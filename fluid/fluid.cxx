@@ -82,6 +82,7 @@ const char *copyright =
 
 #include "about_panel.h"
 #include "alignment_panel.h"
+#include "function_panel.h"
 #include "template_panel.h"
 #include "widget_panel.h"
 
@@ -93,6 +94,9 @@ const char *copyright =
 #include "undo.h"
 
 using namespace fltk;
+
+DECL_MENUCB2(toggle_sourceview_cb,DoubleBufferWindow);
+
 /////////////////////////////////////////
 // Read preferences file 
 Preferences fluid_prefs(Preferences::USER, "fltk.org", "fluid");
@@ -347,7 +351,7 @@ void save_template_cb(Widget *, void *) {
 
   if ((fp = fopen(filename, "wb")) == NULL) {
     delete[] pixels;
-    fl_alert("Error writing %s: %s", filename, strerror(errno));
+    fltk::alert("Error writing %s: %s", filename, strerror(errno));
     return;
   }
 
@@ -798,6 +802,37 @@ MenuBar* menubar;
 Browser *widget_browser;
 
 ////////////////////////////////////////////////////////////////
+void toggle_sourceview_cb(DoubleBufferWindow *, void *) {
+  if (!sourceview_panel) {
+    make_sourceview();
+    sourceview_panel->callback((Callback*)toggle_sourceview_cb);
+    Preferences svp(fluid_prefs, "sourceview");
+    int autorefresh;
+    svp.get("autorefresh", autorefresh, 1);
+    sv_autorefresh->value(autorefresh ? true : false);
+    int autoposition;
+    svp.get("autoposition", autoposition, 1);
+    sv_autoposition->value(autoposition ? true : false);
+    int tab;
+    svp.get("tab", tab, 0);
+    if (tab>=0 && tab<sv_tab->children()) sv_tab->value(tab);
+    if (!position_window(sourceview_panel,"sourceview_pos", 0, 320, 120, 550, 500)) return;
+  }
+
+  if (sourceview_panel->visible()) {
+    sourceview_panel->hide();
+    isource_view->label("Show Source Code...");
+  } else {
+    sourceview_panel->show();
+    isource_view->label("Hide Source Code...");
+    update_sourceview_cb(0,0);
+  }
+}
+////////////////////////////////////////////////////////////////
+void toggle_sourceview_b_cb(Button*, void *) {
+  toggle_sourceview_cb(0,0);
+}
+////////////////////////////////////////////////////////////////
 void make_main_window() {
     if (!main_window) {
 	Widget *o;
@@ -816,9 +851,242 @@ void make_main_window() {
 	//    menubar->global();
 	main_window->end();
 	load_history();
+	make_shell_window();
     }
 }
+////////////////////////////////////////////////////////////////
+// Shell command support...
+////////////////////////////////////////////////////////////////
+#if (!defined(WIN32) || defined(__CYGWIN__)) && !defined(__MWERKS__)
+// Support the full piped shell command...
+static FILE *shell_pipe = 0;
 
+void
+shell_pipe_cb(int, void*) {
+  char	line[1024];		// Line from command output...
+
+  if (fgets(line, sizeof(line), shell_pipe) != NULL) {
+    // Add the line to the output list...
+    shell_run_buffer->append(line);
+  } else {
+    // End of file; tell the parent...
+    fltk::remove_fd(fileno(shell_pipe));
+
+    pclose(shell_pipe);
+    shell_pipe = NULL;
+    shell_run_buffer->append("... END SHELL COMMAND ...\n");
+  }
+
+  shell_run_display->scroll(shell_run_display->count_lines(0,
+                            shell_run_buffer->length(), 1), 0);
+}
+////////////////////////////////////////////////////////////////
+void do_shell_command(fltk::ReturnButton*, void*) {
+    const char	*command;	// Command to run
+
+  shell_window->hide();
+
+  if (shell_pipe) {
+    fltk::alert("Previous shell command still running!");
+    return;
+  }
+
+  if ((command = shell_command_input->value()) == NULL || !*command) {
+    fltk::alert("No shell command entered!");
+    return;
+  }
+
+  if (shell_savefl_button->value()) {
+    save_cb(0, 0);
+  }
+
+  if (shell_writecode_button->value()) {
+    compile_only = 1;
+    write_cb(0, 0);
+    compile_only = 0;
+  }
+
+#if 0 // FIXME intl strings
+  if (shell_writemsgs_button->value()) {
+    compile_only = 1;
+    write_strings_cb(0, 0);
+    compile_only = 0;
+  }
+#endif
+
+  // Show the output window and clear things...
+  shell_run_buffer->text("");
+  shell_run_buffer->append(command);
+  shell_run_buffer->append("\n");
+  shell_run_window->label("Shell Command Running...");
+
+  if ((shell_pipe = popen((char *)command, "r")) == NULL) {
+    fltk::alert("Unable to run shell command: %s", strerror(errno));
+    return;
+  }
+
+  shell_run_button->deactivate();
+  shell_run_window->show();
+  shell_run_window->hotspot(shell_run_display);
+
+  fltk::add_fd(fileno(shell_pipe), shell_pipe_cb);
+
+  while (shell_pipe) fltk::wait();
+
+  shell_run_button->activate();
+  shell_run_window->label("Shell Command Complete");
+  fltk::beep();
+
+  while (shell_run_window->shown()) fltk::wait();
+}
+#else
+// Just do basic shell command stuff, no status window...
+void do_shell_command(fltk::ReturnButton*, void*) {
+    const char	*command;	// Command to run
+  int		status;		// Status from command...
+
+  shell_window->hide();
+
+  if ((command = shell_command_input->value()) == NULL || !*command) {
+    fltk::alert("No shell command entered!");
+    return;
+  }
+
+  if (shell_savefl_button->value()) {
+    save_cb(0, 0);
+  }
+
+  if (shell_writecode_button->value()) {
+    compile_only = 1;
+    write_cb(0, 0);
+    compile_only = 0;
+  }
+
+/* FIXME : write strings should it be implement in fluid 2 as in fltk1 ?
+  if (shell_writemsgs_button->value()) {
+    compile_only = 1;
+    write_strings_cb(0, 0);
+    compile_only = 0;
+  }
+*/
+  if ((status = system(command)) != 0) {
+    fltk::alert("Shell command returned status %d!", status);
+  } else if (completion_button->value()) {
+    fltk::message("Shell command completed successfully!");
+  }
+}
+#endif // (!WIN32 || __CYGWIN__) && !__MWERKS__
+////////////////////////////////////////////////////////////////
+void show_shell_window(Widget*, void*) {
+  shell_window->show();
+  shell_window->hotspot(shell_command_input);
+}
+//
+// The Source View system offers an immediate preview of the code 
+// files that will be generated by FLUID. It also marks the code
+// generated for the last selected item in the header and the source
+// file.
+//
+// Can we patent this?  ;-)  - Matt, mm@matthiasm.com
+//
+
+//
+// Update the header and source code highlighting depending on the
+// currently selected object
+//
+void update_sourceview_position() {
+  if (!sourceview_panel || !sourceview_panel->visible()) 
+    return;
+  if (sv_autoposition->value()==0) 
+    return;
+  if (sourceview_panel && sourceview_panel->visible() && FluidType::current) {
+    int pos0, pos1;
+    if (sv_source->visible_r()) {
+      pos0 = FluidType::current->code_line;
+      pos1 = FluidType::current->code_line_end;
+      if (pos0>=0) {
+        if (pos1<pos0)
+          pos1 = pos0;
+        sv_source->buffer()->highlight(pos0, pos1);
+        int line = sv_source->buffer()->count_lines(0, pos0);
+        sv_source->scroll(line, 0);
+      }
+    }
+    if (sv_header->visible_r()) {
+      pos0 = FluidType::current->header_line;
+      pos1 = FluidType::current->header_line_end;
+      if (pos0>=0) {
+        if (pos1<pos0)
+          pos1 = pos0;
+        sv_header->buffer()->highlight(pos0, pos1);
+        int line = sv_header->buffer()->count_lines(0, pos0);
+        sv_header->scroll(line, 0);
+      }
+    }
+  }
+}
+
+void update_sourceview_position_cb(TabGroup*, void*) {
+  update_sourceview_position();
+}
+
+static char *sv_source_filename = 0;
+static char *sv_header_filename = 0;
+
+//
+// Generate a header and source file in a temporary directory and
+// load those into the Code Viewer widgets.
+//
+extern int write_sourceview;
+
+void update_sourceview_cb(Button*, void*) {
+  if (!sourceview_panel || !sourceview_panel->visible()) 
+    return;
+  // generate space for the source and header file filenames
+  if (!sv_source_filename) {
+    sv_source_filename = (char*)malloc(PATH_MAX);
+    fluid_prefs.getUserdataPath(sv_source_filename, PATH_MAX);
+    strlcat(sv_source_filename, "source_view_tmp.cxx", PATH_MAX);
+  }
+  if (!sv_header_filename) {
+    sv_header_filename = (char*)malloc(PATH_MAX);
+    fluid_prefs.getUserdataPath(sv_header_filename, PATH_MAX);
+    strlcat(sv_header_filename, "source_view_tmp.h", PATH_MAX);
+  }
+
+//FIXME
+//  strlcpy(i18n_program, fltk::filename_name(sv_source_filename), sizeof(i18n_program));
+//  fltk::filename_ext(i18n_program, sizeof(i18n_program), "");
+  const char *code_file_name_bak = code_file_name;
+  code_file_name = sv_source_filename;
+  const char *header_file_name_bak = header_file_name;
+  header_file_name = sv_header_filename;
+
+  // generate the code and load the files
+  write_sourceview = 1;
+  // generate files
+  if (write_code(sv_source_filename, sv_header_filename)) 
+  {
+    // load file into source editor
+    int pos = sv_source->top_line();
+    sv_source->buffer()->loadfile(sv_source_filename);
+    sv_source->scroll(pos, 0);
+    // load file into header editor
+    pos = sv_header->top_line();
+    sv_header->buffer()->loadfile(sv_header_filename);
+    sv_header->scroll(pos, 0);
+    // update the source code highlighting
+    update_sourceview_position();
+  }
+  write_sourceview = 0;
+
+  code_file_name = code_file_name_bak;
+  header_file_name = header_file_name_bak;
+}
+
+void update_sourceview_timer(void*)  {
+  update_sourceview_cb(0,0);
+}
 ////////////////////////////////////////////////////////////////
 void set_filename(const char *c) {
     if (filename) free((void *)filename);
@@ -978,7 +1246,7 @@ int main(int argc,char **argv) {
 	main_window->show(argc,argv);
 	set_alignment_window();
 	toggle_widgetbin_cb(0,0);
-	// FIXME NOT IMPLEMENTED: toggle_sourceview_cb(0,0);
+	toggle_sourceview_cb(0,0);
 	if (!c && openlast_button->value() && absolute_history[0][0]) {
 	    // Open previous file when no file specified...
 	    open_history_cb(0, absolute_history[0]);

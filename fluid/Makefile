@@ -38,6 +38,7 @@ CPPFILES = \
 	about_panel.cxx \
 	alignment_panel.cxx \
 	code.cxx \
+	CodeEditor.cxx \
 	coding_style.cxx \
 	coding_style_func.cxx \
 	factory.cxx \

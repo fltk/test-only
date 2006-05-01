@@ -149,6 +149,7 @@ public:
   virtual int is_window() const;
   virtual int is_code_block() const;
   virtual int is_decl_block() const;
+  virtual int is_comment() const;
   virtual int is_class() const;
   virtual int is_browser() const;
   virtual int is_input() const;
@@ -157,6 +158,10 @@ public:
   virtual int is_value_slider() const;
 
   const char* member_of(bool need_nest = false) const;
+  // codeview
+  int code_line, header_line;
+  int code_line_end, header_line_end;
+
 };
 
 ////////////////////////////////////////////////////////////////

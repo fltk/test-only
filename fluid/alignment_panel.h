@@ -2,17 +2,26 @@
 
 #ifndef alignment_panel_h
 #define alignment_panel_h
+#include <fltk/Preferences.h>
+#include <fltk/TextBuffer.h>
+#include <fltk/TextDisplay.h>
+extern void load_history();
+extern fltk::Preferences fluid_prefs;
+extern fltk::TextBuffer *shell_run_buffer;
 #include <fltk/Window.h>
 extern fltk::Window* alignment_window;
+#include <fltk/TabGroup.h>
+extern fltk::TabGroup* tabs;
 #include <fltk/Group.h>
+#include <fltk/CheckButton.h>
+extern fltk::CheckButton* openlast_button;
+extern fltk::CheckButton* prevpos_button;
+extern fltk::CheckButton* completion_button;
 #include <fltk/Input.h>
 extern void alignment_cb(fltk::Input*, long);
 extern fltk::Input* horizontal_input;
 extern fltk::Input* vertical_input;
 extern fltk::Input* snap_input;
-#include <fltk/CheckButton.h>
-extern fltk::CheckButton* openlast_button;
-extern fltk::CheckButton* prevpos_button;
 #include <fltk/Widget.h>
 extern void header_input_cb(fltk::Input*, void*);
 extern fltk::Input* header_file_input;
@@ -22,4 +31,17 @@ extern void include_H_from_C_button_cb(fltk::CheckButton*, void*);
 extern fltk::CheckButton* include_H_from_C_button;
 #include <fltk/Button.h>
 fltk::Window* make_alignment_window();
+#include <fltk/DoubleBufferWindow.h>
+extern fltk::DoubleBufferWindow* shell_window;
+extern fltk::Input* shell_command_input;
+extern fltk::CheckButton* shell_writecode_button;
+extern fltk::CheckButton* shell_writemsgs_button;
+extern fltk::CheckButton* shell_savefl_button;
+#include <fltk/ReturnButton.h>
+extern void do_shell_command(fltk::ReturnButton*, void*);
+extern fltk::DoubleBufferWindow* shell_run_window;
+#include <fltk/TextDisplay.h>
+extern fltk::TextDisplay* shell_run_display;
+extern fltk::ReturnButton* shell_run_button;
+fltk::DoubleBufferWindow* make_shell_window();
 #endif

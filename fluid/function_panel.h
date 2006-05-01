@@ -69,4 +69,17 @@ extern fltk::LightButton* comment_in_header;
 extern fltk::PopupMenu* comment_predefined;
 extern fltk::Button* comment_load;
 fltk::DoubleBufferWindow* make_comment_panel();
+extern void toggle_sourceview_cb(fltk::DoubleBufferWindow*, void*);
+extern fltk::DoubleBufferWindow* sourceview_panel;
+#include <fltk/TabGroup.h>
+extern void update_sourceview_position_cb(fltk::TabGroup*, void*);
+extern fltk::TabGroup* sv_tab;
+#include "CodeEditor.h"
+extern fltk::CodeViewer* sv_source;
+extern fltk::CodeViewer* sv_header;
+extern void update_sourceview_cb(fltk::Button*, void*);
+extern fltk::LightButton* sv_autorefresh;
+extern fltk::LightButton* sv_autoposition;
+extern void toggle_sourceview_b_cb(fltk::Button*, void*);
+fltk::DoubleBufferWindow* make_sourceview();
 #endif

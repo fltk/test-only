@@ -264,21 +264,71 @@ void write_h(const char* format,...) {
 #include <fltk/filename.h>
 #include <fltk/ask.h>
 #include <fltk/FL_VERSION.h>
-int write_number;
 
+int write_number=0;
+int write_sourceview=0;
+
+/////////////////////////////////////////////////////////////////////
+// recursively dump code, putting children between the two parts
+// of the parent code:
+/////////////////////////////////////////////////////////////////////
+static FluidType* write_code(FluidType* p) {
+  if (write_sourceview) {
+    p->code_line = (int)ftell(code_file);
+    if (p->header_line_end==-1)
+      p->header_line = (int)ftell(header_file);
+  }
+  // write all code that come before the children code
+  // (but don't write the last comment until the very end)
+  if (!(p->next_brother==0 && p->is_comment()))
+    p->write_code();
+  // recursively write the code of all children
+  FluidType* q;
+  if (p->is_widget() && p->is_class()) {
+    // Handle widget classes specially
+    for (q = p->first_child; q; q = q->walk(p)) {
+      if (strcmp(q->type_name(), "Function")) 
+	  q = write_code(q);
+    }
+    // write all code that come after the children 
+    p->write_code();
+
+    for (q = p->first_child; q; q = q->walk(p)) {
+      if (!strcmp(q->type_name(), "Function")) 
+	  q = write_code(q);
+    }
+
+    write_h("};\n");
+  } else {
+    for (q = p->first_child; q; ) 
+	q = write_code(q);
+    // write all code that come after the children 
+    p->write_code();
+  }
+  if (write_sourceview) {
+    p->code_line_end = (int)ftell(code_file);
+    if (p->header_line_end==-1)
+      p->header_line_end = (int)ftell(header_file);
+  }
+  return q;
+}
+/////////////////////////////////////////////////////////////////////
 int write_code(const char *s, const char *t) {
+  const char *filemode = write_sourceview ? "wb" : "w";
+
   write_number++;
   delete id_root; id_root = 0;
   indentation = 0;
+
   if (!s) code_file = stdout;
   else {
-    FILE *f = fopen(s,"w");	
+    FILE *f = fopen(s,filemode);	
     if (!f) return 0;
     code_file = f;
   }
   if (!t) header_file = stdout;
   else {
-    FILE *f = fopen(t,"w");
+    FILE *f = fopen(t,filemode);
     if (!f) {fclose(code_file); return 0;}
     header_file = f;
   }
@@ -306,8 +356,18 @@ int write_code(const char *s, const char *t) {
   for (FluidType* p = FluidType::first; p; p = p->next_brother) {
     // write all static data for this & all children first
     p->write_static();
-    for (FluidType* q = p->first_child; q; q = q->walk(p))
+    if (write_sourceview) {
+      p->header_line_end = (int)ftell(header_file);
+      if (p->header_line==p->header_line_end) p->header_line_end = -1;
+    }
+    for (FluidType* q = p->first_child; q; q = q->walk(p)) {
+      if (write_sourceview) q->header_line = (int)ftell(header_file);
       q->write_static();
+      if (write_sourceview) {
+        q->header_line_end = (int)ftell(header_file);
+        if (q->header_line==q->header_line_end) q->header_line_end = -1;
+      }
+    }
     // then write the nested code:
     p->write_code();
   }

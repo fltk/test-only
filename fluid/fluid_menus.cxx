@@ -23,6 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 #include <fltk/MenuBuild.h>
+#include <fltk/DoubleBufferWindow.h>
 #include "fluid_menus.h"
 #include "WidgetType.h"
 #include "FunctionType.h"
@@ -30,8 +31,6 @@
 #include "undo.h"
 
 using namespace fltk;
-
-#define DECL_MENUCB(n) void n(Widget *, void *)
 
 DECL_MENUCB(new_cb);
 DECL_MENUCB(open_cb);
@@ -61,6 +60,9 @@ DECL_MENUCB(set_images_dir_cb);
 DECL_MENUCB(about_cb);
 DECL_MENUCB(tt_cb);
 DECL_MENUCB(toggle_overlays);
+DECL_MENUCB2(toggle_sourceview_cb,DoubleBufferWindow);
+DECL_MENUCB(show_shell_window);
+DECL_MENUCB2(do_shell_command,ReturnButton);
 
 //////////////////////////////////////////////////////////////////////
 extern char absolute_history[][1024];
@@ -120,7 +122,7 @@ static TextDisplayType TextDisplaytype;
 
 //////////////////////////////////////////////////////////////////////
 MenuBar* Main_Menu;
-Item *history_item[10],*undo_item[2],*iwidget_bin,*itooltip;
+Item *history_item[10],*undo_item[2],*iwidget_bin,*itooltip,*isource_view;
 ItemGroup* newMenu;
 
 //////////////////////////////////////////////////////////////////////
@@ -193,6 +195,7 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
     //new Item("Activate", 0, nyi, 0, FL_MENU_DIVIDER);
     new Item(Item::TOGGLE,"Show Overlays",ACCELERATOR+'o',toggle_overlays);
     iwidget_bin = new Item(Item::TOGGLE,"Show Widget &Bin",ACCELERATOR+'b',toggle_widgetbin_cb);
+    isource_view = new Item(Item::TOGGLE,"Show Source Code",ACCELERATOR+COMMAND+'s',(Callback*) toggle_sourceview_cb);
     new Divider();
     new Item("&Preferences",COMMAND+'p',show_alignment_cb);
     new Item("Coding Style", 0, show_coding_style_cb);
@@ -205,6 +208,11 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
     g->end();
     
     g=new ItemGroup("&Plugins", 0, 0, (void *)Plugins_Options_Menu);
+    g->end();
+
+    g=new ItemGroup("&Shell", 0, 0);
+	new Item("Execute &Command",ACCELERATOR+'x',show_shell_window);
+	new Item("Execute &Again",ACCELERATOR+'g', (Callback*)do_shell_command);
     g->end();
     
     g=new ItemGroup("&Help",0,0);

@@ -340,6 +340,8 @@ void redraw_browser() {
 
 FluidType::FluidType() {
   memset(this, 0, sizeof(FluidType));
+  code_line = header_line = code_line_end = header_line_end = -1;
+
 }
 
 // Calling walk(N) will return every FluidType under N by scanning
@@ -515,6 +517,7 @@ int FluidType::is_group() const {return 0;}
 int FluidType::is_window() const {return 0;}
 int FluidType::is_code_block() const {return 0;}
 int FluidType::is_decl_block() const {return 0;}
+int FluidType::is_comment()const {return 0;}
 int FluidType::is_class() const {return 0;}
 int FluidType::is_counter() const {return 0;}
 int FluidType::is_adjuster() const {return 0;}

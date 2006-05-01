@@ -46,9 +46,14 @@ namespace fltk {
     ItemGroup * fluidMenuGroup(const char * menu_name,xpmImage *i);
 }
 
-extern fltk::Item *history_item[10],*undo_item[2],*iwidget_bin,*itooltip;
+extern fltk::Item *history_item[10],*undo_item[2],*iwidget_bin,*itooltip,*isource_view;
 extern fltk::ItemGroup* newMenu;
 extern fltk::MenuBar* Main_Menu;
+
+#define DECL_MENUCB(n) void n(Widget *, void *)
+#define DECL_MENUCB2(n,type) void n(type *, void *)
+#define IMPL_MENUCB(n) void n(Widget *, void *) {}
+
 #endif
 //
 // End of "$Id"

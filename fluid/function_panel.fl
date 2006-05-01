@@ -6,10 +6,11 @@ code_name {.cxx}
 gridx 10 
 gridy 11 
 snap 3
+
 Function {make_function_panel()} {open
 } {
   {fltk::Window} function_panel {
-    label {function/method} open
+    label {function/method}
     xywh {488 131 400 208} hide resizable modal
   } {
     {fltk::CheckButton} f_public_button {
@@ -94,8 +95,7 @@ f_c_button->value(0);}
   }
 } 
 
-Function {make_code_panel()} {open
-} {
+Function {make_code_panel()} {} {
   {fltk::Window} code_panel {
     label code open
     xywh {171 177 290 175} hide resizable modal
@@ -114,8 +114,7 @@ Function {make_code_panel()} {open
   }
 } 
 
-Function {make_codeblock_panel()} {open
-} {
+Function {make_codeblock_panel()} {} {
   {fltk::Window} codeblock_panel {
     label codeblock
     xywh {539 470 290 131} hide resizable modal
@@ -246,11 +245,10 @@ Function {make_namespace_panel()} {} {
   }
 } 
 
-Function {make_comment_panel()} {open
-} {
+Function {make_comment_panel()} {} {
   {fltk::Window} comment_panel {
     label {Comment Properties}
-    callback {o->hide();} open selected
+    callback {o->hide();} open
     xywh {417 146 550 320} type Double resizable labelsize 11
     extra_code {o->size_range(320, 180);} modal visible
   } {
@@ -298,6 +296,67 @@ Function {make_comment_panel()} {open
       }
       {fltk::InvisibleBox} {} {
         xywh {0 132 93 133} resizable labelsize 11
+      }
+    }
+  }
+} 
+
+Function {make_sourceview()} {open
+} {
+  {fltk::Window} sourceview_panel {
+    label {Code View}
+    callback toggle_sourceview_cb open
+    xywh {403 196 520 490} type Double resizable visible
+  } {
+    {fltk::TabGroup} sv_tab {
+      callback update_sourceview_position_cb open
+      xywh {10 10 500 440} resizable selection_color 4 labelcolor 7
+    } {
+      {fltk::Group} {} {
+        label Source open
+        xywh {0 25 500 415} hide resizable labelsize 13
+      } {
+        {fltk::TextEditor} sv_source {
+          xywh {10 15 480 390} resizable textfont 4 textsize 11
+          extra_code {\#include "CodeEditor.h"}
+          class fltk::CodeViewer
+        }
+      }
+      {fltk::Group} {} {
+        label Header open selected
+        xywh {0 25 500 415} labelsize 13
+      } {
+        {fltk::TextEditor} sv_header {
+          xywh {10 15 480 390} resizable textfont 4 textsize 11
+          extra_code {\#include "CodeEditor.h"}
+          class fltk::CodeViewer
+        }
+      }
+    }
+    {fltk::Group} {} {
+      xywh {10 460 500 20}
+    } {
+      {fltk::Button} {} {
+        label Refresh
+        callback update_sourceview_cb
+        xywh {0 0 61 20} labelsize 11
+      }
+      {fltk::LightButton} sv_autorefresh {
+        label {Auto-Refresh}
+        xywh {66 0 91 20} labelsize 11
+        extra_code {o->callback((fltk::Callback*)update_sourceview_cb);}
+      }
+      {fltk::LightButton} sv_autoposition {
+        label {Auto-Position}
+        xywh {162 0 89 20} labelsize 11
+      }
+      {fltk::Button} {} {
+        label Close
+        callback toggle_sourceview_b_cb
+        xywh {450 0 50 20} labelsize 11
+      }
+      {fltk::InvisibleBox} {} {
+        xywh {255 0 190 20} resizable
       }
     }
   }
