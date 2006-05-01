@@ -239,13 +239,17 @@ void save_cb(Widget *, void *v) {
     const char *c = filename;
     if (v || !c || !*c) {
 	if (!(c=file_chooser("Save to:", "*.f[ld]", c))) return;
-	set_filename(c);
+	if (v != (void *)2L) set_filename(c);
     }
     if (!write_file(c)) {
 	message("Error writing %s: %s", c, strerror(errno));
 	return;
     }
-    modflag = 0;
+
+    if (v != (void *)2L) {
+      modflag = 0;
+      Undo::update_saved();
+    }
 }
 
 void save_template_cb(Widget *, void *) {

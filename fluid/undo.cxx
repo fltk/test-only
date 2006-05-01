@@ -74,6 +74,10 @@ const char *Undo::filename(int level, char *buf, int bufsize) {
   return buf;
 }
 
+void Undo::update_saved() {
+  if (modflag && current <= save) save = -1;
+  else if (!modflag) save = current;
+}
 
 // Redo menu callback
 void Undo::redo_cb(Widget *, void *) {

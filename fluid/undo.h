@@ -45,7 +45,8 @@ public:
     static void clear();			// Clear undo buffer
     
     static void resume()  {  paused = 0;}	// Resume undo checkpoints
-        static void suspend() {  paused = 1;}	// Suspend undo checkpoints
+    static void suspend() {  paused = 1;}	// Suspend undo checkpoints
+    static void update_saved();			// Update the undo pos when saved
     
     static const char *filename(int level, char *buf, int bufsize);
     static void remove_last();

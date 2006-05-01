@@ -531,6 +531,26 @@ int FluidType::is_value_slider() const {return 0;}
 
 FluidType *in_this_only; // set if menu popped-up in window
 
+void select_none_cb(Widget *,void *) {
+  FluidType *parent = FluidType::current ? FluidType::current->parent : 0;
+  if (in_this_only) {
+    // make sure we don't select outside the current window
+    FluidType* p;
+    for (p = parent; p && p != in_this_only; p = p->parent);
+    if (!p) parent = in_this_only;
+  }
+  for (;;) {
+    // select all children of parent:
+    int changed = 0;
+    for (FluidType *t = parent ? parent->first_child : FluidType::first; t; t = t->walk(parent))
+      if (t->selected) {changed = 1; select(t,0);}
+    if (changed) break;
+    // if everything was selected, try a higher parent:
+    if (!parent || parent == in_this_only) break;
+    parent = parent->parent;
+  }
+}
+
 void select_all_cb(fltk::Widget *,void *) {
   FluidType *parent = FluidType::current ? FluidType::current->parent : 0;
   if (in_this_only) {
