@@ -97,26 +97,26 @@ J1:
     if (handle_shortcut()) return 1;
     // Check against the &x of top-level items:
     if (event_state(ACCELERATOR)) {
-        for (i = 0; i < children; i++) {
-            Widget* w = child(i);
-            if (w->active() && w->test_label_shortcut()) {
-                if (w->is_group()) {value(i); goto J1;} // menu title
-                focus_index(Group::find(w)); // Set focus_index, so Menu::get_item() works
-                if (checkmark(w)) { w->invert_flag(VALUE); redraw(); }
-                execute(w); // button in the menu bar
-                return 1;
-            }
+      for (i = 0; i < children; i++) {
+	Widget* w = child(i);
+	if (w->active() && w->test_label_shortcut()) {
+	  if (w->is_group()) {value(i); goto J1;} // menu title
+	  focus_index(Group::find(w)); // Set focus_index, so Menu::get_item() works
+	  if (checkmark(w)) { w->invert_flag(VALUE); redraw(); }
+	  execute(w); // button in the menu bar
+	  return 1;
 	}
-	if (is_accel_key(event_key())) {
-	  if (style()->hide_underscore() && !event_key_repeated()) redraw();
-	}
+      }
+    }
+    if (event_key()==LeftAccKey || event_key()==RightAccKey) {
+      if (style()->hide_underscore() && !event_key_repeated()) redraw();
     }
     return 0;
   case KEYUP:
     // In the future maybe any shortcut() will work, but for now
     // only the Acelerator key does. Setting the shortcut to zero will disable
     // the accelerator key shortcut.
-    if (!is_accel_key(event_key())) break;
+    if (event_key()!=LeftAccKey && event_key()!=RightAccKey) break;
     if (style()->hide_underscore()) redraw();
     // checking for event_is_click insures that the keyup matches the
     // keydown that preceeded it, so Accel. was pressed & released without
@@ -202,9 +202,9 @@ J4:
     return 1;
   case FOCUS:
     // Only accept keyboard focus from ACCELERATOR keys
-    if (!is_accel_key(event_key()) && !(event_state() & ACCELERATOR)) 
-        break;
-    return 1;
+    if (event_key()==LeftAccKey || event_key()==RightAccKey ||
+	event_state(ACCELERATOR)) return 1;
+    break;
   }
   return 0;
 }

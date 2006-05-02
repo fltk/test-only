@@ -42,7 +42,25 @@ using namespace fltk;
   want to use this</i>. Just call fltk::drawimage() directly with your
   image buffer. Notice that fltk1 had numerous calls for messing with
   the image, these have been deleted in fltk2 to prevent misuse of
-  this object.
+  this object. Well, no, they have reappeared. I guess nobody actually
+  reads this documentation...
+
+  Planned fixed implementation to allow an OPTIONAL buffer to mess
+  with the data:
+
+  * Normal drawing will go directly from the source data (the inline_data
+  or the file) to the system "picture" image. DO NOT RELY ON THE BUFFER
+  BEING CREATED!!!!
+
+  * "fetch()" will create a buffer, load it with the same data as
+  the normal drawing will do. Calling it repeatedly will "revert"
+  the buffer back to the initial data. An attempt will be made to
+  reuse the buffer created by the "picture" object on Win32 and OS/X.
+
+  * an "unfetch()" can be used to dispose of the local buffer.
+
+  * Merge rgbImage into this base class, allow creation of an Image
+  with arbitrary buffer and pixeltype.
 
   Subclasses must implement the update() method. In \e theory this can
   use any fltk drawing functions to draw the contents of the image. In

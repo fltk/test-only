@@ -130,14 +130,16 @@ ComboBrowser::handle(int event) {
     fltk::focus(item());
   }
 
-  if ((event == KEY) &&  (is_accel_key(event_key()) || (event_state() & fltk::ACCELERATOR)) ) {
+  if (event == KEY && event_state(ACCELERATOR)) {
       return Browser::handle(event); // delegate to the Menu handler
-  } else if((event==SHORTCUT||event==KEY) && !(ib->type()&InputBrowser::NONEDITABLE)) {
-    if (!is_accel_key(event_key()) && // give a chance to the browser to handle the menu shortcuts
+  } else if ((event==SHORTCUT||event==KEY) && !(ib->type()&InputBrowser::NONEDITABLE)) {
+    if ((event_key()!=LeftAccKey) &&
+	(event_key()!=RightAccKey) &&
         (event_key()!=EscapeKey) &&
 	(event_key()!=UpKey) &&
 	(event_key()!=DownKey) && 
 	(event_key()!=ReturnKey && !item()) )
+      // give a chance to the browser to handle the menu shortcuts
       return ibinput->handle(KEY);
   }
 
@@ -230,7 +232,7 @@ public:
 
 
 int
-InputBrowser::handle(int e) {
+InputBrowser::handle(int event) {
   int TX, TY = 0, TW, TH = h();
   if(type()&NONEDITABLE) {
       TX = 0;
@@ -245,26 +247,26 @@ InputBrowser::handle(int e) {
       over_now = false;
   if((over_now != over_last) && highlight_color())
       redraw_highlight();
-  //if (e == ENTER || e == LEAVE) redraw_highlight();
+  //if (event == ENTER || event == LEAVE) redraw_highlight();
 
-  if (e == FOCUS) fltk::focus(m_input);
+  if (event == FOCUS) fltk::focus(m_input);
 
   // Scroll using arrow keys
-  if ((e == KEY) && (event_key() == UpKey || event_key() == DownKey )) {
+  if ((event == KEY) && (event_key() == UpKey || event_key() == DownKey )) {
     if (!win || !win->visible())
 	popup();
 //    else
-    return win->handle(e);
-  } else if ((e == KEY) &&  (event_state() & fltk::ACCELERATOR) ) {
-      return list ? list->handle(e) : Menu::handle(e); // delegate to the Menu handler
+    return win->handle(event);
+  } else if (event == KEY && event_state(ACCELERATOR) ) {
+      return list ? list->handle(event) : Menu::handle(event); // delegate to the Menu handler
   // all other keys should be sent to Input
-  } else if ((event_inside(m_input) || e == KEY)
-    && !(type()&NONEDITABLE) && !pushed() && e != MOUSEWHEEL) {
-    if (e == PUSH) { fltk::pushed(m_input); fltk::focus(m_input); }
-    return m_input.handle(e); // if this doesn't work, try send(e)
+  } else if ((event_inside(m_input) || event == KEY)
+    && !(type()&NONEDITABLE) && !pushed() && event != MOUSEWHEEL) {
+    if (event == PUSH) { fltk::pushed(m_input); fltk::focus(m_input); }
+    return m_input.handle(event); // if this doesn't work, try send(e)
   }
 
-  switch (e) {
+  switch (event) {
     // Mouse wheel support
     case MOUSEWHEEL: {
 
@@ -315,7 +317,7 @@ InputBrowser::handle(int e) {
     case FOCUS:
     case UNFOCUS:
       if (type()&NONEDITABLE) break;
-      return m_input.handle(e);
+      return m_input.handle(event);
 
     case ENTER: case MOVE: return 1;
   }

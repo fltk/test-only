@@ -146,11 +146,22 @@ enum {
   LeftCtrlKey	= 0xffe3,	/*!< Left-hand Ctrl */
   RightCtrlKey	= 0xffe4,	/*!< Right-hand Ctrl */
   CapsLockKey	= 0xffe5,	/*!< Caps Lock */
-  LeftMetaKey	= 0xffe7,	/*!< The left "Windows" or the "Apple" key */
-  RightMetaKey	= 0xffe8,	/*!< The right "Windows" or the "Apple" key */
+  LeftMetaKey	= 0xffe7,	/*!< The left "Windows" or "Apple" key */
+  RightMetaKey	= 0xffe8,	/*!< The right "Windows" or "Apple" key */
   LeftAltKey	= 0xffe9,	/*!< Left-hand Alt (option on Mac) */
   RightAltKey	= 0xffea,	/*!< Right-hand Alt (option on Mac) */
-  DeleteKey	= 0xffff	/*!< Delete */
+  DeleteKey	= 0xffff,	/*!< Delete */
+#if  defined(__APPLE__)
+  LeftAccKey	= LeftCtrlKey,
+  RightAccKey	= RightCtrlKey,
+  LeftCmdKey	= LeftMetaKey,
+  RightCmdKey	= RightMetaKey
+#else
+  LeftAccKey	= LeftAltKey,
+  RightAccKey	= RightAltKey,
+  LeftCmdKey	= LeftCtrlKey,
+  RightCmdKey	= RightCtrlKey
+#endif
 };
 
 /*! Flags returned by event_state(), and used as the high 16 bits
@@ -173,25 +184,14 @@ enum {
   BUTTON3	= 0x04000000,	/*!< Right mouse button held down */
   ANY_BUTTON	= 0x7f000000, /*!< Any mouse button (up to 8) */
 #if  defined(__APPLE__)
-  ACCELERATOR = CTRL,       /*!< On Apple CTRL it the same as ALT for other platforms. */
-# define LeftAccKey  LeftCtrlKey
-# define RightAccKey RightCtrlKey
-  COMMAND = META       /*!< Meta is The same as CTRL on other platforms. */
-# define LeftCmdKey  LeftMetaKey
-# define RightCmdKey RightMetaKey
+  ACCELERATOR = CTRL,
+  COMMAND = META
 #else
-  ACCELERATOR = ALT,        /*!< For other platforms, ALT is used as accelerator. */
-# define LeftAccKey  LeftAltKey
-# define RightAccKey RightAltKey
-  COMMAND = CTRL       /*!< Plain CTRL. */
-# define LeftCmdKey  LeftCtrlKey
-# define RightCmdKey RightCtrlKey
-#endif // __APPLE__
+  ACCELERATOR	= ALT,	/*!< Same as ALT on Windows/Linux, same as CTRL on OS/X */
+  COMMAND	= CTRL	/*!< Same as CTRL on Windows/Linux, same as META on OS/X */
+#endif
 };
 
-
-//! will return true if an acelerator key has been pressed (useful for shortcut handling)
-inline bool is_accel_key(int k)  {return k==LeftAccKey || k==RightAccKey;}
 inline unsigned BUTTON(int n) {return 0x00800000 << n;}
 
 /*! Device identifier returned by event_device(). This enumeration
@@ -271,9 +271,6 @@ inline float event_pressure()	 	{return e_pressure;}
 inline float event_x_tilt()     	{return e_x_tilt;}
 inline float event_y_tilt()     	{return e_y_tilt;}
 inline int  event_device()      	{return e_device;}
-
- inline bool is_accel_state()  {return event_key_state(LeftAccKey)  || event_key_state(RightAccKey);}
- 
 
 // tests on current event:
 FL_API bool event_inside(const Rectangle&);
