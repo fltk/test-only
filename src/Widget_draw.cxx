@@ -139,7 +139,7 @@ const Symbol * Widget::context_image() const  {
     if (!nimages_) return 0;
 
     const Symbol * img;
-    
+
     if (!active())  
 	img = nimages_>1 && image_[1]  ? image_[1] : image_[0];
     else if (nimages_>2 && image_[2] && belowmouse() && !pushed())
@@ -153,13 +153,16 @@ const Symbol * Widget::context_image() const  {
 }
 
 void Widget::draw_label(const Rectangle& ir, Flags flags) const {
-    const Symbol* img = context_image();
-    
-    // If label is drawn outside, draw the image only:
-    if ((flags  & fltk::ALIGN_POSITIONMASK) && !(flags & fltk::ALIGN_INSIDE)) {
-	if (img) img->draw(ir);
-	return;
-    }
+  const Symbol* img = context_image();
+
+  // If label is drawn outside, draw the image only, and distort
+  // it to fill (this may change if we can convince people to use
+  // the box instead of the image for buttons)
+  if ((flags & fltk::ALIGN_POSITIONMASK) && !(flags & fltk::ALIGN_INSIDE)) {
+    if (img) img->draw(ir);
+    return;
+  }
+
   Rectangle r(ir);
   if (img) {
 
@@ -188,14 +191,20 @@ void Widget::draw_label(const Rectangle& ir, Flags flags) const {
 
     if (flags & ALIGN_CLIP) push_clip(r);
 
+    // scale the image down so it fits in rectangle:
+    if (w > r.w() || h > r.h()) {
+      if (w*r.h() > h*r.w()) {
+	h = h*r.w()/w;
+	w = r.w();
+      } else {
+	w = w*r.h()/h;
+	h = r.h();
+      }
+    }
+
     Rectangle ir(r, w, h, flags);
-    // avoid the img to draw outside its box if a border is drawn
-    if (box()!=NO_BOX) { 
-	if (ir.x()<box_dx(box())) ir.x( box_dx(box()) ); // don't overwrite the left border
-	if (ir.y()<box_dy(box())) ir.y( box_dy(box()) ); // don't overwrite the top border
-	if (ir.w()>this->w()-box_dw(box())) ir.w(this->w()-box_dw(box())-box_dx(box())/2); // dont go outside horizontally
-	if (ir.h()>this->h()-box_dh(box())) ir.h(this->h()-box_dh(box())-box_dy(box())/2); // dont go outside vertically
-    } // after that
+    // WAS: please pass the inset rectangle if you want to avoid
+    // drawing over the borders!
     img->draw(ir);
 
     // figure out the rectangle that remains for text:
