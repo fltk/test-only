@@ -575,6 +575,9 @@ FileIcon::load_fti(const char *fti)	// I - File to read from
 void
 FileIcon::load_xpm(const char *xpm)	// I - File to read from
 {
+#if 1 // activate raster image reading
+  load(xpm);
+#else
   FILE		*fp;			// File pointer
   int		i, j;			// Looping vars
   int		ch;			// Current character
@@ -763,6 +766,7 @@ FileIcon::load_xpm(const char *xpm)	// I - File to read from
   for (i = 0; i < num_data_; i ++)
     printf("    %d,\n", data_[i]);
 #endif /* DEBUG */
+#endif
 }
 
 //
