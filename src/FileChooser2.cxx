@@ -263,6 +263,7 @@ FileChooser::favoritesButtonCB()
   } else {
     unquote_pathname(pathname, favoritesButton->child(v)->label(), sizeof(pathname));
     directory(pathname);
+    fileList->deselect();
   }
 }
 
@@ -428,7 +429,9 @@ FileChooser::fileListCB()
       // be treated as a triple-click.  We use a value of -1 because
       // the next click will increment click count to 0, which is what
       // we really want...
-      fltk::event_clicks(-1);
+      //fltk::event_clicks(-1); // fabien: doesn't seems to be useful
+      fileList->deselect();	// after directory the file is already 
+				// selected from previous state so deselect it
     }
     else
     {
@@ -888,6 +891,7 @@ FileChooser::showChoiceCB()
   if (shown()) {
     // Rescan the directory...
     rescan();
+    fileList->deselect();
   }
 }
 

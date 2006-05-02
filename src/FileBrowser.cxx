@@ -80,13 +80,6 @@
 using namespace fltk;
 
 //
-// BLINE definition from "Browser.cxx"...
-//
-
-#define SELECTED 1
-#define NOTDISPLAYED 2
-
-//
 // 'FileBrowser::FileBrowser()' - Create a FileBrowser widget.
 //
 
@@ -121,12 +114,11 @@ FileBrowser::load(const char     *directory,// I - Directory to load
 
 //  printf("FileBrowser::load(\"%s\")\n", directory);
 
-  clear();
-
-  directory_ = directory;
-
   if (!directory)
     return (0);
+
+  clear();
+  directory_ = directory;
 
   if (directory_[0] == '\0')
   {

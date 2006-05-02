@@ -72,7 +72,7 @@ fltk::file_chooser(const char *message,	// I - Message in titlebar
 
     fc = new FileChooser(fname, pat, FileChooser::CREATE, message);
     fc->callback(callback, 0);
-  } else {
+  }
     fc->type(FileChooser::CREATE);
     fc->filter(pat);
     fc->label(message);
@@ -97,13 +97,15 @@ fltk::file_chooser(const char *message,	// I - Message in titlebar
 	// Set the directory...
 	fc->directory(retname);
       }
-    }
-    else
+      fc->show();
       fc->value(fname);
-  }
+    }
+    else {
+      fc->ok_label(current_label);
+      fc->show();
+      fc->value(fname);
+    }  
 
-  fc->ok_label(current_label);
-  fc->show();
   while (fc->visible()) fltk::wait();
 
   if (fc->value() && relative) {
