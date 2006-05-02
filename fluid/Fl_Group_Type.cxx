@@ -119,15 +119,15 @@ static void reparent_box(Rectangle &r, FluidType * p) {
     }
     r.set(X, Y, R-X, B-Y);
     for (t=p; t; t=t->next_brother) {
-	if (t->is_widget()) {
-	    Widget* o = ((WidgetType*)t)->o; 
-	    o->x(o->x()-X);
-	    o->y(o->y()-Y);
-	}
+      if (t->is_widget()) {
+	Widget* o = ((WidgetType*)t)->o; 
+	o->x(o->x()-X);
+	o->y(o->y()-Y);
+      }
     }
 }
 
-void group_cb(fltk::Widget *, void *) {
+void group_cb(Widget *, void *) {
     // Find the current widget:
     FluidType *qq = FluidType::current;
     while (qq && (!qq->is_widget() || qq->is_menu_item())) qq = qq->parent;
@@ -141,7 +141,6 @@ void group_cb(fltk::Widget *, void *) {
     force_parent = 1;
     GroupType *n = (GroupType*)(Grouptype.make());
     n->move_before(q);
-    Widget& w= *q->o;
     for (FluidType *t = q->parent->first_child; t;) {
 	FluidType* next = t->next_brother;
 	if (t->selected && t != n) {
@@ -169,11 +168,15 @@ void ungroup_cb(fltk::Widget *, void *) {
     }
     Undo::checkpoint();
     Undo::suspend();
+    Widget* g = (Group*) ((WidgetType*)q)->o; 
     for (FluidType* n = q->first_child; n;) {
 	FluidType* next = n->next_brother;
 	if (n->selected) {
 	    n->remove();
 	    n->insert(q);
+	    if (n->is_widget()) {
+	      ((WidgetType*)n)->o->move(g->x(),g->y());
+	    }
 	}
 	n = next;
     }
