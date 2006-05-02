@@ -21,14 +21,12 @@
 # USA.
 #
 # Please report all bugs and problems to "fltk-bugs@fltk.org".
-#
 
 #
 # Include common definitions...
 #
 
 include ../makeinclude
-
 
 #
 # Files for this directory...
