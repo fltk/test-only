@@ -351,7 +351,7 @@ void FileChooser::icon_size(uchar s) {
 }
 
 uchar FileChooser::icon_size() {
-  return (fileList->icon_size());
+  return ((uchar)fileList->icon_size());
 }
 
 void FileChooser::label(const char *l) {

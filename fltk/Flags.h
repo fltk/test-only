@@ -95,6 +95,7 @@ enum {
   INACTIVE_R		  = 0x00100000, //!< draw it grayed-out
   FOCUSED		  = 0x00200000, //!< draw with keyboard focus also used for belowmouse widget image (image3_) 
   PUSHED		  = 0x00400000, //!< draw pushed-in 
+  RESIZE_IMAGE		  = 0x00800000, //!< proportionnaly resize img in widget
   BELOWMOUSE		  = FOCUSED,	//!< used by image() and set_symbol() for state corresponding to widget below mouse
   OPENED		  = VALUE,	//!< used by image() and set_symbol() for state corresponding to widget open (i.e group node)
 };

@@ -291,7 +291,7 @@ showChoiceCB();} {}
     }
     Function {icon_size()} {return_type uchar
     } {
-      code {return (fileList->icon_size());} {}
+      code {return ((uchar) fileList->icon_size());} {}
     }
     Function {label(const char *l)} {return_type void
     } {

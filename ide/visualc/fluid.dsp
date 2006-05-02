@@ -177,6 +177,10 @@ SOURCE=..\..\fluid\code.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fluid\CodeEditor.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\coding_style.cxx
 # End Source File
 # Begin Source File
