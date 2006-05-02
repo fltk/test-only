@@ -758,7 +758,7 @@ void fltk::flush() {
     difference in sizes is odd, it always rounds up and left.
     Default value for \a flags is to center in both directions.
  */
-fltk::Rectangle::Rectangle(const fltk::Rectangle& r, int w, int h, int flags) {
+void fltk::Rectangle::set(const fltk::Rectangle& r, int w, int h, int flags) {
   if (flags & ALIGN_LEFT) {
     if (flags & ALIGN_RIGHT &&  w > r.w()) x_ = r.r()-w;
     else x_ = r.x();
@@ -769,6 +769,8 @@ fltk::Rectangle::Rectangle(const fltk::Rectangle& r, int w, int h, int flags) {
     // fabien: shouldn't it  consider the case r is smaller to avoid negative values ?
     // WAS: no, it is supposed to center at all times. The right-shift
     // instead of divide-by-2 is to avoid shifting as it goes negative.
+    // fabien : well while debugging i observed the shift doesn't avoid 
+    //    to get negative value at least on Win32
     // if (x_<0) x_=0; 
   }
   if (flags & ALIGN_TOP) {

@@ -75,8 +75,8 @@ void fix_group_size(FluidType *t) {
   if (!t || !t->is_group() || t->is_menu_button()) return;
   fltk::Group* g = (fltk::Group*)((GroupType*)t)->o;
   //if (g->resizable()) return;
-  int X = 0;
-  int Y = 0;
+  int X = g->x();
+  int Y = g->y();
   int R = g->w();
   int B = g->h();
   for (FluidType *nn = t->first_child; nn; nn = nn->next_brother) {
@@ -103,6 +103,30 @@ void fix_group_size(FluidType *t) {
 
 extern int force_parent;
 extern GroupType Grouptype;
+
+static void reparent_box(Rectangle &r, FluidType * p) {
+    int X=1000000, Y=1000000,R=-1,B=-1;
+    FluidType*t;
+    for (t=p; t; t=t->next_brother) {
+	if (t->is_widget()) {
+	    if (((WidgetType*)t)->o->x()<X) X = ((WidgetType*)t)->o->x();
+	    if (((WidgetType*)t)->o->y()<Y) Y = ((WidgetType*)t)->o->y();
+	    if (((WidgetType*)t)->o->r()>R) 
+		R = ((WidgetType*)t)->o->w()+((WidgetType*)t)->o->x();
+	    if (((WidgetType*)t)->o->b()>B) 
+		B = ((WidgetType*)t)->o->h()+((WidgetType*)t)->o->y();
+	}
+    }
+    r.set(X, Y, R-X, B-Y);
+    for (t=p; t; t=t->next_brother) {
+	if (t->is_widget()) {
+	    Widget* o = ((WidgetType*)t)->o; 
+	    o->x(o->x()-X);
+	    o->y(o->y()-Y);
+	}
+    }
+}
+
 void group_cb(fltk::Widget *, void *) {
     // Find the current widget:
     FluidType *qq = FluidType::current;
@@ -117,7 +141,7 @@ void group_cb(fltk::Widget *, void *) {
     force_parent = 1;
     GroupType *n = (GroupType*)(Grouptype.make());
     n->move_before(q);
-    n->o->resize(0,0,0,0);
+    Widget& w= *q->o;
     for (FluidType *t = q->parent->first_child; t;) {
 	FluidType* next = t->next_brother;
 	if (t->selected && t != n) {
@@ -126,7 +150,11 @@ void group_cb(fltk::Widget *, void *) {
 	}
 	t = next;
     }
-    fix_group_size(n);
+    Rectangle r;
+    reparent_box(r, q->parent->first_child);
+    n->o->resize(r.x(),r.y(),r.w(),r.h());
+
+    //fix_group_size(n);
     Undo::resume();
 }
 

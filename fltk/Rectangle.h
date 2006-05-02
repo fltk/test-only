@@ -61,6 +61,8 @@ class FL_API Rectangle {
   void set_b(int v) {h_ = v-y_;}
   /*! Set x(), y(), w(), and h() all at once. */
   void set(int x, int y, int w, int h) {x_=x; y_=y; w_=w; h_=h;}
+  /*! Sets  x, y, w, h so that's it's centered or aligned if flags!=0 inside the source r */
+  void set (const Rectangle& r, int w, int h, int flags = 0);
   /*! Add \a d to x() without changing r() (it reduces w() by \a d). */
   void move_x(int d) {x_ += d; w_ -= d;}
   /*! Add \a d to y() without changing b() (it reduces h() by \a d). */
@@ -94,8 +96,8 @@ class FL_API Rectangle {
 
   /*! Copy constructor. */
   Rectangle(const Rectangle& r) : x_(r.x_),y_(r.y_),w_(r.w_),h_(r.h_) {}
-
-  Rectangle(const Rectangle& r, int w, int h, int flags = 0);
+  /* fabien : factorized this useful construction into a new set() method */
+  Rectangle(const Rectangle& r, int w, int h, int flags = 0) {set(r,w,h,flags);}
 
   /*! True if rectangle contains the pixel who's upper-left corner is at x,y */
   bool contains(int x, int y) const {return x>=x_ && y>=y_ && x<x_+w_ && y<y_+h_;}

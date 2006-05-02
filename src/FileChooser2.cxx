@@ -1031,7 +1031,7 @@ FileChooser::update_preview()
 
     previewBox->align(fltk::ALIGN_CLIP);
     previewBox->label(0);
-    previewBox->set_flag(fltk::RESIZE_IMAGE);
+    previewBox->set_flag(fltk::RESIZE_FIT);
   }
 
   previewBox->redraw();

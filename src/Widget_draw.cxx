@@ -190,34 +190,53 @@ void Widget::draw_label(const Rectangle& ir, Flags flags) const {
     }
 
     if (flags & ALIGN_CLIP) push_clip(r);
-
-    if(flags & RESIZE_IMAGE) { // scale the image down so it fits in rectangle:
-	if (w > r.w() || h > r.h()) {
-	  if (w*r.h() > h*r.w()) {
-	    h = h*r.w()/w;
-	    w = r.w();
-	  } else {
-	    w = w*r.h()/h;
-	    h = r.h();
-	  }
-	}
-    }
+    
+    /* 
+       Implementing the new RESIZE Flags as discussed
+        - Auto resize (RESIZE_AUTO), equivalent to no resize 
+         for raster and resize to fit for vector
+        - No resize (RESIZE_NONE)
+        - Resize to fit (RESIZE_FIT), preserving aspect ratio
+        - Resize to fill (RESIZE_FILL), not preserving aspect ratio
+       The default is RESIZE_AUTO
+    */
     Rectangle ir(r, w, h, flags);
-    if(!(flags & RESIZE_IMAGE)) { // default case no resize asked
-	// avoid the img to draw outside its box if a border is drawn
-	if (box()!=NO_BOX) {
-	// WAS: please pass the inset rectangle if you want to avoid
-	// drawing over the borders!
-	// FABIEN: FWIW, Symbol->inset() would only solve the pb once, but then
-	//	inset() should be called each time encapsulating widget is resized
-	//   rather contrastly, the following code ensures it is drawn as expected in all situations:
-	    if (ir.x()<box_dx(box())) ir.x( box_dx(box()) ); // don't overwrite the left border
-	    if (ir.y()<box_dy(box())) ir.y( box_dy(box()) ); // don't overwrite the top border
-	    if (ir.w()>this->w()-box_dw(box())) ir.w(this->w()-box_dw(box())-box_dx(box())/2); // dont go outside horizontally
-	    if (ir.h()>this->h()-box_dh(box())) ir.h(this->h()-box_dh(box())-box_dy(box())/2); // dont go outside vertically
-	} 
+    if (!(flags & RESIZE_NONE)) {
+	bool resize_fit= (flags & RESIZE_FIT) || !img->is_raster();
+	if(resize_fit) { // scale the image down so it fits in rectangle:
+	    if (w > r.w() || h > r.h()) {
+	      if (w*r.h() > h*r.w()) {
+		h = h*r.w()/w;
+		w = r.w();
+	      } else {
+		w = w*r.h()/h;
+		h = r.h();
+	      }
+	    }
+	}
+	else if(flags & RESIZE_FILL) { // scale the image down so it fits in rectangle:
+	    w = r.w();
+	    h = r.h();
+	}    
+	ir.set(r, w, h, flags);
+	if(!resize_fit) { // default case no resize asked
+	    // avoid the img to draw outside its box if a border is drawn
+	    if (box()!=NO_BOX) {
+	    // WAS: please pass the inset rectangle if you want to avoid
+	    // drawing over the borders!
+	    // FABIEN: FWIW, Symbol->inset() would only solve the pb once, but then
+	    //	inset() should be called each time encapsulating widget is resized
+	    //   rather contrastly, the following code ensures it is drawn as expected in all situations:
+		if (ir.x()<box_dx(box())) ir.x( box_dx(box()) ); // don't overwrite the left border
+		if (ir.y()<box_dy(box())) ir.y( box_dy(box()) ); // don't overwrite the top border
+		if (ir.w()>this->w()-box_dw(box())) ir.w(this->w()-box_dw(box())-box_dx(box())/2); // not out horiz.
+		if (ir.h()>this->h()-box_dh(box())) ir.h(this->h()-box_dh(box())-box_dy(box())/2); // not out vert.
+	    } 
+	}
+	img->draw(ir);
     }
-    img->draw(ir);
+    else
+	img->draw(Rectangle(r, w, h, flags));
 
     // figure out the rectangle that remains for text:
     if (flags & ALIGN_TOP) r.set_y(ir.b());
