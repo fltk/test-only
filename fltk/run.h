@@ -61,6 +61,8 @@ inline int damage() {return damage_;}
 /*! Type of function passed to add_timeout(), add_check(), and add_idle() */
 typedef void (*TimeoutHandler)(void*);
 
+FL_API double get_time_secs();
+
 FL_API void add_timeout(float t, TimeoutHandler, void* v = 0);
 FL_API void repeat_timeout(float t, TimeoutHandler,void* = 0);
 FL_API bool has_timeout(TimeoutHandler, void* = 0);

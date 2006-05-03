@@ -213,21 +213,24 @@ static Timeout* first_timeout, *free_timeout;
 // the current time, and the next call will actualy elapse time.
 static char reset_clock = 1;
 
-static void elapse_timeouts() {
+/** return portable elapsed time from system in seconds. 
+    on Windows it represents the time since system start,
+    on Unixes, it's the time of the day. Precision may vary with OSes, 
+    only uses it for measuring small time deltas with a minimum precision of 20 ms
+*/ 
+double fltk::get_time_secs() {
 #ifdef _WIN32
-  unsigned long newclock = GetTickCount();
-  static unsigned long prevclock;
-  float elapsed = (newclock-prevclock)/1000.0f;
-  prevclock = newclock;
+  return double(GetTickCount())/1000.0;
 #else
-  static struct timeval prevclock;
   struct timeval newclock;
   gettimeofday(&newclock, NULL);
-  float elapsed = float(newclock.tv_sec - prevclock.tv_sec) +
-    float(newclock.tv_usec - prevclock.tv_usec)/1000000.0f;
-  prevclock.tv_sec = newclock.tv_sec;
-  prevclock.tv_usec = newclock.tv_usec;
+  return newclock.tv_sec + double(newclock.tv_usec)/1000000.0;
 #endif
+}
+
+static void elapse_timeouts() {
+  static float prev = 0.0f;
+  float elapsed = float(get_time_secs()) -prev;
   if (reset_clock) {
     reset_clock = 0;
   } else if (elapsed > 0) {
