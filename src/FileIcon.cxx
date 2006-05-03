@@ -103,7 +103,6 @@ FileIcon::FileIcon(const char *p,	/* I - Filename pattern */
   // And add the icon to the list of icons...
   next_  = first_;
   first_ = this;
-  item_ = NULL;
   w_= h_=16;
   on_select_ = false;
   image_=0;
@@ -157,20 +156,22 @@ FileIcon::~FileIcon()
     free(data_);
 }
 
-void FileIcon::_measure(int& w, int& h) const {
-    Widget * i= value();
-    if (i) {w = i->h()-box_dh(i->box()); h = i->h()-box_dh(i->box());}
-    else {
-	w = h = (int) (getascent()+getdescent()+2);
-    }
+// WAS: measure() is passed the size it is expected to draw into, including
+// the inset. Thus it does not need to look at the widget or it's box.
+// This one matches the previous implementation, making the icon always
+// be square and fitting the height of the inset:
 
+void FileIcon::_measure(int& w, int& h) const {
+  w = h;
 }
 
+// Provided for back-compatability, sets the widgets image() to this and
+// also sets the on_select() flag.
 void FileIcon::value(Widget* i, bool on_sel)  {
-    item_=i; // connect to i
-    on_select_ = on_sel;
-    i->image(this);
-} 
+  on_select_ = on_sel;
+  i->image(this);
+}
+
 //
 // 'FileIcon::add()' - Add data to an icon.
 //
@@ -282,13 +283,12 @@ void FileIcon::_draw(const Rectangle& r) const {
   d    = data_;
   prim = NULL;
   
-  Widget * i = value();
   Color	c, ic;
-  if (i->active() && (!on_select_ ||i->selected())  ) 
+  bool active = !drawflags(INACTIVE_R);
+  if (active && (!on_select_ || drawflags(SELECTED))  ) 
     ic = fltk::YELLOW;
   else
     ic = fltk::GRAY90 /* light2 */; 
-  bool active = i && i->active() ? true : false;
   c = ic;
   setcolor(ic);
   while (*d != END || prim)
@@ -382,8 +382,10 @@ void FileIcon::_draw(const Rectangle& r) const {
   // Restore the transform matrix
   pop_matrix();
 
-  // Restore the item color from text part drawing
-  if (i) setcolor(i->selected() ? i->color() : i->selection_color());
+  // WAS: color could be restored by copying it from current_color() first.
+  // However lots of image types screw up the current color so probably best
+  // to just say that changing it is allowed.
+  // setcolor(saved_color);
 }
 
 

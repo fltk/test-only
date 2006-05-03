@@ -33,7 +33,6 @@
 namespace fltk {
 
 class Widget;
-  // It is now a subclass of Image
 
 class FL_API FileIcon : public Symbol {
   static FileIcon *first_;	// Pointer to first icon/filetype
@@ -99,17 +98,14 @@ public:
   static FileIcon *first() { return (first_); }
   static void	load_system_icons(void);
 
-  
-  Widget *	value() const {return item_;} // return connected item
   void		value(Widget* i, bool on_select=false);
 
   // virtual image overloads
   void _measure(int& w, int& h) const;
   void _draw(const Rectangle& r) const;
 private:
-    Widget* item_;
-    const Symbol* image_;
-    bool owned_image_;
+  const Symbol* image_;
+  bool owned_image_;
 };
 
 }
