@@ -259,7 +259,7 @@ FileIcon::find(const char *filename,	// I - Name of file */
 //int      active)	// I - Active or inactive?
 
 void FileIcon::_draw(const Rectangle& r) const {
-
+  
   if (image()) {image()->draw(r);return;}
 
   short		*d;		// Pointer to data
@@ -270,6 +270,11 @@ void FileIcon::_draw(const Rectangle& r) const {
   // Don't try to draw a NULL array!
   if (num_data_ == 0)
     return;
+
+  // fabien: must save currentcolor because otherwise the browser would write the text
+  // with icon color, thanks bill for having removed the back pointer !
+  Color saved_color = getcolor(); 
+					    
 
   // Setup the transform matrix as needed...
   scale = float(r.w() < r.h() ? r.w() : r.h());
@@ -382,10 +387,7 @@ void FileIcon::_draw(const Rectangle& r) const {
   // Restore the transform matrix
   pop_matrix();
 
-  // WAS: color could be restored by copying it from current_color() first.
-  // However lots of image types screw up the current color so probably best
-  // to just say that changing it is allowed.
-  // setcolor(saved_color);
+  setcolor(saved_color); // restoring currrent_color necessary for browser text drawing
 }
 
 
