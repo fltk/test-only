@@ -219,20 +219,29 @@ void Widget::draw_label(const Rectangle& ir, Flags flags) const {
 	    h = r.h();
 	}    
 	ir.set(r, w, h, flags);
-	if(!resize_fit) { // default case no resize asked
+#if 0
+	// WAS: I believe I fixed the problem here with a change to
+	// TiledImage so that it indicates it can draw in any rectangle.
+	// I don't want this code as it adds an extra border inside the
+	// passed rectangle and it does not center icons. If this is
+	// still necessary, it may want to be put into the Rectangle::set()
+	// method.
+	if (!resize_fit) { // default case no resize asked
 	    // avoid the img to draw outside its box if a border is drawn
 	    if (box()!=NO_BOX) {
-	    // WAS: please pass the inset rectangle if you want to avoid
-	    // drawing over the borders!
 	    // FABIEN: FWIW, Symbol->inset() would only solve the pb once, but then
 	    //	inset() should be called each time encapsulating widget is resized
 	    //   rather contrastly, the following code ensures it is drawn as expected in all situations:
+	      // WAS: not sure I understand. inset() *is* called every time the
+	      // widget is drawn, and thus every time it is resized, it is
+	      // called by the code that calls this function.
 		if (ir.x()<box_dx(box())) ir.x( box_dx(box()) ); // don't overwrite the left border
 		if (ir.y()<box_dy(box())) ir.y( box_dy(box()) ); // don't overwrite the top border
 		if (ir.w()>this->w()-box_dw(box())) ir.w(this->w()-box_dw(box())-box_dx(box())/2); // not out horiz.
 		if (ir.h()>this->h()-box_dh(box())) ir.h(this->h()-box_dh(box())-box_dy(box())/2); // not out vert.
 	    } 
 	}
+#endif
 	img->draw(ir);
     }
     else

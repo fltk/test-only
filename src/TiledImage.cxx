@@ -19,7 +19,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 /*! \class fltk::TiledImage
 
@@ -44,16 +43,22 @@ TiledImage::TiledImage(const char * name): Symbol(0) {
     if (name) image(SharedImage::get(name));
 }
 
-/*! Returns the maximum of the passed size and the size of the image.
-  This makes the alignment code center the tiled image if desired.
-*/
+/*! Returns w and h unchanged, indicating that it can draw any size
+  of rectangle, with no preference. */
 void TiledImage::_measure(int& w, int& h) const {
+  // Do nothing to indicate any rectangle is allowed.
+  // I think what I intended with this old code was to return a useful
+  // size for some (nyi) automatic resize of widgets. But it won't draw
+  // right unless ALIGN_CLIP was on. Also I suspect this is being used
+  // for backgrounds and probably should have no effect on resize anyway.
+#if 0
   if (!image_) return;
   int iw = w;
   int ih = h;
   image_->measure(iw,ih);
   if (iw > w) w = iw;
   if (ih > h) h = ih;
+#endif
 }
 
 /*! Repeatedly draws the image to fill the area, putting the top-left
