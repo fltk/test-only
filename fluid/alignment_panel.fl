@@ -26,18 +26,18 @@ decl {extern fltk::Preferences fluid_prefs;} {public
 decl {fltk::TextBuffer *shell_run_buffer;} {public
 } 
 
-Function {make_alignment_window()} {open
+Function {make_preferences_window()} {open
 } {
-  {fltk::Window} alignment_window {
+  {fltk::Window} preferences_window {
     label {fluid Preferences} open
-    xywh {450 264 374 280} resizable non_modal visible
+    xywh {570 272 365 246} resizable non_modal visible
   } {
     {fltk::TabGroup} tabs {open
-      xywh {5 4 355 230}
+      xywh {0 0 360 210}
     } {
       {fltk::Group} {} {
-        label General open
-        xywh {5 26 350 200} hide
+        label General
+        xywh {0 20 360 190} hide color 0x54c2d400
       } {
         {fltk::CheckButton} openlast_button {
           label {Open Previous File on Startup}
@@ -66,61 +66,61 @@ completion_button->value(b);}
       }
       {fltk::Group} {} {
         label {Code generation}
-        xywh {4 26 350 192} align 5 hide box ENGRAVED_BOX
+        xywh {0 20 360 190} align 5 hide color 0x13d47a00
       } {
         {fltk::Widget} {} {
           label {Use "name.ext" to set name or just ".ext" to set only extension.}
-          xywh {16 17 323 25} align 180 box NO_BOX labelsize 11
+          xywh {16 0 323 25} align 180 box NO_BOX labelsize 11
         }
         {fltk::Input} header_file_input {
           label {Header File:}
           user_data 1 user_data_type {void*}
           callback header_input_cb
-          xywh {96 47 185 22} when CHANGED
+          xywh {96 30 185 22} when CHANGED
         }
         {fltk::Input} code_file_input {
           label {Code File:}
           user_data 1 user_data_type {void*}
           callback code_input_cb
-          xywh {96 74 185 22} when CHANGED
+          xywh {96 57 185 22} when CHANGED
         }
         {fltk::CheckButton} include_H_from_C_button {
           label {\#include "header" in code}
           callback include_H_from_C_button_cb
-          xywh {16 101 170 22} value 1
+          xywh {16 84 170 22} value 1
         }
       }
       {fltk::Group} {} {
         label Alignment open selected
-        xywh {4 26 351 190} align 5 box ENGRAVED_BOX
+        xywh {0 20 360 190} align 5 color 0xd49a5600
       } {
         {fltk::Input} horizontal_input {
           label {Horizontal:}
           user_data 1 user_data_type long
           callback alignment_cb
-          xywh {77 20 100 22}
+          xywh {75 10 100 22}
           extra_code {o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);}
         }
         {fltk::Input} vertical_input {
           label {Vertical:}
           user_data 2 user_data_type long
           callback alignment_cb
-          xywh {240 20 100 22}
+          xywh {238 10 100 22}
           extra_code {o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);}
         }
         {fltk::Input} snap_input {
           label {Snap:}
           user_data 3 user_data_type long
           callback alignment_cb
-          xywh {77 56 100 22}
+          xywh {75 50 100 22}
           extra_code {o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);}
         }
       }
     }
     {fltk::Button} {} {
       label Close
-      callback {alignment_window->hide();}
-      xywh {263 250 107 20}
+      callback {preferences_window->hide();}
+      xywh {140 215 107 25}
     }
   }
 } 

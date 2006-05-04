@@ -65,8 +65,8 @@ void alignment_cb(fltk::Input *i, long v) {
 extern const char* header_file_name;
 extern const char* code_file_name;
 
-void set_alignment_window(){
-  if (!alignment_window) make_alignment_window();
+void set_preferences_window(){
+  if (!preferences_window) make_preferences_window();
   include_H_from_C_button->value(include_H_from_C);
   header_file_input->value(header_file_name);
   code_file_input->value(code_file_name);
@@ -76,9 +76,12 @@ void set_alignment_window(){
   sprintf(buf,"%d",snap); snap_input->value(buf);
 }
 
-void show_alignment_cb(fltk::Widget *, void *) {
-  set_alignment_window();
-  alignment_window->show();
+void show_preferences_cb(fltk::Widget *, void * tabnum) {
+  set_preferences_window();
+  int n = (int) (long) tabnum;
+  if (n>=0 && n<3)
+      tabs->value(n);
+  preferences_window->show();
 }
 
 void header_input_cb(fltk::Input* i, void*) {

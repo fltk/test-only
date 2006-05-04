@@ -34,6 +34,7 @@
 #define fltk_fluid_type_h
 
 #include <fltk/Widget.h>
+#include <fltk/Color.h>
 #include <fltk/Preferences.h>
 #include "Fluid_Plugins.h"
 #include "Fluid_Image.h"
@@ -48,9 +49,7 @@ class FLUID_API FluidType {
 public:
   virtual void prefix(const char* p) {}
   virtual const char*  prefix() const {return 0;}
-  virtual int pixmapID() {
-      return -1;
-  }
+  virtual int pixmapID() {return -1;}
 
 protected:
 
@@ -252,7 +251,21 @@ public:
   fltk::Widget *enter_live_mode(int top);
   void leave_live_mode();
   void copy_properties();
+  
+  virtual int textstuff(int w, fltk::Font* f, int& s, fltk::Color c) {
+	fltk::Widget *myo = (fltk::Widget *)(w==4 ? ((WidgetType*)factory)->o : o);
+	switch (w) {
+	case 4:
+	case 0: f = myo->textfont(); s = (int) myo->textsize(); c = myo->textcolor(); break;
+	case 1: myo->textfont(f); break;
+	case 2: myo->textsize((float)s); break;
+	case 3: myo->textcolor(c); break;
+	}
+	return 1;
+    }
+
   int pixmapID() { return 5;}
+  
 };
 
 #define LOAD ((void*)9831)

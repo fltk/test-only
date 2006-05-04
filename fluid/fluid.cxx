@@ -124,7 +124,7 @@ char	relative_history[10][1024];
 
 void	load_history();
 void	update_history(const char *);
-void	set_alignment_window();
+void	set_preferences_window();
 
 ////////////////////////////////////////////////////////////////
 
@@ -712,7 +712,7 @@ void sort_cb(Widget *,void *) {
     for (; f; f = f->next_brother) sort(f);
 }
 
-void show_alignment_cb(Widget *, void *);
+void show_preferences_cb(Widget *, void *);
 
 void set_images_dir_cb(Widget *, void *);
 
@@ -1244,7 +1244,7 @@ int main(int argc,char **argv) {
 	FileIcon::load_system_icons();
 	main_window->callback(exit_cb);
 	main_window->show(argc,argv);
-	set_alignment_window();
+	set_preferences_window();
 	toggle_widgetbin_cb(0,0);
 	toggle_sourceview_cb(0,0);
 	if (!c && openlast_button->value() && absolute_history[0][0]) {

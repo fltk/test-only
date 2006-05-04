@@ -4,7 +4,7 @@
 #include "FluidType.h"
 fltk::TextBuffer *shell_run_buffer;
 
-fltk::Window *alignment_window=(fltk::Window *)0;
+fltk::Window *preferences_window=(fltk::Window *)0;
 
 fltk::TabGroup *tabs=(fltk::TabGroup *)0;
 
@@ -26,30 +26,32 @@ static void cb_completion_button(fltk::CheckButton*, void*) {
   fluid_prefs.set("show_completion_dialogs", completion_button->value());
 }
 
-fltk::Input *horizontal_input=(fltk::Input *)0;
-
-fltk::Input *vertical_input=(fltk::Input *)0;
-
-fltk::Input *snap_input=(fltk::Input *)0;
-
 fltk::Input *header_file_input=(fltk::Input *)0;
 
 fltk::Input *code_file_input=(fltk::Input *)0;
 
 fltk::CheckButton *include_H_from_C_button=(fltk::CheckButton *)0;
 
+fltk::Input *horizontal_input=(fltk::Input *)0;
+
+fltk::Input *vertical_input=(fltk::Input *)0;
+
+fltk::Input *snap_input=(fltk::Input *)0;
+
 static void cb_Close(fltk::Button*, void*) {
-  alignment_window->hide();
+  preferences_window->hide();
 }
 
-fltk::Window* make_alignment_window() {
+fltk::Window* make_preferences_window() {
   fltk::Window* w;
-   {fltk::Window* o = alignment_window = new fltk::Window(374, 280, "fluid Preferences");
+   {fltk::Window* o = preferences_window = new fltk::Window(365, 246, "fluid Preferences");
     w = o;
     o->begin();
-     {fltk::TabGroup* o = tabs = new fltk::TabGroup(5, 4, 355, 230);
+     {fltk::TabGroup* o = tabs = new fltk::TabGroup(0, 0, 360, 210);
       o->begin();
-       {fltk::Group* o = new fltk::Group(5, 26, 350, 200, "General");
+       {fltk::Group* o = new fltk::Group(0, 20, 360, 190, "General");
+        o->color((fltk::Color)0x54c2d400);
+        o->hide();
         o->begin();
          {fltk::CheckButton* o = openlast_button = new fltk::CheckButton(10, 10, 193, 25, "Open Previous File on Startup");
           o->callback((fltk::Callback*)cb_openlast_button);
@@ -71,52 +73,51 @@ fltk::Window* make_alignment_window() {
         }
         o->end();
       }
-       {fltk::Group* o = new fltk::Group(4, 26, 351, 190, "Alignment");
-        o->box(fltk::ENGRAVED_BOX);
+       {fltk::Group* o = new fltk::Group(0, 20, 360, 190, "Code generation");
+        o->color((fltk::Color)0x13d47a00);
         o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
         o->hide();
         o->begin();
-         {fltk::Input* o = horizontal_input = new fltk::Input(77, 20, 100, 22, "Horizontal:");
-          o->callback((fltk::Callback*)alignment_cb, (void*)(1));
-          o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);
-        }
-         {fltk::Input* o = vertical_input = new fltk::Input(240, 20, 100, 22, "Vertical:");
-          o->callback((fltk::Callback*)alignment_cb, (void*)(2));
-          o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);
-        }
-         {fltk::Input* o = snap_input = new fltk::Input(77, 56, 100, 22, "Snap:");
-          o->callback((fltk::Callback*)alignment_cb, (void*)(3));
-          o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);
-        }
-        o->end();
-      }
-       {fltk::Group* o = new fltk::Group(4, 26, 350, 192, "Code generation");
-        o->box(fltk::ENGRAVED_BOX);
-        o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
-        o->hide();
-        o->begin();
-         {fltk::Widget* o = new fltk::Widget(16, 17, 323, 25, "Use \"name.ext\" to set name or just \".ext\" to set only extension.");
+         {fltk::Widget* o = new fltk::Widget(16, 0, 323, 25, "Use \"name.ext\" to set name or just \".ext\" to set only extension.");
           o->box(fltk::NO_BOX);
           o->labelsize(11);
           o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE|fltk::ALIGN_WRAP);
         }
-         {fltk::Input* o = header_file_input = new fltk::Input(96, 47, 90, 22, "Header File:");
+         {fltk::Input* o = header_file_input = new fltk::Input(96, 30, 185, 22, "Header File:");
           o->callback((fltk::Callback*)header_input_cb, (void*)(1));
           o->when(fltk::WHEN_CHANGED);
         }
-         {fltk::Input* o = code_file_input = new fltk::Input(96, 74, 90, 22, "Code File:");
+         {fltk::Input* o = code_file_input = new fltk::Input(96, 57, 185, 22, "Code File:");
           o->callback((fltk::Callback*)code_input_cb, (void*)(1));
           o->when(fltk::WHEN_CHANGED);
         }
-         {fltk::CheckButton* o = include_H_from_C_button = new fltk::CheckButton(16, 101, 170, 22, "#include \"header\" in code");
+         {fltk::CheckButton* o = include_H_from_C_button = new fltk::CheckButton(16, 84, 170, 22, "#include \"header\" in code");
           o->set_flag(fltk::VALUE);
           o->callback((fltk::Callback*)include_H_from_C_button_cb);
         }
         o->end();
       }
+       {fltk::Group* o = new fltk::Group(0, 20, 360, 190, "Alignment");
+        o->color((fltk::Color)0xd49a5600);
+        o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
+        o->begin();
+         {fltk::Input* o = horizontal_input = new fltk::Input(75, 10, 100, 22, "Horizontal:");
+          o->callback((fltk::Callback*)alignment_cb, (void*)(1));
+          o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);
+        }
+         {fltk::Input* o = vertical_input = new fltk::Input(238, 10, 100, 22, "Vertical:");
+          o->callback((fltk::Callback*)alignment_cb, (void*)(2));
+          o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);
+        }
+         {fltk::Input* o = snap_input = new fltk::Input(75, 50, 100, 22, "Snap:");
+          o->callback((fltk::Callback*)alignment_cb, (void*)(3));
+          o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);
+        }
+        o->end();
+      }
       o->end();
     }
-     {fltk::Button* o = new fltk::Button(263, 250, 107, 20, "Close");
+     {fltk::Button* o = new fltk::Button(140, 215, 107, 25, "Close");
       o->callback((fltk::Callback*)cb_Close);
     }
     o->end();

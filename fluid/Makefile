@@ -37,6 +37,7 @@ include ../makeinclude
 CPPFILES = \
 	about_panel.cxx \
 	alignment_panel.cxx \
+	align_widget.cxx \
 	code.cxx \
 	CodeEditor.cxx \
 	coding_style.cxx \

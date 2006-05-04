@@ -48,7 +48,7 @@ DECL_MENUCB(later_cb);
 DECL_MENUCB(group_cb);
 DECL_MENUCB(ungroup_cb);
 DECL_MENUCB(sort_cb);
-DECL_MENUCB(show_alignment_cb);
+DECL_MENUCB(show_preferences_cb);
 DECL_MENUCB(show_coding_style_cb);
 DECL_MENUCB(select_all_cb);
 DECL_MENUCB(select_none_cb);
@@ -63,6 +63,9 @@ DECL_MENUCB(toggle_overlays);
 DECL_MENUCB2(toggle_sourceview_cb,DoubleBufferWindow);
 DECL_MENUCB(show_shell_window);
 DECL_MENUCB2(do_shell_command,ReturnButton);
+IMPL_MENUCB(show_grid_cb);
+void align_widget_cb(Widget*, long how) ;
+void widget_size_cb(Widget *, long size) ;
 
 //////////////////////////////////////////////////////////////////////
 extern char absolute_history[][1024];
@@ -138,7 +141,7 @@ static void cb(fltk::Widget *, void *v) {
 }
 //////////////////////////////////////////////////////////////////////
 MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
-    ItemGroup* g;
+    ItemGroup *g, *sg;
     
     Main_Menu = menubar;
 
@@ -197,7 +200,7 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
     iwidget_bin = new Item(Item::TOGGLE,"Show Widget &Bin",ACCELERATOR+'b',toggle_widgetbin_cb);
     isource_view = new Item(Item::TOGGLE,"Show Source Code",ACCELERATOR+COMMAND+'s',(Callback*) toggle_sourceview_cb);
     new Divider();
-    new Item("&Preferences",COMMAND+'p',show_alignment_cb);
+    new Item("&Preferences",COMMAND+'p',show_preferences_cb);
     new Item("Coding St&yle", 0, show_coding_style_cb);
     new Item("T&heme", 0, theme_cb);
     new Item("Set i&mages root directory", COMMAND+'d', set_images_dir_cb);
@@ -210,6 +213,39 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
     g=new ItemGroup("&Plugins", 0, 0, (void *)Plugins_Options_Menu);
     g->end();
 
+    g=new ItemGroup("&Layout");
+      sg=new ItemGroup("&Align");
+	new Item("&Left",0,(Callback *)align_widget_cb,(void*)10);
+	new Item("&Center",0,(Callback *)align_widget_cb,(void*)11);
+	new Item("&Right",0,(Callback *)align_widget_cb,(void*)12);
+	new Item("&Top",0,(Callback *)align_widget_cb,(void*)13);
+	new Item("&Middle",0,(Callback *)align_widget_cb,(void*)14);
+	new Item("&Bottom",0,(Callback *)align_widget_cb,(void*)15);
+      sg->end();
+      sg=new ItemGroup("&Space Evenly");
+	new Item("&Across",0,(Callback *)align_widget_cb,(void*)20);
+	new Item("&Down",0,(Callback *)align_widget_cb,(void*)21);
+      sg->end();
+      sg=new ItemGroup("&Make Same Size");
+	new Item("&Width",0,(Callback *)align_widget_cb,(void*)30);
+	new Item("&Height",0,(Callback *)align_widget_cb,(void*)31);
+	new Item("&Both",0,(Callback *)align_widget_cb,(void*)32);
+      sg->end();
+      sg=new ItemGroup("&Center In Group");
+	new Item("&Horizontal",0,(Callback *)align_widget_cb,(void*)40);
+	new Item("&Vertical",0,(Callback *)align_widget_cb,(void*)41);
+      sg->end();
+      sg=new ItemGroup("Set &Widget Size");
+	new Item("&Tiny",ACCELERATOR+'1',(Callback *)widget_size_cb,(void*)8,0,NORMAL_LABEL,HELVETICA,8);
+	new Item("&Small",ACCELERATOR+'2',(Callback *)widget_size_cb,(void*)11,0,NORMAL_LABEL,HELVETICA,11);
+	new Item("&Normal",ACCELERATOR+'3',(Callback *)widget_size_cb,(void*)14,0,NORMAL_LABEL,HELVETICA,14);
+	new Item("&Medium",ACCELERATOR+'4',(Callback *)widget_size_cb,(void*)18,0,NORMAL_LABEL,HELVETICA,18);
+	new Item("&Large",ACCELERATOR+'5',(Callback *)widget_size_cb,(void*)24,0,NORMAL_LABEL,HELVETICA,24);
+	new Item("&Huge",ACCELERATOR+'6',(Callback *)widget_size_cb,(void*)32,0,NORMAL_LABEL,HELVETICA,32);
+      sg->end();
+      new Divider();
+      new Item("&Grid and Size Settings...",COMMAND+'g',show_preferences_cb,(void*)2);
+    g->end();
     g=new ItemGroup("&Shell", 0, 0);
 	new Item("Execute &Command",ACCELERATOR+'x',show_shell_window);
 	new Item("Execute &Again",ACCELERATOR+'g', (Callback*)do_shell_command);

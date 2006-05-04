@@ -154,6 +154,8 @@ namespace fltk {
 	    Group::current(0);
 	    resizable(0);
 	}
+	void full_resize(int X, int Y, int W, int H) { Group::resize(X, Y, W, H); }
+
     };
     
     class PackType : public GroupType {
