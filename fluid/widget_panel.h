@@ -14,6 +14,7 @@ void type_make_cb(fltk::Widget*w,void*d);
 extern void propagate_tabs(fltk::TabGroup*, void*);
 extern fltk::TabGroup* panel_tabs;
 extern void propagate_group(fltk::Group*, void*);
+extern fltk::Group* gInput;
 #include <fltk/Input.h>
 extern void user_class_cb(fltk::Input*, void*);
 #include <fltk/Choice.h>

@@ -126,6 +126,7 @@ void Undo::undo_cb(Widget *, void *) {
   // Update undo/redo menu items...
   if (current <= 0) undo_item[UNDO_ITEM]->deactivate();
   undo_item[REDO_ITEM]->activate();
+  resume();
 }
 
 // Save current file to undo buffer

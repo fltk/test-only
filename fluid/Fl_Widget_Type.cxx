@@ -24,7 +24,6 @@
 //
 
 #include <fltk/Window.h>
-//#include <fltk/x.h>
 #include <fltk/run.h>
 #include <fltk/Group.h>
 #include "Fluid_Plugins.h"
@@ -1009,6 +1008,10 @@ static const Enumeration alignmenu[] = {
 
 void align_cb(fltk::Button* i, void *v) {
   fltk::Flags b = fltk::Flags(i->argument());
+  // fabien: I don't understand how colors codification
+  // should work here i get strange results once i propagate the load events
+  // bill if you read these lines please specify how you intented it to work.
+
   if (v == LOAD) {
     i->value((current_widget->o->flags() & b) != 0);
     fltk::Flags tplate = ((WidgetType*)(current_widget->factory))->o->flags();
