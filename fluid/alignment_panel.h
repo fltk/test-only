@@ -17,6 +17,8 @@ extern fltk::TabGroup* tabs;
 extern fltk::CheckButton* openlast_button;
 extern fltk::CheckButton* prevpos_button;
 extern fltk::CheckButton* completion_button;
+#include <fltk/ValueInput.h>
+extern fltk::ValueInput* recent_spinner;
 #include <fltk/Widget.h>
 #include <fltk/Input.h>
 extern void header_input_cb(fltk::Input*, void*);

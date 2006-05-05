@@ -19,7 +19,13 @@ extern void user_class_cb(fltk::Input*, void*);
 #include <fltk/Choice.h>
 extern void subtype_cb(fltk::Choice*, void*);
 extern void label_cb(fltk::Input*, void*);
+extern fltk::Group* gAlignment;
+#include <fltk/CheckButton.h>
+extern void image_inlined_cb(fltk::CheckButton*, void*);
+extern fltk::CheckButton* include_image_button;
 #include <fltk/Widget.h>
+extern void align_cb(fltk::Button*, void*);
+extern fltk::Group* gImage;
 extern fltk::Widget* image_label;
 extern void image_cb(fltk::Button*, void*);
 extern fltk::Button* image_button1;
@@ -29,34 +35,35 @@ extern fltk::Widget* image_label3;
 extern fltk::Button* image_button3;
 extern fltk::Widget* image_label4;
 extern fltk::Button* image_button4;
-#include <fltk/CheckButton.h>
-extern void image_inlined_cb(fltk::CheckButton*, void*);
-extern fltk::CheckButton* include_image_button;
-extern void align_cb(fltk::Button*, void*);
+extern fltk::Group* gDimensions;
 #include <fltk/ValueInput.h>
 extern void x_cb(fltk::ValueInput*, void*);
 extern fltk::ValueInput* widget_x;
 extern void y_cb(fltk::ValueInput*, void*);
 extern fltk::ValueInput* widget_y;
 extern void width_cb(fltk::ValueInput*, void*);
-extern fltk::ValueInput* widget_width;
+extern fltk::ValueInput* widget_w;
 extern void height_cb(fltk::ValueInput*, void*);
-extern fltk::ValueInput* widget_height;
+extern fltk::ValueInput* widget_h;
 extern void set_xy_cb(fltk::CheckButton*, void*);
 extern fltk::CheckButton* set_xy;
 extern void slider_size_cb(fltk::ValueInput*, void*);
-extern void border_cb(fltk::CheckButton*, void*);
-extern void modal_cb(fltk::CheckButton*, void*);
-extern void non_modal_cb(fltk::CheckButton*, void*);
+extern fltk::Group* gValues;
 extern void value_cb(fltk::ValueInput*, void*);
 extern void min_cb(fltk::ValueInput*, void*);
 extern void max_cb(fltk::ValueInput*, void*);
 extern void step_cb(fltk::ValueInput*, void*);
 extern void line_cb(fltk::ValueInput*, void*);
+extern fltk::Group* gAttributes;
 extern void visible_cb(fltk::CheckButton*, void*);
 extern void active_cb(fltk::CheckButton*, void*);
 extern void resizable_cb(fltk::CheckButton*, void*);
 extern void hotspot_cb(fltk::CheckButton*, void*);
+extern void border_cb(fltk::CheckButton*, void*);
+extern void modal_cb(fltk::CheckButton*, void*);
+extern void non_modal_cb(fltk::CheckButton*, void*);
+extern fltk::Group* gShortTool;
+#include <fltk/InvisibleBox.h>
 #include "Shortcut_Button.h"
 extern void shortcut_in_cb(Shortcut_Button*, void*);
 #include <fltk/WordwrapInput.h>

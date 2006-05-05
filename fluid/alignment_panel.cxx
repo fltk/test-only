@@ -26,6 +26,13 @@ static void cb_completion_button(fltk::CheckButton*, void*) {
   fluid_prefs.set("show_completion_dialogs", completion_button->value());
 }
 
+fltk::ValueInput *recent_spinner=(fltk::ValueInput *)0;
+
+static void cb_recent_spinner(fltk::ValueInput*, void*) {
+  fluid_prefs.set("recent_files", recent_spinner->value());
+  load_history();
+}
+
 fltk::Input *header_file_input=(fltk::Input *)0;
 
 fltk::Input *code_file_input=(fltk::Input *)0;
@@ -53,7 +60,6 @@ fltk::Window* make_preferences_window() {
       o->begin();
        {fltk::Group* o = new fltk::Group(0, 30, 360, 180, "General");
         o->color((fltk::Color)0x54c2d400);
-        o->hide();
         o->begin();
          {fltk::CheckButton* o = openlast_button = new fltk::CheckButton(10, 0, 193, 25, "Open Previous File on Startup");
           o->callback((fltk::Callback*)cb_openlast_button);
@@ -72,6 +78,15 @@ fltk::Window* make_preferences_window() {
           int b;
           fluid_prefs.get("show_completion_dialogs", b, 1);
           completion_button->value(b);
+        }
+         {fltk::ValueInput* o = recent_spinner = new fltk::ValueInput(13, 75, 40, 25, "# Recent Files");
+          o->callback((fltk::Callback*)cb_recent_spinner);
+          o->align(fltk::ALIGN_RIGHT);
+          o->when(fltk::WHEN_CHANGED);
+          int c;
+          fluid_prefs.get("recent_files", c, 5);
+          recent_spinner->maximum(10);
+          recent_spinner->value(c);
         }
         o->end();
       }
@@ -102,6 +117,7 @@ fltk::Window* make_preferences_window() {
        {fltk::Group* o = new fltk::Group(0, 30, 360, 180, "Alignment");
         o->color((fltk::Color)0xd49a5600);
         o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
+        o->hide();
         o->begin();
          {fltk::Input* o = horizontal_input = new fltk::Input(75, 0, 100, 22, "Horizontal:");
           o->labelsize(14);

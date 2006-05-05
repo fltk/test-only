@@ -3,8 +3,8 @@ version 2.0100
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
-gridx 10 
-gridy 10 
+gridx 5 
+gridy 5 
 snap 3
 decl {\#include "FluidType.h"} {} 
 
@@ -32,12 +32,12 @@ Function {make_preferences_window()} {open
     label {fluid Preferences} open
     xywh {570 272 365 246} resizable non_modal visible
   } {
-    {fltk::TabGroup} tabs {open selected
+    {fltk::TabGroup} tabs {open
       xywh {0 0 360 210}
     } {
       {fltk::Group} {} {
-        label General
-        xywh {0 30 360 180} hide color 0x54c2d400
+        label General open
+        xywh {0 30 360 180} color 0x54c2d400
       } {
         {fltk::CheckButton} openlast_button {
           label {Open Previous File on Startup}
@@ -62,6 +62,16 @@ prevpos_button->value(b);}
           extra_code {int b;
 fluid_prefs.get("show_completion_dialogs", b, 1);
 completion_button->value(b);}
+        }
+        {fltk::ValueInput} recent_spinner {
+          label {\# Recent Files}
+          callback {fluid_prefs.set("recent_files", recent_spinner->value());
+load_history();} selected
+          xywh {13 75 40 25} align 8 when CHANGED
+          extra_code {int c;
+fluid_prefs.get("recent_files", c, 5);
+recent_spinner->maximum(10);
+recent_spinner->value(c);}
         }
       }
       {fltk::Group} {} {
@@ -92,7 +102,7 @@ completion_button->value(b);}
       }
       {fltk::Group} {} {
         label Alignment
-        xywh {0 30 360 180} align 5 color 0xd49a5600
+        xywh {0 30 360 180} align 5 hide color 0xd49a5600
       } {
         {fltk::Input} horizontal_input {
           label {Horizontal:}

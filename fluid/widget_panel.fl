@@ -4,8 +4,8 @@ images_dir ./
 header_name {.h} 
 code_name {.cxx} 
 gridx 5 
-gridy 11 
-snap 2
+gridy 5 
+snap 3
 decl {\#include <fltk/Window.h>} {public
 } 
 
@@ -17,11 +17,13 @@ decl {\#include "fluid_img.h"} {}
 
 decl {\#include "factory.h"} {} 
 
+decl {\#include "undo.h"} {} 
+
 Function {make_widgetbin()} {open
 } {
   {fltk::Window} widgetbin_panel {
     label {Widget Bin}
-    xywh {495 158 520 85} resizable non_modal visible
+    xywh {478 135 520 85} resizable non_modal visible
   } {
     {fltk::Group} {} {
       xywh {3 3 79 79} box THIN_DOWN_BOX
@@ -412,237 +414,236 @@ Function {type_make_cb(fltk::Widget*w,void*d)} {open return_type void
 } {
   code {FluidType *t = fltk::FluidType_make((char*)d);
   if (t) {
-    Undo::checkpoint();
+    fltk::Undo::checkpoint();
     select_only(t);
     modflag = 1;
     t->open();
-  }} {selected
-  }
+  }} {}
 } 
 
 Function {make_widget_panel()} {open
 } {
   {fltk::Window} {} {open
-    xywh {493 272 380 380} resizable hotspot visible
+    xywh {476 248 380 380} resizable hotspot visible
   } {
     {fltk::TabGroup} panel_tabs {
       callback propagate_tabs open
-      xywh {0 10 380 331}
+      xywh {0 0 380 340}
     } {
       {fltk::Group} {} {
         label GUI
         callback propagate_group open
-        xywh {0 23 380 297}
+        xywh {0 20 380 320} color 0x14aef700
       } {
         {fltk::Input} {} {
           label Class
           user_data 4
           callback user_class_cb
           tooltip {This allows you to name a user-defined class that this widget is an instance of, rather than an fltk built-in class. You will need to add a \#include declaration so that the definition of your class is included in the fluid output.}
-          xywh {80 11 170 22} when CHANGED
+          xywh {80 0 170 22} when CHANGED
         }
         {fltk::Choice} {} {
           callback subtype_cb
           tooltip {Selects a value for type() for this widget}
-          xywh {250 11 120 22}
+          xywh {250 0 120 22}
         } {}
         {fltk::Input} {} {
           label Label
           callback label_cb
           tooltip {Text displayed on or next to the widget}
-          xywh {80 33 290 22} when CHANGED
+          xywh {80 22 290 22} when CHANGED
           extra_code {o->take_focus();}
         }
-        {fltk::Widget} image_label {
-          label {Image default}
-          xywh {10 80 73 17} align 56 box NO_BOX
+        {fltk::Group} gAlignment {
+          xywh {10 44 360 22}
+        } {
+          {fltk::CheckButton} include_image_button {
+            label inline
+            callback image_inlined_cb
+            tooltip {The image data is inserted as inline data into the output C++ code, rather than generating code to read the image file.}
+            xywh {340 0 20 22} align 148
+          }
+          {fltk::Widget} {} {
+            label Alignment
+            xywh {0 0 70 22} align 56 box NO_BOX
+          }
+          {fltk::Button} {} {
+            label {@4->}
+            user_data {fltk::ALIGN_LEFT}
+            callback align_cb
+            tooltip {Places label on the left of the widget}
+            xywh {70 2 20 20} type TOGGLE labelsize 11 textsize 11
+          }
+          {fltk::Button} {} {
+            label {@6->}
+            user_data {fltk::ALIGN_RIGHT}
+            callback align_cb
+            tooltip {Places label on the right of the widget}
+            xywh {90 2 20 20} type TOGGLE labelsize 11 textsize 11
+          }
+          {fltk::Button} {} {
+            label {@8->}
+            user_data {fltk::ALIGN_TOP}
+            callback align_cb
+            tooltip {Places label on the top of the widget}
+            xywh {110 2 20 20} type TOGGLE labelsize 11 textsize 11
+          }
+          {fltk::Button} {} {
+            label {@2->}
+            user_data {fltk::ALIGN_BOTTOM}
+            callback align_cb
+            tooltip {Places label on the bottom of the widget}
+            xywh {130 2 20 20} type TOGGLE labelsize 11 textsize 11
+          }
+          {fltk::Button} {} {
+            label inside
+            user_data {fltk::ALIGN_INSIDE}
+            callback align_cb
+            tooltip {Places label inside the widget}
+            xywh {155 2 40 20} type TOGGLE
+          }
+          {fltk::Button} {} {
+            label clip
+            user_data {fltk::ALIGN_CLIP}
+            callback align_cb
+            tooltip {Turn on clipping to the widget's area when drawing label.  This is slower so it should be left off if label will fit}
+            xywh {195 2 40 20} type TOGGLE
+          }
+          {fltk::Button} {} {
+            label wrap
+            user_data {fltk::ALIGN_WRAP}
+            callback align_cb
+            tooltip {Word-wrap the label}
+            xywh {235 2 40 20} type TOGGLE
+          }
         }
-        {fltk::Button} image_button1 {
-          user_data 1 user_data_type {void*}
-          callback image_cb
-          tooltip {Select an image to label the widget}
-          xywh {84 80 285 16} align 52 color 7
+        {fltk::Group} gImage {
+          xywh {10 69 359 62}
+        } {
+          {fltk::Widget} image_label {
+            label {Image default}
+            xywh {0 0 73 17} align 56 box NO_BOX
+          }
+          {fltk::Button} image_button1 {
+            user_data 1 user_data_type {void*}
+            callback image_cb
+            tooltip {Select an image to label the widget}
+            xywh {74 0 285 16} align 52 color 7
+          }
+          {fltk::Widget} image_label2 {
+            label inactive
+            xywh {0 15 73 17} align 56 box NO_BOX
+          }
+          {fltk::Button} image_button2 {
+            user_data 2 user_data_type {void*}
+            callback image_cb
+            tooltip {Select an image to label the widget}
+            xywh {74 15 285 16} align 52 hotspot color 7
+          }
+          {fltk::Widget} image_label3 {
+            label {mouse on}
+            xywh {0 30 73 17} align 56 box NO_BOX
+          }
+          {fltk::Button} image_button3 {
+            user_data 3 user_data_type {void*}
+            callback image_cb
+            tooltip {Select an image to label the widget}
+            xywh {74 30 285 16} align 52 color 7
+          }
+          {fltk::Widget} image_label4 {
+            label pushed
+            xywh {0 45 73 17} align 56 box NO_BOX
+          }
+          {fltk::Button} image_button4 {
+            user_data 4 user_data_type {void*}
+            callback image_cb
+            tooltip {Select an image to label the widget}
+            xywh {74 45 285 16} align 52 color 7
+          }
         }
-        {fltk::Widget} image_label2 {
-          label inactive
-          xywh {10 95 73 17} align 56 box NO_BOX
+        {fltk::Group} gDimensions {
+          label Dimensions open
+          xywh {80 143 290 23} align 4
+        } {
+          {fltk::ValueInput} widget_x {
+            label x
+            callback x_cb
+            tooltip {The x coordinate of the widget.}
+            xywh {0 1 55 22} align 29 when ENTER_KEY labelsize 11 maximum 2000 step 1 value 10
+          }
+          {fltk::ValueInput} widget_y {
+            label y
+            callback y_cb
+            tooltip {The y coordinate of the widget.}
+            xywh {55 0 55 22} align 29 when ENTER_KEY labelsize 11 maximum 2000 step 1 value 10
+          }
+          {fltk::ValueInput} widget_w {
+            label w
+            callback width_cb
+            tooltip {The width of the widget.}
+            xywh {110 0 55 22} align 29 when ENTER_KEY labelsize 11 maximum 2000 step 1 value 10
+          }
+          {fltk::ValueInput} widget_h {
+            label h
+            callback height_cb
+            tooltip {The height of the widget.}
+            xywh {165 1 55 22} align 29 when ENTER_KEY labelsize 11 maximum 2000 step 1 value 10
+          }
+          {fltk::CheckButton} set_xy {
+            label xy
+            callback set_xy_cb
+            tooltip {Window will use this x,y rather than being positioned by the operating system.}
+            xywh {225 1 25 22} align 5 labelsize 11
+          }
+          {fltk::ValueInput} {} {
+            label {slider size}
+            callback slider_size_cb
+            tooltip {The size of the scroller}
+            xywh {245 1 45 22} align 29 when ENTER_KEY labelsize 11
+          }
         }
-        {fltk::Button} image_button2 {
-          user_data 2 user_data_type {void*}
-          callback image_cb
-          tooltip {Select an image to label the widget}
-          xywh {84 95 285 16} align 52 hotspot color 7
-        }
-        {fltk::Widget} image_label3 {
-          label {mouse on}
-          xywh {10 110 73 17} align 56 box NO_BOX
-        }
-        {fltk::Button} image_button3 {
-          user_data 3 user_data_type {void*}
-          callback image_cb
-          tooltip {Select an image to label the widget}
-          xywh {84 110 285 16} align 52 color 7
-        }
-        {fltk::Widget} image_label4 {
-          label pushed
-          xywh {10 125 73 17} align 56 box NO_BOX
-        }
-        {fltk::Button} image_button4 {
-          user_data 4 user_data_type {void*}
-          callback image_cb
-          tooltip {Select an image to label the widget}
-          xywh {84 125 285 16} align 52 color 7
-        }
-        {fltk::CheckButton} include_image_button {
-          label inline
-          callback image_inlined_cb
-          tooltip {The image data is inserted as inline data into the output C++ code, rather than generating code to read the image file.}
-          xywh {350 55 20 22} align 148
-        }
-        {fltk::Widget} {} {
-          label Alignment
-          xywh {10 55 70 22} align 56 box NO_BOX
-        }
-        {fltk::Button} {} {
-          label {@4->}
-          user_data {fltk::ALIGN_LEFT}
-          callback align_cb
-          tooltip {Places label on the left of the widget}
-          xywh {80 57 20 20} type TOGGLE labelsize 11 textsize 11
-        }
-        {fltk::Button} {} {
-          label {@6->}
-          user_data {fltk::ALIGN_RIGHT}
-          callback align_cb
-          tooltip {Places label on the right of the widget}
-          xywh {100 57 20 20} type TOGGLE labelsize 11 textsize 11
-        }
-        {fltk::Button} {} {
-          label {@8->}
-          user_data {fltk::ALIGN_TOP}
-          callback align_cb
-          tooltip {Places label on the top of the widget}
-          xywh {120 57 20 20} type TOGGLE labelsize 11 textsize 11
-        }
-        {fltk::Button} {} {
-          label {@2->}
-          user_data {fltk::ALIGN_BOTTOM}
-          callback align_cb
-          tooltip {Places label on the bottom of the widget}
-          xywh {140 57 20 20} type TOGGLE labelsize 11 textsize 11
-        }
-        {fltk::Button} {} {
-          label inside
-          user_data {fltk::ALIGN_INSIDE}
-          callback align_cb
-          tooltip {Places label inside the widget}
-          xywh {165 57 40 20} type TOGGLE
-        }
-        {fltk::Button} {} {
-          label clip
-          user_data {fltk::ALIGN_CLIP}
-          callback align_cb
-          tooltip {Turn on clipping to the widget's area when drawing label.  This is slower so it should be left off if label will fit}
-          xywh {205 57 40 20} type TOGGLE
-        }
-        {fltk::Button} {} {
-          label wrap
-          user_data {fltk::ALIGN_WRAP}
-          callback align_cb
-          tooltip {Word-wrap the label}
-          xywh {245 57 40 20} type TOGGLE
-        }
-        {fltk::ValueInput} widget_x {
-          label x
-          callback x_cb
-          tooltip {The x coordinate of the widget.}
-          xywh {80 155 55 22} align 20 when ENTER_KEY labelsize 11 maximum 2000 step 1 value 10
-        }
-        {fltk::ValueInput} widget_y {
-          label y
-          callback y_cb
-          tooltip {The y coordinate of the widget.}
-          xywh {135 155 55 22} align 20 when ENTER_KEY labelsize 11 maximum 2000 step 1 value 10
-        }
-        {fltk::ValueInput} widget_width {
-          label w
-          callback width_cb
-          tooltip {The width of the widget.}
-          xywh {190 155 55 22} align 20 when ENTER_KEY labelsize 11 maximum 2000 step 1 value 10
-        }
-        {fltk::ValueInput} widget_height {
-          label h
-          callback height_cb
-          tooltip {The height of the widget.}
-          xywh {245 155 55 22} align 20 when ENTER_KEY labelsize 11 maximum 2000 step 1 value 10
-        }
-        {fltk::CheckButton} set_xy {
-          label {Set xy}
-          callback set_xy_cb
-          tooltip {Window will use this x,y rather than being positioned by the operating system.}
-          xywh {305 155 60 22}
-        }
-        {fltk::ValueInput} {} {
-          label size
-          callback slider_size_cb
-          tooltip {The size of the scroller}
-          xywh {315 155 55 22} align 20 when ENTER_KEY labelsize 11
-        }
-        {fltk::CheckButton} {} {
-          label Border
-          callback border_cb
-          tooltip {Enable the window manager border}
-          xywh {145 182 70 22}
-        }
-        {fltk::CheckButton} {} {
-          label Modal
-          callback modal_cb
-          tooltip {This window will stay on top of others in the application and will block events from going to other windows until it is hidden or closed.}
-          xywh {210 182 70 22}
-        }
-        {fltk::CheckButton} {} {
-          label Child
-          callback non_modal_cb
-          tooltip {This window will stay on top of others in the application.}
-          xywh {290 182 75 22}
-        }
-        {fltk::ValueInput} {} {
-          label Value
-          callback value_cb
-          tooltip {The initial value of this widget}
-          xywh {80 182 55 22} when ENTER_KEY
-        }
-        {fltk::ValueInput} {} {
-          label min
-          callback min_cb
-          tooltip {The minimum value for this valuator}
-          xywh {135 182 55 22} align 20 when ENTER_KEY labelsize 11
-        }
-        {fltk::ValueInput} {} {
-          label max
-          callback max_cb
-          tooltip {The maximum value for this valuator}
-          xywh {190 182 55 22} align 20 when ENTER_KEY labelsize 11 value 1
-        }
-        {fltk::ValueInput} {} {
-          label step
-          callback step_cb
-          tooltip {step:
+        {fltk::Group} gValues {
+          label Values open
+          xywh {80 166 290 22} align 4
+        } {
+          {fltk::ValueInput} {} {
+            label Value
+            callback value_cb
+            tooltip {The initial value of this widget}
+            xywh {0 0 55 22} align 6 when ENTER_KEY
+          }
+          {fltk::ValueInput} {} {
+            label min
+            callback min_cb
+            tooltip {The minimum value for this valuator}
+            xywh {55 0 55 22} align 22 when ENTER_KEY labelsize 11
+          }
+          {fltk::ValueInput} {} {
+            label max
+            callback max_cb
+            tooltip {The maximum value for this valuator}
+            xywh {110 0 55 22} align 22 when ENTER_KEY labelsize 11 value 1
+          }
+          {fltk::ValueInput} {} {
+            label step
+            callback step_cb selected
+            tooltip {step:
 Round all movements to multiples of this.
 }
-          xywh {245 182 60 22} align 20 when ENTER_KEY labelsize 11
-        }
-        {fltk::ValueInput} {} {
-          label line
-          callback line_cb
-          tooltip {linesize:
+            xywh {165 0 55 22} align 22 when ENTER_KEY labelsize 11
+          }
+          {fltk::ValueInput} {} {
+            label line
+            callback line_cb
+            tooltip {linesize:
 Increment/decrement for arrow keys.}
-          xywh {305 182 65 22} align 20 when ENTER_KEY labelsize 11 minimum 1 step 1 value -4
+            xywh {245 0 45 22} align 22 when ENTER_KEY labelsize 11 minimum 1 step 1 value -4
+          }
         }
-        {fltk::Group} {} {
+        {fltk::Group} gAttributes {
           label Attributes
           callback propagate_group open
-          xywh {80 208 280 22} align 4
+          xywh {80 204 280 44} align 4
         } {
           {fltk::CheckButton} {} {
             label Visible
@@ -668,209 +669,226 @@ Increment/decrement for arrow keys.}
             tooltip {Positions the window so this widget is under the mouse.  This is done when show() is called.}
             xywh {210 0 70 22}
           }
+          {fltk::CheckButton} {} {
+            label Border
+            callback border_cb
+            tooltip {Enable the window manager border}
+            xywh {0 20 65 22}
+          }
+          {fltk::CheckButton} {} {
+            label Modal
+            callback modal_cb
+            tooltip {This window will stay on top of others in the application and will block events from going to other windows until it is hidden or closed.}
+            xywh {65 20 65 22}
+          }
+          {fltk::CheckButton} {} {
+            label Child
+            callback non_modal_cb
+            tooltip {This window will stay on top of others in the application.}
+            xywh {130 20 65 22}
+          }
         }
-        {fltk::Button} {} {
-          label Shortcut
-          callback shortcut_in_cb
-          tooltip {To set a shortcut:
+        {fltk::Group} gShortTool {open
+          xywh {25 255 350 60}
+        } {
+          {fltk::InvisibleBox} {} {
+            label Shortcut
+            xywh {0 0 55 25} align 40
+          }
+          {fltk::Button} {} {
+            callback shortcut_in_cb
+            tooltip {To set a shortcut:
    Click here, then type the key combination you want.
 To delete the shortcut:
    Click here, then type backspace.
 To get out of shortcut-setting mode:
    Click the mouse on this again, or on some other field.}
-          xywh {80 231 290 22} align 4 color 7
-          extra_code {\#include "Shortcut_Button.h"}
-          class Shortcut_Button
-        }
-        {fltk::Input} {} {
-          label Tooltip
-          callback tooltip_cb
-          tooltip {The pop up tooltip which should be used for the widget.}
-          xywh {80 258 290 34} type Wordwrap box BORDER_BOX color 0xffffe100
-        }
-        {fltk::Widget} {} {
-          label resizable
-          xywh {80 220 275 67} hide deactivate resizable
-        }
-        {fltk::Widget} {} {
-          label Dimensions
-          xywh {11 154 69 22} align 52 box NO_BOX
+            xywh {55 0 290 22} align 4 color 7
+            extra_code {\#include "Shortcut_Button.h"}
+            class Shortcut_Button
+          }
+          {fltk::Input} {} {
+            label Tooltip
+            callback tooltip_cb
+            tooltip {The pop up tooltip which should be used for the widget.}
+            xywh {55 25 290 34} type Wordwrap box BORDER_BOX color 0xffffe100
+          }
         }
       }
       {fltk::Group} {} {
         label Style
         callback propagate_group
-        xywh {0 23 380 297} hide
+        xywh {0 20 380 320} hide color 0xd4b38d00
       } {
         {fltk::Choice} {} {
           label Box
           callback box_cb
           tooltip {Type of box to draw around the contents of the widget.}
-          xywh {85 9 270 22}
+          xywh {85 0 270 22}
         } {}
         {fltk::LightButton} {} {
           label Color
           callback color_cb
           tooltip {Color of the contents area.}
-          xywh {85 31 135 22} labelsize 11 textsize 11
+          xywh {85 22 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::LightButton} {} {
           label {Text Color}
           callback text_color_cb
           tooltip {Color of text drawn in the widget.}
-          xywh {220 31 135 22} labelsize 11 textsize 11
+          xywh {220 22 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::LightButton} {} {
           label {Selection Color}
           callback selection_color_cb
           tooltip {Color to draw behind selected text}
-          xywh {85 53 135 22} labelsize 11 textsize 11
+          xywh {85 44 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::LightButton} {} {
           label {Selected Text Color}
           callback selected_text_color_cb
           tooltip {Color to draw selected text}
-          xywh {220 53 135 22} labelsize 11 textsize 11
+          xywh {220 44 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::Choice} {} {
           label {Button box}
           callback button_box_cb open
           tooltip {Type of box to draw around buttons}
-          xywh {85 88 270 22}
+          xywh {85 79 270 22}
         } {}
         {fltk::LightButton} {} {
           label {Button Color}
           callback button_color_cb
           tooltip {Color to draw buttons inside the widget.}
-          xywh {85 110 135 22} labelsize 11 textsize 11
+          xywh {85 101 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::LightButton} {} {
           label {Label Color}
           callback label_color_cb
           tooltip {Color to draw the labels on buttons, and color to draw the label.}
-          xywh {220 110 135 22} labelsize 11 textsize 11
+          xywh {220 101 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::LightButton} {} {
           label {Highlight Color}
           callback highlight_color_cb
           tooltip {Color to use to draw buttons when they are highlighted.  Use color zero (the black top-left chip in the color chooser) to disable highlighting.}
-          xywh {85 132 135 22} labelsize 11 textsize 11
+          xywh {85 123 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::LightButton} {} {
           label {Highlight Label Color}
           callback highlight_label_color_cb
           tooltip {Color to draw the button labels when the buttons are highlighted.  Use color zero (the black top-left chip in the color chooser) to leave the label colors unchanged.}
-          xywh {220 132 135 22} labelsize 11 textsize 11
+          xywh {220 123 135 22} labelsize 11 textsize 11
           extra_code {o->type(0);}
         }
         {fltk::Choice} {} {
           label {Label Style}
           callback label_style_cb open
           tooltip {How to draw the label.}
-          xywh {85 165 270 22}
+          xywh {85 156 270 22}
         } {}
         {fltk::Choice} {} {
           label {Label Font}
           callback label_font_cb open
           tooltip {Font to use for the label}
-          xywh {85 187 215 22}
+          xywh {85 178 215 22}
         } {}
         {fltk::ValueInput} {} {
           callback label_size_cb
           tooltip {Size of the font to use for the label}
-          xywh {300 187 55 22} when ENTER_KEY maximum 100 step 0.1 value 14
+          xywh {300 178 55 22} when ENTER_KEY maximum 100 step 0.1 value 14
         }
         {fltk::Choice} {} {
           label {Text Font}
           callback text_font_cb open
           tooltip {Font to use for text displayed inside the widget}
-          xywh {85 220 215 22}
+          xywh {85 211 215 22}
         } {}
         {fltk::ValueInput} {} {
           callback text_size_cb
           tooltip {Size of the font to use for text displayed inside the widget}
-          xywh {300 220 55 22} when ENTER_KEY maximum 100 step 0.1 value 14
+          xywh {300 211 55 22} when ENTER_KEY maximum 100 step 0.1 value 14
         }
         {fltk::Widget} {} {
           label resizable
-          xywh {85 242 270 3} hide deactivate resizable
+          xywh {85 233 270 3} hide deactivate resizable
         }
         {fltk::Button} {} {
           label {Reset to default}
           callback default_cb
           tooltip {Reset all the above items to the default values for this widget class.}
-          xywh {85 253 124 22}
+          xywh {85 244 124 22}
         }
       }
       {fltk::Group} {} {
         label {C++}
         callback propagate_group
-        xywh {0 23 380 302} hide resizable
+        xywh {0 20 380 320} hide resizable color 0x93d49c00
       } {
         {fltk::Input} {} {
           label Name
           callback name_cb
           tooltip {The variable or member name in which to store a pointer to this widget.}
-          xywh {80 11 230 22} when CHANGED
+          xywh {80 0 230 22} when CHANGED
         }
         {fltk::CheckButton} {} {
           label public
           callback name_public_cb
           tooltip {Make the variable public}
-          xywh {315 11 50 22}
+          xywh {315 0 50 22}
         }
         {fltk::Input} extra_code_input {
           label {Extra Code}
           user_data 0
           callback extra_code_input_cb
           tooltip {Extra code to be exectuted after the widget is created. The variable "o" points at the widget.}
-          xywh {80 44 285 99} type Multiline
+          xywh {80 33 285 99} type Multiline
         }
         {fltk::Input} {} {
           label Callback
           callback callback_cb
           tooltip {The name of the callback function, or code body of the callback function}
-          xywh {80 154 285 99} type Multiline
+          xywh {80 143 285 99} type Multiline
         }
         {fltk::Widget} {} {
           label resizable
-          xywh {80 165 165 65} hide deactivate resizable
+          xywh {80 154 165 65} hide deactivate resizable
         }
         {fltk::Input} {} {
           label {User Data}
           callback user_data_cb
           tooltip {Value passed as the second argument to the callback.  This must be of the type given below.}
-          xywh {80 253 145 22}
+          xywh {80 242 145 22}
         }
         {fltk::Choice} {} {
           label When
           callback when_cb
           tooltip {What actions cause the callback to be called.}
-          xywh {265 253 100 22} when NEVER
+          xywh {265 242 100 22} when NEVER
         } {}
         {fltk::Input} {} {
           label Type
           callback user_data_type_cb
           tooltip {Type of User Data. This must be "long" or a pointer.}
-          xywh {80 275 145 22}
+          xywh {80 264 145 22}
         }
       }
     }
     {fltk::Group} {} {open
-      xywh {0 348 380 26} resizable
+      xywh {0 350 380 24} resizable
     } {
       {fltk::CheckButton} overlaybutton {
         label {&Overlays}
         callback overlay_cb
         tooltip {Turns the overlays (red outlines) off so you can see the edges better.}
-        xywh {20 2 120 24} resizable
+        xywh {20 0 120 24} resizable
         extra_code {extern bool overlays_invisible;
 o->value(!overlays_invisible);}
       }
@@ -878,18 +896,18 @@ o->value(!overlays_invisible);}
         label OK
         callback ok_cb
         tooltip {Closes this attribute window}
-        xywh {235 3 65 23} shortcut 0xff0d
+        xywh {235 1 65 23} shortcut 0xff0d
       }
       {fltk::Button} {} {
         label Cancel
         callback cancel_cb
         tooltip {Sorry, cancel does not really work yet.}
-        xywh {310 3 65 23}
+        xywh {310 1 65 23}
       }
       {fltk::LightButton} wLiveMode {
         label {LiveMode!}
         callback live_mode_cb
-        xywh {95 4 90 22}
+        xywh {95 2 90 22}
       }
     }
   }

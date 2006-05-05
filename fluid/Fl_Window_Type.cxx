@@ -43,6 +43,7 @@
 
 #include "FluidType.h"
 #include "alignment_panel.h"
+#include "widget_panel.h"
 #include "fluid_menus.h"
 #include "undo.h"
 
@@ -130,6 +131,7 @@ class Overlay_Window : public fltk::Window {
 public:
   WindowType *window;
   int handle(int);
+  void resize(int X,int Y,int W,int H);
   Overlay_Window(int w,int h) : fltk::Window(w,h) {fltk::Group::current(0);}
 };
 void Overlay_Window::layout() {
@@ -158,6 +160,29 @@ void Overlay_Window::draw() {
 
 void Overlay_Window::draw_overlay() {
   window->draw_overlay();
+}
+
+// Update the XYWH values in the widget panel...
+static void update_xywh() {
+  if (current_widget && current_widget->is_widget()) {
+    fltk::Undo::checkpoint();
+    Widget& c = *((WidgetType*) current_widget)->o;
+    if (widget_x->value()!=c.x()) {widget_x->value(c.x());}
+    if (widget_y->value()!=c.y()) {widget_y->value(c.y());}
+    if (widget_w->value()!=c.w()) {widget_w->value(c.w());}
+    if (widget_h->value()!=c.h()) {widget_h->value(c.h());}
+  }
+
+}
+
+// Resize from window manager...
+void Overlay_Window::resize(int X,int Y,int W,int H) {
+  if (X==x() && Y==y() && W==w() && H==h()) return;
+  fltk::Undo::checkpoint();
+  Widget* t = resizable(); resizable(0);
+  Overlay_Window::resize(X,Y,W,H);
+  resizable(t);
+  update_xywh();
 }
 int Overlay_Window::handle(int e) {
     switch(e) {
@@ -466,6 +491,7 @@ void WindowType::moveallchildren()
   ((Overlay_Window *)(this->o))->init_sizes();
   modflag = 1;
   dx = dy = 0;
+  update_xywh();
 }
 
 // find the innermost item clicked on:
@@ -591,8 +617,8 @@ int WindowType::handle(int event) {
       {
 	x_cb (widget_x, LOAD);
 	y_cb (widget_y, LOAD);
-	width_cb (widget_width, LOAD);
-	height_cb (widget_height, LOAD);
+	width_cb (widget_w, LOAD);
+	height_cb (widget_h, LOAD);
       }
     return 1;
 
