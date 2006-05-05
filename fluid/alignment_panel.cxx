@@ -38,6 +38,8 @@ fltk::Input *vertical_input=(fltk::Input *)0;
 
 fltk::Input *snap_input=(fltk::Input *)0;
 
+fltk::RadioButton *def_widget_size[6]={(fltk::RadioButton *)0};
+
 static void cb_Close(fltk::Button*, void*) {
   preferences_window->hide();
 }
@@ -49,23 +51,23 @@ fltk::Window* make_preferences_window() {
     o->begin();
      {fltk::TabGroup* o = tabs = new fltk::TabGroup(0, 0, 360, 210);
       o->begin();
-       {fltk::Group* o = new fltk::Group(0, 20, 360, 190, "General");
+       {fltk::Group* o = new fltk::Group(0, 30, 360, 180, "General");
         o->color((fltk::Color)0x54c2d400);
         o->hide();
         o->begin();
-         {fltk::CheckButton* o = openlast_button = new fltk::CheckButton(10, 10, 193, 25, "Open Previous File on Startup");
+         {fltk::CheckButton* o = openlast_button = new fltk::CheckButton(10, 0, 193, 25, "Open Previous File on Startup");
           o->callback((fltk::Callback*)cb_openlast_button);
           int b;
           fluid_prefs.get("open_previous_file", b, 0);
           openlast_button->value(b);
         }
-         {fltk::CheckButton* o = prevpos_button = new fltk::CheckButton(10, 35, 193, 25, "Remember Window Positions");
+         {fltk::CheckButton* o = prevpos_button = new fltk::CheckButton(10, 25, 193, 25, "Remember Window Positions");
           o->callback((fltk::Callback*)cb_prevpos_button);
           int b;
           fluid_prefs.get("prev_window_pos", b, 1);
           prevpos_button->value(b);
         }
-         {fltk::CheckButton* o = completion_button = new fltk::CheckButton(10, 60, 186, 25, "Show Completion Dialog Info");
+         {fltk::CheckButton* o = completion_button = new fltk::CheckButton(10, 50, 186, 25, "Show Completion Dialog Info");
           o->callback((fltk::Callback*)cb_completion_button);
           int b;
           fluid_prefs.get("show_completion_dialogs", b, 1);
@@ -97,21 +99,58 @@ fltk::Window* make_preferences_window() {
         }
         o->end();
       }
-       {fltk::Group* o = new fltk::Group(0, 20, 360, 190, "Alignment");
+       {fltk::Group* o = new fltk::Group(0, 30, 360, 180, "Alignment");
         o->color((fltk::Color)0xd49a5600);
         o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
         o->begin();
-         {fltk::Input* o = horizontal_input = new fltk::Input(75, 10, 100, 22, "Horizontal:");
+         {fltk::Input* o = horizontal_input = new fltk::Input(75, 0, 100, 22, "Horizontal:");
+          o->labelsize(14);
+          o->textsize(14);
           o->callback((fltk::Callback*)alignment_cb, (void*)(1));
           o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);
         }
-         {fltk::Input* o = vertical_input = new fltk::Input(238, 10, 100, 22, "Vertical:");
+         {fltk::Input* o = vertical_input = new fltk::Input(238, 0, 100, 22, "Vertical:");
+          o->labelsize(14);
+          o->textsize(14);
           o->callback((fltk::Callback*)alignment_cb, (void*)(2));
           o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);
         }
-         {fltk::Input* o = snap_input = new fltk::Input(75, 50, 100, 22, "Snap:");
+         {fltk::Input* o = snap_input = new fltk::Input(75, 40, 100, 22, "Snap:");
+          o->labelsize(14);
+          o->textsize(14);
           o->callback((fltk::Callback*)alignment_cb, (void*)(3));
           o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);
+        }
+         {fltk::Group* o = new fltk::Group(73, 75, 207, 85, "Widget\n Size:");
+          o->align(fltk::ALIGN_LEFT);
+          o->begin();
+           {fltk::RadioButton* o = def_widget_size[0] = new fltk::RadioButton(0, 0, 83, 25, "Tiny");
+            o->labelsize(8);
+            o->callback((fltk::Callback*)default_widget_size_cb, (void*)(8));
+            o->align(fltk::ALIGN_LEFT|fltk::ALIGN_RIGHT|fltk::ALIGN_INSIDE);
+          }
+           {fltk::RadioButton* o = def_widget_size[1] = new fltk::RadioButton(100, 0, 70, 25, "Small");
+            o->labelsize(11);
+            o->callback((fltk::Callback*)default_widget_size_cb, (void*)(11));
+          }
+           {fltk::RadioButton* o = def_widget_size[2] = new fltk::RadioButton(0, 25, 83, 25, "Normal");
+            o->callback((fltk::Callback*)default_widget_size_cb, (void*)(14));
+            o->align(fltk::ALIGN_LEFT|fltk::ALIGN_RIGHT|fltk::ALIGN_INSIDE);
+          }
+           {fltk::RadioButton* o = def_widget_size[3] = new fltk::RadioButton(100, 25, 90, 25, "medium");
+            o->labelsize(18);
+            o->callback((fltk::Callback*)default_widget_size_cb, (void*)(18));
+          }
+           {fltk::RadioButton* o = def_widget_size[4] = new fltk::RadioButton(0, 50, 83, 26, "large");
+            o->labelsize(24);
+            o->callback((fltk::Callback*)default_widget_size_cb, (void*)(24));
+            o->align(fltk::ALIGN_LEFT|fltk::ALIGN_RIGHT|fltk::ALIGN_INSIDE);
+          }
+           {fltk::RadioButton* o = def_widget_size[5] = new fltk::RadioButton(100, 50, 95, 25, "huge");
+            o->labelsize(32);
+            o->callback((fltk::Callback*)default_widget_size_cb, (void*)(32));
+          }
+          o->end();
         }
         o->end();
       }

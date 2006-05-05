@@ -83,20 +83,28 @@ void Item::init() {
   set_flag(ALIGN_LEFT|ALIGN_INSIDE);
 }
 
-Item::Item(const char* l,int s,Callback *cb,void *ud, int f) : Widget(0,0,0,0,l)  {
+Item::Item(const char* l,int s,Callback *cb,void *ud, int f
+	   , LabelType* lt, Font*lf, float ls) : Widget(0,0,0,0,l)  {
   shortcut(s);
   callback(cb);
   user_data(ud);
   flags(f);
+  if (lt) labeltype(lt);
+  if (lf) labelfont(lf);
+  if (ls>0) labelsize(ls);
   init();
 }
 
-Item::Item(WidgetVisualType t, const char* l,int s,Callback *cb,void *ud, int f) : Widget(0,0,0,0,l)  {
+Item::Item(WidgetVisualType t, const char* l,int s,Callback *cb,void *ud, int f
+	   , LabelType* lt, Font*lf, float ls) : Widget(0,0,0,0,l)  {
   shortcut(s);
   callback(cb);
   user_data(ud);
   flags(f);
   init();
+  if (lt) labeltype(lt);
+  if (lf) labelfont(lf);
+  if (ls>0) labelsize(ls);
   type(t);
 }
 

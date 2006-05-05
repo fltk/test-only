@@ -64,7 +64,7 @@ void align_widget_cb(Widget*, long how)
 	{
 	  if (!changed) {
 	    changed = 1;
-	    modflag = (1);
+	    modflag = 1;
 	    Undo::checkpoint();
 	  }
 
@@ -100,7 +100,7 @@ void align_widget_cb(Widget*, long how)
 	{
 	  if (!changed) {
 	    changed = 1;
-	    modflag = (1);
+	    modflag = 1;
 	    Undo::checkpoint();
 	  }
 
@@ -133,7 +133,7 @@ void align_widget_cb(Widget*, long how)
 	{
 	  if (!changed) {
 	    changed = 1;
-	    modflag = (1);
+	    modflag = 1;
 	    Undo::checkpoint();
 	  }
 
@@ -165,7 +165,7 @@ void align_widget_cb(Widget*, long how)
 	{
 	  if (!changed) {
 	    changed = 1;
-	    modflag = (1);
+	    modflag = 1;
 	    Undo::checkpoint();
 	  }
 
@@ -201,7 +201,7 @@ void align_widget_cb(Widget*, long how)
 	{
 	  if (!changed) {
 	    changed = 1;
-	    modflag = (1);
+	    modflag = 1;
 	    Undo::checkpoint();
 	  }
 
@@ -234,7 +234,7 @@ void align_widget_cb(Widget*, long how)
 	{
 	  if (!changed) {
 	    changed = 1;
-	    modflag = (1);
+	    modflag = 1;
 	    Undo::checkpoint();
 	  }
 
@@ -274,7 +274,7 @@ void align_widget_cb(Widget*, long how)
 	{
 	  if (!changed) {
 	    changed = 1;
-	    modflag = (1);
+	    modflag = 1;
 	    Undo::checkpoint();
 	  }
 
@@ -316,7 +316,7 @@ void align_widget_cb(Widget*, long how)
 	{
 	  if (!changed) {
 	    changed = 1;
-	    modflag = (1);
+	    modflag = 1;
 	    Undo::checkpoint();
 	  }
 
@@ -352,7 +352,7 @@ void align_widget_cb(Widget*, long how)
 	{
 	  if (!changed) {
 	    changed = 1;
-	    modflag = (1);
+	    modflag = 1;
 	    Undo::checkpoint();
 	  }
 
@@ -384,7 +384,7 @@ void align_widget_cb(Widget*, long how)
 	{
 	  if (!changed) {
 	    changed = 1;
-	    modflag = (1);
+	    modflag = 1;
 	    Undo::checkpoint();
 	  }
 
@@ -418,7 +418,7 @@ void align_widget_cb(Widget*, long how)
 	{
 	  if (!changed) {
 	    changed = 1;
-	    modflag = (1);
+	    modflag = 1;
 	    Undo::checkpoint();
 	  }
 
@@ -441,7 +441,7 @@ void align_widget_cb(Widget*, long how)
       {
 	if (!changed) {
 	  changed = 1;
-	  modflag = (1);
+	  modflag = 1;
 	  Undo::checkpoint();
 	}
 
@@ -469,7 +469,7 @@ void align_widget_cb(Widget*, long how)
       {
 	if (!changed) {
 	  changed = 1;
-	  modflag = (1);
+	  modflag = 1;
 	  Undo::checkpoint();
 	}
 
@@ -487,14 +487,13 @@ void align_widget_cb(Widget*, long how)
 	  // Otherwise, just do the widget...
 	  w->resize(w->x(), (center2-w->h())/2, w->w(), w->h());
 	}
-	modflag = (1);
+	modflag = 1;
 	w->redraw();
 	if (w->window()) w->window()->redraw();
       }
     break;
   }
 }
-
 
 // Set sizes of selected widgets...
 void widget_size_cb(Widget *, long size) {
@@ -504,14 +503,14 @@ void widget_size_cb(Widget *, long size) {
     if (o->selected && o->is_widget()) {
       if (!changed) {
 	changed = 1;
-	modflag = (1);
+	modflag = 1;
 	Undo::checkpoint();
       }
 
       Widget *w = ((WidgetType *)o)->o;
       w->labelsize((float) size);
       Font f;
-      int s = size;
+      float s = (float) size;
       Color c=fltk::BLACK;
       ((WidgetType *)o)->textstuff(2, &f, s, c);
 

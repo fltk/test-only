@@ -97,6 +97,10 @@ SOURCE=..\..\fluid\about_panel.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fluid\align_widget.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\alignment_panel.cxx
 # End Source File
 # Begin Source File

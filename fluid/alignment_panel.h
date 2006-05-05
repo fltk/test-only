@@ -29,6 +29,9 @@ extern void alignment_cb(fltk::Input*, long);
 extern fltk::Input* horizontal_input;
 extern fltk::Input* vertical_input;
 extern fltk::Input* snap_input;
+#include <fltk/RadioButton.h>
+extern void default_widget_size_cb(fltk::RadioButton*, long);
+extern fltk::RadioButton* def_widget_size[6];
 #include <fltk/Button.h>
 fltk::Window* make_preferences_window();
 #include <fltk/DoubleBufferWindow.h>

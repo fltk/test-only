@@ -65,8 +65,13 @@ void alignment_cb(fltk::Input *i, long v) {
 extern const char* header_file_name;
 extern const char* code_file_name;
 
+int  read_alignment_prefs();
+
 void set_preferences_window(){
-  if (!preferences_window) make_preferences_window();
+    if (!preferences_window) {
+	make_preferences_window();
+    }
+  read_alignment_prefs();
   include_H_from_C_button->value(include_H_from_C);
   header_file_input->value(header_file_name);
   code_file_input->value(code_file_name);
@@ -74,9 +79,16 @@ void set_preferences_window(){
   sprintf(buf,"%d",gridx); horizontal_input->value(buf);
   sprintf(buf,"%d",gridy); vertical_input->value(buf);
   sprintf(buf,"%d",snap); snap_input->value(buf);
+  float s = WidgetType::default_size;
+  if (s<=8) def_widget_size[0]->setonly();
+  else if (s<=11) def_widget_size[1]->setonly();
+  else if (s<=14) def_widget_size[2]->setonly();
+  else if (s<=18) def_widget_size[3]->setonly();
+  else if (s<=24) def_widget_size[4]->setonly();
+  else if (s<=32) def_widget_size[5]->setonly();
 }
 
-void show_preferences_cb(fltk::Widget *, void * tabnum) {
+void show_preferences_cb(Widget *, void * tabnum) {
   set_preferences_window();
   int n = (int) (long) tabnum;
   if (n>=0 && n<3)

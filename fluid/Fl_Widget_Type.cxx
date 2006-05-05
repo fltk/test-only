@@ -156,6 +156,8 @@ FluidType *WidgetType::make() {
 
 #include "Fluid_Image.h"
 
+float WidgetType::default_size = 14.0;
+
 void WidgetType::set_image(Fluid_Image *i, int num) {
   if (i == image[num]) return;
   if (image[num]) image[num]->decrement();
@@ -174,6 +176,7 @@ WidgetType::WidgetType() {
   user_class_ = 0;
   hotspot_ = 0;
   o = 0;
+  default_size = 0.0;
   memset(image, 0, sizeof(image));
   public_ = 1;
   set_xy = true;
@@ -690,7 +693,7 @@ void label_size_cb(fltk::ValueInput* i, void *v) {
     n = current_widget->o->labelsize();
   } else {
     n = float(i->value());
-    if (n <= 0) n = 1;
+    if (n <= 0) n = WidgetType::default_size;
     for_all_selected_widgets() {
       modflag = 1;
       WidgetType* q = (WidgetType*)o;
@@ -889,7 +892,7 @@ void text_size_cb(fltk::ValueInput* i, void* v) {
     i->show();
   } else {
     n = float(i->value());
-    if (n <= 0) n = 1;
+    if (n <= 0) n = WidgetType::default_size;
     for_all_selected_widgets() {
       modflag = 1;
       WidgetType* q = (WidgetType*)o;

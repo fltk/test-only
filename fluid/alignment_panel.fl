@@ -32,17 +32,17 @@ Function {make_preferences_window()} {open
     label {fluid Preferences} open
     xywh {570 272 365 246} resizable non_modal visible
   } {
-    {fltk::TabGroup} tabs {open
+    {fltk::TabGroup} tabs {open selected
       xywh {0 0 360 210}
     } {
       {fltk::Group} {} {
         label General
-        xywh {0 20 360 190} hide color 0x54c2d400
+        xywh {0 30 360 180} hide color 0x54c2d400
       } {
         {fltk::CheckButton} openlast_button {
           label {Open Previous File on Startup}
           callback {fluid_prefs.set("open_previous_file", openlast_button->value());}
-          xywh {10 10 193 25}
+          xywh {10 0 193 25}
           extra_code {int b;
 fluid_prefs.get("open_previous_file", b, 0);
 openlast_button->value(b);}
@@ -50,7 +50,7 @@ openlast_button->value(b);}
         {fltk::CheckButton} prevpos_button {
           label {Remember Window Positions}
           callback {fluid_prefs.set("prev_window_pos", prevpos_button->value());}
-          xywh {10 35 193 25}
+          xywh {10 25 193 25}
           extra_code {int b;
 fluid_prefs.get("prev_window_pos", b, 1);
 prevpos_button->value(b);}
@@ -58,7 +58,7 @@ prevpos_button->value(b);}
         {fltk::CheckButton} completion_button {
           label {Show Completion Dialog Info}
           callback {fluid_prefs.set("show_completion_dialogs", completion_button->value());}
-          xywh {10 60 186 25}
+          xywh {10 50 186 25}
           extra_code {int b;
 fluid_prefs.get("show_completion_dialogs", b, 1);
 completion_button->value(b);}
@@ -91,29 +91,71 @@ completion_button->value(b);}
         }
       }
       {fltk::Group} {} {
-        label Alignment open selected
-        xywh {0 20 360 190} align 5 color 0xd49a5600
+        label Alignment
+        xywh {0 30 360 180} align 5 color 0xd49a5600
       } {
         {fltk::Input} horizontal_input {
           label {Horizontal:}
           user_data 1 user_data_type long
           callback alignment_cb
-          xywh {75 10 100 22}
+          xywh {75 0 100 22} labelsize 14 textsize 14
           extra_code {o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);}
         }
         {fltk::Input} vertical_input {
           label {Vertical:}
           user_data 2 user_data_type long
           callback alignment_cb
-          xywh {238 10 100 22}
+          xywh {238 0 100 22} labelsize 14 textsize 14
           extra_code {o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);}
         }
         {fltk::Input} snap_input {
           label {Snap:}
           user_data 3 user_data_type long
           callback alignment_cb
-          xywh {75 50 100 22}
+          xywh {75 40 100 22} labelsize 14 textsize 14
           extra_code {o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);}
+        }
+        {fltk::Group} {} {
+          label {Widget
+ Size:} open
+          xywh {73 75 207 85} align 4
+        } {
+          {fltk::RadioButton} {def_widget_size[0]} {
+            label Tiny
+            user_data 8 user_data_type long
+            callback default_widget_size_cb
+            xywh {0 0 83 25} align 44 labelsize 8
+          }
+          {fltk::RadioButton} {def_widget_size[1]} {
+            label Small
+            user_data 11 user_data_type long
+            callback default_widget_size_cb
+            xywh {100 0 70 25} labelsize 11
+          }
+          {fltk::RadioButton} {def_widget_size[2]} {
+            label Normal
+            user_data 14 user_data_type long
+            callback default_widget_size_cb
+            xywh {0 25 83 25} align 44
+          }
+          {fltk::RadioButton} {def_widget_size[3]} {
+            label medium
+            user_data 18 user_data_type long
+            callback default_widget_size_cb
+            xywh {100 25 90 25} labelsize 18
+          }
+          {fltk::RadioButton} {def_widget_size[4]} {
+            label large
+            user_data 24 user_data_type long
+            callback default_widget_size_cb
+            xywh {0 50 83 26} align 44 labelsize 24
+          }
+          {fltk::RadioButton} {def_widget_size[5]} {
+            label huge
+            user_data 32 user_data_type long
+            callback default_widget_size_cb
+            xywh {100 50 95 25} labelsize 32
+          }
         }
       }
     }

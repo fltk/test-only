@@ -101,21 +101,19 @@ DECL_MENUCB2(toggle_sourceview_cb,DoubleBufferWindow);
 // Read preferences file 
 Preferences fluid_prefs(Preferences::USER, "fltk.org", "fluid");
 
-int gridx;
-int gridy;
-int snap;
-int show_tooltip;
+int gridx, gridy, snap, show_tooltip;
 
-static int  read_alignement_prefs() {
+int  read_alignment_prefs() {
     fluid_prefs.get("snap", snap, 3);
     fluid_prefs.get("gridx", gridx, 5);
     fluid_prefs.get("gridy", gridy, 5);
     fluid_prefs.get("show_tooltips", show_tooltip, 1);
+    fluid_prefs.get("widget_size", WidgetType::default_size, 14.0f);
     Tooltip::enable(show_tooltip ? true : false);
     
     return 0;
 }
-static int dummy = read_alignement_prefs();
+
 /////////////////////////////////////////
 
 // File history info...
@@ -482,6 +480,14 @@ static char* cutfname(int which = 0) {
   }
 
   return name[which];
+}
+
+// Set default widget sizes...
+void default_widget_size_cb(RadioButton *b, long size) {
+  // Update the "normal" text size of new widgets...
+  b->setonly();
+  WidgetType::default_size = (float) size;
+  fluid_prefs.set("widget_size", WidgetType::default_size);
 }
 
 // new_cb() : new (possibly template) fulid file creation from File/New menu

@@ -63,9 +63,9 @@ DECL_MENUCB(toggle_overlays);
 DECL_MENUCB2(toggle_sourceview_cb,DoubleBufferWindow);
 DECL_MENUCB(show_shell_window);
 DECL_MENUCB2(do_shell_command,ReturnButton);
-IMPL_MENUCB(show_grid_cb);
 void align_widget_cb(Widget*, long how) ;
-void widget_size_cb(Widget *, long size) ;
+void default_widget_size_cb(RadioButton *, long size) ;
+void widget_size_cb(Widget*, long size) ;
 
 //////////////////////////////////////////////////////////////////////
 extern char absolute_history[][1024];
