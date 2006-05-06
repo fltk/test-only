@@ -26,7 +26,7 @@
 //
 
 #include <fltk/run.h>
-#include <fltk/window.h>
+#include <fltk/Window.h>
 #include "WidgetType.h"
 #include "undo.h"
 
