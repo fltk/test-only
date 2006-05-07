@@ -725,7 +725,7 @@ ts from going to other windows until it is hidden or closed.");
            {Shortcut_Button* o = new Shortcut_Button(55, 0, 290, 22);
             o->color((fltk::Color)7);
             o->callback((fltk::Callback*)shortcut_in_cb);
-            o->align(fltk::ALIGN_LEFT);
+            o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
             o->tooltip("To set a shortcut:\n   Click here, then type the key combination you want.\nT\
 o delete the shortcut:\n   Click here, then type backspace.\nTo get out of sho\
 rtcut-setting mode:\n   Click the mouse on this again, or on some other field.");

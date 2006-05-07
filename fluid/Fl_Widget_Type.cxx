@@ -2281,13 +2281,11 @@ void live_mode_cb(LightButton*o,void *v) {
         Group::current(0);
         int w = live_widget->w();
         int h = live_widget->h();
+	// create main live mode Window, green backgnd no border
         live_window = new DoubleBufferWindow(w+20, h+55, "Fluid Live Mode Widget");
+	live_window->begin();
         live_window->box(fltk::FLAT_BOX);
         live_window->color(fltk::GREEN);
-        Group *rsz = new Group(0, h+20, 130, 35);
-        rsz->box(fltk::NO_BOX);
-        InvisibleBox*rsz_dummy = new InvisibleBox(fltk::NO_BOX, 110, h+20, 1, 25,"");
-        rsz->resizable(rsz_dummy);
         Button *btn = new Button(10, h+20, 100, 25, "Exit Live Mode");
         btn->labelsize(12);
         btn->callback(leave_live_mode_cb);
@@ -2305,6 +2303,7 @@ void live_mode_cb(LightButton*o,void *v) {
           if (mw || mh || MW || MH)
             live_window->size_range(mw, mh, MW, MH);
         }
+	live_window->end();
         live_window->show();
       } else o->value(0);
     } else o->value(0);

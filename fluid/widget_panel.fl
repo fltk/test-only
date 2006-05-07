@@ -644,7 +644,7 @@ Round all movements to multiples of this.
           }
           {fltk::ValueInput} {} {
             label line
-            callback line_cb selected
+            callback line_cb
             tooltip {linesize:
 Increment/decrement for arrow keys.}
             xywh {245 0 45 22} align 22 when ENTER_KEY labelsize 11 minimum 1 step 1
@@ -699,7 +699,7 @@ Increment/decrement for arrow keys.}
           }
         }
         {fltk::Group} gShortTool {
-          callback propagate_group
+          callback propagate_group open
           xywh {25 255 350 60}
         } {
           {fltk::InvisibleBox} {} {
@@ -707,14 +707,14 @@ Increment/decrement for arrow keys.}
             xywh {0 0 55 25} align 40
           }
           {fltk::Button} {} {
-            callback shortcut_in_cb
+            callback shortcut_in_cb selected
             tooltip {To set a shortcut:
    Click here, then type the key combination you want.
 To delete the shortcut:
    Click here, then type backspace.
 To get out of shortcut-setting mode:
    Click the mouse on this again, or on some other field.}
-            xywh {55 0 290 22} align 4 color 7
+            xywh {55 0 290 22} align 36 color 7
             extra_code {\#include "Shortcut_Button.h"}
             class Shortcut_Button
           }
