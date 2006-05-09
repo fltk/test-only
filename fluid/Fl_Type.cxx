@@ -635,7 +635,7 @@ void later_cb(fltk::Widget*,void*) {
 
 ////////////////////////////////////////////////////////////////
 
-// write a widget and all it's children:
+// write a widget and all its children:
 void FluidType::write() {
   int level = 0;
   for (FluidType* p = parent; p; p = p->parent) level++;

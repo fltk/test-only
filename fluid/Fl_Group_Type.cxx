@@ -69,7 +69,7 @@ FluidType *GroupType::make() {
   return WidgetType::make();
 }
 
-// Enlarge the group to surround all it's children.  This is done to
+// Enlarge the group to surround all its children.  This is done to
 // all groups whenever the user moves any widgets.
 void fix_group_size(FluidType *t) {
   if (!t || !t->is_group() || t->is_menu_button()) return;

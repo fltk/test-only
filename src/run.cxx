@@ -830,6 +830,40 @@ bool fltk::event_inside(const fltk::Rectangle& r) {
   return r.contains(e_x, e_y);
 }
 
+//! return the corresponding str of an event, should not consume memory if api is not used
+const char * fltk::event_name(int event) {
+    const char * const event_n[]= {
+	"NO_EVENT",
+	"PUSH",
+	"RELEASE",
+	"ENTER",
+	"LEAVE",
+	"DRAG",
+	"FOCUS",
+	"UNFOCUS",
+	"KEY",
+	"KEYUP",
+	"FOCUS_CHANGE",
+	"MOVE",
+	"SHORTCUT",
+	"DEACTIVATE",
+	"ACTIVATE",
+	"HIDE",
+	"SHOW",
+	"PASTE",
+	"TIMEOUT",
+	"MOUSEWHEEL",
+	"DND_ENTER",
+	"DND_DRAG",
+	"DND_LEAVE",
+	"DND_RELEASE",
+	"TOOLTIP"
+    };
+    // always return inbounds data:
+    return (event>=0 && event < (int) (sizeof(event_n)/ sizeof(const char *)) ) ? 
+	event_n[event] : "<Unknown Event>";
+}
+
 /*! \fn Widget* fltk::focus()
   Returns the widgets that will receive fltk::KEY events. This is NULL
   if the application does not have focus now, or if no widgets
@@ -1187,9 +1221,21 @@ bool fltk::try_shortcut() {
   widget returns 0 (or the window or widget is null) then the functions
   pointed to by add_event_handler() are called.
 */
+
+#if 0 // set to 1 to dump to console non 0 events from this function
+# define DUMP_EVENTS
+# include <stdio.h>
+#endif
+
 bool fltk::handle(int event, Window* window)
 {
   e_type = event;
+
+#ifdef DUMP_EVENTS
+  static unsigned long evtnum=0L;
+  if (event) printf("event name = %8lu %s\n", ++evtnum, fltk::event_name(event));
+#endif
+
   if (fl_local_grab) return fl_local_grab(event);
 
   Widget* to = fl_actual_window = window;

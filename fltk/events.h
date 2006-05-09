@@ -60,7 +60,7 @@ enum {
   DND_DRAG	= 21,
   DND_LEAVE	= 22,
   DND_RELEASE	= 23,
-  TOOLTIP	= 24
+  TOOLTIP	= 24,
 };
 
 /*! Values returned by event_key(), passed to event_key_state() and
@@ -317,6 +317,8 @@ inline bool grab()			{return grab_;}
 inline void exit_modal()		{exit_modal_ = true;}
 inline bool exit_modal_flag()		{return exit_modal_;}
 
+// for debugging purpose : 
+const char  *event_name(int event); /// see STR #508
 /*! \} */
 
 }
