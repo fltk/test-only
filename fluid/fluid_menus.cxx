@@ -121,6 +121,7 @@ static ValueInputType ValueInputtype;
 static ValueOutputType ValueOutputtype;
 static ValueSliderType ValueSlidertype;
 static BarGroupType BarGrouptype;
+static StatusBarGroupType StatusBarGrouptype;
 static TextDisplayType TextDisplaytype;
 
 //////////////////////////////////////////////////////////////////////
@@ -289,6 +290,7 @@ void fltk::fill_in_New_Menu(ItemGroup* menu) {
 	    fluidMenuItem(Tiletype  , 20);
 	    // WizardType 21
 	    fluidMenuItem(BarGrouptype  , 17);
+	    fluidMenuItem(StatusBarGrouptype  , 5);
 	submenu->end();
 	submenu=fluidMenuGroup("buttons",24);
 	    fluidMenuItem(Buttontype  , 2);

@@ -69,7 +69,7 @@ Widget *SubmenuType::widget(int,int,int,int) {
 extern FL_API bool fl_dont_execute; // in Menu.cxx
 
 FluidType* MenuType::click_test(int, int) {
-  if (selected) return 0; // let user move the widget
+  if (selected()) return 0; // let user move the widget
   fltk::Menu* w = (fltk::Menu*)o;
   if (!w->size()) return 0;
   Widget* save = w->item();
@@ -176,7 +176,7 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
     i->redraw();
   } else {
     for (FluidType *o = FluidType::first; o; o = o->walk())
-      if (o->selected && o->is_widget()) {
+      if (o->selected() && o->is_widget()) {
 	Widget* b = ((WidgetType*)o)->o;
 	b->shortcut(i->svalue);
 	if (o->is_menu_item()) ((WidgetType*)o)->redraw();

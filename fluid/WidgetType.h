@@ -60,6 +60,7 @@
 #include <fltk/ValueOutput.h>
 #include <fltk/ValueSlider.h>
 #include <fltk/BarGroup.h>
+#include <fltk/StatusBarGroup.h>
 #include "FluidType.h"
 
 namespace fltk {
@@ -529,6 +530,15 @@ namespace fltk {
       }
       WidgetType *_make() { return new BarGroupType(); }
       int pixmapID() { return 17; }
+    };
+    class StatusBarGroupType : public WidgetType {
+    public:
+      virtual const char *type_name() const { return "fltk::StatusBarGroup"; }
+      Widget *widget(int x, int y, int w, int h) {
+	return new fltk::StatusBarGroup(x, y, w, h);
+      }
+      WidgetType *_make() { return new StatusBarGroupType(); }
+      int pixmapID() { return 5; } // no nice bitmap yet use the WidgetType one
     };
 }
 #endif

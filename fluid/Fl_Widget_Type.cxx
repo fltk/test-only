@@ -214,11 +214,11 @@ void sort(FluidType *parent) {
   for (FluidType* f = parent->first_child; f;) {
     sort(f);
     FluidType* next = f->next_brother;
-    if (f->selected && (f->is_widget() && !f->is_menu_item())) {
+    if (f->selected() && (f->is_widget() && !f->is_menu_item())) {
       fltk::Widget* fw = ((WidgetType*)f)->o;
       FluidType *g; // we will insert before this
       for (g = parent->first_child; g != f; g = g->next_brother) {
-	if (!g->selected) continue;
+	if (!g->selected()) continue;
 	fltk::Widget* gw = ((WidgetType*)g)->o;
 	if (gw->y() >= fw->y()+fw->h()) break;
 	if (gw->y()+gw->h() > fw->y() && gw->x() >= fw->x()+fw->w()) break;
@@ -277,7 +277,7 @@ void name_cb(fltk::Input* o, void *v) {
 
 #define for_all_selected_widgets() \
 for (FluidType *o = FluidType::first; o; o = o->walk()) \
-  if (o->selected && o->is_widget())
+  if (o->selected() && o->is_widget())
 
 void name_public_cb(fltk::CheckButton* i, void* v) {
   if (v == LOAD) {
@@ -1513,10 +1513,10 @@ void selection_changed(FluidType *p) {
       // back to the previous values:
       FluidType *q = 0;
       for (FluidType *o = FluidType::first; o; o = o->walk()) {
-        o->new_selected = o->selected;
-        if (!q && o->selected) q = o;
+        o->new_selected = o->selected();
+        if (!q && o->selected()) q = o;
       }
-      if (!p || !p->selected) p = q;
+      if (!p || !p->selected()) p = q;
       FluidType::current = p;
       redraw_browser();
       return;
@@ -1525,8 +1525,8 @@ void selection_changed(FluidType *p) {
   }
   // update the selected flags to new set:
   for (FluidType* o = FluidType::first; o; o = o->walk()) {
-    o->selected = o->new_selected;
-    //if (o->selected) FluidType::current = o;
+    o->selected(o->new_selected);
+    //if (o->selected()) FluidType::current = o;
   }
   if (p && p->new_selected) FluidType::current = p;
   redraw_overlays();

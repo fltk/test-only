@@ -451,6 +451,10 @@ SOURCE=..\..\fltk\slider.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fltk\StatusBarGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fltk\string.h
 # End Source File
 # Begin Source File
@@ -981,6 +985,10 @@ SOURCE=..\..\src\show_colormap.cxx
 # Begin Source File
 
 SOURCE=..\..\src\Slider.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\StatusBarGroup.cxx
 # End Source File
 # Begin Source File
 

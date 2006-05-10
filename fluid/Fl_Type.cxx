@@ -48,6 +48,7 @@
 #include <fltk/events.h>
 #include <fltk/damage.h>
 #include <fltk/filename.h>
+#include <fltk/StatusBarGroup.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
@@ -64,6 +65,7 @@
 
 using namespace fltk;
 
+extern StatusBarGroup * status_bar;
 ////////////////////////////////////////////////////////////////
 // Code to access lists of enuerations:
 
@@ -171,8 +173,9 @@ fltk::Widget* Enumeration_List::child(const fltk::Menu* menu, const int* indexes
 
 ////////////////////////////////////////////////////////////////
 
-FluidType *FluidType::first;
-FluidType *FluidType::current;
+FluidType *FluidType::first=0;
+FluidType *FluidType::current=0;
+int FluidType::selected_count_=0;
 
 class Widget_List : public fltk::List {
   virtual int children(const fltk::Menu*, const int* indexes, int level);
@@ -187,17 +190,43 @@ static Widget_List widgetlist;
 extern fltk::Browser *widget_browser;
 
 extern void deselect();
+
 static void Widget_Browser_callback(fltk::Widget * w,void *) {
     if (fltk::event()==fltk::PUSH )  {
 	if ( ( (fltk::Browser*) w)->item()==0) 
 	    deselect();
-	    widget_browser->redraw();
     }
     else if (fltk::event()==fltk::WHEN_ENTER_KEY || fltk::event_clicks()) { // double_click open the widget editor
 	if (FluidType::current) FluidType::current->open();
     }
+    if(fltk::event()!=fltk::RELEASE) refresh_browser_views();
 }
 
+void refresh_browser_views() {
+    widget_browser->redraw();
+    int cnt = FluidType::selected_count();
+    if (cnt <2) status_bar->set(0, StatusBarGroup::SBAR_RIGHT);
+    if (cnt <1) status_bar->set(0, StatusBarGroup::SBAR_CENTER);
+    if (!cnt) return;
+
+    if (FluidType::current && FluidType::current->is_widget()) {
+	Widget * o = ((WidgetType*)FluidType::current)->o;
+	if (cnt==1) 
+	    status_bar->set(StatusBarGroup::SBAR_CENTER, "xywh: %d %d %d %d",o->x(),o->y(),o->w(),o->h());
+	else {
+	    Rectangle r;
+	    for (FluidType *t = FluidType::first; t; t = t->walk())
+		if (t->selected() && t->is_widget())
+		    r.merge( *((WidgetType*)t)->o);
+	    status_bar->set(StatusBarGroup::SBAR_CENTER, "xywh: %d %d %d %d",r.x(),r.y(),r.w(),r.h());
+	}
+    }
+    if (cnt>1) 
+	status_bar->set(StatusBarGroup::SBAR_RIGHT, "%d selected",cnt);
+    status_bar->redraw();  
+}
+
+// make the widget browser in the main fluid window, items use the list method defined by widgetlist
 fltk::Widget *make_widget_browser(int x,int y,int w,int h) {
   widget_browser = new fltk::MultiBrowser(x,y,w,h);
   widget_browser->list(&widgetlist);
@@ -246,7 +275,7 @@ fltk::Widget* Widget_List::child(const fltk::Menu*, const int* indexes, int leve
     widget = new fltk::Item();
   }
   widget->user_data(item);
-  if (item->selected) widget->set_selected();
+  if (item->selected()) widget->set_selected();
   else widget->clear_selected();
   // force the hierarchy to be open/closed:
   if (item->is_parent() && item->open_) widget->set_flag(fltk::VALUE);
@@ -264,15 +293,15 @@ void Widget_List::flags_changed(const fltk::Menu*, fltk::Widget* w) {
   FluidType* item = (FluidType*)(w->user_data());
   item->open_ = (w->flags()&fltk::VALUE) != 0;
   item->new_selected = w->selected();
-  if (item->new_selected != item->selected) selection_changed(item);
+  if (item->new_selected != item->selected()) selection_changed(item);
 }
 
 void select(FluidType* it, int value) {
   it->new_selected = value != 0;
-  if (it->new_selected != it->selected) {
+  if (it->new_selected != it->selected()) {
     selection_changed(it);
     widget_browser->goto_focus();
-    widget_browser->redraw();
+    refresh_browser_views();
   }
 }
 
@@ -335,7 +364,7 @@ const char* FluidType::title() {
 
 // Call this when the descriptive text changes:
 void redraw_browser() {
-  widget_browser->redraw();
+  refresh_browser_views();
 }
 
 FluidType::FluidType() {
@@ -400,7 +429,7 @@ void FluidType::add(FluidType *p) {
       FluidType::first = this;
   }
   if (p) p->add_child(this,0);
-  open_ = 1;
+  open_ = true;
   modflag = 1;
   widget_browser->relayout();
 }
@@ -459,13 +488,13 @@ int storestring(const char *n, const char * & p, int nostrip) {
 }
 
 void FluidType::name(const char *n) {
-  if (storestring(n,name_)) widget_browser->redraw();
+  if (storestring(n,name_)) refresh_browser_views();
 }
 
 void FluidType::label(const char *n) {
   if (storestring(n,label_,1)) {
     setlabel(label_);
-    if (!name_) widget_browser->redraw();
+    if (!name_) refresh_browser_views();
   }
 }
 
@@ -503,6 +532,7 @@ FluidType::~FluidType() {
   if (next_brother) next_brother->previous_brother = previous_brother;
   if (current == this) current = 0;
   modflag = 1;
+  selected(false);
   if (widget_browser) widget_browser->relayout();
 }
 
@@ -546,7 +576,7 @@ void select_none_cb(Widget *,void *) {
     // select all children of parent:
     int changed = 0;
     for (FluidType *t = parent ? parent->first_child : FluidType::first; t; t = t->walk(parent))
-      if (t->selected) {changed = 1; select(t,0);}
+      if (t->selected()) {changed = 1; select(t,0);}
     if (changed) break;
     // if everything was selected, try a higher parent:
     if (!parent || parent == in_this_only) break;
@@ -567,7 +597,7 @@ void select_all_cb(fltk::Widget *,void *) {
     int changed = 0;
     for (FluidType *t = parent ? parent->first_child : FluidType::first;
 	 t; t = t->walk(parent))
-      if (!t->selected) {changed = 1; select(t,1);}
+      if (!t->selected()) {changed = 1; select(t,1);}
     if (changed) break;
     // if everything was selected, try a higher parent:
     if (!parent || parent == in_this_only) break;
@@ -577,7 +607,7 @@ void select_all_cb(fltk::Widget *,void *) {
 
 void delete_all(int selected_only) {
   for (FluidType *f = FluidType::first; f;) {
-    if (f->selected || !selected_only) {
+    if (f->selected() || !selected_only) {
       FluidType* next = f->next_brother;
       delete f;
       f = next;
@@ -606,9 +636,9 @@ void earlier_cb(fltk::Widget*,void*) {
   Undo::checkpoint();
   for (FluidType* f = parent ? parent->first_child : FluidType::first; f; ) {
     FluidType* next = f->next_brother;
-    if (f->selected) {
+    if (f->selected()) {
       FluidType* g = f->previous_brother;
-      if (g && !g->selected) {f->move_before(g); canundo=true;}
+      if (g && !g->selected()) {f->move_before(g); canundo=true;}
     }
     f = next;
   }
@@ -624,9 +654,9 @@ void later_cb(fltk::Widget*,void*) {
     f = f->next_brother;
   for (;f;) {
     FluidType* prev = f->previous_brother;
-    if (f->selected) {
+    if (f->selected()) {
       FluidType* g = f->next_brother;
-      if (g && !g->selected) {g->move_before(f); canundo=true;}
+      if (g && !g->selected()) {g->move_before(f); canundo=true;}
     }
     f = prev;
   }
@@ -682,7 +712,7 @@ void FluidType::write_properties() {
     write_word(callback());
   }
   if (is_parent() && open_) write_word("open");
-  if (selected) write_word("selected");
+  if (selected()) write_word("selected");
   if (tooltip()) {
     write_indent(level+1);
     write_word("tooltip");
@@ -702,7 +732,7 @@ void FluidType::read_property(const char *c) {
   else if (!strcmp(c,"callback"))
     callback(read_word());
   else if (!strcmp(c,"open"))
-    open_ = 1;
+    open_ = true;
   else if (!strcmp(c,"selected"))
     select(this,1);
   else

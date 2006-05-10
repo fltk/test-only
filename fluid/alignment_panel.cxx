@@ -65,19 +65,19 @@ fltk::Window* make_preferences_window() {
           o->callback((fltk::Callback*)cb_openlast_button);
           int b;
           fluid_prefs.get("open_previous_file", b, 0);
-          openlast_button->value(b);
+          openlast_button->value(b ? true : false);
         }
          {fltk::CheckButton* o = prevpos_button = new fltk::CheckButton(10, 25, 193, 25, "Remember Window Positions");
           o->callback((fltk::Callback*)cb_prevpos_button);
           int b;
           fluid_prefs.get("prev_window_pos", b, 1);
-          prevpos_button->value(b);
+          prevpos_button->value(b ? true : false);
         }
          {fltk::CheckButton* o = completion_button = new fltk::CheckButton(10, 50, 186, 25, "Show Completion Dialog Info");
           o->callback((fltk::Callback*)cb_completion_button);
           int b;
           fluid_prefs.get("show_completion_dialogs", b, 1);
-          completion_button->value(b);
+          completion_button->value(b ? true : false);
         }
          {fltk::ValueInput* o = recent_spinner = new fltk::ValueInput(13, 75, 40, 25, "# Recent Files");
           o->callback((fltk::Callback*)cb_recent_spinner);
@@ -239,20 +239,20 @@ fltk::DoubleBufferWindow* make_shell_window() {
       o->callback((fltk::Callback*)cb_shell_writecode_button);
       int b;
       fluid_prefs.get("shell_writecode", b, 1);
-      shell_writecode_button->value(b);
+      shell_writecode_button->value(b ? true : false);
     }
      {fltk::CheckButton* o = shell_writemsgs_button = new fltk::CheckButton(231, 61, 126, 19, "Write Messages");
       o->callback((fltk::Callback*)cb_shell_writemsgs_button);
       o->hide();
       int b;
       fluid_prefs.get("shell_writemsgs", b, 0);
-      shell_writemsgs_button->value(b);
+      shell_writemsgs_button->value(b ? true : false);
     }
      {fltk::CheckButton* o = shell_savefl_button = new fltk::CheckButton(10, 61, 108, 19, "Save Fluid File");
       o->callback((fltk::Callback*)cb_shell_savefl_button);
       int b;
       fluid_prefs.get("shell_savefl", b, 1);
-      shell_savefl_button->value(b);
+      shell_savefl_button->value(b ? true : false);
     }
      {fltk::ReturnButton* o = new fltk::ReturnButton(132, 90, 143, 25, "Run Command");
       o->shortcut(0xff0d);

@@ -715,7 +715,7 @@ static void comment_ok_cb(fltk::Widget * w, void * data) {
     if (mod) modflag=1;
     if (modflag  && widget_browser) {
     	widget_browser->relayout();
-    	widget_browser->redraw();
+    	refresh_browser_views();
     }
     comment_panel->hide();
 }

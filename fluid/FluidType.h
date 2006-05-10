@@ -74,13 +74,26 @@ public:	// things that should not be public:
   FluidType* walk() const;
 
   static FluidType *first;
+  
 
-  char new_selected; // browser highlight
-  char selected; // copied here by selection_changed()
-  char open_;	// open/close state of this parent in browser
 
   FluidType *factory;
   const char *callback_name();
+
+  bool open_;	// open/close state of this parent in browser
+
+  static int selected_count() {return selected_count_;}
+  bool selected() const {return selected_;}
+  void selected(bool s) {
+      if (s==selected_) return;
+      if (s ) ++selected_count_; else --selected_count_; 
+      selected_=s;
+  }
+
+  bool new_selected; // browser highlight
+private:
+  bool selected_; // copied here by selection_changed()
+  static int selected_count_;
 
 public:
 
@@ -429,6 +442,8 @@ FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 FLUID_API extern bool include_H_from_C;
 FLUID_API void select(FluidType* it, int value);
 FLUID_API void select_only(FluidType *);
+FLUID_API void refresh_browser_views();
+
 extern fltk::Preferences	fluid_prefs;	// FLUID preferences
 #endif
 //

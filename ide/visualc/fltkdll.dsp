@@ -2178,6 +2178,10 @@ SOURCE=..\..\src\slowarrow.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\StatusBarGroup.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\string.c
 DEP_CPP_STRIN=\
 	"..\..\fltk\fl_api.h"\

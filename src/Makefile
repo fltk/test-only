@@ -99,6 +99,7 @@ CPPFILES = \
 	SharedImage.cxx \
 	ShortcutAssignment.cxx \
 	Slider.cxx \
+	StatusBarGroup.cxx \
 	StringList.cxx \
 	Style.cxx \
 	StyleSet.cxx \

@@ -335,7 +335,7 @@ int write_file(const char *filename, int selected_only) {
   }
   if (theme && *theme) { write_string("\ntheme "); write_word(theme); }
   for (FluidType *p = FluidType::first; p;) {
-    if (!selected_only || p->selected) {
+    if (!selected_only || p->selected()) {
       p->write();
       write_string("\n");
       p = p->next_brother;
@@ -449,7 +449,7 @@ static void read_children(FluidType *p, int paste) {
       goto REUSE_C;
     }
 
-    t->open_ = 0;
+    t->open_ = false;
     for (;;) {
       const char *c = read_word();
       if (!c || !strcmp(c,"}")) break;
@@ -479,7 +479,7 @@ int read_file(const char *filename, int merge) {
   read_children(parent, merge);
   FluidType::current = parent;
   for (FluidType *o = FluidType::first; o; o = o->walk())
-    if (o->selected) {
+    if (o->selected()) {
       FluidType::current = o; break;
     }
   return close_read();

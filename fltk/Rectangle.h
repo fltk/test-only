@@ -96,11 +96,13 @@ class FL_API Rectangle {
 
   /*! Copy constructor. */
   Rectangle(const Rectangle& r) : x_(r.x_),y_(r.y_),w_(r.w_),h_(r.h_) {}
-  /* fabien : factorized this useful construction into a new set() method */
+  /*! constructor that sets  x, y, w, h so that's it's centered or aligned if flags!=0 inside the source r */
   Rectangle(const Rectangle& r, int w, int h, int flags = 0) {set(r,w,h,flags);}
 
   /*! True if rectangle contains the pixel who's upper-left corner is at x,y */
   bool contains(int x, int y) const {return x>=x_ && y>=y_ && x<x_+w_ && y<y_+h_;}
+  /*! calculate bounding box of this union r */
+  void merge(const Rectangle& r);
   
 };
 

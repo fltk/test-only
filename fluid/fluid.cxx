@@ -52,6 +52,7 @@ const char *copyright =
 #include <fltk/Button.h>
 #include <fltk/Browser.h>
 #include <fltk/MenuBar.h>
+#include <fltk/StatusBarGroup.h>
 #include <fltk/Input.h>
 #include <fltk/Tooltip.h>
 #include <fltk/ask.h>
@@ -682,7 +683,7 @@ void cut_cb(Widget *, void *) {
     Undo::checkpoint();
     ipasteoffset = 0;
     FluidType *p = FluidType::current->parent;
-    while (p && p->selected) p = p->parent;
+    while (p && p->selected()) p = p->parent;
     if (!write_file(cutfname(),1)) {
 	message("Can't write %s: %s", cutfname(), strerror(errno));
 	return;
@@ -805,8 +806,8 @@ void toggle_widgetbin_cb(Widget *o, void * v) {
 
 
 MenuBar* menubar;
-Browser *widget_browser;
-
+Browser* widget_browser;
+StatusBarGroup* status_bar;
 ////////////////////////////////////////////////////////////////
 void toggle_sourceview_cb(DoubleBufferWindow *, void *) {
   if (!sourceview_panel) {
@@ -843,6 +844,7 @@ void make_main_window() {
     if (!main_window) {
 	Widget *o;
 	main_window = new Window(WINWIDTH,WINHEIGHT,"fluid");
+	main_window->size_range(WINWIDTH,100);
 	main_window->box(NO_BOX);
 	main_window->begin();
 	o = widget_browser = (Browser *) make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
@@ -855,6 +857,10 @@ void make_main_window() {
 	// this is removed because the new ctrl+bindings mess up emacs in
 	// the text fields:
 	//    menubar->global();
+	// create a status bar, only care for h(), other dims are automatically resized
+	status_bar = new StatusBarGroup();
+	status_bar->child_box(THIN_DOWN_BOX, StatusBarGroup::SBAR_RIGHT);
+	status_bar->child_box(FLAT_BOX, StatusBarGroup::SBAR_CENTER);
 	main_window->end();
 	load_history();
 	make_shell_window();

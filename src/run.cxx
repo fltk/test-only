@@ -790,15 +790,7 @@ void fltk::Rectangle::set(const fltk::Rectangle& r, int w, int h, int flags) {
   h_ = h;
 }
 
-#if 0 // I commented these out because nothing seems to be calling them
-void Rectangle::intersect(const fltk::Rectangle& R) {
-  if (R.x() > x()) set_x(R.x());
-  if (R.r() < r()) set_r(R.r());
-  if (R.y() > y()) set_y(R.y());
-  if (R.b() < b()) set_b(R.b());
-}
-
-void Rectangle::merge(const fltk::Rectangle& R) {
+void fltk::Rectangle::merge(const fltk::Rectangle& R) {
   if (R.empty()) return;
   if (empty()) {*this = R; return;}
   if (R.x() < x()) set_x(R.x());
@@ -806,6 +798,15 @@ void Rectangle::merge(const fltk::Rectangle& R) {
   if (R.y() < y()) set_y(R.y());
   if (R.b() > b()) set_b(R.b());
 }
+
+#if 0 // I commented these out because nothing seems to be calling them
+void fltk::Rectangle::intersect(const fltk::Rectangle& R) {
+  if (R.x() > x()) set_x(R.x());
+  if (R.r() < r()) set_r(R.r());
+  if (R.y() > y()) set_y(R.y());
+  if (R.b() < b()) set_b(R.b());
+}
+
 #endif
 
 ////////////////////////////////////////////////////////////////

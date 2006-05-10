@@ -51,7 +51,7 @@ void align_widget_cb(Widget*, long how)
   case 10: // align left
     left = max;
     for (o = FluidType::first; o; o = o->walk(0)) 
-      if (o->selected && o->is_widget())
+      if (o->selected() && o->is_widget())
       {
 	Widget *w = ((WidgetType *)o)->o;
 	if (w->x()<left)
@@ -60,7 +60,7 @@ void align_widget_cb(Widget*, long how)
       }
     if (left!=max)
 	for (FluidType* o = FluidType::first; o; o = o->walk(0)) 
-	if (o->selected && o->is_widget())
+	if (o->selected() && o->is_widget())
 	{
 	  if (!changed) {
 	    changed = 1;
@@ -83,7 +83,7 @@ void align_widget_cb(Widget*, long how)
   case 11: // align h.center
     left = max; right = min;
     for (o = FluidType::first; o; o = o->walk(0)) 
-      if (o->selected && o->is_widget())
+      if (o->selected() && o->is_widget())
       {
 	Widget *w = ((WidgetType *)o)->o;
 	if (w->x()<left)
@@ -96,7 +96,7 @@ void align_widget_cb(Widget*, long how)
     {
       int center2 = left+right;
       for (FluidType *o = FluidType::first; o; o = o->walk(0)) 
-	if (o->selected && o->is_widget())
+	if (o->selected() && o->is_widget())
 	{
 	  if (!changed) {
 	    changed = 1;
@@ -120,7 +120,7 @@ void align_widget_cb(Widget*, long how)
   case 12: // align right
     right = min;
     for (o = FluidType::first; o; o = o->walk(0)) 
-      if (o->selected && o->is_widget())
+      if (o->selected() && o->is_widget())
       {
 	Widget *w = ((WidgetType *)o)->o;
 	if (w->x()+w->w()>right)
@@ -129,7 +129,7 @@ void align_widget_cb(Widget*, long how)
       }
     if (right!=min)
       for (FluidType *o = FluidType::first; o; o = o->walk(0)) 
-	if (o->selected && o->is_widget())
+	if (o->selected() && o->is_widget())
 	{
 	  if (!changed) {
 	    changed = 1;
@@ -152,7 +152,7 @@ void align_widget_cb(Widget*, long how)
   case 13: // align top
     top = max;
     for (o = FluidType::first; o; o = o->walk(0)) 
-      if (o->selected && o->is_widget())
+      if (o->selected() && o->is_widget())
       {
 	Widget *w = ((WidgetType *)o)->o;
 	if (w->y()<top)
@@ -161,7 +161,7 @@ void align_widget_cb(Widget*, long how)
       }
     if (top!=max)
       for (FluidType *o = FluidType::first; o; o = o->walk(0)) 
-	if (o->selected && o->is_widget())
+	if (o->selected() && o->is_widget())
 	{
 	  if (!changed) {
 	    changed = 1;
@@ -184,7 +184,7 @@ void align_widget_cb(Widget*, long how)
   case 14: // align v.center
     top = max; bot = min;
     for (o = FluidType::first; o; o = o->walk(0)) 
-      if (o->selected && o->is_widget())
+      if (o->selected() && o->is_widget())
       {
 	Widget *w = ((WidgetType *)o)->o;
 	if (w->y()<top)
@@ -197,7 +197,7 @@ void align_widget_cb(Widget*, long how)
     {
       int center2 = top+bot;
       for (FluidType *o = FluidType::first; o; o = o->walk(0))
-	if (o->selected && o->is_widget())
+	if (o->selected() && o->is_widget())
 	{
 	  if (!changed) {
 	    changed = 1;
@@ -221,7 +221,7 @@ void align_widget_cb(Widget*, long how)
   case 15: // align bottom
     bot = min;
     for (o = FluidType::first; o; o = o->walk(0))
-      if (o->selected && o->is_widget())
+      if (o->selected() && o->is_widget())
       {
 	Widget *w = ((WidgetType *)o)->o;
 	if (w->y()+w->h()>bot)
@@ -230,7 +230,7 @@ void align_widget_cb(Widget*, long how)
       }
     if (bot!=min)
       for (FluidType *o = FluidType::first; o; o = o->walk(0))
-	if (o->selected && o->is_widget())
+	if (o->selected() && o->is_widget())
 	{
 	  if (!changed) {
 	    changed = 1;
@@ -254,7 +254,7 @@ void align_widget_cb(Widget*, long how)
   case 20: // space evenly across
     left = max; right = min; wdt = 0, n = 0;
     for (o = FluidType::first; o; o = o->walk(0))
-      if (o->selected && o->is_widget())
+      if (o->selected() && o->is_widget())
       {
 	Widget *w = ((WidgetType *)o)->o;
 	if (w->x()<left)
@@ -270,7 +270,7 @@ void align_widget_cb(Widget*, long how)
     {
       int cnt = 0, wsum = 0;
       for (FluidType *o = FluidType::first; o; o = o->walk(0))
-	if (o->selected && o->is_widget())
+	if (o->selected() && o->is_widget())
 	{
 	  if (!changed) {
 	    changed = 1;
@@ -296,7 +296,7 @@ void align_widget_cb(Widget*, long how)
   case 21: // space evenly down
     top = max; bot = min; hgt = 0, n = 0;
     for (o = FluidType::first; o; o = o->walk(0))
-      if (o->selected && o->is_widget())
+      if (o->selected() && o->is_widget())
       {
 	Widget *w = ((WidgetType *)o)->o;
 	if (w->y()<top)
@@ -312,7 +312,7 @@ void align_widget_cb(Widget*, long how)
     {
       int cnt = 0, hsum = 0;
       for (FluidType *o = FluidType::first; o; o = o->walk(0))
-	if (o->selected && o->is_widget())
+	if (o->selected() && o->is_widget())
 	{
 	  if (!changed) {
 	    changed = 1;
@@ -339,7 +339,7 @@ void align_widget_cb(Widget*, long how)
   case 30: // same width
     wdt = min;
     for (o = FluidType::first; o; o = o->walk(0))
-      if (o->selected && o->is_widget())
+      if (o->selected() && o->is_widget())
       {
 	Widget *w = ((WidgetType *)o)->o;
 	if (w->w()>wdt)
@@ -348,7 +348,7 @@ void align_widget_cb(Widget*, long how)
       }
     if (wdt!=min)
       for (FluidType *o = FluidType::first; o; o = o->walk(0))
-	if (o->selected && o->is_widget())
+	if (o->selected() && o->is_widget())
 	{
 	  if (!changed) {
 	    changed = 1;
@@ -371,7 +371,7 @@ void align_widget_cb(Widget*, long how)
   case 31: // same height
     hgt = min;
     for (o = FluidType::first; o; o = o->walk(0))
-      if (o->selected && o->is_widget())
+      if (o->selected() && o->is_widget())
       {
 	Widget *w = ((WidgetType *)o)->o;
 	if (w->h()>hgt)
@@ -380,7 +380,7 @@ void align_widget_cb(Widget*, long how)
       }
     if (hgt!=min)
       for (FluidType *o = FluidType::first; o; o = o->walk(0))
-	if (o->selected && o->is_widget())
+	if (o->selected() && o->is_widget())
 	{
 	  if (!changed) {
 	    changed = 1;
@@ -403,7 +403,7 @@ void align_widget_cb(Widget*, long how)
   case 32: // same size
     hgt = min; wdt = min;
     for (o = FluidType::first; o; o = o->walk(0))
-      if (o->selected && o->is_widget())
+      if (o->selected() && o->is_widget())
       {
 	Widget *w = ((WidgetType *)o)->o;
 	if (w->w()>wdt)
@@ -414,7 +414,7 @@ void align_widget_cb(Widget*, long how)
       }
     if (hgt!=min)
       for (FluidType *o = FluidType::first; o; o = o->walk(0))
-	if (o->selected && o->is_widget())
+	if (o->selected() && o->is_widget())
 	{
 	  if (!changed) {
 	    changed = 1;
@@ -437,7 +437,7 @@ void align_widget_cb(Widget*, long how)
   //---- center in group
   case 40: // center hor
     for (o = FluidType::first; o; o = o->walk(0))
-      if (o->selected && o->is_widget() && o->parent)
+      if (o->selected() && o->is_widget() && o->parent)
       {
 	if (!changed) {
 	  changed = 1;
@@ -465,7 +465,7 @@ void align_widget_cb(Widget*, long how)
     break;
   case 41: // center vert
     for (o = FluidType::first; o; o = o->walk(0))
-      if (o->selected && o->is_widget() && o->parent)
+      if (o->selected() && o->is_widget() && o->parent)
       {
 	if (!changed) {
 	  changed = 1;
@@ -500,7 +500,7 @@ void widget_size_cb(Widget *, long size) {
   // Update any selected widgets...
   int changed = 0;
   for (FluidType *o = FluidType::first; o; o = o->walk(0)) {
-    if (o->selected && o->is_widget()) {
+    if (o->selected() && o->is_widget()) {
       if (!changed) {
 	changed = 1;
 	modflag = 1;

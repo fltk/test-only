@@ -143,7 +143,7 @@ void group_cb(Widget *, void *) {
     n->move_before(q);
     for (FluidType *t = q->parent->first_child; t;) {
 	FluidType* next = t->next_brother;
-	if (t->selected && t != n) {
+	if (t->selected() && t != n) {
 	    t->remove();
 	    t->add(n);
 	}
@@ -171,7 +171,7 @@ void ungroup_cb(fltk::Widget *, void *) {
     Widget* g = (Group*) ((WidgetType*)q)->o; 
     for (FluidType* n = q->first_child; n;) {
 	FluidType* next = n->next_brother;
-	if (n->selected) {
+	if (n->selected()) {
 	    n->remove();
 	    n->insert(q);
 	    if (n->is_widget()) {

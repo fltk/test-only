@@ -45,7 +45,7 @@ Function {make_preferences_window()} {open
           xywh {10 0 193 25}
           extra_code {int b;
 fluid_prefs.get("open_previous_file", b, 0);
-openlast_button->value(b);}
+openlast_button->value(b ? true : false);}
         }
         {fltk::CheckButton} prevpos_button {
           label {Remember Window Positions}
@@ -53,7 +53,7 @@ openlast_button->value(b);}
           xywh {10 25 193 25}
           extra_code {int b;
 fluid_prefs.get("prev_window_pos", b, 1);
-prevpos_button->value(b);}
+prevpos_button->value(b ? true : false);}
         }
         {fltk::CheckButton} completion_button {
           label {Show Completion Dialog Info}
@@ -61,7 +61,7 @@ prevpos_button->value(b);}
           xywh {10 50 186 25}
           extra_code {int b;
 fluid_prefs.get("show_completion_dialogs", b, 1);
-completion_button->value(b);}
+completion_button->value(b ? true : false);}
         }
         {fltk::ValueInput} recent_spinner {
           label {\# Recent Files}
@@ -197,7 +197,7 @@ shell_command_input->value(buf);}
       xywh {127 61 93 19}
       extra_code {int b;
 fluid_prefs.get("shell_writecode", b, 1);
-shell_writecode_button->value(b);}
+shell_writecode_button->value(b ? true : false);}
     }
     {fltk::CheckButton} shell_writemsgs_button {
       label {Write Messages}
@@ -205,7 +205,7 @@ shell_writecode_button->value(b);}
       xywh {231 61 126 19} hide
       extra_code {int b;
 fluid_prefs.get("shell_writemsgs", b, 0);
-shell_writemsgs_button->value(b);}
+shell_writemsgs_button->value(b ? true : false);}
     }
     {fltk::CheckButton} shell_savefl_button {
       label {Save Fluid File}
@@ -213,7 +213,7 @@ shell_writemsgs_button->value(b);}
       xywh {10 61 108 19}
       extra_code {int b;
 fluid_prefs.get("shell_savefl", b, 1);
-shell_savefl_button->value(b);}
+shell_savefl_button->value(b ? true : false);}
     }
     {fltk::ReturnButton} {} {
       label {Run Command}

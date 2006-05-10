@@ -374,7 +374,7 @@ void WindowType::draw_overlay() {
     bx = o->w(); by = o->h(); br = 0; bt = 0;
     numselected = 0;
     for (FluidType* q = first_child; q; q = q->walk(this)) {
-      if (q->selected && q->is_widget() && !q->is_menu_item()) {
+      if (q->selected() && q->is_widget() && !q->is_menu_item()) {
 	numselected++;
 	fltk::Widget* o = ((WidgetType*)q)->o;
 	int x = o->x(); int y = o->y();
@@ -395,12 +395,12 @@ void WindowType::draw_overlay() {
     fltk::strokerect(fltk::Rectangle(x,y,r-x,b-y));
   }
   if (overlays_invisible && !drag) return;
-  if (selected) fltk::strokerect(fltk::Rectangle(o->w(),o->h()));
+  if (selected()) fltk::strokerect(fltk::Rectangle(o->w(),o->h()));
   if (!numselected) return;
   int bx,by,br,bt;
   bx = o->w(); by = o->h(); br = 0; bt = 0;
   for (FluidType* q = first_child; q; q = q->walk(this)) {
-    if (q->selected && q->is_widget() && !q->is_menu_item()) {
+    if (q->selected() && q->is_widget() && !q->is_menu_item()) {
       int x,y,r,t;
       newposition((WidgetType*)q,x,y,r,t);
       fltk::Widget* o = ((WidgetType*)q)->o;
@@ -420,7 +420,7 @@ void WindowType::draw_overlay() {
       if (hidden) fltk::line_style(fltk::SOLID);
     }
   }
-  if (selected) return;
+  if (selected()) return;
   if (numselected>1) fltk::strokerect(fltk::Rectangle(bx,by,br-bx,bt-by));
   fltk::fillrect(fltk::Rectangle(bx,by,5,5));
   fltk::fillrect(fltk::Rectangle(br-5,by,5,5));
@@ -469,7 +469,7 @@ void WindowType::moveallchildren()
   FluidType *i;
   bool first = true;
   for (i = first_child; i;) {
-    if (i->selected && i->is_widget() && !i->is_menu_item()) {
+    if (i->selected() && i->is_widget() && !i->is_menu_item()) {
       WidgetType* o = (WidgetType*)i;
       int x,y,r,t;
       newposition(o,x,y,r,t);
@@ -553,7 +553,7 @@ int WindowType::handle(int event) {
       //if (t == selection) return 1; // indicates mouse eaten w/o change
       if (fltk::event_state(fltk::SHIFT)) {
 	fltk::event_is_click(0);
-	select(t, !t->selected);
+	select(t, !t->selected());
       } else {
 	select_only(t);
 	if (t->is_menu_item()) t->open();
@@ -594,7 +594,7 @@ int WindowType::handle(int event) {
 	  fltk::Group* p = o->parent(); if (!p->visible_r()) continue;
 	  while (p->parent()) {x += p->x(); y += p->y(); p = p->parent();}
 	  if (x >= x1 && y > y1 && x+o->w() < mx && y+o->h() < my) {
-	    if (toggle) select(i, !i->selected);
+	    if (toggle) select(i, !i->selected());
 	    else if (!n) select_only(i);
 	    else select(i, 1);
 	    n++;
@@ -606,7 +606,7 @@ int WindowType::handle(int event) {
       if (!n) {
 	// find the innermost item clicked on:
 	selection = clicked_widget();
-	if (toggle) select(selection, !selection->selected);
+	if (toggle) select(selection, !selection->selected());
 	else select_only(selection);
       }
       if (overlays_invisible) toggle_overlays(0,0);
