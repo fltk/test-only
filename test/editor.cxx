@@ -492,9 +492,14 @@ void load_file(const char *newfile, int ipos) {
   int r;
   if (!insert) r = textbuf->loadfile(newfile);
   else r = textbuf->insertfile(newfile, ipos);
-  if (r)
-    fltk::alert("Error reading from file \'%s\':\n%s.", newfile, strerror(errno));
-  else
+  if (r) {
+    //fltk::alert("Error reading from file \'%s\':\n%s.", newfile, strerror(errno));
+    if (fltk::ask("File '%s' does not exit. Do you want to create one?", newfile))
+      strcpy(filename, newfile);
+    else
+      exit(0);
+  } // if
+  else 
     if (!insert) strcpy(filename, newfile);
   loading = 0;
   textbuf->call_modify_callbacks();
@@ -764,18 +769,18 @@ fltk::Window* new_view() {
     build_menus(m,w);
     w->editor = new fltk::TextEditor(0, 21, 660, 379);
     w->editor->buffer(textbuf);
-//     w->editor->highlight_data(stylebuf, styletable,
-//                               sizeof(styletable) / sizeof(styletable[0]),
-// 			      'A', style_unfinished_cb, 0);
-    //w->editor->textfont(fltk::COURIER);
+    w->editor->highlight_data(stylebuf, styletable,
+      sizeof(styletable) / sizeof(styletable[0]),
+     'A', style_unfinished_cb, 0);
+  w->editor->textfont(fltk::COURIER);
   w->end();
   w->resizable(w->editor);
   w->callback((fltk::Callback *)close_cb, w);
 
   w->editor->linenumber_width(60);
   w->editor->wrap_mode(true, 0);
-  //w->editor->cursor_style(fltk::TextDisplay::BLOCK_CURSOR);
-  //w->editor->insert_mode(false);
+  w->editor->cursor_style(fltk::TextDisplay::BLOCK_CURSOR);
+  // w->editor->insert_mode(false);
 
   textbuf->add_modify_callback(style_update, w->editor);
   textbuf->add_modify_callback(changed_cb, w);
