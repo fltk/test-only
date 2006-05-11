@@ -224,7 +224,7 @@ const fltk::Enumeration pack_type_menu[] = {
 
 FluidType* TabsType::click_test(int x, int y) {
   fltk::TabGroup *t = (fltk::TabGroup*)o;
-  int i = t->which(x,y);
+  int i = t->which(x-t->x(),y-t->y());
   if (i < 0) return 0; // didn't click on tab
   // okay, run the tabs ui until they let go of mouse:
   t->handle(fltk::PUSH);
