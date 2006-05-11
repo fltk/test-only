@@ -492,12 +492,11 @@ void load_file(const char *newfile, int ipos) {
   int r;
   if (!insert) r = textbuf->loadfile(newfile);
   else r = textbuf->insertfile(newfile, ipos);
-  if (r) {
-    //fltk::alert("Error reading from file \'%s\':\n%s.", newfile, strerror(errno));
+  if (r) {    
     if (fltk::ask("File '%s' does not exit. Do you want to create one?", newfile))
       strcpy(filename, newfile);
     else
-      exit(0);
+      strcpy(filename, "");
   } // if
   else 
     if (!insert) strcpy(filename, newfile);
@@ -560,7 +559,7 @@ void find2_cb(fltk::Widget* w, void* v) {
 }
 
 void set_title(fltk::Window* w) {
-  if (filename[0] == '\0') strcpy(title, "Untitled");
+  if (filename[0] == '\0') strcpy(title, "Untitled.txt");
   else {
     char *slash;
     slash = strrchr(filename, '/');
@@ -798,7 +797,10 @@ int main(int argc, char **argv) {
 
   window->show(1, argv);
 
-  if (argc > 1) load_file(argv[1], -1);
+  if (argc > 1) {
+    window->label(" "); // Prevent from displaying "Untitled.txt" before its time...
+    load_file(argv[1], -1);
+  } 
 
   return fltk::run();
 }
