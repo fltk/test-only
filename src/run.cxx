@@ -196,27 +196,25 @@ bool Widget::take_focus() {
 // to be checked to see if any should be called.
 
 struct Timeout {
-  float time;
+  double time;
   void (*cb)(void*);
   void* arg;
   Timeout* next;
 };
 static Timeout* first_timeout, *free_timeout;
 
-#ifndef _WIN32
-#include <sys/time.h>
-#endif
+/** Return portable time that increases by 1.0 each second.
 
-// I avoid the overhead of getting the current time when we have no
-// timeouts by setting this flag instead of getting the time.
-// In this case calling elapse_timeouts() does nothing, but records
-// the current time, and the next call will actualy elapse time.
-static char reset_clock = 1;
+    On Windows it represents the time since system start,
+    on Unixes, it's the gettimeofday().
 
-/** return portable elapsed time from system in seconds. 
-    on Windows it represents the time since system start,
-    on Unixes, it's the time of the day. Precision may vary with OSes, 
-    only uses it for measuring small time deltas with a minimum precision of 20 ms
+    Using a double, the numerical precision exceeds 1/1040000 even
+    for the Unix gettimeofday value (which is seconds since 1970).
+    However you should only store the \e difference between these
+    values in a float.
+
+    The precision of the returned value depends on the OS, but
+    the minimum precision is 20ms.
 */ 
 double fltk::get_time_secs() {
 #ifdef _WIN32
@@ -224,28 +222,26 @@ double fltk::get_time_secs() {
 #else
   struct timeval newclock;
   gettimeofday(&newclock, NULL);
-  return newclock.tv_sec + double(newclock.tv_usec)/1000000.0;
+  return (unsigned)newclock.tv_sec + double(newclock.tv_usec)/1000000.0;
 #endif
 }
 
 static void elapse_timeouts() {
-  static float prev = 0.0f;
-  float elapsed = float(get_time_secs()) -prev;
-  if (reset_clock) {
-    reset_clock = 0;
-  } else if (elapsed > 0) {
-    for (Timeout* t = first_timeout; t; t = t->next) t->time -= elapsed;
-  }
+  static double prev = 0;
+  double now = get_time_secs();
+  double elapsed = now-prev;
+  prev = now;
+  for (Timeout* t = first_timeout; t; t = t->next) t->time -= elapsed;
 }
 
 // Continuously-adjusted error value, this is a number <= 0 for how late
 // we were at calling the last timeout. This appears to make repeat_timeout
 // very accurate even when processing takes a significant portion of the
 // time interval:
-static float missed_timeout_by;
+static double missed_timeout_by;
 
-static void _add_timeout(float time, TimeoutHandler cb, void *arg) {
-  if (time < -.05f) time = 0; // prevent missed_timeout_by from accumulating
+static void _add_timeout(double time, TimeoutHandler cb, void *arg) {
+  if (time < -.05) time = 0; // prevent missed_timeout_by from accumulating
   Timeout* t = free_timeout;
   if (t) free_timeout = t->next;
   else t = new Timeout;
@@ -485,8 +481,8 @@ int fltk::wait(float time_to_wait) {
 
   if (first_timeout) {
     elapse_timeouts();
-    Timeout* t = first_timeout;
-    if (t->time < time_to_wait) time_to_wait = t->time;
+    float t = float(first_timeout->time);
+    if (t < time_to_wait) time_to_wait = t;
   }
 
   // run the system-specific part that waits for sockets & events:
@@ -498,7 +494,7 @@ int fltk::wait(float time_to_wait) {
     Timeout *t;
     while ((t = first_timeout)) {
       if (t->time > 0) break;
-      // We must remove timeout from array before doing the callback:
+      // We must remove timeout from array before doing the callback
       void (*cb)(void*) = t->cb;
       void *arg = t->arg;
       first_timeout = t->next;
@@ -510,8 +506,6 @@ int fltk::wait(float time_to_wait) {
       // return true because something was done:
       ret = 1;
     }
-  } else {
-    reset_clock = 1; // remember that elapse_timeouts was not called
   }
 
   if (idle && !in_idle) {in_idle = true; idle(); in_idle = false;}
@@ -559,8 +553,6 @@ int fltk::ready() {
   if (first_timeout) {
     elapse_timeouts();
     if (first_timeout->time <= 0) return 1;
-  } else {
-    reset_clock = 1;
   }
   // run the system-specific part:
   return fl_ready();

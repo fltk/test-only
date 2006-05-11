@@ -35,7 +35,7 @@
 
 using namespace fltk;
 
-ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*inactb;
+ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*inactb,*fitb,*fillb;
 Button *b;
 Window *win;
 
@@ -47,6 +47,10 @@ void button_cb(Widget *,void *) {
   if (bottomb->value()) i |= ALIGN_BOTTOM;
   if (insideb->value()) i |= ALIGN_INSIDE;
   b->align(i);
+  if (fitb->value()) b->set_flag(RESIZE_FIT);
+  else b->clear_flag(RESIZE_FIT);
+  if (fillb->value()) b->set_flag(RESIZE_FILL);
+  else b->clear_flag(RESIZE_FILL);
   if (inactb->value()) b->deactivate();
   else b->activate();
   win->redraw();
@@ -76,6 +80,10 @@ int main(int argc, char **argv) {
   bottomb->callback(button_cb);
   insideb = new ToggleButton(225,50,50,25,"inside");
   insideb->callback(button_cb);
+  fitb = new ToggleButton(25,75,50,25,"fit");
+  fitb->callback(button_cb);
+  fillb = new ToggleButton(75,75,50,25,"fill");
+  fillb->callback(button_cb);
   inactb = new ToggleButton(125,75,100,25,"inactive");
   inactb->callback(button_cb);
   window.resizable(window);

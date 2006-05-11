@@ -93,6 +93,7 @@ CPPFILES = \
 	symbols.cxx \
 	tabs.cxx \
 	tile.cxx \
+	timer.cxx \
 	fast_slow.cxx \
 	resize.cxx \
 	pack.cxx \
@@ -162,6 +163,7 @@ TARGETS = \
 	threads$(EXEEXT) \
 	tabs$(EXEEXT) \
 	tile$(EXEEXT) \
+	timer$(EXEEXT) \
 	utf$(EXEEXT) \
 	fullscreen$(EXEEXT) \
 	valuators$(EXEEXT) \
