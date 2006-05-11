@@ -426,6 +426,12 @@ fltk::Group *gAttributes=(fltk::Group *)0;
 
 fltk::Group *gShortTool=(fltk::Group *)0;
 
+static fltk::Group *BoxColor=(fltk::Group *)0;
+
+static fltk::Group *ButtonBox=(fltk::Group *)0;
+
+static fltk::Group *Labels=(fltk::Group *)0;
+
 fltk::MultiLineInput *extra_code_input=(fltk::MultiLineInput *)0;
 
 fltk::CheckButton *overlaybutton=(fltk::CheckButton *)0;
@@ -444,8 +450,9 @@ fltk::Window* make_widget_panel() {
        {fltk::Group* o = new fltk::Group(0, 20, 380, 320, "GUI");
         o->color((fltk::Color)0x14aef700);
         o->callback((fltk::Callback*)propagate_group);
+        o->hide();
         o->begin();
-         {fltk::Group* o = gInput = new fltk::Group(80, 0, 290, 44);
+         {fltk::Group* o = gInput = new fltk::Group(80, 9, 290, 44);
           o->callback((fltk::Callback*)propagate_group);
           o->begin();
            {fltk::Input* o = i_class_name = new fltk::Input(0, 0, 170, 22, "Class");
@@ -467,11 +474,11 @@ ation so that the definition of your class is included in the fluid output.");
           }
           o->end();
         }
-         {fltk::Group* o = gAlignment = new fltk::Group(80, 44, 290, 22, "Alignment");
+         {fltk::Group* o = gAlignment = new fltk::Group(81, 54, 293, 22, "Alignment");
           o->callback((fltk::Callback*)propagate_group);
           o->align(fltk::ALIGN_LEFT);
           o->begin();
-           {fltk::CheckButton* o = include_image_button = new fltk::CheckButton(265, 0, 20, 22, "inline");
+           {fltk::CheckButton* o = include_image_button = new fltk::CheckButton(272, 0, 20, 22, "inline");
             o->set_vertical();
             o->callback((fltk::Callback*)image_inlined_cb);
             o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_WRAP);
@@ -529,7 +536,7 @@ it should be left off if label will fit");
           }
           o->end();
         }
-         {fltk::Group* o = gImage = new fltk::Group(10, 70, 359, 62);
+         {fltk::Group* o = gImage = new fltk::Group(10, 79, 359, 62);
           o->callback((fltk::Callback*)propagate_group);
           o->begin();
            {fltk::Widget* o = image_label = new fltk::Widget(0, 0, 73, 17, "Image default");
@@ -575,7 +582,7 @@ it should be left off if label will fit");
           }
           o->end();
         }
-         {fltk::Group* o = gDimensions = new fltk::Group(80, 146, 290, 23, "Dimensions");
+         {fltk::Group* o = gDimensions = new fltk::Group(80, 153, 290, 23, "Dimensions");
           o->callback((fltk::Callback*)propagate_group);
           o->align(fltk::ALIGN_LEFT);
           o->begin();
@@ -635,7 +642,7 @@ it should be left off if label will fit");
           }
           o->end();
         }
-         {fltk::Group* o = gValues = new fltk::Group(80, 169, 290, 23, "Values");
+         {fltk::Group* o = gValues = new fltk::Group(80, 175, 290, 23, "Values");
           o->callback((fltk::Callback*)propagate_group);
           o->align(fltk::ALIGN_LEFT);
           o->begin();
@@ -677,7 +684,7 @@ it should be left off if label will fit");
           }
           o->end();
         }
-         {fltk::Group* o = gAttributes = new fltk::Group(80, 207, 280, 44, "Attributes");
+         {fltk::Group* o = gAttributes = new fltk::Group(80, 210, 280, 44, "Attributes");
           o->callback((fltk::Callback*)propagate_group);
           o->align(fltk::ALIGN_LEFT);
           o->begin();
@@ -716,13 +723,13 @@ ts from going to other windows until it is hidden or closed.");
           }
           o->end();
         }
-         {fltk::Group* o = gShortTool = new fltk::Group(25, 255, 350, 60);
+         {fltk::Group* o = gShortTool = new fltk::Group(25, 255, 345, 60);
           o->callback((fltk::Callback*)propagate_group);
           o->begin();
            {fltk::InvisibleBox* o = new fltk::InvisibleBox(0, 0, 55, 25, "Shortcut");
             o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_INSIDE);
           }
-           {Shortcut_Button* o = new Shortcut_Button(55, 0, 290, 22);
+           {Shortcut_Button* o = new Shortcut_Button(55, 1, 290, 22);
             o->color((fltk::Color)7);
             o->callback((fltk::Callback*)shortcut_in_cb);
             o->align(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE);
@@ -744,109 +751,123 @@ rtcut-setting mode:\n   Click the mouse on this again, or on some other field.")
        {fltk::Group* o = new fltk::Group(0, 20, 380, 320, "Style");
         o->color((fltk::Color)0xd4b38d00);
         o->callback((fltk::Callback*)propagate_group);
-        o->hide();
         o->begin();
-         {fltk::Choice* o = new fltk::Choice(85, 0, 270, 22, "Box");
-          o->callback((fltk::Callback*)box_cb);
-          o->tooltip("Type of box to draw around the contents of the widget.");
+         {fltk::Group* o = BoxColor = new fltk::Group(85, 9, 270, 66);
+          o->callback((fltk::Callback*)propagate_group);
+          o->begin();
+           {fltk::Choice* o = new fltk::Choice(0, 0, 270, 22, "Box");
+            o->callback((fltk::Callback*)box_cb);
+            o->tooltip("Type of box to draw around the contents of the widget.");
+          }
+           {fltk::LightButton* o = new fltk::LightButton(0, 22, 135, 22, "Color");
+            o->labelsize(11);
+            o->textsize(11);
+            o->callback((fltk::Callback*)color_cb);
+            o->tooltip("Color of the contents area.");
+            o->type(0);
+          }
+           {fltk::LightButton* o = new fltk::LightButton(135, 22, 135, 22, "Text Color");
+            o->labelsize(11);
+            o->textsize(11);
+            o->callback((fltk::Callback*)text_color_cb);
+            o->tooltip("Color of text drawn in the widget.");
+            o->type(0);
+          }
+           {fltk::LightButton* o = new fltk::LightButton(0, 44, 135, 22, "Selection Color");
+            o->labelsize(11);
+            o->textsize(11);
+            o->callback((fltk::Callback*)selection_color_cb);
+            o->tooltip("Color to draw behind selected text");
+            o->type(0);
+          }
+           {fltk::LightButton* o = new fltk::LightButton(135, 44, 135, 22, "Selected Text Color");
+            o->labelsize(11);
+            o->textsize(11);
+            o->callback((fltk::Callback*)selected_text_color_cb);
+            o->tooltip("Color to draw selected text");
+            o->type(0);
+          }
+          o->end();
         }
-         {fltk::LightButton* o = new fltk::LightButton(85, 22, 135, 22, "Color");
-          o->labelsize(11);
-          o->textsize(11);
-          o->callback((fltk::Callback*)color_cb);
-          o->tooltip("Color of the contents area.");
-          o->type(0);
-        }
-         {fltk::LightButton* o = new fltk::LightButton(220, 22, 135, 22, "Text Color");
-          o->labelsize(11);
-          o->textsize(11);
-          o->callback((fltk::Callback*)text_color_cb);
-          o->tooltip("Color of text drawn in the widget.");
-          o->type(0);
-        }
-         {fltk::LightButton* o = new fltk::LightButton(85, 44, 135, 22, "Selection Color");
-          o->labelsize(11);
-          o->textsize(11);
-          o->callback((fltk::Callback*)selection_color_cb);
-          o->tooltip("Color to draw behind selected text");
-          o->type(0);
-        }
-         {fltk::LightButton* o = new fltk::LightButton(220, 44, 135, 22, "Selected Text Color");
-          o->labelsize(11);
-          o->textsize(11);
-          o->callback((fltk::Callback*)selected_text_color_cb);
-          o->tooltip("Color to draw selected text");
-          o->type(0);
-        }
-         {fltk::Choice* o = new fltk::Choice(85, 79, 270, 22, "Button box");
-          o->callback((fltk::Callback*)button_box_cb);
-          o->tooltip("Type of box to draw around buttons");
-        }
-         {fltk::LightButton* o = new fltk::LightButton(85, 101, 135, 22, "Button Color");
-          o->labelsize(11);
-          o->textsize(11);
-          o->callback((fltk::Callback*)button_color_cb);
-          o->tooltip("Color to draw buttons inside the widget.");
-          o->type(0);
-        }
-         {fltk::LightButton* o = new fltk::LightButton(220, 101, 135, 22, "Label Color");
-          o->labelsize(11);
-          o->textsize(11);
-          o->callback((fltk::Callback*)label_color_cb);
-          o->tooltip("Color to draw the labels on buttons, and color to draw the label.");
-          o->type(0);
-        }
-         {fltk::LightButton* o = new fltk::LightButton(85, 123, 135, 22, "Highlight Color");
-          o->labelsize(11);
-          o->textsize(11);
-          o->callback((fltk::Callback*)highlight_color_cb);
-          o->tooltip("Color to use to draw buttons when they are highlighted.  Use color zero (the \
+         {fltk::Group* o = ButtonBox = new fltk::Group(85, 88, 270, 66);
+          o->callback((fltk::Callback*)propagate_group);
+          o->begin();
+           {fltk::Choice* o = new fltk::Choice(0, 0, 270, 22, "Button box");
+            o->callback((fltk::Callback*)button_box_cb);
+            o->tooltip("Type of box to draw around buttons");
+          }
+           {fltk::LightButton* o = new fltk::LightButton(0, 22, 135, 22, "Button Color");
+            o->labelsize(11);
+            o->textsize(11);
+            o->callback((fltk::Callback*)button_color_cb);
+            o->tooltip("Color to draw buttons inside the widget.");
+            o->type(0);
+          }
+           {fltk::LightButton* o = new fltk::LightButton(135, 22, 135, 22, "Label Color");
+            o->labelsize(11);
+            o->textsize(11);
+            o->callback((fltk::Callback*)label_color_cb);
+            o->tooltip("Color to draw the labels on buttons, and color to draw the label.");
+            o->type(0);
+          }
+           {fltk::LightButton* o = new fltk::LightButton(0, 44, 135, 22, "Highlight Color");
+            o->labelsize(11);
+            o->textsize(11);
+            o->callback((fltk::Callback*)highlight_color_cb);
+            o->tooltip("Color to use to draw buttons when they are highlighted.  Use color zero (the \
 black top-left chip in the color chooser) to disable highlighting.");
-          o->type(0);
-        }
-         {fltk::LightButton* o = new fltk::LightButton(220, 123, 135, 22, "Highlight Label Color");
-          o->labelsize(11);
-          o->textsize(11);
-          o->callback((fltk::Callback*)highlight_label_color_cb);
-          o->tooltip("Color to draw the button labels when the buttons are highlighted.  Use color \
+            o->type(0);
+          }
+           {fltk::LightButton* o = new fltk::LightButton(135, 44, 135, 22, "Highlight Label Color");
+            o->labelsize(11);
+            o->textsize(11);
+            o->callback((fltk::Callback*)highlight_label_color_cb);
+            o->tooltip("Color to draw the button labels when the buttons are highlighted.  Use color \
 zero (the black top-left chip in the color chooser) to leave the label colors \
 unchanged.");
-          o->type(0);
+            o->type(0);
+          }
+          o->end();
         }
-         {fltk::Choice* o = new fltk::Choice(85, 156, 270, 22, "Label Style");
-          o->callback((fltk::Callback*)label_style_cb);
-          o->tooltip("How to draw the label.");
+         {fltk::Group* o = Labels = new fltk::Group(85, 165, 270, 80);
+          o->callback((fltk::Callback*)propagate_group);
+          o->begin();
+           {fltk::Choice* o = new fltk::Choice(0, 0, 270, 22, "Label Style");
+            o->callback((fltk::Callback*)label_style_cb);
+            o->tooltip("How to draw the label.");
+          }
+           {fltk::Choice* o = new fltk::Choice(0, 22, 215, 22, "Label Font");
+            o->callback((fltk::Callback*)label_font_cb);
+            o->tooltip("Font to use for the label");
+          }
+           {fltk::ValueInput* o = new fltk::ValueInput(215, 22, 55, 22);
+            o->maximum(100);
+            o->step(0.1);
+            o->value(14);
+            o->callback((fltk::Callback*)label_size_cb);
+            o->when(fltk::WHEN_ENTER_KEY);
+            o->tooltip("Size of the font to use for the label");
+          }
+           {fltk::Choice* o = new fltk::Choice(0, 55, 215, 22, "Text Font");
+            o->callback((fltk::Callback*)text_font_cb);
+            o->tooltip("Font to use for text displayed inside the widget");
+          }
+           {fltk::ValueInput* o = new fltk::ValueInput(215, 55, 55, 22);
+            o->maximum(100);
+            o->step(0.1);
+            o->value(14);
+            o->callback((fltk::Callback*)text_size_cb);
+            o->when(fltk::WHEN_ENTER_KEY);
+            o->tooltip("Size of the font to use for text displayed inside the widget");
+          }
+           {fltk::Widget* o = new fltk::Widget(0, 77, 270, 3, "resizable");
+            o->align(fltk::ALIGN_BOTTOM);
+            o->hide();
+            o->deactivate();
+          }
+          o->end();
         }
-         {fltk::Choice* o = new fltk::Choice(85, 178, 215, 22, "Label Font");
-          o->callback((fltk::Callback*)label_font_cb);
-          o->tooltip("Font to use for the label");
-        }
-         {fltk::ValueInput* o = new fltk::ValueInput(300, 178, 55, 22);
-          o->maximum(100);
-          o->step(0.1);
-          o->value(14);
-          o->callback((fltk::Callback*)label_size_cb);
-          o->when(fltk::WHEN_ENTER_KEY);
-          o->tooltip("Size of the font to use for the label");
-        }
-         {fltk::Choice* o = new fltk::Choice(85, 211, 215, 22, "Text Font");
-          o->callback((fltk::Callback*)text_font_cb);
-          o->tooltip("Font to use for text displayed inside the widget");
-        }
-         {fltk::ValueInput* o = new fltk::ValueInput(300, 211, 55, 22);
-          o->maximum(100);
-          o->step(0.1);
-          o->value(14);
-          o->callback((fltk::Callback*)text_size_cb);
-          o->when(fltk::WHEN_ENTER_KEY);
-          o->tooltip("Size of the font to use for text displayed inside the widget");
-        }
-         {fltk::Widget* o = new fltk::Widget(85, 233, 270, 3, "resizable");
-          o->hide();
-          o->deactivate();
-          fltk::Group::current()->resizable(o);
-        }
-         {fltk::Button* o = new fltk::Button(85, 244, 124, 22, "Reset to default");
+         {fltk::Button* o = new fltk::Button(85, 258, 124, 22, "Reset to default");
           o->callback((fltk::Callback*)default_cb);
           o->tooltip("Reset all the above items to the default values for this widget class.");
         }
@@ -857,16 +878,16 @@ unchanged.");
         o->callback((fltk::Callback*)propagate_group);
         o->hide();
         o->begin();
-         {fltk::Input* o = new fltk::Input(80, 0, 230, 22, "Name");
+         {fltk::Input* o = new fltk::Input(80, 9, 230, 22, "Name");
           o->callback((fltk::Callback*)name_cb);
           o->when(fltk::WHEN_CHANGED);
           o->tooltip("The variable or member name in which to store a pointer to this widget.");
         }
-         {fltk::CheckButton* o = new fltk::CheckButton(315, 0, 50, 22, "public");
+         {fltk::CheckButton* o = new fltk::CheckButton(315, 9, 50, 22, "public");
           o->callback((fltk::Callback*)name_public_cb);
           o->tooltip("Make the variable public");
         }
-         {fltk::MultiLineInput* o = extra_code_input = new fltk::MultiLineInput(80, 33, 285, 99, "Extra Code");
+         {fltk::MultiLineInput* o = extra_code_input = new fltk::MultiLineInput(80, 37, 285, 99, "Extra Code");
           o->type(4);
           o->callback((fltk::Callback*)extra_code_input_cb, (void*)(0));
           o->tooltip("Extra code to be exectuted after the widget is created. The variable \"o\" po\

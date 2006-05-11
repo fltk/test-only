@@ -74,31 +74,37 @@ FluidType *GroupType::make() {
 void fix_group_size(FluidType *t) {
   if (!t || !t->is_group() || t->is_menu_button()) return;
   fltk::Group* g = (fltk::Group*)((GroupType*)t)->o;
-  //if (g->resizable()) return;
-  int X = g->x();
-  int Y = g->y();
-  int R = g->w();
-  int B = g->h();
+  int X = g->x(), X0=X;
+  int Y = g->y(), Y0=Y;
+  int R = g->r();
+  int B = g->b();
+
   for (FluidType *nn = t->first_child; nn; nn = nn->next_brother) {
     if (nn->is_widget()) {
       fltk::Widget* o = ((WidgetType*)nn)->o;
-      int x = o->x();  if (x < X) X = x;
-      int y = o->y();  if (y < Y) Y = y;
-      int r = x+o->w();if (r > R) R = r;
-      int b = y+o->h();if (b > B) B = b;
+      int x = o->x();  if (x+X0 < X) 
+	  X = x+X0;
+      int y = o->y();  if (y+Y0 < Y) Y = y+Y0;
+      int r = o->r(); if (r+X0 > R) 
+	  R = r+X0;
+      int b = o->b(); if (b+Y0 > B) B = b+Y0;
     }
   }
-  g->resize(g->x()+X,g->y()+Y,R-X,B-Y);
-  if (X || Y) {
+
+  int dx = X - X0, dy = Y-Y0;
+  g->resize(X,Y,R-X,B-Y);
+  if (dx || dy) {
     for (FluidType *nn = t->first_child; nn; nn = nn->next_brother) {
       if (nn->is_widget()) {
 	fltk::Widget* o = ((WidgetType*)nn)->o;
-	o->x(o->x()-X);
-	o->y(o->y()-Y);
+	o->x(o->x()-dx);
+	o->y(o->y()-dy);
       }
     }
   }
+
   g->init_sizes();
+  fix_group_size(t->parent );
 }
 
 extern int force_parent;
