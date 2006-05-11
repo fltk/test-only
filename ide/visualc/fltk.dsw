@@ -350,6 +350,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name symbols
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name wizard
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -880,6 +883,21 @@ Package=<4>
 ###############################################################################
 
 Project: "valuators"=.\valuators.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "wizard"=.\wizard.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

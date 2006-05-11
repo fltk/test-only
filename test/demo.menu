@@ -14,7 +14,6 @@
 	@x:Input:input
 	@x:Output:output
 	@x:Buttons:buttons
-	@x:Button\n&&\nTooltip:radio
 	@x:TabGroup:tabs
 	@x:TiledGroup:tile
 	@x:ScrollGroup:scroll
@@ -62,6 +61,8 @@
 	@o:color choosers:color_chooser r
 	@o:file chooser:file_chooser
 	@o:XForms Emulation:../forms/forms
+	@o:WizardGroup:wizard
+	@o:TiledImage:button
 
 @main:Tutorial\nfrom\nManual:@j
 	@j:ask\n(modified):ask

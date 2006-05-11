@@ -551,6 +551,10 @@ SOURCE=..\..\fltk\window.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fltk\WizardGroup.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fltk\WordwrapInput.h
 # End Source File
 # Begin Source File
@@ -1097,6 +1101,10 @@ SOURCE=..\..\src\Window_iconize.cxx
 # Begin Source File
 
 SOURCE=..\..\src\win32\WinMain.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\WizardGroup.cxx
 # End Source File
 # Begin Source File
 
