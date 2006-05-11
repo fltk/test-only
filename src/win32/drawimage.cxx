@@ -50,6 +50,23 @@ extern "C" {
 }
 #endif
 
+// DM C/C++ compiler comes with very old Win32 API headers. Modifying existing
+// ones (from MS PSDK for example) is time-consuming job, so I have decided
+// to declare necessary stuff here.
+#if __DMC__ || __SC__ || __RCC__
+  typedef struct _BLENDFUNCTION {
+    BYTE BlendOp;
+    BYTE BlendFlags;
+    BYTE SourceConstantAlpha;
+    BYTE AlphaFormat;
+  } BLENDFUNCTION,*PBLENDFUNCTION,*LPBLENDFUNCTION;
+  extern "C" {
+    WINGDIAPI BOOL WINAPI AlphaBlend(HDC,int,int,int,int,HDC,int,int,int,int,BLENDFUNCTION);
+  }
+  #define AC_SRC_OVER   0x00
+  #define AC_SRC_ALPHA  0x01
+#endif // __DMC__
+
 #define MAXBUFFER 0x40000 // 256k
 
 extern fltk::Image* fl_current_Image;
