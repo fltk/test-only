@@ -44,6 +44,7 @@ const char *copyright =
 "\n"
 "Please report bugs to fltk-bugs@fltk.org.";
 
+#include <config.h>
 #include <fltk/run.h>
 #include <fltk/visual.h>
 #include <fltk/events.h>
@@ -64,7 +65,7 @@ const char *copyright =
 #include <fltk/Preferences.h>
 #include <fltk/MenuBuild.h>
 #include <fltk/string.h>
-
+#include <fltk/HelpDialog.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -96,13 +97,14 @@ const char *copyright =
 
 using namespace fltk;
 
-DECL_MENUCB2(toggle_sourceview_cb,DoubleBufferWindow);
+DECL_MENUCBV2(toggle_sourceview_cb,DoubleBufferWindow);
 
 /////////////////////////////////////////
 // Read preferences file 
 Preferences fluid_prefs(Preferences::USER, "fltk.org", "fluid");
 
 int gridx, gridy, snap, show_tooltip;
+int modflag;
 
 int  read_alignment_prefs() {
     fluid_prefs.get("snap", snap, 3);
@@ -132,8 +134,9 @@ void nyi(Widget *,void *) {
 }
 
 static const char *filename;
+static HelpDialog *help_dialog = 0;
+
 void set_filename(const char *c);
-int modflag;
 
 #if 0
 static char* pwd;
@@ -325,19 +328,18 @@ void save_template_cb(Widget *, void *) {
     return;
   }
 
-#if defined(HAVE_LIBPNG) && defined(HAVE_LIBZ)
+// FIXME : need offscreen capabilities
+#if 0
+//#if defined(HAVE_LIBPNG) && defined(HAVE_LIBZ)
   // Get the screenshot, if any...
   FluidType *t;
 
-  for (t = FluidType::first; t; t = t->next) {
-    // Find the first window...
-    if (t->is_window()) break;
-  }
-
+  for (t = FluidType::first; t; t = t->walk(0)) 
+      if (t->is_window()) break;  // Find the first window...
   if (!t) return;
 
   // Grab a screenshot...
-  Fl_Window_Type *wt = (Fl_Window_Type *)t;
+  WindowType *wt = (WindowType *)t;
   uchar *pixels;
   int w, h;
 
@@ -728,6 +730,39 @@ void about_cb(Widget *, void *) {
     copyright_box->hide();
     display_group->show();
     about_panel->show();
+}
+
+void show_help(const char *name) {
+  const char	*docdir;
+  char		helpname[1024];
+  
+  if (!help_dialog) help_dialog = new HelpDialog();
+
+  if ((docdir = getenv("FLTK_DOCDIR")) == NULL) {
+#ifdef __EMX__
+    // Doesn't make sense to have a hardcoded fallback
+    static char fltk_docdir[1024];
+
+    strlcpy(fltk_docdir, __XOS2RedirRoot("/XFree86/lib/X11/fltk/doc"),
+            sizeof(fltk_docdir));
+
+    docdir = fltk_docdir;
+#else
+    docdir = FLTK_DOCDIR;
+#endif // __EMX__
+  }
+  snprintf(helpname, sizeof(helpname), "%s/%s", docdir, name);  
+
+  help_dialog->load(helpname);
+  help_dialog->show();
+}
+
+void help_cb(Widget *, void *) {
+  show_help("fluid.html");
+}
+
+void manual_cb(Widget *, void *) {
+  show_help("index.html");
 }
 
 void tt_cb(Widget *w, void *) {

@@ -104,6 +104,10 @@ SOURCE=..\..\fluid\alignment_panel.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fluid\CodeEditor.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\coding_style.h
 # End Source File
 # Begin Source File

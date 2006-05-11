@@ -6,9 +6,7 @@ code_name {.cxx}
 gridx 10 
 gridy 11 
 snap 3
-
-Function {make_function_panel()} {open
-} {
+Function {make_function_panel()} {} {
   {fltk::Window} function_panel {
     label {function/method}
     xywh {488 131 400 208} hide resizable modal
@@ -95,13 +93,16 @@ f_c_button->value(0);}
   }
 } 
 
-Function {make_code_panel()} {} {
+Function {make_code_panel()} {open
+} {
   {fltk::Window} code_panel {
-    label code open
-    xywh {171 177 290 175} hide resizable modal
+    label code
+    callback {o->resizable(code_input);} open selected
+    xywh {421 148 290 175} resizable modal visible
   } {
     {fltk::Input} code_input {
       xywh {6 5 280 138} type Multiline align 0 when NEVER resizable
+      class {fltk::CodeEditor}
     }
     {fltk::ReturnButton} code_panel_ok {
       label OK
@@ -301,8 +302,7 @@ Function {make_comment_panel()} {} {
   }
 } 
 
-Function {make_sourceview()} {open
-} {
+Function {make_sourceview()} {} {
   {fltk::Window} sourceview_panel {
     label {Code View}
     callback toggle_sourceview_cb open
@@ -318,18 +318,16 @@ Function {make_sourceview()} {open
       } {
         {fltk::TextEditor} sv_source {
           xywh {10 15 480 390} resizable textfont 4 textsize 11
-          extra_code {\#include "CodeEditor.h"}
-          class fltk::CodeViewer
+          class {fltk::CodeViewer}
         }
       }
       {fltk::Group} {} {
-        label Header open selected
+        label Header open
         xywh {0 25 500 415} labelsize 13
       } {
         {fltk::TextEditor} sv_header {
           xywh {10 15 480 390} resizable textfont 4 textsize 11
-          extra_code {\#include "CodeEditor.h"}
-          class fltk::CodeViewer
+          class {fltk::CodeViewer}
         }
       }
     }

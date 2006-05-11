@@ -19,8 +19,8 @@ extern fltk::Button* f_panel_cancel;
 #include <fltk/Item.h>
 fltk::Window* make_function_panel();
 extern fltk::Window* code_panel;
-#include <fltk/MultiLineInput.h>
-extern fltk::MultiLineInput* code_input;
+#include "CodeEditor.h"
+extern fltk::CodeEditor* code_input;
 extern fltk::ReturnButton* code_panel_ok;
 extern fltk::Button* code_panel_cancel;
 fltk::Window* make_code_panel();
@@ -57,6 +57,7 @@ extern fltk::Button* namespace_panel_cancel;
 fltk::Window* make_namespace_panel();
 #include <fltk/DoubleBufferWindow.h>
 extern fltk::DoubleBufferWindow* comment_panel;
+#include <fltk/MultiLineInput.h>
 extern fltk::MultiLineInput* comment_input;
 #include <fltk/Group.h>
 extern fltk::ReturnButton* comment_panel_ok;
@@ -74,7 +75,6 @@ extern fltk::DoubleBufferWindow* sourceview_panel;
 #include <fltk/TabGroup.h>
 extern void update_sourceview_position_cb(fltk::TabGroup*, void*);
 extern fltk::TabGroup* sv_tab;
-#include "CodeEditor.h"
 extern fltk::CodeViewer* sv_source;
 extern fltk::CodeViewer* sv_header;
 extern void update_sourceview_cb(fltk::Button*, void*);
