@@ -44,7 +44,7 @@
 
 // FIXME - Following block fixes weird problem with compiling FLTK
 //   inside Visual C++ (.NET 2003 Enterprise Architect)
-#ifdef _MSC_VER 
+#ifdef _MSC_VER
 # define IN
 # define OUT
 #endif
@@ -392,7 +392,7 @@ static inline int fl_wait(double time_to_wait) {
     fl_unlock_function();
     int t_msec =
       time_to_wait < 2147483.647 ? int(time_to_wait*1000+.5) : 0x7fffffff;
-    // int ret_val = 
+    // int ret_val =
       MsgWaitForMultipleObjects(0, NULL, false, t_msec, QS_ALLINPUT);
     fl_lock_function();
     in_main_thread_ = true;
@@ -1892,7 +1892,7 @@ void Window::borders( fltk::Rectangle *r ) const
     style |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
     if (!contains(modal()))
       style |= WS_SYSMENU | WS_MINIMIZEBOX;
-    else 
+    else
       style |= WS_SYSMENU ; // keep the possibility to close the box as in osx and X11
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
   }
@@ -2211,7 +2211,7 @@ void CreatedWindow::set_minmax(LPMINMAXINFO minmax)
     // WAS: monitor_h() is the screen, not the taskbar!
     // Use Monitor::all().work.h() for area above taskbar.
     // Also is there a reason we don't just leave the Windows default?
-    minmax->ptMaxTrackSize.y = 
+    minmax->ptMaxTrackSize.y =
       minmax->ptMaxSize.y = fltk::monitor_h()-r.h();
   }
 }
@@ -2294,12 +2294,11 @@ void fltk::draw_into(HBITMAP bitmap, int w, int h) {
   fl_current_Image = 0;
 }
 
-void fltk::stop_drawing(HWND window) {}
-
-// Following fixes Borland C++ Builder "error"
-// "Body has already been defined for function 'stop_drawing(void*)'"
-#if !defined(__BORLANDC__)
-void fltk::stop_drawing(HBITMAP bitmap) {}
+#if __BORLANDC__ || __DMC__
+  void fltk::stop_drawing(HWND window) {}
+#else
+  void fltk::stop_drawing(HWND window) {}
+  void fltk::stop_drawing(HBITMAP bitmap) {}
 #endif
 
 static HDC screen_dc = 0;
