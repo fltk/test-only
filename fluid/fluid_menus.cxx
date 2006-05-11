@@ -76,6 +76,7 @@ extern char relative_history[][1024];
 GroupType Grouptype; // used by group_cb
 static PackType Packtype;
 static TabsType Tabstype;
+static WizardGroupType WizardGrouptype;
 static ScrollType Scrolltype;
 static TileType Tiletype;
 static WindowType Windowtype;
@@ -294,7 +295,7 @@ void fltk::fill_in_New_Menu(ItemGroup* menu) {
 	    fluidMenuItem(Tabstype  , 13);
 	    fluidMenuItem(Scrolltype  , 19);
 	    fluidMenuItem(Tiletype  , 20);
-	    // WizardType 21
+	    fluidMenuItem(WizardGrouptype  , 21);
 	    fluidMenuItem(BarGrouptype  , 17);
 	    fluidMenuItem(StatusBarGrouptype  , 5);
 	submenu->end();

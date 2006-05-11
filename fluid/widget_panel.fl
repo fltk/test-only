@@ -22,8 +22,8 @@ decl {\#include "undo.h"} {}
 Function {make_widgetbin()} {open
 } {
   {fltk::Window} widgetbin_panel {
-    label {Widget Bin}
-    xywh {385 94 520 85} resizable non_modal visible
+    label {Widget Bin} open
+    xywh {382 184 520 85} resizable non_modal visible
   } {
     {fltk::Group} {} {
       xywh {3 3 79 79} box THIN_DOWN_BOX
@@ -92,7 +92,7 @@ Function {make_widgetbin()} {open
         extra_code {o->image(fltk::fluid_pixmap[48]);}
       }
     }
-    {fltk::Group} {} {
+    {fltk::Group} {} {open
       xywh {83 3 79 79} box THIN_DOWN_BOX
     } {
       {fltk::Button} {} {
@@ -138,11 +138,18 @@ Function {make_widgetbin()} {open
         extra_code {o->image(fltk::fluid_pixmap[20]);}
       }
       {fltk::Button} {} {
-        user_data {"fltk::Wizard"}
+        user_data {"fltk::WizardGroup"}
         callback type_make_cb
         tooltip Wizard
         xywh {27 52 25 25} box THIN_UP_BOX
         extra_code {o->image(fltk::fluid_pixmap[21]);}
+      }
+      {fltk::Button} {} {
+        user_data {"fltk::StatusBarGroup"}
+        callback type_make_cb selected
+        tooltip StatusBarGroup
+        xywh {52 27 25 25} box THIN_UP_BOX
+        extra_code {o->image(fltk::fluid_pixmap[5]);}
       }
     }
     {fltk::Group} {} {
@@ -424,7 +431,7 @@ Function {type_make_cb(fltk::Widget*w,void*d)} {open return_type void
 Function {make_widget_panel()} {open
 } {
   {fltk::Window} {} {open
-    xywh {359 304 380 380} resizable hotspot visible
+    xywh {359 304 380 380} hide resizable hotspot
   } {
     {fltk::TabGroup} panel_tabs {
       callback propagate_tabs open
@@ -433,7 +440,7 @@ Function {make_widget_panel()} {open
       {fltk::Group} {} {
         label GUI
         callback propagate_group open
-        xywh {0 20 380 320} hide color 0x14aef700
+        xywh {0 20 380 320} color 0x14aef700
       } {
         {fltk::Group} gInput {
           callback propagate_group open
@@ -728,8 +735,8 @@ To get out of shortcut-setting mode:
       }
       {fltk::Group} {} {
         label Style
-        callback propagate_group open selected
-        private xywh {0 20 380 320} color 0xd4b38d00
+        callback propagate_group open
+        private xywh {0 20 380 320} hide color 0xd4b38d00
       } {
         {fltk::Group} BoxColor {
           callback propagate_group

@@ -114,9 +114,15 @@ fltk::Window* make_widgetbin() {
       }
        {fltk::Button* o = new fltk::Button(27, 52, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::Wizard"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::WizardGroup"));
         o->tooltip("Wizard");
         o->image(fltk::fluid_pixmap[21]);
+      }
+       {fltk::Button* o = new fltk::Button(52, 27, 25, 25);
+        o->box(fltk::THIN_UP_BOX);
+        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::StatusBarGroup"));
+        o->tooltip("StatusBarGroup");
+        o->image(fltk::fluid_pixmap[5]);
       }
       o->end();
     }
@@ -450,7 +456,6 @@ fltk::Window* make_widget_panel() {
        {fltk::Group* o = new fltk::Group(0, 20, 380, 320, "GUI");
         o->color((fltk::Color)0x14aef700);
         o->callback((fltk::Callback*)propagate_group);
-        o->hide();
         o->begin();
          {fltk::Group* o = gInput = new fltk::Group(80, 9, 290, 44);
           o->callback((fltk::Callback*)propagate_group);
@@ -751,6 +756,7 @@ rtcut-setting mode:\n   Click the mouse on this again, or on some other field.")
        {fltk::Group* o = new fltk::Group(0, 20, 380, 320, "Style");
         o->color((fltk::Color)0xd4b38d00);
         o->callback((fltk::Callback*)propagate_group);
+        o->hide();
         o->begin();
          {fltk::Group* o = BoxColor = new fltk::Group(85, 9, 270, 66);
           o->callback((fltk::Callback*)propagate_group);

@@ -106,7 +106,8 @@ CPPFILES = \
 	menubar.cxx \
 	line_style.cxx \
 	utf.cxx \
-	valuators.cxx
+	valuators.cxx \
+	wizard.cxx
 
 CFILES	=
 
@@ -167,7 +168,8 @@ TARGETS = \
 	utf$(EXEEXT) \
 	fullscreen$(EXEEXT) \
 	valuators$(EXEEXT) \
-	list$(EXEEXT)
+	list$(EXEEXT) \
+	wizard$(EXEEXT)
 
 # other programs that are minimally changed from fltk1.1:
 TARGETS += \

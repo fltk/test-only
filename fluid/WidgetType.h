@@ -33,6 +33,7 @@
 
 #include <fltk/Box.h>
 #include <fltk/TabGroup.h>
+#include <fltk/WizardGroup.h>
 #include <fltk/PopupMenu.h>
 #include <fltk/Choice.h>
 #include <fltk/MenuBar.h>
@@ -188,6 +189,16 @@ namespace fltk {
 	// live mode functionalities
 	Widget *enter_live_mode(int top);
 	int pixmapID() { return 13; }
+    };
+
+    class WizardGroupType : public GroupType {
+    public:
+	virtual const char *type_name() const {return "fltk::WizardGroup";}
+	Widget *widget(int x,int y,int w,int h) {
+	  return new WizardGroup(x,y,w,h);}
+	WidgetType *_make() {return new WizardGroupType();}
+	// live mode functionalities
+	int pixmapID() { return 21; }
     };
     
     extern const Enumeration scroll_type_menu[];
