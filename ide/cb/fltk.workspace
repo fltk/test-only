@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Workspace">
+		<Project filename="windows-mingw32.cbp" />
+		<Project filename="windows-borland.cbp" />
+		<Project filename="windows-dmc.cbp" active="1" />
+	</Workspace>
+</CodeBlocks_workspace_file>
