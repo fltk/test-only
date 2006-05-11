@@ -46,7 +46,9 @@
 # include <direct.h>
 // Visual C++ 2005 incorrectly displays a warning about the use of POSIX APIs
 // on Windows, which is supposed to be POSIX compliant...
-#  define getcwd _getcwd
+#  if !defined(__DMC__)
+#    define getcwd _getcwd
+#  endif
 #else
 #  include <unistd.h>
 #  ifdef __EMX__
