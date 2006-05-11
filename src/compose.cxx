@@ -24,6 +24,7 @@
 #include <config.h>
 #include <fltk/events.h>
 #include <stdio.h>
+
 using namespace fltk;
 
 // Before searching anything the following conversions are made:
@@ -292,7 +293,13 @@ static const char dead_keys[] = {
 };
 #endif
 
-int fltk::compose_state;
+// For some reason DM C/C++ compiler complains about compose_state saying:
+// Error 42: Symbol Undefined ?compose_state@fltk@@3HA (int fltk::compose_state)
+#if __DMC__
+  int compose_state;
+#else
+  int fltk::compose_state;
+#endif
 
 /*!
 
@@ -334,7 +341,7 @@ bool fltk::compose(int& del) {
     plen = e_length;
 
     // see if it is either character of any pair:
-    for (const char *p = compose_pairs; *p; p += 2) 
+    for (const char *p = compose_pairs; *p; p += 2)
       if (p[0] == ascii || p[1] == ascii) {
 	compose_state = ascii;
 	// prefer the single-character versions:
@@ -421,4 +428,6 @@ bool fltk::compose(int& del) {
   and in many places.
 */
 
-// end of Fl_compose.cxx
+//
+// "$Id$"
+//
