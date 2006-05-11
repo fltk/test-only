@@ -91,6 +91,7 @@ inline char* filename_name(char* a) {return (char*)(filename_name((const char*)a
 FL_API const char *filename_ext(const char *);
 inline char* filename_ext(char* a) {return (char*)(filename_ext((const char*)a));}
 FL_API bool filename_match(const char *, const char *pattern); // glob match
+FL_API bool filename_exist(const char*);
 FL_API bool filename_isdir(const char*);
 FL_API double filename_size(const char *); // return size of file
 FL_API long int filename_mtime(const char *); // return modification time

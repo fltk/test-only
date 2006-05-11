@@ -99,6 +99,7 @@ using namespace fltk;
 
 DECL_MENUCBV2(toggle_sourceview_cb,DoubleBufferWindow);
 
+
 /////////////////////////////////////////
 // Read preferences file 
 Preferences fluid_prefs(Preferences::USER, "fltk.org", "fluid");
@@ -120,9 +121,11 @@ int  read_alignment_prefs() {
 /////////////////////////////////////////
 
 // File history info...
-char	absolute_history[10][1024];
-char	relative_history[10][1024];
+const int MAX_HISTORY = 10;
+char	absolute_history[MAX_HISTORY][1024];
+char	relative_history[MAX_HISTORY][1024];
 
+void    check_history (const char * fname);
 void	load_history();
 void	update_history(const char *);
 void	set_preferences_window();
@@ -425,6 +428,10 @@ void open_cb(Widget *, void *v) {
     if (!v && modflag && !ask("Discard changes?")) return;
     const char *c;
     if (!(c = file_chooser("Open:", "*.f[ld]", filename))) return;
+    if (!fltk::filename_exist(c)) {
+	message("%s not found", c);
+	return;
+    }
     Undo::suspend();
 
     if (!v) set_filename(c);
@@ -451,7 +458,13 @@ void open_history_cb(Widget *, void *v) {
 	    if (modflag) return;	// Didn't save!
 	}
     }
-    const char *oldfilename = filename;
+    const char *oldfilename = (char *)v;
+    if (!fltk::filename_exist(oldfilename )) {
+	message("%s not found", oldfilename );
+	check_history(oldfilename);
+	return;
+    }
+    oldfilename=filename;
     filename = NULL;
     set_filename((char *)v);
     Undo::suspend(); 
@@ -1155,13 +1168,34 @@ void set_filename(const char *c) {
 }
 
 ////////////////////////////////////////////////////////////////
+// Check that file is valid, remove from history if not
+void check_history (const char * fname) {
+    int i;
+    for (i=0;i<MAX_HISTORY;i++) {
+	if (!strcmp(fname,absolute_history[i]) && !fltk::filename_exist(absolute_history[i])) {
+	    if (i<MAX_HISTORY-1) {
+		for (int p=i;p<MAX_HISTORY-1;p++) {
+		    strcpy(absolute_history[p],absolute_history[p+1]);
+		    strcpy(relative_history[p],relative_history[p+1]);
+		}
+		*absolute_history[MAX_HISTORY-1]='\0';
+	    }
+	    else
+		*absolute_history[i]='\0';
+	}
+    }
+    for (i=0;i<MAX_HISTORY; i ++) 
+	fluid_prefs.set( Preferences::Name("file%d", i), absolute_history[i]);
+    for (i=0;i<MAX_HISTORY && *absolute_history[i]; i ++);
+    if (i<MAX_HISTORY ) history_item[i]->hide();
+}
 // Load file history from preferences...
 void load_history() {
     int	i;		// Looping var
     int	max_files;
     
     fluid_prefs.get("recent_files", max_files, 5);
-    if (max_files > 10) max_files = 10;
+    if (max_files > MAX_HISTORY) max_files = MAX_HISTORY;
     
     for (i = 0; i < max_files; i ++) {
 	fluid_prefs.get( Preferences::Name("file%d", i), absolute_history[i], "", sizeof(absolute_history[i]));
@@ -1173,7 +1207,7 @@ void load_history() {
 	} else break;
     }
     
-    for (; i < 10; i ++) {
+    for (; i < MAX_HISTORY; i ++) {
 	history_item[i]->hide();
     }
     menubar->redraw();
@@ -1187,7 +1221,7 @@ void update_history(const char *flname) {
     
     
     fluid_prefs.get("recent_files", max_files, 5);
-    if (max_files > 10) max_files = 10;
+    if (max_files > MAX_HISTORY) max_files = MAX_HISTORY;
     
     filename_absolute(absolute, sizeof(absolute), flname);
     
@@ -1198,32 +1232,33 @@ void update_history(const char *flname) {
 	if (!strcmp(absolute, absolute_history[i])) break;
 #endif // WIN32 || __APPLE__
 	
-	if (i == 0) return;
-	
-	if (i >= max_files) i = max_files - 1;
-	
-	// Move the other flnames down in the list...
-	memmove(absolute_history + 1, absolute_history,
-	    i * sizeof(absolute_history[0]));
-	memmove(relative_history + 1, relative_history,
-	    i * sizeof(relative_history[0]));
-	
-	// Put the new file at the top...
-	strlcpy(absolute_history[0], absolute, sizeof(absolute_history[0]));
-	
-	filename_relative(relative_history[0], sizeof(relative_history[0]),
-	    absolute_history[0]);
-	
-	// Update the menu items as needed...
-	for (i = 0; i < max_files; i ++) {
-	    fluid_prefs.set( Preferences::Name("file%d", i), absolute_history[i]);
-	    if (!absolute_history[i][0]) break;
-	}
-	
-	for (; i < 10; i ++) {
-	    fluid_prefs.set( Preferences::Name("file%d", i), "");
-	    history_item[i]->hide();
-	}
+    if (i == 0) return;
+    
+    if (i >= max_files) i = max_files - 1;
+    
+    // Move the other flnames down in the list...
+    memmove(absolute_history + 1, absolute_history,
+	i * sizeof(absolute_history[0]));
+    memmove(relative_history + 1, relative_history,
+	i * sizeof(relative_history[0]));
+    
+    // Put the new file at the top...
+    strlcpy(absolute_history[0], absolute, sizeof(absolute_history[0]));
+    
+    filename_relative(relative_history[0], sizeof(relative_history[0]),
+	absolute_history[0]);
+    
+    // Update the menu items as needed...
+    for (i = 0; i < max_files; i ++) {
+	fluid_prefs.set( Preferences::Name("file%d", i), absolute_history[i]);
+	if (!absolute_history[i][0]) break;
+	history_item[i]->show();
+    }
+    
+    for (; i < MAX_HISTORY; i ++) {
+	fluid_prefs.set( Preferences::Name("file%d", i), "");
+	history_item[i]->hide();
+    }
 }
 ////////////////////////////////////////////////////////////////
 

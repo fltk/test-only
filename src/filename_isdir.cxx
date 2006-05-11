@@ -64,6 +64,10 @@ static bool fill_stat(const char *name) {
   return last_result;
 }
 
+/** Returns true if the file exists . */
+bool fltk::filename_exist(const char* name) {
+  return name && *name && fill_stat(name);
+}
 
 /** Returns true if the file exists and is a directory. */
 bool fltk::filename_isdir(const char* name) {
