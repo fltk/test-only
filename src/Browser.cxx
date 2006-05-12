@@ -50,10 +50,19 @@ using namespace fltk;
   widgets to make a hierarchy). Alternatively you can build simple
   text lists by using the add() method, which will create the child
   widgets for you (and even create a hierarchy if you put slashes in
-  the text). You can also us an fltk::List which allows you to control
+  the text). 
+  You can use Item/ItemGroup to easily create browser trees. 
+  Up to three different images can natively be set 
+  depending on the default/belowmouse/open states 
+  \see 
+  - add_group() 
+  - add_leaf() 
+  - get_symbol() 
+  - set_symbol()
+  
+  You can also us an fltk::List which allows you to control
   the storage by dynamically creating a "fake" widget for the browser
-  to use to draw each item.
-
+  to use to draw each item. 
   All the functions used to add, remove, or modify items in the list
   are defined by the base class fltk::Menu. See that for much more
   information.
@@ -157,6 +166,27 @@ using namespace fltk;
 
 /*! \fn int Browser::nheader() const
   Return number of columns in browser.
+*/
+
+//
+// Tree construction high level API
+//
+/*! \fn ItemGroup * Browser::add_group(const char *label, Group* parent, int state, const Symbol* img1, const Symbol* img2, const Symbol* img3)
+    returns an ItemGroup node with a label, a parent node, a state to pass to ItemGroup constructor  flags,
+    and possibly up to three default symbols for respectively: the default, belowmouse and opened states
+*/
+/*! \fn Item * Browser::add_leaf(const char *label,  Group* parent, const Symbol* img1, const Symbol* img2)
+    return an Item node with a label, a parent node, 
+    and possibly up to two default syymbols for respectively: the default and belowmouse states
+*/
+/*! \fn const Symbol * Browser::get_symbol(Browser::NodeType nodetype, Flags  state) const
+    return the default Symbol associated to a node type at a particular state
+*/
+/*! \fn void Browser::set_symbol(Browser::NodeType nodetype, const Symbol* img1, const Symbol* img2, const Symbol* img3)
+    sets default(s) symbol(s) for the group or leaf node type, 
+      the state can be OPEN or CLOSE, 
+      0 for img means no img
+      you can choose to setup a set of images up to three different states/events for a group node
 */
 
 ////////////////////////////////////////////////////////////////
@@ -1855,9 +1885,6 @@ Browser::~Browser() {
 
 */
 
-//
-// Tree construction high level API
-//
 ItemGroup* Browser::add_group(const char *label, Group* parent, int state, 
       const Symbol* img1, const Symbol* img2, const Symbol* img3) {
     if (parent) parent->begin();
@@ -1880,7 +1907,6 @@ Item* Browser::add_leaf(const char *label,  Group* parent,
     return i;
 }
 
-// tell what image is affected to a particlar event
 const Symbol * Browser::get_symbol(Browser::NodeType nodetype, Flags  f) const {
     switch(f) {
     case fltk::NO_FLAGS:    return nodetype== Browser::GROUP ? defGroupSymbol1 : defLeafSymbol1;

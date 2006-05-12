@@ -87,7 +87,7 @@ using namespace fltk;
   Image, you must call destroy() before doing so.
 */
 
-/*! \fn Image::Image(const char* name)
+/*! \fn Image::Image(const char* name=0)
   The default constructor makes a zero-sized image. This will not
   draw anything, you have to call setsize() on it. Most image
   subclasses use this initial zero size as an indication that they
@@ -97,7 +97,8 @@ using namespace fltk;
   the image to be drawn by puttin "@name;" into a label.
 */
 
-/*! \fn Image::Image(int w, int h, const char* name)
+  
+  /*! \fn Image::Image(int w, int h, const char* name=0, const char * const * d=0) 
   This constructor sets the width and height. The initial
   image is an opaque black rectangle of that size.
 

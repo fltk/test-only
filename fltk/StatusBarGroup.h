@@ -44,21 +44,29 @@ public:
 
   static NamedStyle* default_style;
   void layout();
-  enum Position {SBAR_LEFT=0,SBAR_CENTER,SBAR_RIGHT};
+  enum Position {
+	SBAR_LEFT=0,	//!< statusbar text left-aligned
+	SBAR_CENTER,	//!< statusbar text centered
+	SBAR_RIGHT	//!< statusbar text right-aligned (default)
+  };
   
-  //! set a text in the status bar at a given alignment
-  void set(const char * t, Position f=SBAR_RIGHT);
-  //! set a formatable (printf-like) text in the status bar at a given alignment
-  void set(Position f, const char * format, ... );
+  /** set a simple string in the status bar 
+      at a given Position 'pos' alignment spec.
+  */
+  void set(const char * t, Position pos=SBAR_RIGHT);
+  /** set a formatable (printf-like) text in the status bar 
+      at a given Position 'pos' alignment spec.
+  */
+  void set(Position pos, const char * format, ... );
   //! set a default box to all texts  inside the status bar
   void child_box(Box* b) {for(int i=0;i<3;i++) child_box(b,(Position)i);}
   //! set a default box to text at particular position inside the status bar
   void child_box(Box* b, Position i) {b_[i]= b;if(tf_[i]) tf_[i]->box(b);}
 
 protected:
-  //! draw a label on a particular (left,middle, right) position 
+  //! draw a label on a particular (left,middle, right) Position 
   void draw_label(Position pos, const char * label);
-  //! adapt box position and size according to pos and statusbar dims
+  //! adapt box position and size according to Position pos and statusbar dimensions
   void update_box(InvisibleBox *b, Position pos);
 
 private:

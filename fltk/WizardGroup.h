@@ -30,17 +30,11 @@
 //
 
 #ifndef  _fltk_WizardGroup_h_
-# define _fltk_WizardGroup_h_
+#define _fltk_WizardGroup_h_
 
-# include <fltk/Group.h>
+#include <fltk/Group.h>
 
 namespace fltk {
-
-/*! \class fltk::WizardGroup
-  This class encapsulates Groups and shows only one group <br>
-  among n others at any time.<br>
-  Just create a WizardGroup as a Group and add child Widgets inside.
-*/
 
 class FL_API WizardGroup : public Group {
   Widget * value_;
@@ -48,13 +42,9 @@ public:
   WizardGroup(int X, int Y, int W, int H, const char * l = 0)
     : Group(X, Y, W, H, l), value_(0) {  box(THIN_UP_BOX);}
 
-  //! draw WizardGroup and make sure before that only one child is visible 
   void          draw(); 
-  //! show next child.
   void		next();
-  //! show previous child.
   void		prev();
-  //! Set  the visible child.
   void		value(Widget *);
   //! return  the current visible child.
   Widget *      value() const { return value_;}
@@ -62,7 +52,7 @@ public:
 
 }
 
-#endif // !_fltk_WizardGroup_h_
+#endif
 
 //
 // End of "$Id: WizardGroup.h 4288 2005-04-16 00:13:17Z mike $".

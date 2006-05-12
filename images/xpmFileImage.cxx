@@ -22,9 +22,8 @@
 
   Image type that reads a .xpm (X Pixmap) file in from disk.
 
-  The normal use of a .xpm file is to #include it into
-  your source code. In that case you want to use an fltk::xpmImage
-  object.
+  The normal use of a .xpm file is to include it into your source code. 
+  In that case you want to use an fltk::xpmImage object.
 
 */
 

@@ -269,7 +269,7 @@ void FrameBox::_draw(const fltk::Rectangle& R) const
   setcolor(fg);
 }
 
-/** \fn FrameBox::FrameBox(const char* name, int dx,int dy,int dw,int dh, const char* pattern, const FrameBox* down)
+/** \fn FrameBox::FrameBox(const char* name, int dx,int dy,int dw,int dh, const char* pattern, const Box* down=0)
     Constructor where you give the thickness of the borders used by inset().
 */
 

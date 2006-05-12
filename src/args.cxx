@@ -424,8 +424,8 @@ int XParseGeometry(const char* string, int* x, int* y,
     *height = tempHeight;
   return (mask);
 }
-#endif // if !USE_X11
 /* \} */
+#endif // if !USE_X11
 
 //
 // End of "$Id$".

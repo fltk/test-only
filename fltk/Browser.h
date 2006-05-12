@@ -43,13 +43,37 @@ public:
   static NamedStyle* default_style;
   ~Browser();
   
-  enum { // values for type()
-    NORMAL = 0,
-    MULTI = 1
+  enum { //<! values for type()
+    NORMAL = 0,	    //!< means single selection can be achieved by user 
+    MULTI = 1	    //!< means multiple selection can be achieved by user \see type()
   };
   enum { // values selected_column
-    NO_COLUMN_SELECTED = -1 // lets make opaque these constants, user should never rely on their values
+    NO_COLUMN_SELECTED = -1 //!< means that no column has been selected by user
   };
+  enum { //!< predefined marks
+    HERE = 0,	    //!< current item, the one moved by all the calls
+    FOCUS,	    //!< what the user thinks is the curren item
+    FIRST_VISIBLE,  //!< item at top of scroll region
+    REDRAW_0,	    //!< item that needs to be redrawn
+    REDRAW_1,	    //!< a second item that needs to be redrawn
+    OPEN,	    //!< this and all parents are open
+    TEMP,	    //!< scratch space reserved for fltk only
+    TREE_TRAVERSAL, //!< this volatile mark is available for all tree traversal usage fltk+applications
+    USER1,	    //!< all purpose scratch space 1, for applications only
+    USER2,	    //!< all purpose scratch space 2, for applications only
+    NUMMARKS	    //!< end/number of marks
+  };
+  enum NodeType { //!< values for tree node types
+    GROUP= 0,	    //!< indicates that the node is a ItemGroup derived node in the tree
+    LEAF = 1	    //!< indicates that the node is simple Item in the tree
+  };
+  enum linepos { 
+      NOSCROLL,	    //!< no_scroll is made to make the current item visible
+      TOP,	    //!< position current item to top when made visible
+      MIDDLE,	    //!< position current item to middle when made visible
+      BOTTOM	    //!< position current item to bottom when made visible \see make_item_visible()
+  };
+  
 
   int width() const {return width_;}
   int height() const {return height_;}
@@ -83,7 +107,6 @@ public:
   bool set_item_selected(bool value = true, int do_callback = 0);
   bool select_only_this(int do_callback = 0);
   bool deselect(int do_callback = 0);
-  enum linepos { NOSCROLL, TOP, MIDDLE, BOTTOM };
   bool make_item_visible(linepos = NOSCROLL);
   void damage_item() {damage_item(HERE);}
   bool set_item_opened(bool);
@@ -149,19 +172,6 @@ private:
   // Marks serve as "indexes" into the hierarchial browser. We probably
   // need to make some sort of public interface but I have not figured
   // it out completely.
-  enum { // predefined marks
-    HERE = 0,	// current item, the one moved by all the calls
-    FOCUS,	// what the user thinks is the curren item
-    FIRST_VISIBLE, // item at top of scroll region
-    REDRAW_0,	// item that needs to be redrawn
-    REDRAW_1,	// a second item that needs to be redrawn
-    OPEN,	// this and all parents are open
-    TEMP,	// scratch space reserved for fltk only
-	TREE_TRAVERSAL, // this volatile mark is available for all tree traversal usage fltk+applications
-    USER1,	// all purpose scratch space 1, for applications only
-    USER2,	// all purpose scratch space 2, for applications only
-    NUMMARKS
-  };
   Widget* goto_mark(int mark); // set HERE to mark
   Widget* goto_visible_focus(); // set HERE to focus if visible
   void set_mark(int dest, int mark); // set dest to mark
@@ -186,27 +196,13 @@ public:
   // tree construction high level API
   //   dramatically improves tree construction in an easy and elegant way
   // 
-  enum NodeType { // values for tree node types
-    GROUP= 0,
-    LEAF = 1
-  };
-  
-  /** sets default(s) symbol(s) for the group or leaf node type, 
-      the state can be OPEN or CLOSE, 
-      0 for img means no img
-      you can choose to setup a set of images up to three different states/events for a group node
-  */
   void set_symbol(NodeType nodetype, 
       const Symbol* imgClosed=0, // default (and closed if open not null) img
       const Symbol* imgFocus=0,  // img when mouse comes on it
       const Symbol* imgOpen=0);  // img when node open (for group nodes only)
-  //! tell what image is affected to a particlar event/state
   const Symbol* get_symbol(NodeType nodetype, Flags f=fltk::NO_FLAGS) const;  
-
-  //! create a group node in the tree, if img is not 0 then custom img is set, otherwise default img is set if any
   ItemGroup* add_group(const char *label, Group* parent=0, int state=OPENED, 
       const Symbol* imgClosed=0, const Symbol* imgFocus=0, const Symbol* imgOpen=0);
-  //! create a leaf node in the tree, if img is not 0 then custom img is set, otherwise default img is set if any
   Item* add_leaf(const char *label, Group* parent=0,  
       const Symbol* img=0, const Symbol* imgFocus=0);
   

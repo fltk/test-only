@@ -34,6 +34,50 @@
 //   WizardGroup::value()     - Set the visible child.
 //
 
+/*! \class fltk::WizardGroup
+  This class encapsulates Groups and shows only one group <br>
+  among n others at any time.<br>
+  Just create a WizardGroup as you would create a Group 
+  and add child Widgets inside.<br>
+  Sample use:
+\code
+// some useful callbacks:
+void done_cb(Widget*, void*) { G_win->hide(); }
+void back_cb(Widget*, void*) { G_wiz->prev(); }
+void next_cb(Widget*, void*) { G_wiz->next(); }
+// main code:
+int main(int argc, char **argv) {
+  G_win = new Window(WIDTH,HEIGHT); // create main window
+  G_win->begin(); 
+  G_wiz = new WizardGroup(0,0,WIDTH, HEIGHT);// create Wizard
+  G_wiz->begin();
+  add_group("This is the\nFirst\npage", fltk::RED,true, false ); // Wz p.1
+  add_group("This is the\nSecond\npage", fltk::YELLOW, false, false); // Wz p.2
+  add_group("This is the\nLast\npage", fltk::GREEN, false, true); // Wz p.3
+  G_wiz->end();
+  G_win->end();
+  G_win->show(argc, argv);
+  return fltk::run();
+}
+\endcode
+*/
+
+/** \fn void fltk::WizardGroup::draw(); 
+   draw WizardGroup and make sure before that only one child is visible 
+*/
+/** \fn void fltk::WizardGroup::next(); 
+   show next (or last if no more next) child, usually a group.
+*/
+/** \fn void fltk::WizardGroup::prev(); 
+    show previous (or first if no more previous) child, usually a group.
+*/
+/** \fn fltk::WizardGroup::value(Widget *kid);
+    Set  the visible child, 
+    look in the Wizard for  this widget, 
+    make it visible, hide all others.
+*/
+
+
 //
 // Include necessary header files...
 //
@@ -70,8 +114,7 @@ void WizardGroup::prev() {
   if (i > 0 && i < num_kids) {kids->hide(); value(child(i-1));}
 }
 
-void WizardGroup::value(Widget *kid)
-{
+void WizardGroup::value(Widget *kid) {
   int num_kids, i;
 
   value_=kid;
