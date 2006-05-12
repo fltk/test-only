@@ -60,7 +60,7 @@ void TestWindow::draw() {
 	drawtext(buffer,X+3,Y+16);
       }
       pop_clip();
-      clip_out(X,Y,W,H);
+      clipout(Rectangle(X,Y,W,H));
     }
     setcolor(GRAY75);
     fillrect(0,0,w(),h());
@@ -81,6 +81,7 @@ int main(int argc, char** argv) {
   }
   TestWindow window(atoi(argv[n]));
   int iterations = atoi(argv[n+1]);
+  double dt = get_time_secs();
   printf("iterations = %d\n", iterations);
   window.show(argc, argv);
   while (window.damage()) fltk::wait();
@@ -88,6 +89,8 @@ int main(int argc, char** argv) {
     window.redraw();
     fltk::check();
   }
+  dt = get_time_secs() - dt;
+  printf("time elapsed = %4.6lf secs\n",dt);
   return 0;
 }
 

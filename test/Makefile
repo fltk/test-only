@@ -62,6 +62,7 @@ CPPFILES = \
 	demo.cxx \
 	doublebuffer.cxx \
 	drawing.cxx \
+	drawtiming.cxx \
 	editor.cxx \
 	file_chooser.cxx \
 	fonts.cxx \
@@ -129,6 +130,7 @@ TARGETS = \
 	demo$(EXEEXT) \
 	doublebuffer$(EXEEXT) \
 	drawing$(EXEEXT) \
+	drawtiming$(EXEEXT) \
 	editor$(EXEEXT) \
 	exception$(EXEEXT) \
 	file_chooser$(EXEEXT) \
