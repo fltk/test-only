@@ -662,7 +662,7 @@ void Group::draw() {
 #if USE_CLIPOUT
     // Non-blinky draw, draw the inside widgets first, clip their areas
     // out, and then draw the background:
-    push_clip(Rectangle(w(), h()));
+    push_clip(0,0, w(), h());
     int n; for (n = numchildren; n--;) {
       Widget& w = *child(n);
       fl_did_clipping = 0;
@@ -723,7 +723,7 @@ void Widget::draw_background() const {
   if (damage()&DAMAGE_EXPOSE) return;
 #endif
   if (!parent()) return;
-  push_clip(Rectangle(w(),h()));
+  push_clip(0,0,w(),h());
   push_matrix();
   translate(-x(), -y());
   if (!parent()->box()->fills_rectangle()) parent()->draw_background();

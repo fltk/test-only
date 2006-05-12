@@ -228,7 +228,7 @@ void ccHueBox::draw() {
   if (damage()&DAMAGE_ALL) draw_frame();
   Rectangle r(w(),h()); box()->inset(r);
   if (damage() == DAMAGE_VALUE) {
-    push_clip(Rectangle(r.x()+px,r.y()+py,6,6));
+    push_clip(r.x()+px,r.y()+py,6,6);
   }
   drawimage(generate_image, this, RGB, r);
   if (damage() == DAMAGE_VALUE) pop_clip();
@@ -327,7 +327,7 @@ void ccValueBox::draw() {
     i.aimage = false;
   }
   if (damage() == DAMAGE_VALUE) {
-    push_clip(Rectangle(i.wh.x(),i.wh.y()+py,i.wh.w(),6));
+    push_clip(i.wh.x(),i.wh.y()+py,i.wh.w(),6);
   }
   drawimage(generate_vimage, &i, RGB, i.wh);
   if (damage() == DAMAGE_VALUE) pop_clip();

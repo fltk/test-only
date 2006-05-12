@@ -61,7 +61,12 @@ FL_API void transform(Rectangle&);
 
 /*! \addtogroup clipping
   \{ */
-FL_API void push_clip(const Rectangle&);
+FL_API void push_clip0(Rectangle& r); // common method for push_clip primitives, r is modified in output
+// standard push_clip equals to former monolithic definition no perf. change
+inline void push_clip(const Rectangle& rectangle) {Rectangle r(rectangle); push_clip0(r);}
+// gain one rectangle construction by providing ddirect x,y,w,h push_clip alternative
+inline void push_clip(int X,int Y, int W, int H) {Rectangle r(X,Y,W,H); push_clip0(r);}
+
 FL_API void clipout(const Rectangle&);
 FL_API void pop_clip();
 FL_API void push_no_clip();

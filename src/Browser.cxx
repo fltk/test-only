@@ -41,7 +41,7 @@ using namespace fltk;
 /*! \class fltk::Browser
 
   Displays a scrolling vertical list of text widgets, possibly with a
-  hierachial arrangement, and lets the user select one of them.
+  hierarchical arrangement, and lets the user select one of them.
 
   \image html browser.gif
 

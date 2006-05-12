@@ -51,12 +51,13 @@ public:
 protected:
   void draw();
 
-private:
-  int push(Widget *);
-  int tab_positions(int*, int*);
   int tab_height();
   void draw_tab(int x1, int x2, int W, int H, Widget* o, int sel=0);
   void draw_tab_background();
+
+private:
+  int push(Widget *);
+  int tab_positions(int*, int*);
 
   bool _drawOutline;
 };

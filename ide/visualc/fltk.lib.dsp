@@ -391,6 +391,10 @@ SOURCE=..\..\fltk\progressbar.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fltk\PulldownTabs.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fltk\radiobutton.h
 # End Source File
 # Begin Source File
@@ -905,6 +909,10 @@ SOURCE=..\..\src\Preferences.cxx
 # Begin Source File
 
 SOURCE=..\..\src\ProgressBar.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\PulldownTabs.cxx
 # End Source File
 # Begin Source File
 

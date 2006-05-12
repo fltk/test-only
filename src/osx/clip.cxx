@@ -95,8 +95,8 @@ void fltk::clip_region(Region r) {
 /*!
   Pushes the \e intersection of the current region and this rectangle
   onto the clip stack. */
-void fltk::push_clip(const Rectangle& r1) {
-  Rectangle r(r1); transform(r);
+void fltk::push_clip0(Rectangle& r) {
+  transform(r);
   Region region = NewRgn();
   if (r.empty()) {
     SetEmptyRgn(region);

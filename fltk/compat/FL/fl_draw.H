@@ -9,7 +9,7 @@ inline void fl_color(uchar r, uchar g, uchar b) {fltk::setcolor(fltk::color(r,g,
 inline fltk::Color fl_color() {return fltk::getcolor();}
 
 // clip:
-inline void fl_push_clip(int x, int y, int w, int h) {fltk::push_clip(fltk::Rectangle(x,y,w,h));}
+inline void fl_push_clip(int x, int y, int w, int h) {fltk::push_clip(x,y,w,h);}
 #define fl_clip		fl_push_clip
 #define fl_pop_clip	fltk::pop_clip
 inline int fl_not_clipped(int x, int y, int w, int h) {return fltk::not_clipped(fltk::Rectangle(x,y,w,h));}

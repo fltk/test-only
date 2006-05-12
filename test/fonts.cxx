@@ -47,7 +47,7 @@ fltk::Widget* id_box;
 
 void FontDisplay::draw() {
   draw_box();
-  fltk::push_clip(fltk::Rectangle(2,2,w()-2,h()-2));
+  fltk::push_clip(2,2,w()-2,h()-2);
   const char* saved_encoding = fltk::get_encoding();
   fltk::set_encoding(encoding);
   fltk::setfont(font, (float) size);

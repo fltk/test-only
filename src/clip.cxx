@@ -136,8 +136,8 @@ void fltk::clip_region(Region region) {
   Pushes the \e intersection of the current region and \a rectangle
   onto the clip stack.
 */
-void fltk::push_clip(const Rectangle& rectangle) {
-  Rectangle r(rectangle); transform(r);
+void fltk::push_clip0(Rectangle& r) {
+  transform(r);
   Region region;
   if (r.empty()) {
 #if USE_X11

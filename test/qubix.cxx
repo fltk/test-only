@@ -824,7 +824,7 @@ int makemove() {
 
 class QubixView : public Widget {
   void draw() {
-    push_clip(Rectangle(w(),h()));
+    push_clip(0, 0, w(),h());
     setcolor(WHITE);
     fillrect(Rectangle(w(),h()));
     push_matrix();

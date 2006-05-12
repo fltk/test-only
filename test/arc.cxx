@@ -33,7 +33,7 @@ const char* name[7] = {"X", "Y", "W", "H", "start", "end", "rotate"};
 
 class Drawing : public fltk::Widget {
   void draw() {
-    fltk::push_clip(Rectangle(w(), h()));
+    fltk::push_clip(0,0, w(), h());
     fltk::setcolor(fltk::BLACK);
     fltk::fillrect(Rectangle(w(), h()));
     fltk::push_matrix();

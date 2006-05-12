@@ -38,7 +38,7 @@ rgbImage* theimage;
 
 class Drawing : public Widget {
   void draw() {
-    push_clip(Rectangle(w(),h()));
+    push_clip(0, 0, w(),h());
     setcolor(GRAY20);
     fillrect(Rectangle(w(),h()));
     setcolor(GRAY10);
