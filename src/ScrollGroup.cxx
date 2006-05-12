@@ -172,7 +172,7 @@ void ScrollGroup::draw() {
     if (scrollbar.visible() && hscrollbar.visible()) {
       // fill in the little box in the corner
       setcolor(buttoncolor());
-      fillrect(Rectangle(scrollbar.x(),hscrollbar.y(),scrollbar.w(),hscrollbar.h()));
+      fillrect(scrollbar.x(),hscrollbar.y(),scrollbar.w(),hscrollbar.h());
     }
   }
   update_child(scrollbar);

@@ -605,7 +605,7 @@ public:
     drawline(lx, r.y(), lx, ly-boxsize);
     if (glyph&1) drawline(lx, ly+boxsize, lx, r.b()-1);
     drawline(lx+boxsize, ly, r.r(), ly);
-    strokerect(Rectangle(lx-boxsize, ly-boxsize, BOXSIZE, BOXSIZE));
+    strokerect(lx-boxsize, ly-boxsize, BOXSIZE, BOXSIZE);
     drawline(lx-boxsize+2, ly, lx+boxsize-2, ly);
     if (glyph < OPEN_ELL) drawline(lx, ly-boxsize+2, lx, ly+boxsize-2);
     }
@@ -634,7 +634,7 @@ void Browser::draw_item(int damage) {
     drawstyle(style(), 0);
     Color fg = getcolor();
     setcolor(getbgcolor());
-    fillrect(Rectangle(0, y, inset-xposition_+arrow_size, item_h()));
+    fillrect(0, y, inset-xposition_+arrow_size, item_h());
     setcolor(fg);
     bool preview_open = openclose_drag == 1 && pushed() && at_mark(FOCUS);
     for (int j = indented() ? 0 : 1; j <= item_level[HERE]; j++) {
@@ -714,7 +714,7 @@ void Browser::draw_clip(const Rectangle& r) {
   int bottom_y = interior.y()+item_position[HERE]-yposition_;
   if (bottom_y < r.b()) {
     setcolor(color());
-    fillrect(Rectangle(r.x(), bottom_y, r.w(), r.b()-bottom_y));
+    fillrect(r.x(), bottom_y, r.w(), r.b()-bottom_y);
   }
   pop_clip();
 }
@@ -768,7 +768,7 @@ void Browser::draw() {
     if (scrollbar.visible() && hscrollbar.visible()) {
       // fill in the little box in the corner
       setcolor(buttoncolor());
-      fillrect(Rectangle(scrollbar.x(), hscrollbar.y(), scrollbar.w(),hscrollbar.h()));
+      fillrect(scrollbar.x(), hscrollbar.y(), scrollbar.w(),hscrollbar.h());
     }
     if (header_) {
       for (int i=0; i<nHeader; i++) {

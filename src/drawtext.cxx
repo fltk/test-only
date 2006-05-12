@@ -664,7 +664,7 @@ void fltk::drawtext(void (*textfunction)(const char*,int,float,float),
     } else if (!(flags & ALIGN_LEFT)) {
       dx = (r.w()-w)>>1;
     }
-    fillrect(Rectangle(r.x()+dx, int(dy), w, h));
+    fillrect(r.x()+dx, int(dy), w, h);
     setcolor(normal_color);
   }
   if (column_widths_) {

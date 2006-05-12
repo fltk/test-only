@@ -92,7 +92,7 @@ void PlasticBox::_draw(const Rectangle& r) const
     i = chalf / cstep;
 
     setcolor(shade_color(c[chalf], bc));
-    fillrect(Rectangle(x + 1, y + i, w - 2, h - 2 * i));
+    fillrect(x + 1, y + i, w - 2, h - 2 * i);
 
     setcolor(shade_color(c[chalf] - 2, bc));
     drawline(x, y + i, x, y + h - i);
@@ -123,7 +123,7 @@ void PlasticBox::_draw(const Rectangle& r) const
     i = chalf / cstep;
 
     setcolor(shade_color(c[chalf], bc));
-    fillrect(Rectangle(x + i, y + 1, w - 2 * i, h - 2));
+    fillrect(x + i, y + 1, w - 2 * i, h - 2);
 
     setcolor(shade_color(c[chalf - 2], bc));
     drawline(x + i, y, x + w - i, y);

@@ -40,10 +40,10 @@ class Drawing : public Widget {
   void draw() {
     push_clip(0, 0, w(),h());
     setcolor(GRAY20);
-    fillrect(Rectangle(w(),h()));
+    fillrect(0,0,w(),h());
     setcolor(GRAY10);
-    fillrect(Rectangle(0,0,w()/2,h()/2));
-    fillrect(Rectangle(w()/2,h()/2,(w()+1)/2,(h()+1)/2));
+    fillrect(0,0,w()/2,h()/2);
+    fillrect(w()/2,h()/2,(w()+1)/2,(h()+1)/2);
     push_matrix();
     translate(w()/2+xy[2], h()/2+xy[3]);
     scale(xy[4],xy[5]);

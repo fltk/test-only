@@ -1654,7 +1654,7 @@ void TextDisplay::draw_string( int style, int X, int Y, int toX,
   }
 
   fltk::setcolor(background);
-  fltk::fillrect(Rectangle(X, Y, toX - X, maxsize_));
+  fltk::fillrect(X, Y, toX - X, maxsize_);
   
   if (!(style & BG_ONLY_MASK) && !(attr & ATTR_HIDDEN)) {
     fltk::setcolor(foreground);
@@ -1697,7 +1697,7 @@ void TextDisplay::clear_rect( int style, int X, int Y,
   } else {
     fltk::setcolor(color());
   }
-  fltk::fillrect(Rectangle(X, Y, width, height));
+  fltk::fillrect(X, Y, width, height);
 }
 
 /*
@@ -1720,7 +1720,7 @@ void TextDisplay::draw_cursor(int X, int Y) {
 
   fltk::push_no_clip();
 #if 1
-  fltk::fillrect(Rectangle(X, Y, 2, bot-Y));
+  fltk::fillrect(X, Y, 2, bot-Y);
 #else
 
   /* For cursors other than the block, make them around 2/3 of a character
@@ -2396,9 +2396,9 @@ void TextDisplay::blank_cursor_protrusions()
 
   fltk::setcolor(color());
 #if 1
-  fltk::fillrect(Rectangle(cursorX-1, cursorY, 2, fontHeight));
+  fltk::fillrect(cursorX-1, cursorY, 2, fontHeight);
 #else
-  fltk::fillrect(Rectangle(X, cursorY, width, fontHeight));
+  fltk::fillrect(X, cursorY, width, fontHeight);
 #endif
   cursor_oldx_ = cursor_oldy_ = -100;
 }
@@ -2965,23 +2965,23 @@ void TextDisplay::draw(void) {
     setcolor(color());
 
     // left margin
-    fillrect(Rectangle(text_area.x()-LEFT_MARGIN, text_area.y()-TOP_MARGIN,
-		       LEFT_MARGIN, text_area.h()+TOP_MARGIN+BOTTOM_MARGIN));
+    fillrect(text_area.x()-LEFT_MARGIN, text_area.y()-TOP_MARGIN,
+		       LEFT_MARGIN, text_area.h()+TOP_MARGIN+BOTTOM_MARGIN);
     // right margin
-    fillrect(Rectangle(text_area.x()+text_area.w(), text_area.y()-TOP_MARGIN,
-		       RIGHT_MARGIN, text_area.h()+TOP_MARGIN+BOTTOM_MARGIN));
+    fillrect(text_area.x()+text_area.w(), text_area.y()-TOP_MARGIN,
+		       RIGHT_MARGIN, text_area.h()+TOP_MARGIN+BOTTOM_MARGIN);
     // top margin
-    fillrect(Rectangle(text_area.x(), text_area.y()-TOP_MARGIN,
-		       text_area.w(), TOP_MARGIN));
+    fillrect(text_area.x(), text_area.y()-TOP_MARGIN,
+		       text_area.w(), TOP_MARGIN);
     // bottom margin
-    fillrect(Rectangle(text_area.x(), text_area.y()+text_area.h(),
-		       text_area.w(), BOTTOM_MARGIN));
+    fillrect(text_area.x(), text_area.y()+text_area.h(),
+		       text_area.w(), BOTTOM_MARGIN);
 
     // draw that little box in the corner of the scrollbars
     if (vscrollbar->visible() && hscrollbar->visible()) {
       setcolor(buttoncolor());
-      fillrect(Rectangle(vscrollbar->x(), hscrollbar->y(),
-			 vscrollbar->w(), hscrollbar->h()));
+      fillrect(vscrollbar->x(), hscrollbar->y(),
+			 vscrollbar->w(), hscrollbar->h());
     }
     // blank the previous cursor protrusions
   }

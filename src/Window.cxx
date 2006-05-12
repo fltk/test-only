@@ -772,7 +772,7 @@ void CreatedWindow::expose(const fltk::Rectangle& r) {
 */
 void Window::draw_overlay() {
   setcolor(RED);
-  fillrect(fltk::Rectangle(w(),h()));
+  fillrect(0,0,w(),h());
 }
 
 /** Indicate that the image made by draw_overlay() has changed and must

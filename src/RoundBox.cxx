@@ -76,9 +76,9 @@ static void lozenge(int which, int x,int y,int w,int h, Color color)
 
   if (which == FILL) {
     if (w < h)
-      fillrect(Rectangle(x, y+d/2, w, h-(d&-2)));
+      fillrect(x, y+d/2, w, h-(d&-2));
     else if (w > h)
-      fillrect(Rectangle(x+d/2, y, w-(d&-2), h));
+      fillrect(x+d/2, y, w-(d&-2), h);
   } else {
     if (w < h) {
       if (which != UPPER_LEFT) drawline(x+w-1, y+d/2, x+w-1, y+h-d/2);

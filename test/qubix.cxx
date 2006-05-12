@@ -826,7 +826,7 @@ class QubixView : public Widget {
   void draw() {
     push_clip(0, 0, w(),h());
     setcolor(WHITE);
-    fillrect(Rectangle(w(),h()));
+    fillrect(0,0,w(),h());
     push_matrix();
     drawfrom(0,0, this);
     pop_matrix();

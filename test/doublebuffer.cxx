@@ -47,7 +47,7 @@ class BlinkWindow : public Window {
 
   void draw() {
     setcolor(BLACK);
-    fillrect(Rectangle(w(),h()));
+    fillrect(0,0,w(),h());
     push_matrix();
     translate(w()/2, h()/2);
     scale(w()/2, h()/2);

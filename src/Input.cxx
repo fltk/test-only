@@ -425,7 +425,7 @@ void Input::draw(const Rectangle& r)
       Color fg = contrast(selection_textcolor(), bg);
       setcolor(bg);
       int xx=int(x1);
-      fillrect(Rectangle(xx, r.y()+ypos, int(x2+.5)-xx, height));
+      fillrect(xx, r.y()+ypos, int(x2+.5)-xx, height);
       setcolor(fg);
       drawtext(buf+offset1, offset2-offset1, x1, r.y()+ypos+desc);
       // draw unselected text after the selection:
@@ -446,7 +446,7 @@ void Input::draw(const Rectangle& r)
     if ((this==dnd_target || focused() && selstart == selend) &&
 	cursor_position >= p-text_ && cursor_position <= e-text_) {
       setcolor(textcolor);
-      fillrect(Rectangle(xpos+curx-1, r.y()+ypos, 2, height));
+      fillrect(xpos+curx-1, r.y()+ypos, 2, height);
       spot_x = xpos+curx;
       spot_y = r.y()+ypos;
     }

@@ -15,7 +15,7 @@ class ShapeWidget : public Widget {
 
   void draw() {
     setcolor(BLACK);
-    fillrect(Rectangle(w(),h()));
+    fillrect(0,0,w(),h());
     push_matrix();
     scale(w()/2.0f, h()/2.0f);
     translate(1,1);

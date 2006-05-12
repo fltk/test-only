@@ -35,7 +35,7 @@ class Drawing : public fltk::Widget {
   void draw() {
     fltk::push_clip(0,0, w(), h());
     fltk::setcolor(fltk::BLACK);
-    fltk::fillrect(Rectangle(w(), h()));
+    fltk::fillrect(0,0,w(), h());
     fltk::push_matrix();
     //    if (args[6]) {
       fltk::translate(w()/2.0f, h()/2.0f);
@@ -54,9 +54,9 @@ class Drawing : public fltk::Widget {
     // now draw non-rotated hardware circle to check if it inscribes:
     fltk::pop_matrix();
     fltk::setcolor(fltk::GRAY40);
-    fltk::fillrect(fltk::Rectangle(10,(int)(270-args[3]),(int)args[2],(int)args[3]));
+    fltk::fillrect(10,(int)(270-args[3]),(int)args[2],(int)args[3]);
     fltk::setcolor(fltk::GRAY90);
-    fltk::strokerect(fltk::Rectangle(10,(int)(270-args[3]),(int) args[2],(int) args[3]));
+    fltk::strokerect(10,(int)(270-args[3]),(int) args[2],(int) args[3]);
     fltk::setcolor(fltk::GRAY10);
     fltk::addchord(fltk::Rectangle(10,(int) (270-args[3]),(int) args[2],(int)args[3]),args[4],args[5]);
     fltk::fillstrokepath(fltk::GRAY90);

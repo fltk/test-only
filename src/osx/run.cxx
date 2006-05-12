@@ -1520,7 +1520,7 @@ void Window::flush() {
     int s = child_of() && !contains(modal()) ? 12 : 15;
     int x = w()-s;
     int y = h()-s;
-    fillrect(Rectangle(x,y,s,s));
+    fillrect(x,y,s,s);
     setcolor(GRAY15);
     int d = s-12;
     drawline(x+d,y+s-1,x+s-1,y+d); d += 4;

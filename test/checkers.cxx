@@ -967,16 +967,16 @@ int squarey(int i) {return (usermoves(i,2)-'1')*BOXSIZE+BMOFFSET;}
 
 void Board::draw() {
   make_bitmaps();
-  fltk::setcolor(color()); fltk::fillrect(fltk::Rectangle(w(),h()));
+  fltk::setcolor(color()); fltk::fillrect(0,0,w(),h());
   fltk::setcolor((fltk::Color)107 /*10*/);
   int x; for (x=0; x<8; x++) for (int y=0; y<8; y++) {
-    if (!((x^y)&1)) fltk::fillrect(fltk::Rectangle(BORDER+x*BOXSIZE, BORDER+y*BOXSIZE,
-			     BOXSIZE-BORDER, BOXSIZE-BORDER));
+    if (!((x^y)&1)) fltk::fillrect(BORDER+x*BOXSIZE, BORDER+y*BOXSIZE,
+			     BOXSIZE-BORDER, BOXSIZE-BORDER);
   }
   fltk::setcolor(fltk::GRAY20);
   for (x=0; x<9; x++) {
-    fltk::fillrect(fltk::Rectangle(x*BOXSIZE,0,BORDER,h()));
-    fltk::fillrect(fltk::Rectangle(0,x*BOXSIZE,w(),BORDER));
+    fltk::fillrect(x*BOXSIZE,0,BORDER,h());
+    fltk::fillrect(0,x*BOXSIZE,w(),BORDER);
   }
   for (int i = 5; i < 40; i++) if (i != erase_this) {
     draw_piece(::b[i], squarex(i), squarey(i));

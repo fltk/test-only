@@ -100,8 +100,8 @@ void ThumbWheel::draw() {
     for (int i=0; h1; i++) {
       setcolor((Color)(GRAY75-i-1));
       int h2 = GRAY75-i-1 > GRAY33 ? 2*h1/3+1 : 0;
-      fillrect(Rectangle(r.x()+h2,r.y(),h1-h2,r.h()));
-      fillrect(Rectangle(r.r()-h1,r.y(),h1-h2,r.h()));
+      fillrect(r.x()+h2,r.y(),h1-h2,r.h());
+      fillrect(r.r()-h1,r.y(),h1-h2,r.h());
       h1 = h2;
     }
     if (!(flags()&INACTIVE_R)) {
@@ -133,12 +133,12 @@ void ThumbWheel::draw() {
     offset = (1-offset);
     // draw shaded ends of wheel:
     int h1 = r.h()/4+1; // distance from end that shading starts
-    setcolor(getbgcolor()); fillrect(Rectangle(r.x(),r.y()+h1,r.w(),r.h()-2*h1));
+    setcolor(getbgcolor()); fillrect(r.x(),r.y()+h1,r.w(),r.h()-2*h1);
     for (int i=0; h1; i++) {
       setcolor((Color)(GRAY75-i-1));
       int h2 = GRAY75-i-1 > GRAY33 ? 2*h1/3+1 : 0;
-      fillrect(Rectangle(r.x(),r.y()+h2,r.w(),h1-h2));
-      fillrect(Rectangle(r.x(),r.b()-h1,r.w(),h1-h2));
+      fillrect(r.x(),r.y()+h2,r.w(),h1-h2);
+      fillrect(r.x(),r.b()-h1,r.w(),h1-h2);
       h1 = h2;
     }
     if (!(flags()&INACTIVE_R)) {

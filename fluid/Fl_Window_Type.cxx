@@ -148,7 +148,7 @@ void Overlay_Window::draw() {
       for (int x = 0; x < w(); x += CHECKSIZE) {
 	fltk::setcolor(((y/(2*CHECKSIZE))&1) != ((x/(2*CHECKSIZE))&1) ?
 		 fltk::WHITE : fltk::BLACK);
-	fltk::fillrect(fltk::Rectangle(x,y,CHECKSIZE,CHECKSIZE));
+	fltk::fillrect(x,y,CHECKSIZE,CHECKSIZE);
       }
   }
 #ifdef __sgi
@@ -392,10 +392,10 @@ void WindowType::draw_overlay() {
   if (drag==BOX && (x1 != mx || y1 != my)) {
     int x = x1; int r = mx; if (x > r) {x = mx; r = x1;}
     int y = y1; int b = my; if (y > b) {y = my; b = y1;}
-    fltk::strokerect(fltk::Rectangle(x,y,r-x,b-y));
+    fltk::strokerect(x,y,r-x,b-y);
   }
   if (overlays_invisible && !drag) return;
-  if (selected()) fltk::strokerect(fltk::Rectangle(o->w(),o->h()));
+  if (selected()) fltk::strokerect(0,0,o->w(),o->h());
   if (!numselected) return;
   int bx,by,br,bt;
   bx = o->w(); by = o->h(); br = 0; bt = 0;
@@ -412,7 +412,7 @@ void WindowType::draw_overlay() {
       }
       int hidden = (!o->visible_r());
       if (hidden) fltk::line_style(fltk::DASH);
-      fltk::strokerect(fltk::Rectangle(x,y,r-x,t-y));
+      fltk::strokerect(x,y,r-x,t-y);
       if (x < bx) bx = x;
       if (y < by) by = y;
       if (r > br) br = r;
@@ -421,11 +421,11 @@ void WindowType::draw_overlay() {
     }
   }
   if (selected()) return;
-  if (numselected>1) fltk::strokerect(fltk::Rectangle(bx,by,br-bx,bt-by));
-  fltk::fillrect(fltk::Rectangle(bx,by,5,5));
-  fltk::fillrect(fltk::Rectangle(br-5,by,5,5));
-  fltk::fillrect(fltk::Rectangle(br-5,bt-5,5,5));
-  fltk::fillrect(fltk::Rectangle(bx,bt-5,5,5));
+  if (numselected>1) fltk::strokerect(bx,by,br-bx,bt-by);
+  fltk::fillrect(bx,by,5,5);
+  fltk::fillrect(br-5,by,5,5);
+  fltk::fillrect(br-5,bt-5,5,5);
+  fltk::fillrect(bx,bt-5,5,5);
 }
 
 // Calculate new bounding box of selected widgets:

@@ -222,7 +222,7 @@ public:
       for (int y = 0; y < h(); y += 10) {
 	x1 = 10-x1;
 	for (int x = x1; x < w(); x += 20)
-	  fltk::fillrect(Rectangle(x,y,10,10));
+	  fltk::fillrect(x,y,10,10);
       }
     }
     Group::draw();

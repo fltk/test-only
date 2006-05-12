@@ -48,23 +48,23 @@ namespace fltk {
 */
 
 /*! Fill the rectangle with the current color. */
-void fltk::fillrect(const Rectangle& r) {
-  if (r.empty()) return;
-  int x = r.x(); int y = r.y(); transform(x,y);
+void fltk::fillrect(int x, int y, int w, int h) {
+  if (w <= 0 || h <= 0) return;
+  transform(x,y);
 #if USE_CAIRO
-  cairo_rectangle(cc,x,y,r.w(),r.h());
+  cairo_rectangle(cc,x,y,w,h);
   cairo_fill(cc);
 #elif USE_X11
-  XFillRectangle(xdisplay, xwindow, gc, x, y, r.w(), r.h());
+  XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
 #elif defined(_WIN32)
   RECT rect;
   rect.left = x; rect.top = y;  
-  rect.right = x+r.w(); rect.bottom = y+r.h();
+  rect.right = x+w; rect.bottom = y+h;
   SetBkColor(dc, current_xpixel);
   ExtTextOut(dc, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
 #elif USE_QUARTZ
   if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, false);
-  CGRect rect = CGRectMake(x, y, r.w()-1, r.h()-1);
+  CGRect rect = CGRectMake(x, y, w-1, h-1);
   CGContextFillRect(quartz_gc, rect);
   if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, true);
 #else
@@ -76,24 +76,24 @@ void fltk::fillrect(const Rectangle& r) {
   Draw a line \e inside this bounding box (currently correct only for
   0-thickness lines).
 */
-void fltk::strokerect(const Rectangle& r) {
-  if (r.empty()) return;
-  int x = r.x(); int y = r.y(); transform(x,y);
+void fltk::strokerect(int x, int y, int w, int h) {
+  if (w <= 0 || h <= 0) return;
+  transform(x,y);
 #if USE_CAIRO
-  cairo_rectangle(cc,x+.5,y+.5,r.w()-1,r.h()-1);
+  cairo_rectangle(cc,x+.5,y+.5,w-1,h-1);
   cairo_stroke(cc);
 #elif USE_X11
-  XDrawRectangle(xdisplay, xwindow, gc, x, y, r.w()-1, r.h()-1);
+  XDrawRectangle(xdisplay, xwindow, gc, x, y, w-1, h-1);
 #elif defined(_WIN32)
   setpen();
   MoveToEx(dc, x, y, 0L); 
-  LineTo(dc, x+r.w()-1, y);
-  LineTo(dc, x+r.w()-1, y+r.h()-1);
-  LineTo(dc, x, y+r.h()-1);
+  LineTo(dc, x+w-1, y);
+  LineTo(dc, x+w-1, y+h-1);
+  LineTo(dc, x, y+h-1);
   LineTo(dc, x, y);
 #elif USE_QUARTZ
   if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, false);
-  CGRect rect = CGRectMake(x, y, r.w()-1, r.h()-1);
+  CGRect rect = CGRectMake(x, y, w-1, h-1);
   CGContextStrokeRect(quartz_gc, rect);
   if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, true);
 #else

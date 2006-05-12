@@ -39,11 +39,11 @@ public:
     Rectangle r(r1); r.move_r(-SIZE); r.move_b(-SIZE);
     if (r.w() > 2 && r.h() > 2 && !drawflags(INVISIBLE)) {
       setcolor(bg);
-      fillrect(Rectangle(r.x()+1,r.y()+1,r.w()-2,r.h()-2));
+      fillrect(r.x()+1,r.y()+1,r.w()-2,r.h()-2);
     }
     setcolor(GRAY33);
-    fillrect(Rectangle(r.x()+SIZE, r.b(),  r.w(), SIZE));
-    fillrect(Rectangle(r.r(), r.y()+SIZE, SIZE, r.h()));
+    fillrect(r.x()+SIZE, r.b(),  r.w(), SIZE);
+    fillrect(r.r(), r.y()+SIZE, SIZE, r.h());
     setcolor(fg);
     strokerect(r);
   }
