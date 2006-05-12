@@ -56,8 +56,11 @@ using namespace fltk;
   the normal drawing will do. Calling it repeatedly will "revert"
   the buffer back to the initial data. An attempt will be made to
   reuse the buffer created by the "picture" object on Win32 and OS/X.
-
-  * an "unfetch()" can be used to dispose of the local buffer.
+  When fetch() is called from read(), it automatically dispose the buffer
+  after use, only manual/previous call to fetch() permits
+  to apply generic data algorithms on it.
+  * an "unfetch()" can be used to dispose of the local buffer, 
+    to achieve that simply call the dealloc_data() method.
 
   * Merge rgbImage into this base class, allow creation of an Image
   with arbitrary buffer and pixeltype.
@@ -175,7 +178,7 @@ void Image::setsize(int w, int h) {
 */
 
 /**
-  By default Image assummes the constructor set the w_ and h_
+  By default Image assumes the constructor set the w_ and h_
   fields, and returns them.
 
   For many subclasses (such as ones that read a file!) you certainly
@@ -308,7 +311,7 @@ const char ** Image::alloc_data(int  size ) { // alloc data, sets the pixel type
     return (const char**) data_;
 }
 
-//! dealloc potentially owned data, harmless if called more than once */
+//! dealloc potentially owned data, harmless if called more than once
 void Image::dealloc_data() { 
     if (owned_ && data_ ) {
 	if (count_==0 && nb_data_>0) {
@@ -330,7 +333,10 @@ void Image::dealloc_data() {
   Same as redraw() but it also deallocates as much memory as possible.
 */
 
-//! copy the pixels or data buffer if it is not owned, useful for destructive image manip.
+/** \fn void Image::copy_data(); 
+  Copy the pixels or data buffer if it is not owned, useful for destructive image manip,
+  like color_average()
+*/
 void Image::copy_data() {
     if (!data() || owned_) return; // don't copy already owned data
     
@@ -396,7 +402,10 @@ void Image::copy_data() {
 
 }
 
-//! generic algorithm to set the color average to a buffer
+/** Generic algorithm to make all pixels of a buffer tend
+    to a color c average with a blending coefficient i.<br>
+    useful for desaturating an image if c is a grey color
+*/
 void Image::color_average(Color c, float i) {
     // Delete any existing pixmap/mask objects...
     if (!data()) 
@@ -504,7 +513,7 @@ void Image::color_average(Color c, float i) {
 	}
     }
 }
-//! do common constructor init here as too many variable are affected to make it inline
+//! Common constructors init here as too many variables are affected to make this inlined
 void Image::init(int w, int h, const char * const * d) {
     picture=0;
     flags= 0;

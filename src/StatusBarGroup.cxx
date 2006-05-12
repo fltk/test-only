@@ -32,13 +32,19 @@
   The StatusBarGroup widget can also be visually created in Fluid2.<br><br>
 
   Here's some typical code you can use to create a status bar:<br>
-  my_status_bar = new StatusBarGroup(24); <br>
-  my_status_bar->child_box(StatusBarGroup::SBAR_RIGHT, THIN_DOWN_BOX);<br>
-  ... more code ...<br>
-  my_status_bar->set(StatusBarGroup::SBAR_RIGHT, "%d items", count); // sets a text righ aligned<br>
-  my_status_bar->set("Hi", StatusBarGroup::SBAR_CENTER); // sets a centered text <br>
-  ... more code ...<br>
-  my_status_bar->set(0, StatusBarGroup::SBAR_CENTER); // using an empty text removes the text box<br>
+  Sample implementation:
+\code
+  my_status_bar = new StatusBarGroup(24);
+  my_status_bar->child_box(StatusBarGroup::SBAR_RIGHT, THIN_DOWN_BOX);
+  //... more code ...
+  // sets a right-aligned formatted text :
+  my_status_bar->set(StatusBarGroup::SBAR_RIGHT, "%d items", count); 
+  // sets a centered text :
+  my_status_bar->set("Hi", StatusBarGroup::SBAR_CENTER); 
+  //... more code ...
+  // using a null or 0-len text removes the text box :
+  my_status_bar->set(0, StatusBarGroup::SBAR_CENTER); 
+\endcode
 
 */
 
