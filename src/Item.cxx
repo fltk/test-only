@@ -89,10 +89,23 @@ Item::Item(const char* l,int s,Callback *cb,void *ud, int f
   callback(cb);
   user_data(ud);
   flags(f);
+  init();
   if (lt) labeltype(lt);
   if (lf) labelfont(lf);
   if (ls>0) labelsize(ls);
+}
+Item::Item(const char* l,const Symbol* i, int s,Callback *cb,void *ud, int f
+	   , LabelType* lt, Font*lf, float ls) : Widget(0,0,0,0,l)  {
+  shortcut(s);
+  callback(cb);
+  user_data(ud);
+  flags(f);
+
+  if (i) image(i);
   init();
+  if (lt) labeltype(lt);
+  if (lf) labelfont(lf);
+  if (ls>0) labelsize(ls);
 }
 
 Item::Item(WidgetVisualType t, const char* l,int s,Callback *cb,void *ud, int f
@@ -254,14 +267,15 @@ ItemGroup::ItemGroup(const Symbol * img, const char* l,  int custom_align)
   if (custom_align!=-1) align(custom_align);
 }
 
-
-ItemGroup::ItemGroup(const char* l,int s,Callback *cb,void *ud, int f) : Menu(0,0,0,0,l)  {
+// Constructor that suits well dynamic menu building
+ItemGroup::ItemGroup(const char* l,int s,Callback *cb,void *ud, int f, bool begin) 
+    : Menu(0,0,0,0,l,false)  {
   callback(cb);
   shortcut(s);
   user_data(ud);
   flags(f);
   init();
-  this->begin();
+  if (begin) this->begin();
 }
 // implementation of draw & layout should be identical to Item type()==0
 

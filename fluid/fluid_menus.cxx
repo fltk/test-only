@@ -70,8 +70,6 @@ DECL_MENUCBL2(default_widget_size_cb, RadioButton);
 DECL_MENUCBL(widget_size_cb);
 
 //////////////////////////////////////////////////////////////////////
-extern char absolute_history[][1024];
-extern char relative_history[][1024];
 
 GroupType Grouptype; // used by group_cb
 static PackType Packtype;
@@ -145,125 +143,107 @@ static void cb(fltk::Widget *, void *v) {
 }
 //////////////////////////////////////////////////////////////////////
 MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
-    ItemGroup *g, *sg;
-    
     Main_Menu = menubar;
-
     menubar->begin();
-    g=fluidMenuGroup("&File");
-    new Item("&New", COMMAND+'n', new_cb, 0);//)->image(new_pixmap);
-    new Item("&Open...", COMMAND+'o', open_cb, 0);//)->image(open_pixmap);
-    new Item("&Save", COMMAND+'s', save_cb, 0); //)->image(save_pixmap);
-    new Item("S&ave As", SHIFT+COMMAND+'S', save_cb, (void*)1);
-    new Item("Sa&ve a Copy", ACCELERATOR+COMMAND+'S', save_cb, (void*)2);
-    new Item("Save &Template", COMMAND+'T', save_template_cb, (void*)1);
-    new Divider();
-    new Item("&Revert", COMMAND+'R', revert_cb, (void*)1);
-    //new Item("&Print", COMMAND+'P', print_menu_cb, (void*)1); // TODO: add nice printing code
-    new Item("&Merge...", COMMAND+'i', open_cb, (void*)1);//)->image(merge_pixmap);
-    new Item("&Write code", COMMAND+'w', write_cb, 0);//)->image(write_pixmap);
-    new Divider();
-    history_item[0] = new Item(relative_history[0], COMMAND+'0', open_history_cb, absolute_history[0]);
-    history_item[1] = new Item(relative_history[1], COMMAND+'1', open_history_cb, absolute_history[1]);
-    history_item[2] = new Item(relative_history[2], COMMAND+'2', open_history_cb, absolute_history[2]);
-    history_item[3] = new Item(relative_history[3], COMMAND+'3', open_history_cb, absolute_history[3]);
-    history_item[4] = new Item(relative_history[4], COMMAND+'4', open_history_cb, absolute_history[4]);
-    history_item[5] = new Item(relative_history[5], COMMAND+'5', open_history_cb, absolute_history[5]);
-    history_item[6] = new Item(relative_history[6], COMMAND+'6', open_history_cb, absolute_history[6]);
-    history_item[7] = new Item(relative_history[7], COMMAND+'7', open_history_cb, absolute_history[7]);
-    history_item[8] = new Item(relative_history[8], COMMAND+'8', open_history_cb, absolute_history[8]);
-    history_item[9] = new Item(relative_history[9], COMMAND+'9', open_history_cb, absolute_history[9]);
-    new Divider();
-    new Item("&Quit", COMMAND+'q', exit_cb);
-    g->end();
-    
-    g=new ItemGroup("&Edit",0,0);
-    undo_item[0] = new Item("U&ndo", COMMAND+'z', Undo::undo_cb,0,INACTIVE);
-    undo_item[1] = new Item("&Redo", SHIFT+COMMAND+'Z', Undo::redo_cb,0,INACTIVE);
-    new Divider();
-    new Item("&Cut", COMMAND+'x', cut_cb);
-    new Item("C&opy", COMMAND+'c', copy_cb);
-    new Item("&Paste", COMMAND+'v', paste_cb);
-    new Item("Select &All", COMMAND+'a', select_all_cb);
-    new Item("Select &None", SHIFT+COMMAND+'a', select_none_cb);
-    new Divider();
-    new Item("Ed&it this widget", ReturnKey, openwidget_cb);
-    new Item("&Sort these widgets", 0, sort_cb);
-    new Divider();
-    new Item("Move widget &earlier", F2Key, earlier_cb);
-    new Item("Move widget &later", F3Key, later_cb);
-    new Divider();
-    //new Item("Show", F5Key, show_cb);
-    //new Item("Hide", F6Key, hide_cb);
-    new Item("&Group", F7Key, group_cb);
-    new Item("&Ungroup", F8Key, ungroup_cb,0);
-    new Divider();
-    //new Item("Deactivate", 0, nyi);
-    //new Item("Activate", 0, nyi, 0, FL_MENU_DIVIDER);
-    new Item(Item::TOGGLE,"Show Overlays",ACCELERATOR+'o',toggle_overlays);
-    iwidget_bin = new Item(Item::TOGGLE,"Show Widget &Bin",ACCELERATOR+'b',toggle_widgetbin_cb);
-    isource_view = new Item(Item::TOGGLE,"Show Source Code",ACCELERATOR+COMMAND+'s',(Callback*) toggle_sourceview_cb);
-    new Divider();
-    new Item("&Preferences",COMMAND+'p',show_preferences_cb);
-    new Item("Coding St&yle", 0, show_coding_style_cb);
-    new Item("T&heme", 0, theme_cb);
-    new Item("Set i&mages root directory", COMMAND+'d', set_images_dir_cb);
-    g->end();
-    
-    g=new ItemGroup("&New", 0, 0);
-    fill_in_New_Menu(g);
-    g->end();
-    
-    g=new ItemGroup("&Plugins", 0, 0, (void *)Plugins_Options_Menu);
-    g->end();
 
-    g=new ItemGroup("&Layout");
-      sg=new ItemGroup("&Align");
+    {MenuSection g("&File");
+	new Item("&New", COMMAND+'n', new_cb, 0);//)->image(new_pixmap);
+	new Item("&Open...", COMMAND+'o', open_cb, 0);//)->image(open_pixmap);
+	new Item("&Save", COMMAND+'s', save_cb, 0); //)->image(save_pixmap);
+	new Item("S&ave As", SHIFT+COMMAND+'S', save_cb, (void*)1);
+	new Item("Sa&ve a Copy", ACCELERATOR+COMMAND+'S', save_cb, (void*)2);
+	new Item("Save &Template", COMMAND+'T', save_template_cb, (void*)1);
+	new Divider();
+	new Item("&Revert", COMMAND+'R', revert_cb, (void*)1);
+	//new Item("&Print", COMMAND+'P', print_menu_cb, (void*)1); // TODO: add nice printing code
+	new Item("&Merge...", COMMAND+'i', open_cb, (void*)1);//)->image(merge_pixmap);
+	new Item("&Write code", COMMAND+'w', write_cb, 0);//)->image(write_pixmap);
+	new Divider();
+	for (int h=0; h<MAX_HISTORY; h++)
+	    history_item[h] = new Item(relative_history[h], COMMAND+('0'+h), open_history_cb, absolute_history[h]);
+	new Divider();
+	new Item("&Quit", COMMAND+'q', exit_cb);
+    }
+    {MenuSection g("&Edit");
+	undo_item[0] = new Item("U&ndo", COMMAND+'z', Undo::undo_cb,0,INACTIVE);
+	undo_item[1] = new Item("&Redo", SHIFT+COMMAND+'Z', Undo::redo_cb,0,INACTIVE);
+	new Divider();
+	new Item("&Cut", COMMAND+'x', cut_cb);
+	new Item("C&opy", COMMAND+'c', copy_cb);
+	new Item("&Paste", COMMAND+'v', paste_cb);
+	new Item("Select &All", COMMAND+'a', select_all_cb);
+	new Item("Select &None", SHIFT+COMMAND+'a', select_none_cb);
+	new Divider();
+	new Item("Ed&it this widget", ReturnKey, openwidget_cb);
+	new Item("&Sort these widgets", 0, sort_cb);
+	new Divider();
+	new Item("Move widget &earlier", F2Key, earlier_cb);
+	new Item("Move widget &later", F3Key, later_cb);
+	new Divider();
+	//new Item("Show", F5Key, show_cb);
+	//new Item("Hide", F6Key, hide_cb);
+	new Item("&Group", F7Key, group_cb);
+	new Item("&Ungroup", F8Key, ungroup_cb,0);
+	new Divider();
+	//new Item("Deactivate", 0, nyi);
+	//new Item("Activate", 0, nyi, 0, FL_MENU_DIVIDER);
+	new Item(Item::TOGGLE,"Show Overlays",ACCELERATOR+'o',toggle_overlays);
+	iwidget_bin = new Item(Item::TOGGLE,"Show Widget &Bin",ACCELERATOR+'b',toggle_widgetbin_cb);
+	isource_view = new Item(Item::TOGGLE,"Show Source Code",ACCELERATOR+COMMAND+'s',(Callback*) toggle_sourceview_cb);
+	new Divider();
+	new Item("&Preferences",COMMAND+'p',show_preferences_cb);
+	new Item("Coding St&yle", 0, show_coding_style_cb);
+	new Item("T&heme", 0, theme_cb);
+	new Item("Set i&mages root directory", COMMAND+'d', set_images_dir_cb);
+    }    
+    {MenuSection g("&New"); fill_in_New_Menu(g.group()); }
+    {MenuSection g("&Plugins", 0, 0, (void *)Plugins_Options_Menu);}
+    {MenuSection g("&Layout");
+      {MenuSection sg("&Align");
 	new Item("&Left",0,(Callback *)align_widget_cb,(void*)10);
 	new Item("&Center",0,(Callback *)align_widget_cb,(void*)11);
 	new Item("&Right",0,(Callback *)align_widget_cb,(void*)12);
 	new Item("&Top",0,(Callback *)align_widget_cb,(void*)13);
 	new Item("&Middle",0,(Callback *)align_widget_cb,(void*)14);
 	new Item("&Bottom",0,(Callback *)align_widget_cb,(void*)15);
-      sg->end();
-      sg=new ItemGroup("&Space Evenly");
+      }
+      {MenuSection sg("&Space Evenly");
 	new Item("&Across",0,(Callback *)align_widget_cb,(void*)20);
 	new Item("&Down",0,(Callback *)align_widget_cb,(void*)21);
-      sg->end();
-      sg=new ItemGroup("&Make Same Size");
+      }
+      {MenuSection sg("&Make Same Size");
 	new Item("&Width",0,(Callback *)align_widget_cb,(void*)30);
 	new Item("&Height",0,(Callback *)align_widget_cb,(void*)31);
 	new Item("&Both",0,(Callback *)align_widget_cb,(void*)32);
-      sg->end();
-      sg=new ItemGroup("&Center In Group");
+      }
+      {MenuSection sg("&Center In Group");
 	new Item("&Horizontal",0,(Callback *)align_widget_cb,(void*)40);
 	new Item("&Vertical",0,(Callback *)align_widget_cb,(void*)41);
-      sg->end();
-      sg=new ItemGroup("Set &Widget Size");
+      }
+      {MenuSection sg("Set &Widget Size");
 	new Item("&Tiny",ACCELERATOR+'1',(Callback *)widget_size_cb,(void*)8,0,NORMAL_LABEL,HELVETICA,8);
 	new Item("&Small",ACCELERATOR+'2',(Callback *)widget_size_cb,(void*)11,0,NORMAL_LABEL,HELVETICA,11);
 	new Item("&Normal",ACCELERATOR+'3',(Callback *)widget_size_cb,(void*)14,0,NORMAL_LABEL,HELVETICA,14);
 	new Item("&Medium",ACCELERATOR+'4',(Callback *)widget_size_cb,(void*)18,0,NORMAL_LABEL,HELVETICA,18);
 	new Item("&Large",ACCELERATOR+'5',(Callback *)widget_size_cb,(void*)24,0,NORMAL_LABEL,HELVETICA,24);
 	new Item("&Huge",ACCELERATOR+'6',(Callback *)widget_size_cb,(void*)32,0,NORMAL_LABEL,HELVETICA,32);
-      sg->end();
+      }
       new Divider();
       new Item("&Grid and Size Settings...",COMMAND+'g',show_preferences_cb,(void*)2);
-    g->end();
-    g=new ItemGroup("&Shell", 0, 0);
+    }
+    {MenuSection g("&Shell");
 	new Item("Execute &Command",ACCELERATOR+'x',show_shell_window);
 	new Item("Execute &Again",ACCELERATOR+'g', (Callback*)do_shell_command);
-    g->end();
-    
-    g=new ItemGroup("&Help",0,0);
-    new Item("&About fluid",0,about_cb);
-    new Divider();
-    new Item("&On fluid...",0,help_cb);
-    new Item("&FLTK Manual...",0,manual_cb);
-    new Divider();
-    itooltip= new Item(Item::TOGGLE,"&Tooltips", 0, tt_cb, 0);
-    //new Item("Manual",0,nyi);
-    g->end();
+    }
+    {MenuSection g("&Help");
+	new Item("&About fluid",0,about_cb);
+	new Divider();
+	new Item("&On fluid...",0,help_cb);
+	new Item("&FLTK Manual...",0,manual_cb);
+	new Divider();
+	itooltip= new Item(Item::TOGGLE,"&Tooltips", 0, tt_cb, 0);
+        //new Item("Manual",0,nyi);
+    }
     menubar->end();
 
     return menubar;
@@ -273,13 +253,11 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
 // All Fluid buildable widgets are accesible from the New menu:
 //////////////////////////////////////////////////////////////////////
 void fltk::fill_in_New_Menu(ItemGroup* menu) {
-  fltk::ItemGroup* submenu;
   newMenu= menu;
-
+  xpmImage** i = fluid_pixmap;
     newMenu->begin();
-	submenu=fluidMenuGroup("code",12);
+	{MenuSection g("code",i[12]);
 	  fluidMenuItem(Functiontype,7);
-	  //new fltk::Item((*(WidgetType*)&Functiontype).type_name(),0,cb,(void*)&Functiontype);
 	  fluidMenuItem(Codetype, 8);
 	  fluidMenuItem(CodeBlocktype, 9);
 	  fluidMenuItem(Decltype, 10);
@@ -287,8 +265,8 @@ void fltk::fill_in_New_Menu(ItemGroup* menu) {
 	  fluidMenuItem(Classtype, 12);
 	  fluidMenuItem(Namespacetype, 49);
 	  fluidMenuItem(Commenttype, 46);
-	submenu->end();
-	submenu=fluidMenuGroup("group",1);
+	}
+	{MenuSection g("group",i[1]);
 	    fluidMenuItem(Windowtype  , 1);
 	    fluidMenuItem(Grouptype  , 6);
 	    fluidMenuItem(Packtype  , 22);
@@ -298,16 +276,16 @@ void fltk::fill_in_New_Menu(ItemGroup* menu) {
 	    fluidMenuItem(WizardGrouptype  , 21);
 	    fluidMenuItem(BarGrouptype  , 17);
 	    fluidMenuItem(StatusBarGrouptype  , 5);
-	submenu->end();
-	submenu=fluidMenuGroup("buttons",24);
+	}
+	{MenuSection g("buttons",i[24]);
 	    fluidMenuItem(Buttontype  , 2);
 	    fluidMenuItem(ReturnButtontype  , 23);
 	    fluidMenuItem(LightButtontype  , 24);
 	    fluidMenuItem(CheckButtontype  , 3);
 	    fluidMenuItem(RadioButtontype  , 4);
 	    fluidMenuItem(RepeatButtontype  , 25);
-	submenu->end();
-	submenu=fluidMenuGroup("valuators",37);
+	}
+	{MenuSection g("valuators",i[37]);
 	    fluidMenuItem(Slidertype  , 37);
 	    fluidMenuItem(ValueSlidertype  , 39);
 	    fluidMenuItem(ValueInputtype  , 44);
@@ -317,15 +295,15 @@ void fltk::fill_in_New_Menu(ItemGroup* menu) {
 	    fluidMenuItem(Dialtype  , 42);
 	    fluidMenuItem(ThumbWheeltype  , 43);
 	    fluidMenuItem(ProgressBartype  , 36);
-	submenu->end();
-	submenu=fluidMenuGroup("text",27);
+	}
+	{MenuSection g("text",i[27]);
 	    fluidMenuItem(Inputtype  , 14);
 	    fluidMenuItem(Outputtype  ,  27);
 	    fluidMenuItem(TextDisplaytype  , 28);
 	    fluidMenuItem(TextEditortype  , 29);
 	    fluidMenuItem(FileInputtype  , 30);
-	submenu->end();
-	submenu=fluidMenuGroup("menus",17);
+	}
+	{MenuSection g("menus",i[17]);
 	    fluidMenuItem(MenuBartype  , 17);
 	    fluidMenuItem(PopupMenutype  , 26);
 	    fluidMenuItem(Choicetype  , 15);
@@ -335,33 +313,20 @@ void fltk::fill_in_New_Menu(ItemGroup* menu) {
 	    fluidMenuItem(Submenutype  ,18);
 	    fluidMenuItem(Itemtype  , 16);
 	    fluidMenuItem(Dividertype  , 16);
-	submenu->end();
-	submenu=fluidMenuGroup("other",5);
+	}
+	{MenuSection g("other",i[5]);
 	    fluidMenuItem(Widgettype  , 5);
 	    fluidMenuItem(InvisibleBoxtype  , 5);
 	    fluidMenuItem(Clocktype  , 34);
 	    //helpview 35
-	submenu->end();
+	}
       newMenu->end();
 }
 //////////////////////////////////////////////////////////////////////
 Item * fltk::fluidMenuItem(FluidType& wt,int n) {
-  return fluidMenuItem(wt, n>=0 ?fluid_pixmap[n] : (xpmImage*)0);
-}
-Item * fltk::fluidMenuItem(FluidType& wt,xpmImage*img) {
-    fltk::Item * i = new fltk::Item(wt.type_name(),0,cb,(void*)&wt);
-    if (img) {	i->image(img);}
-    return i;
+  return new Item(wt.type_name(),n>=0 ?fluid_pixmap[n] : (xpmImage*)0,0,cb,(void*)&wt);
 }
 //////////////////////////////////////////////////////////////////////
-ItemGroup * fltk::fluidMenuGroup(const char * menu_name,int n) {
-  return fluidMenuGroup(menu_name, n>=0 ?fluid_pixmap[n] : (xpmImage*) 0);
-}
-ItemGroup * fltk::fluidMenuGroup(const char * menu_name,xpmImage* img) {
-    fltk::ItemGroup * i = new fltk::ItemGroup(menu_name,0,0);
-    if (img) {	i->image(img); }
-    return i;
-}
 
 //
 // End of "$Id"

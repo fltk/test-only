@@ -42,6 +42,8 @@ public:
   int type() const {return Widget::type();}
   //!default  constructor for normal item type decl
   Item(const char* label=0,int shortcut=0,Callback *callback=0,void *user_data_=0, int flags=0, LabelType* labeltype=0, Font*labelfont=0, float labelsize=0);  
+  //!other constructor for menus with symbols
+  Item(const char* label,const Symbol* img, int shortcut=0,Callback *callback=0,void *user_data_=0, int flags=0, LabelType* labeltype=0, Font*labelfont=0, float labelsize=0);  
   
   //! constructor for custom item type decl
   Item(WidgetVisualType t,const char* label,int shortcut,Callback *callback,void *user_data_=0, int flags=0, LabelType* labeltype=0, Font*labelfont=0, float labelsize=0);

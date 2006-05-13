@@ -74,20 +74,14 @@ Slider *x_silder=(Slider *)0;
 MenuBar *main_menu=(MenuBar *)0;
 
 void load_menu(MenuBar* menu) {
-    ItemGroup* g;
-
     menu->begin();
-     g = new ItemGroup("Info", 0);
-     new Item("About");
-     g->end();
-     g = new ItemGroup("Game", 0);
-     new Item("New Game");
-     new Item("Flip Sides");
-     new Item("Undo Last Move");
-     g->end();
-     g = new ItemGroup("System",0);
-     new Item("Quit");
-     g->end();
+    {MenuSection g("Info"); new Item("About"); }
+    {MenuSection g("Game"); 
+	new Item("New Game"); 
+	new Item("Flip Sides"); 
+	new Item("Undo Last Move"); 
+    }
+    {MenuSection g("System"); new Item("Quit"); }
     menu->end();
 };
 

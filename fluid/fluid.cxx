@@ -121,7 +121,6 @@ int  read_alignment_prefs() {
 /////////////////////////////////////////
 
 // File history info...
-const int MAX_HISTORY = 10;
 char	absolute_history[MAX_HISTORY][1024];
 char	relative_history[MAX_HISTORY][1024];
 

@@ -52,26 +52,24 @@ void build_hierarchy() {
   new Item("Item &3");
   new Item("Item &4");
   g->end();
-  g = new ItemGroup("submenu&2");
-  g->begin();
-  (new Item("Item &1"))->labelsize(10);
-  (new Item("Item &2"))->labelsize(14);
-  (new Item("Item &3"))->labelsize(18);
-  (new Item("Item &4"))->labelsize(22);
-  //g->deactivate();
-  Group* g1 = new ItemGroup("&nested menu");
-  g1->begin();
-  new Item("Item &1");
-  new Item("Item &2");
-  Group* g2 = new ItemGroup("deeper");
-  g2->begin();
-  (new Item("Very low level items"))->deactivate();
-  (new Item("Are here on this menu"))->deactivate();
-  new Item("In this test");
-  new Item("Program");
-  g2->end();
-  g1->end();
-  g->end();
+  // now using MenuSection facility:
+  {MenuSection g("submenu&2");
+      new Item("Item &1",0,0,0,0,0,0,10);
+      new Item("Item &2",0,0,0,0,0,0,14);
+      new Item("Item &3",0,0,0,0,0,0,18);
+      new Item("Item &4",0,0,0,0,0,0,22);
+      //g->deactivate();
+      {MenuSection g1("&nested menu");
+	  new Item("Item &1");
+	  new Item("Item &2");
+	  {MenuSection g2("deeper");
+	      (new Item("Very low level items"))->deactivate();
+	      (new Item("Are here on this menu"))->deactivate();
+	      new Item("In this test");
+	      new Item("Program");
+	  }
+      }
+  }
 }
 
 void quit_cb(Widget*, void*) {exit(0);}

@@ -38,15 +38,37 @@ public:
   void draw();
   void layout();
   int handle(int);
-  // default constructor and convenient constructor for menus/browsers
-  ItemGroup(const char* label,int shortcut=0,Callback *callback=0,void *user_data_=0, int flags=0);
-  // convenient constructor for menus/browsers 
+  // convenient constructor for menus
+  ItemGroup(const char* label,int shortcut=0,Callback *callback=0,
+      void *user_data_=0, int flags=0, bool begin=false);
+  // default and convenient constructor for browsers 
   ItemGroup(const Symbol * img=0, const char* label=0, int custom_align=-1);
 
 private:
   void init();
 };
 
-}
+/** \class MenuSection 
+    This class will elegantly facilitate dynamic (& hand-made) menu code writing
+    use inside codeblock { } thus autogenerating begin() at construction, 
+    end() at destruction 
+*/
+class FL_API MenuSection {
+  ItemGroup* group_;
+public:
+  //! build a typical submenu group section, then call begin()
+  MenuSection(const Symbol * img=0, const char* label=0, int custom_align=-1) {
+    group_ = new ItemGroup(img, label,custom_align); group_->begin(); }
+  //! build a browser group node section, then call begin()
+  MenuSection(const char* l,int s=0,Callback *c=0, void *u=0, int f=0) {
+    group_ = new ItemGroup(l,s,c,u,f,true); }
+  //! build a browser group node section with an image symbol, then begin()
+  MenuSection(const char* l,const Symbol * i,int s=0,Callback *c=0, void *u=0, int f=0) {
+      group_ = new ItemGroup(l,s,c,u,f,true); if (i) group_->image(i); }
+  //! call end() at destruction
+  ~MenuSection() {group_->end();}
+  ItemGroup* group() const {return group_;}
+};
 
+}
 #endif

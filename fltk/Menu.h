@@ -48,7 +48,7 @@ class FL_API Menu : public Group {
 
 public:
 
-  Menu(int,int,int,int, const char* l=0);
+  Menu(int,int,int,int, const char* l=0, bool begin=false);
   List* list() const {return list_;}
   void list(List* l) {list_ = l;}
   void layout();
