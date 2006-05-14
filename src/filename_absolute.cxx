@@ -37,7 +37,7 @@
   whatsoever (such as, I hope, putting them in your system's libraries!)
 
 */
-
+#include <config.h>
 #include <fltk/filename.h>
 #include <fltk/string.h>
 #include <stdlib.h>

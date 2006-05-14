@@ -24,7 +24,13 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-
+#if _MSC_VER > 1000
+#pragma once
+// suppress vc2005 warnings: 
+// C4312 because we have no problem to cast a smaller type to a greater (potentially 64bit) one
+// and C4996 (deprecated C-lib calls like strcpy that should be _strcpy, etc ...)
+#pragma warning(disable:4312 4996)
+#endif
 #ifndef FL_API
 
 #if !defined(DOXYGEN) && defined(_WIN32) && defined(FL_SHARED)

@@ -171,7 +171,7 @@ int Clock::handle(int event) {
     remove_timeout();
   case TIMEOUT:
 #ifdef _WIN32
-    value(time(0));
+    value((unsigned long) time(0));
     repeat_timeout(1.0f);
 #else
     {struct timeval t; gettimeofday(&t, 0);

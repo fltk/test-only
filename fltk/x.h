@@ -32,6 +32,9 @@
 // has GDI32/LongHorn/DirectX, and Mac has Carbon/Aqua/X11, and all
 // have OpenGL) not all the symbols in here may be usable with a given
 // compilation of fltk.
+#if defined(__GNUC__) || defined(_MSC_VER)
+# pragma once /* speeds up compilation */
+#endif
 
 #ifndef fltk_x_h
 # define fltk_x_h

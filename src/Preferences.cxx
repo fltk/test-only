@@ -24,10 +24,7 @@
 //
 //     http://www.fltk.org/str.php
 //
-
-
-
-
+#include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>

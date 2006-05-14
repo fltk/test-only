@@ -71,7 +71,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /Gi /GX /ZI /Od /I "../visualc" /I "." /I "../.." /I "../../fltk/compat" /D "FL_SHARED" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /Fr /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /Gi /GX /ZI /Od /I "../visualc" /I "." /I "../.." /I "../../fltk/compat" /D "FL_SHARED" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
@@ -102,6 +102,10 @@ SOURCE=..\..\fluid\align_widget.cxx
 # Begin Source File
 
 SOURCE=..\..\fluid\alignment_panel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\template_panel.cxx
 # End Source File
 # Begin Source File
 
@@ -154,6 +158,14 @@ SOURCE=..\..\fluid\fluid.cxx
 # Begin Source File
 
 SOURCE=..\..\fluid\Fluid_Image.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\fluid_img.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\undo.cxx
 # End Source File
 # Begin Source File
 

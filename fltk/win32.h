@@ -26,6 +26,9 @@
 // Do not directly include this file, instead use <fltk/x.h>.  It will
 // include this file if _WIN32 is defined.  This is to encourage
 // portability of even the system-specific code...
+#if defined(_MSC_VER)
+# pragma once /* speeds up compilation */
+#endif
 
 #ifndef FL_WIN32_H
 #define FL_WIN32_H

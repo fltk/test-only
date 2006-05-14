@@ -22,13 +22,15 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
+#if defined(__GNUC__) || defined(_MSC_VER)
+# pragma once /* speeds up compilation */
+#endif
 
 #ifndef fltk_Widget_h
 #define fltk_Widget_h
 
 #include "Style.h"
 #include "Rectangle.h"
-
 namespace fltk {
 
 class FL_API Widget;

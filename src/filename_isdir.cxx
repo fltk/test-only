@@ -87,10 +87,10 @@ double fltk::filename_size(const char* name) {
   if the file does not exist.
 */
 long int fltk::filename_mtime(const char *name) {
-  if (!fill_stat(name)) return 0;
-  if (last_stat.st_mtime) return last_stat.st_mtime;
-  if (last_stat.st_atime) return last_stat.st_atime;
-  return last_stat.st_ctime;
+  if (!fill_stat(name)) return 0L;
+  if (last_stat.st_mtime) return (long) last_stat.st_mtime;
+  if (last_stat.st_atime) return (long) last_stat.st_atime;
+  return (long) last_stat.st_ctime;
 }
 
 //
