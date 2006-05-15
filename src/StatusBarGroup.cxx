@@ -73,6 +73,7 @@ NamedStyle* StatusBarGroup::default_style = &::style;
 void StatusBarGroup::init() {
   tf_[0] = tf_[1] = tf_[2] = 0;
   b_[0] = b_[1] = b_[2] = fltk::FLAT_BOX; 
+  saved_h_=this->h();
   style(default_style);
   align(ALIGN_INSIDE);
   box(THIN_DOWN_BOX);
@@ -90,21 +91,45 @@ StatusBarGroup::~StatusBarGroup() {
 */
 void StatusBarGroup::resize_from_parent() {
     if (!parent()) return;
-    x(box_dx(parent()->box())); // bottom position
-    w(parent()->w()-box_dw(parent()->box())); // set proper width 
-    y(parent()->h()-box_dh(parent()->box())-h()); // bottom position
     int i;
-    for (i = 0; i < parent()->children(); i++) {
-	Widget* w = parent()->child(i);
-	if (((Widget*) this)!= w) {
-	    int delta = w->b()-this->y();
-	    if (delta>0) {
-		w->resize(w->x(), w->y(), w->w(), w->h()-delta > 0 ? w->h()-delta : 0);
-		if (w->is_group()) ((Group*)w)->init_sizes();
+    x(box_dx(parent()->box())); // bottom position
+    y(parent()->h()-box_dh(parent()->box())-h()); 
+    if (visible()) {
+	w(parent()->w()-box_dw(parent()->box())); // set proper width 
+	if (h()==0) h(saved_h_);
+	y(parent()->h()-box_dh(parent()->box())-h()); // bottom position
+	for (i = 0; i < parent()->children(); i++) {
+	    Widget* w = parent()->child(i);
+	    if (((Widget*) this)!= w) {
+		int delta = w->b()-this->y();
+		if (delta>0) {
+		    w->resize(w->x(), w->y(), w->w(), w->h()-delta > 0 ? w->h()-delta : 0);
+		    if (w->is_group()) ((Group*)w)->init_sizes();
+		    w->redraw();
+		}
 	    }
 	}
+	for (i=0; i<3;i++) update_box(tf_[i], (StatusBarGroup::Position) i);
+    } else {
+	if (h()!=0) saved_h_ = h();
+	w(0);h(0);
+	bool c = false;
+	for (i = 0; i < parent()->children(); i++) {
+	    Widget* w = parent()->child(i);
+	    if (((Widget*) this)!= w) {
+		int delta = w->b()-this->y();
+		if (delta==0) {
+		    w->resize(w->x(), w->y(), w->w(), w->h()+saved_h_);
+		    if (w->is_group()) 
+			((Group*)w)->init_sizes();
+		    w->relayout();
+		    c=true;
+		}
+	    }
+	}
+	if(c) {parent()->relayout();}
     }
-    for (i=0; i<3;i++) update_box(tf_[i], (StatusBarGroup::Position) i);
+
 
 }
 
@@ -161,6 +186,15 @@ void StatusBarGroup::set(StatusBarGroup::Position pos, const char* format,...) {
 // make sure no widget will overwrite the status bar in the parent
 void StatusBarGroup::layout() {
     Group::layout();
+    resize_from_parent();
+}
+void StatusBarGroup::show() {
+    Group::show();
+    resize_from_parent();
+}
+
+void StatusBarGroup::hide() {
+    Group::hide();
     resize_from_parent();
 }
 

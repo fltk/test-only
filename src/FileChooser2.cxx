@@ -129,7 +129,7 @@ FileChooser::count() {
 
   filename = fileName->text();
 
-  if (!(type_ & MULTI)) {
+  if (!(type_ & FileChooser::MULTI)) {
     // Check to see if the file name input field is blank...
     if (!filename || !filename[0]) return 0;
     else return 1;
@@ -445,7 +445,7 @@ FileChooser::fileListCB()
     // if so, make sure only that item is selected...
     filename = pathname + strlen(pathname) - 1;
 
-    if ((type_ & MULTI) && !(type_ & DIRECTORY)) {
+    if ((type_ & FileChooser::MULTI) && !(type_ & DIRECTORY)) {
       if (*filename == '/') {
 	// Clicked on a directory, deselect everything else...
 	int i = fileList->value();
@@ -1057,7 +1057,7 @@ FileChooser::value(int f)	// I - File number
 
   name = fileName->text();
 
-  if (!(type_ & MULTI)) {
+  if (!(type_ & FileChooser::MULTI)) {
     // Return the filename in the filename field...
     if (!name || !name[0]) return NULL;
     else return name;

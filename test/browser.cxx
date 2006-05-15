@@ -68,7 +68,7 @@ void cb_test(Widget* browser, void*) {
 
 void cb_remove(Widget*, void* ptr) {
   Browser* tree = (Browser*) ptr;
-  if (tree->type() & Browser::MULTI) {
+  if (tree->type() & Browser::IS_MULTI) {
     Widget* w = tree->goto_top();
     while (w) {
       if (w->selected()) { // test for parent being open

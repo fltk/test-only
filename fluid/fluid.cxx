@@ -48,6 +48,7 @@ const char *copyright =
 #include <fltk/run.h>
 #include <fltk/visual.h>
 #include <fltk/events.h>
+#include <fltk/damage.h>
 #include <fltk/Window.h>
 #include <fltk/Box.h>
 #include <fltk/Button.h>
@@ -66,6 +67,7 @@ const char *copyright =
 #include <fltk/MenuBuild.h>
 #include <fltk/string.h>
 #include <fltk/HelpDialog.h>
+#include <fltk/PackedGroup.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -102,7 +104,7 @@ DECL_MENUCBV2(toggle_sourceview_cb,DoubleBufferWindow);
 
 /////////////////////////////////////////
 // Read preferences file 
-Preferences fluid_prefs(Preferences::USER, "fltk.org", "fluid");
+Preferences fluid_prefs(Preferences::USER, "fltk.org", "fluid2");
 
 int gridx, gridy, snap, show_tooltip;
 int modflag;
@@ -855,6 +857,22 @@ void toggle_widgetbin_cb(Widget *o, void * v) {
 MenuBar* menubar;
 Browser* widget_browser;
 StatusBarGroup* status_bar;
+
+////////////////////////////////////////////////////////////////
+void toggle_statusbar_cb(Widget *,void *) {
+    Preferences svp(fluid_prefs, "show_statusbar");
+
+    if (status_bar->visible()) {
+    status_bar->hide();
+    istatusbar->label("Show Status Bar ...");
+    svp.set("show_statusbar", 0);
+  } else {
+    status_bar->show();
+    istatusbar->label("Hide Status Bar ...");
+    svp.set("show_statusbar", 1);
+  }
+}
+
 ////////////////////////////////////////////////////////////////
 void toggle_sourceview_cb(DoubleBufferWindow *, void *) {
   if (!sourceview_panel) {
@@ -891,23 +909,27 @@ void make_main_window() {
     if (!main_window) {
 	Widget *o;
 	main_window = new Window(WINWIDTH,WINHEIGHT,"fluid");
-	main_window->size_range(WINWIDTH,100);
+	//in_window->size_range(WINWIDTH,100);
 	main_window->box(NO_BOX);
 	main_window->begin();
+	menubar = new MenuBar(0,0,BROWSERWIDTH,MENUHEIGHT);
+	menubar->box(FLAT_BOX);
 	o = widget_browser = (Browser *) make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
 	//  o->text_box(FLAT_BOX);
 	main_window->resizable(o);
-	menubar = new MenuBar(0,0,BROWSERWIDTH,MENUHEIGHT);
-	menubar->box(FLAT_BOX);
 	build_hierarchy(menubar);
 	if (show_tooltip) itooltip->set_flag(VALUE);
 	// this is removed because the new ctrl+bindings mess up emacs in
 	// the text fields:
 	//    menubar->global();
 	// create a status bar, only care for h(), other dims are automatically resized
+	Preferences svp(fluid_prefs, "show_statusbar");
+	int show_status_bar;
 	status_bar = new StatusBarGroup();
 	status_bar->child_box(THIN_DOWN_BOX, StatusBarGroup::SBAR_RIGHT);
 	status_bar->child_box(FLAT_BOX, StatusBarGroup::SBAR_CENTER);
+	svp.get("show_statusbar", show_status_bar,1);
+	if (!show_status_bar) toggle_statusbar_cb(0, 0);
 	main_window->end();
 	load_history();
 	make_shell_window();

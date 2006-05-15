@@ -424,7 +424,7 @@ float FileChooser::textsize() {
 
 void FileChooser::type(int t) {
   type_ = t;
-  if (t & MULTI)
+  if (t & FileChooser::MULTI)
     fileList->type(Browser::MULTI);
   else
     fileList->type(Browser::NORMAL);

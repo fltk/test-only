@@ -43,7 +43,11 @@ public:
   virtual ~StatusBarGroup();
 
   static NamedStyle* default_style;
+  
   void layout();
+  void show();
+  void hide();
+ 
   enum Position {
 	SBAR_LEFT=0,	//!< statusbar text left-aligned
 	SBAR_CENTER,	//!< statusbar text centered
@@ -76,6 +80,7 @@ private:
   // text fields up to three fields
   InvisibleBox* tf_[3];   // 3 position possible and cumulable left, middle, center fields
   Box* b_[3]; // box style for fields, default to no box
+  int saved_h_;
 };
 
 }

@@ -61,6 +61,7 @@ DECL_MENUCBV(about_cb);
 DECL_MENUCBV(tt_cb);
 DECL_MENUCBV(toggle_overlays);
 DECL_MENUCBV2(toggle_sourceview_cb,DoubleBufferWindow);
+DECL_MENUCBV(toggle_statusbar_cb);
 DECL_MENUCBV(show_shell_window);
 DECL_MENUCBV2(do_shell_command,ReturnButton);
 DECL_MENUCBV(help_cb);
@@ -127,7 +128,8 @@ static TextDisplayType TextDisplaytype;
 
 //////////////////////////////////////////////////////////////////////
 MenuBar* Main_Menu;
-Item *history_item[10],*undo_item[2],*iwidget_bin,*itooltip,*isource_view;
+Item *history_item[10],*undo_item[2],*iwidget_bin,
+    *itooltip,*isource_view,*istatusbar;
 ItemGroup* newMenu;
 
 //////////////////////////////////////////////////////////////////////
@@ -187,10 +189,13 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
 	new Divider();
 	//new Item("Deactivate", 0, nyi);
 	//new Item("Activate", 0, nyi, 0, FL_MENU_DIVIDER);
-	new Item(Item::TOGGLE,"Show Overlays",ACCELERATOR+'o',toggle_overlays);
-	iwidget_bin = new Item(Item::TOGGLE,"Show Widget &Bin",ACCELERATOR+'b',toggle_widgetbin_cb);
-	isource_view = new Item(Item::TOGGLE,"Show Source Code",ACCELERATOR+COMMAND+'s',(Callback*) toggle_sourceview_cb);
-	new Divider();
+	{MenuSection g("&Show / Hide"); 
+	    new Item(Item::TOGGLE,"Show Overlays",ACCELERATOR+'o',toggle_overlays);
+	    iwidget_bin = new Item(Item::TOGGLE,"Show Widget &Bin",ACCELERATOR+'b',toggle_widgetbin_cb);
+	    isource_view = new Item(Item::TOGGLE,"Show Source Code",ACCELERATOR+COMMAND+'s',(Callback*) toggle_sourceview_cb);
+	    istatusbar = new Item(Item::TOGGLE,"Show Status bar",ACCELERATOR+COMMAND+'b',(Callback*) toggle_statusbar_cb);
+	}
+	//new Divider();
 	new Item("&Preferences",COMMAND+'p',show_preferences_cb);
 	new Item("Coding St&yle", 0, show_coding_style_cb);
 	new Item("T&heme", 0, theme_cb);

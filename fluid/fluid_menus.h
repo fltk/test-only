@@ -48,7 +48,8 @@ const int MAX_HISTORY = 10; //!< maximum number of items in menu File
 extern char absolute_history[MAX_HISTORY][1024];
 extern char relative_history[MAX_HISTORY][1024];
 
-extern fltk::Item *history_item[10],*undo_item[2],*iwidget_bin,*itooltip,*isource_view;
+extern fltk::Item *history_item[10],*undo_item[2],
+    *iwidget_bin,*itooltip,*isource_view,*istatusbar;
 extern fltk::ItemGroup* newMenu;
 extern fltk::MenuBar* Main_Menu;
 

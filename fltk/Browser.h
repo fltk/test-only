@@ -47,8 +47,9 @@ public:
   ~Browser();
   
   enum { //<! values for type()
-    NORMAL = 0,	    //!< means single selection can be achieved by user 
-    MULTI = 1	    //!< means multiple selection can be achieved by user \see type()
+    IS_MULTI = 1,
+    NORMAL =  GROUP_TYPE,  //!< means single selection can be achieved by user 
+    MULTI  =  GROUP_TYPE+1 //!< means multiple selection can be achieved by user \see type()
   };
   enum { // values selected_column
     NO_COLUMN_SELECTED = -1 //!< means that no column has been selected by user
@@ -170,7 +171,7 @@ private:
   Widget **header_;
   int nHeader, nColumn, selected_column_;
 
-  int multi() const {return type()&MULTI;}
+  int multi() const {return type()&IS_MULTI;}
 
   // Marks serve as "indexes" into the hierarchial browser. We probably
   // need to make some sort of public interface but I have not figured
