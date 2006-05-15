@@ -845,9 +845,9 @@ void toggle_widgetbin_cb(Widget *o, void * v) {
 ////////////////////////////////////////////////////////////////
 
 
-#define BROWSERWIDTH 300
+#define BROWSERWIDTH 350
 #define BROWSERHEIGHT 500
-#define WINWIDTH 300
+#define WINWIDTH 350
 #define MENUHEIGHT 23
 #define WINHEIGHT (BROWSERHEIGHT+MENUHEIGHT)
 
