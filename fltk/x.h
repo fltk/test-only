@@ -39,7 +39,6 @@
 #ifndef fltk_x_h
 # define fltk_x_h
 
-# include <config.h>
 # include "draw.h"
 
 # if defined(_WIN32) && !USE_X11
