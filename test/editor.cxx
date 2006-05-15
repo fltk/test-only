@@ -731,9 +731,9 @@ void view_cb(fltk::Widget*, void*) {
 static void build_menus(fltk::MenuBar * menu, fltk::Widget *w) {
     fltk::ItemGroup * g;
     menu->user_data(w);
-
     menu->begin();
       g = new fltk::ItemGroup( "&File", 0);
+      g->begin();
 	new fltk::Item( "&New File",        0, (fltk::Callback *)new_cb );
 	new fltk::Item( "&Open File...",    fltk::COMMAND + 'o', (fltk::Callback *)open_cb );
 	new fltk::Item( "&Insert File...",  fltk::COMMAND + 'i', (fltk::Callback *)insert_cb);
@@ -747,12 +747,14 @@ static void build_menus(fltk::MenuBar * menu, fltk::Widget *w) {
 	new fltk::Item( "E&xit", fltk::COMMAND + 'q', (fltk::Callback *)quit_cb, 0 );
       g->end();
       g = new fltk::ItemGroup( "&Edit", 0);
+      g->begin();
 	new fltk::Item( "Cu&t",        fltk::COMMAND + 'x', (fltk::Callback *)cut_cb );
 	new fltk::Item( "&Copy",       fltk::COMMAND + 'c', (fltk::Callback *)copy_cb );
 	new fltk::Item( "&Paste",      fltk::COMMAND + 'v', (fltk::Callback *)paste_cb );
 	new fltk::Item( "&Delete",     0, (fltk::Callback *)delete_cb );
       g->end();
       g = new fltk::ItemGroup( "&Search", 0);
+      g->begin();
 	new fltk::Item( "&Find...",       fltk::COMMAND + 'f', (fltk::Callback *)find_cb );
 	new fltk::Item( "F&ind Again",    fltk::COMMAND + 'g', find2_cb );
 	new fltk::Item( "&Replace...",    fltk::COMMAND + 'r', replace_cb );
@@ -763,7 +765,7 @@ static void build_menus(fltk::MenuBar * menu, fltk::Widget *w) {
 
 fltk::Window* new_view() {
   EditorWindow* w = new EditorWindow(660, 400, title);
-    w->begin();
+  w->begin();
     fltk::MenuBar* m = new fltk::MenuBar(0, 0, 660, 21);
     build_menus(m,w);
     w->editor = new fltk::TextEditor(0, 21, 660, 379);
@@ -771,7 +773,7 @@ fltk::Window* new_view() {
     w->editor->highlight_data(stylebuf, styletable,
       sizeof(styletable) / sizeof(styletable[0]),
      'A', style_unfinished_cb, 0);
-  w->editor->textfont(fltk::COURIER);
+    w->editor->textfont(fltk::COURIER);
   w->end();
   w->resizable(w->editor);
   w->callback((fltk::Callback *)close_cb, w);
