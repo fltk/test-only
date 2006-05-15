@@ -1,19 +1,33 @@
 /////////////////////////////////////////////////////////////////////
-+ new Widget image() extensions and API
++ Change ItemGroup to follow other group standards : now NO begin() is called
+  anymore in constructor, alternatively one can now use the MenuSection service
+  to automatically genenerate  begin() / end () calls
+  see fluid/fluid_menus.cxx use and doxygen autodocumentation for more info
+/////////////////////////////////////////////////////////////////////
++ New Widget image() extensions and API
   now context dependent image() API has been added to the Widget
   it is now possible to affect up to 4 different images for common events.
-  it is also possible to use alternatively on MultipleImage even more, up to 8, different combination of flags
-  see buttons demo for use of these new API
+  it is also possible to use alternatively on MultipleImage even more, 
+  up to 8 different combination of flags see buttons demo for use of these new API
 
 + new Browser features and API
   now it is possible to affect images to node depending on their state closed, open and belowmouse.
-  new tree API available to rapidly implement load tree browser with arborescent data (add_leaf(), add_group(), set_symbol(), get_symbol())
-  see browser demo for demonstrating these new features
+  new tree API available to rapidly implement load tree browser with arborescent data (add_leaf(), 
+  add_group(), set_symbol(), get_symbol())  see browser demo for demonstrating these new features
 
-+ More genericity to Image and derived classes, now SharedImage::get() allow to load an image from its name without specifying it's type.
-+ Generic fetch() Image method allow to preload an image without drawing it, then new dimension info. api will allow to dynamically discover its pixel type, depth, scanline size, and other useful parameters. Used in FileIcon2.cxx to load generically any image with a pixel buffer or pixmap data buffer.
-+ Smart adjustements made to symbols in widgets when image data doesn't match widget size but still widget has a border
-+ Added generic color_average() Image algo and inactive() API to Image base class,  quite differently from fltk1.1.x, in fltk2 this algo is generic so it will suit potentially any kind of image and pixel depth (tested successfully with pixmaps, png, jpegs).So now inactive images can have its data modified by calling inactive() method as in fltk1.1.x to desaturate them. see buttons demo for demonstration. Still one can override this color_average() method to change the algo.
++ More genericity to Image and derived classes, now SharedImage::get() allow to load an image 
+  from its name without specifying it's type.
++ Generic fetch() Image method allow to preload an image without drawing it, then new dimension 
+   info. api will allow to dynamically discover its pixel type, depth, scanline size, and other 
+  useful parameters. Used in FileIcon2.cxx to load generically any image with a pixel buffer 
+  or pixmap data buffer.
++ Smart adjustements made to symbols in widgets when image data doesn't match widget size 
+  but still widget has a border
++ Added generic color_average() Image algo and inactive() API to Image base class,  quite differently 
+  from fltk1.1.x, in fltk2 this algo is generic so it will suit potentially any kind of image 
+  and pixel depth (tested successfully with pixmaps, png, jpegs).So now inactive images can have 
+  its data modified by calling inactive() method as in fltk1.1.x to desaturate them. see buttons demo 
+  for demonstration. Still one can override this color_average() method to change the algo.
 /////////////////////////////////////////////////////////////////////
 1. Fl_Window::clear_border() will remove the border from a window,
    and Fl_Window::border() will return false if this has been done.
