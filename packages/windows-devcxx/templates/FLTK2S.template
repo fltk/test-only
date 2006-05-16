@@ -16,4 +16,4 @@ IsCpp=1
 Name=FLTK2 (Static) Project
 ProjectIcon=eide.ico
 Compiler=-DWIN32_EXTRA_LEAN -DWIN32 -W -D_MSC_DLL -fno-exceptions -g -O0 -D_DEBUG -D_WIN32
-Linker=-lfltk_images -lfltk -lwsock32 -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lmsimg32
+Linker=-lfltk2_images -lfltk2 -lwsock32 -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -luuid -lmsimg32
