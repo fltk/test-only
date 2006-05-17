@@ -32,7 +32,7 @@ fltkBuild=`date +%j`
 fileName=FLTK-$fltkVersion-$fltkBuild
 bzFile=$fileName.tar.bz2£
 devPakFile=$fileName.DevPak
-tmpDir=$HOME/tmp/fltk-devcxx-pak
+tmpDir=$HOME/fltk-devcxx-pak
 RM=/bin/rm
 fltkSourceDir=../..
 fltkConfigureLine='./configure --prefix=/usr --enable-shared --enable-gl --enable-threads'
