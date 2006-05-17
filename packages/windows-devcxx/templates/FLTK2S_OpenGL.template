@@ -1,5 +1,5 @@
 [Template]
-ver=5
+ver=6
 Name=FLTK2 OpenGL (Static)
 Icon=eide2.ico
 Description=Create GUI, OpenGL application using FLTK2.

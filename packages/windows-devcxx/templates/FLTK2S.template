@@ -1,5 +1,5 @@
 [Template]
-ver=4
+ver=5
 Name=FLTK2 (Static)
 Icon=eide.ico
 Description=Create GUI application using FLTK2.
