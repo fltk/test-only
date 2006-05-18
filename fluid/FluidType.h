@@ -446,6 +446,7 @@ FLUID_API extern bool include_H_from_C;
 FLUID_API void select(FluidType* it, int value);
 FLUID_API void select_only(FluidType *);
 FLUID_API void refresh_browser_views();
+FLUID_API void initialize_tab_colors();
 #endif
 //
 // End of "$Id$".

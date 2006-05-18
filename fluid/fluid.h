@@ -96,6 +96,7 @@ class PrefsData : public fltk::Preferences {
     FluidPropertyGroup("sourceview", int, sv_autoposition,"autoposition");
     FluidPropertyGroup("sourceview", int, sv_tab,"tab");
 
+    FluidPropertyGroup("tabs", int, tabcolor,"tabcolor");
     FluidPropertyGroup("tabs", int, tabcolor1,"tabcolor1");
     FluidPropertyGroup("tabs", int, tabcolor2,"tabcolor2");
     FluidPropertyGroup("tabs", int, tabcolor3,"tabcolor3");
@@ -122,9 +123,10 @@ class PrefsData : public fltk::Preferences {
       s.get("tab",sv_tab_,0);
 
       fltk::Preferences g(this,"tabs");
-      g.get("tabcolor1",tabcolor1_, fltk::GRAY75);
-      g.get("tabcolor2",tabcolor2_, fltk::GRAY75);
-      g.get("tabcolor3",tabcolor3_, fltk::GRAY75);
+      g.get("tabcolor",tabcolor_, 1);
+      g.get("tabcolor1",tabcolor1_, 0x14aef700);
+      g.get("tabcolor2",tabcolor2_, 0xd4b38d00);
+      g.get("tabcolor3",tabcolor3_, 0x93d49c00);
 
     }
 

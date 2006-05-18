@@ -829,6 +829,20 @@ void theme_cb(Widget *, void *) {
 }
 
 
+void initialize_tab_colors() {
+    int c = prefs.tabcolor();
+    if (panel_tabs) {
+	panel_tabs->child(0)->color((unsigned) c ? prefs.tabcolor1() : fltk::GRAY75);
+	panel_tabs->child(1)->color((unsigned) c ? prefs.tabcolor2() : fltk::GRAY75);
+	panel_tabs->child(2)->color((unsigned) c ? prefs.tabcolor3() : fltk::GRAY75);
+    }
+    if (pref_tabs) {
+	pref_tabs->child(0)->color((unsigned) c ? prefs.tabcolor1() : fltk::GRAY75);
+	pref_tabs->child(1)->color((unsigned) c ? prefs.tabcolor2() : fltk::GRAY75);
+	pref_tabs->child(2)->color((unsigned) c ? prefs.tabcolor3() : fltk::GRAY75);
+    }
+}
+
 void toggle_widgetbin_cb(Widget *o, void * v) {
     if (!widgetbin_panel) {
 	make_widgetbin();

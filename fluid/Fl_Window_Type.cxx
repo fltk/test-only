@@ -93,7 +93,7 @@ void show_preferences_cb(Widget *, void * tabnum) {
   set_preferences_window();
   int n = (int) (long) tabnum;
   if (n>=0 && n<3)
-      tabs->value(n);
+      pref_tabs->value(n);
   preferences_window->show();
 }
 

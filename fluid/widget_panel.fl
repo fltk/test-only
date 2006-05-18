@@ -11,6 +11,9 @@ decl {\#include <fltk/Window.h>} {public
 
 decl {\#include <fltk/xpmImage.h>} {} 
 
+decl {\#include "fluid.h"} {selected
+} 
+
 decl {\#include "FluidType.h"} {} 
 
 decl {\#include "fluid_img.h"} {} 
@@ -434,7 +437,7 @@ Function {make_widget_panel()} {open
     xywh {480 184 380 380} resizable hotspot visible
   } {
     {fltk::TabGroup} panel_tabs {
-      callback propagate_tabs selected
+      callback propagate_tabs
       xywh {0 0 380 340} resizable
     } {
       {fltk::Group} {} {

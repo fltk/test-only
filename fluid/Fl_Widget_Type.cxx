@@ -1475,7 +1475,8 @@ static void load_panel() {
  */
 void WidgetType::open() {
   if (!the_panel) {
-      the_panel = make_widget_panel();
+    the_panel = make_widget_panel();
+    initialize_tab_colors();
     Fluid_Plugin *p = 0, **pp;
     for(pp = next_panel(plugins, p); pp-plugins<nbplugins; pp = next_panel(pp+1, p))
     {
