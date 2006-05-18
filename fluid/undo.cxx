@@ -31,6 +31,7 @@
 #include <fltk/MenuBar.h>
 #include <fltk/Item.h>
 
+#include "fluid.h"
 #include "FluidType.h"
 #include "undo.h"
 
@@ -47,7 +48,6 @@
 
 using namespace fltk;
 
-extern Preferences	fluid_prefs;	// FLUID preferences
 
 extern fltk::Item*  undo_item[2];
 const int UNDO_ITEM=0;
@@ -69,7 +69,7 @@ bool Undo::paused=false;
 // Return the undo filename
 const char *Undo::filename(int level, char *buf, int bufsize) {
 
-  if (!path[0]) fluid_prefs.getUserdataPath(path, sizeof(path));
+  if (!path[0]) prefs.getUserdataPath(path, sizeof(path));
   snprintf(buf, bufsize, "%sundo_%d_%d.fl", path, getpid(), level);
   return buf;
 }

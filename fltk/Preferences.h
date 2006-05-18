@@ -96,7 +96,7 @@ public:
 
 private:
 
-  // make the following functions unavailable
+  // make the following functions unavailable 
   Preferences();
   Preferences(const Preferences&);
   Preferences &operator=(const Preferences&);

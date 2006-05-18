@@ -26,6 +26,7 @@
 #include <fltk/DoubleBufferWindow.h>
 #include "fluid_menus.h"
 #include "WidgetType.h"
+#include "fluid.h"
 #include "FunctionType.h"
 #include "fluid_img.h"
 #include "undo.h"
@@ -129,7 +130,7 @@ static TextDisplayType TextDisplaytype;
 //////////////////////////////////////////////////////////////////////
 MenuBar* Main_Menu;
 Item *history_item[10],*undo_item[2],*iwidget_bin,
-    *itooltip,*isource_view,*istatusbar;
+    *itooltip,*isource_view,*istatusbar,*ishow_overlay;
 ItemGroup* newMenu;
 
 //////////////////////////////////////////////////////////////////////
@@ -138,9 +139,7 @@ static void cb(fltk::Widget *, void *v) {
   Undo::suspend();
   FluidType *t = ((FluidType*)v)->make();
   if (t) {select_only(t); modflag = 1; t->open();}
-  else {
-      Undo::remove_last();
-  }
+  else Undo::remove_last();
   Undo::resume();
 }
 //////////////////////////////////////////////////////////////////////
@@ -190,10 +189,10 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
 	//new Item("Deactivate", 0, nyi);
 	//new Item("Activate", 0, nyi, 0, FL_MENU_DIVIDER);
 	{MenuSection g("&Show / Hide"); 
-	    new Item(Item::TOGGLE,"Show Overlays",ACCELERATOR+'o',toggle_overlays);
-	    iwidget_bin = new Item(Item::TOGGLE,"Show Widget &Bin",ACCELERATOR+'b',toggle_widgetbin_cb);
-	    isource_view = new Item(Item::TOGGLE,"Show Source Code",ACCELERATOR+COMMAND+'s',(Callback*) toggle_sourceview_cb);
-	    istatusbar = new Item(Item::TOGGLE,"Show Status bar",ACCELERATOR+COMMAND+'b',(Callback*) toggle_statusbar_cb);
+	    ishow_overlay = new Item(Item::TOGGLE,"Show &Overlays",ACCELERATOR+'o',toggle_overlays);
+	    iwidget_bin   = new Item(Item::TOGGLE,"Show &Widget Bin",ACCELERATOR+'b',toggle_widgetbin_cb);
+	    isource_view  = new Item(Item::TOGGLE,"Show &Source Code",ACCELERATOR+COMMAND+'s',(Callback*) toggle_sourceview_cb);
+	    istatusbar    = new Item(Item::TOGGLE,"Show Status &Bar",ACCELERATOR+COMMAND+'b',(Callback*) toggle_statusbar_cb);
 	}
 	//new Divider();
 	new Item("&Preferences",COMMAND+'p',show_preferences_cb);

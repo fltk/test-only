@@ -116,6 +116,10 @@ SOURCE=..\..\fluid\factory.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fluid\fluid.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\Fluid_Image.h
 # End Source File
 # Begin Source File

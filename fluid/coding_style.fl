@@ -1,5 +1,5 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0002 
+version 2.0100 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
@@ -78,68 +78,67 @@ galways_return_parens = always_return_parens;} {}
 Function {make_codingstyle_window()} {open
 } {
   {fltk::Window} {} {open
-    xywh {436 416 310 255} resizable visible
+    xywh {408 452 310 255} resizable visible
   } {
     {fltk::TabGroup} {} {open
       xywh {0 0 303 220} box EMBOSSED_BOX
     } {
       {fltk::Group} {} {
         label {Brace Style} open selected
-        xywh {0 25 303 195}
+        xywh {0 25 303 195} selection_color 0x7f00
       } {
         {fltk::Group} {} {
-          label {Brace Style} open
-          xywh {14 22 282 122} align 5 box ENGRAVED_BOX
+          xywh {14 10 282 134} align 5 box ENGRAVED_BOX
         } {
           {fltk::Widget} {} {
             label {if ( x ) \{}
-            private xywh {20 6 47 20} align 20 box NO_BOX
+            private xywh {20 6 47 20} align 52 box NO_BOX
           }
           {fltk::Widget} {} {
             label {++y;}
-            private xywh {20 25 45 20} align 24 box NO_BOX
+            private xywh {20 25 45 20} align 56 box NO_BOX
           }
           {fltk::Widget} {} {
             label {\}}
-            private xywh {20 41 36 20} align 20 box NO_BOX
+            private xywh {20 41 36 20} align 52 box NO_BOX
           }
           {fltk::Widget} {} {
             label {if ( x )}
-            private xywh {114 6 47 20} align 20 box NO_BOX
+            private xywh {114 6 47 20} align 52 box NO_BOX
           }
           {fltk::Widget} {} {
             label {\{}
-            private xywh {114 25 36 20} align 20 box NO_BOX
+            private xywh {114 25 36 20} align 52 box NO_BOX
           }
           {fltk::Widget} {} {
             label {++y;}
-            private xywh {115 42 46 20} align 24 box NO_BOX
+            private xywh {115 42 46 20} align 56 box NO_BOX
           }
           {fltk::Widget} {} {
             label {\}}
-            private xywh {114 59 36 20} align 20 box NO_BOX
+            private xywh {114 59 36 20} align 52 box NO_BOX
+          }
+          {fltk::Widget} {} {
+            label {if ( x )}
+            private xywh {201 6 47 20} align 52 box NO_BOX
+          }
+          {fltk::Widget} {} {
+            label {\{}
+            private xywh {201 25 36 20} align 56 box NO_BOX
+          }
+          {fltk::Widget} {} {
+            label {++y;}
+            private xywh {227 42 34 22} align 56 box NO_BOX
+          }
+          {fltk::Widget} {} {
+            label {\}}
+            private xywh {201 59 36 20} align 56 box NO_BOX
           }
           {fltk::RadioButton} pStyle1 {
             label {Style 1}
             callback {if(o->value())
    brace_style = 1;}
             private xywh {16 84 66 25} value 1
-          }
-          {fltk::Widget} {} {
-            label {if ( x )}
-            private xywh {201 6 47 20} align 20 box NO_BOX
-          }
-          {fltk::Widget} {} {
-            label {\{}
-            private xywh {201 25 36 20} align 24 box NO_BOX
-          }
-          {fltk::Widget} {} {
-            label {++y;}
-            private xywh {227 42 34 22} align 24 box NO_BOX
-          }
-          {fltk::Widget} {} {
-            label {\}}
-            private xywh {201 59 36 20} align 24 box NO_BOX
           }
           {fltk::RadioButton} pStyle2 {
             label {Style 2}
@@ -166,11 +165,11 @@ Function {make_codingstyle_window()} {open
         }
       }
       {fltk::Group} {} {
-        label Other open
+        label Other
         xywh {0 25 303 183} hide
       } {
         {fltk::Group} {} {
-          label Indentation open
+          label Indentation
           xywh {11 22 218 90} align 5 box ENGRAVED_BOX
         } {
           {fltk::ValueInput} pTabSize {

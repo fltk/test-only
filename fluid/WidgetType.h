@@ -28,6 +28,10 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
+#if defined(__GNUC__) || defined(_MSC_VER)
+# pragma once /* speeds up compilation */
+#endif
+
 #ifndef fltk_widget_type_h
 #define fltk_widget_type_h
 

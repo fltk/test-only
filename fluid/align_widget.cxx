@@ -28,6 +28,7 @@
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include "WidgetType.h"
+#include "fluid.h"
 #include "undo.h"
 
 using namespace fltk;

@@ -41,6 +41,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "fluid.h"
 #include "FluidType.h"
 #include "alignment_panel.h"
 #include "widget_panel.h"
@@ -51,15 +52,14 @@ using namespace fltk;
 
 bool include_H_from_C = true;
 
-extern int gridx, gridy, snap;
 
 void alignment_cb(fltk::Input *i, long v) {
   int n = (int)strtol(i->value(),0,0);
   if (n < 0) n = 0;
   switch (v) {
-  case 1: gridx = n; break;
-  case 2: gridy = n; break;
-  case 3: snap  = n; break;
+  case 1: prefs.gridx(n); break;
+  case 2: prefs.gridy(n); break;
+  case 3: prefs.snap(n); break;
   }
 }
 
@@ -77,9 +77,9 @@ void set_preferences_window(){
   header_file_input->value(header_file_name);
   code_file_input->value(code_file_name);
   char buf[128];
-  sprintf(buf,"%d",gridx); horizontal_input->value(buf);
-  sprintf(buf,"%d",gridy); vertical_input->value(buf);
-  sprintf(buf,"%d",snap); snap_input->value(buf);
+  sprintf(buf,"%d",prefs.gridx()); horizontal_input->value(buf);
+  sprintf(buf,"%d",prefs.gridy()); vertical_input->value(buf);
+  sprintf(buf,"%d",prefs.snap()); snap_input->value(buf);
   float s = WidgetType::default_size;
   if (s<=8) def_widget_size[0]->setonly();
   else if (s<=11) def_widget_size[1]->setonly();
@@ -264,7 +264,7 @@ void WindowType::open() {
     w->show();
     WidgetType::open();
   } else {
-    w->size_range(10, 10, 0, 0, gridx, gridy);
+    w->size_range(10, 10, 0, 0, prefs.gridx(), prefs.gridy());
     w->resizable(w);
     w->show();
   }
@@ -321,19 +321,20 @@ void WindowType::newdx() {
   } else {
     int dx0 = mx-x1;
     int ix = (drag&RIGHT) ? br : bx;
-    dx = gridx ? ((ix+dx0+gridx/2)/gridx)*gridx - ix : dx0;
-    if (dx0 > snap) {
+    dx = prefs.gridx ()? 
+	((ix+dx0+prefs.gridx()/2)/prefs.gridx())*prefs.gridx ()- ix : dx0;
+    if (dx0 > prefs.snap()) {
       if (dx < 0) dx = 0;
-    } else if (dx0 < -snap) {
+    } else if (dx0 < -prefs.snap()) {
       if (dx > 0) dx = 0;
     } else 
       dx = 0;
     int dy0 = my-y1;
     int iy = (drag&BOTTOM) ? by : bt;
-    dy = gridy ? ((iy+dy0+gridy/2)/gridy)*gridy - iy : dy0;
-    if (dy0 > snap) {
+    dy = prefs.gridy ()? ((iy+dy0+prefs.gridy()/2)/prefs.gridy())*prefs.gridy()- iy : dy0;
+    if (dy0 > prefs.snap()) {
       if (dy < 0) dy = 0;
-    } else if (dy0 < -snap) {
+    } else if (dy0 < - prefs.snap()) {
       if (dy > 0) dy = 0;
     } else 
       dy = 0;
@@ -444,10 +445,8 @@ void redraw_overlays() {
 extern fltk::MenuBar* menubar;
 
 void toggle_overlays(fltk::Widget *,void *) {
-  if (overlays_invisible)
-    menubar->find("&Edit/Show Overlays")->set_flag(fltk::VALUE);
-  else
-    menubar->find("&Edit/Show Overlays")->clear_flag(fltk::VALUE);
+  if (overlays_invisible)   ishow_overlay->set_flag(fltk::VALUE);
+  else	ishow_overlay->clear_flag(fltk::VALUE);
   if (overlaybutton) overlaybutton->value(overlays_invisible);
   overlays_invisible = !overlays_invisible;
   for (FluidType *o=FluidType::first; o; o=o->walk())
@@ -537,8 +536,9 @@ int WindowType::handle(int event) {
     selection = clicked_widget();
     // see if user grabs edges of selected region:
     if (numselected && !(fltk::event_state(fltk::SHIFT)) &&
-	mx<=br+snap && mx>=bx-snap && my<=bt+snap && my>=by-snap) {
-      int snap1 = snap>5 ? snap : 5;
+	mx<=br+prefs.snap() && mx>=bx-prefs.snap() && 
+	my<=bt+prefs.snap() && my>=by-prefs.snap()) {
+      int snap1 = prefs.snap()>5 ? prefs.snap () : 5;
       int w1 = (br-bx)/4; if (w1 > snap1) w1 = snap1;
       if (mx>=br-w1) drag |= RIGHT;
       else if (mx<bx+w1) drag |= LEFT;
@@ -670,7 +670,7 @@ int WindowType::handle(int event) {
     ARROW:
       // for some reason BOTTOM/TOP are swapped... should be fixed...
       drag = (fltk::event_state(fltk::SHIFT)) ? (RIGHT|TOP) : DRAG;
-      if (fltk::event_state(fltk::CTRL)) {dx *= gridx; dy *= gridy;}
+      if (fltk::event_state(fltk::CTRL)) {dx *= prefs.gridx(); dy *= prefs.gridy();}
       moveallchildren();
       drag = 0;
       return 1;
@@ -785,7 +785,8 @@ FluidType *WidgetClassType::make() {
   }
   // Set the size ranges for this window; in order to avoid opening the
   // X display we use an arbitrary maximum size...
-  ((Window *)(this->o))->size_range(gridx, gridy,3072, 2048,gridx, gridy);
+  ((Window *)(this->o))->size_range(prefs.gridx(), prefs.gridy(),
+      3072, 2048,prefs.gridx(), prefs.gridy());
   myo->factory = this;
   myo->drag = 0;
   myo->numselected = 0;

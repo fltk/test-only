@@ -28,6 +28,10 @@
 //
 //     http://www.fltk.org/str.php
 //
+#if defined(__GNUC__) || defined(_MSC_VER)
+# pragma once /* speeds up compilation */
+#endif
+
 #ifndef fltk_fluid_menus_h
 #define fltk_fluid_menus_h
 #include "FluidType.h"
@@ -49,8 +53,8 @@ extern char absolute_history[MAX_HISTORY][1024];
 extern char relative_history[MAX_HISTORY][1024];
 
 extern fltk::Item *history_item[10],*undo_item[2],
-    *iwidget_bin,*itooltip,*isource_view,*istatusbar;
-extern fltk::ItemGroup* newMenu;
+    *iwidget_bin,*itooltip,*isource_view,*istatusbar, *ishow_overlay;
+extern fltk::ItemGroup *newMenu;
 extern fltk::MenuBar* Main_Menu;
 
 #define DECL_MENUCBV(n) void n(Widget *, void *)

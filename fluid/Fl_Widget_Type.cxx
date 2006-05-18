@@ -37,6 +37,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#include "fluid.h"
 #include "coding_style.h"
 #include "factory.h"
 #include "undo.h"
@@ -75,8 +76,6 @@ const char* WidgetType::subclass() const {
 
 extern int reading_file;
 int force_parent;
-extern int gridx;
-extern int gridy;
 
 #include <fltk/StyleSet.h>
 extern fltk::StyleSet* fluid_style_set;
@@ -124,13 +123,13 @@ FluidType *WidgetType::make() {
   }
 
   // satisfy the grid requirements (otherwise it edits really strangely):
-  if (gridx>1) {
-    X = (X/gridx)*gridx;
-    W = ((W-1)/gridx+1)*gridx;
+  if (prefs.gridx()>1) {
+    X = (X/prefs.gridx())*prefs.gridx();
+    W = ((W-1)/prefs.gridx()+1)*prefs.gridx();
   }
-  if (gridy>1) {
-    Y = (Y/gridy)*gridy;
-    H = ((H-1)/gridy+1)*gridy;
+  if (prefs.gridy()>1) {
+    Y = (Y/prefs.gridy())*prefs.gridy();
+    H = ((H-1)/prefs.gridy()+1)*prefs.gridy();
   }
 
   // Construct the FluidType:

@@ -10,13 +10,12 @@
 #include <fltk/filename.h>
 #include <fltk/ask.h>
 #include <fltk/SharedImage.h>
-#include <fltk/Preferences.h>
+#include "fluid.h"
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <io.h>
 #else
 #include <unistd.h>
 #endif // WIN32 && !__CYGWIN__
-extern fltk::Preferences fluid_prefs;
 
 fltk::DoubleBufferWindow *template_panel=(fltk::DoubleBufferWindow *)0;
 
@@ -125,12 +124,11 @@ fltk::DoubleBufferWindow* make_template_panel() {
     o->callback((fltk::Callback*)cb_template_panel);
     o->begin();
      {fltk::Browser* o = template_browser = new fltk::Browser(10, 28, 180, 250, "Available Templates:");
-      o->type(0);
       o->set_vertical();
       o->labelfont(fltk::HELVETICA_BOLD);
       o->callback((fltk::Callback*)cb_template_browser);
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
-      o->when(fltk::WHEN_CHANGED);
+      o->when(fltk::WHEN_NEVER);
     }
      {fltk::InvisibleBox* o = template_preview = new fltk::InvisibleBox(200, 28, 250, 250);
       o->box(fltk::THIN_DOWN_BOX);
@@ -141,7 +139,7 @@ fltk::DoubleBufferWindow* make_template_panel() {
       o->labelfont(fltk::HELVETICA_BOLD);
       o->textfont(fltk::COURIER);
       o->callback((fltk::Callback*)cb_template_name);
-      o->when(fltk::WHEN_CHANGED);
+      o->when(fltk::WHEN_NEVER);
     }
      {fltk::Input* o = template_instance = new fltk::Input(124, 288, 326, 25, "Instance Name:");
       o->labelfont(fltk::HELVETICA_BOLD);
@@ -204,7 +202,7 @@ void template_load() {
   struct dirent **files;
   int num_files;
   
-  fluid_prefs.getUserdataPath(path, sizeof(path));
+  prefs.getUserdataPath(path, sizeof(path));
   strlcat(path, "templates", sizeof(path));
   
   num_files = fltk::filename_list(path, &files);

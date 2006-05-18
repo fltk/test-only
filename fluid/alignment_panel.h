@@ -6,7 +6,6 @@
 #include <fltk/TextBuffer.h>
 #include <fltk/TextDisplay.h>
 extern void load_history();
-extern fltk::Preferences fluid_prefs;
 extern fltk::TextBuffer *shell_run_buffer;
 #include <fltk/Window.h>
 extern fltk::Window* preferences_window;

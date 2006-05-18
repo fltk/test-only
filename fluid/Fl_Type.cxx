@@ -52,12 +52,9 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef _WIN32
-# define strcasecmp(a,b) stricmp(a,b)
-# define strncasecmp(a,b,c) strnicmp(a,b,c)
-#endif
 #include <stdio.h>
 
+#include "fluid.h"
 #include "FluidType.h"
 #include "Fluid_Image.h"
 #include "fluid_img.h"

@@ -53,6 +53,7 @@
 #include <fltk/InvisibleBox.h>
 #include <fltk/events.h>
 #include <fltk/damage.h>
+#include <fltk/layout.h>
 #include <fltk/draw.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -86,7 +87,7 @@ StatusBarGroup::~StatusBarGroup() {
     for (int i=0; i<3;i++) if (tf_[i]) delete tf_[i];
 }
 
-/** make sure that width will match optimally parent's width and that it will fity in the bottom
+/** make sure that width will match optimally parent's width and that it will fit in the bottom
     also make sure that any child in the same group does not override the status bar and resize if necessary
 */
 void StatusBarGroup::resize_from_parent() {
@@ -120,9 +121,11 @@ void StatusBarGroup::resize_from_parent() {
 		int delta = w->b()-this->y();
 		if (delta==0) {
 		    w->resize(w->x(), w->y(), w->w(), w->h()+saved_h_);
-		    if (w->is_group()) 
+		    if (w->is_group())  {
 			((Group*)w)->init_sizes();
+		    }
 		    w->relayout();
+		    w->redraw();
 		    c=true;
 		}
 	    }
@@ -189,13 +192,15 @@ void StatusBarGroup::layout() {
     resize_from_parent();
 }
 void StatusBarGroup::show() {
+    bool v = visible();
     Group::show();
-    resize_from_parent();
+    if(!v) resize_from_parent();
 }
 
 void StatusBarGroup::hide() {
+    bool v = visible();
     Group::hide();
-    resize_from_parent();
+    if(v) resize_from_parent();
 }
 
 //

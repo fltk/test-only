@@ -30,6 +30,10 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
+#if defined(__GNUC__) || defined(_MSC_VER)
+# pragma once /* speeds up compilation */
+#endif
+
 #ifndef fltk_fluid_type_h
 #define fltk_fluid_type_h
 
@@ -399,7 +403,6 @@ public:
 
 // object list operations:
 fltk::Widget *make_widget_browser(int x,int y,int w,int h);
-extern int modflag;
 void delete_all(int selected_only=0);
 void selection_changed(FluidType* new_current);
 
@@ -443,8 +446,6 @@ FLUID_API extern bool include_H_from_C;
 FLUID_API void select(FluidType* it, int value);
 FLUID_API void select_only(FluidType *);
 FLUID_API void refresh_browser_views();
-
-extern fltk::Preferences	fluid_prefs;	// FLUID preferences
 #endif
 //
 // End of "$Id$".
