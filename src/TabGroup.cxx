@@ -164,6 +164,7 @@ int TabGroup::tab_height() {
 */
 int TabGroup::which(int event_x, int event_y) {
   int H = tab_height();
+  if (!H) return -1;
   if (H < 0) {
     if (event_y > h() || event_y < h()+H) return -1;
   } else {
@@ -484,7 +485,7 @@ void TabGroup::draw_tab(int x1, int x2, int W, int H, Widget* o, int what) {
   }
   int sel = (what == SELECTED);
   const int shrink_factor = 3;
-  const int eat_border_factor = sel*1;
+  int eat_border_factor = (H<0 ? box_dh(box()) : 1 )*sel;
   int up_pos = (1-sel)*shrink_factor;
   setcolor(sel  ? selection_color() : o->color());
   if (H >= 0) {// put the tab thumbnail on top
@@ -505,23 +506,23 @@ void TabGroup::draw_tab(int x1, int x2, int W, int H, Widget* o, int what) {
     drawline(x2, (1-sel)*shrink_factor , x2+TABSLOPE, H);
   } else { // put the tab thumbnail at the bottom
     newpath();
-    addvertex(x1, h()+H-sel);
-    addvertex(x1+TABSLOPE, h());
-    addvertex(x2, h());
-    addvertex(x2+TABSLOPE, h()+H-sel);
+    addvertex(x1, h()+H-eat_border_factor);
+    addvertex(x1+TABSLOPE, h()-1-up_pos );
+    addvertex(x2, h()-1-up_pos );
+    addvertex(x2+TABSLOPE, h()+H-eat_border_factor);
     fillpath();
     setcolor(!sel && o==push_ ? GRAY99 : GRAY33);
     newpath();
-    addvertex(x1+TABSLOPE, h()-1);
-    addvertex(x2, h()-1);
-    addvertex(x2+TABSLOPE, h()+H);
+    addvertex(x1+TABSLOPE, h()-1-up_pos);
+    addvertex(x2, h()-1-up_pos);
+    addvertex(x2+TABSLOPE, h()+H-eat_border_factor);
     strokepath();
     if (sel) {
       if (x1>0) drawline(0, h()+H, x1, h()+H);
       if (x2+TABSLOPE < w()-1) drawline(x2+TABSLOPE, h()+H, w()-1, h()+H);
     }
     setcolor(!sel && o==push_ ? GRAY33 : GRAY99);
-    drawline(x1, h()+H, x1+TABSLOPE, h()-1);
+    drawline(x1, h()+H, x1+TABSLOPE, h()-up_pos);
   }
   if (drawlabel) {
     Rectangle r((what==LEFT ? x1 : x2-W)+(TABSLOPE+EXTRASPACE/2),
