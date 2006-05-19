@@ -632,6 +632,7 @@ void Window::first(Window* window) {
 
 void Window::hide() {
   Group::hide();
+
   // Try to stop the annoying "raise another program" behavior
   if (!modal() && Window::first() && Window::first()->visible()) {
       Window::first()->show();

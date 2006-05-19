@@ -26,7 +26,7 @@ fltk::Window* make_widgetbin() {
       }
        {fltk::Button* o = new fltk::Button(27, 2, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("Class"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("class"));
         o->tooltip("Class");
         o->image(fltk::fluid_pixmap[12]);
       }
@@ -38,19 +38,19 @@ fltk::Window* make_widgetbin() {
       }
        {fltk::Button* o = new fltk::Button(2, 27, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("Code"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("code"));
         o->tooltip("Code");
         o->image(fltk::fluid_pixmap[8]);
       }
        {fltk::Button* o = new fltk::Button(27, 27, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("CodeBlock"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("codeblock"));
         o->tooltip("Code Block");
         o->image(fltk::fluid_pixmap[9]);
       }
        {fltk::Button* o = new fltk::Button(52, 27, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("Namespace"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("namespace"));
         o->tooltip("Namespace");
         o->image(fltk::fluid_pixmap[49]);
       }
@@ -91,25 +91,25 @@ fltk::Window* make_widgetbin() {
       }
        {fltk::Button* o = new fltk::Button(52, 2, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::Pack"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::PackedGroup"));
         o->tooltip("Pack");
         o->image(fltk::fluid_pixmap[22]);
       }
        {fltk::Button* o = new fltk::Button(2, 27, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::Tabs"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::TabGroup"));
         o->tooltip("Tabs");
         o->image(fltk::fluid_pixmap[13]);
       }
        {fltk::Button* o = new fltk::Button(27, 27, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::Scroll"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::ScrollGroup"));
         o->tooltip("Scroll");
         o->image(fltk::fluid_pixmap[19]);
       }
        {fltk::Button* o = new fltk::Button(2, 52, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::Tile"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::TiledGroup"));
         o->tooltip("Tile");
         o->image(fltk::fluid_pixmap[20]);
       }
@@ -282,8 +282,8 @@ fltk::Window* make_widgetbin() {
       }
        {fltk::Button* o = new fltk::Button(27, 2, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::Input_Choice"));
-        o->tooltip("Input Choice");
+        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::InputBrowser"));
+        o->tooltip("Input Browser");
         o->image(fltk::fluid_pixmap[15]);
       }
        {fltk::Button* o = new fltk::Button(2, 27, 25, 25);
@@ -294,7 +294,7 @@ fltk::Window* make_widgetbin() {
       }
        {fltk::Button* o = new fltk::Button(27, 27, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("menuitem"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::Item"));
         o->tooltip("Menu Item");
         o->image(fltk::fluid_pixmap[16]);
       }
@@ -306,7 +306,7 @@ fltk::Window* make_widgetbin() {
       }
        {fltk::Button* o = new fltk::Button(27, 52, 25, 25);
         o->box(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)type_make_cb, (void*)("submenu"));
+        o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::ItemGroup"));
         o->tooltip("Sub Menu");
         o->image(fltk::fluid_pixmap[18]);
       }
@@ -355,7 +355,7 @@ fltk::Window* make_widgetbin() {
        {fltk::Button* o = new fltk::Button(2, 27, 25, 25);
         o->box(fltk::THIN_UP_BOX);
         o->callback((fltk::Callback*)type_make_cb, (void*)("fltk::HelpView"));
-        o->tooltip("Help Browser");
+        o->tooltip("Help View");
         o->image(fltk::fluid_pixmap[35]);
       }
        {fltk::Button* o = new fltk::Button(2, 52, 25, 25);
@@ -457,6 +457,7 @@ fltk::Window* make_widget_panel() {
        {fltk::Group* o = new fltk::Group(0, 20, 380, 320, "GUI");
         o->color((fltk::Color)0x14aef700);
         o->callback((fltk::Callback*)propagate_group);
+        o->hide();
         o->begin();
          {fltk::Group* o = gInput = new fltk::Group(80, 9, 290, 44);
           o->callback((fltk::Callback*)propagate_group);
@@ -883,7 +884,6 @@ unchanged.");
        {fltk::Group* o = new fltk::Group(0, 20, 380, 320, "C++");
         o->color((fltk::Color)0x93d49c00);
         o->callback((fltk::Callback*)propagate_group);
-        o->hide();
         o->begin();
          {fltk::Input* o = new fltk::Input(80, 9, 230, 22, "Name");
           o->callback((fltk::Callback*)name_cb);

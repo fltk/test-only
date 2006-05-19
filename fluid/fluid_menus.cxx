@@ -116,6 +116,7 @@ static AdjusterType Adjustertype;
 static ThumbWheelType ThumbWheeltype;
 static TextEditorType TextEditortype;
 static FileInputType FileInputtype;
+static HelpViewType HelpViewtype;
 static ProgressBarType ProgressBartype;
 static SliderType Slidertype;
 static ScrollbarType Scrollbartype;
@@ -321,6 +322,7 @@ void fltk::fill_in_New_Menu(ItemGroup* menu) {
 	{MenuSection g("other",i[5]);
 	    fluidMenuItem(Widgettype  , 5);
 	    fluidMenuItem(InvisibleBoxtype  , 5);
+	    fluidMenuItem(HelpViewtype  , 35);
 	    fluidMenuItem(Clocktype  , 34);
 	    //helpview 35
 	}

@@ -11,8 +11,7 @@ decl {\#include <fltk/Window.h>} {public
 
 decl {\#include <fltk/xpmImage.h>} {} 
 
-decl {\#include "fluid.h"} {selected
-} 
+decl {\#include "fluid.h"} {} 
 
 decl {\#include "FluidType.h"} {} 
 
@@ -25,10 +24,10 @@ decl {\#include "undo.h"} {}
 Function {make_widgetbin()} {open
 } {
   {fltk::Window} widgetbin_panel {
-    label {Widget Bin}
+    label {Widget Bin} open
     xywh {499 41 520 85} resizable non_modal visible
   } {
-    {fltk::Group} {} {
+    {fltk::Group} {} {open
       xywh {3 3 79 79} box THIN_DOWN_BOX
     } {
       {fltk::Button} {} {
@@ -39,7 +38,7 @@ Function {make_widgetbin()} {open
         extra_code {o->image(fltk::fluid_pixmap[7]);}
       }
       {fltk::Button} {} {
-        user_data {"Class"}
+        user_data {"class"}
         callback type_make_cb
         tooltip Class
         xywh {27 2 25 25} box THIN_UP_BOX
@@ -53,21 +52,21 @@ Function {make_widgetbin()} {open
         extra_code {o->image(fltk::fluid_pixmap[46]);}
       }
       {fltk::Button} {} {
-        user_data {"Code"}
+        user_data {"code"}
         callback type_make_cb
         tooltip Code
         xywh {2 27 25 25} box THIN_UP_BOX
         extra_code {o->image(fltk::fluid_pixmap[8]);}
       }
       {fltk::Button} {} {
-        user_data {"CodeBlock"}
+        user_data {"codeblock"}
         callback type_make_cb
         tooltip {Code Block}
         xywh {27 27 25 25} box THIN_UP_BOX
         extra_code {o->image(fltk::fluid_pixmap[9]);}
       }
       {fltk::Button} {} {
-        user_data {"Namespace"}
+        user_data {"namespace"}
         callback type_make_cb
         tooltip Namespace
         xywh {52 27 25 25} box THIN_UP_BOX
@@ -113,28 +112,28 @@ Function {make_widgetbin()} {open
         extra_code {o->image(fltk::fluid_pixmap[6]);}
       }
       {fltk::Button} {} {
-        user_data {"fltk::Pack"}
+        user_data {"fltk::PackedGroup"}
         callback type_make_cb
         tooltip Pack
         xywh {52 2 25 25} box THIN_UP_BOX
         extra_code {o->image(fltk::fluid_pixmap[22]);}
       }
       {fltk::Button} {} {
-        user_data {"fltk::Tabs"}
+        user_data {"fltk::TabGroup"}
         callback type_make_cb
         tooltip Tabs
         xywh {2 27 25 25} box THIN_UP_BOX
         extra_code {o->image(fltk::fluid_pixmap[13]);}
       }
       {fltk::Button} {} {
-        user_data {"fltk::Scroll"}
+        user_data {"fltk::ScrollGroup"}
         callback type_make_cb
         tooltip Scroll
         xywh {27 27 25 25} box THIN_UP_BOX
         extra_code {o->image(fltk::fluid_pixmap[19]);}
       }
       {fltk::Button} {} {
-        user_data {"fltk::Tile"}
+        user_data {"fltk::TiledGroup"}
         callback type_make_cb
         tooltip Tile
         xywh {2 52 25 25} box THIN_UP_BOX
@@ -275,7 +274,7 @@ Function {make_widgetbin()} {open
         extra_code {o->image(fltk::fluid_pixmap[44]);}
       }
     }
-    {fltk::Group} {} {
+    {fltk::Group} {} {open
       xywh {323 3 54 79} box THIN_DOWN_BOX
     } {
       {fltk::Button} {} {
@@ -314,7 +313,7 @@ Function {make_widgetbin()} {open
         extra_code {o->image(fltk::fluid_pixmap[30]);}
       }
     }
-    {fltk::Group} {} {
+    {fltk::Group} {} {open
       xywh {378 3 54 79} box THIN_DOWN_BOX
     } {
       {fltk::Button} {} {
@@ -325,9 +324,9 @@ Function {make_widgetbin()} {open
         extra_code {o->image(fltk::fluid_pixmap[17]);}
       }
       {fltk::Button} {} {
-        user_data {"fltk::Input_Choice"}
+        user_data {"fltk::InputBrowser"}
         callback type_make_cb
-        tooltip {Input Choice}
+        tooltip {Input Browser}
         xywh {27 2 25 25} box THIN_UP_BOX
         extra_code {o->image(fltk::fluid_pixmap[15]);}
       }
@@ -339,7 +338,7 @@ Function {make_widgetbin()} {open
         extra_code {o->image(fltk::fluid_pixmap[26]);}
       }
       {fltk::Button} {} {
-        user_data {"menuitem"}
+        user_data {"fltk::Item"}
         callback type_make_cb
         tooltip {Menu Item}
         xywh {27 27 25 25} box THIN_UP_BOX
@@ -353,14 +352,14 @@ Function {make_widgetbin()} {open
         extra_code {o->image(fltk::fluid_pixmap[15]);}
       }
       {fltk::Button} {} {
-        user_data {"submenu"}
+        user_data {"fltk::ItemGroup"}
         callback type_make_cb
         tooltip {Sub Menu}
         xywh {27 52 25 25} box THIN_UP_BOX
         extra_code {o->image(fltk::fluid_pixmap[18]);}
       }
     }
-    {fltk::Group} {} {
+    {fltk::Group} {} {open
       xywh {433 3 29 79} box THIN_DOWN_BOX
     } {
       {fltk::Button} {} {
@@ -404,8 +403,8 @@ Function {make_widgetbin()} {open
       }
       {fltk::Button} {} {
         user_data {"fltk::HelpView"}
-        callback type_make_cb
-        tooltip {Help Browser}
+        callback type_make_cb selected
+        tooltip {Help View}
         xywh {2 27 25 25} box THIN_UP_BOX
         extra_code {o->image(fltk::fluid_pixmap[35]);}
       }
@@ -434,16 +433,16 @@ Function {type_make_cb(fltk::Widget*w,void*d)} {open return_type void
 Function {make_widget_panel()} {open
 } {
   {fltk::Window} {} {open
-    xywh {480 184 380 380} resizable hotspot visible
+    xywh {480 184 380 380} hide resizable hotspot
   } {
     {fltk::TabGroup} panel_tabs {
-      callback propagate_tabs
+      callback propagate_tabs open
       xywh {0 0 380 340} resizable
     } {
       {fltk::Group} {} {
         label GUI
         callback propagate_group open
-        xywh {0 20 380 320} color 0x14aef700
+        xywh {0 20 380 320} hide color 0x14aef700
       } {
         {fltk::Group} gInput {
           callback propagate_group
@@ -866,7 +865,7 @@ To get out of shortcut-setting mode:
       {fltk::Group} {} {
         label {C++}
         callback propagate_group open
-        xywh {0 20 380 320} hide resizable color 0x93d49c00
+        xywh {0 20 380 320} resizable color 0x93d49c00
       } {
         {fltk::Input} {} {
           label Name

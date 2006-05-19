@@ -66,6 +66,7 @@
 #include <fltk/ValueSlider.h>
 #include <fltk/BarGroup.h>
 #include <fltk/StatusBarGroup.h>
+#include <fltk/HelpView.H>
 #include "FluidType.h"
 
 namespace fltk {
@@ -452,6 +453,30 @@ namespace fltk {
 	int pixmapID() { return 30; }
     };
     
+    class HelpViewType : public WidgetType {
+    public:
+      void ideal_size(int &w, int &h) {
+	fltk::HelpView *myo = (fltk::HelpView *)o;
+	fltk::setfont(myo->textfont(), (float) myo->textsize());
+	h -= fltk::box_dh(o->box());
+	w -= fltk::box_dw(o->box());
+	int ww = (int) fltk::getwidth("m");
+	w = ((w + ww - 1) / ww) * ww + fltk::box_dw(o->box());
+	h = (int) (((h + fltk::getascent() - 1) / fltk::getascent() ) * fltk::getascent() +
+	    fltk::box_dh(o->box()));
+	if (h < 30) h = 30;
+	if (w < 50) w = 50;
+      }
+      const char *type_name() const {return "fltk::HelpView";}
+	Widget *widget(int x,int y,int w,int h) {
+	HelpView *myo = new HelpView(x,y,w,h);
+	myo->value("<HTML><BODY><H1>HelpView Widget</H1>"
+		   "<P>This is a HelpView widget.</P></BODY></HTML>");
+	return myo;}
+      WidgetType *_make() {return new HelpViewType();}
+      int pixmapID() { return 35; }
+    };
+
     class ProgressBarType : public WidgetType {
     public:
 	virtual const char *type_name() const { return "fltk::ProgressBar"; }
