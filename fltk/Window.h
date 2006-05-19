@@ -88,6 +88,7 @@ public:
   void show();
   void show(int, char**);
   void show(const Window* parent);
+  void hide();
   bool exec(const Window* parent = 0, bool grab = false);
   void make_exec_return(bool);
   void show_inside(const Window* parent);

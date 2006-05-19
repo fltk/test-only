@@ -630,6 +630,14 @@ void Window::first(Window* window) {
   fltk::find(xid(window));
 }
 
+void Window::hide() {
+  Group::hide();
+  // Try to stop the annoying "raise another program" behavior
+  if (!modal() && Window::first() && Window::first()->visible()) {
+      Window::first()->show();
+  }
+}
+
 int fltk::damage_;
 
 /*! \fn int fltk::damage()
@@ -885,6 +893,11 @@ void fltk::focus(Widget *o) {
     if (o) {
       unsigned saved = e_keysym;
       e_keysym = 0; // make widgets not think a keystroke moved focus
+      // Make focused Window including o be the first window:
+      Window *w; 
+      if (o->is_window()) w = (Window*)o; else  w = o->window(); 
+      while(w && w->window()) w=w->window();
+      if (w && w!=Window::first()) Window::first(w);
       o->handle(FOCUS);
       o->set_flag(FOCUSED);
       for (; (o = o->parent()); ) {
