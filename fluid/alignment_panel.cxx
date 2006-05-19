@@ -64,20 +64,21 @@ static void cb_Close(fltk::Button*, void*) {
 
 fltk::Window* make_preferences_window() {
   fltk::Window* w;
-   {fltk::Window* o = preferences_window = new fltk::Window(365, 246, "fluid Preferences");
+   {fltk::Window* o = preferences_window = new fltk::Window(370, 253, "fluid Preferences");
     w = o;
     o->begin();
-     {fltk::TabGroup* o = pref_tabs = new fltk::TabGroup(0, 0, 360, 210);
+     {fltk::TabGroup* o = pref_tabs = new fltk::TabGroup(5, 4, 360, 210);
       o->callback((fltk::Callback*)cb_pref_tabs);
       o->begin();
-       {fltk::Group* o = new fltk::Group(0, 30, 360, 180, "General");
+       {fltk::Group* o = new fltk::Group(0, 21, 360, 188, "General");
         o->color((fltk::Color)0x54c2d400);
+        o->hide();
         o->begin();
-         {fltk::CheckButton* o = openlast_button = new fltk::CheckButton(10, 0, 193, 25, "Open Previous File on Startup");
+         {fltk::CheckButton* o = openlast_button = new fltk::CheckButton(10, 5, 193, 25, "Open Previous File on Startup");
           o->callback((fltk::Callback*)cb_openlast_button);
           openlast_button->value(prefs.open_previous_file() ? true : false);
         }
-         {fltk::CheckButton* o = prevpos_button = new fltk::CheckButton(10, 22, 193, 25, "Remember Window Positions");
+         {fltk::CheckButton* o = prevpos_button = new fltk::CheckButton(10, 25, 193, 25, "Remember Window Positions");
           o->callback((fltk::Callback*)cb_prevpos_button);
           prevpos_button->value(prefs.prev_window_pos() ? true : false);
         }
@@ -85,7 +86,7 @@ fltk::Window* make_preferences_window() {
           o->callback((fltk::Callback*)cb_completion_button);
           completion_button->value(prefs.show_completion_dialogs() ? true : false);
         }
-         {fltk::ValueInput* o = recent_spinner = new fltk::ValueInput(13, 73, 40, 25, "# Recent Files");
+         {fltk::ValueInput* o = recent_spinner = new fltk::ValueInput(13, 73, 37, 25, "# Recent Files");
           o->callback((fltk::Callback*)cb_recent_spinner);
           o->align(fltk::ALIGN_RIGHT);
           o->when(fltk::WHEN_CHANGED);
@@ -121,18 +122,17 @@ fltk::Window* make_preferences_window() {
         }
         o->end();
       }
-       {fltk::Group* o = new fltk::Group(0, 30, 360, 180, "Alignment");
+       {fltk::Group* o = new fltk::Group(0, 21, 360, 189, "Alignment");
         o->color((fltk::Color)0xd49a5600);
         o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
-        o->hide();
         o->begin();
-         {fltk::Input* o = horizontal_input = new fltk::Input(75, 0, 100, 22, "Horizontal:");
+         {fltk::Input* o = horizontal_input = new fltk::Input(75, 6, 100, 22, "Horizontal:");
           o->labelsize(14);
           o->textsize(14);
           o->callback((fltk::Callback*)alignment_cb, (void*)(1));
           o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);
         }
-         {fltk::Input* o = vertical_input = new fltk::Input(238, 0, 100, 22, "Vertical:");
+         {fltk::Input* o = vertical_input = new fltk::Input(238, 6, 100, 22, "Vertical:");
           o->labelsize(14);
           o->textsize(14);
           o->callback((fltk::Callback*)alignment_cb, (void*)(2));
@@ -179,7 +179,7 @@ fltk::Window* make_preferences_window() {
       }
       o->end();
     }
-     {fltk::Button* o = new fltk::Button(140, 215, 107, 25, "Close");
+     {fltk::Button* o = new fltk::Button(139, 222, 106, 25, "Close");
       o->callback((fltk::Callback*)cb_Close);
     }
     o->end();

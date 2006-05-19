@@ -201,6 +201,7 @@ static void Widget_Browser_callback(fltk::Widget * w,void *) {
 
 void refresh_browser_views() {
     widget_browser->redraw();
+    if (!status_bar) return;
     int cnt = FluidType::selected_count();
     if (cnt <2) status_bar->set(0, StatusBarGroup::SBAR_RIGHT);
     if (cnt <1) status_bar->set(0, StatusBarGroup::SBAR_CENTER);

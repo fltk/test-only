@@ -1265,7 +1265,8 @@ static bool mouse_event(Window *window, int what, unsigned button,
   while (window->parent()) {
     e_x += window->x();
     e_y += window->y();
-    window = window->window();
+    if(window->window() ) window = window->window();
+    else break;
   }
 
   unsigned long state = shiftflags();
@@ -1773,7 +1774,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   case WM_SETCURSOR:
     if (window && LOWORD(lParam) == HTCLIENT) {
-      while (window->parent()) window = window->window();
+      while (!window->is_window() && window->parent()) 
+	  window = window->window();
       CreatedWindow* i = CreatedWindow::find(window);
       if (i && i->cursor != default_cursor &&
 	  !i->cursor_for->contains(belowmouse_))

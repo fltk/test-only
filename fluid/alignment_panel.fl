@@ -29,26 +29,26 @@ Function {make_preferences_window()} {open
 } {
   {fltk::Window} preferences_window {
     label {fluid Preferences} open
-    xywh {336 258 365 246} resizable non_modal visible
+    xywh {487 250 370 253} resizable non_modal visible
   } {
     {fltk::TabGroup} pref_tabs {
       callback {initialize_tab_colors();} open selected
-      xywh {0 0 360 210}
+      xywh {5 4 360 210}
     } {
       {fltk::Group} {} {
         label General open
-        xywh {0 30 360 180} color 0x54c2d400
+        xywh {0 21 360 188} hide color 0x54c2d400
       } {
         {fltk::CheckButton} openlast_button {
           label {Open Previous File on Startup}
           callback {prefs.open_previous_file(openlast_button->value());}
-          xywh {10 0 193 25}
+          xywh {10 5 193 25}
           extra_code {openlast_button->value(prefs.open_previous_file() ? true : false);}
         }
         {fltk::CheckButton} prevpos_button {
           label {Remember Window Positions}
           callback {prefs.prev_window_pos(prevpos_button->value());}
-          xywh {10 22 193 25}
+          xywh {10 25 193 25}
           extra_code {prevpos_button->value(prefs.prev_window_pos() ? true : false);}
         }
         {fltk::CheckButton} completion_button {
@@ -60,7 +60,7 @@ Function {make_preferences_window()} {open
         {fltk::ValueInput} recent_spinner {
           label {\# Recent Files}
           callback {prefs.recent_files((int) recent_spinner->value()); load_history();}
-          xywh {13 73 40 25} align 8 when CHANGED
+          xywh {13 73 37 25} align 8 when CHANGED
           extra_code {recent_spinner->maximum(10); recent_spinner->value(prefs.recent_files());}
         }
         {fltk::CheckButton} tabcolor_button {
@@ -98,21 +98,21 @@ initialize_tab_colors();}
         }
       }
       {fltk::Group} {} {
-        label Alignment
-        xywh {0 30 360 180} align 5 hide color 0xd49a5600
+        label Alignment open
+        xywh {0 21 360 189} align 5 color 0xd49a5600
       } {
         {fltk::Input} horizontal_input {
           label {Horizontal:}
           user_data 1 user_data_type long
           callback alignment_cb
-          xywh {75 0 100 22} labelsize 14 textsize 14
+          xywh {75 6 100 22} labelsize 14 textsize 14
           extra_code {o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);}
         }
         {fltk::Input} vertical_input {
           label {Vertical:}
           user_data 2 user_data_type long
           callback alignment_cb
-          xywh {238 0 100 22} labelsize 14 textsize 14
+          xywh {238 6 100 22} labelsize 14 textsize 14
           extra_code {o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);}
         }
         {fltk::Input} snap_input {
@@ -169,7 +169,7 @@ initialize_tab_colors();}
     {fltk::Button} {} {
       label Close
       callback {preferences_window->hide();}
-      xywh {140 215 107 25}
+      xywh {139 222 106 25}
     }
   }
 } 

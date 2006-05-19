@@ -838,8 +838,8 @@ void initialize_tab_colors() {
     }
     if (pref_tabs) {
 	pref_tabs->child(0)->color((unsigned) c ? prefs.tabcolor1() : fltk::GRAY75);
-	pref_tabs->child(1)->color((unsigned) c ? prefs.tabcolor2() : fltk::GRAY75);
-	pref_tabs->child(2)->color((unsigned) c ? prefs.tabcolor3() : fltk::GRAY75);
+	pref_tabs->child(1)->color((unsigned) c ? prefs.tabcolor3() : fltk::GRAY75);
+	pref_tabs->child(2)->color((unsigned) c ? prefs.tabcolor2() : fltk::GRAY75);
     }
 }
 
@@ -1051,7 +1051,7 @@ void do_shell_command(fltk::ReturnButton*, void*) {
     compile_only = 0;
   }
 
-/* FIXME : write strings should it be implement in fluid 2 as in fltk1 ?
+/* FIXME : write strings : should it be implemented in fluid 2 as in fltk1 ?
   if (shell_writemsgs_button->value()) {
     compile_only = 1;
     write_strings_cb(0, 0);
