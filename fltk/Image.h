@@ -127,8 +127,6 @@ public:
 
   // Common image methods
   virtual void update() = 0;
-  //! determine if image has vectorial (true) or raster (false) data
-  virtual bool is_raster() const {return true;} // common image derived class are raster
   void destroy();
   void setsize(int w, int h);
   void make_current();

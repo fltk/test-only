@@ -59,8 +59,6 @@ class FL_API Symbol {
   virtual void inset(Rectangle& r) const;
   virtual bool fills_rectangle() const;
   virtual bool is_frame() const;
-  //! determine if image has vectorial (true) or raster (false) data
-  virtual bool is_raster() const {return false;} // common Symbols has vectorial data
 
   int dx() const;
   int dy() const;

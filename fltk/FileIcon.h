@@ -83,7 +83,6 @@ public:
 
   void		image(const Symbol* direct_raster, bool owned=true) {image_=direct_raster;owned_image_=owned;}
   const Symbol* image() const {return image_;}
-  virtual bool	is_raster() const {return image_!=0;}
 
   void		load(const char *f);
   void		load_fti(const char *fti);

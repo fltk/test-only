@@ -179,27 +179,15 @@ void Widget::draw_label(const Rectangle& ir, Flags flags) const {
 
     /*
        Implementing the new RESIZE Flags as discussed
-        - Auto resize (RESIZE_AUTO), equivalent to no resize 
-         for raster and resize to fit for vector
-        - No resize (RESIZE_NONE)
-        - Resize to fit (RESIZE_FIT), preserving aspect ratio
-        - Resize to fill (RESIZE_FILL), not preserving aspect ratio
-       The default is RESIZE_AUTO
-
-       WAS: there is no need to check for is_raster(), as the measure() of
-       non-is_raster() Symbol returned w,h unchanged, so they are always
-       distorted (a Symbol subclass could change this if wanted). I
-       believe therefore that RESIZE_NONE and RESIZE_AUTO always resulted
-       in the same value.
-
-       Since there are 4 combinations, I added the ability to enlarge
-       but preserve aspect ratio. Current meaning of the flags:
 
        RESIZE_NONE: do not scale. If widget is smaller you probably want
          ALIGN_CLIP so it does not draw outside it.
        RESIZE_FIT : make it smaller if necessary, keeping aspect
        RESIZE_FIT+RESIZE_FILL : make it both smaller and larger, keeping aspect
        RESIZE_FILL : distort
+
+       Note that this may still change, it appears RESIZE_FIT may be
+       a useful default value so that should be zero?
 
     */
     if (flags & RESIZE_FIT) {

@@ -39,7 +39,6 @@ public:
   // this constructor allow to load a sharedimage from an image name in one shot
   TiledImage(const char * name); 
   const Symbol* image() const {return image_;}
-  virtual bool is_raster() const {return true;}
   void image(const Symbol* i) {image_ = i;}
   void _measure(int& w, int& h) const;
   void _draw(const Rectangle&) const;
