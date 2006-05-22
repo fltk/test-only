@@ -16,9 +16,7 @@
  *
  * Please report all bugs and problems to "fltk-bugs@fltk.org".
  */
-#if defined(__GNUC__) || defined(_MSC_VER)
-# pragma once /* speeds up compilation */
-#endif
+
 /* This file is designed to work on Windows, Linux, and BSD systems.
    It may need to be edited to work on other systems. Please try
    to do this by adding #if statements so this file remains portable.

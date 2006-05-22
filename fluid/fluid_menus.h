@@ -1,11 +1,6 @@
+// "$Id:"
 //
-// "$Id"
-//
-// Fluid menus declaration for the Fast Light Tool Kit (FLTK).
-//
-// The widget describing an Fl_Window.  This is also all the code
-// for interacting with the overlay, which allows the user to
-// select, move, and resize the children widgets.
+// Stuff to build menus in the Fast Light toolkit Interface Designer (fluid)
 //
 // Copyright 1998-2005 by Bill Spitzak and others.
 //
@@ -27,16 +22,13 @@
 // Please report all bugs and problems on the following page:
 //
 //     http://www.fltk.org/str.php
-//
-#if defined(__GNUC__) || defined(_MSC_VER)
-# pragma once /* speeds up compilation */
-#endif
 
 #ifndef fltk_fluid_menus_h
 #define fltk_fluid_menus_h
 #include "FluidType.h"
 
 namespace fltk {
+
     class MenuBar;
     class ItemGroup;
     class Item;

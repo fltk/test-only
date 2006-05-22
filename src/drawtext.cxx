@@ -613,7 +613,7 @@ static float split(
 void fltk::drawtext(const char* str, const Rectangle& r1, Flags flags)
 {
   if (!str || !*str) return; // speeds up very common widgets
-  Rectangle r(r1); transform(r);
+  Rectangle r; transform(r1,r);
   push_matrix();
   load_identity();
   drawtext(drawtext_transformed, getwidth, str, r, flags);

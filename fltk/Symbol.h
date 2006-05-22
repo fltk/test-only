@@ -1,7 +1,4 @@
-//
 // "$Id$"
-//
-// The fltk drawing library
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -21,10 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
-#if defined(__GNUC__) || defined(_MSC_VER)
-# pragma once /* speeds up compilation */
-#endif
 
 #ifndef fltk_Symbol_h
 #define fltk_Symbol_h

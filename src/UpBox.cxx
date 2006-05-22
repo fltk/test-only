@@ -49,7 +49,8 @@ class FL_API DottedFrame : public Box {
 public:
   void _draw(const fltk::Rectangle& r1) const {
     if (!drawflags(FOCUSED)) return;
-    fltk::Rectangle r(r1);
+
+    fltk::Rectangle r; transform(r1,r);
     if (r.w() > 12) {r.move_x(1); r.move_r(-1);}
     else if (r.w() <= 3) return;
     if (r.h() > 15) {r.move_y(1); r.move_b(-1);}
@@ -66,7 +67,6 @@ public:
       evenstipple = XCreateBitmapFromData(xdisplay, root, pattern, 8, 8);
       oddstipple = XCreateBitmapFromData(xdisplay, root, pattern+1, 8, 8);
     }
-    transform(r);
     XSetStipple(xdisplay, gc, (r.x()+r.y()-r1.x()-r1.y())&1 ? oddstipple : evenstipple);
     XSetFillStyle(xdisplay, gc, FillStippled);
     // X documentation claims a nonzero line width is necessary for stipple
@@ -90,7 +90,6 @@ public:
 
 /*
     // Draw using WIN32 API function (since 95)
-    transform(r);
     RECT r = {r.x(), r.y(), r.r()-1, r.b()-1};
     DrawFocusRect(dc, &r);
 */
@@ -119,7 +118,6 @@ public:
       DeleteObject(oddstipple);
     }
 
-    transform(r);
     HBRUSH brush = (r.x()+r.y()-r1.x()-r1.y())&1 ? oddbrush : evenbrush;
 
     // Select the patterned brush into the DC

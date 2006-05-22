@@ -18,9 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-#if defined(__GNUC__) || defined(_MSC_VER)
-# pragma once /* speeds up compilation */
-#endif
 
 #ifndef fltk_draw_h
 #define fltk_draw_h
@@ -58,17 +55,17 @@ FL_API void load_identity();
 FL_API void transform(float& x, float& y);
 FL_API void transform_distance(float& x, float& y);
 FL_API void transform(int& x, int& y);
-FL_API void transform(Rectangle&);
+FL_API void transform(const Rectangle& from, Rectangle& to);
+FL_API void transform(int x,int y,int w, int h, Rectangle& to);
 
 /*! \} */
 
 /*! \addtogroup clipping
   \{ */
-FL_API void push_clip0(Rectangle& r); // common method for push_clip primitives, r is modified in output
-// standard push_clip equals to former monolithic definition no perf. change
-inline void push_clip(const Rectangle& rectangle) {Rectangle r(rectangle); push_clip0(r);}
-// gain one rectangle construction by providing ddirect x,y,w,h push_clip alternative
-inline void push_clip(int X,int Y, int W, int H) {Rectangle r(X,Y,W,H); push_clip0(r);}
+
+void push_clip(const Rectangle& rectangle);
+//! Same as push_clip(Rectangle(x,y,w,h)) but faster:
+void push_clip(int X,int Y, int W, int H);
 
 FL_API void clipout(const Rectangle&);
 FL_API void pop_clip();

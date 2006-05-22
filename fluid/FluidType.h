@@ -1,7 +1,7 @@
-//
 // "$Id$"
 //
-// Widget type header file for the Fast Light Tool Kit (FLTK).
+// Base type of object constructed and manipualated by the
+// Fast Light toolkit Interface Designer (fluid)
 //
 // Each object described by Fluid is one of these objects.  They
 // are all stored in a double-linked list.
@@ -29,10 +29,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
-#if defined(__GNUC__) || defined(_MSC_VER)
-# pragma once /* speeds up compilation */
-#endif
 
 #ifndef fltk_fluid_type_h
 #define fltk_fluid_type_h
@@ -79,8 +75,6 @@ public:	// things that should not be public:
 
   static FluidType *first;
   
-
-
   FluidType *factory;
   const char *callback_name();
 
@@ -447,6 +441,7 @@ FLUID_API void select(FluidType* it, int value);
 FLUID_API void select_only(FluidType *);
 FLUID_API void refresh_browser_views();
 FLUID_API void initialize_tab_colors();
+
 #endif
 //
 // End of "$Id$".

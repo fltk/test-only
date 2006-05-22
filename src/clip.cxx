@@ -133,11 +133,19 @@ void fltk::clip_region(Region region) {
 }
 
 /**
-  Pushes the \e intersection of the current region and \a rectangle
+  Pushes the \e intersection of the current region and \a r
   onto the clip stack.
 */
-void fltk::push_clip0(Rectangle& r) {
-  transform(r);
+void fltk::push_clip(const Rectangle& r) {
+  push_clip(r.x(), r.y(), r.w(), r.h());
+}
+
+/**
+  Same as push_clip(Rectangle(x,y,r,h)) except faster as it avoids the
+  construction of an intermediate rectangle object.
+*/
+void fltk::push_clip(int x, int y, int w, int h) {
+  Rectangle r; transform(x,y,w,h,r);
   Region region;
   if (r.empty()) {
 #if USE_X11
@@ -177,7 +185,7 @@ void fltk::push_clip0(Rectangle& r) {
   non-rectangular clip regions. This call does nothing on those.
 */
 void fltk::clipout(const Rectangle& rectangle) {
-  Rectangle r(rectangle); transform(r);
+  Rectangle r; transform(rectangle, r);
   if (r.empty()) return;
 #if USE_X11
   Region current = rstack[rstackptr];
@@ -235,7 +243,7 @@ extern int fl_clip_w, fl_clip_h;
   Returns true if any or all of \a rectangle is inside the clip region.
 */
 bool fltk::not_clipped(const Rectangle& rectangle) {
-  Rectangle r(rectangle); transform(r);
+  Rectangle r; transform(rectangle,r);
   // first check against the window so we get rid of coordinates
   // outside the 16-bit range the X/Win32 calls take:
   if (r.r() <= 0 || r.b() <= 0 || r.x() >= fl_clip_w || r.y() >= fl_clip_h)

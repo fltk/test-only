@@ -1,16 +1,9 @@
+// "$Id:"
 //
-// "$Id"
+// Random fluid functions that are not in another header
+// for the Fast Light toolkit Interface Designer (fluid)
+// WAS: looks like this should be renamed PrefsData.h?
 //
-// Fluid main program include file
-//
-// Each object described by Fluid is one of these objects.  They
-// are all stored in a double-linked list.
-//
-// There is also a single "factory" instance of each type of this.
-// The method "make()" is called on this factory to create a new
-// instance of this object.  It could also have a "copy()" function,
-// but it was easier to implement this by using the file read/write
-// that is needed to save the setup anyways.
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
@@ -29,10 +22,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
-#if defined(__GNUC__) || defined(_MSC_VER)
-# pragma once /* speeds up compilation */
-#endif
 
 #ifndef _fltk_fluid_h
 #define _fltk_fluid_h

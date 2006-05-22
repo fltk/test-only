@@ -87,7 +87,7 @@ static void innards(const uchar *buf, PixelType type,
 		    int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
-  fltk::Rectangle r(r1); transform(r);
+  fltk::Rectangle r; transform(r1,r);
 
   const int W = r1.w();
   const int H = r1.h();

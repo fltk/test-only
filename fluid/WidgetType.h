@@ -1,13 +1,6 @@
+// "$Id:"
 //
-// "$Id"
-//
-// WidgetType include file for the Fast Light Tool Kit (FLTK).
-//
-// This class stores the image labels for widgets in fluid.  This is
-// not a class in fltk itself, and this will produce different types of
-// code depending on what the image type is.  There are private subclasses
-// in Fluid_Image.C for each type of image format.  Right now only xpm
-// files are supported.
+// Subclasses of FluidType for each type of Widget in FLTK.
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -27,10 +20,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
-#if defined(__GNUC__) || defined(_MSC_VER)
-# pragma once /* speeds up compilation */
-#endif
 
 #ifndef fltk_widget_type_h
 #define fltk_widget_type_h
@@ -66,7 +55,7 @@
 #include <fltk/ValueSlider.h>
 #include <fltk/BarGroup.h>
 #include <fltk/StatusBarGroup.h>
-#include <fltk/HelpView.H>
+#include <fltk/HelpView.h>
 #include "FluidType.h"
 
 namespace fltk {

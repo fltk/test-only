@@ -295,6 +295,8 @@ static const char dead_keys[] = {
 
 // For some reason DM C/C++ compiler complains about compose_state saying:
 // Error 42: Symbol Undefined ?compose_state@fltk@@3HA (int fltk::compose_state)
+// WAS: any idea why many dozens of other symbols, such as all the fltk::e_x
+// and similar in run.cxx, work?
 #if __DMC__
   int compose_state;
 #else

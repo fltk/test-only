@@ -950,7 +950,7 @@ static void innards(const uchar *buf, PixelType type,
     target = fltk::xwindow;
     // because scaling is not supported, I just draw the image centered:
     // This is the rectangle I want to fill:
-    Rectangle tr(r1); transform(tr);
+    Rectangle tr; transform(r1,tr);
     // Center the image in that rectangle:
     Rectangle r(tr, r1.w(), r1.h());
     // Clip image if it is bigger than destination rectangle:

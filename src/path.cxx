@@ -297,55 +297,50 @@ void fltk::transform(int& x, int& y) {
   }
 }
 
-/*! Replace the rectangle with a transformed version. Device-specific
-  code can use this to get a rectangle that matches the current fltk
-  transform. This only works correctly for 90 degree rotations, for
+/*!
+  Transform the rectangle \a from into device coordinates and put
+  it into \a to. This only works correctly for 90 degree rotations, for
   other transforms this will produce an axis-aligned rectangle with
   the same area (this is useful for inscribing circles, and is about
   the best that can be done for device functions that don't handle
   rotation.
 */
-void fltk::transform(Rectangle& R) {
-  if (m.trivial || R.empty()) {
-    R.move(m.ix, m.iy);
+void fltk::transform(const Rectangle& from, Rectangle& to) {
+  if (m.trivial || from.empty()) {
+    to.set(from.x()+m.ix, from.y()+m.iy, from.w(), from.h());
     return;
   }
-#if 1 // area+center-preserving transform:
-
-  float x = R.x()+R.w()*.5f;
-  float y = R.y()+R.h()*.5f;
+  float x = from.x()+from.w()*.5f;
+  float y = from.y()+from.h()*.5f;
   transform(x,y);
-  float d1x,d1y; d1x = float(R.w()); d1y = 0; transform_distance(d1x, d1y);
-  float d2x,d2y; d2x = 0; d2y = float(R.h()); transform_distance(d2x, d2y);
+  float d1x,d1y; d1x = float(from.w()); d1y = 0; transform_distance(d1x, d1y);
+  float d2x,d2y; d2x = 0; d2y = float(from.h()); transform_distance(d2x, d2y);
   float w = rintf(sqrtf(d1x*d1x+d2x*d2x));
   x = floorf(x - (w+1)/2);
   float h = rintf(sqrtf(d1y*d1y+d2y*d2y));
   y = floorf(y - (h+1)/2);
-  R.set(int(x),int(y),int(w),int(h));
+  to.set(int(x),int(y),int(w),int(h));
+}
 
-#else // return bounding box of transformed rectangle
-
-  int x,r,t;
-  t = int(rintf(R.x()*m.a + R.y()*m.c));
-  x = r = t;
-  t = int(rintf(R.r()*m.a + R.y()*m.c));
-  if (t < x) x = t; else r = t;
-  t = int(rintf(R.x()*m.a + R.b()*m.c));
-  if (t < x) x = t; else if (t > r) r = t;
-  t = int(rintf(R.r()*m.a + R.b()*m.c));
-  if (t < x) x = t; else if (t > r) r = t;
-  int y,b;
-  t = int(rintf(R.x()*m.b + R.y()*m.d));
-  y = b = t;
-  t = int(rintf(R.r()*m.b + R.y()*m.d));
-  if (t < y) y = t; else b = t;
-  t = int(rintf(R.x()*m.b + R.b()*m.d));
-  if (t < y) y = t; else if (t > b) b = t;
-  t = int(rintf(R.r()*m.b + R.b()*m.d));
-  if (t < y) y = t; else if (t > b) b = t;
-  R.set(x,y,r-x,b-y);
-
-#endif
+/*!
+  Same as transform(Rectangle(X,Y,W,H),to). This may be faster as it
+  avoids the rectangle construction.
+*/
+void fltk::transform(int X,int Y,int W,int H, Rectangle& to) {
+  if (m.trivial) {
+    to.set(X+m.ix, Y+m.iy, W, H);
+    return;
+  }
+  float x = X+W*.5f;
+  float y = Y+H*.5f;
+  transform(x,y);
+  float d1x,d1y; d1x = float(W); d1y = 0; transform_distance(d1x, d1y);
+  float d2x,d2y; d2x = 0; d2y = float(H); transform_distance(d2x, d2y);
+  float w = rintf(sqrtf(d1x*d1x+d2x*d2x));
+  x = floorf(x - (w+1)/2);
+  float h = rintf(sqrtf(d1y*d1y+d2y*d2y));
+  y = floorf(y - (h+1)/2);
+  to.set(int(x),int(y),int(w),int(h));
 }
 
 ////////////////////////////////////////////////////////////////
@@ -690,7 +685,7 @@ void fltk::addpie(const Rectangle& r, float start, float end) {
   circle_end = end;
   circle_type = PIE;
 #else
-  circle = r; transform(circle);
+  transform(r, circle);
   circle_start = start;
   circle_end = end;
   circle_type = PIE;
@@ -719,7 +714,7 @@ void fltk::addchord(const Rectangle& r, float start, float end) {
   circle_end = end;
   circle_type = CHORD;
 #else
-  circle = r; transform(circle);
+  transform(r, circle);
   circle_start = start;
   circle_end = end;
   circle_type = CHORD;

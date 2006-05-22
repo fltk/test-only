@@ -68,7 +68,7 @@ void Image::over(const fltk::Rectangle& from, const fltk::Rectangle& to) const {
   // unfortunately scaling does not work, so I just center and clip
   // to the transformed rectangle.
   // This is the rectangle I want to fill:
-  Rectangle r2(to); transform(r2);
+  Rectangle r2; transform(to,r2);
   // Center the image in that rectangle:
   Rectangle r1(r2,from.w(),from.h());
   // now figure out what area we will draw:

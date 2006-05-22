@@ -1,4 +1,3 @@
-//
 // "$Id$"
 //
 // Window widget. This must be the outermost group. You can also put
@@ -22,10 +21,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
-#if defined(__GNUC__) || defined(_MSC_VER)
-# pragma once /* speeds up compilation */
-#endif
 
 #ifndef fltk_Window_h
 #define fltk_Window_h
