@@ -37,7 +37,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "fluid.h"
+#include "PrefsData.h"
 #include "coding_style.h"
 #include "factory.h"
 #include "undo.h"

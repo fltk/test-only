@@ -34,7 +34,6 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include "fluid.h"
 #include "coding_style.h"
 
 using namespace fltk;

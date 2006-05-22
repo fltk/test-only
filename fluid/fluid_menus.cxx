@@ -26,7 +26,6 @@
 #include <fltk/DoubleBufferWindow.h>
 #include "fluid_menus.h"
 #include "WidgetType.h"
-#include "fluid.h"
 #include "FunctionType.h"
 #include "fluid_img.h"
 #include "undo.h"

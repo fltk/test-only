@@ -2,7 +2,6 @@
 
 #include "widget_panel.h"
 #include <fltk/xpmImage.h>
-#include "fluid.h"
 #include "FluidType.h"
 #include "fluid_img.h"
 #include "factory.h"

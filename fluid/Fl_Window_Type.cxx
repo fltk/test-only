@@ -41,7 +41,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "fluid.h"
+#include "PrefsData.h"
 #include "FluidType.h"
 #include "alignment_panel.h"
 #include "widget_panel.h"

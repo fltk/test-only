@@ -31,7 +31,7 @@
 #include <fltk/MenuBar.h>
 #include <fltk/Item.h>
 
-#include "fluid.h"
+#include "PrefsData.h"
 #include "FluidType.h"
 #include "undo.h"
 

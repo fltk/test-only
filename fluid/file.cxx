@@ -35,10 +35,10 @@
 #include <stdarg.h>
 #include <fltk/FL_VERSION.h>
 
-#include "fluid.h"
 #include "alignment_panel.h"
 #include "Fluid_Image.h"
 #include "FluidType.h"
+#include "PrefsData.h"
 #include "factory.h"
 
 ////////////////////////////////////////////////////////////////

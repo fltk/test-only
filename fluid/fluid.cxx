@@ -90,7 +90,7 @@ const char *copyright =
 #include "template_panel.h"
 #include "widget_panel.h"
 
-#include "fluid.h"
+#include "PrefsData.h"
 #include "Fluid_Plugins.h"
 #include "FluidType.h"
 #include "coding_style.h"

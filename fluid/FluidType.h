@@ -442,6 +442,8 @@ FLUID_API void select_only(FluidType *);
 FLUID_API void refresh_browser_views();
 FLUID_API void initialize_tab_colors();
 
+extern int modflag;
+
 #endif
 //
 // End of "$Id$".

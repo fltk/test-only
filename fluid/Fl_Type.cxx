@@ -54,7 +54,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "fluid.h"
 #include "FluidType.h"
 #include "Fluid_Image.h"
 #include "fluid_img.h"

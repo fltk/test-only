@@ -1,8 +1,6 @@
 // "$Id:"
 //
-// Random fluid functions that are not in another header
-// for the Fast Light toolkit Interface Designer (fluid)
-// WAS: looks like this should be renamed PrefsData.h?
+// Preferences database for the Fast Light toolkit Interface Designer (fluid)
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -23,8 +21,8 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
-#ifndef _fltk_fluid_h
-#define _fltk_fluid_h
+#ifndef _fltk_PrefsData_h
+#define _fltk_PrefsData_h
 #include <fltk/Preferences.h>
 #include <fltk/Color.h>
 #include <fltk/string.h>
@@ -132,7 +130,6 @@ public:
 };
 
 extern PrefsData prefs; // FLUID preferences
-extern int modflag;
 
 #endif
 

@@ -10,7 +10,7 @@
 #include <fltk/filename.h>
 #include <fltk/ask.h>
 #include <fltk/SharedImage.h>
-#include "fluid.h"
+#include "PrefsData.h"
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <io.h>
 #else
