@@ -292,7 +292,7 @@ void fl_do_deferred_calls() {
   // version of Windows for years and affects IE and other Microsoft
   // programs:
   if (keep_active && !grab()) {
-    //BringWindowToTop(keep_active);
+    BringWindowToTop(keep_active);
     SetActiveWindow(keep_active);
   }
   recurse = false;
