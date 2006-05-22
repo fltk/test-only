@@ -49,7 +49,7 @@ decl {\#include <fltk/ask.h>} {}
 
 decl {\#include <fltk/SharedImage.h>} {} 
 
-decl {\#include "fluid.h"} {} 
+decl {\#include "PrefsData.h"} {} 
 
 declblock {\#if defined(WIN32) && !defined(__CYGWIN__)} {after {\#endif // WIN32 && !__CYGWIN__}
 } {

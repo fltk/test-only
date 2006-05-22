@@ -11,8 +11,6 @@ decl {\#include <fltk/Window.h>} {public
 
 decl {\#include <fltk/xpmImage.h>} {} 
 
-decl {\#include "fluid.h"} {} 
-
 decl {\#include "FluidType.h"} {} 
 
 decl {\#include "fluid_img.h"} {} 

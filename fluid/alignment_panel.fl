@@ -6,7 +6,7 @@ code_name {.cxx}
 gridx 5 
 gridy 5 
 snap 3
-decl {\#include "fluid.h"} {} 
+decl {\#include "PrefsData.h"} {} 
 
 decl {\#include "FluidType.h"} {} 
 
