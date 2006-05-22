@@ -62,11 +62,10 @@ class Itest : public Widget {
 public:
   Itest(PixelType pt, int x, int y, const char* l, const unsigned char* d) :
     Widget(x,y,16*SCALE,16*SCALE,l) {
-    box(NO_BOX);
-    image(new rgbImage(d, pt, 16*SCALE, 16*SCALE));
+    box(new rgbImage(d, pt, 16*SCALE, 16*SCALE));
     align(ALIGN_BOTTOM);
     labelsize(10);
-    tooltip("Instance of fltk::rgbImage used as widget->image()");
+    tooltip("Instance of fltk::rgbImage used as widget->box()");
   }
 };
 
@@ -82,8 +81,7 @@ class Insettest : public Widget {
 public:
   Insettest(PixelType pt,int x, int y, const char* l, const unsigned char* d) :
     Widget(x,y,16*SCALE,16*SCALE,l) {
-    box(NO_BOX);
-    image(new Insetimage(d, pt, 16*SCALE, 16*SCALE));
+    box(new Insetimage(d, pt, 16*SCALE, 16*SCALE));
     align(ALIGN_BOTTOM);
     labelsize(10);
     tooltip("Edges are not scaled in this image.");
@@ -96,8 +94,7 @@ class Btest : public Widget {
 public:
   Btest(int x, int y, const char* l)
     : Widget(x,y,16*SCALE,16*SCALE,l) {
-    box(NO_BOX);
-    image(new xbmImage(sorceress_bits, sorceress_width, sorceress_height));
+    box(new xbmImage(sorceress_bits, sorceress_width, sorceress_height));
     align(ALIGN_BOTTOM|ALIGN_CLIP);
     labelsize(10);
   }
@@ -110,8 +107,7 @@ class Xtest : public Widget {
 public:
   Xtest(int x, int y, const char* l, const char* const* data)
     : Widget(x,y,16*SCALE,16*SCALE,l) {
-    box(NO_BOX);
-    image(new xpmImage(data,0));
+    box(new xpmImage(data,0));
     align(ALIGN_BOTTOM|ALIGN_CLIP);
     labelsize(10);
   }
