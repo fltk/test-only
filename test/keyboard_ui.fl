@@ -1,5 +1,5 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0002 
+version 2.0100 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
@@ -11,11 +11,11 @@ decl {\#include <fltk/events.h>} {}
 Function {make_window()} {open
 } {
   {fltk::Window} {} {open
-    xywh {468 297 490 190} resizable
+    xywh {416 379 490 190} resizable
     extra_code {o->shortcut(0);} visible
   } {
     {fltk::Output} key_output {
-      label {Fl::event_key():} selected
+      label {Fl::event_key():}
       xywh {15 15 170 30} align 5 textfont 4 labelsize 10
     }
     {fltk::Output} text_output {
@@ -187,7 +187,7 @@ Function {make_window()} {open
       label Bksp
       user_data {fltk::BackSpaceKey} user_data_type {void*}
       callback key_cb
-      xywh {275 80 35 20} align 20 labelsize 8
+      xywh {275 80 35 20} align 52 labelsize 8
     }
     {fltk::Button} {} {
       label {Ins }
@@ -235,7 +235,7 @@ Function {make_window()} {open
       label Tab
       user_data {fltk::TabKey} user_data_type {void*}
       callback key_cb
-      xywh {15 100 27 20} align 20 labelsize 8
+      xywh {15 100 27 20} align 52 labelsize 8
     }
     {fltk::Button} {} {
       label Q
@@ -300,7 +300,7 @@ Function {make_window()} {open
     {fltk::Button} {} {
       label {\\}
       callback key_cb
-      xywh {282 100 28 20} align 20 labelsize 10
+      xywh {282 100 28 20} align 52 labelsize 10
     }
     {fltk::Button} {} {
       label {Del }
@@ -342,13 +342,13 @@ Function {make_window()} {open
       label {+}
       user_data {fltk::Keypad+'+'} user_data_type {void*}
       callback key_cb
-      xywh {460 100 20 40} align 17 labelsize 10
+      xywh {460 100 20 40} align 49 labelsize 10
     }
     {fltk::Button} {} {
       label Lock
       user_data {fltk::CapsLockKey} user_data_type {void*}
       callback key_cb
-      xywh {15 120 36 20} align 20 labelsize 8
+      xywh {15 120 36 20} align 52 labelsize 8
     }
     {fltk::Button} {} {
       label A
@@ -409,7 +409,7 @@ Function {make_window()} {open
       label Enter
       user_data {fltk::ReturnKey} user_data_type {void*}
       callback key_cb
-      xywh {271 120 39 20} align 20 labelsize 8
+      xywh {271 120 39 20} align 52 labelsize 8
     }
     {fltk::Button} {} {
       label 4
@@ -433,7 +433,7 @@ Function {make_window()} {open
       label Shift
       user_data {fltk::LeftShiftKey} user_data_type {void*}
       callback key_cb
-      xywh {15 140 45 20} align 20 labelsize 8
+      xywh {15 140 45 20} align 52 labelsize 8
     }
     {fltk::Button} {} {
       label Z
@@ -489,7 +489,7 @@ Function {make_window()} {open
       label Shift
       user_data {fltk::RightShiftKey} user_data_type {void*}
       callback key_cb
-      xywh {260 140 50 20} align 20 labelsize 8
+      xywh {260 140 50 20} align 52 labelsize 8
     }
     {fltk::Button} {} {
       label {@8->}
@@ -517,14 +517,14 @@ Function {make_window()} {open
     }
     {fltk::Button} {} {
       user_data {fltk::KeypadEnter} user_data_type {void*}
-      callback key_cb
+      callback key_cb selected
       xywh {460 140 20 40}
     }
     {fltk::Button} {} {
       label Ctrl
       user_data {fltk::LeftCtrlKey} user_data_type {void*}
       callback key_cb
-      xywh {15 160 30 20} align 20 labelsize 8
+      xywh {15 160 30 20} align 52 labelsize 8
     }
     {fltk::Button} {} {
       label Meta
@@ -565,7 +565,7 @@ Function {make_window()} {open
       label Ctrl
       user_data {fltk::RightCtrlKey} user_data_type {void*}
       callback key_cb
-      xywh {280 160 30 20} align 20 labelsize 8
+      xywh {280 160 30 20} align 52 labelsize 8
     }
     {fltk::Button} {} {
       label {@4->}
@@ -589,7 +589,7 @@ Function {make_window()} {open
       label 0
       user_data {fltk::Keypad+'0'} user_data_type {void*}
       callback key_cb
-      xywh {400 160 40 20} align 20 labelsize 10
+      xywh {400 160 40 20} align 52 labelsize 10
     }
     {fltk::Button} {} {
       label {.}

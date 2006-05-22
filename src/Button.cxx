@@ -133,7 +133,7 @@ int Button::handle(int event, const Rectangle& rectangle) {
     // grab initial focus if we are an ReturnButton:
     return shortcut()==ReturnKey ? 2 : 1;
   case UNFOCUS:
-    redraw_highlight(); //(DAMAGE_HIGHLIGHT);
+    redraw(1); // redraw to remove the focus box.
     return 1;
   case KEY:
     if (event_key() == ' ' || event_key() == ReturnKey
