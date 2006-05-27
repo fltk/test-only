@@ -77,8 +77,7 @@ void Image::over(const fltk::Rectangle& from, const fltk::Rectangle& to) const {
     const_cast<Image*>(this)->update();
     if (!picture || w_ < 1 || h_ < 1) return;
   }
-  fltk::Rectangle R(to);
-  fltk::Rectangle F(from); fltk::transform(F,R);
+  fltk::Rectangle R; fltk::transform(to,R);
   HDC tempdc = CreateCompatibleDC(dc);
   SelectObject(tempdc, (HBITMAP)picture);
   if (!(flags&USES_BG)) { // not a bitmap
