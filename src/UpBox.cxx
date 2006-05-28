@@ -44,7 +44,6 @@
 using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
-
 class FL_API FocusFrame : public Box {
 public:
   FocusFrame(const char* name) : Box(name) {}
