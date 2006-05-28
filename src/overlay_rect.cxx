@@ -48,7 +48,6 @@ void fltk::pen_mode(fltk::PenMode mode) {
 #if USE_X11
     XSetFunction(xdisplay, gc, mode==PEN_OVERLAY ? GXxor : GXcopy);
     if (mode==PEN_OVERLAY ) XSetForeground(xdisplay, gc, 0xffffffff);
-    return 0;
 #elif defined(_WIN32)
     SetROP2(dc, mode==PEN_OVERLAY ? R2_NOT : R2_COPYPEN );
 #elif defined(__APPLE__)
