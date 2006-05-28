@@ -97,7 +97,8 @@ int List::children(const Menu* menu, const int* indexes, int level) {
   Group* group = (Group*)menu;
   while (level--) {
     int i = *indexes++;
-    //if (i < 0 || i >= group->children()) return -1;
+    // browser can return indexes pointing on -1 values so we must check this :
+    if (i < 0) return -1;    //if (i >= group->children()) return -1;
     Widget* widget = group->child(i);
     if (!widget->is_group()) return -1;
     group = (Group*)widget;
