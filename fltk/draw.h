@@ -110,6 +110,16 @@ enum {
   JOIN_ROUND	= 0x2000,
   JOIN_BEVEL	= 0x3000
 };
+enum PenMode {
+  PEN_NORMAL	= 0,
+  PEN_OVERLAY
+  // other future modes op. should be set here like
+  // PEN_BLACK
+  // PEN_WHITE
+};
+
+FL_API void pen_mode(PenMode mode);
+
 /*! \} */
 
 /*! \addtogroup path

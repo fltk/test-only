@@ -72,7 +72,7 @@ static void revert(Style* s) {
   s->parent_		= 0;	// this is the topmost style always
   s->box_		= DOWN_BOX;
   s->buttonbox_		= UP_BOX;
-  s->focusbox_		= DOTTED_FRAME;
+  s->focusbox_		= FOCUS_FRAME;
   s->glyph_		= Widget::default_glyph;
   s->labelfont_		= HELVETICA;
   s->textfont_		= HELVETICA;

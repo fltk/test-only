@@ -45,6 +45,19 @@ using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
 
+class FL_API FocusFrame : public Box {
+public:
+  FocusFrame(const char* name) : Box(name) {}
+  void _draw(const fltk::Rectangle& r1) const {
+    if (!drawflags(FOCUSED)) return;
+    pen_mode(PEN_OVERLAY);
+    line_style(DOT,1);
+    strokerect(r1);
+    line_style(SOLID,1);
+    pen_mode(PEN_NORMAL);
+  }
+};
+
 class FL_API DottedFrame : public Box {
 public:
   void _draw(const fltk::Rectangle& r1) const {
@@ -142,6 +155,7 @@ public:
   DottedFrame(const char* name) : Box(name) {}
 };
 static DottedFrame dottedFrame("dotted_frame");
+static FocusFrame focusFrame("focus_frame");
 
 /*! \ingroup boxes
   Default value for focusbox(). This draws nothing if FOCUSED is
@@ -149,6 +163,7 @@ static DottedFrame dottedFrame("dotted_frame");
   one pixel inset.
 */
 Box* const fltk::DOTTED_FRAME = &dottedFrame;
+Box* const fltk::FOCUS_FRAME = &focusFrame;
 
 ////////////////////////////////////////////////////////////////
 
