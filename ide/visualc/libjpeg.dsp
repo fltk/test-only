@@ -19,6 +19,7 @@ CFG=libjpeg - Win32 Release
 !MESSAGE 
 !MESSAGE "libjpeg - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "libjpeg - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "libjpeg - Win32 Release MinSize" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -76,12 +77,38 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\lib\fltk2_jpegd.lib"
 
+!ELSEIF  "$(CFG)" == "libjpeg - Win32 Release MinSize"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "libjpeg___Win32_Release_MinSize"
+# PROP BASE Intermediate_Dir "libjpeg___Win32_Release_MinSize"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "libjpeg___Win32_Release_MinSize"
+# PROP Intermediate_Dir "libjpeg___Win32_Release_MinSize"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_LIB" /FD /c
+# SUBTRACT BASE CPP /YX
+# ADD CPP /nologo /MD /W1 /GX- /O1 /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_LIB" /D "_MSC_DLL" /FD /c
+# SUBTRACT CPP /YX
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\lib\fltk2_jpeg.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\fltk2_jpeg.lib"
+
 !ENDIF 
 
 # Begin Target
 
 # Name "libjpeg - Win32 Release"
 # Name "libjpeg - Win32 Debug"
+# Name "libjpeg - Win32 Release MinSize"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"

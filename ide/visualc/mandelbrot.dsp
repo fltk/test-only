@@ -19,6 +19,7 @@ CFG=mandelbrot - Win32 Debug
 !MESSAGE 
 !MESSAGE "mandelbrot - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "mandelbrot - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "mandelbrot - Win32 Release MinSize" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -83,12 +84,42 @@ LINK32=link.exe
 # ADD LINK32 fltk2d.lib glu32.lib opengl32.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd" /out:"../../test/mandelbrotd.exe" /pdbtype:sept /libpath:"..\..\lib"
 # SUBTRACT LINK32 /pdb:none /incremental:no
 
+!ELSEIF  "$(CFG)" == "mandelbrot - Win32 Release MinSize"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "mandelbrot___Win32_Release_MinSize"
+# PROP BASE Intermediate_Dir "mandelbrot___Win32_Release_MinSize"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "mandelbrot___Win32_Release_MinSize"
+# PROP Intermediate_Dir "mandelbrot___Win32_Release_MinSize"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MT /GX /Os /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /FD /c
+# ADD CPP /nologo /MD /W1 /GX- /Os /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /FD /c
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 fltk2.lib glu32.lib opengl32.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib:"libcd" /out:"../../test/mandelbrot.exe" /libpath:"..\..\lib"
+# SUBTRACT BASE LINK32 /pdb:none /incremental:yes
+# ADD LINK32 fltk2.lib glu32.lib opengl32.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib:"libcd" /out:"../../test/mandelbrot.exe" /libpath:"..\..\lib"
+# SUBTRACT LINK32 /pdb:none /incremental:yes
+
 !ENDIF 
 
 # Begin Target
 
 # Name "mandelbrot - Win32 Release"
 # Name "mandelbrot - Win32 Debug"
+# Name "mandelbrot - Win32 Release MinSize"
 # Begin Source File
 
 SOURCE=..\..\test\mandelbrot.cxx

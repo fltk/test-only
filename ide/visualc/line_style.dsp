@@ -19,6 +19,7 @@ CFG=line_style - Win32 Debug
 !MESSAGE 
 !MESSAGE "line_style - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "line_style - Win32 Debug" (based on "Win32 (x86) Application")
+!MESSAGE "line_style - Win32 Release MinSize" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -83,12 +84,41 @@ LINK32=link.exe
 # ADD LINK32 fltk2d.lib wsock32.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd" /out:"../../test/line_styled.exe" /pdbtype:sept /libpath:"..\..\lib"
 # SUBTRACT LINK32 /pdb:none /incremental:no
 
+!ELSEIF  "$(CFG)" == "line_style - Win32 Release MinSize"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "line_style___Win32_Release_MinSize"
+# PROP BASE Intermediate_Dir "line_style___Win32_Release_MinSize"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "line_style___Win32_Release_MinSize"
+# PROP Intermediate_Dir "line_style___Win32_Release_MinSize"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MT /GX /Os /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /FD /c
+# ADD CPP /nologo /MD /GX- /O1 /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /FD /c
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 wsock32.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /machine:I386 /nodefaultlib:"libcd" /out:"../../test/line_style.exe" /libpath:"..\..\lib"
+# SUBTRACT BASE LINK32 /pdb:none /incremental:yes
+# ADD LINK32 wsock32.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /pdb:none /machine:I386 /out:"../../test/line_style.exe" /libpath:"..\..\lib"
+
 !ENDIF 
 
 # Begin Target
 
 # Name "line_style - Win32 Release"
 # Name "line_style - Win32 Debug"
+# Name "line_style - Win32 Release MinSize"
 # Begin Source File
 
 SOURCE=..\..\test\line_style.cxx

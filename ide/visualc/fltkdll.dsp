@@ -19,6 +19,7 @@ CFG=fltkdll - Win32 Release
 !MESSAGE 
 !MESSAGE "fltkdll - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "fltkdll - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "fltkdll - Win32 Release MinSize" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -85,12 +86,44 @@ LINK32=link.exe
 # ADD LINK32 opengl32.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:2.0 /subsystem:windows /dll /pdb:"fltkdlld.pdb" /debug /machine:I386 /nodefaultlib:"libcd" /out:"..\..\lib\fltk2dlld.dll" /pdbtype:sept /libpath:"..\..\lib"
 # SUBTRACT LINK32 /pdb:none /incremental:no
 
+!ELSEIF  "$(CFG)" == "fltkdll - Win32 Release MinSize"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "fltkdll___Win32_Release_MinSize"
+# PROP BASE Intermediate_Dir "fltkdll___Win32_Release_MinSize"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "..\..\lib\"
+# PROP Intermediate_Dir "fltkdll___Win32_Release_MinSize"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "NDEBUG" /D "FL_SHARED" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /c
+# SUBTRACT BASE CPP /YX
+# ADD CPP /nologo /MD /W1 /GX- /O1 /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "NDEBUG" /D "FL_SHARED" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_MSC_DLL" /c
+# SUBTRACT CPP /YX
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 opengl32.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:2.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386 /nodefaultlib:"libc" /out:"..\..\lib\fltk2dll.dll" /libpath:"..\..\lib"
+# SUBTRACT BASE LINK32 /pdb:none
+# ADD LINK32 opengl32.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:2.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386 /nodefaultlib:"libc" /out:"..\..\lib\fltk2dll.dll" /libpath:"..\..\lib"
+# SUBTRACT LINK32 /pdb:none
+
 !ENDIF 
 
 # Begin Target
 
 # Name "fltkdll - Win32 Release"
 # Name "fltkdll - Win32 Debug"
+# Name "fltkdll - Win32 Release MinSize"
 # Begin Source File
 
 SOURCE=..\..\src\add_idle.cxx
@@ -671,7 +704,6 @@ DEP_CPP_ERROR=\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\x.h"\
-	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -919,6 +951,7 @@ SOURCE=..\..\src\filename_absolute.cxx
 DEP_CPP_FILEN=\
 	"..\..\fltk\filename.h"\
 	"..\..\fltk\string.h"\
+	".\config.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	
 # End Source File
@@ -1554,7 +1587,6 @@ DEP_CPP_MESSA=\
 	"..\..\fltk\secretinput.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\x.h"\
-	".\config.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
@@ -1756,6 +1788,7 @@ DEP_CPP_PREFE=\
 	"..\..\fltk\filename.h"\
 	"..\..\fltk\Preferences.h"\
 	"..\..\fltk\string.h"\
+	".\config.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	
 # End Source File
@@ -2198,6 +2231,7 @@ DEP_CPP_STATU=\
 	"..\..\fltk\damage.h"\
 	"..\..\fltk\events.h"\
 	"..\..\fltk\invisiblebox.h"\
+	"..\..\fltk\layout.h"\
 	"..\..\fltk\StatusBarGroup.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
@@ -2679,7 +2713,6 @@ DEP_CPP_WINDOW_=\
 	"..\..\fltk\events.h"\
 	"..\..\fltk\Monitor.h"\
 	"..\..\fltk\x.h"\
-	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\

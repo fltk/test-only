@@ -49,7 +49,8 @@
 
 #include <windows.h>
 #include <stdio.h>
-
+// ignore deprecated freopen warning in vc2005:
+#pragma warning(disable: 4996)
 extern int main(int, char *[]);
 #ifdef BORLAND5 // FIXME : or __BORLANDC__ ??
 # define __argc _argc
