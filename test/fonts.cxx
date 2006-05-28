@@ -142,8 +142,7 @@ void font_cb(fltk::Widget *, long) {
 
 void encoding_cb(fltk::Widget *, long) {
   int i = encobj->value();
-// CET - FIXME - new browser code has value starting from 0!
-//  if (!i) return;
+  if (i<0) return; // FIXES STR#1291
   textobj->encoding = encobj->child(i)->label();
   textobj->redraw();
 }
