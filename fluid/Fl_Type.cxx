@@ -49,9 +49,9 @@
 #include <fltk/damage.h>
 #include <fltk/filename.h>
 #include <fltk/StatusBarGroup.h>
+#include <fltk/string.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
 
 #include "FluidType.h"
