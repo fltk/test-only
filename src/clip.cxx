@@ -136,6 +136,7 @@ void fltk::clip_region(Region region) {
   Pushes the \e intersection of the current region and \a r
   onto the clip stack.
 */
+// fabien : this code is small enough to merit an inline declaration, isn't it ?
 void fltk::push_clip(const Rectangle& r) {
   push_clip(r.x(), r.y(), r.w(), r.h());
 }
@@ -145,9 +146,13 @@ void fltk::push_clip(const Rectangle& r) {
   construction of an intermediate rectangle object.
 */
 void fltk::push_clip(int x, int y, int w, int h) {
-  Rectangle r; transform(x,y,w,h,r);
+  // Rectangle r; transform(x,y,w,h,r);
+  // no rectangle creation needed, use the direct FLTK_RECT predicates
+  // when dealing with x,y,w,h scalars evaluation in frequently used code
+  // Here XRectangleRegion() as well as CreateRectRgn() both use scalars so let's
+  // try not to build a Rectangle object that is not necessary:
   Region region;
-  if (r.empty()) {
+  if (FLTK_RECT_EMPTY(w,h)) {
 #if USE_X11
     region = XCreateRegion();
 #elif defined(_WIN32)
@@ -157,8 +162,9 @@ void fltk::push_clip(int x, int y, int w, int h) {
 #endif
   } else {
     Region current = rstack[rstackptr];
+    transform(x, y); // absolute coordinates lazy evaluation, only when really needed
 #if USE_X11
-    region = XRectangleRegion(r.x(), r.y(), r.w(), r.h());
+    region = XRectangleRegion(x, y, w, h);
     if (current) {
       Region temp = XCreateRegion();
       XIntersectRegion(current, region, temp);
@@ -166,7 +172,7 @@ void fltk::push_clip(int x, int y, int w, int h) {
       region = temp;
     }
 #elif defined(_WIN32)
-    region = CreateRectRgn(r.x(), r.y(), r.r(), r.b());
+    region = CreateRectRgn(x, y, w+x, h+y);
     if (current) CombineRgn(region, region, current, RGN_AND);
 #else
 # error

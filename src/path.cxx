@@ -380,7 +380,7 @@ namespace fltk {
 }
 static fltk::Rectangle circle;
 static float circle_start, circle_end;
-enum {NONE=0, PIE, CHORD} circle_type;
+enum CircleType {NONE=0, PIE, CHORD} circle_type;
 #else
 // We have to store the path ourselves on X11 and Win32. Path is stored
 // as transformed points plus lengths of "loops".

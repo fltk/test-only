@@ -91,18 +91,22 @@ void fltk::clip_region(Region r) {
   rstack[rstackptr] = r;
   fl_restore_clip();
 }
+// fabien : this code would merit inlining wouldn't it ?
+void fltk::push_clip(const Rectangle& r) {
+  push_clip(r.x(), r.y(), r.w(), r.h());
+}
 
 /*!
   Pushes the \e intersection of the current region and this rectangle
   onto the clip stack. */
-void fltk::push_clip0(Rectangle& r) {
-  transform(r);
+void fltk::push_clip(int x, int y, int w, int  h) {
   Region region = NewRgn();
-  if (r.empty()) {
+  if (FLTK_RECT_EMPTY(w,h)) {
     SetEmptyRgn(region);
   } else {
     Region current = rstack[rstackptr];
-    SetRectRgn(region, r.x(), r.y(), r.r(), r.b());
+    transform(x, y); // x,y absolute coords lazy evaluation
+    SetRectRgn(region, x, y, w+x, h+y);
     if (current) SectRgn(region, current, region);
   }
   pushregion(region);
@@ -118,8 +122,8 @@ void fltk::push_clip0(Rectangle& r) {
   non-rectangular clip regions. This call does nothing on those.
 */
 void fltk::clipout(const Rectangle& r1) {
-  Rectangle r(r1); transform(r);
-  if (r.empty()) return;
+  if (r1.empty()) return; // do not even construct r if r1 is empty
+  Rectangle r; transform(r1, r);
   Region current = rstack[rstackptr];
   if (!current) {current = NewRgn(); SetRectRgn(current, 0,0,16383,16383);}
   Region region = NewRgn();
@@ -159,7 +163,7 @@ void fltk::pop_clip() {
   clip region.
 */
 bool fltk::not_clipped(const Rectangle& r1) {
-  Rectangle r(r1); transform(r);
+  Rectangle r; transform(r1, r);
   // first check against the window so we get rid of coordinates
   // outside the 16-bit range the X/Win32 calls take:
   if (r.r() <= 0 || r.b() <= 0 || r.x() >= Window::drawing_window()->w()

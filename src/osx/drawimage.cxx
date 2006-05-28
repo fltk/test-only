@@ -156,7 +156,7 @@ void fl_quartz_draw_image(CGImageRef img, int w, int h,
   CGContextSaveGState(quartz_gc);
   fl_set_quartz_ctm();
   if (!from.x() && !from.y() && from.w()==w && from.h()==h) {
-    CGRect rect = {to.x(), -to.y(), to.w(), -to.h()};
+    CGRect rect = {{to.x(), -to.y()}, {to.w(), -to.h()}};
     CGContextDrawImage(quartz_gc, rect, img);
   } else {
 #if 0 // does not work before Tiger!!!

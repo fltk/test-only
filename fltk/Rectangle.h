@@ -24,6 +24,15 @@
 
 #include "FL_API.h"
 
+// rectangle macros that help keeping rectangle predicates as strict as possible 
+// even when not using rectangles in some situations (as when only using w h scalars)  
+// so that there is only one strict defintion for common predicates, 
+// if one change the following, it will be repercuted in all the core lib
+#define FLTK_RECT_EMPTY(w,h)        (w <= 0 || h <= 0)
+// we should always use the same evaluation for center_x, center_y  in all corelib code:
+//#define FLTK_CENTER_X(coord, length)  (coord + (length>>1))
+//#define FLTK_CENTER_Y(coord, length)  (coord + (length>>1))
+
 namespace fltk {
 
 class FL_API Rectangle {
@@ -76,9 +85,9 @@ class FL_API Rectangle {
   /*! Move entire rectangle by given distance in x and y. */
   void move(int dx, int dy) {x_ += dx; y_ += dy;}
   /*! True if w() or h() are less or equal to zero. */
-  bool empty() const {return w_ <= 0 || h_ <= 0;}
+  bool empty() const {return FLTK_RECT_EMPTY(w_, h_);}
   /*! Same as !empty(), true if w() and h() are both greater than zero. */
-  bool not_empty() const {return w_ > 0 && h_ > 0;}
+  bool not_empty() const {return  !FLTK_RECT_EMPTY(w_, h_);}
   /*! Integer center position. Rounded to the left if w() is odd. */
   int center_x() const {return x_+(w_>>1);}
   /*! Integer center position. Rounded to lower y if h() is odd. */
