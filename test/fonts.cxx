@@ -76,6 +76,7 @@ int pickedsize = 14;
 
 void font_cb(fltk::Widget *, long) {
   int fn = fontobj->value();
+  if (fn<0) return; // no current selection
 //printf("font: %d    name: %s   bigname: %s\n", fn, fonts[fn]->name(), fonts[fn]->system_name());
 
   fltk::Font* f = fonts[fn];
@@ -149,8 +150,7 @@ void encoding_cb(fltk::Widget *, long) {
 
 void size_cb(fltk::Widget *, long) {
   int i = sizeobj->value();
-// CET - FIXME - new browser code has value starting from 0!
-//  if (!i) return;
+  if (i<0) return; // no current selection
   const char *c = sizeobj->child(i)->label();
   while (*c < '0' || *c > '9') c++;
   pickedsize = atoi(c);

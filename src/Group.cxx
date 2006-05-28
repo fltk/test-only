@@ -720,7 +720,9 @@ void Group::draw() {
 */
 void Widget::draw_background() const {
 #if !USE_CLIPOUT
-  if (damage()&DAMAGE_EXPOSE) return;
+  // fabien: if DAMAGE ALL is requested though we should redraw this backgnd as asked by this flag
+  if ((damage()&DAMAGE_EXPOSE) ) return;
+
 #endif
   if (!parent()) return;
   push_clip(0,0,w(),h());
