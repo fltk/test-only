@@ -401,10 +401,8 @@ FileChooser::fileListCB()
   char	*filename,			// New filename
 	pathname[1024];			// Full pathname to file
 
-
- filename = (char *)fileList->child(fileList->value())->label();
-   if (!filename)
-    return;
+ int cval = fileList->value();
+ if (cval<0  || !(filename = (char *)fileList->child(cval)->label())) return;
 
   if (!directory_[0]) {
     strlcpy(pathname, filename, sizeof(pathname));
