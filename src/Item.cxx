@@ -224,6 +224,28 @@ void Item::layout() {
 int Item::handle(int) {return 0;}
 
 
+/*! Same as value(1). */
+bool Item::set() {
+  clear_changed();
+  if (!value()) {set_flag(VALUE); redraw(); return true;}
+  return false;
+}
+
+/*! Same as value(0). */
+bool Item::clear() {
+  clear_changed();
+  if (value()) {clear_flag(VALUE); redraw(); return true;}
+  return false;
+}
+
+/*! The current value. True means it is pushed down, false means it is
+  not pushed down. Only with the ToggleButton subclass can the user change
+  this permanelty, but you can change it for any button. */
+bool Item::value(bool v) {
+  return v ? set() : clear();
+}
+
+
 ////////////////////////////////////////////////////////////////
 
 /*! \class fltk::ItemGroup
