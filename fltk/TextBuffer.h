@@ -82,7 +82,7 @@ typedef void (*Text_Predelete_Cb)(int pos, int nDeleted, void* cbArg);
 /** TextBuffer */
 class FL_API TextBuffer {
 public:
-  TextBuffer(int requestedsize = 0);
+  TextBuffer(int requestedsize = 0,int requestedgapsize=0);
   ~TextBuffer();
 
   int length() const { return length_; }
@@ -273,6 +273,7 @@ protected:
 
   char mCanUndo;		  /*!< if this buffer is used for attributes, it must
 				                   not do any undo calls */
+  int requestedgapsize_;
 };
 
 } /* namespace fltk */

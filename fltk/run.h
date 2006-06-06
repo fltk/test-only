@@ -31,6 +31,9 @@
 # undef check
 #endif
 
+#define FLTK_MIN(a,b) ((a)<(b) ? (a) : (b))
+#define FLTK_MAX(a,b) ((a)>(b) ? (a) : (b))
+
 namespace fltk {
 
 /*! \addtogroup startup

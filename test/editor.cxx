@@ -307,7 +307,7 @@ style_init(void) {
   memset(style, 'A', textbuf->length());
   style[textbuf->length()] = '\0';
 
-  if (!stylebuf) stylebuf = new fltk::TextBuffer(textbuf->length());
+  if (!stylebuf) stylebuf = new fltk::TextBuffer(textbuf->length(),4096);
 
   style_parse(text, style, textbuf->length());
 
@@ -792,7 +792,7 @@ fltk::Window* new_view() {
 
 int main(int argc, char **argv) {
 
-  textbuf = new fltk::TextBuffer;
+  textbuf = new fltk::TextBuffer(0,4096);
   style_init();
 
   fltk::Window* window = new_view();

@@ -33,6 +33,7 @@
 #include <fltk/ask.h>
 #include <fltk/error.h>
 #include <fltk/TextBuffer.h>
+#include <fltk/run.h>
 
 // Return number of bytes that a legal UTF-8 encoding starting with cc
 // will use. Returns 1 if cc cannot start an encoding.
@@ -109,11 +110,14 @@ static void undobuffersize(int n) {
  * avoid unnecessary re-allocation if you know exactly how much the buffer
  * will need to hold
  */
-TextBuffer::TextBuffer(int requestedsize) {
+TextBuffer::TextBuffer(int requestedsize,int requestedgapsize) {
   length_ = 0;
-  buf_ = (char *)malloc(requestedsize + PREFERRED_GAP_SIZE);
+  // calc a gap size :
+  requestedgapsize_= requestedgapsize>0 ? 
+    requestedgapsize : FLTK_MAX(PREFERRED_GAP_SIZE, requestedsize>>8);
+  buf_ = (char *)malloc(requestedsize + requestedgapsize_);
   gapstart_ = 0;
-  gapend_   = PREFERRED_GAP_SIZE;
+  gapend_   = requestedgapsize_;
   tabdist_  = 8;
   usetabs_  = true;
 
@@ -178,11 +182,11 @@ void TextBuffer::text(const char *t) {
   deleted_length = length_;
   free(buf_);
   
-  /* Start a new buffer with a gap of PREFERRED_GAP_SIZE in the center */
-  buf_ = (char*)malloc(insert_length + PREFERRED_GAP_SIZE);
+  /* Start a new buffer with a gap of requestedgapsize_ in the center */
+  buf_ = (char*)malloc(insert_length + requestedgapsize_);
   length_ = insert_length;
   gapstart_ = insert_length/2;
-  gapend_   = gapstart_ + PREFERRED_GAP_SIZE;
+  gapend_   = gapstart_ + requestedgapsize_;
   memcpy(buf_, t, gapstart_);
   memcpy(&buf_[gapend_], &t[gapstart_], insert_length-gapstart_);
 
@@ -326,9 +330,9 @@ void TextBuffer::copy(TextBuffer *from_buf, int from_start, int from_end, int to
      the current buffer, just move the gap (if necessary) to where
      the text should be inserted.  If the new text is too large, reallocate
      the buffer with a gap large enough to accomodate the new text and a
-     gap of PREFERRED_GAP_SIZE */
+     gap of requestedgapsize_ */
   if (copy_length > gapend_ - gapstart_)
-    reallocate_with_gap(to_pos, copy_length + PREFERRED_GAP_SIZE);
+    reallocate_with_gap(to_pos, copy_length + requestedgapsize_);
   else if (to_pos != gapstart_)
     move_gap(to_pos);
   
@@ -1268,9 +1272,9 @@ int TextBuffer::insert_(int pos, const char *s) {
      the current buffer, just move the gap (if necessary) to where
      the text should be inserted.  If the new text is too large, reallocate
      the buffer with a gap large enough to accomodate the new text and a
-     gap of PREFERRED_GAP_SIZE */
+     gap of requestedgapsize_ */
   if (insertedLength > gapend_ - gapstart_)
-    reallocate_with_gap(pos, insertedLength + PREFERRED_GAP_SIZE);
+    reallocate_with_gap(pos, insertedLength + requestedgapsize_);
   else if (pos != gapstart_)
     move_gap(pos);
 
