@@ -14,7 +14,7 @@ Function {make_about_panel(const char *copyright)} {open
   } {
     {fltk::Group} display_group {open selected
       xywh {0 0 550 400}
-      image {/Users/fabien/DEVL/fltk/trunk/pixmaps/fluid/fluid_about.png}
+      image {../pixmaps/fluid/fluid_about.png}
       extra_code {o->resizable(o);}
     } {
       {fltk::ReturnButton} about_ok {
