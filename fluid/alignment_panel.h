@@ -19,6 +19,7 @@ extern fltk::CheckButton* completion_button;
 #include <fltk/ValueInput.h>
 extern fltk::ValueInput* recent_spinner;
 extern fltk::CheckButton* tabcolor_button;
+extern fltk::CheckButton* splash_button;
 #include <fltk/Widget.h>
 #include <fltk/Input.h>
 extern void header_input_cb(fltk::Input*, void*);

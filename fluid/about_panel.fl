@@ -1,5 +1,5 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0002 
+version 2.0100 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
@@ -9,76 +9,19 @@ snap 3
 Function {make_about_panel(const char *copyright)} {open
 } {
   {fltk::Window} about_panel {
-    label {about fluid} open
-    xywh {511 287 300 255} type Double resizable hotspot color 97 selection_color 47 non_modal visible
+    label {about fluid} selected
+    xywh {391 101 550 400} type Double color 97 selection_color 47 non_modal noborder visible
   } {
-    {fltk::Group} display_group {open
-      xywh {5 5 295 245}
+    {fltk::Group} display_group {
+      xywh {0 0 550 400}
+      image {C:/DEVL/fltk/trunk/pixmaps/fluid/fluid_about.png}
       extra_code {o->resizable(o);}
     } {
-      {fltk::Group} {} {open
-        xywh {55 25 60 150} box UP_BOX color 14 labelcolor 6 selection_color 47
-        extra_code {o->resizable(o);}
-      } {
-        {fltk::Widget} {} {
-          label {` }
-          xywh {30 90 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
-        }
+      {fltk::ReturnButton} about_ok {
+        label OK
+        callback {about_panel->hide()}
+        xywh {483 364 50 16} buttoncolor 0x4c519000 labelcolor 0xffffff00 highlight_color 0x6a4fe800 shortcut 0xff0d
       }
-      {fltk::Widget} {} {
-        xywh {40 0 90 40} box FLAT_BOX color 97 selection_color 47
-      }
-      {fltk::Widget} {} {
-        xywh {60 45 50 65} color 6 selection_color 47
-      }
-      {fltk::Widget} {} {
-        xywh {45 25 80 25} align 16 box ROUND_UP_BOX color 6 labelcolor 6 selection_color 47
-      }
-      {fltk::Group} {} {
-        label fluid open
-        xywh {10 130 150 105} align 16 box ROUND_UP_BOX labelfont 1 labeltype SHADOW_LABEL color 14 labelcolor 6 selection_color 47 labelsize 40
-        extra_code {o->resizable(o);}
-      } {
-        {fltk::Widget} {} {
-          label {` }
-          xywh {69 20 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
-        }
-        {fltk::Widget} {} {
-          label {` }
-          xywh {60 5 15 15} align 17 box OVAL_BOX color 6 labelcolor 7 selection_color 47 labelsize 20
-        }
-      }
-      {fltk::Widget} {} {
-        xywh {57 130 56 2} box FLAT_BOX color 14 selection_color 47
-      }
-      {fltk::Group} {} {open
-        xywh {145 18 149 122} box OFLAT_BOX labelfont 1 color 14 labelcolor 7 selection_color 47 labelsize 18
-        extra_code {o->resizable(o);}
-      } {
-        {fltk::Widget} {} {
-          label {FLTK User
-Interface
-Designer
-Version 2.0}
-          xywh {5 4 140 113} box OVAL_BOX labelfont 1 labeltype SHADOW_LABEL color 12 labelcolor 7 selection_color 47 labelsize 18
-        }
-      }
-      {fltk::Button} {} {
-        label {©1998-2006
-Click here for more information}
-        callback {display_group->hide();
-copyright_box->show();}
-        xywh {175 159 95 41} align 128 box BORDER_BOX color 136 labelcolor 6 labelsize 10
-      }
-    }
-    {fltk::Widget} copyright_box {selected
-      xywh {3 5 297 250} align 148 hide resizable box NO_BOX labelcolor 6 labelsize 10
-      extra_code {o->label(copyright);}
-    }
-    {fltk::ReturnButton} {} {
-      label OK
-      callback {o->parent()->hide();}
-      xywh {240 223 55 22} labelsize 10 shortcut 0xff0d
     }
   }
 } 

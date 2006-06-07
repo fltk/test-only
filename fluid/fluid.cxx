@@ -744,11 +744,29 @@ void show_preferences_cb(Widget *, void *);
 
 void set_images_dir_cb(Widget *, void *);
 
+//! fluid splashscreen implementation:
+//      reuse the about_panel but changes its drawing defaults
+Window * splash() {
+    if (!about_panel) make_about_panel(copyright);
+    Window * o= about_panel;
+    o->border(false);
+    o->position(fltk::monitor_w()/2-o->w()/2,fltk::monitor_h()/2-o->h()/2);
+    o->show();
+    about_ok->clear_visible();
+    o->flush();
+    do {fltk::check(); } while(!o->visible()) ;
+    return about_panel;
+}
+
 void about_cb(Widget *, void *) {
     if (!about_panel) make_about_panel(copyright);
-    copyright_box->hide();
-    display_group->show();
-    about_panel->show();
+    Window * o= about_panel;
+    //copyright_box->hide();
+    //display_group->show();
+    o->border(true);
+    o->position(fltk::monitor_w()/2-o->w()/2,fltk::monitor_h()/2-o->h()/2);
+    about_ok->set_visible();
+    o->show();
 }
 
 void show_help(const char *name) {
@@ -1339,17 +1357,23 @@ int main(int argc,char **argv) {
     }
     const char *c = argv[i];
     
+    register_images();
+
+    Window * sw = 0;
+    double splash_time = fltk::get_time_secs();
+    if(!compile_only && prefs.show_splash()) sw = splash();
+
     fluid_style_set = new StyleSet();
     style_set = new StyleSet();
     
-    register_images();
     read_plugins();
     make_main_window();
     load_coding_style();
     
     if (c) set_filename(c);
     if (!compile_only) {
-	visual(DOUBLE_BUFFER|INDEXED_COLOR);
+    	visual(DOUBLE_BUFFER|INDEXED_COLOR);
+
 	FileIcon::load_system_icons();
 	main_window->callback(exit_cb);
 	main_window->show(argc,argv);
@@ -1361,6 +1385,7 @@ int main(int argc,char **argv) {
 	    // Open previous file when no file specified...
 	    open_history_cb(0, absolute_history[0]);
 	}
+	if(sw) sw->show(); // keep splash screen on top if any
     }
     Undo::suspend();
     if (c && !read_file(c,0)) {
@@ -1371,13 +1396,20 @@ int main(int argc,char **argv) {
 	}
 	message("Can't read %s: %s", c, strerror(errno));
     }
+    if(sw) sw->show(); // keep splash screen on top if any
     Undo::resume();
     if (compile_only) {write_cb(0,0); exit(0);}
     modflag = 0;
 #ifndef _WIN32
     signal(SIGINT,sigint);
 #endif
+    if (sw) { // hide splash screen if still visible (no escape have been pressed)
+	while(sw->visible() && fltk::get_time_secs()-splash_time<1.0)
+	    fltk::check();
+	sw->hide();
+    }
     return run();
+
 }
 
 //

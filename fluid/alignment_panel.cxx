@@ -44,6 +44,12 @@ static void cb_tabcolor_button(fltk::CheckButton* o, void*) {
   initialize_tab_colors();
 }
 
+fltk::CheckButton *splash_button=(fltk::CheckButton *)0;
+
+static void cb_splash_button(fltk::CheckButton* o, void*) {
+  prefs.show_splash(o->value());
+}
+
 fltk::Input *header_file_input=(fltk::Input *)0;
 
 fltk::Input *code_file_input=(fltk::Input *)0;
@@ -72,13 +78,12 @@ fltk::Window* make_preferences_window() {
       o->begin();
        {fltk::Group* o = new fltk::Group(0, 21, 360, 188, "General");
         o->color((fltk::Color)0x54c2d400);
-        o->hide();
         o->begin();
-         {fltk::CheckButton* o = openlast_button = new fltk::CheckButton(10, 5, 193, 25, "Open Previous File on Startup");
+         {fltk::CheckButton* o = openlast_button = new fltk::CheckButton(10, 5, 190, 25, "Open Previous File on Startup");
           o->callback((fltk::Callback*)cb_openlast_button);
           openlast_button->value(prefs.open_previous_file() ? true : false);
         }
-         {fltk::CheckButton* o = prevpos_button = new fltk::CheckButton(10, 25, 193, 25, "Remember Window Positions");
+         {fltk::CheckButton* o = prevpos_button = new fltk::CheckButton(10, 25, 190, 25, "Remember Window Positions");
           o->callback((fltk::Callback*)cb_prevpos_button);
           prevpos_button->value(prefs.prev_window_pos() ? true : false);
         }
@@ -86,15 +91,19 @@ fltk::Window* make_preferences_window() {
           o->callback((fltk::Callback*)cb_completion_button);
           completion_button->value(prefs.show_completion_dialogs() ? true : false);
         }
-         {fltk::ValueInput* o = recent_spinner = new fltk::ValueInput(13, 73, 37, 25, "# Recent Files");
+         {fltk::ValueInput* o = recent_spinner = new fltk::ValueInput(13, 93, 37, 25, "# Recent Files");
           o->callback((fltk::Callback*)cb_recent_spinner);
           o->align(fltk::ALIGN_RIGHT);
           o->when(fltk::WHEN_CHANGED);
           recent_spinner->maximum(10); recent_spinner->value(prefs.recent_files());
         }
-         {fltk::CheckButton* o = tabcolor_button = new fltk::CheckButton(10, 105, 100, 25, "Colorful tabs");
+         {fltk::CheckButton* o = tabcolor_button = new fltk::CheckButton(10, 125, 100, 25, "Colorful tabs");
           o->callback((fltk::Callback*)cb_tabcolor_button);
           o->value(prefs.tabcolor() ? true : false);
+        }
+         {fltk::CheckButton* o = splash_button = new fltk::CheckButton(10, 65, 190, 25, "Show splash screen on startup");
+          o->callback((fltk::Callback*)cb_splash_button);
+          o->value(prefs.show_splash() ? true : false);
         }
         o->end();
       }
@@ -125,6 +134,7 @@ fltk::Window* make_preferences_window() {
        {fltk::Group* o = new fltk::Group(0, 21, 360, 189, "Alignment");
         o->color((fltk::Color)0xd49a5600);
         o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
+        o->hide();
         o->begin();
          {fltk::Input* o = horizontal_input = new fltk::Input(75, 6, 100, 22, "Horizontal:");
           o->labelsize(14);

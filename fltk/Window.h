@@ -54,7 +54,8 @@ public:
   static const char* xclass()	{return xclass_;}
   static void xclass(const char* v) {xclass_ = v;}
 
-  void clear_border()	{set_flag(NOBORDER);}
+  void border(bool set)	{set ? clear_flag(NOBORDER) : set_flag(NOBORDER);}
+  void clear_border()	{clear_flag(NOBORDER);} // deprecated for compat. only, please use border()
   bool border() const	{return !(flags() & NOBORDER);}
   void set_override()	{set_flag(NOBORDER|OVERRIDE);}
   bool override() const {return (flags()&OVERRIDE)!=0; }

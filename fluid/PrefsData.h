@@ -78,6 +78,7 @@ class PrefsData : public fltk::Preferences {
     FluidProperty(int, shell_writemsgs,"shell_writemsgs");
     FluidProperty(int, shell_savefl,"shell_savefl");
     FluidProperty(int, show_statusbar,"show_statusbar");
+    FluidProperty(int, show_splash,"show_splash");
     
     FluidPropertyGroup("sourceview", int, sv_autorefresh,"autorefresh");
     FluidPropertyGroup("sourceview", int, sv_autoposition,"autoposition");
@@ -103,6 +104,7 @@ class PrefsData : public fltk::Preferences {
       get("shell_writemsgs", shell_writemsgs_, 0);
       get("shell_savefl", shell_savefl_, 1);
       get("show_statusbar", show_statusbar_, 1);
+      get("show_splash",show_splash_,1);
 
       fltk::Preferences s(this, "sourceview");
       s.get("autorefresh",sv_autorefresh_,1);
