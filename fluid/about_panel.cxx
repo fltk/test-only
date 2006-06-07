@@ -1307,7 +1307,7 @@ fltk::DoubleBufferWindow* make_about_panel(const char *copyright) {
     o->selection_color((fltk::Color)47);
     o->begin();
      {fltk::Group* o = display_group = new fltk::Group(0, 0, 550, 400);
-      o->image(fltk::SharedImage::get("C:/DEVL/fltk/trunk/pixmaps/fluid/fluid_about.png"));
+      o->image(fltk::SharedImage::get("/Users/fabien/DEVL/fltk/trunk/pixmaps/fluid/fluid_about.png"));
       o->begin();
        {fltk::ReturnButton* o = about_ok = new fltk::ReturnButton(483, 364, 50, 16, "OK");
         o->buttoncolor((fltk::Color)0x4c519000);
@@ -1322,6 +1322,7 @@ fltk::DoubleBufferWindow* make_about_panel(const char *copyright) {
     o->end();
     o->set_non_modal();
     o->clear_border();
+    o->resizable(o);
   }
   return  w;
 }
