@@ -33,9 +33,11 @@ comment {//
 //} {in_source in_header
 } 
 
-decl {\#include <stdio.h>} {} 
+decl {\#include <stdio.h>} {selected
+} 
 
-decl {\#include <stdlib.h>} {} 
+decl {\#include <stdlib.h>} {selected
+} 
 
 decl {\#include <errno.h>} {} 
 
@@ -74,51 +76,8 @@ template_panel->hide();} open
   } {
     {fltk::Browser} template_browser {
       label {Available Templates:}
-      callback {if (fltk::event_clicks()) {
-  template_panel->hide();
-  return;
-}
-fltk::SharedImage *img = (fltk::SharedImage *)template_preview->image();
-if (img) img->remove();
-template_preview->image((fltk::Symbol*)0);
-template_preview->redraw();
-
-int item = template_browser->value();
-
-if (item <= 0) template_instance->deactivate();
-else template_instance->activate();
-
-if (item < 0) {
-  template_submit->deactivate();
-  template_delete->deactivate();
-  return;
-}
-
-template_submit->activate();
-
-const char *flfile = (const char *)template_browser->child(item)->label();
-if (!flfile) {
-  template_delete->deactivate();
-  return;
-}
-
-template_name->value(template_browser->child(item)->label());
-
-template_delete->activate();
-
-char pngfile[1024], *ext;
-
-strlcpy(pngfile, flfile, sizeof(pngfile));
-if ((ext = strrchr(pngfile, '.')) == NULL) return;
-strcpy(ext, ".png");
-
-img = fltk::SharedImage::get(pngfile);
-
-if (img) {
-  template_preview->image(img);
-  template_preview->redraw();
-}} open
-      xywh {10 28 180 250} align 5 when WHEN_CHANGED labelfont 1
+      callback template_browser_cb open
+      xywh {10 28 180 250} align 5 when CHANGED labelfont 1
     } {}
     {fltk::InvisibleBox} template_preview {
       xywh {200 28 250 250} align 85 resizable box THIN_DOWN_BOX
@@ -129,7 +88,7 @@ if (img) {
   template_submit->activate();
   if (fltk::event_key() == fltk::KeypadEnter || fltk::event_key() == fltk::ReturnKey) template_panel->hide();
 } else template_submit->deactivate();}
-      xywh {124 288 326 25} when WHEN_CHANGED labelfont 1 textfont 4
+      xywh {124 288 326 25} when NEVER labelfont 1 textfont 4
     }
     {fltk::Input} template_instance {
       label {Instance Name:}
@@ -180,27 +139,6 @@ template_browser->deselect();
 template_browser->clear();} {}
 } 
 
-Function {template_delete_cb(fltk::Button *, void *)} {open return_type void
-} {
-  code {int item = template_browser->value();
-if (item < 1) return;
-
-const char *name = template_browser->child(item)->label();
-const char *flfile = (const char *)template_browser->child(item)->label();
-if (!flfile) return;
-
-if (!fltk::choice("Are you sure you want to delete the template \\"%s\\"?",
-               "Cancel", "Delete", 0, name)) return;
-
-if (unlink(flfile)) {
-  fltk::alert("Unable to delete template \\"%s\\":\\n%s", name, strerror(errno));
-  return;
-}
-
-template_browser->remove(item);
-template_browser->do_callback();} {}
-} 
-
 Function {template_load()} {open return_type void
 } {
   code {int i;
@@ -232,8 +170,7 @@ for (i = 0; i < num_files; i ++) {
   free(files[i]);
 }
 
-if (num_files > 0) free(files);} {selected
-  }
+if (num_files > 0) free(files);} {}
 } 
 
 comment {//

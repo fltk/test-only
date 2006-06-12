@@ -1214,6 +1214,7 @@ void Browser::notify_remove(Widget* o) {
     // if o, one item is removed
     // if o is null then more than one item is removed
     if (!o || o==prev_item_) prev_item_=0;
+    if (o && o==child(value())) value(value()-1); // remove  focus if deleted
 }
 
 void Browser::clear() { 

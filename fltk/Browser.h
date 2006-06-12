@@ -211,7 +211,7 @@ public:
   void replace(Widget& old, Widget& o) {notify_remove(&old);Menu::replace(old,o);}
   void remove(Widget& o) {notify_remove(&o); Menu::remove(o);}
   void remove(Widget* o) {notify_remove(o); Menu::remove(o);}
-  void remove(int index) {notify_remove(0); Menu::remove(index);}
+  void remove(int index) {notify_remove(child(index)); Menu::remove(index);}
   //! update internals when an item is going to be removed, if null warn that more than one item is removed
   void notify_remove(Widget* o);
   // ! empty the browser from items and rest scrollbars

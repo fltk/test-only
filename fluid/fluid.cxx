@@ -256,6 +256,105 @@ void save_cb(Widget *, void *v) {
       Undo::update_saved();
     }
 }
+void template_browser_cb(Browser* b,void*) {
+    if (fltk::event_clicks()) {
+      template_panel->hide();
+      return;
+    }
+    fltk::SharedImage *img = (fltk::SharedImage *)template_preview->image();
+    if (img) img->remove();
+    template_preview->image((fltk::Symbol*)0);
+    template_preview->redraw();
+
+    int item = template_browser->value();
+
+    if (item <= 0) template_instance->deactivate();
+    else template_instance->activate();
+
+    if (item < 0) {
+      template_submit->deactivate();
+      template_delete->deactivate();
+      return;
+    }
+
+    template_submit->activate();
+
+    const char *flfile = (const char *)template_browser->child(item)->label();
+    if (!flfile || item<=0) {
+      template_delete->deactivate();
+      return;
+    }
+    else
+      template_delete->activate();
+    template_name->value(template_browser->child(item)->label());
+
+
+    char pngfile[1024], *ext;
+
+    strlcpy(pngfile, flfile, sizeof(pngfile));
+    if ((ext = strrchr(pngfile, '.')) == NULL) return;
+    strcpy(ext, ".png");
+
+    img = fltk::SharedImage::get(pngfile);
+
+    if (img) {
+      template_preview->image(img);
+      template_preview->redraw();
+    }
+}
+
+// get a filename string from a template name
+bool template_filename_from(const char * c, char * filename, size_t size) {
+    // Convert template name to filename_with_underscores
+  char safename[1024], *safeptr;
+  strlcpy(safename, c, sizeof(safename));
+  for (safeptr = safename; *safeptr; safeptr ++) {
+    if (isspace(*safeptr)) *safeptr = '_';
+  }
+
+  // Find the templates directory...
+  prefs.getUserdataPath(filename, size);
+
+  strlcat(filename, "templates", size);
+#if defined(WIN32) && !defined(__CYGWIN__)
+  if (access(filename, 0)) mkdir(filename);
+#else
+  if (access(filename, 0)) mkdir(filename, 0777);
+#endif // WIN32 && !__CYGWIN__
+
+  strlcat(filename, "/", size);
+  strlcat(filename, safename, size);
+
+  char *ext = filename + strlen(filename);
+  if (ext >= (filename + size - 5)) {
+    alert("The template name \"%s\" is too long!", c);
+    return false;
+  }
+
+  // Save the .fl file...
+  strcpy(ext, ".fl");
+  return true;
+}
+
+void template_delete_cb(fltk::Button *, void *) {
+  int item = template_browser->value();
+  if (item < 1) return;
+  
+  char filename[1024];
+  const char *name = template_browser->child(item)->label();
+  if (!template_filename_from(name, filename, sizeof(filename) )) return;
+  
+  if (!fltk::choice("Are you sure you want to delete the template \"%s\"?",
+                 "Cancel", "Delete", 0, name)) return;
+  
+  if (unlink(filename)) {
+    fltk::alert("Unable to delete template file \"%s\":\n%s", filename, strerror(errno));
+    return;
+  }
+  template_browser->remove(item);
+  template_browser->do_callback();
+  
+}
 
 void save_template_cb(Widget *, void *) {
   // Setup the template panel...
@@ -270,7 +369,6 @@ void save_template_cb(Widget *, void *) {
 
   template_instance->hide();
 
-  template_delete->show();
   template_delete->deactivate();
 
   template_submit->label("Save");
@@ -285,36 +383,10 @@ void save_template_cb(Widget *, void *) {
   // Get the template name, return if it is empty...
   const char *c = template_name->value();
   if (!c || !*c) return;
-
-  // Convert template name to filename_with_underscores
-  char safename[1024], *safeptr;
-  strlcpy(safename, c, sizeof(safename));
-  for (safeptr = safename; *safeptr; safeptr ++) {
-    if (isspace(*safeptr)) *safeptr = '_';
-  }
-
-  // Find the templates directory...
+  
   char filename[1024];
-  prefs.getUserdataPath(filename, sizeof(filename));
-
-  strlcat(filename, "templates", sizeof(filename));
-#if defined(WIN32) && !defined(__CYGWIN__)
-  if (access(filename, 0)) mkdir(filename);
-#else
-  if (access(filename, 0)) mkdir(filename, 0777);
-#endif // WIN32 && !__CYGWIN__
-
-  strlcat(filename, "/", sizeof(filename));
-  strlcat(filename, safename, sizeof(filename));
-
-  char *ext = filename + strlen(filename);
-  if (ext >= (filename + sizeof(filename) - 5)) {
-    alert("The template name \"%s\" is too long!", c);
-    return;
-  }
-
-  // Save the .fl file...
-  strcpy(ext, ".fl");
+  // calculate the template filename from it's name
+  if(!template_filename_from(c, filename,sizeof(filename))) return;
 
   if (!access(filename, 0)) {
     if (choice("The template \"%s\" already exists.\n"
@@ -542,8 +614,6 @@ void new_cb(Widget *, void *v) {
   template_instance->show();
   template_instance->deactivate();
   template_instance->value("");
-
-  template_delete->hide();
 
   template_submit->label("New");
   template_submit->deactivate();

@@ -32,53 +32,6 @@ static void cb_template_panel(fltk::DoubleBufferWindow*, void*) {
 
 fltk::Browser *template_browser=(fltk::Browser *)0;
 
-static void cb_template_browser(fltk::Browser*, void*) {
-  if (fltk::event_clicks()) {
-    template_panel->hide();
-    return;
-  }
-  fltk::SharedImage *img = (fltk::SharedImage *)template_preview->image();
-  if (img) img->remove();
-  template_preview->image((fltk::Symbol*)0);
-  template_preview->redraw();
-  
-  int item = template_browser->value();
-  
-  if (item <= 0) template_instance->deactivate();
-  else template_instance->activate();
-  
-  if (item < 0) {
-    template_submit->deactivate();
-    template_delete->deactivate();
-    return;
-  }
-  
-  template_submit->activate();
-  
-  const char *flfile = (const char *)template_browser->child(item)->label();
-  if (!flfile) {
-    template_delete->deactivate();
-    return;
-  }
-  
-  template_name->value(template_browser->child(item)->label());
-  
-  template_delete->activate();
-  
-  char pngfile[1024], *ext;
-  
-  strlcpy(pngfile, flfile, sizeof(pngfile));
-  if ((ext = strrchr(pngfile, '.')) == NULL) return;
-  strcpy(ext, ".png");
-  
-  img = fltk::SharedImage::get(pngfile);
-  
-  if (img) {
-    template_preview->image(img);
-    template_preview->redraw();
-  }
-;}
-
 fltk::InvisibleBox *template_preview=(fltk::InvisibleBox *)0;
 
 fltk::Input *template_name=(fltk::Input *)0;
@@ -126,9 +79,9 @@ fltk::DoubleBufferWindow* make_template_panel() {
      {fltk::Browser* o = template_browser = new fltk::Browser(10, 28, 180, 250, "Available Templates:");
       o->set_vertical();
       o->labelfont(fltk::HELVETICA_BOLD);
-      o->callback((fltk::Callback*)cb_template_browser);
+      o->callback((fltk::Callback*)template_browser_cb);
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
-      o->when(fltk::WHEN_NEVER);
+      o->when(fltk::WHEN_CHANGED);
     }
      {fltk::InvisibleBox* o = template_preview = new fltk::InvisibleBox(200, 28, 250, 250);
       o->box(fltk::THIN_DOWN_BOX);
@@ -174,26 +127,6 @@ void template_clear() {
   // internal flags set so that it will delete automatically on destruction
   template_browser->deselect();
   template_browser->clear();
-}
-
-void template_delete_cb(fltk::Button *, void *) {
-  int item = template_browser->value();
-  if (item < 1) return;
-  
-  const char *name = template_browser->child(item)->label();
-  const char *flfile = (const char *)template_browser->child(item)->label();
-  if (!flfile) return;
-  
-  if (!fltk::choice("Are you sure you want to delete the template \"%s\"?",
-                 "Cancel", "Delete", 0, name)) return;
-  
-  if (unlink(flfile)) {
-    fltk::alert("Unable to delete template \"%s\":\n%s", name, strerror(errno));
-    return;
-  }
-  
-  template_browser->remove(item);
-  template_browser->do_callback();
 }
 
 void template_load() {

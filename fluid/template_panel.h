@@ -6,6 +6,7 @@
 #include <fltk/DoubleBufferWindow.h>
 extern fltk::DoubleBufferWindow* template_panel;
 #include <fltk/Browser.h>
+extern void template_browser_cb(fltk::Browser*, void*);
 extern fltk::Browser* template_browser;
 #include <fltk/InvisibleBox.h>
 extern fltk::InvisibleBox* template_preview;
@@ -20,7 +21,6 @@ extern fltk::Button* template_delete;
 extern fltk::ReturnButton* template_submit;
 fltk::DoubleBufferWindow* make_template_panel();
 void template_clear();
-void template_delete_cb(fltk::Button *, void *);
 void template_load();
 // Header for //\n// End of "$Id$".\n//
 #endif
