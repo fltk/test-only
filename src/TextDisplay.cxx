@@ -329,9 +329,6 @@ void TextDisplay::layout() {
 
   // try without scrollbars first
   vscrollbar->clear_visible();
-
-  // try without scrollbars first
-  vscrollbar->clear_visible();
   hscrollbar->clear_visible();
 
   for (int again = 1; again;) {

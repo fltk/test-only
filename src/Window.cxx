@@ -880,6 +880,10 @@ Window::~Window() {
   are typically positive. To get the actual rectangle around your
   window, add these values to the window's size.
 */
+/** \fn void Window::border( bool set) 
+    if set is true, then a window border will be set, 
+    otherwise the window will have neither border nor caption.
+*/
 // Implementation in the system-specific code
 
 //
