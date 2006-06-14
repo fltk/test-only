@@ -23,11 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-/** \addtogroup boxes FLTK Box Types
-    These variables point at static instances of several classes of
-    Box which can be put in as the box() attribute of widgets.
-
-    \image html boxtypes.gif
+/** \addtogroup symbols
 */
 
 // These are the most common, square box types, which are always
@@ -90,22 +86,11 @@ public:
     //XSetLineAttributes(xdisplay, gc, 0, LineSolid, CapButt, JoinMiter);
 
 #elif defined(_WIN32) || defined(_WIN32_WCE)
-    // Windows 95/98/ME do not implement the dotted line style, so draw
-    // every other pixel around the focus area...
-    //
-    // Also, QuickDraw (MacOS) does not support line styles specifically,
-    // and the hack we use in fl_line_style() will not draw horizontal lines
-    // on odd-numbered rows...
-    //
-    // WAS: Can we do something with a pattern brush here, like the X
-    // version uses?
-
 /*
     // Draw using WIN32 API function (since 95)
     RECT r = {r.x(), r.y(), r.r()-1, r.b()-1};
     DrawFocusRect(dc, &r);
 */
-
     // Draw using bitmap patterns (like X11) and PatBlt
     static const WORD pattern[] = { 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA };
     static HBRUSH evenbrush, oddbrush;
@@ -154,7 +139,7 @@ public:
   DottedFrame(const char* name) : Box(name) {}
 };
 static DottedFrame dottedFrame("dotted_frame");
-static FocusFrame focusFrame("focus_frame");
+//static FocusFrame focusFrame("focus_frame");
 
 /*! \ingroup boxes
   Default value for focusbox(). This draws nothing if FOCUSED is
@@ -162,7 +147,7 @@ static FocusFrame focusFrame("focus_frame");
   one pixel inset.
 */
 Box* const fltk::DOTTED_FRAME = &dottedFrame;
-Box* const fltk::FOCUS_FRAME = &focusFrame;
+Box* const fltk::FOCUS_FRAME = &dottedFrame; //&focusFrame;
 
 ////////////////////////////////////////////////////////////////
 

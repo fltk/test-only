@@ -203,7 +203,6 @@ void Button::draw(int glyph_width) const
   }
 
   // only draw "inside" labels:
-  bool draw_label = true;
   Rectangle r(0,0,w(),h());
 
   if (box == NO_BOX) {
@@ -211,22 +210,12 @@ void Button::draw(int glyph_width) const
     if (box_flags & HIGHLIGHT && (bg = style->highlight_color())) {
       setcolor(bg);
       fillrect(r);
-    } else if ((damage()&(DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT))) {
+    } else if (label() || (damage()&(DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT))) {
       // erase the background so we can redraw the label in the new color:
-      draw_background();
-    } else if (!label()) {
-      // Assumme this is a button with an animated image label.
-      // we must redraw the image so it changes depending on state.
-      // Partially-transparent pixels will not draw right!
-    } else if (context_image()) {
-	draw_background();
-    } else { // must redraw when we loose focus
-	// fabien: when we loose focus we must draw the background 
-	// to cleanup the previous focus dashed box :
-	// Note that this solution is not really satisfying, we should
-	// draw the dashed focus in xor mode so we make sure we don't need any other redraw
-	// this way only an unfocus rect would be necessary
-	// Don't draw the label unnecessarily: draw_label = false;
+      // fabien: when we loose focus we must draw the background to cleanup
+      // dashed box:
+      // WAS: xor was suggested, but does not work if you want arbitrary
+      // colors or antialiasing!
       draw_background();
     }
     // this allows these buttons to be put into browser/menus:
@@ -249,27 +238,23 @@ void Button::draw(int glyph_width) const
   box->draw(r);
   box->inset(r);
 
-  if (draw_label) {
-    Rectangle lr(r);
-    if (glyph_width) {
-      if (glyph_width < 0)
-	lr.w(lr.w()+glyph_width-3);
-      else
-	lr.set_x(glyph_width+3);
-    }
-    this->draw_label(lr, box_flags);
-  }
-
   if (glyph_width) {
     int g = abs(glyph_width);
+    Rectangle lr(r);
     Rectangle gr(r, g, g);
-    if (glyph_width < 0)
+    if (glyph_width < 0) {
+      lr.w(lr.w()-g-3);
       gr.x(r.r()-g-3);
-    else
+    } else {
+      lr.set_x(g+3);
       gr.x(r.x()+3);
+    }
+    this->draw_label(lr, box_flags);
     drawstyle(style,glyph_flags);
     this->glyph()->draw(gr);
     drawstyle(style,box_flags);
+  } else {
+    this->draw_label(r, box_flags);
   }
   focusbox()->draw(r);
 }
