@@ -36,17 +36,6 @@ namespace fltk {
 }
 #endif
 
-/** \defgroup rectangle Simple Drawing
-    \ingroup drawing
-
-    These functions bypass the path construction mechanism to draw
-    some common shapes more quickly with calls to Xlib or GDI32.  Only
-    the x,y coordinates are transformed and in most cases they are
-    rounded to the nearest integer.
-
-  \{
-*/
-
 /*! Fill the rectangle with the current color. */
 void fltk::fillrect(int x, int y, int w, int h) {
   if (w <= 0 || h <= 0) return;
@@ -203,8 +192,6 @@ void fltk::drawpoint(float X, float Y) {
 # error
 #endif
 }
-
-/** \} */
 
 //
 // End of "$Id$".

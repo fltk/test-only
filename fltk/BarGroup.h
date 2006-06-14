@@ -27,7 +27,7 @@
 #ifndef fltk_BarGroup_h
 #define fltk_BarGroup_h
 
-#include <fltk/Group.h>
+#include "Group.h"
 
 namespace fltk {
 

@@ -6,7 +6,7 @@
 
 using namespace fltk;
 
-/*! \addtogroup example3
+/*! \page example3 Example 3: Using Classes
 
 As soon as you move away from very simple programs, you will need to
 organize your data and widgets, so that it is easier to create correct

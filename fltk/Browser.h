@@ -46,7 +46,7 @@ public:
   enum { //<! values for type()
     IS_MULTI = 1,
     NORMAL =  GROUP_TYPE,  //!< means single selection can be achieved by user 
-    MULTI  =  GROUP_TYPE+1 //!< means multiple selection can be achieved by user \see type()
+    MULTI  =  GROUP_TYPE+1 //!< means multiple selection can be achieved by user
   };
   enum { // values selected_column
     NO_COLUMN_SELECTED = -1 //!< means that no column has been selected by user
@@ -68,11 +68,11 @@ public:
     GROUP= 0,	    //!< indicates that the node is a ItemGroup derived node in the tree
     LEAF = 1	    //!< indicates that the node is simple Item in the tree
   };
-  enum linepos { 
+  enum linepos {  //!< Argument to make_item_visible()
       NOSCROLL,	    //!< no_scroll is made to make the current item visible
       TOP,	    //!< position current item to top when made visible
       MIDDLE,	    //!< position current item to middle when made visible
-      BOTTOM	    //!< position current item to bottom when made visible \see make_item_visible()
+      BOTTOM	    //!< position current item to bottom when made visible
   };
   
 

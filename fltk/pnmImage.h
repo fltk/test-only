@@ -1,4 +1,3 @@
-//
 // "$Id: pnmImage.h 4288 2005-04-16 00:13:17Z mike $"
 //
 // PNM image header file for the Fast Light Tool Kit (FLTK).
@@ -26,21 +25,22 @@
 //
 
 #ifndef fltk_pnm_Image_h
-# define fltk_pnm_Image_h
-# include <fltk/SharedImage.h>
+#define fltk_pnm_Image_h
+
+#include "SharedImage.h"
 
 namespace fltk {
-    class FL_IMAGES_API pnmImage : public SharedImage {
-      public:
-      pnmImage(const char* filename);
 
-      // virtual function overrides
-      void read(); 
-      bool fetch(); 
-    };
+class FL_IMAGES_API pnmImage : public SharedImage {
+public:
+  pnmImage(const char* filename);
+  // virtual function overrides
+  void read(); 
+  bool fetch(); 
+};
+
 }
+
 #endif
 
-//
 // End of "$Id: pnmImage.h 4288 2005-04-16 00:13:17Z mike $".
-//

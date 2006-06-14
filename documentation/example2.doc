@@ -5,7 +5,7 @@
 #include <fltk/run.h>
 using namespace fltk;
 
-/*! \addtogroup example2
+/*! \page example2 Example 2: Using Callbacks
 
 Every widget in fltk has a single \link fltk::Widget::callback
 callback function\endlink. Fltk assummes that for any type of widget,

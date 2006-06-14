@@ -24,7 +24,7 @@
 #ifndef fltk_Clock_h
 #define fltk_Clock_h
 
-#include <fltk/Widget.h>
+#include "Widget.h"
 
 namespace fltk {
 

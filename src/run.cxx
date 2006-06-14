@@ -50,37 +50,6 @@
 
 using namespace fltk;
 
-/*! \namespace fltk
-
-  \brief All classes and interface functions for fltk are in the fltk:: namespace.  This is a complete list of them, with links to the pages they are described on.
-
-  Put "using namespace fltk;" and you will not need to put the "fltk::" in
-  front of everything.
-
-  Fltk also provides some \ref utilities that are \e not in the fltk
-  namespace, as they are provided to make up for missing functions
-  that should be in standard libraries.
-
-  Fltk1.1 emulation is mostly achieved by aliasing the old class name
-  "Fl" to this namespace so that the static methods in Fltk1.1 will
-  work, and by typedefs from the new fltk::Widget class names to the
-  older Widget class names.
-
-*/
-
-/*!
-  Returns the version number of fltk. This can be compared to the
-  value of the FL_VERSION macro to see if the shared library of
-  fltk your program linked with is up to date.
-
-  The FLTK version number is stored in a number of compile-time constants: 
-  - FL_MAJOR_VERSION - The major release number, currently 2.
-  - FL_MINOR_VERSION - The minor release number, currently 0.
-  - FL_PATCH_VERSION - The patch release number, currently 1.
-  - FL_VERSION - A combined floating-point version number of the
-    form M.mmpp where M is the major number, mm is the minor number,
-    and pp is the patch number, currently 2.0001.
-*/
 double fltk::version() {return FL_VERSION;}
 
 //

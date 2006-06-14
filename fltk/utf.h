@@ -16,15 +16,16 @@
  *
  * Please report all bugs and problems to "fltk-bugs@fltk.org".
  */
+/*! \file
+  Functions to manipulate UTF-8 strings and convert from/to legacy
+  encodings. These functions are \e not in the fltk namespace.
+*/
 
 #ifndef fltk_utf_h
 #define fltk_utf_h
 
 #include "FL_API.h"
 #include <stdlib.h>
-
-/*! \addtogroup utilities
-  \{ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,7 +50,5 @@ FL_API int utf8test(const char*, unsigned);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-
-/*! \} */
 
 #endif

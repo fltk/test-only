@@ -19,6 +19,20 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
+/*! \file
+
+  The FLTK drawing library, used by all widgets to draw themselves.
+
+  These functions can only be called when FLTK is setup to draw
+  things. This is only true:
+  - Inside the Widget::draw() virtual function.
+  - Inside the Symbol::draw() virtual function.
+  - After calling Widget::make_current(), before calling wait() or flush().
+  Calling the drawing functions at other times produces undefined results,
+  including crashing.
+
+*/
+
 #ifndef fltk_draw_h
 #define fltk_draw_h
 
@@ -39,8 +53,8 @@ class FL_API GSave {
   ~GSave();
 };
 
-/*! \addtogroup transformation
-  \{ */
+/// \name Transformation
+//@{
 FL_API void push_matrix();
 FL_API void pop_matrix();
 FL_API void scale(float x, float y);
@@ -57,12 +71,10 @@ FL_API void transform_distance(float& x, float& y);
 FL_API void transform(int& x, int& y);
 FL_API void transform(const Rectangle& from, Rectangle& to);
 FL_API void transform(int x,int y,int w, int h, Rectangle& to);
+//@}
 
-/*! \} */
-
-/*! \addtogroup clipping
-  \{ */
-
+/// \name Clipping
+//@{
 void push_clip(const Rectangle& rectangle);
 //! Same as push_clip(Rectangle(x,y,w,h)) but faster:
 void push_clip(int X,int Y, int W, int H);
@@ -72,10 +84,8 @@ FL_API void pop_clip();
 FL_API void push_no_clip();
 FL_API bool not_clipped(const Rectangle&);
 FL_API int intersect_with_clip(Rectangle&);
-/*! \} */
+//@}
 
-/*! \addtogroup color
-  \{ */
 FL_API void setcolor(Color);
 extern FL_API Color current_color_;
 inline Color getcolor() {return current_color_;}
@@ -110,10 +120,13 @@ enum {
   JOIN_ROUND	= 0x2000,
   JOIN_BEVEL	= 0x3000
 };
+
+// WAS: This is highly NOT recommended, as no modern graphics API does XOR!
 enum PenMode {
   PEN_NORMAL	= 0,
   PEN_OVERLAY
   // other future modes op. should be set here like
+  // WAS: are these the same as normal with the color set black or white?
   // PEN_BLACK
   // PEN_WHITE
 };
@@ -122,8 +135,8 @@ FL_API void pen_mode(PenMode mode);
 
 /*! \} */
 
-/*! \addtogroup path
-  \{ */
+/// \name Path construction
+//@{
 FL_API void newpath();
 FL_API void addvertex(float x, float y);
 FL_API void addvertex(int x, int y);
@@ -135,15 +148,15 @@ FL_API void addarc(float x,float y,float w,float h, float a1, float a2);
 FL_API void addpie(const Rectangle& r, float a, float a2);
 FL_API void addchord(const Rectangle& r,float a,float a2);
 FL_API void closepath();
+//@}
 
+/// \name Shapes and lines
+//@{
 FL_API void drawpoints();
 FL_API void strokepath();
 FL_API void fillpath();
 FL_API void fillstrokepath(Color);
-/*! \} */
 
-/*! \addtogroup rectangle
-  \{ */
 FL_API void fillrect(int, int, int, int);
 inline void fillrect(const Rectangle& r) {fillrect(r.x(),r.y(),r.w(),r.h());}
 FL_API void strokerect(int, int, int, int);
@@ -152,10 +165,10 @@ FL_API void drawpoint(int x, int y);
 FL_API void drawpoint(float x, float y);
 FL_API void drawline(int x0, int y0, int x1, int y1);
 FL_API void drawline(float x0, float y0, float x1, float y1);
-/*! \} */
+//@}
 
-/*! \addtogroup font
-  \{ */
+/// \name Text
+//@{
 FL_API void setfont(Font*, float size);
 FL_API void setfont(const char*, float size);
 FL_API void setfont(const char*, int attributes, float size);
@@ -195,10 +208,10 @@ extern FL_API const int* column_widths_;
 inline const int* column_widths() {return column_widths_;}
 inline void column_widths(const int* i) {column_widths_ = i;}
 // see also Symbol.h for @-sign commands
-/*! \} */
+//@}
 
-/*! \addtogroup images
-  \{ */
+/// \name Images
+//@{
 FL_API void drawimage(const uchar*, PixelType, const Rectangle&);
 FL_API void drawimage(const uchar*, PixelType, const Rectangle&, int linedelta);
 
@@ -207,17 +220,18 @@ FL_API void drawimage(DrawImageCallback, void*, PixelType, const Rectangle&);
 
 FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&);
 FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&, int linedelta);
-/*! \} */
 
 FL_API void scrollrect(const Rectangle&, int dx, int dy,
 		       void (*draw_area)(void*, const Rectangle&), void*);
+//@}
 
-// depreciated:
+#ifndef DOXYGEN /* depreciated: */
 FL_API int draw_xpm(const char*const* data, int x, int y);
 FL_API int measure_xpm(const char*const* data, int &w, int &h);
 FL_API void overlay_rect(int,int,int,int);
 FL_API void overlay_clear();
 //FL_API int draw_symbol(const char* label, int x,int y,int w,int h, Color);
+#endif
 
 }
 

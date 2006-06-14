@@ -21,6 +21,7 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
+/*! \file */
 
 #ifndef fltk_ask_h
 #define fltk_ask_h
@@ -41,8 +42,6 @@ enum {
   BEEP_NOTIFICATION
 };
 
-/*! \addtogroup dialogs
-  \{ */
 FL_API void message(const char *, ...);
 FL_API void alert(const char *, ...);
 FL_API int  ask(const char *, ...);
@@ -64,8 +63,6 @@ extern FL_API const char* no;
 extern FL_API const char* yes;
 extern FL_API const char* ok;
 extern FL_API const char* cancel;
-
-/*! \} */
 
 }
 

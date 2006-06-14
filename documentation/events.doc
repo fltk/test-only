@@ -27,7 +27,7 @@
 
 using namespace fltk;
 
-/*! \defgroup events Event Types and Event Handling
+/*! \file fltk/events.h
 
   FLTK Events are identified by the integer argument passed to the
   fltk::Widget::handle() virtual method. Often a widget will modify
@@ -416,6 +416,3 @@ using namespace fltk;
   you paste a nul character.
 */
 
-
-
-/* \} */

@@ -24,7 +24,7 @@
 #ifndef fltk_ValueOutput_h
 #define fltk_ValueOutput_h
 
-#include <fltk/Valuator.h>
+#include "Valuator.h"
 
 namespace fltk {
 

@@ -1,8 +1,8 @@
-//
 // "$Id$"
 //
-// The basic fltk runtime. Every program needs to call this somewhere.
-//
+/*! \file
+  The basic fltk runtime. Every program needs to call this somewhere.
+*/
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
@@ -21,7 +21,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #ifndef fltk_run_h
 #define fltk_run_h
@@ -31,14 +30,8 @@
 # undef check
 #endif
 
-#define FLTK_MIN(a,b) ((a)<(b) ? (a) : (b))
-#define FLTK_MAX(a,b) ((a)>(b) ? (a) : (b))
-
 namespace fltk {
 
-/*! \addtogroup startup
-  \{ */
-FL_API double version();
 FL_API void display(const char*);
 FL_API int arg(int, char**, int&);
 FL_API int args(int, char**, int&, int (*)(int,char**,int&) = 0);
@@ -46,10 +39,6 @@ extern FL_API const char* const help;
 FL_API void args(int, char**);
 FL_API bool enable_tablet_events();
 
-/*! \} */
-
-/*! \addtogroup execution
-  \{ */
 FL_API int wait();
 FL_API int wait(float time);
 FL_API int check();
@@ -90,26 +79,19 @@ FL_API void add_fd(int fd, int when, FileHandler, void* =0);
 FL_API void add_fd(int fd, FileHandler, void* = 0);
 FL_API void remove_fd(int, int when = -1);
 
-/*! \} */
-
 extern FL_API bool in_main_thread_;
 
-/*! \addtogroup multithreading
-  \{ */
 FL_API void lock();
 FL_API void unlock();
 FL_API void awake(void* message = 0);
 FL_API void* thread_message();
 inline bool in_main_thread() {return in_main_thread_;}
-/*! \} */
 
-/*! \addtogroup Monitor access Facility
-  \{ */
-  FL_API int monitor_x();
-  FL_API int monitor_y();
-  FL_API int monitor_w();
-  FL_API int monitor_h();
-/*! \} */
+FL_API int monitor_x();
+FL_API int monitor_y();
+FL_API int monitor_w();
+FL_API int monitor_h();
+
 }
 
 #endif

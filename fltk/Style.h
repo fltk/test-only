@@ -22,6 +22,7 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
+/*! \file */
 
 #ifndef fltk_Style_h
 #define fltk_Style_h
@@ -195,8 +196,6 @@ struct FL_API NamedStyle : public Style {
   NamedStyle(const char* name, void (*revert)(Style*), NamedStyle** backptr);
 };
 
-/*! \addtogroup themes
-  \{ */
 extern "C" {typedef bool (*Theme)();}
 extern FL_API Theme theme_;
 inline Theme theme() {return theme_;}
@@ -204,15 +203,10 @@ inline void theme(Theme f) {theme_ = f;}
 FL_API void load_theme();
 FL_API void reload_theme();
 FL_API bool reset_theme();
-/*! \} */ // Doxygen bug(?) requires this
 
 }
 
-/*! \addtogroup themes
-  \{ */
 extern "C" FL_API bool fltk_theme();
-/*! \} */
-
 
 #endif
 

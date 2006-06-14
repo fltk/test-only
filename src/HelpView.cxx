@@ -158,7 +158,7 @@ HelpView::add_block(const char   *s,	// I - Pointer to start of block text
 			int           yy,	// I - Y position of block
 			int           ww,	// I - Right margin of block
 			int           hh,	// I - Height of block
-			unsigned char border)	// I - Draw border?
+			uchar border)	// I - Draw border?
 {
   HelpBlock	*temp;				// New block
 

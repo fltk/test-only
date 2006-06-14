@@ -592,9 +592,6 @@ static float split(
   }
 }
 
-/*! \addtogroup font
-  \{ */
-
 /*!
   This is the fancy string-drawing function that is used to draw all
   labels in fltk. The string is formatted and aligned inside the

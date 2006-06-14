@@ -28,10 +28,8 @@
 #ifndef fltk_StatusStatusBarGroup_h
 #define fltk_StatusStatusBarGroup_h
 
-#include <fltk/Group.h>
-#include <fltk/InvisibleBox.h>
-#include <stdlib.h>
-#include <string.h>
+#include "Group.h"
+#include "InvisibleBox.h"
 
 namespace fltk {
 

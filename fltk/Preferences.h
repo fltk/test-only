@@ -1,7 +1,4 @@
-//
 // "$Id: Preferences.H 4458 2005-07-26 07:59:01Z matt $"
-//
-// Preferences definitions for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 2002-2005 by Matthias Melcher.
 //
@@ -23,12 +20,11 @@
 // Please report all bugs and problems on the following page:
 //
 //     http://www.fltk.org/str.php
-//
 
-#ifndef Preferences_H
-#define Preferences_H
+#ifndef fltk_Preferences_h
+#define fltk_Preferences_h
 
-#include <fltk/FL_API.h>
+#include "FL_API.h"
 
 namespace fltk {
 
@@ -83,15 +79,10 @@ public:
   class FL_API Name {
     char *data_;
   public:
-    Name( unsigned int n );
+    Name( int n );
     Name( const char *format, ... );
     operator const char *() { return data_; }
-    ~Name();
-  };
-
-  struct Entry
-  {
-    char *name, *value;
+    ~Name() { delete[] data_; }
   };
 
 private:
@@ -102,20 +93,17 @@ private:
   Preferences &operator=(const Preferences&);
 
   class Node;
-  class RootNode;
-
-  friend class RootNode; // fabien: must be friend as well cause they use private node
   friend class Node;
-
   Node *node;
+
+  class RootNode;
+  friend class RootNode;
   RootNode *rootNode;
 
 };
 
 }
 
-#endif // !Preferences_H
+#endif
 
-//
 // End of "$Id: Preferences.H 4458 2005-07-26 07:59:01Z matt $".
-//

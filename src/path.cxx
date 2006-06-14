@@ -33,46 +33,6 @@
 #include <stdlib.h>
 using namespace fltk;
 
-/** \addtogroup drawing
-
-  There are only certain places you can execute drawing code in
-  FLTK. Calling these functions at other places will result in
-  undefined behavior!
-
-  - The most common is inside the virtual method Widget::draw(). To
-    write code here, you must subclass one of the existing
-    Widget classes and implement your own version of draw().
-  - You can also write boxtypes and labeltypes. These are small
-    structures with functions in them that rae called by existing
-    fltk::Widget::draw() methods. Pointers to these structures are
-    stored in the widget's box() , labeltype(), and possibly other
-    properties.
-  - You can write fltk::Image classes, which can then be put into the
-    fltk::Widget::image() and be called by existing
-    fltk::Widget::draw() methods.
-  - You can call fltk::Window::make_current() to do incremental update
-    of a widget. Use fltk::Widget::window() to find the window.
-
-  All functions are defined by including <fltk/draw.h>
-*/
-
-////////////////////////////////////////////////////////////////
-/*! \defgroup transformation Transformation
-    \ingroup drawing
-
-  FLTK provides an arbitrary 2-D linear transformation (ie rotation,
-  scale, skew, reflections, and translation). This is very similar to
-  PostScript, PDF, and SVG.
-
-  Due to limited graphics capabilities of some systems, all drawing
-  methods that take int values only translate the x and y values, and
-  round them to the nearest integer. You should use functions that
-  take floating-point coordinates if you want accurately scaled
-  drawings.
-
-  \{
-*/
-
 struct Matrix {
   float a, b, c, d, x, y;
   int ix, iy; // x & y rounded to nearest integer
@@ -119,8 +79,21 @@ bool fl_get_invert_matrix(XTransform& i) {
 }
 #endif
 
-/*! Save the current transformation on a stack, so you can restore it
-  with pop_matrix(). */
+/**
+
+  Save the current transformation on a stack, so you can restore it
+  with pop_matrix().
+
+  FLTK provides an arbitrary 2-D affine transformation (rotation,
+  scale, skew, reflections, and translation). This is very similar to
+  PostScript, PDF, SVG, and Cairo.
+
+  Due to limited graphics capabilities of some systems, not all
+  drawing functions will be correctly transformed, except by the
+  integer portion of the translation. Don't rely on this as we
+  may be fixing this without notice.
+
+*/
 void fltk::push_matrix() {
   if (sptr >= stacksize) {
     stacksize = stacksize ? 2*stacksize : 16;
@@ -132,12 +105,14 @@ void fltk::push_matrix() {
   stack[sptr++] = m;
 }
 
-/*! Put the transformation back to the way it was before the last
+/**
+  Put the transformation back to the way it was before the last
   push_matrix(). Calling this without a matching push_matrix will crash!
 */
 void fltk::pop_matrix() {m = stack[--sptr];}
 
-/*! Multiply the current transformation by
+/**
+Multiply the current transformation by
 \code
 a b 0
 c d 0
@@ -163,7 +138,8 @@ void fltk::concat(float a, float b, float c, float d, float x, float y) {
   }
 }
 
-/*! Scale the current transformation by multiplying it by
+/**
+Scale the current transformation by multiplying it by
 \code
 x 0 0
 0 y 0
@@ -175,7 +151,8 @@ void fltk::scale(float x,float y) {
     concat(x, 0, 0, y, 0, 0);
 }
 
-/*! Scale the current transformation by multiplying it by
+/**
+Scale the current transformation by multiplying it by
 \code
 x 0 0
 0 x 0
@@ -186,7 +163,8 @@ void fltk::scale(float x) {
   if (x != 1.0) concat(x,0,0,x,0,0);
 }
 
-/*! Translate the current transformation by multiplying it by
+/**
+Translate the current transformation by multiplying it by
 \code
 1 0 0
 0 1 0
@@ -203,7 +181,7 @@ void fltk::translate(float x,float y) {
   }
 }
 
-/*!
+/**
   This integer version is provided because it is much faster than the
   floating-point version. However C++ will not "resolve" which one you
   want to call if you try passing doubles as arguments. To get it to
@@ -221,9 +199,9 @@ void fltk::translate(int x, int y) {
   }
 }
 
-/*!
-  Rotate the current transformation counter-clockwise by \a d degrees
-  (not radians!!). This is done by multiplying the matrix by:
+/**
+Rotate the current transformation counter-clockwise by \a d degrees
+(not radians!!). This is done by multiplying the matrix by:
 \code
 cos -sin 0
 sin  cos 0
@@ -242,10 +220,10 @@ void fltk::rotate(float d) {
   }
 }
 
-/*!
-  Replace the current transform with the identity transform, which
-  puts 0,0 in the top-left corner of the window and each unit is 1
-  pixel in size.
+/**
+Replace the current transform with the identity transform, which
+puts 0,0 in the top-left corner of the window and each unit is 1
+pixel in size.
 */
 void fltk::load_identity() {
   m.a = 1; m.b = 0; m.c = 0; m.d = 1;
@@ -256,9 +234,11 @@ void fltk::load_identity() {
 
 ////////////////////////////////////////////////////////////////
 
-/*! Replace \a x and \a y transformed into device coordinates.
-  Device-specific code can use this to draw things using the
-  fltk transformation matrix.
+/**
+Replace \a x and \a y transformed into device coordinates.
+Device-specific code can use this to draw things using the
+fltk transformation matrix. If the backend is Cairo or another
+API that does transformations, this may return xy unchagned.
 */
 void fltk::transform(float& x, float& y) {
   if (!m.trivial) {
@@ -271,10 +251,10 @@ void fltk::transform(float& x, float& y) {
   }
 }
 
-/*!
-  Replace x and y with the tranformed coordinates, ignoring
-  translation. This transforms a vector which is measuring a distance
-  between two positions, rather than a position.
+/**
+Replace x and y with the tranformed coordinates, ignoring
+translation. This transforms a vector which is measuring a distance
+between two positions, rather than a position.
 */
 void fltk::transform_distance(float& x, float& y) {
   if (!m.trivial) {
@@ -284,8 +264,10 @@ void fltk::transform_distance(float& x, float& y) {
   }
 }
 
-/*! Replace x and y with the transformed coordinates, rounded to the
-  nearest integer. */
+/**
+Replace x and y with the transformed coordinates, rounded to the
+nearest integer.
+*/
 void fltk::transform(int& x, int& y) {
   if (!m.trivial) {
     int t = int(floorf(x*m.a + y*m.c + m.x + .5f));
@@ -297,13 +279,13 @@ void fltk::transform(int& x, int& y) {
   }
 }
 
-/*!
-  Transform the rectangle \a from into device coordinates and put
-  it into \a to. This only works correctly for 90 degree rotations, for
-  other transforms this will produce an axis-aligned rectangle with
-  the same area (this is useful for inscribing circles, and is about
-  the best that can be done for device functions that don't handle
-  rotation.
+/**
+Transform the rectangle \a from into device coordinates and put
+it into \a to. This only works correctly for 90 degree rotations, for
+other transforms this will produce an axis-aligned rectangle with
+the same area (this is useful for inscribing circles, and is about
+the best that can be done for device functions that don't handle
+rotation.
 */
 void fltk::transform(const Rectangle& from, Rectangle& to) {
   if (m.trivial || from.empty()) {
@@ -322,9 +304,9 @@ void fltk::transform(const Rectangle& from, Rectangle& to) {
   to.set(int(x),int(y),int(w),int(h));
 }
 
-/*!
-  Same as transform(Rectangle(X,Y,W,H),to). This may be faster as it
-  avoids the rectangle construction.
+/**
+Same as transform(Rectangle(X,Y,W,H),to). This may be faster as it
+avoids the rectangle construction.
 */
 void fltk::transform(int X,int Y,int W,int H, Rectangle& to) {
   if (m.trivial) {
@@ -344,23 +326,7 @@ void fltk::transform(int X,int Y,int W,int H, Rectangle& to) {
 }
 
 ////////////////////////////////////////////////////////////////
-/** \}
-    \defgroup path Path Construction
-    \ingroup drawing
-
-  These functions let you draw arbitrary shapes with 2-D linear
-  transformations. The functionality matches that found in Adobe®
-  PostScript<sup>TM</sup>. On both X and WIN32 the transformed vertices are
-  rounded to integers before drawing the line segments, this severely
-  limits the accuracy of these functions for complex graphics, so use
-  OpenGL when greater accuracy and/or performance is required.
-
-  Unlike PostScript<sup>TM</sup> the path is cleared after you
-  draw it. Instead fltk provides operators that do multiple operations
-  on the same path, such as fillstrokepath().
-
-  \{
-*/
+// Path Construction
 
 #if USE_CAIRO
 // Cairo has its own coordinate stack
@@ -421,10 +387,10 @@ enum {NONE=0, PIE, CHORD} circle_type;
 
 #endif // local path storage
 
-/*!
-  Add a single vertex to the current path. (If you are familiar
-  with PostScript, this does a "moveto" if the path is clear or
-  fltk::closepath was done last, otherwise it does a "lineto").
+/**
+  Add a single vertex to the current path. (if the path is empty
+  or a closepath() was done, this is equivalent to a "moveto"
+  in PostScript, otherwise it is equivalent to a "lineto").
 */
 void fltk::addvertex(float X, float Y) {
 #if USE_CAIRO
@@ -445,7 +411,7 @@ void fltk::addvertex(float X, float Y) {
 #endif
 }
 
-/*!
+/**
   This integer version is provided because it is much faster than the
   floating-point version. However C++ will not "resolve" which one you
   want to call if you try passing doubles as arguments. To get it to
@@ -479,7 +445,7 @@ void fltk::addvertex(int X, int Y) {
 #endif
 }
 
-/*!
+/**
   Add a whole set of vertices to the current path. This is much faster
   than calling fltk::addvertex once for each point.
 */
@@ -530,7 +496,7 @@ void fltk::addvertices(int n, const float array[][2]) {
 #endif
 }
 
-/*! Add a whole set of integer vertices to the current path. */
+/** Add a whole set of integer vertices to the current path. */
 void fltk::addvertices(int n, const int array[][2]) {
 #if USE_CAIRO
   const int* a = array[0];
@@ -578,9 +544,10 @@ void fltk::addvertices(int n, const int array[][2]) {
 #endif
 }
 
-/*! Adds a whole set of vertcies that have been produced from values
+/**
+  Adds a whole set of vertcies that have been produced from values
   returned by fltk::transform(). This is how curve() and arc() are
-  implemented. Not implemented if Cairo is in use!
+  implemented.
 */
 void fltk::addvertices_transformed(int n, const float array[][2]) {
 #if USE_CAIRO
@@ -613,9 +580,9 @@ void fltk::addvertices_transformed(int n, const float array[][2]) {
 #endif
 }
 
-/*!
+/**
   Similar to drawing another vertex back at the starting point, but
-  fltk knows the path is closed. The next fltk::vertex will start a
+  fltk knows the path is closed. The next addvertex() will start a
   new disconnected part of the shape.
 
   It is harmless to call fltk::closepath() several times in a row, or
@@ -734,13 +701,15 @@ static inline void inline_newpath() {
 #endif
 }
 
-/*! Clear the current "path". This is normally done by fltk::fillpath() or
-  any other drawing command. */
+/**
+  Clear the current "path". This is normally done by fltk::fillpath() or
+  any other drawing command.
+*/
 void fltk::newpath() {inline_newpath();}
 
 ////////////////////////////////////////////////////////////////
 
-/*!
+/**
   Draw a point (one pixel) for every vertex in the path, then clear the path.
   In theory the line_style() should affect how big the points are, but I
   don't think that works on X.
@@ -759,7 +728,7 @@ void fltk::drawpoints() {
   inline_newpath();
 }
 
-/*!
+/**
   Draw a line between all the points in the path (see
   fltk::line_style() for ways to set the thicknesss and dot pattern of
   the line), then clear the path.
@@ -824,7 +793,7 @@ void fltk::strokepath() {
   inline_newpath();
 }
 
-/*!
+/**
   Does fltk::closepath() and then fill with the current color, and
   then clear the path.
 
@@ -907,7 +876,7 @@ void fltk::fillpath() {
   inline_newpath();
 }
 
-/*!
+/**
   Does fltk::fill(), then sets the current color to linecolor and does
   fltk::stroke with the same closed path, and then clears the path.
 
@@ -1001,8 +970,6 @@ void fltk::fillstrokepath(Color color) {
   inline_newpath();
 #endif
 }
-
-/** \} */
 
 //
 // End of "$Id$".

@@ -134,7 +134,7 @@ public:
 
   // Common image algorithms
   virtual void color_average(Color c, float i);
-  //! this will desaturate to 33% an image to make it look inactivate \see color_average()
+  //! this will desaturate to 33% an image to make it look inactivate (see color_average())
   void inactive() { color_average(fltk::GRAY75, .33f); }
 
   // Drawing 

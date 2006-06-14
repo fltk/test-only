@@ -18,18 +18,17 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
+/*! \file */
 
 #ifndef fltk_PixelType_h
 #define fltk_PixelType_h
 
 namespace fltk {
-/*! \addtogroup images
-  \{ */
 
 /**
   Enumeration describing how colors are stored in an array of bytes
   that is a pixel. This is used as an argument for fltk::drawimage(),
-  fltk::readimage(), and fltk::Symbol::readimage().
+  fltk::readimage(), and fltk::Image.
 
   Notice that the order of the bytes in memory of ARGB32 or RGB32 is
   a,r,g,b on a little-endian machine and b,g,r,a on a big-endian
@@ -66,8 +65,6 @@ enum PixelType {
   inline PixelType pixel_type_bpp(int bpp, bool hasPal=false, bool hasAlpha=false) {
       return bpp <9  ? hasPal ? RGB8 : MONO : bpp <16 ? bpp==15 ? RGB15 : RGB16 :
 	    bpp <25 ? RGB : hasAlpha ? ARGB32 : RGB32;}
-/*! \} */
-
 }
 
 #endif

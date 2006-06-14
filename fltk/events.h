@@ -21,7 +21,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #ifndef fltk_events_h
 #define fltk_events_h
@@ -29,10 +28,6 @@
 #include "FL_API.h"
 
 namespace fltk {
-
-/*! \addtogroup events
-  \{
-*/
 
 /*! Numbers passed to Widget::handle() and returned by event(). */
 enum {
@@ -207,11 +202,11 @@ enum {
   DEVICE_TOUCH    = 5  /*!< Event triggered by touch a touch screen device */
 };
 
-/*! \} */
-
 class Rectangle;
 class Widget;
 class Window;
+
+#ifndef DOXYGEN
 
 ////////////////////////////////////////////////////////////////
 // Do not use these variables, they may not exist in future versions:
@@ -243,11 +238,8 @@ extern FL_API bool grab_;
 extern FL_API bool exit_modal_;
 
 ////////////////////////////////////////////////////////////////
+#endif
 
-/*! \addtogroup events
-  \{
-*/
-// event information:
 inline int  event()			{return e_type;}
 inline int  event_x()			{return e_x;}
 inline int  event_y()			{return e_y;}
@@ -319,7 +311,6 @@ inline bool exit_modal_flag()		{return exit_modal_;}
 
 // for debugging purpose : 
 const char  *event_name(int event); /// see STR #508
-/*! \} */
 
 }
 

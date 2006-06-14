@@ -32,11 +32,6 @@
 
 using namespace fltk;
 
-/*! \defgroup color Color and Line Style
-    \ingroup drawing
-
-*/
-
 /*! \typedef fltk::Color
 
   fltk::Color is a typedef for a 32-bit integer containing r,g,b bytes

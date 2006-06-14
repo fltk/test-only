@@ -1,7 +1,7 @@
 Project files for MS Visual Studio .NET
 ---------------------------------------
 
-config.h and fltk/string.h is located in ../ide/visualc directory.
+config.h is located in ../visualc directory.
 
 .......................................
 $Id$

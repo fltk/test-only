@@ -26,8 +26,7 @@
 #ifndef fltk_rgbImage_h
 #define fltk_rgbImage_h
 
-#include <fltk/FL_API.h>
-#include <fltk/Image.h>
+#include "Image.h"
 
 namespace fltk {
 

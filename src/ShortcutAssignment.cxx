@@ -21,9 +21,6 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-/*! \addtogroup events
-  \{
-*/
 
 // Shortcuts are stored entirely using hidden data structures, and are
 // looked up by searching for pointers in tables. This keeps the size

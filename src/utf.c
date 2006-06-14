@@ -1,6 +1,6 @@
 // "$Id$"
 
-/* Copyright 2004 by Bill Spitzak and others.
+/* Copyright 2006 by Bill Spitzak and others.
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above

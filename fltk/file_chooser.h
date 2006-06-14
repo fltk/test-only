@@ -1,6 +1,5 @@
 // "$Id$"
 //
-// Popup file chooser.
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
@@ -20,14 +19,15 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
+/*! \file
+  Popup file chooser dialog, using the FileChooser widget. */
+
 #ifndef fltk_file_chooser_h
 #define fltk_file_chooser_h
 
 #include "FL_API.h"
 
 namespace fltk {
-/*! \addtogroup dialogs
-  \{ */
 
 FL_API void use_system_file_chooser(bool = true);
 
@@ -36,7 +36,6 @@ FL_API const char *file_chooser(const char *message,const char *pattern,
 				const char *filename, int relative = 0);
 FL_API void file_chooser_callback(void (*cb)(const char *));
 
-/* \} */
 }
 
 #endif

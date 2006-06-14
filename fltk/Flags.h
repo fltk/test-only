@@ -37,8 +37,7 @@
 
 namespace fltk {
 
-/*! \addtogroup flags
-  \{ */
+/*! \file */
 
 /*! Type returned by fltk::Widget::flags() and passed to fltk::Box
   and many other drawing functions. */
@@ -101,7 +100,6 @@ enum {
   BELOWMOUSE		  = FOCUSED,	//!< used by image() and set_symbol() for state corresponding to widget below mouse
   OPENED		  = VALUE,	//!< used by image() and set_symbol() for state corresponding to widget open (i.e group node)
 };
-/*! \} */
 
 }
 

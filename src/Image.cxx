@@ -149,9 +149,10 @@ void Image::setsize(int w, int h) {
 
 /*! \fn void Image::make_current();
 
-  Make all the \ref drawing functions draw into the offscreen image.
-  Or so we wish. On all current platforms the only call that works
-  is a single fltk::drawimage() with the rectangle set to 0,0,w(),h().
+  Make all the drawing functions (see \link draw.h <fltk/draw.h>
+  \endlink) draw into the offscreen image.  Or so we wish. On all
+  current platforms the only call that works is a single
+  fltk::drawimage() with the rectangle set to 0,0,w(),h().
 
   To draw into an Image while you are drawing a widget (or drawing
   another Image) you must use a GSave object to save the state. See

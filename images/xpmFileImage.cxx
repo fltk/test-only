@@ -126,7 +126,7 @@ static char** read(char *name, int oneline = 0) {
   looks like the start of a .xpm file. This returns true if the 
   data contains "/\* XPM".
 */
-bool xpmFileImage::test(const unsigned char *data, unsigned)
+bool xpmFileImage::test(const uchar *data, unsigned)
 {
   return (strstr((char*) data,"/* XPM") != 0);
 }

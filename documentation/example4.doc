@@ -6,7 +6,7 @@
 
 using namespace fltk;
 
-/*! \addtogroup example4
+/*! \page example4 Example 4: Drawing Things
 
 Programs get a lot more interesting if you can output your own
 graphics. Fltk does this by having you define your own subclass of
@@ -50,12 +50,14 @@ the drawing color to black, then we draw a rectangle in that
 color.
 
 By default, the coordinate system is set up so one unit is a pixel and
-positive is right and down. w() and h() are methods on the widget to
-return it's current width and height.
+positive is right and down, and 0,0 is the upper-left corner of the
+widget being drawn. Widget::w() and Widget::h() return a widget's
+current width and height.
 
 The fltk::Rectangle class is a very simple container for four
 integers. The constructor here initializes the top-left corner to 0,0
-and the size to w(),h(), thus the rectangle fills the widget.
+and the size to Widget::w(),Widget::h(), thus the rectangle fills the
+widget.
 
 \until translate
 
@@ -82,23 +84,28 @@ You can also use any of the constants defined in <fltk/Color.h>
 
 \until fillstrokepath
 
-Now we build a "path" by calling addvertex() once for each corner of
-the polygon. You should set the color first (this is for compatability
-with future fltk versions where you may be able to change the color
-per vertex).
+Now we build a "path" by calling addvertex(float,float) once for each
+corner of the polygon. You should set the color first (this is for
+compatability with future fltk versions where you may be able to
+change the color per vertex).
 
 We then fill it and draw a white line around the outside with
-fillstrokepath(). You could also just fill the path with fillpath(),
-only draw the line with strokepath(), or draw a dot at each vertex
-with drawpoints(). All of these do an automatic "newpath", unlike
-PostScript.
+fillstrokepath(Color). You could also just fill the path with
+fillpath(), only draw the line with strokepath(), or draw a dot at
+each vertex with drawpoints(). All of these do an automatic "newpath",
+unlike PostScript.
+
+\until pop_matrix
+
+This restores the transformation back to what it was before the
+push_matrix() was called. Your draw() function \e must put the
+transformation and clipping back, or nasty things will happen!
 
 \until setfont
 
-Next we restore the previous transformation and select the font we
-want to draw the text in the middle in. It is recommended you use the
-labelfont() or textfont() so that user's preferences will affect your
-widgets.
+Next we select the font we want to draw the text in the middle in. It
+is recommended you use the labelfont() or textfont() so that user's
+preferences will affect your widgets.
 
 \until drawtext
 
@@ -114,12 +121,7 @@ labels on all the widgets, and it can justify and word-wrap the text
 well as print a number of interesting formatting commands and symbols
 indicated with '@' signs in the text.
 
-\until }
-
-This restores the transformation back to what it was before the
-pushmatrix() was called. Your draw() function \e must put the
-transformation and clipping back, or nasty things will happen!
-
+\skip }
 \skip inline
 \until }
 

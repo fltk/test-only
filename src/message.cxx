@@ -40,20 +40,6 @@
 
 using namespace fltk;
 
-/*! \addtogroup dialogs
-
-  FLTK provides a number of functions that create a popup window and
-  Window::exec() it. These functions return when the user OK's or
-  Cancels the window, returning the value the user chose.
-
-  Currently these are all built using normal fltk widgets. In theory
-  these should be services provided by the operating system or desktop
-  environment, but so far no non-ugly scheme has been developed for
-  that. Unfortunatly the space for these dialogs can often end up being
-  the majority of an FLTK program's size.
-
-*/
-
 static void m_revert(Style* s) {
   s->box_ = NO_BOX;
 }

@@ -1,4 +1,7 @@
 // "$Id$"
+/*! \file
+  Some functions to manipulate filenames, to make portable programs.
+*/
 
 /* Copyright 1998-2006 by Bill Spitzak and others.
  *
@@ -28,6 +31,7 @@
 #include "FL_API.h"
 
 ////////////////////////////////////////////////////////////////
+#ifndef DOXYGEN
 // dirent (what a pain)...
 
 #if defined(__WATCOMC__)
@@ -78,11 +82,10 @@ struct dirent {char d_name[1];};
 # endif
 #endif
 
+#endif
 ////////////////////////////////////////////////////////////////
 
 namespace fltk {
-/*! \addtogroup utilities
-  \{ */
 
 FL_API int filename_absolute(char *to, int tolen, const char *from, const char* cwd=0);
 FL_API int filename_relative(char *to, int tolen, const char *from, const char* cwd=0);
@@ -104,7 +107,6 @@ FL_API int numericsort(const dirent*const*, const dirent*const*);
 FL_API int filename_list(const char *d, dirent ***list, File_Sort_F *sort);
 FL_API int filename_list(const char *d, dirent ***list); // uses numericsort
 
-/*! \} */
 }
 
 #endif

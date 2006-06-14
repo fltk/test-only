@@ -32,24 +32,6 @@
 #include <stdlib.h>
 using namespace fltk;
 
-/*! \defgroup clipping Clipping
-    \ingroup drawing
-
-  You can limit all your drawing to a region by calling
-  fltk::push_clip(), and put the drawings back by using
-  fltk::pop_clip(). Fltk may also set up clipping before draw() is
-  called to limit the drawing to the region of the window that is
-  damaged.
-
-  When drawing you can also test the current clip region with
-  fltk::not_clipped() and fltk::clip_box(). By using these to skip
-  over complex drawings that are clipped you can greatly speed up your
-  program's redisplay.
-
-  <i>The width and height of the clipping region is measured in
-  transformed coordianates.</i>
-*/
-
 #if USE_X11
 // Region == Region
 #elif defined(_WIN32)

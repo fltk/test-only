@@ -32,8 +32,8 @@
 #ifndef fltk_InputBrowser_h
 #define fltk_InputBrowser_h
 
-#include <fltk/Menu.h>
-#include <fltk/Input.h>
+#include "Menu.h"
+#include "Input.h"
 
 namespace fltk {
 

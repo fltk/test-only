@@ -1,38 +1,37 @@
-/*! \defgroup multithreading Multithreaded FLTK Applications
+/*! \page multithreading Multithreaded FLTK Applications
 
-  Fltk has no multithreaded support unless the main thread calls
-  fltk::lock(). It should call this very early, such as the first
-  line in main(). After that parallel threads should call fltk::lock()
-  and fltk::unlock() around any fltk calls.
+  Fltk has no multithreaded support unless the "main" thread calls
+  fltk::lock(). It should call this very early, such as the first line
+  in main(). All threads, including the main one, should surround any
+  calls to FLTK with fltk::lock() and fltk::unlock().
 
-  The "main" thread is the one that calls fltk::wait(). It should call
-  fltk::lock() immediately and then never call fltk::unlock().  Though
-  it appears that fltk is then locked all the time, it is in fact
-  unlocked while fltk::wait() is waiting for events, which is really
-  the majority of the time.
+  Although it appears that the main thread has the lock all the time
+  as it must hold it while calling wait() or run(), in fact FLTK
+  releases the lock internally when it waits for events, and then
+  grabs it again before handling the events.
+
+  The "main" thread is the one that calls fltk::wait().
 
   If non-main threads cause any fltk::Widget::redraw() calls, they
   should call fltk::awake() just before fltk::unlock(). Otherwise the
   drawing may not be done until the next event.
 
-  Non-main threads cannot call all fltk functions. In particular any
-  functions that wait for events (including fltk::Window::exec() and
-  fltk::ask()) do not work. On Windows fltk::Window::show() does not
-  work either. It it likely we will be fixing these in the future.  To
-  make these broken calls you will have to store the fact that you
-  want them called in static memory locations, then call fltk::awake()
-  to make the main thread return, and have it check the static
-  locations and do the calls.
+  Currently non-main threads cannot call all fltk functions. In
+  particular any functions that wait for events (including
+  fltk::Window::exec() and fltk::ask()) do not work. On Windows
+  fltk::Window::show() does not work either. The function
+  in_main_thread() can be used to check if your code is in the main
+  thread or not (you have to hold the lock to call this). The only
+  workaround is to store what you want to do in static variables, call
+  fltk::awake(), and make the main thread call fltk::wait()
+  repeatedly, checking and acting on the static values after each
+  call.
 
-  FLTK provides the file <fltk/Threads.h> which defines some
-  convenience portability wrappers around the native threads
-  system. It provides a Thread type and the classes Mutex and
-  SignalMutex. <i>This file is optional</i>. Fltk does not use it (it
-  has an internal mutex implementation). The header file's only
-  purpose is so we can write portable demo programs. It may be useful
-  or an inspiration to people who want to try writing multithreaded
-  programs themselves, however you can instead use pthreads or any
-  other library that is compatable with your system.
+  FLTK provides the file \link Threads.h <fltk/Threads.h> \endlink which
+  defines some convenience portability wrappers around the native
+  threads system. It provides a Thread type and the classes Mutex and
+  SignalMutex. <i>This file is optional</i>, you can use pthreads
+  or any other multithreading library.
 
   \code
   main() {
@@ -108,9 +107,9 @@
 
 /*! \fn void* fltk::thread_message()
 
-  Returns an argument sent to an awake call, or returns null if none.
-  Warning: the current implementation only has a one-entry queue and
-  only returns the most recent value!
+  Returns an argument sent to the most recent awake(), or returns null
+  if none. Warning: this is almost useless for communication as the
+  value is clobbered by any thread doing awake()!
 */
 
 /*! \fn bool fltk::in_main_thread()

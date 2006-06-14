@@ -138,8 +138,6 @@ int ColorMenu::handle(int e) {
   return 1;
 }
 
-/*! \addtogroup dialogs
-  \{ */
 /*!
   Older style of color chooser that only chooses the "indexed" fltk
   colors. This pops up a panel of the 256 colors you can access with

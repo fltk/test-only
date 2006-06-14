@@ -23,7 +23,7 @@
 #ifndef fltk_AlignGroup_h
 #define fltk_AlignGroup_h
 
-#include <fltk/Group.h>
+#include "Group.h"
 
 namespace fltk {
 

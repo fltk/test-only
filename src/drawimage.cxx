@@ -39,38 +39,10 @@
 
 using namespace fltk;
 
-/*! \defgroup images Drawing Images
-    \ingroup drawing
-
-  If you plan to draw the same image many times, you may want an
-  fltk::Image subclass and call draw() on it. The advantage of using
-  such an object is that the image data is stored already-translated
-  to whatever form the display needs (and on X at least it is stored
-  in the same memory space as the server), so drawing it is much
-  faster. (Also currently alpha transparency is broken on X and Windows
-  unless you use an Image).
-
-  The advantage of using these calls verses fltk::Image is that it is
-  a lot easier to write the program. It also is the fastest way if you
-  are only going to draw the image once (for instance a video image
-  that is changing, or the output of your painting program that you
-  want the user to change).
-
-  Currently the image is only affected by the integer portion of the
-  current transformation. This may change in future versions!
-
-  The X version does not support some visuals and will abort() if
-  this is called on them. Currently only TrueColor, the rare
-  DirectColor, and PseudoColor of less or equal to 8 bits are
-  supported. It is recommended that you put fltk::visual(fltk::RGB)
-  at the start of your program to indicate that you want TrueColor,
-  all known X servers unsupported by FLTK in their default mode
-  provide a working full-color mode.
-*/
-
 /*!
 
-  Draw an image.
+  Draw a image (a rectangle of pixels) stored in your program's
+  memory. The current transformation (scale, rotate) is applied.
 
   - \a pointer points at the first byte of the top-left pixel.
   - \a type describes how to interpret the bytes of each pixel.
@@ -83,6 +55,16 @@ using namespace fltk;
   notice that in this case \a pointer still points at the top-left
   pixel, which is at the \e end of your buffer minus one line_delta.
 
+  If you plan to draw the \e same image (not a buffer that you are
+  changing) more than once, you probably want to use the Image
+  subclass of Symbol. This will set up the necessary shared memory
+  or server object so that redrawing the image is much faster.
+
+  The X version of FLTK will abort() when this is called if the
+  server is not full color but the colormap has more than 8 bits.
+  As far as I know, all such servers have a full-color mode that
+  will work, put fltk::visual(fltk::RGB) at the start of your program
+  to get this.
 */
 void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
 		     const Rectangle& r,

@@ -6,7 +6,7 @@
 
 using namespace fltk;
 
-/*! \addtogroup example1
+/*! \page example1 Example 1: Basic FLTK Program
 
 Here is a very short fltk program:
 
@@ -98,7 +98,7 @@ box->label_type(fltk::SHADOW_LABEL);
 draws, changing it from the default of fltk::DOWN_BOX. In our "Hello,
 World!"  example we use fltk::UP_BOX, which means that a raised button
 border will be drawn around the widget. There is a large selection of
-\ref boxes, or you can define your own by subclass fltk::Symbol.
+boxes, or you can define your own by subclass fltk::Symbol.
 
 You can examine the boxtype in by doing <tt>box->box()</tt>. Fltk uses
 method name overloading to make short names for get/set methods. A
@@ -133,10 +133,10 @@ window->show(argc, argv);
 \endcode
 
 For the first Window you can provide the command-line arguments, this
-runs a rather simple default \link fltk::args argument parser\endlink
-that lets the user customize the appearance, size, and position of
-your windows (you are not required to use this argument parser, and
-just calling show() with no arguments does not do this).
+runs a rather simple default args() argument parser that lets the user
+customize the appearance, size, and position of your windows (you are
+not required to use this argument parser, and just calling show() with
+no arguments does not do this).
 
 On some systems the window does not actually appear until fltk::run()
 is called, which flushes the cached instructions to the window

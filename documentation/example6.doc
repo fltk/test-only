@@ -6,7 +6,7 @@
 
 using namespace fltk;
 
-/*! \addtogroup editor
+/*! \page editor Example 6: A Text Editor
 
 \dontinclude editor.cxx
 

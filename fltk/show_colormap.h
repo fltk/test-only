@@ -1,9 +1,8 @@
-//
 // "$Id$"
-//
-// Pretty much obsolete popup color chooser that lets you pick one
-// of the 256 indexed colors in fltk.
-//
+/*! \file
+Pretty much obsolete popup color chooser that lets you pick one
+of the 256 indexed colors in fltk.
+*/
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
@@ -31,7 +30,6 @@
 #include "Color.h"
 
 namespace fltk {
-/*! \addtogroup utilities */
 FL_API Color show_colormap(Color oldcol);
 }
 

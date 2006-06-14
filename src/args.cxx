@@ -60,21 +60,6 @@ using namespace fltk;
   //extern FL_API const char *filename_name(const char *);
 #endif
 
-/*! \addtogroup startup
-\{
-  Warning: most of these functions will not work (and may crash) after
-  Window::show() has been called the first time. Calling
-  Window::show() will call any necessary setup that you have not
-  called yourself.
-
-  The args() argument parser is <i>entirely optional</i>. It was written
-  to make demo programs easy to write, although some minor work was done
-  to make it usable by more complex programs. But there is no requirement
-  that you call it or even acknoledge it's existence, if you prefer to
-  use your own code to parse switches.
-
-*/
-
 static int match(const char *a, const char *match, int atleast = 1) {
   const char *b = match;
   while (*a && (*a == *b || tolower(*a) == *b)) {a++; b++;}
@@ -95,6 +80,12 @@ extern Color fl_bg_switch;	// in Style.cxx
   adds the same value to \a i. You can use this function if you prefer to
   control the incrementing through the arguments yourself. The arguments
   recognized are listed under args().
+
+  The args() argument parser is <i>entirely optional</i>. It was written
+  to make demo programs easy to write, although some minor work was done
+  to make it usable by more complex programs. But there is no requirement
+  that you call it or even acknoledge it's existence, if you prefer to
+  use your own code to parse switches.
 */
 int fltk::arg(int argc, char **argv, int &i) {
   arg_called = true;
@@ -175,16 +166,15 @@ int fltk::arg(int argc, char **argv, int &i) {
   than argc.
 
   All switches may be abbreviated one letter and case is ignored: 
-  - -iconic Window::iconize() will be done to the window.
-  - -geometry WxH Window is resized to this width & height
-  - -geometry +X+Y Initial window position
-  - -geometry WxH+X+Y Window is resized and positioned.
-  - -display host or -display host:n.n The X display to use (ignored under WIN32).
-  - -name string will set the Window::label()
-  - -bg color XParseColor is used to lookup the passed color and then
-     fltk::background() is done. Under WIN32 only color names of the
-     form "#xxxxxx" are understood.
-  - -background color is the same as -bg color
+  - \c -iconic Window::iconize() will be done to the window.
+  - \c -geometry \e WxH Window is resized to this width & height
+  - \c -geometry \e +X+Y Initial window position
+  - \c -geometry \e WxH+X+Y Window is resized and positioned.
+  - \c -display \e host or \c -display \e host:n.n The X display to use (ignored under WIN32).
+  - \c -name \e string will set the Window::label()
+  - \c -bg \e color Call set_background() with the named color.
+     Use "#rrggbb" to set it in hex.
+  - \c -background \e color is the same as -bg color
 
 */
 int fltk::args(int argc, char** argv, int& i, int (*cb)(int,char**,int&)) {
@@ -197,8 +187,6 @@ int fltk::args(int argc, char** argv, int& i, int (*cb)(int,char**,int&)) {
   return i;
 }
 
-/*! \addtogroup startup
-  \{ */
 /*!
   This must be called after fltk::args(argc,argv) to show the "main"
   window, this indicates which window should be affected by any
@@ -424,7 +412,7 @@ int XParseGeometry(const char* string, int* x, int* y,
     *height = tempHeight;
   return (mask);
 }
-/* \} */
+
 #endif // if !USE_X11
 
 //

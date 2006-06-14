@@ -24,16 +24,16 @@
 //
 //     http://www.fltk.org/str.php
 //
-#include <config.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <sys/stat.h>
 
+#include <config.h>
 #include <fltk/Preferences.h>
 #include <fltk/filename.h>
 #include <fltk/string.h>
+
 #include <ctype.h>
+#include <stdarg.h>
+#include <stdlib.h>
+#include <sys/stat.h>
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
 #  include <windows.h>
@@ -52,7 +52,9 @@
 
 using namespace fltk;
 
-static char nameBuffer[128];
+struct Entry {
+  char *name, *value;
+};
 
 class Preferences::Node // a node contains a list to all its entries
 {          // and all means to manage the tree structure
@@ -269,6 +271,7 @@ bool Preferences::get( const char *key, int &value, int defaultValue )
  */
 bool Preferences::set( const char *key, int value )
 {
+  char nameBuffer[128];
   sprintf( nameBuffer, "%d", value );
   node->set( key, nameBuffer );
   return true;
@@ -291,6 +294,7 @@ bool Preferences::get( const char *key, float &value, float defaultValue )
  */
 bool Preferences::set( const char *key, float value )
 {
+  char nameBuffer[128];
   sprintf( nameBuffer, "%g", value );
   node->set( key, nameBuffer );
   return true;
@@ -313,6 +317,7 @@ bool Preferences::get( const char *key, double &value, double defaultValue )
  */
 bool Preferences::set( const char *key, double value )
 {
+  char nameBuffer[128];
   sprintf( nameBuffer, "%g", value );
   node->set( key, nameBuffer );
   return true;
@@ -329,7 +334,8 @@ static char *decodeText( const char *src )
     if ( *s == '\\' )
       if ( isdigit( s[1] ) ) s+=3; else s+=1;
   }
-  char *dst = (char*)malloc( len+1 ), *d = dst;
+  char *dst = new char[len+1];
+  char *d = dst;
   for ( s = src; *s; s++ )
   {
     char c = *s;
@@ -360,12 +366,12 @@ bool Preferences::get( const char *key, char *text, const char *defaultValue, in
   if ( v && strchr( v, '\\' ) ) {
     char *w = decodeText( v );
     strlcpy(text, w, maxSize);
-    free( w );
+    delete[] w;
     return true;
   }
   if ( !v ) v = defaultValue;
   if ( v ) strlcpy(text, v, maxSize);
-  else text = 0;
+  else *text = 0;
   return ( v != defaultValue );
 }
 
@@ -373,7 +379,7 @@ bool Preferences::get( const char *key, char *text, const char *defaultValue, in
 /**
  * read a text entry from the group
  * 'text' will be changed to point to a new text buffer
- * the text buffer must be deleted with 'free(text)' by the user.
+ * the text buffer must be freed with "delete[] text" by the user.
  */
 bool Preferences::get( const char *key, char *&text, const char *defaultValue )
 {
@@ -384,10 +390,7 @@ bool Preferences::get( const char *key, char *&text, const char *defaultValue )
     return true;
   }    
   if ( !v ) v = defaultValue;
-  if ( v )
-    text = strdup( v );
-  else
-    text = 0;
+  text = newstring(v);
   return ( v != defaultValue );
 }
 
@@ -402,7 +405,8 @@ bool Preferences::set( const char *key, const char *text )
   for ( ; *s; s++ ) { n++; if ( *s<32 || *s=='\\' || *s==0x7f ) ns+=4; }
   if ( ns )
   {
-    char *buffer = (char*)malloc( n+ns+1 ), *d = buffer;
+    char *buffer = new char[n+ns+1];
+    char *d = buffer;
     for ( s=text; *s; ) 
     { 
       char c = *s;
@@ -415,7 +419,7 @@ bool Preferences::set( const char *key, const char *text )
     }
     *d = 0;
     node->set( key, buffer );
-    free( buffer );
+    delete[] buffer;
   }
   else
     node->set( key, text );
@@ -424,10 +428,11 @@ bool Preferences::set( const char *key, const char *text )
 
 
 // convert a hex string to binary data
-static void *decodeHex( const char *src, int &size )
+static char *decodeHex( const char *src, int &size )
 {
   size = strlen( src )/2;
-  unsigned char *data = (unsigned char*)malloc( size ), *d = data;
+  char *data = new char[size];
+  char *d = data;
   const char *s = src;
   int i;
 
@@ -439,10 +444,10 @@ static void *decodeHex( const char *src, int &size )
     v = v<<4;
     x = tolower(*s++);
     if ( x >= 'a' ) v += x-'a'+10; else v += x-'0';
-    *d++ = (uchar)v;
+    *d++ = (char)v;
   }
 
-  return (void*)data;
+  return data;
 }
 
 
@@ -457,9 +462,9 @@ bool Preferences::get( const char *key, void *data, const void *defaultValue, in
   if ( v )
   {
     int dsize;
-    void *w = decodeHex( v, dsize );
-    memmove( data, w, dsize>maxSize?maxSize:dsize );
-    free( w );
+    char *w = decodeHex( v, dsize );
+    memcpy( data, w, dsize>maxSize?maxSize:dsize );
+    delete[] w;
     return true;
   }    
   if ( defaultValue )
@@ -471,7 +476,7 @@ bool Preferences::get( const char *key, void *data, const void *defaultValue, in
 /**
  * read a binary entry from the group
  * 'data' will be changed to point to a new data buffer
- * the data buffer must be deleted with 'free(data)' by the user.
+ * the data buffer must be deleted with "delete[] (char*)data" by the user.
  */
 bool Preferences::get( const char *key, void *&data, const void *defaultValue, int defaultSize )
 {
@@ -479,12 +484,12 @@ bool Preferences::get( const char *key, void *&data, const void *defaultValue, i
   if ( v )
   {
     int dsize;
-    data = decodeHex( v, dsize );
+    data = (void*)decodeHex( v, dsize );
     return true;
   }    
   if ( defaultValue )
   {
-    data = (void*)malloc( defaultSize );
+    data = new char[defaultSize];
     memmove( data, defaultValue, defaultSize );
   }
   else
@@ -498,7 +503,8 @@ bool Preferences::get( const char *key, void *&data, const void *defaultValue, i
  */
 bool Preferences::set( const char *key, const void *data, int dsize )
 {
-  char *buffer = (char*)malloc( dsize*2+1 ), *d = buffer;;
+  char *buffer = new char[dsize*2+1];
+  char *d = buffer;
   unsigned char *s = (unsigned char*)data;
   for ( ; dsize>0; dsize-- )
   {
@@ -509,7 +515,7 @@ bool Preferences::set( const char *key, const void *data, int dsize )
   }
   *d = 0;
   node->set( key, buffer );
-  free( buffer );
+  delete[] buffer;
   return true;
 }
 
@@ -556,48 +562,44 @@ void Preferences::flush()
 }
 
 //-----------------------------------------------------------------------------
-// helper class to create dynamic group and entry names on the fly
-//
+/** \class Preferences::Name
+  Helper class to create group and entry names on the fly. Use an instance
+  as the first argument to the Preferences::set() command.
+*/
 
 /**
- * create a group name or entry name on the fly
- * - this version creates a simple unsigned integer as an entry name
- * example:
- *   int n, i;
- *   Preferences prev( appPrefs, "PreviousFiles" );
- *   prev.get( "n", 0 );
- *   for ( i=0; i<n; i++ )
- *     prev.get( Preferences::Name(i), prevFile[i], "" );
- */
-Preferences::Name::Name( unsigned int n )
+  Converts an integer into an entry name. Example:
+\code
+Preferences prev( appPrefs, "PreviousFiles" );
+int n; prev.get( "n", n, 0 );
+for ( int i=0; i<n; i++ )
+  prev.get( Name(i), prevFile[i], "" );
+\endcode
+*/
+Preferences::Name::Name( int n )
 {
-  data_ = (char*)malloc(20);
-  sprintf(data_, "%u", n);
+  char buf[20];
+  snprintf(buf, 20, "%d", n);
+  data_ = newstring(buf);
 }
 
 /**
- * create a group name or entry name on the fly
- * - this version creates entry names as in 'printf'
- * example:
- *   int n, i;
- *   Preferences prefs( USER, "matthiasm.com", "test" );
- *   prev.get( "nFiles", 0 );
- *   for ( i=0; i<n; i++ )
- *     prev.get( Preferences::Name( "File%d", i ), prevFile[i], "" );
- */
+  Uses printf output to create the entry name. Example:
+\code
+Preferences prefs( USER, "matthiasm.com", "test" );
+int n; prev.get( "nFiles", n, 0 );
+for ( int i=0; i<n; i++ )
+  prev.get( Name( "File%d", i ), prevFile[i], "" );
+\endcode
+*/
 Preferences::Name::Name( const char *format, ... )
 {
-  data_ = (char*)malloc(1024);
+  char buf[1024];
   va_list args;
   va_start(args, format);
-  vsnprintf(data_, 1024, format, args);
+  vsnprintf(buf, 1024, format, args);
   va_end(args);
-}
-
-// delete the name
-Preferences::Name::~Name()
-{
-  free(data_);
+  data_ = newstring(buf);
 }
 
 //-----------------------------------------------------------------------------
@@ -612,11 +614,11 @@ static char makePath( const char *path ) {
     const char *s = strrchr( path, '/' );
     if ( !s ) return 0;
     int len = s-path;
-    char *p = (char*)malloc( len+1 );
+    char *p = new char[len+1];
     memcpy( p, path, len );
     p[len] = 0;
     makePath( p );
-    free( p );
+    delete[] p;
 #if defined(_WIN32) && !defined(__CYGWIN__)
     return ( mkdir( path ) == 0 );
 #else
@@ -632,11 +634,11 @@ static void makePathForFile( const char *path )
   const char *s = strrchr( path, '/' );
   if ( !s ) return;
   int len = s-path;
-  char *p = (char*)malloc( len+1 );
+  char *p = new char[len+1];
   memcpy( p, path, len );
   p[len] = 0;
   makePath( p );
-  free( p );
+  delete[] p;
 }
 
 // create the root node
@@ -728,9 +730,9 @@ Preferences::RootNode::RootNode( Preferences *prefs, Root root, const char *vend
 #endif
 
   prefs_       = prefs;
-  filename_    = strdup(filename);
-  vendor_      = strdup(vendor);
-  application_ = strdup(application);
+  filename_    = newstring(filename);
+  vendor_      = newstring(vendor);
+  application_ = newstring(application);
 
   read();
 }
@@ -744,9 +746,9 @@ Preferences::RootNode::RootNode( Preferences *prefs, const char *path, const cha
   snprintf(filename, sizeof(filename), "%s/%s.prefs", path, application);
 
   prefs_       = prefs;
-  filename_    = strdup(filename);
-  vendor_      = strdup(vendor);
-  application_ = strdup(application);
+  filename_    = newstring(filename);
+  vendor_      = newstring(vendor);
+  application_ = newstring(application);
 
   read();
 }
@@ -756,12 +758,9 @@ Preferences::RootNode::~RootNode()
 {
   if ( prefs_->node->dirty() )
     write();
-  if ( filename_ ) 
-    free( filename_ );
-  if ( vendor_ )
-    free( vendor_ );
-  if ( application_ )
-    free( application_ );
+  delete[] filename_;
+  delete[] vendor_;
+  delete[] application_;
   delete prefs_->node;
 }
 
@@ -840,7 +839,7 @@ bool Preferences::RootNode::getPath( char *path, int pathlen )
 // - path must be a single word, prferable alnum(), dot and underscore only. Space is ok.
 Preferences::Node::Node( const char *path )
 {
-  if ( path ) path_ = strdup( path ); else path_ = 0;
+  path_ = newstring( path );
   child_ = 0; next_ = 0; parent_ = 0;
   entry = 0;
   nEntry = NEntry = 0;
@@ -860,15 +859,12 @@ Preferences::Node::~Node()
   {
     for ( int i = 0; i < nEntry; i++ )
     {
-      if ( entry[i].name ) 
-	free( entry[i].name );
-      if ( entry[i].value )
-	free( entry[i].value );
+      delete[] entry[i].name;
+      delete[] entry[i].value;
     }
-    free( entry );
+    delete[] entry;
   }
-  if ( path_ ) 
-    free( path_ );
+  delete[] path_;
 }
 
 // recursively check if any entry is dirty (was changed after loading a fresh prefs file)
@@ -923,18 +919,20 @@ void Preferences::Node::setParent( Node *pn )
   parent_ = pn;
   next_ = pn->child_;
   pn->child_ = this;
+  char nameBuffer[128];
   sprintf( nameBuffer, "%s/%s", pn->path_, path_ );
-  free( path_ );
-  path_ = strdup( nameBuffer );
+  delete[] path_;
+  path_ = newstring( nameBuffer );
 }
 
 // add a child to this node and set its path (try to find it first...)
 Preferences::Node *Preferences::Node::addChild( const char *path )
 {
+  char nameBuffer[128];
   sprintf( nameBuffer, "%s/%s", path_, path );
-  char *name = strdup( nameBuffer );
+  char *name = newstring( nameBuffer );
   Node *nd = find( name );
-  free( name );
+  delete[] name;
   dirty_ = 1;
   return nd;
 }
@@ -949,9 +947,8 @@ void Preferences::Node::set( const char *name, const char *value )
       if ( !value ) return; // annotation
       if ( strcmp( value, entry[i].value ) != 0 )
       {
-	if ( entry[i].value )
-	  free( entry[i].value );
-	entry[i].value = strdup( value );
+	delete[] entry[i].value;
+	entry[i].value = newstring( value );
 	dirty_ = 1;
       }
       lastEntrySet = i;
@@ -961,10 +958,12 @@ void Preferences::Node::set( const char *name, const char *value )
   if ( NEntry==nEntry )
   {
     NEntry = NEntry ? NEntry*2 : 10;
-    entry = (Entry*)realloc( entry, NEntry * sizeof(Entry) );
+    Entry* newarray = new Entry[NEntry];
+    if (entry) memcpy(newarray, entry, nEntry*sizeof(Entry));
+    entry = newarray;
   }
-  entry[ nEntry ].name = strdup( name );
-  entry[ nEntry ].value = value?strdup( value ):0;
+  entry[ nEntry ].name = newstring( name );
+  entry[ nEntry ].value = newstring( value );
   lastEntrySet = nEntry;
   nEntry++;
   dirty_ = 1;
@@ -983,8 +982,8 @@ void Preferences::Node::set( const char *line )
   else
   {
     const char *c = strchr( line, ':' );
-    if ( c )
-    {
+    if ( c ) {
+      char nameBuffer[128];
       strlcpy( nameBuffer, line, c-line+1);
       set( nameBuffer, c+1 );
     }
@@ -1001,8 +1000,11 @@ void Preferences::Node::add( const char *line )
   char *&dst = entry[ lastEntrySet ].value;
   int a = strlen( dst );
   int b = strlen( line );
-  dst = (char*)realloc( dst, a+b+1 );
-  memcpy( dst+a, line, b+1 );
+  char* newdst = new char[a+b+1];
+  memcpy( newdst, dst, a);
+  strcpy( newdst+a, line );
+  delete[] dst;
+  dst = newdst;
   dirty_ = 1;
 }
 
@@ -1057,6 +1059,7 @@ Preferences::Node *Preferences::Node::find( const char *path )
       }
       const char *s = path+len+1;
       const char *e = strchr( s, '/' );
+      char nameBuffer[128];
       if (e) strlcpy( nameBuffer, s, e-s+1 );
       else strlcpy( nameBuffer, s, sizeof(nameBuffer));
       nd = new Node( nameBuffer );

@@ -109,29 +109,25 @@ int Style::wheel_scroll_lines_ = 3;
 
 /*! \fn Box* Style::focusbox() const
 
-  This box is drawn atop all calls to buttonbox() after any labels and
-  glyphs are drawn in it. The Browser also calls this to draw atop the
-  item that has keyboard focus.  If you have good alpha compositing
-  graphics (newer Windows and XRender on X) this can be used to draw
-  highlighting over the label.
+  Widgets draw this box atop the buttonbox() after they draw any
+  labels or other graphics. If you have working alpha compositing
+  this can add a translucent or highlighted overlay over the buttons.
 
-  The default draws a dotted frame if the FOCUSED is true, and draws
-  nothing otherwise.
+  This is called focusbox() because by default it is used to draw
+  the Windows-style dotted focus lines. The default box draws this
+  dotted line if FOCUESED is true, and draws nothing if false.
 */
 
-/*! \fn GlyphStyle Style::glyph() const;
+/*! \fn Symbol* Style::glyph() const;
 
-  Draw part of a widget, called a "glyph". Examples are the up and
-  down arrows on sliders, the slider itself, and check boxes. The base
-  class draws arrow buttons (because they are so commonly used), but
-  most widgets that use this define their own function to call. A
-  theme can make these functions point at it's own code and thus
-  customize the appearance of widgets quite a bit.
+  A small image that some Widgets use to draw part of themselves.
+  For instance the fltk::CheckButton class has this set to a Symbol
+  that draws the white box and the checkmark if VALUE is true.
 
-  See \ref glyphs for the numbers.
-  If you wish to write your own glyph function you should examine the
-  ones in the fltk source code and in the sample theme plugins to see
-  how the arguments are interpreted.
+  Im most cases the fltk::drawflags() are examined to decide between
+  differnt symbols. The default value draws empty squares and arrow
+  buttons if ALIGN flags are on, see Widget::default_glpyh.
+
 */
 
 /*! \fn Font* Style::labelfont() const;
@@ -148,8 +144,8 @@ int Style::wheel_scroll_lines_ = 3;
 */
 
 /*! \fn float Style::textsize() const;
-  Size of text_font. Checkboxes and some other widgets use this to
-  control the size of the glyph. Default is 12.
+  Size of textfont(). This is also used by many Widgets to control
+  the size they draw the glyph(). Default is 12.
 */
 
 /*! \fn float Style::leading() const;
@@ -178,9 +174,9 @@ int Style::wheel_scroll_lines_ = 3;
 */
 
 /*! \fn Color Style::textcolor() const;
-  Color to draw text inside the widget. Default is black. Check and
-  radio buttons use this to control the color of the checkmark. It also
-  controls the color glyphs() are drawn in.
+  Color to draw text inside the widget. Default is black. This is also
+  used by many widgets to control the color when they draw the glyph(),
+  thus it can control the color of checkmarks in fltk::CheckButton.
 */
 
 /*! \fn Color Style::selection_color() const;

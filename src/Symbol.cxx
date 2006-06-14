@@ -485,13 +485,16 @@ void SymbolSymbol::_draw(const Rectangle& r) const
 
 /******************** THE DEFAULT SYMBOLS ****************************/
 
-/** \defgroup symbols @-commands
-    When calling drawtext() (or assigning labels or tooltips or any
-    other strings that call drawtext()) you can imbed @-commands
-    into the text. These actually look up instances of Symbol
-    which then can modify the drawing.
+/** \defgroup symbols Symbols, Box types, and @-commands
 
-    \image html symbols.gif
+  FLTK defines a whole lot of static instances of subclasses of Symbol.
+  These are desinged to be used as boxes and backgrounds of widgets,
+  or as labels, or as imbedded @-commands in #drawtext() to insert
+  symbols or to change the font or color.
+
+  \image html symbols.gif
+
+  \image html boxtypes.gif
 */
 
 #define BP

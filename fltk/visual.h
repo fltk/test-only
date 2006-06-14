@@ -18,7 +18,10 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
+
+/*! \file
+  Enumeration to define setup of X and OpenGL windows.
+*/
 
 #ifndef fltk_visual_h
 #define fltk_visual_h
@@ -26,10 +29,6 @@
 #include "FL_API.h"
 
 namespace fltk {
-
-/*! \addtogroup startup
-  \{
-*/
 
 enum {
   RGB_COLOR	= 0,
@@ -50,8 +49,6 @@ extern FL_API bool visual(int);
 extern FL_GL_API bool glVisual(int);
 
 extern FL_API void own_colormap();
-
-/*! \} */
 
 }
 

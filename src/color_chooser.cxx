@@ -633,10 +633,6 @@ static int run_it(const char* name)
   return window->exec();
 }
 
-/*! \addtogroup dialogs
-  \{
-*/
-
 /*!
   \image html fl_color_chooser.jpg
 
@@ -728,8 +724,6 @@ bool fltk::color_chooser(const char* name, Color& c) {
   c = chooser->value();
   return true;
 }
-
-/*! \} */
 
 //
 // End of "$Id$".

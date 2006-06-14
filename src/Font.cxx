@@ -39,14 +39,6 @@ This is a struct so that fltk can initialize a table internally
 with constants. Don't use the undocumented fields.
 */
 
-/*! \defgroup font Text Drawing
-    \ingroup drawing
-
-   See the fltk::Font class for a description of what can be passed as
-   a font. For most uses one of the built-in constant fonts like
-   fltk::HELVETICA can be used.
-*/
-
 /*! \fn fltk::Font* fltk::Font::plus(int attributes);
   Return a font from the same family with the extra attributes turned
   on. This may return the same font if the attributes are already on
@@ -63,10 +55,9 @@ with constants. Don't use the undocumented fields.
 
 /*! \fn const char* fltk::Font::system_name();
   Returns the string actually passed to the operating system, which
-  may be different than name().
-
-  For Xlib this is a pattern sent to XListFonts to find all the sizes.
-  For most other systems this is the same as name() without any attributes.
+  may be different than name(). For Xlib this is an ugly string with a
+  lot of asterix in it.  For most other systems this is the same as
+  name() without any attributes.
 */
 
 /*! \fn void fltk::drawtext_transformed(const char *text, int n, float x, float y);
@@ -91,6 +82,11 @@ const fltk::Monitor& monitor = fltk::Monitor::all();
 float pixels_per_point = monitor.dpi_y()/72.0;
 float font_pixel_size = font_point_size*pixels_per_point;
 \endcode
+
+  See the fltk::Font class for a description of what can be passed as
+  a font. For most uses one of the built-in constant fonts like
+  fltk::HELVETICA can be used.
+
 */
 
 // Static variables containing the currently selected font, size, encoding:
@@ -157,13 +153,13 @@ float fltk::getwidth(const char* text) {
 /*! \fn const char* fltk::Font::name(int* attributes)
   Return a string name for this font, and put any attributes
   (BOLD, ITALIC) into the location pointed to by \a attributes.
-  Using the returned string and attributes as arguments to find()
+  Using the returned string and attributes as arguments to fltk::font()
   will return the same font.
 */
 
 /*! Return a single string that names this font. Attributes are
   indicated by adding " bold" and/or " italic" to the end of the
-  name. Passing this string and zero for the attributes to find()
+  name. Passing this string and zero for the attributes to fltk::font()
   will return the same font.
 */
 const char* fltk::Font::name() const {

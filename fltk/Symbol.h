@@ -51,10 +51,6 @@ class FL_API Symbol {
   void draw(const Rectangle& r) const {_draw(r);}
   void draw(const Rectangle& r, const Style*, Flags) const;
 
-  uchar* readimage(uchar*, const Rectangle&) const;
-  uchar* readimage(uchar*, const Rectangle&, int delta) const;
-  uchar* readimage(uchar*, const Rectangle&, int delta, int linedelta) const;
-
   // Hints for widgets:
   virtual void inset(Rectangle& r) const;
   virtual bool fills_rectangle() const;

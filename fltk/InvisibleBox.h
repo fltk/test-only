@@ -8,7 +8,7 @@
 #ifndef fltk_InvisibleBox_h
 #define fltk_InvisibleBox_h
 
-#include <fltk/Widget.h>
+#include "Widget.h"
 
 namespace fltk {
 

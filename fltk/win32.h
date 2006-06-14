@@ -41,10 +41,10 @@
 # undef IN
 # undef OUT
 # undef POINT
+//# undef near
 //# undef far
 # undef max
 # undef min
-//# undef near
 // In some of the distributions, the gcc header files are missing some stuff:
 #ifndef LPMINMAXINFO
 # define LPMINMAXINFO MINMAXINFO*

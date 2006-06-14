@@ -29,10 +29,10 @@
 // Include necessary header files...
 //
 
-#ifndef  _fltk_WizardGroup_h_
+#ifndef _fltk_WizardGroup_h_
 #define _fltk_WizardGroup_h_
 
-#include <fltk/Group.h>
+#include "Group.h"
 
 namespace fltk {
 

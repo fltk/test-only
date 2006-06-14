@@ -1,8 +1,4 @@
-//
 // "$Id$"
-//
-// OpenGL header file for the Fast Light Tool Kit (FLTK).
-//
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
 // You must include this instead of GL/gl.h to get the Microsoft
@@ -28,11 +24,16 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
+
+/*! \file
+  Portably include the OpenGL header files, and define a few OpenGL
+  drawing functions provided by fltk.
+*/
 
 #ifndef gl_draw_H
 #define gl_draw_H
 
+#ifndef DOXYGEN
 #include "Color.h"
 #include "Flags.h"
 
@@ -63,13 +64,12 @@
 FL_GL_API void glWindowPos2i(int x, int y);
 #endif
 
+#endif
+
 namespace fltk {
 
 struct Font;
 
-/*! \addtogroup opengl
-  \ingroup drawing
-  \{ */
 FL_GL_API void glstart();
 FL_GL_API void glfinish();
 
@@ -90,8 +90,6 @@ FL_GL_API void gldrawtext(const char*, float x, float y, float z = 0);
 FL_GL_API void gldrawtext(const char*, int n, float x, float y, float z = 0);
 
 FL_GL_API void gldrawimage(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
-
-/*! \} */
 
 }
 #endif

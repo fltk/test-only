@@ -269,7 +269,8 @@ void Widget::copy_label(const char* s) {
 
   Each Widget, and most drawing functions, take a bitmask of
   flags that indicate the current state and exactly how to draw
-  things. See \ref flags for values.
+  things. See \link Flags.h <fltk/Flags.h> \endlink for values.
+
 */
 
 /*! void Widget::align(Flags);
@@ -277,7 +278,7 @@ void Widget::copy_label(const char* s) {
   Forces the values of all the fltk::ALIGN_* flags to the passed
   value. This determines how the label is printed next to or inside
   the widget. The default value is fltk::ALIGN_CENTER, which centers
-  the label. The value can be any of the ALIGN \ref flags or'd together.
+  the label. The value can be any of the ALIGN flags or'd together.
 */
 
 /*! \fn void Widget::when(uchar)
@@ -312,31 +313,10 @@ void Widget::copy_label(const char* s) {
 */
 
 ////////////////////////////////////////////////////////////////
+// LAYOUT
 
-/*! \defgroup layout Layout and Resizing
-
-  When a widget resized or moved (or when it is initially created),
-  flags are set in it to indicate the layout is damaged. This will
-  cause the virtual function layout() to be called later on, just
-  before fltk attempts to draw the windows on the screen.
-
-  This is useful because often calculating the new layout is quite
-  expensive, this expense is thus deferred until the user will
-  actually see the new size.
-
-  Some Group widgets such as fltk::PackedGroup will also use the
-  virtual layout() function to find out how big a widget should be.
-  Widgets are allowed to change their own dimensions in layout().  The
-  only rule is that if nothing except the x/y position is changed and
-  layout() is called a second time, they must not change size again.
-  Usually a widget will alter only one of w() or h(), and usually it
-  will only make itself larger, not smaller. Most widgets only set
-  w() or h() if one or both of them are zero.
-
-  \{
-*/
-
-/*! Virtual function to respond to layout_damage(), it should
+/**
+  Virtual function to respond to layout_damage(), it should
   calculate the correct size of this widget and all it's children.
   This function is called by fltk or by the layout() method in other
   widgets. User programs should not call it.
@@ -401,7 +381,7 @@ void Widget::relayout() {
 /* Cause layout() to be called later. Turns on the specified flags in
    layout_damage(), and turns on LAYOUT_CHILD in all parents of this
    widget. \a flags cannot be zero, the maaning of the flags is listed
-   under \ref layout.
+   under \link layout.h <fltk/layout.h> \endlink.
 */
 void Widget::relayout(uchar flags) {
   //if (!(flags & ~layout_damage_)) return;
@@ -415,7 +395,6 @@ void Widget::relayout(uchar flags) {
 
   The 'or' of all the calls to relayout() or resize() done since the
   last time layout() was called.
-  For more information see the \ref layout chapter.
 
   A typical layout function does not care about the widget moving, an
   easy way to skip it is as follows:
@@ -457,41 +436,8 @@ MyClass::layout() {
   be recalculated.
 */
 
-/* \} */ // end of layout section of documentation
-
 ////////////////////////////////////////////////////////////////
-
-/*! \defgroup damage Damage and Redrawing
-
-  When redrawing your widgets you should look at the damage bits to
-  see what parts of your widget need redrawing. The handle() method
-  can then set individual damage bits to limit the amount of drawing
-  that needs to be done:
-
-  \code
-MyClass::handle(int event) {
-  ...
-  if (change_to_part1) damage(1);
-  if (change_to_part2) damage(2);
-  if (change_to_part3) damage(4);
-}
-
-MyClass::draw() {
-  if (damage() & fltk::DAMAGE_ALL) {
-    ... draw frame/box and other static stuff ...
-  }
-  if (damage() & (fltk::DAMAGE_ALL | 1)) draw_part1();
-  if (damage() & (fltk::DAMAGE_ALL | 2)) draw_part2();
-  if (damage() & (fltk::DAMAGE_ALL | 4)) draw_part3();
-}
-  \endcode
-
-  Except for DAMAGE_ALL, each widget is allowed to assign any meaning
-  to any of the bits it wants. The enumerations are just to provide
-  suggested meanings.
-
-  \{
-*/
+// REDRAWING
 
 /*! \var fltk::DAMAGE_CHILD
   A child of this group widget needs to be
@@ -670,23 +616,20 @@ void Widget::draw()
   draw_label();
 }
 
-/* \} */ // end of damage section of documentation
-
 ////////////////////////////////////////////////////////////////
 
-/*! \addtogroup events
-  \{
-*/
+/**
+  Handle an event. Returns non-zero if the widget understood and used
+  the event.
 
-/*! Handle an \ref events(event). Returns non-zero if the
-  widget understood and used the event.
+  The event numbers are listed in \link events.h <fltk/events.h>
+  \endlink.  All other information about the current event (like mouse
+  position) is accessed by various functions listed in the same header
+  file.
 
   The default version returns true for fltk::ENTER and fltk::MOVE
   events, this is done so you can put tooltips on the base widget. All
   other events return zero.
-
-  Information on how to write your own version of handle() is can
-  be found under \ref events.
 
   If you want to send an event to a widget you probably want to call
   send(), not handle(). Send will do extra work with each event before
@@ -862,8 +805,6 @@ void Widget::repeat_timeout(float time) {
 void Widget::remove_timeout() {
   fltk::remove_timeout(widget_timeout, this);
 }
-
-/*! \} */ // end of events chapter of documentation
 
 ////////////////////////////////////////////////////////////////
 

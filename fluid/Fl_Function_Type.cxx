@@ -680,44 +680,42 @@ void CommentType::read_property(const char *c) {
 static void load_comments_preset(fltk::Preferences &menu) 
 {
   static const char * const predefined_comment[] = {
-	  "GNU Public License/GPL Header",  "GNU Public License/GPL Footer",
-	  "GNU Public License/LGPL Header", "GNU Public License/LGPL Footer",
-	  "FLTK/Header", "FLTK/Footer" };
-	int i;
-	menu.set("n", 6);
-	fltk::Preferences db(fltk::Preferences::USER, "fltk.org", "fluid_comments");
-	for (i=0; i<6; i++) {
-	    menu.set(fltk::Preferences::Name(i), predefined_comment[i]);
-	    db.set(predefined_comment[i], comment_text[i]);
-	}
+    "GNU Public License/GPL Header",  "GNU Public License/GPL Footer",
+    "GNU Public License/LGPL Header", "GNU Public License/LGPL Footer",
+    "FLTK/Header", "FLTK/Footer" };
+  menu.set("n", 6);
+  fltk::Preferences db(fltk::Preferences::USER, "fltk.org", "fluid_comments");
+  for (int i=0; i<6; i++) {
+    menu.set(fltk::Preferences::Name(i), predefined_comment[i]);
+    db.set(predefined_comment[i], comment_text[i]);
+  }
 }
 
 
 static void comment_predefined_cb(fltk::Widget * w, void * data) {
-    // TODO : handle predefined  comments menus cb
-
+  // TODO : handle predefined  comments menus cb
 }
 
 
 static void comment_ok_cb(fltk::Widget * w, void * data) {
-    // TODO : handle predefined  comments menus cb
-    const char * c = comment_input->value();
-    current_comment->name(c);
-    int mod = 0;
-    if (current_comment->in_c_ != comment_in_source->value()) {
-	current_comment->in_c_ = comment_in_source->value();
-	mod = 1;
-    }
-    if (current_comment->in_h_ != comment_in_header->value()) {
-	current_comment->in_h_ = comment_in_header->value();
-	mod = 1;
-    }
-    if (mod) modflag=1;
-    if (modflag  && widget_browser) {
-    	widget_browser->relayout();
-    	refresh_browser_views();
-    }
-    comment_panel->hide();
+  // TODO : handle predefined  comments menus cb
+  const char * c = comment_input->value();
+  current_comment->name(c);
+  int mod = 0;
+  if (current_comment->in_c_ != comment_in_source->value()) {
+    current_comment->in_c_ = comment_in_source->value();
+    mod = 1;
+  }
+  if (current_comment->in_h_ != comment_in_header->value()) {
+    current_comment->in_h_ = comment_in_header->value();
+    mod = 1;
+  }
+  if (mod) modflag=1;
+  if (modflag  && widget_browser) {
+    widget_browser->relayout();
+    refresh_browser_views();
+  }
+  comment_panel->hide();
 }
 
 void CommentType::open() {

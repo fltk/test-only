@@ -22,8 +22,9 @@
 #ifndef fltk_ShapedWindow_h
 #define fltk_ShapedWindow_h
 
-#include <fltk/Window.h>
-#include <fltk/xbmImage.h>
+#include "Window.h"
+// WAS: This needs to take an arbitrary Image as a mask!
+#include "xbmImage.h"
 
 namespace fltk {
 

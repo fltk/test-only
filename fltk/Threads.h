@@ -1,6 +1,7 @@
 // Inline classes to provide a "toy" interface for threads and mutexes.
 // These are used by the fltk demo programs. They have been improved
 // quite a bit and may be useful for non-toy programs, too.
+/*! \file */
 
 #ifndef fltk_Threads_h
 #define fltk_Threads_h
@@ -11,8 +12,6 @@
 #include <pthread.h>
 
 namespace fltk {
-/*! \addtogroup multithreading
-  \{ */
 
 /** Hides whatever the system uses to identify a thread. Used so
   the "toy" interface is portable. */
@@ -200,8 +199,6 @@ class FL_API Guard {
   Guard(Mutex* m) : lock(*m) {lock.lock();}
   ~Guard() {lock.unlock();}
 };
-
-/*! \} */
 
 }
 

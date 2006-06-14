@@ -20,7 +20,7 @@
 #include <fltk/ReturnButton.h>
 #include <fltk/ask.h>
 
-namespace fltk  {
+namespace fltk {
 
 class FL_API FileChooser  {
 public:

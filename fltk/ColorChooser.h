@@ -30,7 +30,7 @@
 #ifndef fltk_ColorChooser_h
 #define fltk_ColorChooser_h
 
-#include <fltk/Group.h>
+#include "Group.h"
 
 namespace fltk {
 
