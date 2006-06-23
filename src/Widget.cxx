@@ -328,11 +328,10 @@ void Widget::copy_label(const char* s) {
 
   You can look at layout_damage() to find out why this is being called.
 
-  The base class redraws the widget and sets layout_damage() to zero.
+  The base class redraws the widget.
 */
 void Widget::layout() {
   if (layout_damage_&~LAYOUT_CHILD) redraw();
-  layout_damage_ = 0;
 }
 
 /*! Change the size or position of the widget. Nothing is done if the

@@ -133,8 +133,6 @@ enum PenMode {
 
 FL_API void pen_mode(PenMode mode);
 
-/*! \} */
-
 /// \name Path construction
 //@{
 FL_API void newpath();

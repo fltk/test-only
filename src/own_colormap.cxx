@@ -30,11 +30,12 @@
   Makes FLTK use its own X colormap. This may make FLTK display
   better and will reduce conflicts with other programs that want lots
   of colors. However the colors may flash as you move the cursor
-  between windows. This function is a no-op on non-X systems or
-  if the visual is not colormapped (which means it probably does
-  nothing on any modern system).
+  between windows. This function is pretty much legacy nowadays
+  as all modern systems are full color, on such systems this does
+  nothing.
 
-  Use fltk::setvisual() to set the visual first.
+  You must call this before you show() any windows. If you call
+  visual(int) you must call this after that.
 */
 
 #if !USE_X11

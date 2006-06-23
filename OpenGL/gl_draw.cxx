@@ -51,6 +51,11 @@ struct FontSize {
 static FontSize* root, *current;
 static HFONT current_xfont;
 
+/**
+  Make the current OpenGL font (as used by gldrawtext()) be as
+  simular as possible to an FLTK Font. Currently the font is
+  aliased and on X a somewhat close X bitmap font is used.
+*/
 void fltk::glsetfont(fltk::Font* font, float size) {
 #if USE_QUARTZ
   size = int(size);
@@ -110,9 +115,20 @@ void fltk::glsetfont(fltk::Font* font, float size) {
 
 #define WCBUFLEN 256
 
-/*! Draw text at the current glRasterPos in the current font selected
+/**
+  Draw \a text at the current glRasterPos in the current font selected
   with fltk::glsetfont(). You can use glRasterPos2f() or similar calls
   to set the position before calling this.
+
+  The string is in UTF-8, although only characters in ISO-8859-1 are
+  drawn correctly, others draw as question marks.
+*/
+void fltk::gldrawtext(const char* str) {
+  gldrawtext(str, strlen(str));
+}
+
+/**
+  Draw the first \a n bytes of \a text at the current glRasterPos.
 */
 void fltk::gldrawtext(const char* text, int n) {
   char localbuffer[WCBUFLEN];
@@ -132,17 +148,20 @@ void fltk::gldrawtext(const char* text, int n) {
   delete[] mallocbuffer;
 }
 
+/**
+  Draw \a text at the given point in 3D space transformed to the screen.
+*/
+void fltk::gldrawtext(const char* str, float x, float y, float z) {
+  gldrawtext(str, strlen(str), x, y, z);
+}
+
+/**
+  Draw the first \a n bytes of \a text at the given point in 3D space
+  transformed to the screen.
+*/
 void fltk::gldrawtext(const char* str, int n, float x, float y, float z) {
   glRasterPos3f(x, y, z);
   gldrawtext(str, n);
-}
-
-void fltk::gldrawtext(const char* str) {
-  gldrawtext(str, strlen(str));
-}
-
-void fltk::gldrawtext(const char* str, float x, float y, float z) {
-  gldrawtext(str, strlen(str), x, y, z);
 }
 
 #if USE_XFT
@@ -169,6 +188,9 @@ float fltk::glgetwidth(const char* s, int n) {return getwidth(s,n);}
 
 #endif
 
+/**
+  Draw a 1-thick line just inside the given rectangle.
+*/
 void fltk::glstrokerect(int x, int y, int w, int h) {
   if (w < 0) {w = -w; x = x-w;}
   if (h < 0) {h = -h; y = y-h;}
@@ -181,6 +203,10 @@ void fltk::glstrokerect(int x, int y, int w, int h) {
   glEnd();
 }
 
+/** \fn void fltk::glfillrect(int x, int y, int w, int h)
+  Inline wrapper for glRecti(x,y,x+w,y+h).
+*/
+
 #if USE_GL_OVERLAY
 extern bool fl_overlay;
 #ifdef _WIN32
@@ -188,6 +214,9 @@ extern int fl_overlay_depth;
 #endif
 #endif
 
+/**
+Set the current OpenGL color to a FLTK color, or as close as possible.
+*/
 void fltk::glsetcolor(Color i) {
 #if USE_GL_OVERLAY
 #ifndef _WIN32
@@ -213,6 +242,11 @@ void fltk::glsetcolor(Color i) {
   glColor3ub(r,g,b);
 }
 
+/**
+Uses glDrawPixels to draw an image using the same arguments as drawimage().
+If you are in the normal OpenGL coordinate system with 0,0 in the lower-left,
+the first pixel is memory is the lower-left corner.
+*/
 void fltk::gldrawimage(const uchar* b, int x, int y, int w, int h, int d, int ld) {
   if (!ld) ld = w*d;
   glPixelStorei(GL_UNPACK_ROW_LENGTH, ld/d);
@@ -220,12 +254,13 @@ void fltk::gldrawimage(const uchar* b, int x, int y, int w, int h, int d, int ld
   glDrawPixels(w, h, d<4?GL_RGB:GL_RGBA, GL_UNSIGNED_BYTE, (const unsigned long*)b);
 }
 
-#ifndef GL_VERSION_1_4
+#if !defined(GL_VERSION_1_4) || defined(DOXYGEN)
 /*!
   Emulate glWindowPos2i on Windows. This emulation is extremely simple
   and only produces the correct result if ortho() has been called (i.e.
   the current transform is such that 0,0 is the lower-left of the
-  window and each unit is the size of a pixel).
+  window and each unit is the size of a pixel). This function is \e not
+  in the fltk:: namespace.
 */
 void glWindowPos2i(int x, int y) {
   if (x < 0 || y < 0) {

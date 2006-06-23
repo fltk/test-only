@@ -21,8 +21,6 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Set the default visual according to passed switches:
-
 #include <config.h>
 #include <fltk/visual.h>
 #include <fltk/x.h>
@@ -37,15 +35,16 @@
 
   You must call this before you show() any windows. The integer
   argument is an 'or' of the following:
-  - fltk::INDEX indicates that a colormapped visual is ok. This call
+  - fltk::INDEXED_COLOR indicates that a colormapped visual is ok. This call
     will normally fail if a TrueColor visual cannot be found.
-  - fltk::RGB this value is zero and may be passed to indicate that
-    fltk::INDEX is not wanted.
-  - fltk::RGB8 indicates that the TrueColor visual must have at least
+  - fltk::RGB_COLOR this value is zero and may be passed to indicate that
+    fltk::INDEXED_COLOR is \e not wanted.
+  - fltk::RGB24_COLOR indicates that the visual must have at least
     8 bits of red, green, and blue (Windows calls this "millions of
     colors").
-  - fltk::DOUBLE indicates that hardware accelerated double buffering
-    is wanted. This will make fltk::DoubleBufferWindow work better.
+  - fltk::DOUBLE_BUFFER indicates that hardware accelerated double buffering
+    is wanted.
+  - Other bits used by glVisual() and GlWindow::mode() are ignored by this.
 
   This returns true if the system has the capabilities by default or
   FLTK suceeded in turing them on. Your program will still work even

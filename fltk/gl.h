@@ -60,7 +60,7 @@
 # include <GL/gl.h>
 #endif
 
-#ifndef GL_VERSION_1_4
+#if !defined(GL_VERSION_1_4) || defined(DOXYGEN)
 FL_GL_API void glWindowPos2i(int x, int y);
 #endif
 

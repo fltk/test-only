@@ -640,7 +640,10 @@ void fl_window_flush(Window* window) {
     return;
   }
 #endif
-  if (window->layout_damage()) window->layout();
+  if (window->layout_damage()) {
+    window->layout();
+    window->layout_damage(0);
+  }
   if (window->damage() || x->region) {
     window->flush();
     window->set_damage(0);

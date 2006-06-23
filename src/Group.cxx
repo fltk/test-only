@@ -640,7 +640,10 @@ void Group::layout(const Rectangle& r, int layout_damage) {
   while (a < e) {
     Widget* widget = *a++;
     widget->layout_damage(widget->layout_damage()|extradamage);
-    if (widget->layout_damage()) widget->layout();
+    if (widget->layout_damage()) {
+      widget->layout();
+      widget->layout_damage(0);
+    }
   }
 }
 

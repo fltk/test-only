@@ -1,8 +1,3 @@
-// Inline classes to provide a "toy" interface for threads and mutexes.
-// These are used by the fltk demo programs. They have been improved
-// quite a bit and may be useful for non-toy programs, too.
-/*! \file */
-
 #ifndef fltk_Threads_h
 #define fltk_Threads_h
 

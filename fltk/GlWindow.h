@@ -28,11 +28,11 @@
 
 #include "Window.h"
 
-#ifndef GLContext
-typedef void* GLContext; // actually a GLXContext or HGLDC
-#endif
-
 namespace fltk {
+
+#ifndef GLContext // you can define this to the correct type if wanted
+typedef void* GLContext; //!< Actually a GLXContext or HGLDC
+#endif
 
 class GlChoice; // structure to hold result of glXChooseVisual
 class GlOverlay; // used by X version for the overlay
@@ -58,10 +58,11 @@ public:
   int mode() const {return mode_;}
   bool mode(int a);
   static bool can_do(int);
-  bool can_do() {return can_do(mode_);}
+  bool can_do() const {return can_do(mode_);}
 
-  void* context() const {return context_;}
-  void context(void*, bool destroy_flag = false);
+  GLContext context() const {return context_;}
+  // this wrapper is so c++mangled name does not depend on GLContext type:
+  void context(GLContext v, bool destroy_flag = false) {_context(v,destroy_flag);}
   void make_current();
   void swap_buffers();
   void ortho();
@@ -76,14 +77,17 @@ public:
   GlWindow(int X, int Y, int W, int H, const char *l=0)
     : Window(X,Y,W,H,l) {init();}
 
+  virtual void draw() = 0;
+  virtual void draw_overlay();
+
 private:
 
   int mode_;
   GlChoice *gl_choice;
   GLContext context_;
+  void _context(void*, bool destroy_flag);
   char valid_;
   char damage1_; // damage() of back buffer
-  virtual void draw_overlay();
   void init();
 
   void *overlay;

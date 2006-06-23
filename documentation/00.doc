@@ -5,7 +5,7 @@
 /*! \mainpage
 
 <center>
-<img src="fltk_shadow.png" alt="FLTK">
+\image html fltk_shadow.png
 <br><a href="http://www.fltk.org">www.fltk.org</a>
 <br>Revision 16 by Bill Spitzak, Michael Sweet, Craig P. Earls, 
 Matthias Melcher, your_name_here<br>
@@ -59,8 +59,17 @@ Doxygen works).
 
 Fltk1.1 emulation is mostly achieved by aliasing the old class name
 "Fl" to this namespace so that the static methods in Fltk1.1 will
-work, and by typedefs from the new fltk::Widget class names to the
+work, and by typedefs from the new fltk:\:Widget class names to the
 older Widget class names.
+
+\section copyrights Copyrights and Trademarks
+
+FLTK is &copy;1998-2006 by Bill Spitzak and others.
+
+UNIX is a registered trademark of the X Open Group, Inc.  Microsoft
+and Windows are registered trademarks of Microsoft Corporation. OpenGL
+is a registered trademark of Silicon Graphics, Inc. Other names and
+terms in this manual are trademarks of their respective organizations.
 
 \image html doxygen.png
 

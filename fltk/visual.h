@@ -19,9 +19,7 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
-/*! \file
-  Enumeration to define setup of X and OpenGL windows.
-*/
+/*! \file */
 
 #ifndef fltk_visual_h
 #define fltk_visual_h

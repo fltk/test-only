@@ -1,7 +1,4 @@
-//
 // "$Id$"
-//
-// OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -21,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #include <config.h>
 #if HAVE_GL
@@ -36,6 +32,32 @@
 #include <stdlib.h>
 #include <string.h>
 using namespace fltk;
+
+/** \class fltk::GlWindow
+
+Provides an area in which the draw() method can use OpenGL to draw.
+This widget sets things up so OpenGL works, and also keeps an OpenGL
+"context" for that window, so that changes to the lighting and
+projection may be reused between redraws. GlWindow also flushes
+the OpenGL streams and swaps buffers after draw() returns.
+
+draw() is a pure virtual method.  You must subclass GlWindow and
+provide an implementation for draw(). You may also provide an
+implementation of draw_overlay() if you want to draw into the overlay
+planes.  You can avoid reinitializing the viewport and lights and
+other things by checking valid() at the start of draw() and only doing
+the initialization if it is false.
+
+draw() can \e only use OpenGL calls.  Do not attempt to call any of
+the functions in &lt;fltk/draw.h&gt;, or X or GDI32 or any other
+drawing api.  Do not call gl_start() or gl_finish().
+
+If double-buffering is enabled in the window, the back and front
+buffers are swapped after draw() is completed. The mode bit
+NO_AUTO_SWAP can be used to stop this, this is needed for some
+third-party libraries that insist on doing the swap for you.
+
+*/
 
 ////////////////////////////////////////////////////////////////
 
@@ -53,8 +75,8 @@ using namespace fltk;
 // GL_SWAP_TYPE, it should be equal to one of these symbols:
 
 // contents of back buffer after glXSwapBuffers():
-#define SWAP 1		// assumme garbage is in back buffer
-#define USE_COPY 2	// use glCopyPixels to imitate COPY behavior (default)
+#define SWAP 1		// assumme garbage is in back buffer (default)
+#define USE_COPY 2	// use glCopyPixels to imitate COPY behavior
 #define COPY 3		// unchanged
 #define NODAMAGE 4	// unchanged even by X expose() events
 
@@ -62,8 +84,17 @@ static char SWAP_TYPE = 0; // 0 = determine it from environment variable
 
 ////////////////////////////////////////////////////////////////
 
-bool GlWindow::can_do(int a) {
-  return GlChoice::find(a) != 0;
+/** \fn bool GlWindow::can_do() const
+  Returns true if the hardware supports the current value of mode().
+  If false, attempts to show or draw this window will cause an fltk::error().
+*/
+
+/**
+Returns true if the hardware supports \a mode, see mode() for the
+meaning of the bits.
+*/
+bool GlWindow::can_do(int mode) {
+  return GlChoice::find(mode) != 0;
 }
 
 void GlWindow::create() {
@@ -82,17 +113,71 @@ void GlWindow::create() {
 #endif
 }
 
+/** \fn char GlWindow::valid() const;
+  This flag is turned off on a new window or if the window is ever
+  resized or the context is changed. It is turned on after draw()
+  is called. draw() can use this to skip initializing the viewport,
+  lights, or other pieces of the context.
+
+\code
+void My_GlWindow_Subclass::draw() {
+  if (!valid()) {
+    glViewport(0,0,w(),h());
+    glFrustum(...);
+    glLight(...);
+    glEnable(...);
+    ...other initialization...
+  }
+  ... draw your geometry here ...
+}
+\endcode
+*/
+
+/** Turn off valid(). */
 void GlWindow::invalidate() {
   valid(0);
-#ifdef WIN32
-  ;
-#elif USE_QUARTZ
-  ;
-#else
+#if USE_X11
   if (overlay) ((GlWindow*)overlay)->valid(0);
 #endif
 }
 
+/**
+Set or change the OpenGL capabilites of the window.  The value can be 
+any of the symbols from \link visual.h <fltk/visual.h> \endlink OR'd together:
+
+- fltk::INDEXED_COLOR indicates that a colormapped visual is ok. This call
+  will normally fail if a TrueColor visual cannot be found.
+- fltk::RGB_COLOR this value is zero and may be passed to indicate that
+  fltk::INDEXED_COLOR is \e not wanted.
+- fltk::RGB24_COLOR indicates that the visual must have at least
+  8 bits of red, green, and blue (Windows calls this "millions of
+  colors").
+- fltk::DOUBLE_BUFFER indicates that double buffering is wanted.
+- fltk::SINGLE_BUFFER is zero and can be used to indicate that double
+  buffering is \a not wanted.
+- fltk::ACCUM_BUFFER makes the accumulation buffer work
+- fltk::ALPHA_BUFFER makes an alpha buffer
+- fltk::DEPTH_BUFFER makes a depth/Z buffer
+- fltk::STENCIL_BUFFER makes a stencil buffer
+- fltk::MULTISAMPLE makes it multi-sample antialias if possible (X only)
+- fltk::STEREO stereo if possible
+- NO_AUTO_SWAP disables the automatic call to swap_buffers() after draw().
+- NO_ERASE_OVERLAY if overlay hardware is used, don't call glClear before
+  calling draw_overlay().
+
+If the desired combination cannot be done, FLTK will try turning
+off MULTISAMPLE and STERERO.  If this also fails then attempts to create
+the context will cause fltk::error() to be called, aborting the program.
+Use can_do() to check for this and try other combinations.
+
+You can change the mode while the window is displayed.  This is most 
+useful for turning double-buffering on and off.  Under X this will 
+cause the old X window to be destroyed and a new one to be created.  If 
+this is a top-level window this will unfortunately also cause the 
+window to blink, raise to the top, and be de-iconized, and the ID
+will change, possibly breaking other code.  It is best to make the GL 
+window a child of another window if you wish to do this!
+*/
 bool GlWindow::mode(int m) {
   if (m == mode_) return false;
   mode_ = m;
@@ -108,6 +193,13 @@ bool GlWindow::mode(int m) {
 
 #define NON_LOCAL_CONTEXT 0x80000000
 
+/**
+Selects the OpenGL context for the widget, creating it if necessary.
+It is called automatically prior to the draw() method being
+called. You can call it in handle() to set things up to do OpenGL
+hit detection, or call it other times to do incremental update
+of the window.
+*/
 void GlWindow::make_current() {
   Window::make_current(); // so gc is correct for non-OpenGL calls
 #if USE_QUARTZ
@@ -124,6 +216,12 @@ void GlWindow::make_current() {
   set_gl_context(this, context_);
 }
 
+/**
+Set the projection so 0,0 is in the lower left of the window and each
+pixel is 1 unit wide/tall.  If you are drawing 2D images, your
+draw() method may want to call this when valid() is
+false.
+*/
 void GlWindow::ortho() {
 #if 1
   // simple version
@@ -141,6 +239,14 @@ void GlWindow::ortho() {
 #endif
 }
 
+/**
+  Swap the front and back buffers of this window (or copy the
+  back buffer to the front, possibly clearing or garbaging the back one,
+  depending on your OpenGL implementation.
+
+  This is called automatically after draw() unless the NO_AUTO_SWAP
+  flag is set in the mode().
+*/
 void GlWindow::swap_buffers() {
 #ifdef _WIN32
 #if USE_GL_OVERLAY
@@ -154,11 +260,6 @@ void GlWindow::swap_buffers() {
 #else
   glXSwapBuffers(xdisplay, xid(this));
 #endif
-}
-
-void GlWindow::draw_swap() {
-  draw();
-  if (!(mode_ & NO_AUTO_SWAP)) swap_buffers();
 }
 
 #if USE_GL_OVERLAY && defined(_WIN32)
@@ -182,7 +283,7 @@ void GlWindow::flush() {
     glDrawBuffer(GL_BACK);
 
     if (!SWAP_TYPE) {
-      SWAP_TYPE = SWAP; //USE_COPY;
+      SWAP_TYPE = SWAP;
       const char* c = getenv("GL_SWAP_TYPE");
       if (c) switch (c[0]) {
       case 'U' : SWAP_TYPE = USE_COPY; break;
@@ -195,18 +296,22 @@ void GlWindow::flush() {
     if (SWAP_TYPE == NODAMAGE) {
 
       // don't draw if only overlay damage or expose events:
-      if (save_damage != DAMAGE_OVERLAY || !save_valid)
-	draw_swap();
-      else
+      if (save_damage != DAMAGE_OVERLAY || !save_valid) {
+	draw();
+	if (!(mode_ & NO_AUTO_SWAP)) swap_buffers();
+      } else {
 	swap_buffers();
+      }
 
     } else if (SWAP_TYPE == COPY) {
 
       // don't draw if only the overlay is damaged:
-      if (save_damage != DAMAGE_OVERLAY || i->region || !save_valid)
-	draw_swap();
-      else
+      if (save_damage != DAMAGE_OVERLAY || i->region || !save_valid) {
+	draw();
+	if (!(mode_ & NO_AUTO_SWAP)) swap_buffers();
+      } else {
 	swap_buffers();
+      }
 
     } else if (SWAP_TYPE == USE_COPY && overlay == this) {
       // If we are faking the overlay, use CopyPixels to act like
@@ -309,13 +414,35 @@ void GlWindow::layout() {
 #endif
 }
 
-void GlWindow::context(void* v, bool destroy_flag) {
-  if (context_ && !(mode_&NON_LOCAL_CONTEXT)) delete_gl_context(context_);
+/** \fn GLContext GlWindow::context() const;
+  Return the current OpenGL context object being used by this window,
+  or 0 if there is none.
+*/
+/** \fn void GlWindow::context(GLContext v, bool destroy_flag);
+  Set the OpenGL context object to use to draw this window.
+
+  This is a system-dependent structure (HGLRC on Windows,GLXContext on
+  X, and AGLContext (may change) on OS/X), but it is portable to copy
+  the context from one window to another. You can also set it to NULL,
+  which will force FLTK to recreate the context the next time
+  make_current() is called, this is useful for getting around bugs in
+  OpenGL implementations.
+
+  \a destroy_flag indicates that the context belongs to this window
+  and should be destroyed by it when no longer needed. It will be
+  destroyed when the window is destroyed, or when the mode() is
+  changed, or if the context is changed to a new value with this call.
+*/
+void GlWindow::_context(void* v, bool destroy_flag) {
+  if (context_ && context_ != v && !(mode_&NON_LOCAL_CONTEXT))
+    delete_gl_context(context_);
   context_ = (GLContext)v;
   if (destroy_flag) mode_ &= ~NON_LOCAL_CONTEXT;
   else mode_ |= NON_LOCAL_CONTEXT;
 }
 
+/** Besides getting rid of the window, this will destroy the context
+    if it belongs to the window. */
 void GlWindow::destroy() {
   context(0);
 #if USE_GL_OVERLAY
@@ -329,12 +456,17 @@ void GlWindow::destroy() {
   Window::destroy();
 }
 
+/** The destructor will destroy the context() if it belongs to the window. */
 GlWindow::~GlWindow() {
   destroy();
 }
 
+/** \fn GlWindow::GlWindow(int x, int y, int w, int h, const char *label=0);
+The constructor sets the mode() to RGB_COLOR|DEPTH_BUFFER|DOUBLE_BUFFER
+which is probably all that is needed for most 3D OpenGL graphics.
+*/
+
 void GlWindow::init() {
-  end(); // we probably don't want any children
   mode_ = DEPTH_BUFFER | DOUBLE_BUFFER;
   context_ = 0;
   gl_choice = 0;
@@ -342,6 +474,23 @@ void GlWindow::init() {
   damage1_ = 0;
 }
 
+/**
+You must implement this virtual function if you want to draw into the
+overlay.  The overlay is cleared before this is called (unless the
+NO_ERASE_OVERLAY bit is set in the mode \e and hardware overlay is
+supported). You should draw anything that is not clear using OpenGL.
+
+If the hardware overlay is being used it will probably be color
+indexed. You must use glsetcolor() to choose colors (it allocates them
+from the colormap using system-specific calls), and remember that you
+are in an indexed OpenGL mode and drawing anything other than
+flat-shaded will probably not work.
+
+Depending on the OS and whether or not the overlay is being simulated,
+the context may be shared with the main window. This means if you
+check valid() in draw() to avoid initialization, you must do so here
+and initialize to exactly the same setting.
+*/
 void GlWindow::draw_overlay() {}
 
 #endif

@@ -1,4 +1,3 @@
-//
 // "$Id$"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
@@ -19,15 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
-
-// This does not work with DoubleBufferWindow!  It will try to draw
-// into the front buffer.  Depending on the system this will either
-// crash or do nothing (when pixmaps are being used as back buffer
-// and GL is being done by hardware), work correctly (when GL is done
-// with software, such as Mesa), or draw into the front buffer and
-// be erased when the buffers are swapped (when double buffer hardware
-// is being used)
 
 #include <config.h>
 #if HAVE_GL
@@ -47,11 +37,15 @@ static GlChoice* gl_choice;
 static GlChoice *gl_choice;
 #endif
 
-/*! Use OpenGL and the glX library to choose the visual. This is a
-  somewhat different algorithim from fltk::visual(). On some X servers
-  OpenGL will crash if the visual is not selected with this.
-*/
+/**
+  Same as fltk::visual(int) except choose a visual that is also capable
+  of drawing OpenGL. On modern X servers this is true by default, but
+  on older ones OpenGL will crash if the visual is not selected with
+  this.
 
+  \a mode is the same bitflags accepted by GlWindow::mode(). This
+  causes all windows (and thus glstart()) to have these capabilities.
+*/
 bool fltk::glVisual(int mode) {
   GlChoice *c = GlChoice::find(mode);
   if (!c) return false;
@@ -70,8 +64,28 @@ static GLContext context;
 //static int clip_state_number=-1;
 static int pw, ph;
 
-//Region XRectangleRegion(int x, int y, int w, int h);
+/**
+  Set up an OpenGL context to draw into the current window being
+  drawn by fltk. This will allow you to use OpenGL to update a
+  normal window. The current transformation is reproduced, and
+  the current clipping is simulated with glScissor() calls (which
+  can only do a rectangle).
 
+  You must use glfinish() to exit this mode before any normal fltk
+  drawing calls are done.
+
+  You should call glvisual() at program startup if you intend to
+  use this. This may be used to change how windows are created so
+  this call works.
+
+  I would like this to work reliably, but it is not real good
+  now on any platforms. In particular it does not cooperate with
+  the double-buffering schemes. It does appear to work on X
+  when you turn off double buffering, it also works if OpenGL
+  is entirely software, such as MESA.
+
+  Do \e not call glstart()/glfinish() when drawing into a GlWindow!
+*/
 void fltk::glstart() {
   if (!context) {
 #ifdef _WIN32
@@ -110,6 +124,10 @@ void fltk::glstart() {
   }
 }
 
+/**
+  Turn off the effects of a previous glstart(). You must call this before
+  using normal fltk drawing methods.
+*/
 void fltk::glfinish() {
   glFlush();
 #ifdef _WIN32
@@ -123,6 +141,4 @@ void fltk::glfinish() {
 
 #endif
 
-//
 // End of "$Id$".
-//

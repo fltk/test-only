@@ -44,6 +44,20 @@
 
 using namespace fltk;
 
+/*! \class fltk::GlutWindow
+
+Window subclass used to emulate GLUT. See the glut.h header file for
+more details on GLUT emulation.
+
+Each GLUT window is an instance of this class.  You may find it useful
+to manipulate instances directly rather than use GLUT window id's.
+These may be created without opening the display, and thus can fit
+better into FLTK's method of creating windows.
+
+The current GLUT window is available in the global variable ::glut_window.
+
+*/
+
 #define MAXWINDOWS 32
 static GlutWindow *windows[MAXWINDOWS+1];
 
@@ -54,12 +68,21 @@ void (*glut_menustatus_function)(int,int,int);
 
 static void default_reshape(int w, int h) {glViewport(0,0,w,h);}
 
+/*!
+  make_current() is the same as glutSetWindow(number).  If the window
+  has not had show() called on it yet, some functions that assumme an
+  OpenGL context will not work.  If you do show() the window, call
+  make_current() again to set the context.
+*/
 void GlutWindow::make_current() {
   glut_window = this;
   if (shown()) GlWindow::make_current();
 }
 
 static int indraw;
+/*!
+  Calls the display() callback provided by the GLUT-using program.
+*/
 void GlutWindow::draw() {
   glut_window = this;
   indraw = 1;
@@ -185,6 +208,10 @@ void GlutWindow::_init() {
   mode(glut_mode);
 }
 
+/**
+  The constructor is the same as glutCreateWindow() except it does not
+  show() the window or make the window current.
+*/
 GlutWindow::GlutWindow(int w, int h, const char *t) :
   GlWindow(w,h,t) {_init();}
 
@@ -251,6 +278,9 @@ int glutCreateSubWindow(int win, int x, int y, int w, int h) {
   return W->number;
 }
 
+/**
+  The destructor is the same as glutDestroyWindow().
+*/
 GlutWindow::~GlutWindow() {
   if (glut_window == this) glut_window = 0;
   windows[number] = 0;

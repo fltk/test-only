@@ -33,7 +33,13 @@ using namespace fltk;
 
 #if !USE_GL_OVERLAY
 
-bool GlWindow::can_do_overlay() {return 0;}
+/**
+Return true if the hardware supports OpenGL overlay planes, and FLTK
+has been compiled to use them. If true, draw_overlay() will be called
+with OpenGL setup to draw these overlay planes, and redraw_overlay()
+will not cause the main draw() to be called.
+*/
+bool GlWindow::can_do_overlay() {return false;}
 
 void GlWindow::make_overlay() {overlay = this;}
 
@@ -197,6 +203,12 @@ bool GlWindow::can_do_overlay() {
 
 #endif
 
+/**
+Causes draw_overlay() to be called at a later time. 
+Initially the overlay is clear, if you want the window to display 
+something in the overlay when it first appears, you must call this 
+immediately after you show() your window. 
+*/
 void GlWindow::redraw_overlay() {
   if (!shown()) return;
   make_overlay();
@@ -208,6 +220,13 @@ void GlWindow::redraw_overlay() {
     redraw(DAMAGE_OVERLAY);
 }
 
+/**
+Selects the OpenGL context
+for the widget's overlay. This can be used to do incremental OpenGL
+drawing into the overlay. If hardware overlay is not supported, this
+sets things to draw into the front buffer, which is probably not
+good enough emulation to be usable.
+*/
 void GlWindow::make_overlay_current() {
   make_overlay();
 #if USE_GL_OVERLAY
