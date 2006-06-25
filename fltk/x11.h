@@ -61,13 +61,6 @@ header files directly.
      typedef struct _XftDraw XftDraw;
 #   endif
 
-#   if USE_CAIRO
-#    include <fltk/fltk_cairo.h>
-#    include <cairo-xlib.h>
-#   else
-     typedef struct _cairo cairo_t;
-#   endif
-
 #   include <X11/extensions/XInput.h>
 #   include <X11/extensions/XI.h>
 
@@ -177,4 +170,10 @@ Window* find(XWindow xid);
 
 } // namespace fltk
 
+#   if USE_CAIRO
+#    include <fltk/fltk_cairo.h>
+#    include <cairo-xlib.h>
+#   else
+     typedef struct _cairo cairo_t;
+#   endif
 #endif

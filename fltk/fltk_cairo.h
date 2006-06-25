@@ -26,6 +26,8 @@
 #ifndef fltk_cairo_h
 # define fltk_cairo_h
 
+# include <fltk/FL_API.h>
+
 # if USE_CAIRO
 // declare common CAIRO decls and includes
 #  include <cairo.h>
