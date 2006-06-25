@@ -2341,6 +2341,17 @@ void Widget::make_current() const {
 namespace fltk {class Image;}
 fltk::Image* fl_current_Image;
 
+#if USE_CAIRO
+/** Fltk cairo create surface function accepting a Window* as input */
+cairo_surface_t* fltk::cairo_create_surface(Window* wi) {
+  XWindow window = fltk::xid(wi);
+  cairo_surface_t* surface =  cairo_xlib_surface_create(xdisplay, window, 
+				   xvisual->visual, wi->w(), wi->h());
+  cairo_xlib_surface_set_size(surface, wi->w(), wi->h());
+  return surface;
+}
+#endif
+
 /**
   Fltk can draw into any X window or pixmap that uses the
   fltk::xvisual.  This will reset the transformation and clip region

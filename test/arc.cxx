@@ -23,82 +23,88 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h> // for  USE_CAIRO definition
+
+#include <fltk/x.h>
+
 #include <fltk/run.h>
 #include <fltk/DoubleBufferWindow.h>
 #include <fltk/ValueSlider.h>
 #include <fltk/draw.h>
 
-float args[7] = {90, 90, 100, 100, 0, 360, 0};
+float dargs[7] = {90, 90, 100, 100, 0, 360, 0};
 const char* name[7] = {"X", "Y", "W", "H", "start", "end", "rotate"};
 
-class Drawing : public fltk::Widget {
+using namespace fltk;
+
+class Drawing : public Widget {
   void draw() {
-    fltk::push_clip(0,0, w(), h());
-    fltk::setcolor(fltk::BLACK);
-    fltk::fillrect(0,0,w(), h());
-    fltk::push_matrix();
-    //    if (args[6]) {
-      fltk::translate(w()/2.0f, h()/2.0f);
-      fltk::rotate(args[6]);
-      fltk::translate(-w()/2.0f, -h()/2.0f);
+    push_clip(0,0, w(), h());
+    setcolor(BLACK);
+    fillrect(0,0,w(), h());
+    push_matrix();
+    //    if (dargs[6]) {
+      translate(w()/2.0f, h()/2.0f);
+      rotate(dargs[6]);
+      translate(-w()/2.0f, -h()/2.0f);
       //}
-    fltk::addarc(args[0],args[1],args[2],args[3],args[4],args[5]);
-    fltk::closepath();
-    fltk::addarc(120,120,40,40,0,-360);
-    fltk::setcolor(fltk::GRAY33);
-    fltk::fillstrokepath(fltk::WHITE);
+    addarc(dargs[0],dargs[1],dargs[2],dargs[3],dargs[4],dargs[5]);
+    closepath();
+    addarc(120,120,40,40,0,-360);
+    setcolor(GRAY33);
+    fillstrokepath(WHITE);
     // draw a hardware circle to see how well rotations match:
-    fltk::setcolor(fltk::GRAY33);
-    fltk::addchord(Rectangle(20,20,(int)(args[2]+1),(int)(args[3]+1)),args[4],args[5]);
-    fltk::fillstrokepath(fltk::WHITE);
+    setcolor(GRAY33);
+    addchord(Rectangle(20,20,(int)(dargs[2]+1),(int)(dargs[3]+1)),dargs[4],dargs[5]);
+    fillstrokepath(WHITE);
     // now draw non-rotated hardware circle to check if it inscribes:
-    fltk::pop_matrix();
-    fltk::setcolor(fltk::GRAY40);
-    fltk::fillrect(10,(int)(270-args[3]),(int)args[2],(int)args[3]);
-    fltk::setcolor(fltk::GRAY90);
-    fltk::strokerect(10,(int)(270-args[3]),(int) args[2],(int) args[3]);
-    fltk::setcolor(fltk::GRAY10);
-    fltk::addchord(fltk::Rectangle(10,(int) (270-args[3]),(int) args[2],(int)args[3]),args[4],args[5]);
-    fltk::fillstrokepath(fltk::GRAY90);
-    fltk::pop_clip();
+    pop_matrix();
+    setcolor(GRAY40);
+    fillrect(10,(int)(270-dargs[3]),(int)dargs[2],(int)dargs[3]);
+    setcolor(GRAY90);
+    strokerect(10,(int)(270-dargs[3]),(int) dargs[2],(int) dargs[3]);
+    setcolor(GRAY10);
+    addchord(Rectangle(10,(int) (270-dargs[3]),(int) dargs[2],(int)dargs[3]),dargs[4],dargs[5]);
+    fillstrokepath(GRAY90);
+    pop_clip();
   }
 public:
-  Drawing(int X,int Y,int W,int H) : fltk::Widget(X,Y,W,H) {}
+  Drawing(int X,int Y,int W,int H) : Widget(X,Y,W,H) {}
 };
 
 Drawing *d;
 
-void slider_cb(fltk::Widget* o, void* v) {
-  fltk::Slider* s = (fltk::Slider*)o;
-  args[long(v)] = s->value();
+void slider_cb(Widget* o, void* v) {
+  Slider* s = (Slider*)o;
+  dargs[long(v)] = s->value();
   d->redraw();
 }
 
 int main(int argc, char** argv) {
-  fltk::DoubleBufferWindow window(300,500);
+  Window window(300,500);
   window.begin();
   Drawing drawing(10,10,280,280);
   d = &drawing;
 
   int y = 300;
   for (int n = 0; n<7; n++) {
-    fltk::Slider* s =
-      new fltk::ValueSlider(50,y,240,25,name[n]); y += 25;
+    Slider* s =
+      new ValueSlider(50,y,240,25,name[n]); y += 25;
     if (n<4) {s->minimum(0); s->maximum(300);}
     else if (n==6) {s->minimum(0); s->maximum(360);}
     else {s->minimum(-360); s->maximum(360);}
-    s->type(fltk::Slider::TICK_ABOVE);
+    s->type(Slider::TICK_ABOVE);
     s->step(1);
-    s->value(args[n]);
-	s->clear_flag(fltk::ALIGN_MASK);
-    s->set_flag(fltk::ALIGN_LEFT);
+    s->value(dargs[n]);
+	s->clear_flag(ALIGN_MASK);
+    s->set_flag(ALIGN_LEFT);
     s->callback(slider_cb, (void*)n);
   }
 
   window.end();
   window.resizable(drawing);
   window.show(argc,argv);
-  return fltk::run();
+  return run();
 }
 
 

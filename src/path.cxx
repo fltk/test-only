@@ -380,7 +380,7 @@ static void add_n_points(int n) {
   xpoint = newpoints;
 }
 
-// The path also contins one dummy pie/chord piece:
+// The path also contains one dummy pie/chord piece:
 static fltk::Rectangle circle;
 static float circle_start, circle_end;
 enum {NONE=0, PIE, CHORD} circle_type;
@@ -450,26 +450,22 @@ void fltk::addvertex(int X, int Y) {
   than calling fltk::addvertex once for each point.
 */
 void fltk::addvertices(int n, const float array[][2]) {
-#if USE_CAIRO
   const float* a = array[0];
   const float* e = a+2*n;
+#if USE_CAIRO
   for (; a < e; a += 2) {
-    float X = a[0]; float Y = a[1];
+    float X = (float) a[0]; float Y = (float) a[1];
     transform(X,Y);
     cairo_line_to(cc,X,Y);
   }
 #elif USE_QUARTZ
-  const float* a = array[0];
-  const float* e = a+2*n;
   for (; a < e; a += 2) {
-    float X = a[0]; float Y = a[1];
+    float X = (float) a[0]; float Y = (float) a[1];
     transform(X,Y);
     quartz_add_vertex(X, Y);
   }
 #else
   if (numpoints+n >= point_array_size) add_n_points(n);
-  const float* a = array[0];
-  const float* e = a+2*n;
   int pn = numpoints;
   if (m.trivial) {
     for (; a < e; a += 2) {
@@ -498,26 +494,22 @@ void fltk::addvertices(int n, const float array[][2]) {
 
 /** Add a whole set of integer vertices to the current path. */
 void fltk::addvertices(int n, const int array[][2]) {
-#if USE_CAIRO
   const int* a = array[0];
   const int* e = a+2*n;
+#if USE_CAIRO
   for (; a < e; a += 2) {
-    float X = a[0]; float Y = a[1];
+    float X = (float) a[0]; float Y = (float) a[1];
     transform(X,Y);
     cairo_line_to(cc,X,Y);
   }
 #elif USE_QUARTZ
-  const int* a = array[0];
-  const int* e = a+2*n;
   for (; a < e; a += 2) {
-    float X = a[0]; float Y = a[1];
+    float X = (float) a[0]; float Y = (float) a[1];
     transform(X,Y);
     quartz_add_vertex(X, Y);
   }
 #else
   if (numpoints+n >= point_array_size) add_n_points(n);
-  const int* a = array[0];
-  const int* e = a+2*n;
   int pn = numpoints;
   if (m.trivial) {
     for (; a < e; a += 2) {
@@ -550,22 +542,14 @@ void fltk::addvertices(int n, const int array[][2]) {
   implemented.
 */
 void fltk::addvertices_transformed(int n, const float array[][2]) {
+  const float* a = array[0];
+  const float* e = a+2*n;
 #if USE_CAIRO
-  const float* a = array[0];
-  const float* e = a+2*n;
-  for (; a < e; a += 2) {
-    cairo_line_to(cc,a[0],a[1]);
-  }
+  for (; a < e; a += 2) cairo_line_to(cc,a[0],a[1]);
 #elif USE_QUARTZ
-  const float* a = array[0];
-  const float* e = a+2*n;
-  for (; a < e; a += 2) {
-    quartz_add_vertex(a[0], a[1]);
-  }
+  for (; a < e; a += 2) quartz_add_vertex(a[0], a[1]);
 #else
   if (numpoints+n >= point_array_size) add_n_points(n);
-  const float* a = array[0];
-  const float* e = a+2*n;
   int pn = numpoints;
   for (; a < e; a += 2) {
     COORD_T x = COORD_T(floorf(a[0] + .5f));

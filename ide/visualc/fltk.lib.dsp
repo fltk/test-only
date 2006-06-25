@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=FLTK - WIN32 RELEASE
+CFG=fltk - Win32 Debug Cairo
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,13 +13,14 @@ CFG=FLTK - WIN32 RELEASE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "fltk.lib.mak" CFG="FLTK - WIN32 RELEASE"
+!MESSAGE NMAKE /f "fltk.lib.mak" CFG="fltk - Win32 Debug Cairo"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "fltk - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "fltk - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "fltk - Win32 Release MinSize" (based on "Win32 (x86) Static Library")
+!MESSAGE "fltk - Win32 Debug Cairo" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -66,7 +67,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "fltkd"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /Gi /GX /ZI /Od /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /Gi /GR /GX /ZI /Od /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -91,7 +92,7 @@ LIB32=link.exe -lib
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /FD /c
 # SUBTRACT BASE CPP /YX
-# ADD CPP /nologo /MD /W1 /GX- /O1 /Ob2 /I "../.." /I "../../fltk/compat" /I "../visualc" /I "." /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_MSC_DLL" /FR /FD /c
+# ADD CPP /nologo /MD /GR /GX /O1 /Ob2 /I "../.." /I "../../fltk/compat" /I "../visualc" /I "." /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_MSC_DLL" /FR /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -102,6 +103,31 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo /out:"..\..\lib\fltk2.lib"
 # ADD LIB32 /nologo /out:"..\..\lib\fltk2.lib"
 
+!ELSEIF  "$(CFG)" == "fltk - Win32 Debug Cairo"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "fltk___Win32_Debug_Cairo"
+# PROP BASE Intermediate_Dir "fltk___Win32_Debug_Cairo"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "fltk___Win32_Debug_Cairo"
+# PROP Intermediate_Dir "fltk___Win32_Debug_Cairo"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MTd /W3 /Gm /Gi /GR /GX /ZI /Od /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /FD /c
+# SUBTRACT BASE CPP /YX
+# ADD CPP /nologo /MTd /W3 /Gm /Gi /GR /GX /ZI /Od /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D USE_CAIRO=1 /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /FD /c
+# SUBTRACT CPP /YX
+# ADD BASE RSC /l 0x409
+# ADD RSC /l 0x409
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\lib\fltk2d.lib"
+# ADD LIB32 /nologo /out:"..\..\lib\fltk2d.lib"
+
 !ENDIF 
 
 # Begin Target
@@ -109,6 +135,7 @@ LIB32=link.exe -lib
 # Name "fltk - Win32 Release"
 # Name "fltk - Win32 Debug"
 # Name "fltk - Win32 Release MinSize"
+# Name "fltk - Win32 Debug Cairo"
 # Begin Group "header"
 
 # PROP Default_Filter "h"
@@ -163,6 +190,10 @@ SOURCE=..\..\fltk\colorchooser.h
 # Begin Source File
 
 SOURCE=..\..\fltk\ComboBox.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\config.h
 # End Source File
 # Begin Source File
 

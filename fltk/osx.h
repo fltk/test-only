@@ -38,17 +38,17 @@ the X version of these is described here.
 #ifndef fltk_osx_h
 #define fltk_osx_h
 
-#ifndef DOXYGEN
+# ifndef DOXYGEN
 // Standard MacOS Carbon API includes...
-#define Style XStyle
-#include <Carbon/Carbon.h>
-#undef Style
+#  define Style XStyle
+#  include <Carbon/Carbon.h>
+#  undef Style
 
 // Now make some fixes to the headers...
-#undef check			// Dunno where this comes from...
-#endif
+#  undef check			// Dunno where this comes from...
+# endif
 
-#include "draw.h"
+# include "draw.h"
 
 ////////////////////////////////////////////////////////////////
 // Emulate X somewhat:
@@ -78,7 +78,7 @@ extern FL_API void	clip_region(RgnHandle);
 extern FL_API RgnHandle	clip_region();
 extern FL_API void	draw_into(CGContextRef xid, int w, int h);
 extern FL_API void	stop_drawing(CGImageRef xid);
-#define HFONT const char* // points at name of font!
+# define HFONT const char* // points at name of font!
 extern FL_API HFONT	xfont();
 
 extern FL_API void clear_quartz_clipping();
@@ -86,7 +86,7 @@ extern FL_API void begin_quartz_image(CGRect&, const Rectangle&);
 extern FL_API void end_quartz_image();
 
 ////////////////////////////////////////////////////////////////
-#ifdef fltk_Window_h // only include this if <fltk/Window.h> was included
+# ifdef fltk_Window_h // only include this if <fltk/Window.h> was included
 
 // When fltk tells X about a window, one of these objects is created.
 // Warning: this object is highly subject to change!  It's definition
@@ -123,12 +123,18 @@ extern CursHandle default_cursor;
 extern CursHandle current_cursor;
 extern const Widget* cursor_for;
 
-#endif //Fl_Window_H
+# endif //Fl_Window_H
 
 }
 
-#endif
+# if USE_CAIRO
+#  include <fltk/fltk_cairo.h>
+#  include <cairo-quartz.h>
+# else
+   typedef struct _cairo cairo_t;
+# endif
 
+#endif
 //
 // End of "$Id$".
 //

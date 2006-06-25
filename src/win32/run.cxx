@@ -42,6 +42,22 @@
 #include <limits.h>
 #include <time.h>
 
+#if USE_CAIRO
+# include <cairo.h>
+# include <cairo-win32.h>
+  FL_API cairo_t * fltk::cc=0;
+#endif
+
+////////////////////////////////////////////////////////////////
+// fabien: added Cairo support for WIN32
+#if USE_CAIRO
+namespace fltk {
+    cairo_surface_t * cairo_create_surface(fltk::Window* w) {
+	return cairo_win32_surface_create((HDC)w->backbuffer());
+    }
+}
+#endif
+
 // FIXME - Following block fixes weird problem with compiling FLTK
 //   inside Visual C++ (.NET 2003 Enterprise Architect)
 #ifdef _MSC_VER
@@ -2328,6 +2344,7 @@ HDC fltk::getDC() {
 
 ////////////////////////////////////////////////////////////////
 // Window update, double buffering, and overlay:
+void*Window::backbuffer() const {return i ? (void*)i->bdc:0;}
 
 void Window::flush() {
 

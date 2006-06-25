@@ -103,7 +103,7 @@ inline Flags drawflags() {return drawflags_;}
 inline Flags drawflags(Flags f) {return drawflags_ & f;}
 
 // line type:
-FL_API void line_style(int, int width=0, char* dashes=0);
+FL_API void line_style(int, double width=0.0, char* dashes=0);
 enum {
   SOLID	= 0,
   DASH	= 1,

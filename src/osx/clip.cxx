@@ -100,7 +100,13 @@ void fltk::push_clip(const Rectangle& r) {
   Pushes the \e intersection of the current region and this rectangle
   onto the clip stack. */
 void fltk::push_clip(int x, int y, int w, int  h) {
-  Region region = NewRgn();
+ #if USE_CAIRO
+    transform(x,y);
+    cairo_rectangle(cc, x,y,w,h);
+    //cairo_stroke(cc);
+    cairo_clip(cc);
+#else
+ Region region = NewRgn();
   if (FLTK_RECT_EMPTY(w,h)) {
     SetEmptyRgn(region);
   } else {
@@ -111,6 +117,7 @@ void fltk::push_clip(int x, int y, int w, int  h) {
   }
   pushregion(region);
   fl_restore_clip();
+#endif
 }
 
 /*!
@@ -149,11 +156,15 @@ void fltk::push_no_clip() {
   FLTK with the clip stack not empty unpredictable results occur.
 */
 void fltk::pop_clip() {
+#if USE_CAIRO
+ cairo_reset_clip(cc);
+#else
   if (rstackptr > 0) {
     Region oldr = rstack[rstackptr--];
     if (oldr) DisposeRgn(oldr);
     fl_restore_clip();
   }
+#endif
 }
 
 ////////////////////////////////////////////////////////////////

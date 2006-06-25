@@ -122,30 +122,34 @@ void fltk::drawline(int x, int y, int x1, int y1) {
 
 /*! Draw a straight line between the two points. */
 void fltk::drawline(float X, float Y, float X1, float Y1) {
-  transform(X,Y); int x = int(floorf(X)+.5); int y = int(floorf(Y)+.5);
-  transform(X1,Y1);int x1 = int(floorf(X1)+.5); int y1 = int(floorf(Y1)+.5);
+  transform(X,Y); 
+  transform(X1,Y1);
 #if USE_CAIRO
   cairo_move_to(cc,X+.5,Y+.5);
   cairo_line_to(cc,X1+.5,Y1+.5);
   cairo_stroke(cc);
-#elif USE_X11
+#else
+  int x = int(floorf(X)+.5); int y = int(floorf(Y)+.5);
+  int x1 = int(floorf(X1)+.5); int y1 = int(floorf(Y1)+.5);
+# if USE_X11
   XDrawLine(xdisplay, xwindow, gc, x, y, x1, y1);
-#elif defined(_WIN32)
+# elif defined(_WIN32)
   setpen();
   MoveToEx(dc, x, y, 0L); 
   LineTo(dc, x1, y1);
   // Draw the last point *again* because the GDI line drawing
   // functions will not draw the last point ("it's a feature!"...)
   // fltk is supposed to act like there is a 1-pixel pen.
-#elif USE_QUARTZ
+# elif USE_QUARTZ
   if (( x==x1 || y==y1 ) && quartz_line_width_==1.0f )  
     CGContextSetShouldAntialias(quartz_gc, false);
   CGContextMoveToPoint(quartz_gc, x, y);
   CGContextAddLineToPoint(quartz_gc, x1, y1);
   CGContextStrokePath(quartz_gc);
   if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, true);
-#else
-# error
+# else
+#  error
+# endif
 #endif
 }
 
@@ -173,23 +177,26 @@ void fltk::drawpoint(int x, int y) {
 
 /*! Draw a dot at the given point. */
 void fltk::drawpoint(float X, float Y) {
-  transform(X,Y); int x = int(floorf(X)); int y = int(floorf(Y));
+  transform(X,Y); 
 #if USE_CAIRO
   cairo_move_to(cc,X,Y);
   cairo_line_to(cc,X,Y);
   cairo_stroke(cc);
-#elif USE_X11
+#else
+  int x = int(floorf(X)); int y = int(floorf(Y));
+# if USE_X11
   XDrawPoint(xdisplay, xwindow, gc, x, y);
-#elif defined(_WIN32)
+# elif defined(_WIN32)
   SetPixel(dc, x, y, current_xpixel);
-#elif USE_QUARTZ
+# elif USE_QUARTZ
   if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, false);
   CGContextMoveToPoint(quartz_gc, x, y);
   CGContextAddLineToPoint(quartz_gc, x, y);
   CGContextStrokePath(quartz_gc);
   if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, true);
-#else
-# error
+# else
+#  error
+# endif
 #endif
 }
 

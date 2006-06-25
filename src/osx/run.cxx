@@ -58,6 +58,22 @@
 
 using namespace fltk;
 
+// fabien: added Cairo support for Quartz
+#if USE_CAIRO
+# include <cairo.h>
+# include <cairo-quartz.h>
+  FL_API cairo_t * fltk::cc=0;
+#endif
+
+#if USE_CAIRO
+namespace fltk {
+    cairo_surface_t * cairo_create_surface(fltk::Window* w) {
+      return cairo_quartz_surface_create ((CGContext*) w->backbuffer(), 
+					  w->w(),w->h(), true);
+    }
+}
+#endif
+
 ////////////////////////////////////////////////////////////////
 // interface to select call:
 //
@@ -1384,6 +1400,10 @@ void Window::label(const char *name, const char * iname) {
 }
 
 ////////////////////////////////////////////////////////////////
+// back buffer gc access (return opaque type for all platforms)
+void* Window::backbuffer() const {  return i ? i->gc :0;}
+
+////////////////////////////////////////////////////////////////
 // Drawing context
 
 const Window *Window::drawing_window_;
@@ -1459,18 +1479,29 @@ namespace fltk {
 // state into the current Quartz context
 void fltk::fill_quartz_context() {
   if (!quartz_gc) return;
-  int hgt = 0;
+  int hgt = 0,wgt=0;
   if (quartz_window) {
     Rect portRect; 
     GetPortBounds(GetWindowPort(quartz_window), &portRect);
     hgt = portRect.bottom-portRect.top;
+    wgt = portRect.right-portRect.left;
   } else {
     hgt = CGBitmapContextGetHeight(quartz_gc);
+    wgt = CGBitmapContextGetWidth(quartz_gc);
   }
   CGContextTranslateCTM(quartz_gc, 0.5, hgt-0.5f);
   CGContextScaleCTM(quartz_gc, 1.0f, -1.0f);
   static CGAffineTransform font_mx = { 1, 0, 0, -1, 0, 0 };
   CGContextSetTextMatrix(quartz_gc, font_mx);
+#if USE_CAIRO
+  if (cc) {
+    cairo_destroy(cc);
+  }
+  cairo_surface_t* s = 
+    cairo_quartz_surface_create(quartz_gc,hgt,wgt, true);
+  cc = cairo_create(s);
+  cairo_surface_destroy(s);
+#endif
   if (current_font_) setfont(current_font_, current_size_);
   setcolor(current_color_);
   restore_quartz_line_style();

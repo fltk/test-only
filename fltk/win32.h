@@ -75,6 +75,11 @@ the X version of these is described here.
 # define VK_APPS 0x5D
 #endif
 
+#if USE_CAIRO
+# include <fltk/fltk_cairo.h>
+# include <cairo-win32.h>
+#endif
+
 extern "C" {
 
 // Function pointer declarations

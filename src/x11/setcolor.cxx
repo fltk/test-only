@@ -273,12 +273,12 @@ static inline void free_color(Color i) {
 // This is here because Win32 makes it impossible to seperately set
 // the color and line style:
 
-void fltk::line_style(int style, int width, char* dashes) {
+void fltk::line_style(int style, double width, char* dashes) {
   char buf[7];
   int ndashes = dashes ? strlen(dashes) : 0;
   // emulate the _WIN32 dash patterns on X
   if (!ndashes && style&0xff) {
-    int w = width ? width : 1;
+    int w = (int) (width ? width : 1.0);
     char dash, dot, gap;
     // adjust lengths to account for cap:
     if (style & 0x200) {
@@ -313,7 +313,7 @@ void fltk::line_style(int style, int width, char* dashes) {
     ndashes = p-buf;
   }
 #if USE_CAIRO
-  cairo_set_line_width(cc, width ? width : 1);
+  cairo_set_line_width(cc, width ? width : 1.0);
   int c = (style>>8)&3; if (c) c--;
   cairo_set_line_cap(cc, (cairo_line_cap_t)c);
   int j = (style>>12)&3; if (j) j--;

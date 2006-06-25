@@ -79,7 +79,8 @@ static void free_pen()
   current_pen = 0;
 }
 
-void fltk::line_style(int style, int width, char* dashes) {
+void fltk::line_style(int style, double  width, char* dashes) {
+#if !USE_CAIRO
   static DWORD Cap[4]= {PS_ENDCAP_ROUND, PS_ENDCAP_FLAT, PS_ENDCAP_ROUND, PS_ENDCAP_SQUARE};
   static DWORD Join[4]={PS_JOIN_ROUND, PS_JOIN_MITER, PS_JOIN_ROUND, PS_JOIN_BEVEL};
   if (dashes && dashes[0]) {
@@ -94,9 +95,58 @@ void fltk::line_style(int style, int width, char* dashes) {
     lstyle = style & 0xff | Cap[(style>>8)&3] | Join[(style>>12)&3];
   }
   // for some reason zero width does not work at all:
-  if (!width) width = 1;
-  line_width = width;
+  if (!width) width = 1.0;
+  line_width = (int) width;
   if (current_pen) free_pen();
+#else
+  int ndashes = dashes ? strlen(dashes) : 0;
+  // emulate the _WIN32 dash patterns on X
+  if (!ndashes && style&0xff) {
+    int w = width ? width : 1;
+    char dash, dot, gap;
+    // adjust lengths to account for cap:
+    if (style & 0x200) {
+      dash = char(2*w);
+      dot = 1; // unfortunately 0 does not work
+      gap = char(2*w-1);
+    } else {
+      dash = char(3*w);
+      dot = gap = char(w);
+    }
+    char buf[7];
+    char* p = dashes = buf;
+    switch (style & 0xff) {
+    default:
+    case DASH:
+      *p++ = dash; *p++ = gap;
+      break;
+    case DOT:
+      *p++ = dot; *p++ = gap;  *p++ = dot; *p++ = gap; *p++ = dot; *p++ = gap;
+      break;
+    case DASHDOT:
+      *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap;
+      break;
+    case DASHDOTDOT:
+      *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; *p++ = dot; *p++ = gap;
+      break;
+    }
+    ndashes = p-buf;
+  }
+  cairo_set_line_width(cc, width ? width : 1);
+  int c = (style>>8)&3; if (c) c--;
+  cairo_set_line_cap(cc, (cairo_line_cap_t)c);
+  int j = (style>>12)&3; if (j) j--;
+  cairo_set_line_join(cc, (cairo_line_join_t)j);
+  if (ndashes) {
+    double *dash = new double[ndashes];
+    for (int i = 0; i < ndashes; i++) dash[i] = dashes[i];
+    cairo_set_dash(cc, dash, ndashes, 0);
+    delete [] dash;
+  } else {
+    cairo_set_dash(cc, 0, 0, 0);
+  }
+
+#endif
 }
 
 #if USE_STOCK_BRUSH
@@ -208,7 +258,11 @@ void fltk::setcolor(Color i) {
   if (current_color_ != i) {
     current_color_ = i;
     current_xpixel = xpixel(i);
-  }
+    #if USE_CAIRO
+      uchar r,g,b; split_color(i,r,g,b);
+      cairo_set_source_rgb(cc,r/255.0,g/255.0,b/255.0);
+    #endif
+   }
 }
 
 // Used by setcolor_index

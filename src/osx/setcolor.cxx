@@ -56,6 +56,9 @@ void fltk::setcolor(Color i) {
   r = i>>24;
   g = i>>16;
   b = i>> 8;
+#if USE_CAIRO
+  cairo_set_source_rgb(cc, r/255.0, g/255.0, b/255.0);
+#endif
   float fr = r/255.0f;
   float fg = g/255.0f;
   float fb = b/255.0f;
@@ -74,16 +77,23 @@ static enum CGLineJoin Join[4] = {
   kCGLineJoinMiter, kCGLineJoinMiter, kCGLineJoinRound, kCGLineJoinBevel 
 };
 
-void fltk::line_style(int style, int width, char* dashes) {
-  if (width<1) width = 1;
+void fltk::line_style(int style, double  width, char* dashes) {
+  if (width<1) width = 1.0;
   quartz_line_width_ = (float)width;
   quartz_line_cap_ = Cap[(style>>8)&3];
   quartz_line_join_ = Join[(style>>12)&3];
   char *d = dashes;
   static float pattern[16];
+#if USE_CAIRO
+  int ndashes=0;
+#endif
   if (d && *d) {
     float *p = pattern;
-    while (*d) { *p++ = (float)*d++; }
+#if USE_CAIRO
+    while (*d) { *p++ = (float)*d++; ndashes++;}
+#else
+    while (*d) { *p++ = (float)*d++;}
+#endif
     quartz_line_pattern = pattern;
     quartz_line_pattern_size = d-dashes;
   } else if (style & 0xff) {
@@ -112,6 +122,20 @@ void fltk::line_style(int style, int width, char* dashes) {
     quartz_line_pattern_size = 0;
   }
   restore_quartz_line_style();
+#if USE_CAIRO
+  cairo_set_line_width(cc, width ? width : 1.0);
+  int c = (style>>8)&3; if (c) c--;
+  cairo_set_line_cap(cc, (cairo_line_cap_t)c);
+  int j = (style>>12)&3; if (j) j--;
+  cairo_set_line_join(cc, (cairo_line_join_t)j);
+  if (ndashes) {
+    double dash[20];
+    for (int i = 0; i < ndashes; i++) dash[i] = (double) dashes[i];
+    cairo_set_dash(cc, dash, ndashes, 0);
+  } else {
+    cairo_set_dash(cc, 0, 0, 0);
+  }
+#endif
 }
 
 //

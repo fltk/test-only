@@ -1,4 +1,4 @@
-// "$Id$"
+// "$Id"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -20,34 +20,22 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
 /** \file
-  "Portably" include either x11.h, win32.h, or osx.h header files,
-  depending on your system. Since the system-specific interfaces
-  resemble each other somewhat, use of this header and some macros
-  may allow you to merge system-specific code for different systems
-  together.
+  "Portably" include cairo common definitions for fltk
 */
 
-#ifndef fltk_x_h
-# define fltk_x_h
-# if defined(_WIN32) && !USE_X11
-#  include "win32.h"
-# elif defined(__APPLE__) && !USE_X11
-#  include "osx.h"
-# else
-#  define USE_X11 1
-#  include "x11.h"
-# endif
-#endif
+#ifndef fltk_cairo_h
+# define fltk_cairo_h
 
-#if USE_CAIRO
+# if USE_CAIRO
 // declare common CAIRO decls and includes
-# include <cairo.h>
+#  include <cairo.h>
   namespace fltk {
     extern FL_API cairo_t * cc;
     class Window;
     FL_API cairo_surface_t * cairo_create_surface(Window* w);
   }
+# endif 
 #endif 
 //
-// End of "$Id$".
+// End of "$Id: x.h 5233 2006-06-25 06:11:31Z spitzak $".
 //

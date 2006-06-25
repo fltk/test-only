@@ -576,6 +576,15 @@ case $uname in
 
 	# Add a postbuild step after linking applications
 	POSTBUILD="/Developer/Tools/Rez -t APPL -o"
+	dnl Check for Cairo library unless disabled...
+  	AC_ARG_ENABLE(cairo,[  --enable-cairo          use Cairo graphics (default=no)])
+  	if test x$enable_cairo = xyes; then
+    	   AC_DEFINE(USE_CAIRO)
+#   FIXME This part should be fixed so configure do not depend on
+#   we do not rely on pkg-config . 
+       	  LIBS="$LIBS `pkg-config --libs cairo`"
+       	  CXXFLAGS="$CXXFLAGS `pkg-config --cflags cairo`" 
+  	fi
 	;;
 
     *)

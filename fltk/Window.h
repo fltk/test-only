@@ -112,6 +112,11 @@ public:
   static const Window* drawing_window() {return drawing_window_;}
   static const Window* drawing_window_;
 
+  // fabien: used for my cairo experimentations,
+  // not sure i'll keep that opaque backbuffer access :
+  // at least it shouldn't stay public
+  void* backbuffer() const;
+
 protected:
   virtual void create();
 

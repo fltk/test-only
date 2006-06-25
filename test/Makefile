@@ -52,6 +52,7 @@ CPPFILES = \
 	browser.cxx \
 	button.cxx \
 	buttons.cxx \
+	cairo.cxx \
 	callbacks.cxx \
 	checkers.cxx \
 	clock.cxx \
@@ -118,6 +119,7 @@ TARGETS = \
 	bitmap$(EXEEXT) \
 	boxtype$(EXEEXT) \
 	browser$(EXEEXT) \
+	cairo$(EXEEXT) \
 	checkers$(EXEEXT) \
 	clock$(EXEEXT) \
 	button$(EXEEXT) \

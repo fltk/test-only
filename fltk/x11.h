@@ -62,7 +62,7 @@ header files directly.
 #   endif
 
 #   if USE_CAIRO
-#    include <cairo.h>
+#    include <fltk/fltk_cairo.h>
 #    include <cairo-xlib.h>
 #   else
      typedef struct _cairo cairo_t;
@@ -122,7 +122,6 @@ extern FL_API Atom dnd_action;
 ////////////////////////////////////////////////////////////////
 // drawing functions:
 
-extern FL_API cairo_t*	cc;
 extern FL_API XftDraw*	xftc;
 extern FL_API GC	gc;
 extern FL_API XWindow	xwindow;
