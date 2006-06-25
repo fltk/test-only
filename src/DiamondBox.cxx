@@ -93,14 +93,12 @@ void DiamondBox::_draw(const Rectangle& r) const
 }
 
 static DiamondBox diamondDownBox("diamond_down", "2WWMMPPAA");
-/*! \ingroup boxes
-  Diamond shape used to draw Motif-style checkboxes.
-*/
+
+/** Diamond shape used to draw Motif-style checkboxes. */
 Box* const fltk::DIAMOND_DOWN_BOX = &diamondDownBox;
 static DiamondBox diamondUpBox("diamond_up", "2AAWWMMTT", &diamondDownBox);
-/*! \ingroup boxes
-  Raised diamond shape used to draw Motif-style checkboxes.
-*/
+
+/** Raised diamond shape used to draw Motif-style checkboxes. */
 Box* const fltk::DIAMOND_UP_BOX = &diamondUpBox;
 
 //

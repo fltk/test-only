@@ -6,7 +6,7 @@
 
 <center>
 \image html fltk_shadow.png
-<br><a href="http://www.fltk.org">www.fltk.org</a>
+<br><a href="http://www.fltk.org" TARGET="_top">www.fltk.org</a>
 <br>Revision 16 by Bill Spitzak, Michael Sweet, Craig P. Earls, 
 Matthias Melcher, your_name_here<br>
 <i><small>
@@ -74,7 +74,7 @@ terms in this manual are trademarks of their respective organizations.
 \image html doxygen.png
 
 Produced from source file comments using <a
-href="http://www.doxygen.org">Doxygen (www.doxygen.org)</a>
+href="http://www.doxygen.org" TARGET="_top">Doxygen (www.doxygen.org)</a>
 
 */
 

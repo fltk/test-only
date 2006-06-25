@@ -426,7 +426,7 @@ WARN_LOGFILE           =
 
 INPUT                  = . \
                          ../fltk \
-                         ../src \
+                         ../src ../src/x11 ../src/win32 ../src/osx \
                          ../images \
                          ../OpenGL \
 			 ../forms \
@@ -452,7 +452,9 @@ RECURSIVE              = NO
 
 # The EXCLUDE tag can be used to specify files and/or directories that should 
 # excluded from the INPUT source files. This way you can easily exclude a 
-# subdirectory from a directory tree whose root is specified with the INPUT tag.
+# subdirectory from a directory tree whose root is specified with the
+# INPUT tag.
+# Unfortunatly we need to list all the internal .h files and exclude them:
 
 EXCLUDE                = ../src/ARRAY.h \
                          ../src/IFont.h \
@@ -466,8 +468,11 @@ EXCLUDE                = ../src/ARRAY.h \
                          ../src/Fl_XColor.h \
                          ../src/slowarrow.h \
                          ../OpenGL/Fl_Gl_Choice.h \
-                         ../OpenGL/GlChoice.h
-
+                         ../OpenGL/GlChoice.h \
+			 ../src/win32/pktdef.h \
+			 ../src/win32/wintab.h \
+			 ../src/x11/IFont.h \
+			 ../src/x11/XColorMap.h
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or directories 
 # that are symbolic links (a Unix filesystem feature) are excluded from the input.

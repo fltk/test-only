@@ -138,7 +138,7 @@ inside it's bounding box. If you wish to simulate a non-square widget,
 you should call Widget::draw_background() to draw this area.
 
 Expose events (and the method Widget::expose(x,y,w,h)) will cause
-Widget::draw() to be called with FLTK's \link push_clip() clipping
+Widget::draw() to be called with FLTK's \link draw.h clipping
 \endlink turned on.  You can greatly speed up redrawing in some cases
 by testing fltk::not_clipped() or fltk::intersect_with_clip() and
 skipping invisible parts.
@@ -262,9 +262,9 @@ also be used to take advantage of system-provided clipping, or to work
 with a library that expects a system window ID to indicate where to 
 draw. 
 
-Subclassing <TT>fltk::Window</TT>is almost exactly like subclassing
-<TT>fltk::Widget</TT>, and in fact you can easily switch a subclass back
-and forth.
+Subclassing fltk::Window is almost exactly like subclassing
+fltk::Widget, and in fact you can easily switch a subclass back and
+forth.
 
 To reuse a window (perhaps created by another toolkit, or with more
 complex creation arguments than FLTK can do) use the system-specific

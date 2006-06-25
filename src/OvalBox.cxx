@@ -44,9 +44,7 @@ public:
   OvalBox(const char* n) : Box(n) {}
 };
 static OvalBox ovalBox("oval");
-/*! \ingroup boxes
-  Ellipse with a black border.
-*/
+/**  Ellipse with a black border. */
 Box* const fltk::OVAL_BOX = &ovalBox;
 
 class OvalShadowBox : public Box {
@@ -72,9 +70,7 @@ public:
   OvalShadowBox(const char* n) : Box(n) {}
 };
 static OvalShadowBox ovalShadowBox("oval_shadow");
-/*! \ingroup boxes
-  Ellipse with a black border and gray shadow.
-*/
+/** Ellipse with a black border and gray shadow. */
 Box* const fltk::OSHADOW_BOX = &ovalShadowBox;
 
 class OvalFlatBox : public Box {
@@ -89,9 +85,7 @@ public:
   OvalFlatBox(const char* n) : Box(n) {}
 };
 static OvalFlatBox ovalFlatBox(0);
-/*! \ingroup boxes
-  Ellipse with no border.
-*/
+/** Ellipse with no border. */
 Box* const fltk::OFLAT_BOX = &ovalFlatBox;
 
 

@@ -481,11 +481,60 @@ static inline int fl_ready() {
 
 ////////////////////////////////////////////////////////////////
 
+/**
+The open X display.  This is needed as an argument to most Xlib calls.
+Don't attempt to change it!  This is NULL before fltk::open_display()
+is called.
+*/
 Display *fltk::xdisplay = 0;
+
+/**
+This dummy 1x1 window is created by fltk::open_display() and is
+never destroyed. You can use it to communicate with the window
+manager or other programs.
+*/
 XWindow fltk::message_window;
+
+/**
+Which screen number to use.  This is set by fltk::open_display() to
+the default screen.  You can change it by setting this to a different
+value immediately afterwards.
+*/
 int fltk::xscreen;
+
+/**
+The X visual that FLTK will use for all windows.  These are set by
+fltk::open_display() to the default visual.  You can change them
+before calling Window::show() the first time.  Typical code for
+changing the default visual is:
+
+\code
+fltk::args(argc, argv); // do this first so $DISPLAY is set
+fltk::open_display();
+fltk::xvisual = find_a_good_visual(fltk::xdisplay, fltk::xscreen);
+if (!fltk::xvisual) fltk::abort(&quot;No good visual&quot;);
+fltk::xcolormap = make_a_colormap(fltk::xdisplay, fltk::xvisual->visual, fltk::xvisual->depth);
+// it is now ok to show() windows:
+window->show(argc, argv);
+\endcode
+
+A portable interface to get a TrueColor visual (which is probably
+the only reason to do this) is to call fltk::visual(int).
+*/
 XVisualInfo *fltk::xvisual;
+
+/**
+The colormap being used by FLTK. This is needed as an argument for
+many Xlib calls. You can also set this immediately after open_display()
+is called to your own colormap. The function own_colormap() can be
+used to make FLTK create a private one. FLTK uses the same colormap
+for all windows and there is no way to change that, sorry.
+*/
 Colormap fltk::xcolormap;
+
+/** \fn XWindow xid(const Window* window);
+Returns the XID for a window, or zero if show() has not been called on it.
+*/
 
 static Atom WM_DELETE_WINDOW;
 static Atom WM_PROTOCOLS;
@@ -527,6 +576,15 @@ static int xerror_handler(Display* d, XErrorEvent* e) {
 }
 }
 
+/**
+Opens the display.  Does nothing if it is already open.  You should
+call this if you wish to do X calls and there is a chance that your
+code will be called before the first show() of a window.  This is
+called automatically Window::show().
+
+This may call fltk::abort() if there is an error opening the 
+display.
+*/
 void fltk::open_display() {
   if (xdisplay) return;
 
@@ -539,6 +597,12 @@ void fltk::open_display() {
   open_display(d);
 }
 
+/**
+You can make fltk "open" a display that has already been opened,
+perhaps by another GUI library.  Calling this will set
+xdisplay to the passed display and also read information
+FLTK needs from it. <i>Don't call this if the display is already open!</i>
+*/
 void fltk::open_display(Display* d) {
   xdisplay = d;
   add_fd(ConnectionNumber(d), POLLIN, do_queued_events);
@@ -600,6 +664,13 @@ void fltk::open_display(Display* d) {
 #endif
 }
 
+/**
+This closes the X connection.  You do \e not need to call this to 
+exit, and in fact it is faster to not do so!  It may be useful to call 
+this if you want your program to continue without the X connection. You 
+cannot open the display again, and probably cannot call any FLTK 
+functions. 
+*/
 void fltk::close_display() {
   remove_fd(ConnectionNumber(xdisplay));
   XCloseDisplay(xdisplay);
@@ -933,12 +1004,76 @@ bool fltk::enable_tablet_events() {
 
 ////////////////////////////////////////////////////////////////
 
-XWindow fltk::dnd_source_window;
-Atom *fltk::dnd_source_types; // null-terminated list of data types being supplied
-Atom *fl_incoming_dnd_source_types;
-Atom fltk::dnd_type;
-Atom fltk::dnd_source_action;
+/**
+The dnd_* variables allow your fltk program to use the
+Xdnd protocol to manipulate files and interact with file managers. You
+can ignore these if you just want to drag & drop blocks of text.  I
+have little information on how to use these, I just tried to clean up
+the Xlib interface and present the variables nicely.
+
+The program can set this variable before returning non-zero for a
+DND_DRAG event to indicate what it will do to the object. Fltk presets
+this to <tt>XdndActionCopy</tt> so that is what is returned if you
+don't set it.
+*/
 Atom fltk::dnd_action;
+
+/** The X id of the window being dragged from. */
+XWindow fltk::dnd_source_window;
+
+/**
+Zero-terminated list of atoms describing the formats of the source
+data. This is set on the DND_ENTER event.  The
+following code will print them all as text, a typical value is
+<tt>"text/plain;charset=UTF-8"</tt> (gag).
+
+\code
+for (int i = 0; dnd_source_types[i]; i++) {
+  char* x = XGetAtomName(xdisplay, dnd_source_types[i]);
+  puts(x);
+  XFree(x);
+}
+\endcode
+
+You can set this and #dnd_source_action before calling dnd() to change
+information about the source. You must set both of these, if you don't
+fltk will default to <tt>"text/plain"</tt> as the type and
+<tt>XdndActionCopy</tt> as the action. To set this change it to point
+at your own array. Only the first 3 types are sent. Also, FLTK has no
+support for reporting back what type the target requested, so all your
+types must use the same block of data.
+*/
+Atom *fltk::dnd_source_types;
+
+/**
+The program can set this when returning non-zero for a DND_RELEASE
+event to indicate the translation wanted. FLTK presets this to
+<tt>"text/plain"</tt> so that is returned if you don't set it
+(supposedly it should be limited to one of the values in
+dnd_source_types, but <tt>"text/plain"</tt> appears to
+always work).
+*/
+Atom fltk::dnd_type;
+
+/**
+The action the source program wants to perform. Due to oddities in the
+Xdnd design this variable is \e not set on the fltk::DND_ENTER event,
+instead it is set on each DND_DRAG event, and it may change each time.
+
+To print the string value of the Atom use this code:
+
+\code
+char* x = XGetAtomName(xdisplay, dnd_source_action);
+puts(x);
+XFree(x);
+\endcode
+
+You can set this before calling fltk::dnd() to communicate a different
+action. See #dnd_source_types, which you must also set.
+*/
+Atom fltk::dnd_source_action;
+
+Atom *fl_incoming_dnd_source_types;
 
 void fl_sendClientMessage(XWindow xwindow, Atom message,
 			  unsigned long d0,
@@ -1041,8 +1176,12 @@ void fltk::paste(Widget &receiver, bool clipboard) {
 
 ////////////////////////////////////////////////////////////////
 
-XEvent fltk::xevent; // the current x event
-ulong fltk::event_time; // the last timestamp from an x event
+/** The most recent X event. */
+XEvent fltk::xevent;
+
+/** The last timestamp from an X event that reported it (not all do).
+Many X calls (like cut and paste) need this value. */
+ulong fltk::event_time;
 
 char fl_key_vector[32]; // used by get_key()
 
@@ -1104,6 +1243,19 @@ static void set_stylus_data() {
   }
 }
 
+/**
+  Make FLTK act as though it just got the event stored in #xevent.
+  You can use this to feed artifical X events to it, or to use your
+  own code to get events from X.
+
+  Besides feeding events your code should call flush() periodically so
+  that FLTK redraws its windows.
+
+  This function will call any widget callbacks from the widget code.
+  It will not return until they complete, for instance if it pops up a
+  modal window with fltk::ask() it will not return until the user
+  clicks yes or no.
+*/
 bool fltk::handle()
 {
   Window* window = find(xevent.xany.window);
@@ -1777,10 +1929,42 @@ bool fltk::handle()
 
 extern bool fl_show_iconic; // In Window.cxx, set by iconize() or -i switch
 
+/**
+This virtual function may be overridden to use something other than
+FLTK's default code to create the system's window. This must call
+either CreatedWindow::create() or CreatedWindow::set_xid().
+
+An example for Xlib (include x.h to make this work):
+\code
+void MyWindow::create() {
+  fltk::open_display();	// necessary if this is first window
+  // we only calcualte the necessary visual & colormap once:
+  static XVisualInfo* visual;
+  static Colormap colormap;
+  static int background;
+  if (!visual) {
+    visual = figure_out_visual();
+    colormap = XCreateColormap(xdisplay, RootWindow(xdisplay,xscreen),
+			        vis->visual, AllocNone);
+    XColor xcol; xcol.red = 1; xcol.green = 2; xcol.blue = 3;
+    XAllocColor(fltk::display, colormap, &xcol);
+    background = xcol.pixel;
+  }
+  CreatedWindow::create(this, visual, colormap, background);
+}
+\endcode
+*/
 void Window::create() {
   CreatedWindow::create(this, xvisual, xcolormap, -1);
 }
 
+/**
+This function calls XCreateWindow and sets things up so that
+xid(window) returns the created X window id.  This also does a lot of
+other ugly X stuff, including setting the label, resize limitations,
+etc.  The \a background is a pixel to use for X's automatic fill
+color, use -1 to indicate that no background filling should be done.
+*/
 void CreatedWindow::create(Window* window,
 			   XVisualInfo *visual, Colormap colormap,
 			   int background)
@@ -1964,7 +2148,8 @@ void CreatedWindow::create(Window* window,
   }
 }
 
-/*! Make an fltk::Window draw into an existing X Window */
+/** Set things up so that xid(window) returns \a winxid. Thus you will
+make that Window draw into an existing X window. */
 CreatedWindow* CreatedWindow::set_xid(Window* window, XWindow winxid) {
   CreatedWindow* x = new CreatedWindow;
   x->xid = winxid;
@@ -2097,11 +2282,23 @@ const Window *Window::drawing_window_;
 
 int fl_clip_w, fl_clip_h;
 
-// Which window we are drawing into. If this changes we will destroy
-// and recreate all the graphics context objects:
+/**
+Set by Window::make_current() and/or draw_into() to the window being
+drawn into. This may be different than the xid() of the window, as it
+may be the back buffer which has a different id.
+*/
 XWindow fltk::xwindow;
 
-// This may be removed if we use Cairo or XRender only:
+/**
+The single X GC used for all drawing. This is initialized by the first
+call to Window::make_current(). This may be removed if we use Cairo or
+XRender only.
+
+Most Xlib drawing calls look like this:
+\code
+XDrawSomething(xdisplay, xwindow, gc, ...);
+\endcode
+*/
 GC fltk::gc;
 
 #if USE_CAIRO
@@ -2254,6 +2451,19 @@ static bool can_xdbe() {
 
 #endif
 
+/**
+This virtual function is called by ::flush() to update the
+window. You can override it for special window subclasses to change
+how they draw.
+
+For FLTK's normal windows this calls make_current(), then perhaps sets
+up the clipping if the only damage is expose events, and then draw(),
+and then does some extra work to get the back buffer copied or swapped
+into the front buffer.
+
+For your own windows you might just want to put all the drawing code
+in here.
+*/
 void Window::flush() {
   drawing_window_ = this;
 

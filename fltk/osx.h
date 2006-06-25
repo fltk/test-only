@@ -1,7 +1,4 @@
-//
 // "$Id$"
-//
-// Mac header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -21,15 +18,27 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
-// Do not directly include this file, instead use <FL/x.h>.  It will
-// include this file if "__APPLE__" is defined and "USE_X11" is UNdefined.
-// This is to encourage portability of even the system-specific code...
+/** \file
 
-#ifndef fltk_mac_h
-#define fltk_mac_h
+Declarations of FLTK symbols and interfaces that only exist if FLTK is
+compiled on Windows. It is recommended you avoid using this header
+file, and that you segregate code requiring it to it's own source
+file.
 
+FLTK is currently using the Carbon interface, and this includes
+the <Carbon/Carbon.h> header file. A macro is used to rename the
+Carbon "Style" as "XStyle" to avoid conflicts with FLTK.
+
+Many of the functions have the same name and purpose as ones defined
+in x11.h, just with different return types. Due to how Doxygen works,
+the X version of these is described here.
+*/
+
+#ifndef fltk_osx_h
+#define fltk_osx_h
+
+#ifndef DOXYGEN
 // Standard MacOS Carbon API includes...
 #define Style XStyle
 #include <Carbon/Carbon.h>
@@ -37,6 +46,9 @@
 
 // Now make some fixes to the headers...
 #undef check			// Dunno where this comes from...
+#endif
+
+#include "draw.h"
 
 ////////////////////////////////////////////////////////////////
 // Emulate X somewhat:
@@ -112,7 +124,6 @@ extern CursHandle current_cursor;
 extern const Widget* cursor_for;
 
 #endif //Fl_Window_H
-////////////////////////////////////////////////////////////////
 
 }
 

@@ -86,12 +86,6 @@ static void figure_out_visual() {
 }
 
 ////////////////////////////////////////////////////////////////
-// Return an X pixel value for an fltk color.  For TrueColor this
-// is easy.  Most of this code is to handle colormaps, which are
-// also assummed to be 8 bits in size or less.  The requested
-// color is rounded to the nearest color in fltk's "colormap"
-// and then requested from X.  If this fails the current X colormap
-// is searched for the nearest match.
 
 #if USE_COLORMAP
 static XColorMap normal_xmap[256];
@@ -104,6 +98,11 @@ ulong fl_transparent_pixel;
 #endif
 #endif
 
+/**
+Returns the X pixel number used to draw the given FLTK color.
+If a colormapped visual is being used, this may allocate it, or find
+the nearest match.
+*/
 ulong fltk::xpixel(Color i) {
   if (!beenhere) figure_out_visual();
 

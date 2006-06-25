@@ -1,7 +1,4 @@
-//
 // "$Id$"
-//
-// _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -21,18 +18,41 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
-// Do not directly include this file, instead use <fltk/x.h>.  It will
-// include this file if _WIN32 is defined.  This is to encourage
-// portability of even the system-specific code...
+/** \file
+
+Declarations of FLTK symbols and interfaces that only exist if FLTK is
+compiled on Windows. It is recommended you avoid using this header
+file, and that you segregate code requiring it to it's own source
+file.
+
+This header includes the horrible <windows.h> header file, followed
+by a large list of undef's to get rid of name conflicts. It is recommended
+you use this if you need any windows functions rather than including
+that file directly.
+
+You can probably combine FLTK with other libraries that make their own
+WIN32 window classes.  The easiest way is to call fltk::wait(), it
+will call DispatchMessage() for all messages to the other windows. If
+your other library insists on reading all the events, it will still
+work (as long as it calls DispatchMessage()), but you will
+have to arrange for the function fltk::flush() to be called regularily
+so that widgets are updated. Timeouts, the idle function, and file
+descriptor callbacks will not work in this case.
+
+Many of the functions have the same name and purpose as ones defined
+in x11.h, just with different return types. Due to how Doxygen works,
+the X version of these is described here.
+*/
+
 #if defined(_MSC_VER)
 # pragma once /* speeds up compilation */
 #endif
 
-#ifndef FL_WIN32_H
-#define FL_WIN32_H
+#ifndef fltk_win32_h
+#define fltk_win32_h
 
+#ifndef DOXYGEN
 #include <windows.h>
 #include <winuser.h>
 # undef OPAQUE
@@ -58,6 +78,7 @@
 extern "C" {
 
 // Function pointer declarations
+// WAS: I suspect these can be put into win32/run.cxx!
 
 typedef HWND (WINAPI *pfCreateWindowExW)(DWORD dwExStyle, LPCWSTR lpClassName, LPCWSTR lpWindowName, DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
 typedef HMODULE (WINAPI *pfLoadLibraryW)(LPCWSTR lpFileName);
@@ -86,6 +107,9 @@ extern pfCreateFontIndirectW __CreateFontIndirectW;
 extern pfGetTextMetricsW     __GetTextMetricsW;
 
 }; /* extern "C" */
+#endif // !DOXYGEN
+
+#include "draw.h"
 
 namespace fltk {
 
@@ -154,8 +178,7 @@ Window* find(HWND xid);
 
 extern FL_API HCURSOR default_cursor;
 
-#endif //Fl_Window_H
-////////////////////////////////////////////////////////////////
+#endif // Fl_Window_H
 
 }
 

@@ -129,14 +129,10 @@ void RoundBox::_draw(const Rectangle& r) const
 }
 
 static RoundBox roundDownBox("round_down", "WWMMPPAA");
-/*! \ingroup boxes
-  Inset oval or circle.
-*/
+/** Inset oval or circle. */
 Box* const fltk::ROUND_DOWN_BOX = &roundDownBox;
 static RoundBox roundUpBox("round_up", "AAWWMMTT", &roundDownBox);
-/*! \ingroup boxes
-  Raised oval or circle.
-*/
+/** Raised oval or circle. */
 Box* const fltk::ROUND_UP_BOX = &roundUpBox;
 
 //

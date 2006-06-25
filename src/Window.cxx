@@ -803,13 +803,15 @@ void Window::erase_overlay() {
 
 ////////////////////////////////////////////////////////////////
 
-/*! Hides the window and also deletes all window system information
+/**
+  Hides the window and also deletes all window system information
   about the window, and thus returns it back to the state it was in
   before the first show(). It is harmless to call this if the window
   is already destroyed.
 
   Subclasses can override this, if you do this you must also override
-  the destructor and make it call destroy().  */
+  the destructor and make it call destroy().
+*/
 void Window::destroy() {
   free_backbuffer();
   CreatedWindow* x = i;

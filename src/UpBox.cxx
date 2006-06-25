@@ -23,9 +23,6 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-/** \addtogroup symbols
-*/
-
 // These are the most common, square box types, which are always
 // linked in because the default styles use them.
 
@@ -141,7 +138,7 @@ public:
 static DottedFrame dottedFrame("dotted_frame");
 //static FocusFrame focusFrame("focus_frame");
 
-/*! \ingroup boxes
+/*!
   Default value for focusbox(). This draws nothing if FOCUSED is
   not set in the flags. If it is set, this draws a dashed line
   one pixel inset.
@@ -158,7 +155,7 @@ public:
 };
 static NoBox noBox("none");
 
-/*! \ingroup boxes
+/*!
   Draws nothing.
   Can be used as a box to make the background of a widget invisible.
   Also some widgets check specifically for this and change their
@@ -186,7 +183,7 @@ bool FlatBox::is_frame() const {return true;}
 FlatBox::FlatBox(const char* name) : Box(name) {}
 static FlatBox flatBox("flat");
 
-/*! \ingroup boxes
+/*!
   Draws a flat rectangle of getbgcolor().
 */
 Box* const fltk::FLAT_BOX = &flatBox;
@@ -285,7 +282,7 @@ bool FrameBox::fills_rectangle() const {return true;}
 bool FrameBox::is_frame() const {return true;}
 
 static FrameBox downBox("down_", 2,2,4,4, "WWLLRRAA");
-/*! \ingroup boxes
+/*!
   Inset box in fltk's standard theme
 */
 Box* const fltk::DOWN_BOX = &downBox;
@@ -293,38 +290,38 @@ Box* const fltk::DOWN_BOX = &downBox;
 // The normal pushable button:
 static FrameBox downBox2("down_", 2,2,3,3, "2LLWWAA");
 static FrameBox upBox("up", 1,1,3,3, "AAWWLL", &downBox2);
-/*! \ingroup boxes
+/*!
   A up button in fltk's standard theme.
 */
 Box* const fltk::UP_BOX = &upBox;
 
 static FrameBox thinDownBox("thin_down", 1,1,2,2, "WWLL");
-/*! \ingroup boxes
+/*!
   1-pixel-thick inset box.
 */
 Box* const fltk::THIN_DOWN_BOX = &thinDownBox;
 
 static FrameBox thinUpBox("thin_up", 1,1,2,2, "LLWW", &thinDownBox);
-/*! \ingroup boxes
+/*!
   1-pixel-thick raised box.
 */
 Box* const fltk::THIN_UP_BOX = &thinUpBox;
 
 // in fltk 1.0 these used to point at each other as a "down_" version:
 static FrameBox engravedBox("engraved", 2,2,4,4, "2LLWWWWLL", &downBox);
-/*! \ingroup boxes
+/*!
   2-pixel thick engraved line around edge.
 */
 Box* const fltk::ENGRAVED_BOX = &engravedBox;
 
 static FrameBox embossedBox("embossed", 2,2,4,4, "LLWWWWLL", &downBox);
-/*! \ingroup boxes
+/*!
   2-pixel thick raised line around edge.
 */
 Box* const fltk::EMBOSSED_BOX = &embossedBox;
 
 static FrameBox borderBox("border", 1,1,1,1, "LLLL", &downBox);
-/*! \ingroup boxes
+/*!
   1-pixel thick gray line around rectangle.
 */
 Box* const fltk::BORDER_BOX = &borderBox;
@@ -342,7 +339,7 @@ public:
   BorderFrame(const char* n) : Box(n) {}
 };
 static BorderFrame borderFrame("border_frame");
-/*! \ingroup boxes
+/*!
   Obsolete. Draws colored edge and draws nothing inside rectangle.
 */
 Box* const fltk::BORDER_FRAME = &borderFrame;
@@ -371,13 +368,13 @@ HighlightBox::HighlightBox(const char* n, const Box* b)
   : FlatBox(n), down_(b) {}
 
 static HighlightBox highlightUpBox("highlight_up", THIN_UP_BOX);
-/*! \ingroup boxes
+/*!
   Draws nothing normally, and as THIN_UP_BOX when the mouse
   pointer points at it or the value of the widget is turned on.
 */
 Box* const fltk::HIGHLIGHT_UP_BOX = &highlightUpBox;
 static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
-/*! \ingroup boxes
+/*!
   Draws nothing normally, and as THIN_DOWN_BOX when the mouse
   pointer points at it or the value of the widget is turned on.
 */

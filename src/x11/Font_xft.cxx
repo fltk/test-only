@@ -160,9 +160,11 @@ FontSize::~FontSize() {
 }
 #endif
 
-// This call is used by gl_setfont to get a bitmapped font. Xft actually did
-// a pretty good job of selecting X fonts. Unfortunately Xft2 seems to have
-// completely hidden or removed this interface...
+/**
+Return the XFont set by the last call to setfont(). Newer FLTK uses
+the Xft and Freetype libraries, so this returns a very crude simulation
+that finds a somewhat similar font.
+*/
 XFontStruct* fltk::xfont() {
   if (!current->xfont) {
 #if 1 //defined(XFT_MAJOR) && XFT_MAJOR >= 2

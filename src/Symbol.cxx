@@ -395,43 +395,8 @@ public:
   void _draw(const Rectangle&) const;
 };
 
-/*! \ingroup symbols
-
-    Define a (hidden) subclass of Symbol that will draw a square icon.
-    All the predefined displaying symbols in fltk use this.
-
-    This is called by "@name;" in a label. By default the square is
-    the current font size. The name may be prefixed with some extra
-    characters:
-
-    "+digit" will enlarge the square by 1/12 of a point
-    size, "-digit" will shrink it. For instance "@+2square;" will
-    make a larger than default square.
-
-    Any digits after that are taken as an angle to rotate. A single
-    digit is a "keypad rotation" where the x axis points
-    at the given number on a keypad, for instance '9' it 45 degrees up,
-    and '4' is upside-down. '5' and '6' cause no rotation. For instance
-    "@4>" will make a triangle pointing left. "@+14>" is a bigger triangle
-    pointing left.
-
-    Multiple digits are a rotation in degrees. To do a rotation less than
-    10 degrees use a leading zero. For instance "@25->" is an arrow pointing
-    25 degrees up. "@-125->" is a slightly smaller arrow pointing 25
-    degrees up.
-
-    The \a drawit function should draw the required image inside the
-    -1,-1 to 1,1 square. The current transformation will already be
-    set to place this in the right place. The current color is passed
-    as an argument, you do not have to use this, but if you change the
-    color you are expected to set it back.
-
-    The \a scalable argument is for back-compatability and is ignored.
-    Pass 1 for compatability. If you want to make a non-scalable symbol
-    you should define your own subclass of Symbol.
-*/
-void fltk::add_symbol(const char *name, void (*drawit)(Color), int scalable)
 /* Adds a symbol to the system. Returns whether correct. */
+void fltk::add_symbol(const char *name, void (*drawit)(Color), int scalable)
 {
   new SymbolSymbol(name,drawit);
 }
@@ -484,18 +449,6 @@ void SymbolSymbol::_draw(const Rectangle& r) const
 }
 
 /******************** THE DEFAULT SYMBOLS ****************************/
-
-/** \defgroup symbols Symbols, Box types, and @-commands
-
-  FLTK defines a whole lot of static instances of subclasses of Symbol.
-  These are desinged to be used as boxes and backgrounds of widgets,
-  or as labels, or as imbedded @-commands in #drawtext() to insert
-  symbols or to change the font or color.
-
-  \image html symbols.gif
-
-  \image html boxtypes.gif
-*/
 
 #define BP
 #define EP fillpath()

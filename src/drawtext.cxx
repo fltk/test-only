@@ -36,21 +36,6 @@ using namespace fltk;
 ////////////////////////////////////////////////////////////////
 // @-sign commands
 
-/*! \addtogroup symbols
-
-  "&x" underscores the 'x'. This is a standard from Microsoft.
-
-  "&&" prints a single "&".
-
-  "@@" prints a single "@" sign. This is not a symbol, the next
-  character is printed or interpreted even if it is a semicolon or
-  space.
-
-  "@;" truncates the string at this point. This can be used to hide
-  program internal data in the label() by putting this before it.
-
-*/
-
 #include <fltk/Symbol.h>
 
 static Font* normal_font;
@@ -59,9 +44,6 @@ static Color normal_color;
 static float dy, nextdy;
 static Flags flags;
 
-/*! \addtogroup symbols
-  "@n" in a label resets the font, color, and postioning offset to
-  the settings they were when the label started. */
 class NormalSymbol : public Symbol {
 public:
   NormalSymbol() : Symbol("n") {}
@@ -77,8 +59,6 @@ public:
 };
 static const NormalSymbol normalsymbol;
 
-/*! \addtogroup symbols
-  "@b" in a label changes the font to bold. */
 class BoldSymbol : public Symbol {
 public:
   BoldSymbol() : Symbol("b") {}
@@ -92,8 +72,6 @@ public:
 };
 static const BoldSymbol boldsymbol;
 
-/*! \addtogroup symbols
-  "@i" in a label changes the font to italic. */
 class ItalicSymbol : public Symbol {
 public:
   ItalicSymbol() : Symbol("i") {}
@@ -107,8 +85,6 @@ public:
 };
 static const ItalicSymbol italicsymbol;
 
-/*! \addtogroup symbols
-  "@f" or "@t" in a label changes the font to fixed fltk::COURIER */
 class FixedSymbol : public Symbol {
 public:
   FixedSymbol(const char* n) : Symbol(n) {}
@@ -123,9 +99,6 @@ public:
 static const FixedSymbol fixedsymbolf("f");
 static const FixedSymbol fixedsymbolt("t");
 
-/*! \addtogroup symbols
-  "@Cxyz" will change the color to xyz, which is a color number. It
-  is easiest to specify it in hex, such as 0xff000000 for red. */
 class ColorSymbol : public Symbol {
 public:
   ColorSymbol() : Symbol("C") {}
@@ -138,17 +111,6 @@ public:
 };
 static const ColorSymbol colorsymbol;
 
-/*! \addtogroup symbols
-  "@snumber" will set the font size directly to the number.
-
-  "@s+number" will set it to (12+n)/12 times the current size.
-
-  "@s-number" will set it to 12/(12+n) times the current size.
-
-  "@s0" will restore the initial size.
-
-  Capital S works as well for back-compatability.
-*/
 class SizeSymbol : public Symbol {
 public:
   SizeSymbol(const char* n) : Symbol(n) {}
@@ -165,11 +127,6 @@ public:
 static const SizeSymbol sizesymbols("s");
 static const SizeSymbol sizesymbolS("S");
 
-/*! \addtogroup symbols
-  "@." prints nothing and also stops any interpretation of @ or &
-  characters later in the string. This will allow you to concatenate
-  some @-commands to the start of an arbitrary string.
-*/
 class NothingSymbol : public Symbol {
 public:
   NothingSymbol() : Symbol(".") {}
@@ -181,14 +138,6 @@ public:
 };
 static const NothingSymbol nothingsymbol;
 
-
-/*! \addtogroup symbols
-
-  "@mxnumber" draws a blank exactly n pixels wide. N may be negative.
-  This is useful for kerning or overprinting characters. For positive
-  N please use a '+' sign, so that unsigned values can be reserved
-  for future use.
-*/
 class MxSymbol : public Symbol {
 public:
   MxSymbol() : Symbol("mx") {}
@@ -199,13 +148,6 @@ public:
 };
 static const MxSymbol mxsymbol;
 
-/*! \addtogroup symbols
-
-  "@xnumber" draws a blank exactly n*(fontsize/12) wide. N may be negative.
-  This is useful for kerning or overprinting characters. For positive
-  N please use a '+' sign, so that unsigned values can be reserved
-  for future use.
-*/
 class DxSymbol : public Symbol {
 public:
   DxSymbol() : Symbol("x") {}
@@ -216,14 +158,6 @@ public:
 };
 static const DxSymbol dxsymbol;
 
-/*! \addtogroup symbols
-  "@ynumber" will move the y origin \e up (not down) by n*(fontsize/12) pixels.
-  The "@n" command will restore the y origin to the baseline.
-
-  This can be used to produce super/subscripts. You should start
-  positive numbers with '+' for compatability with possible
-  future versions of fltk.
-*/
 class DySymbol : public Symbol {
 public:
   DySymbol() : Symbol("y") {}
@@ -237,9 +171,6 @@ static const DySymbol dysymbol;
 
 static Color bgboxcolor;
 
-/*! \addtogroup symbols
-  "@Bcolor" draws a solid box of the given color behind the text. Not
-  sure if this is compatable with fltk1.1. */
 class BgBox : public Symbol {
 public:
   BgBox() : Symbol("B") {}
@@ -252,11 +183,6 @@ public:
 };
 static const BgBox bgbox;
 
-/*! \addtogroup symbols
-  "@l" makes the rest of the label be left-justified.
-  Note that this is incompatable with fltk1, which used this to set the
-  size to 24 points.
-*/
 class LeftSymbol : public Symbol {
 public:
   LeftSymbol() : Symbol("l") {}
@@ -268,8 +194,6 @@ public:
 };
 static const LeftSymbol leftsymbol;
 
-/*! \addtogroup symbols
-  "@c" makes the rest of the label be centered. */
 class CenterSymbol : public Symbol {
 public:
   CenterSymbol() : Symbol("c") {}
@@ -281,8 +205,6 @@ public:
 };
 static const CenterSymbol centersymbol;
 
-/*! \addtogroup symbols
-  "@r" makes the rest of the label be right-justified. */
 class RightSymbol : public Symbol {
 public:
   RightSymbol() : Symbol("r") {}

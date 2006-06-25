@@ -4,6 +4,10 @@ using namespace fltk;
 
 /*! \page opengl Using OpenGL in FLTK
 
+This chapter needs to be rewritten to be a real example program showing
+how to draw an OpenGL window and do some mouse events, including OpenGL
+hit detection, in it.
+
 The easiest way to make an OpenGL display is to subclass
 fltk::GlWindow. Your subclass must implement a GlWindow::draw()
 method which uses OpenGL calls to draw the display.  Your main program 
@@ -11,8 +15,11 @@ should call Widget::redraw() when the display needs to change, and
 (somewhat later) FLTK will call draw() for you.
 
 The functions glstart() and glfinish() may allow you to use OpenGL to
-draw into any normal FLTK window or widget.  This allows you to use
-Gouraud shading for drawing your widgets.
+draw into any normal FLTK window or widget, just put glstart() before
+it and glfinish() afterwards.  This allows you to use Gouraud shading
+for drawing your widgets. (note: not really working currently but I
+want to get it to work. You may have to initially call glvisual(int)
+to indicate you are going to do this).
 
 <h2>Making a Subclass of fltk::GlWindow</h2>
 
@@ -32,7 +39,7 @@ public:
 Like any widget, you can include additional private and public data in 
 your class (such as scene graph information, etc.) 
 
-The <TT>draw()</TT> method is where you actually do your OpenGL 
+The GlWindow::draw() method is where you actually do your OpenGL 
 drawing. The header file gl.h provides some convinence functions
 so that you can reuse FLTK fonts and colors in your OpenGL drawing:
 
@@ -47,7 +54,7 @@ void MyWindow::draw() {
 }
 \endcode
 
-The <TT>handle()</TT> method handles mouse and keyboard events for the 
+The GlWindow::handle() method handles mouse and keyboard events for the 
 window: 
 
 \code
@@ -111,52 +118,25 @@ This will make FLUID produce constructors for your new class.
 - In the "Extra Code" field put <TT>#include "MyWindow.h"</TT>, so that
 the FLUID output file will compile.
 
-<h2><a name=glspeed>Speeding up OpenGL</a></h2>
+<h2>Using OpenGL Optimizer with FLTK</h2>
 
-Performance of fltk::GlWindow may be improved on some types of OpenGL
-implementations (in particular MESA or other software emulators) by
-setting the <tt>GL_SWAP_TYPE</tt> environment variable.  This variable
-declares what is in the back buffer after you do a swapbuffers.
-
-<ul>
-
-<li><tt>setenv GL_SWAP_TYPE COPY</tt>
-
-This indicates that the back buffer is copied to the front buffer,
-and still contains it's old data. This is true of many hardware
-implementations.  Setting this will speed up emulation of
-overlays, and widgets that can do partial update can take
-advantage of this as damage() will not be cleared to -1.
-
-<li><tt>setenv GL_SWAP_TYPE NODAMAGE</tt>
-
-This indicates that nothing changes the back buffer except drawing
-into it.  This is true of MESA and Win32 software emulation and
-perhaps some hardware emulation on systems with lots of memory.
-
-<li>All other values for <tt>GL_SWAP_TYPE</tt>, and not setting the variable,
-cause fltk to assumme that the back buffer must be completely
-redrawn after a swap.
-
-</ul>
-
-This is easily tested by running the gl_overlay demo program and
-seeing if the display is correct when you drag another window over
-it or if you drag the window off the screen and back on. You have to
-exit and run the program again for it to see any changes to the
-environment variable.
-
-<h2><a name=gloptimizer>Using OpenGL Optimizer with FLTK</a></h2>
+This section needs to be updated. Several OpenGL-using libraries
+insist on creating their own contexts, often requiring you to include
+system-specific header files just to communicate the window id to
+them. This example shows how to do that with FLTK.
 
 <A href=http://www.sgi.com/software/optimizer>OpenGL Optimizer</A> is a 
 scene graph toolkit for OpenGL available from Silicon Graphics for IRIX 
 and Microsoft Windows.  Versions are in the works for Solaris and 
 HP-UX.  It allows you to view large scenes without writing a lot of 
 OpenGL code. 
-<H4>OptimizerWindow Class Definition</H4>
- To use OpenGL Optimizer with FLTK you'll need to create a subclass of <TT>
-fltk::Gl_Widget</TT> that includes several state variables: 
-<PRE>
+
+<H4>OptimizerWindow Class Definition</h4>
+
+To use OpenGL Optimizer with FLTK you'll need to create a subclass of
+GlWindow that includes several state variables: 
+
+\code
 class OptimizerWindow : public fltk::GlWindow {
   csContext *context_; // Initialized to 0 and set by draw()...
   csDrawAction *draw_action_; // Draw action...
@@ -185,18 +165,20 @@ public:
     }
   }
 };
-</PRE>
-<PRE>
+\endcode
 
-</PRE>
-<H4>The camera() Method</H4>
- The <TT>camera()</TT> method sets the camera (projection and 
+<h4>The camera() Method</h4>
+
+The <TT>camera()</TT> method sets the camera (projection and 
 viewpoint) to use when drawing the scene. The scene is redrawn after 
 this call. 
-<H4>The draw() Method</H4>
- The <TT>draw()</TT> method performs the needed initialization and does 
+
+<h4>The draw() Method</h4>
+
+The <TT>draw()</TT> method performs the needed initialization and does 
 the actual drawing: 
-<PRE>
+
+\code
 void OptimizerWindow::draw() {
   if (!context_) {
     // This is the first time we've been asked to draw; create the
@@ -204,12 +186,12 @@ void OptimizerWindow::draw() {
 
 #ifdef WIN32
     context_ = new csContext((HDC)fltk::getHDC());
-    context_-&gt;ref();
-    context_-&gt;makeCurrent((HDC)fltk::getHDC());
+    context_->ref();
+    context_->makeCurrent((HDC)fltk::getHDC());
 #else
     context_ = new csContext(fltk::display, fltk::visual);
-    context_-&gt;ref();
-    context_-&gt;makeCurrent(fltk::display, fltk::window);
+    context_->ref();
+    context_->makeCurrent(fltk::display, fltk::window);
 #endif // WIN32
 
     ... perform other context setup as desired ...    
@@ -218,25 +200,25 @@ void OptimizerWindow::draw() {
 
     draw_action_ = new csDrawAction;
     if (camera_) {
-      draw_action_-&gt;setCamera(camera_);
-      camera_-&gt;draw(draw_action_);
+      draw_action_->setCamera(camera_);
+      camera_->draw(draw_action_);
     }
   } else {
 #ifdef WIN32
-    context_-&gt;makeCurrent((HDC)fltk::getHDC());
+    context_->makeCurrent((HDC)fltk::getHDC());
 #else
-    context_-&gt;makeCurrent(fltk::display, fltk::window);
+    context_->makeCurrent(fltk::display, fltk::window);
 #endif // WIN32
   }
 
   if (!valid()) {
     // Update the viewport for this context...
-    context_-&gt;setViewport(0, 0, w(), h());
+    context_->setViewport(0, 0, w(), h());
   }
 
   // Clear the window...
 
-  context_-&gt;clear(csContext::COLOR_CLEAR | csContext::DEPTH_CLEAR,
+  context_->clear(csContext::COLOR_CLEAR | csContext::DEPTH_CLEAR,
                   0.0f,		// Red
 		  0.0f,		// Green
 		  0.0f,		// Blue
@@ -245,9 +227,9 @@ void OptimizerWindow::draw() {
   // Then draw the scene (if any)...
 
   if (scene_)
-    draw_action_-&gt;apply(scene_);
+    draw_action_->apply(scene_);
 }
-</PRE>
+\endcode
 
 <h4>The scene() Method</h4>
 
@@ -255,4 +237,5 @@ The <TT>scene()</TT> method sets the scene to be drawn.  The scene is
 a collection of 3D objects in a <TT>csGroup</TT>.  The scene is redrawn 
 after this call.
 
-</body></html>
+*/
+

@@ -303,8 +303,7 @@ static const char dead_keys[] = {
   int fltk::compose_state;
 #endif
 
-/*!
-
+/**
   Use of this function is very simple. Any text editing widget should
   call this for each fltk::KEY event.
 

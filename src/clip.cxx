@@ -70,9 +70,10 @@ Region fltk::clip_region() {
   return rstack[rstackptr];
 }
 
-#if USE_X11
-// Missing X call: (is this the fastest way to init a 1-rectangle region?)
-// MSWindows equivalent exists, implemented inline in win32.h
+#if USE_X11 || defined(DOXYGEN)
+/**
+Missing X call, this creates and returns a Region with a single rectangle.
+*/
 Region XRectangleRegion(int x, int y, int w, int h) {
   XRectangle R;
   R.x = x; R.y = y; R.width = w; R.height = h;

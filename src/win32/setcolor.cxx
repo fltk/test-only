@@ -25,8 +25,14 @@
 
 // This file does not compile independently, it is included by color.cxx
 
-// The current color:
+/** The color picked by the most recent setcolor(Color). */
 COLORREF	fltk::current_xpixel;
+
+/**
+If non-zero this is the palette alloced by fltk on an 8-bit
+screen. Hopefully you can ignore this, I'm not even sure it
+works anymore.
+*/
 HPALETTE	fltk::xpalette;
 
 static HBRUSH	current_brush;
@@ -126,6 +132,10 @@ static void load_dc_funcs()
 
 #endif /* USE_STOCK_BRUSH */
 
+/** Set the current "pen" in the DC to match the most recent setcolor()
+    and line_style() calls. This is stupid-expensive on Windows so
+    we defer it until the pen is needed.
+*/
 HPEN fltk::setpen() {
 #if USE_STOCK_BRUSH
   if (!lstyle && line_width <= 1) {
@@ -166,6 +176,10 @@ static void free_brush()
   current_brush = 0;
 }
 
+/** Set the current "brush" in the DC to match the most recent setcolor()
+    and line_style() calls. This is stupid-expensive on Windows so
+    we defer it until the brush is needed.
+*/
 HBRUSH fltk::setbrush() {
 #if USE_STOCK_BRUSH
   if (!dc_funcs_init) load_dc_funcs();

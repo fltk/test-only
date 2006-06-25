@@ -133,14 +133,10 @@ void PlasticBox::_draw(const Rectangle& r) const
 }
 
 static PlasticBox plasticDownBox(0, "STUVWWWVT");
-/*! \ingroup boxes
-  Pushed in version of PLASTIC_UP_BOX
-*/
+/**  Pushed in version of PLASTIC_UP_BOX */
 Box* const fltk::PLASTIC_DOWN_BOX = &plasticDownBox;
 static PlasticBox plasticUpBox(0, "TXSPPQQRSSTTUVS", &plasticDownBox);
-/*! \ingroup boxes
-  Box designed to vaguely resemble a certain fruit-themed operating system.
-*/
+/** Box designed to vaguely resemble a certain fruit-themed operating system.*/
 Box* const fltk::PLASTIC_UP_BOX = &plasticUpBox;
 
 // up_frame =  "MNFKKLNO"

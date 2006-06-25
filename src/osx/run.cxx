@@ -371,7 +371,7 @@ static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, E
   return ret;
 }
 
-/**
+/*
  * Wait up to the given time for any events or sockets to become ready,
  * do the callbacks for the events and sockets. Returns non-zero if
  * anything happened during the time period.
@@ -472,7 +472,7 @@ static inline int fl_wait(double time)
   return got_events;
 }
 
-/**
+/*
  * ready() is just like wait(0.0) except no callbacks are done.
  */
 static inline int fl_ready() {
@@ -872,7 +872,7 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
 //+++ verify port to FLTK2
 void fl_set_spot(fltk::Font *f, Widget *w, int x, int y) {}
 
-/**
+/*
  * initialize the Mac toolboxes and set the default menubar
  */
 void fltk::open_display() {
@@ -903,7 +903,7 @@ void fltk::open_display() {
 
 static bool reload_info = true;
 
-/** Return a "monitor" that surrounds all the monitors.
+/* Return a "monitor" that surrounds all the monitors.
     If you have a single monitor, this returns a monitor structure that
     defines it. If you have multiple monitors this returns a fake monitor
     that surrounds all of them.
@@ -931,7 +931,7 @@ const Monitor& Monitor::all() {
   return monitor;
 }
 
-/** Return an array of all Monitors.
+/* Return an array of all Monitors.
     p is set to point to a static array of Monitor structures describing
     all monitors connected to the system. Subsequent calls will usually
     return the same array, but if a signal comes in indicating a change
@@ -943,7 +943,7 @@ int Monitor::list(const Monitor** p) {
   return 1;
 }
 
-/** Return a pointer to a Monitor structure describing the monitor
+/* Return a pointer to a Monitor structure describing the monitor
     that contains or is closest to the given x,y, position.
 */
 //+++ verify port to FLTK2
@@ -980,7 +980,7 @@ const Monitor& Monitor::find(int x, int y) {
 
 ////////////////////////////////////////////////////////////////
 
-/**
+/*
  * get the current mouse pointer world coordinates
  */
 //+++ verify port to FLTK2
@@ -996,7 +996,7 @@ void fltk::get_mouse(int &x, int &y)
 
 ////////////////////////////////////////////////////////////////
 
-/**
+/*
  * convert a Mac FSSpec structure into a Unix filename 
  */
 static int FSSpec2UnixPath( FSSpec *fs, char *dst )
@@ -1009,7 +1009,7 @@ static int FSSpec2UnixPath( FSSpec *fs, char *dst )
  
 Window *dnd_target_window = 0;
 #include <fltk/draw.h>
-/**
+/*
  * Drag'n'drop tracking handler
  */
 //+++ verify port to FLTK2
@@ -1067,7 +1067,7 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
 }
 
 
-/**
+/*
  * Drag'n'drop receive handler
  */
 //+++ verify port to FLTK2
@@ -1165,7 +1165,7 @@ void Window::borders( fltk::Rectangle *r ) const {
   }
 }
 
-/**
+/*
  * Resizes the actual system window in response to a resize() call from
  * the program.
  */
@@ -1195,7 +1195,7 @@ void Window::layout() {
 
 ////////////////////////////////////////////////////////////////
 
-/**
+/*
  * go ahead, create that (sub)window
  * \todo we should make menu windows slightly transparent for the new Mac look
  */
@@ -1348,14 +1348,14 @@ void Window::create()
 //+++ verify port to FLTK2
 void fltk::close_display() {}
 
-/**
+/*
  * Turn on flag to indicate that user set the min and max size.
  */
 void Window::size_range_() {
   size_range_set = 1;
 }
 
-/**
+/*
  * Returns true if the window is shown but is iconized.
  */
 //+++ verify port to FLTK2
@@ -1365,7 +1365,7 @@ bool Window::iconic() const {
 
 ////////////////////////////////////////////////////////////////
 
-/**
+/*
  * set the window title bar
  * \todo make the dock icon work!
  */
@@ -1411,7 +1411,7 @@ void fltk::stop_drawing(CGImageRef) {
   quartz_window = prev_window;
 }
 
-/**
+/*
  * make all drawing go into this window (called by subclass flush() impl.)
  */
 //+++ verify port to FLTK2
@@ -1546,7 +1546,7 @@ static int selection_length[2];
 static int selection_buffer_length[2];
 static ScrapRef myScrap = 0;
 
-/**
+/*
  * create a selection
  * owner: widget that created the selection
  * stuff: pointer to selected data
@@ -1613,7 +1613,7 @@ void fltk::paste(Widget &receiver, bool clipboard) {
 
 ////////////////////////////////////////////////////////////////
 
-/**
+/*
  * drag and drop whatever is in the cut-copy-paste buffer
  * - create a selection first using: 
  *     copy(const char *stuff, int len, 0)
@@ -1657,7 +1657,7 @@ bool fltk::dnd()
   return true;
 }
 
-/**
+/*
  * Due to the lack of subwindows, finding the XID is a little bit more involved.
  */
 WindowPtr fltk::xid(const Window*w) {

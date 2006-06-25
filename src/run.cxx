@@ -532,6 +532,11 @@ int fltk::ready() {
 
 CreatedWindow* CreatedWindow::first;
 
+/**
+Returns the Window that corresponds to the given XID, or
+NULL if not found.  This uses a cache so it is slightly
+faster than iterating through the windows yourself.
+*/
 #if USE_X11
 Window* fltk::find(XWindow xid)
 #elif defined(_WIN32)

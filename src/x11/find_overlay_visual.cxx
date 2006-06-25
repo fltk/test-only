@@ -98,8 +98,6 @@ XVisualInfo *fl_find_overlay_visual() {
   return fl_overlay_visual;
 }
 
-#endif
-
 //
 // End of "$Id$".
 //

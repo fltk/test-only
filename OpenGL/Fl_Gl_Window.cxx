@@ -42,20 +42,60 @@ projection may be reused between redraws. GlWindow also flushes
 the OpenGL streams and swaps buffers after draw() returns.
 
 draw() is a pure virtual method.  You must subclass GlWindow and
-provide an implementation for draw(). You may also provide an
-implementation of draw_overlay() if you want to draw into the overlay
-planes.  You can avoid reinitializing the viewport and lights and
-other things by checking valid() at the start of draw() and only doing
-the initialization if it is false.
+provide an implementation for draw(). You can avoid reinitializing the
+viewport and lights and other things by checking valid() at the start
+of draw() and only doing the initialization if it is false.
 
 draw() can \e only use OpenGL calls.  Do not attempt to call any of
 the functions in &lt;fltk/draw.h&gt;, or X or GDI32 or any other
-drawing api.  Do not call gl_start() or gl_finish().
+drawing api.  Do not call glstart() or glfinish().
 
-If double-buffering is enabled in the window, the back and front
-buffers are swapped after draw() is completed. The mode bit
-NO_AUTO_SWAP can be used to stop this, this is needed for some
-third-party libraries that insist on doing the swap for you.
+<h2>Double Buffering</h2>
+
+Normally double-buffering is enabled. You can disable it by chaning
+the mode() to turn off the DOUBLE_BUFFER bit.
+
+If double-buffering is enabled, the back buffer is made current before
+draw() is called, and the back and front buffers are \e automatically
+swapped after draw() is completed.
+
+Some tricks using the front buffer require you to control the
+swapping.  You can call swap_buffers() to swap them (OpenGL does not
+provide a portable function for this, so we provide it). But you will
+need to turn off the auto-swap, you do this by adding the NO_AUTO_SWAP
+bit to the mode().
+
+<h2>Overlays</h2>
+
+The method draw_overlay() is a second drawing operation that is put
+atop the main image. You can implement this, and call redraw_overlay()
+to indicate that the image in this overlay has changed and that
+draw_overlay() must be called.
+
+Originally this was written to support hardware overlays, but FLTK
+emulated it if the hardware was missing so programs were
+portable. FLTK 2.0 is not normally compiled to support hardware
+overlays, but the emulation still remains, so you can use these
+functions. (Modern hardware typically has no overlays, and besides it
+is fast enough that the original purpose of them is moot)
+
+By default the emulation is to call draw_overlay() after draw() and
+before swapping the buffers, so the overlay is just part of the normal
+image and does not blink. You can get some of the advantages of
+overlay hardware by setting the GL_SWAP_TYPE environment variable,
+which will cause the front buffer to be used for the draw_overlay()
+method, and not call draw() each time the overlay changes. This
+will be faster if draw() is very complex, but the overlay will
+blink. GL_SWAP_TYPE can be set to:
+- "USE_COPY" use glCopyPixels to copy the back buffer to the front.
+This should always work.
+- "COPY" indicates that the swap_buffers() function actually copies the
+back to the front buffer, rather than swapping them. If your card
+does this (most do) then this is best.
+- "NODAMAGE" indicates that behavior is like "COPY" but \e nothing
+changes the back buffer, including overlapping it with another OpenGL
+window. This is true of software OpenGL emulation, and may be true
+of some modern cards with lots of memory.
 
 */
 

@@ -27,7 +27,7 @@ doxygen_html:
 	@-mkdir -p html
 	@-rm -rf html/*.*
 	doxygen
-	cp tiny.gif fltk_shadow.png doxygen.png html
+	cp tiny.gif fltk_shadow.png doxygen.png license.html html
 
 clean:
 	-rm -rf html/*.*

@@ -36,7 +36,6 @@
 #ifndef fltk_draw_h
 #define fltk_draw_h
 
-#include "Flags.h" // for alignment values
 #include "Color.h"
 #include "Rectangle.h"
 #include "PixelType.h"

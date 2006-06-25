@@ -346,6 +346,13 @@ static inline int fl_ready() {
 #endif // USE_ASYNC_SELECT
 }
 
+/**
+The most recent message read by GetMessage() (which is called by
+fltk::wait().  This may not be the most recent message sent to an FLTK
+window (because our fun-loving friends at MicroSoft decided that
+calling the handle procedures directly would be a good idea
+sometimes...)
+*/
 MSG fltk::msg;
 
 // Wait up to the given time for any events or sockets to become ready,
@@ -2171,7 +2178,7 @@ void fltk::open_display() {
   if(been_here) return;
   been_here = 1;
 
-  if(has_unicode()) {
+  if (has_unicode()) {
     // Setup our function pointers to "W" functions
     fltk::xdisplay              = GetModuleHandleW(NULL);
   } else {
@@ -2256,6 +2263,8 @@ void Window::label(const char *name,const char *iname) {
 
 const Window *Window::drawing_window_;
 int fl_clip_w, fl_clip_h;
+
+/** The device context that is currently being drawn into. */
 HDC fltk::dc;
 
 void Widget::make_current() const {
@@ -2299,6 +2308,7 @@ void fltk::draw_into(HBITMAP bitmap, int w, int h) {
 #if __BORLANDC__ || __DMC__
   void fltk::stop_drawing(HWND window) {}
 #else
+  /** Destroy any dc or other objects used to draw into this window. */
   void fltk::stop_drawing(HWND window) {}
   void fltk::stop_drawing(HBITMAP bitmap) {}
 #endif
