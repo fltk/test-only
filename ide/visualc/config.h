@@ -61,7 +61,9 @@
 /* Use the Cairo library to draw everything. Ignored if !USE_X11
    Currently only partly implemented, though line drawing looks
    nice. For more info on Cairo see http://www.cairographics.org */
-#define USE_CAIRO		0
+/* under msvc this variable is defined in the project settings
+    #define USE_CAIRO		0
+*/
 
 /* Use the fltk::clipout() method to make redrawing blink less, by
    drawing the widgets first, and then the background of the

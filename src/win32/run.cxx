@@ -2297,6 +2297,14 @@ void Widget::make_current() const {
   fl_clip_w = window->w();
   fl_clip_h = window->h();
   dc = CreatedWindow::find( window )->dc;
+#if USE_CAIRO
+  // update cairo context here with this new global dc
+  if (fltk::cc)  cairo_destroy(cc);
+  cairo_surface_t * surface =
+      cairo_win32_surface_create(fltk::dc);
+  cc = cairo_create(surface);
+  cairo_surface_destroy(surface);
+#endif
   fl_select_palette(dc);
   load_identity();
   translate(x,y);

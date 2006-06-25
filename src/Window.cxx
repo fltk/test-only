@@ -83,26 +83,13 @@ void Window::draw() {
   // cairo context with current dependent platform context update
   // putting this stuff in draw is not good for performances
   // as graphical device context may not change between 2 calls
-# if defined(WIN32)
-	cairo_surface_t * surface;
-	cairo_t *cr, *old_cc;
-	old_cc = cc;
-	surface = cairo_create_surface(this);
-	cr = ::cairo_create(surface);
-	cc= cr;
-# endif
-#endif
-
-	Group::draw();
-
-#if USE_CAIRO
-        // release cairo context and surface
-# if defined(WIN32)
-        cc = old_cc;
-	cairo_destroy(cr);
+    if (!cc) { // create one iuf no cairo context created yet
+	cairo_surface_t * surface = cairo_create_surface(this);
+	cc = ::cairo_create(surface);
 	cairo_surface_destroy (surface);
-# endif
+    }
 #endif
+    Group::draw();
 }
 
 /*! Sets the window title, which is drawn in the titlebar by the system. */
