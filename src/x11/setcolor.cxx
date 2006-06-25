@@ -278,7 +278,7 @@ void fltk::line_style(int style, double width, char* dashes) {
   int ndashes = dashes ? strlen(dashes) : 0;
   // emulate the _WIN32 dash patterns on X
   if (!ndashes && style&0xff) {
-    int w = (int) (width ? width : 1.0);
+    int w = int(width+.5); if (w<1) w = 1;
     char dash, dot, gap;
     // adjust lengths to account for cap:
     if (style & 0x200) {
@@ -329,7 +329,7 @@ void fltk::line_style(int style, double width, char* dashes) {
   if (ndashes) XSetDashes(xdisplay, gc, 0, dashes, ndashes);
   static int Cap[4] = {CapButt, CapButt, CapRound, CapProjecting};
   static int Join[4] = {JoinMiter, JoinMiter, JoinRound, JoinBevel};
-  XSetLineAttributes(xdisplay, gc, width, 
+  XSetLineAttributes(xdisplay, gc, int(width+.5),
 		     ndashes ? LineOnOffDash : LineSolid,
 		     Cap[(style>>8)&3], Join[(style>>12)&3]);
 }
