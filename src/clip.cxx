@@ -112,7 +112,9 @@ void fltk::clip_region(Region region) {
   if (oldr) DeleteObject(oldr);
 #endif
   rstack[rstackptr] = region;
+#if !USE_CAIRO
   fl_restore_clip();
+#endif
 }
 
 /**
@@ -134,12 +136,6 @@ void fltk::push_clip(int x, int y, int w, int h) {
   // when dealing with x,y,w,h scalars evaluation in frequently used code
   // Here XRectangleRegion() as well as CreateRectRgn() both use scalars so let's
   // try not to build a Rectangle object that is not necessary:
-#if USE_CAIRO
-    transform(x,y);
-    cairo_rectangle(cc, x,y,w,h);
-    //cairo_stroke(cc);
-    cairo_clip(cc);
-#else
   Region region;
   if (FLTK_RECT_EMPTY(w,h)) {
 # if USE_X11
@@ -168,6 +164,13 @@ void fltk::push_clip(int x, int y, int w, int h) {
 # endif
   }
   pushregion(region);
+#if USE_CAIRO
+    //transform(x,y);
+    // fabien: FIXME! should be able to clip the current region not only a rect!
+    cairo_rectangle(cc, x,y,w,h);
+    //cairo_stroke(cc);
+    cairo_clip(cc);
+#else
   fl_restore_clip();
 #endif
 }
@@ -199,7 +202,9 @@ void fltk::clipout(const Rectangle& rectangle) {
   CombineRgn(current, current, region, RGN_DIFF);
   DeleteObject(region);
 #endif
+#if !USE_CAIRO
   fl_restore_clip();
+#endif
 }
 
 /**
@@ -209,8 +214,12 @@ void fltk::clipout(const Rectangle& rectangle) {
   an offscreen area.
 */
 void fltk::push_no_clip() {
-  pushregion(0);
+    pushregion(0);
+#if !USE_CAIRO
   fl_restore_clip();
+#else
+  cairo_reset_clip(cc);
+#endif
 }
 
 /**
@@ -219,9 +228,6 @@ void fltk::push_no_clip() {
   FLTK with the clip stack not empty unpredictable results occur.
 */
 void fltk::pop_clip() {
-#if USE_CAIRO
- cairo_reset_clip(cc);
-#else
   if (rstackptr > 0) {
     Region oldr = rstack[rstackptr--];
 # if USE_X11
@@ -229,7 +235,11 @@ void fltk::pop_clip() {
 # elif defined(_WIN32)
     if (oldr) DeleteObject(oldr);
 # endif
+#if USE_CAIRO
+     cairo_reset_clip(cc);
+#else
     fl_restore_clip();
+#endif
   }
 #endif
 }
@@ -329,7 +339,6 @@ int fltk::intersect_with_clip(Rectangle& r) {
 #endif
 }
 
-#endif
 
 //
 // End of "$Id$"
