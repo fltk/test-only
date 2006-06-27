@@ -240,7 +240,6 @@ void fltk::pop_clip() {
     fl_restore_clip();
 #endif
   }
-#endif
 }
 
 ////////////////////////////////////////////////////////////////
@@ -338,6 +337,7 @@ int fltk::intersect_with_clip(Rectangle& r) {
 #endif
 }
 
+#endif
 
 //
 // End of "$Id$"
