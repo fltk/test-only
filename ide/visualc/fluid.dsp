@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
-CFG=FLUID - WIN32 RELEASE
+CFG=fluid - Win32 Debug Cairo
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,13 +13,14 @@ CFG=FLUID - WIN32 RELEASE
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "fluid.mak" CFG="FLUID - WIN32 RELEASE"
+!MESSAGE NMAKE /f "fluid.mak" CFG="fluid - Win32 Debug Cairo"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "fluid - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "fluid - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE "fluid - Win32 Release MinSize" (based on "Win32 (x86) Application")
+!MESSAGE "fluid - Win32 Debug Cairo" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -116,6 +117,35 @@ LINK32=link.exe
 # ADD LINK32 fltk2.lib fltk2_images.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /entry:"mainCRTStartup" /subsystem:windows /machine:I386 /nodefaultlib:"libc" /out:"../../fluid/fluid2.exe" /libpath:"..\..\lib"
 # SUBTRACT LINK32 /pdb:none
 
+!ELSEIF  "$(CFG)" == "fluid - Win32 Debug Cairo"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "fluid___Win32_Debug_Cairo"
+# PROP BASE Intermediate_Dir "fluid___Win32_Debug_Cairo"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "fluid___Win32_Debug_Cairo"
+# PROP Intermediate_Dir "fluid___Win32_Debug_Cairo"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MTd /W3 /Gm /Gi /GX /ZI /Od /I "../visualc" /I "." /I "../.." /I "../../fltk/compat" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /FD /c
+# SUBTRACT BASE CPP /YX
+# ADD CPP /nologo /MTd /W3 /Gm /Gi /GX /ZI /Od /I "../visualc" /I "." /I "../.." /I "../../fltk/compat" /D USE_CAIRO=1 /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FR /FD /c
+# SUBTRACT CPP /YX
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 fltk2d.lib fltk2_imagesd.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /entry:"mainCRTStartup" /subsystem:windows /profile /debug /machine:I386 /nodefaultlib:"libcd" /out:"../../fluid/fluid2d.exe" /libpath:"..\..\lib"
+# ADD LINK32 cairo.lib fltk2d.lib fltk2_imagesd.lib fltk2_jpegd.lib fltk2_zd.lib ws2_32.lib fltk2_pngd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /entry:"mainCRTStartup" /subsystem:windows /profile /debug /machine:I386 /nodefaultlib:"libcd" /out:"../../fluid/fluid2d.exe" /libpath:"..\..\lib"
+
 !ENDIF 
 
 # Begin Target
@@ -123,6 +153,7 @@ LINK32=link.exe
 # Name "fluid - Win32 Release"
 # Name "fluid - Win32 Debug"
 # Name "fluid - Win32 Release MinSize"
+# Name "fluid - Win32 Debug Cairo"
 # Begin Group "headers"
 
 # PROP Default_Filter "h"

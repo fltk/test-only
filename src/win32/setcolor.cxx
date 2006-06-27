@@ -260,6 +260,13 @@ void fltk::setcolor(Color i) {
     current_xpixel = xpixel(i);
     #if USE_CAIRO
       uchar r,g,b; split_color(i,r,g,b);
+      if (!cc) {
+	    cairo_surface_t* s= 
+	    cairo_win32_surface_create(fltk::dc);
+	    cc= cairo_create(s);
+	    cairo_surface_destroy(s);
+      }
+  
       cairo_set_source_rgb(cc,r/255.0,g/255.0,b/255.0);
     #endif
    }

@@ -168,8 +168,7 @@ void fltk::push_clip(int x, int y, int w, int h) {
     //transform(x,y);
     // fabien: FIXME! should be able to clip the current region not only a rect!
     cairo_rectangle(cc, x,y,w,h);
-    //cairo_stroke(cc);
-    cairo_clip(cc);
+    cairo_clip(cc); // should accumulate clip depending on the stack!
 #else
   fl_restore_clip();
 #endif

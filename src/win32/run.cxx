@@ -2331,7 +2331,10 @@ void fltk::draw_into(HBITMAP bitmap, int w, int h) {
   dc = fl_bitmap_dc;
   fl_select_palette(dc);
 #if USE_CAIRO
-  cairo_invalidate_context();
+    cairo_surface_t * surface =cairo_win32_surface_create(dc);
+    cairo_invalidate_context();
+    cc = cairo_create(surface);
+    cairo_surface_destroy(surface);
 #endif
   load_identity();
   fl_clip_w = w;
