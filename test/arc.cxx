@@ -40,7 +40,7 @@ using namespace fltk;
 class Drawing : public Widget {
   void draw() {
     push_clip(0,0, w(), h());
-    setcolor(BLUE);
+    setcolor_alpha(BLUE,0.6);
     fillrect(0,0,w(), h());
     push_matrix();
     //    if (dargs[6]) {
@@ -51,7 +51,7 @@ class Drawing : public Widget {
     addarc(dargs[0],dargs[1],dargs[2],dargs[3],dargs[4],dargs[5]);
     closepath();
     addarc(120,120,40,40,0,-360);
-    setcolor(GRAY33);
+    setcolor_alpha(GRAY33,0.6);
     fillstrokepath(WHITE);
     // draw a hardware circle to see how well rotations match:
     setcolor(GRAY33);
@@ -60,12 +60,12 @@ class Drawing : public Widget {
     fillstrokepath(WHITE);
     // now draw non-rotated hardware circle to check if it inscribes:
     pop_matrix();
-    setcolor(GRAY40);
-    fillrect(10,(int)(270-dargs[3]),(int)dargs[2],(int)dargs[3]);
-    setcolor(GRAY90);
-    strokerect(10,(int)(270-dargs[3]),(int) dargs[2],(int) dargs[3]);
-    setcolor(GRAY10);
+    setcolor_alpha(GRAY40,0.6);
     r.set(10,(int) (270-dargs[3]),(int) dargs[2],(int)dargs[3]);
+    fillrect(r);
+    setcolor(GRAY90);
+    strokerect(r);
+    setcolor_alpha(RED,0.6);
     addchord(r,dargs[4],dargs[5]);
     fillstrokepath(GRAY90);
     pop_clip();
