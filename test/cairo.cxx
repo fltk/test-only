@@ -34,6 +34,8 @@
 #include <fltk/draw.h>
 #include <fltk/math.h>
 
+#define DEF_WIDTH 0.03
+
 using namespace fltk;
 
 class CairoWindow : public Window {
@@ -57,17 +59,27 @@ const char* name[7] = {"X", "Y", "W", "H", "start", "end", "rotate"};
 
 
 void centered_text(cairo_t* cr, double x0,double y0,double w0,double h0, const char * my_text) {
-    cairo_set_source_rgba (cr, 0, 0, 0.2, 0.6);
+    cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
+                               CAIRO_FONT_WEIGHT_BOLD);
+    cairo_set_source_rgba (cr, 0.8, 0.8, 0.4, 0.6);
     cairo_text_extents_t extents;
     cairo_text_extents (cr, my_text, &extents);
     double x = (extents.width/2 + extents.x_bearing);
     double y = (extents.height/2 + extents.y_bearing);
     cairo_move_to  (cr, x0+w0/2-x, y0+h0/2 - y);
-    cairo_show_text(cr,my_text);
+    cairo_text_path(cr,my_text);
+    cairo_fill_preserve (cr);
+    cairo_set_source_rgba (cr, 0, 0, 0,1);
+    cairo_set_line_width (cr, 0.004);
+    cairo_stroke (cr);
+    cairo_set_line_width (cr, DEF_WIDTH);
+
+
 }
 
-void round_button(cairo_t* cr, double x0, double y0, double rect_width, double rect_height, 
-		  double radius) {
+void round_button(cairo_t* cr, double x0, double y0, 
+		  double rect_width, double rect_height, double radius,
+		  double r, double g, double b) {
     
     double x1,y1;
     
@@ -113,8 +125,12 @@ void round_button(cairo_t* cr, double x0, double y0, double rect_width, double r
     }
     cairo_close_path (cr);
     
-    cairo_pattern_t *pat= cairo_pattern_create_linear (0.0, 0.0,  0.0, 1.0);
-    cairo_pattern_add_color_stop_rgba (pat, 1.0, 0, 0, 1, 1);
+    cairo_pattern_t *pat= 
+	//cairo_pattern_create_linear (0.0, 0.0,  0.0, 1.0);
+        cairo_pattern_create_radial (0.25, 0.24, 0.11, 0.24,  0.14, 0.35);
+    cairo_pattern_set_extend (pat, CAIRO_EXTEND_REFLECT);
+    
+    cairo_pattern_add_color_stop_rgba (pat, 1.0, r, g, b, 1);
     cairo_pattern_add_color_stop_rgba (pat, 0.0, 1, 1, 1, 1);
     cairo_set_source (cr, pat);
     cairo_fill_preserve (cr);
@@ -139,10 +155,12 @@ void my_cairo_draw_cb(CairoWindow& window, cairo_t* cr) {
     double angle1 = 45.0  * (M_PI/180.0);  /* angles are specified */
     double angle2 = 180.0 * (M_PI/180.0);  /* in radians           */
     
-    cairo_set_line_width (cr, 0.03);
+    cairo_set_line_width (cr, DEF_WIDTH);
     cairo_scale (cr, w,h);
 
-    round_button(cr,0.1,0.05,0.8,0.2,0.4);
+    round_button(cr,0.1,0.05,0.8,0.2,0.4,0,0,1);
+    round_button(cr,0.1,0.35,0.8,0.2,0.4,1,0,0);
+    round_button(cr,0.1,0.65,0.8,0.2,0.4,0,1,0);
     return;
 
 

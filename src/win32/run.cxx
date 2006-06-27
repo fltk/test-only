@@ -2287,7 +2287,10 @@ HDC fltk::dc;
 static void cairo_invalidate_context() {
   // invalidate cairo context so that it will be resynchronized
   // on next first real draw()
-    fltk::cc = 0; // don't create know, wait for real draw()
+    if (fltk::cc) {
+	cairo_destroy (cc); // delete previous context pointing on old hdc
+	fltk::cc = 0; // don't create now, wait for draw()
+    }
     return;
 }
 #endif
