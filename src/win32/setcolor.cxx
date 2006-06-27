@@ -102,7 +102,7 @@ void fltk::line_style(int style, double  width, char* dashes) {
   int ndashes = dashes ? strlen(dashes) : 0;
   // emulate the _WIN32 dash patterns on X
   if (!ndashes && style&0xff) {
-    int w = width ? width : 1;
+    int w = (int) (width ? (width+.5) : 1.0);
     char dash, dot, gap;
     // adjust lengths to account for cap:
     if (style & 0x200) {

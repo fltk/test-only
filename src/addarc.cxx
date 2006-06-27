@@ -45,9 +45,10 @@ using namespace fltk;
 void fltk::addarc(float l, float t, float w, float h, float start, float end)
 {
 #if USE_CAIRO
+  transform(l,t);
   float x = l+w/2;
   float y = t+h/2;
-  translate(x,y);
+  //translate(w/2,h/2);
   if (start > end)
     cairo_arc(cc,x,y,w/2,start*(-M_PI/180),end*(-M_PI/180));
   else

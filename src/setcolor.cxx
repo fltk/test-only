@@ -169,6 +169,12 @@ Flags fltk::drawflags_;
 
 /*! \fn void fltk::setcolor(Color)
   Set the color for all subsequent drawing operations.
+  \see setcolor_alpha()   
+*/
+
+/*! \fn void fltk::setcolor_alpha(Color)
+  Set the color + a transparency coeff for all subsequent drawing operations.
+  \see setcolor()   
 */
 
 /*! \fn Color fltk::getcolor()
@@ -255,6 +261,14 @@ Flags fltk::drawflags_;
   result in undefined behavior. <i>The dashes array is ignored on
   Windows 95/98.</i>
 */
+
+FL_API void fltk::setcolor_alpha(Color c, double alpha) { // for rendering systems alowing it
+    fltk::setcolor(c);
+    #if USE_CAIRO
+      uchar r,g,b; split_color(c,r,g,b);
+      cairo_set_source_rgba(cc,r/255.0,g/255.0,b/255.0,alpha);
+    #endif
+}
 
 //
 // End of "$Id$".

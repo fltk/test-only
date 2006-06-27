@@ -86,6 +86,7 @@ FL_API int intersect_with_clip(Rectangle&);
 //@}
 
 FL_API void setcolor(Color);
+FL_API void setcolor_alpha(Color, double alpha); // for rendering systems alowwing it
 extern FL_API Color current_color_;
 inline Color getcolor() {return current_color_;}
 

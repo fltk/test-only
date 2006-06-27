@@ -871,7 +871,7 @@ void fltk::fillpath() {
 void fltk::fillstrokepath(Color color) {
 #if USE_CAIRO
   cairo_save(cc);
-  cairo_fill(cc);
+  cairo_fill_preserve(cc);
   cairo_restore(cc);
   setcolor(color);
   cairo_stroke(cc);

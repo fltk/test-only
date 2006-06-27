@@ -59,9 +59,8 @@ const char* name[7] = {"X", "Y", "W", "H", "start", "end", "rotate"};
 
 
 void centered_text(cairo_t* cr, double x0,double y0,double w0,double h0, const char * my_text) {
-    cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
-                               CAIRO_FONT_WEIGHT_BOLD);
-    cairo_set_source_rgba (cr, 0.8, 0.8, 0.4, 0.6);
+    cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_OBLIQUE,CAIRO_FONT_WEIGHT_BOLD);
+    cairo_set_source_rgba (cr, 0.9, 0.9, 0.4, 0.6);
     cairo_text_extents_t extents;
     cairo_text_extents (cr, my_text, &extents);
     double x = (extents.width/2 + extents.x_bearing);
