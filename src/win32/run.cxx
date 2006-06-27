@@ -2283,6 +2283,15 @@ int fl_clip_w, fl_clip_h;
 /** The device context that is currently being drawn into. */
 HDC fltk::dc;
 
+#if USE_CAIRO
+static void cairo_invalidate_context() {
+  // invalidate cairo context so that it will be resynchronized
+  // on next first real draw()
+    fltk::cc = 0; // don't create know, wait for real draw()
+    return;
+}
+#endif
+
 void Widget::make_current() const {
   int x = 0;
   int y = 0;
@@ -2298,12 +2307,7 @@ void Widget::make_current() const {
   fl_clip_h = window->h();
   dc = CreatedWindow::find( window )->dc;
 #if USE_CAIRO
-  // update cairo context here with this new global dc
-  if (fltk::cc)  cairo_destroy(cc);
-  cairo_surface_t * surface =
-      cairo_win32_surface_create(fltk::dc);
-  cc = cairo_create(surface);
-  cairo_surface_destroy(surface);
+  cairo_invalidate_context();
 #endif
   fl_select_palette(dc);
   load_identity();
@@ -2323,6 +2327,9 @@ void fltk::draw_into(HBITMAP bitmap, int w, int h) {
   SelectObject(fl_bitmap_dc, bitmap);
   dc = fl_bitmap_dc;
   fl_select_palette(dc);
+#if USE_CAIRO
+  cairo_invalidate_context();
+#endif
   load_identity();
   fl_clip_w = w;
   fl_clip_h = h;
@@ -2387,6 +2394,9 @@ void Window::flush() {
       // set the graphics context to draw into back buffer:
       dc = i->bdc;
       fl_select_palette(dc);
+#if USE_CAIRO
+      cairo_invalidate_context();
+#endif
       load_identity();
       if ((damage & DAMAGE_ALL) || i->backbuffer_bad) {
 	set_damage(DAMAGE_ALL);
@@ -2432,6 +2442,9 @@ void Window::flush() {
     // Single buffer drawing
     dc = i->dc;
     fl_select_palette(dc);
+#if USE_CAIRO
+    cairo_invalidate_context();
+#endif
     load_identity();
     if (damage & ~DAMAGE_EXPOSE) {
       set_damage(damage & ~DAMAGE_EXPOSE);

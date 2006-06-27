@@ -132,6 +132,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "cairo_demo"=.\cairo.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "checkers"=.\checkers.dsp - Package Owner=<4>
 
 Package=<5>
@@ -637,10 +649,6 @@ Project: "inactive"=.\inactive.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
-    begin source code control
-    inactive
-    ..\..
-    end source code control
 }}}
 
 Package=<4>

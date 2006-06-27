@@ -138,9 +138,9 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 cairo.lib  fltk2d.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd" /out:"../../test/arcd.exe" /pdbtype:sept /libpath:"..\..\lib"
+# ADD BASE LINK32 cairo.lib fltk2d.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd" /out:"../../test/arcd.exe" /pdbtype:sept /libpath:"..\..\lib"
 # SUBTRACT BASE LINK32 /pdb:none /incremental:no
-# ADD LINK32 cairo.lib  fltk2d.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd" /out:"../../test/arcd.exe" /pdbtype:sept /libpath:"..\..\lib"
+# ADD LINK32 cairo.lib fltk2d.lib ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib msimg32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:"libcd" /out:"../../test/arcd.exe" /pdbtype:sept /libpath:"..\..\lib"
 # SUBTRACT LINK32 /pdb:none /incremental:no
 
 !ENDIF 
@@ -154,26 +154,6 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=..\..\test\arc.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\test\cairo.cxx
-
-!IF  "$(CFG)" == "arc - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "arc - Win32 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "arc - Win32 Release MinSize"
-
-!ELSEIF  "$(CFG)" == "arc - Win32 Debug Cairo"
-
-# PROP BASE Exclude_From_Build 1
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # End Target
 # End Project

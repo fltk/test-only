@@ -41,35 +41,11 @@ public:
     CairoWindow(int w, int h) : Window(w,h),draw_cb_(0) {}
 
     void draw() {
-	// prepare for cairo context
-	cairo_surface_t * surface;
-	cairo_t *cr, *old_cc;
-	if (draw_cb_) {
-	    old_cc = cc;
-#if !USE_X11
-	    surface = cairo_create_surface(this);
-	    cr = ::cairo_create(surface);
-	    cc= cr;
-#endif
-	}
-	else {cr=old_cc=0;surface=0;}
-
-	Group::draw();
-
-	if (draw_cb_) {
-	
-	    draw_cb_(*this, surface, cr); // enjoy cairo features here !
-
-	    // release cairo context
-	    cc = old_cc;
-#if !USE_X11
-	    cairo_destroy(cr);
-	    cairo_surface_destroy (surface);
-#endif
-	}
+	Window::draw();
+	if (draw_cb_)draw_cb_(*this, cc); // enjoy cairo features here !
     }
-
-    typedef void (*draw_cb) (CairoWindow& self, cairo_surface_t* surface,cairo_t* def);
+    
+    typedef void (*draw_cb) (CairoWindow& self, cairo_t* def);
     void set_draw_cb(draw_cb  cb){draw_cb_=cb;}
 private:
     draw_cb draw_cb_;
@@ -79,41 +55,84 @@ private:
 float drawargs[7] = {90, 90, 100, 100, 0, 360, 0};
 const char* name[7] = {"X", "Y", "W", "H", "start", "end", "rotate"};
 
-void my_cairo_draw_cb(CairoWindow& window, cairo_surface_t* surface,cairo_t* cr) {
+
+void centered_text(cairo_t* cr, double x0,double y0,double w0,double h0, const char * my_text) {
+    cairo_set_source_rgba (cr, 0, 0, 0.2, 0.6);
+    cairo_text_extents_t extents;
+    cairo_text_extents (cr, my_text, &extents);
+    double x = (extents.width/2 + extents.x_bearing);
+    double y = (extents.height/2 + extents.y_bearing);
+    cairo_move_to  (cr, x0+w0/2-x, y0+h0/2 - y);
+    cairo_show_text(cr,my_text);
+}
+
+void round_button(cairo_t* cr, double x0, double y0, double rect_width, double rect_height, 
+		  double radius) {
+    
+    double x1,y1;
+    
+    
+    x1=x0+rect_width;
+    y1=y0+rect_height;
+    if (!rect_width || !rect_height)
+	return;
+    if (rect_width/2<radius) {
+	if (rect_height/2<radius) {
+	    cairo_move_to  (cr, x0, (y0 + y1)/2);
+	    cairo_curve_to (cr, x0 ,y0, x0, y0, (x0 + x1)/2, y0);
+	    cairo_curve_to (cr, x1, y0, x1, y0, x1, (y0 + y1)/2);
+	    cairo_curve_to (cr, x1, y1, x1, y1, (x1 + x0)/2, y1);
+	    cairo_curve_to (cr, x0, y1, x0, y1, x0, (y0 + y1)/2);
+	} else {
+	    cairo_move_to  (cr, x0, y0 + radius);
+	    cairo_curve_to (cr, x0 ,y0, x0, y0, (x0 + x1)/2, y0);
+	    cairo_curve_to (cr, x1, y0, x1, y0, x1, y0 + radius);
+	    cairo_line_to (cr, x1 , y1 - radius);
+	    cairo_curve_to (cr, x1, y1, x1, y1, (x1 + x0)/2, y1);
+	    cairo_curve_to (cr, x0, y1, x0, y1, x0, y1- radius);
+	}
+    } else {
+	if (rect_height/2<radius) {
+	    cairo_move_to  (cr, x0, (y0 + y1)/2);
+	    cairo_curve_to (cr, x0 , y0, x0 , y0, x0 + radius, y0);
+	    cairo_line_to (cr, x1 - radius, y0);
+	    cairo_curve_to (cr, x1, y0, x1, y0, x1, (y0 + y1)/2);
+	    cairo_curve_to (cr, x1, y1, x1, y1, x1 - radius, y1);
+	    cairo_line_to (cr, x0 + radius, y1);
+	    cairo_curve_to (cr, x0, y1, x0, y1, x0, (y0 + y1)/2);
+	} else {
+	    cairo_move_to  (cr, x0, y0 + radius);
+	    cairo_curve_to (cr, x0 , y0, x0 , y0, x0 + radius, y0);
+	    cairo_line_to (cr, x1 - radius, y0);
+	    cairo_curve_to (cr, x1, y0, x1, y0, x1, y0 + radius);
+	    cairo_line_to (cr, x1 , y1 - radius);
+	    cairo_curve_to (cr, x1, y1, x1, y1, x1 - radius, y1);
+	    cairo_line_to (cr, x0 + radius, y1);
+	    cairo_curve_to (cr, x0, y1, x0, y1, x0, y1- radius);
+	}
+    }
+    cairo_close_path (cr);
+    
+    cairo_pattern_t *pat= cairo_pattern_create_linear (0.0, 0.0,  0.0, 1.0);
+    cairo_pattern_add_color_stop_rgba (pat, 1.0, 0, 0, 1, 1);
+    cairo_pattern_add_color_stop_rgba (pat, 0.0, 1, 1, 1, 1);
+    cairo_set_source (cr, pat);
+    cairo_fill_preserve (cr);
+    cairo_pattern_destroy (pat);
+
+    //cairo_set_source_rgb (cr, 0.5,0.5,1);    cairo_fill_preserve (cr);
+    cairo_set_source_rgba (cr, 0, 0, 0.5, 0.3);
+    cairo_stroke (cr);
+
+    cairo_set_font_size (cr, 0.08);
+    centered_text(cr,x0,y0,rect_width, rect_height, "FLTK loves Cairo!");
+
+}
+void my_cairo_draw_cb(CairoWindow& window, cairo_t* cr) {
 	
     int w= window.w(), h = window.h(); 
 
-    
-#if 1
-    fltk::push_clip(0,0, w, h);
-    fltk::setcolor(fltk::BLACK);
-    fltk::fillrect(0,0,w, h);
-    fltk::push_matrix();
-    //    if (drawargs[6]) {
-      fltk::translate(w/2.0f, h/2.0f);
-      fltk::rotate(drawargs[6]);
-      fltk::translate(-w/2.0f, -h/2.0f);
-      //}
-    fltk::addarc(drawargs[0],drawargs[1],drawargs[2],drawargs[3],drawargs[4],drawargs[5]);
-    fltk::closepath();
-    fltk::addarc(120,120,40,40,0,-360);
-    fltk::setcolor(fltk::GRAY33);
-    fltk::fillstrokepath(fltk::WHITE);
-    // draw a hardware circle to see how well rotations match:
-    fltk::setcolor(fltk::GRAY33);
-    fltk::addchord(fltk::Rectangle(20,20,(int)(drawargs[2]+1),(int)(drawargs[3]+1)),drawargs[4],drawargs[5]);
-    fltk::fillstrokepath(fltk::WHITE);
-    // now draw non-rotated hardware circle to check if it inscribes:
-    fltk::pop_matrix();
-    fltk::setcolor(fltk::GRAY40);
-    fltk::fillrect(10,(int)(270-drawargs[3]),(int)drawargs[2],(int)drawargs[3]);
-    fltk::setcolor(fltk::GRAY90);
-    fltk::strokerect(10,(int)(270-drawargs[3]),(int) drawargs[2],(int) drawargs[3]);
-    fltk::setcolor(fltk::GRAY10);
-    fltk::addchord(fltk::Rectangle(10,(int) (270-drawargs[3]),(int) drawargs[2],(int)drawargs[3]),drawargs[4],drawargs[5]);
-    fltk::fillstrokepath(fltk::GRAY90);
-    fltk::pop_clip();
-#else
+	
     double xc = 0.5;
     double yc = 0.5;
     double radius = 0.4;
@@ -122,24 +141,15 @@ void my_cairo_draw_cb(CairoWindow& window, cairo_surface_t* surface,cairo_t* cr)
     
     cairo_set_line_width (cr, 0.03);
     cairo_scale (cr, w,h);
-    cairo_arc (cr, xc, yc, radius, angle1, angle2);
-    cairo_stroke (cr);
-    
-    /* draw helping lines */
-    cairo_set_source_rgba (cr, 1,0.2,0.2,0.6);
-    cairo_arc (cr, xc, yc, 0.05, 0, 2*M_PI);
-    cairo_fill (cr);
-    cairo_arc (cr, xc, yc, radius, angle1, angle1);
-    cairo_line_to (cr, xc, yc);
-    cairo_arc (cr, xc, yc, radius, angle2, angle2);
-    cairo_line_to (cr, xc, yc);
-    cairo_stroke (cr);
-#endif
+
+    round_button(cr,0.1,0.05,0.8,0.2,0.4);
+    return;
+
 
 }
 
 int main(int argc, char** argv) {
-    CairoWindow window(300,500);
+    CairoWindow window(300,300);
     window.resizable(&window);
     window.color(fltk::WHITE);
     window.show(argc,argv);
