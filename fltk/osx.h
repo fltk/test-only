@@ -64,7 +64,7 @@ extern FL_API void	close_display();
 extern FL_API WindowPtr  quartz_window;
 extern FL_API CGContextRef quartz_gc;
 extern FL_API Handle    system_menu;
-extern FL_API class Fl_Sys_Menu_Bar *sys_menu_bar;
+extern FL_API class     SystemMenuBar *system_menu_bar;
 
 ////////////////////////////////////////////////////////////////
 // event handling:

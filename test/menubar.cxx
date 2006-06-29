@@ -42,6 +42,10 @@
 #include <stdlib.h>
 #include <fltk/string.h>
 
+#ifdef __APPLE__
+#include <fltk/SystemMenuBar.h>
+#endif
+
 fltk::Window *window;
 
 fltk::Menu* menus[4];
@@ -245,6 +249,35 @@ int main(int argc, char **argv)
   window.size_range(300,20);
   window.end();
   window.show(argc, argv);
+
+#ifdef __APPLE__
+  fltk::SystemMenuBar sysmb(0, 0, 1, 1);
+  sysmb.menu(menutable);
+  sysmb.find("&Font/Normal")->labelfont(fltk::HELVETICA);
+  sysmb.find("&Font/Bold")->labelfont(fltk::HELVETICA_BOLD);
+  sysmb.find("&Font/Italic")->labelfont(fltk::HELVETICA_ITALIC);
+  sysmb.find("&Font/BoldItalic")->labelfont(fltk::HELVETICA_BOLD_ITALIC);
+  sysmb.find("&Font/Small")->labelsize(10);
+  sysmb.find("&Font/Large")->labelsize(24);
+  sysmb.find("&Font/Emboss")->labeltype(fltk::EMBOSSED_LABEL);
+  sysmb.find("&Font/Engrave")->labeltype(fltk::ENGRAVED_LABEL);
+  sysmb.find("&Font/Shadow")->labeltype(fltk::SHADOW_LABEL);
+  sysmb.find("&Font/@->")->labeltype(fltk::SYMBOL_LABEL);
+  sysmb.find("&Checkbox/Red")->labelcolor(fltk::RED); // label text red
+  sysmb.find("&Checkbox/Red")->selection_textcolor(fltk::RED); // label text red when selected
+  sysmb.find("&Checkbox/Red")->textcolor(fltk::RED); // check mark red
+  sysmb.find("&Checkbox/Black")->labelcolor(fltk::BLACK);
+  sysmb.find("&Checkbox/Black")->selection_textcolor(fltk::BLACK);
+  sysmb.find("&Checkbox/Black")->textcolor(fltk::BLACK);
+  sysmb.find("&Radio/Red")->labelcolor(fltk::RED);
+  sysmb.find("&Radio/Red")->selection_textcolor(fltk::RED);
+  sysmb.find("&Radio/Red")->textcolor(fltk::RED);
+  sysmb.find("&Radio/Black")->labelcolor(fltk::BLACK);
+  sysmb.find("&Radio/Black")->selection_textcolor(fltk::BLACK);
+  sysmb.find("&Radio/Black")->textcolor(fltk::BLACK);
+  sysmb.callback(test_cb);
+  sysmb.layout();
+#endif
 
   return fltk::run();
 }

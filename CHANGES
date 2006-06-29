@@ -1,3 +1,4 @@
++ Added SystemMenuBar for Apple OS X.
 /////////////////////////////////////////////////////////////////////
 + Change ItemGroup to follow other group standards : now NO begin() is called
   anymore in constructor, alternatively one can now use the MenuSection service

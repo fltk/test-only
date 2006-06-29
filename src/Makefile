@@ -104,6 +104,7 @@ CPPFILES = \
 	Style.cxx \
 	StyleSet.cxx \
 	Symbol.cxx \
+	SystemMenuBar.cxx \
 	TabGroup.cxx \
 	TextBuffer.cxx \
 	TextDisplay.cxx \

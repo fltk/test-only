@@ -40,6 +40,9 @@
 #include <fltk/events.h>
 #include <fltk/x.h>
 #include <fltk/Window.h>
+#include <fltk/SystemMenuBar.h>
+#include <fltk/Item.h>
+#include <fltk/ItemGroup.h>
 #include <fltk/Style.h>
 #include <fltk/utf.h>
 #include <stdlib.h>
@@ -260,7 +263,7 @@ static int got_events = 0;
 
 // public variables
 //Handle system_menu;
-//Sys_Menu_Bar *fltk::sys_menu_bar = 0;
+SystemMenuBar *fltk::system_menu_bar = 0;
 
 static WindowRef capture = 0;
 static WindowRef os_capture = 0;
@@ -276,7 +279,7 @@ WindowPtr fltk::quartz_window;
 CGContextRef fltk::quartz_gc;
 
 /**
- * handle Apple Menu items (can be created using the Sys_Menu_Bar
+ * handle Apple Menu items (can be created using the SystemMenuBar
  * returns eventNotHandledErr if the menu item could not be handled
  */
 //+++ verify port to FLTK2
@@ -284,42 +287,44 @@ OSStatus HandleMenu( HICommand *cmd )
 {
   OSStatus ret = eventNotHandledErr;
   // attributes, commandIDm menu.menuRef, menu.menuItemIndex
-#if 0 // NYI
   UInt32 ref;
   OSErr rrc = GetMenuItemRefCon( cmd->menu.menuRef, cmd->menu.menuItemIndex, &ref );
   //printf( "%d, %08x, %08x, %d, %d, %8x\n", rrc, cmd->attributes, cmd->commandID, cmd->menu.menuRef, cmd->menu.menuItemIndex, rrc );
   if ( rrc==noErr && ref )
   {
-    MenuItem *m = (MenuItem*)ref;
+    Widget *m = (Widget*)ref;
     //printf( "Menu: %s\n", m->label() );
-    sys_menu_bar->picked( m );
-    if ( m->type() & Button::TOGGLE ) // update the menu toggle symbol
-      SetItemMark( cmd->menu.menuRef, cmd->menu.menuItemIndex, m->value() ? 0x12 : 0 );
-    if ( m->type() & Button::RADIO ) // update all radio buttons in this menu
-    {
-      MenuItem *j = m;
-      int i = cmd->menu.menuItemIndex;
-      for (;;)
+    if ( m->type()==Item::TOGGLE ) { // update the menu toggle symbol
+      Item *j = (Item*)m;
+      j->value(!j->value());
+      SetItemMark( cmd->menu.menuRef, cmd->menu.menuItemIndex, j->value() ? 0x12 : 0 );
+    } else if ( m->type()==Item::RADIO ) { // update all radio buttons in this menu
+      Item *j = (Item*)m;
+      Group *p = m->parent();
+      j->value(1);
+      int i = cmd->menu.menuItemIndex+1, mi = p->find(m), nn = p->children(), ix;
+      for (ix = mi+1; ix<nn; ix++, i++)
       {
-        if (item is a divider) break;
-        j++; i++;
-        if ( !j->text || !j->radio() )
-          break;
-        SetItemMark( cmd->menu.menuRef, i, j->value() ? 0x13 : 0 );
+        Widget *c = p->child(ix);
+        if (!c->label()) break; // break at the next divider
+        if (c->type()!=Item::RADIO) break;
+        ((Item*)c)->value(0);
+        SetItemMark(cmd->menu.menuRef, i, 0 );
       }
-      j = m-1; i = cmd->menu.menuItemIndex-1;
-      for ( ; i>0; j--, i-- )
+      i = cmd->menu.menuItemIndex-1;
+      for (ix = mi-1; ix>=0; ix--, i-- )
       {
-	if (j->type() & Button::RADIO)
-	  SetItemMark( cmd->menu.menuRef, i, j->value() ? 0x13 : 0 );
-	else
-	  break;
+        Widget *c = p->child(ix);
+        if (!c->label()) break; // break at the next divider
+        if (c->type()!=Item::RADIO) break;
+        ((Item*)c)->value(0);
+        SetItemMark(cmd->menu.menuRef, i, 0 );
       }
-      SetItemMark( cmd->menu.menuRef, cmd->menu.menuItemIndex, m->value() ? 0x13 : 0 );
+      SetItemMark( cmd->menu.menuRef, cmd->menu.menuItemIndex, 0x13 );
     }
+    system_menu_bar->execute(m);
     ret = noErr; // done handling this event
   }
-#endif
   HiliteMenu(0);
   return ret;
 }
