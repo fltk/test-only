@@ -146,8 +146,7 @@ fltk::dir_chooser(const char *message,	// I - Message for titlebar
 
   fc->show();
 
-  while (fc->shown())
-    fltk::wait();
+  while (fc->visible()) fltk::wait();
 
   if (fc->value() && relative) {
       fltk::filename_relative(retname, sizeof(retname), fc->value());
@@ -282,7 +281,7 @@ const char* fltk::file_chooser(const char* message,
     fc->label(message);
   }
   fc->show();
-  while(fc->shown()) fltk::check();
+  while(fc->visible()) fltk::wait();
   return fc->text();
 }
 
