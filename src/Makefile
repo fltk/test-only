@@ -106,6 +106,7 @@ CPPFILES = \
 	Symbol.cxx \
 	SystemMenuBar.cxx \
 	TabGroup.cxx \
+	TabGroup2.cxx \
 	TextBuffer.cxx \
 	TextDisplay.cxx \
 	TextEditor.cxx \
