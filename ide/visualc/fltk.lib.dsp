@@ -632,6 +632,9 @@ SOURCE=..\..\fltk\xbmimage.h
 SOURCE=..\..\fltk\xpmimage.h
 # End Source File
 # End Group
+# Begin Group "source"
+
+# PROP Default_Filter "cxx"
 # Begin Source File
 
 SOURCE=..\..\src\add_idle.cxx
@@ -1078,6 +1081,10 @@ SOURCE=..\..\src\TabGroup.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\TabGroup2.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\TextBuffer.cxx
 # End Source File
 # Begin Source File
@@ -1172,5 +1179,99 @@ SOURCE=..\..\src\xbmImage.cxx
 
 SOURCE=..\..\src\xpmImage.cxx
 # End Source File
+# End Group
+# Begin Group "documentation"
+
+# PROP Default_Filter ""
+# Begin Group "doxygen"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\documentation\Doxyfile
+
+!IF  "$(CFG)" == "fltk - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Debug"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Release MinSize"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Debug Cairo"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\documentation\README
+
+!IF  "$(CFG)" == "fltk - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Debug"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Release MinSize"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Debug Cairo"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=..\..\README
+
+!IF  "$(CFG)" == "fltk - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Debug"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Release MinSize"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Debug Cairo"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\README.windows
+
+!IF  "$(CFG)" == "fltk - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Debug"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Release MinSize"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Debug Cairo"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\README_fltk1_to_fltk2.txt
+
+!IF  "$(CFG)" == "fltk - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Debug"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Release MinSize"
+
+!ELSEIF  "$(CFG)" == "fltk - Win32 Debug Cairo"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
+# End Source File
+# End Group
 # End Target
 # End Project

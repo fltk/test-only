@@ -68,6 +68,10 @@
 #endif
 
 typedef unsigned char uchar;
+// all FLTK classes include this file so let's define fltk 
+// general & portable useful macros here
+#define FLTK_MIN(a,b) ((a)<(b) ? (a) : (b))
+#define FLTK_MAX(a,b) ((a)>(b) ? (a) : (b))
 
 #endif
 

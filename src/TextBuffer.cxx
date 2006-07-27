@@ -34,9 +34,6 @@
 #include <fltk/error.h>
 #include <fltk/TextBuffer.h>
 
-#define FLTK_MIN(a,b) ((a)<(b) ? (a) : (b))
-#define FLTK_MAX(a,b) ((a)>(b) ? (a) : (b))
-
 // Return number of bytes that a legal UTF-8 encoding starting with cc
 // will use. Returns 1 if cc cannot start an encoding.
 static int utf8len(char cc) {

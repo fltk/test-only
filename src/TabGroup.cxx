@@ -61,80 +61,32 @@ to the children.
 #include <fltk/draw.h>
 #include <fltk/Tooltip.h>
 #include <stdlib.h>
-using namespace fltk;
 
-#define BORDER 10
-#define TABSLOPE 5
-#define EXTRASPACE 5
+using namespace fltk;
 
 // return the left edges of each tab (plus a fake left edge for a tab
 // past the right-hand one).  These position are actually of the left
 // edge of the slope.  They are either seperated by the correct distance
-// or by TABSLOPE or by zero.
+// or by pager_->slope() or by zero.
 // Return value is the index of the selected item.
 
 int TabGroup::tab_positions(int* p, int* w) {
-  int selected = 0;
-  int i;
-  int numchildren = children();
-  int width = 0;
+  int i, selected = 0, numchildren = children(), width = 0;
   p[0] = w[0] = 0;
   for (i=0; i<numchildren; i++) {
     Widget* o = child(i);
     if (o->visible()) selected = i;
     int wt = 300; int ht = 300; // rather arbitrary choice for max size
     o->measure_label(wt, ht);
-    w[i] = wt+TABSLOPE+EXTRASPACE;
-    //if (2*TABSLOPE > w[i]) w[i] = 2*TABSLOPE;
+    w[i] = wt+pager_->spacing(); // slope + extra_space
     width += w[i];
     p[i+1] = width;
   }
-  int r = this->w()-TABSLOPE-1;
+  int r = pager_->available_width(this); 
   if (width <= r) return selected;
-  // uh oh, they are too big, we must move them:
-  // special case when the selected tab itself is too big, make it fill width:
-  if (w[selected] >= r) {
-    w[selected] = r;
-    for (i = 0; i <= selected; i++) p[i] = 0;
-    for (i = selected+1; i <= numchildren; i++) p[i] = r;
-    return selected;
-  }
-  int w2[128];
-  for (i = 0; i < numchildren; i++) w2[i] = w[i];
-  i = numchildren-1;
-  int j = 0;
-  int minsize = TABSLOPE;
-  bool right = true;
-  while (width > r) {
-    int n; // which one to shrink
-    if (j < selected && (!right || i <= selected)) { // shrink a left one
-      n = j++;
-      right = true;
-    } else if (i > selected) { // shrink a right one
-      n = i--;
-      right = false;
-    } else { // no more space, start making them zero
-      minsize = 0;
-      i = numchildren-1;
-      j = 0;
-      right = true;
-      continue;
-    }
-    width -= w2[n]-minsize;
-    w2[n] = minsize;
-    if (width < r) {
-      w2[n] = r-width+minsize;
-      width = r;
-      break;
-    }
-  }
-  // re-sum the positions:
-  width = 0;
-  for (i = 0; i < numchildren; i++) {
-    width += w2[i];
-    p[i+1] = width;
-  }
-  return selected;
+
+  return pager_->update_positions(this, numchildren,selected, width, r, p, w);
+
 }
 
 // return space needed for tabs.  Negative to put them on the bottom:
@@ -163,25 +115,10 @@ int TabGroup::tab_height() {
   in a tab.
 */
 int TabGroup::which(int event_x, int event_y) {
-  int H = tab_height();
-  if (!H) return -1;
-  if (H < 0) {
-    if (event_y > h() || event_y < h()+H) return -1;
-  } else {
-    if (event_y > H || event_y < 0) return -1;
-  }
-  if (event_x < 0) return -1;
-  int p[128], w[128];
-  int selected = tab_positions(p, w);
-  int d = (event_y-(H>=0?0:h()))*TABSLOPE/H;
-  for (int i=0; i<children(); i++) {
-    if (event_x < p[i+1]+(i<selected ? TABSLOPE-d : d)) return i;
-  }
-  return -1;
+    return pager_->which(this, event_x, event_y);
 }
 
 int TabGroup::handle(int event) {
-
   int i = value();
   Widget* selected = i >= 0 ? child(i) : 0;
   int backwards = 0;
@@ -380,7 +317,7 @@ bool TabGroup::selected_child(Widget *newvalue) {
   return 1;
 }
 
-enum {LEFT, RIGHT, SELECTED};
+enum {TAB_LEFT, TAB_RIGHT, SELECTED};
 
 #if USE_CLIPOUT
 extern Widget* fl_did_clipping;
@@ -402,21 +339,24 @@ void TabGroup::draw() {
     int selected = tab_positions(p,w);
     int i;
 
-    for (i=0; i<selected; i++) {
-      draw_tab(p[i], p[i+1], w[i], H, child(i), LEFT);
+    if (!pager_->draw_tabs(this, selected, p, w)) { // no custom draw :
+	for (i=pager_->shift(); i<selected; i++) {
+	  draw_tab(p[i], p[i+1], w[i], H, child(i), TAB_LEFT);
+	}
+	for (i=children()-1; i > selected; i--) {
+	  draw_tab(p[i], p[i+1], w[i], H, child(i), TAB_RIGHT);
+	}
+	if (v) {
+	  i = selected;
+	  draw_tab(p[i], p[i+1], w[i], H, child(i), TAB_SELECTED);
+	} else {
+	  // draw the edge when no selection:
+	  setcolor(H >= 0 ? GRAY99 : GRAY33);
+	  int b = H >= 0 ? H : h()+H;
+	  drawline(0, b, this->w(), b);
+	}
     }
-    for (i=children()-1; i > selected; i--) {
-      draw_tab(p[i], p[i+1], w[i], H, child(i), RIGHT);
-    }
-    if (v) {
-      i = selected;
-      draw_tab(p[i], p[i+1], w[i], H, child(i), SELECTED);
-    } else {
-      // draw the edge when no selection:
-      setcolor(H >= 0 ? GRAY99 : GRAY33);
-      int b = H >= 0 ? H : h()+H;
-      drawline(0, b, this->w(), b);
-    }
+
   }
 
   if (damage() & DAMAGE_ALL) { // redraw the entire thing:
@@ -438,7 +378,7 @@ void TabGroup::draw() {
 
 #if USE_CLIPOUT
   if (damage() & DAMAGE_EXPOSE) {
-    clipout(0, H>=0 ? 0 : h()+H, p[children()]+TABSLOPE, (H>=0?H:-H));
+    clipout(0, H>=0 ? 0 : h()+H, p[children()]+pager_->slope(), (H>=0?H:-H));
     clipout(0, H>0 ? H : 0, this->w(), h()-(H>=0?H:-H-1));
     fl_did_clipping = this;
   }
@@ -474,16 +414,16 @@ void TabGroup::draw_tab(int x1, int x2, int W, int H, Widget* o, int what) {
   if (x2 <= x1) return; // ignore ones shrunk to zero width
   bool drawlabel = true;
   if (x2 < x1+W) {
-    if (x2 <= x1+TABSLOPE) drawlabel = false;
-    if (what == LEFT) {
-      if (x1+W < x2+TABSLOPE) x2 = x1+W;
-      else x2 += TABSLOPE;
+    if (x2 <= x1+pager_->slope()) drawlabel = false;
+    if (what == TAB_LEFT) {
+      if (x1+W < x2+pager_->slope()) x2 = x1+W;
+      else x2 += pager_->slope();
     } else {
-      if (x1+W < x2+TABSLOPE) x1 = x2-W;
-      else x1 -= TABSLOPE;
+      if (x1+W < x2+pager_->slope()) x1 = x2-W;
+      else x1 -= pager_->slope();
     }
   }
-  int sel = (what == SELECTED);
+  int sel = (what == TAB_SELECTED);
   const int shrink_factor = 3;
   int eat_border_factor = (H<0 ? box_dh(box()) : 1 )*sel;
   int up_pos = (1-sel)*shrink_factor;
@@ -491,43 +431,43 @@ void TabGroup::draw_tab(int x1, int x2, int W, int H, Widget* o, int what) {
   if (H >= 0) {// put the tab thumbnail on top
     newpath();
     addvertex(x1, H+eat_border_factor);
-    addvertex(x1+TABSLOPE, up_pos );
+    addvertex(x1+pager_->slope(), up_pos );
     addvertex(x2, up_pos );
-    addvertex(x2+TABSLOPE, H+eat_border_factor);
+    addvertex(x2+pager_->slope(), H+eat_border_factor);
     fillpath();
     setcolor(!sel && o==push_ ? GRAY33 : GRAY99);
-    drawline(x1, H, x1+TABSLOPE, up_pos );
-    drawline(x1+TABSLOPE, up_pos , x2, up_pos );
+    drawline(x1, H, x1+pager_->slope(), up_pos );
+    drawline(x1+pager_->slope(), up_pos , x2, up_pos );
     if (sel) {
       if (x1>0) drawline(0, H, x1, H);
-      if (x2+TABSLOPE < w()-1) drawline(x2+TABSLOPE, H, w()-1, H);
+      if (x2+pager_->slope() < w()-1) drawline(x2+pager_->slope(), H, w()-1, H);
     }
     setcolor(!sel && o==push_ ? GRAY99 : GRAY33);
-    drawline(x2, (1-sel)*shrink_factor , x2+TABSLOPE, H);
+    drawline(x2, (1-sel)*shrink_factor , x2+pager_->slope(), H);
   } else { // put the tab thumbnail at the bottom
     newpath();
     addvertex(x1, h()+H-eat_border_factor);
-    addvertex(x1+TABSLOPE, h()-1-up_pos );
+    addvertex(x1+pager_->slope(), h()-1-up_pos );
     addvertex(x2, h()-1-up_pos );
-    addvertex(x2+TABSLOPE, h()+H-eat_border_factor);
+    addvertex(x2+pager_->slope(), h()+H-eat_border_factor);
     fillpath();
     setcolor(!sel && o==push_ ? GRAY99 : GRAY33);
     newpath();
-    addvertex(x1+TABSLOPE, h()-1-up_pos);
+    addvertex(x1+pager_->slope(), h()-1-up_pos);
     addvertex(x2, h()-1-up_pos);
-    addvertex(x2+TABSLOPE, h()+H-eat_border_factor);
+    addvertex(x2+pager_->slope(), h()+H-eat_border_factor);
     strokepath();
     if (sel) {
       if (x1>0) drawline(0, h()+H, x1, h()+H);
-      if (x2+TABSLOPE < w()-1) drawline(x2+TABSLOPE, h()+H, w()-1, h()+H);
+      if (x2+pager_->slope() < w()-1) drawline(x2+pager_->slope(), h()+H, w()-1, h()+H);
     }
     setcolor(!sel && o==push_ ? GRAY33 : GRAY99);
-    drawline(x1, h()+H, x1+TABSLOPE, h()-up_pos);
+    drawline(x1, h()+H, x1+pager_->slope(), h()-up_pos);
   }
   if (drawlabel) {
-    Rectangle r((what==LEFT ? x1 : x2-W)+(TABSLOPE+EXTRASPACE/2),
+    Rectangle r((what==TAB_LEFT ? x1 : x2-W)+(pager_->slope()+pager_->extra_space()/2),
 		H<0 ? this->h()+H-1 : 2,
-		W-(TABSLOPE+EXTRASPACE/2),
+		W-(pager_->slope()+pager_->extra_space()/2),
 		abs(H)-1);
     drawstyle(o->style(), sel && focused() ? FOCUSED|OUTPUT : OUTPUT);
     setcolor(sel  ? selection_textcolor() : o->textcolor());
@@ -540,6 +480,23 @@ static void revert(Style* s) {
   s->box_ = THIN_UP_BOX;
   s->color_ = GRAY75;
 }
+
+/*! assign dynamically a new pager with a preconfigured prototype */
+void TabGroup::pager(TabGroupPager * value) {
+  if (value && pager_!=value) {
+      if (pager_) delete pager_; 
+      pager_= value->clone();
+      redraw();
+  } 
+}
+//! setting the default pager_ for future tabgroups, a default pager is _never_ null by design
+void TabGroup::default_pager(TabGroupPager * value) {
+  if (value && default_pager_!=value) {
+      if (default_pager_) delete default_pager_; 
+      default_pager_= value->clone();
+  } 
+}
+
 static NamedStyle style("Tabs", revert, &TabGroup::default_style);
 /*! The default style has a gray color() and the box() is set to 
   THIN_UP_BOX. The box() is used to draw the edge around the cards,
@@ -558,10 +515,11 @@ edge of the <TT>fltk::Tabs</TT>, which is where the tabs are drawn.
 */
 TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
   : Group(X,Y,W,H,l),
-    _drawOutline( false )
+    _drawOutline( false ) 
 {
   style(default_style);
   focus_index(0);
+  pager_ = default_pager_->clone();
 }
 
 // End of "$Id$".
