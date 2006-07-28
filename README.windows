@@ -1,8 +1,8 @@
 BUILDING FLTK UNDER MICROSOFT WINDOWS
 
     There are three ways to build FLTK under Microsoft Windows.  The
-    first is to use the Microsoft Visual C++ 5.0 project files under
-    the "visualc" directory.  Just open (or double-click on) the
+    first is to use the Microsoft Visual C++ 6.0 project files under
+    the "ide/visualc" directory.  Just open (or double-click on) the
     "fltk.dsw" file to get the whole shebang.
 
     The second method is to use Borland C++. Please read the
