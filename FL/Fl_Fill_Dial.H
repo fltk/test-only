@@ -30,6 +30,9 @@
 
 #include "Fl_Dial.H"
 
+/**
+ * \brief Numeric widget with rotary input.
+ */
 class Fl_Fill_Dial : public Fl_Dial {
 public:
     Fl_Fill_Dial(int x,int y,int w,int h, const char *l = 0)

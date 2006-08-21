@@ -33,6 +33,9 @@
 
 class Fl_Tool_Button_Style;
 
+/**
+ * Not yet documented.
+ */
 class FL_EXPORT Fl_Tool_Button : public Fl_Button {
 protected:
   void draw();

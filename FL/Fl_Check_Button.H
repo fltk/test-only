@@ -30,7 +30,10 @@
 
 #include "Fl_Round_Button.H"
 
-/** Buttons generate callbacks when they are clicked by the user. You 
+/** 
+ * \brief A toggel button showing a check mark in a box when set.
+ *
+ * Buttons generate callbacks when they are clicked by the user. You 
  * control exactly when and how by changing the values for type() and when().
  *   \image html Fl_Check_Button.gif
  * The Fl_Check_Button subclass display the \a on state by turning on a 

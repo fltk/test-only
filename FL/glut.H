@@ -56,6 +56,9 @@
 #  include "Fl.H"
 #  include "Fl_Gl_Window.H"
 
+/**
+ * Not yet documented.
+ */
 class FL_EXPORT Fl_Glut_Window : public Fl_Gl_Window {
   void _init();
   int mouse_down;

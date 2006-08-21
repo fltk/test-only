@@ -43,6 +43,9 @@
 // Fl_Spinner widget class...
 //
 
+/**
+ * Not yet documented.
+ */
 class Fl_Spinner : public Fl_Group
 {
   double	value_;			// Current value
@@ -214,6 +217,9 @@ class Fl_Spinner : public Fl_Group
 // Fl_Spinner widget class...
 //
 
+/**
+ * Not yet documented.
+ */
 class Fl_Spinner : public Fl_Group
 {
   double	value_;			// Current value

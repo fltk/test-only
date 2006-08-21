@@ -30,6 +30,9 @@
 
 #include "Fl_Bitmap.H"
 
+/**
+ * \brief A bitmap API compatible to the Forms library.
+ */
 class FL_EXPORT Fl_FormsBitmap : public Fl_Widget {
     Fl_Bitmap *b;
 protected:

@@ -29,6 +29,9 @@
 #define Fl_BMP_Image_H
 #  include "Fl_Image.H"
 
+/**
+ * \brief Reader for Microsoft Bitmap images (.bmp)
+ */
 class FL_EXPORT Fl_BMP_Image : public Fl_RGB_Image {
 
   public:

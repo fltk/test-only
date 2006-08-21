@@ -29,6 +29,9 @@
 
 #include "Fl_Light_Button.H"
 
+/**
+ * Not yet documented.
+ */
 class Fl_Radio_Light_Button : public Fl_Light_Button {
 public:
     Fl_Radio_Light_Button(int X,int Y,int W,int H,const char *l=0)

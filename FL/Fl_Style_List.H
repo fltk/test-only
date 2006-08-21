@@ -33,6 +33,9 @@
 
 class Fl_Widget_Style;
 
+/**
+ * Not yet documented.
+ */
 class Fl_Style_List{
 public:
   Fl_Style_List * parent_;

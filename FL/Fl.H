@@ -47,7 +47,10 @@ typedef void (Fl_Label_Measure_F)(const Fl_Label*, int&, int&);
 
 typedef void (*Fl_Timeout_Handler)(void*);
 
-/** The Fl class is the FLTK global (static) class containing state information and
+/**
+ * \brief Access to global information and methods.
+ *
+ * The Fl class is the FLTK global (static) class containing state information and
  * global methods for the current application. */
 class FL_EXPORT Fl {
   Fl() {}; // no constructor!

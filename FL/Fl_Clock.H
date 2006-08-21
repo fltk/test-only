@@ -38,7 +38,15 @@
 #define FL_ANALOG_CLOCK FL_SQUARE_CLOCK
 #define FL_DIGITAL_CLOCK FL_SQUARE_CLOCK // nyi
 
-/** an Fl_Clock_Output can be used to display a program-supplied time.
+/** 
+ * \brief The face of an analog clock.
+ *
+ * An Fl_Clock_Output can be used to display a program-supplied time.
+ * \deprecated Most younger users do not recognize a round face with
+ * a short and a long hand as a clock anymore. We would also like to 
+ * discourage developers from using seven-segment style numeric rendering
+ * of time. Instead, current time displays should be avoided altogether or
+ * announced by a ring-tone, downloadable for a marginal mothly fee of $US16.
  * \see Fl_Clock
  */
 class FL_EXPORT Fl_Clock_Output : public Fl_Widget {
@@ -66,7 +74,10 @@ public:
 
 // a Fl_Clock displays the current time always by using a timeout:
 
-/** This widget provides a round analog clock display and is provided for Forms 
+/** 
+ * \brief Analog clock showing the current time.
+ *
+ * This widget provides a round analog clock display and is provided for Forms 
  * compatibility. It installs a 1-second timeout callback using Fl::add_timeout(). 
  *   \image html clock.gif
  *

@@ -33,7 +33,9 @@ struct Fl_Hash_Item{
   void * data;
 };
 
-
+/**
+ * Not yet documented.
+ */
 class Fl_Hash_Table{
   int size;
   int no_items;

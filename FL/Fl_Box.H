@@ -32,8 +32,12 @@
 #include "Fl_Widget.H"
 #endif
 
-/** This widget simply draws its box, and possibly it's label. Putting it before some other
- * widgets and making it big enough to surround them will let you draw a frame around them. */
+/**
+ * \brief Simple widget rendering a box.
+ *
+ * This widget simply draws its box, and possibly it's label. Putting it before some other
+ * widgets and making it big enough to surround them will let you draw a frame around them.
+ */
 class FL_EXPORT Fl_Box : public Fl_Widget {
 protected:
   void draw();

@@ -28,10 +28,11 @@
 #define Fl_Cancel_Button_H
 #include "Fl_Tool_Button.H"
 
-/** The Fl_Return_Button is a subclass of Fl_Button that generates a
- * callback when it is pressed or when the user presses the \a Enter key. 
- * A carriage-return symbol is drawn next to the button label.
- *   \image html Fl_Return_Button.gif
+/**
+ * \brief A button with a built-in shortcut for the ESC key.
+ *
+ * The Fl_Cancel_Button is a subclass of Fl_Button that generates a
+ * callback when it is pressed or when the user presses the \a Escape key. 
  */
 class FL_EXPORT Fl_Cancel_Button : public Fl_Tool_Button {
 

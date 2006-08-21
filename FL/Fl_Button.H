@@ -40,7 +40,11 @@
 
 extern FL_EXPORT int fl_old_shortcut(const char*);
 
+class Fl_Button_Style;
+
 /**
+ * \brief The classic push button.
+ *
  * Buttons generate callbacks when they are clicked by the user. 
  * You control exactly when and how by changing the values for type() and when().
  *
@@ -52,10 +56,6 @@ extern FL_EXPORT int fl_old_shortcut(const char*);
  * the \a Alt key so that the input field does not eat the event first as an 
  * \c FL_KEYBOARD event.
  */
-
-
-class Fl_Button_Style;
-
 class FL_EXPORT Fl_Button : public Fl_Widget {
 
 

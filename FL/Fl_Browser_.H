@@ -45,7 +45,12 @@
 #define FL_HOLD_BROWSER		2
 #define FL_MULTI_BROWSER	3
 
-/** This is the base class for browsers. To be useful it must be subclassed and several virtual
+class Fl_Text_Style;
+
+/** 
+ * \brief Base class for all browser style widgets.
+ *
+ * This is the base class for browsers. To be useful it must be subclassed and several virtual
  * functions defined. The Forms-compatable browser and the file chooser's browser are
  * subclassed off of this.
  *
@@ -58,9 +63,6 @@
  * object requires accessing image data or doing stat() on a file or doing some other slow
  * operation. 
  */
-
-class Fl_Text_Style;
-
 class FL_EXPORT Fl_Browser_ : public Fl_Group {
 
   int position_;	// where user wants it scrolled to

@@ -30,6 +30,9 @@
 
 #include "Fl_Value_Slider.H"
 
+/**
+ * \brief A horizontal slider printing the numeric value.
+ */
 class Fl_Hor_Value_Slider : public Fl_Value_Slider {
 public:
     Fl_Hor_Value_Slider(int X,int Y,int W,int H,const char *l=0)

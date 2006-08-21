@@ -30,6 +30,9 @@
 
 #include "Fl_Button.H"
 
+/**
+ * Not yet documented.
+ */
 class Fl_Radio_Button : public Fl_Button {
 public:
     Fl_Radio_Button(int x,int y,int w,int h,const char *l=0)

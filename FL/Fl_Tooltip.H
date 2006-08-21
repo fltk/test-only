@@ -31,7 +31,8 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 
-/** The Fl_Tooltip class provides tooltip support for all FLTK widgets. */
+/** The Fl_Tooltip class provides tooltip support for all FLTK widgets. 
+ */
 class FL_EXPORT Fl_Tooltip {
 public:
     /** Gets the tooltip delay. The default delay is 1.0 seconds. */

@@ -34,18 +34,21 @@
 #include "Fl_Valuator.H"
 #endif
 
-/// The Fl_Adjuster widget was inspired from Prisms, and has proven to be very useful for
-/// values that need a large dynamic range.
-/**   \image html adjuster1.gif
+class Fl_Widget_Style;
+
+/**
+ * \brief A widget to quickly and precisely change numeric values using only the mouse.
+ *
+ * The Fl_Adjuster widget was inspired from Prisms, and has proven to be very useful for
+ * values that need a large dynamic range.
+ *
+ *   \image html adjuster1.gif
  * 
  * When you press a button and drag to the right the value increases. When you drag to 
  * the left it decreases. The largest button adjusts by 100 * step(), the next by 
  * 10 * step() and that smallest button by step(). Clicking on the buttons increments 
  * by 10 times the amount dragging by a pixel does. Shift + click decrements by 10 times
  * the amount. */
-
-class Fl_Widget_Style;
-
 class FL_EXPORT Fl_Adjuster : public Fl_Valuator {
   int drag;
   int ix;

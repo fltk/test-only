@@ -29,6 +29,9 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Bitmap.H>
 
+/**
+ * Not yet documented.
+ */
 class FL_EXPORT Fl_Shaped_Window : public Fl_Window {
   public:
     Fl_Shaped_Window(int W, int H, const char *l = 0)

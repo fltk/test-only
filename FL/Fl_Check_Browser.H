@@ -31,8 +31,12 @@
 #include "Fl.H"
 #include "Fl_Browser_.H"
 
-/** The Fl_Check_Browser widget displays a scrolling list of text lines
- * that may be selected and/or checked by the user. */
+/** 
+ * \brief Browser with check boxes on each item.
+ *
+ * The Fl_Check_Browser widget displays a scrolling list of text lines
+ * that may be selected and/or checked by the user. 
+ */
 class FL_EXPORT Fl_Check_Browser : public Fl_Browser_ {
   /* required routines for Fl_Browser_ subclass: */
 

@@ -35,6 +35,9 @@
 # define Fl_Widget_Style_H
 
 
+/**
+ * Not yet documented.
+ */
 class FL_EXPORT Fl_Widget_Style {
     friend class Fl_Widget;
     friend class Fl_Style_List;
@@ -197,6 +200,9 @@ class FL_EXPORT Fl_Widget_Style {
 #if defined(Fl_Button_H) && !defined(Fl_Button_Style_H)
 # define Fl_Button_Style_H
 
+/**
+ * Not yet documented.
+ */
 class FL_EXPORT Fl_Button_Style : public Fl_Widget_Style {
   friend class Fl_Button;
   Fl_Boxtype down_box_;
@@ -232,6 +238,9 @@ public:
 #if defined(Fl_Tool_Button_H) && !defined(Fl_Tool_Button_Style_H)
 # define Fl_Tool_Button_Style_H
 
+/**
+ * Not yet documented.
+ */
 class FL_EXPORT Fl_Tool_Button_Style : public Fl_Button_Style {
   friend class Fl_Tool_Button;
   uchar symbol_align_;
@@ -321,6 +330,9 @@ public:
 #if !defined(Fl_Text_Style_H) && (defined(Fl_Browser__H) || defined (Fl_Input_H))
 # define Fl_Text_Style_H
 
+/**
+ * Not yet documented.
+ */
 class FL_EXPORT Fl_Text_Style : public Fl_Widget_Style {
   Text text_;
 protected:

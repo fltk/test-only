@@ -30,6 +30,9 @@
 
 #include "Fl_Menu_Bar.H"
 
+/**
+ * Not yet documented.
+ */
 class FL_EXPORT Fl_Sys_Menu_Bar : public Fl_Menu_Bar {
 protected:
   void draw();

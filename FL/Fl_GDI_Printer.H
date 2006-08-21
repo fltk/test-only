@@ -41,6 +41,9 @@ struct FL_EXPORT Fl_Brush {
 */
 
 #define FL_N_BRUSH 16 
+/**
+ * \brief MS-Windows printer device.
+ */
 class FL_EXPORT Fl_GDI_Printer: public Fl_Printer{
 
   //HPEN tmppen;

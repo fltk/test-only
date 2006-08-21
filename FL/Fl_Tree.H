@@ -44,6 +44,9 @@
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Box.H>
 
+/**
+ * Not yet documented.
+ */
 class FL_EXPORT Fl_Tree : public Fl_Group {
 
   int pos;

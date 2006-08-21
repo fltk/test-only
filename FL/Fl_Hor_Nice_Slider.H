@@ -30,6 +30,9 @@
 
 #include "Fl_Slider.H"
 
+/**
+ * Not yet documented.
+ */
 class Fl_Hor_Nice_Slider : public Fl_Slider {
 public:
     Fl_Hor_Nice_Slider(int x,int y,int w,int h,const char *l=0)

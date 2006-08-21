@@ -38,6 +38,9 @@
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Value_Input.H>
 
+/**
+ * \brief Support widget for the RGB color chooser
+ */
 class FL_EXPORT Flcc_HueBox : public Fl_Widget {
   int px, py;
 protected:
@@ -49,6 +52,9 @@ public:
   px = py = 0;}
 };
 
+/**
+ * \brief Support widget for the RGB color chooser
+ */
 class FL_EXPORT Flcc_ValueBox : public Fl_Widget {
   int py;
 protected:
@@ -60,13 +66,19 @@ public:
   py = 0;}
 };
 
+/**
+ * \brief Support widget for the RGB color chooser
+ */
 class FL_EXPORT Flcc_Value_Input : public Fl_Value_Input {
 public:
   int format(char*);
   Flcc_Value_Input(int X, int Y, int W, int H) : Fl_Value_Input(X,Y,W,H) {}
 };
 
-/** The Fl_Color_Chooser widget provides a standard RGB color chooser. 
+/** 
+ * \brief RGB or YUV color chooser.
+ *
+ * The Fl_Color_Chooser widget provides a standard RGB color chooser. 
  * You can place any number of these into a panel of your own design. 
  * This widget contains the hue box, value slider, and rgb input fields 
  * from the above diagram (it does not have the color chips or the Cancel

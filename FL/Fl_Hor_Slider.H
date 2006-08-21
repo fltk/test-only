@@ -30,6 +30,9 @@
 
 #include "Fl_Slider.H"
 
+/**
+ * \brief A slider with a horizontally moving box.
+ */
 class Fl_Hor_Slider : public Fl_Slider {
 public:
     Fl_Hor_Slider(int X,int Y,int W,int H,const char *l=0)

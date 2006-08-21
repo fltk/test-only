@@ -30,6 +30,9 @@
 
 #include "Fl_Dial.H"
 
+/**
+ * Not yet documented.
+ */
 class Fl_Line_Dial : public Fl_Dial {
 public:
     Fl_Line_Dial(int x,int y,int w,int h, const char *l = 0)

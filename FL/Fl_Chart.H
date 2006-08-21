@@ -52,7 +52,10 @@ struct FL_CHART_ENTRY {
    char str[FL_CHART_LABEL_MAX+1];
 };
 
-/** This widget displays simple charts and is provided for Forms 
+/**
+ * \brief Widget rendering simple graphical charts.
+ *
+ * This widget displays simple charts and is provided for Forms 
  * compatibility. 
  *   \image html charts.gif
  * The chart type() can be one of the following:

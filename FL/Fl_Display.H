@@ -31,11 +31,11 @@
 
 
 /**
-* Fl_Display is a base class for all screen devices.
-* In the future it will also define methods for access of keyboard, mouse
-* and window damage events to encapsulate all interaction with the user
-* and forming a "virtual terminal".
-*/
+ * Fl_Display is a base class for all screen devices.
+ * In the future it will also define methods for access of keyboard, mouse
+ * and window damage events to encapsulate all interaction with the user
+ * and forming a "virtual terminal".
+ */
 
 class FL_EXPORT Fl_Display: public Fl_Device{
 protected:

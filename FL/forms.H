@@ -809,8 +809,10 @@ inline void fl_set_slider_precision(Fl_Widget* o, int i) {
     ((Fl_Value_Slider*)o)->precision(i);}
 // filter function!
 
-// The forms text object was the same as an Fl_Box except it inverted the
-// meaning of FL_ALIGN_INSIDE.  Implementation in forms.cxx
+/**
+ * The forms text object was the same as an Fl_Box except it inverted the
+ * meaning of FL_ALIGN_INSIDE.  Implementation in forms.cxx
+ */
 class FL_EXPORT Fl_FormsText : public Fl_Widget {
 protected:
     void draw();

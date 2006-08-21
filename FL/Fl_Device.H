@@ -41,18 +41,17 @@ typedef void (*Fl_Draw_Image_Cb)(void* ,int,int,int,uchar*);
 class Fl_Image_Cache;
 
 /**
-* A base class for all output devices.
-*
-* This pure virtual class defines all device-specific drawing primitives as its virtual methods.
-* These protected methods can not be used direcly but can be called using standard FLTK drawing 
-* functions when the device is set as a current one.
-* A new Device class should not be a direct subclass of Fl_Device but rather of Fl_Display or
-* Fl_Printer and it must define all the drawing functions, including drawing of three basic image
-* classes - Fl_RGB_Image, FL_Pixmap and Fl_Bitmap. Devices which allow rendering with precision
-* better than logical (screen) pixel - such as printers - should allow fine (subpixel) rendering
-* of text glyphs and also precision drawing of "double" path (vertex) primitives.
-*/
-
+ * \brief A base class for all output devices.
+ *
+ * This pure virtual class defines all device-specific drawing primitives as its virtual methods.
+ * These protected methods can not be used direcly but can be called using standard FLTK drawing 
+ * functions when the device is set as a current one.
+ * A new Device class should not be a direct subclass of Fl_Device but rather of Fl_Display or
+ * Fl_Printer and it must define all the drawing functions, including drawing of three basic image
+ * classes - Fl_RGB_Image, FL_Pixmap and Fl_Bitmap. Devices which allow rendering with precision
+ * better than logical (screen) pixel - such as printers - should allow fine (subpixel) rendering
+ * of text glyphs and also precision drawing of "double" path (vertex) primitives.
+ */
 class FL_EXPORT Fl_Device{
 
  Fl_Image_Cache * image_caches;

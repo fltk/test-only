@@ -36,6 +36,8 @@
 #define FL_VERTICAL		0
 #define FL_HORIZONTAL		1
 
+class Fl_Valuator_Style;
+
 /** Fl_Valuator class controls a single floating-point value and provides a consistent 
  * interface to set the value, range, and step, and insures that callbacks are done the
  * same for every object.
@@ -48,8 +50,6 @@
  * the widget. The ones labelled "0" are the default versions with a type(0). For 
  * consistency the symbol \c FL_VERTICAL is defined as zero. 
  */
-class Fl_Valuator_Style;
-
 class FL_EXPORT Fl_Valuator : public Fl_Button {
 
   double value_;

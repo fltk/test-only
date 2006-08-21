@@ -29,6 +29,9 @@
 
 #include "Fl_Slider.H"
 
+/**
+ * \brief A horizonatl bar graph style slider.
+ */
 class Fl_Hor_Fill_Slider : public Fl_Slider {
 public:
     Fl_Hor_Fill_Slider(int x,int y,int w,int h,const char *l=0)

@@ -37,6 +37,9 @@
 
 class Fl_Image;
 
+/**
+ * Not yet documented.
+ */
 class FL_EXPORT Fl_Symbol{
   uchar type_;
   void * draw_;

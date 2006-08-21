@@ -30,6 +30,9 @@
 
 #include "Fl_Clock.H"
 
+/**
+ * Not yet documented.
+ */
 class Fl_Round_Clock : public Fl_Clock {
 public:
     Fl_Round_Clock(int x,int y,int w,int h, const char *l = 0)

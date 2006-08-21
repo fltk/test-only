@@ -36,6 +36,9 @@
 
 #include "Fl_Export.H"
 
+/**
+ * Not yet documented.
+ */
 class FL_EXPORT Fl_Text_Selection {
   friend class Fl_Text_Buffer;
 

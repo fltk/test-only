@@ -31,6 +31,9 @@
 class Fl_Widget;
 struct Fl_Menu_Item;
 
+/**
+ * Not yet documented.
+ */
 struct FL_EXPORT Fl_Multi_Label {
   const char* labela;
   const char* labelb;

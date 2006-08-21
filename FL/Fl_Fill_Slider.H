@@ -30,6 +30,9 @@
 
 #include "Fl_Slider.H"
 
+/**
+ * \brief Slider using a bar graph style display.
+ */
 class Fl_Fill_Slider : public Fl_Slider {
 public:
     Fl_Fill_Slider(int x,int y,int w,int h,const char *l=0)

@@ -107,6 +107,10 @@ extern FL_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
 // this object contains all X-specific stuff about a window:
 // Warning: this object is highly subject to change!  It's definition
 // is only here so that fl_xid can be declared inline:
+
+/**
+ * Not yet documented.
+ */
 class FL_EXPORT Fl_X {
 public:
   Window xid;

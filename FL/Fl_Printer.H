@@ -40,8 +40,9 @@ const double FL_PICA = 12;
 
 const int NO_PAGE_FORMATS=30;
 
-/** This is a base class for all printing devices. It also defines some usefull methods for paging and placement of drawings on the page. */ 
-
+/** This is a base class for all printing devices. It also defines 
+ * some usefull methods for paging and placement of drawings on the page. 
+ */ 
 class FL_EXPORT Fl_Printer:public Fl_Device{
   static const char * doc_info_;
 

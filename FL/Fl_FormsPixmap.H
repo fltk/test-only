@@ -30,6 +30,9 @@
 
 #include "Fl_Pixmap.H"
 
+/**
+ * \brief A pixmap API compatible to the Forms library.
+ */
 class FL_EXPORT Fl_FormsPixmap : public Fl_Widget {
     Fl_Pixmap *b;
 protected:

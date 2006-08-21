@@ -29,9 +29,10 @@
 #define Fl_Scheme_H
 
 /// A base style class for all widget styles within a scheme (see Fl_Scheme)
-/** @ingroup styles */
-
-
+/**
+ * Not yet documented.
+ *
+ * @ingroup styles */
 class Fl_Widget_Style: public Fl_Style{
   friend class Fl_Scheme;
  
@@ -105,6 +106,9 @@ public:
 
 };
 
+/**
+ * Not yet documented.
+ */
 class Fl_Browser_Style: public Fl_Widget_Style{
   unsigned textcolor_;
   uchar textfont_;
@@ -132,6 +136,9 @@ public:
 
 
 
+/**
+ * Not yet documented.
+ */
 class Fl_Button_Style: public Fl_Widget_Style{
 protected:
   uchar down_box_;
@@ -156,10 +163,9 @@ public:
 
 
 /** \ingroup styles 
-* Scheme defines default appereance and highlighting od FLTK widgets. It conmprises of instances
-* of Fl_Style classes (ot ots subclassess) like Fl_Scheme::button, Fl_Scheme::browser, ... to define styles of 
-* corresponding classess */
-
+ * Scheme defines default appereance and highlighting od FLTK widgets. It conmprises of instances
+ * of Fl_Style classes (ot ots subclassess) like Fl_Scheme::button, Fl_Scheme::browser, ... to define styles of 
+ * corresponding classess */
 class Fl_Scheme:public Fl_Scheme_{
 
 public:

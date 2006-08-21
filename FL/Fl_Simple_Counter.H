@@ -30,6 +30,9 @@
 
 #include "Fl_Counter.H"
 
+/**
+ * Not yet documented.
+ */
 class Fl_Simple_Counter : public Fl_Counter {
 public:
     Fl_Simple_Counter(int x,int y,int w,int h, const char *l = 0)

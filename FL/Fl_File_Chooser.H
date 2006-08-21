@@ -47,6 +47,9 @@
 #include <FL/Fl_Return_Button.H>
 #include <FL/fl_ask.H>
 
+/**
+ * \brief FLTK standard dialog to choose files in the OS file system.
+ */
 class FL_EXPORT Fl_File_Chooser {
 public:
   enum { SINGLE = 0, MULTI = 1, CREATE = 2, DIRECTORY = 4 };

@@ -30,6 +30,9 @@
 
 #include "Fl_Browser.H"
 
+/**
+ * Not yet documented.
+ */
 class Fl_Multi_Browser : public Fl_Browser {
 public:
     Fl_Multi_Browser(int X,int Y,int W,int H,const char *L=0)

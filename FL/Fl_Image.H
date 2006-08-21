@@ -39,11 +39,10 @@ class Fl_Image;
 class Fl_Device;
 
 /** Fl_Image_Cache is a base class for all image caches.
-*
-* If an image class requires a cache data, a new class he cache data should be derived 
-* from this class. New class should add additional member for actual cache data. 
-*/
-
+ *
+ * If an image class requires a cache data, a new class he cache data should be derived 
+ * from this class. New class should add additional member for actual cache data. 
+ */
 class Fl_Image_Cache{
 
   friend class Fl_Device;
@@ -72,7 +71,6 @@ public:
  * Since the Fl_Image class does not support image drawing by itself, calling the
  * draw() method results in a box with an X in it being drawn instead. 
  */
-
 class FL_EXPORT Fl_Image {
   int w_, h_, d_, ld_, count_;
   const char * const *data_;

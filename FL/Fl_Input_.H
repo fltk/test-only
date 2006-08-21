@@ -46,11 +46,12 @@
 #define FL_MULTILINE_INPUT_WRAP	(FL_MULTILINE_INPUT | FL_INPUT_WRAP)
 #define FL_MULTILINE_OUTPUT_WRAP (FL_MULTILINE_INPUT | FL_INPUT_READONLY | FL_INPUT_WRAP)
 
+class Fl_Text_Style;
+
 /** This is a virtual base class below Fl_Input. It has all the same 
  * interfaces, but lacks the handle() and draw() method. You may want to
  * subclass it if you are one of those people who likes to change how the
  * editing keys work. */
-class Fl_Text_Style;
 class FL_EXPORT Fl_Input_ : public Fl_Widget {
 
   const char* value_;

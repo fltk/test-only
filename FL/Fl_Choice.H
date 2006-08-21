@@ -30,7 +30,10 @@
 
 #include "Fl_Menu_.H"
 
-/** This is a button that when pushed pops up a menu (or hierarchy of
+/**
+ * \brief A pushh button with an attached pulldown menu.
+ *
+ * This is a button that when pushed pops up a menu (or hierarchy of
  * menus) defined by an array of Fl_Menu_Item objects. Motif calls this
  * an OptionButton.
  * 

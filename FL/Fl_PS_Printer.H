@@ -8,6 +8,9 @@
 
 
 
+/**
+ * Not yet documented.
+ */
 class FL_EXPORT Fl_PS_Printer:public Fl_Printer{
 
   enum SHAPE{NONE=0, LINE, LOOP, POLYGON, POINTS};

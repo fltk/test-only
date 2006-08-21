@@ -36,7 +36,10 @@
 
 struct FL_BLINE;
 
-/** The Fl_Browser widget displays a scrolling list of text lines, and
+/** 
+ * \brief A scrolling list of formatted text entries.
+ *
+ * The Fl_Browser widget displays a scrolling list of text lines, and
  * manages all the storage for the text. This is not a text editor or
  * spreadsheet! But it is useful for showing a vertical list of named
  * objects to the user.

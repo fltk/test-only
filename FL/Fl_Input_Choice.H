@@ -38,6 +38,9 @@
 #include <FL/Fl_Menu_Button.H>
 #include <FL/fl_draw.H>
 
+/**
+ * Not yet documented.
+ */
 class Fl_Input_Choice : public Fl_Group {
   // Private class to handle slightly 'special' behavior of menu button
   class InputMenuButton : public Fl_Menu_Button {
@@ -190,6 +193,9 @@ public:
 #include <FL/Fl_Menu_Button.H>
 #include <FL/fl_draw.H>
 
+/**
+ * Not yet documented.
+ */
 class Fl_Input_Choice : public Fl_Group {
   // Private class to handle slightly 'special' behavior of menu button
   class InputMenuButton : public Fl_Menu_Button {

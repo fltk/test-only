@@ -85,6 +85,9 @@ struct FL_EXPORT Fl_Label {
 
 
 
+class Fl_Widget_Style;
+
+
 /// Fl_Widget is the base class for all widgets in FLTK. 
 /** You can't create an instanve of Fl_Widget because the constructor is not public.
  * However you can subclass it.
@@ -94,9 +97,6 @@ struct FL_EXPORT Fl_Label {
  * methods such as color(unsigned n) or label(const char *s) change the widget's appearance.
  * It is up to the user code to call redraw() after these. 
  */
-
-class Fl_Widget_Style;
-
 class FL_EXPORT Fl_Widget {
  friend class Fl_Group;
 
