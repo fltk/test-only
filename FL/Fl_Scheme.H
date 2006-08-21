@@ -65,7 +65,7 @@ public:
   /** @internal */
   void set_flags(int flags) {set_flags_ = flags;};
   
-  /** @interval  Compares values with parent ones and returns values with bits set if particular data differ */
+  /** @internal  Compares values with parent ones and returns values with bits set if particular data differ */
   virtual int compare_flags();
 
   Fl_Handle_Style * handle_function(){return handle_;}

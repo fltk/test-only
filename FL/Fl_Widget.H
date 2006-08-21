@@ -339,7 +339,8 @@ public:
      * \arg \c FL_ALIGN_RIGHT
      * \arg \c FL_ALIGN_TEXT_OVER_IMAGE
      * \arg \c FL_ALIGN_TOP
-     * \arg \c FL_ALIGN_WRAP \see labeltype(), image(), label() */
+     * \arg \c FL_ALIGN_WRAP 
+     * \see labeltype(), image(), label() */
   void align(uchar a) {align_ = a;}
 
   void labelsize(uchar a);
