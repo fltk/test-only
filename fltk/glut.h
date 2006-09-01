@@ -131,6 +131,8 @@ FL_GLUT_API void glutDestroyWindow(int win);
 
 inline void glutPostRedisplay() {glut_window->redraw();}
 
+FL_GLUT_API void glutPostWindowRedisplay(int win);
+
 FL_GLUT_API void glutSwapBuffers();
 
 inline int glutGetWindow() {return glut_window->number;}
@@ -432,6 +434,7 @@ extern FL_GLUT_API struct Glut_Bitmap_Font {fltk::Font* font; int size;}
 
 FL_GLUT_API void glutBitmapCharacter(void *font, int character);
 FL_GLUT_API int glutBitmapWidth(void *font, int character);
+FL_GLUT_API int glutBitmapLength(void *font, const unsigned char* string);
 
 ////////////////////////////////////////////////////////////////
 // GLUT drawing functions.  These are NOT emulated but you can

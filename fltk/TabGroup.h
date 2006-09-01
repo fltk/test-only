@@ -100,7 +100,7 @@ public:
   ~TabGroup() {delete pager_;}
   static NamedStyle* default_style;
 
-  int value();
+  int value() const;
   bool value(int);
   int which(int event_x, int event_y);
   Widget *selected_child();

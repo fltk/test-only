@@ -264,7 +264,7 @@ int TabGroup::push(Widget *o) {
 
   If there are no children then -1 is returned.
 */
-int TabGroup::value() {
+int TabGroup::value() const {
   int ret = -1;;
   int numchildren = children();
   for (int i=0; i < numchildren; i++) {

@@ -234,8 +234,8 @@ enum {
 #define FL_BOLD			fltk::HELVETICA_BOLD
 #define FL_ITALIC		fltk::HELVETICA_ITALIC
 
-#define FL_NORMAL_SIZE (fltk::Widget::default_style->label_size_)
-#define FL_FOREGROUND_COLOR (fltk::Widget::default_style->label_color_)
+#define FL_NORMAL_SIZE (fltk::Widget::default_style->labelsize_)
+#define FL_FOREGROUND_COLOR (fltk::Widget::default_style->labelcolor_)
 #define FL_BACKGROUND2_COLOR (fltk::Widget::default_style->color_)
 #define FL_SELECTION_COLOR (fltk::Widget::default_style->selection_color_)
 

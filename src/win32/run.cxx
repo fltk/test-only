@@ -1971,7 +1971,11 @@ void Window::layout() {
     r.h(r.h()+h());
     for (Widget* p = parent(); p && !p->is_window(); p = p->parent())
       r.move(p->x(), p->y());
-    SetWindowPos(i->xid, 0, r.x(), r.y(), r.w(), r.h(), flags);
+    // avoid zero size windows. A zero sized window on Win32
+    // will cause continuously new redraw events
+    int W = r.w(); if (W < 1) W = 1;
+    int H = r.h(); if (H < 1) H = 1;
+    SetWindowPos(i->xid, 0, r.x(), r.y(), W, H, flags);
     if (!(flags & SWP_NOSIZE)) {redraw(); /*i->wait_for_expose = true;*/}
   }
 }

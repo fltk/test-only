@@ -1311,6 +1311,10 @@ void Window::create()
     winattr &= GetAvailableWindowAttributes(winclass);	// make sure that the window will open
     CreateNewWindow(winclass, winattr, &wRect, &(x->xid));
     //MoveWindow(x->xid, wRect.left, wRect.top, 1); // avoid Carbon Bug on old OS
+    if (child_of() && !contains(modal())) {
+      SetWindowActivationScope(x->xid, kWindowActivationScopeAll);
+    }
+
     label(label(), iconlabel());
 
     if (autoplace) {

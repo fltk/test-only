@@ -178,6 +178,7 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
     for (FluidType *o = FluidType::first; o; o = o->walk())
       if (o->selected() && o->is_widget()) {
 	Widget* b = ((WidgetType*)o)->o;
+	if (b->shortcut() != i->svalue) modflag = 1;
 	b->shortcut(i->svalue);
 	if (o->is_menu_item()) ((WidgetType*)o)->redraw();
       }

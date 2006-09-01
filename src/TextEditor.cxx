@@ -434,15 +434,6 @@ void TextEditor::maybe_do_callback() {
 int TextEditor::handle(int event) {
   if (!buffer()) return 0;
 
-  // Handle middle button text paste
-  if (event == PUSH && event_button() == 2) {
-    dragtype_ = -1;
-    fltk::paste(*this, 0);
-    fltk::focus(this);
-    maybe_do_callback();
-    return 1;
-  }
-
   switch (event) {
   case FOCUS:
     show_cursor(true);
@@ -482,6 +473,17 @@ int TextEditor::handle(int event) {
     //    case MOVE:
     show_cursor(cursor_on());
     return 1;
+
+  case PUSH:
+    if (event_button() == 2) {
+      dragtype_ = -1;
+      fltk::paste(*this, 0);
+      fltk::focus(this);
+      maybe_do_callback();
+      return 1;
+    }
+    break;
+
   }
 
   return TextDisplay::handle(event);

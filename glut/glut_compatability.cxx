@@ -267,6 +267,7 @@ int glutCreateWindow(const char *title) {
   } else {
     W->show();
   }
+  W->valid(0);
   W->make_current();
   return W->number;
 }
@@ -289,6 +290,10 @@ GlutWindow::~GlutWindow() {
 void glutDestroyWindow(int win) {
   // should destroy children!!!
   delete windows[win];
+}
+
+void glutPostWindowRedisplay(int win) {
+  windows[win]->redraw();
 }
 
 void glutSetWindow(int win) {

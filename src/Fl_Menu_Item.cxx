@@ -91,9 +91,10 @@ static const Fl_Menu_Item* add(Group* g, const Fl_Menu_Item* m,void* data) {
     if (m->labelfont_) o->labelfont(m->labelfont_);
     if (m->labelsize_) o->labelsize((float)m->labelsize_);
     if (m->labelcolor_) o->labelcolor(m->labelcolor_);
-    // these flags have been cleverly assigned so this shift and mask
-    // converts from the old values to the new ones:
-    o->set_flag((m->flags<<8)&(INACTIVE|VALUE|INVISIBLE));
+    // Shift the old flags values over to where they are in fltk,
+    // but also allow new fltk flag values (this was done so RAW_LABEL
+    // could be put in there for flwm)
+    o->set_flag(((m->flags<<8)&(INACTIVE|VALUE|INVISIBLE))|(m->flags&~0x1ff));
     if (m->flags & FL_MENU_DIVIDER) new Divider();
     m = next;
   }
