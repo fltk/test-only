@@ -107,16 +107,13 @@ static void undobuffersize(int n) {
 /**
  * Create an empty text buffer of a pre-determined size (use this to
  * avoid unnecessary re-allocation if you know exactly how much the buffer
- * will need to hold
+ * will need to hold.
  */
-TextBuffer::TextBuffer(int requestedsize,int requestedgapsize) {
+TextBuffer::TextBuffer(int requestedsize) {
   length_ = 0;
-  // calc a gap size :
-  requestedgapsize_= requestedgapsize>0 ? 
-    requestedgapsize : FLTK_MAX(PREFERRED_GAP_SIZE, requestedsize>>8);
-  buf_ = (char *)malloc(requestedsize + requestedgapsize_);
+  buf_ = (char *)malloc(requestedsize + PREFERRED_GAP_SIZE);
   gapstart_ = 0;
-  gapend_   = requestedgapsize_;
+  gapend_   = PREFERRED_GAP_SIZE;
   tabdist_  = 8;
   usetabs_  = true;
 
@@ -154,51 +151,49 @@ TextBuffer::~TextBuffer() {
 }
 
 /**
- * Get the entire contents of a text buffer.  Memory is allocated to contain
- * the returned string, which the caller must free.
+ * Return the entire contents of the text buffer. Returned memory is
+ * temporary and will only be usable until the next time the text is
+ * altered.
+ *
+ * Unlike previous versions of fltk, DO NOT FREE THE RETURNED RESULT!
  */
-char *TextBuffer::text() {
-  char *t = (char *)malloc(length_ + 1);
-  memcpy(t, buf_, gapstart_);
-  memcpy(&t[gapstart_], &buf_[gapend_], length_ - gapstart_);
-  t[length_] = '\0';
-  return t;
+const char *TextBuffer::text() {
+  if (!gapstart_ && length_) {
+    buf_[length_+gapend_] = 0;
+    return buf_+gapstart_;
+  }
+  if (gapstart_ < gapend_) {
+    memmove(&buf_[gapstart_], &buf_[gapend_], length_-gapstart_);
+    gapstart_ = gapend_ = length_;
+  }
+  buf_[length_] = 0; // add null terminator, assumme length < buffer size!
+  return buf_;
 }
 
 /**
  * Replace the entire contents of the text buffer
  */
 void TextBuffer::text(const char *t) {
-  int insert_length, deleted_length;
-  char *deleted_text;
-  
-  insert_length = strlen(t);
-
   call_predelete_callbacks(0, length_);
-  
-  /* Save information for redisplay, and get rid of the old buffer */
-  deleted_text   = text();
-  deleted_length = length_;
-  free(buf_);
-  
-  /* Start a new buffer with a gap of requestedgapsize_ in the center */
-  buf_ = (char*)malloc(insert_length + requestedgapsize_);
-  length_ = insert_length;
-  gapstart_ = insert_length/2;
-  gapend_   = gapstart_ + requestedgapsize_;
-  memcpy(buf_, t, gapstart_);
-  memcpy(&buf_[gapend_], &t[gapstart_], insert_length-gapstart_);
 
-#ifdef PURIFY
-    { int i; for (i=gapstart_; i<gapend_; i++) buf_[i] = '.'; }
-#endif
-  
+  /* Save information for redisplay, and get rid of the old buffer */
+  const char* deleted_text = text();
+  int deleted_length = length_;
+  char* oldbuf = buf_; // keep this until we are done w deleted_text
+  int insert_length = strlen(t);
+
+  /* Start a new buffer with a gap of PREFERRED_GAP_SIZE at end */
+  buf_ = (char*)malloc(insert_length + PREFERRED_GAP_SIZE);
+  length_ = gapstart_ = gapend_ = insert_length;
+  strcpy(buf_, t);
+
   /* Zero all of the existing selections */
   update_selections(0, deleted_length, 0);
-  
+
   /* Call the saved display routine(s) to update the screen */
   call_modify_callbacks(0, deleted_length, insert_length, 0, deleted_text);
-  free(deleted_text);
+
+  free(oldbuf);
 }
 
 /**
@@ -329,9 +324,9 @@ void TextBuffer::copy(TextBuffer *from_buf, int from_start, int from_end, int to
      the current buffer, just move the gap (if necessary) to where
      the text should be inserted.  If the new text is too large, reallocate
      the buffer with a gap large enough to accomodate the new text and a
-     gap of requestedgapsize_ */
+     gap of PREFERRED_GAP_SIZE */
   if (copy_length > gapend_ - gapstart_)
-    reallocate_with_gap(to_pos, copy_length + requestedgapsize_);
+    reallocate_with_gap(to_pos, copy_length + PREFERRED_GAP_SIZE);
   else if (to_pos != gapstart_)
     move_gap(to_pos);
   
@@ -593,7 +588,6 @@ char *TextBuffer::text_in_rectangle(int start, int end, int rectstart, int recte
  * and used in computing offsets for rectangular selection operations.
  */
 void TextBuffer::tab_distance(int tabDist) {
-  char *deleted_text;
 
   /* First call the pre-delete callbacks with the previous tab setting 
      still active. */
@@ -602,11 +596,8 @@ void TextBuffer::tab_distance(int tabDist) {
   /* Change the tab setting */
   tabdist_ = tabDist;
 
-  /* Force any display routines to redisplay everything (unfortunately,
-     this means copying the whole buffer contents to provide "deleted_text" */
-  deleted_text = text();
-  call_modify_callbacks( 0, length_, length_, 0, deleted_text );
-  free(deleted_text);
+  /* Force any display routines to redisplay everything */
+  call_modify_callbacks( 0, length_, length_, 0, text() );
 }
 
 void TextBuffer::select(int start, int end) {
@@ -1271,9 +1262,9 @@ int TextBuffer::insert_(int pos, const char *s) {
      the current buffer, just move the gap (if necessary) to where
      the text should be inserted.  If the new text is too large, reallocate
      the buffer with a gap large enough to accomodate the new text and a
-     gap of requestedgapsize_ */
+     gap of PREFERRED_GAP_SIZE */
   if (insertedLength > gapend_ - gapstart_)
-    reallocate_with_gap(pos, insertedLength + requestedgapsize_);
+    reallocate_with_gap(pos, insertedLength + PREFERRED_GAP_SIZE);
   else if (pos != gapstart_)
     move_gap(pos);
 

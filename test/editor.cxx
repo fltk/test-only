@@ -301,19 +301,17 @@ style_parse(const char *text,
 void
 style_init(void) {
   char *style = new char[textbuf->length() + 1];
-  char *text = textbuf->text();
-  
+  const char *text = textbuf->text();
 
   memset(style, 'A', textbuf->length());
   style[textbuf->length()] = '\0';
 
-  if (!stylebuf) stylebuf = new fltk::TextBuffer(textbuf->length(),4096);
+  if (!stylebuf) stylebuf = new fltk::TextBuffer(textbuf->length());
 
   style_parse(text, style, textbuf->length());
 
   stylebuf->text(style);
   delete[] style;
-  free(text);
 }
 
 
@@ -792,7 +790,7 @@ fltk::Window* new_view() {
 
 int main(int argc, char **argv) {
 
-  textbuf = new fltk::TextBuffer(0,4096);
+  textbuf = new fltk::TextBuffer(0);
   style_init();
 
   fltk::Window* window = new_view();

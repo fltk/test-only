@@ -375,7 +375,7 @@ CodeEditor::CodeEditor(int X, int Y, int W, int H, const char *L) :
   buffer(new TextBuffer);
 
   char *style = new char[buffer_->length() + 1];
-  char *text = buffer_->text();
+  const char *text = buffer_->text();
 
   memset(style, 'A', buffer_->length());
   style[buffer_->length()] = '\0';
@@ -388,7 +388,6 @@ CodeEditor::CodeEditor(int X, int Y, int W, int H, const char *L) :
 
   stylebuffer_->text(style);
   delete[] style;
-  free(text);
 
   buffer_->add_modify_callback(style_update, this);
   add_key_binding(ReturnKey, TEXT_EDITOR_ANY_STATE, (TextEditor::Key_Func)auto_indent);

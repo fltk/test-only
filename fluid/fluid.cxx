@@ -1054,9 +1054,9 @@ shell_pipe_cb(int, void*) {
     shell_run_buffer->append("... END SHELL COMMAND ...\n");
   }
 
-  shell_run_display->scroll(shell_run_display->count_lines(0,
-                            shell_run_buffer->length(), 1), 0);
+  shell_run_display->scroll(shell_run_display->total_lines(), 0);
 }
+
 ////////////////////////////////////////////////////////////////
 void do_shell_command(fltk::ReturnButton*, void*) {
     const char	*command;	// Command to run
