@@ -134,8 +134,8 @@ fltk::Widget* My_List::child(const fltk::Menu*, const int* indexes, int level) {
   widget->user_data(node);
   if (node->selected) widget->set_flag(fltk::SELECTED);
   else widget->clear_flag(fltk::SELECTED);
-  if (node->is_parent() && node->open) widget->set_flag(fltk::VALUE);
-  else widget->clear_flag(fltk::VALUE);
+  if (node->is_parent() && node->open) widget->set_flag(fltk::STATE);
+  else widget->clear_flag(fltk::STATE);
   return widget;
 }
 \endcode
@@ -164,7 +164,7 @@ Widget* List::child(const Menu* menu, const int* indexes,int level) {
 \code
 void My_List::flags_changed(const fltk::Menu*, fltk::Widget* widget) {
   Node* node = (Node*)(widget->user_data());
-  node->open = (widget->flags() & fltk::VALUE) !=0;
+  node->open = (widget->flags() & fltk::STATE) !=0;
   node->selected = (widget->flags() & fltk::SELECTED) != 0;
 }
 \endcode

@@ -154,7 +154,7 @@ fltk::Window* make_codingstyle_window() {
             o->align(fltk::ALIGN_RIGHT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
           }
            {fltk::RadioButton* o = pStyle1 = new fltk::RadioButton(16, 84, 66, 25, "Style 1");
-            o->set_flag(fltk::VALUE);
+            o->set_flag(fltk::STATE);
             o->callback((fltk::Callback*)cb_pStyle1);
           }
            {fltk::RadioButton* o = pStyle2 = new fltk::RadioButton(109, 84, 66, 25, "Style 2");
@@ -169,7 +169,7 @@ fltk::Window* make_codingstyle_window() {
           o->callback((fltk::Callback*)cb_pNoSpaceParens);
         }
          {fltk::CheckButton* o = pBraceFuncs = new fltk::CheckButton(15, 170, 174, 22, "Apply to function braces");
-          o->set_flag(fltk::VALUE);
+          o->set_flag(fltk::STATE);
           o->callback((fltk::Callback*)cb_pBraceFuncs);
         }
         o->end();

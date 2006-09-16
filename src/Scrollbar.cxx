@@ -247,9 +247,9 @@ void Scrollbar::draw() {
   // 1 = left/top   2 = right/bottom   5 = slider button
   Flags f1, f2, f5;
   f1 = f2 = f5 = flags() | OUTPUT;
-  if (pushed_ == UP_ARROW) f1 |= VALUE;
-  if (pushed_ == DOWN_ARROW) f2 |= VALUE;
-  if (pushed_ == SLIDER) f5 |= VALUE;
+  if (pushed_ == UP_ARROW) f1 |= PUSHED;
+  if (pushed_ == DOWN_ARROW) f2 |= PUSHED;
+  if (pushed_ == SLIDER) f5 |= PUSHED;
   if (highlight_ == UP_ARROW) f5 &=~HIGHLIGHT; else f1 &= ~HIGHLIGHT;
   if (highlight_ == DOWN_ARROW) f5 &=~HIGHLIGHT; else f2 &= ~HIGHLIGHT; 
 
@@ -291,7 +291,7 @@ static class ScrollBarGlyph : public Symbol {
 public:
   void _draw(const Rectangle& r) const {
     // If the box is being drawn, don't draw pushed in and turn on the box:
-    if (!(drawflags()&ALIGN_MASK)) setdrawflags(drawflags()&~VALUE);
+    if (!(drawflags()&ALIGN_MASK)) setdrawflags(drawflags()&~PUSHED);
     Widget::default_glyph->draw(r);
   }
   ScrollBarGlyph() : Symbol() {}

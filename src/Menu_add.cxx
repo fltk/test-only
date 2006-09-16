@@ -64,7 +64,7 @@ static Widget* append(
   else if (flags & MENU_TOGGLE) o->type(Item::TOGGLE);
   // these flags have been cleverly assigned so this shift and mask
   // converts from the old values to the new ones:
-  o->set_flag((flags<<8)&(INACTIVE|VALUE|INVISIBLE));
+  o->set_flag((flags<<8)&(INACTIVE|STATE|INVISIBLE));
   if (insert_here) g->insert(*o, insert_here-1);
   else g->add(o);
   if (flags & MENU_DIVIDER) {

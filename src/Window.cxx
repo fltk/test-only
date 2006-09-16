@@ -595,7 +595,7 @@ void Window::show(const Window* parent) {
   exec to return false.
 */
 void Window::make_exec_return(bool return_value) {
-  if (return_value) set_flag(VALUE);
+  if (return_value) set_flag(STATE);
   fltk::exit_modal();
 }
 
@@ -622,7 +622,7 @@ void Window::make_exec_return(bool return_value) {
   See fltk::modal() for what grab does. This is useful for popup menus.
 */
 bool Window::exec(const Window* parent, bool grab) {
-  clear_flag(VALUE);
+  clear_flag(STATE);
   child_of(parent ? parent : first());
   Widget* saved_modal = fltk::modal(); bool saved_grab = fltk::grab();
   fltk::modal(this, grab);
@@ -630,7 +630,7 @@ bool Window::exec(const Window* parent, bool grab) {
   while (modal() && !exit_modal_flag()) wait();
   hide();
   modal(saved_modal, saved_grab);
-  return (flags()&VALUE)!=0;
+  return state();
 }
 
 /*! Make the window with a normal system border and behavior, but

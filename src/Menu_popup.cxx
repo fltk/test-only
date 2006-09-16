@@ -37,7 +37,6 @@
 #include <fltk/damage.h>
 #include <fltk/run.h>
 #include <fltk/Monitor.h>
-#include <stdio.h>
 #include <ctype.h>
 
 #include <fltk/Item.h> // for TOGGLE, RADIO
@@ -74,13 +73,13 @@ using namespace fltk;
 class MWindow;
 
 struct MenuState {
-  int level; // which level of nesting current item is in
+  int level;	// which level of nesting current item is in
   int indexes[MAX_LEVELS]; // index in each level of selected item
   MWindow* menus[MAX_LEVELS]; // windows that have been created
   int nummenus; // number of windows (may be level+1 or level+2)
   bool menubar; // if true menus[0] is a menubar
   bool hmenubar; // menubar&&menus[0] is horizontal
-  bool changed;   // did the menu items change
+  bool changed;	// did the menu items change
   int state; // one of the enumeration below
   Menu* widget; // widget that is making this menu
   // return the widget being pointed at:
@@ -127,7 +126,7 @@ void MenuTitle::draw() {
     Flags flags = save_flags;
     if (menustate->hmenubar) flags &= ~ALIGN_MASK;
 
-    item->flags(flags|SELECTED|HIGHLIGHT|VALUE);
+    item->flags(flags|SELECTED|HIGHLIGHT|PUSHED);
     item->w(w());
     item->h(h());
     item->draw();
@@ -165,7 +164,7 @@ public:
   int children;
   MenuTitle* title;
   bool is_menubar;
-  int drawn_selected;   // last redraw has this selected
+  int drawn_selected;	// last redraw has this selected
   MWindow(MenuState*, int level, const Rectangle& R, const char* title, int rightedge);
   ~MWindow();
   int find_selected(int mx, int my);
@@ -281,7 +280,7 @@ void Menu::layout_in(Widget* widget, const int* indexes, int level) const {
     selection from one item to the next.
 */
 void Menu::draw_in(Widget* widget, const int* indexes, int level,
-         int selected, int drawn_selected) const {
+		   int selected, int drawn_selected) const {
   Box* box = menubox(widget);
   const unsigned char damage = widget->damage();
 
@@ -351,7 +350,7 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
       item->w(save_w);
       item->h(save_h);
       pop_matrix();
-      flags &= ~(VALUE|ALIGN_MASK);
+      flags &= ~(STATE|ALIGN_MASK);
 
       if (horizontal) ;
       else if (this->children(array,level+1)>=0) {
@@ -379,7 +378,7 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
     items into the widget.
 */
 int Menu::find_selected(Widget* widget, const int* indexes, int level,
-         int mx, int my) const {
+			int mx, int my) const {
   if (mx < 0 || my < 0) return -1;
   if (widget->horizontal()) {
     if (my >= widget->h()) return -1;
@@ -425,7 +424,7 @@ int Menu::find_selected(Widget* widget, const int* indexes, int level,
     the draw() method had been used to draw the items into the widget.
 */
 Rectangle Menu::get_location(Widget* widget, const int* indexes, int level,
-              int index) const
+			     int index) const
 {
   Rectangle r(widget->w(), widget->h());
   menubox(widget)->inset(r);
@@ -458,8 +457,10 @@ Rectangle Menu::get_location(Widget* widget, const int* indexes, int level,
     }
     array[level] = index;
     Widget* item = child(array, level);
-    if (!item->h()) item->layout();
-    r.h(item->h());
+    if (item) {
+      if (!item->h()) item->layout();
+      r.h(item->h());
+    }
   }
   Item::clear_style();
   return r;
@@ -468,7 +469,7 @@ Rectangle Menu::get_location(Widget* widget, const int* indexes, int level,
 ////////////////////////////////////////////////////////////////
 
 MWindow::MWindow(MenuState* m, int l, const Rectangle& rectangle,
-       const char* t, int rightedge)
+		 const char* t, int rightedge)
   : MenuWindow(rectangle.x(), rectangle.y(), rectangle.w(), rectangle.h(), 0), menustate(m), level(l)
 {
   box_from_menuwindow = style()->box();
@@ -560,8 +561,8 @@ int MWindow::ypos(int index) {
   Widget* widget = this;
   if (menustate->menubar && !level) widget = menustate->widget;
   return menustate->widget->get_location(widget,
-                menustate->indexes, level,
-                index).y();
+					 menustate->indexes, level,
+					 index).y();
 }
 
 // return the left edge of an item:
@@ -569,14 +570,14 @@ int MWindow::titlex(int index) {
   Widget* widget = this;
   if (menustate->menubar && !level) widget = menustate->widget;
   return menustate->widget->get_location(widget,
-                menustate->indexes, level,
-                index).x();
+					 menustate->indexes, level,
+					 index).x();
 }
 
 void MWindow::draw() {
   int selected = level <= menustate->level ? menustate->indexes[level] : -1;
   menustate->widget->draw_in(this, menustate->indexes, level,
-              selected, drawn_selected);
+			     selected, drawn_selected);
   drawn_selected = selected;
 }
 
@@ -587,15 +588,15 @@ int MWindow::find_selected(int mx, int my) {
   if (menustate->menubar && !level) widget = menustate->widget;
   return
     menustate->widget->find_selected(widget,
-                 menustate->indexes, level, mx, my);
+				     menustate->indexes, level, mx, my);
 }
 
 ////////////////////////////////////////////////////////////////
 // The Menu::popup() run-time:
 
 enum {INITIAL_STATE = 0,// no mouse up or down since popup() called
-   PUSH_STATE, // mouse has been pushed on a normal item
-      DONE_STATE  // execute the selected item
+      PUSH_STATE,	// mouse has been pushed on a normal item
+      DONE_STATE	// execute the selected item
 };
 
 // scroll so item i is visible on screen, return true if it moves
@@ -691,10 +692,12 @@ int MWindow::handle(int event) {
   Widget* widget = 0;
   //printf("event %08x  key %08x\n", event, event_key());
   switch (event) {
+
   case KEY:
     track_mouse = event_state(ANY_BUTTON);
     switch (event_key()) {
-    case LeftAccKey: case RightAccKey:
+    case LeftAccKey:
+    case RightAccKey:
       if (style()->hide_underscore() && !event_clicks()) {
 	for (int i = 0; i < p.nummenus; i++)
 	  p.menus[i]->redraw();
@@ -711,13 +714,13 @@ int MWindow::handle(int event) {
       return 1;
     case RightKey:
       if (p.hmenubar && (p.level<=0 || p.level==1 && p.nummenus==2))
-   forward(p, 0);
+	forward(p, 0);
       else if (p.level+1 < p.nummenus) forward(p, p.level+1);
       return 1;
     case LeftKey:
       if (p.hmenubar && p.level<=1) backward(p, 0);
       else if (p.level > 0)
-   setitem(p, p.level-1, p.indexes[p.level-1]);
+	setitem(p, p.level-1, p.indexes[p.level-1]);
       return 1;
     case SpaceKey:
     case ReturnKey:
@@ -740,11 +743,11 @@ int MWindow::handle(int event) {
       if (p.indexes[menu] < 0) lastkey = 0;
       for (int item = 0; item < mw.children; item++) {
 	widget = mw.get_widget(item);
-	// if (widget->active() && widget->test_shortcut(false)) {
-	//   setitem(p, menu, item);
-	//   lastkey = 0;
-	//   goto EXECUTE;
-	// }
+//	if (widget->active() && widget->test_shortcut(false)) {
+//	  setitem(p, menu, item);
+//	  lastkey = 0;
+//	  goto EXECUTE;
+//	}
 	// continue unless this item can be picked by the keystroke:
 	if (!widget->takesevents()) continue;
 	if (widget->test_label_shortcut()) {
@@ -820,19 +823,6 @@ int MWindow::handle(int event) {
 	if (!p.menus[menu]->autoscroll(item)) forward(p, p.level);
       }
     }
-#if 0
-    if (event==DRAG) {
-      Widget* w= p.menus[menu]->get_widget(item);
-      if (w && w->takesevents() ) {
-	//w->resize(p.menus[menu]->w(),w->h());
-	int ret = w->handle(event);
-	if (ret) {
-	  p.menus[menu]->redraw(DAMAGE_CHILD);
-	  return ret;
-	}
-      }
-    }
-#endif
     return 1;}
 
   case RELEASE:
@@ -885,7 +875,7 @@ Widget* Menu::try_popup(const Rectangle& r, const char* title, bool menubar)
       rectangle.move(w->x(), w->y());
   } else {
     rectangle.move(event_x_root()-event_x(),
-         event_y_root()-event_y());
+		   event_y_root()-event_y());
   }
   if (fltk::event() == fltk::PUSH)
     monitor = &Monitor::find(event_x_root(), event_y_root());
@@ -906,17 +896,14 @@ Widget* Menu::try_popup(const Rectangle& r, const char* title, bool menubar)
   toplevel.child_of(Window::first());
   p.menus[0] = &toplevel;
   p.fakemenu = 0;
-  int is_shortcut = 0;
 
   if (menubar) {
     if (value() < 0)
       toplevel.handle(PUSH); // get menu mouse points at to appear
     else {
-      // here means we should handle shortcuts
       p.indexes[0] = value();
       p.indexes[1] = -1;
       p.level = 0;
-      is_shortcut = 1;
     }
     p.changed = true; // make it create the pulldown menu
   } else {
@@ -924,13 +911,14 @@ Widget* Menu::try_popup(const Rectangle& r, const char* title, bool menubar)
     // in it, positioning them so that one is selected:
     for (;;) {
       if (p.indexes[p.level] < 0) break;
-      if (p.current_children() < 0) break;
+      //      if (p.current_children() < 0) break;
       Widget* widget = p.current_widget();
+      if (!widget) break;
       if (!widget->is_group()) break;
       if (!widget->takesevents()) break;
       Group* group = (Group*)widget;
       int item = group->focus_index();
-
+      if (item >= group->children()) break;
       MWindow* mw = p.menus[p.level];
       int nX = mw->x() + mw->w();
       int nY = mw->y() + mw->ypos(p.indexes[p.level])-mw->ypos(0);
@@ -943,10 +931,10 @@ Widget* Menu::try_popup(const Rectangle& r, const char* title, bool menubar)
       int dy = mw->y()-nY;
       int dx = mw->x()-nX;
       for (int menu = 0; menu < p.level; menu++) {
-   MWindow* t = p.menus[menu];
-   int nx = t->x()+dx; if (nx < 0) {nx = 0; dx = -t->x();}
-   int ny = t->y()+dy; if (ny < 0) {ny = 0; dy = -t->y();}
-   t->position(nx, ny);
+	MWindow* t = p.menus[menu];
+	int nx = t->x()+dx; if (nx < 0) {nx = 0; dx = -t->x();}
+	int ny = t->y()+dy; if (ny < 0) {ny = 0; dy = -t->y();}
+	t->position(nx, ny);
       }
     }
     // show all the menus:
@@ -977,13 +965,6 @@ Widget* Menu::try_popup(const Rectangle& r, const char* title, bool menubar)
     // quickly.
     p.changed = false;
 
-    // FIXME: It seems that someone (something) change p.indexes[0] so in case
-    // shortcuts it returns in random order -1 when should not. 
-    // To describe it better: if widget is _not_ clicked before hit shortcut, everything
-    // works fine. Otherwise will happen as described above.
-    if(is_shortcut && p.indexes[0] < 0 && p.indexes[0] != value())
-    	p.indexes[0] = value();
-
     int index = p.indexes[p.level];
     if (index < 0) continue;  // no item selected, so no submenu changes
     if (p.level < p.nummenus-1) continue; // submenu already up
@@ -1007,7 +988,6 @@ Widget* Menu::try_popup(const Rectangle& r, const char* title, bool menubar)
       mw->title->show(p.menus[0]->child_of());
       if (widget->takesevents() && p.current_children()>=0) {
 	// if it is a real menu we add it to the list of displayed menus
-	// if it is a real menu we add it to the list of displayed menus
 	p.menus[p.nummenus++] = mw;
 	mw->show(p.menus[0]->child_of());
       } else {
@@ -1021,7 +1001,7 @@ Widget* Menu::try_popup(const Rectangle& r, const char* title, bool menubar)
       int nX = mw->x() + mw->w();
       int nY = mw->y() + mw->ypos(index) - mw->ypos(0);
       mw = new MWindow(&p, p.nummenus, Rectangle(nX, nY, 0, 0), 0,
-             p.nummenus ? p.menus[p.nummenus-1]->x() : 0);
+		       p.nummenus ? p.menus[p.nummenus-1]->x() : 0);
       p.menus[p.nummenus++] = mw;
       mw->show(p.menus[0]->child_of());
 
@@ -1081,7 +1061,7 @@ int Menu::popup(const Rectangle& rectangle, const char* title, bool menubar)
   Widget *selected = try_popup(rectangle, title, menubar);
   if (selected) {
     if (selected->type()==Widget::TOGGLE)
-      selected->invert_flag(VALUE);
+      selected->invert_flag(STATE);
     else if (selected->type()==Widget::RADIO)
       selected->setonly();
     execute(selected);

@@ -65,7 +65,7 @@ void CycleButton::draw() {
   // back-compatability and the glyphs are eliminated:
 
   Flags flags = this->flags()|OUTPUT;
-  if (this == held_down) flags |= VALUE|PUSHED;
+  if (this == held_down) flags |= PUSHED;
 
   Style style = *(this->style());
   if (style.color_) style.buttoncolor_ = style.color_;
@@ -97,6 +97,7 @@ void CycleButton::draw() {
     Item::set_style(&style,false);
     Flags saved = o->flags();
     o->clear_flag(SELECTED);
+    if (flags&(INACTIVE|INACTIVE_R)) o->set_flag(INACTIVE_R);
     push_clip(r);
     push_matrix();
     translate(r.x(),r.y());

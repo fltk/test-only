@@ -71,7 +71,6 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) :
   label_	= L;
   image_	= 0;
   nimages_	= 0;
-      //image2_ = image3_ = image4_ = 0;
   tooltip_	= 0;
 #if CLICK_MOVES_FOCUS
   flags_	= CLICK_TO_FOCUS | TAB_TO_FOCUS;
@@ -270,7 +269,6 @@ void Widget::copy_label(const char* s) {
   Each Widget, and most drawing functions, take a bitmask of
   flags that indicate the current state and exactly how to draw
   things. See \link Flags.h <fltk/Flags.h> \endlink for values.
-
 */
 
 /*! void Widget::align(Flags);
@@ -345,7 +343,7 @@ bool Widget::resize(int x,int y,int w,int h) {
   if (w != this->w()) flags |= LAYOUT_W;
   if (h != this->h()) flags |= LAYOUT_H;
   if (flags) {
-    set(x,y,w,h);
+    Rectangle::set(x,y,w,h);
     // parent must get LAYOUT_DAMAGE as well as LAYOUT_CHILD:
     if (parent()) {
       layout_damage_ |= flags;
@@ -571,7 +569,7 @@ void Widget::redraw_label() {
     the widget if the no highlight color is being used.
 */
 void Widget::redraw_highlight() {
-  if (active() && (highlight_color() || image(fltk::BELOWMOUSE))) 
+  if (active() && (highlight_color() || image(fltk::HIGHLIGHT))) 
       redraw(DAMAGE_HIGHLIGHT);
 }
 
@@ -636,20 +634,19 @@ void Widget::draw()
 */
 int Widget::handle(int event) {
   switch (event) {
-  case LEAVE:
-	if (image(fltk::BELOWMOUSE)) 
-	    redraw_highlight();
-	return 0;
   case ENTER:
+    redraw_highlight();
+    // fall through to MOVE:
   case MOVE:
     // Setting belowmouse directly is not needed by most widgets, as
     // send() will do it if this returns true. However if this widget
     // has children and one of them is the belowmouse, send will not
     // change it, so I have to call this here.
     fltk::belowmouse(this);
-    if (image(fltk::BELOWMOUSE)) redraw_highlight();
-
-    return 1;
+    return true;
+  case LEAVE:
+    redraw_highlight();
+    return true;
   default:
     return 0;
   }
@@ -701,7 +698,7 @@ int Widget::send(int event) {
   case ENTER:
   case MOVE:
     if (!visible()) break;
-    if(active()) set_flag(HIGHLIGHT);
+    if (active()) set_flag(HIGHLIGHT);
     // figure out correct type of event:
     event = (contains(fltk::belowmouse())) ? MOVE : ENTER;
     ret = handle(event);
@@ -833,8 +830,8 @@ void Widget::activate() {
     if (active_r()) {
       redraw_label(); redraw();
       clear_flag(INACTIVE_R);
-      if (inside(focus())) focus()->take_focus();
       handle(ACTIVATE);
+      if (inside(focus())) focus()->take_focus();
     }
   }
 }
@@ -974,16 +971,52 @@ bool Widget::focused() const {return this == fltk::focus();}
   the <fltk/Fl.h> header file. */
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
-//! sets the VALUE to only one on the widget, other widgets in the same group get VALUE cleared
-void Widget::setonly() {
+////////////////////////////////////////////////////////////////
+
+/*! \fn bool Widget::state() const
+  Widgets have space in them to store a single true/false value
+  (put into the STATE bit of flags()). This is used by buttons and
+  checkmarks and radio menu items.
+*/
+
+/*! \fn bool Widget::set()
+  Same as state(true). If you know the widget will already be
+  redrawn, or it is not displayed, it is faster to call the
+  inline set_flag(STATE) function.
+*/
+
+/*! \fn bool Widget::clear()
+  Same as state(false). If you know the widget will already be
+  redrawn, or it is not displayed, it is faster to call the
+  inline clear_flag(STATE) function.
+*/
+
+/*!
+  Change the state(). Also calls clear_changed(). If the state is
+  different, redraw(DAMAGE_VALUE) is called and true is returned. If
+  the state is the same then false is returned and the widget is not
+  redrawn.
+*/
+bool Widget::state(bool v) {
   clear_changed();
-  if (!flags(VALUE)) {set_flag(VALUE); redraw();}
-  if (parent()) for (int i = parent()->children(); i--;) {
+  unsigned f = v ? (flags_|STATE) : (flags_&~STATE);
+  if (f != flags_) {
+    flags_ = f;
+    redraw(DAMAGE_VALUE);
+    return true;
+  }
+  return false;
+}
+
+/*!
+  Calls set() on this widget and calls clear() on all other widgets in
+  the same parent Group that have the type() set to RADIO.
+*/
+void Widget::setonly() {
+  set();
+  for (int i = parent()->children(); i--;) {
     Widget* o = parent()->child(i);
-    if (o != this && o->type() == Widget::RADIO) {
-      o->clear_changed();
-      if (o->flags(VALUE)) {o->clear_flag(VALUE); o->redraw();}
-    }
+    if (o != this && o->type() == RADIO) o->clear();
   }
 }
 
@@ -994,7 +1027,7 @@ void Widget::image(const Symbol* s,Flags f) {
     switch(f) {
     case fltk::NO_FLAGS:    n=1;	break;
     case fltk::INACTIVE_R:  n=2;	break;
-    case fltk::BELOWMOUSE:  n=3;	break;
+    case fltk::HIGHLIGHT:   n=3;	break;
     case fltk::OPENED: 
     case fltk::PUSHED:	    n=4;	break;
     default:				return;
@@ -1014,7 +1047,7 @@ void Widget::image(const Symbol* s,Flags f) {
 void Widget::image(const Symbol* noflags, const Symbol* disabled, 
 	      const Symbol* belowmouse, const Symbol* pushedopen) {
     image(pushedopen, fltk::PUSHED);
-    image(belowmouse, fltk::BELOWMOUSE);
+    image(belowmouse, fltk::HIGHLIGHT);
     image(disabled,   fltk::INACTIVE_R);
     image(noflags);
 }
@@ -1024,7 +1057,7 @@ const Symbol* Widget::image(Flags flags) const	{
 
     if (nimages_>1 && flags & fltk::INACTIVE_R) // reads the image for pushed button or open
 	return image_[1];
-    else if ( nimages_>3 && (flags & fltk::BELOWMOUSE)!=0  && !pushed() ) // reads the image for focused widget
+    else if ( nimages_>3 && (flags & fltk::HIGHLIGHT) && !pushed() ) // reads the image for focused widget
     	return image_[2];
     else if (nimages_>3 && (flags & fltk::OPENED) || (flags & fltk::PUSHED)) // reads the image for pushed button or open
 	return image_[3];

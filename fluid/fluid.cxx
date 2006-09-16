@@ -1016,7 +1016,7 @@ void make_main_window() {
 	//  o->text_box(FLAT_BOX);
 	main_window->resizable(o);
 	build_hierarchy(menubar);
-	if (prefs.show_tooltip()) itooltip->set_flag(VALUE);
+	if (prefs.show_tooltip()) itooltip->set_flag(STATE);
 	// this is removed because the new ctrl+bindings mess up emacs in
 	// the text fields:
 	//    menubar->global();

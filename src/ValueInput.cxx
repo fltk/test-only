@@ -107,7 +107,7 @@ void ValueInput::draw() {
     if (which_highlight && (flags()&HIGHLIGHT))
       f[which_highlight-1] |= HIGHLIGHT;
     if (which_pushed && pushed())
-      f[which_pushed-1] |= VALUE;
+      f[which_pushed-1] |= PUSHED;
     Rectangle gr(r.r(),r.y(),bw,bw);
     drawstyle(style(),f[0]);
     draw_glyph(ALIGN_TOP|ALIGN_INSIDE, gr);

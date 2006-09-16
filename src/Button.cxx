@@ -33,7 +33,8 @@ using namespace fltk;
 
   Buttons generate callbacks when they are clicked by the user. You
   control exactly when and how by changing the values for when():
-  - fltk::WHEN_NEVER: The callback is not done, instead changed() is turned on.
+  - fltk::WHEN_NEVER: The callback is not done, instead changed() is
+    turned on.
   - fltk::WHEN_RELEASE: This is the default, the callback is done
     after the user successfully clicks the button (i.e. they let it go
     with the mouse still pointing at it), or when a shortcut is typed.
@@ -50,41 +51,25 @@ using namespace fltk;
   does not eat the event first as an fltk::KEY event.
 
   \image html buttons.gif
-
 */
 
-/*! Same as value(1). */
-bool Button::set() {
-  clear_changed();
-  if (!value()) {set_flag(VALUE); redraw(); return true;}
-  return false;
-}
+/*! \fn bool Button::value() const
+  The current value. True means it is pushed down, false means it is
+  not pushed down. The ToggleButton subclass provides the ability for
+  the user to change this value permanently, otherwise it is just
+  temporary while the user is holding the button down.
 
-/*! Same as value(0). */
-bool Button::clear() {
-  clear_changed();
-  if (value()) {clear_flag(VALUE); redraw(); return true;}
-  return false;
-}
-
-/*! The current value. True means it is pushed down, false means it is
-  not pushed down. Only with the ToggleButton subclass can the user change
-  this permanelty, but you can change it for any button. */
-bool Button::value(bool v) {
-  return v ? set() : clear();
-}
-
-/*!  Turns on this button and turns off all other RadioButton objects in the
-  parent Group (calling value(1) or set() does not do this).
+  This is the same as Widget::state().
 */
-void Button::setonly() {
-  set();
-  for (int i = parent()->children(); i--;) {
-    Widget* o = parent()->child(i);
-    if (o != this && o->type() == RADIO)
-      ((Button*)o)->clear();
-  }
-}
+
+/*! \fn bool Button::value(bool)
+  Change the value(). Redraws the button and returns true if the new
+  value is different. This is the same function as Widget::state().
+  See also Widget::set(), Widget::clear(), and Widget::setonly().
+
+  If you turn it on, a normal button will draw pushed-in, until
+  the user clicks it and releases it.
+*/
 
 static Button* pushed_button;
 static bool initial_value;
@@ -92,7 +77,7 @@ static bool initial_value;
 int Button::handle(int event) {
   return handle(event, Rectangle(w(),h()));
 }
-#include <stdio.h>
+
 int Button::handle(int event, const Rectangle& rectangle) {
   switch (event) {
   case ENTER:
@@ -133,7 +118,7 @@ int Button::handle(int event, const Rectangle& rectangle) {
     // grab initial focus if we are an ReturnButton:
     return shortcut()==ReturnKey ? 2 : 1;
   case UNFOCUS:
-    redraw(1); // redraw to remove the focus box.
+    redraw(DAMAGE_HIGHLIGHT);
     return 1;
   case KEY:
     if (event_key() == ' ' || event_key() == ReturnKey
@@ -188,19 +173,10 @@ void Button::draw(int glyph_width) const
 
   Box* box = style->buttonbox();
 
-  Flags box_flags = flags() & ~(VALUE|PUSHED) | OUTPUT;
+  Flags box_flags = flags() & ~PUSHED | OUTPUT;
+  if (this == pushed_button && pushed()) box_flags |= PUSHED;
   Flags glyph_flags = box_flags & ~(HIGHLIGHT|OUTPUT);
-  if (glyph_width) {
-    if (value()) glyph_flags |= VALUE;
-    if (this == pushed_button && pushed()) {
-      box_flags |= VALUE|PUSHED;
-      if (box == NO_BOX) glyph_flags |= PUSHED;
-      else if (!(when()&WHEN_CHANGED)) glyph_flags ^= VALUE;
-    }
-  } else {
-    if (value()) box_flags |= VALUE;
-    if (this == pushed_button && pushed()) box_flags |= PUSHED;
-  }
+  if (glyph_width) box_flags &= ~STATE;
 
   // only draw "inside" labels:
   Rectangle r(0,0,w(),h());
@@ -212,10 +188,6 @@ void Button::draw(int glyph_width) const
       fillrect(r);
     } else if (label() || (damage()&(DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT))) {
       // erase the background so we can redraw the label in the new color:
-      // fabien: when we loose focus we must draw the background to cleanup
-      // dashed box:
-      // WAS: xor was suggested, but does not work if you want arbitrary
-      // colors or antialiasing!
       draw_background();
     }
     // this allows these buttons to be put into browser/menus:

@@ -275,8 +275,7 @@ fltk::Widget* Widget_List::child(const fltk::Menu*, const int* indexes, int leve
   if (item->selected()) widget->set_selected();
   else widget->clear_selected();
   // force the hierarchy to be open/closed:
-  if (item->is_parent() && item->open_) widget->set_flag(fltk::VALUE);
-  else widget->clear_flag(fltk::VALUE);
+  widget->state(item->is_parent() && item->open_);
 
   widget->label(get_item_fullname(item));
   //widget->w(0); widget->h(0);
@@ -288,7 +287,7 @@ fltk::Widget* Widget_List::child(const fltk::Menu*, const int* indexes, int leve
 
 void Widget_List::flags_changed(const fltk::Menu*, fltk::Widget* w) {
   FluidType* item = (FluidType*)(w->user_data());
-  item->open_ = (w->flags()&fltk::VALUE) != 0;
+  item->open_ = w->state();
   item->new_selected = w->selected();
   if (item->new_selected != item->selected()) selection_changed(item);
 }

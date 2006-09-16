@@ -94,7 +94,7 @@ extern void fl_to_inactive(const char* s, char* to);
 
 void RoundBox::_draw(const Rectangle& r) const
 {
-  if (drawflags(VALUE) && down_) {
+  if (drawflags(PUSHED|STATE) && down_) {
     down_->draw(r);
     return;
   }

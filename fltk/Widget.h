@@ -39,6 +39,10 @@ typedef Callback* Callback_p; // needed for BORLAND
 typedef void (Callback0)(Widget*);
 typedef void (Callback1)(Widget*, long);
 
+#ifdef FLTK_1_WIDGET  // back-compatability section:
+FL_API Font* font(int);
+#endif
+
 class FL_API Widget : public Rectangle {
   // disable the copy assignment/constructors:
   Widget & operator=(const Widget &);
@@ -146,6 +150,11 @@ public:
   Flags set_flag(int c)		{ return flags_ |= c; }
   Flags clear_flag(int c)	{ return flags_ &= ~c; }
   Flags invert_flag(int c)	{ return flags_ ^= c; }
+
+  bool  state() const		{ return (flags()&STATE)!=0; }
+  bool  state(bool);
+  bool  set()			{ return state(true); }
+  bool  clear()			{ return state(false); }
   void  setonly();
 
   Flags align() const		{ return flags_&ALIGN_MASK; }

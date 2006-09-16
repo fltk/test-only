@@ -45,7 +45,7 @@ public:
   void _draw(const Rectangle& r) const {
     Color saved = getbgcolor();
     Flags f = drawflags();
-    if (f & VALUE) {
+    if (f & STATE) {
       setbgcolor(drawstyle()->selection_color());
     } else if (!drawstyle()->color_) {
       // if user did not set color make the interior invisible

@@ -53,7 +53,7 @@ public:
     // Use the white rather than the gray color:
     Box* box = drawstyle()->box();
     box->draw(R);
-    if (drawflags(VALUE)) {
+    if (drawflags(STATE|PUSHED)) {
       Rectangle r(R);
       box->inset(r);
       // use the selection color only if they directly set it:

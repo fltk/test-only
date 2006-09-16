@@ -80,10 +80,10 @@ void Adjuster::draw() {
   }
 
   Rectangle r(W,H);
-  Flags flags = this->flags() & ~(VALUE|PUSHED|HIGHLIGHT) | OUTPUT;
+  Flags flags = this->flags() & ~(STATE|PUSHED|HIGHLIGHT) | OUTPUT;
   for (int i = 1; i < 4; i++) {
     Flags f = flags;
-    if (drag == i) f |= VALUE|PUSHED;
+    if (drag == i) f |= PUSHED;
     else if (highlight == i) f |= HIGHLIGHT;
     if (damage()&DAMAGE_ALL || last==i || highlight==i) {
       drawstyle(style(), f);

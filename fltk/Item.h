@@ -56,10 +56,8 @@ public:
   static void set_style(const Widget* w, bool f) {set_style(w->style(),f);}
   static void clear_style() {set_style(Widget::default_style,false);}
 
-  bool value() const { return (flags()&VALUE)!=0; }
-  bool value(bool);
-  bool set();
-  bool clear();
+  bool	value() const { return state(); }
+  bool	value(bool v) { return state(v); }
 
 private:
     void init(); // common constructor initialization

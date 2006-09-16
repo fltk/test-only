@@ -92,7 +92,7 @@ void ValueSlider::draw() {
   if (damage() & ~DAMAGE_CHILD) {
     input.set_damage(DAMAGE_ALL);
     Flags f2 = flags() & ~FOCUSED;
-    if (pushed()) f2 |= VALUE|PUSHED;
+    if (pushed()) f2 |= PUSHED;
     Box* box = this->box();
     if (!box->fills_rectangle()) draw_background();
     drawstyle(style(),flags()&~HIGHLIGHT);

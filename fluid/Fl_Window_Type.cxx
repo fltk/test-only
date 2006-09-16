@@ -445,8 +445,7 @@ void redraw_overlays() {
 extern fltk::MenuBar* menubar;
 
 void toggle_overlays(fltk::Widget *,void *) {
-  if (overlays_invisible)   ishow_overlay->set_flag(fltk::VALUE);
-  else	ishow_overlay->clear_flag(fltk::VALUE);
+  ishow_overlay->state(overlays_invisible);
   if (overlaybutton) overlaybutton->value(overlays_invisible);
   overlays_invisible = !overlays_invisible;
   for (FluidType *o=FluidType::first; o; o=o->walk())

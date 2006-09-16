@@ -1768,7 +1768,7 @@ void WidgetType::write_widget_code() {
 
   if (is_button()) {
     fltk::Button* b = (fltk::Button*)o;
-    if (b->value()) write_c("%so->set_flag(fltk::VALUE);\n", indent());
+    if (b->value()) write_c("%so->set_flag(fltk::STATE);\n", indent());
     if (b->shortcut())
       write_c("%so->shortcut(0x%x);\n", indent(), b->shortcut());
   }
@@ -2353,13 +2353,13 @@ void WidgetType::copy_properties() {
 
  w->flags(o->flags());
   w->label(o->label());
-  w->image(o->image(), o->image(INACTIVE),o->image(BELOWMOUSE),o->image(PUSHED));
+  w->image(o->image(), o->image(INACTIVE),o->image(HIGHLIGHT),o->image(PUSHED));
   w->tooltip(tooltip());
   w->type(o->type());
     
   w->align(o->align());
   w->shortcut(o->shortcut());
-  w->set(o->x(), o->y(),o->w(),o->h());
+  w->Rectangle::set(o->x(), o->y(),o->w(),o->h());
 
   // copy all attributes specific to widgets derived from Button
   if (is_button()) {

@@ -148,7 +148,7 @@ void BarGroup::draw()
   }
   if (damage() & (DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT|DAMAGE_ALL)) {
     Flags flags = OUTPUT;
-    if (pushed) flags |= VALUE;
+    if (pushed) flags |= PUSHED;
     if (highlighted) flags |= HIGHLIGHT;
     drawstyle(style(), flags);
     Rectangle r; glyph_box(r);

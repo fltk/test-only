@@ -129,7 +129,7 @@ int main(int argc, char ** argv) {
   b = new HighlightButton(X0, Y, W, H, "Everything !");
   b->image(&fold2,0 ,0, &fold3); // demonstrate the different ways to affect images
   // to remove the  belowmouse changing image comment this line:
-  b->image(fold1, fltk::BELOWMOUSE);
+  b->image(fold1, fltk::HIGHLIGHT);
   b->callback(cb_active_butt);
 #if !defined(TESTIMAGES)
   abutton = b = new Button(X1, Y, W, H, "Inactive");

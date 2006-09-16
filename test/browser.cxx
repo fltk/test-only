@@ -188,8 +188,8 @@ void below_mouse_cb(Button *w, long arg) {
 	    browser->get_symbol(Browser::GROUP,OPENED));
 	browser->set_symbol(Browser::LEAF, browser->get_symbol(Browser::LEAF),last2);
     } else {
-	last1 = browser->get_symbol(Browser::GROUP, fltk::BELOWMOUSE);
-	last2 = browser->get_symbol(Browser::LEAF, fltk::BELOWMOUSE);
+	last1 = browser->get_symbol(Browser::GROUP, fltk::HIGHLIGHT);
+	last2 = browser->get_symbol(Browser::LEAF, fltk::HIGHLIGHT);
 	browser->set_symbol(Browser::GROUP, 
 	    browser->get_symbol(Browser::GROUP), 0, 
 	    browser->get_symbol(Browser::GROUP,fltk::OPENED));
@@ -242,7 +242,7 @@ int main(int argc,char** argv) {
 
   CheckButton when_release_button(88, 260, 160, 20, "WHEN_RELEASE");
   when_release_button.callback((Callback*)cb_when_release, (void *)&tree);
-  when_release_button.set_flag(fltk::VALUE);
+  when_release_button.set_flag(fltk::STATE);
 
   CheckButton when_enter_key_button(88, 280, 160, 20, "WHEN_ENTER_KEY");
   when_enter_key_button.callback((Callback*)cb_when_enter_key, (void *)&tree);

@@ -1276,7 +1276,7 @@ int Browser::handle(int event) {
     // see if they are inside the widget and it takes the event:
     if (event_x() >= x && item()->send(event));
     else {
-	if (item()!=prev_item_ &&  item()->image(fltk::BELOWMOUSE)) {
+	if (item()!=prev_item_ &&  item()->image(fltk::HIGHLIGHT)) {
 	    if(prev_item_) prev_item_->redraw_label();
 	    prev_item_ = item();
 	    fltk::belowmouse(item());
@@ -1893,7 +1893,7 @@ ItemGroup* Browser::add_group(const char *label, Group* parent, int state,
     img2 = img2 ? img2 : defGroupSymbol2;
     img3 = img3 ? img3 : defGroupSymbol3;
     ItemGroup * i = new ItemGroup(img1,label,fltk::ALIGN_BROWSER | state);
-    if (img2) i->image (img2, fltk::BELOWMOUSE); 
+    if (img2) i->image (img2, fltk::HIGHLIGHT); 
     if (img3) i->image (img3, fltk::OPENED);// last parameter because leaves have open images
     return i;
 }
@@ -1904,14 +1904,14 @@ Item* Browser::add_leaf(const char *label,  Group* parent,
     img1 = img1 ? img1 : defLeafSymbol1;
     img2 = img2 ? img2 : defLeafSymbol2;
     Item* i = new Item(img1, label, fltk::ALIGN_BROWSER);
-    if (img2) i->image (img2, fltk::BELOWMOUSE);
+    if (img2) i->image (img2, fltk::HIGHLIGHT);
     return i;
 }
 
 const Symbol * Browser::get_symbol(Browser::NodeType nodetype, Flags  f) const {
     switch(f) {
     case fltk::NO_FLAGS:    return nodetype== Browser::GROUP ? defGroupSymbol1 : defLeafSymbol1;
-    case fltk::BELOWMOUSE:	    return nodetype== Browser::GROUP ? defGroupSymbol2 : defLeafSymbol2;
+    case fltk::HIGHLIGHT:   return nodetype== Browser::GROUP ? defGroupSymbol2 : defLeafSymbol2;
     case fltk::OPENED:	    return nodetype== Browser::GROUP ? defGroupSymbol3 : 0;
     default : return 0;
     }
@@ -1941,8 +1941,8 @@ void Browser::set_symbol(Browser::NodeType nodetype, const Symbol* img1,
 		    if ((it->is_group() ? true : false) == sel) {
 			if (it->image()==old1) 
 			    it->image(img1);
-			if (it->image(fltk::BELOWMOUSE)==old2) 
-			    it->image(img2, fltk::BELOWMOUSE);
+			if (it->image(fltk::HIGHLIGHT)==old2) 
+			    it->image(img2, fltk::HIGHLIGHT);
 			if (it->is_group() && it->image(fltk::OPENED)==old3) 
 			    it->image(img3, fltk::OPENED);
 		    }

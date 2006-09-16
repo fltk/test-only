@@ -92,7 +92,6 @@ ComboWindow::handle(int event) {
   case MOVE:
   case DRAG:
   case RELEASE:
-    return browser->handle(event);
   case KEY:
     return browser->handle(event);
   }
@@ -348,7 +347,6 @@ InputBrowser::draw() {
   }
   if (damage()&(DAMAGE_ALL|DAMAGE_VALUE|DAMAGE_HIGHLIGHT)) {
     Flags f = flags() & ~FOCUSED | OUTPUT;
-    if (win && win->visible()) f |= VALUE;
     if (over_now) f |= HIGHLIGHT;
     drawstyle(style(),f);
 
@@ -450,7 +448,7 @@ InputBrowser::popup() {
 
   if(resize_only) return;
 
-  set_flag(VALUE);
+  set_flag(PUSHED);
   redraw(DAMAGE_VALUE);
 
   win->exec(0, true);
@@ -458,7 +456,7 @@ InputBrowser::popup() {
   if(type()&NONEDITABLE) throw_focus();
   else fltk::focus(m_input);
 
-  clear_flag(VALUE);
+  clear_flag(PUSHED);
   redraw(DAMAGE_VALUE);
 }
 

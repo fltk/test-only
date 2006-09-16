@@ -75,7 +75,7 @@ void PopupMenu::draw() {
   Box* box = this->buttonbox();
   if (!box->fills_rectangle()) draw_background();
   Flags flags = this->flags()|OUTPUT;
-  if (::pushed == this) flags |= VALUE|HIGHLIGHT;
+  if (::pushed == this) flags |= PUSHED|HIGHLIGHT;
   drawstyle(style(), flags);
   Rectangle r(w(),h());
   box->draw(r);

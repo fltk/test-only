@@ -126,7 +126,7 @@ fltk::Window* make_preferences_window() {
           o->when(fltk::WHEN_CHANGED);
         }
          {fltk::CheckButton* o = include_H_from_C_button = new fltk::CheckButton(16, 84, 170, 22, "#include \"header\" in code");
-          o->set_flag(fltk::VALUE);
+          o->set_flag(fltk::STATE);
           o->callback((fltk::Callback*)include_H_from_C_button_cb);
         }
         o->end();

@@ -29,7 +29,6 @@
 #include <fltk/Item.h>
 #include <fltk/ItemGroup.h>
 #include <fltk/Divider.h>
-#include <stdio.h>
 
 using namespace fltk;
 
@@ -94,7 +93,7 @@ static const Fl_Menu_Item* add(Group* g, const Fl_Menu_Item* m,void* data) {
     // Shift the old flags values over to where they are in fltk,
     // but also allow new fltk flag values (this was done so RAW_LABEL
     // could be put in there for flwm)
-    o->set_flag(((m->flags<<8)&(INACTIVE|VALUE|INVISIBLE))|(m->flags&~0x1ff));
+    o->set_flag(((m->flags<<8)&(INACTIVE|STATE|INVISIBLE))|(m->flags&~0x1ff));
     if (m->flags & FL_MENU_DIVIDER) new Divider();
     m = next;
   }
@@ -124,6 +123,7 @@ Fl_Menu_Item::pulldown(int X, int Y, int W, int H,
     return this + menu.value();
   return 0;
 }
+
 // Searches the array for a shortcut that matches the current event
 // and returns it:
 const Fl_Menu_Item*

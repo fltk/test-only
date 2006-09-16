@@ -50,7 +50,7 @@ public:
   // selected color instead:
   if (!box->fills_rectangle()) {
     Color saved = getbgcolor();
-    if (drawflags()&VALUE) setbgcolor(drawstyle()->selection_color());
+    if (drawflags()&STATE) setbgcolor(drawstyle()->selection_color());
     box->draw(R);
     setbgcolor(saved);
     return;
@@ -58,7 +58,7 @@ public:
   // Otherwise draw the box with normal colors and then draw checkmark
   // inside it:
   box->draw(R);
-  if (drawflags()&VALUE) {
+  if (drawflags()&STATE) {
     Rectangle r(R); box->inset(r);
     if (r.h() < 6) {r = Rectangle(R,6,6); r.move(1,1);}
     int x = r.x()+1;

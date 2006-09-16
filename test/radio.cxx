@@ -102,7 +102,7 @@ multiple lines.");
       o->end();
     }
      {fltk::LightButton* o = ttlb = new fltk::LightButton(120, 230, 130, 30, "Show Tooltips");
-      o->set_flag(fltk::VALUE);
+      o->set_flag(fltk::STATE);
       o->callback((fltk::Callback*)cb_ttlb);
       o->tooltip("This button enables or disables tooltips");
     }

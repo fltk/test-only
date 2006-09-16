@@ -302,7 +302,7 @@ void Slider::draw()
 {
   Flags flags = this->flags();
   Flags f2 = flags & ~FOCUSED;
-  if (pushed()) f2 |= VALUE|PUSHED;
+  if (pushed()) f2 |= PUSHED;
   flags &= ~HIGHLIGHT;
 
   Box* box = this->box();
@@ -504,7 +504,7 @@ public:
 
     // this stops the scroller from being pushed-in, while leaving the flag
     // set so that an alternative glyph can draw differently when pushed:
-    if (!(drawflags()&15)) setdrawflags(drawflags()&~VALUE);
+    if (!(drawflags()&15)) setdrawflags(drawflags()&~PUSHED);
 
     // See if anything other than the slider is being drawn, if so
     // call the Widget::default_glyph:

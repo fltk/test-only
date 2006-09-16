@@ -45,7 +45,7 @@ public:
 
 void PlasticBox::_draw(const Rectangle& r) const
 {
-  if (drawflags(VALUE) && down_) {
+  if (drawflags(PUSHED|STATE) && down_) {
     down_->draw(r);
     return;
   }

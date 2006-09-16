@@ -195,13 +195,13 @@ FileChooser::FileChooser(const char *d, const char *p, int t, const char *title)
        {fltk::Group* o = new fltk::Group(0, 0, 470, 40);
         o->begin();
          {fltk::CheckButton* o = previewButton = new fltk::CheckButton(0, 0, 73, 20, "Preview");
-          o->set_flag(fltk::VALUE);
+          o->set_flag(fltk::STATE);
           o->shortcut(0x80070);
           o->callback((fltk::Callback*)cb_previewButton);
           previewButton->label(preview_label);
         }
          {fltk::CheckButton* o = showHiddenButton = new fltk::CheckButton(80, 0, 100, 20, "Show &Hidden");
-          o->set_flag(fltk::VALUE);
+          o->set_flag(fltk::STATE);
           o->shortcut(0x80070);
           o->callback((fltk::Callback*)cb_showHiddenButton);
           o->value(fileList->show_hidden() ? 1 : 0);

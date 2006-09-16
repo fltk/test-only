@@ -62,10 +62,10 @@ int MenuBar::handle(int event) {
       if (c) {
 	Tooltip::enter(this, Menu::get_location(this,0,0,highlight_), c);
       } else {
-    // If last item had tooltip, exit from it
-    if (last_ >= 0 && child(last_)->tooltip()) Tooltip::exit();
-    // If MenuBar has tooltip, enter it
-    if (tooltip()) Tooltip::enter(this);
+	// If last item had tooltip, exit from it
+	if (last_ >= 0 && child(last_)->tooltip()) Tooltip::exit();
+	// If MenuBar has tooltip, enter it
+	if (tooltip()) Tooltip::enter(this);
       }
     } else {
       Tooltip::exit();
@@ -82,15 +82,7 @@ J1:
     popup(Rectangle(w(), h()), 0, true);
     if (lastfocus_) lastfocus_->take_focus();
     lastfocus_ = 0;
-
-    // redraw in case we have hideable underscore
-    // and Choice in menu bar
-    if (style()->hide_underscore())
-        redraw(DAMAGE_EXPOSE|DAMAGE_CHILD);
-    else
-        // only Choice
-        redraw(DAMAGE_CHILD);
-
+    redraw(DAMAGE_CHILD);
     return 1;
   case SHORTCUT:
     // Test against the shortcut() of any item in any submenu:
@@ -102,7 +94,7 @@ J1:
 	if (w->active() && w->test_label_shortcut()) {
 	  if (w->is_group()) {value(i); goto J1;} // menu title
 	  focus_index(Group::find(w)); // Set focus_index, so Menu::get_item() works
-	  if (checkmark(w)) { w->invert_flag(VALUE); redraw(); }
+	  if (checkmark(w)) { w->invert_flag(STATE); redraw(); }
 	  execute(w); // button in the menu bar
 	  return 1;
 	}
@@ -113,10 +105,10 @@ J1:
     }
     return 0;
   case KEYUP:
-    // In the future maybe any shortcut() will work, but for now
-    // only the Acelerator key does. Setting the shortcut to zero will disable
-    // the accelerator key shortcut.
-    if (event_key()!=LeftAccKey && event_key()!=RightAccKey) break;
+    // In the future maybe any shortcut() will work, but for now only
+    // the Accelerator key does. Setting the shortcut to zero will
+    // disable the Accelerator key shortcut.
+    if (event_key() != LeftAccKey && event_key() != RightAccKey) break;
     if (style()->hide_underscore()) redraw();
     // checking for event_is_click insures that the keyup matches the
     // keydown that preceeded it, so Accel. was pressed & released without
@@ -144,10 +136,10 @@ J1:
     for (i = 0; i < children; i++) {
       Widget* w = child(i);
       if (w->active()) {
-    value(i); highlight_ = i;
-    lastfocus_ = fltk::focus();
-    take_focus();
-    return 1;
+	value(i); highlight_ = i;
+	lastfocus_ = fltk::focus();
+	take_focus();
+	return 1;
       }
     }
     break;
@@ -156,37 +148,37 @@ J1:
     case DownKey:
     case RightKey:
       if ((event_key()==RightKey && vertical()) ||
-      (event_key()==DownKey && !vertical())) {
-    /* Popup menu */
-    goto J1;
+	  (event_key()==DownKey && !vertical())) {
+	/* Popup menu */
+	goto J1;
       }
       i=value()+1;
 J3:
       for (; i < children; i++) {
-    Widget* w = child(i);
-    if (w->active()) {
-      value(i); highlight_ = i;
-      redraw(DAMAGE_CHILD);
-      return 1;
-    }
+	Widget* w = child(i);
+	if (w->active()) {
+	  value(i); highlight_ = i;
+	  redraw(DAMAGE_CHILD);
+	  return 1;
+	}
       }
       i = 0;
       goto J3;
     case UpKey:
     case LeftKey:
       if ((event_key()==LeftKey && vertical()) ||
-      (event_key()==UpKey && !vertical())) {
-    break;
+	  (event_key()==UpKey && !vertical())) {
+	break;
       }
       i=value()-1;
 J4:
       for (; i >= 0; i--) {
-    Widget* w = child(i);
-    if (w->active()) {
-      value(i); highlight_ = i;
-      redraw(DAMAGE_CHILD);
-      return 1;
-    }
+	Widget* w = child(i);
+	if (w->active()) {
+	  value(i); highlight_ = i;
+	  redraw(DAMAGE_CHILD);
+	  return 1;
+	}
       }
       i = children-1;
       goto J4;

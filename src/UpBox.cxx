@@ -208,9 +208,9 @@ Box* const fltk::FLAT_BOX = &flatBox;
 
     The normal down_ box draws the pattern "WWHHPPAA"
 
-    The VALUE flag will cause the pattern from down_() to be used
-    instead, allowing you to draw a different bezel when pushed
-    in.
+    The PUSHED or STATE flags will cause the pattern from down_() to
+    be used instead, allowing you to draw a different bezel when
+    pushed in.
 
     The INVISIBLE flag will not draw the interior, which can make
     many widgets draw faster and with less blinking.
@@ -224,7 +224,7 @@ void fl_to_inactive(const char* s, char* to) {
 
 void FrameBox::_draw(const fltk::Rectangle& R) const
 {
-  if (drawflags(VALUE) && down_) {
+  if (drawflags(PUSHED|STATE) && down_) {
     down_->draw(R);
     return;
   }
@@ -268,7 +268,7 @@ void FrameBox::_draw(const fltk::Rectangle& R) const
 */
 
 void FrameBox::inset(fltk::Rectangle& r) const {
-  if (drawflags(VALUE) && down_) {
+  if (drawflags(PUSHED|STATE) && down_) {
     down_->inset(r);
   } else {
     r.x(r.x()+dx_);
@@ -349,13 +349,13 @@ Box* const fltk::BORDER_FRAME = &borderFrame;
 
 /*! \class fltk::HighlightBox
   Draws nothing normally, this can draw as any other box
-  (passed to the constructor) when HIGHLIGHT, VALUE, or PUSHED
+  (passed to the constructor) when HIGHLIGHT, STATE, or PUSHED
   is turned on in the flags. This can be used to make frames appear
   when the mouse points at widgets or when the widget is turned on.
 */
 void HighlightBox::_draw(const fltk::Rectangle& r) const
 {
-  if (drawflags(HIGHLIGHT|VALUE|PUSHED))
+  if (drawflags(HIGHLIGHT|STATE|PUSHED))
     down_->draw(r);
 //   else
 //     FlatBox::_draw(r);

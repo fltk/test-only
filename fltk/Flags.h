@@ -81,7 +81,7 @@ enum {
 
   INACTIVE		  = 0x00000100, //!< !active()
   OUTPUT		  = 0x00000200, //!< does not get events, draw text colors
-  VALUE			  = 0x00000400, //!< true/on state for buttons 
+  STATE			  = 0x00000400, //!< state(), value() for buttons 
   SELECTED		  = 0x00000800, //!< chosen in browser/menu, draw selected colors
   INVISIBLE		  = 0x00001000, //!< !visible(), draw_frame()
   HIGHLIGHT		  = 0x00002000, //!< draw highlighted
@@ -92,13 +92,12 @@ enum {
   TAB_TO_FOCUS		  = 0x00040000, //!< Widget::tab_to_focus();
   CLICK_TO_FOCUS	  = 0x00080000, //!< Widget::click_to_focus()
   INACTIVE_R		  = 0x00100000, //!< draw it grayed-out
-  FOCUSED		  = 0x00200000, //!< draw with keyboard focus also used for belowmouse widget image (image3_) 
+  FOCUSED		  = 0x00200000, //!< draw with keyboard focus
   PUSHED		  = 0x00400000, //!< draw pushed-in 
   RESIZE_NONE		  = 0,	//!< default behavior
   RESIZE_FIT		  = 0x01000000, //!< proportionnaly resize img in widget
   RESIZE_FILL		  = 0x00800000, //!< resize img to fill the widget
-  BELOWMOUSE		  = FOCUSED,	//!< used by image() and set_symbol() for state corresponding to widget below mouse
-  OPENED		  = VALUE,	//!< used by image() and set_symbol() for state corresponding to widget open (i.e group node)
+  OPENED		  = STATE	//!< opened browser hierarchy parent
 };
 
 }

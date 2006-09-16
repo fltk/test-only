@@ -386,7 +386,7 @@ style_update(int        pos,		// I - Position of update
 
   style_parse(text, style, end - start);
 
-//  printf("new style = \"%s\", new last='%c'...\n", 
+//  printf("new style = \"%s\", new last='%c'...\n",
 //         style, style[end - start - 1]);
 
   stylebuf->replace(start, end, style);
@@ -394,7 +394,7 @@ style_update(int        pos,		// I - Position of update
 
   if (start==end || last != style[end - start - 1]) {
 //    printf("Recalculate the rest of the buffer style\n");
-    // Either the user deleted some text, or the last character 
+    // Either the user deleted some text, or the last character
     // on the line changed styles, so reparse the
     // remainder of the buffer...
     free(text);
@@ -490,13 +490,13 @@ void load_file(const char *newfile, int ipos) {
   int r;
   if (!insert) r = textbuf->loadfile(newfile);
   else r = textbuf->insertfile(newfile, ipos);
-  if (r) {    
+  if (r) {
     if (fltk::ask("File '%s' does not exit. Do you want to create one?", newfile))
       strcpy(filename, newfile);
     else
       strcpy(filename, "");
   } // if
-  else 
+  else
     if (!insert) strcpy(filename, newfile);
   loading = 0;
   textbuf->call_modify_callbacks();
@@ -800,7 +800,7 @@ int main(int argc, char **argv) {
   if (argc > 1) {
     window->label(" "); // Prevent from displaying "Untitled.txt" before its time...
     load_file(argv[1], -1);
-  } 
+  }
 
   return fltk::run();
 }
