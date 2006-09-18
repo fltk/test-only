@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Copyright 1998-2006 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -103,7 +103,8 @@ class ColorSymbol : public Symbol {
 public:
   ColorSymbol() : Symbol("C") {}
   void _draw(const Rectangle&) const {
-    if (!drawflags(INACTIVE_R)) setcolor((Color)strtoul(text()+1,0,0));
+    if (!drawflags(INACTIVE_R))
+      setcolor(parsecolor(text()+1, text_length()-1));
   }
   void _measure(int& w, int& h) const {
     w = 0;
@@ -111,14 +112,26 @@ public:
 };
 static const ColorSymbol colorsymbol;
 
+// Read a number and return n*getsize()/12 or just n if the number
+// ends with 'p'.  Other units may be added in the future.
+static double get_pixels(const char* text) {
+  char* p;
+  double number = strtod(text,&p);
+  if (*p == 'p') return number;
+  return number*getsize()/12;
+}
+
 class SizeSymbol : public Symbol {
 public:
   SizeSymbol(const char* n) : Symbol(n) {}
   void dostuff() const {
-    float n = float(strtod(text()+1,0));
-    if (n < 0) n = getsize()*12/(12-n);
-    else if (*(text()+1)=='+') n = getsize()*(12+n)/12;
-    else if (n <= 0) n = normal_size;
+    double n = get_pixels(text()+1);
+    if (n < 0)
+      n = getsize()/(1-n/getsize());
+    else if (*(text()+1)=='+')
+      n = getsize()+n;
+    else if (n <= 0)
+      n = normal_size;
     setfont(getfont(), n);
   }
   void _draw(const Rectangle&) const {dostuff();}
@@ -138,22 +151,14 @@ public:
 };
 static const NothingSymbol nothingsymbol;
 
-class MxSymbol : public Symbol {
-public:
-  MxSymbol() : Symbol("mx") {}
-  void _draw(const Rectangle&) const {}
-  void _measure(int& w, int& h) const {
-    w = (int)strtod(text()+2,0);
-  }
-};
-static const MxSymbol mxsymbol;
-
 class DxSymbol : public Symbol {
 public:
   DxSymbol() : Symbol("x") {}
   void _draw(const Rectangle&) const {}
   void _measure(int& w, int& h) const {
-    w = (int)(strtod(text()+1,0)*h/12);
+    // unsigned is reserverd for future use:
+    if (text()[1] != '+' && text()[1] != '-') {w = 0; return;}
+    w = int(get_pixels(text()+1)+.5f);
   }
 };
 static const DxSymbol dxsymbol;
@@ -163,8 +168,10 @@ public:
   DySymbol() : Symbol("y") {}
   void _draw(const Rectangle&) const {}
   void _measure(int& w, int& h) const {
-    nextdy -= (float)(strtod(text()+1,0)*h/12);
     w = 0;
+    // unsigned is reserverd for future use:
+    if (text()[1] != '+' && text()[1] != '-') return;
+    nextdy -= (float)get_pixels(text()+1);
   }
 };
 static const DySymbol dysymbol;
@@ -176,8 +183,7 @@ public:
   BgBox() : Symbol("B") {}
   void _draw(const Rectangle&) const {}
   void _measure(int& w, int& h) const {
-    bgboxcolor = (Color)strtoul(text()+1,0,0);
-    if (!bgboxcolor) bgboxcolor = BLACK;
+    bgboxcolor = parsecolor(text()+1, text_length()-1);
     w = h = 0;
   }
 };
@@ -385,10 +391,10 @@ static void wrap(
     const float text_w = getwidth(word_end, p-word_end);
     int symbol_w, symbol_h;
     if (symbol) {
-      Symbol::text(p+1);
+      Symbol::text(p+1,q-p-1);
       symbol_w = symbol_h = int(getsize());
       symbol->measure(symbol_w, symbol_h);
-      Symbol::text("");
+      Symbol::text("",0);
     } else {
       symbol_w = symbol_h = 0;
     }
@@ -462,10 +468,10 @@ static void wrap(
 
 // Split at newlines and tabs into sections and then call wrap on them
 // Return value is the y height of the text. The width is stored in
-// max_x.
+// max_x. W is only used if ALIGN_WRAP is on.
 static float split(
     const char* str,
-    int W, int /*H*/,
+    int W,
     Flags flags,
     float (*getwidth)(const char*, int) // lets you change the width function
     )
@@ -562,7 +568,7 @@ void fltk::drawtext(void (*textfunction)(const char*,int,float,float),
 {
   bgboxcolor = 0;
   normal_color = getcolor();
-  int h = int(split(str, r.w(), r.h(), flags, getwidth)+.5);
+  int h = int(split(str, r.w(), flags, getwidth)+.5);
   int dy;
   if (flags & ALIGN_BOTTOM) {
     dy = r.b()-h;
@@ -602,7 +608,7 @@ void fltk::drawtext(void (*textfunction)(const char*,int,float,float),
 	  push_clip(xx, r.y(), r.w(), r.h());
       }
       if (s.symbol) {
-	Symbol::text(s.start);
+	Symbol::text(s.start,s.end-s.start);
 	s.symbol->draw(Rectangle(int(s.x)+r.x(), int(s.y+dy), int(s.w), int(s.h)));
       } else {
 	textfunction(s.start, s.end-s.start, s.x+r.x(), s.y+dy);
@@ -613,14 +619,14 @@ void fltk::drawtext(void (*textfunction)(const char*,int,float,float),
     for (h = 0; h < segment_count; h++) {
       Segment& s = segments[h];
       if (s.symbol) {
-	Symbol::text(s.start);
+	Symbol::text(s.start,s.end-s.start);
 	s.symbol->draw(Rectangle(int(s.x)+r.x(), int(s.y+dy), int(s.w), int(s.h)));
       } else {
 	textfunction(s.start, s.end-s.start, s.x+r.x(), s.y+dy);
       }
     }
   }
-  Symbol::text("");
+  Symbol::text("",0);
 }
 
 /**
@@ -632,8 +638,12 @@ void fltk::drawtext(void (*textfunction)(const char*,int,float,float),
   flags!  \a w and \a h are changed to the size of the resulting box.
 */
 void fltk::measure(const char* str, int& w, int& h, Flags flags) {
+#ifdef DEBUG
+  // remove warning from Valgrind/Purify:
+  if (!(flags & ALIGN_WRAP)) w = 0;
+#endif
   if (!str || !*str) {w = 0; h = int(getsize()+.5); return;}
-  h = int(split(str, w, h, flags, getwidth)+.5);
+  h = int(split(str, w, flags, getwidth)+.5);
   w = int(max_x+.5);
   setfont(normal_font, normal_size);
 }
@@ -645,7 +655,11 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 void fltk::measure(float (*getwidth)(const char*, int),
 		   const char* str, float& w, float& h, Flags flags)
 {
-  h = split(str, int(w), int(h), flags, getwidth);
+#ifdef DEBUG
+  // remove warning from Valgrind/Purify:
+  if (!(flags & ALIGN_WRAP)) w = 0;
+#endif
+  h = split(str, int(w), flags, getwidth);
   w = max_x;
   setfont(normal_font, normal_size);
 }

@@ -98,6 +98,7 @@ void Choice::draw() {
       Flags saved = o->flags();
       if (focused()) o->set_flag(SELECTED);
       else o->clear_flag(SELECTED);
+      if (flags()&(INACTIVE|INACTIVE_R)) o->set_flag(INACTIVE_R);
       r.move_x(2);
       push_clip(r);
       push_matrix();

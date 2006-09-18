@@ -460,8 +460,10 @@ void Image::color_average(Color c, float i) {
 		    previous_word = p;
 		    while (*p && !isspace(*p)) p++;
 		}
-		
-		if (fltk::parse_color(p, r, g, b)) {
+
+                Color c = fltk::Color(p);
+		if (c) {
+                  split_color(c, r,g,b);
 		    r = (ia * r + ir) >> 8;
 		    g = (ia * g + ig) >> 8;
 		    b = (ia * b + ib) >> 8;

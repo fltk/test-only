@@ -18,9 +18,11 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
+//
 
 #ifndef fltk_Symbol_h
 #define fltk_Symbol_h
+
 #include "FL_API.h"
 #include "Color.h"
 #include "Rectangle.h"
@@ -33,6 +35,7 @@ class Style;
 class FL_API Symbol {
   const char* name_;
   static const char* text_;
+  static unsigned text_length_;
 
   // Forbid use of copy contructor and assign operator
   Symbol & operator=(const Symbol &);
@@ -65,8 +68,9 @@ class FL_API Symbol {
   static const Symbol* find(const char* name);
   static const Symbol* find(const char* start, const char* end);
   static const Symbol* iterate(int& index);
-  static void text(const char* s) {text_=s;}
+  static void text(const char* s, unsigned n) {text_=s; text_length_=n;}
   static const char* text() {return text_;}
+  static unsigned text_length() {return text_length_;}
   
   // virtual ~Symbol() {}  // not done as it slows program exit
 };

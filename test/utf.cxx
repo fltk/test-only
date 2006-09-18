@@ -46,7 +46,6 @@ void Drawing::draw() {
   unsigned base = scroll*16;
   int y = 0;
   Box* box = this->box();
-  Style style = *(this->style());
   for (; y < h(); y+=itemh, base+=16) {
     char buf[20];
     sprintf(buf, "U+%03Xx", base>>4);

@@ -801,7 +801,7 @@ void Browser::draw() {
 // Scrolling and layout:
 
 /*!  If the current item is a parent, set the open state (the
-  fltk::VALUE flags) to the given value and redraw the browser
+  fltk::STATE flags) to the given value and redraw the browser
   correctly. Returns true if the state was actually changed, returns
   false if it was already in that state.  */
 bool Browser::set_item_opened(bool open)
@@ -1064,7 +1064,7 @@ bool Browser::set_focus() {
 
   First it turns off the fltk::INVISIBLE flag on the current item, and
   turns off the fltk::INVISIBLE flag and opens (turning on the
-  fltk::VALUE flag) all parent items. These flag changes cause
+  fltk::STATE flag) all parent items. These flag changes cause
   flags_changed() to be called on any fltk::List that you have
   assigned to the browser.
 

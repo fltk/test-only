@@ -32,17 +32,23 @@ consumed).
 
   "@f" or "@t" in a label changes the font to fixed-pitch.
 
-  "@Ccolor" will change the color to xyz, which is a color number. It
-  is easiest to specify it in hex, "@C0xff442200" will make red=ff,
-  green=44, and blue=22.
+  "@Ccolor" will change the color of the text. Color can be any
+  string accepted by parsecolor().
 
-  "@snumber" will set the font size directly to the number.
+  "@sN" will set the font to N/12 times the current size;
 
-  "@s+number" will set it to (12+n)/12 times the current size.
+  "@sNp" will set the font to N pixels.
 
-  "@s-number" will set it to 12/(12+n) times the current size.
+  "@s+N" will multiply the font size by (12+N)/12
 
-  "@s0" will restore the initial size.
+  "@s-N" will multiply the font size by 12/(12+N)
+
+  "@s+Np" will add N pixels to the font size
+
+  "@s-Np" will reduce the font size, but the amount is subject
+  to change.
+
+  "@s0" will restore the initial font size.
 
   "@S..." is the same as "@s..." for back-compatability.
 
@@ -50,23 +56,22 @@ consumed).
   characters later in the string. This will allow you to concatenate
   some @-commands to the start of an arbitrary string.
 
-  "@mxnumber" draws a blank exactly n pixels wide. The number may be
-  negative, this is useful for kerning or overprinting
-  characters. For positive N please use a '+' sign, so that unsigned
-  values can be reserved for future use.
+  "@x+N" draws a blank exactly n*(fontsize/12) wide.
 
-  "@xnumber" draws a blank exactly n*(fontsize/12) wide. N may be negative.
-  This is useful for kerning or overprinting characters. For positive
-  N please use a '+' sign, so that unsigned values can be reserved
-  for future use.
+  "@x-N" moves backwards by n*(fontsize/12) (ie it kerns).
 
-  "@ynumber" will move the y origin \e up (not down) by n*(fontsize/12) pixels.
-  The "@n" command will restore the y origin to the baseline.
-  This can be used to produce super/subscripts. You should start
-  positive numbers with '+' for compatability with possible
-  future versions of fltk.
+  Add a 'p' suffix to the number to move exactly n pixels, instead of
+  a scaled amount. Other suffixes may be added in the future.
 
-  "@Bcolor" draws a solid box of the given color behind the text. Not
+  "@y+number" will move the y origin \e up by n*(fontsize/12).
+  "@y-number" will move the y origin \e down n*(fontsize/12).
+  This can be used to produce super/subscripts.
+  Add a 'p' suffix to the number to move exactly n pixels, instead of
+  a scaled amount. Other suffixes may be added in the future.
+  To restore the y origin to the baseline, use the "@n" command.
+
+  "@Bcolor" draws a solid box of the given color behind the text.
+  "color" can be any string understood by parsecolor(). Not
   sure if this is compatable with fltk1.1.
 
   "@l" makes the rest of the label be left-justified.

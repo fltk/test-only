@@ -108,6 +108,7 @@ inline Color color(unsigned char r, unsigned char g, unsigned char b) {
 inline Color color(unsigned char g) {
   return Color(g*0x1010100u); }
 FL_API Color color(const char*);
+FL_API Color parsecolor(const char*, unsigned length);
 FL_API Color lerp(Color c0, Color c1, float f);
 FL_API Color inactive(Color);
 FL_API Color inactive(Color, Flags f);
@@ -117,7 +118,6 @@ FL_API void set_color_index(Color index, Color);
 FL_API Color get_color_index(Color index);
 FL_API void set_background(Color);
 FL_API Color nearest_index(Color);
-FL_API int parse_color(const char* p, uchar& r, uchar& g, uchar& b);
 
 }
 

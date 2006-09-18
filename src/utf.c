@@ -93,8 +93,7 @@ static unsigned short cp1252[32] = {
 
     Direct testing for the 1-byte case (as shown above) will also
     speed up the scanning of strings where the majority of characters
-    are ASCII. If you don't care for the CP1252 translation you
-    should use *p if it is not in the range 0xc2 through 0xf4.
+    are ASCII.
 */
 unsigned utf8decode(const char* p, const char* end, int* len)
 {

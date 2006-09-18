@@ -190,18 +190,18 @@ const Symbol* Symbol::find(const char* name) {
     points to the character after the end (this allows the name to be
     extracted from a longer string without having to copy it).
 
-    drawtext() can pass "arguments" to symbols as extra text
-    before and after the actual name. This function strips off likely
-    arguments: it removes a leading '#', then it will remove a leading
-    +/- sign and integer, and any number of trailing comma-seperated
-    integers, hex, or floating point constants. So the symbol
-    "+400foo1,2.3,0xbeef" will lookup "foo".
+    drawtext() can pass "arguments" to symbols as extra text before
+    and after the actual name. If the text does not seem to correspond
+    to a symbol name, this function tries to strip off these argments
+    and try again. The current rules are to remove a leading '#' and
+    '+' or '-' sign, remove a leading and trailing integer, so
+    "@+400foo21" will locate the symbol "foo". If that still does not
+    work, it tries the first letter as a 1-letter symbol, so
+    "@Ccolorname" will work.
 
-    When the symbol's draw() function is called, text() will have been
-    set to point at \a name, so the arguments can be read by the
-    symbol method. If draw() is called by something other than
-    drawtext() then text() will be a zero-length string.
-
+    When the symbol's draw() function is called, text() is set
+    to \a name and text_length() is set to \a end minus \a name,
+    so the draw() method can examine these arguments.
 */
 const Symbol* Symbol::find(const char* name, const char* end) {
   if (!symbols_initialized) return 0; // does this ever happen?
@@ -210,47 +210,51 @@ const Symbol* Symbol::find(const char* name, const char* end) {
   int pos = hashindex(name, end-name, false);
   if (hashtable[pos]) return hashtable[pos];
 
-  // Now strip text off both ends and try again:
+  // Strip leading argument:
+  const char* a = name;
 
   // for back-compatability a leading # is ignored:
-  const char* a = name;
+  // This was used in fltk1 and forms to indicate non-distored scaling:
   if (a[0] == '#') a++;
 
   // Remove any leading integer:
   if (a < end-1 && (a[0]=='+'||a[0]=='-') && isdigit(a[1])) a++;
   while (a < end && isdigit(a[0])) a++;
 
-  // Remove trailing "arguments":
-  const char* p = a;
-  while (p < end) {
-    if (isdigit(*p)) break;
-    if (p < end-1 && (*p=='+'||*p=='-'||*p=='.') && isdigit(p[1])) break;
-    p++;
-  }
-  if (a < p && (a > name || p < end)) {
-    const char* q = p+1;
-    while (q < end) {
-      if (isxdigit(*q) || strchr("+-.eExX,",*q)) q++;
-      else return 0;
-    }
-    pos = hashindex(a, p-a, false);
-    return hashtable[pos];
-  }
+  // Remove trailing integer:
+  while (end>a+1 && isdigit(*(end-1))) --end;
+
+  pos = hashindex(a, end-a, false);
+  if (hashtable[pos]) return hashtable[pos];
+
+  // Try 1-letter name:
+  pos = hashindex(a, 1, false);
+  if (hashtable[pos]) return hashtable[pos];
+
   return 0;
 }
 
-/** \fn void Symbol::text(const char*)
-    Set the value returned by text()
+/** \fn void Symbol::text(const char*, unsigned)
+    Set the values returned by text() and text_length()
 */
 
 /** \fn const char* Symbol::text()
-
     Return a pointer to right after the '@' sign to the text used to
     invoke this symbol. This is a zero-length string if not being
     called from drawtext(). This is useful for extracting the
     arguments that are skipped by the find() method.
+    \see text_length()
 */
 const char* Symbol::text_ = "";
+
+/** \fn const char* Symbol::text_length()
+    Return the number of bytes between the '@' sign and the ';' or
+    null or space that terminates the symbol when called from drawtext().
+    This is useful for parsing the arguments. This returns zero if
+    it is not being called from drawtext().
+    \see text()
+*/
+unsigned Symbol::text_length_ = 0;
 
 /** \fn void Symbol::measure(int& w, int& h) const {}
 

@@ -111,7 +111,7 @@ int main(int argc, char** argv) {
 	((fltk::Button*)b)->value(fltk::event_key_state(i));
 	if (i == fltk::event_key()) ((fltk::Button*)b)->take_focus();
       } else if (b->callback() == (fltk::Callback*)shift_cb) {
-	unsigned i = (unsigned) b->argument();
+	unsigned i = (unsigned)b->argument();
 	((fltk::Button*)b)->value(fltk::event_state(i));
       }
     }

@@ -1,4 +1,3 @@
-//
 // "$Id$"
 //
 // Symbol test program for the Fast Light Tool Kit (FLTK).
@@ -21,7 +20,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #include <fltk/Window.h>
 #include <fltk/Browser.h>
@@ -49,7 +47,7 @@ struct fl_char_table {const char* name; const char* text;} specialtable[] = {
   {"t", "@t@@t;\t@t;typewriter"},
   {"s", "@t@@s+#;\t@n@s+4;bigger"},
   {"S", "@t@@s-#;\t@n@S-4;smaller"},
-  {"x", "@t@@x#;\t@n@x10;t@x+3;e@x-4;x@x+5;t (displace x)"},
+  {"x", "@t@@x#;\t@n@x+10;t@x+3;e@x-4;x@x+5;t (displace x)"},
   {"y", "@t@@y#;\t@n@y-1;t@y+1;e@y+3;x@y+5;t@n; (displace y)"},
   {".", "@t@@.;\t@n@.;raw mode: @&"},
   {"l",	"@t@@l;\t@n@l;left"},

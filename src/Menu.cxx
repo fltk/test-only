@@ -54,7 +54,7 @@ using namespace fltk;
   and must implement the flags_changed() method.
 
   If you wish to make a hierarcial Browser, you may want to have space
-  in your data to store the state of the fltk::VALUE flag on each parent
+  in your data to store the state of the fltk::STATE flag on each parent
   item, and implement the flags_changed() method. If you don't do this
   the browser is only able to keep one item open at each level.
 
@@ -74,7 +74,7 @@ using namespace fltk;
 
   This should return -1 if the item is not a "parent" item or the
   index array is illegal. It is not necessary to return the correct
-  value until the parent is "open", which means the fltk::VALUE flag
+  value until the parent is "open", which means the fltk::STATE flag
   was set in it, so if it is expensive to calculate the number you can
   return 1 for any closed parent.
 
@@ -157,7 +157,7 @@ Widget* List::child(const Menu* menu, const int* indexes,int level) {
   you can copy the values to permanent storage, and perhaps change
   other displays of the selection.
 
-  Currently only the fltk::VALUE and fltk::SELECTED flags are ever changed.
+  Currently only the fltk::STATE and fltk::SELECTED flags are ever changed.
 
   Here is a sample implementation, where Node is a data type that you
   have defined:

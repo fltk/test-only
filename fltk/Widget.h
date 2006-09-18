@@ -26,6 +26,7 @@
 
 #include "Style.h"
 #include "Rectangle.h"
+
 namespace fltk {
 
 class FL_API Widget;
@@ -95,11 +96,11 @@ public:
   void	copy_label(const char* a);
 
   // image manips
-  //!  get the image Symbol according to the desired state (NO_FLAGS, INACTIVE, BELOWMOUSE, PUSHED or OPENED)
+  //!  get the image Symbol according to the desired state (NO_FLAGS, INACTIVE, HIGHLIGHT, PUSHED or OPENED)
   const Symbol* image(Flags flags=NO_FLAGS) const;
-  //!  set the image Symbol according to the desired state (NO_FLAGS, INACTIVE, BELOWMOUSE, PUSHED or OPENED)
+  //!  set the image Symbol according to the desired state (NO_FLAGS, INACTIVE, HIGHLIGHT, PUSHED or OPENED)
   void	image(const Symbol* a, Flags flags=NO_FLAGS);	
-  //!  set the image Symbol according to the desired state (NO_FLAGS, INACTIVE, BELOWMOUSE, PUSHED or OPENED)
+  //!  set the image Symbol according to the desired state (NO_FLAGS, INACTIVE, HIGHLIGHT, PUSHED or OPENED)
   void	image(const Symbol& a,Flags flags=NO_FLAGS) {  image(&a, flags); }
   //! get the image relative to a particular event/state 
   //!  convenient way to set several images at once
