@@ -87,11 +87,6 @@ FL_API void awake(void* message = 0);
 FL_API void* thread_message();
 inline bool in_main_thread() {return in_main_thread_;}
 
-FL_API int monitor_x();
-FL_API int monitor_y();
-FL_API int monitor_w();
-FL_API int monitor_h();
-
 }
 
 #endif

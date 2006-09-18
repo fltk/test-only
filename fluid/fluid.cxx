@@ -68,6 +68,7 @@ const char *copyright =
 #include <fltk/string.h>
 #include <fltk/HelpDialog.h>
 #include <fltk/PackedGroup.h>
+#include <fltk/Monitor.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -820,7 +821,7 @@ Window * splash() {
     if (!about_panel) make_about_panel(copyright);
     Window * o= about_panel;
     o->border(false);
-    o->position(fltk::monitor_w()/2-o->w()/2,fltk::monitor_h()/2-o->h()/2);
+    o->Rectangle::set(fltk::Monitor::find(0,0),o->w(),o->h(),fltk::ALIGN_CENTER);
     o->show();
     about_ok->clear_visible();
     o->flush();
@@ -834,7 +835,7 @@ void about_cb(Widget *, void *) {
     //copyright_box->hide();
     //display_group->show();
     o->border(true);
-    o->position(fltk::monitor_w()/2-o->w()/2,fltk::monitor_h()/2-o->h()/2);
+    o->Rectangle::set(fltk::Monitor::find(0,0),o->w(),o->h(),fltk::ALIGN_CENTER);
     about_ok->set_visible();
     o->show();
 }

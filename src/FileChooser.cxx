@@ -294,7 +294,7 @@ FileChooser::FileChooser(const char *d, const char *p, int t, const char *title)
   callback_ = 0;
   data_ = 0;
   directory_[0] = 0;
-  window->size_range(window->w(), window->h(), fltk::monitor_w(), fltk::monitor_h());
+  window->size_range(window->w(), window->h(), 0, 0);
   type(t);
   filter(p);
   update_favorites();
@@ -385,8 +385,8 @@ void FileChooser::show() {
 }
 
 void FileChooser::show(int x, int y) {
-  window->show();
   window->resize(x, y,window->w(),window->h());
+  window->show();
   fltk::flush();
   fltk::cursor(fltk::CURSOR_WAIT);
   rescan();

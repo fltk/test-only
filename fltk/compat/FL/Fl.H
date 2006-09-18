@@ -9,13 +9,15 @@
 #include <fltk/Box.h>
 #include <fltk/error.h>
 #include <fltk/visual.h>
-#include <fltk/Widget.h>
+#include <fltk/Monitor.h>
 
 namespace Fl = fltk;
 
 typedef fltk::TimeoutHandler Fl_Timeout_Handler;
 
 namespace fltk {
+
+  class Widget;
 
   // fltk2 does not keep track of selection owner:
   inline fltk::Widget* selection_owner() {return 0;}
@@ -24,10 +26,10 @@ namespace fltk {
 
   inline void visible_focus(int) {} // fltk2 always acts like this is off
 
-  inline int x() {return monitor_x();}
-  inline int y() {return monitor_y();}
-  inline int w() {return monitor_w();}
-  inline int h() {return monitor_h();}
+  inline int x() {return Monitor::all().x();}
+  inline int y() {return Monitor::all().y();}
+  inline int w() {return Monitor::all().w();}
+  inline int h() {return Monitor::all().h();}
 
   inline void set_color(Color c, uchar r, uchar g, uchar b) {
     set_color_index(c,color(r,g,b));
@@ -43,6 +45,11 @@ namespace fltk {
     else return f->name();
   }
   inline int get_font_sizes(Font* f, int*& sizep) {return f->sizes(sizep);}
+
+  inline int box_dx(const Box* b) {return b->dx();}
+  inline int box_dy(const Box* b) {return b->dy();}
+  inline int box_dw(const Box* b) {return b->dw();}
+  inline int box_dh(const Box* b) {return b->dh();}
 
   inline int event_key(int k) {return event_key_state(k);}
 
