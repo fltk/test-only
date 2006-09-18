@@ -119,8 +119,6 @@ FileIcon::FileIcon(const FileIcon& f) {
   // change the name so that know it's a copy
   sprintf(n, "%s%s", f.name() ? f.name() : "", "(copy)");
   name(strdup(n));
-  sprintf(n, "%s%s", f.text() ? f.text() : "", "(copy)");
-  text(strdup(n));
 
   if (f.alloc_data_ && f.data_) {
     this->data_=(short*) calloc(sizeof(short),f.alloc_data_);

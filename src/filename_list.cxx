@@ -36,9 +36,11 @@
 #include <fltk/filename.h>
 
 #if ! HAVE_SCANDIR
+extern "C" {
 int scandir (const char *dir, dirent ***namelist,
 	 int (*select)(dirent *),
 	 int (*compar)(const dirent*const*, const dirent*const*));
+}
 #endif
 
 int fltk::alphasort(const dirent*const*a, const dirent*const*b) {
@@ -56,28 +58,26 @@ int fltk::filename_list(const char *d, dirent ***list,
   // do this even for our own internal version because some compilers
   // will not cast it to the non-const version! Egad. So we have to
   // use if's to go to what the various systems use:
-#if HAVE_SCANDIR && !defined(__APPLE__) && !defined(__linux) && !defined(__FreeBSD__)&& !defined(__CYGWIN__)
+#if !HAVE_SCANDIR
+  // This version is when we define our own scandir (WIN32 and perhaps
+  // some Unix systems):
   int n = scandir(d, list, 0, sort);
-#elif HAVE_SCANDIR && ( defined(__linux) || defined (__FreeBSD__) )
+#elif defined(__linux)
   int n = scandir(d, list, 0, (int(*)(const void*,const void*))sort);
 #elif defined(__hpux) || defined(__CYGWIN__)
   // HP-UX, Cygwin define the comparison function like this:
   int n = scandir(d, list, 0, (int(*)(const dirent **, const dirent **))sort);
-#elif defined(__osf__)
+#elif defined(__osf__) || defined(__sgi)
   // OSF, DU 4.0x
   int n = scandir(d, list, 0, (int(*)(dirent **, dirent **))sort);
 #elif defined(_AIX)
   // AIX is almost standard...
   int n = scandir(d, list, 0, (int(*)(void*, void*))sort);
-#elif !defined(__sgi) && !defined(WIN32)
+#else
   // The vast majority of UNIX systems want the sort function to have this
   // prototype, most likely so that it can be passed to qsort without any
   // changes:
   int n = scandir(d, list, 0, (int(*)(const void*,const void*))sort);
-#else
-  // This version is when we define our own scandir (WIN32 and perhaps
-  // some Unix systems) and apparently on IRIX:
-  int n = scandir(d, list, 0, sort);
 #endif
 
 #if defined(WIN32) && !defined(__CYGWIN__)

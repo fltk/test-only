@@ -156,37 +156,7 @@ fltk::dir_chooser(const char *message,	// I - Message for titlebar
   else return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #if 0
-
-
-
-
-
-
 
 static bool use_system_fc = false;
 /*! On Windows this makes file_chooser() call the Win32 file chooser
@@ -280,8 +250,7 @@ const char* fltk::file_chooser(const char* message,
     fc->text(fname);
     fc->label(message);
   }
-  fc->show();
-  while(fc->visible()) fltk::wait();
+  fc->exec();
   return fc->text();
 }
 
