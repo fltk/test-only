@@ -105,6 +105,7 @@ void Group::clear() {
     Widget*const* a = array_;
     Widget*const* e = a+children_;
     // clear everything now, in case fix_focus recursively calls us:
+    array_ = 0;
     children_ = 0;
     focus_index_ = -1;
     if (resizable_) resizable_ = this;
@@ -142,7 +143,7 @@ void Group::insert(Widget &o, int index) {
   o.parent(this);
   if (children_ == 0) {
     // allocate for 1 child
-    array_ = new Widget*[1];
+    if (!array_) array_ = new Widget*[1];
     array_[0] = &o;
   } else {
     if (!(children_ & (children_-1))) {// double number of children
@@ -390,11 +391,10 @@ int Group::handle(int event) {
       // see if it wants the event:
       if (child->send(event)) return true;
     }
-    if (event != MOUSEWHEEL) return Widget::handle(event);
-    // else fall through to send MOUSEWHEEL to the focus:
+    break;
 
   default:
-    // Try to give any other event to the focus:
+    // Try to give any other event to the focus first:
     if (focus_index_ >= 0 && focus_index_ < numchildren)
       if (child(focus_index_)->send(event)) return true;
     // Then try all other children in top to bottom order:
@@ -582,19 +582,19 @@ void Group::layout(const Rectangle& r, int layout_damage) {
 	if (X >= IR) X += dw;
 	else if (X > IX) {
 	  switch (resize_align_&(ALIGN_LEFT|ALIGN_RIGHT)) {
-	  case 0: X = X + dw/2; break; // ALIGN_CENTER
-	  case ALIGN_LEFT: break; // ALIGN_LEFT
-	  case ALIGN_RIGHT: X = X+dw; break; // ALIGN_RIGHT
-	  case ALIGN_LEFT|ALIGN_RIGHT: X = X + dw * (X-IX)/(IR-IX); break; // both
+	  case 0: X = X + dw/2; break;
+	  case ALIGN_LEFT: break;
+	  case ALIGN_RIGHT: X = X+dw; break;
+	  case ALIGN_LEFT|ALIGN_RIGHT: X = X + dw * (X-IX)/(IR-IX); break;
 	  }
 	}
 	if (R >= IR) R += dw;
 	else if (R > IX) {
 	  switch (resize_align_&(ALIGN_LEFT|ALIGN_RIGHT)) {
-	  case 0: R = R + dw/2; break; // ALIGN_CENTER
-	  case ALIGN_LEFT: break; // ALIGN_LEFT
-	  case ALIGN_RIGHT: R = R+dw; break; // ALIGN_RIGHT
-	  case ALIGN_LEFT|ALIGN_RIGHT: R = R + dw * (R-IX)/(IR-IX); // both
+	  case 0: R = R + dw/2; break;
+	  case ALIGN_LEFT: break;
+	  case ALIGN_RIGHT: R = R+dw; break;
+	  case ALIGN_LEFT|ALIGN_RIGHT: R = R + dw * (R-IX)/(IR-IX); break;
 	  }
 	}
 	if (R-X != o->w()) {flags |= LAYOUT_W; o->w(R-X);}
@@ -605,19 +605,19 @@ void Group::layout(const Rectangle& r, int layout_damage) {
 	if (Y >= IB) Y += dh;
 	else if (Y > IY) {
 	  switch (resize_align_&(ALIGN_TOP|ALIGN_BOTTOM)) {
-	  case 0: Y = Y + dh/2; break; // ALIGN_CENTER
-	  case ALIGN_TOP: break; // ALIGN_TOP
-	  case ALIGN_BOTTOM: Y = Y+dh; break; // ALIGN_BOTTOM
-	  case ALIGN_TOP|ALIGN_BOTTOM: Y = Y + dh*(Y-IY)/(IB-IY); break; //both;
+	  case 0: Y = Y + dh/2; break;
+	  case ALIGN_TOP: break;
+	  case ALIGN_BOTTOM: Y = Y+dh; break;
+	  case ALIGN_TOP|ALIGN_BOTTOM: Y = Y + dh*(Y-IY)/(IB-IY); break;
 	  }
 	}
 	if (B >= IB) B += dh;
 	else if (B > IY) {
 	  switch (resize_align_&(ALIGN_TOP|ALIGN_BOTTOM)) {
-	  case 0: B = B + dh/2; break; // ALIGN_CENTER
-	  case ALIGN_TOP: break; // ALIGN_TOP
-	  case ALIGN_BOTTOM: B = B+dh; break; // ALIGN_BOTTOM
-	  case ALIGN_TOP|ALIGN_BOTTOM: B = B + dh*(B-IY)/(IB-IY); break; //both;
+	  case 0: B = B + dh/2; break;
+	  case ALIGN_TOP: break;
+	  case ALIGN_BOTTOM: B = B+dh; break;
+	  case ALIGN_TOP|ALIGN_BOTTOM: B = B + dh*(B-IY)/(IB-IY); break;
 	  }
 	}
 	if (B-Y != o->h()) {flags |= LAYOUT_H; o->h(B-Y);}
@@ -665,7 +665,7 @@ void Group::draw() {
 #if USE_CLIPOUT
     // Non-blinky draw, draw the inside widgets first, clip their areas
     // out, and then draw the background:
-    push_clip(0,0, w(), h());
+    push_clip(0, 0, w(), h());
     int n; for (n = numchildren; n--;) {
       Widget& w = *child(n);
       fl_did_clipping = 0;
@@ -724,11 +724,10 @@ void Group::draw() {
 void Widget::draw_background() const {
 #if !USE_CLIPOUT
   // fabien: if DAMAGE ALL is requested though we should redraw this backgnd as asked by this flag
-  if ((damage()&DAMAGE_EXPOSE) ) return;
-
+  if (damage()&DAMAGE_EXPOSE) return;
 #endif
   if (!parent()) return;
-  push_clip(0,0,w(),h());
+  push_clip(0, 0, w(), h());
   push_matrix();
   translate(-x(), -y());
   if (!parent()->box()->fills_rectangle()) parent()->draw_background();
@@ -791,7 +790,6 @@ void Group::fix_old_positions() {
     w.y(w.y()-y());
   }
 }
-
 
 //
 // End of "$Id$".
