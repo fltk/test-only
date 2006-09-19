@@ -692,25 +692,6 @@ static HCTX wintab_ctx = 0;
 static bool stylus_data_valid = false;
 static float pressure_add, pressure_mul;
 
-// this class makes sure that the tablet resources are relesed, even
-// if the application crashes!
-class Wintab32MustUnload {
-public:
-  Wintab32MustUnload() {}
-  ~Wintab32MustUnload() {
-    if (wintab_ctx) {
-      wtClose(wintab_ctx);   // it is: close the device driver
-      wintab_ctx = 0;
-      wintab_hwnd = 0;
-    }
-    if (wintab_dll) {
-      FreeLibrary(wintab_dll);
-      wintab_dll = 0;
-    }
-  }
-};
-Wintab32MustUnload wintab32MustUnload;
-
 // this function is used to behave gracefully in respect to the WT
 // tablet driver by grabbing and releasing tablet devices as needed
 void tablet_raise(bool raise) {
@@ -893,20 +874,18 @@ void fltk::copy(const char *stuff, int len, bool clipboard) {
       // We might want to use CF_TEXT if there are any illegal UTF-8
       // characters so the bytes are preserved?
       if (has_unicode()) {
-	// w2k/xp
-	SetClipboardData(CF_UNICODETEXT, NULL);
+        // w2k/xp
+        SetClipboardData(CF_UNICODETEXT, NULL);
       } else {
-	// w9x
-	SetClipboardData(CF_TEXT, NULL);
+        // w9x
+        SetClipboardData(CF_TEXT, NULL);
       }
       CloseClipboard();
       // we should be able to set this true here, but for some reason
       // some changes by other programs do not send the events that
       // makes this turn off:
-      i_own_selection = false;
-    } else {
-      i_own_selection = true;
     }
+    i_own_selection = true;
   }
 }
 
@@ -1010,6 +989,16 @@ HANDLE fl_global_selection_ansi(int clipboard) {
   utf8tomb(selection_buffer[clipboard], selection_length[clipboard], p, n+1);
   GlobalUnlock(h);
   return h;
+}
+
+static void renderallformats() {
+  if (!i_own_selection) return;
+  i_own_selection = false;
+  OpenClipboard(NULL);
+  EmptyClipboard();
+  SetClipboardData(CF_TEXT, fl_global_selection_ansi(1));
+  SetClipboardData(CF_UNICODETEXT, fl_global_selection(1));
+  CloseClipboard();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1849,13 +1838,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return 1;
 
   case WM_RENDERALLFORMATS:
-    i_own_selection = false;
-    // Windoze seems unhappy unless I do these two steps. Documentation
-    // seems to vary on whether opening the clipboard is necessary or
-    // is in fact wrong:
-    CloseClipboard();
-    OpenClipboard(NULL);
-    // fall through...
+    renderallformats();
+    return 1;
+
   case WM_RENDERFORMAT:
     if (wParam == CF_TEXT)
       SetClipboardData(CF_TEXT, fl_global_selection_ansi(1));
@@ -1863,7 +1848,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       SetClipboardData(CF_UNICODETEXT, fl_global_selection(1));
     // Windoze also seems unhappy if I don't do this. Documentation very
     // unclear on what is correct:
-    if (msg.message == WM_RENDERALLFORMATS) CloseClipboard();
     return 1;
 
   case WT_PACKET: { // stylus motion/pressure packet
@@ -2480,22 +2464,42 @@ void Window::free_backbuffer() {
 }
 
 ////////////////////////////////////////////////////////////////
-// I believe newer w2k is fixed to allow programs to crash or abort
-// without wasting resources. However this code was apparently necessary
-// on Win98 and earler to free some large objects stored in shared
-// DLL's and in the OS itself:
-
-static struct Cleanup { ~Cleanup(); } cleanup;
 
 extern void fl_font_rid();
 
+namespace fltk {
+
+static struct Cleanup { ~Cleanup(); } cleanup;
+
 Cleanup::~Cleanup() {
-  // nasty but works (I think) - deallocates GDI resources in windows
+
+  // save the clipboard:
+  renderallformats();
+
+  // I believe newer w2k is fixed to allow programs to crash or abort
+  // without wasting GDI resources. However this code was apparently
+  // necessary on Win98 and earler to free some large objects stored
+  // in shared DLL's and in the OS itself:
   while (CreatedWindow* x = CreatedWindow::first) x->window->destroy();
   if (fl_bitmap_dc) DeleteDC(fl_bitmap_dc);
+
   // get rid of allocated font resources
   fl_font_rid();
+
+  // free stuff needed by tablet api:
+  if (wintab_ctx) {
+    wtClose(wintab_ctx);   // it is: close the device driver
+    wintab_ctx = 0;
+    wintab_hwnd = 0;
+  }
+  if (wintab_dll) {
+    FreeLibrary(wintab_dll);
+    wintab_dll = 0;
+  }
+
   if (screen_dc) ReleaseDC(0,screen_dc);
+}
+
 }
 
 extern "C" {
