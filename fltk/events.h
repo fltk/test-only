@@ -55,7 +55,7 @@ enum {
   DND_DRAG	= 21,
   DND_LEAVE	= 22,
   DND_RELEASE	= 23,
-  TOOLTIP	= 24,
+  TOOLTIP	= 24
 };
 
 /*! Values returned by event_key(), passed to event_key_state() and
@@ -178,9 +178,9 @@ enum {
   BUTTON2	= 0x02000000,	/*!< Middle mouse button held down */
   BUTTON3	= 0x04000000,	/*!< Right mouse button held down */
   ANY_BUTTON	= 0x7f000000, /*!< Any mouse button (up to 8) */
-#if  defined(__APPLE__)
-  ACCELERATOR = CTRL,
-  COMMAND = META
+#if defined(__APPLE__)
+  ACCELERATOR	= CTRL,
+  COMMAND	= META
 #else
   ACCELERATOR	= ALT,	/*!< Same as ALT on Windows/Linux, same as CTRL on OS/X */
   COMMAND	= CTRL	/*!< Same as CTRL on Windows/Linux, same as META on OS/X */

@@ -375,12 +375,12 @@ namespace fltk {
 	virtual void ideal_size(int &w, int &h) {
 	    fltk::TextDisplay *myo = (fltk::TextDisplay *)o;
 	    fltk::setfont(myo->textfont(), myo->textsize());
-	    h -= fltk::box_dh(o->box());
-	    w -= fltk::box_dw(o->box());
+	    h -= o->box()->dh();
+	    w -= o->box()->dw();
 	    int ww = (int) fltk::getwidth("m");
-	    w = ((w + ww - 1) / ww) * ww + fltk::box_dw(o->box());
+	    w = ((w + ww - 1) / ww) * ww + o->box()->dw();
 	    h = (int) (((h + fltk::getascent() - 1) / fltk::getascent() ) * fltk::getascent() +
-		fltk::box_dh(o->box()));
+		o->box()->dh());
 	    if (h < 30) h = 30;
 	    if (w < 50) w = 50;
 	}
@@ -400,12 +400,12 @@ namespace fltk {
 	virtual void ideal_size(int &w, int &h) {
 	    fltk::TextEditor *myo = (fltk::TextEditor *)o;
 	    fltk::setfont(myo->textfont(), myo->textsize());
-	    h -= fltk::box_dh(o->box());
-	    w -= fltk::box_dw(o->box());
+	    h -= o->box()->dh();
+	    w -= o->box()->dw();
 	    int ww = (int)fltk::getwidth("m");
-	    w = ((w + ww - 1) / ww) * ww + fltk::box_dw(o->box());
+	    w = ((w + ww - 1) / ww) * ww + o->box()->dw();
 	    h = (int) (((h + fltk::getascent() - 1) / fltk::getascent()) * fltk::getascent() +
-		fltk::box_dh(o->box()));
+		o->box()->dh());
 	    if (h < 30) h = 30;
 	    if (w < 50) w = 50;
 	}
@@ -426,9 +426,9 @@ namespace fltk {
 	    FileInput *myo = (fltk::FileInput *)o;
 	    setfont(myo->textfont(), myo->textsize());
 	    h = (int) (fltk::getdescent() + myo->textsize() + 4);
-	    w -= fltk::box_dw(o->box());
+	    w -= o->box()->dw();
 	    int ww = (int)fltk::getwidth("m",1);
-	    w = ((w + ww - 1) / ww) * ww + fltk::box_dw(o->box());
+	    w = ((w + ww - 1) / ww) * ww + o->box()->dw();
 	    if (h < 20) h = 20;
 	    if (w < 50) w = 50;
 	}
@@ -447,12 +447,12 @@ namespace fltk {
       void ideal_size(int &w, int &h) {
 	fltk::HelpView *myo = (fltk::HelpView *)o;
 	fltk::setfont(myo->textfont(), (float) myo->textsize());
-	h -= fltk::box_dh(o->box());
-	w -= fltk::box_dw(o->box());
+	h -= o->box()->dh();
+	w -= o->box()->dw();
 	int ww = (int) fltk::getwidth("m");
-	w = ((w + ww - 1) / ww) * ww + fltk::box_dw(o->box());
+	w = ((w + ww - 1) / ww) * ww + o->box()->dw();
 	h = (int) (((h + fltk::getascent() - 1) / fltk::getascent() ) * fltk::getascent() +
-	    fltk::box_dh(o->box()));
+	    o->box()->dh());
 	if (h < 30) h = 30;
 	if (w < 50) w = 50;
       }

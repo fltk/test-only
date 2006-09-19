@@ -39,19 +39,6 @@ using namespace fltk;
 ////////////////////////////////////////////////////////////////
 class FL_API FocusFrame : public Box {
 public:
-  FocusFrame(const char* name) : Box(name) {}
-  void _draw(const fltk::Rectangle& r1) const {
-    if (!drawflags(FOCUSED)) return;
-    pen_mode(PEN_OVERLAY);
-    line_style(DOT,1);
-    strokerect(r1);
-    line_style(SOLID,1);
-    pen_mode(PEN_NORMAL);
-  }
-};
-
-class FL_API DottedFrame : public Box {
-public:
   void _draw(const fltk::Rectangle& r1) const {
     if (!drawflags(FOCUSED)) return;
 
@@ -74,20 +61,23 @@ public:
     }
     XSetStipple(xdisplay, gc, (r.x()+r.y()-r1.x()-r1.y())&1 ? oddstipple : evenstipple);
     XSetFillStyle(xdisplay, gc, FillStippled);
+    XSetFunction(xdisplay, gc, GXxor);
+    XSetForeground(xdisplay, gc, 0xffffffff);
     // X documentation claims a nonzero line width is necessary for stipple
     // to work, but on the X servers I tried it does not seem to be needed:
     //XSetLineAttributes(xdisplay, gc, 1, LineSolid, CapButt, JoinMiter);
     XDrawRectangle(xdisplay, xwindow, gc, r.x(), r.y(), r.w()-1, r.h()-1);
     XSetFillStyle(xdisplay, gc, FillSolid);
+    XSetFunction(xdisplay, gc, GXcopy);
     // put line width back to zero:
     //XSetLineAttributes(xdisplay, gc, 0, LineSolid, CapButt, JoinMiter);
 
 #elif defined(_WIN32) || defined(_WIN32_WCE)
-/*
+# if 0
     // Draw using WIN32 API function (since 95)
     RECT r = {r.x(), r.y(), r.r()-1, r.b()-1};
     DrawFocusRect(dc, &r);
-*/
+# else
     // Draw using bitmap patterns (like X11) and PatBlt
     static const WORD pattern[] = { 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA };
     static HBRUSH evenbrush, oddbrush;
@@ -116,6 +106,7 @@ public:
 
     // Select the patterned brush into the DC
     HBRUSH old_brush = (HBRUSH)SelectObject(dc, brush);
+    int oldrop = SetROP2(dc, R2_NOT);
 
     // Draw horizontal lines
     PatBlt(dc, r.x(), r.y(), r.w(), 1, PATCOPY);
@@ -126,25 +117,27 @@ public:
     PatBlt(dc, r.r()-1, r.y(), 1, r.h(), PATCOPY);
 
     // Clean up
+    SetROP2(dc, oldrop);
     SelectObject(dc, old_brush);
+# endif
 #else
+    PenMode( patXor );
     line_style(DOT);
     strokerect(r);
+    PenMode( patCopy );
     line_style(0);
 #endif
   }
-  DottedFrame(const char* name) : Box(name) {}
+  FocusFrame(const char* name) : Box(name) {}
 };
-static DottedFrame dottedFrame("dotted_frame");
-//static FocusFrame focusFrame("focus_frame");
+static FocusFrame focusFrame("focus_frame");
 
 /*!
   Default value for focusbox(). This draws nothing if FOCUSED is
   not set in the flags. If it is set, this draws a dashed line
-  one pixel inset.
+  one pixel inset using a system-specific XOR mode.
 */
-Box* const fltk::DOTTED_FRAME = &dottedFrame;
-Box* const fltk::FOCUS_FRAME = &dottedFrame; //&focusFrame;
+Box* const fltk::FOCUS_FRAME = &focusFrame;
 
 ////////////////////////////////////////////////////////////////
 

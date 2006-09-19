@@ -3,7 +3,7 @@
 //
 // Overlay support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2006 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -37,37 +37,31 @@ static fltk::Rectangle pr(0,0,0,0);
 
 static void draw_current_rect() {
   if (pr.empty()) return;
-  pen_mode(PEN_OVERLAY);
-  strokerect(pr);
-  pen_mode(PEN_NORMAL);
-}
-
-/** sets the pen mode (normal, xor for now) before drawing 
-*/
-void fltk::pen_mode(fltk::PenMode mode) {
 #if USE_X11
-    XSetFunction(xdisplay, gc, mode==PEN_OVERLAY ? GXxor : GXcopy);
-    if (mode==PEN_OVERLAY ) XSetForeground(xdisplay, gc, 0xffffffff);
+  XSetFunction(xdisplay, gc, GXxor);
+  XSetForeground(xdisplay, gc, 0xffffffff);
+  strokerect(pr);
+  XSetFunction(xdisplay, gc, GXcopy);
 #elif defined(_WIN32)
-    SetROP2(dc, mode==PEN_OVERLAY ? R2_NOT : R2_COPYPEN );
+  int old = SetROP2(dc, R2_NOT);
+  strokerect(pr);
+  SetROP2(dc, old);
 #elif defined(__APPLE__)
-    ::PenMode( mode==PEN_OVERLAY ? patXor : patCopy);
+  PenMode( patXor );
+  strokerect(pr);
+  PenMode( patCopy );
 #endif
 }
 
 void fltk::overlay_clear() {
-  if (!pr.empty()) {
-      draw_current_rect(); 
-      pr.w(0);
-  }
+  if (!pr.empty()) {draw_current_rect(); pr.w(0);}
 }
 
 void fltk::overlay_rect(int x, int y, int w, int h) {
   if (w < 0) {x += w; w = -w;} else if (!w) w = 1;
   if (h < 0) {y += h; h = -h;} else if (!h) h = 1;
   if (!pr.empty()) {
-    if (x==pr.x() && y==pr.y() && w==pr.w() && h==pr.h()) 
-	return;
+    if (x==pr.x() && y==pr.y() && w==pr.w() && h==pr.h()) return;
     draw_current_rect();
   }
   pr.set(x,y,w,h);

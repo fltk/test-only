@@ -1307,16 +1307,6 @@ bool fltk::handle(int event, Window* window)
   return false;
 }
 
-/*! Same as fltk::Monitor::all().x(), this function is provides so you don't
-  have to include fltk/Monitor.h just to get this information. */
-int fltk::monitor_x() {return Monitor::all().x();}
-/*! Same as fltk::Monitor::all().y(); */
-int fltk::monitor_y() {return Monitor::all().y();}
-/*! Same as fltk::Monitor::all().w(); */
-int fltk::monitor_w() {return Monitor::all().w();}
-/*! Same as fltk::Monitor::all().h(); */
-int fltk::monitor_h() {return Monitor::all().h();}
-
 //
 // End of "$Id$".
 //

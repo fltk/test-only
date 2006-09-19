@@ -91,14 +91,16 @@ StatusBarGroup::~StatusBarGroup() {
     also make sure that any child in the same group does not override the status bar and resize if necessary
 */
 void StatusBarGroup::resize_from_parent() {
+  // resize will work if you set resizable()
     if (!parent()) return;
     int i;
-    x(box_dx(parent()->box())); // bottom position
-    y(parent()->h()-box_dh(parent()->box())-h()); 
+    Rectangle inside(0,0,parent()->w(),parent()->h());
+    parent()->box()->inset(inside);
+    x(inside.x());
     if (visible()) {
-	w(parent()->w()-box_dw(parent()->box())); // set proper width 
+	w(inside.w()); // set proper width 
 	if (h()==0) h(saved_h_);
-	y(parent()->h()-box_dh(parent()->box())-h()); // bottom position
+        y(inside.b()-h());
 	for (i = 0; i < parent()->children(); i++) {
 	    Widget* w = parent()->child(i);
 	    if (((Widget*) this)!= w) {
@@ -132,21 +134,19 @@ void StatusBarGroup::resize_from_parent() {
 	}
 	if(c) {parent()->relayout();}
     }
-
-
 }
 
 //! sets the label at a particular pos, automatically handles alloc + drawing
 void StatusBarGroup::set(const char * t, StatusBarGroup::Position pos) {
-    
+
     if (!t || !*t) {
 	if (tf_[pos]) {delete tf_[pos]; tf_[pos]=0;}
 	return;
     }
-    
+
     if (!tf_[pos]) {
 	Group::current(0);
-	tf_[pos]= new InvisibleBox(b_[pos],box_dx(box()),box_dh(box())+BORDER_WIDTH,10,10,0);
+	tf_[pos]= new InvisibleBox(b_[pos],box()->dx(),box()->dh()+BORDER_WIDTH,10,10,0);
 	tf_[pos]->align(ALIGN_LEFT|ALIGN_INSIDE);
 	add(tf_[pos]);
     }
@@ -161,17 +161,17 @@ void StatusBarGroup::update_box(InvisibleBox *b, Position pos) {
     if (!b) return;
     int X=0, Y=0;
     b->measure_label(X,Y);
-    X+=(box_dw(b_[pos])+1)*2;
-    b->resize(X, h()-(box_dh(box())+BORDER_WIDTH)*2);
-    switch (pos)    {
-    case SBAR_LEFT: 
-	b->x(box_dx(box())); 
+    X += (b_[pos]->dw()+1)*2;
+    b->resize(X, h()-(box()->dh()+BORDER_WIDTH)*2);
+    switch (pos) {
+    case SBAR_LEFT:
+	b->x(box()->dx());
 	break;
-    case SBAR_CENTER: 
-	b->x((r() - b->w())/2);	
+    case SBAR_CENTER:
+	b->x((r() - b->w())/2);
 	break;
     case SBAR_RIGHT:
-	b->x(r()-b->w()-box_dw(box())-BORDER_WIDTH);	
+	b->x(r()-b->w()-box()->dw()-BORDER_WIDTH);
 	break;
     }
     b->damage();

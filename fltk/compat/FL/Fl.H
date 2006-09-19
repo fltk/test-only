@@ -10,6 +10,7 @@
 #include <fltk/error.h>
 #include <fltk/visual.h>
 #include <fltk/Monitor.h>
+#include <fltk/Widget.h>
 
 namespace Fl = fltk;
 

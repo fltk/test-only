@@ -36,6 +36,7 @@
 #ifndef fltk_draw_h
 #define fltk_draw_h
 
+#include "Flags.h" // for alignment values
 #include "Color.h"
 #include "Rectangle.h"
 #include "PixelType.h"
@@ -69,15 +70,14 @@ FL_API void transform(float& x, float& y);
 FL_API void transform_distance(float& x, float& y);
 FL_API void transform(int& x, int& y);
 FL_API void transform(const Rectangle& from, Rectangle& to);
-FL_API void transform(int x,int y,int w, int h, Rectangle& to);
+FL_API void transform(int x, int y, int w, int h, Rectangle& to);
 //@}
 
 /// \name Clipping
 //@{
-void push_clip(const Rectangle& rectangle);
+FL_API void push_clip(const Rectangle&);
 //! Same as push_clip(Rectangle(x,y,w,h)) but faster:
-void push_clip(int X,int Y, int W, int H);
-
+FL_API void push_clip(int X,int Y, int W, int H);
 FL_API void clipout(const Rectangle&);
 FL_API void pop_clip();
 FL_API void push_no_clip();
@@ -86,7 +86,7 @@ FL_API int intersect_with_clip(Rectangle&);
 //@}
 
 FL_API void setcolor(Color);
-FL_API void setcolor_alpha(Color, double alpha); // for rendering systems alowwing it
+FL_API void setcolor_alpha(Color, double alpha);
 extern FL_API Color current_color_;
 inline Color getcolor() {return current_color_;}
 
@@ -120,18 +120,6 @@ enum {
   JOIN_ROUND	= 0x2000,
   JOIN_BEVEL	= 0x3000
 };
-
-// WAS: This is highly NOT recommended, as no modern graphics API does XOR!
-enum PenMode {
-  PEN_NORMAL	= 0,
-  PEN_OVERLAY
-  // other future modes op. should be set here like
-  // WAS: are these the same as normal with the color set black or white?
-  // PEN_BLACK
-  // PEN_WHITE
-};
-
-FL_API void pen_mode(PenMode mode);
 
 /// \name Path construction
 //@{

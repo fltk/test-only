@@ -145,7 +145,7 @@ FileInput::update_buttons() {
 	    end ++;
 
 	    buttons_[i] = (short)getwidth(start, end - start);
-	    if (!i) buttons_[i] += fltk::box_dx(b) + 6;
+	    if (!i) buttons_[i] += b->dx() + 6;
     }
 
     //printf("    found %d components/buttons...\n", i);
@@ -198,7 +198,8 @@ void FileInput::draw() {
 	fltk::focus()!=this && !size() && !(damage()&DAMAGE_ALL);
 
     if (!must_trick_Input_) {
-      Rectangle r(box_dx(b),DIR_HEIGHT+box_dy(b),w()-box_dw(b),h()-DIR_HEIGHT-box_dh(b));
+      Rectangle r(0,DIR_HEIGHT,w(),h()-DIR_HEIGHT);
+      b->inset(r);
       //Input::b->inset(r);
       int label_width ;
       if (1 || damage() & DAMAGE_ALL) {

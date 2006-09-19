@@ -425,7 +425,7 @@ void TabGroup::draw_tab(int x1, int x2, int W, int H, Widget* o, int what) {
   }
   int sel = (what == TAB_SELECTED);
   const int shrink_factor = 3;
-  int eat_border_factor = (H<0 ? box_dh(box()) : 1 )*sel;
+  int eat_border_factor = (H<0 ? box()->dh() : 1 )*sel;
   int up_pos = (1-sel)*shrink_factor;
   setcolor(sel  ? selection_color() : o->color());
   if (H >= 0) {// put the tab thumbnail on top

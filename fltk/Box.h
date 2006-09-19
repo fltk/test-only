@@ -54,17 +54,6 @@ public:
     : Box(name),data_(pattern),down_(down),dx_(dx),dy_(dy),dw_(dw),dh_(dh) {}
 };
 
-// Back compatability functions added by fabian?
-inline int box_dx(const Box* b) {return b->dx();}
-inline int box_dy(const Box* b) {return b->dy();}
-inline int box_dw(const Box* b) {return b->dw();}
-inline int box_dh(const Box* b) {return b->dh();}
-// If we know it is a FrameBox these are faster:
-inline int box_dx(const FrameBox* b) {return b->dx();}
-inline int box_dy(const FrameBox* b) {return b->dy();}
-inline int box_dw(const FrameBox* b) {return b->dw();}
-inline int box_dh(const FrameBox* b) {return b->dh();}
-
 class FL_API FlatBox : public Box {
 public:
   void _draw(const Rectangle&) const;

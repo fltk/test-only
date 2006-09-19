@@ -140,7 +140,7 @@ int Shortcut_Button::handle(int e) {
   when(0); type(TOGGLE);
   if (e == fltk::KEY) {
     if (!value()) return 0;
-    int v = fltk::event_text()[0];
+    unsigned v = fltk::event_text()[0];
     if (v > 32 && v < 0x7f || v > 0xa0 && v <= 0xff) {
       v = v | fltk::event_state()&(fltk::META|fltk::ALT|fltk::CTRL);
     } else {

@@ -382,18 +382,14 @@ HelpView::draw()
   }
   if (i == 2) {
     setcolor (GRAY50);
-    fillrect(
-	Rectangle(ww - fltk::box_dw(b)/2 + fltk::box_dx(b),
-		  hh - fltk::box_dh(b)/2 + fltk::box_dy(b), 17, 17)
-	);
+    fillrect(scrollbar_->x(),hscrollbar_->y(),17,17);
   }
 
   if (!value_)
     return;
 
   // Clip the drawing to the inside of the box...
-  Rectangle tmp(fltk::box_dx(b), fltk::box_dy(b),
-               ww - fltk::box_dw(b), hh - fltk::box_dh(b));
+  Rectangle tmp(*this);
   b->inset(tmp);
   fltk::push_clip(tmp);
 
@@ -1691,26 +1687,26 @@ HelpView::format()
     qsort(targets_, ntargets_, sizeof(HelpTarget),
           (compare_func_t)compare_targets);
 
-  int dx = fltk::box_dw(b) - fltk::box_dx(b);
-  int dy = fltk::box_dh(b) - fltk::box_dy(b);
+  Rectangle inside(*this);
+  b->inset(inside);
 
-  if (hsize_ > (w() - 24)) {
+  if (hsize_ > (inside.w() - 17)) {
     hscrollbar_->show();
 
-    if (size_ < (h() - 24)) {
+    if (size_ <= (inside.h() - 17)) {
       scrollbar_->hide();
-      hscrollbar_->resize(fltk::box_dx(b), h() - 17 - dy, w() - fltk::box_dw(b), 17);
+      hscrollbar_->resize(inside.x(), inside.b()-17, inside.w(), 17);
     } else {
       scrollbar_->show();
-      scrollbar_->resize(w() - 17 - dx, fltk::box_dy(b), 17, h() - 17 - fltk::box_dh(b));
-      hscrollbar_->resize(fltk::box_dx(b), h() - 17 - dy, w() - 17 - fltk::box_dw(b), 17);
+      scrollbar_->resize(inside.r()-17, inside.y(), 17, inside.h()-17);
+      hscrollbar_->resize(inside.x(), inside.b()-17, inside.w()-17, 17);
     }
   } else {
     hscrollbar_->hide();
-
-    if (size_ < (h() - 8)) scrollbar_->hide();
+    if (size_ <= inside.h())
+      scrollbar_->hide();
     else {
-      scrollbar_->resize(w() - 17 - dx, fltk::box_dy(b), 17, h() - fltk::box_dh(b));
+      scrollbar_->resize(inside.r()-17, inside.y(), 17, inside.h());
       scrollbar_->show();
     }
   }
@@ -2722,7 +2718,7 @@ HelpView::load(const char *f)// I - Filename to load (may also have target)
 
 //
 // 'HelpView::resize()' - Resize the help widget.
-//
+// WAS: this should be removed and put into layout()!
 
 void
 HelpView::resize(int xx,	// I - New left position
@@ -2730,25 +2726,14 @@ HelpView::resize(int xx,	// I - New left position
 		     int ww,	// I - New width
 		     int hh)	// I - New height
 {
-  Box *		b = box() ? box() : DOWN_BOX;
-					// Box to draw...
-
-
-
   Widget::resize(xx, yy, ww, hh);
-
-    scrollbar_->resize(w() - 17 - fltk::box_dw(b) + fltk::box_dx(b), fltk::box_dy(b),
-                    17, h() - 17 - fltk::box_dh(b));
-    hscrollbar_->resize(fltk::box_dx(b), h() - 17 - fltk::box_dh(b) + fltk::box_dy(b),
-                     w() - 17 - fltk::box_dw(b), 17);
-  
   format();
 }
 
 
 void 
 HelpView::layout() {
-    Group::layout();
+  Group::layout();
 }
 
 

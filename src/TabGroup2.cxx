@@ -182,6 +182,8 @@ int MenuTabPager::available_width(TabGroup *g ) const {
     return g->w() - this->slope()-1;
 }
 
+static inline int MAX(int a, int b) {return a>b ? a : b;}
+
 ////////////////////////////////////////////////////////////////
 int MenuTabPager::update_positions(TabGroup* g, int numchildren, int& selected, 
 				   int& cumulated_width, int& available_width , 
@@ -199,7 +201,7 @@ int MenuTabPager::update_positions(TabGroup* g, int numchildren, int& selected,
 
     if (tab_pos[selected]+tab_width[selected]-offset > available_width) {
 	// set selected to right 
-	tab_pos[selected] = FLTK_MAX(available_width-tab_width[selected],0);
+	tab_pos[selected] = MAX(available_width-tab_width[selected],0);
 	for (i=selected;i; i--) {
 	    tab_pos[i-1] = tab_pos[i] - tab_width[i-1];
 	}
@@ -329,7 +331,7 @@ void MenuTabPager::createExtMenu(TabGroup* g){
 	}
     }
     int th = g->tab_height()+1;
-    th = FLTK_MAX((th-BTN_HEIGHT)/2,0)+g->y();
+    th = MAX((th-BTN_HEIGHT)/2,0)+g->y();
     extension_->resize(g->r()-BTN_WIDTH, th, BTN_WIDTH,BTN_HEIGHT);
     extension_->y(th);
     extension_->redraw();

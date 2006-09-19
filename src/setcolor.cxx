@@ -262,12 +262,16 @@ Flags fltk::drawflags_;
   Windows 95/98.</i>
 */
 
-FL_API void fltk::setcolor_alpha(Color c, double alpha) { // for rendering systems alowing it
-    fltk::setcolor(c);
-    #if USE_CAIRO
-      uchar r,g,b; split_color(c,r,g,b);
-      cairo_set_source_rgba(cc,r/255.0,g/255.0,b/255.0,alpha);
-    #endif
+/**
+   Sets the current rgb and alpha to draw in, on rendering systems that
+   allow it. If alpha is not supported this is the same as setcolor().
+*/
+FL_API void fltk::setcolor_alpha(Color c, double alpha) {
+  fltk::setcolor(c);
+#if USE_CAIRO
+  uchar r,g,b; split_color(c,r,g,b);
+  cairo_set_source_rgba(cc,r/255.0,g/255.0,b/255.0,alpha);
+#endif
 }
 
 //

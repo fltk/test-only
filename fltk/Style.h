@@ -59,7 +59,6 @@ extern FL_API Box* const OVAL_BOX;
 extern FL_API Box* const OSHADOW_BOX;
 extern FL_API Box* const OFLAT_BOX;
 extern FL_API Box* const BORDER_FRAME;
-extern FL_API Box* const DOTTED_FRAME;
 extern FL_API Box* const FOCUS_FRAME;
 extern FL_API Box* const PLASTIC_UP_BOX;
 extern FL_API Box* const PLASTIC_DOWN_BOX;
