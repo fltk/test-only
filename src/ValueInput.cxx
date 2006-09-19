@@ -96,7 +96,8 @@ static char which_pushed = 0;
 void ValueInput::draw() {
   drawstyle(style(),flags());
   Rectangle r(w(),h()); box()->inset(r);
-  const int bw = r.h()/2; r.move_r(-bw);
+  int bw = r.h(); if (bw*4>r.w()) bw = (r.w()+3)/4; r.move_r(-bw);
+  const int bh = r.h()/2;
   if (damage() & DAMAGE_ALL) {
     draw_frame();
     input.set_damage(DAMAGE_ALL);
@@ -108,13 +109,20 @@ void ValueInput::draw() {
       f[which_highlight-1] |= HIGHLIGHT;
     if (which_pushed && pushed())
       f[which_pushed-1] |= PUSHED;
-    Rectangle gr(r.r(),r.y(),bw,bw);
+    Rectangle gr(r.r(),r.y(),bw,bh);
     drawstyle(style(),f[0]);
     draw_glyph(ALIGN_TOP|ALIGN_INSIDE, gr);
-    gr.move_y(bw);
-    gr.h(r.h()-bw);
+    gr.move_y(bh);
+    gr.h(r.h()-bh);
     drawstyle(style(),f[1]);
-    draw_glyph(ALIGN_BOTTOM|ALIGN_INSIDE, gr);
+    if (gr.h() == bh) {
+      draw_glyph(ALIGN_BOTTOM|ALIGN_INSIDE, gr);
+    } else {
+      draw_glyph(ALIGN_INSIDE, gr); // draw the box
+      gr.h(bh);
+      buttonbox()->inset(gr);
+      draw_glyph(ALIGN_BOTTOM, gr); // draw the arrow same size as up arrow
+    }
   }
   input.label(label());
   input.align(align());
@@ -126,7 +134,8 @@ void ValueInput::draw() {
 
 void ValueInput::increment_cb() {
   double i = linesize();
-  if (event_state()&(SHIFT|CTRL|ALT)) i *= 10;
+  if (event_state(SHIFT|META|ALT)) i *= 10;
+  else if (event_state(CTRL)) i *= .1;
   if (which_pushed == 2) i = -i;
   handle_drag(value()+i);
 }
@@ -136,7 +145,8 @@ void ValueInput::increment_cb() {
 
 int ValueInput::handle(int event) {
   Rectangle r(w(),h()); box()->inset(r);
-  const int bw = r.h()/2; r.move_r(-bw);
+  int bw = r.h(); if (bw*4>r.w()) bw = (r.w()+3)/4; r.move_r(-bw);
+  const int bh = r.h()/2;
   int n;
   switch (event) {
   case FOCUS:
@@ -146,7 +156,7 @@ int ValueInput::handle(int event) {
   case MOVE:
     if (!highlight_color()) return 1;
     if (event_x() >= r.r()) {
-      if (event_y() >= r.y()+bw) n = 2;
+      if (event_y() >= r.y()+bh) n = 2;
       else n = 1;
     } else {
       n = 0;
@@ -164,7 +174,7 @@ int ValueInput::handle(int event) {
     // figure out what button is pushed:
     if (event_x() < r.r() || event_x() >= r.r()+bw) n = 0;
     else if (event_y() < 0 || event_y() >= h()) n = 0;
-    else if (event_y() < r.y()+bw) n = 1;
+    else if (event_y() < r.y()+bh) n = 1;
     else n = 2;
     if (event == PUSH) {
       if (!n) break; // send mouse event to the input field
@@ -232,12 +242,19 @@ void ValueInput::value_damage() {
     if (step() >= 1) {
       if (strtol(input.text(), 0, 0) == long(value())) return;
     } else {
-      // parse the existing text:
-      double oldv = strtod(input.text(), 0);
-      if (!oldv) {
-	if (!value()) return;
+      const double A = value();
+      // parse the existing text and see if it is close enough to number
+      char* p; double v = strtod(input.text(), &p);
+      if (*p || p == input.text() || rint(A) != rint(v) ||
+#ifdef _WIN32
+	  (v ? (fabs(fabs(A/v)-1) > 1.2e-7) : (A != 0))
+#else
+	  float(A) != float(v)
+#endif
+	  ) {
+	;
       } else {
-	if (fabs(fabs(value()/oldv)-1) < 1.2e-7) return;
+	return; // it is close enough, leave it alone
       }
     }
   }
