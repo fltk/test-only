@@ -545,6 +545,7 @@ void fltk::load_theme() {
 */
 void fltk::reload_theme() {
   if (theme_loaded != 1) return;
+  reset_theme();
   theme_();
   if (fl_bg_switch) set_background(fl_bg_switch);
   fltk::redraw();
