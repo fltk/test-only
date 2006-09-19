@@ -50,7 +50,7 @@ void fltk::addarc(float l, float t, float w, float h, float start, float end)
   float y = t+h/2;
   
   translate(w/2,h/2);
-   if (start > end)
+  if (start > end)
      cairo_arc(cc,x,y,w/2,start*(-M_PI/180),end*(-M_PI/180));
    else
      cairo_arc_negative(cc,x,y,w/2,start*(-M_PI/180),end*(-M_PI/180));

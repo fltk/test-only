@@ -46,7 +46,8 @@ static fltk::Color ccolor(unsigned r, unsigned g, unsigned b) {
     return fltk::BLACK;
 }
 
-static const struct {const char* const name; fltk::Color color;}
+/* fabien: const char* const invalid in a struct (even const) in VC6 */
+static const struct {const char* name; fltk::Color color;}
 web_safe[] = { // must be in alphabetical order!
   {"aqua",	0x00ffff00},
   {"black",	fltk::BLACK},
