@@ -331,6 +331,7 @@ bool Slider::draw(const Rectangle& sr, Flags flags, bool slot)
   if (type()&16/*FILL*/) slider_size(0);
 
   Rectangle r = sr;
+  const int slot_size_ = 3; // was 6, really should be a preference?
 
   // draw the tick marks and inset the slider drawing area to clear them:
   if (tick_size_ && (type()&TICK_BOTH)) {
@@ -339,29 +340,29 @@ bool Slider::draw(const Rectangle& sr, Flags flags, bool slot)
       r.move_b(-tick_size_);
       switch (type()&TICK_BOTH) {
       case TICK_BOTH:
-	r.y(r.y()+tick_size_/2);
-	break;
+        r.y(r.y()+tick_size_/2);
+        break;
       case TICK_ABOVE:
-	r.y(r.y()+tick_size_);
-	tr.set_b(r.center_y());
-	break;
+        r.y(r.y()+tick_size_);
+        tr.set_b(r.center_y());
+        break;
       case TICK_BELOW:
-	tr.set_y(r.center_y()+(slot?3:0));
-	break;
+        tr.set_y(r.center_y()+(slot?slot_size_/2:0));
+        break;
       }
     } else {
       r.move_r(-tick_size_);
       switch (type()&TICK_BOTH) {
       case TICK_BOTH:
-	r.x(r.x()+tick_size_/2);
-	break;
+        r.x(r.x()+tick_size_/2);
+        break;
       case TICK_ABOVE:
-	r.x(r.x()+tick_size_);
-	tr.set_r(r.center_x());
-	break;
+        r.x(r.x()+tick_size_);
+        tr.set_r(r.center_x());
+        break;
       case TICK_BELOW:
-	tr.set_x(r.center_x()+(slot?3:0));
-	break;
+        tr.set_x(r.center_x()+(slot?slot_size_/2:0));
+        break;
       }
     }
     setcolor(inactive(contrast(textcolor(),color()),flags));
@@ -369,7 +370,6 @@ bool Slider::draw(const Rectangle& sr, Flags flags, bool slot)
   }
 
   if (slot) {
-    const int slot_size_ = 6;
     Rectangle sl;
     int dx = (slider_size_-slot_size_)/2; if (dx < 0) dx = 0;
     if (horizontal()) {
@@ -396,17 +396,22 @@ bool Slider::draw(const Rectangle& sr, Flags flags, bool slot)
 
   // figure out where the slider should be:
   Rectangle s(r);
-  int sglyph = ALIGN_INSIDE; // draw a box
+  int sglyph = 0; // draw our special glyph
   if (horizontal()) {
     s.x(r.x()+slider_position(value(),r.w()));
     s.w(slider_size_);
-    if (!s.w()) {s.w(s.x()-r.x()); s.x(r.x());} // fill slider
-    else sglyph=0; // draw our own special glyph
+    if (!s.w()) { // fill slider
+      s.w(s.x()-r.x());
+      s.x(r.x());
+      sglyph=ALIGN_CENTER; // stops it from drawing divider line
+    }
   } else {
     s.y(r.y()+slider_position(value(),r.h()));
     s.h(slider_size_);
-    if (!s.h()) {s.h(r.b()-s.y());} // fill slider
-    else sglyph=0; // draw our own special glyph
+    if (!s.h()) { // fill slider
+      s.h(r.b()-s.y());
+      sglyph=ALIGN_CENTER; // stops it from drawing divider line
+    }
   }
   draw_glyph(sglyph, s); // draw slider in new position
   return true;
@@ -520,7 +525,7 @@ public:
     // draw the divider line into slider:
     if (r.w() < 4 || r.h() < 4) return;
     if (!(drawflags()&LAYOUT_VERTICAL)) { // horizontal
-      int x = r.x()+r.w()/2;
+      int x = r.x()+(r.w()-1)/2;
       setcolor(GRAY33);
       drawline(x, r.y(), x, r.b());
       setcolor(WHITE);
