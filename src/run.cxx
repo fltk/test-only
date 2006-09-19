@@ -184,7 +184,7 @@ static Timeout* first_timeout, *free_timeout;
 
     The precision of the returned value depends on the OS, but
     the minimum precision is 20ms.
-*/ 
+*/
 double fltk::get_time_secs() {
 #ifdef _WIN32
   return double(GetTickCount())/1000.0;
@@ -257,7 +257,7 @@ main() {
   fltk::add_timeout(1.0,callback);
   for (;;) fltk::wait();
 }
-\endcode 
+\endcode
 */
 void fltk::repeat_timeout(float time, TimeoutHandler cb, void *arg) {
   _add_timeout(time+missed_timeout_by, cb, arg);
@@ -493,7 +493,7 @@ while (!calculation_done()) {
   fltk::check();
   if (user_hit_abort_button()) break;
 }
-\endcode 
+\endcode
 */
 int fltk::check() {
   return wait(0.0);
@@ -516,7 +516,7 @@ while (!calculation_done()) {
     if (user_hit_abort_button()) break;
   }
 }
-\endcode 
+\endcode
 */
 int fltk::ready() {
   if (first_timeout) {
@@ -737,13 +737,15 @@ void fltk::Rectangle::set(const fltk::Rectangle& r, int w, int h, int flags) {
   } else if (flags & ALIGN_RIGHT) {
     x_ = r.r()-w;
   } else {
-    x_ = r.x()+((r.w()-w)>>1); 
+    x_ = r.x()+((r.w()-w)>>1);
     // fabien: shouldn't it  consider the case r is smaller to avoid negative values ?
     // WAS: no, it is supposed to center at all times. The right-shift
     // instead of divide-by-2 is to avoid shifting as it goes negative.
-    // fabien : well while debugging i observed the shift doesn't avoid 
+    // fabien : well while debugging i observed the shift doesn't avoid
     //    to get negative value at least on Win32
-    // if (x_<0) x_=0; 
+    // WAS: no, it is *supposed* to return a negative value! I want the
+    // rectangle "centered" even if it is *bigger*.
+    // if (x_<0) x_=0;
   }
   if (flags & ALIGN_TOP) {
     if (flags & ALIGN_BOTTOM && h > r.h()) y_ = r.b()-h;
@@ -751,14 +753,20 @@ void fltk::Rectangle::set(const fltk::Rectangle& r, int w, int h, int flags) {
   } else if (flags & ALIGN_BOTTOM) {
     y_ = r.b()-h;
   } else {
-    y_ = r.y()+((r.h()-h)>>1); 
+    y_ = r.y()+((r.h()-h)>>1);
     // see above
-    // if (y_<0) y_=0; 
+    // if (y_<0) y_=0;
   }
   w_ = w;
   h_ = h;
 }
 
+/**
+  Replace the value with the union of this rectangle and \a R
+  (ie the rectangle that surrounds both of these rectangles).
+  If one rectangle is empty(), the other is returned unchanged
+  (ie it does not union in the degenerate point of that rectangle).
+*/
 void fltk::Rectangle::merge(const fltk::Rectangle& R) {
   if (R.empty()) return;
   if (empty()) {*this = R; return;}
@@ -768,15 +776,18 @@ void fltk::Rectangle::merge(const fltk::Rectangle& R) {
   if (R.b() > b()) set_b(R.b());
 }
 
-#if 0 // I commented these out because nothing seems to be calling them
+/**
+  Replace the value with the intersection of this rectangle and \a R.
+  If the rectangles do not intersect, the result may have negative
+  width and/or height, this means empty() will return true, but some
+  code may still draw this rectangle.
+*/
 void fltk::Rectangle::intersect(const fltk::Rectangle& R) {
   if (R.x() > x()) set_x(R.x());
   if (R.r() < r()) set_r(R.r());
   if (R.y() > y()) set_y(R.y());
   if (R.b() < b()) set_b(R.b());
 }
-
-#endif
 
 ////////////////////////////////////////////////////////////////
 // Event handling:
@@ -830,7 +841,7 @@ const char * fltk::event_name(int event) {
 	"TOOLTIP"
     };
     // always return inbounds data:
-    return (event>=0 && event < (int) (sizeof(event_n)/ sizeof(const char *)) ) ? 
+    return (event>=0 && event < (int) (sizeof(event_n)/ sizeof(const char *)) ) ?
 	event_n[event] : "<Unknown Event>";
 }
 
@@ -863,10 +874,10 @@ void fltk::focus(Widget *o) {
       unsigned saved = e_keysym;
       e_keysym = 0; // make widgets not think a keystroke moved focus
       // Make focused Window including o be the first window:
-      Window *w; 
-      if (o->is_window()) w = (Window*)o; else  w = o->window(); 
-      while(w && w->window()) w=w->window();
-      if (w && w!=Window::first()) Window::first(w);
+      Window *w;
+      if (o->is_window()) w = (Window*)o; else  w = o->window();
+      while (w && w->window()) w=w->window();
+      Window::first(w);
       o->handle(FOCUS);
       o->set_flag(FOCUSED);
       for (; (o = o->parent()); ) {
@@ -996,6 +1007,7 @@ void fltk::modal(Widget* widget, bool grab) {
 #endif
     // because we "pushed back" the PUSH, make it think no buttons are down:
     e_state &= 0xffffff;
+    e_keysym = 0;
   }
 
   // start the new grab:
@@ -1234,7 +1246,7 @@ bool fltk::handle(int event, Window* window)
       e_type = DRAG;
       return pushed()->send(DRAG) != 0;
     }
-    { 
+    {
       Widget* pbm = belowmouse();
       if (outside_modal(to)) to = modal_;
       bool ret = to && to->send(MOVE);

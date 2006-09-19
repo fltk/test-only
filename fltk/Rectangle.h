@@ -112,8 +112,8 @@ class FL_API Rectangle {
   /*! True if rectangle contains the pixel who's upper-left corner is at x,y */
   bool contains(int x, int y) const {return x>=x_ && y>=y_ && x<x_+w_ && y<y_+h_;}
 
-  /*! calculate bounding box of this union r */
   void merge(const Rectangle& r);
+  void intersect(const Rectangle& r);
 
 };
 
