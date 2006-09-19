@@ -38,7 +38,8 @@
 #include <fltk/Item.h>
 #include <fltk/ItemGroup.h>
 #include <fltk/Divider.h>
-#include <string.h>
+#include <fltk/string.h>
+#include <ctype.h>
 #include "ARRAY.h"
 
 using namespace fltk;
@@ -62,9 +63,10 @@ static Widget* append(
   o->copy_label(label);
   if (flags & MENU_RADIO) o->type(Item::RADIO);
   else if (flags & MENU_TOGGLE) o->type(Item::TOGGLE);
-  // these flags have been cleverly assigned so this shift and mask
-  // converts from the old values to the new ones:
-  o->set_flag((flags<<8)&(INACTIVE|STATE|INVISIBLE));
+  // Shift the old flags values over to where they are in fltk,
+  // but also allow new fltk flag values (this was done so RAW_LABEL
+  // could be put in there for flwm)
+  o->set_flag(((flags<<8)&(INACTIVE|STATE|INVISIBLE))|(flags&~0x1ff));
   if (insert_here) g->insert(*o, insert_here-1);
   else g->add(o);
   if (flags & MENU_DIVIDER) {
@@ -76,26 +78,47 @@ static Widget* append(
   return o;
 }
 
-// Comparison that does not care about deleted '&' signs:
-static int compare(const char* a, const char* b) {
-  for (;;) {
-    int n = *a-*b;
-    if (n) {
-      if (*a == '&') a++;
-      else if (*b == '&') b++;
-      else if (a[0]=='@' && a[1]==';') a += 2;
-      else if (b[0]=='@' && b[1]==';') b += 2;
-      else return n;
-    } else if (*a) {
-      a++; b++;
-    } else {
-      return 0;
+// flags to determine what _add() does:
+enum {FIND=1, REPLACE=2, FLAT=4};
+
+// Skip @ commands, return pointer to null or first actual letter:
+// Except we don't skip a trailing command with no semicolon.
+static inline void skip_embedded(const char*& aa) {
+  const char* a = aa;
+  while (*a == '@') {
+    if (*++a == '@') {aa = a; return;} // return pointer to second @ of @@
+    for (;; a++) {
+      if (!*a) return; // leave pointer unchanged for trailing command
+      if (isspace((uchar)*a) || *a==';') {aa = ++a; break;}
+      if (*a == '@') {aa = a; break;}
     }
   }
 }
 
-// flags to determine what _add() does:
-enum {FIND=1, REPLACE=2, FLAT=4};
+// See if widget has the same label, except ignore @-sequences or &-sequences
+// when comparing. If the new label has any @-sequences, replace the old label.
+static bool match_and_replace(Widget* i, const char* B, int flags, int what) {
+  const char* b = B;
+  const char* a = i->label();
+  if (!a) return false;
+  // Check for exact match (thus avoiding replacement if all @-commands are
+  // the same as before):
+  if (!strcmp(a,b)) return true;
+  if (flags&RAW_LABEL) return false;
+  bool replace = false;
+  for (;;) {
+    if (*a == '@') skip_embedded(a);
+    if (*b == '@') {skip_embedded(b); replace = true;}
+    if (*a == '&') a++;
+    if (*b == '&') {b++; replace = true;}
+    if (*a != *b) return false;
+    if (!*a) {
+      if (replace && (what&REPLACE)) i->copy_label(B);
+      return true;
+    }
+    ++a; ++b;
+  }
+}
 
 FL_API bool fl_menu_replaced; // hack so fluid can tell what replace() did
 
@@ -151,7 +174,7 @@ static Widget* innards(
 	break;
       }
       Widget* w = group->child(--n);
-      if (w->is_group() && w->label() && !compare(w->label(), item_label)) {
+      if (w->is_group() && match_and_replace(w, item_label, flags, what)) {
 	group = (Group*)w;
 	break;
       }
@@ -179,7 +202,7 @@ static Widget* innards(
     // find a matching menu item:
     if (what & (REPLACE|FIND)) for (int n = group->children(); n--;) {
       Widget* w = group->child(n);
-      if (w->label() && !compare(w->label(), item_label) && !w->is_group()) {
+      if (!w->is_group() && match_and_replace(w, item_label, flags, what)) {
 	item = w;
 	break;
       }
@@ -256,6 +279,12 @@ Widget* Menu::add(
     Same rules as add() except if the item already exists it is changed
     to this new data, instead of a second item with the same label being
     created.
+
+    If the \a label has any @ or & commands in any portion, that
+    portion is relabelled, thus you can use this to change the
+    appearance of existing menu items. However if the new label does
+    not have any such commands, the label remains as before, with any
+    older @-commands.
 */
 Widget* Menu::replace(
   const char *label,
