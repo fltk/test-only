@@ -199,7 +199,11 @@ bool fltk::dnd() {
   if (!drop_ok) ;
   else if (local_window) {
     fl_i_own_selection[0] = true;
-    if (local_handle(DND_RELEASE, local_window)) paste(*belowmouse(),false);
+    if (local_handle(DND_RELEASE, local_window)) {
+      fl_local_grab = 0;
+      source_window->cursor(0);
+      paste(*belowmouse(),false);
+    }
   } else if (version) {
     fl_sendClientMessage(target_window, XdndDrop, source_xwindow,
 			 0, event_time);
