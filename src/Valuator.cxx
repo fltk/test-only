@@ -234,13 +234,14 @@ void Valuator::handle_release() {
 int Valuator::format(char* buffer) {
   double v = value();
   if (!step_) return sprintf(buffer, "%g", v);
-  double s = step_-floor(step_)+1e-9;
-  int i=0;
+  double s = step_-floor(step_);
+  if (!s)
+    return sprintf(buffer, "%ld", long(v));
+  int i=1;
   for (; i < 8; i++) {
-    if (s-floor(s)<1e-3) break;
+    if (s >= .099) break;
     s *= 10;
   }
-  if (!i) return sprintf(buffer, "%ld", long(v));
   return sprintf(buffer, "%.*f", i, v);
 }
 
