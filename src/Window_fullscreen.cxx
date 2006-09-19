@@ -82,6 +82,7 @@ static void innards(Window* window, bool fullscreen, int X, int Y, int W, int H)
     // This will make some window managers obey the border being turned on/off.
     // Most other modern window managers will allow the border to be placed
     // off-screen:
+    // Unfortunatly stoopid MetaCity raises the window. Sigh
     CreatedWindow::find(window)->sendxjunk();
 
 # if 0
