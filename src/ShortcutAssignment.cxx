@@ -390,11 +390,11 @@ unsigned Widget::label_shortcut() const {
 /*! Test to see if the current KEY or SHORTCUT event matches a shortcut
     specified with &x in the label.
 
-    This will match if the character after the first '&' matches the
-    event_text()[0]. Case is ignored. The caller may want to
-    check if ALT or some other shift key is held down before calling
-    this so that plain keys do not do anything, and should certainly
-    make sure no other widgets want the shortcut.
+    This will match if the character in the label() after a '&'
+    matches event_text()[0]. Case is ignored. The caller may want
+    to check if ACCELERATOR or some other shift key is held down
+    before calling this so that plain keys do not do anything, and
+    should certainly make sure no other widgets want the shortcut.
 
     This is ignored if flags() has RAW_LABEL turned on (which stops
     the &x from printing as an underscore. The sequence "&&" is ignored
@@ -402,15 +402,20 @@ unsigned Widget::label_shortcut() const {
 */
 bool Widget::test_label_shortcut() const {
   if (flags() & RAW_LABEL) return false;
-  char c = tolower(event_text()[0]);
-  if (c <= 0x1A) c+=0x60; // remove ctrl
-  // printf("ok shortcut %c\n",c);
+  char c = event_text()[0];
+  if (!c) return false;
   const char* label = this->label();
-  if (!c || !label) return false;
+  if (!label) return false;
+  //if (ACCELERATOR==CTRL)
+  if (event_state(CTRL) && (!(c&~0x1f)||c==127)) c ^= 0x40;
+  c = tolower(c);
+  // printf("ok shortcut %c\n",c);
   for (;*label;) {
     if (*label++ == '&') {
-      if (*label == '&') label++;
-      else return (tolower(*label) == c);
+      if (*label) {
+	if (*label != '&' && tolower(*label) == c) return true;
+	label++;
+      }
     }
   }
   return false;
