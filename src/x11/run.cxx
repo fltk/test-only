@@ -1868,7 +1868,10 @@ bool fltk::handle()
 	       e.target == XA_TEXT ||
 	       e.target == textplain ||
 	       e.target == textplainutf) {
-      /*if (e.target == XA_TEXT)*/ e.target = UTF8_STRING;
+      // clobber the target type, this seems to make some applications
+      // behave that insist on asking for XA_TEXT instead of UTF8_STRING
+      // Does not change XA_STRING as that breaks xclipboard.
+      if (e.target != XA_STRING) e.target = UTF8_STRING;
       XChangeProperty(xdisplay, e.requestor, e.property,
 		      e.target, 8, 0,
 		      (unsigned char *)selection_buffer[clipboard],
