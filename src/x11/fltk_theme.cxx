@@ -34,6 +34,15 @@
 // Xresources reading code. It is all obsolete, nobody writes useful
 // information there anymore.
 
+/*
+  This attempts to read information from the KDE files
+  "~/.kde/share/config/kdeglobals" and "/usr/share/config/kdeglobals".
+  If these exist it also installs an event handler to listen for KDE
+  style-change events and call fltk::reload_theme() on them. Fltk does
+  not even bother trying to look at the xrdb databases, nobody seems
+  to use that any more.
+*/
+
 #include <fltk/Widget.h>
 #include <fltk/draw.h>
 #include <fltk/Monitor.h>
@@ -309,7 +318,6 @@ static fltk::Font* grok_font(const char* s, float& fontsize, char* fontencoding)
 ////////////////////////////////////////////////////////////////
 
 extern "C" bool fltk_theme() {
-  fltk::reset_theme();
 
   const char* home = getenv("HOME");
   if (!home) return false;
@@ -587,7 +595,6 @@ static Color to_color(const char* p) {
 }
 
 extern "C" bool fltk_theme() {
-  fltk::reset_theme();
   open_display();
 
   Color color;

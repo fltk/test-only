@@ -27,6 +27,7 @@
 #include <fltk/Widget.h>
 #include <fltk/draw.h>
 #include <fltk/Monitor.h>
+#include <fltk/Font.h>
 #include <fltk/events.h>
 #include <stdio.h>
 #include <fltk/string.h>
@@ -65,7 +66,6 @@ static int win_fontsize(int winsize) {
 }
 
 extern "C" bool fltk_theme() {
-  fltk::reset_theme();
 
   Color background = win_color(GetSysColor(COLOR_BTNFACE));
   Color foreground = win_color(GetSysColor(COLOR_BTNTEXT));

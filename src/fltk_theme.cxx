@@ -14,12 +14,11 @@
 
   <b>Unix/Linux/X11:</b>
 
-  This attempts to read information from the KDE files
-  "~/.kde/share/config/kdeglobals" and "/usr/share/config/kdeglobals".
-  If these exist it also installs an event handler to listen for KDE
-  style-change events and call fltk::reload_theme() on them. Fltk does
-  not even bother trying to look at the xrdb databases, nobody seems
-  to use that any more.
+  Does not do anything. Previous versions of FLTK 2.0 tried to read
+  the KDE setup but this has not worked recently and sometimes
+  produces weird results. FLTK does not bother looking at xrdb
+  databases. In any case, if any standard appears it can be
+  implemented here.
 
   <b>Windows:</b>
 
@@ -37,8 +36,9 @@ extern "C" FL_API bool fltk_theme();
 
 #if USE_X11
 
+extern "C" bool fltk_theme() {return false; /* true? */}
 /* Maybe _WIN32 should use the Windows version anyway? It would work! */
-# include "x11/fltk_theme.cxx"
+//# include "x11/fltk_theme.cxx"
 
 #elif defined(_WIN32)
 
