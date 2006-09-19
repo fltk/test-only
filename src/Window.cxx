@@ -76,21 +76,8 @@ Window *Widget::window() const {
   return 0;
 }
 
-void Window::draw() {
-#if USE_CAIRO
-  // fabien: not the good solution, will remove it for all platform
-  // progressively. Will be replaced by a synchronization of
-  // cairo context with current dependent platform context update
-  // putting this stuff in draw is not good for performances
-  // as graphical device context may not change between 2 calls
-    if (!cc) { // create one iuf no cairo context created yet
-	cairo_surface_t * surface = cairo_create_surface(this);
-	cc = ::cairo_create(surface);
-	cairo_surface_destroy (surface);
-    }
-#endif
-    Group::draw();
-}
+// WAS: anything with cairo contexts should be put into make_current()
+void Window::draw() {Group::draw();}
 
 /*! Sets the window title, which is drawn in the titlebar by the system. */
 void Window::label(const char *name) {label(name, iconlabel());}
@@ -306,7 +293,7 @@ void fl_do_deferred_calls() {
   // version of Windows for years and affects IE and other Microsoft
   // programs:
   if (keep_active && !grab()) {
-    BringWindowToTop(keep_active);
+    //BringWindowToTop(keep_active);
     SetActiveWindow(keep_active);
   }
   recurse = false;
@@ -454,16 +441,17 @@ void Window::show() {
 #endif
 
   if (!shown()) {
-    // Create an all-new system window.
-
-    // If the window was created with the xywh constructor, the visible()
-    // flag was left on, turn it off:
-    clear_visible();
 
     // open the display:
     load_theme();
     open_display();
     layout();
+
+    // Ignore show() calls on children of un-shown parent windows:
+    if (parent()) {
+      Window* pw = window();
+      if (!pw || !pw->shown()) {Widget::show(); return;}
+    }
 
     // back-compatability automatic size_range() based on resizable():
     if (!parent() && !size_range_set) {
@@ -487,13 +475,14 @@ void Window::show() {
     // that think "child of" means "next to" rather than "above":
     //if (child_of() && !override()) ((Window*)child_of())->show();
 
+    // create the window:
     create();
 
     // create & map child windows:
     Group::handle(SHOW);
 
-    // We must turn this flag on first so when silly Windows calls
-    // the WinProc directly it is already on:
+    // We must turn this flag on first because Windows will call
+    // the WinProc directly and that code wants this on:
     set_visible();
 
     // map the window, making it iconized if fl_show_iconic is on:
@@ -833,10 +822,9 @@ void Window::destroy() {
   i = 0;
 
   // remove from the list of windows:
-  CreatedWindow* p=CreatedWindow::first;
-  // Tree cases to handle : x is first, x is not first,x not in the list
-  if (x==p) CreatedWindow::first = p->next;
-  else {while(p && p->next != x) p = p->next;if(p) p->next = x->next;}
+  CreatedWindow** pp = &CreatedWindow::first;
+  for (; *pp != x; pp = &(*pp)->next) if (!*pp) return;
+  *pp = x->next;
 
   // recursively remove any subwindows:
   for (CreatedWindow *x1 = CreatedWindow::first; x1;) {
@@ -896,8 +884,8 @@ Window::~Window() {
   are typically positive. To get the actual rectangle around your
   window, add these values to the window's size.
 */
-/** \fn void Window::border( bool set) 
-    if set is true, then a window border will be set, 
+/** \fn void Window::border( bool set)
+    if set is true, then a window border will be set,
     otherwise the window will have neither border nor caption.
 */
 // Implementation in the system-specific code

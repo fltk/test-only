@@ -1,4 +1,4 @@
-// "$Id"
+// fltk_cairo.h
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -20,24 +20,26 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
 /** \file
-  "Portably" include cairo common definitions for fltk
+  "Portably" include cairo common definitions for fltk. If fltk is
+  compiled correctly, you can create a cairo "surface" from an fltk
+  Window and then make your own cairo context to draw into it.
+  FLTK may also be compiled to use cairo for all it's drawing, in
+  which case this has already been done when draw() is called.
 */
 
 #ifndef fltk_cairo_h
-# define fltk_cairo_h
+#define fltk_cairo_h
 
-# include <fltk/FL_API.h>
+#include <fltk/FL_API.h>
 
-# if USE_CAIRO
-// declare common CAIRO decls and includes
-#  include <cairo.h>
-  namespace fltk {
-    extern FL_API cairo_t * cc;
-    class Window;
-    FL_API cairo_surface_t * cairo_create_surface(Window* w);
-  }
-# endif 
-#endif 
-//
-// End of "$Id: x.h 5233 2006-06-25 06:11:31Z spitzak $".
-//
+#include <cairo.h>
+namespace fltk {
+  extern FL_API cairo_t * cc;
+  class Window;
+  FL_API cairo_surface_t * cairo_create_surface(Window* w);
+}
+
+#endif
+
+// End of fltk_cairo.h
+
