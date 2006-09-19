@@ -33,6 +33,5 @@ void fltk::unlock() {fl_unlock_function();}
 
 extern UINT fl_wake_msg;
 void fltk::awake(void* msg) {
-  if (!in_main_thread())
-    PostThreadMessage( main_thread, fl_wake_msg, (WPARAM)msg, 0);
+  PostThreadMessage( main_thread, fl_wake_msg, (WPARAM)msg, 0);
 }

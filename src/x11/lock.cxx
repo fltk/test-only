@@ -14,6 +14,7 @@ We don't use this by default for 2 reasons:
    program that works as a command-line version when DISPLAY is not set.
 3. It may interfere with XInput processing. I took a guess at how to
    work around this but it is untested.
+
 If you want this, edit config.h and set USE_X11_MULTITHREADING to 1.
 
 */
@@ -53,8 +54,7 @@ void fltk::lock() {init_or_lock_function();}
 void fltk::unlock() {fl_unlock_function();}
 
 void fltk::awake(void* msg) {
-  if (!in_main_thread())
-    write(thread_filedes[1], &msg, sizeof(void*));
+  write(thread_filedes[1], &msg, sizeof(void*));
 }
 
 void* fltk::thread_message() {

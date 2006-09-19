@@ -119,15 +119,31 @@
 
   Returns an argument sent to the most recent awake(), or returns null
   if none. Warning: this is almost useless for communication as the
-  value is clobbered by any thread doing awake()!
+  current implementation only has a one-entry queue and
+  only returns the most recent awake() result.
 */
 
 /*! \fn bool fltk::in_main_thread()
+
   Returns true if the current thread is the main thread, i.e. the one
   that called wait() first. Many fltk calls such as wait() will not
-  work correctly if this is not true. Notice that this function must
-  be surrounded by lock() and unlock() just like all other fltk
-  functions.
+
+  work correctly if this is not true. This function must be surrounded
+  by lock() and unlock() just like all other fltk functions, the
+  return value is wrong if you don't hold the fltk lock!
+
+  Warning: in_main_thread() is wrong if the main thread calls
+  fltk::unlock() and another thread calls fltk::lock() (the
+  assumption is that the main thread only calls wait()). Current
+  fix is to do the following unsupported code:
+
+\code
+  fltk::in_main_thread_ = false;
+  fltk::unlock();
+  wait_for_something_without_calling_fltk_wait();
+  fltk::lock();
+  fltk::in_main_thread_ = true;
+\endcode
 */
 
 #include <fltk/run.h>
@@ -205,8 +221,7 @@ void fltk::lock() {init_or_lock_function();}
 void fltk::unlock() {fl_unlock_function();}
 
 void fltk::awake(void* msg) {
-  if (!in_main_thread())
-    write(thread_filedes[1], &msg, sizeof(void*));
+  write(thread_filedes[1], &msg, sizeof(void*));
 }
 
 // the following is already defined in CYGWIN
