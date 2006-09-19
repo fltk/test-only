@@ -25,7 +25,8 @@
 #ifndef FLUID_PLUGINS_H
 #define FLUID_PLUGINS_H
 
-struct Fl_Menu_Item;
+#include <FL/Fl_Menu_Item.H>
+
 namespace fltk {class Group;}
 
 #define PLUGINS_EXTENSION ".flpl"

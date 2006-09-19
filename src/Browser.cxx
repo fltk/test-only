@@ -1892,8 +1892,9 @@ ItemGroup* Browser::add_group(const char *label, Group* parent, int state,
     img1 = img1 ? img1 : defGroupSymbol1;
     img2 = img2 ? img2 : defGroupSymbol2;
     img3 = img3 ? img3 : defGroupSymbol3;
-    ItemGroup * i = new ItemGroup(img1,label,fltk::ALIGN_BROWSER | state);
-    if (img2) i->image (img2, fltk::HIGHLIGHT); 
+    ItemGroup * i = new ItemGroup(label, img1);
+    i->set_flag(state);
+    if (img2) i->image (img2, fltk::HIGHLIGHT);
     if (img3) i->image (img3, fltk::OPENED);// last parameter because leaves have open images
     return i;
 }
@@ -1903,7 +1904,7 @@ Item* Browser::add_leaf(const char *label,  Group* parent,
     if (parent) parent->begin();
     img1 = img1 ? img1 : defLeafSymbol1;
     img2 = img2 ? img2 : defLeafSymbol2;
-    Item* i = new Item(img1, label, fltk::ALIGN_BROWSER);
+    Item* i = new Item(label, img1);
     if (img2) i->image (img2, fltk::HIGHLIGHT);
     return i;
 }

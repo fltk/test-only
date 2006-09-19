@@ -54,10 +54,10 @@ void build_hierarchy() {
   g->end();
   // now using MenuSection facility:
   {MenuSection g("submenu&2");
-      new Item("Item &1",0,0,0,0,0,0,10);
-      new Item("Item &2",0,0,0,0,0,0,14);
-      new Item("Item &3",0,0,0,0,0,0,18);
-      new Item("Item &4",0,0,0,0,0,0,22);
+      (new Item("Item &1"))->textsize(10);
+      (new Item("Item &2"))->textsize(14);
+      (new Item("Item &3"))->textsize(18);
+      (new Item("Item &4"))->textsize(22);
       //g->deactivate();
       {MenuSection g1("&nested menu");
 	  new Item("Item &1");

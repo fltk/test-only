@@ -24,6 +24,7 @@
 //
 #include <fltk/MenuBuild.h>
 #include <fltk/DoubleBufferWindow.h>
+#include <fltk/ToggleItem.h>
 #include "fluid_menus.h"
 #include "WidgetType.h"
 #include "FunctionType.h"
@@ -189,10 +190,10 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
 	//new Item("Deactivate", 0, nyi);
 	//new Item("Activate", 0, nyi, 0, FL_MENU_DIVIDER);
 	{MenuSection g("&Show / Hide"); 
-	    ishow_overlay = new Item(Item::TOGGLE,"Show &Overlays",ACCELERATOR+'o',toggle_overlays);
-	    iwidget_bin   = new Item(Item::TOGGLE,"Show &Widget Bin",ACCELERATOR+'b',toggle_widgetbin_cb);
-	    isource_view  = new Item(Item::TOGGLE,"Show &Source Code",ACCELERATOR+COMMAND+'s',(Callback*) toggle_sourceview_cb);
-	    istatusbar    = new Item(Item::TOGGLE,"Show Status &Bar",ACCELERATOR+COMMAND+'b',(Callback*) toggle_statusbar_cb);
+	    ishow_overlay = new ToggleItem("Show &Overlays",ACCELERATOR+'o',toggle_overlays);
+	    iwidget_bin   = new ToggleItem("Show &Widget Bin",ACCELERATOR+'b',toggle_widgetbin_cb);
+	    isource_view  = new ToggleItem("Show &Source Code",ACCELERATOR+COMMAND+'s',(Callback*) toggle_sourceview_cb);
+	    istatusbar    = new ToggleItem("Show Status &Bar",ACCELERATOR+COMMAND+'b',(Callback*) toggle_statusbar_cb);
 	}
 	//new Divider();
 	new Item("&Preferences",COMMAND+'p',show_preferences_cb);
@@ -201,7 +202,7 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
 	new Item("Set i&mages root directory", COMMAND+'d', set_images_dir_cb);
     }    
     {MenuSection g("&New"); fill_in_New_Menu(g.group()); }
-    {MenuSection g("&Plugins", 0, 0, (void *)Plugins_Options_Menu);}
+    {MenuSection g("&Plugins"); Plugins_Options_Menu->add_to(g.group());}
     {MenuSection g("&Layout");
       {MenuSection sg("&Align");
 	new Item("&Left",0,(Callback *)align_widget_cb,(void*)10);
@@ -225,12 +226,12 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
 	new Item("&Vertical",0,(Callback *)align_widget_cb,(void*)41);
       }
       {MenuSection sg("Set &Widget Size");
-	new Item("&Tiny",ACCELERATOR+'1',(Callback *)widget_size_cb,(void*)8,0,NORMAL_LABEL,HELVETICA,8);
-	new Item("&Small",ACCELERATOR+'2',(Callback *)widget_size_cb,(void*)11,0,NORMAL_LABEL,HELVETICA,11);
-	new Item("&Normal",ACCELERATOR+'3',(Callback *)widget_size_cb,(void*)14,0,NORMAL_LABEL,HELVETICA,14);
-	new Item("&Medium",ACCELERATOR+'4',(Callback *)widget_size_cb,(void*)18,0,NORMAL_LABEL,HELVETICA,18);
-	new Item("&Large",ACCELERATOR+'5',(Callback *)widget_size_cb,(void*)24,0,NORMAL_LABEL,HELVETICA,24);
-	new Item("&Huge",ACCELERATOR+'6',(Callback *)widget_size_cb,(void*)32,0,NORMAL_LABEL,HELVETICA,32);
+	(new Item("&Tiny",ACCELERATOR+'1',(Callback *)widget_size_cb,(void*)8))->textsize(8);
+	(new Item("&Small",ACCELERATOR+'2',(Callback *)widget_size_cb,(void*)11))->textsize(11);
+	(new Item("&Normal",ACCELERATOR+'3',(Callback *)widget_size_cb,(void*)14))->textsize(14);
+	(new Item("&Medium",ACCELERATOR+'4',(Callback *)widget_size_cb,(void*)18))->textsize(18);
+	(new Item("&Large",ACCELERATOR+'5',(Callback *)widget_size_cb,(void*)24))->textsize(24);
+	(new Item("&Huge",ACCELERATOR+'6',(Callback *)widget_size_cb,(void*)32))->textsize(32);
       }
       new Divider();
       new Item("&Grid and Size Settings...",COMMAND+'g',show_preferences_cb,(void*)2);
@@ -245,7 +246,7 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
 	new Item("&On fluid...",0,help_cb);
 	new Item("&FLTK Manual...",0,manual_cb);
 	new Divider();
-	itooltip= new Item(Item::TOGGLE,"&Tooltips", 0, tt_cb, 0);
+	itooltip= new ToggleItem("&Tooltips", 0, tt_cb, 0);
         //new Item("Manual",0,nyi);
     }
     menubar->end();
@@ -328,9 +329,13 @@ void fltk::fill_in_New_Menu(ItemGroup* menu) {
       newMenu->end();
 }
 //////////////////////////////////////////////////////////////////////
+
 Item * fltk::fluidMenuItem(FluidType& wt,int n) {
-  return new Item(wt.type_name(),n>=0 ?fluid_pixmap[n] : (xpmImage*)0,0,cb,(void*)&wt);
+  Item* i = new Item(wt.type_name(),0,cb,(void*)&wt);
+  if (n >= 0) i->image(fluid_pixmap[n]);
+  return i;
 }
+
 //////////////////////////////////////////////////////////////////////
 
 //

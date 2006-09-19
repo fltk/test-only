@@ -1,7 +1,4 @@
-//
-// "$Id$"
-//
-// Widget designed to be a menu or browser item.
+// "$Id: ToggleItem.h 588 2003-06-24 21:10:19Z spitzak $"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -23,33 +20,20 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#ifndef fltk_Item_h
-#define fltk_Item_h
+#ifndef fltk_ToggleItem_h
+#define fltk_ToggleItem_h
 
-#ifndef fltk_Widget_h
-#include "Widget.h"
-#endif
+#include "Item.h"
 
 namespace fltk {
 
-class FL_API Item : public Widget {
+/** This widget makes a checkmark in a popup or pulldown Menu.
+    It's behavior in a Browser or other group is undefined. */
+class ToggleItem : public Item {
 public:
-  
-  void draw();
-  void layout();
-  int handle(int);
-  
-  Item(const char* label = 0);
-  Item(const char* label, int shortcut, Callback *callback=0, void *user_data_=0, int flags=0);
-  Item(const char* label, const Symbol*);
-
-  static NamedStyle* default_style;
-  static void set_style(const Style*, bool menubar);
-  static void set_style(const Widget* w, bool f) {set_style(w->style(),f);}
-  static void clear_style() {set_style(Widget::default_style,false);}
-
-private:
-    void init(); // common constructor initialization
+  ToggleItem(const char* label = 0) : Item(label) {type(TOGGLE);}
+  ToggleItem(const char* label,int shortcut,Callback *callback=0,void *user_data=0, int flags=0)
+    : Item(label,shortcut,callback,user_data,flags) {type(TOGGLE);}
 };
 
 }

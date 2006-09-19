@@ -22,10 +22,8 @@
 //
 
 #include <fltk/Item.h>
-#include <fltk/ItemGroup.h>
 #include <fltk/Box.h>
 #include <fltk/CheckButton.h>
-#include <fltk/RadioButton.h>
 #include <fltk/draw.h>
 #include <string.h>
 
@@ -50,28 +48,12 @@ static NamedStyle style("Item", revert, &Item::default_style);
 */
 NamedStyle* Item::default_style = &::style;
 
-/** Constructor by default and also the one that should be used to easily 
-    constructing browsing items (supports image + alignement decl)
-    Unlike other widgets the constructor does not take any dimensions,
+/** Unlike other widgets the constructor does not take any dimensions,
     since it is assummed the container widget will size this
     correctly.
 */
-Item::Item(const Symbol* img, const char* l, int custom_alignment) 
-  : Widget(0,0,0,0,l) {
+Item::Item(const char* l) : Widget(0,0,0,0,l) {
   init();
-  if (img) image(img);
-  if (custom_alignment!=-1)  align(custom_alignment);
-}
-
-void Item::type(int t) { 
-    Widget::type(t);
-    if (t!=Widget::RADIO && t!=Widget::TOGGLE) return;
-    if (t==RADIO )
-	 default_style->glyph_= RadioButton::default_style->glyph_; 
-    else 
-    	default_style->glyph_ = CheckButton::default_style->glyph_;
-    this->style(default_style);
-    set_flag(ALIGN_LEFT|ALIGN_INSIDE);
 }
 
 void Item::init() {
@@ -79,46 +61,26 @@ void Item::init() {
   // to make sure the check button style is constructed before this style:
   if (!default_style->glyph_)
     default_style->glyph_ = CheckButton::default_style->glyph_;
-  this->style(default_style);
-  set_flag(ALIGN_LEFT|ALIGN_INSIDE);
+  style(default_style);
+  flags(ALIGN_LEFT|ALIGN_INSIDE);
 }
 
-Item::Item(const char* l,int s,Callback *cb,void *ud, int f
-	   , LabelType* lt, Font*lf, float ls) : Widget(0,0,0,0,l)  {
+/*!
+  This constructor is provided to match the Menu::add() function arguments.
+  See Menu::add() for more details.
+*/
+Item::Item(const char* l, int s, Callback *cb, void *ud, int f) : Widget(0,0,0,0,l)  {
+  init();
   shortcut(s);
   callback(cb);
   user_data(ud);
-  flags(f);
-  init();
-  if (lt) labeltype(lt);
-  if (lf) labelfont(lf);
-  if (ls>0) labelsize(ls);
-}
-Item::Item(const char* l,const Symbol* i, int s,Callback *cb,void *ud, int f
-	   , LabelType* lt, Font*lf, float ls) : Widget(0,0,0,0,l)  {
-  shortcut(s);
-  callback(cb);
-  user_data(ud);
-  flags(f);
-
-  if (i) image(i);
-  init();
-  if (lt) labeltype(lt);
-  if (lf) labelfont(lf);
-  if (ls>0) labelsize(ls);
+  set_flag(f);
 }
 
-Item::Item(WidgetVisualType t, const char* l,int s,Callback *cb,void *ud, int f
-	   , LabelType* lt, Font*lf, float ls) : Widget(0,0,0,0,l)  {
-  shortcut(s);
-  callback(cb);
-  user_data(ud);
-  flags(f);
+/*! This constructor also sets the image(), useful for a browser item. */
+Item::Item(const char* l, const Symbol* i) : Widget(0,0,0,0,l) {
   init();
-  if (lt) labeltype(lt);
-  if (lf) labelfont(lf);
-  if (ls>0) labelsize(ls);
-  type(t);
+  image(i);
 }
 
 /** Modify the parent of the Item::default_style to this style.
@@ -189,7 +151,6 @@ void Item::draw() {
     int gw = int(textsize())+2;
     Rectangle lr(r);
     lr.move_x(gw+3);
-    type(type()); // don't now why but glyph_ seems to be forced somewhere
     draw_label(lr, flags());
     draw_glyph(0, Rectangle(r.x()+3, r.y()+((r.h()-gw)>>1), gw, gw));
   } else {
@@ -208,9 +169,9 @@ void Item::layout() {
   measure(label(), w, h);
   if (w) {w += 6+int(textsize())/2;}
   if (type()) w += 15;
-  if (context_image()) {
+  if (image()) {
     int W,H;
-    context_image()->measure(W, H);
+    image()->measure(W, H);
     if (H > h) h = H;
     w += W;
   }
@@ -222,7 +183,6 @@ void Item::layout() {
 /** Returns 0 always. Items do not accept \e any events. Any results
     of clicking on them is handled by the parent Menu or Browser. */
 int Item::handle(int) {return 0;}
-
 
 ////////////////////////////////////////////////////////////////
 
@@ -258,25 +218,18 @@ void ItemGroup::init() {
   align(ALIGN_LEFT|ALIGN_INSIDE);
 }
 
-ItemGroup::ItemGroup(const Symbol * img, const char* l,  int custom_align) 
-  : Menu(0,0,0,0,l) {
+ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
   init();
   // Undo the Menu class changing default_callback:
-  callback(Widget::default_callback);
-  if (img) image(img);
-  if (custom_align!=-1) align(custom_align);
+  // callback(Widget::default_callback);
 }
 
-// Constructor that suits well dynamic menu building
-ItemGroup::ItemGroup(const char* l,int s,Callback *cb,void *ud, int f, bool begin) 
-    : Menu(0,0,0,0,l,false)  {
-  callback(cb);
-  shortcut(s);
-  user_data(ud);
-  flags(f);
+/*! This constructor also sets image(). */
+ItemGroup::ItemGroup(const char* l, const Symbol* i) : Menu(0,0,0,0,l) {
   init();
-  if (begin) this->begin();
+  image(i);
 }
+
 // implementation of draw & layout should be identical to Item type()==0
 
 void ItemGroup::draw() {
@@ -300,9 +253,9 @@ void ItemGroup::layout() {
   int w = 250, h = 250;
   measure(label(), w, h);
   if (w) {w += 6+int(textsize())/2;}
-  if (context_image()) {
+  if (image()) {
     int W,H;
-    context_image()->measure(W, H);
+    image()->measure(W, H);
     if (H > h) h = H;
     w += W;
   }
