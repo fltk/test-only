@@ -27,6 +27,12 @@
 
 namespace fltk {
 
+enum {  // values for attributes:
+  BOLD = 1,
+  ITALIC = 2,
+  BOLD_ITALIC = 3
+};
+
 struct FL_API Font {
   const char* name_;
   int attributes_;
@@ -49,6 +55,12 @@ struct FL_API Font {
   static const char* current_name();
 
 };
+
+// Find a Font from a name and attributes:
+FL_API Font* font(const char* name, int attrib = 0);
+
+// Find a Font from an fltk1 integer font id:
+FL_API Font* font(int);
 
 // Find and return every font on the system.
 FL_API int list_fonts(Font**& arrayp);

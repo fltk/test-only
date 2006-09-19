@@ -1,4 +1,3 @@
-//
 // "$Id$"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
@@ -21,7 +20,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #include <config.h>
 #include <fltk/Font.h>
@@ -29,7 +27,7 @@
 #include <fltk/x.h>
 #include <fltk/string.h>
 
-/*! \class fltk::Font
+/** \class fltk::Font
 
 Identifies a font. You can create these with fltk::font(name) or
 with fltk::list_fonts(). Do not attempt to create your instances
@@ -39,28 +37,28 @@ This is a struct so that fltk can initialize a table internally
 with constants. Don't use the undocumented fields.
 */
 
-/*! \fn fltk::Font* fltk::Font::plus(int attributes);
+/** \fn fltk::Font* fltk::Font::plus(int attributes);
   Return a font from the same family with the extra attributes turned
   on. This may return the same font if the attributes are already on
   or there is no font with those attributes.
 */
 
-/*! \fn fltk::Font* fltk::Font::bold()
+/** \fn fltk::Font* fltk::Font::bold()
   Same as plus(BOLD), returns a bold version of this font.
 */
 
-/*! \fn fltk::Font* fltk::Font::italic()
+/** \fn fltk::Font* fltk::Font::italic()
   Same as plus(ITALIC), returns an italic version of this font.
 */
 
-/*! \fn const char* fltk::Font::system_name();
+/** \fn const char* fltk::Font::system_name();
   Returns the string actually passed to the operating system, which
-  may be different than name(). For Xlib this is an ugly string with a
-  lot of asterix in it.  For most other systems this is the same as
-  name() without any attributes.
+  may be different than name().
+  For Xlib this is a pattern sent to XListFonts to find all the sizes.
+  For most other systems this is the same as name() without any attributes.
 */
 
-/*! \fn void fltk::drawtext_transformed(const char *text, int n, float x, float y);
+/** \fn void fltk::drawtext_transformed(const char *text, int n, float x, float y);
   Draw text starting at a point returned by fltk::transform(). This
   is needed for complex text layout when the current transform may
   not match the transform being used by the font.
@@ -104,74 +102,83 @@ const char *fltk::encoding_ = "iso10646-1";
 #error
 #endif
 
-/*! \fn Font* fltk::getfont()
+/** \fn Font* fltk::getfont()
   Return the Font sent to the last setfont().
 */
 
-/*! \fn float fltk::getsize()
+/** \fn float fltk::getsize()
   Return the size sent to the last setfont(). You should use this as a
   minimum line spacing (using ascent()+descent() will produce oddly
   spaced lines for many fonts).
 */
 
-/*! \fn float fltk::getascent()
+/** \fn float fltk::getascent()
   Return the distance from the baseline to the top of letters in
   the current font.
 */
 
-/*! \fn float fltk::getdescent()
+/** \fn float fltk::getdescent()
   Return the distance from the baseline to the bottom of letters in
   the current font.
 */
 
-/*! Draw a nul-terminated string. */
-void
-fltk::drawtext(const char* text, float x, float y) {
+/** Draw a nul-terminated string. */
+void fltk::drawtext(const char* text, float x, float y) {
   drawtext(text, strlen(text), x, y);
 }
 
-/*!
+/**
   Draw the first n \e bytes (not characters if utf8 is used) starting
-  at the given position. */
-void
-fltk::drawtext(const char* text, int n, float x, float y) {
+  at the given position.
+*/
+void fltk::drawtext(const char* text, int n, float x, float y) {
   transform(x,y);
   drawtext_transformed(text, n, x, y);
 }
 
-/*! \fn float fltk::getwidth(const char *text, int n)
+/** \fn float fltk::getwidth(const char *text, int n)
   Return the width of the first \a n bytes of this UTF-8 string drawn
   in the font set by the most recent setfont().
 */
 
-/*! Return the width of a nul-terminated UTF-8 string drawn in the
-  font set by the most recent setfont(). */
+/**
+  Return the width of a nul-terminated UTF-8 string drawn in the
+  font set by the most recent setfont().
+*/
 float fltk::getwidth(const char* text) {
   return getwidth(text, strlen(text));
 }
 
-/*! \fn const char* fltk::Font::name(int* attributes)
+/** \fn const char* fltk::Font::name(int* attributes)
   Return a string name for this font, and put any attributes
   (BOLD, ITALIC) into the location pointed to by \a attributes.
-  Using the returned string and attributes as arguments to fltk::font()
+  Using the returned string and attributes as arguments to find()
   will return the same font.
 */
 
-/*! Return a single string that names this font. Attributes are
-  indicated by adding " bold" and/or " italic" to the end of the
-  name. Passing this string and zero for the attributes to fltk::font()
-  will return the same font.
+/**
+  Return a single string that names this font. Passing this
+  string and zero for the attributes to find() will return the
+  same font.
+
+  If the font's attributes are non-zero, this is done by appending a
+  space and "Bold" and/or "Italic" to the name. This allows a single
+  string rather than a string+attribute pair to identify a font, which
+  is really useful for saving them in a file. <i>The return value is
+  in a temporary buffer that will be overwritten on the next call in
+  this case.</i>
 */
 const char* fltk::Font::name() const {
   if (!attributes_) return name_;
-  static char *buffer; if (!buffer) buffer = new char[128];
-  strcpy(buffer, name_);
-  if (attributes_ & BOLD) strcat(buffer, " Bold");
-  if (attributes_ & ITALIC) strcat(buffer, " Italic");
+  const int length=128;
+  static char *buffer; if (!buffer) buffer = new char[length];
+  strlcpy(buffer, name_, length);
+  if (attributes_ & BOLD) strlcat(buffer, " Bold", length);
+  if (attributes_ & ITALIC) strlcat(buffer, " Italic", length);
   return buffer;
 }
 
-/*!
+/**
   Obsolete function to encourage FLTK to choose a 256-glyph font with
   the given encoding. You must call setfont() after changing this for
   it to have any effect.
@@ -185,7 +192,7 @@ const char* fltk::Font::name() const {
 */
 void fltk::set_encoding(const char* f) {encoding_ = f;}
 
-/*! \fn const char* fltk::get_encoding()
+/** \fn const char* fltk::get_encoding()
   Returns the string sent to the most recent set_encoding().
 */
 

@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Copyright 2004 Bill Spitzak and others.
+// Copyright 2006 Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -22,14 +22,6 @@
 
 // Draw fonts using Keith Packard's Xft and Xrender extension. Yow!
 // Many thanks to Carl for making the original version of this.
-//
-// In older versions Xft fell back on using X11 fonts if it could not
-// use the Xrender extension. Xft2 sends bitmaps, which actually works
-// acceptably even to a remote X server. Unfortunatly it lost the
-// ability to return a "similar" X11 font, which broke our code to
-// get matching fonts into OpenGL. It would probably be best to fix
-// this by having the OpenGL emulation access the bitmaps as well,
-// so there would be antialiasing there, too!
 //
 // Unlike some other Xft packages, I tried to keep this simple and not
 // to work around the current problems in Xft by making the "patterns"
@@ -62,11 +54,13 @@ typedef struct _XftMatrix {
 
 using namespace fltk;
 
-// One of these is made for each combination of size + encoding:
+// One of these is made for each combination of font+size:
 struct FontSize {
-  unsigned size10;	// size*10
+  float minsize, maxsize;
   XftFont* font;
-  const char* encoding;
+  unsigned fonthash; // id of the actual glyph images
+  unsigned opengl_id; // for OpenGL display lists
+  unsigned texture; // for OpenGL display lists
   XFontStruct* xfont;
   //~FontSize();
 };
@@ -92,7 +86,13 @@ const char* fltk::Font::system_name() {
 
 static FontSize* current;
 
-static XftFont* fontopen(const char* name, int attributes, bool core) {
+// API to OpenGL/gl_draw.cxx:
+FL_API unsigned fl_font_opengl_id() {return current->opengl_id;}
+FL_API unsigned fl_font_opengl_texture() {return current->texture;}
+FL_API void fl_set_font_opengl_id(unsigned v) {current->opengl_id = v;}
+FL_API void fl_set_font_opengl_texture(unsigned v) {current->texture = v;}
+
+static XftFont* fontopen(const char* name, int attributes, float size, bool core) {
   open_display();
   int weight = XFT_WEIGHT_MEDIUM;
   if (attributes&BOLD) weight = XFT_WEIGHT_BOLD;
@@ -104,23 +104,22 @@ static XftFont* fontopen(const char* name, int attributes, bool core) {
 		     XFT_WEIGHT, XftTypeInteger, weight,
 		     XFT_SLANT, XftTypeInteger, slant,
 		     //XFT_ENCODING, XftTypeString, encoding_,
-		     XFT_PIXEL_SIZE, XftTypeDouble, (double)current_size_,
+		     XFT_PIXEL_SIZE, XftTypeDouble, (double)size,
 		     core ? XFT_CORE : 0, XftTypeBool, true,
 		     XFT_RENDER, XftTypeBool, false,
 		     0);
 }
 
-void fltk::setfont(fltk::Font* font, float rsize) {
-  // Reduce the number of sizes by rounding to various multiples:
-  unsigned size10 = unsigned(10*rsize+.5);
+void fltk::setfont(fltk::Font* font, float size) {
 #ifndef XFT_MAJOR
   // Older Xft craps out with tiny sizes and returns null for the font
-  if (size10 < 20) size10 = 20;
+  if (size < 2) size = 2;
 #endif
-  if (font == current_font_ && current->size10 == size10 &&
-      !strcasecmp(current->encoding, encoding_))
+  current_size_ = size;
+  if (font == current_font_
+      && current->minsize <= size && current->maxsize >= size)
     return;
-  current_font_ = font; current_size_ = size10/10.0f;
+  current_font_ = font;
   // binary search the fontsizes we have generated already
   FontSize* array = ((IFont*)font)->fontsizes;
   unsigned n = ((IFont*)font)->numsizes;
@@ -128,12 +127,32 @@ void fltk::setfont(fltk::Font* font, float rsize) {
   while (a < b) {
     unsigned c = (a+b)/2;
     FontSize* f = array+c;
-    int d = f->size10-size10;
-    if (!d) d = strcasecmp(f->encoding, encoding_);
-    if (d < 0) a = c+1;
-    else if (d > 0) b = c;
+    if (size < f->minsize) b = c;
+    else if (size > f->maxsize) a = c+1;
     else {current = f; return;}
   }
+  // new font should now be inserted at a.
+  // Ask Xft for the font:
+  XftFont* xftfont = fontopen(font->name_, font->attributes_, size, false);
+  // There has to be a way to find out which bitmaps were chosen! Anyway
+  // this uses what information we have to try to identify if the same
+  // bitmaps were chosen:
+  unsigned fonthash =
+    (32*32)*xftfont->height+32*xftfont->ascent+xftfont->descent;
+  // merge if it is the same font as one of the neighbors:
+  if (a > 0 && fonthash == array[a-1].fonthash) {
+    array[a-1].maxsize = size;
+    XftFontClose(xdisplay, xftfont);
+    current = array+a-1;
+    return;
+  }
+  if (a < n && fonthash == array[a].fonthash) {
+    array[a].minsize = size;
+    XftFontClose(xdisplay, xftfont);
+    current = array+a;
+    return;
+  }
+  // insert the new entry into the list:
   if (!(n&(n+1))) {
     unsigned m = 2*(n+1)-1;
     FontSize* newarray = new FontSize[m];
@@ -146,9 +165,10 @@ void fltk::setfont(fltk::Font* font, float rsize) {
   }
   ((IFont*)font)->numsizes = n+1;
   FontSize* f = array+a;
-  f->size10 = size10;
-  f->encoding = encoding_;
-  f->font = fontopen(font->name_, font->attributes_, false);
+  f->minsize = f->maxsize = size;
+  f->font = xftfont;
+  f->fonthash = fonthash;
+  f->opengl_id = 0;
   f->xfont = 0; // figure this out later
   current = f;
 }
@@ -160,60 +180,25 @@ FontSize::~FontSize() {
 }
 #endif
 
-/**
-Return the XFont set by the last call to setfont(). Newer FLTK uses
-the Xft and Freetype libraries, so this returns a very crude simulation
-that finds a somewhat similar font.
-*/
+// This returns the XftFont, not an XFontStruct!
 XFontStruct* fltk::xfont() {
+  return (XFontStruct*)(current->font);
+#if 0
+  // This code only works for XFT 1, which was able to find matching
+  // X fonts:
   if (!current->xfont) {
-#if 1 //defined(XFT_MAJOR) && XFT_MAJOR >= 2
-    // kludge! Select Xfonts for the fltk built-in ones, uses "variable"
-    // for everything else. Assummes the Xfont setup from RedHat 9:
-    const char *name = current_font_->name();
-    char *myname, xname[1024];
-    int slo = 0;
-    if (strncmp(name, "sans", 4)==0) {
-      myname = "-*-helvetica-%s-%s-normal-*-%d-*-*-*-*-*-*-*";
-    } else if (strncmp(name, "mono", 4)==0) {
-      myname = "-*-courier-%s-%s-normal-*-%d-*-*-*-*-*-*-*";
-    } else if (strncmp(name, "serif", 5)==0) {
-      myname = "-*-times-%s-%s-normal-*-%d-*-*-*-*-*-*-*"; slo = 2;
-    } else if (strncmp(name, "symbol", 6)==0) {
-      myname = "-*-symbol-%s-%s-*-*-%d-*-*-*-*-*-*-*";
-    } else if (strncmp(name, "screen", 6)==0) {
-      myname = "-*-clean-%s-%s-*-*-%d-*-*-*-*-*-*-*"; slo = 2;
-    } else if (strncmp(name, "dingbats", 8)==0) {
-      myname = "-*-*zapf dingbats-%s-%s-*-*-%d-*-*-*-*-*-*-*";
-    } else {
-      myname = "-*-helvetica-%s-%s-normal-*-%d-*-*-*-*-*-*-*";
-    }
-    static char *wghtLUT[] = { "medium", "bold" };
-    static char *slantLUT[] = { "r", "o", "r", "i" };
-    sprintf(xname, myname,
-	    wghtLUT[(current_font_->attributes_&BOLD)!=0],
-	    slantLUT[slo+((current_font_->attributes_&ITALIC)!=0)],
-	    int(current_size_+0.5));
-    XFontStruct *myFont = XLoadQueryFont(xdisplay, xname);
-    if (!myFont) {
-      static XFontStruct* some_font = 0;
-      if (!some_font) some_font = XLoadQueryFont(xdisplay, "variable");
-      myFont = some_font;
-    }
-    current->xfont = myFont;
-#else
     if (current->font->core) {
       current->xfont = current->font->u.core.font;
     } else {
       static XftFont* xftfont;
       if (xftfont) XftFontClose (xdisplay, xftfont);
       // select the "core" version of the font:
-      xftfont = fontopen(current_font_->name_,current_font_->attributes_,true);
+      xftfont = fontopen(current_font_->name_,current_font_->attributes_,current_size_,true);
       current->xfont = xftfont->u.core.font;
     }
-#endif
   }
   return current->xfont;
+#endif
 }
 
 const char* fltk::Font::current_name() {
@@ -308,9 +293,7 @@ static IFont fonts [] = {
   {{"serif",	2},	1,	0},
   {{"serif",	3},	0,	0},
   {{"symbol",	0},	0,	0},
-  {{"screen",	0},	1,	0},
-  {{"screen",	1},	0,	0},
-  {{"dingbats",	0},	0,	0}
+  {{"wingdings",0},	0,	0},
 };
 
 fltk::Font* const fltk::HELVETICA		= &(fonts[0].f);
@@ -326,12 +309,21 @@ fltk::Font* const fltk::TIMES_BOLD		= &(fonts[9].f);
 fltk::Font* const fltk::TIMES_ITALIC		= &(fonts[10].f);
 fltk::Font* const fltk::TIMES_BOLD_ITALIC	= &(fonts[11].f);
 fltk::Font* const fltk::SYMBOL_FONT		= &(fonts[12].f);
-fltk::Font* const fltk::SCREEN_FONT		= &(fonts[13].f);
-fltk::Font* const fltk::SCREEN_BOLD_FONT	= &(fonts[14].f);
-fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[15].f);
+fltk::Font* const fltk::SCREEN_FONT		= &(fonts[4].f);
+fltk::Font* const fltk::SCREEN_BOLD_FONT	= &(fonts[5].f);
+fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[13].f);
 
-// Turn an old integer into a predefined font:
-fltk::Font* fltk::font(int i) {return &(fonts[i%16].f);}
+// Turn an fltk1 integer font id into a predefined font:
+fltk::Font* fltk::font(int i) {
+  i = i & 15;
+  switch (i) {
+  case 13: i = 4; break; // "screen"
+  case 14: i = 5; break; // "screen bold"
+  case 15: i = 13; break; // "dingbats"
+  default: break;
+  }
+  return &(fonts[i].f);
+}
 
 ////////////////////////////////////////////////////////////////
 // The rest of this is for listing fonts:

@@ -32,6 +32,7 @@
 #include <fltk/MenuBuild.h>
 #include <fltk/Choice.h>
 #include <fltk/draw.h>
+#include <fltk/Font.h>
 #include <fltk/xpmImage.h>
 
 using namespace fltk;
@@ -173,11 +174,11 @@ int main(int argc, char **argv) {
   fontslider->callback(font_cb);
 
   sizes= new ValueSlider(50,350,350,25,"Size:");
-  sizes->type(Slider::TICK_ABOVE);
+  sizes->type(Slider::TICK_ABOVE|Slider::LOG);
   sizes->clear_flag(ALIGN_MASK);
   sizes->set_flag(ALIGN_LEFT);
   sizes->range(1,64);
-  sizes->step(1);
+  //sizes->step(1);
   sizes->value(14);
   sizes->callback(size_cb);
 

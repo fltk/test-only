@@ -142,6 +142,7 @@ int fltk::list_fonts(Font**& arrayp) {
     if ( listFamilies != 0 ) break;
     FMGetFontFamilyName( family, buf );
     buf[ buf[0]+1 ] = 0;
+    if (!isalpha(buf[1])) continue;
     //printf( "Font Family: %s\n", buf+1 );
     if (num_fonts >= array_size) {
       array_size = array_size ? 2*array_size : 128;

@@ -72,6 +72,10 @@ fltk::Font* fltk::font(const char* name, int attributes /* = 0 */) {
   if (!name || !*name) return 0;
   // find out if the " bold" or " italic" are on the end:
   int length = strlen(name);
+  // also accept "italics" because old Nuke saved scripts used that:
+  if (length > 8 && !strncasecmp(name+length-8, " italics", 8)) {
+    length -= 8; attributes |= ITALIC;
+  }
   if (length > 7 && !strncasecmp(name+length-7, " italic", 7)) {
     length -= 7; attributes |= ITALIC;
   }
@@ -80,7 +84,7 @@ fltk::Font* fltk::font(const char* name, int attributes /* = 0 */) {
   }
   Font* font = 0;
   // always try the built-in fonts first, becasue list_fonts is *slow*...
-  int i; for (i = 0; i < 16; i += (i < 12 ? 4 : 1)) {
+  int i; for (i = 0; i <= 12; i += 4) {
     font = fltk::font(i);
     const char* fontname = font->name();
     if (!strncasecmp(name, fontname, length) && !fontname[length]) goto GOTIT;
@@ -105,6 +109,11 @@ fltk::Font* fltk::font(const char* name, int attributes /* = 0 */) {
  GOTIT:
   return font->plus(attributes);
 }
+
+/*! \fn fltk::Font* fltk::font(int i)
+  \relates fltk::Font
+  Turn an fltk1 integer font id into a font.
+*/
 
 /*! \fn int fltk::Font::sizes(int*& sizep);
 

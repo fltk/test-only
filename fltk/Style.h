@@ -64,12 +64,6 @@ extern FL_API Box* const PLASTIC_UP_BOX;
 extern FL_API Box* const PLASTIC_DOWN_BOX;
 
 struct Font;
-FL_API Font* font(const char* name, int attrib = 0);
-enum {  // values for attributes:
-  BOLD = 1,
-  ITALIC = 2,
-  BOLD_ITALIC = 3
-};
 extern FL_API Font* const HELVETICA;
 extern FL_API Font* const HELVETICA_BOLD;
 extern FL_API Font* const HELVETICA_ITALIC;
@@ -86,7 +80,6 @@ extern FL_API Font* const SYMBOL_FONT;
 extern FL_API Font* const SCREEN_FONT;
 extern FL_API Font* const SCREEN_BOLD_FONT;
 extern FL_API Font* const ZAPF_DINGBATS;
-FL_API Font* font(int);
 
 class LabelType;
 extern FL_API LabelType* const NO_LABEL;

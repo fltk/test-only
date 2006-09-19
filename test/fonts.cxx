@@ -3,7 +3,7 @@
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2006 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -50,7 +50,7 @@ void FontDisplay::draw() {
   fltk::push_clip(2,2,w()-2,h()-2);
   const char* saved_encoding = fltk::get_encoding();
   fltk::set_encoding(encoding);
-  fltk::setfont(font, (float) size);
+  fltk::setfont(font, size);
   id_box->label(fltk::Font::current_name());
   id_box->redraw();
   fltk::setcolor(fltk::BLACK);
@@ -76,7 +76,6 @@ int pickedsize = 14;
 
 void font_cb(fltk::Widget *, long) {
   int fn = fontobj->value();
-  if (fn<0) return; // no current selection
 //printf("font: %d    name: %s   bigname: %s\n", fn, fonts[fn]->name(), fonts[fn]->system_name());
 
   fltk::Font* f = fonts[fn];
@@ -110,12 +109,12 @@ void font_cb(fltk::Widget *, long) {
   int *s; int n = f->sizes(s);
   if (!n) {
     // no sizes (this only happens on X)
-    fltk::setfont(f, (float) pickedsize);
+    fltk::setfont(f, pickedsize);
     textobj->size = (int)fltk::getsize();
-  } else if (s[0] == 0) {
+  } else /*if (s[0] == 0)*/ {
     // many sizes;
     int j = 1;
-    for (int i = 1; i<64 || i<s[n-1]; i++) {
+    for (int i = s[0]?0:1; i<64 || i<s[n-1]; i++) {
       char buf[20];
       if (j < n && i==s[j]) {sprintf(buf,"@b;%d",i); j++;}
       else sprintf(buf,"%d",i);
@@ -123,7 +122,7 @@ void font_cb(fltk::Widget *, long) {
     }
     sizeobj->value(pickedsize-1);
     textobj->size = pickedsize;
-  } else {
+    /*  } else {
     // some sizes
     int w = 0;
     for (int i = 0; i < n; i++) {
@@ -133,7 +132,7 @@ void font_cb(fltk::Widget *, long) {
       sizeobj->add(buf);
     }
     sizeobj->value(w);
-    textobj->size = s[w];
+    textobj->size = s[w]; */
   }
   encobj->redraw();
   sizeobj->redraw();
@@ -143,14 +142,17 @@ void font_cb(fltk::Widget *, long) {
 
 void encoding_cb(fltk::Widget *, long) {
   int i = encobj->value();
-  if (i<0) return; // FIXES STR#1291
+// CET - FIXME - new browser code has value starting from 0!
+//  if (!i) return;
   textobj->encoding = encobj->child(i)->label();
   textobj->redraw();
 }
 
 void size_cb(fltk::Widget *, long) {
   int i = sizeobj->value();
-  if (i<0) return; // no current selection
+  if (i < 0) return;
+// CET - FIXME - new browser code has value starting from 0!
+//  if (!i) return;
   const char *c = sizeobj->child(i)->label();
   while (*c < '0' || *c > '9') c++;
   pickedsize = atoi(c);

@@ -46,6 +46,7 @@ struct FontSize {
   const char* name;
   unsigned minsize;	// smallest point size that should use this
   unsigned maxsize;	// largest point size that should use this
+  unsigned opengl_id; // for OpenGL display lists
   //  ~FontSize();
 };
 
@@ -62,6 +63,9 @@ const char* fltk::Font::system_name() {
 
 static FontSize *current;
 static GC font_gc; // which gc the font was set in last time
+
+FL_API unsigned fl_font_opengl_id() {return current->opengl_id;}
+FL_API void fl_set_font_opengl_id(unsigned v) {current->opengl_id = v;}
 
 /*! Returns the operating-system dependent structure defining the
   current font. You must include <fltk/x.h> to use this. */
@@ -85,6 +89,7 @@ FontSize::FontSize(const char* name, const char* nname) {
     font = XLoadQueryFont(xdisplay, "fixed"); // if fixed fails we crash
   }
   encoding = 0;
+  opengl_id = 0;
 }
 
 #if 0 // this is never called!

@@ -131,6 +131,10 @@ static int CALLBACK enumcbW(CONST LOGFONTW* lplf,
   if (lplf->lfCharSet != ANSI_CHARSET) return 1;
   const wchar_t *name = lplf->lfFaceName;
   //const char *name = (const char*)(((ENUMLOGFONT *)lplf)->elfFullName);
+  char buffer[1024];
+  utf8fromwc(buffer, 1024, name, wcslen(name));
+  // ignore mystery garbage font names:
+  if (buffer[0] == '@') return 1;
 
   if (num_fonts >= array_size) {
     array_size = array_size ? 2*array_size : 128;
@@ -139,8 +143,6 @@ static int CALLBACK enumcbW(CONST LOGFONTW* lplf,
   int attrib = 0;
 //    if (lplf->lfWeight > 400 || strstr(name, " Bold") == name+strlen(name)-5)
 //      attrib = BOLD;
-  char buffer[1024];
-  utf8fromwc(buffer, 1024, name, wcslen(name));
   font_array[num_fonts++] = fl_make_font(buffer, attrib);
   return 1;
 }

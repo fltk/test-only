@@ -189,7 +189,8 @@ int main(int, char **) {
   popup->type(PopupMenu::POPUP3);
   popup->add_many("This|is|a popup|menu");
   window->end();
-  window->show();
+  subwindow->show(); // this should do nothing. On older fltk it crashed.
+  window->show(); // this actually shows the window + subwindow
   return fltk::run();
 }
 

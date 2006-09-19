@@ -35,6 +35,8 @@
 
 using namespace fltk;
 
+struct FontSize {float size; unsigned opengl_id;};
+
 // The public-visible fltk::Font structures are actually imbedded in
 // this larger structure which points at the the above list
 struct IFont {
@@ -42,6 +44,8 @@ struct IFont {
   int attribute_mask; // all attributes that can be turned on
   const char* name;
   float ascent, descent;
+  FontSize* sizes;
+  int numsizes;
 };
 
 // We store the attributes in neat blocks of 2^n:
@@ -60,6 +64,40 @@ const char* fltk::Font::system_name() {
 const char* fltk::xfont() { return current_font_->system_name(); }
 
 const char* fltk::Font::current_name() { return current_font_->name_; }
+
+// Locate storage to track OpenGL font ids:
+static FontSize* findsize() {
+  // binary search the fontsizes we have generated already
+  FontSize* array = ((IFont*)current_font_)->sizes;
+  unsigned n = ((IFont*)current_font_)->numsizes;
+  unsigned a = 0; unsigned b = n;
+  while (a < b) {
+    unsigned c = (a+b)/2;
+    FontSize* f = array+c;
+    if (current_size_ < f->size) b = c;
+    else if (current_size_ > f->size) a = c+1;
+    else return f;
+  }
+  // new font should now be inserted at a:
+  if (!(n&(n+1))) {
+    unsigned m = 2*(n+1)-1;
+    FontSize* newarray = new FontSize[m];
+    memcpy(newarray, array, a*sizeof(FontSize));
+    memcpy(newarray+a+1, array+a, (n-a)*sizeof(FontSize));
+    delete[] array;
+    ((IFont*)current_font_)->sizes = array = newarray;
+  } else {
+    memmove(array+a+1, array+a, (n-a)*sizeof(FontSize));
+  }
+  ((IFont*)current_font_)->numsizes = n+1;
+  FontSize* f = array+a;
+  f->size = current_size_;
+  f->opengl_id = 0;
+  return f;
+}
+
+FL_API unsigned fl_font_opengl_id() {return findsize()->opengl_id;}
+FL_API void fl_set_font_opengl_id(unsigned v) {findsize()->opengl_id = v;}
 
 ////////////////////////////////////////////////////////////////
 
@@ -122,6 +160,8 @@ Font* fl_make_font(const char* name, int attrib) {
     newfont[j].attribute_mask = 3;
     newfont[j].name = 0;
     newfont[j].ascent = 0;
+    newfont[j].sizes = 0;
+    newfont[j].numsizes = 0;
   }
   return &(newfont[0].f);
 }
@@ -130,7 +170,9 @@ Font* fl_make_font(const char* name, int attrib) {
 // Public interface:
 
 void fltk::setfont(Font* font, float psize) {
-  psize = rint(psize*10)/10.0f;
+  // round the sizes to reduce how many different fonts are used:
+  if (psize > 24) psize = rint(psize);
+  else psize = rint(psize*4)/4.0f;
 
   IFont* ifont = (IFont*)font;
 

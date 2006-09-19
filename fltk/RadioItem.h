@@ -1,8 +1,4 @@
-//
 // "$Id$"
-//
-// This widget makes a radio item in a popup or pulldown Menu.
-// It's behavior in a Browser or other group is undefined.
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -29,14 +25,17 @@
 
 #include "Item.h"
 
-/* obsolete see Item.h
 namespace fltk {
 
+/** This widget makes a radio item in a popup or pulldown Menu.
+    It's behavior in a Browser or other group is undefined. */
 class RadioItem : public Item {
 public:
-  RadioItem(const char* l = 0) : Item(l) {type(RADIO);}
+  RadioItem(const char* label = 0) : Item(label) {type(RADIO);}
+  RadioItem(const char* label,int shortcut,Callback *callback=0,void *user_data=0, int flags=0)
+    : Item(label,shortcut,callback,user_data,flags) {type(RADIO);}
 };
+
 }
-*/
 
 #endif

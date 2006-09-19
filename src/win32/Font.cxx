@@ -39,6 +39,7 @@ struct FontSize {
   int charset;
   int width[256];
   TEXTMETRICW metr;
+  unsigned opengl_id;
   FontSize* next_all;
   FontSize(const char* fontname, int attr, int size, int charset);
   ~FontSize();
@@ -65,6 +66,9 @@ const char* fltk::Font::system_name() {
 }
 
 static FontSize *current;
+
+FL_API unsigned fl_font_opengl_id() {return current->opengl_id;}
+FL_API void fl_set_font_opengl_id(unsigned v) {current->opengl_id = v;}
 
 static FontSize* all_fonts;
 
@@ -118,6 +122,8 @@ FontSize::FontSize(const char* name, int attr, int size, int charset) {
   this->charset = charset;
   next_all = all_fonts;
   all_fonts = this;
+
+  opengl_id = 0;
 }
 
 FontSize::~FontSize() {
@@ -152,8 +158,6 @@ static IFont fonts [] = {
   {{"Times New Roman",	2},	3,	0},
   {{"Times New Roman",	3},	3,	0},
   {{"Symbol",	0},	0,	0},
-  {{"Terminal",	0},	1,	0},
-  {{"Terminal",	1},	1,	0},
   {{"Wingdings",0},	0,	0}
 };
 
@@ -170,12 +174,21 @@ fltk::Font* const fltk::TIMES_BOLD		= &(fonts[9].f);
 fltk::Font* const fltk::TIMES_ITALIC		= &(fonts[10].f);
 fltk::Font* const fltk::TIMES_BOLD_ITALIC	= &(fonts[11].f);
 fltk::Font* const fltk::SYMBOL_FONT		= &(fonts[12].f);
-fltk::Font* const fltk::SCREEN_FONT		= &(fonts[13].f);
-fltk::Font* const fltk::SCREEN_BOLD_FONT	= &(fonts[14].f);
-fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[15].f);
+fltk::Font* const fltk::SCREEN_FONT		= &(fonts[4].f);
+fltk::Font* const fltk::SCREEN_BOLD_FONT	= &(fonts[5].f);
+fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[13].f);
 
-// Turn an old integer into a predefined font:
-fltk::Font* fltk::font(int i) {return &(fonts[i%16].f);}
+// Turn an fltk1 integer font id into a predefined font:
+fltk::Font* fltk::font(int i) {
+  i = i & 15;
+  switch (i) {
+  case 13: i = 4; break; // "screen"
+  case 14: i = 5; break; // "screen bold"
+  case 15: i = 13; break; // "dingbats"
+  default: break;
+  }
+  return &(fonts[i].f);
+}
 
 ////////////////////////////////////////////////////////////////
 
@@ -183,7 +196,7 @@ fltk::Font* fltk::font(int i) {return &(fonts[i%16].f);}
 // italic subfonts:
 Font* fl_make_font(const char* name, int attrib) {
   // see if it is one of our built-in fonts and return it:
-  int j; for (j = 0; j < 16; j++) {
+  int j; for (j = 0; j < 13; j++) {
     if (fonts[j].f.attributes_ == attrib &&
 	!strcasecmp(fonts[j].f.name_, name)) return &(fonts[j].f);
   }
