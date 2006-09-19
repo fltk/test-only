@@ -36,7 +36,7 @@
 #include <fltk/win32.h>
 #include <fltk/filename.h>
 #include <fltk/utf.h>
-#include <fltk/monitor.h>
+#include <fltk/Monitor.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -2221,12 +2221,14 @@ void CreatedWindow::set_minmax(LPMINMAXINFO minmax)
   if (window->maxh) {
     minmax->ptMaxTrackSize.y =
       minmax->ptMaxSize.y = window->maxh + r.h();
-  } else { // taking in account the windows desktop taskbar
-    // Also is there a reason we don't just leave the Windows default?
+  } else {
+    // Is there a reason we don't just leave the Windows default max height?
     // fabien: i think it is related to a minmax bug STR we had fixed many months ago :
     //   the bug was about happening when moving  the taskbar ...
     minmax->ptMaxTrackSize.y =
 	minmax->ptMaxSize.y = fltk::Monitor::all().h()-r.h();
+    // fltk::Monitor::all().work.h()-r.h() would leave space for taskbar
+    // but apparently Windows does this anyway
   }
 }
 

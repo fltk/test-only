@@ -37,7 +37,9 @@
 #ifdef USE_XFT
 # define Window XWindow
 # include <X11/Xft/Xft.h>
-# include FT_GLYPH_H
+# ifndef MAKEDEPEND
+#  include FT_GLYPH_H
+# endif
 # undef Window
 static void glXUseXftFont(XftFont*, unsigned listbase);
 # define TEXTURES 1

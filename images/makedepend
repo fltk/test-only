@@ -1,32 +1,39 @@
 Fl_Guess_Image.o: Fl_Guess_Image.cxx ../config.h ../fltk/draw.h \
   ../fltk/Flags.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Rectangle.h \
   ../fltk/PixelType.h ../fltk/SharedImage.h ../fltk/Image.h \
-  ../fltk/Symbol.h ../fltk/xbmImage.h ../fltk/x.h
+  ../fltk/types.h ../fltk/Symbol.h ../fltk/xbmImage.h ../fltk/x.h \
+  ../fltk/x11.h
 fl_jpeg.o: fl_jpeg.cxx ../config.h ../fltk/draw.h ../fltk/Flags.h \
   ../fltk/Color.h ../fltk/FL_API.h ../fltk/Rectangle.h \
   ../fltk/PixelType.h ../fltk/SharedImage.h ../fltk/Image.h \
-  ../fltk/Symbol.h
-fl_png.o: fl_png.cxx ../config.h ../fltk/draw.h ../fltk/Flags.h \
-  ../fltk/Color.h ../fltk/FL_API.h ../fltk/Rectangle.h \
-  ../fltk/PixelType.h ../fltk/SharedImage.h ../fltk/Image.h \
-  ../fltk/Symbol.h
-pnmImage.o: pnmImage.cxx
-xpmFileImage.o: xpmFileImage.cxx ../fltk/SharedImage.h ../fltk/Image.h \
-  ../fltk/Symbol.h ../fltk/FL_API.h ../fltk/Color.h ../fltk/Flags.h \
-  ../fltk/Rectangle.h ../fltk/PixelType.h ../fltk/xpmImage.h \
-  ../fltk/events.h ../fltk/draw.h ../fltk/x.h ../config.h
-images_core.o: images_core.cxx ../fltk/SharedImage.h ../fltk/Image.h \
-  ../fltk/Symbol.h ../fltk/FL_API.h ../fltk/Color.h ../fltk/Flags.h \
+  ../fltk/types.h ../fltk/Symbol.h
+fl_png.o: fl_png.cxx ../config.h ../fltk/x.h ../fltk/x11.h ../fltk/draw.h \
+  ../fltk/Flags.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Rectangle.h \
+  ../fltk/PixelType.h ../fltk/error.h ../fltk/SharedImage.h \
+  ../fltk/Image.h ../fltk/types.h ../fltk/Symbol.h
+pnmImage.o: pnmImage.cxx ../fltk/run.h ../fltk/FL_API.h ../fltk/error.h \
+  ../fltk/pnmImage.h ../fltk/SharedImage.h ../fltk/Image.h \
+  ../fltk/types.h ../fltk/Symbol.h ../fltk/Color.h ../fltk/Flags.h \
   ../fltk/Rectangle.h ../fltk/PixelType.h ../fltk/string.h
+xpmFileImage.o: xpmFileImage.cxx ../fltk/SharedImage.h ../fltk/Image.h \
+  ../fltk/types.h ../fltk/Symbol.h ../fltk/FL_API.h ../fltk/Color.h \
+  ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/PixelType.h \
+  ../fltk/xpmImage.h ../fltk/events.h ../fltk/draw.h ../fltk/x.h \
+  ../fltk/x11.h
+images_core.o: images_core.cxx ../fltk/SharedImage.h ../fltk/Image.h \
+  ../fltk/types.h ../fltk/Symbol.h ../fltk/FL_API.h ../fltk/Color.h \
+  ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/PixelType.h \
+  ../fltk/string.h
 FileIcon2.o: FileIcon2.cxx ../fltk/FileIcon.h ../fltk/FL_API.h \
   ../fltk/Color.h ../fltk/Flags.h ../fltk/Symbol.h ../fltk/Rectangle.h \
   ../fltk/PixelType.h ../fltk/filename.h ../fltk/draw.h \
-  ../fltk/SharedImage.h ../fltk/Image.h ../config.h ../fltk/string.h
+  ../fltk/SharedImage.h ../fltk/Image.h ../fltk/types.h ../config.h \
+  ../fltk/string.h
 HelpDialog.o: HelpDialog.cxx ../fltk/HelpDialog.h \
   ../fltk/DoubleBufferWindow.h ../fltk/Window.h ../fltk/Group.h \
   ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h \
   ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/HelpView.h \
   ../fltk/Scrollbar.h ../fltk/Slider.h ../fltk/Valuator.h ../fltk/draw.h \
   ../fltk/PixelType.h ../fltk/SharedImage.h ../fltk/Image.h \
-  ../fltk/Symbol.h ../fltk/Button.h ../fltk/Input.h ../fltk/string.h \
-  ../fltk/ask.h
+  ../fltk/types.h ../fltk/Symbol.h ../fltk/Button.h ../fltk/Input.h \
+  ../fltk/string.h ../fltk/ask.h

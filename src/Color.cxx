@@ -30,8 +30,9 @@
 #include <ctype.h>
 #include <stdio.h>
 
-/*! Turn a string into a color. If \a name is null this returns NO_COLOR.
-  Otherwise it returns fltk::color(name, strlen(name)).
+/**
+  Turn a string into a color. If \a name is null this returns NO_COLOR.
+  Otherwise it returns fltk::parsecolor(name, strlen(name)).
 */
 fltk::Color fltk::color(const char* name) {
   if (!name) return NO_COLOR;

@@ -787,7 +787,7 @@ fi
 dnl Define the command used to update the dependencies (this option
 dnl mainly for FLTK core developers - not necessary for users)
 dnl Command must write dependencies to stdout!
-MAKEDEPEND="\$(CXX) -MM"
+MAKEDEPEND="\$(CXX) -MM -DMAKEDEPEND"
 AC_SUBST(MAKEDEPEND)
 
 dnl Add warnings to compiler switches:

@@ -38,40 +38,40 @@ fltk::Thread prime_thread;
 
 fltk::Browser *browser1, *browser2;
 fltk::ValueInput *value1, *value2;
-int start2 = 3;
+unsigned start2 = 5;
 
 void* prime_func(void* p)
 {
   fltk::Browser* browser = (fltk::Browser*) p;
   fltk::ValueInput *value;
-  int n;
-  int step;
-
+  unsigned n = 5;
   if (browser == browser2) {
-    n      = start2;
-    start2 += 2;
-    step   = 12;
-    value  = value2;
+    value = value2;
   } else {
-    n     = 3;
-    step  = 2;
     value = value1;
   }
 
   // very simple prime number calculator !
-  for (; ; n+= step) {
-    int p;
-    int hn = (int)sqrt(n);
-    for (p=3; p<=hn; p+=2) if ( n%p == 0 ) break;
-    if (p >= hn) {
-      char s[128];
-      sprintf(s, "%d", n);
+  for (; ; n += 2) {
+    if (browser == browser2) {
+      // for multithreaded one, get next number to test
       fltk::lock();
-      browser->add(s);
-      browser->bottomline(browser->size());
-      if (n > value->value()) value->value(n);
+      n = start2;
+      start2 += 2;
       fltk::unlock();
-      fltk::awake((void*) (browser == browser1? p:0));	// Cause the browser to redraw ...
+    }
+    for (unsigned p=3; n%p; p+=2) {
+      if (p*p > n) {
+	char s[128];
+	sprintf(s, "%u", n);
+	fltk::lock();
+	browser->add(s);
+	browser->bottomline(browser->size());
+	if (n > value->value()) value->value(n);
+	fltk::awake((void*) (browser == browser1? p:0));	// Cause the browser to redraw ...
+	fltk::unlock();
+	break;
+      }
     }
   }
   return 0;
@@ -97,7 +97,11 @@ int main()
   w->show();
 
   browser1->add("Prime numbers:");
+  browser1->add("2");
+  browser1->add("3");
   browser2->add("Prime numbers:");
+  browser2->add("2");
+  browser2->add("3");
 
   // One thread displaying in one browser
   fltk::create_thread(prime_thread, prime_func, browser1);
