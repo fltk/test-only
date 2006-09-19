@@ -36,8 +36,6 @@ protected:
   const Symbol* image_;
 public:
   TiledImage(Symbol *i) : Symbol(0), image_(i) {}
-  // this constructor allow to load a sharedimage from an image name in one shot
-  TiledImage(const char * name); 
   const Symbol* image() const {return image_;}
   void image(const Symbol* i) {image_ = i;}
   void _measure(int& w, int& h) const;

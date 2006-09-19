@@ -1,7 +1,5 @@
 // "$Id$"
 //
-// The base class of all widgets.
-//
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or

@@ -1,4 +1,3 @@
-//
 // "$Id$"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
@@ -28,9 +27,7 @@
 */
 
 #include <fltk/TiledImage.h>
-#include <fltk/SharedImage.h>
 #include <fltk/draw.h>
-
 using namespace fltk;
 
 /*! \fn TiledImage::TiledImage(Symbol*)
@@ -39,27 +36,9 @@ using namespace fltk;
   is null then the TiledImage draws nothing.
 */
 
-TiledImage::TiledImage(const char * name): Symbol(0) {
-    if (name) image(SharedImage::get(name));
-}
-
 /*! Returns w and h unchanged, indicating that it can draw any size
   of rectangle, with no preference. */
-void TiledImage::_measure(int& w, int& h) const {
-  // Do nothing to indicate any rectangle is allowed.
-  // I think what I intended with this old code was to return a useful
-  // size for some (nyi) automatic resize of widgets. But it won't draw
-  // right unless ALIGN_CLIP was on. Also I suspect this is being used
-  // for backgrounds and probably should have no effect on resize anyway.
-#if 0
-  if (!image_) return;
-  int iw = w;
-  int ih = h;
-  image_->measure(iw,ih);
-  if (iw > w) w = iw;
-  if (ih > h) h = ih;
-#endif
-}
+void TiledImage::_measure(int& w, int& h) const {}
 
 /*! Repeatedly draws the image to fill the area, putting the top-left
   corner at \a x,y. This checks the current clip region and does

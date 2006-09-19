@@ -25,14 +25,14 @@ int main(int argc, char ** argv) {
   window->begin();
   Group* ib = new Group(0,0,window->w(),window->h());
   ib->begin();
-  ib->image(new TiledImage("./images/bg.jpeg"));
+  ib->image(new TiledImage(SharedImage::get("./images/bg.jpeg")));
   window->resizable(ib);
 
   Button *b1 = new Button(20, 20, 80, 25, "&Beep");
   b1->callback(beepcb,0);
   
   Button *b2 = new Button(120,20, 80, 25, "");
-  b2->image(new TiledImage("./images/coucou.png"));
+  b2->image(new TiledImage(SharedImage::get("./images/coucou.png")));
 
   Button *b3 = new Button(220,20, 80, 25, "E&xit");
   b3->callback(exitcb,0);
