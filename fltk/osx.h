@@ -28,7 +28,8 @@ file.
 
 FLTK is currently using the Carbon interface, and this includes
 the <Carbon/Carbon.h> header file. A macro is used to rename the
-Carbon "Style" as "XStyle" to avoid conflicts with FLTK.
+Carbon "Style" as "XStyle" to avoid conflicts with FLTK. (all
+drawing is using Quartz, however!)
 
 Many of the functions have the same name and purpose as ones defined
 in x11.h, just with different return types. Due to how Doxygen works,
@@ -70,6 +71,9 @@ extern FL_API class     SystemMenuBar *system_menu_bar;
 // event handling:
 
 // we want some way to access last message from system
+
+// Register a function to call when user opens a file in finder:
+extern void open_callback(void (*cb)(const char* name));
 
 ////////////////////////////////////////////////////////////////
 // drawing functions:
@@ -135,7 +139,5 @@ extern const Widget* cursor_for;
 # endif
 
 #endif
-//
-// End of "$Id$".
-//
 
+// End of "$Id$".

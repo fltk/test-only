@@ -1028,6 +1028,81 @@ static int FSSpec2UnixPath( FSSpec *fs, char *dst )
   return strlen(dst);
 }
  
+////////////////////////////////////////////////////////////////
+
+/* current value of fltk::open_callback() */
+static void	(*open_cb)(const char *) = 0;
+
+/*
+ * Event handler for Apple-O key combination and also for file opens
+ * via the finder...
+ */
+static OSErr OpenAppleEventHandler(const AppleEvent *appleEvt,
+                                   AppleEvent *reply,
+				   UInt32 refcon) {
+  if (!open_cb) return noErr;
+
+  // Initialize the document list...
+  AEDescList documents;
+  AECreateDesc(typeNull, NULL, 0, &documents);
+
+  // Get the open parameter(s)...
+  OSErr err;
+  err = AEGetParamDesc(appleEvt, keyDirectObject, typeAEList, &documents);
+  if (err != noErr) {
+    AEDisposeDesc(&documents);
+    return err;
+  }
+
+  // Open the documents via the callback...
+  long n; if (AECountItems(&documents, &n) == noErr) {
+    for (long i = 1; i <= n; i ++) {
+      // Get the next FSSpec record...
+      FSSpec fileSpec;
+      AEKeyword keyWd;
+      DescType typeCd;
+      Size actSz;
+      AEGetNthPtr(&documents, i, typeFSS, &keyWd, &typeCd,
+                  (Ptr)&fileSpec, sizeof(fileSpec),
+		  (actSz = sizeof(fileSpec), &actSz));
+
+      // Convert to a UNIX path...
+      char filename[1024];
+      FSSpec2UnixPath(&fileSpec, filename);
+
+      // Call the callback with the filename...
+      (*open_cb)(filename);
+    }
+  }
+
+  // Get rid of the document list...
+  AEDisposeDesc(&documents);
+
+  return noErr;
+}
+
+
+/**
+ * Install an open documents event handler...
+ */
+
+void fltk::open_callback(void (*cb)(const char *)) {
+  if (cb == open_cb) return;
+  open_cb = cb;
+  if (cb)
+    AEInstallEventHandler(kCoreEventClass, kAEOpenDocuments,
+                          NewAEEventHandlerUPP((AEEventHandlerProcPtr)
+					       OpenAppleEventHandler),
+			  0, false);
+  else
+    AERemoveEventHandler(kCoreEventClass, kAEOpenDocuments,
+			 NewAEEventHandlerUPP((AEEventHandlerProcPtr)
+					      OpenAppleEventHandler),
+			 false);
+}
+
+////////////////////////////////////////////////////////////////
+
 Window *dnd_target_window = 0;
 #include <fltk/draw.h>
 /*
