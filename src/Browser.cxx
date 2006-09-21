@@ -1,4 +1,3 @@
-//
 // "$Id$"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
@@ -189,23 +188,20 @@ using namespace fltk;
   open and visible as well.
 */
 bool Browser::item_is_visible() const {
-  return open_level[HERE] >= item_level[HERE] && item()->visible();
+  return HERE.open_level >= HERE.level && item()->visible();
 }
 
 /*! This function increases the number of levels we can store in each
   mark, and sets the level of the current mark to n. */
-void Browser::set_level(int n) {
-  if (n > levels) {
-    if (n > 255) fatal("More than 255 levels in Browser");
-    for (int i = 0; i < NUMMARKS; i++) {
-      int* newlist = new int[n+1];
-      memcpy(newlist, item_index[i], n*sizeof(int));
-      delete[] item_index[i];
-      item_index[i] = newlist;
-    }
-    levels = n;
+void Browser::set_level(unsigned n) {
+  if (n+1 > HERE.indexes_size) {
+    int* newlist = new int[n+1];
+    memcpy(newlist, HERE.indexes, n*sizeof(int));
+    if (HERE.indexes != &HERE.index0) delete[] HERE.indexes;
+    HERE.indexes = newlist;
+    HERE.indexes_size = n+1;
   }
-  item_level[HERE] = n;
+  HERE.level = n;
 }
 
 /*!
@@ -224,16 +220,16 @@ void Browser::set_level(int n) {
   invisible.
 */
 Widget* Browser::goto_top() {
-  item_level[HERE] = 0;
-  open_level[HERE] = 0;
-  item_position[HERE] = 0;
-  item_index[HERE][0] = 0;
-  siblings = children(item_index[HERE],0);
+  HERE.level = 0;
+  HERE.open_level = 0;
+  HERE.position = 0;
+  HERE.indexes[0] = 0;
+  siblings = children(HERE.indexes,0);
   // empty browser must return a null widget
   if (siblings <= 0) {
     item(0);
   } else {
-    item(child(item_index[HERE],0));
+    item(child(HERE.indexes,0));
     // skip leading invisible widgets:
     if (!item()->visible()) return next_visible();
   }
@@ -247,26 +243,47 @@ Widget* Browser::goto_top() {
 */
 
 /*! set current item to a particular mark */
-Widget* Browser::goto_mark(int mark) {
-  item_position[HERE] = item_position[mark];
-  item_level[HERE] = item_level[mark];
-  open_level[HERE] = open_level[mark];
-  for (int L = 0; L <= item_level[HERE]; L++) {
-    int i = item_index[HERE][L] = item_index[mark][L];
-    siblings = children(item_index[HERE], L);
+Widget* Browser::goto_mark(const Mark& mark) {
+  HERE = mark;
+  for (unsigned L = 0; L <= HERE.level; L++) {
+    int i = HERE.indexes[L];
+    siblings = children(HERE.indexes, L);
     if (i < 0 || i >= siblings) {item(0); return 0;}
   }
-  item(child(item_index[HERE], item_level[HERE]));
+  item(child(HERE.indexes, HERE.level));
   return item();
 }
 
-// copy one mark to another
-void Browser::set_mark(int dest_mark, int src_mark) {
-  item_position[dest_mark] = item_position[src_mark];
-  item_level[dest_mark] = item_level[src_mark];
-  open_level[dest_mark] = open_level[src_mark];
-  for (int L = item_level[src_mark]; L >= 0; L--)
-    item_index[dest_mark][L] = item_index[src_mark][L];
+/** Copy constructor */
+Browser::Mark::Mark(const Mark& source) {
+  level = source.level;
+  open_level = source.open_level;
+  position = source.position;
+  indexes_size = level+1;
+  if (indexes_size > 1)
+    indexes = new int[indexes_size];
+  else
+    indexes = &index0;
+  for (unsigned i=0; i < indexes_size; i++)
+    indexes[i] = source.indexes[i];
+}
+
+/** Assignment */
+const Browser::Mark& Browser::Mark::operator=(const Mark& source) {
+  if (&source != this) {
+    if (indexes != &index0) delete[] indexes;
+    level = source.level;
+    open_level = source.open_level;
+    position = source.position;
+    indexes_size = level+1;
+    if (indexes_size > 1)
+      indexes = new int[indexes_size];
+    else
+      indexes = &index0;
+    for (unsigned i=0; i < indexes_size; i++)
+      indexes[i] = source.indexes[i];
+  }
+  return *this;
 }
 
 // compare the relative locations of these two marks
@@ -274,8 +291,9 @@ void Browser::set_mark(int dest_mark, int src_mark) {
 // return   0 if mark1 is mark2
 // return > 0 if mark1 is after mark2
 
-static int compare_marks(const int* index1,int L1, const int* index2, int L2) {
-  for (int L = 0; ; L++) {
+static int compare_marks(const int* index1, unsigned L1,
+                         const int* index2, unsigned L2) {
+  for (unsigned L = 0; ; L++) {
     if (L > L1) {
       if (L > L2) return 0;
       return -1; // mark1 is on a parent of mark2
@@ -287,34 +305,29 @@ static int compare_marks(const int* index1,int L1, const int* index2, int L2) {
   }
 }
 
-int Browser::compare_marks(int mark1, int mark2) {
-  return ::compare_marks(item_index[mark1], item_level[mark1],
-			 item_index[mark2], item_level[mark2]);
-}
-
-// unsets this mark in toplevel
-void Browser::unset_mark(int mark) {
-  item_index[mark][0] = -1;
-}
-
-// is this toplevel mark set?
-bool Browser::is_set(int mark) {
-  return item_index[mark][0] >= 0;
+/** - Return -2 or less if this is before mark2
+    - Return -1 if this is a parent of mark2
+    - Return 0 if this is equal to mark2
+    - Return 1 if this is a child of mark2
+    - return 2 or greater if this is after mark2
+*/
+int Browser::Mark::compare(const Mark& mark2) const {
+  return ::compare_marks(indexes, level, mark2.indexes, mark2.level);
 }
 
 /*!  Return true if the current item is a parent. Notice that it may
   have zero children. */
 bool Browser::item_is_parent() const {
-  return children(item_index[HERE],item_level[HERE]+1) >= 0;
+  return children(HERE.indexes, HERE.level+1) >= 0;
 }
 
 /** If item_is_parent() is true, return true if this item is open.
     If this is not a parent the result is undefined. */
 bool Browser::item_is_open() const {
-    if (item()->flags() & fltk::OPENED) return true;
-  for (int i = 0; i <= item_level[HERE]; i++) {
-    if (i > item_level[OPEN]) return false;
-    if (item_index[HERE][i] != item_index[OPEN][i]) return false;
+  if (item()->flags() & fltk::OPENED) return true;
+  for (unsigned i = 0; i <= HERE.level; i++) {
+    if (i > OPEN.level) return false;
+    if (HERE.indexes[i] != OPEN.indexes[i]) return false;
   }
   return true;
 }
@@ -328,42 +341,42 @@ int Browser::item_h() const {
   This does not move and returns null if we are at the bottom. */
 Widget* Browser::next_visible() {
   if (item_is_visible()) {
-    item_position[HERE] += item()->h();
+    HERE.position += item()->h();
     // If we are on an open group title with children, go to first item in group
     if (item_is_open() && item_is_parent()) {
-      int n = item_level[HERE]+1;
+      int n = HERE.level+1;
       set_level(n);
-      open_level[HERE] = n;
-      item_index[HERE][n] = 0;
-      siblings = children(item_index[HERE], n);
+      HERE.open_level = n;
+      HERE.indexes[n] = 0;
+      siblings = children(HERE.indexes, n);
     } else {
       // go to next item in this group
-      item_index[HERE][item_level[HERE]] ++;
+      HERE.indexes[HERE.level] ++;
     }
   } else {
     // item is not visible, point after it (or after closed/invisible parent)
-    item_level[HERE] = open_level[HERE];
-    siblings = children(item_index[HERE], item_level[HERE]);
-    item_index[HERE][item_level[HERE]] ++;
+    HERE.level = HERE.open_level;
+    siblings = children(HERE.indexes, HERE.level);
+    HERE.indexes[HERE.level] ++;
   }
 
   // loop to find the next real item:
   for (;;) {
 
-    if (item_index[HERE][item_level[HERE]] >= siblings) {
+    if (HERE.indexes[HERE.level] >= siblings) {
       // we moved off the end of a group
-      if (!item_level[HERE]) {item(0); return 0;} // end of the entire browser
-      open_level[HERE] = --item_level[HERE];
-      item_index[HERE][item_level[HERE]] ++;
-      siblings = children(item_index[HERE], item_level[HERE]);
+      if (!HERE.level) {item(0); return 0;} // end of the entire browser
+      HERE.open_level = --HERE.level;
+      HERE.indexes[HERE.level] ++;
+      siblings = children(HERE.indexes, HERE.level);
       continue;
     }
 
-    item(child(item_index[HERE], item_level[HERE]));
+    item(child(HERE.indexes, HERE.level));
 
     // skip invisible items:
     if (item()->visible()) break;
-    item_index[HERE][item_level[HERE]] ++;
+    HERE.indexes[HERE.level] ++;
   }
 
   return item();
@@ -375,44 +388,44 @@ Widget* Browser::previous_visible() {
 
   // if we are on a child of a closed or invisible parent, pretend
   // we are on the item after that parent:
-  if (item_level[HERE] > open_level[HERE]) {
-    item_level[HERE] = open_level[HERE];
-    item_index[HERE][item_level[HERE]] ++;
+  if (HERE.level > HERE.open_level) {
+    HERE.level = HERE.open_level;
+    HERE.indexes[HERE.level] ++;
   }
 
   // there's got to be simpler logic for this loop...
   for (;;) {
     // go up to parent from first item in a group:
-    if (!item_index[HERE][item_level[HERE]]) {
-      if (!item_level[HERE]) { // start of browser
-	item_position[HERE] = 0;
+    if (!HERE.indexes[HERE.level]) {
+      if (!HERE.level) { // start of browser
+	HERE.position = 0;
 	return 0;
       }
-      open_level[HERE] = --item_level[HERE];
-      item(child(item_index[HERE], item_level[HERE]));
-      siblings = children(item_index[HERE], item_level[HERE]);
+      HERE.open_level = --HERE.level;
+      item(child(HERE.indexes, HERE.level));
+      siblings = children(HERE.indexes, HERE.level);
       break;
     }
 
     // go back to previous item in this group:
-    item_index[HERE][item_level[HERE]] --;
-    item(child(item_index[HERE], item_level[HERE]));
+    HERE.indexes[HERE.level] --;
+    item(child(HERE.indexes, HERE.level));
 
     // go to last child in a group:
     while (item_is_open() && item()->visible() && item_is_parent()) {
-      int n = children(item_index[HERE], item_level[HERE]+1);
+      int n = children(HERE.indexes, HERE.level+1);
       if (n <= 0) break; // the group is empty, remain on it's title
-      set_level(item_level[HERE]+1);
-      open_level[HERE] = item_level[HERE];
-      item_index[HERE][item_level[HERE]] = n-1;
-      item(child(item_index[HERE], item_level[HERE]));
+      set_level(HERE.level+1);
+      HERE.open_level = HERE.level;
+      HERE.indexes[HERE.level] = n-1;
+      item(child(HERE.indexes, HERE.level));
       siblings = n;
     }
 
     if (item()->visible()) break;
   }
 
-  item_position[HERE] -= item()->h();
+  HERE.position -= item()->h();
   return item();
 }
 
@@ -429,23 +442,23 @@ Widget* Browser::previous_visible() {
   visiting all items.
 */
 Widget* Browser::next() {
-  int n = children(item_index[HERE], item_level[HERE]+1);
+  int n = children(HERE.indexes, HERE.level+1);
   if (n > 0) {
-    set_level(item_level[HERE]+1);
-    item_index[HERE][item_level[HERE]] = 0;
+    set_level(HERE.level+1);
+    HERE.indexes[HERE.level] = 0;
     siblings = n;
   } else {
-    item_index[HERE][item_level[HERE]]++;
+    HERE.indexes[HERE.level]++;
   }
   for (;;) {
-    if (item_index[HERE][item_level[HERE]] < siblings) {
-      item(child(item_index[HERE], item_level[HERE]));
+    if (HERE.indexes[HERE.level] < siblings) {
+      item(child(HERE.indexes, HERE.level));
       return item();
     }
-    if (item_level[HERE] <= 0) {item(0); return 0;}
-    item_level[HERE]--;
-    item_index[HERE][item_level[HERE]]++;
-    siblings = children(item_index[HERE], item_level[HERE]);
+    if (HERE.level <= 0) {item(0); return 0;}
+    HERE.level--;
+    HERE.indexes[HERE.level]++;
+    siblings = children(HERE.indexes, HERE.level);
   }
 }
 
@@ -457,13 +470,13 @@ Widget* Browser::goto_position(int Y) {
     goto_top();
   } else {
     // move backwards until we are before or at the position:
-    while (item_position[HERE] > Y) {
+    while (HERE.position > Y) {
       if (!previous_visible()) {goto_top(); break;}
     }
   }
   // move forward to the item:
   if (item()) for (;;) {
-    if (item_position[HERE]+item_h() > Y) break;
+    if (HERE.position+item_h() > Y) break;
     if (!next_visible()) {previous_visible(); return 0;}
   }
   return item();
@@ -477,19 +490,20 @@ Widget* Browser::goto_position(int Y) {
 
 static bool nodamage;
 /*! Set item referenced by this mark as being damaged. */
-void Browser::damage_item(int mark) {
+void Browser::damage_item(const Mark& mark) {
   if (nodamage) return;
-  if (!is_set(mark)) return;
-  if (!compare_marks(REDRAW_0, mark) || !compare_marks(REDRAW_1, mark))
-    return;
-  int m = REDRAW_0;
-  if (is_set(m)) {
-    m = REDRAW_1;
-    // if both marks are used we give up and damage the whole thing:
-    if (is_set(m)) {redraw(DAMAGE_CONTENTS); return;}
-  }
-  set_mark(m, mark);
-  redraw(DAMAGE_VALUE);
+  if (!mark.is_set()) return;
+  unsigned i;
+  for (i = 0; i < NUM_REDRAW; i++)
+    if (!mark.compare(REDRAW[i])) return;
+  for (i = 0; i < NUM_REDRAW; i++)
+    if (!REDRAW[i].is_set()) {
+      REDRAW[i] = mark;
+      redraw(DAMAGE_VALUE);
+      return;
+    }
+  // if both marks are used we give up and damage the whole thing:
+  redraw(DAMAGE_CONTENTS);
 }
 
 /*! \fn int Browser::current_level() const
@@ -602,9 +616,9 @@ static char openclose_drag;
 void Browser::draw_item(int damage) {
 
   int x = interior.x()-xposition_;
-  int y = interior.y()+item_position[HERE]-yposition_;
+  int y = interior.y()+HERE.position-yposition_;
   int arrow_size = int(textsize())|1;
-  int inset = (item_level[HERE]+indented())*arrow_size;
+  int inset = (HERE.level+indented())*arrow_size;
 
   // draw the open/close glyphs at the left:
   if (damage && inset > xposition_) {
@@ -614,10 +628,10 @@ void Browser::draw_item(int damage) {
     fillrect(0, y, inset-xposition_+arrow_size, item_h());
     setcolor(fg);
     bool preview_open = openclose_drag == 1 && pushed() && at_mark(FOCUS);
-    for (int j = indented() ? 0 : 1; j <= item_level[HERE]; j++) {
-      int g = item_index[HERE][j] < children(item_index[HERE],j) - 1;
-      if (j == item_level[HERE]) {
-	if (children(item_index[HERE],j+1)>=0)
+    for (unsigned j = indented() ? 0 : 1; j <= HERE.level; j++) {
+      int g = (HERE.indexes[j] < children(HERE.indexes,j) - 1) ? 1 : 0;
+      if (j == HERE.level) {
+	if (children(HERE.indexes,j+1)>=0)
 	  if (item_is_open() != preview_open)
 	    g += OPEN_ELL;
 	  else
@@ -689,14 +703,22 @@ void Browser::draw_clip(const Rectangle& r) {
 
   int draw_all = damage() & (DAMAGE_ALL|DAMAGE_CONTENTS);
   if (goto_mark(FIRST_VISIBLE)) for (;;) {
-    int item_y = interior.y()+item_position[HERE]-yposition_;
+    int item_y = interior.y()+HERE.position-yposition_;
     if (item_y >= r.b()) break;
-    if (draw_all || !at_mark(REDRAW_0) && !at_mark(REDRAW_1)) draw_item(DAMAGE_ALL);
+    if (draw_all) {
+      draw_item(DAMAGE_ALL);
+    } else {
+      // draw all items that are not going to be drawn later:
+      for (unsigned i = 0; ; i++) {
+        if (i >= NUM_REDRAW) {draw_item(DAMAGE_ALL); break;}
+        if (at_mark(REDRAW[i])) break;
+      }
+    }
     if (!next_visible()) break;
   }
 
   // erase the area below the last item:
-  int bottom_y = interior.y()+item_position[HERE]-yposition_;
+  int bottom_y = interior.y()+HERE.position-yposition_;
   if (bottom_y < r.b()) {
     setcolor(color());
     fillrect(r.x(), bottom_y, r.w(), r.b()-bottom_y);
@@ -722,15 +744,15 @@ void Browser::draw() {
       scrollrect(interior, scrolldx, scrolldy, draw_clip_cb, this);
     }
     bool clipped = false;
-    for (int n = REDRAW_0; n <= REDRAW_1; n++) {
-      if (goto_mark(n)) {
+    for (unsigned n = 0; n < NUM_REDRAW; n++) {
+      if (goto_mark(REDRAW[n])) {
 	if (!clipped) {push_clip(interior); clipped = true;}
 	draw_item(DAMAGE_ALL);
       }
     }
     if (d & DAMAGE_CHILD) {
       if (goto_mark(FIRST_VISIBLE)) for (;;) {
-	if (item_position[HERE]-yposition_ > interior.h()) break;
+	if (HERE.position-yposition_ > interior.h()) break;
 	if (item()->damage()) {
 	  if (!clipped) {push_clip(interior); clipped = true;}
 	  draw_item(0);
@@ -743,8 +765,8 @@ void Browser::draw() {
   fltk::column_widths(last_columns);
   //fltk::column_widths(0);
   scrolldx = scrolldy = 0;
-  unset_mark(REDRAW_0);
-  unset_mark(REDRAW_1);
+  for (unsigned n = 0; n < NUM_REDRAW; n++)
+    REDRAW[n].unset();
 
   // draw the scrollbars:
   if (d & DAMAGE_ALL) {
@@ -793,13 +815,13 @@ bool Browser::set_item_opened(bool open)
 {
   if (!item() || item_is_open()==open || !item_is_parent()) return false;
   if (open) {
-      item()->set_flag(fltk::OPENED);
-    set_mark(OPEN, HERE);
+    item()->set_flag(fltk::OPENED);
+    set_mark(OPEN);
   } else {
-      item()->clear_flag(fltk::OPENED);
+    item()->clear_flag(fltk::OPENED);
     if (item_is_open()) {
-      if (item_level[HERE]) item_level[OPEN] = item_level[HERE]-1;
-      else unset_mark(OPEN);
+      if (HERE.level) OPEN.level = HERE.level-1;
+      else OPEN.unset();
     }
   }
   list()->flags_changed(this, item());
@@ -821,7 +843,7 @@ bool Browser::set_item_visible(bool value)
     item()->set_flag(INVISIBLE);
   }
   list()->flags_changed(this, item());
-  if (open_level[HERE] >= item_level[HERE]) relayout(LAYOUT_CHILD);
+  if (HERE.open_level >= HERE.level) relayout(LAYOUT_CHILD);
   return true;
 }
 
@@ -857,7 +879,7 @@ void Browser::layout() {
   int arrow_size = int(textsize())|1;
   bool saw_first_visible = false;
   for (goto_top(); item(); next_visible()) {
-    int border = arrow_size*item_level[HERE];
+    int border = arrow_size*HERE.level;
     item()->x(interior.x()+border);
     item()->w(interior.w()-border);
     item()->layout_damage(LAYOUT_X|LAYOUT_W);
@@ -865,15 +887,15 @@ void Browser::layout() {
     //if (!indented_ && item_is_parent()) indented_ = true;
     int w = item()->w()+border;
     if (w > width_) width_ = w;
-    if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
-    if (!saw_first_visible && item_position[HERE]+item()->h() > yposition_) {
+    if (at_mark(FOCUS)) set_mark(FOCUS);
+    if (!saw_first_visible && HERE.position+item()->h() > yposition_) {
       saw_first_visible = true;
-      set_mark(FIRST_VISIBLE, HERE);
+      set_mark(FIRST_VISIBLE);
     }
   }
-  if (!saw_first_visible) set_mark(FIRST_VISIBLE, HERE);
+  if (!saw_first_visible) set_mark(FIRST_VISIBLE);
   if (indented()) width_ += arrow_size;
-  height_ = item_position[HERE];
+  height_ = HERE.position;
 
   // Do we have flexible column?
   bool has_flex = false;
@@ -1018,7 +1040,7 @@ void Browser::yposition(int Y) {
   if (Y == yposition_) return;
   ((Slider*)(&scrollbar))->value(Y);
   goto_position(Y);
-  set_mark(FIRST_VISIBLE, HERE);
+  set_mark(FIRST_VISIBLE);
   scrolldy += (yposition_-Y); redraw(DAMAGE_VALUE);
   yposition_ = Y;
 }
@@ -1034,7 +1056,7 @@ bool Browser::set_focus() {
   if (ret) {
     damage_item(HERE); // so will draw focus box around item
     damage_item(FOCUS); // so focus box around old focus item will be removed
-    set_mark(FOCUS, HERE); // current item is new focus item
+    set_mark(FOCUS); // current item is new focus item
   }
   // make the item do it's own focus highlighting:
   if (item() && item()->take_focus());
@@ -1068,12 +1090,12 @@ bool Browser::make_item_visible(linepos where) {
   if (!item()) return false;
   bool changed = set_item_visible(true);
   // make any parents open and visible:
-  if (open_level[HERE] < item_level[HERE]) {
-    for (int n = open_level[HERE]; n < item_level[HERE]; n++) {
-      if (item_index[HERE][n] < 0) break;
-      int children = this->children(item_index[HERE], n);
-      if (item_index[HERE][n] >= children) break;
-      Widget* i = child(item_index[HERE], n);
+  if (HERE.open_level < HERE.level) {
+    for (unsigned n = HERE.open_level; n < HERE.level; n++) {
+      if (HERE.indexes[n] < 0) break;
+      int children = this->children(HERE.indexes, n);
+      if (HERE.indexes[n] >= children) break;
+      Widget* i = child(HERE.indexes, n);
       i->set_visible();
       i->set_flag(fltk::OPENED);
       list()->flags_changed(this, item());
@@ -1081,9 +1103,9 @@ bool Browser::make_item_visible(linepos where) {
     changed = true;
     relayout(LAYOUT_CHILD);
   } else if (!layout_damage()) {
-    set_mark(TEMP,HERE);
+    Mark TEMP(HERE);
     int h = item_h();
-    int p = item_position[HERE];
+    int p = HERE.position;
     switch (where) {
     case 0:
       if (p < yposition_) break; // act like TOP
@@ -1161,7 +1183,7 @@ bool Browser::set_item_selected(bool value, int do_callback) {
   callback is done for each item that changes selected state.
 */
 bool Browser::deselect(int do_callback) {
-  unset_mark(HERE); item(0);
+  HERE.unset(); item(0);
   return select_only_this(do_callback);
 }
 
@@ -1210,7 +1232,7 @@ int Browser::handle(int event) {
 
   case LEAVE:
     damage_item(BELOWMOUSE);
-    unset_mark(BELOWMOUSE);
+    BELOWMOUSE.unset();
     break;
 
   case PUSH:
@@ -1245,11 +1267,11 @@ int Browser::handle(int event) {
       // click below the bottom item must be handled specially
       event_clicks(0); // make it not be a double-click for callback
       damage_item(BELOWMOUSE);
-      unset_mark(BELOWMOUSE);
+      BELOWMOUSE.unset();
       if (event != PUSH) return 1;
       if (multi() && event_state(CTRL|SHIFT)) {
         if (event_state(SHIFT)) goto DRAG;
-        unset_mark(FOCUS);
+        FOCUS.unset();
       } else {
 	deselect(WHEN_CHANGED);
       }
@@ -1260,7 +1282,7 @@ int Browser::handle(int event) {
     if (!at_mark(BELOWMOUSE)) {
       damage_item(BELOWMOUSE);
       if (defLeafSymbol2||defGroupSymbol2||item()->image(fltk::HIGHLIGHT)) {
-        set_mark(BELOWMOUSE,HERE);
+        set_mark(BELOWMOUSE);
         damage_item(BELOWMOUSE);
         fltk::belowmouse(item());
       }
@@ -1268,7 +1290,7 @@ int Browser::handle(int event) {
 
     // set x to left edge of item:
     int arrow_size = int(textsize())|1;
-    int x = interior.x()+(item_level[HERE]+indented())*arrow_size-xposition_;
+    int x = interior.x()+(HERE.level+indented())*arrow_size-xposition_;
     // see if they are inside the widget and it takes the event:
     if (event_x() >= x) item()->send(event);
     // accept enter/move events so the browser's tooltip appears:
@@ -1309,7 +1331,7 @@ int Browser::handle(int event) {
       set_focus();
       // set x to left edge of item:
       int arrow_size = int(textsize())|1;
-      int x = interior.x()+(item_level[HERE]+indented())*arrow_size-xposition_;
+      int x = interior.x()+(HERE.level+indented())*arrow_size-xposition_;
       if (event_x()<x && event_x()>=x-arrow_size && item_is_parent()) {
 	if (openclose_drag != 1) {openclose_drag = 1; damage_item(HERE);}
       } else {
@@ -1319,9 +1341,9 @@ int Browser::handle(int event) {
     }
     if (multi()) {
       if (hit) {
-        int direction = compare_marks(FOCUS,HERE);
+        int direction = FOCUS.compare(HERE);
         if (direction) {
-          set_mark(TEMP, HERE);
+          Mark TEMP(HERE);
           if (goto_mark(FOCUS)) {
             for (;;) {
               if (at_mark(TEMP)) break;
@@ -1342,7 +1364,7 @@ int Browser::handle(int event) {
         set_focus(); // leave focus on last item
       }
     } else {
-      if (hit || is_set(FOCUS)) select_only_this(WHEN_CHANGED);
+      if (hit || FOCUS.is_set()) select_only_this(WHEN_CHANGED);
     }
     return 1;}
 
@@ -1435,12 +1457,12 @@ int Browser::handle(int event) {
   zero. This is used by keystrokes so the browser does not scroll
   unexpectedly. */
 Widget* Browser::goto_visible_focus() {
-  if (item_position[FOCUS] >= yposition_ &&
-      item_position[FOCUS] <= yposition_+interior.h()) {
+  if (FOCUS.position >= yposition_ &&
+      FOCUS.position <= yposition_+interior.h()) {
     if (goto_mark(FOCUS)) return item();
   }
   if (goto_mark(FIRST_VISIBLE)) {
-    if (item_position[HERE] < yposition_) next_visible();
+    if (HERE.position < yposition_) next_visible();
     if (item()) return 0;
   }
   goto_top();
@@ -1456,40 +1478,41 @@ Widget* Browser::goto_visible_focus() {
   A negative number in indexes[0] will make it go into a special
   no-item state where select_only_this() will do deselect().
 */
-Widget* Browser::goto_index(const int* indexes, int level) {
+Widget* Browser::goto_index(const int* indexes, unsigned level) {
   // negative numbers make nothing be selected:
   if (indexes[0] < 0) {
-    item_index[HERE][0] = -1;
+    HERE.indexes[0] = -1;
     item(0);
     return 0;
   }
   // go to the 0'th item if needed (otherwise go to the focus):
   if (!indexes[0] && !level || layout_damage() || !goto_mark(FOCUS)) {
-    item_level[HERE] = 0;
-    open_level[HERE] = 0;
-    item_position[HERE] = 0;
-    item_index[HERE][0] = 0;
-    siblings = children(item_index[HERE],0);
+    HERE.level = 0;
+    HERE.open_level = 0;
+    HERE.position = 0;
+    HERE.indexes[0] = 0;
+    siblings = children(HERE.indexes,0);
     if (siblings <= 0) {item(0); return 0;}// empty browser
-    item(child(item_index[HERE],0));
+    item(child(HERE.indexes,0));
     // quit if this is correct:
     if (!level && !indexes[0]) return item();
   } else {
     // move from the focus backwards until we are before it:
-    while (::compare_marks(item_index[HERE],item_level[HERE],indexes,level)>0)
+    while (::compare_marks(HERE.indexes,HERE.level,indexes,level)>0)
       if (!previous_visible()) {goto_index(0); break;}
   }
   // move forward until we are after it:
   for (;;) {
-    int n = ::compare_marks(item_index[HERE],item_level[HERE],indexes,level);
+    int n = ::compare_marks(HERE.indexes,HERE.level,indexes,level);
     if (!n) return item(); // we found it!
     if (n > 0 || !next_visible()) break;
   }
   // if we get here we passed the item because it was invisible or a
   // parent was closed or invisible, directly set the indexes in this case:
   set_level(level);
-  for (int n = 0; n <= level; n++) item_index[HERE][n] = indexes[n];
-  item(child(item_index[HERE], item_level[HERE]));
+  for (unsigned n = 0; n <= level; n++)
+    HERE.indexes[n] = indexes[n];
+  item(child(HERE.indexes, HERE.level));
   return item();
 }
 
@@ -1833,27 +1856,17 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
   nHeader = 0; header_ = 0;
   defGroupSymbol1 = defGroupSymbol2 = defGroupSymbol3 =0;
   defLeafSymbol1 = defLeafSymbol2 = defLeafSymbol3 = 0;
-  // set all the marks to the top:
-  levels = 0;
-  for (int i = 0; i < NUMMARKS; i++) {
-    // allocate space for the top level of indexes
-    item_index[i] = new int[1];
-    item_index[i][0] = 0;
-    item_position[i] = 0;
-    item_level[i] = 0;
-  }
-  item_index[OPEN][0] = -1;
+  OPEN.unset();
   Group::current(parent());
 }
 
 /*! The destructor deletes all the list items (because they are child
   fltk::Widgets of an fltk::Group) and destroys the browser. */
 Browser::~Browser() {
-  int i; for (i = 0; i < NUMMARKS; i++) delete[] item_index[i];
   delete[] column_widths_p;
   delete[] column_widths_i;
   if (header_) {
-    for (i=0; i<nHeader; i++) delete header_[i];
+    for (int i=0; i<nHeader; i++) delete header_[i];
     delete[] header_;
   }
 }

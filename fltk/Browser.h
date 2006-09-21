@@ -1,7 +1,6 @@
-//
 // "$Id$"
 //
-// Copyright 2002 by Bill Spitzak and others.
+// Copyright 2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -19,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #ifndef fltk_Browser_h
 #define fltk_Browser_h
@@ -39,7 +37,7 @@ public:
   Browser(int X,int Y,int W,int H,const char*l=0);
   static NamedStyle* default_style;
   ~Browser();
-  
+
   enum { //<! values for type()
     IS_MULTI = 1,
     NORMAL =  GROUP_TYPE,  //!< means single selection can be achieved by user 
@@ -48,20 +46,34 @@ public:
   enum { // value for selected_column
     NO_COLUMN_SELECTED = -1 //!< means that no column has been selected by user
   };
-  enum { //!< predefined marks
-    HERE = 0,	    //!< current item, the one moved by all the calls
-    FOCUS,	    //!< what the user thinks is the current item
-    FIRST_VISIBLE,  //!< item at top of scroll region
-    REDRAW_0,	    //!< item that needs to be redrawn
-    REDRAW_1,	    //!< a second item that needs to be redrawn
-    OPEN,	    //!< this and all parents are open
-    BELOWMOUSE,     //!< one that is drawn highlighted
-    TEMP,	    //!< scratch space reserved for fltk only
-    TREE_TRAVERSAL, //!< this volatile mark is available for all tree traversal usage fltk+applications
-    USER1,	    //!< all purpose scratch space 1, for applications only
-    USER2,	    //!< all purpose scratch space 2, for applications only
-    NUMMARKS	    //!< end/number of marks
+
+  class Mark {
+    friend class Browser;
+    unsigned level; // depth in hierarchy of the item
+    unsigned open_level; // depth of highest closed parent
+    int position;  // distance in pixels from top of browser
+    unsigned indexes_size; // allocated size
+    int* indexes;  // array of indexes
+    int index0;    // used as *indexes if indexes_size==1
+  public:
+    Mark() {
+      level = 0;
+      open_level = 0;
+      position = 0;
+      indexes_size = 1;
+      indexes = &index0;
+      index0 = 0;
+    }
+    Mark(const Mark&);
+    ~Mark() {
+      if (indexes != &index0) delete[] indexes;
+    }
+    const Mark& operator=(const Mark&);
+    int compare(const Mark& mark2) const;
+    void unset() {indexes[0] = -1;}
+    bool is_set() const {return indexes[0] >= 0;}
   };
+
   enum linepos {  //!< Argument to make_item_visible()
     NOSCROLL,	    //!< move as little as possible so item is visible
     TOP,	    //!< position current item to top
@@ -86,35 +98,39 @@ public:
   Widget* goto_top();
   Widget* goto_focus() {return goto_mark(FOCUS);}
   Widget* goto_position(int y);
-  Widget* goto_index(const int* indexes, int level);
+  Widget* goto_index(const int* indexes, unsigned level);
   Widget* goto_index(int);
   Widget* goto_index(int,int,int=-1,int=-1,int=-1);
+  Widget* goto_mark(const Mark&); // set HERE to mark
   Widget* next();
   Widget* next_visible();
   Widget* previous_visible();
+  bool at_mark(const Mark& mark) const {return !HERE.compare(mark);}
+  int compare_to_mark(const Mark& mark) const {return HERE.compare(mark);}
   bool item_is_visible() const;
   bool item_is_parent() const;
   bool item_is_open() const;
   int item_h() const;
 
   bool set_focus();
+  void set_mark(Mark& dest) const {dest = HERE;}
+  void set_mark_to_focus(Mark& dest) const {dest = FOCUS;}
   bool set_item_selected(bool value = true, int do_callback = 0);
   bool select_only_this(int do_callback = 0);
   bool deselect(int do_callback = 0);
   bool make_item_visible(linepos = NOSCROLL);
   void damage_item() {damage_item(HERE);}
+  void damage_item(const Mark&); // make this item redraw
   bool set_item_opened(bool);
   bool set_item_visible(bool);
 
-  int current_level() const {return item_level[HERE];}
-  const int* current_index() const {return item_index[HERE];}
-  int current_position() const {return item_position[HERE];}
+  int current_level() const {return HERE.level;}
+  const int* current_index() const {return HERE.indexes;}
+  int current_position() const {return HERE.position;}
 
-  int focus_level() const {return item_level[FOCUS];}
-  const int* focus_index() const {return item_index[FOCUS];}
-  int focus_position() const {return item_position[FOCUS];}
-  void value(int v) {goto_index(v); set_focus();}
-  int value() const {return focus_index()[0];}
+  int focus_level() const {return FOCUS.level;}
+  const int* focus_index() const {return FOCUS.indexes;}
+  int focus_position() const {return FOCUS.position;}
 
   // Maybe these should be moved to base Menu class:
   const int *column_widths() const { return column_widths_p; }
@@ -124,21 +140,25 @@ public:
   int selected_column() { return selected_column_; }
   int set_column_start(int column, int x);
 
+  Widget *header(int col) { if(col<0 || col>=nHeader) return 0; return header_[col]; }
+  int nheader() const { return nHeader; }
+
   // Convienence functions for flat browsers:
+  void value(int v) {goto_index(v); set_focus();}
+  int value() const {return FOCUS.indexes[0];}
   bool select(int line, bool value = true);
   bool selected(int line);
-  int topline() const {return item_index[FIRST_VISIBLE][0];}
+  int topline() const {return FIRST_VISIBLE.indexes[0];}
   void topline(int line) {goto_index(line); make_item_visible(TOP);}
   void bottomline(int line) {goto_index(line); make_item_visible(BOTTOM);}
   void middleline(int line) {goto_index(line); make_item_visible();}
   bool displayed(int line);
   bool display(int line, bool value = true);
 
-  Widget *header(int col) { if(col<0 || col>=nHeader) return 0; return header_[col]; }
-  int nheader() const { return nHeader; }
-
   int load(const char *filename);
  
+  int multi() const {return type()&IS_MULTI;}
+
 protected:
   void handle_callback(int doit); // defines how cb are handled in the browser
 
@@ -157,32 +177,16 @@ private:
   void draw_clip(const Rectangle&);
   static void draw_clip_cb(void*,const Rectangle&);
   Rectangle interior; // inside box edges and scrollbars
-  
+
   Widget **header_;
   int nHeader, nColumn, selected_column_;
+  void set_level(unsigned);
+  enum {NUM_REDRAW = 2};
+  Mark HERE, FOCUS, FIRST_VISIBLE, REDRAW[NUM_REDRAW], OPEN, BELOWMOUSE;
 
-  int multi() const {return type()&IS_MULTI;}
-
-  // Marks serve as "indexes" into the hierarchial browser. We probably
-  // need to make some sort of public interface but I have not figured
-  // it out completely.
-  Widget* goto_mark(int mark); // set HERE to mark
   Widget* goto_visible_focus(); // set HERE to focus if visible
-  void set_mark(int dest, int mark); // set dest to mark
-  int compare_marks(int mark1, int mark2); // returns >0 if mark1 after mark2
-  bool at_mark(int mark) { return !compare_marks(HERE,mark); }
-  void unset_mark(int mark);  // makes mark have illegal value
-  bool is_set(int mark);  // false if unset_mark was called
-  void damage_item(int mark); // make this item redraw
-  int siblings; // # of children of parent of HERE item
-  // For each mark:
-  unsigned char item_level[NUMMARKS]; // depth in hierarchy of the item
-  unsigned char open_level[NUMMARKS]; // depth of highest closed parent
-  int item_position[NUMMARKS]; // distance in pixels from top of browser
-  int* item_index[NUMMARKS]; // indexes at each level of hierarchy
-  int levels; // maximum depth of all items encountered so far
-  void set_level(int); // increases levels by reallocating the arrays
 
+  int siblings; // # of children of parent of HERE item
   static void column_click_cb_(Widget*, void*);
 
 public:
@@ -193,7 +197,7 @@ public:
       const Symbol* imgClosed=0, // default (and closed if open not null) img
       const Symbol* imgFocus=0,  // img when mouse comes on it
       const Symbol* imgOpen=0);  // img when node open (for group nodes only)
-  
+
 private:
   const Symbol *defGroupSymbol1, *defGroupSymbol2, *defGroupSymbol3;
   const Symbol *defLeafSymbol1,*defLeafSymbol2,*defLeafSymbol3;
