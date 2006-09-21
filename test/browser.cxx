@@ -157,45 +157,30 @@ const char *labels[] = {"Column 1", "Column 2", "Column 3", 0};
 int widths[]   = {100, 70, 70, 0};
 
 Browser *browser=0;
-CheckButton *bm = 0;
+bool flip = false;
+bool bm = true;
+void update_look() {
+  browser->set_symbol(Browser::GROUP	   // tell if you want to setup Group nodes
+      ,flip ? folderSmall : folderSmall2   // node default (closed) image 
+      ,bm ? (flip ? folderSmall3  : folderSmall) : 0 // belowmouse image (optional)
+      ,flip ? folderSmall : folderSmall3   // group node open image (optional)
+      );
+  browser->set_symbol(Browser::LEAF, // tell you want to setup Leaf nodes
+      flip ? fileSmall : fileSmall2,    // node default (closed) image 
+      bm ? (flip ? fileSmall2 : fileSmall) : 0);   // belowmouse image (optional)
+  browser->relayout();
+}
 
 // callback for changing dynamically the look of the tree browser 
 void cb_change_look(Widget*, void* ptr) {
-  static bool flip = true;
-  Browser* tree = (Browser*) ptr;
-  bm->set();
-  bm->do_callback();
-
-  tree->set_symbol(Browser::GROUP	   // tell if you want to setup Group nodes
-      ,flip ? folderSmall : folderSmall2   // node default (closed) image 
-      ,flip ? folderSmall3  : folderSmall  // belowmouse image (optional)
-      ,flip ? folderSmall : folderSmall3   // group node open image (optional)
-      );
-  tree->set_symbol(Browser::LEAF, // tell you want to setup Leaf nodes
-      flip ? fileSmall : fileSmall2,    // node default (closed) image 
-      flip ? fileSmall2 : fileSmall);   // belowmouse image (optional)
   flip = !flip;
-  tree->relayout();
+  update_look();
 }
 
 // callback for deactivate/activate the belowmouse img change
 void below_mouse_cb(Button *w, long arg) {
-    static const Symbol *last1 = 0;
-    static const Symbol *last2=0;
-
-    if (w->value()) {
-	browser->set_symbol(Browser::GROUP, browser->get_symbol(Browser::GROUP),last1,
-	    browser->get_symbol(Browser::GROUP,OPENED));
-	browser->set_symbol(Browser::LEAF, browser->get_symbol(Browser::LEAF),last2);
-    } else {
-	last1 = browser->get_symbol(Browser::GROUP, fltk::HIGHLIGHT);
-	last2 = browser->get_symbol(Browser::LEAF, fltk::HIGHLIGHT);
-	browser->set_symbol(Browser::GROUP, 
-	    browser->get_symbol(Browser::GROUP), 0, 
-	    browser->get_symbol(Browser::GROUP,fltk::OPENED));
-	browser->set_symbol(Browser::LEAF, browser->get_symbol(Browser::LEAF),0);
-    }
-    browser->relayout();
+  bm = w->value();
+  update_look();
 }
 
 void change_resize(Button *w, long arg) {
@@ -250,9 +235,9 @@ int main(int argc,char** argv) {
   CheckButton resize(88, 310, 160, 20, "Make 2. column flexible");
   resize.callback((Callback*)change_resize);
 
-  bm = new CheckButton (5, 310, 82, 20, "below mouse");
-  bm->set();
-  bm->callback((Callback*)below_mouse_cb);
+  CheckButton bm(5, 310, 82, 20, "below mouse");
+  bm.set();
+  bm.callback((Callback*)below_mouse_cb);
 
   win.resizable(tree);
   win.end();

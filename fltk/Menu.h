@@ -87,6 +87,8 @@ public:
   Widget* replace(const char*, unsigned shortcut, Callback*, void* = 0, int = 0);
   Widget* insert(int n, const char*, unsigned shortcut, Callback*, void* = 0, int = 0);
   Widget* add(const char*, void* = 0);
+  Group*  add_group(const char* label, Group* parent=0, void* data=0);
+  Widget* add_leaf(const char* label, Group* parent=0, void* data=0);
   Widget* add_many(const char*);
   Widget* replace(const char*, void* = 0);
   Widget* insert(int n, const char*, void* = 0);

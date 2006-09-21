@@ -34,11 +34,11 @@ namespace fltk {
 
 class FL_API Item : public Widget {
 public:
-  
+
   void draw();
   void layout();
   int handle(int);
-  
+
   Item(const char* label = 0);
   Item(const char* label, int shortcut, Callback *callback=0, void *user_data_=0, int flags=0);
   Item(const char* label, const Symbol*);

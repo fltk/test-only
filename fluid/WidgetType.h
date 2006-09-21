@@ -56,6 +56,7 @@
 #include <fltk/BarGroup.h>
 #include <fltk/StatusBarGroup.h>
 #include <fltk/HelpView.h>
+#include <fltk/Item.h>
 #include "FluidType.h"
 
 namespace fltk {

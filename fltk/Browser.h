@@ -29,9 +29,6 @@
 
 namespace fltk {
 
-class ItemGroup;
-class Item;
-
 class FL_API Browser : public Menu {
 public:
 
@@ -48,33 +45,29 @@ public:
     NORMAL =  GROUP_TYPE,  //!< means single selection can be achieved by user 
     MULTI  =  GROUP_TYPE+1 //!< means multiple selection can be achieved by user
   };
-  enum { // values selected_column
+  enum { // value for selected_column
     NO_COLUMN_SELECTED = -1 //!< means that no column has been selected by user
   };
   enum { //!< predefined marks
     HERE = 0,	    //!< current item, the one moved by all the calls
-    FOCUS,	    //!< what the user thinks is the curren item
+    FOCUS,	    //!< what the user thinks is the current item
     FIRST_VISIBLE,  //!< item at top of scroll region
     REDRAW_0,	    //!< item that needs to be redrawn
     REDRAW_1,	    //!< a second item that needs to be redrawn
     OPEN,	    //!< this and all parents are open
+    BELOWMOUSE,     //!< one that is drawn highlighted
     TEMP,	    //!< scratch space reserved for fltk only
     TREE_TRAVERSAL, //!< this volatile mark is available for all tree traversal usage fltk+applications
     USER1,	    //!< all purpose scratch space 1, for applications only
     USER2,	    //!< all purpose scratch space 2, for applications only
     NUMMARKS	    //!< end/number of marks
   };
-  enum NodeType { //!< values for tree node types
-    GROUP= 0,	    //!< indicates that the node is a ItemGroup derived node in the tree
-    LEAF = 1	    //!< indicates that the node is simple Item in the tree
-  };
   enum linepos {  //!< Argument to make_item_visible()
-      NOSCROLL,	    //!< no_scroll is made to make the current item visible
-      TOP,	    //!< position current item to top when made visible
-      MIDDLE,	    //!< position current item to middle when made visible
-      BOTTOM	    //!< position current item to bottom when made visible
+    NOSCROLL,	    //!< move as little as possible so item is visible
+    TOP,	    //!< position current item to top
+    MIDDLE,	    //!< position current item to middle
+    BOTTOM	    //!< position current item to bottom
   };
-  
 
   int width() const {return width_;}
   int height() const {return height_;}
@@ -192,36 +185,18 @@ private:
 
   static void column_click_cb_(Widget*, void*);
 
-public:  
-  //
-  // tree construction high level API
-  //   dramatically improves tree construction in an easy and elegant way
-  // 
+public:
+  enum NodeType { //!< argument for set_symbol()
+    GROUP=0,LEAF
+  };
   void set_symbol(NodeType nodetype, 
       const Symbol* imgClosed=0, // default (and closed if open not null) img
       const Symbol* imgFocus=0,  // img when mouse comes on it
       const Symbol* imgOpen=0);  // img when node open (for group nodes only)
-  const Symbol* get_symbol(NodeType nodetype, Flags f=fltk::NO_FLAGS) const;  
-  ItemGroup* add_group(const char *label, Group* parent=0, int state=OPENED, 
-      const Symbol* imgClosed=0, const Symbol* imgFocus=0, const Symbol* imgOpen=0);
-  Item* add_leaf(const char *label, Group* parent=0,  
-      const Symbol* img=0, const Symbol* imgFocus=0);
   
-  // override item removal changes to have a notification
-  void replace(Widget& old, Widget& o) {notify_remove(&old);Menu::replace(old,o);}
-  void remove(Widget& o) {notify_remove(&o); Menu::remove(o);}
-  void remove(Widget* o) {notify_remove(o); Menu::remove(o);}
-  void remove(int index) {notify_remove(child(index)); Menu::remove(index);}
-  //! update internals when an item is going to be removed, if null warn that more than one item is removed
-  void notify_remove(Widget* o);
-  // ! empty the browser from items and rest scrollbars
-  void clear();
-  
-
 private:
   const Symbol *defGroupSymbol1, *defGroupSymbol2, *defGroupSymbol3;
   const Symbol *defLeafSymbol1,*defLeafSymbol2,*defLeafSymbol3;
-  Widget* prev_item_;
 };
 
 }

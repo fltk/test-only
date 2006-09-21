@@ -47,33 +47,30 @@ using namespace fltk;
 
   The items may be created as child widgets (usually the same widgets
   as are used to create menus: fltk::Item widgets, or fltk::ItemGroup
-  widgets to make a hierarchy). Alternatively you can build simple
-  text lists by using the add() method, which will create the child
-  widgets for you (and even create a hierarchy if you put slashes in
-  the text). 
-  You can use Item/ItemGroup to easily create browser trees. 
-  Up to three different images can natively be set 
-  depending on the default/belowmouse/open states 
+  widgets to make a hierarchy).
+
+  All the functions used to add, remove, or modify items in the list
+  are defined by the base class fltk::Menu. See that for much more
+  information.  For a simple constant list you can populate the list
+  by calling browser->add("text of item") once for each item.
   \see 
+  - add()
   - add_group() 
   - add_leaf() 
   - get_symbol() 
   - set_symbol()
-  
-  You can also us an fltk::List which allows you to control
-  the storage by dynamically creating a "fake" widget for the browser
-  to use to draw each item. 
-  All the functions used to add, remove, or modify items in the list
-  are defined by the base class fltk::Menu. See that for much more
-  information.
 
-  For a simple constant list you can populate the list by calling
-  browser->add("text of item") once for each item.  If you give the
-  browser a callback you can find out what item was selected with
-  value(), the first item is zero (this is different from
-  older versions of fltk that started at 1!), and will be negative if
-  no item is selected. You can change the selected item with
-  value(new_value).
+  You can also us an fltk::List which allows you to control
+  the storage by dynamically creating a temporary "fake" widget for
+  the browser to use each time it wants to look at or draw an item.
+  This is useful for creating browsers with hundreds of thousands
+  of items, or when the set of items changes rapidly.
+
+  If you give the browser a callback you can find out what item was
+  selected with value(), the first item is zero (this is different
+  from older versions of fltk that started at 1!), and will be
+  negative if no item is selected. You can change the selected item
+  with value(new_value).
 
   The subclass fltk::MultiBrowser lets the user select more than one
   item at the same time.
@@ -81,9 +78,9 @@ using namespace fltk;
   The callback() is done when the user changes the selected items or
   when they open/close parents. In addition, if the user double-clicks
   a non-parent item, then it is "executed" which usually means that
-  the callback() on the item itself is run. However if that is the
-  default callback, the callback() of this widget is called with the
-  user_data() of the item.
+  the callback() on the item itself is run. However, if no callback
+  has been set on the item, the callback() of this widget is called
+  with the user_data() of the item.
 
   You can control when callbacks are done with the when() method. The
   following values are useful, the default value is fltk::WHEN_CHANGED.
@@ -166,27 +163,6 @@ using namespace fltk;
 
 /*! \fn int Browser::nheader() const
   Return number of columns in browser.
-*/
-
-//
-// Tree construction high level API
-//
-/*! \fn ItemGroup * Browser::add_group(const char *label, Group* parent, int state, const Symbol* img1, const Symbol* img2, const Symbol* img3)
-    returns an ItemGroup node with a label, a parent node, a state to pass to ItemGroup constructor  flags,
-    and possibly up to three default symbols for respectively: the default, belowmouse and opened states
-*/
-/*! \fn Item * Browser::add_leaf(const char *label,  Group* parent, const Symbol* img1, const Symbol* img2)
-    return an Item node with a label, a parent node, 
-    and possibly up to two default syymbols for respectively: the default and belowmouse states
-*/
-/*! \fn const Symbol * Browser::get_symbol(Browser::NodeType nodetype, Flags  state) const
-    return the default Symbol associated to a node type at a particular state
-*/
-/*! \fn void Browser::set_symbol(Browser::NodeType nodetype, const Symbol* img1, const Symbol* img2, const Symbol* img3)
-    sets default(s) symbol(s) for the group or leaf node type, 
-      the state can be OPEN or CLOSE, 
-      0 for img means no img
-      you can choose to setup a set of images up to three different states/events for a group node
 */
 
 ////////////////////////////////////////////////////////////////
@@ -503,6 +479,7 @@ static bool nodamage;
 /*! Set item referenced by this mark as being damaged. */
 void Browser::damage_item(int mark) {
   if (nodamage) return;
+  if (!is_set(mark)) return;
   if (!compare_marks(REDRAW_0, mark) || !compare_marks(REDRAW_1, mark))
     return;
   int m = REDRAW_0;
@@ -662,13 +639,6 @@ void Browser::draw_item(int damage) {
   if (cols) {
     saved_colw = cols[0];
     cols[0] -= inset;
-    const Symbol * img = item()->context_image();
-
-    if (img) {
-      int image_w = 0, image_h = 0;
-      img->_measure(image_w, image_h);
-      cols[0] -= image_w;
-    }
     if (cols[0]==0) cols[0]--;
   }
 
@@ -686,7 +656,22 @@ void Browser::draw_item(int damage) {
     if (!multi()) item()->clear_flag(SELECTED);
   }
   if (damage) item()->set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
-  item()->draw();
+  if (!item()->image()) {
+    if (item()->is_group()) {
+      item()->image(defGroupSymbol1);
+      item()->image(defGroupSymbol2, HIGHLIGHT);
+      item()->image(defGroupSymbol3, OPENED);
+    } else {
+      item()->image(defLeafSymbol1);
+      item()->image(defLeafSymbol2, HIGHLIGHT);
+    }
+    item()->draw();
+    item()->image((const Symbol*)0);
+    item()->image((const Symbol*)0,HIGHLIGHT);
+    item()->image((const Symbol*)0,OPENED);
+  } else {
+    item()->draw();
+  }
   item()->set_damage(0);
   pop_matrix();
 
@@ -1183,25 +1168,26 @@ bool Browser::deselect(int do_callback) {
 /*! Make the given item be the current one. For the MultiBrowser subclass
   this will turn off selection of all other items and turn it on
   for this one and also set the focus here. If the selection
-  changes and when()&do_callback is non-zero, the callback is done. */
+  changes and when()&do_callback is non-zero, the callback is done.
+
+  For the multibrowser, the callback is done for each item that changes,
+  whether it turns on or off.
+*/
 bool Browser::select_only_this(int do_callback) {
   if (multi() ) {
     set_focus();
     bool ret = false;
     // Turn off all other items and set damage:
-    if (goto_top()) do { 
-    // fabien: don't do callback cb yet: this action can be a deselection 
-    // so let a chance to the callback to handle this with an item() value to 0
-      if (set_item_selected(at_mark(FOCUS), 0 /*do_callback*/)) ret = true;
+    if (goto_top()) do {
+      if (set_item_selected(at_mark(FOCUS),do_callback)) ret = true;
     } while (next_visible());
-    // turn off any invisible ones:
+    // Turn off closed items:
     nodamage = true;
     if (goto_top()) do {
-      if (set_item_selected(at_mark(FOCUS), 0 /*do_callback*/)) ret = true;
+      if (set_item_selected(at_mark(FOCUS),do_callback)) ret = true;
     } while (next());
     nodamage = false;
     goto_mark(FOCUS);
-    if (do_callback) handle_callback(do_callback);
     return ret;
   } else {
     if (!set_focus()) return false;
@@ -1210,40 +1196,28 @@ bool Browser::select_only_this(int do_callback) {
   }
 }
 
-void Browser::notify_remove(Widget* o) {
-    // if o, one item is removed
-    // if o is null then more than one item is removed
-    if (!o || o==prev_item_) prev_item_=0;
-    if (o && o==child(value())) value(value()-1); // remove  focus if deleted
-}
-
-void Browser::clear() { 
-    notify_remove(0);
-    Group::clear(); 
-    scrollbar.handle_drag(0); 
-    hscrollbar.handle_drag(0); 
-}
-
 int Browser::handle(int event) {
   static bool drag_type; // for multibrowser
 
   switch (event) {
+
   case fltk::FOCUS:
     if (goto_mark(FOCUS) && item()) item()->take_focus();
+
   case UNFOCUS:
     damage_item(FOCUS);
     return 1;
 
   case LEAVE:
-    if(prev_item_) {prev_item_->redraw_label();prev_item_ = 0;}
+    damage_item(BELOWMOUSE);
+    unset_mark(BELOWMOUSE);
     break;
+
   case PUSH:
   case ENTER:
   case MOVE: {
     // For all mouse events check to see if we are in the scrollbar
     // areas and send to them:
-    if (event==PUSH)
-	event=event; // debug 
     if (scrollbar.visible() &&
 	(event_y() >= scrollbar.y()) &&
 	(scrollbar_align()&ALIGN_LEFT ?
@@ -1262,64 +1236,76 @@ int Browser::handle(int event) {
 	return hi->send(event);
       }
     }
-    // find the item we are pointing at:
-    if (!goto_position(event_y()-interior.y()+yposition_)) {
-	if (event==PUSH )  // fabien: as in 1.1.x clicking ouside a tree node deselect any current selection
-	    deselect(1);
-	if(prev_item_) {prev_item_->redraw_label();prev_item_=0;}
 
-	if (!item()) return 0;
+    openclose_drag = false;
+    drag_type = true;
+
+    // find the item we are pointing at
+    if (!goto_position(event_y()-interior.y()+yposition_)) {
+      // click below the bottom item must be handled specially
+      event_clicks(0); // make it not be a double-click for callback
+      damage_item(BELOWMOUSE);
+      unset_mark(BELOWMOUSE);
+      if (event != PUSH) return 1;
+      if (multi() && event_state(CTRL|SHIFT)) {
+        if (event_state(SHIFT)) goto DRAG;
+        unset_mark(FOCUS);
+      } else {
+	deselect(WHEN_CHANGED);
+      }
+      return 1;
     }
+
+    // update highlighting:
+    if (!at_mark(BELOWMOUSE)) {
+      damage_item(BELOWMOUSE);
+      if (defLeafSymbol2||defGroupSymbol2||item()->image(fltk::HIGHLIGHT)) {
+        set_mark(BELOWMOUSE,HERE);
+        damage_item(BELOWMOUSE);
+        fltk::belowmouse(item());
+      }
+    }
+
     // set x to left edge of item:
     int arrow_size = int(textsize())|1;
     int x = interior.x()+(item_level[HERE]+indented())*arrow_size-xposition_;
     // see if they are inside the widget and it takes the event:
-    if (event_x() >= x && item()->send(event));
-    else {
-	if (item()!=prev_item_ &&  item()->image(fltk::HIGHLIGHT)) {
-	    if(prev_item_) prev_item_->redraw_label();
-	    prev_item_ = item();
-	    fltk::belowmouse(item());
-	    damage_item();
-	}
-	else
-	    fltk::belowmouse(this);
-    }
+    if (event_x() >= x) item()->send(event);
     // accept enter/move events so the browser's tooltip appears:
     if (event != PUSH) return 1;
+
     // drag must start & end in open/close box for it to work:
-    openclose_drag = (event_x()<x && event_x()>=x-arrow_size && item_is_parent());
-    if (openclose_drag) {
+    if (event_x()<x && event_x()>=x-arrow_size && item_is_parent()) {
+      openclose_drag = true;
       set_focus();
       damage_item(HERE);
       return 1;
     }
+
     //take_focus();
     if (multi()) {
       if (event_state(CTRL)) {
-	// start a new selection block without changing state
-	drag_type = !item()->selected();
-	if (openclose_drag) drag_type = !drag_type; // don't change it
+	// toggle this item and set any items we drag over the same:
+	if (item()->selected()) drag_type = false;
+	event_clicks(0); // make it not be a double-click for callback
+        if (event_state(SHIFT)) goto DRAG;
 	set_item_selected(drag_type, WHEN_CHANGED);
 	set_focus();
-	event_clicks(0); // make it not be a double-click for callback
 	return 1;
       } else if (event_state(SHIFT)) {
-	// extend the current focus
-	drag_type = !item()->selected();
+        // select between focus and here:
 	event_clicks(0); // make it not be a double-click for callback
-      } else {
-	select_only_this(WHEN_CHANGED);
-	drag_type = true;
-	return 1;
+        goto DRAG;
       }
     }
-    goto MOUSE_TO_ITEM;}
+    select_only_this(WHEN_CHANGED);
+    return 1;}
 
-  case DRAG:
+  case DRAG: {
+  DRAG:
     // find the item they are now pointing at:
-    if (!goto_position(event_y()-interior.y()+yposition_) && !item()) break;
-    if (openclose_drag) {
+    bool hit = goto_position(event_y()-interior.y()+yposition_);
+    if (openclose_drag && hit && item()) {
       set_focus();
       // set x to left edge of item:
       int arrow_size = int(textsize())|1;
@@ -1331,25 +1317,38 @@ int Browser::handle(int event) {
       }
       return 1;
     }
-  MOUSE_TO_ITEM:
     if (multi()) {
-      // set everything from old focus to current to drag_type:
-      int direction = compare_marks(HERE,FOCUS);
-      set_mark(TEMP, HERE);
-      for (;;) {
-	set_item_selected(drag_type, WHEN_CHANGED);
-	if (at_mark(FOCUS)) break;
-	if (!(direction<0 ? next_visible() : previous_visible())) break;
+      if (hit) {
+        int direction = compare_marks(FOCUS,HERE);
+        if (direction) {
+          set_mark(TEMP, HERE);
+          if (goto_mark(FOCUS)) {
+            for (;;) {
+              if (at_mark(TEMP)) break;
+              set_item_selected(drag_type, WHEN_CHANGED);
+              if (!(direction<0 ? next_visible() : previous_visible())) break;
+            }
+          }
+          goto_mark(TEMP);
+        }
+        set_item_selected(drag_type, WHEN_CHANGED);
+        set_focus();
+      } else if (goto_mark(FOCUS)) {
+        // drag from inside to below last item
+        for (;;) {
+          set_item_selected(drag_type, WHEN_CHANGED);
+          if (!next_visible()) {previous_visible(); break;}
+        }
+        set_focus(); // leave focus on last item
       }
-      goto_mark(TEMP);
-      set_focus();
     } else {
-      select_only_this(WHEN_CHANGED);
+      if (hit || is_set(FOCUS)) select_only_this(WHEN_CHANGED);
     }
-    return 1;
+    return 1;}
 
   case RELEASE:
     goto_mark(FOCUS);
+    if (!item()) goto RELEASE;
     if (openclose_drag == 1 || event_clicks() && item_is_parent()) {
       // toggle the open/close state of this item:
       set_item_opened(!item_is_open());
@@ -1834,7 +1833,6 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
   nHeader = 0; header_ = 0;
   defGroupSymbol1 = defGroupSymbol2 = defGroupSymbol3 =0;
   defLeafSymbol1 = defLeafSymbol2 = defLeafSymbol3 = 0;
-  prev_item_=0;
   // set all the marks to the top:
   levels = 0;
   for (int i = 0; i < NUMMARKS; i++) {
@@ -1886,70 +1884,24 @@ Browser::~Browser() {
 
 */
 
-ItemGroup* Browser::add_group(const char *label, Group* parent, int state, 
-      const Symbol* img1, const Symbol* img2, const Symbol* img3) {
-    if (parent) parent->begin();
-    img1 = img1 ? img1 : defGroupSymbol1;
-    img2 = img2 ? img2 : defGroupSymbol2;
-    img3 = img3 ? img3 : defGroupSymbol3;
-    ItemGroup * i = new ItemGroup(label, img1);
-    i->set_flag(state);
-    if (img2) i->image (img2, fltk::HIGHLIGHT);
-    if (img3) i->image (img3, fltk::OPENED);// last parameter because leaves have open images
-    return i;
-}
+/**
+  Sets a default value for image() on each item. Any children with no image
+  on them will instead draw as though this image it put on them.
 
-Item* Browser::add_leaf(const char *label,  Group* parent, 
-      const Symbol* img1, const Symbol* img2) {
-    if (parent) parent->begin();
-    img1 = img1 ? img1 : defLeafSymbol1;
-    img2 = img2 ? img2 : defLeafSymbol2;
-    Item* i = new Item(label, img1);
-    if (img2) i->image (img2, fltk::HIGHLIGHT);
-    return i;
-}
+  \a nodetype is either Browser::GROUP or Browser::LEAF.
 
-const Symbol * Browser::get_symbol(Browser::NodeType nodetype, Flags  f) const {
-    switch(f) {
-    case fltk::NO_FLAGS:    return nodetype== Browser::GROUP ? defGroupSymbol1 : defLeafSymbol1;
-    case fltk::HIGHLIGHT:   return nodetype== Browser::GROUP ? defGroupSymbol2 : defLeafSymbol2;
-    case fltk::OPENED:	    return nodetype== Browser::GROUP ? defGroupSymbol3 : 0;
-    default : return 0;
-    }
-}
-
+  The 3 images are the normal one, a highlighted one, and an opened one.
+*/
 void Browser::set_symbol(Browser::NodeType nodetype, const Symbol* img1, 
 			 const Symbol* img2, const Symbol* img3) {
-   const Symbol *old1= 0, *old2= 0, *old3= 0;
-   bool sel = (nodetype == Browser::GROUP) ? true : false;
-
-    switch(nodetype) {
-	case Browser::GROUP:	
-		old1 = defGroupSymbol1; old2 = defGroupSymbol2;old3 = defGroupSymbol3;
-		defGroupSymbol1 = img1; defGroupSymbol2 = img2; defGroupSymbol3 = img3; 
-		break;
-	case Browser::LEAF:	
-		old1 = defLeafSymbol1; old2 = defLeafSymbol2;
-		defLeafSymbol1 = img1; defLeafSymbol2 = img2; 
-		break;
-    }
-	// now let's change dynamically the look of the tree symbols !
-	if ( (img1!=old1) || 
-	     (img2!=old2) || 
-	     (img3!=old3) ) {
-		set_mark(TREE_TRAVERSAL, HERE); // memorize current
-		for (Widget* it=goto_top(); it ; it = next()) {
-		    if ((it->is_group() ? true : false) == sel) {
-			if (it->image()==old1) 
-			    it->image(img1);
-			if (it->image(fltk::HIGHLIGHT)==old2) 
-			    it->image(img2, fltk::HIGHLIGHT);
-			if (it->is_group() && it->image(fltk::OPENED)==old3) 
-			    it->image(img3, fltk::OPENED);
-		    }
-		}
-		goto_mark(TREE_TRAVERSAL); // memorize current
-	}
+  switch(nodetype) {
+  case Browser::GROUP:
+    defGroupSymbol1 = img1; defGroupSymbol2 = img2; defGroupSymbol3 = img3;
+    break;
+  case Browser::LEAF:
+    defLeafSymbol1 = img1; defLeafSymbol2 = img2;
+    break;
+  }
 }
 
 //

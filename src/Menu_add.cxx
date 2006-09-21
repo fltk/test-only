@@ -45,6 +45,7 @@
 using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
+// Menu-style api:
 
 static Widget* append(
   Group* g,
@@ -78,8 +79,8 @@ static Widget* append(
   return o;
 }
 
-// flags to determine what _add() does:
-enum {FIND=1, REPLACE=2, FLAT=4};
+// flags to determine what innards() does:
+enum AddType {ADD=0, FIND=1, REPLACE=2};
 
 // Skip @ commands, return pointer to null or first actual letter:
 // Except we don't skip a trailing command with no semicolon.
@@ -97,7 +98,7 @@ static inline void skip_embedded(const char*& aa) {
 
 // See if widget has the same label, except ignore @-sequences or &-sequences
 // when comparing. If the new label has any @-sequences, replace the old label.
-static bool match_and_replace(Widget* i, const char* B, int flags, int what) {
+static bool match_and_replace(Widget* i, const char* B, int flags, AddType what) {
   const char* b = B;
   const char* a = i->label();
   if (!a) return false;
@@ -113,7 +114,7 @@ static bool match_and_replace(Widget* i, const char* B, int flags, int what) {
     if (*b == '&') {b++; replace = true;}
     if (*a != *b) return false;
     if (!*a) {
-      if (replace && (what&REPLACE)) i->copy_label(B);
+      if (replace && (what==REPLACE)) i->copy_label(B);
       return true;
     }
     ++a; ++b;
@@ -130,7 +131,7 @@ static Widget* innards(
   Callback *callback,
   void *data,
   int flags,
-  int what,
+  AddType what,
   int insert_here
 ) {
   Group* group = top;
@@ -139,8 +140,7 @@ static Widget* innards(
 
   int flags1 = 0;
   const char* item_label;
-  if (what & FLAT) item_label = label;
-  else for (;;) {    /* do all the supermenus: */
+  for (;;) {    /* do all the supermenus: */
 
     // leading slash makes us assumme it is a filename:
     if (*label == '/') {item_label = label; break;}
@@ -164,7 +164,7 @@ static Widget* innards(
     // find a matching menu title:
     for (int n = group->children();;) {
       if (!n) { // create a new menu
-	if (what & FIND) {
+	if (what == FIND) {
 	  // give up on hierarchy search and find flat item:
 	  item_label = label;
 	  group = top;
@@ -189,7 +189,7 @@ static Widget* innards(
   if (!*item_label && (group != top || flags1)) {
     item = group;
     // hack so "/_" adds a divider line
-    if (flags1 && !(what & FIND)) {
+    if (flags1 && what!=FIND) {
       Group* saved = Group::current();
       Group::current(0);
       group->add(new Divider());
@@ -200,7 +200,7 @@ static Widget* innards(
   } else {
 
     // find a matching menu item:
-    if (what & (REPLACE|FIND)) for (int n = group->children(); n--;) {
+    if (what != ADD) for (int n = group->children(); n--;) {
       Widget* w = group->child(n);
       if (!w->is_group() && match_and_replace(w, item_label, flags, what)) {
 	item = w;
@@ -210,10 +210,10 @@ static Widget* innards(
   }
 
   if (item) {
-    if (what & FIND) return item;
+    if (what == FIND) return item;
     fl_menu_replaced = true;
   } else {
-    if (what & FIND) return 0;
+    if (what == FIND) return 0;
     item = append(group, item_label, flags|flags1, insert_here);
     fl_menu_replaced = false;
   }
@@ -269,7 +269,7 @@ Widget* Menu::add(
   void *data,
   int flags
 ) {
-  return ::innards(this,label,shortcut,callback,data,flags,0,0);
+  return ::innards(this,label,shortcut,callback,data,flags,ADD,0);
 }
 
 /*! Split label at '/' characters and add or replace a hierachial Item.
@@ -311,7 +311,7 @@ Widget* Menu::insert(
   void *data,
   int flags
 ) {
-  return ::innards(this,label,shortcut,callback,data,flags,0,n+1);
+  return ::innards(this,label,shortcut,callback,data,flags,ADD,n+1);
 }
 
 /*! Return the item with the given label
@@ -327,6 +327,46 @@ Widget* Menu::find(const char* label) const {
   return ::innards((Group*)this,label,0,0,0,0,FIND,0);
 }
 
+////////////////////////////////////////////////////////////////
+// Browser-style api:
+
+// Innards of Menu::add() and Menu::replace() methods:
+// This is the same code except it does not do the splitting at '/'
+// thus it is much simpler
+static Widget* flat_innards(
+  Group* group,
+  const char *label,
+  void *data,
+  int flags,
+  AddType what,
+  int insert_here
+) {
+  Widget* item = 0;
+
+  // find a matching menu item:
+  if (what != ADD) for (int n = group->children(); n--;) {
+    Widget* w = group->child(n);
+    if (!w->is_group() && match_and_replace(w, label, flags, what)) {
+      item = w;
+      break;
+    }
+  }
+
+  if (item) {
+    if (what == FIND) return item;
+    fl_menu_replaced = true;
+  } else {
+    if (what == FIND) return 0;
+    item = append(group, label, flags, insert_here);
+    fl_menu_replaced = false;
+  }
+
+  /* fill it in */
+  item->user_data(data);
+  group->relayout();
+  return item;
+}
+
 /*! Create a new Item and add it to the top-level of the hierarchy.
 
     This matches add() from the Browser in fltk1.
@@ -335,7 +375,7 @@ Widget* Menu::find(const char* label) const {
     the label at '/' characters. The label is used unchanged.
 */
 Widget* Menu::add(const char* label, void* data) {
-  return ::innards(this,label,0,0,data,0,FLAT,0);
+  return ::flat_innards(this,label,data,0,ADD,0);
 }
 
 /*! Create a new Item and add it to the top-level of the hierarchy.
@@ -347,7 +387,7 @@ Widget* Menu::add(const char* label, void* data) {
     the label at '/' characters. The label is used unchanged.
 */
 Widget* Menu::insert(int n, const char* label, void* data) {
-  return ::innards(this,label,0,0,data,0,FLAT,n+1);
+  return ::flat_innards(this,label,data,0,ADD,n+1);
 }
 
 /*! Create or replace an Item at the top-level of the hierarchy.
@@ -357,12 +397,31 @@ Widget* Menu::insert(int n, const char* label, void* data) {
     not found a new Item is created and added at the end.
 */
 Widget* Menu::replace(const char* label, void* data) {
-  return ::innards(this,label,0,0,data,0,FLAT|REPLACE,0);
+  return ::flat_innards(this,label,data,0,REPLACE,0);
+}
+
+/*!
+  Add a parent widget to a (possibly) lower level of the
+  hierarchy, such as returned by add_group().
+*/
+Group* Menu::add_group(const char* label, Group* parent, void* data) {
+  return (Group*)::flat_innards(parent?parent:this, label, data, SUBMENU, ADD, 0);
+}
+
+/*!
+  Add a non-parent widget to a (possibly) lower level of the
+  hierarchy, such as returned by add_group(). If parent is null
+  or this then this is the same as add(label,data).
+*/
+Widget* Menu::add_leaf(const char* label, Group* parent, void* data) {
+  return ::flat_innards(parent?parent:this, label, data, 0, ADD, 0);
 }
 
 /*! \fn void Menu::remove(const char* l)
   Does find(l) and then deletes that widget.
 */
+
+////////////////////////////////////////////////////////////////
 
 /*! This is a Forms (and SGI GL library) compatable add function, it
   adds many menu items, with '|' seperating the menu items, and tab
