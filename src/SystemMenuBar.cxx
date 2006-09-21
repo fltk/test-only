@@ -138,9 +138,9 @@ static void setMenuShortcut( MenuHandle mh, int miCnt, const Widget *m )
 static void setMenuFlags( MenuHandle mh, int miCnt, const Item *m )
 {
   if ( m->type()==Item::TOGGLE )
-    SetItemMark( mh, miCnt, m->value() ? 0x12 : 0 );
+    SetItemMark( mh, miCnt, m->state() ? 0x12 : 0 );
   else if ( m->type()==Item::RADIO )
-    SetItemMark( mh, miCnt, m->value() ? 0x13 : 0 );
+    SetItemMark( mh, miCnt, m->state() ? 0x13 : 0 );
 }
 
 static void catMenuFlags( const Widget *m, char *dst )
