@@ -78,7 +78,7 @@ corner of the window.
 
 \a label is a pointer to a character string to label the widget with
 or NULL. If not given it defaults to NULL. The string is not copied,
-FLTK assummes it resides in static storage. This is true of almost all
+FLTK assumes it resides in static storage. This is true of almost all
 interfaces in FLTK that take string constants, and greatly speeds up
 FLTK. (You can use Widget::copy_label() if you want fltk to manage the
 memory the label is in).

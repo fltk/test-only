@@ -49,7 +49,7 @@ excuse that it stands for the &quot;Fast Light Tool Kit&quot;.
 \section features Features
 
 FLTK was designed to be statically linked. This was done by splitting 
-it into many small objects and desigining it so that functions that are 
+it into many small objects and designing it so that functions that are 
 not used do not have pointers to them in the parts that are used, and 
 thus do not get linked in. It is also designed so that all data used by
 the GUI, such as images and widget layout, can be inlined into source
@@ -69,7 +69,7 @@ FLTK  library using gcc on a 486 and then stripped) is 82K.
 - The FLUID program (which includes every widget) is 352k.
 - Written directly atop Xlib (or WIN32) for maximum speed,  and 
 carefully optimized for code size and performance.
-- Precise low-level compatability between the X11 and WIN32  version 
+- Precise low-level compatibility between the X11 and WIN32  version 
 (only about 10% of the code is different).
 - Interactive user interface builder program. Output is 
  human-readable and editable C++ source code.
@@ -127,7 +127,7 @@ using a version of Forms with the menus and file browser replaced with
 code from viewkit.
 
 The need to switch to OpenGL, a desire to use C++, and the
-closed-source nature of XForms, all led to a rquirement to rewrite
+closed-source nature of XForms, all led to a requirement to rewrite
 Forms.  This produced the first version of FLTK.  The conversion to
 C++ required so many changes it made it impossible to recompile any
 Forms objects.  Since it was incompatible anyway, Bill decided to
@@ -149,7 +149,7 @@ the color of every widget.
 
 FLTK is hosted on a web site, http://www.fltk.org operated by Michael
 Sweet of the Easy Software Corporation (the developer of CUPS). An SVN
-repostiory of the source code, downloads of the fltk package, mailing
+repository of the source code, downloads of the fltk package, mailing
 list and newsserver, bug tracking, and programs using FLTK are all here.
 
 FLTK also has a SourceForge page at http://fltk.sourceforge.net,

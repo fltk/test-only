@@ -248,7 +248,7 @@ to members or functions that don't exist.
 <h4>Adding a Class Method</h4>
 
 You can add class methods within FLUID that have nothing to do with the
-GUI. An an example add a show function so that CubeViewUI can actually
+GUI. As an example add a show function so that CubeViewUI can actually
 appear on the screen.
 
 Make sure the top level CubeViewUI is selected and select

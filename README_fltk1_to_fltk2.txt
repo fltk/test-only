@@ -42,7 +42,7 @@ I. FLTK2 Source Organisation
 1. fltk include directory
 	FL/*.H	-> fltk/*.h
    
-   fltk1 (minimal) compatibitily includes:
+   fltk1 (minimal) compatibility includes:
     fltk/compat/FL/*.H
 
 2. fltk include filenames
@@ -69,7 +69,7 @@ I. FLTK2 Source Organisation
 			In some rare situations, you will have to remove ambiguity
 			as with XWindow based unix systems, 
 			be careful i.e. when using Button and Window classes
-			they will be for sure ambigous after the use of <fltk/x.h> include. 
+			they will be for sure ambiguous after the use of <fltk/x.h> include. 
 	
 	Also concerning fltk files naming :
 	all lib names + fltk tools named .*fltk.* are named .*fltk2.*
@@ -89,7 +89,7 @@ II. FLTK2 Window creation and event loops
 	be careful not to omit the method:
 		myGroupKind.begin();
 	This is automatically called in fltk1 in the constructor,
-	so in fltk1 you can ommit it but for some reasons, 
+	so in fltk1 you can omit it but for some reasons, 
 	it have NOT been the case on FLTK2.
 	
 	So to continue with our example let's add one button to our fltk2 window:
@@ -107,7 +107,7 @@ II. FLTK2 Window creation and event loops
 	  while(myWin.visible()) fltk::wait();
 	
 	For handling the main Window event loop, 
-	you won't use this and would preferrably simply use :
+	you won't use this and would preferably simply use :
 	  fltk::run();
 
 ==============================================================

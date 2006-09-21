@@ -4,7 +4,7 @@ using namespace fltk;
 
 /*! \file glut.h
 
-This file provides GLUT compatabilty in FLTK 2.0.
+This file provides GLUT compatibility in FLTK 2.0.
 
 GLUT is/was a popular toolkit for making single-window OpenGL
 applications.  GLUT is Copyright&copy; Mark J. Kilgard, 1994, 1995,

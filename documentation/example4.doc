@@ -86,7 +86,7 @@ You can also use any of the constants defined in <fltk/Color.h>
 
 Now we build a "path" by calling addvertex(float,float) once for each
 corner of the polygon. You should set the color first (this is for
-compatability with future fltk versions where you may be able to
+compatibility with future fltk versions where you may be able to
 change the color per vertex).
 
 We then fill it and draw a white line around the outside with

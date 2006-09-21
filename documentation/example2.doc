@@ -8,7 +8,7 @@ using namespace fltk;
 /*! \page example2 Example 2: Using Callbacks
 
 Every widget in fltk has a single \link fltk::Widget::callback
-callback function\endlink. Fltk assummes that for any type of widget,
+callback function\endlink. Fltk assumes that for any type of widget,
 there is exactly one "interesting" thing it does, such as the value
 inside it being changed, or the user changing what is selected, or for
 buttons the user pushing them.
@@ -66,10 +66,10 @@ levels of base classes results in unreadable header files.)
 
 Why are there two arguments? Isn't the second one the same as
 widget->user_data()? In most cases this is true. However having the
-seperate arguments allows you to declare the function as taking the
+separate arguments allows you to declare the function as taking the
 correct type and casting it when setting the callback. It also allows
 Menus and Browsers to execute the widgets inside them in a way that is
-convienent: the widget argument is the Menu, the callback is from the
+convenient: the widget argument is the Menu, the callback is from the
 actual item, and the data will be from the item unless it is zero, in
 which case it is from the Menu.
 

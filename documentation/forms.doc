@@ -40,7 +40,7 @@ You will also have to compile your Forms or XForms program using a
 C++ compiler.  The FLTK library does not provide C bindings or header
 files.
 
-Although FLTK was designed to be compatable with the GL Forms
+Although FLTK was designed to be compatible with the GL Forms
 library (version 0.3 or so), XForms has bloated severely and it's
 interface is X-specific.  Therefore, XForms compatibility is no longer
 a goal of FLTK.  Compatibility was limited to things that were free, or
@@ -88,7 +88,7 @@ to do this is to globally replace &quot;-&gt;x&quot; with
 
 <tt>const char *</tt> arguments to most FLTK methods are simply
 stored, while Forms would <tt>strdup()</tt> the passed string.  This is
-most noticable with the label of widgets.  Your program must always
+most noticeable with the label of widgets.  Your program must always
 pass static data such as a string constant or malloc'd buffer to <tt>
 label()</tt>.  If you are using labels to display program output you
 may need to change the calls to Widget::copy_label().
@@ -101,7 +101,7 @@ fdesign outputs a setting of a &quot;fdui&quot; instance variable to
 the main window.  I did not emulate this because I wanted all instance
 variables to be hidden.  You can store the same information in the
 Widget::user_data() field of a window.  To do this, search through
-the fdesign output for all occurances of &quot;-&gt;fdui&quot; and
+the fdesign output for all occurrences of &quot;-&gt;fdui&quot; and
 edit to use &quot;-&gt;user_data()&quot; instead.  This will require
 casts and is not trivial.
 

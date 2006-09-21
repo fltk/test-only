@@ -68,13 +68,13 @@ to handle each event passed to the widget. It can:
 - Change the state of the widget.
 - Call Widget::redraw() if the widget needs to be redisplayed.
 - Call Widget::redraw(n) if the widget needs a partial-update
-(assumming you provide support for this in your Widget::draw()
+(assuming you provide support for this in your Widget::draw()
 method).
 - Call fltk::Widget::do_callback() if a callback should be generated.
 - Call fltk::Widget::handle() on child widgets.
 
 Events are identified by the integer argument.  Other information
-about the most recent event is stored in static locations and aquired
+about the most recent event is stored in static locations and acquired
 by calling the <A href=Fl.html#event><TT>fltk::event_*()</TT></A>
 functions. This information remains valid until another event is
 handled.
@@ -144,7 +144,7 @@ by testing fltk::not_clipped() or fltk::intersect_with_clip() and
 skipping invisible parts.
 
 FLTK provides a \link draw.h large number of basic drawing functions
-\endlink. And fltk::Widget provides several convienent drawing methods
+\endlink. And fltk::Widget provides several convenient drawing methods
 using the Widget's settings, such as Widget::draw_box().
 
 <h3>Resizing the Widget</h3>

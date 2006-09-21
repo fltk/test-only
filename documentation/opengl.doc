@@ -40,7 +40,7 @@ Like any widget, you can include additional private and public data in
 your class (such as scene graph information, etc.) 
 
 The GlWindow::draw() method is where you actually do your OpenGL 
-drawing. The header file gl.h provides some convinence functions
+drawing. The header file gl.h provides some convenience functions
 so that you can reuse FLTK fonts and colors in your OpenGL drawing:
 
 \code

@@ -7,8 +7,8 @@
 <center>
 \image html fltk_shadow.png
 <br><a href="http://www.fltk.org" TARGET="_top">www.fltk.org</a>
-<br>Revision 16 by Bill Spitzak, Michael Sweet, Craig P. Earls, 
-Matthias Melcher, your_name_here<br>
+<br>Revision 17 by Bill Spitzak, Michael Sweet, Craig P. Earls, 
+Matthias Melcher, Nicolas Kaiser, your_name_here<br>
 <i><small>
 All contents &copy;1998-2006 by Bill Spitzak and others.<br>
 Permission is granted to reproduce this manual<br>
@@ -21,7 +21,7 @@ copyright and permission notice are preserved.
 
 - <b><a href="files.html">File List</a></b> All FLTK header files that
   define something other than a Class. Different areas of functionality
-  are catagorized into different header files.
+  are categorized into different header files.
 
 - <b><a href="classes.html">Class List</a></b> All C++ classes and
   structs defined by FLTK header files. In most cases you must include
@@ -33,12 +33,12 @@ copyright and permission notice are preserved.
   classes and structs, but arranged by inheritance.
 
 - <b><a href="functions.html">Class Members</a></b> A list of all
-  class members (methods, variables, enumerations, etc) by name,
+  class members (methods, variables, enumerations, etc.) by name,
   with the class they are defined in. Useful when you see a method
   being called but are not sure what the class is.
 
 - <b><a href="globals.html">File Members</a></b> A list of all
-  functions, enumerations, variables, etc, that are not members
+  functions, enumerations, variables, etc., that are not members
   of classes, with the header file they are defined in.
 
 - <b><a href="pages.html">Related Pages</a></b> Tutorial by example of

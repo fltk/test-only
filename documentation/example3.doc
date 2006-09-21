@@ -41,7 +41,7 @@ several widgets. These widgets are defined as instance variables
 inside it. The positions and labels and callbacks of these widgets
 will be defined below in the constructor. You can also define the
 widgets as pointers and have your constructor call "new" to define
-them, this can be more convienent in some cases and is necessary if
+them, this can be more convenient in some cases and is necessary if
 you want to repeat or vary the set of widgets.
 
 \skip inline

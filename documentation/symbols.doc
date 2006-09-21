@@ -23,7 +23,7 @@ consumed).
   "@;" truncates the string at this point. This can be used to hide
   program internal data in the label() by putting this before it.
 
-  "@n" in a label resets the font, color, and postioning offset to
+  "@n" in a label resets the font, color, and positioning offset to
   the settings they were when the label started.
 
   "@b" in a label changes the font to bold.
@@ -50,7 +50,7 @@ consumed).
 
   "@s0" will restore the initial font size.
 
-  "@S..." is the same as "@s..." for back-compatability.
+  "@S..." is the same as "@s..." for back-compatibility.
 
   "@." prints nothing and also stops any interpretation of @ or &
   characters later in the string. This will allow you to concatenate
@@ -72,10 +72,10 @@ consumed).
 
   "@Bcolor" draws a solid box of the given color behind the text.
   "color" can be any string understood by parsecolor(). Not
-  sure if this is compatable with fltk1.1.
+  sure if this is compatible with fltk1.1.
 
   "@l" makes the rest of the label be left-justified.
-  Note that this is incompatable with fltk1, which used this to set the
+  Note that this is incompatible with fltk1, which used this to set the
   size to 24 points.
 
   "@c" makes the rest of the label be centered.

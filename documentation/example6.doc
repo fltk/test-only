@@ -51,7 +51,7 @@ In the constructor for EditorWindow, most of the work is in building
 the menubar that goes across the top. Menus are populated by "items",
 which are actually normal Widgets, each with a callback function to do
 the actual work. Here though we call the Menu::add() function, which
-is a convience function for creating a large hierarchy of widgets:
+is a convenience function for creating a large hierarchy of widgets:
 \skip ::EditorWindow
 \until replace2
 
@@ -148,14 +148,14 @@ The replace callback just shows the replace dialog:
 \skip replace_cb
 \until }
 
-This callback will replace the next occurence of the replacement
+This callback will replace the next occurrence of the replacement
 string. If nothing has been entered for the replacement string, then
 the replace dialog is displayed instead:
 \skip replace2_cb
 \until alert
 \until }
 
-This callback will replace all occurences of the search string in the
+This callback will replace all occurrences of the search string in the
 file:
 \skip replall_cb
 \until alert

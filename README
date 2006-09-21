@@ -33,7 +33,7 @@ ON-LINE DOCUMENTATION
 
 BUILDING AND INSTALLING FLTK
 
-    Specific directions for various systems are provided in seperate
+    Specific directions for various systems are provided in separate
     README files:
 
 	README.unix (linux as well)
@@ -80,7 +80,7 @@ REPORTING BUGS
 TRADEMARKS
 
     Microsoft and Windows are registered trademarks of Microsoft
-    Corportation. UNIX is a registered trademark of the X/Open Group,
+    Corporation. UNIX is a registered trademark of the X/Open Group,
     Inc.  OpenGL is a registered trademark of Silicon Graphics, Inc.
 
 
@@ -103,7 +103,7 @@ COPYRIGHT
     as published by the Free Software Foundation; either version 2 of
     the License, or (at your option) any later version. You may also
     release programs that use the unmodified FLTK library without any
-    restrictions according to the LPGL exceptions granted in the FLTK
+    restrictions according to the LGPL exceptions granted in the FLTK
     LIBRARY LICENSE.
 
     This library is distributed in the hope that it will be useful, but

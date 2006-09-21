@@ -61,7 +61,7 @@ using namespace fltk;
   events. This is done with fltk::add_event_handler()
 
   You can generate fake events by calling handle(int) on the correct
-  widgets (usally a window). Currently you can change the values
+  widgets (usually a window). Currently you can change the values
   returned by the fltk::event_*() functions by storing the desired
   value into the static variables fltk::e_*, but this may change in
   future versions.
@@ -215,7 +215,7 @@ using namespace fltk;
 
   If you implement a widget class it is important to call your base
   class with this same event. Fltk relies on this to communicate the
-  visiblilty of widgets that are windows to the system.
+  visibility of widgets that are windows to the system.
 */
 
 /*! \var fltk::SHOW
@@ -225,7 +225,7 @@ using namespace fltk;
 
   If you implement a widget class it is important to call your base
   class with this same event. Fltk relies on this to communicate the
-  visiblilty of widgets that are windows to the system.
+  visibility of widgets that are windows to the system.
 */
 
 /*! \var fltk::PASTE
@@ -241,7 +241,7 @@ using namespace fltk;
 
 /*! \var fltk::DND_ENTER
   The user is dragging something over your widget. Return 1 if you are
-  intersted in getting fltk::DND_DRAG and fltk::DND_RELEASE events.
+  interested in getting fltk::DND_DRAG and fltk::DND_RELEASE events.
 
   It is impossible to examine the text of the drag until you release
   it. There are system-specific variables that can be examined to
@@ -369,7 +369,7 @@ using namespace fltk;
   lots of X servers have really botched up the key assignments trying
   to make Emacs work.  Fltk tries to work around this but you may find
   that Alt or Meta don't work, since I have seen at least 3 mutually
-  incompatable arrangements. Non-XFree86 machines may also have
+  incompatible arrangements. Non-XFree86 machines may also have
   selected different values so that NUMLOCK, META, and SCROLLLOCK are
   mixed up. In addition X reports the state \e before the last key
   was pressed so the state looks backwards for any shift keys, currently
