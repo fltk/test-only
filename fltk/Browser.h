@@ -177,6 +177,8 @@ private:
   void draw_clip(const Rectangle&);
   static void draw_clip_cb(void*,const Rectangle&);
   Rectangle interior; // inside box edges and scrollbars
+  void set_belowmouse();
+  void clear_belowmouse();
 
   Widget **header_;
   int nHeader, nColumn, selected_column_;

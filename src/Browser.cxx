@@ -669,6 +669,10 @@ void Browser::draw_item(int damage) {
     item()->clear_flag(FOCUSED);
     if (!multi()) item()->clear_flag(SELECTED);
   }
+  if (/*(flags()&HIGHLIGHT) &&*/ at_mark(BELOWMOUSE))
+    item()->set_flag(HIGHLIGHT);
+  else
+    item()->clear_flag(HIGHLIGHT);
   if (damage) item()->set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
   if (!item()->image()) {
     if (item()->is_group()) {
@@ -1218,6 +1222,27 @@ bool Browser::select_only_this(int do_callback) {
   }
 }
 
+// check if current item is not the highlighted one, needs highligting,
+// and trigger the old and new highlighted ones to redraw if so:
+void Browser::set_belowmouse() {
+  // update highlighting:
+  if (at_mark(BELOWMOUSE)) return;
+  damage_item(BELOWMOUSE);
+  if (defLeafSymbol2||defGroupSymbol2||item()->image(fltk::HIGHLIGHT)
+      ||item()->highlight_color()) {
+    set_mark(BELOWMOUSE);
+    damage_item(BELOWMOUSE);
+  } else {
+    BELOWMOUSE.unset();
+  }
+}
+
+// Indicate that nothing should be highlighted:
+void Browser::clear_belowmouse() {
+  damage_item(BELOWMOUSE);
+  BELOWMOUSE.unset();
+}
+
 int Browser::handle(int event) {
   static bool drag_type; // for multibrowser
 
@@ -1231,8 +1256,7 @@ int Browser::handle(int event) {
     return 1;
 
   case LEAVE:
-    damage_item(BELOWMOUSE);
-    BELOWMOUSE.unset();
+    clear_belowmouse();
     break;
 
   case PUSH:
@@ -1240,23 +1264,22 @@ int Browser::handle(int event) {
   case MOVE: {
     // For all mouse events check to see if we are in the scrollbar
     // areas and send to them:
-    if (scrollbar.visible() &&
-	(event_y() >= scrollbar.y()) &&
-	(scrollbar_align()&ALIGN_LEFT ?
-	 (event_x() < scrollbar.x()+scrollbar.w()) :
-	 (event_x() >= scrollbar.x())))
+    if (scrollbar.visible() && event_inside(scrollbar)) {
+      clear_belowmouse();
       return scrollbar.send(event);
-    if (hscrollbar.visible() &&
-	(scrollbar_align()&ALIGN_TOP ?
-	 (event_y() < hscrollbar.y()+hscrollbar.h()) :
-	 (event_y() >= hscrollbar.y())))
+    }
+    if (hscrollbar.visible() && event_inside(hscrollbar)) {
+      clear_belowmouse();
       return hscrollbar.send(event);
-    if (header_ && nHeader && event_y()<header_[0]->y()+header_[0]->h()) {
+    }
+    if (header_ && nHeader && event_y() <= interior.y()) {
+      clear_belowmouse();
       for (int i=0; i<nHeader; i++) {
-	Widget *hi = header_[i];
-	if (event_x()>=hi->x() && event_x()<hi->x()+hi->w())
-	return hi->send(event);
+        Widget *hi = header_[i];
+        if (event_x()>=hi->x() && event_x()<hi->x()+hi->w())
+          return hi->send(event);
       }
+      return 0; // ignore other clicks on header area
     }
 
     openclose_drag = false;
@@ -1265,9 +1288,8 @@ int Browser::handle(int event) {
     // find the item we are pointing at
     if (!goto_position(event_y()-interior.y()+yposition_)) {
       // click below the bottom item must be handled specially
+      clear_belowmouse();
       event_clicks(0); // make it not be a double-click for callback
-      damage_item(BELOWMOUSE);
-      BELOWMOUSE.unset();
       if (event != PUSH) return 1;
       if (multi() && event_state(CTRL|SHIFT)) {
         if (event_state(SHIFT)) goto DRAG;
@@ -1278,21 +1300,17 @@ int Browser::handle(int event) {
       return 1;
     }
 
-    // update highlighting:
-    if (!at_mark(BELOWMOUSE)) {
-      damage_item(BELOWMOUSE);
-      if (defLeafSymbol2||defGroupSymbol2||item()->image(fltk::HIGHLIGHT)) {
-        set_mark(BELOWMOUSE);
-        damage_item(BELOWMOUSE);
-        fltk::belowmouse(item());
-      }
-    }
-
     // set x to left edge of item:
     int arrow_size = int(textsize())|1;
     int x = interior.x()+(HERE.level+indented())*arrow_size-xposition_;
     // see if they are inside the widget and it takes the event:
-    if (event_x() >= x) item()->send(event);
+    if (event_x() >= x) {
+      if (item()->send(event)) return 1;
+      set_belowmouse();
+    } else {
+      clear_belowmouse();
+    }
+
     // accept enter/move events so the browser's tooltip appears:
     if (event != PUSH) return 1;
 
@@ -1327,6 +1345,7 @@ int Browser::handle(int event) {
   DRAG:
     // find the item they are now pointing at:
     bool hit = goto_position(event_y()-interior.y()+yposition_);
+    if (hit) set_belowmouse(); else clear_belowmouse();
     if (openclose_drag && hit && item()) {
       set_focus();
       // set x to left edge of item:

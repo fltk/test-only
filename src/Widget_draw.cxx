@@ -140,12 +140,12 @@ const Symbol * Widget::context_image() const  {
 
     const Symbol * img;
 
-    if (!active())  
-	img = nimages_>1 && image_[1]  ? image_[1] : image_[0];
-    else if (nimages_>2 && image_[2] && belowmouse() && !pushed())
+    if ((flags_ & INACTIVE_R) && nimages_>1 && image_[1])
+      img = image_[1];
+    else if ((flags_ & HIGHLIGHT) && nimages_>2 && image_[2])
 	img = image_[2];
-    else if (pushed() || (flags() & fltk::OPENED) ) 
-	img = nimages_>3 && image_[3]  ? image_[3] : image_[0];
+    else if ((flags_ & (PUSHED|OPENED)) && nimages_>3 && image_[3])
+      img = image_[3];
     else 
 	img = image_[0];
 
