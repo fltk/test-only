@@ -34,7 +34,7 @@
 #include <fltk/string.h>
 #include "GlChoice.h"
 
-#ifdef USE_XFT
+#if USE_XFT
 # define Window XWindow
 # include <X11/Xft/Xft.h>
 # ifndef MAKEDEPEND

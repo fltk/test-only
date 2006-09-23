@@ -296,19 +296,19 @@ OSStatus HandleMenu( HICommand *cmd )
     //printf( "Menu: %s\n", m->label() );
     if ( m->type()==Item::TOGGLE ) { // update the menu toggle symbol
       Item *j = (Item*)m;
-      j->value(!j->value());
-      SetItemMark( cmd->menu.menuRef, cmd->menu.menuItemIndex, j->value() ? 0x12 : 0 );
+      j->state(!j->state());
+      SetItemMark( cmd->menu.menuRef, cmd->menu.menuItemIndex, j->state() ? 0x12 : 0 );
     } else if ( m->type()==Item::RADIO ) { // update all radio buttons in this menu
       Item *j = (Item*)m;
       Group *p = m->parent();
-      j->value(1);
+      j->state(1);
       int i = cmd->menu.menuItemIndex+1, mi = p->find(m), nn = p->children(), ix;
       for (ix = mi+1; ix<nn; ix++, i++)
       {
         Widget *c = p->child(ix);
         if (!c->label()) break; // break at the next divider
         if (c->type()!=Item::RADIO) break;
-        ((Item*)c)->value(0);
+        ((Item*)c)->state(0);
         SetItemMark(cmd->menu.menuRef, i, 0 );
       }
       i = cmd->menu.menuItemIndex-1;
@@ -317,7 +317,7 @@ OSStatus HandleMenu( HICommand *cmd )
         Widget *c = p->child(ix);
         if (!c->label()) break; // break at the next divider
         if (c->type()!=Item::RADIO) break;
-        ((Item*)c)->value(0);
+        ((Item*)c)->state(0);
         SetItemMark(cmd->menu.menuRef, i, 0 );
       }
       SetItemMark( cmd->menu.menuRef, cmd->menu.menuItemIndex, 0x13 );
