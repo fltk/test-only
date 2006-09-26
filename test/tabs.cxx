@@ -22,7 +22,7 @@ int main (int argc, char **argv) {
     o->begin();
      {fltk::TabGroup* o = new fltk::TabGroup(10, 10, 300, 191);
       o->begin();
-       {fltk::Group* o = new fltk::Group(0, 20, 300, 171, "tab1");
+       {fltk::Group* o = new fltk::Group(0, 20, 300, 171, "Label1");
         o->begin();
         new fltk::Input(50, 14, 240, 22, "input:");
         new fltk::Input(50, 36, 240, 22, "input2:");
@@ -69,8 +69,7 @@ int main (int argc, char **argv) {
         }
         o->end();
       }
-       //{fltk::Group* o = new fltk::Group(0, 20, 300, 171, "     tab5      ");
-       {fltk::Group* o = new fltk::Group(0, 20, 300, 171, "very long tab text");
+       {fltk::Group* o = new fltk::Group(0, 20, 300, 171, "     tab5      ");
         o->labeltype(fltk::ENGRAVED_LABEL);
         o->hide();
         o->begin();

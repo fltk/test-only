@@ -461,7 +461,7 @@ void Image::color_average(Color c, float i) {
 		    while (*p && !isspace(*p)) p++;
 		}
 
-                Color c = fltk::Color(p);
+                Color c = fltk::color(p);
 		if (c) {
                   split_color(c, r,g,b);
 		    r = (ia * r + ir) >> 8;
