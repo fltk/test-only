@@ -83,7 +83,7 @@ Function {} {open
         }
       }
       {fltk::Group} {} {
-        label {     tab5      } open
+        label {very long tab text} open
         xywh {0 20 300 171} hide labeltype ENGRAVED_LABEL
       } {
         {fltk::Button} {} {

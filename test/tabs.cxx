@@ -69,7 +69,7 @@ int main (int argc, char **argv) {
         }
         o->end();
       }
-       {fltk::Group* o = new fltk::Group(0, 20, 300, 171, "     tab5      ");
+       {fltk::Group* o = new fltk::Group(0, 20, 300, 171, "very long tab text");
         o->labeltype(fltk::ENGRAVED_LABEL);
         o->hide();
         o->begin();
