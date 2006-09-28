@@ -1,7 +1,6 @@
+// CodeEditor.h
 //
-// "$Id$"
-//
-// Code editor widget for the Fast Light Tool Kit (FLTK).
+// $Id:$
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -23,7 +22,6 @@
 // Please report all bugs and problems on the following page:
 //
 //     http://www.fltk.org/str.php
-//
 
 #ifndef Fluid_CodeEditor_h
 # define Fluid_CodeEditor_h
@@ -43,49 +41,47 @@
 #  include <fltk/TextEditor.h>
 
 namespace fltk {
-    
-    class CodeEditor : public TextEditor {
-	static TextDisplay::StyleTableEntry styletable[];
-	static const char * const code_keywords[];
-	static const char * const code_types[];
-	
-	
-	// 'compare_keywords()' - Compare two keywords...
-	static int compare_keywords(const void *a, const void *b);
-	
-	// 'style_parse()' - Parse text and produce style data.
-	static void style_parse(const char *text, char *style, int length);
-	
-	// 'style_unfinished_cb()' - Update unfinished styles.
-	static void style_unfinished_cb(int, void*);
-	
-	// 'style_update()' - Update the style buffer...
-	static void style_update(int pos, int nInserted, int nDeleted,
-	    int /*nRestyled*/, const char * /*deletedText*/,
-	    void *cbArg);
-	
-	static int auto_indent(int, CodeEditor* e);
-	
-    public:
-	
-	CodeEditor(int X, int Y, int W, int H, const char *L=0);
-	~CodeEditor();
-	int top_line() { return get_absolute_top_line_number(); }
-    };
-    
-    class CodeViewer : public CodeEditor {
-    public:
-	
-	CodeViewer(int X, int Y, int W, int H, const char *L=0);
-	
-    protected:
-	int handle(int ev) { return TextDisplay::handle(ev); }
-    };
-    
+
+  class CodeEditor : public TextEditor {
+    static TextDisplay::StyleTableEntry styletable[];
+    static const char * const code_keywords[];
+    static const char * const code_types[];
+
+
+    // 'compare_keywords()' - Compare two keywords...
+    static int compare_keywords(const void *a, const void *b);
+
+    // 'style_parse()' - Parse text and produce style data.
+    static void style_parse(const char *text, char *style, int length);
+
+    // 'style_unfinished_cb()' - Update unfinished styles.
+    static void style_unfinished_cb(int, void*);
+
+    // 'style_update()' - Update the style buffer...
+    static void style_update(int pos, int nInserted, int nDeleted,
+                             int /*nRestyled*/, const char * /*deletedText*/,
+                             void *cbArg);
+
+    static int auto_indent(int, CodeEditor* e);
+
+  public:
+
+    CodeEditor(int X, int Y, int W, int H, const char *L=0);
+    ~CodeEditor();
+    int top_line() { return get_absolute_top_line_number(); }
+  };
+
+  class CodeViewer : public CodeEditor {
+  public:
+
+    CodeViewer(int X, int Y, int W, int H, const char *L=0);
+
+  protected:
+    int handle(int ev) { return TextDisplay::handle(ev); }
+  };
+
 } // namespace fltk
 
 #endif // !CodeEditor_h
 
-//
-// End of "$Id$".
-//
+// End of $Id:$

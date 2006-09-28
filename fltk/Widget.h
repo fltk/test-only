@@ -71,14 +71,14 @@ public:
   enum WidgetVisualType {
     // Values for type() shared by Button and menu Item, and for fake RTTI:
     NORMAL = 0,
-    RESERVED_TYPE	= 0x64,
+    RESERVED_TYPE      = 0x64,
     TOGGLE = RESERVED_TYPE+1,
     RADIO  = RESERVED_TYPE+2,
-    GROUP_TYPE		= 0xe0,
-    WINDOW_TYPE		= 0xf0
+    GROUP_TYPE         = 0xe0,
+    WINDOW_TYPE                = 0xf0
   };
 
-  uchar type() const		{ return type_; }
+  uchar	type() const		{ return type_; }
   void	type(uchar t)		{ type_ = t; }
   bool	is_group() const	{ return type_ >= GROUP_TYPE; }
   bool	is_window() const	{ return type_ >= WINDOW_TYPE; }
@@ -93,18 +93,9 @@ public:
   void	label(const char* a);
   void	copy_label(const char* a);
 
-  // image manips
-  //!  get the image Symbol according to the desired state (NO_FLAGS, INACTIVE, HIGHLIGHT, PUSHED or OPENED)
-  const Symbol* image(Flags flags=NO_FLAGS) const;
-  //!  set the image Symbol according to the desired state (NO_FLAGS, INACTIVE, HIGHLIGHT, PUSHED or OPENED)
-  void	image(const Symbol* a, Flags flags=NO_FLAGS);	
-  //!  set the image Symbol according to the desired state (NO_FLAGS, INACTIVE, HIGHLIGHT, PUSHED or OPENED)
-  void	image(const Symbol& a,Flags flags=NO_FLAGS) {  image(&a, flags); }
-  //! get the image relative to a particular event/state 
-  //!  convenient way to set several images at once
-  void	image(const Symbol* noflags, const Symbol* disabled, const Symbol* belowmouse=0, const Symbol* pushedopen=0);
-  const Symbol * context_image() const; // return the context dependant image
-
+  const Symbol* image() const	{ return image_; }
+  void	image(const Symbol* a)	{ image_ = a; }
+  void	image(const Symbol& a)	{ image_ = &a; }
 
   const char *tooltip() const	{ return tooltip_; }
   void	tooltip(const char *t)	{ tooltip_ = t; }
@@ -132,12 +123,9 @@ public:
   void	when(uchar i)		{ when_ = i; }
 
   static void default_callback(Widget*, void*);
-  
-  // it is legal to set callback_ to 0, so callback_ non nullity *must* be tested
-  void	do_callback()		{ if(callback_) callback_(this,user_data_); }
-  void	do_callback(Widget* o,void* arg=0) { if(callback_) callback_(o,arg); }
-  void	do_callback(Widget* o,long arg) { if(callback_) callback_(o,(void*)arg); }
-  
+  void	do_callback()		{ callback_(this,user_data_); }
+  void	do_callback(Widget* o,void* arg=0) { callback_(o,arg); }
+  void	do_callback(Widget* o,long arg) { callback_(o,(void*)arg); }
   bool	contains(const Widget*) const;
   bool	inside(const Widget* o) const { return o && o->contains(this); }
   bool	pushed() const		;
@@ -150,10 +138,10 @@ public:
   Flags clear_flag(int c)	{ return flags_ &= ~c; }
   Flags invert_flag(int c)	{ return flags_ ^= c; }
 
-  bool  state() const		{ return (flags()&STATE)!=0; }
+  bool  state() const 		{ return (flags()&STATE)!=0; }
   bool  state(bool);
-  bool  set()			{ return state(true); }
-  bool  clear()			{ return state(false); }
+  bool	set()			{ return state(true); }
+  bool	clear()			{ return state(false); }
   void  setonly();
 
   Flags align() const		{ return flags_&ALIGN_MASK; }
@@ -299,8 +287,7 @@ public:
 private:
 
   const char*		label_;
-  const Symbol**	image_;
-  uchar			nimages_;
+  const Symbol*		image_;
   unsigned		flags_;
   const Style*		style_;
   Callback*		callback_;

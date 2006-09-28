@@ -52,12 +52,10 @@ using namespace fltk;
   are defined by the base class fltk::Menu. See that for much more
   information.  For a simple constant list you can populate the list
   by calling browser->add("text of item") once for each item.
-  \see 
+  \see
   - add()
-  - add_group() 
-  - add_leaf() 
-  - get_symbol() 
-  - set_symbol()
+  - add_group()
+  - add_leaf()
 
   You can also us an fltk::List which allows you to control
   the storage by dynamically creating a temporary "fake" widget for
@@ -675,18 +673,9 @@ void Browser::draw_item(int damage) {
     item()->clear_flag(HIGHLIGHT);
   if (damage) item()->set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
   if (!item()->image()) {
-    if (item()->is_group()) {
-      item()->image(defGroupSymbol1);
-      item()->image(defGroupSymbol2, HIGHLIGHT);
-      item()->image(defGroupSymbol3, OPENED);
-    } else {
-      item()->image(defLeafSymbol1);
-      item()->image(defLeafSymbol2, HIGHLIGHT);
-    }
+    item()->image(item_is_parent() ? group_symbol_ : leaf_symbol_);
     item()->draw();
-    item()->image((const Symbol*)0);
-    item()->image((const Symbol*)0,HIGHLIGHT);
-    item()->image((const Symbol*)0,OPENED);
+    item()->image(0);
   } else {
     item()->draw();
   }
@@ -1228,8 +1217,8 @@ void Browser::set_belowmouse() {
   // update highlighting:
   if (at_mark(BELOWMOUSE)) return;
   damage_item(BELOWMOUSE);
-  if (defLeafSymbol2||defGroupSymbol2||item()->image(fltk::HIGHLIGHT)
-      ||item()->highlight_color()) {
+  // needs way to detect if image will redraw due to highlight!
+  if (leaf_symbol_ || group_symbol_ || item()->highlight_color()) {
     set_mark(BELOWMOUSE);
     damage_item(BELOWMOUSE);
   } else {
@@ -1873,8 +1862,8 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
   selected_column_ = -1;
   nColumn = 0;
   nHeader = 0; header_ = 0;
-  defGroupSymbol1 = defGroupSymbol2 = defGroupSymbol3 =0;
-  defLeafSymbol1 = defLeafSymbol2 = defLeafSymbol3 = 0;
+  leaf_symbol_ = 0;
+  group_symbol_ = 0;
   OPEN.unset();
   Group::current(parent());
 }
@@ -1916,25 +1905,17 @@ Browser::~Browser() {
 
 */
 
-/**
-  Sets a default value for image() on each item. Any children with no image
-  on them will instead draw as though this image it put on them.
-
-  \a nodetype is either Browser::GROUP or Browser::LEAF.
-
-  The 3 images are the normal one, a highlighted one, and an opened one.
+/*! \fn Browser::leaf_symbol(Symbol*);
+  Sets a default value for image() on each item that is not a parent
+  of other items. If the item has no image() then this one is used
+  for it.
 */
-void Browser::set_symbol(Browser::NodeType nodetype, const Symbol* img1, 
-			 const Symbol* img2, const Symbol* img3) {
-  switch(nodetype) {
-  case Browser::GROUP:
-    defGroupSymbol1 = img1; defGroupSymbol2 = img2; defGroupSymbol3 = img3;
-    break;
-  case Browser::LEAF:
-    defLeafSymbol1 = img1; defLeafSymbol2 = img2;
-    break;
-  }
-}
+
+/*! \fn Browser::group_symbol(Symbol*);
+  Sets a default value for image() on each item that is a hierarchy
+  parent. If the parent item has no image() then this one is used
+  for it.
+*/
 
 //
 // End of "$Id$".

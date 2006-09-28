@@ -42,23 +42,25 @@ CPPFILES = \
 	CodeEditor.cxx \
 	coding_style.cxx \
 	coding_style_func.cxx \
+	Enumeration.cxx \
 	factory.cxx \
 	file.cxx \
-	Fl_Function_Type.cxx \
-	Fl_Group_Type.cxx \
-	Fl_Menu_Type.cxx \
-	Fl_Type.cxx \
+	FunctionType.cxx \
+	GroupType.cxx \
+	MenuType.cxx \
+	FluidType.cxx \
 	fluid.cxx \
 	fluid_menus.cxx \
 	Fluid_Image.cxx \
 	Fluid_Plugins.cxx \
-	Fl_Widget_Type.cxx \
-	Fl_Window_Type.cxx \
+	WidgetClassType.cxx \
+	WidgetType.cxx \
+	WindowType.cxx \
 	function_panel.cxx \
 	template_panel.cxx \
 	fluid_img.cxx \
 	widget_panel.cxx \
-	undo.cxx 
+	undo.cxx
 
 CFILES	=
 

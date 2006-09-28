@@ -93,7 +93,8 @@ int main(int argc, char ** argv) {
   //SharedImage& ifold2 = *SharedImage::get("images/coucou.png"); 
 #endif
   ifold2.inactive();
-
+  MultiImage push_release_img(fold2, PUSHED, fold3);
+  MultiImage push_release_hlt_img(fold2, HIGHLIGHT, fold1, PUSHED, fold3);
   
   int Y = B;
   (void) new Button(X0, Y, W, H, "Button");
@@ -120,16 +121,15 @@ int main(int argc, char ** argv) {
 
   Y += H+B;
   Button * b = new Button(X0, Y, W, H, "push/release img");
-  b->image(&fold2, 0, 0, &fold3); // use default & pushed img
+  b->image(push_release_img); // use default & pushed img
   b = new Button(X1, Y, W, H, "push/rel noborder");
-  b->image(&fold2, 0, 0, &fold3); // use default & pushed img
+  b->image(push_release_img); // use default & pushed img
   b->box(NO_BOX);
   
   Y += H+B;
   b = new HighlightButton(X0, Y, W, H, "Everything !");
-  b->image(&fold2,0 ,0, &fold3); // demonstrate the different ways to affect images
   // to remove the  belowmouse changing image comment this line:
-  b->image(fold1, fltk::HIGHLIGHT);
+  b->image(push_release_hlt_img);
   b->callback(cb_active_butt);
 #if !defined(TESTIMAGES)
   abutton = b = new Button(X1, Y, W, H, "Inactive");

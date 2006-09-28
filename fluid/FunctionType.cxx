@@ -1,4 +1,3 @@
-//
 // "$Id$"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
@@ -24,8 +23,8 @@
 //
 
 #include <fltk/run.h>
-#include "FluidType.h"
 #include "FunctionType.h"
+#include "WidgetType.h"
 #include "Fluid_Image.h"
 #include <fltk/ask.h>
 #include <fltk/Preferences.h>
@@ -244,7 +243,6 @@ void FunctionType::open() {
     delete function_panel;
     function_panel = NULL;
 }
-
 
 WidgetType* last_group;
 

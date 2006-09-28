@@ -26,8 +26,9 @@
 #include <fltk/DoubleBufferWindow.h>
 #include <fltk/ToggleItem.h>
 #include "fluid_menus.h"
-#include "WidgetType.h"
+#include "Widget_Types.h"
 #include "FunctionType.h"
+#include "WindowType.h"
 #include "fluid_img.h"
 #include "undo.h"
 
@@ -129,12 +130,14 @@ static StatusBarGroupType StatusBarGrouptype;
 static TextDisplayType TextDisplaytype;
 
 //////////////////////////////////////////////////////////////////////
+
 MenuBar* Main_Menu;
 Item *history_item[10],*undo_item[2],*iwidget_bin,
     *itooltip,*isource_view,*istatusbar,*ishow_overlay;
 ItemGroup* newMenu;
 
 //////////////////////////////////////////////////////////////////////
+
 static void cb(fltk::Widget *, void *v) {
   Undo::checkpoint();
   Undo::suspend();
@@ -143,8 +146,10 @@ static void cb(fltk::Widget *, void *v) {
   else Undo::remove_last();
   Undo::resume();
 }
+
 //////////////////////////////////////////////////////////////////////
-MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
+
+MenuBar* build_hierarchy(MenuBar* menubar) {
     Main_Menu = menubar;
     menubar->begin();
 
@@ -257,7 +262,8 @@ MenuBar* fltk::build_hierarchy(MenuBar* menubar) {
 //////////////////////////////////////////////////////////////////////
 // All Fluid buildable widgets are accesible from the New menu:
 //////////////////////////////////////////////////////////////////////
-void fltk::fill_in_New_Menu(ItemGroup* menu) {
+
+void fill_in_New_Menu(ItemGroup* menu) {
   newMenu= menu;
   xpmImage** i = fluid_pixmap;
     newMenu->begin();
@@ -330,7 +336,7 @@ void fltk::fill_in_New_Menu(ItemGroup* menu) {
 }
 //////////////////////////////////////////////////////////////////////
 
-Item * fltk::fluidMenuItem(FluidType& wt,int n) {
+Item * fluidMenuItem(FluidType& wt,int n) {
   Item* i = new Item(wt.type_name(),0,cb,(void*)&wt);
   if (n >= 0) i->image(fluid_pixmap[n]);
   return i;

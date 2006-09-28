@@ -74,7 +74,7 @@ public:	// things that should not be public:
   FluidType* walk() const;
 
   static FluidType *first;
-  
+
   FluidType *factory;
   const char *callback_name();
 
@@ -143,254 +143,27 @@ public:
   virtual void copy_properties(); // copy properties from this type into a potetial live object
 
   // fake rtti:
-  virtual int is_parent() const;
-  virtual int is_widget() const;
-  virtual int is_button() const;
-  virtual int is_light_button() const;
-  virtual int is_valuator() const;
-  virtual int is_menu_item() const;
-  virtual int is_menu_button() const;
-  virtual int is_adjuster() const;
-  virtual int is_counter() const;
-  virtual int is_slider() const;
-  virtual int is_scrollbar() const;
-  virtual int is_choice() const;
-  virtual int is_group() const;
-  virtual int is_window() const;
+  virtual int is_parent() const; // makes it open/close in browser
+  virtual int is_widget() const; // is an fltk::Widget
+  virtual int is_button() const; // has true/false value()
+  virtual int is_valuator() const; // double value(), range, step, etc
+  virtual int is_menu_item() const; // can be put into menus
+  virtual int is_group() const; // is an fltk::Group but not an fltk::Menu
+  virtual int is_window() const; // is an outermost fltk::Window
   virtual int is_code_block() const;
   virtual int is_decl_block() const;
   virtual int is_comment() const;
   virtual int is_class() const;
-  virtual int is_browser() const;
-  virtual int is_input() const;
-  virtual int is_value_input() const;
-  virtual int is_value_output() const;
-  virtual int is_value_slider() const;
+  virtual int is_input() const; // has text() methods
 
   const char* member_of(bool need_nest = false) const;
   // codeview
   int code_line, header_line;
   int code_line_end, header_line_end;
 
+  // constructor of a subclass by name:
+  static FluidType* make(const char *type_name);
 };
-
-////////////////////////////////////////////////////////////////
-
-// This structure is used to define tables of enumerations:
-
-struct Enumeration {
-  const char* menu_entry;	// user-friendly string, null for end of table
-  const char* symbol;		// symbol for c++ code and for .fl file
-  void* compiled;		// symbol compiled for use by fluid
-  const char* subclass;		// For type() of widgets, use this subclass
-};
-
-// Use this call to make a menu/Choice from a table. Warning this
-// will overwrite the user_data() of the fltk::Menu:
-namespace fltk {class Menu;}
-void set_menu(fltk::Menu*, const Enumeration*);
-
-// Converters from/to strings and values:
-const Enumeration* from_value(void* data, const Enumeration* table);
-const Enumeration* from_value(int data, const Enumeration* table);
-const Enumeration* from_text(const char* text, const Enumeration* table);
-const char* to_text(void* data, const Enumeration* table);
-int number_from_text(const char* text, const Enumeration* table);
-const char* number_to_text(int number, const Enumeration* table);
-const int FLUID_MAX_IMG=4;
-////////////////////////////////////////////////////////////////
-
-class FLUID_API WidgetType : public FluidType {
-  virtual fltk::Widget *widget(int,int,int,int);
-  virtual WidgetType *_make(); // virtual constructor
-  virtual void setlabel(const char *);
-
-  const char *extra_code_;
-  const char *user_class_;
-  bool hotspot_;
-
-protected:
-
-  void write_static();
-  void write_code();
-  void write_code1();
-  void write_widget_code();
-  void write_extra_code();
-  void write_block_close();
-
-public:
-
-  bool set_xy;
-  fltk::Widget *o;
-  bool public_;
-  
-  Fluid_Image* image[FLUID_MAX_IMG]; // updated image number to four seems enough
-			 // for more han 4 combinations use a MultiImage
-			 // and set the default image to it
-  void set_image(Fluid_Image* i,int num);
-
-  WidgetType();
-  FluidType *make();
-  void open();
-
-  const char *extra_code() const {return extra_code_;}
-  void extra_code(const char *);
-  const char *user_class() const {return user_class_;}
-  void user_class(const char *);
-  bool hotspot() const {return hotspot_;}
-  void hotspot(bool v) {hotspot_ = v;}
-  bool resizable() const;
-  void resizable(bool v);
-
-  virtual const Enumeration* subtypes() const;
-
-  virtual int is_widget() const;
-
-  virtual void write_properties();
-  virtual void read_property(const char *);
-  virtual int read_fdesign(const char*, const char*);
-
-  virtual ~WidgetType();
-  void redraw();
-
-  const char* subclass() const;
-  const char* array_name() const;
-
-  virtual const char *type_name() const;
-
-  // live mode functionalities
-  fltk::Widget *enter_live_mode(int top);
-  void leave_live_mode();
-  void copy_properties();
-  
-  virtual int textstuff(int w, fltk::Font* f, float& s, fltk::Color c) {
-	fltk::Widget *myo = (fltk::Widget *)(w==4 ? ((WidgetType*)factory)->o : o);
-	switch (w) {
-	case 4:
-	case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
-	case 1: myo->textfont(f); break;
-	case 2: myo->textsize((float)s); break;
-	case 3: myo->textcolor(c); break;
-	}
-	return 1;
-    }
-
-  static float default_size;
-  int pixmapID() { return 5;}
-  
-};
-
-#define LOAD ((void*)9831)
-
-FLUID_API extern WidgetType *current_widget; // one of the selected ones
-
-////////////////////////////////////////////////////////////////
-
-class FLUID_API GroupType : public WidgetType {
-public:
-  const Enumeration* subtypes() const;
-  virtual ~GroupType();
-  virtual const char *type_name() const;
-  fltk::Widget *widget(int x,int y,int w,int h);
-  WidgetType* _make();
-  FluidType *make();
-  void write_code();
-  void add_child(FluidType*, FluidType*);
-  void move_child(FluidType*, FluidType*);
-  void remove_child(FluidType*);
-  int is_parent() const;
-  int is_group() const;
-
-  // live mode functionalities
-  fltk::Widget *enter_live_mode(int top);
-  void leave_live_mode();
-  void copy_properties();
-  int pixmapID() { return 6; }
-};
-
-////////////////////////////////////////////////////////////////
-
-//class FLUID_API WindowType : public WidgetType {
-class FLUID_API WindowType : public GroupType {
-  const Enumeration* subtypes() const;
-
-  friend class Overlay_Window;
-  int mx,my;		// mouse position during dragging
-  int x1,y1;		// initial position of selection box
-  int bx,by,br,bt;	// bounding box of selection
-  int dx,dy;
-  int recalc;		// set by fix_overlay()
-public:
-  int drag;		// which parts of bbox are being moved
-  int numselected;	// number of children selected
-
-  enum {LEFT=1,RIGHT=2,BOTTOM=4,TOP=8,DRAG=16,BOX=32};
-  void draw_overlay();
-  void newdx();
-  void newposition(WidgetType *,int &x,int &y,int &w,int &h);
-  int handle(int);
-  virtual void setlabel(const char *);
-  void write_code();
-  WidgetType *_make() {return 0;} // we don't call this
-  fltk::Widget *widget(int,int,int,int) {return 0;}
-  void moveallchildren();
-  void move_children(FluidType*, int);
-  WidgetType* clicked_widget();
-
-public:
-  WindowType();
-
-  bool modal, non_modal, border;
-
-  FluidType *make();
-  virtual const char *type_name() const;
-
-  void open();
-
-  void fix_overlay();	// update the bounding box, etc
-
-  virtual void write_properties();
-  virtual void read_property(const char *);
-  virtual int read_fdesign(const char*, const char*);
-
-  void add_child(FluidType*, FluidType*);
-  void move_child(FluidType*, FluidType*);
-  void remove_child(FluidType*);
-
-  int is_parent() const {return 1;}
-  int is_group() const {return 1;}
-  int is_window() const {return 1;}
-
-  // live mode functionalities
-  fltk::Widget *enter_live_mode(int top);
-  void leave_live_mode();
-  void copy_properties();
-  
-  int sr_min_w, sr_min_h, sr_max_w, sr_max_h; // size_range related
-
-  int pixmapID() { return 1; }
-};
-
-class FLUID_API WidgetClassType : private WindowType {
-public:
-  WidgetClassType() {write_public_state = false;  wc_relative = false;}
-  // state variables for output:
-  bool write_public_state; // true when public: has been printed
-  bool wc_relative; // if true, reposition all child widgets in an Fl_Group
-
-  virtual void write_properties();
-  virtual void read_property(const char *);
-
-  void write_code();
-  void write_code1();
-  FluidType *make();
-  virtual const char *type_name() const  {return "fltk::WidgetClass";}
-  int is_parent() const {return 1;}
-  int is_decl_block() const {return 1;}
-  int is_class() const {return 1;}
-  int pixmapID() { return 48; }
-};
-
 
 ////////////////////////////////////////////////////////////////
 // This header file also declares all the global functions in fluid:

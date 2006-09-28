@@ -37,9 +37,8 @@
 
 #include "alignment_panel.h"
 #include "Fluid_Image.h"
-#include "FluidType.h"
+#include "WidgetType.h"
 #include "PrefsData.h"
-#include "factory.h"
 
 ////////////////////////////////////////////////////////////////
 // BASIC FILE WRITING:
@@ -388,7 +387,7 @@ static void read_children(FluidType *p, int paste) {
 
     // back compatability with Vincent Penne's original class code:
     if (!p && !strcmp(c,"define_in_struct")) {
-	FluidType *t = fltk::FluidType_make("class");
+	FluidType *t = FluidType::make("class");
       t->name(read_word());
       FluidType::current = p = t;
       paste = 1; // stops "missing }" error
@@ -430,7 +429,7 @@ static void read_children(FluidType *p, int paste) {
       }
     }
 
-    {FluidType *t = fltk::FluidType_make(c);
+    {FluidType *t = FluidType::make(c);
     if (!t) {
       read_error("Unknown word \"%s\"", c);
       continue;
@@ -608,7 +607,7 @@ void read_fdesign() {
   WidgetType *group = 0;
   WidgetType *widget = 0;
   if (!FluidType::current) {
-    FluidType *t = fltk::FluidType_make("Function");
+    FluidType *t = FluidType::make("Function");
     t->name("create_the_forms()");
     FluidType::current = t;
   }
@@ -619,7 +618,7 @@ void read_fdesign() {
 
     if (!strcmp(name,"Name")) {
 
-      window = (WidgetType*)fltk::FluidType_make("fltk::Window");
+      window = (WidgetType*)FluidType::make("fltk::Window");
       window->name(value);
       window->label(value);
       FluidType::current = widget = window;
@@ -627,7 +626,7 @@ void read_fdesign() {
     } else if (!strcmp(name,"class")) {
 
       if (!strcmp(value,"fltk::BEGIN_GROUP")) {
-	  group = widget = (WidgetType*)fltk::FluidType_make("fltk::Group");
+	  group = widget = (WidgetType*)FluidType::make("fltk::Group");
 	FluidType::current = group;
       } else if (!strcmp(value,"fltk::END_GROUP")) {
 	if (group) {
@@ -643,10 +642,10 @@ void read_fdesign() {
 	for (int i = 0; class_matcher[i]; i += 2)
 	  if (!strcmp(value,class_matcher[i])) {
 	    value = class_matcher[i+1]; break;}
-	  widget = (WidgetType*)fltk::FluidType_make(value);
+	  widget = (WidgetType*)FluidType::make(value);
 	if (!widget) {
 	  printf("class %s not found, using fltk::Button\n", value);
-	  widget = (WidgetType*)fltk::FluidType_make("fltk::Button");
+	  widget = (WidgetType*)FluidType::make("fltk::Button");
 	}
       }
 

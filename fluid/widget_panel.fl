@@ -1,5 +1,5 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0100 
+version 2.1000 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
@@ -15,12 +15,9 @@ decl {\#include "FluidType.h"} {}
 
 decl {\#include "fluid_img.h"} {} 
 
-decl {\#include "factory.h"} {} 
-
 decl {\#include "undo.h"} {} 
 
-Function {make_widgetbin()} {open
-} {
+Function {make_widgetbin()} {} {
   {fltk::Window} widgetbin_panel {
     label {Widget Bin} open
     xywh {499 41 520 85} resizable non_modal visible
@@ -401,7 +398,7 @@ Function {make_widgetbin()} {open
       }
       {fltk::Button} {} {
         user_data {"fltk::HelpView"}
-        callback type_make_cb selected
+        callback type_make_cb
         tooltip {Help View}
         xywh {2 27 25 25} box THIN_UP_BOX
         extra_code {o->image(fltk::fluid_pixmap[35]);}
@@ -417,7 +414,7 @@ Function {make_widgetbin()} {open
   }
 } 
 
-Function {type_make_cb(fltk::Widget*w,void*d)} {open return_type void
+Function {type_make_cb(fltk::Widget*w,void*d)} {return_type void
 } {
   code {FluidType *t = fltk::FluidType_make((char*)d);
   if (t) {
@@ -430,8 +427,8 @@ Function {type_make_cb(fltk::Widget*w,void*d)} {open return_type void
 
 Function {make_widget_panel()} {open
 } {
-  {fltk::Window} {} {open
-    xywh {480 184 380 380} hide resizable hotspot
+  {fltk::Window} {} {open selected
+    xywh {704 505 380 380} resizable hotspot visible
   } {
     {fltk::TabGroup} panel_tabs {
       callback propagate_tabs open
@@ -440,10 +437,10 @@ Function {make_widget_panel()} {open
       {fltk::Group} {} {
         label GUI
         callback propagate_group open
-        xywh {0 20 380 320} hide color 0x14aef700
+        xywh {0 20 380 320} color 0x14aef700
       } {
         {fltk::Group} gInput {
-          callback propagate_group
+          callback propagate_group open
           xywh {80 9 290 44}
         } {
           {fltk::Input} i_class_name {
@@ -468,8 +465,8 @@ Function {make_widget_panel()} {open
         }
         {fltk::Group} gAlignment {
           label Alignment
-          callback propagate_group
-          xywh {81 54 293 22} align 4
+          callback propagate_group open
+          xywh {80 54 293 22} align 4
         } {
           {fltk::CheckButton} include_image_button {
             label inline
@@ -531,55 +528,20 @@ Function {make_widget_panel()} {open
             xywh {171 2 40 20} type TOGGLE
           }
         }
-        {fltk::Group} gImage {
-          callback propagate_group
-          xywh {10 79 359 62}
-        } {
-          {fltk::Widget} image_label {
-            label {Image default}
-            xywh {0 0 73 17} align 56 box NO_BOX
-          }
-          {fltk::Button} image_button1 {
-            user_data 1 user_data_type {void*}
-            callback image_cb
-            tooltip {Select an image to label the widget}
-            xywh {74 0 285 16} align 52 color 7
-          }
-          {fltk::Widget} image_label2 {
-            label inactive
-            xywh {0 15 73 17} align 56 box NO_BOX
-          }
-          {fltk::Button} image_button2 {
-            user_data 2 user_data_type {void*}
-            callback image_cb
-            tooltip {Select an image to label the widget}
-            xywh {74 15 285 16} align 52 hotspot color 7
-          }
-          {fltk::Widget} image_label3 {
-            label {mouse on}
-            xywh {0 30 73 17} align 56 box NO_BOX
-          }
-          {fltk::Button} image_button3 {
-            user_data 3 user_data_type {void*}
-            callback image_cb
-            tooltip {Select an image to label the widget}
-            xywh {74 30 285 16} align 52 color 7
-          }
-          {fltk::Widget} image_label4 {
-            label pushed
-            xywh {0 45 73 17} align 56 box NO_BOX
-          }
-          {fltk::Button} image_button4 {
-            user_data 4 user_data_type {void*}
-            callback image_cb
-            tooltip {Select an image to label the widget}
-            xywh {74 45 285 16} align 52 color 7
-          }
+        {fltk::Widget} image_label {
+          label Image
+          xywh {5 79 78 22} align 56 box NO_BOX
+        }
+        {fltk::Button} image_button {
+          user_data 1 user_data_type {void*}
+          callback image_cb
+          tooltip {Select an image to label the widget}
+          xywh {80 79 290 22} align 52 color 7
         }
         {fltk::Group} gDimensions {
           label Dimensions
-          callback propagate_group
-          xywh {80 153 290 23} align 4
+          callback propagate_group open
+          xywh {80 112 290 23} align 4
         } {
           {fltk::ValueInput} widget_x {
             label x
@@ -620,26 +582,26 @@ Function {make_widget_panel()} {open
         }
         {fltk::Group} gValues {
           label Values
-          callback propagate_group
-          xywh {80 175 290 23} align 4
+          callback propagate_group open
+          xywh {80 147 290 23} align 4
         } {
           {fltk::ValueInput} {} {
             label Value
             callback value_cb
             tooltip {The initial value of this widget}
-            xywh {0 0 55 22} align 6 when ENTER_KEY
+            xywh {0 0 55 22} align 5 when ENTER_KEY
           }
           {fltk::ValueInput} {} {
             label min
             callback min_cb
             tooltip {The minimum value for this valuator}
-            xywh {55 0 55 22} align 22 when ENTER_KEY labelsize 11
+            xywh {55 0 55 22} align 21 when ENTER_KEY labelsize 11
           }
           {fltk::ValueInput} {} {
             label max
             callback max_cb
             tooltip {The maximum value for this valuator}
-            xywh {110 0 55 23} align 22 when ENTER_KEY labelsize 11
+            xywh {110 0 55 23} align 21 when ENTER_KEY labelsize 11
           }
           {fltk::ValueInput} {} {
             label step
@@ -647,20 +609,20 @@ Function {make_widget_panel()} {open
             tooltip {step:
 Round all movements to multiples of this.
 }
-            xywh {165 0 55 22} align 22 when ENTER_KEY labelsize 11
+            xywh {165 0 55 22} align 21 when ENTER_KEY labelsize 11
           }
           {fltk::ValueInput} {} {
             label line
             callback line_cb
             tooltip {linesize:
 Increment/decrement for arrow keys.}
-            xywh {245 0 45 22} align 22 when ENTER_KEY labelsize 11 minimum 1 step 1
+            xywh {245 0 45 22} align 21 when ENTER_KEY labelsize 11 minimum 1 step 1
           }
         }
         {fltk::Group} gAttributes {
           label Attributes
           callback propagate_group
-          xywh {80 210 280 44} align 4
+          xywh {80 171 280 44} align 4
         } {
           {fltk::CheckButton} {} {
             label Visible
@@ -705,32 +667,27 @@ Increment/decrement for arrow keys.}
             xywh {130 20 65 22}
           }
         }
-        {fltk::Group} gShortTool {
-          callback propagate_group
-          xywh {25 255 345 60}
-        } {
-          {fltk::InvisibleBox} {} {
-            label Shortcut
-            xywh {0 0 55 25} align 40
-          }
-          {fltk::Button} {} {
-            callback shortcut_in_cb
-            tooltip {To set a shortcut:
+        {fltk::InvisibleBox} {} {
+          label Shortcut
+          xywh {25 215 55 25} align 40
+        }
+        {fltk::Button} {} {
+          callback shortcut_in_cb
+          tooltip {To set a shortcut:
    Click here, then type the key combination you want.
 To delete the shortcut:
    Click here, then type backspace.
 To get out of shortcut-setting mode:
    Click the mouse on this again, or on some other field.}
-            xywh {55 1 290 22} align 36 color 7
-            extra_code {\#include "Shortcut_Button.h"}
-            class Shortcut_Button
-          }
-          {fltk::Input} {} {
-            label Tooltip
-            callback tooltip_cb
-            tooltip {The pop up tooltip which should be used for the widget.}
-            xywh {55 25 290 34} type Wordwrap box BORDER_BOX color 0xffffe100
-          }
+          xywh {80 216 290 22} align 36 color 7
+          extra_code {\#include "Shortcut_Button.h"}
+          class Shortcut_Button
+        }
+        {fltk::Input} {} {
+          label Tooltip
+          callback tooltip_cb
+          tooltip {The pop up tooltip which should be used for the widget.}
+          xywh {80 240 290 70} type Wordwrap resizable box BORDER_BOX color 0xffffe100
         }
       }
       {fltk::Group} {} {
@@ -859,11 +816,14 @@ To get out of shortcut-setting mode:
           tooltip {Reset all the above items to the default values for this widget class.}
           xywh {85 258 124 22}
         }
+        {fltk::InvisibleBox} {} {
+          xywh {85 280 270 25} resizable
+        }
       }
       {fltk::Group} {} {
         label {C++}
         callback propagate_group open
-        xywh {0 20 380 320} resizable color 0x93d49c00
+        xywh {0 20 380 320} hide resizable color 0x93d49c00
       } {
         {fltk::Input} {} {
           label Name
@@ -929,7 +889,7 @@ o->value(!overlays_invisible);}
         label OK
         callback ok_cb
         tooltip {Closes this attribute window}
-        xywh {235 1 65 23} shortcut 0xff0d
+        xywh {235 1 65 23}
       }
       {fltk::Button} {} {
         label Cancel

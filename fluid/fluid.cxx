@@ -94,9 +94,9 @@ const char *copyright =
 #include "PrefsData.h"
 #include "Fluid_Plugins.h"
 #include "FluidType.h"
+#include "WidgetType.h"
 #include "coding_style.h"
 #include "fluid_menus.h"
-#include "factory.h"
 #include "undo.h"
 
 using namespace fltk;
@@ -112,7 +112,6 @@ int modflag=0;
 int  read_alignment_prefs() {
     prefs.get("widget_size", WidgetType::default_size, 14.0f);
     Tooltip::enable(prefs.show_tooltip()? true : false);
-    
     return 0;
 }
 

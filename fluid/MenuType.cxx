@@ -26,8 +26,9 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include "Enumeration.h"
+#include "Widget_Types.h"
 #include <fltk/events.h>
-#include "FluidType.h"
 #include <fltk/ask.h>
 #include <fltk/Menu.h>
 #include <fltk/Item.h>
@@ -37,14 +38,12 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "WidgetType.h"
 
-const Enumeration fltk::item_type_menu[] = {
+const Enumeration item_type_menu[] = {
   {"Normal", "NORMAL", (void*)0},
   {"Toggle", "TOGGLE", (void*)fltk::Item::TOGGLE},
   {"Radio",  "RADIO",  (void*)fltk::Item::RADIO},
   {0}};
-
 
 extern int reading_file;
 
@@ -59,7 +58,6 @@ Widget *SubmenuType::widget(int,int,int,int) {
   fltk::Group::current(0);
   return g;
 }
-
 
 ////////////////////////////////////////////////////////////////
 
@@ -87,7 +85,7 @@ FluidType* MenuType::click_test(int, int) {
 ////////////////////////////////////////////////////////////////
 
 #include <fltk/PopupMenu.h>
-const Enumeration fltk::button_type_menu[] = {
+const Enumeration button_type_menu[] = {
   {"normal", 0,		(void*)0},
   {"popup1", "POPUP1",	(void*)fltk::PopupMenu::POPUP1},
   {"popup2", "POPUP2",	(void*)fltk::PopupMenu::POPUP2},
@@ -100,12 +98,7 @@ const Enumeration fltk::button_type_menu[] = {
 
 ////////////////////////////////////////////////////////////////
 
-
-////////////////////////////////////////////////////////////////
-
-
-
-const Enumeration fltk::input_browser_type_menu[] = {
+const Enumeration input_browser_type_menu[] = {
   {"Normal",		0,	(void*)fltk::InputBrowser::NORMAL},
   {"Non-Editable","NONEDITABLE",(void*)fltk::InputBrowser::NONEDITABLE},
   {"Indented",	"INDENTED",	(void*)fltk::InputBrowser::INDENTED},
@@ -113,7 +106,7 @@ const Enumeration fltk::input_browser_type_menu[] = {
   {0}};
 
 #include <fltk/Browser.h>
-const Enumeration fltk::browser_type_menu[] = {
+const Enumeration browser_type_menu[] = {
   {"Single",	0,	(void*)fltk::Browser::NORMAL},
   {"Multi",	"MULTI",	(void*)fltk::Browser::MULTI, "fltk::MultiBrowser"},
   {0}};

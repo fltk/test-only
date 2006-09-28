@@ -37,6 +37,7 @@
 #include <fltk/MenuBuild.h>
 #include <fltk/ask.h>
 #include <fltk/xpmImage.h>
+#include <fltk/MultiImage.h>
 
 #include <pixmaps/folder_small.xpm>
 #include <pixmaps/folder_small2.xpm>
@@ -51,9 +52,13 @@
 
 using namespace fltk;
 
-xpmImage* folderSmall, *folderSmall2,*folderSmall3;
-xpmImage* fileSmall, *fileSmall2,*bookImg;
-xpmImage* customImage;
+xpmImage folderSmall(folder_small);
+xpmImage folderSmall2(folder_small2);
+xpmImage folderSmall3(folder_small3);
+xpmImage fileSmall(file_small);
+xpmImage fileSmall2(file_small2);
+xpmImage bookImg(book);
+xpmImage customImage(porsche_xpm);
 
 void cb_test(Widget* browser, void*) {
   Browser *b = (Browser*)browser;
@@ -159,15 +164,31 @@ int widths[]   = {100, 70, 70, 0};
 Browser *browser=0;
 bool flip = false;
 bool bm = true;
+
+MultiImage g1(fileSmall, HIGHLIGHT, fileSmall2);
+MultiImage g2(folderSmall, HIGHLIGHT, folderSmall3);
+MultiImage g3(fileSmall2, HIGHLIGHT, fileSmall);
+MultiImage g4(folderSmall2, OPENED, folderSmall3, HIGHLIGHT, folderSmall);
+MultiImage g5(folderSmall2, OPENED, folderSmall3);
+
 void update_look() {
-  browser->set_symbol(Browser::GROUP	   // tell if you want to setup Group nodes
-      ,flip ? folderSmall : folderSmall2   // node default (closed) image 
-      ,bm ? (flip ? folderSmall3  : folderSmall) : 0 // belowmouse image (optional)
-      ,flip ? folderSmall : folderSmall3   // group node open image (optional)
-      );
-  browser->set_symbol(Browser::LEAF, // tell you want to setup Leaf nodes
-      flip ? fileSmall : fileSmall2,    // node default (closed) image 
-      bm ? (flip ? fileSmall2 : fileSmall) : 0);   // belowmouse image (optional)
+  if (bm) {
+    if (flip) {
+      browser->leaf_symbol(&g1);
+      browser->group_symbol(&g2);
+    } else {
+      browser->leaf_symbol(&g3);
+      browser->group_symbol(&g4);
+    }
+  } else {
+    if (flip) {
+      browser->leaf_symbol(&fileSmall);
+      browser->group_symbol(&folderSmall);
+    } else {
+      browser->leaf_symbol(&fileSmall2);
+      browser->group_symbol(&g5);
+    }
+  }
   browser->relayout();
 }
 
@@ -242,15 +263,6 @@ int main(int argc,char** argv) {
   win.resizable(tree);
   win.end();
 
-  folderSmall = new xpmImage(folder_small);
-  folderSmall2= new xpmImage(folder_small2);
-  folderSmall3= new xpmImage(folder_small3);
-
-  fileSmall = new xpmImage(file_small);
-  fileSmall2 = new xpmImage(file_small2);
-  bookImg = new xpmImage(book);
-  customImage = new xpmImage(porsche_xpm);
-
 #if USE_STRING_LIST
   //tree.list(new String_List("alpha\0beta\0ceta\0delta\0red\0green\0blue\0"));
   tree.list(new String_List(strings, sizeof(strings)/sizeof(*strings)));
@@ -271,7 +283,7 @@ int main(int argc,char** argv) {
 
   
   g = tree.add_group("eee", &tree);
-  tree.add_leaf("fff", &tree, customImage); // let's have fun with a custom image
+  tree.add_leaf("fff", &tree)->image(customImage); // let's have fun with a custom image
 					    // while demonstrating different height nodes
   g = tree.add_group("ggg", g);
   tree.add_leaf("hhh", g); // g decl is not even necessary for next children

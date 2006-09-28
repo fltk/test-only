@@ -113,7 +113,7 @@ void Widget::draw_frame() const {
 void Widget::draw_label() const {
   Flags flags = this->flags();
   // Do a quick test to see if we don't want to draw anything:
-  if (!context_image() && (!label() || !*label() ||
+  if (!image() && (!label() || !*label() ||
 		   (flags&15) && !(flags & ALIGN_INSIDE))) return;
   // figure out the inside of the box():
   Rectangle r(w(),h()); box()->inset(r);
@@ -134,39 +134,8 @@ void Widget::draw_label() const {
     box in a nice way. The image() is put against the side that any
     ALIGN flags say, and then the label() is put next to that.
 */
-
-const Symbol * Widget::context_image() const  {
-    if (!nimages_) return 0;
-
-    const Symbol * img;
-
-    if ((flags_ & INACTIVE_R) && nimages_>1 && image_[1])
-      img = image_[1];
-    else if ((flags_ & HIGHLIGHT) && nimages_>2 && image_[2])
-	img = image_[2];
-    else if ((flags_ & (PUSHED|OPENED)) && nimages_>3 && image_[3])
-      img = image_[3];
-    else 
-	img = image_[0];
-
-    return img;
-}
-
 void Widget::draw_label(const Rectangle& ir, Flags flags) const {
-  const Symbol* img = context_image();
-
-#if 0
-  // Older fltk used outside label as indicator for distortion of image.
-  // This is no longer needed as RESIZE_FILL indicates this. Hopefully
-  // removing this will not break too many programs.
-  // If label is drawn outside, draw the image only, and distort
-  // it to fill (this may change if we can convince people to use
-  // the box instead of the image for buttons)
-  if ((flags & fltk::ALIGN_POSITIONMASK) && !(flags & fltk::ALIGN_INSIDE)) {
-    if (img) img->draw(ir);
-    return;
-  }
-#endif
+  const Symbol* img = image();
 
   Rectangle r(ir);
   if (img) {

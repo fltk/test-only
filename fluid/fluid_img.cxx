@@ -93,13 +93,13 @@
 
 using namespace fltk;
 
-xpmImage	fltk::open_pixmap(folder_small);
-xpmImage	fltk::new_pixmap(file_small2);
-xpmImage	fltk::write_pixmap(book);
-xpmImage	fltk::save_pixmap(book);
-xpmImage	fltk::saveas_pixmap(book);
-xpmImage	fltk::merge_pixmap(recycle_xpm);
-xpmImage	fltk::exit_pixmap(recycle_xpm);
+xpmImage	open_pixmap(folder_small);
+xpmImage	new_pixmap(file_small2);
+xpmImage	write_pixmap(book);
+xpmImage	save_pixmap(book);
+xpmImage	saveas_pixmap(book);
+xpmImage	merge_pixmap(recycle_xpm);
+xpmImage	exit_pixmap(recycle_xpm);
 
 static xpmImage	lock_pixmap(lock_xpm);
 static xpmImage	window_pixmap(flWindow_xpm);
@@ -152,7 +152,7 @@ static xpmImage	valueoutput_pixmap(flValueOutput_xpm);
 static xpmImage	spinner_pixmap(flSpinner_xpm);
 static xpmImage	widgetclass_pixmap(flWidgetClass_xpm);
 
-xpmImage * fltk::fluid_pixmap[] = { 
+xpmImage * fluid_pixmap[] = { 
  0, &window_pixmap, &button_pixmap, &checkbutton_pixmap, &roundbutton_pixmap, /* 0..4 */
  &box_pixmap, &group_pixmap, &function_pixmap, &code_pixmap, &codeblock_pixmap, &declaration_pixmap, /* 5..10 */ 
  &declarationblock_pixmap, &class_pixmap, &tabs_pixmap, &input_pixmap, &choice_pixmap,               /* 11..15 */

@@ -70,7 +70,6 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) :
   user_data_	= 0;
   label_	= L;
   image_	= 0;
-  nimages_	= 0;
   tooltip_	= 0;
 #if CLICK_MOVES_FOCUS
   flags_	= CLICK_TO_FOCUS | TAB_TO_FOCUS;
@@ -97,7 +96,6 @@ Widget::~Widget() {
     delete (Style*)style_; // cast away const
   }
   if (flags_&COPIED_LABEL) delete[] const_cast<char*>( label_ );
-  if (nimages_) free(image_); // free the dynamically alloc'd image array
 }
 
 /*! \fn Group* Widget::parent() const
@@ -542,7 +540,7 @@ void Widget::redraw(uchar flags) {
   the parent() is told to redraw it. Otherwise redraw() is called.
 */
 void Widget::redraw_label() {
-  if (!label() && !context_image()) return;
+  if (!label() && !image()) return;
   // inside label redraws the widget:
   if (!(flags()&15) || (flags() & ALIGN_INSIDE)) redraw();
 #if 0
@@ -569,8 +567,8 @@ void Widget::redraw_label() {
     the widget if the no highlight color is being used.
 */
 void Widget::redraw_highlight() {
-  if (active() && (highlight_color() || image(fltk::HIGHLIGHT))) 
-      redraw(DAMAGE_HIGHLIGHT);
+  if (active() && highlight_color())
+    redraw(DAMAGE_HIGHLIGHT);
 }
 
 // If a draw() method sets this then the calling group assummes it
@@ -600,7 +598,7 @@ void Widget::draw()
     // check for completely blank widgets. We must not clip to their
     // area because it will break lots of programs that assumme these
     // can overlap any other widgets:
-    if (!context_image() && (!label() ||
+    if (!image() && (!label() ||
 		     align() != ALIGN_CENTER && !(align()&ALIGN_INSIDE))) {
       fl_did_clipping = this;
       return;
@@ -1018,51 +1016,6 @@ void Widget::setonly() {
     Widget* o = parent()->child(i);
     if (o != this && o->type() == RADIO) o->clear();
   }
-}
-
-// images manip
-void Widget::image(const Symbol* s,Flags f) {
-    // redim the array and store this new images
-    int n=0;
-    switch(f) {
-    case fltk::NO_FLAGS:    n=1;	break;
-    case fltk::INACTIVE_R:  n=2;	break;
-    case fltk::HIGHLIGHT:   n=3;	break;
-    case fltk::OPENED: 
-    case fltk::PUSHED:	    n=4;	break;
-    default:				return;
-    }
-    if (n<=nimages_) {image_[n-1]=s; return;  } // array well dimensioned
-    if (!s) return; // no image slot available and value is null no need to allocate anything
-    int a = nimages_ ? (nimages_<<1) : 1;
-    while(a<n) a=(a<<1); // double buffer size each realloc
-    if (!image_ || a>nimages_ ) { // we need to first-alloc or realloc the array
-	 image_ = (const Symbol**) realloc(image_,sizeof(const Symbol*)*a);
-	for (int i=nimages_; i<a-1;i++) image_[i]=0;
-    }
-    image_[n-1]=s;
-    nimages_=a;
-}
-
-void Widget::image(const Symbol* noflags, const Symbol* disabled, 
-	      const Symbol* belowmouse, const Symbol* pushedopen) {
-    image(pushedopen, fltk::PUSHED);
-    image(belowmouse, fltk::HIGHLIGHT);
-    image(disabled,   fltk::INACTIVE_R);
-    image(noflags);
-}
-
-const Symbol* Widget::image(Flags flags) const	{ 
-    if (!image_) return 0;
-
-    if (nimages_>1 && flags & fltk::INACTIVE_R) // reads the image for pushed button or open
-	return image_[1];
-    else if ( nimages_>3 && (flags & fltk::HIGHLIGHT) && !pushed() ) // reads the image for focused widget
-    	return image_[2];
-    else if (nimages_>3 && (flags & (fltk::OPENED|fltk::PUSHED))) // reads the image for pushed button or open
-	return image_[3];
-    else
-	return nimages_>0 ? image_[0] : 0; // default img
 }
 
 //

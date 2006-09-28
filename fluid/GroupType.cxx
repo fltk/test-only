@@ -1,8 +1,6 @@
 //
 // "$Id$"
 //
-// fltk::Group object code for the Fast Light Tool Kit (FLTK).
-//
 // Object describing an fltk::Group and links to WindowType.C and
 // the fltk::TabGroup widget, with special stuff to select tab items and
 // insure that only one is visible.
@@ -27,18 +25,16 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-
+#include "Enumeration.h"
+#include "Widget_Types.h"
 #include <fltk/events.h>
 #include <fltk/run.h>
 #include <fltk/Group.h>
 #include <fltk/TabGroup.h>
 #include <fltk/ask.h>
-#include "FluidType.h"
-#include "WidgetType.h"
 #include "undo.h"
 
 using namespace fltk;
-
 
 WidgetType* GroupType::_make() {return new GroupType();}
 
@@ -54,7 +50,8 @@ GroupType::~GroupType() {
 }
 
 fltk::Widget *GroupType::widget(int x,int y,int w,int h) {
-  igroup *g = new igroup(x,y,w,h);
+  Group *g = new Group(x,y,w,h);
+  g->resizable(0);
   fltk::Group::current(0);
   return g;
 }
@@ -72,7 +69,7 @@ FluidType *GroupType::make() {
 // Enlarge the group to surround all its children.  This is done to
 // all groups whenever the user moves any widgets.
 void fix_group_size(FluidType *t) {
-  if (!t || !t->is_group() || t->is_menu_button()) return;
+  if (!t || !t->is_group()) return;
   fltk::Group* g = (fltk::Group*)((GroupType*)t)->o;
   int X = g->x(), X0=X;
   int Y = g->y(), Y0=Y;
@@ -284,7 +281,7 @@ void GroupType::move_child(FluidType* cc, FluidType* before) {
 
 #include <fltk/ScrollGroup.h>
 
-const Enumeration fltk::scroll_type_menu[] = {
+const Enumeration scroll_type_menu[] = {
   {"Both",		"BOTH",		(void*)fltk::ScrollGroup::BOTH},
   {"Horizontal",	"HORIZONTAL",	(void*)fltk::ScrollGroup::HORIZONTAL},
   {"Vertical",		"VERTICAL",	(void*)fltk::ScrollGroup::VERTICAL},

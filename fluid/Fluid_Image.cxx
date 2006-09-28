@@ -76,9 +76,9 @@ protected:
   int *linelength;
   fltk::ImageType* filetype;
 public:
-  generic_image(const char *name, int num);
+  generic_image(const char *name);
   ~generic_image();
-  virtual void label(fltk::Widget *); // set the label of this widget
+  virtual const fltk::Symbol* symbol() {return p;}
   virtual void write_static();
   virtual void write_code();
   static int test_file(char *buffer);
@@ -87,10 +87,6 @@ public:
 int generic_image::test_file(char *buffer) {
   fltk::ImageType* ft = fltk::guess_image("", (uchar*)buffer);
   return ft->name != 0;
-}
-
-void generic_image::label(fltk::Widget *o) {
-  o->image(p);
 }
 
 static int image_file_header_written;
@@ -144,15 +140,6 @@ void generic_image::write_static() {
     leave_images_dir();
   }
 }
-// return the flags from then num of image
-static const char * flags_from_num(int num) {
-    switch (num) {
-    case 0: default: return 0;
-    case 1: return "fltk::INACTIVE";
-    case 2: return "fltk::BELOWMOUSE";
-    case 3: return "fltk::PUSHED";
-    }
-}
 
 void generic_image::write_code() {
   if (!p) return;
@@ -164,14 +151,11 @@ void generic_image::write_code() {
     write_c("%so->image(fltk::SharedImage::get(\"%s\"", indent(), name());
   }
 
-  if (!img_number())
-    write_c("));\n");
-  else // write the corresponding flags 
-    write_c("),%s);\n",flags_from_num(img_number()));
+  write_c("));\n");
     
 }
 
-generic_image::generic_image(const char *name, int num ) : Fluid_Image(name,num) {
+generic_image::generic_image(const char *name ) : Fluid_Image(name) {
   filetype = fltk::guess_image((char *) name);
   p = filetype->get((char*) name, 0);
   inlined = 1;
@@ -187,8 +171,8 @@ class bitmap_image : public Fluid_Image {
   fltk::xbmImage *p;
 public:
   ~bitmap_image();
-  bitmap_image(const char *name, FILE *, int num);
-  virtual void label(fltk::Widget *); // set the label of this widget
+  bitmap_image(const char *name, FILE *);
+  virtual const fltk::Symbol* symbol() {return p;}
   virtual void write_static();
   virtual void write_code();
   static int test_file(char *buffer);
@@ -197,10 +181,6 @@ public:
 // bad test, always do this last!
 int bitmap_image::test_file(char *buffer) {
   return (strstr(buffer,"#define ") != 0);
-}
-
-void bitmap_image::label(fltk::Widget *o) {
-  o->image(p);
 }
 
 static int bitmap_header_written;
@@ -234,13 +214,8 @@ void bitmap_image::write_static() {
 
 void bitmap_image::write_code() {
   if (!p) return;
-  if (!img_number())
-    write_c("%so->image(%s);\n", indent(),
+  write_c("%so->image(%s);\n", indent(),
 	  unique_id(this, "xbmImage", fltk::filename_name(name()), 0));
-  else // write the corresponding flags 
-  write_c("%so->image(%s,%s);\n", indent(),
-	  unique_id(this, "xbmImage", fltk::filename_name(name()), 0),
-	  flags_from_num(img_number()));
 }
 
 #define ns_width 16
@@ -251,7 +226,7 @@ static unsigned char ns_bits[] = {
    0xe0, 0x07, 0xc0, 0x03, 0x80, 0x01, 0x00, 0x00};
 static fltk::xbmImage nosuch_bitmap(ns_bits, ns_width, ns_height);
 
-bitmap_image::bitmap_image(const char *name, FILE *f,int num) : Fluid_Image(name,num) {
+bitmap_image::bitmap_image(const char *name, FILE *f) : Fluid_Image(name) {
   p = &nosuch_bitmap; // if any problems with parse we exit with this
   if (!f) return;
   char buffer[1024];
@@ -330,9 +305,9 @@ Fluid_Image* Fluid_Image::find(const char *name) {
     rewind(f);
     buffer[1024] = 0; // null-terminate so strstr() works
     if (generic_image::test_file(buffer)) {
-      ret = new generic_image(name,0);
+      ret = new generic_image(name);
     } else if (bitmap_image::test_file(buffer)) {
-      ret = new bitmap_image(name,f,0);
+      ret = new bitmap_image(name,f);
     } else {
       ret = 0;
       read_error("%s : unrecognized image format", name);
@@ -340,7 +315,7 @@ Fluid_Image* Fluid_Image::find(const char *name) {
     fclose(f);
   }
   leave_images_dir();
-  if (!ret) ret = new bitmap_image(name, 0,0);
+  if (!ret) ret = new bitmap_image(name, 0);
 
   // make a new entry in the table:
   numimages++;
@@ -354,12 +329,11 @@ Fluid_Image* Fluid_Image::find(const char *name) {
   return ret;
 }
 
-Fluid_Image::Fluid_Image(const char *name, int num) {
+Fluid_Image::Fluid_Image(const char *name) {
   name_ = strdup(name);
   written = 0;
   refcount = 0;
   inlined=0;
-  img_number_=num;
 }
 
 void Fluid_Image::increment() {

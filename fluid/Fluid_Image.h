@@ -38,10 +38,8 @@
 class Fluid_Image {
   const char *name_;
   int refcount;
-  int img_number_;
-
 protected:
-  Fluid_Image(const char *name, int num); // no public constructor
+  Fluid_Image(const char *name); // no public constructor
   virtual ~Fluid_Image(); // no public destructor
 public:
   bool inlined;
@@ -49,19 +47,17 @@ public:
   static Fluid_Image* find(const char *);
   void decrement(); // reference counting & automatic free
   void increment();
-  virtual void label(fltk::Widget *) = 0; // set the label of this widget
+  virtual const fltk::Symbol* symbol() = 0; // return the fltk Symbol object
   virtual void write_static() = 0;
   virtual void write_code() = 0;
   const char *name() const {return name_;}
-  int img_number() const {return  img_number_;}
-  void img_number(int i ) {img_number_=i;}
 };
 
 // pop up file chooser and return a legal image selected by user,
 // or zero for any errors:
 Fluid_Image *ui_find_image(Fluid_Image* old);
 
-FLUID_API extern const char *images_dir;  
+FLUID_API extern const char *images_dir;
 
 #endif
 

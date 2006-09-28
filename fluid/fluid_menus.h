@@ -25,20 +25,19 @@
 
 #ifndef fltk_fluid_menus_h
 #define fltk_fluid_menus_h
+
 #include "FluidType.h"
 
 namespace fltk {
-
     class MenuBar;
     class ItemGroup;
     class Item;
     class xpmImage;
+};
 
-    MenuBar* build_hierarchy(MenuBar* menubar);
-    void fill_in_New_Menu(ItemGroup* menu);
-    Item * fluidMenuItem(FluidType& wt,int n=-1);
-
-}
+fltk::MenuBar* build_hierarchy(fltk::MenuBar* menubar);
+void fill_in_New_Menu(fltk::ItemGroup* menu);
+fltk::Item* fluidMenuItem(FluidType& wt,int n=-1);
 
 const int MAX_HISTORY = 10; //!< maximum number of items in menu File
 extern char absolute_history[MAX_HISTORY][1024];

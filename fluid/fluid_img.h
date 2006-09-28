@@ -35,16 +35,14 @@
 
 #include <fltk/xpmImage.h>
 
-namespace fltk {
-  extern xpmImage* fluid_pixmap[];
-  extern xpmImage	open_pixmap;
-  extern xpmImage	new_pixmap;
-  extern xpmImage	save_pixmap;
-  extern xpmImage	saveas_pixmap;
-  extern xpmImage	merge_pixmap;
-  extern xpmImage	write_pixmap;
-  extern xpmImage	exit_pixmap;
-}
+extern fltk::xpmImage*	fluid_pixmap[];
+extern fltk::xpmImage	open_pixmap;
+extern fltk::xpmImage	new_pixmap;
+extern fltk::xpmImage	save_pixmap;
+extern fltk::xpmImage	saveas_pixmap;
+extern fltk::xpmImage	merge_pixmap;
+extern fltk::xpmImage	write_pixmap;
+extern fltk::xpmImage	exit_pixmap;
 
 #endif
 

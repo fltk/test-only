@@ -42,7 +42,8 @@
 #include <stdio.h>
 
 #include "PrefsData.h"
-#include "FluidType.h"
+#include "Enumeration.h"
+#include "WindowType.h"
 #include "alignment_panel.h"
 #include "widget_panel.h"
 #include "fluid_menus.h"
@@ -165,7 +166,7 @@ void Overlay_Window::draw_overlay() {
 // Update the XYWH values in the widget panel...
 static void update_xywh() {
   if (current_widget && current_widget->is_widget()) {
-    fltk::Undo::checkpoint();
+    Undo::checkpoint();
     Widget& c = *((WidgetType*) current_widget)->o;
     if (widget_x->value()!=c.x()) {widget_x->value(c.x());}
     if (widget_y->value()!=c.y()) {widget_y->value(c.y());}
@@ -178,7 +179,7 @@ static void update_xywh() {
 // Resize from window manager...
 void Overlay_Window::resize(int X,int Y,int W,int H) {
   if (X==x() && Y==y() && W==w() && H==h()) return;
-  fltk::Undo::checkpoint();
+  Undo::checkpoint();
   Widget* t = resizable(); resizable(0);
   Overlay_Window::resize(X,Y,W,H);
   resizable(t);
@@ -200,6 +201,12 @@ int Overlay_Window::handle(int e) {
 extern fltk::StyleSet* fluid_style_set;
 extern fltk::StyleSet* style_set;
 
+void WindowType::make_fltk_window() {
+  Overlay_Window *w = new Overlay_Window(100,100);
+  w->window = this;
+  this->o = w;
+}
+
 FluidType *WindowType::make() {
   FluidType *p = FluidType::current;
   while (p && !p->is_code_block()) p = p->parent;
@@ -216,10 +223,8 @@ FluidType *WindowType::make() {
   o->factory = this;
   o->drag = 0;
   o->numselected = 0;
-  Overlay_Window *w = new Overlay_Window(100,100);
+  o->make_fltk_window();
   fluid_style_set->make_current();
-  w->window = o;
-  o->o = w;
   o->add(p);
   o->modal = false;
   o->non_modal = false;
@@ -766,120 +771,6 @@ int WindowType::read_fdesign(const char* name, const char* value) {
   }
   return 1;
 }
-
-///////////////////////////////////////////////////////////////////////
-
-WidgetClassType Widget_Class_type;
-WidgetClassType *current_widget_class = 0;
-
-FluidType *WidgetClassType::make() {
-  FluidType *p = FluidType::current;
-  while (p && !p->is_decl_block()) p = p->parent;
-  WidgetClassType *myo = new WidgetClassType();
-  myo->name("UserInterface");
-
-  if (!this->o) {// template widget
-    this->o = new Window(100,100);
-    Group::current(0);
-  }
-  // Set the size ranges for this window; in order to avoid opening the
-  // X display we use an arbitrary maximum size...
-  ((Window *)(this->o))->size_range(prefs.gridx(), prefs.gridy(),
-      3072, 2048,prefs.gridx(), prefs.gridy());
-  myo->factory = this;
-  myo->drag = 0;
-  myo->numselected = 0;
-  Overlay_Window *w = new Overlay_Window(100,100);
-  w->window = myo;
-  myo->o = w;
-  myo->add(p);
-  myo->modal = 0;
-  myo->non_modal = 0;
-  myo->wc_relative = 0;
-
-  return myo;
-}
-
-void WidgetClassType::write_properties() {
-  WindowType::write_properties();
-  if (wc_relative) write_string("position_relative");
-}
-
-void WidgetClassType::read_property(const char *c) {
-  if (!strcmp(c,"position_relative")) {
-    wc_relative = 1;
-  } else {
-    WindowType::read_property(c);
-  }
-}
-
-void WidgetClassType::write_code() {
-#if 0
-  WidgetType::write_code1();
-#endif // 0
-
-  current_widget_class = this;
-  write_public_state = 1;
-
-  const char *c = subclass();
-  if (!c) c = "Group";
-
-  write_h("\nclass %s : public %s {\n", name(), c);
-  if (!strcmp(c, "Window") ||
-      !strcmp(c, "Fl_Double_Window") ||
-      !strcmp(c, "Fl_Gl_Window") ||
-      !strcmp(c, "Fl_Overlay_Window")) {
-    write_h("  void _%s();\n", name());
-    write_h("public:\n");
-    write_h("  %s(int X, int Y, int W, int H, const char *L = 0);\n", name());
-    write_h("  %s(int W, int H, const char *L = 0);\n", name());
-
-    write_c("%s::%s(int X, int Y, int W, int H, const char *L)\n", name(), name());
-    write_c("  : %s(X, Y, W, H, L) {\n", c);
-    write_c("  _%s();\n", name());
-    write_c("}\n\n");
-
-    write_c("%s::%s(int W, int H, const char *L)\n", name(), name());
-    write_c("  : %s(0, 0, W, H, L) {\n", c);
-    write_c("  clear_flag(16);\n");
-    write_c("  _%s();\n", name());
-    write_c("}\n\n");
-
-    write_c("void %s::_%s() {\n", name(), name());
-    write_c("  %s *w = this;\n", name());
-  } else {
-    write_h("public:\n");
-    write_h("  %s(int X, int Y, int W, int H, const char *L = 0);\n", name());
-
-    write_c("%s::%s(int X, int Y, int W, int H, const char *L)\n", name(), name());
-    if (wc_relative)
-      write_c("  : %s(0, 0, W, H, L) {\n", c);
-    else
-      write_c("  : %s(X, Y, W, H, L) {\n", c);
-  }
-
-  write_c("  %s *o = this;\n", name());
-
-  write_widget_code();
-}
-
-void WidgetClassType::write_code1() {
-  write_extra_code();
-  if (wc_relative) write_c("%sposition(X, Y);\n", indent());
-  if (modal) write_c("%sset_modal();\n", indent());
-  else if (non_modal) write_c("%sset_non_modal();\n", indent());
-  if (!((Window*)o)->border()) write_c("%sclear_border();\n", indent());
-  if (user_class()) {
-    write_c("%sclass(", indent());
-    write_cstring(user_class());
-    write_c(");\n");
-  }
-  write_c("%send();\n", indent());
-  if (((Window*)o)->resizable() == o)
-    write_c("%sresizable(this);\n", indent());
-  write_c("}\n");
-}
-
 
 ////////////////////////////////////////////////////////////////
 // live mode support

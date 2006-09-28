@@ -39,25 +39,22 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "FluidType.h"
-#include "FunctionType.h"
-#include "WidgetType.h"
+#include "Enumeration.h"
+#include "Widget_Types.h"
 #include "Fluid_Plugins.h"
-#include "factory.h"
 #include "fluid_menus.h"
 #include "undo.h"
-
 
 using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
-const Enumeration fltk::buttontype_menu[] = {
+const Enumeration buttontype_menu[] = {
   {"Normal", 0,		(void*)fltk::Button::NORMAL},
   {"Toggle", "TOGGLE",	(void*)fltk::Button::TOGGLE},
   {"Radio",  "RADIO",	(void*)fltk::Button::RADIO},
   {0}};
 
-const Enumeration fltk::input_type_menu[] = {
+const Enumeration input_type_menu[] = {
   {"Normal",	0,	(void*)Input::NORMAL},
   {"Numeric",	0,	(void*)6,			"fltk::NumericInput"},
   {"Float",	0,	(void*)1,			"fltk::FloatInput"},
@@ -67,13 +64,13 @@ const Enumeration fltk::input_type_menu[] = {
   {"Wordwrap",	0,	(void*)Input::WORDWRAP,		"fltk::WordwrapInput"},
   {0}};
 
-const Enumeration fltk::dial_type_menu[] = {
+const Enumeration dial_type_menu[] = {
   {"Dot", 	0,	(void*)Dial::NORMAL},
   {"Line",	"LINE",	(void*)Dial::LINE},
   {"Fill",	"FILL",	(void*)Dial::FILL},
   {0}};
 
-const Enumeration fltk::slider_type_menu[] = {
+const Enumeration slider_type_menu[] = {
   {"Linear No ticks",	"LINEAR",	(void*)(fltk::Slider::LINEAR)},
   {"Linear Top/left ticks","TICK_ABOVE",(void*)(fltk::Slider::TICK_ABOVE)},
   {"Linear Bottom/right ticks","TICK_BELOW",(void*)(fltk::Slider::TICK_BELOW)},
@@ -85,7 +82,7 @@ const Enumeration fltk::slider_type_menu[] = {
   {"Log Both ticks","LOG|fltk::Slider::TICK_BOTH", (void*)(fltk::Slider::LOG|fltk::Slider::TICK_BOTH)},
   {0}};
 
-  const Enumeration fltk::output_type_menu[] = {
+const Enumeration output_type_menu[] = {
   {"Normal",	0,	(void*)fltk::Output::NORMAL},
   {"Multiline",	0,	(void*)fltk::Output::MULTILINE, "fltk::MultiLineOutput"},
   {"Wordwrap",	0,	(void*)fltk::Output::WORDWRAP, "fltk::WordwrapOutput"},
@@ -190,8 +187,9 @@ static struct {const char* oldname; const char* newname;} ntable[] = {
   {"Fl_Tile",		"fltk::TiledGroup"}
 };
 
-// Create a new type by name:
-FluidType *fltk::FluidType_make(const char *tn) {
+// Create a new type by name.
+FluidType* FluidType::make(const char *tn) {
+  // Translate fltk1.0 names into fltk2.0 ones:
   const char* p = 0;
   // First try any of our direct translations:
   for (unsigned n = 0; n < sizeof(ntable)/sizeof(*ntable); n++) {
@@ -208,6 +206,7 @@ FluidType *fltk::FluidType_make(const char *tn) {
   } else if (!p) {
     p = tn;
   }
+  // Now search the "new" menu for them
   return ::FluidType_make(p, newMenu);
 }
 
@@ -345,7 +344,7 @@ static symbol table[] = {
 
 #include <stdlib.h>
 
-int fltk::lookup_symbol(const char *name, int &v, int numberok) {
+int lookup_fdesign(const char *name, int &v, int numberok) {
   if (name[0]=='F' && name[1]=='L' && name[2]=='_') name += 3;
   for (int i=0; i < int(sizeof(table)/sizeof(*table)); i++)
     if (!strcasecmp(name,table[i].name)) {v = table[i].value; return 1;}

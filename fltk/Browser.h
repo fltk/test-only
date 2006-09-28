@@ -159,6 +159,11 @@ public:
  
   int multi() const {return type()&IS_MULTI;}
 
+  const Symbol* leaf_symbol() const {return leaf_symbol_;}
+  void leaf_symbol(const Symbol* s) {leaf_symbol_ = s;}
+  const Symbol* group_symbol() const {return group_symbol_;}
+  void group_symbol(const Symbol* s) {group_symbol_ = s;}
+
 protected:
   void handle_callback(int doit); // defines how cb are handled in the browser
 
@@ -191,18 +196,8 @@ private:
   int siblings; // # of children of parent of HERE item
   static void column_click_cb_(Widget*, void*);
 
-public:
-  enum NodeType { //!< argument for set_symbol()
-    GROUP=0,LEAF
-  };
-  void set_symbol(NodeType nodetype, 
-      const Symbol* imgClosed=0, // default (and closed if open not null) img
-      const Symbol* imgFocus=0,  // img when mouse comes on it
-      const Symbol* imgOpen=0);  // img when node open (for group nodes only)
-
-private:
-  const Symbol *defGroupSymbol1, *defGroupSymbol2, *defGroupSymbol3;
-  const Symbol *defLeafSymbol1,*defLeafSymbol2,*defLeafSymbol3;
+  const Symbol* leaf_symbol_;
+  const Symbol* group_symbol_;
 };
 
 }

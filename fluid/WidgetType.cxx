@@ -23,11 +23,12 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include "Enumeration.h"
+#include "WidgetType.h"
+
 #include <fltk/Window.h>
 #include <fltk/run.h>
 #include <fltk/Group.h>
-#include "Fluid_Plugins.h"
-#include "FluidType.h"
 #include <fltk/ask.h>
 #include <fltk/Slider.h>
 #include <fltk/DoubleBufferWindow.h>
@@ -40,7 +41,6 @@
 
 #include "PrefsData.h"
 #include "coding_style.h"
-#include "factory.h"
 #include "undo.h"
 
 using namespace fltk;
@@ -93,7 +93,7 @@ FluidType *WidgetType::make() {
   WidgetType* q = (WidgetType*)qq;
   // find the parent widget:
   WidgetType* p = q;
-  if ((force_parent || !p->is_group()) && p->parent->is_widget())
+  if ((force_parent || !p->o->is_group()) && p->parent->is_widget())
     p = (WidgetType*)(p->parent);
   force_parent = 0;
 
@@ -157,11 +157,12 @@ FluidType *WidgetType::make() {
 
 float WidgetType::default_size = 14.0;
 
-void WidgetType::set_image(Fluid_Image *i, int num) {
-  if (i == image[num]) return;
-  if (image[num]) image[num]->decrement();
-  if (i) {i->increment(); i->label(o);} else o->image((Symbol*)0);
-  image[num] = i;
+void WidgetType::set_image(Fluid_Image *i) {
+  if (i == image) return;
+  if (image) image->decrement();
+  if (i) i->increment();
+  image = i;
+  o->image(i ? i->symbol() : 0);
   redraw();
 }
 
@@ -176,7 +177,7 @@ WidgetType::WidgetType() {
   hotspot_ = 0;
   o = 0;
   default_size = 0.0;
-  memset(image, 0, sizeof(image));
+  image = 0;
   public_ = 1;
   set_xy = true;
 }
@@ -707,46 +708,24 @@ void label_size_cb(fltk::ValueInput* i, void *v) {
     { i->textcolor(c); i->redraw();}
 }
 
-static fltk::Widget * img_label(int i) {
-    switch(i) {
-    case 0: 	return image_label;
-    case 1: 	return image_label2;
-    case 2: 	return image_label3;
-    case 3: 	return image_label4;
-    default:	return 0;
-    }
-}
-static fltk::Widget * img_button(int i) {
-    switch(i) {
-    case 0: 	return image_button1;
-    case 1: 	return image_button2;
-    case 2: 	return image_button3;
-    case 3: 	return image_button4;
-    default:	return 0;
-    }
-}
 void image_cb(fltk::Button *a, void * v) {
-  int num = (int) (long)v-1,i;
   if (v != LOAD) {
-
-    Fluid_Image *i = ui_find_image(current_widget->image[num]);
-    if (i == current_widget->image[num]) return; // user hit "Cancel"
+    Fluid_Image *i = ui_find_image(current_widget->image);
+    if (i == current_widget->image) return; // user hit "Cancel"
     for_all_selected_widgets() {
       WidgetType* p = (WidgetType*)o;
-      p->set_image(i,num);
+      p->set_image(i);
     }
     image_inlined_cb(include_image_button, LOAD); // update the button state
   }
-  for (i=0; i<FLUID_MAX_IMG; i++) {
-      const char* s = current_widget->image[i] ? 
-      current_widget->image[i]->name() : 0;
-      if (s != img_button(i)->label()) 
-	{img_button(i)->label(s); img_button(i)->redraw();}
-      fltk::Color c = fltk::BLACK;
-      if (current_widget->image[i]) c = fltk::RED;
-      if (img_label(i)->labelcolor() != c)
-	{ img_label(i)->labelcolor(c); img_label(i)->redraw();}
-  }
+  const char* s = current_widget->image ? 
+    current_widget->image->name() : 0;
+  if (s != image_button->label()) 
+    {image_button->label(s); image_button->redraw();}
+  fltk::Color c = fltk::BLACK;
+  if (current_widget->image) c = fltk::RED;
+  if (image_button->labelcolor() != c)
+    { image_button->labelcolor(c); image_button->redraw();}
 }
 
 static const Enumeration labelstylemenu[] = {
@@ -785,9 +764,6 @@ void label_style_cb(fltk::Choice* i, void *v) {
 void color_cb(fltk::LightButton* i, void *v) {
   fltk::Color c = current_widget->o->color();
   if (v == LOAD) {
-//     if (current_widget->is_slider()) i->label("Back Color");
-//     else if (current_widget->is_counter()) i->label("Button Color");
-//     else i->label("Color");
     i->show();
   } else {
     if (!fltk::color_chooser(i->label(), c)) return;
@@ -806,10 +782,7 @@ void color_cb(fltk::LightButton* i, void *v) {
 void selection_color_cb(fltk::LightButton* i, void *v) {
   fltk::Color c = current_widget->o->selection_color();
   if (v == LOAD) {
-    if (current_widget->is_light_button() ||
-	current_widget->is_menu_item()) i->label("On Color");
-    else if (current_widget->is_button()) i->label("Down Color");
-    else i->label("Selection Color");
+    i->label("Selection Color");
     i->show();
   } else {
     if (!fltk::color_chooser(i->label(), c)) return;
@@ -909,9 +882,6 @@ void text_size_cb(fltk::ValueInput* i, void* v) {
 void text_color_cb(fltk::LightButton* i, void* v) {
   fltk::Color c;
   if (v == LOAD) {
-    if (current_widget->is_menu_item()) i->label("Shortcut Color");
-    else if (current_widget->is_slider()) i->label("Glyph Color");
-    else i->label("Text Color");
     c = current_widget->o->textcolor();
     i->show();
   } else {
@@ -1039,26 +1009,18 @@ void align_cb(fltk::Button* i, void *v) {
 }
 
 void image_inlined_cb(fltk::CheckButton* i, void *v) {
-  int num;
   if (v==LOAD) { // for now all images are inlined or none is.
-      bool bSet=false;
-      for (num=0; num<FLUID_MAX_IMG; num++) {
-	if(current_widget->image[num]) {
-	  i->value(current_widget->image[num]->inlined);
-	  i->activate();
-	  bSet=true;
-	}
-      }
-      if(!bSet) {i->value(0);i->deactivate();}
-
+    if (current_widget->image) {
+      i->activate();
+      i->value(current_widget->image->inlined);
+    } else {
+      i->deactivate();
+      i->value(false);
+    }
   } else {
-      Undo::checkpoint();
-
     for_all_selected_widgets() {
       WidgetType* q = (WidgetType*)o;
-      for (num=0; num<FLUID_MAX_IMG; num++) {
-	if(q->image[num]) q->image[num]->inlined = i->value();
-      }
+      if (q->image) q->image->inlined = i->value();
     }
   }
 }
@@ -1280,7 +1242,7 @@ void value_cb(fltk::ValueInput* i, void* v) {
       i->value(((fltk::Valuator*)(current_widget->o))->value());
     } else if (current_widget->is_button()) {
       i->show();
-      i->value(((fltk::Button*)(current_widget->o))->value());
+      i->value(current_widget->o->state());
     } else 
       i->hide();
   } else {
@@ -1290,8 +1252,8 @@ void value_cb(fltk::ValueInput* i, void* v) {
       WidgetType* q = (WidgetType*)o;
       if (q->is_valuator()) {
 	((fltk::Valuator*)(q->o))->value(n);
-      } else if (q->is_button()) {
-	((fltk::Button*)(q->o))->value(n != 0);
+      } else {
+	q->o->state(n != 0);
 	if (q->is_menu_item()) q->redraw();
       }
     }
@@ -1642,13 +1604,9 @@ void WidgetType::write_static() {
       write_c("user_data()))->%s_i(o,v);\n}\n", cn);
     }
   }
-  for (int numImg=0; numImg<FLUID_MAX_IMG; numImg++) {
-      if (image[numImg]) {
-	if (image[numImg]->written != write_number) {
-	  image[numImg]->write_static();
-	  image[numImg]->written = write_number;
-	}
-      }
+  if (image && image->written != write_number) {
+    image->written = write_number; // do this first so they can recurse
+    image->write_static();
   }
 }
 
@@ -1720,7 +1678,6 @@ static void write_color(const char* function, fltk::Color c) {
 // this is split from write_code1() for WindowType:
 void WidgetType::write_widget_code() {
   fltk::Widget* tplate = ((WidgetType*)factory)->o;
-  int i;
 
   if (o->type() != tplate->type()) {
     const Enumeration* e = subtypes();
@@ -1733,7 +1690,7 @@ void WidgetType::write_widget_code() {
 
   if (o->vertical()) write_c("%so->set_vertical();\n", indent());
 
-  for(i=0; i<FLUID_MAX_IMG;i++) if (image[i]) {image[i]->img_number(i); image[i]->write_code();}
+  if (image) image->write_code();
 
   if (o->box() != tplate->box())
     write_c("%so->box(fltk::%s);\n",indent(),to_text((void*)(o->box()),boxmenu));
@@ -1766,13 +1723,10 @@ void WidgetType::write_widget_code() {
     write_c("%so->labelsize(%g);\n", indent(), o->labelsize());
   if (o->textsize() != tplate->textsize())
     write_c("%so->textsize(%g);\n", indent(), o->textsize());
-
-  if (is_button()) {
-    fltk::Button* b = (fltk::Button*)o;
-    if (b->value()) write_c("%so->set_flag(fltk::STATE);\n", indent());
-    if (b->shortcut())
-      write_c("%so->shortcut(0x%x);\n", indent(), b->shortcut());
-  }
+  if (o->state() && !tplate->state())
+    write_c("%so->set_flag(fltk::STATE);\n", indent());
+  if (o->shortcut())
+    write_c("%so->shortcut(0x%x);\n", indent(), o->shortcut());
 
   if (is_valuator()) {
     fltk::Valuator* v = (fltk::Valuator*)o;
@@ -1863,7 +1817,7 @@ static void save_color(const char* name, fltk::Color color) {
 
 void WidgetType::write_properties() {
   FluidType::write_properties();
-  int indent = 1,i;
+  int indent = 1;
 
   for (FluidType* p = parent; p; p = p->parent) indent++;
   write_indent(indent);
@@ -1905,14 +1859,11 @@ void WidgetType::write_properties() {
     write_string("labeltype");
     write_word(to_text((void*)(o->labeltype()),labelstylemenu));
   }
-  for (i=0; i<FLUID_MAX_IMG; i++) {
-      if (image[i]) {
-	write_indent(indent);
-	if (i>0) write_string("image%d",i+1);// stay compatible with backward version 
-	else write_string("image");  // when only one image is required
-	if (!image[i]->inlined) write_string("not_inlined");
-	write_word(image[i]->name());
-      }
+  if (image) {
+    write_indent(indent);
+    write_string("image");  // when only one image is required
+    if (!image->inlined) write_string("not_inlined");
+    write_word(image->name());
   }
   if (o->color() != tplate->color())
     save_color("color", o->color());
@@ -1934,12 +1885,10 @@ void WidgetType::write_properties() {
     write_string("labelsize %g", o->labelsize());
   if (o->textsize() != tplate->textsize())
     write_string("textsize %g", o->textsize());
-
-  if (is_button()) {
-    fltk::Button* b = (fltk::Button*)o;
-    if (b->shortcut()) write_string("shortcut 0x%x", b->shortcut());
-    if (b->value()) write_string("value 1");
-  }
+  unsigned s = o->shortcut(); if (s && s != tplate->shortcut())
+    write_string("shortcut 0x%x", s);
+  if (o->state() && !tplate->state())
+    write_string("value 1");
 
   if (is_valuator()) {
     fltk::Valuator* v = (fltk::Valuator*)o;
@@ -2020,12 +1969,8 @@ void WidgetType::read_property(const char *c) {
   //} else if (!strcmp(c, "divider")) { // do something here...
   } else if (!strcmp(c,"class")) {
     user_class(read_word());
-  } else if (is_button() && !strcmp(c,"shortcut")) {
-    ((fltk::Button*)o)->shortcut(strtol(read_word(),0,0));
-  } else if (is_button() && !strcmp(c,"value")) {
-    const char* value = read_word();
-    ((fltk::Button*)o)->value(value[0]!=0 && value[0]!='0');
-
+  } else if (!strcmp(c,"shortcut")) {
+    o->shortcut(strtol(read_word(),0,0));
   } else if (!strcmp(c,"box") || !strcmp(c,"text_box") || !strcmp(c, "window_box")) {
     const char* value = read_word();
     const Enumeration* e = from_text(value, boxmenu);
@@ -2045,42 +1990,48 @@ void WidgetType::read_property(const char *c) {
   } else if (!strcmp(c,"labeltype") || !strcmp(c,"label_type")
 	     || !strcmp(c,"label_style")) {
     c = read_word();
-    // back compatability with 1.0 and Vincent's original graphical patch
-    if (!strncmp(c,"image",5) || !strcmp(c, "image_file")) { 
-      int numImage;
-      // ensure backward compatibility and new image[1-4] notation
-      if (!strncmp(c,"image",5) && strlen(c)==6 && c[5]>='0' && (c[5]-0x30)<=FLUID_MAX_IMG)  numImage=(c[5]-0x30)-1;
-      else numImage=0; // old notations
-
+    // back compatability with 1.0 and Vincent's original graphical patch:
+    if (!strncmp(c,"image",5) || !strcmp(c, "image_file")) {
+      // WAS: since it used the label(), I don't think mulitple images
+      // could have been supported.
       Fluid_Image *i = Fluid_Image::find(label());
       if (!i) read_error("Image file '%s' not found", label());
-      set_image(i, numImage); label(0);
+      set_image(i); label(0);
       if (!strcmp(c,"image_file")) {
-	c = read_word();
-	if (i && c[0]=='d') i->inlined = 0;
-	// if (c[1]=='t') do something here to make it fltk::Tiled_Image
+        c = read_word();
+        if (i && c[0]=='d') i->inlined = 0;
+        // if (c[1]=='t') do something here to make it fltk::Tiled_Image
       }
     } else {
       const Enumeration* e = from_text(c, labelstylemenu);
       if (e) o->labeltype((fltk::LabelType*)(e->compiled));
     }
-  } else if (!strncmp(c, "image",5)) {
-    int inlined = 1;
-    int numImage;
-    // ensure backward compatibility and new image[1-4] notation
-    if (!strncmp(c,"image",5) && strlen(c)==6 && c[5]>='0' && (c[5]-0x30)<=FLUID_MAX_IMG)  numImage=(c[5]-0x30)-1;
-    else numImage=0; // old notations
 
+  } else if (!strcmp(c,"image") || !strcmp(c,"image1")) {
     c = read_word();
-    if (!strcmp(c, "inlined")) c = read_word(); // for back compatability
-    if (!strcmp(c, "not_inlined")) {
+    // back compatability with a prefixed inlined indicator:
+    bool inlined = true;
+    if (!strcmp(c, "inlined")) {
+      c = read_word();
+    } else if (!strcmp(c, "not_inlined")) {
       inlined = 0;
       c = read_word();
     }
     Fluid_Image *i = Fluid_Image::find(c);
-    if(!inlined) i->inlined = 0;
     if (!i) read_error("Image file '%s' not found", c);
-    else set_image(i, numImage);
+    else {
+      set_image(i);
+      if (!inlined) i->inlined = 0;
+    }
+
+  } else if (!strcmp(c,"image2")||!strcmp(c,"image3")||!strcmp(c,"image4")) {
+    // Read the multi-image api, this should be converted to a new
+    // MultiImage instance for compatability. Unfortunatly I don't have
+    // time for that, and instead throw all except image1 away...
+    // 2 = INACTIVE_R
+    // 3 = HIGHLIGHT
+    // 4 = PUSHED
+
   } else if (!strcmp(c,"color") || !strcmp(c,"text_background")
 	     || !strcmp(c,"off_color") || !strcmp(c,"window_color")) {
     char* p;
@@ -2118,8 +2069,13 @@ void WidgetType::read_property(const char *c) {
     ((fltk::Valuator*)o)->step(strtod(read_word(),0));
   } else if (!strcmp(c,"linesize") && is_valuator()) {
     ((fltk::Valuator*)o)->linesize(strtod(read_word(),0));
-  } else if (!strcmp(c,"value") && is_valuator()) {
-    ((fltk::Valuator*)o)->value(strtod(read_word(),0));
+  } else if (!strcmp(c,"value")) {
+    if (is_valuator()) {
+      ((fltk::Valuator*)o)->value(strtod(read_word(),0));
+    } else {
+      const char* value = read_word();
+      o->state(value[0]!=0 && value[0]!='0');
+    }
   } else if ((!strcmp(c,"slider_size")||!strcmp(c,"size"))&&is_valuator()==2) {
     double v = strtod(read_word(),0);
     if (v < 1.0)
@@ -2166,6 +2122,7 @@ static const Enumeration boxmenu1[] = {
 {0}};
 
 extern int fdesign_flip;
+extern int lookup_fdesign(const char *name, int &v, int numberok=0);
 
 int WidgetType::read_fdesign(const char* name, const char* value) {
   int v;
@@ -2199,25 +2156,25 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
     }
   } else if (!strcmp(name,"style")) {
     if (!strncmp(value,"fltk::NORMAL",9)) return 1;
-    if (!fltk::lookup_symbol(value,v,1)) return 0;
+    if (!lookup_fdesign(value,v,1)) return 0;
     o->labelfont(fltk::font(v)); o->labeltype((fltk::LabelType*)(v>>8));
   } else if (!strcmp(name,"size")) {
-      if (!fltk::lookup_symbol(value,v,1)) return 0;
+      if (!lookup_fdesign(value,v,1)) return 0;
     o->labelsize((float)v);
   } else if (!strcmp(name,"type")) {
     if (!strncmp(value,"NORMAL",6)) return 1;
-    if (fltk::lookup_symbol(value,v,1)) {o->type(v); return 1;}
+    if (lookup_fdesign(value,v,1)) {o->type(v); return 1;}
     if (!strcmp(value+strlen(value)-5,"FRAME")) goto TRY_BOXTYPE;
     if (!strcmp(value+strlen(value)-3,"BOX")) goto TRY_BOXTYPE;
     return 0;
   } else if (!strcmp(name,"lcol")) {
-    if (!fltk::lookup_symbol(value,v,1)) return 0;
+    if (!lookup_fdesign(value,v,1)) return 0;
     o->labelcolor(v);
   } else if (!strcmp(name,"return")) {
-    if (!fltk::lookup_symbol(value,v,0)) return 0;
+    if (!lookup_fdesign(value,v,0)) return 0;
     o->when(v|fltk::WHEN_RELEASE);
   } else if (!strcmp(name,"alignment")) {
-    if (!fltk::lookup_symbol(value,v)) {
+    if (!lookup_fdesign(value,v)) {
       // convert old numeric values:
       int v1 = strtol(value,0,0); if (v1 <= 0 && strcmp(value,"0")) return 0;
       v = 0;
@@ -2239,7 +2196,7 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
     while (*p != ' ') {if (!*p) return 0; p++;}
     *p = 0;
     int v1;
-    if (!fltk::lookup_symbol(value,v,1) || !fltk::lookup_symbol(p+1,v1,1)) {
+    if (!lookup_fdesign(value,v,1) || !lookup_fdesign(p+1,v1,1)) {
       *p=' '; return 0;}
     o->color(v); o->selection_color(v1);
   } else if (!strcmp(name,"resize")) {
@@ -2260,6 +2217,11 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
   }
   return 1;
 }
+
+////////////////////////////////////////////////////////////////
+// live mode
+
+#include "WindowType.h"
 
 void leave_live_mode_cb(Widget*, void*);
 
@@ -2352,9 +2314,9 @@ void WidgetType::copy_properties() {
   w->default_style = o->default_style;
   w->default_glyph= o->default_glyph;
 
- w->flags(o->flags());
+  w->flags(o->flags());
   w->label(o->label());
-  w->image(o->image(), o->image(INACTIVE),o->image(HIGHLIGHT),o->image(PUSHED));
+  w->image(o->image());
   w->tooltip(tooltip());
   w->type(o->type());
     

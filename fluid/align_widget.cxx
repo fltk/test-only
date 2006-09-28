@@ -27,6 +27,7 @@
 
 #include <fltk/run.h>
 #include <fltk/Window.h>
+#include <fltk/Font.h>
 #include "WidgetType.h"
 #include "undo.h"
 
@@ -69,13 +70,7 @@ void align_widget_cb(Widget*, long how)
 	  }
 
 	  Widget *w = ((WidgetType *)o)->o;
-	  if (o->is_group() && o->first_child && !o->is_menu_button()) {
-	    // When resizing a group, make sure we also move the children...
-	    ((igroup *)w)->full_resize(left, w->y(), w->w(), w->h());
-	  } else {
-	    // Otherwise, just do the widget...
-	    w->resize(left, w->y(), w->w(), w->h());
-	  }
+          w->resize(left, w->y(), w->w(), w->h());
 	  w->redraw();
 	  if (w->window()) w->window()->redraw();
 	}
@@ -105,13 +100,7 @@ void align_widget_cb(Widget*, long how)
 	  }
 
 	  Widget *w = ((WidgetType *)o)->o;
-	  if (o->is_group() && o->first_child && !o->is_menu_button()) {
-	    // When resizing a group, make sure we also move the children...
-	    ((igroup *)w)->full_resize((center2-w->w())/2, w->y(), w->w(), w->h());
-	  } else {
-	    // Otherwise, just do the widget...
-	    w->resize((center2-w->w())/2, w->y(), w->w(), w->h());
-	  }
+          w->resize((center2-w->w())/2, w->y(), w->w(), w->h());
 	  w->redraw();
 	  if (w->window()) w->window()->redraw();
 	}
@@ -138,13 +127,7 @@ void align_widget_cb(Widget*, long how)
 	  }
 
 	  Widget *w = ((WidgetType *)o)->o;
-	  if (o->is_group() && o->first_child && !o->is_menu_button()) {
-	    // When resizing a group, make sure we also move the children...
-	    ((igroup *)w)->full_resize(right-w->w(), w->y(), w->w(), w->h());
-	  } else {
-	    // Otherwise, just do the widget...
-	    w->resize(right-w->w(), w->y(), w->w(), w->h());
-	  }
+          w->resize(right-w->w(), w->y(), w->w(), w->h());
 	  w->redraw();
 	  if (w->window()) w->window()->redraw();
 	}
@@ -170,13 +153,7 @@ void align_widget_cb(Widget*, long how)
 	  }
 
 	  Widget *w = ((WidgetType *)o)->o;
-	  if (o->is_group() && o->first_child && !o->is_menu_button()) {
-	    // When resizing a group, make sure we also move the children...
-	    ((igroup *)w)->full_resize(w->x(), top, w->w(), w->h());
-	  } else {
-	    // Otherwise, just do the widget...
-	    w->resize(w->x(), top, w->w(), w->h());
-	  }
+          w->resize(w->x(), top, w->w(), w->h());
 	  w->redraw();
 	  if (w->window()) w->window()->redraw();
 	}
@@ -206,13 +183,7 @@ void align_widget_cb(Widget*, long how)
 	  }
 
 	  Widget *w = ((WidgetType *)o)->o;
-	  if (o->is_group() && o->first_child && !o->is_menu_button()) {
-	    // When resizing a group, make sure we also move the children...
-	    ((igroup *)w)->full_resize(w->x(), (center2-w->h())/2, w->w(), w->h());
-	  } else {
-	    // Otherwise, just do the widget...
-	    w->resize(w->x(), (center2-w->h())/2, w->w(), w->h());
-	  }
+          w->resize(w->x(), (center2-w->h())/2, w->w(), w->h());
 	  w->redraw();
 	  if (w->window()) w->window()->redraw();
 	}
@@ -239,13 +210,7 @@ void align_widget_cb(Widget*, long how)
 	  }
 
 	  Widget *w = ((WidgetType *)o)->o;
-	  if (o->is_group() && o->first_child && !o->is_menu_button()) {
-	    // When resizing a group, make sure we also move the children...
-	    ((igroup *)w)->full_resize( w->x(), bot-w->h(), w->w(), w->h());
-	  } else {
-	    // Otherwise, just do the widget...
-	    w->resize( w->x(), bot-w->h(), w->w(), w->h());
-	  }
+          w->resize( w->x(), bot-w->h(), w->w(), w->h());
 	  w->redraw();
 	  if (w->window()) w->window()->redraw();
 	}
@@ -279,13 +244,7 @@ void align_widget_cb(Widget*, long how)
 	  }
 
 	  Widget *w = ((WidgetType *)o)->o;
-	  if (o->is_group() && o->first_child && !o->is_menu_button()) {
-	    // When resizing a group, make sure we also move the children...
-	    ((igroup *)w)->full_resize(left+wsum+wdt*cnt/n, w->y(), w->w(), w->h());
-	  } else {
-	    // Otherwise, just do the widget...
-	    w->resize(left+wsum+wdt*cnt/n, w->y(), w->w(), w->h());
-	  }
+          w->resize(left+wsum+wdt*cnt/n, w->y(), w->w(), w->h());
 	  w->redraw();
 	  if (w->window()) w->window()->redraw();
 	  cnt++;
@@ -321,13 +280,7 @@ void align_widget_cb(Widget*, long how)
 	  }
 
 	  Widget *w = ((WidgetType *)o)->o;
-	  if (o->is_group() && o->first_child && !o->is_menu_button()) {
-	    // When resizing a group, make sure we also move the children...
-	    ((igroup *)w)->full_resize(w->x(), top+hsum+hgt*cnt/n, w->w(), w->h());
-	  } else {
-	    // Otherwise, just do the widget...
-	    w->resize(w->x(), top+hsum+hgt*cnt/n, w->w(), w->h());
-	  }
+          w->resize(w->x(), top+hsum+hgt*cnt/n, w->w(), w->h());
 	  w->redraw();
 	  if (w->window()) w->window()->redraw();
 	  cnt++;
@@ -357,13 +310,7 @@ void align_widget_cb(Widget*, long how)
 	  }
 
 	  Widget *w = ((WidgetType *)o)->o;
-	  if (o->is_group() && o->first_child && !o->is_menu_button()) {
-	    // When resizing a group, make sure we also move the children...
-	    ((igroup *)w)->full_resize(w->x(), w->y(), wdt, w->h());
-	  } else {
-	    // Otherwise, just do the widget...
-	    w->resize(w->x(), w->y(), wdt, w->h());
-	  }
+          w->resize(w->x(), w->y(), wdt, w->h());
 	  w->redraw();
 	  if (w->window()) w->window()->redraw();
 	}
@@ -389,13 +336,7 @@ void align_widget_cb(Widget*, long how)
 	  }
 
 	  Widget *w = ((WidgetType *)o)->o;
-	  if (o->is_group() && o->first_child && !o->is_menu_button()) {
-	    // When resizing a group, make sure we also move the children...
-	    ((igroup *)w)->full_resize( w->x(), w->y(), w->w(), hgt);
-	  } else {
-	    // Otherwise, just do the widget...
-	    w->resize( w->x(), w->y(), w->w(), hgt);
-	  }
+          w->resize( w->x(), w->y(), w->w(), hgt);
 	  w->redraw();
 	  if (w->window()) w->window()->redraw();
 	}
@@ -423,13 +364,7 @@ void align_widget_cb(Widget*, long how)
 	  }
 
 	  Widget *w = ((WidgetType *)o)->o;
-	  if (o->is_group() && o->first_child && !o->is_menu_button()) {
-	    // When resizing a group, make sure we also move the children...
-	    ((igroup *)w)->full_resize( w->x(), w->y(), wdt, hgt);
-	  } else {
-	    // Otherwise, just do the widget...
-	    w->resize( w->x(), w->y(), wdt, hgt);
-	  }
+          w->resize( w->x(), w->y(), wdt, hgt);
 	  w->redraw();
 	  if (w->window()) w->window()->redraw();
 	}
@@ -451,14 +386,7 @@ void align_widget_cb(Widget*, long how)
 
 	if (w->window() == p) center2 = p->w();
 	else center2 = 2*p->x()+p->w();
-
-	  if (o->is_group() && o->first_child && !o->is_menu_button()) {
-	  // When resizing a group, make sure we also move the children...
-	  ((igroup *)w)->full_resize((center2-w->w())/2, w->y(), w->w(), w->h());
-	} else {
-	  // Otherwise, just do the widget...
-	  w->resize((center2-w->w())/2, w->y(), w->w(), w->h());
-	}
+        w->resize((center2-w->w())/2, w->y(), w->w(), w->h());
 	w->redraw();
 	if (w->window()) w->window()->redraw();
       }
@@ -479,14 +407,7 @@ void align_widget_cb(Widget*, long how)
 
 	if (w->window() == p) center2 = p->h();
 	else center2 = 2*p->y()+p->h();
-
-	if (o->is_group() && o->first_child && !o->is_menu_button()) {
-	  // When resizing a group, make sure we also move the children...
-	  ((igroup *)w)->full_resize(w->x(), (center2-w->h())/2, w->w(), w->h());
-	} else {
-	  // Otherwise, just do the widget...
-	  w->resize(w->x(), (center2-w->h())/2, w->w(), w->h());
-	}
+        w->resize(w->x(), (center2-w->h())/2, w->w(), w->h());
 	modflag = 1;
 	w->redraw();
 	if (w->window()) w->window()->redraw();
