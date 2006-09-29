@@ -186,7 +186,7 @@ using namespace fltk;
   open and visible as well.
 */
 bool Browser::item_is_visible() const {
-  return HERE.open_level >= HERE.level && item()->visible();
+  return HERE.open_level >= HERE.level && item() && item()->visible();
 }
 
 /*! This function increases the number of levels we can store in each
