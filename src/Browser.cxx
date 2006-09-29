@@ -1318,8 +1318,8 @@ int Browser::handle(int event) {
 	if (item()->selected()) drag_type = false;
 	event_clicks(0); // make it not be a double-click for callback
         if (event_state(SHIFT)) goto DRAG;
-	set_item_selected(drag_type, WHEN_CHANGED);
 	set_focus();
+	set_item_selected(drag_type, WHEN_CHANGED);
 	return 1;
       } else if (event_state(SHIFT)) {
         // select between focus and here:
@@ -1354,15 +1354,17 @@ int Browser::handle(int event) {
           Mark TEMP(HERE);
           if (goto_mark(FOCUS)) {
             for (;;) {
-              if (at_mark(TEMP)) break;
               set_item_selected(drag_type, WHEN_CHANGED);
+              if (at_mark(TEMP)) break;
               if (!(direction<0 ? next_visible() : previous_visible())) break;
             }
           }
           goto_mark(TEMP);
+          set_focus();
+        } else {
+          set_focus();
+          set_item_selected(drag_type, WHEN_CHANGED);
         }
-        set_item_selected(drag_type, WHEN_CHANGED);
-        set_focus();
       } else if (goto_mark(FOCUS)) {
         // drag from inside to below last item
         for (;;) {
