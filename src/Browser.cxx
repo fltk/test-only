@@ -1124,16 +1124,6 @@ bool Browser::make_item_visible(linepos where) {
   return changed;
 }
 
-/*! defines the way cb are handled in the browser */
-void Browser::handle_callback(int do_callback) {
-    if (when() & do_callback) {
-      clear_changed();
-      this->do_callback();
-    } else if (do_callback) {
-      set_changed();
-    }
-}
-
 /*! This is for use by the MultiBrowser subclass.
   Turn the fltk::SELECTED flag on or off in the current item (use
   goto_index() to set the current item before calling this).
@@ -1156,7 +1146,17 @@ bool Browser::set_item_selected(bool value, int do_callback) {
     }
     list()->flags_changed(this, item());
     damage_item(HERE);
-    handle_callback(do_callback);
+    // allow callbacks to search through items to see what is on/off
+    // by remembering the current location and then restoring it
+    // afterwards. This means the callback cannot destroy the widget!
+    if (when() & do_callback) {
+      clear_changed();
+      Mark TEMP(HERE);
+      this->do_callback();
+      goto_mark(TEMP);
+    } else if (do_callback) {
+      set_changed();
+    }
     return true;
   } else {
     if (value) return (select_only_this(do_callback));
@@ -1206,7 +1206,12 @@ bool Browser::select_only_this(int do_callback) {
     return ret;
   } else {
     if (!set_focus()) return false;
-    handle_callback(do_callback);
+    if (when() & do_callback) {
+      clear_changed();
+      this->do_callback();
+    } else if (do_callback) {
+      set_changed();
+    }
     return true;
   }
 }

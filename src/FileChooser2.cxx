@@ -446,26 +446,18 @@ FileChooser::fileListCB()
     if ((type_ & FileChooser::MULTI) && !(type_ & DIRECTORY)) {
       if (*filename == '/') {
 	// Clicked on a directory, deselect everything else...
-	int i = fileList->value();
-	fileList->deselect();
-	fileList->select(i);
+	fileList->select_only_this();
       } else {
-        // Clicked on a file - see if there are other directories selected...
-        int i;
-	const char *temp;
-	for (i = 1; i <= fileList->size(); i ++) {
-	  if (i != fileList->value() && fileList->selected(i)) {
-	    temp = fileList->child(i-1)->label();
-	    temp += strlen(temp) - 1;
-	    if (*temp == '/') break;	// Yes, selected directory
-	  }
-	}
-
-        if (i <= fileList->size()) {
-	  i = fileList->value();
-	  fileList->deselect();
-	  fileList->select(i);
-	}
+        // Clicked on a file - deselect any directories
+        for (int i = 0; i < fileList->size(); i++) {
+          fileList->goto_index(i);
+          if (fileList->item()->selected()) {
+            const char* temp = fileList->item()->label();
+            temp += strlen(temp)-1;
+            if (*temp == '/') // this is a directory!
+              fileList->set_item_selected(false);
+          }
+        }
       }
     }
     // Strip any trailing slash from the directory name...
