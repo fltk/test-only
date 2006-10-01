@@ -10,6 +10,7 @@
 
 #include <fltk/MultiImage.h>
 #include <fltk/draw.h>
+#include <stdarg.h>
 
 using namespace fltk;
 
@@ -41,28 +42,43 @@ using namespace fltk;
 \endcode
 */
 
+void MultiImage::set(int count, Symbol* img0, ...) {
+  int i;
+  n_images = count>0 ? count : 1;
+  pairs =  new MultiImagePair[n_images];
+  pairs[0].image = img0;
+  if (count>1) {
+    va_list ap;
+    va_start(ap, img0);
+    for (i=1; i<count; i++) {
+      pairs[i].flags = va_arg(ap,int);
+      pairs[i].image = (Symbol*) va_arg(ap, void*);
+    }
+    va_end(ap);
+  }
+}
+
+
 /*! It probably is useless for the images to be different sizes.
   However if they are, Image0 (the first
   one passed to the constructor) is used to figure out the size. */
-void MultiImage::_measure(int& w, int& h) const {
-  images[0]->measure(w,h);
-}
+void MultiImage::_measure(int& w, int& h) const {  pairs[0].image->measure(w,h); }
 
 /*! Calls the same image that _draw() will call to get the inset. */
 void MultiImage::inset(Rectangle& r) const {
   int which = 0;
   const Flags f = drawflags();
-  for (int i = 1; i < MAXIMAGES && images[i]; i++) {
-    if ((f & flags[i]) == flags[i]) {which = i; /*passed_flags = f&~flags[i];*/}
+  for (int i = 1; i < n_images && pairs[i].image; i++) {
+    if ((f & pairs[i].flags) == pairs[i].flags) {which = i; /*passed_flags = f&~flags[i];*/}
   }
-  images[which]->inset(r);
+  pairs[which].image->inset(r);
 }
 
 /*! Returns the info from the first image given to the constructor. */
-bool MultiImage::fills_rectangle() const {return images[0]->fills_rectangle();}
+bool MultiImage::fills_rectangle() const {return pairs[0].image->fills_rectangle();}
 
 /*! Returns the info from the first image given to the constructor. */
-bool MultiImage::is_frame() const {return images[0]->is_frame();}
+bool MultiImage::is_frame() const {return pairs[0].image->is_frame();}
 
 /*! Select one of the images and draw it. The last image with all the
   flags specified for it turned on will be drawn. If none of them match
@@ -72,8 +88,8 @@ void MultiImage::_draw(const Rectangle& r) const
 {
   int which = 0;
   const Flags f = drawflags();
-  for (int i = 1; i < MAXIMAGES && images[i]; i++) {
-    if ((f & flags[i]) == flags[i]) {which = i; /*passed_flags = f&~flags[i];*/}
+  for (int i = 1; i < n_images && pairs[i].image; i++) {
+    if ((f &  pairs[i].flags) == pairs[i].flags) {which = i; /*passed_flags = f&~flags[i];*/}
   }
-  images[which]->draw(r);
+  pairs[which].image->draw(r);
 }

@@ -102,7 +102,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "FL_SHARED" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /FD /c
 # SUBTRACT BASE CPP /YX
-# ADD CPP /nologo /MD /W1 /GX- /O1 /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "FL_SHARED" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_MSC_DLL" /FD /c
+# ADD CPP /nologo /MD /O1 /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "FL_SHARED" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_MSC_DLL" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
@@ -154,35 +154,15 @@ SOURCE=..\..\fluid\coding_style_func.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fluid\Enumeration.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\factory.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\fluid\file.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\Fl_Function_Type.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\Fl_Group_Type.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\Fl_Menu_Type.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\Fl_Type.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\Fl_Widget_Type.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\Fl_Window_Type.cxx
 # End Source File
 # Begin Source File
 
@@ -206,7 +186,23 @@ SOURCE=..\..\fluid\Fluid_Plugins.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fluid\FluidType.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\function_panel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\FunctionType.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\GroupType.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\MenuType.cxx
 # End Source File
 # Begin Source File
 
@@ -219,6 +215,18 @@ SOURCE=..\..\fluid\undo.cxx
 # Begin Source File
 
 SOURCE=..\..\fluid\widget_panel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\WidgetClassType.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\WidgetType.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\WindowType.cxx
 # End Source File
 # End Target
 # End Project

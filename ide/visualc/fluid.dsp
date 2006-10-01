@@ -264,6 +264,10 @@ SOURCE=..\..\fluid\coding_style_func.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fluid\Enumeration.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\factory.cxx
 # End Source File
 # Begin Source File
@@ -273,30 +277,6 @@ SOURCE=..\..\fluid\file.cxx
 # Begin Source File
 
 SOURCE=..\..\src\FileInput.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\Fl_Function_Type.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\Fl_Group_Type.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\Fl_Menu_Type.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\Fl_Type.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\Fl_Widget_Type.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\fluid\Fl_Window_Type.cxx
 # End Source File
 # Begin Source File
 
@@ -320,7 +300,23 @@ SOURCE=..\..\fluid\Fluid_Plugins.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\fluid\FluidType.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\fluid\function_panel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\FunctionType.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\GroupType.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\MenuType.cxx
 # End Source File
 # Begin Source File
 
@@ -333,6 +329,18 @@ SOURCE=..\..\fluid\undo.cxx
 # Begin Source File
 
 SOURCE=..\..\fluid\widget_panel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\WidgetClassType.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\WidgetType.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\WindowType.cxx
 # End Source File
 # End Target
 # End Project

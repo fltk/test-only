@@ -102,7 +102,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "NDEBUG" /D "FL_SHARED" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /c
 # SUBTRACT BASE CPP /YX
-# ADD CPP /nologo /MD /W1 /GX- /O1 /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "NDEBUG" /D "FL_SHARED" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_MSC_DLL" /c
+# ADD CPP /nologo /MD /O1 /Ob2 /I "." /I "../.." /I "../../fltk/compat" /I "../visualc" /D "NDEBUG" /D "FL_SHARED" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "_MSC_DLL" /c
 # SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
@@ -136,34 +136,44 @@ DEP_CPP_ADD_I=\
 
 SOURCE=..\..\src\addarc.cxx
 DEP_CPP_ADDAR=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\addcurve.cxx
 DEP_CPP_ADDCU=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -173,14 +183,13 @@ DEP_CPP_ADJUS=\
 	"..\..\fltk\adjuster.h"\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\types.h"\
-	"..\..\fltk\xbmimage.h"\
 	"..\..\src\fastarrow.h"\
 	"..\..\src\mediumarrow.h"\
 	"..\..\src\slowarrow.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\image.h"\
@@ -190,6 +199,7 @@ DEP_CPP_ADJUS=\
 	{$(INCLUDE)}"fltk\symbol.h"\
 	{$(INCLUDE)}"fltk\valuator.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
+	{$(INCLUDE)}"fltk\xbmimage.h"\
 	
 # End Source File
 # Begin Source File
@@ -214,22 +224,27 @@ SOURCE=..\..\src\args.cxx
 DEP_CPP_ARGS_=\
 	"..\..\fltk\error.h"\
 	"..\..\fltk\filename.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\Monitor.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -243,9 +258,9 @@ DEP_CPP_BARGR=\
 	"..\..\fltk\bargroup.h"\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
@@ -261,21 +276,26 @@ DEP_CPP_BARGR=\
 SOURCE=..\..\src\bmpImage.cxx
 DEP_CPP_BMPIM=\
 	"..\..\fltk\error.h"\
-	"..\..\fltk\events.h"\
-	"..\..\fltk\sharedimage.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\types.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\image.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\sharedimage.h"\
 	{$(INCLUDE)}"fltk\symbol.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -287,17 +307,17 @@ DEP_CPP_BROWS=\
 	"..\..\fltk\cursor.h"\
 	"..\..\fltk\damage.h"\
 	"..\..\fltk\error.h"\
-	"..\..\fltk\events.h"\
-	"..\..\fltk\item.h"\
-	"..\..\fltk\itemgroup.h"\
 	"..\..\fltk\layout.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\font.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\item.h"\
+	{$(INCLUDE)}"fltk\itemgroup.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
@@ -315,10 +335,10 @@ SOURCE=..\..\src\Button.cxx
 DEP_CPP_BUTTO=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
@@ -354,14 +374,14 @@ SOURCE=..\..\src\Choice.cxx
 DEP_CPP_CHOIC=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
-	"..\..\fltk\item.h"\
 	{$(INCLUDE)}"fltk\choice.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\item.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
@@ -374,22 +394,27 @@ DEP_CPP_CHOIC=\
 
 SOURCE=..\..\src\clip.cxx
 DEP_CPP_CLIP_=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\clip.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -398,9 +423,9 @@ SOURCE=..\..\src\Clock.cxx
 DEP_CPP_CLOCK=\
 	"..\..\fltk\clock.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
@@ -413,16 +438,22 @@ DEP_CPP_CLOCK=\
 
 SOURCE=..\..\src\Color.cxx
 DEP_CPP_COLOR=\
+	"..\..\fltk\fltk_cairo.h"\
+	"..\..\fltk\string.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -433,24 +464,24 @@ DEP_CPP_COLOR_=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\colorchooser.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
-	"..\..\fltk\item.h"\
 	"..\..\fltk\layout.h"\
 	"..\..\fltk\math.h"\
-	"..\..\fltk\popupmenu.h"\
 	"..\..\fltk\returnbutton.h"\
 	"..\..\fltk\valueinput.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\floatinput.h"\
 	{$(INCLUDE)}"fltk\group.h"\
 	{$(INCLUDE)}"fltk\input.h"\
+	{$(INCLUDE)}"fltk\item.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\numericinput.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\popupmenu.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\symbol.h"\
@@ -470,11 +501,11 @@ DEP_CPP_COMBO=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\ComboBox.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\string.h"\
 	{$(INCLUDE)}"fltk\choice.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
@@ -491,8 +522,8 @@ DEP_CPP_COMBO=\
 
 SOURCE=..\..\src\compose.cxx
 DEP_CPP_COMPO=\
-	"..\..\fltk\events.h"\
 	".\config.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	
 # End Source File
@@ -501,20 +532,25 @@ DEP_CPP_COMPO=\
 SOURCE=..\..\src\Cursor.cxx
 DEP_CPP_CURSO=\
 	"..\..\fltk\cursor.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -524,14 +560,14 @@ DEP_CPP_CYCLE=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\cyclebutton.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
-	"..\..\fltk\item.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\item.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
@@ -563,10 +599,10 @@ DEP_CPP_DIAL_=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
 	"..\..\fltk\dial.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\math.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
@@ -598,25 +634,30 @@ DEP_CPP_DIAMO=\
 SOURCE=..\..\src\dnd.cxx
 DEP_CPP_DND_C=\
 	"..\..\fltk\cursor.h"\
-	"..\..\fltk\events.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\dnd.cxx"\
 	"..\..\src\win32\dnd.cxx"\
 	"..\..\src\x11\dnd.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -637,7 +678,7 @@ DEP_CPP_DRAW_=\
 SOURCE=..\..\src\drawimage.cxx
 DEP_CPP_DRAWI=\
 	"..\..\fltk\error.h"\
-	"..\..\fltk\events.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\types.h"\
 	"..\..\fltk\x.h"\
@@ -645,18 +686,23 @@ DEP_CPP_DRAWI=\
 	"..\..\src\win32\drawimage.cxx"\
 	"..\..\src\x11\drawimage.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\font.h"\
 	{$(INCLUDE)}"fltk\image.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\symbol.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	{$(INCLUDE)}"src\x11\XColorMap.h"\
 	
 # End Source File
@@ -701,37 +747,47 @@ DEP_CPP_ENGRA=\
 SOURCE=..\..\src\error.cxx
 DEP_CPP_ERROR=\
 	"..\..\fltk\error.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\x.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\event_key_state.cxx
 DEP_CPP_EVENT=\
-	"..\..\fltk\events.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\event_key_state.cxx"\
 	"..\..\src\win32\event_key_state.cxx"\
 	"..\..\src\x11\event_key_state.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -751,8 +807,6 @@ DEP_CPP_FILE_=\
 	"..\..\fltk\fileicon.h"\
 	"..\..\fltk\fileinput.h"\
 	"..\..\fltk\filename.h"\
-	"..\..\fltk\invisiblebox.h"\
-	"..\..\fltk\popupmenu.h"\
 	"..\..\fltk\Preferences.h"\
 	"..\..\fltk\returnbutton.h"\
 	"..\..\fltk\run.h"\
@@ -767,8 +821,10 @@ DEP_CPP_FILE_=\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
 	{$(INCLUDE)}"fltk\input.h"\
+	{$(INCLUDE)}"fltk\invisiblebox.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\popupmenu.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\scrollbar.h"\
 	{$(INCLUDE)}"fltk\slider.h"\
@@ -787,7 +843,6 @@ DEP_CPP_FILEB=\
 	"..\..\fltk\filebrowser.h"\
 	"..\..\fltk\fileicon.h"\
 	"..\..\fltk\filename.h"\
-	"..\..\fltk\item.h"\
 	"..\..\fltk\string.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
@@ -795,6 +850,7 @@ DEP_CPP_FILEB=\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\font.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\item.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
@@ -819,14 +875,11 @@ DEP_CPP_FILEC=\
 	"..\..\fltk\fileicon.h"\
 	"..\..\fltk\fileinput.h"\
 	"..\..\fltk\filename.h"\
-	"..\..\fltk\invisiblebox.h"\
-	"..\..\fltk\popupmenu.h"\
 	"..\..\fltk\Preferences.h"\
 	"..\..\fltk\returnbutton.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\tiledgroup.h"\
 	"..\..\fltk\types.h"\
-	"..\..\fltk\xbmimage.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\checkbutton.h"\
 	{$(INCLUDE)}"fltk\choice.h"\
@@ -837,8 +890,10 @@ DEP_CPP_FILEC=\
 	{$(INCLUDE)}"fltk\group.h"\
 	{$(INCLUDE)}"fltk\image.h"\
 	{$(INCLUDE)}"fltk\input.h"\
+	{$(INCLUDE)}"fltk\invisiblebox.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\popupmenu.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\scrollbar.h"\
 	{$(INCLUDE)}"fltk\slider.h"\
@@ -847,6 +902,7 @@ DEP_CPP_FILEC=\
 	{$(INCLUDE)}"fltk\valuator.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\xbmimage.h"\
 	
 # End Source File
 # Begin Source File
@@ -857,19 +913,14 @@ DEP_CPP_FILECH=\
 	"..\..\fltk\browser.h"\
 	"..\..\fltk\cursor.h"\
 	"..\..\fltk\DoubleBufferWindow.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\filebrowser.h"\
 	"..\..\fltk\filechooser.h"\
 	"..\..\fltk\fileicon.h"\
 	"..\..\fltk\fileinput.h"\
 	"..\..\fltk\filename.h"\
-	"..\..\fltk\invisiblebox.h"\
-	"..\..\fltk\item.h"\
-	"..\..\fltk\popupmenu.h"\
 	"..\..\fltk\Preferences.h"\
 	"..\..\fltk\returnbutton.h"\
 	"..\..\fltk\run.h"\
-	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\tiledgroup.h"\
 	"..\..\fltk\types.h"\
@@ -877,15 +928,20 @@ DEP_CPP_FILECH=\
 	{$(INCLUDE)}"fltk\checkbutton.h"\
 	{$(INCLUDE)}"fltk\choice.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
 	{$(INCLUDE)}"fltk\image.h"\
 	{$(INCLUDE)}"fltk\input.h"\
+	{$(INCLUDE)}"fltk\invisiblebox.h"\
+	{$(INCLUDE)}"fltk\item.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\popupmenu.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\scrollbar.h"\
+	{$(INCLUDE)}"fltk\sharedimage.h"\
 	{$(INCLUDE)}"fltk\slider.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\symbol.h"\
@@ -902,13 +958,13 @@ DEP_CPP_FILEI=\
 	"..\..\fltk\browser.h"\
 	"..\..\fltk\fileicon.h"\
 	"..\..\fltk\filename.h"\
-	"..\..\fltk\item.h"\
 	"..\..\fltk\string.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\item.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
@@ -927,12 +983,12 @@ DEP_CPP_FILEIN=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\cursor.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\fileinput.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\string.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
@@ -1005,34 +1061,44 @@ DEP_CPP_FILENAME_N=\
 
 SOURCE=..\..\src\fillarc.cxx
 DEP_CPP_FILLA=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\fillrect.cxx
 DEP_CPP_FILLR=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -1040,16 +1106,16 @@ DEP_CPP_FILLR=\
 SOURCE=..\..\src\Fl_Menu_Item.cxx
 DEP_CPP_FL_ME=\
 	"..\..\fltk\compat\fl\fl_menu_item.h"\
-	"..\..\fltk\divider.h"\
-	"..\..\fltk\events.h"\
-	"..\..\fltk\item.h"\
-	"..\..\fltk\itemgroup.h"\
-	"..\..\fltk\popupmenu.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\divider.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\item.h"\
+	{$(INCLUDE)}"fltk\itemgroup.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
+	{$(INCLUDE)}"fltk\popupmenu.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
@@ -1059,8 +1125,8 @@ DEP_CPP_FL_ME=\
 
 SOURCE=..\..\src\FloatInput.cxx
 DEP_CPP_FLOAT=\
-	"..\..\fltk\events.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\floatinput.h"\
@@ -1075,24 +1141,29 @@ DEP_CPP_FLOAT=\
 
 SOURCE=..\..\src\fltk_theme.cxx
 DEP_CPP_FLTK_=\
-	"..\..\fltk\events.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\Monitor.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\win32\fltk_theme.cxx"\
-	"..\..\src\x11\fltk_theme.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\font.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -1100,7 +1171,7 @@ DEP_CPP_FLTK_=\
 SOURCE=..\..\src\Font.cxx
 DEP_CPP_FONT_=\
 	"..\..\fltk\error.h"\
-	"..\..\fltk\events.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\utf.h"\
@@ -1109,19 +1180,24 @@ DEP_CPP_FONT_=\
 	"..\..\src\win32\Font.cxx"\
 	"..\..\src\x11\Font.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\font.h"\
 	{$(INCLUDE)}"fltk\group.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	{$(INCLUDE)}"src\osx\utf8tomac.cxx"\
 	{$(INCLUDE)}"src\x11\Font_xft.cxx"\
 	{$(INCLUDE)}"src\x11\Font_xlfd.cxx"\
@@ -1132,20 +1208,25 @@ DEP_CPP_FONT_=\
 
 SOURCE=..\..\src\gifImage.cxx
 DEP_CPP_GIFIM=\
-	"..\..\fltk\sharedimage.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\types.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\image.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\sharedimage.h"\
 	{$(INCLUDE)}"fltk\symbol.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -1154,11 +1235,11 @@ SOURCE=..\..\src\Group.cxx
 DEP_CPP_GROUP=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\layout.h"\
 	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
@@ -1174,16 +1255,21 @@ DEP_CPP_GROUP=\
 
 SOURCE=..\..\src\GSave.cxx
 DEP_CPP_GSAVE=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -1192,14 +1278,13 @@ SOURCE=..\..\src\HelpView.cxx
 DEP_CPP_HELPV=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\cursor.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\HelpView.h"\
-	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\types.h"\
 	"..\..\fltk\xpmimage.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\font.h"\
@@ -1208,6 +1293,7 @@ DEP_CPP_HELPV=\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\scrollbar.h"\
+	{$(INCLUDE)}"fltk\sharedimage.h"\
 	{$(INCLUDE)}"fltk\slider.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\symbol.h"\
@@ -1219,10 +1305,10 @@ DEP_CPP_HELPV=\
 
 SOURCE=..\..\src\HighlightButton.cxx
 DEP_CPP_HIGHL=\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\highlightbutton.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
@@ -1234,27 +1320,32 @@ DEP_CPP_HIGHL=\
 
 SOURCE=..\..\src\Image.cxx
 DEP_CPP_IMAGE=\
-	"..\..\fltk\events.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\types.h"\
 	"..\..\fltk\x.h"\
-	"..\..\fltk\xbmimage.h"\
 	"..\..\src\osx\Image.cxx"\
 	"..\..\src\win32\Image.cxx"\
 	"..\..\src\x11\Image.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\image.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\symbol.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
+	{$(INCLUDE)}"fltk\xbmimage.h"\
 	
 # End Source File
 # Begin Source File
@@ -1263,11 +1354,11 @@ SOURCE=..\..\src\Input.cxx
 DEP_CPP_INPUT=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\utf.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\input.h"\
@@ -1285,11 +1376,11 @@ DEP_CPP_INPUTB=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\browser.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\inputbrowser.h"\
 	"..\..\fltk\Monitor.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
@@ -1311,10 +1402,10 @@ DEP_CPP_INPUTB=\
 
 SOURCE=..\..\src\InvisibleWidget.cxx
 DEP_CPP_INVIS=\
-	"..\..\fltk\invisiblebox.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\invisiblebox.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
@@ -1326,17 +1417,16 @@ SOURCE=..\..\src\Item.cxx
 DEP_CPP_ITEM_=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\divider.h"\
-	"..\..\fltk\item.h"\
-	"..\..\fltk\itemgroup.h"\
-	"..\..\fltk\radiobutton.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\checkbutton.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\divider.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\item.h"\
+	{$(INCLUDE)}"fltk\itemgroup.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
@@ -1349,20 +1439,25 @@ DEP_CPP_ITEM_=\
 
 SOURCE=..\..\src\key_name.cxx
 DEP_CPP_KEY_N=\
-	"..\..\fltk\events.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -1388,7 +1483,7 @@ DEP_CPP_LIGHT=\
 
 SOURCE=..\..\src\list_fonts.cxx
 DEP_CPP_LIST_=\
-	"..\..\fltk\events.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\x.h"\
@@ -1396,16 +1491,21 @@ DEP_CPP_LIST_=\
 	"..\..\src\win32\list_fonts.cxx"\
 	"..\..\src\x11\list_fonts.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\font.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	{$(INCLUDE)}"src\x11\IFont.h"\
 	{$(INCLUDE)}"src\x11\list_fonts_xlfd.cxx"\
 	
@@ -1414,39 +1514,49 @@ DEP_CPP_LIST_=\
 
 SOURCE=..\..\src\load_plugin.cxx
 DEP_CPP_LOAD_=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\load_plugin.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\dlload_osx.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\lock.cxx
 DEP_CPP_LOCK_=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\Threads.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\win32\lock.cxx"\
 	"..\..\src\x11\lock.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -1458,12 +1568,12 @@ SOURCE=..\..\src\mediumarrow.h
 SOURCE=..\..\src\Menu.cxx
 DEP_CPP_MENU_=\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
-	"..\..\fltk\item.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\item.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
@@ -1474,14 +1584,15 @@ DEP_CPP_MENU_=\
 
 SOURCE=..\..\src\Menu_add.cxx
 DEP_CPP_MENU_A=\
-	"..\..\fltk\divider.h"\
-	"..\..\fltk\item.h"\
-	"..\..\fltk\itemgroup.h"\
+	"..\..\fltk\string.h"\
 	"..\..\src\array.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\divider.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\item.h"\
+	{$(INCLUDE)}"fltk\itemgroup.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
@@ -1492,8 +1603,8 @@ DEP_CPP_MENU_A=\
 
 SOURCE=..\..\src\Menu_global.cxx
 DEP_CPP_MENU_G=\
-	"..\..\fltk\events.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
@@ -1510,16 +1621,16 @@ SOURCE=..\..\src\Menu_popup.cxx
 DEP_CPP_MENU_P=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
-	"..\..\fltk\item.h"\
 	"..\..\fltk\labeltype.h"\
 	"..\..\fltk\Monitor.h"\
 	"..\..\fltk\run.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\item.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\menuwindow.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
@@ -1536,17 +1647,17 @@ SOURCE=..\..\src\MenuBar.cxx
 DEP_CPP_MENUB=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
-	"..\..\fltk\item.h"\
-	"..\..\fltk\menubar.h"\
 	"..\..\fltk\tooltip.h"\
 	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\item.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
+	{$(INCLUDE)}"fltk\menubar.h"\
 	{$(INCLUDE)}"fltk\menuwindow.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
@@ -1561,21 +1672,26 @@ DEP_CPP_MENUB=\
 SOURCE=..\..\src\MenuWindow.cxx
 DEP_CPP_MENUW=\
 	"..\..\fltk\damage.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
 	{$(INCLUDE)}"fltk\menuwindow.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -1583,10 +1699,14 @@ DEP_CPP_MENUW=\
 SOURCE=..\..\src\message.cxx
 DEP_CPP_MESSA=\
 	"..\..\fltk\ask.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\returnbutton.h"\
 	"..\..\fltk\secretinput.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\x.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
@@ -1594,13 +1714,14 @@ DEP_CPP_MESSA=\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
 	{$(INCLUDE)}"fltk\input.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -1621,10 +1742,10 @@ DEP_CPP_MULTI=\
 
 SOURCE=..\..\src\NumericInput.cxx
 DEP_CPP_NUMER=\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\string.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\input.h"\
@@ -1647,10 +1768,10 @@ DEP_CPP_NUMERI=\
 
 SOURCE=..\..\src\Output.cxx
 DEP_CPP_OUTPU=\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\output.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\input.h"\
@@ -1679,33 +1800,43 @@ DEP_CPP_OVALB=\
 
 SOURCE=..\..\src\overlay_rect.cxx
 DEP_CPP_OVERL=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\own_colormap.cxx
 DEP_CPP_OWN_C=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\visual.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -1730,18 +1861,23 @@ DEP_CPP_PACKE=\
 
 SOURCE=..\..\src\path.cxx
 DEP_CPP_PATH_=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -1765,16 +1901,16 @@ SOURCE=..\..\src\PopupMenu.cxx
 DEP_CPP_POPUP=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
-	"..\..\fltk\item.h"\
-	"..\..\fltk\popupmenu.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\item.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\popupmenu.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\symbol.h"\
@@ -1833,30 +1969,35 @@ DEP_CPP_RADIO=\
 
 SOURCE=..\..\src\readimage.cxx
 DEP_CPP_READI=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\readimage.cxx"\
 	"..\..\src\win32\readimage.cxx"\
 	"..\..\src\x11\readimage.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\RepeatButton.cxx
 DEP_CPP_REPEA=\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\repeatbutton.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
@@ -1868,11 +2009,11 @@ DEP_CPP_REPEA=\
 
 SOURCE=..\..\src\ReturnButton.cxx
 DEP_CPP_RETUR=\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\returnbutton.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
@@ -1886,12 +2027,12 @@ DEP_CPP_RETUR=\
 
 SOURCE=..\..\src\rgbImage.cxx
 DEP_CPP_RGBIM=\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\rgbimage.h"\
 	"..\..\fltk\types.h"\
 	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\image.h"\
@@ -1937,13 +2078,14 @@ DEP_CPP_RUN_C=\
 	"..\..\fltk\browser.h"\
 	"..\..\fltk\damage.h"\
 	"..\..\fltk\error.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\filename.h"\
 	"..\..\fltk\FL_VERSION.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\layout.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\Monitor.h"\
 	"..\..\fltk\run.h"\
+	"..\..\fltk\SystemMenuBar.h"\
 	"..\..\fltk\tooltip.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\visual.h"\
@@ -1952,15 +2094,22 @@ DEP_CPP_RUN_C=\
 	"..\..\src\win32\run.cxx"\
 	"..\..\src\x11\run.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\font.h"\
 	{$(INCLUDE)}"fltk\group.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\item.h"\
+	{$(INCLUDE)}"fltk\itemgroup.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
+	{$(INCLUDE)}"fltk\menubar.h"\
 	{$(INCLUDE)}"fltk\menuwindow.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\scrollbar.h"\
@@ -1970,6 +2119,7 @@ DEP_CPP_RUN_C=\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	{$(INCLUDE)}"src\osx\mactoutf8.cxx"\
 	{$(INCLUDE)}"src\win32\pktdef.h"\
 	{$(INCLUDE)}"src\win32\wintab.h"\
@@ -1992,10 +2142,10 @@ SOURCE=..\..\src\Scrollbar.cxx
 DEP_CPP_SCROL=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
@@ -2014,12 +2164,12 @@ SOURCE=..\..\src\ScrollGroup.cxx
 DEP_CPP_SCROLL=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\layout.h"\
 	"..\..\fltk\scrollgroup.h"\
 	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
@@ -2037,40 +2187,50 @@ DEP_CPP_SCROLL=\
 
 SOURCE=..\..\src\scrollrect.cxx
 DEP_CPP_SCROLLR=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\setcolor.cxx
 DEP_CPP_SETCO=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\colormap.h"\
 	"..\..\src\osx\setcolor.cxx"\
 	"..\..\src\win32\setcolor.cxx"\
 	"..\..\src\x11\setcolor.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	{$(INCLUDE)}"src\x11\XColorMap.h"\
 	
 # End Source File
@@ -2086,17 +2246,22 @@ DEP_CPP_SETDI=\
 
 SOURCE=..\..\src\setvisual.cxx
 DEP_CPP_SETVI=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\visual.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -2118,18 +2283,21 @@ DEP_CPP_SHADO=\
 
 SOURCE=..\..\src\ShapedWindow.cxx
 DEP_CPP_SHAPE=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\shapedwindow.h"\
 	"..\..\fltk\types.h"\
 	"..\..\fltk\x.h"\
-	"..\..\fltk\xbmimage.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
 	{$(INCLUDE)}"fltk\image.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
@@ -2137,36 +2305,38 @@ DEP_CPP_SHAPE=\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
+	{$(INCLUDE)}"fltk\xbmimage.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\SharedImage.cxx
 DEP_CPP_SHARE=\
-	"..\..\fltk\events.h"\
-	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\types.h"\
-	"..\..\fltk\xbmimage.h"\
 	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\image.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\sharedimage.h"\
 	{$(INCLUDE)}"fltk\symbol.h"\
+	{$(INCLUDE)}"fltk\xbmimage.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\ShortcutAssignment.cxx
 DEP_CPP_SHORT=\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\string.h"\
 	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
@@ -2180,11 +2350,11 @@ SOURCE=..\..\src\show_colormap.cxx
 DEP_CPP_SHOW_=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\Monitor.h"\
 	"..\..\fltk\show_colormap.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
@@ -2203,11 +2373,11 @@ SOURCE=..\..\src\Slider.cxx
 DEP_CPP_SLIDE=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\math.h"\
 	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
@@ -2229,15 +2399,15 @@ SOURCE=..\..\src\StatusBarGroup.cxx
 DEP_CPP_STATU=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
-	"..\..\fltk\invisiblebox.h"\
 	"..\..\fltk\layout.h"\
 	"..\..\fltk\StatusBarGroup.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\invisiblebox.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
@@ -2258,12 +2428,12 @@ DEP_CPP_STRIN=\
 
 SOURCE=..\..\src\StringList.cxx
 DEP_CPP_STRING=\
-	"..\..\fltk\item.h"\
 	"..\..\fltk\stringlist.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\item.h"\
 	{$(INCLUDE)}"fltk\menu.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
@@ -2322,13 +2492,13 @@ SOURCE=..\..\src\TabGroup.cxx
 DEP_CPP_TABGR=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\layout.h"\
 	"..\..\fltk\tabgroup.h"\
 	"..\..\fltk\tooltip.h"\
 	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
@@ -2343,13 +2513,41 @@ DEP_CPP_TABGR=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\TabGroup2.cxx
+DEP_CPP_TABGRO=\
+	"..\..\fltk\ask.h"\
+	"..\..\fltk\box.h"\
+	"..\..\fltk\MenuBuild.h"\
+	"..\..\fltk\tabgroup.h"\
+	{$(INCLUDE)}"fltk\choice.h"\
+	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\divider.h"\
+	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
+	{$(INCLUDE)}"fltk\fl_api.h"\
+	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\group.h"\
+	{$(INCLUDE)}"fltk\item.h"\
+	{$(INCLUDE)}"fltk\itemgroup.h"\
+	{$(INCLUDE)}"fltk\menu.h"\
+	{$(INCLUDE)}"fltk\menubar.h"\
+	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\popupmenu.h"\
+	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\style.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
+	{$(INCLUDE)}"fltk\widget.h"\
+	
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\TextBuffer.cxx
 DEP_CPP_TEXTB=\
 	"..\..\fltk\ask.h"\
 	"..\..\fltk\error.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\string.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\style.h"\
@@ -2363,11 +2561,11 @@ DEP_CPP_TEXTD=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
 	"..\..\fltk\error.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\layout.h"\
 	"..\..\fltk\utf.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\font.h"\
@@ -2391,10 +2589,10 @@ DEP_CPP_TEXTD=\
 SOURCE=..\..\src\TextEditor.cxx
 DEP_CPP_TEXTE=\
 	"..\..\fltk\ask.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\texteditor.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\font.h"\
@@ -2416,11 +2614,11 @@ SOURCE=..\..\src\ThumbWheel.cxx
 DEP_CPP_THUMB=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\thumbwheel.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
@@ -2436,10 +2634,10 @@ DEP_CPP_THUMB=\
 SOURCE=..\..\src\TiledGroup.cxx
 DEP_CPP_TILED=\
 	"..\..\fltk\cursor.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\layout.h"\
 	"..\..\fltk\tiledgroup.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
@@ -2453,14 +2651,11 @@ DEP_CPP_TILED=\
 
 SOURCE=..\..\src\TiledImage.cxx
 DEP_CPP_TILEDI=\
-	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\tiledimage.h"\
-	"..\..\fltk\types.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\image.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\symbol.h"\
@@ -2471,13 +2666,13 @@ DEP_CPP_TILEDI=\
 SOURCE=..\..\src\Tooltip.cxx
 DEP_CPP_TOOLT=\
 	"..\..\fltk\box.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\Monitor.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\tooltip.h"\
 	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
@@ -2495,21 +2690,26 @@ DEP_CPP_TOOLT=\
 SOURCE=..\..\src\UpBox.cxx
 DEP_CPP_UPBOX=\
 	"..\..\fltk\box.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\symbol.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
@@ -2525,9 +2725,9 @@ DEP_CPP_UTF_C=\
 SOURCE=..\..\src\Valuator.cxx
 DEP_CPP_VALUA=\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\math.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
@@ -2542,11 +2742,11 @@ SOURCE=..\..\src\ValueInput.cxx
 DEP_CPP_VALUE=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\valueinput.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\floatinput.h"\
@@ -2567,11 +2767,11 @@ SOURCE=..\..\src\ValueOutput.cxx
 DEP_CPP_VALUEO=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\valueoutput.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
@@ -2588,11 +2788,11 @@ SOURCE=..\..\src\ValueSlider.cxx
 DEP_CPP_VALUES=\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\valueslider.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\floatinput.h"\
@@ -2622,12 +2822,12 @@ DEP_CPP_VSNPR=\
 SOURCE=..\..\src\Widget.cxx
 DEP_CPP_WIDGE=\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
 	"..\..\fltk\layout.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\string.h"\
 	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
@@ -2665,86 +2865,106 @@ DEP_CPP_WIDGET=\
 SOURCE=..\..\src\Window.cxx
 DEP_CPP_WINDO=\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\events.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\layout.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\Window_fullscreen.cxx
 DEP_CPP_WINDOW=\
-	"..\..\fltk\events.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\Monitor.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\Window_hotspot.cxx
 DEP_CPP_WINDOW_=\
-	"..\..\fltk\events.h"\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\Monitor.h"\
 	"..\..\fltk\x.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
+	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\Window_iconize.cxx
 DEP_CPP_WINDOW_I=\
+	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"cairo-features.h"\
+	{$(INCLUDE)}"cairo-win32.h"\
+	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\group.h"\
-	{$(INCLUDE)}"fltk\mac.h"\
+	{$(INCLUDE)}"fltk\osx.h"\
 	{$(INCLUDE)}"fltk\PixelType.h"\
 	{$(INCLUDE)}"fltk\rectangle.h"\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
+	{$(INCLUDE)}"fltk\x11.h"\
 	
 # End Source File
 # Begin Source File

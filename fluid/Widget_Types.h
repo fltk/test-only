@@ -403,7 +403,7 @@ class FileInputType: public WidgetType {
  public:
   virtual void ideal_size(int &w, int &h) {
     fltk::FileInput *myo = (fltk::FileInput *)o;
-    setfont(myo->textfont(), myo->textsize());
+    fltk::setfont(myo->textfont(), myo->textsize());
     h = (int) (fltk::getdescent() + myo->textsize() + 4);
     w -= o->box()->dw();
     int ww = (int)fltk::getwidth("m",1);
