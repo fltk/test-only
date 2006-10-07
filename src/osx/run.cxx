@@ -1714,6 +1714,7 @@ void fltk::paste(Widget &receiver, bool clipboard) {
       }
       GetScrapFlavorData( scrap, kScrapFlavorTypeText, &len,
 			  selection_buffer[clipboard] );
+      selection_buffer[clipboard][len] = 0;
       selection_length[clipboard] = len;
       // turn all \r characters into \n:
       for (char* p = selection_buffer[clipboard]; *p; ++p)
