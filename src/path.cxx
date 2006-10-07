@@ -876,7 +876,6 @@ void fltk::fillstrokepath(Color color) {
   setcolor(color);
   cairo_stroke(cc);
 #elif USE_QUARTZ
-  closepath();
   uchar r, g, b; 
   split_color(color, r, g, b);
   CGContextSetRGBStrokeColor(quartz_gc, r/255.0f, g/255.0f, b/255.0f, 1.0);
