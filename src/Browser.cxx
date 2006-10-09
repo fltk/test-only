@@ -1338,7 +1338,7 @@ int Browser::handle(int event) {
   case DRAG: {
   DRAG:
     // find the item they are now pointing at:
-    bool hit = goto_position(event_y()-interior.y()+yposition_);
+    Widget * hit = goto_position(event_y()-interior.y()+yposition_);
     if (hit) set_belowmouse(); else clear_belowmouse();
     if (openclose_drag && hit && item()) {
       set_focus();

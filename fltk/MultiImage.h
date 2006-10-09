@@ -49,7 +49,7 @@ public:
   bool fills_rectangle() const;
   bool is_frame() const;
 
-  MultiImage::~MultiImage() { delete [] pairs; }
+  ~MultiImage() { release();}
 
   //! for MultiImage arrays construction using set() for post initialization
   MultiImage() { pairs=0; n_images = 0; } 
@@ -59,7 +59,8 @@ public:
   
   //! for unlimited images state post construction affectation
   void set (int count, Symbol* img0, ...);
-
+  //! permit to explicitly unallocate the internal image vector
+  void release() { if (pairs) delete [] pairs; }
   /* compatibility convenient constructors */
   MultiImage(Symbol& img0, Flags f1, Symbol& img1) { set(2, &img0,f1,&img1); }
   MultiImage(Symbol& img0, Flags f1, Symbol& img1,Flags f2, Symbol& img2) {
