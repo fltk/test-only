@@ -36,15 +36,11 @@
 #include <fltk/filename.h>
 
 #if ! HAVE_SCANDIR
-# if !defined (WIN32) || defined(__CYGWIN__) 
 extern "C" {
-# endif
 int scandir (const char *dir, dirent ***namelist,
 	 int (*select)(dirent *),
 	 int (*compar)(const dirent*const*, const dirent*const*));
-# if !defined (WIN32) || defined(__CYGWIN__) 
 }
-# endif
 #endif
 
 int fltk::alphasort(const dirent*const*a, const dirent*const*b) {

@@ -33,6 +33,10 @@
   struct dirent { char d_name[1]; };
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int scandir(const char *dirname, struct dirent ***namelist,
     int (*select)(struct dirent *),
     int (*compar)(const dirent*const*, const dirent*const*)) {
@@ -89,6 +93,11 @@ int scandir(const char *dirname, struct dirent ***namelist,
   *namelist = dir;
   return nDir;
 }
+
+#ifdef __cplusplus
+}
+#endif
+
 
 //
 // End of "$Id: scandir.c 4401 2005-06-27 16:42:26Z dejan $".

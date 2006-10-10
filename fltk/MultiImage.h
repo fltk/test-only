@@ -34,17 +34,19 @@ namespace fltk {
 
 class FL_API MultiImage : public Symbol
 {
+  const Symbol* image0;
   struct MultiImagePair {
-    Symbol* image;
+    const Symbol* image;
     Flags flags;
   };
-  
   MultiImagePair* pairs;
-  uchar n_images;
+  unsigned n_images;
+  void set (unsigned count, const Symbol* img0, ...);
 
 public:
   void _measure(int&, int&) const;
   void _draw(const Rectangle&) const;
+  const Symbol* current_image() const;
   void inset(Rectangle&) const;
   bool fills_rectangle() const;
   bool is_frame() const;
@@ -55,38 +57,40 @@ public:
   MultiImage() { pairs=0; n_images = 0; } 
   
   //! constructor for unlimited images state affectation
-  MultiImage(int count, Symbol* img0, va_list ap) { set(count,img0, ap); }
-  
-  //! for unlimited images state post construction affectation
-  void set (int count, Symbol* img0, ...);
-  //! permit to explicitly unallocate the internal image vector
-  void release() { if (pairs) delete [] pairs; }
+  MultiImage(int count, const Symbol* img0, va_list ap) { set(count,img0, ap); }
+  void add(Flags flags, const Symbol& image);
+
+  //! Destroys everything except image0.
+  void release() { delete[] pairs; pairs = 0; n_images = 0; }
+
+  MultiImage(const Symbol& img0) : image0(&img0), pairs(0), n_images(0) {}
+
   /* compatibility convenient constructors */
-  MultiImage(Symbol& img0, Flags f1, Symbol& img1) { set(2, &img0,f1,&img1); }
-  MultiImage(Symbol& img0, Flags f1, Symbol& img1,Flags f2, Symbol& img2) {
+  MultiImage(const Symbol& img0, Flags f1, const Symbol& img1) { set(2, &img0,f1,&img1); }
+  MultiImage(const Symbol& img0, Flags f1, const Symbol& img1,Flags f2, const Symbol& img2) {
     set(3, &img0, f1, &img1, f2, &img2); 
   }
-  MultiImage(Symbol& img0, Flags f1, Symbol& img1, Flags f2, Symbol& img2, Flags f3, Symbol& img3) {
+  MultiImage(const Symbol& img0, Flags f1, const Symbol& img1, Flags f2, const Symbol& img2, Flags f3, const Symbol& img3) {
     set(4, &img0, f1, &img1, f2, &img2, f3); 
   }
-  MultiImage(Symbol& img0, Flags f1, Symbol& img1, Flags f2, Symbol& img2, Flags f3, Symbol& img3,
-	     Flags f4, Symbol& img4) {
+  MultiImage(const Symbol& img0, Flags f1, const Symbol& img1, Flags f2, const Symbol& img2, Flags f3, const Symbol& img3,
+	     Flags f4, const Symbol& img4) {
     set(5, &img0, f1, &img1, f2, &img2, f3, &img3, f4, &img4); 
   }
-  MultiImage(Symbol& img0, Flags f1, Symbol& img1, Flags f2, Symbol& img2, Flags f3, Symbol& img3,
-	     Flags f4, Symbol& img4, Flags f5, Symbol& img5) {
+  MultiImage(const Symbol& img0, Flags f1, const Symbol& img1, Flags f2, const Symbol& img2, Flags f3, const Symbol& img3,
+	     Flags f4, const Symbol& img4, Flags f5, const Symbol& img5) {
     set(6, &img0, f1, &img1, f2, &img2, f3, &img3, f4, &img4, f5, &img5); 
   }
-  MultiImage(Symbol& img0, Flags f1, Symbol& img1, Flags f2, Symbol& img2, Flags f3, Symbol& img3,
-	     Flags f4, Symbol& img4, Flags f5, Symbol& img5, Flags f6, Symbol& img6) {
+  MultiImage(const Symbol& img0, Flags f1, const Symbol& img1, Flags f2, const Symbol& img2, Flags f3, const Symbol& img3,
+	     Flags f4, const Symbol& img4, Flags f5, const Symbol& img5, Flags f6, const Symbol& img6) {
     set(7, &img0, f1, &img1, f2, &img2, f3, &img3, f4, &img4, f5, &img5, f6, &img6); 
   }
-  MultiImage(Symbol& img0, Flags f1, Symbol& img1, Flags f2, Symbol& img2, Flags f3, Symbol& img3,
-	     Flags f4, Symbol& img4, Flags f5, Symbol& img5, Flags f6, Symbol& img6,  Flags f7, Symbol& img7 ) {
+  MultiImage(const Symbol& img0, Flags f1, const Symbol& img1, Flags f2, const Symbol& img2, Flags f3, const Symbol& img3,
+	     Flags f4, const Symbol& img4, Flags f5, const Symbol& img5, Flags f6, const Symbol& img6,  Flags f7, const Symbol& img7 ) {
     set(8, &img0, f1, &img1, f2, &img2, f3, &img3, f4, &img4, f5, &img5, f6, &img6, f7, &img7); 
   }
 };
-  
+
 }
 
 

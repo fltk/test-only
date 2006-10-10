@@ -19,6 +19,7 @@ int main (int argc, char **argv) {
   fltk::Window* w;
    {fltk::Window* o = foo_window = new fltk::Window(320, 296);
     w = o;
+    o->shortcut(0xff1b);
     o->begin();
      {fltk::TabGroup* o = new fltk::TabGroup(10, 10, 300, 191);
       o->begin();
