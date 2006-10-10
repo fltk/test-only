@@ -38,9 +38,9 @@ fltk::Window *form;
 class FontDisplay : public fltk::Widget {
   void draw();
 public:
-  fltk::Font* font; unsigned size; const char* encoding;
+  fltk::Font* font; float size; const char* encoding;
   FontDisplay(fltk::Box* B, int X, int Y, int W, int H, const char* L = 0) :
-    fltk::Widget(X,Y,W,H,L) {box(B); font = 0; size = 14;}
+    fltk::Widget(X,Y,W,H,L) {box(B); font = 0; size = 14.0f;}
 };
 
 fltk::Widget* id_box;
@@ -72,7 +72,7 @@ fltk::Font** fonts; // list returned by fltk
 fltk::Group *button_group;
 fltk::CheckButton* bold_button, *italic_button;
 
-int pickedsize = 14;
+float pickedsize = 14.0f;
 
 void font_cb(fltk::Widget *, long) {
   int fn = fontobj->value();
@@ -110,7 +110,7 @@ void font_cb(fltk::Widget *, long) {
   if (!n) {
     // no sizes (this only happens on X)
     fltk::setfont(f, pickedsize);
-    textobj->size = (int)fltk::getsize();
+    textobj->size = fltk::getsize();
   } else /*if (s[0] == 0)*/ {
     // many sizes;
     int j = 1;
@@ -120,7 +120,7 @@ void font_cb(fltk::Widget *, long) {
       else sprintf(buf,"%d",i);
       sizeobj->add(buf);
     }
-    sizeobj->value(pickedsize-1);
+    sizeobj->value(int(pickedsize-1));
     textobj->size = pickedsize;
     /*  } else {
     // some sizes
@@ -155,7 +155,7 @@ void size_cb(fltk::Widget *, long) {
 //  if (!i) return;
   const char *c = sizeobj->child(i)->label();
   while (*c < '0' || *c > '9') c++;
-  pickedsize = atoi(c);
+  pickedsize = (float) atoi(c);
   textobj->size = pickedsize;
   textobj->redraw();
 }

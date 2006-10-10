@@ -132,7 +132,7 @@ public:
       n = getsize()+n;
     else if (n <= 0)
       n = normal_size;
-    setfont(getfont(), n);
+    setfont(getfont(), (float) n);
   }
   void _draw(const Rectangle&) const {dostuff();}
   void _measure(int& w, int& h) const {dostuff(); w = 0;}

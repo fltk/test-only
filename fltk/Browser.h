@@ -47,7 +47,7 @@ public:
     NO_COLUMN_SELECTED = -1 //!< means that no column has been selected by user
   };
 
-  class Mark {
+  class FL_API Mark {
     friend class Browser;
     unsigned level; // depth in hierarchy of the item
     unsigned open_level; // depth of highest closed parent
