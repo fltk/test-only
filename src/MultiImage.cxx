@@ -75,6 +75,13 @@ void MultiImage::add(Flags flags, const Symbol& image) {
     }
   }
   // this is not very efficient (it reallocates the array every time):
+  // fabien: true, I initially thought of a simple linked list impl then I thought:
+  // we have more memory to alloc and also alloc fragmentation and finally
+  // it would also slow down non-default Multimage constructors
+  // mainly because of the links pointers updates and multiple allocs 
+  // so i think we can stay with that impl. if we safely suppose
+  // that main use would be one shot alloc for MultiImage ...
+
   MultiImagePair* newpairs = new MultiImagePair[n_images+1];
   memcpy(newpairs, pairs, n_images*sizeof(*pairs));
   newpairs[n_images].flags = flags;
@@ -101,7 +108,7 @@ void MultiImage::add(Flags flags, const Symbol& image) {
 /*! Innards of the inline constructors. */
 void MultiImage::set(unsigned count, const Symbol* img0, ...) {
   image0 = img0;
-  n_images = count-1;
+  n_images = count>0 ? count-1 : 0; // don't authorize setting 2^32-1 images count on 32bit systems
   if (count > 1) {
     pairs =  new MultiImagePair[n_images];
     va_list ap;

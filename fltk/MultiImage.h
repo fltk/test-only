@@ -41,7 +41,6 @@ class FL_API MultiImage : public Symbol
   };
   MultiImagePair* pairs;
   unsigned n_images;
-  void set (unsigned count, const Symbol* img0, ...);
 
 public:
   void _measure(int&, int&) const;
@@ -57,7 +56,10 @@ public:
   MultiImage() { pairs=0; n_images = 0; } 
   
   //! constructor for unlimited images state affectation
-  MultiImage(int count, const Symbol* img0, va_list ap) { set(count,img0, ap); }
+  MultiImage(unsigned count, const Symbol* img0, va_list ap) { set(count,img0, ap); }
+    
+  void set (unsigned count, const Symbol* img0, ...); // fabien: need to be accessible because of MultiImage arrays with post (set) affectations
+
   void add(Flags flags, const Symbol& image);
 
   //! Destroys everything except image0.
