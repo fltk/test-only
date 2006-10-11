@@ -563,6 +563,8 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
   case kEventWindowBoundsChanging:
     {Rect r;
     GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &r );
+    if ((r.right - r.left == window->w()) && (r.bottom - r.top == window->h()))
+	break;
     if (window->resize(r.left, r.top, r.right-r.left, r.bottom-r.top)) {
       resize_from_system = window;
       window->layout_damage( window->layout_damage() | LAYOUT_USER );
