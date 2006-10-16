@@ -1403,16 +1403,26 @@ bool fltk::handle()
   // I now think this is an unavoidable problem with X: it is impossible
   // for a window manager to prevent the "real" notify event from being
   // sent when it resizes the contents, even though it can send an
-  // artificial event with the correct position afterwards (and some
-  // window managers do not send this fake event anyway)
-  // So anyway, do a round trip to find the correct x,y:
-  // WAS: Actually, TWO round trips! Is X stoopid or what?
+  // artificial event with the correct position afterwards. Also I think
+  // some window managers are broken and send wrong window locations
+  // or don't send the fake ConfigureNotify as all.
+  //
+  // Furthermore, some window managers send ConfigureNotify for icons
+  // or just due to bugs when the window in unmapped. This ignores them.
+  //
+  // Used to ignore MapNofify as it always came in pairs with Configure
+  // Notify so the overhead was doubled. However newer kwin sends the
+  // ConfigureNotify before the expose event causing it to be ignored.
+  // So I now obey the MapNotify event as well.
   case ConfigureNotify:
-    /*case MapNotify:*/ {
-    //window = find(xevent.xmapping.window);
+  case MapNotify: {
     if (!window) break;
     if (window->parent()) break; // ignore child windows
     if (xevent.xconfigure.window != xid(window)) break; // ignore frontbuffer
+    if (CreatedWindow::find(window)->wait_for_expose) {
+      if (xevent.type == ConfigureNotify) break; // ignore icons and wm bugs
+      CreatedWindow::find(window)->wait_for_expose = false;
+    }
     //if (!xevent.xconfigure.send_event) break; // ignore non-wm messages
 
     // figure out where Window Manager really put window:
@@ -1422,19 +1432,18 @@ bool fltk::handle()
     XTranslateCoordinates(xdisplay, xid(window), actual.root,
 			  0, 0, &X, &Y, &junk);
     Rectangle& current = CreatedWindow::find(window)->current_size;
-    if (!CreatedWindow::find(window)->wait_for_expose &&
-	(X != current.x() || Y != current.y() || W != current.w() || H != current.h())) {
+    if (X != current.x() || Y != current.y() || W != current.w() || H != current.h()) {
       window->resize(X, Y, W, H);
     }
     current.set(X,Y,W,H);
     break;}
 
-  case ReparentNotify: {
+  case ReparentNotify:
     if (!window || window->parent()) break;
     // Fix stoopid MetaCity! When you hide a window it reparents it but
     // it trashes the window position. It then uses this bad position
-    // when you restore the window:
-    // If we have hidden a window and it reparents it to nothing:
+    // when you restore the window. This code detects if this is happening
+    // and fixes the position of the hidden window.
     if (!window->visible() &&
 	xevent.xreparent.parent == XRootWindow(xdisplay, xscreen)) {
       int X = xevent.xreparent.x;
@@ -1444,7 +1453,7 @@ bool fltk::handle()
       if (X != current.x() || Y != current.y())
 	XMoveWindow(xdisplay, xid(window), current.x(), current.y());
     }
-    break;}
+    break;
 
   case Expose:
   case GraphicsExpose:
