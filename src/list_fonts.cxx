@@ -68,8 +68,44 @@ using namespace fltk;
   that names the same font. This is sufficiently painful that I have
   not done this yet.
 */
+#if defined(WIN32) && !defined(__CYGWIN__)
+static const char* GetFontSubstitutes(const char* name)
+{ 
+   static char subst_name[1024]; //used BUFLEN from bool fltk_theme()
+   
+   if ( strstr(name,"MS Shell Dlg") ||  strstr(name,"Helv")  || 
+	strstr(name,"Tms Rmn"))
+   {
+      DWORD type = REG_SZ;
+      LONG  err;
+      HKEY  key;
+
+      err = RegOpenKey(
+          HKEY_LOCAL_MACHINE,
+	  "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\FontSubstitutes",
+	  &key );
+
+      if (err == ERROR_SUCCESS)
+      {
+          DWORD len=1024;
+          err = RegQueryValueEx( key, name, 0L, &type, (BYTE*)
+                                 subst_name, &len);
+          RegCloseKey(key);
+          if ( err == ERROR_SUCCESS )
+             return subst_name;
+      }  
+   }
+   return name;
+}
+#endif
+
 fltk::Font* fltk::font(const char* name, int attributes /* = 0 */) {
   if (!name || !*name) return 0;
+
+#if defined(WIN32) && !defined(__CYGWIN__)
+  name = GetFontSubstitutes(name);
+#endif
+
   // find out if the " bold" or " italic" are on the end:
   int length = strlen(name);
   // also accept "italics" because old Nuke saved scripts used that:
