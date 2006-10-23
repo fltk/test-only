@@ -1,5 +1,6 @@
 #ifndef fltk_Threads_h
 #define fltk_Threads_h
+#include <fltk/FL_API.h>
 
 #if !defined( _WIN32) || defined(__CYGWIN__)
 // pthreads:
