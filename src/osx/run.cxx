@@ -195,7 +195,6 @@ static void *select_thread_proc(void *userdata)
                           // so parent can cancel us :(
     if (ret > 0) {
       DEBUGMSG("Select returned non-zero\n");
-      fltk::lock();
       for (int i=0; i<nfds; i++) {
 	//fprintf(stderr, "CHECKING FD %d OF %d (%d)\n", i, nfds, fd[i].fd);
 	int f = fd[i].fd;
@@ -205,11 +204,12 @@ static void *select_thread_proc(void *userdata)
 	if (FD_ISSET(f, &x)) revents |= POLLERR;
 	if (fd[i].events & revents) {
 	  DEBUGMSG("DOING CALLBACK: ");
+	  fltk::lock();
 	  fd[i].cb(f, fd[i].arg);
+	  fltk::unlock();
 	  DEBUGMSG("DONE\n");
 	}
       }
-      fltk::unlock();
       // see if we need to copy fd_sets again:
       if (FD_ISSET(G_pipe[0], &r)) {
 	DEBUGMSG("reading from G_pipe\n");
@@ -229,6 +229,8 @@ static void *select_thread_proc(void *userdata)
 static void HandleDataReady()
 {
 #if 0
+  fl_lock_function();
+  in_main_thread_ = true;
   timeval t = { 0, 0 };		// quick check
   fd_set r = fdsets[0];
   fd_set w = fdsets[1];
@@ -249,6 +251,8 @@ static void HandleDataReady()
       }
     }
   }
+  in_main_thread_ = false;
+  fl_unlock_function();
 #endif
 }
 
@@ -256,8 +260,6 @@ static void HandleDataReady()
 static void nothing() {}
 void (*fl_lock_function)() = nothing;
 void (*fl_unlock_function)() = nothing;
-
-static int got_events = 0;
 
 ////////////////////////////////////////////////////////////////
 
@@ -340,11 +342,6 @@ static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, E
   OSStatus ret = eventNotHandledErr;
   HICommand cmd;
 
-  fl_lock_function();
-  in_main_thread_ = true;
-
-  got_events = 1;
-
   switch ( GetEventClass( event ) )
   {
   case kEventClassMouse:
@@ -367,7 +364,11 @@ static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, E
     {
       case kEventCommandProcess:
         GetEventParameter( event, kEventParamDirectObject, typeHICommand, NULL, sizeof(HICommand), NULL, &cmd );
+	fl_lock_function();
+	in_main_thread_ = true;
         ret = HandleMenu( &cmd );
+	in_main_thread_ = false;
+	fl_unlock_function();
         break;
     }
     break;
@@ -385,9 +386,6 @@ static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, E
   }
   if ( ret == eventNotHandledErr )
     ret = CallNextEventHandler( nextHandler, event ); // let the OS handle the activation, but continue to get a click-through effect
-
-  in_main_thread_ = false;
-  fl_unlock_function();
 
   return ret;
 }
@@ -433,7 +431,7 @@ static inline int fl_wait(double time)
 					  appEvents, 0, 0L );
   }
 
-  got_events = 0;
+  int got_events = 0;
   // START A THREAD TO WATCH FOR DATA READY
   if ( nfds && !select_thread) {
     // detect if calling program did not do fltk::lock() and do it:
@@ -450,7 +448,7 @@ static inline int fl_wait(double time)
 
   EventRef event;
   if (!ReceiveNextEvent(0, NULL, time, true, &event)) {
-    got_events = 1;
+    ++got_events;
     OSErr ret = SendEventToEventTarget( event, target );
     // Not sure what this does, but it makes some UI actions work:
     if (ret!=noErr) {
@@ -557,14 +555,17 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
   UInt32 kind = GetEventKind( event );
   OSStatus ret = noErr;
   Window *window = (Window*)userData;
+  fl_lock_function();
+  in_main_thread_ = true;
 
   switch ( kind )
   {
   case kEventWindowBoundsChanging:
     {Rect r;
     GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &r );
-    if ((r.right - r.left == window->w()) && (r.bottom - r.top == window->h()))
-	break;
+    // WAS: this if breaks window position snapping done by the layout() method:
+//     if ((r.right - r.left == window->w()) && (r.bottom - r.top == window->h()))
+// 	break;
     if (window->resize(r.left, r.top, r.right-r.left, r.bottom-r.top)) {
       resize_from_system = window;
       window->layout_damage( window->layout_damage() | LAYOUT_USER );
@@ -612,7 +613,8 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
     ret = eventNotHandledErr;
     break;
   }
-
+  in_main_thread_ = false;
+  fl_unlock_function();
   return ret;
 }
 
@@ -632,6 +634,8 @@ static pascal OSStatus carbonMousewheelHandler( EventHandlerCallRef nextHandler,
   GetEventParameter( event, kEventParamMouseWheelDelta, typeLongInteger, 
                      NULL, sizeof(long), NULL, &delta );
   OSStatus ret = noErr;
+  fl_lock_function();
+  in_main_thread_ = true;
   if ( axis == kEventMouseWheelAxisX ) {
     e_dx = delta;
     e_dy = 0;
@@ -643,7 +647,8 @@ static pascal OSStatus carbonMousewheelHandler( EventHandlerCallRef nextHandler,
   } else {
     ret = eventNotHandledErr;
   }
-
+  in_main_thread_ = false;
+  fl_unlock_function();
   return ret;
 }
 
@@ -676,6 +681,8 @@ static UInt32 recent_keycode = 0;
 //+++ verify port to FLTK2
 static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, EventRef event, void *userData )
 {
+  fl_lock_function();
+  in_main_thread_ = true;
 
   os_event = event;
   Window *window = (Window*)userData;
@@ -697,13 +704,18 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
     fix_xfocus(window);
     if ( FindWindow( pos, 0 ) != inContent ) {
       // let the OS handle clicks in the title bar
-      CallNextEventHandler( nextHandler, event );
-      break;
+      in_main_thread_ = false;
+      fl_unlock_function();
+      return CallNextEventHandler( nextHandler, event );
     }
     if ( !IsWindowActive( fltk::xid(window) ) ) {
       // let the OS handle the activation,
       // but continue to get a click-through effect
+      in_main_thread_ = false;
+      fl_unlock_function();
       CallNextEventHandler( nextHandler, event );
+      fl_lock_function();
+      in_main_thread_ = true;
     }
     os_capture = fltk::xid(window); // make all mouse events go to this window
     px = pos.h; py = pos.v;
@@ -734,6 +746,8 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
     break;
   }
 
+  in_main_thread_ = false;
+  fl_unlock_function();
   return noErr;
 }
 
@@ -820,6 +834,8 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
   GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &macchar );
   unsigned short sym;
 
+  fl_lock_function();
+  in_main_thread_ = true;
   if (!xfocus) fix_xfocus((Window*)userData);
 
   switch ( GetEventKind( event ) )
@@ -885,7 +901,10 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     prevMods = mods;
     break; }
   }
-  if (sendEvent && handle(sendEvent, xfocus)) return noErr;
+  bool r = (sendEvent && handle(sendEvent, xfocus));
+  in_main_thread_ = false;
+  fl_unlock_function();
+  if (r) return noErr;
   return CallNextEventHandler( nextHandler, event );
 }
 
