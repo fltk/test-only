@@ -24,7 +24,7 @@ void ProgressBar::draw() {
   box()->inset(r);
   if (mPresent > mMax) mPresent = mMax;
   if (mPresent < mMin) mPresent = mMin;
-  double pct = (mPresent - mMin) / mMax;
+  double pct = mMax != mMin ? (mPresent - mMin) / (mMax - mMin) : 0;
 
   if (vertical()) {
     int barHeight = int(r.h()*pct+.5);

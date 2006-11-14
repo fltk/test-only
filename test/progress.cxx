@@ -1,6 +1,7 @@
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/ProgressBar.h>
+#include <stdlib.h>
 
 using namespace fltk;
 
@@ -20,10 +21,14 @@ static void ptimer(void *o)
 
 int main(int argc, char **argv) {
   ProgressBar* pbar;
+  int nargs = 0;
   { Window* o = new Window(400, 100);
     o->begin();
     win = o;
     { ProgressBar* o = new ProgressBar(25, 25, 330, 25, "Simple Progress Bar");
+      if (argc>1) {nargs++; o->minimum(atoi(argv[1]));}
+      if (argc>2) {nargs++; o->maximum(atoi(argv[2]));}
+
 	  pbar = o;
 	  //pbar->set_vertical();
       o->box(ENGRAVED_BOX);
@@ -40,7 +45,7 @@ int main(int argc, char **argv) {
     o->end();
   }
   add_timeout(0.1, ptimer, (void *)pbar);
-  win->show(argc, argv);
-
+  if (nargs) argv[nargs] = argv[0];
+  win->show(argc-nargs, &argv[nargs]);
   return run();
 }
