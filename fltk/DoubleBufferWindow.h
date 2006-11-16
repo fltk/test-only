@@ -17,8 +17,8 @@ public:
   DoubleBufferWindow(int x, int y, int w, int h, const char*l = 0)
     : Window(x,y,w,h,l) {set_double_buffer();}
     
-  DoubleBufferWindow(int x, int y, const char*l = 0)
-    : Window(x,y,l) {set_double_buffer();}
+  DoubleBufferWindow(int w, int h, const char*l = 0)
+    : Window(w,h,l) {set_double_buffer();}
 
 };
 
