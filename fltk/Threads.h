@@ -118,7 +118,7 @@ public:
 #else // _WIN32:
 
 # define _WIN32_WINNT 0x0500
-# include <Windows.h>
+# include <windows.h>
 # include <process.h>
 // undefine some of the more annoying crap:
 # undef DELETE
