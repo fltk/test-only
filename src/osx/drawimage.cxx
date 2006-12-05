@@ -106,16 +106,14 @@ static void innards(const uchar *buf,
     colorspace = graycolorspace;
     break;
   case RGBx: bitmapInfo = kCGImageAlphaNone; break;
-  case RGB: bitmapInfo = kCGImageAlphaNone; break;
-  case RGBA: bitmapInfo = kCGImageAlphaPremultipliedLast; break;
-#if WORDS_BIGENDIAN
+  case RGB: bitmapInfo = kCGImageAlphaNone; break;  case RGBA: bitmapInfo = kCGImageAlphaPremultipliedLast; break;
+#if !(WORDS_BIGENDIAN)
+# warning not tested yet:  RGB32/ARGB32 image format on intel osx
+#endif
   case RGB32: bitmapInfo = kCGImageAlphaNoneSkipFirst; break;
   case ARGB32: bitmapInfo = kCGImageAlphaPremultipliedFirst; break;
-#else
     // These *may* be wrong on little-endian (Intel). Probably Apple will
     // add some way of specifying these patterns on Intel:
-# error Little-endian not supported
-#endif
   default: break; // please gcc
   }
   CGImageRef img;
