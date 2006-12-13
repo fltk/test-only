@@ -874,6 +874,11 @@ void Widget::show() {
   if (!visible()) {
     clear_flag(INVISIBLE);
     if (visible_r()) {
+      if (active_r()) {
+        if (flags() & INACTIVE_R) {clear_flag(INACTIVE_R); handle(ACTIVATE);}
+      } else {
+        if (!(flags()&INACTIVE_R)) {set_flag(INACTIVE_R); handle(DEACTIVATE);}
+      }
       redraw_label(); redraw();
       relayout();
       handle(SHOW);

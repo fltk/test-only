@@ -185,6 +185,44 @@ int fltk::list_fonts(Font**& arrayp) {
   return num_fonts;
 }
 
+////////////////////////////////////////////////////////////////
+// This function apparently is needed to translate some font names
+// stored in setup files to the actual name of a font. Currently
+// font(name) calls this.
+
+#if defined(WIN32) && !defined(__CYGWIN__)
+static const char* GetFontSubstitutes(const char* name,int& len)
+{
+  static char subst_name[1024]; //used BUFLEN from bool fltk_theme()
+
+  if ( strstr(name,"MS Shell Dlg") ||  strstr(name,"Helv")  ||
+       strstr(name,"Tms Rmn")) {
+    DWORD type = REG_SZ;
+    LONG  err;
+    HKEY  key;
+    char truncname[1024];
+    strncpy(truncname, name, len);
+    truncname[len] = 0;
+    err = RegOpenKey(
+      HKEY_LOCAL_MACHINE,
+      "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\FontSubstitutes",
+      &key );
+
+    if (err == ERROR_SUCCESS) {
+      DWORD L=1024;
+      err = RegQueryValueEx( key, truncname, 0L, &type, (BYTE*)
+                             subst_name, &L);
+      RegCloseKey(key);
+      if ( err == ERROR_SUCCESS ) {
+        len = L;
+        return subst_name;
+      }
+    }
+  }
+  return name;
+}
+#endif
+
 //
 // End of "$Id$"
 //
