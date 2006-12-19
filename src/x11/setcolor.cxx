@@ -273,7 +273,10 @@ static inline void free_color(Color i) {
 // This is here because Win32 makes it impossible to seperately set
 // the color and line style:
 
-void fltk::line_style(int style, double width, char* dashes) {
+void fltk::line_style(int style, float width, const char* dashes) {
+  line_style_ = style;
+  line_width_ = width;
+  line_dashes_ = dashes;
   char buf[7];
   int ndashes = dashes ? strlen(dashes) : 0;
   // emulate the _WIN32 dash patterns on X
@@ -281,6 +284,16 @@ void fltk::line_style(int style, double width, char* dashes) {
     int w = int(width+.5); if (w<1) w = 1;
     char dash, dot, gap;
     // adjust lengths to account for cap:
+#if USE_CAIRO
+    if (style & 0x200 || !width && !(style&0x100)) {
+      dash = char(2*w);
+      dot = 0;
+      gap = char(2*w);
+    } else {
+      dash = char(3*w);
+      dot = gap = char(w);
+    }
+#else
     if (style & 0x200) {
       dash = char(2*w);
       dot = 1; // unfortunately 0 does not work
@@ -289,7 +302,9 @@ void fltk::line_style(int style, double width, char* dashes) {
       dash = char(3*w);
       dot = gap = char(w);
     }
-    char* p = dashes = buf;
+#endif
+    dashes = buf;
+    char* p = buf;
     switch (style & 0xff) {
     default:
     case DASH:
@@ -297,11 +312,13 @@ void fltk::line_style(int style, double width, char* dashes) {
       break;
     case DOT:
       *p++ = dot; *p++ = gap;
+#if !USE_CAIRO
       // Bug in XFree86 3.0? If I only use the above two pieces it does
       // not completely "erase" the previous dash pattern. Making it longer
       // like this seems to fix this. For some reason this bug is only for
       // the dot pattern (not the dash), and only for 0-width lines:
       *p++ = dot; *p++ = gap; *p++ = dot; *p++ = gap;
+#endif
       break;
     case DASHDOT:
       *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap;
@@ -325,13 +342,14 @@ void fltk::line_style(int style, double width, char* dashes) {
   } else {
     cairo_set_dash(cc, 0, 0, 0);
   }
-#endif
+#else
   if (ndashes) XSetDashes(xdisplay, gc, 0, dashes, ndashes);
   static int Cap[4] = {CapButt, CapButt, CapRound, CapProjecting};
   static int Join[4] = {JoinMiter, JoinMiter, JoinRound, JoinBevel};
   XSetLineAttributes(xdisplay, gc, int(width+.5),
 		     ndashes ? LineOnOffDash : LineSolid,
 		     Cap[(style>>8)&3], Join[(style>>12)&3]);
+#endif
 }
 
 //

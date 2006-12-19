@@ -427,7 +427,7 @@ void SymbolSymbol::_draw(const Rectangle& r) const
     h = (h*(12+n)+6)/12;
     p += 2;
   }
-  if (w < 2 || h < 2) {drawpoint(x,y); return;} // too small
+  if (w < 2 || h < 2) {fillrect(x,y,1,1); return;} // too small
   // read rotation in degrees. One digit does "numeric pad" orientation,
   // for back compatability, start degrees with a '0' to avoid this.
   bool firstzero = *p=='0';

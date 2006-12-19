@@ -73,19 +73,19 @@ void PlasticBox::_draw(const Rectangle& r) const
     for (i = 0, j = 0; j < chalf; i ++, j += cstep) {
       // Draw the top line and points...
       setcolor(shade_color(c[i], bc));
-      drawline(x + 1, y + i, x + w - 1, y + i);
+      fillrect(x+1, y+i, w-1, 1);
 
       setcolor(shade_color(c[i] - 2, bc));
-      drawpoint(x, y + i + 1);
-      drawpoint(x + w - 1, y + i + 1);
+      fillrect(x, y+i, 1, 1);
+      fillrect(x+w-1, y+i+1, 1, 1);
 
       // Draw the bottom line and points...
       setcolor(shade_color(c[clen - i], bc));
-      drawline(x + 1, y + h - 1 - i, x + w - 1, y + h - 1 - i);
+      fillrect(x+1, y+h-1-i, w-1, 1);
 
       setcolor(shade_color(c[clen - i] - 2, bc));
-      drawpoint(x, y + h - i);
-      drawpoint(x + w - 1, y + h - i);
+      fillrect(x, y+h-i-1, 1, 1);
+      fillrect(x+w-1, y+h-i-1, 1, 1);
     }
 
     // Draw the interior and sides...
@@ -95,8 +95,9 @@ void PlasticBox::_draw(const Rectangle& r) const
     fillrect(x + 1, y + i, w - 2, h - 2 * i);
 
     setcolor(shade_color(c[chalf] - 2, bc));
-    drawline(x, y + i, x, y + h - i);
-    drawline(x + w - 1, y + i, x + w - 1, y + h - i);
+    fillrect(x, y+i, 1, h-2*i);
+    fillrect(x+w-1, y+i, 1, h-2*i);
+
   } else {
     // Vertical shading...
     if (clen >= w) cstep = 2;
@@ -104,19 +105,19 @@ void PlasticBox::_draw(const Rectangle& r) const
     for (i = 0, j = 0; j < chalf; i ++, j += cstep) {
       // Draw the left line and points...
       setcolor(shade_color(c[i], bc));
-      drawline(x + i, y + 1, x + i, y + h - 1);
+      fillrect(x+i, y+1, 1, h-1);
 
       setcolor(shade_color(c[i] - 2, bc));
-      drawpoint(x + i + 1, y);
-      drawpoint(x + i + 1, y + h - 1);
+      fillrect(x+i, y, 1, 1);
+      fillrect(x+i, y+h-1, 1, 1);
 
       // Draw the right line and points...
       setcolor(shade_color(c[clen - i], bc));
-      drawline(x + w - 1 - i, y + 1, x + w - 1 - i, y + h - 1);
+      fillrect(x+w-1-i, y+1, 1, h-1);
 
       setcolor(shade_color(c[clen - i] - 2, bc));
-      drawpoint(x + w - 1 - i, y);
-      drawpoint(x + w - 1 - i, y + h - 1);
+      fillrect(x+w-1-i, y, 1, 1);
+      fillrect(x+w-1-i, y+h-1, 1, 1);
     }
 
     // Draw the interior, top, and bottom...
@@ -126,8 +127,8 @@ void PlasticBox::_draw(const Rectangle& r) const
     fillrect(x + i, y + 1, w - 2 * i, h - 2);
 
     setcolor(shade_color(c[chalf - 2], bc));
-    drawline(x + i, y, x + w - i, y);
-    drawline(x + i, y + h - 1, x + w - i, y + h);
+    fillrect(x+i, y, w-2*i, 1);
+    fillrect(x+i, y+h-1, w-2*i, 1);
   }
   setcolor(fg);
 }

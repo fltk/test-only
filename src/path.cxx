@@ -334,7 +334,6 @@ void fltk::transform(int X,int Y,int W,int H, Rectangle& to) {
 // Quartz has its own coordinate stack
 static bool first_point = true;
 namespace fltk { 
-  extern float quartz_line_width_; 
   void quartz_add_vertex(float x, float y) {
     if (first_point) {
       CGContextMoveToPoint(quartz_gc, x, y);
@@ -693,6 +692,8 @@ void fltk::newpath() {inline_newpath();}
 
 ////////////////////////////////////////////////////////////////
 
+#if 0
+// removed as it is difficult to emulate except on OpenGL
 /**
   Draw a point (one pixel) for every vertex in the path, then clear the path.
   In theory the line_style() should affect how big the points are, but I
@@ -711,6 +712,7 @@ void fltk::drawpoints() {
 #endif
   inline_newpath();
 }
+#endif
 
 /**
   Draw a line between all the points in the path (see

@@ -86,7 +86,7 @@ FL_API int intersect_with_clip(Rectangle&);
 //@}
 
 FL_API void setcolor(Color);
-FL_API void setcolor_alpha(Color, double alpha);
+FL_API void setcolor_alpha(Color, float alpha);
 extern FL_API Color current_color_;
 inline Color getcolor() {return current_color_;}
 
@@ -104,7 +104,7 @@ inline Flags drawflags() {return drawflags_;}
 inline Flags drawflags(Flags f) {return drawflags_ & f;}
 
 // line type:
-FL_API void line_style(int, double width=0.0, char* dashes=0);
+FL_API void line_style(int, float width=0, const char* dashes=0);
 enum {
   SOLID	= 0,
   DASH	= 1,
@@ -120,6 +120,12 @@ enum {
   JOIN_ROUND	= 0x2000,
   JOIN_BEVEL	= 0x3000
 };
+extern FL_API int line_style_;
+inline int FL_API line_style() {return line_style_;}
+extern FL_API float line_width_;
+inline float FL_API line_width() {return line_width_;}
+extern FL_API const char* line_dashes_;
+inline const char* FL_API line_dashes() {return line_dashes_;}
 
 /// \name Path construction
 //@{
@@ -138,7 +144,7 @@ FL_API void closepath();
 
 /// \name Shapes and lines
 //@{
-FL_API void drawpoints();
+//FL_API void drawpoints();
 FL_API void strokepath();
 FL_API void fillpath();
 FL_API void fillstrokepath(Color);
@@ -147,8 +153,8 @@ FL_API void fillrect(int, int, int, int);
 inline void fillrect(const Rectangle& r) {fillrect(r.x(),r.y(),r.w(),r.h());}
 FL_API void strokerect(int, int, int, int);
 inline void strokerect(const Rectangle& r) {strokerect(r.x(),r.y(),r.w(),r.h());}
-FL_API void drawpoint(int x, int y);
-FL_API void drawpoint(float x, float y);
+// FL_API void drawpoint(int x, int y);
+// FL_API void drawpoint(float x, float y);
 FL_API void drawline(int x0, int y0, int x1, int y1);
 FL_API void drawline(float x0, float y0, float x1, float y1);
 //@}

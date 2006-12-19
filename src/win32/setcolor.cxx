@@ -67,10 +67,11 @@ COLORREF fltk::xpixel(Color i) {
   return rgb;
 }
 
+// These are the fltk setting converted into Win32 versions:
 static int lstyle = 0;
 static DWORD dash_pattern[16];
 static int dash_pattern_size = 0;
-static int line_width = 0;
+static int line_width_i = 0;
 
 static void free_pen()
 {
@@ -79,7 +80,10 @@ static void free_pen()
   current_pen = 0;
 }
 
-void fltk::line_style(int style, double  width, char* dashes) {
+void fltk::line_style(int style, float  width, char* dashes) {
+  line_style_ = style;
+  line_width_ = width;
+  line_dashes_ = dashes;
 #if !USE_CAIRO
   static DWORD Cap[4]= {PS_ENDCAP_ROUND, PS_ENDCAP_FLAT, PS_ENDCAP_ROUND, PS_ENDCAP_SQUARE};
   static DWORD Join[4]={PS_JOIN_ROUND, PS_JOIN_MITER, PS_JOIN_ROUND, PS_JOIN_BEVEL};
@@ -95,12 +99,11 @@ void fltk::line_style(int style, double  width, char* dashes) {
     lstyle = style & 0xff | Cap[(style>>8)&3] | Join[(style>>12)&3];
   }
   // for some reason zero width does not work at all:
-  if (!width) width = 1.0;
-  line_width = (int) width;
+  line_width_i = int(width); if (!line_width_i) line_width_i = 1;
   if (current_pen) free_pen();
 #else
   int ndashes = dashes ? strlen(dashes) : 0;
-  // emulate the _WIN32 dash patterns on X
+  // emulate the _WIN32 dash patterns:
   if (!ndashes && style&0xff) {
     int w = (int) (width ? (width+.5) : 1.0);
     char dash, dot, gap;
@@ -114,14 +117,15 @@ void fltk::line_style(int style, double  width, char* dashes) {
       dot = gap = char(w);
     }
     char buf[7];
-    char* p = dashes = buf;
+    dashes = buf;
+    char* p = buf;
     switch (style & 0xff) {
     default:
     case DASH:
       *p++ = dash; *p++ = gap;
       break;
     case DOT:
-      *p++ = dot; *p++ = gap;  *p++ = dot; *p++ = gap; *p++ = dot; *p++ = gap;
+      *p++ = dot; *p++ = gap;
       break;
     case DASHDOT:
       *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap;
@@ -188,7 +192,7 @@ static void load_dc_funcs()
 */
 HPEN fltk::setpen() {
 #if USE_STOCK_BRUSH
-  if (!lstyle && line_width <= 1) {
+  if (!lstyle && line_width_i <= 1) {
     if (!dc_funcs_init) load_dc_funcs();
     if (__SetDCPenColor) {
       SelectObject(dc, stockpen);
@@ -205,11 +209,11 @@ HPEN fltk::setpen() {
   J1:
     if (lstyle) {
       LOGBRUSH penbrush = {BS_SOLID, current_xpixel, 0};
-      current_pen = ExtCreatePen(lstyle|PS_GEOMETRIC, line_width, &penbrush,
+      current_pen = ExtCreatePen(lstyle|PS_GEOMETRIC, line_width_i, &penbrush,
 				 dash_pattern_size,
 				 dash_pattern_size ? dash_pattern : 0);
     } else {
-      current_pen = CreatePen(PS_SOLID, line_width, current_xpixel);
+      current_pen = CreatePen(PS_SOLID, line_width_i, current_xpixel);
     }
     pen_for_dc = dc;
     pen_for_color = current_xpixel;

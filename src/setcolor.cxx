@@ -163,9 +163,12 @@ Color fltk::get_color_index(Color color) {
   Makes a gray-scale color using an 8-bit gray level. This is
   done by multiplying \a gray by 0x1010100. */
 
-Color fltk::current_color_;
-Color fltk::current_bgcolor_;
-Flags fltk::drawflags_;
+Color	fltk::current_color_;
+Color	fltk::current_bgcolor_;
+Flags	fltk::drawflags_;
+int	fltk::line_style_;
+float	fltk::line_width_;
+const char* fltk::line_dashes_;
 
 /*! \fn void fltk::setcolor(Color)
   Set the color for all subsequent drawing operations.
@@ -254,7 +257,8 @@ Flags fltk::drawflags_;
   is somewhat different and nicer than 1.
 
   \a dashes is a pointer to an array of dash lengths, measured in
-  pixels. The first location is how long to draw a solid portion, the
+  pixels, if set then the dash pattern in \a style is ignored.
+  The first location is how long to draw a solid portion, the
   next is how long to draw the gap, then the solid, etc. It is
   terminated with a zero-length entry. A null pointer or a zero-length
   array results in a solid line. Odd array sizes are not supported and
@@ -262,11 +266,27 @@ Flags fltk::drawflags_;
   Windows 95/98.</i>
 */
 
+/*! \fn int fltk::line_style()
+  Return the last value sent to line_style(int,width,dashes), indicating the
+  cap and join types and the built-in dash patterns.
+*/
+
+/*! \fn float fltk::line_width()
+  Return the last value for \a width sent to line_style(int,width,dashes).
+*/
+
+/*! \fn const char* fltk::line_dashes()
+  Return the last value for \a dashes sent to line_style(int,width,dashes).
+  Note that the actual pointer is returned, which may not point at legal
+  data if a local array was passed, so this is only useful for checking
+  if it is NULL or not.
+*/
+
 /**
    Sets the current rgb and alpha to draw in, on rendering systems that
    allow it. If alpha is not supported this is the same as setcolor().
 */
-FL_API void fltk::setcolor_alpha(Color c, double alpha) {
+FL_API void fltk::setcolor_alpha(Color c, float alpha) {
   fltk::setcolor(c);
 #if USE_CAIRO
   uchar r,g,b; split_color(c,r,g,b);

@@ -27,7 +27,7 @@
 
 namespace fltk {
 
-float quartz_line_width_ = 1.0f;
+static float quartz_line_width_ = 1.0f;
 static enum CGLineCap quartz_line_cap_ = kCGLineCapButt;
 static enum CGLineJoin quartz_line_join_ = kCGLineJoinMiter;
 static float *quartz_line_pattern = 0;
@@ -77,9 +77,11 @@ static enum CGLineJoin Join[4] = {
   kCGLineJoinMiter, kCGLineJoinMiter, kCGLineJoinRound, kCGLineJoinBevel 
 };
 
-void fltk::line_style(int style, double  width, char* dashes) {
-  if (width<1) width = 1.0;
-  quartz_line_width_ = (float)width;
+void fltk::line_style(int style, float  width, char* dashes) {
+  line_style_ = style;
+  line_width_ = width;
+  line_dashes_ = dashes;
+  quartz_line_width_ = width ? width : 1;
   quartz_line_cap_ = Cap[(style>>8)&3];
   quartz_line_join_ = Join[(style>>12)&3];
   char *d = dashes;

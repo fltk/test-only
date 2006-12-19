@@ -63,7 +63,7 @@ class Drawing : public Widget {
     setcolor(points ? WHITE : RED);
     line_style(0,int(xy[9]));
     addcurve(xy[0],xy[1],xy[2],xy[3],xy[4],xy[5],xy[6],xy[7]);
-    points ? drawpoints() : strokepath();
+    /*points ? drawpoints() :*/ strokepath();
     line_style(0);
     pop_matrix();
     pop_clip();
@@ -102,8 +102,8 @@ int main(int argc, char** argv) {
     s->align(ALIGN_LEFT);
     s->callback(slider_cb, (void*)n);
   }
-  ToggleButton but(50,y,50,25,"points");
-  but.callback(points_cb);
+//   ToggleButton but(50,y,50,25,"points");
+//   but.callback(points_cb);
 
   window.end();
   window.show(argc,argv);

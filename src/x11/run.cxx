@@ -2398,25 +2398,26 @@ void fltk::draw_into(XWindow window, int w, int h) {
 #if USE_CAIRO
     cairo_status_t cstatus;
     if (cc) {
-      if ((cstatus = cairo_status(cc)))
+      if ((cstatus = cairo_status(cc))) {
         warning("Cairo: %s", cairo_status_to_string(cstatus));
-      cairo_destroy(cc);
-      cairo_surface_destroy(surface);
+	cairo_destroy(cc);
+	cairo_surface_destroy(surface);
+	goto CREATE_SURFACE;
+      }
+      cairo_xlib_surface_set_drawable(surface, window, w, h);
+    } else {
+    CREATE_SURFACE:
+      surface = cairo_xlib_surface_create(xdisplay, window, xvisual->visual, w, h);
+      cc = cairo_create(surface);
+      // emulate line_style(0):
+      cairo_set_line_width(cc, 1);
     }
-/*
-cairo_surface_t* cairo_xlib_surface_create  (Display *dpy,
-                                             Drawable drawable,
-                                             Visual *visual,
-                                             int width,
-                                             int height);
-*/
-    surface = cairo_xlib_surface_create(xdisplay, window, xvisual->visual, w, h);
-    cc = cairo_create(surface);
 #endif
+
   }
 
 #if USE_CAIRO
-  cairo_xlib_surface_set_size(surface, w, h);
+  else cairo_xlib_surface_set_size(surface, w, h);
 #endif
 
   load_identity();
