@@ -284,25 +284,23 @@ void fltk::line_style(int style, float width, const char* dashes) {
     int w = int(width+.5); if (w<1) w = 1;
     char dash, dot, gap;
     // adjust lengths to account for cap:
+    if (style & 0x200
 #if USE_CAIRO
-    if (style & 0x200 || !width && !(style&0x100)) {
+ || !width
+#endif
+	) {
       dash = char(2*w);
+#if USE_CAIRO
       dot = 0;
       gap = char(2*w);
-    } else {
-      dash = char(3*w);
-      dot = gap = char(w);
-    }
 #else
-    if (style & 0x200) {
-      dash = char(2*w);
       dot = 1; // unfortunately 0 does not work
       gap = char(2*w-1);
+#endif
     } else {
       dash = char(3*w);
       dot = gap = char(w);
     }
-#endif
     dashes = buf;
     char* p = buf;
     switch (style & 0xff) {
@@ -330,9 +328,14 @@ void fltk::line_style(int style, float width, const char* dashes) {
     ndashes = p-buf;
   }
 #if USE_CAIRO
-  cairo_set_line_width(cc, width ? width : 1.0);
-  int c = (style>>8)&3; if (c) c--;
-  cairo_set_line_cap(cc, (cairo_line_cap_t)c);
+  if (!width) {
+    cairo_set_line_width(cc, 1.0);
+    cairo_set_line_cap(cc, CAIRO_LINE_CAP_SQUARE);
+  } else {
+    cairo_set_line_width(cc, width);
+    int c = (style>>8)&3; if (c) c--;
+    cairo_set_line_cap(cc, (cairo_line_cap_t)c);
+  }
   int j = (style>>12)&3; if (j) j--;
   cairo_set_line_join(cc, (cairo_line_join_t)j);
   if (ndashes) {

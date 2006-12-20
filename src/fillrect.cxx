@@ -110,12 +110,6 @@ void fltk::drawline(int x, int y, int x1, int y1) {
   if (line_width_) {
     cairo_move_to(cc, x, y);
     cairo_line_to(cc, x1, y1);
-  } else if (x==x1) {
-    cairo_move_to(cc, x+.5, y);
-    cairo_line_to(cc, x1+.5, y1+1);
-  } else if (y==y1) {
-    cairo_move_to(cc, x, y+.5);
-    cairo_line_to(cc, x1+1, y1+.5);
   } else {
     cairo_move_to(cc, x+.5, y+.5);
     cairo_line_to(cc, x1+.5, y1+.5);
@@ -153,12 +147,6 @@ void fltk::drawline(float x, float y, float x1, float y1) {
   if (line_width_) {
     cairo_move_to(cc, x, y);
     cairo_line_to(cc, x1, y1);
-  } else if (x==x1) {
-    cairo_move_to(cc, x+.5, y);
-    cairo_line_to(cc, x1+.5, y1+1);
-  } else if (y==y1) {
-    cairo_move_to(cc, x, y+.5);
-    cairo_line_to(cc, x1+1, y1+.5);
   } else {
     cairo_move_to(cc, x+.5, y+.5);
     cairo_line_to(cc, x1+.5, y1+.5);
