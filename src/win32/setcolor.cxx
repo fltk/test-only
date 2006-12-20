@@ -80,7 +80,7 @@ static void free_pen()
   current_pen = 0;
 }
 
-void fltk::line_style(int style, float  width, char* dashes) {
+void fltk::line_style(int style, float width, const char* dashes) {
   line_style_ = style;
   line_width_ = width;
   line_dashes_ = dashes;
