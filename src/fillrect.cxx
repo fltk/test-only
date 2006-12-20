@@ -55,7 +55,7 @@ void fltk::fillrect(int x, int y, int w, int h) {
 #endif
 }
 
-/*! 
+/*!
   Draw a line \e inside this bounding box (currently correct only for
   0-thickness lines).
 */
