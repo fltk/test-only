@@ -37,7 +37,7 @@ void restore_quartz_line_style() {
   CGContextSetLineWidth(quartz_gc, quartz_line_width_);
   CGContextSetLineCap(quartz_gc, quartz_line_cap_);
   CGContextSetLineJoin(quartz_gc, quartz_line_join_);
-  CGContextSetLineDash(quartz_gc, 0, 
+  CGContextSetLineDash(quartz_gc, 0,
       quartz_line_pattern, quartz_line_pattern_size);
 }
 
@@ -70,57 +70,50 @@ void fltk::setcolor(Color i) {
 static void free_color(Color) {}
 
 static enum CGLineCap Cap[4] = {
-  kCGLineCapButt, kCGLineCapButt, kCGLineCapRound, kCGLineCapSquare 
+  kCGLineCapButt, kCGLineCapButt, kCGLineCapRound, kCGLineCapSquare
 };
 
 static enum CGLineJoin Join[4] = {
-  kCGLineJoinMiter, kCGLineJoinMiter, kCGLineJoinRound, kCGLineJoinBevel 
+  kCGLineJoinMiter, kCGLineJoinMiter, kCGLineJoinRound, kCGLineJoinBevel
 };
 
-void fltk::line_style(int style, float  width, char* dashes) {
+void fltk::line_style(int style, float  width, const char* dashes) {
   line_style_ = style;
   line_width_ = width;
   line_dashes_ = dashes;
   quartz_line_width_ = width ? width : 1;
   quartz_line_cap_ = Cap[(style>>8)&3];
   quartz_line_join_ = Join[(style>>12)&3];
-  char *d = dashes;
+  const char *d = dashes;
   static float pattern[16];
-#if USE_CAIRO
-  int ndashes=0;
-#endif
   if (d && *d) {
     float *p = pattern;
-#if USE_CAIRO
-    while (*d) { *p++ = (float)*d++; ndashes++;}
-#else
     while (*d) { *p++ = (float)*d++;}
-#endif
     quartz_line_pattern = pattern;
     quartz_line_pattern_size = d-dashes;
   } else if (style & 0xff) {
-    char dash, dot, gap;
+    float dash, dot, gap;
     // adjust lengths to account for cap:
     if (style & 0x200) {
-      dash = char(2*width);
-      dot = 1;
-      gap = char(2*width-1);
+      dash = 2*quartz_line_width_;
+      dot = 0;
+      gap = 2*quartz_line_width_;
     } else {
-      dash = char(3*width);
-      dot = gap = char(width);
+      dash = 3*quartz_line_width_;
+      dot = gap = quartz_line_width_;
     }
     float *p = pattern;
     switch (style & 0xff) {
     case DASH:       *p++ = dash; *p++ = gap; break;
     case DOT:        *p++ = dot; *p++ = gap; break;
     case DASHDOT:    *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; break;
-    case DASHDOTDOT: *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; 
+    case DASHDOTDOT: *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap;
                      *p++ = dot; *p++ = gap; break;
     }
     quartz_line_pattern_size = p-pattern;
     quartz_line_pattern = pattern;
   } else {
-    quartz_line_pattern = 0; 
+    quartz_line_pattern = 0;
     quartz_line_pattern_size = 0;
   }
   restore_quartz_line_style();
@@ -130,6 +123,7 @@ void fltk::line_style(int style, float  width, char* dashes) {
   cairo_set_line_cap(cc, (cairo_line_cap_t)c);
   int j = (style>>12)&3; if (j) j--;
   cairo_set_line_join(cc, (cairo_line_join_t)j);
+  int ndashes = quartz_line_pattern_size;
   if (ndashes) {
     double dash[20];
     for (int i = 0; i < ndashes; i++) dash[i] = (double) dashes[i];
