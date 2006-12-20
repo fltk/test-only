@@ -69,11 +69,14 @@ void fltk::strokerect(int x, int y, int w, int h) {
   XDrawRectangle(xdisplay, xwindow, gc, x, y, w-1, h-1);
 #elif defined(_WIN32)
   setpen();
-  MoveToEx(dc, x, y, 0L); 
-  LineTo(dc, x+w-1, y);
-  LineTo(dc, x+w-1, y+h-1);
-  LineTo(dc, x, y+h-1);
-  LineTo(dc, x, y);
+  POINT pts[4];
+  pts[0].x = pts[3].x = x;
+  pts[0].y = pts[1].y = y;
+  pts[1].x = pts[2].x = x+w-1;
+  pts[2].y = pts[3].y = y+h-1;
+  static const BYTE i[4] =
+  {PT_MOVETO, PT_LINETO, PT_LINETO, PT_LINETO|PT_CLOSEFIGURE};
+  PolyDraw(dc, pts, i, 4);
 #elif USE_QUARTZ
   if (!line_width_) CGContextSetShouldAntialias(quartz_gc, false);
   CGRect rect = CGRectMake(x, y, w-1, h-1);
