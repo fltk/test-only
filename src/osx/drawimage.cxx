@@ -95,7 +95,7 @@ static void innards(const uchar *buf,
   CGDataProviderRef src =
     CGDataProviderCreateWithData( 0L, array, linedelta*h,
 				  tmpBuf ? releaser : 0);
-  CGImageAlphaInfo bitmapInfo = kCGImageAlphaNone;
+  CGImageAlphaInfo bitmapInfo;
   switch (pixeltype) {
   case MASK:
     bitmapInfo = kCGImageAlphaOnly;
@@ -106,15 +106,18 @@ static void innards(const uchar *buf,
     colorspace = graycolorspace;
     break;
   case RGBx: bitmapInfo = kCGImageAlphaNone; break;
-  case RGB: bitmapInfo = kCGImageAlphaNone; break;  case RGBA: bitmapInfo = kCGImageAlphaPremultipliedLast; break;
-#if !(WORDS_BIGENDIAN)
-# warning not tested yet:  RGB32/ARGB32 image format on intel osx
+  case RGB: bitmapInfo = kCGImageAlphaNone; break;
+  case RGBA: bitmapInfo = kCGImageAlphaPremultipliedLast; break;
+  //case RGBM: bitmapInfo = kCGImageAlphaLast; break;
+#if __BIG_ENDIAN__
+# define BE(x) x
+#else
+# define BE(x) CGImageAlphaInfo(x|(2<<12))
 #endif
-  case RGB32: bitmapInfo = kCGImageAlphaNoneSkipFirst; break;
-  case ARGB32: bitmapInfo = kCGImageAlphaPremultipliedFirst; break;
-    // These *may* be wrong on little-endian (Intel). Probably Apple will
-    // add some way of specifying these patterns on Intel:
-  default: break; // please gcc
+  case RGB32: bitmapInfo = BE(kCGImageAlphaNoneSkipFirst); break;
+  case ARGB32: bitmapInfo = BE(kCGImageAlphaPremultipliedFirst); break;
+  //case MRGB32: bitmapInfo = BE(kCGImageAlphaFirst); break;
+  default: bitmapInfo = kCGImageAlphaNone; break;
   }
   CGImageRef img;
   if (pixeltype==MASK)

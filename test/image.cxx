@@ -194,6 +194,7 @@ void bgcallback(Widget* w, void *v) {
 void fgcallback(Widget* w, void *v) {
   fltk::Color c = fltk::Color(((Slider*)w)->value());
   fltk::Widget::default_style->labelcolor(c);
+  fltk::Widget::default_style->textcolor(c);
   fltk::redraw();
 }
 
