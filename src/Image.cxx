@@ -28,15 +28,15 @@
 
 /*! \class fltk::Image
 
-  A rectangular buffer of pixels that the program and write (and
-  read?)  and can be efficiently drawn on the screen. The draw()
+  A rectangular buffer of pixels that the program can write (and
+  read?) and can be efficiently drawn on the screen. The draw()
   functions will copy (or "over" composite if there is alpha in the
   pixeltype()) onto the output, transformed by the current transform.
 
   If you already have a set of pixels sitting in your own memory,
   drawimage() can draw it and is \e much easier to use. You should use
-  this class \e only if you will be drawing the \e same image (with no
-  changes to the pixels) multiple times, or if you can efficiently use
+  this class only if you will be drawing the \e same image multiple
+  times (with no changes to the pixels), or if you can efficiently use
   the linebuffer() and setpixels() functions to write your image to
   the buffer as you generate it. Otherwise you will have no efficiency
   advantages over drawimage() and it may actually perform worse.
@@ -80,24 +80,18 @@ using namespace fltk;
   is set to RGB32 (0x00rrggbb).
 
   The optional name is passed to the Symbol constructor and allows
-  the image to be drawn by puttin "@name;" into a label.
+  the image to be drawn by putting "@name;" into a label.
 */
 
 /*! \fn Image::Image(int w, int h, const char* name)
   Does setsize(w,h). This causes the width() and height() to return
   the passed values. No buffer is allocated, call allocate() to do that.
   The pixeltype() is set to RGB32 (0x00rrggbb).
-
-  The optional name is passed to the Symbol constructor and allows
-  the image to be drawn by puttin "@name;" into a label.
 */
 
 /*! \fn Image::Image(PixelType p, int w, int h, const char* name)
   Does pixeltype(p) and setsize(w,h). No buffer is allocated, call
   allocate() to do that.
-
-  The optional name is passed to the Symbol constructor and allows
-  the image to be drawn by puttin "@name;" into a label.
 */
 
 /*! \fn Image::Image(const uchar* data, PixelType, int w, int h, int linedelta)
@@ -114,7 +108,7 @@ using namespace fltk;
 
 /*! \fn PixelType Image::pixeltype() const
   Return the types of pixels that can be put into the image with
-  setpixels(). You can change this with setpixelsize(). It is
+  setpixels(). You can change this with setpixeltype(). It is
   possible the internal data is in a different type, use
   buffer_pixeltype() to find out what that is.
 */
@@ -187,9 +181,9 @@ using namespace fltk;
 
 /*! \fn uchar* Image::buffer()
   Creates if necessary and returns a pointer to the internal pixel
-  buffer. Allocated by, and probably shared with, the graphics system,
-  it may have a different pixeltype, size, and linedelta that the
-  Image. If you are able to figure out the type you can read and
+  buffer. This is probably going to be shared memory with the graphics
+  system, it may have a different pixeltype, size, and linedelta that
+  the Image. If you are able to figure out the type you can read and
   write the pixels directly.
 
   The non-const version will sync any previous drawing with the
@@ -202,8 +196,6 @@ using namespace fltk;
   ARGB32. On older (non-XRender) X system the types 1 and 2 indicate 1
   and 2-byte data, but there is no api to figure out anything more
   about this data.
-
-  Note that this returns garbage until allocate() is called.
 */
 
 /*! \fn PixelType Image::buffer_depth() const
