@@ -41,6 +41,7 @@ protected:
   int dx_, dy_, dw_, dh_;
 public:
   const char* data() const {return data_;}
+  void data(const char* d) {data_ = d;}
   void _draw(const Rectangle&) const;
   void inset(Rectangle&) const;
   /*! dx,dy,dw,dh lets you peek at constants rather than use inset(). */

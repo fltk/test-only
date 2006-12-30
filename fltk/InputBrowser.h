@@ -62,6 +62,11 @@ public:
   Widget* item() const ;
   Widget* item(Widget* v) const ;
 
+  void minw(int i) { minw_ = i; }
+  void minh(int i) { minh_ = i; }
+  int minw() { return minw_; }
+  int minh() { return minh_; }
+
   void maxw(int i) { maxw_ = i; }
   void maxh(int i) { maxh_ = i; }
   int maxw() { return maxw_; }
