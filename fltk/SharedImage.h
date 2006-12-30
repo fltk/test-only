@@ -21,13 +21,20 @@
 
 /*! \class fltk::SharedImage
 
-Images that are all put in a tree by "name" (usually a filename)
-so that if the same name is used more than once the same instance
-is used.
-
-This is probably obsolete and will be deleted. The base Symbol class
-now has a lookup-by-name function, and the Image class could have
-methods added to it to throw away the pixmaps of lru images.
+Subclass of Image that can read a file or block of compressed data.
+This provides several useful functions:
+* Images are identified by filename. The static get() function will
+return an existing instance if it was called before with the same filename.
+The release() function will decrement the reference count and delete
+the image if nobody wants it any more.
+* An inline block of data may be provided that is the contents of the file,
+so the file does not have to exist and you can link the image directly
+into your program.
+* You may set a memory usage limit. If Image::mem_used() goes above
+this limit, it will call destroy() on least-recently-used images until
+it goes below this limit.
+* The get() function can determine the type of the file or block of
+data and create the correct subclass.
 
 */
 
@@ -73,11 +80,10 @@ protected:
   static int image_used;
   static unsigned mem_usage_limit;
 
-  static unsigned mem_used;
-
   SharedImage* l1;    // Left leaf in the binary tree
   SharedImage* l2;    // Right leaf in the binary tree
   const char* 	   name;  // Used to indentify the image, and as filename
+  const uchar* datas; // If non zero, pointers on inlined compressed datas
   unsigned int     used;  // Last time used, for cache handling purpose
   int              refcount; // Number of time this image has been get
 
@@ -96,7 +102,7 @@ protected:
 
   static const char* get_filename(const char*);
 
-  virtual void read() = 0;/*!< decompress the image and create its pixmap */
+  virtual bool fetch() = 0; // force fetch() to be defined by subclasses
 
   static void insert(SharedImage*& p, SharedImage* image);
   static SharedImage* find(SharedImage* image, const char* name);
@@ -133,7 +139,6 @@ public:
   /*! Set the size of the cache (0 = unlimited is the default) */
   static void set_cache_size(unsigned l);
 
-  void update();
   void _draw(const Rectangle&) const;
 
 };
@@ -162,12 +167,10 @@ FL_IMAGES_API ImageType* guess_image(const char* name, const uchar* datas=0);
 //
 
 class FL_API gifImage : public SharedImage {
-  void read();
   gifImage() { }
   static SharedImage* create() { return new gifImage; }
 public:
   static bool test(const uchar* datas, unsigned size=0);
-  void _measure(int& W, int& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -175,26 +178,21 @@ public:
 };
 
 class FL_API bmpImage : public SharedImage {
-  void read();
   bmpImage() { }
   static SharedImage* create() { return new bmpImage; }
 public:
   static bool test(const uchar* datas, unsigned size=0);
-  void _measure(int& W, int& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
   bool fetch();
 };
 
-// Name collision with xpmImage:
 class FL_IMAGES_API xpmFileImage : public SharedImage {
-  void read();
   xpmFileImage() { }
   static SharedImage* create() { return new xpmFileImage; }
 public:
   static bool test(const uchar* datas, unsigned size=0);
-  void _measure(int& W, int& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -206,12 +204,10 @@ public:
 //
 
 class FL_IMAGES_API jpegImage : public SharedImage {
-  void read();
   jpegImage() { }
   static SharedImage* create() { return new jpegImage; }
 public:
   static bool test(const uchar* datas, unsigned size=0);
-  void _measure(int& W, int& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -219,17 +215,15 @@ public:
 };
 
 class FL_IMAGES_API pngImage : public SharedImage {
-  void read();		// Uncompress PNG datas
-  bool fetch();
   pngImage() { }
   static SharedImage* create() { return new pngImage; } // Instantiate
 public:
 // Check the given buffer if it is in PNG format
   static bool test(const uchar* datas, unsigned size=0);
-  void _measure(int& W, int& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
+  bool fetch();
 };
 
   extern FL_IMAGES_API void register_images(); // return always true only for automatic lib init purpose see images_core.cxx trick

@@ -101,7 +101,7 @@ public:
 };
 
 // Monochrome xpm tester:
-#include <pixmaps/recycle.xpm>
+#include "../pixmaps/recycle.xpm"
 #include "porsche.xpm"
 class Xtest : public Widget {
 public:
@@ -160,6 +160,15 @@ unsigned char rgbapixels[7*4] = {
   0, 127, 0,127,
   0, 0, 127,127};
 
+unsigned char rgbmpixels[7*4] = {
+  255, 255, 255, 0,
+  255,0,0,255,
+  0, 255, 0,255,
+  0, 0, 255,255,
+  255, 0,0,127,
+  0, 255, 0,127,
+  0, 0, 255,127};
+
 // Warning assummes sizeof(unsigned)==4!
 unsigned argbpixels[7] = {
   0x0,
@@ -169,6 +178,16 @@ unsigned argbpixels[7] = {
   0x7f7f0000,
   0x7f007f00,
   0x7f00007f
+};
+
+unsigned mrgbpixels[7] = {
+  0x00ffffff,
+  0xffff0000,
+  0xff00ff00,
+  0xff0000ff,
+  0x7fff0000,
+  0x7f00ff00,
+  0x7f0000ff
 };
 
 #if USE_X11
@@ -309,6 +328,19 @@ int main(int argc, char** argv) {
   w = new Itest(fltk::ARGB32, x, y, "ARGB32image", builddata(4, (uchar*)argbpixels));
   nextxy();
 
+  w = new Dtest(fltk::RGBM, x, y, "RGBM", builddata(4, rgbmpixels));
+  w->tooltip("drawimage() of 4-byte @i;unpremultiplied@n; rgba. Should be transparent, not white");
+  nextxy();
+
+  w = new Itest(fltk::RGBM, x, y, "RGBMimage", builddata(4, rgbmpixels));
+  nextxy();
+
+  w = new Dtest(fltk::MRGB32, x, y, "MRGB32", builddata(4, (uchar*)mrgbpixels));
+  nextxy();
+
+  w = new Itest(fltk::MRGB32, x, y, "MRGB32image", builddata(4, (uchar*)mrgbpixels));
+  nextxy();
+
   w = new Dtest(fltk::MASK, x, y, "MASK", builddata(1, monopixels));
   nextxy();
 
@@ -363,14 +395,12 @@ int main(int argc, char** argv) {
   s->align(ALIGN_LEFT);
 
   Widget text(0,y+40,window.w(),window.h()-y-40,
-	      "All images should scale to fill their rectangle.\n"
-	      "MONO images should be black & white.\n"
-	      "All color images should have r red, g green, b blue.\n"
-	      "The background should show through the A images in the 3rd row "
-	      "and through the MASK and around the xpm image.\n"
-	      "All the Mask and xbm images in the fourth row should change "
-	      "to match the fg and bg colors.\n"
-	      "Currently only the OS/X version has no errors.");
+	      "* All images should scale to fill their rectangle as you resize the window.\n"
+              "* Images with RGB in their names should have the letters opaque and the correct color.\n"
+              "* RGBA and RGBM images should look identical and be transparent, "
+              "with 100% transparency around the upper-left.\n"
+              "* MASK images should match the fg color as you change it.\n"
+              "Currently only OS/X version has no errors.");
   text.align(ALIGN_LEFT|ALIGN_INSIDE|ALIGN_WRAP);
 
   window.end();

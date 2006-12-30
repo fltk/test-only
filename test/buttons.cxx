@@ -92,7 +92,8 @@ int main(int argc, char ** argv) {
   SharedImage& ifold2 = *SharedImage::get("images/testimg2.jpg");
   //SharedImage& ifold2 = *SharedImage::get("images/coucou.png"); 
 #endif
-  ifold2.inactive();
+  // ifold2.inactive();
+  // WAS: inactive() is nyi but should not be a problem with new Image...
   MultiImage push_release_img(fold2, PUSHED, fold3);
   MultiImage push_release_hlt_img(fold2, HIGHLIGHT, fold1, PUSHED, fold3);
   

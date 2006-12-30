@@ -52,8 +52,7 @@ static void read_data_fn(png_structp /*png_ptr*/,png_bytep d,png_size_t length)
 static void declare_now(void*) { }
 #endif
 
-#include <fltk/x.h>
-#include <fltk/error.h>
+#include <fltk/draw.h>
 #include <fltk/SharedImage.h>
 
 using namespace fltk;
@@ -67,107 +66,9 @@ bool pngImage::test(const uchar* datas, unsigned size)
 #endif
 }
 
-void fltk::pngImage::_measure(int &W, int &H) const {
-
-#if !HAVE_LIBPNG
-  const_cast<pngImage*>(this)->setsize(0,0);
-  W = H = 0;
-#else
-  if (w() >= 0) { 
-    W = w(); H = h(); 
-    return; 
-  }
-
-  png_structp png_ptr;
-  png_infop info_ptr;
-  png_uint_32 width, height;
-  int bit_depth, color_type;
-
-  png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0,0,0);
-
-  if (png_ptr == NULL) {
-    const_cast<pngImage*>(this)->setsize(0,0);
-    W = H = 0;
-    return;
-  }
-  info_ptr = png_create_info_struct(png_ptr);
-  FILE *fp=0;
-  declare_now(&fp);
-  if(pixels())
-  {
-    cur_datas=(png_bytep)pixels();
-    png_set_read_fn(png_ptr, NULL, read_data_fn);
-  }
-  else
-     fp = fopen(get_filename(), "rb");
-  if (info_ptr == NULL || (pixels()== NULL && fp == NULL))
-  {
-    png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
-    const_cast<pngImage*>(this)->setsize(0,0);
-    W = H = 0;
-    return;
-  }
-
-  if(pixels())
-  {
-    if (png_sig_cmp((uchar*)pixels(), (png_size_t)0, 8))
-      goto error;
-  }
-  else
-  {
-    uchar buf[8];
-    if (fread(buf, 1, 8, fp) != 8 || png_sig_cmp(buf, (png_size_t)0, 8))
-      goto error;
-    png_init_io(png_ptr, fp);
-    png_set_sig_bytes(png_ptr, 8);
-  }
-
-  if (setjmp(png_ptr->jmpbuf))
-  {
-    goto error;
-  }
-
-  png_read_info(png_ptr, info_ptr);
-
-  png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth,&color_type,
-	       NULL,NULL,NULL);
-
-  const_cast<pngImage*>(this)->setsize(width, height);
-  W = width;
-  H = height;
-
-  png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
-  if(fp) fclose(fp);
-  return;
-
- error:
-  png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
-  if(fp) fclose(fp);
-  const_cast<pngImage*>(this)->setsize(0,0);
-  W = H = 0;
-  return;
-#endif
-}
-
-#if HAVE_LIBPNG
-static const uchar* drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar* b)
-{
-  png_read_row((png_structp)v, b, NULL);
-  return b;
-}
-#endif
-
-
-void fltk::pngImage::read()
+bool pngImage::fetch()
 {
 #if HAVE_LIBPNG
-# if USE_PROGRESSIVE_DRAW
-  if (pixels()) { // already fetched ?
-    GSave gsave;
-    make_current();
-    drawimage(pixels(), pixel_type(), Rectangle(width(), height()));
-    return;
-  }
   //  printf("reading '%s' ...\n", filename);
   png_structp png_ptr;
   png_infop info_ptr;
@@ -177,36 +78,32 @@ void fltk::pngImage::read()
   png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0,0,0);
 
   if (png_ptr == NULL) {
-    return;
+    return false;
   }
   info_ptr = png_create_info_struct(png_ptr);
 
   FILE *fp=0;
   declare_now(&fp);
-  if(pixels())
-  {
-    cur_datas=(png_bytep)pixels();
+  if (datas) {
+    cur_datas=(png_bytep)datas;
     png_set_read_fn(png_ptr, cur_datas, read_data_fn);
+  } else {
+    fp = fopen(get_filename(), "rb");
   }
-  else
-     fp = fopen(get_filename(), "rb");
-  if (info_ptr == NULL || (pixels() == NULL && fp == NULL))
-  {
+  if (info_ptr == NULL || (datas == NULL && fp == NULL)) {
     png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
-    return;
+    return false;
   }
 
   uchar* buffer=0;
-  int d=3;
-  declare_now(&d);
+  declare_now(&buffer);
+  bool ret = false;
+  bool alpha = false;
 
-  if(pixels())
-  {
-    if (png_sig_cmp((uchar*)pixels(), (png_size_t)0, 8))
+  if (datas) {
+    if (png_sig_cmp((uchar*)datas, (png_size_t)0, 8))
       goto error;
-  }
-  else
-  {
+  } else {
     uchar buf[8];
     if (fread(buf, 1, 8, fp) != 8 || png_sig_cmp(buf, (png_size_t)0, 8))
       goto error;
@@ -251,122 +148,29 @@ void fltk::pngImage::read()
   png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth,&color_type,
 	       NULL,NULL,NULL);
 
-  if (color_type & PNG_COLOR_MASK_ALPHA)
-    d=4; //    png_set_strip_alpha(png_ptr); 
+  if (color_type & PNG_COLOR_MASK_ALPHA) alpha = true;
   // png_set_strip_alpha doesn't seem to work ... too bad
- 
-  { // We use a block because GSave creates a local
-    // and we have 'goto error' before this point
-    GSave gsave;
-    make_current();
-    drawimage(drawimage_cb, png_ptr, d>3 ? RGBA : RGB, Rectangle(width, height));
+
+  setsize(width, height);
+  setpixeltype(alpha ? RGBM : RGB);
+
+  for (unsigned y=0; y<height; y++) {
+    uchar* b = linebuffer(y);
+    png_read_row(png_ptr, b, NULL);
+    setpixels(b, y);
   }
 
   png_read_end(png_ptr, NULL);
+  ret = true;
 
  error:
   png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
   if (fp) fclose(fp);
   if (buffer) free(buffer);
-# else
-  bool created = pixels()==0;
-  if (!fetch()) return; // reuse fetch code
-  GSave gsave;
-  make_current();
-  drawimage(pixels(), pixel_type(), Rectangle(width(), height()));
-  if (created) dealloc_data();
-
-# endif //USE_PROGRESSIVE_DRAW
+  return ret;
+#else
+  return false;
 #endif
-}
-
-//! fetch a pngImage in a pixel buffer and update imaage info consequently
-bool pngImage::fetch() {
-  int		i;			// Looping var
-  FILE		*fp;			// File pointer
-  int		channels;		// Number of color channels
-  png_structp	pp;			// PNG read pointer
-  png_infop	info;			// PNG info pointers
-  png_bytep	*rows;			// PNG row pointers
-
-  const char * png = get_filename();
-
-  // Open the PNG file...
-  if ((fp = fopen(png, "rb")) == NULL) return false;
-
-  // Setup the PNG data structures...
-  pp   = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-  info = png_create_info_struct(pp);
-
-  if (setjmp(pp->jmpbuf))
-  {
-    fltk::warning("PNG file \"%s\" contains errors!\n", png);
-    return false;
-  }
-
-  // Initialize the PNG read "engine"...
-  png_init_io(pp, fp);
-
-  // Get the image dimensions and convert to grayscale or RGB...
-  png_read_info(pp, info);
-
-  if (info->color_type == PNG_COLOR_TYPE_PALETTE)
-    png_set_expand(pp);
-
-  if (info->color_type & PNG_COLOR_MASK_COLOR)
-    channels = 3;
-  else
-    channels = 1;
-
-  if ((info->color_type & PNG_COLOR_MASK_ALPHA) || info->num_trans)
-    channels ++;
-
-  w((int)(info->width));
-  h((int)(info->height));
-  pixel_type(channels ==4 ? ARGB32 : channels ==3 ? RGB : MONO );
-
-  if (info->bit_depth < 8)
-  {
-    png_set_packing(pp);
-    png_set_expand(pp);
-  }
-  else if (info->bit_depth == 16)
-    png_set_strip_16(pp);
-
-  // Handle transparency...
-  if (png_get_valid(pp, info, PNG_INFO_tRNS))
-    png_set_tRNS_to_alpha(pp);
-
-  uchar * array = alloc_pixels(w(),h(),pixel_type()); // this unified array is automatically deallocated
-
-  // Allocate pointers...
-  rows = new png_bytep[h()];
-  // initialize rows to point on the new allocated buffer
-  for (i = 0; i < h(); i ++) rows[i] = (png_bytep)(array + i * ld());
-
-  // Read the image, handling interlacing as needed...
-  for (i = png_set_interlace_handling(pp); i > 0; i --)
-    png_read_rows(pp, rows, NULL, h());
-
-#ifdef WIN32
-  // Some Windows graphics drivers don't honor transparency when RGB == white
-  if (channels == 4) {
-    // Convert RGB to 0 when alpha == 0...
-    uchar *ptr = array;
-    for (i = w() * h(); i > 0; i --, ptr += 4)
-      if (!ptr[3]) ptr[0] = ptr[1] = ptr[2] = 0;
-  }
-#endif // WIN32
-
-  // Free memory and return...
-  delete[] rows;
-
-  png_read_end(pp, info);
-  png_destroy_read_struct(&pp, &info, NULL);
-
-  fclose(fp);
-
-  return true;
 }
 
 //

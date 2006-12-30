@@ -78,7 +78,8 @@ void ShapedWindow::draw() {
     xbmImage* mask = resize_bitmap(shape_, w(), h());
 #if USE_X11
     Pixmap pmask = XCreateBitmapFromData(xdisplay, xid(this),
-					 (const char*)mask->pixels() , mask->width(), mask->height());
+					 (const char*)mask->array,
+					 mask->width(), mask->height());
     hide();
     XShapeCombineMask(xdisplay, xid(this), ShapeBounding, 0, 0,
                       pmask, ShapeSet);

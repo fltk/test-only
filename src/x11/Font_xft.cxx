@@ -107,7 +107,7 @@ static XftFont* fontopen(const char* name, int attributes, float size, bool core
 		     XFT_PIXEL_SIZE, XftTypeDouble, (double)size,
 		     core ? XFT_CORE : 0, XftTypeBool, true,
 		     XFT_RENDER, XftTypeBool, false,
-		     0);
+		     (void*)0);
 }
 
 void fltk::setfont(fltk::Font* font, float size) {

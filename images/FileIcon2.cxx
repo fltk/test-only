@@ -114,7 +114,7 @@ FileIcon::load_image(const char *ifile)	// I - File to read from
   img = SharedImage::get(ifile);
  
   if (!img  || !img->w() || !img->h()) return -1;
-  if (!img->data() && !img->fetch()) return 0;     
+  //if (!img->data() && !img->fetch()) return 0;     
   
 #if 1 // activate raster image reading
   image(img);

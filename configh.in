@@ -76,6 +76,11 @@
    work in them. */
 #define USE_CLIPOUT 0
 
+/* Use the MIT_SHM extension to share memory between the program
+   and X server for images, if possible.
+*/
+#define USE_XSHM 1
+
 /* Do we have the X double-buffer extension header file
    <X11/extensions/Xdbe.h>? Turning this on will make the list_visuals
    program produce info about it. (ignored if !USE_X11) */

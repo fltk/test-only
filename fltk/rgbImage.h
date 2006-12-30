@@ -1,8 +1,6 @@
 //
 // "$Id$"
 //
-// Image subclass that draws uncompressed 8-bit rgb data from memory.
-//
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
@@ -23,6 +21,9 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+// This is an obsolete class from fltk2 development. All functionality
+// has been moved to the base Image class.
+
 #ifndef fltk_rgbImage_h
 #define fltk_rgbImage_h
 
@@ -31,17 +32,13 @@
 namespace fltk {
 
 class FL_API rgbImage : public Image {
-  int linedelta_;
 public:
-    rgbImage(const uchar * d, PixelType p, int W, int H, const char* name=0) 
-	: Image(W,H,name, (const char* const*) d) {p_=p;  linedelta_=W*this->depth();}
-
-    rgbImage(const uchar * d, PixelType p, int W, int H, int linedelta)
-	: Image(W,H, 0, (const char* const*) d),  linedelta_(linedelta) {p_=p;}
-
-    int linedelta() const {return linedelta_;}
-    void update();
   //bool write_jpeg(const char *filename, int quality=75, int dpi=150);
+  rgbImage(const char* name=0) : Image(name) {}
+  rgbImage(const uchar* d, PixelType p, int W, int H) :
+    Image(d,p,W,H,fltk::depth(p)*W) {}
+  rgbImage(const uchar* d, PixelType p, int W, int H, int linedelta) :
+    Image(d,p,W,H,linedelta) {}
 };
 
 }

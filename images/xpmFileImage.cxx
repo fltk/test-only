@@ -1,5 +1,5 @@
 // "$Id$"
-// Copyright 1998-2006 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -22,16 +22,15 @@
 
   Image type that reads a .xpm (X Pixmap) file in from disk.
 
-  The normal use of a .xpm file is to include it into your source code. 
-  In that case you want to use an fltk::xpmImage object.
+  The normal use of a .xpm file is to #include it into
+  your source code. In that case you want to use an fltk::xpmImage
+  object.
 
 */
 
 #include <fltk/SharedImage.h>
 #include <fltk/xpmImage.h>
 #include <fltk/events.h>
-#include <fltk/draw.h>
-#include <fltk/x.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
@@ -48,6 +47,7 @@ static int hexdigit(int x) {
 #define MAXSIZE 2048
 #define INITIALLINES 1024
 
+// This reads C source code and parses out the string array:
 static char** read(char *name, int oneline = 0) {
   FILE *f=fopen(name, "rb");
   if (!f) return 0;
@@ -126,63 +126,28 @@ static char** read(char *name, int oneline = 0) {
   looks like the start of a .xpm file. This returns true if the 
   data contains "/\* XPM".
 */
-bool xpmFileImage::test(const uchar *data, unsigned)
+bool xpmFileImage::test(const unsigned char *data, unsigned)
 {
   return (strstr((char*) data,"/* XPM") != 0);
 }
 
-void xpmFileImage::_measure(int &W, int &H) const
+bool xpmFileImage::fetch()
 {
-  if(w()>=0) { 
-    W = w();
-    H = h(); 
-    return; 
-  }
-  int loaded=0;
-  char *const* ldata = (char *const*)data();
-  if (!ldata) {
-    ldata = ::read((char *)get_filename(), 1);
-    if (!ldata) {
-      W = H = 0;
-      const_cast<xpmFileImage*>(this)->setsize(0,0);
-      return;
-    }
-    loaded=1;
-  }
-
-  measure_xpm(ldata, W, H);
-  const_cast<xpmFileImage*>(this)->setsize(W,H);
-
-  if (loaded) {
-    delete[] ldata[0];
-    free((void*)ldata);
-  }
-}
-
-bool xpmFileImage::fetch() {
   //id = mask = 0;
-  const char *const* ldata = data();
+  char *const* ldata = (char *const*)datas;
+  bool loaded = false;
   if (!ldata) {
     ldata = ::read((char *)get_filename());
     if (!ldata) return false;
-    data(ldata);
+    loaded = true;
   }
-
-  int W, H;
-  measure_xpm(data(), W, H);
-  w(W); h(H); pixel_type(MONO);
-  return true;
-}
-
-void xpmFileImage::read() {
-  bool created = (data() == 0); // does this image need to be loaded
-  if (!fetch()) return;
-
-  GSave gsave;
-  const_cast<xpmFileImage*>(this)->make_current();
-  draw_xpm(data(), 0, 0);
-
-  if (created) dealloc_data();
+  bool ret = xpmImage::fetch(*this, ldata);
+  if (loaded) {
+    char* const* p = ldata;
+    while (*p) delete[] *p++;
+    free((void*)ldata);
+  }
+  return ret;
 }
 
 //

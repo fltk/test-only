@@ -25,59 +25,33 @@
 #include <fltk/events.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
-#include <fltk/string.h>
-#include <ctype.h>
-
-using namespace fltk;
 
 /*! \class fltk::Image
 
-  This subclass of Symbol draws a very common thing: a fixed-size
-  "offscreen" image, containing color and alpha information for
-  a rectangle of pixels. Call over() or draw(rectangle) to composite
-  a copy on the screen, transformed by the current transform.
+  A rectangular buffer of pixels that the program and write (and
+  read?)  and can be efficiently drawn on the screen. The draw()
+  functions will copy (or "over" composite if there is alpha in the
+  pixeltype()) onto the output, transformed by the current transform.
 
-  This is for \e static images. If your image is changing (ie a movie
-  playback, or the image in a painting program) then you <i>do not
-  want to use this</i>. Just call fltk::drawimage() directly with your
-  image buffer. Notice that fltk1 had numerous calls for messing with
-  the image, these have been deleted in fltk2 to prevent misuse of
-  this object. Well, no, they have reappeared. I guess nobody actually
-  reads this documentation...
-
-  Planned fixed implementation to allow an OPTIONAL buffer to mess
-  with the data:
-
-  * Normal drawing will go directly from the source data (the inline_data
-  or the file) to the system "picture" image. DO NOT RELY ON THE BUFFER
-  BEING CREATED!!!!
-
-  * "fetch()" will create a buffer, load it with the same data as
-  the normal drawing will do. Calling it repeatedly will "revert"
-  the buffer back to the initial data. An attempt will be made to
-  reuse the buffer created by the "picture" object on Win32 and OS/X.
-  When fetch() is called from read(), it automatically dispose the buffer
-  after use, only manual/previous call to fetch() permits
-  to apply generic data algorithms on it.
-  * an "unfetch()" can be used to dispose of the local buffer, 
-    to achieve that simply call the dealloc_data() method.
-
-  * Merge rgbImage into this base class, allow creation of an Image
-  with arbitrary buffer and pixeltype.
-
-  Subclasses must implement the update() method. In \e theory this can
-  use any fltk drawing functions to draw the contents of the image. In
-  reality on most platforms the only thing that works is a single
-  fltk::drawimage().
+  If you already have a set of pixels sitting in your own memory,
+  drawimage() can draw it and is \e much easier to use. You should use
+  this class \e only if you will be drawing the \e same image (with no
+  changes to the pixels) multiple times, or if you can efficiently use
+  the linebuffer() and setpixels() functions to write your image to
+  the buffer as you generate it. Otherwise you will have no efficiency
+  advantages over drawimage() and it may actually perform worse.
 
   Because Image is a subclass of Symbol, it may be used as a
   Widget::image() or as the box() in a Style. If you give it a name it
-  can be drawn with "@name;" in a label. Overriding the inset() method
-  can produce very useful images for buttons with fixed-thickness
-  edges.
+  can be drawn with "@name;" in a label. If resized, the Symbol
+  _draw() method will use the inset() call to decide on edge
+  thicknesses and will dice the image up into 9 individually-scaled
+  pieces, which is very useful for GUI buttons and background images
+  (this is similar to how Flash draws buttons).
 
-  There are a number of subclasses that draw jpeg or png images,
-  either from in-memory data buffers or from files.
+  There are a number of subclasses such as jpgImage and pngImage that
+  display compressed image data, either from in-memory data buffers or
+  from files.
 
   <i>There is no destructor</i> due to C++'s lame insistence
   that it be called on static objects. An fltk program may contain
@@ -87,23 +61,67 @@ using namespace fltk;
   Image, you must call destroy() before doing so.
 */
 
-/*! \fn Image::Image(const char* name=0)
-  The default constructor makes a zero-sized image. This will not
-  draw anything, you have to call setsize() on it. Most image
-  subclasses use this initial zero size as an indication that they
-  have not analyzed the data and figured out the size.
+using namespace fltk;
+
+#if USE_X11
+# include "x11/Image.cxx"
+#elif defined(_WIN32)
+# include "win32/Image.cxx"
+#elif USE_QUARTZ
+# include "osx/Image.cxx"
+#else
+# error
+#endif
+
+/*! \fn Image::Image(const char* name)
+  The default constructor sets the width() and height() to -1, which
+  indicates that setsize() has not been called. This allows measurement
+  to be deferred until fetch() or _measure() is called. The pixeltype()
+  is set to RGB32 (0x00rrggbb).
 
   The optional name is passed to the Symbol constructor and allows
   the image to be drawn by puttin "@name;" into a label.
 */
 
-  
-  /*! \fn Image::Image(int w, int h, const char* name=0, const char * const * d=0) 
-  This constructor sets the width and height. The initial
-  image is an opaque black rectangle of that size.
+/*! \fn Image::Image(int w, int h, const char* name)
+  Does setsize(w,h). This causes the width() and height() to return
+  the passed values. No buffer is allocated, call allocate() to do that.
+  The pixeltype() is set to RGB32 (0x00rrggbb).
 
   The optional name is passed to the Symbol constructor and allows
   the image to be drawn by puttin "@name;" into a label.
+*/
+
+/*! \fn Image::Image(PixelType p, int w, int h, const char* name)
+  Does pixeltype(p) and setsize(w,h). No buffer is allocated, call
+  allocate() to do that.
+
+  The optional name is passed to the Symbol constructor and allows
+  the image to be drawn by puttin "@name;" into a label.
+*/
+
+/*! \fn Image::Image(const uchar* data, PixelType, int w, int h, int linedelta)
+  Initializes the size and pixels by doing setimage(). Note that
+  the pointer \a data may be used unchanged. If you want to force
+  a copy you should use setpixels() instead.
+*/
+
+/*! \fn Image::Image(const uchar* data, PixelType, int w, int h)
+  Initializes the size and pixels by doing setimage(). Note that
+  the pointer \a data may be used unchanged. If you want to force
+  a copy you should use setpixels() instead.
+*/
+
+/*! \fn PixelType Image::pixeltype() const
+  Return the types of pixels that can be put into the image with
+  setpixels(). You can change this with setpixelsize(). It is
+  possible the internal data is in a different type, use
+  buffer_pixeltype() to find out what that is.
+*/
+
+/*! \fn int Image::depth() const
+  Same as ::depth(pixeltype()), this returns how many bytes
+  each pixel takes in the buffer sent to setpixels().
 */
 
 /*! \fn int Image::width() const
@@ -116,86 +134,165 @@ using namespace fltk;
   setsize().
 */
 
-/*! \fn int Image::depth() const
-  Return the depth of the image = number of bytes per pixel.
-*/
-/*! \fn int Image::line_size() const
-  Size in bytes of a horiz. line,  generally equals (but not always) = w() * d() 
-*/
-
-/*! \fn int Image::count() const
-  Number of raster images data inside this Image (generally 1)
-*/
-
-/*! Change the size of the stored image. If it is different then
+/*! \fn void Image::setpixeltype(PixelType);
+  Change the stored pixeltype. If it is not compatable then
   destroy() is called. */
-void Image::setsize(int w, int h) {
-  if (w == w_ && h == h_) return;
-  destroy();
-  w_ = w;
-  h_ = h;
-}
 
-/*! \fn void Image::redraw() {
-  Delete any cached data, reverting to a transparent rectangle, and
-  make drawn() return false.
+/*! \fn void Image::setsize(int w, int h)
+  Change the size of the stored image. If it is not compatable with
+  the current data size (generally if it is larger) then destroy()
+  is called. */
+
+/*! \fn void Image::setpixels(const uchar* data, const Rectangle&, int linedelta)
+  Replace the given rectangle of buffer() with the supplied data,
+  which must be in the pixeltype(). \a linedelta is the distance
+  between each row of pixels in \a data. The rectangle is assummed
+  to fit inside the width() and height().
 */
 
-/*! \fn bool Image::drawn() const
-  Returns true if make_current() has been called. On some platforms this will
-  return false if the platform is incabable of compositing the stored
-  data without update() being called again.
+/** \fn void Image::setpixels(const uchar* data, const fltk::Rectangle& r)
+  Figures out the linedelta for you as depth()*r.w().
 */
 
-/*! \fn void Image::make_current();
-
-  Make all the drawing functions (see \link draw.h <fltk/draw.h>
-  \endlink) draw into the offscreen image.  Or so we wish. On all
-  current platforms the only call that works is a single
-  fltk::drawimage() with the rectangle set to 0,0,w(),h().
-
-  To draw into an Image while you are drawing a widget (or drawing
-  another Image) you must use a GSave object to save the state. See
-  update() for sample code.
+/*! \fn void Image::setpixels(const uchar* data, int y);
+  Same as setpixels(data,Rectangle(0,y,width(),1)), sets the entire
+  row of pixels.
 */
 
-/*! \fn void Image::update();
+/*! \fn void Image::setimage(const uchar* d, PixelType p, int w, int h, int linedelta)
+  This is equivalent to:
+\code
+  setsize(w,h);
+  setpixeltype(p);
+  setpixels(d,Rectangle(w,h),linedelta);
+\endcode
+  except, if possible, \a d is used as buffer() (throwing
+  away the const!). This will happen if the pixeltype and linedelta
+  are of types that it can handle unchanged and if the image memory
+  does not need to be allocated by the system (currently OS/X only).
+*/
 
-  Subclasses must implement this function to draw the offscreen image.
-  It will be called if drawn() is false.
+/*! \fn void Image::setimage(const uchar* d, PixelType p, int w, int h)
+  Figures out linedelta for you as w*depth(p).
+*/
+
+/*! \fn uchar* linebuffer(int y)
+  Return a pointer to a buffer that you can write up to width() pixels
+  in pixeltype() to and then call setpixels(buffer,y) with. This can
+  avoid doing any copying of the data if the internal format and
+  pixeltype() are compatable, because it will return a pointer
+  directly into the buffer and setpixels will detect this and do
+  nothing.
+*/
+
+/*! \fn uchar* Image::buffer()
+  Creates if necessary and returns a pointer to the internal pixel
+  buffer. Allocated by, and probably shared with, the graphics system,
+  it may have a different pixeltype, size, and linedelta that the
+  Image. If you are able to figure out the type you can read and
+  write the pixels directly.
+
+  The non-const version will sync any previous drawing with the
+  display, on the assumption that you are about to write to the
+  buffer.
+*/
+
+/*! \fn PixelType Image::buffer_pixeltype() const
+  Return the type of pixels stored in buffer().  Likely to be
+  ARGB32. On older (non-XRender) X system the types 1 and 2 indicate 1
+  and 2-byte data, but there is no api to figure out anything more
+  about this data.
+
+  Note that this returns garbage until allocate() is called.
+*/
+
+/*! \fn PixelType Image::buffer_depth() const
+  Returns the number of bytes per pixel stored in buffer(). This
+  is the same as ::depth(buffer_pixeltype()).
+*/
+
+/*! \fn int Image::buffer_width() const
+  Return the width in pixels of buffer().
+*/
+
+/*! \fn int Image::buffer_height() const
+  Return the height in pixels of buffer();
+*/
+
+/*! \fn int Image::buffer_linedelta() const
+  Return the distance between each row of pixels in buffer().
+*/
+
+/*! \fn void Image::buffer_changed()
+  Call this if you modify the contents of buffer(). On some systems
+  the memory is not actually shared with the window system, and this
+  will cause draw() to copy the buffer to the system's memory.
+  setpixels() calls this for you.
+*/
+
+/*! \fn void Image::destroy()
+  Destroys the buffer() and any related system structures.
+*/
+
+/*!
+  This is called by the draw() functions once after the Image is
+  created or after refetch() has been called.  This allows subclasses
+  to defer reading files and calling setpixels() calls until the first
+  draw() or measure(). This should return true if successful, false on
+  any error (though fltk does not do anything useful with errors).
+
+  The base class does nothing and returns true, thus leaving the
+  image unchanged.
 
   Sample implementation:
 \code
-  void MyImage::update() {
-    set_size(figure_out_width(),figure_out_height());
-    GSave gsave;
-    make_current();
-    drawimage(imagebuffer(), RGB, Rectangle(0,0,w(),h()));
+  bool MyImage::fetch() {
+    setsize(get_width(file), get_height(file));
+    setpixeltype(my_pixeltype);
+    for (int y=0; y<height(); y++) {
+      uchar* buffer = linebuffer(y);
+      get_line_of_pixels(file, buffer, y);
+      setpixels(buffer, y);
+    }
+    return true;
   }
 \endcode
+*/
+bool Image::fetch() {return true;}
 
-  If you don't call make_current(), then nothing will be drawn. This
-  is useful if you encounter an error, such as a non-existent image
-  file.
+/*! \fn void Image::refetch()
+  Cause fetch() to be called again. This is useful for a file image
+  if the file name or contents have changed.
+*/
+
+/*! \fn void Image::fetch_if_needed() const
+  Call fetch() if it has not been called or if refetch() was called.
 */
 
 /**
-  By default Image assumes the constructor set the w_ and h_
-  fields, and returns them.
+  Returns width() and height().
 
-  For many subclasses (such as ones that read a file!) you certainly
-  want to defer this calculation until first use. The way to do this
-  is to put zero into the w_ and h_ in the constructor, and override this
-  method with your own which calculates the values and sets them if
-  it has not done so already. Typically this is done by calling update()
-  on the assumption that the image will be needed soon.
+  The default constructor sets an internal flag that indicates that
+  fetch() must be called before the width() and height() are known.
+  This is useful for subclasses that read a file and figure out both
+  the size and pixels at the same time.
 */
-void Image::_measure(int& W, int& H) const { W=w(); H=h(); }
+void Image::_measure(int& W, int& H) const {
+  if (flags & MEASUREFETCH)
+    fetch_if_needed();
+  W = w_;
+  H = h_;
+}
 
 /*! \fn bool Image::fills_rectangle() const
-  Peeks into the internal data and returns true if it knows that
-  the alpha is solid 1 everywhere in the rectangle.
+  Returns true if the pixeltype does not support alpha.
 */
+bool Image::fills_rectangle() const {
+  return
+    pixeltype_ != MASK &&
+    pixeltype_ != RGBA &&
+    pixeltype_ < ARGB32;
+}
 
 #include <fltk/Widget.h>
 
@@ -209,16 +306,16 @@ void Image::label(Widget* o) {
 }
 
 /**
-  This does measure() and then draw(Rectangle(x,y,w(),h()). Thus it
-  draws it without any scaling and with the top-left corner at the x,y
-  position.
+  Does measure() and then draw(Rectangle(0,0,w,h),Rectangle(x,y,w,h).
+  Thus the top-left corner is placed at x,y and no scaling (other
+  than due to the current transformation) is done.
 */
 void Image::draw(int x, int y) const {
   int w,h; measure(w,h);
-  draw(Rectangle(x,y,w,h));
+  draw(fltk::Rectangle(0,0,w,h), fltk::Rectangle(x,y,w,h));
 }
 
-/*! \fn void Image::over(const Rectangle& from, const Rectangle& to) const
+/*! \fn void Image::draw(const Rectangle& from, const Rectangle& to) const
 
   Draws the subrectangle \a from of the image, transformed to fill
   the rectangle \a to (as transformed by the CTM). If the image has
@@ -237,299 +334,164 @@ void Image::draw(int x, int y) const {
   * OS/X: works well in all cases.
 */
 
-#if USE_X11
-# include "x11/Image.cxx"
-#elif defined(_WIN32)
-# include "win32/Image.cxx"
-#elif USE_QUARTZ
-# include "osx/Image.cxx"
-#else
-# error
-#endif
-
 /**
-  Virtual method from Symbol baseclass, calls over() to resize
-  the source image to fill the destination rectangle.
+  Resizes the image to fit in the rectangle. This is the virtual
+  method from the Symbol base class, so this is what is called if
+  the image is used as a label or box type.
 
-  If you override inset() then this will call inset() for the
-  original and the output rectangle. The source and destination
-  are diced into 9 rectangles in a 3x3 grid by the insets, and
+  If the destination rectangle is not the same size, inset() is
+  used to figure out the edge thicknesses. The image is then
+  diced into 9 rectangles in a 3x3 grid by the insets, and
   each piece is scaled individually. This is very useful for
-  scaling paintings of buttons.
+  scaling paintings of buttons. Note that if the insets are zero
+  (the default) then the whole image is scaled as one piece.
+  If you want, inset() can return different thicknesses depending
+  on the size, producing very interesting scaling.
 
-  It is possible this will use drawflags(INACTIVE_R) to gray out
-  the image is a system-specific way. NYI.
+  It is possible this will use drawflags(INACTIVE) to gray out
+  the image in a system-specific way. NYI.
 */
 void Image::_draw(const fltk::Rectangle& r) const
 {
   if (r.empty()) return;
-  if (!(flags&DRAWN)) const_cast<Image*>(this)->update(); // get the size right
+  int w,h; measure(w,h);
   // quickly handle no-scaling:
-  if (r.w()==w_ && r.h()==h_) {
+  if (r.w()==w && r.h()==h) {
   NOINSETS:
-    over(fltk::Rectangle(0,0,w_,h_), r);
+    draw(fltk::Rectangle(0,0,w,h), r);
     return;
   }
   // now check the insets and use them to scale pieces individually:
-  fltk::Rectangle in(0,0,w_,h_); this->inset(in);
-  if (!in.x() && !in.y() && in.w()==w_ && in.h()==h_) goto NOINSETS;
-  int fx[4]; fx[0]=0; fx[1]=in.x(); fx[2]=in.r(); fx[3]=w_;
-  int fy[4]; fy[0]=0; fy[1]=in.y(); fy[2]=in.b(); fy[3]=h_;
+  fltk::Rectangle in(0,0,w,h); this->inset(in);
+  if (!in.x() && !in.y() && in.w()==w && in.h()==h) goto NOINSETS;
+  int fx[4]; fx[0]=0; fx[1]=in.x(); fx[2]=in.r(); fx[3]=w;
+  int fy[4]; fy[0]=0; fy[1]=in.y(); fy[2]=in.b(); fy[3]=h;
   fltk::Rectangle out(r); this->inset(out);
   int tx[4]; tx[0]=r.x(); tx[1]=out.x(); tx[2]=out.r(); tx[3]=r.r();
   int ty[4]; ty[0]=r.y(); ty[1]=out.y(); ty[2]=out.b(); ty[3]=r.b();
   for (int y=0; y<3; y++) if (fy[y+1]>fy[y] && ty[y+1]>ty[y]) {
     for (int x=0; x<3; x++) if (fx[x+1]>fx[x] && tx[x+1]>tx[x]) {
-      over(fltk::Rectangle(fx[x],fy[y],fx[x+1]-fx[x],fy[y+1]-fy[y]),
+      draw(fltk::Rectangle(fx[x],fy[y],fx[x+1]-fx[x],fy[y+1]-fy[y]),
 	   fltk::Rectangle(tx[x],ty[y],tx[x+1]-tx[x],ty[y+1]-ty[y]));
     }
   }
 }
 
-// Image Allocation / DeAllocation
-//! alloc data, sets the pixel type,  and make owned data destroyed automatically
-uchar * Image::alloc_pixels(int w,int h, PixelType p=UNDEFINED) { 
-    int size= (p!= UNDEFINED) ? (w*h*fltk::depth(p)) : 
-	p_ !=UNDEFINED ? (w*h*fltk::depth(p_)) : 0 ;
-    if (!size) return 0;
-    dealloc_data();
-    owned_ = true;
-    count_=1; // force the buffer to be a pixels buffer
-    nb_data_ = size;
-    data_ = (const char**) new uchar[size] ;
-    // we dont need to 0 the buffer for pixels buffer
-    return (uchar*) data_;
-}
-
-//! alloc data, sets the pixel type,  and make owned data destroyed automatically
-const char ** Image::alloc_data(int  size ) { // alloc data, sets the pixel type,  and will destroy owned data
-    dealloc_data();
-    owned_ = true;
-    count_=0; // force the buffer to be a data buffer
-    nb_data_ = size /(sizeof(const char *));
-    data_ = (const char**) new uchar[size] ;
-    memset((const char**) data_,0,size);   // 0 the buffer so we can delete the allocated lines 
-			    // later in a safer way
-    return (const char**) data_;
-}
-
-//! dealloc potentially owned data, harmless if called more than once
-void Image::dealloc_data() { 
-    if (owned_ && data_ ) {
-	if (count_==0 && nb_data_>0) {
-	// data buffers need more care than pixels buffers
-	    int i;
-	    for (i=0; i<nb_data_; i++) delete [] const_cast<char*>(data_[i]);
-	}
-	delete [] ((uchar*)data_); // deletes data or pixels buffers
-	if (colors_ && ncolors_>0) delete [] colors_; 
-	colors_ = 0;
-    }
-    data_ = 0;
-    nb_data_ = 0;
-    owned_ = false;
-    count_=0;
-}
-
-/** \fn void Image::destroy();
-  Same as redraw() but it also deallocates as much memory as possible.
+/*! \fn unsigned long Image::mem_used();
+  Returns how much memory the image is using for buffer() and for
+  any other structures it created. Returns zero if buffer() has
+  not been called.
 */
 
-/** \fn void Image::copy_data(); 
-  Copy the pixels or data buffer if it is not owned, useful for destructive image manip,
-  like color_average()
+/*! \fn unsigned long Image::total_mem_used()
+  Sum of all mem_used() calls to all Images.  This is used by
+  SharedImage to decide when to clear out cached images.
 */
-void Image::copy_data() {
-    if (!data() || owned_) return; // don't copy already owned data
-    
-    if (count_==0) { // pixmap data
-	
-	char	**new_data,	// New data array
-		**new_row;	// Current row in image
-	int	i,		// Looping var
-		ncolors,	// Number of colors in image
-		chars_per_pixel,// Characters per color
-		chars_per_line;	// Characters per line 
-	int W,H;
 
-	// Figure out how many colors there are, and how big they are...
-	sscanf(data()[0],"%d %d %d %d", &W, &H,&ncolors, &chars_per_pixel);
-	if (w()==-1) {w(W); h(H);} // use this opportunity to measure on the fly this pixmap
-	chars_per_line = chars_per_pixel * w() + 1;
-	
-	// Allocate memory for the new array...
-	if (ncolors < 0) new_data = new char *[h() + 2];
-	else new_data = new char *[h() + ncolors + 1];
-	
-	new_data[0] = new char[strlen(data()[0]) + 1];
-	strcpy(new_data[0], data()[0]);
-	
-	// Copy colors...
-	if (ncolors < 0) {
-	    // Copy FLTK colormap values...
-	    ncolors = -ncolors;
-	    new_row = new_data + 1;
-	    *new_row = new char[ncolors * 4];
-	    memcpy(*new_row, data()[1], ncolors * 4);
-	    ncolors = 1;
-	    new_row ++;
-	} else {
-	    // Copy standard XPM colormap values...
-	    for (i = 0, new_row = new_data + 1; i < ncolors; i ++, new_row ++) {
-		*new_row = new char[strlen(data()[i + 1]) + 1];
-		strcpy(*new_row, data()[i + 1]);
-	    }
-	}
-	
-	// Copy image data...
-	for (i = 0; i < h(); i ++, new_row ++) {
-	    *new_row = new char[chars_per_line];
-	    memcpy(*new_row, data()[i + ncolors + 1], chars_per_line);
-	}
-	
-	// Update pointers...
-	data((const char **)new_data);
-	nb_data_ =  h() + ncolors + 1;  
-	owned_=true;
-    }
-    else if (count_>=1) {
-	if (w()==-1) {int W=w(),H=h(); _measure(W,H);w(W); h(H);}
-	size_t s = d()*h();
-	uchar* newbuf = new uchar[s];
-	memcpy(newbuf, pixels(), s);
-	pixels(newbuf);
-	nb_data_=(int)s;
-	owned_=true;
-    }
+////////////////////////////////////////////////////////////////
+// drawimage()
 
-}
+static Image* reused_image;
 
-/** Generic algorithm to make all pixels of a buffer tend
-    to a color c average with a blending coefficient i.<br>
-    useful for desaturating an image if c is a grey color
+/*!
+
+  Draw a image (a rectangle of pixels) stored in your program's
+  memory. The current transformation (scale, rotate) is applied.
+
+  - \a pointer points at the first byte of the top-left pixel.
+  - \a type describes how to interpret the bytes of each pixel.
+  - \a rectangle: the image is put in the top-left corner
+  and the width and height declare how many pixels the image has.
+  - \a line_delta is how much to add to \a pointer to go 1 pixel down.
+  By setting \a line_delta to larger than \a depth(type)*r.w() you can
+  crop a picture out of a larger buffer. You can also set it negative
+  for images that are stored with bottom-to-top in memory,
+  notice that in this case \a pointer still points at the top-left
+  pixel, which is at the \e end of your buffer minus one line_delta.
+
+  The X version of FLTK will abort() if the default visual is one
+  it cannot use for images. To avoid this call fltk::visual(fltk::RGB)
+  at the start of your program.
 */
-void Image::color_average(Color c, float i) {
-    // Delete any existing pixmap/mask objects...
-    if (!data()) 
-	fetch();
-    if (!data()) return; // no data() or pixels after fetch: 
-		         // seems that no image is set his object yet
-    copy_data(); // make sure we own the data
-    
-    uchar		r, g, b;
-    unsigned	ia, ir, ig, ib;
-    fltk::split_color(c, r, g, b);
-    if (i < 0.0f) i = 0.0f;
-    else if (i > 1.0f) i = 1.0f;
-    // Get the color to blend with...
-    ia = (unsigned)(256 * i);
-    ir = r * (256 - ia);
-    ig = g * (256 - ia);
-    ib = b * (256 - ia);
-
-    if (count_==0 ) {// pixmap data
-	// Update the colormap to do the blend...
-	char		line[255];	// New colormap line
-	int		color,		// Looping var
-	    ncolors,	// Number of colors in image
-	    chars_per_pixel;// Characters per color
-	sscanf(data()[0],"%*d%*d%d%d", &ncolors, &chars_per_pixel);
-	
-	if (ncolors < 0) {
-	    // Update FLTK colormap...
-	    ncolors = -ncolors;
-	    uchar *cmap = (uchar *)(data()[1]);
-	    for (color = 0; color < ncolors; color ++, cmap += 4) {
-		cmap[1] = (ia * cmap[1] + ir) >> 8;
-		cmap[2] = (ia * cmap[2] + ig) >> 8;
-		cmap[3] = (ia * cmap[3] + ib) >> 8;
-	    }
-	} else {
-	    // Update standard XPM colormap...
-	    for (color = 0; color < ncolors; color ++) {
-		// look for "c word", or last word if none:
-		const char *p = data()[color + 1] + chars_per_pixel + 1;
-		const char *previous_word = p;
-		for (;;) {
-		    while (*p && isspace(*p)) p++;
-		    char what = *p++;
-		    while (*p && !isspace(*p)) p++;
-		    while (*p && isspace(*p)) p++;
-		    if (!*p) {p = previous_word; break;}
-		    if (what == 'c') break;
-		    previous_word = p;
-		    while (*p && !isspace(*p)) p++;
-		}
-
-                Color c = fltk::color(p);
-		if (c) {
-                  split_color(c, r,g,b);
-		    r = (ia * r + ir) >> 8;
-		    g = (ia * g + ig) >> 8;
-		    b = (ia * b + ib) >> 8;
-		    
-		    if (chars_per_pixel > 1) sprintf(line, "%c%c c #%02X%02X%02X",
-			data()[color + 1][0],
-			data()[color + 1][1], r, g, b);
-		    else sprintf(line, "%c c #%02X%02X%02X", data()[color + 1][0], r, g, b);
-		    
-		    delete[] (char *)data()[color + 1];
-		    ((char **)data())[color + 1] = new char[strlen(line) + 1];
-		    strcpy((char *)data()[color + 1], line);
-		}
-	    }
-	}
-    } 
-    else if (count_>=1) { // pixels data
-	int y, x,l=ld();
-	uchar * pixBuffer = (uchar*) pixels();
-		
-	switch (pixel_type()) {
-	case ARGB32: //aarrggbb
-	case RGB32:  
-	    for (y=0; y<h_; y++) { // for each image row
-		pixBuffer = ((uchar*)pixels())+y*l;
-		for(x=0; x<l; x+=4) {
-		    unsigned * org = ((unsigned *) (&pixBuffer[x]));
-		    unsigned trans = 
-			(pixBuffer[x+3] <<24)	+ 
-			(((ia * pixBuffer[x+2] + ir)>>8) <<16) +
-			(((ia * pixBuffer[x+1] + ig)>>8) <<8) +
-			((ia * pixBuffer[x+0] + ib)>>8);
-		      *org= trans;
-
-		}
-	    }
-	    break;    
-	case RGB:
-	    for (y=0; y<h_; y++) { // for each image row
-		pixBuffer = ((uchar*)pixels())+y*l;
-		for(x=0; x<l; x+=3) {
-		    pixBuffer[x]  = (ia * pixBuffer[x]     + ir) >>8;
-		    pixBuffer[x+1]= (ia * pixBuffer[x+1]   + ig) >>8;
-		    pixBuffer[x+2]= (ia * pixBuffer[x+2]   + ib) >>8;
-		}
-	    }
-	    break;
-	default:
-	    // TODO : MONO
-	    break;
-	}
-    }
+void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
+		     const Rectangle& r,
+		     int line_delta) {
+  if (innards(pointer, type, r, line_delta, 0, 0)) return;
+  // Fake it using a temporary image
+  if (!reused_image) reused_image = new Image();
+  reused_image->setimage(pointer, type, r.w(), r.h(), line_delta);
+  reused_image->draw(Rectangle(r.w(),r.h()), r);
 }
-//! Common constructors init here as too many variables are affected to make this inlined
-void Image::init(int w, int h, const char * const * d) {
-    picture=0;
-    flags= 0;
-    w_= w; h_ = h;
-    p_=UNDEFINED;
-    ld_= count_=0;
-    data_=d;
-    nb_data_=0;
-    owned_=0;
-    colors_=0;
-    transp_index_ = -1; // means no transparency
+
+/*!
+  Same except \a line_delta is set to <i>r</i>.w() times
+  depth(<i>type</i>), indicating the rows are packed together one
+  after another with no gap.
+*/
+void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
+		     const Rectangle& r) {
+  drawimage(pointer, type, r, depth(type)*r.w());
 }
+
+/*! \typedef fltk::DrawImageCallback
+
+  Type of function passed to drawimage(). It must return a pointer
+  to a horizontal row of \a w pixels, starting with the pixel at
+  \a x and \a y (relative to the top-left corner of the image, not
+  to the coordinate space drawimage() is called in). These pixels
+  must be in the format described by \a type passed to drawimage()
+  and must be the \a delta apart passed to drawimage().
+
+  \a userdata is the same as the argument passed to drawimage().
+  This can be used to point at a structure of information about
+  the image.
+
+  Due to cropping, less than the whole image may be requested. So the
+  callback may get an \a x greater than zero, the first \a y passed to
+  it may be greater than zero, and \a x+w may be less than the width
+  of the image.  The passed \a buffer contains room for at least the
+  number of pixels specified by the width passed to drawimage(). You
+  can use this as temporary storage to construct a row of the image,
+  and return a pointer offset by \a x into it.
+
+*/
+
+/**
+  Call the passed function to provide each scan line of the
+  image. This lets you generate the image as it is being drawn, or do
+  arbitrary decompression of stored data (provided it can be
+  decompressed to individual scan lines easily).
+
+  \a callback is called with the void* \a data argument (this can be
+  used to point at a structure of information about the image), the x,
+  y, and number of pixels desired from the image, measured from the
+  upper-left corner of the image. It is also given a buffer of at
+  least \a w pixels that can be used as temporary storage, for
+  instance to decompress a line read from a file. You can then return
+  a pointer to this buffer, or to somewhere inside it.
+
+  The callback must return n pixels of the format described by \a
+  type.
+
+  The \a xywh rectangle describes the area to draw. The callback is
+  called with y values between 0 and h-1. Due to cropping not
+  all pixels may be asked for. You can assumme y will be asked for in
+  increasing order.
+*/
+void fltk::drawimage(DrawImageCallback cb,
+		     void* userdata, fltk::PixelType type,
+		     const Rectangle& r) {
+  if (innards(0, type, r, 0, cb, userdata)) return;
+  // fake it using an Image object
+  // Fake it using a temporary image
+  if (!reused_image) reused_image = new Image();
+  reused_image->setpixeltype(type);
+  reused_image->setsize(r.w(), r.h());
+  for (int y=0; y<r.h(); y++)
+    reused_image->setpixels(cb(userdata, 0, y, r.w(), reused_image->linebuffer(y)), y);
+  reused_image->draw(Rectangle(r.w(),r.h()), r);
+}
+
 //
 // End of "$Id$".
 //

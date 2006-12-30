@@ -24,8 +24,6 @@
 // WAS: why? it's already in the Pixmap, ready for drawing!
 
 #include <config.h>
-#include <fltk/events.h>
-#include <fltk/draw.h>
 #include <fltk/SharedImage.h>
 #include <fltk/xbmImage.h>
 #include <fltk/string.h>
@@ -39,7 +37,6 @@ const char*	SharedImage::shared_image_root=0;
 SharedImage*	SharedImage::first_image = 0;
 int		SharedImage::image_used=0;
 unsigned	SharedImage::mem_usage_limit=0;
-unsigned	SharedImage::mem_used=0;
 
 ////////////////////////////
 // static module variables
@@ -47,11 +44,6 @@ unsigned	SharedImage::mem_used=0;
 SharedImage::Handler *SharedImage::handlers_ = 0;// Additional format handlers
 int	SharedImage::num_handlers_ = 0;	// Number of format handlers
 int	SharedImage::alloc_handlers_ = 0;	// Allocated format handlers
-
-// static unsigned mem_used=0; (now moved to Fl.cxx !)
-// This contains the total number of pixmap pixels in the cache
-// WARNING : this is updated incrementally, so beware that it keeps balanced
-// when deleting or creating pixmaps !
 
 void SharedImage::set_cache_size(unsigned l)
 {
@@ -62,21 +54,20 @@ static SharedImage *limage; // used to find the less used image
 void SharedImage::find_less_used() {
   if(l1) l1->find_less_used();
   if(l2) l2->find_less_used();
-  if(drawn() && (!limage->drawn() || used<limage->used)) limage=this;
+  if(mem_used() && (!limage->mem_used() || used<limage->used)) limage=this;
 }
 void SharedImage::check_mem_usage()
 {
-  if(mem_usage_limit==0 || first_image==NULL || mem_used < mem_usage_limit) 
+  if (mem_usage_limit==0 || first_image==NULL ||
+      total_mem_used() <= mem_usage_limit)
     return;
 
   do {
     limage=first_image;
     first_image->find_less_used();
-    if (limage->drawn()) {
-      mem_used -= limage->w() * limage->h();
-      limage->destroy();
-    } else return;
-  } while(mem_used >= mem_usage_limit);
+    if (!limage->mem_used()) break;
+    limage->destroy();
+  } while(total_mem_used() >= mem_usage_limit);
 }
 
 // WAS: this is probably a waste of time! No modern system requires these
@@ -92,14 +83,12 @@ public:
 
 shared_image_destructor_class shared_image_destructor;
 
+/*! Calls destroy() on this and every less-recently-used SharedImage?. */
 void SharedImage::clear_cache()
 {
-  if (drawn()) {
-    mem_used -= w()*h();
-    destroy();
-  }
+  destroy();
   if (l1 && l1!=this) l1->clear_cache();
-  if (l2&& l2!=this) l2->clear_cache();
+  if (l2 && l2!=this) l2->clear_cache();
 }
 
 void SharedImage::set_root_directory(const char *d) {
@@ -158,12 +147,12 @@ SharedImage* SharedImage::get(SharedImage* (*create)(),
     image=create();
     image->refcount = 1;
     image->name = newstring(name);
-    image->pixels(datas);
+    image->datas=datas;
     image->setsize(-1,-1); // We mark the fact the it has never been measured yet
     image->l1 = image->l2 = 0;
     SharedImage::insert(first_image, image);
   } else {
-    if(image->pixels()==NULL) image->pixels(datas);
+    if(image->datas==NULL) image->datas=datas;
     image->refcount++;
   }
   image->used = image_used++;
@@ -207,13 +196,10 @@ SharedImage * SharedImage::get(const char *n) {
   return img;
 }
 
-void SharedImage::reload(const uchar* datas)
+void SharedImage::reload(const uchar* pdatas)
 {
-  if (drawn()) {
-    mem_used -= w()*h();
-    destroy();
-  }
-  if (datas) pixels(datas);
+  if (pdatas) datas = pdatas;
+  refetch();
 }
 void SharedImage::reload(const char* name, const uchar* pdatas)
 {
@@ -239,9 +225,9 @@ int SharedImage::remove()
 {
   if (--refcount) return 0;
   remove_from_tree(first_image, this);
-  if (drawn()) mem_used -= w()*h();
   return 1;
 }
+
 int SharedImage::remove(const char* name)
 {
   SharedImage *image=SharedImage::find(first_image, name);
@@ -249,23 +235,10 @@ int SharedImage::remove(const char* name)
   else return 0;
 }
 
-void SharedImage::update()
-{
-  if (this->w() < 0) {int w=0,h=0; measure(w,h);}
-  if (this->w() == 0) return;
-  mem_used += this->w()*this->h();
-  check_mem_usage();
-  const_cast<SharedImage*>(this)->read();
-  if (!drawn()) { // could not read the image for some reason ?
-    mem_used -= this->w()*this->h();
-    const_cast<SharedImage*>(this)->setsize(0,0); // Will never try again ...
-    return; 
-  }
-}
-
 void SharedImage::_draw(const Rectangle& r) const {
   const_cast<SharedImage*>(this)->used = image_used++; // do this before check_mem_usage
   Image::_draw(r);
+  check_mem_usage();
 }
 
 //

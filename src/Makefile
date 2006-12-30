@@ -136,8 +136,6 @@ CPPFILES = \
 	compose.cxx \
 	default_glyph.cxx \
 	dnd.cxx \
-	draw_xpm.cxx \
-	drawimage.cxx \
 	drawtext.cxx \
 	error.cxx \
 	event_key_state.cxx \
@@ -160,7 +158,6 @@ CPPFILES = \
 	own_colormap.cxx \
 	path.cxx \
 	readimage.cxx \
-	rgbImage.cxx \
 	run.cxx \
 	scandir.cxx \
 	scrollrect.cxx \

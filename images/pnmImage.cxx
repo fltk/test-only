@@ -58,7 +58,8 @@ bool pnmImage::fetch() {
 		val,		// Pixel value
 		maxval;		// Maximum pixel value
   
-  if (pixels() || (fp = fopen(name, "rb")) == NULL) return false;
+  fp = fopen(name, "rb");
+  if (!fp) return false;
 
   //
   // Read the file header in the format:
@@ -87,25 +88,27 @@ bool pnmImage::fetch() {
 
   if (format == 7) lineptr = (char *)"";
 
-  while (lineptr != NULL && w() == 0) {
+  int w=0;
+  while (lineptr != NULL && w == 0) {
     if (*lineptr == '\0' || *lineptr == '#') {
       lineptr = fgets(line, sizeof(line), fp);
     } else if (isdigit(*lineptr)) {
-      w(strtol(lineptr, &lineptr, 10));
+      w = strtol(lineptr, &lineptr, 10);
     } else lineptr ++;
   }
 
-  while (lineptr != NULL && h() == 0) {
+  int h=0;
+  while (lineptr != NULL && h == 0) {
     if (*lineptr == '\0' || *lineptr == '#') {
       lineptr = fgets(line, sizeof(line), fp);
     } else if (isdigit(*lineptr)) {
-      h(strtol(lineptr, &lineptr, 10));
+      h = strtol(lineptr, &lineptr, 10);
     } else lineptr ++;
   }
+  setsize(w,h);
 
   if (format != 1 && format != 4) {
     maxval = 0;
-
     while (lineptr != NULL && maxval == 0) {
       if (*lineptr == '\0' || *lineptr == '#') {
 	lineptr = fgets(line, sizeof(line), fp);
@@ -116,24 +119,25 @@ bool pnmImage::fetch() {
   } else maxval = 1;
 
   // Allocate memory ...
-  if (format == 1 || format == 2 || format == 4 || format == 5) pixel_type(MONO);
-  else pixel_type(RGB);
-
-  uchar * array  = alloc_pixels(w(),h(),pixel_type()); // data is owned by object so will destoyed with it
+  if (format == 1 || format == 2 || format == 4 || format == 5)
+    setpixeltype(MONO);
+  else
+    setpixeltype(RGB);
 
   // Read the image file ...
-  for (y = 0; y < h(); y ++) {
-    ptr = (uchar *)array + y * w() * d();
+  for (y = 0; y < h; y ++) {
+    uchar* linebuf = linebuffer(y);
+    ptr = linebuf;
 
     switch (format) {
       case 1 :
       case 2 :
-          for (x = w(); x > 0; x --)
+          for (x = w; x > 0; x --)
             if (fscanf(fp, "%d", &val) == 1) *ptr++ = (uchar)(255 * val / maxval);
           break;
 
       case 3 :
-          for (x = w(); x > 0; x --) {
+          for (x = w; x > 0; x --) {
             if (fscanf(fp, "%d", &val) == 1) *ptr++ = (uchar)(255 * val / maxval);
             if (fscanf(fp, "%d", &val) == 1) *ptr++ = (uchar)(255 * val / maxval);
             if (fscanf(fp, "%d", &val) == 1) *ptr++ = (uchar)(255 * val / maxval);
@@ -141,7 +145,7 @@ bool pnmImage::fetch() {
           break;
 
       case 4 :
-          for (x = w(), byte = (uchar)getc(fp), bit = 128; x > 0; x --) {
+          for (x = w, byte = (uchar)getc(fp), bit = 128; x > 0; x --) {
 	    if (byte & bit) *ptr++ = 255;
 	    else *ptr++ = 0;
 
@@ -155,11 +159,11 @@ bool pnmImage::fetch() {
 
       case 5 :
       case 6 :
-          fread(ptr, w(), d(), fp);
+          fread(ptr, w, depth(), fp);
           break;
 
       case 7 : /* XV 3:3:2 thumbnail format */
-          for (x = w(); x > 0; x --) {
+          for (x = w; x > 0; x --) {
 	    byte = (uchar)getc(fp);
 
 	    *ptr++ = (uchar)(255 * ((byte >> 5) & 7) / 7);
@@ -168,6 +172,7 @@ bool pnmImage::fetch() {
 	  }
           break;
     }
+    setpixels(linebuf,y);
   }
   fclose(fp);
   return true;
@@ -175,12 +180,6 @@ bool pnmImage::fetch() {
 
 pnmImage::pnmImage(const char *n) : SharedImage() {
   name = n;
-}
-
-void pnmImage::read() {
-  bool created = pixels()==0;
-  if (!fetch()) return; // reuse fetch code
-  if (created) dealloc_data();
 }
 
 //

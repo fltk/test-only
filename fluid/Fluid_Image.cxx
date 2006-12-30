@@ -198,12 +198,12 @@ void bitmap_image::write_static() {
 #if 1 // older one
   write_c("static const unsigned char %s[%d] = {\n",
 	  unique_id(this, "bits", fltk::filename_name(name()), 0), n);
-  write_carray((const char*)(p->pixels()), n);
+  write_carray((const char*)(p->array), n);
   write_c("};\n");
 #else // this seems to produce slightly shorter c++ files
   write_c("static const unsigned char %s[] =\n",
 	  unique_id(this, "bits", fltk::filename_name(name()), 0));
-  write_cstring((const char*)(p->pixels()), n);
+  write_cstring((const char*)(p->array), n);
   write_c(";\n");
 #endif
   write_c("static fltk::xbmImage %s(%s, %d, %d);\n",

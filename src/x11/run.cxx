@@ -735,7 +735,8 @@ const Monitor& Monitor::all() {
 		       &actual, &format, &count, &remaining, &buffer);
     if (buffer && actual == XA_CARDINAL && format == 32 && count > 3) {
       long* p = (long*)buffer;
-      monitor.work.set(int(p[0]),int(p[1]),int(p[2]),int(p[3]));
+      if (p[2] && p[3])
+	monitor.work.set(int(p[0]),int(p[1]),int(p[2]),int(p[3]));
     }
     if (buffer) {XFree(buffer); buffer = 0;}
 
