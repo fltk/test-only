@@ -918,18 +918,10 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y) {}
  * initialize the Mac toolboxes, dock status, and set the default menubar
  */
 
-ifndef MAC_OS_X_VERSION_10_3
+#ifndef MAC_OS_X_VERSION_10_3
 extern "C" {
-typedef struct CPSProcessSerNum
-{
-  UInt32 lo; 
-  UInt32 hi;
-} CPSProcessSerNum;
- 
-extern OSErr CPSGetCurrentProcess(CPSProcessSerNum *psn);
-extern OSErr CPSEnableForegroundOperation(CPSProcessSerNum *psn, UInt32 _arg2,
+extern OSErr CPSEnableForegroundOperation(ProcessSerialNumber *psn, UInt32 _arg2,
     UInt32 _arg3, UInt32 _arg4, UInt32 _arg5);
-extern OSErr CPSSetFrontProcess(CPSProcessSerNum *psn);
 }
 #endif
 
@@ -951,24 +943,45 @@ void fltk::open_display() {
     default_cursor  = &default_cursor_ptr;
     current_cursor = default_cursor;
 
+    // This populates the menu bar, see fltk1 code:
     //ClearMenuBar();
     //AppendResMenu( GetMenuHandle( 1 ), 'DRVR' );
     //DrawMenuBar();
 
     // bring the application into foreground without a 'CARB' resource
-    // or .app file hierarchy:
+    Boolean same_psn;
+    ProcessSerialNumber cur_psn, front_psn;
+    if (!GetCurrentProcess( &cur_psn ) && !GetFrontProcess( &front_psn ) &&
+        !SameProcess( &front_psn, &cur_psn, &same_psn ) && !same_psn ) {
+      // If we are in a .app bundle this is not necessary, so don't do it.
+      // It also prevents some bundle functions such as LSBackgroundOnly.
+      // This mess figures out if we are bundled:
+      CFBundleRef bundle = CFBundleGetMainBundle();
+      if ( bundle ) {
+	FSRef execFs;
+	CFURLRef execUrl = CFBundleCopyExecutableURL( bundle );
+	CFURLGetFSRef( execUrl, &execFs );
+
+	FSRef bundleFs;
+	GetProcessBundleLocation( &cur_psn, &bundleFs );
+
+	if ( !FSCompareFSRefs( &execFs, &bundleFs ) )
+          bundle = NULL;
+
+        CFRelease(execUrl);
+      }
+
+      if ( !bundle ) {
 #ifdef MAC_OS_X_VERSION_10_3
-    // newer supported API
-    ProcessSerialNumber psn = { 0, kCurrentProcess };
-    if( !TransformProcessType( &psn, kProcessTransformToForegroundApplication ) )
-      SetFrontProcess( &psn );
+        // newer supported API
+        if( !TransformProcessType( &cur_psn, kProcessTransformToForegroundApplication ) )
 #else
-    // undocumented API
-    CPSProcessSerNum psn;
-    if( !CPSGetCurrentProcess( &psn ) &&
-        !CPSEnableForegroundOperation( &psn, 0x03, 0x3C, 0x2C, 0x1103 ) )
-      CPSSetFrontProcess( &psn );
+        // undocumented API
+        if( !CPSEnableForegroundOperation( &cur_psn, 0x03, 0x3C, 0x2C, 0x1103 ) )
 #endif
+          SetFrontProcess( &cur_psn );
+      }
+    }
   }
 }
 
