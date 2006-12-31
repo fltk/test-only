@@ -915,8 +915,24 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
 void fl_set_spot(fltk::Font *f, Widget *w, int x, int y) {}
 
 /*
- * initialize the Mac toolboxes and set the default menubar
+ * initialize the Mac toolboxes, dock status, and set the default menubar
  */
+
+ifndef MAC_OS_X_VERSION_10_3
+extern "C" {
+typedef struct CPSProcessSerNum
+{
+  UInt32 lo; 
+  UInt32 hi;
+} CPSProcessSerNum;
+ 
+extern OSErr CPSGetCurrentProcess(CPSProcessSerNum *psn);
+extern OSErr CPSEnableForegroundOperation(CPSProcessSerNum *psn, UInt32 _arg2,
+    UInt32 _arg3, UInt32 _arg4, UInt32 _arg5);
+extern OSErr CPSSetFrontProcess(CPSProcessSerNum *psn);
+}
+#endif
+
 void fltk::open_display() {
   static char beenHereDoneThat = 0;
   if ( !beenHereDoneThat )  {
@@ -935,9 +951,24 @@ void fltk::open_display() {
     default_cursor  = &default_cursor_ptr;
     current_cursor = default_cursor;
 
-    //    ClearMenuBar();
+    //ClearMenuBar();
     //AppendResMenu( GetMenuHandle( 1 ), 'DRVR' );
     //DrawMenuBar();
+
+    // bring the application into foreground without a 'CARB' resource
+    // or .app file hierarchy:
+#ifdef MAC_OS_X_VERSION_10_3
+    // newer supported API
+    ProcessSerialNumber psn = { 0, kCurrentProcess };
+    if( !TransformProcessType( &psn, kProcessTransformToForegroundApplication ) )
+      SetFrontProcess( &psn );
+#else
+    // undocumented API
+    CPSProcessSerNum psn;
+    if( !CPSGetCurrentProcess( &psn ) &&
+        !CPSEnableForegroundOperation( &psn, 0x03, 0x3C, 0x2C, 0x1103 ) )
+      CPSSetFrontProcess( &psn );
+#endif
   }
 }
 
