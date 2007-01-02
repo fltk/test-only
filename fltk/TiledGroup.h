@@ -37,7 +37,8 @@ protected:
   void layout();
 public:
   int handle(int);
-  TiledGroup(int X,int Y,int W,int H,const char*l=0) : Group(X,Y,W,H,l) {}
+  TiledGroup(int x,int y,int w,int h, const char*l=0, bool begin=false) :
+    Group(x,y,w,h,l,begin) {}
   void position(int, int, int, int);
 };
 

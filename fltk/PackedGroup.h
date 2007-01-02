@@ -41,7 +41,7 @@ public:
     ALL_CHILDREN_VERTICAL = GROUP_TYPE+1
   };
   void layout();
-  PackedGroup(int x,int y,int w ,int h,const char *l = 0);
+  PackedGroup(int x, int y, int w, int h, const char *l = 0, bool begin=false);
   int spacing() const {return spacing_;}
   void spacing(int i) {spacing_ = i;}
 };

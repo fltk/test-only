@@ -36,6 +36,7 @@ public:
 
   void layout();
 
+  // WAS: this should have a begin=false argument added somehow.
   AlignGroup(int X, int Y, int W, int H, const char* L = 0,
 	     uchar n_to_break = 0, bool vertical = 1,
 	     Flags align = ALIGN_LEFT,

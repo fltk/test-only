@@ -35,7 +35,8 @@ namespace fltk {
 
 class FL_API StatusBarGroup : public Group {
 public:
-  StatusBarGroup(int X, int Y, int W, int H, const char* l=0) : Group(X, Y, W, H, l) {init(); }
+  StatusBarGroup(int x,int y,int w,int h, const char* l=0, bool begin=false) :
+    Group(x,y,w,h,l,begin) {init(); }
   //! statusbar default constructor
   StatusBarGroup(int H=24) : Group(0, 0, 0, H, 0) {init(); }
   virtual ~StatusBarGroup();

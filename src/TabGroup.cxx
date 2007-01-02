@@ -513,8 +513,8 @@ probably an fltk::Group widget containing the actual widgets the user
 sees. The children should be sized to stay away from the top or bottom
 edge of the <TT>fltk::Tabs</TT>, which is where the tabs are drawn.
 */
-TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
-  : Group(X,Y,W,H,l),
+TabGroup::TabGroup(int X,int Y,int W, int H, const char *l,bool begin)
+  : Group(X,Y,W,H,l,begin),
     _drawOutline( false ) 
 {
   style(default_style);

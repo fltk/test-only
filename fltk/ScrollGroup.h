@@ -64,7 +64,7 @@ public:
   virtual int handle(int);
   virtual void layout();
 
-  ScrollGroup(int X,int Y,int W,int H,const char*l=0);
+  ScrollGroup(int x,int y,int w,int h, const char*l=0, bool begin=false);
 
   enum { // values for type()
     HORIZONTAL = 1,

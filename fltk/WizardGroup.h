@@ -39,8 +39,8 @@ namespace fltk {
 class FL_API WizardGroup : public Group {
   Widget * value_;
 public:
-  WizardGroup(int X, int Y, int W, int H, const char * l = 0)
-    : Group(X, Y, W, H, l), value_(0) {  box(THIN_UP_BOX);}
+  WizardGroup(int x,int y,int w,int h, const char * l = 0, bool begin=false)
+    : Group(x,y,w,h,l,begin), value_(0) {  box(THIN_UP_BOX);}
 
   void          draw(); 
   void		next();

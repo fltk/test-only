@@ -39,8 +39,8 @@ static void revert(Style *s) {
 static NamedStyle style("BarGroup", revert, &BarGroup::default_style);
 NamedStyle* BarGroup::default_style = &::style;
 
-BarGroup::BarGroup(int x, int y, int w, int h, const char* title)
-  : Group(x, y, w, h,title)
+BarGroup::BarGroup(int x, int y, int w, int h, const char* title, bool begin)
+  : Group(x, y, w, h, title, begin)
 {
   resizable(0);
   style(default_style);

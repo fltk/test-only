@@ -96,7 +96,7 @@ class FL_API TabGroup : public Group {
 public:
   int handle(int);
 
-  TabGroup(int,int,int,int,const char * = 0);
+  TabGroup(int,int,int,int,const char * = 0, bool begin=false);
   ~TabGroup() {delete pager_;}
   static NamedStyle* default_style;
 

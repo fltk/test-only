@@ -213,20 +213,21 @@ int Item::handle(int) {return 0;}
 /** Unlike other widgets the constructor does not take any dimensions,
   since it is assummed the container widget will size this
   correctly. */
-void ItemGroup::init() {
+ItemGroup::ItemGroup(const char* l, bool begin) :
+  Menu(0,0,0,0,l,begin)
+{
   style(Item::default_style);
   align(ALIGN_LEFT|ALIGN_INSIDE);
-}
-
-ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
-  init();
   // Undo the Menu class changing default_callback:
   // callback(Widget::default_callback);
 }
 
 /*! This constructor also sets image(). */
-ItemGroup::ItemGroup(const char* l, const Symbol* i) : Menu(0,0,0,0,l) {
-  init();
+ItemGroup::ItemGroup(const char* l, const Symbol* i, bool begin) :
+  Menu(0,0,0,0,l,begin)
+{
+  style(Item::default_style);
+  align(ALIGN_LEFT|ALIGN_INSIDE);
   image(i);
 }
 

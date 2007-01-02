@@ -39,7 +39,7 @@ class FL_API BarGroup : public Group {
   int saved_size;
   void glyph_box(Rectangle&) const;
 public:
-  BarGroup(int x,int y,int w ,int h,const char *l = 0);
+  BarGroup(int x,int y,int w ,int h,const char *l = 0,bool begin=false);
   static NamedStyle* default_style;
   void layout();
   int handle(int);

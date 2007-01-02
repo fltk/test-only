@@ -63,8 +63,8 @@ using namespace fltk;
 
 #define is_vertical(widget) (type()&1 || widget->vertical())
 
-PackedGroup::PackedGroup(int x,int y,int w ,int h,const char *l)
-: Group(x, y, w, h, l) {
+PackedGroup::PackedGroup(int x,int y,int w,int h,const char *l,bool begin)
+: Group(x, y, w, h, l, begin) {
   resizable(0);
   spacing_ = 0;
 }

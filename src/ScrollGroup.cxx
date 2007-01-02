@@ -343,7 +343,7 @@ void ScrollGroup::scrollbar_cb(Widget* o, void*) {
 
 static inline int nogroup(int X) {Group::current(0); return X;}
 
-ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L)
+ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L,bool begin)
   : Group(X,Y,W,H,L),
     // This initial size & position of scrollbars is probably not used:
     enable_drag_scroll_( true ),
@@ -365,7 +365,7 @@ ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L)
   scrollbar.set_vertical();
   scrollbar.parent(this);
   scrollbar.callback(scrollbar_cb);
-  Group::current(parent());
+  Group::current(begin ? this : parent());
 }
 
 int ScrollGroup::handle(int event) {

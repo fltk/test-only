@@ -82,7 +82,6 @@ void StatusBarGroup::init() {
   resizable(0);
 }
 
-
 StatusBarGroup::~StatusBarGroup() {
     for (int i=0; i<3;i++) if (tf_[i]) delete tf_[i];
 }

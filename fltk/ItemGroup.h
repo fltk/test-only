@@ -38,10 +38,8 @@ public:
   void draw();
   void layout();
   int handle(int);
-  ItemGroup(const char* label = 0);
-  ItemGroup(const char* label, const Symbol*);
-private:
-  void init();
+  ItemGroup(const char* label = 0, bool begin=false);
+  ItemGroup(const char* label, const Symbol*, bool begin=false);
 };
 
 /** \class MenuSection
@@ -61,14 +59,14 @@ class FL_API MenuSection {
   ItemGroup* group_;
 public:
   //! build a typical submenu group section, then call begin()
-  MenuSection(const char* label = 0) {
-    group_ = new ItemGroup(label); group_->begin();}
+  MenuSection(const char* label = 0) { group_ = new ItemGroup(label,true); }
 
-  MenuSection(const char* label, const Symbol* i) {
-    group_ = new ItemGroup(label,i); group_->begin();}
+  MenuSection(const char* label, const Symbol* i) { group_ = new ItemGroup(label,i,true); }
 
   //! call end() at destruction
   ~MenuSection() {group_->end();}
+
+  //! The ItemGroup created by this.
   ItemGroup* group() const {return group_;}
 };
 
