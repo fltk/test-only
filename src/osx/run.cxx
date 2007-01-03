@@ -271,10 +271,9 @@ static WindowRef capture = 0;
 static WindowRef os_capture = 0;
 
 static Window* resize_from_system;
-static CursPtr default_cursor_ptr;
 static ::Cursor _default_cursor;
-CursHandle fltk::default_cursor;
-CursHandle fltk::current_cursor;
+CursPtr fltk::default_cursor;
+CursPtr fltk::current_cursor;
 const Widget* fltk::cursor_for;
 
 WindowPtr fltk::quartz_window;
@@ -485,7 +484,7 @@ static inline int fl_wait(double time)
   if (cursor_for && !cursor_for->contains(belowmouse_)) {
     cursor_for = 0;
     current_cursor = default_cursor;
-    SetCursor(*default_cursor);
+    SetCursor(default_cursor);
   }
 
   return got_events;
@@ -937,10 +936,9 @@ void fltk::open_display() {
 	NewAEEventHandlerUPP((AEEventHandlerProcPtr)QuitAppleEventHandler),
 			   0, false );
 
-    // create the Mac Handle for the default cursor (a pointer to a pointer)
+    // get pointer to default cursor:
     GetQDGlobalsArrow(&_default_cursor);
-    default_cursor_ptr = &_default_cursor;
-    default_cursor  = &default_cursor_ptr;
+    default_cursor = &_default_cursor;
     current_cursor = default_cursor;
 
     // This populates the menu bar, see fltk1 code:
@@ -948,6 +946,7 @@ void fltk::open_display() {
     //AppendResMenu( GetMenuHandle( 1 ), 'DRVR' );
     //DrawMenuBar();
 
+#if 1
     // bring the application into foreground without a 'CARB' resource
     Boolean same_psn;
     ProcessSerialNumber cur_psn, front_psn;
@@ -982,6 +981,7 @@ void fltk::open_display() {
           SetFrontProcess( &cur_psn );
       }
     }
+#endif
   }
 }
 

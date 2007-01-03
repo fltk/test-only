@@ -575,7 +575,7 @@ case $uname in
 	HLINKS="#"
 
 	# Add a postbuild step after linking applications
-	POSTBUILD="/Developer/Tools/Rez -t APPL -o"
+	dnl POSTBUILD="/Developer/Tools/Rez -t APPL -o"
 	dnl Check for Cairo library unless disabled...
   	AC_ARG_ENABLE(cairo,[  --enable-cairo          use Cairo graphics (default=no)])
   	if test x$enable_cairo = xyes; then

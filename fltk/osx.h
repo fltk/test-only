@@ -123,8 +123,8 @@ extern FL_API void release_quartz_context(CreatedWindow *x=0);
 WindowPtr xid(const Window*);
 Window* find(WindowPtr xid);
 
-extern CursHandle default_cursor;
-extern CursHandle current_cursor;
+extern CursPtr default_cursor;
+extern CursPtr current_cursor;
 extern const Widget* cursor_for;
 
 # endif //Fl_Window_H
