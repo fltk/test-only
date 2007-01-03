@@ -40,8 +40,8 @@ public:
   int handle(int);
 
   Item(const char* label = 0);
-  Item(const char* label, int shortcut, Callback *callback=0, void *user_data_=0, int flags=0);
   Item(const char* label, const Symbol*);
+  Item(const char* label, int shortcut, Callback *callback=0, void *user_data_=0, int flags=0);
 
   static NamedStyle* default_style;
   static void set_style(const Style*, bool menubar);

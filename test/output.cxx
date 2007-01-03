@@ -33,7 +33,6 @@
 #include <fltk/Output.h>
 #include <fltk/MultiLineOutput.h>
 #include <fltk/ValueSlider.h>
-#include <fltk/Font.h>
 
 using namespace fltk;
 

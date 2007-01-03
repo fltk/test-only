@@ -155,7 +155,7 @@ void ClockOutput::value(int h, int m, int s) {
   and second. */
 void ClockOutput::value(unsigned long v) {
   value_ = v;
-  const time_t vv = v;
+  const time_t vv = (time_t)v;
   struct tm *timeofday = localtime(&vv);
   value(timeofday->tm_hour, timeofday->tm_min, timeofday->tm_sec);
 }

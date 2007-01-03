@@ -116,20 +116,26 @@ using namespace fltk;
 #  define ENUM_CURRENT_SETTINGS       ((DWORD)-1)
 #endif
 
-//
-// WM_FLSELECT is the user-defined message that we get when one of
-// the sockets has pending data, etc.
-//
+// In some of the distributions, the gcc header files are missing some stuff:
+#ifndef LPMINMAXINFO
+# define LPMINMAXINFO MINMAXINFO*
+#endif
 
+#ifndef VK_LWIN
+# define VK_LWIN 0x5B
+# define VK_RWIN 0x5C
+# define VK_APPS 0x5D
+#endif
+
+// WM_FLSELECT is the user-defined message used for fltk::add_fd()
+// to indicate that a socket is ready.
 #define WM_FLSELECT	(WM_USER+0x0400)
 
 // WM_MAKEWAITRETURN is the user-defined message that is used to try
 // to make wait() return to the main loop so the windows version acts
 // like GUI programs on more sensible operating systems
+// Note same symbol is in lock.cxx and must match!
 #define WM_MAKEWAITRETURN (WM_USER+0x401)
-
-// This is so fltk::awake() in lock.cxx can get at message number:
-UINT fl_wake_msg = WM_MAKEWAITRETURN;
 
 #if USE_IMM
 #define IMM_DYNAMIC_LOADING 1
@@ -1221,11 +1227,11 @@ public:
 
 //#define NO_TRACK_MOUSE 1
 
-#ifndef NO_TRACK_MOUSE
-extern "C" {
-  BOOL WINAPI TrackMouseEvent(LPTRACKMOUSEEVENT lpEventTrack);
-};
-#endif
+//  #ifndef NO_TRACK_MOUSE
+//  extern "C" {
+//    BOOL WINAPI TrackMouseEvent(LPTRACKMOUSEEVENT lpEventTrack);
+//  };
+//  #endif
 
 // Return the shift flags for event_state():
 static unsigned long shiftflags(bool ignorealt=false) {
@@ -1625,8 +1631,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       if (e_keysym==ReturnKey || e_keysym==KeypadEnter) {
 	buffer[0] = '\r';
 	e_length = 1;
-      } else if (has_unicode())
-      {
+      } else if (has_unicode()) {
 	// If we have registered UNICODE window under NT4, 2000, XP
 	// We get WCHAR as wParam
 	e_length = utf8encode((unsigned short)wParam, &buffer[0]);

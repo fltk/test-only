@@ -144,7 +144,6 @@ void FileChooser::cb_favOkButton(fltk::ReturnButton* o, void* v) {
 }
 
 FileChooser::FileChooser(const char *d, const char *p, int t, const char *title) {
-  fltk::DoubleBufferWindow* w;
    {fltk::DoubleBufferWindow* o = window = new fltk::DoubleBufferWindow(490, 380, "Choose File");
     o->type(241);
     o->callback((fltk::Callback*)cb_window, (void*)(this));
@@ -242,7 +241,6 @@ FileChooser::FileChooser(const char *d, const char *p, int t, const char *title)
     o->set_modal();
   }
    {fltk::DoubleBufferWindow* o = favWindow = new fltk::DoubleBufferWindow(355, 150, "Manage Favorites");
-    w = o;
     o->type(241);
     o->user_data((void*)(this));
     o->begin();

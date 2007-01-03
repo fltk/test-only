@@ -23,8 +23,11 @@
   "Portably" include cairo common definitions for fltk. If fltk is
   compiled correctly, you can create a cairo "surface" from an fltk
   Window and then make your own cairo context to draw into it.
-  FLTK may also be compiled to use cairo for all it's drawing, in
-  which case this has already been done when draw() is called.
+
+  FLTK may also be compiled to use cairo for \e all it's drawing, by
+  adding --enable_cairo when running ./configure. In this case this
+  has already been done when draw() is called, and the cairo context
+  is in fltk::cc.
 */
 
 #ifndef fltk_cairo_h

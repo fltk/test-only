@@ -120,7 +120,7 @@ void WizardGroup::value(Widget *kid) {
   value_=kid;
   if ((num_kids = children()) == 0)  return;
 
-  for (i=0; i<children(); i++) 
+  for (i=0; i<num_kids; i++) 
     if (child(i) != kid)  child(i)->hide(); else kid->show();
 
   // This will restore the mouse pointer to the window's default cursor

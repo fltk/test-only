@@ -1,7 +1,5 @@
-//
 // "$Id$"
 //
-// scandir.c
 // Implementation of Posix scandir() command on systems that do not have it.
 
 /* Copyright (C) 1992, 1993, 1994, 1995, 1996 Free Software Foundation, Inc.
@@ -29,11 +27,13 @@ linking) can be used on all such machines.
 
 */
 
+// THIS IS A C FILE!!!! NOT C++, DO NOT CHANGE THIS! THANKS.
+
 #include <config.h>
 
 #if ! HAVE_SCANDIR
 # if defined(_WIN32) && !defined(__CYGWIN__)
-#  include "win32/scandir.cxx"
+#  include "win32/scandir.c"
 # else
 
 #include <ctype.h>

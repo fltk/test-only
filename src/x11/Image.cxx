@@ -582,7 +582,7 @@ static void rgbm_converter(const uchar* from, uchar* to, int w) {
 	g = (g*a+bg[1]*(255-a))>>8;
 	b = (b*a+bg[2]*(255-a))>>8;
       }
-      *bp++ = (a<<24)|(r<<16)|(g<<8)|b;
+      *bp++ = (r<<16)|(g<<8)|b;
     }
     if (amask & 0x80) {
       *ap++ = aaccum; aaccum = 0; amask = 1;
@@ -618,7 +618,7 @@ static void mrgb32_converter(const uchar* from, uchar* to, int w) {
 	uchar r = (((c>>16)&255)*a+bg[0]*(255-a))>>8;
 	uchar g = (((c>>8)&255)*a+bg[1]*(255-a))>>8;
 	uchar b = ((c&255)*a+bg[2]*(255-a))>>8;
-	*bp++ = (c&0xff000000)|(r<<16)|(g<<8)|b;
+	*bp++ = (r<<16)|(g<<8)|b;
       }
     }
     if (amask & 0x80) {
@@ -1162,7 +1162,6 @@ void Image::setpixels(const uchar* buf, int y) {
   void (*conv)(const uchar *from,uchar *to,int w);
 #if USE_XFT
   if (fl_rgba_xrender_format) {
-    alphapointer = 0;
     conv = xrender_converter[pixeltype_];
     conv(buf, to, width());
     return;
@@ -1183,7 +1182,6 @@ void Image::setpixels(const uchar* buf, const Rectangle& r, int linedelta)
   void (*conv)(const uchar *from,uchar *to,int w);
 #if USE_XFT
   if (fl_rgba_xrender_format) {
-    alphapointer = 0;
     conv = xrender_converter[pixeltype_];
     // see if we can do it all at once:
     if (r.w() == picture->w && (r.h()==1 || linedelta == picture->linedelta)) {

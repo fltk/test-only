@@ -81,13 +81,9 @@ public:
 		  add((int)(y * 10000.0)); return (d); }
   void		clear() { num_data_ = 0; }
 
-  void		image(const Symbol* direct_raster, bool owned=true) {image_=direct_raster;owned_image_=owned;}
   const Symbol* image() const {return image_;}
 
   void		load(const char *f);
-  void		load_fti(const char *fti);
-  void		load_xpm(const char *xpm);
-  int 		load_image(const char *img);
   const char	*pattern() { return (pattern_); }
   int		size() { return (num_data_); }
   int		type() { return (type_); }
@@ -103,6 +99,8 @@ public:
   void _measure(int& w, int& h) const;
   void _draw(const Rectangle& r) const;
 private:
+  void		image(const Symbol* direct_raster, bool owned=true) {image_=direct_raster;owned_image_=owned;}
+  void		load_fti(const char *fti);
   const Symbol* image_;
   bool owned_image_;
 };

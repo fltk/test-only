@@ -371,9 +371,9 @@ ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L,bool begin)
 int ScrollGroup::handle(int event) {
   switch (event) {
 
+#if 0
   case FOCUS_CHANGE: {
-    return Group::handle(event);
-    // The event indicates that the focus changed to a different child,
+    {// The event indicates that the focus changed to a different child,
     // auto-scroll to show it:
 
     // NO !!!!   FORTY TIMES NO!!!
@@ -410,6 +410,7 @@ int ScrollGroup::handle(int event) {
     else if (b > R.b()) {dy = R.b()-b; if (y+dy < R.y()) {dy = R.y()-y; if (dy > 0) dy = 0;}}
     scrollTo(xposition_-dx, yposition_-dy);
     break;}
+#endif
 
   case ENTER:
   case MOVE:

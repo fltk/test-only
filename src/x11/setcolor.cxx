@@ -41,6 +41,7 @@ static uchar beenhere;
 
 static void figure_out_visual() {
   beenhere = 1;
+  open_display();
   if (!xvisual->red_mask || !xvisual->green_mask || !xvisual->blue_mask){
 #if USE_COLORMAP
     fl_redmask = 0;

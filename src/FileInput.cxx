@@ -253,6 +253,7 @@ FileInput::handle(int event)		// I - Event
     case LEAVE:
         window()->cursor(CURSOR_DEFAULT);
 	return 1;
+
     case PUSH :
     case RELEASE :
     case DRAG :
@@ -260,7 +261,6 @@ FileInput::handle(int event)		// I - Event
 	    return handle_button(event);
 
 	return Input::handle(event);
-    break;
 
     case KEY:
     case KEYUP:

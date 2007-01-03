@@ -1,4 +1,4 @@
-// "$Id: scandir.c 4401 2005-06-27 16:42:26Z dejan $"
+// "$Id: scandir.c 1339 2006-04-03 22:47:29Z spitzak $"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -21,25 +21,22 @@
 
 // Emulation of posix scandir() call
 // This source file is #include'd by scandir.c
+// THIS IS A C FILE! DO NOT CHANGE TO C++!!!
 
 #include <string.h>
 #include <windows.h>
 #include <stdlib.h>
 #include <fltk/utf.h>
 
-#if defined(__MINGW32__) || defined(__CYGWIN__)
-# include <dirent.h>
-#else
-  struct dirent { char d_name[1]; };
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+struct dirent { char d_name[1]; };
+
 int scandir(const char *dirname, struct dirent ***namelist,
     int (*select)(struct dirent *),
-    int (*compar)(const dirent*const*, const dirent*const*)) {
+    int (*compar)(struct dirent **, struct dirent **)) {
   char *d;
   WIN32_FIND_DATA find;
   HANDLE h;
@@ -98,7 +95,6 @@ int scandir(const char *dirname, struct dirent ***namelist,
 }
 #endif
 
-
 //
-// End of "$Id: scandir.c 4401 2005-06-27 16:42:26Z dejan $".
+// End of "$Id: scandir.c 1339 2006-04-03 22:47:29Z spitzak $".
 //

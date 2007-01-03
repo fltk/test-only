@@ -71,7 +71,6 @@ InputBrowser::input_cb(Input *w, InputBrowser *ib)
 }
 
 // these are only used when in grabbed state so only one exists at once
-static MenuWindow *mw;
 static InputBrowser *ib;
 static Browser *browser;
 
@@ -385,7 +384,6 @@ InputBrowser::popup() {
       win->end();
       win->box(UP_BOX);
 
-      mw = win;
       browser = list;
       ib = this;
     }

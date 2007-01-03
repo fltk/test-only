@@ -123,23 +123,21 @@ static int array_size = 0;
 int fltk::list_fonts(Font**& arrayp) {
   if (font_array) {arrayp = font_array; return num_fonts;}
   //FMFontFamilyInstanceIterator ffiIterator;
-  FMFontFamilyIterator ffIterator;
-  FMFontFamily family;
   //FMFont font;
   //FMFontStyle style; // bits 0..6: bold, italic, underline, outline, shadow, condens, extended (FLTK supports 0 and 1 )
   //FMFontSize size;
   //FMFilter filter; // do we need to set a specific (or multiple) filter(s) to get ALL fonts?
   
-  Str255 buf;
   //filter.format = kFMCurrentFilterFormat;
   //filter.selector = kFMGenerationFilterSelector;
   //filter.filter.generationFilter = 
-  FMCreateFontFamilyIterator( NULL, NULL, kFMUseGlobalScopeOption, &ffIterator );
-  OSStatus listFamilies;
-  for (;;)
-  {
-    listFamilies = FMGetNextFontFamily( &ffIterator, &family );
-    if ( listFamilies != 0 ) break;
+
+  FMFontFamilyIterator ffIterator;
+  FMCreateFontFamilyIterator(NULL,NULL, kFMUseGlobalScopeOption, &ffIterator);
+  for (;;) {
+    FMFontFamily family;
+    if (FMGetNextFontFamily( &ffIterator, &family ) != 0) break;
+    Str255 buf;
     FMGetFontFamilyName( family, buf );
     buf[ buf[0]+1 ] = 0;
     if (!isalpha(buf[1])) continue;

@@ -62,6 +62,13 @@ extern void fl_set_spot(fltk::Font *f, Widget *w, int x, int y);
 
 #undef min
 #undef max
+static int inline max( int i1, int i2) {
+  return i1 >= i2 ? i1 : i2;
+}
+
+static int inline min( int i1, int i2) {
+  return i1 <= i2 ? i1 : i2;
+}
 
 // Text area margins.  Left & right margins should be at least 3 so that
 // there is some room for the overhanging parts of the cursor!
@@ -86,8 +93,6 @@ extern void fl_set_spot(fltk::Font *f, Widget *w, int x, int y);
    stack in the draw_vline() method for drawing strings */
 #define MAX_DISP_LINE_LEN 1000
 
-static int max( int i1, int i2);
-static int min( int i1, int i2);
 static int countlines( const char *string);
 
 TextDisplay::TextDisplay(int X, int Y, int W, int H,  const char* l)
@@ -2302,14 +2307,6 @@ void TextDisplay::draw_line_numbers(bool clearAll) {
   fltk::pop_clip();
 }
 
-static int inline max( int i1, int i2) {
-  return i1 >= i2 ? i1 : i2;
-}
-
-static int inline min( int i1, int i2) {
-  return i1 <= i2 ? i1 : i2;
-}
-
 /*
  * Count the number of newlines in a null-terminated text string;
  */
@@ -2376,28 +2373,11 @@ int TextDisplay::empty_vlines() {
 */
 void TextDisplay::blank_cursor_protrusions()
 {
-  int X, width, cursorX = cursor_oldx_, cursorY = cursor_oldy_;
-  int fontWidth = stdfontwidth_;  
-  int fontHeight = maxsize_;
-  int cursorWidth, left = text_area.x(), right = text_area.r();
-
-  cursorWidth = (fontWidth/3) * 2;
-  if (cursorX >= left-1 && cursorX <= left + cursorWidth/2 - 1) {
-      X = cursorX - cursorWidth/2;
-      width = left - X;
-  } else if (cursorX >= right - cursorWidth/2 && cursorX <= right) {
-      X = right;
-      width = cursorX + cursorWidth/2 + 2 - right;
-  } else
-      return;
-
-  fltk::setcolor(color());
-#if 1
-  fltk::fillrect(cursorX-1, cursorY, 2, fontHeight);
-#else
-  fltk::fillrect(X, cursorY, width, fontHeight);
-#endif
-  cursor_oldx_ = cursor_oldy_ = -100;
+  if (cursor_oldx_ >= 0 && cursor_oldy_ >= 0) {
+    fltk::setcolor(color());
+    fltk::fillrect(cursor_oldx_-1, cursor_oldy_, 2, maxsize_);
+    cursor_oldx_ = cursor_oldy_ = -100;
+  }
 }
 
 /*

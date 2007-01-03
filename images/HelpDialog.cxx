@@ -130,9 +130,7 @@ void HelpDialog::cb_find_(fltk::Input* o, void* v) {
 }
 
 HelpDialog::HelpDialog() {
-  fltk::DoubleBufferWindow* w;
    {fltk::DoubleBufferWindow* o = window_ = new fltk::DoubleBufferWindow(530, 385, "Help Dialog");
-    w = o;
     o->type(241);
     o->user_data((void*)(this));
     o->begin();

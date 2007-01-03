@@ -144,7 +144,6 @@ FL_API void closepath();
 
 /// \name Shapes and lines
 //@{
-//FL_API void drawpoints();
 FL_API void strokepath();
 FL_API void fillpath();
 FL_API void fillstrokepath(Color);
@@ -153,8 +152,6 @@ FL_API void fillrect(int, int, int, int);
 inline void fillrect(const Rectangle& r) {fillrect(r.x(),r.y(),r.w(),r.h());}
 FL_API void strokerect(int, int, int, int);
 inline void strokerect(const Rectangle& r) {strokerect(r.x(),r.y(),r.w(),r.h());}
-// FL_API void drawpoint(int x, int y);
-// FL_API void drawpoint(float x, float y);
 FL_API void drawline(int x0, int y0, int x1, int y1);
 FL_API void drawline(float x0, float y0, float x1, float y1);
 //@}
@@ -218,11 +215,8 @@ FL_API void scrollrect(const Rectangle&, int dx, int dy,
 //@}
 
 #ifndef DOXYGEN /* depreciated: */
-FL_API int draw_xpm(const char*const* data, int x, int y);
-FL_API int measure_xpm(const char*const* data, int &w, int &h);
 FL_API void overlay_rect(int,int,int,int);
 FL_API void overlay_clear();
-//FL_API int draw_symbol(const char* label, int x,int y,int w,int h, Color);
 #endif
 
 }

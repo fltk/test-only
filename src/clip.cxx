@@ -213,7 +213,7 @@ void fltk::clipout(const Rectangle& rectangle) {
   an offscreen area.
 */
 void fltk::push_no_clip() {
-    pushregion(0);
+  pushregion(0);
 #if !USE_CAIRO
   fl_restore_clip();
 #else

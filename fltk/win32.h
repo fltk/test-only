@@ -53,27 +53,20 @@ the X version of these is described here.
 #define fltk_win32_h
 
 #ifndef DOXYGEN
-#include <windows.h>
-#include <winuser.h>
-# undef OPAQUE
+
+# define WIN32_LEAN_AND_MEAN
+# include <windows.h>
+# include <winuser.h>
 # undef DELETE
 # undef ERROR
 # undef IN
+# undef OPAQUE
 # undef OUT
 # undef POINT
-//# undef near
-//# undef far
+//#undef far
 # undef max
 # undef min
-// In some of the distributions, the gcc header files are missing some stuff:
-#ifndef LPMINMAXINFO
-# define LPMINMAXINFO MINMAXINFO*
-#endif
-#ifndef VK_LWIN
-# define VK_LWIN 0x5B
-# define VK_RWIN 0x5C
-# define VK_APPS 0x5D
-#endif
+//#undef near
 
 #if USE_CAIRO
 # include <fltk/fltk_cairo.h>

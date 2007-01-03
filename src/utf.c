@@ -349,7 +349,7 @@ unsigned utf8towc(const char* src, unsigned srclen,
 	dst[++count] = (ucs&0x3ff) | 0xdc00;
       }
 #else
-      dst[count] = ucs;
+      dst[count] = (wchar_t)ucs;
 #endif
     }
     if (++count == dstlen) {dst[count-1] = 0; break;}
@@ -587,7 +587,7 @@ unsigned utf8froma(char* dst, unsigned dstlen,
     it is likely that all non-Asian Unix systems will return true,
     due to the compatability of UTF-8 with ISO-8859-1.
 */
-int utf8locale() {
+int utf8locale(void) {
   static int ret = 2;
   if (ret == 2) {
 #ifdef _WIN32

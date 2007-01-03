@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key_win32.cxx 3955 2004-12-30 11:39:21Z spitzak $"
+// "$Id: event_key_state.cxx 1464 2006-12-28 21:37:21Z spitzak $"
 //
 // _WIN32 keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -30,11 +30,13 @@
 #include <fltk/events.h>
 #include <fltk/x.h>
 #include <ctype.h>
-using namespace fltk;
+#ifndef VK_LWIN
+# define VK_LWIN 0x5B
+# define VK_RWIN 0x5C
+# define VK_APPS 0x5D
+#endif
 
-// convert an Fltk (X) keysym to a MSWindows VK symbol:
-// See also the inverse converter in win32.C
-// This table is in numeric order by Fltk symbol order for binary search:
+using namespace fltk;
 
 static const struct {unsigned short vk, fltk, ext;} vktab[] = {
   {VK_SPACE,	' '},
@@ -152,5 +154,5 @@ bool fltk::get_key_state(unsigned k) {
 }
 
 //
-// End of "$Id: Fl_get_key_win32.cxx 3955 2004-12-30 11:39:21Z spitzak $".
+// End of "$Id: event_key_state.cxx 1464 2006-12-28 21:37:21Z spitzak $".
 //

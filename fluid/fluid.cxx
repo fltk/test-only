@@ -855,7 +855,11 @@ void show_help(const char *name) {
 
     docdir = fltk_docdir;
 #else
+# ifdef FLTK_DOCDIR
     docdir = FLTK_DOCDIR;
+# else
+    docdir = "/usr/local/share/doc/fltk";
+# endif
 #endif // __EMX__
   }
   snprintf(helpname, sizeof(helpname), "%s/%s", docdir, name);  

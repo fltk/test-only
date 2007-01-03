@@ -56,9 +56,8 @@ FL_API void fl_set_font_opengl_id(unsigned v);
 FL_API unsigned fl_font_opengl_texture();
 FL_API void fl_set_font_opengl_texture(unsigned);
 static unsigned texture; // current texture
-#endif
-
 static float scalefactor = 1; // current scale factor
+#endif
 
 /**
   Make the current OpenGL font (as used by gldrawtext()) be as

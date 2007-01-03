@@ -51,7 +51,7 @@ class Drawing : public Widget {
     if (::image) {
       Rectangle r(xy[7],xy[7],SIZE-xy[7],SIZE-xy[7]);
       Rectangle r1(xy[8]+xy[0],xy[8]+xy[1],SIZE-xy[8],SIZE-xy[8]);
-      ::theimage->over(r,r1);
+      ::theimage->draw(r,r1);
     } else {
       drawimage((uchar*)array,
 		alpha ? ARGB32 : RGB32,
@@ -112,7 +112,7 @@ int main(int argc, char** argv) {
     if (n < 4) s->range(-200,200);
     else if (n < 6) {s->range(-1,3); s->step(.01);}
     else if (n < 7) s->range(-180, 180);
-    else {s->range(0,SIZE); s->tooltip("top-left corner of rectangle passed to Image::over()");}
+    else {s->range(0,SIZE); s->tooltip("top-left corner of rectangle passed to Image::draw()");}
     s->value(xy[n]);
     s->align(ALIGN_LEFT);
     s->callback(slider_cb, (void*)n);
@@ -130,5 +130,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: image_transform.cxx,v 1.2 2005/07/15 03:03:34 spitzak Exp $".
+// End of "$Id: image_transform.cxx 1464 2006-12-28 21:37:21Z spitzak $".
 //
