@@ -103,9 +103,9 @@ install_static: static
 install_shared: shared
 	@echo "Installing shared libraries..."
 	@rm -f $(libdir)/$(DLLIMPORTNAME)
-	@if [ -f "$(libdir)/$(DSOLIBglutNAME)$(DSOEXT)" ]; then rm -f $(libdir)/$(DSOLIBglutNAME)$(DSOEXT)
+	@if [ -f "$(libdir)/$(DSOLIBglutNAME)$(DSOEXT)" ]; then rm -f $(libdir)/$(DSOLIBglutNAME)$(DSOEXT); fi
 	@if [ "$(DSOSHORTEXT)" ]; then rm -f $(libdir)/$(DSOLIBglutNAME)$(DSOSHORTEXT); fi
-	@cp $(DSO)$(DSOEXT) $(libdir)
+	@if [ "$(DSO)$(DSOEXT)" ]; then cp $(DSO)$(DSOEXT) $(libdir); fi
 	@chmod 755 $(libdir)/$(DSOLIBglutNAME)$(DSOEXT)
 	@if [ "$(DSOSHORTEXT)" ]; then \
 		ln -s $(DSOLIBglutNAME)$(DSOEXT) $(libdir)/$(DSOLIBglutNAME)$(DSOSHORTEXT); fi
