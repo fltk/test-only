@@ -22,16 +22,33 @@
 /*! \class fltk::xbmImage
 
   Image based on a 1-bit bitmap from memory. This matches the very
-  first type of image provided with X10 in 1980 or so, and unfortunately
-  the only one that draws with any efficiency even today...
+  first type of image provided with X10 in 1980 or so...
 
   Each byte in the bitmap determines 8 pixels, a 1 bit is opaque and
-  a 0 bit is transparent. The high-order bit is the left-most (this
+  a 0 bit is transparent. The low-order bit is the left-most (this
   is inverted from similar data used by Windows). If the width is
   not a multiple of 8 each line starts at the start of the next byte.
 */
 
-// Implementation is in system/Image.cxx!
+#include <fltk/xbmImage.h>
+
+using namespace fltk;
+
+bool xbmImage::fetch() {
+  // See the x11/Image.cxx for some code that is faster if the scale
+  // is 1:1 or XRender is not being used. I ignore this as it is only
+  // for X11 and it complicates the Image by adding xbmImage as a
+  // friend.
+  int rowBytes = (w()+7)>>3 ;
+  for (int y=0; y < h(); y++) {
+    uchar* to = linebuffer(y);
+    uchar* from = (uchar*)array+y*rowBytes;
+    for (int x=0; x<w(); x++)
+      to[x] = from[x>>3]&(1<<(x&7)) ? 0 : 255;
+    setpixels(to,y);
+  }
+  return true;
+}
 
 //
 // End of "$Id$".

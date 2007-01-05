@@ -1,28 +1,26 @@
-static void releaser(void*, const void* data, size_t size) {
-  delete[] (U32*)data;
-}
-
 struct fltk::Picture {
   int w, h, linedelta;
   unsigned long n; // bytes used
   uchar* data;
-  CGImageRef img;
+  int depth;
+  CGImageAlphaInfo bitmapInfo;
+  CGColorSpaceRef colorspace;
 
   Picture(PixelType p, int w, int h, int ld, const uchar* d=0) {
     this->w = w;
     this->h = h;
     this->linedelta = ld;
+    this->depth = ::depth(p);
     if (d) {n = 0; data = (uchar*)d;}
     else {n = ld*h; data = (uchar*)(new U32[n/4]);}
+    setpixeltype(p);
+  }
 
-    // create an image context
+  void setpixeltype(PixelType p) {
     static CGColorSpaceRef rgbcolorspace = 0;
     static CGColorSpaceRef graycolorspace = 0;
     if (!rgbcolorspace) rgbcolorspace = CGColorSpaceCreateDeviceRGB();
-    CGColorSpaceRef colorspace = rgbcolorspace;
-    CGDataProviderRef src =
-      CGDataProviderCreateWithData( 0L, data, ld*h, d ? 0 : releaser);
-    CGImageAlphaInfo bitmapInfo;
+    colorspace = rgbcolorspace;
     switch (p) {
     case MASK:
       bitmapInfo = kCGImageAlphaOnly;
@@ -46,19 +44,35 @@ struct fltk::Picture {
     case MRGB32: bitmapInfo = BE(kCGImageAlphaFirst); break;
     default: bitmapInfo = kCGImageAlphaNone; break;
     }
-    if (p==MASK)
-      img = CGImageMaskCreate(w, h,
+  }
+
+  ~Picture() {
+    // delete data only if it was not passed to constructor:
+    if (n) delete[] (U32*)data;
+  }
+
+  // Create and return an image context that matches a given
+  // subrectangle:
+  CGImageRef img(const fltk::Rectangle rect) {
+    uchar* ptr = data+rect.y()*linedelta+rect.x()*depth;
+
+    CGDataProviderRef src =
+      CGDataProviderCreateWithData( 0L, ptr, linedelta*rect.h(), 0);
+
+    CGImageRef img;
+    if (bitmapInfo == kCGImageAlphaOnly)
+      img = CGImageMaskCreate(rect.w(), rect.h(),
                               8, // bitsPerComponent
                               8, // bitsPerPixel
-                              ld, // bytesPerRow
+                              linedelta, // bytesPerRow
                               src, // provider
                               0L, // decode array (?)
                               true); // shouldInterpolate
     else
-      img = CGImageCreate(w, h,
+      img = CGImageCreate(rect.w(), rect.h(),
                           8, // bitsPerComponent
-                          8*depth(p), // bitsPerPixel
-                          ld, // bytesPerRow
+                          8*depth, // bitsPerPixel
+                          linedelta, // bytesPerRow
                           colorspace,
                           bitmapInfo, // bitmapInfo
                           src, // provider
@@ -66,20 +80,10 @@ struct fltk::Picture {
                           true, // shouldInterpolate
                           kCGRenderingIntentDefault);
     CGDataProviderRelease(src);
+    return img;
   }
 
-  // special one for xbmImage:
-  Picture(int w, int h, CGImageRef i) {
-    this->w = w;
-    this->h = h;
-    n = 0;
-    data = 0;
-    img = i;
-  }
-
-  ~Picture() {
-    CGImageRelease(img);
-  }
+  void sync() {}
 
 };
 
@@ -119,7 +123,9 @@ const uchar* Image::buffer() const {
 }
 
 uchar* Image::buffer() {
-  if (!picture) {
+  if (picture) {
+    picture->sync();
+  } else {
     open_display();
     picture = new Picture(pixeltype_, w_, h_, (w_*depth()+3)&-4);
     memused_ += picture->n;
@@ -136,7 +142,10 @@ void Image::destroy() {
 }
 
 void Image::setpixeltype(PixelType p) {
-  if (pixeltype_ != p) destroy();
+  if (picture) {
+    if (::depth(p) != picture->depth) destroy();
+    else picture->setpixeltype(p);
+  }
   pixeltype_ = p;
 }
 
@@ -196,18 +205,10 @@ void Image::draw(const fltk::Rectangle& from, const fltk::Rectangle& to) const {
   if (!picture) {fillrect(to); return;}
   CGContextSaveGState(quartz_gc);
   fl_set_quartz_ctm();
-  if (!from.x() && !from.y() && from.w()==w_ && from.h()==h_) {
+  CGImageRef img = picture->img(from);
     CGRect rect = {{to.x(), -to.y()}, {to.w(), -to.h()}};
-    CGContextDrawImage(quartz_gc, rect, picture->img);
-  } else {
-#if 1 // does not work before Tiger!!!
-    CGRect irect = {{from.x(), from.y()}, {from.w(), from.h()}};
-    CGImageRef clip = CGImageCreateWithImageInRect(picture->img, irect);
-    CGRect rect = {{to.x(), -to.y()}, {to.w(), -to.h()}};
-    CGContextDrawImage(quartz_gc, rect, clip);
-    CGImageRelease(clip);
-#endif
-  }
+  CGContextDrawImage(quartz_gc, rect, img);
+  CGImageRelease(img);
   CGContextRestoreGState(quartz_gc);
 }
 
@@ -224,31 +225,6 @@ void Image::setimage(const uchar* source, PixelType p, int w, int h, int ld)
     picture = new Picture(p, w, h, ld, source);
     flags = FETCHED;
   }
-}
-
-////////////////////////////////////////////////////////////////
-
-#include <fltk/xbmImage.h>
-
-bool xbmImage::fetch()
-{
-  destroy();
-  static uchar reverse[16] = /* Bit reversal lookup table */
-    { 0x00, 0x88, 0x44, 0xcc, 0x22, 0xaa, 0x66, 0xee, 
-      0x11, 0x99, 0x55, 0xdd, 0x33, 0xbb, 0x77, 0xff };
-  int rowBytes = (w_+7)>>3 ;
-  uchar *bmask = new uchar[rowBytes*h_];
-  uchar *dst = bmask;
-  const uchar *src = (uchar*)array;
-  for ( int i=rowBytes*h_; i>0; i--,src++ ) {
-    *dst++ = ((reverse[*src & 0x0f] & 0xf0) | (reverse[(*src >> 4) & 0x0f] & 0x0f))^0xff;
-  }
-  CGDataProviderRef srcp =
-    CGDataProviderCreateWithData( 0L, bmask, rowBytes*h_, releaser);
-  picture = new Picture(w_,h_,CGImageMaskCreate( w_, h_, 1, 1, rowBytes, srcp, 0L, true));
-  CGDataProviderRelease(srcp);
-  flags = FETCHED;
-  return true;
 }
 
 ////////////////////////////////////////////////////////////////

@@ -1330,10 +1330,9 @@ void Image::setimage(const uchar* d, PixelType p, int w, int h, int ld) {
 }
 
 ////////////////////////////////////////////////////////////////
+#if 0
 
-#include <fltk/xbmImage.h>
-
-bool xbmImage::fetch() {
+bool xbmImage::direct_fetch() {
   if (!picture) {
     open_display();
     picture = new Picture(0);
@@ -1346,6 +1345,7 @@ bool xbmImage::fetch() {
   return true;
 }
 
+#endif
 ////////////////////////////////////////////////////////////////
 
 // drawimage() calls this to see if a direct draw will work. Returns

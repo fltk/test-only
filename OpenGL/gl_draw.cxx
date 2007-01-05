@@ -174,9 +174,8 @@ void fltk::gldrawtext(const char* text, int n) {
 # if 0
   glLoadIdentity();
   glOrtho(viewport[0],viewport[2],viewport[1],viewport[3],-1,1);
-  glTranslatef(rintf(rasterpos[0]),rintf(rasterpos[1]),rintf(rasterpos[2]));
-  glScalef(scalefactor,scalefactor,1);
-  force z to be 2*rasterpos[2]-1;
+  glTranslatef(rintf(rasterpos[0]),rintf(rasterpos[1]),1-2*rasterpos[2]);
+  glScalef(scalefactor,scalefactor,0);
 # else // emulate above directly
   {float m[16];
   const float w = viewport[2]-viewport[0];
@@ -203,6 +202,11 @@ void fltk::gldrawtext(const char* text, int n) {
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
   glPopAttrib();
+#elif defined(__APPLE__) && !__BIG_ENDIAN__
+  // Work around an apparent OpenGL bug on our Intel Mac
+  glPushMatrix();
+  glCallLists(count, GL_UNSIGNED_BYTE, buffer);
+  glPopMatrix();
 #else
   glCallLists(count, GL_UNSIGNED_BYTE, buffer);
 #endif

@@ -1227,11 +1227,11 @@ public:
 
 //#define NO_TRACK_MOUSE 1
 
-//  #ifndef NO_TRACK_MOUSE
-//  extern "C" {
-//    BOOL WINAPI TrackMouseEvent(LPTRACKMOUSEEVENT lpEventTrack);
-//  };
-//  #endif
+#ifndef NO_TRACK_MOUSE
+extern "C" {
+  BOOL WINAPI TrackMouseEvent(LPTRACKMOUSEEVENT lpEventTrack);
+};
+#endif
 
 // Return the shift flags for event_state():
 static unsigned long shiftflags(bool ignorealt=false) {

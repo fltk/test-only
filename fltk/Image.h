@@ -28,7 +28,6 @@
 namespace fltk {
 
 class FL_API Widget;
-class FL_API xbmImage;
 struct Picture; // secret internal system-specific data
 
 class FL_API Image : public Symbol {
@@ -38,7 +37,6 @@ class FL_API Image : public Symbol {
   int flags; enum {COPIED=1, FETCHED=2, SHAREDDATA=4, MEASUREFETCH=8};
 
   static unsigned long memused_;
-  friend class xbmImage;
 
 public:
 

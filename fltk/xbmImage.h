@@ -34,8 +34,10 @@ namespace fltk {
 class FL_API xbmImage : public Image {
 public:
   const unsigned char *array;
-  xbmImage(const unsigned char *bits, int w,int h) : Image(w,h), array(bits) {}
-  xbmImage(const char *bits, int w, int h) : Image(w,h), array((const unsigned char *)bits) {}
+  xbmImage(const unsigned char *bits, int w,int h) :
+    Image(fltk::MASK,w,h), array(bits) {}
+  xbmImage(const char *bits, int w, int h) :
+    Image(fltk::MASK,w,h), array((const unsigned char *)bits) {}
   bool fetch();
 };
 

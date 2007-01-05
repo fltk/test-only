@@ -70,14 +70,6 @@ struct fltk::Picture {
     syncro=0;
   }
 
-  Picture(int w, int h, HBITMAP b) { // special xbmImage one
-    linedelta = this->w = w;
-    this->h = h;
-    n = 0;
-    bitmap = b;
-    data =0;
-  }
-
   void sync() {
     if (syncro == syncnumber) {++syncnumber; GdiFlush();}
   }
@@ -275,8 +267,6 @@ void Image::fetch_if_needed() const {
   }
 }
 
-#define ISxbmImage 16
-
 void Image::draw(const fltk::Rectangle& from, const fltk::Rectangle& to) const {
   fetch_if_needed();
   if (!picture) {fillrect(to); return;}
@@ -284,16 +274,7 @@ void Image::draw(const fltk::Rectangle& from, const fltk::Rectangle& to) const {
   fltk::Rectangle R; fltk::transform(to,R);
   HDC tempdc = CreateCompatibleDC(dc);
   SelectObject(tempdc, picture->bitmap);
-  if (flags&ISxbmImage) {
-    // special xbmImage implementation:
-    // This does not work! If anybody can figure out the correct
-    // BitBlt incantation, please tell me! I want 1's in the mask
-    // to be the current color, and 0's to be unchanged.
-    // Possibly this is a bug in our Nvidia driver?
-    setbrush();
-    SetTextColor(dc, 0); //current_xpixel^xpixel(getbgcolor()));
-    BitBlt(dc, R.x(), R.y(), R.w(), R.h(), tempdc, from.x(), from.y(),MASKPAT);
-  } else if (fills_rectangle() && R.w()==from.w() && R.h()==from.h()) {
+  if (fills_rectangle() && R.w()==from.w() && R.h()==from.h()) {
     BitBlt(dc, R.x(), R.y(), from.w(), from.h(), tempdc, from.x(), from.y(), SRCCOPY);
   } else {
     BLENDFUNCTION m_bf;
@@ -312,38 +293,6 @@ void Image::setimage(const uchar* d, PixelType p, int w, int h, int ld) {
   setsize(w,h);
   setpixeltype(p);
   setpixels(d, Rectangle(w,h), ld); flags = 0;
-}
-
-////////////////////////////////////////////////////////////////
-
-#include <fltk/xbmImage.h>
-
-bool xbmImage::fetch()
-{
-  destroy();
-  static uchar hiNibble[16] =
-    { 0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
-      0x10, 0x90, 0x50, 0xd0, 0x30, 0xb0, 0x70, 0xf0 };
-  static uchar loNibble[16] =
-    { 0x00, 0x08, 0x04, 0x0c, 0x02, 0x0a, 0x06, 0x0e,
-      0x01, 0x09, 0x05, 0x0d, 0x03, 0x0b, 0x07, 0x0f };
-  int Bpr = (w_+7)/8;			//: bytes per row
-  int pad = Bpr&1, w1 = (w_+7)/8; //shr = ((w-1)&7)+1;
-  uchar *newarray = new uchar[(Bpr+pad)*h_], *dst = newarray;
-  const uchar* src = array;
-  for (int y=0; y<h_; y++) {
-    //: this is slooow, but we do it only once per pixmap
-    for (int j=w1; j>0; j--) {
-      uchar b = *src++;
-      *dst++ = ( hiNibble[b&15] ) | ( loNibble[(b>>4)&15] );
-    }
-    if (pad)
-      *dst++ = 0;
-  }
-  picture = new Picture(w_,h_,CreateBitmap(w_, h_, 1, 1, newarray));
-  flags = FETCHED|ISxbmImage;
-  delete[] newarray;
-  return true;
 }
 
 ////////////////////////////////////////////////////////////////

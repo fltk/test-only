@@ -123,7 +123,10 @@ public:
 #else
     PenMode( patXor );
     line_style(DOT);
-    strokerect(r);
+    CGContextSetShouldAntialias(quartz_gc, false);
+    CGRect rect = CGRectMake(r.x(), r.y(), r.w()-1, r.h()-1);
+    CGContextStrokeRect(quartz_gc, rect);
+    CGContextSetShouldAntialias(quartz_gc, true);
     PenMode( patCopy );
     line_style(0);
 #endif
