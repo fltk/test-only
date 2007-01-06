@@ -1,3 +1,8 @@
+//
+// "$Id"
+//
+// Mouse cursor support for the Fast Light Tool Kit (FLTK).
+
 // This is likely to change!
 
 #ifndef fltk_Cursor_h
@@ -30,3 +35,5 @@ extern FL_API Cursor* const CURSOR_NONE;
 
 }
 #endif
+
+// End of "$Id"

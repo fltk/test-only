@@ -108,7 +108,7 @@ include makedepend
 fluid2$(EXEEXT): $(OBJECTS) ../lib/$(LIBPREFIX)fltk2$(LIBSUFFIX) \
 		../lib/$(LIBPREFIX)fltk2_images$(LIBSUFFIX)
 	echo Linking $@...
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS) $(LINKFLTKIMG) $(LDLIBS) $(LOCAL_IMAGELIBS)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS) $(LINKFLTKIMG) $(LIBS) $(LDLIBS) $(LOCAL_IMAGELIBS)
 	$(POSTBUILD) $@ ../fltk/mac.r
 
 

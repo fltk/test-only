@@ -19,7 +19,7 @@ ask.o: ask.cxx
 bitmap.o: bitmap.cxx ../fltk/ToggleButton.h ../fltk/Button.h \
   ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h \
   ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/run.h ../fltk/Window.h \
-  ../fltk/Group.h ../fltk/xbmImage.h ../fltk/Image.h ../fltk/types.h \
+  ../fltk/Group.h ../fltk/xbmImage.h ../fltk/Image.h  \
   ../fltk/Symbol.h ../fltk/PixelType.h escherknot.xbm
 boxtype.o: boxtype.cxx ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h \
   ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
@@ -33,7 +33,7 @@ browser.o: browser.cxx ../fltk/Browser.h ../fltk/Menu.h ../fltk/Group.h \
   ../fltk/run.h ../fltk/events.h ../fltk/MenuBuild.h ../fltk/ItemGroup.h \
   ../fltk/Item.h ../fltk/Divider.h ../fltk/MenuBar.h ../fltk/Choice.h \
   ../fltk/PopupMenu.h ../fltk/ask.h ../fltk/xpmImage.h ../fltk/Image.h \
-  ../fltk/types.h ../fltk/Symbol.h ../fltk/PixelType.h \
+   ../fltk/Symbol.h ../fltk/PixelType.h \
   ../pixmaps/folder_small.xpm ../pixmaps/folder_small2.xpm \
   ../pixmaps/folder_small3.xpm ../pixmaps/file_small.xpm \
   ../pixmaps/file_small2.xpm ../pixmaps/book.xpm porsche.xpm
@@ -42,14 +42,14 @@ button.o: button.cxx ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h \
   ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/Button.h \
   ../fltk/InvisibleBox.h ../fltk/TiledImage.h ../fltk/Symbol.h \
   ../fltk/PixelType.h ../fltk/SharedImage.h ../fltk/Image.h \
-  ../fltk/types.h
+  
 buttons.o: buttons.cxx ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h \
   ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
   ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/Button.h \
   ../fltk/ToggleButton.h ../fltk/ReturnButton.h ../fltk/RepeatButton.h \
   ../fltk/CheckButton.h ../fltk/RadioButton.h ../fltk/LightButton.h \
   ../fltk/HighlightButton.h ../fltk/MultiImage.h ../fltk/Symbol.h \
-  ../fltk/PixelType.h ../fltk/xpmImage.h ../fltk/Image.h ../fltk/types.h \
+  ../fltk/PixelType.h ../fltk/xpmImage.h ../fltk/Image.h  \
   ../fltk/SharedImage.h ../pixmaps/folder_small.xpm \
   ../pixmaps/folder_small2.xpm ../pixmaps/folder_small3.xpm
 cairo.o: cairo.cxx ../config.h ../fltk/ask.h ../fltk/FL_API.h \
@@ -62,7 +62,7 @@ callbacks.o: callbacks.cxx ../fltk/run.h ../fltk/FL_API.h \
 checkers.o: checkers.cxx ../fltk/run.h ../fltk/FL_API.h ../fltk/events.h \
   ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h \
   ../fltk/Color.h ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/xbmImage.h \
-  ../fltk/Image.h ../fltk/types.h ../fltk/Symbol.h ../fltk/PixelType.h \
+  ../fltk/Image.h  ../fltk/Symbol.h ../fltk/PixelType.h \
   ../fltk/draw.h ../fltk/ask.h ../fltk/Cursor.h black_1.xbm black_2.xbm \
   black_3.xbm black_4.xbm white_1.xbm white_2.xbm white_3.xbm white_4.xbm \
   blackking_1.xbm blackking_2.xbm blackking_3.xbm blackking_4.xbm \
@@ -73,7 +73,7 @@ checkers.o: checkers.cxx ../fltk/run.h ../fltk/FL_API.h ../fltk/events.h \
 clock.o: clock.cxx ../fltk/ShapedWindow.h ../fltk/Window.h \
   ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
   ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/xbmImage.h \
-  ../fltk/Image.h ../fltk/types.h ../fltk/Symbol.h ../fltk/PixelType.h \
+  ../fltk/Image.h  ../fltk/Symbol.h ../fltk/PixelType.h \
   ../fltk/Clock.h ../fltk/PopupMenu.h ../fltk/Menu.h ../fltk/Item.h \
   ../fltk/SharedImage.h ../fltk/ask.h ../fltk/events.h ../fltk/run.h \
   circle.xbm
@@ -82,7 +82,7 @@ color_chooser.o: color_chooser.cxx ../config.h ../fltk/run.h \
   ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h ../fltk/Rectangle.h \
   ../fltk/visual.h ../fltk/Button.h ../fltk/show_colormap.h \
   ../fltk/ColorChooser.h ../fltk/rgbImage.h ../fltk/Image.h \
-  ../fltk/types.h ../fltk/Symbol.h ../fltk/PixelType.h ../fltk/x.h \
+   ../fltk/Symbol.h ../fltk/PixelType.h ../fltk/x.h \
   ../fltk/x11.h ../fltk/draw.h ../fltk/error.h list_visuals.cxx
 cube.o: cube.cxx ../config.h ../fltk/run.h ../fltk/FL_API.h \
   ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h ../fltk/Rectangle.h \
@@ -136,7 +136,7 @@ file_chooser.o: file_chooser.cxx ../fltk/FileChooser.h \
   ../fltk/FileIcon.h ../fltk/Symbol.h ../fltk/PixelType.h \
   ../fltk/filename.h ../fltk/InvisibleBox.h ../fltk/CheckButton.h \
   ../fltk/FileInput.h ../fltk/Input.h ../fltk/ReturnButton.h \
-  ../fltk/ask.h ../fltk/SharedImage.h ../fltk/Image.h ../fltk/types.h \
+  ../fltk/ask.h ../fltk/SharedImage.h ../fltk/Image.h  \
   ../fltk/pnmImage.h ../fltk/LightButton.h ../fltk/run.h \
   ../fltk/file_chooser.h
 fonts.o: fonts.cxx ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h \
@@ -174,7 +174,7 @@ image.o: image.cxx ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h \
   ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
   ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/Slider.h ../fltk/Valuator.h \
   ../fltk/draw.h ../fltk/PixelType.h ../fltk/rgbImage.h ../fltk/Image.h \
-  ../fltk/types.h ../fltk/Symbol.h ../fltk/xpmImage.h ../fltk/xbmImage.h \
+   ../fltk/Symbol.h ../fltk/xpmImage.h ../fltk/xbmImage.h \
   ../fltk/CheckButton.h ../fltk/Button.h ../config.h list_visuals.cxx \
   ../fltk/x.h ../fltk/x11.h ../fltk/visual.h sorceress.xbm \
   ../pixmaps/recycle.xpm porsche.xpm
@@ -200,7 +200,7 @@ label.o: label.cxx ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h \
   ../fltk/MenuBuild.h ../fltk/ItemGroup.h ../fltk/Menu.h ../fltk/Item.h \
   ../fltk/Divider.h ../fltk/MenuBar.h ../fltk/Choice.h \
   ../fltk/PopupMenu.h ../fltk/events.h ../fltk/draw.h ../fltk/Font.h \
-  ../fltk/xpmImage.h ../fltk/Image.h ../fltk/types.h porsche.xpm
+  ../fltk/xpmImage.h ../fltk/Image.h  porsche.xpm
 list_visuals.o: list_visuals.cxx ../config.h ../fltk/x.h ../fltk/x11.h \
   ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h ../fltk/FL_API.h \
   ../fltk/Rectangle.h ../fltk/PixelType.h ../fltk/run.h
@@ -232,7 +232,7 @@ overlay.o: overlay.cxx
 pixmap.o: pixmap.cxx ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h \
   ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
   ../fltk/Flags.h ../fltk/Rectangle.h ../fltk/Button.h ../fltk/xpmImage.h \
-  ../fltk/Image.h ../fltk/types.h ../fltk/Symbol.h ../fltk/PixelType.h \
+  ../fltk/Image.h  ../fltk/Symbol.h ../fltk/PixelType.h \
   porsche.xpm ../fltk/ToggleButton.h
 pixmap_browser.o: pixmap_browser.cxx
 radio.o: radio.cxx radio.h ../fltk/Window.h ../fltk/Group.h \

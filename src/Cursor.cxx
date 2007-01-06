@@ -96,7 +96,7 @@ struct fltk::Cursor {
   uchar tableid;
 };
 
-fltk::Cursor *fltk::cursor(void *raw) {
+FL_API fltk::Cursor *fltk::cursor(void *raw) {
   fltk::Cursor *c = new fltk::Cursor;
   c->cursor = (::Cursor)raw;
   c->fontid = 0;
@@ -104,7 +104,7 @@ fltk::Cursor *fltk::cursor(void *raw) {
   return c;
 }
 
-static fltk::Cursor arrow = {0,35};
+Static fltk::Cursor arrow = {0,35};
 static fltk::Cursor cross = {0,66};
 static fltk::Cursor wait_c = {0,76};
 static fltk::Cursor insert = {0,77};
@@ -394,6 +394,15 @@ void Widget::cursor(fltk::Cursor* c) const {
     fltk::current_cursor = xcursor;
     SetCursor(xcursor);
   }
+}
+
+// FC: check me ! bill don't commit unfinished & non compiling work on the trunk please !
+FL_API fltk::Cursor *fltk::cursor(void *raw) {
+  fltk::Cursor *c = new fltk::Cursor;
+  c->resource=0;
+  memcpy(c->data,raw,32);
+  memset(c->mask,0, sizeof(c->mask));
+  return c;
 }
 
 #endif
