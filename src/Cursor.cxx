@@ -104,7 +104,7 @@ FL_API fltk::Cursor *fltk::cursor(void *raw) {
   return c;
 }
 
-Static fltk::Cursor arrow = {0,35};
+static fltk::Cursor arrow = {0,35};
 static fltk::Cursor cross = {0,66};
 static fltk::Cursor wait_c = {0,76};
 static fltk::Cursor insert = {0,77};
