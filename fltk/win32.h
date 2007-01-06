@@ -54,7 +54,10 @@ the X version of these is described here.
 
 #ifndef DOXYGEN
 
+#ifndef WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
+#endif
+
 # include <windows.h>
 # include <winuser.h>
 # undef DELETE

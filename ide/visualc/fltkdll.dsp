@@ -140,9 +140,6 @@ DEP_CPP_ADDAR=\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -162,9 +159,6 @@ DEP_CPP_ADDCU=\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -183,7 +177,6 @@ DEP_CPP_ADJUS=\
 	"..\..\fltk\adjuster.h"\
 	"..\..\fltk\box.h"\
 	"..\..\fltk\damage.h"\
-	"..\..\fltk\types.h"\
 	"..\..\src\fastarrow.h"\
 	"..\..\src\mediumarrow.h"\
 	"..\..\src\slowarrow.h"\
@@ -229,9 +222,6 @@ DEP_CPP_ARGS_=\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -277,12 +267,8 @@ SOURCE=..\..\src\bmpImage.cxx
 DEP_CPP_BMPIM=\
 	"..\..\fltk\error.h"\
 	"..\..\fltk\fltk_cairo.h"\
-	"..\..\fltk\types.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\events.h"\
@@ -399,9 +385,6 @@ DEP_CPP_CLIP_=\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\clip.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -442,9 +425,6 @@ DEP_CPP_COLOR=\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -535,9 +515,6 @@ DEP_CPP_CURSO=\
 	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -641,9 +618,6 @@ DEP_CPP_DND_C=\
 	"..\..\src\win32\dnd.cxx"\
 	"..\..\src\x11\dnd.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\events.h"\
@@ -658,52 +632,6 @@ DEP_CPP_DND_C=\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\window.h"\
 	{$(INCLUDE)}"fltk\x11.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\draw_xpm.cxx
-DEP_CPP_DRAW_=\
-	".\config.h"\
-	{$(INCLUDE)}"fltk\color.h"\
-	{$(INCLUDE)}"fltk\draw.h"\
-	{$(INCLUDE)}"fltk\fl_api.h"\
-	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\PixelType.h"\
-	{$(INCLUDE)}"fltk\rectangle.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\drawimage.cxx
-DEP_CPP_DRAWI=\
-	"..\..\fltk\error.h"\
-	"..\..\fltk\fltk_cairo.h"\
-	"..\..\fltk\math.h"\
-	"..\..\fltk\types.h"\
-	"..\..\fltk\x.h"\
-	"..\..\src\osx\drawimage.cxx"\
-	"..\..\src\win32\drawimage.cxx"\
-	"..\..\src\x11\drawimage.cxx"\
-	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
-	{$(INCLUDE)}"fltk\color.h"\
-	{$(INCLUDE)}"fltk\draw.h"\
-	{$(INCLUDE)}"fltk\events.h"\
-	{$(INCLUDE)}"fltk\fl_api.h"\
-	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\font.h"\
-	{$(INCLUDE)}"fltk\image.h"\
-	{$(INCLUDE)}"fltk\osx.h"\
-	{$(INCLUDE)}"fltk\PixelType.h"\
-	{$(INCLUDE)}"fltk\rectangle.h"\
-	{$(INCLUDE)}"fltk\style.h"\
-	{$(INCLUDE)}"fltk\symbol.h"\
-	{$(INCLUDE)}"fltk\win32.h"\
-	{$(INCLUDE)}"fltk\x11.h"\
-	{$(INCLUDE)}"src\x11\XColorMap.h"\
 	
 # End Source File
 # Begin Source File
@@ -751,9 +679,6 @@ DEP_CPP_ERROR=\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\x.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -775,9 +700,6 @@ DEP_CPP_EVENT=\
 	"..\..\src\win32\event_key_state.cxx"\
 	"..\..\src\x11\event_key_state.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\events.h"\
@@ -879,7 +801,6 @@ DEP_CPP_FILEC=\
 	"..\..\fltk\returnbutton.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\tiledgroup.h"\
-	"..\..\fltk\types.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\checkbutton.h"\
 	{$(INCLUDE)}"fltk\choice.h"\
@@ -923,7 +844,6 @@ DEP_CPP_FILECH=\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\tiledgroup.h"\
-	"..\..\fltk\types.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\checkbutton.h"\
 	{$(INCLUDE)}"fltk\choice.h"\
@@ -1059,37 +979,12 @@ DEP_CPP_FILENAME_N=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fillarc.cxx
-DEP_CPP_FILLA=\
-	"..\..\fltk\fltk_cairo.h"\
-	"..\..\fltk\math.h"\
-	"..\..\fltk\x.h"\
-	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
-	{$(INCLUDE)}"fltk\color.h"\
-	{$(INCLUDE)}"fltk\draw.h"\
-	{$(INCLUDE)}"fltk\fl_api.h"\
-	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\osx.h"\
-	{$(INCLUDE)}"fltk\PixelType.h"\
-	{$(INCLUDE)}"fltk\rectangle.h"\
-	{$(INCLUDE)}"fltk\win32.h"\
-	{$(INCLUDE)}"fltk\x11.h"\
-	
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\fillrect.cxx
 DEP_CPP_FILLR=\
 	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -1148,9 +1043,6 @@ DEP_CPP_FLTK_=\
 	"..\..\fltk\x.h"\
 	"..\..\src\win32\fltk_theme.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\events.h"\
@@ -1180,9 +1072,6 @@ DEP_CPP_FONT_=\
 	"..\..\src\win32\Font.cxx"\
 	"..\..\src\x11\Font.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\events.h"\
@@ -1209,12 +1098,8 @@ DEP_CPP_FONT_=\
 SOURCE=..\..\src\gifImage.cxx
 DEP_CPP_GIFIM=\
 	"..\..\fltk\fltk_cairo.h"\
-	"..\..\fltk\types.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -1258,9 +1143,6 @@ DEP_CPP_GSAVE=\
 	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -1280,7 +1162,6 @@ DEP_CPP_HELPV=\
 	"..\..\fltk\cursor.h"\
 	"..\..\fltk\HelpView.h"\
 	"..\..\fltk\string.h"\
-	"..\..\fltk\types.h"\
 	"..\..\fltk\xpmimage.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
@@ -1320,17 +1201,14 @@ DEP_CPP_HIGHL=\
 
 SOURCE=..\..\src\Image.cxx
 DEP_CPP_IMAGE=\
+	"..\..\fltk\error.h"\
 	"..\..\fltk\fltk_cairo.h"\
-	"..\..\fltk\string.h"\
-	"..\..\fltk\types.h"\
+	"..\..\fltk\math.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\Image.cxx"\
 	"..\..\src\win32\Image.cxx"\
 	"..\..\src\x11\Image.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\events.h"\
@@ -1345,7 +1223,7 @@ DEP_CPP_IMAGE=\
 	{$(INCLUDE)}"fltk\widget.h"\
 	{$(INCLUDE)}"fltk\win32.h"\
 	{$(INCLUDE)}"fltk\x11.h"\
-	{$(INCLUDE)}"fltk\xbmimage.h"\
+	{$(INCLUDE)}"src\x11\XColorMap.h"\
 	
 # End Source File
 # Begin Source File
@@ -1443,9 +1321,6 @@ DEP_CPP_KEY_N=\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\events.h"\
@@ -1491,9 +1366,6 @@ DEP_CPP_LIST_=\
 	"..\..\src\win32\list_fonts.cxx"\
 	"..\..\src\x11\list_fonts.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\events.h"\
@@ -1520,9 +1392,6 @@ DEP_CPP_LOAD_=\
 	"..\..\fltk\x.h"\
 	"..\..\src\dlload_osx.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -1545,9 +1414,6 @@ DEP_CPP_LOCK_=\
 	"..\..\src\win32\lock.cxx"\
 	"..\..\src\x11\lock.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -1675,9 +1541,6 @@ DEP_CPP_MENUW=\
 	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -1704,9 +1567,6 @@ DEP_CPP_MESSA=\
 	"..\..\fltk\secretinput.h"\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\x.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\button.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
@@ -1729,6 +1589,7 @@ DEP_CPP_MESSA=\
 SOURCE=..\..\src\MultiImage.cxx
 DEP_CPP_MULTI=\
 	"..\..\fltk\multiimage.h"\
+	"..\..\fltk\string.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -1803,9 +1664,6 @@ DEP_CPP_OVERL=\
 	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -1825,9 +1683,6 @@ DEP_CPP_OWN_C=\
 	"..\..\fltk\visual.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -1866,9 +1721,6 @@ DEP_CPP_PATH_=\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -1976,9 +1828,6 @@ DEP_CPP_READI=\
 	"..\..\src\win32\readimage.cxx"\
 	"..\..\src\x11\readimage.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -2021,24 +1870,6 @@ DEP_CPP_RETUR=\
 	{$(INCLUDE)}"fltk\style.h"\
 	{$(INCLUDE)}"fltk\symbol.h"\
 	{$(INCLUDE)}"fltk\widget.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\rgbImage.cxx
-DEP_CPP_RGBIM=\
-	"..\..\fltk\rgbimage.h"\
-	"..\..\fltk\types.h"\
-	".\config.h"\
-	{$(INCLUDE)}"fltk\color.h"\
-	{$(INCLUDE)}"fltk\draw.h"\
-	{$(INCLUDE)}"fltk\events.h"\
-	{$(INCLUDE)}"fltk\fl_api.h"\
-	{$(INCLUDE)}"fltk\flags.h"\
-	{$(INCLUDE)}"fltk\image.h"\
-	{$(INCLUDE)}"fltk\PixelType.h"\
-	{$(INCLUDE)}"fltk\rectangle.h"\
-	{$(INCLUDE)}"fltk\symbol.h"\
 	
 # End Source File
 # Begin Source File
@@ -2094,9 +1925,6 @@ DEP_CPP_RUN_C=\
 	"..\..\src\win32\run.cxx"\
 	"..\..\src\x11\run.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\events.h"\
@@ -2128,10 +1956,10 @@ DEP_CPP_RUN_C=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\scandir.cxx
+SOURCE=..\..\src\scandir.c
 DEP_CPP_SCAND=\
 	"..\..\fltk\utf.h"\
-	"..\..\src\win32\scandir.cxx"\
+	"..\..\src\win32\scandir.c"\
 	".\config.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	
@@ -2190,9 +2018,6 @@ DEP_CPP_SCROLLR=\
 	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -2219,9 +2044,6 @@ DEP_CPP_SETCO=\
 	"..\..\src\win32\setcolor.cxx"\
 	"..\..\src\x11\setcolor.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -2250,9 +2072,6 @@ DEP_CPP_SETVI=\
 	"..\..\fltk\visual.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -2285,12 +2104,8 @@ SOURCE=..\..\src\ShapedWindow.cxx
 DEP_CPP_SHAPE=\
 	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\shapedwindow.h"\
-	"..\..\fltk\types.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -2314,11 +2129,8 @@ DEP_CPP_SHAPE=\
 SOURCE=..\..\src\SharedImage.cxx
 DEP_CPP_SHARE=\
 	"..\..\fltk\string.h"\
-	"..\..\fltk\types.h"\
 	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
-	{$(INCLUDE)}"fltk\draw.h"\
-	{$(INCLUDE)}"fltk\events.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
 	{$(INCLUDE)}"fltk\flags.h"\
 	{$(INCLUDE)}"fltk\image.h"\
@@ -2695,9 +2507,6 @@ DEP_CPP_UPBOX=\
 	"..\..\fltk\string.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -2844,7 +2653,6 @@ DEP_CPP_WIDGET=\
 	"..\..\fltk\damage.h"\
 	"..\..\fltk\labeltype.h"\
 	"..\..\fltk\string.h"\
-	"..\..\fltk\types.h"\
 	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
@@ -2870,9 +2678,6 @@ DEP_CPP_WINDO=\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\events.h"\
@@ -2897,9 +2702,6 @@ DEP_CPP_WINDOW=\
 	"..\..\fltk\Monitor.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\events.h"\
@@ -2923,9 +2725,6 @@ DEP_CPP_WINDOW_=\
 	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\Monitor.h"\
 	"..\..\fltk\x.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\events.h"\
@@ -2949,9 +2748,6 @@ DEP_CPP_WINDOW_I=\
 	"..\..\fltk\fltk_cairo.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"cairo-features.h"\
-	{$(INCLUDE)}"cairo-win32.h"\
-	{$(INCLUDE)}"cairo.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\
@@ -2992,14 +2788,24 @@ DEP_CPP_WIZAR=\
 # Begin Source File
 
 SOURCE=..\..\src\xbmImage.cxx
+DEP_CPP_XBMIM=\
+	{$(INCLUDE)}"fltk\color.h"\
+	{$(INCLUDE)}"fltk\fl_api.h"\
+	{$(INCLUDE)}"fltk\flags.h"\
+	{$(INCLUDE)}"fltk\image.h"\
+	{$(INCLUDE)}"fltk\PixelType.h"\
+	{$(INCLUDE)}"fltk\rectangle.h"\
+	{$(INCLUDE)}"fltk\symbol.h"\
+	{$(INCLUDE)}"fltk\xbmimage.h"\
+	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\xpmImage.cxx
 DEP_CPP_XPMIM=\
 	"..\..\fltk\string.h"\
-	"..\..\fltk\types.h"\
 	"..\..\fltk\xpmimage.h"\
+	".\config.h"\
 	{$(INCLUDE)}"fltk\color.h"\
 	{$(INCLUDE)}"fltk\draw.h"\
 	{$(INCLUDE)}"fltk\fl_api.h"\

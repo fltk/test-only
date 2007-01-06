@@ -733,14 +733,6 @@ SOURCE=..\..\src\dnd.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\draw_xpm.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\drawimage.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\drawtext.cxx
 # End Source File
 # Begin Source File
@@ -802,10 +794,6 @@ SOURCE=..\..\src\filename_match.cxx
 # Begin Source File
 
 SOURCE=..\..\src\filename_name.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fillarc.cxx
 # End Source File
 # Begin Source File
 
@@ -985,10 +973,6 @@ SOURCE=..\..\src\ReturnButton.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\rgbImage.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\RoundBox.cxx
 # End Source File
 # Begin Source File
@@ -1001,7 +985,7 @@ SOURCE=..\..\src\run.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\scandir.cxx
+SOURCE=..\..\src\scandir.c
 # End Source File
 # Begin Source File
 
