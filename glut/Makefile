@@ -91,8 +91,10 @@ include makedepend
 ################################################################
 
 install: $(INSTALLTARGETS)
+
 uninstall:
-	# echo nothing to do ?
+#	echo nothing to do ?
+
 install_static: static
 	@echo "Installing static libraries..."
 	@mkdir -p $(libdir)

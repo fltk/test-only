@@ -131,8 +131,8 @@ void fltk::drawline(int x, int y, int x1, int y1) {
   MoveToEx(dc, x, y, 0L); 
   LineTo(dc, x1, y1);
   // GDI does butt end caps (sort of, it just truncates the drawing
-  // with horizontal/vertical lines if dy or dx is bigger). This adds
-  // an extra pixel to emulate the X11 drawing.
+  // with horizontal or vertical lines depending on the slope). This
+  // adds an extra pixel to emulate the X11 drawing.
   if (!line_width_) SetPixel(dc, x1, y1, current_xpixel);
 #else
 # error
@@ -175,57 +175,50 @@ void fltk::drawline(float x, float y, float x1, float y1) {
 #endif
 }
 
-#if 0
-// WAS: Removed as Cairo does not emulate it well, and I want to see if
-// anybody calls these.
-
-/*! Draw a dot at the given point. */
+/*! Draw a dot at the given point. If line_width() is zero this is a
+  single pixel to the lower-right of x,y. If line_width() is non-zero
+  this is a dot drawn with the current pen and line caps.
+*/
 void fltk::drawpoint(int x, int y) {
-  transform(x,y);
+  if (!line_width_) {
+    transform(x,y);
 #if USE_CAIRO
-  cairo_move_to(cc,x,y);
-  cairo_line_to(cc,x,y);
-  cairo_stroke(cc);
+    fillrect(x,y,1,1);
 #elif USE_X11
-  XDrawPoint(xdisplay, xwindow, gc, x, y);
+    XDrawPoint(xdisplay, xwindow, gc, x, y);
 #elif defined(_WIN32)
-  SetPixel(dc, x, y, current_xpixel);
-#elif USE_QUARTZ
-  if (!line_width_) CGContextSetShouldAntialias(quartz_gc, false);
-  CGContextMoveToPoint(quartz_gc, x, y);
-  CGContextAddLineToPoint(quartz_gc, x, y);
-  CGContextStrokePath(quartz_gc);
-  if (!line_width_) CGContextSetShouldAntialias(quartz_gc, true);
+    SetPixel(dc, x, y, current_xpixel);
 #else
-# error
+    fillrect(x,y,1,1);
 #endif
+  } else {
+    drawline(x,y,x,y);
+  }
 }
 
-/*! Draw a dot at the given point. */
+/*! Draw a dot at the given point. If line_width() is zero this is
+  the single pixel containing X,Y, or the one to the lower-right if
+  X and Y transform to integers. If line_width() is non-zero this
+  is a dot drawn with the current pen and line caps (currently
+  draws nothing in some api's unless the line_style has CAP_ROUND).
+*/
 void fltk::drawpoint(float X, float Y) {
-  transform(X,Y); 
+  if (!line_width_) {
+    transform(X,Y); 
+    int x = int(floorf(X)); int y = int(floorf(Y));
 #if USE_CAIRO
-  cairo_move_to(cc,X,Y);
-  cairo_line_to(cc,X,Y);
-  cairo_stroke(cc);
+    fillrect(x,y,1,1);
+#elif USE_X11
+    XDrawPoint(xdisplay, xwindow, gc, x, y);
+#elif defined(_WIN32)
+    SetPixel(dc, x, y, current_xpixel);
 #else
-  int x = int(floorf(X)); int y = int(floorf(Y));
-# if USE_X11
-  XDrawPoint(xdisplay, xwindow, gc, x, y);
-# elif defined(_WIN32)
-  SetPixel(dc, x, y, current_xpixel);
-# elif USE_QUARTZ
-  if (!line_width_) CGContextSetShouldAntialias(quartz_gc, false);
-  CGContextMoveToPoint(quartz_gc, x, y);
-  CGContextAddLineToPoint(quartz_gc, x, y);
-  CGContextStrokePath(quartz_gc);
-  if (!line_width_) CGContextSetShouldAntialias(quartz_gc, true);
-# else
-#  error
-# endif
+    fillrect(x,y,1,1);
 #endif
+  } else {
+    drawline(X,Y,X,Y);
+  }
 }
-#endif
 
 //
 // End of "$Id$".

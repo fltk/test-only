@@ -37,9 +37,11 @@ void test_box::draw() {
   strokerect(10,10,w()-20,h()-20);
   addvertex(35, 35);
   addvertex(w()-35, h()-35);
-  addvertex(w()-40, 35);
+  addvertex(w()/2, 35);
   addvertex(35, h()/2);
   strokepath();
+  drawpoint(w()-35, 35);
+  drawline(35, h()*3/4, w()-35, h()*3/4);
   // you must reset the line type when done:
   line_style(SOLID);
 }

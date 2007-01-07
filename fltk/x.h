@@ -40,13 +40,7 @@
 #endif
 
 #if USE_CAIRO
-// declare common CAIRO decls and includes
-# include <cairo.h>
-  namespace fltk {
-    extern FL_API cairo_t * cc;
-    class Window;
-    FL_API cairo_surface_t * cairo_create_surface(Window* w);
-  }
+# include "fltk_cairo.h"
 #endif 
 //
 // End of "$Id$".

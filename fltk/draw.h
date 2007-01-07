@@ -154,6 +154,8 @@ FL_API void strokerect(int, int, int, int);
 inline void strokerect(const Rectangle& r) {strokerect(r.x(),r.y(),r.w(),r.h());}
 FL_API void drawline(int x0, int y0, int x1, int y1);
 FL_API void drawline(float x0, float y0, float x1, float y1);
+FL_API void drawpoint(int x, int y);
+FL_API void drawpoint(float x, float y);
 //@}
 
 /// \name Text

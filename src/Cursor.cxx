@@ -227,7 +227,7 @@ struct fltk::Cursor {
   HCURSOR cursor;
 };
 
-fltk::Cursor *fltk::cursor(void *raw) {
+FL_API fltk::Cursor *fltk::cursor(void *raw) {
   fltk::Cursor *c = new fltk::Cursor;
   c->cursor = (HCURSOR)raw;
   c->resource = 0;
@@ -397,11 +397,15 @@ void Widget::cursor(fltk::Cursor* c) const {
 }
 
 // FC: check me ! bill don't commit unfinished & non compiling work on the trunk please !
+// WAS: I'm going to guess that "raw" is an OS9 "Cursor". The problem is
+// that the structure itself did not port to Intel, as it is defined with
+// 16-bit shorts but apparently the system api wants the bytes the same,
+// probably because they expect it to be resource data.
 FL_API fltk::Cursor *fltk::cursor(void *raw) {
   fltk::Cursor *c = new fltk::Cursor;
   c->resource=0;
-  memcpy(c->data,raw,32);
-  memset(c->mask,0, sizeof(c->mask));
+  // This overwrites the data, mask, and hotspot:
+  memcpy(c->data, raw, sizeof(::Cursor));
   return c;
 }
 
