@@ -506,7 +506,7 @@ int ScrollGroup::handle(int event) {
       if ( scrollbar.visible() && !fltk::event_state( fltk::ALT ) ) {
         return scrollbar.send(event);
       } else {
-        return Group::handle( event );
+        return Group::handle(event);
       }
     }
 

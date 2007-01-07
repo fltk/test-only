@@ -1503,10 +1503,10 @@ bool fltk::handle()
       e_is_click = e_keysym;
     }
     if (n == wheel_up_button) {
-      e_dy = +1;
+      e_dy = -1;
       event = MOUSEWHEEL;
     } else if (n == wheel_down_button) {
-      e_dy = -1;
+      e_dy = +1;
       event = MOUSEWHEEL;
     } else {
       e_state |= BUTTON(n);

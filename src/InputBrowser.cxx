@@ -289,18 +289,18 @@ InputBrowser::handle(int event) {
 	      found=i; break;
 	  }
       }
-      if (event_dy() < 0) {
+      if (event_dy() > 0) {
 	  if (found==-1 || found==children()-1)
 	      found=0;
 	  else
 	      found++;
-      } else if (event_dy() > 0) {
+      } else if (event_dy() < 0) {
 	  if (found==-1 || found==0)
 	      found=children()-1;
 	  else
 	      found--;
       }
-	  m_input.text(child(found)->label());
+      m_input.text(child(found)->label());
       break;
     }
 

@@ -112,7 +112,7 @@ int NumericInput::handle(int event) {
     break;
   case MOUSEWHEEL:
     if (!focused()) return 0;
-    return handle_arrow(event_dy());
+    return handle_arrow(-event_dy());
   case PUSH:
     if (event_state(ALT|META)) {
       dragvalue=true;

@@ -217,7 +217,7 @@ int Scrollbar::handle(int event) {
     which_pushed = NOTHING;
     return 1;
   case MOUSEWHEEL: {
-    double n = (vertical() ? -event_dy() : event_dx())
+    double n = (vertical() ? event_dy() : event_dx())
       * style()->wheel_scroll_lines() * linesize();
     if (fabs(n) > pagesize()) n = (n<0)?-pagesize():pagesize();
     handle_drag(value()+n);

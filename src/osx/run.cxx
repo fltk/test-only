@@ -641,7 +641,7 @@ static pascal OSStatus carbonMousewheelHandler( EventHandlerCallRef nextHandler,
     if ( e_dx) handle( MOUSEWHEEL, window );
   } else if ( axis == kEventMouseWheelAxisY ) {
     e_dx = 0;
-    e_dy = delta;
+    e_dy = -delta;
     if ( e_dy) handle( MOUSEWHEEL, window );
   } else {
     ret = eventNotHandledErr;

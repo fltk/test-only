@@ -1458,8 +1458,8 @@ int Browser::handle(int event) {
 #if 0
     int n = event_dy() * Style::wheel_scroll_lines;
     goto_mark(FIRST_VISIBLE);
-    while (n > 0 && previous_visible()) n--;
-    while (n < 0 && next_visible()) n++;
+    while (n < 0 && previous_visible()) n++;
+    while (n > 0 && next_visible()) n--;
     set_top();
     return 1;
 #endif

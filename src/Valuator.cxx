@@ -298,7 +298,7 @@ int Valuator::handle(int event) {
       return 0;
     }
     case MOUSEWHEEL: /*if (vertical())*/ {
-      handle_drag(value()+event_dy()*linesize());
+      handle_drag(value()-event_dy()*linesize());
       return 1;
     }
   }
