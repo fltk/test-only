@@ -1912,13 +1912,13 @@ Browser::~Browser() {
 
 */
 
-/*! \fn Browser::leaf_symbol(Symbol*);
+/*! \fn Browser::leaf_symbol(const Symbol*);
   Sets a default value for image() on each item that is not a parent
   of other items. If the item has no image() then this one is used
   for it.
 */
 
-/*! \fn Browser::group_symbol(Symbol*);
+/*! \fn Browser::group_symbol(const Symbol*);
   Sets a default value for image() on each item that is a hierarchy
   parent. If the parent item has no image() then this one is used
   for it.

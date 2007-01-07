@@ -23,7 +23,12 @@
 
   Draws inline XPM data. This is a text-based 256-color image format
   designed for X11 and still very useful for making small icons, since
-  the data can be easily inserted into your source code.
+  the data can be easily inserted into your source code:
+
+\code
+#include "image_name.xpm"
+static xpmImage image_name(image_name_xpm);
+\endcode
 
   FLTK recognizes a few extensions to the xpm color map:
   * Setting the number of colors negative means the second line

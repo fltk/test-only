@@ -806,10 +806,11 @@ static void figure_out_visual() {
 
 #if USE_XFT
   // See if XRender is going to work.
-  // RGBA is run through the generic ARGB32 bitmap format. To allow
-  // RGB images to be drawn with XCopyArea or XPutImage I use the
-  // bitmap format that matches the visual. This code assummes that
-  // format is laid out exactly the same as RGBA.
+  // If so all image types are converted to ARGB32 format,
+  // put in a pixmap, and Xrender is used to draw them.
+  // The older direct conversion is still done for opaque formats
+  // sent through drawimage() if there is no scaling or rotation,
+  // this is to avoid slowness with XRender.
 //   {int major, minor; major = minor = -1;
 //   int status = XRenderQueryVersion(xdisplay, &major, &minor);
 //   printf("status = %d, version = %d.%d\n", status, major, minor);}
@@ -970,9 +971,8 @@ struct fltk::Picture {
   XShmSegmentInfo shminfo;
   int syncro;
 #endif
-  // The rest of this is crap to get alpha to kind-of work on X11:
   uchar* linebuffer;
-  XWindow alpha;        // binary alpha
+  XWindow alpha;        // binary alpha for non-XRender
   char* alphabuffer;    // binary alpha local source
 
   Picture(int w, int h, int depth, int ld) {

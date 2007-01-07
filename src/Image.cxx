@@ -170,7 +170,7 @@ using namespace fltk;
   Figures out linedelta for you as w*depth(p).
 */
 
-/*! \fn uchar* linebuffer(int y)
+/*! \fn uchar* Image::linebuffer(int y)
   Return a pointer to a buffer that you can write up to width() pixels
   in pixeltype() to and then call setpixels(buffer,y) with. This can
   avoid doing any copying of the data if the internal format and
@@ -369,7 +369,7 @@ void Image::_draw(const fltk::Rectangle& r) const
   }
 }
 
-/*! \fn unsigned long Image::mem_used();
+/*! \fn unsigned long Image::mem_used() const;
   Returns how much memory the image is using for buffer() and for
   any other structures it created. Returns zero if buffer() has
   not been called.

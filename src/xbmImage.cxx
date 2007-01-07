@@ -22,7 +22,13 @@
 /*! \class fltk::xbmImage
 
   Image based on a 1-bit bitmap from memory. This matches the very
-  first type of image provided with X10 in 1980 or so...
+  first type of image provided with X10 in 1980 or so. To use an
+  actual xbm file:
+
+\code
+#include "image_name.xbm"
+static xbmImage image_name(image_name_bits, image_name_width, image_name_height);
+\endcode
 
   Each byte in the bitmap determines 8 pixels, a 1 bit is opaque and
   a 0 bit is transparent. The low-order bit is the left-most (this

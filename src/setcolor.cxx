@@ -175,7 +175,7 @@ const char* fltk::line_dashes_;
   \see setcolor_alpha()   
 */
 
-/*! \fn void fltk::setcolor_alpha(Color)
+/*! \fn void fltk::setcolor_alpha(Color, float)
   Set the color + a transparency coeff for all subsequent drawing operations.
   \see setcolor()   
 */
@@ -230,7 +230,7 @@ const char* fltk::line_dashes_;
   are set.
 */
 
-/*! \fn void fltk::line_style(int style, int width, char* dashes)
+/*! \fn void fltk::line_style(int style, float width, const char* dashes)
 
   Set how to draw lines (the "pen"). If you change this it is your
   responsibility to set it back to the default with

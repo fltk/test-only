@@ -44,7 +44,7 @@
 
 using namespace fltk;
 
-/*! \fn MultiImage::MultiImage(Symbol& image0)
+/*! \fn MultiImage::MultiImage(const Symbol& image0)
   Constructor where only the "image0" is provided. Unless you call add(),
   this will always just draw \a image0.
 */
@@ -91,12 +91,12 @@ void MultiImage::add(Flags flags, const Symbol& image) {
   n_images++;
 }
 
-/*! \fn MultiImage::MultiImage(Symbol& image0, Flags flags1, Symbol& image1);
+/*! \fn MultiImage::MultiImage(const Symbol& image0, Flags flags1, const Symbol& image1);
   If all of \a flags1 are on in drawimage(), then \a image1 will be
   drawn, otherwise \a image0 will be drawn.
 */
 
-/*! \fn MultiImage::MultiImage(Symbol& image0, Flags flags1, Symbol& image1, Flags flags2, Symbol& image2);
+/*! \fn MultiImage::MultiImage(const Symbol& image0, Flags flags1, const Symbol& image1, Flags flags2, const Symbol& image2);
   If all of \a flags2 are on in drawimage(), then \a image2 will be
   drawn, else if all of \a flags1 are on then \a image1 will be
   drawn, otherwise \a image0 will be drawn.
