@@ -202,7 +202,7 @@ void fltk::gldrawtext(const char* text, int n) {
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
   glPopAttrib();
-#elif defined(__APPLE__) && !__BIG_ENDIAN__
+#elif defined(__APPLE__)
   // Work around an apparent OpenGL bug on our Intel Mac
   glPushMatrix();
   glCallLists(count, GL_UNSIGNED_BYTE, buffer);

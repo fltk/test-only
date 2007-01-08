@@ -757,11 +757,11 @@ int Widget::send(int event) {
     break;
 
   case ACTIVATE:
-    if (takesevents()) {clear_flag(INACTIVE_R); handle(event);}
+    if (active()) {clear_flag(INACTIVE_R); handle(event);}
     break;
 
   case DEACTIVATE:
-    if (takesevents()) {throw_focus(); set_flag(INACTIVE_R); handle(event);}
+    if (active()) {throw_focus(); set_flag(INACTIVE_R); handle(event);}
     break;
 
   case SHORTCUT:
@@ -808,16 +808,23 @@ void Widget::remove_timeout() {
 
   Parents may also be deactivated, in which case this widget will
   not get events even if this is true. You can test for this with
-  !active_r(). Or inside draw() events you can test flags()&INACTIVE_R.
+  !active_r().
 */
 
-/*! Returns whether the widget is active. This is true if active() is
-  true for this and all parent widgets. An inactive widget does not
-  get any events, but it does get redrawn. */
+/*! Returns true if active() is true for this and all parent widgets.
+  This is actually the INACTIVE_R bit in flags(), fltk keeps this
+  up to date as widgets are deactivated and/or added to inactive
+  parents.
+*/
 bool Widget::active_r() const {
+#if 1
+  return !(flags()&(INACTIVE|INACTIVE_R));
+#else
+  // this version will work if INACTIVE_R is not kept up to date
   for (const Widget* o = this; o; o = o->parent())
     if (!o->active()) return false;
   return true;
+#endif
 }
 
 /*! If active() is false, this turns it on. If active_r() is now true
@@ -825,11 +832,11 @@ bool Widget::active_r() const {
 void Widget::activate() {
   if (!active()) {
     clear_flag(INACTIVE);
-    if (active_r()) {
-      redraw_label(); redraw();
+    if (!parent() || parent()->active_r()) {
       clear_flag(INACTIVE_R);
       handle(ACTIVATE);
       if (inside(focus())) focus()->take_focus();
+      redraw_label(); redraw();
     }
   }
 }
@@ -874,11 +881,6 @@ void Widget::show() {
   if (!visible()) {
     clear_flag(INVISIBLE);
     if (visible_r()) {
-      if (active_r()) {
-        if (flags() & INACTIVE_R) {clear_flag(INACTIVE_R); handle(ACTIVATE);}
-      } else {
-        if (!(flags()&INACTIVE_R)) {set_flag(INACTIVE_R); handle(DEACTIVATE);}
-      }
       redraw_label(); redraw();
       relayout();
       handle(SHOW);
