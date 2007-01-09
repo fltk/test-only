@@ -60,7 +60,7 @@ void Drawing::draw() {
       fltk::newpath();
       fltk::addvertex(cosf(M_PI*i/10+.1), sinf(M_PI*i/10+.1));
       fltk::addvertex(cosf(M_PI*j/10+.1), sinf(M_PI*j/10+.1));
-      fltk::closepath();
+//      fltk::closepath(); //bug
       fltk::strokepath();
       // you must reset the line type when done:
       line_style(SOLID);
@@ -112,7 +112,7 @@ void load_menu_achoice (Choice* c)  {
 int main(int argc, char** argv) {
   Window window(5*75,400);
   //window.clear_double_buffer(); // use this to test scroll_area()
-  window.box(fltk::NO_BOX);
+  //window.box(fltk::NO_BOX); //remove trash
   window.begin();
   ScrollGroup scroll(0,0,5*75,300);
   scroll.begin();
