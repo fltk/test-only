@@ -38,7 +38,7 @@ using namespace fltk;
 struct FontSize {float size; unsigned opengl_id;};
 
 // The public-visible fltk::Font structures are actually imbedded in
-// this larger structure which points at the the above list
+// this larger structure:
 struct IFont {
   fltk::Font f;
   int attribute_mask; // all attributes that can be turned on
@@ -102,11 +102,13 @@ FL_API void fl_set_font_opengl_id(unsigned v) {findsize()->opengl_id = v;}
 ////////////////////////////////////////////////////////////////
 
 // The predefined fonts that fltk has:
+//#define DEFFONT "Helvetica"
+#define DEFFONT "Lucida Grande"
 static IFont fonts [] = {
-  {{"Arial",	0},	3,	0},
-  {{"Arial",	1},	3,	0},
-  {{"Arial",	2},	3,	0},
-  {{"Arial",	3},	3,	0},
+  {{DEFFONT,    0},	3,	0},
+  {{DEFFONT,    1},	3,	0},
+  {{DEFFONT,    2},	3,	0},
+  {{DEFFONT,    3},	3,	0},
   {{"Courier New",0},	3,	0},
   {{"Courier New",1},	3,	0},
   {{"Courier New",2},	3,	0},
@@ -177,21 +179,23 @@ void fltk::setfont(Font* font, float psize) {
   IFont* ifont = (IFont*)font;
 
   if (!ifont->ascent) {
-    // Using ATS to get the general Glyph size information
+    // set some default values in case this does not work:
     ifont->ascent = .75;
     ifont->descent = .25;
+    // Using ATS to get the general Glyph size information
     CFStringRef cfname = CFStringCreateWithCString(0L, font->system_name(), kCFStringEncodingASCII);
     ATSFontRef afont = ATSFontFindFromName(cfname, kATSOptionFlagsDefault);
     CFRelease(cfname);
-    if (!afont) return; // we lose...
-    ATSFontMetrics m = { 0 };
-    ATSFontGetHorizontalMetrics(afont, kATSOptionFlagsDefault, &m);
-    //if (m.avgAdvanceWidth) q_width = int(m.avgAdvanceWidth*size);
-    if (m.ascent) {
-      ifont->ascent = m.ascent+m.descent;
-      ifont->descent = -m.descent;
+    if (afont) {
+      ATSFontMetrics m = { 0 };
+      ATSFontGetHorizontalMetrics(afont, kATSOptionFlagsDefault, &m);
+      //if (m.avgAdvanceWidth) q_width = int(m.avgAdvanceWidth*size);
+      if (m.ascent) {
+	ifont->ascent = m.ascent+m.descent;
+	ifont->descent = -m.descent;
+      }
+      // does the ATSFontRef need to be freed somehow?
     }
-    // does the ATSFontRef need to be freed somehow?
   }
 
   current_font_ = font; current_size_ = psize;
