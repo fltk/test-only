@@ -1,8 +1,4 @@
-//
 // "$Id$"
-//
-// Base class for all the widgets that control a single floating-point
-// value.
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -22,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #ifndef fltk_Valuator_h
 #define fltk_Valuator_h
@@ -40,19 +35,19 @@ public:
   double value() const {return value_;}
   int value(double);
 
-  float minimum() const {return minimum_;}
-  void minimum(double a) {minimum_ = float(a);}
+  double minimum() const {return minimum_;}
+  void minimum(double a) {minimum_ = a;}
 
-  float maximum() const {return maximum_;}
-  void maximum(double a) {maximum_ = float(a);}
+  double maximum() const {return maximum_;}
+  void maximum(double a) {maximum_ = a;}
 
-  void range(double a, double b) {minimum_ = float(a); maximum_ = float(b);}
+  void range(double a, double b) {minimum_ = a; maximum_ = b;}
 
-  float step() const {return step_;}
-  void step(double a) {step_ = float(a);}
+  double step() const {return step_;}
+  void step(double a) {step_ = a;}
 
-  float linesize() const {return linesize_;}
-  void linesize(double a) {linesize_ = float(a);}
+  double linesize() const;
+  void linesize(double a) {linesize_ = a;}
 
   virtual int format(char*);
 
@@ -60,7 +55,7 @@ public:
 
 #ifdef FLTK_1_SLIDER
   void step(double a, int b) {step(a/b);}
-  void bounds(double a, double b) {minimum_=float(a); maximum_=float(b);}
+  void bounds(double a, double b) {minimum_=a; maximum_=b;}
   void precision(int p) {
     int B = 1;
     for (int i=0; i<p; i++) B *= 10;
@@ -83,10 +78,10 @@ private:
 
   double value_;
   static double previous_value_;
-  float minimum_;
-  float maximum_;
-  float step_;
-  float linesize_;
+  double minimum_;
+  double maximum_;
+  double step_;
+  double linesize_;
 
 };
 
@@ -94,6 +89,4 @@ private:
 
 #endif
 
-//
 // End of "$Id$".
-//

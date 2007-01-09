@@ -310,6 +310,7 @@ Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
 {
   style(default_style);
   step(1);
+  linesize(1);
   pagesize_ = 1;
 }
 

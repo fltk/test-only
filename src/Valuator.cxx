@@ -69,7 +69,7 @@ using namespace fltk;
   - value(0.0)
   - step(0)
   - range(0,1)
-  - linesize(1)
+  - linesize(0)
 */
 Valuator::Valuator(int X, int Y, int W, int H, const char* L)
   : Widget(X,Y,W,H,L) {
@@ -80,7 +80,7 @@ Valuator::Valuator(int X, int Y, int W, int H, const char* L)
   step_ = 0;
   minimum_ = 0;
   maximum_ = 1;
-  linesize_ = 1;
+  linesize_ = 0;
 }
 
 /*! \fn double Valuator::value() const
@@ -149,12 +149,29 @@ int Valuator::value(double v) {
 */
 
 /*! \fn void Valuator::linesize(double)
+  Set the value returned by linesize(), or restore the default
+  behavior by setting this to zero. Values less than zero or
+  between zero and the step() value produce undefined results.
+*/
+
+/*! Return the value set for linesize(), or the calculated value
+  if linesize() is zero.
 
   The linesize is the amount the valuator moves in response to an
-  arrow key, or the user clicking an up/down button. The default value
-  is 1. Negative values and values that are not a multiple of step()
-  produce undocumented results.
-*/
+  arrow key, or the user clicking an up/down button, or a click of the
+  mouse wheel. If this has not been set, this will return the maximum
+  of step() and 1/50 of the range.
+ */
+double Valuator::linesize() const {
+  if (linesize_) return linesize_;
+  double r = fabs(maximum_-minimum_)/50;
+  if (r < step_) return step_;
+//   if (step_ > 0) {
+//     if (r < step_) r = step_;
+//     else r = rint(r/step_)*step_;
+//   }
+  return r;
+}
 
 /*! Subclasses must implement this. It is called whenever the value()
   changes. They must call redraw() if necessary. */
@@ -274,7 +291,7 @@ int Valuator::handle(int event) {
       redraw(DAMAGE_HIGHLIGHT);
       return 1;
     case KEY: {
-      float i;
+      double i;
       switch (event_key()) {
         case DownKey:
         case LeftKey:
