@@ -503,7 +503,9 @@ int ScrollGroup::handle(int event) {
 
   case MOUSEWHEEL:
     {
-      if ( scrollbar.visible() && !fltk::event_state( fltk::ALT ) ) {
+      if ( (scrollbar.visible()||hscrollbar.visible())
+           && !fltk::event_state( fltk::ALT ) ) {
+        hscrollbar.send(event);
         return scrollbar.send(event);
       } else {
         return Group::handle(event);

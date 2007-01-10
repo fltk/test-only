@@ -281,43 +281,42 @@ int Valuator::format(char* buffer) {
 */
 int Valuator::handle(int event) {
   switch(event) {
-    case ENTER:
-    case LEAVE:
-      redraw_highlight();
-    case MOVE:
+  case ENTER:
+  case LEAVE:
+    redraw_highlight();
+  case MOVE:
+    return 1;
+  case FOCUS:
+  case UNFOCUS:
+    redraw(DAMAGE_HIGHLIGHT);
+    return 1;
+  case KEY: {
+    double i;
+    switch (event_key()) {
+    case DownKey:
+    case LeftKey:
+      i = -linesize();
+      goto J1;
+    case UpKey:
+    case RightKey:
+      i = linesize();
+    J1:
+      if (event_state()&(SHIFT|CTRL|ALT)) i *= 10;
+      if (maximum() < minimum()) i = -i;
+      handle_drag(value()+i);
       return 1;
-    case FOCUS:
-    case UNFOCUS:
-      redraw(DAMAGE_HIGHLIGHT);
+    case HomeKey:
+      handle_drag(minimum());
       return 1;
-    case KEY: {
-      double i;
-      switch (event_key()) {
-        case DownKey:
-        case LeftKey:
-          i = -linesize();
-	  goto J1;
-        case UpKey:
-        case RightKey:
-          i = linesize();
-      J1:
-	  if (event_state()&(SHIFT|CTRL|ALT)) i *= 10;
-	  if (maximum() < minimum()) i = -i;
-          handle_drag(value()+i);
-          return 1;
-        case HomeKey:
-          handle_drag(minimum());
-          return 1;
-        case EndKey:
-          handle_drag(maximum());
-          return 1;
-      }
-      return 0;
-    }
-    case MOUSEWHEEL: /*if (vertical())*/ {
-      handle_drag(value()-event_dy()*linesize());
+    case EndKey:
+      handle_drag(maximum());
       return 1;
     }
+    return 0;
+  }
+  case MOUSEWHEEL:
+    handle_drag(value()+(event_dx()-event_dy())*linesize());
+    return 1;
   }
   return 0;
 }

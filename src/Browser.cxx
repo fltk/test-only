@@ -1454,6 +1454,7 @@ int Browser::handle(int event) {
     break;
 
   case MOUSEWHEEL:
+    if (event_dx()) hscrollbar.send(event);
     return scrollbar.send(event);
 #if 0
     int n = event_dy() * Style::wheel_scroll_lines;
