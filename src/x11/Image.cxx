@@ -797,7 +797,7 @@ static void figure_out_visual() {
   xpixel(BLACK); // make sure figure_out_visual in color.cxx is called
 
 #if USE_XSHM
-  {int major, minor;
+  if (!getenv("NO_XSHM")) {int major, minor;
   use_xshm = XShmQueryVersion(xdisplay, &major, &minor, &use_xshm_pixmaps);
   if (use_xshm_pixmaps)
     use_xshm_pixmaps = XShmPixmapFormat(xdisplay)==ZPixmap;
@@ -962,6 +962,11 @@ static void figure_out_visual() {
 static int syncnumber = 1;
 #endif
 
+static int xerror_handler(Display* d, XErrorEvent* e) {
+  use_xshm_pixmaps = false;
+  return 0;
+}
+
 struct fltk::Picture {
   int w, h, linedelta;
   unsigned long n; // bytes used
@@ -985,18 +990,33 @@ struct fltk::Picture {
     syncro = 0;
     if (use_xshm_pixmaps) {
       shminfo.shmid = shmget(IPC_PRIVATE, n, IPC_CREAT|0777);
-      shminfo.shmaddr = shminfo.shmid ? (char*)shmat(shminfo.shmid, 0, 0) : 0;
+      if (shminfo.shmid != -1)
+        shminfo.shmaddr = (char*)shmat(shminfo.shmid, 0, 0);
+      else
+        shminfo.shmaddr = 0;
     } else {
-      shminfo.shmid = 0;
+      shminfo.shmid = -1;
       shminfo.shmaddr = 0;
     }
     shminfo.readOnly = False;
     if (shminfo.shmaddr && XShmAttach(xdisplay, &shminfo)) {
       data = (uchar*)shminfo.shmaddr;
+      static bool beenhere;
+      int (*f)(Display*,XErrorEvent*);
+      if (!beenhere) f = XSetErrorHandler(xerror_handler);
       rgb = XShmCreatePixmap(xdisplay, RootWindow(xdisplay,xscreen),
                              shminfo.shmaddr, &shminfo,
                              w, h, depth);
-      return;
+      if (beenhere) return;
+      // rest of this is a test to make sure XShm will really work...
+      beenhere = true;
+      XSync(xdisplay,false);
+      XSetErrorHandler(f);
+      if (use_xshm_pixmaps) return; // the xerror_handler did not get called!
+      // throw stuff away and give up:
+      //printf("XShm is not going to work!\n");
+      shmdt(shminfo.shmaddr); data = 0; shminfo.shmaddr = 0;
+      shmctl(shminfo.shmid, IPC_RMID, 0); shminfo.shmid = -1;
     }
 #endif
     rgb = XCreatePixmap(xdisplay, RootWindow(xdisplay,xscreen),
@@ -1007,7 +1027,7 @@ struct fltk::Picture {
   Picture(int) { // special constructor for xbmImage
     linebuffer = 0; alpha = 0; alphabuffer = 0;
 #if USE_XSHM
-    shminfo.shmid = 0;
+    shminfo.shmid = -1;
     shminfo.shmaddr = 0;
 #endif
     data = 0;
@@ -1036,7 +1056,7 @@ struct fltk::Picture {
     if (rgb) XFreePixmap(xdisplay, rgb);
 #if USE_XSHM
     if (shminfo.shmaddr) {shmdt(shminfo.shmaddr); data = 0;}
-    if (shminfo.shmid) shmctl(shminfo.shmid, IPC_RMID, 0);
+    if (shminfo.shmid != -1) shmctl(shminfo.shmid, IPC_RMID, 0);
 #endif
     delete[] (U32*)data;
   }
