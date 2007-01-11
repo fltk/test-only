@@ -170,7 +170,10 @@ Fl_Menu_Item menutable[] = {
     {"A very long menu item"},
     {0},
   {"&Huge", 0, 0, (void*)hugemenu, FL_SUBMENU_POINTER},
-  {"button",0, 0, 0, fltk::MENU_TOGGLE},
+  // these buttons demonstrates that the menubar can be used as a "toolbar"
+  {"@[]"}, {"@<->"}, {"@+"},
+  // it would be nice if checkmarks worked, but they don't:
+  //{"toggle",0, 0, 0, fltk::MENU_TOGGLE},
   {0}
 };
 
