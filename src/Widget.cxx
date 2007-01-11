@@ -550,11 +550,8 @@ void Widget::redraw_label() {
 #else
   // Find the parent with a box and redraw it...
   else {
-    Widget* widget = this->parent();
-    if (widget) {
-      widget = (Widget*)(widget->window());
-      if (widget) widget->redraw();
-    }
+    Widget* window = (Widget*)(this->window());
+    if (window) window->redraw();
   }
 #endif
 }
