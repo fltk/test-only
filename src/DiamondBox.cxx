@@ -56,7 +56,7 @@ void DiamondBox::_draw(const Rectangle& r) const
   int x = r.x(); int w = r.w(); if (w&1) w--; else {w -= 2; x++;}
   int y1 = r.center_y();
   int y = r.y(); int h = r.h(); if (h&1) h--; else {h -= 2; y++;}
-  const char* s = drawflags(PUSHED|STATE) ? down->data : data;
+  const char* s = drawflags(PUSHED|STATE) && down ? down->data : data;
   char buf[26]; if (drawflags(INACTIVE_R) && Style::draw_boxes_inactive_) {
     fl_to_inactive(s, buf); s = buf;}
   const char* t;
