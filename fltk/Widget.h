@@ -132,51 +132,55 @@ public:
   bool	focused() const		;
   bool	belowmouse() const	;
 
-  Flags flags() const		{ return flags_; }
-  Flags flags(Flags f)		{ return flags_ = f; }
-  Flags set_flag(int c)		{ return flags_ |= c; }
-  Flags clear_flag(int c)	{ return flags_ &= ~c; }
-  Flags invert_flag(int c)	{ return flags_ ^= c; }
+  Flags	flags() const		{ return flags_; }
+  void	flags(Flags f)  	{ flags_ = f; }
+  void	set_flag(unsigned f)	{ flags_ |= f; }
+  void	clear_flag(unsigned f)	{ flags_ &= ~f; }
+  void	invert_flag(unsigned f)	{ flags_ ^= f; }
+  void	set_flag(unsigned f,bool b) { flags_ = (flags_&~f)|(b?f:0); }
+  bool	flag(unsigned f) const	{ return (flags_ & f) != 0; }
+  bool	any_of(unsigned f) const{ return (flags_ & f) != 0; }
+  bool	all_of(unsigned f) const{ return (flags_ & f) == f; }
 
-  bool  state() const 		{ return (flags()&STATE)!=0; }
+  bool	state() const 		{ return flag(STATE); }
   bool  state(bool);
   bool	set()			{ return state(true); }
   bool	clear()			{ return state(false); }
-  void  setonly();
+  void	setonly();
 
-  Flags align() const		{ return flags_&ALIGN_MASK; }
+  Flags	align() const		{ return flags_&ALIGN_MASK; }
   void	align(unsigned a)	{ flags_ = (flags_ & (~ALIGN_MASK)) | a; }
-  bool	visible() const		{ return !(flags_&INVISIBLE); }
+  bool	visible() const		{ return !flag(INVISIBLE); }
   bool	visible_r() const	;
   void	show()			;
   void	hide()			;
-  void	set_visible()		{ flags_ &= ~INVISIBLE; }
-  void	clear_visible()		{ flags_ |= INVISIBLE; }
-  bool	active() const		{ return !(flags_&INACTIVE); }
+  void	set_visible()		{ clear_flag(INVISIBLE); }
+  void	clear_visible()		{ set_flag(INVISIBLE); }
+  bool	active() const		{ return !flag(INACTIVE); }
   bool	active_r() const	;
   void	activate()		;
   void	activate(int b)		{ if (b) activate(); else deactivate(); }
   void	deactivate()		;
-  bool	output() const		{ return (flags_&OUTPUT)!=0; }
-  void	set_output()		{ flags_ |= OUTPUT; }
-  void	clear_output()		{ flags_ &= ~OUTPUT; }
-  bool	takesevents() const	{ return !(flags_&(OUTPUT|INVISIBLE|INACTIVE)); }
-  bool	changed() const		{ return (flags_&CHANGED)!=0; }
-  void	set_changed()		{ flags_ |= CHANGED; }
-  void	clear_changed()		{ flags_ &= ~CHANGED; }
-  bool	selected() const	{ return (flags_&SELECTED)!=0; }
-  void	set_selected()		{ flags_ |= SELECTED; }
-  void	clear_selected()	{ flags_ &= ~SELECTED; }
-  bool	click_to_focus()	{ return (flags_ & CLICK_TO_FOCUS) != 0; }
-  void  set_click_to_focus()	{ flags_ |= CLICK_TO_FOCUS; }
-  void	clear_click_to_focus()	{ flags_ &= ~CLICK_TO_FOCUS; }
-  bool	tab_to_focus()		{ return (flags_ & TAB_TO_FOCUS) != 0; }
-  void  set_tab_to_focus()	{ flags_ |= TAB_TO_FOCUS; }
-  void	clear_tab_to_focus()	{ flags_ &= ~(TAB_TO_FOCUS|CLICK_TO_FOCUS); }
-  bool  horizontal() const	{ return !(flags_&LAYOUT_VERTICAL);}
-  bool  vertical() const	{ return (flags_&LAYOUT_VERTICAL)!=0;}
-  void	set_horizontal()	{ flags_ &= ~LAYOUT_VERTICAL; }
-  void	set_vertical()		{ flags_ |= LAYOUT_VERTICAL; }
+  bool	output() const		{ return flag(OUTPUT); }
+  void	set_output()		{ set_flag(OUTPUT); }
+  void	clear_output()		{ clear_flag(OUTPUT); }
+  bool	takesevents() const	{ return !any_of(OUTPUT|INVISIBLE|INACTIVE); }
+  bool	changed() const		{ return flag(CHANGED); }
+  void	set_changed()		{ set_flag(CHANGED); }
+  void	clear_changed()		{ clear_flag(CHANGED); }
+  bool	selected() const	{ return flag(SELECTED); }
+  void	set_selected()		{ set_flag(SELECTED); }
+  void	clear_selected()	{ clear_flag(SELECTED); }
+  bool	click_to_focus()	{ return flag(CLICK_TO_FOCUS); }
+  void  set_click_to_focus()	{ set_flag(CLICK_TO_FOCUS); }
+  void	clear_click_to_focus()	{ clear_flag(CLICK_TO_FOCUS); }
+  bool	tab_to_focus()		{ return flag(TAB_TO_FOCUS); }
+  void  set_tab_to_focus()	{ set_flag(TAB_TO_FOCUS); }
+  void	clear_tab_to_focus()	{ clear_flag(TAB_TO_FOCUS|CLICK_TO_FOCUS); }
+  bool  horizontal() const	{ return !flag(LAYOUT_VERTICAL);}
+  bool	vertical() const	{ return flag(LAYOUT_VERTICAL);}
+  void	set_horizontal()	{ clear_flag(LAYOUT_VERTICAL); }
+  void	set_vertical()		{ set_flag(LAYOUT_VERTICAL); }
 
   bool	take_focus()		;
   void	throw_focus()		;

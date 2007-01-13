@@ -158,11 +158,11 @@ void Group::insert(Widget &o, int index) {
   ++children_;
   // fix the INACTIVE_R flag:
   if ( active_r() && o.active() ) {
-    if ( o.flags() & INACTIVE_R ) {
+    if ( o.flag(INACTIVE_R) ) {
       o.clear_flag(INACTIVE_R); o.handle(ACTIVATE);
     }
   } else {
-    if ( !(o.flags() & INACTIVE_R ) ) {
+    if ( !o.flag(INACTIVE_R) ) {
       o.set_flag(INACTIVE_R); o.handle(DEACTIVATE);
     }
   }

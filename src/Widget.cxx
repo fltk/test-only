@@ -263,14 +263,52 @@ void Widget::copy_label(const char* s) {
 */
 
 /*! \fn Flags Widget::flags() const
-
   Each Widget, and most drawing functions, take a bitmask of
   flags that indicate the current state and exactly how to draw
   things. See \link Flags.h <fltk/Flags.h> \endlink for values.
+  This is for copying the flag values, use flag(c) to test them.
 */
 
-/*! void Widget::align(Flags);
+/*! \fn void Widget::flags(Flags f)
+  Replace flags(). This is for constructors, don't use it elsewhere.
+*/
 
+/*! \fn void Widget::set_flag(unsigned f)
+  Make flag(f) return true by turning on that bit. You can set
+  more than one by or'ing them together.
+*/
+
+/*! \fn void Widget::clear_flag(unsigned f)
+  Make flag(f) return false by turning off that bit. You can turn
+  off multiple bits by or'ing them toegher.
+*/
+
+/*! \fn void Widget::set_flag(unsigned f,bool b)
+  Make flag(f) return \a b. Same as b ? set_flag(f) : clear_flag(f).
+*/
+
+/*! \fn void Widget::invert_flag(unsigned f)
+  Flip the result of flag(f) if \a f is a single bit. If you or
+  together bits it will flip them all.
+*/
+
+/*! \fn bool Widget::flag(unsigned f) const
+  Returns true if the bit for \a f is on.
+*/
+
+/*! \fn bool Widget::any_of(unsigned f) const
+  Returns true if \e any of the bits in \a f are on. Actually this
+  is the same function as flag(f) but using this may make the code
+  more readable.
+*/
+
+/*! \fn bool Widget::all_of(unsigned f) const
+  Returns true if \e all of the bits in \a f are on. \a f
+  should be several bits or'd together, otherwise this is the
+  same as flag(f).
+*/
+
+/*! \fn void Widget::align(Flags);
   Forces the values of all the fltk::ALIGN_* flags to the passed
   value. This determines how the label is printed next to or inside
   the widget. The default value is fltk::ALIGN_CENTER, which centers
@@ -542,7 +580,7 @@ void Widget::redraw(uchar flags) {
 void Widget::redraw_label() {
   if (!label() && !image()) return;
   // inside label redraws the widget:
-  if (!(flags()&15) || (flags() & ALIGN_INSIDE)) redraw();
+  if (!(flags()&15) || flag(ALIGN_INSIDE)) redraw();
 #if 0
   // outside label requires a marker flag and damage to parent:
   // This does not work for antialiased labels...
@@ -815,7 +853,7 @@ void Widget::remove_timeout() {
 */
 bool Widget::active_r() const {
 #if 1
-  return !(flags()&(INACTIVE|INACTIVE_R));
+  return !any_of(INACTIVE|INACTIVE_R);
 #else
   // this version will work if INACTIVE_R is not kept up to date
   for (const Widget* o = this; o; o = o->parent())
@@ -861,7 +899,7 @@ void Widget::deactivate() {
 */
 
 /*! bool Widget::visible() const
-  Returns true if the widget is visible (flags() & INVISIBLE is false)
+  Returns true if the widget is visible (flag(INVISIBLE) is false)
 */
 
 /*! Returns true if the widget and all of its parents are visible. Only

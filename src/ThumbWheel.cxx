@@ -31,7 +31,7 @@
 #include <fltk/math.h>
 using namespace fltk;
 
-#define horizontal() (!(flags()&LAYOUT_VERTICAL)||(type()&1))
+#define horizontal() (!flag(LAYOUT_VERTICAL)||(type()&1))
 
 /*! \class fltk::ThumbWheel
 

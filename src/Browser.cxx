@@ -322,7 +322,7 @@ bool Browser::item_is_parent() const {
 /** If item_is_parent() is true, return true if this item is open.
     If this is not a parent the result is undefined. */
 bool Browser::item_is_open() const {
-  if (item()->flags() & fltk::OPENED) return true;
+  if (item()->flag(fltk::OPENED)) return true;
   for (unsigned i = 0; i <= HERE.level; i++) {
     if (i > OPEN.level) return false;
     if (HERE.indexes[i] != OPEN.indexes[i]) return false;
@@ -660,14 +660,14 @@ void Browser::draw_item(int damage) {
   item()->w(interior.w()+xposition_-inset);
   translate(x, y);
   if (at_mark(FOCUS)) {
-    if (flags() & FOCUSED) item()->set_flag(FOCUSED);
+    if (flag(FOCUSED)) item()->set_flag(FOCUSED);
     else item()->clear_flag(FOCUSED);
     if (!multi()) item()->set_flag(SELECTED);
   } else {
     item()->clear_flag(FOCUSED);
     if (!multi()) item()->clear_flag(SELECTED);
   }
-  if (/*(flags()&HIGHLIGHT) &&*/ at_mark(BELOWMOUSE))
+  if (/*flag(HIGHLIGHT) &&*/ at_mark(BELOWMOUSE))
     item()->set_flag(HIGHLIGHT);
   else
     item()->clear_flag(HIGHLIGHT);

@@ -87,7 +87,7 @@ void Choice::draw() {
   if (damage() & (DAMAGE_ALL|DAMAGE_VALUE)) {
     setcolor(color());
     fillrect(r);
-    if (flags() & FOCUSED) {
+    if (flag(FOCUSED)) {
       setcolor(selection_color());
       Rectangle fr(r); fr.inset(2); fillrect(fr);
     }
@@ -98,7 +98,7 @@ void Choice::draw() {
       Flags saved = o->flags();
       if (focused()) o->set_flag(SELECTED);
       else o->clear_flag(SELECTED);
-      if (flags()&(INACTIVE|INACTIVE_R)) o->set_flag(INACTIVE_R);
+      if (any_of(INACTIVE|INACTIVE_R)) o->set_flag(INACTIVE_R);
       r.move_x(2);
       push_clip(r);
       push_matrix();

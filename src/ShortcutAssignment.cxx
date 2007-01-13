@@ -373,10 +373,10 @@ bool Widget::shortcut(unsigned key) {
   widget has a real shortcut assignment to match any &x in it's label().
   The returned value is ALT|c where c is the character after
   the first '&' in the label, or zero if there isn't any '&' sign
-  or if flags() has RAW_LABEL turned on.
+  or if flag(RAW_LABEL) is on.
 */
 unsigned Widget::label_shortcut() const {
-  if (flags() & RAW_LABEL) return 0;
+  if (flag(RAW_LABEL)) return 0;
   const char* label = this->label();
   if (!label) for (;*label;) {
     if (*label++ == '&') {
@@ -396,12 +396,12 @@ unsigned Widget::label_shortcut() const {
     before calling this so that plain keys do not do anything, and
     should certainly make sure no other widgets want the shortcut.
 
-    This is ignored if flags() has RAW_LABEL turned on (which stops
-    the &x from printing as an underscore. The sequence "&&" is ignored
-    as well because that is used to print a plain '&' in the label.
+    This is ignored if flag(RAW_LABEL) is on (which stops the &x from
+    printing as an underscore. The sequence "&&" is ignored as well
+    because that is used to print a plain '&' in the label.
 */
 bool Widget::test_label_shortcut() const {
-  if (flags() & RAW_LABEL) return false;
+  if (flag(RAW_LABEL)) return false;
   char c = event_text()[0];
   if (!c) return false;
   const char* label = this->label();

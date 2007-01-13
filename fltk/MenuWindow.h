@@ -37,7 +37,7 @@ public:
 
   static NamedStyle* default_style;
 
-  int overlay() {return !(flags()&NO_OVERLAY);}
+  int overlay() {return !flag(NO_OVERLAY);}
   void set_overlay() {clear_flag(NO_OVERLAY);}
   void clear_overlay() {set_flag(NO_OVERLAY);}
   ~MenuWindow();

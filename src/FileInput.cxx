@@ -216,7 +216,7 @@ void FileInput::draw() {
 	  Rectangle lr(r); lr.w(label_width);
 	  fillrect(lr);
 	  Color color = labelcolor();
-	  if (flags()&INACTIVE_R) color = inactive(color);
+	  if (flag(INACTIVE_R)) color = inactive(color);
 	  setcolor(color);
 	  float y = r.y()+((r.h()-height)>>1)+desc;
 	  drawtext(label(), float(r.x()+2), y);

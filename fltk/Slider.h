@@ -56,7 +56,7 @@ public:
     FILL		= 16
 #endif
   };
-  bool horizontal() const {return !(flags()&LAYOUT_VERTICAL) || (type()&1);}
+  bool horizontal() const {return !flag(LAYOUT_VERTICAL) || (type()&1);}
   bool log() const {return (type()&LOG)!=0;}
 
   void draw();

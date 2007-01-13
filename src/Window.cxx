@@ -337,7 +337,7 @@ int Window::handle(int event) {
     return 1;
 
   case HIDE:
-    if (flags()&MODAL) modal(0, false);
+    if (flag(MODAL)) modal(0, false);
 #if USE_X11
     if (i) XUnmapWindow(xdisplay, i->xid);
 #elif defined(_WIN32)
@@ -426,9 +426,9 @@ void Window::show() {
   // get rid of very common user bug: forgot end():
   Group::current(0);
   // Emulate the undocumented back-compatability modal() stuff:
-  if (flags()&(MODAL|NON_MODAL)) {
+  if (any_of(MODAL|NON_MODAL)) {
     child_of(first()); // this may unmap window if it changes
-    if (flags()&MODAL) modal(this, false);
+    if (flag(MODAL)) modal(this, false);
   }
 
 #if USE_QUARTZ
@@ -838,7 +838,7 @@ void Window::destroy() {
   }
 
   // Make sure no events are sent to this window:
-  if (flags()&MODAL) modal(0, false);
+  if (flag(MODAL)) modal(0, false);
   throw_focus();
   clear_visible();
 

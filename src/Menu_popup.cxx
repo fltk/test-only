@@ -842,7 +842,7 @@ int MWindow::handle(int event) {
       widget = p.current_widget();
       if (widget->takesevents()) {
 #if 0
-	if ((widget->flags() & MENU_STAYS_UP) && (!p.menubar || p.level)) {
+	if (widget->flag(MENU_STAYS_UP) && (!p.menubar || p.level)) {
 	  p.widget->set_item(p.indexes, p.level);
 	  p.widget->execute(widget);
 	  Window* mw = p.menus[p.level];

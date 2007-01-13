@@ -106,7 +106,7 @@ void cb_multi(Button* w, void* ptr) {
 static Group* current_group(Browser* tree) {
   Widget* w = tree->goto_focus();
   if (!w) return tree;
-  if (w->is_group() && w->flags()&fltk::OPENED) return (Group*)w;
+  if (w->is_group() && w->flag(fltk::OPENED)) return (Group*)w;
   return w->parent() ? w->parent() : tree;
 }
 

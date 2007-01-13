@@ -57,15 +57,15 @@ public:
   void border(bool set)	{set ? clear_flag(NOBORDER) : set_flag(NOBORDER);}
   /*! \deprecated compat. api only, please use Window::border(bool)*/
   void clear_border()    {set_flag(NOBORDER);} 
-  bool border() const	{return !(flags() & NOBORDER);}
+  bool border() const	{return !flag(NOBORDER);}
   void set_override()	{set_flag(NOBORDER|OVERRIDE);}
-  bool override() const {return (flags()&OVERRIDE)!=0; }
+  bool override() const {return flag(OVERRIDE); }
   const Window* child_of() const {return child_of_;}
   void child_of(const Window* w);
   void set_modal()	{set_flag(MODAL);} // back compatability only!
   void set_non_modal()	{set_flag(NON_MODAL);} // back compatability only!
 
-  bool double_buffer() const {return (flags()&DOUBLE)!=0;}
+  bool double_buffer() const {return flag(DOUBLE);}
   void set_double_buffer() {set_flag(DOUBLE);}
   void clear_double_buffer() {clear_flag(DOUBLE);}
   void free_backbuffer();

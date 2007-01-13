@@ -72,7 +72,7 @@ void Dial::draw() {
   drawstyle(style(), flags());
   Color fillcolor = selection_color();
   Color linecolor = textcolor();
-  if (flags()&INACTIVE_R) {
+  if (flag(INACTIVE_R)) {
     fillcolor = inactive(fillcolor);
     linecolor = inactive(linecolor);
   }

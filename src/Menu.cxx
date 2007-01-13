@@ -164,8 +164,8 @@ Widget* List::child(const Menu* menu, const int* indexes,int level) {
 \code
 void My_List::flags_changed(const fltk::Menu*, fltk::Widget* widget) {
   Node* node = (Node*)(widget->user_data());
-  node->open = (widget->flags() & fltk::STATE) !=0;
-  node->selected = (widget->flags() & fltk::SELECTED) != 0;
+  node->open = widget->flag(fltk::STATE);
+  node->selected = widget->flag(fltk::SELECTED);
 }
 \endcode
 */

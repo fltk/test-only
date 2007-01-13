@@ -139,7 +139,7 @@ void Item::set_style(const Style* style, bool menubar) {
 */
 void Item::draw() {
   drawstyle(style(), flags() & ~OUTPUT);
-  if (flags() & SELECTED) {
+  if (flag(SELECTED)) {
     setbgcolor(selection_color());
     setcolor(contrast(selection_textcolor(), getbgcolor()));
   }
@@ -235,7 +235,7 @@ ItemGroup::ItemGroup(const char* l, const Symbol* i, bool begin) :
 
 void ItemGroup::draw() {
   drawstyle(style(), flags() & ~OUTPUT);
-  if (flags() & SELECTED) {
+  if (flag(SELECTED)) {
     setbgcolor(selection_color());
     setcolor(contrast(selection_textcolor(), getbgcolor()));
   }
