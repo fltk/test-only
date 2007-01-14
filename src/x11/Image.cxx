@@ -960,12 +960,12 @@ static void figure_out_visual() {
 
 #if USE_XSHM
 static int syncnumber = 1;
-#endif
 
 static int xerror_handler(Display* d, XErrorEvent* e) {
   use_xshm_pixmaps = false;
   return 0;
 }
+#endif
 
 struct fltk::Picture {
   int w, h, linedelta;
@@ -1002,19 +1002,26 @@ struct fltk::Picture {
     if (shminfo.shmaddr && XShmAttach(xdisplay, &shminfo)) {
       data = (uchar*)shminfo.shmaddr;
       static bool beenhere;
-      int (*f)(Display*,XErrorEvent*);
-      if (!beenhere) f = XSetErrorHandler(xerror_handler);
+      if (beenhere) {
+	rgb = XShmCreatePixmap(xdisplay, RootWindow(xdisplay,xscreen),
+			       shminfo.shmaddr, &shminfo,
+			       w, h, depth);
+	return;
+      }
+      beenhere = true;
+      // The first time, we will do an XSync and detect if it throws
+      // an error. This seems to be the only way to see if XShm is
+      // going to work, it won't work on remote displays but amazingly
+      // enough no api is provided to tell you that!
+      int (*f)(Display*,XErrorEvent*) = XSetErrorHandler(xerror_handler);
       rgb = XShmCreatePixmap(xdisplay, RootWindow(xdisplay,xscreen),
                              shminfo.shmaddr, &shminfo,
                              w, h, depth);
-      if (beenhere) return;
-      // rest of this is a test to make sure XShm will really work...
-      beenhere = true;
       XSync(xdisplay,false);
       XSetErrorHandler(f);
       if (use_xshm_pixmaps) return; // the xerror_handler did not get called!
-      // throw stuff away and give up:
       //printf("XShm is not going to work!\n");
+      // throw stuff away and continue with non-Xshm code:
       shmdt(shminfo.shmaddr); data = 0; shminfo.shmaddr = 0;
       shmctl(shminfo.shmid, IPC_RMID, 0); shminfo.shmid = -1;
     }
