@@ -164,8 +164,10 @@ int Valuator::value(double v) {
  */
 double Valuator::linesize() const {
   if (linesize_) return linesize_;
+  if (step_ >= 1) return step_;
   double r = fabs(maximum_-minimum_)/50;
   if (r < step_) return step_;
+  if (r > 1) return 1;
 //   if (step_ > 0) {
 //     if (r < step_) r = step_;
 //     else r = rint(r/step_)*step_;
@@ -206,6 +208,10 @@ void Valuator::handle_drag(double v) {
     double is = rint(1/step_);
     if (fabs(is*step_-1) < .001) v = rint(v*is)/is;
     else v = rint(v/step_)*step_;
+  } else {
+    // check for them incrementing toward zero and don't produce tiny
+    // numbers:
+    if (previous_value_ && fabs(v/previous_value_) < 1e-5) v = 0;
   }
   // If original value was in-range, clamp the new value:
   double A = minimum_; double B = maximum_;
