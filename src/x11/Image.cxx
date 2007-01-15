@@ -1126,6 +1126,7 @@ uchar* Image::buffer() {
     picture->sync();
     return picture->data;
   }
+  if (w_ <= 0 || h_ <= 0) return 0;
   if (!bytes_per_pixel) figure_out_visual();
   int depth;
   int ld;
