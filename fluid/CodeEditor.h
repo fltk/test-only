@@ -40,9 +40,12 @@
 #  include <fltk/TextDisplay.h>
 #  include <fltk/TextEditor.h>
 
-namespace fltk {
+// WAS: I removed the namespace as fluid tries to include the fltk
+// header for any classes with fltk in their name. However it is
+// quite likely that this class sould be made part of fltk...
+//namespace fltk {
 
-  class CodeEditor : public TextEditor {
+  class CodeEditor : public fltk::TextEditor {
     static TextDisplay::StyleTableEntry styletable[];
     static const char * const code_keywords[];
     static const char * const code_types[];
@@ -80,7 +83,7 @@ namespace fltk {
     int handle(int ev) { return TextDisplay::handle(ev); }
   };
 
-} // namespace fltk
+  //} // namespace fltk
 
 #endif // !CodeEditor_h
 

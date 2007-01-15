@@ -67,7 +67,7 @@ CFILES	=
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.cxx=.o)
 TARGETS	= fluid2$(EXEEXT) $(FLUID)
 
-
+#CXXFLAGS+=-g
 #
 # Make everything...
 #

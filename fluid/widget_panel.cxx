@@ -372,14 +372,14 @@ fltk::Window* make_widgetbin() {
   return  w;
 }
 
-void type_make_cb(fltk::Widget* w, void* d) {
+void type_make_cb(fltk::Widget*w,void*d) {
   FluidType *t = FluidType::make((char*)d);
-  if (t) {
-    Undo::checkpoint();
-    select_only(t);
-    modflag = 1;
-    t->open();
-  }
+    if (t) {
+      Undo::checkpoint();
+      select_only(t);
+      modflag = 1;
+      t->open();
+    }
 }
 
 fltk::TabGroup *panel_tabs=(fltk::TabGroup *)0;
@@ -540,10 +540,11 @@ it should be left off if label will fit");
           o->callback((fltk::Callback*)propagate_group);
           o->align(fltk::ALIGN_LEFT);
           o->begin();
-           {fltk::ValueInput* o = widget_x = new fltk::ValueInput(0, 1, 55, 22, "x");
+           {fltk::ValueInput* o = widget_x = new fltk::ValueInput(0, 0, 55, 22, "x");
             o->labelsize(11);
             o->maximum(2000);
             o->step(1);
+            o->linesize(1);
             o->value(10);
             o->callback((fltk::Callback*)x_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
@@ -554,6 +555,7 @@ it should be left off if label will fit");
             o->labelsize(11);
             o->maximum(2000);
             o->step(1);
+            o->linesize(1);
             o->value(10);
             o->callback((fltk::Callback*)y_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
@@ -564,31 +566,34 @@ it should be left off if label will fit");
             o->labelsize(11);
             o->maximum(2000);
             o->step(1);
+            o->linesize(1);
             o->value(10);
             o->callback((fltk::Callback*)width_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
             o->when(fltk::WHEN_ENTER_KEY);
             o->tooltip("The width of the widget.");
           }
-           {fltk::ValueInput* o = widget_h = new fltk::ValueInput(165, 1, 55, 22, "h");
+           {fltk::ValueInput* o = widget_h = new fltk::ValueInput(165, 0, 55, 22, "h");
             o->labelsize(11);
             o->maximum(2000);
             o->step(1);
+            o->linesize(1);
             o->value(10);
             o->callback((fltk::Callback*)height_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
             o->when(fltk::WHEN_ENTER_KEY);
             o->tooltip("The height of the widget.");
           }
-           {fltk::CheckButton* o = set_xy = new fltk::CheckButton(225, 1, 25, 22, "xy");
+           {fltk::CheckButton* o = set_xy = new fltk::CheckButton(225, 0, 25, 22, "xy");
             o->labelsize(11);
             o->callback((fltk::Callback*)set_xy_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
             o->tooltip("Window will use this x,y rather than being positioned by the operating system\
 .");
           }
-           {fltk::ValueInput* o = new fltk::ValueInput(245, 1, 45, 22, "slider size");
+           {fltk::ValueInput* o = new fltk::ValueInput(245, 0, 45, 22, "slider size");
             o->labelsize(11);
+            o->linesize(1.20259e+09);
             o->callback((fltk::Callback*)slider_size_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_CENTER);
             o->when(fltk::WHEN_ENTER_KEY);
@@ -601,6 +606,7 @@ it should be left off if label will fit");
           o->align(fltk::ALIGN_LEFT);
           o->begin();
            {fltk::ValueInput* o = new fltk::ValueInput(0, 0, 55, 22, "Value");
+            o->linesize(1.20259e+09);
             o->callback((fltk::Callback*)value_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
             o->when(fltk::WHEN_ENTER_KEY);
@@ -608,6 +614,7 @@ it should be left off if label will fit");
           }
            {fltk::ValueInput* o = new fltk::ValueInput(55, 0, 55, 22, "min");
             o->labelsize(11);
+            o->linesize(1.20259e+09);
             o->callback((fltk::Callback*)min_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
             o->when(fltk::WHEN_ENTER_KEY);
@@ -615,6 +622,7 @@ it should be left off if label will fit");
           }
            {fltk::ValueInput* o = new fltk::ValueInput(110, 0, 55, 23, "max");
             o->labelsize(11);
+            o->linesize(1.20259e+09);
             o->callback((fltk::Callback*)max_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
             o->when(fltk::WHEN_ENTER_KEY);
@@ -622,6 +630,7 @@ it should be left off if label will fit");
           }
            {fltk::ValueInput* o = new fltk::ValueInput(165, 0, 55, 22, "step");
             o->labelsize(11);
+            o->linesize(1.20259e+09);
             o->callback((fltk::Callback*)step_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
             o->when(fltk::WHEN_ENTER_KEY);
@@ -631,6 +640,7 @@ it should be left off if label will fit");
             o->labelsize(11);
             o->minimum(1);
             o->step(1);
+            o->linesize(1);
             o->callback((fltk::Callback*)line_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
             o->when(fltk::WHEN_ENTER_KEY);
@@ -794,6 +804,7 @@ unchanged.");
            {fltk::ValueInput* o = new fltk::ValueInput(215, 22, 55, 22);
             o->maximum(100);
             o->step(0.1);
+            o->linesize(1);
             o->value(14);
             o->callback((fltk::Callback*)label_size_cb);
             o->when(fltk::WHEN_ENTER_KEY);
@@ -806,6 +817,7 @@ unchanged.");
            {fltk::ValueInput* o = new fltk::ValueInput(215, 55, 55, 22);
             o->maximum(100);
             o->step(0.1);
+            o->linesize(1);
             o->value(14);
             o->callback((fltk::Callback*)text_size_cb);
             o->when(fltk::WHEN_ENTER_KEY);

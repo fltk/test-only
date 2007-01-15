@@ -1,5 +1,5 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0100 
+version 2.1000 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
@@ -33,7 +33,7 @@ Function {make_function_panel()} {} {
     }
     {fltk::ReturnButton} f_panel_ok {
       label OK
-      xywh {153 176 118 22} hotspot buttonbox THIN_UP_BOX shortcut 0xff0d
+      xywh {153 176 118 22} hotspot buttonbox THIN_UP_BOX
     }
     {fltk::Button} f_panel_cancel {
       label Cancel
@@ -97,16 +97,17 @@ Function {make_code_panel()} {open
 } {
   {fltk::Window} code_panel {
     label code
-    callback {o->resizable(code_input);} open selected
+    callback {o->resizable(code_input);} open
     xywh {421 148 290 175} resizable modal visible
   } {
-    {fltk::Input} code_input {
+    {fltk::Input} code_input {selected
       xywh {6 5 280 138} type Multiline align 0 when NEVER resizable
-      class {fltk::CodeEditor}
+      extra_code {\#include "CodeEditor.h"}
+      class CodeEditor
     }
     {fltk::ReturnButton} code_panel_ok {
       label OK
-      xywh {115 148 80 22} hotspot shortcut 0xff0d
+      xywh {115 148 80 22} hotspot
     }
     {fltk::Button} code_panel_cancel {
       label Cancel
@@ -134,7 +135,7 @@ Function {make_codeblock_panel()} {} {
     }
     {fltk::ReturnButton} codeblock_panel_ok {
       label OK
-      xywh {110 99 80 22} hotspot shortcut 0xff0d
+      xywh {110 99 80 22} hotspot
     }
     {fltk::Button} codeblock_panel_cancel {
       label Cancel
@@ -162,7 +163,7 @@ Function {make_declblock_panel()} {} {
     }
     {fltk::ReturnButton} declblock_panel_ok {
       label OK
-      xywh {110 99 80 22} hotspot shortcut 0xff0d
+      xywh {110 99 80 22} hotspot
     }
     {fltk::Button} declblock_panel_cancel {
       label Cancel
@@ -189,7 +190,7 @@ or a comment like "//foo" or "/*foo*/"}
     }
     {fltk::ReturnButton} decl_panel_ok {
       label OK
-      xywh {110 143 80 22} hotspot shortcut 0xff0d
+      xywh {110 143 80 22} hotspot
     }
     {fltk::Button} decl_panel_cancel {
       label Cancel
@@ -217,7 +218,7 @@ Function {make_class_panel()} {} {
     }
     {fltk::ReturnButton} c_panel_ok {
       label OK
-      xywh {100 132 80 22} hotspot shortcut 0xff0d
+      xywh {100 132 80 22} hotspot
     }
     {fltk::Button} c_panel_cancel {
       label Cancel
@@ -237,7 +238,7 @@ Function {make_namespace_panel()} {} {
     }
     {fltk::ReturnButton} namespace_panel_ok {
       label OK
-      xywh {112 96 83 22} hotspot shortcut 0xff0d
+      xywh {112 96 83 22} hotspot
     }
     {fltk::Button} namespace_panel_cancel {
       label Cancel
@@ -263,7 +264,7 @@ Function {make_comment_panel()} {} {
     } {
       {fltk::ReturnButton} comment_panel_ok {
         label OK
-        xywh {371 286 80 23} hotspot labelsize 11 shortcut 0xff0d
+        xywh {371 286 80 23} hotspot labelsize 11
       }
       {fltk::Button} comment_panel_cancel {
         label Cancel
@@ -306,7 +307,7 @@ Function {make_sourceview()} {} {
   {fltk::Window} sourceview_panel {
     label {Code View}
     callback toggle_sourceview_cb open
-    xywh {403 196 520 490} type Double resizable visible
+    xywh {225 395 520 490} type Double resizable visible
   } {
     {fltk::TabGroup} sv_tab {
       callback update_sourceview_position_cb open
@@ -318,7 +319,7 @@ Function {make_sourceview()} {} {
       } {
         {fltk::TextEditor} sv_source {
           xywh {10 15 480 390} resizable textfont 4 textsize 11
-          class {fltk::CodeViewer}
+          class CodeViewer
         }
       }
       {fltk::Group} {} {
@@ -327,7 +328,7 @@ Function {make_sourceview()} {} {
       } {
         {fltk::TextEditor} sv_header {
           xywh {10 15 480 390} resizable textfont 4 textsize 11
-          class {fltk::CodeViewer}
+          class CodeViewer
         }
       }
     }
