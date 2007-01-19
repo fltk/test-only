@@ -10,7 +10,7 @@
 <br>Revision 17 by Bill Spitzak, Michael Sweet, Craig P. Earls, 
 Matthias Melcher, Nicolas Kaiser, your_name_here<br>
 <i><small>
-All contents &copy;1998-2006 by Bill Spitzak and others.<br>
+All contents &copy;1998-2007 by Bill Spitzak and others.<br>
 Permission is granted to reproduce this manual<br>
 or any portion, for any purpose, provided this<br>
 copyright and permission notice are preserved.
@@ -64,7 +64,7 @@ older Widget class names.
 
 \section copyrights Copyrights and Trademarks
 
-FLTK is &copy;1998-2006 by Bill Spitzak and others.
+FLTK is &copy;1998-2007 by Bill Spitzak and others.
 
 UNIX is a registered trademark of the X Open Group, Inc.  Microsoft
 and Windows are registered trademarks of Microsoft Corporation. OpenGL
