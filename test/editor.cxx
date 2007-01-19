@@ -62,13 +62,13 @@ fltk::TextBuffer     *textbuf = 0;
 fltk::TextBuffer     *stylebuf = 0;
 fltk::TextDisplay::StyleTableEntry
                    styletable[] = {	// Style table
-		     { fltk::BLACK,           fltk::HELVETICA,        12 }, // A - Plain
-		     { fltk::DARK_GREEN,      fltk::HELVETICA_ITALIC, 12 }, // B - Line comments
-		     { fltk::DARK_GREEN,      fltk::HELVETICA_ITALIC, 12 }, // C - Block comments
-		     { fltk::BLUE,            fltk::HELVETICA,        12 }, // D - Strings
-		     { fltk::DARK_RED,        fltk::HELVETICA,        12 }, // E - Directives
-		     { fltk::DARK_RED,        fltk::HELVETICA_BOLD,   12 }, // F - Types
-		     { fltk::BLUE,            fltk::HELVETICA_BOLD,   12/*, fltk::TextDisplay::ATTR_UNDERLINE*/ }  // G - Keywords
+		     { fltk::BLACK,           fltk::COURIER,        12 }, // A - Plain
+		     { fltk::DARK_GREEN,      fltk::COURIER_ITALIC, 12 }, // B - Line comments
+		     { fltk::DARK_GREEN,      fltk::COURIER_ITALIC, 12 }, // C - Block comments
+		     { fltk::BLUE,            fltk::COURIER,        12 }, // D - Strings
+		     { fltk::DARK_RED,        fltk::COURIER,        12 }, // E - Directives
+		     { fltk::DARK_RED,        fltk::COURIER_BOLD,   12 }, // F - Types
+		     { fltk::BLUE,            fltk::COURIER_BOLD,   12/*, fltk::TextDisplay::ATTR_UNDERLINE*/ }  // G - Keywords
 		   };
 const char         *code_keywords[] = {	// List of known C/C++ keywords...
 		     "and",
@@ -771,7 +771,7 @@ fltk::Window* new_view() {
     w->editor->highlight_data(stylebuf, styletable,
       sizeof(styletable) / sizeof(styletable[0]),
      'A', style_unfinished_cb, 0);
-    w->editor->textfont(fltk::HELVETICA);
+    w->editor->textfont(fltk::COURIER);
   w->end();
   w->resizable(w->editor);
   w->callback((fltk::Callback *)close_cb, w);
