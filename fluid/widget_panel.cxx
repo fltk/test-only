@@ -533,7 +533,7 @@ it should be left off if label will fit");
          {fltk::Button* o = image_button = new fltk::Button(80, 79, 290, 22);
           o->color((fltk::Color)7);
           o->callback((fltk::Callback*)image_cb, (void*)(1));
-          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
+          o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE|fltk::ALIGN_CLIP);
           o->tooltip("Select an image to label the widget");
         }
          {fltk::Group* o = gDimensions = new fltk::Group(80, 112, 290, 23, "Dimensions");

@@ -534,9 +534,9 @@ Function {make_widget_panel()} {open
         }
         {fltk::Button} image_button {
           user_data 1 user_data_type {void*}
-          callback image_cb
+          callback image_cb selected
           tooltip {Select an image to label the widget}
-          xywh {80 79 290 22} align 52 color 7
+          xywh {80 79 290 22} align 116 color 7
         }
         {fltk::Group} gDimensions {
           label Dimensions
@@ -577,7 +577,7 @@ Function {make_widget_panel()} {open
             label {slider size}
             callback slider_size_cb
             tooltip {The size of the scroller}
-            xywh {245 0 45 22} align 17 when ENTER_KEY labelsize 11 linesize 1202590843
+            xywh {245 0 45 22} align 17 when ENTER_KEY labelsize 11 linesize 515899392
           }
         }
         {fltk::Group} gValues {
@@ -589,19 +589,19 @@ Function {make_widget_panel()} {open
             label Value
             callback value_cb
             tooltip {The initial value of this widget}
-            xywh {0 0 55 22} align 5 when ENTER_KEY linesize 1202590843
+            xywh {0 0 55 22} align 5 when ENTER_KEY linesize 515899392
           }
           {fltk::ValueInput} {} {
             label min
             callback min_cb
             tooltip {The minimum value for this valuator}
-            xywh {55 0 55 22} align 21 when ENTER_KEY labelsize 11 linesize 1202590843
+            xywh {55 0 55 22} align 21 when ENTER_KEY labelsize 11 linesize 515899392
           }
           {fltk::ValueInput} {} {
             label max
             callback max_cb
             tooltip {The maximum value for this valuator}
-            xywh {110 0 55 23} align 21 when ENTER_KEY labelsize 11 linesize 1202590843
+            xywh {110 0 55 23} align 21 when ENTER_KEY labelsize 11 linesize 515899392
           }
           {fltk::ValueInput} {} {
             label step
@@ -609,7 +609,7 @@ Function {make_widget_panel()} {open
             tooltip {step:
 Round all movements to multiples of this.
 }
-            xywh {165 0 55 22} align 21 when ENTER_KEY labelsize 11 linesize 1202590843
+            xywh {165 0 55 22} align 21 when ENTER_KEY labelsize 11 linesize 515899392
           }
           {fltk::ValueInput} {} {
             label line
@@ -621,7 +621,7 @@ Increment/decrement for arrow keys.}
         }
         {fltk::Group} gAttributes {
           label Attributes
-          callback propagate_group open selected
+          callback propagate_group open
           xywh {80 171 280 44} align 4
         } {
           {fltk::CheckButton} {} {
