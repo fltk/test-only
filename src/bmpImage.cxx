@@ -164,7 +164,6 @@ bool bmpImage::fetch()
     read_dword();
 
     repcount = info_size - 40;
-
     if (!compression && bitsperpixel>=8 && w>32/bitsperpixel) {
       unsigned maskSize =
 	(((w*(bitsperpixel/8)+3)&~3)*h) + (((((w+7)/8)+3)&~3)*h);
@@ -173,12 +172,9 @@ bool bmpImage::fetch()
 	h /= 2;
 	depth = 4;
       }
-      this->setsize(w,h);
-      this->setpixeltype(fltk::RGBA);
-    } else {
-      this->setsize(w,h);
-      this->setpixeltype(fltk::RGB);
     }
+    this->setsize(w,h);
+    this->setpixeltype(mask ? fltk::RGBA : fltk::RGB);
   }
 
   //printf("w %d, h %d, bitsperpixel %d, compression %d, colors_used %d, repcount %d\n", w(), h(), bitsperpixel, compression, colors_used, repcount);
