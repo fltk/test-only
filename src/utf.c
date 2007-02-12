@@ -668,14 +668,13 @@ unsigned utf8tomb(const char* src, unsigned srclen,
 #endif
   }
   // identity transform:
-  if (srclen <= dstlen) {
+  if (srclen < dstlen) {
     memcpy(dst, src, srclen);
     dst[srclen] = 0;
   } else {
     memcpy(dst, src, dstlen-1);
-    dst[dstlen] = 0;
+    dst[dstlen-1] = 0;
   }
-
   return srclen;
 }
 
@@ -735,14 +734,13 @@ unsigned utf8frommb(char* dst, unsigned dstlen,
     // errors in conversion return the UTF-8 unchanged
 #endif
   }
-
   // identity transform:
-  if (srclen <= dstlen) {
+  if (srclen < dstlen) {
     memcpy(dst, src, srclen);
     dst[srclen] = 0;
   } else {
     memcpy(dst, src, dstlen-1);
-    dst[dstlen] = 0;
+    dst[dstlen-1] = 0;
   }
   return srclen;
 }
