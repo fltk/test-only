@@ -10,6 +10,7 @@
 */
 
 #include <fltk/InvisibleBox.h>
+#include <fltk/events.h>
 using namespace fltk;
 
 static void revert(Style* s) {
@@ -41,6 +42,18 @@ InvisibleBox::InvisibleBox(Box* b, int x, int y, int w, int h, const char *l)
   so this just calls that. */
 void InvisibleBox::draw() {
   Widget::draw();
+}
+
+/*! Handles enter/exit only if a tooltip is set. Otherwise it is assummed
+  this is used for resizable and otherwise has no effect, so all e
+*/
+int InvisibleBox::handle(int event) {
+  if (box()==NO_BOX) {
+    if (event == ENTER && tooltip()) return 1;
+    return 0;
+  } else {
+    return Widget::handle(event);
+  }
 }
 
 //

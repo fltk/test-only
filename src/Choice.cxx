@@ -103,7 +103,12 @@ void Choice::draw() {
       push_clip(r);
       push_matrix();
       if (!o->h()) o->layout();
-      translate(r.x(), r.y()+((r.h()-o->h())>>1));
+      // make it center on only the first line of multi-line item:
+      int h = o->h();
+      int n = h/int(o->labelsize()+o->leading());
+      if (n > 1) h -= int((n-1)*o->labelsize()+(n-1.5)*o->leading());
+      // center the item vertically:
+      translate(r.x(), r.y()+((r.h()-h)>>1));
       int save_w = o->w(); o->w(r.w());
       fl_hide_underscore = true;
       o->draw();
@@ -131,7 +136,6 @@ int Choice::handle(int e) {
 
 int Choice::handle(int e, const Rectangle& rectangle) {
   int children = this->children(0,0);
-  if (!children) return 0;
   switch (e) {
 
   case FOCUS:
@@ -154,6 +158,7 @@ int Choice::handle(int e, const Rectangle& rectangle) {
 //  event_is_click(0);
     if (click_to_focus()) take_focus();
   EXECUTE:
+    if (!children) return 1;
     if (popup(rectangle, 0)) redraw(DAMAGE_VALUE);
     return 1;
 
@@ -170,10 +175,12 @@ int Choice::handle(int e, const Rectangle& rectangle) {
       goto EXECUTE;
 
     case UpKey: {
+      if (!children) return 1;
       int i = value(); if (i < 0) i = children;
       while (i > 0) {--i; if (try_item(this, i)) return 1;}
       return 1;}
     case DownKey: {
+      if (!children) return 1;
       int i = value();
       while (++i < children) if (try_item(this,i)) return 1;
       return 1;}

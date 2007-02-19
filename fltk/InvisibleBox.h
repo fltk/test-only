@@ -17,6 +17,7 @@ public:
   InvisibleBox(int x, int y, int w, int h, const char *l=0);
   InvisibleBox(Box* b, int x, int y, int w, int h, const char *l);
   static NamedStyle* default_style;
+  int handle(int);
   void draw();
 };
 
