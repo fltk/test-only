@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
-	<FileVersion major="1" minor="4" />
+	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="windows-dmc" />
 		<Option pch_mode="0" />
 		<Option compiler="dmc" />
 		<Build>
 			<Target title="fltk-static-debug">
-				<Option output="..\..\lib\fltk2-debug.lib" />
+				<Option output="..\..\lib\fltk2-debug.lib" prefix_auto="0" extension_auto="0" />
 				<Option working_dir="" />
 				<Option object_output=".objs-debug" />
 				<Option type="2" />
 				<Option compiler="dmc" />
-				<Option includeInTargetAll="1" />
 				<Option projectCompilerOptionsRelation="1" />
 				<Compiler>
 					<Add option="-NL" />
@@ -28,12 +27,11 @@
 				</Linker>
 			</Target>
 			<Target title="fltk-static-release">
-				<Option output="..\..\lib\fltk2.lib" />
+				<Option output="..\..\lib\fltk2.lib" prefix_auto="0" extension_auto="0" />
 				<Option working_dir="" />
 				<Option object_output=".objs-release" />
 				<Option type="2" />
 				<Option compiler="dmc" />
-				<Option includeInTargetAll="1" />
 				<Option projectCompilerOptionsRelation="1" />
 				<Compiler>
 					<Add option="-o" />
@@ -48,7 +46,7 @@
 				</Compiler>
 			</Target>
 			<Target title="hello-debug">
-				<Option output="..\..\bin\hello-debug.exe" />
+				<Option output="..\..\bin\hello-debug.exe" prefix_auto="0" extension_auto="0" />
 				<Option object_output=".objs-debug" />
 				<Option type="0" />
 				<Option compiler="dmc" />
@@ -76,7 +74,7 @@
 				</Linker>
 			</Target>
 			<Target title="hello-release">
-				<Option output="..\..\bin\hello.exe" />
+				<Option output="..\..\bin\hello.exe" prefix_auto="0" extension_auto="0" />
 				<Option object_output=".objs-release" />
 				<Option type="0" />
 				<Option compiler="dmc" />
@@ -101,1354 +99,890 @@
 				</Linker>
 			</Target>
 		</Build>
+		<VirtualTargets>
+			<Add alias="All" targets="fltk-static-debug;fltk-static-release;" />
+		</VirtualTargets>
 		<Unit filename="..\..\fltk\Adjuster.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\AlignGroup.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\BarGroup.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Box.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Browser.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Button.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\CheckButton.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Choice.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Clock.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Color.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\ColorChooser.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\ComboBox.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Cursor.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\CycleButton.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Dial.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Divider.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\DoubleBufferWindow.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\FL_API.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\FL_VERSION.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\FileBrowser.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\FileChooser.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\FileIcon.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\FileInput.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\FillDial.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\FillSlider.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Flags.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\FloatInput.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Font.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\GlWindow.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Group.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\HelpDialog.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\HelpView.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\HighlightButton.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Image.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Input.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\InputBrowser.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\IntInput.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\InvisibleBox.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Item.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\ItemGroup.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\LabelType.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\LightButton.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\LineDial.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Menu.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\MenuBar.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\MenuBuild.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\MenuWindow.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Monitor.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\MultiBrowser.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\MultiImage.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\MultiLineInput.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\MultiLineOutput.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\NumericInput.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Output.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\PackedGroup.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\PixelType.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\PopupMenu.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Preferences.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\ProgressBar.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\RadioButton.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\RadioItem.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\RadioLightButton.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Rectangle.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\RepeatButton.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\ReturnButton.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\ScrollGroup.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Scrollbar.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\SecretInput.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\ShapedWindow.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\SharedImage.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Slider.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\StringList.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Style.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\StyleSet.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Symbol.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\TabGroup.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\TextBuffer.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\TextDisplay.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\TextEditor.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Threads.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\ThumbWheel.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\TiledGroup.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\TiledImage.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\ToggleButton.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Tooltip.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Valuator.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\ValueInput.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\ValueOutput.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\ValueSlider.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Widget.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\Window.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\WordwrapInput.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\WordwrapOutput.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\ask.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\damage.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\dirent.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\draw.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\error.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\events.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\file_chooser.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\filename.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\forms.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\gl.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\gl2opengl.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\glut.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\layout.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\load_plugin.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\mac.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\math.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\pnmImage.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\rgbImage.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\run.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\show_colormap.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\string.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\types.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\utf.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\visual.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\win32.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\x.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\xbmImage.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\fltk\xpmImage.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\ARRAY.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Adjuster.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\AlignGroup.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\BarGroup.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Browser.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Browser_load.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Button.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\CheckButton.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Choice.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Clock.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Color.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\ComboBox.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Cursor.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\CycleButton.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Dial.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\DiamondBox.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\EngravedLabel.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\FileBrowser.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\FileChooser.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\FileChooser2.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\FileIcon.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\FileInput.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Fl_Menu_Item.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\FloatInput.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Font.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\GSave.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Group.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\HelpView.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\HighlightButton.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Image.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Input.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\InputBrowser.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\InvisibleWidget.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Item.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\LightButton.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Menu.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\MenuBar.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\MenuWindow.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Menu_add.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Menu_global.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Menu_popup.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\MultiImage.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\NumericInput.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Output.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\OvalBox.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\PackedGroup.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\PlasticBox.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\PopupMenu.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Preferences.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\ProgressBar.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\RadioButton.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\RepeatButton.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\ReturnButton.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\RoundBox.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\RoundedBox.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\ScrollGroup.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Scrollbar.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\ShadowBox.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\ShapedWindow.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\SharedImage.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\ShortcutAssignment.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Slider.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\StringList.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Style.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\StyleSet.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Symbol.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\TabGroup.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\TextBuffer.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\TextDisplay.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\TextEditor.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\ThumbWheel.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\TiledGroup.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\TiledImage.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Tooltip.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\UpBox.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Valuator.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\ValueInput.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\ValueOutput.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\ValueSlider.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Widget.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Widget_draw.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Window.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Window_fullscreen.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Window_hotspot.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\Window_iconize.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\add_idle.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\addarc.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\addcurve.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\args.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\bmpImage.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\clip.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\color_chooser.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\colormap.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\colormap.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\compose.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\default_glyph.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\dnd.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\draw_xpm.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\drawimage.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\drawtext.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
@@ -1458,178 +992,138 @@
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\error.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\event_key_state.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\fastarrow.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\file_chooser.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\filename_absolute.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\filename_ext.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\filename_isdir.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\filename_list.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\filename_match.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\filename_name.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\fillarc.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\fillrect.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\fltk_theme.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\gifImage.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\key_name.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\list_fonts.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\load_plugin.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\lock.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\mediumarrow.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\message.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\numericsort.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\overlay_rect.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\own_colormap.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\path.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\readimage.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\rgbImage.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\run.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\scandir.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\scrollrect.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\setcolor.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\setdisplay.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\setvisual.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\show_colormap.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\slowarrow.h">
-			<Option compilerVar="CPP" />
-			<Option compile="0" />
-			<Option link="0" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
@@ -1649,19 +1143,19 @@
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\xbmImage.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\src\xpmImage.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="fltk-static-debug" />
 			<Option target="fltk-static-release" />
 		</Unit>
 		<Unit filename="..\..\test\hello.cxx">
-			<Option compilerVar="CPP" />
 			<Option target="hello-debug" />
 			<Option target="hello-release" />
 		</Unit>
+		<Extensions>
+			<code_completion />
+		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
