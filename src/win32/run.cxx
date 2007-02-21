@@ -92,6 +92,12 @@ using namespace fltk;
 // USE_IMM - define it non-zero if you want Input Method
 #define USE_IMM 1
 
+#if USE_IMM
+# if __MINGW32__
+#   include <imm.h>
+# endif
+#endif
+
 //
 // WM_SYNCPAINT is an "undocumented" message, which is finally defined in
 // VC++ 6.0.
@@ -138,63 +144,63 @@ using namespace fltk;
 #define WM_MAKEWAITRETURN (WM_USER+0x401)
 
 #if USE_IMM
-#define IMM_DYNAMIC_LOADING 1
+# define IMM_DYNAMIC_LOADING 1
 
-#ifdef IMM_DYNAMIC_LOADING
-# ifdef NOIME
-typedef struct tagCOMPOSITIONFORM {
-  DWORD dwStyle;
-  POINT ptCurrentPos;
-  RECT  rcArea;
-} COMPOSITIONFORM, *PCOMPOSITIONFORM, NEAR *NPCOMPOSITIONFORM, FAR *LPCOMPOSITIONFORM;
-typedef HANDLE HIMC;
-#endif
-HINSTANCE hLibImm = NULL;
-HIMC (WINAPI *pfnImmGetContext)(HWND);
-BOOL (WINAPI *pfnImmSetCompositionWindow)(HIMC, LPCOMPOSITIONFORM);
-BOOL (WINAPI *pfnImmSetCompositionFontW)(HIMC, LPLOGFONTW);
-BOOL (WINAPI *pfnImmReleaseContext)(HWND, HIMC);
-HIMC (WINAPI *pfnImmAssociateContext)(HWND, HIMC);
-#else
-# pragma comment(lib, "imm32.lib")
-# define pfnImmGetContext ImmGetContext
-# define pfnImmSetCompositionWindow ImmSetCompositionWindow
-# define pfnImmSetCompositionFontW ImmSetCompositionFontW
-# define pfnImmReleaseContext ImmReleaseContext
-# define pfnImmAssociateContext ImmAssociateContext
-#endif
+# ifdef IMM_DYNAMIC_LOADING
+#   ifdef NOIME
+      typedef struct tagCOMPOSITIONFORM {
+        DWORD dwStyle;
+        POINT ptCurrentPos;
+        RECT  rcArea;
+      } COMPOSITIONFORM, *PCOMPOSITIONFORM, NEAR *NPCOMPOSITIONFORM, FAR *LPCOMPOSITIONFORM;
+      typedef HANDLE HIMC;
+#   endif
+    HINSTANCE hLibImm = NULL;
+    HIMC (WINAPI *pfnImmGetContext)(HWND);
+    BOOL (WINAPI *pfnImmSetCompositionWindow)(HIMC, LPCOMPOSITIONFORM);
+    BOOL (WINAPI *pfnImmSetCompositionFontW)(HIMC, LPLOGFONTW);
+    BOOL (WINAPI *pfnImmReleaseContext)(HWND, HIMC);
+    HIMC (WINAPI *pfnImmAssociateContext)(HWND, HIMC);
+# else
+#   pragma comment(lib, "imm32.lib")
+#   define pfnImmGetContext ImmGetContext
+#   define pfnImmSetCompositionWindow ImmSetCompositionWindow
+#   define pfnImmSetCompositionFontW ImmSetCompositionFontW
+#   define pfnImmReleaseContext ImmReleaseContext
+#   define pfnImmAssociateContext ImmAssociateContext
+# endif
 
-static bool fl_use_imm32 = false;
+  static bool fl_use_imm32 = false;
 
-static bool fl_load_imm32() {
-#ifdef IMM_DYNAMIC_LOADING
-  hLibImm = __LoadLibraryW(L"imm32.dll");
-  if (hLibImm == NULL)
-    return false;
+  static bool fl_load_imm32() {
+  #ifdef IMM_DYNAMIC_LOADING
+    hLibImm = __LoadLibraryW(L"imm32.dll");
+    if (hLibImm == NULL)
+      return false;
 
-  *(FARPROC*)&pfnImmGetContext
-    = GetProcAddress(hLibImm, "ImmGetContext");
-  *(FARPROC*)&pfnImmReleaseContext
-    = GetProcAddress(hLibImm, "ImmReleaseContext");
-  *(FARPROC*)&pfnImmSetCompositionFontW
-    = GetProcAddress(hLibImm, "ImmSetCompositionFontW");
-  *(FARPROC*)&pfnImmSetCompositionWindow
-    = GetProcAddress(hLibImm, "ImmSetCompositionWindow");
-  *(FARPROC*)&pfnImmAssociateContext
-    = GetProcAddress(hLibImm, "ImmAssociateContext");
+    *(FARPROC*)&pfnImmGetContext
+      = GetProcAddress(hLibImm, "ImmGetContext");
+    *(FARPROC*)&pfnImmReleaseContext
+      = GetProcAddress(hLibImm, "ImmReleaseContext");
+    *(FARPROC*)&pfnImmSetCompositionFontW
+      = GetProcAddress(hLibImm, "ImmSetCompositionFontW");
+    *(FARPROC*)&pfnImmSetCompositionWindow
+      = GetProcAddress(hLibImm, "ImmSetCompositionWindow");
+    *(FARPROC*)&pfnImmAssociateContext
+      = GetProcAddress(hLibImm, "ImmAssociateContext");
 
-  if (!pfnImmGetContext ||
-      !pfnImmReleaseContext ||
-      !pfnImmSetCompositionFontW ||
-      !pfnImmSetCompositionWindow ||
-      !pfnImmAssociateContext) {
-    FreeLibrary(hLibImm);
-    return false;
-  }
-#endif
-  return true;
-}
-#endif
+    if (!pfnImmGetContext ||
+        !pfnImmReleaseContext ||
+        !pfnImmSetCompositionFontW ||
+        !pfnImmSetCompositionWindow ||
+        !pfnImmAssociateContext) {
+      FreeLibrary(hLibImm);
+      return false;
+    }
+  #endif // IMM_DYNAMIC_LOADING
+    return true;
+  } // fl_load_imm32() function
+#endif // USE_IMM
 
 void fl_set_spot(fltk::Font *f, Widget *w, int x, int y) {
 #if USE_IMM
@@ -1792,7 +1798,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   case WM_SETCURSOR:
     if (window && LOWORD(lParam) == HTCLIENT) {
-      while (!window->is_window() && window->parent()) 
+      while (!window->is_window() && window->parent())
 	  window = window->window();
       CreatedWindow* i = CreatedWindow::find(window);
       if (i && i->cursor != default_cursor &&
