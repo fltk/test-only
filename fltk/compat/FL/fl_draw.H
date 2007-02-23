@@ -21,7 +21,7 @@ inline int fl_clip_box(int X, int Y, int W, int H, int& x, int& y, int& w, int& 
 }
 
 // points:
-inline void fl_point(int x, int y) {fltk::addvertex(x,y); fltk::drawpoints();}
+inline void fl_point(int x, int y) {fltk::drawpoint(x,y);}
 
 // line type:
 #define fl_line_style	fltk::line_style
