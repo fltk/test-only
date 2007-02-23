@@ -1,11 +1,6 @@
-//
 // "$Id$"
 //
-// List that can be used in a Menu (and Browser) where each item
-// displays one string from an array.  It is pretty much impossible to
-// describe a menu in less space than this.
-//
-// Copyright 1998-2006 by Bill Spitzak and others.
+// Copyright 1998-2007 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

@@ -99,7 +99,7 @@ bool pngImage::fetch()
   declare_now(&buffer);
   bool ret = false;
   bool alpha = false;
-  
+
   if (datas) {
     if (png_sig_cmp((uchar*)datas, (png_size_t)0, 8))
       goto error;
@@ -155,11 +155,11 @@ bool pngImage::fetch()
   setpixeltype(alpha ? RGBM : RGB);
 
   { // avoid y initialization error in VC6 because of 'goto error' code
-      for (unsigned y=0; y<height; y++) {
-	  uchar* b = linebuffer(y);
-	  png_read_row(png_ptr, b, NULL);
-	  setpixels(b, y);
-      } 
+  for (unsigned y=0; y<height; y++) {
+    uchar* b = linebuffer(y);
+    png_read_row(png_ptr, b, NULL);
+    setpixels(b, y);
+  }
   }
 
   png_read_end(png_ptr, NULL);

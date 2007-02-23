@@ -206,7 +206,7 @@ void Image::draw(const fltk::Rectangle& from, const fltk::Rectangle& to) const {
   CGContextSaveGState(quartz_gc);
   fl_set_quartz_ctm();
   CGImageRef img = picture->img(from);
-    CGRect rect = {{to.x(), -to.y()}, {to.w(), -to.h()}};
+  CGRect rect = {{to.x(), -to.y()}, {to.w(), -to.h()}};
   CGContextDrawImage(quartz_gc, rect, img);
   CGImageRelease(img);
   CGContextRestoreGState(quartz_gc);
@@ -241,5 +241,5 @@ static bool innards(const uchar *buf, fltk::PixelType type,
 }
 
 //
-// End of "$Id: Image.cxx 1478 2006-12-30 03:54:06Z spitzak $".
+// End of "$Id: Image.cxx 1488 2007-01-05 02:31:53Z spitzak $".
 //

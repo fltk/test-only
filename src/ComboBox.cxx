@@ -1,4 +1,4 @@
-// "$Id: ComboBox.cxx,v 1.2 2005/02/04 22:45:05 spitzak Exp $"
+// "$Id: ComboBox.cxx 1399 2006-08-11 02:15:20Z spitzak $"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -153,30 +153,30 @@ int ComboBox::handle(int event) {
   case DND_LEAVE:
   case DND_RELEASE:
   case FOCUS_CHANGE:
-    ret = input_->handle(event);
-    break;
+	ret = input_->handle(event);
+	break;
   // events that both widgets should receive
   case FOCUS:
-    input_->take_focus();
+	input_->take_focus();
   case ACTIVATE:
   case ENTER:
   case SHOW:
-    ret = Choice::handle(event);
+	ret = Choice::handle(event);
     ret |= input_->handle(event);
-    break;
+	break;
   case UNFOCUS:
   case DEACTIVATE:
   case HIDE:
   case LEAVE:
     ret = input_->handle(event);
-    ret |= Choice::handle(event);
-    break;
+	ret |= Choice::handle(event);
+	break;
   // events for choice alone
   default: // MOVE, MOUSWHEEL, TOOLTIP
-    ret = Choice::handle(event);
+	ret = Choice::handle(event);
   }
   if (input_->damage())
-    redraw();
+	redraw();
   return ret;
 }
 
@@ -257,4 +257,4 @@ int ComboBox::ComboInput::handle(int event) {
   return ret;
 }
 
-// End of $Id: ComboBox.cxx,v 1.2 2005/02/04 22:45:05 spitzak Exp $
+// End of $Id: ComboBox.cxx 1399 2006-08-11 02:15:20Z spitzak $

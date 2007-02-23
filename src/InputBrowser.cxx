@@ -300,7 +300,7 @@ InputBrowser::handle(int event) {
 	  else
 	      found--;
       }
-      m_input.text(child(found)->label());
+	  m_input.text(child(found)->label());
       break;
     }
 

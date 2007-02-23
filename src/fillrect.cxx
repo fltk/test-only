@@ -181,13 +181,13 @@ void fltk::drawline(float x, float y, float x1, float y1) {
 */
 void fltk::drawpoint(int x, int y) {
   if (!line_width_) {
-    transform(x,y);
+  transform(x,y);
 #if USE_CAIRO
     fillrect(x,y,1,1);
 #elif USE_X11
-    XDrawPoint(xdisplay, xwindow, gc, x, y);
+  XDrawPoint(xdisplay, xwindow, gc, x, y);
 #elif defined(_WIN32)
-    SetPixel(dc, x, y, current_xpixel);
+  SetPixel(dc, x, y, current_xpixel);
 #else
     fillrect(x,y,1,1);
 #endif
@@ -204,15 +204,15 @@ void fltk::drawpoint(int x, int y) {
 */
 void fltk::drawpoint(float X, float Y) {
   if (!line_width_) {
-    transform(X,Y); 
-    int x = int(floorf(X)); int y = int(floorf(Y));
+  transform(X,Y); 
+  int x = int(floorf(X)); int y = int(floorf(Y));
 #if USE_CAIRO
     fillrect(x,y,1,1);
 #elif USE_X11
-    XDrawPoint(xdisplay, xwindow, gc, x, y);
-#elif defined(_WIN32)
-    SetPixel(dc, x, y, current_xpixel);
-#else
+  XDrawPoint(xdisplay, xwindow, gc, x, y);
+# elif defined(_WIN32)
+  SetPixel(dc, x, y, current_xpixel);
+# else
     fillrect(x,y,1,1);
 #endif
   } else {

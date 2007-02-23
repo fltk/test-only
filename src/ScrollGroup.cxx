@@ -508,7 +508,7 @@ int ScrollGroup::handle(int event) {
         hscrollbar.send(event);
         return scrollbar.send(event);
       } else {
-        return Group::handle(event);
+        return Group::handle( event );
       }
     }
 
