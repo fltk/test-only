@@ -339,7 +339,7 @@ int Browser::item_h() const {
   This does not move and returns null if we are at the bottom. */
 Widget* Browser::next_visible() {
   if (item_is_visible()) {
-    HERE.position += item()->h();
+    HERE.position += item_h();
     // If we are on an open group title with children, go to first item in group
     if (item_is_open() && item_is_parent()) {
       int n = HERE.level+1;
@@ -423,7 +423,7 @@ Widget* Browser::previous_visible() {
     if (item()->visible()) break;
   }
 
-  HERE.position -= item()->h();
+  HERE.position -= item_h();
   return item();
 }
 

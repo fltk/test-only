@@ -52,13 +52,6 @@
   There are a number of subclasses such as jpgImage and pngImage that
   display compressed image data, either from in-memory data buffers or
   from files.
-
-  <i>There is no destructor</i> due to C++'s lame insistence
-  that it be called on static objects. An fltk program may contain
-  many static instances and this destruction is a waste of time on
-  program exit, plus work must be done to avoid losing the display
-  connection before the destruction. If you do want to destroy an
-  Image, you must call destroy() before doing so.
 */
 
 using namespace fltk;
@@ -225,6 +218,11 @@ using namespace fltk;
 /*! \fn void Image::destroy()
   Destroys the buffer() and any related system structures.
 */
+
+/*! The destructor calls destroy() */
+Image::~Image() {
+  destroy();
+}
 
 /*!
   This is called by the draw() functions once after the Image is

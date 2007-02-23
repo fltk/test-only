@@ -23,7 +23,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #ifndef fltk_StringList_h
 #define fltk_StringList_h
@@ -32,17 +31,47 @@
 
 namespace fltk {
 
-class FL_API StringList : public List {
+class FL_API StringHierarchy : public List {
+  Widget* generated_item_;
+public:
+  // fltk::List virtual functions:
+  virtual Widget* child(const Menu*, const int* indexes, int level);
+  // virtual functions to return hierarchy of strings:
+  virtual int children(const Menu*, const int* indexes, int level) = 0;
+  virtual const char* label(const Menu*, const int* indexes, int level)=0;
+  // label() can mess with this item to change flags, font, etc:
+  Widget* generated_item() {return generated_item_;}
+  StringHierarchy() {generated_item_ = 0;}
+  ~StringHierarchy() {delete generated_item_;}
+};
+
+class FL_API StringList : public StringHierarchy {
+public:
+  // overrides of StringHierarchy virtual functions:
+  virtual int children(const Menu*, const int* indexes, int level);
+  virtual const char* label(const Menu*, const int* indexes, int level);
+  // new virtual funcitons:
+  virtual int children(const Menu*) = 0;
+  virtual const char* label(const Menu*, int index) = 0;
+};
+
+class FL_API StringArray : public StringList {
   const char* const * array;
   int children_;
 public:
-  virtual int children(const Menu*, const int* indexes, int level);
-  virtual Widget* child(const Menu*, const int* indexes, int level);
-  StringList(const char*const* a, int n) : array(a), children_(n) {}
-  StringList(const char*const* a); // null-terminated array
-  StringList(const char* S); // nul-seperated string, double nul at end
+  // overrides of StringList virtual functions:
+  virtual int children(const Menu*);
+  virtual const char* label(const Menu*, int index);
+  // Constructors to use a constant array of strings:
+  StringArray(const char*const* a, int n) : array(a), children_(n) {}
+  StringArray(const char*const* a) {set(a);}
+  StringArray(const char* s) {set(s);}
+  StringArray() {children_ = 0;}
+  // change the array:
+  void set(const char*const* a, int n) {array=a; children_ = n;}
+  void set(const char*const* a);
+  void set(const char* s); // nul-seperated list
 };
 
 }
-
 #endif

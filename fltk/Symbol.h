@@ -72,7 +72,7 @@ class FL_API Symbol {
   static const char* text() {return text_;}
   static unsigned text_length() {return text_length_;}
   
-  // virtual ~Symbol() {}  // not done as it slows program exit
+  virtual ~Symbol();
 };
 
 // Back-compatability constructor:

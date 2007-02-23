@@ -1059,8 +1059,10 @@ struct fltk::Picture {
     sync();
     delete[] alphabuffer;
     delete[] (U32*)linebuffer;
-    if (alpha) XFreePixmap(xdisplay, alpha);
-    if (rgb) XFreePixmap(xdisplay, rgb);
+    if (xdisplay) {
+      if (alpha) XFreePixmap(xdisplay, alpha);
+      if (rgb) XFreePixmap(xdisplay, rgb);
+    }
 #if USE_XSHM
     if (shminfo.shmaddr) {shmdt(shminfo.shmaddr); data = 0;}
     if (shminfo.shmid != -1) shmctl(shminfo.shmid, IPC_RMID, 0);

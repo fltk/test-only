@@ -53,6 +53,7 @@ public:
     Symbol(), picture(0) {setimage(d,p,w,h);}
   Image(const uchar* d, PixelType p, int w, int h, int linedelta) :
     Symbol(), picture(0) {setimage(d,p,w,h,linedelta);}
+  ~Image();
 
   PixelType pixeltype() const {return pixeltype_;}
   int depth() const {return fltk::depth(pixeltype_);}

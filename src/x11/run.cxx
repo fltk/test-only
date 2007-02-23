@@ -674,6 +674,7 @@ functions.
 void fltk::close_display() {
   remove_fd(ConnectionNumber(xdisplay));
   XCloseDisplay(xdisplay);
+  xdisplay = 0;
 }
 
 ////////////////////////////////////////////////////////////////

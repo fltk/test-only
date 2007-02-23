@@ -171,6 +171,20 @@ void My_List::flags_changed(const fltk::Menu*, fltk::Widget* widget) {
 */
 void List::flags_changed(const Menu*, Widget*) {}
 
+/*!
+  The destructor does nothing. It is mostly here to shut up compiler
+  warnings, and to allow subclasses that you want to dynamically
+  allocate to work.
+
+  Unfortunately C++ calls the destructor for static objects on program
+  exit. I consider this a mistake, particularily because the
+  destructor cannot assumme other objects (like the display
+  connection) still exist.  It also slows down program exit. As all
+  useable systems can harvest resources used by crashed programs,
+  calling these destructors serve no useful purpose.
+*/
+List::~List() {}
+
 static List default_list;
 
 ////////////////////////////////////////////////////////////////

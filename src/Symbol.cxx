@@ -135,10 +135,6 @@ Symbol::Symbol(const char* name) : name_(0) {
     The strings are assummed to belong to the calling program. You
     can go through the trouble of freeing the old one, or just leak
     it like Fluid does.
-
-    You \e must call name(0) before destroying a Symbol.
-    The Symbol class does not have a destructor because C++ will
-    call it for all the static symbols and thus slow down program exit.
 */
 void Symbol::name(const char* name) {
   if (name_ == name) return;
@@ -156,6 +152,20 @@ void Symbol::name(const char* name) {
     // if table is more than half-full we need to reallocate it:
     if (++num_symbols > hashtablesize/2) double_hashtable();
   }
+}
+
+/*!
+  The destructor does name(0) and removes it from the hash table.
+
+  Unfortunately C++ calls the destructor for static objects on program
+  exit. I consider this a mistake, particularily because the
+  destructor cannot assumme other objects (like the display
+  connection) still exist.  It also slows down program exit. As all
+  useable systems can harvest resources used by crashed programs,
+  calling these destructors serve no useful purpose.
+*/
+Symbol::~Symbol() {
+  name(0);
 }
 
 /*! You can call this to get a list of all Symbols that have

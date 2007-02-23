@@ -13,7 +13,7 @@ using namespace fltk;
 const int SIZE = 50;
 const int DEPTH = 3;
 
-class MyList : public List {
+class MyList : public StringHierarchy {
 public:
 
   int children(const Menu* group, const int* indexes, int level) {
@@ -21,28 +21,16 @@ public:
     return -1;
   }
 
-  Widget* child(const Menu* group, const int* indexes, int level) {
+  const char* label(const Menu* group, const int* indexes, int level) {
     int n = indexes[level];
     // FLTK is never supposed to ask for a widget outside the children range,
     // so this should never print:
     if (n < 0 || n >= SIZE) {printf("Asked for item %d\n", n); return 0;}
-    // Construct reusable widget that we will return:
-    static Widget* widget;
-    if (!widget) {
-      Group::current(0);
-      widget = new Item();
-    }
-    // produce a label for the widget. You can reuse the buffer:
+    // produce a label. You can reuse the buffer:
     static char buffer[100];
     if (level) sprintf(buffer, "Level %d Item %d", level, n);
     else sprintf(buffer, "Top Item %d", n);
-    widget->label(buffer);
-    // We must clear flags so it does not accidentally think the item
-    // is selected or (if a parent) is opened:
-    widget->clear_flag(fltk::STATE);
-    // This indicates we have no idea what the dimensions are:
-    widget->w(0);
-    return widget;
+    return buffer;
   }
 };
 
