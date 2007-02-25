@@ -34,6 +34,8 @@
 #include <fltk/error.h>
 #include <fltk/math.h>
 #include "XColorMap.h"
+#include <string.h>
+#include <stdlib.h>
 
 #if USE_XSHM
 # include <sys/ipc.h>
@@ -643,7 +645,7 @@ XRenderPictFormat* fl_rgba_xrender_format;
 extern bool fl_get_invert_matrix(XTransform&);
 extern bool fl_trivial_transform();
 
-::Picture p;
+//::Picture p;
 XWindow prevsource;
 
 #define XRENDER_SAMPLING_BUG 1
@@ -1357,6 +1359,14 @@ void Image::setimage(const uchar* d, PixelType p, int w, int h, int ld) {
   // If there is no shared memory and type is compatable we could
   // instead use the data directly, see ../osx/Image.cxx for details
   setpixels(d, Rectangle(w,h), ld); flags = 0;
+}
+
+void Image::make_current() {
+  if (!picture) {
+    buffer(); // initialise 
+  }
+  draw_into(picture->rgb ? picture->rgb : picture->alpha,
+	    picture->w, picture->h);
 }
 
 ////////////////////////////////////////////////////////////////

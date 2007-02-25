@@ -227,6 +227,10 @@ void Image::setimage(const uchar* source, PixelType p, int w, int h, int ld)
   }
 }
 
+void Image::make_current() {
+  // TODO - see x11/Image.cxx for implementation clues
+}
+
 ////////////////////////////////////////////////////////////////
 
 // drawimage() calls this to see if a direct draw will work. Returns

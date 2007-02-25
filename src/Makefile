@@ -40,6 +40,7 @@ include ../makeinclude
 CPPFILES = \
 	Adjuster.cxx \
 	AlignGroup.cxx \
+        AnsiWidget.cxx \
 	BarGroup.cxx \
 	Browser.cxx \
 	Button.cxx \

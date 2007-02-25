@@ -99,6 +99,9 @@ public:
   // for back compatability with fltk1 only:
   void label(Widget* o);
 
+  // see also: GSave
+  void make_current();
+
 };
 
 }

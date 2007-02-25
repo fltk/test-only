@@ -45,6 +45,7 @@ include ../makeinclude
 CPPFILES = \
 	CubeMain.cxx \
 	CubeView.cxx \
+        ansiwidget.cxx \
 	arc.cxx \
 	ask.cxx \
 	bitmap.cxx \
@@ -116,6 +117,7 @@ CFILES	=
 # only some of the demos have been changed to use namespaces:
 TARGETS = \
 	arc$(EXEEXT) \
+        ansiwidget$(EXEEXT) \
 	bitmap$(EXEEXT) \
 	boxtype$(EXEEXT) \
 	browser$(EXEEXT) \
