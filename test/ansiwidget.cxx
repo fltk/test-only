@@ -24,14 +24,13 @@
 //
 
 #include <fltk/run.h>
-#include <fltk/x11.h>
 #include <fltk/Window.h>
 #include <fltk/AnsiWidget.h>
 
 int main(int argc, char **argv) {
   int w = 210; // must be > 104
   int h = 200;
-  Window window(w, h );
+  Window window(w, h);
   window.begin();
   
   AnsiWidget out(0, 0, w, h, 11);
