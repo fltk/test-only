@@ -58,7 +58,8 @@ static bool is_visible(int x, int y, int w, int h)
   // Copy system clipping region from fltk::dc
   GetRandomRgn (fltk::dc, rgn0, SYSRGN);
 
-  if (has_unicode()) {
+  if (!has_unicode()) {
+    // if not unicode then we are running on Win9x and the following applies:
     // Windows 9x operating systems the region is returned in window coordinates,
     // and on Windows XP/2k machines the region is in screen coordinates.. SIGH!
     POINT pt = { 0, 0 };
