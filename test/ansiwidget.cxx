@@ -1,5 +1,5 @@
 //
-// "$Id: arc.cxx 5247 2006-06-27 13:17:33Z fabien $"
+// "$Id: $"
 //
 // AnsiWindow test program for the Fast Light Tool Kit (FLTK).
 //
@@ -24,30 +24,43 @@
 //
 
 #include <fltk/run.h>
+#include <fltk/Button.h>
 #include <fltk/Window.h>
 #include <fltk/AnsiWidget.h>
+
+void more_cb(Widget*, void* p) {
+  AnsiWidget* out = (AnsiWidget*)p;
+  for (int i=0; i<10; i++) {
+    out->print("\033[3mitalic\033[23moff\033[4munderline\033[24moff");
+    out->print("\033[7minverse\033[27moff");
+    out->print("\033[1mbold\033[21moff");
+  }
+}
 
 int main(int argc, char **argv) {
   int w = 210; // must be > 104
   int h = 200;
   Window window(w, h);
   window.begin();
-  
-  AnsiWidget out(0, 0, w, h, 11);
+
+  AnsiWidget out(0, 22, w, h, 11);
   window.resizable(&out);
+
+  Button* b = new Button(0, 0, 40, 20, "Print");
+  b->callback(more_cb);
+  b->user_data(&out);
+
   window.end();
   window.show(argc,argv);
 
+#if USE_X11
   while (!ready()) {
     flush();
     check();
   }
-
-  for (int i=0; i<20; i++) {
-    out.print("\033[3mitalic\033[23moff\033[4munderline\033[24moff");
-    out.print("\033[7minverse\033[27moff");
-    out.print("\033[1mbold\033[21moff");
-  }
+#else
+  check();
+#endif
 
   return run();
 }

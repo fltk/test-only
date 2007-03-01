@@ -296,7 +296,8 @@ void Image::setimage(const uchar* d, PixelType p, int w, int h, int ld) {
 }
 
 void Image::make_current() {
-  // TODO - see x11/Image.cxx for implementation clues
+  buffer();
+  draw_into(picture->bitmap, picture->w, picture->h);
 }
 
 ////////////////////////////////////////////////////////////////
