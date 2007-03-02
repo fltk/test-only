@@ -645,7 +645,7 @@ XRenderPictFormat* fl_rgba_xrender_format;
 extern bool fl_get_invert_matrix(XTransform&);
 extern bool fl_trivial_transform();
 
-//::Picture p;
+::Picture p;
 XWindow prevsource;
 
 #define XRENDER_SAMPLING_BUG 1
