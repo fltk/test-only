@@ -47,6 +47,8 @@ static Bool use_xshm_pixmaps;
 
 using namespace fltk;
 
+typedef unsigned int U32;
+
 /// Converter functions:
 static void (*converter[9])(const uchar *from, uchar *to, int w);
 
