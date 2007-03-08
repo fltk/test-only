@@ -316,7 +316,7 @@ static FrameBox embossedBox("embossed", 2,2,4,4, "LLWWWWLL", &downBox);
 */
 Box* const fltk::EMBOSSED_BOX = &embossedBox;
 
-static FrameBox borderBox("border", 1,1,1,1, "LLLL", &downBox);
+static FrameBox borderBox("border", 1,1,2,2, "IIJJ", &downBox);
 /*!
   1-pixel thick gray line around rectangle.
 */
