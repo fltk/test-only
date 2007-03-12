@@ -62,7 +62,6 @@ fltk::Window* make_function_panel() {
   fltk::Window* w;
    {fltk::Window* o = function_panel = new fltk::Window(400, 208, "function/method");
     w = o;
-    o->shortcut(0xff1b);
     o->begin();
      {fltk::CheckButton* o = f_public_button = new fltk::CheckButton(13, 15, 95, 25, "public");
       o->box(fltk::THIN_DOWN_BOX);
@@ -161,7 +160,6 @@ fltk::Window* make_code_panel() {
   fltk::Window* w;
    {fltk::Window* o = code_panel = new fltk::Window(290, 175, "code");
     w = o;
-    o->shortcut(0xff1b);
     o->callback((fltk::Callback*)cb_code_panel);
     o->begin();
      {CodeEditor* o = code_input = new CodeEditor(6, 5, 280, 138);
@@ -197,7 +195,6 @@ fltk::Window* make_codeblock_panel() {
   fltk::Window* w;
    {fltk::Window* o = codeblock_panel = new fltk::Window(290, 131, "codeblock");
     w = o;
-    o->shortcut(0xff1b);
     o->begin();
      {fltk::Input* o = code_before_input = new fltk::Input(10, 11, 270, 22, "input:");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
@@ -239,7 +236,6 @@ fltk::Window* make_declblock_panel() {
   fltk::Window* w;
    {fltk::Window* o = declblock_panel = new fltk::Window(290, 131, "declaration block");
     w = o;
-    o->shortcut(0xff1b);
     o->begin();
      {fltk::Input* o = decl_before_input = new fltk::Input(10, 11, 270, 22, "input:");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
@@ -281,7 +277,6 @@ fltk::Window* make_decl_panel() {
   fltk::Window* w;
    {fltk::Window* o = decl_panel = new fltk::Window(290, 175, "declaration");
     w = o;
-    o->shortcut(0xff1b);
     o->begin();
      {fltk::CheckButton* o = decl_public_button = new fltk::CheckButton(10, 11, 65, 22, "public");
       o->when(fltk::WHEN_NEVER);
@@ -321,7 +316,6 @@ fltk::Window* make_class_panel() {
   fltk::Window* w;
    {fltk::Window* o = class_panel = new fltk::Window(280, 164, "class");
     w = o;
-    o->shortcut(0xff1b);
     o->begin();
      {fltk::CheckButton* o = c_public_button = new fltk::CheckButton(10, 11, 65, 22, "public");
       o->when(fltk::WHEN_NEVER);
@@ -360,7 +354,6 @@ fltk::Window* make_namespace_panel() {
   fltk::Window* w;
    {fltk::Window* o = namespace_panel = new fltk::Window(298, 140, "namespace");
     w = o;
-    o->shortcut(0xff1b);
     o->begin();
      {fltk::Input* o = namespace_input = new fltk::Input(21, 10, 270, 22, "default is  \"fltk\", can be declared at the root or  imbricated into another\
  namespace");
@@ -410,7 +403,6 @@ fltk::DoubleBufferWindow* make_comment_panel() {
     w = o;
     o->type(241);
     o->labelsize(11);
-    o->shortcut(0xff1b);
     o->callback((fltk::Callback*)cb_comment_panel);
     o->begin();
      {fltk::MultiLineInput* o = comment_input = new fltk::MultiLineInput(110, 10, 430, 266, "input");
@@ -491,7 +483,6 @@ fltk::DoubleBufferWindow* make_sourceview() {
    {fltk::DoubleBufferWindow* o = sourceview_panel = new fltk::DoubleBufferWindow(520, 490, "Code View");
     w = o;
     o->type(241);
-    o->shortcut(0xff1b);
     o->callback((fltk::Callback*)toggle_sourceview_cb);
     o->begin();
      {fltk::TabGroup* o = sv_tab = new fltk::TabGroup(10, 10, 500, 440);

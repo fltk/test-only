@@ -29,7 +29,6 @@ fltk::Window* make_images_dir_window() {
   fltk::Window* w;
    {fltk::Window* o = images_dir_window = new fltk::Window(310, 98, "Images root directory");
     w = o;
-    o->shortcut(0xff1b);
     o->callback((fltk::Callback*)cb_images_dir_window);
     o->begin();
      {fltk::Input* o = images_dir_input = new fltk::Input(10, 22, 220, 22);

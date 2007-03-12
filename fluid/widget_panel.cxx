@@ -593,7 +593,6 @@ it should be left off if label will fit");
           }
            {fltk::ValueInput* o = new fltk::ValueInput(245, 0, 45, 22, "slider size");
             o->labelsize(11);
-            o->linesize(1.20259e+09);
             o->callback((fltk::Callback*)slider_size_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_CENTER);
             o->when(fltk::WHEN_ENTER_KEY);
@@ -606,7 +605,6 @@ it should be left off if label will fit");
           o->align(fltk::ALIGN_LEFT);
           o->begin();
            {fltk::ValueInput* o = new fltk::ValueInput(0, 0, 55, 22, "Value");
-            o->linesize(1.20259e+09);
             o->callback((fltk::Callback*)value_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
             o->when(fltk::WHEN_ENTER_KEY);
@@ -614,7 +612,6 @@ it should be left off if label will fit");
           }
            {fltk::ValueInput* o = new fltk::ValueInput(55, 0, 55, 22, "min");
             o->labelsize(11);
-            o->linesize(1.20259e+09);
             o->callback((fltk::Callback*)min_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
             o->when(fltk::WHEN_ENTER_KEY);
@@ -622,7 +619,6 @@ it should be left off if label will fit");
           }
            {fltk::ValueInput* o = new fltk::ValueInput(110, 0, 55, 23, "max");
             o->labelsize(11);
-            o->linesize(1.20259e+09);
             o->callback((fltk::Callback*)max_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
             o->when(fltk::WHEN_ENTER_KEY);
@@ -630,7 +626,6 @@ it should be left off if label will fit");
           }
            {fltk::ValueInput* o = new fltk::ValueInput(165, 0, 55, 22, "step");
             o->labelsize(11);
-            o->linesize(1.20259e+09);
             o->callback((fltk::Callback*)step_cb);
             o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
             o->when(fltk::WHEN_ENTER_KEY);

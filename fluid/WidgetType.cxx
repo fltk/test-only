@@ -1737,8 +1737,8 @@ void WidgetType::write_widget_code() {
       write_c("%so->maximum(%g);\n", indent(), v->maximum());
     if (v->step()!=f->step())
       write_c("%so->step(%g);\n", indent(), v->step());
-    if (v->linesize()!=f->linesize())
-      write_c("%so->linesize(%g);\n", indent(), v->linesize());
+    if (v->linesize_setting()!=f->linesize_setting())
+      write_c("%so->linesize(%g);\n", indent(), v->linesize_setting());
     if (v->value())
       write_c("%so->value(%g);\n", indent(), v->value());
     if (is_valuator()==2) {
@@ -1896,7 +1896,8 @@ void WidgetType::write_properties() {
     if (v->minimum()!=f->minimum()) write_string("minimum %g",v->minimum());
     if (v->maximum()!=f->maximum()) write_string("maximum %g",v->maximum());
     if (v->step()!=f->step()) write_string("step %g",v->step());
-    if (v->linesize()!=f->linesize()) write_string("linesize %d",v->linesize());
+    if (v->linesize_setting()!=f->linesize_setting())
+      write_string("linesize %d",v->linesize());
     if (v->value()!=0.0) write_string("value %g",v->value());
     if (is_valuator()==2) {
       double x = ((fltk::Slider*)v)->slider_size();

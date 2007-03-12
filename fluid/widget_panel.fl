@@ -547,25 +547,25 @@ Function {make_widget_panel()} {open
             label x
             callback x_cb
             tooltip {The x coordinate of the widget.}
-            xywh {0 0 55 22} align 21 when ENTER_KEY labelsize 11 maximum 2000 step 1 linesize 0 value 10
+            xywh {0 0 55 22} align 21 when ENTER_KEY labelsize 11 maximum 2000 step 1 value 10
           }
           {fltk::ValueInput} widget_y {
             label y
             callback y_cb
             tooltip {The y coordinate of the widget.}
-            xywh {55 0 55 22} align 21 when ENTER_KEY labelsize 11 maximum 2000 step 1 linesize 0 value 10
+            xywh {55 0 55 22} align 21 when ENTER_KEY labelsize 11 maximum 2000 step 1 value 10
           }
           {fltk::ValueInput} widget_w {
             label w
             callback width_cb
             tooltip {The width of the widget.}
-            xywh {110 0 55 22} align 21 when ENTER_KEY labelsize 11 maximum 2000 step 1 linesize 0 value 10
+            xywh {110 0 55 22} align 21 when ENTER_KEY labelsize 11 maximum 2000 step 1 value 10
           }
           {fltk::ValueInput} widget_h {
             label h
             callback height_cb
             tooltip {The height of the widget.}
-            xywh {165 0 55 22} align 21 when ENTER_KEY labelsize 11 maximum 2000 step 1 linesize 0 value 10
+            xywh {165 0 55 22} align 21 when ENTER_KEY labelsize 11 maximum 2000 step 1 value 10
           }
           {fltk::CheckButton} set_xy {
             label xy
@@ -577,7 +577,7 @@ Function {make_widget_panel()} {open
             label {slider size}
             callback slider_size_cb
             tooltip {The size of the scroller}
-            xywh {245 0 45 22} align 17 when ENTER_KEY labelsize 11 linesize 515899392
+            xywh {245 0 45 22} align 17 when ENTER_KEY labelsize 11
           }
         }
         {fltk::Group} gValues {
@@ -589,19 +589,19 @@ Function {make_widget_panel()} {open
             label Value
             callback value_cb
             tooltip {The initial value of this widget}
-            xywh {0 0 55 22} align 5 when ENTER_KEY linesize 515899392
+            xywh {0 0 55 22} align 5 when ENTER_KEY
           }
           {fltk::ValueInput} {} {
             label min
             callback min_cb
             tooltip {The minimum value for this valuator}
-            xywh {55 0 55 22} align 21 when ENTER_KEY labelsize 11 linesize 515899392
+            xywh {55 0 55 22} align 21 when ENTER_KEY labelsize 11
           }
           {fltk::ValueInput} {} {
             label max
             callback max_cb
             tooltip {The maximum value for this valuator}
-            xywh {110 0 55 23} align 21 when ENTER_KEY labelsize 11 linesize 515899392
+            xywh {110 0 55 23} align 21 when ENTER_KEY labelsize 11
           }
           {fltk::ValueInput} {} {
             label step
@@ -609,14 +609,14 @@ Function {make_widget_panel()} {open
             tooltip {step:
 Round all movements to multiples of this.
 }
-            xywh {165 0 55 22} align 21 when ENTER_KEY labelsize 11 linesize 515899392
+            xywh {165 0 55 22} align 21 when ENTER_KEY labelsize 11
           }
           {fltk::ValueInput} {} {
             label line
             callback line_cb
             tooltip {linesize:
 Increment/decrement for arrow keys.}
-            xywh {245 0 45 22} align 21 when ENTER_KEY labelsize 11 minimum 1 step 1 linesize 0
+            xywh {245 0 45 22} align 21 when ENTER_KEY labelsize 11 minimum 1 step 1
           }
         }
         {fltk::Group} gAttributes {
@@ -792,7 +792,7 @@ To get out of shortcut-setting mode:
           {fltk::ValueInput} {} {
             callback label_size_cb
             tooltip {Size of the font to use for the label}
-            xywh {215 22 55 22} when ENTER_KEY maximum 100 step 0.1 linesize 0 value 14
+            xywh {215 22 55 22} when ENTER_KEY maximum 100 step 0.1 value 14
           }
           {fltk::Choice} {} {
             label {Text Font}
@@ -803,7 +803,7 @@ To get out of shortcut-setting mode:
           {fltk::ValueInput} {} {
             callback text_size_cb
             tooltip {Size of the font to use for text displayed inside the widget}
-            xywh {215 55 55 22} when ENTER_KEY maximum 100 step 0.1 linesize 0 value 14
+            xywh {215 55 55 22} when ENTER_KEY maximum 100 step 0.1 value 14
           }
           {fltk::Widget} {} {
             label resizable

@@ -93,7 +93,6 @@ fltk::Window* make_preferences_window() {
           completion_button->value(prefs.show_completion_dialogs() ? true : false);
         }
          {fltk::ValueInput* o = recent_spinner = new fltk::ValueInput(13, 93, 37, 25, "# Recent Files");
-          o->linesize(0.02);
           o->callback((fltk::Callback*)cb_recent_spinner);
           o->align(fltk::ALIGN_RIGHT);
           o->when(fltk::WHEN_CHANGED);
