@@ -1235,7 +1235,7 @@ extern "C" {
   }
 }
 
-// this little function makes sure that the styleus related event data
+// this little function makes sure that the stylus related event data
 // is useful, even if no tablet was discovered, or the mouse was used to
 // generate a PUSH, RELEASE, MOVE or DRAG event
 static void set_stylus_data() {

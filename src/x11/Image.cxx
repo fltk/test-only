@@ -34,8 +34,6 @@
 #include <fltk/error.h>
 #include <fltk/math.h>
 #include "XColorMap.h"
-#include <string.h>
-#include <stdlib.h>
 
 #if USE_XSHM
 # include <sys/ipc.h>
@@ -1005,9 +1003,9 @@ struct fltk::Picture {
       data = (uchar*)shminfo.shmaddr;
       static bool beenhere;
       if (beenhere) {
-	rgb = XShmCreatePixmap(xdisplay, RootWindow(xdisplay,xscreen),
-			       shminfo.shmaddr, &shminfo,
-			       w, h, depth);
+      rgb = XShmCreatePixmap(xdisplay, RootWindow(xdisplay,xscreen),
+                             shminfo.shmaddr, &shminfo,
+                             w, h, depth);
 	return;
       }
       beenhere = true;

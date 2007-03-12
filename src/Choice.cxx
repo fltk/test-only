@@ -63,6 +63,7 @@ unfortunately.
 #include <fltk/Box.h>
 #include <fltk/Item.h>
 #include <fltk/draw.h>
+#include <fltk/run.h>
 using namespace fltk;
 
 // The dimensions for the glyph in this and the PopupMenu are exactly
@@ -156,7 +157,12 @@ int Choice::handle(int e, const Rectangle& rectangle) {
     // Depending on the size and usage of the menu this may be more
     // user-friendly.
 //  event_is_click(0);
-    if (click_to_focus()) take_focus();
+    if (click_to_focus()) {
+      take_focus();
+      fltk::flush(); // this is a temporary fix for Nuke!
+      // Nuke is destroying widgets in layout(), not a good idea...
+      if (fltk::focus() != this) return 1; // detect if take_focus destroys this
+    }
   EXECUTE:
     if (!children) return 1;
     if (popup(rectangle, 0)) redraw(DAMAGE_VALUE);
@@ -246,7 +252,6 @@ Choice::Choice(int x,int y,int w,int h, const char *l) : Menu(x,y,w,h,l) {
   clear_flag(ALIGN_MASK);
   set_flag(ALIGN_LEFT);
   set_click_to_focus();
-  when(WHEN_RELEASE);
 }
 
 //

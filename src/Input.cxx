@@ -41,13 +41,13 @@ extern Widget* fl_pending_callback;
 // Called by any changes to the text, this correctly triggers callbacks:
 static void changed_stuff(Input* i) {
   i->set_changed();
-  if (i->when() & (WHEN_RELEASE|WHEN_ENTER_KEY)) {
+  if (i->when() & WHEN_CHANGED) {
+    i->do_callback();
+  } else if (i->when() & (WHEN_RELEASE|WHEN_ENTER_KEY)) {
     Widget* w = fl_pending_callback;
     if (i == w) return;
     if (w) {fl_pending_callback = 0; w->do_callback();}
     fl_pending_callback = i;
-  } else {
-    if (i->when()) i->do_callback();
   }
 }
 
@@ -60,27 +60,25 @@ static void changed_stuff(Input* i) {
   (even '\\0'). The bytes 0..31 are displayed in ^X notation, the
   rest are interpreted as UTF-8 (see fltk::utf8decode()).
 
-  By default the callback() is done each time the text is changed
-  by the user. Other values for when():
+  The default when() is WHEN_RELEASE. This is fine for a popup
+  control panel where nothing happens until the panel is closed.
+  But for most other uses of the input field you want to change
+  it. Useful values are:
 
   - fltk::WHEN_NEVER: The callback is not done, but changed() is turned on.
-  - fltk::WHEN_CHANGED: The default, if set and no other flags are set the
-    callback is done each time the text is changed by the user.
-  - fltk::WHEN_ENTER_KEY: If the user types the Enter key, the entire
-    text is selected, and if the value has changed, the callback is
-    done. The callback will also be done if the value has changed
-    and the user clicks on another widget or the focus moves away
-    (to another widget or program). If another widget (such as an OK button
-    on a panel) has Enter as a shortcut, that widget will take precendence.
-    If that widget hides or destroys the Input widget because it is
-    dismissing a panel, the callback will be done then.
+  - fltk::WHEN_CHANGED: The callback is done each time the text is
+    changed by the user.
+  - fltk::WHEN_ENTER_KEY: Hitting the enter key after changing the
+    text will cause the callback. 
   - fltk::WHEN_ENTER_KEY_ALWAYS: The Enter key will do the callback
     even if the text has not changed. Useful for command fields.
-    The callback will also be done for other reasons described above,
-    test fltk::event_key()==fltk::EnterKey to ignore these.
+    Also you need to do this if you want both the enter key and
+    either WHEN_CHANGED or WHEN_RELEASE, in this case you can tell
+    if Enter was typed by testing fltk::event_key()==fltk::EnterKey.
   - fltk::WHEN_RELEASE: Depreciated. The callback is done if the
     text has changed and the user clicks on another widget or the
-    focus moves away. But no special treatment of ENTER.
+    focus moves (which can happen due to the window this widget
+    is on being closed).
 
   If you wish to restrict the text the user can type (such as limiting
   it to numbers, a particular length, etc), you should subclass this

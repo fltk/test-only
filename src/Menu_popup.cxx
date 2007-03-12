@@ -295,7 +295,8 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
 
   Item::set_style(widget, widget->parent()!=0);
-  if (widget->style()->hide_underscore() && !event_state(ACCELERATOR) )
+  if (!widget->shortcut() ||
+      widget->style()->hide_underscore() && !event_state(ACCELERATOR) )
     fl_hide_underscore = true;
 
   const bool horizontal = widget->horizontal();

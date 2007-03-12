@@ -88,8 +88,12 @@ void Tooltip::layout() {
   if (ox < monitor.x()) ox = monitor.x();
 
   int oy = event_y_root()+16;
-  if (oy < r.b()) oy = r.b();
-  if (oy+hh > monitor.b()) oy = r.y()-hh;
+  if (r.h() < 30) {
+    if (oy < r.b()) oy = r.b();
+    if (oy+hh > monitor.b()) oy = r.y()-hh;
+  } else {
+    if (oy+hh > monitor.b()) oy = event_y_root()-hh;
+  }
   if (oy < monitor.y()) oy = monitor.y();
 
   resize(ox, oy, ww, hh);

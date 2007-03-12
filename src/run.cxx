@@ -137,14 +137,14 @@ bool fltk::in_main_thread_ = true;
 
   On current systems fltk does not force the window system to set
   the focus. If the window does not have focus it will usually switch
-  back to the previous window.
+  back to the previous window when the user types a key.
 */
 bool Widget::take_focus() {
   if (focused()) return true;
-  Widget* w = xfocus;
+//  Widget* w = xfocus;
   // Modal overrides whatever the system says the focus is:
-  if (grab_ || w && modal_) w = modal_;
-  if (!w || !w->contains(this)) return false;
+//   if (grab_ || w && modal_) w = modal_;
+//   if (!w || !w->contains(this)) return false;
   if (!takesevents() || !handle(FOCUS)) return false;
   if (!contains(fltk::focus())) fltk::focus(this);
   return true;

@@ -1,4 +1,4 @@
-// "$Id: ComboBox.cxx 1399 2006-08-11 02:15:20Z spitzak $"
+// "$Id: ComboBox.cxx 1513 2007-03-07 16:46:20Z spitzak $"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
@@ -43,6 +43,11 @@ static void revert(Style* s) {
 static NamedStyle style("ComboBox", revert, &ComboBox::default_style);
 NamedStyle* ComboBox::default_style = &::style;
 
+static void input_cb(Widget* w, void*) {
+  ((ComboBox*)w->parent())->value(-1);
+  w->parent()->do_callback();
+}
+
 ComboBox::ComboBox(int x,int y,int w,int h, const char *l) :
   Choice(x,y,w,h,l)
 {
@@ -50,9 +55,10 @@ ComboBox::ComboBox(int x,int y,int w,int h, const char *l) :
   int w1 = h*4/5;
   Group *g = current();
   current(0);
-  input_ = new ComboInput(x, y, w-w1, h, this);
+  input_ = new Input(x, y, w-w1, h);
   input_->box(fltk::NO_BOX);
   input_->parent(this);
+  input_->callback(input_cb);
   current(g);
 }
 
@@ -62,8 +68,8 @@ ComboBox::~ComboBox() {
 
 void ComboBox::draw() {
   if (damage() & DAMAGE_ALL) {
-    drawstyle(style(), flags()|OUTPUT);
     draw_frame();
+    drawstyle(style(), (flags()|OUTPUT)&~FOCUSED);
     Rectangle r(w(),h());
     r.set_x(w()-h()*4/5);
     box()->inset(r);
@@ -89,63 +95,40 @@ void ComboBox::layout() {
 }
 
 int ComboBox::handle(int event) {
-  static bool mouse_on_input = false;
-  static bool want_mouse_drag = false;
+  input_->when(when());
   int ret = 0;
   switch (event) {
   case PUSH:
-	if (event_x()<w()-h()*4/5) {
-	  mouse_on_input = true;
-	  ret = input_->handle(event);
-	} else {
-	  mouse_on_input = false;
-	  if (click_to_focus()) take_focus();
-	EXECUTE:
-	  if (popup(Rectangle(w(), h()), 0)) redraw(DAMAGE_VALUE);
-	}
-	want_mouse_drag = ret!=0;
-	ret = 1;
-	break;
-  case DRAG:
-	if (want_mouse_drag) {
-	  if (mouse_on_input)
-		ret = input_->handle(event);
-	  else
-		ret = Choice::handle(event);
-	}
-	ret = 1;
-	break;
-  case RELEASE:
-	if (want_mouse_drag) {
-	  if (mouse_on_input)
-		ret = input_->handle(event);
-	  else
-		ret = Choice::handle(event);
-	}
-	mouse_on_input = false;
-	ret = 1;
-	break;
+    if (event_x()<w()-h()*4/5) {
+      ret = input_->send(event);
+    } else {
+      if (click_to_focus()) take_focus();
+    EXECUTE:
+      if (popup(Rectangle(w(), h()), 0)) redraw(DAMAGE_VALUE);
+      ret = 1;
+    }
+    break;
   case SHORTCUT:
-	if (test_shortcut()) goto EXECUTE;
-	if (handle_shortcut()) {
-	  redraw(DAMAGE_VALUE);
-	  return 1;
-	} else {
-	  input_->handle(event);
-	}
-	break;
+    if (test_shortcut()) goto EXECUTE;
+    if (handle_shortcut()) {
+      redraw(DAMAGE_VALUE);
+      return 1;
+    } else {
+      input_->handle(event);
+    }
+    break;
   case KEY:
-	if (event_key()==DownKey||event_key()==UpKey) {
-	  if (event_key()==DownKey) Choice::value(0); else Choice::value(Choice::size()-1);
-	  e_keysym = ReturnKey;
-	  ret = Choice::handle(event);
-	  break;
-	}
+    if (event_key()==DownKey||event_key()==UpKey) {
+      if (event_key()==DownKey) Choice::value(0); else Choice::value(Choice::size()-1);
+      e_keysym = ReturnKey;
+      ret = Choice::handle(event);
+      break;
+    }
   case KEYUP:
-	// handle arrow up/down to select items from the menu
-	ret = input_->handle(event);
-	break;
-  // events for input alone
+    // handle arrow up/down to select items from the menu
+    ret = input_->handle(event);
+    break;
+    // events for input alone
   case PASTE:
   case TIMEOUT:
   case DND_ENTER:
@@ -153,38 +136,37 @@ int ComboBox::handle(int event) {
   case DND_LEAVE:
   case DND_RELEASE:
   case FOCUS_CHANGE:
-	ret = input_->handle(event);
-	break;
-  // events that both widgets should receive
+    ret = input_->handle(event);
+    break;
+    // events that both widgets should receive
   case FOCUS:
-	input_->take_focus();
+    input_->take_focus();
   case ACTIVATE:
   case ENTER:
   case SHOW:
-	ret = Choice::handle(event);
+    ret = Choice::handle(event);
     ret |= input_->handle(event);
-	break;
+    break;
   case UNFOCUS:
   case DEACTIVATE:
   case HIDE:
   case LEAVE:
     ret = input_->handle(event);
-	ret |= Choice::handle(event);
-	break;
-  // events for choice alone
+    ret |= Choice::handle(event);
+    break;
+    // events for choice alone
   default: // MOVE, MOUSWHEEL, TOOLTIP
-	ret = Choice::handle(event);
+    ret = Choice::handle(event);
   }
   if (input_->damage())
-	redraw();
+    redraw();
   return ret;
 }
 
 int ComboBox::choice(int v) {
   int ret = Choice::value(v);
   Widget *f = get_item();
-  if (f) input_->text(f->label());
-  text_changed_();
+  if (f) ret = input_->text(f->label());
   return ret;
 }
 
@@ -210,10 +192,11 @@ int ComboBox::find_choice() const {
 }
 
 bool ComboBox::text_changed_(bool ret) {
-  if (input_->damage()) {
-    redraw(input_->damage());
-  }
+//   if (input_->damage()) {
+//     redraw(input_->damage());
+//   }
   // we should also update the current choice
+  value(-1);
   return ret;
 }
 
@@ -234,27 +217,4 @@ int ComboBox::popup(const Rectangle& r,  const char* title, bool menubar)
   return 0;
 }
 
-//---- Combo Input ---------------------------------------------
-
-ComboBox::ComboInput::ComboInput(int x, int y, int w, int h, ComboBox *c) :
-  Input(x, y, w, h)
-{
-  combo_ = c;
-  callback(input_callback_, combo_);
-}
-
-int ComboBox::ComboInput::handle(int event) {
-  int ret;
-  switch (event) {
-  case FOCUS:
-	break;
-  case UNFOCUS:
-	break;
-  }
-  ret = Input::handle(event);
-  if (damage())
-	combo_->redraw();
-  return ret;
-}
-
-// End of $Id: ComboBox.cxx 1399 2006-08-11 02:15:20Z spitzak $
+// End of $Id: ComboBox.cxx 1513 2007-03-07 16:46:20Z spitzak $

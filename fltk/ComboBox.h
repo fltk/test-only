@@ -87,22 +87,12 @@ public:
 	{ return input_->mouse_position(r); }
   int xscroll() const { return input_->xscroll();}
   int yscroll() const { return input_->yscroll();}
-
-  uchar when() const { return input_->when(); }
-  void when(uchar w) { input_->when(w); }
   
 protected:
   bool text_changed_(bool ret=true);
 
 private:
-  class ComboInput : public Input {
-  public:
-	ComboInput(int,int,int,int,ComboBox*);
-	int handle(int);
-  private:
-	ComboBox *combo_;
-  };  
-  ComboInput *input_;
+  Input *input_;
 #if defined (_WIN32) || (defined( __GNUC__ ) && __GNUC__ < 3) 
  public:
 #endif
