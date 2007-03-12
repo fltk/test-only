@@ -375,11 +375,15 @@ int fltk::list_fonts(fltk::Font**& arrayp) {
   // that is a pain to figure out. Besides this is what Windows
   // version does:
   IFont* fonts = new IFont[num_fonts*4];
+  int k = 0;
   for (int i = 0; i < num_fonts; i++) {
-    IFont* newfont = fonts+4*i;
-    font_array[i] = &(newfont->f);
     FcPattern* p = fnt_set->fonts[i];
-    const char* name = newstring(getfamily(p));
+    const char* n = getfamily(p);
+    if (!isalpha(n[0])) continue;
+    const char* name = newstring(n);
+    IFont* newfont = fonts+4*k;
+    font_array[k] = &(newfont->f);
+    ++k;
     for (int j = 0; j < 4; j++) {
       newfont[j].f.name_ = name;
       newfont[j].f.attributes_ = j;
@@ -388,6 +392,7 @@ int fltk::list_fonts(fltk::Font**& arrayp) {
       newfont[j].fontsizes = 0;
     }
   }
+  num_fonts = k;
   // Release the fnt_set - we don't need it any more
   FcFontSetDestroy (fnt_set);
 
