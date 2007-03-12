@@ -668,6 +668,13 @@ static void button_to_keysym( EventRef event ) {
   GetEventParameter( event, kEventParamMouseChord,
 		     typeUInt32, NULL, sizeof(UInt32), NULL, &chord );
   e_state = ( e_state & 0xff0000 ) | state[ chord & 0x07 ];
+
+  // make the stylus data produce something useful if there's no pen
+  //if (no_stylus) {
+  e_pressure = e_state&BUTTON1 ? 1.0f : 0.0f;
+  e_x_tilt = e_y_tilt = 0.0f;
+  e_device = DEVICE_MOUSE;
+  //}
 }
 
 
@@ -725,6 +732,7 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
     button_to_keysym( event );
     e_is_click = e_keysym;
     recent_keycode = 0;
+
     handle( PUSH, window );
     break;
 
