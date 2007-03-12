@@ -48,6 +48,7 @@ public:
 
   double linesize() const;
   void linesize(double a) {linesize_ = a;}
+  double linesize_setting() const {return linesize_;}
 
   virtual int format(char*);
 
