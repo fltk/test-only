@@ -323,7 +323,7 @@ int write_file(const char *filename, int selected_only) {
   if (!open_write(filename)) return 0;
   write_string("# data file for the FLTK User Interface Designer (FLUID)\n"
 	       "version %.4f",FL_VERSION);
-  if(strlen(images_dir)) write_string("\nimages_dir %s", images_dir);
+  if (images_dir) write_string("\nimages_dir %s", images_dir);
   if(!include_H_from_C)
     write_string("\ndo_not_include_H_from_C");
   if (!selected_only) {
@@ -402,6 +402,7 @@ static void read_children(FluidType *p, int paste) {
     if (!strcmp(c,"images_dir"))
     {
       images_dir = strdup(read_word()); // This will never get deleted ...
+      if (!*images_dir) images_dir = 0;
       goto CONTINUE;
     }
     if (!strcmp(c,"header_name")) {

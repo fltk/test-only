@@ -132,85 +132,57 @@ void nyi(Widget *,void *) {
     message("That's not yet implemented, sorry");
 }
 
-static const char *filename;
-static HelpDialog *help_dialog = 0;
+static char *filename;
+static char* file_directory;
 
-void set_filename(const char *c);
-
-#if 0
-static char* pwd;
-static char in_source_dir;
+void fix_images_dir() {
+  static char* pvalue;
+  delete[] pvalue;
+  pvalue = 0;
+  if (!images_dir) {
+    SharedImage::set_root_directory(file_directory);
+    return;
+  }
+  if (!file_directory || *images_dir == '/'
+#ifdef _WIN32
+      || *images_dir && images_dir[1]==':'
 #endif
-void goto_source_dir() {
-#if 0
-    if (in_source_dir) return;
-    if (!filename || !*filename) return;
-    const char *p = filename_name(filename);
-    if (p <= filename) return; // it is in the current directory
-    char buffer[1024];
-    strcpy(buffer,filename);
-    int n = p-filename; if (n>1) n--; buffer[n] = 0;
-    if (!pwd) {
-	pwd = getcwd(0,1024);
-	if (!pwd) {fprintf(stderr,"getcwd : %s\n",strerror(errno)); return;}
-    }
-    if (chdir(buffer)<0) {fprintf(stderr, "Can't chdir to %s : %s\n",
-	buffer, strerror(errno)); return;}
-    in_source_dir = 1;
-    SharedImage::set_root_directory(buffer);
-#endif
+      ) {
+    SharedImage::set_root_directory(images_dir);
+    return;
+  }
+  // append them together so images dir is relative to this dir...
+  pvalue = new char[strlen(file_directory)+strlen(images_dir)+2];
+  sprintf(pvalue, "%s/%s", file_directory, images_dir);
+  SharedImage::set_root_directory(pvalue);
 }
 
-#include "Fluid_Image.h"
-void goto_images_dir() {
-#if 0
-    if (in_source_dir) return;
-    if (!filename || !*filename) return;
-    const char *p = filename_name(filename);
-    // This is static since SharedImage::set_root_directory just copies the pointer
-    static char buffer[1024];
-    if (p <= filename)
-	strcpy(buffer, images_dir);
-    else
-    {
-	strcpy(buffer,filename);
-	int n = p-filename; if (n>1) n--; buffer[n] = 0;
-	if(buffer[strlen(buffer)-1]!='/' && buffer[strlen(buffer)-1]!='\\')
-	    strcat(buffer, "/");
-	strcat(buffer, images_dir);
-    }
-    if (!pwd) {
-	pwd = getcwd(0,1024);
-	if (!pwd) {fprintf(stderr,"getcwd : %s\n",strerror(errno)); return;}
-    }
-    if (chdir(buffer)<0) {fprintf(stderr, "Can't chdir to %s : %s\n",
-	buffer, strerror(errno)); return;}
-    in_source_dir = 1;
-    
-    // Call to set_images_root_directory so that images are corretly displayed in FLUID.
-    // Construct the path name verbosely because images are loaded from draw() function and
-    // we do not know what is the cwd at this time
+void set_filename(const char *c) {
+  if (!c || !*c) {
+    delete[] filename; filename = 0;
+    delete[] file_directory; file_directory = 0;
+    SharedImage::set_root_directory(images_dir && *images_dir ? images_dir:0);
+    return;
+  }
+  if (c != filename) {
+    delete[] filename;
+    filename = newstring(c);
 #ifdef _WIN32
-    if (buffer[1] != ':') {
+    for (char* p = filename; *p; p++)
+      if (*p == '\\') *p = '/';
 #endif
-	// this is skipped on Win32 if the path has a drive letter (like "C:\whatever")
-	memmove(buffer+strlen(pwd)+1, buffer, strlen(buffer));
-	strcpy(buffer, pwd);
-	buffer[strlen(pwd)]='/';
+  }
+  delete[] file_directory;
+  file_directory = newstring(c);
+  const char* a = file_directory;
 #ifdef _WIN32
-    }
+  if (*a && a[1]==':') a+=2;
 #endif
-    SharedImage::set_root_directory(buffer);
-#endif
-}
-
-void leave_source_dir() {
-#if 0
-    if (!in_source_dir) return;
-    if (chdir(pwd)<0) {fprintf(stderr, "Can't chdir to %s : %s\n",
-			     pwd, strerror(errno));}
-    in_source_dir = 0;
-#endif
+  if (*a=='/') a++;
+  char* p = (char*)(fltk::filename_name(a));
+  if (p > a && *(p-1)=='/') p--;
+  *p = 0;
+  fix_images_dir();
 }
 
 Window *main_window;
@@ -462,11 +434,11 @@ void save_template_cb(Widget *, void *) {
 void revert_cb(Widget *,void *) {
   if (modflag) {
     if (!choice("This user interface has been changed. Really revert?",
-                   "Cancel", "Revert", NULL)) return;
+                "Cancel", "Revert", NULL)) return;
   }
   Undo::suspend();
   if (!read_file(filename, 0)) {
-      Undo::resume();
+    Undo::resume();
     message("Can't read %s: %s", filename, strerror(errno));
     return;
   }
@@ -503,62 +475,53 @@ void exit_cb(Widget *,void *) {
 }
 
 void open_cb(Widget *, void *v) {
-    if (!v && modflag && !ask("Discard changes?")) return;
-    const char *c;
-    if (!(c = file_chooser("Open:", "*.f[ld]", filename))) return;
-    if (!fltk::filename_exist(c)) {
-	message("%s not found", c);
-	return;
-    }
-    Undo::suspend();
+  if (!v && modflag && !ask("Discard changes?")) return;
+  const char *c;
+  if (!(c = file_chooser("Open:", "*.f[ld]", filename))) return;
+  if (!fltk::filename_exist(c)) {
+    message("%s not found", c);
+    return;
+  }
+  Undo::suspend();
 
-    if (!v) set_filename(c);
-    if (!read_file(c, v!=0)) {
-	message("Can't read %s: %s", c, strerror(errno));
-    } else {
-	if (!v) modflag = 0;
-	else modflag = 1;
-    }
-    Undo::resume();
-    Undo::clear();
+  if (!v) set_filename(c);
+  if (!read_file(c, v!=0)) {
+    message("Can't read %s: %s", c, strerror(errno));
+  } else {
+    if (!v) modflag = 0;
+    else modflag = 1;
+  }
+  Undo::resume();
+  Undo::clear();
 }
 
 void open_history_cb(Widget *, void *v) {
-    if (modflag) {
-	switch (choice("Do you want to save changes to this user\n"
-	    "interface before opening another one?", "Cancel",
-	    "Save", "Don't Save"))
-	{
-	case 0 : /* Cancel */
-	    return;
-	case 1 : /* Save */
-	    save_cb(NULL, NULL);
-	    if (modflag) return;	// Didn't save!
-	}
-    }
-    const char *oldfilename = (char *)v;
-    if (!fltk::filename_exist(oldfilename )) {
-	message("%s not found", oldfilename );
-	check_history(oldfilename);
-	return;
-    }
-    oldfilename=filename;
-    filename = NULL;
-    set_filename((char *)v);
-    Undo::suspend(); 
-    if (!read_file(filename, 0)) {
-	Undo::resume();
-	Undo::clear();
-	message("Can't read %s: %s", filename, strerror(errno));
-	free((void *)filename);
-	filename = oldfilename;
-	if (main_window) main_window->label(filename);
-	return;
-    }
-    modflag = 0;
-    Undo::resume();
-    Undo::clear();
-    if (oldfilename) free((void *)oldfilename);
+  if (modflag) {
+    switch (choice("Do you want to save changes to this user\n"
+                   "interface before opening another one?", "Cancel",
+                   "Save", "Don't Save"))
+      {
+      case 0 : /* Cancel */
+        return;
+      case 1 : /* Save */
+        save_cb(NULL, NULL);
+        if (modflag) return;	// Didn't save!
+      }
+  }
+  char *oldfilename = (char *)v;
+  if (!fltk::filename_exist(oldfilename )) {
+    message("%s not found", oldfilename );
+    check_history(oldfilename);
+    return;
+  }
+  set_filename(oldfilename);
+  Undo::suspend(); 
+  if (!read_file(filename, 0)) {
+    message("Can't read %s: %s", filename, strerror(errno));
+  }
+  modflag = 0;
+  Undo::resume();
+  Undo::clear();
 }
 
 static char* cutfname(int which = 0) {
@@ -724,9 +687,7 @@ void write_cb(Widget *, void *) {
     } else {
 	strcpy(hname, header_file_name);
     }
-    if (!compile_only) goto_source_dir();
     int x = write_code(cname,hname);
-    if (!compile_only) leave_source_dir();
     strcat(cname, "/"); strcat(cname,header_file_name);
     if (compile_only) {
 	if (!x) {fprintf(stderr,"%s : %s\n",cname,strerror(errno)); exit(1);}
@@ -842,6 +803,7 @@ void about_cb(Widget *, void *) {
 void show_help(const char *name) {
   const char	*docdir;
   char		helpname[1024];
+  static HelpDialog *help_dialog = 0;
   
   if (!help_dialog) help_dialog = new HelpDialog();
 
@@ -1268,25 +1230,6 @@ void update_sourceview_cb(Button*, void*) {
 void update_sourceview_timer(void*)  {
   update_sourceview_cb(0,0);
 }
-////////////////////////////////////////////////////////////////
-void set_filename(const char *c) {
-    if (filename) free((void *)filename);
-    filename = c ? strdup(c) : 0;
-    if (c && strlen(c)) update_history(c);
-    
-    if (main_window) main_window->label(filename);
-    
-    /* Change directory to .fl file directory
-    * so generated .h/.cxx files goes there also.
-    */
-    char curdir[1024]; 
-    const char *start = c;
-    const char *end = filename_name(c);
-    int len = end-start;
-    strncpy(curdir, start, len);
-    curdir[len] = 0;
-    chdir(curdir);
-}
 
 ////////////////////////////////////////////////////////////////
 // Check that file is valid, remove from history if not
@@ -1420,69 +1363,69 @@ extern "C" {
 #endif
 
 int main(int argc,char **argv) {
-    int i = 1;
-    if (!args(argc,argv,i,::arg) || i < argc-1) {
-	fprintf(stderr,"usage: %s <switches> name.fl\n"
+  int i = 1;
+  if (!args(argc,argv,i,::arg) || i < argc-1) {
+    fprintf(stderr,"usage: %s <switches> name.fl\n"
 	    " -c : write .cxx and .h and exit\n"
 	    " -o <name> : .cxx output filename, or extension if <name> starts with '.'\n"
 	    " -h <name> : .h output filename, or extension if <name> starts with '.'\n"
 	    "%s\n", argv[0], help);
-	return 1;
-    }
-    const char *c = argv[i];
-    
-    register_images();
+    return 1;
+  }
+  const char *c = argv[i];
 
-    Window * sw = 0;
-    double splash_time = fltk::get_time_secs();
-    if(!compile_only && prefs.show_splash()) sw = splash();
+  register_images();
 
-    fluid_style_set = new StyleSet();
-    style_set = new StyleSet();
-    
-    read_plugins();
-    make_main_window();
-    load_coding_style();
-    
-    if (c) set_filename(c);
-    if (!compile_only) {
-    	visual(DOUBLE_BUFFER|INDEXED_COLOR);
+  Window * sw = 0;
+  double splash_time = fltk::get_time_secs();
+  if(!compile_only && prefs.show_splash()) sw = splash();
 
-	FileIcon::load_system_icons();
-	main_window->callback(exit_cb);
-	main_window->show(argc,argv);
-	set_preferences_window();
-	position_window(main_window,"main_window_pos", 1, 10, 30, WINWIDTH, WINHEIGHT );
-	toggle_widgetbin_cb(0,0);
-	toggle_sourceview_cb(0,0);
-	if (!c && openlast_button->value() && absolute_history[0][0]) {
-	    // Open previous file when no file specified...
-	    open_history_cb(0, absolute_history[0]);
-	}
-	if(sw) sw->show(); // keep splash screen on top if any
-    }
-    Undo::suspend();
-    if (c && !read_file(c,0)) {
-	if (compile_only) {
-	    Undo::resume();
-	    fprintf(stderr,"%s : %s\n", c, strerror(errno));
-	    exit(1);
-	}
-	message("Can't read %s: %s", c, strerror(errno));
+  fluid_style_set = new StyleSet();
+  style_set = new StyleSet();
+
+  read_plugins();
+  make_main_window();
+  load_coding_style();
+
+  if (c) set_filename(c);
+  if (!compile_only) {
+    visual(DOUBLE_BUFFER|INDEXED_COLOR);
+
+    FileIcon::load_system_icons();
+    main_window->callback(exit_cb);
+    main_window->show(argc,argv);
+    set_preferences_window();
+    position_window(main_window,"main_window_pos", 1, 10, 30, WINWIDTH, WINHEIGHT );
+    toggle_widgetbin_cb(0,0);
+    toggle_sourceview_cb(0,0);
+    if (!c && openlast_button->value() && absolute_history[0][0]) {
+      // Open previous file when no file specified...
+      open_history_cb(0, absolute_history[0]);
     }
     if(sw) sw->show(); // keep splash screen on top if any
-    Undo::resume();
-    if (compile_only) {write_cb(0,0); exit(0);}
-    modflag = 0;
-#ifndef _WIN32
-    signal(SIGINT,sigint);
-#endif
-    if (sw) { // hide splash screen if still visible (no escape have been pressed)
-	while(sw->visible() && fltk::get_time_secs()-splash_time<1.0)
-	    fltk::check();
-	sw->hide();
+  }
+  Undo::suspend();
+  if (c && !read_file(c,0)) {
+    if (compile_only) {
+      Undo::resume();
+      fprintf(stderr,"%s : %s\n", c, strerror(errno));
+      exit(1);
     }
-    return run();
+    message("XCan't read %s: %s", c, strerror(errno));
+  }
+  if(sw) sw->show(); // keep splash screen on top if any
+  Undo::resume();
+  if (compile_only) {write_cb(0,0); exit(0);}
+  modflag = 0;
+#ifndef _WIN32
+  signal(SIGINT,sigint);
+#endif
+  if (sw) { // hide splash screen if still visible (no escape have been pressed)
+    while(sw->visible() && fltk::get_time_secs()-splash_time<1.0)
+      fltk::check();
+    sw->hide();
+  }
+  return run();
 
 }
 

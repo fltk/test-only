@@ -100,16 +100,14 @@ protected:
     available only until next call to get_filename */
   const char* get_filename() const;
 
-  static const char* get_filename(const char*);
-
   virtual bool fetch() = 0; // force fetch() to be defined by subclasses
 
   static void insert(SharedImage*& p, SharedImage* image);
   static SharedImage* find(SharedImage* image, const char* name);
   void remove_from_tree(SharedImage*& p, SharedImage* image);
 
-
 public:
+
   static SharedImage  *first_image;
 
   /*! Return an SharedImage, using the create function if an image with
@@ -135,6 +133,9 @@ public:
 
   /*! Set the position where images are looked for on disk */
   static void set_root_directory(const char* d);
+
+  /*! Expand a name relative to root to see what file it will read */
+  static const char* get_filename(const char*);
 
   /*! Set the size of the cache (0 = unlimited is the default) */
   static void set_cache_size(unsigned l);

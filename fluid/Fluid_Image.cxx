@@ -38,13 +38,6 @@
 #include <stdlib.h>
 #include <fltk/filename.h>
 
-extern void goto_source_dir(); // in fluid.C
-extern void goto_images_dir(); // in fluid.cxx
-extern void leave_source_dir(); // in fluid.C
-#define leave_images_dir() leave_source_dir()
-
-const char *images_dir = "";
-
 ////////////////////////////////////////////////////////////////
 
 static uchar* store_datas_from_file(const char *filename, size_t &size)
@@ -102,7 +95,6 @@ void generic_image::write_static() {
   }
   if (inlined) {
     size_t l=0;
-    goto_images_dir();
     if (filetype->name && !strcasecmp(filetype->name, "xpm")) {
       write_c("static const char *%s[] = {\n",
 	      unique_id(this, "datas", fltk::filename_name(name()), 0));
@@ -137,7 +129,6 @@ void generic_image::write_static() {
 	free(d);
       }
     }
-    leave_images_dir();
   }
 }
 
@@ -156,7 +147,7 @@ void generic_image::write_code() {
 }
 
 generic_image::generic_image(const char *name ) : Fluid_Image(name) {
-  filetype = fltk::guess_image((char *) name);
+  filetype = fltk::guess_image(fltk::SharedImage::get_filename(name));
   p = filetype->get((char*) name, 0);
   inlined = 1;
 }
@@ -291,12 +282,11 @@ Fluid_Image* Fluid_Image::find(const char *name) {
 
   Fluid_Image *ret = 0;
 
-  goto_images_dir();
-  FILE *f = fopen(name,"rb");
+  const char* realname = fltk::SharedImage::get_filename(name);
+  FILE *f = fopen(realname,"rb");
 
   if (!f) {
-    read_error("%s : %s",name,strerror(errno));
-    leave_images_dir();
+    read_error("%s : %s", realname, strerror(errno));
   } else {
     // now see if we can identify the type, by reading in some data
     // and asking all the types we know about:
@@ -314,7 +304,6 @@ Fluid_Image* Fluid_Image::find(const char *name) {
     }
     fclose(f);
   }
-  leave_images_dir();
   if (!ret) ret = new bitmap_image(name, 0);
 
   // make a new entry in the table:
@@ -361,11 +350,9 @@ Fluid_Image::~Fluid_Image() {
 #include <fltk/file_chooser.h>
 
 Fluid_Image *ui_find_image(Fluid_Image *old) {
-  goto_images_dir();
   const char *name = fltk::file_chooser("Image", "*.{bm|xbm|xpm|gif|png|bmp|jpg|jpeg}",
 				     old ? old->name() : 0);
   Fluid_Image *ret = (name && *name) ? Fluid_Image::find(name) : 0;
-  leave_images_dir();
   return ret;
 }
 
@@ -377,6 +364,9 @@ void browse_dir_cb();
 #include "image_file_panel.h"
 #include "image_file_panel.cxx"
 
+const char *images_dir = 0;
+extern void fix_images_dir();
+
 void browse_dir_cb()
 {
   const char *f = fltk::file_chooser("Images directory","",
@@ -385,15 +375,16 @@ void browse_dir_cb()
 }
 
 void set_images_dir_cb(fltk::Widget *, void *) {
-  goto_source_dir();
   if(!images_dir_window) make_images_dir_window();
   images_dir_input->value(images_dir);
   images_dir_window->show();
   cancel=0; modal=1;
   while(modal) fltk::wait();
-  if(!cancel)
+  if (!cancel) {
     images_dir = images_dir_input->value();
-  leave_source_dir();
+    if (!*images_dir) images_dir = 0;
+    fix_images_dir();
+  }
 }
  
 //
