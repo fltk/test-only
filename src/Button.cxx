@@ -127,14 +127,16 @@ int Button::handle(int event, const Rectangle& rectangle) {
   case SHORTCUT:
     if (!test_shortcut()) return 0;
   EXECUTE:
-    if (type() == RADIO && !value()) {
-      setonly();
-      if (when() & WHEN_CHANGED) do_callback();
+    if (type() == RADIO) {
+      if (!value()) {
+        setonly();
+        if (when() & WHEN_CHANGED) do_callback(); else set_changed();
+      }
     } else if (type()) { // TOGGLE
       value(!value());
-      if (when() & WHEN_CHANGED) do_callback();
+      if (when() & WHEN_CHANGED) do_callback(); else set_changed();
     }
-    if (when() & WHEN_RELEASE) do_callback(); else set_changed();
+    if (when() & WHEN_RELEASE) do_callback();
     return 1;
   default:
     return 0;
