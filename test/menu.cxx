@@ -35,9 +35,9 @@ void callback(Widget* w, void*) {
 }
 
 const char* const strings[] = {
-  "This","is","a","test","of","a","menu","defined","as a","StringList"
+  "This","is","a","test","of","a","menu","defined","as a","StringArray"
 };
-StringList thelist(strings, sizeof(strings)/sizeof(*strings));
+StringArray thelist(strings, sizeof(strings)/sizeof(*strings));
 
 void build_hierarchy() {
   new Item("&Alpha");
