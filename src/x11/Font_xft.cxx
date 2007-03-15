@@ -336,14 +336,6 @@ static int sort_function(const void *aa, const void *bb) {
   return a->attributes_ - b->attributes_;
 }}
 
-// Apparently the 2nd name is more interesting than the first (?)
-static const char* getfamily(FcPattern* p) {
-  FcChar8* s;
-  if (FcPatternGetString(p, FC_FAMILY, 1, &s) != 0)
-    FcPatternGetString(p, FC_FAMILY, 0, &s);
-  return (const char*)s;
-}
-
 int fltk::list_fonts(fltk::Font**& arrayp) {
   static fltk::Font** font_array = 0;
   static int num_fonts = 0;
@@ -378,8 +370,15 @@ int fltk::list_fonts(fltk::Font**& arrayp) {
   int k = 0;
   for (int i = 0; i < num_fonts; i++) {
     FcPattern* p = fnt_set->fonts[i];
-    const char* n = getfamily(p);
-    if (!isalpha(n[0])) continue;
+    const char* n = 0;
+    FcPatternGetString(p, FC_FAMILY, 0, (FcChar8**)(&n));
+    if (!n /*|| !isalpha(n[0])*/) continue;
+//     for (int kk=1;;kk++) {
+//       const char* x = 0;
+//       FcPatternGetString(p, FC_FAMILY, kk, (FcChar8**)(&x));
+//       if (!x) break;
+//       printf("%s is also \"%s\"\n", n,x);
+//     }
     const char* name = newstring(n);
     IFont* newfont = fonts+4*k;
     font_array[k] = &(newfont->f);
