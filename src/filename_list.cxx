@@ -80,8 +80,10 @@ int fltk::filename_list(const char *d, dirent ***list,
   int n = scandir(d, list, 0, (int(*)(const void*,const void*))sort);
 #endif
 
+#if 0 // Add a slash to all directories...
 #if defined(WIN32) && !defined(__CYGWIN__)
   // we did this already during fl_scandir/win32
+  // WAS: no it isn't!
 #else
   // append a '/' to all filenames that are directories
   int i, dirlen = strlen(d);
@@ -105,6 +107,8 @@ int fltk::filename_list(const char *d, dirent ***list,
   }
   free(fullname);
 #endif
+#endif
+
   return n;
 }
 
