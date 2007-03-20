@@ -974,8 +974,6 @@ static bool open_stylus_device(XDeviceInfo *list, int i, int n) {
 }
 
 bool fltk::enable_tablet_events() {
-  e_pressure = 0.0f; // indicate uninitialised data
-  e_x_tilt = e_y_tilt = 0.0f;
   open_display();
   // check if there is an XInput extension on this machine
   XExtensionVersion	*version;
@@ -1496,13 +1494,6 @@ bool fltk::handle()
     unsigned n = xevent.xbutton.button;
     e_keysym = n;
     set_event_xy(true);
-    // turn off is_click if enough time or mouse movement has passed:
-    if (e_is_click == e_keysym) {
-      e_clicks++;
-    } else {
-      e_clicks = 0;
-      e_is_click = e_keysym;
-    }
     if (n == wheel_up_button) {
       e_dy = -1;
       event = MOUSEWHEEL;
@@ -1510,6 +1501,13 @@ bool fltk::handle()
       e_dy = +1;
       event = MOUSEWHEEL;
     } else {
+      // turn off is_click if enough time or mouse movement has passed:
+      if (e_is_click == e_keysym) {
+        e_clicks++;
+      } else {
+        e_clicks = 0;
+        e_is_click = e_keysym;
+      }
       e_state |= BUTTON(n);
       event = PUSH;
     }}
