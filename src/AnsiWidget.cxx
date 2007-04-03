@@ -35,6 +35,7 @@
 #include <fltk/Font.h>
 #include <fltk/Rectangle.h>
 #include <fltk/Group.h>
+#include <fltk/ask.h>
 
 #if defined(WIN32) 
 #include <fltk/win32.h>
@@ -328,7 +329,8 @@ int AnsiWidget::getPixel(int x, int y) {
   // needs to return a -ve number to distiguish from basic 16 color values
   // unpacked in later calls to ansiToFltk()
   return -::GetPixel(fl_bitmap_dc, x, y);
-
+#elif defined(__APPLE__)
+  // TODO !
 #else
   XImage *image = 
     XGetImage(fltk::xdisplay, xwindow, x, y, 1, 1, AllPlanes, ZPixmap);
@@ -337,20 +339,14 @@ int AnsiWidget::getPixel(int x, int y) {
     XDestroyImage(image);
     return -color;
   }
-  return 0;
 #endif
+  return 0;
 }
 
 /*! create audible beep sound
  */
 void AnsiWidget::beep() const {
-#ifdef WIN32
-  MessageBeep(MB_ICONASTERISK);
-#elif defined(__APPLE__)
-  SysBeep(30);
-#else
-  XBell(fltk::xdisplay, 100);
-#endif
+  fltk::beep(fltk::BEEP_MESSAGE);
 }
 
 /*! Returns the width in pixels using the current font setting
