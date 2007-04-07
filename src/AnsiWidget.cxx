@@ -324,14 +324,7 @@ void AnsiWidget::setPixel(int x, int y, int c) {
 /*! returns the color of the pixel at the given xy location
  */
 int AnsiWidget::getPixel(int x, int y) {
-#if defined(WIN32) 
-  begin_offscreen();
-  // needs to return a -ve number to distiguish from basic 16 color values
-  // unpacked in later calls to ansiToFltk()
-  return -::GetPixel(fl_bitmap_dc, x, y);
-#elif defined(__APPLE__)
-  // TODO !
-#else
+#if USE_X11
   XImage *image = 
     XGetImage(fltk::xdisplay, xwindow, x, y, 1, 1, AllPlanes, ZPixmap);
   if (image) {
@@ -339,6 +332,13 @@ int AnsiWidget::getPixel(int x, int y) {
     XDestroyImage(image);
     return -color;
   }
+#elif defined(_WIN32)
+  begin_offscreen();
+  // needs to return a -ve number to distiguish from basic 16 color values
+  // unpacked in later calls to ansiToFltk()
+  return -::GetPixel(fl_bitmap_dc, x, y);
+#elif defined(__APPLE__)
+  // TODO !
 #endif
   return 0;
 }

@@ -11,6 +11,7 @@ fltk::Window* make_window() {
   fltk::Window* w;
    {fltk::Window* o = new fltk::Window(490, 190);
     w = o;
+    o->shortcut(0xff1b);
     o->begin();
      {fltk::Output* o = key_output = new fltk::Output(15, 15, 170, 30, "Fl::event_key():");
       o->textfont(fltk::COURIER);

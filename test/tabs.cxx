@@ -82,6 +82,7 @@ int main (int argc, char **argv) {
         }
          {fltk::Clock* o = new fltk::Clock(155, 13, 100, 100, "Make sure this clock does not use processor time when this tab is hidden or w\
 indow is iconized");
+          o->box(fltk::OSHADOW_BOX);
           o->labelfont(fltk::TIMES);
           o->color((fltk::Color)238);
           o->labelsize(10);
