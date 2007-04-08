@@ -147,8 +147,7 @@ SharedImage* SharedImage::get(SharedImage* (*create)(),
     image=create();
     image->refcount = 1;
     image->name = newstring(name);
-    image->datas=datas;
-    image->setsize(-1,-1); // We mark the fact the it has never been measured yet
+    image->datas = datas;
     image->l1 = image->l2 = 0;
     SharedImage::insert(first_image, image);
   } else {

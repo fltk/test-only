@@ -106,6 +106,16 @@ PixelType Image::buffer_pixeltype() const {
   return ARGB32;
 }
 
+void Image::set_forceARGB32() {
+  flags |= FORCEARGB32;
+  // This does nothing, as it always is ARGB32
+}
+
+void Image::clear_forceARGB32() {
+  flags &= ~FORCEARGB32;
+  // This does nothing, as it always is ARGB32
+}
+
 unsigned long Image::mem_used() const {
   if (picture) return picture->n;
   return 0;
@@ -259,11 +269,6 @@ void Image::fetch_if_needed() const {
     Image* thisimage = const_cast<Image*>(this);
     thisimage->fetch();
     thisimage->flags |= FETCHED;
-    // make errors have non-zero size:
-    if (w_ < 0 || h_ < 0) {
-      thisimage->destroy();
-      thisimage->w_ = thisimage->h_ = 12;
-    }
   }
 }
 

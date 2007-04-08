@@ -633,7 +633,7 @@ static void mrgb32_converter(const uchar* from, uchar* to, int w) {
 
 ////////////////////////////////////////////////////////////////
 
-static XImage i;	// this is reused to draw an images
+static XImage i;	// this is reused to draw images
 static int bytes_per_pixel;
 static int scanline_add;
 static int scanline_mask;
@@ -1105,6 +1105,16 @@ int Image::buffer_depth() const {
   return bytes_per_pixel;
 }
 
+void Image::set_forceARGB32() {
+  flags |= FORCEARGB32;
+  // NYI!!! (though it does nothing if USE_XFT is on)
+}
+
+void Image::clear_forceARGB32() {
+  flags &= ~FORCEARGB32;
+  // NYI!!! (though it does nothing if USE_XFT is on)
+}
+
 PixelType Image::buffer_pixeltype() const {
   if (!bytes_per_pixel) figure_out_visual();
 #if USE_XFT
@@ -1262,11 +1272,6 @@ void Image::fetch_if_needed() const {
   if (!(flags&FETCHED)) {
     thisimage->fetch();
     thisimage->flags |= FETCHED;
-    // make errors have non-zero size:
-    if (w_ < 0 || h_ < 0) {
-      thisimage->destroy();
-      thisimage->w_ = thisimage->h_ = 12;
-    }
   }
 }
 

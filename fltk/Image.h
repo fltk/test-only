@@ -34,14 +34,14 @@ class FL_API Image : public Symbol {
 
   PixelType pixeltype_; int w_, h_;
   Picture* picture;
-  int flags; enum {COPIED=1, FETCHED=2, SHAREDDATA=4, MEASUREFETCH=8};
+  int flags; enum {COPIED=1, FETCHED=2, FORCEARGB32=4, MEASUREFETCH=8};
 
   static unsigned long memused_;
 
 public:
 
   Image(const char* name=0) :
-    Symbol(name), pixeltype_(fltk::RGB32), w_(-1), h_(-1),
+    Symbol(name), pixeltype_(fltk::RGB32), w_(12), h_(12),
     picture(0), flags(MEASUREFETCH) {}
   Image(int w, int h, const char* name=0) :
     Symbol(name), pixeltype_(fltk::RGB32), w_(w), h_(h),
@@ -74,6 +74,9 @@ public:
 
   uchar* buffer();
   const uchar* buffer() const;
+  void set_forceARGB32();
+  void clear_forceARGB32();
+  bool forceARGB32() const {return (flags&FORCEARGB32) != 0;}
   PixelType buffer_pixeltype() const;
   int buffer_depth() const;
   int buffer_width() const;

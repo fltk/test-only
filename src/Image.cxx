@@ -28,18 +28,48 @@
 
 /*! \class fltk::Image
 
-  A rectangular buffer of pixels that the program can write (and
-  read?) and can be efficiently drawn on the screen. The draw()
-  functions will copy (or "over" composite if there is alpha in the
-  pixeltype()) onto the output, transformed by the current transform.
+  A rectangular buffer of pixels that can be efficiently drawn on the
+  screen. The draw() functions will copy (or "over" composite if there
+  is alpha in the pixeltype()) onto the output, transformed by the
+  current transform.
 
-  If you already have a set of pixels sitting in your own memory,
+  NOTE: If you already have a set of pixels sitting in your own memory,
   drawimage() can draw it and is \e much easier to use. You should use
-  this class only if you will be drawing the \e same image multiple
-  times (with no changes to the pixels), or if you can efficiently use
-  the linebuffer() and setpixels() functions to write your image to
-  the buffer as you generate it. Otherwise you will have no efficiency
-  advantages over drawimage() and it may actually perform worse.
+  this class \e only if you will be drawing the \e same image multiple
+  times, with no changes to the pixels.
+
+  The buffer is created and filled in by setting the type of pixels
+  with setpixeltype(), the size with setsize(), and then calling
+  buffer() (note that setpixels() calls buffer() for you). The initial
+  buffer is filled with undefined contents.
+
+  The best way to put data into the buffer is to make one or more
+  calls to setpixels(), to replace rectangular regions.
+
+  You can directly address the buffer() to read and write the
+  pixels. The size of the buffer is in buffer_width() and
+  buffer_height() (this may be much larger than width() and height())
+  and the distance between lines is in buffer_linedelta(). If you
+  change any pixels you should call buffer_changed() before the
+  next draw().
+
+  Due to operating system limitations, buffer() is usually not an
+  array of pixeltype() pixels. Instead setpixels() converts pixels
+  into a type the operating system can use. The type of pixels in the
+  buffer is retured by buffer_pixeltype(). This is really
+  inconvienent, so you can also call the method
+  force_ARGB32_on(). This will cause buffer_pixeltype() to return
+  ARGB32, so you can assume this at compile time. The implementation
+  of Image may be less efficient (actually the overhead is zero on
+  Windows and close to zero on most other systems)
+
+  If buffer() has not been called, draw() will call the
+  fetch() virtual method. It should call setpixeltype(), setsize() and
+  setpixels(). This is used to defer reading image files or
+  decompressing data until needed.  fetch() will also restore the
+  buffer contents to the original values if you have written to the
+  buffer. If fetch() does not allocate a buffer, draw() will draw a
+  solid rectangle in the current color.
 
   Because Image is a subclass of Symbol, it may be used as a
   Widget::image() or as the box() in a Style. If you give it a name it
@@ -78,13 +108,13 @@ using namespace fltk;
 
 /*! \fn Image::Image(int w, int h, const char* name)
   Does setsize(w,h). This causes the width() and height() to return
-  the passed values. No buffer is allocated, call allocate() to do that.
+  the passed values. No buffer is allocated, call buffer() to do that.
   The pixeltype() is set to RGB32 (0x00rrggbb).
 */
 
 /*! \fn Image::Image(PixelType p, int w, int h, const char* name)
   Does pixeltype(p) and setsize(w,h). No buffer is allocated, call
-  allocate() to do that.
+  buffer() to do that.
 */
 
 /*! \fn Image::Image(const uchar* data, PixelType, int w, int h, int linedelta)
@@ -407,7 +437,7 @@ void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
 		     const Rectangle& r,
 		     int line_delta) {
   if (innards(pointer, type, r, line_delta, 0, 0)) return;
-  // Fake it using a temporary image
+  // Fake it using a temporary Image
   if (!reused_image) reused_image = new Image();
   reused_image->setimage(pointer, type, r.w(), r.h(), line_delta);
   reused_image->draw(Rectangle(r.w(),r.h()), r);
@@ -472,8 +502,7 @@ void fltk::drawimage(DrawImageCallback cb,
 		     void* userdata, fltk::PixelType type,
 		     const Rectangle& r) {
   if (innards(0, type, r, 0, cb, userdata)) return;
-  // fake it using an Image object
-  // Fake it using a temporary image
+  // Fake it using a temporary Image
   if (!reused_image) reused_image = new Image();
   reused_image->setpixeltype(type);
   reused_image->setsize(r.w(), r.h());
