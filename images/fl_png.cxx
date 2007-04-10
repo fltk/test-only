@@ -30,13 +30,7 @@
 
 #if HAVE_LIBPNG
 
-# ifdef HAVE_LOCAL_PNG_H
-# include "libpng/png.h"
-#elif defined(HAVE_PNG_H)
-# include <png.h>
-#elif defined(HAVE_LIBPNG_PNG_H)
-# include <libpng/png.h>
-#endif
+#include <libpng/png.h>
 
 # include <stdlib.h>
 

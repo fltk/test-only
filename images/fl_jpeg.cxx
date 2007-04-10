@@ -31,13 +31,7 @@
 #if HAVE_LIBJPEG
 
 #include <stdio.h>
-extern "C" {
-# ifdef HAVE_LOCAL_JPEG_H
-#  include "libjpeg/jpeglib.h"
-# else
-#  include <jpeglib.h>
-# endif
-}
+#include <libjpeg/jpeglib.h>
 #include <setjmp.h>
 #include <string.h>
 
