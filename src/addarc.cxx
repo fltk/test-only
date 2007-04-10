@@ -98,7 +98,7 @@ void fltk::addarc(float l, float t, float w, float h, float start, float end)
   int i = int(ceilf(fabsf(angle)/epsilon));// Segments in approximation
   if (i > MAXPOINTS-1) i = MAXPOINTS-1;
 
-  if (i) {
+  if (i>0) {
     epsilon = angle/i;		// Arc length for equal-size steps
     // calculate transformation matrix that does rotation by epsilon in
     // a scaled by w,h coordinate system. We could in fact figure out a
