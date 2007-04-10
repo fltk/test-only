@@ -177,11 +177,11 @@ unsigned fltk::key(const char* name) {
   int shifts = 0;
   while (name[0] && name[1]) {
     if (*name == '#') {
-      shifts |= fltk::ACCELERATOR; name++;
+      shifts |= fltk::ALT; name++;
     } else if (*name == '+') {
       shifts |= fltk::SHIFT; name++;
     } else if (*name == '^') {
-      shifts |= fltk::COMMAND; name++;
+      shifts |= fltk::COMMAND; name++; // ctrl on win/linux, meta on os/x
     } else if (!strncasecmp(name, "alt",  3) && (name[3]=='-'||name[3]=='+')) {
       shifts |= fltk::ALT; name += 4;
     } else if (!strncasecmp(name, "shift",5) && (name[5]=='-'||name[5]=='+')) {
@@ -190,10 +190,10 @@ unsigned fltk::key(const char* name) {
       shifts |= fltk::CTRL; name += 5;
     } else if (!strncasecmp(name, "meta", 4) && (name[4]=='-'||name[4]=='+')) {
       shifts |= fltk::META; name += 5;
-    } else if (!strncasecmp(name,"accelerator",11)&& (name[11]=='-'||name[11]=='+')) {
-      shifts |= fltk::ACCELERATOR; name += 12;
-    } else if (!strncasecmp(name,"command",7)&& (name[7]=='-'||name[7]=='+')) {
-      shifts |= fltk::COMMAND; name += 8;
+//     } else if (!strncasecmp(name,"accelerator",11)&& (name[11]=='-'||name[11]=='+')) {
+//       shifts |= fltk::ACCELERATOR; name += 12;
+    } else if (!strncasecmp(name, "cmd", 3) && (name[3]=='-'||name[3]=='+')) {
+      shifts |= fltk::COMMAND; name += 4; // ctrl on win/linux, meta on os/x
     } else break;
   }
   if (!*name) return 0;
