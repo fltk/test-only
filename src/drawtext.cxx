@@ -508,7 +508,7 @@ static float split(
       x = 0; y = max_y;
       column = column_widths_;
       current_column = 0;
-      ::flags = flags;
+      //::flags = flags;
     } else { // tab
       x += w;
       current_column++;
