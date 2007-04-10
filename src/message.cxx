@@ -121,7 +121,7 @@ static int innards(
   }
 
   window.resizable(message);
-  window.resize_align(ALIGN_RIGHT);
+  window.resize_align(ALIGN_TOP|ALIGN_RIGHT);
 //  w->size_range(window.w(), window.h(), 0, window.h());
 
   char buffer[1024];
@@ -137,7 +137,7 @@ static int innards(
   window.end();
   window.layout();
   setfont(message.labelfont(), message.labelsize());
-  int w = 800;
+  int w = 400;
   int h = 0;
   measure(message.label(), w, h, message.flags());
   w+=6; h+=6;
