@@ -320,6 +320,8 @@ void glWindowPos2i(int x, int y) {
 }
 #endif
 
+const char* fl_default_font_pathname;
+
 #if USE_XFT
 
 static int nextpow2(int a) {
@@ -347,6 +349,11 @@ static void glXUseXftFont(XftFont* xftfont, unsigned listbase) {
   int maxy = 1;
 
   FT_Face face = XftLockFace(xftfont);
+
+  // hack so Nuke knows where to look for fonts...
+  if (!fl_default_font_pathname)
+    fl_default_font_pathname = (char*)(face->stream->pathname.pointer);
+
 //   if (!face->charmap && face->num_charmaps)
 //     FT_Set_Charmap(face, face->charmaps[0]);
   int prev_pixel_mode = FT_PIXEL_MODE_GRAY;
