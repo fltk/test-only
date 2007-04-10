@@ -62,6 +62,8 @@ static LabelType normalLabel("normal");
 LabelType* const fltk::NORMAL_LABEL = &normalLabel;
 LabelType* const fltk::SYMBOL_LABEL = &normalLabel;
 
+LabelType::~LabelType() {}
+
 ////////////////////////////////////////////////////////////////
 
 class FL_API NoLabel : public LabelType {

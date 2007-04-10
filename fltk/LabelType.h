@@ -44,7 +44,7 @@ public:
   static LabelType* first;
   LabelType(const char* n) : name(n), next(first) {first = this;}
   static LabelType* find(const char* name);
-  // virtual ~LabelType() {} // not done as it slows program exit
+  virtual ~LabelType(); // virtual to shut up C++ warnings
 };
 
 // You can use this to draw overlapping patterns
