@@ -5,6 +5,39 @@
 #include <stdio.h>
 using namespace fltk;
 
+/*! \class fltk::ProgressBar
+
+  ProgressBar is a widget meant to display progress of some operation.
+  maximum() and optionally minimum() values should be set, and for
+  each step of operation step() should be called.
+*/
+
+/*! \fn ProgressBar::minimum(double nm)
+  Set minimal value for in the progess widget.
+*/
+
+/*! \fn ProgressBar::maximum(double nm)
+  Set maximal value for in the progess widget. It should represent operation length.
+*/
+
+/*! \fn ProgressBar::position(double value)
+  Set position of bar in progress widget and redraw it. If value
+  goes out of minimum()/maximum() bounds, it will be ignored.
+*/
+
+/*! \fn ProgressBar::step(double step)
+  Increase bar length with given step and redraw widget. If value
+  goes out of minimum() and maximum() bounds, it will be ignored.
+*/
+
+/*! \fn ProgressBar::range(double min, double max, double step)
+  A shorthand for minimum(), maximum() and step().
+*/
+
+/*! \fn ProgressBar::showtext(bool st)
+  Shows completition percentage inside progress widget.
+*/
+
 ProgressBar::ProgressBar(int x, int y, int w, int h, const char *lbl)
   : Widget(x,y,w,h,lbl)
 {
