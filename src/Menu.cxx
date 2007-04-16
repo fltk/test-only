@@ -313,8 +313,6 @@ Widget* Menu::child(int n) const {
   callback. This does not produce any visible change for the user.
 */
 
-FL_API bool fl_dont_execute; // hack for fluid
-
 /*!
   Calls do_callback(). First it sets item() to the given widget, so
   the callback code can see it.
@@ -323,10 +321,14 @@ FL_API bool fl_dont_execute; // hack for fluid
   on the menu item. However the default callback for Menu widget does
   item()->do_callback() so by default the callback for each menu item
   is done.
+
+  Callbacks for items can be disabled, so item()->when(WHEN_NEVER) will
+  disable it for named item, but calling when(WHEN_NEVER) with menu instance
+  will disable callbacks for all menu items (but not for the menu itself).
 */
 void Menu::execute(Widget* widget) {
   item(widget);
-  if (fl_dont_execute) return;
+  if(when() == WHEN_NEVER || item()->when() == WHEN_NEVER) return;
   if (widget) do_callback();
 }
 

@@ -64,18 +64,18 @@ Widget *SubmenuType::widget(int,int,int,int) {
 // This is the base class for widgets that contain a menu (ie
 // subclasses of fltk::Menu).
 
-extern FL_API bool fl_dont_execute; // in Menu.cxx
-
 FluidType* MenuType::click_test(int, int) {
   if (selected()) return 0; // let user move the widget
   fltk::Menu* w = (fltk::Menu*)o;
   if (!w->size()) return 0;
   Widget* save = w->item();
   w->item(0);
-  fl_dont_execute = true;
+  // disable menu items callbacks so we can do selection
+  w->when(WHEN_NEVER);
   fltk::pushed(w);
   w->handle(fltk::PUSH);
-  fl_dont_execute = false;
+  // enable them again
+  w->when(WHEN_RELEASE);
   const Widget* m = w->item();
   if (m) return (FluidType*)(m->user_data());
   w->item(save);
