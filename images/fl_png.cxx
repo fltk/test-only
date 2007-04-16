@@ -29,8 +29,14 @@
 #include <config.h>
 
 #if HAVE_LIBPNG
-
-#include <libpng/png.h>
+extern "C"
+{
+#ifdef HAVE_LOCAL_PNG_H
+#  include "libpng/png.h"
+#else
+#  include <png.h>
+#endif
+}
 
 # include <stdlib.h>
 
