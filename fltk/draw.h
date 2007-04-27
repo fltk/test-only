@@ -121,11 +121,11 @@ enum {
   JOIN_BEVEL	= 0x3000
 };
 extern FL_API int line_style_;
-inline int FL_API line_style() {return line_style_;}
+inline FL_API int line_style() {return line_style_;}
 extern FL_API float line_width_;
-inline float FL_API line_width() {return line_width_;}
+inline FL_API float line_width() {return line_width_;}
 extern FL_API const char* line_dashes_;
-inline const char* FL_API line_dashes() {return line_dashes_;}
+inline FL_API const char* line_dashes() {return line_dashes_;}
 
 /// \name Path construction
 //@{
