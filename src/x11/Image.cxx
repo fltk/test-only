@@ -43,6 +43,12 @@ static Bool use_xshm;
 static Bool use_xshm_pixmaps;
 #endif
 
+// Xlib drawing code uses memcpy and getenv
+#if !USE_XFT
+# include <string.h>
+# include <stdlib.h>
+#endif
+
 using namespace fltk;
 
 /// Converter functions:
@@ -69,11 +75,13 @@ static void mono_to_8(const uchar *from, uchar *to, int w) {
     d = 1;
     td = 1;
   }
+
+  uchar i;
   for (;; from += d, to += td) {
     r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
     g += from[0]; if (g < 0) g = 0; else if (g>255) g = 255;
     b += from[0]; if (b < 0) b = 0; else if (b>255) b = 255;
-    uchar i = (uchar)(BLACK + (b*5/256 * 5 + r*5/256) * 8 + g*8/256);
+    i = (uchar)(BLACK + (b*5/256 * 5 + r*5/256) * 8 + g*8/256);
     XColorMap& xmap = fl_xmap(i,(uchar)r,(uchar)g,(uchar)b);
     r -= xmap.r;
     g -= xmap.g;
@@ -98,11 +106,13 @@ static void rgb_to_8d(const uchar *from, uchar *to, int w, int delta) {
     d = delta;
     td = 1;
   }
+
+  uchar i;
   for (;; from += d, to += td) {
     r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
     g += from[1]; if (g < 0) g = 0; else if (g>255) g = 255;
     b += from[2]; if (b < 0) b = 0; else if (b>255) b = 255;
-    uchar i = (uchar)(BLACK + (b*5/256 * 5 + r*5/256) * 8 + g*8/256);
+    i = (uchar)(BLACK + (b*5/256 * 5 + r*5/256) * 8 + g*8/256);
     XColorMap& xmap = fl_xmap(i,(uchar)r,(uchar)g,(uchar)b);
     r -= xmap.r;
     g -= xmap.g;
@@ -138,11 +148,13 @@ static void argb32_to_8(const uchar *from, uchar *to, int w) {
     d = 4;
     td = 1;
   }
+
+  uchar i;
   for (;; from += d, to += td) {
     r += from[2]; if (r < 0) r = 0; else if (r>255) r = 255;
     g += from[1]; if (g < 0) g = 0; else if (g>255) g = 255;
     b += from[0]; if (b < 0) b = 0; else if (b>255) b = 255;
-    uchar i = (uchar)(BLACK + (b*5/256 * 5 + r*5/256) * 8 + g*8/256);
+    i = (uchar)(BLACK + (b*5/256 * 5 + r*5/256) * 8 + g*8/256);
     XColorMap& xmap = fl_xmap(i,(uchar)r,(uchar)g,(uchar)b);
     r -= xmap.r;
     g -= xmap.g;
@@ -185,11 +197,13 @@ static void mono_to_16(const uchar *from,uchar *to,int w) {
     d = 1;
     td = OUTSIZE;
   }
+
   uchar mask = fl_redmask & fl_greenmask & fl_bluemask;
+  uchar m;
   int r=ri;
   for (;; from += d, t += td) {
     r = (r&~mask) + *from; if (r > 255) r = 255;
-    uchar m = r&mask;
+    m = r&mask;
     OUTASSIGN((
       (m<<fl_redshift)+
       (m<<fl_greenshift)+
@@ -393,8 +407,10 @@ static void rgba_to_rgbx(const uchar *from, uchar *to, int w) {
 static void argb32_to_rgbx(const uchar *from, uchar *to, int w) {
   U32* t = (U32*)to;
   const U32* f = (U32*)from;
+  unsigned x;
+
   for (;;) {
-    unsigned x = *f++;
+    x = *f++;
     *t++ = (x<<8)|((x>>24)&255);
     if (!--w) break;
   }
@@ -449,27 +465,31 @@ static U32* getbuffer(int w) {
 static void mask_converter(const uchar* from, uchar* to, int w)
 {
   uchar bg[3];
-  Color c = getbgcolor(); if (!c) c = GRAY75;
-  split_color(c, bg[0],bg[1],bg[2]);
+  Color col = getbgcolor(); if (!col) col = GRAY75;
+  split_color(col, bg[0],bg[1],bg[2]);
   uchar fg[3];
-  c = getcolor(); if (!c) c = BLACK;
-  split_color(c, fg[0],fg[1],fg[2]);
+  col = getcolor(); if (!col) col = BLACK;
+  split_color(col, fg[0],fg[1],fg[2]);
 
   U32* buffer = getbuffer(w);
   U32* bp = buffer;
   char* ap = alphapointer;
   char aaccum = 0;
   char amask = ::amask;
+
+  uchar c;
+  uchar r,g,b;
+
   for (int i = 0; i < w; i++) {
-    uchar c = *from++;
+    c = *from++;
     if (c==255) {
       *bp++ = 0;
     } else {
       aaccum |= amask;
       if (c) {
-	uchar r = (c*bg[0]+(255-c)*fg[0])>>8;
-	uchar g = (c*bg[1]+(255-c)*fg[1])>>8;
-	uchar b = (c*bg[2]+(255-c)*fg[2])>>8;
+	r = (c*bg[0]+(255-c)*fg[0])>>8;
+	g = (c*bg[1]+(255-c)*fg[1])>>8;
+	b = (c*bg[2]+(255-c)*fg[2])>>8;
 	*bp++ = (r<<16)|(g<<8)|b;
       } else {
 	*bp++ = (fg[0]<<16)|(fg[1]<<8)|fg[2];
@@ -495,11 +515,14 @@ static void rgba_converter(const uchar* from, uchar* to, int w) {
   char* ap = alphapointer;
   char aaccum = 0;
   char amask = ::amask;
+
+  uchar r,g,b,a;
+
   for (int i = 0; i < w; i++) {
-    uchar r = *from++;
-    uchar g = *from++;
-    uchar b = *from++;
-    uchar a = *from++;
+    r = *from++;
+    g = *from++;
+    b = *from++;
+    a = *from++;
     if (!a) {
       *bp++ = 0;
     } else {
@@ -523,8 +546,8 @@ static void rgba_converter(const uchar* from, uchar* to, int w) {
 
 static void argb32_converter(const uchar* from, uchar* to, int w) {
   uchar bg[3];
-  Color c = getbgcolor(); if (!c) c = GRAY75;
-  split_color(c, bg[0],bg[1],bg[2]);
+  Color col = getbgcolor(); if (!col) col = GRAY75;
+  split_color(col, bg[0],bg[1],bg[2]);
 
   U32* buffer = getbuffer(w);
   U32* bp = buffer;
@@ -532,9 +555,13 @@ static void argb32_converter(const uchar* from, uchar* to, int w) {
   char* ap = alphapointer;
   char aaccum = 0;
   char amask = ::amask;
+
+  U32 c;
+  uchar r,g,b,a;
+
   for (int i = 0; i < w; i++) {
-    U32 c = *f++;
-    uchar a = c>>24;
+    c = *f++;
+    a = c>>24;
     if (!a) {
       *bp++ = 0;
     } else {
@@ -542,9 +569,9 @@ static void argb32_converter(const uchar* from, uchar* to, int w) {
       if (a == 255) {
 	*bp++ = c;
       } else {
-	uchar r = (c>>16)+((bg[0]*(255-a))>>8);
-	uchar g = (c>>8)+((bg[1]*(255-a))>>8);
-	uchar b = c+((bg[2]*(255-a))>>8);
+	r = (c>>16)+((bg[0]*(255-a))>>8);
+	g = (c>>8)+((bg[1]*(255-a))>>8);
+	b = c+((bg[2]*(255-a))>>8);
 	*bp++ = (r<<16)|(g<<8)|b;
       }
     }
@@ -568,11 +595,14 @@ static void rgbm_converter(const uchar* from, uchar* to, int w) {
   char* ap = alphapointer;
   char aaccum = 0;
   char amask = ::amask;
+
+  uchar r,g,b,a;
+
   for (int i = 0; i < w; i++) {
-    uchar r = *from++;
-    uchar g = *from++;
-    uchar b = *from++;
-    uchar a = *from++;
+    r = *from++;
+    g = *from++;
+    b = *from++;
+    a = *from++;
     if (!a) {
       *bp++ = 0;
     } else {
@@ -596,8 +626,8 @@ static void rgbm_converter(const uchar* from, uchar* to, int w) {
 
 static void mrgb32_converter(const uchar* from, uchar* to, int w) {
   uchar bg[3];
-  Color c = getbgcolor(); if (!c) c = GRAY75;
-  split_color(c, bg[0],bg[1],bg[2]);
+  Color col = getbgcolor(); if (!col) col = GRAY75;
+  split_color(col, bg[0],bg[1],bg[2]);
 
   U32* buffer = getbuffer(w);
   U32* bp = buffer;
@@ -605,9 +635,13 @@ static void mrgb32_converter(const uchar* from, uchar* to, int w) {
   char* ap = alphapointer;
   char aaccum = 0;
   char amask = ::amask;
+
+  U32 c;
+  uchar r,g,b,a;
+
   for (int i = 0; i < w; i++) {
-    U32 c = *f++;
-    uchar a = c>>24;
+    c = *f++;
+    a = c>>24;
     if (!a) {
       *bp++ = 0;
     } else {
@@ -615,9 +649,9 @@ static void mrgb32_converter(const uchar* from, uchar* to, int w) {
       if (a == 255) {
 	*bp++ = c;
       } else {
-	uchar r = (((c>>16)&255)*a+bg[0]*(255-a))>>8;
-	uchar g = (((c>>8)&255)*a+bg[1]*(255-a))>>8;
-	uchar b = ((c&255)*a+bg[2]*(255-a))>>8;
+	r = (((c>>16)&255)*a+bg[0]*(255-a))>>8;
+	g = (((c>>8)&255)*a+bg[1]*(255-a))>>8;
+	b = ((c&255)*a+bg[2]*(255-a))>>8;
 	*bp++ = (r<<16)|(g<<8)|b;
       }
     }
@@ -653,9 +687,11 @@ XWindow prevsource;
 static void rgbm_to_argb32(const uchar* from, uchar* to, int w) {
   U32* t = (U32*)to+w;
   from += 4*w;
+  uchar a;
+
   while (t > (U32*)to) {
     from -= 4;
-    uchar a = from[3];
+    a = from[3];
     *--t = (a<<24) | (((from[0]*a)<<8)&0xff0000) | ((from[1]*a)&0xff00) | ((from[2]*a)>>8);
   }
 }
@@ -663,10 +699,13 @@ static void rgbm_to_argb32(const uchar* from, uchar* to, int w) {
 static void mrgb32_to_argb32(const uchar* from, uchar* to, int w) {
   U32* t = (U32*)to+w;
   from += 4*w;
+  U32 v;
+  uchar a;
+
   while (t > (U32*)to) {
     from -= 4;
-    U32 v = *(U32*)from;
-    uchar a = v>>24;
+    v = *(U32*)from;
+    a = v>>24;
     *--t = (v&0xff000000) |
       ((((v&0xff0000)*a)>>8) & 0xff0000) |
       ((((v&0xff00)*a)>>8) & 0xff00) |
