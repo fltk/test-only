@@ -50,8 +50,6 @@
 #include <fltk/TextEditor.h>
 #include <fltk/MenuBuild.h>
 
-#include <FL/Fl_Menu_Bar.H>
-
 int                changed = 0;
 char               filename[256] = "";
 char               title[256];
