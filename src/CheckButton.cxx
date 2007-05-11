@@ -43,35 +43,36 @@ using namespace fltk;
 static class CheckBox : public Symbol {
 public:
   void _draw(const Rectangle& R) const {
-  Box* box = drawstyle()->box();
-  // for back compatability with some programs that changed the
-  // square into a diamond or circle, where the checkmark does
-  // not look too good. Draw the box colored in with the
-  // selected color instead:
-  if (!box->fills_rectangle()) {
-    Color saved = getbgcolor();
-    if (drawflags()&STATE) setbgcolor(drawstyle()->selection_color());
+    Box* box = drawstyle()->box();
+    // for back compatability with some programs that changed the
+    // square into a diamond or circle, where the checkmark does
+    // not look too good. Draw the box colored in with the
+    // selected color instead:
+    if (!box->fills_rectangle()) {
+      Color saved = getbgcolor();
+      if (drawflags()&STATE) setbgcolor(drawstyle()->selection_color());
+      box->draw(R);
+      setbgcolor(saved);
+      return;
+    }
+    // Otherwise draw the box with normal colors and then draw checkmark
+    // inside it:
+    if (drawflags()&PUSHED) setbgcolor(GRAY50);
     box->draw(R);
-    setbgcolor(saved);
-    return;
-  }
-  // Otherwise draw the box with normal colors and then draw checkmark
-  // inside it:
-  box->draw(R);
-  if (drawflags()&STATE) {
-    Rectangle r(R); box->inset(r);
-    if (r.h() < 6) {r = Rectangle(R,6,6); r.move(1,1);}
-    int x = r.x()+1;
-    int w = r.h()-2;
-    int d1 = w/3;
-    int d2 = w-d1;
-    int y = r.y()+(r.h()+d2)/2-d1-2;
-    for (int n = 0; n < 3; n++, y++) {
-      drawline(x, y, x+d1, y+d1);
-      drawline(x+d1, y+d1, x+w-1, y+d1-d2+1);
+    if (drawflags()&STATE) {
+      Rectangle r(R); box->inset(r);
+      if (r.h() < 6) {r = Rectangle(R,6,6); r.move(1,1);}
+      int x = r.x()+1;
+      int w = r.h()-2;
+      int d1 = w/3;
+      int d2 = w-d1;
+      int y = r.y()+(r.h()+d2)/2-d1-2;
+      for (int n = 0; n < 3; n++, y++) {
+        drawline(x, y, x+d1, y+d1);
+        drawline(x+d1, y+d1, x+w-1, y+d1-d2+1);
+      }
     }
   }
-}
   CheckBox() : Symbol("checkbox") {}
 } glyph;
 

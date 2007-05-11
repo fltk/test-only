@@ -17,12 +17,35 @@
 
 \code
   MultiImage buttonImage(OffImage,
-		HIGHLIGHT, BrightOffImage,
 		STATE, OnImage,
-		HIGHLIGHT|STATE, BrightOnImage,
 		INACTIVE_R, DimOffImage,
-		INACTIVE_R|VALUE, DimOnImage);
+		INACTIVE_R|STATE, DimOnImage,
+                FOCUSED, FocusedOffImage,
+                FOCUSED|STATE, FocusedOnImage,
+		HIGHLIGHT, BrightOffImage,
+		HIGHLIGHT|STATE, BrightOnImage,
+                PUSHED, BrightPushedOffImage,
+                PUSHED|STATE, BrightPushedOnImage);
 \endcode
+
+  In the above example, because the PUSHED is later than the
+  FOCUSED, when the user pushes the button and it has the focus
+  they will see the pushed image. If they were the other way around
+  they would see the focused image and not see any feedback from
+  pushing the button. In addition, although the hightlight or
+  focus should not turn on for an inactive widget, this will show
+  if it happens.
+
+  Also note that the number of images is less than 2^n where n is the
+  number of flags you care about. This seems to be true of most
+  hand-painted image sets. The user probably does not care or is
+  confused by showing the focus or highlight state of a button they
+  are pushing.
+
+  A fully-populated example like the above is not necessary,
+  as the flags are passed to the sub-images. If they respond to
+  them (for instance drawing differently depending on STATE) then
+  fewer images are necessary.
 
   Useful flags are:
   - INACTIVE_R
@@ -30,9 +53,7 @@
   - HIGHLIGHT True when the mouse is over widget or pushing it (you
   must also set highlight_color() to non-zero or most widgets will
   not redraw because they don't think they changed appearance).
-  - PUSHED True if user is pushing button (it also
-  inverts the STATE setting, so you may need to swap the images
-  you intend to use for PUSHED and PUSHED|STATE).
+  - PUSHED True if user is pushing button
   - FOCUSED True if button has the keyboard focus
 
 */

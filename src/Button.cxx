@@ -72,7 +72,7 @@ using namespace fltk;
 */
 
 static Button* pushed_button;
-static bool initial_value;
+static bool initial_state;
 
 int Button::handle(int event) {
   return handle(event, Rectangle(w(),h()));
@@ -86,36 +86,36 @@ int Button::handle(int event, const Rectangle& rectangle) {
   case MOVE:
     return 1;
   case PUSH:
-    if (pushed()) return 1; /* this is pushed already, don't change value */
-    initial_value = value();
+    if (pushed()) return 1; // ignore extra pushes on currently-pushed button
+    initial_state = state();
+    pushed_button = 0;
   case DRAG: {
-    bool new_value;
-    if (event_inside(rectangle)) {
-      pushed_button = this;
-      // if (type() == RADIO) new_value = true; else
-      new_value = !initial_value;
-    } else {
-      pushed_button = 0;
-      new_value = initial_value;
+    bool inside = event_inside(rectangle);
+    if (inside != (pushed_button == this)) {
+      pushed_button = inside ? this : 0;
+      redraw(DAMAGE_VALUE); // redraw the pushed state
     }
-    if (value(new_value) && (when()&WHEN_CHANGED)) do_callback();
+    if (when() & WHEN_CHANGED) { // momentary button must record state()
+      if (state(inside ? !initial_state : initial_state))
+        do_callback();
+    }
     return 1;}
   case RELEASE:
-    if (value() == initial_value) return 1;
+    if (pushed_button != this) return 1;
     redraw(DAMAGE_VALUE);
     if (type() == RADIO)
       setonly();
     else if (type()) // TOGGLE
-      ; // leave it as set
+      state(!initial_state);
     else {
-      value(initial_value);
+      state(initial_state);
       if (when() & WHEN_CHANGED) {do_callback(); return 1;}
     }
     if (when() & WHEN_RELEASE) do_callback(); else set_changed();
     return 1;
   case FOCUS:
     redraw(1); // minimal redraw to just add the focus box
-    // grab initial focus if we are an ReturnButton:
+    // grab initial focus if we are a ReturnButton:
     return shortcut()==ReturnKey ? 2 : 1;
   case UNFOCUS:
     redraw(DAMAGE_HIGHLIGHT);
@@ -128,12 +128,12 @@ int Button::handle(int event, const Rectangle& rectangle) {
     if (!test_shortcut()) return 0;
   EXECUTE:
     if (type() == RADIO) {
-      if (!value()) {
+      if (!state()) {
         setonly();
         if (when() & WHEN_CHANGED) do_callback(); else set_changed();
       }
     } else if (type()) { // TOGGLE
-      value(!value());
+      state(!state());
       if (when() & WHEN_CHANGED) do_callback(); else set_changed();
     }
     if (when() & WHEN_RELEASE) do_callback();
@@ -153,9 +153,9 @@ extern Widget* fl_did_clipping;
   This function provides a mess of back-compatabilty and Windows
   emulation to subclasses of Button to draw with. It will draw the
   button according to the current state of being pushed and it's
-  value. If non-zero is passed for \a glyph_width then the glyph()
+  state(). If non-zero is passed for \a glyph_width then the glyph()
   is drawn in that space on the left (or on the right if negative),
-  and it assummes the glyph indicates the value, so the box is only
+  and it assummes the glyph indicates the state(), so the box is only
   used to indicate the pushed state.
 */
 void Button::draw(int glyph_width) const
@@ -205,7 +205,7 @@ void Button::draw(int glyph_width) const
   drawstyle(style,box_flags);
   // For back-compatability we use any directly-set selection_color()
   // to color the box:
-  if (!glyph_width && value() && style->selection_color_) {
+  if (!glyph_width && state() && style->selection_color_) {
     setbgcolor(style->selection_color_);
     setcolor(contrast(style->selection_textcolor(),style->selection_color_));
   }
@@ -254,7 +254,7 @@ Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
 ////////////////////////////////////////////////////////////////
 
 /*! \class fltk::ToggleButton
-  This button turns the value() on and off each release of a click
+  This button turns the state() on and off each release of a click
   inside of it.
 
   You can also convert a regular button into this by doing

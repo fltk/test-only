@@ -52,8 +52,9 @@ public:
   void _draw(const Rectangle& R) const {
     // Use the white rather than the gray color:
     Box* box = drawstyle()->box();
+    if (drawflags()&PUSHED) setbgcolor(GRAY50);
     box->draw(R);
-    if (drawflags(STATE|PUSHED)) {
+    if (drawflags(STATE)) {
       Rectangle r(R);
       box->inset(r);
       // use the selection color only if they directly set it:

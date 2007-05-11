@@ -213,9 +213,9 @@ const char* fltk::line_dashes_;
     - INACTIVE_R : Draw inactive, fill images with solid fg color
     - VALUE: Draw turned on or checked
     - SELECTED: Draw as though selected in a browser or menu.
-    - HIGHLIGHT: Draw as though highlighted with the mouse pointing at it
-    - PUSHED: The mouse is pushing this button. This also inverts VALUE.
-    - FOCUSED: Indicates that the current object has keyboard focus.
+    - HIGHLIGHT: Draw as though highlighted by the mouse pointing at it
+    - PUSHED: Draw as though pushed by the user
+    - FOCUSED: Draw as though it has keyboard focus
     - INVISIBLE: Some boxes don't draw their interior if this is set
 
   \see fltk::drawstyle()
