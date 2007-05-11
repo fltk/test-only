@@ -132,7 +132,6 @@ void Item::set_style(const Style* style, bool menubar) {
 }
 
 /** The SELECTED flag will cause it to draw using the selected colors.
-    Focusbox is also drawn if FOCUSED is on.
 
     The current version can also draw check or radio buttons
     but this functionality may be removed.
@@ -146,17 +145,14 @@ void Item::draw() {
   Rectangle r(w(),h());
   Box* box = this->box();
   box->draw(r);
-  box->inset(r);
+  Rectangle r1(r); box->inset(r1);
   if (type()) {
     int gw = int(textsize())+2;
-    Rectangle lr(r);
-    lr.move_x(gw+3);
-    draw_label(lr, flags());
-    draw_glyph(0, Rectangle(r.x()+3, r.y()+((r.h()-gw)>>1), gw, gw));
-  } else {
-    draw_label(r, flags());
+    draw_glyph(0, Rectangle(r1.x()+3, r1.y()+((r1.h()-gw)>>1), gw, gw));
+    r1.move_x(gw+3);
   }
-  focusbox()->draw(r);
+  draw_label(r1, flags());
+  box->drawOverlay(r);
 }
 
 /** Measure the space the draw() will take and set w() and h().
@@ -242,9 +238,9 @@ void ItemGroup::draw() {
   Rectangle r(w(),h());
   Box* box = this->box();
   box->draw(r);
-  box->inset(r);
-  draw_label(r, flags());
-  focusbox()->draw(r);
+  Rectangle r1(r); box->inset(r1);
+  draw_label(r1, flags());
+  box->drawOverlay(r);
 }
 
 void ItemGroup::layout() {

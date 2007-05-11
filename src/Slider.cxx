@@ -308,14 +308,16 @@ void Slider::draw()
   Box* box = this->box();
   if (!box->fills_rectangle()) draw_background();
   drawstyle(style(),flags);
-  Rectangle r(w(),h()); box->draw(r); box->inset(r);
+  Rectangle r(w(),h());
+  box->draw(r);
 
   // we draw the slot if box() has a zero-sized border:
-  draw(r, f2, r.y()==0);
+  Rectangle r1(r); box->inset(r1);
+  draw(r1, f2, r1.y()==0);
 
   // draw the focus indicator inside the box:
   drawstyle(style(),flags);
-  focusbox()->draw(r);
+  box->drawOverlay(r);
 }
 
 /*!

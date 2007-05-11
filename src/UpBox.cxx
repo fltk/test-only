@@ -37,110 +37,118 @@
 using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
-class FL_API FocusFrame : public Box {
-public:
-  void _draw(const fltk::Rectangle& r1) const {
-    if (!drawflags(FOCUSED)) return;
 
-    fltk::Rectangle r; transform(r1,r);
-    if (r.w() > 12) {r.move_x(1); r.move_r(-1);}
-    else if (r.w() <= 3) return;
-    if (r.h() > 15) {r.move_y(1); r.move_b(-1);}
-    else if (r.h() <= 3) return;
-
+// Maybe this should be a public fltk method?
+void drawFocusRect(const fltk::Rectangle& r1) {
+  Rectangle r; transform(r1,r);
 #if USE_X11
-    // X version uses stipple pattern because there seem to be too many
-    // servers with bugs when drawing dotted lines:
-    static const char pattern[]
-      = {0xAA,0x55,0xAA,0x55,0xAA,0x55,0xAA,0x55,0xAA};
-    static Pixmap evenstipple, oddstipple;
-    if (!evenstipple) {
-      XWindow root = RootWindow(xdisplay, xscreen);
-      evenstipple = XCreateBitmapFromData(xdisplay, root, pattern, 8, 8);
-      oddstipple = XCreateBitmapFromData(xdisplay, root, pattern+1, 8, 8);
-    }
-    XSetStipple(xdisplay, gc, (r.x()+r.y()-r1.x()-r1.y())&1 ? oddstipple : evenstipple);
-    XSetFillStyle(xdisplay, gc, FillStippled);
-    XSetFunction(xdisplay, gc, GXxor);
-    XSetForeground(xdisplay, gc, 0xffffffff);
-    // X documentation claims a nonzero line width is necessary for stipple
-    // to work, but on the X servers I tried it does not seem to be needed:
-    //XSetLineAttributes(xdisplay, gc, 1, LineSolid, CapButt, JoinMiter);
-    XDrawRectangle(xdisplay, xwindow, gc, r.x(), r.y(), r.w()-1, r.h()-1);
-    XSetFillStyle(xdisplay, gc, FillSolid);
-    XSetFunction(xdisplay, gc, GXcopy);
-    // put line width back to zero:
-    //XSetLineAttributes(xdisplay, gc, 0, LineSolid, CapButt, JoinMiter);
+  // X version uses stipple pattern because there seem to be too many
+  // servers with bugs when drawing dotted lines:
+  static const char pattern[]
+    = {0xAA,0x55,0xAA,0x55,0xAA,0x55,0xAA,0x55,0xAA};
+  static Pixmap evenstipple, oddstipple;
+  if (!evenstipple) {
+    XWindow root = RootWindow(xdisplay, xscreen);
+    evenstipple = XCreateBitmapFromData(xdisplay, root, pattern, 8, 8);
+    oddstipple = XCreateBitmapFromData(xdisplay, root, pattern+1, 8, 8);
+  }
+  XSetStipple(xdisplay, gc, (r.x()+r.y()-r1.x()-r1.y())&1 ? oddstipple : evenstipple);
+  XSetFillStyle(xdisplay, gc, FillStippled);
+  XSetFunction(xdisplay, gc, GXxor);
+  XSetForeground(xdisplay, gc, 0xffffffff);
+  // X documentation claims a nonzero line width is necessary for stipple
+  // to work. Without this the top-left dot is not drawn:
+  XSetLineAttributes(xdisplay, gc, 1, LineSolid, CapButt, JoinMiter);
+  XDrawRectangle(xdisplay, xwindow, gc, r.x(), r.y(), r.w()-1, r.h()-1);
+  XSetFillStyle(xdisplay, gc, FillSolid);
+  XSetFunction(xdisplay, gc, GXcopy);
+  // put line width back to zero:
+  XSetLineAttributes(xdisplay, gc, 0, LineSolid, CapButt, JoinMiter);
 
 #elif defined(_WIN32) || defined(_WIN32_WCE)
 # if 0
-    // Draw using WIN32 API function (since 95)
-    RECT r = {r.x(), r.y(), r.r()-1, r.b()-1};
-    DrawFocusRect(dc, &r);
+  // Draw using WIN32 API function (since 95)
+  RECT r = {r.x(), r.y(), r.r()-1, r.b()-1};
+  DrawFocusRect(dc, &r);
 # else
-    // Draw using bitmap patterns (like X11) and PatBlt
-    static const WORD pattern[] = { 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA };
-    static HBRUSH evenbrush, oddbrush;
-    if (!evenbrush) {
-      // Init stipple brushes
-      BITMAP bm;
-      bm.bmType = 0;
-      bm.bmWidth = 8;
-      bm.bmHeight = 8;
-      bm.bmWidthBytes = 2;
-      bm.bmPlanes = 1;
-      bm.bmBitsPixel = 1;
-      bm.bmBits = (LPVOID)pattern;
-      HBITMAP evenstipple = CreateBitmapIndirect(&bm);
-      bm.bmBits = (LPVOID)(pattern+1);
-      HBITMAP oddstipple  = CreateBitmapIndirect(&bm);
-      // Create the brush from the bitmap bits
-      evenbrush = CreatePatternBrush(evenstipple);
-      oddbrush  = CreatePatternBrush(oddstipple);
-      // Delete the useless bitmaps
-      DeleteObject(evenstipple);
-      DeleteObject(oddstipple);
-    }
+  // Draw using bitmap patterns (like X11) and PatBlt
+  static const WORD pattern[] = { 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA };
+  static HBRUSH evenbrush, oddbrush;
+  if (!evenbrush) {
+    // Init stipple brushes
+    BITMAP bm;
+    bm.bmType = 0;
+    bm.bmWidth = 8;
+    bm.bmHeight = 8;
+    bm.bmWidthBytes = 2;
+    bm.bmPlanes = 1;
+    bm.bmBitsPixel = 1;
+    bm.bmBits = (LPVOID)pattern;
+    HBITMAP evenstipple = CreateBitmapIndirect(&bm);
+    bm.bmBits = (LPVOID)(pattern+1);
+    HBITMAP oddstipple  = CreateBitmapIndirect(&bm);
+    // Create the brush from the bitmap bits
+    evenbrush = CreatePatternBrush(evenstipple);
+    oddbrush  = CreatePatternBrush(oddstipple);
+    // Delete the useless bitmaps
+    DeleteObject(evenstipple);
+    DeleteObject(oddstipple);
+  }
 
-    HBRUSH brush = (r.x()+r.y()-r1.x()-r1.y())&1 ? oddbrush : evenbrush;
+  HBRUSH brush = (r.x()+r.y()-r1.x()-r1.y())&1 ? oddbrush : evenbrush;
 
-    // Select the patterned brush into the DC
-    HBRUSH old_brush = (HBRUSH)SelectObject(dc, brush);
-    int oldrop = SetROP2(dc, R2_NOT);
+  // Select the patterned brush into the DC
+  HBRUSH old_brush = (HBRUSH)SelectObject(dc, brush);
+  int oldrop = SetROP2(dc, R2_NOT);
 
-    // Draw horizontal lines
-    PatBlt(dc, r.x(), r.y(), r.w(), 1, PATCOPY);
-    PatBlt(dc, r.x(), r.b()-1, r.w(), 1, PATCOPY);
+  // Draw horizontal lines
+  PatBlt(dc, r.x(), r.y(), r.w(), 1, PATCOPY);
+  PatBlt(dc, r.x(), r.b()-1, r.w(), 1, PATCOPY);
 
-    // Draw vertical lines
-    PatBlt(dc, r.x(), r.y(), 1, r.h(), PATCOPY);
-    PatBlt(dc, r.r()-1, r.y(), 1, r.h(), PATCOPY);
+  // Draw vertical lines
+  PatBlt(dc, r.x(), r.y(), 1, r.h(), PATCOPY);
+  PatBlt(dc, r.r()-1, r.y(), 1, r.h(), PATCOPY);
 
-    // Clean up
-    SetROP2(dc, oldrop);
-    SelectObject(dc, old_brush);
+  // Clean up
+  SetROP2(dc, oldrop);
+  SelectObject(dc, old_brush);
 # endif
 #else
-    PenMode( patXor );
-    line_style(DOT);
-    CGContextSetShouldAntialias(quartz_gc, false);
-    CGRect rect = CGRectMake(r.x(), r.y(), r.w()-1, r.h()-1);
-    CGContextStrokeRect(quartz_gc, rect);
-    CGContextSetShouldAntialias(quartz_gc, true);
-    PenMode( patCopy );
-    line_style(0);
+  PenMode( patXor );
+  line_style(DOT);
+  CGContextSetShouldAntialias(quartz_gc, false);
+  CGRect rect = CGRectMake(r.x(), r.y(), r.w()-1, r.h()-1);
+  CGContextStrokeRect(quartz_gc, rect);
+  CGContextSetShouldAntialias(quartz_gc, true);
+  PenMode( patCopy );
+  line_style(0);
 #endif
-  }
-  FocusFrame(const char* name) : Box(name) {}
-};
-static FocusFrame focusFrame("focus_frame");
+}
 
 /*!
-  Default value for focusbox(). This draws nothing if FOCUSED is
-  not set in the flags. If it is set, this draws a dashed line
-  one pixel inset using a system-specific XOR mode.
+  The drawing of the symbol can be split into two parts, a background
+  and an overlay. When the symbol is used as a box, the widget draws
+  the background (using draw()), then draws any labels or images on
+  the widget, then draws the overlay by calling this. If this alpha-composites
+  an image then the widget label will look like it is embedded in glass
+  or plastic.
+
+  Even without compositing, this can be used to draw highlights or
+  indicators that should go atop the image.
+
+  The default version draws a dotted line around the edge, using
+  a system-specific XOR mode, if the FOCUSED flag is on in drawflags().
 */
-Box* const fltk::FOCUS_FRAME = &focusFrame;
+void Symbol::drawOverlay(const Rectangle& r1) const {
+  if (!drawflags(FOCUSED)) return;
+  fltk::Rectangle r(r1);
+  inset(r);
+  if (r.w() > 12) {r.move_x(1); r.move_r(-1);}
+  else if (r.w() <= 3) return;
+  if (r.h() > 15) {r.move_y(1); r.move_b(-1);}
+  else if (r.h() <= 3) return;
+  drawFocusRect(r);
+}
 
 ////////////////////////////////////////////////////////////////
 
@@ -267,10 +275,7 @@ void FrameBox::inset(fltk::Rectangle& r) const {
   if (drawflags(PUSHED|STATE) && down_) {
     down_->inset(r);
   } else {
-    r.x(r.x()+dx_);
-    r.y(r.y()+dy_);
-    r.w(r.w()-dw_);
-    r.h(r.h()-dh_);
+    Symbol::inset(r);
   }
 }
 
@@ -331,8 +336,7 @@ public:
   {
     strokerect(r);
   }
-  void inset(fltk::Rectangle& r) const {r.inset(1);}
-  BorderFrame(const char* n) : Box(n) {}
+  BorderFrame(const char* n) : Box(n) {setInset(1);}
 };
 static BorderFrame borderFrame("border_frame");
 /*!
@@ -356,12 +360,11 @@ void HighlightBox::_draw(const fltk::Rectangle& r) const
 //   else
 //     FlatBox::_draw(r);
 }
-void HighlightBox::inset(fltk::Rectangle& r) const {down_->inset(r);}
 bool HighlightBox::fills_rectangle() const {return false;}
 bool HighlightBox::is_frame() const {return false;}
 
 HighlightBox::HighlightBox(const char* n, const Box* b)
-  : FlatBox(n), down_(b) {}
+  : FlatBox(n), down_(b) {setInset(down_->getInset());}
 
 static HighlightBox highlightUpBox("highlight_up", THIN_UP_BOX);
 /*!

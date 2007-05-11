@@ -89,7 +89,7 @@ void CycleButton::draw() {
   }
   drawstyle(&style,flags);
   box->draw(r);
-  box->inset(r);
+  Rectangle r1(r); box->inset(r1);
 
   // This portion of the code is copied from Choice:
   Widget* o = get_item();
@@ -100,9 +100,9 @@ void CycleButton::draw() {
     if (flags&(INACTIVE|INACTIVE_R)) o->set_flag(INACTIVE_R);
     push_clip(r);
     push_matrix();
-    translate(r.x(),r.y());
-    int save_w = o->w(); o->w(r.w());
-    int save_h = o->h(); o->h(r.h());
+    translate(r1.x(),r1.y());
+    int save_w = o->w(); o->w(r1.w());
+    int save_h = o->h(); o->h(r1.h());
     fl_hide_underscore = true;
     o->draw();
     fl_hide_underscore = false;
@@ -115,7 +115,7 @@ void CycleButton::draw() {
   }
 
   drawstyle(&style,flags);
-  focusbox()->draw(r);
+  box->drawOverlay(r);
 }
 
 static bool try_item(CycleButton* choice, int i) {

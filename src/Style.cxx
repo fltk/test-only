@@ -72,7 +72,6 @@ static void revert(Style* s) {
   s->parent_		= 0;	// this is the topmost style always
   s->box_		= DOWN_BOX;
   s->buttonbox_		= UP_BOX;
-  s->focusbox_		= FOCUS_FRAME;
   s->glyph_		= Widget::default_glyph;
   s->labelfont_		= HELVETICA;
   s->textfont_		= HELVETICA;
@@ -105,17 +104,6 @@ int Style::wheel_scroll_lines_ = 3;
 /*! \fn Box* Style::buttonbox()	const
   The type of box to draw buttons internal the widget (notice that
   fltk::Button uses box, however). The default is fltk::UP_BOX.
-*/
-
-/*! \fn Box* Style::focusbox() const
-
-  Widgets draw this box atop the buttonbox() after they draw any
-  labels or other graphics. If you have working alpha compositing
-  this can add a translucent or highlighted overlay over the buttons.
-
-  This is called focusbox() because by default it is used to draw
-  the Windows-style dotted focus lines. The default box draws this
-  dotted line if FOCUESED is true, and draws nothing if false.
 */
 
 /*! \fn Symbol* Style::glyph() const;
@@ -293,7 +281,6 @@ void Widget::FIELD(TYPE v) {		\
 
 style_functions(Box*,	box		)
 style_functions(Box*,	buttonbox	)
-style_functions(Box*,	focusbox	)
 style_functions(Symbol*,	glyph		)
 style_functions(Font*,		labelfont	)
 style_functions(Font*,		textfont	)

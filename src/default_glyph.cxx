@@ -111,7 +111,7 @@ void DefaultGlyph::_draw(const Rectangle& rr) const
     if (i) {i = 0; setcolor(saved_color);}
     else break;
   }
-  if (box) drawstyle()->focusbox()->draw(r);
+  if (box) box->drawOverlay(rr);
 }
 
 /**

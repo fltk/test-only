@@ -472,7 +472,7 @@ void TabGroup::draw_tab(int x1, int x2, int W, int H, Widget* o, int what) {
     drawstyle(o->style(), sel && focused() ? FOCUSED|OUTPUT : OUTPUT);
     setcolor(sel  ? selection_textcolor() : o->textcolor());
     o->draw_label(r, ALIGN_CENTER);
-    if (sel && focused()) focusbox()->draw(r);
+    FLAT_BOX->drawOverlay(r);
   }
 }
 

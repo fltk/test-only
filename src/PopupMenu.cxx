@@ -79,12 +79,12 @@ void PopupMenu::draw() {
   drawstyle(style(), flags);
   Rectangle r(w(),h());
   box->draw(r);
-  box->inset(r);
-  draw_label(r, flags);
+  Rectangle r1(r); box->inset(r1);
+  draw_label(r1, flags);
   // draw the little mark at the right:
 //    int w1 = int(textsize());
 //    draw_glyph(GLYPH_DOWN, x+w-w1, y, w1, h, flags);
-  focusbox()->draw(r);
+  box->drawOverlay(r);
 }
 
 /*! Wrapper for Menu::popup(). For NORMAL PopupMenu this places the

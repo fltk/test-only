@@ -210,27 +210,27 @@ void Button::draw(int glyph_width) const
     setcolor(contrast(style->selection_textcolor(),style->selection_color_));
   }
   box->draw(r);
-  box->inset(r);
+  Rectangle r1(r); box->inset(r1);
 
   if (glyph_width) {
     int g = abs(glyph_width);
-    Rectangle lr(r);
-    Rectangle gr(r, g, g);
+    Rectangle lr(r1);
+    Rectangle gr(r1, g, g);
     if (glyph_width < 0) {
       lr.w(lr.w()-g-3);
-      gr.x(r.r()-g-3);
+      gr.x(r1.r()-g-3);
     } else {
       lr.set_x(g+3);
-      gr.x(r.x()+3);
+      gr.x(r1.x()+3);
     }
     this->draw_label(lr, box_flags);
     drawstyle(style,glyph_flags);
     this->glyph()->draw(gr);
     drawstyle(style,box_flags);
   } else {
-    this->draw_label(r, box_flags);
+    this->draw_label(r1, box_flags);
   }
-  focusbox()->draw(r);
+  box->drawOverlay(r);
 }
 
 void Button::draw() {

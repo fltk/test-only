@@ -59,7 +59,6 @@ extern FL_API Box* const OVAL_BOX;
 extern FL_API Box* const OSHADOW_BOX;
 extern FL_API Box* const OFLAT_BOX;
 extern FL_API Box* const BORDER_FRAME;
-extern FL_API Box* const FOCUS_FRAME;
 extern FL_API Box* const PLASTIC_UP_BOX;
 extern FL_API Box* const PLASTIC_DOWN_BOX;
 
@@ -97,7 +96,6 @@ class FL_API Style {
   const Style* parent_;
   Box*		box_;
   Box*		buttonbox_;
-  Box*		focusbox_;
   Symbol*	glyph_;
   Font*		labelfont_;
   Font*		textfont_;
@@ -124,7 +122,6 @@ class FL_API Style {
   // Get functions, which search parents if value is zero:
   Box*		box()		const;
   Box*		buttonbox()	const;
-  Box*		focusbox()	const;
   Symbol*	glyph()		const;
   Font*		labelfont()	const;
   Font*		textfont()	const;
@@ -150,7 +147,6 @@ class FL_API Style {
   // Set functions:
   void box		(Box* v)	{box_ = v;		}
   void buttonbox	(Box* v)	{buttonbox_ = v;	}
-  void focusbox		(Box* v)	{focusbox_ = v;		}
   void glyph		(Symbol* v)	{glyph_ = v; 		}
   void labelfont	(Font* v)	{labelfont_ = v;	}
   void textfont		(Font* v)	{textfont_ = v;		}

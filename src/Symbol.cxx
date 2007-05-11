@@ -120,7 +120,7 @@ static bool symbols_initialized = false;
     is looked up in when "@" signs are found in a label. See find()
     for details. Pass null for the name to not put it in hash table.
 */
-Symbol::Symbol(const char* name) : name_(0) {
+Symbol::Symbol(const char* name) : name_(0), inset_(0,0,0,0) {
   if (!symbols_initialized) {
     symbols_initialized = true;
     init_symbols();
@@ -321,52 +321,50 @@ void Symbol::_measure(int& w, int& h) const {}
     - r.baseline_y() is where to put the baseline
 */
 
-/** Move the edges of \a r to be the "interior" of the symbol. If
-    this symbol is used as a Widget::box() then this method is used
-    to determine where to put the widget interior.
+/** Change \a r to be the "interior" of the symbol if it was drawn to
+    fill it. This is used when the symbol is a Widget::box() to
+    define the interior area where the widget can draw it's contents.
+
+    The default version adds the value of the inset() rectangle
+    (and thus if setInset() was not called it does nothing).
 
     The most recent values sent to fltk::setcolor(),
     fltk::setbgcolor(), fltk::setdrawflags(), fltk::setfont(), etc,
     may influence the value that this returns (such as to return
     a different edge for a pushed button).
-
-    The default implementation returns \a r unchanged.
 */
-void Symbol::inset(Rectangle& r) const {}
+void Symbol::inset(Rectangle& r) const {
+  r.move(inset_.x(), inset_.y());
+  r.move_r(inset_.w());
+  r.move_b(inset_.h());
+}
 
-/** Back-compatability function. This returns the amount that inset()
-    moves the left edge, but this only works if inset() moves that
-    edge by a constant amount no matter what rectangle is used and
-    no matter what fltk::drawflags() or any other graphics state is
-    set to. Notice also that dx() is overridden in the fltk::FrameBox
-    subclass, both produce the same result but that one is inline.
+/** \fn void Symbol::setInset(const Rectangle&)
+    Set the inset rectangle. This is normally done by the constructor
+    for a subclass. If the inset() method is not overridden, the
+    values in this rectangle define the edges.
 */
-int Symbol::dx() const {
-  Rectangle r(128,128);
-  inset(r);
-  return r.x();
-}
 
-/** See dx(). Returns the inset of the top edge. */
-int Symbol::dy() const {
-  Rectangle r(128,128);
-  inset(r);
-  return r.y();
-}
-
-/** See dx(). Returns the change in width (positive means smaller) */
-int Symbol::dw() const {
-  Rectangle r(128,128);
-  inset(r);
-  return 128-r.w();
-}
-
-/** See dx(). Returns the change in height (positive means smaller) */
-int Symbol::dh() const {
-  Rectangle r(128,128);
-  inset(r);
-  return 128-r.h();
-}
+/** \fn int Symbol::dx() const
+    Returns getInset().x(). This is usally the width of the left
+    inset for the image, though if the inset() method was overridden
+    it may return a different number.
+*/
+/** \fn int Symbol::dy() const
+    Returns getInset().y(). This is usally the height of the top
+    inset for the image, though if the inset() method was overridden
+    it may return a different number.
+*/
+/** \fn int Symbol::dw() const
+    Returns -getInset().w(). This is usally the width of the left
+    and right insets added together, though if the inset() method was overridden
+    it may return a different number.
+*/
+/** \fn int Symbol::dh() const
+    Returns -getInset().h(). This is usally the height of the top
+    and bottom insets added together, though if the inset() method was overridden
+    it may return a different number.
+*/
 
 /** Return true if the symbol will completely fill all the pixels
     in the Rectangle passed to draw(). Widgets use this to test
@@ -376,28 +374,18 @@ int Symbol::dh() const {
 bool Symbol::fills_rectangle() const {return false;}
 
 /** Return true to indicate that the area returned by inset() is
-    solidly filled with the value from fltk::getbgcolor(). Many widgets
-    will use this fact (or assumme it) in order to accelerate
-    drawing.
-
-    If the INVISIBLE flag is passed to draw(), this symbol is allowed
-    to skip drawing the interior. This is used by widgets to indicate
-    they are going to fill it anyway, and can save some time.
+    drawn as a solid rectangle filled with fltk::getbgcolor(),
+    and that if INVISIBLE is set in drawflags() the interior
+    is not filled in at all and instead left with it's previous
+    contents.
 
     The default implementation returns false, but most of the useful
-    values for a Widget's box() return true.
+    values for a Widget's box() return true, and widgets can take
+    advantage of this to reduce drawing overhead. In fact quite
+    a few widgets currently assumme this is true, but I hope
+    to fix this so that image boxes can be used anywhere.
 */
 bool Symbol::is_frame() const {return false;}
-
-/** This function is for back-compatability only. It does
-    drawstyle(style, flags^OUTPUT) and then draw(r).
-*/
-void Symbol::draw(const Rectangle& r, const Style* style, Flags flags) const
-{
-  drawstyle(style, flags^OUTPUT);
-  draw(r);
-}
-
 
 /**************** The routines seen by the user *************************/
 

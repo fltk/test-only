@@ -81,10 +81,6 @@ void TiledImage::_draw(const Rectangle& r) const
   pop_clip();
 }
 
-void TiledImage::inset(Rectangle& r) const {
-  if (image_) image_->inset(r);
-}
-
 //
 // End of "$Id$".
 //
