@@ -108,7 +108,7 @@ static Color colors[] = {
  */
 AnsiWidget::AnsiWidget(int x, int y, int w, int h, int defsize) : 
   Widget(x, y, w, h, 0) {
-  labelsize(defsize);
+  labelsize(float(defsize));
   init();
   img = 0;
   resized = false;
@@ -336,7 +336,7 @@ int AnsiWidget::getPixel(int x, int y) {
   begin_offscreen();
   // needs to return a -ve number to distiguish from basic 16 color values
   // unpacked in later calls to ansiToFltk()
-  return -::GetPixel(fl_bitmap_dc, x, y);
+  return -int(::GetPixel(fl_bitmap_dc, x, y));
 #elif defined(__APPLE__)
   // TODO !
 #endif
@@ -626,14 +626,14 @@ void AnsiWidget::print(const char *str) {
             
       if (invert) {
         setcolor(labelcolor());
-        fillrect(Rectangle(curX, curY, cx, fontHeight));
+        fillrect(curX, curY, cx, fontHeight);
         setcolor(color());
-        drawtext((const char*)p, numChars, curX, curY+ascent);
+        drawtext((const char*)p, numChars, float(curX), float(curY+ascent));
       } else {
         setcolor(color());
-        fillrect(Rectangle(curX, curY, cx, fontHeight));
+        fillrect(curX, curY, cx, fontHeight);
         setcolor(labelcolor());
-        drawtext((const char*)p, numChars, curX, curY+ascent);
+        drawtext((const char*)p, numChars, float(curX), float(curY+ascent));
       }
 
       if (underline) {
