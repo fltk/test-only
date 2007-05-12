@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="file_chooser"
+	ProjectGUID="{01F6F3FC-3574-4EAD-9F5D-EAA93ABEEE52}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -12,23 +13,23 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\Debug"
-			IntermediateDirectory=".\Debug"
+			OutputDirectory=".\testd"
+			IntermediateDirectory=".\testd"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
+				AdditionalIncludeDirectories="../../visualc;../../..;../../../fltk/compat"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="1"
-				PrecompiledHeaderFile=".\Debug/file_chooser.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
+				PrecompiledHeaderFile="./testd/file_chooserd.pch"
+				AssemblerListingLocation=".\testd/"
+				ObjectFile=".\testd/"
+				ProgramDataBaseFileName=".\testd/"
 				BrowseInformation="1"
-				BrowseInformationFile=".\Debug/"
+				BrowseInformationFile=".\testd/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="4"
@@ -37,15 +38,16 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk2d.lib fltk2_imagesd.lib ws2_32.lib msimg32.lib"
-				OutputFile="../../test/file_chooserd.exe"
+				AdditionalDependencies="fltk2d.lib ws2_32.lib msimg32.lib fltk2_imagesd.lib fltk2_zd.lib fltk2_jpegd.lib fltk2_pngd.lib"
+				OutputFile="../../../test/file_chooser.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\lib"
+				AdditionalLibraryDirectories="../../../lib"
 				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\Debug/file_chooserd.pdb"
+				ProgramDatabaseFile=".\testd/file_chooserd.pdb"
 				SubSystem="2"
+				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -53,7 +55,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Debug/file_chooser.tlb"
+				TypeLibraryName=".\testd/file_chooser.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -78,8 +80,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory=".\test"
+			IntermediateDirectory=".\test"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
@@ -88,13 +90,14 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
+				AdditionalIncludeDirectories="../../visualc;../../..;../../../fltk/compat"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
-				PrecompiledHeaderFile=".\Release/file_chooser.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
+				PrecompiledHeaderFile="./test/file_chooser.pch"
+				AssemblerListingLocation=".\test/"
+				ObjectFile=".\test/"
+				ProgramDataBaseFileName=".\test/"
+				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
@@ -102,14 +105,15 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk2.lib ws2_32.lib msimg32.lib"
-				OutputFile="../../test/file_chooser.exe"
+				AdditionalDependencies="fltk2.lib ws2_32.lib msimg32.lib fltk2_images.lib fltk2_z.lib fltk2_png.lib fltk2_jpeg.lib"
+				OutputFile="../../../test/file_chooser.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\lib"
+				AdditionalLibraryDirectories="../../../lib"
 				IgnoreDefaultLibraryNames="libc"
-				ProgramDatabaseFile=".\Release/file_chooser.pdb"
+				ProgramDatabaseFile=".\test/file_chooser.pdb"
 				SubSystem="2"
+				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -117,7 +121,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Release/file_chooser.tlb"
+				TypeLibraryName=".\test/file_chooser.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -145,23 +149,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\test\file_chooser.cxx">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
-			</FileConfiguration>
+			RelativePath="..\..\..\test\file_chooser.cxx">
 		</File>
 	</Files>
 	<Globals>

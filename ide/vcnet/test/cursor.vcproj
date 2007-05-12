@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="cursor"
+	ProjectGUID="{01F6F3FC-3574-4EAD-9F5D-EAA93ABEEE52}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -12,23 +13,23 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\Debug"
-			IntermediateDirectory=".\Debug"
+			OutputDirectory=".\testd"
+			IntermediateDirectory=".\testd"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
+				AdditionalIncludeDirectories="../../visualc;../../..;../../../fltk/compat"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="1"
-				PrecompiledHeaderFile=".\Debug/cursor.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
+				PrecompiledHeaderFile="./testd/cursord.pch"
+				AssemblerListingLocation=".\testd/"
+				ObjectFile=".\testd/"
+				ProgramDataBaseFileName=".\testd/"
 				BrowseInformation="1"
-				BrowseInformationFile=".\Debug/"
+				BrowseInformationFile=".\testd/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="4"
@@ -38,14 +39,15 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="fltk2d.lib ws2_32.lib msimg32.lib"
-				OutputFile="../../test/cursord.exe"
+				OutputFile="../../../test/cursor.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\lib"
+				AdditionalLibraryDirectories="../../../lib"
 				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\Debug/cursord.pdb"
+				ProgramDatabaseFile=".\testd/cursord.pdb"
 				SubSystem="2"
+				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -53,7 +55,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Debug/cursor.tlb"
+				TypeLibraryName=".\testd/cursor.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -78,8 +80,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory=".\test"
+			IntermediateDirectory=".\test"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
@@ -88,13 +90,14 @@
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
+				AdditionalIncludeDirectories="../../visualc;../../..;../../../fltk/compat"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
-				PrecompiledHeaderFile=".\Release/cursor.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
+				PrecompiledHeaderFile="./test/cursor.pch"
+				AssemblerListingLocation=".\test/"
+				ObjectFile=".\test/"
+				ProgramDataBaseFileName=".\test/"
+				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				CompileAs="0"/>
@@ -103,13 +106,14 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="fltk2.lib ws2_32.lib msimg32.lib"
-				OutputFile="../../test/cursor.exe"
+				OutputFile="../../../test/cursor.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\lib"
+				AdditionalLibraryDirectories="../../../lib"
 				IgnoreDefaultLibraryNames="libc"
-				ProgramDatabaseFile=".\Release/cursor.pdb"
+				ProgramDatabaseFile=".\test/cursor.pdb"
 				SubSystem="2"
+				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -117,7 +121,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Release/cursor.tlb"
+				TypeLibraryName=".\test/cursor.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -145,23 +149,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\test\cursor.cxx">
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
-			</FileConfiguration>
+			RelativePath="..\..\..\test\cursor.cxx">
 		</File>
 	</Files>
 	<Globals>

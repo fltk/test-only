@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="boxtype"
+	Name="fullscreen"
 	ProjectGUID="{01F6F3FC-3574-4EAD-9F5D-EAA93ABEEE52}"
 	SccProjectName=""
 	SccLocalPath="">
@@ -24,7 +24,7 @@
 				AdditionalIncludeDirectories="../../visualc;../../..;../../../fltk/compat"
 				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="1"
-				PrecompiledHeaderFile="./testd/boxtyped.pch"
+				PrecompiledHeaderFile="./testd/fullscreend.pch"
 				AssemblerListingLocation=".\testd/"
 				ObjectFile=".\testd/"
 				ProgramDataBaseFileName=".\testd/"
@@ -38,14 +38,14 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk2d.lib ws2_32.lib msimg32.lib"
-				OutputFile="../../../test/boxtype.exe"
+				AdditionalDependencies="fltk2d.lib ws2_32.lib msimg32.lib fltk2_gld.lib opengl32.lib"
+				OutputFile="../../../test/fullscreen.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="../../../lib"
 				IgnoreDefaultLibraryNames="libcd"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\testd/boxtyped.pdb"
+				ProgramDatabaseFile=".\testd/fullscreend.pdb"
 				SubSystem="2"
 				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
@@ -55,7 +55,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\testd/boxtype.tlb"
+				TypeLibraryName=".\testd/fullscreen.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -93,7 +93,7 @@
 				AdditionalIncludeDirectories="../../visualc;../../..;../../../fltk/compat"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
-				PrecompiledHeaderFile="./test/boxtype.pch"
+				PrecompiledHeaderFile="./test/fullscreen.pch"
 				AssemblerListingLocation=".\test/"
 				ObjectFile=".\test/"
 				ProgramDataBaseFileName=".\test/"
@@ -105,13 +105,13 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk2.lib ws2_32.lib msimg32.lib"
-				OutputFile="../../../test/boxtype.exe"
+				AdditionalDependencies="fltk2.lib ws2_32.lib msimg32.lib fltk2_gl.lib opengl32.lib"
+				OutputFile="../../../test/fullscreen.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="../../../lib"
 				IgnoreDefaultLibraryNames="libc"
-				ProgramDatabaseFile=".\test/boxtype.pdb"
+				ProgramDatabaseFile=".\test/fullscreen.pdb"
 				SubSystem="2"
 				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
@@ -121,7 +121,7 @@
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\test/boxtype.tlb"
+				TypeLibraryName=".\test/fullscreen.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -149,7 +149,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\test\boxtype.cxx">
+			RelativePath="..\..\..\test\fullscreen.cxx">
 		</File>
 	</Files>
 	<Globals>

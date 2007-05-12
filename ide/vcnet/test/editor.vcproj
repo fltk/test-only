@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="editor"
+	ProjectGUID="{01F6F3FC-3574-4EAD-9F5D-EAA93ABEEE52}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -11,48 +12,50 @@
 	</Platforms>
 	<Configurations>
 		<Configuration
-			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			Name="Debug|Win32"
+			OutputDirectory=".\testd"
+			IntermediateDirectory=".\testd"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="4"
-				InlineFunctionExpansion="2"
-				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
-				RuntimeLibrary="0"
-				PrecompiledHeaderFile=".\Release/editor.pch"
-				AssemblerListingLocation=".\Release/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
+				Optimization="0"
+				AdditionalIncludeDirectories="../../visualc;../../..;../../../fltk/compat"
+				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				RuntimeLibrary="1"
+				PrecompiledHeaderFile="./testd/editord.pch"
+				AssemblerListingLocation=".\testd/"
+				ObjectFile=".\testd/"
+				ProgramDataBaseFileName=".\testd/"
+				BrowseInformation="1"
+				BrowseInformationFile=".\testd/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="4"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk2.lib ws2_32.lib msimg32.lib"
-				OutputFile="../../test/editor.exe"
+				AdditionalDependencies="fltk2d.lib ws2_32.lib msimg32.lib"
+				OutputFile="../../../test/editor.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\lib"
-				IgnoreDefaultLibraryNames="libc"
-				ProgramDatabaseFile=".\Release/editor.pdb"
+				AdditionalLibraryDirectories="../../../lib"
+				IgnoreDefaultLibraryNames="libcd"
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile=".\testd/editord.pdb"
 				SubSystem="2"
 				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
+				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Release/editor.tlb"
+				TypeLibraryName=".\testd/editor.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -62,7 +65,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
+				PreprocessorDefinitions="_DEBUG"
 				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
@@ -76,50 +79,49 @@
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
-			Name="Debug|Win32"
-			OutputDirectory=".\Debug"
-			IntermediateDirectory=".\Debug"
+			Name="Release|Win32"
+			OutputDirectory=".\test"
+			IntermediateDirectory=".\test"
 			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
-				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
-				RuntimeLibrary="1"
-				PrecompiledHeaderFile=".\Debug/editor.pch"
-				AssemblerListingLocation=".\Debug/"
-				ObjectFile=".\Debug/"
-				ProgramDataBaseFileName=".\Debug/"
+				Optimization="4"
+				InlineFunctionExpansion="2"
+				FavorSizeOrSpeed="2"
+				AdditionalIncludeDirectories="../../visualc;../../..;../../../fltk/compat"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				RuntimeLibrary="0"
+				PrecompiledHeaderFile="./test/editor.pch"
+				AssemblerListingLocation=".\test/"
+				ObjectFile=".\test/"
+				ProgramDataBaseFileName=".\test/"
 				BrowseInformation="1"
-				BrowseInformationFile=".\Debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="4"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk2d.lib ws2_32.lib msimg32.lib"
-				OutputFile="../../test/editord.exe"
+				AdditionalDependencies="fltk2.lib ws2_32.lib msimg32.lib"
+				OutputFile="../../../test/editor.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\lib"
-				IgnoreDefaultLibraryNames="libcd"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\Debug/editord.pdb"
+				AdditionalLibraryDirectories="../../../lib"
+				IgnoreDefaultLibraryNames="libc"
+				ProgramDatabaseFile=".\test/editor.pdb"
 				SubSystem="2"
 				EntryPointSymbol="mainCRTStartup"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
+				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Debug/editor.tlb"
+				TypeLibraryName=".\test/editor.tlb"
 				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
@@ -129,7 +131,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
+				PreprocessorDefinitions="NDEBUG"
 				Culture="1033"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
@@ -147,23 +149,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\test\editor.cxx">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					BrowseInformation="1"/>
-			</FileConfiguration>
+			RelativePath="..\..\..\test\editor.cxx">
 		</File>
 	</Files>
 	<Globals>
