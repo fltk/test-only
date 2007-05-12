@@ -40,14 +40,14 @@ endif
 #
 
 CPPFILES = \
+	FileIcon2.cxx \
 	Fl_Guess_Image.cxx \
 	fl_jpeg.cxx\
 	fl_png.cxx \
-	pnmImage.cxx \
-	xpmFileImage.cxx \
+	HelpDialog.cxx \
 	images_core.cxx \
-	FileIcon2.cxx \
-	HelpDialog.cxx 
+	pnmImage.cxx \
+	xpmFileImage.cxx
 CFILES	=
 
 LIBNAME	=	$(LIBPREFIX)fltk2_images$(LIBSUFFIX)
