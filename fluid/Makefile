@@ -36,8 +36,8 @@ include ../makeinclude
 
 CPPFILES = \
 	about_panel.cxx \
-	alignment_panel.cxx \
 	align_widget.cxx \
+	alignment_panel.cxx \
 	code.cxx \
 	CodeEditor.cxx \
 	coding_style.cxx \
@@ -45,22 +45,22 @@ CPPFILES = \
 	Enumeration.cxx \
 	factory.cxx \
 	file.cxx \
+	fluid.cxx \
+	Fluid_Image.cxx \
+	fluid_img.cxx \
+	fluid_menus.cxx \
+	Fluid_Plugins.cxx \
+	FluidType.cxx \
+	function_panel.cxx \
 	FunctionType.cxx \
 	GroupType.cxx \
 	MenuType.cxx \
-	FluidType.cxx \
-	fluid.cxx \
-	fluid_menus.cxx \
-	Fluid_Image.cxx \
-	Fluid_Plugins.cxx \
+	template_panel.cxx \
+	undo.cxx \
+	widget_panel.cxx \
 	WidgetClassType.cxx \
 	WidgetType.cxx \
-	WindowType.cxx \
-	function_panel.cxx \
-	template_panel.cxx \
-	fluid_img.cxx \
-	widget_panel.cxx \
-	undo.cxx
+	WindowType.cxx
 
 CFILES	=
 
