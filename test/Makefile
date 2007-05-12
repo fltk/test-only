@@ -150,7 +150,6 @@ TARGETS = \
 	label$(EXEEXT) \
 	line_style$(EXEEXT) \
 	list_visuals$(EXEEXT) \
-	logslider$(EXEEXT) \
 	mandelbrot$(EXEEXT) \
 	menu$(EXEEXT) \
 	message$(EXEEXT) \
@@ -166,7 +165,7 @@ TARGETS = \
 	scroll$(EXEEXT) \
 	shape$(EXEEXT) \
 	sizes$(EXEEXT) \
-	slider$(EXEEXT) \
+	symbols$(EXEEXT) \
 	threads$(EXEEXT) \
 	tabs$(EXEEXT) \
 	tile$(EXEEXT) \
@@ -176,12 +175,6 @@ TARGETS = \
 	valuators$(EXEEXT) \
 	list$(EXEEXT) \
 	wizard$(EXEEXT)
-
-# other programs that are minimally changed from fltk1.1:
-TARGETS += \
-	symbols$(EXEEXT) \
-	mandelbrot$(EXEEXT) \
-	scroll$(EXEEXT)
 
 #
 # Make everything...
@@ -265,11 +258,6 @@ glpuzzle$(EXEEXT): glpuzzle.o ../lib/$(LIBPREFIX)fltk2_glut$(LIBSUFFIX)  ../lib/
 gl_overlay$(EXEEXT): gl_overlay.o ../lib/$(LIBPREFIX)fltk2_gl$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKGL) $(GLDLIBS) -o $@
-	$(POSTBUILD) $@ ../fltk/mac.r
-
-keyboard$(EXEEXT): keyboard.o keyboard_ui.o
-	echo Linking $@...
-	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -o $@
 	$(POSTBUILD) $@ ../fltk/mac.r
 
 mandelbrot$(EXEEXT): mandelbrot.o mandelbrot_ui.o
