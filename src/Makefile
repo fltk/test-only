@@ -38,30 +38,53 @@ include ../makeinclude
 #	HelpDialog.cxx \
 
 CPPFILES = \
+	add_idle.cxx \
+	addarc.cxx \
+	addcurve.cxx \
 	Adjuster.cxx \
 	AlignGroup.cxx \
-        AnsiWidget.cxx \
+	AnsiWidget.cxx \
+	args.cxx \
 	BarGroup.cxx \
+	bmpImage.cxx \
 	Browser.cxx \
 	Button.cxx \
 	CheckButton.cxx \
 	Choice.cxx \
+	clip.cxx \
 	Clock.cxx \
 	Color.cxx \
+	color_chooser.cxx \
 	ComboBox.cxx \
+	compose.cxx \
 	Cursor.cxx \
 	CycleButton.cxx \
+	default_glyph.cxx \
 	Dial.cxx \
 	DiamondBox.cxx \
+	dnd.cxx \
+	drawtext.cxx \
 	EngravedLabel.cxx \
+	error.cxx \
+	event_key_state.cxx \
+	file_chooser.cxx \
 	FileBrowser.cxx \
 	FileChooser.cxx \
 	FileChooser2.cxx \
 	FileIcon.cxx \
 	FileInput.cxx \
+	filename_absolute.cxx \
+	filename_ext.cxx \
+	filename_isdir.cxx \
+	filename_list.cxx \
+	filename_match.cxx \
+	filename_name.cxx \
+	fillrect.cxx \
 	Fl_Menu_Item.cxx \
 	FloatInput.cxx \
+	fltk_theme.cxx \
 	Font.cxx \
+	gifImage.cxx \
 	Group.cxx \
 	GSave.cxx \
 	HelpView.cxx \
@@ -71,34 +94,49 @@ CPPFILES = \
 	InputBrowser.cxx \
 	InvisibleWidget.cxx \
 	Item.cxx \
+	key_name.cxx \
 	LightButton.cxx \
+	list_fonts.cxx \
+	load_plugin.cxx \
+	lock.cxx \
 	Menu.cxx \
-	MenuBar.cxx \
-	MenuWindow.cxx \
 	Menu_add.cxx \
 	Menu_global.cxx \
 	Menu_popup.cxx \
+	MenuBar.cxx \
+	MenuWindow.cxx \
+	message.cxx \
 	MultiImage.cxx \
 	NumericInput.cxx \
 	numericsort.cxx \
 	Output.cxx \
 	OvalBox.cxx \
+	overlay_rect.cxx \
+	own_colormap.cxx \
 	PackedGroup.cxx \
+	path.cxx \
 	PlasticBox.cxx \
 	PopupMenu.cxx \
 	Preferences.cxx \
 	ProgressBar.cxx \
 	RadioButton.cxx \
+	readimage.cxx \
 	RepeatButton.cxx \
 	ReturnButton.cxx \
 	RoundBox.cxx \
 	RoundedBox.cxx \
-	ScrollGroup.cxx \
+	run.cxx \
 	Scrollbar.cxx \
+	ScrollGroup.cxx \
+	scrollrect.cxx \
+	setcolor.cxx \
+	setdisplay.cxx \
+	setvisual.cxx \
 	ShadowBox.cxx \
 	ShapedWindow.cxx \
 	SharedImage.cxx \
 	ShortcutAssignment.cxx \
+	show_colormap.cxx \
 	Slider.cxx \
 	StatusBarGroup.cxx \
 	StringList.cxx \
@@ -114,7 +152,7 @@ CPPFILES = \
 	ThumbWheel.cxx \
 	TiledGroup.cxx \
 	TiledImage.cxx \
-	Tooltip.cxx  \
+	Tooltip.cxx \
 	UpBox.cxx \
 	Valuator.cxx \
 	ValueInput.cxx \
@@ -127,44 +165,6 @@ CPPFILES = \
 	Window_hotspot.cxx \
 	Window_iconize.cxx \
 	WizardGroup.cxx \
-	add_idle.cxx \
-	addarc.cxx \
-	addcurve.cxx \
-	args.cxx \
-	bmpImage.cxx \
-	clip.cxx \
-	color_chooser.cxx \
-	compose.cxx \
-	default_glyph.cxx \
-	dnd.cxx \
-	drawtext.cxx \
-	error.cxx \
-	event_key_state.cxx \
-	file_chooser.cxx \
-	filename_absolute.cxx \
-	filename_ext.cxx \
-	filename_isdir.cxx \
-	filename_list.cxx \
-	filename_match.cxx \
-	filename_name.cxx \
-	fillrect.cxx \
-	fltk_theme.cxx \
-	gifImage.cxx \
-	key_name.cxx \
-	list_fonts.cxx \
-	load_plugin.cxx \
-	lock.cxx \
-	message.cxx \
-	overlay_rect.cxx \
-	own_colormap.cxx \
-	path.cxx \
-	readimage.cxx \
-	run.cxx \
-	scrollrect.cxx \
-	setcolor.cxx \
-	setdisplay.cxx \
-	setvisual.cxx \
-	show_colormap.cxx \
 	xbmImage.cxx \
 	xpmImage.cxx
 
