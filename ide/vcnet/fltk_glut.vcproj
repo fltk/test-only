@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="fltk_gl"
+	Name="fltk_glut"
 	ProjectGUID="{CAF31CAF-5874-4859-B21A-A1033C68453B}"
 	Keyword="Win32Proj">
 	<Platforms>
@@ -12,8 +12,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="fltkd"
-			IntermediateDirectory="fltkd"
+			OutputDirectory="glutd"
+			IntermediateDirectory="glutd"
 			ConfigurationType="4"
 			CharacterSet="0">
 			<Tool
@@ -32,7 +32,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\fltk2_gld.lib"/>
+				OutputFile="..\..\lib\fltk2_glutd.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -54,8 +54,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="fltk"
-			IntermediateDirectory="fltk"
+			OutputDirectory="glut"
+			IntermediateDirectory="glut"
 			ConfigurationType="4"
 			CharacterSet="0">
 			<Tool
@@ -64,7 +64,7 @@
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="FALSE"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".,../..,../visualc"
+				AdditionalIncludeDirectories="../visualc;.;../.."
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -74,7 +74,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="..\..\lib\fltk2_gl.lib"/>
+				OutputFile="..\..\lib\fltk2_glut.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -103,31 +103,16 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath="..\..\OpenGL\Fl_Gl_Choice.cxx">
+				RelativePath="..\..\glut\glut_compatability.cxx">
 			</File>
 			<File
-				RelativePath="..\..\OpenGL\Fl_Gl_Overlay.cxx">
-			</File>
-			<File
-				RelativePath="..\..\OpenGL\Fl_Gl_Window.cxx">
-			</File>
-			<File
-				RelativePath="..\..\OpenGL\gl_draw.cxx">
-			</File>
-			<File
-				RelativePath="..\..\OpenGL\gl_start.cxx">
+				RelativePath="..\..\glut\glut_font.cxx">
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
-			<File
-				RelativePath="..\..\OpenGL\GlChoice.h">
-			</File>
-			<File
-				RelativePath="..\..\fltk\GlWindow.h">
-			</File>
 		</Filter>
 	</Files>
 	<Globals>

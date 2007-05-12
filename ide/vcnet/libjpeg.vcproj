@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="libjpeg"
+	ProjectGUID="{C1E5804B-938F-4DAD-84E7-5C162448E6DE}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>

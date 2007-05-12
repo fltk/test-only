@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="libpng"
+	ProjectGUID="{D5CE085C-6326-497C-B38F-6442476B1EED}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
