@@ -38,7 +38,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk2d.lib ws2_32.lib msimg32.lib fltk2_gld.lib opengl32.lib fltk2_glutd.lib"
+				AdditionalDependencies="fltk2d.lib ws2_32.lib msimg32.lib fltk2_gld.lib opengl32.lib glu32.lib fltk2_glutd.lib"
 				OutputFile="../../../test/fractals.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"

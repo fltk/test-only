@@ -38,7 +38,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk2d.lib ws2_32.lib msimg32.lib fltk2_gld.lib opengl32.lib fltk2_glut.lib glu32.lib"
+				AdditionalDependencies="fltk2d.lib ws2_32.lib msimg32.lib fltk2_gld.lib opengl32.lib fltk2_glutd.lib glu32.lib"
 				OutputFile="../../../test/glpuzzle.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"

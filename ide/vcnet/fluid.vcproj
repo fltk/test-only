@@ -38,7 +38,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk2d.lib fltk2_imagesd.lib ws2_32.lib msimg32.lib"
+				AdditionalDependencies="fltk2d.lib fltk2_imagesd.lib ws2_32.lib msimg32.lib fltk2_jpeg.lib fltk2_png.lib fltk2_z.lib"
 				OutputFile="../../fluid/fluid2d.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
