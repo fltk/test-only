@@ -66,6 +66,7 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) :
 {
   style_	= default_style;
   parent_	= 0;
+  childVector   = 0;
   callback_	= default_callback;
   user_data_	= 0;
   label_	= L;
@@ -80,15 +81,18 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) :
   damage_	= DAMAGE_ALL;
   layout_damage_= LAYOUT_DAMAGE;
   when_		= WHEN_RELEASE;
-  if (Group::current()) Group::current()->add(this);
+  if (constructorAddsTo_) constructorAddsTo_->add(this);
 }
 
-/*! The destructor is virtual. The base class removes itself from the
-  parent widget (if any), and destroys any label made with copy_label().
+/*!
+  The destructor destroys all child Widgets by calling destroyChildren().
+  Be sure to call remove_all() if you don't want this. It then
+  removes itself from the parent widget (if any).
 */
 Widget::~Widget() {
   remove_timeout();
   remove_shortcuts();
+  if (childVector) destroyChildren();
   if (parent_) parent_->remove(this);
   throw_focus();
   if (style_->dynamic()) {
@@ -643,7 +647,7 @@ void Widget::draw()
   } else {
     draw_box();
   }
-  draw_label();
+  draw_inside_label();
 }
 
 ////////////////////////////////////////////////////////////////

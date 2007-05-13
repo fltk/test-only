@@ -270,8 +270,8 @@ ValueInput::ValueInput(int x, int y, int w, int h, const char* l)
   input.callback(input_cb, this);
   clear_flag(ALIGN_MASK);
   set_flag(ALIGN_LEFT);
-  Group::current(parent());
   when(WHEN_CHANGED|WHEN_ENTER_KEY);
+  end();
 }
 
 ValueInput::~ValueInput() {

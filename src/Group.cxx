@@ -49,9 +49,6 @@ allow the user to resize it. If you want different behavior (such as
 from fltk::Pack) for your window you should make the window have that
 as a single resizable child that fills it.
 
-fltk::Menu is a subclass and thus all menus and browsers are groups
-and the items in them are widgets.
-
 */
 
 #include <config.h>
@@ -68,7 +65,7 @@ using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
 
-FL_API Group* Group::current_;
+FL_API Widget* Widget::constructorAddsTo_;
 
 static void revert(Style* s) {
   s->color_ = GRAY75;
@@ -84,9 +81,7 @@ NamedStyle* group_style = &the_style;
   and label string. The default boxtype is fltk::NO_BOX. */
 Group::Group(int X,int Y,int W,int H,const char *l,bool begin)
 : Widget(X,Y,W,H,l),
-  children_(0),
   focus_index_(-1),
-  array_(0),
   resize_align_(ALIGN_TOPLEFT|ALIGN_BOTTOMRIGHT),
   sizes_(0)
 {
@@ -98,64 +93,82 @@ Group::Group(int X,int Y,int W,int H,const char *l,bool begin)
 }
 
 /*! \e Deletes all children from the group and makes it empty.
-  This calls the destructor on all the children!!! */
-void Group::clear() {
-  init_sizes();
-  if (children_) {
-    Widget*const* a = array_;
-    Widget*const* e = a+children_;
-    // clear everything now, in case fix_focus recursively calls us:
-    array_ = 0;
-    children_ = 0;
-    focus_index_ = -1;
-    if (resizable_) resizable_ = this;
-    // okay, now it is safe to destroy the children:
-    while (e > a) {
-      Widget* o = *--e;
-      o->parent(0); // stops it from calling remove()
-      delete o;
-    }
-    delete[] const_cast<Widget**>( a );
+  This calls the destructor on all the children!!! If you don't
+  want to call the destructor, use remove_all().
+*/
+void Widget::destroyChildren() {
+  ChildVector* v = childVector;
+  if (!v) return;
+  // clear everything now, in case fix_focus recursively calls us:
+  childVector = 0;
+  // now destroy all the children in backwards order:
+  for (unsigned n = v->count; n--;) {
+    v->array[n]->parent_ = 0; // stops it from calling remove()
+    delete v->array[n];
   }
+  delete[] v->array;
+  delete v;
 }
 
-/*! Calls clear(), and thus <i>deletes all child widgets</i> */
-Group::~Group() {current_ = 0; clear();}
+Group::~Group() {}
 
-/*! \fn Widget * Group::child(int n) const
+/*! \fn Widget* Widget::child(int n) const
   Returns a child, n >= 0 && n < children(). <i>No range checking is done!</i>
 */
 
-/*! \fn int Group::children() const
-  Returns how many child widgets the group has. */
+/*! \fn bool Widget::hasChildren() const
+  Same as children()!=0 but slightly faster.
+*/
 
-/*! This does insert(w, find(beforethis)). This will append the
-  widget if beforethis is not in the group. */
-void Group::insert(Widget &o, int index) {
-  if (o.parent()) {
-    int n = o.parent()->find(o);
-    if (o.parent() == this) {
+/*! \fn int Widget::children() const
+  Returns how many child widgets this Widget has.
+*/
+
+/*! \fn void Widget::insert(Widget& o, Widget* beforethis)
+  This does insert(w, find(beforethis)). This will append the
+  widget if beforethis is null or not a child of this.
+*/
+
+/*!
+  Make \a o be a child of this widget. It is removed from it's
+  previous parent and inserted into this list at
+  \a index, or added at the end if the index is too large.
+  This does the right thing if the parent is already this,
+  it moves it to be before the widget currently at \a index.
+*/
+void Widget::insert(Widget &o, unsigned index) {
+  if (o.parent_) {
+    unsigned n = o.parent_->find(o);
+    if (o.parent_ == this) {
       if (index > n) index--;
       if (index == n) return;
     }
-    o.parent()->remove(n);
+    o.parent_->remove(n);
   }
-  o.parent(this);
-  if (children_ == 0) {
-    // allocate for 1 child
-    if (!array_) array_ = new Widget*[1];
-    array_[0] = &o;
+  o.parent_ = this;
+  if (!childVector) {
+    // initialize to one child
+    ChildVector* v = childVector = new ChildVector;
+    v->alloc = 1;
+    v->array = new Widget*[v->alloc];
+    v->count = 1;
+    v->array[0] = &o;
   } else {
-    if (!(children_ & (children_-1))) {// double number of children
-      Widget** newarray = new Widget*[2*children_];
-      memcpy(newarray, array_, children_*sizeof(Widget*));
-      delete[] array_;
-      array_ = newarray;
+    ChildVector* v = childVector;
+    if (v->count >= v->alloc) {
+      v->alloc = 2*v->count;
+      Widget** newarray = new Widget*[v->alloc];
+      memcpy(newarray, v->array, v->count*sizeof(Widget*));
+      delete[] v->array;
+      v->array = newarray;
     }
-    for (int j = children_; j > index; --j) array_[j] = array_[j-1];
-    array_[index] = &o;
+    unsigned j = v->count++;
+    while (j > index) {
+      v->array[j] = v->array[j-1];
+      --j;
+    }
+    v->array[j] = &o;
   }
-  ++children_;
   // fix the INACTIVE_R flag:
   if ( active_r() && o.active() ) {
     if ( o.flag(INACTIVE_R) ) {
@@ -170,97 +183,113 @@ void Group::insert(Widget &o, int index) {
   if ( o.visible_r() ) {
     o.handle( SHOW );
   }
-  init_sizes();
 }
-
-/*! \fn Group * Group::current()
-  Returns the group being currently built. The fltk::Widget
-  constructor automatically does current()->add(widget) if this is not
-  null. To prevent new widgets from being added to a group, call
-  Group::current(0).
-*/
-
-/*! \fn void Group::begin()
-
-  begin() sets the current group so you can build the widget tree by
-  just constructing the widgets. begin() is exactly the same as current(this).
-
-  <i>Don't forget to end() the group or window!</i>
-*/
-
-/*! \fn void Group::end()
-  end() is exactly the same as current(this->parent()). Any new
-  widgets added to the widget tree will be added to the parent of the
-  group.
-*/
 
 /*! The widget is removed from it's current group (if any) and then
   added to the end of this group. */
-void Group::add(Widget &o) {
-  insert(o, children_);
+void Widget::add(Widget &o) {
+  insert(o, unsigned(-1));
 }
 
-/*! Remove the indexed widget from the group. */
-void Group::remove(int index) {
-  if (index >= children_) return;
-  Widget* o = array_[index];
-  o->parent(0);
-  children_--;
-  for (int i=index; i < children_; ++i) array_[i] = array_[i+1];
-  init_sizes();
-}
+/*! \fn Widget* Widget::constructorAddsTo()
+  If not zero, the constructor calls constructorAddsTo()->add(this).
+  This allows a hierarchy to be built by calling constructors without
+  any other code or temporary variables.
+  Use begin() and end() to set this. To prevent new widgets from being
+  added to a group, call Widget::constructorAddsTo(0).
+*/
 
-/*! \fn void Group::remove(Widget& widget)
-  Removes a widget from the group. This does nothing if the widget is
-  not currently a child of this group. */
+/*! \fn void Widget::begin()
+  Sets constructorAddsTo() to this, so any further widgets that are
+  constructed are added as children to this.
 
-/*! \fn void Group::remove_all()
-  Removes all widgets from the group.  This does not call the destructor
-  on the child widget (see clear()). */
-void Group::remove_all()
-{
-  int count = children();
-  while ( count-- ) {
-    remove( count );
+  <i>Don't forget to end() after you create the children!</i>
+*/
+
+/*! \fn void Widget::end()
+  Sets constructorAddsTo() to parent(). Any new widgets will now
+  be added to the parent, or not added anywhere if the parent() is
+  null.
+*/
+
+/*! Remove the indexed widget from the group. Does nothing
+  if index is out of range.
+*/
+void Widget::remove(unsigned index) {
+  ChildVector* v = childVector;
+  if (!v || index >= v->count) return;
+  if (v->count < 2) {remove_all(); return;}
+  Widget* o = v->array[index];
+  o->parent_ = 0;
+  if (!--v->count) {
+    delete[] v->array;
+    delete v;
+    childVector = 0;
+  } else {
+    for (unsigned i=index; i < v->count; ++i)
+      v->array[i] = v->array[i+1];
   }
 }
 
-/*! Remove the indexed widget and insert the passed widget in it's place. */
-void Group::replace(int index, Widget& o) {
-  if (index >= children_) {add(o); return;}
-  o.parent(this);
-  array_[index]->parent(0);
-  array_[index] = &o;
-  init_sizes();
+/*! \fn void Widget::remove(Widget& widget)
+  Removes a widget from the group. This does nothing if the widget is
+  not currently a child of this group.
+*/
+
+/*! \fn void Widget::remove_all()
+  Does remove() on all the children. You may want to do this before
+  calling the destructor if you don't want the children destroyed.
+*/
+void Widget::remove_all()
+{
+  ChildVector* v = childVector;
+  if (!v) return;
+  childVector = 0;
+  for (unsigned n = v->count; n--;)
+    v->array[n]->parent_ = 0;
+  delete[] v->array;
+  delete v;
 }
 
-/*! \fn void Group::replace(Widget& old, Widget& nu)
+/*! Remove the indexed child and insert the passed widget in it's place. */
+void Widget::replace(unsigned index, Widget& o) {
+  ChildVector* v = childVector;
+  if (!v || index >= v->count) {add(o); return;}
+  o.parent(this);
+  v->array[index]->parent(0);
+  v->array[index] = &o;
+}
+
+/*! \fn void Widget::replace(Widget& old, Widget& nu)
   Find the \a old widget and remove it and insert the \a nu one. If \a old
   is not a child, the new widget is appended to the end of the
-  list. */
+  list.
+*/
 
-void Group::swap(int indexA, int indexB) {
-  if (indexA >= children_ || indexB >= children_) return;
-  Widget* o = array_[indexA];
-  array_[indexA] = array_[indexB];
-  array_[indexB] = o;
-  init_sizes();
+void Widget::swap(unsigned indexA, unsigned indexB) {
+  ChildVector* v = childVector;
+  if (!v || indexA >= v->count || indexB >= v->count) return;
+  Widget* o = v->array[indexA];
+  v->array[indexA] = v->array[indexB];
+  v->array[indexB] = o;
 }
 
 /*! Searches the children for \a widget, returns the index of \a
   widget or of a parent of \a widget that is a child() of
   this. Returns children() if the widget is NULL or not found. */
-int Group::find(const Widget* widget) const {
+unsigned Widget::find(const Widget* widget) const {
+  ChildVector* v = childVector;
+  if (!v) return 0;
   for (;;) {
-    if (!widget) return children_;
+    if (!widget) return v->count;
     if (widget->parent() == this) break;
     widget = widget->parent();
   }
   // Search backwards so if children are deleted in backwards order
   // they are found quickly:
-  for (int index = children_; index--;)
-    if (array_[index] == widget) return index;
-  return children_;
+  for (unsigned n = v->count; n--;)
+    if (v->array[n] == widget) return n;
+  return v->count;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -481,7 +510,7 @@ void Group::init_sizes() {
     directly.
 */
 bool Group::resize(int x, int y, int w, int h) {
-  if (!sizes_ && resizable() && children_ && (w != this->w() || h != this->h()))
+  if (!sizes_ && resizable() && hasChildren() && (w != this->w() || h != this->h()))
     layout(); // this is needed to recursively get inner groups...
   return Widget::resize(x,y,w,h);
 }
@@ -501,7 +530,8 @@ bool Group::resize(int x, int y, int w, int h) {
 */
 int* Group::sizes() {
   if (!sizes_) {
-    int* p = sizes_ = new int[4*(children_+2)];
+    unsigned numchildren = children();
+    int* p = sizes_ = new int[4*(numchildren+2)];
     // first thing in sizes array is the group's size:
     p[0] = x();
     p[1] = w();
@@ -522,10 +552,8 @@ int* Group::sizes() {
     }
     // next is all the children's sizes:
     p += 8;
-    Widget*const* a = array_;
-    Widget*const* e = a+children_;
-    while (a < e) {
-      Widget* o = *a++;
+    for (unsigned i=0; i<numchildren; i++) {
+      Widget* o = child(i);
       *p++ = o->x();
       *p++ = o->x()+o->w();
       *p++ = o->y();
@@ -564,7 +592,7 @@ void Group::layout(const Rectangle& r, int layout_damage) {
   // on and subclasses like PackedGroup can detect that:
   Widget::layout();
 
-  if (children_ && layout_damage&LAYOUT_WH) {
+  if (hasChildren() && layout_damage&LAYOUT_WH) {
     int* p = sizes(); // initialize the size array
 
     // get changes in size from the initial size:
@@ -579,10 +607,9 @@ void Group::layout(const Rectangle& r, int layout_damage) {
     int IY = *p++;
     int IB = *p++;
 
-    Widget*const* a = array_;
-    Widget*const* e = a+children_;
-    while (a < e) {
-      Widget* o = *a++;
+    unsigned numchildren = children();
+    for (unsigned i=0; i<numchildren; ++i) {
+      Widget* o = child(i);
       int flags = o->layout_damage();
       int X = *p++;
       int R = *p++;
@@ -639,8 +666,8 @@ void Group::layout(const Rectangle& r, int layout_damage) {
     }
   }
 
-  Widget*const* a = array_;
-  Widget*const* e = a+children_;
+  unsigned numchildren = children();
+  // This last part probably should be part of Widget::layout():
   int extradamage = layout_damage & LAYOUT_DAMAGE;
 #if USE_X11 || !defined(__APPLE__)
   // If this is not a Window and the xy position is changed, we must
@@ -648,8 +675,8 @@ void Group::layout(const Rectangle& r, int layout_damage) {
   // Windows will move to their new positions:
   if ((layout_damage & LAYOUT_XY) && !is_window()) extradamage |= LAYOUT_XY;
 #endif
-  while (a < e) {
-    Widget* widget = *a++;
+  for (unsigned i = 0; i < numchildren; ++i) {
+    Widget* widget = child(i);
     widget->layout_damage(widget->layout_damage()|extradamage);
     if (widget->layout_damage()) {
       widget->layout();
@@ -671,20 +698,20 @@ Widget* fl_did_clipping;
 
 void Group::draw() {
   clear_flag(HIGHLIGHT); // we never draw the box with highlight colors
-  int numchildren = children();
+  unsigned numchildren = children();
   if (damage() & ~DAMAGE_CHILD) {
 #if USE_CLIPOUT
     // Non-blinky draw, draw the inside widgets first, clip their areas
     // out, and then draw the background:
     push_clip(0, 0, w(), h());
-    int n; for (n = numchildren; n--;) {
+    unsigned n; for (n = numchildren; n--;) {
       Widget& w = *child(n);
       fl_did_clipping = 0;
       draw_child(w);
       if (fl_did_clipping != &w) clipout(w.x(), w.y(), w.w(), w.h());
     }
     draw_box();
-    draw_label();
+    draw_inside_label();
     pop_clip();
     // labels are drawn without the clip for back compatability so they
     // can draw atop sibling widgets:
@@ -692,8 +719,8 @@ void Group::draw() {
 #else
     // blinky-draw:
     draw_box();
-    draw_label();
-    for (int n = 0; n < numchildren; n++) {
+    draw_inside_label();
+    for (unsigned n = 0; n < numchildren; n++) {
       Widget& w = *child(n);
       draw_child(w);
       draw_outside_label(w);
@@ -704,7 +731,7 @@ void Group::draw() {
     // doing any clipping.  This is for maximum speed, even though
     // this may result in different output if this widget overlaps
     // another widget or a label.
-    for (int n = 0; n < numchildren; n++) {
+    for (unsigned n = 0; n < numchildren; n++) {
       Widget& w = *child(n);
       if (w.damage() & DAMAGE_CHILD_LABEL) {
 	draw_outside_label(w);
@@ -743,7 +770,7 @@ void Widget::draw_background() const {
   translate(-x(), -y());
   if (!parent()->box()->fills_rectangle()) parent()->draw_background();
   parent()->draw_box();
-  parent()->draw_label();
+  parent()->draw_inside_label();
   pop_matrix();
   pop_clip();
 }
@@ -754,7 +781,7 @@ extern void fl_window_flush(Window* window);
   and calling it's draw() after temporarily translating so 0,0 in
   drawing coordinates is the upper-left corner. It's damage is then set to 0.
 */
-void Group::draw_child(Widget& w) const {
+void Widget::draw_child(Widget& w) const {
   if (w.visible() && not_clipped(w)) {
     w.set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
     if (w.is_window()) {
@@ -774,7 +801,7 @@ void Group::draw_child(Widget& w) const {
   it's draw() after temporarily translating so 0,0 in drawing
   coordinates is the upper-left corner. It's damage is then set to 0.
 */
-void Group::update_child(Widget& w) const {
+void Widget::update_child(Widget& w) const {
   if (w.damage() && w.visible() && not_clipped(w)) {
     if (w.is_window()) {
       GSave gsave;
@@ -795,7 +822,7 @@ void Group::update_child(Widget& w) const {
 */
 void Group::fix_old_positions() {
   if (is_window()) return; // in fltk 1.0 children of windows were relative
-  for (int i = 0; i < children(); i++) {
+  for (unsigned i = 0; i < children(); i++) {
     Widget& w = *(child(i));
     w.x(w.x()-x());
     w.y(w.y()-y());

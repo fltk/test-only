@@ -107,12 +107,15 @@ void Widget::draw_frame() const {
   setdrawflags(flags_);
 }
 
-/** Calls draw_label() with the area inside the box() and with the
-    alignment stored in flags(). The labelfont() and labelcolor()
-    are used. For historic reasons if the OUTPUT flag is on then
-    the textfont() and textcolor() are used.
+/** Draws the label() and image() inside this widget. The label()
+  is only drawn if the alignment indicates it is inside (this
+  also means draw_outside_label(this) does nothing).
+
+  For historic reasons if the OUTPUT flag is on then
+  the textfont() and textcolor() are used instead of the
+  labelfont() and labelcolor().
 */
-void Widget::draw_label() const {
+void Widget::draw_inside_label() const {
   Flags flags = this->flags();
   // Do a quick test to see if we don't want to draw anything:
   if (!image() && (!label() || !*label() ||
@@ -120,7 +123,7 @@ void Widget::draw_label() const {
   // figure out the inside of the box():
   Rectangle r(w(),h()); box()->inset(r);
   // and draw it:
-  drawstyle(style(), this->flags() ^ OUTPUT);
+  drawstyle(style(), flags ^ OUTPUT);
   draw_label(r, flags);
 }
 
@@ -230,22 +233,14 @@ void Widget::draw_label(const Rectangle& ir, Flags flags) const {
 }
 
 /**
-  Groups normally call this to draw the label() outside a widget.
-  This uses the flags() to determine where to put the label. If
-  the ALIGN flags are all zero, or if ALIGN_INSIDE is turned
-  on, then nothing is done. Otherwise the align is used to select
-  a rectangle outside the widget and the widget's label() is
-  formatted into that area.
-
-  The font is set to labelfont()/labelsize(), and labelcolor()
-  is used to color the text. The flags are passed to the draw()
-  function, but with the alignment changed to put the text against
-  the widget, and INACTIVE is added if active_r() is false.
+  Draw the outside label, if any, of the child widget. A draw()
+  method should call this on child widgets. This does nothing
+  if the widget does not have an outside label.
 
   The image() of the widget is not drawn by this. It is always
   drawn inside the widget.
 */
-void Group::draw_outside_label(Widget& w) const {
+void Widget::draw_outside_label(Widget& w) const {
   Flags flags = w.flags();
   if (flags & INVISIBLE) return;
   // skip any labels that are inside the widget:

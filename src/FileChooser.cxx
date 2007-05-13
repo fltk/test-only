@@ -365,7 +365,7 @@ void FileChooser::ok_label(const char *l) {
   okButton->measure_label(w, h);
   w+=70;
   okButton->resize(cancelButton->x() - w , cancelButton->y(),w-10 , 25);
-  okButton->parent()->init_sizes();
+  ((Group*)(okButton->parent()))->init_sizes();
 }
 
 const char * FileChooser::ok_label() {

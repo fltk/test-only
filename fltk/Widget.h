@@ -30,7 +30,6 @@ namespace fltk {
 class FL_API Widget;
 class FL_API Window;
 class FL_API Symbol;
-class FL_API Group;
 struct Cursor;
 
 typedef void (Callback )(Widget*, void*);
@@ -64,9 +63,32 @@ public:
   static NamedStyle* default_style;
   static Symbol* default_glyph;
 
-  Group* parent() const	{ return parent_; }
-  void	parent(Group* w)	{ parent_ = w; }
+  Widget* parent() const	{ return parent_; }
+  void	parent(Widget* w)	{ parent_ = w; }
   Window* window() const	;
+
+  bool hasChildren() const {return childVector != 0;}
+  unsigned children() const {return childVector?childVector->count : 0;}
+  Widget* child(unsigned n) const {return childVector->array[n];}
+  unsigned find(const Widget*) const;
+  unsigned find(const Widget& o) const {return find(&o);}
+  void add(Widget&);
+  void add(Widget* o) {add(*o);}
+  void insert(Widget&, unsigned index);
+  void insert(Widget& o, Widget* before) {insert(o,find(before));}
+  void remove(unsigned index);
+  void remove(Widget& o) {remove(find(o));}
+  void remove(Widget* o) {remove(find(*o));}
+  void remove_all();
+  void replace(unsigned index, Widget&);
+  void replace(Widget& old, Widget& o) {replace(find(old),o);}
+  void swap(unsigned indexA, unsigned indexB);
+  void destroyChildren();
+
+  void begin() {constructorAddsTo_ = this;}
+  void end() {constructorAddsTo_ = parent();}
+  static Widget* constructorAddsTo() {return constructorAddsTo_;}
+  static void constructorAddsTo(Widget* w) {constructorAddsTo_ = w;}
 
   enum WidgetVisualType {
     // Values for type() shared by Button and menu Item, and for fake RTTI:
@@ -206,10 +228,13 @@ public:
   void	draw_background() const	;
   void  draw_frame() const	;
   void  draw_box() const	;
-  void  draw_box(const Rectangle& r) const ; // multiple boxes drawing for a single Widget
-  void	draw_label() const	;
+  void  draw_box(const Rectangle& r) const ;
+  void	draw_inside_label() const	;
   void  draw_label(const Rectangle&, Flags) const ;
   void  draw_glyph(int, const Rectangle&) const ;
+  void  draw_child(Widget&) const;
+  void  update_child(Widget&) const;
+  void  draw_outside_label(Widget& child) const ;
   void	cursor(Cursor*) const	;
 
   void	measure_label(int&, int&) const ;
@@ -295,11 +320,15 @@ private:
   Callback*		callback_;
   void*			user_data_;
   const char*		tooltip_; // make this into another widget?
-  Group*		parent_;
+  Widget*		parent_;
+  struct ChildVector {Widget** array; unsigned count; unsigned alloc;};
+  ChildVector*		childVector;
   uchar			type_;
   uchar			damage_;
   uchar			layout_damage_;
   uchar			when_;
+
+  static Widget*        constructorAddsTo_;
 
 };
 

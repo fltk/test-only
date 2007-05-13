@@ -365,7 +365,7 @@ ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L,bool begin)
   scrollbar.set_vertical();
   scrollbar.parent(this);
   scrollbar.callback(scrollbar_cb);
-  Group::current(begin ? this : parent());
+  if (begin) constructorAddsTo(this);
 }
 
 int ScrollGroup::handle(int event) {

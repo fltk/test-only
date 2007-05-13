@@ -204,7 +204,7 @@ ValueSlider::ValueSlider(int x, int y, int w, int h, const char* l)
 : Slider(x, y, w, h, l), input(nogroup(x), y, w, h, 0) {
   input.parent((Group*)this); // kludge!
   input.callback(input_cb, this);
-  Group::current(parent());
+  end();
   step(.01);
   when(WHEN_CHANGED|WHEN_ENTER_KEY);
 }

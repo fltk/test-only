@@ -159,8 +159,8 @@ int ShrinkTabPager::which(TabGroup* g, int event_x,int event_y) {
     int p[128], w[128];
     int selected = g->tab_positions(p, w);
     int d = (event_y-(H>=0?0:g->h()))*slope()/H;
-    for (int i=0; i<g->children(); i++) {
-	if (event_x < p[i+1]+(i<selected ? slope() - d : d)) return i;
+    for (unsigned i=0; i<g->children(); i++) {
+	if (event_x < p[i+1]+(int(i)<selected ? slope() - d : d)) return i;
     }
     return -1;
     
@@ -240,8 +240,8 @@ int MenuTabPager::which(TabGroup* g, int event_x,int event_y) {
     int p[128], w[128];
     int selected = g->tab_positions(p, w);
     int d = (event_y-(H>=0?0:g->h()))*slope()/H;
-    for (int i=0; i<g->children(); i++) {
-	if (event_x < p[i+1]+(i<selected ? slope() - d : d)) return i;
+    for (unsigned i=0; i<g->children(); i++) {
+	if (event_x < p[i+1]+(int(i)<selected ? slope() - d : d)) return i;
     }
     return -1;
     
@@ -262,7 +262,7 @@ bool MenuTabPager::draw_tabs(TabGroup* g, int selected, int* p, int* w) {
 	}
     } else {r-=BTN_WIDTH;want_extension=true;}
     
-    for (i=0;i<g->children()-1; i++) if (p[i]+w[i]>r) break;
+    for (i=0;i<int(g->children())-1; i++) if (p[i]+w[i]>r) break;
     //printf("%c last %d (p,w,p+w) = (%d,%d,%d),win width=%d, avail width = %d\n",want_extension ? 'E' : ' ',i, p[i],w[i],p[i]+w[i],g->w(),r);
     if (extension_) {
 	if (want_extension) extension_->set_visible();
@@ -323,7 +323,7 @@ void MenuTabPager::createExtMenu(TabGroup* g){
 	extension_->buttonbox(FLAT_BOX);
     }
     extension_->clear();
-    for (int i=0;i<g->children(); i++) {
+    for (unsigned i=0;i<g->children(); i++) {
 	Widget  * c = g->child(i);
 	if (c) {
 	    Widget* wi = extension_->add(c->label());

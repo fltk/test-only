@@ -91,7 +91,7 @@ void PackedGroup::layout() {
     bool saw_vertical = false;
 
     // layout all the top & left widgets (the ones before the resizable):
-    int i; for (i = 0; i < children(); i++) {
+    int i; for (i = 0; i < int(children()); i++) {
       Widget* widget = child(i);
       if (widget->contains(resizable())) break;
       if (!widget->visible()) continue;
@@ -134,7 +134,7 @@ void PackedGroup::layout() {
     }
 
     // Lay out the resizable widget to fill the remaining space:
-    if (resizable_index < children()) {
+    if (resizable_index < int(children())) {
       Widget* widget = child(resizable_index);
       widget->resize(r.x(), r.y(), r.w(), r.h());
       widget->layout_damage(widget->layout_damage()|extradamage);

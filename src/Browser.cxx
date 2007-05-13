@@ -1873,7 +1873,7 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
   leaf_symbol_ = 0;
   group_symbol_ = 0;
   OPEN.unset();
-  Group::current(parent());
+  end();
 }
 
 /*! The destructor deletes all the list items (because they are child

@@ -206,8 +206,8 @@ int TabGroup::handle(int event) {
       case LeftKey:
 	backwards = 1;
       MOVE:
-	if (backwards) {i = i ? i-1 : children()-1;}
-	else {i++; if (i >= children()) i = 0;}
+	if (backwards) {i = i ? i-1 : int(children())-1;}
+	else {i++; if (i >= int(children())) i = 0;}
 	if (value(i)) do_callback();
 	return 1;
       }
@@ -289,7 +289,7 @@ Widget* TabGroup::selected_child() {
 */
 bool TabGroup::value(int n) {
   if (n < 0) n = 0;
-  if (n >= children()) {
+  if (n >= int(children())) {
     if (!children()) return false;
     n = children()-1;
   }

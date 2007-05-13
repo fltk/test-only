@@ -178,6 +178,7 @@ static int innards(
   }
 
   window.end();
+  window.init_sizes();
   button_number = 0;
   window.exec();
   if (istr)

@@ -34,37 +34,20 @@
 namespace fltk {
 
 class FL_API Group : public Widget {
-public:
 
-  int children() const {return children_;}
-  Widget* child(int n) const {return array_[n];}
+public:
 
   void draw();
   void layout();
   int handle(int);
 
-  void begin() {current_ = this;}
-  void end() {current_ = (Group*)parent();}
-  static Group *current() {return current_;}
-  static void current(Group *g) {current_ = g;}
-
-  int find(const Widget*) const;
-  int find(const Widget& o) const {return find(&o);}
+  // for back-compatability:
+  static Group* current() {return (Group*)constructorAddsTo();}
+  static void current(Group* g) {constructorAddsTo(g);}
+  void clear() {destroyChildren();}
 
   Group(int,int,int,int, const char * = 0, bool begin=false);
   virtual ~Group();
-  void add(Widget&);
-  void add(Widget* o) {add(*o);}
-  void insert(Widget&, int index);
-  void insert(Widget& o, Widget* before) {insert(o,find(before));}
-  void remove(int index);
-  void remove(Widget& o) {remove(find(o));}
-  void remove(Widget* o) {remove(find(*o));}
-  void remove_all();
-  void replace(int index, Widget&);
-  void replace(Widget& old, Widget& o) {replace(find(old),o);}
-  void swap(int indexA, int indexB);
-  void clear();
 
   void resizable(Widget& o) {resizable_ = &o;}
   void resizable(Widget* o) {resizable_ = o;}
@@ -88,22 +71,15 @@ public:
 
 protected:
 
-  void draw_child(Widget&) const;
-  void update_child(Widget&) const;
-  void draw_outside_label(Widget&) const ;
   int* sizes();
   void layout(const Rectangle&, int layout_damage);
 
 private:
 
-  int children_;
   int focus_index_;
-  Widget** array_;
   Widget* resizable_;
   Flags resize_align_;
   int *sizes_; // remembered initial sizes of children
-
-  static Group *current_;
 
 };
 
