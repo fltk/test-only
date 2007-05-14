@@ -159,8 +159,14 @@ bool pnmImage::fetch() {
 
       case 5 :
       case 6 :
+        if (maxval < 256) {
           fread(ptr, w, depth(), fp);
-          break;
+        } else {
+          val = (uchar)getc(fp);
+          val = (val<<8)|(uchar)getc(fp);
+          *ptr++ = (255*val)/maxval;
+        }
+        break;
 
       case 7 : /* XV 3:3:2 thumbnail format */
           for (x = w; x > 0; x --) {
