@@ -65,8 +65,8 @@ const Fl_Menu_Item* Fl_Menu_Item::next(int n) const {
 
 // Recursive function to create Items and add them to a group:
 
-static const Fl_Menu_Item* add(Menu* g, const Fl_Menu_Item* m,void* data) {
-  Widget* saved = Widget::constructorAddsTo();
+static const Fl_Menu_Item* add(Group* g, const Fl_Menu_Item* m,void* data) {
+  Group* saved = Group::current();
   g->begin();
   while (m && m->text) {
     Widget* o;
@@ -97,7 +97,7 @@ static const Fl_Menu_Item* add(Menu* g, const Fl_Menu_Item* m,void* data) {
     if (m->flags & FL_MENU_DIVIDER) new Divider();
     m = next;
   }
-  Widget::constructorAddsTo(saved);
+  Group::current(saved);
   return m;
 }
 

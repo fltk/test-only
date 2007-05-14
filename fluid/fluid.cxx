@@ -951,7 +951,7 @@ void toggle_sourceview_cb(DoubleBufferWindow *, void *) {
     sourceview_panel->callback((Callback*)toggle_sourceview_cb);
     sv_autorefresh->value(prefs.sv_autorefresh() ? true : false);
     sv_autoposition->value(prefs.sv_autoposition() ? true : false);
-    if (prefs.sv_tab()>=0 && prefs.sv_tab()<int(sv_tab->children())) sv_tab->value(prefs.sv_tab());
+    if (prefs.sv_tab()>=0 && prefs.sv_tab()<sv_tab->children()) sv_tab->value(prefs.sv_tab());
     if (!position_window(sourceview_panel,"sourceview_pos", 0, 320, 120, 550, 500)) return;
   }
 

@@ -92,6 +92,7 @@ StatusBarGroup::~StatusBarGroup() {
 void StatusBarGroup::resize_from_parent() {
   // resize will work if you set resizable()
     if (!parent()) return;
+    int i;
     Rectangle inside(0,0,parent()->w(),parent()->h());
     parent()->box()->inset(inside);
     x(inside.x());
@@ -99,7 +100,7 @@ void StatusBarGroup::resize_from_parent() {
 	w(inside.w()); // set proper width 
 	if (h()==0) h(saved_h_);
         y(inside.b()-h());
-	for (unsigned i = 0; i < parent()->children(); i++) {
+	for (i = 0; i < parent()->children(); i++) {
 	    Widget* w = parent()->child(i);
 	    if (((Widget*) this)!= w) {
 		int delta = w->b()-this->y();
@@ -110,12 +111,12 @@ void StatusBarGroup::resize_from_parent() {
 		}
 	    }
 	}
-	for (unsigned i=0; i<3;i++) update_box(tf_[i], (StatusBarGroup::Position) i);
+	for (i=0; i<3;i++) update_box(tf_[i], (StatusBarGroup::Position) i);
     } else {
 	if (h()!=0) saved_h_ = h();
 	w(0);h(0);
 	bool c = false;
-	for (unsigned i = 0; i < parent()->children(); i++) {
+	for (i = 0; i < parent()->children(); i++) {
 	    Widget* w = parent()->child(i);
 	    if (((Widget*) this)!= w) {
 		int delta = w->b()-this->y();

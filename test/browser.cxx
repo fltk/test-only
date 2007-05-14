@@ -77,7 +77,10 @@ void cb_remove(Widget*, void* ptr) {
     Widget* w = tree->goto_top();
     while (w) {
       if (w->selected()) { // test for parent being open
-        delete w;
+	Group* g = w->parent();
+	g->remove(w);
+	delete w;
+	g->relayout();
 	w = tree->goto_top();
       } else {
 	w = tree->next();
@@ -85,8 +88,12 @@ void cb_remove(Widget*, void* ptr) {
     }
   } else {
     Widget* w = tree->goto_focus();
-    if (w)
+    if (w) {
+      Group* g = w->parent();
+      g->remove(w);
       delete w;
+      g->relayout();
+    }
   }
 }
 
@@ -100,7 +107,7 @@ static Group* current_group(Browser* tree) {
   Widget* w = tree->goto_focus();
   if (!w) return tree;
   if (w->is_group() && w->flag(fltk::OPENED)) return (Group*)w;
-  return w->parent() ? (Group*)(w->parent()) : tree;
+  return w->parent() ? w->parent() : tree;
 }
 
 void cb_add_folder(Widget*, void* ptr) {

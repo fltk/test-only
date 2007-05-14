@@ -1931,7 +1931,7 @@ void WidgetType::read_property(const char *c) {
       y += pasteoffset;
       // adjust for older relative coordinates:
       if (read_version < 2.0001 && !is_menu_item() && o->parent()) {
-	fltk::Widget* p = o->parent();
+	fltk::Group* p = o->parent();
 	while (p->parent()) {x -= p->x(); y -= p->y(); p = p->parent();}
       }
       o->x(x); o->y(y); o->w(w); o->h(h);
@@ -2357,7 +2357,7 @@ void WidgetType::copy_properties() {
   if (!o->active()) 
     w->deactivate();
   if (resizable() && w->parent()) 
-    ((Group*)w->parent())->resizable(o);
+    w->parent()->resizable(o);
 }
 //
 // End of "$Id$".

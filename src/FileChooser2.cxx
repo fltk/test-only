@@ -780,10 +780,10 @@ FileChooser::newdir()
 void
 FileChooser::preview(int e)// I - 1 = enable preview, 0 = disable preview
 {
-  previewButton->value(e ? true : false);
+    previewButton->value(e ? true : false);
   prefs_.set("preview", e);
 
-  Widget *p = previewBox->parent();
+  Group *p = previewBox->parent();
   if (e) {
     int w = p->w() * 2 / 3;
     fileList->resize(fileList->x(), fileList->y(),
@@ -799,7 +799,7 @@ FileChooser::preview(int e)// I - 1 = enable preview, 0 = disable preview
                        0, previewBox->h());
     previewBox->hide();
   }
-  ((Group*)p)->init_sizes();
+  p->init_sizes();
 
   fileList->parent()->redraw();
 }

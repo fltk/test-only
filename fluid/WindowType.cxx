@@ -364,7 +364,7 @@ void WindowType::newposition(WidgetType *o,int &X,int &Y,int &R,int &T) {
     T += dy;
   } else {
     int ox = 0; int oy = 0;
-    fltk::Widget* p = o->o->parent();
+    fltk::Group* p = o->o->parent();
     while (p->parent()) {ox += p->x(); oy += p->y(); p = p->parent();}
     if (drag&LEFT) if (X+ox==bx) X += dx; else if (X<bx+dx-ox) X = bx+dx-ox;
     if (drag&BOTTOM) if (Y+oy==by) Y += dy; else if (Y<by+dy-oy) Y = by+dy-oy;
@@ -384,7 +384,7 @@ void WindowType::draw_overlay() {
 	numselected++;
 	fltk::Widget* o = ((WidgetType*)q)->o;
 	int x = o->x(); int y = o->y();
-	fltk::Widget* p = o->parent();
+	fltk::Group* p = o->parent();
 	while (p->parent()) {x += p->x(); y += p->y(); p = p->parent();}
 	if (x < bx) bx = x;
 	if (y < by) by = y;
@@ -410,7 +410,7 @@ void WindowType::draw_overlay() {
       int x,y,r,t;
       newposition((WidgetType*)q,x,y,r,t);
       fltk::Widget* o = ((WidgetType*)q)->o;
-      fltk::Widget* p = o->parent();
+      fltk::Group* p = o->parent();
       while (p->parent()) {
 	x += p->x(); r += p->x();
 	y += p->y(); t += p->y();
@@ -595,7 +595,7 @@ int WindowType::handle(int event) {
 	if (i->is_widget() && !i->is_menu_item()) {
 	  fltk::Widget* o = ((WidgetType*)i)->o;
 	  int x = o->x(); int y = o->y();
-	  fltk::Widget* p = o->parent(); if (!p->visible_r()) continue;
+	  fltk::Group* p = o->parent(); if (!p->visible_r()) continue;
 	  while (p->parent()) {x += p->x(); y += p->y(); p = p->parent();}
 	  if (x >= x1 && y > y1 && x+o->w() < mx && y+o->h() < my) {
 	    if (toggle) select(i, !i->selected());
