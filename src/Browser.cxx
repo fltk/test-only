@@ -1194,15 +1194,18 @@ bool Browser::select_only_this(int do_callback) {
     bool ret = false;
     // Turn off all other items and set damage:
     if (goto_top()) do {
-      if (set_item_selected(at_mark(FOCUS),do_callback)) ret = true;
+      if (!at_mark(FOCUS))
+        if (set_item_selected(false,do_callback)) ret = true;
     } while (next_visible());
     // Turn off closed items:
     nodamage = true;
     if (goto_top()) do {
-      if (set_item_selected(at_mark(FOCUS),do_callback)) ret = true;
+      if (!at_mark(FOCUS))
+        if (set_item_selected(false,do_callback)) ret = true;
     } while (next());
     nodamage = false;
     goto_mark(FOCUS);
+    if (set_item_selected(true,do_callback)) ret = true;
     return ret;
   } else {
     if (!set_focus()) return false;
