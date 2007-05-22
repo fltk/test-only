@@ -89,6 +89,7 @@ void ShapedWindow::draw() {
     HRGN region = bitmap2region(mask);
     SetWindowRgn(xid(this), region, TRUE);
 #elif defined(__APPLE__)
+	mask = 0; // hopefully will shut up compiler
     // not yet implemented for Apple
 #else
 #endif

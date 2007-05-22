@@ -96,7 +96,6 @@ using namespace fltk;
 # error
 #endif
 
-    Symbol(name), pixeltype_(fltk::RGB32), w_(12), h_(12),
 /*! \fn Image::Image(const char* name)
   The default constructor sets pixeltype() to RGB32 (0x00rrggbb) and
   width() and height() to 12. This means that 12x12 square with the current

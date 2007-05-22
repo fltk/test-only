@@ -108,7 +108,7 @@ void fltk::glsetfont(fltk::Font* font, float size) {
     short cfont;
     GetFNum(CFStringGetPascalStringPtr(cfname, kCFStringEncodingMacRoman),&cfont);
     CFRelease(cfname);
-    aglUseFont(aglGetCurrentContext(), cfont, attrib,current_size_,0,256,listbase);
+    aglUseFont(aglGetCurrentContext(), cfont, attrib,(int)current_size_,0,256,listbase);
 #else
 #error
 #endif
