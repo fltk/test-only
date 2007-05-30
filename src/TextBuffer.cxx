@@ -174,6 +174,8 @@ const char *TextBuffer::text() {
  * Replace the entire contents of the text buffer
  */
 void TextBuffer::text(const char *t) {
+  if(!t) return;
+
   call_predelete_callbacks(0, length_);
 
   /* Save information for redisplay, and get rid of the old buffer */

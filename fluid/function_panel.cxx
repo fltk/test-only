@@ -62,41 +62,35 @@ fltk::Window* make_function_panel() {
   fltk::Window* w;
    {fltk::Window* o = function_panel = new fltk::Window(400, 208, "function/method");
     w = o;
+    o->shortcut(0xff1b);
     o->begin();
-     {fltk::CheckButton* o = f_public_button = new fltk::CheckButton(13, 15, 95, 25, "public");
-      o->box(fltk::THIN_DOWN_BOX);
+     {fltk::CheckButton* o = f_public_button = new fltk::CheckButton(13, 8, 95, 25, "public");
       o->when(fltk::WHEN_NEVER);
     }
-     {fltk::CheckButton* o = f_c_button = new fltk::CheckButton(129, 15, 133, 25, "C declaration");
-      o->box(fltk::THIN_DOWN_BOX);
-    }
+    f_c_button = new fltk::CheckButton(129, 8, 133, 25, "C declaration");
      {fltk::Input* o = f_name_input = new fltk::Input(13, 55, 237, 22, "Name(args): (blank for main())");
-      o->box(fltk::THIN_DOWN_BOX);
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
     }
      {fltk::Input* o = f_attributes_input = new fltk::Input(13, 99, 237, 22, "Attributes (virtual, static, __declspec, ...)");
-      o->box(fltk::THIN_DOWN_BOX);
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
     }
-     {fltk::Input* o = f_return_type_input = new fltk::Input(13, 143, 383, 22, "Return Type: (blank to return outermost widget)");
-      o->box(fltk::THIN_DOWN_BOX);
+     {fltk::Input* o = f_return_type_input = new fltk::Input(13, 143, 377, 22, "Return Type: (blank to return outermost widget)");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
     }
-     {fltk::ReturnButton* o = f_panel_ok = new fltk::ReturnButton(153, 176, 118, 22, "OK");
-      o->buttonbox(fltk::THIN_UP_BOX);
+     {fltk::ReturnButton* o = f_panel_ok = new fltk::ReturnButton(220, 176, 80, 22, "OK");
+      o->box(fltk::UP_BOX);
       o->shortcut(0xff0d);
       ((fltk::Window*)(o->parent()))->hotspot(o);
     }
-     {fltk::Button* o = f_panel_cancel = new fltk::Button(281, 176, 115, 22, "Cancel");
-      o->box(fltk::THIN_UP_BOX);
-      o->buttonbox(fltk::DOWN_BOX);
+     {fltk::Button* o = f_panel_cancel = new fltk::Button(310, 176, 80, 22, "Cancel");
+      o->box(fltk::UP_BOX);
+      o->buttonbox(fltk::NO_BOX);
       o->shortcut(0xff1b);
     }
-     {fltk::Choice* o = new fltk::Choice(278, 99, 111, 22, "attr:");
-      o->box(fltk::THIN_DOWN_BOX);
+     {fltk::Choice* o = new fltk::Choice(280, 99, 110, 22, "attr:");
       o->begin();
        {fltk::Item* o = new fltk::Item("static");
         o->callback((fltk::Callback*)cb_static);
@@ -132,14 +126,13 @@ fltk::Window* make_function_panel() {
       }
       o->end();
     }
-     {fltk::Button* o = new fltk::Button(269, 55, 120, 22, "Set main()");
-      o->box(fltk::THIN_UP_BOX);
+     {fltk::Button* o = new fltk::Button(280, 55, 110, 22, "Set main()");
+      o->box(fltk::UP_BOX);
       o->buttonbox(fltk::DOWN_BOX);
       o->callback((fltk::Callback*)cb_Set);
     }
     o->end();
     o->set_modal();
-    o->resizable(o);
   }
   return  w;
 }
@@ -160,6 +153,7 @@ fltk::Window* make_code_panel() {
   fltk::Window* w;
    {fltk::Window* o = code_panel = new fltk::Window(290, 175, "code");
     w = o;
+    o->shortcut(0xff1b);
     o->callback((fltk::Callback*)cb_code_panel);
     o->begin();
      {CodeEditor* o = code_input = new CodeEditor(6, 5, 280, 138);
@@ -195,16 +189,13 @@ fltk::Window* make_codeblock_panel() {
   fltk::Window* w;
    {fltk::Window* o = codeblock_panel = new fltk::Window(290, 131, "codeblock");
     w = o;
+    o->shortcut(0xff1b);
     o->begin();
-     {fltk::Input* o = code_before_input = new fltk::Input(10, 11, 270, 22, "input:");
+     {fltk::Input* o = code_before_input = new fltk::Input(10, 22, 270, 22, "Conditional code block");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
     }
-     {fltk::Widget* o = new fltk::Widget(10, 33, 270, 33, "\"{...child code...}\" is inserted here");
-      o->box(fltk::NO_BOX);
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
-    }
-     {fltk::Input* o = code_after_input = new fltk::Input(10, 65, 270, 23, "input:");
+     {fltk::Input* o = code_after_input = new fltk::Input(10, 65, 270, 23, "\"{...child code...}\" is inserted here");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
     }
@@ -217,7 +208,6 @@ fltk::Window* make_codeblock_panel() {
     }
     o->end();
     o->set_modal();
-    o->resizable(o);
   }
   return  w;
 }
@@ -236,16 +226,13 @@ fltk::Window* make_declblock_panel() {
   fltk::Window* w;
    {fltk::Window* o = declblock_panel = new fltk::Window(290, 131, "declaration block");
     w = o;
+    o->shortcut(0xff1b);
     o->begin();
-     {fltk::Input* o = decl_before_input = new fltk::Input(10, 11, 270, 22, "input:");
+     {fltk::Input* o = decl_before_input = new fltk::Input(10, 22, 270, 22, "Block start");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
     }
-     {fltk::Widget* o = new fltk::Widget(10, 33, 270, 33, "\"\\n...child code...\\n\" is inserted here");
-      o->box(fltk::NO_BOX);
-      o->align(fltk::ALIGN_LEFT|fltk::ALIGN_CENTER);
-    }
-     {fltk::Input* o = decl_after_input = new fltk::Input(10, 66, 270, 22, "input:");
+     {fltk::Input* o = decl_after_input = new fltk::Input(10, 66, 270, 22, "\"\\n...child code...\\n\" is inserted here");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
     }
@@ -277,6 +264,7 @@ fltk::Window* make_decl_panel() {
   fltk::Window* w;
    {fltk::Window* o = decl_panel = new fltk::Window(290, 175, "declaration");
     w = o;
+    o->shortcut(0xff1b);
     o->begin();
      {fltk::CheckButton* o = decl_public_button = new fltk::CheckButton(10, 11, 65, 22, "public");
       o->when(fltk::WHEN_NEVER);
@@ -286,7 +274,6 @@ fltk::Window* make_decl_panel() {
 \" or \"/*foo*/\"");
       o->align(fltk::ALIGN_BOTTOM|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
-      fltk::Group::current()->resizable(o);
     }
      {fltk::ReturnButton* o = decl_panel_ok = new fltk::ReturnButton(110, 143, 80, 22, "OK");
       o->shortcut(0xff0d);
@@ -296,6 +283,7 @@ fltk::Window* make_decl_panel() {
       o->shortcut(0xff1b);
     }
     o->end();
+    o->resizable(o);
   }
   return  w;
 }
@@ -316,6 +304,7 @@ fltk::Window* make_class_panel() {
   fltk::Window* w;
    {fltk::Window* o = class_panel = new fltk::Window(280, 164, "class");
     w = o;
+    o->shortcut(0xff1b);
     o->begin();
      {fltk::CheckButton* o = c_public_button = new fltk::CheckButton(10, 11, 65, 22, "public");
       o->when(fltk::WHEN_NEVER);
@@ -323,7 +312,6 @@ fltk::Window* make_class_panel() {
      {fltk::Input* o = c_name_input = new fltk::Input(10, 44, 260, 22, "name:");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
-      fltk::Group::current()->resizable(o);
     }
      {fltk::Input* o = c_subclass_input = new fltk::Input(10, 89, 260, 21, "subclass of (text between : and {)");
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
@@ -338,6 +326,7 @@ fltk::Window* make_class_panel() {
     }
     o->end();
     o->set_modal();
+    o->resizable(o);
   }
   return  w;
 }
@@ -352,20 +341,20 @@ fltk::Button *namespace_panel_cancel=(fltk::Button *)0;
 
 fltk::Window* make_namespace_panel() {
   fltk::Window* w;
-   {fltk::Window* o = namespace_panel = new fltk::Window(298, 140, "namespace");
+   {fltk::Window* o = namespace_panel = new fltk::Window(300, 130, "namespace");
     w = o;
+    o->shortcut(0xff1b);
     o->begin();
-     {fltk::Input* o = namespace_input = new fltk::Input(21, 10, 270, 22, "default is  \"fltk\", can be declared at the root or  imbricated into another\
+     {fltk::Input* o = namespace_input = new fltk::Input(10, 22, 281, 22, "default is  \"fltk\", can be declared at the root or  imbricated into another\
  namespace");
       o->align(fltk::ALIGN_BOTTOM|fltk::ALIGN_LEFT|fltk::ALIGN_WRAP);
       o->when(fltk::WHEN_NEVER);
-      fltk::Group::current()->resizable(o);
     }
-     {fltk::ReturnButton* o = namespace_panel_ok = new fltk::ReturnButton(112, 96, 83, 22, "OK");
+     {fltk::ReturnButton* o = namespace_panel_ok = new fltk::ReturnButton(120, 99, 80, 22, "OK");
       o->shortcut(0xff0d);
       ((fltk::Window*)(o->parent()))->hotspot(o);
     }
-     {fltk::Button* o = namespace_panel_cancel = new fltk::Button(205, 96, 83, 22, "Cancel");
+     {fltk::Button* o = namespace_panel_cancel = new fltk::Button(210, 99, 80, 22, "Cancel");
       o->shortcut(0xff1b);
     }
     o->end();
@@ -403,6 +392,7 @@ fltk::DoubleBufferWindow* make_comment_panel() {
     w = o;
     o->type(241);
     o->labelsize(11);
+    o->shortcut(0xff1b);
     o->callback((fltk::Callback*)cb_comment_panel);
     o->begin();
      {fltk::MultiLineInput* o = comment_input = new fltk::MultiLineInput(110, 10, 430, 266, "input");
@@ -415,12 +405,10 @@ fltk::DoubleBufferWindow* make_comment_panel() {
       o->labelsize(11);
       o->begin();
        {fltk::ReturnButton* o = comment_panel_ok = new fltk::ReturnButton(371, 286, 80, 23, "OK");
-        o->labelsize(11);
         o->shortcut(0xff0d);
         ((fltk::Window*)(o->parent()->parent()))->hotspot(o);
       }
        {fltk::Button* o = comment_panel_cancel = new fltk::Button(460, 286, 79, 23, "Cancel");
-        o->labelsize(11);
         o->shortcut(0xff1b);
         o->callback((fltk::Callback*)cb_comment_panel_cancel);
       }
@@ -483,6 +471,7 @@ fltk::DoubleBufferWindow* make_sourceview() {
    {fltk::DoubleBufferWindow* o = sourceview_panel = new fltk::DoubleBufferWindow(520, 490, "Code View");
     w = o;
     o->type(241);
+    o->shortcut(0xff1b);
     o->callback((fltk::Callback*)toggle_sourceview_cb);
     o->begin();
      {fltk::TabGroup* o = sv_tab = new fltk::TabGroup(10, 10, 500, 440);
@@ -491,7 +480,6 @@ fltk::DoubleBufferWindow* make_sourceview() {
       o->callback((fltk::Callback*)update_sourceview_position_cb);
       o->begin();
        {fltk::Group* o = new fltk::Group(0, 25, 500, 415, "Source");
-        o->labelsize(13);
         o->hide();
         o->begin();
          {CodeViewer* o = sv_source = new CodeViewer(10, 15, 480, 390);
@@ -503,7 +491,6 @@ fltk::DoubleBufferWindow* make_sourceview() {
         fltk::Group::current()->resizable(o);
       }
        {fltk::Group* o = new fltk::Group(0, 25, 500, 415, "Header");
-        o->labelsize(13);
         o->begin();
          {CodeViewer* o = sv_header = new CodeViewer(10, 15, 480, 390);
           o->textfont(fltk::COURIER);

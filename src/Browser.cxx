@@ -1135,8 +1135,9 @@ bool Browser::make_item_visible(linepos where) {
   callback is done for each item that changes selected state.
 */
 bool Browser::set_item_selected(bool value, int do_callback) {
+  if(!item()) return false;
+
   if (multi()) {
-    //if (value) set_focus();
     if (value) {
       if (item()->selected()) return false;
       item()->set_selected();

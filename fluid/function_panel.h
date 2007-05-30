@@ -26,7 +26,6 @@ extern fltk::Button* code_panel_cancel;
 fltk::Window* make_code_panel();
 extern fltk::Window* codeblock_panel;
 extern fltk::Input* code_before_input;
-#include <fltk/Widget.h>
 extern fltk::Input* code_after_input;
 extern fltk::ReturnButton* codeblock_panel_ok;
 extern fltk::Button* codeblock_panel_cancel;
