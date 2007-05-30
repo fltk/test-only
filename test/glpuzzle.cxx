@@ -153,11 +153,13 @@ static GLint viewport[4];
 
 unsigned hash(Config config) {
   int i, j, value;
+  int p;
 
   value = 0;
   for (i = 0; i < HEIGHT; i++) {
     for (j = 0; j < WIDTH; j++) {
-      value = value + convert[config[i][j]];
+      p = config[i][j];
+      value = value + convert[p];
       value *= 6;
     }
   }
@@ -520,12 +522,13 @@ addConfig(Config config, struct puzzle *back)
   newpiece = hashtable[hashvalue % HASHSIZE];
   while (newpiece != NULL) {
     if (newpiece->hashvalue == hashvalue) {
-      int i, j;
+      int i, j, p, np;
 
       for (i = 0; i < WIDTH; i++) {
         for (j = 0; j < HEIGHT; j++) {
-          if (convert[config[j][i]] !=
-            convert[newpiece->pieces[j][i]])
+          p = config[j][i];
+          np = newpiece->pieces[j][i];
+          if (convert[p] != convert[np])
             goto nomatch;
         }
       }

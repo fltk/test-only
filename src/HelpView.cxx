@@ -59,6 +59,7 @@
 #include <fltk/Font.h>
 #include <fltk/xpmImage.h>
 #include <fltk/draw.h>
+#include <fltk/damage.h>
 #include <fltk/events.h>
 #include <fltk/Cursor.h>
 #include <stdio.h>
@@ -370,6 +371,11 @@ HelpView::draw()
   box(b);
   draw_box(Rectangle(0, 0, ww, hh));
 
+  if (damage() & (DAMAGE_ALL | DAMAGE_CHILD)) {
+    hscrollbar_->set_damage(DAMAGE_ALL);
+	scrollbar_->set_damage(DAMAGE_ALL);
+  }
+
   if (hscrollbar_->visible()) {
     update_child (*hscrollbar_);
     hh -= 17;
@@ -389,7 +395,14 @@ HelpView::draw()
     return;
 
   // Clip the drawing to the inside of the box...
-  Rectangle tmp(*this);
+  Rectangle tmp(0, 0, w(), h());
+
+  if(scrollbar_->visible())
+    tmp.w(tmp.w() - scrollbar_->w());
+
+  if(hscrollbar_->visible())
+    tmp.h(tmp.h() - hscrollbar_->h());
+
   b->inset(tmp);
   fltk::push_clip(tmp);
 
@@ -969,8 +982,6 @@ HelpView::format()
 		columns[MAX_COLUMNS];
 				// Column widths
   Color	tc, rc;		// Table/row background color
-  Box * b = box() ? box() : DOWN_BOX;
-				// Box to draw...
 
 
   // Reset document width...
@@ -1687,30 +1698,6 @@ HelpView::format()
     qsort(targets_, ntargets_, sizeof(HelpTarget),
           (compare_func_t)compare_targets);
 
-  Rectangle inside(*this);
-  b->inset(inside);
-
-  if (hsize_ > (inside.w() - 17)) {
-    hscrollbar_->show();
-
-    if (size_ <= (inside.h() - 17)) {
-      scrollbar_->hide();
-      hscrollbar_->resize(inside.x(), inside.b()-17, inside.w(), 17);
-    } else {
-      scrollbar_->show();
-      scrollbar_->resize(inside.r()-17, inside.y(), 17, inside.h()-17);
-      hscrollbar_->resize(inside.x(), inside.b()-17, inside.w()-17, 17);
-    }
-  } else {
-    hscrollbar_->hide();
-    if (size_ <= inside.h())
-      scrollbar_->hide();
-    else {
-      scrollbar_->resize(inside.r()-17, inside.y(), 17, inside.h());
-      scrollbar_->show();
-    }
-  }
-
   // Reset scrolling if it needs to be...
   if (scrollbar_->visible()) {
     int temph = h() - 8;
@@ -2411,7 +2398,7 @@ HelpView::handle(int event)	// I - Event to handle
 
     case MOVE :
         xx = event_x() - x() + leftline_;
-	yy = event_y() - y() + topline_;
+        yy = event_y() - y() + topline_;
 	break;
 
     case LEAVE :
@@ -2583,21 +2570,20 @@ HelpView::HelpView(int        xx,	// I - Left position
   size_         = 0;
   hsize_        = 0;
 
-  scrollbar_ = new Scrollbar(ww - 17, 0, 17, hh - 17);
+  scrollbar_ = new Scrollbar(ww - 17, yy, 17, hh - 17);
   scrollbar_->value(0, hh, 0, 1);
   scrollbar_->step(8.0);
-  scrollbar_->set_vertical();
   scrollbar_->callback(scrollbar_callback);
-  //scrollbar_->show();
+  scrollbar_->set_vertical();
 
-  hscrollbar_= new Scrollbar(0, hh - 17, ww - 17, 17);
+  hscrollbar_= new Scrollbar(xx, hh - 17, ww - 17, 17);
   hscrollbar_->value(0, ww, 0, 1);
   hscrollbar_->step(8.0);
   hscrollbar_->callback(hscrollbar_callback);
-  //hscrollbar_->show();
+
   end();
 
-  resize(xx, yy, ww, hh);
+  //resize(xx, yy, ww, hh);
 }
 
 
@@ -2715,25 +2701,38 @@ HelpView::load(const char *f)// I - Filename to load (may also have target)
   return (0);
 }
 
-
-//
-// 'HelpView::resize()' - Resize the help widget.
-// WAS: this should be removed and put into layout()!
-
-void
-HelpView::resize(int xx,	// I - New left position
-                     int yy,	// I - New top position
-		     int ww,	// I - New width
-		     int hh)	// I - New height
-{
-  Widget::resize(xx, yy, ww, hh);
-  format();
-}
-
-
 void 
 HelpView::layout() {
-  Group::layout();
+  Rectangle inside(0, 0, w(), h());
+  Box *b = box() ? box () : DOWN_BOX;
+  b->inset(inside);
+
+  if (hsize_ > (inside.w() - 17)) {
+    hscrollbar_->show();
+
+    if (size_ <= (inside.h() - 17)) {
+      scrollbar_->hide();
+      hscrollbar_->resize(inside.x(), inside.b()-17, inside.w(), 17);
+	  hscrollbar_->layout();
+    } else {
+      scrollbar_->show();
+      scrollbar_->resize(inside.r()-17, inside.y(), 17, inside.h()-17);
+      hscrollbar_->resize(inside.x(), inside.b()-17, inside.w()-17, 17);
+    }
+
+  } else {
+    hscrollbar_->hide();
+    if (size_ <= inside.h())
+      scrollbar_->hide();
+    else {
+      scrollbar_->resize(inside.r()-17, inside.y(), 17, inside.h());
+      scrollbar_->show();
+    }
+  }
+
+  // scrollbars will format() update additionaly
+  format();
+  Widget::layout();
 }
 
 

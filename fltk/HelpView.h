@@ -171,7 +171,6 @@ public:
     link_ = fn;
   }
   int load (const char *f);
-  void resize (int, int, int, int);
   void layout();
   int size () const { return (size_); } 
 
