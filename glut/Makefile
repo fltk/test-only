@@ -29,106 +29,140 @@ CPPFILES = \
 
 
 DEMOS = \
-	glpuzzle fractals
+	glpuzzle \
+	fractals
 
 ################################################################
 
-
 include ../makeinclude
-DSOCFLAGS += -DFL_GLUT_LIBRARY
-DSOCXXFLAGS += -DFL_GLUT_LIBRARY
-LDLIBS := -lfltk2_glut $(LINKFLTKGL) $(GLDLIBS) $(LDLIBS)
 
-LIBNAME	= ../lib/$(LIBPREFIX)fltk2_glut$(LIBSUFFIX)
+DSOCFLAGS   += -DFL_GLUT_LIBRARY
+DSOCXXFLAGS += $(DSOCFLAGS)
+
+LIBNAME	= $(LIBPREFIX)fltk2_glut$(LIBSUFFIX)
+DSONAME = $(DSOPREFIX)fltk2_glut$(DSOSUFFIX)
+DSOLINK = $(DSOPREFIX)fltk2_glut$(DSOSYMLINK)
+
+# This is here since only $(DEMOS) depends on glut library
+CXXFLAGS    += -I../test
+LINKFLTKGLUT = -L../lib -lfltk2_glut -lfltk2_gl -lfltk2
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all:	static
 
-static:	$(LIBNAME)
+#
+# Make everything...
+#
 
-shared:	$(DSO)$(DSOEXT)
+all:		$(LIBTARGET) $(DSOTARGET) $(DEMOS)
 
-demos: $(DEMOS)
+static:		../lib/$(LIBNAME)
 
-programs: demos
+shared:		../lib/$(DSONAME)
 
-$(DEMOS): $(FLGLUTLIB) $(FLGLLIB) $(FLLIB)
 
-$(LIBNAME): $(OBJECTS)
-	@rm -f $@
+#
+# Clean old files...
+#
+
+clean:
+	$(RM) $(DEMOS)
+	$(RM) *.bck
+	$(RM) *.o
+	$(RM) core*
+	$(RM) ../lib/$(LIBNAME)
+	$(RM) ../lib/$(DSONAME)
+        ifeq ($(DSONAME), fltk2_glut.dll)
+	$(RM) lib$(DSONAME).a $(DSONAME)
+        endif
+
+#
+# Make dependencies, excluding standard include directories...
+#
+
+depend:
+	$(MAKEDEPEND) -I.. $(CPPFILES) $(CFILES) > makedepend
+
+
+#
+# Include automatically generated dependencies...
+#
+
+include makedepend
+
+#
+# Make static libraries...
+#
+
+../lib/$(LIBNAME): $(OBJECTS)
+	$(RM) $@
+	echo $(LIBCOMMAND) $@ ...
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-$(DSO).so.2 $(DSO).sl.2: $(OBJECTS)
-	@rm -f $@
-	$(DSOCOMMAND) $(DSONAME) $(OBJECTS) $(DSOLIBS)
-	mv $(DSONAME) $@
+../lib/$(DSONAME): $(OBJECTS)
+	echo $(DSOCOMMAND) $@ ...
+	$(DSOCOMMAND) $@ $(OBJECTS)
+	$(RM) ../lib/$(DSOLINK)
+	$(LN) $(DSONAME) ../lib/$(DSOLINK)
 
-DLLIMPORTLIBS = ../lib/$(LIBNAME)_gl.2.dll$(LIBEXT) ../lib/$(LIBNAME).2.dll$(LIBEXT)
-DLLIMPORTNAME = $(LIBNAME)_glut.2.dll$(LIBEXT)
-$(DSO).2.dll: $(OBJECTS)
-	@rm -f $@
-	$(DSOCOMMAND) $@ $(OBJECTS) $(DSOLIBS) $(DLLIMPORTLIBS)
-	mv $@.import ../lib/$(DLLIMPORTNAME)
+../lib/fltk2_glut.dll: $(OBJECTS)
+	echo $(DSOCOMMAND) $@ ...
+	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS) $(LOCAL_IMAGELIBS) $(LINKFLTK) $(GLDLIBS)
+	cp ../lib/fltk2_glut.dll ./
 
-#.fl.cxx .fl.h:
-#	echo Generating $@...
-#	../fluid/fluid -c $<
+#
+# Make glut demos...
+#
 
-clean :
-	@rm -f *.o $(DEMOS) *.exe $(LIBNAME) $(DSO)$(DSOEXT) \
-	       ../lib/$(DLLIMPORTNAME) core *~ makedepend
-	@touch makedepend
+glpuzzle$(EXEEXT): glpuzzle.o ../lib/$(LIBPREFIX)fltk2_glut$(LIBSUFFIX)
+	echo Linking $@...
+	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKGLUT) $(GLDLIBS) -o $@
+	$(POSTBUILD) $@ ../fltk/mac.r
 
-depend:	$(CPPFILES)
-	$(MAKEDEPEND) -I.. $(CPPFILES) > makedepend
-
-# Automatically generated dependencies...
-include makedepend
+fractals$(EXEEXT): fractals.o ../lib/$(LIBPREFIX)fltk2_glut$(LIBSUFFIX)
+	echo Linking $@...
+	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKGLUT) $(GLDLIBS) -o $@
+	$(POSTBUILD) $@ ../fltk/mac.r
 
 
-################################################################
+#
+# Install everything...
+#
 
-install: $(INSTALLTARGETS)
+install:
+        ifneq (,$(wildcard ../lib/$(LIBNAME)))
+	echo "Installing static glut library in $(libdir)"
+	$(MKDIR) $(DESTDIR)$(libdir)
+	$(RM) $(DESTDIR)$(libdir)/$(LIBNAME)
+	$(CP) ../lib/$(LIBNAME) $(DESTDIR)$(libdir)
+        endif
+        ifneq (,$(wildcard ../lib/$(DSONAME)))
+	echo "Installing shared glut library in $(libdir)"
+	$(MKDIR) $(DESTDIR)$(libdir)
+	$(RM) $(DESTDIR)$(libdir)/$(DSONAME)
+	$(RM) $(DESTDIR)$(libdir)/$(DSOLINK)
+	$(CP) ../lib/$(DSONAME) $(DESTDIR)$(libdir)
+	$(LN) -s $(DSONAME) $(DESTDIR)$(libdir)/$(DSOLINK)
+        endif
+        ifeq ($(DSONAME), fltk2_glut.dll)
+	$(CP) lib$(DSONAME).a $(DESTDIR)$(libdir)
+        endif
+
+#
+# Uninstall the libraries...
+#
 
 uninstall:
-#	echo nothing to do ?
-
-install_static: static
-	@echo "Installing static libraries..."
-	@mkdir -p $(libdir)
-	@rm -f $(libdir)/$(LIBNAME)_glut$(LIBEXT)
-	@cp $(LIBNAME) $(libdir)
-	@-chmod 644 $(libdir)/$(LIBNAME)_glut$(LIBEXT) 
-
-install_shared: shared
-	@echo "Installing shared libraries..."
-	@rm -f $(libdir)/$(DLLIMPORTNAME)
-	@if [ -f "$(libdir)/$(DSOLIBglutNAME)$(DSOEXT)" ]; then rm -f $(libdir)/$(DSOLIBglutNAME)$(DSOEXT); fi
-	@if [ "$(DSOSHORTEXT)" ]; then rm -f $(libdir)/$(DSOLIBglutNAME)$(DSOSHORTEXT); fi
-	@if [ "$(DSO)$(DSOEXT)" ]; then cp $(DSO)$(DSOEXT) $(libdir); fi
-	@chmod 755 $(libdir)/$(DSOLIBglutNAME)$(DSOEXT)
-	@if [ "$(DSOSHORTEXT)" ]; then \
-		ln -s $(DSOLIBglutNAME)$(DSOEXT) $(libdir)/$(DSOLIBglutNAME)$(DSOSHORTEXT); fi
-	@if [ -f "../lib/$(DLLIMPORTNAME)" ]; then cp ../lib/$(DLLIMPORTNAME) $(libdir); fi
-
-install_programs:
+	echo "Removing static glut library from $(libdir)"
+	$(RM) $(libdir)/$(LIBNAME)
+	echo "Removing shared glut library from $(libdir)"
+	$(RM) $(libdir)/$(DSONAME)
+	$(RM) $(libdir)/$(DSOLINK)
+        ifeq ($(DSONAME), fltk2_glut.dll)
+	$(RM) $(libdir)/lib$(DSONAME).a
+        endif
 
 #
 # End of "$Id$".
 #
-# DO NOT DELETE
-
-glut_compatability.o: ../config.h ../fltk/glut.h ../fltk/gl.h ../fltk/Color.h
-glut_compatability.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/run.h
-glut_compatability.o: ../fltk/events.h ../fltk/GlWindow.h ../fltk/Window.h
-glut_compatability.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
-glut_compatability.o: ../fltk/Rectangle.h ../fltk/Cursor.h ../fltk/visual.h
-glut_compatability.o: ../fltk/Menu.h ../fltk/Item.h ../fltk/ItemGroup.h
-glut_compatability.o: ../fltk/Menu.h ../fltk/Monitor.h
-glut_font.o: ../config.h ../fltk/glut.h ../fltk/gl.h ../fltk/Color.h
-glut_font.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/run.h ../fltk/events.h
-glut_font.o: ../fltk/GlWindow.h ../fltk/Window.h ../fltk/Group.h
-glut_font.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Rectangle.h
-glut_font.o: ../fltk/Cursor.h ../fltk/visual.h ../fltk/gl.h
