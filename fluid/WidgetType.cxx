@@ -2359,6 +2359,19 @@ void WidgetType::copy_properties() {
   if (resizable() && w->parent()) 
     w->parent()->resizable(o);
 }
+
+int WidgetType::textstuff(int w, fltk::Font* f, float& s, fltk::Color c) {
+  fltk::Widget *myo = (fltk::Widget *)(w==4 ? ((WidgetType*)factory)->o : o);
+  switch (w) {
+    case 4:
+    case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
+    case 1: myo->textfont(f); break;
+    case 2: myo->textsize((float)s); break;
+    case 3: myo->textcolor(c); break;
+  }
+  return 1;
+}
+
 //
 // End of "$Id$".
 //

@@ -66,17 +66,7 @@ public:
   void leave_live_mode();
   void copy_properties();
   
-  virtual int textstuff(int w, fltk::Font* f, float& s, fltk::Color c) {
-    fltk::Widget *myo = (fltk::Widget *)(w==4 ? ((WidgetType*)factory)->o : o);
-    switch (w) {
-    case 4:
-    case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
-    case 1: myo->textfont(f); break;
-    case 2: myo->textsize((float)s); break;
-    case 3: myo->textcolor(c); break;
-    }
-    return 1;
-  }
+  virtual int textstuff(int w, fltk::Font* f, float& s, fltk::Color c);
 
   static float default_size;
   int pixmapID() { return 5;}
