@@ -71,6 +71,8 @@ bool gifImage::fetch()
     dat += 6;
   } else { // set up to read from file, quit silently on any errors:
     GifFile=fopen(get_filename(), "rb");
+    if (!GifFile)
+      return false;
     char b[6];
     if (!GifFile || fread(b,1,6,GifFile) < 6 ||
 	b[0]!='G' || b[1]!='I' || b[2] != 'F') {

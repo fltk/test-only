@@ -454,7 +454,6 @@ static Widget* shortcut_search(Group* g) {
   more than one shortcut for an action may be given by putting
   multiple copies of the item in, where only the first is visible.
 */
-#include <stdio.h>
 int Menu::handle_shortcut() {
   //if (event_key_repeated()) return 0; // ignore repeating keys
   int children = this->children();
