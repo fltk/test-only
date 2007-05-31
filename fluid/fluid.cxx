@@ -1411,7 +1411,7 @@ int main(int argc,char **argv) {
       fprintf(stderr,"%s : %s\n", c, strerror(errno));
       exit(1);
     }
-    message("XCan't read %s: %s", c, strerror(errno));
+    message("Can't read %s: %s", c, strerror(errno));
   }
   if(sw) sw->show(); // keep splash screen on top if any
   Undo::resume();
