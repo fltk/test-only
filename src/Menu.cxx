@@ -23,6 +23,7 @@
 #include <fltk/Menu.h>
 #include <fltk/damage.h>
 #include <fltk/Item.h> // for TOGGLE, RADIO
+
 #define checkmark(item) (item->type()>=Item::TOGGLE && item->type()<=Item::RADIO)
 
 using namespace fltk;
@@ -453,23 +454,30 @@ static Widget* shortcut_search(Group* g) {
   more than one shortcut for an action may be given by putting
   multiple copies of the item in, where only the first is visible.
 */
+#include <stdio.h>
 int Menu::handle_shortcut() {
   //if (event_key_repeated()) return 0; // ignore repeating keys
   int children = this->children();
   for (int i = 0; i < children; i++) {
     Widget* item = child(i);
     if (!item->active()) continue;
-    if (item->test_shortcut(false)) {
-      value(i);
-      execute(item);
-      return 1;
+      if (item->test_shortcut(false)) {
+        value(i);
+        if (checkmark(item))
+          item->invert_flag(STATE);
+
+        execute(item);
+        return 1;
     }
     if (item->is_group()) {
       item = shortcut_search((Group*)item);
       if (item) {
-	value(i);
-	execute(item);
-	return 1;
+	   value(i);
+       if (checkmark(item))
+          item->invert_flag(STATE);
+
+	   execute(item);
+	   return 1;
       }
     }
   }
