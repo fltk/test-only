@@ -139,7 +139,7 @@ void drawFocusRect(const fltk::Rectangle& r1) {
   The default version draws a dotted line around the edge, using
   a system-specific XOR mode, if the FOCUSED flag is on in drawflags().
 */
-void Symbol::drawOverlay(const Rectangle& r1) const {
+void Symbol::draw_symbol_overlay(const Rectangle& r1) const {
   if (!drawflags(FOCUSED)) return;
   fltk::Rectangle r(r1);
   inset(r);
@@ -336,7 +336,7 @@ public:
   {
     strokerect(r);
   }
-  BorderFrame(const char* n) : Box(n) {setInset(1);}
+  BorderFrame(const char* n) : Box(n) {set_inset(1);}
 };
 static BorderFrame borderFrame("border_frame");
 /*!
@@ -364,7 +364,7 @@ bool HighlightBox::fills_rectangle() const {return false;}
 bool HighlightBox::is_frame() const {return false;}
 
 HighlightBox::HighlightBox(const char* n, const Box* b)
-  : FlatBox(n), down_(b) {setInset(down_->getInset());}
+  : FlatBox(n), down_(b) {set_inset(down_->get_inset());}
 
 static HighlightBox highlightUpBox("highlight_up", THIN_UP_BOX);
 /*!

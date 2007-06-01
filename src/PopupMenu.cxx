@@ -84,7 +84,7 @@ void PopupMenu::draw() {
   // draw the little mark at the right:
 //    int w1 = int(textsize());
 //    draw_glyph(GLYPH_DOWN, x+w-w1, y, w1, h, flags);
-  box->drawOverlay(r);
+  box->draw_symbol_overlay(r);
 }
 
 /*! Wrapper for Menu::popup(). For NORMAL PopupMenu this places the

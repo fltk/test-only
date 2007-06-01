@@ -82,7 +82,7 @@ using namespace fltk;
 void MultiImage::add(Flags flags, const Symbol& image) {
   if (!flags) {
     image0 = &image;
-    setInset(image.getInset());
+    set_inset(image.get_inset());
     // release(); // this would be consistent with documentation?
     return;
   }
@@ -130,7 +130,7 @@ void MultiImage::add(Flags flags, const Symbol& image) {
 /*! Innards of the inline constructors. */
 void MultiImage::set(unsigned count, const Symbol* img0, ...) {
   image0 = img0;
-  setInset(img0->getInset());
+  set_inset(img0->get_inset());
   n_images = count>0 ? count-1 : 0; // don't authorize setting 2^32-1 images count on 32bit systems
   if (count > 1) {
     pairs =  new MultiImagePair[n_images];

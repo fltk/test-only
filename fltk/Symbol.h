@@ -54,13 +54,14 @@ class FL_API Symbol {
 
   virtual void _draw(const Rectangle&) const = 0;
   void draw(const Rectangle& r) const {_draw(r);}
-  virtual void drawOverlay(const Rectangle&) const;
+  virtual void draw_symbol_overlay(const Rectangle&) const;
 
-  void setInset(int x,int y,int w,int h) {inset_.set(x,y,w,h);}
-  void setInset(int x,int y) {inset_.set(x,y,-2*x,-2*y);}
-  void setInset(int x) {inset_.set(x,x,-2*x,-2*x);}
-  void setInset(const Rectangle& r) {inset_ = r;}
-  const Rectangle& getInset() const {return inset_;}
+  void set_inset(int x,int y,int w,int h) {inset_.set(x,y,w,h);}
+  void set_inset(int x,int y) {inset_.set(x,y,-2*x,-2*y);}
+  void set_inset(int x) {inset_.set(x,x,-2*x,-2*x);}
+  void set_inset(const Rectangle& r) {inset_ = r;}
+  const Rectangle& get_inset() const {return inset_;}
+
   int dx() const {return inset_.x();}
   int dy() const {return inset_.y();}
   int dw() const {return -inset_.w();} // inverted for back-compatability

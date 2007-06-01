@@ -168,7 +168,7 @@ void ThumbWheel::draw() {
     }
   }
   setcolor(fg);
-  box()->drawOverlay(Rectangle(w(),h()));
+  box()->draw_symbol_overlay(Rectangle(w(),h()));
 }
 
 ThumbWheel::ThumbWheel(int X,int Y,int W,int H,const char* L) : Valuator(X,Y,W,H,L) {

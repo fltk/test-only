@@ -326,7 +326,7 @@ void Symbol::_measure(int& w, int& h) const {}
     define the interior area where the widget can draw it's contents.
 
     The default version adds the value of the inset() rectangle
-    (and thus if setInset() was not called it does nothing).
+    (and thus if set_inset() was not called it does nothing).
 
     The most recent values sent to fltk::setcolor(),
     fltk::setbgcolor(), fltk::setdrawflags(), fltk::setfont(), etc,
@@ -339,7 +339,7 @@ void Symbol::inset(Rectangle& r) const {
   r.move_b(inset_.h());
 }
 
-/** \fn void Symbol::setInset(const Rectangle&)
+/** \fn void Symbol::set_inset(const Rectangle&)
     Set the inset rectangle. This is normally done by the constructor
     for a subclass. If the inset() method is not overridden, the
     values in this rectangle define the edges.

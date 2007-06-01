@@ -46,7 +46,7 @@ public:
   bool fills_rectangle() const;
   bool is_frame() const;
   FrameBox(const char* name, int dx,int dy,int dw,int dh, const char* pattern, const Box* down=0)
-    : Box(name),data_(pattern),down_(down) {setInset(dx,dy,-dw,-dh);}
+    : Box(name),data_(pattern),down_(down) {set_inset(dx,dy,-dw,-dh);}
 };
 
 class FL_API FlatBox : public Box {

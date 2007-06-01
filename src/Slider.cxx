@@ -317,7 +317,7 @@ void Slider::draw()
 
   // draw the focus indicator inside the box:
   drawstyle(style(),flags);
-  box->drawOverlay(r);
+  box->draw_symbol_overlay(r);
 }
 
 /*!

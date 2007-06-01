@@ -115,7 +115,7 @@ void CycleButton::draw() {
   }
 
   drawstyle(&style,flags);
-  box->drawOverlay(r);
+  box->draw_symbol_overlay(r);
 }
 
 static bool try_item(CycleButton* choice, int i) {

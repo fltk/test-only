@@ -152,7 +152,7 @@ void Item::draw() {
     r1.move_x(gw+3);
   }
   draw_label(r1, flags());
-  box->drawOverlay(r);
+  box->draw_symbol_overlay(r);
 }
 
 /** Measure the space the draw() will take and set w() and h().
@@ -240,7 +240,7 @@ void ItemGroup::draw() {
   box->draw(r);
   Rectangle r1(r); box->inset(r1);
   draw_label(r1, flags());
-  box->drawOverlay(r);
+  box->draw_symbol_overlay(r);
 }
 
 void ItemGroup::layout() {

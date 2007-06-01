@@ -230,7 +230,7 @@ void Button::draw(int glyph_width) const
   } else {
     this->draw_label(r1, box_flags);
   }
-  box->drawOverlay(r);
+  box->draw_symbol_overlay(r);
 }
 
 void Button::draw() {
