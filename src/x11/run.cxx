@@ -1870,8 +1870,7 @@ bool fltk::handle()
     } else if (e.target == TARGETS) {
       Atom a[3] = {UTF8_STRING, XA_STRING, XA_TEXT};
       XChangeProperty(xdisplay, e.requestor, e.property,
-		      XA_ATOM, sizeof(Atom)*8, 0, (unsigned char*)a,
-		      sizeof(a)/sizeof(Atom));
+		      XA_ATOM, 32, 0, (unsigned char*)a, 3);
     } else if (e.target == UTF8_STRING ||
 	       e.target == XA_STRING ||
 	       e.target == XA_TEXT ||
@@ -2112,8 +2111,7 @@ void CreatedWindow::create(Window* window,
 
     // Make it receptive to DnD:
     int version = 4;
-    XChangeProperty(xdisplay, x->xid, XdndAware,
-		    XA_ATOM, sizeof(int)*8, 0, (unsigned char*)&version, 1);
+    XChangeProperty(xdisplay, x->xid, XdndAware, XA_ATOM, 32, 0, (unsigned char*)&version, 1);
 
     // Set up the icon and initial icon state:
     XWMHints *hints = XAllocWMHints();
