@@ -238,19 +238,19 @@ include makedepend
 
 #
 # Install everything...
-#
+# DESTDIR can be used as root directory (default empty, assuming '/')
+# 
 
 install:
 	echo "Installing include files in $(includedir)/fltk..."
-	if [ -z $(DESTDIR) ]; then                          \
-	  echo "DESTDIR not specified";                     \
-	else                                                \
-	  if [ -d $(DESTDIR) ]; then                        \
-	    echo "$(DESTDIR) exists - will be overwritten"; \
-	  else                                              \
-	    mkdir $(DESTDIR);                               \
-	  fi                                                \
+	if [ ! -z $(DESTDIR) ]; then                            \
+		if [ -d $(DESTDIR) ]; then                          \
+	    	echo "$(DESTDIR) exists - will be overwritten"; \
+		else                                                \
+			mkdir $(DESTDIR);                               \
+		fi                                                  \
 	fi
+
 	$(RMDIR) $(DESTDIR)$(includedir)/fltk
 	$(MKDIR) $(DESTDIR)$(includedir)/fltk
 	$(CP) ../fltk/*.h ../fltk/*.r  $(DESTDIR)$(includedir)/fltk
