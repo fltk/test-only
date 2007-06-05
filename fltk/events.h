@@ -180,10 +180,12 @@ enum {
   ANY_BUTTON	= 0x7f000000, /*!< Any mouse button (up to 8) */
 #if defined(__APPLE__)
   ACCELERATOR	= CTRL,
+  OPTION	= ALT,
   COMMAND	= META
 #else
-  ACCELERATOR	= ALT,	/*!< Same as ALT on Windows/Linux, same as CTRL on OS/X */
-  COMMAND	= CTRL	/*!< Same as CTRL on Windows/Linux, same as META on OS/X */
+  ACCELERATOR	= ALT, //!< ALT on Windows/Linux, CTRL on OS/X, use for menu accelerators
+  COMMAND	= CTRL,	//!< CTRL on Windows/Linux, META on OS/X, use for menu shortcuts
+  OPTION	= ALT|META //!< ALT|META on Windows/Linux, just ALT on OS/X, use as a drag modifier
 #endif
 };
 
