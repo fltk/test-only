@@ -404,8 +404,12 @@ void Widget::cursor(fltk::Cursor* c) const {
 FL_API fltk::Cursor *fltk::cursor(void *raw) {
   fltk::Cursor *c = new fltk::Cursor;
   c->resource=0;
-  // This overwrites the data, mask, and hotspot:
-  memcpy(c->data, raw, sizeof(::Cursor));
+  if(raw) {
+     // This overwrites the data, mask, and hotspot:
+     memcpy(c->data, raw, sizeof(::Cursor));
+  } else
+     memset(c->data, 0, sizeof(::Cursor));
+	
   return c;
 }
 
