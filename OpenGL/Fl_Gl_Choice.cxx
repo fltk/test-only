@@ -274,15 +274,17 @@ void fltk::set_gl_context(const Window* window, GLContext context) {
 }
 
 void fltk::no_gl_context() {
+  if (fl_current_glcontext != first_context) {
 #if USE_X11
-  glXMakeCurrent(xdisplay, 0, 0);
+    glXMakeCurrent(xdisplay, message_window, first_context);
 #elif defined(_WIN32)
-  wglMakeCurrent(0, 0);
+    wglMakeCurrent(getDC(), first_context);
 #elif defined(__APPLE__)
-  // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
-  if (fl_current_glcontext) aglSetCurrentContext(0);
+    // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
+    aglSetCurrentContext(first_context);
 #endif
-  fl_current_glcontext = 0;
+    fl_current_glcontext = first_context;
+  }
   cached_window = 0;
 }
 
