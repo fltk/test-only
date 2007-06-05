@@ -76,6 +76,7 @@ Valuator::Valuator(int X, int Y, int W, int H, const char* L)
   clear_flag(ALIGN_MASK);
   set_flag(ALIGN_BOTTOM);
   when(WHEN_CHANGED);
+  type(Widget::VALUATOR); // for Item
   value_ = 0.0;
   step_ = 0;
   minimum_ = 0;
