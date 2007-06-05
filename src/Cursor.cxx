@@ -407,9 +407,9 @@ FL_API fltk::Cursor *fltk::cursor(void *raw) {
   if(raw) {
      // This overwrites the data, mask, and hotspot:
      memcpy(c->data, raw, sizeof(::Cursor));
-  } else
+  } else {
      memset(c->data, 0, sizeof(::Cursor));
-	
+  }
   return c;
 }
 

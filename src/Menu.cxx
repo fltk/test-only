@@ -460,23 +460,23 @@ int Menu::handle_shortcut() {
   for (int i = 0; i < children; i++) {
     Widget* item = child(i);
     if (!item->active()) continue;
-      if (item->test_shortcut(false)) {
-        value(i);
+    if (item->test_shortcut(false)) {
+      value(i);
+      if (checkmark(item))
+        item->invert_flag(STATE);
+
+      execute(item);
+      return 1;
+    }
+    if (item->is_group()) {
+      item = shortcut_search((Group*)item);
+      if (item) {
+	value(i);
         if (checkmark(item))
           item->invert_flag(STATE);
 
         execute(item);
         return 1;
-    }
-    if (item->is_group()) {
-      item = shortcut_search((Group*)item);
-      if (item) {
-	   value(i);
-       if (checkmark(item))
-          item->invert_flag(STATE);
-
-	   execute(item);
-	   return 1;
       }
     }
   }
