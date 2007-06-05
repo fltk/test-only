@@ -109,56 +109,36 @@ static short cmap[256][3] = {
 // The rest of the colormap is a gray ramp and table, filled in below:
 };
 
-// This is background from get_system_colors.C, with modifications:
+// This is fltk::set_background() from Style.C, with modifications:
 
-#define GRAY_RAMP 32
-#define NUM_GRAY  24
-#define GRAY 49 // old value is 47
+enum {
+  GRAY00 = 32,
+  GRAY75 = 49,
+  GRAY99 = 55
+};
 typedef unsigned char uchar;
-#include <math.h>
 
 void background(uchar r, uchar g, uchar b) {
-  // replace the gray ramp so that color 47 (by default 2/3) is this color
-  if (!r) r = 1; else if (r==255) r = 254;
-  double powr = log(r/255.0)/log((GRAY-GRAY_RAMP)/(NUM_GRAY-1.0));
-  if (!g) g = 1; else if (g==255) g = 254;
-  double powg = log(g/255.0)/log((GRAY-GRAY_RAMP)/(NUM_GRAY-1.0));
-  if (!b) b = 1; else if (b==255) b = 254;
-  double powb = log(b/255.0)/log((GRAY-GRAY_RAMP)/(NUM_GRAY-1.0));
-  for (int i = 0; i < NUM_GRAY; i++) {
-    double gray = i/(NUM_GRAY-1.0);
-    cmap[i+GRAY_RAMP][0] = uchar(pow(gray,powr)*255+.5);
-    cmap[i+GRAY_RAMP][1] = uchar(pow(gray,powg)*255+.5);
-    cmap[i+GRAY_RAMP][2] = uchar(pow(gray,powb)*255+.5);
+  int i;
+  int R, G, B;
+  for (i = GRAY00; i <= GRAY99; i++) {
+    if (i <= GRAY75) {
+      R = r*(i-GRAY00)/(GRAY75-GRAY00);
+      G = g*(i-GRAY00)/(GRAY75-GRAY00);
+      B = b*(i-GRAY00)/(GRAY75-GRAY00);
+    } else {
+      const int DELTA = ((0xff-0xe0)*(i-GRAY75))/(GRAY99-GRAY75);
+      R = r+DELTA; if (R > 255) R = 255;
+      G = g+DELTA; if (G > 255) G = 255;
+      B = b+DELTA; if (B > 255) B = 255;
+    }
+    cmap[i][0] = uchar(R);
+    cmap[i][1] = uchar(G);
+    cmap[i][2] = uchar(B);
+    // used to produce the comments in Color.h:
+    //printf("%2d %02x %.2f %c\n", i, R, R/255.0, i-GRAY00+'A');
   }
 }
-
-/* Exact resulting percentages of the gray map entries:
-A 32 0.0
-B 33 0.0509803921569
-C 34 0.101960784314
-D 35 0.149019607843
-E 36 0.192156862745
-F 37 0.239215686275
-G 38 0.282352941176
-H 39 0.333333333333
-I 40 0.372549019608
-J 41 0.41568627451
-K 42 0.458823529412
-L 43 0.501960784314
-M 44 0.541176470588
-N 45 0.58431372549
-O 46 0.627450980392
-P 47 0.666666666667
-Q 48 0.709803921569
-R 49 0.752941176471
-S 50 0.796078431373
-T 51 0.835294117647
-U 52 0.878431372549
-V 53 0.917647058824
-W 54 0.960784313725
-X 55 1.0
-*/
 
 int main() {
   int i,r,g,b;

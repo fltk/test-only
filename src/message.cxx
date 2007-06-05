@@ -54,7 +54,7 @@ static void i_revert(Style* s) {
   s->box_ = THIN_UP_BOX;
   s->labelfont_ = TIMES_BOLD;
   s->labelsize_ = 34;
-  s->color_ = WHITE;
+  s->color_ = GRAY99;
   s->textcolor_ = s->labelcolor_ = BLUE;
 }
 static NamedStyle i_style("Icon", i_revert, &fltk::icon_style);

@@ -45,7 +45,7 @@ public:
     int x1 = x0+d;
     int y0 = r.center_y();
 #if 1
-    setcolor(WHITE);
+    setcolor(GRAY99);
     newpath();
     addvertex(x0, y0);
     addvertex(x1, y0+d);

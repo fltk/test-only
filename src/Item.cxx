@@ -288,12 +288,12 @@ void Divider::draw() {
   if (w() > h()) {
     int y = (h()-1)/2;
     drawline(0, y, w()-1, y);
-    setcolor(WHITE);
+    setcolor(GRAY99);
     drawline(0, y+1, w()-1, y+1);
   } else if (h()) {
     int x = (w()-1)/2;
     drawline(x, 0, x, h()-1);
-    setcolor(WHITE);
+    setcolor(GRAY99);
     drawline(x+1, 0, x+1, h()-1);
   }
 }
