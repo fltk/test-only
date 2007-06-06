@@ -27,7 +27,10 @@
 
 /*! \file
   Portably include the OpenGL header files, and define a few OpenGL
-  drawing functions provided by fltk.
+  drawing functions provided by fltk. You may want to use the
+  OpenGL Extension Wrangler (glew), which will make it much easier
+  to call modern OpenGL extensions. If so, include glew.h before
+  this file, or define USE_GLEW to 1 before including this.
 */
 
 #ifndef gl_draw_H
@@ -37,33 +40,40 @@
 #include "Color.h"
 #include "Flags.h"
 
-#define GL_GLEXT_PROTOTYPES 1
-#ifdef _WIN32
-# include <windows.h>
-# undef OPAQUE
-# undef DELETE
-# undef ERROR
-# undef IN
-# undef OUT
-# undef POINT
-# undef far
-# undef max
-# undef min
-# undef near
-# include <GL/gl.h>
-#elif defined(__APPLE__)
-#  ifndef APIENTRY
-#      define APIENTRY
-#  endif
-# include <OpenGL/gl.h>
+#if USE_GLEW
+# include <GL/glew.h>
+#elif defined(__GLEW_H__)
+  /* do nothing if they included glew.h */
 #else
-# include <GL/gl.h>
-#endif
 
-#if !defined(GL_VERSION_1_4) || defined(DOXYGEN)
+# define GL_GLEXT_PROTOTYPES 1
+# ifdef _WIN32
+#  include <windows.h>
+#  undef OPAQUE
+#  undef DELETE
+#  undef ERROR
+#  undef IN
+#  undef OUT
+#  undef POINT
+#  undef far
+#  undef max
+#  undef min
+#  undef near
+#  include <GL/gl.h>
+# elif defined(__APPLE__)
+#  ifndef APIENTRY
+#   define APIENTRY
+#  endif
+#  include <OpenGL/gl.h>
+# else
+#  include <GL/gl.h>
+# endif
+
+# if !defined(GL_VERSION_1_4) || defined(DOXYGEN)
 FL_GL_API void glWindowPos2i(int x, int y);
-#endif
+# endif
 
+#endif
 #endif
 
 namespace fltk {

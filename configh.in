@@ -162,6 +162,13 @@
    and visual management code. */
 #define USE_GL_OVERLAY	 	0
 
+/* Use the Open GL Extension Wrangler library. This does a far better
+   job than fltk/gl.h at fixing OpenGL on windows and allows you
+   to call any OpenGL extension and have the program run without
+   missing symbols (though you need to check if the extension
+   exists before you call it). See http://glew.sourceforge.net */
+#define USE_GLEW                0
+
 /* Standard autoconf stuff to figure out readdir() header files.
    (ignored for _WIN32) */
 #undef HAVE_DIRENT_H

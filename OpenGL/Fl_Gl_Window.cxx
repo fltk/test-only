@@ -248,12 +248,19 @@ void GlWindow::make_current() {
     if (!gl_choice) {error("Insufficient GL support"); return;}
   }
 #endif
+
   if (!context_) {
     mode_ &= ~NON_LOCAL_CONTEXT;
     context_ = create_gl_context(this, gl_choice);
+    set_gl_context(this, context_);
+#if USE_GLEW
+    glewExperimental = GL_TRUE;
+    glewInit();
+#endif
     valid(0);
+  } else {
+    set_gl_context(this, context_);
   }
-  set_gl_context(this, context_);
 }
 
 /**
@@ -363,8 +370,8 @@ void GlWindow::flush() {
       static GLContext ortho_context = 0;
       static GlWindow* ortho_window = 0;
       if (!ortho_context) {
-	ortho_context = create_gl_context(this, gl_choice);
-	save_valid = 0;
+        ortho_context = create_gl_context(this, gl_choice);
+        save_valid = 0;
       }
       set_gl_context(this, ortho_context);
       if (!save_valid || ortho_window != this) {

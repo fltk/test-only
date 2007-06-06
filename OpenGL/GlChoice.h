@@ -70,7 +70,11 @@
 #else
 # include <fltk/x.h>
 # define Window XWindow
-# include <GL/glx.h>
+# if USE_GLEW
+#  include <GL/glxew.h>
+# else
+#  include <GL/glx.h>
+# endif
 # undef Window
 # define GLContext GLXContext
 #endif
