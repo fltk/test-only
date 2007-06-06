@@ -321,6 +321,7 @@ int Valuator::handle(int event) {
     return 0;
   }
   case MOUSEWHEEL:
+    previous_value_ = value();
     handle_drag(value()+(event_dx()-event_dy())*linesize());
     return 1;
   }
