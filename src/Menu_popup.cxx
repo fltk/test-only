@@ -687,6 +687,7 @@ static bool backward(MenuState& p, int menu) {
 }
 
 static bool track_mouse;
+static bool valuator;
 
 int MWindow::handle(int event) {
   MenuState &p = *menustate;
@@ -816,14 +817,16 @@ int MWindow::handle(int event) {
       // redraw checkboxes so they preview the state they will be in:
       Widget* widget = p.menus[menu]->get_widget(item);
       if (checkmark(widget)) 
-          p.menus[menu]->redraw(DAMAGE_CHILD);
+        p.menus[menu]->redraw(DAMAGE_CHILD);
+      else if (widget->handle(event))
+        valuator = true;
     } else if (event == DRAG) {
       // allow scrolling for valuators, but ignore their handle() returns
       Widget* widget = p.menus[menu]->get_widget(item);
-      if (widget->type() == Widget::VALUATOR) {
-          widget->handle(event);
-          p.menus[menu]->redraw(DAMAGE_CHILD);
-      }     
+      if (valuator) {
+        widget->handle(event);
+        p.menus[menu]->redraw(DAMAGE_CHILD);
+      }
     } else if (p.level || !p.hmenubar) {
       // item didn't change on drag/move, check for autoscroll:
       if (event_y_root() <= MENUAREA.y()) {
@@ -837,6 +840,7 @@ int MWindow::handle(int event) {
 
   case RELEASE:
     pushed_ = 0;
+    valuator = false;
     // The initial click just brings up the menu. The user has to either
     // drag the mouse around, hold it still for a long time, or click
     // again to actually pick an item and dismiss the menu. You can
