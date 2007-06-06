@@ -23,6 +23,17 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+/*! \class fltk::MenuBar
+
+Subclass of fltk::Menu. The top level menu items are visible and drawn
+in a horizontal row. Put this at the top edge of your window and you
+get a typical menubar.
+
+You can call popup() on this same widget in response to a right-click
+in your work area and you will get the exact same menu as a vertical
+pop up menu.
+*/
+
 #include <fltk/MenuBar.h>
 #include <fltk/events.h>
 #include <fltk/damage.h>
