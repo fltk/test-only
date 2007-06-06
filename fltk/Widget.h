@@ -74,7 +74,6 @@ public:
     RESERVED_TYPE      = 0x64,
     TOGGLE    = RESERVED_TYPE+1,
     RADIO     = RESERVED_TYPE+2,
-    VALUATOR  = RESERVED_TYPE+4,
     GROUP_TYPE         = 0xe0,
     WINDOW_TYPE        = 0xf0
   };

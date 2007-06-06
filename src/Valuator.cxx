@@ -49,7 +49,7 @@ using namespace fltk;
     moves the slider and then lets it go on a different value than it
     started.
   - fltk::WHEN_RELEASE_ALWAYS: will do the callback when
-  the user lets go of the slider whether or not the value changed.
+    the user lets go of the slider whether or not the value changed.
   - fltk::WHEN_NEVER: do not do the callback, instead it will turn
     on the changed() flag.
 
@@ -76,7 +76,6 @@ Valuator::Valuator(int X, int Y, int W, int H, const char* L)
   clear_flag(ALIGN_MASK);
   set_flag(ALIGN_BOTTOM);
   when(WHEN_CHANGED);
-  type(Widget::VALUATOR); // for Item
   value_ = 0.0;
   step_ = 0;
   minimum_ = 0;
