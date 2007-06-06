@@ -127,7 +127,7 @@ void ValueInput::draw() {
   input.label(label());
   input.align(align());
   input.copy_style(style());
-  input.flags(flags()|CLICK_TO_FOCUS);
+  input.flags((flags()&~COPIED_LABEL)|CLICK_TO_FOCUS);
   input.draw(r);
   input.set_damage(0);
 }
