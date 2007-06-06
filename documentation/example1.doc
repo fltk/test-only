@@ -192,7 +192,7 @@ compiler to use the FLTK library and where to find it. In X you need
 to include several libraries that fltk calls:
 
 \code
-c++ ... -L/usr/local/lib -lfltk2 -lXext -lXinerama -lXft -lX11 -lm
+c++ ... -L/usr/local/lib -lfltk2 -lXext -lXinerama -lXft -lX11 -lXi -lm
 \endcode
 
 (In Visual C++ you need to add the FLTK library to the "Link" settings).
