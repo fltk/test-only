@@ -37,7 +37,7 @@
 
 using namespace fltk;
 
-ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*clipb,*wrapb;
+ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*centerb,*clipb,*wrapb;
 Widget *textbox;
 Input *input;
 ValueSlider *fontslider;
@@ -51,6 +51,7 @@ void button_cb(Widget *,void *) {
   if (topb->value()) i |= ALIGN_TOP;
   if (bottomb->value()) i |= ALIGN_BOTTOM;
   if (insideb->value()) i |= ALIGN_INSIDE;
+  if (centerb->value()) i |= ALIGN_CENTER;
   if (clipb->value()) i |= ALIGN_CLIP;
   if (wrapb->value()) i |= ALIGN_WRAP;
   textbox->align(i);
@@ -133,8 +134,6 @@ int main(int argc, char **argv) {
 
   textbox= new Widget(100,75,200,100,initial);
   textbox->box(ENGRAVED_BOX);
-  textbox->clear_flag(ALIGN_MASK);
-  textbox->set_flag(ALIGN_CENTER);
 
   Choice *c = new Choice(50,275,200,25);
   load_menu(c);
@@ -148,16 +147,18 @@ int main(int argc, char **argv) {
   Group *g = new Group(0,300,400,25);
   g->resizable(g);
   g->begin();
-  leftb = new ToggleButton(50,0,50,25,"left");
+  leftb = new ToggleButton(0,0,50,25,"left");
   leftb->callback(button_cb);
-  rightb = new ToggleButton(100,0,50,25,"right");
+  rightb = new ToggleButton(50,0,50,25,"right");
   rightb->callback(button_cb);
-  topb = new ToggleButton(150,0,50,25,"top");
+  topb = new ToggleButton(100,0,50,25,"top");
   topb->callback(button_cb);
-  bottomb = new ToggleButton(200,0,50,25,"bottom");
+  bottomb = new ToggleButton(150,0,50,25,"bottom");
   bottomb->callback(button_cb);
-  insideb = new ToggleButton(250,0,50,25,"inside");
+  insideb = new ToggleButton(200,0,50,25,"inside");
   insideb->callback(button_cb);
+  centerb = new ToggleButton(250,0,50,25,"center");
+  centerb->callback(button_cb);
   wrapb = new ToggleButton(300,0,50,25,"wrap");
   wrapb->callback(button_cb);
   clipb = new ToggleButton(350,0,50,25,"clip");

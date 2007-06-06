@@ -197,15 +197,20 @@ void Widget::draw_label(const Rectangle& ir, Flags flags) const {
       }
     }
 
-    Rectangle ir(r, w, h, flags);
-    img->draw(ir);
-
-    // figure out the rectangle that remains for text:
-    if (flags & ALIGN_TOP) r.set_y(ir.b());
-    else if (flags & ALIGN_BOTTOM) r.set_b(ir.y());
-    else if (flags & ALIGN_LEFT) r.set_x(ir.r());
-    else if (flags & ALIGN_RIGHT) r.set_r(ir.x());
-    else {r.set_y(ir.b()); /*flags |= ALIGN_TOP|ALIGN_INSIDE;*/}
+    // STR 1547: ALIGN_CENTER forces the image to center and not effect label
+    if (flags & ALIGN_CENTER) {
+      Rectangle ir(r, w, h, 0);
+      img->draw(ir);
+    } else {
+      Rectangle ir(r, w, h, flags);
+      img->draw(ir);
+      // figure out the rectangle that remains for text:
+      if (flags & ALIGN_TOP) r.set_y(ir.b());
+      else if (flags & ALIGN_BOTTOM) r.set_b(ir.y());
+      else if (flags & ALIGN_LEFT) r.set_x(ir.r());
+      else if (flags & ALIGN_RIGHT) r.set_r(ir.x());
+      else r.set_y(ir.b());
+    }
   }
 
   // skip outside labels:
