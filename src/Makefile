@@ -48,6 +48,7 @@ CPPFILES = \
 	BarGroup.cxx \
 	bmpImage.cxx \
 	Browser.cxx \
+	Browser_load.cxx \
 	Button.cxx \
 	CheckButton.cxx \
 	Choice.cxx \
