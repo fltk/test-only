@@ -995,7 +995,10 @@ void fltk::open_display() {
 
 ////////////////////////////////////////////////////////////////
 
-static bool reload_info = true;
+// this should be turned on by changes to monitor layout, nyi.
+// Apparently CGDisplayReconfigurationCallBack is what you need
+static bool reload_list = true; 
+static bool reload_all = true;
 
 /* Return a "monitor" that surrounds all the monitors.
     If you have a single monitor, this returns a monitor structure that
@@ -1005,25 +1008,21 @@ static bool reload_info = true;
 //+++ verify port to FLTK2
 const Monitor& Monitor::all() {
   static Monitor monitor;
-  if (reload_info) {
-    reload_info = false;
-    BitMap r;
-    GetQDGlobalsScreenBits(&r);
-    monitor.set(r.bounds.left, r.bounds.top,
-                r.bounds.right - r.bounds.left,
-                r.bounds.bottom - r.bounds.top);
-    //++ there is a wonderful call in Carbon that will return exactly 
-    //++ this information...
-    monitor.work.set(r.bounds.left, r.bounds.top+22,
-                     r.bounds.right - r.bounds.left,
-                     r.bounds.bottom - r.bounds.top - 22);
-    //++ I don't know if this scale info is available...
-    monitor.depth_ = 32;
-    monitor.dpi_x_ = 100;
-    monitor.dpi_y_ = 100;
+  if (reload_list || reload_all) {
+    const Monitor* list;
+    int count = Monitor::list(&list);
+    reload_all = false;
+    monitor = list[0];
+    for (int i=1; i < count; i++) {
+      monitor.merge(list[i]);
+      monitor.work.merge(list[i].work);
+    }
   }
   return monitor;
 }
+
+static Monitor* monitors = 0;
+static int num_monitors = 0;
 
 /* Return an array of all Monitors.
     p is set to point to a static array of Monitor structures describing
@@ -1031,16 +1030,40 @@ const Monitor& Monitor::all() {
     return the same array, but if a signal comes in indicating a change
     it will probably delete the old array and return a new one.
 */
-//+++ verify port to FLTK2
 int Monitor::list(const Monitor** p) {
-  *p = &all();
-  return 1;
+  if (reload_list) {
+    reload_list = false;
+    reload_all = true;
+    const unsigned int Max = 10;
+    CGDirectDisplayID list[Max];
+    CGDisplayCount count = 0;
+    /*CGDisplayErr err =*/ CGGetActiveDisplayList(Max, list, &count);
+    // maybe do something if count < 1?
+    num_monitors = count;
+    delete[] monitors;
+    monitors = new Monitor[count];
+    for (unsigned int d = 0; d < count; ++d) {
+      CGRect bounds = CGDisplayBounds(list[d]);
+      monitors[d].set(bounds.origin.x,
+                      bounds.origin.y,
+                      bounds.size.width,
+                      bounds.size.height);
+      GDHandle gdhandle; DMGetGDeviceByDisplayID((DisplayIDType)(list[d]),&gdhandle,false);
+      Rect work; GetAvailableWindowPositioningBounds(gdhandle, &work);
+      monitors[d].work.set(work.left, work.top, work.right-work.left, work.bottom-work.top);
+      monitors[d].depth_ = CGDisplayBitsPerPixel(list[d]);
+      CGSize size = CGDisplayScreenSize(list[d]); //display size in mm
+      monitors[d].dpi_x_ = bounds.size.width*25.4f/size.width;
+      monitors[d].dpi_y_ = bounds.size.height*25.4f/size.height;
+    }
+  }
+  *p = monitors;
+  return num_monitors;
 }
 
 /* Return a pointer to a Monitor structure describing the monitor
     that contains or is closest to the given x,y, position.
 */
-//+++ verify port to FLTK2
 const Monitor& Monitor::find(int x, int y) {
   const Monitor* monitors;
   int count = list(&monitors);

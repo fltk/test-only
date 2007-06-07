@@ -305,12 +305,12 @@ void fltk::transform(const Rectangle& from, Rectangle& to) {
 }
 
 /**
-Same as transform(Rectangle(X,Y,W,H),to). This may be faster as it
-avoids the rectangle construction.
+Same as transform(Rectangle(X,Y,W,H),to) but replaces XYWH with the transformed
+rectangle. This may be faster as it avoids the rectangle construction.
 */
-void fltk::transform(int X,int Y,int W,int H, Rectangle& to) {
+void fltk::transform(int& X,int& Y,int& W,int& H) {
   if (m.trivial) {
-    to.set(X+m.ix, Y+m.iy, W, H);
+    X += m.ix; Y += m.iy;
     return;
   }
   float x = X+W*.5f;
@@ -318,11 +318,10 @@ void fltk::transform(int X,int Y,int W,int H, Rectangle& to) {
   transform(x,y);
   float d1x,d1y; d1x = float(W); d1y = 0; transform_distance(d1x, d1y);
   float d2x,d2y; d2x = 0; d2y = float(H); transform_distance(d2x, d2y);
-  float w = rintf(sqrtf(d1x*d1x+d2x*d2x));
-  x = floorf(x - (w+1)/2);
-  float h = rintf(sqrtf(d1y*d1y+d2y*d2y));
-  y = floorf(y - (h+1)/2);
-  to.set(int(x),int(y),int(w),int(h));
+  W = int(sqrtf(d1x*d1x+d2x*d2x)+.5f);
+  H = int(sqrtf(d1y*d1y+d2y*d2y)+.5f);
+  X = int(floorf(x - .5f*(W+1)));
+  Y = int(floorf(y - .5f*(H+1)));
 }
 
 ////////////////////////////////////////////////////////////////

@@ -82,6 +82,7 @@ CPPFILES = \
 	mandelbrot.cxx \
 	menu.cxx \
 	message.cxx \
+	monitors.cxx \
 	navigation.cxx \
 	output.cxx \
 	overlay.cxx \
@@ -153,6 +154,7 @@ TARGETS = \
 	mandelbrot$(EXEEXT) \
 	menu$(EXEEXT) \
 	message$(EXEEXT) \
+	monitors$(EXEEXT) \
 	navigation$(EXEEXT) \
 	output$(EXEEXT) \
 	pack$(EXEEXT) \

@@ -33,12 +33,12 @@ using namespace fltk;
 /*! Fill the rectangle with the current color. */
 void fltk::fillrect(int x, int y, int w, int h) {
   if (w <= 0 || h <= 0) return;
-  transform(x,y);
+  transform(x,y,w,h);
 #if USE_CAIRO
   cairo_rectangle(cc,x,y,w,h);
   cairo_fill(cc);
 #elif USE_X11
-  XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
+  if (w && h) XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
 #elif defined(_WIN32)
   RECT rect;
   rect.left = x; rect.top = y;  
@@ -61,12 +61,13 @@ void fltk::fillrect(int x, int y, int w, int h) {
 */
 void fltk::strokerect(int x, int y, int w, int h) {
   if (w <= 0 || h <= 0) return;
-  transform(x,y);
+  transform(x,y,w,h);
 #if USE_CAIRO
   cairo_rectangle(cc,x+.5,y+.5,w-1,h-1);
   cairo_stroke(cc);
 #elif USE_X11
-  XDrawRectangle(xdisplay, xwindow, gc, x, y, w-1, h-1);
+  if (w && h) XDrawRectangle(xdisplay, xwindow, gc, x, y, w-1, h-1);
+  else XDrawLine(xdisplay, xwindow, gc, x, y, x+w, y+h);
 #elif defined(_WIN32)
   setpen();
   POINT pts[4];

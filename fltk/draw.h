@@ -70,7 +70,7 @@ FL_API void transform(float& x, float& y);
 FL_API void transform_distance(float& x, float& y);
 FL_API void transform(int& x, int& y);
 FL_API void transform(const Rectangle& from, Rectangle& to);
-FL_API void transform(int x, int y, int w, int h, Rectangle& to);
+FL_API void transform(int& x, int& y, int& w, int& h);
 //@}
 
 /// \name Clipping
