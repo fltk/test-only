@@ -66,13 +66,14 @@ int BarGroup::handle(int event)
   switch (event) {
   case ENTER:
   case MOVE:
-    if (highlight_color() && takesevents()) {
+    if (takesevents()) {
       glyph_box(r);
       bool hl = event_inside(r);
       if (hl != highlighted) {
 	highlighted = hl;
-	redraw(DAMAGE_HIGHLIGHT);
+	if (highlight_color()) redraw(DAMAGE_HIGHLIGHT);
       }
+      if (hl) {fltk::belowmouse(this); return 1;}
     }
     break;
   case LEAVE:
@@ -107,7 +108,7 @@ int BarGroup::handle(int event)
     if (pushed) {
       opened(!open_);
       pushed = false;
-      highlighted = true;
+      highlighted = event_inside(fltk::Rectangle(glyph_size_, glyph_size_));
       redraw(DAMAGE_HIGHLIGHT);
       do_callback();
     } else if (highlighted) {
@@ -132,7 +133,9 @@ void BarGroup::draw()
       //flags(saved);
     }
   } else if (damage() & ~(DAMAGE_CHILD|DAMAGE_HIGHLIGHT)) {
+    clear_flag(HIGHLIGHT);
     draw_box();
+    // draw the label inside it:
     Rectangle r(w(),h());
     Flags flags = this->flags();
     drawstyle(style(), flags|OUTPUT);
@@ -146,6 +149,7 @@ void BarGroup::draw()
     }
     draw_label(r, flags);
   }
+  // draw the open/close button:
   if (damage() & (DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT|DAMAGE_ALL)) {
     Flags flags = OUTPUT;
     if (pushed) flags |= PUSHED;
