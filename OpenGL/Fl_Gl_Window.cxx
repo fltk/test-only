@@ -29,6 +29,7 @@
 #include <fltk/visual.h>
 #include <fltk/layout.h>
 #include <fltk/run.h>
+#include <fltk/events.h>
 #include <stdlib.h>
 #include <string.h>
 using namespace fltk;
@@ -539,6 +540,18 @@ check valid() in draw() to avoid initialization, you must do so here
 and initialize to exactly the same setting.
 */
 void GlWindow::draw_overlay() {}
+
+int GlWindow::handle( int event )
+{
+#if USE_QUARTZ
+    switch ( event ) {
+    case HIDE:
+        aglSetDrawable( context(), NULL );
+        break;
+    }
+#endif
+    return Window::handle( event );
+}
 
 #endif
 

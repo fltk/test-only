@@ -80,6 +80,8 @@ public:
   virtual void draw() = 0;
   virtual void draw_overlay();
 
+  virtual int handle( int event );
+
 private:
 
   int mode_;
