@@ -1136,9 +1136,10 @@ bool Input::handle_key() {
 		   event_text(), event_length());
   }
 
+  bool command = event_state(COMMAND);
   bool ctrl = event_state(CTRL);
   bool shift = event_state(SHIFT);
-  bool alt = event_state(ALT|META);
+  bool alt = event_state(OPTION);
 
   switch (event_key()) {
 
@@ -1205,7 +1206,7 @@ bool Input::handle_key() {
     return true;}
 
   case 'a':
-    if (ctrl) {
+    if (command) {
       // if already at start of line, select the entire buffer. This
       // makes two ^A's do a select-all for both Emacs & Win32 compatability
       i = line_start(position());
@@ -1259,7 +1260,7 @@ bool Input::handle_key() {
 
   case ReturnKey:
   case KeypadEnter:
-    if (ctrl || shift) return false;
+    if (command || shift) return false;
     if (when() & WHEN_ENTER_KEY) {
       position(size(), 0);
       if (fl_pending_callback==this || (when()&WHEN_NOT_CHANGED)) {
@@ -1286,7 +1287,7 @@ bool Input::handle_key() {
     return true;
 
   case 'c':
-    if (!ctrl && try_shortcut()) return true;
+    if (!command && try_shortcut()) return true;
     return copy();
 
   case 'o': // Emacs insert newline after cursor
@@ -1316,7 +1317,7 @@ bool Input::handle_key() {
     return cut();
 
   case 'v':
-    if (!ctrl && try_shortcut()) return true;
+    if (!command && try_shortcut()) return true;
     paste(*this,true);
     return true;
 
@@ -1326,7 +1327,7 @@ bool Input::handle_key() {
     return cut();
 
   case 'x':
-    if (!ctrl && try_shortcut()) return true;
+    if (!command && try_shortcut()) return true;
     copy();
     return cut();
 
@@ -1358,6 +1359,10 @@ bool Input::handle_key() {
   case RightShiftKey:
   case LeftCtrlKey:
   case RightCtrlKey:
+#if defined(__APPLE__)
+  case LeftCmdKey:
+  case RightCmdKey:
+#endif
     // Don't pass these to other widgets. The user considers them
     // part of typing.
     return true;
