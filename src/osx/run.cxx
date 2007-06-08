@@ -1015,7 +1015,10 @@ const Monitor& Monitor::all() {
     monitor = list[0];
     for (int i=1; i < count; i++) {
       monitor.merge(list[i]);
+      // always keep the menubar off the first window out of work area!
+      int oldy = monitor.work.y();
       monitor.work.merge(list[i].work);
+      monitor.work.set_y(oldy);
     }
   }
   return monitor;
