@@ -163,16 +163,25 @@ void Item::layout() {
   setfont(textfont(), textsize());
   int w = 250, h = 250;
   measure(label(), w, h);
-  if (w) {w += 6+int(textsize())/2;}
-  if (type()) w += 15;
+  if (w) {
+    w += int(textsize())/2; // put 1 space between menubar items
+    h += int(leading());
+  }
   if (image()) {
     int W,H;
     image()->measure(W, H);
-    if (H > h) h = H;
-    w += W;
+    if (flag(ALIGN_LEFT|ALIGN_RIGHT)) {
+      if (H > h) h = H;
+      w += W;
+    } else {
+      if (w) h += H; else h = H;
+      if (W > w) w = W;
+    }
+  } else {
+    w += 6; // further adjustment to match Windows menubars
   }
   this->w(w);
-  this->h(h+int(leading()));
+  this->h(h);
   Widget::layout();
 }
 
@@ -249,15 +258,25 @@ void ItemGroup::layout() {
   setfont(textfont(), textsize());
   int w = 250, h = 250;
   measure(label(), w, h);
-  if (w) {w += 6+int(textsize())/2;}
+  if (w) {
+    w += int(textsize())/2; // put 1 space between menubar items
+    h += int(leading());
+  }
   if (image()) {
     int W,H;
     image()->measure(W, H);
-    if (H > h) h = H;
-    w += W;
+    if (flag(ALIGN_LEFT|ALIGN_RIGHT)) {
+      if (H > h) h = H;
+      w += W;
+    } else {
+      if (w) h += H; else h = H;
+      if (W > w) w = W;
+    }
+  } else {
+    w += 6; // further adjustment to match Windows menubars
   }
   this->w(w);
-  this->h(h+int(leading()));
+  this->h(h);
   Widget::layout();
 }
 

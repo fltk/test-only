@@ -183,18 +183,23 @@ void Widget::draw_label(const Rectangle& ir, Flags flags) const {
     // in the button:
     if (label_ && !(flags&0x3f) && !(label_[0]=='@' && label_[1]==';')) {
       int d = (r.h()-int(h+labelsize()+leading()+.5))>>1;
-      if (d >= 0) {
-	// put the image atop the text
-	r.move_y(d); flags |= ALIGN_TOP|ALIGN_INSIDE;
-      } else if (w < r.w()) {
-	int text_w = r.w(); int text_h = r.h();
-	measure(label_, text_w, text_h, flags);
-	int d = (r.w()-(w+text_w))>>1;
-	if (d > 0) {
-	  r.move_x(d);
-	  flags |= ALIGN_LEFT|ALIGN_INSIDE;
-	}
+      if (d < 0) {
+        if (w < r.w()) {
+          // try to put the text to the right
+          int text_w = r.w()-w; int text_h = r.h();
+          measure(label_, text_w, text_h, flags);
+          int d = (r.w()-w-text_w)>>1;
+          if (d >= 0) {
+            r.move_x(d);
+            flags |= ALIGN_LEFT|ALIGN_INSIDE;
+            goto OK;
+          }
+        }
+        d = 0;
       }
+      // put the image atop the text
+      r.move_y(d); flags |= ALIGN_TOP|ALIGN_INSIDE;
+    OK:;
     }
 
     // STR 1547: ALIGN_CENTER forces the image to center and not effect label
@@ -202,13 +207,13 @@ void Widget::draw_label(const Rectangle& ir, Flags flags) const {
       Rectangle ir(r, w, h, 0);
       img->draw(ir);
     } else {
-      Rectangle ir(r, w, h, flags);
-      img->draw(ir);
-      // figure out the rectangle that remains for text:
-      if (flags & ALIGN_TOP) r.set_y(ir.b());
-      else if (flags & ALIGN_BOTTOM) r.set_b(ir.y());
-      else if (flags & ALIGN_LEFT) r.set_x(ir.r());
-      else if (flags & ALIGN_RIGHT) r.set_r(ir.x());
+    Rectangle ir(r, w, h, flags);
+    img->draw(ir);
+    // figure out the rectangle that remains for text:
+    if (flags & ALIGN_TOP) r.set_y(ir.b());
+    else if (flags & ALIGN_BOTTOM) r.set_b(ir.y());
+    else if (flags & ALIGN_LEFT) r.set_x(ir.r());
+    else if (flags & ALIGN_RIGHT) r.set_r(ir.x());
       else r.set_y(ir.b());
     }
   }

@@ -99,7 +99,7 @@ J1:
     // Test against the shortcut() of any item in any submenu:
     if (handle_shortcut()) return 1;
     // Check against the &x of top-level items:
-    if (event_state(ACCELERATOR)) {
+    if (shortcut() && event_state(ACCELERATOR)) {
       for (i = 0; i < children; i++) {
 	Widget* w = child(i);
 	if (w->active() && w->test_label_shortcut()) {

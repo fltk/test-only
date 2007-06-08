@@ -222,6 +222,7 @@ static Widget* innards(
   item->shortcut(shortcut);
   if (callback) item->callback(callback);
   item->user_data(data);
+  item->w(0); item->h(0); // force re-measure
   top->relayout();
   return item;
 }
