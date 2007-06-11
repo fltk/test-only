@@ -823,8 +823,17 @@ void Window::destroy() {
 
   // remove from the list of windows:
   CreatedWindow** pp = &CreatedWindow::first;
+#if USE_QUARTZ
+  // remove child/brother pointers as well...
+  for (; *pp; pp = &(*pp)->next) {
+    if ((*pp)->children == x) (*pp)->children = x->brother;
+    if ((*pp)->brother == x) (*pp)->brother = x->brother;
+    if (*pp == x) *pp = x->next;
+  }
+#else
   for (; *pp != x; pp = &(*pp)->next) if (!*pp) return;
   *pp = x->next;
+#endif
 
   // recursively remove any subwindows:
   for (CreatedWindow *x1 = CreatedWindow::first; x1;) {
