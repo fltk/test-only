@@ -828,7 +828,11 @@ void Window::destroy() {
   for (; *pp; pp = &(*pp)->next) {
     if ((*pp)->children == x) (*pp)->children = x->brother;
     if ((*pp)->brother == x) (*pp)->brother = x->brother;
-    if (*pp == x) *pp = x->next;
+    if (*pp == x) {
+      *pp = x->next;
+      if(!*pp)
+        break;
+    }
   }
 #else
   for (; *pp != x; pp = &(*pp)->next) if (!*pp) return;
