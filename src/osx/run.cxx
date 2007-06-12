@@ -602,6 +602,7 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
     ret = eventNotHandledErr; // without this it blocks until mouse moves?
     break;
   case kEventWindowDeactivated:
+    handle(LEAVE, 0); // temporary fix until we get real enter/leave events
     if ( window == xfocus ) fix_xfocus(0);
     ret = eventNotHandledErr;
     break;
@@ -1354,7 +1355,7 @@ void Window::borders( fltk::Rectangle *r ) const {
 	   (outside.right-outside.left)-(inside.right-inside.left),
 	   (outside.bottom-outside.top)-(inside.bottom-inside.top));
   } else if (child_of() && !contains(modal())) {
-    r->set(0,-16,0,16);
+    r->set(0,-22,0,22);
   } else {
     r->set(0,-22,0,22);
   }
@@ -1397,6 +1398,17 @@ void Window::layout() {
 //+++ verify port to FLTK2
 void Window::create()
 {
+  static WindowGroupRef floatingWindowGroup;
+  static WindowGroupRef mainWindowGroup;
+
+  if ( !floatingWindowGroup ) {
+    CreateWindowGroup( 0, &floatingWindowGroup );
+    CreateWindowGroup( 0, &mainWindowGroup );
+    SetWindowGroupParent( floatingWindowGroup, GetWindowGroupOfClass( kDocumentWindowClass ) );
+    SetWindowGroupParent( mainWindowGroup, floatingWindowGroup );
+    ChangeWindowGroupAttributes( floatingWindowGroup, kWindowGroupAttrSelectAsLayer | kWindowGroupAttrSharedActivation, 0);
+  }
+
   // Create structure to hold the rectangle, initialize the parts that
   // are the same for outer and child windows:
   CreatedWindow* x = new CreatedWindow;
@@ -1433,6 +1445,7 @@ void Window::create()
   } else {
     // create a desktop window
     int winclass, winattr, where;
+    WindowGroupRef winGroup = NULL;
     if (!border() || override()) {
       winclass = kHelpWindowClass;
       if (contains(modal()) || override()) {
@@ -1450,18 +1463,17 @@ void Window::create()
 	          kWindowCloseBoxAttribute;
 	where = kWindowAlertPositionOnParentWindowScreen;
       } else if (child_of()) {
-	// Major kludge: this is to have the regular look, but stay
-	// above the document windows
-	//SetWindowClass(x->xid, kFloatingWindowClass );
-	winclass = kFloatingWindowClass;
+	winclass = kDocumentWindowClass;
 	winattr = kWindowStandardHandlerAttribute |
-	          kWindowCloseBoxAttribute;
+	          kWindowCloseBoxAttribute | kWindowCollapseBoxAttribute;
 	where = kWindowCenterOnParentWindowScreen;
+        winGroup = floatingWindowGroup;
       } else {
 	winclass = kDocumentWindowClass;
 	winattr = kWindowStandardHandlerAttribute |
 	  kWindowCloseBoxAttribute | kWindowCollapseBoxAttribute;
 	where = kWindowCascadeOnParentWindowScreen;
+        winGroup = mainWindowGroup;
       }
       if (minw != maxw || minh != maxh)
 	winattr |= kWindowFullZoomAttribute |
@@ -1488,6 +1500,8 @@ void Window::create()
     if (child_of() && !contains(modal())) {
       SetWindowActivationScope(x->xid, kWindowActivationScopeAll);
     }
+    if ( winGroup )
+      SetWindowGroup( x->xid, winGroup );
 
     label(label(), iconlabel());
 
@@ -1499,8 +1513,7 @@ void Window::create()
       this->resize(r.left, r.top, r.right-r.left, r.bottom-r.top);
     } else if (border() && !override()) {
       // stop it from putting title bar under the menubar:
-      Rect r; GetWindowBounds(x->xid, kWindowStructureRgn, &r);
-      if (r.top < 22) {y(y()+22-r.top); MoveWindow(x->xid, 0, y(), true);}
+      ConstrainWindowToScreen( x->xid, kWindowStructureRgn, kWindowConstrainAllowPartial, NULL, NULL );
     }
 
     x->wait_for_expose = false;//true;
