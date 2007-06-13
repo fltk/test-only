@@ -34,12 +34,10 @@
 #include <fltk/string.h>
 #include "GlChoice.h"
 
-#if USE_XFT
+#if USE_XFT && !MAKEDEPEND
 # define Window XWindow
 # include <X11/Xft/Xft.h>
-# ifndef MAKEDEPEND
-#  include FT_GLYPH_H
-# endif
+# include FT_GLYPH_H
 # undef Window
 static void glXUseXftFont(XftFont*, unsigned listbase);
 # define TEXTURES 1

@@ -36,9 +36,6 @@
 #include <fltk/string.h>
 #include <fltk/utf.h>
 #include <fltk/x.h>
-#define Window XWindow
-#include <X11/Xft/Xft.h>
-#undef Window
 
 // define some symbols missing from some Xft header files:
 #ifndef XFT_MINSPACE

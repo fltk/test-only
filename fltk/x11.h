@@ -55,7 +55,7 @@ header files directly.
 
 #   include <X11/Xatom.h>
 
-#   if USE_XFT
+#   if USE_XFT && !MAKEDEPEND
 #    include <X11/Xft/Xft.h>
 #   else
      typedef struct _XftDraw XftDraw;
