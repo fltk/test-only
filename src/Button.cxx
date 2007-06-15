@@ -71,7 +71,6 @@ using namespace fltk;
   the user clicks it and releases it.
 */
 
-static Button* pushed_button;
 static bool initial_state;
 
 int Button::handle(int event) {
@@ -88,12 +87,19 @@ int Button::handle(int event, const Rectangle& rectangle) {
   case PUSH:
     if (pushed()) return 1; // ignore extra pushes on currently-pushed button
     initial_state = state();
-    pushed_button = 0;
+    clear_flag(PUSHED);
   case DRAG: {
     bool inside = event_inside(rectangle);
-    if (inside != (pushed_button == this)) {
-      pushed_button = inside ? this : 0;
-      redraw(DAMAGE_VALUE); // redraw the pushed state
+    if (inside) {
+      if (!flag(PUSHED)) {
+        set_flag(PUSHED);
+        redraw(DAMAGE_VALUE);
+      }
+    } else {
+      if (flag(PUSHED)) {
+        clear_flag(PUSHED);
+        redraw(DAMAGE_VALUE);
+      }
     }
     if (when() & WHEN_CHANGED) { // momentary button must record state()
       if (state(inside ? !initial_state : initial_state))
@@ -101,7 +107,8 @@ int Button::handle(int event, const Rectangle& rectangle) {
     }
     return 1;}
   case RELEASE:
-    if (pushed_button != this) return 1;
+    if (!flag(PUSHED)) return 1;
+    clear_flag(PUSHED);
     redraw(DAMAGE_VALUE);
     if (type() == RADIO)
       setonly();
@@ -175,8 +182,7 @@ void Button::draw(int glyph_width) const
 
   Box* box = style->buttonbox();
 
-  Flags box_flags = flags() & ~PUSHED | OUTPUT;
-  if (this == pushed_button && pushed()) box_flags |= PUSHED;
+  Flags box_flags = flags() | OUTPUT;
   Flags glyph_flags = box_flags & ~(HIGHLIGHT|OUTPUT);
   if (glyph_width) box_flags &= ~STATE;
 
