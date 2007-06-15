@@ -1434,6 +1434,7 @@ bool fltk::handle()
     Rectangle& current = CreatedWindow::find(window)->current_size;
     if (X != current.x() || Y != current.y() || W != current.w() || H != current.h()) {
       window->resize(X, Y, W, H);
+      window->layout_damage( window->layout_damage() | LAYOUT_USER );
     }
     current.set(X,Y,W,H);
     break;}

@@ -602,8 +602,10 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
     ret = eventNotHandledErr; // without this it blocks until mouse moves?
     break;
   case kEventWindowDeactivated:
-    handle(LEAVE, 0); // temporary fix until we get real enter/leave events
-    if ( window == xfocus ) fix_xfocus(0);
+    if ( window == xfocus ) {
+      handle(LEAVE, 0); // temporary fix until we get real enter/leave events
+      fix_xfocus(0);
+    }
     ret = eventNotHandledErr;
     break;
   case kEventWindowClose:
