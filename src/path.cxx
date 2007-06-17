@@ -298,9 +298,9 @@ void fltk::transform(const Rectangle& from, Rectangle& to) {
   float d1x,d1y; d1x = float(from.w()); d1y = 0; transform_distance(d1x, d1y);
   float d2x,d2y; d2x = 0; d2y = float(from.h()); transform_distance(d2x, d2y);
   float w = rintf(sqrtf(d1x*d1x+d2x*d2x));
-  x = floorf(x - (w+1)/2);
+  x = floorf(x - w/2);
   float h = rintf(sqrtf(d1y*d1y+d2y*d2y));
-  y = floorf(y - (h+1)/2);
+  y = floorf(y - h/2);
   to.set(int(x),int(y),int(w),int(h));
 }
 
@@ -320,8 +320,8 @@ void fltk::transform(int& X,int& Y,int& W,int& H) {
   float d2x,d2y; d2x = 0; d2y = float(H); transform_distance(d2x, d2y);
   W = int(sqrtf(d1x*d1x+d2x*d2x)+.5f);
   H = int(sqrtf(d1y*d1y+d2y*d2y)+.5f);
-  X = int(floorf(x - .5f*(W+1)));
-  Y = int(floorf(y - .5f*(H+1)));
+  X = int(floorf(x - .5f*W));
+  Y = int(floorf(y - .5f*H));
 }
 
 ////////////////////////////////////////////////////////////////
