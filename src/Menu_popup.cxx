@@ -911,10 +911,12 @@ Widget* Menu::try_popup(const Rectangle& r, const char* title, bool menubar)
   p.menus[0] = &toplevel;
   p.fakemenu = 0;
 
+  track_mouse = true; //event_state(ANY_BUTTON);
   if (menubar) {
-    if (value() < 0)
+    if (value() < 0) {
       toplevel.handle(PUSH); // get menu mouse points at to appear
-    else {
+    } else {
+      track_mouse = false;
       p.indexes[0] = value();
       p.indexes[1] = -1;
       p.level = 0;
@@ -962,7 +964,6 @@ Widget* Menu::try_popup(const Rectangle& r, const char* title, bool menubar)
 
   Widget* saved_modal = modal(); bool saved_grab = grab();
   p.state = INITIAL_STATE;
-  track_mouse = true; //event_state(ANY_BUTTON);
 #ifdef DEBUG
 #define MODAL false
 #else
