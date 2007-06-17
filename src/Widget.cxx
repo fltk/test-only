@@ -1049,14 +1049,22 @@ bool Widget::state(bool v) {
 }
 
 /*!
-  Calls set() on this widget and calls clear() on all other widgets in
+  Calls set() on this widget and calls clear() on all adjacent widgets in
   the same parent Group that have the type() set to RADIO.
 */
 void Widget::setonly() {
   set();
-  for (int i = parent()->children(); i--;) {
-    Widget* o = parent()->child(i);
-    if (o != this && o->type() == RADIO) o->clear();
+  Group* g = parent();
+  int my_index = g->find( this );
+  for( int i = my_index-1; i >= 0; --i ) {
+    Widget* c = g->child(i);
+    if( RADIO != c->type() ) break;
+    c->clear();
+  }
+  for( int i = my_index+1; i < g->children(); ++i ) {
+    Widget* c = g->child(i);
+    if( RADIO != c->type() ) break;
+    c->clear();
   }
 }
 
