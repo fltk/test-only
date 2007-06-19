@@ -94,6 +94,7 @@ Group::Group(int X,int Y,int W,int H,const char *l,bool begin)
   type(GROUP_TYPE);
   style(::group_style);
   align(ALIGN_TOP);
+  init_sizes();
   if (begin) this->begin();
 }
 
@@ -448,42 +449,19 @@ int Group::handle(int event) {
 
     The group remembers the initial size of itself and all it's children,
     so that the layout can be restored even if the group is resized so
-    that some children go to zero or negative sizes. Normally these
-    sizes are calculated the first time layout() is called, though you
-    can do so by calling sizes() directly.
+    that some children go to zero or negative sizes.
 
-    Though this makes sense it often results in unexpected behavior
-    when a program wants to rearrange the child widgets or change the
-    size of a group to surround a new arrangement of child widgets. The
-    widgets tend to snap back to a previous size.
-
-    Calling init_sizes() "resets" the sizes array to the current group
-    and children positions.  Actually it just deletes the sizes array,
-    and it is not recreated until the next time layout is called. Call
-    this if you manually adjust the sizes of the children, or attempt
-    to change the size of the group without wanting the children to scale.
+    This can produce unwanted behavior if you try to rearrange the
+    child widgets yourself, as the next resize will put them right back
+    where they were initially. Call this to make it forget all the
+    saved sizes and reinitialize them during the next layout().
 
     This is automatically done when any child is added or removed.  */
 void Group::init_sizes() {
+  initial_w = w();
+  initial_h = h();
   delete[] sizes_; sizes_ = 0;
-  relayout();
-}
-
-/** This non-virtual override is for programs that set up a group's
-    layout and then call resize() on it to set the correct size before
-    it is displayed. What it does is remember the current sizes (the
-    thing the init_sizes() method makes it forget) before calling the
-    normal widget resize().
-
-    This is a non-virtual override because in normal use fltk will call
-    layout() anyway before any use of the widget, and Group's layout()
-    initializes the sizes. This is only for programs that use resize()
-    directly.
-*/
-bool Group::resize(int x, int y, int w, int h) {
-  if (!sizes_ && resizable() && children_ && (w != this->w() || h != this->h()))
-    layout(); // this is needed to recursively get inner groups...
-  return Widget::resize(x,y,w,h);
+  //relayout();
 }
 
 /** Returns array of initial sizes of the widget and it's children.
@@ -504,9 +482,9 @@ int* Group::sizes() {
     int* p = sizes_ = new int[4*(children_+2)];
     // first thing in sizes array is the group's size:
     p[0] = x();
-    p[1] = w();
+    p[1] = initial_w;
     p[2] = y();
-    p[3] = h();
+    p[3] = initial_h;
     // next is the resizable's size:
     p[4] = 0; // init to the group's size
     p[5] = p[1];
@@ -537,6 +515,10 @@ int* Group::sizes() {
 
 void Group::layout() {
   int layout_damage = this->layout_damage();
+  if (!sizes_) {
+    if (!(layout_damage&LAYOUT_W)) initial_w = w();
+    if (!(layout_damage&LAYOUT_H)) initial_h = h();
+  }
   if (resizable() && layout_damage&(LAYOUT_WH|LAYOUT_DAMAGE))
     layout_damage |= LAYOUT_WH;
   else

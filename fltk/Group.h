@@ -71,8 +71,6 @@ public:
   Widget* resizable() const {return resizable_;}
   void add_resizable(Widget& o) {resizable_ = &o; add(o);}
   void init_sizes();
-  bool resize(int,int,int,int)	;
-  bool resize(int w, int h) {return resize(x(),y(),w,h);}
 
   void focus_index(int v) {focus_index_ = v;}
   void set_focus(Widget* w) {focus_index_ = find(w);}
@@ -91,6 +89,7 @@ protected:
   void draw_child(Widget&) const;
   void update_child(Widget&) const;
   void draw_outside_label(Widget&) const ;
+  int initial_w, initial_h;
   int* sizes();
   void layout(const Rectangle&, int layout_damage);
 
