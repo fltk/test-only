@@ -154,7 +154,7 @@
 # ifndef __USE_GNU
 #  define __USE_GNU // makes the RECURSIVE stuff appear on Linux
 # endif
-#include <fltk/Threads.h>
+# include <fltk/Threads.h>
 
 # if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP) && !defined(__CYGWIN__)
 static pthread_mutexattr_t recursive_attrib={PTHREAD_MUTEX_RECURSIVE_NP};
@@ -162,7 +162,7 @@ fltk::RecursiveMutex::RecursiveMutex() : Mutex(&recursive_attrib) {}
 # elif defined(PTHREAD_MUTEX_RECURSIVE)
 static pthread_mutexattr_t* recursive_attrib() {
   static pthread_mutexattr_t a;
-  static bool beenhere;
+  static bool beenhere = false;
   if (!beenhere) {
     pthread_mutexattr_init(&a);
     pthread_mutexattr_settype(&a,PTHREAD_MUTEX_RECURSIVE);
@@ -197,20 +197,27 @@ static void (*init_or_lock_function)() = init_function;
 
 static fltk::RecursiveMutex fltkmutex;
 
-static void lock_function() {fltkmutex.lock();}
-static void unlock_function() {fltkmutex.unlock();}
+static void lock_function() { fltkmutex.lock(); }
+static void unlock_function() { fltkmutex.unlock(); }
 
+static pthread_t main_thread_id;
+
+#if !USE_QUARTZ
 static void* thread_message_;
 static void thread_awake_cb(int fd, void*) {
   while (read(fd, &thread_message_, sizeof(void*)) > 0);
 }
 static int thread_filedes[2];
+#endif
 
 static void init_function() {
   // Init threads communication pipe to let threads awake FLTK from wait
+  main_thread_id = pthread_self();
   pipe(thread_filedes);
+#if !USE_QUARTZ
   fcntl(thread_filedes[0], F_SETFL, O_NONBLOCK);
   fltk::add_fd(thread_filedes[0], fltk::READ, thread_awake_cb);
+#endif
   fl_lock_function = init_or_lock_function = lock_function;
   fl_unlock_function = unlock_function;
   lock_function();
@@ -220,18 +227,24 @@ void fltk::lock() {init_or_lock_function();}
 
 void fltk::unlock() {fl_unlock_function();}
 
+bool fltk::in_main_thread() {
+  return init_or_lock_function == init_function || pthread_self() == main_thread_id;
+}
+
+#if !USE_QUARTZ
 void fltk::awake(void* msg) {
   write(thread_filedes[1], &msg, sizeof(void*));
 }
 
 // the following is already defined in CYGWIN
 // for the common win32/run.cxx part
-#if !defined(__CYGWIN__) 
+# if !defined(__CYGWIN__) 
 void* fltk::thread_message() {
   void* r = thread_message_;
   thread_message_ = 0;
   return r;
 }
+# endif
 #endif
 
 #else

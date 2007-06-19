@@ -44,7 +44,6 @@ pop up menu.
 #include <config.h>
 #include <fltk/Item.h> // for TOGGLE, RADIO
 #define checkmark(item) (item->type()>=Item::TOGGLE && item->type()<=Item::RADIO)
-#include <stdio.h>
 
 using namespace fltk;
 
@@ -104,7 +103,7 @@ J1:
       for (i = 0; i < children; i++) {
 	Widget* w = child(i);
 	if (w->active() && w->test_label_shortcut()) {
-	  if (w->is_group()) {value(i); printf("Picking %s\n", w->label()); goto J1;} // menu title
+	  if (w->is_group()) {value(i); goto J1;} // menu title
 	  focus_index(Group::find(w)); // Set focus_index, so Menu::get_item() works
 	  if (checkmark(w)) { w->invert_flag(STATE); redraw(); }
 	  execute(w); // button in the menu bar

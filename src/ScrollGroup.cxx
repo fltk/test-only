@@ -184,7 +184,7 @@ void ScrollGroup::layout() {
   int layout_damage = this->layout_damage();
 
   // handle movement in xy without wasting time:
-  if (!(layout_damage&(LAYOUT_WH|LAYOUT_DAMAGE))) {
+  if (!(layout_damage&(LAYOUT_WH|LAYOUT_DAMAGE|LAYOUT_CHILD))) {
     Group::layout();
     return;
   }

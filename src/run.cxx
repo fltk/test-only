@@ -127,8 +127,6 @@ FL_API char* newstring(const char *from) {
 }
 } /* extern "C" */
 
-bool fltk::in_main_thread_ = true;
-
 /*! Tries to make this widget be the keyboard focus widget, by first
   sending it an fltk::FOCUS event, and if it returns non-zero, setting
   fltk::focus() to this widget. You should use this method to assign

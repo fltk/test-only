@@ -426,7 +426,6 @@ static inline int fl_wait(float time_to_wait) {
   fdt[2] = fdsets[2];
 #endif
 
-  in_main_thread_ = false;
   fl_unlock_function();
 #if USE_POLL
   int n = ::poll(pollfds, nfds,
@@ -443,7 +442,6 @@ static inline int fl_wait(float time_to_wait) {
   }
 #endif
   fl_lock_function();
-  in_main_thread_ = true;
 
   if (n > 0) {
     for (int i=0; i<nfds; i++) {

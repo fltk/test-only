@@ -79,13 +79,11 @@ FL_API void add_fd(int fd, int when, FileHandler, void* =0);
 FL_API void add_fd(int fd, FileHandler, void* = 0);
 FL_API void remove_fd(int, int when = -1);
 
-extern FL_API bool in_main_thread_;
-
 FL_API void lock();
 FL_API void unlock();
 FL_API void awake(void* message = 0);
 FL_API void* thread_message();
-inline bool in_main_thread() {return in_main_thread_;}
+FL_API bool in_main_thread();
 
 }
 

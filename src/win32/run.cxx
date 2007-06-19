@@ -424,14 +424,12 @@ static inline int fl_wait(double time_to_wait) {
 #endif // USE_ASYNC_SELECT
 
   if (!fl_ready()) {
-    in_main_thread_ = false;
     fl_unlock_function();
     int t_msec =
       time_to_wait < 2147483.647 ? int(time_to_wait*1000+.5) : 0x7fffffff;
     // int ret_val =
       MsgWaitForMultipleObjects(0, NULL, false, t_msec, QS_ALLINPUT);
     fl_lock_function();
-    in_main_thread_ = true;
   }
 
   // Execute all pending messages:
