@@ -58,8 +58,11 @@ public:
       Rectangle r(R);
       box->inset(r);
       // use the selection color only if they directly set it:
-      if (drawstyle()->selection_color_)
-	setcolor(inactive(drawstyle()->selection_color_, drawflags()));
+      Color c = drawstyle()->selection_color_;
+      if (c) {
+        if (drawflags()&INACTIVE_R) c = inactive(c);
+        setcolor(c);
+      }
       r.inset((r.h()+1)/6);
       addchord(r, 0, 360);
       fillpath();

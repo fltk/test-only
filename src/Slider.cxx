@@ -424,7 +424,9 @@ bool Slider::draw(const Rectangle& sr, Flags flags, bool slot)
         break;
       }
     }
-    setcolor(inactive(contrast(textcolor(),color()),flags));
+    Color b = color();
+    Color c = contrast(textcolor(), b);
+    if (flags&INACTIVE_R) c = inactive(c, b);
     draw_ticks(tr, (slider_size()+1)/2);
   }
 

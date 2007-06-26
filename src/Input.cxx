@@ -239,12 +239,12 @@ void Input::draw() {
       fltk::setfont(labelfont(), labelsize());
       float width = getwidth(label());
       label_width = int(width+getwidth(":")+2.5);
-      setcolor(color());
+      Color color = this->color();
+      setcolor(color);
       Rectangle lr(r); lr.w(label_width);
       fillrect(lr);
-      Color color = labelcolor();
-      if (flag(INACTIVE_R)) color = inactive(color);
-      setcolor(color);
+      if (flag(INACTIVE_R)) setcolor(inactive(labelcolor(), color));
+      else setcolor(labelcolor());
       float y = r.y()+((r.h()-height)>>1)+desc;
       drawtext(label(), float(r.x()+2), y);
       drawtext(":", r.x()+2+width, y);
@@ -269,8 +269,7 @@ void Input::draw(const Rectangle& r)
 {
 
   // ignore HIGHLIGHT so it does not change color when mouse points at it:
-  Flags flags = this->flags()&~HIGHLIGHT;
-  drawstyle(style(), flags);
+  drawstyle(style(), this->flags()&~HIGHLIGHT);
 
   const Color background = getbgcolor();
   const Color textcolor = getcolor();

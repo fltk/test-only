@@ -272,7 +272,6 @@ void FileIcon::_draw(const Rectangle& r) const {
   // fabien: must save currentcolor because otherwise the browser would write the text
   // with icon color, thanks bill for having removed the back pointer !
   Color saved_color = getcolor(); 
-					    
 
   // Setup the transform matrix as needed...
   scale = float(r.w() < r.h() ? r.w() : r.h());

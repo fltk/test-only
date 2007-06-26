@@ -99,15 +99,14 @@ Color fltk::lerp(Color color0, Color color1, float weight) {
 	(uchar)(((uchar)(rgb1>>8))*weight + ((uchar)(rgb0>>8))*(1-weight)));
 }
 
-/*! Same as lerp(c, GRAY75, .7), it grays out the color. */
-Color fltk::inactive(Color c) {
-  return lerp(c, GRAY75, 0.70f);
+/*! Same as lerp(fg, bg, .5), it grays out the color. */
+Color fltk::inactive(Color fg, Color bg) {
+  return lerp(fg, bg, .5);
 }
 
-/*! Same as (f&INACTIVE_R) ? inactive(c) : c */
-Color fltk::inactive(Color c, Flags f) {
-  if (f&INACTIVE_R) return lerp(c, GRAY75, 0.70f);
-  return c;
+/*! Same as lerp(fg, getbgcolor(), .5). This is for back-compatability only? */
+Color fltk::inactive(Color fg) {
+  return lerp(fg, current_bgcolor_, .5);
 }
 
 /*! Returns \a fg if fltk decides it can be seen well when drawn against

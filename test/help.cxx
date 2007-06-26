@@ -52,7 +52,7 @@ main(int  argc,			// I - Number of command-line arguments
   else
     help->load(argv[1]);
 
-  help->show(argc, argv);
+  help->show();
 
   fltk::run();
 

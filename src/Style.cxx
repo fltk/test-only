@@ -396,7 +396,7 @@ void fltk::drawstyle(const Style* style, Flags flags) {
     else {bg = style->color(); fg = style->textcolor();}
     // fg = contrast(fg, bg);this messes up things
   }
-  if (flags & INACTIVE_R) fg = inactive(fg);
+  if (flags & INACTIVE_R) fg = inactive(fg,bg);
   setcolor(fg);
   setbgcolor(bg);
   if (flags & OUTPUT) setfont(style->labelfont(), style->labelsize());
