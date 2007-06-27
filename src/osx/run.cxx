@@ -227,7 +227,7 @@ void fltk::awake(void* msg) {
   EventRef drEvent;
   CreateEvent( 0, kEventClassFLTK, kEventFLTKDataReady,
                0, kEventAttributeUserEvent, &drEvent);
-  PostEventToQueue(eventqueue, drEvent, kEventPriorityStandard);
+  PostEventToQueue(GetCurrentEventQueue(), drEvent, kEventPriorityStandard);
 }
 
 void* fltk::thread_message() {

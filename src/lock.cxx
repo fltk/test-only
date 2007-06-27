@@ -213,8 +213,8 @@ static int thread_filedes[2];
 static void init_function() {
   // Init threads communication pipe to let threads awake FLTK from wait
   main_thread_id = pthread_self();
-  pipe(thread_filedes);
 #if !USE_QUARTZ
+  pipe(thread_filedes);
   fcntl(thread_filedes[0], F_SETFL, O_NONBLOCK);
   fltk::add_fd(thread_filedes[0], fltk::READ, thread_awake_cb);
 #endif
