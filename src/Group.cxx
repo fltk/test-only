@@ -106,7 +106,6 @@ void Group::clear() {
     Widget*const* a = array_;
     Widget*const* e = a+children_;
     // clear everything now, in case fix_focus recursively calls us:
-    array_ = 0;
     children_ = 0;
     focus_index_ = -1;
     if (resizable_) resizable_ = this;
@@ -116,8 +115,9 @@ void Group::clear() {
       o->parent(0); // stops it from calling remove()
       delete o;
     }
-    delete[] const_cast<Widget**>( a );
   }
+  delete[] const_cast<Widget**>( array_ );
+  array_ = 0;
 }
 
 /*! Calls clear(), and thus <i>deletes all child widgets</i> */
