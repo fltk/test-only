@@ -619,32 +619,31 @@ void Browser::draw_item(int damage) {
   int inset = (HERE.level+indented())*arrow_size;
 
   // draw the open/close glyphs at the left:
-  if (damage && inset > xposition_) {
-    drawstyle(style(), 0);
-    Color fg = getcolor();
-    setcolor(getbgcolor());
-    fillrect(0, y, inset-xposition_+arrow_size, item_h());
-    setcolor(fg);
-    bool preview_open = openclose_drag == 1 && pushed() && at_mark(FOCUS);
-    for (unsigned j = indented() ? 0 : 1; j <= HERE.level; j++) {
-      int g = (HERE.indexes[j] < children(HERE.indexes,j) - 1) ? 1 : 0;
-      if (j == HERE.level) {
+	if (damage && inset > xposition_) {
+		drawstyle(style(), 0);
+		Color fg = getcolor();
+		setcolor(getbgcolor());
+		fillrect(0, y, inset-xposition_+arrow_size, item_h());
+		setcolor(fg);
+		bool preview_open = openclose_drag == 1 && pushed() && at_mark(FOCUS);
+		for (unsigned j = indented() ? 0 : 1; j <= HERE.level; j++) {
+			int g = (HERE.indexes[j] < children(HERE.indexes,j) - 1) ? 1 : 0;
+			if (j == HERE.level) {
 	if (children(HERE.indexes,j+1)>=0)
-	  if (item_is_open() != preview_open)
-	    g += OPEN_ELL;
-	  else
-	    g += CLOSED_ELL;
+		if (item_is_open() != preview_open)
+			g += OPEN_ELL;
+		else
+			g += CLOSED_ELL;
 	else
-	  g += ELL;
-      }
-      // if (getcolor()==BLACK) setcolor(GRAY33);
-      draw_glyph(g, Rectangle(x, y, arrow_size, item_h()));
-      x += arrow_size;
-    }
-  } else {
-    x += inset;
-  }
-
+		g += ELL;
+			}
+			// if (getcolor()==BLACK) setcolor(GRAY33);
+			if (displaylines_) draw_glyph(g, Rectangle(x, y, arrow_size, item_h()));
+			x += arrow_size;
+		}
+	} else {
+	x += inset;
+	}
   // Shift first column width, so labels after 1. column are lined up correctly.
   int saved_colw = 0;
   int *cols = (int *)column_widths_p;
@@ -1833,6 +1832,23 @@ bool Browser::display(int line, bool value) {
   Make the indexed item visible and scroll to put it at the bottom of
   the browser. */
 
+/** 
+ * Accessor (get) method which returns TRUE if lines should be displayed, or FALSE
+ * otwherwize.
+ */
+bool Browser::display_lines() const {
+  return displaylines_;
+}
+
+/**
+ * Accessor (set) method which is used to set the value of the "displaylines_"
+ * member. If you set display to FALSE it will mean that you do not want
+ * lines of the tree to be displayed.
+ */
+void Browser::display_lines(bool display) {
+  displaylines_ = display;
+}
+
 ////////////////////////////////////////////////////////////////
 // Constructor
 
@@ -1876,6 +1892,7 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
   nHeader = 0; header_ = 0;
   leaf_symbol_ = 0;
   group_symbol_ = 0;
+  displaylines_ = true;
   OPEN.unset();
   Group::current(parent());
 }
