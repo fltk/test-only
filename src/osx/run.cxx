@@ -77,6 +77,11 @@ namespace fltk {
 }
 #endif
 
+// these pointers are set by the lock() function:
+static void nothing() {}
+void (*fl_lock_function)() = nothing;
+void (*fl_unlock_function)() = nothing;
+
 ////////////////////////////////////////////////////////////////
 // interface to select call:
 //
@@ -166,6 +171,59 @@ void fltk::remove_fd(int n, int events) {
 enum { kEventClassFLTK = 'fltk' };
 enum { kEventFLTKBreakLoop = 1, kEventFLTKDataReady };
 
+// Run select() and do the callbacks:
+static int run_select(double time_to_wait, bool in_thread, bool callbacks) {
+  // Thread safe local copy
+  pthread_mutex_lock(&select_mutex);
+  int maxfd = ::maxfd;
+  fd_set r = fdsets[0];
+  fd_set w = fdsets[1];
+  fd_set x = fdsets[2];
+  pthread_mutex_unlock(&select_mutex);
+  // TACK ON FD'S FOR 'CANCEL PIPE'
+  if (in_thread) {
+    FD_SET(G_pipe[0], &r);
+    if ( G_pipe[0] > maxfd ) maxfd = G_pipe[0];
+  }
+  DEBUGMSG("Calling select\n");
+  int ret;
+  if (time_to_wait < 2147483.648f) {
+    timeval t;
+    t.tv_sec = int(time_to_wait);
+    t.tv_usec = int(1000000 * (time_to_wait-t.tv_sec));
+    ret = ::select(maxfd+1, &r, &w, &x, &t);
+  } else {
+    ret = ::select(maxfd+1, &r, &w, &x, 0);
+  }
+  if (ret > 0) {
+    DEBUGMSG("Select returned non-zero\n");
+    if (!callbacks) return ret;
+    for (int i=0; i<nfds; i++) {
+      //fprintf(stderr, "CHECKING FD %d OF %d (%d)\n", i, nfds, fd[i].fd);
+      int f = fd[i].fd;
+      short revents = 0;
+      if (FD_ISSET(f, &r)) revents |= POLLIN;
+      if (FD_ISSET(f, &w)) revents |= POLLOUT;
+      if (FD_ISSET(f, &x)) revents |= POLLERR;
+      if (fd[i].events & revents) {
+        DEBUGMSG("DOING CALLBACK: ");
+        fl_lock_function();
+        fd[i].cb(f, fd[i].arg);
+        fl_unlock_function();
+        DEBUGMSG("DONE\n");
+      }
+    }
+    // see if we need to copy fd_sets again:
+    if (in_thread && FD_ISSET(G_pipe[0], &r)) {
+      DEBUGMSG("reading from G_pipe\n");
+      char buf[1]; read(G_pipe[0],buf,1);
+    }
+    return ret;
+  } else {
+    return 0;
+  }
+}
+
 // select_thread
 //    Separate thread, watches for changes in user's file descriptors.
 //    Sends a 'data ready event' to the main thread if any change.
@@ -177,63 +235,16 @@ static void *select_thread_proc(void *userdata)
   EventQueueRef eventqueue = (EventQueueRef)userdata;
 
   while (1) {
-    // Thread safe local copy
-    pthread_mutex_lock(&select_mutex);
-    int maxfd = ::maxfd;
-    fd_set r = fdsets[0];
-    fd_set w = fdsets[1];
-    fd_set x = fdsets[2];
-    pthread_mutex_unlock(&select_mutex);
-    // TACK ON FD'S FOR 'CANCEL PIPE'
-    FD_SET(G_pipe[0], &r);
-    if ( G_pipe[0] > maxfd ) maxfd = G_pipe[0];
-
-    DEBUGMSG("Calling select\n");
-    //    timeval t = { 1000, 0 };	// 1000 seconds;
-    int ret = ::select(maxfd+1, &r, &w, &x, 0 /*&t*/);
+    if (run_select(1e20, true, true)) {
+      // wake up the main thread with a message:
+      EventRef drEvent;
+      CreateEvent( 0, kEventClassFLTK, kEventFLTKDataReady,
+                   0, kEventAttributeUserEvent, &drEvent);
+      PostEventToQueue(GetCurrentEventQueue(), drEvent, kEventPriorityStandard);
+    }
     //pthread_testcancel();	// OSX 10.0.4 and under: need to do this
                           // so parent can cancel us :(
-    if (ret > 0) {
-      DEBUGMSG("Select returned non-zero\n");
-      for (int i=0; i<nfds; i++) {
-	//fprintf(stderr, "CHECKING FD %d OF %d (%d)\n", i, nfds, fd[i].fd);
-	int f = fd[i].fd;
-	short revents = 0;
-	if (FD_ISSET(f, &r)) revents |= POLLIN;
-	if (FD_ISSET(f, &w)) revents |= POLLOUT;
-	if (FD_ISSET(f, &x)) revents |= POLLERR;
-	if (fd[i].events & revents) {
-	  DEBUGMSG("DOING CALLBACK: ");
-	  fltk::lock();
-	  fd[i].cb(f, fd[i].arg);
-	  fltk::unlock();
-	  DEBUGMSG("DONE\n");
-	}
-      }
-      // see if we need to copy fd_sets again:
-      if (FD_ISSET(G_pipe[0], &r)) {
-	DEBUGMSG("reading from G_pipe\n");
-	char buf[1]; read(G_pipe[0],buf,1);
-      }
-      fltk::awake();
-    }
   }
-}
-
-static void* thread_message_;
-void fltk::awake(void* msg) {
-  thread_message_ = msg;
-  // wake up the main thread with a message:
-  EventRef drEvent;
-  CreateEvent( 0, kEventClassFLTK, kEventFLTKDataReady,
-               0, kEventAttributeUserEvent, &drEvent);
-  PostEventToQueue(GetCurrentEventQueue(), drEvent, kEventPriorityStandard);
-}
-
-void* fltk::thread_message() {
-  void* r = thread_message_;
-  thread_message_ = 0;
-  return r;
 }
 
 // Main thread calls this when it gets the above data-ready message:
@@ -265,11 +276,6 @@ static void HandleDataReady()
   fl_unlock_function();
 #endif
 }
-
-// these pointers are set by the lock() function:
-static void nothing() {}
-void (*fl_lock_function)() = nothing;
-void (*fl_unlock_function)() = nothing;
 
 ////////////////////////////////////////////////////////////////
 
@@ -402,10 +408,19 @@ static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, E
  * do the callbacks for the events and sockets. Returns non-zero if
  * anything happened during the time period.
  */
-//+++ verify port to FLTK2
 static inline int fl_wait(double time) 
 {
-  OSStatus ret;
+  if (!CreatedWindow::first && !select_thread) {
+    // If there are no windows, avoid calling event handler stuff. This
+    // allows the program to work on a headless render farm or when
+    // ssh'd in without admin privledges.
+    // Also similar to how the X11 version works when DISPLAY is not set.
+    fl_unlock_function();
+    int ret = run_select(time, false, true);
+    fl_lock_function();
+    return ret;  
+  }
+
   static EventTargetRef target = 0;
   if ( !target ) {
     target = GetEventDispatcherTarget();
@@ -428,6 +443,7 @@ static inline int fl_wait(double time)
         { kEventClassMouse, kEventMouseDragged },
         { kEventClassFLTK, kEventFLTKBreakLoop },
         { kEventClassFLTK, kEventFLTKDataReady } };
+    OSStatus ret;
     ret = InstallEventHandler( target, dispatchHandler,
 			       GetEventTypeCount(dispatchEvents),
 			       dispatchEvents, 0, 0L );
@@ -500,6 +516,9 @@ static inline int fl_wait(double time)
  * ready() is just like wait(0.0) except no callbacks are done.
  */
 static inline int fl_ready() {
+  if (!CreatedWindow::first && !select_thread) {
+    return run_select(0.0, false, false);
+  }
   EventRef event;
   return !ReceiveNextEvent(0, NULL, 0.0, false, &event);
 }

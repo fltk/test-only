@@ -202,22 +202,18 @@ static void unlock_function() { fltkmutex.unlock(); }
 
 static pthread_t main_thread_id;
 
-#if !USE_QUARTZ
 static void* thread_message_;
 static void thread_awake_cb(int fd, void*) {
   while (read(fd, &thread_message_, sizeof(void*)) > 0);
 }
 static int thread_filedes[2];
-#endif
 
 static void init_function() {
   // Init threads communication pipe to let threads awake FLTK from wait
   main_thread_id = pthread_self();
-#if !USE_QUARTZ
   pipe(thread_filedes);
   fcntl(thread_filedes[0], F_SETFL, O_NONBLOCK);
   fltk::add_fd(thread_filedes[0], fltk::READ, thread_awake_cb);
-#endif
   fl_lock_function = init_or_lock_function = lock_function;
   fl_unlock_function = unlock_function;
   lock_function();
@@ -231,20 +227,18 @@ bool fltk::in_main_thread() {
   return init_or_lock_function == init_function || pthread_self() == main_thread_id;
 }
 
-#if !USE_QUARTZ
 void fltk::awake(void* msg) {
   write(thread_filedes[1], &msg, sizeof(void*));
 }
 
 // the following is already defined in CYGWIN
 // for the common win32/run.cxx part
-# if !defined(__CYGWIN__) 
+#if !defined(__CYGWIN__) 
 void* fltk::thread_message() {
   void* r = thread_message_;
   thread_message_ = 0;
   return r;
 }
-# endif
 #endif
 
 #else
