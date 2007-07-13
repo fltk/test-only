@@ -94,7 +94,8 @@ Group::Group(int X,int Y,int W,int H,const char *l,bool begin)
   type(GROUP_TYPE);
   style(::group_style);
   align(ALIGN_TOP);
-  init_sizes();
+  initial_w = w();
+  initial_h = h();
   if (begin) this->begin();
 }
 
@@ -461,7 +462,7 @@ void Group::init_sizes() {
   initial_w = w();
   initial_h = h();
   delete[] sizes_; sizes_ = 0;
-  //relayout();
+  relayout();
 }
 
 /** Returns array of initial sizes of the widget and it's children.
