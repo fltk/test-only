@@ -28,7 +28,7 @@
 namespace fltk {
 
 /** This widget makes a checkmark in a popup or pulldown Menu.
-    It's behavior in a Browser or other group is undefined. */
+    It's behavior in a Browser or MultiBrowser is that it changes its status on multiple clicks (e.g. double click). */
 class ToggleItem : public Item {
 public:
   ToggleItem(const char* label = 0) : Item(label) {type(TOGGLE);}

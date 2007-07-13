@@ -22,9 +22,11 @@
 //
 
 #include <fltk/Item.h>
+#include <fltk/Group.h>
 #include <fltk/Box.h>
 #include <fltk/CheckButton.h>
 #include <fltk/draw.h>
+#include <fltk/events.h>
 #include <string.h>
 
 using namespace fltk;
@@ -187,7 +189,20 @@ void Item::layout() {
 
 /** Returns 0 always. Items do not accept \e any events. Any results
     of clicking on them is handled by the parent Menu or Browser. */
-int Item::handle(int) {return 0;}
+int Item::handle(int e) {
+  if (type() == TOGGLE) {
+    if (e == PUSH && event_clicks() > 0) state(!state());
+  } else if (type() == RADIO) {
+    if (e == PUSH && event_clicks() > 0) {
+      state(true);
+      Group *g = parent();
+      for (int n = 0; n < g->children(); n++) {
+        if (g->child(n) != this) g->child(n)->state(false);
+      }
+    }
+  }
+  return 0;
+}
 
 ////////////////////////////////////////////////////////////////
 

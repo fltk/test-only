@@ -28,7 +28,7 @@
 namespace fltk {
 
 /** This widget makes a radio item in a popup or pulldown Menu.
-    It's behavior in a Browser or other group is undefined. */
+    It's behavior in a Browser or MultiBrowser is that it changes its status on multiple clicks (e.g. double click). */
 class RadioItem : public Item {
 public:
   RadioItem(const char* label = 0) : Item(label) {type(RADIO);}
