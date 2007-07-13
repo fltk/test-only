@@ -1131,6 +1131,13 @@ void fltk::get_mouse(int &x, int &y)
   y = loc.v;
 }
 
+bool fltk::warp_mouse(int x, int y) {
+  CGPoint new_pos;
+  new_pos.x = x;
+  new_pos.y = y;
+  return CGWarpMouseCursorPosition(new_pos) == 0;
+}
+
 ////////////////////////////////////////////////////////////////
 
 /*

@@ -2,6 +2,7 @@
 
 #ifndef resize_h
 #define resize_h
+void warp(int dx, int dy);
 #include <fltk/Window.h>
 #include <fltk/Button.h>
 #include <fltk/InvisibleBox.h>

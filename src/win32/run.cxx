@@ -674,6 +674,10 @@ void fltk::get_mouse(int &x, int &y) {
   y = p.y;
 }
 
+bool fltk::warp_mouse(int x, int y) {
+  return SetCursorPos(x, y);
+}
+
 ////////////////////////////////////////////////////////////////
 // Tablet initialisation and event handling
 #include "wintab.h"

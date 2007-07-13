@@ -285,6 +285,7 @@ FL_API unsigned key(const char* name);
 // get current information, not info from last event:
 FL_API bool get_key_state(unsigned);
 FL_API void get_mouse(int &,int &);
+FL_API bool warp_mouse(int, int);
 
 // event destinations:
 FL_API bool handle(int, Window*);

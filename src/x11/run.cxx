@@ -901,6 +901,17 @@ void fltk::get_mouse(int &x, int &y) {
   y = my;
 }
 
+/*!
+  Change where the mouse is on the screen.
+  Returns true if successful, false on failure (exactly what success
+  and failure means depends on the os).
+*/
+bool fltk::warp_mouse(int x, int y) {
+  XWindow root = RootWindow(xdisplay, xscreen);
+  XWarpPointer(xdisplay, root, root, 0, 0, 0, 0, x, y);
+  return true; // always works
+}
+
 ////////////////////////////////////////////////////////////////
 // Tablet initialisation and event handling
 const int n_stylus_device = 2;
