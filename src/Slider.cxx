@@ -275,7 +275,7 @@ void Slider::draw_ticks(const Rectangle& r, int min_spacing)
     //if (derivative > num) {num *= 5; smallmod = powincr = nummod = 2;}
   }
 
-  Color textcolor = getcolor();
+  Color textcolor = this->textcolor();
   Color linecolor = lerp(getbgcolor(), textcolor, .66666f);
   setcolor(linecolor);
   setfont(textfont(), textsize());
@@ -424,9 +424,6 @@ bool Slider::draw(const Rectangle& sr, Flags flags, bool slot)
         break;
       }
     }
-    Color b = color();
-    Color c = contrast(textcolor(), b);
-    if (flags&INACTIVE_R) c = inactive(c, b);
     draw_ticks(tr, (slider_size()+1)/2);
   }
 
