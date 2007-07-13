@@ -64,16 +64,14 @@ void CycleButton::draw() {
   // this code is copied from Button, but simplified as a lot of
   // back-compatability and the glyphs are eliminated:
 
-  Flags flags = this->flags()|OUTPUT;
+  Flags flags = this->flags();
   if (this == held_down) flags |= PUSHED;
 
   Style style = *(this->style());
-  if (style.color_) style.buttoncolor_ = style.color_;
-  else style.color_ = style.buttoncolor();
-  if (style.box_) style.buttonbox_ = style.box_;
-  if (style.textcolor_) style.labelcolor_ = style.textcolor_;
+  if (!style.color_) style.color_ = style.buttoncolor();
+  if (!style.textcolor_) style.textcolor_ = style.labelcolor();
 
-  Box* box = style.buttonbox();
+  Box* box = style.box_ ? style.box_ : style.buttonbox();
   Rectangle r(w(),h());
 
   if (!box->fills_rectangle()) {
