@@ -396,8 +396,8 @@ int TextEditor::handle_key() {
   int del;
   if (fltk::compose(del)) {
     if (del) buffer()->select(insert_position()-del, insert_position());
-    kill_selection(this);
     if (event_length()) {
+      kill_selection(this);
       if (insert_mode()) insert(event_text());
       else overstrike(event_text());
     }
