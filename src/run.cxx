@@ -1300,6 +1300,10 @@ bool fltk::handle(int event, Window* window)
     to = focus();
     break;
 
+  case MOUSEWHEEL:
+    Tooltip::exit();
+    break;
+
 //default: break;
   }
 
