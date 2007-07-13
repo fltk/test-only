@@ -204,9 +204,41 @@ static GLContext first_context;
 
 #if USE_X11
 
+// Define this to destroy all OpenGL contexts at exit to try to fix NVidia crashes
+#define DESTROY_ON_EXIT 0
+
+#if DESTROY_ON_EXIT
+static struct Contexts {
+  GLContext context;
+  struct Contexts* next;
+} * context_list;
+
+static void destructor() {
+  if (xdisplay && first_context) {
+    first_context = 0;
+    for (Contexts* p = context_list; p; p = p->next) {
+      glXDestroyContext(xdisplay, p->context);
+    }
+    context_list = 0;
+    XFlush(xdisplay);
+  }
+}
+#endif
+
 GLContext fltk::create_gl_context(XVisualInfo* vis) {
   GLContext context = glXCreateContext(xdisplay, vis, first_context, 1);
-  if (!first_context) first_context = context;
+#if DESTROY_ON_EXIT
+  Contexts* p = new Contexts;
+  p->context = context;
+  p->next = context_list;
+  context_list = p;
+#endif
+  if (!first_context) {
+    first_context = context;
+#if DESTROY_ON_EXIT
+    atexit(::destructor);
+#endif
+  }
   return context;
 }
 
@@ -245,7 +277,7 @@ void fltk::set_gl_context(const Window* window, GLContext context) {
     fl_current_glcontext = context;
     cached_window = window;
 #if USE_X11
-    glXMakeCurrent(xdisplay, xid(window), context);
+    if (first_context) glXMakeCurrent(xdisplay, xid(window), context);
 #elif defined(_WIN32)
     wglMakeCurrent(CreatedWindow::find(window)->dc, context);
 #elif defined(__APPLE__)
@@ -276,7 +308,7 @@ void fltk::set_gl_context(const Window* window, GLContext context) {
 void fltk::no_gl_context() {
   if (fl_current_glcontext != first_context) {
 #if USE_X11
-    glXMakeCurrent(xdisplay, message_window, first_context);
+    if (first_context) glXMakeCurrent(xdisplay, message_window, first_context);
 #elif defined(_WIN32)
     wglMakeCurrent(getDC(), first_context);
 #elif defined(__APPLE__)
@@ -292,7 +324,18 @@ void fltk::delete_gl_context(GLContext context) {
   if (fl_current_glcontext == context) no_gl_context();
   if (context != first_context) {
 #if USE_X11
-    glXDestroyContext(xdisplay, context);
+    if (first_context) {
+      glXDestroyContext(xdisplay, context);
+#if DESTROY_ON_EXIT
+      Contexts** p = &context_list;
+      Contexts* q = *p;
+      while (q && q->context != context) {
+        p = &(q->next);
+        q = *p;
+      }
+      if (q) {*p = q->next; delete q;}
+#endif
+    }
 #elif defined(_WIN32)
     wglDeleteContext(context);
 #elif defined(__APPLE__)
