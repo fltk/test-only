@@ -26,14 +26,26 @@
 #include <string.h>
 #include <windows.h>
 #include <stdlib.h>
+#include <io.h>
 #include <fltk/utf.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-struct dirent { char d_name[1]; };
+struct dirent {
+  long           d_ino;	              /** Always zero. */
+  unsigned short d_reclen;	      /** Always zero. */
+  unsigned short d_namlen;            /** Length of name in d_name. */
+  char		d_name[FILENAME_MAX]; /** File name. */
+};
 
+/**
+ * The scandir() function reads the directory dirname and builds an array of
+ * pointers to directory entries. It returns the number of entries in the array.
+ * A pointer to the array of directory entries is stored in the location
+ * referenced by namelist.
+ */
 int scandir(const char *dirname, struct dirent ***namelist,
     int (*select)(struct dirent *),
     int (*compar)(struct dirent **, struct dirent **)) {
@@ -61,7 +73,7 @@ int scandir(const char *dirname, struct dirent ***namelist,
     return nDir;
   }
   do {
-    selectDir=(struct dirent*)malloc(sizeof(struct dirent)+strlen(find.cFileName));
+    selectDir=(struct dirent*)malloc(sizeof(struct dirent));
     strcpy(selectDir->d_name, find.cFileName);
     if (!select || (*select)(selectDir)) {
       if (nDir==NDir) {
