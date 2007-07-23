@@ -124,13 +124,13 @@ static int innards(
   window.resize_align(ALIGN_TOP|ALIGN_RIGHT);
 //  w->size_range(window.w(), window.h(), 0, window.h());
 
-  char buffer[1024];
+  char buffer[2048];
   if (!strcmp(fmt,"%s")) {
     message.label(va_arg(ap, const char*));
   } else if (!strchr(fmt, '%')) {
     message.label(fmt);
   } else {
-    vsnprintf(buffer, 1024, fmt, ap);
+    vsnprintf(buffer, 2048, fmt, ap);
     message.label(buffer);
   }
 
@@ -229,7 +229,7 @@ void fltk::message(const char *fmt, ...) {
   Same as fltk::message() except for the "!" symbol. 
 */
 void fltk::alert(const char *fmt, ...) {
-    if (fltk::beep_on_dialog()) (fltk::beep(fltk::BEEP_ERROR));
+  if (fltk::beep_on_dialog()) (fltk::beep(fltk::BEEP_ERROR));
   va_list ap;
   va_start(ap, fmt);
   innards("!", 0, 0, fmt, ap, ok, 0, 0);

@@ -346,6 +346,7 @@ int Group::handle(int event) {
   case RELEASE:
   case LEAVE:
   case DND_LEAVE:
+  case DND_RELEASE:
     // Ignore these. We handle them if the belowmouse of pushed widget
     // has been set to this. Subclasses may do something with these.
     // Definately do not pass them to child widgets!

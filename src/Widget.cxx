@@ -671,12 +671,14 @@ int Widget::handle(int event) {
     redraw_highlight();
     // fall through to MOVE:
   case MOVE:
-    // Setting belowmouse directly is not needed by most widgets, as
-    // send() will do it if this returns true. However if this widget
-    // has children and one of them is the belowmouse, send will not
-    // change it, so I have to call this here.
+    // This calls belowmouse() directly do this works as the fallback
+    // for Group::handle(), and also so it somewhat works if called
+    // directly rather than from send():
     fltk::belowmouse(this);
     return true;
+  case DND_DRAG:
+    fltk::belowmouse(this);
+    return false;
   case LEAVE:
     redraw_highlight();
     return true;
@@ -735,14 +737,12 @@ int Widget::send(int event) {
     // figure out correct type of event:
     event = (contains(fltk::belowmouse())) ? MOVE : ENTER;
     ret = handle(event);
-    if (ret) {
-      // If return value is true then this is the belowmouse widget,
-      // set it, but only if handle() did not set it to some child:
-      if (!contains(fltk::belowmouse())) fltk::belowmouse(this);
-    }
+    // Set belowmouse only if handle() did not set it to some child:
+    if (!contains(fltk::belowmouse())) fltk::belowmouse(this);
     break;
 
   case LEAVE:
+  case DND_LEAVE:
     clear_flag(HIGHLIGHT);
     ret = handle(event);
     break;
@@ -755,11 +755,8 @@ int Widget::send(int event) {
     event = (contains(fltk::belowmouse())) ? DND_DRAG : DND_ENTER;
     // see if it wants the event:
     ret = handle(event);
-    if (ret) {
-      // If return value is true then this is the belowmouse widget,
-      // set it, but only if handle() did not set it to some child:
-      if (!contains(fltk::belowmouse())) fltk::belowmouse(this);
-    }
+    // Set belowmouse only if handle() did not set it to some child:
+    if (!contains(fltk::belowmouse())) fltk::belowmouse(this);
     break;
 
   case PUSH:

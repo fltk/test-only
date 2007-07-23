@@ -40,10 +40,10 @@ public:
 
   enum { //<! values for type()
     IS_MULTI = 1,
-    NORMAL =  GROUP_TYPE,  //!< means single selection can be achieved by user
+    NORMAL =  GROUP_TYPE,  //!< means single selection can be achieved by user 
     MULTI  =  GROUP_TYPE+1 //!< means multiple selection can be achieved by user
   };
-  enum { /// value for selected_column
+  enum { // value for selected_column
     NO_COLUMN_SELECTED = -1 //!< means that no column has been selected by user
   };
 
@@ -159,7 +159,7 @@ public:
   void display_lines(bool display);
 
   int load(const char *filename);
-
+ 
   int multi() const {return type()&IS_MULTI;}
 
   const Symbol* leaf_symbol() const {return leaf_symbol_;}
@@ -168,7 +168,7 @@ public:
   void group_symbol(const Symbol* s) {group_symbol_ = s;}
 
 protected:
-  void handle_callback(int doit); /// defines how cb are handled in the browser
+  void handle_callback(int doit); // defines how cb are handled in the browser
 
 private:
   bool displaylines_;

@@ -45,6 +45,7 @@
 #include <fltk/ItemGroup.h>
 #include <fltk/Style.h>
 #include <fltk/utf.h>
+#include <fltk/Cursor.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -232,8 +233,6 @@ static int run_select(double time_to_wait, bool in_thread, bool callbacks) {
 // on every event to stop it.
 static void *select_thread_proc(void *userdata)
 {
-  EventQueueRef eventqueue = (EventQueueRef)userdata;
-
   while (1) {
     if (run_select(1e20, true, true)) {
       // wake up the main thread with a message:
@@ -1226,12 +1225,24 @@ void fltk::open_callback(void (*cb)(const char *)) {
 
 ////////////////////////////////////////////////////////////////
 
-Window *dnd_target_window = 0;
 #include <fltk/draw.h>
+
+static void show_drag(bool v, Widget* target, DragReference dragRef) {
+  if (v) {
+    target->cursor(CURSOR_HAND);
+    //ShowDragHilite( dragRef );
+  } else {
+    target->cursor(CURSOR_DEFAULT);
+    //HideDragHilight( dragRef );
+  }
+  fltk::flush(); // make any fltk drawing get done
+}
+
 /*
  * Drag'n'drop tracking handler
  */
-//+++ verify port to FLTK2
+static DragReference current_drag;
+
 static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, void *userData, DragReference dragRef )
 {
   Window *target = (Window*)userData;
@@ -1247,13 +1258,8 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     e_y_root = py = mp.v;
     e_x = px - target->x();
     e_y = py - target->y();
-    dnd_target_window = target;
-#if 0
-    if ( handle( DND_ENTER, target ) )
-      cursor( CURSOR_HAND ); //ShowDragHilite( ); // modify the mouse cursor?!
-    else
-      cursor( CURSOR_DEFAULT ); //HideDragHilite( dragRef );
-#endif
+    show_drag( handle( DND_ENTER, target ), target, dragRef);
+    current_drag = dragRef;
     return noErr;
   case kDragTrackingInWindow:
     GetDragMouse( dragRef, &mp, 0 );
@@ -1263,22 +1269,12 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     e_y_root = py = mp.v;
     e_x = px - target->x();
     e_y = py - target->y();
-    dnd_target_window = target;
-#if 0
-    if ( handle( DND_DRAG, target ) )
-      cursor( CURSOR_HAND ); //ShowDragHilite( ); // modify the mouse cursor?!
-    else
-      cursor( CURSOR_DEFAULT ); //HideDragHilite( dragRef );
-#endif
+    show_drag ( handle( DND_DRAG, target ), target, dragRef);
     return noErr;
-    break;
   case kDragTrackingLeaveWindow:
-    // HideDragHilite()
-    //    cursor( CURSOR_DEFAULT ); //HideDragHilite( dragRef );
-    if ( dnd_target_window )
-    {
-      handle( DND_LEAVE, dnd_target_window );
-      dnd_target_window = 0;
+    if (current_drag) { // ignore if release was done
+      handle( DND_LEAVE, target );
+      show_drag( false, target, dragRef );
     }
     return noErr;
   }
@@ -1295,15 +1291,20 @@ static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReferenc
   Point mp;
   OSErr ret;
   
-  Window *target = dnd_target_window = (Window*)userData;
+  Window *target = (Window*)userData;
   GetDragMouse( dragRef, &mp, 0 );
   e_x_root = mp.h;
   e_y_root = mp.v;
   e_x = e_x_root - target->x();
   e_y = e_y_root - target->y();
-  if ( !handle( DND_RELEASE, target ) )
+
+  ret = handle( DND_RELEASE, target );
+  Widget* droptarget = belowmouse();
+  show_drag( false, target, dragRef );
+  current_drag = 0;
+  if (!ret || !droptarget)
     return userCanceledErr;
-    
+
   // get the ASCII text
   UInt16 i, nItem;
   ItemReference itemRef;
@@ -1358,10 +1359,9 @@ static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReferenc
   dst[-1] = 0;
 //  if ( e_text[e_length-1]==0 ) e_length--; // modify, if trailing 0 is part of string
   e_length = dst - e_text - 1;
-  target->handle(PASTE);
+  droptarget->handle(PASTE);
   free(buffer);
   
-  dnd_target_window = 0L;
   return noErr;
 }
 

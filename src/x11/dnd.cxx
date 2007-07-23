@@ -135,7 +135,7 @@ bool fltk::dnd() {
   drop_ok = true;
   moved = true;
 
-  while (pushed()) {
+  while (event_state(ANY_BUTTON)) {
 
     // figure out what window we are pointing at:
     XWindow new_window = 0; int new_version = 0;
