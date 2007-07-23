@@ -676,14 +676,16 @@ void write_cb(Widget *, void *) {
     char cname[1024];
     char hname[1024];
     if (code_file_name[0] == '.' && isalpha(code_file_name[1])) {
-	strcpy(cname,filename_name(filename));
-	strcpy((char*)filename_ext(cname), code_file_name);
+	strlcpy(cname, filename, 1024);
+	*filename_ext(cname) = 0;
+	strlcat(cname, code_file_name, 1024);
     } else {
 	strcpy(cname, code_file_name);
     }
     if (header_file_name[0] == '.' && isalpha(header_file_name[1])) {
-	strcpy(hname,filename_name(filename));
-	strcpy((char*)filename_ext(hname), header_file_name);
+	strlcpy(hname, filename, 1024);
+	*filename_ext(hname) = 0;
+	strlcat(hname, header_file_name, 1024);
     } else {
 	strcpy(hname, header_file_name);
     }
