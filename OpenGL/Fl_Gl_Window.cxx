@@ -254,10 +254,6 @@ void GlWindow::make_current() {
     mode_ &= ~NON_LOCAL_CONTEXT;
     context_ = create_gl_context(this, gl_choice);
     set_gl_context(this, context_);
-#if USE_GLEW
-    glewExperimental = GL_TRUE;
-    glewInit();
-#endif
     valid(0);
   } else {
     set_gl_context(this, context_);

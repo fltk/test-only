@@ -77,9 +77,11 @@
 #define USE_CLIPOUT 0
 
 /* Use the MIT_SHM extension to share memory between the program
-   and X server for images, if possible.
+   and X server for images, if possible. This is disabled by default
+   as it will permanently leak system memory if your program crashes
+   or otherwise exits without destroying the Image objects.
 */
-#define USE_XSHM 1
+#define USE_XSHM 0
 
 /* Do we have the X double-buffer extension header file
    <X11/extensions/Xdbe.h>? Turning this on will make the list_visuals

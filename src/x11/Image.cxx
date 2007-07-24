@@ -30,6 +30,13 @@
 // Anything with a 8 bits_per_pixel bitmaps (visual depth may be less)
 // 16-bit TrueColor with arbitrary layout
 // 32-bit TrueColor with ARGB32 layout
+//
+// Code for using X Shared Memory is here but is normally disabled by
+// configure. This is because the current implementation will leak the
+// memory permanently (as ipshm segments) if the images are not destroyed
+// (which they won't be if your program crashes, no matter how many
+// automatic destructors you create. Therefore this is Windows3.1-style
+// stupidity).
 
 #include <fltk/error.h>
 #include <fltk/math.h>
@@ -1029,41 +1036,42 @@ struct fltk::Picture {
     syncro = 0;
     if (use_xshm_pixmaps) {
       shminfo.shmid = shmget(IPC_PRIVATE, n, IPC_CREAT|0777);
-      if (shminfo.shmid != -1)
+      if (shminfo.shmid != -1) {
         shminfo.shmaddr = (char*)shmat(shminfo.shmid, 0, 0);
-      else
-        shminfo.shmaddr = 0;
-    } else {
-      shminfo.shmid = -1;
-      shminfo.shmaddr = 0;
-    }
-    shminfo.readOnly = False;
-    if (shminfo.shmaddr && XShmAttach(xdisplay, &shminfo)) {
-      data = (uchar*)shminfo.shmaddr;
-      static bool beenhere;
-      if (beenhere) {
-      rgb = XShmCreatePixmap(xdisplay, RootWindow(xdisplay,xscreen),
-                             shminfo.shmaddr, &shminfo,
-                             w, h, depth);
-	return;
+        if (shminfo.shmaddr) {
+          shminfo.readOnly = False;
+          if (XShmAttach(xdisplay, &shminfo)) {
+            data = (uchar*)shminfo.shmaddr;
+            static bool beenhere;
+            if (beenhere) {
+              rgb = XShmCreatePixmap(xdisplay, RootWindow(xdisplay,xscreen),
+                                     shminfo.shmaddr, &shminfo,
+                                     w, h, depth);
+              return;
+            }
+            beenhere = true;
+            // The first time, we will do an XSync and detect if it throws
+            // an error. This seems to be the only way to see if XShm is
+            // going to work, it won't work on remote displays but amazingly
+            // enough no api is provided to tell you that!
+            int (*f)(Display*,XErrorEvent*) = XSetErrorHandler(xerror_handler);
+            rgb = XShmCreatePixmap(xdisplay, RootWindow(xdisplay,xscreen),
+                                   shminfo.shmaddr, &shminfo,
+                                   w, h, depth);
+            XSync(xdisplay,false);
+            XSetErrorHandler(f);
+            if (use_xshm_pixmaps) return; // the xerror_handler did not get called!
+            // Okay, clean up all the failed stuff we created,
+            // and continue with non-Xshm code:
+            XShmDetach(xdisplay, &shminfo);
+          }
+          shmdt(shminfo.shmaddr);
+        }
+        shmctl(shminfo.shmid, IPC_RMID, 0);
       }
-      beenhere = true;
-      // The first time, we will do an XSync and detect if it throws
-      // an error. This seems to be the only way to see if XShm is
-      // going to work, it won't work on remote displays but amazingly
-      // enough no api is provided to tell you that!
-      int (*f)(Display*,XErrorEvent*) = XSetErrorHandler(xerror_handler);
-      rgb = XShmCreatePixmap(xdisplay, RootWindow(xdisplay,xscreen),
-                             shminfo.shmaddr, &shminfo,
-                             w, h, depth);
-      XSync(xdisplay,false);
-      XSetErrorHandler(f);
-      if (use_xshm_pixmaps) return; // the xerror_handler did not get called!
-      //printf("XShm is not going to work!\n");
-      // throw stuff away and continue with non-Xshm code:
-      shmdt(shminfo.shmaddr); data = 0; shminfo.shmaddr = 0;
-      shmctl(shminfo.shmid, IPC_RMID, 0); shminfo.shmid = -1;
     }
+    shminfo.shmid = -1;
+    shminfo.shmaddr = 0;
 #endif
     rgb = XCreatePixmap(xdisplay, RootWindow(xdisplay,xscreen),
                         w, h, depth);
@@ -1103,8 +1111,11 @@ struct fltk::Picture {
       if (rgb) XFreePixmap(xdisplay, rgb);
     }
 #if USE_XSHM
-    if (shminfo.shmaddr) {shmdt(shminfo.shmaddr); data = 0;}
-    if (shminfo.shmid != -1) shmctl(shminfo.shmid, IPC_RMID, 0);
+    if (shminfo.shmaddr) {
+      if (xdisplay) XShmDetach(xdisplay, &shminfo);
+      shmdt(shminfo.shmaddr); data = 0;
+      shmctl(shminfo.shmid, IPC_RMID, 0);
+    }
 #endif
     delete[] (U32*)data;
   }

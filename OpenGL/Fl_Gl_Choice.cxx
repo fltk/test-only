@@ -302,6 +302,14 @@ void fltk::set_gl_context(const Window* window, GLContext context) {
     aglSetDrawable(context, GetWindowPort( xid(window) ) );
     aglSetCurrentContext(context);
 #endif
+# if USE_GLEW
+    static bool beenhere = false;
+    if (!beenhere) {
+      beenhere = true;
+      glewExperimental = GL_TRUE;
+      glewInit();
+    }
+# endif
   }
 }
 
