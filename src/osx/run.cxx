@@ -970,7 +970,6 @@ void fltk::open_display() {
     //AppendResMenu( GetMenuHandle( 1 ), 'DRVR' );
     //DrawMenuBar();
 
-#if 1
     // bring the application into foreground without a 'CARB' resource
     Boolean same_psn;
     ProcessSerialNumber cur_psn, front_psn;
@@ -995,17 +994,20 @@ void fltk::open_display() {
       }
 
       if ( !bundle ) {
+	OSErr err = 1;
 #ifdef MAC_OS_X_VERSION_10_3
         // newer supported API
-        if( !TransformProcessType( &cur_psn, kProcessTransformToForegroundApplication ) )
+	if (TransformProcessType != NULL)
+	  err = TransformProcessType( &cur_psn, kProcessTransformToForegroundApplication );
 #else
         // undocumented API
-        if( !CPSEnableForegroundOperation( &cur_psn, 0x03, 0x3C, 0x2C, 0x1103 ) )
+        if (CPSEnableForegroundOperation != NULL)
+	  err = CPSEnableForegroundOperation( &cur_psn, 0x03, 0x3C, 0x2C, 0x1103 );
 #endif
-          SetFrontProcess( &cur_psn );
+	if (err == noErr)
+	  SetFrontProcess( &cur_psn );
       }
     }
-#endif
   }
 }
 
