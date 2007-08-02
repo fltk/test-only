@@ -199,14 +199,8 @@ Box* const fltk::FLAT_BOX = &flatBox;
     indicate the gray shades to draw around the edge of the box
     and can be used to draw simple bezels.
 
-    The box is drawn as a spiral, starting with the bottom edge and
-    going in a counter-clockwise direction, from the outside in
-    toward the center. The string is interpreted to get a gray
-    shade: A is black, X is white, and all other letters are 24
-    possible steps of gray shade, and R is the normal background
-    color of GRAY75. A leading '2' makes it start with the top
-    edge, which will reverse exactly which pixels are drawn in
-    the corner.
+    The box is drawn by calling drawframe() or drawframe2() if the
+    string starts with a '2'.
 
     The normal up box draws the pattern "AAWWHHTT"
 
@@ -220,6 +214,66 @@ Box* const fltk::FLAT_BOX = &flatBox;
     many widgets draw faster and with less blinking.
 */
 
+/**
+  Draw a spiral, useful as a box edge, starting with the bottom edge and
+  going in a counter-clockwise direction, from the outside in
+  toward the center. The string is interpreted to get a gray
+  shade: A is black, X is white, and all other letters are 24
+  possible steps of gray shade, and R is the normal background
+  color of GRAY75. A leading '2' makes it start with the top
+  edge, which will reverse exactly which pixels are drawn in
+  the corner.
+
+  Emulates the fltk1 fl_frame2() function
+*/
+void fltk::drawframe(const char* s, int x, int y, int w, int h) {
+  if (h > 0 && w > 0) for (;*s;) {
+    // draw bottom line:
+    setcolor(*s++ + (GRAY00-'A'));
+    drawline(x, y+h-1, x+w-1, y+h-1);
+    if (--h <= 0) break;
+    // draw right line:
+    setcolor(*s++ + (GRAY00-'A'));
+    drawline(x+w-1, y+h-1, x+w-1, y);
+    if (--w <= 0) break;
+    // draw top line:
+    setcolor(*s++ + (GRAY00-'A'));
+    drawline(x, y, x+w-1, y);
+    y++; if (--h <= 0) break;
+    // draw left line:
+    setcolor(*s++ + (GRAY00-'A'));
+    drawline(x, y+h-1, x, y);
+    x++; if (--w <= 0) break;
+  }
+}
+
+/**
+  Draw a spiral similar to drawframe(), but starts with the top
+  edge and goes counter-clockwise.
+
+  Emulates the fltk1 fl_frame() function
+*/
+void fltk::drawframe2(const char* s, int x, int y, int w, int h) {
+  if (h > 0 && w > 0) for (;*s;) {
+    // draw top line:
+    setcolor(*s++ + (GRAY00-'A'));
+    drawline(x, y, x+w-1, y);
+    y++; if (--h <= 0) break;
+    // draw left line:
+    setcolor(*s++ + (GRAY00-'A'));
+    drawline(x, y+h-1, x, y);
+    x++; if (--w <= 0) break;
+    // draw bottom line:
+    setcolor(*s++ + (GRAY00-'A'));
+    drawline(x, y+h-1, x+w-1, y+h-1);
+    if (--h <= 0) break;
+    // draw right line:
+    setcolor(*s++ + (GRAY00-'A'));
+    drawline(x+w-1, y+h-1, x+w-1, y);
+    if (--w <= 0) break;
+  }
+}
+
 void fl_to_inactive(const char* s, char* to) {
   if (*s == '2') *to++ = *s++;
   while (*s) *to++ = 'M'+(*s++ - 'A')/3;
@@ -232,35 +286,18 @@ void FrameBox::_draw(const fltk::Rectangle& R) const
     down_->draw(R);
     return;
   }
-  fltk::Rectangle r(R);
-  if (r.empty()) return;
   const Color fg = getcolor();
   const char* s = data();
   char buf[26]; if (drawflags(INACTIVE_R) && Style::draw_boxes_inactive_) {
     fl_to_inactive(s, buf); s = buf;}
-  if (*s == '2') {s++; goto HACK;}
-  for (;;) {
-    // draw bottom line:
-    setcolor(*s++ + (GRAY00-'A'));
-    drawline(r.x(), r.b()-1, r.r()-1, r.b()-1);
-    r.move_b(-1); if (r.h() <= 0) break;
-    // draw right line:
-    setcolor(*s++ + (GRAY00-'A'));
-    drawline(r.r()-1, r.y(), r.r()-1, r.b()-1);
-    r.move_r(-1); if (r.w() <= 0) break;
-    if (!*s) break;
-  HACK:
-    // draw top line:
-    setcolor(*s++ + (GRAY00-'A'));
-    drawline(r.x(), r.y(), r.r()-1, r.y());
-    r.move_y(1); if (r.h() <= 0) break;
-    // draw left line:
-    setcolor(*s++ + (GRAY00-'A'));
-    drawline(r.x(), r.y(), r.x(), r.b()-1);
-    r.move_x(1); if (r.w() <= 0) break;
-    if (!*s) break;
+  if (*s == '2') {
+    drawframe2(s+1,R.x(), R.y(), R.w(), R.h());
+  } else {
+    drawframe(s,  R.x(), R.y(), R.w(), R.h());
   }
   if (!drawflags(INVISIBLE)) {
+    Rectangle r(R);
+    Symbol::inset(r);
     setcolor(getbgcolor());
     fillrect(r);
   }

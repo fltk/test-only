@@ -3,6 +3,7 @@
 
 #include "Enumerations.H"
 #include <fltk/draw.h>
+#include <fltk/Font.h>
 
 inline void fl_color(fltk::Color c) {fltk::setcolor(c);}
 inline void fl_color(uchar r, uchar g, uchar b) {fltk::setcolor(fltk::color(r,g,b));}
@@ -203,6 +204,8 @@ inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {flt
 #define fl_overlay_clear	fltk::overlay_clear
 #define fl_draw_symbol		fltk::draw_symbol
 #define fl_add_symbol		fltk::add_symbol
+#define fl_frame		fltk::drawframe2
+#define fl_frame2		fltk::drawframe
 
 #endif
 

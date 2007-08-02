@@ -217,6 +217,8 @@ FL_API void scrollrect(const Rectangle&, int dx, int dy,
 //@}
 
 #ifndef DOXYGEN /* depreciated: */
+FL_API void drawframe(const char* s, int x, int y, int w, int h);
+FL_API void drawframe2(const char* s, int x, int y, int w, int h);
 FL_API void overlay_rect(int,int,int,int);
 FL_API void overlay_clear();
 #endif
