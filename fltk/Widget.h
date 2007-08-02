@@ -70,7 +70,6 @@ public:
 
   enum WidgetVisualType {
     // Values for type() shared by Button and menu Item, and for fake RTTI:
-    NORMAL = 0,
     RESERVED_TYPE      = 0x64,
     TOGGLE    = RESERVED_TYPE+1,
     RADIO     = RESERVED_TYPE+2,

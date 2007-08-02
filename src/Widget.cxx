@@ -76,7 +76,7 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) :
 #else
   flags_	= TAB_TO_FOCUS;
 #endif
-  type_		= NORMAL;
+  type_		= 0;
   damage_	= DAMAGE_ALL;
   layout_damage_= LAYOUT_DAMAGE;
   when_		= WHEN_RELEASE;
