@@ -59,6 +59,7 @@ header files directly.
 #    include <X11/Xft/Xft.h>
 #   else
      typedef struct _XftDraw XftDraw;
+     typedef struct _XftFont XftFont;
 #   endif
 
 #   include <X11/extensions/XInput.h>
@@ -126,8 +127,8 @@ extern FL_API Region	clip_region();
 extern FL_API void	draw_into(XWindow, int w, int h);
 extern FL_API void	stop_drawing(XWindow);
 
-#  define HFONT XFontStruct*
-extern FL_API HFONT	xfont();
+extern FL_API XFontStruct* xfont();
+extern FL_API XftFont*  xftfont();
 
 ////////////////////////////////////////////////////////////////
 // only include this if <fltk/Window.h> was included:

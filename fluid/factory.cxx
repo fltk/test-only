@@ -49,7 +49,7 @@ using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
 const Enumeration buttontype_menu[] = {
-  {"Normal", 0,		(void*)fltk::Button::NORMAL},
+  {"Normal", 0,		(void*)0},
   {"Toggle", "TOGGLE",	(void*)fltk::Button::TOGGLE},
   {"Radio",  "RADIO",	(void*)fltk::Button::RADIO},
   {0}};

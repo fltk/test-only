@@ -83,9 +83,9 @@ void fltk::glsetfont(fltk::Font* font, float size) {
     listbase = glGenLists(256);
     fl_set_font_opengl_id(listbase);
 #if USE_XFT
-    glXUseXftFont((XftFont*)xfont(), listbase);
+    glXUseXftFont(xftfont(), listbase);
 #elif USE_X11
-    HFONT current_xfont = xfont();
+    XFontStruct* current_xfont = xfont();
     int base = current_xfont->min_char_or_byte2;
     int last = current_xfont->max_char_or_byte2;
     if (last > 255) last = 255;

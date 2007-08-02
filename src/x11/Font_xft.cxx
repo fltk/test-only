@@ -177,10 +177,22 @@ FontSize::~FontSize() {
 }
 #endif
 
-// This returns the XftFont, not an XFontStruct!
+XftFont* fltk::xftfont() {
+  return current->font;
+}
+
+// This is for back compatability with fltk1 programs, implements the
+// former variable fl_xfont:
 XFontStruct* fltk::xfont() {
-  return (XFontStruct*)(current->font);
-#if 0
+#if XFT_MAJOR > 1
+  // kludge!
+  static XFontStruct* ret = 0;
+  if (!ret) {
+    ret = XLoadQueryFont(xdisplay, "variable");
+    if (!ret) ret = XLoadQueryFont(xdisplay, "fixed");
+  }
+  return ret;
+#else
   // This code only works for XFT 1, which was able to find matching
   // X fonts:
   if (!current->xfont) {
@@ -190,7 +202,10 @@ XFontStruct* fltk::xfont() {
       static XftFont* xftfont;
       if (xftfont) XftFontClose (xdisplay, xftfont);
       // select the "core" version of the font:
-      xftfont = fontopen(current_font_->name_,current_font_->attributes_,current_size_,true);
+      xftfont = fontopen(current_font_->name_,
+			 current_font_->attributes_,
+			 current_size_,
+			 true);
       current->xfont = xftfont->u.core.font;
     }
   }
