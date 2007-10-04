@@ -158,14 +158,14 @@ Widget* List::child(const Menu* menu, const int* indexes,int level) {
   you can copy the values to permanent storage, and perhaps change
   other displays of the selection.
 
-  Currently only the fltk::STATE and fltk::SELECTED flags are ever changed.
+  Currently only the fltk::OPENED and fltk::SELECTED flags are ever changed.
 
   Here is a sample implementation, where Node is a data type that you
   have defined:
 \code
 void My_List::flags_changed(const fltk::Menu*, fltk::Widget* widget) {
   Node* node = (Node*)(widget->user_data());
-  node->open = widget->flag(fltk::STATE);
+  node->open = widget->flag(fltk::OPENED);
   node->selected = widget->flag(fltk::SELECTED);
 }
 \endcode

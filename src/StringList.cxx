@@ -27,7 +27,7 @@ Widget* StringHierarchy::child(const Menu* group, const int* indexes,int level)
   //generated_item_->h(0);
   // We must clear flags so it does not accidentally think the item
   // is selected or (if a parent) is opened:
-  generated_item_->clear_flag(fltk::STATE|fltk::OPENED);
+  generated_item_->clear_flag(fltk::SELECTED|fltk::STATE|fltk::OPENED);
   generated_item_->label(label(group, indexes, level));
   return generated_item_;
 }
