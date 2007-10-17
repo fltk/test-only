@@ -27,6 +27,7 @@
 #include <windows.h>
 #include <stdlib.h>
 #include <io.h>
+#include <stdio.h>
 #include <fltk/utf.h>
 
 #ifdef __cplusplus
