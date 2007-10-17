@@ -864,7 +864,7 @@ To get out of shortcut-setting mode:
           label When
           callback when_cb
           tooltip {What actions cause the callback to be called.}
-          xywh {265 242 100 22} when NEVER
+          xywh {265 242 100 22} when CHANGED
         } {}
         {fltk::Input} {} {
           label Type
