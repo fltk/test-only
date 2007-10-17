@@ -602,7 +602,7 @@ void Widget::redraw_label() {
     the widget if the no highlight color is being used.
 */
 void Widget::redraw_highlight() {
-  if (active() && highlight_color())
+  if (active() && highlight_color() && box()!=NO_BOX)
     redraw(DAMAGE_HIGHLIGHT);
 }
 
