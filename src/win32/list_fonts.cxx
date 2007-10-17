@@ -172,7 +172,10 @@ int fltk::list_fonts(Font**& arrayp) {
   HDC dc = getDC();
 
   if (has_unicode()) {
-    EnumFontFamiliesExW(dc, NULL, (FONTENUMPROCW)enumcbW, 0, 0);
+    LOGFONTW lf;
+    memset(&lf, 0, sizeof(lf));
+    lf.lfCharSet = DEFAULT_CHARSET;
+    EnumFontFamiliesExW(dc, &lf, (FONTENUMPROCW)enumcbW, 0, 0);
   } else {
     LOGFONT lf;
     memset(&lf, 0, sizeof(lf));
