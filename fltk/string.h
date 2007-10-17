@@ -47,8 +47,8 @@
 /* Windows has equivalent functions, but being Microsoft they added
    gratuitoius changes to the names to stop code from being portable: */
 #if (defined(_WIN32) && !defined(__CYGWIN__)) || defined(__EMX__)
-# define strcasecmp(s,t)	stricmp(s, t)
-# define strncasecmp(s,t,n)	strnicmp(s, t, n)
+# define strcasecmp(s,t)	_stricmp(s, t)
+# define strncasecmp(s,t,n)	_strnicmp(s, t, n)
 # define vsnprintf		_vsnprintf
 # define snprintf		_snprintf
 #endif
