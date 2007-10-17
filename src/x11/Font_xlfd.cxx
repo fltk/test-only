@@ -432,7 +432,7 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
 #if !X_UTF8_FONT
     XDrawString16(xdisplay, xwindow, gc,
 		  int(floorf(x+.5f)),
-		  int(floorf(y+.5f)), buffer, n);
+		  int(floorf(y+.5f)), buffer, count);
 #else
 #ifdef FONT_DEBUG
 	//printf("current = %s\n", current->name);
