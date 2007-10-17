@@ -333,26 +333,26 @@ static FrameBox upBox("up", 1,1,3,3, "AAWWNN", &downBox2);
 */
 Box* const fltk::UP_BOX = &upBox;
 
-static FrameBox thinDownBox("thin_down", 1,1,2,2, "WWNN");
+static FrameBox thinDownBox("thin_down", 1,1,2,2, "WWII");
 /*!
   1-pixel-thick inset box.
 */
 Box* const fltk::THIN_DOWN_BOX = &thinDownBox;
 
-static FrameBox thinUpBox("thin_up", 1,1,2,2, "NNWW", &thinDownBox);
+static FrameBox thinUpBox("thin_up", 1,1,2,2, "IIWW", &thinDownBox);
 /*!
   1-pixel-thick raised box.
 */
 Box* const fltk::THIN_UP_BOX = &thinUpBox;
 
 // in fltk 1.0 these used to point at each other as a "down_" version:
-static FrameBox engravedBox("engraved", 2,2,4,4, "2NNWWWWNN", &downBox);
+static FrameBox engravedBox("engraved", 2,2,4,4, "2IIWWWWII", &downBox);
 /*!
   2-pixel thick engraved line around edge.
 */
 Box* const fltk::ENGRAVED_BOX = &engravedBox;
 
-static FrameBox embossedBox("embossed", 2,2,4,4, "NNWWWWNN", &downBox);
+static FrameBox embossedBox("embossed", 2,2,4,4, "IIWWWWII", &downBox);
 /*!
   2-pixel thick raised line around edge.
 */
