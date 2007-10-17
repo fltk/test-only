@@ -76,7 +76,7 @@ using namespace fltk;
   \a l = the total size of your data.
 
 */
-int Scrollbar::value(int p, int w, int t, int l) {
+bool Scrollbar::value(int p, int w, int t, int l) {
   if (p+w > t+l) l = p+w-t;
   if (l <= 0) l = 1;
   int b = l-w+t;

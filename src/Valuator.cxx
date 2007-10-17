@@ -91,13 +91,14 @@ Valuator::Valuator(int X, int Y, int W, int H, const char* L)
   Sets the current value, redrawing the widget if necessary by calling
   value_damage(). <i>The new value is stored unchanged, even if it is
   outside the range or not a multiple of step()</i>.
+  Returns true if the new value is different.
 */
-int Valuator::value(double v) {
+bool Valuator::value(double v) {
   clear_changed();
-  if (v == value_) return 0;
+  if (v == value_) return false;
   value_ = v;
   value_damage();
-  return 1;
+  return true;
 }
 
 /*! \fn void Valuator::set_value(double)

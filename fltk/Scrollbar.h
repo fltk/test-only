@@ -37,8 +37,9 @@ public:
   Scrollbar(int x,int y,int w,int h, const char *l = 0);
   static NamedStyle* default_style;
 
-  int value() {return int(Slider::value());}
-  int value(int position, int size, int top, int total);
+  int value() const {return int(Slider::value());}
+  bool value(int position) {return Slider::value(position);}
+  bool value(int position, int size, int top, int total);
   int handle(int);
 
   int pagesize() const {return pagesize_;}

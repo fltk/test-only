@@ -33,7 +33,7 @@ class FL_API Valuator : public Widget {
 public:
 
   double value() const {return value_;}
-  int value(double);
+  bool value(double);
 
   double minimum() const {return minimum_;}
   void minimum(double a) {minimum_ = a;}
