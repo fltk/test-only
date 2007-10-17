@@ -335,9 +335,9 @@ static void fltk_xyline(int x, int y, int x1) {
 
 void 
 HelpView::write_text (const char * buf, const char * ptr, int X, int Y, int X1, int underline) {
-    drawtext (buf, (float) X+x(), (float) Y+y());
+    drawtext (buf, (float) X, (float) Y);
     if (underline) {
-      fltk_xyline(X+x(), Y+1+y(), X+X1+x());
+      fltk_xyline(X, Y+1, X+X1);
     }
 }
 
@@ -500,8 +500,8 @@ HelpView::draw()
 
 	      drawtext (buf, float(xx - leftline_), float(yy));
 	      ww = (int)getwidth(buf);
-	      if (underline) fltk_xyline(xx + x() - leftline_, yy + y() + 1,
-	                               xx + x() - leftline_ + ww);
+	      if (underline) fltk_xyline(xx - leftline_, yy + 1,
+	                               xx - leftline_ + ww);
               xx += ww;
 	    }
 
@@ -561,8 +561,7 @@ HelpView::draw()
 	  }
 	  else if (strcasecmp(buf, "HR") == 0)
 	  {
-	    fltk_line(block->x + x(), yy + y(), block->w + x(),
-	            yy + y());
+	    fltk_line(block->x, yy, block->w, yy);
 
 	    if (line < 31)
 	      line ++;
@@ -872,8 +871,8 @@ HelpView::draw()
       if (s > buf && !head)
       {
         drawtext(buf, (float) xx - leftline_, (float) yy );
-	if (underline) fltk_xyline(xx + x() - leftline_, yy + y() + 1,
-	                         xx + x() - leftline_ + ww);
+	if (underline) fltk_xyline(xx - leftline_, yy + 1,
+	                         xx - leftline_ + ww);
       }
     }
 
@@ -2397,8 +2396,8 @@ HelpView::handle(int event)	// I - Event to handle
 	  return (1);
 
     case MOVE :
-        xx = event_x() - x() + leftline_;
-        yy = event_y() - y() + topline_;
+        xx = event_x() + leftline_;
+        yy = event_y() + topline_;
 	break;
 
     case LEAVE :
