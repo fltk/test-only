@@ -25,7 +25,6 @@
 
 #include <config.h>
 #include <fltk/filename.h>
-#include <fltk/utf.h>
 #include <fltk/string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -46,9 +45,6 @@ static bool fill_stat(const char *name) {
   if (last_statname && strcmp(last_statname, name)==0) return last_result;
   delete[] const_cast<char *>( last_statname ); // otherwize VC++ will scream
   last_statname = newstring(name);
-  char namebuf[PATH_MAX];
-  utf8tomb(name, strlen(name), namebuf, PATH_MAX);
-  name = namebuf;
 #if defined(_WIN32) || defined(__EMX__)
   // _WIN32 apparently thinks A: is not a directory, but A:/ is!
   char buffer[4];

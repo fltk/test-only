@@ -26,27 +26,14 @@
 #include <string.h>
 #include <windows.h>
 #include <stdlib.h>
-#include <io.h>
-#include <stdio.h>
 #include <fltk/utf.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-struct dirent {
-  long           d_ino;	              /** Always zero. */
-  unsigned short d_reclen;	      /** Always zero. */
-  unsigned short d_namlen;            /** Length of name in d_name. */
-  char		d_name[FILENAME_MAX]; /** File name. */
-};
+struct dirent { char d_name[1]; };
 
-/**
- * The scandir() function reads the directory dirname and builds an array of
- * pointers to directory entries. It returns the number of entries in the array.
- * A pointer to the array of directory entries is stored in the location
- * referenced by namelist.
- */
 int scandir(const char *dirname, struct dirent ***namelist,
     int (*select)(struct dirent *),
     int (*compar)(struct dirent **, struct dirent **)) {
@@ -56,9 +43,9 @@ int scandir(const char *dirname, struct dirent ***namelist,
   int nDir = 0, NDir = 0;
   struct dirent **dir = 0, *selectDir;
   unsigned long ret;
-  char findIn[MAX_PATH*4];
+  char findIn[MAX_PATH];
 
-  utf8tomb(dirname, strlen(dirname), findIn, _MAX_PATH);
+  strlcpy ( findIn, dirname, MAX_PATH );
   d = findIn+strlen(findIn);
   if (d==findIn) *d++ = '.';
   if (*(d-1)!='/' && *(d-1)!='\\') *d++ = '/';
@@ -74,7 +61,7 @@ int scandir(const char *dirname, struct dirent ***namelist,
     return nDir;
   }
   do {
-    selectDir=(struct dirent*)malloc(sizeof(struct dirent));
+    selectDir=(struct dirent*)malloc(sizeof(struct dirent)+strlen(find.cFileName));
     strcpy(selectDir->d_name, find.cFileName);
     if (!select || (*select)(selectDir)) {
       if (nDir==NDir) {
