@@ -122,7 +122,7 @@ FL_API char* newstring(const char *from) {
   if (!from) return 0;
   unsigned n = strlen(from)+1;
   char* ret = new char[n];
-  strcpy(ret, from);
+  memcpy(ret, from, n);
   return ret;
 }
 } /* extern "C" */
