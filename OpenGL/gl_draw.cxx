@@ -104,7 +104,13 @@ void fltk::glsetfont(fltk::Font* font, float size) {
     int attrib; const char* name = font->name(&attrib);
     CFStringRef cfname = CFStringCreateWithCString(0L, name, kCFStringEncodingASCII);
     short cfont;
-    GetFNum(CFStringGetPascalStringPtr(cfname, kCFStringEncodingMacRoman),&cfont);
+    unsigned char buf[BUFSIZ];
+    ConstStringPtr ptr = CFStringGetPascalStringPtr(cfname, kCFStringEncodingMacRoman);
+    if (!ptr) {
+        CFStringGetPascalString(cfname, buf, BUFSIZ, kCFStringEncodingMacRoman);
+        ptr = buf;
+    }
+    GetFNum(ptr, &cfont);
     CFRelease(cfname);
     aglUseFont(aglGetCurrentContext(), cfont, attrib,(int)current_size_,0,256,listbase);
 #else
