@@ -58,6 +58,11 @@ FL_API bool beep_on_dialog();
 extern FL_API NamedStyle* icon_style;
 extern FL_API NamedStyle* message_style;
 
+extern FL_API const char* message_window_label;
+extern FL_API float message_window_timeout;
+
+extern FL_API bool message_window_scrollable;
+
 // pointers you can use to change FLTK to a foreign language:
 extern FL_API const char* no;
 extern FL_API const char* yes;
