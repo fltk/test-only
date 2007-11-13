@@ -67,6 +67,7 @@ PackedGroup::PackedGroup(int x,int y,int w,int h,const char *l,bool begin)
 : Group(x, y, w, h, l, begin) {
   resizable(0);
   spacing_ = 0;
+  margin(0);
 }
 
 void PackedGroup::layout() {
@@ -86,6 +87,12 @@ void PackedGroup::layout() {
     // This is the rectangle to lay out the remaining widgets in:
     Rectangle r(w(),h());
     box()->inset(r);
+
+    // Apply margins
+    r.set_x(r.x()+margin_left_);
+    r.set_r(r.r()-margin_right_);
+    r.set_y(r.y()+margin_top_);
+    r.set_b(r.b()-margin_bottom_);
 
     bool saw_horizontal = false;
     bool saw_vertical = false;
