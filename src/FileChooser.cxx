@@ -160,6 +160,7 @@ FileChooser::FileChooser(const char *d, const char *p, int t, const char *title)
         o->callback((fltk::Callback*)cb_favoritesButton);
         o->align(fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
         favoritesButton->label(favorites_label);
+        favorites_showing = 1;
       }
        {fltk::Button* o = newButton = new fltk::Button(390, 0, 25, 25);
         o->image(xbmImage_new);
@@ -451,5 +452,15 @@ void FileChooser::user_data(void *d) {
 int FileChooser::visible() {
   return window->visible();
 }
+
+void FileChooser::favorites(int e) {
+	favorites_showing = e;
+	update_favorites();
+}
+
+int FileChooser::favorites() const {
+	return favorites_showing;
+}
+
 FL_API void file_chooser_ok_label(const char*l);
 // Code for //\n// End of "$Id: FileChooser.fl 5067 2006-05-0...

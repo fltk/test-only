@@ -51,6 +51,7 @@ private:
       fltk::Choice *showChoice;
       inline void cb_showChoice_i(fltk::Choice*, void*);
       static void cb_showChoice(fltk::Choice*, void*);
+      int favorites_showing;
       fltk::PopupMenu *favoritesButton;
       inline void cb_favoritesButton_i(fltk::PopupMenu*, void*);
       static void cb_favoritesButton(fltk::PopupMenu*, void*);
@@ -141,6 +142,8 @@ public:
   const char *value(int f = 1);
   void value(const char *filename);
   int visible();
+  void favorites(int e);
+  int favorites() const;
   static const char *add_favorites_label;
   static const char *all_files_label;
   static const char *custom_filter_label;

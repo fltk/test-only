@@ -893,6 +893,12 @@ FileChooser::showChoiceCB()
 void
 FileChooser::update_favorites()
 {
+  if(favorites_showing) {
+	favoritesButton->show();
+  } else {
+	favoritesButton->hide();
+  }
+
   int		i;			// Looping var
   char		pathname[1024],		// Pathname
 		menuname[2048];		// Menu name
