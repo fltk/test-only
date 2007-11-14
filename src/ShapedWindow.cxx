@@ -38,6 +38,10 @@ but with no border and no pixels are changed unless you draw into
 them. Thus you can get arbitrary shapes by the simple expediency of
 not drawing where it should be "transparent".
 
+The window borders and caption created by the window system are turned
+off by default for a ShapedWindow object .  They can be re-enabled by
+calling void Window::border(bool set).
+
 */
 
 #include <config.h>
