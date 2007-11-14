@@ -8,29 +8,29 @@
 #include <fltk/Slider.h>
 #include <fltk/InvisibleBox.h>
 
-class Drawing_Window  {
+class DrawingWindow  {
 public:
-  void make_window();
   fltk::Window *window;
-    Drawing_Area *d;
-    fltk::FloatInput *x_input;
+  void make_window();
+  DrawingArea *d;
+  fltk::FloatInput *x_input;
 private:
-    inline void cb_x_input_i(fltk::FloatInput*, void*);
-    static void cb_x_input(fltk::FloatInput*, void*);
+  inline void cb_x_input_i(fltk::FloatInput*, void*);
+  static void cb_x_input(fltk::FloatInput*, void*);
 public:
-    fltk::FloatInput *y_input;
+  fltk::FloatInput *y_input;
 private:
-    inline void cb_y_input_i(fltk::FloatInput*, void*);
-    static void cb_y_input(fltk::FloatInput*, void*);
+  inline void cb_y_input_i(fltk::FloatInput*, void*);
+  static void cb_y_input(fltk::FloatInput*, void*);
 public:
-    fltk::FloatInput *w_input;
+  fltk::FloatInput *w_input;
 private:
-    inline void cb_w_input_i(fltk::FloatInput*, void*);
-    static void cb_w_input(fltk::FloatInput*, void*);
-    inline void cb_brightness_i(fltk::Slider*, void*);
-    static void cb_brightness(fltk::Slider*, void*);
-    inline void cb_iterations_i(fltk::Slider*, void*);
-    static void cb_iterations(fltk::Slider*, void*);
+  inline void cb_w_input_i(fltk::FloatInput*, void*);
+  static void cb_w_input(fltk::FloatInput*, void*);
+  inline void cb_brightness_i(fltk::Slider*, void*);
+  static void cb_brightness(fltk::Slider*, void*);
+  inline void cb_iterations_i(fltk::Slider*, void*);
+  static void cb_iterations(fltk::Slider*, void*);
 public:
   void update_label();
 };
