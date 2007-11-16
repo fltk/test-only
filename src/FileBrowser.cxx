@@ -118,6 +118,7 @@ FileBrowser::load(const char     *directory,// I - Directory to load
     return (0);
 
   clear();
+  yposition(0);
   directory_ = directory;
 
   if (directory_[0] == '\0')
