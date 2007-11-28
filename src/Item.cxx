@@ -179,7 +179,10 @@ void Item::layout() {
       if (w) h += H; else h = H;
       if (W > w) w = W;
     }
-  } else {
+  } else if ((type() & RADIO) || (type() & TOGGLE)) {
+      w += 20;
+  }
+  else {
     w += 6; // further adjustment to match Windows menubars
   }
   this->w(w);

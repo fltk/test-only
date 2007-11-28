@@ -82,7 +82,7 @@ static void timeout_handler(void *w) {
 #define BORDER_W 10
 #define BORDER_H 10
 #define INPUT_W 270
-#define BUTTON_W 75
+#define MIN_BUTTON_W 75
 #define BUTTON_H 21
 
 static Input *textfield;
@@ -223,6 +223,53 @@ static int innards(
     if (blabels[i][0] == '*') {blabels[i]++; default_button = i;}
   }
 
+#if 1
+  int bx = window.w();
+  int by = window.h()-(BORDER_H+BUTTON_H);
+  int bh = BUTTON_H;
+  for (i = 3; i--;) {
+    if (blabels[i]) {
+      fltk::Button* button;
+      int glyph_width=0;
+      if (i == default_button) {
+        button = new ReturnButton(0, 0, 0, 0, blabels[i]);
+        window.hotspot(button);
+        if (!istr) window.set_focus(button);
+
+        // a ReturnButton uses this as the glyph size.. I don't know what else to do except do the same thing here
+        glyph_width = 2*int(button->textsize());
+
+        // and best I can tell from the code, 3 is the constant width between label and glyph
+        glyph_width += 3; 
+
+      } else {
+        button = new fltk::Button(0, 0, 0, 0, blabels[i]);
+      }
+      button->callback(set_button_number, i);
+
+      // calculate the horizontal size of the button
+      int bw, dummy;
+      button->measure_label(bw, dummy);
+
+      // add a 5+5 px padding in button
+      bw += 10; 
+
+      // and include any glyph width
+      bw += glyph_width;
+
+      // enforce button min size
+      bw = bw < MIN_BUTTON_W ? MIN_BUTTON_W : bw;
+
+      // accumulate the horizontal button position based on button widths
+      bx -= bw + BORDER_W;
+
+      // finally position and size the button
+      button->resize(bx, by, bw, bh);
+    }
+  }
+
+#else // the old way of placing constant sized buttons
+
   for (i = 3; i--;) if (blabels[i]) {
     fltk::Button* button;
     if (i == default_button) {
@@ -238,6 +285,9 @@ static int innards(
     }
     button->callback(set_button_number, i);
   }
+
+#endif
+
 
   window.end();
 
