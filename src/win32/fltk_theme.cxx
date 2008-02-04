@@ -147,8 +147,8 @@ extern "C" bool fltk_theme() {
     NONCLIENTMETRICSW ncm;
     int sncm = sizeof(ncm);
     ncm.cbSize = sncm;
-    SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, sncm, &ncm, SPIF_SENDCHANGE);
-
+    if (false == SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, sncm, &ncm, SPIF_SENDCHANGE))
+      return false;
     Font* font; float size;
     wchar_t *name;
     const int BUFLEN = 1024;
@@ -197,7 +197,8 @@ extern "C" bool fltk_theme() {
     NONCLIENTMETRICSA ncm;
     int sncm = sizeof(ncm);
     ncm.cbSize = sncm;
-    SystemParametersInfoA(SPI_GETNONCLIENTMETRICS, sncm, &ncm, SPIF_SENDCHANGE);
+    if (false == SystemParametersInfoA(SPI_GETNONCLIENTMETRICS, sncm, &ncm, SPIF_SENDCHANGE))
+      return false;
 
     Font* font; float size;
     char *name;
