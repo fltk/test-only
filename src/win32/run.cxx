@@ -675,7 +675,7 @@ void fltk::get_mouse(int &x, int &y) {
 }
 
 bool fltk::warp_mouse(int x, int y) {
-  return SetCursorPos(x, y);
+	return SetCursorPos(x, y) ? true : false;
 }
 
 ////////////////////////////////////////////////////////////////

@@ -34,6 +34,16 @@
 #ifndef DOXYGEN
 // dirent (what a pain)...
 
+// FC: UNDER WIN32/VC6 long long is undefined, so use __int64 instead
+//  for cross platform type compatibility though in fact VC6 uses 
+//  a 32 bit long to calculate size in the stat struct so don't expect
+//  to handle >4GB files here...
+#if defined(_WIN32) && !defined(__CYGWIN__) && !defined(__MINGW32__) && (_MSC_VER==1200)
+typedef unsigned __int64 FL_FILESIZE_T;
+#else
+typedef unsigned long long FL_FILESIZE_T;
+#endif
+
 #if defined(__WATCOMC__)
 
 # include <sys/types.h>
@@ -96,7 +106,7 @@ inline char* filename_ext(char* a) {return (char*)(filename_ext((const char*)a))
 FL_API bool filename_match(const char *, const char *pattern); // glob match
 FL_API bool filename_exist(const char*);
 FL_API bool filename_isdir(const char*);
-FL_API long long unsigned filename_size(const char *); // return size of file
+FL_API FL_FILESIZE_T filename_size(const char *); // return size of file
 FL_API long int filename_mtime(const char *); // return modification time
 
 typedef int (File_Sort_F)(const dirent*const*, const dirent*const*);

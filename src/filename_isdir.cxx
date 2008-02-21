@@ -72,9 +72,9 @@ bool fltk::filename_isdir(const char* name) {
 }
 
 /** Returns the size of the file in bytes. Returns zero if it does not exist.*/
-unsigned long long fltk::filename_size(const char* name) {
+FL_FILESIZE_T fltk::filename_size(const char* name) {
   if (!fill_stat(name)) return 0;
-  return (unsigned long long)last_stat.st_size;
+  return (FL_FILESIZE_T)last_stat.st_size;
 }
 
 /**

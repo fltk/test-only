@@ -1053,12 +1053,13 @@ void Widget::setonly() {
   set();
   Group* g = parent();
   int my_index = g->find( this );
-  for( int i = my_index-1; i >= 0; --i ) {
+  int i;
+  for(i = my_index-1; i >= 0; --i ) {
     Widget* c = g->child(i);
     if( RADIO != c->type() ) break;
     c->clear();
   }
-  for( int i = my_index+1; i < g->children(); ++i ) {
+  for(i = my_index+1; i < g->children(); ++i ) {
     Widget* c = g->child(i);
     if( RADIO != c->type() ) break;
     c->clear();

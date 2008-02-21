@@ -223,7 +223,7 @@ void DrawingArea::layout() {
       delete[] buffer; buffer = 0; new_display();
     }
   }
-  fltk::Widget::layout();
+  Widget::layout();
 }
 
 //
