@@ -61,6 +61,7 @@ namespace fltk {open
     decl {void showChoiceCB();} {}
     decl {void update_favorites();} {}
     decl {void update_preview();} {}
+    decl {int favorites_showing;} {}
     Function {FileChooser(const char *d, const char *p, int t, const char *title)} {open
     } {
       {fltk::Window} window {
@@ -88,7 +89,8 @@ window->hide();} open
             label Favorites
             callback {favoritesButtonCB();} open
             private xywh {225 0 155 25} align 48
-            extra_code {favoritesButton->label(favorites_label);}
+            extra_code {favoritesButton->label(favorites_label);
+favorites_showing = 1;}
           } {}
           {fltk::Button} newButton {
             callback {newdir();}
@@ -107,7 +109,7 @@ o->tooltip(new_directory_tooltip);}
             callback {fileListCB();}
             private xywh {0 0 295 225} type Single hotspot labelsize 14
             extra_code {\#include <fltk/FileBrowser.h>
-            fileList->when(fltk::WHEN_CHANGED);}
+            fileList->type(0);fileList->when(fltk::WHEN_CHANGED);}
           }
           {fltk::InvisibleBox} previewBox {
             label {?}
@@ -177,13 +179,14 @@ window->hide();}
         label {Manage Favorites} open
         private xywh {440 69 355 150} type Double resizable
         extra_code {favWindow->label(manage_favorites_label);
-favWindow->resizable(fileList);} modal visible
+favWindow->resizable(fileList);
+o->shortcut(0xff1b);} modal visible
       } {
         {fltk::FileBrowser} favList {
           callback {favoritesCB(favList);}
           private xywh {10 10 300 95} type Single when CHANGED
-        }
-        {fltk::Group} {} {open
+	   extra_code {o->type(0);}
+        } {fltk::Group} {} {open
           xywh {320 10 25 95}
           extra_code {o->resizable(0);}
         } {
@@ -303,8 +306,8 @@ showChoiceCB();} {}
       code {okButton->label(l);
 int w=0, h=0;
 okButton->measure_label(w, h);
-okButton->resize(cancelButton->x() - 50 - w, cancelButton->y(),
-                 w + 40, 25);
+w+=70;
+okButton->resize(cancelButton->x()- w, cancelButton->y(),w-10, 25);
 okButton->parent()->init_sizes();} {}
     }
     Function {ok_label()} {return_type {const char *}
@@ -336,6 +339,10 @@ fltk::cursor(fltk::CURSOR_WAIT);
 rescan();
 fltk::cursor(fltk::CURSOR_DEFAULT);
 fileName->take_focus();} {}
+    }
+    Function {exec(Window* p, bool grab)} {return_type bool
+    } {
+      code {return window->exec(p, grab);} {}
     }
     Function {shown()} {open return_type int
     } {
@@ -400,6 +407,15 @@ else
     Function {visible()} {return_type int
     } {
       code {return window->visible();} {}
+    }
+    Function {favorites(int e)} {return_type void
+    } {
+      code {favorites_showing = e;
+update_favorites();} {}
+    }
+    Function {favorites() const} {return_type int 
+    } {
+      code {return favorites_showing;} {}
     }
     decl {static const char *add_favorites_label;} {public
     }

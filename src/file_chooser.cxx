@@ -69,22 +69,22 @@ fltk::file_chooser(const char *message,	// I - Message in titlebar
 
   if (!fc) {
     if (!fname || !*fname) fname = ".";
-
+    
     fc = new FileChooser(fname, pat, FileChooser::CREATE, message);
     fc->callback(callback, 0);
   }
-    fc->type(FileChooser::CREATE);
-    fc->filter(pat);
-    fc->label(message);
-
-    if (!fname || !*fname) {
-      if (fc->filter() != pat && (!pat || !fc->filter() ||
-          strcmp(pat, fc->filter())) && fc->value()) {
-	// if pattern is different, remove name but leave old directory:
-	strlcpy(retname, fc->value(), sizeof(retname));
-
+  fc->type(FileChooser::CREATE);
+  fc->filter(pat);
+  fc->label(message);
+  
+  if (!fname || !*fname) {
+    if (fc->filter() != pat && (!pat || !fc->filter() ||
+				strcmp(pat, fc->filter())) && fc->value()) {
+      // if pattern is different, remove name but leave old directory:
+      strlcpy(retname, fc->value(), sizeof(retname));
+      
 	char *p = strrchr(retname, '/');
-
+	
         if (p) {
 	  // If the filename is "/foo", then the directory will be "/", not
 	  // ""...
@@ -93,27 +93,28 @@ fltk::file_chooser(const char *message,	// I - Message in titlebar
 	  else
 	    *p = '\0';
 	}
-
+	
 	// Set the directory...
 	fc->directory(retname);
-      }
-      fc->show();
-      fc->value(fname);
     }
-    else {
-      fc->ok_label(current_label);
-      fc->show();
-      fc->value(fname);
-    }  
-
-  while (fc->visible()) fltk::wait();
-
+    fc->show();
+    fc->value(fname);
+  }
+  else {
+    fc->ok_label(current_label);
+    fc->show();
+    fc->value(fname);
+  }  
+  
+  //while (fc->visible()) fltk::wait();
+  fc->exec(0, true);
+  
   if (fc->value() && relative) {
-      fltk::filename_relative(retname, sizeof(retname), fc->value());
-
+    fltk::filename_relative(retname, sizeof(retname), fc->value());
+    
     return retname;
   } else if (fc->value()) {
-      fltk::filename_absolute(retname, sizeof(retname), fc->value());
+    fltk::filename_absolute(retname, sizeof(retname), fc->value());
     return retname;
   }
   else return 0;
@@ -146,7 +147,8 @@ fltk::dir_chooser(const char *message,	// I - Message for titlebar
 
   fc->show();
 
-  while (fc->visible()) fltk::wait();
+  // while (fc->visible()) fltk::wait();
+  fc->exec(0, true);
 
   if (fc->value() && relative) {
       fltk::filename_relative(retname, sizeof(retname), fc->value());
@@ -250,7 +252,7 @@ const char* fltk::file_chooser(const char* message,
     fc->text(fname);
     fc->label(message);
   }
-  fc->exec();
+  fc->exec(0,true);
   return fc->text();
 }
 
