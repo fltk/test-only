@@ -429,7 +429,7 @@ static const char* input_innards(const char* fmt, va_list ap,
 				 const char* defstr, uchar type) {
   int r = innards("?", defstr ? defstr : "", type,
 		  fmt, ap, fltk::cancel, fltk::ok, 0);
-  return r>=0 ? textfield->text() : 0;
+  return r>0 ? textfield->text() : 0;
 }
 
 /*!
