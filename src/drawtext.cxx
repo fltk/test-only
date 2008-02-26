@@ -433,9 +433,15 @@ static void wrap(
     width = 0;
     if (underscore) {
       if (!fl_hide_underscore) {
-	const char* us = "_";
-	add(0, us, us+1, x, y+ascent, getsize(),getsize(), ascent, spacing);
-      }
+	const char* us = "_"; 
+	// on the some platforms the underscore sticks to the bottom of the letter
+	// so add space to enhance the shortcut appearance 
+	// finally, the shortcut symbol should be centered for all platforms 
+	// whatever the font is so add a potential delta
+	int xdelta = (int) (getwidth(p,1)-getwidth(us,1))/2;
+	int ydelta = getsize()<=ascent ? 0 : (int) getsize() - ascent;
+	add(0, us, us+1, x+xdelta, y+ascent+ydelta, getsize(),getsize(), ascent, spacing);
+}
       p = q;
     } else if (symbol) {
       if (!symbol_w) {
