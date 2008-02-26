@@ -439,7 +439,12 @@ static void wrap(
 	// finally, the shortcut symbol should be centered for all platforms 
 	// whatever the font is so add a potential delta
 	int xdelta = (int) (getwidth(p,1)-getwidth(us,1))/2;
-	int ydelta = getsize()<=ascent ? 0 : (int) getsize() - ascent;
+	int ydelta =
+#ifndef	_WIN32
+	    (getdescent())/2;
+#else
+	(getdescent())/2 -1;
+#endif
 	add(0, us, us+1, x+xdelta, y+ascent+ydelta, getsize(),getsize(), ascent, spacing);
 }
       p = q;
