@@ -36,6 +36,10 @@
 #include <fltk/Tooltip.h>
 #include <fltk/filename.h>
 
+#if defined(__APPLE__)
+#include <sys/time.h>
+#endif
+
 #if defined(_WIN32) && USE_MULTIMONITOR && WINVER<0x0500
 // Make the headers declare the functions needed for multimonitor:
 # undef WINVER
