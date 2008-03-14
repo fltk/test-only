@@ -26,12 +26,13 @@
 CPPFILES = \
 	glut_compatability.cxx \
 	glut_font.cxx
-
+	
 
 DEMOS = \
-	glpuzzle \
-	fractals
-
+	glpuzzle$(EXEEXT) \
+	fractals$(EXEEXT)
+	
+	
 ################################################################
 
 include ../makeinclude
