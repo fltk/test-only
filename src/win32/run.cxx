@@ -1447,6 +1447,7 @@ extern void fl_prune_deferred_calls(HWND);
 HWND ignore_size_change_window;
 
 #define MakeWaitReturn() __PostMessage(hWnd, WM_MAKEWAITRETURN, 0, 0)
+static CreatedWindow * sCreatedWindowPending = 0; // this hack keeps tracks of the CreatedWindow instance during its creation before we know its xid ...
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1463,7 +1464,11 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   //msg.lPrivate = ???
 
   Window *window = find(hWnd);
-
+  // Don't have any window/xid yet during reentrant window creation ? hack it !
+  if (!window && sCreatedWindowPending) {
+      window=sCreatedWindowPending->window;
+      sCreatedWindowPending->xid = hWnd;
+      }
   switch (uMsg) {
 
   case WM_SYNCPAINT :
@@ -2058,6 +2063,8 @@ void CreatedWindow::create(Window* window) {
   if (name && *name) utf8towc(name, strlen(name), ucs_name, 1024);
   else ucs_name[0] = 0;
 
+  // CreateWindowEx enters WndProc by sending many important msgs like WM_GETMINMAXINFO *before* the window handle (xid here) is set in the instance..
+  sCreatedWindowPending=x; // start of hack
   x->xid = __CreateWindowExW(styleEx,
 			     L"fltk", ucs_name, style,
 			     xp, yp, wp, hp,
@@ -2066,6 +2073,8 @@ void CreatedWindow::create(Window* window) {
 			     xdisplay,
 			     NULL // creation parameters
 			     );
+
+  sCreatedWindowPending=0; // end of hack
 
   x->dc = GetDC(x->xid);
   SetTextAlign(x->dc, TA_BASELINE|TA_LEFT);
