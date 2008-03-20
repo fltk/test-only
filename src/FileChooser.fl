@@ -342,7 +342,7 @@ fileName->take_focus();} {}
     }
     Function {exec(Window* p, bool grab)} {return_type bool
     } {
-      code {return window->exec(p, grab);} {}
+      code {if (shown()) window->hide();return window->exec(p, grab);} {}
     }
     Function {shown()} {open return_type int
     } {

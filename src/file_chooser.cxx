@@ -97,16 +97,13 @@ fltk::file_chooser(const char *message,	// I - Message in titlebar
 	// Set the directory...
 	fc->directory(retname);
     }
-    fc->show();
-    fc->value(fname);
   }
   else {
     fc->ok_label(current_label);
-    fc->show();
-    fc->value(fname);
   }  
-  
-  //while (fc->visible()) fltk::wait();
+
+  fc->value(fname);
+  //fc->show(); while (fc->visible()) fltk::wait();
   fc->exec(0, true);
   
   if (fc->value() && relative) {
@@ -145,8 +142,7 @@ fltk::dir_chooser(const char *message,	// I - Message for titlebar
     fc->label(message);
   }
 
-  fc->show();
-
+  //fc->show();
   // while (fc->visible()) fltk::wait();
   fc->exec(0, true);
 

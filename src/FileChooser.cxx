@@ -399,7 +399,8 @@ void FileChooser::show(int x, int y) {
 }
 
 bool FileChooser::exec(Window* p, bool grab) {
-  return window->exec(p, grab);
+ if (shown()) window->hide();
+ return window->exec(p, grab);
 }
 
 int FileChooser::shown() {
