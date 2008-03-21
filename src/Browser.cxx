@@ -1124,6 +1124,22 @@ bool Browser::make_item_visible(linepos where) {
 }
 
 /*! This is for use by the MultiBrowser subclass.
+  select or deselect an item in parameter, 
+  optionally execute a callback (calls set_item_selected()).
+  This method changes item position in the tree.
+*/
+bool  Browser::select(Widget* e, int v, int do_callback) {
+	Browser& tree= *this;
+	if (!item()) tree.goto_top();
+    Widget* i = item();
+	Widget *c;
+	while  (tree.item()!=e) {
+		c=tree.next_visible();
+		if (c==i || (!c && (c=goto_top())==i)) return false;
+	}
+	return tree.set_item_selected(v ? true: false, do_callback);
+}
+/*! This is for use by the MultiBrowser subclass.
   Turn the fltk::SELECTED flag on or off in the current item (use
   goto_index() to set the current item before calling this).
 
@@ -1133,6 +1149,7 @@ bool Browser::make_item_visible(linepos where) {
   If do_callback has some bits that are also in when() then the
   callback is done for each item that changes selected state.
 */
+
 bool Browser::set_item_selected(bool value, int do_callback) {
   if(!item()) return false;
 

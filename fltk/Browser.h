@@ -115,6 +115,7 @@ public:
   bool set_focus();
   void set_mark(Mark& dest) const {dest = HERE;}
   void set_mark_to_focus(Mark& dest) const {dest = FOCUS;}
+  bool select(Widget*e, int val, int do_callback=0);
   bool set_item_selected(bool value = true, int do_callback = 0);
   bool select_only_this(int do_callback = 0);
   bool deselect(int do_callback = 0);

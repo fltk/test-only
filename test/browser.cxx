@@ -306,6 +306,7 @@ int main(int argc,char** argv) {
   tree.add_leaf("kkk",g);
 
   tree.add_leaf("lll");
+ tree.add_leaf("zut");
 
   g = tree.add_group("mmm", &tree, 0); // let this node closed
   tree.add_leaf("nnn",g);
@@ -324,6 +325,7 @@ int main(int argc,char** argv) {
 
   tree.add_leaf("yyy", g);
   tree.add_leaf("zzz", g);
+
 
   // add some widgets:
   Button * b = new Button(0,0,100,23,"button");
@@ -359,8 +361,10 @@ int main(int argc,char** argv) {
 #endif
 #endif
 
-  win.show(argc,argv);
+  tree.select(tree.find( "fff" ),1);
 
+  win.show(argc,argv);
+ 
   run();
   return 0;
 }
