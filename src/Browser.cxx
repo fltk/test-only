@@ -1129,15 +1129,14 @@ bool Browser::make_item_visible(linepos where) {
   This method changes item position in the tree.
 */
 bool  Browser::select(Widget* e, int v, int do_callback) {
-	Browser& tree= *this;
-	if (!item()) tree.goto_top();
+	if (!item()) goto_top();
     Widget* i = item();
 	Widget *c;
-	while  (tree.item()!=e) {
-		c=tree.next_visible();
+	while  (item()!=e) {
+		c=next_visible();
 		if (c==i || (!c && (c=goto_top())==i)) return false;
 	}
-	return tree.set_item_selected(v ? true: false, do_callback);
+	return set_item_selected(v ? true: false, do_callback);
 }
 /*! This is for use by the MultiBrowser subclass.
   Turn the fltk::SELECTED flag on or off in the current item (use
