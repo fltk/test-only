@@ -1015,6 +1015,7 @@ static int xerror_handler(Display* d, XErrorEvent* e) {
 
 struct fltk::Picture {
   int w, h, linedelta;
+  Bool draw_target; // whether the image is used with draw_into()
   unsigned long n; // bytes used
   uchar* data;
   XWindow rgb;
@@ -1026,10 +1027,11 @@ struct fltk::Picture {
   XWindow alpha;        // binary alpha for non-XRender
   char* alphabuffer;    // binary alpha local source
 
-  Picture(int w, int h, int depth, int ld) {
+  Picture(int w, int h, int depth, int ld, Bool draw_target=false) {
     this->w = w;
     this->h = h;
     this->linedelta = ld;
+    this->draw_target = draw_target;
     n = (ld*h+3)&-4;
     linebuffer = 0; alpha = 0; alphabuffer = 0;
 #if USE_XSHM
@@ -1360,7 +1362,7 @@ void Image::draw(const fltk::Rectangle& from, const fltk::Rectangle& to) const {
     ((Image*)this)->flags |= COPIED;
   }
 #if USE_XFT
-  if (fl_rgba_xrender_format && picture->rgb) {
+  if (fl_rgba_xrender_format && picture->rgb && !picture->draw_target) {
     fl_xrender_draw_image(picture->rgb, pixeltype_, from, to);
     return;
   }
@@ -1415,11 +1417,25 @@ void Image::setimage(const uchar* d, PixelType p, int w, int h, int ld) {
 }
 
 void Image::make_current() {
+  // make this image the target for drawing operations
+  // fl_xrender_draw_image() cannot be used in draw() apparently
+  // due to incompatible depth attributes
   if (!picture) {
-    buffer(); // initialise 
+    // initialise
+    if (w_ > 0 && h_ > 0) {
+      int ld = buffer_linedelta();
+      int depth = xvisual->depth;
+      picture = new Picture(w_, h_, depth, ld, true);
+      memused_ += picture->n;
+      // the copy operation in draw() does not seem to do anything
+      // in this context other than generate an xlib warning message
+      ((Image*)this)->flags |= COPIED;
+    } else {
+      fatal("Can't draw into empty image");
+    }
   }
-  draw_into(picture->rgb ? picture->rgb : picture->alpha,
-	    picture->w, picture->h);
+
+  draw_into(picture->rgb, picture->w, picture->h);
 }
 
 ////////////////////////////////////////////////////////////////
