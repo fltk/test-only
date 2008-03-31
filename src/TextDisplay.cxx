@@ -857,6 +857,7 @@ int TextDisplay::wrapped_row(int row) {
 void TextDisplay::display_insert() {
   int hOffset, topLine, X, Y;
   int lastChar = lastchar_;
+  int oldTopLine = topline_num_; // determine whether to update v_scrollbar
 
   /* FLTK widget shows one line too much (clipped at the bottom), so get last char from line before that */
   if (visiblelines_cnt_ > 1 && linestarts_[visiblelines_cnt_-2] != -1) {
@@ -899,7 +900,7 @@ void TextDisplay::display_insert() {
   if(hOffset<0) hOffset = 0;
 
   /* Do the scroll */
-  if (topLine != topline_num_ || hOffset != horiz_offset_) {
+  if (topLine != oldTopLine || hOffset != horiz_offset_) {
     scroll_(topLine, hOffset);
     update_v_scrollbar();
     update_h_scrollbar();
