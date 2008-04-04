@@ -1352,6 +1352,7 @@ bool fltk::handle()
 #endif
 	if (type == textplainutf ||
 	    type == textplain ||
+            type == texturilist ||
 	    type == UTF8_STRING) {dnd_type = type; break;} // ok
       }
       event = DND_ENTER;
@@ -1839,11 +1840,22 @@ bool fltk::handle()
 	buffer = portion;
       }
       read += count*format/8;
-      if (!remaining) break;
+
+      if (!remaining) {
+        e_text = buffer ? (char*)buffer : "";
+        e_length = read;
+
+        if (actual == texturilist && strncmp(e_text, "file://", 7) == 0) {
+          // to be consistent with windows implementation
+          e_text += 7; // skip leading file://
+          e_length -= 9; // skip trailing CR+LF
+        }
+
+        selection_requestor->handle(PASTE);
+        break; // exit for(;;)
+      }
     }
-    e_text = buffer ? (char*)buffer : "";
-    e_length = read;
-    selection_requestor->handle(PASTE);
+
     // Detect if this paste is due to Xdnd by the property name (I use
     // XA_SECONDARY for that) and send an XdndFinished message. It is not
     // clear if this has to be delayed until now or if it can be done
