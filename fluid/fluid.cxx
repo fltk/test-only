@@ -662,7 +662,7 @@ void new_cb(Widget *, void *v) {
     modflag = 0;
 }
 */
-static int compile_only = 0;
+int compile_only = 0;
 int header_file_set = 0;
 int code_file_set = 0;
 const char* header_file_name = ".h";

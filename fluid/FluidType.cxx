@@ -83,6 +83,8 @@ extern fltk::Browser *widget_browser;
 
 extern void deselect();
 
+extern int compile_only; 
+
 static void Widget_Browser_callback(fltk::Widget * w,void *) {
     if (fltk::event()==fltk::PUSH )  {
 	if ( ( (fltk::Browser*) w)->item()==0) 
@@ -94,7 +96,9 @@ static void Widget_Browser_callback(fltk::Widget * w,void *) {
     if(fltk::event()!=fltk::RELEASE) refresh_browser_views();
 }
 
+
 void refresh_browser_views() {
+  if (compile_only) return;
     widget_browser->redraw();
     if (!status_bar) return;
     int cnt = FluidType::selected_count();
