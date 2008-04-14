@@ -412,9 +412,11 @@ bool fltk::compose(int& del) {
     return true;
   }
 
+  // cancel compose mode for ctrl+c ctrl+home etc
+  compose_state = 0;
+
   // Only insert non-control characters:
   if (e_length && (ascii & ~31 && ascii != 127)) {
-    compose_state = 0;
     return true;
   }
 
