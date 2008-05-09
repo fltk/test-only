@@ -110,6 +110,7 @@ AnsiWidget::AnsiWidget(int x, int y, int w, int h, int defsize) :
   Widget(x, y, w, h, 0) {
   labelsize(float(defsize));
   init();
+  reset();
   img = 0;
   resized = false;
 }
@@ -150,7 +151,6 @@ void AnsiWidget::init() {
   curY = INITXY; // allow for input control border
   curX = INITXY;
   tabSize = 40; // tab size in pixels (160/32 = 5)
-  reset();
 }
 
 /*! reset the current drawing variables
