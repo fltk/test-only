@@ -73,7 +73,7 @@ public:
     ALWAYS_ON = 4,
     HORIZONTAL_ALWAYS = 5,
     VERTICAL_ALWAYS = 6,
-    BOTH_ALWAYS = 7,
+    BOTH_ALWAYS = 7
   };
 
   int xposition() const {return xposition_;}

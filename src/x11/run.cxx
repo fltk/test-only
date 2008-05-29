@@ -1615,6 +1615,7 @@ bool fltk::handle()
       recent_keycode = 0;
     } else {
       e_clicks = 0;
+      e_key_repeated = 0;
       recent_keycode = keycode;
     }
     fl_key_vector[keycode/8] |= (1 << (keycode%8));

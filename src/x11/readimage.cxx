@@ -111,6 +111,13 @@ fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
     }
   }
 
+  if (!image->red_mask && image->bits_per_pixel > 12) {
+    // Greater than 12 bits must be TrueColor...
+    image->red_mask   = xvisual->visual->red_mask;
+    image->green_mask   = xvisual->visual->green_mask;
+    image->blue_mask   = xvisual->visual->blue_mask;
+  }
+
   // Check if we have colormap image...
   if (image->red_mask == 0) {
     // Get the colormap entries for this window...

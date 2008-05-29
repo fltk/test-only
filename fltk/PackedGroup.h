@@ -38,7 +38,7 @@ class FL_API PackedGroup : public Group {
   int margin_left_;
   int margin_right_;
   int margin_top_;
-  int margin_bottom_;;
+  int margin_bottom_;
 public:
   enum { // values for type(int), for back-compatability
     NORMAL	= GROUP_TYPE,

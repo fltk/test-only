@@ -231,19 +231,19 @@ void fltk::drawframe(const char* s, int x, int y, int w, int h) {
     // draw bottom line:
     setcolor(*s++ + (GRAY00-'A'));
     drawline(x, y+h-1, x+w-1, y+h-1);
-    if (--h <= 0) break;
+    if (--h <= 0 || !*s) break;
     // draw right line:
     setcolor(*s++ + (GRAY00-'A'));
     drawline(x+w-1, y+h-1, x+w-1, y);
-    if (--w <= 0) break;
+    if (--w <= 0 || !*s) break;
     // draw top line:
     setcolor(*s++ + (GRAY00-'A'));
     drawline(x, y, x+w-1, y);
-    y++; if (--h <= 0) break;
+    y++; if (--h <= 0 || !*s) break;
     // draw left line:
     setcolor(*s++ + (GRAY00-'A'));
     drawline(x, y+h-1, x, y);
-    x++; if (--w <= 0) break;
+    x++; if (--w <= 0 || !*s) break;
   }
 }
 
@@ -258,19 +258,19 @@ void fltk::drawframe2(const char* s, int x, int y, int w, int h) {
     // draw top line:
     setcolor(*s++ + (GRAY00-'A'));
     drawline(x, y, x+w-1, y);
-    y++; if (--h <= 0) break;
+    y++; if (--h <= 0 || !*s) break;
     // draw left line:
     setcolor(*s++ + (GRAY00-'A'));
     drawline(x, y+h-1, x, y);
-    x++; if (--w <= 0) break;
+    x++; if (--w <= 0 || !*s) break;
     // draw bottom line:
     setcolor(*s++ + (GRAY00-'A'));
     drawline(x, y+h-1, x+w-1, y+h-1);
-    if (--h <= 0) break;
+    if (--h <= 0 || !*s) break;
     // draw right line:
     setcolor(*s++ + (GRAY00-'A'));
     drawline(x+w-1, y+h-1, x+w-1, y);
-    if (--w <= 0) break;
+    if (--w <= 0 || !*s) break;
   }
 }
 
