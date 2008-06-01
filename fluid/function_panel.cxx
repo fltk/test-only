@@ -133,6 +133,7 @@ fltk::Window* make_function_panel() {
     }
     o->end();
     o->set_modal();
+    o->resizable(o);
   }
   return  w;
 }
@@ -162,12 +163,19 @@ fltk::Window* make_code_panel() {
       o->when(fltk::WHEN_NEVER);
       fltk::Group::current()->resizable(o);
     }
-     {fltk::ReturnButton* o = code_panel_ok = new fltk::ReturnButton(115, 148, 80, 22, "OK");
-      o->shortcut(0xff0d);
-      ((fltk::Window*)(o->parent()))->hotspot(o);
-    }
-     {fltk::Button* o = code_panel_cancel = new fltk::Button(205, 148, 80, 22, "Cancel");
-      o->shortcut(0xff1b);
+     {fltk::Group* o = new fltk::Group(6, 148, 279, 22);
+      o->begin();
+       {fltk::InvisibleBox* o = new fltk::InvisibleBox(0, 0, 99, 22);
+        fltk::Group::current()->resizable(o);
+      }
+       {fltk::ReturnButton* o = code_panel_ok = new fltk::ReturnButton(109, 0, 80, 22, "OK");
+        o->shortcut(0xff0d);
+        ((fltk::Window*)(o->parent()->parent()))->hotspot(o);
+      }
+       {fltk::Button* o = code_panel_cancel = new fltk::Button(199, 0, 80, 22, "Cancel");
+        o->shortcut(0xff1b);
+      }
+      o->end();
     }
     o->end();
     o->set_modal();
@@ -208,6 +216,7 @@ fltk::Window* make_codeblock_panel() {
     }
     o->end();
     o->set_modal();
+    o->resizable(o);
   }
   return  w;
 }
@@ -341,23 +350,24 @@ fltk::Button *namespace_panel_cancel=(fltk::Button *)0;
 
 fltk::Window* make_namespace_panel() {
   fltk::Window* w;
-   {fltk::Window* o = namespace_panel = new fltk::Window(300, 130, "namespace");
+   {fltk::Window* o = namespace_panel = new fltk::Window(300, 120, "namespace");
     w = o;
     o->shortcut(0xff1b);
     o->begin();
-     {fltk::Input* o = namespace_input = new fltk::Input(10, 22, 281, 22, "default is  \"fltk\", can be declared at the root or  imbricated into another\
+     {fltk::Input* o = namespace_input = new fltk::Input(10, 21, 281, 20, "default is  \"fltk\", can be declared at the root or  imbricated into another\
  namespace");
       o->align(fltk::ALIGN_BOTTOM|fltk::ALIGN_LEFT|fltk::ALIGN_WRAP);
       o->when(fltk::WHEN_NEVER);
     }
-     {fltk::ReturnButton* o = namespace_panel_ok = new fltk::ReturnButton(120, 99, 80, 22, "OK");
+     {fltk::ReturnButton* o = namespace_panel_ok = new fltk::ReturnButton(120, 92, 80, 20, "OK");
       o->shortcut(0xff0d);
       ((fltk::Window*)(o->parent()))->hotspot(o);
     }
-     {fltk::Button* o = namespace_panel_cancel = new fltk::Button(210, 99, 80, 22, "Cancel");
+     {fltk::Button* o = namespace_panel_cancel = new fltk::Button(210, 92, 80, 20, "Cancel");
       o->shortcut(0xff1b);
     }
     o->end();
+    o->resizable(o);
   }
   return  w;
 }
@@ -388,37 +398,37 @@ fltk::Button *comment_load=(fltk::Button *)0;
 
 fltk::DoubleBufferWindow* make_comment_panel() {
   fltk::DoubleBufferWindow* w;
-   {fltk::DoubleBufferWindow* o = comment_panel = new fltk::DoubleBufferWindow(550, 320, "Comment Properties");
+   {fltk::DoubleBufferWindow* o = comment_panel = new fltk::DoubleBufferWindow(550, 318, "Comment Properties");
     w = o;
     o->type(241);
     o->labelsize(11);
     o->shortcut(0xff1b);
     o->callback((fltk::Callback*)cb_comment_panel);
     o->begin();
-     {fltk::MultiLineInput* o = comment_input = new fltk::MultiLineInput(110, 10, 430, 266, "input");
+     {fltk::MultiLineInput* o = comment_input = new fltk::MultiLineInput(110, 10, 430, 265, "input");
       o->type(4);
       o->align(fltk::ALIGN_BOTTOM|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
       o->when(fltk::WHEN_ENTER_KEY_CHANGED|fltk::WHEN_RELEASE);
     }
-     {fltk::Group* o = new fltk::Group(0, -1, 550, 320);
+     {fltk::Group* o = new fltk::Group(0, -1, 550, 318);
       o->labelsize(11);
       o->begin();
-       {fltk::ReturnButton* o = comment_panel_ok = new fltk::ReturnButton(371, 286, 80, 23, "OK");
+       {fltk::ReturnButton* o = comment_panel_ok = new fltk::ReturnButton(371, 286, 80, 21, "OK");
         o->shortcut(0xff0d);
         ((fltk::Window*)(o->parent()->parent()))->hotspot(o);
       }
-       {fltk::Button* o = comment_panel_cancel = new fltk::Button(460, 286, 79, 23, "Cancel");
+       {fltk::Button* o = comment_panel_cancel = new fltk::Button(460, 286, 79, 21, "Cancel");
         o->shortcut(0xff1b);
         o->callback((fltk::Callback*)cb_comment_panel_cancel);
       }
-       {fltk::InvisibleBox* o = new fltk::InvisibleBox(110, 285, 244, 23);
+       {fltk::InvisibleBox* o = new fltk::InvisibleBox(110, 285, 244, 21);
         o->labelsize(11);
         fltk::Group::current()->resizable(o);
       }
       o->end();
     }
-     {fltk::Group* o = new fltk::Group(7, 10, 103, 293);
+     {fltk::Group* o = new fltk::Group(7, 10, 103, 291);
       o->set_vertical();
       o->labelsize(11);
       o->begin();
@@ -439,7 +449,7 @@ fltk::DoubleBufferWindow* make_comment_panel() {
        {fltk::Button* o = comment_load = new fltk::Button(0, 100, 90, 20, "Import...");
         o->labelsize(11);
       }
-       {fltk::InvisibleBox* o = new fltk::InvisibleBox(0, 132, 93, 133);
+       {fltk::InvisibleBox* o = new fltk::InvisibleBox(0, 132, 93, 131);
         o->set_vertical();
         o->labelsize(11);
         fltk::Group::current()->resizable(o);
@@ -468,21 +478,21 @@ fltk::LightButton *sv_autoposition=(fltk::LightButton *)0;
 
 fltk::DoubleBufferWindow* make_sourceview() {
   fltk::DoubleBufferWindow* w;
-   {fltk::DoubleBufferWindow* o = sourceview_panel = new fltk::DoubleBufferWindow(520, 490, "Code View");
+   {fltk::DoubleBufferWindow* o = sourceview_panel = new fltk::DoubleBufferWindow(520, 483, "Code View");
     w = o;
     o->type(241);
     o->shortcut(0xff1b);
     o->callback((fltk::Callback*)toggle_sourceview_cb);
     o->begin();
-     {fltk::TabGroup* o = sv_tab = new fltk::TabGroup(10, 10, 500, 440);
+     {fltk::TabGroup* o = sv_tab = new fltk::TabGroup(10, 10, 500, 433);
       o->selection_color((fltk::Color)4);
       o->labelcolor((fltk::Color)7);
       o->callback((fltk::Callback*)update_sourceview_position_cb);
       o->begin();
-       {fltk::Group* o = new fltk::Group(0, 25, 500, 415, "Source");
+       {fltk::Group* o = new fltk::Group(0, 25, 500, 408, "Source");
         o->hide();
         o->begin();
-         {CodeViewer* o = sv_source = new CodeViewer(10, 15, 480, 390);
+         {CodeViewer* o = sv_source = new CodeViewer(10, 15, 480, 383);
           o->textfont(fltk::COURIER);
           o->textsize(11);
           fltk::Group::current()->resizable(o);
@@ -490,9 +500,9 @@ fltk::DoubleBufferWindow* make_sourceview() {
         o->end();
         fltk::Group::current()->resizable(o);
       }
-       {fltk::Group* o = new fltk::Group(0, 25, 500, 415, "Header");
+       {fltk::Group* o = new fltk::Group(0, 25, 500, 408, "Header");
         o->begin();
-         {CodeViewer* o = sv_header = new CodeViewer(10, 15, 480, 390);
+         {CodeViewer* o = sv_header = new CodeViewer(10, 15, 480, 383);
           o->textfont(fltk::COURIER);
           o->textsize(11);
           fltk::Group::current()->resizable(o);
@@ -502,7 +512,7 @@ fltk::DoubleBufferWindow* make_sourceview() {
       o->end();
       fltk::Group::current()->resizable(o);
     }
-     {fltk::Group* o = new fltk::Group(10, 460, 500, 20);
+     {fltk::Group* o = new fltk::Group(10, 453, 500, 20);
       o->begin();
        {fltk::Button* o = new fltk::Button(0, 0, 61, 20, "Refresh");
         o->labelsize(11);

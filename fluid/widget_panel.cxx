@@ -441,6 +441,7 @@ fltk::Window* make_widget_panel() {
        {fltk::Group* o = new fltk::Group(0, 20, 380, 320, "GUI");
         o->color((fltk::Color)0x14aef700);
         o->callback((fltk::Callback*)propagate_group);
+        o->hide();
         o->begin();
          {fltk::Group* o = gInput = new fltk::Group(80, 9, 290, 44);
           o->callback((fltk::Callback*)propagate_group);
@@ -830,7 +831,6 @@ unchanged.");
        {fltk::Group* o = new fltk::Group(0, 20, 380, 320, "C++");
         o->color((fltk::Color)0x93d49c00);
         o->callback((fltk::Callback*)propagate_group);
-        o->hide();
         o->begin();
          {fltk::Input* o = new fltk::Input(80, 9, 230, 22, "Name");
           o->callback((fltk::Callback*)name_cb);
@@ -843,12 +843,16 @@ unchanged.");
         }
          {fltk::MultiLineInput* o = extra_code_input = new fltk::MultiLineInput(80, 37, 285, 99, "Extra Code");
           o->type(4);
+          o->textfont(fltk::COURIER);
+          o->textsize(11);
           o->callback((fltk::Callback*)extra_code_input_cb, (void*)(0));
           o->tooltip("Extra code to be exectuted after the widget is created. The variable \"o\" po\
 ints at the widget.");
         }
          {fltk::MultiLineInput* o = new fltk::MultiLineInput(80, 143, 285, 99, "Callback");
           o->type(4);
+          o->textfont(fltk::COURIER);
+          o->textsize(11);
           o->callback((fltk::Callback*)callback_cb);
           o->tooltip("The name of the callback function, or code body of the callback function");
         }

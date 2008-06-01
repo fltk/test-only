@@ -21,6 +21,8 @@ fltk::Window* make_function_panel();
 extern fltk::Window* code_panel;
 #include "CodeEditor.h"
 extern CodeEditor* code_input;
+#include <fltk/Group.h>
+#include <fltk/InvisibleBox.h>
 extern fltk::ReturnButton* code_panel_ok;
 extern fltk::Button* code_panel_cancel;
 fltk::Window* make_code_panel();
@@ -58,10 +60,8 @@ fltk::Window* make_namespace_panel();
 extern fltk::DoubleBufferWindow* comment_panel;
 #include <fltk/MultiLineInput.h>
 extern fltk::MultiLineInput* comment_input;
-#include <fltk/Group.h>
 extern fltk::ReturnButton* comment_panel_ok;
 extern fltk::Button* comment_panel_cancel;
-#include <fltk/InvisibleBox.h>
 #include <fltk/LightButton.h>
 extern fltk::LightButton* comment_in_source;
 extern fltk::LightButton* comment_in_header;

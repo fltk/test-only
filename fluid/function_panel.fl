@@ -10,7 +10,7 @@ Function {make_function_panel()} {open
 } {
   {fltk::Window} function_panel {
     label {function/method}
-    xywh {488 153 400 208} modal visible
+    xywh {488 153 400 208} resizable modal visible
   } {
     {fltk::CheckButton} f_public_button {
       label public
@@ -98,21 +98,28 @@ Function {make_code_panel()} {open
 } {
   {fltk::Window} code_panel {
     label code
-    callback {o->resizable(code_input);} open
-    xywh {421 214 290 175} resizable modal visible
+    callback {o->resizable(code_input);}
+    xywh {599 205 290 175} resizable modal visible
   } {
     {fltk::Input} code_input {
       xywh {6 5 280 138} type Multiline align 0 when NEVER resizable
       extra_code {\#include "CodeEditor.h"}
       class CodeEditor
     }
-    {fltk::ReturnButton} code_panel_ok {
-      label OK
-      xywh {115 148 80 22} hotspot
-    }
-    {fltk::Button} code_panel_cancel {
-      label Cancel
-      xywh {205 148 80 22} shortcut 0xff1b
+    {fltk::Group} {} {open
+      xywh {6 148 279 22}
+    } {
+      {fltk::InvisibleBox} {} {
+        xywh {0 0 99 22} resizable
+      }
+      {fltk::ReturnButton} code_panel_ok {
+        label OK
+        xywh {109 0 80 22} hotspot
+      }
+      {fltk::Button} code_panel_cancel {
+        label Cancel
+        xywh {199 0 80 22} shortcut 0xff1b
+      }
     }
   }
 } 
@@ -120,8 +127,8 @@ Function {make_code_panel()} {open
 Function {make_codeblock_panel()} {open
 } {
   {fltk::Window} codeblock_panel {
-    label codeblock
-    xywh {539 536 290 131} modal visible
+    label codeblock open
+    xywh {539 536 290 131} resizable modal visible
   } {
     {fltk::Input} code_before_input {
       label {Conditional code block}
@@ -228,19 +235,19 @@ Function {make_namespace_panel()} {open
 } {
   {fltk::Window} namespace_panel {
     label namespace open
-    xywh {688 486 300 130} visible
+    xywh {688 486 300 120} resizable visible
   } {
     {fltk::Input} namespace_input {
       label {default is  "fltk", can be declared at the root or  imbricated into another namespace}
-      xywh {10 22 281 22} align 134 when NEVER
+      xywh {10 21 281 20} align 134 when NEVER
     }
     {fltk::ReturnButton} namespace_panel_ok {
       label OK
-      xywh {120 99 80 22} hotspot
+      xywh {120 92 80 20} hotspot
     }
     {fltk::Button} namespace_panel_cancel {
       label Cancel
-      xywh {210 99 80 22} shortcut 0xff1b
+      xywh {210 92 80 20} shortcut 0xff1b
     }
   }
 } 
@@ -250,32 +257,32 @@ Function {make_comment_panel()} {open
   {fltk::Window} comment_panel {
     label {Comment Properties}
     callback {o->hide();} open
-    xywh {409 235 550 320} type Double resizable labelsize 11
+    xywh {409 235 550 318} type Double resizable labelsize 11
     extra_code {o->size_range(320, 180);} modal visible
   } {
     {fltk::Input} comment_input {
       label input
-      xywh {110 10 430 266} type Multiline align 6 when NEVER
+      xywh {110 10 430 265} type Multiline align 6 when NEVER
       extra_code {o->when(fltk::WHEN_ENTER_KEY_CHANGED|fltk::WHEN_RELEASE);}
     }
     {fltk::Group} {} {open
-      xywh {0 -1 550 320} labelsize 11
+      xywh {0 -1 550 318} labelsize 11
     } {
       {fltk::ReturnButton} comment_panel_ok {
         label OK
-        xywh {371 286 80 23} hotspot
+        xywh {371 286 80 21} hotspot
       }
       {fltk::Button} comment_panel_cancel {
         label Cancel
         callback {comment_panel->hide();}
-        xywh {460 286 79 23} shortcut 0xff1b
+        xywh {460 286 79 21} shortcut 0xff1b
       }
       {fltk::InvisibleBox} {} {
-        xywh {110 285 244 23} resizable labelsize 11
+        xywh {110 285 244 21} resizable labelsize 11
       }
     }
     {fltk::Group} {} {open
-      xywh {7 10 103 293} resizable labelsize 11
+      xywh {7 10 103 291} resizable labelsize 11
     } {
       {fltk::LightButton} comment_in_source {
         label {In Source}
@@ -296,7 +303,7 @@ Function {make_comment_panel()} {open
         xywh {0 100 90 20} labelsize 11
       }
       {fltk::InvisibleBox} {} {
-        xywh {0 132 93 133} resizable labelsize 11
+        xywh {0 132 93 131} resizable labelsize 11
       }
     }
   }
@@ -307,33 +314,33 @@ Function {make_sourceview()} {open
   {fltk::Window} sourceview_panel {
     label {Code View}
     callback toggle_sourceview_cb open
-    xywh {366 125 520 490} type Double resizable visible
+    xywh {804 133 520 483} type Double resizable visible
   } {
     {fltk::TabGroup} sv_tab {
       callback update_sourceview_position_cb open
-      xywh {10 10 500 440} resizable selection_color 4 labelcolor 7
+      xywh {10 10 500 433} resizable selection_color 4 labelcolor 7
     } {
       {fltk::Group} {} {
         label Source
-        xywh {0 25 500 415} hide resizable
+        xywh {0 25 500 408} hide resizable
       } {
         {fltk::TextEditor} sv_source {
-          xywh {10 15 480 390} resizable textfont 4 textsize 11
+          xywh {10 15 480 383} resizable textfont 4 textsize 11
           class CodeViewer
         }
       }
       {fltk::Group} {} {
         label Header open
-        xywh {0 25 500 415}
+        xywh {0 25 500 408}
       } {
-        {fltk::TextEditor} sv_header {
-          xywh {10 15 480 390} resizable textfont 4 textsize 11
+        {fltk::TextEditor} sv_header {selected
+          xywh {10 15 480 383} resizable textfont 4 textsize 11
           class CodeViewer
         }
       }
     }
     {fltk::Group} {} {open
-      xywh {10 460 500 20}
+      xywh {10 453 500 20}
     } {
       {fltk::Button} {} {
         label Refresh
@@ -354,7 +361,7 @@ Function {make_sourceview()} {open
         callback toggle_sourceview_b_cb
         xywh {450 0 50 20} labelsize 11
       }
-      {fltk::InvisibleBox} {} {selected
+      {fltk::InvisibleBox} {} {
         xywh {255 0 190 20} resizable
       }
     }

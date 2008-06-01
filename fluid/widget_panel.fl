@@ -20,7 +20,7 @@ decl {\#include "undo.h"} {}
 Function {make_widgetbin()} {} {
   {fltk::Window} widgetbin_panel {
     label {Widget Bin} open
-    xywh {499 41 520 85} resizable non_modal visible
+    xywh {499 58 520 85} resizable non_modal visible
   } {
     {fltk::Group} {} {open
       xywh {3 3 79 79} box THIN_DOWN_BOX
@@ -428,7 +428,7 @@ Function {type_make_cb(fltk::Widget*w,void*d)} {return_type void
 Function {make_widget_panel()} {open
 } {
   {fltk::Window} {} {open
-    xywh {72 313 380 380} resizable hotspot visible
+    xywh {72 313 380 380} hide resizable hotspot
   } {
     {fltk::TabGroup} panel_tabs {
       callback propagate_tabs open
@@ -437,7 +437,7 @@ Function {make_widget_panel()} {open
       {fltk::Group} {} {
         label GUI
         callback propagate_group open
-        xywh {0 20 380 320} color 0x14aef700
+        xywh {0 20 380 320} hide color 0x14aef700
       } {
         {fltk::Group} gInput {
           callback propagate_group open
@@ -534,7 +534,7 @@ Function {make_widget_panel()} {open
         }
         {fltk::Button} image_button {
           user_data 1 user_data_type {void*}
-          callback image_cb selected
+          callback image_cb
           tooltip {Select an image to label the widget}
           xywh {80 79 290 22} align 116 color 7
         }
@@ -823,7 +823,7 @@ To get out of shortcut-setting mode:
       {fltk::Group} {} {
         label {C++}
         callback propagate_group open
-        xywh {0 20 380 320} hide resizable color 0x93d49c00
+        xywh {0 20 380 320} resizable color 0x93d49c00
       } {
         {fltk::Input} {} {
           label Name
@@ -842,13 +842,13 @@ To get out of shortcut-setting mode:
           user_data 0
           callback extra_code_input_cb
           tooltip {Extra code to be exectuted after the widget is created. The variable "o" points at the widget.}
-          xywh {80 37 285 99} type Multiline
+          xywh {80 37 285 99} type Multiline textfont 4 textsize 11
         }
         {fltk::Input} {} {
           label Callback
-          callback callback_cb
+          callback callback_cb selected
           tooltip {The name of the callback function, or code body of the callback function}
-          xywh {80 143 285 99} type Multiline
+          xywh {80 143 285 99} type Multiline textfont 4 textsize 11
         }
         {fltk::Widget} {} {
           label resizable
