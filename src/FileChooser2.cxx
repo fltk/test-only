@@ -645,7 +645,7 @@ void FileChooser::fileNameCB() {
         max_match == (int)strlen(fileList->child(first_line-1)->label())) {
       // This is the only possible match...
       fileList->deselect(0);
-      fileList->select(first_line);
+      fileList->select(first_line - 1);
       fileList->redraw();
     } else if (max_match > min_match && first_line) {
       // Add the matching portion...
