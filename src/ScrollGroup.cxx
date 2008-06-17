@@ -356,7 +356,7 @@ ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L,bool begin)
     scrollbar(nogroup(X)+W-SLIDER_WIDTH,Y,SLIDER_WIDTH,H-SLIDER_WIDTH),
     hscrollbar(X,Y+H-SLIDER_WIDTH,W-SLIDER_WIDTH,SLIDER_WIDTH)
 {
-  type(BOTH);
+  type(BOTH | GROUP_TYPE);
   xposition_ = 0;
   yposition_ = 0;
   scrolldx = scrolldy = layoutdx = layoutdy = 0;

@@ -29,14 +29,14 @@ struct PrimaryAssociation {
 };
 
 static PrimaryAssociation** associationTable = 0;
-static unsigned int associationTableSize = 0;
-static unsigned int associationTableEntries = 0;
+static size_t associationTableSize = 0;
+static size_t associationTableEntries = 0;
 
 static void growTable(void) {
 
   if (associationTableEntries >= associationTableSize) {
 
-    unsigned int newassociationTableSize;
+    size_t newassociationTableSize;
 
     // increase table size and rehash
     if (associationTableSize == 0)
@@ -48,9 +48,9 @@ static void growTable(void) {
     PrimaryAssociation** newTab = new PrimaryAssociation*[newassociationTableSize];
     memset(newTab, 0, newassociationTableSize*sizeof(PrimaryAssociation*));
 
-    for (unsigned int i = 0; i < associationTableSize; i++)
+    for (size_t i = 0; i < associationTableSize; i++)
       while (associationTable[i]) {
-        unsigned int hash = (int)associationTable[i]->wg % newassociationTableSize;
+        size_t const hash = (size_t)associationTable[i]->wg % newassociationTableSize;
         PrimaryAssociation* node = associationTable[i];
         associationTable[i] = node->next;
 
@@ -77,7 +77,7 @@ void Widget::add(const AssociationType& at, void* data) {
 
   growTable();
 
-  unsigned int hash = (int)this % associationTableSize;
+  const size_t hash = (size_t)this % associationTableSize;
 
   PrimaryAssociation* node = associationTable[hash];
 
@@ -115,7 +115,7 @@ void Widget::set(const AssociationType& at, void* data) {
 
   if (associationTableEntries > 0) {
 
-    unsigned int hash = (int)this % associationTableSize;
+    const size_t hash = (size_t)this % associationTableSize;
 
     PrimaryAssociation* node = associationTable[hash];
 
@@ -159,7 +159,7 @@ void* Widget::get(const AssociationType& at) const {
 
   if (associationTableSize == 0) return 0;
 
-  unsigned int hash = (int)this % associationTableSize;
+  const size_t hash = (size_t)this % associationTableSize;
 
   PrimaryAssociation* node = associationTable[hash];
 
@@ -188,7 +188,7 @@ void delete_associations_for(Widget* widget) {
 
   if (associationTableSize == 0) return;
 
-  unsigned int hash = (int)widget % associationTableSize;
+  const size_t hash = (size_t)widget % associationTableSize;
 
   PrimaryAssociation* node = associationTable[hash];
   PrimaryAssociation* prev = 0;
@@ -239,7 +239,7 @@ void* fltk::foreach(const AssociationType* at, const Widget* wg, AssociationFunc
 
     if (associationTableSize == 0) return 0;
 
-    unsigned int hash = (int)wg % associationTableSize;
+    const size_t hash = (size_t)wg % associationTableSize;
     PrimaryAssociation* node = associationTable[hash];
 
     while (node && node->wg != wg) node = node->next;
