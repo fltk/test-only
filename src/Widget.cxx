@@ -83,6 +83,8 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) :
   if (Group::current()) Group::current()->add(this);
 }
 
+extern void delete_associations_for(Widget* widget); // in WidgetAssociation.cxx
+
 /*! The destructor is virtual. The base class removes itself from the
   parent widget (if any), and destroys any label made with copy_label().
 */
@@ -91,6 +93,7 @@ Widget::~Widget() {
   remove_shortcuts();
   if (parent_) parent_->remove(this);
   throw_focus();
+  delete_associations_for(this);
   if (style_->dynamic()) {
     // When a widget is destroyed it can destroy unique styles:
     delete (Style*)style_; // cast away const

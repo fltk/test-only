@@ -7,7 +7,8 @@ Fl_Guess_Image.o: Fl_Guess_Image.cxx ../config.h ../fltk/draw.h \
   ../fltk/Flags.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Rectangle.h \
   ../fltk/PixelType.h ../fltk/SharedImage.h ../fltk/Image.h \
   ../fltk/Symbol.h ../fltk/xbmImage.h ../fltk/x.h ../fltk/x11.h \
-  ../fltk/draw.h
+  ../fltk/draw.h ../fltk/fltk_cairo.h ../fltk/FL_API.h \
+  ../fltk/fltk_cairo.h
 fl_jpeg.o: fl_jpeg.cxx ../config.h ../fltk/SharedImage.h ../fltk/Image.h \
   ../fltk/Symbol.h ../fltk/FL_API.h ../fltk/Color.h ../fltk/Flags.h \
   ../fltk/Rectangle.h ../fltk/PixelType.h

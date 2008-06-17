@@ -161,6 +161,7 @@ CPPFILES = \
 	ValueSlider.cxx \
 	Widget.cxx \
 	Widget_draw.cxx \
+	WidgetAssociation.cxx \
 	Window.cxx \
 	Window_fullscreen.cxx \
 	Window_hotspot.cxx \

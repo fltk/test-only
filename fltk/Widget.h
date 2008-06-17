@@ -31,6 +31,8 @@ class FL_API Widget;
 class FL_API Window;
 class FL_API Symbol;
 class FL_API Group;
+class FL_API AssociationType;
+class FL_API AssociationFunctor;
 struct Cursor;
 
 typedef void (Callback )(Widget*, void*);
@@ -252,6 +254,11 @@ public:
   void leading(float a)		;
   void scrollbar_align(unsigned char);
   void scrollbar_width(unsigned char);
+
+  void  add(const AssociationType&, void* data);
+  void  set(const AssociationType&, void* data);
+  void* get(const AssociationType&) const;
+  void* foreach(const AssociationType&, AssociationFunctor&) const;
 
 #ifdef FLTK_1_WIDGET  // back-compatability section:
 
