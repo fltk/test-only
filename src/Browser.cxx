@@ -1676,7 +1676,7 @@ RETURN:
 
 void Browser::column_click_cb_(Widget *ww, void *d) {
   Browser *w = (Browser*)(ww->parent());
-  w->selected_column_ = *(int*)&d;
+  w->selected_column_ = int(long(d));
   w->do_callback();
   w->selected_column_ = NO_COLUMN_SELECTED;
 }

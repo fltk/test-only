@@ -2,7 +2,7 @@
 	Copyright (C) 2002 Jason Bryan, Ohio Supercomputer Center, Ohio State University 
 */
 /* XPM */
-static char * book[] = {
+static const char * book[] = {
 "18 18 15 1",
 " 	c None",
 ".	c #840084",

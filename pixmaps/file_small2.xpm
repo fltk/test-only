@@ -1,5 +1,5 @@
 /* XPM */
-char * file_small2[] = {
+static const char * file_small2[] = {
 "15 18 5 1",
 " 	c None",
 ".	c #848484",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * recycle_xpm[] = {
+static const char * recycle_xpm[] = {
 "14 14 6 1",
 " 	c #FFFFFF",
 "X	c #000000",

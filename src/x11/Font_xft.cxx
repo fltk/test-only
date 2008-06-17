@@ -361,7 +361,7 @@ int fltk::list_fonts(fltk::Font**& arrayp) {
   // this does the Right Thing... but am not certain...
   FcPattern* fnt_pattern = FcPatternCreate ();
   // Now list all the families:
-  FcObjectSet* fnt_obj_set = FcObjectSetBuild (FC_FAMILY, 0);
+  FcObjectSet* fnt_obj_set = FcObjectSetBuild (FC_FAMILY, (void*)0);
   // This gives more info, but it is a pain to deal with:
   //FcObjectSet* fnt_obj_set = FcObjectSetBuild (FC_FAMILY, FC_WEIGHT, FC_SLANT, 0);
 
@@ -383,7 +383,7 @@ int fltk::list_fonts(fltk::Font**& arrayp) {
   for (int i = 0; i < num_fonts; i++) {
     FcPattern* p = fnt_set->fonts[i];
     const char* n = 0;
-    FcPatternGetString(p, FC_FAMILY, 0, (FcChar8**)(&n));
+    FcPatternGetString(p, FC_FAMILY, 0, (FcChar8**)(void*)(&n));
     if (!n /*|| !isalpha(n[0])*/) continue;
 //     for (int kk=1;;kk++) {
 //       const char* x = 0;
@@ -427,8 +427,8 @@ static int int_sort(const void *aa, const void *bb) {
 int fltk::Font::sizes(int*& sizep) {
   open_display();
   XftFontSet* fs = XftListFonts(xdisplay, xscreen,
-				XFT_FAMILY, XftTypeString, name_, 0,
-				XFT_PIXEL_SIZE, 0);
+				XFT_FAMILY, XftTypeString, name_, (void*)0,
+				XFT_PIXEL_SIZE, (void*)0);
   static int* array = 0;
   static int array_size = 0;
   if (fs->nfont >= array_size) {
@@ -462,8 +462,8 @@ int fltk::Font::encodings(const char**& arrayp) {
   static XftFontSet* fs;
   if (fs) XftFontSetDestroy(fs);
   fs = XftListFonts(xdisplay, xscreen,
-		    XFT_FAMILY, XftTypeString, name_, 0,
-		    XFT_ENCODING, 0);
+		    XFT_FAMILY, XftTypeString, name_, (void*)0,
+		    XFT_ENCODING, (void*)0);
   static const char** array = 0;
   static int array_size = 0;
   if (fs->nfont > array_size) {
@@ -473,7 +473,7 @@ int fltk::Font::encodings(const char**& arrayp) {
   int j = 0;
   for (int i = 0; i < fs->nfont; i++) {
     char* v;
-    if (XftPatternGetString(fs->fonts[i], XFT_ENCODING, 0, &v) == XftResultMatch) {
+    if (XftPatternGetString(fs->fonts[i], XFT_ENCODING, 0, (void*)&v) == XftResultMatch) {
       array[j++] = v;
     }
   }

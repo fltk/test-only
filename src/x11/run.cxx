@@ -607,7 +607,7 @@ void fltk::open_display(Display* d) {
 
 #define MAX_ATOMS 30
   Atom* atom_ptr[MAX_ATOMS];
-  char* names[MAX_ATOMS];
+  const char* names[MAX_ATOMS];
   int i = 0;
 #define atom(a,b) atom_ptr[i] = &a; names[i] = b; i++
   atom(	WM_DELETE_WINDOW	, "WM_DELETE_WINDOW");
@@ -638,7 +638,7 @@ void fltk::open_display(Display* d) {
   atom( UTF8_STRING		, "UTF8_STRING");
 #undef atom
   Atom atoms[MAX_ATOMS];
-  XInternAtoms(d, names, i, 0, atoms);
+  XInternAtoms(d, (char**)names, i, 0, atoms);
   for (; i--;) *atom_ptr[i] = atoms[i];
 
   xscreen = DefaultScreen(d);

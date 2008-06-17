@@ -1126,7 +1126,7 @@ FileChooser::value(const char *filename)
   // See if there is a directory in there...
   fltk::filename_absolute(pathname, sizeof(pathname), filename);
   char dir[1024]="";
-  if (pathname) strncpy(dir,pathname,sizeof(dir));
+  strlcpy(dir,pathname,sizeof(dir));
   if ((slash = strrchr(dir, '/')) != NULL) {
     // Yes, change the display to the directory... 
     if (!fltk::filename_isdir(dir)) *slash++ = '\0';

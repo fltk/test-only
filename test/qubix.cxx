@@ -87,7 +87,7 @@ void load_menu(MenuBar* menu) {
 
 // taken directly from NeXTSTEP Qubix
 
-char *remark=NULL;	/* message set by makemove */
+const char *remark=NULL;	/* message set by makemove */
 
 int board[65];			/* game field */
 bool playerblack;		/* which side I am on */

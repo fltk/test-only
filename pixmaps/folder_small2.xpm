@@ -2,7 +2,7 @@
 	Copyright (C) 2002 Jason Bryan, Ohio Supercomputer Center, Ohio State University 
 */
 /* XPM */
-char * folder_small2[] = {
+const char * folder_small2[] = {
 "20 16 44 1",
 " 	c None",
 ".	c #A68A5E",
