@@ -49,10 +49,8 @@ public:
     // not look too good. Draw the box colored in with the
     // selected color instead:
     if (!box->fills_rectangle()) {
-      Color saved = getbgcolor();
       if (drawflags()&STATE) setbgcolor(drawstyle()->selection_color());
       box->draw(R);
-      setbgcolor(saved);
       return;
     }
     // Otherwise draw the box with normal colors and then draw checkmark

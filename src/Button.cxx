@@ -231,6 +231,10 @@ void Button::draw(int glyph_width) const
     }
     this->draw_label(lr, box_flags);
     drawstyle(style,glyph_flags);
+    if (state() && style->selection_color_) {
+      setbgcolor(style->selection_color_);
+      setcolor(contrast(style->selection_textcolor(),style->selection_color_));
+    }
     this->glyph()->draw(gr);
     drawstyle(style,box_flags);
   } else {

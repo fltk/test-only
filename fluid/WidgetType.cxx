@@ -1220,7 +1220,7 @@ void line_cb(fltk::ValueInput* i, void* v) {
     i->value(((fltk::Valuator*)(current_widget->o))->linesize());
   } else {
     int n = int(i->value());
-    if (n > 0) for_all_selected_widgets() {
+    if (n >= 0) for_all_selected_widgets() {
       modflag = 1;
       WidgetType* q = (WidgetType*)o;
       if (q->is_valuator()) {
