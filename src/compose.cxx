@@ -27,9 +27,6 @@
 
 using namespace fltk;
 
-// Before searching anything the following conversions are made:
-// ';' -> ":"     "|" -> "/"    "=",'_' -> "-"
-
 // This table starts at character 0xA0 (non-breaking space)
 // The characters may be typed in either order after the compose key.
 // If the second character is a space then only the first character
@@ -37,24 +34,26 @@ using namespace fltk;
 // I changed these slightly from fltk 1.0 to match X compose
 // sequences in cases when my version did not use the same characters
 // as the X sequence. Comments show the original versions.
+// I then changed them back because the X ones were stupid and the
+// single-character ones much nicer.
 
 static const char compose_pairs[] = {
   "  "	// nbsp
   "! "	// inverted !
-  "c/"	// cent		 (was "% ")
-  "l-"	// pound	 (was "# ")
-  "xo"	// currency	 (was "$ ")
-  "y-"	// yen
-  "/ "	// broken bar
+  "$ "	// cent		 (was "% " and "c/")
+  "# "	// pound	 (was "L-")
+  "e "	// euro (actually unicode for currency, changed below)
+  "y "	// yen		 (was "y-")
+  "| "	// broken bar	 (was "/ ")
   "s "	// section	 (was "& ", X uses "so")
   ": "	// dieresis
   "c "	// copyright	 (X uses "co")
   "a "	// superscript a (X uses "a-")
   "<<"	// <<
-  "-,"	// not sign	 (was "~ ")
+  "~ "	// not sign	 (was "-,")
   "- "	// hyphen
   "r "	// registered	 (X uses "ro")
-  "--"	// macron	 (was "_ ", X uses "-^")
+  "_ "	// macron	 (was "--", X uses "-^")
   "0 "	// superscript 0 (degree, was "* ", X uses "0^")
   "+-"	// plusminus
   "2 "	// superscript 2 (X uses "2^")
@@ -126,7 +125,7 @@ static const char compose_pairs[] = {
   "o^"
   "o~"
   "o:"
-  "-:"	// divide
+  "/ "	// divide (was "-:")
   "o/"
   "u`"
   "u'"
@@ -329,8 +328,8 @@ bool fltk::compose(int& del) {
   del = 0;
   char ascii = e_text[0];
   if      (ascii == ';') ascii = ':';
-  else if (ascii == '|') ascii = '/';
-  else if (ascii == '_' || ascii == '=') ascii = '-';
+//   else if (ascii == '|') ascii = '/';
+//   else if (ascii == '_' || ascii == '=') ascii = '-';
 
   static int plen;
   static char textbuffer[10];
@@ -348,6 +347,12 @@ bool fltk::compose(int& del) {
 	// prefer the single-character versions:
 	if (p[1] == ' ') {
 	  int code = (p-compose_pairs)/2+0xA0;
+          if (code == 0xa4) {
+            code = 0x20ac; // turn currency into euro
+            e_text = "\xe2\x82\xac";
+            plen = e_length = 3;
+            return true;
+          }
 	  // convert code to utf8:
 	  e_text = textbuffer;
 	  textbuffer[0] = 0xc0 | code>>6;
@@ -404,7 +409,9 @@ bool fltk::compose(int& del) {
   // Alt+letters are reserved for shortcuts.  But alt+foreign letters
   // has to be allowed, because some key layouts require alt to be held
   // down in order to type them...
-  if ((e_state & (ALT|META)) && !(ascii & 128)) return false;
+  // SCROLLLOCK is set by AltGr key on Spanish (at least) keyboards, so
+  // don't interfere with the input method.
+  if ((e_state & (ALT|META|SCROLLLOCK)) && !(ascii & 128)) return false;
 
   // See if they type the compose prefix key:
   if (i == RightCtrlKey || i == 0xff20/* Multi-Key */) {
@@ -413,7 +420,9 @@ bool fltk::compose(int& del) {
   }
 
   // cancel compose mode for ctrl+c ctrl+home etc
-  compose_state = 0;
+  // but not for shift keys
+  if (i < LeftShiftKey || i > RightAltKey)
+    compose_state = 0;
 
   // Only insert non-control characters:
   if (e_length && (ascii & ~31 && ascii != 127)) {
