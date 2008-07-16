@@ -406,12 +406,16 @@ bool fltk::compose(int& del) {
   int i = e_keysym;
 #endif
 
+#if USE_X11
+  // AltGr key produces ALT and SCROLLLOCK, but must return true as the
+  // text should be inserted, not used as a menu shortcut:
+  if ((e_state & ALT) && (e_state & SCROLLLOCK));
+  else
+#endif
   // Alt+letters are reserved for shortcuts.  But alt+foreign letters
   // has to be allowed, because some key layouts require alt to be held
   // down in order to type them...
-  // SCROLLLOCK is set by AltGr key on Spanish (at least) keyboards, so
-  // don't interfere with the input method.
-  if ((e_state & (ALT|META|SCROLLLOCK)) && !(ascii & 128)) return false;
+  if ((e_state & (ALT|META)) && !(ascii & 128)) return false;
 
   // See if they type the compose prefix key:
   if (i == RightCtrlKey || i == 0xff20/* Multi-Key */) {
