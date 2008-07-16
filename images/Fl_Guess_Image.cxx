@@ -47,7 +47,7 @@ class UnknownImage {
 public:
   static bool test(const uchar*, unsigned =0) { return 1; };
   static fltk::SharedImage* get(const char*, const uchar* = 0) {
-    return (fltk::SharedImage*) &nosuch_bitmap;
+    return (fltk::SharedImage*)(void*)&nosuch_bitmap;
   };
 };
 
