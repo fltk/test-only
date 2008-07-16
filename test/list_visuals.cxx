@@ -128,7 +128,7 @@ void list_visuals() {
 			   overlayVisualsAtom, 0L, 10000L, False,
 			   overlayVisualsAtom, &actualType, &actualFormat,
 			   &sizeData, &bytesLeft,
-			   (unsigned char **) &overlayInfo))
+			   (unsigned char **)(void*)&overlayInfo))
       numoverlayinfo = int(sizeData/4);
   }
 
