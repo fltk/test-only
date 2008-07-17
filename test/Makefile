@@ -45,7 +45,7 @@ include ../makeinclude
 CPPFILES = \
 	CubeMain.cxx \
 	CubeView.cxx \
-        ansiwidget.cxx \
+	ansiwidget.cxx \
 	arc.cxx \
 	ask.cxx \
 	bitmap.cxx \
@@ -123,6 +123,7 @@ TARGETS = \
 	boxtype$(EXEEXT) \
 	browser$(EXEEXT) \
 	cairo$(EXEEXT) \
+	callbacks$(EXEEXT) \
 	checkers$(EXEEXT) \
 	clock$(EXEEXT) \
 	button$(EXEEXT) \
@@ -167,6 +168,7 @@ TARGETS = \
 	scroll$(EXEEXT) \
 	shape$(EXEEXT) \
 	sizes$(EXEEXT) \
+	subwindow$(EXEEXT) \
 	symbols$(EXEEXT) \
 	threads$(EXEEXT) \
 	tabs$(EXEEXT) \

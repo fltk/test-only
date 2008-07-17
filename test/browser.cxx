@@ -158,7 +158,7 @@ void button_cb(Widget* b, void *) {
   printf("Button %s pushed\n", b->label());
 }
 
-const char *labels[] = {"Column 1", "Column 2", "Column 3", 0};
+const char *labels[] = {"Column 1", "Column 2\nwith new\nlines", "Column 3", 0};
 int widths[]   = {100, 70, 70, 0};
 
 Browser *browser=0;

@@ -44,7 +44,8 @@ int main(int argc, char ** argv) {
   intinput.value(0.0);
   Button copy_button(110, 10, 100, 20, "copy to slider");
   Slider slider(10,35,300,20);
-  slider.type(Slider::HORIZONTAL|Slider::TICK_ABOVE);
+  slider.type(Slider::TICK_ABOVE);
+  slider.clear_flag(LAYOUT_VERTICAL);
   slider.callback(slider_callback);
   copy_button.callback(copy_callback, &slider);
   slider.range(-10,10);

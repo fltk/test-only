@@ -860,8 +860,10 @@ void Browser::layout() {
 
   int headerh = 0;
   if (header_) {
-    header_[0]->layout();
-    headerh = header_[0]->h();
+    for (int i=0; i<nHeader; ++i) {
+      if (headerh < header_[i]->h())
+        headerh = header_[i]->h();
+    }
     interior.move_y(headerh);
   }
 
@@ -1743,8 +1745,11 @@ public:
   } // handle() method
 
   void layout() {
-    setfont(labelfont(),labelsize());
-    h(int(getascent()+getdescent()+leading()+2));
+    if (h() == 0) {
+      int wide, high;
+      measure_label(wide, high);
+      h(high + leading() + 3);
+    }
     Button::layout();
   }
 }; // BButton class
