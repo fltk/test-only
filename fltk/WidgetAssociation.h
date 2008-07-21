@@ -22,7 +22,6 @@ class FL_API AssociationFunctor {
    * loop is aborted and the data pointer for the current association is returned
    */
   virtual bool handle(const AssociationType&, const Widget*, void* data) = 0;
-  virtual ~AssociationFunctor();
 };
 
 /*! \relates AssociationType
@@ -36,7 +35,7 @@ class FL_API AssociationFunctor {
  * The function either returns the first associated data for which the functor returns true, or NULL.
  * See also Widget::foreach() and AssociationType::foreach().
  */
-void* FL_API foreach(const AssociationType*, const Widget*, AssociationFunctor&);
+FL_API void*  foreach(const AssociationType*, const Widget*, AssociationFunctor&);
 
 /*! \brief Base class for the association type.
  *

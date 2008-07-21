@@ -4206,6 +4206,10 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\src\WidgetAssociation.cxx"
+			>
+		</File>
+		<File
 			RelativePath="..\..\src\Window.cxx"
 			>
 			<FileConfiguration
