@@ -1873,6 +1873,14 @@ void Window::borders( fltk::Rectangle *r ) const
 ////////////////////////////////////////////////////////////////
 
 void Window::layout() {
+  // If only the xy position changed, then win32 did everything for us, so don't
+  // call the Group layout.
+  if (layout_damage() & ~LAYOUT_XY) Group::layout();
+  // Fix the window:
+  system_layout();
+}
+
+void Window::system_layout() {
   UINT flags;
   if (layout_damage() & LAYOUT_WH) {
     free_backbuffer();
@@ -1882,10 +1890,6 @@ void Window::layout() {
   } else {
     flags = 0;
   }
-  if (layout_damage() & ~LAYOUT_XY)
-    Group::layout();
-  else
-    layout_damage(0);
   if (i && flags) {
     fltk::Rectangle r(*this);
     borders(&r);

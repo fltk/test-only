@@ -1386,12 +1386,14 @@ void Window::borders( fltk::Rectangle *r ) const {
   }
 }
 
-/*
- * Resizes the actual system window in response to a resize() call from
- * the program.
- */
-//+++ verify port to FLTK2
 void Window::layout() {
+  // Unlike X11 and Win32, we do need to propagate xy changes to child windows
+  /*if (layout_damage() & ~LAYOUT_XY)*/ Group::layout();
+  // Fix the window:
+  system_layout();
+}
+
+void Window::system_layout() {
   if (parent()) {
     // child windows are done entirely by us
     if (i) for (Widget* p = parent(); ; p = p->parent())
@@ -1411,7 +1413,6 @@ void Window::layout() {
     SetWindowBounds(i->xid, kWindowContentRgn, &rect);
   }
   if (i) i->need_new_subRegion = true;
-  Group::layout();
 }
 
 ////////////////////////////////////////////////////////////////

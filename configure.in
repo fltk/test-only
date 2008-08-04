@@ -289,6 +289,9 @@ if test $ac_cv_sizeof_int -eq 4; then
 else
     if test $ac_cv_sizeof_long -eq 4; then
         AC_DEFINE(U32,unsigned long)
+    else
+        dnl fall back
+        AC_DEFINE(U32,unsigned long)
     fi
 fi
 if test $ac_cv_sizeof_int -eq 8; then

@@ -2692,11 +2692,20 @@ void Window::borders( fltk::Rectangle *r ) const {
   }
 }
 
-/**
- * Resizes the actual system window in response to a resize() call from
- * the program.
- */
 void Window::layout() {
+  // If only the xy position changed, then X does everything for us, so don't
+  // call the Group layout.
+  if (layout_damage() & ~LAYOUT_XY) Group::layout();
+  // Fix the window:
+  system_layout();
+}
+
+/**
+ * Resizes the actual system window to match the current size of the fltk
+ * widget. You should call this in your layout() method if xywh have changed.
+ * The layout_damage() flags must be on or it won't work.
+ */
+void Window::system_layout() {
   if (i && (layout_damage()&LAYOUT_XYWH)) {
     // Fix the size/position we recorded for the X window if it is not
     // the same as the fltk window. If we received CONFIGURE_NOTIFY
@@ -2740,9 +2749,6 @@ void Window::layout() {
 	free_backbuffer();
     }
   }
-  // don't redraw if only the xy position changed:
-  if (layout_damage() & ~LAYOUT_XY) Group::layout();
-  else layout_damage(0);
 }
 
 //

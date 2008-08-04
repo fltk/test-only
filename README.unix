@@ -53,3 +53,5 @@ MESA
     libraries).
 
 
+For crosscompiling see also README.mingw32_cross
+

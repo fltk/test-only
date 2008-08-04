@@ -35,6 +35,8 @@ const int USEDEFAULT = ((int)0x80000000); // same as Win32 value
 class CreatedWindow;
 class Monitor;
 
+// implementations of methods of Window are in different files in src/
+
 class FL_API Window : public Group {
 public:
 
@@ -88,9 +90,12 @@ public:
   bool exec(const Window* parent = 0, bool grab = false);
   void make_exec_return(bool);
   void show_inside(const Window* parent);
+  virtual void destroy();
+
   void iconize();
   bool iconic() const;
-  virtual void destroy();
+
+  void maximize();
 
   void fullscreen();
   void fullscreen(const Monitor&);
@@ -100,6 +105,7 @@ public:
 
   virtual int handle(int);
   virtual void layout();
+  void system_layout();
   virtual void flush();
   virtual void draw();
 

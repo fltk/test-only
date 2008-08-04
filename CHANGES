@@ -2555,3 +2555,21 @@ and made it FL_IMAGES_API.
 fl_color_win32.cxx loads SetDCPenColor and SetDCBrushColor functions dynamically.
 Uses alternative (old) method, if those functions cannot be loaded (older windows)
 from gdi32.dll
+
+////////////////////////////////////////////////////////////////
+* Added Window::Maximize
+  so far for X11 and Win32
+  TODO: MAC OS X version, and testing
+	And added example of maximize() as part of teset/fullscreen.cxx
+
+* Probably fixed bug: gifImage.cxx:105: error: â€˜U32â€™ was not declared
+  by adding a work around to configure.in
+  in crosscompilation with mingw (linux 64 bit to windows)
+  And documented crosscompilation (TODO - finish it)
+
+* Added Window::system_layout() so that it is possible to override the
+  default Window::layout() method yet still do the operating system
+  stuff needed to resize the window. Only tested on X11.
+
+
+

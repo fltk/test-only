@@ -196,6 +196,11 @@ void fullscreen_cb(fltk::Widget *o, void *p) {
   }
 }
 
+void maximize_cb(fltk::Widget *o, void *p) {
+  fltk::Window *w = (fltk::Window *)p;
+  w->maximize();
+}
+
 void exit_cb(fltk::Widget *, void *) {
   // Turn fullscreen off when exit
   if(fullscreen)
@@ -203,7 +208,7 @@ void exit_cb(fltk::Widget *, void *) {
   exit(0);
 }
 
-#define NUMB 4
+#define NUMB 5
 
 int twowindow = 0;
 int initfull = 0;
@@ -266,6 +271,10 @@ int main(int argc, char **argv) {
 
   fltk::LightButton b3(50,y,window.w()-60,30,"FullScreen");
   b3.callback(fullscreen_cb,w);
+  y+=30;
+
+  fltk::Button btnMaximize(50,y,window.w()-60,30,"Maximize me!");
+  btnMaximize.callback(maximize_cb,&window);
   y+=30;
 
   fltk::Button eb(50,y,window.w()-60,30,"Exit");
