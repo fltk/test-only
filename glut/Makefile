@@ -26,13 +26,11 @@
 CPPFILES = \
 	glut_compatability.cxx \
 	glut_font.cxx
-	
 
 DEMOS = \
 	glpuzzle$(EXEEXT) \
 	fractals$(EXEEXT)
-	
-	
+
 ################################################################
 
 include ../makeinclude
@@ -89,6 +87,8 @@ depend:
 # Include automatically generated dependencies...
 #
 
+makedepend:
+	touch makedepend
 include makedepend
 
 #

@@ -92,6 +92,8 @@ depend:
 # Include automatically generated dependencies...
 #
 
+makedepend:
+	touch makedepend
 include makedepend
 
 

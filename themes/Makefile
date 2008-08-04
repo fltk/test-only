@@ -87,8 +87,7 @@ none.theme : $(NONE_OBJ)
 	$(THEMECOMMAND) $@ $(NONE_OBJ) $(DSOLIBS) $(THEMELIBS)
 
 clean :
-	-@ rm -f *.o $(LIBRARY)$(LIBEXT) $(THEMES) core *~ makedepend
-	@touch makedepend
+	-@ rm -f *.o $(LIBRARY)$(LIBEXT) $(THEMES) core *~
 
 install : $(INSTALLTARGETS)
 
@@ -108,6 +107,8 @@ depend:
 	cat foo >> makedepend
 	rm foo
 
+makedepend:
+	touch makedepend
 include makedepend
 
 #

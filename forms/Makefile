@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.20 2002/12/15 10:42:51 spitzak Exp $"
+# "$Id$"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -92,6 +92,8 @@ depend:	$(CPPFILES)
 	$(MAKEDEPEND) -I.. $(CPPFILES) > makedepend
 
 # Automatically generated dependencies...
+makedepend:
+	touch makedepend
 include makedepend
 
 ################################################################
@@ -119,5 +121,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.20 2002/12/15 10:42:51 spitzak Exp $".
+# End of "$Id$".
 #
