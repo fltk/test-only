@@ -93,7 +93,7 @@ using namespace fltk;
 #define USE_IMM 1
 
 #if USE_IMM
-# if __MINGW32__
+# if defined(__MINGW32__) || defined(__CYGWIN__)
 #   include <imm.h>
 # endif
 #endif
