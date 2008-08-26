@@ -72,8 +72,8 @@ using namespace fltk;
 #if USE_CAIRO
 namespace fltk {
     cairo_surface_t * cairo_create_surface(fltk::Window* w) {
-      return cairo_quartz_surface_create ((CGContext*) w->backbuffer(), 
-					  w->w(),w->h(), true);
+      return cairo_quartz_surface_create_for_cg_context((CGContext*) w->backbuffer(), 
+                                                        w->w(), w->h());
     }
 }
 #endif
@@ -1720,7 +1720,7 @@ void fltk::fill_quartz_context() {
     cairo_destroy(cc);
   }
   cairo_surface_t* s = 
-    cairo_quartz_surface_create(quartz_gc,hgt,wgt, true);
+    cairo_quartz_surface_create_for_cg_context(quartz_gc, hgt, wgt);
   cc = cairo_create(s);
   cairo_surface_destroy(s);
 #endif
