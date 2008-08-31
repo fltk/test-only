@@ -48,7 +48,7 @@ copyright and permission notice are preserved.
 \section fltk namespace fltk
 
 All classes and functions for running the user interface are in the
-\link fltk:: fltk:: namespace \endlink . Some utility functions such as in \link string.h
+\link fltk fltk:: namespace \endlink . Some utility functions such as in \link string.h
 <fltk/string.h> \endlink are \e not in this namespace.
 
 Put <code>using namespace fltk;</code> after the include files, and you
