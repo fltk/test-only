@@ -47,24 +47,21 @@ copyright and permission notice are preserved.
 
 \section fltk namespace fltk
 
-All classes and interface functions for fltk are in the fltk::
-namespace. Some utility functions such as in \link string.h
+All classes and functions for running the user interface are in the
+\link fltk:: fltk:: namespace \endlink . Some utility functions such as in \link string.h
 <fltk/string.h> \endlink are \e not in this namespace.
 
-Put "using namespace fltk;" after the include files, and you
-will not need to put the "fltk::" in front of everything. All
-this documentation and sample code has been written as though this
-using statement is in effect (partly because of limitations in how
-Doxygen works).
+Put <code>using namespace fltk;</code> after the include files, and you
+will not need to put the "fltk::" in front of everything.
 
 Fltk1.1 emulation is mostly achieved by aliasing the old class name
 "Fl" to this namespace so that the static methods in Fltk1.1 will
-work, and by typedefs from the new fltk:\:Widget class names to the
-older Widget class names.
+work, and by typedefs from the new fltk::Widget class names to the
+older Fl_Widget class names.
 
 \section copyrights Copyrights and Trademarks
 
-FLTK is &copy;1998-2007 by Bill Spitzak and others.
+FLTK is &copy;1998-2008 by Bill Spitzak and others.
 
 UNIX is a registered trademark of the X Open Group, Inc.  Microsoft
 and Windows are registered trademarks of Microsoft Corporation. OpenGL
