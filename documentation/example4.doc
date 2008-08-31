@@ -30,7 +30,7 @@ Let's look at the pieces of this program:
 \skip public
 \until sides
 
-This is defining a new subclass of the fltk Widget class called
+This is defining a new subclass of the fltk::Widget class called
 ShapeWidget. This widget's only purpose is to draw an n-sided polygon
 and to calculate and show some interesting information about it.
 
