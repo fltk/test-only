@@ -28,6 +28,8 @@
 #include <fltk/Monitor.h>
 #include <fltk/events.h>
 #include <fltk/x.h>
+#include <string.h>
+
 using namespace fltk;
 
 static void innards(Window*, bool fullscreen, int X, int Y, int W, int H);

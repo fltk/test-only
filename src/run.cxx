@@ -19,6 +19,8 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
+/** \namespace fltk */
+
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
