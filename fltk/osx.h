@@ -52,9 +52,11 @@ the X version of these is described here.
 # include "draw.h"
 
 ////////////////////////////////////////////////////////////////
-// Emulate X somewhat:
 
 namespace fltk {
+
+/// \name fltk/osx.h
+//@{
 
 ////////////////////////////////////////////////////////////////
 // constant information about the display:
@@ -128,6 +130,8 @@ extern CursPtr current_cursor;
 extern const Widget* cursor_for;
 
 # endif //Fl_Window_H
+
+//@}
 
 }
 

@@ -37,7 +37,8 @@
 
 namespace fltk {
 
-/*! \file */
+/// \name fltk/Flags.h
+//@{
 
 /*! Type returned by fltk::Widget::flags() and passed to fltk::Box
   and many other drawing functions. */
@@ -99,6 +100,8 @@ enum {
   RESIZE_FILL		  = 0x00800000, //!< resize img to fill the widget
   OPENED		  = STATE	//!< opened browser hierarchy parent
 };
+
+//@}
 
 }
 

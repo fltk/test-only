@@ -114,6 +114,9 @@ extern pfGetTextMetricsW     __GetTextMetricsW;
 
 namespace fltk {
 
+/// \name fltk/win32.h
+//@{
+
 ////////////////////////////////////////////////////////////////
 // constant information about the display:
 
@@ -180,6 +183,8 @@ Window* find(HWND xid);
 extern FL_API HCURSOR default_cursor;
 
 #endif // Fl_Window_H
+
+//@}
 
 }
 

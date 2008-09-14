@@ -9,6 +9,9 @@
 
 namespace fltk {
 
+/// \name fltk/Threads.h
+//@{
+
 /** Hides whatever the system uses to identify a thread. Used so
   the "toy" interface is portable. */
 typedef pthread_t Thread;
@@ -195,6 +198,8 @@ class FL_API Guard {
   Guard(Mutex* m) : lock(*m) {lock.lock();}
   ~Guard() {lock.unlock();}
 };
+
+//@}
 
 }
 

@@ -18,12 +18,14 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-/*! \file */
 
 #ifndef fltk_PixelType_h
 #define fltk_PixelType_h
 
 namespace fltk {
+
+/// \name fltk/PixelType.h
+//@{
 
 /**
   Enumeration describing how colors are stored in an array of bytes
@@ -57,6 +59,8 @@ enum PixelType {
    Turn a PixelType into the number of bytes needed to hold a pixel.
 */
 inline int depth(PixelType t) {return (t<2 ? 1 : t==3 ? 3 : 4);}
+
+//@}
 
 }
 

@@ -29,6 +29,9 @@
 
 namespace fltk {
 
+/// \name fltk/events.h
+//@{
+
 /*! Numbers passed to Widget::handle() and returned by event(). */
 enum {
   NO_EVENT	= 0,
@@ -314,6 +317,8 @@ inline bool exit_modal_flag()		{return exit_modal_;}
 
 // for debugging purpose : 
 const char  *event_name(int event); /// see STR #508
+
+//@}
 
 }
 

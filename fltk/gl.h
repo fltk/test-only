@@ -80,6 +80,9 @@ namespace fltk {
 
 struct Font;
 
+/// \name fltk/gl.h
+//@{
+
 FL_GL_API void glstart();
 FL_GL_API void glfinish();
 
@@ -100,6 +103,8 @@ FL_GL_API void gldrawtext(const char*, float x, float y, float z = 0);
 FL_GL_API void gldrawtext(const char*, int n, float x, float y, float z = 0);
 
 FL_GL_API void gldrawimage(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
+
+//@}
 
 }
 #endif

@@ -1,9 +1,7 @@
 //
 // "$Id$"
 //
-// Utility pop-up windows for fltk
-//
-// Copyright 2002 by Bill Spitzak and others.
+// Copyright 2008 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,7 +19,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-/*! \file */
 
 #ifndef fltk_ask_h
 #define fltk_ask_h
@@ -32,6 +29,9 @@
 namespace fltk {
 
 class Widget;
+
+/// \name fltk/ask.h
+//@{
 
 enum {
   BEEP_DEFAULT = 0,
@@ -70,6 +70,8 @@ extern FL_API const char* ok;
 extern FL_API const char* cancel;
 
 }
+
+//@}
 
 #endif
 

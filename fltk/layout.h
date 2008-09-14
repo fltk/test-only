@@ -1,4 +1,9 @@
-/*! \file
+#ifndef fltk_layout_h
+#define fltk_layout_h
+
+namespace fltk {
+
+/*!
   Values of the bits stored in Widget::layout_damage().
 
   When a widget resized or moved (or when it is initially created),
@@ -18,12 +23,6 @@
 
   The layout bits are turned on by calling Widget::relayout().
 */
-
-#ifndef fltk_layout_h
-#define fltk_layout_h
-
-namespace fltk {
-
 enum {
   LAYOUT_X	= 0x01, /*!< Widget::x() changed by resize() */
   LAYOUT_Y	= 0x02, /*!< Widget::y() changed by resize() */

@@ -22,7 +22,6 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
-/*! \file */
 
 #ifndef fltk_Style_h
 #define fltk_Style_h
@@ -30,6 +29,9 @@
 #include "Color.h"
 
 namespace fltk {
+
+/// \name fltk/Style.h
+//@{
 
 class FL_API Widget;
 class FL_API Rectangle;
@@ -195,6 +197,8 @@ FL_API bool reset_theme();
 }
 
 extern "C" FL_API bool fltk_theme();
+
+//@}
 
 #endif
 

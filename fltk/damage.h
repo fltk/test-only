@@ -1,5 +1,10 @@
-/*! \file
-   Values of the bits stored in Widget::damage().
+#ifndef fltk_damage_h
+#define fltk_damage_h
+
+namespace fltk {
+
+/*!
+  Values of the bits stored in Widget::damage().
 
   When redrawing your widgets you should look at the damage bits to
   see what parts of your widget need redrawing. The Widget::handle()
@@ -28,14 +33,7 @@ MyClass::draw() {
   Except for DAMAGE_ALL, each widget is allowed to assign any meaning
   to any of the bits it wants. The enumerations are just to provide
   suggested meanings.
-
 */
-
-#ifndef fltk_damage_h
-#define fltk_damage_h
-
-namespace fltk {
-
 enum {
   DAMAGE_VALUE		= 0x01,
   DAMAGE_PUSHED		= 0x02,

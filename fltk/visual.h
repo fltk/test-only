@@ -19,14 +19,15 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
-/*! \file */
-
 #ifndef fltk_visual_h
 #define fltk_visual_h
 
 #include "FL_API.h"
 
 namespace fltk {
+
+/// \name fltk/visual.h
+//@{
 
 enum {
   RGB_COLOR	= 0,
@@ -47,6 +48,8 @@ extern FL_API bool visual(int);
 extern FL_GL_API bool glVisual(int);
 
 extern FL_API void own_colormap();
+
+//@}
 
 }
 

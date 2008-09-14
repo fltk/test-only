@@ -81,6 +81,9 @@ extern FL_API Region	XRectangleRegion(int x, int y, int w, int h);
 
 namespace fltk {
 
+/// \name fltk/x11.h
+//@{
+
 ////////////////////////////////////////////////////////////////
 // constant info about the X server connection:
 
@@ -168,6 +171,8 @@ inline XWindow xid(const Window*w) {return CreatedWindow::find(w)->xid;}
 Window* find(XWindow xid);
 
 #  endif // Window_h
+
+//@}
 
 } // namespace fltk
 

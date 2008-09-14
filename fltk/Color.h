@@ -26,7 +26,6 @@
 //
 //     http://www.fltk.org/str.php
 //
-/*! \file */
 
 #ifndef fltk_Color_h
 #define fltk_Color_h
@@ -35,6 +34,9 @@
 #include "Flags.h"
 
 namespace fltk {
+
+/// \name fltk/Color.h
+//@{
 
 typedef unsigned Color;
 
@@ -119,6 +121,8 @@ FL_API void set_background(Color);
 FL_API Color nearest_index(Color);
 
 }
+
+//@}
 
 #endif
 

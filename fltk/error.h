@@ -11,9 +11,14 @@
 
 namespace fltk {
 
+/// \name fltk/error.h
+//@{
+
 extern FL_API void (*warning)(const char*, ...);
 extern FL_API void (*error)(const char*, ...);
 extern FL_API void (*fatal)(const char*, ...);
+
+//@}
 
 }
 #endif

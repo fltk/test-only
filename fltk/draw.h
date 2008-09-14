@@ -19,8 +19,7 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
-/*! \file
-
+/*
   The FLTK drawing library, used by all widgets to draw themselves.
 
   These functions can only be called when FLTK is setup to draw
@@ -30,7 +29,6 @@
   - After calling Widget::make_current(), before calling wait() or flush().
   Calling the drawing functions at other times produces undefined results,
   including crashing.
-
 */
 
 #ifndef fltk_draw_h
@@ -43,6 +41,9 @@
 
 namespace fltk {
 
+/// \name fltk/draw.h
+//@{
+
 struct Font;
 class Style;
 
@@ -53,8 +54,7 @@ class FL_API GSave {
   ~GSave();
 };
 
-/// \name Transformation
-//@{
+// Transformation
 FL_API void push_matrix();
 FL_API void pop_matrix();
 FL_API void scale(float x, float y);
@@ -71,10 +71,8 @@ FL_API void transform_distance(float& x, float& y);
 FL_API void transform(int& x, int& y);
 FL_API void transform(const Rectangle& from, Rectangle& to);
 FL_API void transform(int& x, int& y, int& w, int& h);
-//@}
 
-/// \name Clipping
-//@{
+// Clipping
 FL_API void push_clip(const Rectangle&);
 //! Same as push_clip(Rectangle(x,y,w,h)) but faster:
 FL_API void push_clip(int X,int Y, int W, int H);
@@ -83,7 +81,6 @@ FL_API void pop_clip();
 FL_API void push_no_clip();
 FL_API bool not_clipped(const Rectangle&);
 FL_API int intersect_with_clip(Rectangle&);
-//@}
 
 FL_API void setcolor(Color);
 FL_API void setcolor_alpha(Color, float alpha);
@@ -127,8 +124,7 @@ inline FL_API float line_width() {return line_width_;}
 extern FL_API const char* line_dashes_;
 inline FL_API const char* line_dashes() {return line_dashes_;}
 
-/// \name Path construction
-//@{
+// Path construction
 FL_API void newpath();
 FL_API void addvertex(float x, float y);
 FL_API void addvertex(int x, int y);
@@ -140,10 +136,8 @@ FL_API void addarc(float x,float y,float w,float h, float a1, float a2);
 FL_API void addpie(const Rectangle& r, float a, float a2);
 FL_API void addchord(const Rectangle& r,float a,float a2);
 FL_API void closepath();
-//@}
 
-/// \name Shapes and lines
-//@{
+// Shapes and lines
 FL_API void strokepath();
 FL_API void fillpath();
 FL_API void fillstrokepath(Color);
@@ -156,10 +150,8 @@ FL_API void drawline(int x0, int y0, int x1, int y1);
 FL_API void drawline(float x0, float y0, float x1, float y1);
 FL_API void drawpoint(int x, int y);
 FL_API void drawpoint(float x, float y);
-//@}
 
-/// \name Text
-//@{
+// Text
 FL_API void setfont(Font*, float size);
 FL_API void setfont(const char*, float size);
 FL_API void setfont(const char*, int attributes, float size);
@@ -199,10 +191,8 @@ extern FL_API const int* column_widths_;
 inline const int* column_widths() {return column_widths_;}
 inline void column_widths(const int* i) {column_widths_ = i;}
 // see also Symbol.h for @-sign commands
-//@}
 
-/// \name Images
-//@{
+// Images
 FL_API void drawimage(const uchar*, PixelType, const Rectangle&);
 FL_API void drawimage(const uchar*, PixelType, const Rectangle&, int linedelta);
 
@@ -214,7 +204,6 @@ FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&, int linedelta);
 
 FL_API void scrollrect(const Rectangle&, int dx, int dy,
 		       void (*draw_area)(void*, const Rectangle&), void*);
-//@}
 
 #ifndef DOXYGEN /* depreciated: */
 FL_API void drawframe(const char* s, int x, int y, int w, int h);
@@ -222,6 +211,8 @@ FL_API void drawframe2(const char* s, int x, int y, int w, int h);
 FL_API void overlay_rect(int,int,int,int);
 FL_API void overlay_clear();
 #endif
+
+//@}
 
 }
 

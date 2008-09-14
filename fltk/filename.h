@@ -1,7 +1,4 @@
 // "$Id$"
-/*! \file
-  Some functions to manipulate filenames, to make portable programs.
-*/
 
 /* Copyright 1998-2006 by Bill Spitzak and others.
  *
@@ -97,6 +94,10 @@ struct dirent {char d_name[1];};
 
 namespace fltk {
 
+/// \name fltk/filename.h
+/// Some functions to manipulate filenames, to make portable programs.
+//@{
+
 FL_API int filename_absolute(char *to, int tolen, const char *from, const char* cwd=0);
 FL_API int filename_relative(char *to, int tolen, const char *from, const char* cwd=0);
 FL_API const char *filename_name(const char *);
@@ -116,6 +117,8 @@ FL_API int casenumericsort(const dirent*const*, const dirent*const*);
 FL_API int numericsort(const dirent*const*, const dirent*const*);
 FL_API int filename_list(const char *d, dirent ***list, File_Sort_F *sort);
 FL_API int filename_list(const char *d, dirent ***list); // uses numericsort
+
+//@}
 
 }
 
