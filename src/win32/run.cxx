@@ -46,7 +46,7 @@
 #if USE_CAIRO
 # include <cairo.h>
 # include <cairo-win32.h>
-  FL_API cairo_t * fltk::cc=0;
+  FL_API cairo_t * fltk::cr=0;
 #endif
 
 ////////////////////////////////////////////////////////////////
@@ -2217,9 +2217,9 @@ HDC fltk::dc;
 static void cairo_invalidate_context() {
   // invalidate cairo context so that it will be resynchronized
   // on next first real draw()
-    if (fltk::cc) {
-	cairo_destroy (cc); // delete previous context pointing on old hdc
-	fltk::cc = 0; // don't create now, wait for draw()
+    if (fltk::cr) {
+	cairo_destroy (fltk::cr); // delete previous context pointing on old hdc
+	fltk::cr = 0; // don't create now, wait for draw()
     }
     return;
 }

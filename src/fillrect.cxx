@@ -35,8 +35,8 @@ void fltk::fillrect(int x, int y, int w, int h) {
   if (w <= 0 || h <= 0) return;
   transform(x,y,w,h);
 #if USE_CAIRO
-  cairo_rectangle(cc,x,y,w,h);
-  cairo_fill(cc);
+  cairo_rectangle(cr,x,y,w,h);
+  cairo_fill(cr);
 #elif USE_X11
   if (w && h) XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
 #elif defined(_WIN32)
@@ -63,8 +63,8 @@ void fltk::strokerect(int x, int y, int w, int h) {
   if (w <= 0 || h <= 0) return;
   transform(x,y,w,h);
 #if USE_CAIRO
-  cairo_rectangle(cc,x+.5,y+.5,w-1,h-1);
-  cairo_stroke(cc);
+  cairo_rectangle(cr,x+.5,y+.5,w-1,h-1);
+  cairo_stroke(cr);
 #elif USE_X11
   if (w && h) XDrawRectangle(xdisplay, xwindow, gc, x, y, w-1, h-1);
   else XDrawLine(xdisplay, xwindow, gc, x, y, x+w, y+h);
@@ -109,13 +109,13 @@ void fltk::drawline(int x, int y, int x1, int y1) {
   // attempt to emulate the X11 drawing if line_width is zero. It also
   // works to set the end caps to square and add .5 in all cases...
   if (line_width_) {
-    cairo_move_to(cc, x, y);
-    cairo_line_to(cc, x1, y1);
+    cairo_move_to(cr, x, y);
+    cairo_line_to(cr, x1, y1);
   } else {
-    cairo_move_to(cc, x+.5, y+.5);
-    cairo_line_to(cc, x1+.5, y1+.5);
+    cairo_move_to(cr, x+.5, y+.5);
+    cairo_line_to(cr, x1+.5, y1+.5);
   }
-  cairo_stroke(cc);
+  cairo_stroke(cr);
 #elif USE_QUARTZ
   // This appears to produce the same output as X11, though it is unclear
   // why, as the line caps are butt by default:
@@ -146,13 +146,13 @@ void fltk::drawline(float x, float y, float x1, float y1) {
   transform(x1,y1);
 #if USE_CAIRO
   if (line_width_) {
-    cairo_move_to(cc, x, y);
-    cairo_line_to(cc, x1, y1);
+    cairo_move_to(cr, x, y);
+    cairo_line_to(cr, x1, y1);
   } else {
-    cairo_move_to(cc, x+.5, y+.5);
-    cairo_line_to(cc, x1+.5, y1+.5);
+    cairo_move_to(cr, x+.5, y+.5);
+    cairo_line_to(cr, x1+.5, y1+.5);
   }
-  cairo_stroke(cc);
+  cairo_stroke(cr);
 # elif USE_QUARTZ
   if (( x==x1 || y==y1 ) && !line_width_ )
     CGContextSetShouldAntialias(quartz_gc, false);

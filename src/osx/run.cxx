@@ -66,7 +66,7 @@ using namespace fltk;
 #if USE_CAIRO
 # include <cairo.h>
 # include <cairo-quartz.h>
-  FL_API cairo_t * fltk::cc=0;
+  FL_API cairo_t * fltk::cr=0;
 #endif
 
 #if USE_CAIRO
@@ -1716,12 +1716,12 @@ void fltk::fill_quartz_context() {
   static CGAffineTransform font_mx = { 1, 0, 0, -1, 0, 0 };
   CGContextSetTextMatrix(quartz_gc, font_mx);
 #if USE_CAIRO
-  if (cc) {
-    cairo_destroy(cc);
+  if (cr) {
+    cairo_destroy(cr);
   }
   cairo_surface_t* s = 
     cairo_quartz_surface_create_for_cg_context(quartz_gc, hgt, wgt);
-  cc = cairo_create(s);
+  cr = cairo_create(s);
   cairo_surface_destroy(s);
 #endif
   if (current_font_) setfont(current_font_, current_size_);

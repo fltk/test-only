@@ -169,8 +169,8 @@ void fltk::push_clip(int x, int y, int w, int h) {
 #if USE_CAIRO
     //transform(x,y);
     // fabien: FIXME! should be able to clip the current region not only a rect!
-    cairo_rectangle(cc, x,y,w,h);
-    cairo_clip(cc); // should accumulate clip depending on the stack!
+    cairo_rectangle(cr, x,y,w,h);
+    cairo_clip(cr); // should accumulate clip depending on the stack!
 #else
   fl_restore_clip();
 #endif
@@ -219,7 +219,7 @@ void fltk::push_no_clip() {
 #if !USE_CAIRO
   fl_restore_clip();
 #else
-  cairo_reset_clip(cc);
+  cairo_reset_clip(cr);
 #endif
 }
 
@@ -237,7 +237,7 @@ void fltk::pop_clip() {
     if (oldr) DeleteObject(oldr);
 # endif
 #if USE_CAIRO
-     cairo_reset_clip(cc);
+     cairo_reset_clip(cr);
 #else
     fl_restore_clip();
 #endif

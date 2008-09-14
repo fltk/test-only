@@ -289,7 +289,7 @@ FL_API void fltk::setcolor_alpha(Color c, float alpha) {
   fltk::setcolor(c);
 #if USE_CAIRO
   uchar r,g,b; split_color(c,r,g,b);
-  cairo_set_source_rgba(cc,r/255.0,g/255.0,b/255.0,alpha);
+  cairo_set_source_rgba(cr,r/255.0,g/255.0,b/255.0,alpha);
 #endif
 }
 

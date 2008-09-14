@@ -102,9 +102,9 @@ void fltk::push_clip(const Rectangle& r) {
 void fltk::push_clip(int x, int y, int w, int  h) {
  #if USE_CAIRO
     transform(x,y);
-    cairo_rectangle(cc, x,y,w,h);
-    //cairo_stroke(cc);
-    cairo_clip(cc);
+    cairo_rectangle(cr, x,y,w,h);
+    //cairo_stroke(cr);
+    cairo_clip(cr);
 #else
  Region region = NewRgn();
   if (FLTK_RECT_EMPTY(w,h)) {
@@ -157,7 +157,7 @@ void fltk::push_no_clip() {
 */
 void fltk::pop_clip() {
 #if USE_CAIRO
- cairo_reset_clip(cc);
+ cairo_reset_clip(cr);
 #else
   if (rstackptr > 0) {
     Region oldr = rstack[rstackptr--];

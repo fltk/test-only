@@ -246,7 +246,7 @@ void fltk::setcolor(Color i) {
   current_color_ = i;
 #if USE_CAIRO
   uchar r,g,b; split_color(i,r,g,b);
-  cairo_set_source_rgb(cc,r/255.0,g/255.0,b/255.0);
+  cairo_set_source_rgb(cr,r/255.0,g/255.0,b/255.0);
 #endif
   current_xpixel = xpixel(i);
   XSetForeground(xdisplay, gc, current_xpixel);
@@ -330,21 +330,21 @@ void fltk::line_style(int style, float width, const char* dashes) {
   }
 #if USE_CAIRO
   if (!width) {
-    cairo_set_line_width(cc, 1.0);
-    cairo_set_line_cap(cc, CAIRO_LINE_CAP_SQUARE);
+    cairo_set_line_width(cr, 1.0);
+    cairo_set_line_cap(cr, CAIRO_LINE_CAP_SQUARE);
   } else {
-    cairo_set_line_width(cc, width);
+    cairo_set_line_width(cr, width);
     int c = (style>>8)&3; if (c) c--;
-    cairo_set_line_cap(cc, (cairo_line_cap_t)c);
+    cairo_set_line_cap(cr, (cairo_line_cap_t)c);
   }
   int j = (style>>12)&3; if (j) j--;
-  cairo_set_line_join(cc, (cairo_line_join_t)j);
+  cairo_set_line_join(cr, (cairo_line_join_t)j);
   if (ndashes) {
     double dash[20];
     for (int i = 0; i < ndashes; i++) dash[i] = dashes[i];
-    cairo_set_dash(cc, dash, ndashes, 0);
+    cairo_set_dash(cr, dash, ndashes, 0);
   } else {
-    cairo_set_dash(cc, 0, 0, 0);
+    cairo_set_dash(cr, 0, 0, 0);
   }
 #else
   if (ndashes) XSetDashes(xdisplay, gc, 0, dashes, ndashes);

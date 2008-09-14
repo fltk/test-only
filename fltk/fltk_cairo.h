@@ -34,10 +34,10 @@
 #define fltk_cairo_h
 
 #include <fltk/FL_API.h>
-
 #include <cairo.h>
+
 namespace fltk {
-  extern FL_API cairo_t * cc;
+  extern FL_API cairo_t * cr;
   class Window;
   FL_API cairo_surface_t * cairo_create_surface(Window* w);
 }

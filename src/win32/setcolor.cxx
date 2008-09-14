@@ -136,18 +136,18 @@ void fltk::line_style(int style, float width, const char* dashes) {
     }
     ndashes = p-buf;
   }
-  cairo_set_line_width(cc, width ? width : 1);
+  cairo_set_line_width(cr, width ? width : 1);
   int c = (style>>8)&3; if (c) c--;
-  cairo_set_line_cap(cc, (cairo_line_cap_t)c);
+  cairo_set_line_cap(cr, (cairo_line_cap_t)c);
   int j = (style>>12)&3; if (j) j--;
-  cairo_set_line_join(cc, (cairo_line_join_t)j);
+  cairo_set_line_join(cr, (cairo_line_join_t)j);
   if (ndashes) {
     double *dash = new double[ndashes];
     for (int i = 0; i < ndashes; i++) dash[i] = dashes[i];
-    cairo_set_dash(cc, dash, ndashes, 0);
+    cairo_set_dash(cr, dash, ndashes, 0);
     delete [] dash;
   } else {
-    cairo_set_dash(cc, 0, 0, 0);
+    cairo_set_dash(cr, 0, 0, 0);
   }
 
 #endif
@@ -271,7 +271,7 @@ void fltk::setcolor(Color i) {
 	    cairo_surface_destroy(s);
       }
   
-      cairo_set_source_rgb(cc,r/255.0,g/255.0,b/255.0);
+      cairo_set_source_rgb(cr,r/255.0,g/255.0,b/255.0);
     #endif
    }
 }

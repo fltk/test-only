@@ -2335,7 +2335,7 @@ XDrawSomething(xdisplay, xwindow, gc, ...);
 GC fltk::gc;
 
 #if USE_CAIRO
-cairo_t* fltk::cc;
+cairo_t* fltk::cr;
 static cairo_surface_t* surface;
 #endif
 
@@ -2418,10 +2418,10 @@ void fltk::draw_into(XWindow window, int w, int h) {
 
 #if USE_CAIRO
     cairo_status_t cstatus;
-    if (cc) {
-      if ((cstatus = cairo_status(cc))) {
+    if (cr) {
+      if ((cstatus = cairo_status(cr))) {
         warning("Cairo: %s", cairo_status_to_string(cstatus));
-	cairo_destroy(cc);
+	cairo_destroy(cr);
 	cairo_surface_destroy(surface);
 	goto CREATE_SURFACE;
       }
@@ -2429,9 +2429,9 @@ void fltk::draw_into(XWindow window, int w, int h) {
     } else {
     CREATE_SURFACE:
       surface = cairo_xlib_surface_create(xdisplay, window, xvisual->visual, w, h);
-      cc = cairo_create(surface);
+      cr = cairo_create(surface);
       // emulate line_style(0):
-      cairo_set_line_width(cc, 1);
+      cairo_set_line_width(cr, 1);
     }
 #endif
 
@@ -2456,7 +2456,7 @@ void fltk::stop_drawing(XWindow window) {
   if (xwindow == window) {
     xwindow = 0;
 #if USE_CAIRO
-    cairo_destroy(cc); cc = 0;
+    cairo_destroy(cr); cr = 0;
 #endif
 #if USE_XFT
     XftDrawDestroy(xftc); xftc = 0;

@@ -390,7 +390,7 @@ static enum {NONE=0, PIE, CHORD} circle_type;
 void fltk::addvertex(float X, float Y) {
 #if USE_CAIRO
   transform(X,Y);
-  cairo_line_to(cc,X,Y);
+  cairo_line_to(cr,X,Y);
 #elif USE_QUARTZ
   transform(X, Y);
   quartz_add_vertex(X, Y);
@@ -418,7 +418,7 @@ void fltk::addvertex(float X, float Y) {
 void fltk::addvertex(int X, int Y) {
 #if USE_CAIRO
   transform(X,Y);
-  cairo_line_to(cc,X,Y);
+  cairo_line_to(cr,X,Y);
 #elif USE_QUARTZ
   transform(X, Y);
   quartz_add_vertex(X, Y);
@@ -451,7 +451,7 @@ void fltk::addvertices(int n, const float array[][2]) {
   for (; a < e; a += 2) {
     float X = (float) a[0]; float Y = (float) a[1];
     transform(X,Y);
-    cairo_line_to(cc,X,Y);
+    cairo_line_to(cr,X,Y);
   }
 #elif USE_QUARTZ
   for (; a < e; a += 2) {
@@ -495,7 +495,7 @@ void fltk::addvertices(int n, const int array[][2]) {
   for (; a < e; a += 2) {
     float X = (float) a[0]; float Y = (float) a[1];
     transform(X,Y);
-    cairo_line_to(cc,X,Y);
+    cairo_line_to(cr,X,Y);
   }
 #elif USE_QUARTZ
   for (; a < e; a += 2) {
@@ -540,7 +540,7 @@ void fltk::addvertices_transformed(int n, const float array[][2]) {
   const float* a = array[0];
   const float* e = a+2*n;
 #if USE_CAIRO
-  for (; a < e; a += 2) cairo_line_to(cc,a[0],a[1]);
+  for (; a < e; a += 2) cairo_line_to(cr,a[0],a[1]);
 #elif USE_QUARTZ
   for (; a < e; a += 2) quartz_add_vertex(a[0], a[1]);
 #else
@@ -570,7 +570,7 @@ void fltk::addvertices_transformed(int n, const float array[][2]) {
 */
 void fltk::closepath() {
 #if USE_CAIRO
-  cairo_close_path(cc);
+  cairo_close_path(cr);
 #elif USE_QUARTZ
   if (!first_point) 
     CGContextClosePath(quartz_gc);
@@ -659,7 +659,7 @@ void fltk::addchord(const Rectangle& r, float start, float end) {
 
 static inline void inline_newpath() {
 #if USE_CAIRO
-  cairo_new_path(cc);
+  cairo_new_path(cr);
 #elif USE_QUARTZ
   first_point = true;
   CGContextBeginPath(quartz_gc);
@@ -706,7 +706,7 @@ void fltk::drawpoints() {
 */
 void fltk::strokepath() {
 #if USE_CAIRO
-  cairo_stroke(cc);
+  cairo_stroke(cr);
 #elif USE_QUARTZ
   CGContextStrokePath(quartz_gc);
 #elif USE_X11
@@ -773,7 +773,7 @@ void fltk::strokepath() {
 */
 void fltk::fillpath() {
 #if USE_CAIRO
-  cairo_fill(cc);
+  cairo_fill(cr);
 #elif USE_QUARTZ
   CGContextFillPath(quartz_gc);
 #elif USE_X11
@@ -842,11 +842,11 @@ void fltk::fillpath() {
 */
 void fltk::fillstrokepath(Color color) {
 #if USE_CAIRO
-  cairo_save(cc);
-  cairo_fill_preserve(cc);
-  cairo_restore(cc);
+  cairo_save(cr);
+  cairo_fill_preserve(cr);
+  cairo_restore(cr);
   setcolor(color);
-  cairo_stroke(cc);
+  cairo_stroke(cr);
 #elif USE_QUARTZ
   uchar r, g, b; 
   split_color(color, r, g, b);

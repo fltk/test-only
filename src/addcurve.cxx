@@ -48,8 +48,8 @@ void fltk::addcurve(float x0, float y0,
   transform(x2,y2);
   transform(x3,y3);
 #if USE_CAIRO
-  cairo_line_to(cc,x0,y0);
-  cairo_curve_to(cc,x1,y1,x2,y2,x3,y3);
+  cairo_line_to(cr,x0,y0);
+  cairo_curve_to(cr,x1,y1,x2,y2,x3,y3);
 #else
   float x = x0; float y = y0;
 

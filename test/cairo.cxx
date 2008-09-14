@@ -44,7 +44,7 @@ public:
 
     void draw() {
 	Window::draw();
-	if (draw_cb_)draw_cb_(*this, cc); // enjoy cairo features here !
+	if (draw_cb_)draw_cb_(*this, cr); // enjoy cairo features here !
     }
     
     typedef void (*draw_cb) (CairoWindow& self, cairo_t* def);
