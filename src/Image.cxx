@@ -146,6 +146,7 @@ static void convert(uchar* to, const uchar* from, PixelType type, int w) {
     }
     break;
   case RGBA:
+  case RGBM:
     t += w;
     from += 4*w;
     while (t > (U32*)to) {
@@ -155,31 +156,9 @@ static void convert(uchar* to, const uchar* from, PixelType type, int w) {
     break;
   case RGB32:
   case ARGB32:
-    if (from != to) memcpy(to, from, 4*w);
-    break;
-  // premultiply the non-premultiplied versions. However it is possible
-  // Cairo can do this by using the image as a mask?
-  case RGBM:
-    t += w;
-    from += 4*w;
-    while (t > (U32*)to) {
-      from -= 4;
-      uchar a = from[3];
-      *--t = (a<<24) | (((from[0]*a)<<8)&0xff0000) | ((from[1]*a)&0xff00) | ((from[2]*a)>>8);
-    }
-    break;
   case MRGB32:
-    t += w;
-    from += 4*w;
-    while (t > (U32*)to) {
-      from -= 4;
-      U32 v = *(U32*)from;
-      uchar a = v>>24;
-      *--t = (v&0xff000000) |
-          ((((v&0xff0000)*a)>>8) & 0xff0000) |
-          ((((v&0xff00)*a)>>8) & 0xff00) |
-          ((((v&0xff)*a)>>8) & 0xff);
-    }
+  default:
+    if (from != to) memcpy(to, from, 4*w);
     break;
   }
 }
@@ -247,10 +226,11 @@ fltk::PixelType Image::buffer_pixeltype() const {
     return RGB32;
   case RGBA:
   case ARGB32:
-  case RGBM:
-  case MRGB32:
   default:
     return ARGB32;
+  case RGBM:
+  case MRGB32:
+    return MRGB32;
   }
 }
 
@@ -405,6 +385,14 @@ void Image::draw(const fltk::Rectangle& from, const fltk::Rectangle& to) const {
   cairo_rectangle(cr, 0, 0, from.w(), from.h());
   switch (pixeltype_) {
   case MASK:
+    cairo_clip(cr);
+    cairo_mask_surface(cr, PICTURE, -from.x(), -from.y());
+    break;
+  case RGBM:
+  case MRGB32:
+    cairo_clip(cr);
+    cairo_set_source_surface(cr, PICTURE, -from.x(), -from.y());
+    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     cairo_mask_surface(cr, PICTURE, -from.x(), -from.y());
     break;
   default:
