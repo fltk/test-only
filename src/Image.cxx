@@ -86,7 +86,385 @@
 
 using namespace fltk;
 
-#if USE_X11
+unsigned long Image::memused_;
+
+#if USE_CAIRO || DOXYGEN
+
+// Make the fltk::Picture be a cairo_surface_t:
+#define PICTURE ((cairo_surface_t*)picture)
+#define SET_PICTURE(x) picture = (fltk::Picture*)x
+
+// Return the Cairo image type we will use for the given fltk image type
+static cairo_format_t cairo_format(PixelType type) {
+  switch (type) {
+  case MASK:
+    return CAIRO_FORMAT_A8;
+  case MONO:
+  case RGBx:
+  case RGB:
+  case RGB32:
+    return CAIRO_FORMAT_RGB24;
+  case RGBA:
+  case ARGB32:
+  case RGBM:
+  case MRGB32:
+  default:
+    return CAIRO_FORMAT_ARGB32;
+  }
+}
+
+// Convert fltk pixeltypes to the Cairo image type
+// Go backwards so the buffers can be shared
+static void convert(uchar* to, const uchar* from, PixelType type, int w) {
+  U32* t = (U32*)to;
+  switch (type) {
+  case MONO:
+    t += w;
+    from += w;
+    while (t > (U32*)to)
+      *--t = 0x1010101 * *--from;
+    break;
+  case MASK:
+    // fltk mask was designed for black letter images and is therefore
+    // inverted from the more sensible usage that Cairo has.
+    while (w--) *to++ = ~*from++;
+    break;
+  case RGBx:
+    t += w;
+    from += 4*w;
+    while (t > (U32*)to) {
+      from -= 4;
+      *--t = 0xff000000 | (from[0]<<16) | (from[1]<<8) | from[2];
+    }
+    break;
+  case RGB:
+    t += w;
+    from += 3*w;
+    while (t > (U32*)to) {
+      from -= 3;
+      *--t = 0xff000000 | (from[0]<<16) | (from[1]<<8) | from[2];
+    }
+    break;
+  case RGBA:
+    t += w;
+    from += 4*w;
+    while (t > (U32*)to) {
+      from -= 4;
+      *--t = (from[3]<<24) | (from[0]<<16) | (from[1]<<8) | from[2];
+    }
+    break;
+  case RGB32:
+  case ARGB32:
+    if (from != to) memcpy(to, from, 4*w);
+    break;
+  // premultiply the non-premultiplied versions. However it is possible
+  // Cairo can do this by using the image as a mask?
+  case RGBM:
+    t += w;
+    from += 4*w;
+    while (t > (U32*)to) {
+      from -= 4;
+      uchar a = from[3];
+      *--t = (a<<24) | (((from[0]*a)<<8)&0xff0000) | ((from[1]*a)&0xff00) | ((from[2]*a)>>8);
+    }
+    break;
+  case MRGB32:
+    t += w;
+    from += 4*w;
+    while (t > (U32*)to) {
+      from -= 4;
+      U32 v = *(U32*)from;
+      uchar a = v>>24;
+      *--t = (v&0xff000000) |
+          ((((v&0xff0000)*a)>>8) & 0xff0000) |
+          ((((v&0xff00)*a)>>8) & 0xff00) |
+          ((((v&0xff)*a)>>8) & 0xff);
+    }
+    break;
+  }
+}
+
+/**
+  Return the width in pixels of buffer().
+*/
+int Image::buffer_width() const {
+  if (picture) return cairo_image_surface_get_width(PICTURE);
+  return w();
+}
+
+/**
+  Return the height in pixels of buffer();
+*/
+int Image::buffer_height() const {
+  if (picture) return cairo_image_surface_get_height(PICTURE);
+  return h();
+}
+
+/**
+  Return the distance between each row of pixels in buffer().
+*/
+int Image::buffer_linedelta() const {
+  if (picture) return cairo_image_surface_get_stride(PICTURE);
+  return (w_*depth()+3)&-4;
+}
+
+/**
+  Returns the number of bytes per pixel stored in buffer(). This
+  is the same as ::depth(buffer_pixeltype()).
+*/
+int Image::buffer_depth() const {
+  switch (pixeltype_) {
+  case MASK:
+    return 1;
+  default:
+    return 4;
+  }
+}
+
+void Image::set_forceARGB32() {
+  flags |= FORCEARGB32;
+  // It pretty much does this already except for mono
+}
+
+void Image::clear_forceARGB32() {
+  flags &= ~FORCEARGB32;
+}
+
+/**
+  Return the type of pixels stored in buffer().  Likely to be
+  ARGB32. On older (non-XRender) X system the types 1 and 2 indicate 1
+  and 2-byte data, but there is no api to figure out anything more
+  about this data.
+*/
+fltk::PixelType Image::buffer_pixeltype() const {
+  switch (pixeltype_) {
+  case MASK:
+    return MONO;
+  case MONO:
+  case RGBx:
+  case RGB:
+  case RGB32:
+    return RGB32;
+  case RGBA:
+  case ARGB32:
+  case RGBM:
+  case MRGB32:
+  default:
+    return ARGB32;
+  }
+}
+
+/**
+  Returns how much memory the image is using for buffer() and for
+  any other structures it created. Returns zero if buffer() has
+  not been called.
+*/
+unsigned long Image::mem_used() const {
+  if (picture)
+    return cairo_image_surface_get_stride(PICTURE)*cairo_image_surface_get_height(PICTURE);
+  return 0;
+}
+
+/**
+  This just does a const-cast and calls the non-const version.
+*/
+const uchar* Image::buffer() const {
+  return const_cast<Image*>(this)->buffer();
+}
+
+/**
+  Creates (if necessary) and returns a pointer to the internal pixel
+  buffer. This is probably going to be shared memory with the graphics
+  system, it may have a different pixeltype, size, and linedelta than
+  the Image. If you are able to figure out the type you can read and
+  write the pixels directly.
+*/
+uchar* Image::buffer() {
+  if (!picture) {
+    SET_PICTURE(cairo_image_surface_create(cairo_format(pixeltype_), w_, h_));
+    memused_ += mem_used();
+  }
+  return cairo_image_surface_get_data(PICTURE);
+}
+
+/**
+  Destroys the buffer() and any related system structures.
+*/
+void Image::destroy() {
+  if (!picture) return;
+  memused_ -= mem_used();
+  cairo_surface_destroy(PICTURE);
+  picture = 0;
+  flags &= ~FETCHED;
+}
+
+/**
+  Change the stored pixeltype. If it is not compatable then
+  destroy() is called.
+*/
+void Image::setpixeltype(PixelType p) {
+  if (picture && cairo_format(p) != cairo_image_surface_get_format(PICTURE))
+    destroy();
+  pixeltype_ = p;
+}
+
+/**
+  Change the size of the stored image. If it is not compatable with
+  the current data size (generally if it is larger) then destroy()
+  is called.
+*/
+void Image::setsize(int w, int h) {
+  if (picture && (w > buffer_width() || h > buffer_height())) destroy();
+  w_ = w;
+  h_ = h;
+}
+
+/**
+  Return a pointer to a buffer that you can write up to width() pixels
+  in pixeltype() to and then call setpixels(buffer,y) with. This can
+  avoid doing any copying of the data if the internal format and
+  pixeltype() are compatable, because it will return a pointer
+  directly into the buffer and setpixels will detect this and do
+  nothing.
+*/
+uchar* Image::linebuffer(int y) {
+  buffer();
+  return cairo_image_surface_get_data(PICTURE) + y*cairo_image_surface_get_stride(PICTURE);
+}
+
+/**
+  Replace the given rectangle of buffer() with the supplied data,
+  which must be in the pixeltype(). \a linedelta is the distance
+  between each row of pixels in \a data. The rectangle is assummed
+  to fit inside the width() and height().
+*/
+void Image::setpixels(const uchar* buf, const fltk::Rectangle& r, int linedelta)
+{
+  if (r.empty()) return;
+  flags &= ~COPIED;
+  uchar* to = linebuffer(r.y()) + r.x()*buffer_depth();
+  // see if we can do it all at once:
+  if (r.w() == buffer_width() && (r.h()==1 || linedelta == buffer_linedelta())) {
+    convert(to, buf, pixeltype_, r.w()*r.h());
+  } else {
+    for (int y = 0; y < r.h(); y++) {
+      convert(to, buf, pixeltype_, r.w());
+      buf += linedelta;
+      to += buffer_linedelta();
+    }
+  }
+}
+
+/** \fn void Image::setpixels(const uchar* data, const fltk::Rectangle& r)
+  Figures out the linedelta for you as depth()*r.w().
+*/
+
+/**
+  Same as setpixels(data,Rectangle(0,y,width(),1)), sets one entire
+  row of pixels.
+*/
+void Image::setpixels(const uchar* buf, int y) {
+  convert(linebuffer(y), buf, pixeltype_, width());
+  flags &= ~COPIED;
+}
+
+void Image::fetch_if_needed() const {
+  if (!(flags&FETCHED)) {
+    Image* thisimage = const_cast<Image*>(this);
+    thisimage->fetch();
+    thisimage->flags |= FETCHED;
+  }
+}
+
+extern void fl_set_cairo_ctm();
+
+/**
+  Draws the subrectangle \a from of the image, transformed to fill
+  the rectangle \a to (as transformed by the CTM). If the image has
+  an alpha channel, an "over" operation is done.
+
+  Due to lame graphics systems, this is not fully operational on all
+  systems:
+  * X11 without XRender extension: no transformations are done, the
+  image is centered in the output area.
+  * X11 with XRender: rotations fill the bounding box of the destination
+  rectangle, drawing extra triangular areas outside the source rectangle.
+  Somewhat bad filtering when making images smaller. xbmImage does
+  not transform.
+  * Windows: Only scaling, no rotations. Bad filtering. xbmImage does
+  not do any transformations.
+  * OS/X: works well in all cases.
+*/
+void Image::draw(const fltk::Rectangle& from, const fltk::Rectangle& to) const {
+  fetch_if_needed();
+  if (!picture) {fillrect(to); return;}
+  cairo_save(cr);
+  fl_set_cairo_ctm();
+  cairo_translate(cr, to.x(), to.y());
+  cairo_scale(cr, double(to.w())/from.w(), double(to.h())/from.h());
+  cairo_rectangle(cr, 0, 0, from.w(), from.h());
+  switch (pixeltype_) {
+  case MASK:
+    cairo_mask_surface(cr, PICTURE, -from.x(), -from.y());
+    break;
+  default:
+    cairo_set_source_surface(cr, PICTURE, -from.x(), -from.y());
+    cairo_fill(cr);
+    break;
+  }
+  cairo_restore(cr);
+}
+
+/**
+  This is equivalent to:
+\code
+  setsize(w, h);
+  setpixeltype(p);
+  setpixels(source, Rectangle(w,h), linedelta);
+\endcode
+  except, if possible, \a source is used as buffer() (throwing
+  away the const!). This will happen if the pixeltype and linedelta
+  are of types that it can handle unchanged and if the image memory
+  does not need to be allocated by the system.
+*/
+void Image::setimage(const uchar* source, PixelType p, int w, int h, int ld)
+{
+  setsize(w,h);
+  setpixeltype(p);
+  if (p == ARGB32 || p == RGB32) {
+    // may want to make sure linedelta is ok?
+    // data can be used directly by cairo:
+    destroy();
+    SET_PICTURE(cairo_image_surface_create_for_data((unsigned char*)source, cairo_format(p), w, h, ld));
+    memused_ += mem_used(); // not really...
+  } else {
+    // copy the data to a new image_surface:
+    setpixels(source, Rectangle(w, h), ld);
+  }
+  flags = FETCHED;
+}
+
+/*! \fn void Image::setimage(const uchar* d, PixelType p, int w, int h)
+  Figures out linedelta for you as w*depth(p).
+*/
+
+void Image::make_current() {
+  // TODO - make the cr point at the image_surface!
+}
+
+// This function is provided by some backends, and does direct-draw
+// from a memory buffer without creating an Image. Returns true if
+// it can do it. Returns false if a temporary Image object should be
+// used instead to emulate it.
+static inline bool innards(const uchar *buf, fltk::PixelType type,
+                           const fltk::Rectangle& r1,
+                           int linedelta,
+                           DrawImageCallback cb, void* userdata)
+{
+  return false;
+}
+
+#elif USE_X11
 # include "x11/Image.cxx"
 #elif defined(_WIN32)
 # include "win32/Image.cxx"
@@ -129,7 +507,7 @@ using namespace fltk;
 */
 
 /*! \fn PixelType Image::pixeltype() const
-  Return the types of pixels that can be put into the image with
+  Return the type of pixels that are put into the image with
   setpixels(). You can change this with setpixeltype(). It is
   possible the internal data is in a different type, use
   buffer_pixeltype() to find out what that is.
@@ -150,102 +528,11 @@ using namespace fltk;
   setsize().
 */
 
-/*! \fn void Image::setpixeltype(PixelType);
-  Change the stored pixeltype. If it is not compatable then
-  destroy() is called. */
-
-/*! \fn void Image::setsize(int w, int h)
-  Change the size of the stored image. If it is not compatable with
-  the current data size (generally if it is larger) then destroy()
-  is called. */
-
-/*! \fn void Image::setpixels(const uchar* data, const Rectangle&, int linedelta)
-  Replace the given rectangle of buffer() with the supplied data,
-  which must be in the pixeltype(). \a linedelta is the distance
-  between each row of pixels in \a data. The rectangle is assummed
-  to fit inside the width() and height().
-*/
-
-/** \fn void Image::setpixels(const uchar* data, const fltk::Rectangle& r)
-  Figures out the linedelta for you as depth()*r.w().
-*/
-
-/*! \fn void Image::setpixels(const uchar* data, int y);
-  Same as setpixels(data,Rectangle(0,y,width(),1)), sets the entire
-  row of pixels.
-*/
-
-/*! \fn void Image::setimage(const uchar* d, PixelType p, int w, int h, int linedelta)
-  This is equivalent to:
-\code
-  setsize(w,h);
-  setpixeltype(p);
-  setpixels(d,Rectangle(w,h),linedelta);
-\endcode
-  except, if possible, \a d is used as buffer() (throwing
-  away the const!). This will happen if the pixeltype and linedelta
-  are of types that it can handle unchanged and if the image memory
-  does not need to be allocated by the system (currently OS/X only).
-*/
-
-/*! \fn void Image::setimage(const uchar* d, PixelType p, int w, int h)
-  Figures out linedelta for you as w*depth(p).
-*/
-
-/*! \fn uchar* Image::linebuffer(int y)
-  Return a pointer to a buffer that you can write up to width() pixels
-  in pixeltype() to and then call setpixels(buffer,y) with. This can
-  avoid doing any copying of the data if the internal format and
-  pixeltype() are compatable, because it will return a pointer
-  directly into the buffer and setpixels will detect this and do
-  nothing.
-*/
-
-/*! \fn uchar* Image::buffer()
-  Creates if necessary and returns a pointer to the internal pixel
-  buffer. This is probably going to be shared memory with the graphics
-  system, it may have a different pixeltype, size, and linedelta that
-  the Image. If you are able to figure out the type you can read and
-  write the pixels directly.
-
-  The non-const version will sync any previous drawing with the
-  display, on the assumption that you are about to write to the
-  buffer.
-*/
-
-/*! \fn PixelType Image::buffer_pixeltype() const
-  Return the type of pixels stored in buffer().  Likely to be
-  ARGB32. On older (non-XRender) X system the types 1 and 2 indicate 1
-  and 2-byte data, but there is no api to figure out anything more
-  about this data.
-*/
-
-/*! \fn PixelType Image::buffer_depth() const
-  Returns the number of bytes per pixel stored in buffer(). This
-  is the same as ::depth(buffer_pixeltype()).
-*/
-
-/*! \fn int Image::buffer_width() const
-  Return the width in pixels of buffer().
-*/
-
-/*! \fn int Image::buffer_height() const
-  Return the height in pixels of buffer();
-*/
-
-/*! \fn int Image::buffer_linedelta() const
-  Return the distance between each row of pixels in buffer().
-*/
-
 /*! \fn void Image::buffer_changed()
   Call this if you modify the contents of buffer(). On some systems
   the memory is not actually shared with the window system, and this
   will cause draw() to copy the buffer to the system's memory.
   setpixels() calls this for you.
-*/
-
-/*! \fn void Image::destroy()
-  Destroys the buffer() and any related system structures.
 */
 
 /*! The destructor calls destroy() */
@@ -334,25 +621,6 @@ void Image::draw(int x, int y) const {
   draw(fltk::Rectangle(0,0,w,h), fltk::Rectangle(x,y,w,h));
 }
 
-/*! \fn void Image::draw(const Rectangle& from, const Rectangle& to) const
-
-  Draws the subrectangle \a from of the image, transformed to fill
-  the rectangle \a to (as transformed by the CTM). If the image has
-  an alpha channel, an "over" operation is done.
-
-  Due to lame graphics systems, this is not fully operational on all
-  systems:
-  * X11 without XRender extension: no transformations are done, the
-  image is centered in the output area.
-  * X11 with XRender: rotations fill the bounding box of the destination
-  rectangle, drawing extra triangular areas outside the source rectangle.
-  Somewhat bad filtering when making images smaller. xbmImage does
-  not transform.
-  * Windows: Only scaling, no rotations. Bad filtering. xbmImage does
-  not do any transformations.
-  * OS/X: works well in all cases.
-*/
-
 /**
   Resizes the image to fit in the rectangle. This is the virtual
   method from the Symbol base class, so this is what is called if
@@ -396,12 +664,6 @@ void Image::_draw(const fltk::Rectangle& r) const
   }
 }
 
-/*! \fn unsigned long Image::mem_used() const;
-  Returns how much memory the image is using for buffer() and for
-  any other structures it created. Returns zero if buffer() has
-  not been called.
-*/
-
 /*! \fn unsigned long Image::total_mem_used()
   Sum of all mem_used() calls to all Images.  This is used by
   SharedImage to decide when to clear out cached images.
@@ -412,8 +674,7 @@ void Image::_draw(const fltk::Rectangle& r) const
 
 static Image* reused_image;
 
-/*!
-
+/**
   Draw a image (a rectangle of pixels) stored in your program's
   memory. The current transformation (scale, rotate) is applied.
 
@@ -442,7 +703,7 @@ void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
   reused_image->draw(Rectangle(r.w(),r.h()), r);
 }
 
-/*!
+/**
   Same except \a line_delta is set to <i>r</i>.w() times
   depth(<i>type</i>), indicating the rows are packed together one
   after another with no gap.
@@ -452,7 +713,7 @@ void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
   drawimage(pointer, type, r, depth(type)*r.w());
 }
 
-/*! \typedef fltk::DrawImageCallback
+/** \typedef fltk::DrawImageCallback
 
   Type of function passed to drawimage(). It must return a pointer
   to a horizontal row of \a w pixels, starting with the pixel at

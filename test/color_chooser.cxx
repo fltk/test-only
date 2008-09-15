@@ -145,7 +145,9 @@ int main(int argc, char **argv)
     if (!fltk::xvisual) fltk::fatal("No visual with id %d",visid);
     fltk::xcolormap = XCreateColormap(fltk::xdisplay, RootWindow(fltk::xdisplay,fltk::xscreen),
 				  fltk::xvisual->visual, AllocNone);
+# if !USE_CAIRO
     fltk::xpixel(fltk::BLACK); // make sure black is allocated
+# endif
 #else
     fltk::fatal("Visual id's not supported on this platform");
 #endif

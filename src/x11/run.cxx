@@ -272,9 +272,12 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
     preedit_attr =
       XVaCreateNestedList(0,
 			  XNSpotLocation, &spot_set,
+#if !USE_CAIRO // xpixel machinery is removed for cairo! Hope this works without this...
 			  XNForeground, xpixel(textcolor),
 			  XNBackground, xpixel(background),
-			  XNFontSet, fl_xim_fs, NULL);
+#endif
+			  XNFontSet, fl_xim_fs,
+                          NULL);
     if (preedit_attr) {
       XSetICValues(fl_xim_ic, XNPreeditAttributes, preedit_attr, NULL);
       XFree(preedit_attr);
@@ -2401,6 +2404,18 @@ void fltk::draw_into(XWindow window, int w, int h) {
   fl_clip_w = w;
   fl_clip_h = h;
 
+#if USE_CAIRO
+  if (cr) {
+    cairo_status_t cstatus = cairo_status(cr);
+    if (cstatus) {
+      warning("Cairo: %s", cairo_status_to_string(cstatus));
+      cairo_destroy(cr); cr = 0;
+      cairo_surface_destroy(surface); surface = 0;
+      xwindow = 0;
+    }
+  }
+#endif
+
   if (xwindow != window) {
     xwindow = window;
 
@@ -2417,17 +2432,9 @@ void fltk::draw_into(XWindow window, int w, int h) {
 #endif
 
 #if USE_CAIRO
-    cairo_status_t cstatus;
     if (cr) {
-      if ((cstatus = cairo_status(cr))) {
-        warning("Cairo: %s", cairo_status_to_string(cstatus));
-	cairo_destroy(cr);
-	cairo_surface_destroy(surface);
-	goto CREATE_SURFACE;
-      }
       cairo_xlib_surface_set_drawable(surface, window, w, h);
     } else {
-    CREATE_SURFACE:
       surface = cairo_xlib_surface_create(xdisplay, window, xvisual->visual, w, h);
       cr = cairo_create(surface);
       // emulate line_style(0):

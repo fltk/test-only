@@ -258,7 +258,11 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
   // Use fltk's color allocator, copy the results to match what
   // XftCollorAllocValue returns:
   XftColor color;
+#if USE_CAIRO
+  color.pixel = 0;
+#else
   color.pixel = current_xpixel;
+#endif
   uchar r,g,b; split_color(getcolor(), r,g,b);
   color.color.red   = r*0x101;
   color.color.green = g*0x101;

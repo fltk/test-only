@@ -75,6 +75,7 @@ CPPFILES = \
 	helloask.cxx \
 	iconize.cxx \
 	image.cxx \
+	image_transform.cxx \
 	input.cxx \
 	keyboard.cxx \
 	label.cxx \
@@ -146,6 +147,7 @@ TARGETS = \
 	gl_overlay$(EXEEXT) \
 	hello$(EXEEXT) \
 	image$(EXEEXT) \
+	image_transform$(EXEEXT) \
 	inactive$(EXEEXT) \
 	input$(EXEEXT) \
 	keyboard$(EXEEXT) \

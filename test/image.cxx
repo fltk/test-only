@@ -267,7 +267,9 @@ int main(int argc, char** argv) {
     }
     xcolormap = XCreateColormap(xdisplay, RootWindow(xdisplay,xscreen),
 				xvisual->visual, AllocNone);
-    xpixel(BLACK); // make sure black is allocated in overlay visuals
+# if !USE_CAIRO
+    fltk::xpixel(fltk::BLACK); // make sure black is allocated
+# endif
   } else {
     visual(RGB_COLOR);
   }

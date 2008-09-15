@@ -84,7 +84,6 @@ void fltk::line_style(int style, float width, const char* dashes) {
   line_style_ = style;
   line_width_ = width;
   line_dashes_ = dashes;
-#if !USE_CAIRO
   static DWORD Cap[4]= {PS_ENDCAP_ROUND, PS_ENDCAP_FLAT, PS_ENDCAP_ROUND, PS_ENDCAP_SQUARE};
   static DWORD Join[4]={PS_JOIN_ROUND, PS_JOIN_MITER, PS_JOIN_ROUND, PS_JOIN_BEVEL};
   if (dashes && dashes[0]) {
@@ -101,56 +100,6 @@ void fltk::line_style(int style, float width, const char* dashes) {
   // for some reason zero width does not work at all:
   line_width_i = int(width); if (!line_width_i) line_width_i = 1;
   if (current_pen) free_pen();
-#else
-  int ndashes = dashes ? strlen(dashes) : 0;
-  // emulate the _WIN32 dash patterns:
-  if (!ndashes && style&0xff) {
-    int w = (int) (width ? (width+.5) : 1.0);
-    char dash, dot, gap;
-    // adjust lengths to account for cap:
-    if (style & 0x200) {
-      dash = char(2*w);
-      dot = 1; // unfortunately 0 does not work
-      gap = char(2*w-1);
-    } else {
-      dash = char(3*w);
-      dot = gap = char(w);
-    }
-    char buf[7];
-    dashes = buf;
-    char* p = buf;
-    switch (style & 0xff) {
-    default:
-    case DASH:
-      *p++ = dash; *p++ = gap;
-      break;
-    case DOT:
-      *p++ = dot; *p++ = gap;
-      break;
-    case DASHDOT:
-      *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap;
-      break;
-    case DASHDOTDOT:
-      *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; *p++ = dot; *p++ = gap;
-      break;
-    }
-    ndashes = p-buf;
-  }
-  cairo_set_line_width(cr, width ? width : 1);
-  int c = (style>>8)&3; if (c) c--;
-  cairo_set_line_cap(cr, (cairo_line_cap_t)c);
-  int j = (style>>12)&3; if (j) j--;
-  cairo_set_line_join(cr, (cairo_line_join_t)j);
-  if (ndashes) {
-    double *dash = new double[ndashes];
-    for (int i = 0; i < ndashes; i++) dash[i] = dashes[i];
-    cairo_set_dash(cr, dash, ndashes, 0);
-    delete [] dash;
-  } else {
-    cairo_set_dash(cr, 0, 0, 0);
-  }
-
-#endif
 }
 
 #if USE_STOCK_BRUSH
@@ -262,24 +211,12 @@ void fltk::setcolor(Color i) {
   if (current_color_ != i) {
     current_color_ = i;
     current_xpixel = xpixel(i);
-    #if USE_CAIRO
-      uchar r,g,b; split_color(i,r,g,b);
-      if (!cc) {
-	    cairo_surface_t* s= 
-	    cairo_win32_surface_create(fltk::dc);
-	    cc= cairo_create(s);
-	    cairo_surface_destroy(s);
-      }
-  
-      cairo_set_source_rgb(cr,r/255.0,g/255.0,b/255.0);
-    #endif
-   }
+  }
 }
 
-// Used by setcolor_index
-static void free_color(Color) {
-  // CET - FIXME - Are there colormapped displays on Windows?
-  //               Would this only be used for private colormaps?
+// alpha color is not implemented
+void fltk::setcolor_alpha(Color color, float alpha) {
+  setcolor(color);
 }
 
 #if USE_COLORMAP

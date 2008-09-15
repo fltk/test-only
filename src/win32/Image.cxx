@@ -81,8 +81,6 @@ struct fltk::Picture {
 
 };
 
-unsigned long Image::memused_;
-
 int Image::buffer_width() const {
   if (picture) return picture->w;
   return w();

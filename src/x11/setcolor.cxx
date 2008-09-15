@@ -244,14 +244,16 @@ ulong fltk::current_xpixel;
 
 void fltk::setcolor(Color i) {
   current_color_ = i;
-#if USE_CAIRO
-  uchar r,g,b; split_color(i,r,g,b);
-  cairo_set_source_rgb(cr,r/255.0,g/255.0,b/255.0);
-#endif
   current_xpixel = xpixel(i);
   XSetForeground(xdisplay, gc, current_xpixel);
 }
 
+// alpha color is not implemented on X
+void fltk::setcolor_alpha(Color color, float alpha) {
+  setcolor(color);
+}
+
+#if USE_COLORMAP || USE_OVERLAY || USE_GL_OVERLAY
 // This is used by setcolor_index()
 static inline void free_color(Color i) {
 #if USE_COLORMAP
@@ -269,10 +271,10 @@ static inline void free_color(Color i) {
 #endif
 #endif
 }
+#define CALL_FREE_COLOR 1
+#endif
 
 ////////////////////////////////////////////////////////////////
-// This is here because Win32 makes it impossible to seperately set
-// the color and line style:
 
 void fltk::line_style(int style, float width, const char* dashes) {
   line_style_ = style;
@@ -285,19 +287,10 @@ void fltk::line_style(int style, float width, const char* dashes) {
     int w = int(width+.5); if (w<1) w = 1;
     char dash, dot, gap;
     // adjust lengths to account for cap:
-    if (style & 0x200
-#if USE_CAIRO
- || !width
-#endif
-	) {
+    if (style & 0x200) {
       dash = char(2*w);
-#if USE_CAIRO
-      dot = 0;
-      gap = char(2*w);
-#else
       dot = 1; // unfortunately 0 does not work
       gap = char(2*w-1);
-#endif
     } else {
       dash = char(3*w);
       dot = gap = char(w);
@@ -311,13 +304,11 @@ void fltk::line_style(int style, float width, const char* dashes) {
       break;
     case DOT:
       *p++ = dot; *p++ = gap;
-#if !USE_CAIRO
       // Bug in XFree86 3.0? If I only use the above two pieces it does
       // not completely "erase" the previous dash pattern. Making it longer
       // like this seems to fix this. For some reason this bug is only for
       // the dot pattern (not the dash), and only for 0-width lines:
       *p++ = dot; *p++ = gap; *p++ = dot; *p++ = gap;
-#endif
       break;
     case DASHDOT:
       *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap;
@@ -328,32 +319,12 @@ void fltk::line_style(int style, float width, const char* dashes) {
     }
     ndashes = p-buf;
   }
-#if USE_CAIRO
-  if (!width) {
-    cairo_set_line_width(cr, 1.0);
-    cairo_set_line_cap(cr, CAIRO_LINE_CAP_SQUARE);
-  } else {
-    cairo_set_line_width(cr, width);
-    int c = (style>>8)&3; if (c) c--;
-    cairo_set_line_cap(cr, (cairo_line_cap_t)c);
-  }
-  int j = (style>>12)&3; if (j) j--;
-  cairo_set_line_join(cr, (cairo_line_join_t)j);
-  if (ndashes) {
-    double dash[20];
-    for (int i = 0; i < ndashes; i++) dash[i] = dashes[i];
-    cairo_set_dash(cr, dash, ndashes, 0);
-  } else {
-    cairo_set_dash(cr, 0, 0, 0);
-  }
-#else
   if (ndashes) XSetDashes(xdisplay, gc, 0, dashes, ndashes);
   static int Cap[4] = {CapButt, CapButt, CapRound, CapProjecting};
   static int Join[4] = {JoinMiter, JoinMiter, JoinRound, JoinBevel};
   XSetLineAttributes(xdisplay, gc, int(width+.5),
 		     ndashes ? LineOnOffDash : LineSolid,
 		     Cap[(style>>8)&3], Join[(style>>12)&3]);
-#endif
 }
 
 //
