@@ -38,21 +38,6 @@
 
 using namespace fltk;
 
-class CairoWindow : public Window {
-public:
-    CairoWindow(int w, int h) : Window(w,h),draw_cb_(0) {}
-
-    void draw() {
-	Window::draw();
-	if (draw_cb_)draw_cb_(*this, cr); // enjoy cairo features here !
-    }
-    
-    typedef void (*draw_cb) (CairoWindow& self, cairo_t* def);
-    void set_draw_cb(draw_cb  cb){draw_cb_=cb;}
-private:
-    draw_cb draw_cb_;
-};
-
 // put your drawing stuff here
 float drawargs[7] = {90, 90, 100, 100, 0, 360, 0};
 const char* name[7] = {"X", "Y", "W", "H", "start", "end", "rotate"};
@@ -143,36 +128,39 @@ void round_button(cairo_t* cr, double x0, double y0,
     centered_text(cr,x0,y0,rect_width, rect_height, "FLTK loves Cairo!");
 
 }
-void my_cairo_draw_cb(CairoWindow& window, cairo_t* cr) {
-	
-    int w= window.w(), h = window.h(); 
 
-	
+class CairoWindow : public Window {
+public:
+
+  CairoWindow() : Window(300,300) {
+    resizable(this); // comment this out for fixed-size
+    color(fltk::WHITE); // desired background color
+  }
+
+  void draw() {
+    fltk::Window::draw(); // this erases it
+    cairo_save(cr);
+
     double xc = 0.5;
     double yc = 0.5;
     double radius = 0.4;
     double angle1 = 45.0  * (M_PI/180.0);  /* angles are specified */
     double angle2 = 180.0 * (M_PI/180.0);  /* in radians           */
-    
+
     cairo_set_line_width (cr, DEF_WIDTH);
-    cairo_scale (cr, w,h);
+    cairo_scale (cr, w(), h());
 
     round_button(cr,0.1,0.05,0.8,0.2,0.4,0,0,1);
     round_button(cr,0.1,0.35,0.8,0.2,0.4,1,0,0);
     round_button(cr,0.1,0.65,0.8,0.2,0.4,0,1,0);
-    return;
-
-
-}
+    cairo_restore(cr);
+  }
+};
 
 int main(int argc, char** argv) {
-    CairoWindow window(300,300);
-    window.resizable(&window);
-    window.color(fltk::WHITE);
-    window.show(argc,argv);
-    window.set_draw_cb(my_cairo_draw_cb);
-    
-    return fltk::run();
+  CairoWindow window;
+  window.show(argc,argv);
+  return fltk::run();
 }
 #else
 #include <fltk/ask.h>
