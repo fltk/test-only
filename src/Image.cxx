@@ -93,6 +93,8 @@ unsigned long Image::memused_;
 // Make the fltk::Picture be a cairo_surface_t:
 #define PICTURE ((cairo_surface_t*)picture)
 #define SET_PICTURE(x) picture = (fltk::Picture*)x
+// special flag to indicate if setimage was used:
+#define COPIED_DATA 32
 
 // Return the Cairo image type we will use for the given fltk image type
 static cairo_format_t cairo_format(PixelType type) {
@@ -240,7 +242,7 @@ fltk::PixelType Image::buffer_pixeltype() const {
   not been called.
 */
 unsigned long Image::mem_used() const {
-  if (picture)
+  if (flags & COPIED_DATA)
     return cairo_image_surface_get_stride(PICTURE)*cairo_image_surface_get_height(PICTURE);
   return 0;
 }
@@ -262,6 +264,7 @@ const uchar* Image::buffer() const {
 uchar* Image::buffer() {
   if (!picture) {
     SET_PICTURE(cairo_image_surface_create(cairo_format(pixeltype_), w_, h_));
+    flags |= COPIED_DATA;
     memused_ += mem_used();
   }
   return cairo_image_surface_get_data(PICTURE);
@@ -275,7 +278,7 @@ void Image::destroy() {
   memused_ -= mem_used();
   cairo_surface_destroy(PICTURE);
   picture = 0;
-  flags &= ~FETCHED;
+  flags &= ~(FETCHED|COPIED_DATA);
 }
 
 /**
@@ -419,17 +422,23 @@ void Image::setimage(const uchar* source, PixelType p, int w, int h, int ld)
 {
   setsize(w,h);
   setpixeltype(p);
+  // see if we can directly use the memory:
   if (p == ARGB32 || p == RGB32) {
-    // may want to make sure linedelta is ok?
-    // data can be used directly by cairo:
-    destroy();
-    SET_PICTURE(cairo_image_surface_create_for_data((unsigned char*)source, cairo_format(p), w, h, ld));
-    memused_ += mem_used(); // not really...
-  } else {
-    // copy the data to a new image_surface:
-    setpixels(source, Rectangle(w, h), ld);
+    cairo_surface_t* new_picture =
+      cairo_image_surface_create_for_data((unsigned char*)source, cairo_format(p), w, h, ld);
+    // check for no errors due to alignment or stride:
+    if (cairo_surface_status(new_picture) == 0) {
+      destroy();
+      SET_PICTURE(new_picture);
+      flags |= FETCHED;
+      return;
+    }
+    cairo_surface_destroy(new_picture);
   }
-  flags = FETCHED;
+  // copy the data to a normal cairo_image:
+  if (!(flags & COPIED_DATA)) destroy();
+  setpixels(source, Rectangle(w, h), ld);
+  flags |= FETCHED;
 }
 
 /*! \fn void Image::setimage(const uchar* d, PixelType p, int w, int h)

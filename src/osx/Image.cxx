@@ -226,7 +226,7 @@ void Image::setimage(const uchar* source, PixelType p, int w, int h, int ld)
   } else {
     destroy();
     picture = new Picture(p, w, h, ld, source);
-    flags = FETCHED;
+    flags |= FETCHED;
   }
 }
 
