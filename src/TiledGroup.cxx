@@ -101,41 +101,42 @@ int TiledGroup::handle(int event) {
 
   case MOVE:
   case ENTER:
-  case PUSH: {
-    int mindx = 100;
-    int mindy = 100;
-    int oldx = 0;
-    int oldy = 0;
-    int* q = sizes();
-    int* p = q+8;
-    int numchildren = children();
-    for (int i=0; i < numchildren; p += 4, i++) {
-      Widget* o = child(i);
-      if (o == resizable()) continue;
-      if (p[1]<q[1] && o->y()<=my+GRABAREA && o->y()+o->h()>=my-GRABAREA) {
-	int t = mx - (o->x()+o->w());
-	if (abs(t) < mindx) {
-	  sdx = t;
-	  mindx = abs(t);
-	  oldx = p[1];
-	}
+  case PUSH:
+    if (active()) {
+      int mindx = 100;
+      int mindy = 100;
+      int oldx = 0;
+      int oldy = 0;
+      int* q = sizes();
+      int* p = q+8;
+      int numchildren = children();
+      for (int i=0; i < numchildren; p += 4, i++) {
+        Widget* o = child(i);
+        if (o == resizable()) continue;
+        if (p[1]<q[1] && o->y()<=my+GRABAREA && o->y()+o->h()>=my-GRABAREA) {
+          int t = mx - (o->x()+o->w());
+          if (abs(t) < mindx) {
+            sdx = t;
+            mindx = abs(t);
+            oldx = p[1];
+          }
+        }
+        if (p[3]<q[3] && o->x()<=mx+GRABAREA && o->x()+o->w()>=mx-GRABAREA) {
+          int t = my - (o->y()+o->h());
+          if (abs(t) < mindy) {
+            sdy = t;
+            mindy = abs(t);
+            oldy = p[3];
+          }
+        }
       }
-      if (p[3]<q[3] && o->x()<=mx+GRABAREA && o->x()+o->w()>=mx-GRABAREA) {
-	int t = my - (o->y()+o->h());
-	if (abs(t) < mindy) {
-	  sdy = t;
-	  mindy = abs(t);
-	  oldy = p[3];
-	}
-      }
+      sdrag = 0; sx = sy = 0;
+      if (mindx <= GRABAREA) {sdrag = DRAGH; sx = oldx;}
+      if (mindy <= GRABAREA) {sdrag |= DRAGV; sy = oldy;}
+      cursor(cursors[sdrag]);
+      if (sdrag) return 1;
     }
-    sdrag = 0; sx = sy = 0;
-    if (mindx <= GRABAREA) {sdrag = DRAGH; sx = oldx;}
-    if (mindy <= GRABAREA) {sdrag |= DRAGV; sy = oldy;}
-    cursor(cursors[sdrag]);
-    if (sdrag) return 1;
     return Group::handle(event);
-  }
 
   case DRAG:
     // This is necessary if CONSOLIDATE_MOTION in x.C is turned off:
