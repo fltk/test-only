@@ -264,10 +264,6 @@ bool MenuTabPager::draw_tabs(TabGroup* g, int selected, int* p, int* w) {
     
     for (i=0;i<g->children()-1; i++) if (p[i]+w[i]>r) break;
     //printf("%c last %d (p,w,p+w) = (%d,%d,%d),win width=%d, avail width = %d\n",want_extension ? 'E' : ' ',i, p[i],w[i],p[i]+w[i],g->w(),r);
-    if (extension_) {
-	if (want_extension) extension_->set_visible();
-	else extension_->clear_visible();
-    }
 
     for (i=shift()-1; i>=0; i--) 
 	// when resizing, thumbnails behind the shift may be drawable again
@@ -295,8 +291,10 @@ bool MenuTabPager::draw_tabs(TabGroup* g, int selected, int* p, int* w) {
     if (want_extension) {
 	createExtMenu(g);
     } else {
-	if (!extension_) {delete extension_; extension_=0; }
-	g->redraw();
+      if (extension_ && extension_->visible()) {
+        extension_->clear_visible();
+        // g->redraw(); // I think it is already erased
+      }
     }
     return true;
 }
@@ -322,6 +320,7 @@ void MenuTabPager::createExtMenu(TabGroup* g){
 	extension_->callback(btnCb);
 	extension_->buttonbox(FLAT_BOX);
     }
+    extension_->set_visible();
     extension_->clear();
     for (int i=0;i<g->children(); i++) {
 	Widget  * c = g->child(i);
