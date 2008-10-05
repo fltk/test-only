@@ -508,7 +508,7 @@ static void mask_converter(const uchar* from, uchar* to, int w)
       amask <<= 1;
     }
   }
-  *ap = aaccum;
+  if (amask != 1) *ap = aaccum;
   converter[RGB32]((const uchar*)buffer, to, w);
 }
 
@@ -547,7 +547,7 @@ static void rgba_converter(const uchar* from, uchar* to, int w) {
       amask <<= 1;
     }
   }
-  *ap = aaccum;
+  if (amask != 1) *ap = aaccum;
   converter[RGB32]((const uchar*)buffer, to, w);
 }
 
@@ -588,7 +588,7 @@ static void argb32_converter(const uchar* from, uchar* to, int w) {
       amask <<= 1;
     }
   }
-  *ap = aaccum;
+  if (amask != 1) *ap = aaccum;
   converter[RGB32]((const uchar*)buffer, to, w);
 }
 
@@ -627,7 +627,7 @@ static void rgbm_converter(const uchar* from, uchar* to, int w) {
       amask <<= 1;
     }
   }
-  *ap = aaccum;
+  if (amask != 1) *ap = aaccum;
   converter[RGB32]((const uchar*)buffer, to, w);
 }
 
@@ -668,7 +668,7 @@ static void mrgb32_converter(const uchar* from, uchar* to, int w) {
       amask <<= 1;
     }
   }
-  *ap = aaccum;
+  if (amask != 1) *ap = aaccum;
   converter[RGB32]((const uchar*)buffer, to, w);
 }
 
