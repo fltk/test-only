@@ -53,7 +53,11 @@ TextEditor::TextEditor(int X, int Y, int W, int H, const char* l)
   default_key_function(kf_default);
 }
 
-TextEditor::~TextEditor() { remove_all_key_bindings(); }
+extern Widget* fl_pending_callback;
+TextEditor::~TextEditor() {
+  if (fl_pending_callback == this) fl_pending_callback = 0;
+  remove_all_key_bindings();
+}
 
 TextEditor::Key_Binding* TextEditor::global_key_bindings = 0;
 
@@ -415,8 +419,6 @@ int TextEditor::handle_key() {
   if (default_key_function_ && !state) return default_key_function_(c, this);
   return 0;
 }
-
-extern Widget* fl_pending_callback;
 
 // Called by any changes to the text, this correctly triggers callbacks:
 void TextEditor::maybe_do_callback() {
