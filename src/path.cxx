@@ -630,7 +630,6 @@ void fltk::addpie(const Rectangle& r, float start, float end) {
   addvertex(r.x()+r.w()*.5f, r.y()+r.h()*.5f);
   float delta = sqrtf(1/fabsf(m.a*m.d-m.b*m.c));
   addarc(r.x()+delta/2, r.y()+delta/2, r.w()-delta, r.h()-delta, start, end);
-  closepath();
 #else
   transform(r, circle);
   circle_start = start;
@@ -647,8 +646,7 @@ void fltk::addpie(const Rectangle& r, float start, float end) {
 
   This tries to take advantage of the primitive calls provided by
   Xlib and GDI32. Limitations are that you can only draw one,
-  a rotated current transform does not work, and whether stroke
-  of a closed version draws the straight edge is indeterminate.
+  a rotated current transform does not work.
 */
 void fltk::addchord(const Rectangle& r, float start, float end) {
 #if USE_CAIRO || USE_QUARTZ

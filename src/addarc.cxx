@@ -45,12 +45,12 @@ using namespace fltk;
 void fltk::addarc(float l, float t, float w, float h, float start, float end)
 {
 #if USE_CAIRO
-  cairo_save(cr);//push cairo state
+  cairo_save(cr);
   extern void fl_set_cairo_ctm();
   fl_set_cairo_ctm();
   float x = l+w/2;
   float y = t+h/2;
-  
+
   double scl=h/w;
   cairo_scale(cr,1.,scl);//Need for 'ovals'
   y/=scl;//restore coordinate
@@ -58,7 +58,7 @@ void fltk::addarc(float l, float t, float w, float h, float start, float end)
     cairo_arc(cr,x,y,w/2,start*(-M_PI/180),end*(-M_PI/180));
   else
     cairo_arc_negative(cr,x,y,w/2,start*(-M_PI/180),end*(-M_PI/180));
-  cairo_restore(cr);//pop cairo state
+  cairo_restore(cr);
 #else
   const float x = l+w/2;
   const float y = t+h/2;
