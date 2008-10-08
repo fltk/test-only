@@ -848,9 +848,8 @@ void fltk::fillpath() {
 */
 void fltk::fillstrokepath(Color color) {
 #if USE_CAIRO
-  cairo_save(cr);
+  closepath();
   cairo_fill_preserve(cr);
-  cairo_restore(cr);
   setcolor(color);
   cairo_stroke(cr);
 #elif USE_QUARTZ
