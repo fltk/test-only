@@ -576,6 +576,7 @@ void fltk::addvertices_transformed(int n, const float array[][2]) {
 void fltk::closepath() {
 #if USE_CAIRO
   cairo_close_path(cr);
+  cairo_new_sub_path(cr);
 #elif USE_QUARTZ
   if (!first_point) 
     CGContextClosePath(quartz_gc);

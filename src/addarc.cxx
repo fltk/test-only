@@ -46,7 +46,8 @@ void fltk::addarc(float l, float t, float w, float h, float start, float end)
 {
 #if USE_CAIRO
   cairo_save(cr);//push cairo state
-  transform(l,t);
+  extern void fl_set_cairo_ctm();
+  fl_set_cairo_ctm();
   float x = l+w/2;
   float y = t+h/2;
   
