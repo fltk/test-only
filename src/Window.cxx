@@ -343,7 +343,10 @@ int Window::handle(int event) {
   case HIDE:
     if (flag(MODAL)) modal(0, false);
 #if USE_X11
-    if (i) XUnmapWindow(xdisplay, i->xid);
+    if (i) {
+      if (!parent()) XWithdrawWindow(xdisplay, i->xid, xscreen);
+      XUnmapWindow(xdisplay, i->xid);
+    }
 #elif defined(_WIN32)
     if (i) {
       deferred_call(SHOW_WINDOW, i->xid, SW_HIDE);
