@@ -27,6 +27,7 @@
 // These box types are in seperate files so they are not linked
 // in if not used.
 
+#include <config.h>
 #include <fltk/Box.h>
 #include <fltk/Style.h>
 #include <fltk/draw.h>
@@ -44,6 +45,12 @@ public:
 
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
 
+#if USE_CAIRO || USE_QUARTZ
+static void addarc(const Rectangle& r, float start, float end) {
+  addarc(r.x(),r.y(),r.w(),r.h(),start,end);
+}
+#endif
+
 // Draw the oval shape. This is ugly because I need to cut the path
 // up into individual arcs so the drawing library uses the server
 // arc code.
@@ -53,8 +60,32 @@ static void lozenge(int which, int x,int y,int w,int h, Color color)
   int d = w <= h ? w : h;
   if (d <= 1) return;
   setcolor(color);
-
   Rectangle r1(x+w-d, y, d, d);
+  Rectangle r2(x, y+h-d, d, d);
+
+#if USE_CAIRO || USE_QUARTZ
+
+  newpath();
+  switch (which) {
+  case UPPER_LEFT:
+    addarc(r1, 45.0f, w<=h ? 180.0f : 90.0f);
+    addarc(r2, w<=h ? 180.0f : 90.0f, 225.0f);
+    break;
+  case LOWER_RIGHT:
+    addarc(r2, 225.0f, w<=h ? 360.0f : 270.0f);
+    addarc(r1, w<=h ? 360.0f : 270.0f, 360.0f+45.0f);
+    break;
+  default:
+    addarc(r1, w<=h ? 0.0f : -90.0f, w<=h ? 180.0f : 90.0f);
+    addarc(r2, w<=h ? 180.0f : 90.0f, w<=h ? 360.0f : 270.0f);
+    break;
+  }
+  which==FILL ? fillpath() : strokepath();
+
+#else
+  // Ugly version that uses pie pieces in order to get the better drawing
+  // functions.
+
   if (which >= CLOSED) {
     addpie(r1, w<=h ? 0.0f : -90.0f, w<=h ? 180.0f : 90.0f);
   } else if (which == UPPER_LEFT) {
@@ -64,7 +95,6 @@ static void lozenge(int which, int x,int y,int w,int h, Color color)
   }
   which==FILL ? fillpath() : strokepath();
 
-  Rectangle r2(x, y+h-d, d, d);
   if (which >= CLOSED) {
     addpie(r2, w<=h ? 180.0f : 90.0f, w<=h ? 360.0f : 270.0f);
   } else if (which == UPPER_LEFT) {
@@ -88,6 +118,7 @@ static void lozenge(int which, int x,int y,int w,int h, Color color)
       if (which != LOWER_RIGHT) drawline(x+d/2, y, x+w-d/2, y);
     }
   }
+#endif
 }
 
 extern void fl_to_inactive(const char* s, char* to);
