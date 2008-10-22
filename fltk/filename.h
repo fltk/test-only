@@ -63,8 +63,12 @@ struct dirent {char d_name[1];};
 # include <features.h>
 # include <sys/types.h>
 # include <dirent.h>
-# define dirent dirent64
-# define scandir scandir64
+# if defined(__GLIBC_PREREQ)
+#  if __GLIBC_PREREQ(2,3)
+#   define dirent dirent64
+#   define scandir scandir64
+#  endif
+# endif
 
 #else
 // warning: on some systems (very few nowadays?) <dirent.h> may not exist.
