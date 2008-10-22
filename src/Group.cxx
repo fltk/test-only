@@ -354,7 +354,7 @@ int Group::handle(int event) {
 
   case KEY: {
     // keyboard navigation
-    if (numchildren < 2) break;
+    if (numchildren < 1) break;
     int key = navigation_key();
     if (!key) break;
     int previous = focus_index_;
