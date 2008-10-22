@@ -197,10 +197,6 @@
 /* Which header file do we include for libjpeg? */
 #define HAVE_LOCAL_JPEG_H 1
 
-/* Do we have the png_xyz() functions? */
-/* #undef HAVE_PNG_GET_VALID */
-/* #undef HAVE_PNG_SET_TRNS_TO_ALPHA */
-
 /* Do we have POSIX thread library? fltk::lock() will not work unless
    this exists or WIN32 exists. */
 #define HAVE_PTHREAD 1
