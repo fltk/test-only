@@ -1613,9 +1613,16 @@ void Window::label(const char *name, const char * iname) {
   iconlabel_ = iname;
   if (i && !parent()) {
     if (!name) name = "";
+#if 0
+    // this probably works, it was in a bug report
+    CFStringRef mlabel = CFStringCreateWithCString(NULL, name, kCFStringEncodingUTF8);
+    SetWindowTitleWithCFString(fl_xid(this), mlabel);
+    CFRelease(mlabel);
+#else
     Str255 pTitle;
     pTitle[0] = strlen(name); memcpy(pTitle+1, name, pTitle[0]);
     SetWTitle(xid(this), pTitle);
+#endif
     // if (!iname) iname = filename_name(name);
     // should do something with iname here, it should label the dock icon
   }
