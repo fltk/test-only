@@ -206,10 +206,15 @@ void Group::add(Widget &o) {
 void Group::remove(int index) {
   if (index >= children_) return;
   Widget* o = array_[index];
+  // we must redraw the enclosing group that has an opaque box:
+  if (o->visible_r())
+    for (Widget *p = this; p; p = p->parent())
+      if (p->box() != NO_BOX || !p->parent()) {p->redraw(); break;}
   o->parent(0);
   children_--;
   for (int i=index; i < children_; ++i) array_[i] = array_[i+1];
   init_sizes();
+  redraw();
 }
 
 /*! \fn void Group::remove(Widget& widget)
