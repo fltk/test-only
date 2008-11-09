@@ -739,34 +739,43 @@ int MWindow::handle(int event) {
     }
     {for (int menu = p.nummenus; menu--;) {
       MWindow &mw = *(p.menus[menu]);
-      int nextitem = -1;
-      static char lastkey; // test for same key multiple times
-      if (p.indexes[menu] < 0) lastkey = 0;
+      // Apparent rules, at least for Firefox:
+      // Check for &x, if there is none check for leading 'x'
+      // If there is exactly one, execute it (STR#980, STR#2078)
+      // Otherwise cycle through the matches
+      // Whether Alt is held down is apparently irrelevant.
+      int current_item = p.indexes[menu];
+      int new_item = -1;
+      bool found_underscore = false;
+      bool execute_it = true;
       for (int item = 0; item < mw.children; item++) {
 	widget = mw.get_widget(item);
-//	if (widget->active() && widget->test_shortcut(false)) {
-//	  setitem(p, menu, item);
-//	  lastkey = 0;
-//	  goto EXECUTE;
-//	}
-	// continue unless this item can be picked by the keystroke:
 	if (!widget->takesevents()) continue;
 	if (widget->test_label_shortcut()) {
-	  // underscored items are jumped to immediately on first keystroke:
-	  if (event_text()[0]!=lastkey) {nextitem = item; continue;}
-	} else {
+          if (!found_underscore) {
+            found_underscore = true;
+            new_item = -1;
+            execute_it = true;
+          }
+	} else if (found_underscore) {
+          continue;
+        } else {
 	  const char* l = widget->label();
 	  if (!l || tolower(*l) != event_text()[0]) continue;
 	}
-	// cycle around the selectable items:
-	if (nextitem < 0 ||
-	    nextitem <= p.indexes[menu] && item > p.indexes[menu])
-	  nextitem = item;
+        if (new_item >= 0) { // found more than one item
+          execute_it = false;
+          if (item > current_item && new_item <= current_item)
+            new_item = item;
+        } else {
+          if (widget->is_group()) // don't execute submenu titles
+            execute_it = false;
+          new_item = item;
+        }
       }
-      lastkey = event_text()[0];
-      if (nextitem >= 0) {
-	setitem(p, menu, nextitem);
-	goto EXECUTE; // now menu items autoexecute see STR#980  return 1;
+      if (new_item >= 0) {
+	setitem(p, menu, new_item);
+        if (execute_it) goto EXECUTE;
       }
     }}
     return 1; // always eat all the keystrokes
