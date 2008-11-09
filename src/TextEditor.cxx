@@ -202,8 +202,9 @@ int TextEditor::kf_ignore(int, TextEditor*) {
 }
 
 int TextEditor::kf_backspace(int, TextEditor* e) {
+  int oldpos = e->insert_position();
   if (!e->buffer()->selected() && e->move_left())
-    e->buffer()->select(e->insert_position(), e->insert_position()+1);
+    e->buffer()->select(e->insert_position(), oldpos);
   kill_selection(e);
   e->show_insert_position();
   e->maybe_do_callback();
@@ -343,8 +344,9 @@ int TextEditor::kf_insert(int, TextEditor* e) {
 }
 
 int TextEditor::kf_delete(int, TextEditor* e) {
-  if (!e->buffer()->selected())
-    e->buffer()->select(e->insert_position(), e->insert_position()+1);
+  int oldpos = e->insert_position();
+  if (!e->buffer()->selected() && e->move_right())
+    e->buffer()->select(oldpos, e->insert_position());
   kill_selection(e);
   e->show_insert_position();
   e->maybe_do_callback();
