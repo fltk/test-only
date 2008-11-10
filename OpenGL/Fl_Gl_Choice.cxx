@@ -226,7 +226,35 @@ static void destructor() {
 #endif
 
 GLContext fltk::create_gl_context(XVisualInfo* vis) {
-  GLContext context = glXCreateContext(xdisplay, vis, first_context, 1);
+  GLContext context;
+#if 1 // enable OpenGL3 support if possible
+  typedef GLXFBConfig (*PFNGLXGETFBCONFIGFROMVISUALSGIXPROC)(
+		Display *dpy,
+		XVisualInfo *vis );
+  typedef GLXContext (*PFNGLXCREATECONTEXTATTRIBSARB)(
+		Display *dpy,
+		GLXFBConfig config,
+		GLXContext share_context,
+		Bool direct,
+		const int *attrib_list);
+
+  PFNGLXGETFBCONFIGFROMVISUALSGIXPROC glXGetFBConfigFromVisualSGIX = (PFNGLXGETFBCONFIGFROMVISUALSGIXPROC)
+		glXGetProcAddress((const GLubyte *) "glXGetFBConfigFromVisualSGIX");
+
+  PFNGLXCREATECONTEXTATTRIBSARB glXCreateContextAttribsARB =
+		(PFNGLXCREATECONTEXTATTRIBSARB)  glXGetProcAddress((const GLubyte *) "glXCreateContextAttribsARB");
+
+  if (glXGetFBConfigFromVisualSGIX && glXCreateContextAttribsARB) {
+    printf("Success!\n");
+    GLXFBConfig c = glXGetFBConfigFromVisualSGIX(xdisplay, vis);
+#   define GLX_CONTEXT_MAJOR_VERSION_ARB		0x2091
+#   define GLX_CONTEXT_MINOR_VERSION_ARB		0x2092
+    int arr2[] = {  GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
+                    GLX_CONTEXT_MINOR_VERSION_ARB, 0, None };
+    context = glXCreateContextAttribsARB(xdisplay, c, first_context, True, arr2);
+  } else
+#endif
+    context = glXCreateContext(xdisplay, vis, first_context, 1);
 #if DESTROY_ON_EXIT
   Contexts* p = new Contexts;
   p->context = context;
