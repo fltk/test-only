@@ -77,7 +77,7 @@ static shortcutAssociationType shortcutAssociation;
   Widget::test_shortcut() to see if the keystroke is registered here (many
   widgets will also directly test the key to see if it is something
   they are interested in).  */
-bool Widget::add_shortcut(unsigned key) {
+bool Widget::add_shortcut(size_t key) {
   if (!key) return false;
   key = key&0xffff0000u|tolower(key&0xffu);
   if (find(shortcutAssociation, (void*)key)) return false;
@@ -89,7 +89,7 @@ bool Widget::add_shortcut(unsigned key) {
 /*!
   Delete a shortcut assignment. Returns true if it actually existed.
 */
-bool Widget::remove_shortcut(unsigned key) {
+bool Widget::remove_shortcut(size_t key) {
   return remove(shortcutAssociation, (void*)key);
 }
 
@@ -108,8 +108,8 @@ void Widget::remove_shortcuts() {
   or returns zero if there are none. If you want to look at more
   than onle you must use fltk::list_shortcuts(this).
 */
-unsigned Widget::shortcut() const {
-  return (unsigned int)get(shortcutAssociation);
+size_t Widget::shortcut() const {
+  return (size_t)get(shortcutAssociation);
 }
 
 
@@ -118,7 +118,7 @@ unsigned Widget::shortcut() const {
   except it may be implemented in a more efficient way.
   The result is exactly one shortcut (or none if \a key is zero).
 */
-void Widget::shortcut(unsigned key) {
+void Widget::shortcut(size_t key) {
   set(shortcutAssociation, (void*)key);
 }
 
@@ -130,7 +130,7 @@ void Widget::shortcut(unsigned key) {
   the first '&' in the label (except '&&' is ignored), or zero if
   there isn't any '&' sign or if flag(RAW_LABEL) is on.
 */
-unsigned Widget::label_shortcut() const {
+size_t Widget::label_shortcut() const {
   if (flag(RAW_LABEL)) return 0;
   const char* label = this->label();
   if (!label) for (;*label;) {
@@ -198,7 +198,7 @@ class keyCompareFunctor : public AssociationFunctor {
 
       count++;
 
-      unsigned int key = (unsigned int)data;
+      size_t key = (size_t)data;
 
       unsigned mismatch = key ^ (event_key() | event_state());
 
@@ -250,7 +250,7 @@ public:
   ShortcutFunctor& f;
   GlueFunctor(ShortcutFunctor& g) : f(g) {}
   bool handle(const AssociationType&, const Widget* widget, void* data) {
-    return f.handle(widget, (unsigned int)data);
+    return f.handle(widget, (size_t)data);
   }
 };
 
@@ -285,7 +285,7 @@ f() {
 */
 unsigned fltk::foreachShortcut(const Widget* widget, ShortcutFunctor& f) {
   GlueFunctor g(f);
-  return (unsigned int)(foreach(&shortcutAssociation, widget, g));
+  return (size_t)(foreach(&shortcutAssociation, widget, g));
 }
 
 // End of $Id$
