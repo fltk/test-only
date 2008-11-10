@@ -275,15 +275,16 @@ FL_API bool compose(int &del);
 inline void compose_reset()		{compose_state = 0;}
 
 // shortcuts:
-/*! Structure created by Widget::add_shortcut() and returned by list_shortcuts(). */
-struct ShortcutAssignment {Widget* widget; unsigned key;};
-FL_API const ShortcutAssignment* list_shortcuts(unsigned key, unsigned& count);
-FL_API const ShortcutAssignment* list_shortcuts(const Widget*,unsigned& count);
-FL_API const ShortcutAssignment* list_shortcuts(unsigned& count);
-FL_API const ShortcutAssignment* list_matching_shortcuts(unsigned& count);
 FL_API bool try_shortcut();
 FL_API const char* key_name(unsigned key);
 FL_API unsigned key(const char* name);
+
+class FL_API ShortcutFunctor {
+ public:
+  virtual bool handle(const Widget*, unsigned key) = 0;
+};
+FL_API unsigned foreachShortcut(const Widget*, ShortcutFunctor&);
+inline unsigned foreachShortcut(ShortcutFunctor& f) { return foreachShortcut(0,f); }
 
 // get current information, not info from last event:
 FL_API bool get_key_state(unsigned);

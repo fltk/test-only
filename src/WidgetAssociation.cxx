@@ -177,6 +177,72 @@ void* Widget::get(const AssociationType& at) const {
 }
 
 /*!
+ * tries to remove one association from a widget, if it exists it is removed
+ * and the function returns true, if such an association doesn't exist false is returned
+ * and nothing is changed
+ */
+bool Widget::remove(const AssociationType& at, void* data) {
+
+  if (associationTableSize == 0) return false;
+
+  const size_t hash = (size_t)this % associationTableSize;
+
+  PrimaryAssociation* node = associationTable[hash];
+
+  while (node && node->wg != this) node = node->next;
+
+  if (!node) return false;
+
+  Association* ass = node->associations;
+  Association* prev = 0;
+
+  while (ass && ass->at != &at && ass->data != data) {
+    prev = ass;
+    ass = ass->next;
+  }
+
+  if (!ass) return false;
+
+  if (prev)
+    prev->next = ass->next;
+  else
+    node->associations = ass->next;
+
+  ass->at->destroy(ass->data);
+  delete ass;
+
+  return true;
+}
+
+/*!
+ * tries to find an association of this type with the given data
+ * if found the function returns true, else false
+ */
+bool Widget::find(const AssociationType& at, void* data) const {
+
+  if (associationTableSize == 0) return false;
+
+  const size_t hash = (size_t)this % associationTableSize;
+
+  PrimaryAssociation* node = associationTable[hash];
+
+  while (node && node->wg != this) node = node->next;
+
+  if (!node) return false;
+
+  Association* ass = node->associations;
+  Association* prev = 0;
+
+  while (ass && ass->at != &at && ass->data != data) {
+    prev = ass;
+    ass = ass->next;
+  }
+
+  return ass != 0;
+}
+
+
+/*!
   Call the functor for each piece of data of the give AssociationType.
   This is a wrapper for ::foreach(&at, this, fkt).
  */

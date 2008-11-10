@@ -102,10 +102,10 @@ public:
   void	tooltip(const char *t)	{ tooltip_ = t; }
 
   unsigned shortcut() const	;
-  bool	shortcut(unsigned key)	;
+  void	shortcut(unsigned key)	;
   bool	add_shortcut(unsigned key);
   bool	remove_shortcut(unsigned key);
-  bool  remove_shortcuts()	;
+  void  remove_shortcuts()	;
   unsigned label_shortcut() const;
   bool	test_label_shortcut() const;
   bool	test_shortcut() const	;
@@ -259,6 +259,8 @@ public:
   void  set(const AssociationType&, void* data);
   void* get(const AssociationType&) const;
   void* foreach(const AssociationType&, AssociationFunctor&) const;
+  bool  remove(const AssociationType&, void* data);
+  bool  find(const AssociationType&, void* data) const;
 
 #ifdef FLTK_1_WIDGET  // back-compatability section:
 

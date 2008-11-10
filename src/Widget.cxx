@@ -90,7 +90,6 @@ extern void delete_associations_for(Widget* widget); // in WidgetAssociation.cxx
 */
 Widget::~Widget() {
   remove_timeout();
-  remove_shortcuts();
   if (parent_) parent_->remove(this);
   throw_focus();
   delete_associations_for(this);

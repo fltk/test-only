@@ -81,6 +81,14 @@ void build_hierarchy() {
 
 void quit_cb(Widget*, void*) {exit(0);}
 
+class ListShortcuts : public ShortcutFunctor {
+public:
+  bool handle(const Widget* widget, unsigned key) {
+    printf("Widget=%s shortcut=%s\n", widget->label() ? widget->label() : "NULL", key_name(key));
+    return false;
+  }
+} listShortcuts;
+
 int main(int argc, char **argv) {
   Window window(WIDTH,400);
   window.begin();
@@ -185,6 +193,8 @@ int main(int argc, char **argv) {
   window.size_range(300,20);
   window.end();
   window.show(argc, argv);
+
+  foreachShortcut(listShortcuts);
 
   return run();
 }

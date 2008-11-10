@@ -39,8 +39,8 @@ FL_API void*  foreach(const AssociationType*, const Widget*, AssociationFunctor&
 
 /*! \brief Base class for the association type.
  *
- * FLTK allows you to attach any kind user data to a widget. This data is automatically freed when the
- * widget to which it is attached is destroyed. Internally an association table is used to connetc the
+ * FLTK allows you to attach any kind of user data to a widget. This data is automatically freed when the
+ * widget to which it is attached is destroyed. Internally an association table is used to connect the
  * widget pointer with the data pointer that is why all the functions concerned with this feature contain
  * "association" in their name. The advantage of this is that no space is taken on widgets that do not
  * contain the data (or that have the "default value"), and that the destructor code is not linked in
@@ -62,7 +62,7 @@ FL_API void*  foreach(const AssociationType*, const Widget*, AssociationFunctor&
 class FL_API AssociationType {
 
  public:
-  /*! \brief This function is called with associated data is freed
+  /*! \brief This function is called when associated data is freed
    * This function must be proveded when creating a data specific subclass. The function
    * must do whatever is necessary to free associated data. Most of the time it will be a cast
    * to the right datatype and a delete
@@ -70,8 +70,8 @@ class FL_API AssociationType {
   virtual void destroy(void* data) const = 0;
 
   /*! \brief Finds all data of this association type for a widget
-   * This function is just calls fltk::foreach(this, wg, fkt). If \a widget
-   * is NULL this all data for any widget.
+   * This function just calls fltk::foreach(this, wg, fkt). If \a wg
+   * is NULL this function will find all data for any widget.
    */
   void* foreach(const Widget* wg, AssociationFunctor& fkt) { return fltk::foreach(this, wg, fkt); }
 };
