@@ -22,8 +22,6 @@
 #ifndef fltk_Widget_h
 #define fltk_Widget_h
 
-#include <cstdio>
-
 #include "Style.h"
 #include "Rectangle.h"
 
@@ -103,12 +101,12 @@ public:
   const char *tooltip() const	{ return tooltip_; }
   void	tooltip(const char *t)	{ tooltip_ = t; }
 
-  size_t shortcut() const	;
-  void	shortcut(size_t key)	;
-  bool	add_shortcut(size_t key);
-  bool	remove_shortcut(size_t key);
+  unsigned shortcut() const	;
+  void	shortcut(unsigned key)	;
+  bool	add_shortcut(unsigned key);
+  bool	remove_shortcut(unsigned key);
   void  remove_shortcuts()	;
-  size_t label_shortcut() const;
+  unsigned label_shortcut() const;
   bool	test_label_shortcut() const;
   bool	test_shortcut() const	;
   bool  test_shortcut(bool) const;

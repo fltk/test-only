@@ -76,18 +76,13 @@ static Keyname table[] = {
 #endif
 };
 
-// Secret control for fltk::key_name.
-// 0 = all letters are returned lower-case
-// 1 = all letters are returned upper-case (default)
-// 2 = letters are uppercase if SHIFT is on
-FL_API int fl_key_name_uppercase = 1;
-
 /*!
-  Unparse a fltk::Widget::shortcut() or fltk::event_key() value into
-  human-readable text. Returns a pointer to a
-  human-readable string like "Alt+N". If \a hotkey is zero an empty
-  string is returned. The return value points at a static buffer that
-  is overwritten with each call.
+
+  Unparse a fltk::Widget::shortcut(), an fltk::event_key(), or an
+  fltk::event_key() or'd with fltk::event_state().  Returns a pointer
+  to a human-readable string like "Alt+N". If \a hotkey is zero an
+  empty string is returned. The return value points at a static buffer
+  that is overwritten with each call.
 
   The opposite function is fltk::key().
 */
@@ -142,12 +137,8 @@ const char* fltk::key_name(unsigned hotkey) {
     return buf;
   }
   // if all else fails use the keysym as a character:
-  switch (fl_key_name_uppercase) {
-  case 0: *p = uchar(key); break;
-  case 2: if (!(hotkey&SHIFT)) {*p = uchar(key); break;}
-  default: *p = toupper(uchar(key)); break;
-  }
-  *++p = 0;
+  *p++ = uchar(key);
+  *p = 0;
   return buf;
 }
 

@@ -154,32 +154,32 @@ MenuBar* build_hierarchy(MenuBar* menubar) {
     menubar->begin();
 
     {MenuSection g("&File");
-	new Item("&New", COMMAND+'n', new_cb, 0);//)->image(new_pixmap);
-	new Item("&Open...", COMMAND+'o', open_cb, 0);//)->image(open_pixmap);
-	new Item("&Save", COMMAND+'s', save_cb, 0); //)->image(save_pixmap);
+	new Item("&New", COMMAND+'N', new_cb, 0);//)->image(new_pixmap);
+	new Item("&Open...", COMMAND+'O', open_cb, 0);//)->image(open_pixmap);
+	new Item("&Save", COMMAND+'S', save_cb, 0); //)->image(save_pixmap);
 	new Item("S&ave As", SHIFT+COMMAND+'S', save_cb, (void*)1);
 	new Item("Sa&ve a Copy", ACCELERATOR+COMMAND+'S', save_cb, (void*)2);
 	new Item("Save &Template", COMMAND+'T', save_template_cb, (void*)1);
 	new Divider();
 	new Item("&Revert", COMMAND+'R', revert_cb, (void*)1);
 	//new Item("&Print", COMMAND+'P', print_menu_cb, (void*)1); // TODO: add nice printing code
-	new Item("&Merge...", COMMAND+'i', open_cb, (void*)1);//)->image(merge_pixmap);
-	new Item("&Write code", COMMAND+'w', write_cb, 0);//)->image(write_pixmap);
+	new Item("&Merge...", COMMAND+'I', open_cb, (void*)1);//)->image(merge_pixmap);
+	new Item("&Write code", COMMAND+'W', write_cb, 0);//)->image(write_pixmap);
 	new Divider();
 	for (int h=0; h<MAX_HISTORY; h++)
 	    history_item[h] = new Item(relative_history[h], COMMAND+('0'+h), open_history_cb, absolute_history[h]);
 	new Divider();
-	new Item("&Quit", COMMAND+'q', exit_cb);
+	new Item("&Quit", COMMAND+'Q', exit_cb);
     }
     {MenuSection g("&Edit");
-	undo_item[0] = new Item("U&ndo", COMMAND+'z', Undo::undo_cb,0,INACTIVE);
+	undo_item[0] = new Item("U&ndo", COMMAND+'Z', Undo::undo_cb,0,INACTIVE);
 	undo_item[1] = new Item("&Redo", SHIFT+COMMAND+'Z', Undo::redo_cb,0,INACTIVE);
 	new Divider();
-	new Item("&Cut", COMMAND+'x', cut_cb);
-	new Item("C&opy", COMMAND+'c', copy_cb);
-	new Item("&Paste", COMMAND+'v', paste_cb);
-	new Item("Select &All", COMMAND+'a', select_all_cb);
-	new Item("Select &None", SHIFT+COMMAND+'a', select_none_cb);
+	new Item("&Cut", COMMAND+'X', cut_cb);
+	new Item("C&opy", COMMAND+'C', copy_cb);
+	new Item("&Paste", COMMAND+'V', paste_cb);
+	new Item("Select &All", COMMAND+'A', select_all_cb);
+	new Item("Select &None", SHIFT+COMMAND+'A', select_none_cb);
 	new Divider();
 	new Item("Ed&it this widget", ReturnKey, openwidget_cb);
 	new Item("&Sort these widgets", 0, sort_cb);
@@ -195,16 +195,16 @@ MenuBar* build_hierarchy(MenuBar* menubar) {
 	//new Item("Deactivate", 0, nyi);
 	//new Item("Activate", 0, nyi, 0, FL_MENU_DIVIDER);
 	{MenuSection g("&Show / Hide"); 
-	    ishow_overlay = new ToggleItem("Show &Overlays",ACCELERATOR+'o',toggle_overlays);
-	    iwidget_bin   = new ToggleItem("Show &Widget Bin",ACCELERATOR+'b',toggle_widgetbin_cb);
-	    isource_view  = new ToggleItem("Show &Source Code",ACCELERATOR+COMMAND+'s',(Callback*) toggle_sourceview_cb);
-	    istatusbar    = new ToggleItem("Show Status &Bar",ACCELERATOR+COMMAND+'b',(Callback*) toggle_statusbar_cb);
+	    ishow_overlay = new ToggleItem("Show &Overlays",ACCELERATOR+'O',toggle_overlays);
+	    iwidget_bin   = new ToggleItem("Show &Widget Bin",ACCELERATOR+'B',toggle_widgetbin_cb);
+	    isource_view  = new ToggleItem("Show &Source Code",ACCELERATOR+COMMAND+'S',(Callback*) toggle_sourceview_cb);
+	    istatusbar    = new ToggleItem("Show Status &Bar",ACCELERATOR+COMMAND+'B',(Callback*) toggle_statusbar_cb);
 	}
 	//new Divider();
-	new Item("&Preferences",COMMAND+'p',show_preferences_cb);
+	new Item("&Preferences",COMMAND+'P',show_preferences_cb);
 	new Item("Coding St&yle", 0, show_coding_style_cb);
 	new Item("T&heme", 0, theme_cb);
-	new Item("Set i&mages root directory", COMMAND+'d', set_images_dir_cb);
+	new Item("Set i&mages root directory", COMMAND+'D', set_images_dir_cb);
     }    
     {MenuSection g("&New"); fill_in_New_Menu(g.group()); }
     {MenuSection g("&Plugins"); Plugins_Options_Menu->add_to(g.group());}
@@ -239,11 +239,11 @@ MenuBar* build_hierarchy(MenuBar* menubar) {
 	(new Item("&Huge",ACCELERATOR+'6',(Callback *)widget_size_cb,(void*)32))->textsize(32);
       }
       new Divider();
-      new Item("&Grid and Size Settings...",COMMAND+'g',show_preferences_cb,(void*)2);
+      new Item("&Grid and Size Settings...",COMMAND+'G',show_preferences_cb,(void*)2);
     }
     {MenuSection g("&Shell");
-	new Item("Execute &Command",ACCELERATOR+'x',show_shell_window);
-	new Item("Execute &Again",ACCELERATOR+'g', (Callback*)do_shell_command);
+	new Item("Execute &Command",ACCELERATOR+'X',show_shell_window);
+	new Item("Execute &Again",ACCELERATOR+'G', (Callback*)do_shell_command);
     }
     {MenuSection g("&Help");
 	new Item("&About fluid",0,about_cb);

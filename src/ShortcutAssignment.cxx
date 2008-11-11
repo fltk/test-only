@@ -44,7 +44,6 @@ class shortcutAssociationType : public AssociationType {
 static shortcutAssociationType shortcutAssociation;
 
 /*!
-
   Add a new shortcut assignment. Returns true if successful.  If \a key
   is zero or the assignment already exists this does nothing and
   returns false.
@@ -58,14 +57,25 @@ static shortcutAssociationType shortcutAssociation;
 
   The shortcut value is a bitwise OR (or sum) of a any set of shift flags
   returned by fltk::event_state(), and either a key symbol returned by
-  fltk::event_key(), or an ASCII character.  Examples:
+  fltk::event_key(), or an ASCII character from fltk::event_text().  Examples:
   - <code>fltk::CTRL+'a'</code>
   - <code>fltk::ACCELERATOR+fltk::CTRL+'A'</code>
   - just <code>'a'</code>
   - <code>fltk::SHIFT+'#'</code>
   - <code>fltk::SHIFT+fltk::UpKey</code>
-  Case is ignored
-  (the lower-case version of any letter is actually put in the table).
+
+  For letters, <code>'A'</code> will only match if the Shift key
+  is \e not held down, and <code>fltk::SHIFT+'a'</code> will only match
+  if the shift key \e is held down. Case (and thus Caps Lock) is ignored.
+  The case does control how the shortcut is displayed in a menu so
+  you will want to choose based on the style of your application.
+
+  Non-letters without <code>fltk::SHIFT</code> will match whether or
+  not Shift is held down. Since both fltk::event_key() and
+  fltk::event_text()[0] are matched, the '#' can be specified by any
+  of <code>fltk::SHIFT+'3'</code>, <code>fltk::SHIFT+'#'</code>, or
+  by <code>'#'</code>. You can choose based on how you want the shortcut
+  to appear in menus and how you want to map to foreign keyboards.
 
   When FLTK gets a keystroke, it sends it to the fltk::focus()
   widget. If that widget's handle() returns 0, it will also send
@@ -77,9 +87,8 @@ static shortcutAssociationType shortcutAssociation;
   Widget::test_shortcut() to see if the keystroke is registered here (many
   widgets will also directly test the key to see if it is something
   they are interested in).  */
-bool Widget::add_shortcut(size_t key) {
+bool Widget::add_shortcut(unsigned key) {
   if (!key) return false;
-  key = key&0xffff0000u|tolower(key&0xffu);
   if (find(shortcutAssociation, (void*)key)) return false;
   add(shortcutAssociation, (void*)key);
   return true;
@@ -89,7 +98,7 @@ bool Widget::add_shortcut(size_t key) {
 /*!
   Delete a shortcut assignment. Returns true if it actually existed.
 */
-bool Widget::remove_shortcut(size_t key) {
+bool Widget::remove_shortcut(unsigned key) {
   return remove(shortcutAssociation, (void*)key);
 }
 
@@ -108,8 +117,8 @@ void Widget::remove_shortcuts() {
   or returns zero if there are none. If you want to look at more
   than onle you must use fltk::list_shortcuts(this).
 */
-size_t Widget::shortcut() const {
-  return (size_t)get(shortcutAssociation);
+unsigned Widget::shortcut() const {
+  return (unsigned int)get(shortcutAssociation);
 }
 
 
@@ -118,7 +127,7 @@ size_t Widget::shortcut() const {
   except it may be implemented in a more efficient way.
   The result is exactly one shortcut (or none if \a key is zero).
 */
-void Widget::shortcut(size_t key) {
+void Widget::shortcut(unsigned key) {
   set(shortcutAssociation, (void*)key);
 }
 
@@ -126,11 +135,11 @@ void Widget::shortcut(size_t key) {
 /*!
   Returns a value that can be passed to add_shortcut() so that this
   widget has a real shortcut assignment to match any &x in it's
-  label().  The returned value is ALT|c where c is the character after
-  the first '&' in the label (except '&&' is ignored), or zero if
-  there isn't any '&' sign or if flag(RAW_LABEL) is on.
+  label().  The returned value is ACCELERATOR|c where c is the
+  character after the first '&' in the label (except '&&' is ignored),
+  or zero if there isn't any '&' sign or if flag(RAW_LABEL) is on.
 */
-size_t Widget::label_shortcut() const {
+unsigned Widget::label_shortcut() const {
   if (flag(RAW_LABEL)) return 0;
   const char* label = this->label();
   if (!label) for (;*label;) {
@@ -160,7 +169,8 @@ size_t Widget::label_shortcut() const {
 bool Widget::test_label_shortcut() const {
   if (flag(RAW_LABEL)) return false;
   char c = event_text()[0];
-  if (!c) return false;
+  if (!c) return false; // ignore function keys
+  if (c & 0x80) return false; // UTF-8 does not work yet
   const char* label = this->label();
   if (!label) return false;
   //if (ACCELERATOR==CTRL)
@@ -195,22 +205,32 @@ class keyCompareFunctor : public AssociationFunctor {
     keyCompareFunctor(void) : count(0) {}
 
     bool handle(const AssociationType&, const Widget*, void* data) {
-
       count++;
 
-      size_t key = (size_t)data;
+      unsigned shortcut = unsigned(long(data));
 
-      unsigned mismatch = key ^ (event_key() | event_state());
+      // turn letters into lower-case to match event_key()
+      if (!(shortcut & 0xff00u))
+        shortcut = shortcut&0xffff0000u|tolower(shortcut&0xffu);
 
-      if (!(mismatch & 0xffff) &&
-          !(mismatch & (key|META|ALT|CTRL|SHIFT)))
+      // we must match all bits in the keysym, all shift keys that
+      // must be held down, and the main shift keys must match if off:
+      unsigned mismatch = shortcut ^ (event_key() | event_state());
+      if (!(mismatch & (0xffffu|shortcut|META|ALT|CTRL|SHIFT)))
         return true;
 
-      mismatch = key ^ (tolower(event_text()[0]) | event_state());
-
-      if (!(mismatch & 0xffff) &&
-          !(mismatch & (key|META|ALT|CTRL|SHIFT)))
-        return true;
+      // Check against punctuation characters that may require shift
+      // or that the keypad produces. If you want '#' to work as a
+      // shortcut, you would have to specify SHIFT+'3' for the above
+      // to work. This code allows SHIFT+'#' and just '#' to work:
+      char c = event_text()[0];
+      // this does not work for letters (as it would make different
+      // shortcuts for shift and unshifted not work) and not for UTF-8:
+      if (c && !isalpha(c) && !(c&0x80)) {
+        mismatch = shortcut ^ (unsigned(c) | event_state());
+        if (!(mismatch & (0xffffu|shortcut|META|ALT|CTRL)))
+          return true;
+      }
 
       return false;
     }
@@ -250,7 +270,7 @@ public:
   ShortcutFunctor& f;
   GlueFunctor(ShortcutFunctor& g) : f(g) {}
   bool handle(const AssociationType&, const Widget* widget, void* data) {
-    return f.handle(widget, (size_t)data);
+    return f.handle(widget, unsigned(long(data)));
   }
 };
 
@@ -285,7 +305,7 @@ f() {
 */
 unsigned fltk::foreachShortcut(const Widget* widget, ShortcutFunctor& f) {
   GlueFunctor g(f);
-  return (size_t)(foreach(&shortcutAssociation, widget, g));
+  return (unsigned int)(foreach(&shortcutAssociation, widget, g));
 }
 
 // End of $Id$
