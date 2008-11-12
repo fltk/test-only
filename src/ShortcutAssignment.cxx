@@ -118,7 +118,7 @@ void Widget::remove_shortcuts() {
   than onle you must use fltk::list_shortcuts(this).
 */
 unsigned Widget::shortcut() const {
-  return (unsigned int)get(shortcutAssociation);
+  return unsigned(long(get(shortcutAssociation)));
 }
 
 
@@ -305,7 +305,7 @@ f() {
 */
 unsigned fltk::foreachShortcut(const Widget* widget, ShortcutFunctor& f) {
   GlueFunctor g(f);
-  return (unsigned int)(foreach(&shortcutAssociation, widget, g));
+  return unsigned(long(foreach(&shortcutAssociation, widget, g)));
 }
 
 // End of $Id$
