@@ -750,6 +750,7 @@ int main(int argc, char** argv)
   // create fltk window:
   Window window(512+20, 512+110);
   window.resizable(window);
+  window.begin();
 
   // create a bunch of buttons:
   Group *g = new Group(50,50,400-110,30,"Level:");
@@ -770,13 +771,11 @@ int main(int argc, char** argv)
   g->end();
 
   b = new Button(400,50,100,30,"New Fractal"); b->callback(handlemenu,(void*)MENU_RAND);
-  
   b = new RadioButton( 10,10,100,25,"Mountain"); b->callback(choosefract,(void*)MOUNTAIN);
   b = new RadioButton(110,10,100,25,"Tree"); b->callback(choosefract,(void*)TREE);
   b->set();
   b = new RadioButton(210,10,100,25,"Island"); b->callback(choosefract,(void*)ISLAND);
   b = new Button(400,10,100,30,"Quit"); b->callback(handlemenu,(void*)MENU_QUIT);
-
 
   window.show(argc,argv); // glut will die unless parent window visible
   window.begin(); // this will cause Glut window to be a child

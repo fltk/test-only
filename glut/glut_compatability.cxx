@@ -63,6 +63,7 @@ static GlutWindow *windows[MAXWINDOWS+1];
 
 GlutWindow *glut_window;
 int glut_menu;
+void (*glut_idle_function)();
 void (*glut_menustate_function)(int);
 void (*glut_menustatus_function)(int,int,int);
 
@@ -306,22 +307,22 @@ void glutSetWindow(int win) {
 static Menu* menus[MAXMENUS+1];
 
 static void item_cb(Widget* w, long v) {
-    ItemGroup* m = (ItemGroup* )w;
-    Item* i = (Item*)m->get_item();
-    int num_item= (int) i->argument();
-    ( (void(*)(int)) v) (num_item);
+  void* cb = w->parent()->user_data(); // get call passed to glutCreateMenu
+  // v should work but there is an fltk (mis)feature that if it is zero
+  // then the one from the menu is passed.
+  ( (void(*)(int)) cb) (int(w->argument()));
 }
 
 static void domenu(int n, int ex, int ey) {
   glut_menu = n;
-  if (glut_menustate_function) 
+  if (glut_menustate_function)
       glut_menustate_function(1);
-  if (glut_menustatus_function) 
+  if (glut_menustatus_function)
       glut_menustatus_function(1,ex,ey);
   menus[n]->popup(fltk::Rectangle(event_x(), event_y(),0,0), 0);
-  if (glut_menustatus_function) 
+  if (glut_menustatus_function)
       glut_menustatus_function(0,ex,ey);
-  if (glut_menustate_function) 
+  if (glut_menustate_function)
       glut_menustate_function(0);
 }
 
@@ -333,7 +334,6 @@ int glutCreateMenu(void (*cb)(int)) {
   Menu* m = new ItemGroup("menu");
   // store the callback in the user_data, the child widgets will
   // look here for it:
-  m->callback(item_cb); 
   m->user_data((void*)cb);
   menus[i] = m;
   return glut_menu = i;
@@ -347,7 +347,7 @@ void glutDestroyMenu(int n) {
 void glutAddMenuEntry(const char *label, int value) {
   menus[glut_menu]->begin();
   Item* m = new Item(label);
-  m->callback( menus[glut_menu]->callback()/*item_cb*/,(void*)(long)value);
+  m->callback(item_cb,(long)value);
 }
 
 void glutAddSubMenu(const char *label, int submenu) {
@@ -371,6 +371,14 @@ void glutRemoveMenuItem(int item) {
   Menu* m = menus[glut_menu];
   if (item > m->children() || item < 1) return;
   delete m->child(item-1);
+}
+
+void glutIdleFunc(void (*f)())
+{
+  if (glut_idle_function == f) return;  // no change
+  if (glut_idle_function) fltk::remove_idle((void (*)(void *))glut_idle_function);
+  if (f) fltk::add_idle((void (*)(void *))f);
+  glut_idle_function = f;
 }
 
 ////////////////////////////////////////////////////////////////
