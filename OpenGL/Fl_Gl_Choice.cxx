@@ -245,7 +245,7 @@ GLContext fltk::create_gl_context(XVisualInfo* vis) {
 		(PFNGLXCREATECONTEXTATTRIBSARB)  glXGetProcAddress((const GLubyte *) "glXCreateContextAttribsARB");
 
   if (glXGetFBConfigFromVisualSGIX && glXCreateContextAttribsARB) {
-    printf("Success!\n");
+    // printf("Success!\n");
     GLXFBConfig c = glXGetFBConfigFromVisualSGIX(xdisplay, vis);
 #   define GLX_CONTEXT_MAJOR_VERSION_ARB		0x2091
 #   define GLX_CONTEXT_MINOR_VERSION_ARB		0x2092
