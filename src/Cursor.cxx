@@ -36,8 +36,12 @@
 #include <fltk/Cursor.h>
 #include <fltk/Window.h>
 #include <fltk/x.h>
+#if defined(USE_X11) && defined(USE_XCURSOR)
+#include <X11/Xcursor/Xcursor.h>
+#endif
 #include <fltk/draw.h>
 #include <fltk/Color.h>
+#include <fltk/Image.h>
 
 using namespace fltk;
 
@@ -103,6 +107,44 @@ FL_API fltk::Cursor *fltk::cursor(void *raw) {
   c->tableid = 0;
   return c;
 }
+
+#ifdef USE_XCURSOR
+#warning we assume PixelType = 6 ARGB32 in test it is true for color images
+static XcursorImage* create_cursor_image(Image *cimg, int x, int y) {
+  XcursorImage *xcimage = XcursorImageCreate(cimg->w(),cimg->h());
+  XcursorPixel *dest;
+
+  xcimage->xhot = x;
+  xcimage->yhot = y;
+
+  dest = xcimage->pixels;
+  unsigned char *src = cimg->buffer();
+  //cimg->buffer_pixeltype() 
+  for (int j = 0; j < cimg->h() ; ++j){
+    for (int i = 0; i < cimg->w() ; ++i){
+     
+        *dest = (src[3] <<24) | (src[2] << 16) | (src[1] << 8) | src[0];
+        src += 4;
+        dest++;
+    }
+  }
+  return xcimage;
+}
+
+FL_API fltk::Cursor *fltk::cursor(Image *img, int x, int y) {
+  fltk::Cursor *c = new fltk::Cursor;
+  if(!xdisplay)fltk::open_display();
+  img->fetch();
+  XcursorImage *xcimage = create_cursor_image(img, x, y);
+  c->cursor = XcursorImageLoadCursor(xdisplay, xcimage);
+  XcursorImageDestroy (xcimage);
+  
+  c->fontid = 0;
+  c->tableid = 0;
+  return c;
+}
+
+#endif //USE_XCURSOR
 
 static fltk::Cursor arrow = {0,35};
 static fltk::Cursor cross = {0,66};
@@ -233,6 +275,83 @@ FL_API fltk::Cursor *fltk::cursor(void *raw) {
   c->resource = 0;
   return c;
 }
+
+//thanx to gtk team for reference
+//http://www.dotnet247.com/247reference/msgs/13/66301.aspx
+#warning we assume PixelType = 6 ARGB32 in test it is true for color images
+
+#include <stdio.h>
+
+static HCURSOR create_cursor_from_image(Image *img, int x, int y)
+{
+  BITMAPV5HEADER bi;
+  HBITMAP hBitmap;
+  const int cw = 32, ch = 32; // Hm it seams only one size of cursors for Windows
+
+  ZeroMemory(&bi,sizeof(BITMAPV5HEADER));
+  bi.bV5Size = sizeof(BITMAPV5HEADER);
+  bi.bV5Width = cw;
+  bi.bV5Height = ch;
+  bi.bV5Planes = 1;
+  bi.bV5BitCount = 32;
+  bi.bV5Compression = BI_BITFIELDS;
+  // The following mask specification specifies a supported 32 BPP
+  // alpha format for Windows XP.
+  bi.bV5RedMask = 0x00FF0000;
+  bi.bV5GreenMask = 0x0000FF00;
+  bi.bV5BlueMask = 0x000000FF;
+  bi.bV5AlphaMask = 0xFF000000;
+
+  HDC hdc;
+  hdc = GetDC(NULL);
+
+  // Create the DIB section with an alpha channel.
+  void *lpBits;
+  hBitmap = CreateDIBSection(hdc, (BITMAPINFO *)&bi, DIB_RGB_COLORS,(void **)&lpBits, NULL, (DWORD)0);
+
+  ReleaseDC(NULL,hdc);
+
+  printf("Img format:%d\n",img->buffer_pixeltype());
+  int w = img->w() , h = img->h();
+  unsigned char* isrc = img->buffer();
+  DWORD *lpdwPixel = (DWORD *)lpBits;
+  for (int i=0;i<cw;i++)
+    for (int j=0;j<ch;j++)
+    {
+    fprintf(stderr,"%d %d\n",i,j);
+    unsigned char* src = isrc + 4*(j + w*(cw - i -1));
+    //*lpdwPixel = (src[0] << 24) | (src[1] << 16) | (src[2] << 8) | src[3];
+    *lpdwPixel = (src[3] << 24) | (src[2] << 16) | (src[1] << 8) | src[0];
+    lpdwPixel++;
+    }
+
+  // Create an empty mask bitmap
+  HBITMAP hMonoBitmap = CreateBitmap(cw,cw,1,1,NULL);
+
+  ICONINFO ii;
+  ii.fIcon = FALSE; // Change fIcon to TRUE to create an alpha icon
+  ii.xHotspot = x;
+  ii.yHotspot = y;
+  ii.hbmMask = hMonoBitmap;
+  ii.hbmColor = hBitmap;
+
+  // Create the alpha cursor with the alpha DIB section
+  HCURSOR hAlphaCursor = CreateIconIndirect(&ii);
+
+  DeleteObject(hBitmap);
+  DeleteObject(hMonoBitmap);
+
+  return hAlphaCursor;
+}
+
+FL_API fltk::Cursor *fltk::cursor(Image *img, int x, int y) {
+  img->fetch();
+  fltk::Cursor *c = new fltk::Cursor;
+  c->cursor = create_cursor_from_image(img, x, y);
+  c->resource = 0;
+  return c;
+}
+
 
 static fltk::Cursor arrow = {TEXT(IDC_ARROW)};
 static fltk::Cursor cross = {TEXT(IDC_CROSS)};

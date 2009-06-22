@@ -26,17 +26,22 @@
 // This is a complete rewrite that replaces the old test program.
 // Cursors are no longer identified by an integer.
 
+#include <config.h> 
 #include <fltk/run.h>
 #include <fltk/events.h>
 #include <fltk/Window.h>
 #include <fltk/Cursor.h>
+#ifdef USE_XCURSOR
+#include <fltk/SharedImage.h>
+#include <stdio.h>
+#endif
 
 using namespace fltk;
 
 class CursorBox : public Widget {
-  Cursor* cursor;
   int handle(int);
 public:
+  Cursor* cursor;
   CursorBox(int x, int y, int w, int h, const char* name, Cursor* c)
     : Widget(x,y,w,h,name), cursor(c) {}
 };
@@ -62,13 +67,37 @@ struct gcc4_bug_workaround {const char* name; Cursor* cursor;} table[] = {
   {"CURSOR_NESW",	CURSOR_NESW},
   {"CURSOR_NO",		CURSOR_NO},
   {"CURSOR_NONE",	CURSOR_NONE},
+#ifdef USE_XCURSOR
+  {"CUSTOM_CURSOR",	0},
+#endif
 };
 #define COUNT (sizeof(table)/sizeof(table[0]))
 #define W 200
 #define H 25
 #define GAP 5
 
+#ifdef USE_XCURSOR
+int load_file(int argc, char** argv, int&i){
+  Image *img = SharedImage::get(argv[i]);
+  if( img ){
+    table[COUNT-1].cursor = fltk::cursor(img, 0, 0);
+    ++i;
+    return 1;
+  }
+  return 0;
+}
+
 int main(int argc, char **argv) {
+  register_images();
+  int i;
+  if ( fltk::args(argc, argv, i, load_file) < argc -1) {
+    fprintf(stderr,"args return %d (%d)\n",i,argc);
+    return 1;
+  }
+  if(!table[COUNT-1].cursor)table[COUNT-1].cursor = fltk::cursor(SharedImage::get("porsche.xpm"),32,32);
+#else
+int main(int argc, char **argv) {
+#endif
   Window window(W+2*GAP, (H+GAP)*COUNT+GAP);
   window.begin();
   for (unsigned i = 0; i < COUNT; i++)

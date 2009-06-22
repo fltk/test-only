@@ -248,6 +248,11 @@ cube$(EXEEXT): cube.o ../lib/$(LIBPREFIX)fltk2_gl$(LIBSUFFIX)
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKGL) $(GLDLIBS) -o $@
 	$(POSTBUILD) $@ ../fltk/mac.r
 
+cursor$(EXEEXT): cursor.o
+	echo Linking $@...
+	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKIMG) $(LDLIBS) -o $@
+	$(POSTBUILD) $@ ../fltk/mac.r
+
 fullscreen$(EXEEXT): fullscreen.o ../lib/$(LIBPREFIX)fltk2_gl$(LIBSUFFIX)
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKGL) $(GLDLIBS) -o $@
