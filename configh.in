@@ -65,7 +65,7 @@
 
 /* Use Xcursor library for fltk::cursor(Image*,int,int) function.
    (ignored if !USE_X11) */
-#define USE_XCURSOR		0
+#undef USE_XCURSOR
 
 /* Use the Cairo library to draw everything. Ignored if !USE_X11
    Currently only partly implemented, though line drawing looks
