@@ -62,11 +62,11 @@ int fltk::filename_list(const char *d, dirent ***list,
   // This version is when we define our own scandir (WIN32 and perhaps
   // some Unix systems):
   int n = scandir(d, list, 0, sort);
+#elif defined(HAVE_SCANDIR_POSIX)
+  // POSIX (2008) defines the comparison function like this:
+  int n = scandir(d, list, 0, (int(*)(const dirent **, const dirent **))sort);
 #elif defined(__linux) || defined (__FreeBSD__) || defined (__NetBSD__)
   int n = scandir(d, list, 0, (int(*)(const void*,const void*))sort);
-#elif defined(__hpux) || defined(__CYGWIN__)
-  // HP-UX, Cygwin define the comparison function like this:
-  int n = scandir(d, list, 0, (int(*)(const dirent **, const dirent **))sort);
 #elif defined(__osf__) || defined(__sgi)
   // OSF, DU 4.0x
   int n = scandir(d, list, 0, (int(*)(dirent **, dirent **))sort);

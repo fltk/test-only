@@ -2571,5 +2571,10 @@ from gdi32.dll
   default Window::layout() method yet still do the operating system
   stuff needed to resize the window. Only tested on X11.
 
+////////////////////////////////////////////////////////////////
+
+Fixed glibc 2.10 compiler problems (Fedora 11 and others) with scandir()
+(STR #2202, #2205, #2223)
+
 
 
