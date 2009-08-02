@@ -62,6 +62,7 @@ using namespace fltk;
   For more information about ANSI code see:
   http://en.wikipedia.org/wiki/ANSI_escape_code
   http://www.uv.tietgen.dk/staff/mlha/PC/Soft/Prog/BAS/VB/Function.html
+  http://bjh21.me.uk/all-escapes/all-escapes.txt
 
   Supported control codes:
   \t      tab (20 px)
@@ -108,7 +109,8 @@ static Color colors[] = {
  */
 AnsiWidget::AnsiWidget(int x, int y, int w, int h, int defsize) : 
   Widget(x, y, w, h, 0) {
-  labelsize(float(defsize));
+  labelsize(float(defsize)); // default size
+  textsize(float(defsize)); // settable size
   init();
   reset();
   img = 0;
@@ -141,7 +143,7 @@ void AnsiWidget::initImage() {
     img->make_current();
     setcolor(color());
     fillrect(Rectangle(w(), h()));
-    setfont(labelfont(), labelsize());
+    setFont();
   }
 }
 
@@ -165,6 +167,8 @@ void AnsiWidget::reset() {
   color(WHITE); // bg
   labelcolor(BLACK); // fg
   labelfont(COURIER);
+  textsize(labelsize()); 
+  setFont();
 }
 
 /*! handle resize changes
@@ -203,7 +207,7 @@ void AnsiWidget::draw() {
       GSave gsave;
       img->make_current();
       setcolor(color());
-      setfont(labelfont(), labelsize());
+      setFont();
       fillrect(Rectangle(W, H));
       old->draw(Rectangle(old->w(), old->h()));
       old->destroy();
@@ -353,7 +357,7 @@ void AnsiWidget::beep() const {
  */
 int AnsiWidget::textWidth(const char* s) {
   begin_offscreen();
-  setfont(labelfont(), labelsize());
+  setFont();
   return (int)getwidth(s);
 }
 
@@ -361,7 +365,7 @@ int AnsiWidget::textWidth(const char* s) {
  */
 int AnsiWidget::textHeight(void) {
   begin_offscreen();
-  setfont(labelfont(), labelsize());
+  setFont();
   return (int)(getascent()+getdescent());
 }
 
@@ -414,7 +418,7 @@ Color AnsiWidget::ansiToFltk(long c) {
   return (c > 16) ? WHITE : colors[c];
 }
 
-/*! Handles the given escape character
+/*! Handles the given escape character. Returns whether the font has changed
  */
 bool AnsiWidget::setGraphicsRendition(char c, int escValue) {
   switch (c) {
@@ -477,52 +481,52 @@ bool AnsiWidget::setGraphicsRendition(char c, int escValue) {
       // colors - 30..37 foreground, 40..47 background
     case 30: // set black fg
       labelcolor(ansiToFltk(0));
-      return true;
+      break;
     case 31: // set red fg
       labelcolor(ansiToFltk(4));
-      return true;
+      break;
     case 32: // set green fg
       labelcolor(ansiToFltk(2));
-      return true;
+      break;
     case 33: // set yellow fg
       labelcolor(ansiToFltk(6));
-      return true;
+      break;
     case 34: // set blue fg
       labelcolor(ansiToFltk(1));
-      return true;
+      break;
     case 35: // set magenta fg
       labelcolor(ansiToFltk(5));
-      return true;
+      break;
     case 36: // set cyan fg
       labelcolor(ansiToFltk(3));
-      return true;
+      break;
     case 37: // set white fg
       labelcolor(ansiToFltk(7));
-      return true;
+      break;
     case 40: // set black bg
       color(ansiToFltk(0));
-      return true;
+      break;
     case 41: // set red bg
       color(ansiToFltk(4));
-      return true;
+      break;
     case 42: // set green bg
       color(ansiToFltk(2));
-      return true;
+      break;
     case 43: // set yellow bg
       color(ansiToFltk(6));
-      return true;
+      break;
     case 44: // set blue bg
       color(ansiToFltk(1));
-      return true;
+      break;
     case 45: // set magenta bg
       color(ansiToFltk(5));
-      return true;
+      break;
     case 46: // set cyan bg
       color(ansiToFltk(3));
-      return true;
+      break;
     case 47: // set white bg
       color(ansiToFltk(15));
-      return true;
+      break;
     case 48: // subscript on
       break;
     case 49: // superscript
@@ -532,24 +536,28 @@ bool AnsiWidget::setGraphicsRendition(char c, int escValue) {
   return false;
 }
 
-/*! Handles the characters following the \e[ sequence
+/*! Handles the characters following the \e[ sequence. Returns whether a further call
+ * is required to complete the process.
  */
 bool AnsiWidget::doEscape(unsigned char* &p) {
   int escValue = 0;
+
   while (isdigit(*p)) {
     escValue = (escValue * 10) + (*p - '0');
     p++;
   }
 
-  if (setGraphicsRendition(*p, escValue)) {
-    fltk::Font* font = labelfont();
-    if (bold) {
-      font = font->bold();
+  if (*p == ' ') {
+    p++;
+    switch (*p) {
+    case 'C':
+      // GSS  Graphic Size Selection
+      textsize(escValue);
+      setFont();
+      break;
     }
-    if (italic) {
-      font = font->italic();
-    }
-    setfont(font, labelsize());
+  } else if (setGraphicsRendition(*p, escValue)) {
+    setFont();
   }
     
   if (*p == ';') {
@@ -557,6 +565,19 @@ bool AnsiWidget::doEscape(unsigned char* &p) {
     return true;
   }
   return false;
+}
+
+/*! Prepares to display text according to accumulated flags
+ */
+void AnsiWidget::setFont() {
+  fltk::Font* font = labelfont();
+  if (bold) {
+    font = font->bold();
+  }
+  if (italic) {
+    font = font->italic();
+  }
+  setfont(font, textsize());
 }
 
 /*! Prints the contents of the given string onto the backbuffer
@@ -568,7 +589,7 @@ void AnsiWidget::print(const char *str) {
   }
 
   begin_offscreen();
-  setfont(labelfont(), labelsize());
+  setFont();
   int ascent = (int)getascent();
   int fontHeight = (int)(ascent+getdescent());
   unsigned char *p = (unsigned char*)str;
@@ -589,10 +610,8 @@ void AnsiWidget::print(const char *str) {
     case '\033':  // ESC ctrl chars
       if (*(p+1) == '[' ) {
         p += 2;
-        while(true) {
-          if (!doEscape(p)) {
-            break;
-          }
+        while (doEscape(p)) {
+          // continue
         }
       }
       break;

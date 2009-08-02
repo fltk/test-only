@@ -73,6 +73,7 @@ class AnsiWidget : public Widget {
     int calcTab(int x) const;
     void newLine();
     void reset();
+    void setFont();
 
     Image* img;
     bool underline;
