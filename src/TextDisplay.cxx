@@ -2278,7 +2278,8 @@ void TextDisplay::draw_line_numbers(bool clearAll) {
   fltk::push_clip(clipRect);
   
   // Erase background
-  fltk::setcolor(fltk::lerp(color(), fltk::BLACK, .1f));
+  Color bg = fltk::lerp(color(), fltk::BLACK, .1f);
+  fltk::setcolor(bg);
   fltk::fillrect(clipRect);
 
   // Draw separator line
@@ -2286,7 +2287,7 @@ void TextDisplay::draw_line_numbers(bool clearAll) {
   fltk::drawline(clipRect.r()-1, clipRect.y(), clipRect.r()-1, clipRect.b());
 
   // Draw text
-  fltk::setcolor(fltk::BLACK);
+  fltk::setcolor(fltk::contrast(color(), bg));
   fltk::setfont(textfont(), textsize());
 
   /* Draw the line numbers, aligned to the text */
