@@ -207,6 +207,11 @@ static GLContext first_context;
 // Define this to destroy all OpenGL contexts at exit to try to fix NVidia crashes
 #define DESTROY_ON_EXIT 0
 
+// Define this to select OpenGL3 contexts. This is disabled because it fails
+// on SUSE11 with Nvidia cards. I suspect the visual selected above is
+// incorrect but do not know how to fix that.
+#define OPENGL3 0
+
 #if DESTROY_ON_EXIT
 static struct Contexts {
   GLContext context;
@@ -227,7 +232,7 @@ static void destructor() {
 
 GLContext fltk::create_gl_context(XVisualInfo* vis) {
   GLContext context;
-#if 1 // enable OpenGL3 support if possible
+#if OPENGL3 // enable OpenGL3 support if possible
   typedef GLXFBConfig (*PFNGLXGETFBCONFIGFROMVISUALSGIXPROC)(
 		Display *dpy,
 		XVisualInfo *vis );
