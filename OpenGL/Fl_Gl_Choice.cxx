@@ -165,7 +165,14 @@ GlChoice* GlChoice::find(int mode) {
   list[n] = 0;
     
   open_display();
+#if 0 // force it to use a specific visual number, for testing
+  XVisualInfo templt;
+  templt.visualid = 0x34; // use glxinfo to list these numbers
+  int num;
+  XVisualInfo *vis=XGetVisualInfo(xdisplay, VisualIDMask, &templt, &num);
+#else
   XVisualInfo* vis = glXChooseVisual(xdisplay, xscreen, list);
+#endif
   if (!vis) {
 # if defined(GLX_VERSION_1_1) && defined(GLX_SGIS_multisample)
     if (mode&MULTISAMPLE) return find(mode&~MULTISAMPLE);
@@ -207,11 +214,6 @@ static GLContext first_context;
 // Define this to destroy all OpenGL contexts at exit to try to fix NVidia crashes
 #define DESTROY_ON_EXIT 0
 
-// Define this to select OpenGL3 contexts. This is disabled because it fails
-// on SUSE11 with Nvidia cards. I suspect the visual selected above is
-// incorrect but do not know how to fix that.
-#define OPENGL3 0
-
 #if DESTROY_ON_EXIT
 static struct Contexts {
   GLContext context;
@@ -232,7 +234,13 @@ static void destructor() {
 
 GLContext fltk::create_gl_context(XVisualInfo* vis) {
   GLContext context;
-#if OPENGL3 // enable OpenGL3 support if possible
+#if 0 // enable OpenGL3 support if possible
+  // This is disabled because it does not work on SUSE11 with NVidia cards.
+  // I tried all the visuals and none worked. Error is returned when attempts
+  // are made to use the context:
+  // XRequest.144: BadAlloc (insufficient resources for operation) 0x1e00006
+  // XRequest.144: GLXBadContext 0x1e00006
+  // XRequest.144: GLXBadDrawable 0x1e00004
   typedef GLXFBConfig (*PFNGLXGETFBCONFIGFROMVISUALSGIXPROC)(
 		Display *dpy,
 		XVisualInfo *vis );
@@ -250,13 +258,16 @@ GLContext fltk::create_gl_context(XVisualInfo* vis) {
 		(PFNGLXCREATECONTEXTATTRIBSARB)  glXGetProcAddress((const GLubyte *) "glXCreateContextAttribsARB");
 
   if (glXGetFBConfigFromVisualSGIX && glXCreateContextAttribsARB) {
+    printf("A\n");
     // printf("Success!\n");
     GLXFBConfig c = glXGetFBConfigFromVisualSGIX(xdisplay, vis);
+    printf("B\n");
 #   define GLX_CONTEXT_MAJOR_VERSION_ARB		0x2091
 #   define GLX_CONTEXT_MINOR_VERSION_ARB		0x2092
     int arr2[] = {  GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
                     GLX_CONTEXT_MINOR_VERSION_ARB, 0, None };
     context = glXCreateContextAttribsARB(xdisplay, c, first_context, True, arr2);
+    printf("C\n");
   } else
 #endif
     context = glXCreateContext(xdisplay, vis, first_context, 1);
