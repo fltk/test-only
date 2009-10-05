@@ -160,13 +160,13 @@ TextBuffer::~TextBuffer() {
 const char *TextBuffer::text() {
   if (!gapstart_ && length_) {
     buf_[length_+gapend_] = 0;
-    return buf_+gapstart_;
+    return buf_+gapend_;
   }
   if (gapstart_ < gapend_) {
     memmove(&buf_[gapstart_], &buf_[gapend_], length_-gapstart_);
     gapstart_ = gapend_ = length_;
   }
-  buf_[length_] = 0; // add null terminator, assumme length < buffer size!
+  buf_[length_] = 0; // add null terminator, assume length < buffer size!
   return buf_;
 }
 

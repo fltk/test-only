@@ -2577,4 +2577,9 @@ Fixed glibc 2.10 compiler problems (Fedora 11 and others) with scandir()
 (STR #2202, #2205, #2223)
 
 
+////////////////////////////////////////////////////////////////
+
+Fixed TextEditor::text() would return garbage if the "gap" is at the
+beginning of the text buffer (STR #1987)
+
 
