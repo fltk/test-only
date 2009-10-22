@@ -134,7 +134,7 @@ install:
 	-$(MKDIR) $(DESTDIR)$(bindir)
 	$(CP) $(FLUID) $(DESTDIR)$(bindir)/fluid2$(EXEEXT)
 	$(STRIP) $(DESTDIR)$(bindir)/fluid2$(EXEEXT)
-	$(bindir)/fltk2-config --post $(DESTDIR)$(bindir)/fluid2$(EXEEXT)
+	$(DESTDIR)$(bindir)/fltk2-config --post $(DESTDIR)$(bindir)/fluid2$(EXEEXT)
 	$(CHMOD) 755 $(DESTDIR)$(bindir)/fluid2$(EXEEXT)
 
 

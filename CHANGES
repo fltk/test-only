@@ -2582,4 +2582,7 @@ Fixed glibc 2.10 compiler problems (Fedora 11 and others) with scandir()
 Fixed TextEditor::text() would return garbage if the "gap" is at the
 beginning of the text buffer (STR #1987)
 
+////////////////////////////////////////////////////////////////
 
+fluid/Makefile didn't respect ${DESTDIR} for fltk2-config --post
+(STR #1701, 2065, 2254)
