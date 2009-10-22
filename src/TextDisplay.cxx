@@ -861,7 +861,7 @@ void TextDisplay::display_insert() {
 
   /* FLTK widget shows one line too much (clipped at the bottom), so get last char from line before that */
   if (visiblelines_cnt_ > 1 && linestarts_[visiblelines_cnt_-2] != -1) {
-    lastChar = buffer()->line_end(linestarts_[visiblelines_cnt_-2]);
+    lastChar = line_end(linestarts_[visiblelines_cnt_-2]);
   }
 
   hOffset = horiz_offset_;
@@ -959,7 +959,7 @@ bool TextDisplay::move_up() {
   if (position_to_line(cursor_pos_, &visLineNum))
     lineStartPos = linestarts_[visLineNum];
   else {
-    lineStartPos = buffer()->line_start(cursor_pos_);
+    lineStartPos = line_start(cursor_pos_);
     visLineNum = -1;
   }
   if (lineStartPos == 0)
@@ -973,7 +973,7 @@ bool TextDisplay::move_up() {
   if (visLineNum != -1 && visLineNum != 0)
     prevLineStartPos = linestarts_[visLineNum - 1];
   else
-    prevLineStartPos = buffer()->rewind_lines(lineStartPos, 1);
+    prevLineStartPos = rewind_lines(lineStartPos, 1);
 
   newPos = buffer_->skip_displayed_characters_utf(prevLineStartPos, column);
 

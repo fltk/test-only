@@ -2586,3 +2586,11 @@ beginning of the text buffer (STR #1987)
 
 fluid/Makefile didn't respect ${DESTDIR} for fltk2-config --post
 (STR #1701, 2065, 2254)
+
+////////////////////////////////////////////////////////////////
+
+Fix for word wrapping, equivalent to svn -r 5194 for FLTK 1.1.
+This fixes cursor positioning issues when wrap mode is on in
+TextEditor (FLTK 1.1 - STR #1227). This has also been discussed in
+fltk.bugs in Dec. 2008 (please refer to STR #2276), but not yet
+completely fixed.
