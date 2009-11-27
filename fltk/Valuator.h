@@ -78,7 +78,7 @@ public:
 private:
 
   double value_;
-  static double previous_value_;
+  double previous_value_;
   double minimum_;
   double maximum_;
   double step_;

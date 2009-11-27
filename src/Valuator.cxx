@@ -81,6 +81,7 @@ Valuator::Valuator(int X, int Y, int W, int H, const char* L)
   minimum_ = 0;
   maximum_ = 1;
   linesize_ = 0;
+  previous_value_ = 0;
 }
 
 /*! \fn double Valuator::value() const
@@ -185,7 +186,6 @@ void Valuator::value_damage() {
 /*! \fn double Valuator::previous_value() const
   Value saved when handle_push() was last called.
 */
-double Valuator::previous_value_;
 
 /*! \fn void Valuator::handle_push()
   Subclasses should call this when the user starts to change the value. 
