@@ -594,7 +594,7 @@ static void draw_search(Color col)
   EC;
   line_style(SOLID,1);
   BC; vv(-.4f, .13f); vv(-1.0f, .73f); vv(-.73f, 1.0f); vv(-.13f, .4f); EC;
-
+  line_style(0);
 }
 
 
