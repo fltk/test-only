@@ -35,6 +35,8 @@
 #include "Widget.h"
 #endif
 
+class Fl_Group;
+
 /**
   The fltk3::Group class is the FLTK container widget. It maintains
   an array of child widgets. These children can themselves be any widget
@@ -43,6 +45,7 @@
   or to enforce resize behavior.
 */
 class FL_EXPORT fltk3::Group : public fltk3::Widget {
+  friend class ::Fl_Group;
 
   fltk3::Widget** array_;
   fltk3::Widget* savedfocus_;

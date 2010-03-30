@@ -28,18 +28,19 @@
 /* \file
    fltk3::Widget, Fl_Label classes . */
 
-#ifndef Fl_Widget_H
-#define Fl_Widget_H
+#ifndef Fltk3_Widget_H
+#define Fltk3_Widget_H
 
 #include "Enumerations.H"
+#include "Wrapper.h"
 
 namespace fltk3 {
   class Window;
   class Widget;
   class Group;
 }
-
 class Fl_Image;
+class Fl_Widget;
 
 /** Default callback type definition for all fltk widgets (by far the most used) */
 typedef void (Fl_Callback )(fltk3::Widget*, void*);
@@ -95,6 +96,7 @@ struct FL_EXPORT Fl_Label {
  */
 class FL_EXPORT fltk3::Widget {
   friend class Group;
+  friend class ::Fl_Widget;
 
   fltk3::Group* parent_;
   Fl_Callback* callback_;
@@ -110,6 +112,8 @@ class FL_EXPORT fltk3::Widget {
   uchar when_;
 
   const char *tooltip_;
+  
+  Wrapper *wrapper_;
 
   /** unimplemented copy ctor */
   Widget(const fltk3::Widget &);
@@ -962,6 +966,14 @@ public:
       \deprecated Use selection_color(unsigned) instead.
   */
   void color2(unsigned a) {color2_ = a;}
+  
+  /** \brief return an external language wrapper or a compatibility wrapper.
+   */
+  Wrapper *wrapper() { return wrapper_; }
+  
+  /** \brief set an external language wrapper or a compatibility wrapper.
+   */
+  void wrapper(Wrapper *w) { wrapper_ = w; }
 };
 
 /**
