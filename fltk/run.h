@@ -1,38 +1,19 @@
 // "$Id: run.h 6233 2008-09-14 07:54:06Z spitzak $"
 //
-// The basic fltk runtime. Every program needs to call this somewhere.
-// Copyright 1998-2006 by Bill Spitzak and others.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
 
-#ifndef fltk_run_h
-#define fltk_run_h
+#ifndef fltk2_run_h
+#define fltk2_run_h
 
 #include "FL_API.h"
+#include <fltk3/run.h>
+
 #ifdef check
 # undef check
 #endif
 
 namespace fltk {
 
-/// \name fltk/run.h
-//@{
-
+#if 0
 FL_API void display(const char*);
 FL_API int arg(int, char**, int&);
 FL_API int args(int, char**, int&, int (*)(int,char**,int&) = 0);
@@ -44,7 +25,11 @@ FL_API int wait();
 FL_API int wait(float time);
 FL_API int check();
 FL_API int ready();
-FL_API int run();
+#endif
+  
+  FL_API int run() { return fltk3::run(); }
+  
+#if 0
 FL_API void flush();
 FL_API void redraw();
 extern FL_API int damage_;
@@ -85,9 +70,8 @@ FL_API void unlock();
 FL_API void awake(void* message = 0);
 FL_API void* thread_message();
 FL_API bool in_main_thread();
-
-//@}
-
+#endif
+  
 }
 
 #endif

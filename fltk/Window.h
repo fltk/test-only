@@ -1,50 +1,35 @@
 // "$Id: Window.h 6150 2008-08-04 22:53:30Z spitzak $"
 //
-// Window widget. This must be the outermost group. You can also put
-// them inside other widgets to use the system's window hierarchy.
-//
-// Copyright 1998-2006 by Bill Spitzak and others.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
 
-#ifndef fltk_Window_h
-#define fltk_Window_h
+#ifndef fltk2_Window_h
+#define fltk2_Window_h
 
 #include "Group.h"
+#include <fltk3/Window.h>
 
 namespace fltk {
 
+#if 0
 // value for x,y to indicate window system places window
 const int USEDEFAULT = ((int)0x80000000); // same as Win32 value
 
 class CreatedWindow;
 class Monitor;
-
-// implementations of methods of Window are in different files in src/
+#endif
 
 class FL_API Window : public Group {
 public:
-
   Window(int,int,int,int, const char* = 0, bool begin = false);
-  Window(int,int, const char* = 0);
-  static NamedStyle* default_style;
-  virtual ~Window();
+  
+  Window(int w, int h, const char *title=0) {
+    _p = new fltk3::Window(w, h, title);
+    _p->wrapper(this);
+  }
+  
+  virtual ~Window() { }
 
+#if 0
+  static NamedStyle* default_style;
   const char* label() const	{return Widget::label();}
   const char* iconlabel() const	{return iconlabel_;}
   void label(const char*);
@@ -85,7 +70,11 @@ public:
 
   bool shown() const {return i != 0;}
   void show();
-  void show(int, char**);
+#endif
+  
+  void show(int argc, char **argv) { ((fltk3::Window*)_p)->show(argc, argv); }
+  
+#if 0
   void show(const Window* parent);
   bool exec(const Window* parent = 0, bool grab = false);
   void make_exec_return(bool);
@@ -147,6 +136,7 @@ private:
   };
   static const char* xclass_;
   void _Window(); // constructor innards
+#endif
 };
 
 }

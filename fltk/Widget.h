@@ -2,31 +2,17 @@
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
 //
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
 
-#ifndef fltk_Widget_h
-#define fltk_Widget_h
+#ifndef fltk2_Widget_h
+#define fltk2_Widget_h
 
 #include "Style.h"
 #include "Rectangle.h"
+#include <fltk3/Widget.h>
 
 namespace fltk {
 
+#if 0
 class FL_API Widget;
 class FL_API Window;
 class FL_API Symbol;
@@ -43,17 +29,25 @@ typedef void (Callback1)(Widget*, long);
 #ifdef FLTK_1_WIDGET  // back-compatability section:
 FL_API Font* font(int);
 #endif
+#endif
 
 class FL_API Widget : public Rectangle {
   // disable the copy assignment/constructors:
   Widget & operator=(const Widget &);
   Widget(const Widget &);
 
+protected:
+  Widget() { }
+  
 public:
 
-  Widget(int,int,int,int,const char* =0);
-  virtual ~Widget();
+  Widget(int x, int y, int w, int h, const char *title=0) {
+    _p = new fltk3::Widget(x, y, w, h, title);
+    _p->wrapper(this);
+  }
+  virtual ~Widget() { }
 
+#if 0
   virtual void draw();
   virtual int handle(int);
   int	send(int event);
@@ -234,13 +228,24 @@ public:
   float leading()		const;
   unsigned char scrollbar_align() const;
   unsigned char scrollbar_width() const;
-
+#endif
+  
   void box(Box*)		;
+  
+#if 0
   void buttonbox(Box*)		;
   void glyph(Symbol*)		;
+#endif
+  
   void labelfont(Font*)		;
+  
+#if 0
   void textfont(Font*)		;
+#endif
+  
   void labeltype(LabelType*)	;
+  
+#if 0
   void color(Color)		;
   void textcolor(Color a)	;
   void selection_color(Color)	;
@@ -249,7 +254,11 @@ public:
   void labelcolor(Color)	;
   void highlight_color(Color)	;
   void highlight_textcolor(Color);
-  void labelsize(float a)	;
+#endif 
+  
+  void labelsize(float a) { _p->labelsize(a); }
+  
+#if 0
   void textsize(float a)	;
   void leading(float a)		;
   void scrollbar_align(unsigned char);
@@ -284,7 +293,11 @@ public:
   void color2(Color a)		{ selection_color(a); }
   void color3(Color a)		{ buttoncolor(a); }
   void down_labelcolor(Color a)	{ selection_textcolor(a); }
+#endif 
+  
   void labelfont(unsigned a)	{ labelfont(font(a)); }
+  
+#if 0
   void fly_color(Color a)	{ highlight_color(a); }
   void textfont(unsigned a)	{ textfont(font(a)); }
   void selected_textcolor(Color a) { selection_textcolor(a); }
@@ -308,7 +321,8 @@ private:
   uchar			damage_;
   uchar			layout_damage_;
   uchar			when_;
-
+#endif
+  
 };
 
 enum { // Widget::when() values

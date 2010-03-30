@@ -22,6 +22,7 @@
 #ifndef fltk_Rectangle_h
 #define fltk_Rectangle_h
 
+#include <fltk3/Wrapper.h>
 #include "FL_API.h"
 
 // rectangle macros that help keeping rectangle predicates as strict as possible 
@@ -35,11 +36,15 @@
 
 namespace fltk {
 
-class FL_API Rectangle {
+  class FL_API Rectangle : public fltk3::Wrapper {
+  
+#if 0
   int x_, y_, w_, h_;
+#endif
 
  public:
-
+  
+#if 0
   /*! Left edge */
   int x() const {return x_;}
   /*! Top edge */
@@ -114,7 +119,8 @@ class FL_API Rectangle {
 
   void merge(const Rectangle& r);
   void intersect(const Rectangle& r);
-
+#endif
+  
 };
 
 }

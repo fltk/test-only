@@ -1,57 +1,43 @@
 //
 // "$Id: Group.h 5915 2007-06-19 17:49:29Z spitzak $"
 //
-// Group is the base class for all container widgets. For historical
-// reasons it also provides a default version of layout.
-//
-// Copyright 1998-2006 by Bill Spitzak and others.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
-#ifndef fltk_Group_h
-#define fltk_Group_h
+#ifndef fltk2_Group_h
+#define fltk2_Group_h
 
-#ifndef fltk_Widget_h
-# include "Widget.h"
-#endif
+#include "Widget.h"
+#include <fltk3/Group.h>
 
 namespace fltk {
 
 class FL_API Group : public Widget {
+protected:
+  Group() { }
+  
 public:
-
+#if 0
   int children() const {return children_;}
   Widget* child(int n) const {return array_[n];}
 
   void draw();
   void layout();
   int handle(int);
-
-  void begin() {current_ = this;}
-  void end() {current_ = (Group*)parent();}
+#endif
+  
+  void begin() { ((fltk3::Group*)_p)->begin(); }
+  void end() { ((fltk3::Group*)_p)->end(); }
+  
+#if 0
   static Group *current() {return current_;}
   static void current(Group *g) {current_ = g;}
 
   int find(const Widget*) const;
   int find(const Widget& o) const {return find(&o);}
-
+#endif
+  
   Group(int,int,int,int, const char * = 0, bool begin=false);
+  
+#if 0
   virtual ~Group();
   void add(Widget&);
   void add(Widget* o) {add(*o);}
@@ -103,7 +89,8 @@ private:
   int *sizes_; // remembered initial sizes of children
 
   static Group *current_;
-
+#endif
+  
 };
 
 }

@@ -28,8 +28,8 @@
 /* \file
    fltk3::Group, Fl_End classes . */
 
-#ifndef Fl_Group_H
-#define Fl_Group_H
+#ifndef Fltk3_Group_H
+#define Fltk3_Group_H
 
 #ifndef Fl_Widget_H
 #include "Widget.h"
