@@ -31,9 +31,9 @@
 // handling is designed so windows themselves work correctly.
 
 #include <stdio.h>
-#include <fltk3/Fl.H>
-#include <fltk3/Fl_Group.H>
-#include <fltk3/Fl_Window.H>
+#include <fltk3/run.h>
+#include <fltk3/Group.h>
+#include <fltk3/Window.h>
 #include <fltk3/fl_draw.H>
 #include <stdlib.h>
 

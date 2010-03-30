@@ -37,8 +37,8 @@
 //
 
 #  include <stdio.h>
-#  include "Fl.H"
-#  include "Fl_Group.H"
+#  include "run.h"
+#  include "Group.h"
 #  include "Fl_Scrollbar.H"
 #  include "fl_draw.H"
 #  include "Fl_Shared_Image.H"

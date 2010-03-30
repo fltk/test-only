@@ -33,7 +33,7 @@
 // can be used to dismiss the menus.
 
 #include <config.h>
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/x.H>
 #include <fltk3/fl_draw.H>
 #include <fltk3/Fl_Menu_Window.H>

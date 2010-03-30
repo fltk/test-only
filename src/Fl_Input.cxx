@@ -33,8 +33,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <fltk3/Fl.H>
-#include <fltk3/Fl_Window.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
 #include <fltk3/Fl_Input.H>
 #include <fltk3/fl_draw.H>
 #include <fltk3/fl_ask.H>

@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Color_Chooser.H>
-#include <fltk3/Fl_Window.H>
+#include <fltk3/Window.h>
 #include <fltk3/Fl_Box.H>
 #include <fltk3/Fl_Return_Button.H>
 #include <fltk3/fl_draw.H>

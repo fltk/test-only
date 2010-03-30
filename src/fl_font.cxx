@@ -40,7 +40,7 @@
 
 // Select fonts from the FLTK font table.
 #include "flstring.h"
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/fl_draw.H>
 #include <fltk3/x.H>
 #include "Fl_Font.H"

@@ -30,9 +30,9 @@
 // The size of the first child determines where the resize border is.
 // The resizebox is used to limit where the border can be dragged to.
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Tile.H>
-#include <fltk3/Fl_Window.H>
+#include <fltk3/Window.h>
 #include <stdlib.h>
 
 // Drag the edges that were initially at oldx,oldy to newx,newy:

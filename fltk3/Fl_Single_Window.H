@@ -31,7 +31,7 @@
 #ifndef Fl_Single_Window_H
 #define Fl_Single_Window_H
 
-#include "Fl_Window.H"
+#include "Window.h"
 
 /**
   This is the same as fltk3::Window.  However, it is possible that

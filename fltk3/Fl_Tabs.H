@@ -31,7 +31,7 @@
 #ifndef Fl_Tabs_H
 #define Fl_Tabs_H
 
-#include "Fl_Group.H"
+#include "Group.h"
 
 /**
   The Fl_Tabs widget is the "file card tabs"

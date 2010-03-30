@@ -55,7 +55,7 @@
 #if defined(__APPLE__) || defined(FL_DOXYGEN)
 
 #include <fltk3/x.H>
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Sys_Menu_Bar.H>
 
 #include "flstring.h"

@@ -32,7 +32,7 @@
 #define Fl_Positioner_H
 
 #ifndef Fl_Widget_H
-#include "Fl_Widget.H"
+#include "Widget.h"
 #endif
 
 /**

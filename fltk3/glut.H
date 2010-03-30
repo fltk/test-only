@@ -43,7 +43,7 @@
 #  include "gl.h"
 
 
-#  include "Fl.H"
+#  include "run.h"
 #  include "Fl_Gl_Window.H"
 
 /** 

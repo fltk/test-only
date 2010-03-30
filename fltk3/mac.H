@@ -97,7 +97,7 @@ typedef CGImageRef Fl_Bitmask;
 
 void fl_clip_region(Fl_Region);
 
-#  include "Fl_Window.H"
+#  include "Window.h"
 
 // This object contains all mac-specific stuff about a window:
 // WARNING: this object is highly subject to change!

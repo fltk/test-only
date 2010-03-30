@@ -5,8 +5,8 @@
 #ifndef FL_TREE_ITEM_H
 #define FL_TREE_ITEM_H
 
-#include <fltk3/Fl.H>
-#include <fltk3/Fl_Widget.H>
+#include <fltk3/run.h>
+#include <fltk3/Widget.h>
 #include <fltk3/Fl_Image.H>
 #include <fltk3/fl_draw.H>
 

@@ -56,7 +56,7 @@
 #endif /* WIN32 || __EMX__ */
 
 #include <fltk3/Fl_File_Icon.H>
-#include <fltk3/Fl_Widget.H>
+#include <fltk3/Widget.h>
 #include <fltk3/fl_draw.H>
 #include <fltk3/filename.H>
 

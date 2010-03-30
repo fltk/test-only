@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Menu_Bar.H>
 #include <fltk3/fl_draw.H>
 

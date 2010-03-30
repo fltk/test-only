@@ -31,7 +31,7 @@
 #ifndef Fl_Double_Window_H
 #define Fl_Double_Window_H
 
-#include "Fl_Window.H"
+#include "Window.h"
 
 /**
   The Fl_Double_Window provides a double-buffered window.

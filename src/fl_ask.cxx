@@ -34,14 +34,14 @@
 #include <stdarg.h>
 #include "flstring.h"
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 
 #include <fltk3/fl_ask.H>
 
 #include <fltk3/Fl_Box.H>
 #include <fltk3/Fl_Button.H>
 #include <fltk3/Fl_Return_Button.H>
-#include <fltk3/Fl_Window.H>
+#include <fltk3/Window.h>
 #include <fltk3/Fl_Input.H>
 #include <fltk3/Fl_Secret_Input.H>
 #include <fltk3/x.H>

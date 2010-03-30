@@ -29,7 +29,7 @@
 #ifndef Fl_Object
 #define Fl_Object fltk3::Widget
 #endif
-#include "Fl_Widget.H"
+#include "Widget.h"
 
 //
 // End of "$Id: Fl_Object.H 7365 2010-03-30 15:18:29Z matt $".

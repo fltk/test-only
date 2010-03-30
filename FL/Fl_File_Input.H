@@ -32,7 +32,7 @@
 #ifndef Fl_File_Input_H
 #  define Fl_File_Input_H
 
-#  include <FL/Fl_Input.H>
+#  include <fltk3/Fl_Input.H>
 
 /**
   \class Fl_File_Input

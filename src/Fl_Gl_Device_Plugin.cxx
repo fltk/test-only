@@ -28,7 +28,7 @@
 #include <fltk3/Fl_Printer.H>
 #include <fltk3/Fl_Gl_Window.H>
 #include "Fl_Gl_Choice.H"
-#include "fltk3/Fl.H"
+#include "fltk3/run.h"
 #ifndef __APPLE__
 #include "fltk3/fl_draw.H"
 #endif

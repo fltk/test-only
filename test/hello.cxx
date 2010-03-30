@@ -3,7 +3,7 @@
 //
 // Hello, World! program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/Fl.H>
-#include <fltk3/Fl_Window.H>
-#include <fltk3/Fl_Box.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/Widget.h>
 
 using namespace fltk3;
 

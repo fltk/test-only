@@ -39,8 +39,8 @@
 #include <stdlib.h>		// UNIX: malloc/realloc
 #endif /*WIN32*/
 
-#include <fltk3/Fl.H>
-#include <fltk3/Fl_Group.H>
+#include <fltk3/run.h>
+#include <fltk3/Group.h>
 #include <fltk3/Fl_Scroll.H>
 #include <fltk3/Fl_Box.H>
 #include <fltk3/Fl_Scrollbar.H>

@@ -32,7 +32,7 @@
 #define Fl_Chart_H
 
 #ifndef Fl_Widget_H
-#include "Fl_Widget.H"
+#include "Widget.h"
 #endif
 
 // values for type()

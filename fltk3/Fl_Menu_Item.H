@@ -28,7 +28,7 @@
 #ifndef Fl_Menu_Item_H
 #define Fl_Menu_Item_H
 
-#  include "Fl_Widget.H"
+#  include "Widget.h"
 #  include "Fl_Image.H"
 
 #  if defined(__APPLE__) && defined(check)

@@ -29,8 +29,8 @@
 #include <stdlib.h>
 #include "flstring.h"
 #include <ctype.h>
-#include <fltk3/Fl.H>
-#include <fltk3/Fl_Window.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
 #include <fltk3/Fl_Text_Editor.H>
 #include <fltk3/fl_ask.H>
 

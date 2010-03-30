@@ -32,7 +32,7 @@
 #define Fl_Free_H
 
 #ifndef Fl_Widget_H
-#include "Fl_Widget.H"
+#include "Widget.h"
 #endif
 
 #define FL_NORMAL_FREE		1 /**< normal event handling */

@@ -32,7 +32,7 @@
 #define Fl_Valuator_H
 
 #ifndef Fl_Widget_H
-#include "Fl_Widget.H"
+#include "Widget.h"
 #endif
 
 // shared type() values for classes that work in both directions:

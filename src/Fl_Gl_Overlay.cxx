@@ -28,7 +28,7 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/x.H>
 #include "Fl_Gl_Choice.H"
 #include <fltk3/Fl_Gl_Window.H>

@@ -31,7 +31,7 @@
 #ifndef Fl_Scroll_H
 #define Fl_Scroll_H
 
-#include "Fl_Group.H"
+#include "Group.h"
 #include "Fl_Scrollbar.H"
 
 /**

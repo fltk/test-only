@@ -29,7 +29,7 @@
 // The positioner widget from Forms, gives 2D input
 // Written by: Mark Overmars
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Positioner.H>
 #include <fltk3/fl_draw.H>
 

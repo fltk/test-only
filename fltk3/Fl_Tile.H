@@ -31,7 +31,7 @@
 #ifndef Fl_Tile_H
 #define Fl_Tile_H
 
-#include "Fl_Group.H"
+#include "Group.h"
 
 /**
   The Fl_Tile class lets you resize the children by dragging

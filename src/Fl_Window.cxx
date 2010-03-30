@@ -30,9 +30,9 @@
 // crap you need to do to communicate with X is in Fl_x.cxx, the
 // equivalent (but totally different) crap for MSWindows is in Fl_win32.cxx
 #include "config.h"
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/x.H>
-#include <fltk3/Fl_Window.H>
+#include <fltk3/Window.h>
 #include <stdlib.h>
 #include "flstring.h"
 

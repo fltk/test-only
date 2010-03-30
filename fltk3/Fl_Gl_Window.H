@@ -31,7 +31,7 @@
 #ifndef Fl_Gl_Window_H
 #define Fl_Gl_Window_H
 
-#include "Fl_Window.H"
+#include "Window.h"
 
 #ifndef GLContext
 /**

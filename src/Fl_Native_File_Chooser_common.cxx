@@ -26,7 +26,7 @@
 //
 
 #include <string.h>
-#include <FL/Enumerations.H>
+#include <fltk3/Enumerations.H>
 
 // COPY A STRING WITH 'new'
 //    Value can be NULL

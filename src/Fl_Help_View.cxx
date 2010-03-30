@@ -56,7 +56,7 @@
 //
 
 #include <fltk3/Fl_Help_View.H>
-#include <fltk3/Fl_Window.H>
+#include <fltk3/Window.h>
 #include <fltk3/Fl_Pixmap.H>
 #include <fltk3/x.H>
 #include <stdio.h>

@@ -35,7 +35,7 @@
 #ifndef Fl_Color_Chooser_H
 #define Fl_Color_Chooser_H
 
-#include <fltk3/Fl_Group.H>
+#include <fltk3/Group.h>
 #include <fltk3/Fl_Box.H>
 #include <fltk3/Fl_Return_Button.H>
 #include <fltk3/Fl_Choice.H>

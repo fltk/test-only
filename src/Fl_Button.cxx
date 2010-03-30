@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Button.H>
-#include <fltk3/Fl_Group.H>
-#include <fltk3/Fl_Window.H>
+#include <fltk3/Group.h>
+#include <fltk3/Window.h>
 
 // There are a lot of subclasses, named Fl_*_Button.  Some of
 // them are implemented by setting the type() value and testing it

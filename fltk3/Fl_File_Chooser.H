@@ -29,12 +29,12 @@
 
 #ifndef Fl_File_Chooser_H
 #define Fl_File_Chooser_H
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Double_Window.H>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fltk3/Fl_Group.H>
+#include <fltk3/Group.h>
 #include <fltk3/Fl_Choice.H>
 #include <fltk3/Fl_Menu_Button.H>
 #include <fltk3/Fl_Button.H>

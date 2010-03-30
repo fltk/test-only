@@ -29,7 +29,7 @@
 // which are actually X keysyms.  So this has to translate to macOS
 // symbols.
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/x.H>
 #include <config.h>
 

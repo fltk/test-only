@@ -2,7 +2,7 @@
 // "$Id$"
 //
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Pixmap.H>
 #include <fltk3/Fl_Tree_Prefs.H>
 #include <string.h>

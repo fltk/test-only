@@ -28,8 +28,8 @@
 // Allows two labels to be used on a widget (by having one of them
 // be one of these it allows an infinte number!)
 
-#include <fltk3/Fl.H>
-#include <fltk3/Fl_Widget.H>
+#include <fltk3/run.h>
+#include <fltk3/Widget.h>
 #include <fltk3/Fl_Menu_Item.H>
 #include <fltk3/Fl_Multi_Label.H>
 

@@ -34,7 +34,7 @@
 
 #define min(a,b) ((a)<(b)?(a):(b))
 #include <fltk3/fl_utf8.h>
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/fl_draw.H>
 #include <fltk3/Fl_Image.H>
 

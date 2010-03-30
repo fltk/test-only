@@ -37,7 +37,7 @@
 /** Gets the file name from a path. 
     Similar to basename(3), exceptions shown below.
     \code
-    #include <FL/filename.H>
+    #include <fltk3/filename.H>
     [..]
     const char *out;
     out = fl_filename_name("/usr/lib");     // out="lib"

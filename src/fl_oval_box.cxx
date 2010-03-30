@@ -29,7 +29,7 @@
 // Less-used box types are in separate files so they are not linked
 // in if not used.
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/fl_draw.H>
 
 static void fl_oval_flat_box(int x, int y, int w, int h, Fl_Color c) {

@@ -34,8 +34,8 @@
 #define FL_TEXT_DISPLAY_H
 
 #include "fl_draw.H"
-#include "Fl_Group.H"
-#include "Fl_Widget.H"
+#include "Group.h"
+#include "Widget.h"
 #include "Fl_Scrollbar.H"
 #include "Fl_Text_Buffer.H"
 

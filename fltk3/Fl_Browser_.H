@@ -34,10 +34,10 @@
 #define Fl_Browser__H
 
 #ifndef Fl_Group_H
-#include "Fl_Group.H"
+#include "Group.h"
 #endif
 #include "Fl_Scrollbar.H"
-#include <fltk3/Fl.H>		// Fl::scrollbar_size()
+#include <fltk3/run.h>		// Fl::scrollbar_size()
 
 #define FL_NORMAL_BROWSER	0	/**< type() of Fl_Browser */
 #define FL_SELECT_BROWSER	1	/**< type() of FL_Select_Browser */

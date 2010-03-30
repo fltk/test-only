@@ -35,7 +35,7 @@
 #ifndef _Fl_Wizard_H_
 #  define _Fl_Wizard_H_
 
-#  include <fltk3/Fl_Group.H>
+#  include <fltk3/Group.h>
 
 
 /**

@@ -38,8 +38,8 @@
 #ifndef Fl_Input_Choice_H
 #define Fl_Input_Choice_H
 
-#include <fltk3/Fl.H>
-#include <fltk3/Fl_Group.H>
+#include <fltk3/run.h>
+#include <fltk3/Group.h>
 #include <fltk3/Fl_Input.H>
 #include <fltk3/Fl_Menu_Button.H>
 #include <fltk3/fl_draw.H>

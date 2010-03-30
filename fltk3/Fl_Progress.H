@@ -35,7 +35,7 @@
 // Include necessary headers.
 //
 
-#include "Fl_Widget.H"
+#include "Widget.h"
 
 
 //

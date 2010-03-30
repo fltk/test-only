@@ -28,7 +28,7 @@
 // Set the default visual according to passed switches:
 
 #include <config.h>
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/x.H>
 
 /** \fn  fltk3::visual(int flags)

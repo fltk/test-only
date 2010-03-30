@@ -28,7 +28,7 @@
 
 // Base class for sliders and all other one-value "knobs"
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Valuator.H>
 #include <fltk3/math.h>
 #include <stdio.h>

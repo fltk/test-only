@@ -29,9 +29,9 @@
 // Warning: this works by making a child Fl_Input object, even
 // though this object is *not* an fltk3::Group.  May be a kludge?
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Value_Input.H>
-#include <fltk3/Fl_Group.H>
+#include <fltk3/Group.h>
 #include <stdlib.h>
 #include <fltk3/math.h>
 

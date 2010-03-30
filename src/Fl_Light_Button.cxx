@@ -32,7 +32,7 @@
 // The default down_box of zero draws a rectangle designed to look
 // just like Flame's buttons.
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Light_Button.H>
 #include <fltk3/fl_draw.H>
 #include "flstring.h"

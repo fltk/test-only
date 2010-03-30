@@ -32,9 +32,9 @@
 
 #ifndef Fl_Help_Dialog_H
 #define Fl_Help_Dialog_H
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Double_Window.H>
-#include <fltk3/Fl_Group.H>
+#include <fltk3/Group.h>
 #include <fltk3/Fl_Button.H>
 #include <fltk3/Fl_Input.H>
 #include <fltk3/Fl_Box.H>

@@ -41,8 +41,8 @@
 // This allows punctuation shortcuts like "#" to work (rather than
 // calling it "shift+3" on a US keyboard)
 
-#include <fltk3/Fl.H>
-#include <fltk3/Fl_Widget.H>
+#include <fltk3/run.h>
+#include <fltk3/Widget.h>
 #include <fltk3/Fl_Button.H>
 #include <fltk3/fl_draw.H>
 #include <ctype.h>

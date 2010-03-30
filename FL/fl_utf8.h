@@ -38,8 +38,8 @@
 #ifndef _HAVE_FL_UTF8_HDR_
 #define _HAVE_FL_UTF8_HDR_
 
-#include "FL/Fl_Export.H"
-#include "FL/fl_types.h"
+#include "fltk3/Fl_Export.H"
+#include "fltk3/fl_types.h"
 
 #include <stdio.h>
 #include <string.h>

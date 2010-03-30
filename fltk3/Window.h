@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H 7365 2010-03-30 15:18:29Z matt $"
+// "$Id: Window.h 7365 2010-03-30 15:18:29Z matt $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 #ifndef Fl_Window_H
 #define Fl_Window_H
 
-#include "Fl_Group.H"
+#include "Group.h"
 
 #define FL_WINDOW 0xF0		///< window type id all subclasses have type() >= this
 #define FL_DOUBLE_WINDOW 0xF1   ///< double window type id
@@ -446,5 +446,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Window.H 7365 2010-03-30 15:18:29Z matt $".
+// End of "$Id: Window.h 7365 2010-03-30 15:18:29Z matt $".
 //

@@ -31,10 +31,10 @@
 #include "flstring.h"
 #include <limits.h>
 #include <ctype.h>
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Text_Buffer.H>
 #include <fltk3/Fl_Text_Display.H>
-#include <fltk3/Fl_Window.H>
+#include <fltk3/Window.h>
 
 #undef min
 #undef max

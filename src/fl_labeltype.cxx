@@ -29,9 +29,9 @@
 // Other label types (symbols) are in their own source files
 // to avoid linking if not used.
 
-#include <fltk3/Fl.H>
-#include <fltk3/Fl_Widget.H>
-#include <fltk3/Fl_Group.H>
+#include <fltk3/run.h>
+#include <fltk3/Widget.h>
+#include <fltk3/Group.h>
 #include <fltk3/fl_draw.H>
 #include <fltk3/Fl_Image.H>
 

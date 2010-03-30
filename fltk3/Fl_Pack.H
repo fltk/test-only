@@ -31,7 +31,7 @@
 #ifndef Fl_Pack_H
 #define Fl_Pack_H
 
-#include <FL/Fl_Group.H>
+#include <fltk3/Group.h>
 
 /**
   This widget was designed to add the functionality of compressing and

@@ -34,7 +34,7 @@
 // Version 2.1 a
 // Date: Oct  2, 1992
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/fl_draw.H>
 #include <fltk3/math.h>
 #include "flstring.h"

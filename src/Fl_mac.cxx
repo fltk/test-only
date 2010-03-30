@@ -59,9 +59,9 @@ extern "C" {
 }
 
 #include <config.h>
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/x.H>
-#include <fltk3/Fl_Window.H>
+#include <fltk3/Window.h>
 #include <fltk3/Fl_Tooltip.H>
 #include <fltk3/Fl_Sys_Menu_Bar.H>
 #include <stdio.h>

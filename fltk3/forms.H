@@ -28,9 +28,9 @@
 #ifndef __FORMS_H__
 #define __FORMS_H__
 
-#include "Fl.H"
-#include "Fl_Group.H"
-#include "Fl_Window.H"
+#include "run.h"
+#include "Group.h"
+#include "Window.h"
 #include "fl_draw.H"
 
 typedef fltk3::Widget FL_OBJECT;

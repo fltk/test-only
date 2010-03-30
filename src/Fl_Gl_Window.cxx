@@ -32,7 +32,7 @@ extern int fl_gl_load_plugin;
 
 static int temp = fl_gl_load_plugin;
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/x.H>
 #include "Fl_Gl_Choice.H"
 #include <fltk3/Fl_Gl_Window.H>

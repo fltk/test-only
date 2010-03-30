@@ -32,7 +32,7 @@
 
 #include <config.h>
 #if HAVE_OVERLAY
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/x.H>
 
 // SERVER_OVERLAY_VISUALS property element:

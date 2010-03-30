@@ -30,7 +30,7 @@
 // me to port several other programs, but it is in no way
 // complete.
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Free.H>
 
 void Fl_Free::step(void *v) {

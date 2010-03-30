@@ -5,8 +5,8 @@
 #ifndef FL_TREE_H
 #define FL_TREE_H
 
-#include <fltk3/Fl.H>
-#include <fltk3/Fl_Group.H>
+#include <fltk3/run.h>
+#include <fltk3/Group.h>
 #include <fltk3/Fl_Scrollbar.H>
 #include <fltk3/fl_draw.H>
 

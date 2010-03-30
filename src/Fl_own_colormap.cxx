@@ -34,7 +34,7 @@
 // get huge color changes when switching windows.
 
 #include <config.h>
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/x.H>
 
 /** \fn fltk3::own_colormap()

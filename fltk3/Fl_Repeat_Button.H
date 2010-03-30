@@ -30,7 +30,7 @@
 
 #ifndef Fl_Repeat_Button_H
 #define Fl_Repeat_Button_H
-#include "Fl.H"
+#include "run.h"
 #include "Fl_Button.H"
 
 /**

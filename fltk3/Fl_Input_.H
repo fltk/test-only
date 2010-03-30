@@ -32,7 +32,7 @@
 #define Fl_Input__H
 
 #ifndef Fl_Widget_H
-#include "Fl_Widget.H"
+#include "Widget.h"
 #endif
 
 #define FL_NORMAL_INPUT		0

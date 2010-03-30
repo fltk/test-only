@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H 7365 2010-03-30 15:18:29Z matt $"
+// "$Id: Group.h 7365 2010-03-30 15:18:29Z matt $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@
 #define Fl_Group_H
 
 #ifndef Fl_Widget_H
-#include "Fl_Widget.H"
+#include "Widget.h"
 #endif
 
 /**
@@ -230,5 +230,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H 7365 2010-03-30 15:18:29Z matt $".
+// End of "$Id: Group.h 7365 2010-03-30 15:18:29Z matt $".
 //

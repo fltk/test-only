@@ -29,7 +29,7 @@
 /* \file
    Fl_Native_File_Chooser widget. */
 
-#include <FL/Fl_File_Chooser.H>
+#include <fltk3/Fl_File_Chooser.H>
 #include <unistd.h>		// _POSIX_NAME_MAX
 
 /**
@@ -43,7 +43,7 @@
   <P>
   \code
   // Create and post the local native file chooser
-  #include <FL/Fl_Native_File_Chooser.H>
+  #include <fltk3/Fl_Native_File_Chooser.H>
   [..]
   Fl_Native_File_Chooser fnfc;
   fnfc.title("Pick a file");

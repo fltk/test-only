@@ -28,8 +28,8 @@
 #define DISPLAY_SEARCH_BOTH_WAYS_AT_ONCE
 
 #include <stdio.h>
-#include <fltk3/Fl.H>
-#include <fltk3/Fl_Widget.H>
+#include <fltk3/run.h>
+#include <fltk3/Widget.h>
 #include <fltk3/Fl_Browser_.H>
 #include <fltk3/fl_draw.H>
 

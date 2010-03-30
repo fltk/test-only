@@ -31,7 +31,7 @@
 #ifndef Fl_Check_Browser_H
 #define Fl_Check_Browser_H
 
-#include "Fl.H"
+#include "run.h"
 #include "Fl_Browser_.H"
 
 /**

@@ -40,7 +40,7 @@
 //
 
 #include <fltk3/Fl_Wizard.H>
-#include <fltk3/Fl_Window.H>
+#include <fltk3/Window.h>
 #include <fltk3/fl_draw.H>
 
 

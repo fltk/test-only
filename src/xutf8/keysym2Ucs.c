@@ -27,7 +27,7 @@
 
 #if !defined(WIN32) && !defined(__APPLE__)
 
-#include "../../FL/Xutf8.h"
+#include "../../fltk3/Xutf8.h"
 #include "imKStoUCS.c"
 
 long XKeysymToUcs(KeySym keysym) {

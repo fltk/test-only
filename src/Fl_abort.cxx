@@ -29,7 +29,7 @@
 // do not need to be included in Fl.cxx:
 // You can also override this by redefining all of these.
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>

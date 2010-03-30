@@ -6,7 +6,7 @@
 #define FL_TREE_PREFS_H
 
 //////////////////////
-// FL/Fl_Tree_Prefs.H
+// fltk3/Fl_Tree_Prefs.H
 //////////////////////
 //
 // Fl_Tree -- This file is part of the Fl_Tree widget for FLTK

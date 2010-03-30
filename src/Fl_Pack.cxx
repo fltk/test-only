@@ -30,7 +30,7 @@
 // them on each redraw (only if box() is zero)
 // Bugs: ?
 
-#include <fltk3/Fl.H>
+#include <fltk3/run.h>
 #include <fltk3/Fl_Pack.H>
 #include <fltk3/fl_draw.H>
 

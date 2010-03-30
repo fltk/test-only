@@ -66,7 +66,7 @@ inline void XClipBox(Fl_Region r,XRectangle* rect) {
 #define XMapWindow(a,b) ShowWindow(b, SW_RESTORE)
 #define XUnmapWindow(a,b) ShowWindow(b, SW_HIDE)
 
-#include "Fl_Window.H"
+#include "Window.h"
 // this object contains all win32-specific stuff about a window:
 // Warning: this object is highly subject to change!
 class FL_EXPORT Fl_X {

@@ -459,12 +459,12 @@
 		C9039A6D472AFBDB4D5D3581 /* fltkgl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4AED96DAF2EDB1950E04795 /* fltkgl.framework */; };
 		C9603E2EF91824FAFDAB4652 /* device.cxx in Sources */ = {isa = PBXBuildFile; fileRef = AE541F73BF89F614E5BCC604 /* device.cxx */; };
 		C9C84B2983DC793B141DDC70 /* ide_maketools.cxx in Sources */ = {isa = PBXBuildFile; fileRef = B65FCD2B8489E2BBAA3F695A /* ide_maketools.cxx */; };
-		C9C9078F11626697006C5014 /* hello.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 388A5267639C2CEEDD762C41 /* hello.cxx */; };
 		C9C9079111626697006C5014 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
 		C9C9079311626697006C5014 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
-		C9C907A9116266AA006C5014 /* hello.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 388A5267639C2CEEDD762C41 /* hello.cxx */; };
 		C9C907AB116266AA006C5014 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
 		C9C907AD116266AA006C5014 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
+		C9C90822116270B8006C5014 /* hello2.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C9C9081E116270B8006C5014 /* hello2.cxx */; };
+		C9C90823116270B8006C5014 /* hello1.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C9C9081D116270B8006C5014 /* hello1.cxx */; };
 		CA0BD11A864DD8E6018DDC43 /* Fl_File_Input.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 19E46DC28A1945E3BB3FA0EC /* Fl_File_Input.cxx */; };
 		CA29F412020993F3D156CA64 /* jdinput.c in Sources */ = {isa = PBXBuildFile; fileRef = E28D295E888C8D18A99E45DB /* jdinput.c */; };
 		CAE74E0204978B1EE0CB2685 /* fltkimages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23AEAC354D12FE5A50BF85B5 /* fltkimages.framework */; };
@@ -4019,6 +4019,8 @@
 		C9C907A011626698006C5014 /* hello-Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "hello-Info copy.plist"; path = "plists/hello-Info copy.plist"; sourceTree = "<group>"; };
 		C9C907B2116266AA006C5014 /* hello.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9C907BA116266AB006C5014 /* hello-Info copy 2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "hello-Info copy 2.plist"; path = "plists/hello-Info copy 2.plist"; sourceTree = "<group>"; };
+		C9C9081D116270B8006C5014 /* hello1.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hello1.cxx; path = ../../test/hello1.cxx; sourceTree = SOURCE_ROOT; };
+		C9C9081E116270B8006C5014 /* hello2.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hello2.cxx; path = ../../test/hello2.cxx; sourceTree = SOURCE_ROOT; };
 		C9F70AA7DF730564A9DD1BFD /* pngwtran.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwtran.c; path = ../../png/pngwtran.c; sourceTree = SOURCE_ROOT; };
 		CA38333A14E4BA43F4E01CAA /* fl_show_colormap.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fl_show_colormap.cxx; path = ../../src/fl_show_colormap.cxx; sourceTree = SOURCE_ROOT; };
 		CA39566FD1F25D47C83DE042 /* glut_font.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glut_font.cxx; path = ../../src/glut_font.cxx; sourceTree = SOURCE_ROOT; };
@@ -5223,6 +5225,8 @@
 			isa = PBXGroup;
 			children = (
 				388A5267639C2CEEDD762C41 /* hello.cxx */,
+				C9C9081D116270B8006C5014 /* hello1.cxx */,
+				C9C9081E116270B8006C5014 /* hello2.cxx */,
 			);
 			name = hello;
 			sourceTree = "<group>";
@@ -9020,7 +9024,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9C9078F11626697006C5014 /* hello.cxx in Sources */,
+				C9C90823116270B8006C5014 /* hello1.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9028,7 +9032,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C9C907A9116266AA006C5014 /* hello.cxx in Sources */,
+				C9C90822116270B8006C5014 /* hello2.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

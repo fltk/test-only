@@ -36,7 +36,7 @@
 //
 
 #  include <fltk3/Enumerations.H>
-#  include <fltk3/Fl_Group.H>
+#  include <fltk3/Group.h>
 #  include <fltk3/Fl_Input.H>
 #  include <fltk3/Fl_Repeat_Button.H>
 #  include <stdio.h>
