@@ -30,16 +30,16 @@
 
 #ifndef Fl_Return_Button_H
 #define Fl_Return_Button_H
-#include "Fl_Button.H"
+#include "Button.h"
 
 /**
-  The Fl_Return_Button is a subclass of Fl_Button that
+  The Fl_Return_Button is a subclass of fltk3::Button that
   generates a callback when it is pressed or when the user presses the
   Enter key.  A carriage-return symbol is drawn next to the button label.
   <P ALIGN=CENTER>\image html Fl_Return_Button.gif 
   \image latex Fl_Return_Button.eps "Fl_Return_Button" width=4cm
 */
-class FL_EXPORT Fl_Return_Button : public Fl_Button {
+class FL_EXPORT Fl_Return_Button : public fltk3::Button {
 protected:
   void draw();
 public:
@@ -50,7 +50,7 @@ public:
     <P> The inherited destructor deletes the button.
   */
   Fl_Return_Button(int X, int Y, int W, int H,const char *l=0)
-    : Fl_Button(X,Y,W,H,l) {}
+    : fltk3::Button(X,Y,W,H,l) {}
 };
 
 #endif

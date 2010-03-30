@@ -472,7 +472,7 @@ inline void fl_setdisplayed_browser_line(fltk3::Widget* o, int n, int i) {
 inline int fl_isdisplayed_browser_line(fltk3::Widget* o, int n) {
     return ((Fl_Browser*)o)->displayed(n);}
 
-#include "Fl_Button.H"
+#include "Button.h"
 
 #define FL_NORMAL_BUTTON	0
 #define FL_TOUCH_BUTTON		4
@@ -482,12 +482,12 @@ inline int fl_isdisplayed_browser_line(fltk3::Widget* o, int n) {
 #define FL_PUSH_BUTTON		FL_TOGGLE_BUTTON
 #define FL_MENU_BUTTON		9
 
-FL_EXPORT Fl_Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
-inline int fl_get_button(fltk3::Widget* b) {return ((Fl_Button*)b)->value();}
-inline void fl_set_button(fltk3::Widget* b, int v) {((Fl_Button*)b)->value(v);}
+FL_EXPORT fltk3::Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
+inline int fl_get_button(fltk3::Widget* b) {return ((fltk3::Button*)b)->value();}
+inline void fl_set_button(fltk3::Widget* b, int v) {((fltk3::Button*)b)->value(v);}
 inline int fl_get_button_numb(fltk3::Widget*) {return fltk3::event_button();}
 inline void fl_set_button_shortcut(fltk3::Widget* b, const char* s,int=0) {
-    ((Fl_Button*)b)->shortcut(s);}
+    ((fltk3::Button*)b)->shortcut(s);}
 //#define fl_set_object_shortcut(b,s) fl_set_button_shortcut(b,s)
 
 #include "Fl_Light_Button.H"

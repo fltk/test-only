@@ -332,7 +332,7 @@ enum Fl_When { // fltk3::Widget::when():
 
 // FIXME: These codes collide with valid Unicode keys
 
-#define FL_Button	0xfee8	///< A mouse button; use Fl_Button + n for mouse button n.
+#define FL_Button	0xfee8	///< A mouse button; use FL_Button + n for mouse button n.
 #define FL_BackSpace	0xff08	///< The backspace key.
 #define FL_Tab		0xff09	///< The tab key.
 #define FL_Enter	0xff0d	///< The enter key. 

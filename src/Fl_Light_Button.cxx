@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-// Subclass of Fl_Button where the "box" indicates whether it is
+// Subclass of fltk3::Button where the "box" indicates whether it is
 // pushed or not, and the "down box" is drawn small and square on
 // the left to indicate the current state.
 
@@ -153,7 +153,7 @@ int Fl_Light_Button::handle(int event) {
   case FL_RELEASE:
     if (box()) redraw();
   default:
-    return Fl_Button::handle(event);
+    return fltk3::Button::handle(event);
   }
 }
 
@@ -163,7 +163,7 @@ int Fl_Light_Button::handle(int event) {
   <P>The destructor deletes the check button.
 */
 Fl_Light_Button::Fl_Light_Button(int X, int Y, int W, int H, const char* l)
-: Fl_Button(X, Y, W, H, l) {
+: fltk3::Button(X, Y, W, H, l) {
   type(FL_TOGGLE_BUTTON);
   selection_color(FL_YELLOW);
   align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);

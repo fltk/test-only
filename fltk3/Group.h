@@ -208,9 +208,9 @@ public:
   \code 
    class MyClass {
    fltk3::Group group;
-   Fl_Button button_in_group;
+   fltk3::Button button_in_group;
    Fl_End end;
-   Fl_Button button_outside_group;
+   fltk3::Button button_outside_group;
    MyClass();
   };
   MyClass::MyClass() :

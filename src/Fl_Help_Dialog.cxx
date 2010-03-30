@@ -31,7 +31,7 @@
 #include "flstring.h"
 #include <fltk3/fl_ask.H>
 
-void Fl_Help_Dialog::cb_back__i(Fl_Button*, void*) {
+void Fl_Help_Dialog::cb_back__i(fltk3::Button*, void*) {
   if (index_ > 0)
   index_ --;
 
@@ -47,11 +47,11 @@ if (strcmp(view_->filename(), file_[index_]) != 0)
 
 view_->topline(l);
 }
-void Fl_Help_Dialog::cb_back_(Fl_Button* o, void* v) {
+void Fl_Help_Dialog::cb_back_(fltk3::Button* o, void* v) {
   ((Fl_Help_Dialog*)(o->parent()->parent()->user_data()))->cb_back__i(o,v);
 }
 
-void Fl_Help_Dialog::cb_forward__i(Fl_Button*, void*) {
+void Fl_Help_Dialog::cb_forward__i(fltk3::Button*, void*) {
   if (index_ < max_)
   index_ ++;
 
@@ -67,11 +67,11 @@ if (strcmp(view_->filename(), file_[index_]) != 0)
 
 view_->topline(l);
 }
-void Fl_Help_Dialog::cb_forward_(Fl_Button* o, void* v) {
+void Fl_Help_Dialog::cb_forward_(fltk3::Button* o, void* v) {
   ((Fl_Help_Dialog*)(o->parent()->parent()->user_data()))->cb_forward__i(o,v);
 }
 
-void Fl_Help_Dialog::cb_smaller__i(Fl_Button*, void*) {
+void Fl_Help_Dialog::cb_smaller__i(fltk3::Button*, void*) {
   if (view_->textsize() > 8)
   view_->textsize(view_->textsize() - 2);
 
@@ -79,11 +79,11 @@ if (view_->textsize() <= 8)
   smaller_->deactivate();
 larger_->activate();
 }
-void Fl_Help_Dialog::cb_smaller_(Fl_Button* o, void* v) {
+void Fl_Help_Dialog::cb_smaller_(fltk3::Button* o, void* v) {
   ((Fl_Help_Dialog*)(o->parent()->parent()->user_data()))->cb_smaller__i(o,v);
 }
 
-void Fl_Help_Dialog::cb_larger__i(Fl_Button*, void*) {
+void Fl_Help_Dialog::cb_larger__i(fltk3::Button*, void*) {
   if (view_->textsize() < 18)
   view_->textsize(view_->textsize() + 2);
 
@@ -91,7 +91,7 @@ if (view_->textsize() >= 18)
   larger_->deactivate();
 smaller_->activate();
 }
-void Fl_Help_Dialog::cb_larger_(Fl_Button* o, void* v) {
+void Fl_Help_Dialog::cb_larger_(fltk3::Button* o, void* v) {
   ((Fl_Help_Dialog*)(o->parent()->parent()->user_data()))->cb_larger__i(o,v);
 }
 
@@ -150,30 +150,30 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
   { window_ = new Fl_Double_Window(530, 385, "Help Dialog");
     window_->user_data((void*)(this));
     { fltk3::Group* o = new fltk3::Group(10, 10, 511, 25);
-      { back_ = new Fl_Button(10, 10, 25, 25, "@<-");
+      { back_ = new fltk3::Button(10, 10, 25, 25, "@<-");
         back_->tooltip("Show the previous help page.");
         back_->shortcut(0xff51);
         back_->labelcolor((Fl_Color)2);
         back_->callback((Fl_Callback*)cb_back_);
-      } // Fl_Button* back_
-      { forward_ = new Fl_Button(45, 10, 25, 25, "@->");
+      } // fltk3::Button* back_
+      { forward_ = new fltk3::Button(45, 10, 25, 25, "@->");
         forward_->tooltip("Show the next help page.");
         forward_->shortcut(0xff53);
         forward_->labelcolor((Fl_Color)2);
         forward_->callback((Fl_Callback*)cb_forward_);
-      } // Fl_Button* forward_
-      { smaller_ = new Fl_Button(80, 10, 25, 25, "F");
+      } // fltk3::Button* forward_
+      { smaller_ = new fltk3::Button(80, 10, 25, 25, "F");
         smaller_->tooltip("Make the help text smaller.");
         smaller_->labelfont(1);
         smaller_->labelsize(10);
         smaller_->callback((Fl_Callback*)cb_smaller_);
-      } // Fl_Button* smaller_
-      { larger_ = new Fl_Button(115, 10, 25, 25, "F");
+      } // fltk3::Button* smaller_
+      { larger_ = new fltk3::Button(115, 10, 25, 25, "F");
         larger_->tooltip("Make the help text larger.");
         larger_->labelfont(1);
         larger_->labelsize(16);
         larger_->callback((Fl_Callback*)cb_larger_);
-      } // Fl_Button* larger_
+      } // fltk3::Button* larger_
       { fltk3::Group* o = new fltk3::Group(350, 10, 171, 25);
         o->box(FL_DOWN_BOX);
         o->color(FL_BACKGROUND2_COLOR);

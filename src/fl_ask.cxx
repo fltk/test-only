@@ -39,7 +39,7 @@
 #include <fltk3/fl_ask.H>
 
 #include <fltk3/Fl_Box.H>
-#include <fltk3/Fl_Button.H>
+#include <fltk3/Button.h>
 #include <fltk3/Fl_Return_Button.H>
 #include <fltk3/Window.h>
 #include <fltk3/Fl_Input.H>
@@ -56,7 +56,7 @@
 static fltk3::Window *message_form;
 static Fl_Box *message;
 static Fl_Box *icon;
-static Fl_Button *button[3];
+static fltk3::Button *button[3];
 static Fl_Input *input;
 static int ret_val;
 static const char *iconlabel = "?";
@@ -96,7 +96,7 @@ static fltk3::Window *makeform() {
  }
  // create the buttons (right to left)
  for (int b=0, x=310; b<3; b++, x -= 100) {
-   button[b] = new Fl_Button(x, 70, 90, 23);
+   button[b] = new fltk3::Button(x, 70, 90, 23);
    button[b]->align(FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
    button[b]->callback(button_cb,(void *)b);
  }

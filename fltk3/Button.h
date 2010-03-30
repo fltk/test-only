@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.H 7365 2010-03-30 15:18:29Z matt $"
+// "$Id: Button.h 7365 2010-03-30 15:18:29Z matt $"
 //
 // Button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 //
 
 /* \file
-   Fl_Button widget . */
+   fltk3::Button widget . */
 
 #ifndef Fl_Button_H
 #define Fl_Button_H
@@ -48,8 +48,10 @@
 extern FL_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
 #endif
 
+namespace fltk3 {
+
 /**
-  \class Fl_Button
+  \class fltk3::Button
   \brief Buttons generate callbacks when they are clicked by the user.
   
   You control exactly when and how by changing the values for type() and
@@ -61,18 +63,18 @@ extern FL_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
   to hold down the \e Alt key so that the input field does not eat the event
   first as an \c FL_KEYBOARD event.
 
-  \todo Refactor the doxygen comments for Fl_Button type() documentation.
+  \todo Refactor the doxygen comments for fltk3::Button type() documentation.
 
-  For an Fl_Button object, the type() call returns one of:
+  For an fltk3::Button object, the type() call returns one of:
   \li \c FL_NORMAL_BUTTON (0): value() remains unchanged after button press.
   \li \c FL_TOGGLE_BUTTON: value() is inverted after button press.
   \li \c FL_RADIO_BUTTON: value() is set to 1 after button press, and all other
          buttons in the current group with <tt>type() == FL_RADIO_BUTTON</tt>
 	 are set to zero.
 
-  \todo Refactor the doxygen comments for Fl_Button when() documentation.
+  \todo Refactor the doxygen comments for fltk3::Button when() documentation.
 
-  For an Fl_Button object, the following when() values are useful, the default
+  For an fltk3::Button object, the following when() values are useful, the default
   being \c FL_WHEN_RELEASE:
   \li \c 0: The callback is not done, instead changed() is turned on.
   \li \c FL_WHEN_RELEASE: The callback is done after the user successfully
@@ -81,7 +83,7 @@ extern FL_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
          (when the user pushes and releases the button, and as the mouse is
 	 dragged around in and out of the button).
 */
-class FL_EXPORT Fl_Button : public fltk3::Widget {
+class FL_EXPORT Button : public Widget {
 
   int shortcut_;
   char value_;
@@ -96,7 +98,7 @@ public:
 
   virtual int handle(int);
 
-  Fl_Button(int X, int Y, int W, int H, const char *L = 0);
+  Button(int X, int Y, int W, int H, const char *L = 0);
 
   int value(int v);
 
@@ -168,9 +170,11 @@ public:
   /// (for backwards compatibility)
   void down_color(unsigned c) {selection_color(c);}
 };
+  
+}; // namespace fltk3
 
 #endif
 
 //
-// End of "$Id: Fl_Button.H 7365 2010-03-30 15:18:29Z matt $".
+// End of "$Id: Button.h 7365 2010-03-30 15:18:29Z matt $".
 //

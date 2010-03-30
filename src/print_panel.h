@@ -36,7 +36,7 @@
 #include <fltk3/Fl_Double_Window.H>
 #include <fltk3/Group.h>
 #include <fltk3/Fl_Choice.H>
-#include <fltk3/Fl_Button.H>
+#include <fltk3/Button.h>
 #include <fltk3/Fl_Box.H>
 #include <fltk3/Fl_Round_Button.H>
 #include <fltk3/Fl_Input.H>

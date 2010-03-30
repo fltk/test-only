@@ -572,7 +572,7 @@ int fl_color_chooser(const char* name, double& r, double& g, double& b) {
   cancel_color.r = uchar(255*r+.5); ok_color.r = cancel_color.r;
   ok_color.g = cancel_color.g = uchar(255*g+.5);
   ok_color.b = cancel_color.b = uchar(255*b+.5);
-  Fl_Button cancel_button(110, 165, 95, 25, fl_cancel);
+  fltk3::Button cancel_button(110, 165, 95, 25, fl_cancel);
   cancel_button.callback(cc_cancel_cb,&ret);
   window.resizable(chooser);
   chooser.rgb(r,g,b);

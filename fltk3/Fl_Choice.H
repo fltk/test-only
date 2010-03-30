@@ -57,7 +57,7 @@
   could be added with a subclass, however.
 
   The menu will also pop up in response to shortcuts indicated by putting
-  a '\&' character in the label().  See Fl_Button::shortcut(int s) for a
+  a '\&' character in the label().  See fltk3::Button::shortcut(int s) for a
   description of this.
 
   Typing the shortcut() of any of the items will do exactly the same as when

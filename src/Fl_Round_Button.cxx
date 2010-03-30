@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-// A subclass of Fl_Button that always draws as a round circle.  This
+// A subclass of fltk3::Button that always draws as a round circle.  This
 // circle is smaller than the widget size and can be surrounded by
 // another box type, for compatibility with Forms.
 

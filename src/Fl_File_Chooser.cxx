@@ -54,10 +54,10 @@ void Fl_File_Chooser::cb_favoritesButton(Fl_Menu_Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_favoritesButton_i(o,v);
 }
 
-void Fl_File_Chooser::cb_newButton_i(Fl_Button*, void*) {
+void Fl_File_Chooser::cb_newButton_i(fltk3::Button*, void*) {
   newdir();
 }
-void Fl_File_Chooser::cb_newButton(Fl_Button* o, void* v) {
+void Fl_File_Chooser::cb_newButton(fltk3::Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_newButton_i(o,v);
 }
 
@@ -106,13 +106,13 @@ void Fl_File_Chooser::cb_okButton(Fl_Return_Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->parent()->user_data()))->cb_okButton_i(o,v);
 }
 
-void Fl_File_Chooser::cb_cancelButton_i(Fl_Button*, void*) {
+void Fl_File_Chooser::cb_cancelButton_i(fltk3::Button*, void*) {
   fileName->value("");
 fileList->deselect();
 fltk3::remove_timeout((Fl_Timeout_Handler)previewCB, this);
 window->hide();
 }
-void Fl_File_Chooser::cb_cancelButton(Fl_Button* o, void* v) {
+void Fl_File_Chooser::cb_cancelButton(fltk3::Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->parent()->user_data()))->cb_cancelButton_i(o,v);
 }
 
@@ -123,31 +123,31 @@ void Fl_File_Chooser::cb_favList(Fl_File_Browser* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->user_data()))->cb_favList_i(o,v);
 }
 
-void Fl_File_Chooser::cb_favUpButton_i(Fl_Button*, void*) {
+void Fl_File_Chooser::cb_favUpButton_i(fltk3::Button*, void*) {
   favoritesCB(favUpButton);
 }
-void Fl_File_Chooser::cb_favUpButton(Fl_Button* o, void* v) {
+void Fl_File_Chooser::cb_favUpButton(fltk3::Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_favUpButton_i(o,v);
 }
 
-void Fl_File_Chooser::cb_favDeleteButton_i(Fl_Button*, void*) {
+void Fl_File_Chooser::cb_favDeleteButton_i(fltk3::Button*, void*) {
   favoritesCB(favDeleteButton);
 }
-void Fl_File_Chooser::cb_favDeleteButton(Fl_Button* o, void* v) {
+void Fl_File_Chooser::cb_favDeleteButton(fltk3::Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_favDeleteButton_i(o,v);
 }
 
-void Fl_File_Chooser::cb_favDownButton_i(Fl_Button*, void*) {
+void Fl_File_Chooser::cb_favDownButton_i(fltk3::Button*, void*) {
   favoritesCB(favDownButton);
 }
-void Fl_File_Chooser::cb_favDownButton(Fl_Button* o, void* v) {
+void Fl_File_Chooser::cb_favDownButton(fltk3::Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_favDownButton_i(o,v);
 }
 
-void Fl_File_Chooser::cb_favCancelButton_i(Fl_Button*, void*) {
+void Fl_File_Chooser::cb_favCancelButton_i(fltk3::Button*, void*) {
   favWindow->hide();
 }
-void Fl_File_Chooser::cb_favCancelButton(Fl_Button* o, void* v) {
+void Fl_File_Chooser::cb_favCancelButton(fltk3::Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_favCancelButton_i(o,v);
 }
 
@@ -176,12 +176,12 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
         favoritesButton->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
         favoritesButton->label(favorites_label);
       } // Fl_Menu_Button* favoritesButton
-      { Fl_Button* o = newButton = new Fl_Button(455, 10, 25, 25);
+      { fltk3::Button* o = newButton = new fltk3::Button(455, 10, 25, 25);
         newButton->image(image_new);
         newButton->labelsize(8);
         newButton->callback((Fl_Callback*)cb_newButton);
         o->tooltip(new_directory_tooltip);
-      } // Fl_Button* newButton
+      } // fltk3::Button* newButton
       o->end();
     } // fltk3::Group* o
     { Fl_Tile* o = new Fl_Tile(10, 45, 470, 225);
@@ -230,10 +230,10 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
           okButton->callback((Fl_Callback*)cb_okButton);
           okButton->label(fl_ok);
         } // Fl_Return_Button* okButton
-        { Fl_Button* o = cancelButton = new Fl_Button(408, 345, 72, 25, "Cancel");
+        { fltk3::Button* o = cancelButton = new fltk3::Button(408, 345, 72, 25, "Cancel");
           cancelButton->callback((Fl_Callback*)cb_cancelButton);
           o->label(fl_cancel);
-        } // Fl_Button* cancelButton
+        } // fltk3::Button* cancelButton
         { Fl_Box* o = new Fl_Box(10, 345, 30, 25);
           fltk3::Group::current()->resizable(o);
         } // Fl_Box* o
@@ -253,24 +253,24 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
       fltk3::Group::current()->resizable(favList);
     } // Fl_File_Browser* favList
     { fltk3::Group* o = new fltk3::Group(320, 10, 25, 95);
-      { favUpButton = new Fl_Button(320, 10, 25, 25, "@8>");
+      { favUpButton = new fltk3::Button(320, 10, 25, 25, "@8>");
         favUpButton->callback((Fl_Callback*)cb_favUpButton);
-      } // Fl_Button* favUpButton
-      { favDeleteButton = new Fl_Button(320, 45, 25, 25, "X");
+      } // fltk3::Button* favUpButton
+      { favDeleteButton = new fltk3::Button(320, 45, 25, 25, "X");
         favDeleteButton->labelfont(1);
         favDeleteButton->callback((Fl_Callback*)cb_favDeleteButton);
         fltk3::Group::current()->resizable(favDeleteButton);
-      } // Fl_Button* favDeleteButton
-      { favDownButton = new Fl_Button(320, 80, 25, 25, "@2>");
+      } // fltk3::Button* favDeleteButton
+      { favDownButton = new fltk3::Button(320, 80, 25, 25, "@2>");
         favDownButton->callback((Fl_Callback*)cb_favDownButton);
-      } // Fl_Button* favDownButton
+      } // fltk3::Button* favDownButton
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(10, 113, 335, 29);
-      { favCancelButton = new Fl_Button(273, 115, 72, 25, "Cancel");
+      { favCancelButton = new fltk3::Button(273, 115, 72, 25, "Cancel");
         favCancelButton->callback((Fl_Callback*)cb_favCancelButton);
         favCancelButton->label(fl_cancel);
-      } // Fl_Button* favCancelButton
+      } // fltk3::Button* favCancelButton
       { favOkButton = new Fl_Return_Button(181, 115, 79, 25, "Save");
         favOkButton->callback((Fl_Callback*)cb_favOkButton);
         favOkButton->label(save_label);

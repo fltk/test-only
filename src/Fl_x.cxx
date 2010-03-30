@@ -1765,7 +1765,7 @@ void fltk3::Window::make_current() {
 // to test the Fl_Printer class creating a "Print front window" button in a separate window
 // contains also preparePrintFront call above
 #include <fltk3/Fl_Printer.H>
-#include <fltk3/Fl_Button.H>
+#include <fltk3/Button.h>
 void printFront(fltk3::Widget *o, void *data)
 {
   Fl_Printer printer;
@@ -1808,7 +1808,7 @@ void preparePrintFront(void)
   if(!first) return;
   first=0;
   static fltk3::Window w(0,0,150,30);
-  static Fl_Button b(0,0,w.w(),w.h(), "Print front window");
+  static fltk3::Button b(0,0,w.w(),w.h(), "Print front window");
   b.callback(printFront);
   w.end();
   w.show();

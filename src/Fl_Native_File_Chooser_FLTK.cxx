@@ -66,7 +66,7 @@ Fl_Native_File_Chooser::Fl_Native_File_Chooser(int val) {
   _nfilters    = 0;
 
   // Added by MG
-  Fl_Button *b = _file_chooser->previewButton;
+  fltk3::Button *b = _file_chooser->previewButton;
   fltk3::Window *w = b->window();
   fltk3::Group::current(w);		// adds a "Show hidden files" check button in _file_chooser's window
   show_hidden = new Fl_Check_Button(b->x() + b->w() + 10, b->y(), 145, b->h(), "Show hidden files");

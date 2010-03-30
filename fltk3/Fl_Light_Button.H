@@ -31,7 +31,7 @@
 #ifndef Fl_Light_Button_H
 #define Fl_Light_Button_H
 
-#include "Fl_Button.H"
+#include "Button.h"
 
 /**
   <P>This subclass displays the "on" state by turning on a light, 
@@ -44,7 +44,7 @@
   <P ALIGN=CENTER>\image html Fl_Light_Button.gif</P> 
   \image latex Fl_Light_Button.eps "Fl_Light_Button" width=4cm
 */
-class FL_EXPORT Fl_Light_Button : public Fl_Button {
+class FL_EXPORT Fl_Light_Button : public fltk3::Button {
 protected:
     virtual void draw();
 public:
