@@ -188,14 +188,14 @@ struct FL_EXPORT Fl_Menu_Item {
   /**
     Fonts are identified by small 8-bit indexes into a table. See the 
     enumeration list for predefined fonts. The default value is a
-    Helvetica font. The function Fl::set_font() can define new fonts.
+    Helvetica font. The function fltk3::set_font() can define new fonts.
   */
   Fl_Font labelfont() const {return labelfont_;}
 
   /**
     Fonts are identified by small 8-bit indexes into a table. See the 
     enumeration list for predefined fonts. The default value is a
-    Helvetica font.  The function Fl::set_font() can define new fonts.
+    Helvetica font.  The function fltk3::set_font() can define new fonts.
   */
   void labelfont(Fl_Font a) {labelfont_ = a;}
 
@@ -259,11 +259,11 @@ struct FL_EXPORT Fl_Menu_Item {
     FL_ALT+'a' or FL_ALT+FL_F+10 or just 'a'.  A value of
     zero disables the shortcut.
 
-    The key can be any value returned by Fl::event_key(), but will usually 
+    The key can be any value returned by fltk3::event_key(), but will usually 
     be an ASCII letter. Use a lower-case letter unless you require the shift 
     key to be held down.
 
-    The shift flags can be any set of values accepted by Fl::event_state().
+    The shift flags can be any set of values accepted by fltk3::event_state().
     If the bit is on that shift key must be pushed.  Meta, Alt, Ctrl, 
     and Shift must be off if they are not in the shift flags (zero for the 
     other bits indicates a "don't care" setting).
@@ -353,27 +353,27 @@ struct FL_EXPORT Fl_Menu_Item {
 
   /**
     Calls the Fl_Menu_Item item's callback, and provides the 
-    Fl_Widget argument (and optionally overrides the user_data()
+    fltk3::Widget argument (and optionally overrides the user_data()
     argument). You must first check that callback() is non-zero
     before calling this.
   */
-  void do_callback(Fl_Widget* o) const {callback_(o, user_data_);}
+  void do_callback(fltk3::Widget* o) const {callback_(o, user_data_);}
 
   /**
     Calls the Fl_Menu_Item item's callback, and provides the 
-    Fl_Widget argument (and optionally overrides the user_data()
+    fltk3::Widget argument (and optionally overrides the user_data()
     argument). You must first check that callback() is non-zero
     before calling this.
   */
-  void do_callback(Fl_Widget* o,void* arg) const {callback_(o, arg);}
+  void do_callback(fltk3::Widget* o,void* arg) const {callback_(o, arg);}
 
   /**
     Calls the Fl_Menu_Item item's callback, and provides the 
-    Fl_Widget argument (and optionally overrides the user_data()
+    fltk3::Widget argument (and optionally overrides the user_data()
     argument).  You must first check that callback() is non-zero
     before calling this.
   */
-  void do_callback(Fl_Widget* o,long arg) const {callback_(o, (void*)arg);}
+  void do_callback(fltk3::Widget* o,long arg) const {callback_(o, (void*)arg);}
 
   // back-compatibility, do not use:
 

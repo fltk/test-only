@@ -32,7 +32,7 @@
 #include <FL/fl_draw.H>
 
 // On systems that support double buffering "naturally" the base
-// Fl_Window class will probably do double-buffer and this subclass
+// fltk3::Window class will probably do double-buffer and this subclass
 // does nothing.
 
 #if USE_XDBE
@@ -61,7 +61,7 @@ static int can_xdbe() {
 #endif
 
 void Fl_Double_Window::show() {
-  Fl_Window::show();
+  fltk3::Window::show();
 }
 
 #if defined(USE_X11)
@@ -214,7 +214,7 @@ void fl_delete_offscreen(Fl_Offscreen ctx) {
 const int stack_max = 16;
 static int stack_ix = 0;
 static CGContextRef stack_gc[stack_max];
-static Window stack_window[stack_max];
+static NativeWindow stack_window[stack_max];
 
 void fl_begin_offscreen(Fl_Offscreen ctx) {
   if (stack_ix<stack_max) {
@@ -323,7 +323,7 @@ void Fl_Double_Window::flush(int eraseoverlay) {
     DeleteDC(fl_gc);
     fl_gc = _sgc;
     //# if defined(USE_CAIRO)
-    //if Fl::cairo_autolink_context() Fl::cairo_make_current(this); // capture gc changes automatically to update the cairo context adequately
+    //if fltk3::cairo_autolink_context() fltk3::cairo_make_current(this); // capture gc changes automatically to update the cairo context adequately
     //# endif
 #elif defined(__APPLE__)
     if ( myi->other_xid ) {
@@ -350,7 +350,7 @@ void Fl_Double_Window::flush(int eraseoverlay) {
 void Fl_Double_Window::resize(int X,int Y,int W,int H) {
   int ow = w();
   int oh = h();
-  Fl_Window::resize(X,Y,W,H);
+  fltk3::Window::resize(X,Y,W,H);
 #if USE_XDBE
   if (use_xdbe) return;
 #endif
@@ -369,7 +369,7 @@ void Fl_Double_Window::hide() {
 #endif
       fl_delete_offscreen(myi->other_xid);
   }
-  Fl_Window::hide();
+  fltk3::Window::hide();
 }
 
 /**

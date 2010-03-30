@@ -34,7 +34,7 @@
 
 // Was the last event inside the specified xywh?
 static int event_inside(const int xywh[4]) {
-  return(Fl::event_inside(xywh[0],xywh[1],xywh[2],xywh[3]));
+  return(fltk3::event_inside(xywh[0],xywh[1],xywh[2],xywh[3]));
 }
 
 /// Constructor.
@@ -469,7 +469,7 @@ Fl_Tree_Item *Fl_Tree_Item::find_clicked(const Fl_Tree_Prefs &prefs) {
 }
 
 /// Draw this item and its children.
-void Fl_Tree_Item::draw(int X, int &Y, int W, Fl_Widget *tree, 
+void Fl_Tree_Item::draw(int X, int &Y, int W, fltk3::Widget *tree, 
                         const Fl_Tree_Prefs &prefs, int lastchild) {
   if ( ! _visible ) return; 
   fl_font(_labelfont, _labelsize);

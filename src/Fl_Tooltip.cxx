@@ -63,7 +63,7 @@ public:
   }
 };
 
-Fl_Widget* Fl_Tooltip::widget_ = 0;
+fltk3::Widget* Fl_Tooltip::widget_ = 0;
 static Fl_TooltipBox *window = 0;
 static int Y,H;
 
@@ -75,17 +75,17 @@ void Fl_TooltipBox::layout() {
   ww += 6; hh += 6;
 
   // find position on the screen of the widget:
-  int ox = Fl::event_x_root();
+  int ox = fltk3::event_x_root();
   int oy = Y + H+2;
-  for (Fl_Widget* p = Fl_Tooltip::current(); p; p = p->window()) {
+  for (fltk3::Widget* p = Fl_Tooltip::current(); p; p = p->window()) {
     oy += p->y();
   }
   int scr_x, scr_y, scr_w, scr_h;
-  Fl::screen_xywh(scr_x, scr_y, scr_w, scr_h);
+  fltk3::screen_xywh(scr_x, scr_y, scr_w, scr_h);
   if (ox+ww > scr_x+scr_w) ox = scr_x+scr_w - ww;
   if (ox < scr_x) ox = scr_x;
   if (H > 30) {
-    oy = Fl::event_y_root()+13;
+    oy = fltk3::event_y_root()+13;
     if (oy+hh > scr_y+scr_h) oy -= 23+hh;
   } else {
     if (oy+hh > scr_y+scr_h) oy -= (4+hh+H);
@@ -124,10 +124,10 @@ static void tooltip_timeout(void*) {
   if (!tip || !*tip) {
     if (window) window->hide();
   } else {
-    //if (Fl::grab()) return;
+    //if (fltk3::grab()) return;
     if (!window) window = new Fl_TooltipBox;
-    // this cast bypasses the normal Fl_Window label() code:
-    ((Fl_Widget*)window)->label(tip);
+    // this cast bypasses the normal fltk3::Window label() code:
+    ((fltk3::Widget*)window)->label(tip);
     window->layout();
     window->redraw();
 //    printf("tooltip_timeout: Showing window %p with tooltip \"%s\"...\n",
@@ -135,7 +135,7 @@ static void tooltip_timeout(void*) {
     window->show();
   }
 
-  Fl::remove_timeout(recent_timeout);
+  fltk3::remove_timeout(recent_timeout);
   recent_tooltip = 1;
   recursion = 0;
 }
@@ -149,14 +149,14 @@ static void tooltip_timeout(void*) {
    if you want the tooltip to reappear when the mouse moves back in)
    call the fancier enter_area() below.
 */
-void Fl_Tooltip::enter_(Fl_Widget* w) {
+void Fl_Tooltip::enter_(fltk3::Widget* w) {
 #ifdef DEBUG
   printf("Fl_Tooltip::enter_(w=%p)\n", w);
   printf("    window=%p\n", window);
 #endif // DEBUG
 
   // find the enclosing group with a tooltip:
-  Fl_Widget* tw = w;
+  fltk3::Widget* tw = w;
   for (;;) {
     if (!tw) {exit_(0); return;}
     if (tw == widget_) return;
@@ -172,14 +172,14 @@ void Fl_Tooltip::enter_(Fl_Widget* w) {
      a modal overlapping window is deleted. FLTK does this automatically
      when you click the mouse button.
 */
-void Fl_Tooltip::current(Fl_Widget* w) {
+void Fl_Tooltip::current(fltk3::Widget* w) {
 #ifdef DEBUG
   printf("Fl_Tooltip::current(w=%p)\n", w);
 #endif // DEBUG
 
   exit_(0);
   // find the enclosing group with a tooltip:
-  Fl_Widget* tw = w;
+  fltk3::Widget* tw = w;
   for (;;) {
     if (!tw) return;
     if (tw->tooltip()) break;
@@ -191,7 +191,7 @@ void Fl_Tooltip::current(Fl_Widget* w) {
 
 // Hide any visible tooltip.
 /**  This method is called when the mouse pointer leaves a  widget. */
-void Fl_Tooltip::exit_(Fl_Widget *w) {
+void Fl_Tooltip::exit_(fltk3::Widget *w) {
 #ifdef DEBUG
   printf("Fl_Tooltip::exit_(w=%p)\n", w);
   printf("    widget=%p, window=%p\n", widget_, window);
@@ -199,12 +199,12 @@ void Fl_Tooltip::exit_(Fl_Widget *w) {
 
   if (!widget_ || (w && w == window)) return;
   widget_ = 0;
-  Fl::remove_timeout(tooltip_timeout);
-  Fl::remove_timeout(recent_timeout);
+  fltk3::remove_timeout(tooltip_timeout);
+  fltk3::remove_timeout(recent_timeout);
   if (window && window->visible()) window->hide();
   if (recent_tooltip) {
-    if (Fl::event_state() & FL_BUTTONS) recent_tooltip = 0;
-    else Fl::add_timeout(Fl_Tooltip::hoverdelay(), recent_timeout);
+    if (fltk3::event_state() & FL_BUTTONS) recent_tooltip = 0;
+    else fltk3::add_timeout(Fl_Tooltip::hoverdelay(), recent_timeout);
   }
 }
 
@@ -214,7 +214,7 @@ void Fl_Tooltip::exit_(Fl_Widget *w) {
 // inside or near the box).
 /**
   You may be able to use this to provide tooltips for internal pieces
-  of your widget. Call this after setting Fl::belowmouse() to
+  of your widget. Call this after setting fltk3::belowmouse() to
   your widget (because that calls the above enter() method). Then figure
   out what thing the mouse is pointing at, and call this with the widget
   (this pointer is used to remove the tooltip if the widget is deleted
@@ -223,7 +223,7 @@ void Fl_Tooltip::exit_(Fl_Widget *w) {
   where to put the tooltip), and the text of the tooltip (which must be
   a pointer to static data as it is not copied).
 */
-void Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char* t)
+void Fl_Tooltip::enter_area(fltk3::Widget* wid, int x,int y,int w,int h, const char* t)
 {
   (void)x;
   (void)w;
@@ -241,14 +241,14 @@ void Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char*
   }
   // do nothing if it is the same:
   if (wid==widget_ /*&& x==X && y==Y && w==W && h==H*/ && t==tip) return;
-  Fl::remove_timeout(tooltip_timeout);
-  Fl::remove_timeout(recent_timeout);
+  fltk3::remove_timeout(tooltip_timeout);
+  fltk3::remove_timeout(recent_timeout);
   // remember it:
   widget_ = wid; Y = y; H = h; tip = t;
   // popup the tooltip immediately if it was recently up:
   if (recent_tooltip) {
     if (window) window->hide();
-    Fl::add_timeout(Fl_Tooltip::hoverdelay(), tooltip_timeout);
+    fltk3::add_timeout(Fl_Tooltip::hoverdelay(), tooltip_timeout);
   } else if (Fl_Tooltip::delay() < .1) {
 #ifdef WIN32
     // possible fix for the Windows titlebar, it seems to want the
@@ -258,7 +258,7 @@ void Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char*
     tooltip_timeout(0);
   } else {
     if (window && window->visible()) window->hide();
-    Fl::add_timeout(Fl_Tooltip::delay(), tooltip_timeout);
+    fltk3::add_timeout(Fl_Tooltip::delay(), tooltip_timeout);
   }
 
 #ifdef DEBUG
@@ -267,7 +267,7 @@ void Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char*
 #endif // DEBUG
 }
 
-void Fl_Widget::tooltip(const char *tt) {
+void fltk3::Widget::tooltip(const char *tt) {
   static char beenhere = 0;
   if (!beenhere) {
     beenhere          = 1;

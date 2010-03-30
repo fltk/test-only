@@ -428,7 +428,7 @@ protected:
     return( Fl_Group::children() > 3 );		// (ie. more than box and 2 scrollbars?)
   }
   
-  static void scroll_cb(Fl_Widget*,void*);	// h/v scrollbar callback
+  static void scroll_cb(fltk3::Widget*,void*);	// h/v scrollbar callback
   
   void damage_zone(int r1, int c1, int r2, int c2, int r3 = 0, int c3 = 0);
   
@@ -837,19 +837,19 @@ public:
     table->init_sizes();
     table->redraw();
   }
-  void add(Fl_Widget& w) {
+  void add(fltk3::Widget& w) {
     table->add(w);
   }
-  void add(Fl_Widget* w) {
+  void add(fltk3::Widget* w) {
     table->add(w);
   }
-  void insert(Fl_Widget& w, int n) {
+  void insert(fltk3::Widget& w, int n) {
     table->insert(w,n);
   }
-  void insert(Fl_Widget& w, Fl_Widget* w2) {
+  void insert(fltk3::Widget& w, fltk3::Widget* w2) {
     table->insert(w,w2);
   }
-  void remove(Fl_Widget& w) {
+  void remove(fltk3::Widget& w) {
     table->remove(w);
   }
   void begin() {
@@ -867,7 +867,7 @@ public:
     } 
     Fl_Group::current(Fl_Group::parent());
   }
-  Fl_Widget * const *array() {
+  fltk3::Widget * const *array() {
     return(table->array());
   }
   
@@ -881,12 +881,12 @@ public:
    \code
    for ( int i=0; i<children(); i++ )
    {
-   Fl_Widget *w = child(i);
+   fltk3::Widget *w = child(i);
    [..]
    }
    \endcode
    */
-  Fl_Widget *child(int n) const {
+  fltk3::Widget *child(int n) const {
     return(table->child(n));
   }
   
@@ -901,10 +901,10 @@ public:
   int children() const {
     return(table->children()-2);    // -2: skip Fl_Scroll's h/v scrollbar widgets
   }
-  int find(const Fl_Widget *w) const {
+  int find(const fltk3::Widget *w) const {
     return(table->find(w));
   }
-  int find(const Fl_Widget &w) const {
+  int find(const fltk3::Widget &w) const {
     return(table->find(w));
   } 
   // CALLBACKS
@@ -940,12 +940,12 @@ public:
     _callback_context = context;
     _callback_row = row;
     _callback_col = col;
-    Fl_Widget::do_callback();
+    fltk3::Widget::do_callback();
   }
   
 #if DOXYGEN
   /**
-   The Fl_Widget::when() function is used to set a group of flags, determining
+   The fltk3::Widget::when() function is used to set a group of flags, determining
    when the widget callback is called:
    
    <table border=1>
@@ -969,7 +969,7 @@ public:
    event occurred in, such as in a cell, in a header, or elsewhere on the table.  
    When an event occurs in a cell or header, callback_row() and 
    callback_col() can be used to determine the row and column. The callback can 
-   also look at the regular fltk event values (ie. Fl::event() and Fl::button()) 
+   also look at the regular fltk event values (ie. fltk3::event() and fltk3::button()) 
    to determine what kind of event is occurring.
    */
   void when(Fl_When flags);
@@ -977,7 +977,7 @@ public:
   
 #if DOXYGEN
   /**
-   Callbacks will be called depending on the setting of Fl_Widget::when().
+   Callbacks will be called depending on the setting of fltk3::Widget::when().
    
    Callback functions should use the following functions to determine the 
    context/row/column:
@@ -1036,11 +1036,11 @@ public:
    C = callback_col();                         // column where event occurred
    TableContext context = callback_context();  // which part of table
    fprintf(stderr, "callback: Row=%d Col=%d Context=%d Event=%d\n",
-   R, C, (int)context, (int)Fl::event());
+   R, C, (int)context, (int)fltk3::event());
    }
    
    // Actual static callback
-   static void event_callback(Fl_Widget*, void* data)
+   static void event_callback(fltk3::Widget*, void* data)
    {
    MyTable *o = (MyTable*)data;
    o-&gt;event_callback2();
@@ -1056,7 +1056,7 @@ public:
    };
    \endcode
    */
-  void callback(Fl_Widget*, void*);
+  void callback(fltk3::Widget*, void*);
 #endif
 };
 

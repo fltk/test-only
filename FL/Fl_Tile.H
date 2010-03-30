@@ -68,12 +68,12 @@
   children but before displaying the window to set the borders where you
   want.
 
-  <P>Note on resizable(Fl_Widget &w) :
+  <P>Note on resizable(fltk3::Widget &w) :
   The "resizable" child widget (which should be invisible) limits where the
   border can be dragged to.  If you don't set it, it will be possible to
   drag the borders right to the edge, and thus resize objects on the edge
   to zero width or height.  The resizable() widget is not
-  resized by dragging any borders. See also void Fl_Group::resizable(Fl_Widget &w)
+  resized by dragging any borders. See also void Fl_Group::resizable(fltk3::Widget &w)
 
 */
 class FL_EXPORT Fl_Tile : public Fl_Group {

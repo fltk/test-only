@@ -49,7 +49,7 @@
 
   When the user picks an item off the menu the value() is set to that item
   and then the item's callback is done with the menu_button as the
-  \c Fl_Widget* argument. If the item does not have a callback the
+  \c fltk3::Widget* argument. If the item does not have a callback the
   menu_button's callback is done instead.
 
   All three mouse buttons pop up the menu. The Forms behavior of the first
@@ -68,13 +68,13 @@
   \image latex choice.eps  "Fl_Choice" width=4cm
   \todo Refactor the doxygen comments for Fl_Choice changed() documentation.
 
-  \li <tt>int Fl_Widget::changed() const</tt>
+  \li <tt>int fltk3::Widget::changed() const</tt>
       This value is true the user picks a different value. <em>It is turned
       off by value() and just before doing a callback (the callback can turn
       it back on if desired).</em>
-  \li <tt>void Fl_Widget::set_changed()</tt>
+  \li <tt>void fltk3::Widget::set_changed()</tt>
       This method sets the changed() flag.
-  \li <tt>void Fl_Widget::clear_changed()</tt>
+  \li <tt>void fltk3::Widget::clear_changed()</tt>
       This method clears the changed() flag.
   \li <tt>Fl_Boxtype Fl_Choice::down_box() const</tt>
       Gets the current down box, which is used when the menu is popped up.

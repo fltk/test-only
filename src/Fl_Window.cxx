@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-// The Fl_Window is a window in the fltk library.
+// The fltk3::Window is a window in the fltk library.
 // This is the system-independent portions.  The huge amount of 
 // crap you need to do to communicate with X is in Fl_x.cxx, the
 // equivalent (but totally different) crap for MSWindows is in Fl_win32.cxx
@@ -40,13 +40,13 @@
 #include <FL/fl_draw.H>
 #endif
 
-void Fl_Window::_Fl_Window() {
+void fltk3::Window::_Fl_Window() {
   type(FL_WINDOW);
   box(FL_FLAT_BOX);
-  if (Fl::scheme_bg_) {
+  if (fltk3::scheme_bg_) {
     labeltype(FL_NORMAL_LABEL);
     align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_CLIP);
-    image(Fl::scheme_bg_);
+    image(fltk3::scheme_bg_);
   } else {
     labeltype(FL_NO_LABEL);
   }
@@ -60,7 +60,7 @@ void Fl_Window::_Fl_Window() {
   callback((Fl_Callback*)default_callback);
 }
 
-Fl_Window::Fl_Window(int X,int Y,int W, int H, const char *l)
+fltk3::Window::Window(int X,int Y,int W, int H, const char *l)
 : Fl_Group(X, Y, W, H, l) {
   cursor_default = FL_CURSOR_DEFAULT;
   cursor_fg      = FL_BLACK;
@@ -70,7 +70,7 @@ Fl_Window::Fl_Window(int X,int Y,int W, int H, const char *l)
   set_flag(FORCE_POSITION);
 }
 
-Fl_Window::Fl_Window(int W, int H, const char *l)
+fltk3::Window::Window(int W, int H, const char *l)
 // fix common user error of a missing end() with current(0):
   : Fl_Group((Fl_Group::current(0),0), 0, W, H, l) {
   cursor_default = FL_CURSOR_DEFAULT;
@@ -81,25 +81,25 @@ Fl_Window::Fl_Window(int W, int H, const char *l)
   clear_visible();
 }
 
-Fl_Window *Fl_Widget::window() const {
-  for (Fl_Widget *o = parent(); o; o = o->parent())
-    if (o->type() >= FL_WINDOW) return (Fl_Window*)o;
+fltk3::Window *fltk3::Widget::window() const {
+  for (fltk3::Widget *o = parent(); o; o = o->parent())
+    if (o->type() >= FL_WINDOW) return (fltk3::Window*)o;
   return 0;
 }
 /** Gets the x position of the window on the screen */
-int Fl_Window::x_root() const {
-  Fl_Window *p = window();
+int fltk3::Window::x_root() const {
+  fltk3::Window *p = window();
   if (p) return p->x_root() + x();
   return x();
 }
 /** Gets the y position of the window on the screen */
-int Fl_Window::y_root() const {
-  Fl_Window *p = window();
+int fltk3::Window::y_root() const {
+  fltk3::Window *p = window();
   if (p) return p->y_root() + y();
   return y();
 }
 
-void Fl_Window::draw() {
+void fltk3::Window::draw() {
 
   // The following is similar to Fl_Group::draw(), but ...
   //  - we draw the box with x=0 and y=0 instead of x() and y()
@@ -115,8 +115,8 @@ void Fl_Window::draw() {
   // corner. This code draws a little ribbed triangle for dragging.
   extern CGContextRef fl_gc;
   if (fl_gc && !parent() && resizable() && (!size_range_set || minh!=maxh || minw!=maxw)) {
-    int dx = Fl::box_dw(box())-Fl::box_dx(box());
-    int dy = Fl::box_dh(box())-Fl::box_dy(box());
+    int dx = fltk3::box_dw(box())-fltk3::box_dx(box());
+    int dy = fltk3::box_dh(box())-fltk3::box_dy(box());
     if (dx<=0) dx = 1;
     if (dy<=0) dy = 1;
     int x1 = w()-dx-1, x2 = x1, y1 = h()-dx-1, y2 = y1;
@@ -135,15 +135,15 @@ void Fl_Window::draw() {
 #endif
 
 # if defined(USE_CAIRO)
-  Fl::cairo_make_current(this); // checkout if an update is necessary
+  fltk3::cairo_make_current(this); // checkout if an update is necessary
 # endif
 }
 
-void Fl_Window::label(const char *name) {
+void fltk3::Window::label(const char *name) {
   label(name, iconlabel());
 }
 
-void Fl_Window::copy_label(const char *a) {
+void fltk3::Window::copy_label(const char *a) {
   if (flags() & COPIED_LABEL) {
     free((void *)label());
     clear_flag(COPIED_LABEL);
@@ -154,27 +154,27 @@ void Fl_Window::copy_label(const char *a) {
 }
 
 
-void Fl_Window::iconlabel(const char *iname) {
+void fltk3::Window::iconlabel(const char *iname) {
   label(label(), iname);
 }
 
-// the Fl::atclose pointer is provided for back compatibility.  You
+// the fltk3::atclose pointer is provided for back compatibility.  You
 // can now just change the callback for the window instead.
 
 /** Default callback for window widgets. It hides the window and then calls the default widget callback. */
-void Fl::default_atclose(Fl_Window* window, void* v) {
+void fltk3::default_atclose(fltk3::Window* window, void* v) {
   window->hide();
-  Fl_Widget::default_callback(window, v); // put on Fl::read_queue()
+  fltk3::Widget::default_callback(window, v); // put on fltk3::read_queue()
 }
-/** Back compatibility: default window callback handler \see Fl::set_atclose() */
-void (*Fl::atclose)(Fl_Window*, void*) = default_atclose;
+/** Back compatibility: default window callback handler \see fltk3::set_atclose() */
+void (*fltk3::atclose)(fltk3::Window*, void*) = default_atclose;
 /** Back compatibility: Sets the default callback v for win to call on close event */
-void Fl_Window::default_callback(Fl_Window* win, void* v) {
-  Fl::atclose(win, v);
+void fltk3::Window::default_callback(fltk3::Window* win, void* v) {
+  fltk3::atclose(win, v);
 }
 
-/**  Returns the last window that was made current. \see Fl_Window::make_current() */
-Fl_Window *Fl_Window::current() {
+/**  Returns the last window that was made current. \see fltk3::Window::make_current() */
+fltk3::Window *fltk3::Window::current() {
   return current_;
 }
 

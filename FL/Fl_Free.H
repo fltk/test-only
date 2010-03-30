@@ -42,7 +42,7 @@
 #define FL_ALL_FREE		5 /**< FL_INPUT_FREE and FL_CONTINOUS_FREE */
 
 /** appropriate signature for handle function */
-typedef int (*FL_HANDLEPTR)(Fl_Widget *, int , float, float, char);
+typedef int (*FL_HANDLEPTR)(fltk3::Widget *, int , float, float, char);
 
 /**
   Emulation of the Forms "free" widget.
@@ -63,7 +63,7 @@ typedef int (*FL_HANDLEPTR)(Fl_Widget *, int , float, float, char);
   \li \c FL_ALL_FREE         same as FL_INPUT_FREE and FL_CONTINUOUS_FREE.
  
 */
-class FL_EXPORT Fl_Free : public Fl_Widget {
+class FL_EXPORT Fl_Free : public fltk3::Widget {
     FL_HANDLEPTR hfunc;
     static void step(void *);
 protected:

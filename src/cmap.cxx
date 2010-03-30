@@ -109,7 +109,7 @@ static short cmap[256][3] = {
 // The rest of the colormap is a gray ramp and table, filled in below:
 };
 
-// This is Fl::background from Fl_get_system_colors.cxx, with modifications:
+// This is fltk3::background from Fl_get_system_colors.cxx, with modifications:
 
 #define FL_GRAY_RAMP 32
 #define FL_NUM_GRAY  24

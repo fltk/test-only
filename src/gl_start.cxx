@@ -68,22 +68,22 @@ void gl_start() {
 #if defined(USE_X11)
     context = fl_create_gl_context(fl_visual);
 #elif defined(WIN32)
-    if (!gl_choice) Fl::gl_visual(0);
-    context = fl_create_gl_context(Fl_Window::current(), gl_choice);
+    if (!gl_choice) fltk3::gl_visual(0);
+    context = fl_create_gl_context(fltk3::Window::current(), gl_choice);
 #elif defined(__APPLE_QUARTZ__)
     // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
-    context = fl_create_gl_context(Fl_Window::current(), gl_choice);
+    context = fl_create_gl_context(fltk3::Window::current(), gl_choice);
 #else
 #  error Unsupported platform
 #endif
   }
-  fl_set_gl_context(Fl_Window::current(), context);
+  fl_set_gl_context(fltk3::Window::current(), context);
 #if !defined(WIN32) && !defined(__APPLE__)
   glXWaitX();
 #endif
-  if (pw != Fl_Window::current()->w() || ph != Fl_Window::current()->h()) {
-    pw = Fl_Window::current()->w();
-    ph = Fl_Window::current()->h();
+  if (pw != fltk3::Window::current()->w() || ph != fltk3::Window::current()->h()) {
+    pw = fltk3::Window::current()->w();
+    ph = fltk3::Window::current()->h();
     glLoadIdentity();
     glViewport(0, 0, pw, ph);
     glOrtho(0, pw, 0, ph, -1, 1);
@@ -92,10 +92,10 @@ void gl_start() {
   if (clip_state_number != fl_clip_state_number) {
     clip_state_number = fl_clip_state_number;
     int x, y, w, h;
-    if (fl_clip_box(0, 0, Fl_Window::current()->w(), Fl_Window::current()->h(),
+    if (fl_clip_box(0, 0, fltk3::Window::current()->w(), fltk3::Window::current()->h(),
 		    x, y, w, h)) {
       fl_clip_region(XRectangleRegion(x,y,w,h));
-      glScissor(x, Fl_Window::current()->h()-(y+h), w, h);
+      glScissor(x, fltk3::Window::current()->h()-(y+h), w, h);
       glEnable(GL_SCISSOR_TEST);
     } else {
       glDisable(GL_SCISSOR_TEST);
@@ -111,7 +111,7 @@ void gl_finish() {
 #endif
 }
 
-int Fl::gl_visual(int mode, int *alist) {
+int fltk3::gl_visual(int mode, int *alist) {
   Fl_Gl_Choice *c = Fl_Gl_Choice::find(mode,alist);
   if (!c) return 0;
 #if defined(USE_X11)

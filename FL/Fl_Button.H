@@ -81,7 +81,7 @@ extern FL_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
          (when the user pushes and releases the button, and as the mouse is
 	 dragged around in and out of the button).
 */
-class FL_EXPORT Fl_Button : public Fl_Widget {
+class FL_EXPORT Fl_Button : public fltk3::Widget {
 
   int shortcut_;
   char value_;
@@ -134,11 +134,11 @@ public:
     <tt>'a'</tt>.
     A value of 0 disables the shortcut.
 
-    The key can be any value returned by Fl::event_key(), but will usually be
+    The key can be any value returned by fltk3::event_key(), but will usually be
     an ASCII letter.  Use a lower-case letter unless you require the shift key
     to be held down.
 
-    The shift flags can be any set of values accepted by Fl::event_state().
+    The shift flags can be any set of values accepted by fltk3::event_state().
     If the bit is on, that shift key must be pushed.  Meta, Alt, Ctrl, and
     Shift must be off if they are not in the shift flags (zero for the other
     bits indicates a "don't care" setting).

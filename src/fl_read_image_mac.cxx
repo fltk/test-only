@@ -26,7 +26,7 @@
 //
 
 #include <config.h>
-extern unsigned char *MACbitmapFromRectOfWindow(Fl_Window *win, int x, int y, int w, int h, int *bytesPerPixel);
+extern unsigned char *MACbitmapFromRectOfWindow(fltk3::Window *win, int x, int y, int w, int h, int *bytesPerPixel);
 
 //
 // 'fl_read_image()' - Read an image from the current window.
@@ -39,7 +39,7 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
 	      int   w,		// I - Width of area to read
 	      int   h,		// I - Height of area to read
 	      int   alpha) {	// I - Alpha value for image (0 for none)
-  Fl_Window *window = Fl_Window::current();
+  fltk3::Window *window = fltk3::Window::current();
   while(window->window()) window = window->window();
   int delta;
   uchar *base = MACbitmapFromRectOfWindow(window,x,y,w,h,&delta);

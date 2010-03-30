@@ -35,8 +35,8 @@
 // button: it draws the text of the current pick and a down-arrow.
 
 void Fl_Choice::draw() {
-  int dx = Fl::box_dx(FL_DOWN_BOX);
-  int dy = Fl::box_dy(FL_DOWN_BOX);
+  int dx = fltk3::box_dx(FL_DOWN_BOX);
+  int dy = fltk3::box_dy(FL_DOWN_BOX);
   int H = h() - 2 * dy;
   int W = (H > 20) ? 20 : H;
   int X = x() + w() - W - dx;
@@ -45,11 +45,11 @@ void Fl_Choice::draw() {
   int x1 = X + (W - 2 * w1 - 1) / 2;
   int y1 = Y + (H - w1 - 1) / 2;
 
-  if (Fl::scheme()) {
+  if (fltk3::scheme()) {
     draw_box(FL_UP_BOX, color());
 
     fl_color(active_r() ? labelcolor() : fl_inactive(labelcolor()));
-    if (!strcmp(Fl::scheme(), "plastic")) {
+    if (!strcmp(fltk3::scheme(), "plastic")) {
       // Show larger up/down arrows...
       fl_polygon(x1, y1 + 3, x1 + w1, y1 + w1 + 3, x1 + 2 * w1, y1 + 3);
       fl_polygon(x1, y1 + 1, x1 + w1, y1 - w1 + 1, x1 + 2 * w1, y1 + 1);
@@ -89,7 +89,7 @@ void Fl_Choice::draw() {
 
     fl_push_clip(xx, yy, ww, hh);
 
-    if ( Fl::scheme()) {
+    if ( fltk3::scheme()) {
       Fl_Label l;
       l.value = m.text;
       l.image = 0;
@@ -102,11 +102,11 @@ void Fl_Choice::draw() {
       fl_draw_shortcut = 2; // hack value to make '&' disappear
       l.draw(xx+3, yy, ww>6 ? ww-6 : 0, hh, FL_ALIGN_LEFT);
       fl_draw_shortcut = 0;
-      if ( Fl::focus() == this ) draw_focus(box(), xx, yy, ww, hh);
+      if ( fltk3::focus() == this ) draw_focus(box(), xx, yy, ww, hh);
     }
     else {
       fl_draw_shortcut = 2; // hack value to make '&' disappear
-      m.draw(xx, yy, ww, hh, this, Fl::focus() == this);
+      m.draw(xx, yy, ww, hh, this, fltk3::focus() == this);
       fl_draw_shortcut = 0;
     }
 
@@ -170,12 +170,12 @@ int Fl_Choice::handle(int e) {
     return 1;
 
   case FL_KEYBOARD:
-    if (Fl::event_key() != ' ' ||
-        (Fl::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) return 0;
+    if (fltk3::event_key() != ' ' ||
+        (fltk3::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) return 0;
   case FL_PUSH:
-    if (Fl::visible_focus()) Fl::focus(this);
+    if (fltk3::visible_focus()) fltk3::focus(this);
   J1:
-    if (Fl::scheme()
+    if (fltk3::scheme()
 	|| fl_contrast(textcolor(), FL_BACKGROUND2_COLOR) != textcolor()) {
       v = menu()->pulldown(x(), y(), w(), h(), mvalue(), this);
     } else {
@@ -191,7 +191,7 @@ int Fl_Choice::handle(int e) {
     picked(v);
     return 1;
   case FL_SHORTCUT:
-    if (Fl_Widget::test_shortcut()) goto J1;
+      if (fltk3::Widget::test_shortcut()) goto J1;
     v = menu()->test_shortcut();
     if (!v) return 0;
     if (v != mvalue()) redraw();
@@ -199,7 +199,7 @@ int Fl_Choice::handle(int e) {
     return 1;
   case FL_FOCUS:
   case FL_UNFOCUS:
-    if (Fl::visible_focus()) {
+    if (fltk3::visible_focus()) {
       redraw();
       return 1;
     } else return 0;

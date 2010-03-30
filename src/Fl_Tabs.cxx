@@ -49,14 +49,14 @@
 
 int Fl_Tabs::tab_positions(int* p, int* wp) {
   int selected = 0;
-  Fl_Widget*const* a = array();
+  fltk3::Widget*const* a = array();
   int i;
   char prev_draw_shortcut = fl_draw_shortcut;
   fl_draw_shortcut = 1;
 
-  p[0] = Fl::box_dx(box());
+  p[0] = fltk3::box_dx(box());
   for (i=0; i<children(); i++) {
-    Fl_Widget* o = *a++;
+    fltk3::Widget* o = *a++;
     if (o->visible()) selected = i;
 
     int wt = 0; int ht = 0;
@@ -97,9 +97,9 @@ int Fl_Tabs::tab_positions(int* p, int* wp) {
 int Fl_Tabs::tab_height() {
   int H = h();
   int H2 = y();
-  Fl_Widget*const* a = array();
+  fltk3::Widget*const* a = array();
   for (int i=children(); i--;) {
-    Fl_Widget* o = *a++;
+    fltk3::Widget* o = *a++;
     if (o->y() < y()+H) H = o->y()-y();
     if (o->y()+o->h() > H2) H2 = o->y()+o->h();
   }
@@ -109,7 +109,7 @@ int Fl_Tabs::tab_height() {
 }
 
 // this is used by fluid to pick tabs:
-Fl_Widget *Fl_Tabs::which(int event_x, int event_y) {
+fltk3::Widget *Fl_Tabs::which(int event_x, int event_y) {
   int H = tab_height();
   if (H < 0) {
     if (event_y > y()+h() || event_y < y()+h()+H) return 0;
@@ -129,17 +129,17 @@ void Fl_Tabs::redraw_tabs()
 {
   int H = tab_height();
   if (H >= 0) {
-    H += Fl::box_dy(box());
+    H += fltk3::box_dy(box());
     damage(FL_DAMAGE_SCROLL, x(), y(), w(), H);
   } else {
-    H = Fl::box_dy(box()) - H;
+    H = fltk3::box_dy(box()) - H;
     damage(FL_DAMAGE_SCROLL, x(), y() + h() - H, w(), H);
   }
 }
 
 int Fl_Tabs::handle(int event) {
 
-  Fl_Widget *o;
+  fltk3::Widget *o;
   int i;
 
   switch (event) {
@@ -147,18 +147,18 @@ int Fl_Tabs::handle(int event) {
   case FL_PUSH: {
     int H = tab_height();
     if (H >= 0) {
-      if (Fl::event_y() > y()+H) return Fl_Group::handle(event);
+      if (fltk3::event_y() > y()+H) return Fl_Group::handle(event);
     } else {
-      if (Fl::event_y() < y()+h()+H) return Fl_Group::handle(event);
+      if (fltk3::event_y() < y()+h()+H) return Fl_Group::handle(event);
     }}
     /* FALLTHROUGH */
   case FL_DRAG:
   case FL_RELEASE:
-    o = which(Fl::event_x(), Fl::event_y());
+    o = which(fltk3::event_x(), fltk3::event_y());
     if (event == FL_RELEASE) {
       push(0);
-      if (o && Fl::visible_focus() && Fl::focus()!=this) { 
-        Fl::focus(this);
+      if (o && fltk3::visible_focus() && fltk3::focus()!=this) { 
+        fltk3::focus(this);
         redraw_tabs();
       }
       if (o && value(o)) {
@@ -174,14 +174,14 @@ int Fl_Tabs::handle(int event) {
     return 1;
   case FL_MOVE: {
     int ret = Fl_Group::handle(event);
-    Fl_Widget *o = Fl_Tooltip::current(), *n = o;
+    fltk3::Widget *o = Fl_Tooltip::current(), *n = o;
     int H = tab_height();
-    if ( (H>=0) && (Fl::event_y()>y()+H) )
+    if ( (H>=0) && (fltk3::event_y()>y()+H) )
       return ret;
-    else if ( (H<0) && (Fl::event_y() < y()+h()+H) )
+    else if ( (H<0) && (fltk3::event_y() < y()+h()+H) )
       return ret;
     else { 
-      n = which(Fl::event_x(), Fl::event_y());
+      n = which(fltk3::event_x(), fltk3::event_y());
       if (!n) n = this;
     }
     if (n!=o)
@@ -189,18 +189,18 @@ int Fl_Tabs::handle(int event) {
     return ret; }
   case FL_FOCUS:
   case FL_UNFOCUS:
-    if (!Fl::visible_focus()) return Fl_Group::handle(event);
-    if (Fl::event() == FL_RELEASE ||
-	Fl::event() == FL_SHORTCUT ||
-	Fl::event() == FL_KEYBOARD ||
-	Fl::event() == FL_FOCUS ||
-	Fl::event() == FL_UNFOCUS) {
+    if (!fltk3::visible_focus()) return Fl_Group::handle(event);
+    if (fltk3::event() == FL_RELEASE ||
+	fltk3::event() == FL_SHORTCUT ||
+	fltk3::event() == FL_KEYBOARD ||
+	fltk3::event() == FL_FOCUS ||
+	fltk3::event() == FL_UNFOCUS) {
       redraw_tabs();
-      if (Fl::event() == FL_FOCUS || Fl::event() == FL_UNFOCUS) return 0;
+      if (fltk3::event() == FL_FOCUS || fltk3::event() == FL_UNFOCUS) return 0;
       else return 1;
     } else return Fl_Group::handle(event);
   case FL_KEYBOARD:
-    switch (Fl::event_key()) {
+    switch (fltk3::event_key()) {
       case FL_Left:
         if (child(0)->visible()) return 0;
 	for (i = 1; i < children(); i ++)
@@ -226,7 +226,7 @@ int Fl_Tabs::handle(int event) {
     return Fl_Group::handle(event);
   case FL_SHORTCUT:
     for (i = 0; i < children(); ++i) {
-      Fl_Widget *c = child(i);
+      fltk3::Widget *c = child(i);
       if (c->test_shortcut(c->label())) {
         char sc = !c->visible();
         value(c);
@@ -244,7 +244,7 @@ int Fl_Tabs::handle(int event) {
   }
 }
 
-int Fl_Tabs::push(Fl_Widget *o) {
+int Fl_Tabs::push(fltk3::Widget *o) {
   if (push_ == o) return 0;
   if (push_ && !push_->visible() || o && !o->visible())
     redraw_tabs();
@@ -259,11 +259,11 @@ int Fl_Tabs::push(Fl_Widget *o) {
    This allows the tabs to be deleted, moved to other groups, and
    show()/hide() called without it screwing up.
 */
-Fl_Widget* Fl_Tabs::value() {
-  Fl_Widget* v = 0;
-  Fl_Widget*const* a = array();
+fltk3::Widget* Fl_Tabs::value() {
+  fltk3::Widget* v = 0;
+  fltk3::Widget*const* a = array();
   for (int i=children(); i--;) {
-    Fl_Widget* o = *a++;
+    fltk3::Widget* o = *a++;
     if (v) o->hide();
     else if (o->visible()) v = o;
     else if (!i) {o->show(); v = o;}
@@ -276,11 +276,11 @@ Fl_Widget* Fl_Tabs::value() {
   Setting the value hides all other children, and makes this one
   visible, if it is really a child.
 */
-int Fl_Tabs::value(Fl_Widget *newvalue) {
-  Fl_Widget*const* a = array();
+int Fl_Tabs::value(fltk3::Widget *newvalue) {
+  fltk3::Widget*const* a = array();
   int ret = 0;
   for (int i=children(); i--;) {
-    Fl_Widget* o = *a++;
+    fltk3::Widget* o = *a++;
     if (o == newvalue) {
       if (!o->visible()) ret = 1;
       o->show();
@@ -294,7 +294,7 @@ int Fl_Tabs::value(Fl_Widget *newvalue) {
 enum {LEFT, RIGHT, SELECTED};
 
 void Fl_Tabs::draw() {
-  Fl_Widget *v = value();
+  fltk3::Widget *v = value();
   int H = tab_height();
 
   if (damage() & FL_DAMAGE_ALL) { // redraw the entire thing:
@@ -321,7 +321,7 @@ void Fl_Tabs::draw() {
     int p[128]; int wp[128];
     int selected = tab_positions(p,wp);
     int i;
-    Fl_Widget*const* a = array();
+    fltk3::Widget*const* a = array();
     for (i=0; i<selected; i++)
       draw_tab(x()+p[i], x()+p[i+1], wp[i], H, a[i], LEFT);
     for (i=children()-1; i > selected; i--)
@@ -333,10 +333,10 @@ void Fl_Tabs::draw() {
   }
 }
 
-void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
+void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what) {
   int sel = (what == SELECTED);
-  int dh = Fl::box_dh(box());
-  int dy = Fl::box_dy(box());
+  int dh = fltk3::box_dh(box());
+  int dy = fltk3::box_dy(box());
   char prev_draw_shortcut = fl_draw_shortcut;
   fl_draw_shortcut = 1;
 
@@ -367,7 +367,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
     // Restore the original label color...
     o->labelcolor(oc);
 
-    if (Fl::focus() == this && o->visible())
+    if (fltk3::focus() == this && o->visible())
       draw_focus(box(), x1, y(), W, H);
 
     fl_pop_clip();
@@ -393,7 +393,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
     // Restore the original label color...
     o->labelcolor(oc);
 
-    if (Fl::focus() == this && o->visible())
+    if (fltk3::focus() == this && o->visible())
       draw_focus(box(), x1, y() + h() - H, W, H);
 
     fl_pop_clip();
@@ -405,7 +405,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
     Creates a new Fl_Tabs widget using the given position, size,
     and label string. The default boxtype is FL_THIN_UP_BOX.
 
-    <P>Use add(Fl_Widget
+    <P>Use add(fltk3::Widget
     *) to add each child, which are usually
     Fl_Group widgets. The children should be sized to stay
     away from the top or bottom edge of the Fl_Tabs widget,

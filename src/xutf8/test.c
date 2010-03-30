@@ -89,7 +89,7 @@ int main(int argc, char**argv) {
   unsigned long mask;
   Display* dpy;
   int scr;
-  Window w, root;
+  NativeWindow w, root;
   XSetWindowAttributes set_attr;
   int i;
   XIMStyle *style;

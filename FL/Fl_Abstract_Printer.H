@@ -52,7 +52,7 @@ private:
   };
   void add_image(Fl_Image *image, const uchar *data); // adds an image to the page image list
 #endif
-  void traverse(Fl_Widget *widget); // finds subwindows of widget and prints them
+  void traverse(fltk3::Widget *widget); // finds subwindows of widget and prints them
 protected:
   /** \brief horizontal offset to the origin of graphics coordinates */
   int x_offset;
@@ -80,8 +80,8 @@ public:
   virtual void rotate(float angle);
   virtual void translate(int x, int y);
   virtual void untranslate(void);
-  void print_widget(Fl_Widget* widget, int delta_x = 0, int delta_y = 0);
-  void print_window_part(Fl_Window *win, int x, int y, int w, int h, int delta_x = 0, int delta_y = 0);
+  void print_widget(fltk3::Widget* widget, int delta_x = 0, int delta_y = 0);
+  void print_window_part(fltk3::Window *win, int x, int y, int w, int h, int delta_x = 0, int delta_y = 0);
   virtual int end_page (void);
   virtual void end_job (void);
 };

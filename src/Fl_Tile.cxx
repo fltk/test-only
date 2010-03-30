@@ -42,11 +42,11 @@
   This redraws all the necessary children.
 */
 void Fl_Tile::position(int oix, int oiy, int newx, int newy) {
-  Fl_Widget*const* a = array();
+  fltk3::Widget*const* a = array();
   int *p = sizes();
   p += 8; // skip group & resizable's saved size
   for (int i=children(); i--; p += 4) {
-    Fl_Widget* o = *a++;
+    fltk3::Widget* o = *a++;
     if (o == resizable()) continue;
     int X = o->x();
     int R = X+o->w();
@@ -79,17 +79,17 @@ void Fl_Tile::resize(int X,int Y,int W,int H) {
   int dh = H-h();
   int *p = sizes();
   // resize this (skip the Fl_Group resize):
-  Fl_Widget::resize(X,Y,W,H);
+  fltk3::Widget::resize(X,Y,W,H);
   // find bottom-right of resiable:
   int OR = p[5];
   int NR = X+W-(p[1]-OR);
   int OB = p[7];
   int NB = Y+H-(p[3]-OB);
   // move everything to be on correct side of new resizable:
-  Fl_Widget*const* a = array();
+  fltk3::Widget*const* a = array();
   p += 8;
   for (int i=children(); i--;) {
-    Fl_Widget* o = *a++;
+    fltk3::Widget* o = *a++;
     int xx = o->x()+dx;
     int R = xx+o->w();
     if (*p++ >= OR) xx += dw; else if (xx > NR) xx = NR;
@@ -129,8 +129,8 @@ int Fl_Tile::handle(int event) {
 #define DRAGV 2
 #define GRABAREA 4
 
-  int mx = Fl::event_x();
-  int my = Fl::event_y();
+  int mx = fltk3::event_x();
+  int my = fltk3::event_y();
 
   switch (event) {
 
@@ -144,11 +144,11 @@ int Fl_Tile::handle(int event) {
     int mindy = 100;
     int oldx = 0;
     int oldy = 0;
-    Fl_Widget*const* a = array();
+      fltk3::Widget*const* a = array();
     int *q = sizes();
     int *p = q+8;
     for (int i=children(); i--; p += 4) {
-      Fl_Widget* o = *a++;
+      fltk3::Widget* o = *a++;
       if (o == resizable()) continue;
       if (p[1]<q[1] && o->y()<=my+GRABAREA && o->y()+o->h()>=my-GRABAREA) {
 	int t = mx - (o->x()+o->w());
@@ -184,17 +184,17 @@ int Fl_Tile::handle(int event) {
     // if (damage()) return 1; // don't fall behind
   case FL_RELEASE: {
     if (!sdrag) return 0; // should not happen
-    Fl_Widget* r = resizable(); if (!r) r = this;
+    fltk3::Widget* r = resizable(); if (!r) r = this;
     int newx;
     if (sdrag&DRAGH) {
-      newx = Fl::event_x()-sdx;
+      newx = fltk3::event_x()-sdx;
       if (newx < r->x()) newx = r->x();
       else if (newx > r->x()+r->w()) newx = r->x()+r->w();
     } else
       newx = sx;
     int newy;
     if (sdrag&DRAGV) {
-      newy = Fl::event_y()-sdy;
+      newy = fltk3::event_y()-sdy;
       if (newy < r->y()) newy = r->y();
       else if (newy > r->y()+r->h()) newy = r->y()+r->h();
     } else

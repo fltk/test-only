@@ -112,10 +112,10 @@ void Fl_Image::desaturate() {
   The label() methods are an obsolete way to set the
   image attribute of a widget or menu item. Use the
   image() or deimage() methods of the
-  Fl_Widget and Fl_Menu_Item classes
+  fltk3::Widget and Fl_Menu_Item classes
   instead.
 */
-void Fl_Image::label(Fl_Widget* widget) {
+void Fl_Image::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 
@@ -123,11 +123,11 @@ void Fl_Image::label(Fl_Widget* widget) {
   The label() methods are an obsolete way to set the
   image attribute of a widget or menu item. Use the
   image() or deimage() methods of the
-  Fl_Widget and Fl_Menu_Item classes
+  fltk3::Widget and Fl_Menu_Item classes
   instead.
 */
 void Fl_Image::label(Fl_Menu_Item* m) {
-  Fl::set_labeltype(_FL_IMAGE_LABEL, labeltype, measure);
+  fltk3::set_labeltype(_FL_IMAGE_LABEL, labeltype, measure);
   m->label(_FL_IMAGE_LABEL, (const char*)this);
 }
 
@@ -295,7 +295,7 @@ void Fl_RGB_Image::color_average(Fl_Color c, float i) {
   uchar		r, g, b;
   unsigned	ia, ir, ig, ib;
 
-  Fl::get_color(c, r, g, b);
+  fltk3::get_color(c, r, g, b);
   if (i < 0.0f) i = 0.0f;
   else if (i > 1.0f) i = 1.0f;
 
@@ -544,12 +544,12 @@ void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
 #endif
 }
 
-void Fl_RGB_Image::label(Fl_Widget* widget) {
+void Fl_RGB_Image::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 
 void Fl_RGB_Image::label(Fl_Menu_Item* m) {
-  Fl::set_labeltype(_FL_IMAGE_LABEL, labeltype, measure);
+  fltk3::set_labeltype(_FL_IMAGE_LABEL, labeltype, measure);
   m->label(_FL_IMAGE_LABEL, (const char*)this);
 }
 

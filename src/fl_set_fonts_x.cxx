@@ -49,7 +49,7 @@
 // By default fl_set_fonts() only does iso8859-1 encoded fonts.  You can
 // do all normal X fonts by passing "-*" or every possible font with "*".
 
-// Fl::set_font will take strings other than the ones this stores
+// fltk3::set_font will take strings other than the ones this stores
 // and can identify any font on X that way.  You may want to write your
 // own system of font management and not use this code.
 
@@ -88,7 +88,7 @@ static int use_registry(const char *p) {
 #define ENDOFBUFFER 127 // sizeof(Fl_Font.fontname)-1
 
 // turn a stored (with *'s) X font name into a pretty name:
-const char* Fl::get_font_name(Fl_Font fnum, int* ap) {
+const char* fltk3::get_font_name(Fl_Font fnum, int* ap) {
   Fl_Fontdesc *f = fl_fonts + fnum;
   if (!f->fontname[0]) {
     int type = 0;
@@ -259,7 +259,7 @@ static int to_canonical(char *to, const char *from, size_t tolen) {
 
 static unsigned int fl_free_font = FL_FREE_FONT;
 
-Fl_Font Fl::set_fonts(const char* xstarname) {
+Fl_Font fltk3::set_fonts(const char* xstarname) {
   if (fl_free_font > FL_FREE_FONT) // already been here
     return (Fl_Font)fl_free_font;
   fl_open_display();
@@ -298,7 +298,7 @@ Fl_Font Fl::set_fonts(const char* xstarname) {
       } else */{
 	j = fl_free_font++;
 	if (p == canon) p = strdup(p); else used_xlist = 1;
-	Fl::set_font((Fl_Font)j, p);
+	fltk3::set_font((Fl_Font)j, p);
 	break;
       }
     }
@@ -312,7 +312,7 @@ Fl_Font Fl::set_fonts(const char* xstarname) {
   return (Fl_Font)fl_free_font;
 }
 
-int Fl::get_font_sizes(Fl_Font fnum, int*& sizep) {
+int fltk3::get_font_sizes(Fl_Font fnum, int*& sizep) {
   Fl_Fontdesc *s = fl_fonts+fnum;
   if (!s->name) s = fl_fonts; // empty slot in table, use entry 0
   if (!s->xlist) {

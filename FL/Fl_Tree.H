@@ -113,7 +113,7 @@ public:
   /// You probably want to use item_clicked() instead, which is fast.
   ///
   /// This method walks the entire tree looking for the first item that is
-  /// under the mouse (ie. at Fl::event_x()/Fl:event_y().
+  /// under the mouse (ie. at fltk3::event_x()/fltk3:event_y().
   ///
   /// Use this method /only/ if you've subclassed Fl_Tree, and are receiving
   /// events before Fl_Tree has been able to process and update item_clicked().
@@ -631,14 +631,14 @@ public:
   }
   /// Sets the style of box used to draw selected items.
   /// This is an fltk Fl_Boxtype.
-  /// The default is influenced by FLTK's current Fl::scheme()
+  /// The default is influenced by FLTK's current fltk3::scheme()
   ///
   Fl_Boxtype selectbox() const {
     return(_prefs.selectbox());
   }
   /// Gets the style of box used to draw selected items.
   /// This is an fltk Fl_Boxtype.
-  /// The default is influenced by FLTK's current Fl::scheme()
+  /// The default is influenced by FLTK's current fltk3::scheme()
   ///
   void selectbox(Fl_Boxtype val) {
     _prefs.selectbox(val);

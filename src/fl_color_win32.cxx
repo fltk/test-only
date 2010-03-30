@@ -191,12 +191,12 @@ CREATE_BRUSH:
   return brushes[i].brush;
 }
 
-void Fl::free_color(Fl_Color i, int overlay) {
+void fltk3::free_color(Fl_Color i, int overlay) {
   if (overlay) return; // do something about GL overlay?
   clear_xmap(fl_xmap[i]);
 }
 
-void Fl::set_color(Fl_Color i, unsigned c) {
+void fltk3::set_color(Fl_Color i, unsigned c) {
   if (fl_cmap[i] != c) {
     clear_xmap(fl_xmap[i]);
     fl_cmap[i] = c;

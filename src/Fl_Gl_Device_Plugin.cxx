@@ -54,17 +54,17 @@ static void print_gl_window(Fl_Abstract_Printer *printer, Fl_Gl_Window *glw, int
 #endif
   fl_gc = NULL;
 #ifdef WIN32
-  Fl::check();
-  Fl_Window *win = (Fl_Window*)glw;
+  fltk3::check();
+  fltk3::Window *win = (fltk3::Window*)glw;
   while( win->window() ) win = win->window();
   win->redraw();
-  Fl::check();
+  fltk3::check();
   glw->make_current();
 #else
   glw->make_current();
   glw->redraw();
   glFlush();
-  Fl::check();
+  fltk3::check();
   glFinish();
 #endif
   // Read OpenGL context pixels directly.
@@ -137,7 +137,7 @@ public:
    \param w the widget
    \param x,y offsets where to print relatively to coordinates origin
    */
-  virtual int print(Fl_Abstract_Printer *p, Fl_Widget *w, int x, int y) {
+  virtual int print(Fl_Abstract_Printer *p, fltk3::Widget *w, int x, int y) {
     Fl_Gl_Window *glw = w->as_gl_window();
     if (!glw) return 0;
     print_gl_window(p, glw, x, y);

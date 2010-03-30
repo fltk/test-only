@@ -148,7 +148,7 @@ public:
     Returns 0 if browser is empty.
   */
   int size() const { return lines; }
-  void size(int W, int H) { Fl_Widget::size(W, H); }
+  void size(int W, int H) { fltk3::Widget::size(W, H); }
 
   int topline() const ;
   /** For internal use only? */
@@ -180,10 +180,10 @@ public:
   int selected(int line) const ;
   void show(int line);
   /** Shows the entire Fl_Browser widget -- opposite of hide(). */
-  void show() { Fl_Widget::show(); }
+  void show() { fltk3::Widget::show(); }
   void hide(int line);
   /** Hides the entire Fl_Browser widget -- opposite of show(). */
-  void hide() { Fl_Widget::hide(); }
+  void hide() { fltk3::Widget::hide(); }
   int visible(int line) const ;
 
   int value() const ;

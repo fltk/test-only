@@ -62,7 +62,7 @@ class Fl_Gl_Choice; // structure to hold result of glXChooseVisual
   it is not useful to add other FLTK Widgets as children,
   unless those widgets are modified to draw using OpenGL calls.
 */
-class FL_EXPORT Fl_Gl_Window : public Fl_Window {
+class FL_EXPORT Fl_Gl_Window : public fltk3::Window {
 
   int mode_;
   const int *alist;
@@ -83,7 +83,7 @@ class FL_EXPORT Fl_Gl_Window : public Fl_Window {
 public:
 
   void show();
-  void show(int a, char **b) {Fl_Window::show(a,b);}
+  void show(int a, char **b) {fltk3::Window::show(a,b);}
   void flush();
   void hide();
   void resize(int,int,int,int);
@@ -157,7 +157,7 @@ public:
 
     If the desired combination cannot be done, FLTK will try turning off 
     FL_MULTISAMPLE.  If this also fails the show() will call 
-    Fl::error() and not show the window.
+    fltk3::error() and not show the window.
 
     You can change the mode while the window is displayed.  This is most
     useful for turning double-buffering on and off.  Under X this will
@@ -217,7 +217,7 @@ public:
     Creates a new Fl_Gl_Window widget using the given size, and label string. 
     The default boxtype is FL_NO_BOX. The default mode is FL_RGB|FL_DOUBLE|FL_DEPTH.
   */
-  Fl_Gl_Window(int W, int H, const char *l=0) : Fl_Window(W,H,l) {init();}
+  Fl_Gl_Window(int W, int H, const char *l=0) : fltk3::Window(W,H,l) {init();}
   /**
     Creates a new Fl_Gl_Window widget using the given position,
     size, and label string. The default boxtype is FL_NO_BOX. The
@@ -225,7 +225,7 @@ public:
   */
 
   Fl_Gl_Window(int X, int Y, int W, int H, const char *l=0)
-    : Fl_Window(X,Y,W,H,l) {init();}
+  : fltk3::Window(X,Y,W,H,l) {init();}
 
 protected:
   /**

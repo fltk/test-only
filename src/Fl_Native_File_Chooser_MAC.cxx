@@ -123,7 +123,7 @@ int Fl_Native_File_Chooser::options() const {
 int Fl_Native_File_Chooser::show() {
 
   // Make sure fltk interface updates before posting our dialog
-  Fl::flush();
+  fltk3::flush();
   
   // POST BROWSER
   int err = post();

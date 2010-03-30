@@ -51,10 +51,10 @@ void Fl_Value_Slider::draw() {
     syy += 25; bhh = 25; shh -= 25;
   }
   if (damage()&FL_DAMAGE_ALL) draw_box(box(),sxx,syy,sww,shh,color());
-  Fl_Slider::draw(sxx+Fl::box_dx(box()),
-		  syy+Fl::box_dy(box()),
-		  sww-Fl::box_dw(box()),
-		  shh-Fl::box_dh(box()));
+  Fl_Slider::draw(sxx+fltk3::box_dx(box()),
+		  syy+fltk3::box_dy(box()),
+		  sww-fltk3::box_dw(box()),
+		  shh-fltk3::box_dh(box()));
   draw_box(box(),bxx,byy,bww,bhh,color());
   char buf[128];
   format(buf);
@@ -64,8 +64,8 @@ void Fl_Value_Slider::draw() {
 }
 
 int Fl_Value_Slider::handle(int event) {
-  if (event == FL_PUSH && Fl::visible_focus()) {
-    Fl::focus(this);
+  if (event == FL_PUSH && fltk3::visible_focus()) {
+    fltk3::focus(this);
     redraw();
   }
   int sxx = x(), syy = y(), sww = w(), shh = h();
@@ -75,10 +75,10 @@ int Fl_Value_Slider::handle(int event) {
     syy += 25; shh -= 25;
   }
   return Fl_Slider::handle(event,
-			   sxx+Fl::box_dx(box()),
-			   syy+Fl::box_dy(box()),
-			   sww-Fl::box_dw(box()),
-			   shh-Fl::box_dh(box()));
+			   sxx+fltk3::box_dx(box()),
+			   syy+fltk3::box_dy(box()),
+			   sww-fltk3::box_dw(box()),
+			   shh-fltk3::box_dh(box()));
 }
 
 //

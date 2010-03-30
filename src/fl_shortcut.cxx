@@ -36,7 +36,7 @@
 // Only FL_META, FL_ALT, FL_SHIFT, and FL_CTRL must be "off".  A
 // zero in the other shift flags indicates "dont care".
 //
-// It also checks against the first character of Fl::event_text(),
+// It also checks against the first character of fltk3::event_text(),
 // and zero for FL_SHIFT means "don't care".
 // This allows punctuation shortcuts like "#" to work (rather than
 // calling it "shift+3" on a US keyboard)
@@ -56,9 +56,9 @@
     FL_SHORTCUT, against a shortcut value (described in 
     Fl_Button).  Returns non-zero if there is a match.  Not to
     be confused with 
-    Fl_Widget::test_shortcut().
+    fltk3::Widget::test_shortcut().
 */
-int Fl::test_shortcut(unsigned int shortcut) {
+int fltk3::test_shortcut(unsigned int shortcut) {
   if (!shortcut) return 0;
 
   unsigned int v = shortcut & FL_KEY_MASK;
@@ -66,7 +66,7 @@ int Fl::test_shortcut(unsigned int shortcut) {
     shortcut |= FL_SHIFT;
   }
 
-  int shift = Fl::event_state();
+  int shift = fltk3::event_state();
   // see if any required shift flags are off:
   if ((shortcut&shift) != (shortcut&0x7fff0000)) return 0;
   // record shift flags that are wrong:
@@ -77,10 +77,10 @@ int Fl::test_shortcut(unsigned int shortcut) {
   unsigned int key = shortcut & FL_KEY_MASK;
 
   // if shift is also correct, check for exactly equal keysyms:
-  if (!(mismatch&(FL_SHIFT)) && key == (unsigned)Fl::event_key()) return 1;
+  if (!(mismatch&(FL_SHIFT)) && key == (unsigned)fltk3::event_key()) return 1;
 
   // try matching utf8, ignore shift:
-  unsigned int firstChar = fl_utf8decode(Fl::event_text(), Fl::event_text()+Fl::event_length(), 0);
+  unsigned int firstChar = fl_utf8decode(fltk3::event_text(), fltk3::event_text()+fltk3::event_length(), 0);
   if (key==firstChar) return 1;
 
   // kludge so that Ctrl+'_' works (as opposed to Ctrl+'^_'):
@@ -282,7 +282,7 @@ unsigned int fl_old_shortcut(const char* s) {
 
 // Tests for &x shortcuts in button labels:
 
-unsigned int Fl_Widget::label_shortcut(const char *t) {
+unsigned int fltk3::Widget::label_shortcut(const char *t) {
   if (!t) return 0;
   for (;;) {
     if (*t==0) return 0;
@@ -296,20 +296,20 @@ unsigned int Fl_Widget::label_shortcut(const char *t) {
   }
 }
 
-int Fl_Widget::test_shortcut(const char *t) {
+int fltk3::Widget::test_shortcut(const char *t) {
   #ifdef WIN32
   // on MSWindows, users expect shortcuts to work only when the Alt modifier is pressed
-  if (Fl::event_state(FL_ALT)==0) return 0;
+  if (fltk3::event_state(FL_ALT)==0) return 0;
   #endif
   if (!t) return 0;
-  unsigned int c = fl_utf8decode(Fl::event_text(), Fl::event_text()+Fl::event_length(), 0);
+  unsigned int c = fl_utf8decode(fltk3::event_text(), fltk3::event_text()+fltk3::event_length(), 0);
   if (!c) return 0;
   if (c == label_shortcut(t))
     return 1;
   return 0;
 }
 
-int Fl_Widget::test_shortcut() {
+int fltk3::Widget::test_shortcut() {
   if (!(flags()&SHORTCUT_LABEL)) return 0;
   return test_shortcut(label());
 }

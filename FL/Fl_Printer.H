@@ -44,7 +44,7 @@
  *
  It allows to use all FLTK drawing, color, text, and clip functions, and to have them operate
  on printed page(s). There are two main, non exclusive, ways to use it.
- <ul><li>Print any widget (standard, custom, Fl_Window, Fl_Gl_Window) as it appears 
+ <ul><li>Print any widget (standard, custom, fltk3::Window, Fl_Gl_Window) as it appears 
  on screen, with optional translation and scaling. This is done by calling print_widget() 
  or print_window_part().
  <li>Use a series of FLTK graphics commands (e.g., font, text, lines, colors, clip) to
@@ -102,8 +102,8 @@ public:
   void translate(int x, int y);
   void untranslate(void);
 #ifdef FL_DOXYGEN  
-  void print_widget(Fl_Widget* widget, int delta_x = 0, int delta_y = 0);
-  void print_window_part(Fl_Window *win, int x, int y, int w, int h, int delta_x = 0, int delta_y = 0);
+  void print_widget(fltk3::Widget* widget, int delta_x = 0, int delta_y = 0);
+  void print_window_part(fltk3::Window *win, int x, int y, int w, int h, int delta_x = 0, int delta_y = 0);
 #endif  
   int end_page (void);
   void end_job (void);
@@ -204,7 +204,7 @@ public:
    \param w the widget
    \param x,y offsets where to print relatively to coordinates origin
    */
-  virtual int print(Fl_Abstract_Printer* p, Fl_Widget* w, int x, int y) { return 0; }
+  virtual int print(Fl_Abstract_Printer* p, fltk3::Widget* w, int x, int y) { return 0; }
 };
 
 #endif // Fl_Printer_H

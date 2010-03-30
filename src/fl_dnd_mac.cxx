@@ -42,9 +42,9 @@ extern int fl_selection_length;
 /**
  * drag and drop whatever is in the cut-copy-paste buffer
  * - create a selection first using: 
- *     Fl::copy(const char *stuff, int len, 0)
+ *     fltk3::copy(const char *stuff, int len, 0)
  */
-int Fl::dnd()
+int fltk3::dnd()
 {
   extern int MACpreparedrag(void);
   return MACpreparedrag();

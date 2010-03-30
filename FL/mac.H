@@ -70,7 +70,7 @@ typedef float CGFloat;
 struct XPoint { int x, y; };
 struct XRectangle {int x, y, width, height;};
 
-typedef void *Window; // this is really a pter to the subclass FLWindow of NSWindow
+typedef void *NativeWindow; // this is really a pter to the subclass FLWindow of NSWindow
 typedef struct flCocoaRegion {
   int count;
   CGRect *rects;
@@ -104,9 +104,9 @@ void fl_clip_region(Fl_Region);
 class Fl_X 
 {
 public:
-  Window xid;              // Cocoa: FLWindow* ; Carbon: WindowRef
+  NativeWindow xid;              // Cocoa: FLWindow* ; Carbon: WindowRef
   Fl_Offscreen other_xid;  // pointer for offscreen bitmaps (doublebuffer)
-  Fl_Window *w;            // FLTK window for 
+  fltk3::Window *w;            // FLTK window for 
   Fl_Region region;
   Fl_Region subRegion;     // region for this specific subwindow
   Fl_X *next;              // linked tree to support subwindows
@@ -114,9 +114,9 @@ public:
   int wait_for_expose;
   void *cursor;			  // is really NSCursor*
   static Fl_X* first;
-  static Fl_X* i(const Fl_Window* w) {return w->i;}
-  static int fake_X_wm(const Fl_Window*,int&,int&,int&,int&,int&);
-  static void make(Fl_Window*);
+  static Fl_X* i(const fltk3::Window* w) {return w->i;}
+  static int fake_X_wm(const fltk3::Window*,int&,int&,int&,int&,int&);
+  static void make(fltk3::Window*);
   void flush();
   // Quartz additions:
   CGContextRef gc;                 // graphics context (NULL when using QD)
@@ -127,16 +127,16 @@ public:
   static void q_end_image();
 };
 
-extern void MacDestroyWindow(Fl_Window*,void *);
-extern void MacMapWindow(Fl_Window*,void *);
-extern void MacUnmapWindow(Fl_Window*,void *);
-extern WindowRef MACwindowRef(Fl_Window *w);
+extern void MacDestroyWindow(fltk3::Window*,void *);
+extern void MacMapWindow(fltk3::Window*,void *);
+extern void MacUnmapWindow(fltk3::Window*,void *);
+extern WindowRef MACwindowRef(fltk3::Window *w);
 extern Fl_Region MacRectRegionIntersect(Fl_Region current, int x,int y,int w, int h);
-extern void MacCollapseWindow(Window w);
+extern void MacCollapseWindow(NativeWindow w);
 
 extern int MacUnlinkWindow(Fl_X*,Fl_X*start=0L);
 
-inline Window fl_xid(const Fl_Window*w) 
+inline NativeWindow fl_xid(const fltk3::Window*w) 
 {
   return Fl_X::i(w)->xid;
 }
@@ -147,7 +147,7 @@ extern struct Fl_XMap {
 } *fl_current_xmap;
 
 extern FL_EXPORT void *fl_display;
-extern FL_EXPORT Window fl_window;
+extern FL_EXPORT NativeWindow fl_window;
 extern FL_EXPORT CGContextRef fl_gc;
 extern FL_EXPORT class Fl_Sys_Menu_Bar *fl_sys_menu_bar;
 

@@ -101,7 +101,7 @@ void Fl_Device::line_style(int style, int width, char* dashes) {
   LOGBRUSH penbrush = {BS_SOLID,fl_RGB(),0}; // can this be fl_brush()?
   HPEN newpen = ExtCreatePen(s1, width, &penbrush, n, n ? a : 0);
   if (!newpen) {
-    Fl::error("fl_line_style(): Could not create GDI pen object.");
+    fltk3::error("fl_line_style(): Could not create GDI pen object.");
     return;
   }
   HPEN oldpen = (HPEN)SelectObject(fl_gc, newpen);

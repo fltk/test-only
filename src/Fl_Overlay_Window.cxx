@@ -93,7 +93,7 @@ int Fl_Overlay_Window::can_do_overlay() {return 0;}
 void Fl_Overlay_Window::redraw_overlay() {
   overlay_ = this;
   clear_damage((uchar)(damage()|FL_DAMAGE_OVERLAY));
-  Fl::damage(FL_DAMAGE_CHILD);
+  fltk3::damage(FL_DAMAGE_CHILD);
 }
 
 #else
@@ -105,13 +105,13 @@ extern unsigned long fl_transparent_pixel;
 static GC gc;	// the GC used by all X windows
 extern uchar fl_overlay; // changes how fl_color(x) works
 
-class _Fl_Overlay : public Fl_Window {
+class _Fl_Overlay : public fltk3::Window {
   friend class Fl_Overlay_Window;
   void flush();
   void show();
 public:
   _Fl_Overlay(int x, int y, int w, int h) :
-    Fl_Window(x,y,w,h) {set_flag(INACTIVE);}
+  fltk3::Window(x,y,w,h) {set_flag(INACTIVE);}
 };
 
 int Fl_Overlay_Window::can_do_overlay() {
@@ -119,13 +119,13 @@ int Fl_Overlay_Window::can_do_overlay() {
 }
 
 void _Fl_Overlay::show() {
-  if (shown()) {Fl_Window::show(); return;}
+  if (shown()) {fltk3::Window::show(); return;}
   fl_background_pixel = int(fl_transparent_pixel);
   Fl_X::make_xid(this, fl_overlay_visual, fl_overlay_colormap);
   fl_background_pixel = -1;
   // find the outermost window to tell wm about the colormap:
-  Fl_Window *w = window();
-  for (;;) {Fl_Window *w1 = w->window(); if (!w1) break; w = w1;}
+  fltk3::Window *w = window();
+  for (;;) {fltk3::Window *w1 = w->window(); if (!w1) break; w = w1;}
   XSetWMColormapWindows(fl_display, fl_xid(w), &(Fl_X::i(this)->xid), 1);
 }
 
@@ -136,7 +136,7 @@ void _Fl_Overlay::flush() {
   }
   fl_gc = gc;
 #if defined(USE_CAIRO)
-      if (Fl::cairo_autolink_context()) Fl::cairo_make_current(this); // capture gc changes automatically to update the cairo context adequately
+      if (fltk3::cairo_autolink_context()) fltk3::cairo_make_current(this); // capture gc changes automatically to update the cairo context adequately
 #endif
   fl_overlay = 1;
   Fl_Overlay_Window *w = (Fl_Overlay_Window *)parent();
@@ -161,7 +161,7 @@ void Fl_Overlay_Window::redraw_overlay() {
   if (shown()) {
     if (overlay_ == this) {
       clear_damage(damage()|FL_DAMAGE_OVERLAY);
-      Fl::damage(FL_DAMAGE_CHILD);
+      fltk3::damage(FL_DAMAGE_CHILD);
     } else if (!overlay_->shown())
       overlay_->show();
     else

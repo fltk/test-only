@@ -34,7 +34,7 @@
 //
 
 // INTERNAL: scroller callback
-static void scroll_cb(Fl_Widget*,void *data) {
+static void scroll_cb(fltk3::Widget*,void *data) {
   ((Fl_Tree*)data)->redraw();
 }
 
@@ -169,10 +169,10 @@ void Fl_Tree::draw() {
   Fl_Group::draw_box();
   Fl_Group::draw_label();
   if ( ! _root ) return;
-  int cx = x() + Fl::box_dx(box());
-  int cy = y() + Fl::box_dy(box());
-  int cw = w() - Fl::box_dw(box());
-  int ch = h() - Fl::box_dh(box());
+  int cx = x() + fltk3::box_dx(box());
+  int cy = y() + fltk3::box_dy(box());
+  int cw = w() - fltk3::box_dw(box());
+  int ch = h() - fltk3::box_dh(box());
   // These values are changed during drawing
   // 'Y' will be the lowest point on the tree
   int X = cx + _prefs.marginleft();
@@ -196,10 +196,10 @@ void Fl_Tree::draw() {
   if ( ytoofar > 0 ) ydiff += ytoofar;
   if ( Ysave<cy || ydiff > ch || int(_vscroll->value()) > 1 ) {
     _vscroll->visible();
-    int sx = x()+w()-Fl::box_dx(box())-SCROLL_W;
-    int sy = y()+Fl::box_dy(box());
+    int sx = x()+w()-fltk3::box_dx(box())-SCROLL_W;
+    int sy = y()+fltk3::box_dy(box());
     int sw = SCROLL_W;
-    int sh = h()-Fl::box_dh(box());
+    int sh = h()-fltk3::box_dh(box());
     _vscroll->show();
     _vscroll->range(0.0,ydiff-ch);
     _vscroll->resize(sx,sy,sw,sh);
@@ -226,7 +226,7 @@ int Fl_Tree::handle(int e) {
       Fl_Tree_Item *o = _root->find_clicked(_prefs);
       if ( o ) {
         ret |= 1;				// handled
-        if ( Fl::event_button() == FL_LEFT_MOUSE ) {
+        if ( fltk3::event_button() == FL_LEFT_MOUSE ) {
           // Was collapse icon clicked?
           if ( o->event_on_collapse_icon(_prefs) ) {
             o->open_toggle();
@@ -234,9 +234,9 @@ int Fl_Tree::handle(int e) {
           }
           // Item's label clicked?
           else if ( o->event_on_label(_prefs) && 
-                   (!o->widget() || !Fl::event_inside(o->widget())) &&
+                   (!o->widget() || !fltk3::event_inside(o->widget())) &&
                    callback() &&
-                   (!_vscroll->visible() || !Fl::event_inside(_vscroll)) ) {
+                   (!_vscroll->visible() || !fltk3::event_inside(_vscroll)) ) {
             item_clicked(o);			// save item clicked
 
             // Handle selection behavior
@@ -249,7 +249,7 @@ int Fl_Tree::handle(int e) {
                 break;
               }
               case FL_TREE_SELECT_MULTI: {
-                int state = Fl::event_state();
+                int state = fltk3::event_state();
                 if ( state & FL_SHIFT ) {
                   if ( ! o->is_selected() ) {
                     o->select();		// add to selection
@@ -270,7 +270,7 @@ int Fl_Tree::handle(int e) {
               redraw();						// make change(s) visible
               if ( when() & FL_WHEN_CHANGED ) {
                 set_changed();
-                do_callback((Fl_Widget*)this, user_data());	// item callback
+                do_callback((fltk3::Widget*)this, user_data());	// item callback
               }
             }
           }
@@ -284,9 +284,9 @@ int Fl_Tree::handle(int e) {
         ret |= 1;				// handled
         // Item's label clicked?
         if ( o->event_on_label(_prefs) && 
-	  (!o->widget() || !Fl::event_inside(o->widget())) &&
+	  (!o->widget() || !fltk3::event_inside(o->widget())) &&
 	  callback() &&
-	  (!_vscroll->visible() || !Fl::event_inside(_vscroll)) ) {
+	  (!_vscroll->visible() || !fltk3::event_inside(_vscroll)) ) {
           item_clicked(o);			// save item clicked
           // Handle selection behavior
           switch ( _prefs.selectmode() ) {
@@ -298,7 +298,7 @@ int Fl_Tree::handle(int e) {
               break;
             }
             case FL_TREE_SELECT_MULTI: {
-              int state = Fl::event_state();
+              int state = fltk3::event_state();
               if ( state & FL_CTRL ) {
                 if ( lastselect != o ) {// not already toggled from last microdrag?
                   changed = 1;	// changed
@@ -318,14 +318,14 @@ int Fl_Tree::handle(int e) {
             redraw();			// make change(s) visible
             if ( when() & FL_WHEN_CHANGED ) {
               set_changed();
-              do_callback((Fl_Widget*)this, user_data());	// item callback
+              do_callback((fltk3::Widget*)this, user_data());	// item callback
             }
           }
         }
       }
     }
     case FL_RELEASE: {
-      if ( Fl::event_button() == FL_LEFT_MOUSE ) {
+      if ( fltk3::event_button() == FL_LEFT_MOUSE ) {
         ret |= 1;
       }
       break;

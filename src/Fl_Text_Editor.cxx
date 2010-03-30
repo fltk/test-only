@@ -467,7 +467,7 @@ int Fl_Text_Editor::kf_delete(int, Fl_Text_Editor* e) {
 int Fl_Text_Editor::kf_copy(int, Fl_Text_Editor* e) {
   if (!e->buffer()->selected()) return 1;
   const char *copy = e->buffer()->selection_text();
-  if (*copy) Fl::copy(copy, strlen(copy), 1);
+  if (*copy) fltk3::copy(copy, strlen(copy), 1);
   free((void*)copy);
   e->show_insert_position();
   return 1;
@@ -485,7 +485,7 @@ int Fl_Text_Editor::kf_cut(int c, Fl_Text_Editor* e) {
 /**  Does a paste of selected text in the current buffer.*/
 int Fl_Text_Editor::kf_paste(int, Fl_Text_Editor* e) {
   kill_selection(e);
-  Fl::paste(*e, 1);
+  fltk3::paste(*e, 1);
   e->show_insert_position();
   e->set_changed();
   if (e->when()&FL_WHEN_CHANGED) e->do_callback();
@@ -516,12 +516,12 @@ int Fl_Text_Editor::handle_key() {
   // the changes that should be made to the text, as a number of
   // bytes to delete and a string to insert:
   int del = 0;
-  if (Fl::compose(del)) {
+  if (fltk3::compose(del)) {
     if (del) buffer()->select(insert_position()-del, insert_position());
     kill_selection(this);
-    if (Fl::event_length()) {
-      if (insert_mode()) insert(Fl::event_text());
-      else overstrike(Fl::event_text());
+    if (fltk3::event_length()) {
+      if (insert_mode()) insert(fltk3::event_text());
+      else overstrike(fltk3::event_text());
     }
     show_insert_position();
     set_changed();
@@ -529,7 +529,7 @@ int Fl_Text_Editor::handle_key() {
     return 1;
   }
 
-  int key = Fl::event_key(), state = Fl::event_state(), c = Fl::event_text()[0];
+  int key = fltk3::event_key(), state = fltk3::event_state(), c = fltk3::event_text()[0];
   state &= FL_SHIFT|FL_CTRL|FL_ALT|FL_META; // only care about these states
   Key_Func f;
   f = bound_key_function(key, state, global_key_bindings);
@@ -553,7 +553,7 @@ int Fl_Text_Editor::handle(int event) {
     case FL_FOCUS:
       show_cursor(mCursorOn); // redraws the cursor
       if (buffer()->selected()) redraw(); // Redraw selections...
-      Fl::focus(this);
+      fltk3::focus(this);
       return 1;
 
     case FL_UNFOCUS:
@@ -564,18 +564,18 @@ int Fl_Text_Editor::handle(int event) {
       return 1;
 
     case FL_KEYBOARD:
-      if (active_r() && window() && this == Fl::belowmouse()) 
+      if (active_r() && window() && this == fltk3::belowmouse()) 
         window()->cursor(FL_CURSOR_NONE);
       return handle_key();
 
     case FL_PASTE:
-      if (!Fl::event_text()) {
+      if (!fltk3::event_text()) {
         fl_beep();
 	return 1;
       }
       buffer()->remove_selection();
-      if (insert_mode()) insert(Fl::event_text());
-      else overstrike(Fl::event_text());
+      if (insert_mode()) insert(fltk3::event_text());
+      else overstrike(fltk3::event_text());
       show_insert_position();
       set_changed();
       if (when()&FL_WHEN_CHANGED) do_callback();
@@ -588,12 +588,12 @@ int Fl_Text_Editor::handle(int event) {
       return 1;
 
     case FL_PUSH:
-      if (Fl::event_button() == 2) {
+      if (fltk3::event_button() == 2) {
         // don't let the text_display see this event
         if (Fl_Group::handle(event)) return 1;
         dragType = -1;
-        Fl::paste(*this, 0);
-        Fl::focus(this);
+        fltk3::paste(*this, 0);
+        fltk3::focus(this);
         set_changed();
         if (when()&FL_WHEN_CHANGED) do_callback();
         return 1;
@@ -601,10 +601,10 @@ int Fl_Text_Editor::handle(int event) {
       break;
 
     case FL_SHORTCUT:
-      if (!(shortcut() ? Fl::test_shortcut(shortcut()) : test_shortcut()))
+      if (!(shortcut() ? fltk3::test_shortcut(shortcut()) : test_shortcut()))
         return 0;
-      if (Fl::visible_focus() && handle(FL_FOCUS)) {
-        Fl::focus(this);
+      if (fltk3::visible_focus() && handle(FL_FOCUS)) {
+        fltk3::focus(this);
         return 1;
       }
       break;

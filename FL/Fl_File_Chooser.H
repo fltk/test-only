@@ -59,7 +59,7 @@ private:
   char preview_text_[2048]; 
   int type_; 
   void favoritesButtonCB(); 
-  void favoritesCB(Fl_Widget *w); 
+  void favoritesCB(fltk3::Widget *w); 
   void fileListCB(); 
   void fileNameCB(); 
   void newdir(); 
@@ -219,9 +219,9 @@ public:
   */
   static Fl_File_Sort_F *sort; 
 private:
-  Fl_Widget* ext_group; 
+  fltk3::Widget* ext_group; 
 public:
-  Fl_Widget* add_extra(Fl_Widget* gr);
+  fltk3::Widget* add_extra(fltk3::Widget* gr);
   Fl_File_Browser *browser(void) {return fileList; };
 };
 FL_EXPORT char *fl_dir_chooser(const char *message,const char *fname,int relative=0);

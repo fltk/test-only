@@ -45,7 +45,7 @@
   array may either be supplied directly by the user program, or it may
   be "private": a dynamically allocated array managed by the Fl_Menu_.
 */
-class FL_EXPORT Fl_Menu_ : public Fl_Widget {
+class FL_EXPORT Fl_Menu_ : public fltk3::Widget {
 
   Fl_Menu_Item *menu_;
   const Fl_Menu_Item *value_;
@@ -83,7 +83,7 @@ public:
       return add(a,fl_old_shortcut(b),c,d,e);}
   int  add(const char *);
   int  size() const ;
-  void size(int W, int H) { Fl_Widget::size(W, H); }
+  void size(int W, int H) { fltk3::Widget::size(W, H); }
   void clear();
   void replace(int,const char *);
   void remove(int);

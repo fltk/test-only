@@ -61,7 +61,7 @@ int Fl_Printer::start_job (int pagecount, int *frompage, int *topage)
       retval = (NSInteger)[panel runModalWithPrintInfo:info];//from 10.5 only
     }
     if(retval != NSOKButton) {
-      Fl::first_window()->show();
+      fltk3::first_window()->show();
       [localPool release];
       return 1;
     }
@@ -89,7 +89,7 @@ int Fl_Printer::start_job (int pagecount, int *frompage, int *topage)
     if (status != noErr) return 1;
     status = PMSessionPageSetupDialog(printSession, pageFormat, &accepted);
     if (status != noErr || !accepted) {
-      Fl::first_window()->show();
+      fltk3::first_window()->show();
       return 1;
     }
     status = PMCreatePrintSettings(&printSettings);
@@ -100,7 +100,7 @@ int Fl_Printer::start_job (int pagecount, int *frompage, int *topage)
     status = PMSessionPrintDialog(printSession, printSettings, pageFormat, &accepted);
     if (!accepted) status = kPMCancel;
     if (status != noErr) {
-      Fl::first_window()->show();
+      fltk3::first_window()->show();
       return 1;
     }
     UInt32 from32, to32;
@@ -287,7 +287,7 @@ void Fl_Printer::end_job (void)
   PMSessionEndDocumentNoDialog(printSession);
   Fl_Device::display_device()->set_current();
   fl_gc = 0;
-  Fl::first_window()->show();
+  fltk3::first_window()->show();
 }
 
 #endif // __APPLE__

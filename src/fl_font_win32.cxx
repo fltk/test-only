@@ -199,11 +199,11 @@ double fl_width(unsigned int c) {
     HWND hWnd = 0;
     if (!gc) { // We have no valid gc, try and obtain one
 	// Use our first fltk window, or fallback to using the screen via GetDC(NULL)
-	hWnd = Fl::first_window() ? fl_xid(Fl::first_window()) : NULL;
+	hWnd = fltk3::first_window() ? fl_xid(fltk3::first_window()) : NULL;
 	gc = GetDC(hWnd);
     }
     if (!gc)
-	Fl::fatal("Invalid graphic context: fl_width() failed because no valid HDC was found!");
+	fltk3::fatal("Invalid graphic context: fl_width() failed because no valid HDC was found!");
     for (; i < 0x400; i++) {
       GetTextExtentPoint32W(gc, (WCHAR*)&ii, 1, &s);
       fl_fontsize->width[r][i] = s.cx;
@@ -277,7 +277,7 @@ void fl_text_extents(const char *c, int n, int &dx, int &dy, int &w, int &h) {
   // See description in fl_width() above for an explanation.
   if (!fl_gc) { // We have no valid gc, try and obtain one
 	// Use our first fltk window, or fallback to using the screen via GetDC(NULL)
-	hWnd = Fl::first_window() ? fl_xid(Fl::first_window()) : NULL;
+	hWnd = fltk3::first_window() ? fl_xid(fltk3::first_window()) : NULL;
 	fl_gc = GetDC(hWnd);
   }
   if (!fl_gc)goto exit_error; // no valid gc, attempt to use fallback measure

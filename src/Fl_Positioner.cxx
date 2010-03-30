@@ -85,7 +85,7 @@ int Fl_Positioner::handle(int event, int X, int Y, int W, int H) {
     double y1 = Y + 4;
     double w1 = W - 2 * 4;
     double h1 = H - 2 * 4;
-    double xx = flinear(Fl::event_x(), x1, x1+w1-1.0, xmin, xmax);
+    double xx = flinear(fltk3::event_x(), x1, x1+w1-1.0, xmin, xmax);
     if (xstep_) xx = int(xx/xstep_+0.5) * xstep_;
     if (xmin < xmax) {
       if (xx < xmin) xx = xmin;
@@ -94,7 +94,7 @@ int Fl_Positioner::handle(int event, int X, int Y, int W, int H) {
       if (xx > xmin) xx = xmin;
       if (xx < xmax) xx = xmax;
     }
-    double yy = flinear(Fl::event_y(), y1, y1+h1-1.0, ymin, ymax);
+    double yy = flinear(fltk3::event_y(), y1, y1+h1-1.0, ymin, ymax);
     if (ystep_) yy = int(yy/ystep_+0.5) * ystep_;
     if (ymin < ymax) {
       if (yy < ymin) yy = ymin;
@@ -129,7 +129,7 @@ int Fl_Positioner::handle(int e) {
   size, and label string. The default boxtype is FL_NO_BOX.
 */
 Fl_Positioner::Fl_Positioner(int X, int Y, int W, int H, const char* l)
-: Fl_Widget(X, Y, W, H, l) {
+: fltk3::Widget(X, Y, W, H, l) {
   box(FL_DOWN_BOX);
   selection_color(FL_RED);
   align(FL_ALIGN_BOTTOM);

@@ -50,7 +50,7 @@
   submenu, then it acts like a "button" in the menubar.  Clicking on it
   will pick it. </P>
   <P>When the user picks an item off the menu, the item's callback is
-  done with the menubar as the Fl_Widget* argument.  If the item
+  done with the menubar as the fltk3::Widget* argument.  If the item
   does not have a callback the menubar's callback is done instead. </P>
   <P>Submenus will also pop up in response to shortcuts indicated by
   putting a '&' character in the name field of the menu item. If you put a

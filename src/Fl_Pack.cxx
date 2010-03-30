@@ -52,15 +52,15 @@ Fl_Pack::Fl_Pack(int X, int Y, int W, int H,const char *l)
 }
 
 void Fl_Pack::draw() {
-  int tx = x()+Fl::box_dx(box());
-  int ty = y()+Fl::box_dy(box());
-  int tw = w()-Fl::box_dw(box());
-  int th = h()-Fl::box_dh(box());
+  int tx = x()+fltk3::box_dx(box());
+  int ty = y()+fltk3::box_dy(box());
+  int tw = w()-fltk3::box_dw(box());
+  int th = h()-fltk3::box_dh(box());
   int rw, rh;
   int current_position = horizontal() ? tx : ty;
   int maximum_position = current_position;
   uchar d = damage();
-  Fl_Widget*const* a = array();
+  fltk3::Widget*const* a = array();
   if (horizontal()) {
     rw = -spacing_;
     rh = th;
@@ -81,7 +81,7 @@ void Fl_Pack::draw() {
       }
   }
   for (int i = children(); i--;) {
-    Fl_Widget* o = *a++;
+    fltk3::Widget* o = *a++;
     if (o->visible()) {
       int X,Y,W,H;
       if (horizontal()) {
@@ -140,10 +140,10 @@ void Fl_Pack::draw() {
     th = maximum_position-ty;
   }
   
-  tw += Fl::box_dw(box()); if (tw <= 0) tw = 1;
-  th += Fl::box_dh(box()); if (th <= 0) th = 1;
+  tw += fltk3::box_dw(box()); if (tw <= 0) tw = 1;
+  th += fltk3::box_dh(box()); if (th <= 0) th = 1;
   if (tw != w() || th != h()) {
-    Fl_Widget::resize(x(),y(),tw,th);
+    fltk3::Widget::resize(x(),y(),tw,th);
     d = FL_DAMAGE_ALL;
   }
   if (d&FL_DAMAGE_ALL) {

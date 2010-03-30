@@ -58,7 +58,7 @@ static int sptr = 0;
 */
 void fl_push_matrix() {
   if (sptr==32)
-    Fl::error("fl_push_matrix(): matrix stack overflow.");
+    fltk3::error("fl_push_matrix(): matrix stack overflow.");
   else
     stack[sptr++] = m;
 }
@@ -68,7 +68,7 @@ void fl_push_matrix() {
 */
 void fl_pop_matrix() {
   if (sptr==0)
-    Fl::error("fl_pop_matrix(): matrix stack underflow.");
+    fltk3::error("fl_pop_matrix(): matrix stack underflow.");
   else 
     m = stack[--sptr];
 }

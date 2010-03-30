@@ -60,12 +60,12 @@ public:
   static void enable(int b = 1) { enabled_ = b;}
   /**    Same as enable(0), disables tooltips on all widgets.  */
   static void disable() { enabled_ = 0; }
-  static void (*enter)(Fl_Widget* w);
-  static void enter_area(Fl_Widget* w, int X, int Y, int W, int H, const char* tip);
-  static void (*exit)(Fl_Widget *w);
+  static void (*enter)(fltk3::Widget* w);
+  static void enter_area(fltk3::Widget* w, int X, int Y, int W, int H, const char* tip);
+  static void (*exit)(fltk3::Widget *w);
   /** Gets the current widget target */
-  static Fl_Widget* current() {return widget_;}
-  static void current(Fl_Widget*);
+  static fltk3::Widget* current() {return widget_;}
+  static void current(fltk3::Widget*);
 
   /**    Gets the typeface for the tooltip text.  */
   static Fl_Font font() { return font_; }
@@ -84,12 +84,12 @@ public:
   /** Sets the color of the text in the tooltip. The default is  black. */
   static void textcolor(Fl_Color c) { textcolor_ = c; }
 
-  // These should not be public, but Fl_Widget::tooltip() needs them...
+  // These should not be public, but fltk3::Widget::tooltip() needs them...
   // fabien: made it private with only a friend function access
 private:
-  friend void Fl_Widget::tooltip(const char *);
-  static void enter_(Fl_Widget* w);
-  static void exit_(Fl_Widget *w);
+  friend void fltk3::Widget::tooltip(const char *);
+  static void enter_(fltk3::Widget* w);
+  static void exit_(fltk3::Widget *w);
 
 private:
   static float delay_; //!< delay before a tooltip is shown
@@ -99,7 +99,7 @@ private:
   static Fl_Color textcolor_;
   static Fl_Font font_;
   static Fl_Fontsize size_;
-  static Fl_Widget* widget_; //!< Keeps track of the current target widget
+  static fltk3::Widget* widget_; //!< Keeps track of the current target widget
 };
 
 #endif

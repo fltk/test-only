@@ -64,7 +64,7 @@
   <LI>Fl_Scroll::BOTH_ALWAYS       - Both always on. </LI>
   </UL>
 
-  Use <B> scrollbar.align(int) ( see void Fl_Widget::align(Fl_Align) ) :</B>
+  Use <B> scrollbar.align(int) ( see void fltk3::Widget::align(Fl_Align) ) :</B>
   to change what side the scrollbars are drawn on.
 
   If the FL_ALIGN_LEFT bit is on, the vertical scrollbar is on the left.
@@ -89,7 +89,7 @@
   fit inside the Fl_Scroll without scrolling.  Be sure to leave
   space for the scrollbars, as Fluid won't show these either.
 
-  <I>You cannot use Fl_Window as a child of this since the
+  <I>You cannot use fltk3::Window as a child of this since the
   clipping is not conveyed to it when drawn, and it will draw over the
   scrollbars and neighboring objects.</I>
 */
@@ -98,8 +98,8 @@ class FL_EXPORT Fl_Scroll : public Fl_Group {
   int xposition_, yposition_;
   int oldx, oldy;
   int scrollbar_size_;
-  static void hscrollbar_cb(Fl_Widget*, void*);
-  static void scrollbar_cb(Fl_Widget*, void*);
+  static void hscrollbar_cb(fltk3::Widget*, void*);
+  static void scrollbar_cb(fltk3::Widget*, void*);
   void fix_scrollbar_order();
   static void draw_clip(void*,int,int,int,int);
 
@@ -159,10 +159,10 @@ public:
     Gets the current size of the scrollbars' troughs, in pixels.
 
     If this value is zero (default), this widget will use the 
-    Fl::scrollbar_size() value as the scrollbar's width.
+    fltk3::scrollbar_size() value as the scrollbar's width.
   
-    \returns Scrollbar size in pixels, or 0 if the global Fl::scrollsize() is being used.
-    \see Fl::scrollbar_size(int)
+    \returns Scrollbar size in pixels, or 0 if the global fltk3::scrollsize() is being used.
+    \see fltk3::scrollbar_size(int)
   */
   int scrollbar_size() const {
       return(scrollbar_size_);
@@ -171,7 +171,7 @@ public:
     Sets the pixel size of the scrollbars' troughs to the \p size, in pixels.
 
     Normally you should not need this method, and should use
-    Fl::scrollbar_size(int) instead to manage the size of ALL 
+    fltk3::scrollbar_size(int) instead to manage the size of ALL 
     your widgets' scrollbars. This ensures your application 
     has a consistent UI, is the default behavior, and is normally
     what you want.
@@ -180,11 +180,11 @@ public:
     scrollbar size. The need for this should be rare.
     
     Setting \p size to the special value of 0 causes the widget to
-    track the global Fl::scrollbar_size(), which is the default.
+    track the global fltk3::scrollbar_size(), which is the default.
     
     \param[in] size Sets the scrollbar size in pixels.\n
-                    If 0 (default), scrollbar size tracks the global Fl::scrollbar_size()
-    \see Fl::scrollbar_size()
+                    If 0 (default), scrollbar size tracks the global fltk3::scrollbar_size()
+    \see fltk3::scrollbar_size()
   */
   void scrollbar_size(int size) {
       if ( size != scrollbar_size_ ) redraw();

@@ -62,7 +62,7 @@ class Fl_Spinner : public Fl_Group
 		down_button_;		// Down button
 
 
-  static void	sb_cb(Fl_Widget *w, Fl_Spinner *sb) {
+  static void	sb_cb(fltk3::Widget *w, Fl_Spinner *sb) {
 		  double v;		// New value
 
 		  if (w == &(sb->input_)) {
@@ -158,10 +158,10 @@ class Fl_Spinner : public Fl_Group
 		  switch (event) {
 		    case FL_KEYDOWN :
 		    case FL_SHORTCUT :
-		      if (Fl::event_key() == FL_Up) {
+		      if (fltk3::event_key() == FL_Up) {
 			up_button_.do_callback();
 			return 1;
-		      } else if (Fl::event_key() == FL_Down) {
+		      } else if (fltk3::event_key() == FL_Down) {
 			down_button_.do_callback();
 			return 1;
 		      } else return 0;

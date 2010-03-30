@@ -74,7 +74,7 @@ extern const char *fl_bg2;
   function if you prefer to control the incrementing through the
   arguments yourself.
 */
-int Fl::arg(int argc, char **argv, int &i) {
+int fltk3::arg(int argc, char **argv, int &i) {
   arg_called = 1;
   const char *s = argv[i];
 
@@ -93,19 +93,19 @@ int Fl::arg(int argc, char **argv, int &i) {
     i++;
     return 1;
   } else if (fl_match(s, "kbd")) {
-    Fl::visible_focus(1);
+    fltk3::visible_focus(1);
     i++;
     return 1;
   } else if (fl_match(s, "nokbd", 3)) {
-    Fl::visible_focus(0);
+    fltk3::visible_focus(0);
     i++;
     return 1;
   } else if (fl_match(s, "dnd", 2)) {
-    Fl::dnd_text_ops(1);
+    fltk3::dnd_text_ops(1);
     i++;
     return 1;
   } else if (fl_match(s, "nodnd", 3)) {
-    Fl::dnd_text_ops(0);
+    fltk3::dnd_text_ops(0);
     i++;
     return 1;
   } else if (fl_match(s, "tooltips", 2)) {
@@ -139,7 +139,7 @@ int Fl::arg(int argc, char **argv, int &i) {
 
 #if !defined(WIN32) && !defined(__APPLE__)
   } else if (fl_match(s, "display", 2)) {
-    Fl::display(v);
+    fltk3::display(v);
 #endif
 
   } else if (fl_match(s, "title", 2)) {
@@ -158,7 +158,7 @@ int Fl::arg(int argc, char **argv, int &i) {
     fl_fg = v;
 
   } else if (fl_match(s, "scheme", 1)) {
-    Fl::scheme(v);
+    fltk3::scheme(v);
 
   } else return 0; // unrecognized
 
@@ -178,7 +178,7 @@ int Fl::arg(int argc, char **argv, int &i) {
   You don't have to call it if you don't like them! Everything it can do
   can be done with other calls to FLTK.
   
-  <P>To use the switch parser, call Fl::args(...) near the start
+  <P>To use the switch parser, call fltk3::args(...) near the start
   of your program.  This does <I>not</I> open the display, instead
   switches that need the display open are stashed into static variables.
   Then you <I>must</I> display your first window by calling 
@@ -216,11 +216,11 @@ int Fl::arg(int argc, char **argv, int &i) {
   
   	<LI>-bg color or -background color
   
-  	<P>Sets the background color using Fl::background().</LI>
+  	<P>Sets the background color using fltk3::background().</LI>
   
   	<LI>-bg2 color or -background2 color
   
-  	<P>Sets the secondary background color using Fl::background2().</LI>
+  	<P>Sets the secondary background color using fltk3::background2().</LI>
   
   	<LI>-display host:n.n
   
@@ -230,11 +230,11 @@ int Fl::arg(int argc, char **argv, int &i) {
   	<LI>-dnd and -nodnd
   
   	<P>Enables or disables drag and drop text operations
-  	using Fl::dnd_text_ops().</LI>
+  	using fltk3::dnd_text_ops().</LI>
   
   	<LI>-fg color or -foreground color
   
-  	<P>Sets the foreground color using Fl::foreground().</LI>
+  	<P>Sets the foreground color using fltk3::foreground().</LI>
   
   	<LI>-geometry WxH+X+Y
   
@@ -243,24 +243,24 @@ int Fl::arg(int argc, char **argv, int &i) {
   
   	<LI>-iconic
   
-  	<P>Iconifies the window using Fl_Window::iconize().</LI>
+  	<P>Iconifies the window using fltk3::Window::iconize().</LI>
   
   	<LI>-kbd and -nokbd
   
   	<P>Enables or disables visible keyboard focus for
-  	non-text widgets using Fl::visible_focus().</LI>
+  	non-text widgets using fltk3::visible_focus().</LI>
   
   	<LI>-name string
   
-  	<P>Sets the window class using Fl_Window::xclass().</LI>
+  	<P>Sets the window class using fltk3::Window::xclass().</LI>
   
   	<LI>-scheme string
   
-  	<P>Sets the widget scheme using Fl::scheme().</LI>
+  	<P>Sets the widget scheme using fltk3::scheme().</LI>
   
   	<LI>-title string
   
-  	<P>Sets the window title using Fl_Window::label().</LI>
+  	<P>Sets the window title using fltk3::Window::label().</LI>
   
   	<LI>-tooltips and -notooltips
   
@@ -268,16 +268,16 @@ int Fl::arg(int argc, char **argv, int &i) {
   
   </UL>
   
-  <P>The second form of Fl::args() is useful if your program does
+  <P>The second form of fltk3::args() is useful if your program does
   not have command line switches of its own. It parses all the switches,
-  and if any are not recognized it calls Fl::abort(Fl::help).
+  and if any are not recognized it calls fltk3::abort(fltk3::help).
   
-  <P>A usage string is displayed if Fl::args() detects an invalid
+  <P>A usage string is displayed if fltk3::args() detects an invalid
   argument on the command-line. You can change the message by setting the
-  Fl::help pointer.
+  fltk3::help pointer.
 */
 
-int Fl::args(int argc, char** argv, int& i, Fl_Args_Handler cb) {
+int fltk3::args(int argc, char** argv, int& i, Fl_Args_Handler cb) {
   arg_called = 1;
   i = 1; // skip argv[0]
   while (i < argc) {
@@ -288,20 +288,20 @@ int Fl::args(int argc, char** argv, int& i, Fl_Args_Handler cb) {
 }
 
 // show a main window, use any parsed arguments
-void Fl_Window::show(int argc, char **argv) {
-  if (argc && !arg_called) Fl::args(argc,argv);
+void fltk3::Window::show(int argc, char **argv) {
+  if (argc && !arg_called) fltk3::args(argc,argv);
 
-  Fl::get_system_colors();
+  fltk3::get_system_colors();
 
 #if !defined(WIN32) && !defined(__APPLE__)
   // Get defaults for drag-n-drop and focus...
   const char *key = 0, *val;
 
-  if (Fl::first_window()) key = Fl::first_window()->xclass();
+  if (fltk3::first_window()) key = fltk3::first_window()->xclass();
   if (!key) key = "fltk";
 
   val = XGetDefault(fl_display, key, "dndTextOps");
-  if (val) Fl::dnd_text_ops(strcasecmp(val, "true") == 0 ||
+  if (val) fltk3::dnd_text_ops(strcasecmp(val, "true") == 0 ||
                             strcasecmp(val, "on") == 0 ||
                             strcasecmp(val, "yes") == 0);
 
@@ -311,7 +311,7 @@ void Fl_Window::show(int argc, char **argv) {
                               strcasecmp(val, "yes") == 0);
 
   val = XGetDefault(fl_display, key, "visibleFocus");
-  if (val) Fl::visible_focus(strcasecmp(val, "true") == 0 ||
+  if (val) fltk3::visible_focus(strcasecmp(val, "true") == 0 ||
                              strcasecmp(val, "on") == 0 ||
                              strcasecmp(val, "yes") == 0);
 #endif // !WIN32 && !__APPLE__
@@ -322,12 +322,12 @@ void Fl_Window::show(int argc, char **argv) {
     if (geometry) {
       int fl = 0, gx = x(), gy = y(); unsigned int gw = w(), gh = h();
       fl = XParseGeometry(geometry, &gx, &gy, &gw, &gh);
-      if (fl & XNegative) gx = Fl::w()-w()+gx;
-      if (fl & YNegative) gy = Fl::h()-h()+gy;
+      if (fl & XNegative) gx = fltk3::w()-w()+gx;
+      if (fl & YNegative) gy = fltk3::h()-h()+gy;
       //  int mw,mh; minsize(mw,mh);
       //  if (mw > gw) gw = mw;
       //  if (mh > gh) gh = mh;
-      Fl_Widget *r = resizable();
+      fltk3::Widget *r = resizable();
       if (!r) resizable(this);
       // for WIN32 we assume window is not mapped yet:
       if (fl & (XValue | YValue))
@@ -347,7 +347,7 @@ void Fl_Window::show(int argc, char **argv) {
 
   if (!beenhere) {
     beenhere = 1;
-    Fl::scheme(Fl::scheme()); // opens display!  May call Fl::fatal()
+    fltk3::scheme(fltk3::scheme()); // opens display!  May call fltk3::fatal()
   }
 
   // Show the window AFTER we have set the colors and scheme.
@@ -386,10 +386,10 @@ static const char * const helpmsg =
 " -ti[tle] windowtitle\n"
 " -to[oltips]";
 
-const char * const Fl::help = helpmsg+13;
-/** See Fl::args(int argc, char **argv, int& i, int (*cb)(int,char**,int&)) */
-void Fl::args(int argc, char **argv) {
-  int i; if (Fl::args(argc,argv,i) < argc) Fl::error(helpmsg);
+const char * const fltk3::help = helpmsg+13;
+/** See fltk3::args(int argc, char **argv, int& i, int (*cb)(int,char**,int&)) */
+void fltk3::args(int argc, char **argv) {
+  int i; if (fltk3::args(argc,argv,i) < argc) fltk3::error(helpmsg);
 }
 
 #if defined(WIN32) || defined(__APPLE__)

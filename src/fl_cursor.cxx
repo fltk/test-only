@@ -28,7 +28,7 @@
 // Change the current cursor.
 // Under X the cursor is attached to the X window.  I tried to hide
 // this and pretend that changing the cursor is a drawing function.
-// This avoids a field in the Fl_Window, and I suspect is more
+// This avoids a field in the fltk3::Window, and I suspect is more
 // portable to other systems.
 
 #include <FL/Fl.H>
@@ -44,14 +44,14 @@
   The cursors are defined in the <FL/Enumerations.H> header file. 
   */
 void fl_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
-  if (Fl::first_window()) Fl::first_window()->cursor(c,fg,bg);
+  if (fltk3::first_window()) fltk3::first_window()->cursor(c,fg,bg);
 }
 /** 
     Sets the default window cursor as well as its color.
 
     For back compatibility only.
 */
-void Fl_Window::default_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
+void fltk3::Window::default_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
 //  if (c == FL_CURSOR_DEFAULT) c = FL_CURSOR_ARROW;
 
   cursor_default = c;
@@ -67,10 +67,10 @@ void Fl_Window::default_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
 #    define IDC_HAND	MAKEINTRESOURCE(32649)
 #  endif // !IDC_HAND
 
-void Fl_Window::cursor(Fl_Cursor c, Fl_Color c1, Fl_Color c2) {
+void fltk3::Window::cursor(Fl_Cursor c, Fl_Color c1, Fl_Color c2) {
   if (!shown()) return;
   // the cursor must be set for the top level window, not for subwindows
-  Fl_Window *w = window(), *toplevel = this;
+  fltk3::Window *w = window(), *toplevel = this;
   while (w) { toplevel = w; w = w->window(); }
   if (toplevel != this) { toplevel->cursor(c, c1, c2); return; }
   // now set the actual cursor
@@ -228,7 +228,7 @@ CGContextRef CreateNWSEImage(void)
   return (CGContextRef)off;
 }
 
-void Fl_Window::cursor(Fl_Cursor c, Fl_Color, Fl_Color) {
+void fltk3::Window::cursor(Fl_Cursor c, Fl_Color, Fl_Color) {
   if (c == FL_CURSOR_DEFAULT) {
     c = cursor_default;
   }
@@ -284,7 +284,7 @@ static struct TableEntry {
   {{0}, {0}} // FL_CURSOR_NONE & unknown
 };
 
-void Fl_Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
+void fltk3::Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
   if (!shown()) return;
   Cursor xc;
   int deleteit = 0;
@@ -319,10 +319,10 @@ void Fl_Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
     }
     XColor fgc;
     uchar r,g,b;
-    Fl::get_color(fg,r,g,b);
+    fltk3::get_color(fg,r,g,b);
     fgc.red = r<<8; fgc.green = g<<8; fgc.blue = b<<8;
     XColor bgc;
-    Fl::get_color(bg,r,g,b);
+    fltk3::get_color(bg,r,g,b);
     bgc.red = r<<8; bgc.green = g<<8; bgc.blue = b<<8;
     XRecolorCursor(fl_display, xc, &fgc, &bgc);
   }

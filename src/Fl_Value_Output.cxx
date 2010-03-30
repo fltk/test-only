@@ -35,10 +35,10 @@
 
 void Fl_Value_Output::draw() {
   Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;
-  int X = x()+Fl::box_dx(b);
-  int Y = y()+Fl::box_dy(b);
-  int W = w()-Fl::box_dw(b);
-  int H = h()-Fl::box_dh(b);
+  int X = x()+fltk3::box_dx(b);
+  int Y = y()+fltk3::box_dy(b);
+  int W = w()-fltk3::box_dw(b);
+  int H = h()-fltk3::box_dh(b);
   if (damage()&~FL_DAMAGE_CHILD)
     draw_box(b, color());
   else {
@@ -56,16 +56,16 @@ int Fl_Value_Output::handle(int event) {
   if (!step()) return 0;
   double v;
   int delta;
-  int mx = Fl::event_x();
+  int mx = fltk3::event_x();
   static int ix, drag;
   switch (event) {
   case FL_PUSH:
     ix = mx;
-    drag = Fl::event_button();
+    drag = fltk3::event_button();
     handle_push();
     return 1;
   case FL_DRAG:
-    delta = Fl::event_x()-ix;
+    delta = fltk3::event_x()-ix;
     if (delta > 5) delta -= 5;
     else if (delta < -5) delta += 5;
     else delta = 0;

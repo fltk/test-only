@@ -45,7 +45,7 @@
 #include <stdio.h>
 #endif
 
-class Fl_Widget;
+class fltk3::Widget;
 class Fl_Device;
 class Fl_Display;
 class Fl_Abstract_Printer;

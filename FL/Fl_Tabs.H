@@ -60,23 +60,23 @@
   the tabs look the way you want them to.
 */
 class FL_EXPORT Fl_Tabs : public Fl_Group {
-  Fl_Widget *value_;
-  Fl_Widget *push_;
+  fltk3::Widget *value_;
+  fltk3::Widget *push_;
   int tab_positions(int*, int*);
   int tab_height();
-  void draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int sel=0);
+  void draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int sel=0);
 protected:
   void redraw_tabs();
   void draw();
 
 public:
   int handle(int);
-  Fl_Widget *value();
-  int value(Fl_Widget *);
-  Fl_Widget *push() const {return push_;}
-  int push(Fl_Widget *);
+  fltk3::Widget *value();
+  int value(fltk3::Widget *);
+  fltk3::Widget *push() const {return push_;}
+  int push(fltk3::Widget *);
   Fl_Tabs(int,int,int,int,const char * = 0);
-  Fl_Widget *which(int event_x, int event_y);
+  fltk3::Widget *which(int event_x, int event_y);
 };
 
 #endif

@@ -61,9 +61,9 @@ int Fl_Button::value(int v) {
 void Fl_Button::setonly() { // set this radio button on, turn others off
   value(1);
   Fl_Group* g = parent();
-  Fl_Widget*const* a = g->array();
+  fltk3::Widget*const* a = g->array();
   for (int i = g->children(); i--;) {
-    Fl_Widget* o = *a++;
+    fltk3::Widget* o = *a++;
     if (o != this && o->type()==FL_RADIO_BUTTON) ((Fl_Button*)o)->value(0);
   }
 }
@@ -78,7 +78,7 @@ void Fl_Button::draw() {
     draw_label();
     labelcolor(c);
   } else draw_label();
-  if (Fl::focus() == this) draw_focus();
+  if (fltk3::focus() == this) draw_focus();
 }
 
 int Fl_Button::handle(int event) {
@@ -89,9 +89,9 @@ int Fl_Button::handle(int event) {
 //  if ((value_?selection_color():color())==FL_GRAY) redraw();
     return 1;
   case FL_PUSH:
-    if (Fl::visible_focus() && handle(FL_FOCUS)) Fl::focus(this);
+    if (fltk3::visible_focus() && handle(FL_FOCUS)) fltk3::focus(this);
   case FL_DRAG:
-    if (Fl::event_inside(this)) {
+    if (fltk3::event_inside(this)) {
       if (type() == FL_RADIO_BUTTON) newval = 1;
       else newval = !oldval;
     } else
@@ -127,9 +127,9 @@ int Fl_Button::handle(int event) {
     return 1;
   case FL_SHORTCUT:
     if (!(shortcut() ?
-	  Fl::test_shortcut(shortcut()) : test_shortcut())) return 0;
+	  fltk3::test_shortcut(shortcut()) : test_shortcut())) return 0;
     
-    if (Fl::visible_focus() && handle(FL_FOCUS)) Fl::focus(this);
+    if (fltk3::visible_focus() && handle(FL_FOCUS)) fltk3::focus(this);
 
     if (type() == FL_RADIO_BUTTON && !value_) {
       setonly();
@@ -145,7 +145,7 @@ int Fl_Button::handle(int event) {
     return 1;
   case FL_FOCUS : /* FALLTHROUGH */
   case FL_UNFOCUS :
-    if (Fl::visible_focus()) {
+    if (fltk3::visible_focus()) {
       if (box() == FL_NO_BOX) {
 	// Widgets with the FL_NO_BOX boxtype need a parent to
 	// redraw, since it is responsible for redrawing the
@@ -157,8 +157,8 @@ int Fl_Button::handle(int event) {
       return 1;
     } else return 0;
   case FL_KEYBOARD :
-    if (Fl::focus() == this && Fl::event_key() == ' ' &&
-        !(Fl::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) {
+    if (fltk3::focus() == this && fltk3::event_key() == ' ' &&
+        !(fltk3::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) {
       set_changed();
       Fl_Widget_Tracker wp(this);
       if (type() == FL_RADIO_BUTTON && !value_) {
@@ -183,7 +183,7 @@ int Fl_Button::handle(int event) {
   \param[in] L widget label, default is no label
  */
 Fl_Button::Fl_Button(int X, int Y, int W, int H, const char *L)
-: Fl_Widget(X,Y,W,H,L) {
+: fltk3::Widget(X,Y,W,H,L) {
   box(FL_UP_BOX);
   down_box(FL_NO_BOX);
   value_ = oldval = 0;

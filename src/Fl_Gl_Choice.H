@@ -89,29 +89,29 @@ public:
   static Fl_Gl_Choice *find(int mode, const int *);
 };
 
-class Fl_Window;
+class fltk3::Window;
 
 #ifdef WIN32
 
-GLContext fl_create_gl_context(Fl_Window*, const Fl_Gl_Choice*, int layer=0);
+GLContext fl_create_gl_context(fltk3::Window*, const Fl_Gl_Choice*, int layer=0);
 
 #elif defined(__APPLE_QUARTZ__)
 // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
 
-GLContext fl_create_gl_context(Fl_Window*, const Fl_Gl_Choice*, int layer=0);
+GLContext fl_create_gl_context(fltk3::Window*, const Fl_Gl_Choice*, int layer=0);
 
 #else
 
 GLContext fl_create_gl_context(XVisualInfo* vis);
 
 static inline
-GLContext fl_create_gl_context(Fl_Window*, const Fl_Gl_Choice* g) {
+GLContext fl_create_gl_context(fltk3::Window*, const Fl_Gl_Choice* g) {
   return fl_create_gl_context(g->vis);
 }
 
 #endif
 
-void fl_set_gl_context(Fl_Window*, GLContext);
+void fl_set_gl_context(fltk3::Window*, GLContext);
 void fl_no_gl_context();
 void fl_delete_gl_context(GLContext);
 

@@ -33,7 +33,7 @@
 void Fl_File_Chooser::cb_window_i(Fl_Double_Window*, void*) {
   fileName->value("");
 fileList->deselect();
-Fl::remove_timeout((Fl_Timeout_Handler)previewCB, this);
+fltk3::remove_timeout((Fl_Timeout_Handler)previewCB, this);
 window->hide();
 }
 void Fl_File_Chooser::cb_window(Fl_Double_Window* o, void* v) {
@@ -109,7 +109,7 @@ void Fl_File_Chooser::cb_okButton(Fl_Return_Button* o, void* v) {
 void Fl_File_Chooser::cb_cancelButton_i(Fl_Button*, void*) {
   fileName->value("");
 fileList->deselect();
-Fl::remove_timeout((Fl_Timeout_Handler)previewCB, this);
+fltk3::remove_timeout((Fl_Timeout_Handler)previewCB, this);
 window->hide();
 }
 void Fl_File_Chooser::cb_cancelButton(Fl_Button* o, void* v) {
@@ -288,7 +288,7 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
   callback_ = 0;
 data_ = 0;
 directory_[0] = 0;
-window->size_range(window->w(), window->h(), Fl::w(), Fl::h());
+window->size_range(window->w(), window->h(), fltk3::w(), fltk3::h());
 type(t);
 filter(p);
 update_favorites();
@@ -298,11 +298,11 @@ int e;
 prefs_.get("preview", e, 1);
 preview(e);
 Fl_Group::current(prev_current);
-  ext_group=(Fl_Widget*)0;
+  ext_group=(fltk3::Widget*)0;
 }
 
 Fl_File_Chooser::~Fl_File_Chooser() {
-  Fl::remove_timeout((Fl_Timeout_Handler)previewCB, this);
+  fltk3::remove_timeout((Fl_Timeout_Handler)previewCB, this);
 if(ext_group)window->remove(ext_group);
 delete window;
 delete favWindow;
@@ -374,7 +374,7 @@ const char * Fl_File_Chooser::ok_label() {
 void Fl_File_Chooser::show() {
   window->hotspot(fileList);
 window->show();
-Fl::flush();
+fltk3::flush();
 fl_cursor(FL_CURSOR_WAIT);
 rescan_keep_filename();
 fl_cursor(FL_CURSOR_DEFAULT);
@@ -441,14 +441,14 @@ int Fl_File_Chooser::visible() {
   return window->visible();
 }
 
-Fl_Widget* Fl_File_Chooser::add_extra(Fl_Widget* gr) {
-  Fl_Widget* ret=ext_group;
+fltk3::Widget* Fl_File_Chooser::add_extra(fltk3::Widget* gr) {
+  fltk3::Widget* ret=ext_group;
   if (gr==ext_group) {
     return ret;
       }
       if (ext_group) {
         int sh=ext_group->h()+4;
-Fl_Widget* svres=window->resizable();
+        fltk3::Widget* svres=window->resizable();
 window->resizable(NULL);
 window->size(window->w(),window->h()-sh);
 window->remove(ext_group);
@@ -457,7 +457,7 @@ window->resizable(svres);
           }
           if (gr) {
             int nh=window->h()+gr->h()+4;
-Fl_Widget* svres=window->resizable();
+            fltk3::Widget* svres=window->resizable();
 window->resizable(NULL);
 window->size(window->w(),nh);
 gr->position(2,okButton->y()+okButton->h()+2);

@@ -399,7 +399,7 @@ void Fl_Text_Buffer::insert_column(int column, int startPos, const char *text,
   insert_column_(column, lineStartPos, text, &insertDeleted, &nInserted,
                   &mCursorPosHint);
   if (nDeleted != insertDeleted)
-    Fl::error("Fl_Text_Buffer::insert_column(): internal consistency check ins1 failed");
+    fltk3::error("Fl_Text_Buffer::insert_column(): internal consistency check ins1 failed");
   call_modify_callbacks(lineStartPos, nDeleted, nInserted, 0, deletedText);
   free((void *) deletedText);
   if (charsInserted != NULL)
@@ -426,7 +426,7 @@ void Fl_Text_Buffer::overlay_rectangular(int startPos, int rectStart,
   overlay_rectangular_(lineStartPos, rectStart, rectEnd, text, &insertDeleted,
                         &nInserted, &mCursorPosHint);
   if (nDeleted != insertDeleted)
-    Fl::error("Fl_Text_Buffer::overlay_rectangle(): internal consistency check ovly1 failed");
+    fltk3::error("Fl_Text_Buffer::overlay_rectangle(): internal consistency check ovly1 failed");
   call_modify_callbacks(lineStartPos, nDeleted, nInserted, 0, deletedText);
   free((void *) deletedText);
   if (charsInserted != NULL)
@@ -485,7 +485,7 @@ void Fl_Text_Buffer::replace_rectangular(int start, int end, int rectStart,
 
   /* Figure out how many chars were inserted and call modify callbacks */
   if (insertDeleted != deleteInserted + linesPadded)
-    Fl::error("Fl_Text_Buffer::replace_rectangular(): internal consistency check repl1 failed");
+    fltk3::error("Fl_Text_Buffer::replace_rectangular(): internal consistency check repl1 failed");
   call_modify_callbacks(start, end - start, insertInserted, 0, deletedText);
   free((void *) deletedText);
   if (nInsertedLines < nDeletedLines)
@@ -769,7 +769,7 @@ void Fl_Text_Buffer::remove_modify_callback(Fl_Text_Modify_Cb bufModifiedCB,
     }
   }
   if (toRemove == -1) {
-    Fl::error("Fl_Text_Buffer::remove_modify_callback(): Can't find modify CB to remove");
+    fltk3::error("Fl_Text_Buffer::remove_modify_callback(): Can't find modify CB to remove");
     return;
   }
 
@@ -835,7 +835,7 @@ void Fl_Text_Buffer::remove_predelete_callback(
     	}
     }
     if (toRemove == -1) {
-    	Fl::error("Fl_Text_Buffer::remove_predelete_callback(): Can't find pre-delete CB to remove");
+    	fltk3::error("Fl_Text_Buffer::remove_predelete_callback(): Can't find pre-delete CB to remove");
     	return;
     }
     

@@ -151,8 +151,8 @@ void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
   BitBlt(fl_gc, dest_x, dest_y, src_w, src_h, fl_gc, src_x, src_y,SRCCOPY);
 
 #elif defined(__APPLE_QUARTZ__)
-  extern CGImageRef MAC_CGImageFromRectOfWindow(Fl_Window*, int x, int y, int w, int h);
-  CGImageRef img = MAC_CGImageFromRectOfWindow(Fl_Window::current(), src_x, src_y, src_w, src_h);
+  extern CGImageRef MAC_CGImageFromRectOfWindow(fltk3::Window*, int x, int y, int w, int h);
+  CGImageRef img = MAC_CGImageFromRectOfWindow(fltk3::Window::current(), src_x, src_y, src_w, src_h);
   CGRect rect = { { dest_x, dest_y }, { src_w, src_h } };
   Fl_X::q_begin_image(rect, 0, 0, src_w, src_h);
   CGContextDrawImage(fl_gc, rect, img);

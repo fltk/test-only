@@ -53,7 +53,7 @@
 # endif
 #endif
 
-static Fl_Window *message_form;
+static fltk3::Window *message_form;
 static Fl_Box *message;
 static Fl_Box *icon;
 static Fl_Button *button[3];
@@ -66,12 +66,12 @@ Fl_Fontsize fl_message_size_ = 14;
 static char avoidRecursion = 0;
 
 // sets the global return value (ret_val) and closes the window
-static void button_cb(Fl_Widget *bt, void *val) {
+static void button_cb(fltk3::Widget *bt, void *val) {
   ret_val = (int)(long)val;
   message_form->hide();
 }
 
-static Fl_Window *makeform() {
+static fltk3::Window *makeform() {
  if (message_form) {
    message_form->size(410,103);
    return message_form;
@@ -81,7 +81,7 @@ static Fl_Window *makeform() {
  Fl_Group *previously_current_group = Fl_Group::current();
  Fl_Group::current(0);
  // create a new top level window
- Fl_Window *w = message_form = new Fl_Window(410,103,"");
+  fltk3::Window *w = message_form = new fltk3::Window(410,103,"");
  // w->clear_border();
  // w->box(FL_UP_BOX);
  (message = new Fl_Box(60, 25, 340, 20))
@@ -191,7 +191,7 @@ static int innards(const char* fmt, va_list ap,
   const char *b1,
   const char *b2)
 {
-  Fl::pushed(0); // stop dragging (STR #2159)
+  fltk3::pushed(0); // stop dragging (STR #2159)
 
   avoidRecursion = 1;
 
@@ -220,18 +220,18 @@ static int innards(const char* fmt, va_list ap,
   if (button[1]->visible() && !input->visible()) 
     button[1]->take_focus();
   message_form->hotspot(button[0]);
-  if (b0 && Fl_Widget::label_shortcut(b0))
+  if (b0 && fltk3::Widget::label_shortcut(b0))
     button[0]->shortcut(0);
   else
     button[0]->shortcut(FL_Escape);
 
-  // deactivate Fl::grab(), because it is incompatible with modal windows
-  Fl_Window* g = Fl::grab();
-  if (g) Fl::grab(0);
+  // deactivate fltk3::grab(), because it is incompatible with modal windows
+  fltk3::Window* g = fltk3::grab();
+  if (g) fltk3::grab(0);
   message_form->show();
-  while (message_form->shown()) Fl::wait();
+  while (message_form->shown()) fltk3::wait();
   if (g) // regrab the previous popup menu, if there was one
-    Fl::grab(g);
+    fltk3::grab(g);
   icon->label(prev_icon_label);
 
   avoidRecursion = 0;
@@ -416,7 +416,7 @@ int fl_choice(const char*fmt,const char *b0,const char *b1,const char *b2,...){
     many common dialogs like fl_message(), fl_alert(), 
     fl_ask(), fl_choice(), fl_input(), fl_password() 
 */ 
-Fl_Widget *fl_message_icon() {makeform(); return icon;}
+fltk3::Widget *fl_message_icon() {makeform(); return icon;}
 
 static const char* input_innards(const char* fmt, va_list ap,
 				 const char* defstr, uchar type) {

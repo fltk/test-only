@@ -47,7 +47,7 @@
 class FL_EXPORT Fl_Overlay_Window : public Fl_Double_Window {
   friend class _Fl_Overlay;
   virtual void draw_overlay() = 0;
-  Fl_Window *overlay_;
+  fltk3::Window *overlay_;
 public:
   void show();
   void flush();

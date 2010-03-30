@@ -93,8 +93,8 @@ extern "C"
 //
 
 static int	quote_char(const char *);
-static void	scrollbar_callback(Fl_Widget *s, void *);
-static void	hscrollbar_callback(Fl_Widget *s, void *);
+static void	scrollbar_callback(fltk3::Widget *s, void *);
+static void	hscrollbar_callback(fltk3::Widget *s, void *);
 
 //
 // global flag for image loading (see get_image).
@@ -464,12 +464,12 @@ Fl_Help_View::draw()
   draw_box(b, x(), y(), ww, hh, bgcolor_);
 
   if ( hscrollbar_.visible() || scrollbar_.visible() ) {
-    int scrollsize = scrollbar_size_ ? scrollbar_size_ : Fl::scrollbar_size();
+    int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
     int hor_vis = hscrollbar_.visible();
     int ver_vis = scrollbar_.visible();
     // Scrollbar corner
-    int scorn_x = x() + ww - (ver_vis?scrollsize:0) - Fl::box_dw(b) + Fl::box_dx(b);
-    int scorn_y = y() + hh - (hor_vis?scrollsize:0) - Fl::box_dh(b) + Fl::box_dy(b);
+    int scorn_x = x() + ww - (ver_vis?scrollsize:0) - fltk3::box_dw(b) + fltk3::box_dx(b);
+    int scorn_y = y() + hh - (hor_vis?scrollsize:0) - fltk3::box_dh(b) + fltk3::box_dy(b);
     if ( hor_vis ) {
       if ( hscrollbar_.h() != scrollsize ) {		// scrollsize changed?
 	hscrollbar_.resize(x(), scorn_y, scorn_x - x(), scrollsize);
@@ -503,8 +503,8 @@ Fl_Help_View::draw()
   current_pos = 0;
 
   // Clip the drawing to the inside of the box...
-  fl_push_clip(x() + Fl::box_dx(b), y() + Fl::box_dy(b),
-               ww - Fl::box_dw(b), hh - Fl::box_dh(b));
+  fl_push_clip(x() + fltk3::box_dx(b), y() + fltk3::box_dy(b),
+               ww - fltk3::box_dw(b), hh - fltk3::box_dh(b));
   fl_color(textcolor_);
 
   // Draw all visible blocks...
@@ -1094,8 +1094,8 @@ void Fl_Help_View::format() {
 
 
   // Reset document width...
-  int scrollsize = scrollbar_size_ ? scrollbar_size_ : Fl::scrollbar_size();
-  hsize_ = w() - scrollsize - Fl::box_dw(b);
+  int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
+  hsize_ = w() - scrollsize - fltk3::box_dw(b);
 
   done = 0;
   while (!done)
@@ -1824,11 +1824,11 @@ void Fl_Help_View::format() {
     qsort(targets_, ntargets_, sizeof(Fl_Help_Target),
           (compare_func_t)compare_targets);
 
-  int dx = Fl::box_dw(b) - Fl::box_dx(b);
-  int dy = Fl::box_dh(b) - Fl::box_dy(b);
-  int ss = scrollbar_size_ ? scrollbar_size_ : Fl::scrollbar_size();
-  int dw = Fl::box_dw(b) + ss;
-  int dh = Fl::box_dh(b);
+  int dx = fltk3::box_dw(b) - fltk3::box_dx(b);
+  int dy = fltk3::box_dh(b) - fltk3::box_dy(b);
+  int ss = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
+  int dw = fltk3::box_dw(b) + ss;
+  int dh = fltk3::box_dh(b);
 
   if (hsize_ > (w() - dw)) {
     hscrollbar_.show();
@@ -1837,36 +1837,36 @@ void Fl_Help_View::format() {
 
     if (size_ < (h() - dh)) {
       scrollbar_.hide();
-      hscrollbar_.resize(x() + Fl::box_dx(b), y() + h() - ss - dy,
-                         w() - Fl::box_dw(b), ss);
+      hscrollbar_.resize(x() + fltk3::box_dx(b), y() + h() - ss - dy,
+                         w() - fltk3::box_dw(b), ss);
     } else {
       scrollbar_.show();
-      scrollbar_.resize(x() + w() - ss - dx, y() + Fl::box_dy(b),
-                        ss, h() - ss - Fl::box_dh(b));
-      hscrollbar_.resize(x() + Fl::box_dx(b), y() + h() - ss - dy,
-                         w() - ss - Fl::box_dw(b), ss);
+      scrollbar_.resize(x() + w() - ss - dx, y() + fltk3::box_dy(b),
+                        ss, h() - ss - fltk3::box_dh(b));
+      hscrollbar_.resize(x() + fltk3::box_dx(b), y() + h() - ss - dy,
+                         w() - ss - fltk3::box_dw(b), ss);
     }
   } else {
     hscrollbar_.hide();
 
     if (size_ < (h() - dh)) scrollbar_.hide();
     else {
-      scrollbar_.resize(x() + w() - ss - dx, y() + Fl::box_dy(b),
-                        ss, h() - Fl::box_dh(b));
+      scrollbar_.resize(x() + w() - ss - dx, y() + fltk3::box_dy(b),
+                        ss, h() - fltk3::box_dh(b));
       scrollbar_.show();
     }
   }
 
   // Reset scrolling if it needs to be...
   if (scrollbar_.visible()) {
-    int temph = h() - Fl::box_dh(b);
+    int temph = h() - fltk3::box_dh(b);
     if (hscrollbar_.visible()) temph -= ss;
     if ((topline_ + temph) > size_) topline(size_ - temph);
     else topline(topline_);
   } else topline(0);
 
   if (hscrollbar_.visible()) {
-    int tempw = w() - ss - Fl::box_dw(b);
+    int tempw = w() - ss - fltk3::box_dw(b);
     if ((leftline_ + tempw) > hsize_) leftline(hsize_ - tempw);
     else leftline(leftline_);
   } else leftline(0);
@@ -2244,7 +2244,7 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
   // Adjust the width if needed...
   int scale_width = *table_width;
 
-  int scrollsize = scrollbar_size_ ? scrollbar_size_ : Fl::scrollbar_size();
+  int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
   if (scale_width == 0) {
     if (width > (hsize_ - scrollsize)) scale_width = hsize_ - scrollsize;
     else scale_width = width;
@@ -2671,7 +2671,7 @@ Fl_Help_View::get_length(const char *l) {	// I - Value
     if (val > 100) val = 100;
     else if (val < 0) val = 0;
 
-    int scrollsize = scrollbar_size_ ? scrollbar_size_ : Fl::scrollbar_size();
+    int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
     val = val * (hsize_ - scrollsize) / 100;
   }
 
@@ -2780,8 +2780,8 @@ char Fl_Help_View::begin_selection()
 
   if (!fl_help_view_buffer) fl_help_view_buffer = fl_create_offscreen(1, 1);
 
-  mouse_x = Fl::event_x();
-  mouse_y = Fl::event_y();
+  mouse_x = fltk3::event_x();
+  mouse_y = fltk3::event_y();
   draw_mode = 1;
 
     current_view = this;
@@ -2797,7 +2797,7 @@ char Fl_Help_View::begin_selection()
 
 char Fl_Help_View::extend_selection()
 {
-  if (Fl::event_is_click())
+  if (fltk3::event_is_click())
     return 0;
 
 //  printf("old selection_first=%d, selection_last=%d\n",
@@ -2806,8 +2806,8 @@ char Fl_Help_View::extend_selection()
   int sf = selection_first, sl = selection_last;
 
   selected = 1;
-  mouse_x = Fl::event_x();
-  mouse_y = Fl::event_y();
+  mouse_x = fltk3::event_x();
+  mouse_y = fltk3::event_y();
   draw_mode = 2;
 
     fl_begin_offscreen(fl_help_view_buffer);
@@ -2936,7 +2936,7 @@ void Fl_Help_View::end_selection(int clipboard)
     }
   }
   *d = 0;
-  Fl::copy(txt, strlen(txt), clipboard);
+  fltk3::copy(txt, strlen(txt), clipboard);
   free(txt);
 }
 
@@ -2948,8 +2948,8 @@ Fl_Help_View::handle(int event)	// I - Event to handle
 {
   static Fl_Help_Link *linkp;   // currently clicked link
 
-  int xx = Fl::event_x() - x() + leftline_;
-  int yy = Fl::event_y() - y() + topline_;
+  int xx = fltk3::event_x() - x() + leftline_;
+  int yy = fltk3::event_y() - y() + topline_;
 
   switch (event)
   {
@@ -2985,7 +2985,7 @@ Fl_Help_View::handle(int event)	// I - Event to handle
       return 1;
     case FL_DRAG:
       if (linkp) {
-        if (Fl::event_is_click()) {
+        if (fltk3::event_is_click()) {
           fl_cursor(FL_CURSOR_HAND);
         } else {
           fl_cursor(FL_CURSOR_DEFAULT); // should be "FL_CURSOR_CANCEL" if we had it
@@ -3001,7 +3001,7 @@ Fl_Help_View::handle(int event)	// I - Event to handle
       return 1;
     case FL_RELEASE:
       if (linkp) {
-        if (Fl::event_is_click()) {
+        if (fltk3::event_is_click()) {
           follow_link(linkp);
         }
         fl_cursor(FL_CURSOR_DEFAULT);
@@ -3014,7 +3014,7 @@ Fl_Help_View::handle(int event)	// I - Event to handle
       }
       return 1;
     case FL_SHORTCUT: {
-      char ascii = Fl::event_text()[0];
+      char ascii = fltk3::event_text()[0];
       switch (ascii) {
         case ctrl('A'): select_all(); redraw(); return 1;
         case ctrl('C'):
@@ -3035,10 +3035,10 @@ Fl_Help_View::Fl_Help_View(int        xx,	// I - Left position
 			   int        hh,	// I - Height in pixels
 			   const char *l)
     : Fl_Group(xx, yy, ww, hh, l),
-      scrollbar_(xx + ww - Fl::scrollbar_size(), yy,
-                 Fl::scrollbar_size(), hh - Fl::scrollbar_size()),
-      hscrollbar_(xx, yy + hh - Fl::scrollbar_size(),
-                  ww - Fl::scrollbar_size(), Fl::scrollbar_size())
+      scrollbar_(xx + ww - fltk3::scrollbar_size(), yy,
+                 fltk3::scrollbar_size(), hh - fltk3::scrollbar_size()),
+      hscrollbar_(xx, yy + hh - fltk3::scrollbar_size(),
+                  ww - fltk3::scrollbar_size(), fltk3::scrollbar_size())
 {
   color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
 
@@ -3240,14 +3240,14 @@ Fl_Help_View::resize(int xx,	// I - New left position
 					// Box to draw...
 
 
-  Fl_Widget::resize(xx, yy, ww, hh);
+  fltk3::Widget::resize(xx, yy, ww, hh);
 
-  int scrollsize = scrollbar_size_ ? scrollbar_size_ : Fl::scrollbar_size();
-  scrollbar_.resize(x() + w() - scrollsize - Fl::box_dw(b) + Fl::box_dx(b),
-                    y() + Fl::box_dy(b), scrollsize, h() - scrollsize - Fl::box_dh(b));
-  hscrollbar_.resize(x() + Fl::box_dx(b),
-                     y() + h() - scrollsize - Fl::box_dh(b) + Fl::box_dy(b),
-                     w() - scrollsize - Fl::box_dw(b), scrollsize);
+  int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
+  scrollbar_.resize(x() + w() - scrollsize - fltk3::box_dw(b) + fltk3::box_dx(b),
+                    y() + fltk3::box_dy(b), scrollsize, h() - scrollsize - fltk3::box_dh(b));
+  hscrollbar_.resize(x() + fltk3::box_dx(b),
+                     y() + h() - scrollsize - fltk3::box_dh(b) + fltk3::box_dy(b),
+                     w() - scrollsize - fltk3::box_dw(b), scrollsize);
 
   format();
 }
@@ -3290,7 +3290,7 @@ Fl_Help_View::topline(int top)	// I - Top line number
   if (!value_)
     return;
 
-  int scrollsize = scrollbar_size_ ? scrollbar_size_ : Fl::scrollbar_size();
+  int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
   if (size_ < (h() - scrollsize) || top < 0)
     top = 0;
   else if (top > size_)
@@ -3319,7 +3319,7 @@ Fl_Help_View::leftline(int left)	// I - Left position
   if (!value_)
     return;
 
-  int scrollsize = scrollbar_size_ ? scrollbar_size_ : Fl::scrollbar_size();
+  int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
   if (hsize_ < (w() - scrollsize) || left < 0)
     left = 0;
   else if (left > hsize_)
@@ -3500,7 +3500,7 @@ quote_char(const char *p) {	// I - Quoted string
 
 /** The vertical scrollbar callback. */
 static void
-scrollbar_callback(Fl_Widget *s, void *)
+scrollbar_callback(fltk3::Widget *s, void *)
 {
   ((Fl_Help_View *)(s->parent()))->topline(int(((Fl_Scrollbar*)s)->value()));
 }
@@ -3508,7 +3508,7 @@ scrollbar_callback(Fl_Widget *s, void *)
 
 /** The horizontal scrollbar callback. */
 static void
-hscrollbar_callback(Fl_Widget *s, void *)
+hscrollbar_callback(fltk3::Widget *s, void *)
 {
   ((Fl_Help_View *)(s->parent()))->leftline(int(((Fl_Scrollbar*)s)->value()));
 }

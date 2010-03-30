@@ -32,7 +32,7 @@
 #include <Carbon/Carbon.h>
 #include <config.h>
 
-#undef check // necessary for use of Fl::check()
+#undef check // necessary for use of fltk3::check()
 
 #include <FL/filename.H>
 #define MAXFILTERS	80

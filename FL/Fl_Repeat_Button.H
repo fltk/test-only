@@ -51,7 +51,7 @@ public:
   Fl_Repeat_Button(int X,int Y,int W,int H,const char *l=0)
     : Fl_Button(X,Y,W,H,l) {}
   void deactivate() {
-    Fl::remove_timeout(repeat_callback,this);
+    fltk3::remove_timeout(repeat_callback,this);
     Fl_Button::deactivate();
   }
 };

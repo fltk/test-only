@@ -39,7 +39,7 @@ extern void fl_internal_boxtype(Fl_Boxtype, Fl_Box_Draw_F*);
 
 
 static void gtk_color(Fl_Color c) {
-  if (Fl::draw_box_active()) fl_color(c);
+  if (fltk3::draw_box_active()) fl_color(c);
   else fl_color(fl_inactive(c));
 }
 

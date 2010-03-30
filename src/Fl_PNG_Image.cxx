@@ -80,7 +80,7 @@ Fl_PNG_Image::Fl_PNG_Image(const char *png) // I - File to read
 
   if (setjmp(pp->jmpbuf))
   {
-    Fl::warning("PNG file \"%s\" contains errors!\n", png);
+    fltk3::warning("PNG file \"%s\" contains errors!\n", png);
     return;
   }
 

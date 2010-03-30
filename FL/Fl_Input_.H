@@ -99,7 +99,7 @@
   None of these issues should be desasterous. Nevertheless, we should 
   discuss how FLTK should handle false UTF8 suequences and pointers.
 */
-class FL_EXPORT Fl_Input_ : public Fl_Widget {
+class FL_EXPORT Fl_Input_ : public fltk3::Widget {
 
   /** \internal Storage for the text field. */
   const char* value_;
@@ -261,8 +261,8 @@ public:
 
   /** Sets the width and height of this widget.
     \param [in] W, H new width and height
-    \see Fl_Widget::size(int, int) */
-  void size(int W, int H) { Fl_Widget::size(W, H); }
+    \see fltk3::Widget::size(int, int) */
+  void size(int W, int H) { fltk3::Widget::size(W, H); }
 
   /** Gets the maximum length of the input field.  
     \todo It is not clear if this function is actually required */

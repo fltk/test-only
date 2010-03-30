@@ -136,7 +136,7 @@ fl_file_chooser(const char *message,	// I - Message in titlebar
   fc->show();
 
   while (fc->shown())
-    Fl::wait();
+    fltk3::wait();
 
   if (fc->value() && relative) {
     fl_filename_relative(retname, sizeof(retname), fc->value());
@@ -177,7 +177,7 @@ fl_dir_chooser(const char *message,	// I - Message for titlebar
   fc->show();
 
   while (fc->shown())
-    Fl::wait();
+    fltk3::wait();
 
   if (fc->value() && relative) {
     fl_filename_relative(retname, sizeof(retname), fc->value());

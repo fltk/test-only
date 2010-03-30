@@ -118,7 +118,7 @@ Fl_File_Icon::load(const char *f)	// I - File to read from
 
   if (i)
   {
-    Fl::warning("Fl_File_Icon::load(): Unable to load icon file \"%s\".", f);
+    fltk3::warning("Fl_File_Icon::load(): Unable to load icon file \"%s\".", f);
     return;
   }
 }
@@ -143,7 +143,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
   // Try to open the file...
   if ((fp = fl_fopen(fti, "rb")) == NULL)
   {
-    Fl::error("Fl_File_Icon::load_fti(): Unable to open \"%s\" - %s",
+    fltk3::error("Fl_File_Icon::load_fti(): Unable to open \"%s\" - %s",
               fti, strerror(errno));
     return -1;
   }
@@ -173,7 +173,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
     // OK, this character better be a letter...
     if (!isalpha(ch))
     {
-      Fl::error("Fl_File_Icon::load_fti(): Expected a letter at file position %ld (saw '%c')",
+      fltk3::error("Fl_File_Icon::load_fti(): Expected a letter at file position %ld (saw '%c')",
                 ftell(fp) - 1, ch);
       break;
     }
@@ -195,7 +195,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
     // Make sure we stopped on a parenthesis...
     if (ch != '(')
     {
-      Fl::error("Fl_File_Icon::load_fti(): Expected a ( at file position %ld (saw '%c')",
+      fltk3::error("Fl_File_Icon::load_fti(): Expected a ( at file position %ld (saw '%c')",
                 ftell(fp) - 1, ch);
       break;
     }
@@ -216,7 +216,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
     // Make sure we stopped on a parenthesis...
     if (ch != ')')
     {
-      Fl::error("Fl_File_Icon::load_fti(): Expected a ) at file position %ld (saw '%c')",
+      fltk3::error("Fl_File_Icon::load_fti(): Expected a ) at file position %ld (saw '%c')",
                 ftell(fp) - 1, ch);
       break;
     }
@@ -224,7 +224,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
     // Make sure the next character is a semicolon...
     if ((ch = getc(fp)) != ';')
     {
-      Fl::error("Fl_File_Icon::load_fti(): Expected a ; at file position %ld (saw '%c')",
+      fltk3::error("Fl_File_Icon::load_fti(): Expected a ; at file position %ld (saw '%c')",
                 ftell(fp) - 1, ch);
       break;
     }
@@ -323,7 +323,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
     }
     else
     {
-      Fl::error("Fl_File_Icon::load_fti(): Unknown command \"%s\" at file position %ld.",
+      fltk3::error("Fl_File_Icon::load_fti(): Unknown command \"%s\" at file position %ld.",
                 command, ftell(fp) - 1);
       break;
     }

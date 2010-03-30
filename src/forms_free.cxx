@@ -35,10 +35,10 @@
 
 void Fl_Free::step(void *v) {
   Fl_Free *f = (Fl_Free *)v;
-  int old_event = Fl::e_number;
-  f->handle(Fl::e_number == FL_STEP);
-  Fl::e_number = old_event;
-  Fl::add_timeout(.01,step,v);
+  int old_event = fltk3::e_number;
+  f->handle(fltk3::e_number == FL_STEP);
+  fltk3::e_number = old_event;
+  fltk3::add_timeout(.01,step,v);
 }
 
 /**
@@ -51,7 +51,7 @@ void Fl_Free::step(void *v) {
   The constructor takes both the type and the handle function. The handle
   function should be declared as follows:
   \code
-  int handle_function(Fl_Widget *w,
+  int handle_function(fltk3::Widget *w,
                       int       event,
      	              float     event_x,
     		      float     event_y,
@@ -73,26 +73,26 @@ void Fl_Free::step(void *v) {
 */
 Fl_Free::Fl_Free(uchar t,int X, int Y, int W, int H,const char *L,
 		 FL_HANDLEPTR hdl) :
-Fl_Widget(X,Y,W,H,L) {
+fltk3::Widget(X,Y,W,H,L) {
   type(t);
   hfunc = hdl;
   if (t == FL_SLEEPING_FREE) set_flag(INACTIVE);
   if (t == FL_CONTINUOUS_FREE || t == FL_ALL_FREE)
-    Fl::add_timeout(.01,step,this);
+    fltk3::add_timeout(.01,step,this);
 }
 
 /**
   The destructor will call the handle function with the event FL_FREE_MEM.
 */
 Fl_Free::~Fl_Free() {
-  Fl::remove_timeout(step,this);
+  fltk3::remove_timeout(step,this);
   hfunc(this,FL_FREEMEM,0,0,0);
 }
 
 void Fl_Free::draw() {hfunc(this,FL_DRAW,0,0,0);}
 
 int Fl_Free::handle(int e) {
-  char key = Fl::event_key();
+  char key = fltk3::event_key();
   switch (e) {
   case FL_FOCUS:
     if (type()!=FL_INPUT_FREE && type()!=FL_ALL_FREE) return 0;
@@ -100,12 +100,12 @@ int Fl_Free::handle(int e) {
   case FL_PUSH:
   case FL_DRAG:
   case FL_RELEASE:
-    key = 4-Fl::event_button();
+    key = 4-fltk3::event_button();
     break;
   case FL_SHORTCUT:
     return 0;
   }
-  if (hfunc(this, e, float(Fl::event_x()), float(Fl::event_y()), key)) do_callback();
+  if (hfunc(this, e, float(fltk3::event_x()), float(fltk3::event_y()), key)) do_callback();
   return 1;
 }
 

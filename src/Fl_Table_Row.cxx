@@ -173,16 +173,16 @@ void Fl_Table_Row::rows(int val) {
 int Fl_Table_Row::handle(int event) {
   
   //  fprintf(stderr, "** EVENT: %s: EVENT XY=%d,%d\n", 
-  //      eventnames[event], Fl::event_x(), Fl::event_y());	// debugging
+  //      eventnames[event], fltk3::event_x(), fltk3::event_y());	// debugging
   
   // Let base class handle event
   int ret = Fl_Table::handle(event);
   
   // The following code disables cell selection.. why was it added? -erco 05/18/03
-  // if ( ret ) { _last_y = Fl::event_y(); return(1); }	// base class 'handled' it (eg. column resize)
+  // if ( ret ) { _last_y = fltk3::event_y(); return(1); }	// base class 'handled' it (eg. column resize)
   
-  int shiftstate = (Fl::event_state() & FL_CTRL) ? FL_CTRL :
-  (Fl::event_state() & FL_SHIFT) ? FL_SHIFT : 0;
+  int shiftstate = (fltk3::event_state() & FL_CTRL) ? FL_CTRL :
+  (fltk3::event_state() & FL_SHIFT) ? FL_SHIFT : 0;
   
   // Which row/column are we over?
   int R, C;  				// row/column being worked on
@@ -190,9 +190,9 @@ int Fl_Table_Row::handle(int event) {
   TableContext context = cursor2rowcol(R, C, resizeflag);
   switch ( event ) {
     case FL_PUSH:
-      if ( Fl::event_button() == 1 ) {
-        _last_push_x = Fl::event_x();	// save regardless of context
-        _last_push_y = Fl::event_y();	// " "
+      if ( fltk3::event_button() == 1 ) {
+        _last_push_x = fltk3::event_x();	// save regardless of context
+        _last_push_y = fltk3::event_y();	// " "
         
         // Handle selection in table.
         //     Select cell under cursor, and enable drag selection mode.
@@ -243,7 +243,7 @@ int Fl_Table_Row::handle(int event) {
         
         if ( offtop > 0 && row_position() > 0 ) {
           // Only scroll in upward direction
-          int diff = _last_y - Fl::event_y();
+          int diff = _last_y - fltk3::event_y();
           if ( diff < 1 ) {
             ret = 1;
             break;
@@ -254,7 +254,7 @@ int Fl_Table_Row::handle(int event) {
         }
         else if ( offbot > 0 && botrow < rows() ) {
           // Only scroll in downward direction
-          int diff = Fl::event_y() - _last_y;
+          int diff = fltk3::event_y() - _last_y;
           if ( diff < 1 ) {
             ret = 1;
             break;
@@ -294,7 +294,7 @@ int Fl_Table_Row::handle(int event) {
     }
       
     case FL_RELEASE:
-      if ( Fl::event_button() == 1 ) {
+      if ( fltk3::event_button() == 1 ) {
         _dragging_select = 0;
         ret = 1;			// release handled
         // Clicked off edges of data table? 
@@ -303,8 +303,8 @@ int Fl_Table_Row::handle(int event) {
         int databot = tiy + table_h,
         dataright = tix + table_w;
         if ( 
-            ( _last_push_x > dataright && Fl::event_x() > dataright ) ||
-            ( _last_push_y > databot && Fl::event_y() > databot )
+            ( _last_push_x > dataright && fltk3::event_x() > dataright ) ||
+            ( _last_push_y > databot && fltk3::event_y() > databot )
             ) {
           select_all_rows(0);			// clear previous selections
         }
@@ -314,7 +314,7 @@ int Fl_Table_Row::handle(int event) {
     default:
       break;
   }
-  _last_y = Fl::event_y();
+  _last_y = fltk3::event_y();
   return(ret);
 }
 

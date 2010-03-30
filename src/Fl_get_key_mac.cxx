@@ -79,14 +79,14 @@ static int fltk2mac(int fltk) {
 }
 
 //: returns true, if that key was pressed during the last event
-int Fl::event_key(int k) {
+int fltk3::event_key(int k) {
   return get_key(k);
 }
 
 #include <stdio.h>
 
 //: returns true, if that key is pressed right now
-int Fl::get_key(int k) {
+int fltk3::get_key(int k) {
   KeyMap foo;
   GetKeys(foo);
 #ifdef MAC_TEST_FOR_KEYCODES

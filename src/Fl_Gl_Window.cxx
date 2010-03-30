@@ -83,7 +83,7 @@ void Fl_Gl_Window::show() {
       }
 
       if (!g) {
-        Fl::error("Insufficient GL support");
+        fltk3::error("Insufficient GL support");
 	return;
       }
     }
@@ -91,12 +91,12 @@ void Fl_Gl_Window::show() {
     Fl_X::make_xid(this, g->vis, g->colormap);
     if (overlay && overlay != this) ((Fl_Gl_Window*)overlay)->show();
 #elif defined(__APPLE__)
-	extern void MACsetContainsGLsubwindow(Fl_Window *);
+    extern void MACsetContainsGLsubwindow(fltk3::Window *);
 	if( ! parent() ) need_redraw=1;
 	else MACsetContainsGLsubwindow( window() );
 #endif
   }
-  Fl_Window::show();
+  fltk3::Window::show();
 
 #ifdef __APPLE__
   set_visible();
@@ -422,7 +422,7 @@ void Fl_Gl_Window::resize(int X,int Y,int W,int H) {
   }
 #endif
 
-  Fl_Window::resize(X,Y,W,H);
+  fltk3::Window::resize(X,Y,W,H);
 }
 
 /**
@@ -454,7 +454,7 @@ void Fl_Gl_Window::hide() {
     overlay = 0;
   }
 #endif
-  Fl_Window::hide();
+  fltk3::Window::hide();
 }
 
 /**
@@ -520,7 +520,7 @@ void Fl_Gl_Window::draw_overlay() {}
   buffers are swapped after this function is completed.
 */
 void Fl_Gl_Window::draw() {
-    Fl::fatal("Fl_Gl_Window::draw() *must* be overriden. Please refer to the documentation.");
+    fltk3::fatal("Fl_Gl_Window::draw() *must* be overriden. Please refer to the documentation.");
 }
 //
 // End of "$Id$".

@@ -64,7 +64,7 @@ class Fl_Input_Choice : public Fl_Group {
       fl_color(active_r() ? labelcolor() : fl_inactive(labelcolor()));
       int xc = x()+w()/2, yc=y()+h()/2;
       fl_polygon(xc-5,yc-3,xc+5,yc-3,xc,yc+3);
-      if (Fl::focus() == this) draw_focus();
+      if (fltk3::focus() == this) draw_focus();
     }
   public:
     InputMenuButton(int x,int y,int w,int h,const char*l=0) : 
@@ -74,14 +74,14 @@ class Fl_Input_Choice : public Fl_Group {
   Fl_Input *inp_;
   InputMenuButton *menu_;
 
-  static void menu_cb(Fl_Widget*, void *data) { 
+  static void menu_cb(fltk3::Widget*, void *data) { 
     Fl_Input_Choice *o=(Fl_Input_Choice *)data;
     Fl_Widget_Tracker wp(o);
     const Fl_Menu_Item *item = o->menubutton()->mvalue();
     if (item && item->flags & (FL_SUBMENU|FL_SUBMENU_POINTER)) return;	// ignore submenus
     if (!strcmp(o->inp_->value(), o->menu_->text()))
     {
-      o->Fl_Widget::clear_changed();
+      o->fltk3::Widget::clear_changed();
       if (o->when() & FL_WHEN_NOT_CHANGED)
 	o->do_callback();
     }
@@ -89,7 +89,7 @@ class Fl_Input_Choice : public Fl_Group {
     {
       o->inp_->value(o->menu_->text());
       o->inp_->set_changed();
-      o->Fl_Widget::set_changed();
+      o->fltk3::Widget::set_changed();
       if (o->when() & (FL_WHEN_CHANGED|FL_WHEN_RELEASE))
 	o->do_callback();
     }
@@ -98,20 +98,20 @@ class Fl_Input_Choice : public Fl_Group {
 
     if (o->callback() != default_callback)
     {
-      o->Fl_Widget::clear_changed();
+      o->fltk3::Widget::clear_changed();
       o->inp_->clear_changed();
     }
   }
 
-  static void inp_cb(Fl_Widget*, void *data) { 
+  static void inp_cb(fltk3::Widget*, void *data) { 
     Fl_Input_Choice *o=(Fl_Input_Choice *)data;
     Fl_Widget_Tracker wp(o);
     if (o->inp_->changed()) {
-      o->Fl_Widget::set_changed();
+      o->fltk3::Widget::set_changed();
       if (o->when() & (FL_WHEN_CHANGED|FL_WHEN_RELEASE))
 	o->do_callback();
     } else {
-      o->Fl_Widget::clear_changed();
+      o->fltk3::Widget::clear_changed();
       if (o->when() & FL_WHEN_NOT_CHANGED)
 	o->do_callback();
     }
@@ -119,19 +119,19 @@ class Fl_Input_Choice : public Fl_Group {
     if (wp.deleted()) return;
 
     if (o->callback() != default_callback)
-      o->Fl_Widget::clear_changed();
+      o->fltk3::Widget::clear_changed();
   }
 
   // Custom resize behavior -- input stretches, menu button doesn't
-  inline int inp_x() { return(x() + Fl::box_dx(box())); }
-  inline int inp_y() { return(y() + Fl::box_dy(box())); }
-  inline int inp_w() { return(w() - Fl::box_dw(box()) - 20); }
-  inline int inp_h() { return(h() - Fl::box_dh(box())); }
+  inline int inp_x() { return(x() + fltk3::box_dx(box())); }
+  inline int inp_y() { return(y() + fltk3::box_dy(box())); }
+  inline int inp_w() { return(w() - fltk3::box_dw(box()) - 20); }
+  inline int inp_h() { return(h() - fltk3::box_dh(box())); }
 
-  inline int menu_x() { return(x() + w() - 20 - Fl::box_dx(box())); }
-  inline int menu_y() { return(y() + Fl::box_dy(box())); }
+  inline int menu_x() { return(x() + w() - 20 - fltk3::box_dx(box())); }
+  inline int menu_y() { return(y() + fltk3::box_dy(box())); }
   inline int menu_w() { return(20); }
-  inline int menu_h() { return(h() - Fl::box_dh(box())); }
+  inline int menu_h() { return(h() - fltk3::box_dh(box())); }
 
 public:
   /**
@@ -156,14 +156,14 @@ public:
   
   /** Adds an item to the menu.*/
   void add(const char *s) { menu_->add(s);  }
-  int changed() const { return inp_->changed() | Fl_Widget::changed();}
+  int changed() const { return inp_->changed() | fltk3::Widget::changed();}
   void clear_changed() { 
     inp_->clear_changed();
-    Fl_Widget::clear_changed();
+    fltk3::Widget::clear_changed();
   }
   void set_changed() { 
     inp_->set_changed();
-    // no need to call Fl_Widget::set_changed()
+    // no need to call fltk3::Widget::set_changed()
   }
   /** Removes all items from the menu. */
   void clear() { menu_->clear(); }

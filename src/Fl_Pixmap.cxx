@@ -230,12 +230,12 @@ void Fl_Pixmap::uncache() {
   }
 }
 
-void Fl_Pixmap::label(Fl_Widget* widget) {
+void Fl_Pixmap::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 
 void Fl_Pixmap::label(Fl_Menu_Item* m) {
-  Fl::set_labeltype(_FL_IMAGE_LABEL, labeltype, Fl_Image::measure);
+  fltk3::set_labeltype(_FL_IMAGE_LABEL, labeltype, Fl_Image::measure);
   m->label(_FL_IMAGE_LABEL, (const char*)this);
 }
 
@@ -397,7 +397,7 @@ void Fl_Pixmap::color_average(Fl_Color c, float i) {
   uchar		r, g, b;
   unsigned	ia, ir, ig, ib;
 
-  Fl::get_color(c, r, g, b);
+  fltk3::get_color(c, r, g, b);
   if (i < 0.0f) i = 0.0f;
   else if (i > 1.0f) i = 1.0f;
 

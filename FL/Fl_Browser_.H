@@ -307,10 +307,10 @@ public:
     Gets the current size of the scrollbars' troughs, in pixels.
 
     If this value is zero (default), this widget will use the 
-    Fl::scrollbar_size() value as the scrollbar's width.
+    fltk3::scrollbar_size() value as the scrollbar's width.
   
-    \returns Scrollbar size in pixels, or 0 if the global Fl::scrollsize() is being used.
-    \see Fl::scrollbar_size(int)
+    \returns Scrollbar size in pixels, or 0 if the global fltk3::scrollsize() is being used.
+    \see fltk3::scrollbar_size(int)
   */
   int scrollbar_size() const {
       return(scrollbar_size_);
@@ -319,7 +319,7 @@ public:
     Sets the pixel size of the scrollbars' troughs to the \p size, in pixels.
 
     Normally you should not need this method, and should use
-    Fl::scrollbar_size(int) instead to manage the size of ALL 
+    fltk3::scrollbar_size(int) instead to manage the size of ALL 
     your widgets' scrollbars. This ensures your application 
     has a consistent UI, is the default behavior, and is normally
     what you want.
@@ -328,11 +328,11 @@ public:
     scrollbar size. The need for this should be rare.
     
     Setting \p size to the special value of 0 causes the widget to
-    track the global Fl::scrollbar_size(), which is the default.
+    track the global fltk3::scrollbar_size(), which is the default.
     
     \param[in] size Sets the scrollbar size in pixels.\n
-                    If 0 (default), scrollbar size tracks the global Fl::scrollbar_size()
-    \see Fl::scrollbar_size()
+                    If 0 (default), scrollbar size tracks the global fltk3::scrollbar_size()
+    \see fltk3::scrollbar_size()
   */
   void scrollbar_size(int size) {
       scrollbar_size_ = size;
@@ -340,22 +340,22 @@ public:
   /**
     This method has been deprecated, existing for backwards compatibility only.
     Use scrollbar_size() instead.
-    This method always returns the global value Fl::scrollbar_size().
-    \returns Always returns the global value Fl::scrollbar_size().
+    This method always returns the global value fltk3::scrollbar_size().
+    \returns Always returns the global value fltk3::scrollbar_size().
     \todo This method should eventually be removed in 1.4+
   */
   int scrollbar_width() const {
-      return(Fl::scrollbar_size());
+      return(fltk3::scrollbar_size());
   }
   /**
     This method has been deprecated, existing for backwards compatibility only.
     Use scrollbar_size(int) instead.
-    This method sets the global Fl::scrollbar_size(), and forces this
+    This method sets the global fltk3::scrollbar_size(), and forces this
     instance of the widget to use it.
     \todo This method should eventually be removed in 1.4+
   */
   void scrollbar_width(int width) {
-      Fl::scrollbar_size(width);
+      fltk3::scrollbar_size(width);
       scrollbar_size_ = 0;
   }
   /**

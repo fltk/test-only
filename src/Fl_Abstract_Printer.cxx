@@ -44,7 +44,7 @@
  to the current origin of graphics functions.
  @param[in] delta_y Same as above, vertically.
  */
-void Fl_Abstract_Printer::print_widget(Fl_Widget* widget, int delta_x, int delta_y) 
+void Fl_Abstract_Printer::print_widget(fltk3::Widget* widget, int delta_x, int delta_y) 
 { 
   int old_x, old_y, new_x, new_y, is_window;
   if ( ! widget->visible() ) return;
@@ -83,13 +83,13 @@ void Fl_Abstract_Printer::print_widget(Fl_Widget* widget, int delta_x, int delta
 }
 
 
-void Fl_Abstract_Printer::traverse(Fl_Widget *widget)
+void Fl_Abstract_Printer::traverse(fltk3::Widget *widget)
 {
   Fl_Group *g = widget->as_group();
   if (!g) return;
   int n = g->children();
   for (int i = 0; i < n; i++) {
-    Fl_Widget *c = g->child(i);
+    fltk3::Widget *c = g->child(i);
     if ( !c->visible() ) continue;
     if ( c->as_window() ) {
       print_widget(c, c->x(), c->y());
@@ -121,14 +121,14 @@ void Fl_Abstract_Printer::origin(int *x, int *y)
  @param delta_x Optional horizontal offset from current graphics origin where to print the captured rectangle.
  @param delta_y As above, vertically.
  */
-void Fl_Abstract_Printer::print_window_part(Fl_Window *win, int x, int y, int w, int h, int delta_x, int delta_y)
+void Fl_Abstract_Printer::print_window_part(fltk3::Window *win, int x, int y, int w, int h, int delta_x, int delta_y)
 {
   int slice, width, offset, count = 0;
   Fl_Device::display_device()->set_current();
-  Fl_Window *save_front = Fl::first_window();
+  fltk3::Window *save_front = fltk3::first_window();
   win->show();
   fl_gc = NULL;
-  Fl::check();
+  fltk3::check();
   win->make_current();
   uchar *image_data[20];
 #ifdef WIN32 // because of bug in StretchDIBits, vertically cut image in pieces of width slice

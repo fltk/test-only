@@ -76,15 +76,15 @@ static void fl_embossed_label(
 }
 
 Fl_Labeltype fl_define_FL_SHADOW_LABEL() {
-  Fl::set_labeltype(_FL_SHADOW_LABEL, fl_shadow_label, 0);
+  fltk3::set_labeltype(_FL_SHADOW_LABEL, fl_shadow_label, 0);
   return _FL_SHADOW_LABEL;
 }
 Fl_Labeltype fl_define_FL_ENGRAVED_LABEL() {
-  Fl::set_labeltype(_FL_ENGRAVED_LABEL, fl_engraved_label, 0);
+  fltk3::set_labeltype(_FL_ENGRAVED_LABEL, fl_engraved_label, 0);
   return _FL_ENGRAVED_LABEL;
 }
 Fl_Labeltype fl_define_FL_EMBOSSED_LABEL() {
-  Fl::set_labeltype(_FL_EMBOSSED_LABEL, fl_embossed_label, 0);
+  fltk3::set_labeltype(_FL_EMBOSSED_LABEL, fl_embossed_label, 0);
   return _FL_EMBOSSED_LABEL;
 }
 

@@ -482,14 +482,14 @@ void Fl_Device::push_clip(int x, int y, int w, int h) {
 #endif
   }
   if (rstackptr < STACK_MAX) rstack[++rstackptr] = r;
-  else Fl::warning("fl_push_clip: clip stack overflow!\n");
+  else fltk3::warning("fl_push_clip: clip stack overflow!\n");
   fl_restore_clip();
 }
 
 // make there be no clip (used by fl_begin_offscreen() only!)
 void Fl_Device::push_no_clip() {
   if (rstackptr < STACK_MAX) rstack[++rstackptr] = 0;
-  else Fl::warning("fl_push_no_clip: clip stack overflow!\n");
+  else fltk3::warning("fl_push_no_clip: clip stack overflow!\n");
   fl_restore_clip();
 }
 
@@ -498,7 +498,7 @@ void Fl_Device::pop_clip() {
   if (rstackptr > 0) {
     Fl_Region oldr = rstack[rstackptr--];
     if (oldr) XDestroyRegion(oldr);
-  } else Fl::warning("fl_pop_clip: clip stack underflow!\n");
+  } else fltk3::warning("fl_pop_clip: clip stack underflow!\n");
   fl_restore_clip();
 }
 

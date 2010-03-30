@@ -868,7 +868,7 @@ void Fl_PSfile_Device::font(int f, int s) {
 void Fl_PSfile_Device::color(Fl_Color c) {
   //colored_=1;
   color_=c;
-  Fl::get_color(c, cr_, cg_, cb_);
+  fltk3::get_color(c, cr_, cg_, cb_);
   if (cr_==cg_ && cg_==cb_) {
     double gray = cr_/255.0;
     fprintf(output, "%g GL\n", gray);
@@ -1292,7 +1292,7 @@ int Fl_Printer::start_job(int pages, int *firstpage, int *lastpage) {
   print_from->value("1");
   { char tmp[10]; snprintf(tmp, sizeof(tmp), "%d", pages); print_to->value(tmp); }
   print_panel->show(); // this is modal
-  while (print_panel->shown()) Fl::wait();
+  while (print_panel->shown()) fltk3::wait();
   
   if (!print_start) // user clicked cancel
     return 1;

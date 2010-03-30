@@ -130,13 +130,13 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
   if (!image) {
     // fetch absolute coordinates
     int dx, dy, sx, sy, sw, sh;
-    Window child_win;
-    Fl_Window *win = fl_find(fl_window);
+    NativeWindow child_win;
+    fltk3::Window *win = fl_find(fl_window);
     if (win) {
       XTranslateCoordinates(fl_display, fl_window,
           RootWindow(fl_display, fl_screen), X, Y, &dx, &dy, &child_win);
       // screen dimensions
-      Fl::screen_xywh(sx, sy, sw, sh, fl_screen);
+      fltk3::screen_xywh(sx, sy, sw, sh, fl_screen);
     }
     if (!win || (dx >= sx && dy >= sy && dx + w <= sw && dy + h <= sh)) {
       // the image is fully contained, we can use the traditional method

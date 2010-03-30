@@ -203,7 +203,7 @@ int fl_draw_pixmap(const char*const* cdata, int x, int y, Fl_Color bg) {
 #  endif
 #endif
       transparent_index = ' ';
-      Fl::get_color(bg, c[0], c[1], c[2]); c[3] = 0;
+      fltk3::get_color(bg, c[0], c[1], c[2]); c[3] = 0;
       p += 4;
       ncolors--;
     }
@@ -269,7 +269,7 @@ int fl_draw_pixmap(const char*const* cdata, int x, int y, Fl_Color bg) {
       if (!fl_parse_color((const char*)p, c[0], c[1], c[2])) {
         // assume "None" or "#transparent" for any errors
 	// "bg" should be transparent...
-	Fl::get_color(bg, c[0], c[1], c[2]);
+	fltk3::get_color(bg, c[0], c[1], c[2]);
 #ifdef __APPLE_QUARTZ__
         c[3] = 0;
 #endif

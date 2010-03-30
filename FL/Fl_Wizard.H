@@ -49,7 +49,7 @@
 */
 class FL_EXPORT Fl_Wizard : public Fl_Group
 {
-  Fl_Widget *value_;
+  fltk3::Widget *value_;
 
   void draw();
 
@@ -59,8 +59,8 @@ class FL_EXPORT Fl_Wizard : public Fl_Group
 
   void		next();
   void		prev();
-  Fl_Widget	*value();
-  void		value(Fl_Widget *);
+  fltk3::Widget	*value();
+  void		value(fltk3::Widget *);
 };
 
 #endif // !_Fl_Wizard_H_

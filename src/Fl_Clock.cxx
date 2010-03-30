@@ -155,7 +155,7 @@ void Fl_Clock_Output::value(ulong v) {
   \param[in] L widget label, default is no label
  */
 Fl_Clock_Output::Fl_Clock_Output(int X, int Y, int W, int H, const char *L)
-: Fl_Widget(X, Y, W, H, L) {
+: fltk3::Widget(X, Y, W, H, L) {
   box(FL_UP_BOX);
   selection_color(fl_gray_ramp(5));
   align(FL_ALIGN_BOTTOM);
@@ -191,7 +191,7 @@ Fl_Clock::Fl_Clock(uchar t, int X, int Y, int W, int H, const char *L)
 
 static void tick(void *v) {
   ((Fl_Clock*)v)->value(time(0));
-  Fl::add_timeout(1.0, tick, v);
+  fltk3::add_timeout(1.0, tick, v);
 }
 
 int Fl_Clock::handle(int event) {
@@ -200,7 +200,7 @@ int Fl_Clock::handle(int event) {
     tick(this);
     break;
   case FL_HIDE:
-    Fl::remove_timeout(tick, this);
+    fltk3::remove_timeout(tick, this);
     break;
   }
   return Fl_Clock_Output::handle(event);
@@ -210,7 +210,7 @@ int Fl_Clock::handle(int event) {
   The destructor removes the clock.
  */
 Fl_Clock::~Fl_Clock() {
-  Fl::remove_timeout(tick, this);
+  fltk3::remove_timeout(tick, this);
 }
 
 //

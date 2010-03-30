@@ -60,14 +60,14 @@ FL_EXPORT void fl_close_display();
 
 // constant info about the X server connection:
 extern FL_EXPORT Display *fl_display;
-extern FL_EXPORT Window fl_message_window;
+extern FL_EXPORT NativeWindow fl_message_window;
 extern FL_EXPORT int fl_screen;
 extern FL_EXPORT XVisualInfo *fl_visual;
 extern FL_EXPORT Colormap fl_colormap;
 
 // drawing functions:
 extern FL_EXPORT GC fl_gc;
-extern FL_EXPORT Window fl_window;
+extern FL_EXPORT NativeWindow fl_window;
 //extern FL_EXPORT XFontStruct* fl_xfont;
 extern FL_EXPORT XUtf8FontStruct* fl_xfont;
 extern FL_EXPORT void *fl_xftfont;
@@ -80,7 +80,7 @@ FL_EXPORT Fl_Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.
 // feed events into fltk:
 FL_EXPORT int fl_handle(const XEvent&);
 
-// you can use these in Fl::add_handler() to look at events:
+// you can use these in fltk3::add_handler() to look at events:
 extern FL_EXPORT const XEvent* fl_xevent;
 extern FL_EXPORT ulong fl_event_time;
 
@@ -90,7 +90,7 @@ typedef ulong Fl_Offscreen;
   XCreatePixmap(fl_display, fl_window, w, h, fl_visual->depth)
 // begin/end are macros that save the old state in local variables:
 #    define fl_begin_offscreen(pixmap) \
-  Window _sw=fl_window; fl_window=pixmap; fl_push_no_clip()
+  NativeWindow _sw=fl_window; fl_window=pixmap; fl_push_no_clip()
 #    define fl_end_offscreen() \
   fl_pop_clip(); fl_window = _sw
 
@@ -110,28 +110,28 @@ extern FL_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
 // is only here so that fl_xid can be declared inline:
 class FL_EXPORT Fl_X {
 public:
-  Window xid;
-  Window other_xid;
-  Fl_Window *w;
+  NativeWindow xid;
+  NativeWindow other_xid;
+  fltk3::Window *w;
   Fl_Region region;
   Fl_X *next;
   char wait_for_expose;
   char backbuffer_bad; // used for XDBE
   static Fl_X* first;
-  static Fl_X* i(const Fl_Window* wi) {return wi->i;}
-  void setwindow(Fl_Window* wi) {w=wi; wi->i=this;}
+  static Fl_X* i(const fltk3::Window* wi) {return wi->i;}
+  void setwindow(fltk3::Window* wi) {w=wi; wi->i=this;}
   void sendxjunk();
-  static void make_xid(Fl_Window*,XVisualInfo* =fl_visual, Colormap=fl_colormap);
-  static Fl_X* set_xid(Fl_Window*, Window);
+  static void make_xid(fltk3::Window*,XVisualInfo* =fl_visual, Colormap=fl_colormap);
+  static Fl_X* set_xid(fltk3::Window*, NativeWindow);
   // kludges to get around protection:
   void flush() {w->flush();}
-  static void x(Fl_Window* wi, int X) {wi->x(X);}
-  static void y(Fl_Window* wi, int Y) {wi->y(Y);}
+  static void x(fltk3::Window* wi, int X) {wi->x(X);}
+  static void y(fltk3::Window* wi, int Y) {wi->y(Y);}
 };
 
-// convert xid <-> Fl_Window:
-inline Window fl_xid(const Fl_Window*w) {return Fl_X::i(w)->xid;}
-FL_EXPORT Fl_Window* fl_find(Window xid);
+// convert xid <-> fltk3::Window:
+inline NativeWindow fl_xid(const fltk3::Window*w) {return Fl_X::i(w)->xid;}
+FL_EXPORT fltk3::Window* fl_find(NativeWindow xid);
 
 extern FL_EXPORT char fl_override_redirect; // hack into Fl_X::make_xid()
 extern FL_EXPORT int fl_background_pixel;  // hack into Fl_X::make_xid()
