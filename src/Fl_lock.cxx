@@ -26,7 +26,7 @@
 //
 
 
-#include <FL/Fl.H>
+#include <fltk3/Fl.H>
 #include <config.h>
 
 #include <stdlib.h>
@@ -189,7 +189,7 @@ int fltk3::awake(Fl_Awake_Handler func, void *data) {
 #ifdef WIN32
 #  include <windows.h>
 #  include <process.h>
-#  include <FL/x.H>
+#  include <fltk3/x.H>
 
 // These pointers are in Fl_win32.cxx:
 extern void (*fl_lock_function)();

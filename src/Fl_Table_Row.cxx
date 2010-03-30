@@ -31,9 +31,9 @@
 //
 
 #include <stdio.h>		// for debugging
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Table_Row.H>
+#include <fltk3/Fl.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/Fl_Table_Row.H>
 
 // Is row selected?
 int Fl_Table_Row::row_selected(int row) {

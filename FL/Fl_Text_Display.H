@@ -46,7 +46,7 @@
   by the Fl_Text_Buffer
   class.
 */
-class FL_EXPORT Fl_Text_Display: public Fl_Group {
+class FL_EXPORT Fl_Text_Display: public fltk3::Group {
   public:
     /** text display cursor shapes enumeration */
     enum {

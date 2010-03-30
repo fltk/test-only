@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl_Tooltip.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Menu_Window.H>
+#include <fltk3/Fl_Tooltip.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/Fl_Menu_Window.H>
 
 #include <stdio.h>
 

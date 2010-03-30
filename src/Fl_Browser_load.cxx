@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Browser.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Browser.H>
 #include <stdio.h>
-#include <FL/fl_utf8.h>
+#include <fltk3/fl_utf8.h>
 
 /**
   Clears the browser and reads the file, adding each line from the file

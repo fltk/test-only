@@ -43,7 +43,7 @@
   
   Clicking the tab makes a child visible() by calling
   show() on it, and all other children are made invisible
-  by calling hide() on them. Usually the children are Fl_Group widgets
+  by calling hide() on them. Usually the children are fltk3::Group widgets
   containing several widgets themselves.
   
   Each child makes a card, and its label() is printed
@@ -59,7 +59,7 @@
   fluid browser to select each child group and resize them until
   the tabs look the way you want them to.
 */
-class FL_EXPORT Fl_Tabs : public Fl_Group {
+class FL_EXPORT Fl_Tabs : public fltk3::Group {
   fltk3::Widget *value_;
   fltk3::Widget *push_;
   int tab_positions(int*, int*);

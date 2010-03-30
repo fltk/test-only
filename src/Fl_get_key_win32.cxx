@@ -29,8 +29,8 @@
 // which are actually X keysyms.  So this has to translate to MSWindows
 // VK_x symbols.
 
-#include <FL/fltk3.H>
-#include <FL/x.H>
+#include <fltk3/fltk3.H>
+#include <fltk3/x.H>
 
 // convert an Fltk (X) keysym to a MSWindows VK symbol:
 // See also the inverse converter in Fl_win32.cxx

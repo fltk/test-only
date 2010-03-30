@@ -28,14 +28,14 @@
 // Forms library compatibility functions.
 // Many more functions are defined as inlines in forms.h!
 
-#include <FL/forms.H>
+#include <fltk3/forms.H>
 #include <stdlib.h>
 
 char fl_flip = 2;
 void fl_end_form() {
-  while (Fl_Group::current()) Fl_Group::current()->forms_end();
+  while (fltk3::Group::current()) fltk3::Group::current()->forms_end();
 }
-void Fl_Group::forms_end() {
+void fltk3::Group::forms_end() {
   // set the dimensions of a group to surround contents
   if (children() && !w()) {
     fltk3::Widget*const* a = array();
@@ -148,8 +148,8 @@ void Fl_FormsText::draw() {
 
 // Create a forms button by selecting correct fltk subclass:
 
-#include <FL/Fl_Return_Button.H>
-#include <FL/Fl_Repeat_Button.H>
+#include <fltk3/Fl_Return_Button.H>
+#include <fltk3/Fl_Repeat_Button.H>
 
 Fl_Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
   Fl_Button *b;

@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Device.H>
-//#include <FL/fl_draw.H>
-#include <FL/Fl_Image.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Device.H>
+//#include <fltk3/fl_draw.H>
+#include <fltk3/Fl_Image.H>
 
 /** \brief Draws an Fl_RGB_Image object to the device. 
  *

@@ -36,9 +36,9 @@
 namespace fltk3 {
   class Window;
   class Widget;
+  class Group;
 }
 
-class Fl_Group;
 class Fl_Image;
 
 /** Default callback type definition for all fltk widgets (by far the most used) */
@@ -94,9 +94,9 @@ struct FL_EXPORT Fl_Label {
     user code to call redraw() after these.
  */
 class FL_EXPORT fltk3::Widget {
-  friend class ::Fl_Group;
+  friend class Group;
 
-  Fl_Group* parent_;
+  fltk3::Group* parent_;
   Fl_Callback* callback_;
   void* user_data_;
   int x_,y_,w_,h_;
@@ -147,7 +147,7 @@ protected:
         OVERRIDE        = 1<<8,   ///< position window on top (fltk3::Window)
         VISIBLE_FOCUS   = 1<<9,   ///< accepts keyboard focus navigation if the widget can have the focus
         COPIED_LABEL    = 1<<10,  ///< the widget label is internally copied, its destruction is handled by the widget
-        CLIP_CHILDREN   = 1<<11,  ///< all drawing within this widget will be clipped (Fl_Group)
+        CLIP_CHILDREN   = 1<<11,  ///< all drawing within this widget will be clipped (fltk3::Group)
         MENU_WINDOW     = 1<<12,  ///< a temporary popup window, dismissed by clicking outside (fltk3::Window)
         TOOLTIP_WINDOW  = 1<<13,  ///< a temporary popup, transparent to events, and dismissed easily (fltk3::Window)
         MODAL           = 1<<14,  ///< a window blocking input to all other winows (fltk3::Window)
@@ -231,21 +231,21 @@ public:
   virtual int handle(int event);
 
   /** Returns a pointer to the parent widget.  
-      Usually this is a Fl_Group or fltk3::Window. 
+      Usually this is a fltk3::Group or fltk3::Window. 
       \retval NULL if the widget has no parent
-      \see Fl_Group::add(fltk3::Widget*)
+      \see fltk3::Group::add(fltk3::Widget*)
    */
-  Fl_Group* parent() const {return parent_;}
+  fltk3::Group* parent() const {return parent_;}
 
   /** Internal use only - "for hacks only".
   
       It is \em \b STRONGLY recommended not to use this method, because it
-      short-circuits Fl_Group's normal widget adding and removing methods,
-      if the widget is already a child widget of another Fl_Group.
+      short-circuits fltk3::Group's normal widget adding and removing methods,
+      if the widget is already a child widget of another fltk3::Group.
 
-      Use Fl_Group::add(fltk3::Widget*) and/or Fl_Group::remove(fltk3::Widget*) instead.
+      Use fltk3::Group::add(fltk3::Widget*) and/or fltk3::Group::remove(fltk3::Widget*) instead.
   */
-  void parent(Fl_Group* p) {parent_ = p;} // for hacks only, use Fl_Group::add()
+  void parent(fltk3::Group* p) {parent_ = p;} // for hacks only, use fltk3::Group::add()
 
   /** Gets the widget type.
       Returns the widget type value, which is used for Forms compatibility
@@ -930,13 +930,13 @@ public:
    */
   fltk3::Window* window() const ;
 
-  /** Returns an Fl_Group pointer if this widget is an Fl_Group.
+  /** Returns an fltk3::Group pointer if this widget is an fltk3::Group.
   
-      \retval NULL if this widget is not derived from Fl_Group.
+      \retval NULL if this widget is not derived from fltk3::Group.
       \note This method is provided to avoid dynamic_cast.
       \todo More documentation ...
    */
-  virtual Fl_Group* as_group() {return 0;}
+  virtual fltk3::Group* as_group() {return 0;}
 
   /** Returns an fltk3::Window pointer if this widget is an fltk3::Window.
    

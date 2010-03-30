@@ -25,11 +25,11 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Tooltip.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Widget.H>
+#include <fltk3/Fl_Group.H>
+#include <fltk3/Fl_Tooltip.H>
+#include <fltk3/fl_draw.H>
 #include <stdlib.h>
 #include "flstring.h"
 
@@ -134,7 +134,7 @@ fltk3::Widget::Widget(int X, int Y, int W, int H, const char* L) {
   when_		 = FL_WHEN_RELEASE;
 
   parent_ = 0;
-  if (Fl_Group::current()) Fl_Group::current()->add(this);
+  if (fltk3::Group::current()) fltk3::Group::current()->add(this);
 }
 
 void fltk3::Widget::resize(int X, int Y, int W, int H) {

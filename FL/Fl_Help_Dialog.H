@@ -32,13 +32,13 @@
 
 #ifndef Fl_Help_Dialog_H
 #define Fl_Help_Dialog_H
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Help_View.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Double_Window.H>
+#include <fltk3/Fl_Group.H>
+#include <fltk3/Fl_Button.H>
+#include <fltk3/Fl_Input.H>
+#include <fltk3/Fl_Box.H>
+#include <fltk3/Fl_Help_View.H>
 
 class FL_EXPORT Fl_Help_Dialog {
   int index_; 

@@ -26,7 +26,7 @@
 //
 
 /* Adapted from Rich Salz. */
-#include <FL/filename.H>
+#include <fltk3/filename.H>
 #include <ctype.h>
 
 /**
@@ -43,7 +43,7 @@
 
     \b Include:
     \code
-    #include <FL/filename.H>
+    #include <fltk3/filename.H>
     \endcode
 
     \param[in] s the string to check for a match

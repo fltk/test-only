@@ -35,9 +35,9 @@
 // as I want to discourage programs that require support files to work.
 // All data needed by a program ui should be compiled in!!!
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
+#include <fltk3/Fl.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/x.H>
 #include <stdio.h>
 #include "flstring.h"
 

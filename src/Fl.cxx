@@ -31,10 +31,10 @@
 //          to implement clipping. This should be changed into pure
 //          Quartz calls in the near future.
 #include "config.h"
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/x.H>
-#include <FL/Fl_Tooltip.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Window.H>
+#include <fltk3/x.H>
+#include <fltk3/Fl_Tooltip.H>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -748,7 +748,7 @@ static int send_handlers(int e) {
 
 ////////////////////////////////////////////////////////////////
 
-fltk3::Widget* fl_oldfocus; // kludge for Fl_Group...
+fltk3::Widget* fl_oldfocus; // kludge for fltk3::Group...
 
 /**
     Sets the widget that will receive FL_KEYBOARD events.
@@ -1319,7 +1319,7 @@ int fltk3::Window::handle(int ev)
 //    Fl_Tooltip::exit(Fl_Tooltip::current());
   }
 
-  return Fl_Group::handle(ev);
+  return fltk3::Group::handle(ev);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1367,7 +1367,7 @@ void fltk3::paste(fltk3::Widget &receiver) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/fl_draw.H>
+#include <fltk3/fl_draw.H>
 
 void fltk3::Widget::redraw() {
   damage(FL_DAMAGE_ALL);

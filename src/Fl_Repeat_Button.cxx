@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Repeat_Button.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Repeat_Button.H>
 
 #define INITIALREPEAT .5
 #define REPEAT .1

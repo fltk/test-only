@@ -30,8 +30,8 @@
 // to erase the overlay before drawing anything that might intersect
 // it.
 
-#include <FL/x.H>
-#include <FL/fl_draw.H>
+#include <fltk3/x.H>
+#include <fltk3/fl_draw.H>
 #ifdef __APPLE__
 #include <config.h>
 #endif

@@ -59,11 +59,11 @@ extern "C" {
 }
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Tooltip.H>
-#include <FL/Fl_Sys_Menu_Bar.H>
+#include <fltk3/Fl.H>
+#include <fltk3/x.H>
+#include <fltk3/Fl_Window.H>
+#include <fltk3/Fl_Tooltip.H>
+#include <fltk3/Fl_Sys_Menu_Bar.H>
 #include <stdio.h>
 #include <stdlib.h>
 #include "flstring.h"
@@ -1855,7 +1855,7 @@ static char *currDragData = 0L;
 static int currDragSize = 0; 
 static OSErr currDragErr = noErr;
 fltk3::Window *fl_dnd_target_window = 0;
-#include <FL/fl_draw.H>
+#include <fltk3/fl_draw.H>
 
 /**
  * Fill the currDrag* variables with the current DnD ASCII text.
@@ -2104,7 +2104,7 @@ void Fl_X::make(fltk3::Window* w)
   static int xyPos = 100;
   if ( w->parent() ) // create a subwindow
   {
-    Fl_Group::current(0);
+    fltk3::Group::current(0);
     Rect wRect;
     wRect.top    = w->y();
     wRect.left   = w->x();
@@ -2137,7 +2137,7 @@ void Fl_X::make(fltk3::Window* w)
   }
   else // create a desktop window
   {
-    Fl_Group::current(0);
+    fltk3::Group::current(0);
     fl_open_display();
     int winclass = kDocumentWindowClass;
     int winattr = kWindowStandardHandlerAttribute | kWindowCloseBoxAttribute | kWindowCollapseBoxAttribute;
@@ -2427,7 +2427,7 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
   }
   resize_from_system = 0;
   if (is_a_resize) {
-    Fl_Group::resize(X,Y,W,H);
+    fltk3::Group::resize(X,Y,W,H);
     if (shown()) { 
       redraw(); 
     }

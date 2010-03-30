@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Counter.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Counter.H>
+#include <fltk3/fl_draw.H>
 
 void Fl_Counter::draw() {
   int i; Fl_Boxtype boxtype[5];

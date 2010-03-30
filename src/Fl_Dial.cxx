@@ -25,11 +25,11 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Dial.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Dial.H>
+#include <fltk3/fl_draw.H>
 #include <stdlib.h>
-#include <FL/math.h>
+#include <fltk3/math.h>
 
 // All angles are measured with 0 to the right and counter-clockwise
 /**

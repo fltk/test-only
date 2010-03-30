@@ -23,11 +23,11 @@
 //
 
 #include <stdio.h>		// fprintf
-#include <FL/fl_draw.H>
-#include <FL/Fl_Table.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/Fl_Table.H>
 
 #if defined(USE_UTF8) && ( defined(MICROSOFT) || defined(LINUX) )
-#include <FL/fl_utf8.H>	// currently only Windows and Linux
+#include <fltk3/fl_utf8.H>	// currently only Windows and Linux
 #endif
 
 #define SCROLLBAR_SIZE	16
@@ -99,7 +99,7 @@ long Fl_Table::col_scroll_position(int col) {
 }
 
 // Ctor
-Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : Fl_Group(X,Y,W,H,l) {
+Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : fltk3::Group(X,Y,W,H,l) {
   _rows             = 0;
   _cols             = 0;
   _row_header_w     = 40;
@@ -157,14 +157,14 @@ Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : Fl_Group(X,Y,W,H
   table_resized();
   redraw();
   
-  Fl_Group::end();		// end the group's begin()
+  fltk3::Group::end();		// end the group's begin()
   
   table->begin();		// leave with fltk children getting added to the scroll
 }
 
 // Dtor
 Fl_Table::~Fl_Table() {
-  // The parent Fl_Group takes care of destroying scrollbars
+  // The parent fltk3::Group takes care of destroying scrollbars
 }
 
 // Set height of a row
@@ -578,7 +578,7 @@ void Fl_Table::table_resized() {
   }
   
   // Tell FLTK child widgets were resized
-  Fl_Group::init_sizes();
+  fltk3::Group::init_sizes();
   
   // Recalc top/bot/left/right
   table_scrolled();
@@ -700,7 +700,7 @@ fprintf(stderr,"Table %s: ** Event: %s --\n", (label()?label():"none"), eventnam
 // Handle FLTK events
 int Fl_Table::handle(int event) {
   PRINTEVENT;
-  int ret = Fl_Group::handle(event);	// let FLTK group handle events first
+  int ret = fltk3::Group::handle(event);	// let FLTK group handle events first
   if (ret) {
     if (fltk3::event_inside(hscrollbar) || fltk3::event_inside(vscrollbar)) return 1;
     if (fltk3::focus() != this && contains(fltk3::focus())) return 1;
@@ -1021,7 +1021,7 @@ int Fl_Table::handle(int event) {
 //
 void Fl_Table::resize(int X, int Y, int W, int H) {
   // Tell group to resize, and recalc our own widget as well
-  Fl_Group::resize(X, Y, W, H);
+  fltk3::Group::resize(X, Y, W, H);
   table_resized();
   redraw();
 }
@@ -1098,7 +1098,7 @@ void Fl_Table::draw() {
   //
   fl_push_clip(wix, wiy, wiw, wih);
   {
-    Fl_Group::draw();
+    fltk3::Group::draw();
   }
   fl_pop_clip();
   
@@ -1106,7 +1106,7 @@ void Fl_Table::draw() {
   draw_box(box(), x(), y(), w(), h(), color());
   
   // If Fl_Scroll 'table' is hidden, draw its box
-  //    Do this after Fl_Group::draw() so we draw over scrollbars
+  //    Do this after fltk3::Group::draw() so we draw over scrollbars
   //    that leak around the border.
   //
   if ( ! table->visible() ) {

@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Choice.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Choice.H>
+#include <fltk3/fl_draw.H>
 #include "flstring.h"
 
 // Emulates the Forms choice widget.  This is almost exactly the same

@@ -26,8 +26,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl_Native_File_Chooser.H>
-#include <FL/Fl_File_Icon.H>
+#include <fltk3/Fl_Native_File_Chooser.H>
+#include <fltk3/Fl_File_Icon.H>
 #define FLTK_CHOOSER_SINGLE    Fl_File_Chooser::SINGLE
 #define FLTK_CHOOSER_DIRECTORY Fl_File_Chooser::DIRECTORY
 #define FLTK_CHOOSER_MULTI     Fl_File_Chooser::MULTI
@@ -68,7 +68,7 @@ Fl_Native_File_Chooser::Fl_Native_File_Chooser(int val) {
   // Added by MG
   Fl_Button *b = _file_chooser->previewButton;
   fltk3::Window *w = b->window();
-  Fl_Group::current(w);		// adds a "Show hidden files" check button in _file_chooser's window
+  fltk3::Group::current(w);		// adds a "Show hidden files" check button in _file_chooser's window
   show_hidden = new Fl_Check_Button(b->x() + b->w() + 10, b->y(), 145, b->h(), "Show hidden files");
   show_hidden->callback((Fl_Callback*)show_hidden_cb, this);
   my_fileList = _file_chooser->browser();

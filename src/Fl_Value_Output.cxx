@@ -29,9 +29,9 @@
 // This is much lighter than Fl_Value_Input because it has no text editor
 // If step() is zero then it can be used to display a floating-point value
 
-#include <FL/Fl.H>
-#include <FL/Fl_Value_Output.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Value_Output.H>
+#include <fltk3/fl_draw.H>
 
 void Fl_Value_Output::draw() {
   Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;

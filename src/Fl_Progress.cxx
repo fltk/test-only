@@ -35,9 +35,9 @@
 // Include necessary header files...
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Progress.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Progress.H>
+#include <fltk3/fl_draw.H>
 
 
 //

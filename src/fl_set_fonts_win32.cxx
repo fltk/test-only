@@ -29,7 +29,7 @@
 // are found on the X server.  It tries to place the fonts into families
 // and to sort them so the first 4 in a family are normal, bold, italic,
 // and bold italic.
-#include <FL/fl_utf8.h>
+#include <fltk3/fl_utf8.h>
 #ifdef __CYGWIN__
 # include <wchar.h>
 #endif

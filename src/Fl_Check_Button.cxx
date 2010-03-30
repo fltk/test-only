@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Check_Button.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Check_Button.H>
 
 // TODO Correct incorrect Fl_Check_Button comments.
 // A subclass of Fl_Button that always draws as a diamond box.  This

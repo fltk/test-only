@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/fl_draw.H>
-#include <FL/Enumerations.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/Enumerations.H>
 #include <stdlib.h>
 #include "flstring.h"
 

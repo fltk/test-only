@@ -36,12 +36,12 @@
 /* #define BACKSPACE_HACK 1 */
 
 #  include <config.h>
-#  include <FL/Fl.H>
-#  include <FL/x.H>
-#  include <FL/Fl_Window.H>
-#  include <FL/fl_utf8.h>
-#  include <FL/Fl_Tooltip.H>
-#  include <FL/fl_draw.H>
+#  include <fltk3/Fl.H>
+#  include <fltk3/x.H>
+#  include <fltk3/Fl_Window.H>
+#  include <fltk3/fl_utf8.h>
+#  include <fltk3/Fl_Tooltip.H>
+#  include <fltk3/fl_draw.H>
 #  include <stdio.h>
 #  include <stdlib.h>
 #  include "flstring.h"
@@ -1374,7 +1374,7 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
   if (is_a_move && resize_from_program) set_flag(FORCE_POSITION);
   else if (!is_a_resize && !is_a_move) return;
   if (is_a_resize) {
-    Fl_Group::resize(X,Y,W,H);
+    fltk3::Group::resize(X,Y,W,H);
     if (shown()) {redraw(); i->wait_for_expose = 1;}
   } else {
     x(X); y(Y);
@@ -1438,7 +1438,7 @@ ExposureMask|StructureNotifyMask
 
 void Fl_X::make_xid(fltk3::Window* win, XVisualInfo *visual, Colormap colormap)
 {
-  Fl_Group::current(0); // get rid of very common user bug: forgot end()
+  fltk3::Group::current(0); // get rid of very common user bug: forgot end()
 
   int X = win->x();
   int Y = win->y();
@@ -1764,8 +1764,8 @@ void fltk3::Window::make_current() {
 #ifdef USE_PRINT_BUTTON
 // to test the Fl_Printer class creating a "Print front window" button in a separate window
 // contains also preparePrintFront call above
-#include <FL/Fl_Printer.H>
-#include <FL/Fl_Button.H>
+#include <fltk3/Fl_Printer.H>
+#include <fltk3/Fl_Button.H>
 void printFront(fltk3::Widget *o, void *data)
 {
   Fl_Printer printer;

@@ -58,7 +58,7 @@ class Fl_Gl_Choice; // structure to hold result of glXChooseVisual
   Please note that the FLTK drawing and clipping functions
   will not work inside an Fl_Gl_Window. All drawing
   should be done using OpenGL calls exclusively.
-  Even though Fl_Gl_Window is derived from Fl_Group, 
+  Even though Fl_Gl_Window is derived from fltk3::Group, 
   it is not useful to add other FLTK Widgets as children,
   unless those widgets are modified to draw using OpenGL calls.
 */

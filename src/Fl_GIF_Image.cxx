@@ -32,11 +32,11 @@
 // Include necessary header files...
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_GIF_Image.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_GIF_Image.H>
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/fl_utf8.h>
+#include <fltk3/fl_utf8.h>
 #include "flstring.h"
 
 // Read a .gif file and convert it to a "xpm" format (actually my

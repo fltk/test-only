@@ -36,10 +36,10 @@
 // that minimal update works.
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Widget.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/x.H>
 
 #ifdef __APPLE_QUARTZ__
 extern float fl_quartz_line_width_;

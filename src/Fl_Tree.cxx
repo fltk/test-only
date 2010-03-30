@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <FL/Fl_Tree.H>
+#include <fltk3/Fl_Tree.H>
 
 #define SCROLL_W 15
 
@@ -77,7 +77,7 @@ static int find_total_children(Fl_Tree_Item *item, int count=0) {
 }
 
 /// Constructor.
-Fl_Tree::Fl_Tree(int X, int Y, int W, int H, const char *L) : Fl_Group(X,Y,W,H,L) { 
+Fl_Tree::Fl_Tree(int X, int Y, int W, int H, const char *L) : fltk3::Group(X,Y,W,H,L) { 
   _root = new Fl_Tree_Item(_prefs);
   _root->parent(0);				// we are root of tree
   _root->label("ROOT");
@@ -166,8 +166,8 @@ void Fl_Tree::draw() {
   // Let group draw box+label but *NOT* children.
   // We handle drawing children ourselves by calling each item's draw()
   //
-  Fl_Group::draw_box();
-  Fl_Group::draw_label();
+  fltk3::Group::draw_box();
+  fltk3::Group::draw_label();
   if ( ! _root ) return;
   int cx = x() + fltk3::box_dx(box());
   int cy = y() + fltk3::box_dy(box());
@@ -209,7 +209,7 @@ void Fl_Tree::draw() {
     _vscroll->hide();
   }
   fl_push_clip(cx,cy,cw,ch);
-  Fl_Group::draw_children();	// draws any FLTK children set via Fl_Tree::widget()
+  fltk3::Group::draw_children();	// draws any FLTK children set via Fl_Tree::widget()
   fl_pop_clip();
 }
 
@@ -217,7 +217,7 @@ void Fl_Tree::draw() {
 int Fl_Tree::handle(int e) {
   static Fl_Tree_Item *lastselect = 0;
   int changed = 0;
-  int ret = Fl_Group::handle(e);
+  int ret = fltk3::Group::handle(e);
   if ( ! _root ) return(ret);
   switch ( e ) {
     case FL_PUSH: {

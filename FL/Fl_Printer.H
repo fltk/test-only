@@ -31,11 +31,11 @@
 #ifndef Fl_Printer_H
 #define Fl_Printer_H
 
-#include <FL/Fl_Abstract_Printer.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Pixmap.H>
-#include <FL/Fl_RGB_Image.H>
-#include <FL/Fl_Bitmap.H>
+#include <fltk3/Fl_Abstract_Printer.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/Fl_Pixmap.H>
+#include <fltk3/Fl_RGB_Image.H>
+#include <fltk3/Fl_Bitmap.H>
 #include <stdio.h>
 
 #if defined(__APPLE__) || defined(WIN32) || defined(FL_DOXYGEN)
@@ -155,7 +155,7 @@ public:
 
 #else
 
-#include <FL/Fl_PSfile_Device.H>
+#include <fltk3/Fl_PSfile_Device.H>
 
 class Fl_Printer : public Fl_PSfile_Device {
 public:

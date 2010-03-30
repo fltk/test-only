@@ -29,11 +29,11 @@
 // Other label types (symbols) are in their own source files
 // to avoid linking if not used.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Group.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Image.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Widget.H>
+#include <fltk3/Fl_Group.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/Fl_Image.H>
 
 void
 fl_no_label(const Fl_Label*,int,int,int,int,Fl_Align) {}
@@ -137,7 +137,7 @@ void fltk3::Widget::draw_label(int X, int Y, int W, int H, Fl_Align a) const {
 
 // include these vars here so they can be referenced without including
 // Fl_Input_ code:
-#include <FL/Fl_Input_.H>
+#include <fltk3/Fl_Input_.H>
 
 //
 // End of "$Id$".

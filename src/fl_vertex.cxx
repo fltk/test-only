@@ -38,10 +38,10 @@
 //       operations for reasons of compatibility and maintainability
 
 #include <config.h>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#include <FL/Fl.H>
-#include <FL/math.h>
+#include <fltk3/fl_draw.H>
+#include <fltk3/x.H>
+#include <fltk3/Fl.H>
+#include <fltk3/math.h>
 #include <stdlib.h>
 
 struct matrix {double a, b, c, d, x, y;};

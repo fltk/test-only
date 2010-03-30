@@ -38,9 +38,9 @@
 #include <sys/stat.h>		// stat(2)
 
 
-#include <FL/Fl.H>
-#include <FL/Fl_Native_File_Chooser.H>
-#include <FL/filename.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Native_File_Chooser.H>
+#include <fltk3/filename.H>
 
 // FREE PATHNAMES ARRAY, IF IT HAS ANY CONTENTS
 void Fl_Native_File_Chooser::clear_pathnames() {

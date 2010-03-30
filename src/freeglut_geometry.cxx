@@ -25,8 +25,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <FL/glut.H>
-#include <FL/math.h>
+#include <fltk3/glut.H>
+#include <fltk3/math.h>
 #include <stdlib.h>
 
 /*

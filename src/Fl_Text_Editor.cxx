@@ -29,10 +29,10 @@
 #include <stdlib.h>
 #include "flstring.h"
 #include <ctype.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Text_Editor.H>
-#include <FL/fl_ask.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Window.H>
+#include <fltk3/Fl_Text_Editor.H>
+#include <fltk3/fl_ask.H>
 
 
 /* Keyboard Control Matrix
@@ -590,7 +590,7 @@ int Fl_Text_Editor::handle(int event) {
     case FL_PUSH:
       if (fltk3::event_button() == 2) {
         // don't let the text_display see this event
-        if (Fl_Group::handle(event)) return 1;
+        if (fltk3::Group::handle(event)) return 1;
         dragType = -1;
         fltk3::paste(*this, 0);
         fltk3::focus(this);

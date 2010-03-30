@@ -27,11 +27,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/fl_utf8.h>
+#include <fltk3/fl_utf8.h>
 #include "flstring.h"
 #include <ctype.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Text_Buffer.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Text_Buffer.H>
 
 
 static void histogramCharacters(const char *string, int length, char hist[ 256 ],

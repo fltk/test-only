@@ -37,11 +37,11 @@
 /**
   This is an array of event names you can use to convert event numbers into names.
 
-  The array gets defined inline wherever your '\#include <FL/names.h>' appears.
+  The array gets defined inline wherever your '\#include <fltk3/names.h>' appears.
 
   \b Example:
   \code
-  #include <FL/names.h>		// array will be defined here
+  #include <fltk3/names.h>		// array will be defined here
   int MyClass::handle(int e) {
       printf("Event was %s (%d)\n", fl_eventnames[e], e);
       // ..resulting output might be e.g. "Event was FL_PUSH (1)"..
@@ -80,11 +80,11 @@ const char * const fl_eventnames[] =
 /**
   This is an array of font names you can use to convert font numbers into names.
 
-  The array gets defined inline wherever your '\#include <FL/names.h>' appears.
+  The array gets defined inline wherever your '\#include <fltk3/names.h>' appears.
 
   \b Example:
   \code
-  #include <FL/names.h>		// array will be defined here
+  #include <fltk3/names.h>		// array will be defined here
   int MyClass::my_callback(fltk3::Widget *w, void*) {
       int fnum = w->labelfont();
       // Resulting output might be e.g. "Label's font is FL_HELVETICA (0)"

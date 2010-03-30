@@ -27,13 +27,13 @@
 
 // FLTK widget for drag-adjusting a floating point value.
 // Warning: this works by making a child Fl_Input object, even
-// though this object is *not* an Fl_Group.  May be a kludge?
+// though this object is *not* an fltk3::Group.  May be a kludge?
 
-#include <FL/Fl.H>
-#include <FL/Fl_Value_Input.H>
-#include <FL/Fl_Group.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Value_Input.H>
+#include <fltk3/Fl_Group.H>
 #include <stdlib.h>
-#include <FL/math.h>
+#include <fltk3/math.h>
 
 
 void Fl_Value_Input::input_cb(fltk3::Widget*, void* v) {
@@ -127,7 +127,7 @@ Fl_Value_Input::Fl_Value_Input(int X, int Y, int W, int H, const char* l)
   soft_ = 0;
   if (input.parent())  // defeat automatic-add
     input.parent()->remove(input);
-  input.parent((Fl_Group *)this); // kludge!
+  input.parent((fltk3::Group *)this); // kludge!
   input.callback(input_cb, this);
   input.when(FL_WHEN_CHANGED);
   box(input.box());
@@ -140,7 +140,7 @@ Fl_Value_Input::Fl_Value_Input(int X, int Y, int W, int H, const char* l)
 
 Fl_Value_Input::~Fl_Value_Input() {
 
-  if (input.parent() == (Fl_Group *)this)
+  if (input.parent() == (fltk3::Group *)this)
     input.parent(0);   // *revert* ctor kludge!
 }
 

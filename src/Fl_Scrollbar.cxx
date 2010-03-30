@@ -26,9 +26,9 @@
 //
 
 
-#include <FL/Fl.H>
-#include <FL/Fl_Scrollbar.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Scrollbar.H>
+#include <fltk3/fl_draw.H>
 #include <math.h>
 #include "flstring.h"
 

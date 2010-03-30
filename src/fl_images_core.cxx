@@ -34,12 +34,12 @@
 // Include necessary header files...
 //
 
-#include <FL/Fl_Shared_Image.H>
-#include <FL/Fl_BMP_Image.H>
-#include <FL/Fl_GIF_Image.H>
-#include <FL/Fl_JPEG_Image.H>
-#include <FL/Fl_PNG_Image.H>
-#include <FL/Fl_PNM_Image.H>
+#include <fltk3/Fl_Shared_Image.H>
+#include <fltk3/Fl_BMP_Image.H>
+#include <fltk3/Fl_GIF_Image.H>
+#include <fltk3/Fl_JPEG_Image.H>
+#include <fltk3/Fl_PNG_Image.H>
+#include <fltk3/Fl_PNM_Image.H>
 #include <stdio.h>
 #include <stdlib.h>
 #include "flstring.h"

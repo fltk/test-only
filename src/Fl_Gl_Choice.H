@@ -55,7 +55,7 @@
 // Warning: whatever GLContext is defined to must take exactly the same
 // space in a structure as a void*!!!
 #ifdef WIN32
-#  include <FL/gl.h>
+#  include <fltk3/gl.h>
 #  define GLContext HGLRC
 #elif defined(__APPLE_QUARTZ__)
 // warning: the Quartz version should probably use Core GL (CGL) instead of AGL

@@ -27,9 +27,9 @@
 // for other system-specific code.
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/Fl_Window.H>
+#include <fltk3/Fl.H>
+#include <fltk3/x.H>
+#include <fltk3/Fl_Window.H>
 
 // warning: this function is only implemented in Quickdraw. The function
 //          below may not work if FLTK is compiled with Quartz enabled

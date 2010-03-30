@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/x.H>
+#include <fltk3/Fl.H>
+#include <fltk3/x.H>
 
 //
 // MRS: Uncomment the following define to get the original (pre-1.1.2)

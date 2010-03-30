@@ -33,11 +33,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Input.H>
-#include <FL/fl_draw.H>
-#include <FL/fl_ask.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Window.H>
+#include <fltk3/Fl_Input.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/fl_ask.H>
 #include "flstring.h"
 
 #ifdef HAVE_LOCALE_H

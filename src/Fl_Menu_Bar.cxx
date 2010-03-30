@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Menu_Bar.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Menu_Bar.H>
+#include <fltk3/fl_draw.H>
 
 void Fl_Menu_Bar::draw() {
   draw_box();

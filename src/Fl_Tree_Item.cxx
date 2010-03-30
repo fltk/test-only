@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Tree_Item.H>
-#include <FL/Fl_Tree_Prefs.H>
+#include <fltk3/Fl_Widget.H>
+#include <fltk3/Fl_Tree_Item.H>
+#include <fltk3/Fl_Tree_Prefs.H>
 
 //////////////////////
 // Fl_Tree_Item.cxx
@@ -74,7 +74,7 @@ Fl_Tree_Item::~Fl_Tree_Item() {
     free((void*)_label);
     _label = 0;
   }
-  _widget = 0;			// Fl_Group will handle destruction
+  _widget = 0;			// fltk3::Group will handle destruction
   _usericon = 0;		// user handled allocation
   //_children.clear();		// array's destructor handles itself
 }

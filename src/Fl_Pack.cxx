@@ -30,9 +30,9 @@
 // them on each redraw (only if box() is zero)
 // Bugs: ?
 
-#include <FL/Fl.H>
-#include <FL/Fl_Pack.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Pack.H>
+#include <fltk3/fl_draw.H>
 
 /**
   Creates a new Fl_Pack widget using the given position, size,
@@ -45,7 +45,7 @@
   that it is destroyed last.
 */
 Fl_Pack::Fl_Pack(int X, int Y, int W, int H,const char *l)
-: Fl_Group(X, Y, W, H, l) {
+: fltk3::Group(X, Y, W, H, l) {
   resizable(0);
   spacing_ = 0;
   // type(VERTICAL); // already set like this

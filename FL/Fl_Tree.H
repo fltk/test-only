@@ -5,16 +5,16 @@
 #ifndef FL_TREE_H
 #define FL_TREE_H
 
-#include <FL/Fl.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Scrollbar.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Group.H>
+#include <fltk3/Fl_Scrollbar.H>
+#include <fltk3/fl_draw.H>
 
-#include <FL/Fl_Tree_Item.H>
-#include <FL/Fl_Tree_Prefs.H>
+#include <fltk3/Fl_Tree_Item.H>
+#include <fltk3/Fl_Tree_Prefs.H>
 
 //////////////////////
-// FL/Fl_Tree.H
+// fltk3/Fl_Tree.H
 //////////////////////
 //
 // Fl_Tree -- This file is part of the Fl_Tree widget for FLTK
@@ -65,7 +65,7 @@
 ///
 ///     The simple way to define a tree:
 /// \code
-///    #include <FL/Fl_Tree.H>
+///    #include <fltk3/Fl_Tree.H>
 ///    [..]
 ///    Fl_Tree tree(X,Y,W,H);
 ///    tree.begin();
@@ -102,7 +102,7 @@
 ///     \image html tree-elements.png
 ///
 
-class Fl_Tree : public Fl_Group {
+class Fl_Tree : public fltk3::Group {
   Fl_Tree_Item  *_root;					// can be null!
   Fl_Tree_Item  *_item_clicked;
   Fl_Tree_Prefs  _prefs;				// all the tree's settings

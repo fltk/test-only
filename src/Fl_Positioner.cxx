@@ -29,9 +29,9 @@
 // The positioner widget from Forms, gives 2D input
 // Written by: Mark Overmars
 
-#include <FL/Fl.H>
-#include <FL/Fl_Positioner.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Positioner.H>
+#include <fltk3/fl_draw.H>
 
 static double flinear(double val, double smin, double smax, double gmin, double gmax)
 {

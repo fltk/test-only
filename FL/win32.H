@@ -25,13 +25,13 @@
 //     http://www.fltk.org/str.php
 //
 
-// Do not directly include this file, instead use <FL/x.H>.  It will
+// Do not directly include this file, instead use <fltk3/x.H>.  It will
 // include this file if WIN32 is defined.  This is to encourage
 // portability of even the system-specific code...
 
 #ifndef FL_DOXYGEN
 #ifndef Fl_X_H
-#  error "Never use <FL/win32.H> directly; include <FL/x.H> instead."
+#  error "Never use <fltk3/win32.H> directly; include <fltk3/x.H> instead."
 #endif // !Fl_X_H
 
 #include <windows.h>
@@ -45,7 +45,7 @@
 #define VK_APPS 0x5D
 #endif
 
-#include <FL/Fl_Device.H>
+#include <fltk3/Fl_Device.H>
 
 // some random X equivalents
 typedef HWND NativeWindow;

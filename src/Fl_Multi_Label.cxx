@@ -28,10 +28,10 @@
 // Allows two labels to be used on a widget (by having one of them
 // be one of these it allows an infinte number!)
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Menu_Item.H>
-#include <FL/Fl_Multi_Label.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Widget.H>
+#include <fltk3/Fl_Menu_Item.H>
+#include <fltk3/Fl_Multi_Label.H>
 
 static void multi_labeltype(
     const Fl_Label* o, int x, int y, int w, int h, Fl_Align a)

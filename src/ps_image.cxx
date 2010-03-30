@@ -29,10 +29,10 @@
 #include <math.h>
 #include <string.h>
 
-#include <FL/Fl_PSfile_Device.H>
-#include <FL/Fl.H>
-#include <FL/Fl_Pixmap.H>
-#include <FL/Fl_Bitmap.H>
+#include <fltk3/Fl_PSfile_Device.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Pixmap.H>
+#include <fltk3/Fl_Bitmap.H>
  
 int Fl_PSfile_Device::alpha_mask(const uchar * data, int w, int h, int D, int LD){
 

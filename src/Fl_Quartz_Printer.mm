@@ -26,11 +26,11 @@
 //
 
 #ifdef __APPLE__
-#include <FL/Fl_Printer.H>
+#include <fltk3/Fl_Printer.H>
 
-#include <FL/Fl.H>
-#include <FL/fl_ask.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/fl_ask.H>
+#include <fltk3/fl_draw.H>
 #import <Cocoa/Cocoa.h>
 
 extern void fl_quartz_restore_line_style_();

@@ -32,12 +32,12 @@
 #ifndef Fl_Device_H
 #define Fl_Device_H
 
-#include <FL/x.H>
-#include <FL/Fl_Plugin.H>
-#include <FL/Fl_Image.H>
-#include <FL/Fl_Bitmap.H>
-#include <FL/Fl_Pixmap.H>
-#include <FL/Fl_RGB_Image.H>
+#include <fltk3/x.H>
+#include <fltk3/Fl_Plugin.H>
+#include <fltk3/Fl_Image.H>
+#include <fltk3/Fl_Bitmap.H>
+#include <fltk3/Fl_Pixmap.H>
+#include <fltk3/Fl_RGB_Image.H>
 #ifdef WIN32
 #include <commdlg.h>
 #elif defined(__APPLE__)

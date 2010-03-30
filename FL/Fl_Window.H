@@ -46,7 +46,7 @@ class Fl_X;
 
   Once you create a window, you usually add children fltk3::Widget
   's to it by using window->add(child) for each new widget.
-  See Fl_Group for more information on how to add and remove children.
+  See fltk3::Group for more information on how to add and remove children.
 
   There are several subclasses of fltk3::Window that provide
   double-buffering, overlay, menu, and OpenGL support.
@@ -55,7 +55,7 @@ class Fl_X;
   using the window manager and fltk3::modal() is zero or equal to the
   window. fltk3::Window has a default callback that calls fltk3::Window::hide().
 */
-class FL_EXPORT fltk3::Window : public Fl_Group {
+class FL_EXPORT fltk3::Window : public fltk3::Group {
 
   friend class ::Fl_X;
   Fl_X *i; // points at the system-specific stuff
@@ -111,7 +111,7 @@ public:
 
   /**
     Creates a window from the given size and title. 
-    If Fl_Group::current() is not NULL, the window is created as a 
+    If fltk3::Group::current() is not NULL, the window is created as a 
     subwindow of the parent window.
     
     The first form of the constructor creates a top-level window
@@ -160,7 +160,7 @@ public:
     these changes are communicated to the window server (which may
     refuse that size and cause a further resize).  If shown() is
     false, the size and position are used when show() is called.
-    See Fl_Group for the effect of resizing on the child widgets.
+    See fltk3::Group for the effect of resizing on the child widgets.
 
     You can also call the fltk3::Widget methods size(x,y) and position(w,h),
     which are inline wrappers for this virtual function.
@@ -405,7 +405,7 @@ public:
 
   static fltk3::Window *current();
   /**
-    Sets things up so that the drawing functions in <FL/fl_draw.H> will go
+    Sets things up so that the drawing functions in <fltk3/fl_draw.H> will go
     into this window. This is useful for incremental update of windows, such
     as in an idle callback, which will make your program behave much better
     if it draws a slow graphic. <B>Danger: incremental update is very hard to
@@ -430,7 +430,7 @@ public:
     you set it in a static variable and call this only if the new cursor
     is different.
 
-    The type Fl_Cursor is an enumeration defined in <FL/Enumerations.H>.
+    The type Fl_Cursor is an enumeration defined in <fltk3/Enumerations.H>.
     (Under X you can get any XC_cursor value by passing 
     Fl_Cursor((XC_foo/2)+1)).  The colors only work on X, they are
     not implemented on WIN32.

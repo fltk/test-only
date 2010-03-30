@@ -33,10 +33,10 @@
 // Clicking the tab makes that card visible.
 
 #include <stdio.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Tabs.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Tooltip.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Tabs.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/Fl_Tooltip.H>
 
 #define BORDER 2
 #define EXTRASPACE 10
@@ -147,9 +147,9 @@ int Fl_Tabs::handle(int event) {
   case FL_PUSH: {
     int H = tab_height();
     if (H >= 0) {
-      if (fltk3::event_y() > y()+H) return Fl_Group::handle(event);
+      if (fltk3::event_y() > y()+H) return fltk3::Group::handle(event);
     } else {
-      if (fltk3::event_y() < y()+h()+H) return Fl_Group::handle(event);
+      if (fltk3::event_y() < y()+h()+H) return fltk3::Group::handle(event);
     }}
     /* FALLTHROUGH */
   case FL_DRAG:
@@ -173,7 +173,7 @@ int Fl_Tabs::handle(int event) {
     }
     return 1;
   case FL_MOVE: {
-    int ret = Fl_Group::handle(event);
+    int ret = fltk3::Group::handle(event);
     fltk3::Widget *o = Fl_Tooltip::current(), *n = o;
     int H = tab_height();
     if ( (H>=0) && (fltk3::event_y()>y()+H) )
@@ -189,7 +189,7 @@ int Fl_Tabs::handle(int event) {
     return ret; }
   case FL_FOCUS:
   case FL_UNFOCUS:
-    if (!fltk3::visible_focus()) return Fl_Group::handle(event);
+      if (!fltk3::visible_focus()) return fltk3::Group::handle(event);
     if (fltk3::event() == FL_RELEASE ||
 	fltk3::event() == FL_SHORTCUT ||
 	fltk3::event() == FL_KEYBOARD ||
@@ -198,7 +198,7 @@ int Fl_Tabs::handle(int event) {
       redraw_tabs();
       if (fltk3::event() == FL_FOCUS || fltk3::event() == FL_UNFOCUS) return 0;
       else return 1;
-    } else return Fl_Group::handle(event);
+    } else return fltk3::Group::handle(event);
   case FL_KEYBOARD:
     switch (fltk3::event_key()) {
       case FL_Left:
@@ -219,11 +219,11 @@ int Fl_Tabs::handle(int event) {
         return 1;
       case FL_Down:
         redraw();
-        return Fl_Group::handle(FL_FOCUS);
+        return fltk3::Group::handle(FL_FOCUS);
       default:
         break;
     }
-    return Fl_Group::handle(event);
+      return fltk3::Group::handle(event);
   case FL_SHORTCUT:
     for (i = 0; i < children(); ++i) {
       fltk3::Widget *c = child(i);
@@ -235,11 +235,11 @@ int Fl_Tabs::handle(int event) {
         return 1;
       }
     }
-    return Fl_Group::handle(event);
+      return fltk3::Group::handle(event);
   case FL_SHOW:
     value(); // update visibilities and fall through
   default:
-    return Fl_Group::handle(event);
+      return fltk3::Group::handle(event);
 
   }
 }
@@ -407,7 +407,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
 
     <P>Use add(fltk3::Widget
     *) to add each child, which are usually
-    Fl_Group widgets. The children should be sized to stay
+    fltk3::Group widgets. The children should be sized to stay
     away from the top or bottom edge of the Fl_Tabs widget,
     which is where the tabs will be drawn.
 
@@ -419,7 +419,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
     Fl_Tabs widget <I>first</I> so that it is destroyed last.
 */
 Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l) :
-  Fl_Group(X,Y,W,H,l)
+fltk3::Group(X,Y,W,H,l)
 {
   box(FL_THIN_UP_BOX);
   push_ = 0;

@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Box.H>
+#include <fltk3/Fl_Widget.H>
+#include <fltk3/Fl_Box.H>
 
 void Fl_Box::draw() {
   draw_box();

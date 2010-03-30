@@ -30,14 +30,14 @@
 // crap you need to do to communicate with X is in Fl_x.cxx, the
 // equivalent (but totally different) crap for MSWindows is in Fl_win32.cxx
 #include "config.h"
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/Fl_Window.H>
+#include <fltk3/Fl.H>
+#include <fltk3/x.H>
+#include <fltk3/Fl_Window.H>
 #include <stdlib.h>
 #include "flstring.h"
 
 #ifdef __APPLE_QUARTZ__
-#include <FL/fl_draw.H>
+#include <fltk3/fl_draw.H>
 #endif
 
 void fltk3::Window::_Fl_Window() {
@@ -61,7 +61,7 @@ void fltk3::Window::_Fl_Window() {
 }
 
 fltk3::Window::Window(int X,int Y,int W, int H, const char *l)
-: Fl_Group(X, Y, W, H, l) {
+: fltk3::Group(X, Y, W, H, l) {
   cursor_default = FL_CURSOR_DEFAULT;
   cursor_fg      = FL_BLACK;
   cursor_bg      = FL_WHITE;
@@ -72,7 +72,7 @@ fltk3::Window::Window(int X,int Y,int W, int H, const char *l)
 
 fltk3::Window::Window(int W, int H, const char *l)
 // fix common user error of a missing end() with current(0):
-  : Fl_Group((Fl_Group::current(0),0), 0, W, H, l) {
+: fltk3::Group((fltk3::Group::current(0),0), 0, W, H, l) {
   cursor_default = FL_CURSOR_DEFAULT;
   cursor_fg      = FL_BLACK;
   cursor_bg      = FL_WHITE;
@@ -101,7 +101,7 @@ int fltk3::Window::y_root() const {
 
 void fltk3::Window::draw() {
 
-  // The following is similar to Fl_Group::draw(), but ...
+  // The following is similar to fltk3::Group::draw(), but ...
   //  - we draw the box with x=0 and y=0 instead of x() and y()
   //  - we don't draw a label
 

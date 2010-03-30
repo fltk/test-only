@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/math.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Chart.H>
-#include <FL/fl_draw.H>
+#include <fltk3/math.h>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Chart.H>
+#include <fltk3/fl_draw.H>
 #include "flstring.h"
 #include <stdlib.h>
 

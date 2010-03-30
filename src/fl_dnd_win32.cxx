@@ -26,10 +26,10 @@
 // in.  Search other files for "WIN32" or filenames ending in _win32.cxx
 // for other system-specific code.
 
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/Fl_Window.H>
-#include <FL/fl_utf8.h>
+#include <fltk3/Fl.H>
+#include <fltk3/x.H>
+#include <fltk3/Fl_Window.H>
+#include <fltk3/fl_utf8.h>
 #include "flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -134,7 +134,7 @@ public:
       fltk3::e_y = fltk3::e_y_root-fl_dnd_target_window->y();
     }
     if (fillCurrentDragData(0)) {
-      // Fl_Group will change DND_DRAG into DND_ENTER and DND_LEAVE if needed
+      // fltk3::Group will change DND_DRAG into DND_ENTER and DND_LEAVE if needed
       if ( fltk3::handle( FL_DND_DRAG, fl_dnd_target_window ) )
         *pdwEffect = DROPEFFECT_MOVE|DROPEFFECT_COPY; //|DROPEFFECT_LINK;
       else

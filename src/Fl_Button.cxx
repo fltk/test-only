@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Window.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Button.H>
+#include <fltk3/Fl_Group.H>
+#include <fltk3/Fl_Window.H>
 
 // There are a lot of subclasses, named Fl_*_Button.  Some of
 // them are implemented by setting the type() value and testing it
@@ -60,7 +60,7 @@ int Fl_Button::value(int v) {
  */
 void Fl_Button::setonly() { // set this radio button on, turn others off
   value(1);
-  Fl_Group* g = parent();
+  fltk3::Group* g = parent();
   fltk3::Widget*const* a = g->array();
   for (int i = g->children(); i--;) {
     fltk3::Widget* o = *a++;

@@ -34,18 +34,18 @@
 #include <stdarg.h>
 #include "flstring.h"
 
-#include <FL/Fl.H>
+#include <fltk3/Fl.H>
 
-#include <FL/fl_ask.H>
+#include <fltk3/fl_ask.H>
 
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Return_Button.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Secret_Input.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl_Box.H>
+#include <fltk3/Fl_Button.H>
+#include <fltk3/Fl_Return_Button.H>
+#include <fltk3/Fl_Window.H>
+#include <fltk3/Fl_Input.H>
+#include <fltk3/Fl_Secret_Input.H>
+#include <fltk3/x.H>
+#include <fltk3/fl_draw.H>
 
 #ifdef __APPLE__
 # if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
@@ -78,8 +78,8 @@ static fltk3::Window *makeform() {
  }
  // make sure that the dialog does not become the child of some 
  // current group
- Fl_Group *previously_current_group = Fl_Group::current();
- Fl_Group::current(0);
+  fltk3::Group *previously_current_group = fltk3::Group::current();
+  fltk3::Group::current(0);
  // create a new top level window
   fltk3::Window *w = message_form = new fltk3::Window(410,103,"");
  // w->clear_border();
@@ -104,7 +104,7 @@ static fltk3::Window *makeform() {
  w->resizable(new Fl_Box(60,10,110-60,27));
  w->end();
  w->set_modal();
- Fl_Group::current(previously_current_group);
+  fltk3::Group::current(previously_current_group);
  return w;
 }
 

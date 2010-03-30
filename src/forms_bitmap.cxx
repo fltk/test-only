@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/forms.H>
+#include <fltk3/forms.H>
 /** Creates a bitmap widget from a box type, position, size and optional label specification */
 Fl_FormsBitmap::Fl_FormsBitmap(
   Fl_Boxtype t, int X, int Y, int W, int H, const char* l)

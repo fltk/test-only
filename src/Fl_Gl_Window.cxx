@@ -32,12 +32,12 @@ extern int fl_gl_load_plugin;
 
 static int temp = fl_gl_load_plugin;
 
-#include <FL/Fl.H>
-#include <FL/x.H>
+#include <fltk3/Fl.H>
+#include <fltk3/x.H>
 #include "Fl_Gl_Choice.H"
-#include <FL/Fl_Gl_Window.H>
+#include <fltk3/Fl_Gl_Window.H>
 #include <stdlib.h>
-#include <FL/fl_utf8.h>
+#include <fltk3/fl_utf8.h>
 
 ////////////////////////////////////////////////////////////////
 
@@ -513,7 +513,7 @@ void Fl_Gl_Window::draw_overlay() {}
   initialization if it is false.
 
   The draw() method can <I>only</I> use OpenGL calls.  Do not
-  attempt to call X, any of the functions in <FL/fl_draw.H>, or glX
+  attempt to call X, any of the functions in <fltk3/fl_draw.H>, or glX
   directly.  Do not call gl_start() or gl_finish().
 
   If double-buffering is enabled in the window, the back and front

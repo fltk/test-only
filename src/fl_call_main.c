@@ -51,7 +51,7 @@
 #  include <windows.h>
 #  include <stdio.h>
 #  include <stdlib.h>
-#  include <FL/fl_utf8.h>
+#  include <fltk3/fl_utf8.h>
 
 extern int main(int, char *[]);
 

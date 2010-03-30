@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 
-#include <FL/filename.H>
+#include <fltk3/filename.H>
 
 #if !defined(WIN32) || defined(__CYGWIN__)
 #  ifdef HAVE_DIRENT_H

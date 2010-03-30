@@ -33,7 +33,7 @@
 #  define Fl_H
 
 #ifdef HAVE_CAIRO
-# include <FL/Fl_Cairo.H>
+# include <fltk3/Fl_Cairo.H>
 #endif
 
 #  include "fl_utf8.h"
@@ -914,7 +914,7 @@ namespace fltk3 {
     These functions support deletion of widgets inside callbacks.
 
     fltk3::delete_widget() should be called when deleting widgets
-    or complete widget trees (Fl_Group, fltk3::Window, ...) inside
+    or complete widget trees (fltk3::Group, fltk3::Window, ...) inside
     callbacks.
 
     The other functions are intended for internal use. The preferred

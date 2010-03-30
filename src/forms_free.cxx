@@ -30,8 +30,8 @@
 // me to port several other programs, but it is in no way
 // complete.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Free.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Free.H>
 
 void Fl_Free::step(void *v) {
   Fl_Free *f = (Fl_Free *)v;

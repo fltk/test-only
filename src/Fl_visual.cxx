@@ -28,8 +28,8 @@
 // Set the default visual according to passed switches:
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/x.H>
+#include <fltk3/Fl.H>
+#include <fltk3/x.H>
 
 /** \fn  fltk3::visual(int flags)
     Selects a visual so that your graphics are drawn correctly.  This is

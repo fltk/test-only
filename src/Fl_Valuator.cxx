@@ -28,9 +28,9 @@
 
 // Base class for sliders and all other one-value "knobs"
 
-#include <FL/Fl.H>
-#include <FL/Fl_Valuator.H>
-#include <FL/math.h>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Valuator.H>
+#include <fltk3/math.h>
 #include <stdio.h>
 #include "flstring.h"
 

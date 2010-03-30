@@ -77,13 +77,13 @@ extern "C" {
 }
 
 
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Tooltip.H>
-#include <FL/Fl_Sys_Menu_Bar.H>
-#include <FL/Fl_Printer.H>
-#include <FL/Fl_Input_.H>
+#include <fltk3/Fl.H>
+#include <fltk3/x.H>
+#include <fltk3/Fl_Window.H>
+#include <fltk3/Fl_Tooltip.H>
+#include <fltk3/Fl_Sys_Menu_Bar.H>
+#include <fltk3/Fl_Printer.H>
+#include <fltk3/Fl_Input_.H>
 #include <stdio.h>
 #include <stdlib.h>
 #include "flstring.h"
@@ -2054,7 +2054,7 @@ void Fl_X::make(fltk3::Window* w)
 {
   static int xyPos = 100;
   if ( w->parent() ) {		// create a subwindow
-    Fl_Group::current(0);
+    fltk3::Group::current(0);
     // our subwindow needs this structure to know about its clipping. 
     Fl_X* x = new Fl_X;
     x->other_xid = 0;
@@ -2086,7 +2086,7 @@ void Fl_X::make(fltk3::Window* w)
   else {			// create a desktop window
     NSAutoreleasePool *localPool;
     localPool = [[NSAutoreleasePool alloc] init]; 
-    Fl_Group::current(0);
+    fltk3::Group::current(0);
     fl_open_display();
     NSInteger winlevel = NSNormalWindowLevel;
     NSUInteger winstyle;
@@ -2356,7 +2356,7 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
   }
   resize_from_system = 0;
   if (is_a_resize) {
-    Fl_Group::resize(X,Y,W,H);
+    fltk3::Group::resize(X,Y,W,H);
     if (shown()) { 
       redraw(); 
     }

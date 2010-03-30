@@ -34,8 +34,8 @@
 // get huge color changes when switching windows.
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/x.H>
+#include <fltk3/Fl.H>
+#include <fltk3/x.H>
 
 /** \fn fltk3::own_colormap()
     Makes FLTK use its own colormap.  This may make FLTK display better

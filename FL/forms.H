@@ -270,9 +270,9 @@ inline fltk3::Window* fl_bgn_form(Fl_Boxtype b,int w,int h) {
 }
 FL_EXPORT void fl_end_form();
 inline void fl_addto_form(fltk3::Window* f) {f->begin();}
-inline Fl_Group* fl_bgn_group() {return new Fl_Group(0,0,0,0,0);}
-inline void fl_end_group() {Fl_Group::current()->forms_end();}
-inline void fl_addto_group(fltk3::Widget* o) {((Fl_Group* )o)->begin();}
+inline fltk3::Group* fl_bgn_group() {return new fltk3::Group(0,0,0,0,0);}
+inline void fl_end_group() {fltk3::Group::current()->forms_end();}
+inline void fl_addto_group(fltk3::Widget* o) {((fltk3::Group* )o)->begin();}
 #define resizebox _ddfdesign_kludge()
 
 inline void fl_scale_form(fltk3::Window* f, double x, double y) {

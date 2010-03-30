@@ -28,8 +28,8 @@
  \brief implementation of class Fl_Abstract_Printer.
  */
 
-#include <FL/Fl.H>
-#include <FL/Fl_Printer.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Printer.H>
 
 /**
  @brief Draws the widget on the printed page.
@@ -85,7 +85,7 @@ void Fl_Abstract_Printer::print_widget(fltk3::Widget* widget, int delta_x, int d
 
 void Fl_Abstract_Printer::traverse(fltk3::Widget *widget)
 {
-  Fl_Group *g = widget->as_group();
+  fltk3::Group *g = widget->as_group();
   if (!g) return;
   int n = g->children();
   for (int i = 0; i < n; i++) {

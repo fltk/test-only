@@ -5,16 +5,16 @@
 #ifndef FL_TREE_ITEM_H
 #define FL_TREE_ITEM_H
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Image.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Widget.H>
+#include <fltk3/Fl_Image.H>
+#include <fltk3/fl_draw.H>
 
-#include <FL/Fl_Tree_Item_Array.H>
-#include <FL/Fl_Tree_Prefs.H>
+#include <fltk3/Fl_Tree_Item_Array.H>
+#include <fltk3/Fl_Tree_Prefs.H>
 
 //////////////////////
-// FL/Fl_Tree_Item.H
+// fltk3/Fl_Tree_Item.H
 //////////////////////
 //
 // Fl_Tree -- This file is part of the Fl_Tree widget for FLTK

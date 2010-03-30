@@ -35,11 +35,11 @@
 #ifndef Fl_Color_Chooser_H
 #define Fl_Color_Chooser_H
 
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Return_Button.H>
-#include <FL/Fl_Choice.H>
-#include <FL/Fl_Value_Input.H>
+#include <fltk3/Fl_Group.H>
+#include <fltk3/Fl_Box.H>
+#include <fltk3/Fl_Return_Button.H>
+#include <fltk3/Fl_Choice.H>
+#include <fltk3/Fl_Value_Input.H>
 
 #ifndef FL_DOXYGEN
 
@@ -113,7 +113,7 @@ public:
   color using dithering.
  */
 /** @} */
-class FL_EXPORT Fl_Color_Chooser : public Fl_Group {
+class FL_EXPORT Fl_Color_Chooser : public fltk3::Group {
   Flcc_HueBox huebox;
   Flcc_ValueBox valuebox;
   Fl_Choice choice;

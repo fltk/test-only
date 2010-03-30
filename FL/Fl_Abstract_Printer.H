@@ -32,7 +32,7 @@
 #ifndef Fl_Abstract_Printer_H
 #define Fl_Abstract_Printer_H
 
-#include <FL/Fl_Device.H>
+#include <fltk3/Fl_Device.H>
 
 /**
  \brief A virtual class for print support with several platform-specific implementations.

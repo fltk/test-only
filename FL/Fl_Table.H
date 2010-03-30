@@ -39,11 +39,11 @@
 #include <stdlib.h>		// UNIX: malloc/realloc
 #endif /*WIN32*/
 
-#include <FL/Fl.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Scroll.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Scrollbar.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Group.H>
+#include <fltk3/Fl_Scroll.H>
+#include <fltk3/Fl_Box.H>
+#include <fltk3/Fl_Scrollbar.H>
 
 /**
  A table of widgets or other content.
@@ -168,7 +168,7 @@
  
  
  */
-class Fl_Table : public Fl_Group {
+class Fl_Table : public fltk3::Group {
 public:
   enum TableContext {
     CONTEXT_NONE       = 0,
@@ -425,7 +425,7 @@ protected:
   long col_scroll_position(int col);		// find scroll position of col (in pixels)
   
   int is_fltk_container() { 			// does table contain fltk widgets?
-    return( Fl_Group::children() > 3 );		// (ie. more than box and 2 scrollbars?)
+    return( fltk3::Group::children() > 3 );		// (ie. more than box and 2 scrollbars?)
   }
   
   static void scroll_cb(fltk3::Widget*,void*);	// h/v scrollbar callback
@@ -823,13 +823,13 @@ public:
   
   // This crashes sortapp() during init.
   //  void box(Fl_Boxtype val) {
-  //    Fl_Group::box(val);
+  //    fltk3::Group::box(val);
   //    if ( table ) {
   //      resize(x(), y(), w(), h());
   //    }
   //  }
   //  Fl_Boxtype box(void) const {
-  //    return(Fl_Group::box());
+  //    return(fltk3::Group::box());
   //  }
   
   // Child group
@@ -865,7 +865,7 @@ public:
     } else {
       table->hide();
     } 
-    Fl_Group::current(Fl_Group::parent());
+    fltk3::Group::current(fltk3::Group::parent());
   }
   fltk3::Widget * const *array() {
     return(table->array());

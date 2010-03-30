@@ -27,7 +27,7 @@
 
 // Replace .ext with new extension
 
-#include <FL/filename.H>
+#include <fltk3/filename.H>
 #include "flstring.h"
 
 /**
@@ -38,7 +38,7 @@
 
    \b Example
    \code
-   #include <FL/filename.H>
+   #include <fltk3/filename.H>
    [..]
    char buf[1024] = "/path/myfile.cxx";
    fl_filename_setext(buf, sizeof(buf), ".txt");      // buf[] becomes "/path/myfile.txt"

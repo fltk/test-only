@@ -184,8 +184,8 @@ class FL_EXPORT Fl_Image {
   contents of the screen.</P>
   
   <P>Fl_RGB_Image is defined in
-  &lt;FL/Fl_Image.H&gt;, however for compatibility reasons
-  &lt;FL/Fl_RGB_Image.H&gt; should be included.
+  &lt;fltk3/Fl_Image.H&gt;, however for compatibility reasons
+  &lt;fltk3/Fl_RGB_Image.H&gt; should be included.
 */
 class FL_EXPORT Fl_RGB_Image : public Fl_Image {
   public:

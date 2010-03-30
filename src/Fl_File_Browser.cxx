@@ -39,10 +39,10 @@
 // Include necessary header files...
 //
 
-#include <FL/Fl_File_Browser.H>
-#include <FL/fl_draw.H>
-#include <FL/filename.H>
-#include <FL/Fl_Image.H>	// icon
+#include <fltk3/Fl_File_Browser.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/filename.H>
+#include <fltk3/Fl_Image.H>	// icon
 #include <stdio.h>
 #include <stdlib.h>
 #include "flstring.h"

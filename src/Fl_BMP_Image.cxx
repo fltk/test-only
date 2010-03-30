@@ -34,7 +34,7 @@
 // Include necessary header files...
 //
 
-#include <FL/Fl_BMP_Image.H>
+#include <fltk3/Fl_BMP_Image.H>
 #include <config.h>
 #include <stdio.h>
 #include <stdlib.h>

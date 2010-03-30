@@ -31,8 +31,8 @@
    Returns true if any changes were made.
 */
 
-#include <FL/filename.H>
-#include <FL/fl_utf8.h>
+#include <fltk3/filename.H>
+#include <fltk3/fl_utf8.h>
 #include <stdlib.h>
 #include "flstring.h"
 #include <ctype.h>
@@ -50,7 +50,7 @@ inline int isdirsep(char c) {return c=='/' || c=='\\';}
 
 /** Makes a filename absolute from a relative filename.
     \code
-    #include <FL/filename.H>
+    #include <fltk3/filename.H>
     [..]
     chdir("/var/tmp");
     fl_filename_absolute(out, sizeof(out), "foo.txt");         // out="/var/tmp/foo.txt"
@@ -117,7 +117,7 @@ int fl_filename_absolute(char *to, int tolen, const char *from) {
 
 /** Makes a filename relative to the current working directory.
     \code
-    #include <FL/filename.H>
+    #include <fltk3/filename.H>
     [..]
     chdir("/var/tmp/somedir");       // set cwd to /var/tmp/somedir
     [..]

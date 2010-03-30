@@ -28,8 +28,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "flstring.h"
-#include <FL/fl_draw.H>
-#include <FL/Fl_Check_Browser.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/Fl_Check_Browser.H>
 
 /* This uses a cache for faster access when you're scanning the list
 either forwards or backwards. */

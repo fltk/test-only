@@ -55,14 +55,14 @@
 // Include necessary header files...
 //
 
-#include <FL/Fl_Help_View.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Pixmap.H>
-#include <FL/x.H>
+#include <fltk3/Fl_Help_View.H>
+#include <fltk3/Fl_Window.H>
+#include <fltk3/Fl_Pixmap.H>
+#include <fltk3/x.H>
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/fl_utf8.h>
-#include <FL/filename.H>	// fl_open_uri()
+#include <fltk3/fl_utf8.h>
+#include <fltk3/filename.H>	// fl_open_uri()
 #include "flstring.h"
 #include <ctype.h>
 #include <errno.h>
@@ -2961,7 +2961,7 @@ Fl_Help_View::handle(int event)	// I - Event to handle
       redraw();
       return 1;
     case FL_ENTER :
-      Fl_Group::handle(event);
+      fltk3::Group::handle(event);
       return 1;
     case FL_LEAVE :
       fl_cursor(FL_CURSOR_DEFAULT);
@@ -2971,7 +2971,7 @@ Fl_Help_View::handle(int event)	// I - Event to handle
       else fl_cursor(FL_CURSOR_DEFAULT);
       return 1;
     case FL_PUSH:
-      if (Fl_Group::handle(event)) return 1;
+      if (fltk3::Group::handle(event)) return 1;
       linkp = find_link(xx, yy);
       if (linkp) {
         fl_cursor(FL_CURSOR_HAND);
@@ -3022,7 +3022,7 @@ Fl_Help_View::handle(int event)	// I - Event to handle
       }
       break; }
   }
-  return (Fl_Group::handle(event));
+  return (fltk3::Group::handle(event));
 }
 
 /** 
@@ -3034,7 +3034,7 @@ Fl_Help_View::Fl_Help_View(int        xx,	// I - Left position
 			   int        ww,	// I - Width in pixels
 			   int        hh,	// I - Height in pixels
 			   const char *l)
-    : Fl_Group(xx, yy, ww, hh, l),
+: fltk3::Group(xx, yy, ww, hh, l),
       scrollbar_(xx + ww - fltk3::scrollbar_size(), yy,
                  fltk3::scrollbar_size(), hh - fltk3::scrollbar_size()),
       hscrollbar_(xx, yy + hh - fltk3::scrollbar_size(),

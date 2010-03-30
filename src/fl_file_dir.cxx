@@ -26,9 +26,9 @@
 //
 
 #include "flstring.h"
-#include <FL/filename.H>
-#include <FL/Fl_File_Chooser.H>
-#include <FL/fl_ask.H>
+#include <fltk3/filename.H>
+#include <fltk3/Fl_File_Chooser.H>
+#include <fltk3/fl_ask.H>
 
 
 static Fl_File_Chooser	*fc = (Fl_File_Chooser *)0;

@@ -25,13 +25,13 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Input_.H>
-#include <FL/Fl_Window.H>
-#include <FL/fl_draw.H>
-#include <FL/fl_ask.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Input_.H>
+#include <fltk3/Fl_Window.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/fl_ask.H>
 #include <math.h>
-#include <FL/fl_utf8.h>
+#include <fltk3/fl_utf8.h>
 #include "flstring.h"
 #include <stdlib.h>
 #include <ctype.h>
@@ -1034,7 +1034,7 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
   Creates a new Fl_Input_ widget.
 
   This function creates a new Fl_Input_ widget and adds it to the current
-  Fl_Group. The value() is set to \c NULL.
+  fltk3::Group. The value() is set to \c NULL.
   The default boxtype is \c FL_DOWN_BOX.
 
   \param X, Y, W, H the dimensions of the new widget
@@ -1217,7 +1217,7 @@ void Fl_Input_::resize(int X, int Y, int W, int H) {
   Destroys the widget.
 
   The destructor clears all allocated buffers and removes the widget
-  from the parent Fl_Group.
+  from the parent fltk3::Group.
 */
 Fl_Input_::~Fl_Input_() {
   if (undowidget == this) undowidget = 0;

@@ -34,7 +34,7 @@
 
 #undef check // necessary for use of fltk3::check()
 
-#include <FL/filename.H>
+#include <fltk3/filename.H>
 #define MAXFILTERS	80
 
 class Fl_Native_File_Chooser {

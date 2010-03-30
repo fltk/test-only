@@ -25,12 +25,12 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Menu_Item.H>
-#include <FL/Fl_Image.H>
+#include <fltk3/Fl.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/x.H>
+#include <fltk3/Fl_Widget.H>
+#include <fltk3/Fl_Menu_Item.H>
+#include <fltk3/Fl_Image.H>
 #include "flstring.h"
 
 #ifdef WIN32

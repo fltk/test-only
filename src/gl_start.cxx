@@ -40,10 +40,10 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Window.H>
+#include <fltk3/x.H>
+#include <fltk3/fl_draw.H>
 #include "Fl_Gl_Choice.H"
 
 extern int fl_clip_state_number; // in fl_rect.cxx

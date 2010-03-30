@@ -37,7 +37,7 @@
 #include "Fl_Group.H"
 #endif
 #include "Fl_Scrollbar.H"
-#include <FL/Fl.H>		// Fl::scrollbar_size()
+#include <fltk3/Fl.H>		// Fl::scrollbar_size()
 
 #define FL_NORMAL_BROWSER	0	/**< type() of Fl_Browser */
 #define FL_SELECT_BROWSER	1	/**< type() of FL_Select_Browser */
@@ -64,7 +64,7 @@
   accessing image data or doing stat() on a file or doing some
   other slow operation.
 */
-class FL_EXPORT Fl_Browser_ : public Fl_Group {
+class FL_EXPORT Fl_Browser_ : public fltk3::Group {
   int position_;	// where user wants it scrolled to
   int real_position_;	// the current vertical scrolling position
   int hposition_;	// where user wants it panned to

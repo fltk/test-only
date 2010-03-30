@@ -31,7 +31,7 @@
 //	buffered.  You can turn it off using this subclass in case
 //	your display looks better without it.
 
-#include <FL/Fl_Single_Window.H>
+#include <fltk3/Fl_Single_Window.H>
 
 void Fl_Single_Window::show() {fltk3::Window::show();}
 void Fl_Single_Window::flush() {fltk3::Window::flush();}

@@ -25,13 +25,13 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Color_Chooser.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Return_Button.H>
-#include <FL/fl_draw.H>
-#include <FL/math.h>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Color_Chooser.H>
+#include <fltk3/Fl_Window.H>
+#include <fltk3/Fl_Box.H>
+#include <fltk3/Fl_Return_Button.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/math.h>
 #include <stdio.h>
 
 // Besides being a useful object on it's own, the Fl_Color_Chooser was
@@ -468,7 +468,7 @@ void Fl_Color_Chooser::mode_cb(fltk3::Widget* o, void*) {
   \param[in] L widget label, default is no label
  */
 Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
-  : Fl_Group(0,0,195,115,L),
+: fltk3::Group(0,0,195,115,L),
     huebox(0,0,115,115),
     valuebox(115,0,20,115),
     choice(140,0,55,25),

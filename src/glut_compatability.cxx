@@ -38,7 +38,7 @@
 #include "flstring.h"
 #if HAVE_GL
 
-#  include <FL/glut.H>
+#  include <fltk3/glut.H>
 #  ifdef HAVE_GLXGETPROCADDRESSARB
 #    define GLX_GLXEXT_LEGACY
 #    include <GL/glx.h>
@@ -281,7 +281,7 @@ void glutSetWindow(int win) {
 }
 
 ////////////////////////////////////////////////////////////////
-#include <FL/Fl_Menu_Item.H>
+#include <fltk3/Fl_Menu_Item.H>
 
 struct menu {
   void (*cb)(int);

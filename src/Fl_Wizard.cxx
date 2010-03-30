@@ -39,9 +39,9 @@
 // Include necessary header files...
 //
 
-#include <FL/Fl_Wizard.H>
-#include <FL/Fl_Window.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl_Wizard.H>
+#include <fltk3/Fl_Window.H>
+#include <fltk3/fl_draw.H>
 
 
 //
@@ -58,7 +58,7 @@ Fl_Wizard::Fl_Wizard(int        xx,	// I - Lefthand position
 		     int        ww,	// I - Width
 		     int        hh,	// I - Height
 		     const char *l) :	// I - Label
-    Fl_Group(xx, yy, ww, hh, l)
+fltk3::Group(xx, yy, ww, hh, l)
 {
   box(FL_THIN_UP_BOX);
 

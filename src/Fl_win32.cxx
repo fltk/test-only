@@ -30,13 +30,13 @@
 // for other system-specific code.
 
 #ifndef FL_DOXYGEN
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/fl_utf8.h>
-#include <FL/Fl_Window.H>
-#include <FL/fl_draw.H>
-#include <FL/Enumerations.H>
-#include <FL/Fl_Tooltip.H>
+#include <fltk3/Fl.H>
+#include <fltk3/x.H>
+#include <fltk3/fl_utf8.h>
+#include <fltk3/Fl_Window.H>
+#include <fltk3/fl_draw.H>
+#include <fltk3/Enumerations.H>
+#include <fltk3/Fl_Tooltip.H>
 #include "flstring.h"
 #include "Fl_Font.H"
 #include <stdio.h>
@@ -1304,7 +1304,7 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
     flags |= SWP_NOMOVE;
   }
   if (is_a_resize) {
-    Fl_Group::resize(X,Y,W,H);
+    fltk3::Group::resize(X,Y,W,H);
     if (visible_r()) {
       redraw(); 
       // only wait for exposure if this window has a size - a window 
@@ -1379,7 +1379,7 @@ UINT fl_wake_msg = 0;
 int fl_disable_transient_for; // secret method of removing TRANSIENT_FOR
 
 Fl_X* Fl_X::make(fltk3::Window* w) {
-  Fl_Group::current(0); // get rid of very common user bug: forgot end()
+  fltk3::Group::current(0); // get rid of very common user bug: forgot end()
 
   // if the window is a subwindow and our parent is not mapped yet, we
   // mark this window visible, so that mapping the parent at a later
@@ -1719,7 +1719,7 @@ void Fl_X::set_minmax(LPMINMAXINFO minmax)
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/filename.H> // need so FL_EXPORT fl_filename_name works
+#include <fltk3/filename.H> // need so FL_EXPORT fl_filename_name works
 
 // returns pointer to the filename, or null if name ends with '/'
 const char *fl_filename_name(const char *name) {
@@ -1935,8 +1935,8 @@ Fl_Region XRectangleRegion(int x, int y, int w, int h) {
 #ifdef USE_PRINT_BUTTON
 // to test the Fl_Printer class creating a "Print front window" button in a separate window
 // contains also preparePrintFront call above
-#include <FL/Fl_Printer.H>
-#include <FL/Fl_Button.H>
+#include <fltk3/Fl_Printer.H>
+#include <fltk3/Fl_Button.H>
 void printFront(fltk3::Widget *o, void *data)
 {
   Fl_Printer printer;

@@ -26,10 +26,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_File_Input.H>
-#include <FL/Fl_Window.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_File_Input.H>
+#include <fltk3/Fl_Window.H>
+#include <fltk3/fl_draw.H>
 #include <stdio.h>
 #include "flstring.h"
 

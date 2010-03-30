@@ -36,7 +36,7 @@
 // Cairo is currently supported for the following platforms:
 // Win32, Apple Quartz, X11
 
-# include <FL/Fl_Export.H>
+# include <fltk3/Fl_Export.H>
 
 # if defined(USE_X11) // X11
 #  include <cairo-xlib.h>

@@ -25,22 +25,22 @@
 //     http://www.fltk.org/str.php
 //
 
-// Functions from <FL/gl.h>
+// Functions from <fltk3/gl.h>
 // See also Fl_Gl_Window and gl_start.cxx
 
 #include "flstring.h"
 #if HAVE_GL
 
-#include <FL/Fl.H>
-#include <FL/gl.h>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Fl.H>
+#include <fltk3/gl.h>
+#include <fltk3/x.H>
+#include <fltk3/fl_draw.H>
 #include "Fl_Gl_Choice.H"
 #include "Fl_Font.H"
-#include <FL/fl_utf8.h>
+#include <fltk3/fl_utf8.h>
 
 #if !defined(WIN32) && !defined(__APPLE__)
-#include <FL/Xutf8.h>
+#include <fltk3/Xutf8.h>
 #endif
 
 #if USE_XFT
@@ -362,7 +362,7 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 
 #ifdef __APPLE__
 
-#include <FL/glu.h>
+#include <fltk3/glu.h>
 
 static void gl_draw_cocoa(const char* str, int n) 
 {

@@ -29,8 +29,8 @@
 // which are actually X keysyms.  So this has to translate to macOS
 // symbols.
 
-#include <FL/Fl.H>
-#include <FL/x.H>
+#include <fltk3/Fl.H>
+#include <fltk3/x.H>
 #include <config.h>
 
 // convert an FLTK (X) keysym to a MacOS symbol:

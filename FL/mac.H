@@ -25,13 +25,13 @@
 //     http://www.fltk.org/str.php
 //
 
-// Do not directly include this file, instead use <FL/x.H>.  It will
+// Do not directly include this file, instead use <fltk3/x.H>.  It will
 // include this file if "__APPLE__" is defined.  This is to encourage
 // portability of even the system-specific code...
 #ifndef FL_DOXYGEN
 
 #if !defined(Fl_X_H)
-#  error "Never use <FL/mac.H> directly; include <FL/x.H> instead."
+#  error "Never use <fltk3/mac.H> directly; include <fltk3/x.H> instead."
 #endif // !Fl_X_H
 
 // Standard MacOS Carbon API includes...
@@ -176,7 +176,7 @@ extern FL_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b)
 
 /** 
  * \brief Mac OS X: attaches a callback to the "About myprog" item of the system application menu.
- * \note  #include <FL/x.H>
+ * \note  #include <fltk3/x.H>
  *
  * \param cb   a callback that will be called by "About myprog" menu item
  *		   with NULL 1st argument.

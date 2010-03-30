@@ -208,7 +208,7 @@ struct Fl_Help_Target
      - yen Yuml yuml
 
 */
-class FL_EXPORT Fl_Help_View : public Fl_Group	// Help viewer widget
+class FL_EXPORT Fl_Help_View : public fltk3::Group	// Help viewer widget
 {
   enum { RIGHT = -1, CENTER, LEFT };	///< Alignments
 

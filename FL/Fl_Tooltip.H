@@ -31,8 +31,8 @@
 #ifndef Fl_Tooltip_H
 #define Fl_Tooltip_H
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
+#include <fltk3/Fl.H>
+#include <fltk3/Fl_Widget.H>
 
 /**
   The Fl_Tooltip class provides tooltip support for
