@@ -40,7 +40,7 @@
  */
 Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
 : fltk3::Widget(X,Y,W,H,L) {
-  align(FL_ALIGN_BOTTOM);
+  align(fltk3::ALIGN_BOTTOM);
   when(FL_WHEN_CHANGED);
   value_ = 0;
   previous_value_ = 1;

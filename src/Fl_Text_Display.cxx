@@ -110,7 +110,7 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
   end();
 
   scrollbar_width(fltk3::scrollbar_size());
-  scrollbar_align(FL_ALIGN_BOTTOM_RIGHT);
+  scrollbar_align(fltk3::ALIGN_BOTTOM_RIGHT);
 
   mCursorOn = 0;
   mCursorPos = 0;
@@ -427,11 +427,11 @@ void Fl_Text_Display::resize(int X, int Y, int W, int H) {
     // figure the scrollbars
     if (scrollbar_width()) {
       /* Decide if the vertical scroll bar needs to be visible */
-      if (scrollbar_align() & (FL_ALIGN_LEFT|FL_ALIGN_RIGHT) &&
+      if (scrollbar_align() & (fltk3::ALIGN_LEFT|fltk3::ALIGN_RIGHT) &&
           mNBufferLines >= mNVisibleLines - 1)
       {
         mVScrollBar->set_visible();
-        if (scrollbar_align() & FL_ALIGN_LEFT) {
+        if (scrollbar_align() & fltk3::ALIGN_LEFT) {
           text_area.x = X+scrollbar_width()+LEFT_MARGIN;
           text_area.w = W-scrollbar_width()-LEFT_MARGIN-RIGHT_MARGIN;
           mVScrollBar->resize(X, text_area.y-TOP_MARGIN, scrollbar_width(),
@@ -465,14 +465,14 @@ void Fl_Text_Display::resize(int X, int Y, int W, int H) {
       /* WAS: Suggestion: Try turning the horizontal scrollbar on when
 	 you first see a line that is too wide in the window, but then
 	 don't turn it off (ie mix both of your solutions). */
-      if (scrollbar_align() & (FL_ALIGN_TOP|FL_ALIGN_BOTTOM) &&
+      if (scrollbar_align() & (fltk3::ALIGN_TOP|fltk3::ALIGN_BOTTOM) &&
           (mVScrollBar->visible() || longest_vline() > text_area.w))
       {
         if (!mHScrollBar->visible()) {
           mHScrollBar->set_visible();
           again = 1; // loop again to see if we now need vert. & recalc sizes
         }
-        if (scrollbar_align() & FL_ALIGN_TOP) {
+        if (scrollbar_align() & fltk3::ALIGN_TOP) {
           text_area.y = Y + scrollbar_width()+TOP_MARGIN;
           text_area.h = H - scrollbar_width()-TOP_MARGIN-BOTTOM_MARGIN;
           mHScrollBar->resize(text_area.x-LEFT_MARGIN, Y,

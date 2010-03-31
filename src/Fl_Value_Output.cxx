@@ -49,7 +49,7 @@ void Fl_Value_Output::draw() {
   format(buf);
   fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
   fl_font(textfont(), textsize());
-  fl_draw(buf,X,Y,W,H,FL_ALIGN_LEFT);
+  fl_draw(buf,X,Y,W,H,fltk3::ALIGN_LEFT);
 }
 
 int Fl_Value_Output::handle(int event) {
@@ -96,7 +96,7 @@ int Fl_Value_Output::handle(int event) {
 Fl_Value_Output::Fl_Value_Output(int X, int Y, int W, int H,const char *l)
 : Fl_Valuator(X,Y,W,H,l) {
   box(fltk3::NO_BOX);
-  align(FL_ALIGN_LEFT);
+  align(fltk3::ALIGN_LEFT);
   textfont_ = fltk3::HELVETICA;
   textsize_ = FL_NORMAL_SIZE;
   textcolor_ = FL_FOREGROUND_COLOR;

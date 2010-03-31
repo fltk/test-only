@@ -35,19 +35,19 @@
 #include <fltk3/fl_draw.H>
 #include <fltk3/Fl_Image.H>
 
-extern void fl_shadow_label(const Fl_Label*,int,int,int,int,Fl_Align);
-extern void fl_engraved_label(const Fl_Label*,int,int,int,int,Fl_Align);
-extern void fl_embossed_label(const Fl_Label*,int,int,int,int,Fl_Align);
-extern void fl_icon_label(const Fl_Label*,int,int,int,int,Fl_Align);
+extern void fl_shadow_label(const Fl_Label*,int,int,int,int,fltk3::Align);
+extern void fl_engraved_label(const Fl_Label*,int,int,int,int,fltk3::Align);
+extern void fl_embossed_label(const Fl_Label*,int,int,int,int,fltk3::Align);
+extern void fl_icon_label(const Fl_Label*,int,int,int,int,fltk3::Align);
 
 extern void fl_multi_measure(const Fl_Label* o, int& w, int& h);
-extern void fl_multi_labeltype(const Fl_Label* o, int x, int y, int w, int h, Fl_Align a);
+extern void fl_multi_labeltype(const Fl_Label* o, int x, int y, int w, int h, fltk3::Align a);
 
 
-void fl_no_label(const Fl_Label*,int,int,int,int,Fl_Align) {}
+void fl_no_label(const Fl_Label*,int,int,int,int,fltk3::Align) {}
 
 void
-fl_normal_label(const Fl_Label* o, int X, int Y, int W, int H, Fl_Align align)
+fl_normal_label(const Fl_Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
   fl_font(o->font, o->size);
   fl_color((Fl_Color)o->color);
@@ -98,7 +98,7 @@ void fltk3::set_labeltype(fltk3::Labeltype t,Fl_Label_Draw_F* f,Fl_Label_Measure
 ////////////////////////////////////////////////////////////////
 
 /** Draws a label with arbitrary alignment in an arbitrary box. */
-void Fl_Label::draw(int X, int Y, int W, int H, Fl_Align align) const {
+void Fl_Label::draw(int X, int Y, int W, int H, fltk3::Align align) const {
   if (!value && !image) return;
   table[type](this, X, Y, W, H, align);
 }
@@ -123,7 +123,7 @@ void Fl_Label::measure(int& W, int& H) const {
 void fltk3::Widget::draw_label() const {
   int X = x_+fltk3::box_dx(box());
   int W = w_-fltk3::box_dw(box());
-  if (W > 11 && align()&(FL_ALIGN_LEFT|FL_ALIGN_RIGHT)) {X += 3; W -= 6;}
+  if (W > 11 && align()&(fltk3::ALIGN_LEFT|fltk3::ALIGN_RIGHT)) {X += 3; W -= 6;}
   draw_label(X, y_+fltk3::box_dy(box()), W, h_-fltk3::box_dh(box()));
 }
 
@@ -132,14 +132,14 @@ void fltk3::Widget::draw_label() const {
  */
 void fltk3::Widget::draw_label(int X, int Y, int W, int H) const {
   // quit if we are not drawing a label inside the widget:
-  if ((align()&15) && !(align() & FL_ALIGN_INSIDE)) return;
+  if ((align()&15) && !(align() & fltk3::ALIGN_INSIDE)) return;
   draw_label(X,Y,W,H,align());
 }
 
 /** Draws the label in an arbitrary bounding box with an arbitrary alignment.
     Anybody can call this to force the label to draw anywhere.
  */
-void fltk3::Widget::draw_label(int X, int Y, int W, int H, Fl_Align a) const {
+void fltk3::Widget::draw_label(int X, int Y, int W, int H, fltk3::Align a) const {
   if (flags()&SHORTCUT_LABEL) fl_draw_shortcut = 1;
   Fl_Label l1 = label_;
   if (!active_r()) {

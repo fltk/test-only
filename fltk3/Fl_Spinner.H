@@ -137,7 +137,7 @@ class Fl_Spinner : public fltk3::Group
 		  step_    = 1.0;
 		  format_  = "%g";
 
-		  align(FL_ALIGN_LEFT);
+		  align(fltk3::ALIGN_LEFT);
 
 		  input_.value("1");
 		  input_.type(FL_INT_INPUT);

@@ -362,12 +362,12 @@ public:
     Moves the vertical scrollbar to the righthand side of the list.
     For back compatibility.
   */
-  void scrollbar_right() { scrollbar.align(FL_ALIGN_RIGHT); }
+  void scrollbar_right() { scrollbar.align(fltk3::ALIGN_RIGHT); }
   /**
     Moves the vertical scrollbar to the lefthand side of the list.
     For back compatibility.
   */
-  void scrollbar_left() { scrollbar.align(FL_ALIGN_LEFT); }
+  void scrollbar_left() { scrollbar.align(fltk3::ALIGN_LEFT); }
   void sort(int flags=0);
 };
 

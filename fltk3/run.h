@@ -71,7 +71,7 @@ struct Fl_Label;
   @{ */
 
 /** signature of some label drawing functions passed as parameters */
-typedef void (Fl_Label_Draw_F)(const Fl_Label *label, int x, int y, int w, int h, Fl_Align align);
+typedef void (Fl_Label_Draw_F)(const Fl_Label *label, int x, int y, int w, int h, fltk3::Align align);
 
 /** signature of some label measurement functions passed as parameters */
 typedef void (Fl_Label_Measure_F)(const Fl_Label *label, int &width, int &height);

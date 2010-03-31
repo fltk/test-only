@@ -108,27 +108,27 @@ protected:
   void set_flag(unsigned int c) { _p->set_flag(c); }
   void clear_flag(unsigned int c) { _p->clear_flag(c); }
   enum {
-        INACTIVE        = 1<<0,   ///< the widget can't receive focus, and is disabled but potentially visible
-        INVISIBLE       = 1<<1,   ///< the widget is not drawn but can receive events
-        OUTPUT          = 1<<2,   ///< for output only
-        NOBORDER        = 1<<3,   ///< don't draw a decoration (Fl_Window)
-        FORCE_POSITION  = 1<<4,   ///< don't let the window manager position the window (Fl_Window)
-        NON_MODAL       = 1<<5,   ///< thisis a hovering toolbar window (Fl_Window)
-        SHORTCUT_LABEL  = 1<<6,   ///< the label contains a shortcut we need to draw
-        CHANGED         = 1<<7,   ///< the widget value changed
-        OVERRIDE        = 1<<8,   ///< position window on top (Fl_Window)
-        VISIBLE_FOCUS   = 1<<9,   ///< accepts keyboard focus navigation if the widget can have the focus
-        COPIED_LABEL    = 1<<10,  ///< the widget label is internally copied, its destruction is handled by the widget
-        CLIP_CHILDREN   = 1<<11,  ///< all drawing within this widget will be clipped (Fl_Group)
-        MENU_WINDOW     = 1<<12,  ///< a temporary popup window, dismissed by clicking outside (Fl_Window)
-        TOOLTIP_WINDOW  = 1<<13,  ///< a temporary popup, transparent to events, and dismissed easily (Fl_Window)
-        MODAL           = 1<<14,  ///< a window blocking input to all other winows (Fl_Window)
-        NO_OVERLAY      = 1<<15,  ///< window not using a hardware overlay plane (Fl_Menu_Window)
-        GROUP_RELATIVE  = 1<<16,  ///< position this idget relative to the parent group, not to the window
-        // (space for more flags)
-        USERFLAG3       = 1<<29,  ///< reserved for 3rd party extensions
-        USERFLAG2       = 1<<30,  ///< reserved for 3rd party extensions
-        USERFLAG1       = 1<<31   ///< reserved for 3rd party extensions
+    INACTIVE        = fltk3::Widget::INACTIVE,
+    INVISIBLE       = fltk3::Widget::INVISIBLE,
+    OUTPUT          = fltk3::Widget::OUTPUT,
+    NOBORDER        = fltk3::Widget::NOBORDER,
+    FORCE_POSITION  = fltk3::Widget::FORCE_POSITION,
+    NON_MODAL       = fltk3::Widget::NON_MODAL,
+    SHORTCUT_LABEL  = fltk3::Widget::SHORTCUT_LABEL,
+    CHANGED         = fltk3::Widget::CHANGED,
+    OVERRIDE        = fltk3::Widget::OVERRIDE,
+    VISIBLE_FOCUS   = fltk3::Widget::VISIBLE_FOCUS,
+    COPIED_LABEL    = fltk3::Widget::COPIED_LABEL,
+    CLIP_CHILDREN   = fltk3::Widget::CLIP_CHILDREN,
+    MENU_WINDOW     = fltk3::Widget::MENU_WINDOW,
+    TOOLTIP_WINDOW  = fltk3::Widget::TOOLTIP_WINDOW,
+    MODAL           = fltk3::Widget::MODAL,
+    NO_OVERLAY      = fltk3::Widget::NO_OVERLAY,
+    GROUP_RELATIVE  = fltk3::Widget::GROUP_RELATIVE,
+    // (space for more flags)
+    USERFLAG3       = fltk3::Widget::USERFLAG3,
+    USERFLAG2       = fltk3::Widget::USERFLAG2,
+    USERFLAG1       = fltk3::Widget::USERFLAG1
   };
   void draw_box() const { _p->draw_box(); }
   void draw_box(Fl_Boxtype t, Fl_Color c) const { _p->draw_box((fltk3::Boxtype)t, c); }
@@ -153,12 +153,12 @@ public:
   int y() const { return _p->y(); }
   int w() const { return _p->w(); }
   int h() const { return _p->h(); }
+  virtual void resize(int x, int y, int w, int h) { _p->resize(x, y, w, h); }
+  int damage_resize(int x, int y, int w, int h) { return _p->damage_resize(x, y, w, h); }
+  void position(int X,int Y) { _p->position(X, Y); }
+  void size(int W,int H) { _p->size(W, H); }
   
 #if 0
-  virtual void resize(int x, int y, int w, int h);
-  int damage_resize(int,int,int,int);
-  void position(int X,int Y) {resize(X,Y,w_,h_);}
-  void size(int W,int H) {resize(x_,y_,W,H);}
   Fl_Align align() const {return label_.align_;}
   void align(Fl_Align alignment) {label_.align_ = alignment;}
 #endif

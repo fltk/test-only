@@ -173,7 +173,7 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
       { favoritesButton = new Fl_Menu_Button(290, 10, 155, 25, "Favorites");
         favoritesButton->down_box(fltk3::BORDER_BOX);
         favoritesButton->callback((fltk3::Callback*)cb_favoritesButton);
-        favoritesButton->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
+        favoritesButton->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
         favoritesButton->label(favorites_label);
       } // Fl_Menu_Button* favoritesButton
       { fltk3::Button* o = newButton = new fltk3::Button(455, 10, 25, 25);
@@ -194,7 +194,7 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
       { previewBox = new Fl_Box(305, 45, 175, 225, "?");
         previewBox->box(fltk3::DOWN_BOX);
         previewBox->labelsize(100);
-        previewBox->align(Fl_Align(FL_ALIGN_CLIP|FL_ALIGN_INSIDE));
+        previewBox->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
       } // Fl_Box* previewBox
       o->end();
       fltk3::Group::current()->resizable(o);
@@ -222,7 +222,7 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
       } // Fl_File_Input* fileName
       { Fl_Box* o = new Fl_Box(10, 310, 105, 25, "Filename:");
         o->labelfont(1);
-        o->align(Fl_Align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE));
+        o->align(fltk3::Align(fltk3::ALIGN_RIGHT|fltk3::ALIGN_INSIDE));
         o->label(filename_label);
       } // Fl_Box* o
       { fltk3::Group* o = new fltk3::Group(10, 345, 470, 25);

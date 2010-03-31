@@ -530,7 +530,7 @@ void Fl_Browser::item_draw(void* item, int X, int Y, int W, int H) const {
     int tsize = textsize();
     Fl_Font font = textfont();
     Fl_Color lcol = textcolor();
-    Fl_Align talign = FL_ALIGN_LEFT;
+    fltk3::Align talign = fltk3::ALIGN_LEFT;
     // check for all the @-lines recognized by XForms:
     //#if defined(__GNUC__)
     //#warning FIXME This maybe needs to be more UTF8 aware now...?
@@ -543,8 +543,8 @@ void Fl_Browser::item_draw(void* item, int X, int Y, int W, int H) const {
       case 'b': font = (Fl_Font)(font|fltk3::BOLD); break;
       case 'i': font = (Fl_Font)(font|fltk3::ITALIC); break;
       case 'f': case 't': font = fltk3::COURIER; break;
-      case 'c': talign = FL_ALIGN_CENTER; break;
-      case 'r': talign = FL_ALIGN_RIGHT; break;
+      case 'c': talign = fltk3::ALIGN_CENTER; break;
+      case 'r': talign = fltk3::ALIGN_RIGHT; break;
       case 'B': 
 	if (!(l->flags & SELECTED)) {
 	  fl_color((Fl_Color)strtol(str, &str, 10));
@@ -586,7 +586,7 @@ void Fl_Browser::item_draw(void* item, int X, int Y, int W, int H) const {
       lcol = fl_contrast(lcol, selection_color());
     if (!active_r()) lcol = fl_inactive(lcol);
     fl_color(lcol);
-    fl_draw(str, X+3, Y, w1-6, H, e ? Fl_Align(talign|FL_ALIGN_CLIP) : talign, 0, 0);
+    fl_draw(str, X+3, Y, w1-6, H, e ? fltk3::Align(talign|fltk3::ALIGN_CLIP) : talign, 0, 0);
     if (!e) break; // no more fields...
     *e = column_char(); // put the separator back
     X += w1;

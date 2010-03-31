@@ -141,7 +141,7 @@ void fl_set_graphics_mode(int /*r*/,int /*d*/) {}
 #ifndef FL_DOXYGEN // FIXME: suppress doxygen warning
 void Fl_FormsText::draw() {
   draw_box();
-  align(align()|FL_ALIGN_INSIDE); // questionable method of compatibility
+  align(align()|fltk3::ALIGN_INSIDE); // questionable method of compatibility
   draw_label();
 }
 #endif

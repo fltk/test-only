@@ -75,12 +75,12 @@ struct FL_EXPORT Fl_Label {
   /** text color */
   Fl_Color color;
   /** alignment of label */
-  Fl_Align align_;
+  fltk3::Align align_;
   /** type of label. \see fltk3::Labeltype */
   uchar type;
 
   /** Draws the label aligned to the given box */
-  void draw(int,int,int,int, Fl_Align) const ;
+  void draw(int,int,int,int, fltk3::Align) const ;
   void measure(int &w, int &h) const ;
 };
 
@@ -335,25 +335,25 @@ public:
   /** Gets the label alignment.
 
       \return label alignment
-      \see label(), align(Fl_Align), Fl_Align
+      \see label(), align(fltk3::Align), fltk3::Align
       \todo This function should not take uchar as an argument. 
             Apart from the fact that uchar is too short with only 8 bits, 
 	    it does not provide type safety (in which case we don't need 
-	    to declare Fl_Align an enum to begin with).
+	    to declare fltk3::Align an enum to begin with).
 	    *NOTE* The current (FLTK 1.3) implementation (Dec 2008) is such that
-	    Fl_Align is (typedef'd to be) "unsigned" (int), but Widget's
+	    fltk3::Align is (typedef'd to be) "unsigned" (int), but Widget's
 	    "align_" member variable is a bit field of 8 bits only !
    */
-  Fl_Align align() const {return label_.align_;}
+  fltk3::Align align() const {return label_.align_;}
 
   /** Sets the label alignment.
       This controls how the label is displayed next to or inside the widget. 
-      The default value is FL_ALIGN_CENTER, which centers the label inside 
+      The default value is fltk3::ALIGN_CENTER, which centers the label inside 
       the widget.
       \param[in] alignment new label alignment
-      \see align(), Fl_Align
+      \see align(), fltk3::Align
    */
-  void align(Fl_Align alignment) {label_.align_ = alignment;}
+  void align(fltk3::Align alignment) {label_.align_ = alignment;}
 
   /** Gets the box type of the widget.
       \return the current box type
@@ -924,7 +924,7 @@ public:
    */
   void damage(uchar c, int x, int y, int w, int h);
 
-  void draw_label(int, int, int, int, Fl_Align) const;
+  void draw_label(int, int, int, int, fltk3::Align) const;
 
   /** Sets width ww and height hh accordingly with the label size.
       Labels with images will return w() and h() of the image.

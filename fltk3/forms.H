@@ -95,7 +95,7 @@ typedef fltk3::Window FL_FORM;
 #define FL_DARKTOMATO	((Fl_Color)(113))
 #define FL_WHEAT	((Fl_Color)(174))
 
-#define FL_ALIGN_BESIDE	FL_ALIGN_INSIDE
+#define fltk3::ALIGN_BESIDE	fltk3::ALIGN_INSIDE
 
 #define FL_PUP_TOGGLE	2 // FL_MENU_TOGGLE
 #define FL_PUP_INACTIVE 1 // FL_MENU_INACTIVE
@@ -214,7 +214,7 @@ inline void fl_set_object_lstyle(fltk3::Widget* o,int a) {
   o->labelfont((Fl_Font)(a&0xff)); o->labeltype((fltk3::Labeltype)(a>>8));}
 inline void fl_set_object_lcol(fltk3::Widget* o, Fl_Color a) {o->labelcolor(a);}
 #define fl_set_object_lcolor  fl_set_object_lcol
-inline void fl_set_object_lalign(fltk3::Widget* o, Fl_Align a) {o->align(a);}
+inline void fl_set_object_lalign(fltk3::Widget* o, fltk3::Align a) {o->align(a);}
 #define fl_set_object_align fl_set_object_lalign
 inline void fl_set_object_color(fltk3::Widget* o,Fl_Color a,Fl_Color b) {o->color(a,b);}
 inline void fl_set_object_label(fltk3::Widget* o, const char* a) {o->label(a); o->redraw();}
@@ -354,7 +354,7 @@ inline void fl_drw_box(fltk3::Boxtype b,int x,int y,int w,int h,Fl_Color bgc,int
 inline void fl_drw_frame(fltk3::Boxtype b,int x,int y,int w,int h,Fl_Color bgc,int=3) {
     fl_draw_box(b,x,y,w,h,bgc);}
 
-inline void fl_drw_text(Fl_Align align, int x, int y, int w, int h,
+inline void fl_drw_text(fltk3::Align align, int x, int y, int w, int h,
 		  Fl_Color fgcolor, int size, Fl_Font style,
 		  const char* s) {
   fl_font(style,size);
@@ -363,7 +363,7 @@ inline void fl_drw_text(Fl_Align align, int x, int y, int w, int h,
 }
 
 // this does not work except for CENTER...
-inline void fl_drw_text_beside(Fl_Align align, int x, int y, int w, int h,
+inline void fl_drw_text_beside(fltk3::Align align, int x, int y, int w, int h,
 		  Fl_Color fgcolor, int size, Fl_Font style,
 		  const char* s) {
   fl_font(style,size);
@@ -408,7 +408,7 @@ inline void fl_set_pixmap_data(fltk3::Widget* o, char*const* b) {
     ((Fl_FormsPixmap*)o)->set(b);
 }
 //inline void fl_set_pixmap_file(fltk3::Widget*, const char*);
-inline void fl_set_pixmap_align(fltk3::Widget* o,Fl_Align a,int,int) {o->align(a);}
+inline void fl_set_pixmap_align(fltk3::Widget* o,fltk3::Align a,int,int) {o->align(a);}
 //inline void fl_set_pixmap_colorcloseness(int, int, int);
 
 #include "Fl_Box.H"
@@ -633,7 +633,7 @@ inline fltk3::Widget* fl_add_frame(fltk3::Boxtype i,int x,int y,int w,int h,cons
 // labelframe nyi
 inline fltk3::Widget* fl_add_labelframe(fltk3::Boxtype i,int x,int y,int w,int h,const char* l) {
   fltk3::Widget* o = fl_add_box(i,x-3,y-3,w+6,h+6,l);
-  o->align(FL_ALIGN_TOP_LEFT);
+  o->align(fltk3::ALIGN_TOP_LEFT);
   return o;
 }
 
@@ -810,13 +810,13 @@ inline void fl_set_slider_precision(fltk3::Widget* o, int i) {
 // filter function!
 
 // The forms text object was the same as an Fl_Box except it inverted the
-// meaning of FL_ALIGN_INSIDE.  Implementation in forms.cxx
+// meaning of fltk3::ALIGN_INSIDE.  Implementation in forms.cxx
 class FL_EXPORT Fl_FormsText : public fltk3::Widget {
 protected:
     void draw();
 public:
     Fl_FormsText(fltk3::Boxtype b, int X, int Y, int W, int H, const char* l=0)
-  : fltk3::Widget(X,Y,W,H,l) {box(b); align(FL_ALIGN_LEFT);}
+  : fltk3::Widget(X,Y,W,H,l) {box(b); align(fltk3::ALIGN_LEFT);}
 };
 #define FL_NORMAL_TEXT fltk3::NO_BOX
 forms_constructorb(Fl_FormsText, fl_add_text)

@@ -387,7 +387,7 @@ protected:
    {
    fl_draw_box(fltk3::THIN_UP_BOX, X, Y, W, H, color());
    fl_color(FL_BLACK);
-   fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
+   fl_draw(s, X, Y, W, H, fltk3::ALIGN_CENTER);
    }
    fl_pop_clip();
    return;
@@ -401,7 +401,7 @@ protected:
    
    // TEXT
    fl_color(FL_BLACK);
-   fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
+   fl_draw(s, X, Y, W, H, fltk3::ALIGN_CENTER);
    
    // BORDER
    fl_color(FL_LIGHT2);

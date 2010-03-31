@@ -96,7 +96,7 @@ FL_EXPORT void gl_draw(const char*, int x, int y);
 FL_EXPORT void gl_draw(const char*, float x, float y);
 FL_EXPORT void gl_draw(const char*, int n, int x, int y);
 FL_EXPORT void gl_draw(const char*, int n, float x, float y);
-FL_EXPORT void gl_draw(const char*, int x, int y, int w, int h, Fl_Align);
+FL_EXPORT void gl_draw(const char*, int x, int y, int w, int h, fltk3::Align);
 FL_EXPORT void gl_measure(const char*, int& x, int& y);
 
 FL_EXPORT void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);

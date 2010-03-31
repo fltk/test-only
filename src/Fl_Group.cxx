@@ -365,7 +365,7 @@ int fltk3::Group::navigation(int key) {
 
 fltk3::Group::Group(int X,int Y,int W,int H,const char *l)
 : fltk3::Widget(X,Y,W,H,l) {
-  align(FL_ALIGN_TOP);
+  align(fltk3::ALIGN_TOP);
   children_ = 0;
   array_ = 0;
   savedfocus_ = 0;
@@ -738,31 +738,31 @@ extern char fl_draw_shortcut;
 void fltk3::Group::draw_outside_label(const fltk3::Widget& widget) const {
   if (!widget.visible()) return;
   // skip any labels that are inside the widget:
-  if (!(widget.align()&15) || (widget.align() & FL_ALIGN_INSIDE)) return;
+  if (!(widget.align()&15) || (widget.align() & fltk3::ALIGN_INSIDE)) return;
   // invent a box that is outside the widget:
   int a = widget.align();
   int X = widget.x();
   int Y = widget.y();
   int W = widget.w();
   int H = widget.h();
-  if (a & FL_ALIGN_TOP) {
-    a ^= (FL_ALIGN_BOTTOM|FL_ALIGN_TOP);
+  if (a & fltk3::ALIGN_TOP) {
+    a ^= (fltk3::ALIGN_BOTTOM|fltk3::ALIGN_TOP);
     Y = y();
     H = widget.y()-Y;
-  } else if (a & FL_ALIGN_BOTTOM) {
-    a ^= (FL_ALIGN_BOTTOM|FL_ALIGN_TOP);
+  } else if (a & fltk3::ALIGN_BOTTOM) {
+    a ^= (fltk3::ALIGN_BOTTOM|fltk3::ALIGN_TOP);
     Y = Y+H;
     H = y()+h()-Y;
-  } else if (a & FL_ALIGN_LEFT) {
-    a ^= (FL_ALIGN_LEFT|FL_ALIGN_RIGHT);
+  } else if (a & fltk3::ALIGN_LEFT) {
+    a ^= (fltk3::ALIGN_LEFT|fltk3::ALIGN_RIGHT);
     X = x();
     W = widget.x()-X-3;
-  } else if (a & FL_ALIGN_RIGHT) {
-    a ^= (FL_ALIGN_LEFT|FL_ALIGN_RIGHT);
+  } else if (a & fltk3::ALIGN_RIGHT) {
+    a ^= (fltk3::ALIGN_LEFT|fltk3::ALIGN_RIGHT);
     X = X+W+3;
     W = x()+this->w()-X;
   }
-  widget.draw_label(X,Y,W,H,(Fl_Align)a);
+  widget.draw_label(X,Y,W,H,(fltk3::Align)a);
 }
 
 //

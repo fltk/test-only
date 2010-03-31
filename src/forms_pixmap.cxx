@@ -40,7 +40,7 @@ Fl_FormsPixmap::Fl_FormsPixmap(
   box(t);
   b = 0;
   color(FL_BLACK);
-  align(FL_ALIGN_BOTTOM);
+  align(fltk3::ALIGN_BOTTOM);
 }
 
 /**

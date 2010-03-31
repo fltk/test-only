@@ -1044,7 +1044,7 @@ Fl_Input_::Fl_Input_(int X, int Y, int W, int H, const char* l)
 : fltk3::Widget(X, Y, W, H, l) {
   box(fltk3::DOWN_BOX);
   color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
-  align(FL_ALIGN_LEFT);
+  align(fltk3::ALIGN_LEFT);
   textsize_ = FL_NORMAL_SIZE;
   textfont_ = fltk3::HELVETICA;
   textcolor_ = FL_FOREGROUND_COLOR;

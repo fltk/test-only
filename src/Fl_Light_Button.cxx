@@ -166,7 +166,7 @@ Fl_Light_Button::Fl_Light_Button(int X, int Y, int W, int H, const char* l)
 : fltk3::Button(X, Y, W, H, l) {
   type(FL_TOGGLE_BUTTON);
   selection_color(FL_YELLOW);
-  align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+  align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE);
 }
 
 //

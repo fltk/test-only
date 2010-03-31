@@ -205,25 +205,25 @@ enum Fl_Labeltype {
 #if 0
 
 typedef unsigned Fl_Align;
-const Fl_Align FL_ALIGN_CENTER		= (Fl_Align)0;
-const Fl_Align FL_ALIGN_TOP		= (Fl_Align)1;
-const Fl_Align FL_ALIGN_BOTTOM		= (Fl_Align)2;
-const Fl_Align FL_ALIGN_LEFT		= (Fl_Align)4;
-const Fl_Align FL_ALIGN_RIGHT		= (Fl_Align)8;
-const Fl_Align FL_ALIGN_INSIDE		= (Fl_Align)16;
-const Fl_Align FL_ALIGN_TEXT_OVER_IMAGE	= (Fl_Align)32;
-const Fl_Align FL_ALIGN_IMAGE_OVER_TEXT	= (Fl_Align)0;
-const Fl_Align FL_ALIGN_CLIP		= (Fl_Align)64;
-const Fl_Align FL_ALIGN_WRAP		= (Fl_Align)128;
-const Fl_Align FL_ALIGN_TOP_LEFT	= FL_ALIGN_TOP | FL_ALIGN_LEFT;
-const Fl_Align FL_ALIGN_TOP_RIGHT	= FL_ALIGN_TOP | FL_ALIGN_RIGHT;
-const Fl_Align FL_ALIGN_BOTTOM_LEFT	= FL_ALIGN_BOTTOM | FL_ALIGN_LEFT;
-const Fl_Align FL_ALIGN_BOTTOM_RIGHT	= FL_ALIGN_BOTTOM | FL_ALIGN_RIGHT;
-const Fl_Align FL_ALIGN_LEFT_TOP	= FL_ALIGN_TOP_LEFT;
-const Fl_Align FL_ALIGN_RIGHT_TOP	= FL_ALIGN_TOP_RIGHT;
-const Fl_Align FL_ALIGN_LEFT_BOTTOM	= FL_ALIGN_BOTTOM_LEFT;
-const Fl_Align FL_ALIGN_RIGHT_BOTTOM	= FL_ALIGN_BOTTOM_RIGHT;
-const Fl_Align FL_ALIGN_NOWRAP		= (Fl_Align)0;
+const Fl_Align FL_ALIGN_CENTER		= (Fl_Align)fltk3::ALIGN_CENTER;
+const Fl_Align FL_ALIGN_TOP		= (Fl_Align)fltk3::ALIGN_TOP;
+const Fl_Align FL_ALIGN_BOTTOM		= (Fl_Align)fltk3::ALIGN_BOTTOM;
+const Fl_Align FL_ALIGN_LEFT		= (Fl_Align)fltk3::ALIGN_LEFT;
+const Fl_Align FL_ALIGN_RIGHT		= (Fl_Align)fltk3::ALIGN_RIGHT;
+const Fl_Align FL_ALIGN_INSIDE		= (Fl_Align)fltk3::ALIGN_INSIDE;
+const Fl_Align FL_ALIGN_TEXT_OVER_IMAGE	= (Fl_Align)fltk3::ALIGN_TEXT_OVER_IMAGE;
+const Fl_Align FL_ALIGN_IMAGE_OVER_TEXT	= (Fl_Align)fltk3::ALIGN_IMAGE_OVER_TEXT;
+const Fl_Align FL_ALIGN_CLIP		= (Fl_Align)fltk3::ALIGN_CLIP;
+const Fl_Align FL_ALIGN_WRAP		= (Fl_Align)fltk3::ALIGN_WRAP;
+const Fl_Align FL_ALIGN_TOP_LEFT	= (Fl_Align)fltk3::ALIGN_TOP_LEFT;
+const Fl_Align FL_ALIGN_TOP_RIGHT	= (Fl_Align)fltk3::ALIGN_TOP_RIGHT;
+const Fl_Align FL_ALIGN_BOTTOM_LEFT	= (Fl_Align)fltk3::ALIGN_BOTTOM_LEFT;
+const Fl_Align FL_ALIGN_BOTTOM_RIGHT	= (Fl_Align)fltk3::ALIGN_BOTTOM_RIGHT;
+const Fl_Align FL_ALIGN_LEFT_TOP	= (Fl_Align)fltk3::ALIGN_LEFT_TOP;
+const Fl_Align FL_ALIGN_RIGHT_TOP	= (Fl_Align)fltk3::ALIGN_RIGHT_TOP;
+const Fl_Align FL_ALIGN_LEFT_BOTTOM	= (Fl_Align)fltk3::ALIGN_LEFT_BOTTOM;
+const Fl_Align FL_ALIGN_RIGHT_BOTTOM	= (Fl_Align)fltk3::ALIGN_RIGHT_BOTTOM;
+const Fl_Align FL_ALIGN_NOWRAP		= (Fl_Align)fltk3::ALIGN_NOWRAP;
 
 #endif
 

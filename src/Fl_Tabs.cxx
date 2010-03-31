@@ -362,7 +362,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
 
     // Draw the label using the current color...
     o->labelcolor(sel ? labelcolor() : o->labelcolor());    
-    o->draw_label(x1, y() + yofs, W, H - yofs, FL_ALIGN_CENTER);
+    o->draw_label(x1, y() + yofs, W, H - yofs, fltk3::ALIGN_CENTER);
 
     // Restore the original label color...
     o->labelcolor(oc);
@@ -388,7 +388,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
 
     // Draw the label using the current color...
     o->labelcolor(sel ? labelcolor() : o->labelcolor());
-    o->draw_label(x1, y() + h() - H, W, H - yofs, FL_ALIGN_CENTER);
+    o->draw_label(x1, y() + h() - H, W, H - yofs, fltk3::ALIGN_CENTER);
 
     // Restore the original label color...
     o->labelcolor(oc);

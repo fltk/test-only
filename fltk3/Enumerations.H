@@ -597,52 +597,54 @@ enum Labeltype {      // labeltypes:
   FREE_LABELTYPE      ///< first free labeltype to use for creating own labeltypes
 };
   
-} //namespace fltk3
 
 /** \name Alignment Flags */
 /*@{*/
 /** Flags to control the label alignment. 
  *  This controls how the label is displayed next to or inside the widget. 
- *  The default value is FL_ALIGN_CENTER for most widgets, which centers the label
+ *  The default value is ALIGN_CENTER for most widgets, which centers the label
  *  inside the widget.
  *
  *  Flags can be or'd to achieve a combination of alignments.
- *  \see #FL_ALIGN_CENTER, etc.
+ *  \see #ALIGN_CENTER, etc.
  */
-typedef unsigned Fl_Align;
+typedef unsigned Align;
   /** Align the label horizontally in the middle. */
-const Fl_Align FL_ALIGN_CENTER		= (Fl_Align)0;
+const Align ALIGN_CENTER		= (Align)0;
   /** Align the label at the top of the widget. Inside labels appear below the top,
    *  outside labels are drawn on top of the widget. */
-const Fl_Align FL_ALIGN_TOP		= (Fl_Align)1;
+const Align ALIGN_TOP		= (Align)1;
   /** Align the label at the bottom of the widget. */
-const Fl_Align FL_ALIGN_BOTTOM		= (Fl_Align)2;
+const Align ALIGN_BOTTOM		= (Align)2;
   /** Align the label at the left of the widget. Inside labels appear left-justified
    *  starting at the left side of the widget, outside labels are right-justified and
    *  drawn to the left of the widget. */
-const Fl_Align FL_ALIGN_LEFT		= (Fl_Align)4;
+const Align ALIGN_LEFT		= (Align)4;
   /** Align the label to the right of the widget. */
-const Fl_Align FL_ALIGN_RIGHT		= (Fl_Align)8;
+const Align ALIGN_RIGHT		= (Align)8;
   /** Draw the label inside of the widget. */
-const Fl_Align FL_ALIGN_INSIDE		= (Fl_Align)16;
+const Align ALIGN_INSIDE		= (Align)16;
   /** If the label contains an image, draw the text on top of the image. */
-const Fl_Align FL_ALIGN_TEXT_OVER_IMAGE	= (Fl_Align)32;
+const Align ALIGN_TEXT_OVER_IMAGE	= (Align)32;
   /** If the label contains an image, draw the text below the image. */
-const Fl_Align FL_ALIGN_IMAGE_OVER_TEXT	= (Fl_Align)0;
+const Align ALIGN_IMAGE_OVER_TEXT	= (Align)0;
   /** All parts of the label that are lager than the widget will not be drawn . */
-const Fl_Align FL_ALIGN_CLIP		= (Fl_Align)64;
+const Align ALIGN_CLIP		= (Align)64;
   /** Wrap text that does not fit the width of the widget. */
-const Fl_Align FL_ALIGN_WRAP		= (Fl_Align)128;
-const Fl_Align FL_ALIGN_TOP_LEFT	= FL_ALIGN_TOP | FL_ALIGN_LEFT;
-const Fl_Align FL_ALIGN_TOP_RIGHT	= FL_ALIGN_TOP | FL_ALIGN_RIGHT;
-const Fl_Align FL_ALIGN_BOTTOM_LEFT	= FL_ALIGN_BOTTOM | FL_ALIGN_LEFT;
-const Fl_Align FL_ALIGN_BOTTOM_RIGHT	= FL_ALIGN_BOTTOM | FL_ALIGN_RIGHT;
-const Fl_Align FL_ALIGN_LEFT_TOP	= FL_ALIGN_TOP_LEFT;
-const Fl_Align FL_ALIGN_RIGHT_TOP	= FL_ALIGN_TOP_RIGHT;
-const Fl_Align FL_ALIGN_LEFT_BOTTOM	= FL_ALIGN_BOTTOM_LEFT;
-const Fl_Align FL_ALIGN_RIGHT_BOTTOM	= FL_ALIGN_BOTTOM_RIGHT;
-const Fl_Align FL_ALIGN_NOWRAP		= (Fl_Align)0; // for back compatability
+const Align ALIGN_WRAP		= (Align)128;
+const Align ALIGN_TOP_LEFT	= ALIGN_TOP | ALIGN_LEFT;
+const Align ALIGN_TOP_RIGHT	= ALIGN_TOP | ALIGN_RIGHT;
+const Align ALIGN_BOTTOM_LEFT	= ALIGN_BOTTOM | ALIGN_LEFT;
+const Align ALIGN_BOTTOM_RIGHT	= ALIGN_BOTTOM | ALIGN_RIGHT;
+const Align ALIGN_LEFT_TOP	= ALIGN_TOP_LEFT;
+const Align ALIGN_RIGHT_TOP	= ALIGN_TOP_RIGHT;
+const Align ALIGN_LEFT_BOTTOM	= ALIGN_BOTTOM_LEFT;
+const Align ALIGN_RIGHT_BOTTOM	= ALIGN_BOTTOM_RIGHT;
+const Align ALIGN_NOWRAP		= (Align)0; // for back compatability
 /*@}*/
+  
+} //namespace fltk3
+
 
 /** \name Font Numbers */
 /*@{*/

@@ -33,7 +33,7 @@ Fl_FormsBitmap::Fl_FormsBitmap(
   box(t);
   b = 0;
   color(FL_BLACK);
-  align(FL_ALIGN_BOTTOM);
+  align(fltk3::ALIGN_BOTTOM);
 }
 /** Sets a new bitmap bits with size W,H. Deletes the previous one.*/
 void Fl_FormsBitmap::set(int W, int H, const uchar *bits) {

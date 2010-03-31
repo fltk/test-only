@@ -89,7 +89,7 @@ class FL_EXPORT Fl_Image {
   void data(const char * const *p, int c) {data_ = p; count_ = c;}
   void draw_empty(int X, int Y);
 
-  static void labeltype(const Fl_Label *lo, int lx, int ly, int lw, int lh, Fl_Align la);
+  static void labeltype(const Fl_Label *lo, int lx, int ly, int lw, int lh, fltk3::Align la);
   static void measure(const Fl_Label *lo, int &lw, int &lh);
 
   public:

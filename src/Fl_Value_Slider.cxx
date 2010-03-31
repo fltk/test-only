@@ -60,7 +60,7 @@ void Fl_Value_Slider::draw() {
   format(buf);
   fl_font(textfont(), textsize());
   fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
-  fl_draw(buf, bxx, byy, bww, bhh, FL_ALIGN_CLIP);
+  fl_draw(buf, bxx, byy, bww, bhh, fltk3::ALIGN_CLIP);
 }
 
 int Fl_Value_Slider::handle(int event) {

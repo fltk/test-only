@@ -63,7 +63,7 @@ void Fl_Counter::draw() {
   fl_font(textfont(), textsize());
   fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
   char str[128]; format(str);
-  fl_draw(str, xx[0], y(), ww[0], h(), FL_ALIGN_CENTER);
+  fl_draw(str, xx[0], y(), ww[0], h(), fltk3::ALIGN_CENTER);
   if (fltk3::focus() == this) draw_focus(boxtype[0], xx[0], y(), ww[0], h());
   if (!(damage()&FL_DAMAGE_ALL)) return; // only need to redraw text
 
@@ -196,7 +196,7 @@ Fl_Counter::Fl_Counter(int X, int Y, int W, int H, const char* L)
   : Fl_Valuator(X, Y, W, H, L) {
   box(fltk3::UP_BOX);
   selection_color(FL_INACTIVE_COLOR); // was FL_BLUE
-  align(FL_ALIGN_BOTTOM);
+  align(fltk3::ALIGN_BOTTOM);
   bounds(-1000000.0, 1000000.0);
   Fl_Valuator::step(1, 10);
   lstep_ = 1.0;

@@ -137,18 +137,18 @@ Fl_Image::labeltype(const Fl_Label *lo,		// I - Label
 		    int            ly,		// I - Y position
 		    int            lw,		// I - Width of label
 		    int            lh,		// I - Height of label
-		    Fl_Align       la) {	// I - Alignment
+		    fltk3::Align       la) {	// I - Alignment
   Fl_Image	*img;				// Image pointer
   int		cx, cy;				// Image position
 
   img = (Fl_Image *)(lo->value);
 
-  if (la & FL_ALIGN_LEFT) cx = 0;
-  else if (la & FL_ALIGN_RIGHT) cx = img->w() - lw;
+  if (la & fltk3::ALIGN_LEFT) cx = 0;
+  else if (la & fltk3::ALIGN_RIGHT) cx = img->w() - lw;
   else cx = (img->w() - lw) / 2;
 
-  if (la & FL_ALIGN_TOP) cy = 0;
-  else if (la & FL_ALIGN_BOTTOM) cy = img->h() - lh;
+  if (la & fltk3::ALIGN_TOP) cy = 0;
+  else if (la & fltk3::ALIGN_BOTTOM) cy = img->h() - lh;
   else cy = (img->h() - lh) / 2;
 
   fl_color((Fl_Color)lo->color);

@@ -133,7 +133,7 @@ Fl_Value_Input::Fl_Value_Input(int X, int Y, int W, int H, const char* l)
   box(input.box());
   color(input.color());
   selection_color(input.selection_color());
-  align(FL_ALIGN_LEFT);
+  align(fltk3::ALIGN_LEFT);
   value_damage();
   set_flag(SHORTCUT_LABEL);
 }

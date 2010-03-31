@@ -90,7 +90,7 @@ void Fl_Timer::draw() {
     }
     fl_font(labelfont(), labelsize());
     fl_color(labelcolor());
-    fl_draw(str, x(), y(), w(), h(), FL_ALIGN_CENTER);
+    fl_draw(str, x(), y(), w(), h(), fltk3::ALIGN_CENTER);
   } else
     draw_label();
 }
@@ -155,7 +155,7 @@ Fl_Timer::Fl_Timer(uchar t, int X, int Y, int W, int H, const char* l)
   direction_ = 0;
   type(t);
   if (t == FL_HIDDEN_TIMER) clear_visible();
-  if (t == FL_VALUE_TIMER) align(FL_ALIGN_LEFT);
+  if (t == FL_VALUE_TIMER) align(fltk3::ALIGN_LEFT);
 }
 /** Sets the current timer value */
 void Fl_Timer::value(double d) {

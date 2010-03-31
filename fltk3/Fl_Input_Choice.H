@@ -141,7 +141,7 @@ public:
   */
   Fl_Input_Choice (int x,int y,int w,int h,const char*l=0) : fltk3::Group(x,y,w,h,l) {
     fltk3::Group::box(fltk3::DOWN_BOX);
-    align(FL_ALIGN_LEFT);				// default like Fl_Input
+    align(fltk3::ALIGN_LEFT);				// default like Fl_Input
     inp_ = new Fl_Input(inp_x(), inp_y(),
 			inp_w(), inp_h());
     inp_->callback(inp_cb, (void*)this);

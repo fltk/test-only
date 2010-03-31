@@ -64,11 +64,11 @@
   <LI>Fl_Scroll::BOTH_ALWAYS       - Both always on. </LI>
   </UL>
 
-  Use <B> scrollbar.align(int) ( see void fltk3::Widget::align(Fl_Align) ) :</B>
+  Use <B> scrollbar.align(int) ( see void fltk3::Widget::align(fltk3::Align) ) :</B>
   to change what side the scrollbars are drawn on.
 
-  If the FL_ALIGN_LEFT bit is on, the vertical scrollbar is on the left.
-  If the FL_ALIGN_TOP bit is on, the horizontal scrollbar is on
+  If the fltk3::ALIGN_LEFT bit is on, the vertical scrollbar is on the left.
+  If the fltk3::ALIGN_TOP bit is on, the horizontal scrollbar is on
   the top. Note that only the alignment flags in scrollbar are 
   considered. The flags in hscrollbar however are ignored.
 

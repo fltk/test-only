@@ -45,7 +45,7 @@ void fltk3::Window::_Fl_Window() {
   box(fltk3::FLAT_BOX);
   if (fltk3::scheme_bg_) {
     labeltype(fltk3::NORMAL_LABEL);
-    align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_CLIP);
+    align(fltk3::ALIGN_CENTER | fltk3::ALIGN_INSIDE | fltk3::ALIGN_CLIP);
     image(fltk3::scheme_bg_);
   } else {
     labeltype(fltk3::NO_LABEL);

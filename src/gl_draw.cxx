@@ -294,7 +294,7 @@ static void gl_draw_invert(const char* str, int n, int x, int y) {
 void gl_draw(
   const char* str, 	// the (multi-line) string
   int x, int y, int w, int h, 	// bounding box
-  Fl_Align align) {
+  fltk3::Align align) {
   fl_draw(str, x, -y-h, w, h, align, gl_draw_invert);
 }
 

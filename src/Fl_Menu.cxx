@@ -259,7 +259,7 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
   }
 
   if (!fl_draw_shortcut) fl_draw_shortcut = 1;
-  l.draw(x+3, y, w>6 ? w-6 : 0, h, FL_ALIGN_LEFT);
+  l.draw(x+3, y, w>6 ? w-6 : 0, h, fltk3::ALIGN_LEFT);
   fl_draw_shortcut = 0;
 }
 
@@ -461,11 +461,11 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int n, int eraseit) {
     if (fl_utf_nb_char((const unsigned char*)k, strlen(k))<=4) {
       // righ-align the modifiers and left-align the key
       char buf[32]; strcpy(buf, s); buf[k-s] = 0;
-      fl_draw(buf, xx, yy, ww-shortcutWidth, hh, FL_ALIGN_RIGHT);
-      fl_draw(  k, xx+ww-shortcutWidth, yy, shortcutWidth, hh, FL_ALIGN_LEFT);
+      fl_draw(buf, xx, yy, ww-shortcutWidth, hh, fltk3::ALIGN_RIGHT);
+      fl_draw(  k, xx+ww-shortcutWidth, yy, shortcutWidth, hh, fltk3::ALIGN_LEFT);
     } else {
       // right-align to the menu
-      fl_draw(s, xx, yy, ww-4, hh, FL_ALIGN_RIGHT);
+      fl_draw(s, xx, yy, ww-4, hh, fltk3::ALIGN_RIGHT);
     }
   }
 

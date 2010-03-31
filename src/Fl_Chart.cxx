@@ -76,7 +76,7 @@ static void draw_barchart(int x,int y,int w,int h,
   for (i=0; i<numb; i++)
       fl_draw(entries[i].str,
 	      x+i*bwidth+bwidth/2,zeroh,0,0,
-	      FL_ALIGN_TOP);
+	      fltk3::ALIGN_TOP);
 }
 
 static void draw_horbarchart(int x,int y,int w,int h,
@@ -122,7 +122,7 @@ static void draw_horbarchart(int x,int y,int w,int h,
   for (i=0; i<numb; i++)
       fl_draw(entries[i].str,
 	      zeroh-2,y+i*bwidth+bwidth/2,0,0,
-	      FL_ALIGN_RIGHT);
+	      fltk3::ALIGN_RIGHT);
 }
 
 static void draw_linechart(int type, int x,int y,int w,int h,
@@ -172,7 +172,7 @@ static void draw_linechart(int type, int x,int y,int w,int h,
   for (i=0; i<numb; i++)
       fl_draw(entries[i].str,
 	      x+(int)rint((i+.5)*bwidth), zeroh - (int)rint(entries[i].val*incr),0,0,
-	      entries[i].val>=0 ? FL_ALIGN_BOTTOM : FL_ALIGN_TOP);
+	      entries[i].val>=0 ? fltk3::ALIGN_BOTTOM : fltk3::ALIGN_TOP);
 }
 
 static void draw_piechart(int x,int y,int w,int h,
@@ -225,7 +225,7 @@ static void draw_piechart(int x,int y,int w,int h,
 	      (int)rint(xl),
 	      (int)rint(tyc - 1.1*rad*sin(ARCINC*curang)),
 	      0, 0,
-	      xl<txc ? FL_ALIGN_RIGHT : FL_ALIGN_LEFT);
+	      xl<txc ? fltk3::ALIGN_RIGHT : fltk3::ALIGN_LEFT);
       curang += 0.5 * incr * entries[i].val;
     }
 }
@@ -283,7 +283,7 @@ void Fl_Chart::draw() {
 #define FL_CHART_BOXTYPE	fltk3::BORDER_BOX
 #define FL_CHART_COL1		FL_COL1
 #define FL_CHART_LCOL		FL_LCOL
-#define FL_CHART_ALIGN		FL_ALIGN_BOTTOM
+#define FL_CHART_ALIGN		fltk3::ALIGN_BOTTOM
 
 /**
   Create a new Fl_Chart widget using the given position, size and label string.
@@ -294,7 +294,7 @@ void Fl_Chart::draw() {
 Fl_Chart::Fl_Chart(int X, int Y, int W, int H,const char *L) :
 fltk3::Widget(X,Y,W,H,L) {
   box(fltk3::BORDER_BOX);
-  align(FL_ALIGN_BOTTOM);
+  align(fltk3::ALIGN_BOTTOM);
   numb       = 0;
   maxnumb    = 0;
   sizenumb   = FL_CHART_MAX;

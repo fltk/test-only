@@ -2295,7 +2295,7 @@ void fltk3::Window::show() {
   image(fltk3::scheme_bg_);
   if (fltk3::scheme_bg_) {
     labeltype(fltk3::NORMAL_LABEL);
-    align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_CLIP);
+    align(fltk3::ALIGN_CENTER | fltk3::ALIGN_INSIDE | fltk3::ALIGN_CLIP);
   } else {
     labeltype(fltk3::NO_LABEL);
   }

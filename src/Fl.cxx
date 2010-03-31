@@ -1384,7 +1384,7 @@ void fltk3::Widget::redraw_label() {
       window()->damage(FL_DAMAGE_ALL, X, Y, w() + 2, h() + 2);
     }
 
-    if (align() && !(align() & FL_ALIGN_INSIDE) && window()->shown()) {
+    if (align() && !(align() & fltk3::ALIGN_INSIDE) && window()->shown()) {
       // If the label is not inside the widget, compute the location of
       // the label and redraw the window within that bounding box...
       int W = 0, H = 0;
@@ -1392,13 +1392,13 @@ void fltk3::Widget::redraw_label() {
       W += 5; // Add a little to the size of the label to cover overflow
       H += 5;
 
-      if (align() & FL_ALIGN_BOTTOM) {
+      if (align() & fltk3::ALIGN_BOTTOM) {
 	window()->damage(FL_DAMAGE_EXPOSE, x(), y() + h(), w(), H);
-      } else if (align() & FL_ALIGN_TOP) {
+      } else if (align() & fltk3::ALIGN_TOP) {
 	window()->damage(FL_DAMAGE_EXPOSE, x(), y() - H, w(), H);
-      } else if (align() & FL_ALIGN_LEFT) {
+      } else if (align() & fltk3::ALIGN_LEFT) {
 	window()->damage(FL_DAMAGE_EXPOSE, x() - W, y(), W, h());
-      } else if (align() & FL_ALIGN_RIGHT) {
+      } else if (align() & fltk3::ALIGN_RIGHT) {
 	window()->damage(FL_DAMAGE_EXPOSE, x() + w(), y(), W, h());
       } else {
         window()->damage(FL_DAMAGE_ALL);

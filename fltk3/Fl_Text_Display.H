@@ -132,9 +132,9 @@ class FL_EXPORT Fl_Text_Display: public fltk3::Group {
     /**    Sets or gets the width/height of the scrollbars.  */
     void scrollbar_width(int W) { scrollbar_width_ = W; }
     /**    Gets the scrollbar alignment type */
-    Fl_Align scrollbar_align() const { return scrollbar_align_; }
+    fltk3::Align scrollbar_align() const { return scrollbar_align_; }
     /**    Sets the scrollbar alignment type */
-    void scrollbar_align(Fl_Align a) { scrollbar_align_ = a; }
+    void scrollbar_align(fltk3::Align a) { scrollbar_align_ = a; }
     /**    Moves the insert position to the beginning of the current word.  */
     int word_start(int pos) const { return buffer()->word_start(pos); }
     /**    Moves the insert position to the end of the current word.  */
@@ -318,7 +318,7 @@ class FL_EXPORT Fl_Text_Display: public fltk3::Group {
     Fl_Scrollbar* mHScrollBar;
     Fl_Scrollbar* mVScrollBar;
     int scrollbar_width_;
-    Fl_Align scrollbar_align_;
+    fltk3::Align scrollbar_align_;
     int dragPos, dragType, dragging;
     int display_insert_position_hint;
     struct { int x, y, w, h; } text_area;

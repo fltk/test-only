@@ -100,7 +100,7 @@ void Fl_Choice::draw() {
       l.color= m.labelcolor_ ? m.labelcolor_ : textcolor();
       if (!m.active()) l.color = fl_inactive((Fl_Color)l.color);
       fl_draw_shortcut = 2; // hack value to make '&' disappear
-      l.draw(xx+3, yy, ww>6 ? ww-6 : 0, hh, FL_ALIGN_LEFT);
+      l.draw(xx+3, yy, ww>6 ? ww-6 : 0, hh, fltk3::ALIGN_LEFT);
       fl_draw_shortcut = 0;
       if ( fltk3::focus() == this ) draw_focus(box(), xx, yy, ww, hh);
     }
@@ -128,7 +128,7 @@ void Fl_Choice::draw() {
  */
 Fl_Choice::Fl_Choice(int X, int Y, int W, int H, const char *L)
 : Fl_Menu_(X,Y,W,H,L) {
-  align(FL_ALIGN_LEFT);
+  align(fltk3::ALIGN_LEFT);
   when(FL_WHEN_RELEASE);
   textfont(fltk3::HELVETICA);
   box(fltk3::FLAT_BOX);

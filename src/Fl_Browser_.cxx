@@ -83,12 +83,12 @@ void Fl_Browser_::bbox(int& X, int& Y, int& W, int& H) const {
   H = h()-fltk3::box_dh(b);
   if (scrollbar.visible()) {
     W -= scrollsize;
-    if (scrollbar.align() & FL_ALIGN_LEFT) X += scrollsize;
+    if (scrollbar.align() & fltk3::ALIGN_LEFT) X += scrollsize;
   }
   if (W < 0) W = 0;
   if (hscrollbar.visible()) {
     H -= scrollsize;
-    if (scrollbar.align() & FL_ALIGN_TOP) Y += scrollsize;
+    if (scrollbar.align() & fltk3::ALIGN_TOP) Y += scrollsize;
   }
   if (H < 0) H = 0;
 }
@@ -117,10 +117,10 @@ void Fl_Browser_::resize(int X, int Y, int W, int H) {
   // move the scrollbars so they can respond to events:
   bbox(X,Y,W,H);
   scrollbar.resize(
-	scrollbar.align()&FL_ALIGN_LEFT ? X-scrollsize : X+W,
+	scrollbar.align()&fltk3::ALIGN_LEFT ? X-scrollsize : X+W,
 	Y, scrollsize, H);
   hscrollbar.resize(
-	X, scrollbar.align()&FL_ALIGN_TOP ? Y-scrollsize : Y+H,
+	X, scrollbar.align()&fltk3::ALIGN_TOP ? Y-scrollsize : Y+H,
 	W, scrollsize);
 }
 
@@ -459,7 +459,7 @@ J1:
   int dy = top_ ? item_quick_height(top_) : 0; if (dy < 10) dy = 10;
   if (scrollbar.visible()) {
     scrollbar.damage_resize(
-	scrollbar.align()&FL_ALIGN_LEFT ? X-scrollsize : X+W,
+	scrollbar.align()&fltk3::ALIGN_LEFT ? X-scrollsize : X+W,
 	Y, scrollsize, H);
     scrollbar.value(position_, H, 0, full_height_);
     scrollbar.linesize(dy);
@@ -468,7 +468,7 @@ J1:
   }
   if (hscrollbar.visible()) {
     hscrollbar.damage_resize(
-	X, scrollbar.align()&FL_ALIGN_TOP ? Y-scrollsize : Y+H,
+	X, scrollbar.align()&fltk3::ALIGN_TOP ? Y-scrollsize : Y+H,
 	W, scrollsize);
     hscrollbar.value(hposition_, W, 0, full_width_);
     hscrollbar.linesize(dy);
@@ -963,7 +963,7 @@ Fl_Browser_::Fl_Browser_(int X, int Y, int W, int H, const char* L)
     hscrollbar(0, 0, 0, 0, 0)
 {
   box(fltk3::NO_BOX);
-  align(FL_ALIGN_BOTTOM);
+  align(fltk3::ALIGN_BOTTOM);
   position_ = real_position_ = 0;
   hposition_ = real_hposition_ = 0;
   offset_ = 0;
@@ -972,7 +972,7 @@ Fl_Browser_::Fl_Browser_(int X, int Y, int W, int H, const char* L)
   selection_ = 0;
   color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
   scrollbar.callback(scrollbar_callback);
-//scrollbar.align(FL_ALIGN_LEFT|FL_ALIGN_BOTTOM); // back compatibility?
+//scrollbar.align(fltk3::ALIGN_LEFT|fltk3::ALIGN_BOTTOM); // back compatibility?
   hscrollbar.callback(hscrollbar_callback);
   hscrollbar.type(FL_HORIZONTAL);
   textfont_ = fltk3::HELVETICA;

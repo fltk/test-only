@@ -1394,7 +1394,7 @@ Fl_File_Chooser::update_preview()
     if (*ptr || ptr == preview_text_) {
       // Non-printable file, just show a big ?...
       previewBox->label(filename ? "?" : 0);
-      previewBox->align(FL_ALIGN_CLIP);
+      previewBox->align(fltk3::ALIGN_CLIP);
       previewBox->labelsize(75);
       previewBox->labelfont(fltk3::HELVETICA);
     } else {
@@ -1404,8 +1404,8 @@ Fl_File_Chooser::update_preview()
       else if (size > 14) size = 14;
 
       previewBox->label(preview_text_);
-      previewBox->align((Fl_Align)(FL_ALIGN_CLIP | FL_ALIGN_INSIDE |
-                                   FL_ALIGN_LEFT | FL_ALIGN_TOP));
+      previewBox->align((fltk3::Align)(fltk3::ALIGN_CLIP | fltk3::ALIGN_INSIDE |
+                                   fltk3::ALIGN_LEFT | fltk3::ALIGN_TOP));
       previewBox->labelsize(size);
       previewBox->labelfont(fltk3::COURIER);
     }
@@ -1430,11 +1430,11 @@ Fl_File_Chooser::update_preview()
       previewBox->image((Fl_Image *)image);
     }
 
-    previewBox->align(FL_ALIGN_CLIP);
+    previewBox->align(fltk3::ALIGN_CLIP);
     previewBox->label(0);
   } else if (newlabel) {
     previewBox->label(newlabel);
-    previewBox->align(FL_ALIGN_CLIP);
+    previewBox->align(fltk3::ALIGN_CLIP);
     previewBox->labelsize(newlabel[0]=='@'?75:12);
     previewBox->labelfont(fltk3::HELVETICA);
   }

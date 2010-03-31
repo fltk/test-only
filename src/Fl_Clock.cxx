@@ -158,7 +158,7 @@ Fl_Clock_Output::Fl_Clock_Output(int X, int Y, int W, int H, const char *L)
 : fltk3::Widget(X, Y, W, H, L) {
   box(fltk3::UP_BOX);
   selection_color(fl_gray_ramp(5));
-  align(FL_ALIGN_BOTTOM);
+  align(fltk3::ALIGN_BOTTOM);
   hour_ = 0;
   minute_ = 0;
   second_ = 0;

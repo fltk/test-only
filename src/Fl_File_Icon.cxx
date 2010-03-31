@@ -474,7 +474,7 @@ Fl_File_Icon::labeltype(const Fl_Label *o,	// I - Label data
 			int            y,	// I - Y position of label
 			int            w,	// I - Width of label
 			int            h,	// I - Height of label
-			Fl_Align       a)	// I - Label alignment (not used)
+			fltk3::Align       a)	// I - Label alignment (not used)
 {
   Fl_File_Icon *icon;			// Pointer to icon data
 
@@ -485,7 +485,7 @@ Fl_File_Icon::labeltype(const Fl_Label *o,	// I - Label data
   if (icon) icon->draw(x, y, w, h, (Fl_Color)(o->color));
 }
 
-void fl_icon_label(const Fl_Label *o,int x,int y,int w,int h,Fl_Align a)
+void fl_icon_label(const Fl_Label *o,int x,int y,int w,int h,fltk3::Align a)
 {
   Fl_File_Icon::labeltype(o, x, y, w, h, a);
 }
