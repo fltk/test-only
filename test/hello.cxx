@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
   Window *window = new Window(300,180);
   Widget *box = new Widget(20,40,260,100,"Hello, World!");
   box->box(FL_UP_BOX);
-  box->labelfont(FL_BOLD+FL_ITALIC);
+  box->labelfont(BOLD+ITALIC);
   box->labelsize(36);
   box->labeltype(FL_SHADOW_LABEL);
   window->end();
