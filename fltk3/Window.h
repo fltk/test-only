@@ -130,10 +130,10 @@ public:
     have visible() set to 1 and parent() set to
     the parent window pointer.
     
-    fltk3::Widget::box() defaults to FL_FLAT_BOX. If you plan to
+    fltk3::Widget::box() defaults to fltk3::FLAT_BOX. If you plan to
     completely fill the window with children widgets you should
-    change this to FL_NO_BOX. If you turn the window border off
-    you may want to change this to FL_UP_BOX.
+    change this to fltk3::NO_BOX. If you turn the window border off
+    you may want to change this to fltk3::UP_BOX.
 
     \see fltk3::Window(int x, int y, int w, int h, const char* title = 0)
   */

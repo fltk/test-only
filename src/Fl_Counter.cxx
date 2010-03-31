@@ -30,12 +30,12 @@
 #include <fltk3/fl_draw.H>
 
 void Fl_Counter::draw() {
-  int i; Fl_Boxtype boxtype[5];
+  int i; fltk3::Boxtype boxtype[5];
   Fl_Color selcolor;
 
   boxtype[0] = box();
-  if (boxtype[0] == FL_UP_BOX) boxtype[0] = FL_DOWN_BOX;
-  if (boxtype[0] == FL_THIN_UP_BOX) boxtype[0] = FL_THIN_DOWN_BOX;
+  if (boxtype[0] == fltk3::UP_BOX) boxtype[0] = fltk3::DOWN_BOX;
+  if (boxtype[0] == fltk3::THIN_UP_BOX) boxtype[0] = fltk3::THIN_DOWN_BOX;
   for (i=1; i<5; i++)
     if (mouseobj == i)
       boxtype[i] = fl_down(box());
@@ -194,7 +194,7 @@ Fl_Counter::~Fl_Counter() {
  */
 Fl_Counter::Fl_Counter(int X, int Y, int W, int H, const char* L)
   : Fl_Valuator(X, Y, W, H, L) {
-  box(FL_UP_BOX);
+  box(fltk3::UP_BOX);
   selection_color(FL_INACTIVE_COLOR); // was FL_BLUE
   align(FL_ALIGN_BOTTOM);
   bounds(-1000000.0, 1000000.0);

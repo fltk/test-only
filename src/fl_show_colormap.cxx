@@ -62,17 +62,17 @@ void ColorMenu::drawbox(Fl_Color c) {
   int X = (c%8)*BOXSIZE+BORDER;
   int Y = (c/8)*BOXSIZE+BORDER;
 #if BORDER_WIDTH < 3
-  if (c == which) fl_draw_box(FL_DOWN_BOX, X+1, Y+1, BOXSIZE-1, BOXSIZE-1, c);
-  else fl_draw_box(FL_BORDER_BOX, X, Y, BOXSIZE+1, BOXSIZE+1, c);
+  if (c == which) fl_draw_box(fltk3::DOWN_BOX, X+1, Y+1, BOXSIZE-1, BOXSIZE-1, c);
+  else fl_draw_box(fltk3::BORDER_BOX, X, Y, BOXSIZE+1, BOXSIZE+1, c);
 #else
-  fl_draw_box(c == which ? FL_DOWN_BOX : FL_BORDER_BOX,
+  fl_draw_box(c == which ? fltk3::DOWN_BOX : fltk3::BORDER_BOX,
 	      X, Y, BOXSIZE+1, BOXSIZE+1, c);
 #endif
 }
 
 void ColorMenu::draw() {
   if (damage() != FL_DAMAGE_CHILD) {
-    fl_draw_box(FL_UP_BOX,0,0,w(),h(),color());
+    fl_draw_box(fltk3::UP_BOX,0,0,w(),h(),color());
     for (int c = 0; c < 256; c++) drawbox((Fl_Color)c);
   } else {
     drawbox(previous);

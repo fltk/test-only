@@ -136,7 +136,7 @@ Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : fltk3::Group(X,Y
   select_row        = -1;
   select_col        = -1;
   
-  box(FL_THIN_DOWN_FRAME);
+  box(fltk3::THIN_DOWN_FRAME);
   
   vscrollbar = new Fl_Scrollbar(x()+w()-SCROLLBAR_SIZE, y(),
                                 SCROLLBAR_SIZE, h()-SCROLLBAR_SIZE);
@@ -149,7 +149,7 @@ Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : fltk3::Group(X,Y
   hscrollbar->callback(scroll_cb, (void*)this);
   
   table = new Fl_Scroll(x(), y(), w(), h());
-  table->box(FL_NO_BOX);
+  table->box(fltk3::NO_BOX);
   table->type(0);		// don't show Fl_Scroll's scrollbars -- use our own
   table->hide();		// hide unless children are present
   table->end();
@@ -1196,7 +1196,7 @@ void Fl_Table::draw() {
         if ( row_header() ) {
           // NOTE:
           //     Careful with that lower corner; don't use tih; when eg. 
-          //     table->box(FL_THIN_UPFRAME) and hscrollbar hidden, 
+          //     table->box(fltk3::THIN_UPFRAME) and hscrollbar hidden, 
           //     leaves a row of dead pixels.
           //
           fl_rectf(wix, tiy + table_h, row_header_width(), 

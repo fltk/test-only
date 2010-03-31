@@ -43,7 +43,7 @@
   \image latex  Fl_Scroll.eps "Fl_Scroll" width=4cm
 
   If all of the child widgets are packed together into a solid
-  rectangle then you want to set box() to FL_NO_BOX or
+  rectangle then you want to set box() to fltk3::NO_BOX or
   one of the _FRAME types. This will result in the best output.
   However, if the child widgets are a sparse arrangement you must
   set box() to a real _BOX type. This can result in some

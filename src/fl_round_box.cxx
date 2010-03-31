@@ -110,13 +110,6 @@ void fl_round_up_box(int x, int y, int w, int h, Fl_Color bgcolor) {
   draw(CLOSED,	    x,   y, w,   h, 0, (Fl_Color)g['A']);
 }
 
-extern void fl_internal_boxtype(Fl_Boxtype, Fl_Box_Draw_F*);
-Fl_Boxtype fl_define_FL_ROUND_UP_BOX() {
-  fl_internal_boxtype(_FL_ROUND_DOWN_BOX, fl_round_down_box);
-  fl_internal_boxtype(_FL_ROUND_UP_BOX, fl_round_up_box);
-  return _FL_ROUND_UP_BOX;
-}
-
 //
 // End of "$Id$".
 //

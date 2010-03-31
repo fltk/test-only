@@ -66,7 +66,7 @@ public:
     int handle(int);
   /**
       Creates a new Fl_Menu_Bar widget using the given position,
-    size, and label string. The default boxtype is FL_UP_BOX.
+    size, and label string. The default boxtype is fltk3::UP_BOX.
     <P>The constructor sets menu() to NULL.  See 
     Fl_Menu_ for the methods to set or change the menu. </P>
     <P>labelsize(), labelfont(), and labelcolor()

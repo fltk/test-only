@@ -120,7 +120,7 @@ int Fl_Value_Input::handle(int event) {
 /**
   Creates a new Fl_Value_Input widget using the given
   position, size, and label string. The default boxtype is
-  FL_DOWN_BOX.
+  fltk3::DOWN_BOX.
 */
 Fl_Value_Input::Fl_Value_Input(int X, int Y, int W, int H, const char* l)
 : Fl_Valuator(X, Y, W, H, l), input(X, Y, W, H, 0) {

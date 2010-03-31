@@ -107,10 +107,10 @@ public:
   void slider_size(double v);
 
   /** Gets the slider box type. */
-  Fl_Boxtype slider() const {return (Fl_Boxtype)slider_;}
+  fltk3::Boxtype slider() const {return (fltk3::Boxtype)slider_;}
 
   /** Sets the slider box type. */
-  void slider(Fl_Boxtype c) {slider_ = c;}
+  void slider(fltk3::Boxtype c) {slider_ = c;}
 };
 
 #endif

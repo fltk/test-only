@@ -60,7 +60,7 @@ class Fl_Input_Choice : public fltk3::Group {
   // Private class to handle slightly 'special' behavior of menu button
   class InputMenuButton : public Fl_Menu_Button {
     void draw() {
-      draw_box(FL_UP_BOX, color());
+      draw_box(fltk3::UP_BOX, color());
       fl_color(active_r() ? labelcolor() : fl_inactive(labelcolor()));
       int xc = x()+w()/2, yc=y()+h()/2;
       fl_polygon(xc-5,yc-3,xc+5,yc-3,xc,yc+3);
@@ -68,7 +68,7 @@ class Fl_Input_Choice : public fltk3::Group {
     }
   public:
     InputMenuButton(int x,int y,int w,int h,const char*l=0) : 
-	Fl_Menu_Button(x,y,w,h,l) { box(FL_UP_BOX); }
+	Fl_Menu_Button(x,y,w,h,l) { box(fltk3::UP_BOX); }
   };
 
   Fl_Input *inp_;
@@ -140,17 +140,17 @@ public:
   <P> Inherited destructor Destroys the widget and any value associated with it.
   */
   Fl_Input_Choice (int x,int y,int w,int h,const char*l=0) : fltk3::Group(x,y,w,h,l) {
-    fltk3::Group::box(FL_DOWN_BOX);
+    fltk3::Group::box(fltk3::DOWN_BOX);
     align(FL_ALIGN_LEFT);				// default like Fl_Input
     inp_ = new Fl_Input(inp_x(), inp_y(),
 			inp_w(), inp_h());
     inp_->callback(inp_cb, (void*)this);
-    inp_->box(FL_FLAT_BOX);		// cosmetic
+    inp_->box(fltk3::FLAT_BOX);		// cosmetic
     inp_->when(FL_WHEN_CHANGED|FL_WHEN_NOT_CHANGED);
     menu_ = new InputMenuButton(menu_x(), menu_y(),
 				menu_w(), menu_h());
     menu_->callback(menu_cb, (void*)this);
-    menu_->box(FL_FLAT_BOX);				// cosmetic
+    menu_->box(fltk3::FLAT_BOX);				// cosmetic
     end();
   }
   
@@ -168,9 +168,9 @@ public:
   /** Removes all items from the menu. */
   void clear() { menu_->clear(); }
   /** Gets the box type of the menu button */
-  Fl_Boxtype down_box() const { return (menu_->down_box()); }
+  fltk3::Boxtype down_box() const { return (menu_->down_box()); }
   /** Sets the box type of the menu button */
-  void down_box(Fl_Boxtype b) { menu_->down_box(b); }
+  void down_box(fltk3::Boxtype b) { menu_->down_box(b); }
   /** Gets the Fl_Menu_Item array used for the menu. */
   const Fl_Menu_Item *menu() { return (menu_->menu()); }
   /** Sets the Fl_Menu_Item array used for the menu. */

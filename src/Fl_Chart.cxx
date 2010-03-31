@@ -233,7 +233,7 @@ static void draw_piechart(int x,int y,int w,int h,
 void Fl_Chart::draw() {
 
     draw_box();
-    Fl_Boxtype b = box();
+    fltk3::Boxtype b = box();
     int xx = x()+fltk3::box_dx(b); // was 9 instead of dx...
     int yy = y()+fltk3::box_dy(b);
     int ww = w()-fltk3::box_dw(b);
@@ -280,20 +280,20 @@ void Fl_Chart::draw() {
 
 /*------------------------------*/
 
-#define FL_CHART_BOXTYPE	FL_BORDER_BOX
+#define FL_CHART_BOXTYPE	fltk3::BORDER_BOX
 #define FL_CHART_COL1		FL_COL1
 #define FL_CHART_LCOL		FL_LCOL
 #define FL_CHART_ALIGN		FL_ALIGN_BOTTOM
 
 /**
   Create a new Fl_Chart widget using the given position, size and label string.
-  The default boxstyle is \c FL_NO_BOX.
+  The default boxstyle is \c fltk3::NO_BOX.
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
 Fl_Chart::Fl_Chart(int X, int Y, int W, int H,const char *L) :
 fltk3::Widget(X,Y,W,H,L) {
-  box(FL_BORDER_BOX);
+  box(fltk3::BORDER_BOX);
   align(FL_ALIGN_BOTTOM);
   numb       = 0;
   maxnumb    = 0;

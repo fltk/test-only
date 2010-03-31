@@ -340,7 +340,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
   char prev_draw_shortcut = fl_draw_shortcut;
   fl_draw_shortcut = 1;
 
-  Fl_Boxtype bt = (o==push_ &&!sel) ? fl_down(box()) : box();
+  fltk3::Boxtype bt = (o==push_ &&!sel) ? fl_down(box()) : box();
 
   // compute offsets to make selected tab look bigger
   int yofs = sel ? 0 : BORDER;
@@ -403,7 +403,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
 
 /**
     Creates a new Fl_Tabs widget using the given position, size,
-    and label string. The default boxtype is FL_THIN_UP_BOX.
+    and label string. The default boxtype is fltk3::THIN_UP_BOX.
 
     <P>Use add(fltk3::Widget
     *) to add each child, which are usually
@@ -421,7 +421,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
 Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l) :
 fltk3::Group(X,Y,W,H,l)
 {
-  box(FL_THIN_UP_BOX);
+  box(fltk3::THIN_UP_BOX);
   push_ = 0;
 }
 

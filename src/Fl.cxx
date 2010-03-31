@@ -1375,8 +1375,8 @@ void fltk3::Widget::redraw() {
 
 void fltk3::Widget::redraw_label() {
   if (window()) {
-    if (box() == FL_NO_BOX) {
-      // Widgets with the FL_NO_BOX boxtype need a parent to
+    if (box() == fltk3::NO_BOX) {
+      // Widgets with the fltk3::NO_BOX boxtype need a parent to
       // redraw, since it is responsible for redrawing the
       // background...
       int X = x() > 0 ? x() - 1 : 0;

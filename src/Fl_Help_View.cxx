@@ -451,7 +451,7 @@ Fl_Help_View::draw()
   Fl_Color              fcolor;         // current font color 
   int			head, pre,	// Flags for text
 			needspace;	// Do we need whitespace?
-  Fl_Boxtype		b = box() ? box() : FL_DOWN_BOX;
+  fltk3::Boxtype		b = box() ? box() : fltk3::DOWN_BOX;
 					// Box to draw...
   int			underline,	// Underline text?
                         xtra_ww;        // Extra width for underlined space between words
@@ -1088,7 +1088,7 @@ void Fl_Help_View::format() {
 		columns[MAX_COLUMNS];
 				// Column widths
   Fl_Color	tc, rc;		// Table/row background color
-  Fl_Boxtype	b = box() ? box() : FL_DOWN_BOX;
+  fltk3::Boxtype	b = box() ? box() : fltk3::DOWN_BOX;
 				// Box to draw...
   fl_margins	margins;	// Left margin stack...
 
@@ -3236,7 +3236,7 @@ Fl_Help_View::resize(int xx,	// I - New left position
 		     int ww,	// I - New width
 		     int hh)	// I - New height
 {
-  Fl_Boxtype		b = box() ? box() : FL_DOWN_BOX;
+  fltk3::Boxtype		b = box() ? box() : fltk3::DOWN_BOX;
 					// Box to draw...
 
 

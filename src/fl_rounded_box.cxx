@@ -54,44 +54,26 @@ static void rbox(int fill, int x, int y, int w, int h) {
   if (fill) fl_end_polygon(); else fl_end_loop();
 }
 
-static void fl_rflat_box(int x, int y, int w, int h, Fl_Color c) {
+void fl_rflat_box(int x, int y, int w, int h, Fl_Color c) {
   fl_color(c); rbox(1, x, y, w, h); rbox(0, x, y, w, h);
 }
 
-static void fl_rounded_frame(int x, int y, int w, int h, Fl_Color c) {
+void fl_rounded_frame(int x, int y, int w, int h, Fl_Color c) {
   fl_color(c); rbox(0, x, y, w, h);
 }
 
-static void fl_rounded_box(int x, int y, int w, int h, Fl_Color c) {
+void fl_rounded_box(int x, int y, int w, int h, Fl_Color c) {
   fl_color(c); rbox(1, x, y, w, h);
   fl_color(FL_BLACK); rbox(0, x, y, w, h);
 }
 
-static void fl_rshadow_box(int x, int y, int w, int h, Fl_Color c) {
+void fl_rshadow_box(int x, int y, int w, int h, Fl_Color c) {
   // draw shadow:
   fl_color(FL_DARK3);
   rbox(1, x+BW, y+BW, w, h);
   rbox(0, x+BW, y+BW, w, h);
   // draw the box:
   fl_rounded_box(x, y, w, h, c);
-}
-
-extern void fl_internal_boxtype(Fl_Boxtype, Fl_Box_Draw_F*);
-
-Fl_Boxtype fl_define_FL_ROUNDED_BOX() {
-  fl_internal_boxtype(_FL_ROUNDED_FRAME, fl_rounded_frame);
-  fl_internal_boxtype(_FL_ROUNDED_BOX, fl_rounded_box);
-  return _FL_ROUNDED_BOX;
-}
-
-Fl_Boxtype fl_define_FL_RFLAT_BOX() {
-  fl_internal_boxtype(_FL_RFLAT_BOX, fl_rflat_box);
-  return _FL_RFLAT_BOX;
-}
-
-Fl_Boxtype fl_define_FL_RSHADOW_BOX() {
-  fl_internal_boxtype(_FL_RSHADOW_BOX, fl_rshadow_box);
-  return _FL_RSHADOW_BOX;
 }
 
 //

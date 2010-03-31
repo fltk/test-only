@@ -163,11 +163,11 @@ protected:
         USERFLAG1       = 1<<31   ///< reserved for 3rd party extensions
   };
   void draw_box() const;
-  void draw_box(Fl_Boxtype t, Fl_Color c) const;
-  void draw_box(Fl_Boxtype t, int x,int y,int w,int h, Fl_Color c) const;
+  void draw_box(fltk3::Boxtype t, Fl_Color c) const;
+  void draw_box(fltk3::Boxtype t, int x,int y,int w,int h, Fl_Color c) const;
   /** draws a focus rectangle around the widget */
   void draw_focus() {draw_focus(box(),x(),y(),w(),h());}
-  void draw_focus(Fl_Boxtype t, int x,int y,int w,int h) const;
+  void draw_focus(fltk3::Boxtype t, int x,int y,int w,int h) const;
   void draw_label() const;
   void draw_label(int, int, int, int) const;
 
@@ -353,18 +353,18 @@ public:
 
   /** Gets the box type of the widget.
       \return the current box type
-      \see box(Fl_Boxtype), Fl_Boxtype
+      \see box(fltk3::Boxtype), fltk3::Boxtype
    */
-  Fl_Boxtype box() const {return (Fl_Boxtype)box_;}
+  fltk3::Boxtype box() const {return (fltk3::Boxtype)box_;}
   
   /** Sets the box type for the widget. 
       This identifies a routine that draws the background of the widget.
-      See Fl_Boxtype for the available types. The default depends on the 
-      widget, but is usually FL_NO_BOX or FL_UP_BOX.
+      See fltk3::Boxtype for the available types. The default depends on the 
+      widget, but is usually fltk3::NO_BOX or fltk3::UP_BOX.
       \param[in] new_box the new box type
-      \see box(), Fl_Boxtype
+      \see box(), fltk3::Boxtype
    */
-  void box(Fl_Boxtype new_box) {box_ = new_box;}
+  void box(fltk3::Boxtype new_box) {box_ = new_box;}
 
   /** Gets the background color of the widget.
       \return current background color

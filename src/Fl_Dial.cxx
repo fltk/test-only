@@ -45,7 +45,7 @@ void Fl_Dial::draw(int X, int Y, int W, int H) {
   double angle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;
   if (type() == FL_FILL_DIAL) {
     // foo: draw this nicely in certain round box types
-    int foo = (box() > _FL_ROUND_UP_BOX && fltk3::box_dx(box()));
+    int foo = (box() > fltk3::ROUND_UP_BOX && fltk3::box_dx(box()));
     if (foo) {X--; Y--; W+=2; H+=2;}
     if (active_r()) fl_color(color());
     else fl_color(fl_inactive(color()));
@@ -155,7 +155,7 @@ Fl_Dial::Fl_Dial(int X, int Y, int W, int H, const char* l)
   and label string. The default type is FL_NORMAL_DIAL.
 */
 : Fl_Valuator(X, Y, W, H, l) {
-  box(FL_OVAL_BOX);
+  box(fltk3::OVAL_BOX);
   selection_color(FL_INACTIVE_COLOR); // was 37
   a1 = 45;
   a2 = 315;

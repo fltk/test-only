@@ -247,7 +247,7 @@ void Fl_Menu_Item::setonly() {
 Fl_Menu_::Fl_Menu_(int X,int Y,int W,int H,const char* l)
 : fltk3::Widget(X,Y,W,H,l) {
   set_flag(SHORTCUT_LABEL);
-  box(FL_UP_BOX);
+  box(fltk3::UP_BOX);
   when(FL_WHEN_RELEASE_ALWAYS);
   value_ = menu_ = 0;
   alloc = 0;
@@ -255,7 +255,7 @@ Fl_Menu_::Fl_Menu_(int X,int Y,int W,int H,const char* l)
   textfont(fltk3::HELVETICA);
   textsize(FL_NORMAL_SIZE);
   textcolor(FL_FOREGROUND_COLOR);
-  down_box(FL_NO_BOX);
+  down_box(fltk3::NO_BOX);
 }
 
 /**

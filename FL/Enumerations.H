@@ -126,100 +126,59 @@ enum Fl_When {
 #  define FL_CONTROL  FL_META
 #endif
 
+#endif
+
 enum Fl_Boxtype {
-  FL_NO_BOX = 0,
-  FL_FLAT_BOX,
-  FL_UP_BOX,
-  FL_DOWN_BOX,
-  FL_UP_FRAME,
-  FL_DOWN_FRAME,
-  FL_THIN_UP_BOX,
-  FL_THIN_DOWN_BOX,
-  FL_THIN_UP_FRAME,
-  FL_THIN_DOWN_FRAME,
-  FL_ENGRAVED_BOX,
-  FL_EMBOSSED_BOX,
-  FL_ENGRAVED_FRAME,
-  FL_EMBOSSED_FRAME,
-  FL_BORDER_BOX,
-  _FL_SHADOW_BOX,
-  FL_BORDER_FRAME,
-  _FL_SHADOW_FRAME,
-  _FL_ROUNDED_BOX,
-  _FL_RSHADOW_BOX,
-  _FL_ROUNDED_FRAME,
-  _FL_RFLAT_BOX,
-  _FL_ROUND_UP_BOX,
-  _FL_ROUND_DOWN_BOX,
-  _FL_DIAMOND_UP_BOX,
-  _FL_DIAMOND_DOWN_BOX,
-  _FL_OVAL_BOX,
-  _FL_OSHADOW_BOX,
-  _FL_OVAL_FRAME,
-  _FL_OFLAT_BOX,
-  _FL_PLASTIC_UP_BOX,
-  _FL_PLASTIC_DOWN_BOX,
-  _FL_PLASTIC_UP_FRAME,
-  _FL_PLASTIC_DOWN_FRAME,
-  _FL_PLASTIC_THIN_UP_BOX,
-  _FL_PLASTIC_THIN_DOWN_BOX,
-  _FL_PLASTIC_ROUND_UP_BOX,
-  _FL_PLASTIC_ROUND_DOWN_BOX,
-  _FL_GTK_UP_BOX,
-  _FL_GTK_DOWN_BOX,
-  _FL_GTK_UP_FRAME,
-  _FL_GTK_DOWN_FRAME,
-  _FL_GTK_THIN_UP_BOX,
-  _FL_GTK_THIN_DOWN_BOX,
-  _FL_GTK_THIN_UP_FRAME,
-  _FL_GTK_THIN_DOWN_FRAME,
-  _FL_GTK_ROUND_UP_BOX,
-  _FL_GTK_ROUND_DOWN_BOX,
-  FL_FREE_BOXTYPE
+  FL_NO_BOX                 = fltk3::NO_BOX,
+  FL_FLAT_BOX               = fltk3::FLAT_BOX,
+  FL_UP_BOX                 = fltk3::UP_BOX,
+  FL_DOWN_BOX               = fltk3::DOWN_BOX,
+  FL_UP_FRAME               = fltk3::UP_FRAME,
+  FL_DOWN_FRAME             = fltk3::DOWN_FRAME,
+  FL_THIN_UP_BOX            = fltk3::THIN_UP_BOX,
+  FL_THIN_DOWN_BOX          = fltk3::THIN_DOWN_BOX,
+  FL_THIN_UP_FRAME          = fltk3::THIN_UP_FRAME,
+  FL_THIN_DOWN_FRAME        = fltk3::THIN_DOWN_FRAME,
+  FL_ENGRAVED_BOX           = fltk3::ENGRAVED_BOX,
+  FL_EMBOSSED_BOX           = fltk3::EMBOSSED_BOX,
+  FL_ENGRAVED_FRAME         = fltk3::ENGRAVED_FRAME,
+  FL_EMBOSSED_FRAME         = fltk3::EMBOSSED_FRAME,
+  FL_BORDER_BOX             = fltk3::BORDER_BOX,
+  FL_SHADOW_BOX             = fltk3::SHADOW_BOX,
+  FL_BORDER_FRAME           = fltk3::BORDER_FRAME,
+  FL_SHADOW_FRAME           = fltk3::SHADOW_FRAME,
+  FL_ROUNDED_BOX            = fltk3::ROUNDED_BOX,
+  FL_RSHADOW_BOX            = fltk3::RSHADOW_BOX,
+  FL_ROUNDED_FRAME          = fltk3::ROUNDED_FRAME,
+  FL_RFLAT_BOX              = fltk3::RFLAT_BOX,
+  FL_ROUND_UP_BOX           = fltk3::ROUND_UP_BOX,
+  FL_ROUND_DOWN_BOX         = fltk3::ROUND_DOWN_BOX,
+  FL_DIAMOND_UP_BOX         = fltk3::DIAMOND_UP_BOX,
+  FL_DIAMOND_DOWN_BOX       = fltk3::DIAMOND_DOWN_BOX,
+  FL_OVAL_BOX               = fltk3::OVAL_BOX,
+  FL_OSHADOW_BOX            = fltk3::OSHADOW_BOX,
+  FL_OVAL_FRAME             = fltk3::OVAL_FRAME,
+  FL_OFLAT_BOX              = fltk3::OFLAT_BOX,
+  FL_PLASTIC_UP_BOX         = fltk3::PLASTIC_UP_BOX,
+  FL_PLASTIC_DOWN_BOX       = fltk3::PLASTIC_DOWN_BOX,
+  FL_PLASTIC_UP_FRAME       = fltk3::PLASTIC_UP_FRAME,
+  FL_PLASTIC_DOWN_FRAME     = fltk3::PLASTIC_DOWN_FRAME,
+  FL_PLASTIC_THIN_UP_BOX    = fltk3::PLASTIC_THIN_UP_BOX,
+  FL_PLASTIC_THIN_DOWN_BOX  = fltk3::PLASTIC_THIN_DOWN_BOX,
+  FL_PLASTIC_ROUND_UP_BOX   = fltk3::PLASTIC_ROUND_UP_BOX,
+  FL_PLASTIC_ROUND_DOWN_BOX = fltk3::PLASTIC_ROUND_DOWN_BOX,
+  FL_GTK_UP_BOX             = fltk3::GTK_UP_BOX,
+  FL_GTK_DOWN_BOX           = fltk3::GTK_DOWN_BOX,
+  FL_GTK_UP_FRAME           = fltk3::GTK_UP_FRAME,
+  FL_GTK_DOWN_FRAME         = fltk3::GTK_DOWN_FRAME,
+  FL_GTK_THIN_UP_BOX        = fltk3::GTK_THIN_UP_BOX,
+  FL_GTK_THIN_DOWN_BOX      = fltk3::GTK_THIN_DOWN_BOX,
+  FL_GTK_THIN_UP_FRAME      = fltk3::GTK_THIN_UP_FRAME,
+  FL_GTK_THIN_DOWN_FRAME    = fltk3::GTK_THIN_DOWN_FRAME,
+  FL_GTK_ROUND_UP_BOX       = fltk3::GTK_ROUND_UP_BOX,
+  FL_GTK_ROUND_DOWN_BOX     = fltk3::GTK_ROUND_DOWN_BOX,
+  FL_FREE_BOXTYPE           = fltk3::FREE_BOXTYPE
 };
-extern FL_EXPORT Fl_Boxtype fl_define_FL_ROUND_UP_BOX();
-#define FL_ROUND_UP_BOX fl_define_FL_ROUND_UP_BOX()
-#define FL_ROUND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_ROUND_UP_BOX()+1)
-extern FL_EXPORT Fl_Boxtype fl_define_FL_SHADOW_BOX();
-#define FL_SHADOW_BOX fl_define_FL_SHADOW_BOX()
-#define FL_SHADOW_FRAME (Fl_Boxtype)(fl_define_FL_SHADOW_BOX()+2)
-extern FL_EXPORT Fl_Boxtype fl_define_FL_ROUNDED_BOX();
-#define FL_ROUNDED_BOX fl_define_FL_ROUNDED_BOX()
-#define FL_ROUNDED_FRAME (Fl_Boxtype)(fl_define_FL_ROUNDED_BOX()+2)
-extern FL_EXPORT Fl_Boxtype fl_define_FL_RFLAT_BOX();
-#define FL_RFLAT_BOX fl_define_FL_RFLAT_BOX()
-extern FL_EXPORT Fl_Boxtype fl_define_FL_RSHADOW_BOX();
-#define FL_RSHADOW_BOX fl_define_FL_RSHADOW_BOX()
-extern FL_EXPORT Fl_Boxtype fl_define_FL_DIAMOND_BOX();
-#define FL_DIAMOND_UP_BOX fl_define_FL_DIAMOND_BOX()
-#define FL_DIAMOND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_DIAMOND_BOX()+1)
-extern FL_EXPORT Fl_Boxtype fl_define_FL_OVAL_BOX();
-#define FL_OVAL_BOX fl_define_FL_OVAL_BOX()
-#define FL_OSHADOW_BOX (Fl_Boxtype)(fl_define_FL_OVAL_BOX()+1)
-#define FL_OVAL_FRAME (Fl_Boxtype)(fl_define_FL_OVAL_BOX()+2)
-#define FL_OFLAT_BOX (Fl_Boxtype)(fl_define_FL_OVAL_BOX()+3)
-
-extern FL_EXPORT Fl_Boxtype fl_define_FL_PLASTIC_UP_BOX();
-#define FL_PLASTIC_UP_BOX fl_define_FL_PLASTIC_UP_BOX()
-#define FL_PLASTIC_DOWN_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+1)
-#define FL_PLASTIC_UP_FRAME (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+2)
-#define FL_PLASTIC_DOWN_FRAME (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+3)
-#define FL_PLASTIC_THIN_UP_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+4)
-#define FL_PLASTIC_THIN_DOWN_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+5)
-#define FL_PLASTIC_ROUND_UP_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+6)
-#define FL_PLASTIC_ROUND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+7)
-
-extern FL_EXPORT Fl_Boxtype fl_define_FL_GTK_UP_BOX();
-#define FL_GTK_UP_BOX fl_define_FL_GTK_UP_BOX()
-#define FL_GTK_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+1)
-#define FL_GTK_UP_FRAME (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+2)
-#define FL_GTK_DOWN_FRAME (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+3)
-#define FL_GTK_THIN_UP_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+4)
-#define FL_GTK_THIN_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+5)
-#define FL_GTK_THIN_UP_FRAME (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+6)
-#define FL_GTK_THIN_DOWN_FRAME (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+7)
-#define FL_GTK_ROUND_UP_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+8)
-#define FL_GTK_ROUND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+9)
 
 inline Fl_Boxtype fl_box(Fl_Boxtype b) {
   return (Fl_Boxtype)((b<FL_UP_BOX||b%4>1)?b:(b-2));
@@ -230,8 +189,6 @@ inline Fl_Boxtype fl_down(Fl_Boxtype b) {
 inline Fl_Boxtype fl_frame(Fl_Boxtype b) {
   return (Fl_Boxtype)((b%4<2)?b:(b+2));
 }
-
-#endif
 
 enum Fl_Labeltype {
   FL_NORMAL_LABEL     = fltk3::NORMAL_LABEL,

@@ -82,7 +82,7 @@ Fl_Tree::Fl_Tree(int X, int Y, int W, int H, const char *L) : fltk3::Group(X,Y,W
   _root->parent(0);				// we are root of tree
   _root->label("ROOT");
   _item_clicked = 0;
-  box(FL_DOWN_BOX);
+  box(fltk3::DOWN_BOX);
   color(FL_WHITE);
   when(FL_WHEN_CHANGED);
   _vscroll = new Fl_Scrollbar(0,0,0,0);	// will be resized by draw()

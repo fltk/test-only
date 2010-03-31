@@ -630,17 +630,17 @@ public:
     // no redraw().. only affects new add()itions
   }
   /// Sets the style of box used to draw selected items.
-  /// This is an fltk Fl_Boxtype.
+  /// This is an fltk fltk3::Boxtype.
   /// The default is influenced by FLTK's current fltk3::scheme()
   ///
-  Fl_Boxtype selectbox() const {
+  fltk3::Boxtype selectbox() const {
     return(_prefs.selectbox());
   }
   /// Gets the style of box used to draw selected items.
-  /// This is an fltk Fl_Boxtype.
+  /// This is an fltk fltk3::Boxtype.
   /// The default is influenced by FLTK's current fltk3::scheme()
   ///
-  void selectbox(Fl_Boxtype val) {
+  void selectbox(fltk3::Boxtype val) {
     _prefs.selectbox(val);
     redraw();
   }

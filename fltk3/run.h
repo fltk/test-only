@@ -790,13 +790,13 @@ namespace fltk3 {
   extern void set_labeltype(fltk3::Labeltype, fltk3::Labeltype from); // is it defined ?
 
   // boxtypes:
-  extern Fl_Box_Draw_F *get_boxtype(Fl_Boxtype);
-  extern void set_boxtype(Fl_Boxtype, Fl_Box_Draw_F*,uchar,uchar,uchar,uchar);
-  extern void set_boxtype(Fl_Boxtype, Fl_Boxtype from);
-  extern int box_dx(Fl_Boxtype);
-  extern int box_dy(Fl_Boxtype);
-  extern int box_dw(Fl_Boxtype);
-  extern int box_dh(Fl_Boxtype);
+  extern Fl_Box_Draw_F *get_boxtype(fltk3::Boxtype);
+  extern void set_boxtype(fltk3::Boxtype, Fl_Box_Draw_F*,uchar,uchar,uchar,uchar);
+  extern void set_boxtype(fltk3::Boxtype, fltk3::Boxtype from);
+  extern int box_dx(fltk3::Boxtype);
+  extern int box_dy(fltk3::Boxtype);
+  extern int box_dw(fltk3::Boxtype);
+  extern int box_dh(fltk3::Boxtype);
   extern int draw_box_active();
 
   // back compatibility:

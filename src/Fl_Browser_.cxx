@@ -76,7 +76,7 @@ static void hscrollbar_callback(fltk3::Widget* s, void*) {
 */
 void Fl_Browser_::bbox(int& X, int& Y, int& W, int& H) const {
   int scrollsize = scrollbar_size_ ? scrollbar_size_ : fltk3::scrollbar_size();
-  Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;
+  fltk3::Boxtype b = box() ? box() : fltk3::DOWN_BOX;
   X = x()+fltk3::box_dx(b);
   Y = y()+fltk3::box_dy(b);
   W = w()-fltk3::box_dw(b);
@@ -343,7 +343,7 @@ void Fl_Browser_::draw() {
   int dont_repeat = 0;
 J1:
   if (damage() & FL_DAMAGE_ALL) { // redraw the box if full redraw
-    Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;
+    fltk3::Boxtype b = box() ? box() : fltk3::DOWN_BOX;
     draw_box(b, x(), y(), w(), h(), color());
     drawsquare = 1;
   }
@@ -412,13 +412,13 @@ J1:
 	fl_rectf(X, yy+Y, W, hh);
       } else if (!(damage()&FL_DAMAGE_ALL)) {
 	fl_push_clip(X, yy+Y, W, hh);
-	draw_box(box() ? box() : FL_DOWN_BOX, x(), y(), w(), h(), color());
+	draw_box(box() ? box() : fltk3::DOWN_BOX, x(), y(), w(), h(), color());
 	fl_pop_clip();
       }
       item_draw(l, X-hposition_, yy+Y, W+hposition_, hh);
       if (l == selection_ && fltk3::focus() == this) {
-	draw_box(FL_BORDER_FRAME, X, yy+Y, W, hh, color());
-	draw_focus(FL_NO_BOX, X, yy+Y, W+1, hh+1);
+	draw_box(fltk3::BORDER_FRAME, X, yy+Y, W, hh, color());
+	draw_focus(fltk3::NO_BOX, X, yy+Y, W+1, hh+1);
       }
       int ww = item_width(l);
       if (ww > max_width) {max_width = ww; max_width_item = l;}
@@ -428,7 +428,7 @@ J1:
   // erase the area below last line:
   if (!(damage()&FL_DAMAGE_ALL) && yy < H) {
     fl_push_clip(X, yy+Y, W, H-yy);
-    draw_box(box() ? box() : FL_DOWN_BOX, x(), y(), w(), h(), color());
+    draw_box(box() ? box() : fltk3::DOWN_BOX, x(), y(), w(), h(), color());
     fl_pop_clip();
   }
   fl_pop_clip();
@@ -962,7 +962,7 @@ Fl_Browser_::Fl_Browser_(int X, int Y, int W, int H, const char* L)
     scrollbar(0, 0, 0, 0, 0), // they will be resized by draw()
     hscrollbar(0, 0, 0, 0, 0)
 {
-  box(FL_NO_BOX);
+  box(fltk3::NO_BOX);
   align(FL_ALIGN_BOTTOM);
   position_ = real_position_ = 0;
   hposition_ = real_hposition_ = 0;

@@ -128,7 +128,7 @@ fltk3::Widget::Widget(int X, int Y, int W, int H, const char* L) {
   type_		 = 0;
   flags_	 = VISIBLE_FOCUS;
   damage_	 = 0;
-  box_		 = FL_NO_BOX;
+  box_		 = fltk3::NO_BOX;
   color_	 = FL_GRAY;
   color2_	 = FL_GRAY;
   when_		 = FL_WHEN_RELEASE;
@@ -183,13 +183,13 @@ fltk3::Widget::~Widget() {
 
 /** Draws a focus box for the widget at the given position and size */
 void
-fltk3::Widget::draw_focus(Fl_Boxtype B, int X, int Y, int W, int H) const {
+fltk3::Widget::draw_focus(fltk3::Boxtype B, int X, int Y, int W, int H) const {
   if (!fltk3::visible_focus()) return;
   switch (B) {
-    case FL_DOWN_BOX:
-    case FL_DOWN_FRAME:
-    case FL_THIN_DOWN_BOX:
-    case FL_THIN_DOWN_FRAME:
+    case fltk3::DOWN_BOX:
+    case fltk3::DOWN_FRAME:
+    case fltk3::THIN_DOWN_BOX:
+    case fltk3::THIN_DOWN_FRAME:
       X ++;
       Y ++;
     default:

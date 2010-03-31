@@ -35,7 +35,7 @@
   \param[in] L widget label, default is no label
 */
 Fl_FormsPixmap::Fl_FormsPixmap(
-  Fl_Boxtype t, int X, int Y, int W, int H, const char* L)
+  fltk3::Boxtype t, int X, int Y, int W, int H, const char* L)
 : fltk3::Widget(X, Y, W, H, L) {
   box(t);
   b = 0;

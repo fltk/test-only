@@ -231,7 +231,7 @@ public:
 #endif
   
   // Port to 3: void box(Box*)		;
-  void box(Fl_Boxtype b) { _p->box(b); }
+  void box(Boxtype b) { _p->box((fltk3::Boxtype)b); }
   
 #if 0
   void buttonbox(Box*)		;

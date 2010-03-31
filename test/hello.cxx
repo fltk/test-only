@@ -34,7 +34,7 @@ using namespace fltk3;
 int main(int argc, char **argv) {
   Window *window = new Window(300,180);
   Widget *box = new Widget(20,40,260,100,"Hello, World!");
-  box->box(FL_UP_BOX);
+  box->box(UP_BOX);
   box->labelfont(BOLD+ITALIC);
   box->labelsize(36);
   box->labeltype(SHADOW_LABEL);

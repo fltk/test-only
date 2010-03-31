@@ -49,9 +49,9 @@
   <P>Fl_Tile does not normailly draw any graphics of its own.
   The "borders" which can be seen in the snapshot above
   are actually part of the children. Their boxtypes have been set
-  to FL_DOWN_BOX creating the impression of 
+  to fltk3::DOWN_BOX creating the impression of 
   "ridges" where the boxes touch. What you see are 
-  actually two adjacent FL_DOWN_BOX's drawn next to each 
+  actually two adjacent fltk3::DOWN_BOX's drawn next to each 
   other. All neighboring widgets share the same edge - the widget's 
   thick borders make it appear as though the widgets aren't actually
   touching, but they are. If the edges of adjacent widgets do not
@@ -81,7 +81,7 @@ public:
   int handle(int);
   /**
     Creates a new Fl_Tile widget using the given position, size,
-    and label string. The default boxtype is FL_NO_BOX.
+    and label string. The default boxtype is fltk3::NO_BOX.
     
     <P>The destructor <I>also deletes all the children</I>. This allows a
     whole tree to be deleted at once, without having to keep a pointer to

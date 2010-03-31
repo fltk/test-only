@@ -164,14 +164,14 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
     window->callback((Fl_Callback*)cb_window, (void*)(this));
     { fltk3::Group* o = new fltk3::Group(10, 10, 470, 25);
       { showChoice = new Fl_Choice(65, 10, 215, 25, "Show:");
-        showChoice->down_box(FL_BORDER_BOX);
+        showChoice->down_box(fltk3::BORDER_BOX);
         showChoice->labelfont(1);
         showChoice->callback((Fl_Callback*)cb_showChoice);
         fltk3::Group::current()->resizable(showChoice);
         showChoice->label(show_label);
       } // Fl_Choice* showChoice
       { favoritesButton = new Fl_Menu_Button(290, 10, 155, 25, "Favorites");
-        favoritesButton->down_box(FL_BORDER_BOX);
+        favoritesButton->down_box(fltk3::BORDER_BOX);
         favoritesButton->callback((Fl_Callback*)cb_favoritesButton);
         favoritesButton->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
         favoritesButton->label(favorites_label);
@@ -192,7 +192,7 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
         fileList->window()->hotspot(fileList);
       } // Fl_File_Browser* fileList
       { previewBox = new Fl_Box(305, 45, 175, 225, "?");
-        previewBox->box(FL_DOWN_BOX);
+        previewBox->box(fltk3::DOWN_BOX);
         previewBox->labelsize(100);
         previewBox->align(Fl_Align(FL_ALIGN_CLIP|FL_ALIGN_INSIDE));
       } // Fl_Box* previewBox
@@ -203,7 +203,7 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
       { fltk3::Group* o = new fltk3::Group(10, 275, 470, 20);
         { previewButton = new Fl_Check_Button(10, 275, 73, 20, "Preview");
           previewButton->shortcut(0x80070);
-          previewButton->down_box(FL_DOWN_BOX);
+          previewButton->down_box(fltk3::DOWN_BOX);
           previewButton->value(1);
           previewButton->callback((Fl_Callback*)cb_previewButton);
           previewButton->label(preview_label);

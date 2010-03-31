@@ -37,7 +37,7 @@ void Fl_Menu_Button::draw() {
   draw_box(pressed_menu_button_ == this ? fl_down(box()) : box(), color());
   draw_label();
   if (fltk3::focus() == this) draw_focus();
-  // ** if (box() == FL_FLAT_BOX) return; // for XForms compatibility
+  // ** if (box() == fltk3::FLAT_BOX) return; // for XForms compatibility
   int H = (labelsize()-3)&-2;
   int X = x()+w()-H*2;
   int Y = y()+(h()-H)/2;
@@ -108,13 +108,13 @@ int Fl_Menu_Button::handle(int e) {
 
 /**
   Creates a new Fl_Menu_Button widget using the given position,
-  size, and label string. The default boxtype is FL_UP_BOX.
+  size, and label string. The default boxtype is fltk3::UP_BOX.
   <P>The constructor sets menu() to NULL.  See 
   Fl_Menu_ for the methods to set or change the menu.
 */
 Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
 : Fl_Menu_(X,Y,W,H,l) {
-  down_box(FL_NO_BOX);
+  down_box(fltk3::NO_BOX);
 }
 
 //

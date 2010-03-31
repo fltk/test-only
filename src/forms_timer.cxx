@@ -148,7 +148,7 @@ Fl_Timer::~Fl_Timer() {
 Fl_Timer::Fl_Timer(uchar t, int X, int Y, int W, int H, const char* l)
 
 : fltk3::Widget(X, Y, W, H, l) {
-  box(FL_DOWN_BOX);
+  box(fltk3::DOWN_BOX);
   selection_color(FL_RED);
   delay = 0;
   on = 0;

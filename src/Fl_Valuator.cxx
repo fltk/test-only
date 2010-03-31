@@ -36,7 +36,7 @@
 
 /**
  Creates a new Fl_Valuator widget using the given position,
- size, and label string. The default boxtype is FL_NO_BOX.
+ size, and label string. The default boxtype is fltk3::NO_BOX.
  */
 Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
 : fltk3::Widget(X,Y,W,H,L) {

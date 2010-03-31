@@ -42,7 +42,7 @@
 
 void fltk3::Window::_Fl_Window() {
   type(FL_WINDOW);
-  box(FL_FLAT_BOX);
+  box(fltk3::FLAT_BOX);
   if (fltk3::scheme_bg_) {
     labeltype(fltk3::NORMAL_LABEL);
     align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_CLIP);

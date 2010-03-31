@@ -33,16 +33,16 @@
 
 void Fl_Slider::_Fl_Slider() {
   slider_size_ = 0;
-  slider_ = 0; // FL_UP_BOX;
+  slider_ = 0; // fltk3::UP_BOX;
 }
 
 /**
   Creates a new Fl_Slider widget using the given position,
-  size, and label string. The default boxtype is FL_DOWN_BOX.
+  size, and label string. The default boxtype is fltk3::DOWN_BOX.
 */
 Fl_Slider::Fl_Slider(int X, int Y, int W, int H, const char* L)
 : Fl_Valuator(X, Y, W, H, L) {
-  box(FL_DOWN_BOX);
+  box(fltk3::DOWN_BOX);
   _Fl_Slider();
 }
 
@@ -54,7 +54,7 @@ Fl_Slider::Fl_Slider(uchar t, int X, int Y, int W, int H, const char* L)
   : Fl_Valuator(X, Y, W, H, L) {
   type(t);
   box(t==FL_HOR_NICE_SLIDER || t==FL_VERT_NICE_SLIDER ?
-      FL_FLAT_BOX : FL_DOWN_BOX);
+      fltk3::FLAT_BOX : fltk3::DOWN_BOX);
   _Fl_Slider();
 }
 
@@ -108,9 +108,9 @@ void Fl_Slider::draw_bg(int X, int Y, int W, int H) {
 
   Fl_Color black = active_r() ? FL_FOREGROUND_COLOR : FL_INACTIVE_COLOR;
   if (type() == FL_VERT_NICE_SLIDER) {
-    draw_box(FL_THIN_DOWN_BOX, X+W/2-2, Y, 4, H, black);
+    draw_box(fltk3::THIN_DOWN_BOX, X+W/2-2, Y, 4, H, black);
   } else if (type() == FL_HOR_NICE_SLIDER) {
-    draw_box(FL_THIN_DOWN_BOX, X, Y+H/2-2, W, 4, black);
+    draw_box(fltk3::THIN_DOWN_BOX, X, Y+H/2-2, W, 4, black);
   }
 }
 
@@ -153,16 +153,16 @@ void Fl_Slider::draw(int X, int Y, int W, int H) {
 
   draw_bg(X, Y, W, H);
 
-  Fl_Boxtype box1 = slider();
-  if (!box1) {box1 = (Fl_Boxtype)(box()&-2); if (!box1) box1 = FL_UP_BOX;}
+  fltk3::Boxtype box1 = slider();
+  if (!box1) {box1 = (fltk3::Boxtype)(box()&-2); if (!box1) box1 = fltk3::UP_BOX;}
   if (type() == FL_VERT_NICE_SLIDER) {
     draw_box(box1, xsl, ysl, wsl, hsl, FL_GRAY);
     int d = (hsl-4)/2;
-    draw_box(FL_THIN_DOWN_BOX, xsl+2, ysl+d, wsl-4, hsl-2*d,selection_color());
+    draw_box(fltk3::THIN_DOWN_BOX, xsl+2, ysl+d, wsl-4, hsl-2*d,selection_color());
   } else if (type() == FL_HOR_NICE_SLIDER) {
     draw_box(box1, xsl, ysl, wsl, hsl, FL_GRAY);
     int d = (wsl-4)/2;
-    draw_box(FL_THIN_DOWN_BOX, xsl+d, ysl+2, wsl-2*d, hsl-4,selection_color());
+    draw_box(fltk3::THIN_DOWN_BOX, xsl+d, ysl+2, wsl-2*d, hsl-4,selection_color());
   } else {
     if (wsl>0 && hsl>0) draw_box(box1, xsl, ysl, wsl, hsl, selection_color());
 

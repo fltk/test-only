@@ -1035,14 +1035,14 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
 
   This function creates a new Fl_Input_ widget and adds it to the current
   fltk3::Group. The value() is set to \c NULL.
-  The default boxtype is \c FL_DOWN_BOX.
+  The default boxtype is \c fltk3::DOWN_BOX.
 
   \param X, Y, W, H the dimensions of the new widget
   \param l an optional label text
 */
 Fl_Input_::Fl_Input_(int X, int Y, int W, int H, const char* l)
 : fltk3::Widget(X, Y, W, H, l) {
-  box(FL_DOWN_BOX);
+  box(fltk3::DOWN_BOX);
   color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
   align(FL_ALIGN_LEFT);
   textsize_ = FL_NORMAL_SIZE;

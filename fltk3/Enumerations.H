@@ -429,12 +429,14 @@ enum Fl_When { // fltk3::Widget::when():
 
 /*@}*/		// group: Event States
 
+namespace fltk3 {
+
 /** \name Box Types
     \brief FLTK standard box types
     
     This enum defines the standard box types included with FLTK.
     
-    FL_NO_BOX means nothing is drawn at all, so whatever is already 
+    fltk3::NO_BOX means nothing is drawn at all, so whatever is already 
     on the screen remains. The FL_..._FRAME types only draw their edges, 
     leaving the interior unchanged. The blue color in Figure 1 
     is the area that is not drawn by the frame types.
@@ -442,137 +444,135 @@ enum Fl_When { // fltk3::Widget::when():
     \image html boxtypes.gif "Figure 1: FLTK standard box types"
     \image latex boxtypes.eps "FLTK standard box types" width=10cm
     \todo	Description of boxtypes is incomplete.
-    		See below for the defined enum Fl_Boxtype.
+    		See below for the defined enum fltk3::Boxtype.
 		\see src/Fl_get_system_colors.cxx
 */
 /*@{*/
-enum Fl_Boxtype { // boxtypes (if you change these you must fix fl_boxtype.C):
-
-  FL_NO_BOX = 0,		///< nothing is drawn at all, this box is invisible
-  FL_FLAT_BOX,			///< a flat box
-  FL_UP_BOX,			///< see figure 1
-  FL_DOWN_BOX,			///< see figure 1
-  FL_UP_FRAME,			///< see figure 1
-  FL_DOWN_FRAME,		///< see figure 1
-  FL_THIN_UP_BOX,		///< see figure 1
-  FL_THIN_DOWN_BOX,		///< see figure 1
-  FL_THIN_UP_FRAME,		///< see figure 1
-  FL_THIN_DOWN_FRAME,		///< see figure 1
-  FL_ENGRAVED_BOX,		///< see figure 1
-  FL_EMBOSSED_BOX,		///< see figure 1
-  FL_ENGRAVED_FRAME,		///< see figure 1
-  FL_EMBOSSED_FRAME,		///< see figure 1
-  FL_BORDER_BOX,		///< see figure 1
-  _FL_SHADOW_BOX,		///< see figure 1
-  FL_BORDER_FRAME,		///< see figure 1
-  _FL_SHADOW_FRAME,		///< see figure 1
-  _FL_ROUNDED_BOX,		///< see figure 1
-  _FL_RSHADOW_BOX,		///< see figure 1
-  _FL_ROUNDED_FRAME,		///< see figure 1
-  _FL_RFLAT_BOX,		///< see figure 1
-  _FL_ROUND_UP_BOX,		///< see figure 1
-  _FL_ROUND_DOWN_BOX,		///< see figure 1
-  _FL_DIAMOND_UP_BOX,		///< see figure 1
-  _FL_DIAMOND_DOWN_BOX,		///< see figure 1
-  _FL_OVAL_BOX,			///< see figure 1
-  _FL_OSHADOW_BOX,		///< see figure 1
-  _FL_OVAL_FRAME,		///< see figure 1
-  _FL_OFLAT_BOX,		///< see figure 1
-  _FL_PLASTIC_UP_BOX,		///< plastic version of FL_UP_BOX
-  _FL_PLASTIC_DOWN_BOX,		///< plastic version of FL_DOWN_BOX
-  _FL_PLASTIC_UP_FRAME,		///< plastic version of FL_UP_FRAME
-  _FL_PLASTIC_DOWN_FRAME,	///< plastic version of FL_DOWN_FRAME
-  _FL_PLASTIC_THIN_UP_BOX,	///< plastic version of FL_THIN_UP_BOX
-  _FL_PLASTIC_THIN_DOWN_BOX,	///< plastic version of FL_THIN_DOWN_BOX
-  _FL_PLASTIC_ROUND_UP_BOX,	///< plastic version of FL_ROUND_UP_BOX
-  _FL_PLASTIC_ROUND_DOWN_BOX,	///< plastic version of FL_ROUND_DOWN_BOX
-  _FL_GTK_UP_BOX,		///< gtk+ version of FL_UP_BOX
-  _FL_GTK_DOWN_BOX,		///< gtk+ version of FL_DOWN_BOX
-  _FL_GTK_UP_FRAME,		///< gtk+ version of FL_UP_FRAME
-  _FL_GTK_DOWN_FRAME,		///< gtk+ version of FL_DOWN_RAME
-  _FL_GTK_THIN_UP_BOX,		///< gtk+ version of FL_THIN_UP_BOX
-  _FL_GTK_THIN_DOWN_BOX,	///< gtk+ version of FL_THIN_DOWN_BOX
-  _FL_GTK_THIN_UP_FRAME,	///< gtk+ version of FL_UP_FRAME
-  _FL_GTK_THIN_DOWN_FRAME,	///< gtk+ version of FL_THIN_DOWN_FRAME
-  _FL_GTK_ROUND_UP_BOX,		///< gtk+ version of FL_ROUND_UP_BOX
-  _FL_GTK_ROUND_DOWN_BOX,	///< gtk+ version of FL_ROUND_DOWN_BOX
-  FL_FREE_BOXTYPE		///< the first free box type for creation of new box types
+enum Boxtype { // boxtypes (if you change these you must fix fl_boxtype.C):
+  NO_BOX = 0,		///< nothing is drawn at all, this box is invisible
+  FLAT_BOX,			///< a flat box
+  UP_BOX,			///< see figure 1
+  DOWN_BOX,			///< see figure 1
+  UP_FRAME,			///< see figure 1
+  DOWN_FRAME,		///< see figure 1
+  THIN_UP_BOX,		///< see figure 1
+  THIN_DOWN_BOX,		///< see figure 1
+  THIN_UP_FRAME,		///< see figure 1
+  THIN_DOWN_FRAME,		///< see figure 1
+  ENGRAVED_BOX,		///< see figure 1
+  EMBOSSED_BOX,		///< see figure 1
+  ENGRAVED_FRAME,		///< see figure 1
+  EMBOSSED_FRAME,		///< see figure 1
+  BORDER_BOX,		///< see figure 1
+  SHADOW_BOX,		///< see figure 1
+  BORDER_FRAME,		///< see figure 1
+  SHADOW_FRAME,		///< see figure 1
+  ROUNDED_BOX,		///< see figure 1
+  RSHADOW_BOX,		///< see figure 1
+  ROUNDED_FRAME,		///< see figure 1
+  RFLAT_BOX,		///< see figure 1
+  ROUND_UP_BOX,		///< see figure 1
+  ROUND_DOWN_BOX,		///< see figure 1
+  DIAMOND_UP_BOX,		///< see figure 1
+  DIAMOND_DOWN_BOX,		///< see figure 1
+  OVAL_BOX,			///< see figure 1
+  OSHADOW_BOX,		///< see figure 1
+  OVAL_FRAME,		///< see figure 1
+  OFLAT_BOX,		///< see figure 1
+  PLASTIC_UP_BOX,		///< plastic version of UP_BOX
+  PLASTIC_DOWN_BOX,		///< plastic version of DOWN_BOX
+  PLASTIC_UP_FRAME,		///< plastic version of UP_FRAME
+  PLASTIC_DOWN_FRAME,	///< plastic version of DOWN_FRAME
+  PLASTIC_THIN_UP_BOX,	///< plastic version of THIN_UP_BOX
+  PLASTIC_THIN_DOWN_BOX,	///< plastic version of THIN_DOWN_BOX
+  PLASTIC_ROUND_UP_BOX,	///< plastic version of ROUND_UP_BOX
+  PLASTIC_ROUND_DOWN_BOX,	///< plastic version of ROUND_DOWN_BOX
+  GTK_UP_BOX,		///< gtk+ version of UP_BOX
+  GTK_DOWN_BOX,		///< gtk+ version of DOWN_BOX
+  GTK_UP_FRAME,		///< gtk+ version of UP_FRAME
+  GTK_DOWN_FRAME,		///< gtk+ version of DOWN_RAME
+  GTK_THIN_UP_BOX,		///< gtk+ version of THIN_UP_BOX
+  GTK_THIN_DOWN_BOX,	///< gtk+ version of THIN_DOWN_BOX
+  GTK_THIN_UP_FRAME,	///< gtk+ version of UP_FRAME
+  GTK_THIN_DOWN_FRAME,	///< gtk+ version of THIN_DOWN_FRAME
+  GTK_ROUND_UP_BOX,		///< gtk+ version of ROUND_UP_BOX
+  GTK_ROUND_DOWN_BOX,	///< gtk+ version of ROUND_DOWN_BOX
+  FREE_BOXTYPE		///< the first free box type for creation of new box types
 };
-extern FL_EXPORT Fl_Boxtype fl_define_FL_ROUND_UP_BOX();
+  
+}
+
+/*
+extern FL_EXPORT fltk3::Boxtype fl_define_FL_ROUND_UP_BOX();
 #define FL_ROUND_UP_BOX fl_define_FL_ROUND_UP_BOX()
-#define FL_ROUND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_ROUND_UP_BOX()+1)
-extern FL_EXPORT Fl_Boxtype fl_define_FL_SHADOW_BOX();
+#define FL_ROUND_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_ROUND_UP_BOX()+1)
+extern FL_EXPORT fltk3::Boxtype fl_define_FL_SHADOW_BOX();
 #define FL_SHADOW_BOX fl_define_FL_SHADOW_BOX()
-#define FL_SHADOW_FRAME (Fl_Boxtype)(fl_define_FL_SHADOW_BOX()+2)
-extern FL_EXPORT Fl_Boxtype fl_define_FL_ROUNDED_BOX();
-#define FL_ROUNDED_BOX fl_define_FL_ROUNDED_BOX()
-#define FL_ROUNDED_FRAME (Fl_Boxtype)(fl_define_FL_ROUNDED_BOX()+2)
-extern FL_EXPORT Fl_Boxtype fl_define_FL_RFLAT_BOX();
+#define FL_SHADOW_FRAME (fltk3::Boxtype)(fl_define_FL_SHADOW_BOX()+2)
+extern FL_EXPORT fltk3::Boxtype fl_define_FL_ROUNDED_BOX();
+#define fltk3::ROUNDED_BOX fl_define_FL_ROUNDED_BOX()
+#define fltk3::ROUNDED_FRAME (fltk3::Boxtype)(fl_define_FL_ROUNDED_BOX()+2)
+extern FL_EXPORT fltk3::Boxtype fl_define_FL_RFLAT_BOX();
 #define FL_RFLAT_BOX fl_define_FL_RFLAT_BOX()
-extern FL_EXPORT Fl_Boxtype fl_define_FL_RSHADOW_BOX();
+extern FL_EXPORT fltk3::Boxtype fl_define_FL_RSHADOW_BOX();
 #define FL_RSHADOW_BOX fl_define_FL_RSHADOW_BOX()
-extern FL_EXPORT Fl_Boxtype fl_define_FL_DIAMOND_BOX();
-#define FL_DIAMOND_UP_BOX fl_define_FL_DIAMOND_BOX()
-#define FL_DIAMOND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_DIAMOND_BOX()+1)
-extern FL_EXPORT Fl_Boxtype fl_define_FL_OVAL_BOX();
+extern FL_EXPORT fltk3::Boxtype fl_define_FL_DIAMOND_BOX();
+#define fltk3::DIAMOND_UP_BOX fl_define_FL_DIAMOND_BOX()
+#define fltk3::DIAMOND_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_DIAMOND_BOX()+1)
+extern FL_EXPORT fltk3::Boxtype fl_define_FL_OVAL_BOX();
 #define FL_OVAL_BOX fl_define_FL_OVAL_BOX()
-#define FL_OSHADOW_BOX (Fl_Boxtype)(fl_define_FL_OVAL_BOX()+1)
-#define FL_OVAL_FRAME (Fl_Boxtype)(fl_define_FL_OVAL_BOX()+2)
-#define FL_OFLAT_BOX (Fl_Boxtype)(fl_define_FL_OVAL_BOX()+3)
+#define FL_OSHADOW_BOX (fltk3::Boxtype)(fl_define_FL_OVAL_BOX()+1)
+#define FL_OVAL_FRAME (fltk3::Boxtype)(fl_define_FL_OVAL_BOX()+2)
+#define FL_OFLAT_BOX (fltk3::Boxtype)(fl_define_FL_OVAL_BOX()+3)
 
-extern FL_EXPORT Fl_Boxtype fl_define_FL_PLASTIC_UP_BOX();
-#define FL_PLASTIC_UP_BOX fl_define_FL_PLASTIC_UP_BOX()
-#define FL_PLASTIC_DOWN_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+1)
-#define FL_PLASTIC_UP_FRAME (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+2)
-#define FL_PLASTIC_DOWN_FRAME (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+3)
-#define FL_PLASTIC_THIN_UP_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+4)
-#define FL_PLASTIC_THIN_DOWN_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+5)
-#define FL_PLASTIC_ROUND_UP_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+6)
-#define FL_PLASTIC_ROUND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+7)
+extern FL_EXPORT fltk3::Boxtype fl_define_FL_PLASTIC_UP_BOX();
+#define fltk3::PLASTIC_UP_BOX fl_define_FL_PLASTIC_UP_BOX()
+#define fltk3::PLASTIC_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+1)
+#define fltk3::PLASTIC_UP_FRAME (fltk3::Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+2)
+#define fltk3::PLASTIC_DOWN_FRAME (fltk3::Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+3)
+#define fltk3::PLASTIC_THIN_UP_BOX (fltk3::Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+4)
+#define fltk3::PLASTIC_THIN_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+5)
+#define fltk3::PLASTIC_ROUND_UP_BOX (fltk3::Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+6)
+#define fltk3::PLASTIC_ROUND_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+7)
 
-extern FL_EXPORT Fl_Boxtype fl_define_FL_GTK_UP_BOX();
-#define FL_GTK_UP_BOX fl_define_FL_GTK_UP_BOX()
-#define FL_GTK_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+1)
-#define FL_GTK_UP_FRAME (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+2)
-#define FL_GTK_DOWN_FRAME (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+3)
-#define FL_GTK_THIN_UP_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+4)
-#define FL_GTK_THIN_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+5)
-#define FL_GTK_THIN_UP_FRAME (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+6)
-#define FL_GTK_THIN_DOWN_FRAME (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+7)
-#define FL_GTK_ROUND_UP_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+8)
-#define FL_GTK_ROUND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_GTK_UP_BOX()+9)
-
+extern FL_EXPORT fltk3::Boxtype fl_define_FL_GTK_UP_BOX();
+#define fltk3::GTK_UP_BOX fl_define_FL_GTK_UP_BOX()
+#define fltk3::GTK_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+1)
+#define fltk3::GTK_UP_FRAME (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+2)
+#define fltk3::GTK_DOWN_FRAME (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+3)
+#define fltk3::GTK_THIN_UP_BOX (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+4)
+#define fltk3::GTK_THIN_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+5)
+#define fltk3::GTK_THIN_UP_FRAME (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+6)
+#define fltk3::GTK_THIN_DOWN_FRAME (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+7)
+#define fltk3::GTK_ROUND_UP_BOX (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+8)
+#define fltk3::GTK_ROUND_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+9)
+*/
+ 
 // conversions of box types to other boxtypes:
 /**
   Get the filled version of a frame.
   If no filled version of a given frame exists, the behavior of this function
   is undefined and some random box or frame is returned,
   */
-inline Fl_Boxtype fl_box(Fl_Boxtype b) {
-  return (Fl_Boxtype)((b<FL_UP_BOX||b%4>1)?b:(b-2));
+inline fltk3::Boxtype fl_box(fltk3::Boxtype b) {
+  return (fltk3::Boxtype)((b<fltk3::UP_BOX||b%4>1)?b:(b-2));
 }
 /**
   Get the "pressed" or "down" version of a box.
   If no "down" version of a given box exists, the behavior of this function
   is undefined and some random box or frame is returned,
   */
-inline Fl_Boxtype fl_down(Fl_Boxtype b) {
-  return (Fl_Boxtype)((b<FL_UP_BOX)?b:(b|1));
+inline fltk3::Boxtype fl_down(fltk3::Boxtype b) {
+  return (fltk3::Boxtype)((b<fltk3::UP_BOX)?b:(b|1));
 }
 /**
   Get the unfilled, frame only version of a box.
   If no frame version of a given box exists, the behavior of this function
   is undefined and some random box or frame is returned,
   */
-inline Fl_Boxtype fl_frame(Fl_Boxtype b) {
-  return (Fl_Boxtype)((b%4<2)?b:(b+2));
+inline fltk3::Boxtype fl_frame(fltk3::Boxtype b) {
+  return (fltk3::Boxtype)((b%4<2)?b:(b+2));
 }
-
-// back-compatibility box types:
-#define FL_FRAME FL_ENGRAVED_FRAME
-#define FL_FRAME_BOX FL_ENGRAVED_BOX
-#define FL_CIRCLE_BOX FL_ROUND_DOWN_BOX
-#define FL_DIAMOND_BOX FL_DIAMOND_DOWN_BOX
 
 /*@}*/	// group: Box Types
 

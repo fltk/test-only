@@ -50,7 +50,7 @@
 
 /**
   Creates a new Fl_File_Input widget using the given position,
-  size, and label string. The default boxtype is FL_DOWN_BOX.
+  size, and label string. The default boxtype is fltk3::DOWN_BOX.
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
 */
@@ -61,7 +61,7 @@ Fl_File_Input::Fl_File_Input(int X, int Y, int W, int H, const char *L)
   ok_entry_   = 1;
   pressed_    = -1;
 
-  down_box(FL_UP_BOX);
+  down_box(fltk3::UP_BOX);
 }
 
 /**
@@ -168,7 +168,7 @@ Fl_File_Input::value(const char *str) {		// I - New string value
   Draws the file input widget
 */
 void Fl_File_Input::draw() {
-  Fl_Boxtype b = box();
+  fltk3::Boxtype b = box();
   if (damage() & (FL_DAMAGE_BAR | FL_DAMAGE_ALL)) draw_buttons();
   // this flag keeps Fl_Input_::drawtext from drawing a bogus box!
   char must_trick_fl_input_ = 

@@ -126,11 +126,11 @@ int Fl_Positioner::handle(int e) {
 
 /**
   Creates a new Fl_Positioner widget using the given position,
-  size, and label string. The default boxtype is FL_NO_BOX.
+  size, and label string. The default boxtype is fltk3::NO_BOX.
 */
 Fl_Positioner::Fl_Positioner(int X, int Y, int W, int H, const char* l)
 : fltk3::Widget(X, Y, W, H, l) {
-  box(FL_DOWN_BOX);
+  box(fltk3::DOWN_BOX);
   selection_color(FL_RED);
   align(FL_ALIGN_BOTTOM);
   when(FL_WHEN_CHANGED);

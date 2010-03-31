@@ -113,14 +113,14 @@ Fl_Tree_Prefs::Fl_Tree_Prefs() {
   _showroot               = 1;
   _connectorwidth         = 17;
   _sortorder              = FL_TREE_SORT_NONE;
-  _selectbox              = FL_FLAT_BOX;
+  _selectbox              = fltk3::FLAT_BOX;
   _selectmode             = FL_TREE_SELECT_SINGLE;
   // Let fltk's current 'scheme' affect defaults
   if ( fltk3::scheme() ) {
     if ( strcmp(fltk3::scheme(), "gtk+") == 0 ) {
-      _selectbox = _FL_GTK_THIN_UP_BOX;
+      _selectbox = fltk3::GTK_THIN_UP_BOX;
     } else if ( strcmp(fltk3::scheme(), "plastic") == 0 ) {
-      _selectbox = _FL_PLASTIC_THIN_UP_BOX;
+      _selectbox = fltk3::PLASTIC_THIN_UP_BOX;
     }
   }
 }

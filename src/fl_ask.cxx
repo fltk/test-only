@@ -83,12 +83,12 @@ static fltk3::Window *makeform() {
  // create a new top level window
   fltk3::Window *w = message_form = new fltk3::Window(410,103,"");
  // w->clear_border();
- // w->box(FL_UP_BOX);
+ // w->box(fltk3::UP_BOX);
  (message = new Fl_Box(60, 25, 340, 20))
    ->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
  (input = new Fl_Input(60, 37, 340, 23))->hide();
  {Fl_Box* o = icon = new Fl_Box(10, 10, 50, 50);
-  o->box(FL_THIN_UP_BOX);
+  o->box(fltk3::THIN_UP_BOX);
   o->labelfont(fltk3::TIMES_BOLD);
   o->labelsize(34);
   o->color(FL_WHITE);

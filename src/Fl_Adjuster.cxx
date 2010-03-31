@@ -49,9 +49,9 @@ void Fl_Adjuster::draw() {
     dx = 0; W = w();
     dy = H = h()/3;
   }
-  draw_box(drag==1?FL_DOWN_BOX:box(), x(),  y()+2*dy, W, H, color());
-  draw_box(drag==2?FL_DOWN_BOX:box(), x()+dx, y()+dy, W, H, color());
-  draw_box(drag==3?FL_DOWN_BOX:box(), x()+2*dx,  y(), W, H, color());
+  draw_box(drag==1?fltk3::DOWN_BOX:box(), x(),  y()+2*dy, W, H, color());
+  draw_box(drag==2?fltk3::DOWN_BOX:box(), x()+dx, y()+dy, W, H, color());
+  draw_box(drag==3?fltk3::DOWN_BOX:box(), x()+2*dx,  y(), W, H, color());
   if (active_r())
     fl_color(selection_color());
   else
@@ -170,7 +170,7 @@ int Fl_Adjuster::handle(int event) {
 */
 Fl_Adjuster::Fl_Adjuster(int X, int Y, int W, int H, const char* l)
   : Fl_Valuator(X, Y, W, H, l) {
-  box(FL_UP_BOX);
+  box(fltk3::UP_BOX);
   step(1, 10000);
   selection_color(FL_SELECTION_COLOR);
   drag = 0;

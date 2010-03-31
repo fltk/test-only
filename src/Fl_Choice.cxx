@@ -35,8 +35,8 @@
 // button: it draws the text of the current pick and a down-arrow.
 
 void Fl_Choice::draw() {
-  int dx = fltk3::box_dx(FL_DOWN_BOX);
-  int dy = fltk3::box_dy(FL_DOWN_BOX);
+  int dx = fltk3::box_dx(fltk3::DOWN_BOX);
+  int dy = fltk3::box_dy(fltk3::DOWN_BOX);
   int H = h() - 2 * dy;
   int W = (H > 20) ? 20 : H;
   int X = x() + w() - W - dx;
@@ -46,7 +46,7 @@ void Fl_Choice::draw() {
   int y1 = Y + (H - w1 - 1) / 2;
 
   if (fltk3::scheme()) {
-    draw_box(FL_UP_BOX, color());
+    draw_box(fltk3::UP_BOX, color());
 
     fl_color(active_r() ? labelcolor() : fl_inactive(labelcolor()));
     if (!strcmp(fltk3::scheme(), "plastic")) {
@@ -68,11 +68,11 @@ void Fl_Choice::draw() {
     }
   } else {
     if (fl_contrast(textcolor(), FL_BACKGROUND2_COLOR) == textcolor()) {
-      draw_box(FL_DOWN_BOX, FL_BACKGROUND2_COLOR);
+      draw_box(fltk3::DOWN_BOX, FL_BACKGROUND2_COLOR);
     } else {
-      draw_box(FL_DOWN_BOX, fl_lighter(color()));
+      draw_box(fltk3::DOWN_BOX, fl_lighter(color()));
     }
-    draw_box(FL_UP_BOX,X,Y,W,H,color());
+    draw_box(fltk3::UP_BOX,X,Y,W,H,color());
 
     fl_color(active_r() ? labelcolor() : fl_inactive(labelcolor()));
     fl_polygon(x1, y1, x1 + w1, y1 + w1, x1 + 2 * w1, y1);
@@ -118,7 +118,7 @@ void Fl_Choice::draw() {
 
 /**
   Create a new Fl_Choice widget using the given position, size and label string.
-  The default boxtype is \c FL_UP_BOX.
+  The default boxtype is \c fltk3::UP_BOX.
 
   The constructor sets menu() to NULL.
   See Fl_Menu_ for the methods to set or change the menu.
@@ -131,8 +131,8 @@ Fl_Choice::Fl_Choice(int X, int Y, int W, int H, const char *L)
   align(FL_ALIGN_LEFT);
   when(FL_WHEN_RELEASE);
   textfont(fltk3::HELVETICA);
-  box(FL_FLAT_BOX);
-  down_box(FL_BORDER_BOX);
+  box(fltk3::FLAT_BOX);
+  down_box(fltk3::BORDER_BOX);
 }
 
 /**

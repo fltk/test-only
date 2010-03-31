@@ -60,7 +60,7 @@ Fl_Wizard::Fl_Wizard(int        xx,	// I - Lefthand position
 		     const char *l) :	// I - Label
 fltk3::Group(xx, yy, ww, hh, l)
 {
-  box(FL_THIN_UP_BOX);
+  box(fltk3::THIN_UP_BOX);
 
   value_ = (fltk3::Widget *)0;
 }

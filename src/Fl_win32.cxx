@@ -1190,7 +1190,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 ////////////////////////////////////////////////////////////////
 // This function gets the dimensions of the top/left borders and
-// the title bar, if there is one, based on the FL_BORDER, FL_MODAL
+// the title bar, if there is one, based on the fltk3::BORDER, FL_MODAL
 // and FL_NONMODAL flags, and on the window's size range.
 // It returns the following values:
 //

@@ -52,10 +52,10 @@ void Fl_Light_Button::draw() {
   if (down_box()) {
     // draw other down_box() styles:
     switch (down_box()) {
-      case FL_DOWN_BOX :
-      case FL_UP_BOX :
-      case _FL_PLASTIC_DOWN_BOX :
-      case _FL_PLASTIC_UP_BOX :
+      case fltk3::DOWN_BOX :
+      case fltk3::UP_BOX :
+      case fltk3::PLASTIC_DOWN_BOX :
+      case fltk3::PLASTIC_UP_BOX :
         // Check box...
         draw_box(down_box(), x()+dx, y()+dy, W, W, FL_BACKGROUND2_COLOR);
 	if (value()) {
@@ -75,8 +75,8 @@ void Fl_Light_Button::draw() {
 	  }
 	}
         break;
-      case _FL_ROUND_DOWN_BOX :
-      case _FL_ROUND_UP_BOX :
+      case fltk3::ROUND_DOWN_BOX :
+      case fltk3::ROUND_UP_BOX :
         // Radio button...
         draw_box(down_box(), x()+dx, y()+dy, W, W, FL_BACKGROUND2_COLOR);
 	if (value()) {
@@ -140,7 +140,7 @@ void Fl_Light_Button::draw() {
       fl_color(value() ? col : fl_color_average(col, FL_BLACK, 0.5f));
       fl_pie(x()+xx, y()+dy+1, ww, hh, 0, 360);
     } else {
-      draw_box(FL_THIN_DOWN_BOX, x()+xx, y()+dy+1, ww, hh, col);
+      draw_box(fltk3::THIN_DOWN_BOX, x()+xx, y()+dy+1, ww, hh, col);
     }
     dx = (ww + 2 * dx - W) / 2;
   }

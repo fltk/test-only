@@ -468,7 +468,7 @@ Fl_Gl_Window::~Fl_Gl_Window() {
 
 void Fl_Gl_Window::init() {
   end(); // we probably don't want any children
-  box(FL_NO_BOX);
+  box(fltk3::NO_BOX);
 
   mode_    = FL_RGB | FL_DEPTH | FL_DOUBLE;
   alist    = 0;

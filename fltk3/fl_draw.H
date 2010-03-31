@@ -573,7 +573,7 @@ FL_EXPORT void fl_draw(const char* str, int x, int y, int w, int h,
 // boxtypes:
 FL_EXPORT void fl_frame(const char* s, int x, int y, int w, int h);
 FL_EXPORT void fl_frame2(const char* s, int x, int y, int w, int h);
-FL_EXPORT void fl_draw_box(Fl_Boxtype, int x, int y, int w, int h, Fl_Color);
+FL_EXPORT void fl_draw_box(fltk3::Boxtype, int x, int y, int w, int h, Fl_Color);
 
 // images:
 

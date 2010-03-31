@@ -90,7 +90,7 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
   shortcut_ = 0;
 
   color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
-  box(FL_DOWN_FRAME);
+  box(fltk3::DOWN_FRAME);
   textsize(FL_NORMAL_SIZE);
   textcolor(FL_FOREGROUND_COLOR);
   textfont(fltk3::HELVETICA);

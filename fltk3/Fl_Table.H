@@ -87,7 +87,7 @@
  
  <tr><td>wix/wiy/wiw/wih</td>
  <td>Fl_Table widget's inner dimension. The inner edge of the border of the 
- Fl_Table. eg. if the Fl_Table's box() is FL_NO_BOX, these values are the same 
+ Fl_Table. eg. if the Fl_Table's box() is fltk3::NO_BOX, these values are the same 
  as x()/y()/w()/h(). (Yellow in the diagram above)</td></tr>
  
  <tr><td>tox/toy/tow/toh</td>
@@ -98,7 +98,7 @@
  <tr><td>tix/tiy/tiw/tih</td>
  <td>The table's inner dimension. The inner edge of the border around the cells,
  but inside the row/col headings and scrollbars. AKA the table's clip region. 
- eg. if the table_box() is FL_NO_BOX, these values are the same as
+ eg. if the table_box() is fltk3::NO_BOX, these values are the same as
  tox/toyy/tow/toh. (Blue in the diagram above)
  </td></tr></table>
  
@@ -385,7 +385,7 @@ protected:
    case CONTEXT_COL_HEADER:
    fl_push_clip(X, Y, W, H);
    {
-   fl_draw_box(FL_THIN_UP_BOX, X, Y, W, H, color());
+   fl_draw_box(fltk3::THIN_UP_BOX, X, Y, W, H, color());
    fl_color(FL_BLACK);
    fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
    }
@@ -478,10 +478,10 @@ public:
   
   /**
    Sets the kind of box drawn around the data table,
-   the default being FL_NO_BOX. Changing this value will cause the table
+   the default being fltk3::NO_BOX. Changing this value will cause the table
    to redraw.
    */
-  inline void table_box(Fl_Boxtype val) {
+  inline void table_box(fltk3::Boxtype val) {
     table->box(val);
     table_resized();
   }
@@ -489,7 +489,7 @@ public:
   /**
    Returns the current box type used for the data table.
    */
-  inline Fl_Boxtype table_box( void ) {
+  inline fltk3::Boxtype table_box( void ) {
     return(table->box());
   }
   
@@ -822,13 +822,13 @@ public:
   void draw(void);				// fltk draw() override
   
   // This crashes sortapp() during init.
-  //  void box(Fl_Boxtype val) {
+  //  void box(fltk3::Boxtype val) {
   //    fltk3::Group::box(val);
   //    if ( table ) {
   //      resize(x(), y(), w(), h());
   //    }
   //  }
-  //  Fl_Boxtype box(void) const {
+  //  fltk3::Boxtype box(void) const {
   //    return(fltk3::Group::box());
   //  }
   
@@ -858,7 +858,7 @@ public:
   void end() {
     table->end();
     // HACK: Avoid showing Fl_Scroll; seems to erase screen
-    //       causing unnecessary flicker, even if its box() is FL_NO_BOX.
+    //       causing unnecessary flicker, even if its box() is fltk3::NO_BOX.
     //
     if ( table->children() > 2 ) {
       table->show();

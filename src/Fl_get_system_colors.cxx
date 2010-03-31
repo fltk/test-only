@@ -351,17 +351,17 @@ int fltk3::reload_scheme() {
     if (!scheme_bg_) scheme_bg_ = new Fl_Tiled_Image(&tile, w(), h());
 
     // Load plastic buttons, etc...
-    set_boxtype(FL_UP_FRAME,        FL_PLASTIC_UP_FRAME);
-    set_boxtype(FL_DOWN_FRAME,      FL_PLASTIC_DOWN_FRAME);
-    set_boxtype(FL_THIN_UP_FRAME,   FL_PLASTIC_UP_FRAME);
-    set_boxtype(FL_THIN_DOWN_FRAME, FL_PLASTIC_DOWN_FRAME);
+    set_boxtype(fltk3::UP_FRAME,        fltk3::PLASTIC_UP_FRAME);
+    set_boxtype(fltk3::DOWN_FRAME,      fltk3::PLASTIC_DOWN_FRAME);
+    set_boxtype(fltk3::THIN_UP_FRAME,   fltk3::PLASTIC_UP_FRAME);
+    set_boxtype(fltk3::THIN_DOWN_FRAME, fltk3::PLASTIC_DOWN_FRAME);
 
-    set_boxtype(FL_UP_BOX,          FL_PLASTIC_UP_BOX);
-    set_boxtype(FL_DOWN_BOX,        FL_PLASTIC_DOWN_BOX);
-    set_boxtype(FL_THIN_UP_BOX,     FL_PLASTIC_THIN_UP_BOX);
-    set_boxtype(FL_THIN_DOWN_BOX,   FL_PLASTIC_THIN_DOWN_BOX);
-    set_boxtype(_FL_ROUND_UP_BOX,   FL_PLASTIC_ROUND_UP_BOX);
-    set_boxtype(_FL_ROUND_DOWN_BOX, FL_PLASTIC_ROUND_DOWN_BOX);
+    set_boxtype(fltk3::UP_BOX,          fltk3::PLASTIC_UP_BOX);
+    set_boxtype(fltk3::DOWN_BOX,        fltk3::PLASTIC_DOWN_BOX);
+    set_boxtype(fltk3::THIN_UP_BOX,     fltk3::PLASTIC_THIN_UP_BOX);
+    set_boxtype(fltk3::THIN_DOWN_BOX,   fltk3::PLASTIC_THIN_DOWN_BOX);
+    set_boxtype(fltk3::ROUND_UP_BOX,   fltk3::PLASTIC_ROUND_UP_BOX);
+    set_boxtype(fltk3::ROUND_DOWN_BOX, fltk3::PLASTIC_ROUND_DOWN_BOX);
 
     // Use standard size scrollbars...
     fltk3::scrollbar_size(16);
@@ -372,17 +372,17 @@ int fltk3::reload_scheme() {
       scheme_bg_ = (Fl_Image *)0;
     }
 
-    set_boxtype(FL_UP_FRAME,        FL_GTK_UP_FRAME);
-    set_boxtype(FL_DOWN_FRAME,      FL_GTK_DOWN_FRAME);
-    set_boxtype(FL_THIN_UP_FRAME,   FL_GTK_THIN_UP_FRAME);
-    set_boxtype(FL_THIN_DOWN_FRAME, FL_GTK_THIN_DOWN_FRAME);
+    set_boxtype(fltk3::UP_FRAME,        fltk3::GTK_UP_FRAME);
+    set_boxtype(fltk3::DOWN_FRAME,      fltk3::GTK_DOWN_FRAME);
+    set_boxtype(fltk3::THIN_UP_FRAME,   fltk3::GTK_THIN_UP_FRAME);
+    set_boxtype(fltk3::THIN_DOWN_FRAME, fltk3::GTK_THIN_DOWN_FRAME);
 
-    set_boxtype(FL_UP_BOX,          FL_GTK_UP_BOX);
-    set_boxtype(FL_DOWN_BOX,        FL_GTK_DOWN_BOX);
-    set_boxtype(FL_THIN_UP_BOX,     FL_GTK_THIN_UP_BOX);
-    set_boxtype(FL_THIN_DOWN_BOX,   FL_GTK_THIN_DOWN_BOX);
-    set_boxtype(_FL_ROUND_UP_BOX,   FL_GTK_ROUND_UP_BOX);
-    set_boxtype(_FL_ROUND_DOWN_BOX, FL_GTK_ROUND_DOWN_BOX);
+    set_boxtype(fltk3::UP_BOX,          fltk3::GTK_UP_BOX);
+    set_boxtype(fltk3::DOWN_BOX,        fltk3::GTK_DOWN_BOX);
+    set_boxtype(fltk3::THIN_UP_BOX,     fltk3::GTK_THIN_UP_BOX);
+    set_boxtype(fltk3::THIN_DOWN_BOX,   fltk3::GTK_THIN_DOWN_BOX);
+    set_boxtype(fltk3::ROUND_UP_BOX,   fltk3::GTK_ROUND_UP_BOX);
+    set_boxtype(fltk3::ROUND_DOWN_BOX, fltk3::GTK_ROUND_DOWN_BOX);
 
     // Use slightly thinner scrollbars...
     fltk3::scrollbar_size(15);
@@ -393,17 +393,17 @@ int fltk3::reload_scheme() {
       scheme_bg_ = (Fl_Image *)0;
     }
 
-    set_boxtype(FL_UP_FRAME,        fl_up_frame, D1, D1, D2, D2);
-    set_boxtype(FL_DOWN_FRAME,      fl_down_frame, D1, D1, D2, D2);
-    set_boxtype(FL_THIN_UP_FRAME,   fl_thin_up_frame, 1, 1, 2, 2);
-    set_boxtype(FL_THIN_DOWN_FRAME, fl_thin_down_frame, 1, 1, 2, 2);
+    set_boxtype(fltk3::UP_FRAME,        fl_up_frame, D1, D1, D2, D2);
+    set_boxtype(fltk3::DOWN_FRAME,      fl_down_frame, D1, D1, D2, D2);
+    set_boxtype(fltk3::THIN_UP_FRAME,   fl_thin_up_frame, 1, 1, 2, 2);
+    set_boxtype(fltk3::THIN_DOWN_FRAME, fl_thin_down_frame, 1, 1, 2, 2);
 
-    set_boxtype(FL_UP_BOX,          fl_up_box, D1, D1, D2, D2);
-    set_boxtype(FL_DOWN_BOX,        fl_down_box, D1, D1, D2, D2);
-    set_boxtype(FL_THIN_UP_BOX,     fl_thin_up_box, 1, 1, 2, 2);
-    set_boxtype(FL_THIN_DOWN_BOX,   fl_thin_down_box, 1, 1, 2, 2);
-    set_boxtype(_FL_ROUND_UP_BOX,   fl_round_up_box, 3, 3, 6, 6);
-    set_boxtype(_FL_ROUND_DOWN_BOX, fl_round_down_box, 3, 3, 6, 6);
+    set_boxtype(fltk3::UP_BOX,          fl_up_box, D1, D1, D2, D2);
+    set_boxtype(fltk3::DOWN_BOX,        fl_down_box, D1, D1, D2, D2);
+    set_boxtype(fltk3::THIN_UP_BOX,     fl_thin_up_box, 1, 1, 2, 2);
+    set_boxtype(fltk3::THIN_DOWN_BOX,   fl_thin_down_box, 1, 1, 2, 2);
+    set_boxtype(fltk3::ROUND_UP_BOX,   fl_round_up_box, 3, 3, 6, 6);
+    set_boxtype(fltk3::ROUND_DOWN_BOX, fl_round_down_box, 3, 3, 6, 6);
 
     // Use standard size scrollbars...
     fltk3::scrollbar_size(16);

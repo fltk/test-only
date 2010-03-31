@@ -34,7 +34,7 @@
 #include <fltk3/fl_draw.H>
 
 void Fl_Value_Output::draw() {
-  Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;
+  fltk3::Boxtype b = box() ? box() : fltk3::DOWN_BOX;
   int X = x()+fltk3::box_dx(b);
   int Y = y()+fltk3::box_dy(b);
   int W = w()-fltk3::box_dw(b);
@@ -90,12 +90,12 @@ int Fl_Value_Output::handle(int event) {
 
 /**
   Creates a new Fl_Value_Output widget using the given
-  position, size, and label string. The default boxtype is FL_NO_BOX.
+  position, size, and label string. The default boxtype is fltk3::NO_BOX.
   <P> Inherited destructor destroys the Valuator.
 */
 Fl_Value_Output::Fl_Value_Output(int X, int Y, int W, int H,const char *l)
 : Fl_Valuator(X,Y,W,H,l) {
-  box(FL_NO_BOX);
+  box(fltk3::NO_BOX);
   align(FL_ALIGN_LEFT);
   textfont_ = fltk3::HELVETICA;
   textsize_ = FL_NORMAL_SIZE;

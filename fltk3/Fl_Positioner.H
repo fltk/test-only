@@ -62,7 +62,7 @@ public:
   int handle(int);
   /**
     Creates a new Fl_Positioner widget using the given position,
-    size, and label string. The default boxtype is FL_NO_BOX.
+    size, and label string. The default boxtype is fltk3::NO_BOX.
   */
   Fl_Positioner(int x,int y,int w,int h, const char *l=0);
   /** Gets the X axis coordinate.*/

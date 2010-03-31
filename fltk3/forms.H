@@ -99,9 +99,9 @@ typedef fltk3::Window FL_FORM;
 
 #define FL_PUP_TOGGLE	2 // FL_MENU_TOGGLE
 #define FL_PUP_INACTIVE 1 // FL_MENU_INACTIVE
-#define FL_NO_FRAME	FL_NO_BOX
-#define FL_ROUNDED3D_UPBOX 	FL_ROUND_UP_BOX
-#define FL_ROUNDED3D_DOWNBOX	FL_ROUND_DOWN_BOX
+#define FL_NO_FRAME	fltk3::NO_BOX
+#define fltk3::ROUNDED3D_UPBOX 	FL_ROUND_UP_BOX
+#define fltk3::ROUNDED3D_DOWNBOX	FL_ROUND_DOWN_BOX
 #define FL_OVAL3D_UPBOX		FL_ROUND_UP_BOX
 #define FL_OVAL3D_DOWNBOX	FL_ROUND_DOWN_BOX
 
@@ -130,7 +130,7 @@ typedef fltk3::Window FL_FORM;
 
 // hacks to change the labeltype() when passed to fl_set_object_lstyle():
 #define FL_SHADOW_STYLE		(fltk3::SHADOW_LABEL<<8)
-#define FL_ENGRAVED_STYLE	(fltk3::ENGRAVED_LABEL<<8)
+#define fltk3::ENGRAVED_STYLE	(fltk3::ENGRAVED_LABEL<<8)
 #define FL_EMBOSSED_STYLE	(fltk3::EMBOSSED_LABEL<<0)
 
 // size values are different from XForms, match older Forms:
@@ -206,7 +206,7 @@ inline void fl_reset_focus_object(fltk3::Widget* o) {fltk3::focus(o);}
 ////////////////////////////////////////////////////////////////
 // fltk3::Widget:
 
-inline void fl_set_object_boxtype(fltk3::Widget* o, Fl_Boxtype a) {o->box(a);}
+inline void fl_set_object_boxtype(fltk3::Widget* o, fltk3::Boxtype a) {o->box(a);}
 inline void fl_set_object_lsize(fltk3::Widget* o,int s) {o->labelsize(s);}
 
 /* forms lib font indexes must be byte sized - extract correct byte from style word */
@@ -263,7 +263,7 @@ inline void fl_set_form_dblbuffer(fltk3::Window*, int) {}
 inline void fl_free_form(fltk3::Window* x) {delete x;}
 inline void fl_redraw_form(fltk3::Window* f) {f->redraw();}
 
-inline fltk3::Window* fl_bgn_form(Fl_Boxtype b,int w,int h) {
+inline fltk3::Window* fl_bgn_form(fltk3::Boxtype b,int w,int h) {
   fltk3::Window* g = new fltk3::Window(w,h,0);
   g->box(b);
   return g;
@@ -349,9 +349,9 @@ inline int fl_mouse_button() {return fltk3::event_button();}
 ////////////////////////////////////////////////////////////////
 // Drawing functions.  Only usable inside an Fl_Free object?
 
-inline void fl_drw_box(Fl_Boxtype b,int x,int y,int w,int h,Fl_Color bgc,int=3) {
+inline void fl_drw_box(fltk3::Boxtype b,int x,int y,int w,int h,Fl_Color bgc,int=3) {
     fl_draw_box(b,x,y,w,h,bgc);}
-inline void fl_drw_frame(Fl_Boxtype b,int x,int y,int w,int h,Fl_Color bgc,int=3) {
+inline void fl_drw_frame(fltk3::Boxtype b,int x,int y,int w,int h,Fl_Color bgc,int=3) {
     fl_draw_box(b,x,y,w,h,bgc);}
 
 inline void fl_drw_text(Fl_Align align, int x, int y, int w, int h,
@@ -391,18 +391,18 @@ inline type* name(uchar t,int x,int y,int w,int h,const char* l) { \
 inline type* name(uchar t,int x,int y,int w,int h,const char* l) { \
  return (type*)(fl_add_new(new type(t,x,y,w,h,l)));}
 #define forms_constructorb(type,name) \
-inline type* name(Fl_Boxtype t,int x,int y,int w,int h,const char* l) { \
+inline type* name(fltk3::Boxtype t,int x,int y,int w,int h,const char* l) { \
  return (type*)(fl_add_new(new type(t,x,y,w,h,l)));}
 
 #include "Fl_FormsBitmap.H"
-#define FL_NORMAL_BITMAP FL_NO_BOX
+#define FL_NORMAL_BITMAP fltk3::NO_BOX
 forms_constructorb(Fl_FormsBitmap, fl_add_bitmap)
 inline void fl_set_bitmap_data(fltk3::Widget* o, int w, int h, const uchar* b) {
     ((Fl_FormsBitmap*)o)->set(w,h,b);
 }
 
 #include "Fl_FormsPixmap.H"
-#define FL_NORMAL_PIXMAP FL_NO_BOX
+#define FL_NORMAL_PIXMAP fltk3::NO_BOX
 forms_constructorb(Fl_FormsPixmap, fl_add_pixmap)
 inline void fl_set_pixmap_data(fltk3::Widget* o, char*const* b) {
     ((Fl_FormsPixmap*)o)->set(b);
@@ -627,11 +627,11 @@ inline void fl_set_dial_step(fltk3::Widget* o, double v) {
 
 // Frames:
 
-inline fltk3::Widget* fl_add_frame(Fl_Boxtype i,int x,int y,int w,int h,const char* l) {
+inline fltk3::Widget* fl_add_frame(fltk3::Boxtype i,int x,int y,int w,int h,const char* l) {
   return fl_add_box(i,x-3,y-3,w+6,h+6,l);}
 
 // labelframe nyi
-inline fltk3::Widget* fl_add_labelframe(Fl_Boxtype i,int x,int y,int w,int h,const char* l) {
+inline fltk3::Widget* fl_add_labelframe(fltk3::Boxtype i,int x,int y,int w,int h,const char* l) {
   fltk3::Widget* o = fl_add_box(i,x-3,y-3,w+6,h+6,l);
   o->align(FL_ALIGN_TOP_LEFT);
   return o;
@@ -815,10 +815,10 @@ class FL_EXPORT Fl_FormsText : public fltk3::Widget {
 protected:
     void draw();
 public:
-    Fl_FormsText(Fl_Boxtype b, int X, int Y, int W, int H, const char* l=0)
+    Fl_FormsText(fltk3::Boxtype b, int X, int Y, int W, int H, const char* l=0)
   : fltk3::Widget(X,Y,W,H,l) {box(b); align(FL_ALIGN_LEFT);}
 };
-#define FL_NORMAL_TEXT FL_NO_BOX
+#define FL_NORMAL_TEXT fltk3::NO_BOX
 forms_constructorb(Fl_FormsText, fl_add_text)
 
 #include "Fl_Timer.H"

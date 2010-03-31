@@ -160,11 +160,11 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
   Fl_Color color = m ? m->color() : FL_GRAY;
   if (selected) {
     Fl_Color r = m ? m->selection_color() : FL_SELECTION_COLOR;
-    Fl_Boxtype b = m && m->down_box() ? m->down_box() : FL_FLAT_BOX;
+    fltk3::Boxtype b = m && m->down_box() ? m->down_box() : fltk3::FLAT_BOX;
     if (fl_contrast(r,color)!=r) { // back compatibility boxtypes
       if (selected == 2) { // menu title
 	r = color;
-	b = m ? m->box() : FL_UP_BOX;
+	b = m ? m->box() : fltk3::UP_BOX;
       } else {
 	r = (Fl_Color)(FL_COLOR_CUBE-1); // white
 	l.color = fl_contrast((Fl_Color)labelcolor_, r);
@@ -186,11 +186,11 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
     int W = h - 2 * d;
 
     if (flags & FL_MENU_RADIO) {
-      fl_draw_box(FL_ROUND_DOWN_BOX, x+2, y+d, W, W, FL_BACKGROUND2_COLOR);
+      fl_draw_box(fltk3::ROUND_DOWN_BOX, x+2, y+d, W, W, FL_BACKGROUND2_COLOR);
       if (value()) {
-	int tW = (W - fltk3::box_dw(FL_ROUND_DOWN_BOX)) / 2 + 1;
+	int tW = (W - fltk3::box_dw(fltk3::ROUND_DOWN_BOX)) / 2 + 1;
 	if ((W - tW) & 1) tW++;	// Make sure difference is even to center
-	int td = fltk3::box_dx(FL_ROUND_DOWN_BOX) + 1;
+	int td = fltk3::box_dx(fltk3::ROUND_DOWN_BOX) + 1;
         if (fltk3::scheme()) {
 	  // Offset the radio circle...
 	  td ++;
@@ -236,7 +236,7 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
 	}
       }
     } else {
-      fl_draw_box(FL_DOWN_BOX, x+2, y+d, W, W, FL_BACKGROUND2_COLOR);
+      fl_draw_box(fltk3::DOWN_BOX, x+2, y+d, W, W, FL_BACKGROUND2_COLOR);
       if (value()) {
 	if (fltk3::scheme() && !strcmp(fltk3::scheme(), "gtk+")) {
 	  fl_color(FL_SELECTION_COLOR);
@@ -293,9 +293,9 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   drawn_selected = -1;
   if (button) {
     box(button->box());
-    if (box() == FL_NO_BOX || box() == FL_FLAT_BOX) box(FL_UP_BOX);
+    if (box() == fltk3::NO_BOX || box() == fltk3::FLAT_BOX) box(fltk3::UP_BOX);
   } else {
-    box(FL_UP_BOX);
+    box(fltk3::UP_BOX);
   }
   color(button && !fltk3::scheme() ? button->color() : FL_GRAY);
   selected = -1;

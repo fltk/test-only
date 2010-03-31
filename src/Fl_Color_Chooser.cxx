@@ -333,7 +333,7 @@ void Flcc_HueBox::draw() {
   if (X < 0) X = 0; else if (X > w1-6) X = w1-6;
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
   //  fl_color(c->value()>.75 ? FL_BLACK : FL_WHITE);
-  draw_box(FL_UP_BOX,x1+X,yy1+Y,6,6,fltk3::focus() == this ? FL_FOREGROUND_COLOR : FL_GRAY);
+  draw_box(fltk3::UP_BOX,x1+X,yy1+Y,6,6,fltk3::focus() == this ? FL_FOREGROUND_COLOR : FL_GRAY);
   px = X; py = Y;
 }
 #endif // !FL_DOXYGEN
@@ -398,7 +398,7 @@ void Flcc_ValueBox::draw() {
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
   int Y = int((1-c->value()) * (h1-6));
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
-  draw_box(FL_UP_BOX,x1,yy1+Y,w1,6,fltk3::focus() == this ? FL_FOREGROUND_COLOR : FL_GRAY);
+  draw_box(fltk3::UP_BOX,x1,yy1+Y,w1,6,fltk3::focus() == this ? FL_FOREGROUND_COLOR : FL_GRAY);
   py = Y;
 }
 #endif // !FL_DOXYGEN
@@ -484,15 +484,15 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
   hue_ = 0.0;
   saturation_ = 0.0;
   value_ = 0.0;
-  huebox.box(FL_DOWN_FRAME);
-  valuebox.box(FL_DOWN_FRAME);
+  huebox.box(fltk3::DOWN_FRAME);
+  valuebox.box(fltk3::DOWN_FRAME);
   choice.menu(mode_menu);
   set_valuators();
   rvalue.callback(rgb_cb);
   gvalue.callback(rgb_cb);
   bvalue.callback(rgb_cb);
   choice.callback(mode_cb);
-  choice.box(FL_THIN_UP_BOX);
+  choice.box(fltk3::THIN_UP_BOX);
   choice.textfont(fltk3::HELVETICA_BOLD_ITALIC);
 }
 
@@ -504,7 +504,7 @@ class ColorChip : public fltk3::Widget {
 public:
   uchar r,g,b;
   ColorChip(int X, int Y, int W, int H) : fltk3::Widget(X,Y,W,H) {
-    box(FL_ENGRAVED_FRAME);}
+    box(fltk3::ENGRAVED_FRAME);}
 };
 
 void ColorChip::draw() {

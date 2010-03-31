@@ -68,7 +68,33 @@ extern FL_API Box* const BORDER_FRAME;
 extern FL_API Box* const PLASTIC_UP_BOX;
 extern FL_API Box* const PLASTIC_DOWN_BOX;
 */
-const enum Fl_Boxtype UP_BOX = FL_UP_BOX;
+  enum Boxtype {
+    UP_BOX              = fltk3::UP_BOX,
+    DOWN_BOX            = fltk3::DOWN_BOX,
+    THIN_UP_BOX         = fltk3::THIN_UP_BOX,
+    THIN_DOWN_BOX       = fltk3::THIN_DOWN_BOX,
+    ENGRAVED_BOX        = fltk3::ENGRAVED_BOX,
+    EMBOSSED_BOX        = fltk3::EMBOSSED_BOX,
+    BORDER_BOX          = fltk3::BORDER_BOX,
+    FLAT_BOX            = fltk3::FLAT_BOX,
+    HIGHLIGHT_UP_BOX    = fltk3::GTK_UP_BOX,
+    HIGHLIGHT_DOWN_BOX  = fltk3::GTK_DOWN_BOX,
+    ROUND_UP_BOX        = fltk3::ROUND_UP_BOX,
+    ROUND_DOWN_BOX      = fltk3::ROUND_DOWN_BOX,
+    DIAMOND_UP_BOX      = fltk3::DIAMOND_UP_BOX,
+    DIAMOND_DOWN_BOX    = fltk3::DIAMOND_DOWN_BOX,
+    NO_BOX              = fltk3::NO_BOX,
+    SHADOW_BOX          = fltk3::SHADOW_BOX,
+    ROUNDED_BOX         = fltk3::ROUNDED_BOX,
+    RSHADOW_BOX         = fltk3::RSHADOW_BOX,
+    RFLAT_BOX           = fltk3::RFLAT_BOX,
+    OVAL_BOX            = fltk3::OVAL_BOX,
+    OSHADOW_BOX         = fltk3::OSHADOW_BOX,
+    OFLAT_BOX           = fltk3::OFLAT_BOX,
+    BORDER_FRAME        = fltk3::BORDER_FRAME,
+    PLASTIC_UP_BOX      = fltk3::PLASTIC_UP_BOX,
+    PLASTIC_DOWN_BOX    = fltk3::PLASTIC_DOWN_BOX
+  };
   
 struct Font;
 /*

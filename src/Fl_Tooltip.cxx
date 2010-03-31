@@ -96,7 +96,7 @@ void Fl_TooltipBox::layout() {
 }
 
 void Fl_TooltipBox::draw() {
-  draw_box(FL_BORDER_BOX, 0, 0, w(), h(), Fl_Tooltip::color());
+  draw_box(fltk3::BORDER_BOX, 0, 0, w(), h(), Fl_Tooltip::color());
   fl_color(Fl_Tooltip::textcolor());
   fl_font(Fl_Tooltip::font(), Fl_Tooltip::size());
   fl_draw(tip, 3, 3, w()-6, h()-6, Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_WRAP));

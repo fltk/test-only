@@ -150,13 +150,13 @@ void Fl_Clock_Output::value(ulong v) {
 
 /**
   Create a new Fl_Clock_Output widget with the given position, size and label.
-  The default boxtype is \c FL_NO_BOX.
+  The default boxtype is \c fltk3::NO_BOX.
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
 Fl_Clock_Output::Fl_Clock_Output(int X, int Y, int W, int H, const char *L)
 : fltk3::Widget(X, Y, W, H, L) {
-  box(FL_UP_BOX);
+  box(fltk3::UP_BOX);
   selection_color(fl_gray_ramp(5));
   align(FL_ALIGN_BOTTOM);
   hour_ = 0;
@@ -169,7 +169,7 @@ Fl_Clock_Output::Fl_Clock_Output(int X, int Y, int W, int H, const char *L)
 
 /**
   Create an Fl_Clock widget using the given position, size, and label string.
-  The default boxtype is \c FL_NO_BOX.
+  The default boxtype is \c fltk3::NO_BOX.
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
@@ -186,7 +186,7 @@ Fl_Clock::Fl_Clock(int X, int Y, int W, int H, const char *L)
 Fl_Clock::Fl_Clock(uchar t, int X, int Y, int W, int H, const char *L)
   : Fl_Clock_Output(X, Y, W, H, L) {
   type(t);
-  box(t==FL_ROUND_CLOCK ? FL_NO_BOX : FL_UP_BOX);
+  box(t==FL_ROUND_CLOCK ? fltk3::NO_BOX : fltk3::UP_BOX);
 }
 
 static void tick(void *v) {

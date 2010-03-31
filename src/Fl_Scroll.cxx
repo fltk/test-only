@@ -60,19 +60,19 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
   Fl_Scroll* s = (Fl_Scroll*)v;
   // erase background as needed...
   switch (s->box()) {
-    case FL_NO_BOX :
-    case FL_UP_FRAME :
-    case FL_DOWN_FRAME :
-    case FL_THIN_UP_FRAME :
-    case FL_THIN_DOWN_FRAME :
-    case FL_ENGRAVED_FRAME :
-    case FL_EMBOSSED_FRAME :
-    case FL_BORDER_FRAME :
-    case _FL_SHADOW_FRAME :
-    case _FL_ROUNDED_FRAME :
-    case _FL_OVAL_FRAME :
-    case _FL_PLASTIC_UP_FRAME :
-    case _FL_PLASTIC_DOWN_FRAME :
+    case fltk3::NO_BOX :
+    case fltk3::UP_FRAME :
+    case fltk3::DOWN_FRAME :
+    case fltk3::THIN_UP_FRAME :
+    case fltk3::THIN_DOWN_FRAME :
+    case fltk3::ENGRAVED_FRAME :
+    case fltk3::EMBOSSED_FRAME :
+    case fltk3::BORDER_FRAME :
+    case fltk3::SHADOW_FRAME :
+    case fltk3::ROUNDED_FRAME :
+    case fltk3::OVAL_FRAME :
+    case fltk3::PLASTIC_UP_FRAME :
+    case fltk3::PLASTIC_DOWN_FRAME :
       if (s->parent() == (fltk3::Group *)s->window() && fltk3::scheme_bg_) {
 	  fltk3::scheme_bg_->draw(X-(X%((Fl_Tiled_Image *)fltk3::scheme_bg_)->image()->w()),
 	                       Y-(Y%((Fl_Tiled_Image *)fltk3::scheme_bg_)->image()->h()),
@@ -384,7 +384,7 @@ void Fl_Scroll::scrollbar_cb(fltk3::Widget* o, void*) {
 }
 /**
   Creates a new Fl_Scroll widget using the given position,
-  size, and label string. The default boxtype is FL_NO_BOX.
+  size, and label string. The default boxtype is fltk3::NO_BOX.
   <P>The destructor <I>also deletes all the children</I>. This allows a
   whole tree to be deleted at once, without having to keep a pointer to
   all the children in the user code. A kludge has been done so the 

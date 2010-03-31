@@ -215,12 +215,12 @@ public:
   ~Fl_Gl_Window();
   /**
     Creates a new Fl_Gl_Window widget using the given size, and label string. 
-    The default boxtype is FL_NO_BOX. The default mode is FL_RGB|FL_DOUBLE|FL_DEPTH.
+    The default boxtype is fltk3::NO_BOX. The default mode is FL_RGB|FL_DOUBLE|FL_DEPTH.
   */
   Fl_Gl_Window(int W, int H, const char *l=0) : fltk3::Window(W,H,l) {init();}
   /**
     Creates a new Fl_Gl_Window widget using the given position,
-    size, and label string. The default boxtype is FL_NO_BOX. The
+    size, and label string. The default boxtype is fltk3::NO_BOX. The
     default mode is FL_RGB|FL_DOUBLE|FL_DEPTH.
   */
 

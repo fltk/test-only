@@ -47,7 +47,7 @@
 
 void Fl_Input::draw() {
   if (input_type() == FL_HIDDEN_INPUT) return;
-  Fl_Boxtype b = box();
+  fltk3::Boxtype b = box();
   if (damage() & FL_DAMAGE_ALL) draw_box(b, color());
   Fl_Input_::drawtext(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
 		      w()-fltk3::box_dw(b), h()-fltk3::box_dh(b));
@@ -525,7 +525,7 @@ int Fl_Input::handle(int event) {
     case fltk3::PUSH:
       if (fltk3::dnd_text_ops()) {
         int oldpos = position(), oldmark = mark();
-        Fl_Boxtype b = box();
+        fltk3::Boxtype b = box();
         Fl_Input_::handle_mouse(
                                 x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
                                 w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
@@ -603,7 +603,7 @@ int Fl_Input::handle(int event) {
       }
 #endif
     {
-      Fl_Boxtype b = box();
+      fltk3::Boxtype b = box();
       Fl_Input_::handle_mouse(
                               x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
                               w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
@@ -638,7 +638,7 @@ int Fl_Input::handle(int event) {
        */
       
   }
-  Fl_Boxtype b = box();
+  fltk3::Boxtype b = box();
   return Fl_Input_::handletext(event,
                                x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
                                w()-fltk3::box_dw(b), h()-fltk3::box_dh(b));
@@ -646,7 +646,7 @@ int Fl_Input::handle(int event) {
 
 /**
  Creates a new Fl_Input widget using the given position, size,
- and label string. The default boxtype is FL_DOWN_BOX.
+ and label string. The default boxtype is fltk3::DOWN_BOX.
  */
 Fl_Input::Fl_Input(int X, int Y, int W, int H, const char *l)
 : Fl_Input_(X, Y, W, H, l) {

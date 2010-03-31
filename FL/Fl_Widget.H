@@ -131,10 +131,10 @@ protected:
         USERFLAG1       = 1<<31   ///< reserved for 3rd party extensions
   };
   void draw_box() const { _p->draw_box(); }
-  void draw_box(Fl_Boxtype t, Fl_Color c) const { _p->draw_box(t, c); }
-  void draw_box(Fl_Boxtype t, int x,int y,int w,int h, Fl_Color c) const { _p->draw_box(t, x, y, w, h, c); }
+  void draw_box(Fl_Boxtype t, Fl_Color c) const { _p->draw_box((fltk3::Boxtype)t, c); }
+  void draw_box(Fl_Boxtype t, int x,int y,int w,int h, Fl_Color c) const { _p->draw_box((fltk3::Boxtype)t, x, y, w, h, c); }
   void draw_focus() { _p->draw_focus(); }
-  void draw_focus(Fl_Boxtype t, int x,int y,int w,int h) const { _p->draw_focus(t, x, y, w, h); }
+  void draw_focus(Fl_Boxtype t, int x,int y,int w,int h) const { _p->draw_focus((fltk3::Boxtype)t, x, y, w, h); }
   void draw_label() const { _p->draw_label(); }
   void draw_label(int x, int y, int w, int h) const { _p->draw_label(x, y, w, h); }
 
@@ -161,8 +161,8 @@ public:
   void align(Fl_Align alignment) {label_.align_ = alignment;}
 #endif
   
-  Fl_Boxtype box() const { return _p->box(); }
-  void box(Fl_Boxtype new_box) { _p->box(new_box); }
+  Fl_Boxtype box() const { return (Fl_Boxtype)_p->box(); }
+  void box(Fl_Boxtype new_box) { _p->box((fltk3::Boxtype)new_box); }
   
 #if 0
   Fl_Color color() const {return color_;}

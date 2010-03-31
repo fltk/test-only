@@ -126,13 +126,13 @@ public:
 
   /**
     This box type is used to surround the currently-selected items in the
-    menus.  If this is FL_NO_BOX then it acts like 
-    FL_THIN_UP_BOX and selection_color() acts like 
+    menus.  If this is fltk3::NO_BOX then it acts like 
+    fltk3::THIN_UP_BOX and selection_color() acts like 
     FL_WHITE, for back compatibility.    
   */
-  Fl_Boxtype down_box() const {return (Fl_Boxtype)down_box_;}
-  /**    See Fl_Boxtype Fl_Menu_::down_box() const   */
-  void down_box(Fl_Boxtype b) {down_box_ = b;}
+  fltk3::Boxtype down_box() const {return (fltk3::Boxtype)down_box_;}
+  /**    See fltk3::Boxtype Fl_Menu_::down_box() const   */
+  void down_box(fltk3::Boxtype b) {down_box_ = b;}
 
   /** For back compatibility, same as selection_color() */
   Fl_Color down_color() const {return selection_color();}
