@@ -175,8 +175,8 @@ public:
   void copy_label(const char *new_label);
   void label(Fl_Labeltype a, const char* b) {label_.type = a; label_.value = b;}
 #endif
-  Fl_Labeltype labeltype() const { return _p->labeltype(); }
-  void labeltype(Fl_Labeltype a) { _p->labeltype(a); }
+  Fl_Labeltype labeltype() const { return (Fl_Labeltype)_p->labeltype(); }
+  void labeltype(Fl_Labeltype a) { _p->labeltype((fltk3::Labeltype)a); }
   Fl_Color labelcolor() const { return _p->labelcolor(); }
   void labelcolor(Fl_Color c) { _p->labelcolor(c); }
   Fl_Font labelfont() const { return _p->labelfont(); }

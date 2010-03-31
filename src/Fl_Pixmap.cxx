@@ -235,8 +235,8 @@ void Fl_Pixmap::label(fltk3::Widget* widget) {
 }
 
 void Fl_Pixmap::label(Fl_Menu_Item* m) {
-  fltk3::set_labeltype(_FL_IMAGE_LABEL, labeltype, Fl_Image::measure);
-  m->label(_FL_IMAGE_LABEL, (const char*)this);
+  fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, Fl_Image::measure);
+  m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }
 
 void Fl_Pixmap::copy_data() {

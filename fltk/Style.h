@@ -110,10 +110,10 @@ extern FL_API Font* const ZAPF_DINGBATS;
   
   
   
-class LabelType;
 /*
  The values below are currently emulated. In a future version of FLTK3, we 
  really should port the FLTK2 way of handling labeltypes to FLTK3.
+class LabelType;
 extern FL_API LabelType* const NO_LABEL;
 extern FL_API LabelType* const NORMAL_LABEL;
 extern FL_API LabelType* const SYMBOL_LABEL; // same as NORMAL_LABEL
@@ -121,8 +121,16 @@ extern FL_API LabelType* const SHADOW_LABEL;
 extern FL_API LabelType* const ENGRAVED_LABEL;
 extern FL_API LabelType* const EMBOSSED_LABEL;
  */
-const enum Fl_Labeltype SHADOW_LABEL = FL_SHADOW_LABEL;
-
+  enum LabelType {
+    NO_LABEL        = fltk3::NO_LABEL,
+    NORMAL_LABEL    = fltk3::NORMAL_LABEL,
+    SYMBOL_LABEL    = fltk3::NORMAL_LABEL,
+    SHADOW_LABEL    = fltk3::SHADOW_LABEL,
+    ENGRAVED_LABEL  = fltk3::ENGRAVED_LABEL,
+    EMBOSSED_LABEL  = fltk3::EMBOSSED_LABEL
+  };
+  
+  
 class Style;
 
 class FL_API Style {

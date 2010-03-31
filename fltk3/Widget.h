@@ -73,7 +73,7 @@ struct FL_EXPORT Fl_Label {
   Fl_Color color;
   /** alignment of label */
   Fl_Align align_;
-  /** type of label. \see Fl_Labeltype */
+  /** type of label. \see fltk3::Labeltype */
   uchar type;
 
   /** Draws the label aligned to the given box */
@@ -440,25 +440,25 @@ public:
   void copy_label(const char *new_label);
 
   /** Shortcut to set the label text and type in one call.
-      \see label(const char *), labeltype(Fl_Labeltype)
+      \see label(const char *), labeltype(fltk3::Labeltype)
    */
-  void label(Fl_Labeltype a, const char* b) {label_.type = a; label_.value = b;}
+  void label(fltk3::Labeltype a, const char* b) {label_.type = a; label_.value = b;}
 
   /** Gets the label type.
       \return the current label type.
-      \see Fl_Labeltype
+      \see fltk3::Labeltype
    */
-  Fl_Labeltype labeltype() const {return (Fl_Labeltype)label_.type;}
+  fltk3::Labeltype labeltype() const {return (fltk3::Labeltype)label_.type;}
 
   /** Sets the label type. 
       The label type identifies the function that draws the label of the widget. 
       This is generally used for special effects such as embossing or for using 
       the label() pointer as another form of data such as an icon. The value 
-      FL_NORMAL_LABEL prints the label as plain text.
+      fltk3::NORMAL_LABEL prints the label as plain text.
       \param[in] a new label type
-      \see Fl_Labeltype
+      \see fltk3::Labeltype
    */
-  void labeltype(Fl_Labeltype a) {label_.type = a;}
+  void labeltype(fltk3::Labeltype a) {label_.type = a;}
 
   /** Gets the label color. 
       The default color is FL_FOREGROUND_COLOR. 

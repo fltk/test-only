@@ -785,9 +785,9 @@ namespace fltk3 {
  /** @} */
 
   // labeltypes:
-  extern void set_labeltype(Fl_Labeltype,Fl_Label_Draw_F*,Fl_Label_Measure_F*);
+  extern void set_labeltype(fltk3::Labeltype,Fl_Label_Draw_F*,Fl_Label_Measure_F*);
   /** Sets the functions to call to draw and measure a specific labeltype. */
-  extern void set_labeltype(Fl_Labeltype, Fl_Labeltype from); // is it defined ?
+  extern void set_labeltype(fltk3::Labeltype, fltk3::Labeltype from); // is it defined ?
 
   // boxtypes:
   extern Fl_Box_Draw_F *get_boxtype(Fl_Boxtype);

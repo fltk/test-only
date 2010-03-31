@@ -411,7 +411,7 @@ int fltk3::reload_scheme() {
 
   // Set (or clear) the background tile for all windows...
   for (win = first_window(); win; win = next_window(win)) {
-    win->labeltype(scheme_bg_ ? FL_NORMAL_LABEL : FL_NO_LABEL);
+    win->labeltype(scheme_bg_ ? fltk3::NORMAL_LABEL : fltk3::NO_LABEL);
     win->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_CLIP);
     win->image(scheme_bg_);
     win->redraw();

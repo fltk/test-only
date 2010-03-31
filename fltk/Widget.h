@@ -246,7 +246,7 @@ public:
 #endif
   
   // Port to 3: void labeltype(LabelType*)	;
-  void labeltype(Fl_Labeltype t) { _p->labeltype(t); }
+  void labeltype(LabelType t) { _p->labeltype((fltk3::Labeltype)t); }
   
 #if 0
   void color(Color)		;

@@ -458,8 +458,7 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
 */
 void Fl_File_Icon::label(fltk3::Widget *w)	// I - Widget to label
 {
-  fltk3::set_labeltype(_FL_ICON_LABEL, labeltype, 0);
-  w->label(_FL_ICON_LABEL, (const char*)this);
+  w->label(fltk3::ICON_LABEL, (const char*)this);
 }
 
 
@@ -484,6 +483,11 @@ Fl_File_Icon::labeltype(const Fl_Label *o,	// I - Label data
 
   icon = (Fl_File_Icon *)(o->value);
   if (icon) icon->draw(x, y, w, h, (Fl_Color)(o->color));
+}
+
+void fl_icon_label(const Fl_Label *o,int x,int y,int w,int h,Fl_Align a)
+{
+  Fl_File_Icon::labeltype(o, x, y, w, h, a);
 }
 
 

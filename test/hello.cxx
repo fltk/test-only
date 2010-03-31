@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
   box->box(FL_UP_BOX);
   box->labelfont(BOLD+ITALIC);
   box->labelsize(36);
-  box->labeltype(FL_SHADOW_LABEL);
+  box->labeltype(SHADOW_LABEL);
   window->end();
   window->show(argc, argv);
   return fltk3::run();

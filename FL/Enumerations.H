@@ -231,25 +231,21 @@ inline Fl_Boxtype fl_frame(Fl_Boxtype b) {
   return (Fl_Boxtype)((b%4<2)?b:(b+2));
 }
 
+#endif
+
 enum Fl_Labeltype {
-  FL_NORMAL_LABEL	= 0,
-  FL_NO_LABEL,
-  _FL_SHADOW_LABEL,
-  _FL_ENGRAVED_LABEL,
-  _FL_EMBOSSED_LABEL,
-  _FL_MULTI_LABEL,
-  _FL_ICON_LABEL,
-  _FL_IMAGE_LABEL,
-  FL_FREE_LABELTYPE
+  FL_NORMAL_LABEL     = fltk3::NORMAL_LABEL,
+  FL_NO_LABEL         = fltk3::NO_LABEL,
+  FL_SHADOW_LABEL     = fltk3::SHADOW_LABEL,
+  FL_ENGRAVED_LABEL   = fltk3::ENGRAVED_LABEL,
+  FL_EMBOSSED_LABEL   = fltk3::EMBOSSED_LABEL,
+  FL_MULTI_LABEL      = fltk3::MULTI_LABEL,
+  FL_ICON_LABEL       = fltk3::ICON_LABEL,
+  FL_IMAGE_LABEL      = fltk3::IMAGE_LABEL,
+  FL_FREE_LABELTYPE   = fltk3::FREE_LABELTYPE
 };
 
-#define FL_SYMBOL_LABEL FL_NORMAL_LABEL
-extern Fl_Labeltype FL_EXPORT fl_define_FL_SHADOW_LABEL();
-#define FL_SHADOW_LABEL fl_define_FL_SHADOW_LABEL()
-extern Fl_Labeltype FL_EXPORT fl_define_FL_ENGRAVED_LABEL();
-#define FL_ENGRAVED_LABEL fl_define_FL_ENGRAVED_LABEL()
-extern Fl_Labeltype FL_EXPORT fl_define_FL_EMBOSSED_LABEL();
-#define FL_EMBOSSED_LABEL fl_define_FL_EMBOSSED_LABEL()
+#if 0
 
 typedef unsigned Fl_Align;
 const Fl_Align FL_ALIGN_CENTER		= (Fl_Align)0;

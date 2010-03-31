@@ -33,7 +33,7 @@
 #include <fltk3/Fl_Menu_Item.H>
 #include <fltk3/Fl_Multi_Label.H>
 
-static void multi_labeltype(
+void fl_multi_labeltype(
     const Fl_Label* o, int x, int y, int w, int h, Fl_Align a)
 {
   Fl_Multi_Label* b = (Fl_Multi_Label*)(o->value);
@@ -53,7 +53,7 @@ static void multi_labeltype(
 }
 
 // measurement is only correct for left-to-right appending...
-static void multi_measure(const Fl_Label* o, int& w, int& h) {
+void fl_multi_measure(const Fl_Label* o, int& w, int& h) {
   Fl_Multi_Label* b = (Fl_Multi_Label*)(o->value);
   Fl_Label local = *o;
   local.value = b->labela;
@@ -66,13 +66,11 @@ static void multi_measure(const Fl_Label* o, int& w, int& h) {
 }
 
 void Fl_Multi_Label::label(fltk3::Widget* o) {
-  fltk3::set_labeltype(_FL_MULTI_LABEL, multi_labeltype, multi_measure);
-  o->label(_FL_MULTI_LABEL, (const char*)this);
+  o->label(fltk3::MULTI_LABEL, (const char*)this);
 }
 
 void Fl_Multi_Label::label(Fl_Menu_Item* o) {
-  fltk3::set_labeltype(_FL_MULTI_LABEL, multi_labeltype, multi_measure);
-  o->label(_FL_MULTI_LABEL, (const char*)this);
+  o->label(fltk3::MULTI_LABEL, (const char*)this);
 }
 
 //

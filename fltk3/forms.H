@@ -129,9 +129,9 @@ typedef fltk3::Window FL_FORM;
 #define fltk3::TIMESBOLDITALIC_STYLE fltk3::TIMES_BOLD_ITALIC
 
 // hacks to change the labeltype() when passed to fl_set_object_lstyle():
-#define FL_SHADOW_STYLE		(FL_SHADOW_LABEL<<8)
-#define FL_ENGRAVED_STYLE	(FL_ENGRAVED_LABEL<<8)
-#define FL_EMBOSSED_STYLE	(FL_EMBOSSED_LABEL<<0)
+#define FL_SHADOW_STYLE		(fltk3::SHADOW_LABEL<<8)
+#define FL_ENGRAVED_STYLE	(fltk3::ENGRAVED_LABEL<<8)
+#define FL_EMBOSSED_STYLE	(fltk3::EMBOSSED_LABEL<<0)
 
 // size values are different from XForms, match older Forms:
 #define FL_TINY_SIZE	8
@@ -211,7 +211,7 @@ inline void fl_set_object_lsize(fltk3::Widget* o,int s) {o->labelsize(s);}
 
 /* forms lib font indexes must be byte sized - extract correct byte from style word */
 inline void fl_set_object_lstyle(fltk3::Widget* o,int a) {
-  o->labelfont((Fl_Font)(a&0xff)); o->labeltype((Fl_Labeltype)(a>>8));}
+  o->labelfont((Fl_Font)(a&0xff)); o->labeltype((fltk3::Labeltype)(a>>8));}
 inline void fl_set_object_lcol(fltk3::Widget* o, Fl_Color a) {o->labelcolor(a);}
 #define fl_set_object_lcolor  fl_set_object_lcol
 inline void fl_set_object_lalign(fltk3::Widget* o, Fl_Align a) {o->align(a);}

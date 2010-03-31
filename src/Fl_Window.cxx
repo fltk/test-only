@@ -44,11 +44,11 @@ void fltk3::Window::_Fl_Window() {
   type(FL_WINDOW);
   box(FL_FLAT_BOX);
   if (fltk3::scheme_bg_) {
-    labeltype(FL_NORMAL_LABEL);
+    labeltype(fltk3::NORMAL_LABEL);
     align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_CLIP);
     image(fltk3::scheme_bg_);
   } else {
-    labeltype(FL_NO_LABEL);
+    labeltype(fltk3::NO_LABEL);
   }
   i = 0;
   xclass_ = 0;

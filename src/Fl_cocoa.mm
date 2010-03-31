@@ -2294,10 +2294,10 @@ void fltk3::Window::label(const char *name,const char */*iname*/) {
 void fltk3::Window::show() {
   image(fltk3::scheme_bg_);
   if (fltk3::scheme_bg_) {
-    labeltype(FL_NORMAL_LABEL);
+    labeltype(fltk3::NORMAL_LABEL);
     align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_CLIP);
   } else {
-    labeltype(FL_NO_LABEL);
+    labeltype(fltk3::NO_LABEL);
   }
   Fl_Tooltip::exit(this);
   if (!shown() || !i) {

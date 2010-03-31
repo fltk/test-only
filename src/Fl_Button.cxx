@@ -72,7 +72,7 @@ void fltk3::Button::draw() {
   if (type() == FL_HIDDEN_BUTTON) return;
   Fl_Color col = value() ? selection_color() : color();
   draw_box(value() ? (down_box()?down_box():fl_down(box())) : box(), col);
-  if (labeltype() == FL_NORMAL_LABEL && value()) {
+  if (labeltype() == fltk3::NORMAL_LABEL && value()) {
     Fl_Color c = labelcolor();
     labelcolor(fl_contrast(c, col));
     draw_label();

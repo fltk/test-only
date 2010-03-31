@@ -576,43 +576,28 @@ inline Fl_Boxtype fl_frame(Fl_Boxtype b) {
 
 /*@}*/	// group: Box Types
 
+namespace fltk3 {
+
 /**
    The labeltype() method sets the type of the label.
    
    The following standard label types are included:
    
-   \todo	The doxygen comments are incomplete, and some labeltypes
-   		are starting with an underscore. Also, there are three
-		external functions undocumented (yet):
-		  - fl_define_FL_SHADOW_LABEL()
-		  - fl_define_FL_ENGRAVED_LABEL()
-		  - fl_define_FL_EMBOSSED_LABEL()
+   \todo	The doxygen comments are incomplete.
 */
-enum Fl_Labeltype {	// labeltypes:
-  FL_NORMAL_LABEL	= 0,	///< draws the text (0)
-  FL_NO_LABEL,			///< does nothing
-  _FL_SHADOW_LABEL,		///< draws a drop shadow under the text
-  _FL_ENGRAVED_LABEL,		///< draws edges as though the text is engraved
-  _FL_EMBOSSED_LABEL,		///< draws edges as thought the text is raised
-  _FL_MULTI_LABEL,		///< ?
-  _FL_ICON_LABEL,		///< draws the icon associated with the text
-  _FL_IMAGE_LABEL,		///< ?
-
-  FL_FREE_LABELTYPE		///< first free labeltype to use for creating own labeltypes
+enum Labeltype {      // labeltypes:
+  NORMAL_LABEL = 0,   ///< draws the text (0)
+  NO_LABEL,           ///< does nothing
+  SHADOW_LABEL,       ///< draws a drop shadow under the text
+  ENGRAVED_LABEL,     ///< draws edges as though the text is engraved
+  EMBOSSED_LABEL,     ///< draws edges as thought the text is raised
+  MULTI_LABEL,        ///< ?
+  ICON_LABEL,         ///< draws the icon associated with the text
+  IMAGE_LABEL,        ///< ?
+  FREE_LABELTYPE      ///< first free labeltype to use for creating own labeltypes
 };
-
-/** 
-  Sets the current  label type end return its corresponding Fl_Labeltype value. 
-  @{
-*/
-#define FL_SYMBOL_LABEL FL_NORMAL_LABEL
-extern Fl_Labeltype FL_EXPORT fl_define_FL_SHADOW_LABEL();
-#define FL_SHADOW_LABEL fl_define_FL_SHADOW_LABEL()
-extern Fl_Labeltype FL_EXPORT fl_define_FL_ENGRAVED_LABEL();
-#define FL_ENGRAVED_LABEL fl_define_FL_ENGRAVED_LABEL()
-extern Fl_Labeltype FL_EXPORT fl_define_FL_EMBOSSED_LABEL();
-#define FL_EMBOSSED_LABEL fl_define_FL_EMBOSSED_LABEL()
-/** @} */
+  
+} //namespace fltk3
 
 /** \name Alignment Flags */
 /*@{*/
