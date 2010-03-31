@@ -202,8 +202,6 @@ enum Fl_Labeltype {
   FL_FREE_LABELTYPE   = fltk3::FREE_LABELTYPE
 };
 
-#if 0
-
 typedef unsigned Fl_Align;
 const Fl_Align FL_ALIGN_CENTER		= (Fl_Align)fltk3::ALIGN_CENTER;
 const Fl_Align FL_ALIGN_TOP		= (Fl_Align)fltk3::ALIGN_TOP;
@@ -224,8 +222,6 @@ const Fl_Align FL_ALIGN_RIGHT_TOP	= (Fl_Align)fltk3::ALIGN_RIGHT_TOP;
 const Fl_Align FL_ALIGN_LEFT_BOTTOM	= (Fl_Align)fltk3::ALIGN_LEFT_BOTTOM;
 const Fl_Align FL_ALIGN_RIGHT_BOTTOM	= (Fl_Align)fltk3::ALIGN_RIGHT_BOTTOM;
 const Fl_Align FL_ALIGN_NOWRAP		= (Fl_Align)fltk3::ALIGN_NOWRAP;
-
-#endif
 
 typedef int Fl_Font;
 const Fl_Font FL_HELVETICA              = fltk3::HELVETICA;
