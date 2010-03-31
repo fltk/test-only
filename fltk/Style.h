@@ -26,6 +26,7 @@
 #ifndef fltk_Style_h
 #define fltk_Style_h
 
+#include <fltk3/Enumerations.H>
 #include "Color.h"
 
 namespace fltk {
@@ -38,6 +39,9 @@ class FL_API Rectangle;
 class FL_API Symbol;
 typedef Symbol Box;
 
+/*
+ The values below are currently emulated. In a future version of FLTK3, we 
+ really should port the FLTK2 way of handling boxtypes to FLTK3.
 extern FL_API Box* const UP_BOX;
 extern FL_API Box* const DOWN_BOX;
 extern FL_API Box* const THIN_UP_BOX;
@@ -63,8 +67,13 @@ extern FL_API Box* const OFLAT_BOX;
 extern FL_API Box* const BORDER_FRAME;
 extern FL_API Box* const PLASTIC_UP_BOX;
 extern FL_API Box* const PLASTIC_DOWN_BOX;
-
+*/
+const enum Fl_Boxtype UP_BOX = FL_UP_BOX;
+  
 struct Font;
+/*
+The values below are currently emulated. In a future version of FLTK3, we 
+really should port the FLTK2 way of handling fonts to FLTK3.
 extern FL_API Font* const HELVETICA;
 extern FL_API Font* const HELVETICA_BOLD;
 extern FL_API Font* const HELVETICA_ITALIC;
@@ -81,14 +90,21 @@ extern FL_API Font* const SYMBOL_FONT;
 extern FL_API Font* const SCREEN_FONT;
 extern FL_API Font* const SCREEN_BOLD_FONT;
 extern FL_API Font* const ZAPF_DINGBATS;
+*/
+const Fl_Font HELVETICA_BOLD_ITALIC = FL_HELVETICA_BOLD_ITALIC;
 
 class LabelType;
+/*
+ The values below are currently emulated. In a future version of FLTK3, we 
+ really should port the FLTK2 way of handling labeltypes to FLTK3.
 extern FL_API LabelType* const NO_LABEL;
 extern FL_API LabelType* const NORMAL_LABEL;
 extern FL_API LabelType* const SYMBOL_LABEL; // same as NORMAL_LABEL
 extern FL_API LabelType* const SHADOW_LABEL;
 extern FL_API LabelType* const ENGRAVED_LABEL;
 extern FL_API LabelType* const EMBOSSED_LABEL;
+ */
+const enum Fl_Labeltype SHADOW_LABEL = FL_SHADOW_LABEL;
 
 class Style;
 

@@ -230,20 +230,23 @@ public:
   unsigned char scrollbar_width() const;
 #endif
   
-  void box(Box*)		;
+  // Port to 3: void box(Box*)		;
+  void box(Fl_Boxtype b) { _p->box(b); }
   
 #if 0
   void buttonbox(Box*)		;
   void glyph(Symbol*)		;
 #endif
   
-  void labelfont(Font*)		;
+  // Port to 3: void labelfont(Font*)		;
+  void labelfont(Fl_Font f) { _p->labelfont(f); }
   
 #if 0
   void textfont(Font*)		;
 #endif
   
-  void labeltype(LabelType*)	;
+  // Port to 3: void labeltype(LabelType*)	;
+  void labeltype(Fl_Labeltype t) { _p->labeltype(t); }
   
 #if 0
   void color(Color)		;
