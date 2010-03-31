@@ -102,10 +102,10 @@ static int send(fltk3::Widget* o, int event) {
   if (o->type() < FL_WINDOW) return o->handle(event);
   switch ( event )
   {
-  case FL_DND_ENTER: /* FALLTHROUGH */
-  case FL_DND_DRAG:
+  case fltk3::DND_ENTER: /* FALLTHROUGH */
+  case fltk3::DND_DRAG:
     // figure out correct type of event:
-    event = (o->contains(fltk3::belowmouse())) ? FL_DND_DRAG : FL_DND_ENTER;
+    event = (o->contains(fltk3::belowmouse())) ? fltk3::DND_DRAG : fltk3::DND_ENTER;
   }
   int save_x = fltk3::e_x; fltk3::e_x -= o->x();
   int save_y = fltk3::e_y; fltk3::e_y -= o->y();
@@ -114,9 +114,9 @@ static int send(fltk3::Widget* o, int event) {
   fltk3::e_x = save_x;
   switch ( event )
   {
-  case FL_ENTER: /* FALLTHROUGH */
-  case FL_DND_ENTER:
-    // Successful completion of FL_ENTER means the widget is now the
+  case fltk3::ENTER: /* FALLTHROUGH */
+  case fltk3::DND_ENTER:
+    // Successful completion of fltk3::ENTER means the widget is now the
     // belowmouse widget, but only call fltk3::belowmouse if the child
     // widget did not do so:
     if (!o->contains(fltk3::belowmouse())) fltk3::belowmouse(o);
@@ -129,7 +129,7 @@ static int send(fltk3::Widget* o, int event) {
 #define ctrl(x) (x^0x40)
 static int navkey() {
   switch (fltk3::event_key()) {
-  case 0: // not an FL_KEYBOARD/FL_SHORTCUT event
+  case 0: // not an fltk3::KEY/fltk3::SHORTCUT event
     break;
   case FL_Tab:
     if (!fltk3::event_state(FL_SHIFT)) return FL_Right;
@@ -155,7 +155,7 @@ int fltk3::Group::handle(int event) {
 
   switch (event) {
 
-  case FL_FOCUS:
+  case fltk3::FOCUS:
     switch (navkey()) {
     default:
       if (savedfocus_ && savedfocus_->take_focus()) return 1;
@@ -170,51 +170,51 @@ int fltk3::Group::handle(int event) {
     }
     return 0;
 
-  case FL_UNFOCUS:
+  case fltk3::UNFOCUS:
     savedfocus_ = fl_oldfocus;
     return 0;
 
-  case FL_KEYBOARD:
+  case fltk3::KEY:
     return navigation(navkey());
 
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && fltk3::event_inside(o) && send(o,FL_SHORTCUT))
+      if (o->takesevents() && fltk3::event_inside(o) && send(o,fltk3::SHORTCUT))
 	return 1;
     }
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && !fltk3::event_inside(o) && send(o,FL_SHORTCUT))
+      if (o->takesevents() && !fltk3::event_inside(o) && send(o,fltk3::SHORTCUT))
 	return 1;
     }
     if ((fltk3::event_key() == FL_Enter || fltk3::event_key() == FL_KP_Enter)) return navigation(FL_Down);
     return 0;
 
-  case FL_ENTER:
-  case FL_MOVE:
+  case fltk3::ENTER:
+  case fltk3::MOVE:
     for (i = children(); i--;) {
       o = a[i];
       if (o->visible() && fltk3::event_inside(o)) {
 	if (o->contains(fltk3::belowmouse())) {
-	  return send(o,FL_MOVE);
+	  return send(o,fltk3::MOVE);
 	} else {
 	  fltk3::belowmouse(o);
-	  if (send(o,FL_ENTER)) return 1;
+	  if (send(o,fltk3::ENTER)) return 1;
 	}
       }
     }
     fltk3::belowmouse(this);
     return 1;
 
-  case FL_DND_ENTER:
-  case FL_DND_DRAG:
+  case fltk3::DND_ENTER:
+  case fltk3::DND_DRAG:
     for (i = children(); i--;) {
       o = a[i];
       if (o->takesevents() && fltk3::event_inside(o)) {
 	if (o->contains(fltk3::belowmouse())) {
-	  return send(o,FL_DND_DRAG);
-	} else if (send(o,FL_DND_ENTER)) {
+	  return send(o,fltk3::DND_DRAG);
+	} else if (send(o,fltk3::DND_ENTER)) {
 	  if (!o->contains(fltk3::belowmouse())) fltk3::belowmouse(o);
 	  return 1;
 	}
@@ -223,12 +223,12 @@ int fltk3::Group::handle(int event) {
     fltk3::belowmouse(this);
     return 0;
 
-  case FL_PUSH:
+  case fltk3::PUSH:
     for (i = children(); i--;) {
       o = a[i];
       if (o->takesevents() && fltk3::event_inside(o)) {
 	Fl_Widget_Tracker wp(o);
-	if (send(o,FL_PUSH)) {
+	if (send(o,fltk3::PUSH)) {
 	  if (fltk3::pushed() && wp.exists() && !o->contains(fltk3::pushed())) fltk3::pushed(o);
 	  return 1;
 	}
@@ -236,8 +236,8 @@ int fltk3::Group::handle(int event) {
     }
     return 0;
 
-  case FL_RELEASE:
-  case FL_DRAG:
+  case fltk3::RELEASE:
+  case fltk3::DRAG:
     o = fltk3::pushed();
     if (o == this) return 0;
     else if (o) send(o,event);
@@ -251,35 +251,35 @@ int fltk3::Group::handle(int event) {
     }
     return 0;
 
-  case FL_MOUSEWHEEL:
+  case fltk3::MOUSEWHEEL:
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && fltk3::event_inside(o) && send(o,FL_MOUSEWHEEL))
+      if (o->takesevents() && fltk3::event_inside(o) && send(o,fltk3::MOUSEWHEEL))
 	return 1;
     }
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && !fltk3::event_inside(o) && send(o,FL_MOUSEWHEEL))
+      if (o->takesevents() && !fltk3::event_inside(o) && send(o,fltk3::MOUSEWHEEL))
 	return 1;
     }
     return 0;
 
-  case FL_DEACTIVATE:
-  case FL_ACTIVATE:
+  case fltk3::DEACTIVATE:
+  case fltk3::ACTIVATE:
     for (i = children(); i--;) {
       o = *a++;
       if (o->active()) o->handle(event);
     }
     return 1;
 
-  case FL_SHOW:
-  case FL_HIDE:
+  case fltk3::SHOW:
+  case fltk3::HIDE:
     for (i = children(); i--;) {
       o = *a++;
-      if (event == FL_HIDE && o == fltk3::focus()) {
+      if (event == fltk3::HIDE && o == fltk3::focus()) {
         // Give up input focus...
 	int old_event = fltk3::e_number;
-        o->handle(fltk3::e_number = FL_UNFOCUS);
+        o->handle(fltk3::e_number = fltk3::UNFOCUS);
 	fltk3::e_number = old_event;
 	fltk3::focus(0);
       }
@@ -307,7 +307,7 @@ int fltk3::Group::handle(int event) {
   }
 }
 
-//void fltk3::Group::focus(fltk3::Widget *o) {fltk3::focus(o); o->handle(FL_FOCUS);}
+//void fltk3::Group::focus(fltk3::Widget *o) {fltk3::focus(o); o->handle(fltk3::FOCUS);}
 
 #if 0
 const char *nameof(fltk3::Widget *o) {

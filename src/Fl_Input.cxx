@@ -484,7 +484,7 @@ int Fl_Input::handle(int event) {
   static int dnd_save_position, dnd_save_mark, drag_start = -1, newpos;
   static fltk3::Widget *dnd_save_focus;
   switch (event) {
-    case FL_FOCUS:
+    case fltk3::FOCUS:
       switch (fltk3::event_key()) {
         case FL_Right:
           position(0);
@@ -508,7 +508,7 @@ int Fl_Input::handle(int event) {
       }
       break;
       
-    case FL_KEYBOARD:
+    case fltk3::KEY:
       if (fltk3::event_key() == FL_Tab && mark() != position()) {
         // Set the current cursor position to the end of the selection...
         if (mark() > position())
@@ -522,7 +522,7 @@ int Fl_Input::handle(int event) {
         return handle_key();
       }
       
-    case FL_PUSH:
+    case fltk3::PUSH:
       if (fltk3::dnd_text_ops()) {
         int oldpos = position(), oldmark = mark();
         Fl_Boxtype b = box();
@@ -543,11 +543,11 @@ int Fl_Input::handle(int event) {
       
       if (fltk3::focus() != this) {
         fltk3::focus(this);
-        handle(FL_FOCUS);
+        handle(fltk3::FOCUS);
       }
       break;
       
-    case FL_DRAG:
+    case fltk3::DRAG:
       if (fltk3::dnd_text_ops()) {
         if (drag_start >= 0) {
           if (fltk3::event_is_click()) return 1; // debounce the mouse
@@ -561,7 +561,7 @@ int Fl_Input::handle(int event) {
       }
       break;
       
-    case FL_RELEASE:
+    case fltk3::RELEASE:
       if (fltk3::event_button() == 2) {
         fltk3::event_is_click(0); // stop double click from picking a word
         fltk3::paste(*this, 0);
@@ -583,17 +583,17 @@ int Fl_Input::handle(int event) {
       
       return 1;
       
-    case FL_DND_ENTER:
+    case fltk3::DND_ENTER:
       fltk3::belowmouse(this); // send the leave events first
       dnd_save_position = position();
       dnd_save_mark = mark();
       dnd_save_focus = fltk3::focus();
       if (dnd_save_focus != this) {
         fltk3::focus(this);
-        handle(FL_FOCUS);
+        handle(fltk3::FOCUS);
       }
       // fall through:
-    case FL_DND_DRAG: 
+    case fltk3::DND_DRAG: 
       //int p = mouse_position(X, Y, W, H);
 #if DND_OUT_XXXX
       if (fltk3::focus()==this && (p>=dnd_save_position && p<=dnd_save_mark ||
@@ -610,25 +610,25 @@ int Fl_Input::handle(int event) {
     }
       return 1;
       
-    case FL_DND_LEAVE:
+    case fltk3::DND_LEAVE:
       position(dnd_save_position, dnd_save_mark);
 #if DND_OUT_XXXX
       if (!focused())
 #endif
         if (dnd_save_focus != this) {
           fltk3::focus(dnd_save_focus);
-          handle(FL_UNFOCUS);
+          handle(fltk3::UNFOCUS);
         }
       return 1;
       
-    case FL_DND_RELEASE:
+    case fltk3::DND_RELEASE:
       take_focus();
       return 1;
       
       /* TODO: this will scroll the area, but stop if the cursor would become invisible.
        That clipping happens in drawtext(). Do we change the clipping or should 
        we move the cursor (ouch)?
-       case FL_MOUSEWHEEL:
+       case fltk3::MOUSEWHEEL:
        if (fltk3::e_dy > 0) {
        yscroll( yscroll() - fltk3::e_dy*15 );
        } else if (fltk3::e_dy < 0) {

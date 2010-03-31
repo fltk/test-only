@@ -122,7 +122,7 @@ void Fl_Timer::step() {
 }
 
 int Fl_Timer::handle(int event) {
-  if (event == FL_RELEASE && delay <= 0) value(0.0);
+  if (event == fltk3::RELEASE && delay <= 0) value(0.0);
   return 0;
 }
 

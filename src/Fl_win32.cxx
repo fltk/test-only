@@ -160,7 +160,7 @@ static HMODULE get_imm_module() {
 // default, but you can disable it by defining NO_TRACK_MOUSE.
 //
 // TrackMouseEvent is only used to support window leave notifications
-// under Windows. It can be used to get FL_LEAVE events, when the
+// under Windows. It can be used to get fltk3::LEAVE events, when the
 // mouse leaves the _main_ application window (FLTK detects subwindow
 // leave events by using normal move events).
 //
@@ -584,7 +584,7 @@ void fltk3::paste(fltk3::Widget &receiver, int clipboard) {
   if (!clipboard || fl_i_own_selection[clipboard]) {
     // We already have it, do it quickly without window server.
     // Notice that the text is clobbered if set_selection is
-    // called in response to FL_PASTE!
+    // called in response to fltk3::PASTE!
 
     // Convert \r\n -> \n
     char *i = fl_selection_buffer[clipboard];
@@ -600,7 +600,7 @@ void fltk3::paste(fltk3::Widget &receiver, int clipboard) {
     }
     *o = 0;
     fltk3::e_length = o - fltk3::e_text;
-    receiver.handle(FL_PASTE);
+    receiver.handle(fltk3::PASTE);
     delete [] fltk3::e_text;
     fltk3::e_text = 0;
   } else {
@@ -620,7 +620,7 @@ void fltk3::paste(fltk3::Widget &receiver, int clipboard) {
       }
       *b = 0;
       fltk3::e_length = b - fltk3::e_text;
-      receiver.handle(FL_PASTE);
+      receiver.handle(fltk3::PASTE);
       GlobalUnlock(h);
       free(fltk3::e_text);
       fltk3::e_text = 0;
@@ -694,12 +694,12 @@ static int mouse_event(fltk3::Window *window, int what, int button,
     fltk3::e_keysym = FL_Button + button;
     fltk3::e_is_click = 1;
     px = pmx = fltk3::e_x_root; py = pmy = fltk3::e_y_root;
-    return fltk3::handle(FL_PUSH,window);
+    return fltk3::handle(fltk3::PUSH,window);
 
   case 2: // release:
     if (!fl_capture) ReleaseCapture();
     fltk3::e_keysym = FL_Button + button;
-    return fltk3::handle(FL_RELEASE,window);
+    return fltk3::handle(fltk3::RELEASE,window);
 
   case 3: // move:
   default: // avoid compiler warning
@@ -707,7 +707,7 @@ static int mouse_event(fltk3::Window *window, int what, int button,
     if (fltk3::e_x_root == pmx && fltk3::e_y_root == pmy) return 1;
     pmx = fltk3::e_x_root; pmy = fltk3::e_y_root;
     if (abs(fltk3::e_x_root-px)>5 || abs(fltk3::e_y_root-py)>5) fltk3::e_is_click = 0;
-    return fltk3::handle(FL_MOVE,window);
+    return fltk3::handle(fltk3::MOVE,window);
 
   }
 }
@@ -846,7 +846,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     fltk3::fatal("WM_QUIT message");
 
   case WM_CLOSE: // user clicked close box
-    fltk3::handle(FL_CLOSE, window);
+    fltk3::handle(fltk3::CLOSE, window);
     PostQuitMessage(0);
     return 0;
 
@@ -927,23 +927,23 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       fltk3::Window *tw = window;
       while (tw->parent()) tw = tw->window(); // find top level window
       fltk3::belowmouse(0);
-      fltk3::handle(FL_LEAVE, tw);
+      fltk3::handle(fltk3::LEAVE, tw);
     }
     track_mouse_win = 0; // force TrackMouseEvent() restart
     break;
 
   case WM_SETFOCUS:
-    fltk3::handle(FL_FOCUS, window);
+    fltk3::handle(fltk3::FOCUS, window);
     break;
 
   case WM_KILLFOCUS:
-    fltk3::handle(FL_UNFOCUS, window);
+    fltk3::handle(fltk3::UNFOCUS, window);
     fltk3::flush(); // it never returns to main loop when deactivated...
     break;
 
   case WM_SHOWWINDOW:
     if (!window->parent()) {
-      fltk3::handle(wParam ? FL_SHOW : FL_HIDE, window);
+      fltk3::handle(wParam ? fltk3::SHOW : fltk3::HIDE, window);
     }
     break;
 
@@ -1080,12 +1080,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     }
     fltk3::e_text = buffer;
     if (lParam & (1<<31)) { // key up events.
-      if (fltk3::handle(FL_KEYUP, window)) return 0;
+      if (fltk3::handle(fltk3::KEYUP, window)) return 0;
       break;
     }
     // for (int i = lParam&0xff; i--;)
     while (window->parent()) window = window->window();
-    if (fltk3::handle(FL_KEYBOARD,window)) return 0;
+    if (fltk3::handle(fltk3::KEY,window)) return 0;
     break;}
 
   case WM_MOUSEWHEEL: {
@@ -1093,7 +1093,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     delta += (SHORT)(HIWORD(wParam));
     fltk3::e_dy = -delta / WHEEL_DELTA;
     delta += fltk3::e_dy * WHEEL_DELTA;
-    if (fltk3::e_dy) fltk3::handle(FL_MOUSEWHEEL, window);
+    if (fltk3::e_dy) fltk3::handle(fltk3::MOUSEWHEEL, window);
     return 0;
   }
 
@@ -1104,9 +1104,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SIZE:
     if (!window->parent()) {
       if (wParam == SIZE_MINIMIZED || wParam == SIZE_MAXHIDE) {
-	fltk3::handle(FL_HIDE, window);
+	fltk3::handle(fltk3::HIDE, window);
       } else {
-	fltk3::handle(FL_SHOW, window);
+	fltk3::handle(fltk3::SHOW, window);
 	resize_bug_fix = window;
 	window->size(LOWORD(lParam), HIWORD(lParam));
       }
@@ -1540,7 +1540,7 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
   if (showit) {
     w->set_visible();
     int old_event = fltk3::e_number;
-    w->handle(fltk3::e_number = FL_SHOW); // get child windows to appear
+    w->handle(fltk3::e_number = fltk3::SHOW); // get child windows to appear
     fltk3::e_number = old_event;
     w->redraw(); // force draw to happen
   }

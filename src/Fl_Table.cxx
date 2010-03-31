@@ -454,7 +454,7 @@ void Fl_Table::_auto_drag_cb() {
     _dragging_y = fltk3::e_y + 30;
   }
   _auto_drag = 2;
-  handle(FL_DRAG);
+  handle(fltk3::DRAG);
   _auto_drag = 1;
   fltk3::e_x = lx;
   fltk3::e_y = ly;
@@ -710,7 +710,7 @@ int Fl_Table::handle(int event) {
   ResizeFlag resizeflag;		// which resizing area are we over? (0=none)
   TableContext context = cursor2rowcol(R, C, resizeflag);
   switch ( event ) {
-    case FL_PUSH:
+    case fltk3::PUSH:
       if (fltk3::event_button() == 1 && !fltk3::event_clicks()) {
         if (fltk3::focus() != this) {
           take_focus();
@@ -734,12 +734,12 @@ int Fl_Table::handle(int event) {
       }
       switch ( context ) {
         case CONTEXT_CELL:
-          // FL_PUSH on a cell?
-          ret = 1; 			// express interest in FL_RELEASE
+          // fltk3::PUSH on a cell?
+          ret = 1; 			// express interest in fltk3::RELEASE
           break;
           
         case CONTEXT_NONE:
-          // FL_PUSH on table corner?
+          // fltk3::PUSH on table corner?
           if ( fltk3::event_button() == 1 && 
               fltk3::event_x() < x() + row_header_width()) {
             current_col = 0;
@@ -752,7 +752,7 @@ int Fl_Table::handle(int event) {
           break;
           
         case CONTEXT_COL_HEADER:
-          // FL_PUSH on a column header?
+          // fltk3::PUSH on a column header?
           if ( fltk3::event_button() == 1) {
             // Resizing? Handle it
             if ( resizeflag ) {
@@ -778,7 +778,7 @@ int Fl_Table::handle(int event) {
           break;
           
         case CONTEXT_ROW_HEADER:
-          // FL_PUSH on a row header?
+          // fltk3::PUSH on a row header?
           if ( fltk3::event_button() == 1 ) {
             // Resizing? Handle it
             if ( resizeflag ) {
@@ -810,7 +810,7 @@ int Fl_Table::handle(int event) {
       _last_row = R;
       break;
       
-    case FL_DRAG:
+    case fltk3::DRAG:
       if (_auto_drag == 1) {
         ret = 1;
         break;
@@ -895,7 +895,7 @@ int Fl_Table::handle(int event) {
           }
       break;
       
-    case FL_RELEASE:
+    case fltk3::RELEASE:
       _stop_auto_drag();
       switch ( context ) {
         case CONTEXT_ROW_HEADER:		// release on row header
@@ -923,7 +923,7 @@ int Fl_Table::handle(int event) {
       }
       break;
       
-    case FL_MOVE:
+    case fltk3::MOVE:
       if ( context == CONTEXT_COL_HEADER && 		// in column header?
           resizeflag ) {				// resize + near boundary?
         change_cursor(FL_CURSOR_WE);			// show resize cursor
@@ -937,31 +937,31 @@ int Fl_Table::handle(int event) {
       ret = 1;
       break;
       
-    case FL_ENTER:		// See FLTK event docs on the FL_ENTER widget
+    case fltk3::ENTER:		// See FLTK event docs on the fltk3::ENTER widget
       if (!ret) take_focus();
       ret = 1;
       //FALLTHROUGH
       
-    case FL_LEAVE:		// We want to track the mouse if resizing is allowed.
+    case fltk3::LEAVE:		// We want to track the mouse if resizing is allowed.
       if ( resizeflag ) {
         ret = 1;
       }
-      if ( event == FL_LEAVE ) {
+      if ( event == fltk3::LEAVE ) {
         _stop_auto_drag();
         change_cursor(FL_CURSOR_DEFAULT);
       }
       break;
       
-    case FL_FOCUS:
+    case fltk3::FOCUS:
       fltk3::focus(this);
       //FALLTHROUGH
       
-    case FL_UNFOCUS:
+    case fltk3::UNFOCUS:
       _stop_auto_drag();
       ret = 1;
       break;
       
-    case FL_KEYBOARD: {
+    case fltk3::KEY: {
       ret = 0;
       int is_row = select_row;
       int is_col = select_col;

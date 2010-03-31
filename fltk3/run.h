@@ -446,12 +446,12 @@ namespace fltk3 {
   inline int event_y_root()	{return e_y_root;}
   /**
     Returns the current horizontal mouse scrolling associated with the
-    FL_MOUSEWHEEL event. Right is positive.
+    fltk3::MOUSEWHEEL event. Right is positive.
   */
   inline int event_dx()	{return e_dx;}
   /**
     Returns the current vertical mouse scrolling associated with the
-    FL_MOUSEWHEEL event. Down is positive.
+    fltk3::MOUSEWHEEL event. Down is positive.
   */
   inline int event_dy()	{return e_dy;}
   /**
@@ -465,7 +465,7 @@ namespace fltk3 {
   extern void get_mouse(int &,int &); // platform dependent
   /**
     Returns non zero if we had a double click event.
-    \retval Non-zero if the most recent FL_PUSH or FL_KEYBOARD was a "double click".  
+    \retval Non-zero if the most recent fltk3::PUSH or fltk3::KEY was a "double click".  
     \retval  N-1 for  N clicks. 
     A double click is counted if the same button is pressed
     again while event_is_click() is true.
@@ -482,10 +482,10 @@ namespace fltk3 {
   inline void event_clicks(int i) {e_clicks = i;}
   /**
     The first form returns non-zero if the mouse has not moved far enough
-    and not enough time has passed since the last FL_PUSH or 
-    FL_KEYBOARD event for it to be considered a "drag" rather than a
-    "click".  You can test this on FL_DRAG, FL_RELEASE,
-    and FL_MOVE events.  The second form clears the value returned
+    and not enough time has passed since the last fltk3::PUSH or 
+    fltk3::KEY event for it to be considered a "drag" rather than a
+    "click".  You can test this on fltk3::DRAG, fltk3::RELEASE,
+    and fltk3::MOVE events.  The second form clears the value returned
     by fltk3::event_is_click().  Useful to prevent the <I>next</I>
     click from being counted as a double-click or to make a popup menu
     pick an item with a single click.  Don't pass non-zero to this.
@@ -497,7 +497,7 @@ namespace fltk3 {
   inline void event_is_click(int i) {e_is_click = i;}
   /**
     Gets which particular mouse button caused the current event. 
-    This returns garbage if the most recent event was not a FL_PUSH or FL_RELEASE event.
+    This returns garbage if the most recent event was not a fltk3::PUSH or fltk3::RELEASE event.
     \retval FL_LEFT_MOUSE \retval FL_MIDDLE_MOUSE \retval FL_RIGHT_MOUSE.
     \see fltk3::event_buttons()
   */
@@ -595,10 +595,10 @@ namespace fltk3 {
   */
   extern int get_key(int key); // platform dependent
   /** 
-    Returns the text associated with the current event, including FL_PASTE or FL_DND_RELEASE events.
-    This can be used in response to FL_KEYUP, FL_KEYDOWN, FL_PASTE, FL_DND_RELEASE.
+    Returns the text associated with the current event, including fltk3::PASTE or fltk3::DND_RELEASE events.
+    This can be used in response to fltk3::KEYUP, fltk3::KEY, fltk3::PASTE, fltk3::DND_RELEASE.
 
-    When responding to FL_KEYUP/FL_KEYDOWN, use this function instead of fltk3::event_key()
+    When responding to fltk3::KEYUP/fltk3::KEY, use this function instead of fltk3::event_key()
     to get the text equivalent of keystrokes suitable for inserting into strings 
     and text widgets.
 
@@ -737,8 +737,8 @@ namespace fltk3 {
     to a static buffer that is overwritten each call.
     
     The integer pointed to by \p attributes (if the pointer is not
-    zero) is set to zero, FL_BOLD or FL_ITALIC or 
-    FL_BOLD | FL_ITALIC.  To locate a "family" of fonts, search
+    zero) is set to zero, fltk3::BOLD or fltk3::ITALIC or 
+    fltk3::BOLD | fltk3::ITALIC.  To locate a "family" of fonts, search
     forward and back for a set with non-zero attributes, these faces along
     with the face with a zero attribute before them constitute a family.
   */
@@ -825,9 +825,9 @@ namespace fltk3 {
   /**
     Returns the mouse buttons state bits; if non-zero, then at least one
     button is pressed now.  This function returns the button state at the 
-    time of the event. During an FL_RELEASE event, the state 
+    time of the event. During an fltk3::RELEASE event, the state 
     of the released button will be 0. To find out, which button 
-    caused an FL_RELEASE event, you can use fltk3::event_button() instead.
+    caused an fltk3::RELEASE event, you can use fltk3::event_button() instead.
     \return a bit mask value like { [FL_BUTTON1] | [FL_BUTTON2] | [FL_BUTTON3] }
   */
   inline int event_buttons() {return e_state&0x7f000000;}

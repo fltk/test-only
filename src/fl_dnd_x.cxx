@@ -69,7 +69,7 @@ static int dnd_aware(NativeWindow& window) {
 }
 
 static int grabfunc(int event) {
-  if (event == FL_RELEASE) fltk3::pushed(0);
+  if (event == fltk3::RELEASE) fltk3::pushed(0);
   return 0;
 }
 
@@ -115,7 +115,7 @@ int fltk3::dnd() {
 
     if (new_window != target_window) {
       if (local_window) {
-	local_handle(FL_DND_LEAVE, local_window);
+	local_handle(fltk3::DND_LEAVE, local_window);
       } else if (dndversion) {
 	fl_sendClientMessage(target_window, fl_XdndLeave, source_window);
       }
@@ -123,7 +123,7 @@ int fltk3::dnd() {
       target_window = new_window;
       local_window = new_local_window;
       if (local_window) {
-	local_handle(FL_DND_ENTER, local_window);
+	local_handle(fltk3::DND_ENTER, local_window);
       } else if (dndversion) {
         // Send an X-DND message to the target window.  In order to
 	// support dragging of files/URLs as well as arbitrary text,
@@ -154,7 +154,7 @@ int fltk3::dnd() {
       }
     }
     if (local_window) {
-      local_handle(FL_DND_DRAG, local_window);
+      local_handle(fltk3::DND_DRAG, local_window);
     } else if (dndversion) {
       fl_sendClientMessage(target_window, fl_XdndPosition, source_window,
 			   0, (e_x_root<<16)|e_y_root, fl_event_time,
@@ -165,7 +165,7 @@ int fltk3::dnd() {
 
   if (local_window) {
     fl_i_own_selection[0] = 1;
-    if (local_handle(FL_DND_RELEASE, local_window)) paste(*belowmouse(), 0);
+    if (local_handle(fltk3::DND_RELEASE, local_window)) paste(*belowmouse(), 0);
   } else if (dndversion) {
     fl_sendClientMessage(target_window, fl_XdndDrop, source_window,
 			 0, fl_event_time);

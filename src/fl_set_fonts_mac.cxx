@@ -48,15 +48,15 @@ const char* fltk3::get_font_name(Fl_Font fnum, int* ap) {
     if (!p || !*p) {if (ap) *ap = 0; return "";}
     strlcpy(f->fontname, p, ENDOFBUFFER);
     int type = 0;
-    if (strstr(f->name, "Bold")) type |= FL_BOLD;
-    if (strstr(f->name, "Italic")) type |= FL_ITALIC;
+    if (strstr(f->name, "Bold")) type |= fltk3::BOLD;
+    if (strstr(f->name, "Italic")) type |= fltk3::ITALIC;
     f->fontname[ENDOFBUFFER] = (char)type;
   }
   if (ap) *ap = f->fontname[ENDOFBUFFER];
   return f->fontname;
 }
 
-static int fl_free_font = FL_FREE_FONT;
+static int fl_free_font = fltk3::FREE_FONT;
 
 Fl_Font fltk3::set_fonts(const char* xstarname) {
 #pragma unused ( xstarname )

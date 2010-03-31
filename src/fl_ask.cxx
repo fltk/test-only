@@ -60,7 +60,7 @@ static fltk3::Button *button[3];
 static Fl_Input *input;
 static int ret_val;
 static const char *iconlabel = "?";
-Fl_Font fl_message_font_ = FL_HELVETICA;
+Fl_Font fl_message_font_ = fltk3::HELVETICA;
 Fl_Fontsize fl_message_size_ = 14;
 
 static char avoidRecursion = 0;
@@ -89,7 +89,7 @@ static fltk3::Window *makeform() {
  (input = new Fl_Input(60, 37, 340, 23))->hide();
  {Fl_Box* o = icon = new Fl_Box(10, 10, 50, 50);
   o->box(FL_THIN_UP_BOX);
-  o->labelfont(FL_TIMES_BOLD);
+  o->labelfont(fltk3::TIMES_BOLD);
   o->labelsize(34);
   o->color(FL_WHITE);
   o->labelcolor(FL_BLUE);

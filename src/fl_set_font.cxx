@@ -44,10 +44,10 @@ void fltk3::set_font(Fl_Font fnum, const char* name) {
   while (fnum >= table_size) {
     int i = table_size;
     if (!i) {	// don't realloc the built-in table
-      table_size = 2*FL_FREE_FONT;
-      i = FL_FREE_FONT;
+      table_size = 2*fltk3::FREE_FONT;
+      i = fltk3::FREE_FONT;
       Fl_Fontdesc* t = (Fl_Fontdesc*)malloc(table_size*sizeof(Fl_Fontdesc));
-      memcpy(t, fl_fonts, FL_FREE_FONT*sizeof(Fl_Fontdesc));
+      memcpy(t, fl_fonts, fltk3::FREE_FONT*sizeof(Fl_Fontdesc));
       fl_fonts = t;
     } else {
       table_size = 2*table_size;

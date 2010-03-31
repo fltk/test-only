@@ -52,8 +52,8 @@
 #endif
 
 /**
-    Test the current event, which must be an FL_KEYBOARD or 
-    FL_SHORTCUT, against a shortcut value (described in 
+    Test the current event, which must be an fltk3::KEY or 
+    fltk3::SHORTCUT, against a shortcut value (described in 
     fltk3::Button).  Returns non-zero if there is a match.  Not to
     be confused with 
     fltk3::Widget::test_shortcut().

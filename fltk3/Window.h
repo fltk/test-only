@@ -391,8 +391,8 @@ public:
     Call show() to restore the window.
 
     When a window is iconified/restored (either by these calls or by the
-    user) the handle() method is called with FL_HIDE and 
-    FL_SHOW events and visible() is turned on and off.
+    user) the handle() method is called with fltk3::HIDE and 
+    fltk3::SHOW events and visible() is turned on and off.
 
     There is no way to control what is drawn in the icon except with the
     string passed to fltk3::Window::xclass().  You should not rely on

@@ -150,7 +150,7 @@ void Fl_Light_Button::draw() {
 
 int Fl_Light_Button::handle(int event) {
   switch (event) {
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     if (box()) redraw();
   default:
     return fltk3::Button::handle(event);

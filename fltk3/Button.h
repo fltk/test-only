@@ -55,13 +55,13 @@ namespace fltk3 {
   \brief Buttons generate callbacks when they are clicked by the user.
   
   You control exactly when and how by changing the values for type() and
-  when().  Buttons can also generate callbacks in response to \c FL_SHORTCUT
+  when().  Buttons can also generate callbacks in response to \c fltk3::SHORTCUT
   events.  The button can either have an explicit shortcut(int s) value or a
   letter shortcut can be indicated in the label() with an '\&' character
   before it.  For the label shortcut it does not matter if \e Alt is held
   down, but if you have an input field in the same window, the user will have
   to hold down the \e Alt key so that the input field does not eat the event
-  first as an \c FL_KEYBOARD event.
+  first as an \c fltk3::KEY event.
 
   \todo Refactor the doxygen comments for fltk3::Button type() documentation.
 

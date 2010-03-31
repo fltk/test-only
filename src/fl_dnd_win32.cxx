@@ -105,7 +105,7 @@ public:
     px = pt.x; py = pt.y;
     if (fillCurrentDragData(pDataObj)) {
       // FLTK has no mechanism yet for the different drop effects, so we allow move and copy
-      if ( target && fltk3::handle( FL_DND_ENTER, target ) )
+      if ( target && fltk3::handle( fltk3::DND_ENTER, target ) )
         *pdwEffect = DROPEFFECT_MOVE|DROPEFFECT_COPY; //|DROPEFFECT_LINK;
       else
         *pdwEffect = DROPEFFECT_NONE;
@@ -135,7 +135,7 @@ public:
     }
     if (fillCurrentDragData(0)) {
       // fltk3::Group will change DND_DRAG into DND_ENTER and DND_LEAVE if needed
-      if ( fltk3::handle( FL_DND_DRAG, fl_dnd_target_window ) )
+      if ( fltk3::handle( fltk3::DND_DRAG, fl_dnd_target_window ) )
         *pdwEffect = DROPEFFECT_MOVE|DROPEFFECT_COPY; //|DROPEFFECT_LINK;
       else
         *pdwEffect = DROPEFFECT_NONE;
@@ -149,7 +149,7 @@ public:
   HRESULT STDMETHODCALLTYPE DragLeave() {
     if ( fl_dnd_target_window && fillCurrentDragData(0))
     {
-      fltk3::handle( FL_DND_LEAVE, fl_dnd_target_window );
+      fltk3::handle( fltk3::DND_LEAVE, fl_dnd_target_window );
       fl_dnd_target_window = 0;
       clearCurrentDragData();
     }
@@ -167,7 +167,7 @@ public:
       fltk3::e_y = fltk3::e_y_root-target->y();
     }
     // tell FLTK that the user released an object on this widget
-    if ( !fltk3::handle( FL_DND_RELEASE, target ) )
+    if ( !fltk3::handle( fltk3::DND_RELEASE, target ) )
       return S_OK;
 
     fltk3::Widget *w = target;
@@ -175,7 +175,7 @@ public:
     HWND hwnd = fl_xid( (fltk3::Window*)w );
     if (fillCurrentDragData(data)) {
       int old_event = fltk3::e_number;
-      fltk3::belowmouse()->handle(fltk3::e_number = FL_PASTE); // e_text will be invalid after this call
+      fltk3::belowmouse()->handle(fltk3::e_number = fltk3::PASTE); // e_text will be invalid after this call
       fltk3::e_number = old_event;
       SetForegroundWindow( hwnd );
       clearCurrentDragData();
@@ -233,7 +233,7 @@ private:
     fmt.dwAspect = DVASPECT_CONTENT;
     fmt.lindex = -1;
     fmt.cfFormat = CF_HDROP;
-    // if it is a pathname list, send an FL_PASTE with a \n separated list of filepaths
+    // if it is a pathname list, send an fltk3::PASTE with a \n separated list of filepaths
     if ( data->GetData( &fmt, &medium )==S_OK )
     {
       HDROP hdrop = (HDROP)medium.hGlobal;
@@ -510,7 +510,7 @@ int fltk3::dnd()
   if ( w )
   {
     int old_event = fltk3::e_number;
-    w->handle(fltk3::e_number = FL_RELEASE);
+    w->handle(fltk3::e_number = fltk3::RELEASE);
     fltk3::e_number = old_event;
     fltk3::pushed( 0 );
   }

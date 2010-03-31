@@ -189,7 +189,7 @@ int Fl_Table_Row::handle(int event) {
   ResizeFlag resizeflag;		// which resizing area are we over? (0=none)
   TableContext context = cursor2rowcol(R, C, resizeflag);
   switch ( event ) {
-    case FL_PUSH:
+    case fltk3::PUSH:
       if ( fltk3::event_button() == 1 ) {
         _last_push_x = fltk3::event_x();	// save regardless of context
         _last_push_y = fltk3::event_y();	// " "
@@ -228,13 +228,13 @@ int Fl_Table_Row::handle(int event) {
           
           _last_row = R;
           _dragging_select = 1;
-          ret = 1;      // FL_PUSH handled (ensures FL_DRAG will be sent)
+          ret = 1;      // fltk3::PUSH handled (ensures fltk3::DRAG will be sent)
           // redraw();  // redraw() handled by select_row()
         }
       } 
       break;
       
-    case FL_DRAG:
+    case fltk3::DRAG:
     {
       if ( _dragging_select ) {
         // Dragged off table edges? Handle scrolling
@@ -293,7 +293,7 @@ int Fl_Table_Row::handle(int event) {
       break;
     }
       
-    case FL_RELEASE:
+    case fltk3::RELEASE:
       if ( fltk3::event_button() == 1 ) {
         _dragging_select = 0;
         ret = 1;			// release handled

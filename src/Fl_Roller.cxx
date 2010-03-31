@@ -36,7 +36,7 @@ int Fl_Roller::handle(int event) {
   static int ipos;
   int newpos = horizontal() ? fltk3::event_x() : fltk3::event_y();
   switch (event) {
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (fltk3::visible_focus()) {
       fltk3::focus(this);
       redraw();
@@ -44,13 +44,13 @@ int Fl_Roller::handle(int event) {
     handle_push();
     ipos = newpos;
     return 1;
-  case FL_DRAG:
+  case fltk3::DRAG:
     handle_drag(clamp(round(increment(previous_value(),newpos-ipos))));
     return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     handle_release();
     return 1;
-  case FL_KEYBOARD :
+  case fltk3::KEY :
     switch (fltk3::event_key()) {
       case FL_Up:
         if (horizontal()) return 0;
@@ -72,14 +72,14 @@ int Fl_Roller::handle(int event) {
         return 0;
     }
     // break not required because of switch...
-  case FL_FOCUS :
-  case FL_UNFOCUS :
+  case fltk3::FOCUS :
+  case fltk3::UNFOCUS :
     if (fltk3::visible_focus()) {
       redraw();
       return 1;
     } else return 0;
-  case FL_ENTER :
-  case FL_LEAVE :
+  case fltk3::ENTER :
+  case fltk3::LEAVE :
     return 1;
   default:
     return 0;

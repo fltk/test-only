@@ -500,7 +500,7 @@ void fl_destroy_xft_draw(NativeWindow id) {
 
 void Fl_Device::draw(const char *str, int n, int x, int y) {
   if ( !current_font ) {
-    fl_font(FL_HELVETICA, 14);
+    fl_font(fltk3::HELVETICA, 14);
   }
 #if USE_OVERLAY
   XftDraw*& draw_ = fl_overlay ? draw_overlay : ::draw_;

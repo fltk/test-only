@@ -73,10 +73,10 @@ const Fl_Menu_Item* Fl_Menu_Button::popup() {
 int Fl_Menu_Button::handle(int e) {
   if (!menu() || !menu()->text) return 0;
   switch (e) {
-  case FL_ENTER: /* FALLTHROUGH */
-  case FL_LEAVE:
+  case fltk3::ENTER: /* FALLTHROUGH */
+  case fltk3::LEAVE:
     return (box() && !type()) ? 1 : 0;
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (!box()) {
       if (fltk3::event_button() != 3) return 0;
     } else if (type()) {
@@ -85,18 +85,18 @@ int Fl_Menu_Button::handle(int e) {
     if (fltk3::visible_focus()) fltk3::focus(this);
     popup();
     return 1;
-  case FL_KEYBOARD:
+  case fltk3::KEY:
     if (!box()) return 0;
     if (fltk3::event_key() == ' ' &&
         !(fltk3::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) {
       popup();
       return 1;
     } else return 0;
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
       if (fltk3::Widget::test_shortcut()) {popup(); return 1;}
     return test_shortcut() != 0;
-  case FL_FOCUS: /* FALLTHROUGH */
-  case FL_UNFOCUS:
+  case fltk3::FOCUS: /* FALLTHROUGH */
+  case fltk3::UNFOCUS:
     if (box() && fltk3::visible_focus()) {
       redraw();
       return 1;

@@ -59,7 +59,7 @@ void Fl_Return_Button::draw() {
 }
 
 int Fl_Return_Button::handle(int event) {
-  if (event == FL_SHORTCUT &&
+  if (event == fltk3::SHORTCUT &&
       (fltk3::event_key() == FL_Enter || fltk3::event_key() == FL_KP_Enter)) {
     do_callback();
     return 1;

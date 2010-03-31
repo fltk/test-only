@@ -130,7 +130,7 @@ Fl_Choice::Fl_Choice(int X, int Y, int W, int H, const char *L)
 : Fl_Menu_(X,Y,W,H,L) {
   align(FL_ALIGN_LEFT);
   when(FL_WHEN_RELEASE);
-  textfont(FL_HELVETICA);
+  textfont(fltk3::HELVETICA);
   box(FL_FLAT_BOX);
   down_box(FL_BORDER_BOX);
 }
@@ -165,14 +165,14 @@ int Fl_Choice::handle(int e) {
   if (!menu() || !menu()->text) return 0;
   const Fl_Menu_Item* v;
   switch (e) {
-  case FL_ENTER:
-  case FL_LEAVE:
+  case fltk3::ENTER:
+  case fltk3::LEAVE:
     return 1;
 
-  case FL_KEYBOARD:
+  case fltk3::KEY:
     if (fltk3::event_key() != ' ' ||
         (fltk3::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) return 0;
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (fltk3::visible_focus()) fltk3::focus(this);
   J1:
     if (fltk3::scheme()
@@ -190,15 +190,15 @@ int Fl_Choice::handle(int e) {
     if (v != mvalue()) redraw();
     picked(v);
     return 1;
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
       if (fltk3::Widget::test_shortcut()) goto J1;
     v = menu()->test_shortcut();
     if (!v) return 0;
     if (v != mvalue()) redraw();
     picked(v);
     return 1;
-  case FL_FOCUS:
-  case FL_UNFOCUS:
+  case fltk3::FOCUS:
+  case fltk3::UNFOCUS:
     if (fltk3::visible_focus()) {
       redraw();
       return 1;

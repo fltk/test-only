@@ -156,8 +156,8 @@ class Fl_Spinner : public fltk3::Group
 
   int		handle(int event) {
 		  switch (event) {
-		    case FL_KEYDOWN :
-		    case FL_SHORTCUT :
+		    case fltk3::KEY :
+		    case fltk3::SHORTCUT :
 		      if (fltk3::event_key() == FL_Up) {
 			up_button_.do_callback();
 			return 1;
@@ -166,7 +166,7 @@ class Fl_Spinner : public fltk3::Group
 			return 1;
 		      } else return 0;
 
-		    case FL_FOCUS :
+		    case fltk3::FOCUS :
 		      if (input_.take_focus()) return 1;
 		      else return 0;
 		  }

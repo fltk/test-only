@@ -127,7 +127,7 @@ int Fl_Counter::calc_mouseobj() {
 int Fl_Counter::handle(int event) {
   int i;
   switch (event) {
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     if (mouseobj) {
       fltk3::remove_timeout(repeat_callback, this);
       mouseobj = 0;
@@ -135,13 +135,13 @@ int Fl_Counter::handle(int event) {
     }
     handle_release();
     return 1;
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (fltk3::visible_focus()) fltk3::focus(this);
     { Fl_Widget_Tracker wp(this);
       handle_push();
       if (wp.deleted()) return 1;
     }
-  case FL_DRAG:
+  case fltk3::DRAG:
     i = calc_mouseobj();
     if (i != mouseobj) {
       fltk3::remove_timeout(repeat_callback, this);
@@ -153,7 +153,7 @@ int Fl_Counter::handle(int event) {
       redraw();
     }
     return 1;
-  case FL_KEYBOARD :
+  case fltk3::KEY :
     switch (fltk3::event_key()) {
       case FL_Left:
 	handle_drag(clamp(increment(value(),-1)));
@@ -165,14 +165,14 @@ int Fl_Counter::handle(int event) {
         return 0;
     }
     // break not required because of switch...
-  case FL_FOCUS : /* FALLTHROUGH */
-  case FL_UNFOCUS :
+  case fltk3::FOCUS : /* FALLTHROUGH */
+  case fltk3::UNFOCUS :
     if (fltk3::visible_focus()) {
       redraw();
       return 1;
     } else return 0;
-  case FL_ENTER : /* FALLTHROUGH */
-  case FL_LEAVE :
+  case fltk3::ENTER : /* FALLTHROUGH */
+  case fltk3::LEAVE :
     return 1;
   default:
     return 0;
@@ -201,7 +201,7 @@ Fl_Counter::Fl_Counter(int X, int Y, int W, int H, const char* L)
   Fl_Valuator::step(1, 10);
   lstep_ = 1.0;
   mouseobj = 0;
-  textfont_ = FL_HELVETICA;
+  textfont_ = fltk3::HELVETICA;
   textsize_ = FL_NORMAL_SIZE;
   textcolor_ = FL_FOREGROUND_COLOR;
 }

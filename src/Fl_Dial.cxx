@@ -109,11 +109,11 @@ void Fl_Dial::draw() {
 */
 int Fl_Dial::handle(int event, int X, int Y, int W, int H) {
   switch (event) {
-  case FL_PUSH: {
+  case fltk3::PUSH: {
     Fl_Widget_Tracker wp(this);  
     handle_push();
     if (wp.deleted()) return 1; }
-  case FL_DRAG: {
+  case fltk3::DRAG: {
     int mx = (fltk3::event_x()-X-W/2)*H;
     int my = (fltk3::event_y()-Y-H/2)*W;
     if (!mx && !my) return 1;
@@ -131,11 +131,11 @@ int Fl_Dial::handle(int event, int X, int Y, int W, int H) {
     }
     handle_drag(clamp(round(val)));
   } return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     handle_release();
     return 1;
-  case FL_ENTER : /* FALLTHROUGH */
-  case FL_LEAVE :
+  case fltk3::ENTER : /* FALLTHROUGH */
+  case fltk3::LEAVE :
     return 1;
   default:
     return 0;

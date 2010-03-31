@@ -177,7 +177,7 @@ Fl_File_Browser::item_width(void *p) const	// I - List item data
 
   // Set the font and size...
   if (line->txt[strlen(line->txt) - 1] == '/')
-    fl_font(textfont() | FL_BOLD, textsize());
+    fl_font(textfont() | fltk3::BOLD, textsize());
   else
     fl_font(textfont(), textsize());
 
@@ -283,7 +283,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
   line = (FL_BLINE *)p;
 
   if (line->txt[strlen(line->txt) - 1] == '/')
-    fl_font(textfont() | FL_BOLD, textsize());
+    fl_font(textfont() | fltk3::BOLD, textsize());
   else
     fl_font(textfont(), textsize());
 

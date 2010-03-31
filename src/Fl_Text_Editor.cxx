@@ -550,25 +550,25 @@ int Fl_Text_Editor::handle(int event) {
   if (!buffer()) return 0;
 
   switch (event) {
-    case FL_FOCUS:
+    case fltk3::FOCUS:
       show_cursor(mCursorOn); // redraws the cursor
       if (buffer()->selected()) redraw(); // Redraw selections...
       fltk3::focus(this);
       return 1;
 
-    case FL_UNFOCUS:
+    case fltk3::UNFOCUS:
       show_cursor(mCursorOn); // redraws the cursor
       if (buffer()->selected()) redraw(); // Redraw selections...
-    case FL_HIDE:
+    case fltk3::HIDE:
       if (when() & FL_WHEN_RELEASE) maybe_do_callback();
       return 1;
 
-    case FL_KEYBOARD:
+    case fltk3::KEY:
       if (active_r() && window() && this == fltk3::belowmouse()) 
         window()->cursor(FL_CURSOR_NONE);
       return handle_key();
 
-    case FL_PASTE:
+    case fltk3::PASTE:
       if (!fltk3::event_text()) {
         fl_beep();
 	return 1;
@@ -581,13 +581,13 @@ int Fl_Text_Editor::handle(int event) {
       if (when()&FL_WHEN_CHANGED) do_callback();
       return 1;
 
-    case FL_ENTER:
+    case fltk3::ENTER:
 // MRS: WIN32 only?  Need to test!
-//    case FL_MOVE:
+//    case fltk3::MOVE:
       show_cursor(mCursorOn);
       return 1;
 
-    case FL_PUSH:
+    case fltk3::PUSH:
       if (fltk3::event_button() == 2) {
         // don't let the text_display see this event
         if (fltk3::Group::handle(event)) return 1;
@@ -600,10 +600,10 @@ int Fl_Text_Editor::handle(int event) {
       }
       break;
 
-    case FL_SHORTCUT:
+    case fltk3::SHORTCUT:
       if (!(shortcut() ? fltk3::test_shortcut(shortcut()) : test_shortcut()))
         return 0;
-      if (fltk3::visible_focus() && handle(FL_FOCUS)) {
+      if (fltk3::visible_focus() && handle(fltk3::FOCUS)) {
         fltk3::focus(this);
         return 1;
       }

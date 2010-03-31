@@ -59,12 +59,12 @@ int Fl_Value_Output::handle(int event) {
   int mx = fltk3::event_x();
   static int ix, drag;
   switch (event) {
-  case FL_PUSH:
+  case fltk3::PUSH:
     ix = mx;
     drag = fltk3::event_button();
     handle_push();
     return 1;
-  case FL_DRAG:
+  case fltk3::DRAG:
     delta = fltk3::event_x()-ix;
     if (delta > 5) delta -= 5;
     else if (delta < -5) delta += 5;
@@ -77,11 +77,11 @@ int Fl_Value_Output::handle(int event) {
     v = round(v);
     handle_drag(soft()?softclamp(v):clamp(v));;
     return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     handle_release();
     return 1;
-  case FL_ENTER :
-  case FL_LEAVE :
+  case fltk3::ENTER :
+  case fltk3::LEAVE :
     return 1;
   default:
     return 0;
@@ -97,7 +97,7 @@ Fl_Value_Output::Fl_Value_Output(int X, int Y, int W, int H,const char *l)
 : Fl_Valuator(X,Y,W,H,l) {
   box(FL_NO_BOX);
   align(FL_ALIGN_LEFT);
-  textfont_ = FL_HELVETICA;
+  textfont_ = fltk3::HELVETICA;
   textsize_ = FL_NORMAL_SIZE;
   textcolor_ = FL_FOREGROUND_COLOR;
   soft_ = 0;

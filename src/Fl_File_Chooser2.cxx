@@ -1396,7 +1396,7 @@ Fl_File_Chooser::update_preview()
       previewBox->label(filename ? "?" : 0);
       previewBox->align(FL_ALIGN_CLIP);
       previewBox->labelsize(75);
-      previewBox->labelfont(FL_HELVETICA);
+      previewBox->labelfont(fltk3::HELVETICA);
     } else {
       // Show the first 1k of text...
       int size = previewBox->h() / 20;
@@ -1407,7 +1407,7 @@ Fl_File_Chooser::update_preview()
       previewBox->align((Fl_Align)(FL_ALIGN_CLIP | FL_ALIGN_INSIDE |
                                    FL_ALIGN_LEFT | FL_ALIGN_TOP));
       previewBox->labelsize(size);
-      previewBox->labelfont(FL_COURIER);
+      previewBox->labelfont(fltk3::COURIER);
     }
   } else if (image) {
     pbw = previewBox->w() - 20;
@@ -1436,7 +1436,7 @@ Fl_File_Chooser::update_preview()
     previewBox->label(newlabel);
     previewBox->align(FL_ALIGN_CLIP);
     previewBox->labelsize(newlabel[0]=='@'?75:12);
-    previewBox->labelfont(FL_HELVETICA);
+    previewBox->labelfont(fltk3::HELVETICA);
   }
 
   previewBox->redraw();

@@ -75,13 +75,13 @@ int Fl_Value_Input::handle(int event) {
   static int ix, drag;
   input.when(when());
   switch (event) {
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (!step()) goto DEFAULT;
     ix = mx;
     drag = fltk3::event_button();
     handle_push();
     return 1;
-  case FL_DRAG:
+  case fltk3::DRAG:
     if (!step()) goto DEFAULT;
     delta = mx-ix;
     if (delta > 5) delta -= 5;
@@ -95,20 +95,20 @@ int Fl_Value_Input::handle(int event) {
     v = round(v);
     handle_drag(soft()?softclamp(v):clamp(v));;
     return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     if (!step()) goto DEFAULT;
     if (value() != previous_value() || !fltk3::event_is_click())
       handle_release();
     else {
       Fl_Widget_Tracker wp(&input);
-      input.handle(FL_PUSH);
+      input.handle(fltk3::PUSH);
       if (wp.exists())
-	input.handle(FL_RELEASE);
+	input.handle(fltk3::RELEASE);
     }
     return 1;
-  case FL_FOCUS:
+  case fltk3::FOCUS:
     return input.take_focus();
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
     return input.handle(event);
   default:
   DEFAULT:

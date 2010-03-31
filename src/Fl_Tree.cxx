@@ -220,7 +220,7 @@ int Fl_Tree::handle(int e) {
   int ret = fltk3::Group::handle(e);
   if ( ! _root ) return(ret);
   switch ( e ) {
-    case FL_PUSH: {
+    case fltk3::PUSH: {
       lastselect = 0;
       item_clicked(0);				// assume no item was clicked
       Fl_Tree_Item *o = _root->find_clicked(_prefs);
@@ -278,7 +278,7 @@ int Fl_Tree::handle(int e) {
       }
       break;
     }
-    case FL_DRAG: {
+    case fltk3::DRAG: {
       Fl_Tree_Item *o = _root->find_clicked(_prefs);
       if ( o ) {
         ret |= 1;				// handled
@@ -324,7 +324,7 @@ int Fl_Tree::handle(int e) {
         }
       }
     }
-    case FL_RELEASE: {
+    case fltk3::RELEASE: {
       if ( fltk3::event_button() == FL_LEFT_MOUSE ) {
         ret |= 1;
       }

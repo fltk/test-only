@@ -230,7 +230,7 @@ public:
       \param[in] event the kind of event received
       \retval 0 if the event was not used or understood
       \retval 1 if the event was used and can be deleted
-      \see Fl_Event
+      \see fltk3::Event
    */
   virtual int handle(int event);
 
@@ -673,9 +673,9 @@ public:
       all of its parents are visible. A widget is only visible if 
       visible() is true on it <I>and all of its parents</I>. 
 
-      Changing it will send FL_SHOW or FL_HIDE events to 
+      Changing it will send fltk3::SHOW or fltk3::HIDE events to 
       the widget. <I>Do not change it if the parent is not visible, as this 
-      will send false FL_SHOW or FL_HIDE events to the widget</I>.
+      will send false fltk3::SHOW or fltk3::HIDE events to the widget</I>.
       redraw() is called if necessary on this or the parent.
 
       \see hide(), visible(), visible_r()
@@ -712,7 +712,7 @@ public:
   int active_r() const;
 
   /** Activates the widget.
-      Changing this value will send FL_ACTIVATE to the widget if 
+      Changing this value will send fltk3::ACTIVATE to the widget if 
       active_r() is true.
       \see active(), active_r(), deactivate()
    */
@@ -721,11 +721,11 @@ public:
   /** Deactivates the widget.
       Inactive widgets will be drawn "grayed out", e.g. with less contrast 
       than the active widget. Inactive widgets will not receive any keyboard 
-      or mouse button events. Other events (including FL_ENTER, FL_MOVE, 
-      FL_LEAVE, FL_SHORTCUT, and others) will still be sent. A widget is 
+      or mouse button events. Other events (including fltk3::ENTER, fltk3::MOVE, 
+      fltk3::LEAVE, fltk3::SHORTCUT, and others) will still be sent. A widget is 
       only active if active() is true on it <I>and all of its parents</I>.  
 
-      Changing this value will send FL_DEACTIVATE to the widget if 
+      Changing this value will send fltk3::DEACTIVATE to the widget if 
       active_r() is true.
     
       Currently you cannot deactivate fltk3::Window widgets.
@@ -790,7 +790,7 @@ public:
 
   /** Gives the widget the keyboard focus.
       Tries to make this widget be the fltk3::focus() widget, by first sending 
-      it an FL_FOCUS event, and if it returns non-zero, setting 
+      it an fltk3::FOCUS event, and if it returns non-zero, setting 
       fltk3::focus() to this widget. You should use this method to 
       assign the focus to a widget.  
       \return true if the widget accepted the focus.

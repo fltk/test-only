@@ -47,7 +47,7 @@
   <P align=CENTER> \image html Fl_File_Input.gif </P> 
   \image latex Fl_File_Input.eps "Fl_File_Input"  width=6cm
   \note As all Fl_Input derived objects, Fl_File_Input may call its callback
-  when loosing focus (see FL_UNFOCUS) to update its state like its cursor shape.
+  when loosing focus (see fltk3::UNFOCUS) to update its state like its cursor shape.
   One resulting side effect is that you should call clear_changed() early in your callback
   to avoid reentrant calls if you plan to show another window or dialog box in the callback.
 */

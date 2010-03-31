@@ -118,7 +118,7 @@ fltk3::Widget::Widget(int X, int Y, int W, int H, const char* L) {
   label_.image   = 0;
   label_.deimage = 0;
   label_.type	 = FL_NORMAL_LABEL;
-  label_.font	 = FL_HELVETICA;
+  label_.font	 = fltk3::HELVETICA;
   label_.size	 = FL_NORMAL_SIZE;
   label_.color	 = FL_FOREGROUND_COLOR;
   label_.align_	 = FL_ALIGN_CENTER;
@@ -152,7 +152,7 @@ int fltk3::Widget::damage_resize(int X, int Y, int W, int H) {
 int fltk3::Widget::take_focus() {
   if (!takesevents()) return 0;
   if (!visible_focus()) return 0;
-  if (!handle(FL_FOCUS)) return 0; // see if it wants it
+  if (!handle(fltk3::FOCUS)) return 0; // see if it wants it
   if (contains(fltk3::focus())) return 1; // it called fltk3::focus for us
   fltk3::focus(this);
   return 1;
@@ -233,7 +233,7 @@ void fltk3::Widget::activate() {
     if (active_r()) {
       redraw();
       redraw_label();
-      handle(FL_ACTIVATE);
+      handle(fltk3::ACTIVATE);
       if (inside(fltk3::focus())) fltk3::focus()->take_focus();
     }
   }
@@ -244,7 +244,7 @@ void fltk3::Widget::deactivate() {
     set_flag(INACTIVE);
     redraw();
     redraw_label();
-    handle(FL_DEACTIVATE);
+    handle(fltk3::DEACTIVATE);
     fl_throw_focus(this);
   } else {
     set_flag(INACTIVE);
@@ -263,7 +263,7 @@ void fltk3::Widget::show() {
     if (visible_r()) {
       redraw();
       redraw_label();
-      handle(FL_SHOW);
+      handle(fltk3::SHOW);
       if (inside(fltk3::focus())) fltk3::focus()->take_focus();
     }
   }
@@ -274,7 +274,7 @@ void fltk3::Widget::hide() {
     set_flag(INVISIBLE);
     for (fltk3::Widget *p = parent(); p; p = p->parent())
       if (p->box() || !p->parent()) {p->redraw(); break;}
-    handle(FL_HIDE);
+    handle(fltk3::HIDE);
     fl_throw_focus(this);
   } else {
     set_flag(INVISIBLE);

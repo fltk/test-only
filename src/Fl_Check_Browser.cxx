@@ -316,7 +316,7 @@ void Fl_Check_Browser::check_none() {
 }
 
 int Fl_Check_Browser::handle(int event) {
-  if (event==FL_PUSH)
+  if (event==fltk3::PUSH)
     deselect();
   return Fl_Browser_::handle(event);
 }

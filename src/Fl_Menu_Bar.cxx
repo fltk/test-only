@@ -54,16 +54,16 @@ void Fl_Menu_Bar::draw() {
 int Fl_Menu_Bar::handle(int event) {
   const Fl_Menu_Item* v;
   if (menu() && menu()->text) switch (event) {
-  case FL_ENTER:
-  case FL_LEAVE:
+  case fltk3::ENTER:
+  case fltk3::LEAVE:
     return 1;
-  case FL_PUSH:
+  case fltk3::PUSH:
     v = 0;
   J1:
     v = menu()->pulldown(x(), y(), w(), h(), v, this, 0, 1);
     picked(v);
     return 1;
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
     if (visible_r()) {
       v = menu()->find_shortcut();
       if (v && v->submenu()) goto J1;

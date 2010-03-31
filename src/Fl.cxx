@@ -86,7 +86,7 @@ int		fltk3::visible_focus_ = 1,
 		fltk3::dnd_text_ops_ = 1;
 
 fltk3::Window *fl_xfocus;	// which window X thinks has focus
-fltk3::Window *fl_xmousewin;// which window X thinks has FL_ENTER
+fltk3::Window *fl_xmousewin;// which window X thinks has fltk3::ENTER
 fltk3::Window *fltk3::grab_;	// most recent fltk3::grab()
 fltk3::Window *fltk3::modal_;	// topmost modal() window
 
@@ -705,7 +705,7 @@ static handler_link *handlers = 0;
   them returns non zero then the event is ignored.  Events that cause
   this to be called are:
   
-  - FL_SHORTCUT events that are not recognized by any  widget.
+  - fltk3::SHORTCUT events that are not recognized by any  widget.
     This lets you provide global shortcut keys.
   - System events that FLTK does not recognize.  See fl_xevent.
   - \e Some other events when the widget FLTK selected  returns
@@ -751,12 +751,12 @@ static int send_handlers(int e) {
 fltk3::Widget* fl_oldfocus; // kludge for fltk3::Group...
 
 /**
-    Sets the widget that will receive FL_KEYBOARD events.
+    Sets the widget that will receive fltk3::KEY events.
     
     If you change fltk3::focus(), the previous widget and all
-    parents (that don't contain the new widget) are sent FL_UNFOCUS
-    events.  Changing the focus does \e not send FL_FOCUS to
-    this or any widget, because sending FL_FOCUS is supposed to
+    parents (that don't contain the new widget) are sent fltk3::UNFOCUS
+    events.  Changing the focus does \e not send fltk3::FOCUS to
+    this or any widget, because sending fltk3::FOCUS is supposed to
     \e test if the widget wants the focus (by it returning non-zero from
     handle()).
     
@@ -779,9 +779,9 @@ void fltk3::focus(fltk3::Widget *o) {
     // take focus from the old focused window
     fl_oldfocus = 0;
     int old_event = e_number;
-    e_number = FL_UNFOCUS;
+    e_number = fltk3::UNFOCUS;
     for (; p; p = p->parent()) {
-      p->handle(FL_UNFOCUS);
+      p->handle(fltk3::UNFOCUS);
       fl_oldfocus = p;
     }
     e_number = old_event;
@@ -792,15 +792,15 @@ static char dnd_flag = 0; // make 'belowmouse' send DND_LEAVE instead of LEAVE
 
 /**
     Sets the widget that is below the mouse.  This is for
-    highlighting buttons.  It is not used to send FL_PUSH or 
-    FL_MOVE directly, for several obscure reasons, but those events
+    highlighting buttons.  It is not used to send fltk3::PUSH or 
+    fltk3::MOVE directly, for several obscure reasons, but those events
     typically go to this widget.  This is also the first widget tried for 
-    FL_SHORTCUT events.
+    fltk3::SHORTCUT events.
     
     If you change the belowmouse widget, the previous one and all
-    parents (that don't contain the new widget) are sent FL_LEAVE
-    events.  Changing this does \e not send FL_ENTER to this
-    or any widget, because sending FL_ENTER is supposed to \e test
+    parents (that don't contain the new widget) are sent fltk3::LEAVE
+    events.  Changing this does \e not send fltk3::ENTER to this
+    or any widget, because sending fltk3::ENTER is supposed to \e test
     if the widget wants the mouse (by it returning non-zero from 
     handle()).
 */
@@ -810,7 +810,7 @@ void fltk3::belowmouse(fltk3::Widget *o) {
   if (o != p) {
     belowmouse_ = o;
     int old_event = e_number;
-    e_number = dnd_flag ? FL_DND_LEAVE : FL_LEAVE;
+    e_number = dnd_flag ? fltk3::DND_LEAVE : fltk3::LEAVE;
     for (; p && !p->contains(o); p = p->parent()) {
       p->handle(e_number);
     }
@@ -819,14 +819,14 @@ void fltk3::belowmouse(fltk3::Widget *o) {
 }
 
 /**
-    Sets the widget that is being pushed. FL_DRAG or 
-    FL_RELEASE (and any more FL_PUSH) events will be sent to
+    Sets the widget that is being pushed. fltk3::DRAG or 
+    fltk3::RELEASE (and any more fltk3::PUSH) events will be sent to
     this widget.
     
     If you change the pushed widget, the previous one and all parents
-    (that don't contain the new widget) are sent FL_RELEASE
-    events.  Changing this does \e not send FL_PUSH to this
-    or any widget, because sending FL_PUSH is supposed to \e test
+    (that don't contain the new widget) are sent fltk3::RELEASE
+    events.  Changing this does \e not send fltk3::PUSH to this
+    or any widget, because sending fltk3::PUSH is supposed to \e test
     if the widget wants the mouse (by it returning non-zero from 
     handle()).
 */
@@ -839,7 +839,7 @@ void (*Fl_Tooltip::enter)(fltk3::Widget *) = nothing;
 void (*Fl_Tooltip::exit)(fltk3::Widget *) = nothing;
 
 // Update modal(), focus() and other state according to system state,
-// and send FL_ENTER, FL_LEAVE, FL_FOCUS, and/or FL_UNFOCUS events.
+// and send fltk3::ENTER, fltk3::LEAVE, fltk3::FOCUS, and/or fltk3::UNFOCUS events.
 // This is the only function that produces these events in response
 // to system activity.
 // This is called whenever a window is added or hidden, and whenever
@@ -877,15 +877,15 @@ void fl_fix_focus() {
       if (fltk3::modal()) w = fltk3::modal();
       if (!w->contains(fltk3::belowmouse())) {
         int old_event = fltk3::e_number;
-	w->handle(fltk3::e_number = FL_ENTER);
+	w->handle(fltk3::e_number = fltk3::ENTER);
 	fltk3::e_number = old_event;
 	if (!w->contains(fltk3::belowmouse())) fltk3::belowmouse(w);
       } else {
-	// send a FL_MOVE event so the enter/leave state is up to date
+	// send a fltk3::MOVE event so the enter/leave state is up to date
 	fltk3::e_x = fltk3::e_x_root-fl_xmousewin->x();
 	fltk3::e_y = fltk3::e_y_root-fl_xmousewin->y();
         int old_event = fltk3::e_number;
-	w->handle(fltk3::e_number = FL_MOVE);
+	w->handle(fltk3::e_number = fltk3::MOVE);
 	fltk3::e_number = old_event;
       }
     } else {
@@ -904,7 +904,7 @@ extern fltk3::Widget *fl_selection_requestor; // from Fl_x.cxx
 // to receive any more events, and also removes all global variables that
 // point at the widget.
 // I changed this from the 1.0.1 behavior, the older version could send
-// FL_LEAVE or FL_UNFOCUS events to the widget.  This appears to not be
+// fltk3::LEAVE or fltk3::UNFOCUS events to the widget.  This appears to not be
 // desirable behavior and caused flwm to crash.
 
 void fl_throw_focus(fltk3::Widget *o) {
@@ -963,20 +963,20 @@ int fltk3::handle(int e, fltk3::Window* window)
 
   switch (e) {
 
-  case FL_CLOSE:
+  case fltk3::CLOSE:
     if (grab() || modal() && window != modal()) return 0;
     wi->do_callback();
     return 1;
 
-  case FL_SHOW:
+  case fltk3::SHOW:
       wi->fltk3::Widget::show(); // this calls fltk3::Widget::show(), not fltk3::Window::show()
     return 1;
 
-  case FL_HIDE:
+  case fltk3::HIDE:
       wi->fltk3::Widget::hide(); // this calls fltk3::Widget::hide(), not fltk3::Window::hide()
     return 1;
 
-  case FL_PUSH:
+  case fltk3::PUSH:
 #ifdef DEBUG
     printf("fltk3::handle(e=%d, window=%p);\n", e, window);
 #endif // DEBUG
@@ -990,28 +990,28 @@ int fltk3::handle(int e, fltk3::Window* window)
     window->show();
     return 1;
 
-  case FL_DND_ENTER:
-  case FL_DND_DRAG:
+  case fltk3::DND_ENTER:
+  case fltk3::DND_DRAG:
     dnd_flag = 1;
     break;
 
-  case FL_DND_LEAVE:
+  case fltk3::DND_LEAVE:
     dnd_flag = 1;
     belowmouse(0);
     dnd_flag = 0;
     return 1;
 
-  case FL_DND_RELEASE:
+  case fltk3::DND_RELEASE:
     wi = belowmouse();
     break;
 
-  case FL_MOVE:
-  case FL_DRAG:
+  case fltk3::MOVE:
+  case fltk3::DRAG:
     fl_xmousewin = window; // this should already be set, but just in case.
     if (pushed()) {
       wi = pushed();
       if (grab()) wi = grab();
-      e_number = e = FL_DRAG;
+      e_number = e = fltk3::DRAG;
       break;
     }
     if (modal() && wi != modal()) wi = 0;
@@ -1026,8 +1026,8 @@ int fltk3::handle(int e, fltk3::Window* window)
     }
     return ret;}
 
-  case FL_RELEASE: {
-//    printf("FL_RELEASE: window=%p, pushed() = %p, grab() = %p, modal() = %p\n",
+  case fltk3::RELEASE: {
+//    printf("fltk3::RELEASE: window=%p, pushed() = %p, grab() = %p, modal() = %p\n",
 //           window, pushed(), grab(), modal());
 
     if (grab()) {
@@ -1041,17 +1041,17 @@ int fltk3::handle(int e, fltk3::Window* window)
     fl_fix_focus();
     return r;}
 
-  case FL_UNFOCUS:
+  case fltk3::UNFOCUS:
     window = 0;
-  case FL_FOCUS:
+  case fltk3::FOCUS:
     fl_xfocus = window;
     fl_fix_focus();
     return 1;
 
-  case FL_KEYUP:
+  case fltk3::KEYUP:
     // Send the key-up to the current focus. This is not 
     // always the same widget that received the corresponding
-    // FL_KEYBOARD event because focus may have changed.
+    // fltk3::KEY event because focus may have changed.
     // Sending the KEYUP to the right KEYDOWN is possible, but
     // would require that we track the KEYDOWN for every possible 
     // key stroke (users may hold down multiple keys!) and then 
@@ -1059,10 +1059,10 @@ int fltk3::handle(int e, fltk3::Window* window)
     // a KEYUP there. I believe that the current solution is
     // "close enough".
     for (wi = grab() ? grab() : focus(); wi; wi = wi->parent())
-      if (send(FL_KEYUP, wi, window)) return 1;
+      if (send(fltk3::KEYUP, wi, window)) return 1;
     return 0;
 
-  case FL_KEYBOARD:
+  case fltk3::KEY:
 #ifdef DEBUG
     printf("fltk3::handle(e=%d, window=%p);\n", e, window);
 #endif // DEBUG
@@ -1073,19 +1073,19 @@ int fltk3::handle(int e, fltk3::Window* window)
 
     // Try it as keystroke, sending it to focus and all parents:
     for (wi = grab() ? grab() : focus(); wi; wi = wi->parent())
-      if (send(FL_KEYBOARD, wi, window)) return 1;
+      if (send(fltk3::KEY, wi, window)) return 1;
 
     // recursive call to try shortcut:
-    if (handle(FL_SHORTCUT, window)) return 1;
+    if (handle(fltk3::SHORTCUT, window)) return 1;
 
     // and then try a shortcut with the case of the text swapped, by
-    // changing the text and falling through to FL_SHORTCUT case:
+    // changing the text and falling through to fltk3::SHORTCUT case:
     {unsigned char* c = (unsigned char*)event_text(); // cast away const
     if (!isalpha(*c)) return 0;
     *c = isupper(*c) ? tolower(*c) : toupper(*c);}
-    e_number = e = FL_SHORTCUT;
+    e_number = e = fltk3::SHORTCUT;
 
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
     if (grab()) {wi = grab(); break;} // send it to grab window
 
     // Try it as shortcut, sending to mouse widget and all parents:
@@ -1094,15 +1094,15 @@ int fltk3::handle(int e, fltk3::Window* window)
       wi = modal();
       if (!wi) wi = window;
     } else if (wi->window() != first_window()) {
-      if (send(FL_SHORTCUT, first_window(), first_window())) return 1;
+      if (send(fltk3::SHORTCUT, first_window(), first_window())) return 1;
     }
 
     for (; wi; wi = wi->parent()) {
-      if (send(FL_SHORTCUT, wi, wi->window())) return 1;
+      if (send(fltk3::SHORTCUT, wi, wi->window())) return 1;
     }
 
     // try using add_handle() functions:
-    if (send_handlers(FL_SHORTCUT)) return 1;
+    if (send_handlers(fltk3::SHORTCUT)) return 1;
 
     // make Escape key close windows:
     if (event_key()==FL_Escape) {
@@ -1113,7 +1113,7 @@ int fltk3::handle(int e, fltk3::Window* window)
 
     return 0;
 
-  case FL_ENTER:
+    case fltk3::ENTER:
 #ifdef DEBUG
     printf("fltk3::handle(e=%d, window=%p);\n", e, window);
 #endif // DEBUG
@@ -1123,7 +1123,7 @@ int fltk3::handle(int e, fltk3::Window* window)
     Fl_Tooltip::enter(belowmouse());
     return 1;
 
-  case FL_LEAVE:
+    case fltk3::LEAVE:
 #ifdef DEBUG
     printf("fltk3::handle(e=%d, window=%p);\n", e, window);
 #endif // DEBUG
@@ -1135,20 +1135,20 @@ int fltk3::handle(int e, fltk3::Window* window)
     if (window == fl_xmousewin) {fl_xmousewin = 0; fl_fix_focus();}
     return 1;
 
-  case FL_MOUSEWHEEL:
+  case fltk3::MOUSEWHEEL:
     fl_xfocus = window; // this should not happen!  But maybe it does:
 
     // Try sending it to the "grab" first
     if (grab() && grab()!=modal() && grab()!=window) {
-      if (send(FL_MOUSEWHEEL, grab(), window)) return 1;
+      if (send(fltk3::MOUSEWHEEL, grab(), window)) return 1;
     }
     // Now try sending it to the "modal" window
     if (modal()) {
-      send(FL_MOUSEWHEEL, modal(), window);
+      send(fltk3::MOUSEWHEEL, modal(), window);
       return 1;
     }
     // Finally try sending it to the window, the event occured in
-    if (send(FL_MOUSEWHEEL, window, window)) return 1;
+    if (send(fltk3::MOUSEWHEEL, window, window)) return 1;
   default:
     break;
   }
@@ -1205,7 +1205,7 @@ void fltk3::Window::hide() {
 
   // Make sure no events are sent to this window:
   fl_throw_focus(this);
-  handle(FL_HIDE);
+  handle(fltk3::HIDE);
 
 #if defined(WIN32)
   // this little trick keeps the current clipboard alive, even if we are about
@@ -1268,7 +1268,7 @@ fltk3::Window::~Window() {
   hide();
 }
 
-// FL_SHOW and FL_HIDE are called whenever the visibility of this widget
+// fltk3::SHOW and fltk3::HIDE are called whenever the visibility of this widget
 // or any parent changes.  We must correctly map/unmap the system's window.
 
 // For top-level windows it is assumed the window has already been
@@ -1280,7 +1280,7 @@ int fltk3::Window::handle(int ev)
 {
   if (parent()) {
     switch (ev) {
-    case FL_SHOW:
+    case fltk3::SHOW:
       if (!shown()) show();
       else {
 #if defined(USE_X11) || defined(WIN32)
@@ -1292,7 +1292,7 @@ int fltk3::Window::handle(int ev)
 #endif // __APPLE__
       }
       break;
-    case FL_HIDE:
+    case fltk3::HIDE:
       if (shown()) {
 	// Find what really turned invisible, if is was a parent window
 	// we do nothing.  We need to avoid unnecessary unmap calls
@@ -1315,7 +1315,7 @@ int fltk3::Window::handle(int ev)
       }
       break;
     }
-//  } else if (ev == FL_FOCUS || ev == FL_UNFOCUS) {
+//  } else if (ev == fltk3::FOCUS || ev == fltk3::UNFOCUS) {
 //    Fl_Tooltip::exit(Fl_Tooltip::current());
   }
 
@@ -1328,7 +1328,7 @@ int fltk3::Window::handle(int ev)
 /** Back-compatibility only: The single-argument call can be used to
     move the selection to another widget or to set the owner to
     NULL, without changing the actual text of the
-    selection. FL_SELECTIONCLEAR is sent to the previous
+    selection. fltk3::SELECTIONCLEAR is sent to the previous
     selection owner, if any.
     
     <i>Copying the buffer every time the selection is changed is
@@ -1342,7 +1342,7 @@ void fltk3::selection_owner(fltk3::Widget *owner) {selection_owner_ = owner;}
 /**
   Changes the current selection.  The block of text is
   copied to an internal buffer by FLTK (be careful if doing this in
-  response to an FL_PASTE as this \e may be the same buffer
+  response to an fltk3::PASTE as this \e may be the same buffer
   returned by event_text()).  The selection_owner()
   widget is set to the passed owner.
 */
@@ -1352,7 +1352,7 @@ void fltk3::selection(fltk3::Widget &owner, const char* text, int len) {
 }
 
 /** Backward compatibility only:
-  Set things up so the receiver widget will be called with an  FL_PASTE event some
+  Set things up so the receiver widget will be called with an  fltk3::PASTE event some
   time in the future for the specified clipboard. The reciever
   should be prepared to be called \e directly by this, or for
   it to happen \e later, or possibly <i>not at all</i>.  This

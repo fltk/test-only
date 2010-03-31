@@ -35,10 +35,7 @@
 #include <fltk3/Widget.h>
 #include <fltk3/Group.h>
 
-#if 0
 #include "Enumerations.H"
-
-#endif
 
 class Fl_Widget;
 class Fl_Window;

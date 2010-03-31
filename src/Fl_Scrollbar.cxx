@@ -114,10 +114,10 @@ int Fl_Scrollbar::handle(int event) {
   }
 
   switch (event) {
-  case FL_ENTER:
-  case FL_LEAVE:
+  case fltk3::ENTER:
+  case fltk3::LEAVE:
     return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
       damage(FL_DAMAGE_ALL);
     if (pushed_) {
       fltk3::remove_timeout(timeout_cb, this);
@@ -125,7 +125,7 @@ int Fl_Scrollbar::handle(int event) {
     }
     handle_release();
     return 1;
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (pushed_) return 1;
     if (area != 8) pushed_ = area;
     if (pushed_) {
@@ -136,10 +136,10 @@ int Fl_Scrollbar::handle(int event) {
       return 1;
     }
     return Fl_Slider::handle(event, X,Y,W,H);
-  case FL_DRAG:
+  case fltk3::DRAG:
     if (pushed_) return 1;
     return Fl_Slider::handle(event, X,Y,W,H);
-  case FL_MOUSEWHEEL :
+  case fltk3::MOUSEWHEEL :
     if (horizontal()) {
       if (fltk3::e_dx==0) return 0;
       int ls = maximum()>=minimum() ? linesize_ : -linesize_;
@@ -151,8 +151,8 @@ int Fl_Scrollbar::handle(int event) {
       handle_drag(clamp(value() + ls * fltk3::e_dy));
       return 1;
     }
-  case FL_SHORTCUT:
-  case FL_KEYBOARD: {
+  case fltk3::SHORTCUT:
+  case fltk3::KEY: {
     int v = value();
     int ls = maximum()>=minimum() ? linesize_ : -linesize_;
     if (horizontal()) {

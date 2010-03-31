@@ -1,154 +1,111 @@
 //
 // "$Id: events.h 6514 2008-11-10 21:10:13Z spitzak $"
 //
-// Event types and data. A Widget::handle() method needs this.
-//
-// Copyright 1998-2006 by Bill Spitzak and others.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
 
-#ifndef fltk_events_h
-#define fltk_events_h
+#ifndef fltk2_events_h
+#define fltk2_events_h
 
 #include "FL_API.h"
 
+#include <fltk3/Enumerations.H>
+
 namespace fltk {
 
-/// \name fltk/events.h
-//@{
-
-/*! Numbers passed to Widget::handle() and returned by event(). */
 enum {
-  NO_EVENT	= 0,
-  PUSH		= 1,
-  RELEASE	= 2,
-  ENTER		= 3,
-  LEAVE		= 4,
-  DRAG		= 5,
-  FOCUS		= 6,
-  UNFOCUS	= 7,
-  KEY		= 8,
-  KEYUP		= 9,
-  FOCUS_CHANGE	= 10,
-  MOVE		= 11,
-  SHORTCUT	= 12,
-  DEACTIVATE	= 13,
-  ACTIVATE	= 14,
-  HIDE		= 15,
-  SHOW		= 16,
-  PASTE		= 17,
-  TIMEOUT	= 18,
-  MOUSEWHEEL	= 19,
-  DND_ENTER	= 20,
-  DND_DRAG	= 21,
-  DND_LEAVE	= 22,
-  DND_RELEASE	= 23,
-  TOOLTIP	= 24
+  NO_EVENT	= fltk3::NO_EVENT,
+  PUSH		= fltk3::PUSH,
+  RELEASE	= fltk3::RELEASE,
+  ENTER		= fltk3::ENTER,
+  LEAVE		= fltk3::LEAVE,
+  DRAG		= fltk3::DRAG,
+  FOCUS		= fltk3::FOCUS,
+  UNFOCUS	= fltk3::UNFOCUS,
+  KEY		= fltk3::KEY,
+  KEYUP		= fltk3::KEYUP,
+  FOCUS_CHANGE	= fltk3::FOCUS_CHANGE,
+  MOVE		= fltk3::MOVE,
+  SHORTCUT	= fltk3::SHORTCUT,
+  DEACTIVATE	= fltk3::DEACTIVATE,
+  ACTIVATE	= fltk3::ACTIVATE,
+  HIDE		= fltk3::HIDE,
+  SHOW		= fltk3::SHOW,
+  PASTE		= fltk3::PASTE,
+  TIMEOUT	= fltk3::TIMEOUT,
+  MOUSEWHEEL	= fltk3::MOUSEWHEEL,
+  DND_ENTER	= fltk3::DND_ENTER,
+  DND_DRAG	= fltk3::DND_DRAG,
+  DND_LEAVE	= fltk3::DND_LEAVE,
+  DND_RELEASE	= fltk3::DND_RELEASE,
+  TOOLTIP	= fltk3::TOOLTIP
 };
 
-/*! Values returned by event_key(), passed to event_key_state() and
-  get_key_state(), and used for the low 16 bits of add_shortcut().
-
-  The actual values returned are based on X11 keysym values, though
-  fltk always returns "unshifted" values much like Windows does. A
-  given key always returns the same value no matter what shift keys
-  are held down. Use event_text() to see the results of any shift
-  keys.
-
-  The lowercase letters 'a' through 'z' and the ascii symbols
-  '`', '-', '=', '[', ']', '\\', ',', '.', '/', ';', '\'' and space
-  are used to identify the keys in the main keyboard.
-
-  On X systems unrecognized keys are returned unchanged as their
-  X keysym value. If they have no keysym it uses the scan code
-  or'd with 0x8000, this is what all those blue buttons on a
-  Microsoft keyboard will do. I don't know how to get those
-  buttons on Windows.
-*/
 enum {
-  LeftButton	= 1,		/*!< PUSH/RELEASE set event_key to this */
-  MiddleButton	= 2,		/*!< PUSH/RELEASE set event_key to this */
-  RightButton	= 3,		/*!< PUSH/RELEASE set event_key to this */
-  SpaceKey	= 32,		/*!< Same as ' ' or 32 */
-  // 'a'-'z', and all punctuation go here in numerical order
-  BackSpaceKey	= 0xff08,	/*!< Backspace */
-  TabKey	= 0xff09,	/*!< Tab */
-  ClearKey	= 0xff0b,	/*!< On some systems with NumLock off '5' produces this */
-  ReturnKey	= 0xff0d,	/*!< Main Enter key, Windows and X documentation calls this "Return" */
-  PauseKey	= 0xff13,	/*!< Pause + Break button */
-  ScrollLockKey	= 0xff14,	/*!< Scroll Lock button */
-  EscapeKey	= 0xff1b,	/*!< Esc */
-  HomeKey	= 0xff50,	/*!< Home */
-  LeftKey	= 0xff51,	/*!< Left */
-  UpKey		= 0xff52,	/*!< Up arrow */
-  RightKey	= 0xff53,	/*!< Right arrow */
-  DownKey	= 0xff54,	/*!< Down arrow */
-  PageUpKey	= 0xff55,	/*!< Page Up */
-  PageDownKey	= 0xff56,	/*!< Page Down */
-  EndKey	= 0xff57,	/*!< End */
-  PrintKey	= 0xff61,	/*!< Print Scrn key + SysRq key */
-  InsertKey	= 0xff63,	/*!< Insert */
-  MenuKey	= 0xff67,	/*!< Key in lower-right with picture of popup menu */
-  HelpKey	= 0xff68,	/*!< Help key on Macintosh keyboards */
-  NumLockKey	= 0xff7f,	/*!< NumLock key */
-  Keypad	= 0xff80,	/*!< Add ASCII to get keypad keys */
-  KeypadEnter	= Keypad+'\r',	/*!< Keypad+'\\r' */
-  MultiplyKey	= Keypad+'*',	/*!< Keypad+'*' */
-  AddKey	= Keypad+'+',	/*!< Keypad+'+' */
-  SubtractKey	= Keypad+'-',	/*!< Keypad+'-' */
-  DecimalKey	= Keypad+'.',	/*!< Keypad+'.' */
-  DivideKey	= Keypad+'/',	/*!< Keypad+'/' */
-  Keypad0	= Keypad+'0',	/*!< Keypad+'0' */
-  Keypad1	= Keypad+'1',	/*!< Keypad+'1' */
-  Keypad2	= Keypad+'2',	/*!< Keypad+'2' */
-  Keypad3	= Keypad+'3',	/*!< Keypad+'3' */
-  Keypad4	= Keypad+'4',	/*!< Keypad+'4' */
-  Keypad5	= Keypad+'5',	/*!< Keypad+'5' */
-  Keypad6	= Keypad+'6',	/*!< Keypad+'6' */
-  Keypad7	= Keypad+'7',	/*!< Keypad+'7' */
-  Keypad8	= Keypad+'8',	/*!< Keypad+'8' */
-  Keypad9	= Keypad+'9',	/*!< Keypad+'9' */
-  KeypadLast	= 0xffbd,	/*!< Keypad+'=', largest legal keypad key */
-  F0Key		= 0xffbd,	/*!< Add a number to get function key */
-  F1Key		= F0Key+1,	/*!< F0Key+1 */
-  F2Key		= F0Key+2,	/*!< F0Key+2 */
-  F3Key		= F0Key+3,	/*!< F0Key+3 */
-  F4Key		= F0Key+4,	/*!< F0Key+4 */
-  F5Key		= F0Key+5,	/*!< F0Key+5 */
-  F6Key		= F0Key+6,	/*!< F0Key+6 */
-  F7Key		= F0Key+7,	/*!< F0Key+7 */
-  F8Key		= F0Key+8,	/*!< F0Key+8 */
-  F9Key		= F0Key+9,	/*!< F0Key+9 */
-  F10Key	= F0Key+10,	/*!< F0Key+10 */
-  F11Key	= F0Key+11,	/*!< F0Key+11 */
-  F12Key	= F0Key+12,	/*!< F0Key+12 */
-  // use F0Key+n to get function key n
-  LastFunctionKey = F0Key+35,	/*!< F0Key+35, largest legal function key */
-  LeftShiftKey	= 0xffe1,	/*!< Left-hand Shift */
-  RightShiftKey	= 0xffe2,	/*!< Right-hand Shift */
-  LeftCtrlKey	= 0xffe3,	/*!< Left-hand Ctrl */
-  RightCtrlKey	= 0xffe4,	/*!< Right-hand Ctrl */
-  CapsLockKey	= 0xffe5,	/*!< Caps Lock */
-  LeftMetaKey	= 0xffe7,	/*!< The left "Windows" or "Apple" key */
-  RightMetaKey	= 0xffe8,	/*!< The right "Windows" or "Apple" key */
-  LeftAltKey	= 0xffe9,	/*!< Left-hand Alt (option on Mac) */
-  RightAltKey	= 0xffea,	/*!< Right-hand Alt (option on Mac) */
-  DeleteKey	= 0xffff,	/*!< Delete */
+  LeftButton	= 1,
+  MiddleButton	= 2,
+  RightButton	= 3,
+  SpaceKey	= 32,
+  BackSpaceKey	= 0xff08,
+  TabKey	= 0xff09,
+  ClearKey	= 0xff0b,
+  ReturnKey	= 0xff0d,
+  PauseKey	= 0xff13,
+  ScrollLockKey	= 0xff14,
+  EscapeKey	= 0xff1b,
+  HomeKey	= 0xff50,
+  LeftKey	= 0xff51,
+  UpKey		= 0xff52,
+  RightKey	= 0xff53,
+  DownKey	= 0xff54,
+  PageUpKey	= 0xff55,
+  PageDownKey	= 0xff56,
+  EndKey	= 0xff57,
+  PrintKey	= 0xff61,
+  InsertKey	= 0xff63,
+  MenuKey	= 0xff67,
+  HelpKey	= 0xff68,
+  NumLockKey	= 0xff7f,
+  Keypad	= 0xff80,
+  KeypadEnter	= Keypad+'\r',
+  MultiplyKey	= Keypad+'*',
+  AddKey	= Keypad+'+',
+  SubtractKey	= Keypad+'-',
+  DecimalKey	= Keypad+'.',
+  DivideKey	= Keypad+'/',
+  Keypad0	= Keypad+'0',
+  Keypad1	= Keypad+'1',
+  Keypad2	= Keypad+'2',
+  Keypad3	= Keypad+'3',
+  Keypad4	= Keypad+'4',
+  Keypad5	= Keypad+'5',
+  Keypad6	= Keypad+'6',
+  Keypad7	= Keypad+'7',
+  Keypad8	= Keypad+'8',
+  Keypad9	= Keypad+'9',
+  KeypadLast	= 0xffbd,
+  F0Key		= 0xffbd,
+  F1Key		= F0Key+1,
+  F2Key		= F0Key+2,
+  F3Key		= F0Key+3,
+  F4Key		= F0Key+4,
+  F5Key		= F0Key+5,
+  F6Key		= F0Key+6,
+  F7Key		= F0Key+7,
+  F8Key		= F0Key+8,
+  F9Key		= F0Key+9,
+  F10Key	= F0Key+10
+  F11Key	= F0Key+11
+  F12Key	= F0Key+12
+  LastFunctionKey = F0Key+35,
+  LeftShiftKey	= 0xffe1,
+  RightShiftKey	= 0xffe2,
+  LeftCtrlKey	= 0xffe3,
+  RightCtrlKey	= 0xffe4,
+  CapsLockKey	= 0xffe5,
+  LeftMetaKey	= 0xffe7,
+  RightMetaKey	= 0xffe8,
+  LeftAltKey	= 0xffe9,
+  RightAltKey	= 0xffea,
+  DeleteKey	= 0xffff,
 #if  defined(__APPLE__)
   LeftAccKey	= LeftCtrlKey,
   RightAccKey	= RightCtrlKey,
@@ -162,59 +119,43 @@ enum {
 #endif
 };
 
-/*! Flags returned by event_state(), and used as the high 16 bits
-  of Widget::add_shortcut() values (the low 16 bits are all zero, so these
-  may be or'd with key values).
-
-  The inline function BUTTON(n) will turn n (1-8) into the flag for a
-  mouse button.
-*/
 enum {
-  SHIFT		= 0x00010000,	/*!< Either shift key held down */
-  CAPSLOCK	= 0x00020000,	/*!< Caps lock is toggled on */
-  CTRL		= 0x00040000,	/*!< Either ctrl key held down */
-  ALT		= 0x00080000,	/*!< Either alt key held down */
-  NUMLOCK	= 0x00100000,	/*!< Num Lock turned on */
-  META		= 0x00400000,	/*!< "Windows" or the "Apple" keys held down */
-  SCROLLLOCK	= 0x00800000,	/*!< Scroll Lock turned on */
-  BUTTON1	= 0x01000000,	/*!< Left mouse button held down */
-  BUTTON2	= 0x02000000,	/*!< Middle mouse button held down */
-  BUTTON3	= 0x04000000,	/*!< Right mouse button held down */
-  ANY_BUTTON	= 0x7f000000, /*!< Any mouse button (up to 8) */
+  SHIFT		= 0x00010000,
+  CAPSLOCK	= 0x00020000,
+  CTRL		= 0x00040000,
+  ALT		= 0x00080000,
+  NUMLOCK	= 0x00100000,
+  META		= 0x00400000,
+  SCROLLLOCK	= 0x00800000,
+  BUTTON1	= 0x01000000,
+  BUTTON2	= 0x02000000,
+  BUTTON3	= 0x04000000,
+  ANY_BUTTON	= 0x7f000000,
 #if defined(__APPLE__)
   ACCELERATOR	= CTRL,
   OPTION	= ALT,
   COMMAND	= META
 #else
-  ACCELERATOR	= ALT, //!< ALT on Windows/Linux, CTRL on OS/X, use for menu accelerators
-  COMMAND	= CTRL,	//!< CTRL on Windows/Linux, META on OS/X, use for menu shortcuts
-  OPTION	= ALT|META //!< ALT|META on Windows/Linux, just ALT on OS/X, use as a drag modifier
+  ACCELERATOR	= ALT,
+  COMMAND	= CTRL,
+  OPTION	= ALT|META
 #endif
 };
 
 inline unsigned BUTTON(int n) {return 0x00800000 << n;}
 
-/*! Device identifier returned by event_device(). This enumeration
-  is useful to get the device type that caused a PUSH, RELEASE,
-  DRAG or MOVE event 
-*/
 enum {
-  DEVICE_MOUSE    = 0, /*!< Event triggered by the system mouse */
-  DEVICE_STYLUS   = 1, /*!< Event triggered by a pen on a tablet, givin pressure and tilt information */
-  DEVICE_ERASER   = 2, /*!< Event triggered by an eraser on a tablet, givin pressure and tilt information */
-  DEVICE_CURSOR   = 3, /*!< Event triggered by a puck style device on a tablet */
-  DEVICE_AIRBRUSH = 4, /*!< Event triggered by an airbrush on a tablet, giving pressure and tilt information */
-  DEVICE_TOUCH    = 5  /*!< Event triggered by touch a touch screen device */
+  DEVICE_MOUSE    = 0,
+  DEVICE_STYLUS   = 1,
+  DEVICE_ERASER   = 2,
+  DEVICE_CURSOR   = 3,
+  DEVICE_AIRBRUSH = 4,
+  DEVICE_TOUCH    = 5
 };
 
 class Rectangle;
 class Widget;
 class Window;
-
-#ifndef DOXYGEN
-
-////////////////////////////////////////////////////////////////
-// Do not use these variables, they may not exist in future versions:
 
 extern FL_API int e_type;
 extern FL_API int e_x;
@@ -242,9 +183,6 @@ extern FL_API Widget* modal_;
 extern FL_API bool grab_;
 extern FL_API bool exit_modal_;
 
-////////////////////////////////////////////////////////////////
-#endif
-
 inline int  event()			{return e_type;}
 inline int  event_x()			{return e_x;}
 inline int  event_y()			{return e_y;}
@@ -269,12 +207,10 @@ inline float event_x_tilt()     	{return e_x_tilt;}
 inline float event_y_tilt()     	{return e_y_tilt;}
 inline int  event_device()      	{return e_device;}
 
-// tests on current event:
 FL_API bool event_inside(const Rectangle&);
 FL_API bool compose(int &del);
 inline void compose_reset()		{compose_state = 0;}
 
-// shortcuts:
 FL_API bool try_shortcut();
 FL_API const char* key_name(unsigned key);
 FL_API unsigned key(const char* name);
@@ -286,12 +222,10 @@ class FL_API ShortcutFunctor {
 FL_API unsigned foreachShortcut(const Widget*, ShortcutFunctor&);
 inline unsigned foreachShortcut(ShortcutFunctor& f) { return foreachShortcut(0,f); }
 
-// get current information, not info from last event:
 FL_API bool get_key_state(unsigned);
 FL_API void get_mouse(int &,int &);
 FL_API bool warp_mouse(int, int);
 
-// event destinations:
 FL_API bool handle(int, Window*);
 FL_API void add_event_handler(int (*h)(int, Window*));
 inline Widget* belowmouse() 		{return belowmouse_;}
@@ -304,22 +238,17 @@ inline Widget* focus()			{return focus_;}
 FL_API void focus(Widget*);
 inline void focus(Widget& w)		{focus(&w);}
 
-// cut/paste/dnd:
 FL_API void copy(const char* stuff, int len, bool clipboard = false);
 FL_API void paste(Widget &receiver, bool clipboard = false);
 FL_API bool dnd();
 
-// Modal widgets (block events going to any other widgets):
 FL_API void modal(Widget*, bool grab = false);
 inline Widget* modal()			{return modal_;}
 inline bool grab()			{return grab_;}
 inline void exit_modal()		{exit_modal_ = true;}
 inline bool exit_modal_flag()		{return exit_modal_;}
 
-// for debugging purpose : 
 const char  *event_name(int event); /// see STR #508
-
-//@}
 
 }
 

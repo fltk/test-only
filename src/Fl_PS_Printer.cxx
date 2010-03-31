@@ -526,7 +526,7 @@ void Fl_PSfile_Device::reset(){
   gap_=1;
   clip_=0;
   cr_=cg_=cb_=0;
-  font_=FL_HELVETICA;
+  font_=fltk3::HELVETICA;
   size_=12;
   linewidth_=0;
   linestyle_=FL_SOLID;
@@ -857,8 +857,8 @@ static const char *_fontNames[] = {
 };
 
 void Fl_PSfile_Device::font(int f, int s) {
-  if (f >= FL_FREE_FONT)
-    f = FL_COURIER;
+  if (f >= fltk3::FREE_FONT)
+    f = fltk3::COURIER;
   fprintf(output, "/%s SF\n" , _fontNames[f]);
   fprintf(output,"%i FS\n", s);
   Fl_Device::display_device()->font(f,s); // Use display fonts for font measurement

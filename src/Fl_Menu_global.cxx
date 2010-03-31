@@ -35,7 +35,7 @@
 static Fl_Menu_* the_widget;
 
 static int handler(int e) {
-  if (e != FL_SHORTCUT || fltk3::modal()) return 0;
+  if (e != fltk3::SHORTCUT || fltk3::modal()) return 0;
   fltk3::first_window(the_widget->window());
   return the_widget->handle(e);
 }

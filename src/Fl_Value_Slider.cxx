@@ -37,7 +37,7 @@
 Fl_Value_Slider::Fl_Value_Slider(int X, int Y, int W, int H, const char*l)
 : Fl_Slider(X,Y,W,H,l) {
   step(1,100);
-  textfont_ = FL_HELVETICA;
+  textfont_ = fltk3::HELVETICA;
   textsize_ = 10;
   textcolor_ = FL_FOREGROUND_COLOR;
 }
@@ -64,7 +64,7 @@ void Fl_Value_Slider::draw() {
 }
 
 int Fl_Value_Slider::handle(int event) {
-  if (event == FL_PUSH && fltk3::visible_focus()) {
+  if (event == fltk3::PUSH && fltk3::visible_focus()) {
     fltk3::focus(this);
     redraw();
   }

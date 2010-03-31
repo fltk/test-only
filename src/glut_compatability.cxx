@@ -92,7 +92,7 @@ int Fl_Glut_Window::handle(int event) {
   int button;
   switch (event) {
 
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (keyboard || special) fltk3::focus(this);
     button = fltk3::event_button()-1;
     if (button<0) button = 0;
@@ -103,45 +103,45 @@ int Fl_Glut_Window::handle(int event) {
     if (motion) return 1;
     break;
 
-  case FL_MOUSEWHEEL:
+  case fltk3::MOUSEWHEEL:
     button = fltk3::event_dy();
     while (button < 0) {mouse(3,GLUT_DOWN,ex,ey); ++button;}
     while (button > 0) {mouse(4,GLUT_DOWN,ex,ey); --button;}
     return 1;
 
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     for (button = 0; button < 3; button++) if (mouse_down & (1<<button)) {
       if (mouse) mouse(button,GLUT_UP,ex,ey);
     }
     mouse_down = 0;
     return 1;
 
-  case FL_ENTER:
+  case fltk3::ENTER:
     if (entry) {entry(GLUT_ENTERED); return 1;}
     if (passivemotion) return 1;
     break;
 
-  case FL_LEAVE:
+  case fltk3::LEAVE:
     if (entry) {entry(GLUT_LEFT); return 1;}
     if (passivemotion) return 1;
     break;
 
-  case FL_DRAG:
+  case fltk3::DRAG:
     if (motion) {motion(ex, ey); return 1;}
     break;
 
-  case FL_MOVE:
+  case fltk3::MOVE:
     if (passivemotion) {passivemotion(ex, ey); return 1;}
     break;
 
-  case FL_FOCUS:
+  case fltk3::FOCUS:
     if (keyboard || special) return 1;
     break;
 
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
     if (!keyboard && !special) break;
 
-  case FL_KEYBOARD:
+  case fltk3::KEY:
     if (fltk3::event_text()[0]) {
       if (keyboard) {keyboard(fltk3::event_text()[0],ex,ey); return 1;}
       break;
@@ -155,11 +155,11 @@ int Fl_Glut_Window::handle(int event) {
       break;
     }
 
-  case FL_HIDE:
+  case fltk3::HIDE:
     if (visibility) visibility(GLUT_NOT_VISIBLE);
     break;
 
-  case FL_SHOW:
+  case fltk3::SHOW:
     if (visibility) visibility(GLUT_VISIBLE);
     break;
   }

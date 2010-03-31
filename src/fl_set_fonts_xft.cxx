@@ -45,17 +45,17 @@ const char* fltk3::get_font_name(Fl_Font fnum, int* ap) {
     const char* p = f->name;
     int type;
     switch (p[0]) {
-    case 'B': type = FL_BOLD; break;
-    case 'I': type = FL_ITALIC; break;
-    case 'P': type = FL_BOLD | FL_ITALIC; break;
+    case 'B': type = fltk3::BOLD; break;
+    case 'I': type = fltk3::ITALIC; break;
+    case 'P': type = fltk3::BOLD | fltk3::ITALIC; break;
     default:  type = 0; break;
     }
 
   // NOTE: This can cause duplications in fonts that already have Bold or Italic in
   // their "name". Maybe we need to find a cleverer way?
     strlcpy(f->fontname, p+1, ENDOFBUFFER);
-    if (type & FL_BOLD) strlcat(f->fontname, " bold", ENDOFBUFFER);
-    if (type & FL_ITALIC) strlcat(f->fontname, " italic", ENDOFBUFFER);
+    if (type & fltk3::BOLD) strlcat(f->fontname, " bold", ENDOFBUFFER);
+    if (type & fltk3::ITALIC) strlcat(f->fontname, " italic", ENDOFBUFFER);
     f->fontname[ENDOFBUFFER] = (char)type;
   }
   if (ap) *ap = f->fontname[ENDOFBUFFER];

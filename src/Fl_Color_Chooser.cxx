@@ -219,14 +219,14 @@ int Flcc_HueBox::handle(int e) {
   static double ih, is;
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   switch (e) {
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (fltk3::visible_focus()) {
       fltk3::focus(this);
       redraw();
     }
     ih = c->hue();
     is = c->saturation();
-  case FL_DRAG: {
+  case fltk3::DRAG: {
     double Xf, Yf, H, S;
     Xf = (fltk3::event_x()-x()-fltk3::box_dx(box()))/double(w()-fltk3::box_dw(box()));
     Yf = (fltk3::event_y()-y()-fltk3::box_dy(box()))/double(h()-fltk3::box_dh(box()));
@@ -236,14 +236,14 @@ int Flcc_HueBox::handle(int e) {
     if (fltk3::event_state(FL_CTRL)) H = ih;
     if (c->hsv(H, S, c->value())) c->do_callback();
     } return 1;
-  case FL_FOCUS : /* FALLTHROUGH */
-  case FL_UNFOCUS :
+  case fltk3::FOCUS : /* FALLTHROUGH */
+  case fltk3::UNFOCUS :
     if (fltk3::visible_focus()) {
       redraw();
       return 1;
     }
     else return 1;
-  case FL_KEYBOARD :
+  case fltk3::KEY :
     return handle_key(fltk3::event_key());
   default:
     return 0;
@@ -345,26 +345,26 @@ int Flcc_ValueBox::handle(int e) {
   static double iv;
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   switch (e) {
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (fltk3::visible_focus()) {
       fltk3::focus(this);
       redraw();
     }
     iv = c->value();
-  case FL_DRAG: {
+  case fltk3::DRAG: {
     double Yf;
     Yf = 1-(fltk3::event_y()-y()-fltk3::box_dy(box()))/double(h()-fltk3::box_dh(box()));
     if (fabs(Yf-iv)<(3*1.0/h())) Yf = iv;
     if (c->hsv(c->hue(),c->saturation(),Yf)) c->do_callback();
     } return 1;
-  case FL_FOCUS : /* FALLTHROUGH */
-  case FL_UNFOCUS :
+  case fltk3::FOCUS : /* FALLTHROUGH */
+  case fltk3::UNFOCUS :
     if (fltk3::visible_focus()) {
       redraw();
       return 1;
     }
     else return 1;
-  case FL_KEYBOARD :
+  case fltk3::KEY :
     return handle_key(fltk3::event_key());
   default:
     return 0;
@@ -493,7 +493,7 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
   bvalue.callback(rgb_cb);
   choice.callback(mode_cb);
   choice.box(FL_THIN_UP_BOX);
-  choice.textfont(FL_HELVETICA_BOLD_ITALIC);
+  choice.textfont(fltk3::HELVETICA_BOLD_ITALIC);
 }
 
 ////////////////////////////////////////////////////////////////

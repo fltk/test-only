@@ -91,8 +91,25 @@ extern FL_API Font* const SCREEN_FONT;
 extern FL_API Font* const SCREEN_BOLD_FONT;
 extern FL_API Font* const ZAPF_DINGBATS;
 */
-const Fl_Font HELVETICA_BOLD_ITALIC = FL_HELVETICA_BOLD_ITALIC;
-
+  const Fl_Font HELVETICA             = fltk3::HELVETICA;
+  const Fl_Font HELVETICA_BOLD        = fltk3::HELVETICA_BOLD;
+  const Fl_Font HELVETICA_ITALIC      = fltk3::HELVETICA_ITALIC;
+  const Fl_Font HELVETICA_BOLD_ITALIC = fltk3::HELVETICA_BOLD_ITALIC;
+  const Fl_Font COURIER               = fltk3::COURIER;
+  const Fl_Font COURIER_BOLD          = fltk3::COURIER_BOLD;
+  const Fl_Font COURIER_ITALIC        = fltk3::COURIER_ITALIC;
+  const Fl_Font COURIER_BOLD_ITALIC   = fltk3::COURIER_BOLD_ITALIC;
+  const Fl_Font TIMES                 = fltk3::TIMES;
+  const Fl_Font TIMES_BOLD            = fltk3::TIMES_BOLD;
+  const Fl_Font TIMES_ITALIC          = fltk3::TIMES_ITALIC;
+  const Fl_Font TIMES_BOLD_ITALIC     = fltk3::TIMES_BOLD_ITALIC;
+  const Fl_Font SYMBOL_FONT           = fltk3::SYMBOL_FONT;
+  const Fl_Font SCREEN_FONT           = fltk3::SCREEN_FONT;
+  const Fl_Font SCREEN_BOLD_FONT      = fltk3::SCREEN_BOLD_FONT;
+  const Fl_Font ZAPF_DINGBATS         = fltk3::ZAPF_DINGBATS;
+  
+  
+  
 class LabelType;
 /*
  The values below are currently emulated. In a future version of FLTK3, we 

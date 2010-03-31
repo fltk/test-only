@@ -382,7 +382,7 @@ public:
   Fl_Font textfont() const {return textfont_;}
 
   /** Sets the font of the text in the input field.
-    The text font defaults to \c FL_HELVETICA.
+    The text font defaults to \c fltk3::HELVETICA.
     \param [in] s the new text font */
   void textfont(Fl_Font s) {textfont_ = s;}
 

@@ -196,10 +196,10 @@ static void tick(void *v) {
 
 int Fl_Clock::handle(int event) {
   switch (event) {
-  case FL_SHOW:
+  case fltk3::SHOW:
     tick(this);
     break;
-  case FL_HIDE:
+  case fltk3::HIDE:
     fltk3::remove_timeout(tick, this);
     break;
   }

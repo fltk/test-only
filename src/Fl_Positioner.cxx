@@ -78,9 +78,9 @@ int Fl_Positioner::yvalue(double Y) {
 
 int Fl_Positioner::handle(int event, int X, int Y, int W, int H) {
   switch (event) {
-  case FL_PUSH:
-  case FL_DRAG:
-  case FL_RELEASE: {
+  case fltk3::PUSH:
+  case fltk3::DRAG:
+  case fltk3::RELEASE: {
     double x1 = X + 4;
     double y1 = Y + 4;
     double w1 = W - 2 * 4;
@@ -109,9 +109,9 @@ int Fl_Positioner::handle(int event, int X, int Y, int W, int H) {
       redraw();
                    } }
     if (!(when() & FL_WHEN_CHANGED ||
-	  (when() & FL_WHEN_RELEASE && event == FL_RELEASE))) return 1;
+	  (when() & FL_WHEN_RELEASE && event == fltk3::RELEASE))) return 1;
     if (changed() || when()&FL_WHEN_NOT_CHANGED) {
-      if (event == FL_RELEASE) clear_changed();
+      if (event == fltk3::RELEASE) clear_changed();
       do_callback();
     }
     return 1;

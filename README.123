@@ -132,6 +132,21 @@ All attributes in F2 are managed through classes. This is a much better
 way that the F1 way through indices. For now, we try to emulate on source
 code level, but I would very much prefer to port the F2 implementation to F3.
 
+* enum Fl_Boxtype and fltk::Box to fltk3::Fl_Boxtype
+
+The F2 boxtype is far superior over F1 and F3. We will have to port
+F2 boxtypes to F3. For now, we cheaply emulate F2's interface.
+
+* enum Fl_Labeltype and fltk::LabelType to fltk3::Fl_Labeltype
+
+The F2 labeltype is far superior over F1 and F3. We will have to port
+F2 labeltypes to F3. For now, we cheaply emulate F2's interface.
+
+* Fl_Font and fltk::Font to fltk3::Fl_Font
+
+The F2 font handling is far superior over F1 and F3. We will have to port
+F2 font classes to F3. For now, we cheaply emulate F2's interface.
+
 * class Fl_Group and fltk::Group to fltk3::Group:
 
 So far, I only implemented very few of the calls. F1 calls begin()

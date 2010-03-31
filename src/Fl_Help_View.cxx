@@ -694,24 +694,24 @@ Fl_Help_View::draw()
 	  {
             if (tolower(buf[0]) == 'h')
 	    {
-	      font  = FL_HELVETICA_BOLD;
+	      font  = fltk3::HELVETICA_BOLD;
 	      fsize = textsize_ + '7' - buf[1];
 	    }
 	    else if (strcasecmp(buf, "DT") == 0)
 	    {
-	      font  = textfont_ | FL_ITALIC;
+	      font  = textfont_ | fltk3::ITALIC;
 	      fsize = textsize_;
 	    }
 	    else if (strcasecmp(buf, "PRE") == 0)
 	    {
-	      font  = FL_COURIER;
+	      font  = fltk3::COURIER;
 	      fsize = textsize_;
 	      pre   = 1;
 	    }
 
             if (strcasecmp(buf, "LI") == 0)
 	    {
-//            fl_font(FL_SYMBOL, fsize); // The default SYMBOL font on my XP box is not Unicode...
+//            fl_font(fltk3::SYMBOL_FONT, fsize); // The default SYMBOL font on my XP box is not Unicode...
               char buf[8];
               wchar_t b[] = {0x2022, 0x0};
 //            buf[fl_unicode2utf(b, 1, buf)] = 0;
@@ -742,11 +742,11 @@ Fl_Help_View::draw()
             if (get_attr(attrs, "FACE", attr, sizeof(attr)) != NULL) {
 	      if (!strncasecmp(attr, "helvetica", 9) ||
 	          !strncasecmp(attr, "arial", 5) ||
-		  !strncasecmp(attr, "sans", 4)) font = FL_HELVETICA;
+		  !strncasecmp(attr, "sans", 4)) font = fltk3::HELVETICA;
               else if (!strncasecmp(attr, "times", 5) ||
-	               !strncasecmp(attr, "serif", 5)) font = FL_TIMES;
-              else if (!strncasecmp(attr, "symbol", 6)) font = FL_SYMBOL;
-	      else font = FL_COURIER;
+	               !strncasecmp(attr, "serif", 5)) font = fltk3::TIMES;
+              else if (!strncasecmp(attr, "symbol", 6)) font = fltk3::SYMBOL_FONT;
+	      else font = fltk3::COURIER;
             }
 
             if (get_attr(attrs, "SIZE", attr, sizeof(attr)) != NULL) {
@@ -771,14 +771,14 @@ Fl_Help_View::draw()
 	    underline = 0;
 	  else if (strcasecmp(buf, "B") == 0 ||
 	           strcasecmp(buf, "STRONG") == 0)
-	    pushfont(font |= FL_BOLD, fsize);
+	    pushfont(font |= fltk3::BOLD, fsize);
 	  else if (strcasecmp(buf, "TD") == 0 ||
 	           strcasecmp(buf, "TH") == 0)
           {
 	    int tx, ty, tw, th;
 
 	    if (tolower(buf[1]) == 'h')
-	      pushfont(font |= FL_BOLD, fsize);
+	      pushfont(font |= fltk3::BOLD, fsize);
 	    else
 	      pushfont(font = textfont_, fsize);
 
@@ -814,14 +814,14 @@ Fl_Help_View::draw()
 	  }
 	  else if (strcasecmp(buf, "I") == 0 ||
                    strcasecmp(buf, "EM") == 0)
-	    pushfont(font |= FL_ITALIC, fsize);
+	    pushfont(font |= fltk3::ITALIC, fsize);
 	  else if (strcasecmp(buf, "CODE") == 0 ||
 	           strcasecmp(buf, "TT") == 0)
-	    pushfont(font = FL_COURIER, fsize);
+	    pushfont(font = fltk3::COURIER, fsize);
 	  else if (strcasecmp(buf, "KBD") == 0)
-	    pushfont(font = FL_COURIER_BOLD, fsize);
+	    pushfont(font = fltk3::COURIER_BOLD, fsize);
 	  else if (strcasecmp(buf, "VAR") == 0)
-	    pushfont(font = FL_COURIER_ITALIC, fsize);
+	    pushfont(font = fltk3::COURIER_ITALIC, fsize);
 	  else if (strcasecmp(buf, "/HEAD") == 0)
             head = 0;
 	  else if (strcasecmp(buf, "/H1") == 0 ||
@@ -1383,17 +1383,17 @@ void Fl_Help_View::format() {
 
           if (tolower(buf[0]) == 'h' && isdigit(buf[1]))
 	  {
-	    font  = FL_HELVETICA_BOLD;
+	    font  = fltk3::HELVETICA_BOLD;
 	    fsize = textsize_ + '7' - buf[1];
 	  }
 	  else if (strcasecmp(buf, "DT") == 0)
 	  {
-	    font  = textfont_ | FL_ITALIC;
+	    font  = textfont_ | fltk3::ITALIC;
 	    fsize = textsize_;
 	  }
 	  else if (strcasecmp(buf, "PRE") == 0)
 	  {
-	    font  = FL_COURIER;
+	    font  = fltk3::COURIER;
 	    fsize = textsize_;
 	    pre   = 1;
 	  }
@@ -1575,7 +1575,7 @@ void Fl_Help_View::format() {
 	  block->h   += hh;
 
           if (strcasecmp(buf, "TH") == 0)
-	    font = textfont_ | FL_BOLD;
+	    font = textfont_ | fltk3::BOLD;
 	  else
 	    font = textfont_;
 
@@ -1631,11 +1631,11 @@ void Fl_Help_View::format() {
           if (get_attr(attrs, "FACE", attr, sizeof(attr)) != NULL) {
 	    if (!strncasecmp(attr, "helvetica", 9) ||
 	        !strncasecmp(attr, "arial", 5) ||
-		!strncasecmp(attr, "sans", 4)) font = FL_HELVETICA;
+		!strncasecmp(attr, "sans", 4)) font = fltk3::HELVETICA;
             else if (!strncasecmp(attr, "times", 5) ||
-	             !strncasecmp(attr, "serif", 5)) font = FL_TIMES;
-            else if (!strncasecmp(attr, "symbol", 6)) font = FL_SYMBOL;
-	    else font = FL_COURIER;
+	             !strncasecmp(attr, "serif", 5)) font = fltk3::TIMES;
+            else if (!strncasecmp(attr, "symbol", 6)) font = fltk3::SYMBOL_FONT;
+	    else font = fltk3::COURIER;
           }
 
           if (get_attr(attrs, "SIZE", attr, sizeof(attr)) != NULL) {
@@ -1654,17 +1654,17 @@ void Fl_Help_View::format() {
 	  popfont(font, fsize, fcolor);
 	else if (strcasecmp(buf, "B") == 0 ||
         	 strcasecmp(buf, "STRONG") == 0)
-	  pushfont(font |= FL_BOLD, fsize);
+	  pushfont(font |= fltk3::BOLD, fsize);
 	else if (strcasecmp(buf, "I") == 0 ||
         	 strcasecmp(buf, "EM") == 0)
-	  pushfont(font |= FL_ITALIC, fsize);
+	  pushfont(font |= fltk3::ITALIC, fsize);
 	else if (strcasecmp(buf, "CODE") == 0 ||
 	         strcasecmp(buf, "TT") == 0)
-	  pushfont(font = FL_COURIER, fsize);
+	  pushfont(font = fltk3::COURIER, fsize);
 	else if (strcasecmp(buf, "KBD") == 0)
-	  pushfont(font = FL_COURIER_BOLD, fsize);
+	  pushfont(font = fltk3::COURIER_BOLD, fsize);
 	else if (strcasecmp(buf, "VAR") == 0)
-	  pushfont(font = FL_COURIER_ITALIC, fsize);
+	  pushfont(font = fltk3::COURIER_ITALIC, fsize);
 	else if (strcasecmp(buf, "/B") == 0 ||
 		 strcasecmp(buf, "/STRONG") == 0 ||
 		 strcasecmp(buf, "/I") == 0 ||
@@ -1990,17 +1990,17 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
 
         if (tolower(buf[0]) == 'h' && isdigit(buf[1]))
 	{
-	  font  = FL_HELVETICA_BOLD;
+	  font  = fltk3::HELVETICA_BOLD;
 	  fsize = textsize_ + '7' - buf[1];
 	}
 	else if (strcasecmp(buf, "DT") == 0)
 	{
-	  font  = textfont_ | FL_ITALIC;
+	  font  = textfont_ | fltk3::ITALIC;
 	  fsize = textsize_;
 	}
 	else if (strcasecmp(buf, "PRE") == 0)
 	{
-	  font  = FL_COURIER;
+	  font  = fltk3::COURIER;
 	  fsize = textsize_;
 	  pre   = 1;
 	}
@@ -2105,7 +2105,7 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
 	incell    = 1;
 
         if (strcasecmp(buf, "TH") == 0)
-	  font = textfont_ | FL_BOLD;
+	  font = textfont_ | fltk3::BOLD;
 	else
 	  font = textfont_;
 
@@ -2128,17 +2128,17 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
       }
       else if (strcasecmp(buf, "B") == 0 ||
                strcasecmp(buf, "STRONG") == 0)
-	pushfont(font |= FL_BOLD, fsize);
+	pushfont(font |= fltk3::BOLD, fsize);
       else if (strcasecmp(buf, "I") == 0 ||
                strcasecmp(buf, "EM") == 0)
-	pushfont(font |= FL_ITALIC, fsize);
+	pushfont(font |= fltk3::ITALIC, fsize);
       else if (strcasecmp(buf, "CODE") == 0 ||
                strcasecmp(buf, "TT") == 0)
-	pushfont(font = FL_COURIER, fsize);
+	pushfont(font = fltk3::COURIER, fsize);
       else if (strcasecmp(buf, "KBD") == 0)
-	pushfont(font = FL_COURIER_BOLD, fsize);
+	pushfont(font = fltk3::COURIER_BOLD, fsize);
       else if (strcasecmp(buf, "VAR") == 0)
-	pushfont(font = FL_COURIER_ITALIC, fsize);
+	pushfont(font = fltk3::COURIER_ITALIC, fsize);
       else if (strcasecmp(buf, "/B") == 0 ||
 	       strcasecmp(buf, "/STRONG") == 0 ||
 	       strcasecmp(buf, "/I") == 0 ||
@@ -2953,24 +2953,24 @@ Fl_Help_View::handle(int event)	// I - Event to handle
 
   switch (event)
   {
-    case FL_FOCUS:
+    case fltk3::FOCUS:
       redraw();
       return 1;
-    case FL_UNFOCUS:
+    case fltk3::UNFOCUS:
       clear_selection();
       redraw();
       return 1;
-    case FL_ENTER :
+    case fltk3::ENTER :
       fltk3::Group::handle(event);
       return 1;
-    case FL_LEAVE :
+    case fltk3::LEAVE :
       fl_cursor(FL_CURSOR_DEFAULT);
       break;
-    case FL_MOVE:
+    case fltk3::MOVE:
       if (find_link(xx, yy)) fl_cursor(FL_CURSOR_HAND);
       else fl_cursor(FL_CURSOR_DEFAULT);
       return 1;
-    case FL_PUSH:
+    case fltk3::PUSH:
       if (fltk3::Group::handle(event)) return 1;
       linkp = find_link(xx, yy);
       if (linkp) {
@@ -2983,7 +2983,7 @@ Fl_Help_View::handle(int event)	// I - Event to handle
       }
       fl_cursor(FL_CURSOR_DEFAULT);
       return 1;
-    case FL_DRAG:
+    case fltk3::DRAG:
       if (linkp) {
         if (fltk3::event_is_click()) {
           fl_cursor(FL_CURSOR_HAND);
@@ -2999,7 +2999,7 @@ Fl_Help_View::handle(int event)	// I - Event to handle
       }
       fl_cursor(FL_CURSOR_DEFAULT);
       return 1;
-    case FL_RELEASE:
+    case fltk3::RELEASE:
       if (linkp) {
         if (fltk3::event_is_click()) {
           follow_link(linkp);
@@ -3013,7 +3013,7 @@ Fl_Help_View::handle(int event)	// I - Event to handle
         return 1;
       }
       return 1;
-    case FL_SHORTCUT: {
+    case fltk3::SHORTCUT: {
       char ascii = fltk3::event_text()[0];
       switch (ascii) {
         case ctrl('A'): select_all(); redraw(); return 1;
@@ -3047,7 +3047,7 @@ Fl_Help_View::Fl_Help_View(int        xx,	// I - Left position
   bgcolor_      = FL_BACKGROUND_COLOR;
   textcolor_    = FL_FOREGROUND_COLOR;
   linkcolor_    = FL_SELECTION_COLOR;
-  textfont_     = FL_TIMES;
+  textfont_     = fltk3::TIMES;
   textsize_     = 12;
   value_        = NULL;
 

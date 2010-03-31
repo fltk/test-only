@@ -54,7 +54,7 @@
 // own system of font management and not use this code.
 
 // turn word N of a X font name into either some attribute bits
-// (right now 0, FL_BOLD, or FL_ITALIC), or into -1 indicating that
+// (right now 0, fltk3::BOLD, or fltk3::ITALIC), or into -1 indicating that
 // the word should be put into the name:
 
 static int attribute(int n, const char *p) {
@@ -65,10 +65,10 @@ static int attribute(int n, const char *p) {
 	!strncmp(p,"light",5) ||
 	!strncmp(p,"medium",6) ||
 	!strncmp(p,"book",4)) return 0;
-    if (!strncmp(p,"bold",4) || !strncmp(p,"demi",4)) return FL_BOLD;
+    if (!strncmp(p,"bold",4) || !strncmp(p,"demi",4)) return fltk3::BOLD;
   } else if (n == 4) { // slant
     if (*p == 'r') return 0;
-    if (*p == 'i' || *p == 'o') return FL_ITALIC;
+    if (*p == 'i' || *p == 'o') return fltk3::ITALIC;
   } else if (n == 5) { // sWidth
     if (!strncmp(p,"normal",6)) return 0;
   }
@@ -100,8 +100,8 @@ const char* fltk3::get_font_name(Fl_Font fnum, int* ap) {
     char *o = f->fontname;
 
     if (*p != '-') { // non-standard font, just replace * with spaces:
-      if (strstr(p,"bold")) type = FL_BOLD;
-      if (strstr(p,"ital")) type |= FL_ITALIC;
+      if (strstr(p,"bold")) type = fltk3::BOLD;
+      if (strstr(p,"ital")) type |= fltk3::ITALIC;
       for (;*p; p++) {
 	if (*p == '*' || *p == ' ' || *p == '-') {
 	  do p++; while (*p == '*' || *p == ' ' || *p == '-');
@@ -153,8 +153,8 @@ const char* fltk3::get_font_name(Fl_Font fnum, int* ap) {
       if (*x) {x++; *o++ = '('; while (*x) *o++ = *x++; *o++ = ')';}
 
       *o = 0;
-      if (type & FL_BOLD) strlcat(f->fontname, " bold", ENDOFBUFFER);
-      if (type & FL_ITALIC) strlcat(f->fontname, " italic", ENDOFBUFFER);
+      if (type & fltk3::BOLD) strlcat(f->fontname, " bold", ENDOFBUFFER);
+      if (type & fltk3::ITALIC) strlcat(f->fontname, " italic", ENDOFBUFFER);
     }
     f->fontname[ENDOFBUFFER] = (char)type;
   }

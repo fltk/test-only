@@ -476,11 +476,11 @@ Fl_Double_Window* make_print_panel() {
     print_properties_panel->callback((Fl_Callback*)cb_print_properties_panel);
     { print_page_size = new Fl_Choice(150, 10, 80, 25, Fl_Printer::property_pagesize);
       print_page_size->down_box(FL_BORDER_BOX);
-      print_page_size->labelfont(FL_HELVETICA);
+      print_page_size->labelfont(fltk3::HELVETICA);
       print_page_size->menu(menu_print_page_size);
     } // Fl_Choice* print_page_size
     { fltk3::Group* o = new fltk3::Group(110, 45, 170, 40, Fl_Printer::property_mode);
-      o->labelfont(FL_HELVETICA);
+      o->labelfont(fltk3::HELVETICA);
       o->align(Fl_Align(FL_ALIGN_LEFT));
       { print_output_mode[0] = new fltk3::Button(110, 45, 30, 40);
         print_output_mode[0]->type(102);

@@ -712,8 +712,8 @@ int Fl_Browser_::handle(int event) {
   Fl_Widget_Tracker wp(this);
 
   // must do shortcuts first or the scrollbar will get them...
-  if (event == FL_ENTER || event == FL_LEAVE) return 1;
-  if (event == FL_KEYBOARD && type() >= FL_HOLD_BROWSER) {
+  if (event == fltk3::ENTER || event == fltk3::LEAVE) return 1;
+  if (event == fltk3::KEY && type() >= FL_HOLD_BROWSER) {
     void* l1 = selection_;
     void* l = l1; if (!l) l = top_; if (!l) l = item_first();
     if (l) {
@@ -791,7 +791,7 @@ J1:
 // The first form calls the callback *before* setting change.
 // The callback may execute an fltk3::wait(), resulting in another
 // call of Fl_Browser_::handle() for the same widget. The sequence
-// of events can be an FL_PUSH followed by an FL_RELEASE.
+// of events can be an fltk3::PUSH followed by an fltk3::RELEASE.
 // This second call of Fl_Browser_::handle() may result in a -
 // somewhat unexpected - second concurrent invocation of the callback.
 
@@ -799,7 +799,7 @@ J1:
   static char whichway;
   static int py;
   switch (event) {
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (!fltk3::event_inside(X, Y, W, H)) return 0;
     if (fltk3::visible_focus()) {
       fltk3::focus(this);
@@ -872,7 +872,7 @@ J1:
       }
     }
     return 1;
-  case FL_DRAG:
+  case fltk3::DRAG:
     // do the scrolling first:
     my = fltk3::event_y();
     if (my < Y && my < py) {
@@ -920,7 +920,7 @@ J1:
     }
     py = my;
     return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     if (type() == FL_SELECT_BROWSER) {
       void* t = selection_;
       deselect();
@@ -941,8 +941,8 @@ J1:
       do_callback();
     }
     return 1;
-  case FL_FOCUS:
-  case FL_UNFOCUS:
+  case fltk3::FOCUS:
+  case fltk3::UNFOCUS:
     if (type() >= FL_HOLD_BROWSER && fltk3::visible_focus()) {
       redraw();
       return 1;
@@ -975,7 +975,7 @@ Fl_Browser_::Fl_Browser_(int X, int Y, int W, int H, const char* L)
 //scrollbar.align(FL_ALIGN_LEFT|FL_ALIGN_BOTTOM); // back compatibility?
   hscrollbar.callback(hscrollbar_callback);
   hscrollbar.type(FL_HORIZONTAL);
-  textfont_ = FL_HELVETICA;
+  textfont_ = fltk3::HELVETICA;
   textsize_ = FL_NORMAL_SIZE;
   textcolor_ = FL_FOREGROUND_COLOR;
   has_scrollbar_ = BOTH;

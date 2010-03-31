@@ -29,8 +29,8 @@
  *  This file contains type definitions and general enumerations.
  */
 
-#ifndef Fl_Enumerations_H
-#define Fl_Enumerations_H
+#ifndef Fltk3_Enumerations_H
+#define Fltk3_Enumerations_H
 
 #  include "Fl_Export.H"
 #  include "fl_types.h"
@@ -85,6 +85,8 @@
 
 /*@}*/	// group: Version Numbers
 
+namespace fltk3 {
+
 /**
  *  Every time a user moves the mouse pointer, clicks a button,
  *  or presses a key, an event is generated and sent to your
@@ -100,9 +102,9 @@
  *
  *  \sa fltk3::event_text(), fltk3::event_key()
  */
-enum Fl_Event {	// events
+enum Event {	// events
   /** No event. */
-  FL_NO_EVENT		= 0,
+  NO_EVENT		= 0,
 
   /** A mouse button has gone down with the mouse pointing at this
    *  widget. You can find out what button by calling fltk3::event_button(). 
@@ -111,50 +113,50 @@ enum Fl_Event {	// events
    *
    *  A widget indicates that it "wants" the mouse click by returning non-zero 
    *  from its fltk3::Widget::handle() method. It will then become the 
-   *  fltk3::pushed() widget and will get FL_DRAG and the matching FL_RELEASE events.  
-   *  If fltk3::Widget::handle() returns zero then FLTK will try sending the FL_PUSH 
+   *  fltk3::pushed() widget and will get DRAG and the matching RELEASE events.  
+   *  If fltk3::Widget::handle() returns zero then FLTK will try sending the PUSH 
    *  to another widget. 
    */
-  FL_PUSH		= 1,
+  PUSH		= 1,
 
   /** A mouse button has been released. You can find out what button by 
    *  calling fltk3::event_button().
    *
-   *  In order to receive the FL_RELEASE event, the widget must return 
-   *  non-zero when handling FL_PUSH.
+   *  In order to receive the RELEASE event, the widget must return 
+   *  non-zero when handling PUSH.
    */
-  FL_RELEASE		= 2,
+  RELEASE		= 2,
 
   /** The mouse has been moved to point at this widget.  This can
    *  be used for highlighting feedback.  If a widget wants to
    *  highlight or otherwise track the mouse, it indicates this by
    *  returning non-zero from its handle() method. It then
    *  becomes the fltk3::belowmouse() widget and will receive 
-   *  FL_MOVE and FL_LEAVE events.
+   *  MOVE and LEAVE events.
    */
-  FL_ENTER		= 3,
+  ENTER		= 3,
 
   /** The mouse has moved out of the widget.
-   *  In order to receive the FL_LEAVE event, the widget must 
-   *  return non-zero when handling FL_ENTER.
+   *  In order to receive the LEAVE event, the widget must 
+   *  return non-zero when handling ENTER.
    */
-  FL_LEAVE		= 4,
+  LEAVE		= 4,
 
   /** The mouse has moved with a button held down. The current button state 
    *  is in fltk3::event_state(). The mouse position is in fltk3::event_x() and 
    *  fltk3::event_y().
    *
-   *  In order to receive FL_DRAG events, the widget must return non-zero 
-   *  when handling FL_PUSH.
+   *  In order to receive DRAG events, the widget must return non-zero 
+   *  when handling PUSH.
    */
-  FL_DRAG		= 5,
+  DRAG		= 5,
 
   /** This indicates an <I>attempt</I> to give a widget the keyboard focus.
    *
    *  If a widget wants the focus, it should change itself to display the 
    *  fact that it has the focus, and return non-zero from its handle() method.
-   *  It then becomes the fltk3::focus() widget and gets FL_KEYDOWN, FL_KEYUP, 
-   *  and FL_UNFOCUS events.
+   *  It then becomes the fltk3::focus() widget and gets KEYDOWN, KEYUP, 
+   *  and UNFOCUS events.
    *
    *  The focus will change either because the window manager changed which 
    *  window gets the focus, or because the user tried to navigate using tab, 
@@ -162,61 +164,56 @@ enum Fl_Event {	// events
    *  it moved. For navigation it will be the key pressed and interaction 
    *  with the window manager it will be zero.
    */
-  FL_FOCUS		= 6,
+  FOCUS		= 6,
   
   /** This event is sent to the previous fltk3::focus() widget when another 
    *  widget gets the focus or the window loses focus.
    */
-  FL_UNFOCUS		= 7,
+  UNFOCUS		= 7,
 
   /** A key was pressed or released. The key can be found in fltk3::event_key().
    *  The text that the key should insert can be found with fltk3::event_text() 
    *  and its length is in fltk3::event_length(). If you use the key handle()
    *  should return 1. If you return zero then FLTK assumes you ignored the 
    *  key and will then attempt to send it to a parent widget. If none of 
-   *  them want it, it will change the event into a FL_SHORTCUT event.
+   *  them want it, it will change the event into a SHORTCUT event.
    *
-   *  To receive FL_KEYBOARD events you must also respond to the FL_FOCUS
-   *  and FL_UNFOCUS events.
+   *  To receive KEYBOARD events you must also respond to the FOCUS
+   *  and UNFOCUS events.
    *
    *  If you are writing a text-editing widget you may also want to call 
    *  the fltk3::compose() function to translate individual keystrokes into 
    *  foreign characters.
    *
-   *  FL_KEYUP events are sent to the widget that currently has focus. This 
+   *  KEYUP events are sent to the widget that currently has focus. This 
    *  is not necessarily the same widget that received the corresponding 
-   *  FL_KEYDOWN event because focus may have changed between events.
+   *  KEYDOWN event because focus may have changed between events.
    */
-  FL_KEYDOWN		= 8,
+  KEY		= 8,
 
-  /** Equvalent to FL_KEYDOWN.
-   *  \see FL_KEYDOWN
-   */
-  FL_KEYBOARD		= 8,
- 
   /** Key release event.
-   *  \see FL_KEYDOWN
+   *  \see KEYDOWN
    */
-  FL_KEYUP		= 9,
+  KEYUP		= 9,
 
   /** The user clicked the close button of a window.
    *  This event is used internally only to trigger the callback of
    *  fltk3::Window derived classed. The default callback closes the 
    *  window calling fltk3::Window::hide().
    */
-  FL_CLOSE		= 10,
+  CLOSE		= 10,
 
   /** The mouse has moved without any mouse buttons held down. 
    *  This event is sent to the fltk3::belowmouse() widget.
    *
-   *  In order to receive FL_MOVE events, the widget must return 
-   *  non-zero when handling FL_ENTER.
+   *  In order to receive MOVE events, the widget must return 
+   *  non-zero when handling ENTER.
    */
-  FL_MOVE		= 11,
+  MOVE		= 11,
 
-  /** If the fltk3::focus() widget is zero or ignores an FL_KEYBOARD
+  /** If the fltk3::focus() widget is zero or ignores an KEYBOARD
    *  event then FLTK tries sending this event to every widget it 
-   *  can, until one of them returns non-zero. FL_SHORTCUT is first 
+   *  can, until one of them returns non-zero. SHORTCUT is first 
    *  sent to the fltk3::belowmouse() widget, then its parents and siblings, 
    *  and eventually to every widget in the window, trying to find an 
    *  object that returns non-zero. FLTK tries really hard to not to ignore 
@@ -226,19 +223,19 @@ enum Fl_Event {	// events
    *  global shortcut will work no matter what windows are displayed or 
    *  which one has the focus.
    */
-  FL_SHORTCUT		= 12,
+  SHORTCUT		= 12,
 
   /** This widget is no longer active, due to fltk3::Widget::deactivate() 
    *  being called on it or one of its parents. fltk3::Widget::active() may 
    *  still be true after this, the widget is only active if fltk3::Widget::active()
    *  is true on it and all its parents (use fltk3::Widget::active_r() to check this).
    */
-  FL_DEACTIVATE		= 13,
+  DEACTIVATE		= 13,
 
   /** This widget is now active, due to fltk3::Widget::activate() being 
    *  called on it or one of its parents.
    */
-  FL_ACTIVATE		= 14,
+  ACTIVATE		= 14,
 
   /** This widget is no longer visible, due to fltk3::Widget::hide() being 
    *  called on it or one of its parents, or due to a parent window being 
@@ -246,56 +243,63 @@ enum Fl_Event {	// events
    *  widget is visible only if visible() is true for it and all its 
    *  parents (use fltk3::Widget::visible_r() to check this).
    */
-  FL_HIDE		= 15,
+  HIDE		= 15,
 
   /** This widget is visible again, due to fltk3::Widget::show() being called on 
    *  it or one of its parents, or due to a parent window being restored. 
    *  Child Fl_Windows respond to this by actually creating the window if not 
-   *  done already, so if you subclass a window, be sure to pass FL_SHOW 
+   *  done already, so if you subclass a window, be sure to pass SHOW 
    *  to the base class fltk3::Widget::handle() method!
    */
-  FL_SHOW		= 16,
+  SHOW		= 16,
 
   /** You should get this event some time after you call fltk3::paste(). 
    *  The contents of fltk3::event_text() is the text to insert and the number 
    *  of characters is in fltk3::event_length().
    */
-  FL_PASTE		= 17,
+  PASTE		= 17,
 
   /** The fltk3::selection_owner() will get this event before the selection is 
    *  moved to another widget. This indicates that some other widget or program 
    *  has claimed the selection. Motif programs used this to clear the selection 
-   *  indication. Most modern programs ignore this.
+   *  indication. Most modern programs ignore this. THIS VALUE IS NOT USED!
    */
-  FL_SELECTIONCLEAR	= 18,
+  SELECTIONCLEAR	= 18,
 
   /** The user has moved the mouse wheel. The fltk3::event_dx() and fltk3::event_dy()
    *  methods can be used to find the amount to scroll horizontally and vertically.
    */
-  FL_MOUSEWHEEL		= 19,
+  MOUSEWHEEL		= 19,
 
   /** The mouse has been moved to point at this widget. A widget that is 
    *  interested in receiving drag'n'drop data must return 1 to receive 
-   *  FL_DND_DRAG, FL_DND_LEAVE and FL_DND_RELEASE events.
+   *  DND_DRAG, DND_LEAVE and DND_RELEASE events.
    */
-  FL_DND_ENTER		= 20,
+  DND_ENTER		= 20,
 
   /** The mouse has been moved inside a widget while dragging data.  A 
    *  widget that is interested in receiving drag'n'drop data should 
    *  indicate the possible drop position.
    */
-  FL_DND_DRAG		= 21,
+  DND_DRAG		= 21,
 
   /** The mouse has moved out of the widget.
    */
-  FL_DND_LEAVE		= 22,
+  DND_LEAVE		= 22,
 
   /** The user has released the mouse button dropping data into the widget. 
    *  If the widget returns 1, it will receive the data in the immediately 
-   *  following FL_PASTE event.
+   *  following PASTE event.
    */
-  FL_DND_RELEASE	= 23
+  DND_RELEASE	= 23,
+  
+  /* added in FLTK2 */
+  TOOLTIP = 24,
+  FOCUS_CHANGE, /* 10 */
+  TIMEOUT /* 18 */
 };
+  
+} // namespace fltk3
 
 /** \name When Conditions */
 /*@{*/
@@ -320,7 +324,7 @@ enum Fl_When { // fltk3::Widget::when():
 /** \name Mouse and Keyboard Events
 
 	This and the following constants define the non-ASCII keys on the
-	keyboard for FL_KEYBOARD and FL_SHORTCUT events.
+	keyboard for fltk3::KEY and fltk3::SHORTCUT events.
 
 	\todo	FL_Button and FL_key... constants could be structured better
 		(use an enum or some doxygen grouping ?)
@@ -372,7 +376,7 @@ enum Fl_When { // fltk3::Widget::when():
 
 /** \name Mouse Buttons
 
-	These constants define the button numbers for FL_PUSH and FL_RELEASE events.
+	These constants define the button numbers for fltk3::PUSH and fltk3::RELEASE events.
 	
 	\sa fltk3::event_button()
 */
@@ -665,29 +669,29 @@ const Fl_Align FL_ALIGN_NOWRAP		= (Fl_Align)0; // for back compatability
 typedef int Fl_Font;
 
 // standard fonts
+namespace fltk3 {
+const Fl_Font HELVETICA              = 0;	///< Helvetica (or Arial) normal (0)
+const Fl_Font HELVETICA_BOLD         = 1;	///< Helvetica (or Arial) bold
+const Fl_Font HELVETICA_ITALIC       = 2;	///< Helvetica (or Arial) oblique
+const Fl_Font HELVETICA_BOLD_ITALIC  = 3;	///< Helvetica (or Arial) bold-oblique
+const Fl_Font COURIER                = 4;	///< Courier normal
+const Fl_Font COURIER_BOLD           = 5;	///< Courier bold 
+const Fl_Font COURIER_ITALIC         = 6;	///< Courier italic
+const Fl_Font COURIER_BOLD_ITALIC    = 7;	///< Courier bold-italic
+const Fl_Font TIMES                  = 8;	///< Times roman
+const Fl_Font TIMES_BOLD             = 9;	///< Times roman bold
+const Fl_Font TIMES_ITALIC           = 10;	///< Times roman italic
+const Fl_Font TIMES_BOLD_ITALIC      = 11;	///< Times roman bold-italic
+const Fl_Font SYMBOL_FONT            = 12;	///< Standard symbol font
+const Fl_Font SCREEN_FONT            = 13;	///< Default monospaced screen font
+const Fl_Font SCREEN_BOLD_FONT       = 14;	///< Default monospaced bold screen font
+const Fl_Font ZAPF_DINGBATS          = 15;	///< Zapf-dingbats font
 
-const Fl_Font FL_HELVETICA              = 0;	///< Helvetica (or Arial) normal (0)
-const Fl_Font FL_HELVETICA_BOLD         = 1;	///< Helvetica (or Arial) bold
-const Fl_Font FL_HELVETICA_ITALIC       = 2;	///< Helvetica (or Arial) oblique
-const Fl_Font FL_HELVETICA_BOLD_ITALIC  = 3;	///< Helvetica (or Arial) bold-oblique
-const Fl_Font FL_COURIER                = 4;	///< Courier normal
-const Fl_Font FL_COURIER_BOLD           = 5;	///< Courier bold 
-const Fl_Font FL_COURIER_ITALIC         = 6;	///< Courier italic
-const Fl_Font FL_COURIER_BOLD_ITALIC    = 7;	///< Courier bold-italic
-const Fl_Font FL_TIMES                  = 8;	///< Times roman
-const Fl_Font FL_TIMES_BOLD             = 9;	///< Times roman bold
-const Fl_Font FL_TIMES_ITALIC           = 10;	///< Times roman italic
-const Fl_Font FL_TIMES_BOLD_ITALIC      = 11;	///< Times roman bold-italic
-const Fl_Font FL_SYMBOL                 = 12;	///< Standard symbol font
-const Fl_Font FL_SCREEN                 = 13;	///< Default monospaced screen font
-const Fl_Font FL_SCREEN_BOLD            = 14;	///< Default monospaced bold screen font
-const Fl_Font FL_ZAPF_DINGBATS          = 15;	///< Zapf-dingbats font
-
-const Fl_Font FL_FREE_FONT              = 16;	///< first one to allocate
-const Fl_Font FL_BOLD                   = 1;	///< add this to helvetica, courier, or times
-const Fl_Font FL_ITALIC                 = 2;	///< add this to helvetica, courier, or times
-const Fl_Font FL_BOLD_ITALIC            = 3;	///< add this to helvetica, courier, or times
-
+const Fl_Font FREE_FONT              = 16;	///< first one to allocate
+const Fl_Font BOLD                   = 1;	///< add this to helvetica, courier, or times
+const Fl_Font ITALIC                 = 2;	///< add this to helvetica, courier, or times
+const Fl_Font BOLD_ITALIC            = 3;	///< add this to helvetica, courier, or times
+}
 /*@}*/
 
 /** Size of a font in pixels.

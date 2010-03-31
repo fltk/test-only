@@ -71,7 +71,7 @@ int Fl_Adjuster::handle(int event) {
   int mx = fltk3::event_x();
   // Fl_Widget_Tracker wp(this);
   switch (event) {
-    case FL_PUSH:
+    case fltk3::PUSH:
       if (fltk3::visible_focus()) fltk3::focus(this);
       ix = mx;
       if (w()>=h())
@@ -84,7 +84,7 @@ int Fl_Adjuster::handle(int event) {
       }
       redraw();
       return 1;
-    case FL_DRAG:
+    case fltk3::DRAG:
       if (w() >= h()) {
 	delta = x()+(drag-1)*w()/3;	// left edge of button
 	if (mx < delta)
@@ -108,7 +108,7 @@ int Fl_Adjuster::handle(int event) {
       }
       handle_drag(soft() ? softclamp(v) : clamp(v));
       return 1;
-    case FL_RELEASE:
+    case fltk3::RELEASE:
       if (fltk3::event_is_click()) { // detect click but no drag
 	if (fltk3::event_state()&0xF0000) delta = -10;
 	else delta = 10;
@@ -125,7 +125,7 @@ int Fl_Adjuster::handle(int event) {
       redraw();
       handle_release();
       return 1;
-    case FL_KEYBOARD :
+    case fltk3::KEY :
       switch (fltk3::event_key()) {
 	case FL_Up:
           if (w() > h()) return 0;
@@ -148,15 +148,15 @@ int Fl_Adjuster::handle(int event) {
       }
       // break not required because of switch...
 
-    case FL_FOCUS:
-    case FL_UNFOCUS:
+    case fltk3::FOCUS:
+    case fltk3::UNFOCUS:
       if (fltk3::visible_focus()) {
         redraw();
         return 1;
       } else return 0;
 
-    case FL_ENTER :
-    case FL_LEAVE :
+    case fltk3::ENTER :
+    case fltk3::LEAVE :
       return 1;
   }
   return 0;

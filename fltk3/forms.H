@@ -58,7 +58,7 @@ typedef fltk3::Window FL_FORM;
 #define FL_CANCEL	0
 #define FL_INVALID	0
 #define FL_IGNORE	-1
-//#define FL_CLOSE	-2 // this variable is never used in FLTK Forms. It is removed becaus it conflicts with the window FL_CLOSE event
+//#define fltk3::CLOSE	-2 // this variable is never used in FLTK Forms. It is removed becaus it conflicts with the window fltk3::CLOSE event
 
 #define FL_LCOL		FL_BLACK
 #define FL_COL1		FL_GRAY
@@ -115,18 +115,18 @@ typedef fltk3::Window FL_FORM;
 #define FL_MBUTTON5	5
 
 #define FL_INVALID_STYLE 255
-#define FL_NORMAL_STYLE	FL_HELVETICA
-#define FL_BOLD_STYLE	FL_HELVETICA_BOLD
-#define FL_ITALIC_STYLE	FL_HELVETICA_ITALIC
-#define FL_BOLDITALIC_STYLE FL_HELVETICA_BOLD_ITALIC
-#define FL_FIXED_STYLE	FL_COURIER
-#define FL_FIXEDBOLD_STYLE FL_COURIER_BOLD
-#define FL_FIXEDITALIC_STYLE FL_COURIER_ITALIC
-#define FL_FIXEDBOLDITALIC_STYLE FL_COURIER_BOLD_ITALIC
-#define FL_TIMES_STYLE	FL_TIMES
-#define FL_TIMESBOLD_STYLE FL_TIMES_BOLD
-#define FL_TIMESITALIC_STYLE FL_TIMES_ITALIC
-#define FL_TIMESBOLDITALIC_STYLE FL_TIMES_BOLD_ITALIC
+#define FL_NORMAL_STYLE	fltk3::HELVETICA
+#define FL_BOLD_STYLE	fltk3::HELVETICA_BOLD
+#define FL_ITALIC_STYLE	fltk3::HELVETICA_ITALIC
+#define FL_BOLDITALIC_STYLE fltk3::HELVETICA_BOLD_ITALIC
+#define FL_FIXED_STYLE	fltk3::COURIER
+#define FL_FIXEDBOLD_STYLE fltk3::COURIER_BOLD
+#define FL_FIXEDITALIC_STYLE fltk3::COURIER_ITALIC
+#define FL_FIXEDBOLDITALIC_STYLE fltk3::COURIER_BOLD_ITALIC
+#define fltk3::TIMES_STYLE	fltk3::TIMES
+#define fltk3::TIMESBOLD_STYLE fltk3::TIMES_BOLD
+#define fltk3::TIMESITALIC_STYLE fltk3::TIMES_ITALIC
+#define fltk3::TIMESBOLDITALIC_STYLE fltk3::TIMES_BOLD_ITALIC
 
 // hacks to change the labeltype() when passed to fl_set_object_lstyle():
 #define FL_SHADOW_STYLE		(FL_SHADOW_LABEL<<8)

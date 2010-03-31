@@ -385,9 +385,9 @@ int Fl_Browser::item_height(void *item) const {
 	case 'l': case 'L': tsize = 24; break;
 	case 'm': case 'M': tsize = 18; break;
 	case 's': tsize = 11; break;
-	case 'b': font = (Fl_Font)(font|FL_BOLD); break;
-	case 'i': font = (Fl_Font)(font|FL_ITALIC); break;
-	case 'f': case 't': font = FL_COURIER; break;
+	case 'b': font = (Fl_Font)(font|fltk3::BOLD); break;
+	case 'i': font = (Fl_Font)(font|fltk3::ITALIC); break;
+	case 'f': case 't': font = fltk3::COURIER; break;
 	case 'B':
 	case 'C': strtol(str, &str, 10); break;// skip a color number
 	case 'F': font = (Fl_Font)strtol(str,&str,10); break;
@@ -447,9 +447,9 @@ int Fl_Browser::item_width(void *item) const {
     case 'l': case 'L': tsize = 24; break;
     case 'm': case 'M': tsize = 18; break;
     case 's': tsize = 11; break;
-    case 'b': font = (Fl_Font)(font|FL_BOLD); break;
-    case 'i': font = (Fl_Font)(font|FL_ITALIC); break;
-    case 'f': case 't': font = FL_COURIER; break;
+    case 'b': font = (Fl_Font)(font|fltk3::BOLD); break;
+    case 'i': font = (Fl_Font)(font|fltk3::ITALIC); break;
+    case 'f': case 't': font = fltk3::COURIER; break;
     case 'B':
     case 'C': strtol(str, &str, 10); break;// skip a color number
     case 'F': font = (Fl_Font)strtol(str, &str, 10); break;
@@ -540,9 +540,9 @@ void Fl_Browser::item_draw(void* item, int X, int Y, int W, int H) const {
       case 'l': case 'L': tsize = 24; break;
       case 'm': case 'M': tsize = 18; break;
       case 's': tsize = 11; break;
-      case 'b': font = (Fl_Font)(font|FL_BOLD); break;
-      case 'i': font = (Fl_Font)(font|FL_ITALIC); break;
-      case 'f': case 't': font = FL_COURIER; break;
+      case 'b': font = (Fl_Font)(font|fltk3::BOLD); break;
+      case 'i': font = (Fl_Font)(font|fltk3::ITALIC); break;
+      case 'f': case 't': font = fltk3::COURIER; break;
       case 'c': talign = FL_ALIGN_CENTER; break;
       case 'r': talign = FL_ALIGN_RIGHT; break;
       case 'B': 

@@ -90,7 +90,7 @@ void Fl_Tree_Prefs::closeicon(Fl_Image *val) {
 
 /// Fl_Tree_Prefs constructor
 Fl_Tree_Prefs::Fl_Tree_Prefs() {
-  _labelfont              = FL_HELVETICA;
+  _labelfont              = fltk3::HELVETICA;
   _labelsize              = FL_NORMAL_SIZE;
   _marginleft             = 6;
   _margintop              = 3;

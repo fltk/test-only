@@ -144,7 +144,7 @@ int Fl_Tabs::handle(int event) {
 
   switch (event) {
 
-  case FL_PUSH: {
+  case fltk3::PUSH: {
     int H = tab_height();
     if (H >= 0) {
       if (fltk3::event_y() > y()+H) return fltk3::Group::handle(event);
@@ -152,10 +152,10 @@ int Fl_Tabs::handle(int event) {
       if (fltk3::event_y() < y()+h()+H) return fltk3::Group::handle(event);
     }}
     /* FALLTHROUGH */
-  case FL_DRAG:
-  case FL_RELEASE:
+  case fltk3::DRAG:
+  case fltk3::RELEASE:
     o = which(fltk3::event_x(), fltk3::event_y());
-    if (event == FL_RELEASE) {
+    if (event == fltk3::RELEASE) {
       push(0);
       if (o && fltk3::visible_focus() && fltk3::focus()!=this) { 
         fltk3::focus(this);
@@ -172,7 +172,7 @@ int Fl_Tabs::handle(int event) {
       push(o);
     }
     return 1;
-  case FL_MOVE: {
+  case fltk3::MOVE: {
     int ret = fltk3::Group::handle(event);
     fltk3::Widget *o = Fl_Tooltip::current(), *n = o;
     int H = tab_height();
@@ -187,19 +187,19 @@ int Fl_Tabs::handle(int event) {
     if (n!=o)
       Fl_Tooltip::enter(n);
     return ret; }
-  case FL_FOCUS:
-  case FL_UNFOCUS:
+  case fltk3::FOCUS:
+  case fltk3::UNFOCUS:
       if (!fltk3::visible_focus()) return fltk3::Group::handle(event);
-    if (fltk3::event() == FL_RELEASE ||
-	fltk3::event() == FL_SHORTCUT ||
-	fltk3::event() == FL_KEYBOARD ||
-	fltk3::event() == FL_FOCUS ||
-	fltk3::event() == FL_UNFOCUS) {
+    if (fltk3::event() == fltk3::RELEASE ||
+	fltk3::event() == fltk3::SHORTCUT ||
+	fltk3::event() == fltk3::KEY ||
+	fltk3::event() == fltk3::FOCUS ||
+	fltk3::event() == fltk3::UNFOCUS) {
       redraw_tabs();
-      if (fltk3::event() == FL_FOCUS || fltk3::event() == FL_UNFOCUS) return 0;
+      if (fltk3::event() == fltk3::FOCUS || fltk3::event() == fltk3::UNFOCUS) return 0;
       else return 1;
     } else return fltk3::Group::handle(event);
-  case FL_KEYBOARD:
+  case fltk3::KEY:
     switch (fltk3::event_key()) {
       case FL_Left:
         if (child(0)->visible()) return 0;
@@ -219,12 +219,12 @@ int Fl_Tabs::handle(int event) {
         return 1;
       case FL_Down:
         redraw();
-        return fltk3::Group::handle(FL_FOCUS);
+        return fltk3::Group::handle(fltk3::FOCUS);
       default:
         break;
     }
       return fltk3::Group::handle(event);
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
     for (i = 0; i < children(); ++i) {
       fltk3::Widget *c = child(i);
       if (c->test_shortcut(c->label())) {
@@ -236,7 +236,7 @@ int Fl_Tabs::handle(int event) {
       }
     }
       return fltk3::Group::handle(event);
-  case FL_SHOW:
+  case fltk3::SHOW:
     value(); // update visibilities and fall through
   default:
       return fltk3::Group::handle(event);

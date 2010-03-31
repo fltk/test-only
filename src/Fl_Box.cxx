@@ -34,7 +34,7 @@ void Fl_Box::draw() {
 }
 
 int Fl_Box::handle(int event) {
-  if (event == FL_ENTER || event == FL_LEAVE) return 1;
+  if (event == fltk3::ENTER || event == fltk3::LEAVE) return 1;
   else return 0;
 }
 

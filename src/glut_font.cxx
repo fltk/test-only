@@ -37,13 +37,13 @@
 #if HAVE_GL
 #  include <fltk3/glut.H>
 
-Fl_Glut_Bitmap_Font glutBitmap9By15 = {FL_SCREEN, 15};
-Fl_Glut_Bitmap_Font glutBitmap8By13 = {FL_SCREEN, 13};
-Fl_Glut_Bitmap_Font glutBitmapTimesRoman10 = {FL_TIMES, 10};
-Fl_Glut_Bitmap_Font glutBitmapTimesRoman24 = {FL_TIMES, 24};
-Fl_Glut_Bitmap_Font glutBitmapHelvetica10 = {FL_HELVETICA, 10};
-Fl_Glut_Bitmap_Font glutBitmapHelvetica12 = {FL_HELVETICA, 12};
-Fl_Glut_Bitmap_Font glutBitmapHelvetica18 = {FL_HELVETICA, 18};
+Fl_Glut_Bitmap_Font glutBitmap9By15 = {fltk3::SCREEN_FONT, 15};
+Fl_Glut_Bitmap_Font glutBitmap8By13 = {fltk3::SCREEN_FONT, 13};
+Fl_Glut_Bitmap_Font glutBitmapTimesRoman10 = {fltk3::TIMES, 10};
+Fl_Glut_Bitmap_Font glutBitmapTimesRoman24 = {fltk3::TIMES, 24};
+Fl_Glut_Bitmap_Font glutBitmapHelvetica10 = {fltk3::HELVETICA, 10};
+Fl_Glut_Bitmap_Font glutBitmapHelvetica12 = {fltk3::HELVETICA, 12};
+Fl_Glut_Bitmap_Font glutBitmapHelvetica18 = {fltk3::HELVETICA, 18};
 
 void glutBitmapCharacter(void* font, int character) {
   gl_font(((Fl_Glut_Bitmap_Font *)font)->font,((Fl_Glut_Bitmap_Font *)font)->size);

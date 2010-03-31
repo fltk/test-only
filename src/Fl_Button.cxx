@@ -84,13 +84,13 @@ void fltk3::Button::draw() {
 int fltk3::Button::handle(int event) {
   int newval;
   switch (event) {
-  case FL_ENTER: /* FALLTHROUGH */
-  case FL_LEAVE:
+  case fltk3::ENTER: /* FALLTHROUGH */
+  case fltk3::LEAVE:
 //  if ((value_?selection_color():color())==FL_GRAY) redraw();
     return 1;
-  case FL_PUSH:
-    if (fltk3::visible_focus() && handle(FL_FOCUS)) fltk3::focus(this);
-  case FL_DRAG:
+  case fltk3::PUSH:
+    if (fltk3::visible_focus() && handle(fltk3::FOCUS)) fltk3::focus(this);
+  case fltk3::DRAG:
     if (fltk3::event_inside(this)) {
       if (type() == FL_RADIO_BUTTON) newval = 1;
       else newval = !oldval;
@@ -106,7 +106,7 @@ int fltk3::Button::handle(int event) {
       if (when() & FL_WHEN_CHANGED) do_callback();
     }
     return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     if (value_ == oldval) {
       if (when() & FL_WHEN_NOT_CHANGED) do_callback();
       return 1;
@@ -125,11 +125,11 @@ int fltk3::Button::handle(int event) {
     }
     if (when() & FL_WHEN_RELEASE) do_callback();
     return 1;
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
     if (!(shortcut() ?
 	  fltk3::test_shortcut(shortcut()) : test_shortcut())) return 0;
     
-    if (fltk3::visible_focus() && handle(FL_FOCUS)) fltk3::focus(this);
+    if (fltk3::visible_focus() && handle(fltk3::FOCUS)) fltk3::focus(this);
 
     if (type() == FL_RADIO_BUTTON && !value_) {
       setonly();
@@ -143,8 +143,8 @@ int fltk3::Button::handle(int event) {
 	  do_callback();
     } else if (when() & FL_WHEN_RELEASE) do_callback();
     return 1;
-  case FL_FOCUS : /* FALLTHROUGH */
-  case FL_UNFOCUS :
+  case fltk3::FOCUS : /* FALLTHROUGH */
+  case fltk3::UNFOCUS :
     if (fltk3::visible_focus()) {
       if (box() == FL_NO_BOX) {
 	// Widgets with the FL_NO_BOX boxtype need a parent to
@@ -156,7 +156,7 @@ int fltk3::Button::handle(int event) {
       } else redraw();
       return 1;
     } else return 0;
-  case FL_KEYBOARD :
+  case fltk3::KEY :
     if (fltk3::focus() == this && fltk3::event_key() == ' ' &&
         !(fltk3::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) {
       set_changed();

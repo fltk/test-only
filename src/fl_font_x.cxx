@@ -312,7 +312,7 @@ void fl_text_extents(const char *c, int n, int &dx, int &dy, int &W, int &H) {
 
 void fl_draw(const char* c, int n, int x, int y) {
   if (font_gc != fl_gc) {
-    if (!fl_xfont) fl_font(FL_HELVETICA, 14);
+    if (!fl_xfont) fl_font(fltk3::HELVETICA, 14);
     font_gc = fl_gc;
     XSetFont(fl_display, fl_gc, fl_xfont->fid);
   }
@@ -329,7 +329,7 @@ void fl_draw(int angle, const char *str, int n, int x, int y) {
 
 void fl_rtl_draw(const char* c, int n, int x, int y) {
   if (font_gc != fl_gc) {
-    if (!fl_xfont) fl_font(FL_HELVETICA, 12);
+    if (!fl_xfont) fl_font(fltk3::HELVETICA, 12);
     font_gc = fl_gc;
   }
   XUtf8DrawRtlString(fl_display, fl_window, fl_xfont, fl_gc, x, y, c, n);

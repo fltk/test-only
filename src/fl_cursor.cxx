@@ -146,7 +146,7 @@ CGContextRef CreateHelpImage(void)
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fl_rectf(0,0,w,h);
   fl_color(FL_BLACK);
-  fl_font(FL_COURIER_BOLD, 20);
+  fl_font(fltk3::COURIER_BOLD, 20);
   fl_draw("?", 1, h-1);
   fl_end_offscreen();
   return (CGContextRef)off;

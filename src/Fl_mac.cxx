@@ -775,7 +775,7 @@ static double do_queued_events( double time = 0.0 )
 #if CONSOLIDATE_MOTION
   if (send_motion && send_motion == fl_xmousewin) {
     send_motion = 0;
-    fltk3::handle(FL_MOVE, fl_xmousewin);
+    fltk3::handle(fltk3::MOVE, fl_xmousewin);
   }
 #endif
 
@@ -807,7 +807,7 @@ static OSErr QuitAppleEventHandler( const AppleEvent *appleEvt, AppleEvent* repl
 
   while ( Fl_X::first ) {
     Fl_X *x = Fl_X::first;
-    fltk3::handle( FL_CLOSE, x->w );
+    fltk3::handle( fltk3::CLOSE, x->w );
     if ( Fl_X::first == x ) {
       fl_unlock_function();
       return noErr; // FLTK has not close all windows, so we return to the main program now
@@ -866,22 +866,22 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
     {
       GetWindowClass( fl_xid( window ), &winClass );
       if ( winClass != kHelpWindowClass ) {	// help windows can't get the focus!
-        fltk3::handle( FL_FOCUS, window);
+        fltk3::handle( fltk3::FOCUS, window);
         activeWindow = window;
       }
-      fltk3::handle( FL_SHOW, window);
+      fltk3::handle( fltk3::SHOW, window);
       mods_to_e_state(GetCurrentKeyModifiers());
     }
     break;
   case kEventWindowHidden:
-    if ( !window->parent() ) fltk3::handle( FL_HIDE, window);
+    if ( !window->parent() ) fltk3::handle( fltk3::HIDE, window);
     break;
   case kEventWindowActivated:
     if ( window->shown() && window!=activeWindow )
     {
       GetWindowClass( fl_xid( window ), &winClass );
       if ( winClass != kHelpWindowClass ) {	// help windows can't get the focus!
-        fltk3::handle( FL_FOCUS, window);
+        fltk3::handle( fltk3::FOCUS, window);
         activeWindow = window;
       }
     }
@@ -889,12 +889,12 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
   case kEventWindowDeactivated:
     if ( window==activeWindow ) 
     {
-      fltk3::handle( FL_UNFOCUS, window);
+      fltk3::handle( fltk3::UNFOCUS, window);
       activeWindow = 0;
     }
     break;
   case kEventWindowClose:
-    fltk3::handle( FL_CLOSE, window ); // this might or might not close the window
+    fltk3::handle( fltk3::CLOSE, window ); // this might or might not close the window
     // if there are no more windows, send a high-level quit event
     if (!Fl_X::first) QuitAppleEventHandler( 0, 0, 0 );
     ret = noErr; // returning noErr tells Carbon to stop following up on this event
@@ -941,11 +941,11 @@ static pascal OSStatus carbonMousewheelHandler( EventHandlerCallRef nextHandler,
   if ( axis == kEventMouseWheelAxisX ) {
     fltk3::e_dx = -delta;
     fltk3::e_dy = 0;
-    if ( fltk3::e_dx) fltk3::handle( FL_MOUSEWHEEL, window );
+    if ( fltk3::e_dx) fltk3::handle( fltk3::MOUSEWHEEL, window );
   } else if ( axis == kEventMouseWheelAxisY ) {
     fltk3::e_dx = 0;
     fltk3::e_dy = -delta;
-    if ( fltk3::e_dy) fltk3::handle( FL_MOUSEWHEEL, window );
+    if ( fltk3::e_dy) fltk3::handle( fltk3::MOUSEWHEEL, window );
   } else {
     fl_unlock_function();
 
@@ -1027,7 +1027,7 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
     }
     // normal handling of mouse-down follows
     fl_os_capture = xid;
-    sendEvent = FL_PUSH;
+    sendEvent = fltk3::PUSH;
     fltk3::e_is_click = 1; px = pos.h; py = pos.v;
     if (clickCount>1) 
       fltk3::e_clicks++;
@@ -1041,20 +1041,20 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
     }
     if ( !window ) break;
     if ( !sendEvent ) {
-      sendEvent = FL_RELEASE; 
+      sendEvent = fltk3::RELEASE; 
     }
     fltk3::e_keysym = keysym[ btn ];
     // fall through
   case kEventMouseMoved:
     suppressed = 0;
     if ( !sendEvent ) { 
-      sendEvent = FL_MOVE; chord = 0; 
+      sendEvent = fltk3::MOVE; chord = 0; 
     }
     // fall through
   case kEventMouseDragged:
     if (suppressed) break;
     if ( !sendEvent ) {
-      sendEvent = FL_MOVE; // fltk3::handle will convert into FL_DRAG
+      sendEvent = fltk3::MOVE; // fltk3::handle will convert into fltk3::DRAG
       if (abs(pos.h-px)>5 || abs(pos.v-py)>5) 
         fltk3::e_is_click = 0;
     }
@@ -1257,10 +1257,10 @@ pascal OSStatus carbonTextHandler(
   fltk3::e_length = len;
   fltk3::e_text = utf8buf;
   while (window->parent()) window = window->window();
-  fltk3::handle(FL_KEYBOARD, window);
+  fltk3::handle(fltk3::KEY, window);
   fl_unlock_function();
   fl_lock_function();
-  fltk3::handle(FL_KEYUP, window);
+  fltk3::handle(fltk3::KEYUP, window);
   fl_unlock_function();
   // for some reason, the window does not redraw until the next mouse move or button push
   // sending a 'redraw()' or 'awake()' does not solve the issue!
@@ -1336,11 +1336,11 @@ pascal OSStatus carbonKeyboardHandler(
       fltk3::e_state &= 0xbfffffff; // clear the deadkey flag
     }
 */
-    sendEvent = FL_KEYBOARD;
+    sendEvent = fltk3::KEY;
     // fall through
   case kEventRawKeyUp:
     if ( !sendEvent ) {
-      sendEvent = FL_KEYUP;
+      sendEvent = fltk3::KEYUP;
       fltk3::e_state &= 0xbfffffff; // clear the deadkey flag
     }
     // if the user pressed alt/option, event_key should have the keycap, 
@@ -1375,7 +1375,7 @@ pascal OSStatus carbonKeyboardHandler(
     {
       mods_to_e_keysym( tMods );
       if ( fltk3::e_keysym ) 
-        sendEvent = ( prevMods<mods ) ? FL_KEYBOARD : FL_KEYUP;
+        sendEvent = ( prevMods<mods ) ? fltk3::KEY : fltk3::KEYUP;
       fltk3::e_length = 0;
       buffer[0] = 0;
       prevMods = mods;
@@ -1998,7 +1998,7 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     fltk3::e_x = px - target->x();
     fltk3::e_y = py - target->y();
     fl_dnd_target_window = target;
-    if ( fltk3::handle( FL_DND_ENTER, target ) )
+    if ( fltk3::handle( fltk3::DND_ENTER, target ) )
       fl_cursor( FL_CURSOR_HAND ); //ShowDragHilite( ); // modify the mouse cursor?!
     else
       fl_cursor( FL_CURSOR_DEFAULT ); //HideDragHilite( dragRef );
@@ -2013,7 +2013,7 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     fltk3::e_x = px - target->x();
     fltk3::e_y = py - target->y();
     fl_dnd_target_window = target;
-    if ( fltk3::handle( FL_DND_DRAG, target ) )
+    if ( fltk3::handle( fltk3::DND_DRAG, target ) )
       fl_cursor( FL_CURSOR_HAND ); //ShowDragHilite( ); // modify the mouse cursor?!
     else
       fl_cursor( FL_CURSOR_DEFAULT ); //HideDragHilite( dragRef );
@@ -2025,7 +2025,7 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     fl_cursor( FL_CURSOR_DEFAULT ); //HideDragHilite( dragRef );
     if ( fl_dnd_target_window )
     {
-      fltk3::handle( FL_DND_LEAVE, fl_dnd_target_window );
+      fltk3::handle( fltk3::DND_LEAVE, fl_dnd_target_window );
       fl_dnd_target_window = 0;
     }
     breakMacEventLoop();
@@ -2050,7 +2050,7 @@ static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReferenc
   fltk3::e_y_root = mp.v;
   fltk3::e_x = fltk3::e_x_root - target->x();
   fltk3::e_y = fltk3::e_y_root - target->y();
-  if ( !fltk3::handle( FL_DND_RELEASE, target ) )
+  if ( !fltk3::handle( fltk3::DND_RELEASE, target ) )
     return userCanceledErr;
 
   ret = fillCurrentDragData(dragRef);
@@ -2061,7 +2061,7 @@ static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReferenc
   fltk3::e_text = currDragData;
 //  printf("Sending following text to widget %p:\n%s\n", fltk3::belowmouse(), fltk3::e_text);
   int old_event = fltk3::e_number;
-  fltk3::belowmouse()->handle(fltk3::e_number = FL_PASTE);
+  fltk3::belowmouse()->handle(fltk3::e_number = fltk3::PASTE);
   fltk3::e_number = old_event;
   
   if (currDragData) {
@@ -2129,7 +2129,7 @@ void Fl_X::make(fltk3::Window* w)
       x->next = Fl_X::first; // must be in the list for ::flush()
       Fl_X::first = x;
       int old_event = fltk3::e_number;
-      w->handle(fltk3::e_number = FL_SHOW);
+      w->handle(fltk3::e_number = fltk3::SHOW);
       fltk3::e_number = old_event;
       w->redraw(); // force draw to happen
     }
@@ -2312,7 +2312,7 @@ void Fl_X::make(fltk3::Window* w)
     w->w(rect.right-rect.left); w->h(rect.bottom-rect.top);
 
     int old_event = fltk3::e_number;
-    w->handle(fltk3::e_number = FL_SHOW);
+    w->handle(fltk3::e_number = fltk3::SHOW);
     fltk3::e_number = old_event;
     w->redraw(); // force draw to happen
     
@@ -2723,7 +2723,7 @@ void fltk3::paste(fltk3::Widget &receiver, int clipboard) {
     fltk3::e_text = fl_selection_buffer[clipboard];
     fltk3::e_length = fl_selection_length[clipboard];
     if (!fltk3::e_text) fltk3::e_text = (char *)"";
-    receiver.handle(FL_PASTE);
+    receiver.handle(fltk3::PASTE);
 }
 
 void fltk3::add_timeout(double time, Fl_Timeout_Handler cb, void* data)

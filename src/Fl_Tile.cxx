@@ -134,9 +134,9 @@ int Fl_Tile::handle(int event) {
 
   switch (event) {
 
-  case FL_MOVE:
-  case FL_ENTER:
-  case FL_PUSH:
+  case fltk3::MOVE:
+  case fltk3::ENTER:
+  case fltk3::PUSH:
     // don't potentially change the mouse cursor if inactive:
     if (!active()) break; // will cascade inherited handle()
     {
@@ -175,14 +175,14 @@ int Fl_Tile::handle(int event) {
       return fltk3::Group::handle(event);
   }
 
-  case FL_LEAVE:
+  case fltk3::LEAVE:
     set_cursor(this, FL_CURSOR_DEFAULT);
     break;
 
-  case FL_DRAG:
+  case fltk3::DRAG:
     // This is necessary if CONSOLIDATE_MOTION in Fl_x.cxx is turned off:
     // if (damage()) return 1; // don't fall behind
-  case FL_RELEASE: {
+  case fltk3::RELEASE: {
     if (!sdrag) return 0; // should not happen
     fltk3::Widget* r = resizable(); if (!r) r = this;
     int newx;
@@ -200,7 +200,7 @@ int Fl_Tile::handle(int event) {
     } else
       newy = sy;
     position(sx,sy,newx,newy);
-    if (event == FL_DRAG) set_changed();
+    if (event == fltk3::DRAG) set_changed();
     do_callback();
     return 1;}
 
