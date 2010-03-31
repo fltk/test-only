@@ -2,6 +2,16 @@
   R E A D M E . 1 2 3
  =====================
 
+  Introduction
+  The Big Differences
+  The Implementation
+  The Big Changes
+  Comparison Chart By Class
+
+
+ Introduction
+--------------
+
 This file listst the differences between FLTK 1 and FLTK 2 with annotations
 for a possible implementation of FLTK 3. The all new and improved FLTK 3
 needs to be compatible with 1 and 2. It must have a modern API, a complete set 
@@ -76,6 +86,69 @@ same in both versions.
 (7) Styles: FLTK 2 uses a minimal number of styles to define the basic 
 (and often repeated) parameters of every widget. API's are similar though,
 so this is luckily another pretty straight-forward upgrade.
+
+
+ The Implementation
+--------------------
+
+In the current implementation, FLTK3 is almost completely independent of
+FLTK1 and FLTK2. The goal is to have perfectly clean FLTK3 code. FLTK1
+and FLTK2 are emulated using emulation classes in header files only. 
+
+The fltk3 base class has a new member called fltk3::Wrapper. The wrapper
+can be used by any emulation layer to receive basic signals, callbacks, and
+other actions from fltk3. This is great not only for our fltk1 and 2 
+emulation, but also for other external langages that want a perfect binding
+with fltk3.
+
+Wrappers have no member variables except "_p". _p points to the corresponding
+fltk3 class. All calls go through _p. Consequenty, no variables exist in 
+fltk1 and fltk2 classes. There may still be access to those throuh setters
+and getters. Old code will need to be changed.
+
+All protected and public member functions are implemented in the header
+files and genrally merely call their fltk3 counterpart via _p. More complex
+emulations should still remain in the header. Compilers will optimize
+as needed.
+
+Converting from an fltk1 or fltk2 object to the corresponding fltk3
+object is done by casting the _p pointer of the wrapper. Conversion from
+fltk3 is done by casting the return value of wrapper(). Neither conversion
+are type safe. The user must "know what he's doing". I may introduce flags
+that remember the type of the wrapper.
+
+
+ The Big Changes
+-----------------
+
+* class Fl and namespace fltk to namespace fltk3:
+
+This is so far pretty straight forward. There were a lot of event-related
+public variables in Fl that now must be accessed via getters and setters.
+
+* class Fl_Widget and fltk::Widget to fltk3::Widget:
+
+All attributes in F2 are managed through classes. This is a much better 
+way that the F1 way through indices. For now, we try to emulate on source
+code level, but I would very much prefer to port the F2 implementation to F3.
+
+* class Fl_Group and fltk::Group to fltk3::Group:
+
+So far, I only implemented very few of the calls. F1 calls begin()
+in the constructor. F2 needs an explicit begin().
+
+* class Fl_Box:
+
+This class is equivalent to fltk3::Widget. This must not be confused
+with fltk::Box and fltk3::Box which is equivalent to the F1 boxtype.
+
+* class Fl_Window and fltk::Window to fltk3::Window:
+
+Only few calls implemented so far
+
+* class Fl_Button and fltk::Button to fltk3::Button:
+
+Class renamed, file renamed.
 
 
  Comparison Chart by Class
