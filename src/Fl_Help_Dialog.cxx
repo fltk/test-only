@@ -29,7 +29,7 @@
 
 #include "../fltk3/Fl_Help_Dialog.H"
 #include "flstring.h"
-#include <fltk3/fl_ask.H>
+#include <fltk3/ask.h>
 
 void Fl_Help_Dialog::cb_back__i(fltk3::Button*, void*) {
   if (index_ > 0)
@@ -154,25 +154,25 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
         back_->tooltip("Show the previous help page.");
         back_->shortcut(0xff51);
         back_->labelcolor((Fl_Color)2);
-        back_->callback((Fl_Callback*)cb_back_);
+        back_->callback((fltk3::Callback*)cb_back_);
       } // fltk3::Button* back_
       { forward_ = new fltk3::Button(45, 10, 25, 25, "@->");
         forward_->tooltip("Show the next help page.");
         forward_->shortcut(0xff53);
         forward_->labelcolor((Fl_Color)2);
-        forward_->callback((Fl_Callback*)cb_forward_);
+        forward_->callback((fltk3::Callback*)cb_forward_);
       } // fltk3::Button* forward_
       { smaller_ = new fltk3::Button(80, 10, 25, 25, "F");
         smaller_->tooltip("Make the help text smaller.");
         smaller_->labelfont(1);
         smaller_->labelsize(10);
-        smaller_->callback((Fl_Callback*)cb_smaller_);
+        smaller_->callback((fltk3::Callback*)cb_smaller_);
       } // fltk3::Button* smaller_
       { larger_ = new fltk3::Button(115, 10, 25, 25, "F");
         larger_->tooltip("Make the help text larger.");
         larger_->labelfont(1);
         larger_->labelsize(16);
-        larger_->callback((Fl_Callback*)cb_larger_);
+        larger_->callback((fltk3::Callback*)cb_larger_);
       } // fltk3::Button* larger_
       { fltk3::Group* o = new fltk3::Group(350, 10, 171, 25);
         o->box(fltk3::DOWN_BOX);
@@ -182,7 +182,7 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
           find_->box(fltk3::FLAT_BOX);
           find_->labelsize(13);
           find_->textfont(4);
-          find_->callback((Fl_Callback*)cb_find_);
+          find_->callback((fltk3::Callback*)cb_find_);
           find_->when(FL_WHEN_ENTER_KEY_ALWAYS);
         } // Fl_Input* find_
         o->end();
@@ -194,7 +194,7 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
     } // fltk3::Group* o
     { view_ = new Fl_Help_View(10, 45, 510, 330);
       view_->box(fltk3::DOWN_BOX);
-      view_->callback((Fl_Callback*)cb_view_);
+      view_->callback((fltk3::Callback*)cb_view_);
       fltk3::Group::current()->resizable(view_);
     } // Fl_Help_View* view_
     window_->size_range(260, 150);

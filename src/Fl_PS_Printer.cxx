@@ -26,7 +26,7 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/fl_ask.H>
+#include <fltk3/ask.h>
 #include <fltk3/fl_draw.H>
 #include <stdio.h>
 #include <fltk3/Fl_PSfile_Device.H>
@@ -1259,7 +1259,7 @@ void Fl_PSfile_Device::end_job (void)
   reset();
   fflush(output);
   if(ferror(output)) {
-    fl_alert ("Error during PostScript data output.");
+    fltk3::alert ("Error during PostScript data output.");
     }
 #if ! (defined(__APPLE__) || defined(WIN32) )
   if (print_pipe)
@@ -1337,7 +1337,7 @@ int Fl_Printer::start_job(int pages, int *firstpage, int *lastpage) {
 
   output = popen(command, "w");
   if (!output) {
-    fl_alert("could not run command: %s\n",command);
+    fltk3::alert("could not run command: %s\n",command);
     return 1;
   }
 

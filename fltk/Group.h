@@ -11,6 +11,7 @@
 namespace fltk {
 
 class FL_API Group : public Widget {
+  
 protected:
   Group() { }
   
@@ -35,7 +36,11 @@ public:
   int find(const Widget& o) const {return find(&o);}
 #endif
   
-  Group(int,int,int,int, const char * = 0, bool begin=false);
+  Group(int x, int y, int w, int h, const char *label=0, bool doBegin=false) {
+    _p = new fltk3::Group(x, y, w, h, label);
+    _p->wrapper(this);
+    if (doBegin) begin();
+  }
   
 #if 0
   virtual ~Group();
@@ -53,8 +58,12 @@ public:
   void clear();
 
   void resizable(Widget& o) {resizable_ = &o;}
-  void resizable(Widget* o) {resizable_ = o;}
-  Widget* resizable() const {return resizable_;}
+#endif
+  
+  void resizable(Widget* o) { ((fltk3::Group*)_p)->resizable(o->fltk3Widget()); }
+  Widget* resizable() const { return (Widget*)(((fltk3::Group*)_p)->resizable()->wrapper()); }
+  
+#if 0
   void add_resizable(Widget& o) {resizable_ = &o; add(o);}
   void init_sizes();
 

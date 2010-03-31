@@ -42,8 +42,6 @@ class Fl_Window;
 class Fl_Group;
 class Fl_Image;
 
-#if 0
-
 /** Default callback type definition for all fltk widgets (by far the most used) */
 typedef void (Fl_Callback )(Fl_Widget*, void*);
 /** Default callback type pointer definition for all fltk widgets */
@@ -52,6 +50,8 @@ typedef Fl_Callback* Fl_Callback_p; // needed for BORLAND
 typedef void (Fl_Callback0)(Fl_Widget*);
 /** Callback type definition passing the widget and a long data value */
 typedef void (Fl_Callback1)(Fl_Widget*, long);
+
+#if 0
 
 /** This struct stores all information for a text or mixed graphics label.
 
@@ -140,19 +140,21 @@ protected:
 
 public:
 
+  fltk3::Widget *fltk3Widget() { return (fltk3::Widget*)_p; }
+  
   virtual ~Fl_Widget() { }
   virtual void draw() { _p->draw(); }
   virtual int handle(int event) { return _p->handle(event); }
   Fl_Group* parent() const { return (Fl_Group*)_p->parent()->wrapper(); }
   void parent(Fl_Group* p) { _p->parent((fltk3::Group*)(((Fl_Widget*)p)->_p)); }
   uchar type() const { return _p->type(); }
-  void type(uchar t) { _p->type(t); }
+  void type(uchar t) { _p->type(t); }  
+  int x() const { return _p->x(); }
+  int y() const { return _p->y(); }
+  int w() const { return _p->w(); }
+  int h() const { return _p->h(); }
   
 #if 0
-  int x() const {return x_;}
-  int y() const {return y_;}
-  int w() const {return w_;}
-  int h() const {return h_;}
   virtual void resize(int x, int y, int w, int h);
   int damage_resize(int,int,int,int);
   void position(int X,int Y) {resize(X,Y,w_,h_);}
@@ -170,11 +172,12 @@ public:
   Fl_Color selection_color() const {return color2_;}
   void selection_color(Fl_Color a) {color2_ = a;}
   void color(Fl_Color bg, Fl_Color sel) {color_=bg; color2_=sel;}
-  const char* label() const {return label_.value;}
-  void label(const char* text);
-  void copy_label(const char *new_label);
-  void label(Fl_Labeltype a, const char* b) {label_.type = a; label_.value = b;}
 #endif
+  
+  const char* label() const { return _p->label(); }
+  void label(const char* text) { _p->label(text); }
+  void copy_label(const char *new_label) { _p->copy_label(new_label); }
+  void label(Fl_Labeltype a, const char* b) { _p->label((fltk3::Labeltype)a, b); }
   Fl_Labeltype labeltype() const { return (Fl_Labeltype)_p->labeltype(); }
   void labeltype(Fl_Labeltype a) { _p->labeltype((fltk3::Labeltype)a); }
   Fl_Color labelcolor() const { return _p->labelcolor(); }
@@ -183,6 +186,7 @@ public:
   void labelfont(Fl_Font f) { _p->labelfont(f); }
   Fl_Fontsize labelsize() const { return _p->labelsize(); }
   void labelsize(Fl_Fontsize pix) { _p->labelsize(pix); }
+  
 #if 0
   Fl_Image* image() {return label_.image;}
   void image(Fl_Image* img) {label_.image=img;}
@@ -192,15 +196,19 @@ public:
   void deimage(Fl_Image& img) {label_.deimage=&img;}
   const char *tooltip() const {return tooltip_;}
   void tooltip(const char *t);
-  Fl_Callback_p callback() const {return callback_;}
-  void callback(Fl_Callback* cb, void* p) {callback_=cb; user_data_=p;}
-  void callback(Fl_Callback* cb) {callback_=cb;}
-  void callback(Fl_Callback0*cb) {callback_=(Fl_Callback*)cb;}
-  void callback(Fl_Callback1*cb, long p=0) {callback_=(Fl_Callback*)cb; user_data_=(void*)p;}
-  void* user_data() const {return user_data_;}
-  void user_data(void* v) {user_data_ = v;}
-  long argument() const {return (long)user_data_;}
-  void argument(long v) {user_data_ = (void*)v;}
+#endif
+  
+  Fl_Callback_p callback() const { return (Fl_Callback_p)_p->callback(); }
+  void callback(Fl_Callback *cb, void *p) { _p->callback( (fltk3::Callback_p)cb, p); }
+  void callback(Fl_Callback *cb) { _p->callback( (fltk3::Callback_p)cb); }
+  void callback(Fl_Callback0 *cb) { _p->callback( (fltk3::Callback_p)cb); }
+  void callback(Fl_Callback1 *cb, long p=0) { _p->callback( (fltk3::Callback_p)cb, (void*)p); }
+  void *user_data() const { return _p->user_data(); }
+  void user_data(void* v) { _p->user_data(v); }
+  long argument() const { return _p->argument(); }
+  void argument(long v) { _p->argument(v); }
+  
+#if 0
   Fl_When when() const {return (Fl_When)when_;}
   void when(uchar i) {when_ = i;}
   unsigned int visible() const {return !(flags_&INVISIBLE);}

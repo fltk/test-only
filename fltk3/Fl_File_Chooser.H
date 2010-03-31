@@ -45,7 +45,7 @@
 #include <fltk3/Fl_Check_Button.H>
 #include <fltk3/Fl_File_Input.H>
 #include <fltk3/Fl_Return_Button.H>
-#include <fltk3/fl_ask.H>
+#include <fltk3/ask.h>
 
 class FL_EXPORT Fl_File_Chooser {
 public:

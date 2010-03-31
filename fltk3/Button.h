@@ -28,8 +28,8 @@
 /* \file
    fltk3::Button widget . */
 
-#ifndef Fl_Button_H
-#define Fl_Button_H
+#ifndef Fltk3_Button_H
+#define Fltk3_Button_H
 
 #ifndef Fl_Widget_H
 #include "Widget.h"

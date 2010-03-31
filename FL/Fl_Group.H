@@ -77,6 +77,7 @@ public:
   Fl_Group(int x, int y, int w, int h, const char *label = 0) {
     _p = new fltk3::Group(x, y, w, h, label); 
     _p->wrapper(this);
+    begin();
   }
   
   virtual ~Fl_Group() {

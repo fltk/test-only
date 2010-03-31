@@ -103,7 +103,7 @@ static int compare(const char* a, const char* b) {
 int Fl_Menu_Item::add(
   const char *mytext,
   int sc,
-  Fl_Callback *cb,	
+  fltk3::Callback *cb,	
   void *data,
   int myflags
 ) {
@@ -265,7 +265,7 @@ int Fl_Menu_Item::add(
   \endcode
 
  */
-int Fl_Menu_::add(const char *label,int shortcut,Fl_Callback *callback,void *userdata,int flags) {
+int Fl_Menu_::add(const char *label,int shortcut,fltk3::Callback *callback,void *userdata,int flags) {
   // make this widget own the local array:
   if (this != fl_menu_array_owner) {
     if (fl_menu_array_owner) {

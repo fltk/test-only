@@ -181,15 +181,15 @@ fltk3::Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
 }
 
 void fl_show_message(const char *q1,const char *q2,const char *q3) {
-  fl_message("%s\n%s\n%s", q1?q1:"", q2?q2:"", q3?q3:"");
+  fltk3::message("%s\n%s\n%s", q1?q1:"", q2?q2:"", q3?q3:"");
 }
 
 void fl_show_alert(const char *q1,const char *q2,const char *q3,int) {
-  fl_alert("%s\n%s\n%s", q1?q1:"", q2?q2:"", q3?q3:"");
+  fltk3::alert("%s\n%s\n%s", q1?q1:"", q2?q2:"", q3?q3:"");
 }
 
 int fl_show_question(const char *q1,const char *q2,const char *q3) {
-  return fl_choice("%s\n%s\n%s", "No", "Yes", 0L, q1?q1:"", q2?q2:"", q3?q3:"");
+  return fltk3::choice("%s\n%s\n%s", "No", "Yes", 0L, q1?q1:"", q2?q2:"", q3?q3:"");
 }
 
 int fl_show_choice(
@@ -200,11 +200,11 @@ int fl_show_choice(
   const char *b0,
   const char *b1,
   const char *b2) {
-  return fl_choice("%s\n%s\n%s", q1?q1:"", q2?q2:"", q3?q3:"", b0,b1,b2)+1;
+  return fltk3::choice("%s\n%s\n%s", q1?q1:"", q2?q2:"", q3?q3:"", b0,b1,b2)+1;
 }
 
 char *fl_show_simple_input(const char *str1, const char *defstr) {
-  const char *r = fl_input(str1, defstr);
+  const char *r = fltk3::input(str1, defstr);
   return (char *)(r ? r : defstr);
 }
 

@@ -60,11 +60,13 @@ public:
   Fl_Window(int w, int h, const char* title= 0) {
     _p = new fltk3::Window(w, h, title); 
     _p->wrapper(this);
+    begin();
   }
   
   Fl_Window(int x, int y, int w, int h, const char* title = 0) {
     _p = new fltk3::Window(x, y, w, h, title); 
     _p->wrapper(this);
+    begin();
   }
   
   virtual ~Fl_Window() { }

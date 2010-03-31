@@ -32,7 +32,7 @@
 #include <fltk3/run.h>
 #include <fltk3/Window.h>
 #include <fltk3/Fl_Text_Editor.H>
-#include <fltk3/fl_ask.H>
+#include <fltk3/ask.h>
 
 
 /* Keyboard Control Matrix
@@ -570,7 +570,7 @@ int Fl_Text_Editor::handle(int event) {
 
     case fltk3::PASTE:
       if (!fltk3::event_text()) {
-        fl_beep();
+        fltk3::beep();
 	return 1;
       }
       buffer()->remove_selection();

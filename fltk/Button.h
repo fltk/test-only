@@ -23,12 +23,11 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#ifndef fltk_Button_h
-#define fltk_Button_h
+#ifndef fltk2_Button_h
+#define fltk2_Button_h
 
-#ifndef fltk_Widget_h
 #include "Widget.h"
-#endif
+#include <fltk3/Button.h>
 
 namespace fltk {
 
@@ -36,16 +35,26 @@ class FL_API Button : public Widget {
 public:
   enum {HIDDEN=3}; // back-comptability value to hide the button
 
-  bool	value() const { return state(); }
-  bool	value(bool v) { return state(v); }
+  bool	value() const { return ((fltk3::Button*)_p)->value(); }
+  bool	value(bool v) { ((fltk3::Button*)_p)->clear_changed(); if (v==value()) return false; value(v); return true; }
 
+#if 0
   int handle(int);
   int handle(int event, const Rectangle&);
-  Button(int,int,int,int,const char * = 0);
+#endif
+  
+  Button(int x, int y, int w, int h, const char *label=0) {
+    _p = new fltk3::Button(x, y, w, h, label); 
+    _p->wrapper(this);
+  }
+
+#if 0
   static NamedStyle* default_style;
 
   virtual void draw();
   void draw(int glyph_width) const;
+#endif
+  
 };
 
 }

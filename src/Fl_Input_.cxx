@@ -29,7 +29,7 @@
 #include <fltk3/Fl_Input_.H>
 #include <fltk3/Window.h>
 #include <fltk3/fl_draw.H>
-#include <fltk3/fl_ask.H>
+#include <fltk3/ask.h>
 #include <math.h>
 #include <fltk3/fl_utf8.h>
 #include "flstring.h"
@@ -968,7 +968,7 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
   case fltk3::PASTE: {
     // Don't allow pastes into readonly widgets...
     if (readonly()) {
-      fl_beep(FL_BEEP_ERROR);
+      fltk3::beep(fltk3::BEEP_ERROR);
       return 1;
     }
 
@@ -991,7 +991,7 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
         while (isdigit(*p & 255) && p < e) p ++;
       }
       if (p < e) {
-        fl_beep(FL_BEEP_ERROR);
+        fltk3::beep(fltk3::BEEP_ERROR);
         return 1;
       } else return replace(0, size(), t, e - t);
     } else if (input_type() == FL_FLOAT_INPUT) {
@@ -1009,7 +1009,7 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
 	}
       }
       if (p < e) {
-        fl_beep(FL_BEEP_ERROR);
+        fltk3::beep(fltk3::BEEP_ERROR);
         return 1;
       } else return replace(0, size(), t, e - t);
     }

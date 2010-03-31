@@ -340,7 +340,7 @@
 
 #include <fltk3/Fl_File_Chooser.H>
 #include <fltk3/filename.H>
-#include <fltk3/fl_ask.H>
+#include <fltk3/ask.h>
 #include <fltk3/x.H>
 #include <fltk3/Fl_Shared_Image.H>
 
@@ -861,7 +861,7 @@ Fl_File_Chooser::fileNameCB()
       }
     } else {
       // File doesn't exist, so beep at and alert the user...
-      fl_alert("%s",existing_file_label);
+      fltk3::alert("%s",existing_file_label);
     }
   }
   else if (fltk3::event_key() != FL_Delete &&
@@ -1049,7 +1049,7 @@ Fl_File_Chooser::newdir()
 
 
   // Get a directory name from the user
-  if ((dir = fl_input("%s", NULL, new_directory_label)) == NULL)
+  if ((dir = fltk3::input("%s", NULL, new_directory_label)) == NULL)
     return;
 
   // Make it relative to the current directory as needed...
@@ -1070,7 +1070,7 @@ Fl_File_Chooser::newdir()
 #endif /* WIN32 */
     if (errno != EEXIST)
     {
-      fl_alert("%s", strerror(errno));
+      fltk3::alert("%s", strerror(errno));
       return;
     }
 
@@ -1216,7 +1216,7 @@ Fl_File_Chooser::showChoiceCB()
   item = showChoice->text(showChoice->value());
 
   if (strcmp(item, custom_filter_label) == 0) {
-    if ((item = fl_input("%s", pattern_, custom_filter_label)) != NULL) {
+    if ((item = fltk3::input("%s", pattern_, custom_filter_label)) != NULL) {
       strlcpy(pattern_, item, sizeof(pattern_));
 
       quote_pathname(temp, item, sizeof(temp));

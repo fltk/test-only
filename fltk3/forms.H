@@ -645,14 +645,14 @@ fl_add_free(int t,double x,double y,double w,double h,const char* l,
    new Fl_Free(t,int(x),int(y),int(w),int(h),l,hdl)));
 }
 
-#include "fl_ask.H"
+#include "ask.h"
 #include "fl_show_colormap.H"
 
-inline int fl_show_question(const char* c, int = 0) {return fl_choice("%s",fl_no,fl_yes,0L,c);}
+inline int fl_show_question(const char* c, int = 0) {return fltk3::choice("%s",fltk3::text_no,fltk3::text_yes,0L,c);}
 FL_EXPORT void fl_show_message(const char *,const char *,const char *);
 FL_EXPORT void fl_show_alert(const char *,const char *,const char *,int=0);
 FL_EXPORT int fl_show_question(const char *,const char *,const char *);
-inline const char *fl_show_input(const char *l,const char*d=0) {return fl_input(l,d);}
+inline const char *fl_show_input(const char *l,const char*d=0) {return fltk3::input(l,d);}
 FL_EXPORT /*const*/ char *fl_show_simple_input(const char *label, const char *deflt = 0);
 FL_EXPORT int fl_show_choice(
     const char *m1,
@@ -663,8 +663,8 @@ FL_EXPORT int fl_show_choice(
     const char *b1,
     const char *b2);
 
-inline void fl_set_goodies_font(Fl_Font a, Fl_Fontsize b) {fl_message_font(a,b);}
-#define fl_show_messages fl_message
+inline void fl_set_goodies_font(Fl_Font a, Fl_Fontsize b) {fltk3::message_font(a,b);}
+#define fl_show_messages fltk3::message
 inline int fl_show_choices(const char* c,int n,const char* b1,const char* b2,
 			   const char* b3, int) {
   return fl_show_choice(0,c,0,n,b1,b2,b3);

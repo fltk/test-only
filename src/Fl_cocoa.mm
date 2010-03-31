@@ -3110,7 +3110,7 @@ static void createAppleMenu(void)
 }
 @end
 
-void fl_mac_set_about( Fl_Callback *cb, void *user_data, int shortcut) 
+void fl_mac_set_about( fltk3::Callback *cb, void *user_data, int shortcut) 
 {
   NSAutoreleasePool *localPool;
   localPool = [[NSAutoreleasePool alloc] init]; 

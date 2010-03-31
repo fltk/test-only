@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-// Implementation of fl_message, fl_ask, fl_choice, fl_input
+// Implementation of fltk3::message, fltk3::ask, fltk3::choice, fltk3::input
 // The three-message fl_show_x functions are for forms compatibility
 // mostly.  In most cases it is easier to get a multi-line message
 // by putting newlines in the message.
@@ -36,7 +36,7 @@
 
 #include <fltk3/run.h>
 
-#include <fltk3/fl_ask.H>
+#include <fltk3/ask.h>
 
 #include <fltk3/Fl_Box.H>
 #include <fltk3/Button.h>
@@ -60,8 +60,8 @@ static fltk3::Button *button[3];
 static Fl_Input *input;
 static int ret_val;
 static const char *iconlabel = "?";
-Fl_Font fl_message_font_ = fltk3::HELVETICA;
-Fl_Fontsize fl_message_size_ = 14;
+Fl_Font fltk3::message_font_ = fltk3::HELVETICA;
+Fl_Fontsize fltk3::message_size_ = 14;
 
 static char avoidRecursion = 0;
 
@@ -121,7 +121,7 @@ void resizeform() {
   int	x, w, h, max_w, max_h;
 	const int icon_size = 50;
 
-  fl_font(fl_message_font_, fl_message_size_);
+  fl_font(fltk3::message_font_, fltk3::message_size_);
   message_w = message_h = 0;
   fl_measure(message->label(), message_w, message_h);
 
@@ -204,8 +204,8 @@ static int innards(const char* fmt, va_list ap,
     message->label(buffer);
   }
 
-  message->labelfont(fl_message_font_);
-  message->labelsize(fl_message_size_);
+  message->labelfont(fltk3::message_font_);
+  message->labelsize(fltk3::message_size_);
   if (b0) {button[0]->show(); button[0]->label(b0); button[1]->position(210,70);}
   else {button[0]->hide(); button[1]->position(310,70);}
   if (b1) {button[1]->show(); button[1]->label(b1);}
@@ -242,31 +242,31 @@ static int innards(const char* fmt, va_list ap,
     @{ */
 
 // pointers you can use to change FLTK to a foreign language:
-const char* fl_no = "No";        ///< string pointer used in common dialogs, you can change it to a foreign language
-const char* fl_yes= "Yes";       ///< string pointer used in common dialogs, you can change it to a foreign language
-const char* fl_ok = "OK";        ///< string pointer used in common dialogs, you can change it to a foreign language
-const char* fl_cancel= "Cancel"; ///< string pointer used in common dialogs, you can change it to a foreign language
-const char* fl_close= "Close";   ///< string pointer used in common dialogs, you can change it to a foreign language
+const char* fltk3::text_no = "No";        ///< string pointer used in common dialogs, you can change it to a foreign language
+const char* fltk3::text_yes= "Yes";       ///< string pointer used in common dialogs, you can change it to a foreign language
+const char* fltk3::text_ok = "OK";        ///< string pointer used in common dialogs, you can change it to a foreign language
+const char* fltk3::text_cancel= "Cancel"; ///< string pointer used in common dialogs, you can change it to a foreign language
+const char* fltk3::text_close= "Close";   ///< string pointer used in common dialogs, you can change it to a foreign language
 
 // fltk functions:
 
 /**
    Emits a system beep message.
  */
-void fl_beep(int type) {
+void fltk3::beep(int type) {
 #ifdef WIN32
   switch (type) {
-    case FL_BEEP_QUESTION :
-    case FL_BEEP_PASSWORD :
+    case fltk3::BEEP_QUESTION :
+    case fltk3::BEEP_PASSWORD :
       MessageBeep(MB_ICONQUESTION);
       break;
-    case FL_BEEP_MESSAGE :
+    case fltk3::BEEP_MESSAGE :
       MessageBeep(MB_ICONASTERISK);
       break;
-    case FL_BEEP_NOTIFICATION :
+    case fltk3::BEEP_NOTIFICATION :
       MessageBeep(MB_ICONASTERISK);
       break;
-    case FL_BEEP_ERROR :
+    case fltk3::BEEP_ERROR :
       MessageBeep(MB_ICONERROR);
       break;
     default :
@@ -275,8 +275,8 @@ void fl_beep(int type) {
   }
 #elif defined(__APPLE__)
   switch (type) {
-    case FL_BEEP_DEFAULT :
-    case FL_BEEP_ERROR :
+    case fltk3::BEEP_DEFAULT :
+    case fltk3::BEEP_ERROR :
       // How Apple is not any better than Microsoft:
       /* MacOS 8 */   // SysBeep(30);
       /* OS X 10.1 */ // AlertSoundPlay();
@@ -303,8 +303,8 @@ void fl_beep(int type) {
   }
 #else
   switch (type) {
-    case FL_BEEP_DEFAULT :
-    case FL_BEEP_ERROR :
+    case fltk3::BEEP_DEFAULT :
+    case fltk3::BEEP_ERROR :
       if (!fl_display) fl_open_display();
 
       XBell(fl_display, 100);
@@ -324,17 +324,17 @@ void fl_beep(int type) {
 
    \param[in] fmt can be used as an sprintf-like format and variables for the message text
  */
-void fl_message(const char *fmt, ...) {
+void fltk3::message(const char *fmt, ...) {
 
   if (avoidRecursion) return;
 
   va_list ap;
 
-  fl_beep(FL_BEEP_MESSAGE);
+  fltk3::beep(fltk3::BEEP_MESSAGE);
 
   va_start(ap, fmt);
   iconlabel = "i";
-  innards(fmt, ap, 0, fl_close, 0);
+  innards(fmt, ap, 0, fltk3::text_close, 0);
   va_end(ap);
   iconlabel = "?";
 }
@@ -346,17 +346,17 @@ void fl_message(const char *fmt, ...) {
 
    \param[in] fmt can be used as an sprintf-like format and variables for the message text
  */
-void fl_alert(const char *fmt, ...) {
+void fltk3::alert(const char *fmt, ...) {
 
   if (avoidRecursion) return;
 
   va_list ap;
 
-  fl_beep(FL_BEEP_ERROR);
+  fltk3::beep(fltk3::BEEP_ERROR);
 
   va_start(ap, fmt);
   iconlabel = "!";
-  innards(fmt, ap, 0, fl_close, 0);
+  innards(fmt, ap, 0, fltk3::text_close, 0);
   va_end(ap);
   iconlabel = "?";
 }
@@ -370,16 +370,16 @@ void fl_alert(const char *fmt, ...) {
    \retval 0 if the no button is selected or another dialog box is still open
    \retval 1 if yes is selected
  */
-int fl_ask(const char *fmt, ...) {
+int fltk3::ask(const char *fmt, ...) {
 
   if (avoidRecursion) return 0;
 
   va_list ap;
 
-  fl_beep(FL_BEEP_QUESTION);
+  fltk3::beep(fltk3::BEEP_QUESTION);
 
   va_start(ap, fmt);
-  int r = innards(fmt, ap, fl_no, fl_yes, 0);
+  int r = innards(fmt, ap, fltk3::text_no, fltk3::text_yes, 0);
   va_end(ap);
 
   return r;
@@ -399,13 +399,13 @@ int fl_ask(const char *fmt, ...) {
    \retval 1 if the second button with \p b1 text is selected
    \retval 2 if the third button with \p b2 text is selected
  */
-int fl_choice(const char*fmt,const char *b0,const char *b1,const char *b2,...){
+int fltk3::choice(const char*fmt,const char *b0,const char *b1,const char *b2,...){
 
   if (avoidRecursion) return 0;
 
   va_list ap;
 
-  fl_beep(FL_BEEP_QUESTION);
+  fltk3::beep(fltk3::BEEP_QUESTION);
 
   va_start(ap, b2);
   int r = innards(fmt, ap, b0, b1, b2);
@@ -413,10 +413,10 @@ int fl_choice(const char*fmt,const char *b0,const char *b1,const char *b2,...){
   return r;
 }
 /** Gets the Fl_Box icon container of the current default dialog used in 
-    many common dialogs like fl_message(), fl_alert(), 
-    fl_ask(), fl_choice(), fl_input(), fl_password() 
+    many common dialogs like fltk3::message(), fltk3::alert(), 
+    fltk3::ask(), fltk3::choice(), fltk3::input(), fltk3::password() 
 */ 
-fltk3::Widget *fl_message_icon() {makeform(); return icon;}
+fltk3::Widget *fltk3::message_icon() {makeform(); return icon;}
 
 static const char* input_innards(const char* fmt, va_list ap,
 				 const char* defstr, uchar type) {
@@ -427,7 +427,7 @@ static const char* input_innards(const char* fmt, va_list ap,
   input->value(defstr);
   input->take_focus();
 
-  int r = innards(fmt, ap, fl_cancel, fl_ok, 0);
+  int r = innards(fmt, ap, fltk3::text_cancel, fltk3::text_ok, 0);
   input->hide();
   message->position(60,25);
   return r ? input->value() : 0;
@@ -442,11 +442,11 @@ static const char* input_innards(const char* fmt, va_list ap,
    \param[in] defstr defines the default returned string if no text is entered
    \return the user string input if OK was pushed, NULL if Cancel was pushed or another dialog box was still open
  */
-const char* fl_input(const char *fmt, const char *defstr, ...) {
+const char* fltk3::input(const char *fmt, const char *defstr, ...) {
 
   if (avoidRecursion) return 0;
 
-  fl_beep(FL_BEEP_QUESTION);
+  fltk3::beep(fltk3::BEEP_QUESTION);
 
   va_list ap;
   va_start(ap, defstr);
@@ -457,7 +457,7 @@ const char* fl_input(const char *fmt, const char *defstr, ...) {
 
 /** Shows an input dialog displaying the \p fmt message.
 
-    Like fl_input() except the input text is not shown,
+    Like fltk3::input() except the input text is not shown,
     '*' characters are displayed instead.
 
    \note Common dialog boxes are application modal. No more than one common dialog box
@@ -467,11 +467,11 @@ const char* fl_input(const char *fmt, const char *defstr, ...) {
    \param[in] defstr defines the default returned string if no text is entered
    \return the user string input if OK was pushed, NULL if Cancel was pushed or aother dialog box was still open
  */
-const char *fl_password(const char *fmt, const char *defstr, ...) {
+const char *fltk3::password(const char *fmt, const char *defstr, ...) {
 
   if (avoidRecursion) return 0;
 
-  fl_beep(FL_BEEP_PASSWORD);
+  fltk3::beep(fltk3::BEEP_PASSWORD);
 
   va_list ap;
   va_start(ap, defstr);

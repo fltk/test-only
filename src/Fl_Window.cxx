@@ -57,7 +57,7 @@ void fltk3::Window::_Fl_Window() {
   resizable(0);
   size_range_set = 0;
   minw = maxw = minh = maxh = 0;
-  callback((Fl_Callback*)default_callback);
+  callback((fltk3::Callback*)default_callback);
 }
 
 fltk3::Window::Window(int X,int Y,int W, int H, const char *l)

@@ -28,12 +28,12 @@
 #include "flstring.h"
 #include <fltk3/filename.H>
 #include <fltk3/Fl_File_Chooser.H>
-#include <fltk3/fl_ask.H>
+#include <fltk3/ask.h>
 
 
 static Fl_File_Chooser	*fc = (Fl_File_Chooser *)0;
 static void		(*current_callback)(const char*) = 0;
-static const char	*current_label = fl_ok;
+static const char	*current_label = fltk3::text_ok;
 
 
 // Do a file chooser callback...
@@ -58,7 +58,7 @@ void fl_file_chooser_callback(void (*cb)(const char*)) {
 */
 void fl_file_chooser_ok_label(const char *l) {
   if (l) current_label = l;
-  else current_label = fl_ok;
+  else current_label = fltk3::text_ok;
 }
 
 /** \relates Fl_File_Chooser

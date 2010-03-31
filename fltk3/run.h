@@ -808,7 +808,7 @@ namespace fltk3 {
   extern void default_atclose(fltk3::Window*,void*);
   /** For back compatibility, sets the fltk3::atclose handler callback. You
       can now simply change the callback for the window instead.
-      \see fltk3::Window::callback(Fl_Callback*) */
+      \see fltk3::Window::callback(fltk3::Callback*) */
   inline void set_atclose(Fl_Atclose_Handler f) {atclose = f;}
   /**   @} */
 

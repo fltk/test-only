@@ -70,7 +70,7 @@ Fl_Native_File_Chooser::Fl_Native_File_Chooser(int val) {
   fltk3::Window *w = b->window();
   fltk3::Group::current(w);		// adds a "Show hidden files" check button in _file_chooser's window
   show_hidden = new Fl_Check_Button(b->x() + b->w() + 10, b->y(), 145, b->h(), "Show hidden files");
-  show_hidden->callback((Fl_Callback*)show_hidden_cb, this);
+  show_hidden->callback((fltk3::Callback*)show_hidden_cb, this);
   my_fileList = _file_chooser->browser();
   _old_dir = 0;						// to detect directory changes
   prev_filtervalue = _file_chooser->filter_value();	// to detect filter changes
@@ -495,7 +495,7 @@ void Fl_Native_File_Chooser::remove_hidden_files(Fl_File_Browser *my_fileList)
 
 // PRIVATE: Don't show hidden files
 int Fl_Native_File_Chooser::exist_dialog() {
-  return(fl_choice("File exists. Are you sure you want to overwrite?", 
+  return(fltk3::choice("File exists. Are you sure you want to overwrite?", 
 		   "Cancel", "   OK   ", NULL));
 }
 

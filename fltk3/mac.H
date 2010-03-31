@@ -183,7 +183,7 @@ extern FL_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b)
  * \param user_data   a pointer transmitted as 2nd argument to the callback.
  * \param shortcut    optional shortcut to attach to the "About myprog" menu item (e.g., FL_META+'a')
  */
-extern void fl_mac_set_about( Fl_Callback *cb, void *user_data, int shortcut = 0);
+extern void fl_mac_set_about( fltk3::Callback *cb, void *user_data, int shortcut = 0);
 /** @} */
 
 //

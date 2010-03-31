@@ -159,11 +159,11 @@ with fltk::Box and fltk3::Box which is equivalent to the F1 boxtype.
 
 * class Fl_Window and fltk::Window to fltk3::Window:
 
-Only few calls implemented so far
+Only few calls implemented so far.
 
 * class Fl_Button and fltk::Button to fltk3::Button:
 
-Class renamed, file renamed.
+Basic working implementation.
 
 
  Comparison Chart by Class

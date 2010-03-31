@@ -23,6 +23,8 @@
 #define fltk_Rectangle_h
 
 #include <fltk3/Wrapper.h>
+#include <fltk3/Widget.h>
+
 #include "FL_API.h"
 
 // rectangle macros that help keeping rectangle predicates as strict as possible 
@@ -36,23 +38,20 @@
 
 namespace fltk {
 
-  class FL_API Rectangle : public fltk3::Wrapper {
-  
-#if 0
-  int x_, y_, w_, h_;
-#endif
+class FL_API Rectangle : public fltk3::Wrapper {
 
  public:
   
-#if 0
   /*! Left edge */
-  int x() const {return x_;}
+  int x() const { return _p->x(); }
   /*! Top edge */
-  int y() const {return y_;}
+  int y() const { return _p->y(); }
   /*! Distance between left and right edges */
-  int w() const {return w_;}
+  int w() const { return _p->w(); }
   /*! Distance between top and bottom edges */
-  int h() const {return h_;}
+  int h() const { return _p->h(); }
+
+#if 0
   /*! Return x()+w(), the right edge of the rectangle. */
   int r() const {return x_+w_;}
   /*! Return y()+h(), the bottom edge of the rectangle. */

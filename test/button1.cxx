@@ -1,9 +1,9 @@
 //
-// "$Id: fltk3::message.H 6614 2009-01-01 16:11:32Z matt $"
+// "$Id$"
 //
-// Standard message header file for the Fast Light Tool Kit (FLTK).
+// Button/callback test program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,8 +25,33 @@
 //     http://www.fltk.org/str.php
 //
 
-#include "ask.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Button.H>
+#include <FL/fl_ask.H>
+
+void beepcb(Fl_Widget *, void *) {
+  fl_beep();
+}
+
+void exitcb(Fl_Widget *, void *) {
+  exit(0);
+}
+
+int main(int argc, char ** argv) {
+  Fl_Window *window = new Fl_Window(320,65);
+  Fl_Button *b1 = new Fl_Button(20, 20, 80, 25, "&Beep");
+  b1->callback(beepcb, (void*)0);
+  /*Fl_Button *b2 =*/ new Fl_Button(120,20, 80, 25, "&no op");
+  Fl_Button *b3 = new Fl_Button(220,20, 80, 25, "E&xit");
+  b3->callback(exitcb, (void*)0);
+  window->end();
+  window->show(argc,argv);
+  return Fl::run();
+}
 
 //
-// End of "$Id: fltk3::message.H 6614 2009-01-01 16:11:32Z matt $".
+// End of "$Id$".
 //

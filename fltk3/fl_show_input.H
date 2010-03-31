@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include "fl_ask.H"
+#include "ask.h"
 
 //
 // End of "$Id: fl_show_input.H 6614 2009-01-01 16:11:32Z matt $".

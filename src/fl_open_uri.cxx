@@ -79,7 +79,7 @@ static int	run_program(const char *program, char **argv, char *msg, int msglen);
  * if ( !fl_open_uri("http://google.com/", errmsg, sizeof(errmsg)) ) {
  *     char warnmsg[768];
  *     sprintf(warnmsg, "Error: %s", errmsg);
- *     fl_alert(warnmsg);
+ *     fltk3::alert(warnmsg);
  * }
  * \endcode
  *

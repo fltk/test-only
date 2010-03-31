@@ -12,7 +12,6 @@
 
 namespace fltk {
 
-#if 0
 class FL_API Widget;
 class FL_API Window;
 class FL_API Symbol;
@@ -25,11 +24,6 @@ typedef void (Callback )(Widget*, void*);
 typedef Callback* Callback_p; // needed for BORLAND
 typedef void (Callback0)(Widget*);
 typedef void (Callback1)(Widget*, long);
-
-#ifdef FLTK_1_WIDGET  // back-compatability section:
-FL_API Font* font(int);
-#endif
-#endif
 
 class FL_API Widget : public Rectangle {
   // disable the copy assignment/constructors:
@@ -46,6 +40,8 @@ public:
     _p->wrapper(this);
   }
   virtual ~Widget() { }
+  
+  fltk3::Widget *fltk3Widget() { return (fltk3::Widget*)_p; }
 
 #if 0
   virtual void draw();
@@ -104,16 +100,19 @@ public:
   bool	test_label_shortcut() const;
   bool	test_shortcut() const	;
   bool  test_shortcut(bool) const;
-
-  Callback_p callback() const	{ return callback_; }
-  void	callback(Callback* c, void* p) { callback_=c; user_data_=p; }
-  void	callback(Callback* c)	{ callback_=c; }
-  void	callback(Callback0*c)	{ callback_=(Callback*)c; }
-  void	callback(Callback1*c, long p=0) { callback_=(Callback*)c; user_data_=(void*)p; }
-  void*	user_data() const	{ return user_data_; }
-  void	user_data(void* v)	{ user_data_ = v; }
-  long	argument() const	{ return (long)user_data_; }
-  void	argument(long v)	{ user_data_ = (void*)v; }
+#endif
+  
+  Callback_p callback() const { return (Callback_p)_p->callback(); }
+  void	callback(Callback *cb, void *p) { _p->callback( (fltk3::Callback_p)cb, p); }
+  void	callback(Callback *cb) { _p->callback( (fltk3::Callback_p)cb); }
+  void	callback(Callback0 *cb) { _p->callback( (fltk3::Callback_p)cb); }
+  void	callback(Callback1 *cb, long p=0) { _p->callback( (fltk3::Callback_p)cb, (void*)p); }
+  void *user_data() const { return _p->user_data(); }
+  void	user_data(void* v) { _p->user_data(v); }
+  long	argument() const { return _p->argument(); }
+  void	argument(long v) { _p->argument(v); }
+  
+#if 0  
   uchar when() const		{ return when_; }
   void	when(uchar i)		{ when_ = i; }
 

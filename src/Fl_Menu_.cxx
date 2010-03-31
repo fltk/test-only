@@ -124,7 +124,7 @@ int Fl_Menu_::item_pathname(char *name, int namelen, const Fl_Menu_Item *findite
 
  \param name path and name of the menu item
  \return NULL if not found
- \see Fl_Menu_::find_item(Fl_Callback*), item_pathname() 
+ \see Fl_Menu_::find_item(fltk3::Callback*), item_pathname() 
 */
 const Fl_Menu_Item * Fl_Menu_::find_item(const char *name) {
   char menupath[1024] = "";	// File/Export
@@ -171,7 +171,7 @@ const Fl_Menu_Item * Fl_Menu_::find_item(const char *name) {
  \return NULL if not found
  \see Fl_Menu_::find_item(const char*)
  */
-const Fl_Menu_Item * Fl_Menu_::find_item(Fl_Callback *cb) {
+const Fl_Menu_Item * Fl_Menu_::find_item(fltk3::Callback *cb) {
   for ( int t=0; t < size(); t++ ) {
     const Fl_Menu_Item *m = menu_ + t;
     if (m->callback_==cb) {

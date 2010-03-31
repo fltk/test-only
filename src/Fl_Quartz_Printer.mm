@@ -29,7 +29,7 @@
 #include <fltk3/Fl_Printer.H>
 
 #include <fltk3/run.h>
-#include <fltk3/fl_ask.H>
+#include <fltk3/ask.h>
 #include <fltk3/fl_draw.H>
 #import <Cocoa/Cocoa.h>
 
@@ -282,7 +282,7 @@ void Fl_Printer::end_job (void)
   
   status = PMSessionError(printSession);
   if (status != noErr) {
-    fl_alert ("PM Session error %d", (int)status);
+    fltk3::alert ("PM Session error %d", (int)status);
   }
   PMSessionEndDocumentNoDialog(printSession);
   Fl_Device::display_device()->set_current();

@@ -102,9 +102,9 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
   text_area.h = 0;
 
   mVScrollBar = new Fl_Scrollbar(0,0,1,1);
-  mVScrollBar->callback((Fl_Callback*)v_scrollbar_cb, this);
+  mVScrollBar->callback((fltk3::Callback*)v_scrollbar_cb, this);
   mHScrollBar = new Fl_Scrollbar(0,0,1,1);
-  mHScrollBar->callback((Fl_Callback*)h_scrollbar_cb, this);
+  mHScrollBar->callback((fltk3::Callback*)h_scrollbar_cb, this);
   mHScrollBar->type(FL_HORIZONTAL);
 
   end();

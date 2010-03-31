@@ -37,7 +37,7 @@
 #include <fltk3/Window.h>
 #include <fltk3/Fl_Input.H>
 #include <fltk3/fl_draw.H>
-#include <fltk3/fl_ask.H>
+#include <fltk3/ask.h>
 #include "flstring.h"
 
 #ifdef HAVE_LOCALE_H
@@ -130,14 +130,14 @@ int Fl_Input::handle_key() {
               && (ascii>='A'&& ascii<='F' || ascii>='a'&& ascii<='f')) 
           || input_type()==FL_FLOAT_INPUT && ascii && strchr(legal_fp_chars, ascii)) 
       {
-	if (readonly()) fl_beep();
+	if (readonly()) fltk3::beep();
 	else replace(position(), mark(), &ascii, 1);
       }
       return 1;
     }
     
     if (del || fltk3::event_length()) {
-      if (readonly()) fl_beep();
+      if (readonly()) fltk3::beep();
       else replace(position(), del ? position()-del : mark(),
 	           fltk3::event_text(), fltk3::event_length());
     }
@@ -388,7 +388,7 @@ int Fl_Input::handle_key() {
     case ctrl('D'): // cut the next character
     case ctrl('?'):
       if (readonly()) {
-        fl_beep();
+        fltk3::beep();
         return 1;
       }
       if (mark() != position()) return cut();
@@ -399,7 +399,7 @@ int Fl_Input::handle_key() {
       return shift_position(position()+1) + NORMAL_INPUT_MOVE;
     case ctrl('H'): // cut the previous character
       if (readonly()) {
-        fl_beep();
+        fltk3::beep();
         return 1;
       }
       if (mark() != position()) cut();
@@ -407,7 +407,7 @@ int Fl_Input::handle_key() {
       return 1;
     case ctrl('K'): // cut to the end of the line
       if (readonly()) {
-        fl_beep();
+        fltk3::beep();
         return 1;
       }
       if (position()>=size()) return 0;
@@ -437,14 +437,14 @@ int Fl_Input::handle_key() {
       return 1;
     case ctrl('U'): // clear the whole document? 
       if (readonly()) {
-        fl_beep();
+        fltk3::beep();
         return 1;
       }
       return cut(0, size());
     case ctrl('V'): // paste text
     case ctrl('Y'):
       if (readonly()) {
-        fl_beep();
+        fltk3::beep();
         return 1;
       }
       fltk3::paste(*this, 1);
@@ -452,7 +452,7 @@ int Fl_Input::handle_key() {
     case ctrl('X'): // cut the selected text
     case ctrl('W'):
       if (readonly()) {
-        fl_beep();
+        fltk3::beep();
         return 1;
       }
       copy(1);
@@ -460,7 +460,7 @@ int Fl_Input::handle_key() {
     case ctrl('Z'): // undo
     case ctrl('_'):
       if (readonly()) {
-        fl_beep();
+        fltk3::beep();
         return 1;
       }
       return undo();
@@ -469,7 +469,7 @@ int Fl_Input::handle_key() {
     case ctrl('L'):
     case ctrl('M'):
       if (readonly()) {
-        fl_beep();
+        fltk3::beep();
         return 1;
       }
       // insert a few selected control characters literally:

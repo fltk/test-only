@@ -58,7 +58,7 @@ class Fl_Menu_;
   struct Fl_Menu_Item {
    const char*	        text; // label()
    ulong		shortcut_;
-   Fl_Callback*	        callback_;
+   fltk3::Callback*	        callback_;
    void*		user_data_;
    int		        flags;
    uchar		labeltype_;
@@ -118,7 +118,7 @@ class Fl_Menu_;
 struct FL_EXPORT Fl_Menu_Item {
   const char *text;	    ///< menu item text, returned by label()
   int shortcut_;	    ///< menu item shortcut
-  Fl_Callback *callback_;   ///< menu item callback
+  fltk3::Callback *callback_;   ///< menu item callback
   void *user_data_;	    ///< menu item user_data for 3rd party apps
   int flags;		    ///< menu item flags like FL_MENU_TOGGLE, FL_MENU_RADIO
   uchar labeltype_;	    ///< how the menu item text looks like
@@ -211,19 +211,19 @@ struct FL_EXPORT Fl_Menu_Item {
      is not passed to the callback, instead you have to get it by calling 
      ((Fl_Menu_*)w)->mvalue() where w is the widget argument.
   */
-  Fl_Callback_p callback() const {return callback_;}
+  fltk3::Callback_p callback() const {return callback_;}
 
-  /** See Fl_Callback_p Fl_MenuItem::callback() const */
-  void callback(Fl_Callback* c, void* p) {callback_=c; user_data_=p;}
+  /** See fltk3::Callback_p Fl_MenuItem::callback() const */
+  void callback(fltk3::Callback* c, void* p) {callback_=c; user_data_=p;}
 
-  /** See Fl_Callback_p Fl_MenuItem::callback() const */
-  void callback(Fl_Callback* c) {callback_=c;}
+  /** See fltk3::Callback_p Fl_MenuItem::callback() const */
+  void callback(fltk3::Callback* c) {callback_=c;}
 
-  /** See Fl_Callback_p Fl_MenuItem::callback() const */
-  void callback(Fl_Callback0*c) {callback_=(Fl_Callback*)c;}
+  /** See fltk3::Callback_p Fl_MenuItem::callback() const */
+  void callback(fltk3::Callback0*c) {callback_=(fltk3::Callback*)c;}
 
-  /** See Fl_Callback_p Fl_MenuItem::callback() const */
-  void callback(Fl_Callback1*c, long p=0) {callback_=(Fl_Callback*)c; user_data_=(void*)p;}
+  /** See fltk3::Callback_p Fl_MenuItem::callback() const */
+  void callback(fltk3::Callback1*c, long p=0) {callback_=(fltk3::Callback*)c; user_data_=(void*)p;}
 
   /**
     Get or set the user_data argument that is sent to the
@@ -237,14 +237,14 @@ struct FL_EXPORT Fl_Menu_Item {
   void user_data(void* v) {user_data_ = v;}
   /**
     For convenience you can also define the callback as taking a long
-    argument.  This is implemented by casting this to a Fl_Callback
+    argument.  This is implemented by casting this to a fltk3::Callback
     and casting the long to a void* and may not be
     portable to some machines.
   */
   long argument() const {return (long)user_data_;}
   /**
     For convenience you can also define the callback as taking a long
-    argument.  This is implemented by casting this to a Fl_Callback
+    argument.  This is implemented by casting this to a fltk3::Callback
     and casting the long to a void* and may not be
     portable to some machines.
   */
@@ -386,10 +386,10 @@ struct FL_EXPORT Fl_Menu_Item {
   /** back compatibility only \deprecated. */
   void uncheck() {flags &= ~FL_MENU_VALUE;}
 
-  int add(const char*, int shortcut, Fl_Callback*, void* =0, int = 0);
+  int add(const char*, int shortcut, fltk3::Callback*, void* =0, int = 0);
 
-  /** See int add(const char*, int shortcut, Fl_Callback*, void*, int) */
-  int add(const char*a, const char* b, Fl_Callback* c,
+  /** See int add(const char*, int shortcut, fltk3::Callback*, void*, int) */
+  int add(const char*a, const char* b, fltk3::Callback* c,
 	  void* d = 0, int e = 0) {
     return add(a,fl_old_shortcut(b),c,d,e);}
 

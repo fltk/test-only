@@ -20,8 +20,10 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
-#ifndef fltk_ask_h
-#define fltk_ask_h
+#ifndef fltk2_ask_h
+#define fltk2_ask_h
+
+#include <fltk3/ask.h>
 
 #include "FL_API.h"
 #include "Style.h"
@@ -34,14 +36,16 @@ class Widget;
 //@{
 
 enum {
-  BEEP_DEFAULT = 0,
-  BEEP_MESSAGE,
-  BEEP_ERROR,
-  BEEP_QUESTION,
-  BEEP_PASSWORD,
-  BEEP_NOTIFICATION
+  BEEP_DEFAULT      = fltk3::BEEP_DEFAULT,
+  BEEP_MESSAGE      = fltk3::BEEP_MESSAGE,
+  BEEP_ERROR        = fltk3::BEEP_ERROR,
+  BEEP_QUESTION     = fltk3::BEEP_QUESTION,
+  BEEP_PASSWORD     = fltk3::BEEP_PASSWORD,
+  BEEP_NOTIFICATION = fltk3::BEEP_NOTIFICATION
 };
 
+FL_API void beep(int type=BEEP_DEFAULT) { fltk3::beep(type); }
+  
 FL_API void message(const char *, ...);
 FL_API void alert(const char *, ...);
 FL_API int  ask(const char *, ...);
@@ -51,7 +55,6 @@ FL_API int  choice_alert(const char *q,
 		  const char *b0, const char *b1, const char *b2, ...);
 FL_API const char *input(const char *label, const char *deflt = 0, ...);
 FL_API const char *password(const char *label, const char *deflt = 0, ...);
-FL_API void beep(int type = BEEP_DEFAULT);
 FL_API void beep_on_dialog(bool);
 FL_API bool beep_on_dialog();
 

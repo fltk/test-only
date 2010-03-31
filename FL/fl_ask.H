@@ -25,20 +25,21 @@
 //     http://www.fltk.org/str.php
 //
 
-#ifndef fl_ask_H
-#  define fl_ask_H
+#ifndef fltk1_ask_H
+#  define fltk1_ask_H
 
 #  include "Enumerations.H"
 
-class fltk3::Widget;
+#include <fltk3/ask.h>
+
 /** Different system beeps available. \relatesalso fl_beep(int) */
 enum {
-  FL_BEEP_DEFAULT = 0,
-  FL_BEEP_MESSAGE,
-  FL_BEEP_ERROR,
-  FL_BEEP_QUESTION,
-  FL_BEEP_PASSWORD,
-  FL_BEEP_NOTIFICATION
+  FL_BEEP_DEFAULT       = fltk3::BEEP_DEFAULT,
+  FL_BEEP_MESSAGE       = fltk3::BEEP_MESSAGE,
+  FL_BEEP_ERROR         = fltk3::BEEP_ERROR,
+  FL_BEEP_QUESTION      = fltk3::BEEP_QUESTION,
+  FL_BEEP_PASSWORD      = fltk3::BEEP_PASSWORD,
+  FL_BEEP_NOTIFICATION  = fltk3::BEEP_NOTIFICATION
 };
 
 #  ifdef __GNUC__
@@ -50,7 +51,8 @@ enum {
 #    define __fl_attr(x)
 #  endif // __GNUC__
 
-FL_EXPORT void fl_beep(int type = FL_BEEP_DEFAULT);
+inline void fl_beep(int type = FL_BEEP_DEFAULT) { fltk3::beep(type); }
+
 FL_EXPORT void fl_message(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
 FL_EXPORT void fl_alert(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
 // fl_ask() is deprecated since it uses "Yes" and "No" for the buttons,

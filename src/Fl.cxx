@@ -1510,7 +1510,7 @@ static fltk3::Widget	**dwidgets = 0;
 
   To avoid early deletion of widgets, this function should be called
   toward the end of a callback and only after any call to the event
-  loop (fltk3::wait(), fltk3::flush(), fltk3::check(), fl_ask(), etc.).
+  loop (fltk3::wait(), fltk3::flush(), fltk3::check(), fltk3::ask(), etc.).
 
   When deleting groups or windows, you must only delete the group or
   window widget and not the individual child widgets.
