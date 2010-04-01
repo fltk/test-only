@@ -149,7 +149,7 @@ void Fl_FormsText::draw() {
 // Create a forms button by selecting correct fltk subclass:
 
 #include <fltk3/ReturnButton.h>
-#include <fltk3/Fl_Repeat_Button.H>
+#include <fltk3/RepeatButton.h>
 
 fltk3::Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
   fltk3::Button *b;
@@ -159,7 +159,7 @@ fltk3::Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
     b = new fltk3::ReturnButton(x,y,w,h,l);
     break;
   case FL_TOUCH_BUTTON:
-    b = new Fl_Repeat_Button(x,y,w,h,l);
+    b = new fltk3::RepeatButton(x,y,w,h,l);
     break;
   default:
     b = new fltk3::Button(x,y,w,h,l);

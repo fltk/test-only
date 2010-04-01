@@ -31,7 +31,7 @@
 #include <fltk3/Window.h>
 #include <fltk3/Button.h>
 #include <fltk3/ReturnButton.h>
-// fltk123: #include <fltk3/RepeatButton.h>
+#include <fltk3/RepeatButton.h>
 // fltk123: #include <fltk3/CheckButton.h>
 // fltk123: #include <fltk3/LightButton.h>
 // fltk123: #include <fltk3/Fl_Round_Button.h>
@@ -45,7 +45,7 @@ int main(int argc, char ** argv) {
   {
     (new Button(10, 10, 130, 30, "Button"))->tooltip("This is a Tooltip.");
     new ReturnButton(150, 10, 160, 30, "ReturnButton");
-    // fltk123: new RepeatButton(10,50,130,30,"RepeatButton");
+    new RepeatButton(10,50,130,30,"RepeatButton");
     // fltk123: new LightButton(10,90,130,30,"LightButton");
     // fltk123: new Fl_Round_Button(150,50,160,30,"Fl_Round_Button");
     // fltk123: new CheckButton(150,90,160,30,"CheckButton");

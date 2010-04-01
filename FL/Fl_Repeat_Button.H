@@ -28,32 +28,23 @@
 /* \file
    Fl_Repeat_Button widget . */
 
-#ifndef Fl_Repeat_Button_H
-#define Fl_Repeat_Button_H
+#ifndef Fltk1_Repeat_Button_H
+#define Fltk1_Repeat_Button_H
+
+#include <fltk3/RepeatButton.h>
+
 #include "Fl.H"
 #include "Fl_Button.H"
 
-/**
-  The Fl_Repeat_Button is a subclass of Fl_Button that
-  generates a callback when it is pressed and then repeatedly generates
-  callbacks as long as it is held down.  The speed of the repeat is fixed
-  and depends on the implementation.
-*/
 class FL_EXPORT Fl_Repeat_Button : public Fl_Button {
-  static void repeat_callback(void *);
 public:
-  int handle(int);
-  /**
-    Creates a new Fl_Repeat_Button widget using the given
-    position, size, and label string. The default boxtype is FL_UP_BOX.
-    Deletes the button.
-  */
-  Fl_Repeat_Button(int X,int Y,int W,int H,const char *l=0)
-    : Fl_Button(X,Y,W,H,l) {}
-  void deactivate() {
-    fltk3::remove_timeout(repeat_callback,this);
-    Fl_Button::deactivate();
+  // fltk123: int handle(int);
+  
+  Fl_Repeat_Button(int X,int Y,int W,int H,const char *l=0) {
+    _p = new fltk3::RepeatButton(X, Y, W, H, l);
+    _p->wrapper(this);
   }
+  void deactivate() { ((fltk3::RepeatButton*)_p)->deactivate(); }
 };
 
 #endif

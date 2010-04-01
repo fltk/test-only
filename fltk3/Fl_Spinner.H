@@ -38,7 +38,7 @@
 #  include <fltk3/Enumerations.H>
 #  include <fltk3/Group.h>
 #  include <fltk3/Fl_Input.H>
-#  include <fltk3/Fl_Repeat_Button.H>
+#  include <fltk3/RepeatButton.h>
 #  include <stdio.h>
 #  include <stdlib.h>
 
@@ -57,7 +57,7 @@ class Fl_Spinner : public fltk3::Group
   const char	*format_;		// Format string
 
   Fl_Input	input_;			// Input field for the value
-  Fl_Repeat_Button
+  fltk3::RepeatButton
 		up_button_,		// Up button
 		down_button_;		// Down button
 

@@ -26,18 +26,18 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/Fl_Repeat_Button.H>
+#include <fltk3/RepeatButton.h>
 
 #define INITIALREPEAT .5
 #define REPEAT .1
 
-void Fl_Repeat_Button::repeat_callback(void *v) {
+void fltk3::RepeatButton::repeat_callback(void *v) {
   fltk3::Button *b = (fltk3::Button*)v;
   fltk3::add_timeout(REPEAT,repeat_callback,b);
   b->do_callback();
 }
 
-int Fl_Repeat_Button::handle(int event) {
+int fltk3::RepeatButton::handle(int event) {
   int newval;
   switch (event) {
   case fltk3::HIDE:

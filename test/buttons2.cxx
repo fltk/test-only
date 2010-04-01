@@ -30,7 +30,7 @@
 #include <fltk/Button.h>
 // fltk123: #include <fltk/ToggleButton.h>
 #include <fltk/ReturnButton.h>
-// fltk123: #include <fltk/RepeatButton.h>
+#include <fltk/RepeatButton.h>
 // fltk123: #include <fltk/CheckButton.h>
 // fltk123: #include <fltk/RadioButton.h>
 // fltk123: #include <fltk/LightButton.h>
@@ -106,7 +106,7 @@ int main(int argc, char ** argv) {
   // fltk123: (void) new ToggleButton(X0, Y, W, H, "ToggleButton");
   // fltk123: (void) new RadioButton(X1, Y, W, H, "RadioButton");
   Y += H+B;
-  // fltk123: (void) new RepeatButton(X0, Y, W, H, "RepeatButton");
+  (void) new RepeatButton(X0, Y, W, H, "RepeatButton");
   // fltk123: (void) new RadioButton(X1, Y, W, H, "RadioButton");
   Y += H+B;
   // fltk123: (void) new LightButton(X0, Y, W, H, "LightButton");
