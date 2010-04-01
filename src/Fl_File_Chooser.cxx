@@ -81,10 +81,10 @@ void Fl_File_Chooser::cb_fileList(Fl_File_Browser* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_fileList_i(o,v);
 }
 
-void Fl_File_Chooser::cb_previewButton_i(Fl_Check_Button*, void*) {
+void Fl_File_Chooser::cb_previewButton_i(fltk3::CheckButton*, void*) {
   preview(previewButton->value());
 }
-void Fl_File_Chooser::cb_previewButton(Fl_Check_Button* o, void* v) {
+void Fl_File_Chooser::cb_previewButton(fltk3::CheckButton* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->parent()->user_data()))->cb_previewButton_i(o,v);
 }
 
@@ -201,13 +201,13 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
     } // Fl_Tile* o
     { fltk3::Group* o = new fltk3::Group(10, 275, 470, 95);
       { fltk3::Group* o = new fltk3::Group(10, 275, 470, 20);
-        { previewButton = new Fl_Check_Button(10, 275, 73, 20, "Preview");
+        { previewButton = new fltk3::CheckButton(10, 275, 73, 20, "Preview");
           previewButton->shortcut(0x80070);
           previewButton->down_box(fltk3::DOWN_BOX);
           previewButton->value(1);
           previewButton->callback((fltk3::Callback*)cb_previewButton);
           previewButton->label(preview_label);
-        } // Fl_Check_Button* previewButton
+        } // fltk3::CheckButton* previewButton
         { Fl_Box* o = new Fl_Box(115, 275, 365, 20);
           fltk3::Group::current()->resizable(o);
         } // Fl_Box* o

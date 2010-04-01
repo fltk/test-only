@@ -54,10 +54,10 @@ static fltk3::Group *print_panel_controls=(fltk3::Group *)0;
 static Fl_Choice *print_choice=(Fl_Choice *)0;
 static fltk3::Button *print_properties=(fltk3::Button *)0;
 static Fl_Box *print_status=(Fl_Box *)0;
-static Fl_Round_Button *print_all=(Fl_Round_Button *)0;
-static Fl_Round_Button *print_pages=(Fl_Round_Button *)0;
-static Fl_Round_Button *print_selection=(Fl_Round_Button *)0;
-static Fl_Check_Button *print_collate_button=(Fl_Check_Button *)0;
+static fltk3::RoundButton *print_all=(fltk3::RoundButton *)0;
+static fltk3::RoundButton *print_pages=(fltk3::RoundButton *)0;
+static fltk3::RoundButton *print_selection=(fltk3::RoundButton *)0;
+static fltk3::CheckButton *print_collate_button=(fltk3::CheckButton *)0;
 static fltk3::Group *print_collate_group[2]={(fltk3::Group *)0};
 static Fl_Progress *print_progress=(Fl_Progress *)0;
 static fltk3::DoubleBufferWindow *print_properties_panel=(fltk3::DoubleBufferWindow *)0;
@@ -98,17 +98,17 @@ static void cb_print_properties(fltk3::Button*, void*) {
   print_properties_panel->show();
 }
 
-static void cb_print_all(Fl_Round_Button*, void*) {
+static void cb_print_all(fltk3::RoundButton*, void*) {
   print_from->deactivate();
   print_to->deactivate();
 }
 
-static void cb_print_pages(Fl_Round_Button*, void*) {
+static void cb_print_pages(fltk3::RoundButton*, void*) {
   print_from->activate();
   print_to->activate();
 }
 
-static void cb_print_selection(Fl_Round_Button*, void*) {
+static void cb_print_selection(fltk3::RoundButton*, void*) {
   print_from->deactivate();
   print_to->deactivate();
 }
@@ -125,7 +125,7 @@ static void cb_print_copies(Fl_Spinner*, void*) {
   };
 }
 
-static void cb_print_collate_button(Fl_Check_Button*, void*) {
+static void cb_print_collate_button(fltk3::CheckButton*, void*) {
   int i = print_collate_button->value() != 0;
   print_collate_group[i]->show();
   print_collate_group[1 - i]->hide();
@@ -287,22 +287,22 @@ fltk3::DoubleBufferWindow* make_print_panel() {
         o->box(fltk3::THIN_DOWN_BOX);
         o->labelfont(1);
         o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-        { print_all = new Fl_Round_Button(20, 96, 38, 25, Fl_Printer::dialog_all);
+        { print_all = new fltk3::RoundButton(20, 96, 38, 25, Fl_Printer::dialog_all);
           print_all->type(102);
           print_all->down_box(FL_ROUND_DOWN_BOX);
           print_all->value(1);
           print_all->callback((fltk3::Callback*)cb_print_all);
-        } // Fl_Round_Button* print_all
-        { print_pages = new Fl_Round_Button(20, 126, 64, 25, Fl_Printer::dialog_pages);
+        } // fltk3::RoundButton* print_all
+        { print_pages = new fltk3::RoundButton(20, 126, 64, 25, Fl_Printer::dialog_pages);
           print_pages->type(102);
           print_pages->down_box(FL_ROUND_DOWN_BOX);
           print_pages->callback((fltk3::Callback*)cb_print_pages);
-        } // Fl_Round_Button* print_pages
-        { print_selection = new Fl_Round_Button(20, 156, 82, 25, "Selection");
+        } // fltk3::RoundButton* print_pages
+        { print_selection = new fltk3::RoundButton(20, 156, 82, 25, "Selection");
           print_selection->type(102);
           print_selection->down_box(FL_ROUND_DOWN_BOX);
           print_selection->callback((fltk3::Callback*)cb_print_selection);
-        } // Fl_Round_Button* print_selection
+        } // fltk3::RoundButton* print_selection
         { print_from = new Fl_Int_Input(136, 126, 28, 25, Fl_Printer::dialog_from);
           print_from->type(2);
           print_from->textfont(4);
@@ -323,12 +323,12 @@ fltk3::DoubleBufferWindow* make_print_panel() {
           print_copies->callback((fltk3::Callback*)cb_print_copies);
           print_copies->when(FL_WHEN_CHANGED);
         } // Fl_Spinner* print_copies
-        { print_collate_button = new Fl_Check_Button(376, 96, 64, 25, "Collate");
+        { print_collate_button = new fltk3::CheckButton(376, 96, 64, 25, "Collate");
           print_collate_button->down_box(fltk3::DOWN_BOX);
           print_collate_button->callback((fltk3::Callback*)cb_print_collate_button);
           print_collate_button->when(FL_WHEN_CHANGED);
           print_collate_button->deactivate();
-        } // Fl_Check_Button* print_collate_button
+        } // fltk3::CheckButton* print_collate_button
         { print_collate_group[0] = new fltk3::Group(257, 131, 191, 50);
           print_collate_group[0]->deactivate();
           { Fl_Box* o = new Fl_Box(287, 141, 30, 40, "1");

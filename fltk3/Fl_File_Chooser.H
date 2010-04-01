@@ -42,7 +42,7 @@
 #include <fltk3/Fl_Tile.H>
 #include <fltk3/Fl_File_Browser.H>
 #include <fltk3/Fl_Box.H>
-#include <fltk3/Fl_Check_Button.H>
+#include <fltk3/CheckButton.h>
 #include <fltk3/Fl_File_Input.H>
 #include <fltk3/ReturnButton.h>
 #include <fltk3/ask.h>
@@ -91,10 +91,10 @@ private:
   static void cb_fileList(Fl_File_Browser*, void*);
   Fl_Box *previewBox;
 public:
-  Fl_Check_Button *previewButton;
+  fltk3::CheckButton *previewButton;
 private:
-  void cb_previewButton_i(Fl_Check_Button*, void*);
-  static void cb_previewButton(Fl_Check_Button*, void*);
+  void cb_previewButton_i(fltk3::CheckButton*, void*);
+  static void cb_previewButton(fltk3::CheckButton*, void*);
   Fl_File_Input *fileName;
   void cb_fileName_i(Fl_File_Input*, void*);
   static void cb_fileName(Fl_File_Input*, void*);

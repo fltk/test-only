@@ -31,9 +31,9 @@
 // fltk123: #include <fltk/ToggleButton.h>
 #include <fltk/ReturnButton.h>
 #include <fltk/RepeatButton.h>
-// fltk123: #include <fltk/CheckButton.h>
-// fltk123: #include <fltk/RadioButton.h>
-// fltk123: #include <fltk/LightButton.h>
+#include <fltk/CheckButton.h>
+#include <fltk/RadioButton.h>
+#include <fltk/LightButton.h>
 // fltk123: #include <fltk/HighlightButton.h>
 // fltk123: #include <fltk/MultiImage.h>
 // fltk123: #include <fltk/xpmImage.h>
@@ -104,13 +104,13 @@ int main(int argc, char ** argv) {
   rb->tooltip("Push this to revert style to fltk defaults");
   Y += H+B;
   // fltk123: (void) new ToggleButton(X0, Y, W, H, "ToggleButton");
-  // fltk123: (void) new RadioButton(X1, Y, W, H, "RadioButton");
+  (void) new RadioButton(X1, Y, W, H, "RadioButton");
   Y += H+B;
   (void) new RepeatButton(X0, Y, W, H, "RepeatButton");
-  // fltk123: (void) new RadioButton(X1, Y, W, H, "RadioButton");
+  (void) new RadioButton(X1, Y, W, H, "RadioButton");
   Y += H+B;
-  // fltk123: (void) new LightButton(X0, Y, W, H, "LightButton");
-  // fltk123: (void) new RadioButton(X1, Y, W, H, "RadioButton");
+  (void) new LightButton(X0, Y, W, H, "LightButton");
+  (void) new RadioButton(X1, Y, W, H, "RadioButton");
   Y += H+B;
   // The box of the higlight button will appear when belowmouse
   // when combined with image() as below, you get the border + the image appearing when belowmouse()
@@ -118,7 +118,7 @@ int main(int argc, char ** argv) {
   //HighlightButton* hb = 
     // fltk123: new HighlightButton(X0, Y, W, H, "HighlightButton");
 
-  // fltk123: new CheckButton(X1, Y, W, H, "CheckButton");
+  new CheckButton(X1, Y, W, H, "CheckButton");
 
   Y += H+B;
   Button * b = new Button(X0, Y, W, H, "push/release img");

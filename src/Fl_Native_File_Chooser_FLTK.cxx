@@ -69,7 +69,7 @@ Fl_Native_File_Chooser::Fl_Native_File_Chooser(int val) {
   fltk3::Button *b = _file_chooser->previewButton;
   fltk3::Window *w = b->window();
   fltk3::Group::current(w);		// adds a "Show hidden files" check button in _file_chooser's window
-  show_hidden = new Fl_Check_Button(b->x() + b->w() + 10, b->y(), 145, b->h(), "Show hidden files");
+  show_hidden = new fltk3::CheckButton(b->x() + b->w() + 10, b->y(), 145, b->h(), "Show hidden files");
   show_hidden->callback((fltk3::Callback*)show_hidden_cb, this);
   my_fileList = _file_chooser->browser();
   _old_dir = 0;						// to detect directory changes
@@ -471,7 +471,7 @@ const char* Fl_Native_File_Chooser::preset_file() const {
   return(_preset_file);
 }
 
-void Fl_Native_File_Chooser::show_hidden_cb(Fl_Check_Button *o, void *data)
+void Fl_Native_File_Chooser::show_hidden_cb(fltk3::CheckButton *o, void *data)
 {
   Fl_Native_File_Chooser *mychooser = (Fl_Native_File_Chooser *)data;
   if (o->value()) {

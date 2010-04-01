@@ -33,11 +33,11 @@
 // just like Flame's buttons.
 
 #include <fltk3/run.h>
-#include <fltk3/Fl_Light_Button.H>
+#include <fltk3/LightButton.h>
 #include <fltk3/fl_draw.H>
 #include "flstring.h"
 
-void Fl_Light_Button::draw() {
+void fltk3::LightButton::draw() {
   if (box()) draw_box(this==fltk3::pushed() ? fl_down(box()) : box(), color());
   Fl_Color col = value() ? (active_r() ? selection_color() :
                             fl_inactive(selection_color())) : color();
@@ -148,7 +148,7 @@ void Fl_Light_Button::draw() {
   if (fltk3::focus() == this) draw_focus();
 }
 
-int Fl_Light_Button::handle(int event) {
+int fltk3::LightButton::handle(int event) {
   switch (event) {
   case fltk3::RELEASE:
     if (box()) redraw();
@@ -158,11 +158,11 @@ int Fl_Light_Button::handle(int event) {
 }
 
 /**
-  Creates a new Fl_Light_Button widget using the given
+  Creates a new fltk3::LightButton widget using the given
   position, size, and label string.
   <P>The destructor deletes the check button.
 */
-Fl_Light_Button::Fl_Light_Button(int X, int Y, int W, int H, const char* l)
+fltk3::LightButton::LightButton(int X, int Y, int W, int H, const char* l)
 : fltk3::Button(X, Y, W, H, l) {
   type(FL_TOGGLE_BUTTON);
   selection_color(FL_YELLOW);

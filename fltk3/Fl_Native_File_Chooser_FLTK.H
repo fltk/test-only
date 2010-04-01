@@ -98,9 +98,9 @@ private:
 
   // added by MG
   Fl_File_Browser *my_fileList;
-  Fl_Check_Button *show_hidden;
+  fltk3::CheckButton *show_hidden;
   int prev_filtervalue;
-  static void show_hidden_cb(Fl_Check_Button *o, void *data);
+  static void show_hidden_cb(fltk3::CheckButton *o, void *data);
   static void remove_hidden_files(Fl_File_Browser *my_fileList);
 
   // Private methods

@@ -490,15 +490,15 @@ inline void fl_set_button_shortcut(fltk3::Widget* b, const char* s,int=0) {
     ((fltk3::Button*)b)->shortcut(s);}
 //#define fl_set_object_shortcut(b,s) fl_set_button_shortcut(b,s)
 
-#include "Fl_Light_Button.H"
-forms_constructor(Fl_Light_Button, fl_add_lightbutton)
+#include "LightButton.h"
+forms_constructor(fltk3::LightButton, fl_add_lightbutton)
 
-#include "Fl_Round_Button.H"
-forms_constructor(Fl_Round_Button, fl_add_roundbutton)
-forms_constructor(Fl_Round_Button, fl_add_round3dbutton)
+#include "RoundButton.h"
+forms_constructor(fltk3::RoundButton, fl_add_roundbutton)
+forms_constructor(fltk3::RoundButton, fl_add_round3dbutton)
 
-#include "Fl_Check_Button.H"
-forms_constructor(Fl_Check_Button, fl_add_checkbutton)
+#include "CheckButton.h"
+forms_constructor(fltk3::CheckButton, fl_add_checkbutton)
 
 inline fltk3::Widget* fl_add_bitmapbutton(int t,int x,int y,int w,int h,const char* l) {fltk3::Widget* o = fl_add_button(t,x,y,w,h,l); return o;}
 inline void fl_set_bitmapbutton_data(fltk3::Widget* o,int a,int b,uchar* c) {

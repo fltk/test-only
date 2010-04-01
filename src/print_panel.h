@@ -38,10 +38,10 @@
 #include <fltk3/Fl_Choice.H>
 #include <fltk3/Button.h>
 #include <fltk3/Fl_Box.H>
-#include <fltk3/Fl_Round_Button.H>
+#include <fltk3/RoundButton.h>
 #include <fltk3/Fl_Input.H>
 #include <fltk3/Fl_Spinner.H>
-#include <fltk3/Fl_Check_Button.H>
+#include <fltk3/CheckButton.h>
 #include <fltk3/ReturnButton.h>
 #include <fltk3/Fl_Progress.H>
 static fltk3::DoubleBufferWindow* make_print_panel();

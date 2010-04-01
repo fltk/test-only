@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.H 6614 2009-01-01 16:11:32Z matt $"
+// "$Id: LightButton.h 6614 2009-01-01 16:11:32Z matt $"
 //
 // Lighted button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,12 +26,14 @@
 //
 
 /* \file
-   Fl_Light_Button widget . */
+   LightButton widget . */
 
-#ifndef Fl_Light_Button_H
-#define Fl_Light_Button_H
+#ifndef Fltk3_Light_Button_H
+#define Fltk3_Light_Button_H
 
 #include "Button.h"
+
+namespace fltk3 {
 
 /**
   <P>This subclass displays the "on" state by turning on a light, 
@@ -41,19 +43,21 @@
 
   Buttons generate callbacks when they are clicked by the user.  You
   control exactly when and how by changing the values for type() and when().
-  <P ALIGN=CENTER>\image html Fl_Light_Button.gif</P> 
-  \image latex Fl_Light_Button.eps "Fl_Light_Button" width=4cm
+  <P ALIGN=CENTER>\image html fltk3::LightButton.gif</P> 
+  \image latex fltk3::LightButton.eps "fltk3::LightButton" width=4cm
 */
-class FL_EXPORT Fl_Light_Button : public fltk3::Button {
+class FL_EXPORT LightButton : public Button {
 protected:
     virtual void draw();
 public:
     virtual int handle(int);
-    Fl_Light_Button(int x,int y,int w,int h,const char *l = 0);
+    LightButton(int x,int y,int w,int h,const char *l = 0);
 };
+
+}
 
 #endif
 
 //
-// End of "$Id: Fl_Light_Button.H 6614 2009-01-01 16:11:32Z matt $".
+// End of "$Id: LightButton.h 6614 2009-01-01 16:11:32Z matt $".
 //

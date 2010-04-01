@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.H 6614 2009-01-01 16:11:32Z matt $"
+// "$Id: CheckButton.h 6614 2009-01-01 16:11:32Z matt $"
 //
 // Check button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,35 +26,39 @@
 //
 
 /* \file
-   Fl_Check_Button widget . */
+   CheckButton widget . */
 
-#ifndef Fl_Check_Button_H
-#define Fl_Check_Button_H
+#ifndef Fltk3_Check_Button_H
+#define Fltk3_Check_Button_H
 
-#include "Fl_Light_Button.H"
+#include "LightButton.H"
+
+namespace fltk3 {
 
 /**
-  \class Fl_Check_Button
+  \class CheckButton
   \brief A button with an "checkmark" to show its status.
 
-  \image html Fl_Check_Button.gif
-  \image latex Fl_Check_Button.eps  "Fl_Check_Button" width=4cm
+  \image html fltk3::CheckButton.gif
+  \image latex fltk3::CheckButton.eps  "fltk3::CheckButton" width=4cm
   Buttons generate callbacks when they are clicked by the user. You control
   exactly when and how by changing the values for type() and when().
 
-  The Fl_Check_Button subclass displays its "ON" state by showing a "checkmark"
+  The CheckButton subclass displays its "ON" state by showing a "checkmark"
   rather than drawing itself pushed in.
   
-  \todo Refactor Fl_Check_Button doxygen comments (add color() info etc?)
-  \todo Generate Fl_Check_Button.gif with visible checkmark.
+  \todo Refactor CheckButton doxygen comments (add color() info etc?)
+  \todo Generate fltk3::CheckButton.gif with visible checkmark.
  */
-class FL_EXPORT Fl_Check_Button : public Fl_Light_Button {
+class FL_EXPORT CheckButton : public LightButton {
 public:
-  Fl_Check_Button(int X, int Y, int W, int H, const char *L = 0);
+  CheckButton(int X, int Y, int W, int H, const char *L = 0);
 };
+  
+}
 
 #endif
 
 //
-// End of "$Id: Fl_Check_Button.H 6614 2009-01-01 16:11:32Z matt $".
+// End of "$Id: CheckButton.h 6614 2009-01-01 16:11:32Z matt $".
 //

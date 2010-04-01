@@ -28,8 +28,8 @@
 // provided for back-compatibility only
 
 #ifndef Fl_Toggle_Round_Button
-#include "Fl_Round_Button.H"
-#define Fl_Toggle_Round_Button Fl_Round_Button
+#include "RoundButton.h"
+#define Fl_Toggle_Round_Button fltk3::RoundButton
 #endif
 
 //

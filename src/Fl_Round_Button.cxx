@@ -30,14 +30,14 @@
 // another box type, for compatibility with Forms.
 
 #include <fltk3/run.h>
-#include <fltk3/Fl_Round_Button.H>
+#include <fltk3/RoundButton.h>
 
 /**
-  Creates a new Fl_Round_Button widget using the given
+  Creates a new fltk3::RoundButton widget using the given
   position, size, and label string.
 */
-Fl_Round_Button::Fl_Round_Button(int X,int Y,int W,int H, const char *l)
-: Fl_Light_Button(X,Y,W,H,l) {
+fltk3::RoundButton::RoundButton(int X,int Y,int W,int H, const char *l)
+: fltk3::LightButton(X,Y,W,H,l) {
   box(fltk3::NO_BOX);
   down_box(fltk3::ROUND_DOWN_BOX);
   selection_color(FL_FOREGROUND_COLOR);
