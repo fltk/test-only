@@ -81,7 +81,7 @@ CPPFILES = \
 	Fl_Scrollbar.cxx \
 	Fl_Shared_Image.cxx \
 	Fl_Single_Window.cxx \
-	Fl_Slider.cxx \
+	fltk3::Slider.cxx \
 	Fl_Table.cxx \
 	Fl_Table_Row.cxx \
 	Fl_Tabs.cxx \
@@ -95,10 +95,10 @@ CPPFILES = \
 	Fl_Tree_Item_Array.cxx \
 	Fl_Tree_Prefs.cxx \
 	Fl_Tooltip.cxx \
-	Fl_Valuator.cxx \
+	fltk3::Valuator.cxx \
 	Fl_Value_Input.cxx \
 	Fl_Value_Output.cxx \
-	Fl_Value_Slider.cxx \
+	fltk3::ValueSlider.cxx \
 	Fl_Widget.cxx \
 	Fl_Window.cxx \
 	Fl_Window_fullscreen.cxx \

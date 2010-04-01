@@ -777,36 +777,36 @@ inline void fl_set_positioner_ystep(fltk3::Widget* o, double v) {
 inline void fl_set_positioner_return(fltk3::Widget* o, int v) {
     ((Fl_Positioner*)o)->when((Fl_When)(v|FL_WHEN_RELEASE));}
 
-#include "Fl_Slider.H"
+#include "Slider.h"
 
 #define FL_HOR_BROWSER_SLIDER FL_HOR_SLIDER
 #define FL_VERT_BROWSER_SLIDER FL_VERT_SLIDER
 
-forms_constructort(Fl_Slider, fl_add_slider)
+forms_constructort(fltk3::Slider, fl_add_slider)
 #define FL_SLIDER_COL1 FL_GRAY
 inline void fl_set_slider_value(fltk3::Widget* o, double v) {
-    ((Fl_Slider*)o)->value(v);}
+    ((fltk3::Slider*)o)->value(v);}
 inline double fl_get_slider_value(fltk3::Widget* o) {
-    return ((Fl_Slider*)o)->value();}
+    return ((fltk3::Slider*)o)->value();}
 inline void fl_set_slider_bounds(fltk3::Widget* o, double a, double b) {
-    ((Fl_Slider*)o)->bounds(a, b);}
+    ((fltk3::Slider*)o)->bounds(a, b);}
 inline void fl_get_slider_bounds(fltk3::Widget* o, float* a, float* b) {
-  *a = float(((Fl_Slider*)o)->minimum());
-  *b = float(((Fl_Slider*)o)->maximum());
+  *a = float(((fltk3::Slider*)o)->minimum());
+  *b = float(((fltk3::Slider*)o)->maximum());
 }
 inline void fl_set_slider_return(fltk3::Widget* o, int i) {
-    ((Fl_Slider*)o)->when((Fl_When)(i|FL_WHEN_RELEASE));}
+    ((fltk3::Slider*)o)->when((Fl_When)(i|FL_WHEN_RELEASE));}
 inline void fl_set_slider_step(fltk3::Widget* o, double v) {
-    ((Fl_Slider*)o)->step(v);}
+    ((fltk3::Slider*)o)->step(v);}
 // inline void fl_set_slider_increment(fltk3::Widget* o, double v, double);
 inline void fl_set_slider_size(fltk3::Widget* o, double v) {
-    ((Fl_Slider*)o)->slider_size(v);}
+    ((fltk3::Slider*)o)->slider_size(v);}
 
-#include "Fl_Value_Slider.H"
-forms_constructor(Fl_Value_Slider, fl_add_valslider)
+#include "ValueSlider.h"
+forms_constructor(fltk3::ValueSlider, fl_add_valslider)
 
 inline void fl_set_slider_precision(fltk3::Widget* o, int i) {
-    ((Fl_Value_Slider*)o)->precision(i);}
+    ((fltk3::ValueSlider*)o)->precision(i);}
 // filter function!
 
 // The forms text object was the same as an Fl_Box except it inverted the

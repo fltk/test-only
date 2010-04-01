@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.H 6902 2009-09-27 11:06:56Z matt $"
+// "$Id: ValueSlider.H 6902 2009-09-27 11:06:56Z matt $"
 //
 // Value slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,20 +26,22 @@
 //
 
 /* \file
-   Fl_Value_Slider widget . */
+   ValueSlider widget . */
 
-#ifndef Fl_Value_Slider_H
-#define Fl_Value_Slider_H
+#ifndef Fltk3_Value_Slider_H
+#define Fltk3_Value_Slider_H
 
-#include "Fl_Slider.H"
+#include "Slider.h"
+
+namespace fltk3 {
 
 /**
-  The Fl_Value_Slider widget is a Fl_Slider widget
+  The ValueSlider widget is a fltk3::Slider widget
   with a box displaying the current value.
   <P ALIGN=CENTER>\image html value_slider.gif 
-  \image latex  value_slider.eps "Fl_Value_Slider" width=4cm
+  \image latex  value_slider.eps "ValueSlider" width=4cm
 */
-class FL_EXPORT Fl_Value_Slider : public Fl_Slider {
+class FL_EXPORT ValueSlider : public fltk3::Slider {
     Fl_Font textfont_;
     Fl_Fontsize textsize_;
     Fl_Color textcolor_;
@@ -47,7 +49,7 @@ protected:
     void draw();
 public:
     int handle(int);
-    Fl_Value_Slider(int x,int y,int w,int h, const char *l = 0);
+    ValueSlider(int x,int y,int w,int h, const char *l = 0);
     /**    Gets the typeface of the text in the value box.  */
     Fl_Font textfont() const {return textfont_;}
     /**    Sets the typeface of the text in the value box.  */
@@ -61,9 +63,11 @@ public:
     /**    Sets the color of the text in the value box.  */
     void textcolor(Fl_Color s) {textcolor_ = s;}
 };
+  
+}
 
 #endif
 
 //
-// End of "$Id: Fl_Value_Slider.H 6902 2009-09-27 11:06:56Z matt $".
+// End of "$Id: ValueSlider.H 6902 2009-09-27 11:06:56Z matt $".
 //

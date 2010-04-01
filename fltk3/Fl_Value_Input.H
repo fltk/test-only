@@ -31,7 +31,7 @@
 #ifndef Fl_Value_Input_H
 #define Fl_Value_Input_H
 
-#include "Fl_Valuator.H"
+#include "Valuator.h"
 #include "Input.h"
 
 /**
@@ -62,7 +62,7 @@
   <P ALIGN="CENTER">\image html Fl_Value_Input.gif 
   \image latex  Fl_Value_Input.eps "Fl_Value_Input" width=8cm
 */
-class FL_EXPORT Fl_Value_Input : public Fl_Valuator {
+class FL_EXPORT Fl_Value_Input : public fltk3::Valuator {
 public:
   /* This is the encapsulated Fl_input attribute to which 
   this class delegates the value font, color and shortcut */

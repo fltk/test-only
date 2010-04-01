@@ -31,8 +31,8 @@
 #ifndef Fl_Roller_H
 #define Fl_Roller_H
 
-#ifndef Fl_Valuator_H
-#include "Fl_Valuator.H"
+#ifndef fltk3::Valuator_H
+#include "Valuator.h"
 #endif
 
 /**
@@ -41,7 +41,7 @@
   <P ALIGN=CENTER>\image html Fl_Roller.gif 
   \image latex Fl_Roller.eps "Fl_Roller" width=4cm
 */
-class FL_EXPORT Fl_Roller : public Fl_Valuator {
+class FL_EXPORT Fl_Roller : public fltk3::Valuator {
 protected:
   void draw();
 public:

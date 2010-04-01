@@ -239,7 +239,9 @@ public:
   static int test_shortcut(const char*);
   int contains(const Fl_Widget *w) const ;
   int inside(const Fl_Widget* w) const {return w ? w->contains(this) : 0;}
-  void redraw();
+#endif
+  void redraw() { _p->redraw(); }
+#if 0
   void redraw_label();
   uchar damage() const {return damage_;}
   void clear_damage(uchar c = 0) {damage_ = c;}

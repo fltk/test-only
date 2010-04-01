@@ -31,7 +31,7 @@
 #ifndef Fl_Scrollbar_H
 #define Fl_Scrollbar_H
 
-#include "Fl_Slider.H"
+#include "Slider.h"
 
 /**
   The Fl_Scrollbar widget displays a slider with arrow buttons at
@@ -44,12 +44,12 @@
   Scrollbars have step(1) preset (they always return integers). If
   desired you can set the step() to non-integer values. You will then
   have to use casts to get at the floating-point versions of value()
-  from Fl_Slider.
+  from fltk3::Slider.
 
   \image html  scrollbar.gif 
   \image latex scrollbar.eps "Fl_Scrollbar" width=4cm
 */
-class FL_EXPORT Fl_Scrollbar : public Fl_Slider {
+class FL_EXPORT Fl_Scrollbar : public fltk3::Slider {
 
   int linesize_;
   int pushed_;
@@ -66,12 +66,12 @@ public:
 
   /**
     Gets the integer value (position) of the slider in the scrollbar.
-    You can get the floating point value with Fl_Slider::value().
+    You can get the floating point value with fltk3::Slider::value().
 
     \see Fl_Scrollbar::value(int p)
     \see Fl_Scrollbar::value(int pos, int size, int first, int total)
   */
-  int value() const {return int(Fl_Slider::value());}
+  int value() const {return int(fltk3::Slider::value());}
 
   /**
     Sets the value (position) of the slider in the scrollbar.
@@ -79,7 +79,7 @@ public:
     \see Fl_Scrollbar::value()
     \see Fl_Scrollbar::value(int pos, int size, int first, int total)
   */
-  int value(int p) {return int(Fl_Slider::value((double)p));}
+  int value(int p) {return int(fltk3::Slider::value((double)p));}
 
   /**
     Sets the position, size and range of the slider in the scrollbar.
@@ -93,7 +93,7 @@ public:
     to a callback from this scrollbar).
     All necessary calls to redraw() are done.
 
-    Calls Fl_Slider::scrollvalue(int pos, int size, int first, int total).
+    Calls fltk3::Slider::scrollvalue(int pos, int size, int first, int total).
   */
   int value(int pos, int size, int first, int total) {
     return scrollvalue(pos, size, first, total);

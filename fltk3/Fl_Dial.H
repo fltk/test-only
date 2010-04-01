@@ -31,8 +31,8 @@
 #ifndef Fl_Dial_H
 #define Fl_Dial_H
 
-#ifndef Fl_Valuator_H
-#include "Fl_Valuator.H"
+#ifndef fltk3::Valuator_H
+#include "Valuator.h"
 #endif
 
 // values for type():
@@ -53,7 +53,7 @@
   </UL>
 
 */
-class FL_EXPORT Fl_Dial : public Fl_Valuator {
+class FL_EXPORT Fl_Dial : public fltk3::Valuator {
 
   short a1,a2;
 

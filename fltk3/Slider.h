@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.H 7365 2010-03-30 15:18:29Z matt $"
+// "$Id: Slider.H 7365 2010-03-30 15:18:29Z matt $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,14 +26,12 @@
 //
 
 /* \file
-   Fl_Slider widget . */
+   Slider widget . */
 
-#ifndef Fl_Slider_H
-#define Fl_Slider_H
+#ifndef Fltk3_Slider_H
+#define Fltk3_Slider_H
 
-#ifndef Fl_Valuator_H
-#include "Fl_Valuator.H"
-#endif
+#include "Valuator.h"
 
 // values for type(), lowest bit indicate horizontal:
 #define FL_VERT_SLIDER		0
@@ -43,8 +41,10 @@
 #define FL_VERT_NICE_SLIDER	4
 #define FL_HOR_NICE_SLIDER	5
 
+namespace fltk3 {
+
 /**
-  The Fl_Slider widget contains a sliding knob inside a box. It if
+  The Slider widget contains a sliding knob inside a box. It if
   often used as a scrollbar.  Moving the box all the way to the
   top/left sets it to the minimum(), and to the bottom/right to the
   maximum().  The minimum() may be greater than the maximum() to
@@ -65,13 +65,13 @@
       nice looking control knob.
 
   \image html  slider.gif 
-  \image latex slider.eps "Fl_Slider" width=4cm
+  \image latex slider.eps "Slider" width=4cm
 */
-class FL_EXPORT Fl_Slider : public Fl_Valuator {
+class FL_EXPORT Slider : public fltk3::Valuator {
 
   float slider_size_;
   uchar slider_;
-  void _Fl_Slider();
+  void _Slider();
   void draw_bg(int, int, int, int);
 
 protected:
@@ -84,8 +84,8 @@ protected:
 public:
 
   int handle(int);
-  Fl_Slider(int X,int Y,int W,int H, const char *L = 0);
-  Fl_Slider(uchar t,int X,int Y,int W,int H, const char *L);
+  Slider(int X,int Y,int W,int H, const char *L = 0);
+  Slider(uchar t,int X,int Y,int W,int H, const char *L);
 
   int scrollvalue(int pos,int size,int first,int total);
   void bounds(double a, double b);
@@ -112,9 +112,11 @@ public:
   /** Sets the slider box type. */
   void slider(fltk3::Boxtype c) {slider_ = c;}
 };
+  
+}
 
 #endif
 
 //
-// End of "$Id: Fl_Slider.H 7365 2010-03-30 15:18:29Z matt $".
+// End of "$Id: Slider.H 7365 2010-03-30 15:18:29Z matt $".
 //

@@ -175,7 +175,7 @@ void Fl_Roller::draw() {
   <P>Inherited destructor destroys the valuator.
 */
 Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L)
-  : Fl_Valuator(X,Y,W,H,L) {
+  : fltk3::Valuator(X,Y,W,H,L) {
   box(fltk3::UP_BOX);
   step(1,1000);
 }

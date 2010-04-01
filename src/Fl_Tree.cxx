@@ -205,7 +205,7 @@ void Fl_Tree::draw() {
     _vscroll->resize(sx,sy,sw,sh);
     _vscroll->slider_size(float(ch)/float(ydiff));
   } else {
-    _vscroll->Fl_Slider::value(0);
+    _vscroll->fltk3::Slider::value(0);
     _vscroll->hide();
   }
   fl_push_clip(cx,cy,cw,ch);

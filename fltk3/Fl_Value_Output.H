@@ -31,8 +31,8 @@
 #ifndef Fl_Value_Output_H
 #define Fl_Value_Output_H
 
-#ifndef Fl_Valuator_H
-#include "Fl_Valuator.H"
+#ifndef fltk3::Valuator_H
+#include "Valuator.h"
 #endif
 
 /**
@@ -47,7 +47,7 @@
   <P ALIGN=CENTER>\image html Fl_Value_Output.gif 
   \image latex  Fl_Value_Output.eps "Fl_Value_Output" width=8cm
 */
-class FL_EXPORT Fl_Value_Output : public Fl_Valuator {
+class FL_EXPORT Fl_Value_Output : public fltk3::Valuator {
   Fl_Font textfont_;
   Fl_Fontsize textsize_;
   uchar soft_;

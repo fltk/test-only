@@ -33,8 +33,8 @@
 #ifndef Fl_Counter_H
 #define Fl_Counter_H
 
-#ifndef Fl_Valuator_H
-#include "Fl_Valuator.H"
+#ifndef fltk3::Valuator_H
+#include "Valuator.h"
 #endif
 
 // values for type():
@@ -54,7 +54,7 @@
   \li \c FL_NORMAL_COUNTER: Displays a counter with 4 arrow buttons.
   \li \c FL_SIMPLE_COUNTER: Displays a counter with only 2 arrow buttons.
 */
-class FL_EXPORT Fl_Counter : public Fl_Valuator {
+class FL_EXPORT Fl_Counter : public fltk3::Valuator {
 
   Fl_Font textfont_;
   Fl_Fontsize textsize_;
@@ -87,18 +87,18 @@ public:
     Sets the increments for the normal and large step buttons.
     \param[in] a, b normal and large step increments.
   */
-  void step(double a,double b) {Fl_Valuator::step(a); lstep_ = b;}
+  void step(double a,double b) {fltk3::Valuator::step(a); lstep_ = b;}
 
   /**
     Sets the increment for the normal step buttons.
     \param[in] a normal step increment.
   */
-  void step(double a) {Fl_Valuator::step(a);}
+  void step(double a) {fltk3::Valuator::step(a);}
 
   /**
     Returns the increment for normal step buttons.
    */
-  double step() const {return Fl_Valuator::step();}
+  double step() const {return fltk3::Valuator::step();}
 
   /** Gets the text font */
   Fl_Font textfont() const {return textfont_;}

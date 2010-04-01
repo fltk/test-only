@@ -67,12 +67,12 @@ public:
     _p->wrapper(this);
   }
   
+  int value(int v) { return ((fltk3::Button*)_p)->value(v); }
+  char value() const { return ((fltk3::Button*)_p)->value(); }
+  int set() { return ((fltk3::Button*)_p)->set(); }
+  int clear() { return ((fltk3::Button*)_p)->clear(); }
+  void setonly() { ((fltk3::Button*)_p)->setonly(); }
 #if 0
-  int value(int v);
-  char value() const {return value_;}
-  int set() {return value(1);}
-  int clear() {return value(0);}
-  void setonly(); // this should only be called on FL_RADIO_BUTTONs
   int shortcut() const {return shortcut_;}
   void shortcut(int s) {shortcut_ = s;}
   Fl_Boxtype down_box() const {return (Fl_Boxtype)down_box_;}

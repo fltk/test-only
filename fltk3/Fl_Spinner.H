@@ -101,7 +101,7 @@ class Fl_Spinner : public fltk3::Group
 
                   if (format_[0]=='%'&&format_[1]=='.'&&format_[2]=='*') {  // precision argument
                     // this code block is a simplified version of
-                    // Fl_Valuator::format() and works well (but looks ugly)
+                    // fltk3::Valuator::format() and works well (but looks ugly)
                     int c = 0;
                     char temp[64], *sp = temp;
                     sprintf(temp, "%.12f", step_);

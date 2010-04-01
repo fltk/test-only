@@ -31,12 +31,12 @@
 #ifndef Fl_Hor_Slider_H
 #define Fl_Hor_Slider_H
 
-#include "Fl_Slider.H"
+#include "Slider.h"
 
-class Fl_Hor_Slider : public Fl_Slider {
+class Fl_Hor_Slider : public fltk3::Slider {
 public:
     Fl_Hor_Slider(int X,int Y,int W,int H,const char *l=0)
-	: Fl_Slider(X,Y,W,H,l) {type(FL_HOR_SLIDER);}
+	: fltk3::Slider(X,Y,W,H,l) {type(FL_HOR_SLIDER);}
 };
 
 #endif

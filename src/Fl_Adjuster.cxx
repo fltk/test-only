@@ -169,7 +169,7 @@ int Fl_Adjuster::handle(int event) {
   <P> Inherited destructor destroys the Valuator.
 */
 Fl_Adjuster::Fl_Adjuster(int X, int Y, int W, int H, const char* l)
-  : Fl_Valuator(X, Y, W, H, l) {
+  : fltk3::Valuator(X, Y, W, H, l) {
   box(fltk3::UP_BOX);
   step(1, 10000);
   selection_color(FL_SELECTION_COLOR);

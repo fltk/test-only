@@ -26,23 +26,23 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/Fl_Value_Slider.H>
+#include <fltk3/ValueSlider.h>
 #include <fltk3/fl_draw.H>
 #include <math.h>
 
 /**
-  Creates a new Fl_Value_Slider widget using the given
+  Creates a new fltk3::ValueSlider widget using the given
   position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
 */
-Fl_Value_Slider::Fl_Value_Slider(int X, int Y, int W, int H, const char*l)
-: Fl_Slider(X,Y,W,H,l) {
+fltk3::ValueSlider::ValueSlider(int X, int Y, int W, int H, const char*l)
+: fltk3::Slider(X,Y,W,H,l) {
   step(1,100);
   textfont_ = fltk3::HELVETICA;
   textsize_ = 10;
   textcolor_ = FL_FOREGROUND_COLOR;
 }
 
-void Fl_Value_Slider::draw() {
+void fltk3::ValueSlider::draw() {
   int sxx = x(), syy = y(), sww = w(), shh = h();
   int bxx = x(), byy = y(), bww = w(), bhh = h();
   if (horizontal()) {
@@ -51,7 +51,7 @@ void Fl_Value_Slider::draw() {
     syy += 25; bhh = 25; shh -= 25;
   }
   if (damage()&FL_DAMAGE_ALL) draw_box(box(),sxx,syy,sww,shh,color());
-  Fl_Slider::draw(sxx+fltk3::box_dx(box()),
+  fltk3::Slider::draw(sxx+fltk3::box_dx(box()),
 		  syy+fltk3::box_dy(box()),
 		  sww-fltk3::box_dw(box()),
 		  shh-fltk3::box_dh(box()));
@@ -63,7 +63,7 @@ void Fl_Value_Slider::draw() {
   fl_draw(buf, bxx, byy, bww, bhh, fltk3::ALIGN_CLIP);
 }
 
-int Fl_Value_Slider::handle(int event) {
+int fltk3::ValueSlider::handle(int event) {
   if (event == fltk3::PUSH && fltk3::visible_focus()) {
     fltk3::focus(this);
     redraw();
@@ -74,7 +74,7 @@ int Fl_Value_Slider::handle(int event) {
   } else {
     syy += 25; shh -= 25;
   }
-  return Fl_Slider::handle(event,
+  return fltk3::Slider::handle(event,
 			   sxx+fltk3::box_dx(box()),
 			   syy+fltk3::box_dy(box()),
 			   sww-fltk3::box_dw(box()),

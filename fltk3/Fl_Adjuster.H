@@ -33,8 +33,8 @@
 #ifndef Fl_Adjuster_H
 #define Fl_Adjuster_H
 
-#ifndef Fl_Valuator_H
-#include "Fl_Valuator.H"
+#ifndef fltk3::Valuator_H
+#include "Valuator.h"
 #endif
 
 /**
@@ -49,7 +49,7 @@
   increments by 10 times the  amount dragging by a pixel does. Shift +
   click decrements by 10 times  the amount.
 */
-class FL_EXPORT Fl_Adjuster : public Fl_Valuator {
+class FL_EXPORT Fl_Adjuster : public fltk3::Valuator {
   int drag;
   int ix;
   int soft_;

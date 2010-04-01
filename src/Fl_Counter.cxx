@@ -193,12 +193,12 @@ Fl_Counter::~Fl_Counter() {
   \param[in] L widget label, default is no label
  */
 Fl_Counter::Fl_Counter(int X, int Y, int W, int H, const char* L)
-  : Fl_Valuator(X, Y, W, H, L) {
+  : fltk3::Valuator(X, Y, W, H, L) {
   box(fltk3::UP_BOX);
   selection_color(FL_INACTIVE_COLOR); // was FL_BLUE
   align(fltk3::ALIGN_BOTTOM);
   bounds(-1000000.0, 1000000.0);
-  Fl_Valuator::step(1, 10);
+  fltk3::Valuator::step(1, 10);
   lstep_ = 1.0;
   mouseobj = 0;
   textfont_ = fltk3::HELVETICA;
