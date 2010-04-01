@@ -1,39 +1,19 @@
 //
 // "$Id: Input.h 4886 2006-03-30 09:55:32Z fabien $"
 //
-// One-line text input field.
-//
-// Copyright 1998-2006 by Bill Spitzak and others.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
-#ifndef fltk_Input_h
-#define fltk_Input_h
+#ifndef fltk2_Input_h
+#define fltk2_Input_h
 
-#ifndef fltk_Widget_h
+#include <fltk3/Input.h>
+
 #include "Widget.h"
-#endif
 
 namespace fltk {
 
 class FL_API Input : public Widget {
 public:
+#if 0 // fltk123:
   enum { // values for type()
     NORMAL	= 0,
     FLOAT_INPUT = 1,
@@ -42,8 +22,12 @@ public:
     MULTILINE	= 4,
     WORDWRAP	= 5
   };
-
-  Input(int, int, int, int, const char* = 0);
+#endif
+  Input(int x, int y, int w, int h, const char *l = 0) {
+    _p = new fltk3::Input(x, y, w, h, l);
+    _p->wrapper(this);
+  }
+#if 0 // fltk123:  
   ~Input();
   static NamedStyle* default_style;
 
@@ -52,22 +36,24 @@ public:
   int handle(int);
   int handle(int event, const Rectangle&);
   bool handle_key();
-
-  bool text(const char*);
-  bool text(const char*, int);
-  bool static_text(const char*);
-  bool static_text(const char*, int);
-  const char* text() const {return text_;}
+#endif
+  
+  bool text(const char *v) { return ((fltk3::Input*)_p)->value(v); }
+  bool text(const char *v, int a) { return ((fltk3::Input*)_p)->value(v, a); }
+  bool static_text(const char *v) { return ((fltk3::Input*)_p)->static_value(v); }
+  bool static_text(const char *v, int a) { return ((fltk3::Input*)_p)->static_value(v, a); }
+  const char* text() const { return ((fltk3::Input*)_p)->value(); }
+#if 0 // fltk123:
   char at(int i) const {return text_[i];}
 #ifdef FLTK_1_WIDGET  // back-compatability section:
   char index(int i) const {return text_[i];}
 #endif
-#ifndef SKIP_DEPRECIATED
-  bool value(const char* v) {return text(v);}
-  bool value(const char* v, int n) {return text(v,n);}
-  bool static_value(const char* v) {return static_text(v);}
-  const char* value() const {return text_;}
 #endif
+  bool value(const char* v) {return text(v);} // DEPRECIATED
+  bool value(const char* v, int n) {return text(v,n);} // DEPRECIATED
+  bool static_value(const char* v) {return static_text(v);} // DEPRECIATED
+  const char* value() const {return text();} // DEPRECIATED
+#if 0 // fltk123:
   int size() const {return size_;}
   void reserve(int newsize);
 
@@ -97,30 +83,7 @@ public:
   int xscroll() const {return xscroll_;}
   int yscroll() const {return yscroll_;}
 
-private:
-
-  const char* text_;
-  char* buffer;
-
-  int size_;
-  int bufsize;
-  int position_;
-  int mark_;
-  int xscroll_, yscroll_;
-  int mu_p;
-  int label_width;
-
-  const char* expand(const char*, char*, int) const;
-  float expandpos(const char*, const char*, const char*, int*) const;
-  void minimal_update(int, int);
-  void minimal_update(int p);
-  void erase_cursor_at(int p);
-
-  void setfont() const;
-
-  void shift_position(int p);
-  void shift_up_down_position(int p);
-
+#endif
 };
 
 }

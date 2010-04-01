@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.H 7365 2010-03-30 15:18:29Z matt $"
+// "$Id: Input_.H 7365 2010-03-30 15:18:29Z matt $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,10 +26,10 @@
 //
 
 /* \file
-   Fl_Input_ widget . */
+   Input_ widget . */
 
-#ifndef Fl_Input__H
-#define Fl_Input__H
+#ifndef Fltk3_Input__H
+#define Fltk3_Input__H
 
 #ifndef Fl_Widget_H
 #include "Widget.h"
@@ -48,6 +48,8 @@
 #define FL_INPUT_WRAP		16
 #define FL_MULTILINE_INPUT_WRAP	(FL_MULTILINE_INPUT | FL_INPUT_WRAP)
 #define FL_MULTILINE_OUTPUT_WRAP (FL_MULTILINE_INPUT | FL_INPUT_READONLY | FL_INPUT_WRAP)
+
+namespace fltk3 {
 
 /**
   This class provides a low-overhead text input field.
@@ -91,7 +93,7 @@
   \internal
   When porting this widget from ASCII to UTF8, previously legal pointers into 
   the text of this widget can become illegal by pointing into the middle of
-  a UTF8 seuence. This is not a big problem for Fl_Input_ because all code
+  a UTF8 seuence. This is not a big problem for Input_ because all code
   in this module is quite tolerant. It could be problematic though when deriving
   from this class because no feedback for illegal pointers is given. Additionaly,
   a careless "copy" call can put partial UTF8 sequnces into the clipboard.
@@ -99,7 +101,7 @@
   None of these issues should be desasterous. Nevertheless, we should 
   discuss how FLTK should handle false UTF8 suequences and pointers.
 */
-class FL_EXPORT Fl_Input_ : public fltk3::Widget {
+class FL_EXPORT Input_ : public fltk3::Widget {
 
   /** \internal Storage for the text field. */
   const char* value_;
@@ -217,10 +219,10 @@ public:
   void resize(int, int, int, int);
 
   /* Constructor */
-  Fl_Input_(int, int, int, int, const char* = 0);
+  Input_(int, int, int, int, const char* = 0);
 
   /* Destructor */
-  ~Fl_Input_();
+  ~Input_();
 
   /* Changes the widget text. */
   int value(const char*);
@@ -242,7 +244,7 @@ public:
       handled.
   
       \return pointer to an internal buffer - do not free() this    
-      \see Fl_Input_::value(const char*)
+      \see Input_::value(const char*)
   */
   const char* value() const {return value_;}
 
@@ -448,8 +450,10 @@ public:
 
 };
 
+} // namespace
+
 #endif 
 
 //
-// End of "$Id: Fl_Input_.H 7365 2010-03-30 15:18:29Z matt $".
+// End of "$Id: Input_.H 7365 2010-03-30 15:18:29Z matt $".
 //

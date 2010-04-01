@@ -31,7 +31,7 @@
 #ifndef Fltk3_Input_H
 #define Fltk3_Input_H
 
-#include "Fl_Input_.H"
+#include "Input_.h"
 
 namespace fltk3 {
 
@@ -89,7 +89,7 @@ namespace fltk3 {
   
   <TR><TD><B>RightCtrl or
   <BR>Compose</B></TD><TD>
-  \anchor Fl_Input_Compose_Character
+  \anchor fltk3::Input_Compose_Character
   Start a compose-character
   sequence.  The next one or two keys typed define the character to
   insert (see table that follows.)
@@ -245,7 +245,7 @@ namespace fltk3 {
   </tr>
   </table></center>
 */
-class FL_EXPORT Input : public Fl_Input_ {
+class FL_EXPORT Input : public fltk3::Input_ {
   int handle_key();
   int shift_position(int p);
   int shift_up_down_position(int p);

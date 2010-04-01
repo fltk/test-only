@@ -54,7 +54,7 @@ CPPFILES = \
 	Fl_Help_View.cxx \
 	Fl_Image.cxx \
 	Fl_Input.cxx \
-	Fl_Input_.cxx \
+	fltk3::Input_.cxx \
 	Fl_Light_Button.cxx \
 	Fl_Menu.cxx \
 	Fl_Menu_.cxx \

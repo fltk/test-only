@@ -26,7 +26,7 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/Fl_Input_.H>
+#include <fltk3/Input_.h>
 #include <fltk3/Window.h>
 #include <fltk3/fl_draw.H>
 #include <fltk3/ask.h>
@@ -55,7 +55,7 @@ extern void fl_draw(const char*, int, float, float);
   \param [in] buf pointer to destination buffer
   \return pointer to the end of the destination buffer
 */
-const char* Fl_Input_::expand(const char* p, char* buf) const {
+const char* fltk3::Input_::expand(const char* p, char* buf) const {
   char* o = buf;
   char* e = buf+(MAXBUF-4);
   const char* lastspace = p;
@@ -116,7 +116,7 @@ const char* Fl_Input_::expand(const char* p, char* buf) const {
   \param [in] buf pointer to the buffer as returned by expand()
   \return width of string in pixels
 */
-double Fl_Input_::expandpos(
+double fltk3::Input_::expandpos(
   const char* p,	// real string
   const char* e,	// pointer into real string
   const char* buf,	// conversion of real string by expand()
@@ -162,7 +162,7 @@ double Fl_Input_::expandpos(
 
   \param [in] p start of update range
 */
-void Fl_Input_::minimal_update(int p) {
+void fltk3::Input_::minimal_update(int p) {
   if (damage() & FL_DAMAGE_ALL) return; // don't waste time if it won't be done
   if (damage() & FL_DAMAGE_EXPOSE) {
     if (p < mu_p) mu_p = p;
@@ -183,7 +183,7 @@ void Fl_Input_::minimal_update(int p) {
   \param [in] p start of update range
   \param [in] q end of update range
 */
-void Fl_Input_::minimal_update(int p, int q) {
+void fltk3::Input_::minimal_update(int p, int q) {
   if (q < p) p = q;
   minimal_update(p);
 }
@@ -191,15 +191,15 @@ void Fl_Input_::minimal_update(int p, int q) {
 ////////////////////////////////////////////////////////////////
 
 /* Horizontal cursor position in pixels while moving up or down. */
-double Fl_Input_::up_down_pos = 0;
+double fltk3::Input_::up_down_pos = 0;
 
 /* Flag to remember last cursor move. */
-int Fl_Input_::was_up_down = 0;
+int fltk3::Input_::was_up_down = 0;
 
 /**
   Sets the current font and font size.
 */
-void Fl_Input_::setfont() const {
+void fltk3::Input_::setfont() const {
   fl_font(textfont(), textsize());
 }
 
@@ -212,7 +212,7 @@ void Fl_Input_::setfont() const {
 
   \param X, Y, W, H area that must be redrawn
 */
-void Fl_Input_::drawtext(int X, int Y, int W, int H) {
+void fltk3::Input_::drawtext(int X, int Y, int W, int H) {
   int do_mu = !(damage()&FL_DAMAGE_ALL);
 
   if (fltk3::focus()!=this && !size()) {
@@ -409,7 +409,7 @@ static int isword(char c) {
   \param [in] i starting index for the search
   \return end of the word
 */
-int Fl_Input_::word_end(int i) const {
+int fltk3::Input_::word_end(int i) const {
   if (input_type() == FL_SECRET_INPUT) return size();
   //while (i < size() && !isword(index(i))) i++;
   while (i < size() && !isword(index(i))) i++;
@@ -427,7 +427,7 @@ int Fl_Input_::word_end(int i) const {
   \param [in] i starting index for the search
   \return start of the word
 */
-int Fl_Input_::word_start(int i) const {
+int fltk3::Input_::word_start(int i) const {
   if (input_type() == FL_SECRET_INPUT) return 0;
 //   if (i >= size() || !isword(index(i)))
 //     while (i > 0 && !isword(index(i-1))) i--;
@@ -445,7 +445,7 @@ int Fl_Input_::word_start(int i) const {
   \param [in] i starting index for the search
   \return end of the line
 */
-int Fl_Input_::line_end(int i) const {
+int fltk3::Input_::line_end(int i) const {
   if (input_type() != FL_MULTILINE_INPUT) return size();
 
   if (wrap()) {
@@ -475,7 +475,7 @@ int Fl_Input_::line_end(int i) const {
   \param [in] i starting index for the search
   \return start of the line
 */
-int Fl_Input_::line_start(int i) const {
+int fltk3::Input_::line_start(int i) const {
   if (input_type() != FL_MULTILINE_INPUT) return 0;
   int j = i;
   while (j > 0 && index(j-1) != '\n') j--;
@@ -495,7 +495,7 @@ int Fl_Input_::line_start(int i) const {
   Handles mouse clicks and mouse moves.
   \todo Add comment and parameters
 */
-void Fl_Input_::handle_mouse(int X, int Y, int /*W*/, int /*H*/, int drag) {
+void fltk3::Input_::handle_mouse(int X, int Y, int /*W*/, int /*H*/, int drag) {
   was_up_down = 0;
   if (!size()) return;
   setfont();
@@ -585,7 +585,7 @@ void Fl_Input_::handle_mouse(int X, int Y, int /*W*/, int /*H*/, int drag) {
   \return 0 if no positions changed
   \see position(int), position(), mark(int)
 */
-int Fl_Input_::position(int p, int m) {
+int fltk3::Input_::position(int p, int m) {
   int is_same = 0;
   was_up_down = 0;
   if (p<0) p = 0;
@@ -645,7 +645,7 @@ int Fl_Input_::position(int p, int m) {
   \param [in] keepmark if set, move only the cursor, but not the mark
   \return index to new cursor position
 */
-int Fl_Input_::up_down_position(int i, int keepmark) {
+int fltk3::Input_::up_down_position(int i, int keepmark) {
   // unlike before, i must be at the start of the line already!
 
   setfont();
@@ -677,7 +677,7 @@ int Fl_Input_::up_down_position(int i, int keepmark) {
   \return 0 if no text is selected, 1 if the selection was copied
   \see fltk3::copy(const char *, int, int)
 */
-int Fl_Input_::copy(int clipboard) {
+int fltk3::Input_::copy(int clipboard) {
   int b = position();
   int e = mark();
   if (b != e) {
@@ -693,7 +693,7 @@ int Fl_Input_::copy(int clipboard) {
 
 static char* undobuffer;
 static int undobufferlength;
-static Fl_Input_* undowidget;
+static fltk3::Input_* undowidget;
 static int undoat;	// points after insertion
 static int undocut;	// number of characters deleted there
 static int undoinsert;	// number of characters inserted
@@ -740,7 +740,7 @@ static void undobuffersize(int n) {
   \param [in] ilen length of \p text or 0 for \c nul terminated strings
   \return 0 if nothing changed
 */
-int Fl_Input_::replace(int b, int e, const char* text, int ilen) {
+int fltk3::Input_::replace(int b, int e, const char* text, int ilen) {
   int ul, om, op;
   was_up_down = 0;
 
@@ -842,7 +842,7 @@ int Fl_Input_::replace(int b, int e, const char* text, int ilen) {
 
   \return non-zero if any change was made.
 */
-int Fl_Input_::undo() {
+int fltk3::Input_::undo() {
   was_up_down = 0;
   if (undowidget != this || !undocut && !undoinsert) return 0;
 
@@ -892,7 +892,7 @@ int Fl_Input_::undo() {
   \return 0 if the operation did not change the clipboard
   \see copy(int), cut()
 */
-int Fl_Input_::copy_cuts() {
+int fltk3::Input_::copy_cuts() {
   // put the yank buffer into the X clipboard
   if (!yankcut || input_type()==FL_SECRET_INPUT) return 0;
   fltk3::copy(undobuffer, yankcut, 1);
@@ -902,7 +902,7 @@ int Fl_Input_::copy_cuts() {
 /** \internal
   Checks the when() field and does a callback if indicated.
 */
-void Fl_Input_::maybe_do_callback() {
+void fltk3::Input_::maybe_do_callback() {
   if (changed() || (when()&FL_WHEN_NOT_CHANGED)) {
     do_callback();
   }
@@ -914,7 +914,7 @@ void Fl_Input_::maybe_do_callback() {
   This is called by derived classes.
   \todo Add comment and parameters
 */
-int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
+int fltk3::Input_::handletext(int event, int X, int Y, int W, int H) {
   switch (event) {
 
   case fltk3::ENTER:
@@ -1031,16 +1031,16 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
 /*------------------------------*/
 
 /**
-  Creates a new Fl_Input_ widget.
+  Creates a new fltk3::Input_ widget.
 
-  This function creates a new Fl_Input_ widget and adds it to the current
+  This function creates a new fltk3::Input_ widget and adds it to the current
   fltk3::Group. The value() is set to \c NULL.
   The default boxtype is \c fltk3::DOWN_BOX.
 
   \param X, Y, W, H the dimensions of the new widget
   \param l an optional label text
 */
-Fl_Input_::Fl_Input_(int X, int Y, int W, int H, const char* l)
+fltk3::Input_::Input_(int X, int Y, int W, int H, const char* l)
 : fltk3::Widget(X, Y, W, H, l) {
   box(fltk3::DOWN_BOX);
   color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
@@ -1064,7 +1064,7 @@ Fl_Input_::Fl_Input_(int X, int Y, int W, int H, const char* l)
 
  \param [in] len size of the current text
 */
-void Fl_Input_::put_in_buffer(int len) {
+void fltk3::Input_::put_in_buffer(int len) {
   if (value_ == buffer && bufsize > len) {
     buffer[size_] = 0;
     return;
@@ -1117,7 +1117,7 @@ void Fl_Input_::put_in_buffer(int len) {
   \param [in] len the length of the new text
   \return non-zero if the new value is different than the current one
 */
-int Fl_Input_::static_value(const char* str, int len) {
+int fltk3::Input_::static_value(const char* str, int len) {
   clear_changed();
   if (undowidget == this) undowidget = 0;
   if (str == value_ && len == size_) return 0;
@@ -1161,7 +1161,7 @@ int Fl_Input_::static_value(const char* str, int len) {
   \param [in] str the new text 
   \return non-zero if the new value is different than the current one
 */
-int Fl_Input_::static_value(const char* str) {
+int fltk3::Input_::static_value(const char* str) {
   return static_value(str, str ? strlen(str) : 0);
 }
 
@@ -1178,9 +1178,9 @@ int Fl_Input_::static_value(const char* str) {
   \param [in] str the new text 
   \param [in] len the length of the new text
   \return non-zero if the new value is different than the current one
-  \see Fl_Input_::value(const char* str), Fl_Input_::value()
+  \see fltk3::Input_::value(const char* str), fltk3::Input_::value()
 */
-int Fl_Input_::value(const char* str, int len) {
+int fltk3::Input_::value(const char* str, int len) {
   int r = static_value(str, len);
   if (len) put_in_buffer(len);
   return r;
@@ -1195,9 +1195,9 @@ int Fl_Input_::value(const char* str, int len) {
 
   \param [in] str the new text 
   \return non-zero if the new value is different than the current one
-  \see Fl_Input_::value(const char* str, int len), Fl_Input_::value()
+  \see fltk3::Input_::value(const char* str, int len), fltk3::Input_::value()
 */
-int Fl_Input_::value(const char* str) {
+int fltk3::Input_::value(const char* str) {
   return value(str, str ? strlen(str) : 0);
 }
 
@@ -1207,7 +1207,7 @@ int Fl_Input_::value(const char* str) {
   \param [in] X, Y, W, H new size of the widget
   \see fltk3::Widget::resize(int, int, int, int)
 */
-void Fl_Input_::resize(int X, int Y, int W, int H) {
+void fltk3::Input_::resize(int X, int Y, int W, int H) {
   if (W != w()) xscroll_ = 0;
   if (H != h()) yscroll_ = 0;
   fltk3::Widget::resize(X, Y, W, H);
@@ -1219,7 +1219,7 @@ void Fl_Input_::resize(int X, int Y, int W, int H) {
   The destructor clears all allocated buffers and removes the widget
   from the parent fltk3::Group.
 */
-Fl_Input_::~Fl_Input_() {
+fltk3::Input_::~Input_() {
   if (undowidget == this) undowidget = 0;
   if (bufsize) free((void*)buffer);
 }
@@ -1228,7 +1228,7 @@ Fl_Input_::~Fl_Input_() {
   Returns the number of lines displayed on a single page.
   \return widget height divided by the font height
 */
-int Fl_Input_::linesPerPage() {
+int fltk3::Input_::linesPerPage() {
   int n = 1;
   if (input_type() == FL_MULTILINE_INPUT) {
     fl_font(textfont(),textsize()); //ensure current font is set to ours
@@ -1247,7 +1247,7 @@ int Fl_Input_::linesPerPage() {
   \param [in] i index into the value field
   \return the character at index \p i
 */
-unsigned int Fl_Input_::index(int i) const 
+unsigned int fltk3::Input_::index(int i) const 
 {
   int len = 0;
   return fl_utf8decode(value_+i, value_+size_, &len);

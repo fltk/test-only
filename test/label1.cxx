@@ -28,19 +28,25 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Box.H>
+#if 0 // fltk123:
 #include <FL/Fl_Hor_Value_Slider.H>
 #include <FL/Fl_Toggle_Button.H>
+#endif
 #include <FL/Fl_Input.H>
+#if 0 // fltk123:
 #include <FL/Fl_Choice.H>
-#include <FL/fl_draw.H>
 
 Fl_Toggle_Button *leftb,*rightb,*topb,*bottomb,*insideb,*clipb,*wrapb;
 Fl_Box *text;
+#endif
 Fl_Input *input;
+#if 0 // fltk123:
 Fl_Hor_Value_Slider *fonts;
 Fl_Hor_Value_Slider *sizes;
+#endif
 Fl_Double_Window *window;
 
+#if 0 // fltk123:
 void button_cb(Fl_Widget *,void *) {
   int i = 0;
   if (leftb->value()) i |= FL_ALIGN_LEFT;
@@ -105,12 +111,14 @@ Fl_Menu_Item choices[] = {
   {"FL_ENGRAVED_LABEL",0,engraved_cb},
   {"FL_EMBOSSED_LABEL",0,embossed_cb},
   {0}};
+#endif
 
 int main(int argc, char **argv) {
   window = new Fl_Double_Window(400,400);
-
+  
   input = new Fl_Input(50,375,350,25);
   input->static_value("The quick brown fox jumped over the lazy dog.");
+#if 0 // fltk123:
   input->when(FL_WHEN_CHANGED);
   input->callback(input_cb);
 
@@ -148,10 +156,11 @@ int main(int argc, char **argv) {
 
   Fl_Choice *c = new Fl_Choice(50,275,200,25);
   c->menu(choices);
-
+  
   text= new Fl_Box(FL_FRAME_BOX,100,75,200,100,input->value());
   text->align(FL_ALIGN_CENTER);
   window->resizable(text);
+#endif
   window->end();
   window->show(argc,argv);
   return Fl::run();

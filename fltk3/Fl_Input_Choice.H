@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Choice.H 7365 2010-03-30 15:18:29Z matt $"
+// "$Id: fltk3::Input_Choice.H 7365 2010-03-30 15:18:29Z matt $"
 //
 // An input/chooser widget.
 //            ______________  ____
@@ -31,12 +31,12 @@
 //
 
 /* \file
-   Fl_Input_Choice widget . */
+   fltk3::Input_Choice widget . */
 
 
 
-#ifndef Fl_Input_Choice_H
-#define Fl_Input_Choice_H
+#ifndef fltk3::Input_Choice_H
+#define fltk3::Input_Choice_H
 
 #include <fltk3/run.h>
 #include <fltk3/Group.h>
@@ -56,7 +56,7 @@
   widgets directly, using the menubutton()
   and input() accessor methods.
 */
-class Fl_Input_Choice : public fltk3::Group {
+class fltk3::Input_Choice : public fltk3::Group {
   // Private class to handle slightly 'special' behavior of menu button
   class InputMenuButton : public Fl_Menu_Button {
     void draw() {
@@ -75,7 +75,7 @@ class Fl_Input_Choice : public fltk3::Group {
   InputMenuButton *menu_;
 
   static void menu_cb(fltk3::Widget*, void *data) { 
-    Fl_Input_Choice *o=(Fl_Input_Choice *)data;
+    fltk3::Input_Choice *o=(fltk3::Input_Choice *)data;
     Fl_Widget_Tracker wp(o);
     const fltk3::MenuItem *item = o->menubutton()->mvalue();
     if (item && item->flags & (fltk3::SUBMENU|fltk3::SUBMENU_POINTER)) return;	// ignore submenus
@@ -104,7 +104,7 @@ class Fl_Input_Choice : public fltk3::Group {
   }
 
   static void inp_cb(fltk3::Widget*, void *data) { 
-    Fl_Input_Choice *o=(Fl_Input_Choice *)data;
+    fltk3::Input_Choice *o=(fltk3::Input_Choice *)data;
     Fl_Widget_Tracker wp(o);
     if (o->inp_->changed()) {
       o->fltk3::Widget::set_changed();
@@ -135,11 +135,11 @@ class Fl_Input_Choice : public fltk3::Group {
 
 public:
   /**
-    Creates a new Fl_Input_Choice widget using the given position, size,
+    Creates a new fltk3::Input_Choice widget using the given position, size,
     and label string.
   <P> Inherited destructor Destroys the widget and any value associated with it.
   */
-  Fl_Input_Choice (int x,int y,int w,int h,const char*l=0) : fltk3::Group(x,y,w,h,l) {
+  fltk3::Input_Choice (int x,int y,int w,int h,const char*l=0) : fltk3::Group(x,y,w,h,l) {
     fltk3::Group::box(fltk3::DOWN_BOX);
     align(fltk3::ALIGN_LEFT);				// default like fltk3::Input
     inp_ = new fltk3::Input(inp_x(), inp_y(),
@@ -192,7 +192,7 @@ public:
   Fl_Fontsize textsize() const { return (inp_->textsize()); }
   /** Sets the encapsulated input size attributes */
   void textsize(Fl_Fontsize s) { inp_->textsize(s); }
-  /** See void Fl_Input_Choice::value(const char *s)  */
+  /** See void fltk3::Input_Choice::value(const char *s)  */
   const char* value() const { return (inp_->value()); }
   /**
     Sets or returns the input widget's current contents. The
@@ -202,7 +202,7 @@ public:
     deleting the previous text.
   */
   void value(const char *val) { inp_->value(val); }
-  /**    See void Fl_Input_Choice::value(const char *s)  */
+  /**    See void fltk3::Input_Choice::value(const char *s)  */
   void value(int val) {
     menu_->value(val);
     inp_->value(menu_->text(val));
@@ -215,8 +215,8 @@ public:
   fltk3::Input *input() { return inp_; }
 };
 
-#endif // !Fl_Input_Choice_H
+#endif // !fltk3::Input_Choice_H
 
 //
-// End of "$Id: Fl_Input_Choice.H 7365 2010-03-30 15:18:29Z matt $".
+// End of "$Id: fltk3::Input_Choice.H 7365 2010-03-30 15:18:29Z matt $".
 //

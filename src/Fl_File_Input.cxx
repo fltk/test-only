@@ -170,13 +170,13 @@ Fl_File_Input::value(const char *str) {		// I - New string value
 void Fl_File_Input::draw() {
   fltk3::Boxtype b = box();
   if (damage() & (FL_DAMAGE_BAR | FL_DAMAGE_ALL)) draw_buttons();
-  // this flag keeps Fl_Input_::drawtext from drawing a bogus box!
+  // this flag keeps fltk3::Input_::drawtext from drawing a bogus box!
   char must_trick_fl_input_ = 
     fltk3::focus()!=this && !size() && !(damage()&FL_DAMAGE_ALL);
   if ((damage() & FL_DAMAGE_ALL) || must_trick_fl_input_) 
     draw_box(b,x(),y()+DIR_HEIGHT,w(),h()-DIR_HEIGHT,color());
   if (!must_trick_fl_input_) 
-    Fl_Input_::drawtext(x()+fltk3::box_dx(b)+3, y()+fltk3::box_dy(b)+DIR_HEIGHT,
+    fltk3::Input_::drawtext(x()+fltk3::box_dx(b)+3, y()+fltk3::box_dy(b)+DIR_HEIGHT,
 		        w()-fltk3::box_dw(b)-6, h()-fltk3::box_dh(b)-DIR_HEIGHT);
 }
 

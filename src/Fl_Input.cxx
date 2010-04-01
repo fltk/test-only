@@ -26,7 +26,7 @@
 //
 
 // This is the "user interface", it decodes user actions into what to
-// do to the text.  See also Fl_Input_.cxx, where the text is actually
+// do to the text.  See also fltk3::Input_.cxx, where the text is actually
 // manipulated (and some ui, in particular the mouse, is done...).
 // In theory you can replace this code with another subclass to change
 // the keybindings.
@@ -49,7 +49,7 @@ void fltk3::Input::draw() {
   if (input_type() == FL_HIDDEN_INPUT) return;
   fltk3::Boxtype b = box();
   if (damage() & FL_DAMAGE_ALL) draw_box(b, color());
-  Fl_Input_::drawtext(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
+  fltk3::Input_::drawtext(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
 		      w()-fltk3::box_dw(b), h()-fltk3::box_dh(b));
 }
 
@@ -526,7 +526,7 @@ int fltk3::Input::handle(int event) {
       if (fltk3::dnd_text_ops()) {
         int oldpos = position(), oldmark = mark();
         fltk3::Boxtype b = box();
-        Fl_Input_::handle_mouse(
+        fltk3::Input_::handle_mouse(
                                 x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
                                 w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
         newpos = position(); 
@@ -604,7 +604,7 @@ int fltk3::Input::handle(int event) {
 #endif
     {
       fltk3::Boxtype b = box();
-      Fl_Input_::handle_mouse(
+      fltk3::Input_::handle_mouse(
                               x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
                               w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
     }
@@ -639,7 +639,7 @@ int fltk3::Input::handle(int event) {
       
   }
   fltk3::Boxtype b = box();
-  return Fl_Input_::handletext(event,
+  return fltk3::Input_::handletext(event,
                                x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
                                w()-fltk3::box_dw(b), h()-fltk3::box_dh(b));
 }
@@ -649,7 +649,7 @@ int fltk3::Input::handle(int event) {
  and label string. The default boxtype is fltk3::DOWN_BOX.
  */
 fltk3::Input::Input(int X, int Y, int W, int H, const char *l)
-: Fl_Input_(X, Y, W, H, l) {
+: fltk3::Input_(X, Y, W, H, l) {
 }
 
 //

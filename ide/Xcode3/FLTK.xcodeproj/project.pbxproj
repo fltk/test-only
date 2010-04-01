@@ -501,12 +501,10 @@
 		C97834FD1165325700491051 /* label2.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C97834F71165325700491051 /* label2.cxx */; };
 		C978350F1165327700491051 /* label1.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C97834F61165325700491051 /* label1.cxx */; };
 		C97835121165327700491051 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
-		C97835131165327700491051 /* fltkforms.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5EDFD4993E8000051E5208F /* fltkforms.framework */; };
 		C97835151165327700491051 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
 		C97835161165327700491051 /* fltkforms.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E5EDFD4993E8000051E5208F /* fltkforms.framework */; };
 		C97835271165327F00491051 /* label2.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C97834F71165325700491051 /* label2.cxx */; };
 		C97835291165327F00491051 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
-		C978352A1165327F00491051 /* fltkforms.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5EDFD4993E8000051E5208F /* fltkforms.framework */; };
 		C978352C1165327F00491051 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
 		C978352D1165327F00491051 /* fltkforms.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E5EDFD4993E8000051E5208F /* fltkforms.framework */; };
 		C9C84B2983DC793B141DDC70 /* ide_maketools.cxx in Sources */ = {isa = PBXBuildFile; fileRef = B65FCD2B8489E2BBAA3F695A /* ide_maketools.cxx */; };
@@ -2744,26 +2742,12 @@
 			remoteGlobalIDString = E379F105C5DD998B9B72950E;
 			remoteInfo = fltk;
 		};
-		C978350B1165327700491051 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2E06DFE475DEE3090F8EA260 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 27284DC0C205B0F1B26EA258;
-			remoteInfo = fltkforms;
-		};
 		C97835201165327F00491051 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2E06DFE475DEE3090F8EA260 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = E379F105C5DD998B9B72950E;
 			remoteInfo = fltk;
-		};
-		C97835221165327F00491051 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2E06DFE475DEE3090F8EA260 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 27284DC0C205B0F1B26EA258;
-			remoteInfo = fltkforms;
 		};
 		C9BE0900956B8DE28740E8C6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -4983,7 +4967,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C97835121165327700491051 /* fltk.framework in Frameworks */,
-				C97835131165327700491051 /* fltkforms.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4992,7 +4975,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C97835291165327F00491051 /* fltk.framework in Frameworks */,
-				C978352A1165327F00491051 /* fltkforms.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5258,10 +5240,6 @@
 				7806C7AA99FE626675560AF1 /* Tests */,
 				7DC38200FBE41638B7195263 /* Products */,
 				C97832A21164EC3A00491051 /* plists */,
-				C97832F01164F05900491051 /* buttons-Info copy.plist */,
-				C978330A1164F06300491051 /* buttons-Info copy 2.plist */,
-				C978351D1165327800491051 /* label-Info copy.plist */,
-				C978353B1165328000491051 /* label-Info copy 2.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -6208,6 +6186,10 @@
 		C97832A21164EC3A00491051 /* plists */ = {
 			isa = PBXGroup;
 			children = (
+				C97832F01164F05900491051 /* buttons-Info copy.plist */,
+				C978330A1164F06300491051 /* buttons-Info copy 2.plist */,
+				C978351D1165327800491051 /* label-Info copy.plist */,
+				C978353B1165328000491051 /* label-Info copy 2.plist */,
 				C9C907A011626698006C5014 /* hello-Info copy.plist */,
 				C9C907BA116266AB006C5014 /* hello-Info copy 2.plist */,
 				C9782F731163CD2F00491051 /* button-Info copy.plist */,
@@ -7708,7 +7690,6 @@
 			);
 			dependencies = (
 				C97835081165327700491051 /* PBXTargetDependency */,
-				C978350A1165327700491051 /* PBXTargetDependency */,
 			);
 			name = label1;
 			productName = label;
@@ -7729,7 +7710,6 @@
 			);
 			dependencies = (
 				C978351F1165327F00491051 /* PBXTargetDependency */,
-				C97835211165327F00491051 /* PBXTargetDependency */,
 			);
 			name = label2;
 			productName = label;
@@ -10740,20 +10720,10 @@
 			target = E379F105C5DD998B9B72950E /* fltk */;
 			targetProxy = C97835091165327700491051 /* PBXContainerItemProxy */;
 		};
-		C978350A1165327700491051 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 27284DC0C205B0F1B26EA258 /* fltkforms */;
-			targetProxy = C978350B1165327700491051 /* PBXContainerItemProxy */;
-		};
 		C978351F1165327F00491051 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E379F105C5DD998B9B72950E /* fltk */;
 			targetProxy = C97835201165327F00491051 /* PBXContainerItemProxy */;
-		};
-		C97835211165327F00491051 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 27284DC0C205B0F1B26EA258 /* fltkforms */;
-			targetProxy = C97835221165327F00491051 /* PBXContainerItemProxy */;
 		};
 		C98D072A1E10A81ACDB66C3B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

@@ -83,7 +83,7 @@ extern "C" {
 #include <fltk3/Tooltip.h>
 #include <fltk3/Fl_Sys_Menu_Bar.H>
 #include <fltk3/Fl_Printer.H>
-#include <fltk3/Fl_Input_.H>
+#include <fltk3/Input_.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "flstring.h"
@@ -3382,7 +3382,7 @@ int MACpreparedrag(void)
   
   int width, height;
   NSImage *image;
-  if ( dynamic_cast<Fl_Input_*>(w) != NULL) {
+  if ( dynamic_cast<fltk3::Input_*>(w) != NULL) {
     fl_selection_buffer[0][ fl_selection_length[0] ] = 0;
     image = imageFromText(fl_selection_buffer[0], &width, &height);
   } else {

@@ -93,7 +93,7 @@ public:
     Returns the current value, which is a pointer to an internal buffer
     and is valid only until the next event is handled.
   */
-  const char	*value() { return Fl_Input_::value(); }
+  const char	*value() { return fltk3::Input_::value(); }
 };
 
 #endif // !Fl_File_Input_H

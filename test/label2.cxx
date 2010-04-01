@@ -25,25 +25,34 @@
 
 #include <fltk/run.h>
 #include <fltk/Window.h>
+#if 0 // fltk123:
 #include <fltk/Box.h>
 #include <fltk/ValueSlider.h>
 #include <fltk/ToggleButton.h>
+#endif
 #include <fltk/Input.h>
+#if 0 // fltk123:
 #include <fltk/MenuBuild.h>
 #include <fltk/Choice.h>
 #include <fltk/draw.h>
 #include <fltk/Font.h>
 #include <fltk/xpmImage.h>
+#endif
 
 using namespace fltk;
 
+#if 0 // fltk123:
 ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*centerb,*clipb,*wrapb;
 Widget *textbox;
+#endif
 Input *input;
+#if 0 // fltk123:
 ValueSlider *fontslider;
 ValueSlider *sizes;
+#endif
 Window *window;
 
+#if 0 // fltk123:
 void button_cb(Widget *,void *) {
   int i = 0;
   if (leftb->value()) i |= ALIGN_LEFT;
@@ -124,6 +133,7 @@ void inactive_cb(Widget* w, void*) {
   if (((Button*)w)->value()) textbox->deactivate(); else textbox->activate();
   window->redraw();
 }
+#endif
 
 const char* const initial = "The quick brown fox jumps over the lazy dog.";
 
@@ -132,6 +142,7 @@ int main(int argc, char **argv) {
   window->set_double_buffer();
   window->begin();
 
+#if 0 // fltk123:
   textbox= new Widget(100,75,200,100,initial);
   textbox->box(ENGRAVED_BOX);
 
@@ -182,13 +193,16 @@ int main(int argc, char **argv) {
   //sizes->step(1);
   sizes->value(14);
   sizes->callback(size_cb);
-
+#endif
+  
   input = new Input(50,375,350,25);
   input->static_value(initial);
+#if 0 // fltk123:
   input->when(WHEN_CHANGED);
   input->callback(input_cb);
 
   window->resizable(textbox);
+#endif
   window->end();
   window->show(argc,argv);
   return run();

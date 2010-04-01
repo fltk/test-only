@@ -51,12 +51,14 @@ public:
   void child_of(const Window* w);
   void set_modal()	{set_flag(MODAL);} // back compatability only!
   void set_non_modal()	{set_flag(NON_MODAL);} // back compatability only!
-
-  bool double_buffer() const {return flag(DOUBLE);}
-  void set_double_buffer() {set_flag(DOUBLE);}
-  void clear_double_buffer() {clear_flag(DOUBLE);}
-  void free_backbuffer();
-
+#endif
+  
+  bool double_buffer() const { return false; } // fltk123: sorry!
+  void set_double_buffer() {} // fltk123: sorry!
+  void clear_double_buffer() {} // fltk123: sorry!
+  void free_backbuffer() {}  // fltk123: sorry!
+  
+#if 0
   virtual void draw_overlay();
   void redraw_overlay();
   void erase_overlay();
