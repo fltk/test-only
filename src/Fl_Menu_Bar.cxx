@@ -32,13 +32,13 @@
 void Fl_Menu_Bar::draw() {
   draw_box();
   if (!menu() || !menu()->text) return;
-  const Fl_Menu_Item* m;
+  const fltk3::MenuItem* m;
   int X = x()+6;
   for (m=menu()->first(); m->text; m = m->next()) {
     int W = m->measure(0,this) + 16;
     m->draw(X, y(), W, h(), this);
     X += W;
-    if (m->flags & FL_MENU_DIVIDER) {
+    if (m->flags & fltk3::MENU_DIVIDER) {
       int y1 = y() + fltk3::box_dy(box());
       int y2 = y1 + h() - fltk3::box_dh(box()) - 1;
 
@@ -52,7 +52,7 @@ void Fl_Menu_Bar::draw() {
 }
 
 int Fl_Menu_Bar::handle(int event) {
-  const Fl_Menu_Item* v;
+  const fltk3::MenuItem* v;
   if (menu() && menu()->text) switch (event) {
   case fltk3::ENTER:
   case fltk3::LEAVE:

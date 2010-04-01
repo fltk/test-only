@@ -30,7 +30,7 @@
 
 #include <fltk3/run.h>
 #include <fltk3/Widget.h>
-#include <fltk3/Fl_Menu_Item.H>
+#include <fltk3/MenuItem.h>
 #include <fltk3/Fl_Multi_Label.H>
 
 void fl_multi_labeltype(
@@ -69,7 +69,7 @@ void Fl_Multi_Label::label(fltk3::Widget* o) {
   o->label(fltk3::MULTI_LABEL, (const char*)this);
 }
 
-void Fl_Multi_Label::label(Fl_Menu_Item* o) {
+void Fl_Multi_Label::label(fltk3::MenuItem* o) {
   o->label(fltk3::MULTI_LABEL, (const char*)this);
 }
 

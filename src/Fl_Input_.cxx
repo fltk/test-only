@@ -1108,7 +1108,7 @@ void Fl_Input_::put_in_buffer(int len) {
   great deal of time and memory if your program is rapidly
   changing the values of text fields, but this will only work if
   the passed string remains unchanged until either the
-  Fl_Input is destroyed or value() is called again.
+  fltk3::Input is destroyed or value() is called again.
 
   You can use the \p len parameter to directly set the length
   if you know it already or want to put \c nul characters in the text.
@@ -1156,7 +1156,7 @@ int Fl_Input_::static_value(const char* str, int len) {
   great deal of time and memory if your program is rapidly
   changing the values of text fields, but this will only work if
   the passed string remains unchanged until either the
-  Fl_Input is destroyed or value() is called again.
+  fltk3::Input is destroyed or value() is called again.
 
   \param [in] str the new text 
   \return non-zero if the new value is different than the current one

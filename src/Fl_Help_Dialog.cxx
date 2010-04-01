@@ -95,10 +95,10 @@ void Fl_Help_Dialog::cb_larger_(fltk3::Button* o, void* v) {
   ((Fl_Help_Dialog*)(o->parent()->parent()->user_data()))->cb_larger__i(o,v);
 }
 
-void Fl_Help_Dialog::cb_find__i(Fl_Input*, void*) {
+void Fl_Help_Dialog::cb_find__i(fltk3::Input*, void*) {
   find_pos_ = view_->find(find_->value(), find_pos_);
 }
-void Fl_Help_Dialog::cb_find_(Fl_Input* o, void* v) {
+void Fl_Help_Dialog::cb_find_(fltk3::Input* o, void* v) {
   ((Fl_Help_Dialog*)(o->parent()->parent()->parent()->user_data()))->cb_find__i(o,v);
 }
 
@@ -177,14 +177,14 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
       { fltk3::Group* o = new fltk3::Group(350, 10, 171, 25);
         o->box(fltk3::DOWN_BOX);
         o->color(FL_BACKGROUND2_COLOR);
-        { find_ = new Fl_Input(375, 12, 143, 21, "@search");
+        { find_ = new fltk3::Input(375, 12, 143, 21, "@search");
           find_->tooltip("find text in document");
           find_->box(fltk3::FLAT_BOX);
           find_->labelsize(13);
           find_->textfont(4);
           find_->callback((fltk3::Callback*)cb_find_);
           find_->when(FL_WHEN_ENTER_KEY_ALWAYS);
-        } // Fl_Input* find_
+        } // fltk3::Input* find_
         o->end();
       } // fltk3::Group* o
       { Fl_Box* o = new Fl_Box(150, 10, 190, 25);

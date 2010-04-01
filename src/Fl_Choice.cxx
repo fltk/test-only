@@ -26,7 +26,7 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/Fl_Choice.H>
+#include <fltk3/Choice.h>
 #include <fltk3/fl_draw.H>
 #include "flstring.h"
 
@@ -34,7 +34,7 @@
 // as an Fl_Menu_Button.  The only difference is the appearance of the
 // button: it draws the text of the current pick and a down-arrow.
 
-void Fl_Choice::draw() {
+void fltk3::Choice::draw() {
   int dx = fltk3::box_dx(fltk3::DOWN_BOX);
   int dy = fltk3::box_dy(fltk3::DOWN_BOX);
   int H = h() - 2 * dy;
@@ -81,7 +81,7 @@ void Fl_Choice::draw() {
   W += 2 * dx;
 
   if (mvalue()) {
-    Fl_Menu_Item m = *mvalue();
+    fltk3::MenuItem m = *mvalue();
     if (active_r()) m.activate(); else m.deactivate();
 
     // ERCO
@@ -117,7 +117,7 @@ void Fl_Choice::draw() {
 }
 
 /**
-  Create a new Fl_Choice widget using the given position, size and label string.
+  Create a new fltk3::Choice widget using the given position, size and label string.
   The default boxtype is \c fltk3::UP_BOX.
 
   The constructor sets menu() to NULL.
@@ -126,7 +126,7 @@ void Fl_Choice::draw() {
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
-Fl_Choice::Fl_Choice(int X, int Y, int W, int H, const char *L)
+fltk3::Choice::Choice(int X, int Y, int W, int H, const char *L)
 : Fl_Menu_(X,Y,W,H,L) {
   align(fltk3::ALIGN_LEFT);
   when(FL_WHEN_RELEASE);
@@ -141,7 +141,7 @@ Fl_Choice::Fl_Choice(int X, int Y, int W, int H, const char *L)
   \param[in] v pointer to menu item in the menu item array.
   \returns non-zero if the new value is different to the old one.
  */
-int Fl_Choice::value(const Fl_Menu_Item *v) {
+int fltk3::Choice::value(const fltk3::MenuItem *v) {
   if (!Fl_Menu_::value(v)) return 0;
   redraw();
   return 1;
@@ -153,17 +153,17 @@ int Fl_Choice::value(const Fl_Menu_Item *v) {
   \param[in] v index of value in the menu item array.
   \returns non-zero if the new value is different to the old one.
  */
-int Fl_Choice::value(int v) {
-  if (v == -1) return value((const Fl_Menu_Item *)0);
+int fltk3::Choice::value(int v) {
+  if (v == -1) return value((const fltk3::MenuItem *)0);
   if (v < 0 || v >= (size() - 1)) return 0;
   if (!Fl_Menu_::value(v)) return 0;
   redraw();
   return 1;
 }
 
-int Fl_Choice::handle(int e) {
+int fltk3::Choice::handle(int e) {
   if (!menu() || !menu()->text) return 0;
-  const Fl_Menu_Item* v;
+  const fltk3::MenuItem* v;
   switch (e) {
   case fltk3::ENTER:
   case fltk3::LEAVE:

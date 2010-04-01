@@ -31,13 +31,13 @@
 #ifndef Fl_Int_Input_H
 #define Fl_Int_Input_H
 
-#include "Fl_Input.H"
+#include "Input.h"
 
 /**
-  The Fl_Int_Input class is a subclass of Fl_Input
+  The Fl_Int_Input class is a subclass of fltk3::Input
   that only allows the user to type decimal digits (or hex numbers of the form 0xaef).
 */
-class Fl_Int_Input : public Fl_Input {
+class Fl_Int_Input : public fltk3::Input {
 public:
   /**
     Creates a new Fl_Int_Input widget using the given position,
@@ -45,7 +45,7 @@ public:
     <P>Inherited destructor Destroys the widget and any value associated with it.
   */
   Fl_Int_Input(int X,int Y,int W,int H,const char *l = 0)
-      : Fl_Input(X,Y,W,H,l) {type(FL_INT_INPUT);}
+      : fltk3::Input(X,Y,W,H,l) {type(FL_INT_INPUT);}
 };
 
 #endif

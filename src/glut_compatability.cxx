@@ -281,11 +281,11 @@ void glutSetWindow(int win) {
 }
 
 ////////////////////////////////////////////////////////////////
-#include <fltk3/Fl_Menu_Item.H>
+#include <fltk3/MenuItem.h>
 
 struct menu {
   void (*cb)(int);
-  Fl_Menu_Item *m;
+  fltk3::MenuItem *m;
   int size;
   int alloc;
 };
@@ -298,7 +298,7 @@ static void domenu(int n, int ex, int ey) {
   menu *m = &menus[n];
   if (glut_menustate_function) glut_menustate_function(1);
   if (glut_menustatus_function) glut_menustatus_function(1,ex,ey);
-  const Fl_Menu_Item* g = m->m->popup(fltk3::event_x(), fltk3::event_y(), 0);
+  const fltk3::MenuItem* g = m->m->popup(fltk3::event_x(), fltk3::event_y(), 0);
   if (g && g->callback_) ((void (*)(int))(g->callback_))(int(g->argument()));
   if (glut_menustatus_function) glut_menustatus_function(0,ex,ey);
   if (glut_menustate_function) glut_menustate_function(0);
@@ -320,17 +320,17 @@ void glutDestroyMenu(int n) {
   m->size = m->alloc = 0;
 }
 
-static Fl_Menu_Item* additem(menu *m) {
+static fltk3::MenuItem* additem(menu *m) {
   if (m->size+1 >= m->alloc) {
     m->alloc = m->size*2+10;
-    Fl_Menu_Item* nm = new Fl_Menu_Item[m->alloc];
+    fltk3::MenuItem* nm = new fltk3::MenuItem[m->alloc];
     for (int i=0; i<m->size; i++) nm[i] = m->m[i];
     delete[] m->m;
     m->m = nm;
   }
   int n = m->size++;
   m->m[n+1].text = 0;
-  Fl_Menu_Item* i = &(m->m[n]);
+  fltk3::MenuItem* i = &(m->m[n]);
   i->shortcut_ = 0;
   i->flags = 0;
   i->labeltype_ = i->labelfont_ = i->labelsize_ = i->labelcolor_ = 0;
@@ -339,7 +339,7 @@ static Fl_Menu_Item* additem(menu *m) {
 
 void glutAddMenuEntry(char *label, int value) {
   menu *m = &menus[glut_menu];
-  Fl_Menu_Item* i = additem(m);
+  fltk3::MenuItem* i = additem(m);
   i->text = label;
   i->callback_ = (fltk3::Callback*)(m->cb);
   i->user_data_ = (void *)value;
@@ -347,7 +347,7 @@ void glutAddMenuEntry(char *label, int value) {
 
 void glutAddSubMenu(char *label, int submenu) {
   menu *m = &menus[glut_menu];
-  Fl_Menu_Item* i = additem(m);
+  fltk3::MenuItem* i = additem(m);
   i->text = label;
   i->callback_ = 0;
   i->user_data_ = (void *)(menus[submenu].m);
@@ -356,7 +356,7 @@ void glutAddSubMenu(char *label, int submenu) {
 
 void glutChangeToMenuEntry(int item, char *label, int value) {
   menu *m = &menus[glut_menu];
-  Fl_Menu_Item* i = &m->m[item-1];
+  fltk3::MenuItem* i = &m->m[item-1];
   i->text = label;
   i->callback_ = (fltk3::Callback*)(m->cb);
   i->user_data_ = (void *)value;
@@ -365,7 +365,7 @@ void glutChangeToMenuEntry(int item, char *label, int value) {
 
 void glutChangeToSubMenu(int item, char *label, int submenu) {
   menu *m = &menus[glut_menu];
-  Fl_Menu_Item* i = &m->m[item-1];
+  fltk3::MenuItem* i = &m->m[item-1];
   i->text = label;
   i->callback_ = 0;
   i->user_data_ = (void *)(menus[submenu].m);

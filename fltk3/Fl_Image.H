@@ -33,8 +33,11 @@
 
 #  include "Enumerations.H"
 
-class fltk3::Widget;
-struct Fl_Menu_Item;
+namespace fltk3 {
+  class Widget;
+  struct MenuItem;
+}
+
 struct Fl_Label;
 
 /**
@@ -160,7 +163,7 @@ class FL_EXPORT Fl_Image {
   void inactive() { color_average(FL_GRAY, .33f); }
   virtual void desaturate();
   virtual void label(fltk3::Widget*w);
-  virtual void label(Fl_Menu_Item*m);
+  virtual void label(fltk3::MenuItem*m);
   /**
     The draw() methods draw the image. This form specifies
     a bounding box for the image, with the origin
@@ -216,7 +219,7 @@ class FL_EXPORT Fl_RGB_Image : public Fl_Image {
   virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
   void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
   virtual void label(fltk3::Widget*w);
-  virtual void label(Fl_Menu_Item*m);
+  virtual void label(fltk3::MenuItem*m);
   virtual void uncache();
 };
 

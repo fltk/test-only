@@ -32,14 +32,14 @@
 #ifndef Fl_Float_Input_H
 #define Fl_Float_Input_H
 
-#include "Fl_Input.H"
+#include "Input.h"
 
 /**
-  The Fl_Float_Input class is a subclass of Fl_Input
+  The Fl_Float_Input class is a subclass of fltk3::Input
   that only allows the user to type floating point numbers (sign,
   digits, decimal point, more digits, 'E' or 'e', sign, digits).
 */
-class Fl_Float_Input : public Fl_Input {
+class Fl_Float_Input : public fltk3::Input {
 public:
   /**
       Creates a new Fl_Float_Input widget using the given position,
@@ -47,7 +47,7 @@ public:
   <P> Inherited destructor destroys the widget and any value associated with it
   */
   Fl_Float_Input(int X,int Y,int W,int H,const char *l = 0)
-    : Fl_Input(X,Y,W,H,l) {type(FL_FLOAT_INPUT);}
+    : fltk3::Input(X,Y,W,H,l) {type(FL_FLOAT_INPUT);}
 };
 
 #endif

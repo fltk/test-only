@@ -3075,22 +3075,22 @@ static void createAppleMenu(void)
 - (void) doCallback:(id)unused
 {
   int flRank = [self tag];
-  const Fl_Menu_Item *items = fl_sys_menu_bar->Fl_Menu_::menu();
-  const Fl_Menu_Item *item = items + flRank;
+  const fltk3::MenuItem *items = fl_sys_menu_bar->Fl_Menu_::menu();
+  const fltk3::MenuItem *item = items + flRank;
   if (item) {
     fl_sys_menu_bar->picked(item);
-    if ( item->flags & FL_MENU_TOGGLE ) {	// update the menu toggle symbol
+    if ( item->flags & fltk3::MENU_TOGGLE ) {	// update the menu toggle symbol
       [self setState:(item->value() ? NSOnState : NSOffState)];
     }
-    else if ( item->flags & FL_MENU_RADIO ) {	// update the menu radio symbols
+    else if ( item->flags & fltk3::MENU_RADIO ) {	// update the menu radio symbols
       int from = flRank;
-      while( from > 0 && items[from - 1].label() && (items[from - 1].flags & FL_MENU_RADIO) &&
-            !(items[from - 1].flags & FL_MENU_DIVIDER) ) {
+      while( from > 0 && items[from - 1].label() && (items[from - 1].flags & fltk3::MENU_RADIO) &&
+            !(items[from - 1].flags & fltk3::MENU_DIVIDER) ) {
         from--;
       }
       int to = flRank;
-      while( !(items[to].flags & FL_MENU_DIVIDER) && items[to + 1].label() && 
-            (items[to + 1].flags & FL_MENU_RADIO) ) {
+      while( !(items[to].flags & fltk3::MENU_DIVIDER) && items[to + 1].label() && 
+            (items[to + 1].flags & fltk3::MENU_RADIO) ) {
         to++;
       }
       NSMenu *nsmenu = [self menu];
@@ -3105,7 +3105,7 @@ static void createAppleMenu(void)
 }
 - (void) directCallback:(id)unused
 {
-  Fl_Menu_Item *item = (Fl_Menu_Item *)[(NSData*)[self representedObject] bytes];
+  fltk3::MenuItem *item = (fltk3::MenuItem *)[(NSData*)[self representedObject] bytes];
   if ( item && item->callback() ) item->do_callback(NULL);
 }
 @end
@@ -3115,8 +3115,8 @@ void fl_mac_set_about( fltk3::Callback *cb, void *user_data, int shortcut)
   NSAutoreleasePool *localPool;
   localPool = [[NSAutoreleasePool alloc] init]; 
   fl_open_display();
-  Fl_Menu_Item aboutItem;
-  memset(&aboutItem, 0, sizeof(Fl_Menu_Item));
+  fltk3::MenuItem aboutItem;
+  memset(&aboutItem, 0, sizeof(fltk3::MenuItem));
   aboutItem.callback(cb);
   aboutItem.user_data(user_data);
   aboutItem.shortcut(shortcut);
@@ -3129,7 +3129,7 @@ void fl_mac_set_about( fltk3::Callback *cb, void *user_data, int shortcut)
     Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setKeyEquivalent, item, aboutItem.shortcut() & 0xff);
     Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setKeyEquivalentModifierMask, item, aboutItem.shortcut() );
   }
-  NSData *pointer = [NSData dataWithBytes:&aboutItem length:sizeof(Fl_Menu_Item)];
+  NSData *pointer = [NSData dataWithBytes:&aboutItem length:sizeof(fltk3::MenuItem)];
   [item setRepresentedObject:pointer];
   [appleMenu insertItem:item atIndex:0];
   CFRelease(cfname);

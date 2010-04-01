@@ -40,36 +40,36 @@
 #include <stdlib.h>
 
 // If the array is this, we will double-reallocate as necessary:
-static Fl_Menu_Item* local_array = 0;
+static fltk3::MenuItem* local_array = 0;
 static int local_array_alloc = 0; // number allocated
 static int local_array_size = 0; // == size(local_array)
 extern Fl_Menu_* fl_menu_array_owner; // in Fl_Menu_.cxx
 
 // For historical reasons there are matching methods that work on a
-// user-allocated array of Fl_Menu_Item.  These methods are quite
+// user-allocated array of fltk3::MenuItem.  These methods are quite
 // depreciated and should not be used.  These old methods use the
 // above pointers to detect if the array belongs to an Fl_Menu_
 // widget, and if so it reallocates as necessary.
 
-// Insert a single Fl_Menu_Item into an array of size at offset n,
+// Insert a single fltk3::MenuItem into an array of size at offset n,
 // if this is local_array it will be reallocated if needed.
-static Fl_Menu_Item* insert(
-  Fl_Menu_Item* array, int size,
+static fltk3::MenuItem* insert(
+  fltk3::MenuItem* array, int size,
   int n,
   const char *text,
   int flags
 ) {
   if (array == local_array && size >= local_array_alloc) {
     local_array_alloc = 2*size;
-    Fl_Menu_Item* newarray = new Fl_Menu_Item[local_array_alloc];
-    memmove(newarray, array, size*sizeof(Fl_Menu_Item));
+    fltk3::MenuItem* newarray = new fltk3::MenuItem[local_array_alloc];
+    memmove(newarray, array, size*sizeof(fltk3::MenuItem));
     delete[] local_array;
     local_array = array = newarray;
   }
   // move all the later items:
-  memmove(array+n+1, array+n, sizeof(Fl_Menu_Item)*(size-n));
+  memmove(array+n+1, array+n, sizeof(fltk3::MenuItem)*(size-n));
   // create the new item:
-  Fl_Menu_Item* m = array+n;
+  fltk3::MenuItem* m = array+n;
   m->text = text ? strdup(text) : 0;
   m->shortcut_ = 0;
   m->callback_ = 0;
@@ -100,15 +100,15 @@ static int compare(const char* a, const char* b) {
    produce submenus (actually a totally unnecessary feature as you can
    now add submenu titles directly by setting SUBMENU in the flags):
 */
-int Fl_Menu_Item::add(
+int fltk3::MenuItem::add(
   const char *mytext,
   int sc,
   fltk3::Callback *cb,	
   void *data,
   int myflags
 ) {
-  Fl_Menu_Item *array = this;
-  Fl_Menu_Item *m = this;
+  fltk3::MenuItem *array = this;
+  fltk3::MenuItem *m = this;
   const char *p;
   char *q;
   char buf[1024];
@@ -124,7 +124,7 @@ int Fl_Menu_Item::add(
     if (*mytext == '/') {item = mytext; break;}
 
     // leading underscore causes divider line:
-    if (*mytext == '_') {mytext++; flags1 = FL_MENU_DIVIDER;}
+    if (*mytext == '_') {mytext++; flags1 = fltk3::MENU_DIVIDER;}
 
     // copy to buf, changing \x to x:
     q = buf;
@@ -137,11 +137,11 @@ int Fl_Menu_Item::add(
 
     /* find a matching menu title: */
     for (; m->text; m = m->next())
-      if (m->flags&FL_SUBMENU && !compare(item, m->text)) break;
+      if (m->flags&fltk3::SUBMENU && !compare(item, m->text)) break;
 
     if (!m->text) { /* create a new menu */
       int n = m-array;
-      array = insert(array, msize, n, item, FL_SUBMENU|flags1);
+      array = insert(array, msize, n, item, fltk3::SUBMENU|flags1);
       msize++;
       array = insert(array, msize, n+1, 0, 0);
       msize++;
@@ -153,13 +153,13 @@ int Fl_Menu_Item::add(
 
   /* find a matching menu item: */
   for (; m->text; m = m->next())
-    if (!(m->flags&FL_SUBMENU) && !compare(m->text,item)) break;
+    if (!(m->flags&fltk3::SUBMENU) && !compare(m->text,item)) break;
 
   if (!m->text) {	/* add a new menu item */
     int n = m-array;
     array = insert(array, msize, n, item, myflags|flags1);
     msize++;
-    if (myflags & FL_SUBMENU) { // add submenu delimiter
+    if (myflags & fltk3::SUBMENU) { // add submenu delimiter
       array = insert(array, msize, n+1, 0, 0);
       msize++;
     }
@@ -254,14 +254,14 @@ int Fl_Menu_Item::add(
   \par 
   These flags can be 'OR'ed together:
   \code
-      FL_MENU_INACTIVE     // Deactivate menu item (gray out)
-      FL_MENU_TOGGLE       // Item is a checkbox toggle (shows checkbox for on/off state)
-      FL_MENU_VALUE        // The on/off state for checkbox/radio buttons (if set, state is 'on')
-      FL_MENU_RADIO        // Item is a radio button (one checkbox of many can be on)
-      FL_MENU_INVISIBLE    // Item will not show up (shortcut will work)
-      FL_SUBMENU_POINTER   // Indicates user_data() is a pointer to another menu array
-      FL_SUBMENU           // This item is a submenu to other items
-      FL_MENU_DIVIDER      // Creates divider line below this item. Also ends a group of radio buttons.
+      fltk3::MENU_INACTIVE     // Deactivate menu item (gray out)
+      fltk3::MENU_TOGGLE       // Item is a checkbox toggle (shows checkbox for on/off state)
+      fltk3::MENU_VALUE        // The on/off state for checkbox/radio buttons (if set, state is 'on')
+      fltk3::MENU_RADIO        // Item is a radio button (one checkbox of many can be on)
+      fltk3::MENU_INVISIBLE    // Item will not show up (shortcut will work)
+      fltk3::SUBMENU_POINTER   // Indicates user_data() is a pointer to another menu array
+      fltk3::SUBMENU           // This item is a submenu to other items
+      fltk3::MENU_DIVIDER      // Creates divider line below this item. Also ends a group of radio buttons.
   \endcode
 
  */
@@ -273,8 +273,8 @@ int Fl_Menu_::add(const char *label,int shortcut,fltk3::Callback *callback,void 
       // the previous owner get's its own correctly-sized array:
       int value_offset = o->value_-local_array;
       int n = local_array_size;
-      Fl_Menu_Item* newMenu = o->menu_ = new Fl_Menu_Item[n];
-      memcpy(newMenu, local_array, n*sizeof(Fl_Menu_Item));
+      fltk3::MenuItem* newMenu = o->menu_ = new fltk3::MenuItem[n];
+      memcpy(newMenu, local_array, n*sizeof(fltk3::MenuItem));
       if (o->value_) o->value_ = newMenu+value_offset;
     }
     if (menu_) {
@@ -291,10 +291,10 @@ int Fl_Menu_::add(const char *label,int shortcut,fltk3::Callback *callback,void 
 	menu_ = local_array;
       } else {
 	local_array_alloc = 15;
-	local_array = menu_ = new Fl_Menu_Item[local_array_alloc];
-        memset(local_array, 0, sizeof(Fl_Menu_Item) * local_array_alloc);
+	local_array = menu_ = new fltk3::MenuItem[local_array_alloc];
+        memset(local_array, 0, sizeof(fltk3::MenuItem) * local_array_alloc);
       }
-      memset(menu_, 0, sizeof(Fl_Menu_Item));
+      memset(menu_, 0, sizeof(fltk3::MenuItem));
       local_array_size = 1;
     }
     fl_menu_array_owner = this;
@@ -362,15 +362,15 @@ void Fl_Menu_::remove(int i) {
   if (i<0 || i>=n) return;
   if (!alloc) copy(menu_);
   // find the next item, skipping submenus:
-  Fl_Menu_Item* item = menu_+i;
-  const Fl_Menu_Item* next_item = item->next();
+  fltk3::MenuItem* item = menu_+i;
+  const fltk3::MenuItem* next_item = item->next();
   // delete the text only if all items were created with add():
   if (alloc > 1) {
-    for (Fl_Menu_Item* m = item; m < next_item; m++)
+    for (fltk3::MenuItem* m = item; m < next_item; m++)
       if (m->text) free((void*)(m->text));
   }
   // MRS: "n" is the menu size(), which includes the trailing NULL entry...
-  memmove(item, next_item, (menu_+n-next_item)*sizeof(Fl_Menu_Item));
+  memmove(item, next_item, (menu_+n-next_item)*sizeof(fltk3::MenuItem));
 }
 
 //

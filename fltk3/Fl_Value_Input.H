@@ -32,12 +32,12 @@
 #define Fl_Value_Input_H
 
 #include "Fl_Valuator.H"
-#include "Fl_Input.H"
+#include "Input.h"
 
 /**
   The Fl_Value_Input widget displays a numeric value.
   The user can click in the text field and edit it - there is in
-  fact a hidden Fl_Input widget with
+  fact a hidden fltk3::Input widget with
   type(FL_FLOAT_INPUT) or type(FL_INT_INPUT) in
   there - and when they hit return or tab the value updates to
   what they typed and the callback is done.
@@ -45,7 +45,7 @@
   <P>If step() is non-zero and integral, then the range of numbers
   is limited to integers instead of floating point numbers. As
   well as displaying the value as an integer, typed input is also
-  limited to integer values, even if the hidden Fl_Input widget
+  limited to integer values, even if the hidden fltk3::Input widget
   is of type(FL_FLOAT_INPUT).</P>
   
   <P>If step() is non-zero, the user can also drag the
@@ -66,7 +66,7 @@ class FL_EXPORT Fl_Value_Input : public Fl_Valuator {
 public:
   /* This is the encapsulated Fl_input attribute to which 
   this class delegates the value font, color and shortcut */
-  Fl_Input input;
+  fltk3::Input input;
 private:
   char soft_;
   static void input_cb(fltk3::Widget*,void*);

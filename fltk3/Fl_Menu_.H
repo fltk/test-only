@@ -34,21 +34,21 @@
 #ifndef Fl_Widget_H
 #include "Widget.h"
 #endif
-#include "Fl_Menu_Item.H"
+#include "MenuItem.h"
 
 /**
   Base class of all widgets that have a menu in FLTK.
   Currently FLTK provides you with 
-  Fl_Menu_Button, Fl_Menu_Bar, and Fl_Choice.
+  Fl_Menu_Button, Fl_Menu_Bar, and fltk3::Choice.
   
-  <P>The class contains a pointer to an array of structures of type  Fl_Menu_Item.  The
+  <P>The class contains a pointer to an array of structures of type  fltk3::MenuItem.  The
   array may either be supplied directly by the user program, or it may
   be "private": a dynamically allocated array managed by the Fl_Menu_.
 */
 class FL_EXPORT Fl_Menu_ : public fltk3::Widget {
 
-  Fl_Menu_Item *menu_;
-  const Fl_Menu_Item *value_;
+  fltk3::MenuItem *menu_;
+  const fltk3::MenuItem *value_;
 
 protected:
 
@@ -62,21 +62,21 @@ public:
   Fl_Menu_(int,int,int,int,const char * =0);
   ~Fl_Menu_();
 
-  int item_pathname(char *name, int namelen, const Fl_Menu_Item *finditem=0) const;
-  const Fl_Menu_Item* picked(const Fl_Menu_Item*);
-  const Fl_Menu_Item* find_item(const char *name);
-  const Fl_Menu_Item* find_item(fltk3::Callback*);
+  int item_pathname(char *name, int namelen, const fltk3::MenuItem *finditem=0) const;
+  const fltk3::MenuItem* picked(const fltk3::MenuItem*);
+  const fltk3::MenuItem* find_item(const char *name);
+  const fltk3::MenuItem* find_item(fltk3::Callback*);
 
-  const Fl_Menu_Item* test_shortcut() {return picked(menu()->test_shortcut());}
+  const fltk3::MenuItem* test_shortcut() {return picked(menu()->test_shortcut());}
   void global();
 
   /**
-    Returns a pointer to the array of Fl_Menu_Items.  This will either be
+    Returns a pointer to the array of fltk3::MenuItems.  This will either be
     the value passed to menu(value) or the private copy.
   */  
-  const Fl_Menu_Item *menu() const {return menu_;}
-  void menu(const Fl_Menu_Item *m);
-  void copy(const Fl_Menu_Item *m, void* user_data = 0);
+  const fltk3::MenuItem *menu() const {return menu_;}
+  void menu(const fltk3::MenuItem *m);
+  void copy(const fltk3::MenuItem *m, void* user_data = 0);
   int  add(const char*, int shortcut, fltk3::Callback*, void* = 0, int = 0);
   /** See int Fl_Menu_::add(const char* label, int shortcut, fltk3::Callback*, void *user_data=0, int flags=0)*/
   int  add(const char* a, const char* b, fltk3::Callback* c, void* d = 0, int e = 0) {
@@ -89,16 +89,16 @@ public:
   void remove(int);
  /** Changes the shortcut of item i to n.  */
   void shortcut(int i, int s) {menu_[i].shortcut(s);}
-  /** Sets the flags of item i.  For a list of the flags, see Fl_Menu_Item.  */
+  /** Sets the flags of item i.  For a list of the flags, see fltk3::MenuItem.  */
   void mode(int i,int fl) {menu_[i].flags = fl;}
-  /** Gets the flags of item i.  For a list of the flags, see Fl_Menu_Item.  */
+  /** Gets the flags of item i.  For a list of the flags, see fltk3::MenuItem.  */
   int  mode(int i) const {return menu_[i].flags;}
 
   /** Returns a pointer to the last menu item that was picked.  */
-  const Fl_Menu_Item *mvalue() const {return value_;}
+  const fltk3::MenuItem *mvalue() const {return value_;}
   /** Returns the index into menu() of the last item chosen by the user.  It is zero initially. */
   int value() const {return value_ ? (int)(value_-menu_) : -1;}
-  int value(const Fl_Menu_Item*);
+  int value(const fltk3::MenuItem*);
   /**
     The value is the index into menu() of the last item chosen by
     the user.  It is zero initially.  You can set it as an integer, or set

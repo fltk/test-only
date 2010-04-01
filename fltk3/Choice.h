@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.H 7365 2010-03-30 15:18:29Z matt $"
+// "$Id: Choice.H 7365 2010-03-30 15:18:29Z matt $"
 //
 // Choice header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,19 +26,21 @@
 //
 
 /* \file
-   Fl_Choice widget . */
+   Choice widget . */
 
-#ifndef Fl_Choice_H
-#define Fl_Choice_H
+#ifndef Fltk3_Choice_H
+#define Fltk3_Choice_H
 
 #include "Fl_Menu_.H"
 
+namespace fltk3 {
+
 /**
-  \class Fl_Choice
+  \class Choice
   \brief A button that is used to pop up a menu.
 
   This is a button that, when pushed, pops up a menu (or hierarchy of menus)
-  defined by an array of Fl_Menu_Item objects.
+  defined by an array of fltk3::MenuItem objects.
   Motif calls this an OptionButton.
 
   The only difference between this and a Fl_Menu_Button is that the name of
@@ -65,8 +67,8 @@
   only looked at when the menu is popped up, however.
 
   \image html choice.gif
-  \image latex choice.eps  "Fl_Choice" width=4cm
-  \todo Refactor the doxygen comments for Fl_Choice changed() documentation.
+  \image latex choice.eps  "Choice" width=4cm
+  \todo Refactor the doxygen comments for Choice changed() documentation.
 
   \li <tt>int fltk3::Widget::changed() const</tt>
       This value is true the user picks a different value. <em>It is turned
@@ -76,19 +78,19 @@
       This method sets the changed() flag.
   \li <tt>void fltk3::Widget::clear_changed()</tt>
       This method clears the changed() flag.
-  \li <tt>fltk3::Boxtype Fl_Choice::down_box() const</tt>
+  \li <tt>fltk3::Boxtype Choice::down_box() const</tt>
       Gets the current down box, which is used when the menu is popped up.
       The default down box type is \c fltk3::DOWN_BOX.
-  \li <tt>void Fl_Choice::down_box(fltk3::Boxtype b)</tt>
+  \li <tt>void Choice::down_box(fltk3::Boxtype b)</tt>
       Sets the current down box type to \p b.
  */
-class FL_EXPORT Fl_Choice : public Fl_Menu_ {
+class FL_EXPORT Choice : public Fl_Menu_ {
 protected:
   void draw();
 public:
   int handle(int);
 
-  Fl_Choice(int X, int Y, int W, int H, const char *L = 0);
+  Choice(int X, int Y, int W, int H, const char *L = 0);
 
   /**
     Gets the index of the last item chosen by the user.
@@ -98,11 +100,13 @@ public:
 
   int value(int v);
 
-  int value(const Fl_Menu_Item* v);
+  int value(const fltk3::MenuItem* v);
 };
+
+}
 
 #endif
 
 //
-// End of "$Id: Fl_Choice.H 7365 2010-03-30 15:18:29Z matt $".
+// End of "$Id: Choice.H 7365 2010-03-30 15:18:29Z matt $".
 //

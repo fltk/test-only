@@ -35,11 +35,11 @@
 #include <fltk3/run.h>
 #include <fltk3/DoubleBufferWindow.h>
 #include <fltk3/Group.h>
-#include <fltk3/Fl_Choice.H>
+#include <fltk3/Choice.h>
 #include <fltk3/Button.h>
 #include <fltk3/Fl_Box.H>
 #include <fltk3/RoundButton.h>
-#include <fltk3/Fl_Input.H>
+#include <fltk3/Input.h>
 #include <fltk3/Fl_Spinner.H>
 #include <fltk3/CheckButton.h>
 #include <fltk3/ReturnButton.h>

@@ -544,7 +544,7 @@ Fl_File_Chooser::favoritesButtonCB()
     favoritesButton->add(menuname);
 
     if (favoritesButton->size() > 104) {
-      ((Fl_Menu_Item *)favoritesButton->menu())[0].deactivate();
+      ((fltk3::MenuItem *)favoritesButton->menu())[0].deactivate();
     }
   } else if (v == 1) {
     // Manage favorites...
@@ -1256,7 +1256,7 @@ Fl_File_Chooser::update_favorites()
   favoritesButton->add("bla");
   favoritesButton->clear();
   favoritesButton->add(add_favorites_label, FL_ALT + 'a', 0);
-  favoritesButton->add(manage_favorites_label, FL_ALT + 'm', 0, 0, FL_MENU_DIVIDER);
+  favoritesButton->add(manage_favorites_label, FL_ALT + 'm', 0, 0, fltk3::MENU_DIVIDER);
   favoritesButton->add(filesystems_label, FL_ALT + 'f', 0);
     
   if ((home = getenv("HOME")) != NULL) {
@@ -1275,7 +1275,7 @@ Fl_File_Chooser::update_favorites()
     else favoritesButton->add(menuname);
   }
 
-  if (i == 100) ((Fl_Menu_Item *)favoritesButton->menu())[0].deactivate();
+  if (i == 100) ((fltk3::MenuItem *)favoritesButton->menu())[0].deactivate();
 }
 
 

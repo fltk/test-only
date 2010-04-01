@@ -80,7 +80,7 @@ void fltk3::foreground(uchar r, uchar g, uchar b) {
 
 /**
     Changes the alternative background color. This color is used as a 
-    background by Fl_Input and other text widgets.
+    background by fltk3::Input and other text widgets.
     <P>This call may change fl_color(FL_FOREGROUND_COLOR) if it 
     does not provide sufficient contrast to FL_BACKGROUND2_COLOR.
 */

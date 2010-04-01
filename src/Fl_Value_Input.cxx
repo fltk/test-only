@@ -26,7 +26,7 @@
 //
 
 // FLTK widget for drag-adjusting a floating point value.
-// Warning: this works by making a child Fl_Input object, even
+// Warning: this works by making a child fltk3::Input object, even
 // though this object is *not* an fltk3::Group.  May be a kludge?
 
 #include <fltk3/run.h>

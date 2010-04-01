@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fltk3/Group.h>
-#include <fltk3/Fl_Choice.H>
+#include <fltk3/Choice.h>
 #include <fltk3/Fl_Menu_Button.H>
 #include <fltk3/Button.h>
 #include <fltk3/Fl_Preferences.H>
@@ -73,9 +73,9 @@ private:
   fltk3::DoubleBufferWindow *window;
   void cb_window_i(fltk3::DoubleBufferWindow*, void*);
   static void cb_window(fltk3::DoubleBufferWindow*, void*);
-  Fl_Choice *showChoice;
-  void cb_showChoice_i(Fl_Choice*, void*);
-  static void cb_showChoice(Fl_Choice*, void*);
+  fltk3::Choice *showChoice;
+  void cb_showChoice_i(fltk3::Choice*, void*);
+  static void cb_showChoice(fltk3::Choice*, void*);
   Fl_Menu_Button *favoritesButton;
   void cb_favoritesButton_i(Fl_Menu_Button*, void*);
   static void cb_favoritesButton(Fl_Menu_Button*, void*);

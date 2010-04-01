@@ -110,7 +110,7 @@
  OTHER CONTRIBUTORS
  
  - Inspired by the Feb 2000 version of FLVW's Flvw_Table widget. Mucho thanks to those folks.
- - Mister Satan : 04/07/2003 - MinGW porting mods, and singleinput.cxx; a cool Fl_Input oriented spreadsheet example
+ - Mister Satan : 04/07/2003 - MinGW porting mods, and singleinput.cxx; a cool fltk3::Input oriented spreadsheet example
  - Marek Paliwoda : 01/08/2003 - Porting mods for Borland
  - Ori Berger : 03/16/2006 - Optimizations for >500k rows/cols
  

@@ -45,7 +45,7 @@
 #include <fltk3/fl_draw.H>
 #include <fltk3/x.H>
 #include <fltk3/Widget.h>
-#include <fltk3/Fl_Menu_Item.H>
+#include <fltk3/MenuItem.h>
 #include <fltk3/Fl_Pixmap.H>
 
 #include <stdio.h>
@@ -234,7 +234,7 @@ void Fl_Pixmap::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 
-void Fl_Pixmap::label(Fl_Menu_Item* m) {
+void Fl_Pixmap::label(fltk3::MenuItem* m) {
   fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, Fl_Image::measure);
   m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }

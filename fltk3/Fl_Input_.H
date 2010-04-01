@@ -52,14 +52,14 @@
 /**
   This class provides a low-overhead text input field.
 
-  This is a virtual base class below Fl_Input. It has all
+  This is a virtual base class below fltk3::Input. It has all
   the same interfaces, but lacks the handle() and
   draw() method. You may want to subclass it if you are
   one of those people who likes to change how the editing keys
   work. It may also be useful for adding scrollbars
   to the input field.
   
-  This can act like any of the subclasses of Fl_Input, by
+  This can act like any of the subclasses of fltk3::Input, by
   setting type() to one of the following values:
   
   \code

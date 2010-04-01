@@ -188,7 +188,7 @@ public:
    \param[in] label optional text for the widget label
    */
   Widget(int x, int y, int w, int h, const char *label=0L);
-
+  
   /** Destroys the widget.
       Destroying single widgets is not very common. You almost always want to 
       destroy the parent group instead, which will destroy all of the child widgets 

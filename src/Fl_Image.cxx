@@ -29,7 +29,7 @@
 #include <fltk3/fl_draw.H>
 #include <fltk3/x.H>
 #include <fltk3/Widget.h>
-#include <fltk3/Fl_Menu_Item.H>
+#include <fltk3/MenuItem.h>
 #include <fltk3/Fl_Image.H>
 #include "flstring.h"
 
@@ -112,7 +112,7 @@ void Fl_Image::desaturate() {
   The label() methods are an obsolete way to set the
   image attribute of a widget or menu item. Use the
   image() or deimage() methods of the
-  fltk3::Widget and Fl_Menu_Item classes
+  fltk3::Widget and fltk3::MenuItem classes
   instead.
 */
 void Fl_Image::label(fltk3::Widget* widget) {
@@ -123,10 +123,10 @@ void Fl_Image::label(fltk3::Widget* widget) {
   The label() methods are an obsolete way to set the
   image attribute of a widget or menu item. Use the
   image() or deimage() methods of the
-  fltk3::Widget and Fl_Menu_Item classes
+  fltk3::Widget and fltk3::MenuItem classes
   instead.
 */
-void Fl_Image::label(Fl_Menu_Item* m) {
+void Fl_Image::label(fltk3::MenuItem* m) {
   fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
   m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }
@@ -548,7 +548,7 @@ void Fl_RGB_Image::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 
-void Fl_RGB_Image::label(Fl_Menu_Item* m) {
+void Fl_RGB_Image::label(fltk3::MenuItem* m) {
   fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
   m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }

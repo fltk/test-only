@@ -32,7 +32,7 @@
 #ifndef Fl_File_Input_H
 #  define Fl_File_Input_H
 
-#  include <fltk3/Fl_Input.H>
+#  include <fltk3/Input.h>
 
 /**
   \class Fl_File_Input
@@ -46,12 +46,12 @@
   is the same that the current one.
   <P align=CENTER> \image html Fl_File_Input.gif </P> 
   \image latex Fl_File_Input.eps "Fl_File_Input"  width=6cm
-  \note As all Fl_Input derived objects, Fl_File_Input may call its callback
+  \note As all fltk3::Input derived objects, Fl_File_Input may call its callback
   when loosing focus (see fltk3::UNFOCUS) to update its state like its cursor shape.
   One resulting side effect is that you should call clear_changed() early in your callback
   to avoid reentrant calls if you plan to show another window or dialog box in the callback.
 */
-class FL_EXPORT Fl_File_Input : public Fl_Input
+class FL_EXPORT Fl_File_Input : public fltk3::Input
 {
   Fl_Color	errorcolor_;
   char		ok_entry_;

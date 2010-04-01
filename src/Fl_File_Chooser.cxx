@@ -40,10 +40,10 @@ void Fl_File_Chooser::cb_window(fltk3::DoubleBufferWindow* o, void* v) {
   ((Fl_File_Chooser*)(o->user_data()))->cb_window_i(o,v);
 }
 
-void Fl_File_Chooser::cb_showChoice_i(Fl_Choice*, void*) {
+void Fl_File_Chooser::cb_showChoice_i(fltk3::Choice*, void*) {
   showChoiceCB();
 }
-void Fl_File_Chooser::cb_showChoice(Fl_Choice* o, void* v) {
+void Fl_File_Chooser::cb_showChoice(fltk3::Choice* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_showChoice_i(o,v);
 }
 
@@ -163,13 +163,13 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
   { window = new fltk3::DoubleBufferWindow(490, 380, "Choose File");
     window->callback((fltk3::Callback*)cb_window, (void*)(this));
     { fltk3::Group* o = new fltk3::Group(10, 10, 470, 25);
-      { showChoice = new Fl_Choice(65, 10, 215, 25, "Show:");
+      { showChoice = new fltk3::Choice(65, 10, 215, 25, "Show:");
         showChoice->down_box(fltk3::BORDER_BOX);
         showChoice->labelfont(1);
         showChoice->callback((fltk3::Callback*)cb_showChoice);
         fltk3::Group::current()->resizable(showChoice);
         showChoice->label(show_label);
-      } // Fl_Choice* showChoice
+      } // fltk3::Choice* showChoice
       { favoritesButton = new Fl_Menu_Button(290, 10, 155, 25, "Favorites");
         favoritesButton->down_box(fltk3::BORDER_BOX);
         favoritesButton->callback((fltk3::Callback*)cb_favoritesButton);

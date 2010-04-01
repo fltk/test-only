@@ -36,7 +36,7 @@
 /**
   This is a button that when pushed pops up a menu (or hierarchy of
   menus) defined by an array of 
-  Fl_Menu_Item objects.
+  fltk3::MenuItem objects.
   <P ALIGN=CENTER>\image html  menu_button.gif</P>
   \image latex  menu_button.eps " menu_button" width=5cm
   <P>Normally any mouse button will pop up a menu and it is lined up
@@ -61,7 +61,7 @@ public:
   // values for type:
   enum {POPUP1 = 1, POPUP2, POPUP12, POPUP3, POPUP13, POPUP23, POPUP123};
   int handle(int);
-  const Fl_Menu_Item* popup();
+  const fltk3::MenuItem* popup();
   Fl_Menu_Button(int,int,int,int,const char * =0);
 };
 

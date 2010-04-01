@@ -65,19 +65,19 @@
 
 #define MenuHandle void *
 
-typedef const Fl_Menu_Item *pFl_Menu_Item;
+typedef const fltk3::MenuItem *pFl_Menu_Item;
  
 
 /*
  * Set a shortct for an Apple manu item using the FLTK shortcut descriptor.
  */
-static void setMenuShortcut( MenuHandle mh, int miCnt, const Fl_Menu_Item *m )
+static void setMenuShortcut( MenuHandle mh, int miCnt, const fltk3::MenuItem *m )
 {
   if ( !m->shortcut_ ) 
     return;
-  if ( m->flags & FL_SUBMENU )
+  if ( m->flags & fltk3::SUBMENU )
     return;
-  if ( m->flags & FL_SUBMENU_POINTER )
+  if ( m->flags & fltk3::SUBMENU_POINTER )
     return;
   char key = m->shortcut_ & 0xff;
   if ( !isalnum( key ) )
@@ -92,16 +92,16 @@ static void setMenuShortcut( MenuHandle mh, int miCnt, const Fl_Menu_Item *m )
 /*
  * Set the Toggle and Radio flag based on FLTK flags
  */
-static void setMenuFlags( MenuHandle mh, int miCnt, const Fl_Menu_Item *m )
+static void setMenuFlags( MenuHandle mh, int miCnt, const fltk3::MenuItem *m )
 {
-  if ( m->flags & FL_MENU_TOGGLE )
+  if ( m->flags & fltk3::MENU_TOGGLE )
   {
 	void *menuItem = Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::itemAtIndex, mh, miCnt);
-	Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setState, menuItem, m->flags & FL_MENU_VALUE );
+	Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setState, menuItem, m->flags & fltk3::MENU_VALUE );
   }
-  else if ( m->flags & FL_MENU_RADIO ) {
+  else if ( m->flags & fltk3::MENU_RADIO ) {
     void *menuItem = Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::itemAtIndex, mh, miCnt);
-    Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setState, menuItem, m->flags & FL_MENU_VALUE );
+    Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setState, menuItem, m->flags & fltk3::MENU_VALUE );
   }
 }
 
@@ -121,7 +121,7 @@ static void createSubMenu( void * mh, pFl_Menu_Item &mm )
   cnt--;
   menuItem = Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::itemAtIndex, mh, cnt);
   Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setSubmenu, menuItem, submenu);
-  if ( mm->flags & FL_MENU_INACTIVE ) {
+  if ( mm->flags & fltk3::MENU_INACTIVE ) {
     Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setEnabled, menuItem, 0);
   }
   mm++;
@@ -132,21 +132,21 @@ static void createSubMenu( void * mh, pFl_Menu_Item &mm )
     Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::addNewItem, submenu, flRank, &miCnt);
     setMenuFlags( submenu, miCnt, mm );
     setMenuShortcut( submenu, miCnt, mm );
-    if ( mm->flags & FL_MENU_INACTIVE ) {
+    if ( mm->flags & fltk3::MENU_INACTIVE ) {
       void *item = Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::itemAtIndex, submenu, miCnt);
       Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setEnabled, item, 0);
     }
     flags = mm->flags;
-    if ( mm->flags & FL_SUBMENU )
+    if ( mm->flags & fltk3::SUBMENU )
     {
       createSubMenu( submenu, mm );
     }
-    else if ( mm->flags & FL_SUBMENU_POINTER )
+    else if ( mm->flags & fltk3::SUBMENU_POINTER )
     {
-      const Fl_Menu_Item *smm = (Fl_Menu_Item*)mm->user_data_;
+      const fltk3::MenuItem *smm = (fltk3::MenuItem*)mm->user_data_;
       createSubMenu( submenu, smm );
     }
-    if ( flags & FL_MENU_DIVIDER ) {
+    if ( flags & fltk3::MENU_DIVIDER ) {
       Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::addSeparatorItem, submenu);
       }
     mm++;
@@ -155,10 +155,10 @@ static void createSubMenu( void * mh, pFl_Menu_Item &mm )
  
 
 /*
- * convert a complete Fl_Menu_Item array into a series of menus in the top menu bar
+ * convert a complete fltk3::MenuItem array into a series of menus in the top menu bar
  * ALL PREVIOUS SYSTEM MENUS, EXCEPT APPLICATION MENU, ARE REPLACED BY THE NEW DATA
  */
-static void convertToMenuBar(const Fl_Menu_Item *mm)
+static void convertToMenuBar(const fltk3::MenuItem *mm)
 {
   int count;//first, delete all existing system menus
   Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::numberOfItems, fl_system_menu, &count);
@@ -174,10 +174,10 @@ static void convertToMenuBar(const Fl_Menu_Item *mm)
     int flRank = mm - fl_sys_menu_bar->Fl_Menu_::menu();
     Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::addNewItem, fl_system_menu, flRank, NULL);
 		
-    if ( mm->flags & FL_SUBMENU )
+    if ( mm->flags & fltk3::SUBMENU )
       createSubMenu( fl_system_menu, mm );
-    else if ( mm->flags & FL_SUBMENU_POINTER ) {
-      const Fl_Menu_Item *smm = (Fl_Menu_Item*)mm->user_data_;
+    else if ( mm->flags & fltk3::SUBMENU_POINTER ) {
+      const fltk3::MenuItem *smm = (fltk3::MenuItem*)mm->user_data_;
       createSubMenu( fl_system_menu, smm );
     }
     if ( visible ) {
@@ -193,9 +193,9 @@ static void convertToMenuBar(const Fl_Menu_Item *mm)
  *
  * \author Matthias Melcher
  *
- * @param m list of Fl_Menu_Item
+ * @param m list of fltk3::MenuItem
  */
-void Fl_Sys_Menu_Bar::menu(const Fl_Menu_Item *m) 
+void Fl_Sys_Menu_Bar::menu(const fltk3::MenuItem *m) 
 {
   fl_open_display();
   Fl_Menu_Bar::menu( m );

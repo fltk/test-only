@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.H 6699 2009-03-18 22:58:12Z engelsman $"
+// "$Id: Input.h 6699 2009-03-18 22:58:12Z engelsman $"
 //
 // Input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,12 +26,14 @@
 //
 
 /* \file
-   Fl_Input widget . */
+   Input widget . */
 
-#ifndef Fl_Input_H
-#define Fl_Input_H
+#ifndef Fltk3_Input_H
+#define Fltk3_Input_H
 
 #include "Fl_Input_.H"
+
+namespace fltk3 {
 
 /**
   This is the FLTK text input widget. It displays a single line
@@ -42,7 +44,7 @@
   for unprintable characters with the high bit set. It assumes the
   font can draw any characters in the ISO-8859-1 character set.</P>
   
-  <CENTER><TABLE border=1 WIDTH=90% summary="Fl_Input keyboard and mouse bindings.">
+  <CENTER><TABLE border=1 WIDTH=90% summary="Input keyboard and mouse bindings.">
   
   <TR><TD WIDTH=200><B>Mouse button 1</B></TD><TD>Moves the cursor to
   this point. Drag selects characters.  Double click selects words.
@@ -243,7 +245,7 @@
   </tr>
   </table></center>
 */
-class FL_EXPORT Fl_Input : public Fl_Input_ {
+class FL_EXPORT Input : public Fl_Input_ {
   int handle_key();
   int shift_position(int p);
   int shift_up_down_position(int p);
@@ -252,11 +254,13 @@ protected:
   void draw();
 public:
   int handle(int);
-  Fl_Input(int,int,int,int,const char * = 0);
+  Input(int,int,int,int,const char * = 0);
 };
+
+}
 
 #endif 
 
 //
-// End of "$Id: Fl_Input.H 6699 2009-03-18 22:58:12Z engelsman $".
+// End of "$Id: Input.h 6699 2009-03-18 22:58:12Z engelsman $".
 //

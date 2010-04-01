@@ -29,7 +29,7 @@
 #define Fl_Multi_Label_H
 
 class fltk3::Widget;
-struct Fl_Menu_Item;
+struct fltk3::MenuItem;
 
 struct FL_EXPORT Fl_Multi_Label {
   const char* labela;
@@ -37,7 +37,7 @@ struct FL_EXPORT Fl_Multi_Label {
   uchar typea;
   uchar typeb;
   void label(fltk3::Widget*);
-  void label(Fl_Menu_Item*);
+  void label(fltk3::MenuItem*);
 };
 
 #endif

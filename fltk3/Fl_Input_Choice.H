@@ -40,7 +40,7 @@
 
 #include <fltk3/run.h>
 #include <fltk3/Group.h>
-#include <fltk3/Fl_Input.H>
+#include <fltk3/Input.h>
 #include <fltk3/Fl_Menu_Button.H>
 #include <fltk3/fl_draw.H>
 #include <string.h>
@@ -71,14 +71,14 @@ class Fl_Input_Choice : public fltk3::Group {
 	Fl_Menu_Button(x,y,w,h,l) { box(fltk3::UP_BOX); }
   };
 
-  Fl_Input *inp_;
+  fltk3::Input *inp_;
   InputMenuButton *menu_;
 
   static void menu_cb(fltk3::Widget*, void *data) { 
     Fl_Input_Choice *o=(Fl_Input_Choice *)data;
     Fl_Widget_Tracker wp(o);
-    const Fl_Menu_Item *item = o->menubutton()->mvalue();
-    if (item && item->flags & (FL_SUBMENU|FL_SUBMENU_POINTER)) return;	// ignore submenus
+    const fltk3::MenuItem *item = o->menubutton()->mvalue();
+    if (item && item->flags & (fltk3::SUBMENU|fltk3::SUBMENU_POINTER)) return;	// ignore submenus
     if (!strcmp(o->inp_->value(), o->menu_->text()))
     {
       o->fltk3::Widget::clear_changed();
@@ -141,8 +141,8 @@ public:
   */
   Fl_Input_Choice (int x,int y,int w,int h,const char*l=0) : fltk3::Group(x,y,w,h,l) {
     fltk3::Group::box(fltk3::DOWN_BOX);
-    align(fltk3::ALIGN_LEFT);				// default like Fl_Input
-    inp_ = new Fl_Input(inp_x(), inp_y(),
+    align(fltk3::ALIGN_LEFT);				// default like fltk3::Input
+    inp_ = new fltk3::Input(inp_x(), inp_y(),
 			inp_w(), inp_h());
     inp_->callback(inp_cb, (void*)this);
     inp_->box(fltk3::FLAT_BOX);		// cosmetic
@@ -171,10 +171,10 @@ public:
   fltk3::Boxtype down_box() const { return (menu_->down_box()); }
   /** Sets the box type of the menu button */
   void down_box(fltk3::Boxtype b) { menu_->down_box(b); }
-  /** Gets the Fl_Menu_Item array used for the menu. */
-  const Fl_Menu_Item *menu() { return (menu_->menu()); }
-  /** Sets the Fl_Menu_Item array used for the menu. */
-  void menu(const Fl_Menu_Item *m) { menu_->menu(m); }
+  /** Gets the fltk3::MenuItem array used for the menu. */
+  const fltk3::MenuItem *menu() { return (menu_->menu()); }
+  /** Sets the fltk3::MenuItem array used for the menu. */
+  void menu(const fltk3::MenuItem *m) { menu_->menu(m); }
   void resize(int X, int Y, int W, int H) {
     fltk3::Group::resize(X,Y,W,H);
     inp_->resize(inp_x(), inp_y(), inp_w(), inp_h());
@@ -210,9 +210,9 @@ public:
   /**    Returns a reference to the internal Fl_Menu_Button widget.  */
   Fl_Menu_Button *menubutton() { return menu_; }
   /**
-    Returns a reference to the internal Fl_Input widget.</p>
+    Returns a reference to the internal fltk3::Input widget.</p>
   */
-  Fl_Input *input() { return inp_; }
+  fltk3::Input *input() { return inp_; }
 };
 
 #endif // !Fl_Input_Choice_H

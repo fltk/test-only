@@ -38,7 +38,7 @@
 #include <fltk3/Group.h>
 #include <fltk3/Fl_Box.H>
 #include <fltk3/ReturnButton.h>
-#include <fltk3/Fl_Choice.H>
+#include <fltk3/Choice.h>
 #include <fltk3/Fl_Value_Input.H>
 
 #ifndef FL_DOXYGEN
@@ -116,7 +116,7 @@ public:
 class FL_EXPORT Fl_Color_Chooser : public fltk3::Group {
   Flcc_HueBox huebox;
   Flcc_ValueBox valuebox;
-  Fl_Choice choice;
+  fltk3::Choice choice;
   Flcc_Value_Input rvalue;
   Flcc_Value_Input gvalue;
   Flcc_Value_Input bvalue;

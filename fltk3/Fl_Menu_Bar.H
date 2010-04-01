@@ -39,8 +39,8 @@
   widget should be 30 for the menu titles to draw correctly with the
   default font.
   <P>The items on the bar and the menus they bring up are defined by a
-  single Fl_Menu_Item
-  array.  Because a Fl_Menu_Item array defines a hierarchy, the
+  single fltk3::MenuItem
+  array.  Because a fltk3::MenuItem array defines a hierarchy, the
   top level menu defines the items in the menubar, while the submenus
   define the pull-down menus. Sub-sub menus and lower pop up to the right
   of the submenus. </P>

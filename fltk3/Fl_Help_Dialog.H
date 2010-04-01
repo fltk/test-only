@@ -36,7 +36,7 @@
 #include <fltk3/DoubleBufferWindow.h>
 #include <fltk3/Group.h>
 #include <fltk3/Button.h>
-#include <fltk3/Fl_Input.H>
+#include <fltk3/Input.h>
 #include <fltk3/Fl_Box.H>
 #include <fltk3/Fl_Help_View.H>
 
@@ -62,9 +62,9 @@ private:
   fltk3::Button *larger_;
   void cb_larger__i(fltk3::Button*, void*);
   static void cb_larger_(fltk3::Button*, void*);
-  Fl_Input *find_;
-  void cb_find__i(Fl_Input*, void*);
-  static void cb_find_(Fl_Input*, void*);
+  fltk3::Input *find_;
+  void cb_find__i(fltk3::Input*, void*);
+  static void cb_find_(fltk3::Input*, void*);
   Fl_Help_View *view_;
   void cb_view__i(Fl_Help_View*, void*);
   static void cb_view_(Fl_Help_View*, void*);

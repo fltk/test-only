@@ -26,7 +26,7 @@
 //
 
 // this include file is for back compatibility only
-#include "Fl_Menu_Item.H"
+#include "MenuItem.h"
 
 //
 // End of "$Id: Fl_Menu.H 6614 2009-01-01 16:11:32Z matt $".

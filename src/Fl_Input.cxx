@@ -35,7 +35,7 @@
 #include <stdlib.h>
 #include <fltk3/run.h>
 #include <fltk3/Window.h>
-#include <fltk3/Fl_Input.H>
+#include <fltk3/Input.h>
 #include <fltk3/fl_draw.H>
 #include <fltk3/ask.h>
 #include "flstring.h"
@@ -45,7 +45,7 @@
 #endif
 
 
-void Fl_Input::draw() {
+void fltk3::Input::draw() {
   if (input_type() == FL_HIDDEN_INPUT) return;
   fltk3::Boxtype b = box();
   if (damage() & FL_DAMAGE_ALL) draw_box(b, color());
@@ -54,11 +54,11 @@ void Fl_Input::draw() {
 }
 
 // kludge so shift causes selection to extend:
-int Fl_Input::shift_position(int p) {
+int fltk3::Input::shift_position(int p) {
   return position(p, fltk3::event_state(FL_SHIFT) ? mark() : p);
 }
 
-int Fl_Input::shift_up_down_position(int p) {
+int fltk3::Input::shift_up_down_position(int p) {
   return up_down_position(p, fltk3::event_state(FL_SHIFT));
 }
 
@@ -82,7 +82,7 @@ static const char *legal_fp_chars = 0L;
 static const char *legal_fp_chars = ".eE+-"; 
 #endif
 
-int Fl_Input::handle_key() {
+int fltk3::Input::handle_key() {
   
   char ascii = fltk3::event_text()[0];
   
@@ -215,7 +215,7 @@ int Fl_Input::handle_key() {
 #ifdef __APPLE__
       if (mods==0) { // scroll text one page
                      // OS X scrolls the view, but does not move the cursor
-                     // Fl_Input has no scroll control, so instead we move the cursor by one page
+                     // fltk3::Input has no scroll control, so instead we move the cursor by one page
         repeat_num = linesPerPage();
         ascii = ctrl('P');
       } else if (mods==FL_ALT) { // move cursor one page
@@ -233,7 +233,7 @@ int Fl_Input::handle_key() {
         ascii = ctrl('P');
       } else if (mods==FL_CTRL) { // scroll text down one page
                                   // OS X scrolls the view, but does not move the cursor
-                                  // Fl_Input has no scroll control, so instead we move the cursor by one page
+                                  // fltk3::Input has no scroll control, so instead we move the cursor by one page
         repeat_num = linesPerPage();
         ascii = ctrl('P');
       } else if (mods==FL_ALT) { // line start and up
@@ -249,7 +249,7 @@ int Fl_Input::handle_key() {
       if (mods==0) { // line up
         ascii = ctrl('P');
       } else if (mods==FL_CTRL) { // scroll text down one line
-                                  // Fl_Input has no scroll control, so instead we move the cursor by one page
+                                  // fltk3::Input has no scroll control, so instead we move the cursor by one page
         ascii = ctrl('P');
       } else return 1;
 #endif
@@ -258,7 +258,7 @@ int Fl_Input::handle_key() {
 #ifdef __APPLE__
       if (mods==0) { // scroll text one page
                      // OS X scrolls the view, but does not move the cursor
-                     // Fl_Input has no scroll control, so instead we move the cursor by one page
+                     // fltk3::Input has no scroll control, so instead we move the cursor by one page
         repeat_num = linesPerPage();
         ascii = ctrl('N');
       } else if (mods==FL_ALT) { // move cursor one page
@@ -276,7 +276,7 @@ int Fl_Input::handle_key() {
         ascii = ctrl('N');
       } else if (mods==FL_CTRL) {
         // OS X scrolls the view, but does not move the cursor
-        // Fl_Input has no scroll control, so instead we move the cursor by one page
+        // fltk3::Input has no scroll control, so instead we move the cursor by one page
         repeat_num = linesPerPage();
         ascii = ctrl('N');
       } else if (mods==FL_ALT) { // line end and down
@@ -292,7 +292,7 @@ int Fl_Input::handle_key() {
       if (mods==0) { // line down
         ascii = ctrl('N');
       } else if (mods==FL_CTRL) { // scroll text up one line
-                                  // Fl_Input has no scroll control, so instead we move the cursor by one page
+                                  // fltk3::Input has no scroll control, so instead we move the cursor by one page
         ascii = ctrl('N');
       } else return 1;
 #endif
@@ -301,7 +301,7 @@ int Fl_Input::handle_key() {
 #ifdef __APPLE__
       if (mods==0) { // scroll display to the top
                      // OS X scrolls the view, but does not move the cursor
-                     // Fl_Input has no scroll control, so instead we move the cursor by one page
+                     // fltk3::Input has no scroll control, so instead we move the cursor by one page
         shift_position(0);
         return 1;
       } else return 1;
@@ -318,7 +318,7 @@ int Fl_Input::handle_key() {
 #ifdef __APPLE__
       if (mods==0) { // scroll display to the bottom
                      // OS X scrolls the view, but does not move the cursor
-                     // Fl_Input has no scroll control, so instead we move the cursor by one page
+                     // fltk3::Input has no scroll control, so instead we move the cursor by one page
         shift_position(size());
         return 1; 
       } else return 1;
@@ -480,7 +480,7 @@ int Fl_Input::handle_key() {
   return 0;
 }
 
-int Fl_Input::handle(int event) {
+int fltk3::Input::handle(int event) {
   static int dnd_save_position, dnd_save_mark, drag_start = -1, newpos;
   static fltk3::Widget *dnd_save_focus;
   switch (event) {
@@ -645,10 +645,10 @@ int Fl_Input::handle(int event) {
 }
 
 /**
- Creates a new Fl_Input widget using the given position, size,
+ Creates a new fltk3::Input widget using the given position, size,
  and label string. The default boxtype is fltk3::DOWN_BOX.
  */
-Fl_Input::Fl_Input(int X, int Y, int W, int H, const char *l)
+fltk3::Input::Input(int X, int Y, int W, int H, const char *l)
 : Fl_Input_(X, Y, W, H, l) {
 }
 

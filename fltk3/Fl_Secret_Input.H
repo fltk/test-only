@@ -31,14 +31,14 @@
 #ifndef Fl_Secret_Input_H
 #define Fl_Secret_Input_H
 
-#include "Fl_Input.H"
+#include "Input.h"
 
 /**
-  The Fl_Secret_Input class is a subclass of Fl_Input
+  The Fl_Secret_Input class is a subclass of fltk3::Input
   that displays its input as a string of asterisks.  This subclass is
   usually used to receive passwords and other "secret" information.
 */
-class Fl_Secret_Input : public Fl_Input {
+class Fl_Secret_Input : public fltk3::Input {
 public:
   /**
     Creates a new Fl_Secret_Input widget using the given
@@ -46,7 +46,7 @@ public:
     <P>Inherited destructor destroys the widget and any value associated with it.
   */
   Fl_Secret_Input(int X,int Y,int W,int H,const char *l = 0)
-    : Fl_Input(X,Y,W,H,l) {type(FL_SECRET_INPUT);}
+    : fltk3::Input(X,Y,W,H,l) {type(FL_SECRET_INPUT);}
 };
 
 #endif

@@ -428,7 +428,6 @@
 		BAF85F8722A8A4ED808FE2DF /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
 		BAFA353D83EF264FE3C43081 /* forms_free.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 3C45ADA08A729A796F58B6CC /* forms_free.cxx */; };
 		BB32C5CFD1DA7349ABDF6EDC /* jdmaster.c in Sources */ = {isa = PBXBuildFile; fileRef = 476362B8974A588745ED4202 /* jdmaster.c */; };
-		BBE7FE849FC4A5457B0242EE /* fltkforms.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5EDFD4993E8000051E5208F /* fltkforms.framework */; };
 		BBF2937010433FC8330848E8 /* fltkpng.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5C37D7B3EEB272272DB34687 /* fltkpng.framework */; };
 		BC81270C5FD8227D45952E6C /* jcapistd.c in Sources */ = {isa = PBXBuildFile; fileRef = 89DAEA0CB54B226CEF269DD0 /* jcapistd.c */; };
 		BCB3A8B135BB28742B3C0B78 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
@@ -494,6 +493,22 @@
 		C97832F91164F06200491051 /* buttons2.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C97832CE1164F04A00491051 /* buttons2.cxx */; };
 		C97832FB1164F06200491051 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
 		C97832FD1164F06200491051 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
+		C97834F81165325700491051 /* label1.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C97834F61165325700491051 /* label1.cxx */; };
+		C97834F91165325700491051 /* label2.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C97834F71165325700491051 /* label2.cxx */; };
+		C97834FA1165325700491051 /* label1.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C97834F61165325700491051 /* label1.cxx */; };
+		C97834FB1165325700491051 /* label2.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C97834F71165325700491051 /* label2.cxx */; };
+		C97834FC1165325700491051 /* label1.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C97834F61165325700491051 /* label1.cxx */; };
+		C97834FD1165325700491051 /* label2.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C97834F71165325700491051 /* label2.cxx */; };
+		C978350F1165327700491051 /* label1.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C97834F61165325700491051 /* label1.cxx */; };
+		C97835121165327700491051 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
+		C97835131165327700491051 /* fltkforms.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5EDFD4993E8000051E5208F /* fltkforms.framework */; };
+		C97835151165327700491051 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
+		C97835161165327700491051 /* fltkforms.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E5EDFD4993E8000051E5208F /* fltkforms.framework */; };
+		C97835271165327F00491051 /* label2.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C97834F71165325700491051 /* label2.cxx */; };
+		C97835291165327F00491051 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
+		C978352A1165327F00491051 /* fltkforms.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5EDFD4993E8000051E5208F /* fltkforms.framework */; };
+		C978352C1165327F00491051 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
+		C978352D1165327F00491051 /* fltkforms.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E5EDFD4993E8000051E5208F /* fltkforms.framework */; };
 		C9C84B2983DC793B141DDC70 /* ide_maketools.cxx in Sources */ = {isa = PBXBuildFile; fileRef = B65FCD2B8489E2BBAA3F695A /* ide_maketools.cxx */; };
 		C9C9079111626697006C5014 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
 		C9C9079311626697006C5014 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
@@ -1472,6 +1487,30 @@
 			);
 			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
 		};
+		C97835171165327700491051 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		C978352E1165327F00491051 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
 		C9C9079411626697006C5014 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
@@ -2411,13 +2450,6 @@
 			remoteGlobalIDString = E379F105C5DD998B9B72950E;
 			remoteInfo = fltk;
 		};
-		93177B7091AA43D4ECE14423 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2E06DFE475DEE3090F8EA260 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 27284DC0C205B0F1B26EA258;
-			remoteInfo = fltkforms;
-		};
 		9459B35A44A9AECE43E00B78 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2E06DFE475DEE3090F8EA260 /* Project object */;
@@ -2704,6 +2736,34 @@
 			proxyType = 1;
 			remoteGlobalIDString = E379F105C5DD998B9B72950E;
 			remoteInfo = fltk;
+		};
+		C97835091165327700491051 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E06DFE475DEE3090F8EA260 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E379F105C5DD998B9B72950E;
+			remoteInfo = fltk;
+		};
+		C978350B1165327700491051 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E06DFE475DEE3090F8EA260 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 27284DC0C205B0F1B26EA258;
+			remoteInfo = fltkforms;
+		};
+		C97835201165327F00491051 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E06DFE475DEE3090F8EA260 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E379F105C5DD998B9B72950E;
+			remoteInfo = fltk;
+		};
+		C97835221165327F00491051 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E06DFE475DEE3090F8EA260 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 27284DC0C205B0F1B26EA258;
+			remoteInfo = fltkforms;
 		};
 		C9BE0900956B8DE28740E8C6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3747,6 +3807,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C97835141165327700491051 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C97835151165327700491051 /* fltk.framework in CopyFiles */,
+				C97835161165327700491051 /* fltkforms.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C978352B1165327F00491051 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C978352C1165327F00491051 /* fltk.framework in CopyFiles */,
+				C978352D1165327F00491051 /* fltkforms.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C9C9079211626697006C5014 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4243,6 +4325,12 @@
 		C97832F01164F05900491051 /* buttons-Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "buttons-Info copy.plist"; path = "plists/buttons-Info copy.plist"; sourceTree = "<group>"; };
 		C97833021164F06200491051 /* buttons2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = buttons2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C978330A1164F06300491051 /* buttons-Info copy 2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "buttons-Info copy 2.plist"; path = "plists/buttons-Info copy 2.plist"; sourceTree = "<group>"; };
+		C97834F61165325700491051 /* label1.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = label1.cxx; path = ../../test/label1.cxx; sourceTree = SOURCE_ROOT; };
+		C97834F71165325700491051 /* label2.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = label2.cxx; path = ../../test/label2.cxx; sourceTree = SOURCE_ROOT; };
+		C978351B1165327700491051 /* label1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = label1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C978351D1165327800491051 /* label-Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "label-Info copy.plist"; path = "plists/label-Info copy.plist"; sourceTree = "<group>"; };
+		C97835321165327F00491051 /* label2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = label2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C978353B1165328000491051 /* label-Info copy 2.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "label-Info copy 2.plist"; path = "plists/label-Info copy 2.plist"; sourceTree = "<group>"; };
 		C9C9079811626697006C5014 /* hello1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9C907A011626698006C5014 /* hello-Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "hello-Info copy.plist"; path = "plists/hello-Info copy.plist"; sourceTree = "<group>"; };
 		C9C907B2116266AA006C5014 /* hello2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello2.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -4491,7 +4579,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6552E77E6991E795B7573DD5 /* fltk.framework in Frameworks */,
-				BBE7FE849FC4A5457B0242EE /* fltkforms.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4891,6 +4978,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C97835111165327700491051 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C97835121165327700491051 /* fltk.framework in Frameworks */,
+				C97835131165327700491051 /* fltkforms.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C97835281165327F00491051 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C97835291165327F00491051 /* fltk.framework in Frameworks */,
+				C978352A1165327F00491051 /* fltkforms.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C9C9079011626697006C5014 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -5139,6 +5244,8 @@
 			isa = PBXGroup;
 			children = (
 				5E079F4524100018D9EB37EA /* label.cxx */,
+				C97834F61165325700491051 /* label1.cxx */,
+				C97834F71165325700491051 /* label2.cxx */,
 			);
 			name = label;
 			sourceTree = "<group>";
@@ -5153,6 +5260,8 @@
 				C97832A21164EC3A00491051 /* plists */,
 				C97832F01164F05900491051 /* buttons-Info copy.plist */,
 				C978330A1164F06300491051 /* buttons-Info copy 2.plist */,
+				C978351D1165327800491051 /* label-Info copy.plist */,
+				C978353B1165328000491051 /* label-Info copy 2.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -5435,7 +5544,7 @@
 				A18D3FFC7BD51E0063CDE1DB /* 123 boxtype */,
 				1F2A334C7597E64951FE171D /* browser */,
 				DFDAA821C09CB20A1CBF591E /* 123 button */,
-				8C92CD0AE2ABEDD4BEEDF0E6 /* buttons */,
+				8C92CD0AE2ABEDD4BEEDF0E6 /* 123 buttons */,
 				AD3CD53EA76D9E31AFF4ED71 /* checkers */,
 				C5BAF456219335209EA4AA9B /* clock */,
 				916C4ACA6489EB13752E0992 /* colbrowser */,
@@ -5753,6 +5862,8 @@
 				C97831661164915600491051 /* boxtype2.app */,
 				C97832E81164F05800491051 /* buttons1.app */,
 				C97833021164F06200491051 /* buttons2.app */,
+				C978351B1165327700491051 /* label1.app */,
+				C97835321165327F00491051 /* label2.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -5861,14 +5972,14 @@
 			name = Fluid;
 			sourceTree = "<group>";
 		};
-		8C92CD0AE2ABEDD4BEEDF0E6 /* buttons */ = {
+		8C92CD0AE2ABEDD4BEEDF0E6 /* 123 buttons */ = {
 			isa = PBXGroup;
 			children = (
 				12D3F29F27BA74089591E38D /* buttons.cxx */,
 				C97832CD1164F04A00491051 /* buttons1.cxx */,
 				C97832CE1164F04A00491051 /* buttons2.cxx */,
 			);
-			name = buttons;
+			name = "123 buttons";
 			sourceTree = "<group>";
 		};
 		8CC26158E73BF27FE129F204 /* cursor */ = {
@@ -7038,7 +7149,6 @@
 			);
 			dependencies = (
 				03C9DDD74F05198891A19C2F /* PBXTargetDependency */,
-				26E23693EB072FFD8F106BA6 /* PBXTargetDependency */,
 			);
 			name = label;
 			productName = label;
@@ -7584,6 +7694,48 @@
 			productReference = C97833021164F06200491051 /* buttons2.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C97835071165327700491051 /* label1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C97835181165327700491051 /* Build configuration list for PBXNativeTarget "label1" */;
+			buildPhases = (
+				C978350C1165327700491051 /* Resources */,
+				C978350D1165327700491051 /* Sources */,
+				C97835111165327700491051 /* Frameworks */,
+				C97835141165327700491051 /* CopyFiles */,
+			);
+			buildRules = (
+				C97835171165327700491051 /* PBXBuildRule */,
+			);
+			dependencies = (
+				C97835081165327700491051 /* PBXTargetDependency */,
+				C978350A1165327700491051 /* PBXTargetDependency */,
+			);
+			name = label1;
+			productName = label;
+			productReference = C978351B1165327700491051 /* label1.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C978351E1165327F00491051 /* label2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C978352F1165327F00491051 /* Build configuration list for PBXNativeTarget "label2" */;
+			buildPhases = (
+				C97835231165327F00491051 /* Resources */,
+				C97835241165327F00491051 /* Sources */,
+				C97835281165327F00491051 /* Frameworks */,
+				C978352B1165327F00491051 /* CopyFiles */,
+			);
+			buildRules = (
+				C978352E1165327F00491051 /* PBXBuildRule */,
+			);
+			dependencies = (
+				C978351F1165327F00491051 /* PBXTargetDependency */,
+				C97835211165327F00491051 /* PBXTargetDependency */,
+			);
+			name = label2;
+			productName = label;
+			productReference = C97835321165327F00491051 /* label2.app */;
+			productType = "com.apple.product-type.application";
+		};
 		C9C9078A11626697006C5014 /* hello1 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C9C9079511626697006C5014 /* Build configuration list for PBXNativeTarget "hello1" */;
@@ -8083,9 +8235,6 @@
 				9107E4EB6898E69CDEEEF128 /* bitmap */,
 				5C27633EE545BAAEA44DE35E /* blocks */,
 				10D3DB5803F7FAFEC8290342 /* browser */,
-				ED5180E0F3CCE83524692330 /* buttons */,
-				C97832D81164F05800491051 /* buttons1 */,
-				C97832F21164F06200491051 /* buttons2 */,
 				EFFB6C29A0C01196ACBA347E /* checkers */,
 				3967C5131A455EAC4307432E /* clock */,
 				FC53F38F68F40136797FFA65 /* colbrowser */,
@@ -8112,6 +8261,8 @@
 				C460AABB0BD94E3C1708D5D9 /* input_choice */,
 				0392BB8494F097134E0CBAF1 /* keyboard */,
 				7126D1B05AA1F29276D8D9E9 /* label */,
+				C97835071165327700491051 /* label1 */,
+				C978351E1165327F00491051 /* label2 */,
 				38A4947B7F7E645BEA92B0AC /* line_style */,
 				559B969092E6645B40042F02 /* list_visuals */,
 				A1526509EBF19ED3116D154B /* mandelbrot */,
@@ -8149,6 +8300,9 @@
 				6FFE327CD2BCDC4E91814716 /* button */,
 				C9782F591163CD2F00491051 /* button1 */,
 				C9782F761163CD3800491051 /* button2 */,
+				ED5180E0F3CCE83524692330 /* buttons */,
+				C97832D81164F05800491051 /* buttons1 */,
+				C97832F21164F06200491051 /* buttons2 */,
 				D20AA53D1AEB4AA2514B75C1 /* hello */,
 				C9C9078A11626697006C5014 /* hello1 */,
 				C9C907A4116266AA006C5014 /* hello2 */,
@@ -8572,6 +8726,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C97832F51164F06200491051 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C978350C1165327700491051 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C97835231165327F00491051 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -9038,6 +9206,8 @@
 				C97831341164913800491051 /* boxtype2.cxx in Sources */,
 				C97832CF1164F04B00491051 /* buttons1.cxx in Sources */,
 				C97832D01164F04B00491051 /* buttons2.cxx in Sources */,
+				C97834F81165325700491051 /* label1.cxx in Sources */,
+				C97834F91165325700491051 /* label2.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9544,6 +9714,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C978350D1165327700491051 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C978350F1165327700491051 /* label1.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C97835241165327F00491051 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C97835271165327F00491051 /* label2.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C9C9078E11626697006C5014 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -9555,6 +9741,8 @@
 				C97831381164913800491051 /* boxtype2.cxx in Sources */,
 				C97832D31164F04B00491051 /* buttons1.cxx in Sources */,
 				C97832D41164F04B00491051 /* buttons2.cxx in Sources */,
+				C97834FC1165325700491051 /* label1.cxx in Sources */,
+				C97834FD1165325700491051 /* label2.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9569,6 +9757,8 @@
 				C97831361164913800491051 /* boxtype2.cxx in Sources */,
 				C97832D11164F04B00491051 /* buttons1.cxx in Sources */,
 				C97832D21164F04B00491051 /* buttons2.cxx in Sources */,
+				C97834FA1165325700491051 /* label1.cxx in Sources */,
+				C97834FB1165325700491051 /* label2.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9839,11 +10029,6 @@
 			isa = PBXTargetDependency;
 			target = D20AA53D1AEB4AA2514B75C1 /* hello */;
 			targetProxy = A2C89A89C239019CBF7F5C3F /* PBXContainerItemProxy */;
-		};
-		26E23693EB072FFD8F106BA6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 27284DC0C205B0F1B26EA258 /* fltkforms */;
-			targetProxy = 93177B7091AA43D4ECE14423 /* PBXContainerItemProxy */;
 		};
 		2A0E9841532185822213FD1C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -10549,6 +10734,26 @@
 			isa = PBXTargetDependency;
 			target = E379F105C5DD998B9B72950E /* fltk */;
 			targetProxy = C97832F41164F06200491051 /* PBXContainerItemProxy */;
+		};
+		C97835081165327700491051 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E379F105C5DD998B9B72950E /* fltk */;
+			targetProxy = C97835091165327700491051 /* PBXContainerItemProxy */;
+		};
+		C978350A1165327700491051 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 27284DC0C205B0F1B26EA258 /* fltkforms */;
+			targetProxy = C978350B1165327700491051 /* PBXContainerItemProxy */;
+		};
+		C978351F1165327F00491051 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E379F105C5DD998B9B72950E /* fltk */;
+			targetProxy = C97835201165327F00491051 /* PBXContainerItemProxy */;
+		};
+		C97835211165327F00491051 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 27284DC0C205B0F1B26EA258 /* fltkforms */;
+			targetProxy = C97835221165327F00491051 /* PBXContainerItemProxy */;
 		};
 		C98D072A1E10A81ACDB66C3B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -15186,6 +15391,136 @@
 			};
 			name = Release;
 		};
+		C97835191165327700491051 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "USING_XCODE=1";
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode3/,
+					../../,
+					../../png,
+					../../jpeg,
+				);
+				INFOPLIST_FILE = "plists/label-Info copy.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					Carbon,
+				);
+				PRODUCT_NAME = label1;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		C978351A1165327700491051 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "USING_XCODE=1";
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode3/,
+					../../,
+					../../png,
+					../../jpeg,
+				);
+				INFOPLIST_FILE = "plists/label-Info copy.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					Carbon,
+				);
+				PRODUCT_NAME = label1;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Release;
+		};
+		C97835301165327F00491051 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "USING_XCODE=1";
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode3/,
+					../../,
+					../../png,
+					../../jpeg,
+				);
+				INFOPLIST_FILE = "plists/label-Info copy 2.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					Carbon,
+				);
+				PRODUCT_NAME = label2;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		C97835311165327F00491051 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "USING_XCODE=1";
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode3/,
+					../../,
+					../../png,
+					../../jpeg,
+				);
+				INFOPLIST_FILE = "plists/label-Info copy 2.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					Carbon,
+				);
+				PRODUCT_NAME = label2;
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Release;
+		};
 		C9C9079611626697006C5014 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -16862,6 +17197,24 @@
 			buildConfigurations = (
 				C97833001164F06200491051 /* Debug */,
 				C97833011164F06200491051 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C97835181165327700491051 /* Build configuration list for PBXNativeTarget "label1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C97835191165327700491051 /* Debug */,
+				C978351A1165327700491051 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C978352F1165327F00491051 /* Build configuration list for PBXNativeTarget "label2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C97835301165327F00491051 /* Debug */,
+				C97835311165327F00491051 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

@@ -32,7 +32,7 @@
 #ifndef Fl_Multiline_Input_H
 #define Fl_Multiline_Input_H
 
-#include "Fl_Input.H"
+#include "Input.h"
 
 /**
   This input field displays '\n' characters as new lines rather than ^J,
@@ -48,7 +48,7 @@
   instead.
   <P>
 */
-class Fl_Multiline_Input : public Fl_Input {
+class Fl_Multiline_Input : public fltk3::Input {
 public:
   /**
     Creates a new Fl_Multiline_Input widget using the given
@@ -56,7 +56,7 @@ public:
     <P>Inherited destructor destroys the widget and any value associated with it.
   */
   Fl_Multiline_Input(int X,int Y,int W,int H,const char *l = 0)
-    : Fl_Input(X,Y,W,H,l) {type(FL_MULTILINE_INPUT);}
+    : fltk3::Input(X,Y,W,H,l) {type(FL_MULTILINE_INPUT);}
 };
 
 #endif

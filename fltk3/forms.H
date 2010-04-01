@@ -95,10 +95,10 @@ typedef fltk3::Window FL_FORM;
 #define FL_DARKTOMATO	((Fl_Color)(113))
 #define FL_WHEAT	((Fl_Color)(174))
 
-#define fltk3::ALIGN_BESIDE	fltk3::ALIGN_INSIDE
+#define Fl_ALIGN_BESIDE	fltk3::ALIGN_INSIDE
 
-#define FL_PUP_TOGGLE	2 // FL_MENU_TOGGLE
-#define FL_PUP_INACTIVE 1 // FL_MENU_INACTIVE
+#define FL_PUP_TOGGLE	2 // fltk3::MENU_TOGGLE
+#define FL_PUP_INACTIVE 1 // fltk3::MENU_INACTIVE
 #define FL_NO_FRAME	fltk3::NO_BOX
 #define fltk3::ROUNDED3D_UPBOX 	FL_ROUND_UP_BOX
 #define fltk3::ROUNDED3D_DOWNBOX	FL_ROUND_DOWN_BOX
@@ -480,7 +480,7 @@ inline int fl_isdisplayed_browser_line(fltk3::Widget* o, int n) {
 #define FL_RETURN_BUTTON	6
 #define FL_HIDDEN_RET_BUTTON	7
 #define FL_PUSH_BUTTON		FL_TOGGLE_BUTTON
-#define FL_MENU_BUTTON		9
+#define fltk3::MENU_BUTTON		9
 
 FL_EXPORT fltk3::Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
 inline int fl_get_button(fltk3::Widget* b) {return ((fltk3::Button*)b)->value();}
@@ -535,34 +535,34 @@ inline void fl_set_chart_lcolor(fltk3::Widget* o, Fl_Color v) {
   ((Fl_Chart*)o)->textcolor(v);}
 #define fl_set_chart_lcol   fl_set_chart_lcolor
 
-#include "Fl_Choice.H"
+#include "Choice.h"
 
 #define FL_NORMAL_CHOICE	0
 #define FL_NORMAL_CHOICE2	0
 #define FL_DROPLIST_CHOICE	0
 
-forms_constructor(Fl_Choice, fl_add_choice)
+forms_constructor(fltk3::Choice, fl_add_choice)
 inline void fl_clear_choice(fltk3::Widget* o) {
-    ((Fl_Choice*)o)->clear();}
+    ((fltk3::Choice*)o)->clear();}
 inline void fl_addto_choice(fltk3::Widget* o, const char* s) {
-    ((Fl_Choice*)o)->add(s);}
+    ((fltk3::Choice*)o)->add(s);}
 inline void fl_replace_choice(fltk3::Widget* o, int i, const char* s) {
-    ((Fl_Choice*)o)->replace(i-1,s);}
+    ((fltk3::Choice*)o)->replace(i-1,s);}
 inline void fl_delete_choice(fltk3::Widget* o, int i) {
-    ((Fl_Choice*)o)->remove(i-1);}
+    ((fltk3::Choice*)o)->remove(i-1);}
 inline void fl_set_choice(fltk3::Widget* o, int i) {
-    ((Fl_Choice*)o)->value(i-1);}
+    ((fltk3::Choice*)o)->value(i-1);}
 // inline void fl_set_choice_text(fltk3::Widget*, const char*);
 inline int fl_get_choice(fltk3::Widget* o) {
-    return ((Fl_Choice*)o)->value()+1;}
+    return ((fltk3::Choice*)o)->value()+1;}
 // inline const char* fl_get_choice_item_text(fltk3::Widget*, int);
 // inline int fl_get_choice_maxitems(fltk3::Widget*);
 inline const char* fl_get_choice_text(fltk3::Widget* o) {
-    return ((Fl_Choice*)o)->text();}
+    return ((fltk3::Choice*)o)->text();}
 inline void fl_set_choice_fontsize(fltk3::Widget* o, int x) {
-    ((Fl_Choice*)o)->textsize(x);}
+    ((fltk3::Choice*)o)->textsize(x);}
 inline void fl_set_choice_fontstyle(fltk3::Widget* o, Fl_Font x) {
-    ((Fl_Choice*)o)->textfont(x);}
+    ((fltk3::Choice*)o)->textfont(x);}
 // inline void fl_set_choice_item_mode(fltk3::Widget*, int, unsigned);
 // inline void fl_set_choice_item_shortcut(fltk3::Widget*, int, const char*);
 
@@ -681,19 +681,19 @@ FL_EXPORT char*	fl_get_directory();
 FL_EXPORT char*	fl_get_pattern();
 FL_EXPORT char*	fl_get_filename();
 
-#include "Fl_Input.H"
-forms_constructor(Fl_Input, fl_add_input)
+#include "Input.h"
+forms_constructor(fltk3::Input, fl_add_input)
 inline void fl_set_input(fltk3::Widget* o, const char* v) {
-    ((Fl_Input*)o)->value(v);}
+    ((fltk3::Input*)o)->value(v);}
 inline void fl_set_input_return(fltk3::Widget* o, int x) {
-    ((Fl_Input*)o)->when((Fl_When)(x | FL_WHEN_RELEASE));}
+    ((fltk3::Input*)o)->when((Fl_When)(x | FL_WHEN_RELEASE));}
 inline void fl_set_input_color(fltk3::Widget* o, Fl_Color a, Fl_Color b) {
-    ((Fl_Input*)o)->textcolor(a);
-    ((Fl_Input*)o)->cursor_color(b);
+    ((fltk3::Input*)o)->textcolor(a);
+    ((fltk3::Input*)o)->cursor_color(b);
 }
 // inline void fl_set_input_scroll(fltk3::Widget*, int);
 inline void fl_set_input_cursorpos(fltk3::Widget* o, int x, int /*y*/) {
-  ((Fl_Input*)o)->position(x);}
+  ((fltk3::Input*)o)->position(x);}
 // inline void fl_set_input_selected(fltk3::Widget*, int);
 // inline void fl_set_input_selected_range(fltk3::Widget*, int, int);
 // inline void fl_set_input_maxchars(fltk3::Widget*, int);
@@ -706,10 +706,10 @@ inline void fl_set_input_cursorpos(fltk3::Widget* o, int x, int /*y*/) {
 // inline int fl_get_input_topline(fltk3::Widget*);
 // inline int fl_get_input_screenlines(fltk3::Widget*);
 inline int fl_get_input_cursorpos(fltk3::Widget* o, int*x, int*y) {
-  *x = ((Fl_Input*)o)->position(); *y = 0; return *x;}
+  *x = ((fltk3::Input*)o)->position(); *y = 0; return *x;}
 // inline int fl_get_input_numberoflines(fltk3::Widget*);
 // inline void fl_get_input_format(fltk3::Widget*, int*, int*);
-inline const char* fl_get_input(fltk3::Widget* o) {return ((Fl_Input*)o)->value();}
+inline const char* fl_get_input(fltk3::Widget* o) {return ((fltk3::Input*)o)->value();}
 
 #include "Fl_Menu_Button.H"
 
