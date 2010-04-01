@@ -242,7 +242,7 @@ static Fl_Pixmap image_print_gray(idata_print_gray);
 
 static fltk3::Button *print_output_mode[4]={(fltk3::Button *)0};
 
-static void cb_Save(Fl_Return_Button*, void*) {
+static void cb_Save(fltk3::ReturnButton*, void*) {
   print_properties_panel->hide();
 
   char name[1024];
@@ -457,9 +457,9 @@ fltk3::DoubleBufferWindow* make_print_panel() {
         } // fltk3::Group* print_collate_group[1]
         o->end();
       } // fltk3::Group* o
-      { Fl_Return_Button* o = new Fl_Return_Button(279, 201, 100, 25, Fl_Printer::dialog_print_button);
+      { fltk3::ReturnButton* o = new fltk3::ReturnButton(279, 201, 100, 25, Fl_Printer::dialog_print_button);
         o->callback((fltk3::Callback*)print_cb);
-      } // Fl_Return_Button* o
+      } // fltk3::ReturnButton* o
       { fltk3::Button* o = new fltk3::Button(389, 201, 68, 25, Fl_Printer::dialog_cancel_button);
         o->callback((fltk3::Callback*)cb_Cancel);
       } // fltk3::Button* o
@@ -517,9 +517,9 @@ fltk3::DoubleBufferWindow* make_print_panel() {
       } // fltk3::Button* print_output_mode[3]
       o->end();
     } // fltk3::Group* o
-    { Fl_Return_Button* o = new Fl_Return_Button(93, 95, 99, 25, Fl_Printer::property_save);
+    { fltk3::ReturnButton* o = new fltk3::ReturnButton(93, 95, 99, 25, Fl_Printer::property_save);
       o->callback((fltk3::Callback*)cb_Save);
-    } // Fl_Return_Button* o
+    } // fltk3::ReturnButton* o
     { fltk3::Button* o = new fltk3::Button(202, 95, 78, 25, Fl_Printer::property_cancel);
       o->callback((fltk3::Callback*)cb_Cancel1);
     } // fltk3::Button* o
@@ -532,7 +532,7 @@ fltk3::DoubleBufferWindow* make_print_panel() {
   return print_properties_panel;
 }
 
-void print_cb(Fl_Return_Button *, void *) {
+void print_cb(fltk3::ReturnButton *, void *) {
   print_start = 1;
   print_panel->hide();
 }

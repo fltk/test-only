@@ -42,10 +42,10 @@
 #include <fltk3/Fl_Input.H>
 #include <fltk3/Fl_Spinner.H>
 #include <fltk3/Fl_Check_Button.H>
-#include <fltk3/Fl_Return_Button.H>
+#include <fltk3/ReturnButton.h>
 #include <fltk3/Fl_Progress.H>
 static fltk3::DoubleBufferWindow* make_print_panel();
-static void print_cb(Fl_Return_Button *, void *); 
+static void print_cb(fltk3::ReturnButton *, void *); 
 static void print_load();
 static void print_update_status();
 #endif

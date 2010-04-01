@@ -37,7 +37,7 @@
 
 #include <fltk3/Group.h>
 #include <fltk3/Fl_Box.H>
-#include <fltk3/Fl_Return_Button.H>
+#include <fltk3/ReturnButton.h>
 #include <fltk3/Fl_Choice.H>
 #include <fltk3/Fl_Value_Input.H>
 

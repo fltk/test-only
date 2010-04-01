@@ -26,7 +26,7 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/Fl_Return_Button.H>
+#include <fltk3/ReturnButton.h>
 #include <fltk3/fl_draw.H>
 
 int fl_return_arrow(int x, int y, int w, int h) {
@@ -47,7 +47,7 @@ int fl_return_arrow(int x, int y, int w, int h) {
   return 1;
 }
 
-void Fl_Return_Button::draw() {
+void fltk3::ReturnButton::draw() {
   if (type() == FL_HIDDEN_BUTTON) return;
   draw_box(value() ? (down_box()?down_box():fl_down(box())) : box(),
 	   value() ? selection_color() : color());
@@ -58,7 +58,7 @@ void Fl_Return_Button::draw() {
   if (fltk3::focus() == this) draw_focus();
 }
 
-int Fl_Return_Button::handle(int event) {
+int fltk3::ReturnButton::handle(int event) {
   if (event == fltk3::SHORTCUT &&
       (fltk3::event_key() == FL_Enter || fltk3::event_key() == FL_KP_Enter)) {
     do_callback();

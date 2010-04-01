@@ -44,7 +44,7 @@
 #include <fltk3/Fl_Box.H>
 #include <fltk3/Fl_Check_Button.H>
 #include <fltk3/Fl_File_Input.H>
-#include <fltk3/Fl_Return_Button.H>
+#include <fltk3/ReturnButton.h>
 #include <fltk3/ask.h>
 
 class FL_EXPORT Fl_File_Chooser {
@@ -98,9 +98,9 @@ private:
   Fl_File_Input *fileName;
   void cb_fileName_i(Fl_File_Input*, void*);
   static void cb_fileName(Fl_File_Input*, void*);
-  Fl_Return_Button *okButton;
-  void cb_okButton_i(Fl_Return_Button*, void*);
-  static void cb_okButton(Fl_Return_Button*, void*);
+  fltk3::ReturnButton *okButton;
+  void cb_okButton_i(fltk3::ReturnButton*, void*);
+  static void cb_okButton(fltk3::ReturnButton*, void*);
   fltk3::Button *cancelButton;
   void cb_cancelButton_i(fltk3::Button*, void*);
   static void cb_cancelButton(fltk3::Button*, void*);
@@ -120,9 +120,9 @@ private:
   fltk3::Button *favCancelButton;
   void cb_favCancelButton_i(fltk3::Button*, void*);
   static void cb_favCancelButton(fltk3::Button*, void*);
-  Fl_Return_Button *favOkButton;
-  void cb_favOkButton_i(Fl_Return_Button*, void*);
-  static void cb_favOkButton(Fl_Return_Button*, void*);
+  fltk3::ReturnButton *favOkButton;
+  void cb_favOkButton_i(fltk3::ReturnButton*, void*);
+  static void cb_favOkButton(fltk3::ReturnButton*, void*);
 public:
   ~Fl_File_Chooser();
   void callback(void (*cb)(Fl_File_Chooser *, void *), void *d = 0);

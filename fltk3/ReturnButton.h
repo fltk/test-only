@@ -26,32 +26,37 @@
 //
 
 /* \file
-   fltk3::ReturnButton widget . */
+   ReturnButton widget . */
 
-#ifndef Fl_Return_Button_H
-#define Fl_Return_Button_H
+#ifndef Fltk3_Return_Button_H
+#define Fltk3_Return_Button_H
+
 #include "Button.h"
 
+namespace fltk3 {
+
 /**
-  The fltk3::ReturnButton is a subclass of fltk3::Button that
+  The ReturnButton is a subclass of Button that
   generates a callback when it is pressed or when the user presses the
   Enter key.  A carriage-return symbol is drawn next to the button label.
   <P ALIGN=CENTER>\image html fltk3::ReturnButton.gif 
   \image latex fltk3::ReturnButton.eps "fltk3::ReturnButton" width=4cm
 */
-class FL_EXPORT fltk3::ReturnButton : public fltk3::Button {
+class FL_EXPORT ReturnButton : public Button {
 protected:
   void draw();
 public:
   int handle(int);
   /**
-    Creates a new fltk3::ReturnButton widget using the given
-    position, size, and label string. The default boxtype is fltk3::UP_BOX.
+    Creates a new ReturnButton widget using the given
+    position, size, and label string. The default boxtype is UP_BOX.
     <P> The inherited destructor deletes the button.
   */
-  fltk3::ReturnButton(int X, int Y, int W, int H,const char *l=0)
-    : fltk3::Button(X,Y,W,H,l) {}
+  ReturnButton(int X, int Y, int W, int H,const char *l=0)
+    : Button(X,Y,W,H,l) {}
 };
+  
+}
 
 #endif
 

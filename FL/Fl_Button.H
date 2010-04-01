@@ -50,15 +50,11 @@ extern FL_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
 
 class FL_EXPORT Fl_Button : public Fl_Widget {
   
-#if 0
-  int shortcut_;
-  char value_;
-  char oldval;
-  uchar down_box_;
-
 protected:
+#if 0
   virtual void draw();
 #endif
+  Fl_Button() {}
   
 public:
   

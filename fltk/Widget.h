@@ -87,10 +87,12 @@ public:
   const Symbol* image() const	{ return image_; }
   void	image(const Symbol* a)	{ image_ = a; }
   void	image(const Symbol& a)	{ image_ = &a; }
+#endif
+  
+  const char *tooltip() const { return _p->tooltip(); }
+  void	tooltip(const char *t) { _p->tooltip(t); }
 
-  const char *tooltip() const	{ return tooltip_; }
-  void	tooltip(const char *t)	{ tooltip_ = t; }
-
+#if 0
   unsigned shortcut() const	;
   void	shortcut(unsigned key)	;
   bool	add_shortcut(unsigned key);

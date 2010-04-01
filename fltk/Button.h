@@ -32,6 +32,9 @@
 namespace fltk {
 
 class FL_API Button : public Widget {
+protected:
+  Button() {}
+  
 public:
   enum {HIDDEN=3}; // back-comptability value to hide the button
 

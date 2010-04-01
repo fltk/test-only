@@ -3,7 +3,7 @@
 //
 // Another button test program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2009 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -27,32 +27,27 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <fltk3/run.h>
-#include <fltk3/Window.h>
-#include <fltk3/Button.h>
-#include <fltk3/ReturnButton.h>
-// fltk123: #include <fltk3/RepeatButton.h>
-// fltk123: #include <fltk3/CheckButton.h>
-// fltk123: #include <fltk3/LightButton.h>
-// fltk123: #include <fltk3/Fl_Round_Button.h>
-// fltk123: #include <fltk3/Tooltip.h>
-
-using namespace fltk3;
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Return_Button.H>
+// fltk123: #include <FL/Fl_Repeat_Button.H>
+// fltk123: #include <FL/Fl_Check_Button.H>
+// fltk123: #include <FL/Fl_Light_Button.H>
+// fltk123: #include <FL/Fl_Round_Button.H>
+// fltk123: #include <FL/Fl_Tooltip.H>
 
 int main(int argc, char ** argv) {
-  Window *window = new Window(320,130);
-  window->begin();
-  {
-    (new Button(10, 10, 130, 30, "Button"))->tooltip("This is a Tooltip.");
-    new ReturnButton(150, 10, 160, 30, "ReturnButton");
-    // fltk123: new RepeatButton(10,50,130,30,"RepeatButton");
-    // fltk123: new LightButton(10,90,130,30,"LightButton");
-    // fltk123: new Fl_Round_Button(150,50,160,30,"Fl_Round_Button");
-    // fltk123: new CheckButton(150,90,160,30,"CheckButton");
-  }
+  Fl_Window *window = new Fl_Window(320,130);
+  (new Fl_Button(10, 10, 130, 30, "Fl_Button"))->tooltip("This is a Tooltip.");
+  new Fl_Return_Button(150, 10, 160, 30, "Fl_Return_Button");
+  // fltk123: new Fl_Repeat_Button(10,50,130,30,"Fl_Repeat_Button");
+  // fltk123: new Fl_Light_Button(10,90,130,30,"Fl_Light_Button");
+  // fltk123: new Fl_Round_Button(150,50,160,30,"Fl_Round_Button");
+  // fltk123: new Fl_Check_Button(150,90,160,30,"Fl_Check_Button");
   window->end();
   window->show(argc,argv);
-  return run();
+  return Fl::run();
 }
 
 //

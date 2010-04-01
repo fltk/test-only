@@ -29,7 +29,7 @@
 #include <fltk3/Fl_Color_Chooser.H>
 #include <fltk3/Window.h>
 #include <fltk3/Fl_Box.H>
-#include <fltk3/Fl_Return_Button.H>
+#include <fltk3/ReturnButton.h>
 #include <fltk3/fl_draw.H>
 #include <fltk3/math.h>
 #include <fltk3/ask.h>
@@ -567,7 +567,7 @@ int fl_color_chooser(const char* name, double& r, double& g, double& b) {
   window.callback(cc_cancel_cb,&ret);
   Fl_Color_Chooser chooser(10, 10, 195, 115);
   ColorChip ok_color(10, 130, 95, 25);
-  Fl_Return_Button ok_button(10, 165, 95, 25, fltk3::text_ok);
+  fltk3::ReturnButton ok_button(10, 165, 95, 25, fltk3::text_ok);
   ok_button.callback(cc_ok_cb,&ret);
   ColorChip cancel_color(110, 130, 95, 25);
   cancel_color.r = uchar(255*r+.5); ok_color.r = cancel_color.r;

@@ -40,7 +40,7 @@
 
 #include <fltk3/Fl_Box.H>
 #include <fltk3/Button.h>
-#include <fltk3/Fl_Return_Button.H>
+#include <fltk3/ReturnButton.h>
 #include <fltk3/Window.h>
 #include <fltk3/Fl_Input.H>
 #include <fltk3/Fl_Secret_Input.H>
