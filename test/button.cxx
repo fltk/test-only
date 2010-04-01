@@ -47,7 +47,7 @@ int main(int argc, char ** argv) {
   window->begin();
   Button *b1 = new Button(20, 20, 80, 25, "&Beep");
   b1->callback(beepcb,0);
-  /*Button *b2 =*/ new Button(120,20, 80, 25, "&no op");
+  new Button(120,20, 80, 25, "&no op");
   Button *b3 = new Button(220,20, 80, 25, "E&xit");
   b3->callback(exitcb,0);
   window->end();

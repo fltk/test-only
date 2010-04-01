@@ -46,20 +46,20 @@ void exitcb(Widget *, void *) {
 }
 
 int main(int argc, char ** argv) {
-  //register_images();
+  // FLTK123: register_images();
   Window *window = new Window(320,65);
 
   window->begin();
   Group* ib = new Group(0,0,window->w(),window->h());
   ib->begin();
-  //ib->image(new TiledImage(SharedImage::get("./images/bg.jpeg")));
+  // FLTK123: ib->image(new TiledImage(SharedImage::get("./images/bg.jpeg")));
   window->resizable(ib);
 
   Button *b1 = new Button(20, 20, 80, 25, "&Beep");
   b1->callback(beepcb,0);
   
   Button *b2 = new Button(120,20, 80, 25, "");
-  //b2->image(new TiledImage(SharedImage::get("./images/coucou.png")));
+  // FLTK123: b2->image(new TiledImage(SharedImage::get("./images/coucou.png")));
 
   Button *b3 = new Button(220,20, 80, 25, "E&xit");
   b3->callback(exitcb,0);
