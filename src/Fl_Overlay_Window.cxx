@@ -43,12 +43,12 @@
 #include <fltk3/x.H>
 
 void Fl_Overlay_Window::show() {
-  Fl_Double_Window::show();
+  fltk3::DoubleBufferWindow::show();
   if (overlay_ && overlay_ != this) overlay_->show();
 }
 
 void Fl_Overlay_Window::hide() {
-  Fl_Double_Window::hide();
+  fltk3::DoubleBufferWindow::hide();
 }
 
 void Fl_Overlay_Window::flush() {
@@ -56,19 +56,19 @@ void Fl_Overlay_Window::flush() {
   if (overlay_ && overlay_ != this && overlay_->shown()) {
     // all drawing to windows hidden by overlay windows is ignored, fix this
     XUnmapWindow(fl_display, fl_xid(overlay_));
-    Fl_Double_Window::flush(0);
+    fltk3::DoubleBufferWindow::flush(0);
     XMapWindow(fl_display, fl_xid(overlay_));
     return;
   }
 #endif
   int erase_overlay = (damage()&FL_DAMAGE_OVERLAY);
   clear_damage((uchar)(damage()&~FL_DAMAGE_OVERLAY));
-  Fl_Double_Window::flush(erase_overlay);
+  fltk3::DoubleBufferWindow::flush(erase_overlay);
   if (overlay_ == this) draw_overlay();
 }
 
 void Fl_Overlay_Window::resize(int X, int Y, int W, int H) {
-  Fl_Double_Window::resize(X,Y,W,H);
+  fltk3::DoubleBufferWindow::resize(X,Y,W,H);
   if (overlay_ && overlay_!=this) overlay_->resize(0,0,w(),h());
 }
 

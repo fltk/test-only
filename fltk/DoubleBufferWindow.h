@@ -2,12 +2,10 @@
 // versions. You can turn on double buffering on a normal window if
 // you want it.
   
-#ifndef fltk_DoubleBufferWindow_h
-#define fltk_DoubleBufferWindow_h
+#ifndef fltk2_DoubleBufferWindow_h
+#define fltk2_DoubleBufferWindow_h
 
-#ifndef fltk_Window_h
-# include "Window.h"
-#endif
+#include "Window.h"
 
 namespace fltk {
 

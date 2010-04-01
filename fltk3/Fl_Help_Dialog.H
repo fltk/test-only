@@ -33,7 +33,7 @@
 #ifndef Fl_Help_Dialog_H
 #define Fl_Help_Dialog_H
 #include <fltk3/run.h>
-#include <fltk3/Fl_Double_Window.H>
+#include <fltk3/DoubleBufferWindow.h>
 #include <fltk3/Group.h>
 #include <fltk3/Button.h>
 #include <fltk3/Fl_Input.H>
@@ -49,7 +49,7 @@ class FL_EXPORT Fl_Help_Dialog {
 public:
   Fl_Help_Dialog();
 private:
-  Fl_Double_Window *window_;
+  fltk3::DoubleBufferWindow *window_;
   fltk3::Button *back_;
   void cb_back__i(fltk3::Button*, void*);
   static void cb_back_(fltk3::Button*, void*);

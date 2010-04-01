@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.H 7365 2010-03-30 15:18:29Z matt $"
+// "$Id: DoubleBufferWindow.h 7365 2010-03-30 15:18:29Z matt $"
 //
 // Double-buffered window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,15 +26,19 @@
 //
 
 /* \file
-   Fl_Double_Window widget . */
+   DoubleBufferWindow widget . */
 
-#ifndef Fl_Double_Window_H
-#define Fl_Double_Window_H
+#ifndef Fltk3_Double_Window_H
+#define Fltk3_Double_Window_H
 
 #include "Window.h"
 
+class Fl_Double_Window;
+
+namespace fltk3 {
+
 /**
-  The Fl_Double_Window provides a double-buffered window.
+  The fltk3::DoubleBufferWindow provides a double-buffered window.
   If possible this will use the X double buffering extension (Xdbe).  If
   not, it will draw the window data into an off-screen pixmap, and then
   copy it to the on-screen window.
@@ -46,7 +50,8 @@
   This makes sure you can use Xdbe on servers where double buffering
   does not exist for every visual.
 */
-class FL_EXPORT Fl_Double_Window : public fltk3::Window {
+class FL_EXPORT DoubleBufferWindow : public Window {
+  friend class ::Fl_Double_Window;
 protected:
   void flush(int eraseoverlay);
   /**
@@ -56,26 +61,28 @@ protected:
   char force_doublebuffering_;
 public:
   void show();
-  void show(int a, char **b) {fltk3::Window::show(a,b);}
+  void show(int a, char **b) {Window::show(a,b);}
   void flush();
   void resize(int,int,int,int);
   void hide();
-  ~Fl_Double_Window();
+  ~DoubleBufferWindow();
   /**
-    Creates a new Fl_Double_Window widget using the given
+    Creates a new fltk3::DoubleBufferWindow widget using the given
     position, size, and label (title) string.
   */
-  Fl_Double_Window(int W, int H, const char *l = 0) 
-  : fltk3::Window(W,H,l), force_doublebuffering_(0) { type(FL_DOUBLE_WINDOW); }
+  DoubleBufferWindow(int W, int H, const char *l = 0) 
+  : Window(W,H,l), force_doublebuffering_(0) { type(FL_DOUBLE_WINDOW); }
    /**
-    See  Fl_Double_Window::Fl_Double_Window(int w, int h, const char *label = 0)
+    See  fltk3::DoubleBufferWindow::fltk3::DoubleBufferWindow(int w, int h, const char *label = 0)
   */
-  Fl_Double_Window(int X, int Y, int W, int H, const char *l = 0)
-  : fltk3::Window(X,Y,W,H,l), force_doublebuffering_(0) { type(FL_DOUBLE_WINDOW); }
+  DoubleBufferWindow(int X, int Y, int W, int H, const char *l = 0)
+  : Window(X,Y,W,H,l), force_doublebuffering_(0) { type(FL_DOUBLE_WINDOW); }
 };
 
+} // namespace fltk3
+  
 #endif
 
 //
-// End of "$Id: Fl_Double_Window.H 7365 2010-03-30 15:18:29Z matt $".
+// End of "$Id: DoubleBufferWindow.h 7365 2010-03-30 15:18:29Z matt $".
 //

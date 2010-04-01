@@ -48,7 +48,7 @@
   However, if the child widgets are a sparse arrangement you must
   set box() to a real _BOX type. This can result in some
   blinking during redrawing, but that can be solved by using a 
-  Fl_Double_Window.
+  fltk3::DoubleBufferWindow.
 
   By default you can scroll in both directions, and the scrollbars
   disappear if the data will fit in the area of the scroll. 

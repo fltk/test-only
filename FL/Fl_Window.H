@@ -17,23 +17,6 @@
 
 class Fl_X;
 
-/**
-  This widget produces an actual window.  This can either be a main
-  window, with a border and title and all the window management controls,
-  or a "subwindow" inside a window.  This is controlled by whether or not
-  the window has a parent().
-
-  Once you create a window, you usually add children Fl_Widget
-  's to it by using window->add(child) for each new widget.
-  See Fl_Group for more information on how to add and remove children.
-
-  There are several subclasses of Fl_Window that provide
-  double-buffering, overlay, menu, and OpenGL support.
-
-  The window's callback is done if the user tries to close a window
-  using the window manager and Fl::modal() is zero or equal to the
-  window. Fl_Window has a default callback that calls Fl_Window::hide().
-*/
 #endif
 
 class FL_EXPORT Fl_Window : public Fl_Group {
@@ -42,9 +25,11 @@ class FL_EXPORT Fl_Window : public Fl_Group {
   // unimplemented copy ctor and assignment operator
   Fl_Window(const Fl_Window&);
   Fl_Window& operator=(const Fl_Window&);
-
+#endif
+  
 protected:
 
+#if 0
   virtual void draw();
   virtual void flush();
   void force_position(int force) {
@@ -55,8 +40,10 @@ protected:
   
 #endif
   
+  Fl_Window() { }
+  
 public:
-
+  
   Fl_Window(int w, int h, const char* title= 0) {
     _p = new fltk3::Window(w, h, title); 
     _p->wrapper(this);

@@ -1,7 +1,7 @@
 //
-// "$Id$"
+// "$Id: Fl_Box.H 7365 2010-03-30 15:18:29Z matt $"
 //
-// Print panel for the Fast Light Tool Kit (FLTK).
+// Box header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2009 by Bill Spitzak and others.
 //
@@ -25,31 +25,37 @@
 //     http://www.fltk.org/str.php
 //
 
-//
-// This is a temporary file.  It is only for development and will
-// probably be removed later.
-//
+/* \file
+   InvisibleBox widget . */
 
-#ifndef print_panel_h
-#define print_panel_h
-#include <fltk3/run.h>
-#include <fltk3/DoubleBufferWindow.h>
-#include <fltk3/Group.h>
-#include <fltk3/Fl_Choice.H>
-#include <fltk3/Button.h>
-#include <fltk3/Fl_Box.H>
-#include <fltk3/Fl_Round_Button.H>
-#include <fltk3/Fl_Input.H>
-#include <fltk3/Fl_Spinner.H>
-#include <fltk3/Fl_Check_Button.H>
-#include <fltk3/Fl_Return_Button.H>
-#include <fltk3/Fl_Progress.H>
-static fltk3::DoubleBufferWindow* make_print_panel();
-static void print_cb(Fl_Return_Button *, void *); 
-static void print_load();
-static void print_update_status();
+#ifndef Fl_Box_H
+#define Fl_Box_H
+
+#ifndef Fl_Widget_H
+#include "Widget.h"
+#endif
+
+namespace fltk3 {
+
+/**
+ This is a box that is invisible due to not having a box. The
+ label still prints so it can be used to position labels. Also
+ this is useful as a resizable() widget.
+ */
+class FL_EXPORT InvisibleBox : public Widget {
+public:
+  InvisibleBox(int X, int Y, int W, int H, const char *l=0)
+  : Widget(X,Y,W,H,l) { box(NO_BOX); }
+  
+  InvisibleBox(Boxtype b, int X, int Y, int W, int H, const char *l)
+  : Widget(X,Y,W,H,l) {box(b);}
+  
+};
+
+}
+
 #endif
 
 //
-// End of "$Id$".
+// End of "$Id: Fl_Box.H 7365 2010-03-30 15:18:29Z matt $".
 //

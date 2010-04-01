@@ -20,8 +20,8 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#ifndef fltk_Symbol_h
-#define fltk_Symbol_h
+#ifndef fltk2_Symbol_h
+#define fltk2_Symbol_h
 
 #include "FL_API.h"
 #include "Color.h"
@@ -33,6 +33,7 @@ namespace fltk {
 class Style;
 
 class FL_API Symbol {
+  /*
   const char* name_;
   Rectangle inset_;
 
@@ -81,6 +82,7 @@ class FL_API Symbol {
   static unsigned text_length() {return text_length_;}
 
   virtual ~Symbol();
+   */
 };
 
 // Back-compatability constructor:

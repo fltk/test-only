@@ -64,12 +64,20 @@ public: // should be private!
   static double version();
   static int arg(int, char**, int&);
   static int args(int, char**, int&, Fl_Args_Handler ah = 0);
-  static void args(int, char**);
+#endif
+  
+  static void args(int a, char **b) { fltk3::args(a, b); }
+  
+#if 0
   static void display(const char*);
   static int visual(int);
   static int gl_visual(int, int *alist=0); // platform dependent
   static void own_colormap();
-  static void get_system_colors();
+#endif
+  
+  static void get_system_colors() { fltk3::get_system_colors(); }
+  
+#if 0
   static void foreground(uchar, uchar, uchar);
   static void background(uchar, uchar, uchar);
   static void background2(uchar, uchar, uchar);

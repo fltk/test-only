@@ -44,7 +44,7 @@ CPPFILES = \
 	Fl_Counter.cxx \
 	Fl_Dial.cxx \
 	Fl_Device.cxx \
-	Fl_Double_Window.cxx \
+	fltk3::DoubleBufferWindow.cxx \
 	Fl_File_Browser.cxx \
 	Fl_File_Chooser.cxx \
 	Fl_File_Chooser2.cxx \
@@ -503,7 +503,7 @@ fl_color.o:	../FL/mac.H ../FL/win32.H
 fl_cursor.o:	../FL/mac.H ../FL/win32.H
 fl_dnd.o:	../FL/mac.H ../FL/win32.H
 Fl.o:	../FL/mac.H ../FL/win32.H
-Fl_Double_Window.o:	../FL/mac.H ../FL/win32.H
+fltk3::DoubleBufferWindow.o:	../FL/mac.H ../FL/win32.H
 fl_draw_image.o:	../FL/mac.H ../FL/win32.H
 fl_draw_image_mac.o:	../FL/mac.H ../FL/win32.H
 fl_draw_image_win32.o:	../FL/mac.H ../FL/win32.H

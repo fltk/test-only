@@ -36,7 +36,7 @@
 // Cairo is currently supported for the following platforms:
 // Win32, Apple Quartz, X11
 #  include <fltk3/run.h>
-#  include <fltk3/Fl_Double_Window.H>
+#  include <fltk3/DoubleBufferWindow.h>
 
 /** 
    \addtogroup group_cairo
@@ -54,15 +54,15 @@
    to attach a context to your window. You should do it only when your window is 
    the current window. \see fltk3::Window::current()
 */
-class FL_EXPORT Fl_Cairo_Window : public Fl_Double_Window {
+class FL_EXPORT Fl_Cairo_Window : public fltk3::DoubleBufferWindow {
 
 public:
-  Fl_Cairo_Window(int w, int h) : Fl_Double_Window(w,h),draw_cb_(0) {}
+  Fl_Cairo_Window(int w, int h) : fltk3::DoubleBufferWindow(w,h),draw_cb_(0) {}
 
 protected:
   /** Overloaded to provide cairo callback support */
   void draw() {
-    Fl_Double_Window::draw();
+    fltk3::DoubleBufferWindow::draw();
     // manual method ? if yes explicitly get a cairo_context here
     if (!fltk3::cairo_autolink_context()) 
       fltk3::cairo_make_current(this); 

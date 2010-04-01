@@ -26,7 +26,7 @@ typedef void (Callback0)(Widget*);
 typedef void (Callback1)(Widget*, long);
 
 class FL_API Widget : public Rectangle {
-  // disable the copy assignment/constructors:
+
   Widget & operator=(const Widget &);
   Widget(const Widget &);
 
@@ -230,7 +230,7 @@ public:
 #endif
   
   // Port to 3: void box(Box*)		;
-  void box(Boxtype b) { _p->box((fltk3::Boxtype)b); }
+  void box(Box *b) { _p->box(b->bt()); }
   
 #if 0
   void buttonbox(Box*)		;
@@ -247,8 +247,8 @@ public:
   // Port to 3: void labeltype(LabelType*)	;
   void labeltype(LabelType t) { _p->labeltype((fltk3::Labeltype)t); }
   
+  void color(Color a) { _p->color(a); }
 #if 0
-  void color(Color)		;
   void textcolor(Color a)	;
   void selection_color(Color)	;
   void selection_textcolor(Color);

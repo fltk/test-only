@@ -30,7 +30,7 @@
 #ifndef Fl_File_Chooser_H
 #define Fl_File_Chooser_H
 #include <fltk3/run.h>
-#include <fltk3/Fl_Double_Window.H>
+#include <fltk3/DoubleBufferWindow.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -70,9 +70,9 @@ private:
 public:
   Fl_File_Chooser(const char *d, const char *p, int t, const char *title);
 private:
-  Fl_Double_Window *window;
-  void cb_window_i(Fl_Double_Window*, void*);
-  static void cb_window(Fl_Double_Window*, void*);
+  fltk3::DoubleBufferWindow *window;
+  void cb_window_i(fltk3::DoubleBufferWindow*, void*);
+  static void cb_window(fltk3::DoubleBufferWindow*, void*);
   Fl_Choice *showChoice;
   void cb_showChoice_i(Fl_Choice*, void*);
   static void cb_showChoice(Fl_Choice*, void*);
@@ -104,7 +104,7 @@ private:
   fltk3::Button *cancelButton;
   void cb_cancelButton_i(fltk3::Button*, void*);
   static void cb_cancelButton(fltk3::Button*, void*);
-  Fl_Double_Window *favWindow;
+  fltk3::DoubleBufferWindow *favWindow;
   Fl_File_Browser *favList;
   void cb_favList_i(Fl_File_Browser*, void*);
   static void cb_favList(Fl_File_Browser*, void*);

@@ -56,10 +56,9 @@ public:
   void replace(Widget& old, Widget& o) {replace(find(old),o);}
   void swap(int indexA, int indexB);
   void clear();
-
-  void resizable(Widget& o) {resizable_ = &o;}
 #endif
   
+  void resizable(Widget& o) { ((fltk3::Group*)_p)->resizable(o.fltk3Widget()); }
   void resizable(Widget* o) { ((fltk3::Group*)_p)->resizable(o->fltk3Widget()); }
   Widget* resizable() const { return (Widget*)(((fltk3::Group*)_p)->resizable()->wrapper()); }
   

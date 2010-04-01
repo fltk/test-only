@@ -31,7 +31,7 @@
 #ifndef Fl_Overlay_Window_H
 #define Fl_Overlay_Window_H
 
-#include "Fl_Double_Window.H"
+#include "DoubleBufferWindow.h"
 
 /**
   This window provides double buffering and also the ability to draw the
@@ -44,7 +44,7 @@
   "erased" by copying the backbuffer over it again.  This means the
   overlay will blink if you change the image in the window.
 */
-class FL_EXPORT Fl_Overlay_Window : public Fl_Double_Window {
+class FL_EXPORT Fl_Overlay_Window : public fltk3::DoubleBufferWindow {
   friend class _Fl_Overlay;
   virtual void draw_overlay() = 0;
   fltk3::Window *overlay_;
@@ -63,13 +63,13 @@ public:
     will choose them.
   */
   Fl_Overlay_Window(int W, int H, const char *l=0)
-    : Fl_Double_Window(W,H,l) {overlay_ = 0; force_doublebuffering_=1; image(0); }
+    : fltk3::DoubleBufferWindow(W,H,l) {overlay_ = 0; force_doublebuffering_=1; image(0); }
    /**
     See Fl_Overlay_Window::Fl_Overlay_Window(int W, int H, const char *l=0)
   */
  Fl_Overlay_Window(int X, int Y, int W, int H, const char *l=0)
-    : Fl_Double_Window(X,Y,W,H,l) {overlay_ = 0; force_doublebuffering_=1; image(0); }
-  void show(int a, char **b) {Fl_Double_Window::show(a,b);}
+    : fltk3::DoubleBufferWindow(X,Y,W,H,l) {overlay_ = 0; force_doublebuffering_=1; image(0); }
+  void show(int a, char **b) {fltk3::DoubleBufferWindow::show(a,b);}
 };
 
 #endif

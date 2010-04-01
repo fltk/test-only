@@ -30,13 +30,13 @@
 #include "../fltk3/Fl_File_Chooser.H"
 #include <fltk3/fl_draw.H>
 
-void Fl_File_Chooser::cb_window_i(Fl_Double_Window*, void*) {
+void Fl_File_Chooser::cb_window_i(fltk3::DoubleBufferWindow*, void*) {
   fileName->value("");
 fileList->deselect();
 fltk3::remove_timeout((Fl_Timeout_Handler)previewCB, this);
 window->hide();
 }
-void Fl_File_Chooser::cb_window(Fl_Double_Window* o, void* v) {
+void Fl_File_Chooser::cb_window(fltk3::DoubleBufferWindow* o, void* v) {
   ((Fl_File_Chooser*)(o->user_data()))->cb_window_i(o,v);
 }
 
@@ -160,7 +160,7 @@ void Fl_File_Chooser::cb_favOkButton(Fl_Return_Button* o, void* v) {
 
 Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char *title) {
   fltk3::Group *prev_current = fltk3::Group::current();
-  { window = new Fl_Double_Window(490, 380, "Choose File");
+  { window = new fltk3::DoubleBufferWindow(490, 380, "Choose File");
     window->callback((fltk3::Callback*)cb_window, (void*)(this));
     { fltk3::Group* o = new fltk3::Group(10, 10, 470, 25);
       { showChoice = new Fl_Choice(65, 10, 215, 25, "Show:");
@@ -244,8 +244,8 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
     if (title) window->label(title);
     window->set_modal();
     window->end();
-  } // Fl_Double_Window* window
-  { favWindow = new Fl_Double_Window(355, 150, "Manage Favorites");
+  } // fltk3::DoubleBufferWindow* window
+  { favWindow = new fltk3::DoubleBufferWindow(355, 150, "Manage Favorites");
     favWindow->user_data((void*)(this));
     { favList = new Fl_File_Browser(10, 10, 300, 95);
       favList->type(2);
@@ -284,7 +284,7 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
     favWindow->set_modal();
     favWindow->size_range(181, 150);
     favWindow->end();
-  } // Fl_Double_Window* favWindow
+  } // fltk3::DoubleBufferWindow* favWindow
   callback_ = 0;
 data_ = 0;
 directory_[0] = 0;

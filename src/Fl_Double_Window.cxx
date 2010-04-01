@@ -27,7 +27,7 @@
 
 #include <config.h>
 #include <fltk3/run.h>
-#include <fltk3/Fl_Double_Window.H>
+#include <fltk3/DoubleBufferWindow.h>
 #include <fltk3/x.H>
 #include <fltk3/fl_draw.H>
 
@@ -60,7 +60,7 @@ static int can_xdbe() {
 }
 #endif
 
-void Fl_Double_Window::show() {
+void fltk3::DoubleBufferWindow::show() {
   fltk3::Window::show();
 }
 
@@ -253,7 +253,7 @@ extern void fl_restore_clip();
 /**
   Forces the window to be redrawn.
 */
-void Fl_Double_Window::flush() {flush(0);}
+void fltk3::DoubleBufferWindow::flush() {flush(0);}
 
 /**
   Forces the window to be redrawn.
@@ -263,7 +263,7 @@ void Fl_Double_Window::flush() {flush(0);}
   front everywhere, even if damage() == 0, thus erasing the overlay,
   and leaving the clip region set to the entire window.
 */
-void Fl_Double_Window::flush(int eraseoverlay) {
+void fltk3::DoubleBufferWindow::flush(int eraseoverlay) {
   make_current(); // make sure fl_gc is non-zero
   Fl_X *myi = Fl_X::i(this);
   if (!myi->other_xid) {
@@ -347,7 +347,7 @@ void Fl_Double_Window::flush(int eraseoverlay) {
   if (myi->other_xid) fl_copy_offscreen(X, Y, W, H, myi->other_xid, X, Y);
 }
 
-void Fl_Double_Window::resize(int X,int Y,int W,int H) {
+void fltk3::DoubleBufferWindow::resize(int X,int Y,int W,int H) {
   int ow = w();
   int oh = h();
   fltk3::Window::resize(X,Y,W,H);
@@ -361,7 +361,7 @@ void Fl_Double_Window::resize(int X,int Y,int W,int H) {
   }
 }
 
-void Fl_Double_Window::hide() {
+void fltk3::DoubleBufferWindow::hide() {
   Fl_X* myi = Fl_X::i(this);
   if (myi && myi->other_xid) {
 #if USE_XDBE
@@ -377,7 +377,7 @@ void Fl_Double_Window::hide() {
   whole tree to be deleted at once, without having to keep a pointer to
   all the children in the user code.
 */
-Fl_Double_Window::~Fl_Double_Window() {
+fltk3::DoubleBufferWindow::~DoubleBufferWindow() {
   hide();
 }
 

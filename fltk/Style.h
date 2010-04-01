@@ -34,67 +34,57 @@ namespace fltk {
 /// \name fltk/Style.h
 //@{
 
-class FL_API Widget;
-class FL_API Rectangle;
-class FL_API Symbol;
-typedef Symbol Box;
-
-/*
- The values below are currently emulated. In a future version of FLTK3, we 
- really should port the FLTK2 way of handling boxtypes to FLTK3.
-extern FL_API Box* const UP_BOX;
-extern FL_API Box* const DOWN_BOX;
-extern FL_API Box* const THIN_UP_BOX;
-extern FL_API Box* const THIN_DOWN_BOX;
-extern FL_API Box* const ENGRAVED_BOX;
-extern FL_API Box* const EMBOSSED_BOX;
-extern FL_API Box* const BORDER_BOX;
-extern FL_API Box* const FLAT_BOX;
-extern FL_API Box* const HIGHLIGHT_UP_BOX;
-extern FL_API Box* const HIGHLIGHT_DOWN_BOX;
-extern FL_API Box* const ROUND_UP_BOX;
-extern FL_API Box* const ROUND_DOWN_BOX;
-extern FL_API Box* const DIAMOND_UP_BOX;
-extern FL_API Box* const DIAMOND_DOWN_BOX;
-extern FL_API Box* const NO_BOX;
-extern FL_API Box* const SHADOW_BOX;
-extern FL_API Box* const ROUNDED_BOX;
-extern FL_API Box* const RSHADOW_BOX;
-extern FL_API Box* const RFLAT_BOX;
-extern FL_API Box* const OVAL_BOX;
-extern FL_API Box* const OSHADOW_BOX;
-extern FL_API Box* const OFLAT_BOX;
-extern FL_API Box* const BORDER_FRAME;
-extern FL_API Box* const PLASTIC_UP_BOX;
-extern FL_API Box* const PLASTIC_DOWN_BOX;
-*/
-  enum Boxtype {
-    UP_BOX              = fltk3::UP_BOX,
-    DOWN_BOX            = fltk3::DOWN_BOX,
-    THIN_UP_BOX         = fltk3::THIN_UP_BOX,
-    THIN_DOWN_BOX       = fltk3::THIN_DOWN_BOX,
-    ENGRAVED_BOX        = fltk3::ENGRAVED_BOX,
-    EMBOSSED_BOX        = fltk3::EMBOSSED_BOX,
-    BORDER_BOX          = fltk3::BORDER_BOX,
-    FLAT_BOX            = fltk3::FLAT_BOX,
-    HIGHLIGHT_UP_BOX    = fltk3::GTK_UP_BOX,
-    HIGHLIGHT_DOWN_BOX  = fltk3::GTK_DOWN_BOX,
-    ROUND_UP_BOX        = fltk3::ROUND_UP_BOX,
-    ROUND_DOWN_BOX      = fltk3::ROUND_DOWN_BOX,
-    DIAMOND_UP_BOX      = fltk3::DIAMOND_UP_BOX,
-    DIAMOND_DOWN_BOX    = fltk3::DIAMOND_DOWN_BOX,
-    NO_BOX              = fltk3::NO_BOX,
-    SHADOW_BOX          = fltk3::SHADOW_BOX,
-    ROUNDED_BOX         = fltk3::ROUNDED_BOX,
-    RSHADOW_BOX         = fltk3::RSHADOW_BOX,
-    RFLAT_BOX           = fltk3::RFLAT_BOX,
-    OVAL_BOX            = fltk3::OVAL_BOX,
-    OSHADOW_BOX         = fltk3::OSHADOW_BOX,
-    OFLAT_BOX           = fltk3::OFLAT_BOX,
-    BORDER_FRAME        = fltk3::BORDER_FRAME,
-    PLASTIC_UP_BOX      = fltk3::PLASTIC_UP_BOX,
-    PLASTIC_DOWN_BOX    = fltk3::PLASTIC_DOWN_BOX
+  class FL_API Widget;
+  class FL_API Rectangle;
+  class FL_API Symbol;
+  
+  // typedef Symbol Box;
+  
+  // In FLTK2, the Boxtype is actually a class that implements the box drawing.
+  // This is very nice and should be ported to FLTK3. For now, we emulate the
+  // API by creating a bunch of simplified Box classes. Interestingly, there are 
+  // no "frame" styles! I wonder why they were taken out?
+  
+  // we are still missing a lookup table that will convert the fltk3::Boxtype
+  // back into a pointer to the correct Box class.
+  
+  class Box { 
+    fltk3::Boxtype _bt;
+  public:
+    Box(fltk3::Boxtype b) : _bt(b) { }
+    fltk3::Boxtype bt() { return _bt; }
   };
+
+# define FLTK_DEFINE_BOX_TYPE(a) Box _##a(fltk3::a); FL_API Box* const a = &_##a;
+# define FLTK_DEFINE_BOX_TYPE2(a, b) Box _##a(fltk3::b); FL_API Box* const a = &_##a;
+  
+  FLTK_DEFINE_BOX_TYPE(UP_BOX)
+  FLTK_DEFINE_BOX_TYPE(DOWN_BOX)
+  FLTK_DEFINE_BOX_TYPE(THIN_UP_BOX)
+  FLTK_DEFINE_BOX_TYPE(THIN_DOWN_BOX)
+  FLTK_DEFINE_BOX_TYPE(ENGRAVED_BOX)
+  FLTK_DEFINE_BOX_TYPE(EMBOSSED_BOX)
+  FLTK_DEFINE_BOX_TYPE(BORDER_BOX)
+  FLTK_DEFINE_BOX_TYPE(FLAT_BOX)
+  FLTK_DEFINE_BOX_TYPE2(HIGHLIGHT_UP_BOX, GTK_UP_BOX)
+  FLTK_DEFINE_BOX_TYPE2(HIGHLIGHT_DOWN_BOX, GTK_DOWN_BOX)
+  FLTK_DEFINE_BOX_TYPE(ROUND_UP_BOX)
+  FLTK_DEFINE_BOX_TYPE(ROUND_DOWN_BOX)
+  FLTK_DEFINE_BOX_TYPE(DIAMOND_UP_BOX)
+  FLTK_DEFINE_BOX_TYPE(DIAMOND_DOWN_BOX)
+  FLTK_DEFINE_BOX_TYPE(NO_BOX)
+  FLTK_DEFINE_BOX_TYPE(SHADOW_BOX)
+  FLTK_DEFINE_BOX_TYPE(ROUNDED_BOX)
+  FLTK_DEFINE_BOX_TYPE(RSHADOW_BOX)
+  FLTK_DEFINE_BOX_TYPE(RFLAT_BOX)
+  FLTK_DEFINE_BOX_TYPE(OVAL_BOX)
+  FLTK_DEFINE_BOX_TYPE(OSHADOW_BOX)
+  FLTK_DEFINE_BOX_TYPE(OFLAT_BOX)
+  FLTK_DEFINE_BOX_TYPE(BORDER_FRAME)
+  FLTK_DEFINE_BOX_TYPE(PLASTIC_UP_BOX)
+  FLTK_DEFINE_BOX_TYPE(PLASTIC_DOWN_BOX)
+
+# undef FLTK_DEFINE_BOX_TYPE
   
 struct Font;
 /*

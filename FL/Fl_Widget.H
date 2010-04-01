@@ -158,21 +158,17 @@ public:
   void position(int X,int Y) { _p->position(X, Y); }
   void size(int W,int H) { _p->size(W, H); }
   
-#if 0
-  Fl_Align align() const {return label_.align_;}
-  void align(Fl_Align alignment) {label_.align_ = alignment;}
-#endif
+  Fl_Align align() const { return (Fl_Align)_p->align(); }
+  void align(Fl_Align a) { _p->align((fltk3::Align)a); }
   
   Fl_Boxtype box() const { return (Fl_Boxtype)_p->box(); }
   void box(Fl_Boxtype new_box) { _p->box((fltk3::Boxtype)new_box); }
   
-#if 0
-  Fl_Color color() const {return color_;}
-  void color(Fl_Color bg) {color_ = bg;}
-  Fl_Color selection_color() const {return color2_;}
-  void selection_color(Fl_Color a) {color2_ = a;}
-  void color(Fl_Color bg, Fl_Color sel) {color_=bg; color2_=sel;}
-#endif
+  Fl_Color color() const { return _p->color(); }
+  void color(Fl_Color bg) { _p->color(bg); }
+  Fl_Color selection_color() const { return _p->selection_color(); }
+  void selection_color(Fl_Color a) { _p->selection_color(a); }
+  void color(Fl_Color bg, Fl_Color sel) { _p->color(bg, sel); }
   
   const char* label() const { return _p->label(); }
   void label(const char* text) { _p->label(text); }
@@ -194,9 +190,10 @@ public:
   Fl_Image* deimage() {return label_.deimage;}
   void deimage(Fl_Image* img) {label_.deimage=img;}
   void deimage(Fl_Image& img) {label_.deimage=&img;}
-  const char *tooltip() const {return tooltip_;}
-  void tooltip(const char *t);
 #endif
+  
+  const char *tooltip() const { return _p->tooltip(); }
+  void tooltip(const char *t) { _p->tooltip(t); }
   
   Fl_Callback_p callback() const { return (Fl_Callback_p)_p->callback(); }
   void callback(Fl_Callback *cb, void *p) { _p->callback( (fltk3::Callback_p)cb, p); }

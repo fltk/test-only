@@ -54,7 +54,7 @@
     <BR>&nbsp; </LI>
     <LI>fltk3::visual(FL_DOUBLE|FL_INDEX)
     <BR>Hardware double buffering.  Call this if you are going to use 
-    Fl_Double_Window.
+    fltk3::DoubleBufferWindow.
     <BR>&nbsp; </LI>
     <LI>fltk3::visual(FL_DOUBLE|FL_RGB)</LI>
     <LI>fltk3::visual(FL_DOUBLE|FL_RGB8)
