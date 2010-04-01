@@ -43,8 +43,8 @@ fltk::Widget* bt(const char *name, fltk::Box* type, int square=0) {
     fltk::Widget *b = new fltk::InvisibleBox(type,x,y,square ? H-20 : W-20,H-20,name);
     b->labelsize(11);
     if (square) {
-      // FLTK123: b->clear_flag(fltk::ALIGN_MASK);
-      // FLTK123: b->set_flag(fltk::ALIGN_RIGHT);
+      b->clear_flag(fltk::ALIGN_MASK);
+      b->set_flag(fltk::ALIGN_RIGHT);
     }
     return b;
 }

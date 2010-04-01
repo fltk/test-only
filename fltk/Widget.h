@@ -128,8 +128,23 @@ public:
 
   Flags	flags() const		{ return flags_; }
   void	flags(Flags f)  	{ flags_ = f; }
-  void	set_flag(unsigned f)	{ flags_ |= f; }
-  void	clear_flag(unsigned f)	{ flags_ &= ~f; }
+#endif
+  
+  void	set_flag(unsigned f) {
+    if (f&ALIGN_MASK) {
+      _p->align( _p->align() | (f&ALIGN_MASK));
+    }
+    // fltk3: handle all the other flags...
+  }
+  
+  void	clear_flag(unsigned f) {
+    if (f&ALIGN_MASK) {
+      _p->align( _p->align() &~ (f&ALIGN_MASK));
+    }
+    // fltk3: handle all the other flags...
+  }
+  
+#if 0
   void	invert_flag(unsigned f)	{ flags_ ^= f; }
   void	set_flag(unsigned f,bool b) { flags_ = (flags_&~f)|(b?f:0); }
   bool	flag(unsigned f) const	{ return (flags_ & f) != 0; }

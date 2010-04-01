@@ -5058,12 +5058,7 @@
 				C197AD2AAA7FA44783DD8E27 /* Frameworks */,
 				7806C7AA99FE626675560AF1 /* Tests */,
 				7DC38200FBE41638B7195263 /* Products */,
-				C9C907A011626698006C5014 /* hello-Info copy.plist */,
-				C9C907BA116266AB006C5014 /* hello-Info copy 2.plist */,
-				C9782F731163CD2F00491051 /* button-Info copy.plist */,
-				C9782F8C1163CD3900491051 /* button-Info copy 2.plist */,
-				C97831541164914B00491051 /* boxtype-Info copy.plist */,
-				C978316E1164915700491051 /* boxtype-Info copy 2.plist */,
+				C97832A21164EC3A00491051 /* plists */,
 			);
 			sourceTree = "<group>";
 		};
@@ -5343,9 +5338,9 @@
 				91FDF99B89F9FF9129E85003 /* ask */,
 				86CA4FED4095C8CF53154A82 /* bitmap */,
 				06DFADCF98F35FEDD23C6865 /* blocks */,
-				A18D3FFC7BD51E0063CDE1DB /* boxtype */,
+				A18D3FFC7BD51E0063CDE1DB /* 123 boxtype */,
 				1F2A334C7597E64951FE171D /* browser */,
-				DFDAA821C09CB20A1CBF591E /* button */,
+				DFDAA821C09CB20A1CBF591E /* 123 button */,
 				8C92CD0AE2ABEDD4BEEDF0E6 /* buttons */,
 				AD3CD53EA76D9E31AFF4ED71 /* checkers */,
 				C5BAF456219335209EA4AA9B /* clock */,
@@ -5365,7 +5360,7 @@
 				AA8B93FA3AD672ED9C940A12 /* fullscreen */,
 				4872A6B5810CB954EE0FCB61 /* gl_overlay */,
 				5FC9447FDC36128608A852BA /* glpuzzle */,
-				783A046650036FEF936250B4 /* hello */,
+				783A046650036FEF936250B4 /* 123 hello */,
 				05063DB8DFD3CFA480E4E862 /* help */,
 				869E2D8F426D6813AA015BD7 /* iconize */,
 				CEC93D332BAE3CD33732B7E3 /* image */,
@@ -5409,14 +5404,14 @@
 			name = Tests;
 			sourceTree = "<group>";
 		};
-		783A046650036FEF936250B4 /* hello */ = {
+		783A046650036FEF936250B4 /* 123 hello */ = {
 			isa = PBXGroup;
 			children = (
 				388A5267639C2CEEDD762C41 /* hello.cxx */,
 				C9C9081D116270B8006C5014 /* hello1.cxx */,
 				C9C9081E116270B8006C5014 /* hello2.cxx */,
 			);
-			name = hello;
+			name = "123 hello";
 			sourceTree = "<group>";
 		};
 		7D7A86993530D6A56D5A7497 /* fltk */ = {
@@ -5862,14 +5857,14 @@
 			name = CubeView;
 			sourceTree = "<group>";
 		};
-		A18D3FFC7BD51E0063CDE1DB /* boxtype */ = {
+		A18D3FFC7BD51E0063CDE1DB /* 123 boxtype */ = {
 			isa = PBXGroup;
 			children = (
 				8513C25CD986E6EB06BECA58 /* boxtype.cxx */,
 				C97831311164913700491051 /* boxtype1.cxx */,
 				C97831321164913700491051 /* boxtype2.cxx */,
 			);
-			name = boxtype;
+			name = "123 boxtype";
 			sourceTree = "<group>";
 		};
 		A28D8313F0525624F48091A7 /* tabs */ = {
@@ -6001,6 +5996,19 @@
 			name = valuators;
 			sourceTree = "<group>";
 		};
+		C97832A21164EC3A00491051 /* plists */ = {
+			isa = PBXGroup;
+			children = (
+				C9C907A011626698006C5014 /* hello-Info copy.plist */,
+				C9C907BA116266AB006C5014 /* hello-Info copy 2.plist */,
+				C9782F731163CD2F00491051 /* button-Info copy.plist */,
+				C9782F8C1163CD3900491051 /* button-Info copy 2.plist */,
+				C97831541164914B00491051 /* boxtype-Info copy.plist */,
+				C978316E1164915700491051 /* boxtype-Info copy 2.plist */,
+			);
+			name = plists;
+			sourceTree = "<group>";
+		};
 		CEC93D332BAE3CD33732B7E3 /* image */ = {
 			isa = PBXGroup;
 			children = (
@@ -6045,14 +6053,14 @@
 			name = sudoku;
 			sourceTree = "<group>";
 		};
-		DFDAA821C09CB20A1CBF591E /* button */ = {
+		DFDAA821C09CB20A1CBF591E /* 123 button */ = {
 			isa = PBXGroup;
 			children = (
 				047BB6E173EA9EDCD543E517 /* button.cxx */,
 				C9782F991163CD9800491051 /* button1.cxx */,
 				C9782F9A1163CD9800491051 /* button2.cxx */,
 			);
-			name = button;
+			name = "123 button";
 			sourceTree = "<group>";
 		};
 		E2D3B0AFBE3D6983D98316B0 /* fast_slow */ = {
