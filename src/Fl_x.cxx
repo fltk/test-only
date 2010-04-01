@@ -40,7 +40,7 @@
 #  include <fltk3/x.H>
 #  include <fltk3/Window.h>
 #  include <fltk3/fl_utf8.h>
-#  include <fltk3/Fl_Tooltip.H>
+#  include <fltk3/Tooltip.h>
 #  include <fltk3/fl_draw.H>
 #  include <stdio.h>
 #  include <stdlib.h>
@@ -1724,7 +1724,7 @@ void fltk3::Window::show() {
   } else {
     labeltype(fltk3::NO_LABEL);
   }
-  Fl_Tooltip::exit(this);
+  fltk3::Tooltip::exit(this);
   if (!shown()) {
     fl_open_display();
     // Don't set background pixel for double-buffered windows...

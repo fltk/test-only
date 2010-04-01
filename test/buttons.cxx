@@ -35,7 +35,7 @@
 #include <fltk3/CheckButton.h>
 #include <fltk3/LightButton.h>
 #include <fltk3/RoundButton.h>
-// fltk123: #include <fltk3/Tooltip.h>
+#include <fltk3/Tooltip.h>
 
 using namespace fltk3;
 

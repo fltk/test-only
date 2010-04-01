@@ -80,7 +80,7 @@ extern "C" {
 #include <fltk3/run.h>
 #include <fltk3/x.H>
 #include <fltk3/Window.h>
-#include <fltk3/Fl_Tooltip.H>
+#include <fltk3/Tooltip.h>
 #include <fltk3/Fl_Sys_Menu_Bar.H>
 #include <fltk3/Fl_Printer.H>
 #include <fltk3/Fl_Input_.H>
@@ -2209,7 +2209,7 @@ void Fl_X::make(fltk3::Window* w)
     if (w->size_range_set) w->size_range_();
     
     if (winlevel != NSMainMenuWindowLevel) {
-      Fl_Tooltip::enter(0);
+      fltk3::Tooltip::enter(0);
     }
     [cw makeKeyAndOrderFront:nil];
     fltk3::first_window(w);
@@ -2299,7 +2299,7 @@ void fltk3::Window::show() {
   } else {
     labeltype(fltk3::NO_LABEL);
   }
-  Fl_Tooltip::exit(this);
+  fltk3::Tooltip::exit(this);
   if (!shown() || !i) {
     Fl_X::make(this);
   } else {

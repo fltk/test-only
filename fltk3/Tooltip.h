@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.H 6902 2009-09-27 11:06:56Z matt $"
+// "$Id: Tooltip.H 6902 2009-09-27 11:06:56Z matt $"
 //
 // Tooltip header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,19 +26,21 @@
 //
 
 /* \file
-   Fl_Tooltip widget . */
+   Tooltip widget . */
 
-#ifndef Fl_Tooltip_H
-#define Fl_Tooltip_H
+#ifndef Fltk3_Tooltip_H
+#define Fltk3_Tooltip_H
 
 #include <fltk3/run.h>
 #include <fltk3/Widget.h>
 
+namespace fltk3 {
+
 /**
-  The Fl_Tooltip class provides tooltip support for
+  The Tooltip class provides tooltip support for
   all FLTK widgets. It contains only static methods.
 */
-class FL_EXPORT Fl_Tooltip {
+class FL_EXPORT Tooltip {
 public:
   /**    Gets the tooltip delay. The default delay is 1.0 seconds.  */
   static float delay() { return delay_; }
@@ -101,9 +103,11 @@ private:
   static Fl_Fontsize size_;
   static fltk3::Widget* widget_; //!< Keeps track of the current target widget
 };
-
+  
+}
+  
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.H 6902 2009-09-27 11:06:56Z matt $".
+// End of "$Id: Tooltip.H 6902 2009-09-27 11:06:56Z matt $".
 //

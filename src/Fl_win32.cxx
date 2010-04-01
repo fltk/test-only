@@ -36,7 +36,7 @@
 #include <fltk3/Window.h>
 #include <fltk3/fl_draw.H>
 #include <fltk3/Enumerations.H>
-#include <fltk3/Fl_Tooltip.H>
+#include <fltk3/Tooltip.h>
 #include "flstring.h"
 #include "Fl_Font.H"
 #include <stdio.h>
@@ -1771,7 +1771,7 @@ void fltk3::Window::show() {
   } else {
     labeltype(fltk3::NO_LABEL);
   }
-  Fl_Tooltip::exit(this);
+  fltk3::Tooltip::exit(this);
   if (!shown()) {
     // if (can_boxcheat(box())) fl_background_pixel = fl_xpixel(color());
     Fl_X::make(this);

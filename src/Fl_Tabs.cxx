@@ -36,7 +36,7 @@
 #include <fltk3/run.h>
 #include <fltk3/Fl_Tabs.H>
 #include <fltk3/fl_draw.H>
-#include <fltk3/Fl_Tooltip.H>
+#include <fltk3/Tooltip.h>
 
 #define BORDER 2
 #define EXTRASPACE 10
@@ -167,14 +167,14 @@ int Fl_Tabs::handle(int event) {
 	do_callback();
 	if (wp.deleted()) return 1;
       }
-      Fl_Tooltip::current(o);
+      fltk3::Tooltip::current(o);
     } else {
       push(o);
     }
     return 1;
   case fltk3::MOVE: {
     int ret = fltk3::Group::handle(event);
-    fltk3::Widget *o = Fl_Tooltip::current(), *n = o;
+    fltk3::Widget *o = fltk3::Tooltip::current(), *n = o;
     int H = tab_height();
     if ( (H>=0) && (fltk3::event_y()>y()+H) )
       return ret;
@@ -185,7 +185,7 @@ int Fl_Tabs::handle(int event) {
       if (!n) n = this;
     }
     if (n!=o)
-      Fl_Tooltip::enter(n);
+      fltk3::Tooltip::enter(n);
     return ret; }
   case fltk3::FOCUS:
   case fltk3::UNFOCUS:

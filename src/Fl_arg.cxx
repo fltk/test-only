@@ -31,7 +31,7 @@
 #include <fltk3/run.h>
 #include <fltk3/x.H>
 #include <fltk3/Window.h>
-#include <fltk3/Fl_Tooltip.H>
+#include <fltk3/Tooltip.h>
 #include <fltk3/filename.H>
 #include <fltk3/fl_draw.H>
 #include <ctype.h>
@@ -109,11 +109,11 @@ int fltk3::arg(int argc, char **argv, int &i) {
     i++;
     return 1;
   } else if (fl_match(s, "tooltips", 2)) {
-    Fl_Tooltip::enable();
+    fltk3::Tooltip::enable();
     i++;
     return 1;
   } else if (fl_match(s, "notooltips", 3)) {
-    Fl_Tooltip::disable();
+    fltk3::Tooltip::disable();
     i++;
     return 1;
   }
@@ -264,7 +264,7 @@ int fltk3::arg(int argc, char **argv, int &i) {
   
   	<LI>-tooltips and -notooltips
   
-  	<P>Enables or disables tooltips using Fl_Tooltip::enable().</LI>
+  	<P>Enables or disables tooltips using fltk3::Tooltip::enable().</LI>
   
   </UL>
   
@@ -306,7 +306,7 @@ void fltk3::Window::show(int argc, char **argv) {
                             strcasecmp(val, "yes") == 0);
 
   val = XGetDefault(fl_display, key, "tooltips");
-  if (val) Fl_Tooltip::enable(strcasecmp(val, "true") == 0 ||
+  if (val) fltk3::Tooltip::enable(strcasecmp(val, "true") == 0 ||
                               strcasecmp(val, "on") == 0 ||
                               strcasecmp(val, "yes") == 0);
 

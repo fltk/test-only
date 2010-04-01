@@ -35,7 +35,7 @@
 #include <FL/Fl_Check_Button.H>
 #include <FL/Fl_Light_Button.H>
 #include <FL/Fl_Round_Button.H>
-// fltk123: #include <FL/Fl_Tooltip.H>
+#include <FL/Fl_Tooltip.H>
 
 int main(int argc, char ** argv) {
   Fl_Window *window = new Fl_Window(320,130);

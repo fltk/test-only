@@ -34,7 +34,7 @@
 #include <fltk3/run.h>
 #include <fltk3/Window.h>
 #include <fltk3/x.H>
-#include <fltk3/Fl_Tooltip.H>
+#include <fltk3/Tooltip.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -835,8 +835,8 @@ void fltk3::pushed(fltk3::Widget *o) {
 }
 
 static void nothing(fltk3::Widget *) {}
-void (*Fl_Tooltip::enter)(fltk3::Widget *) = nothing;
-void (*Fl_Tooltip::exit)(fltk3::Widget *) = nothing;
+void (*fltk3::Tooltip::enter)(fltk3::Widget *) = nothing;
+void (*fltk3::Tooltip::exit)(fltk3::Widget *) = nothing;
 
 // Update modal(), focus() and other state according to system state,
 // and send fltk3::ENTER, fltk3::LEAVE, fltk3::FOCUS, and/or fltk3::UNFOCUS events.
@@ -890,7 +890,7 @@ void fl_fix_focus() {
       }
     } else {
       fltk3::belowmouse(0);
-      Fl_Tooltip::enter(0);
+      fltk3::Tooltip::enter(0);
     }
   }
 }
@@ -919,9 +919,9 @@ void fl_throw_focus(fltk3::Widget *o) {
   if (o->contains(fltk3::belowmouse())) fltk3::belowmouse_ = 0;
   if (o->contains(fltk3::focus())) fltk3::focus_ = 0;
   if (o == fl_xfocus) fl_xfocus = 0;
-  if (o == Fl_Tooltip::current()) Fl_Tooltip::current(0);
+  if (o == fltk3::Tooltip::current()) fltk3::Tooltip::current(0);
   if (o == fl_xmousewin) fl_xmousewin = 0;
-  Fl_Tooltip::exit(o);
+  fltk3::Tooltip::exit(o);
   fl_fix_focus();
 }
 
@@ -984,7 +984,7 @@ int fltk3::handle(int e, fltk3::Window* window)
     if (grab()) wi = grab();
     else if (modal() && wi != modal()) return 0;
     pushed_ = wi;
-    Fl_Tooltip::current(wi);
+    fltk3::Tooltip::current(wi);
     if (send(e, wi, window)) return 1;
     // raise windows that are clicked on:
     window->show();
@@ -1022,7 +1022,7 @@ int fltk3::handle(int e, fltk3::Window* window)
 #ifdef DEBUG
       printf("fltk3::handle(e=%d, window=%p);\n", e, window);
 #endif // DEBUG
-      Fl_Tooltip::enter(belowmouse());
+      fltk3::Tooltip::enter(belowmouse());
     }
     return ret;}
 
@@ -1067,7 +1067,7 @@ int fltk3::handle(int e, fltk3::Window* window)
     printf("fltk3::handle(e=%d, window=%p);\n", e, window);
 #endif // DEBUG
 
-      Fl_Tooltip::enter((fltk3::Widget*)0);
+      fltk3::Tooltip::enter((fltk3::Widget*)0);
 
     fl_xfocus = window; // this should not happen!  But maybe it does:
 
@@ -1120,7 +1120,7 @@ int fltk3::handle(int e, fltk3::Window* window)
 
     fl_xmousewin = window;
     fl_fix_focus();
-    Fl_Tooltip::enter(belowmouse());
+    fltk3::Tooltip::enter(belowmouse());
     return 1;
 
     case fltk3::LEAVE:
@@ -1130,7 +1130,7 @@ int fltk3::handle(int e, fltk3::Window* window)
 
     if (!pushed_) {
       belowmouse(0);
-      Fl_Tooltip::enter(0);
+      fltk3::Tooltip::enter(0);
     }
     if (window == fl_xmousewin) {fl_xmousewin = 0; fl_fix_focus();}
     return 1;
@@ -1316,7 +1316,7 @@ int fltk3::Window::handle(int ev)
       break;
     }
 //  } else if (ev == fltk3::FOCUS || ev == fltk3::UNFOCUS) {
-//    Fl_Tooltip::exit(Fl_Tooltip::current());
+//    fltk3::Tooltip::exit(fltk3::Tooltip::current());
   }
 
   return fltk3::Group::handle(ev);
