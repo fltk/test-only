@@ -3,7 +3,7 @@
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -52,7 +52,7 @@ typedef fltk3::Window FL_FORM;
 #define FL_VALID	1
 #define FL_PREEMPT	1
 #define FL_AUTO		2
-#define fltk3::WHEN_NEEDED	FL_AUTO
+#define FL_WHEN_NEEDED	FL_AUTO
 #define FL_OFF		0
 #define FL_NONE		0
 #define FL_CANCEL	0
@@ -95,13 +95,13 @@ typedef fltk3::Window FL_FORM;
 #define FL_DARKTOMATO	((Fl_Color)(113))
 #define FL_WHEAT	((Fl_Color)(174))
 
-#define Fl_ALIGN_BESIDE	fltk3::ALIGN_INSIDE
+#define FL_ALIGN_BESIDE	fltk3::ALIGN_INSIDE
 
 #define FL_PUP_TOGGLE	2 // fltk3::MENU_TOGGLE
 #define FL_PUP_INACTIVE 1 // fltk3::MENU_INACTIVE
 #define FL_NO_FRAME	fltk3::NO_BOX
-#define fltk3::ROUNDED3D_UPBOX 	FL_ROUND_UP_BOX
-#define fltk3::ROUNDED3D_DOWNBOX	FL_ROUND_DOWN_BOX
+#define FL_ROUNDED3D_UPBOX 	FL_ROUND_UP_BOX
+#define FL_ROUNDED3D_DOWNBOX	FL_ROUND_DOWN_BOX
 #define FL_OVAL3D_UPBOX		FL_ROUND_UP_BOX
 #define FL_OVAL3D_DOWNBOX	FL_ROUND_DOWN_BOX
 
@@ -123,14 +123,14 @@ typedef fltk3::Window FL_FORM;
 #define FL_FIXEDBOLD_STYLE fltk3::COURIER_BOLD
 #define FL_FIXEDITALIC_STYLE fltk3::COURIER_ITALIC
 #define FL_FIXEDBOLDITALIC_STYLE fltk3::COURIER_BOLD_ITALIC
-#define fltk3::TIMES_STYLE	fltk3::TIMES
-#define fltk3::TIMESBOLD_STYLE fltk3::TIMES_BOLD
-#define fltk3::TIMESITALIC_STYLE fltk3::TIMES_ITALIC
-#define fltk3::TIMESBOLDITALIC_STYLE fltk3::TIMES_BOLD_ITALIC
+#define FL_TIMES_STYLE	fltk3::TIMES
+#define FL_TIMESBOLD_STYLE fltk3::TIMES_BOLD
+#define FL_TIMESITALIC_STYLE fltk3::TIMES_ITALIC
+#define FL_TIMESBOLDITALIC_STYLE fltk3::TIMES_BOLD_ITALIC
 
 // hacks to change the labeltype() when passed to fl_set_object_lstyle():
 #define FL_SHADOW_STYLE		(fltk3::SHADOW_LABEL<<8)
-#define fltk3::ENGRAVED_STYLE	(fltk3::ENGRAVED_LABEL<<8)
+#define FL_ENGRAVED_STYLE	(fltk3::ENGRAVED_LABEL<<8)
 #define FL_EMBOSSED_STYLE	(fltk3::EMBOSSED_LABEL<<0)
 
 // size values are different from XForms, match older Forms:
@@ -480,7 +480,7 @@ inline int fl_isdisplayed_browser_line(fltk3::Widget* o, int n) {
 #define FL_RETURN_BUTTON	6
 #define FL_HIDDEN_RET_BUTTON	7
 #define FL_PUSH_BUTTON		FL_TOGGLE_BUTTON
-#define fltk3::MENU_BUTTON		9
+#define FL_MENU_BUTTON		9
 
 FL_EXPORT fltk3::Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
 inline int fl_get_button(fltk3::Widget* b) {return ((fltk3::Button*)b)->value();}
