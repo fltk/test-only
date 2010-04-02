@@ -38,13 +38,13 @@ CPPFILES = \
 	Fl_Chart.cxx \
 	Fl_Check_Browser.cxx \
 	Fl_Check_Button.cxx \
-	fltk3::Choice.cxx \
+	Fl_Choice.cxx \
 	Fl_Clock.cxx \
 	Fl_Color_Chooser.cxx \
 	Fl_Counter.cxx \
 	Fl_Dial.cxx \
 	Fl_Device.cxx \
-	fltk3::DoubleBufferWindow.cxx \
+	Fl_Double_Window.cxx \
 	Fl_File_Browser.cxx \
 	Fl_File_Chooser.cxx \
 	Fl_File_Chooser2.cxx \
@@ -54,7 +54,7 @@ CPPFILES = \
 	Fl_Help_View.cxx \
 	Fl_Image.cxx \
 	Fl_Input.cxx \
-	fltk3::Input_.cxx \
+	Fl_Input_.cxx \
 	Fl_Light_Button.cxx \
 	Fl_Menu.cxx \
 	Fl_Menu_.cxx \
@@ -81,7 +81,7 @@ CPPFILES = \
 	Fl_Scrollbar.cxx \
 	Fl_Shared_Image.cxx \
 	Fl_Single_Window.cxx \
-	fltk3::Slider.cxx \
+	Fl_Slider.cxx \
 	Fl_Table.cxx \
 	Fl_Table_Row.cxx \
 	Fl_Tabs.cxx \
@@ -95,10 +95,10 @@ CPPFILES = \
 	Fl_Tree_Item_Array.cxx \
 	Fl_Tree_Prefs.cxx \
 	Fl_Tooltip.cxx \
-	fltk3::Valuator.cxx \
+	Fl_Valuator.cxx \
 	Fl_Value_Input.cxx \
 	Fl_Value_Output.cxx \
-	fltk3::ValueSlider.cxx \
+	Fl_Value_Slider.cxx \
 	Fl_Widget.cxx \
 	Fl_Window.cxx \
 	Fl_Window_fullscreen.cxx \
@@ -220,10 +220,10 @@ GLOBJECTS = $(GLCPPFILES:.cxx=.o)
 FLOBJECTS = $(FLCPPFILES:.cxx=.o)
 IMGOBJECTS = $(IMGCPPFILES:.cxx=.o)
 
-all:	$(LIBNAME) $(DSONAME) \
+all: $(LIBNAME) $(DSONAME) \
 	$(FLLIBNAME) $(FLDSONAME) \
 	$(GLLIBNAME) $(GLDSONAME) \
-	$(IMGLIBNAME) $(IMGDSONAME) 
+	$(IMGLIBNAME) $(IMGDSONAME)
 
 $(LIBNAME): $(OBJECTS)
 	echo $(LIBCOMMAND) $@ ...
@@ -503,7 +503,7 @@ fl_color.o:	../FL/mac.H ../FL/win32.H
 fl_cursor.o:	../FL/mac.H ../FL/win32.H
 fl_dnd.o:	../FL/mac.H ../FL/win32.H
 Fl.o:	../FL/mac.H ../FL/win32.H
-fltk3::DoubleBufferWindow.o:	../FL/mac.H ../FL/win32.H
+Fl_Double_Window.o:	../FL/mac.H ../FL/win32.H
 fl_draw_image.o:	../FL/mac.H ../FL/win32.H
 fl_draw_image_mac.o:	../FL/mac.H ../FL/win32.H
 fl_draw_image_win32.o:	../FL/mac.H ../FL/win32.H
@@ -549,7 +549,7 @@ gl_start.o:	../FL/mac.H ../FL/win32.H
 install: $(LIBNAME) $(DSONAME) \
 	$(FLLIBNAME) $(FLDSONAME) \
 	$(GLLIBNAME) $(GLDSONAME) \
-	$(IMGLIBNAME) $(IMGDSONAME) 
+	$(IMGLIBNAME) $(IMGDSONAME)
 	echo "Installing libraries in $(DESTDIR)$(libdir)..."
 	-$(INSTALL_DIR) $(DESTDIR)$(libdir)
 	-$(INSTALL_DIR) $(DESTDIR)$(bindir)

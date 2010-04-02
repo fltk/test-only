@@ -3,7 +3,7 @@
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -81,10 +81,10 @@
   polling method, but as it has been discussed (Thanks Albrecht!) :
   - the async mode would imply to change the socket to non blocking mode.
     This can have unexpected side effects for 3rd party apps, especially
-    if it is set on-the-fly when socket service is really needed, as it is 
+    if it is set on-the-fly when socket service is really needed, as it is
     done today and on purpose, but still the 3rd party developer wouldn't easily
     control the sequencing of socket operations.
-  - Finer granularity of events furthered by the async select is a plus only 
+  - Finer granularity of events furthered by the async select is a plus only
     for socket 3rd party impl., it is simply not needed for the 'light' fltk
     use we make of wsock, so here it would also be a bad point, because of all
     the logic add-ons necessary for using this functionality, without a clear
@@ -123,7 +123,7 @@ static HMODULE get_wsock_mod() {
 
 /*
  * Dynamic linking of imm32.dll
- * This library is only needed for a hand full (four ATM) functions relating to 
+ * This library is only needed for a hand full (four ATM) functions relating to
  * international text rendering and locales. Dynamically loading reduces initial
  * size and link dependencies.
  */
@@ -156,7 +156,7 @@ static HMODULE get_imm_module() {
 //
 // Now (Dec. 2008) we can assume that current Cygwin/MinGW versions
 // support the TrackMouseEvent() function, but WinCE obviously doesn't
-// support it (STR 2095). Therefore, USE_TRACK_MOUSE is enabled by 
+// support it (STR 2095). Therefore, USE_TRACK_MOUSE is enabled by
 // default, but you can disable it by defining NO_TRACK_MOUSE.
 //
 // TrackMouseEvent is only used to support window leave notifications
@@ -183,7 +183,7 @@ static fltk3::Window *track_mouse_win=0;	// current TrackMouseEvent() window
 // USE_CAPTURE_MOUSE_WIN - this must be defined for TrackMouseEvent to work
 // correctly with subwindows - otherwise a single mouse click and release
 // (without a move) would generate phantom leave events.
-// This defines, if the current mouse window (maybe a subwindow) or the 
+// This defines, if the current mouse window (maybe a subwindow) or the
 // main window should get mouse events after pushing (and holding) a mouse
 // button, i.e. when dragging the mouse. This is done by calling SetCapture
 // (see below).
@@ -365,7 +365,7 @@ int fl_wait(double time_to_wait) {
     fltk3::idle();
     in_idle = 0;
   }
-  
+
   if (nfds) {
     // For WIN32 we need to poll for socket input FIRST, since
     // the event queue is not something we can select() on...
@@ -392,7 +392,7 @@ int fl_wait(double time_to_wait) {
     }
   }
 
-  if (fltk3::idle || fltk3::damage()) 
+  if (fltk3::idle || fltk3::damage())
     time_to_wait = 0.0;
 
   // if there are no more windows and this timer is set
@@ -589,7 +589,7 @@ void fltk3::paste(fltk3::Widget &receiver, int clipboard) {
     // Convert \r\n -> \n
     char *i = fl_selection_buffer[clipboard];
     if (i==0L) {
-      fltk3::e_text = 0; 
+      fltk3::e_text = 0;
       return;
     }
     fltk3::e_text = new char[fl_selection_length[clipboard]+1];
@@ -1209,7 +1209,7 @@ int Fl_X::fake_X_wm(const fltk3::Window* w,int &X,int &Y, int &bt,int &bx, int &
     if (hwnd) {
       // The block below calculates the window borders by requesting the
       // required decorated window rectangle for a desired client rectangle.
-      // If any part of the function above fails, we will drop to a 
+      // If any part of the function above fails, we will drop to a
       // fallback to get the best guess which is always available.
       HWND hwnd = fl_xid(w);
       // request the style flags of this window, as WIN32 sees them
@@ -1292,7 +1292,7 @@ int Fl_X::fake_X_wm(const fltk3::Window* w,int &X,int &Y, int &bt,int &bx, int &
 ////////////////////////////////////////////////////////////////
 
 void fltk3::Window::resize(int X,int Y,int W,int H) {
-  UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER 
+  UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER
              | SWP_NOACTIVATE | SWP_NOOWNERZORDER;
   int is_a_resize = (W != w() || H != h());
   int resize_from_program = (this != resize_bug_fix);
@@ -1306,8 +1306,8 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
   if (is_a_resize) {
     fltk3::Group::resize(X,Y,W,H);
     if (visible_r()) {
-      redraw(); 
-      // only wait for exposure if this window has a size - a window 
+      redraw();
+      // only wait for exposure if this window has a size - a window
       // with no width or height will never get an exposure event
       if (i && W>0 && H>0)
         i->wait_for_expose = 1;
@@ -1339,17 +1339,17 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
 ////////////////////////////////////////////////////////////////
 
 /*
- * This silly little class remembers the name of all window classes 
- * we register to avoid double registration. It has the added bonus 
+ * This silly little class remembers the name of all window classes
+ * we register to avoid double registration. It has the added bonus
  * of freeing everything on application close as well.
  */
 class NameList {
 public:
   NameList() { name = (char**)malloc(sizeof(char**)); NName = 1; nName = 0; }
-  ~NameList() { 
+  ~NameList() {
     int i;
     for (i=0; i<nName; i++) free(name[i]);
-    if (name) free(name); 
+    if (name) free(name);
   }
   void add_name(const char *n) {
     if (NName==nName) {
@@ -1829,7 +1829,7 @@ void fltk3::Window::make_current() {
 
 }
 
-/* Make sure that all allocated fonts are released. This works only if 
+/* Make sure that all allocated fonts are released. This works only if
    fltk3::run() is allowed to exit by closing all windows. Calling 'exit(int)'
    will not automatically free any fonts. */
 void fl_free_fonts(void)
@@ -1839,7 +1839,7 @@ void fl_free_fonts(void)
   Fl_Fontdesc * s;
   Fl_Font_Descriptor * f;
   Fl_Font_Descriptor * ff;
-  for (i=0; i<FL_FREE_FONT; i++) {
+  for (i=0; i < fltk3::FREE_FONT; i++) {
     s = fl_fonts + i;
     for (f=s->first; f; f=ff) {
       ff = f->next;
@@ -1862,13 +1862,13 @@ void fl_free_fonts(void)
 //  it is important to control GDI leaks, which are much more important than memory
 //  leaks. The following struct, global variable, and routines help implement
 //  the above protocol for those cases where the GetDC and RestoreDC are not in
-//  the same routine. For each GetDC, fl_save_dc is used to create an entry in 
+//  the same routine. For each GetDC, fl_save_dc is used to create an entry in
 //  a linked list that saves the window handle, the DC handle, and the initial
 //  state. When the DC is to be released, 'fl_release_dc' is called. It restores
 //  the initial state and releases the DC. When the program exits, 'fl_cleanup_dc_list'
 //  frees any remaining nodes in the list.
 
-struct Win_DC_List {      // linked list 
+struct Win_DC_List {      // linked list
   HWND    window;         // window handle
   HDC     dc;             // device context handle
   int     saved_dc;       // initial state of DC
