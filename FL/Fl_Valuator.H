@@ -29,14 +29,12 @@ protected:
 #endif
   
 public:
-  void bounds(double a, double b) { ((fltk3::Valuator*)_p)->bounds(a, b); }
-#if 0 // fltk123:
-    double minimum() const {return min;}
-    void minimum(double a) {min = a;}
-    double maximum() const {return max;}
-    void maximum(double a) {max = a;}
-  void range(double a, double b) {min = a; max = b;}
-#endif
+  void bounds(double a, double b) { ((fltk3::Valuator*)_p)->bounds(a, b); }  
+  double minimum() const { return ((fltk3::Valuator*)_p)->minimum(); }
+  void minimum(double a) { ((fltk3::Valuator*)_p)->minimum(a); }
+  double maximum() const { return ((fltk3::Valuator*)_p)->maximum(); }
+  void maximum(double a) { ((fltk3::Valuator*)_p)->maximum(a); }
+  void range(double a, double b) { ((fltk3::Valuator*)_p)->range(a, b); }
   void step(int a) { ((fltk3::Valuator*)_p)->step(a); }
   void step(double a, int b) { ((fltk3::Valuator*)_p)->step(a, b); }
   void step(double s) { ((fltk3::Valuator*)_p)->step(s); }

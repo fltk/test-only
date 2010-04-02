@@ -143,7 +143,7 @@ public:
   fltk3::Widget *fltk3Widget() { return (fltk3::Widget*)_p; }
   
   virtual ~Fl_Widget() { }
-  virtual void draw() { _p->draw(); }
+  virtual void draw() { vcall = 1; _p->fltk3::Widget::draw(); }
   virtual int handle(int event) { return _p->handle(event); }
   Fl_Group* parent() const { return (Fl_Group*)_p->parent()->wrapper(); }
   void parent(Fl_Group* p) { _p->parent((fltk3::Group*)(((Fl_Widget*)p)->fltk3Widget())); }

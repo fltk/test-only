@@ -43,8 +43,8 @@ public:
   
   fltk3::Widget *fltk3Widget() { return (fltk3::Widget*)_p; }
 
+  virtual void draw() { vcall = 1; _p->fltk3::Widget::draw(); }
 #if 0
-  virtual void draw();
   virtual int handle(int);
   int	send(int event);
   virtual void layout();

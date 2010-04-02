@@ -42,6 +42,8 @@
 
 const int QUEUE_SIZE = 20;
 
+char fltk3::Wrapper::vcall = 0;
+
 static fltk3::Widget *obj_queue[QUEUE_SIZE];
 static int obj_head, obj_tail;
 

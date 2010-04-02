@@ -45,6 +45,8 @@ namespace fltk3 {
     Wrapper() 
     : _p(0L) { }
     virtual ~Wrapper() { }
+    static char vcall;
+    virtual void draw() = 0;
   };
   
 }; // namespace fltk3

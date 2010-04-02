@@ -28,7 +28,6 @@
 #include <fltk3/run.h>
 #include <fltk3/DoubleBufferWindow.h>
 #include <fltk3/HorValueSlider.h>
-#include <fltk3/Button.h>
 #include <fltk3/draw.h>
 
 using namespace fltk3;

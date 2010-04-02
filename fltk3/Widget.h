@@ -216,6 +216,9 @@ public:
       \endcode
    */
   virtual void draw() {
+    if (wrapper() && !Wrapper::vcall) { wrapper()->draw(); } 
+    Wrapper::vcall = 0;
+    
     draw_box();
     draw_label();
   }
