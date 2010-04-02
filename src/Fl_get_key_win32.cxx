@@ -3,7 +3,7 @@
 //
 // WIN32 keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,8 +29,9 @@
 // which are actually X keysyms.  So this has to translate to MSWindows
 // VK_x symbols.
 
-#include <fltk3/fltk3.H>
+#include <fltk3/run.h>
 #include <fltk3/x.H>
+#include <config.h>
 
 // convert an Fltk (X) keysym to a MSWindows VK symbol:
 // See also the inverse converter in Fl_win32.cxx
