@@ -3,7 +3,7 @@
 //
 // Value output header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,7 +31,7 @@
 #ifndef Fl_Value_Output_H
 #define Fl_Value_Output_H
 
-#ifndef fltk3::Valuator_H
+#ifndef Fltk3_Valuator_H
 #include "Valuator.h"
 #endif
 
@@ -39,12 +39,12 @@
   The Fl_Value_Output widget displays a floating point value.
   If step() is not zero, the user can adjust the value by
   dragging the mouse left and right.  The left button moves one step()
-  per pixel, the middle by 10 * step(), and the right button by 
+  per pixel, the middle by 10 * step(), and the right button by
   100 * step().
-  <P>This is much lighter-weight than 
+  <P>This is much lighter-weight than
   Fl_Value_Input because it contains no text editing code or
   character buffer. </P>
-  <P ALIGN=CENTER>\image html Fl_Value_Output.gif 
+  <P ALIGN=CENTER>\image html Fl_Value_Output.gif
   \image latex  Fl_Value_Output.eps "Fl_Value_Output" width=8cm
 */
 class FL_EXPORT Fl_Value_Output : public fltk3::Valuator {

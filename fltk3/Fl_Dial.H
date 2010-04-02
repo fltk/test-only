@@ -3,7 +3,7 @@
 //
 // Dial header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,7 +31,7 @@
 #ifndef Fl_Dial_H
 #define Fl_Dial_H
 
-#ifndef fltk3::Valuator_H
+#ifndef Fltk3_Valuator_H
 #include "Valuator.h"
 #endif
 
@@ -43,7 +43,7 @@
 /**
   The Fl_Dial widget provides a circular dial to control a
   single floating point value.
-  <P ALIGN=CENTER>\image html dial.gif 
+  <P ALIGN=CENTER>\image html dial.gif
   \image latex dial.eps "Fl_Dial" width=4cm
   Use type() to set the type of the dial to:
   <UL>
@@ -72,7 +72,7 @@ public:
     and label string. The default type is FL_NORMAL_DIAL.
   */
   Fl_Dial(int x,int y,int w,int h, const char *l = 0);
-  /** 
+  /**
      Sets Or gets the angles used for the minimum and maximum values.  The default
      values are 45 and 315 (0 degrees is straight down and the angles
      progress clockwise).  Normally angle1 is less than angle2, but if you

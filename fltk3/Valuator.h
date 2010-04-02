@@ -3,7 +3,7 @@
 //
 // Valuator header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -44,12 +44,12 @@ namespace fltk3 {
   and provides a consistent interface to set the value, range, and step,
   and insures that callbacks are done the same for every object.
   <P>There are probably more of these classes in FLTK than any others:
-  <P ALIGN=CENTER>\image html  valuators.gif</P> 
+  <P ALIGN=CENTER>\image html  valuators.gif</P>
   \image latex   valuators.eps "Valuators derived from Valuators" width=10cm
   <P>In the above diagram each box surrounds an actual subclass.  These
   are further differentiated by setting the type() of the widget t
-  o the symbolic value labeling the widget.  
-  The ones labelled "0" are the default versions with a type(0).  
+  o the symbolic value labeling the widget.
+  The ones labelled "0" are the default versions with a type(0).
   For consistency the symbol FL_VERTICAL is defined as zero.
 */
 class FL_EXPORT Valuator : public fltk3::Widget {
@@ -93,17 +93,17 @@ public:
     range. This clamping is done <I>after</I> rounding to the step
     value (this makes a difference if the range is not a multiple of
     the step).
-    
+
     <P>The minimum may be greater than the maximum. This has the
     effect of "reversing" the object so the larger values
     are in the opposite direction. This also switches which end of
     the filled sliders is filled.</P>
-    
+
     <P>Some widgets consider this a "soft" range.  This
     means they will stop at the range, but if the user releases and
     grabs the control again and tries to move it further, it is
     allowed.</P>
-    
+
     <P>The range may affect the display. You must redraw()
     the widget after changing the range.
   */
@@ -118,7 +118,7 @@ public:
     value is rounded to the nearest multiple of the step value. This
     is done <I>before</I> clamping it to the range. For most widgets
     the default step is zero.
-    
+
     <P>For precision the step is stored as the ratio of two
     integers, A/B. You can set these integers directly. Currently
     setting a floating point value sets the nearest A/1 or 1/B value
