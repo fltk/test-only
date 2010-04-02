@@ -31,7 +31,7 @@
 #ifndef Fltk3_Check_Button_H
 #define Fltk3_Check_Button_H
 
-#include "LightButton.H"
+#include "LightButton.h"
 
 namespace fltk3 {
 

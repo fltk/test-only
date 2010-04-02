@@ -31,7 +31,7 @@
 #ifndef Fltk3_Round_Button_H
 #define Fltk3_Round_Button_H
 
-#include "LightButton.H"
+#include "LightButton.h"
 
 namespace fltk3 {
 

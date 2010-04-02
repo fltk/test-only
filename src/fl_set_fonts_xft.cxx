@@ -198,7 +198,7 @@ STYLE_DONE:
 
 ///////////////////////////////////////////////////////////
 
-static int fl_free_font = FL_FREE_FONT;
+static int fl_free_font = fltk3::FREE_FONT;
 
 // Uses the fontconfig lib to construct a list of all installed fonts.
 // I tried using XftListFonts for this, but the API is tricky - and when
@@ -217,7 +217,7 @@ Fl_Font fltk3::set_fonts(const char* pattern_name)
   int font_count; // Total number of fonts found to process
   char **full_list; // The list of font names we build
 
-  if (fl_free_font > FL_FREE_FONT) // already been here
+  if (fl_free_font > fltk3::FREE_FONT) // already been here
     return (Fl_Font)fl_free_font;
   
   fl_open_display(); // Just in case...
@@ -227,7 +227,7 @@ Fl_Font fltk3::set_fonts(const char* pattern_name)
   if (!FcInit())
   {
     // What to do? Just return defaults...
-    return FL_FREE_FONT;
+    return fltk3::FREE_FONT;
   }
 
   // Create a search pattern that will match every font name - I think this
@@ -325,7 +325,7 @@ Fl_Font fltk3::set_fonts(const char* pattern_name)
         // NOTE: This just adds on AFTER the default fonts - no attempt is made
         // to identify already loaded fonts. Is this bad?
         stored_name = strdup(xft_name);
-        fltk3::set_font((Fl_Font)(j + FL_FREE_FONT), stored_name);
+        fltk3::set_font((Fl_Font)(j + fltk3::FREE_FONT), stored_name);
         fl_free_font ++;
         
         free(full_list[j]); // release that name from our internal array

@@ -289,18 +289,18 @@ fltk3::DoubleBufferWindow* make_print_panel() {
         o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
         { print_all = new fltk3::RoundButton(20, 96, 38, 25, Fl_Printer::dialog_all);
           print_all->type(102);
-          print_all->down_box(FL_ROUND_DOWN_BOX);
+          print_all->down_box(fltk3::ROUND_DOWN_BOX);
           print_all->value(1);
           print_all->callback((fltk3::Callback*)cb_print_all);
         } // fltk3::RoundButton* print_all
         { print_pages = new fltk3::RoundButton(20, 126, 64, 25, Fl_Printer::dialog_pages);
           print_pages->type(102);
-          print_pages->down_box(FL_ROUND_DOWN_BOX);
+          print_pages->down_box(fltk3::ROUND_DOWN_BOX);
           print_pages->callback((fltk3::Callback*)cb_print_pages);
         } // fltk3::RoundButton* print_pages
         { print_selection = new fltk3::RoundButton(20, 156, 82, 25, "Selection");
           print_selection->type(102);
-          print_selection->down_box(FL_ROUND_DOWN_BOX);
+          print_selection->down_box(fltk3::ROUND_DOWN_BOX);
           print_selection->callback((fltk3::Callback*)cb_print_selection);
         } // fltk3::RoundButton* print_selection
         { print_from = new Fl_Int_Input(136, 126, 28, 25, Fl_Printer::dialog_from);
