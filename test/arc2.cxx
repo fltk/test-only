@@ -39,6 +39,7 @@ using namespace fltk;
 
 class Drawing : public Widget {
   void draw() {
+#if 0 // fltk123:
     push_clip(0,0, w(), h());
     setcolor_alpha(BLUE,0.6);
     fillrect(0,0,w(), h());
@@ -69,6 +70,7 @@ class Drawing : public Widget {
     addchord(r,dargs[4],dargs[5]);
     fillstrokepath(GRAY90);
     pop_clip();
+#endif
   }
 public:
   Drawing(int X,int Y,int W,int H) : Widget(X,Y,W,H) {}
@@ -95,7 +97,7 @@ int main(int argc, char** argv) {
     if (n<4) {s->minimum(0); s->maximum(300);}
     else if (n==6) {s->minimum(0); s->maximum(360);}
     else {s->minimum(-360); s->maximum(360);}
-    s->type(Slider::TICK_ABOVE);
+    // fltk123: s->type(Slider::TICK_ABOVE);
     s->step(1);
     s->value(dargs[n]);
 	s->clear_flag(ALIGN_MASK);

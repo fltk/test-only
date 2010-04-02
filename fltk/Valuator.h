@@ -20,18 +20,12 @@ public:
     _p->wrapper(this);
   }
   double value() const { return ((fltk3::Valuator*)_p)->value(); }
-  bool value(double v) { return ((fltk3::Valuator*)_p)->value(v); }
-
-#if 0 // fltk123:
-  double minimum() const {return minimum_;}
-  void minimum(double a) {minimum_ = a;}
-
-  double maximum() const {return maximum_;}
-  void maximum(double a) {maximum_ = a;}
-#endif
-  
+  bool value(double v) { return ((fltk3::Valuator*)_p)->value(v); }  
+  double minimum() const { return ((fltk3::Valuator*)_p)->minimum(); }
+  void minimum(double a) { ((fltk3::Valuator*)_p)->minimum(a); }
+  double maximum() const { return ((fltk3::Valuator*)_p)->maximum(); }
+  void maximum(double a) { ((fltk3::Valuator*)_p)->maximum(a); }  
   void range(double a, double b) { ((fltk3::Valuator*)_p)->range(a, b); }
-
   double step() const { return ((fltk3::Valuator*)_p)->step(); }
   void step(double a) { ((fltk3::Valuator*)_p)->step(a); }
 

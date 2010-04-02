@@ -5,6 +5,8 @@
 #ifndef fltk2_Flags_h
 #define fltk2_Flags_h
 
+#include <fltk3/Enumerations.H>
+
 namespace fltk {
 
 typedef int Flags;
