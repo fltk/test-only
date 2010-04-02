@@ -3,7 +3,7 @@
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -62,7 +62,7 @@ const char* fltk3::get_font_name(Fl_Font fnum, int* ap) {
   return f->fontname;
 }
 
-static int fl_free_font = FL_FREE_FONT;
+static int fl_free_font = fltk3::FREE_FONT;
 
 static int CALLBACK
 enumcbw(CONST LOGFONTW    *lpelf,
@@ -77,7 +77,7 @@ enumcbw(CONST LOGFONTW    *lpelf,
 //n[fl_unicode2utf((xchar*)lpelf->lfFaceName, l, n)] = 0;
   dstlen = fl_utf8fromwc(n, dstlen, (xchar*)lpelf->lfFaceName, l); // convert the string
   n[dstlen] = 0;
-  for (int i=0; i<FL_FREE_FONT; i++) // skip if one of our built-in fonts
+  for (int i=0; i < fltk3::FREE_FONT; i++) // skip if one of our built-in fonts
 	  if (!strcmp(fltk3::get_font_name((Fl_Font)i),n)) {free(n);return 1;}
   char buffer[LF_FACESIZE + 1];
   strcpy(buffer+1, n);
@@ -92,7 +92,7 @@ enumcbw(CONST LOGFONTW    *lpelf,
 } /* enumcbw */
 
 Fl_Font fltk3::set_fonts(const char* xstarname) {
-  if (fl_free_font == FL_FREE_FONT) {// if not already been called
+  if (fl_free_font == fltk3::FREE_FONT) {// if not already been called
     if (!fl_gc) fl_GetDC(0);
 
       EnumFontFamiliesW(fl_gc, NULL, (FONTENUMPROCW)enumcbw, xstarname != 0);
