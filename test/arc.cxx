@@ -76,21 +76,18 @@ void slider_cb(Widget* o, void* v) {
 int main(int argc, char** argv) {
   DoubleBufferWindow window(300,500);
   window.begin();
-  {
-    Button w(5, 5, 280, 280); w.box(DOWN_BOX);
-    //Drawing drawing(10,10,280,280);
-    //d = &drawing;
-    int y = 300;
-    for (int n = 0; n<6; n++) {
-      Slider* s = new HorValueSlider(50,y,240,25,name[n]); y += 25;
-      if (n<3) {s->minimum(0); s->maximum(300);}
-      else if (n==5) {s->minimum(0); s->maximum(360);}
-      else {s->minimum(-360); s->maximum(360);}
-      s->step(1);
-      s->value(dargs[n]);
-      s->align(ALIGN_LEFT);
-      s->callback(slider_cb, (void*)n);
-    }
+  Drawing drawing(10,10,280,280);
+  d = &drawing;
+  int y = 300;
+  for (int n = 0; n<6; n++) {
+    Slider* s = new HorValueSlider(50,y,240,25,name[n]); y += 25;
+    if (n<3) {s->minimum(0); s->maximum(300);}
+    else if (n==5) {s->minimum(0); s->maximum(360);}
+    else {s->minimum(-360); s->maximum(360);}
+    s->step(1);
+    s->value(dargs[n]);
+    s->align(ALIGN_LEFT);
+    s->callback(slider_cb, (void*)n);
   }
   window.end();
   window.show(argc,argv);
