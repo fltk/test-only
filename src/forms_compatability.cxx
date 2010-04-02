@@ -174,7 +174,7 @@ fltk3::Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
     b->type(FL_HIDDEN_BUTTON);
     break;
   case FL_INOUT_BUTTON:
-    b->when(FL_WHEN_CHANGED);
+    b->when(fltk3::WHEN_CHANGED);
     break;
   }
   return b;

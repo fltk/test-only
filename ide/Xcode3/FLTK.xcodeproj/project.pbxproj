@@ -502,11 +502,9 @@
 		C978350F1165327700491051 /* label1.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C97834F61165325700491051 /* label1.cxx */; };
 		C97835121165327700491051 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
 		C97835151165327700491051 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
-		C97835161165327700491051 /* fltkforms.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E5EDFD4993E8000051E5208F /* fltkforms.framework */; };
 		C97835271165327F00491051 /* label2.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C97834F71165325700491051 /* label2.cxx */; };
 		C97835291165327F00491051 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
 		C978352C1165327F00491051 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
-		C978352D1165327F00491051 /* fltkforms.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E5EDFD4993E8000051E5208F /* fltkforms.framework */; };
 		C9C84B2983DC793B141DDC70 /* ide_maketools.cxx in Sources */ = {isa = PBXBuildFile; fileRef = B65FCD2B8489E2BBAA3F695A /* ide_maketools.cxx */; };
 		C9C9079111626697006C5014 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
 		C9C9079311626697006C5014 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
@@ -556,7 +554,6 @@
 		D7CE5FAA0A18EDBFE8DF4571 /* align_widget.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 09BCBF5F4228816A661D3BCC /* align_widget.cxx */; };
 		D909486562CB17B6A504D7A0 /* fl_gtk.cxx in Sources */ = {isa = PBXBuildFile; fileRef = E253222494065DE8A6DC5BFD /* fl_gtk.cxx */; };
 		D9C6B784D8CB1DFB9491C5BE /* Fl_Check_Button.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 0E55A2A0E16A56160D6AE5A4 /* Fl_Check_Button.cxx */; };
-		DB944F394D97236240E75A75 /* fltkforms.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E5EDFD4993E8000051E5208F /* fltkforms.framework */; };
 		DC7191C47E627F778E5003D8 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
 		DC97E8A6CE0AC88573042968 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F459EEE32AC6EE0087583065 /* fltk.framework */; };
 		DD3C7D27FBFEAA913E5E3561 /* zlib.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 30C3CAD58FEFBDA955394D5E /* zlib.framework */; };
@@ -3447,7 +3444,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				B3AB7CB3BB4674496EE23A9D /* fltk.framework in CopyFiles */,
-				DB944F394D97236240E75A75 /* fltkforms.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3798,7 +3794,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				C97835151165327700491051 /* fltk.framework in CopyFiles */,
-				C97835161165327700491051 /* fltkforms.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3809,7 +3804,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				C978352C1165327F00491051 /* fltk.framework in CopyFiles */,
-				C978352D1165327F00491051 /* fltkforms.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

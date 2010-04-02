@@ -41,7 +41,7 @@
 fltk3::Valuator::Valuator(int X, int Y, int W, int H, const char* L)
 : fltk3::Widget(X,Y,W,H,L) {
   align(fltk3::ALIGN_BOTTOM);
-  when(FL_WHEN_CHANGED);
+  when(fltk3::WHEN_CHANGED);
   value_ = 0;
   previous_value_ = 1;
   min = 0;
@@ -95,24 +95,24 @@ double fltk3::Valuator::softclamp(double v) {
 }
 
 // inline void fltk3::Valuator::handle_push() {previous_value_ = value_;}
-/** Called during a drag operation, after an FL_WHEN_CHANGED event is received and before the callback. */
+/** Called during a drag operation, after an fltk3::WHEN_CHANGED event is received and before the callback. */
 void fltk3::Valuator::handle_drag(double v) {
   if (v != value_) {
     value_ = v;
     value_damage();
     set_changed();
-    if (when() & FL_WHEN_CHANGED) do_callback();
+    if (when() & fltk3::WHEN_CHANGED) do_callback();
   }
 }
-/** Called after an FL_WHEN_RELEASE event is received and before the callback. */
+/** Called after an fltk3::WHEN_RELEASE event is received and before the callback. */
 void fltk3::Valuator::handle_release() {
-  if (when()&FL_WHEN_RELEASE) {
+  if (when()&fltk3::WHEN_RELEASE) {
     // insure changed() is off even if no callback is done.  It may have
     // been turned on by the drag, and then the slider returned to it's
     // initial position:
     clear_changed();
     // now do the callback only if slider in new position or always is on:
-    if (value_ != previous_value_ || when() & FL_WHEN_NOT_CHANGED) {
+    if (value_ != previous_value_ || when() & fltk3::WHEN_NOT_CHANGED) {
       do_callback();
     }
   }

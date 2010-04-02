@@ -31,7 +31,7 @@
 #ifndef Fl_Menu_Button_H
 #define Fl_Menu_Button_H
 
-#include "Fl_Menu_.H"
+#include "Menu_.h"
 
 /**
   This is a button that when pushed pops up a menu (or hierarchy of
@@ -54,7 +54,7 @@
   item does not have a callback the menu_button's callback is done
   instead.
 */
-class FL_EXPORT Fl_Menu_Button : public Fl_Menu_ {
+class FL_EXPORT Fl_Menu_Button : public fltk3::Menu_ {
 protected:
   void draw();
 public:

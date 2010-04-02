@@ -84,7 +84,7 @@ Fl_Tree::Fl_Tree(int X, int Y, int W, int H, const char *L) : fltk3::Group(X,Y,W
   _item_clicked = 0;
   box(fltk3::DOWN_BOX);
   color(FL_WHITE);
-  when(FL_WHEN_CHANGED);
+  when(fltk3::WHEN_CHANGED);
   _vscroll = new Fl_Scrollbar(0,0,0,0);	// will be resized by draw()
   _vscroll->hide();
   _vscroll->type(FL_VERTICAL);
@@ -268,7 +268,7 @@ int Fl_Tree::handle(int e) {
 
             if ( changed ) {
               redraw();						// make change(s) visible
-              if ( when() & FL_WHEN_CHANGED ) {
+              if ( when() & fltk3::WHEN_CHANGED ) {
                 set_changed();
                 do_callback((fltk3::Widget*)this, user_data());	// item callback
               }
@@ -316,7 +316,7 @@ int Fl_Tree::handle(int e) {
           }
           if ( changed ) {
             redraw();			// make change(s) visible
-            if ( when() & FL_WHEN_CHANGED ) {
+            if ( when() & fltk3::WHEN_CHANGED ) {
               set_changed();
               do_callback((fltk3::Widget*)this, user_data());	// item callback
             }

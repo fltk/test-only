@@ -79,11 +79,13 @@ public:
   bool	resize(int w, int h)	;
 
   void  get_absolute_rect( Rectangle *rect ) const;
-
-  const char* label() const	{ return label_; }
-  void	label(const char* a);
-  void	copy_label(const char* a);
-
+#endif
+  
+  const char* label() const { return _p->label(); }
+  void	label(const char* a) { _p->label(a); }
+  void	copy_label(const char* a) { _p->copy_label(a); }
+  
+#if 0 // fltk123:
   const Symbol* image() const	{ return image_; }
   void	image(const Symbol* a)	{ image_ = a; }
   void	image(const Symbol& a)	{ image_ = &a; }
@@ -114,9 +116,9 @@ public:
   long	argument() const { return _p->argument(); }
   void	argument(long v) { _p->argument(v); }
   
+  uchar when() const { return _p->when(); }
+  void	when(uchar i) { _p->when(i); }
 #if 0  
-  uchar when() const		{ return when_; }
-  void	when(uchar i)		{ when_ = i; }
 
   static void default_callback(Widget*, void*);
   void	do_callback()		{ callback_(this,user_data_); }
@@ -158,9 +160,12 @@ public:
   bool	set()			{ return state(true); }
   bool	clear()			{ return state(false); }
   void	setonly();
-
-  Flags	align() const		{ return flags_&ALIGN_MASK; }
-  void	align(unsigned a)	{ flags_ = (flags_ & (~ALIGN_MASK)) | a; }
+#endif
+  
+  Flags	align() const { return _p->align(); }
+  void	align(unsigned a) { _p->align(a); }
+  
+#if 0 // fltk123:
   bool	visible() const		{ return !flag(INVISIBLE); }
   bool	visible_r() const	;
   void	show()			;
@@ -195,9 +200,12 @@ public:
 
   bool	take_focus()		;
   void	throw_focus()		;
-
-  void	redraw()		;
-  void	redraw(uchar c)		;
+#endif
+  
+  void	redraw() { _p->redraw(); }
+  void	redraw(uchar c) { _p->redraw(); } // fltk123: no partial redraw, use damage()
+  
+#if 0 // fltk123:
   void	redraw_label()		;
   void	redraw_highlight()	;
   void	redraw(const Rectangle&);
@@ -344,15 +352,15 @@ private:
   
 };
 
-enum { // Widget::when() values
-  WHEN_NEVER		= 0,
-  WHEN_CHANGED		= 1,
-  WHEN_RELEASE		= 4,
-  WHEN_RELEASE_ALWAYS	= 6,
-  WHEN_ENTER_KEY	= 8,
-  WHEN_ENTER_KEY_ALWAYS	=10,
-  WHEN_ENTER_KEY_CHANGED=11,
-  WHEN_NOT_CHANGED	= 2 // modifier bit to disable changed() test
+enum {
+  WHEN_NEVER                = fltk3::WHEN_NEVER,
+  WHEN_CHANGED              = fltk3::WHEN_CHANGED,
+  WHEN_RELEASE              = fltk3::WHEN_RELEASE,
+  WHEN_RELEASE_ALWAYS       = fltk3::WHEN_RELEASE_ALWAYS,
+  WHEN_ENTER_KEY            = fltk3::WHEN_ENTER_KEY,
+  WHEN_ENTER_KEY_ALWAYS     = fltk3::WHEN_ENTER_KEY_ALWAYS,
+  WHEN_ENTER_KEY_CHANGED    = fltk3::WHEN_ENTER_KEY_CHANGED,
+  WHEN_NOT_CHANGED          = fltk3::WHEN_NOT_CHANGED
 };
 
 }

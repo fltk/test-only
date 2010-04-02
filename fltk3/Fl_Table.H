@@ -725,7 +725,7 @@ public:
    Sets the height of the specified row in pixels,
    and the table is redrawn.
    callback() will be invoked with CONTEXT_RC_RESIZE
-   if the row's height was actually changed, and when() is FL_WHEN_CHANGED.
+   if the row's height was actually changed, and when() is fltk3::WHEN_CHANGED.
    */
   void row_height(int row, int height);		// set/get row height
   
@@ -739,7 +739,7 @@ public:
   /**
    Sets the width of the specified column in pixels, and the table is redrawn.
    callback() will be invoked with CONTEXT_RC_RESIZE
-   if the column's width was actually changed, and when() is FL_WHEN_CHANGED.
+   if the column's width was actually changed, and when() is fltk3::WHEN_CHANGED.
    */   
   void col_width(int col, int width);		// set/get a column's width
   
@@ -950,14 +950,14 @@ public:
    
    <table border=1>
    <tr>
-   <td>\p FL_WHEN_CHANGED</td>
+   <td>\p fltk3::WHEN_CHANGED</td>
    <td>
    callback() will be called when rows or columns are resized (interactively or 
    via col_width() or row_height()), passing CONTEXT_RC_RESIZE via 
    callback_context().
    </td>
    </tr><tr>
-   <td>\p FL_WHEN_RELEASE</td>
+   <td>\p fltk3::WHEN_RELEASE</td>
    <td>
    callback() will be called during fltk3::RELEASE events, such as when someone 
    releases a mouse button somewhere on the table.
@@ -972,7 +972,7 @@ public:
    also look at the regular fltk event values (ie. fltk3::event() and fltk3::button()) 
    to determine what kind of event is occurring.
    */
-  void when(Fl_When flags);
+  void when(fltk3::When flags);
 #endif
   
 #if DOXYGEN
@@ -1004,7 +1004,7 @@ public:
    Someone clicked on a cell.
    
    To receive callbacks for fltk3::RELEASE events, you must set
-   when(FL_WHEN_RELEASE).
+   when(fltk3::WHEN_RELEASE).
    </td>
    </tr><tr>
    <td><tt>Fl_Table::CONTEXT_RC_RESIZE</tt></td>
@@ -1019,7 +1019,7 @@ public:
    
    If resizing a row, C=0 and R=row being resized.
    
-   NOTE: To receive resize events, you must set when(FL_WHEN_CHANGED).
+   NOTE: To receive resize events, you must set when(fltk3::WHEN_CHANGED).
    </td>
    </tr>
    </table>
@@ -1051,7 +1051,7 @@ public:
    {
    [..]
    table.callback(&event_callback, (void*)this);       // setup callback
-   table.when(FL_WHEN_CHANGED|FL_WHEN_RELEASE);        // when to call it
+   table.when(fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE);        // when to call it
    }
    };
    \endcode

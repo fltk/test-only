@@ -21,27 +21,30 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#ifndef fltk_Value_Slider_h
-#define fltk_Value_Slider_h
+#ifndef fltk2_Value_Slider_h
+#define fltk2_Value_Slider_h
+
+#include <fltk3/ValueSlider.h>
 
 #include "Slider.h"
-#include "FloatInput.h"
 
 namespace fltk {
 
 class FL_API ValueSlider : public Slider {
+protected:
+  ValueSlider() {}
 public:
-  FloatInput input;
-  int handle(int);
-  void draw();
-  ValueSlider(int x,int y,int w,int h, const char *l = 0);
-  ~ValueSlider();
-  void layout();
-  virtual void value_damage(); // cause damage() due to value() changing
-
-private:
-  static void input_cb(Widget*,void*);
-  void slider_rect(Rectangle&);
+  // fltk123: FloatInput input;
+  // fltk123: int handle(int);
+  // fltk123: void draw();
+  ValueSlider(int x,int y,int w,int h, const char *l = 0) {
+    _p = new fltk3::ValueSlider(x, y, w, h, l);
+    _p->wrapper(this);
+    _p->type(FL_HOR_SLIDER); // defaults to horizontal
+  }
+  // fltk123: ~ValueSlider();
+  // fltk123: void layout();
+  // fltk123: virtual void value_damage(); // cause damage() due to value() changing
 };
 
 }

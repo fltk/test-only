@@ -31,7 +31,7 @@
 #ifndef Fl_Menu_Bar_H
 #define Fl_Menu_Bar_H
 
-#include "Fl_Menu_.H"
+#include "Menu_.h"
 
 /**
   This widget provides a standard menubar interface.  Usually you will
@@ -59,7 +59,7 @@
   <P>Typing the shortcut() of any of the menu items will cause
   callbacks exactly the same as when you pick the item with the mouse.
 */
-class FL_EXPORT Fl_Menu_Bar : public Fl_Menu_ {
+class FL_EXPORT Fl_Menu_Bar : public fltk3::Menu_ {
 protected:
     void draw();
 public:
@@ -68,7 +68,7 @@ public:
       Creates a new Fl_Menu_Bar widget using the given position,
     size, and label string. The default boxtype is fltk3::UP_BOX.
     <P>The constructor sets menu() to NULL.  See 
-    Fl_Menu_ for the methods to set or change the menu. </P>
+    fltk3::Menu_ for the methods to set or change the menu. </P>
     <P>labelsize(), labelfont(), and labelcolor()
     are used to control how the menubar items are drawn.  They are
     initialized from the Fl_Menu static variables, but you can
@@ -79,7 +79,7 @@ public:
     menu items.
   */
     Fl_Menu_Bar(int X, int Y, int W, int H,const char *l=0)
-      : Fl_Menu_(X,Y,W,H,l) {}
+      : fltk3::Menu_(X,Y,W,H,l) {}
 };
 
 #endif

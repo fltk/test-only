@@ -29,11 +29,11 @@
 
 // This file contains code for implementing fltk3::MenuItem, and for
 // methods for bringing up popup menu hierarchies without using the
-// Fl_Menu_ widget.
+// fltk3::Menu_ widget.
 
 #include <fltk3/run.h>
 #include <fltk3/Fl_Menu_Window.H>
-#include <fltk3/Fl_Menu_.H>
+#include <fltk3/Menu_.h>
 #include <fltk3/fl_draw.H>
 #include <stdio.h>
 #include "flstring.h"
@@ -80,7 +80,7 @@ const fltk3::MenuItem* fltk3::MenuItem::next(int n) const {
 }
 
 // appearance of current menus are pulled from this parent widget:
-static const Fl_Menu_* button=0;
+static const fltk3::Menu_* button=0;
 
 ////////////////////////////////////////////////////////////////
 
@@ -128,7 +128,7 @@ extern char fl_draw_shortcut;
   Measures width of label, including effect of & characters. 
   Optionally, can get height if hp is not NULL. 
 */
-int fltk3::MenuItem::measure(int* hp, const Fl_Menu_* m) const {
+int fltk3::MenuItem::measure(int* hp, const fltk3::Menu_* m) const {
   Fl_Label l;
   l.value   = text;
   l.image   = 0;
@@ -146,7 +146,7 @@ int fltk3::MenuItem::measure(int* hp, const Fl_Menu_* m) const {
 }
 
 /** Draws the menu item in bounding box x,y,w,h, optionally selects the item. */
-void fltk3::MenuItem::draw(int x, int y, int w, int h, const Fl_Menu_* m,
+void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
 			int selected) const {
   Fl_Label l;
   l.value   = text;
@@ -370,7 +370,7 @@ menuwindow::menuwindow(const fltk3::MenuItem* m, int X, int Y, int Wp, int Hp,
     // that has a selected item.
     if (Y+h()>scr_y+scr_h && Y-h()>=scr_y) {
       if (Hp>1) {
-        // if we know the height of the Fl_Menu_, use it
+        // if we know the height of the fltk3::Menu_, use it
         Y = Y-Hp-h();
       } else if (t) {
         // assume that the menubar item height relates to the first
@@ -780,7 +780,7 @@ int menuwindow::early_hide_handle(int e) {
 #if 0 // makes the check/radio items leave the menu up
       const fltk3::MenuItem* m = pp.current_item;
       if (m && button && (m->flags & (fltk3::MENU_TOGGLE|fltk3::MENU_RADIO))) {
-	((Fl_Menu_*)button)->picked(m);
+	((fltk3::Menu_*)button)->picked(m);
 	pp.p[pp.menu_number]->redraw();
       } else
 #endif
@@ -806,7 +806,7 @@ int menuwindow::early_hide_handle(int e) {
 const fltk3::MenuItem* fltk3::MenuItem::pulldown(
     int X, int Y, int W, int H,
     const fltk3::MenuItem* initial_item,
-    const Fl_Menu_* pbutton,
+    const fltk3::Menu_* pbutton,
     const fltk3::MenuItem* t,
     int menubar) const {
   fltk3::Group::current(0); // fix possible user error...
@@ -970,14 +970,14 @@ const fltk3::MenuItem* fltk3::MenuItem::pulldown(
   If picked is zero or not in the menu item table the menu is
   positioned with the cursor in the top-left corner. </P>
   <P>button is a pointer to an 
-  Fl_Menu_ from which the color and boxtypes for the menu are
+  fltk3::Menu_ from which the color and boxtypes for the menu are
   pulled.  If NULL then defaults are used.
 */
 const fltk3::MenuItem* fltk3::MenuItem::popup(
   int X, int Y,
   const char* title,
   const fltk3::MenuItem* picked,
-  const Fl_Menu_* but
+  const fltk3::Menu_* but
   ) const {
   static fltk3::MenuItem dummy; // static so it is all zeros
   dummy.text = title;

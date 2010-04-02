@@ -1,0 +1,49 @@
+
+This is a short description on how to convert a former FLTK1 header into the FLTK3 equivalent:
+
+- find the new class name and rename the file (note cpital .H vs. lower case .h):
+  svn mv fltk3/Fl_Widget.H fltk3/Widget.h  
+- make all initial #ifdef unique (Fl_Widget_H become Fltk3_Widget_H)
+- rename all occurences of the class name in the header (Fl_Widget becomes Widget)
+- rename all include file references in fltk3/ and src/ (Fl_Widget.H becomes Widget.h)
+- rename all class references in fltk3/ and src/ (Fl_Widget becomes fltk3::Widget)
+- rename other types (enums) that may be hiding in this file (Fl_When becomes fltk3::When) 
+- wrap all cahnges in "namespace fltk3 {" and "} // namespace fltk3"
+- compile and fix bugs
+
+
+This is a short description on how to convert an FLTK1 header into a wrapper:
+
+- code that we need to come back to is marked "// fltk123:"
+- make the initial #ifdef unique (fltk_Widget_H becomes fltk2_Widget_H, Fl_Widget_H
+  becomes Fltk1_Widget_H)
+- include the corresponding class header (#include <fltk3/Widget.h>)
+- remove all comments except the header and footer
+- remove all private memebrs of the class
+- remove all member variables, only keep member methods
+- create a protected ctor for the class (add "proteted: Fl_Widget() {}")
+- remove all code from all methods including ctor and dtor
+- add the following code to all ctor's:
+  {
+    _p = new fltk3::Widget(x, y, w, h, l); (or whatever the corresponding class is)
+    _p->wrapper(this); 
+  }
+- a group constructor needs the additional line in FLTK1 only:
+    begin();
+- comment out all other methods ("#if 0 // fltk123:" and "#endif")
+- do the same thing for all files that are included b this header!
+- test compile with a test program that includes this header
+- fix compile issues
+- uncomment individual functions and make them call the original class:
+   * void redraw() implements as { ((fltk::Widget*)_p)->redraw(); }
+     (replace fltk3::Widget with your corresponding class)
+   * cast return types as needed:
+     Fl_When when() { return (Fl_When)((fltk::Widget*)_p)->when(); }
+   * cast arguments as needed:
+     void when(Fl_When w) { ((fltk::Widget*)_p)->when((fltk3::When)w); }
+   * casting pointers based on Fl_Widget is a bit different:
+     Fl_Widget *child(int i) { return ((fltk::Widget*)_p)->child(i)->wrapper(); }
+     int contains(Fl_Widget *w) { return ((fltk::Widget*)_p)->contains(w->fltk3Widget()); }
+- I don't know yet how virtual functions and destructors will be handled. Just leave them 
+  commented out
+

@@ -350,7 +350,7 @@ int fltk3::Input::handle_key() {
       break;
     case FL_Enter:
     case FL_KP_Enter:
-      if (when() & FL_WHEN_ENTER_KEY) {
+      if (when() & fltk3::WHEN_ENTER_KEY) {
         position(size(), 0);
         maybe_do_callback();
         return 1;

@@ -121,15 +121,15 @@ void fltk3::Choice::draw() {
   The default boxtype is \c fltk3::UP_BOX.
 
   The constructor sets menu() to NULL.
-  See Fl_Menu_ for the methods to set or change the menu.
+  See fltk3::Menu_ for the methods to set or change the menu.
 
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
 fltk3::Choice::Choice(int X, int Y, int W, int H, const char *L)
-: Fl_Menu_(X,Y,W,H,L) {
+: fltk3::Menu_(X,Y,W,H,L) {
   align(fltk3::ALIGN_LEFT);
-  when(FL_WHEN_RELEASE);
+  when(fltk3::WHEN_RELEASE);
   textfont(fltk3::HELVETICA);
   box(fltk3::FLAT_BOX);
   down_box(fltk3::BORDER_BOX);
@@ -142,7 +142,7 @@ fltk3::Choice::Choice(int X, int Y, int W, int H, const char *L)
   \returns non-zero if the new value is different to the old one.
  */
 int fltk3::Choice::value(const fltk3::MenuItem *v) {
-  if (!Fl_Menu_::value(v)) return 0;
+  if (!fltk3::Menu_::value(v)) return 0;
   redraw();
   return 1;
 }
@@ -156,7 +156,7 @@ int fltk3::Choice::value(const fltk3::MenuItem *v) {
 int fltk3::Choice::value(int v) {
   if (v == -1) return value((const fltk3::MenuItem *)0);
   if (v < 0 || v >= (size() - 1)) return 0;
-  if (!Fl_Menu_::value(v)) return 0;
+  if (!fltk3::Menu_::value(v)) return 0;
   redraw();
   return 1;
 }

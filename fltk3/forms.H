@@ -52,7 +52,7 @@ typedef fltk3::Window FL_FORM;
 #define FL_VALID	1
 #define FL_PREEMPT	1
 #define FL_AUTO		2
-#define FL_WHEN_NEEDED	FL_AUTO
+#define fltk3::WHEN_NEEDED	FL_AUTO
 #define FL_OFF		0
 #define FL_NONE		0
 #define FL_CANCEL	0
@@ -151,10 +151,10 @@ typedef fltk3::Window FL_FORM;
 #define FL_NORMAL_FONT2	FL_NORMAL_FONT
 #define FL_DEFAULT_FONT	FL_SMALL_FONT
 
-#define FL_RETURN_END_CHANGED	FL_WHEN_RELEASE
-#define FL_RETURN_CHANGED	FL_WHEN_CHANGED
-#define FL_RETURN_END		FL_WHEN_RELEASE_ALWAYS
-#define FL_RETURN_ALWAYS	(FL_WHEN_CHANGED|FL_WHEN_NOT_CHANGED)
+#define FL_RETURN_END_CHANGED	fltk3::WHEN_RELEASE
+#define FL_RETURN_CHANGED	fltk3::WHEN_CHANGED
+#define FL_RETURN_END		fltk3::WHEN_RELEASE_ALWAYS
+#define FL_RETURN_ALWAYS	(fltk3::WHEN_CHANGED|fltk3::WHEN_NOT_CHANGED)
 
 #define FL_BOUND_WIDTH	3
 
@@ -233,7 +233,7 @@ inline void fl_set_object_callback(fltk3::Widget*o,Forms_CB c,long a) {o->callba
 inline void fl_call_object_callback(fltk3::Widget* o) {o->do_callback();}
 inline void fl_trigger_object(fltk3::Widget* o) {o->do_callback();}
 inline void fl_set_object_return(fltk3::Widget* o, int v) {
-  o->when((Fl_When)(v|FL_WHEN_RELEASE));}
+  o->when((fltk3::When)(v|fltk3::WHEN_RELEASE));}
 
 inline void fl_redraw_object(fltk3::Widget* o) {o->redraw();}
 inline void fl_show_object(fltk3::Widget* o) {o->show();}
@@ -585,7 +585,7 @@ inline void fl_set_counter_step(fltk3::Widget* o, double a, double b) {
 inline void fl_set_counter_precision(fltk3::Widget* o, int v) {
     ((Fl_Counter*)o)->precision(v);}
 inline void fl_set_counter_return(fltk3::Widget* o, int v) {
-    ((Fl_Counter*)o)->when((Fl_When)(v|FL_WHEN_RELEASE));}
+    ((Fl_Counter*)o)->when((fltk3::When)(v|fltk3::WHEN_RELEASE));}
 inline double fl_get_counter_value(fltk3::Widget* o) {
     return ((Fl_Counter*)o)->value();}
 inline void fl_get_counter_bounds(fltk3::Widget* o, float* a, float* b) {
@@ -616,7 +616,7 @@ inline void fl_get_dial_bounds(fltk3::Widget* o, float* a, float* b) {
   *b = float(((Fl_Dial*)o)->maximum());
 }
 inline void fl_set_dial_return(fltk3::Widget* o, int i) {
-  ((Fl_Dial*)o)->when((Fl_When)(i|FL_WHEN_RELEASE));}
+  ((Fl_Dial*)o)->when((fltk3::When)(i|fltk3::WHEN_RELEASE));}
 inline void fl_set_dial_angles(fltk3::Widget* o, int a, int b) {
   ((Fl_Dial*)o)->angles((short)a, (short)b);}
 //inline void fl_set_dial_cross(fltk3::Widget* o, int);
@@ -686,7 +686,7 @@ forms_constructor(fltk3::Input, fl_add_input)
 inline void fl_set_input(fltk3::Widget* o, const char* v) {
     ((fltk3::Input*)o)->value(v);}
 inline void fl_set_input_return(fltk3::Widget* o, int x) {
-    ((fltk3::Input*)o)->when((Fl_When)(x | FL_WHEN_RELEASE));}
+    ((fltk3::Input*)o)->when((fltk3::When)(x | fltk3::WHEN_RELEASE));}
 inline void fl_set_input_color(fltk3::Widget* o, Fl_Color a, Fl_Color b) {
     ((fltk3::Input*)o)->textcolor(a);
     ((fltk3::Input*)o)->cursor_color(b);
@@ -775,7 +775,7 @@ inline void fl_set_positioner_xstep(fltk3::Widget* o, double v) {
 inline void fl_set_positioner_ystep(fltk3::Widget* o, double v) {
     ((Fl_Positioner*)o)->ystep(v);}
 inline void fl_set_positioner_return(fltk3::Widget* o, int v) {
-    ((Fl_Positioner*)o)->when((Fl_When)(v|FL_WHEN_RELEASE));}
+    ((Fl_Positioner*)o)->when((fltk3::When)(v|fltk3::WHEN_RELEASE));}
 
 #include "Slider.h"
 
@@ -795,7 +795,7 @@ inline void fl_get_slider_bounds(fltk3::Widget* o, float* a, float* b) {
   *b = float(((fltk3::Slider*)o)->maximum());
 }
 inline void fl_set_slider_return(fltk3::Widget* o, int i) {
-    ((fltk3::Slider*)o)->when((Fl_When)(i|FL_WHEN_RELEASE));}
+    ((fltk3::Slider*)o)->when((fltk3::When)(i|fltk3::WHEN_RELEASE));}
 inline void fl_set_slider_step(fltk3::Widget* o, double v) {
     ((fltk3::Slider*)o)->step(v);}
 // inline void fl_set_slider_increment(fltk3::Widget* o, double v, double);

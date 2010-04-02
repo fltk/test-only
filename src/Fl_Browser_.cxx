@@ -736,16 +736,16 @@ int Fl_Browser_::handle(int event) {
         switch (fltk3::event_key()) {
         case FL_Enter:
         case FL_KP_Enter:
-          select_only(l, when() & ~FL_WHEN_ENTER_KEY);
+            select_only(l, when() & ~fltk3::WHEN_ENTER_KEY);
 	  if (wp.deleted()) return 1;
-	  if (when() & FL_WHEN_ENTER_KEY) {
+	  if (when() & fltk3::WHEN_ENTER_KEY) {
 	    set_changed();
 	    do_callback();
 	  }
           return 1;
         case ' ':
           selection_ = l;
-          select(l, !item_selected(l), when() & ~FL_WHEN_ENTER_KEY);
+            select(l, !item_selected(l), when() & ~fltk3::WHEN_ENTER_KEY);
           return 1;
         case FL_Down:
           while ((l = item_next(l))) {
@@ -780,10 +780,10 @@ J1:
   int my;
 // NOTE:
 // instead of:
-//     change = select_only(find_item(my), when() & FL_WHEN_CHANGED)
+//     change = select_only(find_item(my), when() & fltk3::WHEN_CHANGED)
 // we use the construct:
 //     change = select_only(find_item(my), 0);
-//     if (change && (when() & FL_WHEN_CHANGED)) {
+//     if (change && (when() & fltk3::WHEN_CHANGED)) {
 //	 set_changed();
 //       do_callback();
 //     }
@@ -812,7 +812,7 @@ J1:
     else if (type() != FL_MULTI_BROWSER) {
       change = select_only(find_item(my), 0);
       if (wp.deleted()) return 1;
-      if (change && (when() & FL_WHEN_CHANGED)) {
+      if (change && (when() & fltk3::WHEN_CHANGED)) {
 	set_changed();
 	do_callback();
 	if (wp.deleted()) return 1;
@@ -826,7 +826,7 @@ J1:
 	  whichway = !item_selected(l);
 	  change = select(l, whichway, 0);
 	  if (wp.deleted()) return 1;
-	  if (change && (when() & FL_WHEN_CHANGED)) {
+	  if (change && (when() & fltk3::WHEN_CHANGED)) {
 	    set_changed();
 	    do_callback();
 	    if (wp.deleted()) return 1;
@@ -846,25 +846,25 @@ J1:
 	}}
 	if (down) {
 	  for (void* m = selection_; m != l; m = item_next(m)) {
-	    select(m, whichway, when() & FL_WHEN_CHANGED);
+	    select(m, whichway, when() & fltk3::WHEN_CHANGED);
 	    if (wp.deleted()) return 1;
 	  }
 	} else {
 	  void* e = selection_;
 	  for (void* m = item_next(l); m; m = item_next(m)) {
-	    select(m, whichway, when() & FL_WHEN_CHANGED);
+	    select(m, whichway, when() & fltk3::WHEN_CHANGED);
 	    if (wp.deleted()) return 1;
 	    if (m == e) break;
 	  }
 	}
 	// do the clicked item last so the select box is around it:
 	change = 1;
-	if (l) select(l, whichway, when() & FL_WHEN_CHANGED);
+	if (l) select(l, whichway, when() & fltk3::WHEN_CHANGED);
 	if (wp.deleted()) return 1;
       } else { // select only this item
 	change = select_only(l, 0);
 	if (wp.deleted()) return 1;
-	if (change && (when() & FL_WHEN_CHANGED)) {
+	if (change && (when() & fltk3::WHEN_CHANGED)) {
 	  set_changed();
 	  do_callback();
 	  if (wp.deleted()) return 1;
@@ -902,7 +902,7 @@ J1:
 	change_t = select(t, whichway, 0);
 	if (wp.deleted()) return 1;
 	change |= change_t;
-	if (change_t && (when() & FL_WHEN_CHANGED)) {
+	if (change_t && (when() & fltk3::WHEN_CHANGED)) {
 	  set_changed();
 	  do_callback();
 	  if (wp.deleted()) return 1;
@@ -915,7 +915,7 @@ J1:
 	(fltk3::event_x()<x() || fltk3::event_x()>x()+w()) ? selection_ :
 	find_item(my);
       change = (l != l1);
-      select_only(l, when() & FL_WHEN_CHANGED);
+      select_only(l, when() & fltk3::WHEN_CHANGED);
       if (wp.deleted()) return 1;
     }
     py = my;
@@ -929,14 +929,14 @@ J1:
     }
     if (change) {
       set_changed();
-      if (when() & FL_WHEN_RELEASE) do_callback();
+      if (when() & fltk3::WHEN_RELEASE) do_callback();
     } else {
-      if (when() & FL_WHEN_NOT_CHANGED) do_callback();
+      if (when() & fltk3::WHEN_NOT_CHANGED) do_callback();
     }
     if (wp.deleted()) return 1;
 
     // double click calls the callback: (like Enter Key)
-    if (fltk3::event_clicks() && (when() & FL_WHEN_ENTER_KEY)) {
+    if (fltk3::event_clicks() && (when() & fltk3::WHEN_ENTER_KEY)) {
       set_changed();
       do_callback();
     }
@@ -968,7 +968,7 @@ Fl_Browser_::Fl_Browser_(int X, int Y, int W, int H, const char* L)
   hposition_ = real_hposition_ = 0;
   offset_ = 0;
   top_ = 0;
-  when(FL_WHEN_RELEASE_ALWAYS);
+  when(fltk3::WHEN_RELEASE_ALWAYS);
   selection_ = 0;
   color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
   scrollbar.callback(scrollbar_callback);

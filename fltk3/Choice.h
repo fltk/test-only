@@ -31,7 +31,7 @@
 #ifndef Fltk3_Choice_H
 #define Fltk3_Choice_H
 
-#include "Fl_Menu_.H"
+#include "Menu_.h"
 
 namespace fltk3 {
 
@@ -84,7 +84,7 @@ namespace fltk3 {
   \li <tt>void Choice::down_box(fltk3::Boxtype b)</tt>
       Sets the current down box type to \p b.
  */
-class FL_EXPORT Choice : public Fl_Menu_ {
+class FL_EXPORT Choice : public fltk3::Menu_ {
 protected:
   void draw();
 public:
@@ -96,7 +96,7 @@ public:
     Gets the index of the last item chosen by the user.
     The index is zero initially.
    */
-  int value() const {return Fl_Menu_::value();}
+  int value() const {return fltk3::Menu_::value();}
 
   int value(int v);
 

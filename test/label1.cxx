@@ -31,9 +31,7 @@
 #include <FL/Fl_Hor_Value_Slider.H>
 #include <FL/Fl_Toggle_Button.H>
 #include <FL/Fl_Input.H>
-#if 0 // fltk123:
 #include <FL/Fl_Choice.H>
-#endif
 
 Fl_Toggle_Button *leftb,*rightb,*topb,*bottomb,*insideb,*clipb,*wrapb;
 Fl_Box *text;
@@ -71,60 +69,49 @@ void input_cb(Fl_Widget *,void *) {
 }
 
 void normal_cb(Fl_Widget *,void *) {
-#if 0 // fltk123:
   text->labeltype(FL_NORMAL_LABEL);
   window->redraw();
-#endif
 }
 
 void symbol_cb(Fl_Widget *,void *) {
-#if 0 // fltk123:
   text->labeltype(FL_SYMBOL_LABEL);
   if (input->value()[0] != '@') {
     input->static_value("@->");
     text->label("@->");
   }
   window->redraw();
-#endif
 }
 
 void shadow_cb(Fl_Widget *,void *) {
-#if 0 // fltk123:
   text->labeltype(FL_SHADOW_LABEL);
   window->redraw();
-#endif
 }
 
 void embossed_cb(Fl_Widget *,void *) {
-#if 0 // fltk123:
   text->labeltype(FL_EMBOSSED_LABEL);
   window->redraw();
-#endif
 }
 
 void engraved_cb(Fl_Widget *,void *) {
-#if 0 // fltk123:
   text->labeltype(FL_ENGRAVED_LABEL);
   window->redraw();
-#endif
 }
 
-#if 0 // fltk123:
 Fl_Menu_Item choices[] = {
   {"FL_NORMAL_LABEL",0,normal_cb},
   {"FL_SYMBOL_LABEL",0,symbol_cb},
   {"FL_SHADOW_LABEL",0,shadow_cb},
   {"FL_ENGRAVED_LABEL",0,engraved_cb},
   {"FL_EMBOSSED_LABEL",0,embossed_cb},
-  {0}};
-#endif
+  {0}
+};
 
 int main(int argc, char **argv) {
   window = new Fl_Double_Window(400,400);
   
   input = new Fl_Input(50,375,350,25);
   input->static_value("The quick brown fox jumped over the lazy dog.");
-  // fltk123: input->when(FL_WHEN_CHANGED);
+  input->when(FL_WHEN_CHANGED);
   input->callback(input_cb);
 
   sizes= new Fl_Hor_Value_Slider(50,350,350,25,"Size:");
@@ -159,10 +146,8 @@ int main(int argc, char **argv) {
   g->resizable(insideb);
   g->end();
 
-#if 0 // fltk123:
   Fl_Choice *c = new Fl_Choice(50,275,200,25);
   c->menu(choices);
-#endif
   
   text= new Fl_Box(FL_BORDER_BOX,100,75,200,100,input->value());
   text->align(FL_ALIGN_CENTER);

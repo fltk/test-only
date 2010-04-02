@@ -50,18 +50,18 @@ enum Fl_Event {	// events
   FL_DND_RELEASE	= fltk3::DND_RELEASE
 };
 
-#if 0
-
 enum Fl_When {
-  FL_WHEN_NEVER		= 0,
-  FL_WHEN_CHANGED	= 1,
-  FL_WHEN_NOT_CHANGED	= 2,
-  FL_WHEN_RELEASE	= 4,
-  FL_WHEN_RELEASE_ALWAYS= 6,
-  FL_WHEN_ENTER_KEY	= 8,
-  FL_WHEN_ENTER_KEY_ALWAYS=10,
-  FL_WHEN_ENTER_KEY_CHANGED=11
+  FL_WHEN_NEVER             = fltk3::WHEN_NEVER,
+  FL_WHEN_CHANGED           = fltk3::WHEN_CHANGED,
+  FL_WHEN_NOT_CHANGED       = fltk3::WHEN_NOT_CHANGED,
+  FL_WHEN_RELEASE           = fltk3::WHEN_RELEASE,
+  FL_WHEN_RELEASE_ALWAYS    = fltk3::WHEN_RELEASE_ALWAYS,
+  FL_WHEN_ENTER_KEY         = fltk3::WHEN_ENTER_KEY,
+  FL_WHEN_ENTER_KEY_ALWAYS  = fltk3::WHEN_ENTER_KEY_ALWAYS,
+  FL_WHEN_ENTER_KEY_CHANGED = fltk3::WHEN_ENTER_KEY_CHANGED
 };
+
+#if 0
 
 #define FL_Button	0xfee8
 #define FL_BackSpace	0xff08
@@ -191,7 +191,8 @@ inline Fl_Boxtype fl_frame(Fl_Boxtype b) {
 }
 
 enum Fl_Labeltype {
-  FL_NORMAL_LABEL     = fltk3::NORMAL_LABEL,
+  FL_NORMAL_LABEL     = fltk3::NORMAL_LABEL, // consider RAW label
+  FL_SYMBOL_LABEL     = fltk3::NORMAL_LABEL,
   FL_NO_LABEL         = fltk3::NO_LABEL,
   FL_SHADOW_LABEL     = fltk3::SHADOW_LABEL,
   FL_ENGRAVED_LABEL   = fltk3::ENGRAVED_LABEL,

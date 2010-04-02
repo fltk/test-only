@@ -719,7 +719,7 @@ static void undobuffersize(int n) {
   equal to the other), and then inserts the string \p text
   at that point and moves the mark() and
   position() to the end of the insertion. Does the callback if
-  <tt>when() & FL_WHEN_CHANGED</tt> and there is a change.
+  <tt>when() & fltk3::WHEN_CHANGED</tt> and there is a change.
 
   Set \p b and \p e equal to not delete anything.
   Set insert to \c NULL to not insert anything.
@@ -831,7 +831,7 @@ int fltk3::Input_::replace(int b, int e, const char* text, int ilen) {
   mark_ = position_ = undoat;
 
   set_changed();
-  if (when()&FL_WHEN_CHANGED) do_callback();
+  if (when()&fltk3::WHEN_CHANGED) do_callback();
   return 1;
 }
 
@@ -878,7 +878,7 @@ int fltk3::Input_::undo() {
     while (b1 > 0 && index(b1)!='\n') b1--;
   minimal_update(b1);
   set_changed();
-  if (when()&FL_WHEN_CHANGED) do_callback();
+  if (when()&fltk3::WHEN_CHANGED) do_callback();
   return 1;
 }
 
@@ -903,7 +903,7 @@ int fltk3::Input_::copy_cuts() {
   Checks the when() field and does a callback if indicated.
 */
 void fltk3::Input_::maybe_do_callback() {
-  if (changed() || (when()&FL_WHEN_NOT_CHANGED)) {
+  if (changed() || (when()&fltk3::WHEN_NOT_CHANGED)) {
     do_callback();
   }
 }
@@ -942,7 +942,7 @@ int fltk3::Input_::handletext(int event, int X, int Y, int W, int H) {
       minimal_update(mark_, position_);
   case fltk3::HIDE:
     fl_reset_spot();
-    if (!readonly() && (when() & FL_WHEN_RELEASE))
+    if (!readonly() && (when() & fltk3::WHEN_RELEASE))
       maybe_do_callback();
     return 1;
 

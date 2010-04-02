@@ -618,22 +618,22 @@ public:
   /** Returns the conditions under which the callback is called.
 
       You can set the flags with when(uchar), the default value is
-      FL_WHEN_RELEASE.
+      fltk3::WHEN_RELEASE.
 
       \return set of flags
       \see when(uchar)
    */
-  Fl_When when() const {return (Fl_When)when_;}
+  fltk3::When when() const {return (fltk3::When)when_;}
 
   /** Sets the flags used to decide when a callback is called.
 
      This controls when callbacks are done. The following values are useful,
-     the default value is FL_WHEN_RELEASE:
+     the default value is fltk3::WHEN_RELEASE:
      
      \li 0: The callback is not done, but changed() is turned on.
-     \li FL_WHEN_CHANGED: The callback is done each time the text is
+     \li fltk3::WHEN_CHANGED: The callback is done each time the text is
          changed by the user.
-     \li FL_WHEN_RELEASE: The callback will be done when this widget loses 
+     \li fltk3::WHEN_RELEASE: The callback will be done when this widget loses 
          the focus, including when the window is unmapped. This is a useful 
 	 value for text fields in a panel where doing the callback on every
   	 change is wasteful. However the callback will also happen if the 
@@ -641,11 +641,11 @@ public:
 	 anything visible (like pop up an error message).
 	 You might do better setting this to zero, and scanning all the
 	 items for changed() when the OK button on a panel is pressed.
-     \li FL_WHEN_ENTER_KEY: If the user types the Enter key, the entire 
+     \li fltk3::WHEN_ENTER_KEY: If the user types the Enter key, the entire 
          text is selected, and the callback is done if the text has changed. 
 	 Normally the Enter key will navigate to the next field (or insert 
 	 a newline for a Fl_Multiline_Input) - this changes the behavior.
-     \li FL_WHEN_ENTER_KEY|FL_WHEN_NOT_CHANGED: The Enter key will do the
+     \li fltk3::WHEN_ENTER_KEY|fltk3::WHEN_NOT_CHANGED: The Enter key will do the
          callback even if the text has not changed. Useful for command fields.
       Widget::when() is a set of bitflags used by subclasses of 
       Widget to decide when to do the callback.

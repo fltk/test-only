@@ -108,9 +108,9 @@ int Fl_Positioner::handle(int event, int X, int Y, int W, int H) {
       set_changed();
       redraw();
                    } }
-    if (!(when() & FL_WHEN_CHANGED ||
-	  (when() & FL_WHEN_RELEASE && event == fltk3::RELEASE))) return 1;
-    if (changed() || when()&FL_WHEN_NOT_CHANGED) {
+    if (!(when() & fltk3::WHEN_CHANGED ||
+	  (when() & fltk3::WHEN_RELEASE && event == fltk3::RELEASE))) return 1;
+    if (changed() || when()&fltk3::WHEN_NOT_CHANGED) {
       if (event == fltk3::RELEASE) clear_changed();
       do_callback();
     }
@@ -133,7 +133,7 @@ Fl_Positioner::Fl_Positioner(int X, int Y, int W, int H, const char* l)
   box(fltk3::DOWN_BOX);
   selection_color(FL_RED);
   align(fltk3::ALIGN_BOTTOM);
-  when(FL_WHEN_CHANGED);
+  when(fltk3::WHEN_CHANGED);
   xmin = ymin = 0;
   xmax = ymax = 1;
   xvalue_ = yvalue_ = .5;

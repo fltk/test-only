@@ -103,12 +103,12 @@ int fltk3::Button::handle(int event) {
       value_ = newval;
       set_changed();
       redraw();
-      if (when() & FL_WHEN_CHANGED) do_callback();
+      if (when() & fltk3::WHEN_CHANGED) do_callback();
     }
     return 1;
   case fltk3::RELEASE:
     if (value_ == oldval) {
-      if (when() & FL_WHEN_NOT_CHANGED) do_callback();
+      if (when() & fltk3::WHEN_NOT_CHANGED) do_callback();
       return 1;
     }
     set_changed();
@@ -117,13 +117,13 @@ int fltk3::Button::handle(int event) {
     else {
       value(oldval);
       set_changed();
-      if (when() & FL_WHEN_CHANGED) {
+      if (when() & fltk3::WHEN_CHANGED) {
 	Fl_Widget_Tracker wp(this);
         do_callback();
         if (wp.deleted()) return 1;
       }
     }
-    if (when() & FL_WHEN_RELEASE) do_callback();
+    if (when() & fltk3::WHEN_RELEASE) do_callback();
     return 1;
   case fltk3::SHORTCUT:
     if (!(shortcut() ?
@@ -134,14 +134,14 @@ int fltk3::Button::handle(int event) {
     if (type() == FL_RADIO_BUTTON && !value_) {
       setonly();
       set_changed();
-      if (when() & (FL_WHEN_CHANGED|FL_WHEN_RELEASE) ) 
+      if (when() & (fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE) ) 
 	  do_callback();
     } else if (type() == FL_TOGGLE_BUTTON) {
       value(!value());
       set_changed();
-      if (when() & (FL_WHEN_CHANGED|FL_WHEN_RELEASE)) 
+      if (when() & (fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE)) 
 	  do_callback();
-    } else if (when() & FL_WHEN_RELEASE) do_callback();
+    } else if (when() & fltk3::WHEN_RELEASE) do_callback();
     return 1;
   case fltk3::FOCUS : /* FALLTHROUGH */
   case fltk3::UNFOCUS :
@@ -163,13 +163,13 @@ int fltk3::Button::handle(int event) {
       Fl_Widget_Tracker wp(this);
       if (type() == FL_RADIO_BUTTON && !value_) {
 	setonly();
-	if (when() & FL_WHEN_CHANGED) do_callback();
+	if (when() & fltk3::WHEN_CHANGED) do_callback();
       } else if (type() == FL_TOGGLE_BUTTON) {
 	value(!value());
-	if (when() & FL_WHEN_CHANGED) do_callback();
+	if (when() & fltk3::WHEN_CHANGED) do_callback();
       }
       if (wp.deleted()) return 1;
-      if (when() & FL_WHEN_RELEASE) do_callback();
+      if (when() & fltk3::WHEN_RELEASE) do_callback();
       return 1;
     }
   default:

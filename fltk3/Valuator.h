@@ -62,7 +62,6 @@ class FL_EXPORT Valuator : public fltk3::Widget {
 protected:
   /** Tells if the valuator is an FL_HORIZONTAL one */
   int horizontal() const {return type()& FL_HORIZONTAL;}
-  Valuator(int X, int Y, int W, int H, const char* L);
 
   /** Gets the previous floating point value before an event changed it */
   double previous_value() const {return previous_value_;}
@@ -76,6 +75,7 @@ protected:
   void set_value(double v) {value_ = v;}
 
 public:
+  Valuator(int X, int Y, int W, int H, const char* L);
 
     /**    Sets the minimum (a) and maximum (b) values for the valuator widget. */
     void bounds(double a, double b) {min=a; max=b;}

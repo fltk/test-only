@@ -82,7 +82,7 @@ class fltk3::Input_Choice : public fltk3::Group {
     if (!strcmp(o->inp_->value(), o->menu_->text()))
     {
       o->fltk3::Widget::clear_changed();
-      if (o->when() & FL_WHEN_NOT_CHANGED)
+      if (o->when() & fltk3::WHEN_NOT_CHANGED)
 	o->do_callback();
     }
     else
@@ -90,7 +90,7 @@ class fltk3::Input_Choice : public fltk3::Group {
       o->inp_->value(o->menu_->text());
       o->inp_->set_changed();
       o->fltk3::Widget::set_changed();
-      if (o->when() & (FL_WHEN_CHANGED|FL_WHEN_RELEASE))
+      if (o->when() & (fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE))
 	o->do_callback();
     }
     
@@ -108,11 +108,11 @@ class fltk3::Input_Choice : public fltk3::Group {
     Fl_Widget_Tracker wp(o);
     if (o->inp_->changed()) {
       o->fltk3::Widget::set_changed();
-      if (o->when() & (FL_WHEN_CHANGED|FL_WHEN_RELEASE))
+      if (o->when() & (fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE))
 	o->do_callback();
     } else {
       o->fltk3::Widget::clear_changed();
-      if (o->when() & FL_WHEN_NOT_CHANGED)
+      if (o->when() & fltk3::WHEN_NOT_CHANGED)
 	o->do_callback();
     }
     
@@ -146,7 +146,7 @@ public:
 			inp_w(), inp_h());
     inp_->callback(inp_cb, (void*)this);
     inp_->box(fltk3::FLAT_BOX);		// cosmetic
-    inp_->when(FL_WHEN_CHANGED|FL_WHEN_NOT_CHANGED);
+    inp_->when(fltk3::WHEN_CHANGED|fltk3::WHEN_NOT_CHANGED);
     menu_ = new InputMenuButton(menu_x(), menu_y(),
 				menu_w(), menu_h());
     menu_->callback(menu_cb, (void*)this);

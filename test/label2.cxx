@@ -26,10 +26,10 @@
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #if 0 // fltk123:
-#include <fltk/Box.h>
+#include <fltk/Box.h> // This is a typical porting bug. In FLTK2, Box is a box drawing function, no Fl_Box.
+#endif
 #include <fltk/ValueSlider.h>
 #include <fltk/ToggleButton.h>
-#endif
 #include <fltk/Input.h>
 #if 0 // fltk123:
 #include <fltk/MenuBuild.h>
@@ -41,18 +41,13 @@
 
 using namespace fltk;
 
-#if 0 // fltk123:
 ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*centerb,*clipb,*wrapb;
 Widget *textbox;
-#endif
 Input *input;
-#if 0 // fltk123:
 ValueSlider *fontslider;
 ValueSlider *sizes;
-#endif
 Window *window;
 
-#if 0 // fltk123:
 void button_cb(Widget *,void *) {
   int i = 0;
   if (leftb->value()) i |= ALIGN_LEFT;
@@ -69,7 +64,7 @@ void button_cb(Widget *,void *) {
 
 void font_cb(Widget *,void *) {
   //Widget::default_style->leading_ = int(fontslider->value());
-  textbox->labelfont(font(int(fontslider->value())));
+  // fltk123: textbox->labelfont(font(int(fontslider->value())));
   window->redraw();
 }
 
@@ -112,6 +107,7 @@ void engraved_cb(Widget *,void *) {
   window->redraw();
 }
 
+#if 0 // fltk123:
 static void load_menu(Choice* c) {
   c->begin();
       new fltk::Item("NORMAL_LABEL",0,normal_cb);
@@ -142,10 +138,10 @@ int main(int argc, char **argv) {
   window->set_double_buffer();
   window->begin();
 
-#if 0 // fltk123:
-  textbox= new Widget(100,75,200,100,initial);
+  textbox = new Widget(100,75,200,100,initial);
   textbox->box(ENGRAVED_BOX);
 
+#if 0 // fltk123:
   Choice *c = new Choice(50,275,200,25);
   load_menu(c);
 
@@ -154,10 +150,11 @@ int main(int argc, char **argv) {
 
   b = new ToggleButton(300,275,50,25,"inactive");
   b->callback(inactive_cb);
+#endif
 
-  Group *g = new Group(0,300,400,25);
-  g->resizable(g);
-  g->begin();
+  // fltk123: Group *g = new Group(0,300,400,25);
+  // fltk123: g->resizable(g);
+  // fltk123: g->begin();
   leftb = new ToggleButton(0,0,50,25,"left");
   leftb->callback(button_cb);
   rightb = new ToggleButton(50,0,50,25,"right");
@@ -174,10 +171,10 @@ int main(int argc, char **argv) {
   wrapb->callback(button_cb);
   clipb = new ToggleButton(350,0,50,25,"clip");
   clipb->callback(button_cb);
-  g->end();
+  // fltk123: g->end();
 
   fontslider=new ValueSlider(50,325,350,25,"Font:");
-  fontslider->type(Slider::TICK_ABOVE);
+  // fltk123: fontslider->type(Slider::TICK_ABOVE);
   fontslider->clear_flag(ALIGN_MASK);
   fontslider->set_flag(ALIGN_LEFT);
   fontslider->range(0,15);
@@ -186,23 +183,20 @@ int main(int argc, char **argv) {
   fontslider->callback(font_cb);
 
   sizes= new ValueSlider(50,350,350,25,"Size:");
-  sizes->type(Slider::TICK_ABOVE|Slider::LOG);
+  // fltk123: sizes->type(Slider::TICK_ABOVE|Slider::LOG);
   sizes->clear_flag(ALIGN_MASK);
   sizes->set_flag(ALIGN_LEFT);
   sizes->range(1,64);
   //sizes->step(1);
   sizes->value(14);
   sizes->callback(size_cb);
-#endif
   
   input = new Input(50,375,350,25);
   input->static_value(initial);
-#if 0 // fltk123:
   input->when(WHEN_CHANGED);
   input->callback(input_cb);
 
   window->resizable(textbox);
-#endif
   window->end();
   window->show(argc,argv);
   return run();

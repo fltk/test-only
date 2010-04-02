@@ -275,7 +275,7 @@ fltk3::DoubleBufferWindow* make_print_panel() {
         print_choice->down_box(fltk3::BORDER_BOX);
         print_choice->labelfont(1);
         print_choice->callback((fltk3::Callback*)cb_print_choice);
-        print_choice->when(FL_WHEN_CHANGED);
+        print_choice->when(fltk3::WHEN_CHANGED);
       } // fltk3::Choice* print_choice
       { print_properties = new fltk3::Button(314, 10, 115, 25, Fl_Printer::dialog_properties);
         print_properties->callback((fltk3::Callback*)cb_print_properties);
@@ -321,12 +321,12 @@ fltk3::DoubleBufferWindow* make_print_panel() {
         o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
         { print_copies = new Fl_Spinner(321, 96, 45, 25, Fl_Printer::dialog_copyNo);
           print_copies->callback((fltk3::Callback*)cb_print_copies);
-          print_copies->when(FL_WHEN_CHANGED);
+          print_copies->when(fltk3::WHEN_CHANGED);
         } // Fl_Spinner* print_copies
         { print_collate_button = new fltk3::CheckButton(376, 96, 64, 25, "Collate");
           print_collate_button->down_box(fltk3::DOWN_BOX);
           print_collate_button->callback((fltk3::Callback*)cb_print_collate_button);
-          print_collate_button->when(FL_WHEN_CHANGED);
+          print_collate_button->when(fltk3::WHEN_CHANGED);
           print_collate_button->deactivate();
         } // fltk3::CheckButton* print_collate_button
         { print_collate_group[0] = new fltk3::Group(257, 131, 191, 50);

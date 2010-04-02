@@ -141,7 +141,7 @@ class Fl_Spinner : public fltk3::Group
 
 		  input_.value("1");
 		  input_.type(FL_INT_INPUT);
-		  input_.when(FL_WHEN_ENTER_KEY | FL_WHEN_RELEASE);
+		  input_.when(fltk3::WHEN_ENTER_KEY | fltk3::WHEN_RELEASE);
 		  input_.callback((fltk3::Callback *)sb_cb, this);
 
 		  up_button_.callback((fltk3::Callback *)sb_cb, this);

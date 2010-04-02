@@ -75,11 +75,11 @@ namespace fltk3 {
   \todo Refactor the doxygen comments for fltk3::Button when() documentation.
 
   For an fltk3::Button object, the following when() values are useful, the default
-  being \c FL_WHEN_RELEASE:
+  being \c fltk3::WHEN_RELEASE:
   \li \c 0: The callback is not done, instead changed() is turned on.
-  \li \c FL_WHEN_RELEASE: The callback is done after the user successfully
+  \li \c fltk3::WHEN_RELEASE: The callback is done after the user successfully
          clicks the button, or when a shortcut is typed.
-  \li \c FL_WHEN_CHANGED: The callback is done each time the value() changes
+  \li \c fltk3::WHEN_CHANGED: The callback is done each time the value() changes
          (when the user pushes and releases the button, and as the mouse is
 	 dragged around in and out of the button).
 */

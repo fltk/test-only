@@ -37,9 +37,10 @@
 
 extern FL_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
 
-class Fl_Menu_;
 
 namespace fltk3 {
+
+  class Menu_;
 
 enum { // values for flags:
   MENU_INACTIVE = 1,		///< Deactivate menu item (gray out)
@@ -55,7 +56,7 @@ enum { // values for flags:
 
 /**
   The MenuItem structure defines a single menu item that
-  is used by the Fl_Menu_ class.  
+  is used by the fltk3::Menu_ class.  
   \code
   struct MenuItem {
    const char*	        text; // label()
@@ -211,7 +212,7 @@ struct FL_EXPORT MenuItem {
      Each item has space for a callback function and an argument for that
      function. Due to back compatibility, the MenuItem itself
      is not passed to the callback, instead you have to get it by calling 
-     ((Fl_Menu_*)w)->mvalue() where w is the widget argument.
+     ((fltk3::Menu_*)w)->mvalue() where w is the widget argument.
   */
   fltk3::Callback_p callback() const {return callback_;}
 
@@ -335,19 +336,19 @@ struct FL_EXPORT MenuItem {
   void image(Fl_Image& a) {a.label(this);}
 
   // used by menubar:
-  int measure(int* h, const Fl_Menu_*) const;
-  void draw(int x, int y, int w, int h, const Fl_Menu_*, int t=0) const;
+  int measure(int* h, const fltk3::Menu_*) const;
+  void draw(int x, int y, int w, int h, const fltk3::Menu_*, int t=0) const;
 
-  // popup menus without using an Fl_Menu_ widget:
+  // popup menus without using an fltk3::Menu_ widget:
   const MenuItem* popup(
     int X, int Y,
     const char *title = 0,
     const MenuItem* picked=0,
-    const Fl_Menu_* = 0) const;
+    const fltk3::Menu_* = 0) const;
   const MenuItem* pulldown(
     int X, int Y, int W, int H,
     const MenuItem* picked = 0,
-    const Fl_Menu_* = 0,
+    const fltk3::Menu_* = 0,
     const MenuItem* title = 0,
     int menubar=0) const;
   const MenuItem* test_shortcut() const;

@@ -118,7 +118,7 @@ int main(int argc, char **argv) {
     
     input = new Input(50,375,350,25);
     input->static_value("The quick brown fox jumped over the lazy dog.");
-    // fltk123: input->when(WHEN_CHANGED);
+    input->when(WHEN_CHANGED);
     input->callback(input_cb);
     
     sizes= new HorValueSlider(50,350,350,25,"Size:");

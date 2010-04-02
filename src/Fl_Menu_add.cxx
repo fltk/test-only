@@ -24,7 +24,7 @@
 //
 //     http://www.fltk.org/str.php
 //
-// Methods to alter the menu in an Fl_Menu_ widget.
+// Methods to alter the menu in an fltk3::Menu_ widget.
 
 // These are for Forms emulation and for dynamically changing the
 // menus.  They are in this source file so they are not linked in if
@@ -34,7 +34,7 @@
 // Not at all guaranteed to be Forms compatible, especially with any
 // string with a % sign in it!
 
-#include <fltk3/Fl_Menu_.H>
+#include <fltk3/Menu_.h>
 #include "flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,12 +43,12 @@
 static fltk3::MenuItem* local_array = 0;
 static int local_array_alloc = 0; // number allocated
 static int local_array_size = 0; // == size(local_array)
-extern Fl_Menu_* fl_menu_array_owner; // in Fl_Menu_.cxx
+extern fltk3::Menu_* fl_menu_array_owner; // in fltk3::Menu_.cxx
 
 // For historical reasons there are matching methods that work on a
 // user-allocated array of fltk3::MenuItem.  These methods are quite
 // depreciated and should not be used.  These old methods use the
-// above pointers to detect if the array belongs to an Fl_Menu_
+// above pointers to detect if the array belongs to an fltk3::Menu_
 // widget, and if so it reallocates as necessary.
 
 // Insert a single fltk3::MenuItem into an array of size at offset n,
@@ -265,11 +265,11 @@ int fltk3::MenuItem::add(
   \endcode
 
  */
-int Fl_Menu_::add(const char *label,int shortcut,fltk3::Callback *callback,void *userdata,int flags) {
+int fltk3::Menu_::add(const char *label,int shortcut,fltk3::Callback *callback,void *userdata,int flags) {
   // make this widget own the local array:
   if (this != fl_menu_array_owner) {
     if (fl_menu_array_owner) {
-      Fl_Menu_* o = fl_menu_array_owner;
+      fltk3::Menu_* o = fl_menu_array_owner;
       // the previous owner get's its own correctly-sized array:
       int value_offset = o->value_-local_array;
       int n = local_array_size;
@@ -320,7 +320,7 @@ int Fl_Menu_::add(const char *label,int shortcut,fltk3::Callback *callback,void 
 
   No items must be added to a menu during a callback to the same menu.
 */
-int Fl_Menu_::add(const char *str) {
+int fltk3::Menu_::add(const char *str) {
   char buf[1024];
   int r = 0;
   while (*str) {
@@ -342,7 +342,7 @@ int Fl_Menu_::add(const char *str) {
   slash into an add()'ed menu item.  If the menu array was directly set
   with menu(x) then copy() is done to make a private array.
 */
-void Fl_Menu_::replace(int i, const char *str) {
+void fltk3::Menu_::replace(int i, const char *str) {
   if (i<0 || i>=size()) return;
   if (!alloc) copy(menu_);
   if (alloc > 1) {
@@ -357,7 +357,7 @@ void Fl_Menu_::replace(int i, const char *str) {
   
   No items must be removed from a menu during a callback to the same menu.
 */
-void Fl_Menu_::remove(int i) {
+void fltk3::Menu_::remove(int i) {
   int n = size();
   if (i<0 || i>=n) return;
   if (!alloc) copy(menu_);

@@ -39,8 +39,8 @@
 
 class Fl_Widget;
 class Fl_Window;
-class Fl_Group;
 class Fl_Image;
+class Fl_Group;
 
 /** Default callback type definition for all fltk widgets (by far the most used) */
 typedef void (Fl_Callback )(Fl_Widget*, void*);
@@ -146,7 +146,7 @@ public:
   virtual void draw() { _p->draw(); }
   virtual int handle(int event) { return _p->handle(event); }
   Fl_Group* parent() const { return (Fl_Group*)_p->parent()->wrapper(); }
-  void parent(Fl_Group* p) { _p->parent((fltk3::Group*)(((Fl_Widget*)p)->_p)); }
+  void parent(Fl_Group* p) { _p->parent((fltk3::Group*)(((Fl_Widget*)p)->fltk3Widget())); }
   uchar type() const { return _p->type(); }
   void type(uchar t) { _p->type(t); }  
   int x() const { return _p->x(); }
@@ -205,9 +205,9 @@ public:
   long argument() const { return _p->argument(); }
   void argument(long v) { _p->argument(v); }
   
-#if 0
-  Fl_When when() const {return (Fl_When)when_;}
-  void when(uchar i) {when_ = i;}
+  Fl_When when() const { return (Fl_When)_p->when(); }
+  void when(uchar i) { _p->when(i); }
+#if 0 // fltk123:
   unsigned int visible() const {return !(flags_&INVISIBLE);}
   int visible_r() const;
   virtual void show();

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H 7365 2010-03-30 15:18:29Z matt $"
+// "$Id: Menu_.H 7365 2010-03-30 15:18:29Z matt $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,26 +26,26 @@
 //
 
 /* \file
-   Fl_Menu_ widget . */
+   Menu_ widget . */
 
-#ifndef Fl_Menu__H
-#define Fl_Menu__H
+#ifndef Fltk3_Menu__H
+#define Fltk3_Menu__H
 
-#ifndef Fl_Widget_H
 #include "Widget.h"
-#endif
 #include "MenuItem.h"
+
+namespace fltk3 {
 
 /**
   Base class of all widgets that have a menu in FLTK.
   Currently FLTK provides you with 
-  Fl_Menu_Button, Fl_Menu_Bar, and fltk3::Choice.
+  Menu_Button, Menu_Bar, and fltk3::Choice.
   
   <P>The class contains a pointer to an array of structures of type  fltk3::MenuItem.  The
   array may either be supplied directly by the user program, or it may
-  be "private": a dynamically allocated array managed by the Fl_Menu_.
+  be "private": a dynamically allocated array managed by the Menu_.
 */
-class FL_EXPORT Fl_Menu_ : public fltk3::Widget {
+class FL_EXPORT Menu_ : public fltk3::Widget {
 
   fltk3::MenuItem *menu_;
   const fltk3::MenuItem *value_;
@@ -59,8 +59,8 @@ protected:
   Fl_Color textcolor_;
 
 public:
-  Fl_Menu_(int,int,int,int,const char * =0);
-  ~Fl_Menu_();
+  Menu_(int,int,int,int,const char * =0);
+  ~Menu_();
 
   int item_pathname(char *name, int namelen, const fltk3::MenuItem *finditem=0) const;
   const fltk3::MenuItem* picked(const fltk3::MenuItem*);
@@ -78,7 +78,7 @@ public:
   void menu(const fltk3::MenuItem *m);
   void copy(const fltk3::MenuItem *m, void* user_data = 0);
   int  add(const char*, int shortcut, fltk3::Callback*, void* = 0, int = 0);
-  /** See int Fl_Menu_::add(const char* label, int shortcut, fltk3::Callback*, void *user_data=0, int flags=0)*/
+  /** See int Menu_::add(const char* label, int shortcut, fltk3::Callback*, void *user_data=0, int flags=0)*/
   int  add(const char* a, const char* b, fltk3::Callback* c, void* d = 0, int e = 0) {
       return add(a,fl_old_shortcut(b),c,d,e);}
   int  add(const char *);
@@ -131,7 +131,7 @@ public:
     FL_WHITE, for back compatibility.    
   */
   fltk3::Boxtype down_box() const {return (fltk3::Boxtype)down_box_;}
-  /**    See fltk3::Boxtype Fl_Menu_::down_box() const   */
+  /**    See fltk3::Boxtype Menu_::down_box() const   */
   void down_box(fltk3::Boxtype b) {down_box_ = b;}
 
   /** For back compatibility, same as selection_color() */
@@ -140,8 +140,10 @@ public:
   void down_color(unsigned c) {selection_color(c);}
 };
 
+}
+
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H 7365 2010-03-30 15:18:29Z matt $".
+// End of "$Id: Menu_.H 7365 2010-03-30 15:18:29Z matt $".
 //

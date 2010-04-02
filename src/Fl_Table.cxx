@@ -186,7 +186,7 @@ void Fl_Table::row_height(int row, int height) {
     redraw();
   }
   // ROW RESIZE CALLBACK
-  if ( fltk3::Widget::callback() && when() & FL_WHEN_CHANGED ) {
+  if ( fltk3::Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
     do_callback(CONTEXT_RC_RESIZE, row, 0);
   }
 }
@@ -212,7 +212,7 @@ void Fl_Table::col_width(int col, int width)
     redraw();
   }
   // COLUMN RESIZE CALLBACK
-  if ( fltk3::Widget::callback() && when() & FL_WHEN_CHANGED ) {
+  if ( fltk3::Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
     do_callback(CONTEXT_RC_RESIZE, 0, col);
   }
 }
@@ -831,7 +831,7 @@ int Fl_Table::handle(int event) {
         redraw();
         change_cursor(FL_CURSOR_WE);
         ret = 1;
-        if ( fltk3::Widget::callback() && when() & FL_WHEN_CHANGED ) {
+        if ( fltk3::Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
           do_callback(CONTEXT_RC_RESIZE, R, C);
         }
       }
@@ -851,7 +851,7 @@ int Fl_Table::handle(int event) {
         redraw();
         change_cursor(FL_CURSOR_NS);
         ret = 1;
-        if ( fltk3::Widget::callback() && when() & FL_WHEN_CHANGED ) {
+        if ( fltk3::Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
           do_callback(CONTEXT_RC_RESIZE, R, C);
         }
       } else {
@@ -905,7 +905,7 @@ int Fl_Table::handle(int event) {
           if ( _resizing_col == -1 &&		// not resizing a column
               _resizing_row == -1 &&		// not resizing a row
               fltk3::Widget::callback() && 	// callback defined
-              when() & FL_WHEN_RELEASE && 	// on button release
+              when() & fltk3::WHEN_RELEASE && 	// on button release
               _last_row == R ) {		// release on same row PUSHed?
             // Need this for eg. left clicking on a cell to select it
             do_callback(context, R, C);
@@ -995,10 +995,10 @@ int Fl_Table::handle(int event) {
         do_callback(CONTEXT_TABLE, -1, -1);
         take_focus();
       }
-      //if (!ret && fltk3::Widget::callback() && when() & FL_WHEN_NOT_CHANGED  )
+      //if (!ret && fltk3::Widget::callback() && when() & fltk3::WHEN_NOT_CHANGED  )
       if ( fltk3::Widget::callback() && 
           (
-           ( !ret && when() & FL_WHEN_NOT_CHANGED ) || 
+           ( !ret && when() & fltk3::WHEN_NOT_CHANGED ) || 
            ( is_row!= select_row || is_col!= select_col ) 
            )
           ) {

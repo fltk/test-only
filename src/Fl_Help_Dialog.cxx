@@ -183,7 +183,7 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
           find_->labelsize(13);
           find_->textfont(4);
           find_->callback((fltk3::Callback*)cb_find_);
-          find_->when(FL_WHEN_ENTER_KEY_ALWAYS);
+          find_->when(fltk3::WHEN_ENTER_KEY_ALWAYS);
         } // fltk3::Input* find_
         o->end();
       } // fltk3::Group* o

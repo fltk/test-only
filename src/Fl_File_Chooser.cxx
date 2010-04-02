@@ -216,9 +216,9 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
       { fileName = new Fl_File_Input(115, 300, 365, 35);
         fileName->labelfont(1);
         fileName->callback((fltk3::Callback*)cb_fileName);
-        fileName->when(FL_WHEN_ENTER_KEY);
+        fileName->when(fltk3::WHEN_ENTER_KEY);
         fltk3::Group::current()->resizable(fileName);
-        fileName->when(FL_WHEN_CHANGED | FL_WHEN_ENTER_KEY);
+        fileName->when(fltk3::WHEN_CHANGED | fltk3::WHEN_ENTER_KEY);
       } // Fl_File_Input* fileName
       { Fl_Box* o = new Fl_Box(10, 310, 105, 25, "Filename:");
         o->labelfont(1);

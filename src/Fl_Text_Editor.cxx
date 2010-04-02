@@ -242,7 +242,7 @@ int Fl_Text_Editor::kf_default(int c, Fl_Text_Editor* e) {
   else e->overstrike(s);
   e->show_insert_position();
   e->set_changed();
-  if (e->when()&FL_WHEN_CHANGED) e->do_callback();
+  if (e->when()&fltk3::WHEN_CHANGED) e->do_callback();
   return 1;
 }
 
@@ -263,7 +263,7 @@ int Fl_Text_Editor::kf_backspace(int, Fl_Text_Editor* e) {
   kill_selection(e);
   e->show_insert_position();
   e->set_changed();
-  if (e->when()&FL_WHEN_CHANGED) e->do_callback();
+  if (e->when()&fltk3::WHEN_CHANGED) e->do_callback();
   return 1;
 }
 
@@ -273,7 +273,7 @@ int Fl_Text_Editor::kf_enter(int, Fl_Text_Editor* e) {
   e->insert("\n");
   e->show_insert_position();
   e->set_changed();
-  if (e->when()&FL_WHEN_CHANGED) e->do_callback();
+  if (e->when()&fltk3::WHEN_CHANGED) e->do_callback();
   return 1;
 }
 
@@ -459,7 +459,7 @@ int Fl_Text_Editor::kf_delete(int, Fl_Text_Editor* e) {
   kill_selection(e);
   e->show_insert_position();
   e->set_changed();
-  if (e->when()&FL_WHEN_CHANGED) e->do_callback();
+  if (e->when()&fltk3::WHEN_CHANGED) e->do_callback();
   return 1;
 }
 
@@ -478,7 +478,7 @@ int Fl_Text_Editor::kf_cut(int c, Fl_Text_Editor* e) {
   kf_copy(c, e);
   kill_selection(e);
   e->set_changed();
-  if (e->when()&FL_WHEN_CHANGED) e->do_callback();
+  if (e->when()&fltk3::WHEN_CHANGED) e->do_callback();
   return 1;
 }
 
@@ -488,7 +488,7 @@ int Fl_Text_Editor::kf_paste(int, Fl_Text_Editor* e) {
   fltk3::paste(*e, 1);
   e->show_insert_position();
   e->set_changed();
-  if (e->when()&FL_WHEN_CHANGED) e->do_callback();
+  if (e->when()&fltk3::WHEN_CHANGED) e->do_callback();
   return 1;
 }
 
@@ -505,7 +505,7 @@ int Fl_Text_Editor::kf_undo(int , Fl_Text_Editor* e) {
   e->insert_position(crsr);
   e->show_insert_position();
   e->set_changed();
-  if (e->when()&FL_WHEN_CHANGED) e->do_callback();
+  if (e->when()&fltk3::WHEN_CHANGED) e->do_callback();
   return ret;
 }
 
@@ -525,7 +525,7 @@ int Fl_Text_Editor::handle_key() {
     }
     show_insert_position();
     set_changed();
-    if (when()&FL_WHEN_CHANGED) do_callback();
+    if (when()&fltk3::WHEN_CHANGED) do_callback();
     return 1;
   }
 
@@ -543,7 +543,7 @@ int Fl_Text_Editor::handle_key() {
 void Fl_Text_Editor::maybe_do_callback() {
 //  printf("Fl_Text_Editor::maybe_do_callback()\n");
 //  printf("changed()=%d, when()=%x\n", changed(), when());
-  if (changed() || (when()&FL_WHEN_NOT_CHANGED)) do_callback();
+  if (changed() || (when()&fltk3::WHEN_NOT_CHANGED)) do_callback();
 }
 
 int Fl_Text_Editor::handle(int event) {
@@ -560,7 +560,7 @@ int Fl_Text_Editor::handle(int event) {
       show_cursor(mCursorOn); // redraws the cursor
       if (buffer()->selected()) redraw(); // Redraw selections...
     case fltk3::HIDE:
-      if (when() & FL_WHEN_RELEASE) maybe_do_callback();
+      if (when() & fltk3::WHEN_RELEASE) maybe_do_callback();
       return 1;
 
     case fltk3::KEY:
@@ -578,7 +578,7 @@ int Fl_Text_Editor::handle(int event) {
       else overstrike(fltk3::event_text());
       show_insert_position();
       set_changed();
-      if (when()&FL_WHEN_CHANGED) do_callback();
+      if (when()&fltk3::WHEN_CHANGED) do_callback();
       return 1;
 
     case fltk3::ENTER:
@@ -595,7 +595,7 @@ int Fl_Text_Editor::handle(int event) {
         fltk3::paste(*this, 0);
         fltk3::focus(this);
         set_changed();
-        if (when()&FL_WHEN_CHANGED) do_callback();
+        if (when()&fltk3::WHEN_CHANGED) do_callback();
         return 1;
       }
       break;

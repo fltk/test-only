@@ -110,10 +110,10 @@ int Fl_Menu_Button::handle(int e) {
   Creates a new Fl_Menu_Button widget using the given position,
   size, and label string. The default boxtype is fltk3::UP_BOX.
   <P>The constructor sets menu() to NULL.  See 
-  Fl_Menu_ for the methods to set or change the menu.
+  fltk3::Menu_ for the methods to set or change the menu.
 */
 Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
-: Fl_Menu_(X,Y,W,H,l) {
+: fltk3::Menu_(X,Y,W,H,l) {
   down_box(fltk3::NO_BOX);
 }
 

@@ -131,7 +131,7 @@ fltk3::Widget::Widget(int X, int Y, int W, int H, const char* L) {
   box_		 = fltk3::NO_BOX;
   color_	 = FL_GRAY;
   color2_	 = FL_GRAY;
-  when_		 = FL_WHEN_RELEASE;
+  when_		 = fltk3::WHEN_RELEASE;
 
   parent_ = 0;
   if (fltk3::Group::current()) fltk3::Group::current()->add(this);

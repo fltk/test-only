@@ -299,8 +299,6 @@ enum Event {	// events
   TIMEOUT /* 18 */
 };
   
-} // namespace fltk3
-
 /** \name When Conditions */
 /*@{*/
 /** These constants determine when a callback is performed.
@@ -308,18 +306,21 @@ enum Event {	// events
  *  \sa fltk3::Widget::when();
  *  \todo doxygen comments for values are incomplete and maybe wrong or unclear
  */
-enum Fl_When { // fltk3::Widget::when():
-  FL_WHEN_NEVER		= 0,	///< Never call the callback
-  FL_WHEN_CHANGED	= 1,	///< Do the callback only when the widget value changes
-  FL_WHEN_NOT_CHANGED	= 2,	///< Do the callback whenever the user interacts with the widget
-  FL_WHEN_RELEASE	= 4,	///< Do the callback when the button or key is released and the value changes
-  FL_WHEN_RELEASE_ALWAYS= 6,	///< Do the callback when the button or key is released, even if the value doesn't change
-  FL_WHEN_ENTER_KEY	= 8,	///< Do the callback when the user presses the ENTER key and the value changes
-  FL_WHEN_ENTER_KEY_ALWAYS=10,	///< Do the callback when the user presses the ENTER key, even if the value doesn't change
-  FL_WHEN_ENTER_KEY_CHANGED=11	///< ?
+enum When { // fltk3::Widget::when():
+  WHEN_NEVER		= 0,	///< Never call the callback
+  WHEN_CHANGED	= 1,	///< Do the callback only when the widget value changes
+  WHEN_NOT_CHANGED	= 2,	///< Do the callback whenever the user interacts with the widget
+  WHEN_RELEASE	= 4,	///< Do the callback when the button or key is released and the value changes
+  WHEN_RELEASE_ALWAYS= 6,	///< Do the callback when the button or key is released, even if the value doesn't change
+  WHEN_ENTER_KEY	= 8,	///< Do the callback when the user presses the ENTER key and the value changes
+  WHEN_ENTER_KEY_ALWAYS=10,	///< Do the callback when the user presses the ENTER key, even if the value doesn't change
+  WHEN_ENTER_KEY_CHANGED=11	///< ?
 };
 
 /*@}*/		// group: When Conditions
+
+} // namespace fltk3
+
 
 /** \name Mouse and Keyboard Events
 
