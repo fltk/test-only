@@ -3,6 +3,7 @@ This is a short description on how to convert a former FLTK1 header into the FLT
 
 - find the new class name and rename the file (note cpital .H vs. lower case .h):
   svn mv fltk3/Fl_Widget.H fltk3/Widget.h  
+- update the Copyright year
 - make all initial #ifdef unique (Fl_Widget_H become Fltk3_Widget_H)
 - rename all occurences of the class name in the header (Fl_Widget becomes Widget)
 - rename all include file references in fltk3/ and src/ (Fl_Widget.H becomes Widget.h)
@@ -15,6 +16,7 @@ This is a short description on how to convert a former FLTK1 header into the FLT
 This is a short description on how to convert an FLTK1 header into a wrapper:
 
 - code that we need to come back to is marked "// fltk123:"
+- update the Copyright year
 - make the initial #ifdef unique (fltk_Widget_H becomes fltk2_Widget_H, Fl_Widget_H
   becomes Fltk1_Widget_H)
 - include the corresponding class header (#include <fltk3/Widget.h>)
