@@ -30,7 +30,7 @@
   \brief Drawing and clipping routines for rectangles.
 */
 
-// These routines from fl_draw.H are used by the standard boxtypes
+// These routines from draw.h are used by the standard boxtypes
 // and thus are always linked into an fltk program.
 // Also all fl_clip routines, since they are always linked in so
 // that minimal update works.
@@ -38,7 +38,7 @@
 #include <config.h>
 #include <fltk3/run.h>
 #include <fltk3/Widget.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <fltk3/x.H>
 
 #ifdef __APPLE_QUARTZ__

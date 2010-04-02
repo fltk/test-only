@@ -30,7 +30,7 @@
 #include "Fl_Gl_Choice.H"
 #include "fltk3/run.h"
 #ifndef __APPLE__
-#include "fltk3/fl_draw.H"
+#include "fltk3/draw.h"
 #endif
 
 #if defined(__APPLE__)

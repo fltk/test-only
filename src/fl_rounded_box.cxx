@@ -26,7 +26,7 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 
 #define RN	5
 #define RS	15

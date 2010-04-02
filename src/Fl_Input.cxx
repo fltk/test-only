@@ -36,7 +36,7 @@
 #include <fltk3/run.h>
 #include <fltk3/Window.h>
 #include <fltk3/Input.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <fltk3/ask.h>
 #include "flstring.h"
 

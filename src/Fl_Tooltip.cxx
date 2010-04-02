@@ -26,7 +26,7 @@
 //
 
 #include <fltk3/Tooltip.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <fltk3/Fl_Menu_Window.H>
 
 #include <stdio.h>

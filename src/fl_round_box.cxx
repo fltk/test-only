@@ -30,7 +30,7 @@
 // in if not used.
 
 #include <fltk3/run.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 
 // A compiler from a certain very large software company will not compile
 // the function pointer assignment due to the name conflict with fl_arc.

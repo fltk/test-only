@@ -29,7 +29,7 @@
 #include <fltk3/Widget.h>
 #include <fltk3/Group.h>
 #include <fltk3/Tooltip.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <stdlib.h>
 #include "flstring.h"
 

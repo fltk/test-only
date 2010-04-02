@@ -405,7 +405,7 @@ public:
 
   static fltk3::Window *current();
   /**
-    Sets things up so that the drawing functions in <fltk3/fl_draw.H> will go
+    Sets things up so that the drawing functions in <fltk3/draw.h> will go
     into this window. This is useful for incremental update of windows, such
     as in an idle callback, which will make your program behave much better
     if it draws a slow graphic. <B>Danger: incremental update is very hard to

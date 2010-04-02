@@ -33,7 +33,7 @@
 #include <fltk3/Window.h>
 #include <fltk3/Tooltip.h>
 #include <fltk3/filename.H>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <ctype.h>
 #include "flstring.h"
 

@@ -37,7 +37,7 @@
 #include "flstring.h"
 
 #ifdef __APPLE_QUARTZ__
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #endif
 
 void fltk3::Window::_Fl_Window() {

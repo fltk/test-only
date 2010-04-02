@@ -40,7 +40,7 @@
 #  include "run.h"
 #  include "Group.h"
 #  include "Fl_Scrollbar.H"
-#  include "fl_draw.H"
+#  include "draw.h"
 #  include "Fl_Shared_Image.H"
 
 

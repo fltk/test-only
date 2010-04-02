@@ -30,7 +30,7 @@
 // in if not used.
 
 #include <fltk3/run.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 
 void fl_oval_flat_box(int x, int y, int w, int h, Fl_Color c) {
   fl_color(c);

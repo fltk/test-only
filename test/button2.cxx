@@ -35,6 +35,8 @@
 #include <fltk/RadioButton.h>
 #include <fltk/LightButton.h>
 #include <fltk/HighlightButton.h>
+
+#if 0 // fltk123:
 #include <fltk/MultiImage.h>
 #include <fltk/xpmImage.h>
 #include <fltk/SharedImage.h>
@@ -42,11 +44,12 @@
 #include <pixmaps/folder_small.xpm>
 #include <pixmaps/folder_small2.xpm>
 #include <pixmaps/folder_small3.xpm>
+#endif
 
 using namespace fltk;
 
 Button * abutton=0;
-MultiImage* multi;
+// fltk123: MultiImage* multi;
 
 void cb_active_butt(Widget*, void*) {
     static bool flip = true;
@@ -60,15 +63,17 @@ void cb_active_butt(Widget*, void*) {
 void rb_cb(Widget*, void*) {
   static bool flip = false;
   if (flip) { //  Fl::theme("essai");
-      reset_theme();
+      // fltk123:  reset_theme();
   } else {
     // Default Style handling for changing the scheme of all widget at once
+#if 0 // fltk123:
     Button::default_style->box_ = fltk::PLASTIC_UP_BOX;
     Button::default_style->color_ = 256-36;
     Widget::default_style->highlight_color(3);
+#endif
   }
   flip = !flip;
-  redraw();
+  // fltk123: redraw();
 }
 
 const int W = 150;
@@ -80,13 +85,15 @@ const int X1 = (B+W+B);
 int main(int argc, char ** argv) {
   Window window(X1+W+B, B+7*(H+B));
   window.begin();
-  
+
+#if 0 // fltk123:  
   xpmImage fold1(folder_small);
   xpmImage fold3(folder_small3);
-
   xpmImage fold2(folder_small2);
+#endif
+  
 #if !defined(TESTIMAGES)
-  xpmImage ifold2(folder_small2); // use closed folder 2 as inactive image
+  // fltk123: xpmImage ifold2(folder_small2); // use closed folder 2 as inactive image
 #else
   register_images();
   SharedImage& ifold2 = *SharedImage::get("images/testimg2.jpg");
@@ -94,8 +101,10 @@ int main(int argc, char ** argv) {
 #endif
   // ifold2.inactive();
   // WAS: inactive() is nyi but should not be a problem with new Image...
+#if 0 // fltk123:  
   MultiImage push_release_img(fold2, PUSHED, fold3);
   MultiImage push_release_hlt_img(fold2, HIGHLIGHT, fold1, PUSHED, fold3);
+#endif
   
   int Y = B;
   (void) new Button(X0, Y, W, H, "Button");
@@ -116,26 +125,34 @@ int main(int argc, char ** argv) {
   // when combined with image() as below, you get the border + the image appearing when belowmouse()
 
   //HighlightButton* hb = 
-      new HighlightButton(X0, Y, W, H, "HighlightButton");
+  // fltk123:      new HighlightButton(X0, Y, W, H, "HighlightButton");
 
   new CheckButton(X1, Y, W, H, "CheckButton");
 
   Y += H+B;
   Button * b = new Button(X0, Y, W, H, "push/release img");
+#if 0 // fltk123:
   b->image(push_release_img); // use default & pushed img
+#endif
   b = new Button(X1, Y, W, H, "push/rel noborder");
+#if 0 // fltk123:
   b->image(push_release_img); // use default & pushed img
+#endif
   b->box(NO_BOX);
   
   Y += H+B;
-  b = new HighlightButton(X0, Y, W, H, "Everything !");
+  // fltk123:  b = new HighlightButton(X0, Y, W, H, "Everything !");
   // to remove the  belowmouse changing image comment this line:
+#if 0 // fltk123:
   b->image(push_release_hlt_img);
+#endif
   b->callback(cb_active_butt);
 #if !defined(TESTIMAGES)
   abutton = b = new Button(X1, Y, W, H, "Inactive");
+#if 0 // fltk123:
   multi = new MultiImage(fold2,  fltk::PUSHED, fold3,fltk::INACTIVE, ifold2);
   b->image(multi); 
+#endif
 #else
   abutton = b = new Button(X1, Y, W, H*2, "Inactive");
   multi = new MultiImage(fold2,  fltk::PUSHED, fold3,fltk::INACTIVE, ifold2);

@@ -513,7 +513,7 @@ void Fl_Gl_Window::draw_overlay() {}
   initialization if it is false.
 
   The draw() method can <I>only</I> use OpenGL calls.  Do not
-  attempt to call X, any of the functions in <fltk3/fl_draw.H>, or glX
+  attempt to call X, any of the functions in <fltk3/draw.h>, or glX
   directly.  Do not call gl_start() or gl_finish().
 
   If double-buffering is enabled in the window, the back and front

@@ -33,7 +33,7 @@
 // in if not used.
 
 #include <fltk3/run.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 
 extern void fl_internal_boxtype(fltk3::Boxtype, Fl_Box_Draw_F*);
 

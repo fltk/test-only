@@ -35,7 +35,7 @@
 // Date: Oct  2, 1992
 
 #include <fltk3/run.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <fltk3/math.h>
 #include "flstring.h"
 

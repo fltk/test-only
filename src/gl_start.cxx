@@ -43,7 +43,7 @@
 #include <fltk3/run.h>
 #include <fltk3/Window.h>
 #include <fltk3/x.H>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include "Fl_Gl_Choice.H"
 
 extern int fl_clip_state_number; // in fl_rect.cxx

@@ -23,7 +23,7 @@
 //
 
 #include <stdio.h>		// fprintf
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <fltk3/Fl_Table.H>
 
 #if defined(USE_UTF8) && ( defined(MICROSOFT) || defined(LINUX) )

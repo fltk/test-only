@@ -1367,7 +1367,7 @@ void fltk3::paste(fltk3::Widget &receiver) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 
 void fltk3::Widget::redraw() {
   damage(FL_DAMAGE_ALL);

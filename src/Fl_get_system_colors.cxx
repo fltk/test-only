@@ -26,7 +26,7 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <fltk3/x.H>
 #include <fltk3/math.h>
 #include <fltk3/fl_utf8.h>

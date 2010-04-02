@@ -27,7 +27,7 @@
 
 #include <fltk3/run.h>
 #include <fltk3/ReturnButton.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 
 int fl_return_arrow(int x, int y, int w, int h) {
   int size = w; if (h<size) size = h;

@@ -32,7 +32,7 @@
 #define Fl_Printer_H
 
 #include <fltk3/Fl_Abstract_Printer.H>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <fltk3/Fl_Pixmap.H>
 #include <fltk3/Fl_RGB_Image.H>
 #include <fltk3/Fl_Bitmap.H>

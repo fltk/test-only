@@ -27,7 +27,7 @@
 
 #include <fltk3/run.h>
 #include <fltk3/Fl_Device.H>
-//#include <fltk3/fl_draw.H>
+//#include <fltk3/draw.h>
 #include <fltk3/Fl_Image.H>
 
 /** \brief Draws an Fl_RGB_Image object to the device. 

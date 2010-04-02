@@ -33,7 +33,7 @@
 #ifndef FL_TEXT_DISPLAY_H
 #define FL_TEXT_DISPLAY_H
 
-#include "fl_draw.H"
+#include "draw.h"
 #include "Group.h"
 #include "Widget.h"
 #include "Fl_Scrollbar.H"

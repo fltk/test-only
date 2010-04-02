@@ -31,7 +31,7 @@
 
 #include <fltk3/run.h>
 #include <fltk3/Fl_Timer.H>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #ifdef WIN32
 #  ifdef __MWERKS__
 #    include <time.h>

@@ -41,7 +41,7 @@
 #  include <fltk3/Window.h>
 #  include <fltk3/fl_utf8.h>
 #  include <fltk3/Tooltip.h>
-#  include <fltk3/fl_draw.H>
+#  include <fltk3/draw.h>
 #  include <stdio.h>
 #  include <stdlib.h>
 #  include "flstring.h"

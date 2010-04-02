@@ -45,7 +45,7 @@
 #include <fltk3/Input.h>
 #include <fltk3/Fl_Secret_Input.H>
 #include <fltk3/x.H>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 
 #ifdef __APPLE__
 # if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5

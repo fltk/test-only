@@ -34,7 +34,7 @@
 // the current fl_begin/fl_vertex/fl_end path.
 // Incremental math implementation:
 
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <fltk3/math.h>
 
 // avoid problems with some platforms that don't 

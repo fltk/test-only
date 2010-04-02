@@ -37,7 +37,7 @@
 #if !defined(WIN32) && !defined(__APPLE__)
 #  include <X11/cursorfont.h>
 #endif
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 
 /**
   Sets the cursor for the current window to the specified shape and colors.

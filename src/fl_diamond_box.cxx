@@ -32,7 +32,7 @@
 // The diamond box draws best if the area is square!
 
 #include <fltk3/run.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 
 extern uchar* fl_gray_ramp();
 

@@ -31,7 +31,7 @@
 #include "run.h"
 #include "Group.h"
 #include "Window.h"
-#include "fl_draw.H"
+#include "draw.h"
 
 typedef fltk3::Widget FL_OBJECT;
 typedef fltk3::Window FL_FORM;

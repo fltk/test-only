@@ -42,7 +42,7 @@
 #include <fltk3/Group.h>
 #include <fltk3/Input.h>
 #include <fltk3/Fl_Menu_Button.H>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <string.h>
 
 /**

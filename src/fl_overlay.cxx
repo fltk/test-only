@@ -31,7 +31,7 @@
 // it.
 
 #include <fltk3/x.H>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #ifdef __APPLE__
 #include <config.h>
 #endif

@@ -30,7 +30,7 @@
 #include <fltk3/Window.h>
 #include <fltk3/Fl_Box.H>
 #include <fltk3/ReturnButton.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <fltk3/math.h>
 #include <fltk3/ask.h>
 #include <stdio.h>

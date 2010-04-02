@@ -25,76 +25,71 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/DoubleBufferWindow.h>
-#include <fltk3/HorValueSlider.h>
-#include <fltk3/Button.h>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Double_Window.H>
+#include <FL/Fl_Hor_Value_Slider.H>
+#include <FL/fl_draw.H>
 
-using namespace fltk3;
-
-double dargs[6] = {140, 140, 50, 0, 360, 0};
+double args[6] = {140, 140, 50, 0, 360, 0};
 const char* name[6] = {"X", "Y", "R", "start", "end", "rotate"};
 
-class Drawing : public Widget {
+class Drawing : public Fl_Widget {
   void draw() {
     fl_push_clip(x(),y(),w(),h());
     fl_color(FL_DARK3);
     fl_rectf(x(),y(),w(),h());
     fl_push_matrix();
-    if (dargs[5]) {
+    if (args[5]) {
       fl_translate(x()+w()/2.0, y()+h()/2.0);
-      fl_rotate(dargs[5]);
+      fl_rotate(args[5]);
       fl_translate(-(x()+w()/2.0), -(y()+h()/2.0));
     }
     fl_color(FL_WHITE);
     fl_translate(x(),y());
     fl_begin_complex_polygon();
-    fl_arc(dargs[0],dargs[1],dargs[2],dargs[3],dargs[4]);
+    fl_arc(args[0],args[1],args[2],args[3],args[4]);
     fl_gap();
     fl_arc(140,140,20,0,-360);
     fl_end_complex_polygon();
     fl_color(FL_RED);
     fl_begin_line();
-    fl_arc(dargs[0],dargs[1],dargs[2],dargs[3],dargs[4]);
+    fl_arc(args[0],args[1],args[2],args[3],args[4]);
     fl_end_line();
     fl_pop_matrix();
     fl_pop_clip();
   }
 public:
-  Drawing(int X,int Y,int W,int H) : Widget(X,Y,W,H) {}
+  Drawing(int X,int Y,int W,int H) : Fl_Widget(X,Y,W,H) {}
 };
 
 Drawing *d;
 
-void slider_cb(Widget* o, void* v) {
-  Slider* s = (Slider*)o;
-  dargs[long(v)] = s->value();
+void slider_cb(Fl_Widget* o, void* v) {
+  Fl_Slider* s = (Fl_Slider*)o;
+  args[long(v)] = s->value();
   d->redraw();
 }
 
 int main(int argc, char** argv) {
-  DoubleBufferWindow window(300,500);
-  window.begin();
-  {
-    Button w(5, 5, 280, 280); w.box(DOWN_BOX);
-    //Drawing drawing(10,10,280,280);
-    //d = &drawing;
-    int y = 300;
-    for (int n = 0; n<6; n++) {
-      Slider* s = new HorValueSlider(50,y,240,25,name[n]); y += 25;
-      if (n<3) {s->minimum(0); s->maximum(300);}
-      else if (n==5) {s->minimum(0); s->maximum(360);}
-      else {s->minimum(-360); s->maximum(360);}
-      s->step(1);
-      s->value(dargs[n]);
-      s->align(ALIGN_LEFT);
-      s->callback(slider_cb, (void*)n);
-    }
+  Fl_Double_Window window(300,500);
+  Drawing drawing(10,10,280,280);
+  d = &drawing;
+
+  int y = 300;
+  for (int n = 0; n<6; n++) {
+    Fl_Slider* s = new Fl_Hor_Value_Slider(50,y,240,25,name[n]); y += 25;
+    if (n<3) {s->minimum(0); s->maximum(300);}
+    else if (n==5) {s->minimum(0); s->maximum(360);}
+    else {s->minimum(-360); s->maximum(360);}
+    s->step(1);
+    s->value(args[n]);
+    s->align(FL_ALIGN_LEFT);
+    s->callback(slider_cb, (void*)n);
   }
+
   window.end();
   window.show(argc,argv);
-  return run();
+  return Fl::run();
 }
 
 

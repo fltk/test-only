@@ -29,7 +29,7 @@
   You must subclass Fl_Overlay_Window and provide this method.
   It is just like a draw() method, except it draws the overlay.
   The overlay will have already been "cleared" when this is called.  You
-  can use any of the routines described in &lt;fltk3/fl_draw.H&gt;.
+  can use any of the routines described in &lt;fltk3/draw.h&gt;.
 */
 
 // A window using double-buffering and able to draw an overlay
@@ -39,7 +39,7 @@
 #include <config.h>
 #include <fltk3/run.h>
 #include <fltk3/Fl_Overlay_Window.H>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <fltk3/x.H>
 
 void Fl_Overlay_Window::show() {

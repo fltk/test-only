@@ -27,7 +27,7 @@
 
 #include <fltk3/run.h>
 #include <fltk3/Fl_Clock.H>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <math.h>
 #include <time.h>
 #ifndef WIN32

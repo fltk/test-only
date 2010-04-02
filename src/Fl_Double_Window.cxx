@@ -29,7 +29,7 @@
 #include <fltk3/run.h>
 #include <fltk3/DoubleBufferWindow.h>
 #include <fltk3/x.H>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 
 // On systems that support double buffering "naturally" the base
 // fltk3::Window class will probably do double-buffer and this subclass

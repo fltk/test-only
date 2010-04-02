@@ -40,7 +40,7 @@
 //
 
 #include <fltk3/Fl_File_Browser.H>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <fltk3/filename.H>
 #include <fltk3/Fl_Image.H>	// icon
 #include <stdio.h>

@@ -31,7 +31,7 @@
 
 #include <fltk3/run.h>
 #include <fltk3/Fl_Positioner.H>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 
 static double flinear(double val, double smin, double smax, double gmin, double gmax)
 {

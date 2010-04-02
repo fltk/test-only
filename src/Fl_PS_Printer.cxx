@@ -27,7 +27,7 @@
 
 #include <fltk3/run.h>
 #include <fltk3/ask.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <stdio.h>
 #include <fltk3/Fl_PSfile_Device.H>
 #include <fltk3/Fl_Native_File_Chooser.H>

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.H 7365 2010-03-30 15:18:29Z matt $"
+// "$Id: draw.h 7365 2010-03-30 15:18:29Z matt $"
 //
 // Portable drawing function header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,12 +26,12 @@
 //
 
 /**
-  \file fl_draw.H
+  \file draw.h
   \brief utility header to pull drawing functions together
 */
 
-#ifndef fl_draw_H
-#define fl_draw_H
+#ifndef fltk3_draw_H
+#define fltk3_draw_H
 
 #include "Enumerations.H"  // for the color names
 #include "Window.h"	   // for fl_set_spot()
@@ -725,5 +725,5 @@ FL_EXPORT int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scal
 #endif
 
 //
-// End of "$Id: fl_draw.H 7365 2010-03-30 15:18:29Z matt $".
+// End of "$Id: draw.h 7365 2010-03-30 15:18:29Z matt $".
 //

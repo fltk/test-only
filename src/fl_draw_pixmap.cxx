@@ -36,7 +36,7 @@
 // All data needed by a program ui should be compiled in!!!
 
 #include <fltk3/run.h>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <fltk3/x.H>
 #include <stdio.h>
 #include "flstring.h"

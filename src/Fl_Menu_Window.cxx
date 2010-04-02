@@ -35,7 +35,7 @@
 #include <config.h>
 #include <fltk3/run.h>
 #include <fltk3/x.H>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 #include <fltk3/Fl_Menu_Window.H>
 
 // WIN32 note: HAVE_OVERLAY is false

@@ -31,7 +31,7 @@
 #include <fltk3/run.h>
 #include <fltk3/Widget.h>
 #include <fltk3/Fl_Browser_.H>
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 
 
 // This is the base class for browsers.  To be useful it must be

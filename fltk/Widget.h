@@ -172,11 +172,13 @@ public:
   void	hide()			;
   void	set_visible()		{ clear_flag(INVISIBLE); }
   void	clear_visible()		{ set_flag(INVISIBLE); }
-  bool	active() const		{ return !flag(INACTIVE); }
-  bool	active_r() const	;
-  void	activate()		;
-  void	activate(int b)		{ if (b) activate(); else deactivate(); }
-  void	deactivate()		;
+#endif
+  bool	active() const { return _p->active(); }
+  bool	active_r() const { return _p->active_r(); }
+  void	activate() { _p->activate(); }
+  void	activate(int b) { if (b) _p->activate(); else _p->deactivate(); }
+  void	deactivate() { _p->deactivate(); }
+#if 0 // fltk123:
   bool	output() const		{ return flag(OUTPUT); }
   void	set_output()		{ set_flag(OUTPUT); }
   void	clear_output()		{ clear_flag(OUTPUT); }

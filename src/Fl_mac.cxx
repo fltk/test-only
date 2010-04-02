@@ -1855,7 +1855,7 @@ static char *currDragData = 0L;
 static int currDragSize = 0; 
 static OSErr currDragErr = noErr;
 fltk3::Window *fl_dnd_target_window = 0;
-#include <fltk3/fl_draw.H>
+#include <fltk3/draw.h>
 
 /**
  * Fill the currDrag* variables with the current DnD ASCII text.
