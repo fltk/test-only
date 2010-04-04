@@ -34,7 +34,7 @@
 
 extern HWND fl_window;
 
-Fl_Printer::Fl_Printer(void) : Fl_Abstract_Printer() {
+Fl_Printer::Fl_Printer(void) : fltk3::AbstractPrinter() {
   hPr = NULL;
   type_ = gdi_printer;
 }

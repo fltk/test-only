@@ -31,7 +31,7 @@
 #ifndef Fl_Printer_H
 #define Fl_Printer_H
 
-#include <fltk3/Fl_Abstract_Printer.H>
+#include <fltk3/AbstractPrinter.h>
 #include <fltk3/draw.h>
 #include <fltk3/Fl_Pixmap.H>
 #include <fltk3/Fl_RGB_Image.H>
@@ -53,7 +53,7 @@
  In both cases, begin by start_job(), start_page(), printable_rect() and origin() calls
  and finish by end_page() and end_job() calls.
  <p>On Xlib-based platforms (<i>e.g.</i>, Linux, Unix), this class is implemented as
- a subclass of Fl_PSfile_Device.
+ a subclass of fltk3::PSFileDevice.
  <p>On Xlib-based platforms, the static public attributes of this class
  can be used to set the print dialog to other languages than English. For example, the "Printer:"
  dialog item Fl_Printer::dialog_printer can be set to French with:
@@ -62,11 +62,11 @@
  Fl_Printer myprinter;
  myprinter.start_job();
  \endcode
- Use Fl_PSfile_Device::file_chooser_title to customize the title of the file chooser dialog that opens
+ Use fltk3::PSFileDevice::file_chooser_title to customize the title of the file chooser dialog that opens
  when using the "Print To File" option of the print dialog.
- \see Fl_PSfile_Device.
+ \see fltk3::PSFileDevice.
  */
-class Fl_Printer : public Fl_Abstract_Printer {
+class Fl_Printer : public fltk3::AbstractPrinter {
 private:
 #ifdef __APPLE__
   float scale_x;
@@ -155,9 +155,9 @@ public:
 
 #else
 
-#include <fltk3/Fl_PSfile_Device.H>
+#include <fltk3/PSFileDevice.H>
 
-class Fl_Printer : public Fl_PSfile_Device {
+class Fl_Printer : public fltk3::PSFileDevice {
 public:
   static const char *dialog_title; // all of this must be duplicated above for correct documentation
   static const char *dialog_printer; 
@@ -204,7 +204,7 @@ public:
    \param w the widget
    \param x,y offsets where to print relatively to coordinates origin
    */
-  virtual int print(Fl_Abstract_Printer* p, fltk3::Widget* w, int x, int y) { return 0; }
+  virtual int print(fltk3::AbstractPrinter* p, fltk3::Widget* w, int x, int y) { return 0; }
 };
 
 #endif // Fl_Printer_H

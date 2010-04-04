@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Abstract_Printer.H 7337 2010-03-25 16:05:00Z manolo $"
+// "$Id: fltk3::AbstractPrinter.H 7337 2010-03-25 16:05:00Z manolo $"
 //
 // Printing support for the Fast Light Tool Kit (FLTK).
 //
@@ -25,24 +25,32 @@
 //     http://www.fltk.org/str.php
 //
 
-/** \file Fl_Abstract_Printer.H 
- \brief declaration of class Fl_Abstract_Printer.
+/** \file fltk3::AbstractPrinter.H 
+ \brief declaration of class fltk3::AbstractPrinter.
  */
 
-#ifndef Fl_Abstract_Printer_H
-#define Fl_Abstract_Printer_H
+#ifndef Fltk3_Abstract_Printer_H
+#define Fltk3_Abstract_Printer_H
 
 #include <fltk3/Device.h>
 
+
+class Fl_Pixmap;
+class Fl_RGB_Image;
+class Fl_Bitmap;
+class Fl_Image;
+
+namespace fltk3 {
+  
 /**
  \brief A virtual class for print support with several platform-specific implementations.
  *
- This class has no public constructor: don't instantiate it; use Fl_Printer or Fl_PSfile_Device instead.
+ This class has no public constructor: don't instantiate it; use Fl_Printer or fltk3::PSFileDevice instead.
  */
-class Fl_Abstract_Printer : public fltk3::Device {
-  friend class Fl_Pixmap;
-  friend class Fl_RGB_Image;
-  friend class Fl_Bitmap;
+class AbstractPrinter : public Device {
+  friend class ::Fl_Pixmap;
+  friend class ::Fl_RGB_Image;
+  friend class ::Fl_Bitmap;
 private:
 #ifdef __APPLE__
   struct chain_elt {
@@ -63,7 +71,7 @@ protected:
   /** \brief the printer's graphics context, if there's one, NULL otherwise */
   void *gc; 
   /** \brief the constructor */
-  Fl_Abstract_Printer(void) { gc = NULL; bg_r_ = bg_g_ = bg_b_ = 0; };
+  AbstractPrinter(void) { gc = NULL; bg_r_ = bg_g_ = bg_b_ = 0; };
 #ifdef __APPLE__
   /** \brief deletes the page image list */
   void delete_image_list(); 
@@ -85,10 +93,12 @@ public:
   virtual int end_page (void);
   virtual void end_job (void);
 };
+  
+} // Namespace fltk3
 
 #endif // Fl_Abstract_Printer_H
 
 //
-// End of "$Id: Fl_Abstract_Printer.H 7337 2010-03-25 16:05:00Z manolo $"
+// End of "$Id: fltk3::AbstractPrinter.H 7337 2010-03-25 16:05:00Z manolo $"
 //
 

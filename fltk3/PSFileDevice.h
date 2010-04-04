@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_PSfile_Device.H 7356 2010-03-29 12:52:28Z manolo $"
+// "$Id: fltk3::PSFileDevice.H 7356 2010-03-29 12:52:28Z manolo $"
 //
 // Support for graphics output to PostScript file for the Fast Light Tool Kit (FLTK).
 //
@@ -25,12 +25,14 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl_Printer.H> // must stay here
+#include "Fl_Printer.H" // must stay here
 
-#ifndef Fl_PSfile_Device_H
-#define Fl_PSfile_Device_H
+#ifndef Fltk3_PSfile_Device_H
+#define Fltk3_PSfile_Device_H
 
 #define NO_PAGE_FORMATS 30 /* MSVC6 compilation fix */
+
+namespace fltk3 {
 
 /**
  \brief Sends all graphics to a local PostScript file; same API as Fl_Printer class.
@@ -40,7 +42,7 @@
  FLTK's standard fonts are output using PostScript's standard fonts: Helvetica, Courier, 
  Times (and their bold, oblique, italic variants), Symbol, ZapfDingbats.
  */
-FL_EXPORT class Fl_PSfile_Device : public  Fl_Abstract_Printer {
+FL_EXPORT class PSFileDevice : public AbstractPrinter {
   public: 
     /**
      \brief Possible page formats.
@@ -233,8 +235,8 @@ FL_EXPORT class Fl_PSfile_Device : public  Fl_Abstract_Printer {
     void close_command( int (*cmd)(FILE *)){close_cmd_=cmd;};
     FILE * file() {return output;};
     //void orientation (int o);
-    //Fl_PSfile_Device(FILE *o, int lang_level, int pages = 0); // ps (also multi-page) constructor
-    //Fl_PSfile_Device(FILE *o, int lang_level, int x, int y, int w, int h); //eps constructor
+    //fltk3::PSFileDevice(FILE *o, int lang_level, int pages = 0); // ps (also multi-page) constructor
+    //fltk3::PSFileDevice(FILE *o, int lang_level, int x, int y, int w, int h); //eps constructor
     void interpolate(int i){interpolate_=i;};
     int interpolate(){return interpolate_;}
     
@@ -253,17 +255,19 @@ FL_EXPORT class Fl_PSfile_Device : public  Fl_Abstract_Printer {
     int end_page (void);    
     void end_job(void);
 #endif // FL_DOXYGEN
-  Fl_PSfile_Device(void);
+  PSFileDevice(void);
   int start_job(int pagecount, enum Page_Format format = A4, enum Page_Layout layout = PORTRAIT);
   int start_job(FILE *ps_output, int pagecount, enum Page_Format format = A4, enum Page_Layout layout = PORTRAIT);
-  virtual ~Fl_PSfile_Device();
+  virtual ~PSFileDevice();
   
   /** [this text may be customized at run-time] */
   static const char *file_chooser_title; 
 };
+  
+}
 
 #endif // Fl_PSfile_Device_H
 
 //
-// End of "$Id: Fl_PSfile_Device.H 7356 2010-03-29 12:52:28Z manolo $"
+// End of "$Id: fltk3::PSFileDevice.H 7356 2010-03-29 12:52:28Z manolo $"
 //

@@ -51,8 +51,8 @@
 #  include <X11/Xlocale.h>
 #  include <X11/Xlib.h>
 
-static Fl_Xlib_Display fl_xlib_device;
-FL_EXPORT Fl_Display *fl_display_device = (Fl_Display*)&fl_xlib_device; // does not change
+static fltk3::XlibDisplay fl_xlib_device;
+FL_EXPORT fltk3::Display *fl_display_device = (fltk3::Display*)&fl_xlib_device; // does not change
 FL_EXPORT fltk3::Device *fl_device = (fltk3::Device*)&fl_xlib_device; // the current target device of graphics operations
 
 ////////////////////////////////////////////////////////////////

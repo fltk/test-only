@@ -5526,14 +5526,14 @@
 			name = forms;
 			sourceTree = "<group>";
 		};
-		580C162D2902D7A4879534EF /* arc */ = {
+		580C162D2902D7A4879534EF /* 123 arc */ = {
 			isa = PBXGroup;
 			children = (
 				1744E1250A97A2CD350F732F /* arc.cxx */,
 				C920562411667E650070F7FC /* arc1.cxx */,
 				C920562511667E650070F7FC /* arc2.cxx */,
 			);
-			name = arc;
+			name = "123 arc";
 			sourceTree = "<group>";
 		};
 		5FC9447FDC36128608A852BA /* glpuzzle */ = {
@@ -5575,7 +5575,7 @@
 			children = (
 				8F4A9C8D7772A59E17445DEB /* Demo */,
 				62276F2F524C874B6A0EB5B0 /* adjuster */,
-				580C162D2902D7A4879534EF /* arc */,
+				580C162D2902D7A4879534EF /* 123 arc */,
 				91FDF99B89F9FF9129E85003 /* ask */,
 				86CA4FED4095C8CF53154A82 /* bitmap */,
 				06DFADCF98F35FEDD23C6865 /* blocks */,

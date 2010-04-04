@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// implementation of Fl_Abstract_Printer class for the Fast Light Tool Kit (FLTK).
+// implementation of fltk3::AbstractPrinter class for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 2010 by Bill Spitzak and others.
 //
@@ -24,8 +24,8 @@
 //
 //     http://www.fltk.org/str.php
 //
-/** \file Fl_Abstract_Printer.cxx
- \brief implementation of class Fl_Abstract_Printer.
+/** \file fltk3::AbstractPrinter.cxx
+ \brief implementation of class fltk3::AbstractPrinter.
  */
 
 #include <fltk3/run.h>
@@ -44,7 +44,7 @@
  to the current origin of graphics functions.
  @param[in] delta_y Same as above, vertically.
  */
-void Fl_Abstract_Printer::print_widget(fltk3::Widget* widget, int delta_x, int delta_y) 
+void fltk3::AbstractPrinter::print_widget(fltk3::Widget* widget, int delta_x, int delta_y) 
 { 
   int old_x, old_y, new_x, new_y, is_window;
   if ( ! widget->visible() ) return;
@@ -83,7 +83,7 @@ void Fl_Abstract_Printer::print_widget(fltk3::Widget* widget, int delta_x, int d
 }
 
 
-void Fl_Abstract_Printer::traverse(fltk3::Widget *widget)
+void fltk3::AbstractPrinter::traverse(fltk3::Widget *widget)
 {
   fltk3::Group *g = widget->as_group();
   if (!g) return;
@@ -104,7 +104,7 @@ void Fl_Abstract_Printer::traverse(fltk3::Widget *widget)
  @param[out] x If non-null, *x is set to the horizontal page offset of graphics origin.
  @param[out] y Same as above, vertically.
  */
-void Fl_Abstract_Printer::origin(int *x, int *y)
+void fltk3::AbstractPrinter::origin(int *x, int *y)
 {
   if (x) *x = x_offset;
   if (y) *y = y_offset;
@@ -121,7 +121,7 @@ void Fl_Abstract_Printer::origin(int *x, int *y)
  @param delta_x Optional horizontal offset from current graphics origin where to print the captured rectangle.
  @param delta_y As above, vertically.
  */
-void Fl_Abstract_Printer::print_window_part(fltk3::Window *win, int x, int y, int w, int h, int delta_x, int delta_y)
+void fltk3::AbstractPrinter::print_window_part(fltk3::Window *win, int x, int y, int w, int h, int delta_x, int delta_y)
 {
   int slice, width, offset, count = 0;
   fltk3::Device::display_device()->set_current();
@@ -156,7 +156,7 @@ void Fl_Abstract_Printer::print_window_part(fltk3::Window *win, int x, int y, in
 }
 
 #ifdef __APPLE__
-void Fl_Abstract_Printer::add_image(Fl_Image *image, const uchar *data)
+void fltk3::AbstractPrinter::add_image(Fl_Image *image, const uchar *data)
 {
   struct chain_elt *elt =  (struct chain_elt *)calloc(sizeof(struct chain_elt), 1);
   elt->image = image;
@@ -165,7 +165,7 @@ void Fl_Abstract_Printer::add_image(Fl_Image *image, const uchar *data)
   image_list_ = elt;
 }
 
-void Fl_Abstract_Printer::delete_image_list()
+void fltk3::AbstractPrinter::delete_image_list()
 {
   while(image_list_) {
     struct chain_elt *next = image_list_->next;
@@ -177,7 +177,7 @@ void Fl_Abstract_Printer::delete_image_list()
 }
 #endif
 
-fltk3::Device *Fl_Abstract_Printer::set_current(void)
+fltk3::Device *fltk3::AbstractPrinter::set_current(void)
 {
 #ifdef __APPLE__
   fl_gc = (CGContextRef)gc;
@@ -198,7 +198,7 @@ fltk3::Device *Fl_Abstract_Printer::set_current(void)
  @param[out] topage if non-null, *topage is set to the last page the user wants printed
  @return 0 iff OK
  */
-int Fl_Abstract_Printer::start_job(int pagecount, int *frompage, int *topage) {return 1;}
+int fltk3::AbstractPrinter::start_job(int pagecount, int *frompage, int *topage) {return 1;}
 
 /**
  @brief Starts a new printed page
@@ -207,7 +207,7 @@ int Fl_Abstract_Printer::start_job(int pagecount, int *frompage, int *topage) {r
  and with origin at the top left of the printable page area.
  @return 0 iff OK
  */
-int Fl_Abstract_Printer::start_page (void) {return 1;}
+int fltk3::AbstractPrinter::start_page (void) {return 1;}
 
 /**
  @brief Computes the width and height of the printable area of the page.
@@ -217,7 +217,7 @@ int Fl_Abstract_Printer::start_page (void) {return 1;}
  Values account for the user-selected paper type and print orientation.
  @return 0 iff OK.
  */
-int Fl_Abstract_Printer::printable_rect(int *w, int *h) {return 1;}
+int fltk3::AbstractPrinter::printable_rect(int *w, int *h) {return 1;}
 
 /**
  @brief Computes the dimensions of margins that lie between the printable page area and
@@ -230,7 +230,7 @@ int Fl_Abstract_Printer::printable_rect(int *w, int *h) {return 1;}
  @param[out] right If non-null, *right is set to the right margin size.
  @param[out] bottom If non-null, *bottom is set to the bottom margin size.
  */
-void Fl_Abstract_Printer::margins(int *left, int *top, int *right, int *bottom) {}
+void fltk3::AbstractPrinter::margins(int *left, int *top, int *right, int *bottom) {}
 
 /**
  @brief Sets the position in page coordinates of the origin of graphics functions.
@@ -243,7 +243,7 @@ void Fl_Abstract_Printer::margins(int *left, int *top, int *right, int *bottom) 
  @param[in] x Horizontal position in page coordinates of the desired origin of graphics functions.
  @param[in] y Same as above, vertically.
  */
-void Fl_Abstract_Printer::origin(int x, int y) {}
+void fltk3::AbstractPrinter::origin(int x, int y) {}
 
 /**
  @brief Changes the scaling of page coordinates.
@@ -254,7 +254,7 @@ void Fl_Abstract_Printer::origin(int x, int y) {}
  @param scale_x Horizontal dimensions of plot are multiplied by this quantity.
  @param scale_y Same as above, vertically.
  */
-void Fl_Abstract_Printer::scale (float scale_x, float scale_y) {}
+void fltk3::AbstractPrinter::scale (float scale_x, float scale_y) {}
 
 /**
  @brief Rotates the graphics operations relatively to paper.
@@ -263,19 +263,19 @@ void Fl_Abstract_Printer::scale (float scale_x, float scale_y) {}
  On MSWindows, Fl_RGB_Image's don't rotate well; print_window_part() is an efficient workaround.
  @param angle Rotation angle in counterclockwise degrees.
  */
-void Fl_Abstract_Printer::rotate(float angle) {}
+void fltk3::AbstractPrinter::rotate(float angle) {}
 
 /**
  @brief To be called at the end of each page.
  *
  @return 0 iff OK.
  */
-int Fl_Abstract_Printer::end_page (void) {return 1;}
+int fltk3::AbstractPrinter::end_page (void) {return 1;}
 
 /**
  @brief To be called at the end of a print job.
  */
-void Fl_Abstract_Printer::end_job (void) {}
+void fltk3::AbstractPrinter::end_job (void) {}
 
 /**
  @brief Translates the current graphics origin accounting for the current rotation.
@@ -284,12 +284,12 @@ void Fl_Abstract_Printer::end_job (void) {}
  Each translate() call must be matched by an untranslate() call.
  Successive translate() calls add up their effects.
  */
-void Fl_Abstract_Printer::translate(int x, int y) {}
+void fltk3::AbstractPrinter::translate(int x, int y) {}
 
 /**
  @brief Undoes the effect of a previous translate() call.
  */
-void Fl_Abstract_Printer::untranslate(void) {}
+void fltk3::AbstractPrinter::untranslate(void) {}
 
 //
 // End of "$Id$".

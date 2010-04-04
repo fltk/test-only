@@ -29,15 +29,15 @@
 #include <fltk3/ask.h>
 #include <fltk3/draw.h>
 #include <stdio.h>
-#include <fltk3/Fl_PSfile_Device.H>
+#include <fltk3/PSFileDevice.H>
 #include <fltk3/Fl_Native_File_Chooser.H>
 
-const char *Fl_PSfile_Device::file_chooser_title = "Select a .ps file";
+const char *fltk3::PSFileDevice::file_chooser_title = "Select a .ps file";
 
 /**
  @brief The constructor.
  */
-Fl_PSfile_Device::Fl_PSfile_Device(void)
+fltk3::PSFileDevice::PSFileDevice(void)
 {
   close_cmd_ = 0;
   //lang_level_ = 3;
@@ -53,16 +53,16 @@ Fl_PSfile_Device::Fl_PSfile_Device(void)
 /**
  @brief Begins the session where all graphics requests will go to a local PostScript file.
  *
- Opens a file dialog entitled with Fl_PSfile_Device::file_chooser_title to select an output PostScript file.
+ Opens a file dialog entitled with fltk3::PSFileDevice::file_chooser_title to select an output PostScript file.
  @param pagecount The total number of pages to be created.
  @param format Desired page format.
  @param layout Desired page layout.
  @return 0 iff OK, 1 if user cancelled the file dialog, 2 if fopen failed on user-selected output file.
  */
-int Fl_PSfile_Device::start_job (int pagecount, enum Page_Format format, enum Page_Layout layout)
+int fltk3::PSFileDevice::start_job (int pagecount, enum Page_Format format, enum Page_Layout layout)
 {
   Fl_Native_File_Chooser fnfc;
-  fnfc.title(Fl_PSfile_Device::file_chooser_title);
+  fnfc.title(fltk3::PSFileDevice::file_chooser_title);
   fnfc.type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
   fnfc.options(Fl_Native_File_Chooser::SAVEAS_CONFIRM);
   fnfc.filter("PostScript\t*.ps\n");
@@ -85,7 +85,7 @@ int Fl_PSfile_Device::start_job (int pagecount, enum Page_Format format, enum Pa
  @param layout Desired page layout.
  @return always 0.
  */
-int Fl_PSfile_Device::start_job (FILE *ps_output, int pagecount, enum Page_Format format, enum Page_Layout layout)
+int fltk3::PSFileDevice::start_job (FILE *ps_output, int pagecount, enum Page_Format format, enum Page_Layout layout)
 {
   output = ps_output;
   ps_filename_ = NULL;
@@ -96,7 +96,7 @@ int Fl_PSfile_Device::start_job (FILE *ps_output, int pagecount, enum Page_Forma
 /**
  @brief The destructor.
  */
-Fl_PSfile_Device::~Fl_PSfile_Device() {
+fltk3::PSFileDevice::~PSFileDevice() {
   if (ps_filename_) free(ps_filename_);
 }
 
@@ -106,7 +106,7 @@ Fl_PSfile_Device::~Fl_PSfile_Device() {
   #include "print_panel.cxx"
 #endif
 
-const Fl_PSfile_Device::page_format Fl_PSfile_Device::page_formats[NO_PAGE_FORMATS] = { // order of enum Page_Format
+const fltk3::PSFileDevice::page_format fltk3::PSFileDevice::page_formats[NO_PAGE_FORMATS] = { // order of enum Page_Format
 // comes from appendix B of 5003.PPD_Spec_v4.3.pdf
 
   // A* // index(Ai) = i
@@ -458,7 +458,7 @@ static const char * prolog_3 = // prolog relevant only if lang_level >2
 
 // end prolog 
 
-int Fl_PSfile_Device::start_postscript (int pagecount, enum Page_Format format, enum Page_Layout layout)
+int fltk3::PSFileDevice::start_postscript (int pagecount, enum Page_Format format, enum Page_Layout layout)
 //returns 0 iff OK
 {
   int w, h, x;
@@ -516,13 +516,13 @@ int Fl_PSfile_Device::start_postscript (int pagecount, enum Page_Format format, 
   return 0;
 }
 
-void Fl_PSfile_Device::recover(){
+void fltk3::PSFileDevice::recover(){
   color(cr_,cg_,cb_);
   line_style(linestyle_,linewidth_,linedash_);
   font(font_,size_);
 }
 
-void Fl_PSfile_Device::reset(){
+void fltk3::PSFileDevice::reset(){
   gap_=1;
   clip_=0;
   cr_=cg_=cb_=0;
@@ -541,7 +541,7 @@ void Fl_PSfile_Device::reset(){
   
 }
 
-void Fl_PSfile_Device::page_policy(int p){
+void fltk3::PSFileDevice::page_policy(int p){
   page_policy_ = p;
   if(lang_level_>=2)
     fprintf(output,"<< /Policies << /Pagesize %i >> >> setpagedevice\n", p);
@@ -551,7 +551,7 @@ void Fl_PSfile_Device::page_policy(int p){
 
 
 
-void Fl_PSfile_Device::page(double pw, double ph, int media) {
+void fltk3::PSFileDevice::page(double pw, double ph, int media) {
   
   if (nPages){
     fprintf(output, "CR\nGR\nGR\nGR\nSP\nrestore\n");
@@ -600,20 +600,20 @@ void Fl_PSfile_Device::page(double pw, double ph, int media) {
   fprintf(output, "GS\nCS\n");
 };
 
-void Fl_PSfile_Device::page(int format){
+void fltk3::PSFileDevice::page(int format){
   
   
   if(format &  LANDSCAPE){
-    ph_=Fl_PSfile_Device::page_formats[format & 0xFF].width;
-    pw_=Fl_PSfile_Device::page_formats[format & 0xFF].height;
+    ph_=fltk3::PSFileDevice::page_formats[format & 0xFF].width;
+    pw_=fltk3::PSFileDevice::page_formats[format & 0xFF].height;
   }else{
-    pw_=Fl_PSfile_Device::page_formats[format & 0xFF].width;
-    ph_=Fl_PSfile_Device::page_formats[format & 0xFF].height;
+    pw_=fltk3::PSFileDevice::page_formats[format & 0xFF].width;
+    ph_=fltk3::PSFileDevice::page_formats[format & 0xFF].height;
   }
   page(pw_,ph_,format & 0xFF00);//,orientation only;
 };
 
-void Fl_PSfile_Device::rect(int x, int y, int w, int h) {
+void fltk3::PSFileDevice::rect(int x, int y, int w, int h) {
   // Commented code does not work, i can't find the bug ;-(
   // fprintf(output, "GS\n");
   //  fprintf(output, "%i, %i, %i, %i R\n", x , y , w, h);
@@ -628,17 +628,17 @@ void Fl_PSfile_Device::rect(int x, int y, int w, int h) {
   fprintf(output, "GR\n");
 }
 
-void Fl_PSfile_Device::rectf(int x, int y, int w, int h) {
+void fltk3::PSFileDevice::rectf(int x, int y, int w, int h) {
   fprintf(output, "%g %g %i %i FR\n", x-0.5, y-0.5, w, h);
 }
 
-void Fl_PSfile_Device::line(int x1, int y1, int x2, int y2) {
+void fltk3::PSFileDevice::line(int x1, int y1, int x2, int y2) {
   fprintf(output, "GS\n");
   fprintf(output, "%i %i %i %i L\n", x1 , y1, x2 ,y2);
   fprintf(output, "GR\n");
 }
 
-void Fl_PSfile_Device::line(int x0, int y0, int x1, int y1, int x2, int y2) {
+void fltk3::PSFileDevice::line(int x0, int y0, int x1, int y1, int x2, int y2) {
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x0 , y0);
@@ -648,7 +648,7 @@ void Fl_PSfile_Device::line(int x0, int y0, int x1, int y1, int x2, int y2) {
   fprintf(output, "GR\n");
 }
 
-void Fl_PSfile_Device::xyline(int x, int y, int x1, int y2, int x3){
+void fltk3::PSFileDevice::xyline(int x, int y, int x1, int y2, int x3){
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x , y );
@@ -660,7 +660,7 @@ void Fl_PSfile_Device::xyline(int x, int y, int x1, int y2, int x3){
 };
 
 
-void Fl_PSfile_Device::xyline(int x, int y, int x1, int y2){
+void fltk3::PSFileDevice::xyline(int x, int y, int x1, int y2){
   
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
@@ -671,7 +671,7 @@ void Fl_PSfile_Device::xyline(int x, int y, int x1, int y2){
   fprintf(output, "GR\n");
 };
 
-void Fl_PSfile_Device::xyline(int x, int y, int x1){
+void fltk3::PSFileDevice::xyline(int x, int y, int x1){
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x , y);
@@ -681,7 +681,7 @@ void Fl_PSfile_Device::xyline(int x, int y, int x1){
   fprintf(output, "GR\n");
 };
 
-void Fl_PSfile_Device::yxline(int x, int y, int y1, int x2, int y3){
+void fltk3::PSFileDevice::yxline(int x, int y, int y1, int x2, int y3){
   fprintf(output, "GS\n");
   
   fprintf(output,"BP\n");
@@ -693,7 +693,7 @@ void Fl_PSfile_Device::yxline(int x, int y, int y1, int x2, int y3){
   fprintf(output, "GR\n");
 };
 
-void Fl_PSfile_Device::yxline(int x, int y, int y1, int x2){
+void fltk3::PSFileDevice::yxline(int x, int y, int y1, int x2){
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x , y);
@@ -703,7 +703,7 @@ void Fl_PSfile_Device::yxline(int x, int y, int y1, int x2){
   fprintf(output, "GR\n");
 };
 
-void Fl_PSfile_Device::yxline(int x, int y, int y1){
+void fltk3::PSFileDevice::yxline(int x, int y, int y1){
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x , y);
@@ -712,7 +712,7 @@ void Fl_PSfile_Device::yxline(int x, int y, int y1){
   fprintf(output, "GR\n");
 };
 
-void Fl_PSfile_Device::loop(int x0, int y0, int x1, int y1, int x2, int y2) {
+void fltk3::PSFileDevice::loop(int x0, int y0, int x1, int y1, int x2, int y2) {
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x0 , y0);
@@ -722,7 +722,7 @@ void Fl_PSfile_Device::loop(int x0, int y0, int x1, int y1, int x2, int y2) {
   fprintf(output, "GR\n");
 }
 
-void Fl_PSfile_Device::loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3) {
+void fltk3::PSFileDevice::loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3) {
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x0 , y0);
@@ -733,7 +733,7 @@ void Fl_PSfile_Device::loop(int x0, int y0, int x1, int y1, int x2, int y2, int 
   fprintf(output, "GR\n");
 }
 
-void Fl_PSfile_Device::polygon(int x0, int y0, int x1, int y1, int x2, int y2) {
+void fltk3::PSFileDevice::polygon(int x0, int y0, int x1, int y1, int x2, int y2) {
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x0 , y0);
@@ -743,7 +743,7 @@ void Fl_PSfile_Device::polygon(int x0, int y0, int x1, int y1, int x2, int y2) {
   fprintf(output, "GR\n");
 }
 
-void Fl_PSfile_Device::polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3) {
+void fltk3::PSFileDevice::polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3) {
   fprintf(output, "GS\n");
   fprintf(output,"BP\n");
   fprintf(output, "%i %i MT\n", x0 , y0 );
@@ -755,7 +755,7 @@ void Fl_PSfile_Device::polygon(int x0, int y0, int x1, int y1, int x2, int y2, i
   fprintf(output, "GR\n");
 }
 
-void Fl_PSfile_Device::point(int x, int y){
+void fltk3::PSFileDevice::point(int x, int y){
   rectf(x,y,1,1);
 }
 
@@ -778,7 +778,7 @@ static double dashes_cap[5][7]={
 };
 
 
-void Fl_PSfile_Device::line_style(int style, int width, char* dashes){
+void fltk3::PSFileDevice::line_style(int style, int width, char* dashes){
   //line_styled_=1;
   
   linewidth_=width;
@@ -856,7 +856,7 @@ static const char *_fontNames[] = {
 "ZapfDingbats"
 };
 
-void Fl_PSfile_Device::font(int f, int s) {
+void fltk3::PSFileDevice::font(int f, int s) {
   if (f >= fltk3::FREE_FONT)
     f = fltk3::COURIER;
   fprintf(output, "/%s SF\n" , _fontNames[f]);
@@ -865,7 +865,7 @@ void Fl_PSfile_Device::font(int f, int s) {
   font_ = f; size_ = s;
 };
 
-void Fl_PSfile_Device::color(Fl_Color c) {
+void fltk3::PSFileDevice::color(Fl_Color c) {
   //colored_=1;
   color_=c;
   fltk3::get_color(c, cr_, cg_, cb_);
@@ -882,7 +882,7 @@ void Fl_PSfile_Device::color(Fl_Color c) {
   }
 }
 
-void Fl_PSfile_Device::color(unsigned char r, unsigned char g, unsigned char b) {
+void fltk3::PSFileDevice::color(unsigned char r, unsigned char g, unsigned char b) {
   //colored_=1;
   cr_=r;cg_=g;cb_=b;
   if (r==g && g==b) {
@@ -897,14 +897,14 @@ void Fl_PSfile_Device::color(unsigned char r, unsigned char g, unsigned char b) 
   }
 }
 
-void Fl_PSfile_Device::draw(int angle, const char *str, int n, int x, int y)
+void fltk3::PSFileDevice::draw(int angle, const char *str, int n, int x, int y)
 {
   fprintf(output, "GS %d %d translate %d rotate\n", x, y, - angle);
   this->transformed_draw(str, n, 0, 0);
   fprintf(output, "GR\n");
 }
 
-void Fl_PSfile_Device::transformed_draw(const char* str, int n, double x, double y){
+void fltk3::PSFileDevice::transformed_draw(const char* str, int n, double x, double y){
   if (!n || !str || !*str)return;
   fprintf(output,"%g (", fl_width(str, n));
   int i=1;
@@ -929,18 +929,18 @@ void Fl_PSfile_Device::transformed_draw(const char* str, int n, double x, double
 struct matrix {double a, b, c, d, x, y;};
 extern matrix * fl_matrix;
 
-void Fl_PSfile_Device::concat(){
+void fltk3::PSFileDevice::concat(){
   fprintf(output,"[%g %g %g %g %g %g] CT\n", fl_matrix->a , fl_matrix->b , fl_matrix->c , fl_matrix->d , fl_matrix->x , fl_matrix->y);
 }
 
-void Fl_PSfile_Device::reconcat(){
+void fltk3::PSFileDevice::reconcat(){
   fprintf(output, "[%g %g %g %g %g %g] RCT\n" , fl_matrix->a , fl_matrix->b , fl_matrix->c , fl_matrix->d , fl_matrix->x , fl_matrix->y);
 }
 
 /////////////////  transformed (double) drawings ////////////////////////////////
 
 
-void Fl_PSfile_Device::begin_points(){
+void fltk3::PSFileDevice::begin_points(){
   fprintf(output, "GS\n");
   concat();
   
@@ -949,7 +949,7 @@ void Fl_PSfile_Device::begin_points(){
   shape_=POINTS;
 };
 
-void Fl_PSfile_Device::begin_line(){
+void fltk3::PSFileDevice::begin_line(){
   fprintf(output, "GS\n");
   concat();
   fprintf(output, "BP\n");
@@ -957,7 +957,7 @@ void Fl_PSfile_Device::begin_line(){
   shape_=LINE;
 };
 
-void Fl_PSfile_Device::begin_loop(){
+void fltk3::PSFileDevice::begin_loop(){
   fprintf(output, "GS\n");
   concat();
   fprintf(output, "BP\n");
@@ -965,7 +965,7 @@ void Fl_PSfile_Device::begin_loop(){
   shape_=LOOP;
 };
 
-void Fl_PSfile_Device::begin_polygon(){
+void fltk3::PSFileDevice::begin_polygon(){
   fprintf(output, "GS\n");
   concat();
   fprintf(output, "BP\n");
@@ -973,7 +973,7 @@ void Fl_PSfile_Device::begin_polygon(){
   shape_=POLYGON;
 };
 
-void Fl_PSfile_Device::vertex(double x, double y){
+void fltk3::PSFileDevice::vertex(double x, double y){
   if(shape_==POINTS){
     fprintf(output,"%g %g MT\n", x , y);
     gap_=1;
@@ -986,7 +986,7 @@ void Fl_PSfile_Device::vertex(double x, double y){
     fprintf(output, "%g %g LT\n", x , y);
 };
 
-void Fl_PSfile_Device::curve(double x, double y, double x1, double y1, double x2, double y2, double x3, double y3){
+void fltk3::PSFileDevice::curve(double x, double y, double x1, double y1, double x2, double y2, double x3, double y3){
   if(shape_==NONE) return;
   if(gap_)
     fprintf(output,"%g %g MT\n", x , y);
@@ -998,7 +998,7 @@ void Fl_PSfile_Device::curve(double x, double y, double x1, double y1, double x2
 };
 
 
-void Fl_PSfile_Device::circle(double x, double y, double r){
+void fltk3::PSFileDevice::circle(double x, double y, double r){
   if(shape_==NONE){
     fprintf(output, "GS\n");
     concat();
@@ -1013,7 +1013,7 @@ void Fl_PSfile_Device::circle(double x, double y, double r){
   
 };
 
-void Fl_PSfile_Device::arc(double x, double y, double r, double start, double a){
+void fltk3::PSFileDevice::arc(double x, double y, double r, double start, double a){
   if(shape_==NONE) return;
   gap_=0;
   if(start>a)
@@ -1023,7 +1023,7 @@ void Fl_PSfile_Device::arc(double x, double y, double r, double start, double a)
   
 };
 
-void Fl_PSfile_Device::arc(int x, int y, int w, int h, double a1, double a2) {
+void fltk3::PSFileDevice::arc(int x, int y, int w, int h, double a1, double a2) {
   fprintf(output, "GS\n");
   //fprintf(output, "BP\n");
   begin_line();
@@ -1042,7 +1042,7 @@ void Fl_PSfile_Device::arc(int x, int y, int w, int h, double a1, double a2) {
   fprintf(output, "GR\n");
 }
 
-void Fl_PSfile_Device::pie(int x, int y, int w, int h, double a1, double a2) {
+void fltk3::PSFileDevice::pie(int x, int y, int w, int h, double a1, double a2) {
   
   fprintf(output, "GS\n");
   fprintf(output, "%g %g TR\n", x + w/2.0 -0.5 , y + h/2.0 - 0.5);
@@ -1054,7 +1054,7 @@ void Fl_PSfile_Device::pie(int x, int y, int w, int h, double a1, double a2) {
   fprintf(output, "GR\n");
 }
 
-void Fl_PSfile_Device::end_points(){
+void fltk3::PSFileDevice::end_points(){
   gap_=1;
   reconcat();
   fprintf(output, "ELP\n"); //??
@@ -1062,14 +1062,14 @@ void Fl_PSfile_Device::end_points(){
   shape_=NONE;
 }
 
-void Fl_PSfile_Device::end_line(){
+void fltk3::PSFileDevice::end_line(){
   gap_=1;
   reconcat();
   fprintf(output, "ELP\n");
   fprintf(output, "GR\n");
   shape_=NONE;
 }
-void Fl_PSfile_Device::end_loop(){
+void fltk3::PSFileDevice::end_loop(){
   gap_=1;
   reconcat();
   fprintf(output, "ECP\n");
@@ -1077,7 +1077,7 @@ void Fl_PSfile_Device::end_loop(){
   shape_=NONE;
 }
 
-void Fl_PSfile_Device::end_polygon(){
+void fltk3::PSFileDevice::end_polygon(){
   
   gap_=1;
   reconcat();
@@ -1086,7 +1086,7 @@ void Fl_PSfile_Device::end_polygon(){
   shape_=NONE;
 }
 
-void Fl_PSfile_Device::transformed_vertex(double x, double y){
+void fltk3::PSFileDevice::transformed_vertex(double x, double y){
   reconcat();
   if(gap_){
     fprintf(output, "%g %g MT\n", x , y);
@@ -1098,7 +1098,7 @@ void Fl_PSfile_Device::transformed_vertex(double x, double y){
 
 /////////////////////////////   Clipping /////////////////////////////////////////////
 
-void Fl_PSfile_Device::push_clip(int x, int y, int w, int h) {
+void fltk3::PSFileDevice::push_clip(int x, int y, int w, int h) {
   Clip * c=new Clip();
   clip_box(x,y,w,h,c->x,c->y,c->w,c->h);
   c->prev=clip_;
@@ -1110,7 +1110,7 @@ void Fl_PSfile_Device::push_clip(int x, int y, int w, int h) {
   
 }
 
-void Fl_PSfile_Device::push_no_clip() {
+void fltk3::PSFileDevice::push_no_clip() {
   Clip * c = new Clip();
   c->prev=clip_;
   clip_=c;
@@ -1120,7 +1120,7 @@ void Fl_PSfile_Device::push_no_clip() {
     recover();
 }
 
-void Fl_PSfile_Device::pop_clip() {
+void fltk3::PSFileDevice::pop_clip() {
   if(!clip_)return;
   Clip * c=clip_;
   clip_=clip_->prev;
@@ -1133,7 +1133,7 @@ void Fl_PSfile_Device::pop_clip() {
     recover();
 }
 
-int Fl_PSfile_Device::clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H){
+int fltk3::PSFileDevice::clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H){
   if(!clip_){
     X=x;Y=y;W=w;H=h;
     return 1;
@@ -1169,7 +1169,7 @@ int Fl_PSfile_Device::clip_box(int x, int y, int w, int h, int &X, int &Y, int &
   return ret;
 };
 
-int Fl_PSfile_Device::not_clipped(int x, int y, int w, int h){
+int fltk3::PSFileDevice::not_clipped(int x, int y, int w, int h){
   if(!clip_) return 1;
   if(clip_->w < 0) return 1;
   int X, Y, W, H;
@@ -1179,7 +1179,7 @@ int Fl_PSfile_Device::not_clipped(int x, int y, int w, int h){
 };
 
 
-void Fl_PSfile_Device::margins(int *left, int *top, int *right, int *bottom) // to implement
+void fltk3::PSFileDevice::margins(int *left, int *top, int *right, int *bottom) // to implement
 {
   if(left) *left = (int)(left_margin / scale_x + .5);
   if(right) *right = (int)(left_margin / scale_x + .5);
@@ -1187,7 +1187,7 @@ void Fl_PSfile_Device::margins(int *left, int *top, int *right, int *bottom) // 
   if(bottom) *bottom = (int)(top_margin / scale_y + .5);
 }
 
-int Fl_PSfile_Device::printable_rect(int *w, int *h)
+int fltk3::PSFileDevice::printable_rect(int *w, int *h)
 //returns 0 iff OK
 {
   if(w) *w = (int)((pw_ - 2 * left_margin) / scale_x + .5);
@@ -1195,7 +1195,7 @@ int Fl_PSfile_Device::printable_rect(int *w, int *h)
   return 0;
 }
 
-void Fl_PSfile_Device::origin(int x, int y)
+void fltk3::PSFileDevice::origin(int x, int y)
 {
   x_offset = x;
   y_offset = y;
@@ -1203,7 +1203,7 @@ void Fl_PSfile_Device::origin(int x, int y)
 	  left_margin, top_margin, scale_x, scale_y, x, y, angle);
 }
 
-void Fl_PSfile_Device::scale (float s_x, float s_y)
+void fltk3::PSFileDevice::scale (float s_x, float s_y)
 {
   scale_x = s_x;
   scale_y = s_y;
@@ -1211,24 +1211,24 @@ void Fl_PSfile_Device::scale (float s_x, float s_y)
 	  left_margin, top_margin, scale_x, scale_y, angle);
 }
 
-void Fl_PSfile_Device::rotate (float rot_angle)
+void fltk3::PSFileDevice::rotate (float rot_angle)
 {
   angle = - rot_angle;
   fprintf(output, "GR GR GS %d %d TR  %f %f SC %d %d TR %f rotate GS\n", 
 	  left_margin, top_margin, scale_x, scale_y, x_offset, y_offset, angle);
 }
 
-void Fl_PSfile_Device::translate(int x, int y)
+void fltk3::PSFileDevice::translate(int x, int y)
 {
   fprintf(output, "GS %d %d translate GS\n", x, y);
 }
 
-void Fl_PSfile_Device::untranslate(void)
+void fltk3::PSFileDevice::untranslate(void)
 {
   fprintf(output, "GR GR\n");
 }
 
-int Fl_PSfile_Device::start_page (void)
+int fltk3::PSFileDevice::start_page (void)
 {
   page(page_format_);
   x_offset = 0;
@@ -1239,12 +1239,12 @@ int Fl_PSfile_Device::start_page (void)
   return 0;
 }
 
-int Fl_PSfile_Device::end_page (void)
+int fltk3::PSFileDevice::end_page (void)
 {
   return 0;
 }
 
-void Fl_PSfile_Device::end_job (void)
+void fltk3::PSFileDevice::end_job (void)
 // finishes PostScript & closes file
 {
   if (nPages) {  // for eps nPages is 0 so it is fine ....
@@ -1326,7 +1326,7 @@ int Fl_Printer::start_job(int pages, int *firstpage, int *lastpage) {
   if (!print_pipe) printer = "<File>";
 
   if (!print_pipe) // fall back to file printing
-    return Fl_PSfile_Device::start_job (pages, format, layout);
+    return fltk3::PSFileDevice::start_job (pages, format, layout);
 
   // Print: pipe the output into the lp command...
 
@@ -1341,7 +1341,7 @@ int Fl_Printer::start_job(int pages, int *firstpage, int *lastpage) {
     return 1;
   }
 
-  return Fl_PSfile_Device::start_postscript(pages, format, layout); // start printing
+  return fltk3::PSFileDevice::start_postscript(pages, format, layout); // start printing
 }
 
 #endif // ! (defined(__APPLE__) || defined(WIN32) )

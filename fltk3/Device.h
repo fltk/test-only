@@ -1,8 +1,8 @@
 //
 // "$Id: Device.H 7330 2010-03-25 13:59:00Z manolo $"
 //
-// Definition of classes Device, Fl_Display, Fl_Quartz_Display, Fl_GDI_Display,
-// and Fl_Xlib_Display for the Fast Light Tool Kit (FLTK).
+// Definition of classes Device, fltk3::Display, fltk3::QuartzDisplay, fltk3::GDIDisplay,
+// and fltk3::XlibDisplay for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 2010 by Bill Spitzak and others.
 //
@@ -26,7 +26,7 @@
 //     http://www.fltk.org/str.php
 //
 /** \file Device.H 
- \brief declaration of classes Device, Fl_Display.
+ \brief declaration of classes Device, fltk3::Display.
 */
 
 #ifndef Fltk3_Device_H
@@ -52,14 +52,14 @@ class Fl_RGB_Image;
 namespace fltk3 {
   class Widget;
   class Device;
+  class Display;
+  class AbstractPrinter;
 }
 
-class Fl_Display;
-class Fl_Abstract_Printer;
 /** \brief Points to the device that currently receives all graphics requests */
 FL_EXPORT extern fltk3::Device *fl_device;
 /** \brief Points to the platform's display device */
-FL_EXPORT extern Fl_Display *fl_display_device;
+FL_EXPORT extern fltk3::Display *fl_display_device;
 
 /**
  signature of image generation callback function.
@@ -324,45 +324,50 @@ public:
   /**
    @brief    Returns the platform's display device.
    */
-  static Fl_Display *display_device() { return fl_display_device; };
+  static fltk3::Display *display_device() { return fl_display_device; };
   
 };
 extern FL_EXPORT fltk3::Device *fl_device;
 
+
+namespace fltk3 {
+
 /**
  @brief A virtual class subclassed for OS-specific display graphics.
  */
-class Fl_Display : public fltk3::Device {
-  friend class Fl_PSfile_Device;
+class Display : public Device {
+  friend class PSFileDevice;
 };
 
 #if defined(__APPLE__) || defined(FL_DOXYGEN)
 /**
  @brief The Mac OS X-specific display graphics class.
  */
-class Fl_Quartz_Display : public Fl_Display {
+class QuartzDisplay : public Display {
 public:
-  Fl_Quartz_Display() { type_ = quartz_display; };
+  QuartzDisplay() { type_ = quartz_display; };
 };
 #endif
 #if defined(WIN32) || defined(FL_DOXYGEN)
 /**
  @brief The MSWindows-specific display graphics class.
  */
-class Fl_GDI_Display : public Fl_Display {
+class GDIDisplay : public Display {
 public:
-  Fl_GDI_Display() { type_ = gdi_display; };
+  GDIDisplay() { type_ = gdi_display; };
 };
 #endif
 #if !( defined(__APPLE__) || defined(WIN32)) || defined(FL_DOXYGEN)
 /**
  @brief The X11-specific display graphics class.
  */
-class Fl_Xlib_Display : public Fl_Display {
+class XlibDisplay : public Display {
 public:
-  Fl_Xlib_Display() { type_ = xlib_display; };
+  XlibDisplay() { type_ = xlib_display; };
 };
 #endif
+  
+} // namespace fltk3
 
 #endif // Device_H
 

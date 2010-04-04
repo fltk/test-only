@@ -95,8 +95,8 @@
   for async mode proper operation, not mentioning the side effects...
 */
 
-static Fl_GDI_Display fl_gdi_device;
-FL_EXPORT Fl_Display *fl_display_device = (Fl_Display*)&fl_gdi_device; // does not change
+static fltk3::GDIDisplay fl_gdi_device;
+FL_EXPORT fltk3::Display *fl_display_device = (fltk3::Display*)&fl_gdi_device; // does not change
 FL_EXPORT fltk3::Device *fl_device = (fltk3::Device*)&fl_gdi_device; // the current target device of graphics operations
 
 // dynamic wsock dll handling api:
