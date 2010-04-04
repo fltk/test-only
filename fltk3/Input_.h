@@ -145,10 +145,10 @@ class FL_EXPORT Input_ : public fltk3::Widget {
   Fl_Fontsize textsize_;
 
   /** \internal color of the entire text */
-  Fl_Color textcolor_;
+  fltk3::Color textcolor_;
 
   /** \internal color of the text cursor */
-  Fl_Color cursor_color_;
+  fltk3::Color cursor_color_;
 
   /** \internal Horizontal cursor position in pixels while movin up or down.  */
   static double up_down_pos;
@@ -399,23 +399,23 @@ public:
 
   /** Gets the color of the text in the input field.
     \return the text color
-    \see textcolor(Fl_Color) */
-  Fl_Color textcolor() const {return textcolor_;}
+    \see textcolor(fltk3::Color) */
+  fltk3::Color textcolor() const {return textcolor_;}
 
   /** Sets the color of the text in the input field.
-    The text color defaults to \c FL_FOREGROUND_COLOR.
+    The text color defaults to \c fltk3::FOREGROUND_COLOR.
     \param [in] n new text color
     \see textcolor() */
-  void textcolor(Fl_Color n) {textcolor_ = n;}
+  void textcolor(fltk3::Color n) {textcolor_ = n;}
 
   /** Gets the color of the cursor.  
     \return the current cursor color */
-  Fl_Color cursor_color() const {return cursor_color_;}
+  fltk3::Color cursor_color() const {return cursor_color_;}
 
   /** Sets the color of the cursor.  
-    The default color for the cursor is \c FL_BLACK.
+    The default color for the cursor is \c fltk3::BLACK.
     \param [in] n the new cursor color */
-  void cursor_color(Fl_Color n) {cursor_color_ = n;}
+  void cursor_color(fltk3::Color n) {cursor_color_ = n;}
 
   /** Gets the input field type. 
     \return the current input type */

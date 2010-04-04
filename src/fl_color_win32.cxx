@@ -92,9 +92,9 @@ static void set_xmap(Fl_XMap& xmap, COLORREF c) {
   xmap.brush = -1;
 }
 
-Fl_Color fl_color_;
+fltk3::Color fl_color_;
 
-void fltk3::Device::color(Fl_Color i) {
+void fltk3::Device::color(fltk3::Color i) {
   if (i & 0xffffff00) {
     unsigned rgb = (unsigned)i;
     fl_color((uchar)(rgb >> 24), (uchar)(rgb >> 16), (uchar)(rgb >> 8));
@@ -191,12 +191,12 @@ CREATE_BRUSH:
   return brushes[i].brush;
 }
 
-void fltk3::free_color(Fl_Color i, int overlay) {
+void fltk3::free_color(fltk3::Color i, int overlay) {
   if (overlay) return; // do something about GL overlay?
   clear_xmap(fl_xmap[i]);
 }
 
-void fltk3::set_color(Fl_Color i, unsigned c) {
+void fltk3::set_color(fltk3::Color i, unsigned c) {
   if (fl_cmap[i] != c) {
     clear_xmap(fl_xmap[i]);
     fl_cmap[i] = c;

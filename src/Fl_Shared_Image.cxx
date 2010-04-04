@@ -301,7 +301,7 @@ Fl_Shared_Image::copy(int W, int H) {
 //
 
 void
-Fl_Shared_Image::color_average(Fl_Color c,	// I - Color to blend with
+Fl_Shared_Image::color_average(fltk3::Color c,	// I - Color to blend with
                                float    i) {	// I - Blend fraction
   if (!image_) return;
 

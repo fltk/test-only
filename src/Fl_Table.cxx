@@ -635,7 +635,7 @@ void Fl_Table::cols(int val) {
 // Change mouse cursor to different type
 void Fl_Table::change_cursor(Fl_Cursor newcursor) {
   if ( newcursor != _last_cursor ) {
-    fl_cursor(newcursor, FL_BLACK, FL_WHITE);
+    fl_cursor(newcursor, fltk3::BLACK, fltk3::WHITE);
     _last_cursor = newcursor;
   }
 }
@@ -679,7 +679,7 @@ int Fl_Table::move_cursor(int R, int C) {
   damage_zone(current_row, current_col, select_row, select_col, R, C);
   select_row = R;
   select_col = C;
-  if (!fltk3::event_state(FL_SHIFT)) {
+  if (!fltk3::event_state(fltk3::SHIFT)) {
     current_row = R;
     current_col = C;
   }
@@ -966,28 +966,28 @@ int Fl_Table::handle(int event) {
       int is_row = select_row;
       int is_col = select_col;
       switch(fltk3::event_key()) {
-        case FL_Home:
+        case fltk3::HomeKey:
           ret = move_cursor(0, -1000000);
           break;
-        case FL_End:
+        case fltk3::EndKey:
           ret = move_cursor(0, 1000000);
           break;
-        case FL_Page_Up:
+        case fltk3::PageUpKey:
           ret = move_cursor(-(botrow - toprow - 1), 0);
           break;
-        case FL_Page_Down:
+        case fltk3::PageDownKey:
           ret = move_cursor(botrow - toprow - 1 , 0);
           break;
-        case FL_Left:
+        case fltk3::LeftKey:
           ret = move_cursor(0, -1);
           break;
-        case FL_Right:
+        case fltk3::RightKey:
           ret = move_cursor(0, 1);
           break;
-        case FL_Up:
+        case fltk3::UpKey:
           ret = move_cursor(-1, 0);
           break;
-        case FL_Down:
+        case fltk3::DownKey:
           ret = move_cursor(1, 0);
           break;
       }

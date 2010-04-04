@@ -313,11 +313,11 @@ void Fl_File_Chooser::callback(void (*cb)(Fl_File_Chooser *, void *), void *d ) 
 data_     = d;
 }
 
-void Fl_File_Chooser::color(Fl_Color c) {
+void Fl_File_Chooser::color(fltk3::Color c) {
   fileList->color(c);
 }
 
-Fl_Color Fl_File_Chooser::color() {
+fltk3::Color Fl_File_Chooser::color() {
   return (fileList->color());
 }
 
@@ -385,11 +385,11 @@ int Fl_File_Chooser::shown() {
   return window->shown();
 }
 
-void Fl_File_Chooser::textcolor(Fl_Color c) {
+void Fl_File_Chooser::textcolor(fltk3::Color c) {
   fileList->textcolor(c);
 }
 
-Fl_Color Fl_File_Chooser::textcolor() {
+fltk3::Color Fl_File_Chooser::textcolor() {
   return (fileList->textcolor());
 }
 

@@ -126,8 +126,8 @@ private:
 public:
   ~Fl_File_Chooser();
   void callback(void (*cb)(Fl_File_Chooser *, void *), void *d = 0);
-  void color(Fl_Color c);
-  Fl_Color color();
+  void color(fltk3::Color c);
+  fltk3::Color color();
   int count(); 
   void directory(const char *d); 
   char * directory();
@@ -148,8 +148,8 @@ public:
   void rescan_keep_filename(); 
   void show();
   int shown();
-  void textcolor(Fl_Color c);
-  Fl_Color textcolor();
+  void textcolor(fltk3::Color c);
+  fltk3::Color textcolor();
   void textfont(Fl_Font f);
   Fl_Font textfont();
   void textsize(Fl_Fontsize s);

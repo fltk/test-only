@@ -36,13 +36,13 @@ int fl_return_arrow(int x, int y, int w, int h) {
   int x0 = x+(w-2*d-2*t-1)/2;
   int x1 = x0+d;
   int y0 = y+h/2;
-  fl_color(FL_LIGHT3);
+  fl_color(fltk3::LIGHT3);
   fl_line(x0, y0, x1, y0+d);
   fl_yxline(x1, y0+d, y0+t, x1+d+2*t, y0-d);
   fl_yxline(x1, y0-t, y0-d);
   fl_color(fl_gray_ramp(0));
   fl_line(x0, y0, x1, y0-d);
-  fl_color(FL_DARK3);
+  fl_color(fltk3::DARK3);
   fl_xyline(x1+1, y0-t, x1+d, y0-d, x1+d+2*t);
   return 1;
 }
@@ -60,7 +60,7 @@ void fltk3::ReturnButton::draw() {
 
 int fltk3::ReturnButton::handle(int event) {
   if (event == fltk3::SHORTCUT &&
-      (fltk3::event_key() == FL_Enter || fltk3::event_key() == FL_KP_Enter)) {
+      (fltk3::event_key() == fltk3::EnterKey || fltk3::event_key() == fltk3::KeypadEnter)) {
     do_callback();
     return 1;
   } else

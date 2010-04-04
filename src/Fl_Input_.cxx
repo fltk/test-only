@@ -282,7 +282,7 @@ void fltk3::Input_::drawtext(int X, int Y, int W, int H) {
   }
 
   fl_push_clip(X, Y, W, H);
-  Fl_Color tc = active_r() ? textcolor() : fl_inactive(textcolor());
+  fltk3::Color tc = active_r() ? textcolor() : fl_inactive(textcolor());
 
   p = value();
   // visit each line and draw it:
@@ -949,7 +949,7 @@ int fltk3::Input_::handletext(int event, int X, int Y, int W, int H) {
   case fltk3::PUSH:
     if (active_r() && window()) window()->cursor(FL_CURSOR_INSERT);
 
-    handle_mouse(X, Y, W, H, fltk3::event_state(FL_SHIFT));
+    handle_mouse(X, Y, W, H, fltk3::event_state(fltk3::SHIFT));
 
     if (fltk3::focus() != this) {
       fltk3::focus(this);
@@ -1043,12 +1043,12 @@ int fltk3::Input_::handletext(int event, int X, int Y, int W, int H) {
 fltk3::Input_::Input_(int X, int Y, int W, int H, const char* l)
 : fltk3::Widget(X, Y, W, H, l) {
   box(fltk3::DOWN_BOX);
-  color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
+  color(fltk3::BACKGROUND2_COLOR, fltk3::SELECTION_COLOR);
   align(fltk3::ALIGN_LEFT);
   textsize_ = FL_NORMAL_SIZE;
   textfont_ = fltk3::HELVETICA;
-  textcolor_ = FL_FOREGROUND_COLOR;
-  cursor_color_ = FL_FOREGROUND_COLOR; // was FL_BLUE
+  textcolor_ = fltk3::FOREGROUND_COLOR;
+  cursor_color_ = fltk3::FOREGROUND_COLOR; // was fltk3::BLUE
   mark_ = position_ = size_ = 0;
   bufsize = 0;
   buffer  = 0;

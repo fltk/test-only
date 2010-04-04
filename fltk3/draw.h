@@ -57,9 +57,9 @@ FL_EXPORT extern char fl_draw_shortcut;
  the foreground is not set for the current window.
  \param[in] c color 
  */
-inline void	fl_color(Fl_Color c) {fl_device->color(c); }; // select indexed color
-/** for back compatibility - use fl_color(Fl_Color c) instead */
-inline void fl_color(int c) {fl_color((Fl_Color)c);}
+inline void	fl_color(fltk3::Color c) {fl_device->color(c); }; // select indexed color
+/** for back compatibility - use fl_color(fltk3::Color c) instead */
+inline void fl_color(int c) {fl_color((fltk3::Color)c);}
 /**
  Set the color for all subsequent drawing operations.
  The closest possible match to the RGB color is used.
@@ -72,12 +72,12 @@ inline void fl_color(int c) {fl_color((Fl_Color)c);}
  */
 inline void	fl_color(uchar r, uchar g, uchar b) {fl_device->color(r,g,b); }; // select actual color
 /** \brief The current color */
-extern FL_EXPORT Fl_Color fl_color_;
+extern FL_EXPORT fltk3::Color fl_color_;
 /**
   Returns the last fl_color() that was set.
   This can be used for state save/restore.
 */
-inline Fl_Color fl_color() {return fl_color_;}
+inline fltk3::Color fl_color() {return fl_color_;}
 /** @} */
 
 /** \addtogroup fl_drawings
@@ -203,11 +203,11 @@ enum {
 inline void fl_rect(int x, int y, int w, int h) { fl_device->rect(x,y,w,h); };
 
 /** Draws with passed color a 1-pixel border \e inside the given bounding box */
-inline void fl_rect(int x, int y, int w, int h, Fl_Color c) {fl_color(c); fl_rect(x,y,w,h);}
+inline void fl_rect(int x, int y, int w, int h, fltk3::Color c) {fl_color(c); fl_rect(x,y,w,h);}
 /** Colors with current color a rectangle that exactly fills the given bounding box */
 inline void fl_rectf(int x, int y, int w, int h) { fl_device->rectf(x,y,w,h); };
 /** Colors with passsed color a rectangle that exactly fills the given bounding box */
-inline void fl_rectf(int x, int y, int w, int h, Fl_Color c) {fl_color(c); fl_rectf(x,y,w,h);}
+inline void fl_rectf(int x, int y, int w, int h, fltk3::Color c) {fl_color(c); fl_rectf(x,y,w,h);}
 
 /**
   Color a rectangle with "exactly" the passed <tt>r,g,b</tt> color.
@@ -573,7 +573,7 @@ FL_EXPORT void fl_draw(const char* str, int x, int y, int w, int h,
 // boxtypes:
 FL_EXPORT void fl_frame(const char* s, int x, int y, int w, int h);
 FL_EXPORT void fl_frame2(const char* s, int x, int y, int w, int h);
-FL_EXPORT void fl_draw_box(fltk3::Boxtype, int x, int y, int w, int h, Fl_Color);
+FL_EXPORT void fl_draw_box(fltk3::Boxtype, int x, int y, int w, int h, fltk3::Color);
 
 // images:
 
@@ -690,8 +690,8 @@ FL_EXPORT char fl_can_do_alpha_blending();
 FL_EXPORT uchar *fl_read_image(uchar *p,int X,int Y,int W,int H,int alpha=0);
 
 // pixmaps:
-FL_EXPORT int fl_draw_pixmap(/*const*/ char* const* data, int x,int y,Fl_Color=FL_GRAY);
-FL_EXPORT int fl_draw_pixmap(const char* const* cdata, int x,int y,Fl_Color=FL_GRAY);
+FL_EXPORT int fl_draw_pixmap(/*const*/ char* const* data, int x,int y,fltk3::Color=fltk3::GRAY);
+FL_EXPORT int fl_draw_pixmap(const char* const* cdata, int x,int y,fltk3::Color=fltk3::GRAY);
 FL_EXPORT int fl_measure_pixmap(/*const*/ char* const* data, int &w, int &h);
 FL_EXPORT int fl_measure_pixmap(const char* const* cdata, int &w, int &h);
 
@@ -702,7 +702,7 @@ FL_EXPORT const char* fl_shortcut_label(unsigned int shortcut);
 FL_EXPORT const char* fl_shortcut_label(unsigned int shortcut, const char **eom);
 FL_EXPORT void fl_overlay_rect(int x,int y,int w,int h);
 FL_EXPORT void fl_overlay_clear();
-FL_EXPORT void fl_cursor(Fl_Cursor, Fl_Color fg=FL_BLACK, Fl_Color bg=FL_WHITE);
+FL_EXPORT void fl_cursor(Fl_Cursor, fltk3::Color fg=fltk3::BLACK, fltk3::Color bg=fltk3::WHITE);
 FL_EXPORT const char* fl_expand_text(const char* from, char* buf, int maxbuf,
                                      double maxw, int& n, double &width,
                                      int wrap, int draw_symbols = 0);
@@ -718,8 +718,8 @@ FL_EXPORT void fl_reset_spot(void);
 
 
 // XForms symbols:
-FL_EXPORT int fl_draw_symbol(const char* label,int x,int y,int w,int h, Fl_Color);
-FL_EXPORT int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scalable);
+FL_EXPORT int fl_draw_symbol(const char* label,int x,int y,int w,int h, fltk3::Color);
+FL_EXPORT int fl_add_symbol(const char* name, void (*drawit)(fltk3::Color), int scalable);
 /** @} */
 
 #endif

@@ -201,7 +201,7 @@ int Fl_Tabs::handle(int event) {
     } else return fltk3::Group::handle(event);
   case fltk3::KEY:
     switch (fltk3::event_key()) {
-      case FL_Left:
+      case fltk3::LeftKey:
         if (child(0)->visible()) return 0;
 	for (i = 1; i < children(); i ++)
 	  if (child(i)->visible()) break;
@@ -209,7 +209,7 @@ int Fl_Tabs::handle(int event) {
 	set_changed();
 	do_callback();
         return 1;
-      case FL_Right:
+      case fltk3::RightKey:
         if (child(children() - 1)->visible()) return 0;
 	for (i = 0; i < children(); i ++)
 	  if (child(i)->visible()) break;
@@ -217,7 +217,7 @@ int Fl_Tabs::handle(int event) {
 	set_changed();
 	do_callback();
         return 1;
-      case FL_Down:
+      case fltk3::DownKey:
         redraw();
         return fltk3::Group::handle(fltk3::FOCUS);
       default:
@@ -298,7 +298,7 @@ void Fl_Tabs::draw() {
   int H = tab_height();
 
   if (damage() & FL_DAMAGE_ALL) { // redraw the entire thing:
-    Fl_Color c = v ? v->color() : color();
+    fltk3::Color c = v ? v->color() : color();
 
     draw_box(box(), x(), y()+(H>=0?H:0), w(), h()-(H>=0?H:-H), c);
 
@@ -353,12 +353,12 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
 
     H += dh;
 
-    Fl_Color c = sel ? selection_color() : o->selection_color();
+    fltk3::Color c = sel ? selection_color() : o->selection_color();
 
     draw_box(bt, x1, y() + yofs, W, H + 10 - yofs, c);
 
     // Save the previous label color
-    Fl_Color oc = o->labelcolor();
+    fltk3::Color oc = o->labelcolor();
 
     // Draw the label using the current color...
     o->labelcolor(sel ? labelcolor() : o->labelcolor());    
@@ -379,12 +379,12 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
 
     H += dh;
 
-    Fl_Color c = sel ? selection_color() : o->selection_color();
+    fltk3::Color c = sel ? selection_color() : o->selection_color();
 
     draw_box(bt, x1, y() + h() - H - 10, W, H + 10 - yofs, c);
 
     // Save the previous label color
-    Fl_Color oc = o->labelcolor();
+    fltk3::Color oc = o->labelcolor();
 
     // Draw the label using the current color...
     o->labelcolor(sel ? labelcolor() : o->labelcolor());

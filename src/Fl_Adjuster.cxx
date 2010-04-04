@@ -127,19 +127,19 @@ int Fl_Adjuster::handle(int event) {
       return 1;
     case fltk3::KEY :
       switch (fltk3::event_key()) {
-	case FL_Up:
+	case fltk3::UpKey:
           if (w() > h()) return 0;
 	  handle_drag(clamp(increment(value(),-1)));
 	  return 1;
-	case FL_Down:
+	case fltk3::DownKey:
           if (w() > h()) return 0;
 	  handle_drag(clamp(increment(value(),1)));
 	  return 1;
-	case FL_Left:
+	case fltk3::LeftKey:
           if (w() < h()) return 0;
 	  handle_drag(clamp(increment(value(),-1)));
 	  return 1;
-	case FL_Right:
+	case fltk3::RightKey:
           if (w() < h()) return 0;
 	  handle_drag(clamp(increment(value(),1)));
 	  return 1;
@@ -172,7 +172,7 @@ Fl_Adjuster::Fl_Adjuster(int X, int Y, int W, int H, const char* l)
   : fltk3::Valuator(X, Y, W, H, l) {
   box(fltk3::UP_BOX);
   step(1, 10000);
-  selection_color(FL_SELECTION_COLOR);
+  selection_color(fltk3::SELECTION_COLOR);
   drag = 0;
   soft_ = 1;
 }

@@ -106,14 +106,14 @@ void Fl_Pixmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
 #ifdef __APPLE_QUARTZ__
     id_ = fl_create_offscreen_with_alpha(w(), h());
     fl_begin_offscreen((Fl_Offscreen)id_);
-    fl_draw_pixmap(data(), 0, 0, FL_GREEN);
+    fl_draw_pixmap(data(), 0, 0, fltk3::GREEN);
     fl_end_offscreen();
 #else
     id_ = fl_create_offscreen(w(), h());
     fl_begin_offscreen((Fl_Offscreen)id_);
     uchar *bitmap = 0;
     fl_mask_bitmap = &bitmap;
-    fl_draw_pixmap(data(), 0, 0, FL_BLACK);
+    fl_draw_pixmap(data(), 0, 0, fltk3::BLACK);
     fl_mask_bitmap = 0;
     if (bitmap) {
       mask_ = fl_create_bitmask(w(), h(), bitmap);
@@ -386,7 +386,7 @@ fltk3::Image *Fl_Pixmap::copy(int W, int H) {
   return new_image;
 }
 
-void Fl_Pixmap::color_average(Fl_Color c, float i) {
+void Fl_Pixmap::color_average(fltk3::Color c, float i) {
   // Delete any existing pixmap/mask objects...
   uncache();
 

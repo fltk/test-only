@@ -240,14 +240,14 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
       //     -------------  ----------
       //     iconcolor      FL_ICON_COLOR; mapped to the icon color in
       //                    Fl_File_Icon::draw()
-      //     shadowcolor    FL_DARK3
-      //     outlinecolor   FL_BLACK
+      //     shadowcolor    fltk3::DARK3
+      //     outlinecolor   fltk3::BLACK
       if (strcmp(params, "iconcolor") == 0)
         add_color(FL_ICON_COLOR);
       else if (strcmp(params, "shadowcolor") == 0)
-        add_color(FL_DARK3);
+        add_color(fltk3::DARK3);
       else if (strcmp(params, "outlinecolor") == 0)
-        add_color(FL_BLACK);
+        add_color(fltk3::BLACK);
       else
       {
         int c = atoi(params);	// Color value
@@ -257,11 +257,11 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
 	{
 	  // Composite color; compute average...
 	  c = -c;
-	  add_color(fl_color_average((Fl_Color)(c >> 4),
-	                             (Fl_Color)(c & 15), 0.5f));
+	  add_color(fl_color_average((fltk3::Color)(c >> 4),
+	                             (fltk3::Color)(c & 15), 0.5f));
 	}
 	else
-	  add_color((Fl_Color)c);
+	  add_color((fltk3::Color)c);
       }
     }
     else if (strcmp(command, "bgnline") == 0)
@@ -284,9 +284,9 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
       if (strcmp(params, "iconcolor") == 0)
         cval = FL_ICON_COLOR;
       else if (strcmp(params, "shadowcolor") == 0)
-        cval = FL_DARK3;
+        cval = fltk3::DARK3;
       else if (strcmp(params, "outlinecolor") == 0)
-        cval = FL_BLACK;
+        cval = fltk3::BLACK;
       else
       {
         int c = atoi(params);	// Color value
@@ -296,7 +296,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
 	{
 	  // Composite color; compute average...
 	  c = -c;
-	  cval = fl_color_average((Fl_Color)(c >> 4), (Fl_Color)(c & 15), 0.5f);
+	  cval = fl_color_average((fltk3::Color)(c >> 4), (fltk3::Color)(c & 15), 0.5f);
 	}
 	else
 	  cval = c;
@@ -358,7 +358,7 @@ int Fl_File_Icon::load_image(const char *ifile)	// I - File to read from
   if (img->count() == 1) {
     int		x, y;		// X & Y in image
     int		startx;		// Starting X coord
-    Fl_Color	c,		// Current color
+    fltk3::Color	c,		// Current color
 		temp;		// Temporary color
     const uchar *row;		// Pointer into image
 
@@ -366,7 +366,7 @@ int Fl_File_Icon::load_image(const char *ifile)	// I - File to read from
     // Loop through grayscale or RGB image...
     for (y = 0, row = (const uchar *)(*(img->data())); y < img->h(); y ++, row += img->ld())
     {
-      for (x = 0, startx = 0, c = (Fl_Color)-1;
+      for (x = 0, startx = 0, c = (fltk3::Color)-1;
            x < img->w();
 	   x ++, row += img->d())
       {
@@ -379,7 +379,7 @@ int Fl_File_Icon::load_image(const char *ifile)	// I - File to read from
 	      if (row[1] > 127)
         	temp = fl_rgb_color(row[0], row[0], row[0]);
 	      else
-		temp = (Fl_Color)-1;
+		temp = (fltk3::Color)-1;
 	      break;
 	  case 3 :
               temp = fl_rgb_color(row[0], row[1], row[2]);
@@ -388,13 +388,13 @@ int Fl_File_Icon::load_image(const char *ifile)	// I - File to read from
 	      if (row[3] > 127)
         	temp = fl_rgb_color(row[0], row[1], row[2]);
 	      else
-		temp = (Fl_Color)-1;
+		temp = (fltk3::Color)-1;
 	      break;
 	}
 
 	if (temp != c)
 	{
-	  if (x > startx && c != (Fl_Color)-1)
+	  if (x > startx && c != (fltk3::Color)-1)
 	  {
 	    add_color(c);
 	    add(POLYGON);
@@ -410,7 +410,7 @@ int Fl_File_Icon::load_image(const char *ifile)	// I - File to read from
 	}
       }
 
-      if (x > startx && c != (Fl_Color)-1)
+      if (x > startx && c != (fltk3::Color)-1)
       {
 	add_color(c);
 	add(POLYGON);
@@ -431,7 +431,7 @@ int Fl_File_Icon::load_image(const char *ifile)	// I - File to read from
 		*const*ptr;		// Pointer into data array
     int		ncolors,		// Number of colors
 		chars_per_color;	// Characters per color
-    Fl_Color	*colors;		// Colors
+    fltk3::Color	*colors;		// Colors
     int		red, green, blue;	// Red, green, and blue values
     int		x, y;			// X & Y in image
     int		startx;			// Starting X coord
@@ -441,10 +441,10 @@ int Fl_File_Icon::load_image(const char *ifile)	// I - File to read from
     ptr = img->data();
     sscanf(*ptr, "%*d%*d%d%d", &ncolors, &chars_per_color);
 
-    colors = new Fl_Color[1 << (chars_per_color * 8)];
+    colors = new fltk3::Color[1 << (chars_per_color * 8)];
 
     // Read the colormap...
-    memset(colors, 0, sizeof(Fl_Color) << (chars_per_color * 8));
+    memset(colors, 0, sizeof(fltk3::Color) << (chars_per_color * 8));
     bg = ' ';
 
     ptr ++;
@@ -470,7 +470,7 @@ int Fl_File_Icon::load_image(const char *ifile)	// I - File to read from
 	// Get the color value...
 	if ((lineptr = strstr(lineptr, "c ")) == NULL) {
 	  // No color; make this black...
-	  colors[ch] = FL_BLACK;
+	  colors[ch] = fltk3::BLACK;
 	} else if (lineptr[2] == '#') {
 	  // Read the RGB triplet...
 	  lineptr += 3;
@@ -524,12 +524,12 @@ int Fl_File_Icon::load_image(const char *ifile)	// I - File to read from
 	  colors[ch] = fl_rgb_color((uchar)red, (uchar)green, (uchar)blue);
 	} else {
 	  // Read a color name...
-	  if (strncasecmp(lineptr + 2, "white", 5) == 0) colors[ch] = FL_WHITE;
-	  else if (strncasecmp(lineptr + 2, "black", 5) == 0) colors[ch] = FL_BLACK;
+	  if (strncasecmp(lineptr + 2, "white", 5) == 0) colors[ch] = fltk3::WHITE;
+	  else if (strncasecmp(lineptr + 2, "black", 5) == 0) colors[ch] = fltk3::BLACK;
 	  else if (strncasecmp(lineptr + 2, "none", 4) == 0) {
-            colors[ch] = FL_BLACK;
+            colors[ch] = fltk3::BLACK;
 	    bg = ch;
-	  } else colors[ch] = FL_GRAY;
+	  } else colors[ch] = fltk3::GRAY;
 	}
       }
     }
@@ -611,13 +611,13 @@ Fl_File_Icon::load_system_icons(void) {
 		  NULL
 		};
   static short	plain[] = {	// Plain file icon
-		  COLOR, -1, -1, OUTLINEPOLYGON, 0, FL_GRAY,
+		  COLOR, -1, -1, OUTLINEPOLYGON, 0, fltk3::GRAY,
 		  VERTEX, 2000, 1000, VERTEX, 2000, 9000,
 		  VERTEX, 6000, 9000, VERTEX, 8000, 7000,
-		  VERTEX, 8000, 1000, END, OUTLINEPOLYGON, 0, FL_GRAY,
+		  VERTEX, 8000, 1000, END, OUTLINEPOLYGON, 0, fltk3::GRAY,
 		  VERTEX, 6000, 9000, VERTEX, 6000, 7000,
 		  VERTEX, 8000, 7000, END,
-		  COLOR, 0, FL_BLACK, LINE, VERTEX, 6000, 7000,
+		  COLOR, 0, fltk3::BLACK, LINE, VERTEX, 6000, 7000,
 		  VERTEX, 8000, 7000, VERTEX, 8000, 1000,
 		  VERTEX, 2000, 1000, END, LINE, VERTEX, 3000, 7000,
 		  VERTEX, 5000, 7000, END, LINE, VERTEX, 3000, 6000,
@@ -629,26 +629,26 @@ Fl_File_Icon::load_system_icons(void) {
 		  END
 		};
   static short	image[] = {	// Image file icon
-		  COLOR, -1, -1, OUTLINEPOLYGON, 0, FL_GRAY,
+		  COLOR, -1, -1, OUTLINEPOLYGON, 0, fltk3::GRAY,
 		  VERTEX, 2000, 1000, VERTEX, 2000, 9000,
 		  VERTEX, 6000, 9000, VERTEX, 8000, 7000,
-		  VERTEX, 8000, 1000, END, OUTLINEPOLYGON, 0, FL_GRAY,
+		  VERTEX, 8000, 1000, END, OUTLINEPOLYGON, 0, fltk3::GRAY,
 		  VERTEX, 6000, 9000, VERTEX, 6000, 7000,
 		  VERTEX, 8000, 7000, END,
-		  COLOR, 0, FL_BLACK, LINE, VERTEX, 6000, 7000,
+		  COLOR, 0, fltk3::BLACK, LINE, VERTEX, 6000, 7000,
 		  VERTEX, 8000, 7000, VERTEX, 8000, 1000,
 		  VERTEX, 2000, 1000, END,
-		  COLOR, 0, FL_RED, POLYGON, VERTEX, 3500, 2500,
+		  COLOR, 0, fltk3::RED, POLYGON, VERTEX, 3500, 2500,
 		  VERTEX, 3000, 3000, VERTEX, 3000, 4000,
 		  VERTEX, 3500, 4500, VERTEX, 4500, 4500,
 		  VERTEX, 5000, 4000, VERTEX, 5000, 3000,
 		  VERTEX, 4500, 2500, END,
-		  COLOR, 0, FL_GREEN, POLYGON, VERTEX, 5500, 2500,
+		  COLOR, 0, fltk3::GREEN, POLYGON, VERTEX, 5500, 2500,
 		  VERTEX, 5000, 3000, VERTEX, 5000, 4000,
 		  VERTEX, 5500, 4500, VERTEX, 6500, 4500,
 		  VERTEX, 7000, 4000, VERTEX, 7000, 3000,
 		  VERTEX, 6500, 2500, END,
-		  COLOR, 0, FL_BLUE, POLYGON, VERTEX, 4500, 3500,
+		  COLOR, 0, fltk3::BLUE, POLYGON, VERTEX, 4500, 3500,
 		  VERTEX, 4000, 4000, VERTEX, 4000, 5000,
 		  VERTEX, 4500, 5500, VERTEX, 5500, 5500,
 		  VERTEX, 6000, 5000, VERTEX, 6000, 4000,
@@ -661,11 +661,11 @@ Fl_File_Icon::load_system_icons(void) {
 		  VERTEX, 9000, 1000, END,
 		  POLYGON, VERTEX, 1000, 7500, VERTEX, 2500, 9000,
 		  VERTEX, 5000, 9000, VERTEX, 6500, 7500, END,
-		  COLOR, 0, FL_WHITE, LINE, VERTEX, 1500, 1500,
+		  COLOR, 0, fltk3::WHITE, LINE, VERTEX, 1500, 1500,
 		  VERTEX, 1500, 7000, VERTEX, 9000, 7000, END,
-		  COLOR, 0, FL_BLACK, LINE, VERTEX, 9000, 7500,
+		  COLOR, 0, fltk3::BLACK, LINE, VERTEX, 9000, 7500,
 		  VERTEX, 9000, 1000, VERTEX, 1000, 1000, END,
-		  COLOR, 0, FL_GRAY, LINE, VERTEX, 1000, 1000,
+		  COLOR, 0, fltk3::GRAY, LINE, VERTEX, 1000, 1000,
 		  VERTEX, 1000, 7500, VERTEX, 2500, 9000,
 		  VERTEX, 5000, 9000, VERTEX, 6500, 7500,
 		  VERTEX, 9000, 7500, END,

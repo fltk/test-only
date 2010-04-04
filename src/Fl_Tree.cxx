@@ -83,7 +83,7 @@ Fl_Tree::Fl_Tree(int X, int Y, int W, int H, const char *L) : fltk3::Group(X,Y,W
   _root->label("ROOT");
   _item_clicked = 0;
   box(fltk3::DOWN_BOX);
-  color(FL_WHITE);
+  color(fltk3::WHITE);
   when(fltk3::WHEN_CHANGED);
   _vscroll = new Fl_Scrollbar(0,0,0,0);	// will be resized by draw()
   _vscroll->hide();
@@ -226,7 +226,7 @@ int Fl_Tree::handle(int e) {
       Fl_Tree_Item *o = _root->find_clicked(_prefs);
       if ( o ) {
         ret |= 1;				// handled
-        if ( fltk3::event_button() == FL_LEFT_MOUSE ) {
+        if ( fltk3::event_button() == fltk3::LEFT_MOUSE ) {
           // Was collapse icon clicked?
           if ( o->event_on_collapse_icon(_prefs) ) {
             o->open_toggle();
@@ -250,12 +250,12 @@ int Fl_Tree::handle(int e) {
               }
               case FL_TREE_SELECT_MULTI: {
                 int state = fltk3::event_state();
-                if ( state & FL_SHIFT ) {
+                if ( state & fltk3::SHIFT ) {
                   if ( ! o->is_selected() ) {
                     o->select();		// add to selection
                     changed = 1;		// changed
                   }
-                } else if ( state & FL_CTRL ) {
+                } else if ( state & fltk3::CTRL ) {
                   changed = 1;			// changed
                   o->select_toggle();		// toggle selection state
                   lastselect = o;		// save we toggled it (prevents oscillation)
@@ -299,7 +299,7 @@ int Fl_Tree::handle(int e) {
             }
             case FL_TREE_SELECT_MULTI: {
               int state = fltk3::event_state();
-              if ( state & FL_CTRL ) {
+              if ( state & fltk3::CTRL ) {
                 if ( lastselect != o ) {// not already toggled from last microdrag?
                   changed = 1;	// changed
                   o->select_toggle();	// toggle selection
@@ -325,7 +325,7 @@ int Fl_Tree::handle(int e) {
       }
     }
     case fltk3::RELEASE: {
-      if ( fltk3::event_button() == FL_LEFT_MOUSE ) {
+      if ( fltk3::event_button() == fltk3::LEFT_MOUSE ) {
         ret |= 1;
       }
       break;

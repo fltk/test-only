@@ -48,7 +48,7 @@ static char	fl_bg2_set = 0;
 static char	fl_fg_set = 0;
 
 /**
-    Changes fl_color(FL_BACKGROUND_COLOR) to the given color, 
+    Changes fl_color(fltk3::BACKGROUND_COLOR) to the given color, 
     and changes the gray ramp from 32 to 56 to black to white.  These are 
     the colors used as backgrounds by almost all widgets and used to draw 
     the edges of all the boxtypes.
@@ -56,40 +56,40 @@ static char	fl_fg_set = 0;
 void fltk3::background(uchar r, uchar g, uchar b) {
   fl_bg_set = 1;
 
-  // replace the gray ramp so that FL_GRAY is this color
+  // replace the gray ramp so that fltk3::GRAY is this color
   if (!r) r = 1; else if (r==255) r = 254;
-  double powr = log(r/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  double powr = log(r/255.0)/log((fltk3::GRAY-fltk3::GRAY_RAMP)/(fltk3::NUM_GRAY-1.0));
   if (!g) g = 1; else if (g==255) g = 254;
-  double powg = log(g/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  double powg = log(g/255.0)/log((fltk3::GRAY-fltk3::GRAY_RAMP)/(fltk3::NUM_GRAY-1.0));
   if (!b) b = 1; else if (b==255) b = 254;
-  double powb = log(b/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
-  for (int i = 0; i < FL_NUM_GRAY; i++) {
-    double gray = i/(FL_NUM_GRAY-1.0);
+  double powb = log(b/255.0)/log((fltk3::GRAY-fltk3::GRAY_RAMP)/(fltk3::NUM_GRAY-1.0));
+  for (unsigned int i = 0; i < fltk3::NUM_GRAY; i++) {
+    double gray = i/(fltk3::NUM_GRAY-1.0);
     fltk3::set_color(fl_gray_ramp(i),
 		  uchar(pow(gray,powr)*255+.5),
 		  uchar(pow(gray,powg)*255+.5),
 		  uchar(pow(gray,powb)*255+.5));
   }
 }
-/** Changes fl_color(FL_FOREGROUND_COLOR). */
+/** Changes fl_color(fltk3::FOREGROUND_COLOR). */
 void fltk3::foreground(uchar r, uchar g, uchar b) {
   fl_fg_set = 1;
 
-  fltk3::set_color(FL_FOREGROUND_COLOR,r,g,b);
+  fltk3::set_color(fltk3::FOREGROUND_COLOR,r,g,b);
 }
 
 /**
     Changes the alternative background color. This color is used as a 
     background by fltk3::Input and other text widgets.
-    <P>This call may change fl_color(FL_FOREGROUND_COLOR) if it 
-    does not provide sufficient contrast to FL_BACKGROUND2_COLOR.
+    <P>This call may change fl_color(fltk3::FOREGROUND_COLOR) if it 
+    does not provide sufficient contrast to fltk3::BACKGROUND2_COLOR.
 */
 void fltk3::background2(uchar r, uchar g, uchar b) {
   fl_bg2_set = 1;
 
-  fltk3::set_color(FL_BACKGROUND2_COLOR,r,g,b);
-  fltk3::set_color(FL_FOREGROUND_COLOR,
-                get_color(fl_contrast(FL_FOREGROUND_COLOR,FL_BACKGROUND2_COLOR)));
+  fltk3::set_color(fltk3::BACKGROUND2_COLOR,r,g,b);
+  fltk3::set_color(fltk3::FOREGROUND_COLOR,
+                get_color(fl_contrast(fltk3::FOREGROUND_COLOR,fltk3::BACKGROUND2_COLOR)));
 }
 
 // these are set by fltk3::args() and override any system colors:
@@ -98,7 +98,7 @@ const char *fl_bg = NULL;
 const char *fl_bg2 = NULL;
 
 static void set_selection_color(uchar r, uchar g, uchar b) {
-  fltk3::set_color(FL_SELECTION_COLOR,r,g,b);
+  fltk3::set_color(fltk3::SELECTION_COLOR,r,g,b);
 }
 
 #if defined(WIN32) || defined(__APPLE__)
@@ -247,17 +247,17 @@ void fltk3::get_system_colors()
 #define D1 BORDER_WIDTH
 #define D2 (BORDER_WIDTH+BORDER_WIDTH)
 
-extern void	fl_up_box(int, int, int, int, Fl_Color);
-extern void	fl_down_box(int, int, int, int, Fl_Color);
-extern void	fl_thin_up_box(int, int, int, int, Fl_Color);
-extern void	fl_thin_down_box(int, int, int, int, Fl_Color);
-extern void	fl_round_up_box(int, int, int, int, Fl_Color);
-extern void	fl_round_down_box(int, int, int, int, Fl_Color);
+extern void	fl_up_box(int, int, int, int, fltk3::Color);
+extern void	fl_down_box(int, int, int, int, fltk3::Color);
+extern void	fl_thin_up_box(int, int, int, int, fltk3::Color);
+extern void	fl_thin_down_box(int, int, int, int, fltk3::Color);
+extern void	fl_round_up_box(int, int, int, int, fltk3::Color);
+extern void	fl_round_down_box(int, int, int, int, fltk3::Color);
 
-extern void	fl_up_frame(int, int, int, int, Fl_Color);
-extern void	fl_down_frame(int, int, int, int, Fl_Color);
-extern void	fl_thin_up_frame(int, int, int, int, Fl_Color);
-extern void	fl_thin_down_frame(int, int, int, int, Fl_Color);
+extern void	fl_up_frame(int, int, int, int, fltk3::Color);
+extern void	fl_down_frame(int, int, int, int, fltk3::Color);
+extern void	fl_thin_up_frame(int, int, int, int, fltk3::Color);
+extern void	fl_thin_down_frame(int, int, int, int, fltk3::Color);
 
 #ifndef FL_DOXYGEN
 const char	*fltk3::scheme_ = (const char *)0;	    // current scheme 
@@ -328,9 +328,9 @@ int fltk3::reload_scheme() {
     // OSX 10.3 and higher use a background with less contrast...
     static uchar levels[3] = { 0xff, 0xf8, 0xf4 };
 
-    get_color(FL_GRAY, r, g, b);
+    get_color(fltk3::GRAY, r, g, b);
 
-//    printf("FL_GRAY = 0x%02x 0x%02x 0x%02x\n", r, g, b);
+//    printf("fltk3::GRAY = 0x%02x 0x%02x 0x%02x\n", r, g, b);
 
     for (i = 0; i < 3; i ++) {
       nr = levels[i] * r / 0xe8;

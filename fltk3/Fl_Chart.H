@@ -87,7 +87,7 @@ class FL_EXPORT Fl_Chart : public fltk3::Widget {
     uchar autosize_;
     Fl_Font textfont_;
     Fl_Fontsize textsize_;
-    Fl_Color textcolor_;
+    fltk3::Color textcolor_;
 protected:
     void draw();
 public:
@@ -136,9 +136,9 @@ public:
     void textsize(Fl_Fontsize s) {textsize_ = s;}
 
     /** Gets the chart's text color */
-    Fl_Color textcolor() const {return textcolor_;}
+    fltk3::Color textcolor() const {return textcolor_;}
     /** gets the chart's text color to \p n. */
-    void textcolor(Fl_Color n) {textcolor_ = n;}
+    void textcolor(fltk3::Color n) {textcolor_ = n;}
 
     /**
       Get whether the chart will automatically adjust the bounds of the chart.

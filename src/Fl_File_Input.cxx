@@ -57,7 +57,7 @@
 Fl_File_Input::Fl_File_Input(int X, int Y, int W, int H, const char *L)
   : fltk3::Input(X, Y, W, H, L) {
   buttons_[0] = 0;
-  errorcolor_ = FL_RED;
+  errorcolor_ = fltk3::RED;
   ok_entry_   = 1;
   pressed_    = -1;
 
@@ -81,14 +81,14 @@ void Fl_File_Input::draw_buttons() {
     if ((X + buttons_[i]) > xscroll()) {
       if (X < xscroll()) {
         draw_box(pressed_ == i ? fl_down(down_box()) : down_box(),
-                 x(), y(), X + buttons_[i] - xscroll(), DIR_HEIGHT, FL_GRAY);
+                 x(), y(), X + buttons_[i] - xscroll(), DIR_HEIGHT, fltk3::GRAY);
       } else if ((X + buttons_[i] - xscroll()) > w()) {
 	draw_box(pressed_ == i ? fl_down(down_box()) : down_box(),
         	 x() + X - xscroll(), y(), w() - X + xscroll(), DIR_HEIGHT,
-		 FL_GRAY);
+		 fltk3::GRAY);
       } else {
         draw_box(pressed_ == i ? fl_down(down_box()) : down_box(),
-	         x() + X - xscroll(), y(), buttons_[i], DIR_HEIGHT, FL_GRAY);
+	         x() + X - xscroll(), y(), buttons_[i], DIR_HEIGHT, fltk3::GRAY);
       }
     }
 
@@ -97,7 +97,7 @@ void Fl_File_Input::draw_buttons() {
 
   if (X < w()) {
     draw_box(pressed_ == i ? fl_down(down_box()) : down_box(),
-             x() + X - xscroll(), y(), w() - X + xscroll(), DIR_HEIGHT, FL_GRAY);
+             x() + X - xscroll(), y(), w() - X + xscroll(), DIR_HEIGHT, fltk3::GRAY);
   }
 }
 

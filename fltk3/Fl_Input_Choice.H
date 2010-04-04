@@ -181,9 +181,9 @@ public:
     menu_->resize(menu_x(), menu_y(), menu_w(), menu_h());
   }
   /** Gets the encapsulated input text color attributes */
-  Fl_Color textcolor() const { return (inp_->textcolor());}
+  fltk3::Color textcolor() const { return (inp_->textcolor());}
   /** Sets the encapsulated input text color attributes */
-  void textcolor(Fl_Color c) { inp_->textcolor(c);}
+  void textcolor(fltk3::Color c) { inp_->textcolor(c);}
   /** Gets the encapsulated input text font  attributes */
   Fl_Font textfont() const { return (inp_->textfont());}
   /** Sets the encapsulated input text font attributes */

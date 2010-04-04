@@ -70,10 +70,10 @@ void fltk3::Button::setonly() { // set this radio button on, turn others off
 
 void fltk3::Button::draw() {
   if (type() == FL_HIDDEN_BUTTON) return;
-  Fl_Color col = value() ? selection_color() : color();
+  fltk3::Color col = value() ? selection_color() : color();
   draw_box(value() ? (down_box()?down_box():fl_down(box())) : box(), col);
   if (labeltype() == fltk3::NORMAL_LABEL && value()) {
-    Fl_Color c = labelcolor();
+    fltk3::Color c = labelcolor();
     labelcolor(fl_contrast(c, col));
     draw_label();
     labelcolor(c);
@@ -86,7 +86,7 @@ int fltk3::Button::handle(int event) {
   switch (event) {
   case fltk3::ENTER: /* FALLTHROUGH */
   case fltk3::LEAVE:
-//  if ((value_?selection_color():color())==FL_GRAY) redraw();
+//  if ((value_?selection_color():color())==fltk3::GRAY) redraw();
     return 1;
   case fltk3::PUSH:
     if (fltk3::visible_focus() && handle(fltk3::FOCUS)) fltk3::focus(this);
@@ -158,7 +158,7 @@ int fltk3::Button::handle(int event) {
     } else return 0;
   case fltk3::KEY :
     if (fltk3::focus() == this && fltk3::event_key() == ' ' &&
-        !(fltk3::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) {
+        !(fltk3::event_state() & (fltk3::SHIFT | fltk3::CTRL | fltk3::ALT | fltk3::META))) {
       set_changed();
       Fl_Widget_Tracker wp(this);
       if (type() == FL_RADIO_BUTTON && !value_) {

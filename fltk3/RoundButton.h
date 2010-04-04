@@ -45,7 +45,7 @@ namespace fltk3 {
   turning on a light, rather than drawing pushed in.  The shape of the
   "light" is initially set to FL_ROUND_DOWN_BOX.  The color of the light
   when on is controlled with selection_color(), which defaults to
-  FL_RED.
+  fltk3::RED.
 */
 class FL_EXPORT RoundButton : public LightButton {
 public:

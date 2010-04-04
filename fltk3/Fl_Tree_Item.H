@@ -60,8 +60,8 @@ class Fl_Tree_Item {
   const char             *_label;		// label (memory managed)
   int                     _labelfont;		// label's font face
   int                     _labelsize;		// label's font size
-  Fl_Color                _labelfgcolor;	// label's fg color
-  Fl_Color                _labelbgcolor;	// label's bg color
+  fltk3::Color                _labelfgcolor;	// label's fg color
+  fltk3::Color                _labelbgcolor;	// label's bg color
   char                    _open;		// item is open?
   char                    _visible;		// item is visible?
   char                    _active;		// item activated?
@@ -111,27 +111,27 @@ public:
     return(_labelsize);
   }
   /// Set item's label foreground text color.
-  void labelfgcolor(Fl_Color val) {
+  void labelfgcolor(fltk3::Color val) {
     _labelfgcolor = val; 
   }
   /// Set item's label text color.
-  void labelcolor(Fl_Color val) {
+  void labelcolor(fltk3::Color val) {
     _labelfgcolor = val; 
   }
   /// Return item's label text color.
-  Fl_Color labelcolor() const {
+  fltk3::Color labelcolor() const {
     return(_labelfgcolor); 
   }
   /// Return item's label foreground text color.
-  Fl_Color labelfgcolor() const {
+  fltk3::Color labelfgcolor() const {
     return(_labelfgcolor); 
   }
   /// Set item's label background color.
-  void labelbgcolor(Fl_Color val) {
+  void labelbgcolor(fltk3::Color val) {
     _labelbgcolor = val; 
   }
   /// Return item's background text color.
-  Fl_Color labelbgcolor() const {
+  fltk3::Color labelbgcolor() const {
     return(_labelbgcolor); 
   }
   /// Assign an FLTK widget to this item.

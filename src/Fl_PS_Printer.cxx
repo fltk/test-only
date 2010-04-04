@@ -865,7 +865,7 @@ void fltk3::PSFileDevice::font(int f, int s) {
   font_ = f; size_ = s;
 };
 
-void fltk3::PSFileDevice::color(Fl_Color c) {
+void fltk3::PSFileDevice::color(fltk3::Color c) {
   //colored_=1;
   color_=c;
   fltk3::get_color(c, cr_, cg_, cb_);
@@ -1279,7 +1279,7 @@ void fltk3::PSFileDevice::end_job (void)
 }
 
 #if ! (defined(__APPLE__) || defined(WIN32) )
-int Fl_Printer::start_job(int pages, int *firstpage, int *lastpage) {
+int fltk3::Printer::start_job(int pages, int *firstpage, int *lastpage) {
   enum Page_Format format;
   enum Page_Layout layout;
 

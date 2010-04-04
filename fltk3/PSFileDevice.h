@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include "Fl_Printer.H" // must stay here
+#include "Printer.h" // must stay here
 
 #ifndef Fltk3_PSfile_Device_H
 #define Fltk3_PSfile_Device_H
@@ -35,9 +35,9 @@
 namespace fltk3 {
 
 /**
- \brief Sends all graphics to a local PostScript file; same API as Fl_Printer class.
+ \brief Sends all graphics to a local PostScript file; same API as fltk3::Printer class.
  *
- This class has the same API as class Fl_Printer except for start_job() member function.
+ This class has the same API as class fltk3::Printer except for start_job() member function.
  <p>PostScript text output is presently implemented only for the latin character set.
  FLTK's standard fonts are output using PostScript's standard fonts: Helvetica, Courier, 
  Times (and their bold, oblique, italic variants), Symbol, ZapfDingbats.
@@ -100,7 +100,7 @@ FL_EXPORT class PSFileDevice : public AbstractPrinter {
     int lang_level_;
     int font_;
     int size_;
-    Fl_Color color_;
+    fltk3::Color color_;
     int gap_;
     int pages_;
     
@@ -121,7 +121,7 @@ FL_EXPORT class PSFileDevice : public AbstractPrinter {
     uchar * mask;
     int mx; // width of mask;
     int my; // mask lines
-    //Fl_Color bg_;
+    //fltk3::Color bg_;
     int (*close_cmd_)(FILE *);
     int page_policy_;
     int nPages;
@@ -160,10 +160,10 @@ FL_EXPORT class PSFileDevice : public AbstractPrinter {
     enum Page_Format page_format_;
     char *ps_filename_;
     // implementation of drawing methods
-    void color(Fl_Color c);
-    //void bg_color(Fl_Color bg);
+    void color(fltk3::Color c);
+    //void bg_color(fltk3::Color bg);
     void color(uchar r, uchar g, uchar b);
-    Fl_Color color(){return color_;};
+    fltk3::Color color(){return color_;};
     
     void push_clip(int x, int y, int w, int h);
     int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);

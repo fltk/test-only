@@ -53,7 +53,7 @@
 */
 class FL_EXPORT Fl_File_Input : public fltk3::Input
 {
-  Fl_Color	errorcolor_;
+  fltk3::Color	errorcolor_;
   char		ok_entry_;
   uchar		down_box_;
   short		buttons_[200];
@@ -82,9 +82,9 @@ public:
     Gets the current error color.
     \todo Better docs for Fl_File_Input::errorcolor() - is it even used?
   */
-  Fl_Color	errorcolor() const { return errorcolor_; }
+  fltk3::Color	errorcolor() const { return errorcolor_; }
   /** Sets the current error color to \p c */
-  void		errorcolor(Fl_Color c) { errorcolor_ = c; }
+  void		errorcolor(fltk3::Color c) { errorcolor_ = c; }
 
   int	value(const char *str);
   int	value(const char *str, int len);

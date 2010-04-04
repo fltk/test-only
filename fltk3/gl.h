@@ -72,9 +72,9 @@
 FL_EXPORT void gl_start();
 FL_EXPORT void gl_finish();
 
-FL_EXPORT void gl_color(Fl_Color i);
+FL_EXPORT void gl_color(fltk3::Color i);
 /** back compatability */
-inline void gl_color(int c) {gl_color((Fl_Color)c);}
+inline void gl_color(int c) {gl_color((fltk3::Color)c);}
 
 FL_EXPORT void gl_rect(int x,int y,int w,int h);
 /**

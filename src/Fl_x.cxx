@@ -761,7 +761,7 @@ static void set_event_xy() {
   fl_event_time = fl_xevent->xbutton.time;
 #  ifdef __sgi
   // get the meta key off PC keyboards:
-  if (fl_key_vector[18]&0x18) fltk3::e_state |= FL_META;
+  if (fl_key_vector[18]&0x18) fltk3::e_state |= fltk3::META;
 #  endif
   // turn off is_click if enough time or mouse movement has passed:
   if (abs(fltk3::e_x_root-px)+abs(fltk3::e_y_root-py) > 3 ||
@@ -1157,7 +1157,7 @@ int fl_handle(const XEvent& thisevent)
         keysym = XKeycodeToKeysym(fl_display, keycode, 0);
       }
       }
-      // MRS: Can't use fltk3::event_state(FL_CTRL) since the state is not
+      // MRS: Can't use fltk3::event_state(fltk3::CTRL) since the state is not
       //      set until set_event_xy() is called later...
       if ((xevent.xkey.state & ControlMask) && keysym == '-') buffer[0] = 0x1f; // ^_
       buffer[len] = 0;
@@ -1206,9 +1206,9 @@ int fl_handle(const XEvent& thisevent)
     // You can plug a microsoft keyboard into an sgi but the extra shift
     // keys are not translated.  Make them translate like XFree86 does:
     if (!keysym) switch(keycode) {
-    case 147: keysym = FL_Meta_L; break;
-    case 148: keysym = FL_Meta_R; break;
-    case 149: keysym = FL_Menu; break;
+    case 147: keysym = fltk3::LeftMetaKey; break;
+    case 148: keysym = fltk3::RightMetaKey; break;
+    case 149: keysym = fltk3::MenuKey; break;
     }
 #  endif
 #  if BACKSPACE_HACK
@@ -1217,8 +1217,8 @@ int fl_handle(const XEvent& thisevent)
     // very few of these remain?
     static int got_backspace = 0;
     if (!got_backspace) {
-      if (keysym == FL_Delete) keysym = FL_BackSpace;
-      else if (keysym == FL_BackSpace) got_backspace = 1;
+      if (keysym == fltk3::DeleteKey) keysym = fltk3::BackSpaceKey;
+      else if (keysym == fltk3::BackSpaceKey) got_backspace = 1;
     }
 #  endif
     // We have to get rid of the XK_KP_function keys, because they are
@@ -1228,21 +1228,21 @@ int fl_handle(const XEvent& thisevent)
       // Map keypad keysym to character or keysym depending on
       // numlock state...
       unsigned long keysym1 = XKeycodeToKeysym(fl_display, keycode, 1);
-      if (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= FL_KP_Last))
-        fltk3::e_original_keysym = (int)(keysym1 | FL_KP);
+      if (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= fltk3::Keypad_Last))
+        fltk3::e_original_keysym = (int)(keysym1 | fltk3::Keypad);
       if ((xevent.xkey.state & Mod2Mask) &&
-          (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= FL_KP_Last))) {
+          (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= fltk3::Keypad_Last))) {
         // Store ASCII numeric keypad value...
-        keysym = keysym1 | FL_KP;
+        keysym = keysym1 | fltk3::Keypad;
         buffer[0] = char(keysym1) & 0x7F;
         len = 1;
       } else {
         // Map keypad to special key...
         static const unsigned short table[15] = {
-          FL_F+1, FL_F+2, FL_F+3, FL_F+4,
-          FL_Home, FL_Left, FL_Up, FL_Right,
-          FL_Down, FL_Page_Up, FL_Page_Down, FL_End,
-          0xff0b/*XK_Clear*/, FL_Insert, FL_Delete};
+          fltk3::FKey+1, fltk3::FKey+2, fltk3::FKey+3, fltk3::FKey+4,
+          fltk3::HomeKey, fltk3::LeftKey, fltk3::UpKey, fltk3::RightKey,
+          fltk3::DownKey, fltk3::PageUpKey, fltk3::PageDownKey, fltk3::EndKey,
+          0xff0b/*XK_Clear*/, FL_Insert, fltk3::DeleteKey};
         keysym = table[keysym-0xff91];
       }
     } else {
@@ -1255,7 +1255,7 @@ int fl_handle(const XEvent& thisevent)
     break;}
 
   case ButtonPress:
-    fltk3::e_keysym = FL_Button + xevent.xbutton.button;
+    fltk3::e_keysym = fltk3::MouseButton + xevent.xbutton.button;
     set_event_xy();
     if (xevent.xbutton.button == Button4) {
       fltk3::e_dy = -1; // Up
@@ -1264,7 +1264,7 @@ int fl_handle(const XEvent& thisevent)
       fltk3::e_dy = +1; // Down
       event = fltk3::MOUSEWHEEL;
     } else {
-      fltk3::e_state |= (FL_BUTTON1 << (xevent.xbutton.button-1));
+      fltk3::e_state |= (fltk3::BUTTON1 << (xevent.xbutton.button-1));
       event = fltk3::PUSH;
       checkdouble();
     }
@@ -1287,9 +1287,9 @@ int fl_handle(const XEvent& thisevent)
 #  endif
 
   case ButtonRelease:
-    fltk3::e_keysym = FL_Button + xevent.xbutton.button;
+    fltk3::e_keysym = fltk3::MouseButton + xevent.xbutton.button;
     set_event_xy();
-    fltk3::e_state &= ~(FL_BUTTON1 << (xevent.xbutton.button-1));
+    fltk3::e_state &= ~(fltk3::BUTTON1 << (xevent.xbutton.button-1));
     if (xevent.xbutton.button == Button4 ||
         xevent.xbutton.button == Button5) return 0;
     event = fltk3::RELEASE;
@@ -1762,13 +1762,13 @@ void fltk3::Window::make_current() {
 }
 
 #ifdef USE_PRINT_BUTTON
-// to test the Fl_Printer class creating a "Print front window" button in a separate window
+// to test the fltk3::Printer class creating a "Print front window" button in a separate window
 // contains also preparePrintFront call above
-#include <fltk3/Fl_Printer.H>
+#include <fltk3/Printer.h>
 #include <fltk3/Button.h>
 void printFront(fltk3::Widget *o, void *data)
 {
-  Fl_Printer printer;
+  fltk3::Printer printer;
   o->window()->hide();
   fltk3::Window *win = fltk3::first_window();
   if(!win) return;

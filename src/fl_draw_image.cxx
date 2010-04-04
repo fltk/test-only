@@ -98,7 +98,7 @@ static void color8_converter(const uchar *from, uchar *to, int w, int delta) {
     r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
     g += from[1]; if (g < 0) g = 0; else if (g>255) g = 255;
     b += from[2]; if (b < 0) b = 0; else if (b>255) b = 255;
-    Fl_Color i = fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
+    fltk3::Color i = fl_color_cube(r*fltk3::NUM_RED/256,g*fltk3::NUM_GREEN/256,b*fltk3::NUM_BLUE/256);
     Fl_XColor& xmap = fl_xmap[0][i];
     if (!xmap.mapped) {if (!fl_redmask) fl_xpixel(r,g,b); else fl_xpixel(i);}
     r -= xmap.r;
@@ -127,7 +127,7 @@ static void mono8_converter(const uchar *from, uchar *to, int w, int delta) {
     r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
     g += from[0]; if (g < 0) g = 0; else if (g>255) g = 255;
     b += from[0]; if (b < 0) b = 0; else if (b>255) b = 255;
-    Fl_Color i = fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
+    fltk3::Color i = fl_color_cube(r*fltk3::NUM_RED/256,g*fltk3::NUM_GREEN/256,b*fltk3::NUM_BLUE/256);
     Fl_XColor& xmap = fl_xmap[0][i];
     if (!xmap.mapped) {if (!fl_redmask) fl_xpixel(r,g,b); else fl_xpixel(i);}
     r -= xmap.r;
@@ -351,14 +351,14 @@ mono32_converter(const uchar *from,uchar *to,int w, int delta) {
 
 static void figure_out_visual() {
 
-  fl_xpixel(FL_BLACK); // setup fl_redmask, etc, in fl_color.cxx
-  fl_xpixel(FL_WHITE); // also make sure white is allocated
+  fl_xpixel(fltk3::BLACK); // setup fl_redmask, etc, in fl_color.cxx
+  fl_xpixel(fltk3::WHITE); // also make sure white is allocated
 
   static XPixmapFormatValues *pfvlist;
-  static int FL_NUM_pfv;
-  if (!pfvlist) pfvlist = XListPixmapFormats(fl_display,&FL_NUM_pfv);
+  static int fltk3::NUM_pfv;
+  if (!pfvlist) pfvlist = XListPixmapFormats(fl_display,&fltk3::NUM_pfv);
   XPixmapFormatValues *pfv;
-  for (pfv = pfvlist; pfv < pfvlist+FL_NUM_pfv; pfv++)
+  for (pfv = pfvlist; pfv < pfvlist+fltk3::NUM_pfv; pfv++)
     if (pfv->depth == fl_visual->depth) break;
   xi.format = ZPixmap;
   xi.byte_order = ImageByteOrder(fl_display);

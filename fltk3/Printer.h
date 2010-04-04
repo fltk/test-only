@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Printer.H 7356 2010-03-29 12:52:28Z manolo $"
+// "$Id: fltk3::Printer.H 7356 2010-03-29 12:52:28Z manolo $"
 //
 // Printing support for the Fast Light Tool Kit (FLTK).
 //
@@ -24,12 +24,12 @@
 //
 //     http://www.fltk.org/str.php
 //
-/** \file Fl_Printer.H 
- \brief declaration of classes Fl_Printer,  Fl_Device_Plugin.
+/** \file fltk3::Printer.H 
+ \brief declaration of classes fltk3::Printer,  Fl_Device_Plugin.
  */
 
-#ifndef Fl_Printer_H
-#define Fl_Printer_H
+#ifndef Fltk3_Printer_H
+#define Fltk3_Printer_H
 
 #include <fltk3/AbstractPrinter.h>
 #include <fltk3/draw.h>
@@ -37,6 +37,8 @@
 #include <fltk3/RGBImage.h>
 #include <fltk3/Fl_Bitmap.H>
 #include <stdio.h>
+
+namespace fltk3 {
 
 #if defined(__APPLE__) || defined(WIN32) || defined(FL_DOXYGEN)
 /**
@@ -56,17 +58,17 @@
  a subclass of fltk3::PSFileDevice.
  <p>On Xlib-based platforms, the static public attributes of this class
  can be used to set the print dialog to other languages than English. For example, the "Printer:"
- dialog item Fl_Printer::dialog_printer can be set to French with:
+ dialog item fltk3::Printer::dialog_printer can be set to French with:
  \code
- Fl_Printer::dialog_printer = "Imprimante:";
- Fl_Printer myprinter;
+ fltk3::Printer::dialog_printer = "Imprimante:";
+ fltk3::Printer myprinter;
  myprinter.start_job();
  \endcode
  Use fltk3::PSFileDevice::file_chooser_title to customize the title of the file chooser dialog that opens
  when using the "Print To File" option of the print dialog.
  \see fltk3::PSFileDevice.
  */
-class Fl_Printer : public fltk3::AbstractPrinter {
+class Printer : public fltk3::AbstractPrinter {
 private:
 #ifdef __APPLE__
   float scale_x;
@@ -88,7 +90,7 @@ public:
   /** 
    @brief The constructor.
    */
-  Fl_Printer(void);
+  Printer(void);
   int start_job(int pagecount, int *frompage = NULL, int *topage = NULL);
   int start_page (void);
   int printable_rect(int *w, int *h);
@@ -157,7 +159,7 @@ public:
 
 #include <fltk3/PSFileDevice.H>
 
-class Fl_Printer : public fltk3::PSFileDevice {
+class fltk3::Printer : public fltk3::PSFileDevice {
 public:
   static const char *dialog_title; // all of this must be duplicated above for correct documentation
   static const char *dialog_printer; 
@@ -179,7 +181,7 @@ public:
   static const char *property_save;
   static const char *property_cancel;
 
-  Fl_Printer(void) {};
+  fltk3::Printer(void) {};
   ~Fl_Printer(void) {};
   int start_job(int pages, int *firstpage = NULL, int *lastpage = NULL);
 };
@@ -207,8 +209,10 @@ public:
   virtual int print(fltk3::AbstractPrinter* p, fltk3::Widget* w, int x, int y) { return 0; }
 };
 
+}
+
 #endif // Fl_Printer_H
 
 //
-// End of "$Id: Fl_Printer.H 7356 2010-03-29 12:52:28Z manolo $"
+// End of "$Id: fltk3::Printer.H 7356 2010-03-29 12:52:28Z manolo $"
 //

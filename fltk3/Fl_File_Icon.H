@@ -42,7 +42,7 @@
 // Special color value for the icon color.
 //
 
-#  define FL_ICON_COLOR (Fl_Color)0xffffffff	/**< icon color [background?]*/
+#  define FL_ICON_COLOR (fltk3::Color)0xffffffff	/**< icon color [background?]*/
 
 
 //
@@ -95,7 +95,7 @@ class FL_EXPORT Fl_File_Icon			//// Icon data
     Adds a color value to the icon array, returning a pointer to it.
     \param[in] c color value
   */
-  short		*add_color(Fl_Color c)
+  short		*add_color(fltk3::Color c)
 		{ short *d = add((short)COLOR); add((short)(c >> 16)); add((short)c); return (d); }
 
   /**
@@ -120,7 +120,7 @@ class FL_EXPORT Fl_File_Icon			//// Icon data
   /** Clears all icon data from the icon.*/
   void		clear() { num_data_ = 0; }
 
-  void		draw(int x, int y, int w, int h, Fl_Color ic, int active = 1);
+  void		draw(int x, int y, int w, int h, fltk3::Color ic, int active = 1);
 
   void		label(fltk3::Widget *w);
 

@@ -58,7 +58,7 @@ class FL_EXPORT Fl_Counter : public fltk3::Valuator {
 
   Fl_Font textfont_;
   Fl_Fontsize textsize_;
-  Fl_Color textcolor_;
+  fltk3::Color textcolor_;
   double lstep_;
   uchar mouseobj;
   static void repeat_callback(void *);
@@ -111,9 +111,9 @@ public:
   void textsize(Fl_Fontsize s) {textsize_ = s;}
 
   /** Gets the font color */
-  Fl_Color textcolor() const {return textcolor_;}
+  fltk3::Color textcolor() const {return textcolor_;}
   /** Sets the font color to \p s */
-  void textcolor(Fl_Color s) {textcolor_ = s;}
+  void textcolor(fltk3::Color s) {textcolor_ = s;}
 
 };
 

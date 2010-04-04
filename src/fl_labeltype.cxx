@@ -50,7 +50,7 @@ void
 fl_normal_label(const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
   fl_font(o->font, o->size);
-  fl_color((Fl_Color)o->color);
+  fl_color((fltk3::Color)o->color);
   fl_draw(o->value, X, Y, W, H, align, o->image);
 }
 
@@ -143,7 +143,7 @@ void fltk3::Widget::draw_label(int X, int Y, int W, int H, fltk3::Align a) const
   if (flags()&SHORTCUT_LABEL) fl_draw_shortcut = 1;
   fltk3::Label l1 = label_;
   if (!active_r()) {
-    l1.color = fl_inactive((Fl_Color)l1.color);
+    l1.color = fl_inactive((fltk3::Color)l1.color);
     if (l1.deimage) l1.image = l1.deimage;
   }
   l1.draw(X,Y,W,H,a);

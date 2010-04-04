@@ -40,7 +40,7 @@ fltk3::RoundButton::RoundButton(int X,int Y,int W,int H, const char *l)
 : fltk3::LightButton(X,Y,W,H,l) {
   box(fltk3::NO_BOX);
   down_box(fltk3::ROUND_DOWN_BOX);
-  selection_color(FL_FOREGROUND_COLOR);
+  selection_color(fltk3::FOREGROUND_COLOR);
 }
 
 //

@@ -76,9 +76,9 @@ int		fltk3::damage_,
 		fltk3::e_state,
 		fltk3::e_clicks,
 		fltk3::e_is_click,
-		fltk3::e_keysym,
-                fltk3::e_original_keysym,
-		fltk3::scrollbar_size_ = 16;
+                fltk3::scrollbar_size_ = 16;
+unsigned int    fltk3::e_keysym,
+                fltk3::e_original_keysym;
 
 char		*fltk3::e_text = (char *)"";
 int		fltk3::e_length;
@@ -856,8 +856,8 @@ void fl_fix_focus() {
   fltk3::Widget* w = fl_xfocus;
   if (w) {
     int saved = fltk3::e_keysym;
-    if (fltk3::e_keysym < (FL_Button + FL_LEFT_MOUSE) ||
-        fltk3::e_keysym > (FL_Button + FL_RIGHT_MOUSE))
+    if (fltk3::e_keysym < (fltk3::MouseButton + fltk3::LEFT_MOUSE) ||
+        fltk3::e_keysym > (fltk3::MouseButton + fltk3::RIGHT_MOUSE))
       fltk3::e_keysym = 0; // make sure widgets don't think a keystroke moved focus
     while (w->parent()) w = w->parent();
     if (fltk3::modal()) w = fltk3::modal();
@@ -869,7 +869,7 @@ void fl_fix_focus() {
 
 // MRS: Originally we checked the button state, but a user reported that it
 //      broke click-to-focus in FLWM?!?
-//  if (!(fltk3::event_state() & 0x7f00000 /*FL_BUTTONS*/)) {
+//  if (!(fltk3::event_state() & 0x7f00000 /*fltk3::BUTTONS*/)) {
   if (!fltk3::pushed()) {
     // set belowmouse based on fltk3::modal() and fl_xmousewin:
     w = fl_xmousewin;
@@ -1105,7 +1105,7 @@ int fltk3::handle(int e, fltk3::Window* window)
     if (send_handlers(fltk3::SHORTCUT)) return 1;
 
     // make Escape key close windows:
-    if (event_key()==FL_Escape) {
+    if (event_key()==fltk3::EscapeKey) {
       wi = modal(); if (!wi) wi = window;
       wi->do_callback();
       return 1;

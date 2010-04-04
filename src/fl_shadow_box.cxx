@@ -30,18 +30,18 @@
 
 #define BW 3
 
-void fl_shadow_frame(int x, int y, int w, int h, Fl_Color c) {
-  fl_color(FL_DARK3);
+void fl_shadow_frame(int x, int y, int w, int h, fltk3::Color c) {
+  fl_color(fltk3::DARK3);
   fl_rectf(x+BW, y+h-BW,  w - BW, BW);
   fl_rectf(x+w-BW,  y+BW, BW,  h - BW);
   fl_color(c);
   fl_rect(x,y,w-BW,h-BW);
 }
 
-void fl_shadow_box(int x, int y, int w, int h, Fl_Color c) {
+void fl_shadow_box(int x, int y, int w, int h, fltk3::Color c) {
   fl_color(c);
   fl_rectf(x+1,y+1,w-2-BW,h-2-BW);
-  fl_shadow_frame(x,y,w,h,FL_GRAY0);
+  fl_shadow_frame(x,y,w,h,fltk3::GRAY0);
 }
 
 //

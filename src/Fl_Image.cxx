@@ -69,7 +69,7 @@ void fltk3::Image::draw(int XP, int YP, int, int, int, int) {
 */
 void fltk3::Image::draw_empty(int X, int Y) {
   if (w() > 0 && h() > 0) {
-    fl_color(FL_FOREGROUND_COLOR);
+    fl_color(fltk3::FOREGROUND_COLOR);
     fl_rect(X, Y, w(), h());
     fl_line(X, Y, X + w() - 1, Y + h() - 1);
     fl_line(X, Y + h() - 1, X + w() - 1, Y);
@@ -96,7 +96,7 @@ fltk3::Image *fltk3::Image::copy(int W, int H) {
   color. <I>The original image data is not altered by this
   method.</I>
 */
-void fltk3::Image::color_average(Fl_Color, float) {
+void fltk3::Image::color_average(fltk3::Color, float) {
 }
 
 /**
@@ -151,7 +151,7 @@ fltk3::Image::labeltype(const fltk3::Label *lo,		// I - Label
   else if (la & fltk3::ALIGN_BOTTOM) cy = img->h() - lh;
   else cy = (img->h() - lh) / 2;
 
-  fl_color((Fl_Color)lo->color);
+  fl_color((fltk3::Color)lo->color);
 
   img->draw(lx, ly, lw, lh, cx, cy);
 }
@@ -278,7 +278,7 @@ fltk3::Image *fltk3::RGBImage::copy(int W, int H) {
   return new_image;
 }
 
-void fltk3::RGBImage::color_average(Fl_Color c, float i) {
+void fltk3::RGBImage::color_average(fltk3::Color c, float i) {
   // Don't average an empty image...
   if (!w() || !h() || !d() || !array) return;
 

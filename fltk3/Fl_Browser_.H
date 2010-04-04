@@ -74,7 +74,7 @@ class FL_EXPORT Fl_Browser_ : public fltk3::Group {
   uchar has_scrollbar_;	// which scrollbars are enabled
   Fl_Font textfont_;
   Fl_Fontsize textsize_;
-  Fl_Color textcolor_;
+  fltk3::Color textcolor_;
   void* top_;		// which item scrolling position is in
   void* selection_;	// which is selected (except for FL_MULTI_BROWSER)
   void *redraw1,*redraw2; // minimal update pointers
@@ -297,11 +297,11 @@ public:
   /**
     Gets the default text color for the lines in the browser.
   */
-  Fl_Color textcolor() const { return textcolor_; }
+  fltk3::Color textcolor() const { return textcolor_; }
   /**
     Sets the default text color for the lines in the browser to color \p col.
   */
-  void textcolor(Fl_Color col) { textcolor_ = col; }
+  void textcolor(fltk3::Color col) { textcolor_ = col; }
 
   /**
     Gets the current size of the scrollbars' troughs, in pixels.

@@ -68,7 +68,7 @@ struct FL_EXPORT Label {
   /** size of label font */
   Fl_Fontsize size;
   /** text color */
-  Fl_Color color;
+  fltk3::Color color;
   /** alignment of label */
   fltk3::Align align_;
   /** type of label. \see fltk3::Labeltype */
@@ -101,8 +101,8 @@ class FL_EXPORT Widget {
   int x_,y_,w_,h_;
   fltk3::Label label_;
   unsigned int flags_;
-  Fl_Color color_;
-  Fl_Color color2_;
+  fltk3::Color color_;
+  fltk3::Color color2_;
   uchar type_;
   uchar damage_;
   uchar box_;
@@ -160,8 +160,8 @@ protected:
         USERFLAG1       = 1<<31   ///< reserved for 3rd party extensions
   };
   void draw_box() const;
-  void draw_box(Boxtype t, Fl_Color c) const;
-  void draw_box(Boxtype t, int x,int y,int w,int h, Fl_Color c) const;
+  void draw_box(Boxtype t, fltk3::Color c) const;
+  void draw_box(Boxtype t, int x,int y,int w,int h, fltk3::Color c) const;
   /** draws a focus rectangle around the widget */
   void draw_focus() {draw_focus(box(),x(),y(),w(),h());}
   void draw_focus(Boxtype t, int x,int y,int w,int h) const;
@@ -368,37 +368,37 @@ public:
 
   /** Gets the background color of the widget.
       \return current background color
-      \see color(Fl_Color), color(Fl_Color, Fl_Color)
+      \see color(fltk3::Color), color(fltk3::Color, fltk3::Color)
    */
-  Fl_Color color() const {return color_;}
+  fltk3::Color color() const {return color_;}
 
   /** Sets the background color of the widget. 
       The color is passed to the box routine. The color is either an index into 
       an internal table of RGB colors or an RGB color value generated using 
       fl_rgb_color().
       
-      The default for most widgets is FL_BACKGROUND_COLOR. Use set_color()
+      The default for most widgets is fltk3::BACKGROUND_COLOR. Use set_color()
       to redefine colors in the color map.
       \param[in] bg background color
-      \see color(), color(Fl_Color, Fl_Color), selection_color(Fl_Color)
+      \see color(), color(fltk3::Color, fltk3::Color), selection_color(fltk3::Color)
    */
-  void color(Fl_Color bg) {color_ = bg;}
+  void color(fltk3::Color bg) {color_ = bg;}
 
   /** Gets the selection color.
       \return the current selection color
-      \see selection_color(Fl_Color), color(Fl_Color, Fl_Color)
+      \see selection_color(fltk3::Color), color(fltk3::Color, fltk3::Color)
    */
-  Fl_Color selection_color() const {return color2_;}
+  fltk3::Color selection_color() const {return color2_;}
 
   /** Sets the selection color.
       The selection color is defined for Forms compatibility and is usually 
       used to color the widget when it is selected, although some widgets 
       use this color for other purposes. You can set both colors at once 
-      with color(Fl_Color bg, Fl_Color sel).
+      with color(fltk3::Color bg, fltk3::Color sel).
       \param[in] a the new selection color
-      \see selection_color(), color(Fl_Color, Fl_Color)
+      \see selection_color(), color(fltk3::Color, fltk3::Color)
    */
-  void selection_color(Fl_Color a) {color2_ = a;}
+  void selection_color(fltk3::Color a) {color2_ = a;}
 
   /** Sets the background and selection color of the widget. 
 
@@ -407,7 +407,7 @@ public:
       \param[in] sel selection color
       \see color(unsigned), selection_color(unsigned)
    */
-  void color(Fl_Color bg, Fl_Color sel) {color_=bg; color2_=sel;}
+  void color(fltk3::Color bg, fltk3::Color sel) {color_=bg; color2_=sel;}
 
   /** Gets the current label text.
       \return a pointer to the current label text
@@ -461,16 +461,16 @@ public:
   void labeltype(Labeltype a) {label_.type = a;}
 
   /** Gets the label color. 
-      The default color is FL_FOREGROUND_COLOR. 
+      The default color is fltk3::FOREGROUND_COLOR. 
       \return the current label color
    */
-  Fl_Color labelcolor() const {return label_.color;}
+  fltk3::Color labelcolor() const {return label_.color;}
 
   /** Sets the label color. 
-      The default color is FL_FOREGROUND_COLOR. 
+      The default color is fltk3::FOREGROUND_COLOR. 
       \param[in] c the new label color
    */
-  void labelcolor(Fl_Color c) {label_.color=c;}
+  void labelcolor(fltk3::Color c) {label_.color=c;}
 
   /** Gets the font to use. 
       Fonts are identified by indexes into a table. The default value
@@ -960,7 +960,7 @@ public:
   /** For back compatibility only.
       \deprecated Use selection_color() instead.
   */
-  Fl_Color color2() const {return (Fl_Color)color2_;}
+  fltk3::Color color2() const {return (fltk3::Color)color2_;}
 
   /** For back compatibility only.
       \deprecated Use selection_color(unsigned) instead.

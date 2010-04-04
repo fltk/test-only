@@ -234,7 +234,7 @@ int Flcc_HueBox::handle(int e) {
     tohs(Xf, Yf, H, S);
     if (fabs(H-ih) < 3*6.0/w()) H = ih;
     if (fabs(S-is) < 3*1.0/h()) S = is;
-    if (fltk3::event_state(FL_CTRL)) H = ih;
+    if (fltk3::event_state(fltk3::CTRL)) H = ih;
     if (c->hsv(H, S, c->value())) c->do_callback();
     } return 1;
   case fltk3::FOCUS : /* FALLTHROUGH */
@@ -287,16 +287,16 @@ int Flcc_HueBox::handle_key(int key) {
 #endif
 
   switch (key) {
-    case FL_Up :
+    case fltk3::UpKey :
       Y -= 3;
       break;
-    case FL_Down :
+    case fltk3::DownKey :
       Y += 3;
       break;
-    case FL_Left :
+    case fltk3::LeftKey :
       X -= 3;
       break;
-    case FL_Right :
+    case fltk3::RightKey :
       X += 3;
       break;
     default :
@@ -333,8 +333,8 @@ void Flcc_HueBox::draw() {
 #endif
   if (X < 0) X = 0; else if (X > w1-6) X = w1-6;
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
-  //  fl_color(c->value()>.75 ? FL_BLACK : FL_WHITE);
-  draw_box(fltk3::UP_BOX,x1+X,yy1+Y,6,6,fltk3::focus() == this ? FL_FOREGROUND_COLOR : FL_GRAY);
+  //  fl_color(c->value()>.75 ? fltk3::BLACK : fltk3::WHITE);
+  draw_box(fltk3::UP_BOX,x1+X,yy1+Y,6,6,fltk3::focus() == this ? fltk3::FOREGROUND_COLOR : fltk3::GRAY);
   px = X; py = Y;
 }
 #endif // !FL_DOXYGEN
@@ -399,7 +399,7 @@ void Flcc_ValueBox::draw() {
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
   int Y = int((1-c->value()) * (h1-6));
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
-  draw_box(fltk3::UP_BOX,x1,yy1+Y,w1,6,fltk3::focus() == this ? FL_FOREGROUND_COLOR : FL_GRAY);
+  draw_box(fltk3::UP_BOX,x1,yy1+Y,w1,6,fltk3::focus() == this ? fltk3::FOREGROUND_COLOR : fltk3::GRAY);
   py = Y;
 }
 #endif // !FL_DOXYGEN
@@ -413,10 +413,10 @@ int Flcc_ValueBox::handle_key(int key) {
   if (Y < 0) Y = 0; else if (Y > h1) Y = h1;
 
   switch (key) {
-    case FL_Up :
+    case fltk3::UpKey :
       Y -= 3;
       break;
-    case FL_Down :
+    case fltk3::DownKey :
       Y += 3;
       break;
     default :

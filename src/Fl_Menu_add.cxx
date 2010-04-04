@@ -180,7 +180,7 @@ int fltk3::MenuItem::add(
   Adds a new menu item.
   
   \param[in] label The text label for the menu item.
-  \param[in] shortcut Optional keyboard shortcut that can be an int or string; (FL_CTRL+'a') or "^a". Default 0 if none.
+  \param[in] shortcut Optional keyboard shortcut that can be an int or string; (fltk3::CTRL+'a') or "^a". Default 0 if none.
   \param[in] callback Optional callback invoked when user clicks the item. Default 0 if none.
   \param[in] userdata Optional user data passed as an argument to the callback. Default 0 if none.
   \param[in] flags Optional flags that control the type of menu item; see below. Default is 0 for none.
@@ -220,7 +220,7 @@ int fltk3::MenuItem::add(
   This parameter is optional, and defaults to 0 to indicate no shortcut.
   \par
   Shortcut can be 0L, or either a modifier/key combination (for example
-  FL_CTRL+'A') or a string describing the shortcut in one of two ways:
+  fltk3::CTRL+'A') or a string describing the shortcut in one of two ways:
   \verbatim
    [#+^]<ascii_value>    e.g. "97", "^97", "+97", "#97"
    [#+^]<ascii_char>     e.g. "a", "^a", "+a", "#a"

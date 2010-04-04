@@ -41,14 +41,14 @@
 extern char fl_key_vector[32]; // in Fl_x.cxx
 
 int fltk3::event_key(int k) {
-  if (k > FL_Button && k <= FL_Button+8)
-    return fltk3::event_state(8<<(k-FL_Button));
+  if (k > fltk3::MouseButton && k <= fltk3::MouseButton+8)
+    return fltk3::event_state(8<<(k-fltk3::MouseButton));
   int i;
 #  ifdef __sgi
   // get some missing PC keyboard keys:
-  if (k == FL_Meta_L) i = 147;
-  else if (k == FL_Meta_R) i = 148;
-  else if (k == FL_Menu) i = 149;
+  if (k == fltk3::LeftMetaKey) i = 147;
+  else if (k == fltk3::RightMetaKey) i = 148;
+  else if (k == fltk3::MenuKey) i = 149;
   else
 #  endif
     i = XKeysymToKeycode(fl_display, k);

@@ -82,7 +82,7 @@ extern "C" {
 #include <fltk3/Window.h>
 #include <fltk3/Tooltip.h>
 #include <fltk3/Fl_Sys_Menu_Bar.H>
-#include <fltk3/Fl_Printer.H>
+#include <fltk3/Printer.h>
 #include <fltk3/Input_.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -188,25 +188,25 @@ static unsigned short macKeyLookUp[128] =
   'y', 't', '1', '2', '3', '4', '6', '5',
   '=', '9', '7', '-', '8', '0', ']', 'o',
   
-  'u', '[', 'i', 'p', FL_Enter, 'l', 'j', '\'',
+  'u', '[', 'i', 'p', fltk3::EnterKey, 'l', 'j', '\'',
   'k', ';', '\\', ',', '/', 'n', 'm', '.',
   
-  FL_Tab, ' ', '`', FL_BackSpace, 
-  FL_KP_Enter, FL_Escape, 0, 0/*FL_Meta_L*/,
-  0/*FL_Shift_L*/, 0/*FL_Caps_Lock*/, 0/*FL_Alt_L*/, 0/*FL_Control_L*/, 
-  0/*FL_Shift_R*/, 0/*FL_Alt_R*/, 0/*FL_Control_R*/, 0,
+  fltk3::TabKey, ' ', '`', fltk3::BackSpaceKey, 
+  fltk3::KeypadEnter, fltk3::EscapeKey, 0, 0/*fltk3::LeftMetaKey*/,
+  0/*fltk3::LeftShiftKey*/, 0/*fltk3::CapsLockKey*/, 0/*fltk3::LeftAltKey*/, 0/*fltk3::LeftControlKey*/, 
+  0/*fltk3::RightShiftKey*/, 0/*fltk3::RightAltKey*/, 0/*fltk3::RightControlKey*/, 0,
   
-  0, FL_KP+'.', FL_Right, FL_KP+'*', 0, FL_KP+'+', FL_Left, FL_Delete,
-  FL_Down, 0, 0, FL_KP+'/', FL_KP_Enter, FL_Up, FL_KP+'-', 0,
+  0, fltk3::Keypad+'.', fltk3::RightKey, fltk3::Keypad+'*', 0, fltk3::Keypad+'+', fltk3::LeftKey, fltk3::DeleteKey,
+  fltk3::DownKey, 0, 0, fltk3::Keypad+'/', fltk3::KeypadEnter, fltk3::UpKey, fltk3::Keypad+'-', 0,
   
-  0, FL_KP+'=', FL_KP+'0', FL_KP+'1', FL_KP+'2', FL_KP+'3', FL_KP+'4', FL_KP+'5',
-  FL_KP+'6', FL_KP+'7', 0, FL_KP+'8', FL_KP+'9', 0, 0, 0,
+  0, fltk3::Keypad+'=', fltk3::Keypad+'0', fltk3::Keypad+'1', fltk3::Keypad+'2', fltk3::Keypad+'3', fltk3::Keypad+'4', fltk3::Keypad+'5',
+  fltk3::Keypad+'6', fltk3::Keypad+'7', 0, fltk3::Keypad+'8', fltk3::Keypad+'9', 0, 0, 0,
   
-  FL_F+5, FL_F+6, FL_F+7, FL_F+3, FL_F+8, FL_F+9, 0, FL_F+11,
-  0, 0/*FL_F+13*/, FL_Print, FL_Scroll_Lock, 0, FL_F+10, FL_Menu, FL_F+12,
+  fltk3::FKey+5, fltk3::FKey+6, fltk3::FKey+7, fltk3::FKey+3, fltk3::FKey+8, fltk3::FKey+9, 0, fltk3::FKey+11,
+  0, 0/*fltk3::FKey+13*/, fltk3::PrintKey, fltk3::ScrollLockKey, 0, fltk3::FKey+10, fltk3::MenuKey, fltk3::FKey+12,
   
-  0, FL_Pause, FL_Help, FL_Home, FL_Page_Up, FL_Delete, FL_F+4, FL_End,
-  FL_F+2, FL_Page_Down, FL_F+1, FL_Left, FL_Right, FL_Down, FL_Up, 0/*FL_Power*/,
+  0, fltk3::PauseKey, fltk3::HelpKey, fltk3::HomeKey, fltk3::PageUpKey, fltk3::DeleteKey, fltk3::FKey+4, fltk3::EndKey,
+  fltk3::FKey+2, fltk3::PageDownKey, fltk3::FKey+1, fltk3::LeftKey, fltk3::RightKey, fltk3::DownKey, fltk3::UpKey, 0/*FL_Power*/,
 };
 
 /*
@@ -215,12 +215,12 @@ static unsigned short macKeyLookUp[128] =
 static unsigned int mods_to_e_state( NSUInteger mods )
 {
   long state = 0;
-  if ( mods & NSNumericPadKeyMask ) state |= FL_NUM_LOCK;
-  if ( mods & NSCommandKeyMask ) state |= FL_META;
-  if ( mods & NSAlternateKeyMask ) state |= FL_ALT;
-  if ( mods & NSControlKeyMask ) state |= FL_CTRL;
-  if ( mods & NSShiftKeyMask ) state |= FL_SHIFT;
-  if ( mods & NSAlphaShiftKeyMask ) state |= FL_CAPS_LOCK;
+  if ( mods & NSNumericPadKeyMask ) state |= fltk3::NUM_LOCK;
+  if ( mods & NSCommandKeyMask ) state |= fltk3::META;
+  if ( mods & NSAlternateKeyMask ) state |= fltk3::ALT;
+  if ( mods & NSControlKeyMask ) state |= fltk3::CTRL;
+  if ( mods & NSShiftKeyMask ) state |= fltk3::SHIFT;
+  if ( mods & NSAlphaShiftKeyMask ) state |= fltk3::CAPS_LOCK;
   unsigned int ret = ( fltk3::e_state & 0xff000000 ) | state;
   fltk3::e_state = ret;
   //printf( "State 0x%08x (%04x)\n", fltk3::e_state, mods );
@@ -234,12 +234,12 @@ static unsigned int mods_to_e_state( NSUInteger mods )
 
  static void mods_to_e_keysym( NSUInteger mods )
  {
- if ( mods & NSCommandKeyMask ) fltk3::e_keysym = FL_Meta_L;
- else if ( mods & NSNumericPadKeyMask ) fltk3::e_keysym = FL_Num_Lock;
- else if ( mods & NSAlternateKeyMask ) fltk3::e_keysym = FL_Alt_L;
- else if ( mods & NSControlKeyMask ) fltk3::e_keysym = FL_Control_L;
- else if ( mods & NSShiftKeyMask ) fltk3::e_keysym = FL_Shift_L;
- else if ( mods & NSAlphaShiftKeyMask ) fltk3::e_keysym = FL_Caps_Lock;
+ if ( mods & NSCommandKeyMask ) fltk3::e_keysym = fltk3::LeftMetaKey;
+ else if ( mods & NSNumericPadKeyMask ) fltk3::e_keysym = fltk3::NumLockKey;
+ else if ( mods & NSAlternateKeyMask ) fltk3::e_keysym = fltk3::LeftAltKey;
+ else if ( mods & NSControlKeyMask ) fltk3::e_keysym = fltk3::LeftControlKey;
+ else if ( mods & NSShiftKeyMask ) fltk3::e_keysym = fltk3::LeftShiftKey;
+ else if ( mods & NSAlphaShiftKeyMask ) fltk3::e_keysym = fltk3::CapsLockKey;
  else fltk3::e_keysym = 0;
  //printf( "to sym 0x%08x (%04x)\n", fltk3::e_keysym, mods );
  }
@@ -798,7 +798,7 @@ void cocoaMouseWheelHandler(NSEvent *theEvent)
  */
 static void cocoaMouseHandler(NSEvent *theEvent)
 {
-  static int keysym[] = { 0, FL_Button+1, FL_Button+3, FL_Button+2 };
+  static int keysym[] = { 0, fltk3::MouseButton+1, fltk3::MouseButton+3, fltk3::MouseButton+2 };
   static int px, py;
   static char suppressed = 0;
   
@@ -820,14 +820,14 @@ static void cocoaMouseHandler(NSEvent *theEvent)
   
   NSEventType etype = [theEvent type];
   if (etype == NSLeftMouseDown || etype == NSRightMouseDown || etype == NSOtherMouseDown) {
-    if (btn == 1) fltk3::e_state |= FL_BUTTON1;
-    else if (btn == 3) fltk3::e_state |= FL_BUTTON2;
-    else if (btn == 2) fltk3::e_state |= FL_BUTTON3;
+    if (btn == 1) fltk3::e_state |= fltk3::BUTTON1;
+    else if (btn == 3) fltk3::e_state |= fltk3::BUTTON2;
+    else if (btn == 2) fltk3::e_state |= fltk3::BUTTON3;
   }
   else if (etype == NSLeftMouseUp || etype == NSRightMouseUp || etype == NSOtherMouseUp) {
-    if (btn == 1) fltk3::e_state &= ~FL_BUTTON1;
-    else if (btn == 3) fltk3::e_state &= ~FL_BUTTON2;
-    else if (btn == 2) fltk3::e_state &= ~FL_BUTTON3;
+    if (btn == 1) fltk3::e_state &= ~fltk3::BUTTON1;
+    else if (btn == 3) fltk3::e_state &= ~fltk3::BUTTON2;
+    else if (btn == 2) fltk3::e_state &= ~fltk3::BUTTON3;
     }
     
   switch ( etype ) {
@@ -1001,8 +1001,8 @@ static int keycode_wrap_old(char * buffer,
                             unsigned char key,
                             unsigned short sym)
 {
-  if ( (sym >= FL_KP && sym <= FL_KP_Last) || !(sym & 0xff00) ||
-        sym == FL_Tab || sym == FL_Enter) {
+  if ( (sym >= fltk3::Keypad && sym <= fltk3::KeypadLast) || !(sym & 0xff00) ||
+        sym == fltk3::TabKey || sym == fltk3::EnterKey) {
     buffer[0] = key;
     return 1;
   } else {
@@ -1155,7 +1155,7 @@ OSStatus cocoaKeyboardHandler(NSEvent *theEvent)
   }
   if ([s length] == 0) {	// this is a dead key that must be combined with the next key to be pressed
     while (window->parent()) window = window->window();
-    fltk3::e_keysym = FL_Control_R; // first simulate pressing of the compose key (FL_Control_R)
+    fltk3::e_keysym = fltk3::RightControlKey; // first simulate pressing of the compose key (fltk3::RightControlKey)
     fltk3::e_text = (char*)"";
     fltk3::e_length = 0;
     fltk3::handle(fltk3::KEY, window); 
@@ -1204,9 +1204,9 @@ OSStatus cocoaKeyboardHandler(NSEvent *theEvent)
       sym = macKeyLookUp[maskedKeyCode];
       if ( isalpha(key) )
         sym = tolower(key);
-      else if ( fltk3::e_state&FL_CTRL && key<32 && sym<0xff00)
+      else if ( fltk3::e_state&fltk3::CTRL && key<32 && sym<0xff00)
         sym = key+96;
-      else if ( fltk3::e_state&FL_ALT && sym<0xff00) {	// find the keycap of this key
+      else if ( fltk3::e_state&fltk3::ALT && sym<0xff00) {	// find the keycap of this key
 	NSString *sim = [theEvent charactersIgnoringModifiers];
 	UniChar one;
 	CFStringGetCharacters((CFStringRef)sim, CFRangeMake(0, 1), &one);
@@ -1216,7 +1216,7 @@ OSStatus cocoaKeyboardHandler(NSEvent *theEvent)
       }
       
       fltk3::e_keysym = fltk3::e_original_keysym = sym;
-      // Handle FL_KP_Enter on regular keyboards and on Powerbooks
+      // Handle fltk3::Keypad_Enter on regular keyboards and on Powerbooks
       if ( maskedKeyCode==0x4c || maskedKeyCode==0x34) key=0x0d;    
       static UInt32 deadKeyState = 0; // must be cleared when losing focus
       int l =  (*keycode_function)(buffer, 31, kind, keyCode, mods, &deadKeyState, keychar, sym);
@@ -2428,7 +2428,7 @@ void fltk3::Window::make_current()
 }
 
 // helper function to manage the current CGContext fl_gc
-extern Fl_Color fl_color_;
+extern fltk3::Color fl_color_;
 extern class Fl_Font_Descriptor *fl_fontsize;
 extern void fl_font(class Fl_Font_Descriptor*);
 extern void fl_quartz_restore_line_style_();
@@ -2971,7 +2971,7 @@ int MACscreen_init(XRectangle screens[])
   }
 - (void)printPanel
 {
-  Fl_Printer printer;
+  fltk3::Printer printer;
   //fltk3::PSFileDevice printer;
   int w, h;
   fltk3::Window *win = fltk3::first_window();
@@ -3022,13 +3022,13 @@ static void createAppleMenu(void)
   FLaboutItemTarget *about = [[FLaboutItemTarget alloc] init];
   [menuItem setTarget:about];
   [appleMenu addItem:[NSMenuItem separatorItem]];
-// temporary for testing Fl_Printer. Contains also printPanel of class FLaboutItemTarget.
+// temporary for testing fltk3::Printer. Contains also printPanel of class FLaboutItemTarget.
   menuItem = [appleMenu addItemWithTitle:@"Print front window" action:@selector(printPanel) keyEquivalent:@""];
   [menuItem setTarget:about];
   [appleMenu setAutoenablesItems:NO];
   [menuItem setEnabled:YES];
   [appleMenu addItem:[NSMenuItem separatorItem]];
-// end of temporary for testing Fl_Printer  
+// end of temporary for testing fltk3::Printer  
   // Services Menu
   services = [[NSMenu alloc] init];
   [appleMenu addItemWithTitle:@"Services" action:nil keyEquivalent:@""];
@@ -3188,10 +3188,10 @@ void *Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::menuOrItemOperatio
     item = va_arg(ap, NSMenuItem*);
     value = va_arg(ap, int);
     NSUInteger macMod = 0;
-    if ( value & FL_META ) macMod = NSCommandKeyMask;
-    if ( value & FL_SHIFT || isupper(value) ) macMod |= NSShiftKeyMask;
-    if ( value & FL_ALT ) macMod |= NSAlternateKeyMask;
-    if ( value & FL_CTRL ) macMod |= NSControlKeyMask;
+    if ( value & fltk3::META ) macMod = NSCommandKeyMask;
+    if ( value & fltk3::SHIFT || isupper(value) ) macMod |= NSShiftKeyMask;
+    if ( value & fltk3::ALT ) macMod |= NSAlternateKeyMask;
+    if ( value & fltk3::CTRL ) macMod |= NSControlKeyMask;
     [item setKeyEquivalentModifierMask:macMod];
   }
   else if (operation == Fl_Sys_Menu_Bar::setState) {	// arguments: NSMenuItem*, int
@@ -3320,7 +3320,7 @@ static NSImage *imageFromText(const char *text, int *pwidth, int *pheight)
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fl_rectf(0,0,width,height);
-  fl_color(FL_BLACK);
+  fl_color(fltk3::BLACK);
   p = text;
   int y = fl_height();
   while(TRUE) {

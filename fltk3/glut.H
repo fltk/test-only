@@ -267,14 +267,14 @@ inline void glutSpecialFunc(void (*f)(int key, int x, int y)) {
 #  define GLUT_KEY_F11			11
 #  define GLUT_KEY_F12			12
 // WARNING: Different values than GLUT uses:
-#  define GLUT_KEY_LEFT			FL_Left
-#  define GLUT_KEY_UP			FL_Up
-#  define GLUT_KEY_RIGHT		FL_Right
-#  define GLUT_KEY_DOWN			FL_Down
-#  define GLUT_KEY_PAGE_UP		FL_Page_Up
-#  define GLUT_KEY_PAGE_DOWN		FL_Page_Down
-#  define GLUT_KEY_HOME			FL_Home
-#  define GLUT_KEY_END			FL_End
+#  define GLUT_KEY_LEFT			fltk3::LeftKey
+#  define GLUT_KEY_UP			fltk3::UpKey
+#  define GLUT_KEY_RIGHT		fltk3::RightKey
+#  define GLUT_KEY_DOWN			fltk3::DownKey
+#  define GLUT_KEY_PAGE_UP		fltk3::PageUpKey
+#  define GLUT_KEY_PAGE_DOWN		fltk3::PageDownKey
+#  define GLUT_KEY_HOME			fltk3::HomeKey
+#  define GLUT_KEY_END			fltk3::EndKey
 #  define GLUT_KEY_INSERT		FL_Insert
 
 //inline void glutSpaceballMotionFunc(void (*)(int x, int y, int z));
@@ -368,9 +368,9 @@ enum {
 FL_EXPORT int glutDeviceGet(GLenum type);
 
 // WARNING: these values are different than GLUT uses:
-#  define GLUT_ACTIVE_SHIFT               FL_SHIFT
-#  define GLUT_ACTIVE_CTRL                FL_CTRL
-#  define GLUT_ACTIVE_ALT                 FL_ALT
+#  define GLUT_ACTIVE_SHIFT               fltk3::SHIFT
+#  define GLUT_ACTIVE_CTRL                fltk3::CTRL
+#  define GLUT_ACTIVE_ALT                 fltk3::ALT
 inline int glutGetModifiers() {return fltk3::event_state() & (GLUT_ACTIVE_SHIFT | GLUT_ACTIVE_CTRL | GLUT_ACTIVE_ALT);}
 
 FL_EXPORT int glutLayerGet(GLenum);

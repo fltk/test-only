@@ -60,40 +60,40 @@ typedef fltk3::Window FL_FORM;
 #define FL_IGNORE	-1
 //#define fltk3::CLOSE	-2 // this variable is never used in FLTK Forms. It is removed becaus it conflicts with the window fltk3::CLOSE event
 
-#define FL_LCOL		FL_BLACK
-#define FL_COL1		FL_GRAY
-#define FL_MCOL		FL_LIGHT1
-#define FL_LEFT_BCOL	FL_LIGHT3 // 53 is better match
-#define FL_TOP_BCOL	FL_LIGHT2 // 51
-#define FL_BOTTOM_BCOL	FL_DARK2  // 40
-#define FL_RIGHT_BCOL	FL_DARK3  // 36
-#define FL_INACTIVE	FL_INACTIVE_COLOR
-#define FL_INACTIVE_COL	FL_INACTIVE_COLOR
+#define FL_LCOL		fltk3::BLACK
+#define FL_COL1		fltk3::GRAY
+#define FL_MCOL		fltk3::LIGHT1
+#define FL_LEFT_BCOL	fltk3::LIGHT3 // 53 is better match
+#define FL_TOP_BCOL	fltk3::LIGHT2 // 51
+#define FL_BOTTOM_BCOL	fltk3::DARK2  // 40
+#define FL_RIGHT_BCOL	fltk3::DARK3  // 36
+#define FL_INACTIVE	fltk3::INACTIVE_COLOR
+#define FL_INACTIVE_COL	fltk3::INACTIVE_COLOR
 #define FL_FREE_COL1	FL_FREE_COLOR
-#define FL_FREE_COL2	((Fl_Color)(FL_FREE_COLOR+1))
-#define FL_FREE_COL3	((Fl_Color)(FL_FREE_COLOR+2))
-#define FL_FREE_COL4	((Fl_Color)(FL_FREE_COLOR+3))
-#define FL_FREE_COL5	((Fl_Color)(FL_FREE_COLOR+4))
-#define FL_FREE_COL6	((Fl_Color)(FL_FREE_COLOR+5))
-#define FL_FREE_COL7	((Fl_Color)(FL_FREE_COLOR+6))
-#define FL_FREE_COL8	((Fl_Color)(FL_FREE_COLOR+7))
-#define FL_FREE_COL9	((Fl_Color)(FL_FREE_COLOR+8))
-#define FL_FREE_COL10	((Fl_Color)(FL_FREE_COLOR+9))
-#define FL_FREE_COL11	((Fl_Color)(FL_FREE_COLOR+10))
-#define FL_FREE_COL12	((Fl_Color)(FL_FREE_COLOR+11))
-#define FL_FREE_COL13	((Fl_Color)(FL_FREE_COLOR+12))
-#define FL_FREE_COL14	((Fl_Color)(FL_FREE_COLOR+13))
-#define FL_FREE_COL15	((Fl_Color)(FL_FREE_COLOR+14))
-#define FL_FREE_COL16	((Fl_Color)(FL_FREE_COLOR+15))
-#define FL_TOMATO	((Fl_Color)(131))
-#define FL_INDIANRED	((Fl_Color)(164))
-#define FL_SLATEBLUE	((Fl_Color)(195))
-#define FL_DARKGOLD	((Fl_Color)(84))
-#define FL_PALEGREEN	((Fl_Color)(157))
-#define FL_ORCHID	((Fl_Color)(203))
-#define FL_DARKCYAN	((Fl_Color)(189))
-#define FL_DARKTOMATO	((Fl_Color)(113))
-#define FL_WHEAT	((Fl_Color)(174))
+#define FL_FREE_COL2	((fltk3::Color)(FL_FREE_COLOR+1))
+#define FL_FREE_COL3	((fltk3::Color)(FL_FREE_COLOR+2))
+#define FL_FREE_COL4	((fltk3::Color)(FL_FREE_COLOR+3))
+#define FL_FREE_COL5	((fltk3::Color)(FL_FREE_COLOR+4))
+#define FL_FREE_COL6	((fltk3::Color)(FL_FREE_COLOR+5))
+#define FL_FREE_COL7	((fltk3::Color)(FL_FREE_COLOR+6))
+#define FL_FREE_COL8	((fltk3::Color)(FL_FREE_COLOR+7))
+#define FL_FREE_COL9	((fltk3::Color)(FL_FREE_COLOR+8))
+#define FL_FREE_COL10	((fltk3::Color)(FL_FREE_COLOR+9))
+#define FL_FREE_COL11	((fltk3::Color)(FL_FREE_COLOR+10))
+#define FL_FREE_COL12	((fltk3::Color)(FL_FREE_COLOR+11))
+#define FL_FREE_COL13	((fltk3::Color)(FL_FREE_COLOR+12))
+#define FL_FREE_COL14	((fltk3::Color)(FL_FREE_COLOR+13))
+#define FL_FREE_COL15	((fltk3::Color)(FL_FREE_COLOR+14))
+#define FL_FREE_COL16	((fltk3::Color)(FL_FREE_COLOR+15))
+#define FL_TOMATO	((fltk3::Color)(131))
+#define FL_INDIANRED	((fltk3::Color)(164))
+#define FL_SLATEBLUE	((fltk3::Color)(195))
+#define fltk3::DARKGOLD	((fltk3::Color)(84))
+#define FL_PALEGREEN	((fltk3::Color)(157))
+#define FL_ORCHID	((fltk3::Color)(203))
+#define fltk3::DARKCYAN	((fltk3::Color)(189))
+#define fltk3::DARKTOMATO	((fltk3::Color)(113))
+#define FL_WHEAT	((fltk3::Color)(174))
 
 #define FL_ALIGN_BESIDE	fltk3::ALIGN_INSIDE
 
@@ -159,7 +159,7 @@ typedef fltk3::Window FL_FORM;
 #define FL_BOUND_WIDTH	3
 
 typedef int FL_Coord;
-typedef int FL_COLOR;
+typedef int fltk3::COLOR;
 
 ////////////////////////////////////////////////////////////////
 // fltk interaction:
@@ -212,11 +212,11 @@ inline void fl_set_object_lsize(fltk3::Widget* o,int s) {o->labelsize(s);}
 /* forms lib font indexes must be byte sized - extract correct byte from style word */
 inline void fl_set_object_lstyle(fltk3::Widget* o,int a) {
   o->labelfont((Fl_Font)(a&0xff)); o->labeltype((fltk3::Labeltype)(a>>8));}
-inline void fl_set_object_lcol(fltk3::Widget* o, Fl_Color a) {o->labelcolor(a);}
+inline void fl_set_object_lcol(fltk3::Widget* o, fltk3::Color a) {o->labelcolor(a);}
 #define fl_set_object_lcolor  fl_set_object_lcol
 inline void fl_set_object_lalign(fltk3::Widget* o, fltk3::Align a) {o->align(a);}
 #define fl_set_object_align fl_set_object_lalign
-inline void fl_set_object_color(fltk3::Widget* o,Fl_Color a,Fl_Color b) {o->color(a,b);}
+inline void fl_set_object_color(fltk3::Widget* o,fltk3::Color a,fltk3::Color b) {o->color(a,b);}
 inline void fl_set_object_label(fltk3::Widget* o, const char* a) {o->label(a); o->redraw();}
 inline void fl_set_object_position(fltk3::Widget*o,int x,int y) {o->position(x,y);}
 inline void fl_set_object_size(fltk3::Widget* o, int w, int h) {o->size(w,h);}
@@ -349,13 +349,13 @@ inline int fl_mouse_button() {return fltk3::event_button();}
 ////////////////////////////////////////////////////////////////
 // Drawing functions.  Only usable inside an Fl_Free object?
 
-inline void fl_drw_box(fltk3::Boxtype b,int x,int y,int w,int h,Fl_Color bgc,int=3) {
+inline void fl_drw_box(fltk3::Boxtype b,int x,int y,int w,int h,fltk3::Color bgc,int=3) {
     fl_draw_box(b,x,y,w,h,bgc);}
-inline void fl_drw_frame(fltk3::Boxtype b,int x,int y,int w,int h,Fl_Color bgc,int=3) {
+inline void fl_drw_frame(fltk3::Boxtype b,int x,int y,int w,int h,fltk3::Color bgc,int=3) {
     fl_draw_box(b,x,y,w,h,bgc);}
 
 inline void fl_drw_text(fltk3::Align align, int x, int y, int w, int h,
-		  Fl_Color fgcolor, int size, Fl_Font style,
+		  fltk3::Color fgcolor, int size, Fl_Font style,
 		  const char* s) {
   fl_font(style,size);
   fl_color(fgcolor);
@@ -364,7 +364,7 @@ inline void fl_drw_text(fltk3::Align align, int x, int y, int w, int h,
 
 // this does not work except for CENTER...
 inline void fl_drw_text_beside(fltk3::Align align, int x, int y, int w, int h,
-		  Fl_Color fgcolor, int size, Fl_Font style,
+		  fltk3::Color fgcolor, int size, Fl_Font style,
 		  const char* s) {
   fl_font(style,size);
   fl_color(fgcolor);
@@ -373,7 +373,7 @@ inline void fl_drw_text_beside(fltk3::Align align, int x, int y, int w, int h,
 
 inline void fl_set_font_name(Fl_Font n,const char* s) {fltk3::set_font(n,s);}
 
-inline void fl_mapcolor(Fl_Color c, uchar r, uchar g, uchar b) {fltk3::set_color(c,r,g,b);}
+inline void fl_mapcolor(fltk3::Color c, uchar r, uchar g, uchar b) {fltk3::set_color(c,r,g,b);}
 
 #define fl_set_clipping(x,y,w,h) fl_push_clip(x,y,w,h)
 #define fl_unset_clipping() fl_pop_clip()
@@ -531,7 +531,7 @@ inline void fl_set_chart_lstyle(fltk3::Widget* o, Fl_Font v) {
   ((Fl_Chart*)o)->textfont(v);}
 inline void fl_set_chart_lsize(fltk3::Widget* o, int v) {
   ((Fl_Chart*)o)->textsize(v);}
-inline void fl_set_chart_lcolor(fltk3::Widget* o, Fl_Color v) {
+inline void fl_set_chart_lcolor(fltk3::Widget* o, fltk3::Color v) {
   ((Fl_Chart*)o)->textcolor(v);}
 #define fl_set_chart_lcol   fl_set_chart_lcolor
 
@@ -601,7 +601,7 @@ inline void fl_set_cursor(fltk3::Window* w, Fl_Cursor c) {w->cursor(c);}
 
 #include "Fl_Dial.H"
 
-#define FL_DIAL_COL1 FL_GRAY
+#define FL_DIAL_COL1 fltk3::GRAY
 #define FL_DIAL_COL2 37
 
 forms_constructor(Fl_Dial, fl_add_dial)
@@ -687,7 +687,7 @@ inline void fl_set_input(fltk3::Widget* o, const char* v) {
     ((fltk3::Input*)o)->value(v);}
 inline void fl_set_input_return(fltk3::Widget* o, int x) {
     ((fltk3::Input*)o)->when((fltk3::When)(x | fltk3::WHEN_RELEASE));}
-inline void fl_set_input_color(fltk3::Widget* o, Fl_Color a, Fl_Color b) {
+inline void fl_set_input_color(fltk3::Widget* o, fltk3::Color a, fltk3::Color b) {
     ((fltk3::Input*)o)->textcolor(a);
     ((fltk3::Input*)o)->cursor_color(b);
 }
@@ -783,7 +783,7 @@ inline void fl_set_positioner_return(fltk3::Widget* o, int v) {
 #define FL_VERT_BROWSER_SLIDER FL_VERT_SLIDER
 
 forms_constructort(fltk3::Slider, fl_add_slider)
-#define FL_SLIDER_COL1 FL_GRAY
+#define FL_SLIDER_COL1 fltk3::GRAY
 inline void fl_set_slider_value(fltk3::Widget* o, double v) {
     ((fltk3::Slider*)o)->value(v);}
 inline double fl_get_slider_value(fltk3::Widget* o) {

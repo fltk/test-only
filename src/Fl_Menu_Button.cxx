@@ -41,9 +41,9 @@ void Fl_Menu_Button::draw() {
   int H = (labelsize()-3)&-2;
   int X = x()+w()-H*2;
   int Y = y()+(h()-H)/2;
-  fl_color(active_r() ? FL_DARK3 : fl_inactive(FL_DARK3));
+  fl_color(active_r() ? fltk3::DARK3 : fl_inactive(fltk3::DARK3));
   fl_line(X+H/2, Y+H, X, Y, X+H, Y);
-  fl_color(active_r() ? FL_LIGHT3 : fl_inactive(FL_LIGHT3));
+  fl_color(active_r() ? fltk3::LIGHT3 : fl_inactive(fltk3::LIGHT3));
   fl_line(X+H, Y, X+H/2, Y+H);
 }
 
@@ -88,7 +88,7 @@ int Fl_Menu_Button::handle(int e) {
   case fltk3::KEY:
     if (!box()) return 0;
     if (fltk3::event_key() == ' ' &&
-        !(fltk3::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) {
+        !(fltk3::event_state() & (fltk3::SHIFT | fltk3::CTRL | fltk3::ALT | fltk3::META))) {
       popup();
       return 1;
     } else return 0;

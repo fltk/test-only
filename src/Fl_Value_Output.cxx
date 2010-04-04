@@ -99,7 +99,7 @@ Fl_Value_Output::Fl_Value_Output(int X, int Y, int W, int H,const char *l)
   align(fltk3::ALIGN_LEFT);
   textfont_ = fltk3::HELVETICA;
   textsize_ = FL_NORMAL_SIZE;
-  textcolor_ = FL_FOREGROUND_COLOR;
+  textcolor_ = fltk3::FOREGROUND_COLOR;
   soft_ = 0;
 }
 

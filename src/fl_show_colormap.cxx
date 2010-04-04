@@ -39,25 +39,25 @@
  Pretty much unchanged from Forms.
 */
 class ColorMenu : public fltk3::Window {
-  Fl_Color initial;
-  Fl_Color which, previous;
+  fltk3::Color initial;
+  fltk3::Color which, previous;
   int done;
-  void drawbox(Fl_Color);
+  void drawbox(fltk3::Color);
   void draw();
   int handle(int);
 public:
-  ColorMenu(Fl_Color oldcol);
-  Fl_Color run();
+  ColorMenu(fltk3::Color oldcol);
+  fltk3::Color run();
 };
 
-ColorMenu::ColorMenu(Fl_Color oldcol) :
+ColorMenu::ColorMenu(fltk3::Color oldcol) :
 fltk3::Window(BOXSIZE*8+1+2*BORDER, BOXSIZE*32+1+2*BORDER) {
   clear_border();
   set_modal();
   initial = which = oldcol;
 }
 
-void ColorMenu::drawbox(Fl_Color c) {
+void ColorMenu::drawbox(fltk3::Color c) {
   if (c < 0 || c > 255) return;
   int X = (c%8)*BOXSIZE+BORDER;
   int Y = (c/8)*BOXSIZE+BORDER;
@@ -73,7 +73,7 @@ void ColorMenu::drawbox(Fl_Color c) {
 void ColorMenu::draw() {
   if (damage() != FL_DAMAGE_CHILD) {
     fl_draw_box(fltk3::UP_BOX,0,0,w(),h(),color());
-    for (int c = 0; c < 256; c++) drawbox((Fl_Color)c);
+    for (int c = 0; c < 256; c++) drawbox((fltk3::Color)c);
   } else {
     drawbox(previous);
     drawbox(which);
@@ -82,7 +82,7 @@ void ColorMenu::draw() {
 }
 
 int ColorMenu::handle(int e) {
-  Fl_Color c = which;
+  fltk3::Color c = which;
   switch (e) {
   case fltk3::PUSH:
   case fltk3::DRAG: {
@@ -100,13 +100,13 @@ int ColorMenu::handle(int e) {
     return 1;
   case fltk3::KEY:
     switch (fltk3::event_key()) {
-    case FL_Up: if (c > 7) c -= 8; break;
-    case FL_Down: if (c < 256-8) c += 8; break;
-    case FL_Left: if (c > 0) c--; break;
-    case FL_Right: if (c < 255) c++; break;
-    case FL_Escape: which = initial; done = 1; return 1;
-    case FL_KP_Enter:
-    case FL_Enter: done = 1; return 1;
+    case fltk3::UpKey: if (c > 7) c -= 8; break;
+    case fltk3::DownKey: if (c < 256-8) c += 8; break;
+    case fltk3::LeftKey: if (c > 0) c--; break;
+    case fltk3::RightKey: if (c < 255) c++; break;
+    case fltk3::EscapeKey: which = initial; done = 1; return 1;
+    case fltk3::KeypadEnter:
+    case fltk3::EnterKey: done = 1; return 1;
     default: return 0;
     }
     break;
@@ -114,7 +114,7 @@ int ColorMenu::handle(int e) {
     return 0;
   }
   if (c != which) {
-    which = (Fl_Color)c; damage(FL_DAMAGE_CHILD);
+    which = (fltk3::Color)c; damage(FL_DAMAGE_CHILD);
     int bx = (c%8)*BOXSIZE+BORDER;
     int by = (c/8)*BOXSIZE+BORDER;
     int px = x();
@@ -137,7 +137,7 @@ extern char fl_override_redirect; // hack for menus
 #ifdef _MSC_VER
 #pragma optimize("a",off) // needed to get the done check to work
 #endif
-Fl_Color ColorMenu::run() {
+fltk3::Color ColorMenu::run() {
   if (which < 0 || which > 255) {
     position(fltk3::event_x_root()-w()/2, fltk3::event_y_root()-y()/2);
   } else {
@@ -152,7 +152,7 @@ Fl_Color ColorMenu::run() {
   return which;
 }
 
-Fl_Color fl_show_colormap(Fl_Color oldcol) {
+fltk3::Color fl_show_colormap(fltk3::Color oldcol) {
   ColorMenu m(oldcol);
   return m.run();
 }

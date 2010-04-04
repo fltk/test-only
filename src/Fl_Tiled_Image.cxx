@@ -70,7 +70,7 @@ Fl_Tiled_Image::copy(int W,	// I - New width
 //
 
 void
-Fl_Tiled_Image::color_average(Fl_Color c,	// I - Color to blend with
+Fl_Tiled_Image::color_average(fltk3::Color c,	// I - Color to blend with
                               float    i) {	// I - Blend fraction
   if (!alloc_image_) {
     image_       = image_->copy();

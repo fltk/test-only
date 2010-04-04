@@ -91,8 +91,8 @@ static fltk3::Window *makeform() {
   o->box(fltk3::THIN_UP_BOX);
   o->labelfont(fltk3::TIMES_BOLD);
   o->labelsize(34);
-  o->color(FL_WHITE);
-  o->labelcolor(FL_BLUE);
+  o->color(fltk3::WHITE);
+  o->labelcolor(fltk3::BLUE);
  }
  // create the buttons (right to left)
  for (int b=0, x=310; b<3; b++, x -= 100) {
@@ -100,7 +100,7 @@ static fltk3::Window *makeform() {
    button[b]->align(fltk3::ALIGN_INSIDE|fltk3::ALIGN_WRAP);
    button[b]->callback(button_cb,(void *)b);
  }
- button[0]->shortcut(FL_Escape);
+ button[0]->shortcut(fltk3::EscapeKey);
  w->resizable(new Fl_Box(60,10,110-60,27));
  w->end();
  w->set_modal();
@@ -223,7 +223,7 @@ static int innards(const char* fmt, va_list ap,
   if (b0 && fltk3::Widget::label_shortcut(b0))
     button[0]->shortcut(0);
   else
-    button[0]->shortcut(FL_Escape);
+    button[0]->shortcut(fltk3::EscapeKey);
 
   // deactivate fltk3::grab(), because it is incompatible with modal windows
   fltk3::Window* g = fltk3::grab();

@@ -3,10 +3,10 @@
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
-  // modify it under the terms of the GNU Library General Public
+// modify it under the terms of the GNU Library General Public
 // License as published by the Free Software Foundation; either
 // version 2 of the License, or (at your option) any later version.
 //
@@ -36,7 +36,7 @@
 namespace fltk3 {
   class Widget;
   struct MenuItem;
-struct Label;
+  struct Label;
 
 /**
   Image is the base class used for caching and
@@ -151,14 +151,14 @@ class FL_EXPORT Image {
     with it.
   */
   Image *copy() { return copy(w(), h()); }
-  virtual void color_average(Fl_Color c, float i);
+  virtual void color_average(fltk3::Color c, float i);
   /**
     The inactive() method calls
-    color_average(FL_BACKGROUND_COLOR, 0.33f) to produce 
+    color_average(fltk3::BACKGROUND_COLOR, 0.33f) to produce 
     an image that appears grayed out. <I>This method does not 
     alter the original image data.</I>
   */
-  void inactive() { color_average(FL_GRAY, .33f); }
+  void inactive() { color_average(fltk3::GRAY, .33f); }
   virtual void desaturate();
   virtual void label(fltk3::Widget*w);
   virtual void label(fltk3::MenuItem*m);
@@ -212,7 +212,7 @@ class FL_EXPORT RGBImage : public Image {
   virtual ~RGBImage();
   virtual Image *copy(int W, int H);
   Image *copy() { return copy(w(), h()); }
-  virtual void color_average(Fl_Color c, float i);
+  virtual void color_average(fltk3::Color c, float i);
   virtual void desaturate();
   virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
   void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}

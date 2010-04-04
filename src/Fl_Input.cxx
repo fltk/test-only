@@ -55,11 +55,11 @@ void fltk3::Input::draw() {
 
 // kludge so shift causes selection to extend:
 int fltk3::Input::shift_position(int p) {
-  return position(p, fltk3::event_state(FL_SHIFT) ? mark() : p);
+  return position(p, fltk3::event_state(fltk3::SHIFT) ? mark() : p);
 }
 
 int fltk3::Input::shift_up_down_position(int p) {
-  return up_down_position(p, fltk3::event_state(FL_SHIFT));
+  return up_down_position(p, fltk3::event_state(fltk3::SHIFT));
 }
 
 // If you define this symbol as zero you will get the peculiar fltk
@@ -144,21 +144,21 @@ int fltk3::Input::handle_key() {
     return 1;
   }
   
-  unsigned int mods = fltk3::event_state() & (FL_META|FL_CTRL|FL_ALT);
+  unsigned int mods = fltk3::event_state() & (fltk3::META|fltk3::CTRL|fltk3::ALT);
   switch (fltk3::event_key()) {
-    case FL_Insert:
-      if (fltk3::event_state() & FL_CTRL) ascii = ctrl('C');
-      else if (fltk3::event_state() & FL_SHIFT) ascii = ctrl('V');
+    case fltk3::InsertKey:
+      if (fltk3::event_state() & fltk3::CTRL) ascii = ctrl('C');
+      else if (fltk3::event_state() & fltk3::SHIFT) ascii = ctrl('V');
       break;
-    case FL_Delete:
+    case fltk3::DeleteKey:
 #ifdef __APPLE__
-      if (mods==0 || mods==FL_CTRL) { // delete next char
+      if (mods==0 || mods==fltk3::CTRL) { // delete next char
         ascii = ctrl('D');
-      } else if (mods==FL_ALT) { // delete next word
+      } else if (mods==fltk3::ALT) { // delete next word
         if (mark() != position()) return cut();
         cut(position(), word_end(position()));
         return 1;
-      } else if (mods==FL_META) { // delete to the end of the line
+      } else if (mods==fltk3::META) { // delete to the end of the line
         if (mark() != position()) return cut();
         cut(position(), line_end(position()));
         return 1;
@@ -166,59 +166,59 @@ int fltk3::Input::handle_key() {
 #else
       if (mods==0) {
         ascii = ctrl('D'); 
-      } else if (mods==FL_SHIFT) {
+      } else if (mods==fltk3::SHIFT) {
         ascii = ctrl('X');
       } else return 1;
 #endif
       break;
-    case FL_Left:
+    case fltk3::LeftKey:
 #ifdef __APPLE__
       if (mods==0) { // char left
         ascii = ctrl('B'); 
-      } else if (mods==FL_ALT) { // word left
+      } else if (mods==fltk3::ALT) { // word left
         shift_position(word_start(position()));
         return 1; 
-      } else if (mods==FL_CTRL || mods==FL_META) { // start of line
+      } else if (mods==fltk3::CTRL || mods==fltk3::META) { // start of line
         shift_position(line_start(position()));
         return 1;
       } else return 1;
 #else
       if (mods==0) { // char left
         ascii = ctrl('B'); 
-      } else if (mods==FL_CTRL) { // word left
+      } else if (mods==fltk3::CTRL) { // word left
         shift_position(word_start(position()));
         return 1;
       } else return 1;
 #endif
       break;
-    case FL_Right:
+    case fltk3::RightKey:
 #ifdef __APPLE__
       if (mods==0) { // char right
         ascii = ctrl('F'); 
-      } else if (mods==FL_ALT) { // word right
+      } else if (mods==fltk3::ALT) { // word right
         shift_position(word_end(position()));
         return 1;
-      } else if (mods==FL_CTRL || mods==FL_META) { // end of line
+      } else if (mods==fltk3::CTRL || mods==fltk3::META) { // end of line
         shift_position(line_end(position()));
         return 1;
       } else return 1;
 #else
       if (mods==0) { // char right
         ascii = ctrl('F'); 
-      } else if (mods==FL_CTRL) { // word right
+      } else if (mods==fltk3::CTRL) { // word right
         shift_position(word_end(position()));
         return 1;
       } else return 1;
 #endif // __APPLE__
       break;
-    case FL_Page_Up:
+    case fltk3::PageUpKey:
 #ifdef __APPLE__
       if (mods==0) { // scroll text one page
                      // OS X scrolls the view, but does not move the cursor
                      // fltk3::Input has no scroll control, so instead we move the cursor by one page
         repeat_num = linesPerPage();
         ascii = ctrl('P');
-      } else if (mods==FL_ALT) { // move cursor one page
+      } else if (mods==fltk3::ALT) { // move cursor one page
         repeat_num = linesPerPage();
         ascii = ctrl('P');
       } else return 1;
@@ -227,41 +227,41 @@ int fltk3::Input::handle_key() {
       repeat_num = linesPerPage();
       // fall through
 #endif
-    case FL_Up:
+    case fltk3::UpKey:
 #ifdef __APPLE__
       if (mods==0) { // line up
         ascii = ctrl('P');
-      } else if (mods==FL_CTRL) { // scroll text down one page
+      } else if (mods==fltk3::CTRL) { // scroll text down one page
                                   // OS X scrolls the view, but does not move the cursor
                                   // fltk3::Input has no scroll control, so instead we move the cursor by one page
         repeat_num = linesPerPage();
         ascii = ctrl('P');
-      } else if (mods==FL_ALT) { // line start and up
+      } else if (mods==fltk3::ALT) { // line start and up
         if (line_start(position())==position() && position()>0)
           return shift_position(line_start(position()-1)) + NORMAL_INPUT_MOVE;
         else
           return shift_position(line_start(position())) + NORMAL_INPUT_MOVE;
-      } else if (mods==FL_META) { // start of document
+      } else if (mods==fltk3::META) { // start of document
         shift_position(0);
         return 1;
       } else return 1;
 #else
       if (mods==0) { // line up
         ascii = ctrl('P');
-      } else if (mods==FL_CTRL) { // scroll text down one line
+      } else if (mods==fltk3::CTRL) { // scroll text down one line
                                   // fltk3::Input has no scroll control, so instead we move the cursor by one page
         ascii = ctrl('P');
       } else return 1;
 #endif
       break;
-    case FL_Page_Down:
+    case fltk3::PageDownKey:
 #ifdef __APPLE__
       if (mods==0) { // scroll text one page
                      // OS X scrolls the view, but does not move the cursor
                      // fltk3::Input has no scroll control, so instead we move the cursor by one page
         repeat_num = linesPerPage();
         ascii = ctrl('N');
-      } else if (mods==FL_ALT) { // move cursor one page
+      } else if (mods==fltk3::ALT) { // move cursor one page
         repeat_num = linesPerPage();
         ascii = ctrl('N');
       } else return 1;
@@ -270,34 +270,34 @@ int fltk3::Input::handle_key() {
       repeat_num = linesPerPage();
       // fall through
 #endif
-    case FL_Down:
+    case fltk3::DownKey:
 #ifdef __APPLE__
       if (mods==0) { // line down
         ascii = ctrl('N');
-      } else if (mods==FL_CTRL) {
+      } else if (mods==fltk3::CTRL) {
         // OS X scrolls the view, but does not move the cursor
         // fltk3::Input has no scroll control, so instead we move the cursor by one page
         repeat_num = linesPerPage();
         ascii = ctrl('N');
-      } else if (mods==FL_ALT) { // line end and down
+      } else if (mods==fltk3::ALT) { // line end and down
         if (line_end(position())==position() && position()<size())
           return shift_position(line_end(position()+1)) + NORMAL_INPUT_MOVE;
         else
           return shift_position(line_end(position())) + NORMAL_INPUT_MOVE;
-      } else if (mods==FL_META) { // end of document
+      } else if (mods==fltk3::META) { // end of document
         shift_position(size());
         return 1;
       } else return 1;
 #else
       if (mods==0) { // line down
         ascii = ctrl('N');
-      } else if (mods==FL_CTRL) { // scroll text up one line
+      } else if (mods==fltk3::CTRL) { // scroll text up one line
                                   // fltk3::Input has no scroll control, so instead we move the cursor by one page
         ascii = ctrl('N');
       } else return 1;
 #endif
       break;
-    case FL_Home:
+    case fltk3::HomeKey:
 #ifdef __APPLE__
       if (mods==0) { // scroll display to the top
                      // OS X scrolls the view, but does not move the cursor
@@ -308,13 +308,13 @@ int fltk3::Input::handle_key() {
 #else
       if (mods==0) {
         ascii = ctrl('A');
-      } else if (mods==FL_CTRL) {
+      } else if (mods==fltk3::CTRL) {
         shift_position(0);
         return 1;
       }
 #endif
       break;
-    case FL_End:
+    case fltk3::EndKey:
 #ifdef __APPLE__
       if (mods==0) { // scroll display to the bottom
                      // OS X scrolls the view, but does not move the cursor
@@ -325,21 +325,21 @@ int fltk3::Input::handle_key() {
 #else
       if (mods==0) {
         ascii = ctrl('E');
-      } else if (mods==FL_CTRL) {
+      } else if (mods==fltk3::CTRL) {
         shift_position(size());
         return 1;
       } else return 1;
 #endif
       break;
-    case FL_BackSpace:
+    case fltk3::BackSpaceKey:
 #ifdef __APPLE__
-      if (mods==0 || mods==FL_CTRL) { // delete previous char
+      if (mods==0 || mods==fltk3::CTRL) { // delete previous char
         ascii = ctrl('H');
-      } else if (mods==FL_ALT) { // delete previous word
+      } else if (mods==fltk3::ALT) { // delete previous word
         if (mark() != position()) return cut();
         cut(word_start(position()), position());
         return 1;
-      } else if (mods==FL_META) { // delete to the beginning of the line
+      } else if (mods==fltk3::META) { // delete to the beginning of the line
         if (mark() != position()) return cut();
         cut(line_start(position()), position());
         return 1;
@@ -348,8 +348,8 @@ int fltk3::Input::handle_key() {
       ascii = ctrl('H'); 
 #endif
       break;
-    case FL_Enter:
-    case FL_KP_Enter:
+    case fltk3::EnterKey:
+    case fltk3::KeypadEnter:
       if (when() & fltk3::WHEN_ENTER_KEY) {
         position(size(), 0);
         maybe_do_callback();
@@ -358,8 +358,8 @@ int fltk3::Input::handle_key() {
         return replace(position(), mark(), "\n", 1);
       else 
         return 0;	// reserved for shortcuts
-    case FL_Tab:
-      if (fltk3::event_state(FL_CTRL|FL_SHIFT) || input_type()!=FL_MULTILINE_INPUT || readonly()) return 0;
+    case fltk3::TabKey:
+      if (fltk3::event_state(fltk3::CTRL|fltk3::SHIFT) || input_type()!=FL_MULTILINE_INPUT || readonly()) return 0;
       return replace(position(), mark(), &ascii, 1);
 #ifdef __APPLE__
     case 'c' :
@@ -367,11 +367,11 @@ int fltk3::Input::handle_key() {
     case 'x' :
     case 'z' :
       //    printf("'%c' (0x%02x) pressed with%s%s%s%s\n", ascii, ascii,
-      //           fltk3::event_state(FL_SHIFT) ? " FL_SHIFT" : "",
-      //           fltk3::event_state(FL_CTRL) ? " FL_CTRL" : "",
-      //           fltk3::event_state(FL_ALT) ? " FL_ALT" : "",
-      //           fltk3::event_state(FL_META) ? " FL_META" : "");
-      if (fltk3::event_state(FL_META)) ascii -= 0x60;
+      //           fltk3::event_state(fltk3::SHIFT) ? " fltk3::SHIFT" : "",
+      //           fltk3::event_state(fltk3::CTRL) ? " fltk3::CTRL" : "",
+      //           fltk3::event_state(fltk3::ALT) ? " fltk3::ALT" : "",
+      //           fltk3::event_state(fltk3::META) ? " fltk3::META" : "");
+      if (fltk3::event_state(fltk3::META)) ascii -= 0x60;
       //    printf("using '%c' (0x%02x)...\n", ascii, ascii);
       break;
 #endif // __APPLE__
@@ -486,19 +486,19 @@ int fltk3::Input::handle(int event) {
   switch (event) {
     case fltk3::FOCUS:
       switch (fltk3::event_key()) {
-        case FL_Right:
+        case fltk3::RightKey:
           position(0);
           break;
-        case FL_Left:
+        case fltk3::LeftKey:
           position(size());
           break;
-        case FL_Down:
+        case fltk3::DownKey:
           up_down_position(0);
           break;
-        case FL_Up:
+        case fltk3::UpKey:
           up_down_position(line_start(size()));
           break;
-        case FL_Tab:
+        case fltk3::TabKey:
         case 0xfe20: // XK_ISO_Left_Tab
           position(size(),0);
           break;
@@ -509,7 +509,7 @@ int fltk3::Input::handle(int event) {
       break;
       
     case fltk3::KEY:
-      if (fltk3::event_key() == FL_Tab && mark() != position()) {
+      if (fltk3::event_key() == fltk3::TabKey && mark() != position()) {
         // Set the current cursor position to the end of the selection...
         if (mark() > position())
           position(mark());
@@ -531,7 +531,7 @@ int fltk3::Input::handle(int event) {
                                 w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
         newpos = position(); 
         position( oldpos, oldmark );
-        if (fltk3::focus()==this && !fltk3::event_state(FL_SHIFT) && input_type()!=FL_SECRET_INPUT &&
+        if (fltk3::focus()==this && !fltk3::event_state(fltk3::SHIFT) && input_type()!=FL_SECRET_INPUT &&
             (newpos >= mark() && newpos < position() ||
              newpos >= position() && newpos < mark())) {
               // user clicked in the selection, may be trying to drag

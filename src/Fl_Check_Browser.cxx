@@ -121,11 +121,11 @@ void Fl_Check_Browser::item_draw(void *v, int X, int Y, int, int) const {
 	cb_item *i = (cb_item *)v;
 	char *s = i->text;
 	int tsize = textsize();
-	Fl_Color col = active_r() ? textcolor() : fl_inactive(textcolor());
+	fltk3::Color col = active_r() ? textcolor() : fl_inactive(textcolor());
 	int cy = Y + (tsize + 1 - CHECK_SIZE) / 2;
 	X += 2;
 
-	fl_color(active_r() ? FL_FOREGROUND_COLOR : fl_inactive(FL_FOREGROUND_COLOR));
+	fl_color(active_r() ? fltk3::FOREGROUND_COLOR : fl_inactive(fltk3::FOREGROUND_COLOR));
 	fl_loop(X, cy, X, cy + CHECK_SIZE,
 	        X + CHECK_SIZE, cy + CHECK_SIZE, X + CHECK_SIZE, cy);
 	if (i->checked) {

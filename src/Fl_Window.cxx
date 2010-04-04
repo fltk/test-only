@@ -63,8 +63,8 @@ void fltk3::Window::_Fl_Window() {
 fltk3::Window::Window(int X,int Y,int W, int H, const char *l)
 : fltk3::Group(X, Y, W, H, l) {
   cursor_default = FL_CURSOR_DEFAULT;
-  cursor_fg      = FL_BLACK;
-  cursor_bg      = FL_WHITE;
+  cursor_fg      = fltk3::BLACK;
+  cursor_bg      = fltk3::WHITE;
 
   _Fl_Window();
   set_flag(FORCE_POSITION);
@@ -74,8 +74,8 @@ fltk3::Window::Window(int W, int H, const char *l)
 // fix common user error of a missing end() with current(0):
 : fltk3::Group((fltk3::Group::current(0),0), 0, W, H, l) {
   cursor_default = FL_CURSOR_DEFAULT;
-  cursor_fg      = FL_BLACK;
-  cursor_bg      = FL_WHITE;
+  cursor_fg      = fltk3::BLACK;
+  cursor_bg      = fltk3::WHITE;
 
   _Fl_Window();
   clear_visible();
@@ -120,11 +120,11 @@ void fltk3::Window::draw() {
     if (dx<=0) dx = 1;
     if (dy<=0) dy = 1;
     int x1 = w()-dx-1, x2 = x1, y1 = h()-dx-1, y2 = y1;
-    Fl_Color c[4] = {
+    fltk3::Color c[4] = {
       color(),
-      fl_color_average(color(), FL_WHITE, 0.7f),
-      fl_color_average(color(), FL_BLACK, 0.6f),
-      fl_color_average(color(), FL_BLACK, 0.8f),
+      fl_color_average(color(), fltk3::WHITE, 0.7f),
+      fl_color_average(color(), fltk3::BLACK, 0.6f),
+      fl_color_average(color(), fltk3::BLACK, 0.8f),
     };
     int i;
     for (i=dx; i<12; i++) {

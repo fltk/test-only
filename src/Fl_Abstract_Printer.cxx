@@ -29,7 +29,7 @@
  */
 
 #include <fltk3/run.h>
-#include <fltk3/Fl_Printer.H>
+#include <fltk3/Printer.h>
 
 /**
  @brief Draws the widget on the printed page.

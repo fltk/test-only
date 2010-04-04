@@ -34,10 +34,10 @@
 float		fltk3::Tooltip::delay_ = 1.0f;
 float		fltk3::Tooltip::hoverdelay_ = 0.2f;
 int		fltk3::Tooltip::enabled_ = 1;
-Fl_Color	fltk3::Tooltip::color_ = fl_color_cube(FL_NUM_RED - 1,
-		                                   FL_NUM_GREEN - 1,
-						   FL_NUM_BLUE - 2);
-Fl_Color	fltk3::Tooltip::textcolor_ = FL_BLACK;
+fltk3::Color	fltk3::Tooltip::color_ = fl_color_cube(fltk3::NUM_RED - 1,
+		                                   fltk3::NUM_GREEN - 1,
+						   fltk3::NUM_BLUE - 2);
+fltk3::Color	fltk3::Tooltip::textcolor_ = fltk3::BLACK;
 Fl_Font         fltk3::Tooltip::font_ = fltk3::HELVETICA;
 Fl_Fontsize    fltk3::Tooltip::size_ = FL_NORMAL_SIZE;
 
@@ -203,7 +203,7 @@ void fltk3::Tooltip::exit_(fltk3::Widget *w) {
   fltk3::remove_timeout(recent_timeout);
   if (window && window->visible()) window->hide();
   if (recent_tooltip) {
-    if (fltk3::event_state() & FL_BUTTONS) recent_tooltip = 0;
+    if (fltk3::event_state() & fltk3::BUTTONS) recent_tooltip = 0;
     else fltk3::add_timeout(fltk3::Tooltip::hoverdelay(), recent_timeout);
   }
 }

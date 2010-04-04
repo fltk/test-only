@@ -109,7 +109,7 @@ static void set_cursor(Fl_Tile*t, Fl_Cursor c) {
   if (cursor == c || !t->window()) return;
   cursor = c;
 #ifdef __sgi
-  t->window()->cursor(c,FL_RED,FL_WHITE);
+  t->window()->cursor(c,fltk3::RED,fltk3::WHITE);
 #else
   t->window()->cursor(c);
 #endif

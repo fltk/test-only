@@ -43,7 +43,7 @@
   Sets the cursor for the current window to the specified shape and colors.
   The cursors are defined in the <fltk3/Enumerations.H> header file. 
   */
-void fl_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
+void fl_cursor(Fl_Cursor c, fltk3::Color fg, fltk3::Color bg) {
   if (fltk3::first_window()) fltk3::first_window()->cursor(c,fg,bg);
 }
 /** 
@@ -51,7 +51,7 @@ void fl_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
 
     For back compatibility only.
 */
-void fltk3::Window::default_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
+void fltk3::Window::default_cursor(Fl_Cursor c, fltk3::Color fg, fltk3::Color bg) {
 //  if (c == FL_CURSOR_DEFAULT) c = FL_CURSOR_ARROW;
 
   cursor_default = c;
@@ -67,7 +67,7 @@ void fltk3::Window::default_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
 #    define IDC_HAND	MAKEINTRESOURCE(32649)
 #  endif // !IDC_HAND
 
-void fltk3::Window::cursor(Fl_Cursor c, Fl_Color c1, Fl_Color c2) {
+void fltk3::Window::cursor(Fl_Cursor c, fltk3::Color c1, fltk3::Color c2) {
   if (!shown()) return;
   // the cursor must be set for the top level window, not for subwindows
   fltk3::Window *w = window(), *toplevel = this;
@@ -145,7 +145,7 @@ CGContextRef CreateHelpImage(void)
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fl_rectf(0,0,w,h);
-  fl_color(FL_BLACK);
+  fl_color(fltk3::BLACK);
   fl_font(fltk3::COURIER_BOLD, 20);
   fl_draw("?", 1, h-1);
   fl_end_offscreen();
@@ -173,14 +173,14 @@ CGContextRef CreateWatchImage(void)
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fl_rectf(0,0,w,h);
   CGContextTranslateCTM( (CGContextRef)off, w/2, h/2);
-  fl_color(FL_WHITE);
+  fl_color(fltk3::WHITE);
   fl_circle(0, 0, r+1);
-  fl_color(FL_BLACK);
+  fl_color(fltk3::BLACK);
   fl_rectf(-r*0.7, -r*1.7, 1.4*r, 3.4*r);
   fl_rectf(r-1, -1, 3, 3);
-  fl_color(FL_WHITE);
+  fl_color(fltk3::WHITE);
   fl_pie(-r, -r, 2*r, 2*r, 0, 360);
-  fl_color(FL_BLACK);
+  fl_color(fltk3::BLACK);
   fl_circle(0,0,r);
   fl_xyline(0, 0, -r*.7);
   fl_xyline(0, 0, 0, -r*.7);
@@ -198,7 +198,7 @@ CGContextRef CreateNESWImage(void)
   fl_rectf(0,0,w,h);
   CGContextTranslateCTM( (CGContextRef)off, 0, h);
   CGContextScaleCTM( (CGContextRef)off, 1, -1);
-  fl_color(FL_BLACK);
+  fl_color(fltk3::BLACK);
   fl_polygon(0, 0, c, 0, 0, c);
   fl_polygon(r, r, r, r-c, r-c, r);
   fl_line_style(FL_SOLID, 2, 0);
@@ -218,7 +218,7 @@ CGContextRef CreateNWSEImage(void)
   fl_rectf(0,0,w,h);
   CGContextTranslateCTM( (CGContextRef)off, 0, h);
   CGContextScaleCTM( (CGContextRef)off, 1, -1);
-  fl_color(FL_BLACK);
+  fl_color(fltk3::BLACK);
   fl_polygon(r-1, 0, r-1, c, r-1-c, 0);
   fl_polygon(-1, r, c-1, r, -1, r-c);
   fl_line_style(FL_SOLID, 2, 0);
@@ -228,7 +228,7 @@ CGContextRef CreateNWSEImage(void)
   return (CGContextRef)off;
 }
 
-void fltk3::Window::cursor(Fl_Cursor c, Fl_Color, Fl_Color) {
+void fltk3::Window::cursor(Fl_Cursor c, fltk3::Color, fltk3::Color) {
   if (c == FL_CURSOR_DEFAULT) {
     c = cursor_default;
   }
@@ -284,7 +284,7 @@ static struct TableEntry {
   {{0}, {0}} // FL_CURSOR_NONE & unknown
 };
 
-void fltk3::Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
+void fltk3::Window::cursor(Fl_Cursor c, fltk3::Color fg, fltk3::Color bg) {
   if (!shown()) return;
   Cursor xc;
   int deleteit = 0;

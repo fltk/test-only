@@ -100,11 +100,11 @@ Fl_Tree_Prefs::Fl_Tree_Prefs() {
   _usericonmarginleft     = 3;
   _labelmarginleft        = 3;
   _linespacing            = 0;
-  _fgcolor                = FL_BLACK;
-  _bgcolor                = FL_WHITE;
-  _selectcolor            = FL_DARK_BLUE;
-  _inactivecolor          = FL_GRAY;
-  _connectorcolor         = Fl_Color(43);
+  _fgcolor                = fltk3::BLACK;
+  _bgcolor                = fltk3::WHITE;
+  _selectcolor            = fltk3::DARK_BLUE;
+  _inactivecolor          = fltk3::GRAY;
+  _connectorcolor         = fltk3::Color(43);
   _connectorstyle         = FL_TREE_CONNECTOR_DOTTED;
   _openimage              = &L_openpixmap;
   _closeimage             = &L_closepixmap;

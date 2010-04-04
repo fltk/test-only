@@ -181,7 +181,7 @@ extern FL_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b)
  * \param cb   a callback that will be called by "About myprog" menu item
  *		   with NULL 1st argument.
  * \param user_data   a pointer transmitted as 2nd argument to the callback.
- * \param shortcut    optional shortcut to attach to the "About myprog" menu item (e.g., FL_META+'a')
+ * \param shortcut    optional shortcut to attach to the "About myprog" menu item (e.g., fltk3::META+'a')
  */
 extern void fl_mac_set_about( fltk3::Callback *cb, void *user_data, int shortcut = 0);
 /** @} */

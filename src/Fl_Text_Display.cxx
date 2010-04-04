@@ -89,10 +89,10 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
   display_insert_position_hint = 0;
   shortcut_ = 0;
 
-  color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
+  color(fltk3::BACKGROUND2_COLOR, fltk3::SELECTION_COLOR);
   box(fltk3::DOWN_FRAME);
   textsize(FL_NORMAL_SIZE);
-  textcolor(FL_FOREGROUND_COLOR);
+  textcolor(fltk3::FOREGROUND_COLOR);
   textfont(fltk3::HELVETICA);
   set_flag(SHORTCUT_LABEL);
 
@@ -127,7 +127,7 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
   mNeedAbsTopLineNum = 0;
   mHorizOffset = mHorizOffsetHint = 0;
 
-  mCursor_color = FL_FOREGROUND_COLOR;
+  mCursor_color = fltk3::FOREGROUND_COLOR;
 
   mFixedFontWidth = -1;
   mStyleBuffer = 0;
@@ -1780,8 +1780,8 @@ void Fl_Text_Display::draw_string( int style, int X, int Y, int toX,
 
   Fl_Font font = textfont();
   int fsize = textsize();
-  Fl_Color foreground;
-  Fl_Color background;
+  fltk3::Color foreground;
+  fltk3::Color background;
 
   if ( style & STYLE_LOOKUP_MASK ) {
     int si = (style & STYLE_LOOKUP_MASK) - 'A';
@@ -3095,7 +3095,7 @@ void Fl_Text_Display::draw(void) {
     if (mVScrollBar->visible() && mHScrollBar->visible())
       fl_rectf(mVScrollBar->x(), mHScrollBar->y(),
                mVScrollBar->w(), mHScrollBar->h(),
-               FL_GRAY);
+               fltk3::GRAY);
 
     // blank the previous cursor protrusions
   }
@@ -3276,7 +3276,7 @@ int Fl_Text_Display::handle(int event) {
 	  handle(fltk3::FOCUS);
 	}
       if (fltk3::Group::handle(event)) return 1;
-        if (fltk3::event_state()&FL_SHIFT) return handle(fltk3::DRAG);
+        if (fltk3::event_state()&fltk3::SHIFT) return handle(fltk3::DRAG);
         dragging = 1;
         int pos = xy_to_position(fltk3::event_x(), fltk3::event_y(), CURSOR_POS);
         int ok = 0;
@@ -3404,7 +3404,7 @@ int Fl_Text_Display::handle(int event) {
 
     case fltk3::KEY:
       // Copy?
-      if ((fltk3::event_state()&(FL_CTRL|FL_COMMAND)) && fltk3::event_key()=='c') {
+      if ((fltk3::event_state()&(fltk3::CTRL|fltk3::COMMAND)) && fltk3::event_key()=='c') {
           if (!buffer()->selected()) return 1;
           const char *copy = buffer()->selection_text();
           if (*copy) fltk3::copy(copy, strlen(copy), 1);
@@ -3413,7 +3413,7 @@ int Fl_Text_Display::handle(int event) {
       }
 
       // Select all ?
-      if ((fltk3::event_state()&(FL_CTRL|FL_COMMAND)) && fltk3::event_key()=='a') {
+      if ((fltk3::event_state()&(fltk3::CTRL|fltk3::COMMAND)) && fltk3::event_key()=='a') {
           buffer()->select(0,buffer()->length());
           return 1;
       }

@@ -136,7 +136,7 @@ int fltk3::MenuItem::measure(int* hp, const fltk3::Menu_* m) const {
   l.type    = labeltype_;
   l.font    = labelsize_ || labelfont_ ? labelfont_ : (m ? m->textfont() : fltk3::HELVETICA);
   l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : FL_NORMAL_SIZE;
-  l.color   = FL_FOREGROUND_COLOR; // this makes no difference?
+  l.color   = fltk3::FOREGROUND_COLOR; // this makes no difference?
   fl_draw_shortcut = 1;
   int w = 0; int h = 0;
   l.measure(w, hp ? *hp : h);
@@ -155,22 +155,22 @@ void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
   l.type    = labeltype_;
   l.font    = labelsize_ || labelfont_ ? labelfont_ : (m ? m->textfont() : fltk3::HELVETICA);
   l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : FL_NORMAL_SIZE;
-  l.color   = labelcolor_ ? labelcolor_ : m ? m->textcolor() : int(FL_FOREGROUND_COLOR);
-  if (!active()) l.color = fl_inactive((Fl_Color)l.color);
-  Fl_Color color = m ? m->color() : FL_GRAY;
+  l.color   = labelcolor_ ? labelcolor_ : m ? m->textcolor() : int(fltk3::FOREGROUND_COLOR);
+  if (!active()) l.color = fl_inactive((fltk3::Color)l.color);
+  fltk3::Color color = m ? m->color() : fltk3::GRAY;
   if (selected) {
-    Fl_Color r = m ? m->selection_color() : FL_SELECTION_COLOR;
+    fltk3::Color r = m ? m->selection_color() : fltk3::SELECTION_COLOR;
     fltk3::Boxtype b = m && m->down_box() ? m->down_box() : fltk3::FLAT_BOX;
     if (fl_contrast(r,color)!=r) { // back compatibility boxtypes
       if (selected == 2) { // menu title
 	r = color;
 	b = m ? m->box() : fltk3::UP_BOX;
       } else {
-	r = (Fl_Color)(FL_COLOR_CUBE-1); // white
-	l.color = fl_contrast((Fl_Color)labelcolor_, r);
+	r = (fltk3::Color)(fltk3::COLOR_CUBE-1); // white
+	l.color = fl_contrast((fltk3::Color)labelcolor_, r);
       }
     } else {
-      l.color = fl_contrast((Fl_Color)labelcolor_, r);
+      l.color = fl_contrast((fltk3::Color)labelcolor_, r);
     }
     if (selected == 2) { // menu title
       fl_draw_box(b, x, y, w, h, r);
@@ -186,7 +186,7 @@ void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
     int W = h - 2 * d;
 
     if (flags & fltk3::MENU_RADIO) {
-      fl_draw_box(fltk3::ROUND_DOWN_BOX, x+2, y+d, W, W, FL_BACKGROUND2_COLOR);
+      fl_draw_box(fltk3::ROUND_DOWN_BOX, x+2, y+d, W, W, fltk3::BACKGROUND2_COLOR);
       if (value()) {
 	int tW = (W - fltk3::box_dw(fltk3::ROUND_DOWN_BOX)) / 2 + 1;
 	if ((W - tW) & 1) tW++;	// Make sure difference is even to center
@@ -196,11 +196,11 @@ void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
 	  td ++;
 
 	  if (!strcmp(fltk3::scheme(), "gtk+")) {
-	    fl_color(FL_SELECTION_COLOR);
+	    fl_color(fltk3::SELECTION_COLOR);
 	    tW --;
 	    fl_pie(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
 	    fl_arc(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
-	    fl_color(fl_color_average(FL_WHITE, FL_SELECTION_COLOR, 0.2f));
+	    fl_color(fl_color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.2f));
 	  } else fl_color(labelcolor_);
 	} else fl_color(labelcolor_);
 
@@ -231,15 +231,15 @@ void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
 	}
 
 	if (fltk3::scheme() && !strcmp(fltk3::scheme(), "gtk+")) {
-	  fl_color(fl_color_average(FL_WHITE, FL_SELECTION_COLOR, 0.5));
+	  fl_color(fl_color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
 	  fl_arc(x + td + 2, y + d + td, tW + 1, tW + 1, 60.0, 180.0);
 	}
       }
     } else {
-      fl_draw_box(fltk3::DOWN_BOX, x+2, y+d, W, W, FL_BACKGROUND2_COLOR);
+      fl_draw_box(fltk3::DOWN_BOX, x+2, y+d, W, W, fltk3::BACKGROUND2_COLOR);
       if (value()) {
 	if (fltk3::scheme() && !strcmp(fltk3::scheme(), "gtk+")) {
-	  fl_color(FL_SELECTION_COLOR);
+	  fl_color(fltk3::SELECTION_COLOR);
 	} else {
 	  fl_color(labelcolor_);
 	}
@@ -297,7 +297,7 @@ menuwindow::menuwindow(const fltk3::MenuItem* m, int X, int Y, int Wp, int Hp,
   } else {
     box(fltk3::UP_BOX);
   }
-  color(button && !fltk3::scheme() ? button->color() : FL_GRAY);
+  color(button && !fltk3::scheme() ? button->color() : fltk3::GRAY);
   selected = -1;
   {
     int j = 0;
@@ -470,9 +470,9 @@ void menuwindow::drawentry(const fltk3::MenuItem* m, int n, int eraseit) {
   }
 
   if (m->flags & fltk3::MENU_DIVIDER) {
-    fl_color(FL_DARK3);
+    fl_color(fltk3::DARK3);
     fl_xyline(BW-1, yy+hh+(LEADING-2)/2, W-2*BW+2);
-    fl_color(FL_LIGHT3);
+    fl_color(fltk3::LIGHT3);
     fl_xyline(BW-1, yy+hh+((LEADING-2)/2+1), W-2*BW+2);
   }
 }
@@ -659,12 +659,12 @@ int menuwindow::early_hide_handle(int e) {
   switch (e) {
   case fltk3::KEY:
     switch (fltk3::event_key()) {
-    case FL_BackSpace:
+    case fltk3::BackSpaceKey:
     case 0xFE20: // backtab
     BACKTAB:
       if (!backward(pp.menu_number)) {pp.item_number = -1;backward(pp.menu_number);}
       return 1;
-    case FL_Up:
+    case fltk3::UpKey:
       if (pp.menubar && pp.menu_number == 0) {
         // Do nothing...
       } else if (backward(pp.menu_number)) {
@@ -673,11 +673,11 @@ int menuwindow::early_hide_handle(int e) {
         setitem(0, pp.p[0]->selected);
       }
       return 1;
-    case FL_Tab:
+    case fltk3::TabKey:
       if (fltk3::event_shift()) goto BACKTAB;
-    case FL_Down:
+    case fltk3::DownKey:
       if (pp.menu_number || !pp.menubar) {
-        if (!forward(pp.menu_number) && fltk3::event_key()==FL_Tab) {
+        if (!forward(pp.menu_number) && fltk3::event_key()==fltk3::TabKey) {
           pp.item_number = -1;
           forward(pp.menu_number);
         }
@@ -685,22 +685,22 @@ int menuwindow::early_hide_handle(int e) {
         forward(pp.menu_number+1);
       }
       return 1;
-    case FL_Right:
+    case fltk3::RightKey:
       if (pp.menubar && (pp.menu_number<=0 || pp.menu_number==1 && pp.nummenus==2))
 	forward(0);
       else if (pp.menu_number < pp.nummenus-1) forward(pp.menu_number+1);
       return 1;
-    case FL_Left:
+    case fltk3::LeftKey:
       if (pp.menubar && pp.menu_number<=1) backward(0);
       else if (pp.menu_number>0)
 	setitem(pp.menu_number-1, pp.p[pp.menu_number-1]->selected);
       return 1;
-    case FL_Enter:
-    case FL_KP_Enter:
+    case fltk3::EnterKey:
+    case fltk3::KeypadEnter:
     case ' ':
       pp.state = DONE_STATE;
       return 1;
-    case FL_Escape:
+    case fltk3::EscapeKey:
       setitem(0, -1, 0);
       pp.state = DONE_STATE;
       return 1;

@@ -28,7 +28,7 @@
 #ifndef fl_show_colormap_H
 #define fl_show_colormap_H
 
-FL_EXPORT Fl_Color fl_show_colormap(Fl_Color oldcol);
+FL_EXPORT fltk3::Color fl_show_colormap(fltk3::Color oldcol);
 
 #endif
 

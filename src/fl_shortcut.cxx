@@ -33,11 +33,11 @@
 //
 // To make it easier to match some things it is more complex:
 //
-// Only FL_META, FL_ALT, FL_SHIFT, and FL_CTRL must be "off".  A
+// Only fltk3::META, fltk3::ALT, fltk3::SHIFT, and fltk3::CTRL must be "off".  A
 // zero in the other shift flags indicates "dont care".
 //
 // It also checks against the first character of fltk3::event_text(),
-// and zero for FL_SHIFT means "don't care".
+// and zero for fltk3::SHIFT means "don't care".
 // This allows punctuation shortcuts like "#" to work (rather than
 // calling it "shift+3" on a US keyboard)
 
@@ -61,9 +61,9 @@
 int fltk3::test_shortcut(unsigned int shortcut) {
   if (!shortcut) return 0;
 
-  unsigned int v = shortcut & FL_KEY_MASK;
+  unsigned int v = shortcut & fltk3::KEY_MASK;
   if (((unsigned)fl_tolower(v))!=v) {
-    shortcut |= FL_SHIFT;
+    shortcut |= fltk3::SHIFT;
   }
 
   int shift = fltk3::event_state();
@@ -72,19 +72,19 @@ int fltk3::test_shortcut(unsigned int shortcut) {
   // record shift flags that are wrong:
   int mismatch = (shortcut^shift)&0x7fff0000;
   // these three must always be correct:
-  if (mismatch&(FL_META|FL_ALT|FL_CTRL)) return 0;
+  if (mismatch&(fltk3::META|fltk3::ALT|fltk3::CTRL)) return 0;
 
-  unsigned int key = shortcut & FL_KEY_MASK;
+  unsigned int key = shortcut & fltk3::KEY_MASK;
 
   // if shift is also correct, check for exactly equal keysyms:
-  if (!(mismatch&(FL_SHIFT)) && key == (unsigned)fltk3::event_key()) return 1;
+  if (!(mismatch&(fltk3::SHIFT)) && key == (unsigned)fltk3::event_key()) return 1;
 
   // try matching utf8, ignore shift:
   unsigned int firstChar = fl_utf8decode(fltk3::event_text(), fltk3::event_text()+fltk3::event_length(), 0);
   if (key==firstChar) return 1;
 
   // kludge so that Ctrl+'_' works (as opposed to Ctrl+'^_'):
-  if ((shift&FL_CTRL) && key >= 0x3f && key <= 0x5F
+  if ((shift&fltk3::CTRL) && key >= 0x3f && key <= 0x5F
       && firstChar==(key^0x40)) return 1; // firstChar should be within a-z
   return 0;
 }
@@ -94,71 +94,71 @@ struct Keyname {unsigned int key; const char* name;};
 #if defined(WIN32)
 static Keyname table[] = {
   {' ', "Space"},
-  {FL_BackSpace, "Backspace"},
-  {FL_Tab,	"Tab"},
+  {fltk3::BackSpaceKey, "Backspace"},
+  {fltk3::TabKey,	"Tab"},
   {0xff0b/*XK_Clear*/, "Clear"},
-  {FL_Enter,	"Enter"}, // X says "Enter"
-  {FL_Pause,	"Pause"},
-  {FL_Scroll_Lock, "Scroll_Lock"},
-  {FL_Escape,	"Escape"},
-  {FL_Home,	"Home"},
-  {FL_Left,	"Left"},
-  {FL_Up,	"Up"},
-  {FL_Right,	"Right"},
-  {FL_Down,	"Down"},
-  {FL_Page_Up,	"Page_Up"}, // X says "Prior"
-  {FL_Page_Down,"Page_Down"}, // X says "Next"
-  {FL_End,	"End"},
-  {FL_Print,	"Print"},
+  {fltk3::EnterKey,	"Enter"}, // X says "Enter"
+  {fltk3::PauseKey,	"Pause"},
+  {fltk3::ScrollLockKey, "Scroll_Lock"},
+  {fltk3::EscapeKey,	"Escape"},
+  {fltk3::HomeKey,	"Home"},
+  {fltk3::LeftKey,	"Left"},
+  {fltk3::UpKey,	"Up"},
+  {fltk3::RightKey,	"Right"},
+  {fltk3::DownKey,	"Down"},
+  {fltk3::PageUpKey,	"Page_Up"}, // X says "Prior"
+  {fltk3::PageDownKey,"Page_Down"}, // X says "Next"
+  {fltk3::EndKey,	"End"},
+  {fltk3::PrintKey,	"Print"},
   {FL_Insert,	"Insert"},
-  {FL_Menu,	"Menu"},
-  {FL_Num_Lock,	"Num_Lock"},
-  {FL_KP_Enter,	"KP_Enter"},
-  {FL_Shift_L,	"Shift_L"},
-  {FL_Shift_R,	"Shift_R"},
-  {FL_Control_L,"Control_L"},
-  {FL_Control_R,"Control_R"},
-  {FL_Caps_Lock,"Caps_Lock"},
-  {FL_Meta_L,	"Meta_L"},
-  {FL_Meta_R,	"Meta_R"},
-  {FL_Alt_L,	"Alt_L"},
-  {FL_Alt_R,	"Alt_R"},
-  {FL_Delete,	"Delete"}
+  {fltk3::MenuKey,	"Menu"},
+  {fltk3::NumLockKey,	"Num_Lock"},
+  {fltk3::Keypad_Enter,	"KP_Enter"},
+  {fltk3::LeftShiftKey,	"Shift_L"},
+  {fltk3::RightShiftKey,	"Shift_R"},
+  {fltk3::LeftControlKey,"Control_L"},
+  {fltk3::RightControlKey,"Control_R"},
+  {fltk3::CapsLockKey,"Caps_Lock"},
+  {fltk3::LeftMetaKey,	"Meta_L"},
+  {fltk3::RightMetaKey,	"Meta_R"},
+  {fltk3::LeftAltKey,	"Alt_L"},
+  {fltk3::RightAltKey,	"Alt_R"},
+  {fltk3::DeleteKey,	"Delete"}
 };
 #elif defined(__APPLE__) 
 static Keyname table[] = {
                                  // v - this column contains utf8 characters
   {' ', "Space"},
-  {FL_BackSpace,"\xe2\x8c\xab"}, // ⌫  erase to the left
-  {FL_Tab,	"\xe2\x87\xa5"}, // ⇥  rightwards arrow to bar
+  {fltk3::BackSpaceKey,"\xe2\x8c\xab"}, // ⌫  erase to the left
+  {fltk3::TabKey,	"\xe2\x87\xa5"}, // ⇥  rightwards arrow to bar
   {0xff0b,      "\xe2\x8c\xa6"}, // ⌦  erase to the right
-  {FL_Enter,	"\xe2\x86\xa9"}, // ↩  leftwards arrow with hook
-  {FL_Pause,	"Pause"},
-  {FL_Scroll_Lock, "Scroll_Lock"},
-  {FL_Escape,	"\xe2\x90\x9b"},
-  {FL_Home,	"\xe2\x86\x96"}, // ↖  north west arrow
-  {FL_Left,	"\xe2\x86\x90"}, // ←  leftwards arrow
-  {FL_Up,	"\xe2\x86\x91"}, // ↑  upwards arrow
-  {FL_Right,	"\xe2\x86\x92"}, // →  rightwards arrow
-  {FL_Down,	"\xe2\x86\x93"}, // ↓  downwards arrow
-  {FL_Page_Up,	"\xe2\x87\x9e"}, // ⇞  upwards arrow with double stroke
-  {FL_Page_Down,"\xe2\x87\x9f"}, // ⇟  downward arrow with double stroke
-  {FL_End,	"\xe2\x86\x98"}, // ↘  south east arrow
-  {FL_Print,	"Print"},
-  {FL_Insert,	"Insert"},
-  {FL_Menu,	"Menu"},
-  {FL_Num_Lock,	"Num_Lock"},
-  {FL_KP_Enter,	"\xe2\x8c\xa4"}, // ⌤ up arrow head between two horizontal bars
-  {FL_Shift_L,	"Shift_L"},
-  {FL_Shift_R,	"Shift_R"},
-  {FL_Control_L,"Control_L"},
-  {FL_Control_R,"Control_R"},
-  {FL_Caps_Lock,"\xe2\x87\xaa"}, // ⇪  upwards white arrow from bar
-  {FL_Meta_L,	"Meta_L"},
-  {FL_Meta_R,	"Meta_R"},
-  {FL_Alt_L,	"Alt_L"},
-  {FL_Alt_R,	"Alt_R"},
-  {FL_Delete,	"\xe2\x8c\xa7"}  // ⌧  x in a rectangle box
+  {fltk3::EnterKey,	"\xe2\x86\xa9"}, // ↩  leftwards arrow with hook
+  {fltk3::PauseKey,	"Pause"},
+  {fltk3::ScrollLockKey, "Scroll_Lock"},
+  {fltk3::EscapeKey,	"\xe2\x90\x9b"},
+  {fltk3::HomeKey,	"\xe2\x86\x96"}, // ↖  north west arrow
+  {fltk3::LeftKey,	"\xe2\x86\x90"}, // ←  leftwards arrow
+  {fltk3::UpKey,	"\xe2\x86\x91"}, // ↑  upwards arrow
+  {fltk3::RightKey,	"\xe2\x86\x92"}, // →  rightwards arrow
+  {fltk3::DownKey,	"\xe2\x86\x93"}, // ↓  downwards arrow
+  {fltk3::PageUpKey,	"\xe2\x87\x9e"}, // ⇞  upwards arrow with double stroke
+  {fltk3::PageDownKey,"\xe2\x87\x9f"}, // ⇟  downward arrow with double stroke
+  {fltk3::EndKey,	"\xe2\x86\x98"}, // ↘  south east arrow
+  {fltk3::PrintKey,	"Print"},
+  {fltk3::InsertKey,	"Insert"},
+  {fltk3::MenuKey,	"Menu"},
+  {fltk3::NumLockKey,	"Num_Lock"},
+  {fltk3::KeypadEnter,	"\xe2\x8c\xa4"}, // ⌤ up arrow head between two horizontal bars
+  {fltk3::LeftShiftKey,	"Shift_L"},
+  {fltk3::RightShiftKey,	"Shift_R"},
+  {fltk3::LeftControlKey,"Control_L"},
+  {fltk3::RightControlKey,"Control_R"},
+  {fltk3::CapsLockKey,"\xe2\x87\xaa"}, // ⇪  upwards white arrow from bar
+  {fltk3::LeftMetaKey,	"Meta_L"},
+  {fltk3::RightMetaKey,	"Meta_R"},
+  {fltk3::LeftAltKey,	"Alt_L"},
+  {fltk3::RightAltKey,	"Alt_R"},
+  {fltk3::DeleteKey,	"\xe2\x8c\xa7"}  // ⌧  x in a rectangle box
 };
 #endif
 
@@ -192,29 +192,29 @@ const char* fl_shortcut_label(unsigned int shortcut, const char **eom) {
   if (eom) *eom = p;
   if (!shortcut) {*p = 0; return buf;}
   // fix upper case shortcuts
-  unsigned int v = shortcut & FL_KEY_MASK;
+  unsigned int v = shortcut & fltk3::KEY_MASK;
   if (((unsigned)fl_tolower(v))!=v) {
-    shortcut |= FL_SHIFT;
+    shortcut |= fltk3::SHIFT;
   }
 #ifdef __APPLE__
   //                        this column contains utf8 characters - v
-  if (shortcut & FL_SHIFT) {strcpy(p,"\xe2\x87\xa7"); p += 3;}  // ⇧  upwards white arrow
-  if (shortcut & FL_CTRL)  {strcpy(p,"\xe2\x8c\x83"); p += 3;}  // ⌃  up arrowhead
-  if (shortcut & FL_ALT)   {strcpy(p,"\xe2\x8c\xa5"); p += 3;}  // ⌥  alternative key symbol
-  if (shortcut & FL_META)  {strcpy(p,"\xe2\x8c\x98"); p += 3;}  // ⌘  place of interest sign
+  if (shortcut & fltk3::SHIFT) {strcpy(p,"\xe2\x87\xa7"); p += 3;}  // ⇧  upwards white arrow
+  if (shortcut & fltk3::CTRL)  {strcpy(p,"\xe2\x8c\x83"); p += 3;}  // ⌃  up arrowhead
+  if (shortcut & fltk3::ALT)   {strcpy(p,"\xe2\x8c\xa5"); p += 3;}  // ⌥  alternative key symbol
+  if (shortcut & fltk3::META)  {strcpy(p,"\xe2\x8c\x98"); p += 3;}  // ⌘  place of interest sign
 #else
-  if (shortcut & FL_META) {strcpy(p,"Meta+"); p += 5;}
-  if (shortcut & FL_ALT) {strcpy(p,"Alt+"); p += 4;}
-  if (shortcut & FL_SHIFT) {strcpy(p,"Shift+"); p += 6;}
-  if (shortcut & FL_CTRL) {strcpy(p,"Ctrl+"); p += 5;}
+  if (shortcut & fltk3::META) {strcpy(p,"Meta+"); p += 5;}
+  if (shortcut & fltk3::ALT) {strcpy(p,"Alt+"); p += 4;}
+  if (shortcut & fltk3::SHIFT) {strcpy(p,"Shift+"); p += 6;}
+  if (shortcut & fltk3::CTRL) {strcpy(p,"Ctrl+"); p += 5;}
 #endif // __APPLE__
   if (eom) *eom = p;
-  unsigned int key = shortcut & FL_KEY_MASK;
+  unsigned int key = shortcut & fltk3::KEY_MASK;
 #if defined(WIN32) || defined(__APPLE__) // if not X
-  if (key >= FL_F && key <= FL_F_Last) {
+  if (key >= fltk3::FKey && key <= fltk3::LastFunctionKey) {
     *p++ = 'F';
-    if (key > FL_F+9) *p++ = (key-FL_F)/10+'0';
-    *p++ = (key-FL_F)%10 + '0';
+    if (key > fltk3::FKey+9) *p++ = (key-fltk3::FKey)/10+'0';
+    *p++ = (key-fltk3::FKey)%10 + '0';
   } else {
     // binary search the table for a match:
     int a = 0;
@@ -234,7 +234,7 @@ const char* fl_shortcut_label(unsigned int shortcut, const char **eom) {
       if (table[c].key < key) a = c+1;
       else b = c;
     }
-    if (key >= FL_KP && key <= FL_KP_Last) {
+    if (key >= fltk3::Keypad && key <= fltk3::KeypadLast) {
       // mark keypad keys with KP_ prefix
       strcpy(p,"KP_"); p += 3;
       *p++ = uchar(key & 127);
@@ -247,7 +247,7 @@ const char* fl_shortcut_label(unsigned int shortcut, const char **eom) {
   return buf;
 #else
   const char* q;
-  if (key == FL_Enter || key == '\r') q="Enter";  // don't use Xlib's "Return":
+  if (key == fltk3::EnterKey || key == '\r') q="Enter";  // don't use Xlib's "Return":
   else if (key > 32 && key < 0x100) q = 0;
   else q = XKeysymToString(key);
   if (!q) {
@@ -273,9 +273,9 @@ const char* fl_shortcut_label(unsigned int shortcut, const char **eom) {
 unsigned int fl_old_shortcut(const char* s) {
   if (!s || !*s) return 0;
   unsigned int n = 0;
-  if (*s == '#') {n |= FL_ALT; s++;}
-  if (*s == '+') {n |= FL_SHIFT; s++;}
-  if (*s == '^') {n |= FL_CTRL; s++;}
+  if (*s == '#') {n |= fltk3::ALT; s++;}
+  if (*s == '+') {n |= fltk3::SHIFT; s++;}
+  if (*s == '^') {n |= fltk3::CTRL; s++;}
   if (*s && s[1]) return n | (int)strtol(s,0,0); // allow 0xf00 to get any key
   return n | *s;
 }
@@ -299,7 +299,7 @@ unsigned int fltk3::Widget::label_shortcut(const char *t) {
 int fltk3::Widget::test_shortcut(const char *t) {
   #ifdef WIN32
   // on MSWindows, users expect shortcuts to work only when the Alt modifier is pressed
-  if (fltk3::event_state(FL_ALT)==0) return 0;
+  if (fltk3::event_state(fltk3::ALT)==0) return 0;
   #endif
   if (!t) return 0;
   unsigned int c = fl_utf8decode(fltk3::event_text(), fltk3::event_text()+fltk3::event_length(), 0);

@@ -269,7 +269,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
 {
   int		i;			// Looping var
   FL_BLINE	*line;			// Pointer to line
-  Fl_Color	c;			// Text color
+  fltk3::Color	c;			// Text color
   char		*t,			// Pointer into text
 		*ptr,			// Pointer into fragment
 		fragment[10240];	// Fragment of text
@@ -303,8 +303,8 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
     // Draw the icon if it is set...
     if (line->data)
       ((Fl_File_Icon *)line->data)->draw(X, Y, iconsize_, iconsize_,
-                                	(line->flags & SELECTED) ? FL_YELLOW :
-				                                   FL_LIGHT2,
+                                	(line->flags & SELECTED) ? fltk3::YELLOW :
+				                                   fltk3::LIGHT2,
 					active_r());
 
     // Draw the text offset to the right...

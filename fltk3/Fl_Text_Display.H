@@ -78,7 +78,7 @@ class FL_EXPORT Fl_Text_Display: public fltk3::Group {
     /** This structure associates the color,font,size of a string to draw
         with an attribute mask matching attr */
     struct Style_Table_Entry {
-      Fl_Color	color;
+      fltk3::Color	color;
       Fl_Font	font;
       int	size;
       unsigned	attr;
@@ -124,9 +124,9 @@ class FL_EXPORT Fl_Text_Display: public fltk3::Group {
     void hide_cursor() { show_cursor(0); }
     void cursor_style(int style);
     /**    Sets or gets the text cursor color.  */
-    Fl_Color cursor_color() const {return mCursor_color;}
+    fltk3::Color cursor_color() const {return mCursor_color;}
     /**    Sets or gets the text cursor color.  */
-    void cursor_color(Fl_Color n) {mCursor_color = n;}
+    void cursor_color(fltk3::Color n) {mCursor_color = n;}
     /**    Sets or gets the width/height of the scrollbars.  */
     int scrollbar_width() const { return scrollbar_width_; }
     /**    Sets or gets the width/height of the scrollbars.  */
@@ -165,9 +165,9 @@ class FL_EXPORT Fl_Text_Display: public fltk3::Group {
     /**    Sets the default size of text in the widget.  */
     void textsize(Fl_Fontsize s) {textsize_ = s;}
     /**    Gets the default color of text in the widget.  */
-    Fl_Color textcolor() const {return textcolor_;}
+    fltk3::Color textcolor() const {return textcolor_;}
     /**    Sets the default color of text in the widget.  */
-    void textcolor(Fl_Color n) {textcolor_ = n;}
+    void textcolor(fltk3::Color n) {textcolor_ = n;}
 
     int wrapped_column(int row, int column) const;
     int wrapped_row(int row) const;
@@ -313,7 +313,7 @@ class FL_EXPORT Fl_Text_Display: public fltk3::Group {
     int mModifyingTabDistance;	/* Whether tab distance is being
     					   modified */
 
-    Fl_Color mCursor_color;
+    fltk3::Color mCursor_color;
 
     Fl_Scrollbar* mHScrollBar;
     Fl_Scrollbar* mVScrollBar;
@@ -327,7 +327,7 @@ class FL_EXPORT Fl_Text_Display: public fltk3::Group {
 
     Fl_Font textfont_;
     Fl_Fontsize textsize_;
-    Fl_Color textcolor_;
+    fltk3::Color textcolor_;
 
 	 // The following are not presently used from the original NEdit code,
 	 // but are being put here so that future versions of Fl_Text_Display

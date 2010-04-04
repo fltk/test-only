@@ -80,7 +80,7 @@ class FL_EXPORT Fl_Pixmap : public fltk3::Image {
   virtual ~Fl_Pixmap();
   virtual fltk3::Image *copy(int W, int H);
   fltk3::Image *copy() { return copy(w(), h()); }
-  virtual void color_average(Fl_Color c, float i);
+  virtual void color_average(fltk3::Color c, float i);
   virtual void desaturate();
   virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
   void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}

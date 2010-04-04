@@ -47,9 +47,9 @@ Fl_XMap fl_xmap[256];
 
 Fl_XMap* fl_current_xmap;
 
-Fl_Color fl_color_;
+fltk3::Color fl_color_;
 
-void fltk3::Device::color(Fl_Color i) {
+void fltk3::Device::color(fltk3::Color i) {
   fl_color_ = i;
   int index;
   uchar r, g, b;
@@ -83,7 +83,7 @@ void fltk3::Device::color(uchar r, uchar g, uchar b) {
   CGContextSetRGBStrokeColor(fl_gc, fr, fg, fb, 1.0f);
 }
 
-void fltk3::set_color(Fl_Color i, unsigned c) {
+void fltk3::set_color(fltk3::Color i, unsigned c) {
   if (fl_cmap[i] != c) {
     fl_cmap[i] = c;
   }

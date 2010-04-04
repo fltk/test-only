@@ -477,8 +477,8 @@ void Fl_Tree_Item::draw(int X, int &Y, int W, fltk3::Widget *tree,
   if(usericon() && H < usericon()->h()) H = usericon()->h(); 
   H += prefs.linespacing() + fl_descent();
   // Colors, fonts
-  Fl_Color fg = _selected ? prefs.bgcolor()     : _labelfgcolor;
-  Fl_Color bg = _selected ? prefs.selectcolor() : _labelbgcolor;
+  fltk3::Color fg = _selected ? prefs.bgcolor()     : _labelfgcolor;
+  fltk3::Color bg = _selected ? prefs.selectcolor() : _labelbgcolor;
   if ( ! _active ) {
     fg = fl_inactive(fg);
     if ( _selected ) bg = fl_inactive(bg);

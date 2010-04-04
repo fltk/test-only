@@ -158,10 +158,10 @@ class Fl_Spinner : public fltk3::Group
 		  switch (event) {
 		    case fltk3::KEY :
 		    case fltk3::SHORTCUT :
-		      if (fltk3::event_key() == FL_Up) {
+		      if (fltk3::event_key() == fltk3::UpKey) {
 			up_button_.do_callback();
 			return 1;
-		      } else if (fltk3::event_key() == FL_Down) {
+		      } else if (fltk3::event_key() == fltk3::DownKey) {
 			down_button_.do_callback();
 			return 1;
 		      } else return 0;
@@ -210,11 +210,11 @@ class Fl_Spinner : public fltk3::Group
 		  update();
 		}
   /** Gets the color of the text in the input field. */
-  Fl_Color	textcolor() const {
+  fltk3::Color	textcolor() const {
 		  return (input_.textcolor());
 		}
   /** Sets the color of the text in the input field. */
-  void		textcolor(Fl_Color c) {
+  void		textcolor(fltk3::Color c) {
 		  input_.textcolor(c);
 		}
   /** Gets the font of the text in the input field. */

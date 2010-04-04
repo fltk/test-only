@@ -71,7 +71,7 @@ void fl_gettime(long* sec, long* usec) {
 
 void Fl_Timer::draw() {
   int tt;
-  Fl_Color col;
+  fltk3::Color col;
   char str[32];
   if (!on || delay>0.0)
     col = color();
@@ -149,7 +149,7 @@ Fl_Timer::Fl_Timer(uchar t, int X, int Y, int W, int H, const char* l)
 
 : fltk3::Widget(X, Y, W, H, l) {
   box(fltk3::DOWN_BOX);
-  selection_color(FL_RED);
+  selection_color(fltk3::RED);
   delay = 0;
   on = 0;
   direction_ = 0;

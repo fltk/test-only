@@ -69,7 +69,7 @@ class FL_EXPORT fltk3::Window : public fltk3::Group {
   uchar size_range_set;
   // cursor stuff
   Fl_Cursor cursor_default;
-  Fl_Color cursor_fg, cursor_bg;
+  fltk3::Color cursor_fg, cursor_bg;
   void size_range_();
   void _Fl_Window(); // constructor innards
 
@@ -437,8 +437,8 @@ public:
 
     For back compatibility only.
   */
-  void cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE); // platform dependent
-  void default_cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
+  void cursor(Fl_Cursor, fltk3::Color=fltk3::BLACK, fltk3::Color=fltk3::WHITE); // platform dependent
+  void default_cursor(Fl_Cursor, fltk3::Color=fltk3::BLACK, fltk3::Color=fltk3::WHITE);
   static void default_callback(fltk3::Window*, void* v);
 
 };

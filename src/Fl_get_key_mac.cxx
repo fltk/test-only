@@ -50,21 +50,21 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   { 32, 'U' }, {  9, 'V'  }, { 13, 'W'  }, {  7, 'X'  }, 
   { 16, 'Y' }, {  6, 'Z'  }, 
   { 33, '[' }, { 30, ']' }, { 50, '`' },  { 42, '|' },
-  { 51, FL_BackSpace }, { 48, FL_Tab }, { 36, FL_Enter }, { 127, FL_Pause },
-  { 107, FL_Scroll_Lock }, { 53, FL_Escape }, { 0x73, FL_Home }, { 123, FL_Left },
-  { 126, FL_Up }, { 124, FL_Right }, { 125, FL_Down }, { 0x74, FL_Page_Up },
-  { 0x79, FL_Page_Down },  { 119, FL_End }, { 0x71, FL_Print }, { 127, FL_Insert },
-  { 0x6e, FL_Menu }, { 114, FL_Help }, /*{ 0x47, FL_Num_Lock },*/
-  { 76, FL_KP_Enter }, { 67, FL_KP+'*' }, { 69, FL_KP+'+'}, { 78, FL_KP+'-' }, { 65, FL_KP+'.' }, { 75, FL_KP+'/' }, 
-  { 82, FL_KP+'0' }, { 83, FL_KP+'1' }, { 84, FL_KP+'2' }, { 85, FL_KP+'3' }, 
-  { 86, FL_KP+'4' }, { 87, FL_KP+'5' }, { 88, FL_KP+'6' }, { 89, FL_KP+'7' }, 
-  { 91, FL_KP+'8' }, { 92, FL_KP+'9' }, { 81, FL_KP+'=' }, 
-  { 0x7a, FL_F+1 }, { 0x78, FL_F+2  }, { 0x63, FL_F+3  }, { 0x76, FL_F+4  }, 
-  { 0x60, FL_F+5 }, { 0x61, FL_F+6  }, { 0x62, FL_F+7  }, { 0x64, FL_F+8  }, 
-  { 0x65, FL_F+9 }, { 0x6D, FL_F+10 }, { 0x67, FL_F+11 }, { 0x6f, FL_F+12 }, 
-  { 56, FL_Shift_L }, { 56, FL_Shift_R }, { 59, FL_Control_L }, { 59, FL_Control_R }, 
-  { 57, FL_Caps_Lock }, { 55, FL_Meta_L }, { 55, FL_Meta_R },
-  { 58, FL_Alt_L }, { 58, FL_Alt_R }, /*{ 0x75, FL_Delete },*/ { 0x47, FL_Delete },
+  { 51, fltk3::BackSpaceKey }, { 48, fltk3::TabKey }, { 36, fltk3::EnterKey }, { 127, fltk3::PauseKey },
+  { 107, fltk3::ScrollLockKey }, { 53, fltk3::EscapeKey }, { 0x73, fltk3::HomeKey }, { 123, fltk3::LeftKey },
+  { 126, fltk3::UpKey }, { 124, fltk3::RightKey }, { 125, fltk3::DownKey }, { 0x74, fltk3::PageUpKey },
+  { 0x79, fltk3::PageDownKey },  { 119, fltk3::EndKey }, { 0x71, fltk3::PrintKey }, { 127, fltk3::InsertKey },
+  { 0x6e, fltk3::MenuKey }, { 114, fltk3::HelpKey }, /*{ 0x47, fltk3::NumLockKey },*/
+  { 76, fltk3::KeypadEnter }, { 67, fltk3::Keypad+'*' }, { 69, fltk3::Keypad+'+'}, { 78, fltk3::Keypad+'-' }, { 65, fltk3::Keypad+'.' }, { 75, fltk3::Keypad+'/' }, 
+  { 82, fltk3::Keypad+'0' }, { 83, fltk3::Keypad+'1' }, { 84, fltk3::Keypad+'2' }, { 85, fltk3::Keypad+'3' }, 
+  { 86, fltk3::Keypad+'4' }, { 87, fltk3::Keypad+'5' }, { 88, fltk3::Keypad+'6' }, { 89, fltk3::Keypad+'7' }, 
+  { 91, fltk3::Keypad+'8' }, { 92, fltk3::Keypad+'9' }, { 81, fltk3::Keypad+'=' }, 
+  { 0x7a, fltk3::FKey+1 }, { 0x78, fltk3::FKey+2  }, { 0x63, fltk3::FKey+3  }, { 0x76, fltk3::FKey+4  }, 
+  { 0x60, fltk3::FKey+5 }, { 0x61, fltk3::FKey+6  }, { 0x62, fltk3::FKey+7  }, { 0x64, fltk3::FKey+8  }, 
+  { 0x65, fltk3::FKey+9 }, { 0x6D, fltk3::FKey+10 }, { 0x67, fltk3::FKey+11 }, { 0x6f, fltk3::FKey+12 }, 
+  { 56, fltk3::LeftShiftKey }, { 56, fltk3::RightShiftKey }, { 59, fltk3::LeftControlKey }, { 59, fltk3::RightControlKey }, 
+  { 57, fltk3::CapsLockKey }, { 55, fltk3::LeftMetaKey }, { 55, fltk3::RightMetaKey },
+  { 58, fltk3::LeftAltKey }, { 58, fltk3::RightAltKey }, /*{ 0x75, fltk3::DeleteKey },*/ { 0x47, fltk3::DeleteKey },
 };
 
 static int fltk2mac(int fltk) {
@@ -98,7 +98,7 @@ int fltk3::get_key(int k) {
 #endif
   unsigned char *b = (unsigned char*)foo;
   // KP_Enter can be at different locations for Powerbooks vs. desktop Macs
-  if (k==FL_KP_Enter) {
+  if (k==fltk3::KeypadEnter) {
     return (((b[0x34>>3]>>(0x34&7))&1)||((b[0x4c>>3]>>(0x4c&7))&1));
   }
   int i = fltk2mac(k);

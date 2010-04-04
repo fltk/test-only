@@ -148,7 +148,7 @@ int Fl_Glut_Window::handle(int event) {
     } else {
       if (special) {
 	int k = fltk3::event_key();
-	if (k > FL_F && k <= FL_F_Last) k -= FL_F;
+	if (k > fltk3::FKey && k <= FL_F_Last) k -= fltk3::FKey;
 	special(k,ex,ey);
 	return 1;
       }

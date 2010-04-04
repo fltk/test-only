@@ -106,7 +106,7 @@ void fltk3::Slider::draw_bg(int X, int Y, int W, int H) {
   draw_box();
   fl_pop_clip();
 
-  Fl_Color black = active_r() ? FL_FOREGROUND_COLOR : FL_INACTIVE_COLOR;
+  fltk3::Color black = active_r() ? fltk3::FOREGROUND_COLOR : fltk3::INACTIVE_COLOR;
   if (type() == FL_VERT_NICE_SLIDER) {
     draw_box(fltk3::THIN_DOWN_BOX, X+W/2-2, Y, 4, H, black);
   } else if (type() == FL_HOR_NICE_SLIDER) {
@@ -156,11 +156,11 @@ void fltk3::Slider::draw(int X, int Y, int W, int H) {
   fltk3::Boxtype box1 = slider();
   if (!box1) {box1 = (fltk3::Boxtype)(box()&-2); if (!box1) box1 = fltk3::UP_BOX;}
   if (type() == FL_VERT_NICE_SLIDER) {
-    draw_box(box1, xsl, ysl, wsl, hsl, FL_GRAY);
+    draw_box(box1, xsl, ysl, wsl, hsl, fltk3::GRAY);
     int d = (hsl-4)/2;
     draw_box(fltk3::THIN_DOWN_BOX, xsl+2, ysl+d, wsl-4, hsl-2*d,selection_color());
   } else if (type() == FL_HOR_NICE_SLIDER) {
-    draw_box(box1, xsl, ysl, wsl, hsl, FL_GRAY);
+    draw_box(box1, xsl, ysl, wsl, hsl, fltk3::GRAY);
     int d = (wsl-4)/2;
     draw_box(fltk3::THIN_DOWN_BOX, xsl+d, ysl+2, wsl-2*d, hsl-4,selection_color());
   } else {
@@ -300,7 +300,7 @@ int fltk3::Slider::handle(int event, int X, int Y, int W, int H) {
   case fltk3::KEY:
     { Fl_Widget_Tracker wp(this);
       switch (fltk3::event_key()) {
-	case FL_Up:
+	case fltk3::UpKey:
 	  if (horizontal()) return 0;
 	  handle_push();
 	  if (wp.deleted()) return 1;
@@ -308,7 +308,7 @@ int fltk3::Slider::handle(int event, int X, int Y, int W, int H) {
 	  if (wp.deleted()) return 1;
 	  handle_release();
 	  return 1;
-	case FL_Down:
+	case fltk3::DownKey:
 	  if (horizontal()) return 0;
 	  handle_push();
 	  if (wp.deleted()) return 1;
@@ -316,7 +316,7 @@ int fltk3::Slider::handle(int event, int X, int Y, int W, int H) {
 	  if (wp.deleted()) return 1;
 	  handle_release();
 	  return 1;
-	case FL_Left:
+	case fltk3::LeftKey:
 	  if (!horizontal()) return 0;
 	  handle_push();
 	  if (wp.deleted()) return 1;
@@ -324,7 +324,7 @@ int fltk3::Slider::handle(int event, int X, int Y, int W, int H) {
 	  if (wp.deleted()) return 1;
 	  handle_release();
 	  return 1;
-	case FL_Right:
+	case fltk3::RightKey:
 	  if (!horizontal()) return 0;
 	  handle_push();
 	  if (wp.deleted()) return 1;

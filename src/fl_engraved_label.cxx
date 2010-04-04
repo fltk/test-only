@@ -42,7 +42,7 @@ static void innards(
     fl_push_clip(X, Y, W, H); a1 = (fltk3::Align)(a1&~fltk3::ALIGN_CLIP);}
   fl_font((Fl_Font)o->font, o->size);
   for (int i = 0; i < n; i++) {
-    fl_color((Fl_Color)(i < n-1 ? data[i][2] : o->color));
+    fl_color((fltk3::Color)(i < n-1 ? data[i][2] : o->color));
     fl_draw(o->value, X+data[i][0], Y+data[i][1], W, H, a1);
   }
   if (align & fltk3::ALIGN_CLIP) fl_pop_clip();
@@ -51,7 +51,7 @@ static void innards(
 void fl_shadow_label(
     const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
-  static int data[2][3] = {{2,2,FL_DARK3},{0,0,0}};
+  static int data[2][3] = {{2,2,fltk3::DARK3},{0,0,0}};
   innards(o, X, Y, W, H, align, data, 2);
 }
 
@@ -59,8 +59,8 @@ void fl_engraved_label(
     const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
   static int data[7][3] = {
-    {1,0,FL_LIGHT3},{1,1,FL_LIGHT3},{0,1,FL_LIGHT3},
-    {-1,0,FL_DARK3},{-1,-1,FL_DARK3},{0,-1,FL_DARK3},
+    {1,0,fltk3::LIGHT3},{1,1,fltk3::LIGHT3},{0,1,fltk3::LIGHT3},
+    {-1,0,fltk3::DARK3},{-1,-1,fltk3::DARK3},{0,-1,fltk3::DARK3},
     {0,0,0}};
   innards(o, X, Y, W, H, align, data, 7);
 }
@@ -69,8 +69,8 @@ void fl_embossed_label(
     const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
   static int data[7][3] = {
-    {-1,0,FL_LIGHT3},{-1,-1,FL_LIGHT3},{0,-1,FL_LIGHT3},
-    {1,0,FL_DARK3},{1,1,FL_DARK3},{0,1,FL_DARK3},
+    {-1,0,fltk3::LIGHT3},{-1,-1,fltk3::LIGHT3},{0,-1,fltk3::LIGHT3},
+    {1,0,fltk3::DARK3},{1,1,fltk3::DARK3},{0,1,fltk3::DARK3},
     {0,0,0}};
   innards(o, X, Y, W, H, align, data, 7);
 }

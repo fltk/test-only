@@ -60,7 +60,7 @@ static void draw_current_rect() {
 # elif defined(__APPLE_QUARTZ__)
   // warning: Quartz does not support xor drawing
   // Use the Fl_Overlay_Window instead.
-  fl_color(FL_WHITE);
+  fl_color(fltk3::WHITE);
   fl_rect(px, py, pw, ph);
 # else
 #  error unsupported platform
@@ -78,10 +78,10 @@ static void draw_current_rect() {
     bgx = px; bgy = py;
     bgw = pw; bgh = ph;
   }
-  fl_color(FL_WHITE);
+  fl_color(fltk3::WHITE);
   fl_line_style(FL_SOLID);
   fl_rect(px, py, pw, ph);
-  fl_color(FL_BLACK);
+  fl_color(fltk3::BLACK);
   fl_line_style(FL_DOT);
   fl_rect(px, py, pw, ph);
   fl_line_style(FL_SOLID);

@@ -153,13 +153,13 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
       { back_ = new fltk3::Button(10, 10, 25, 25, "@<-");
         back_->tooltip("Show the previous help page.");
         back_->shortcut(0xff51);
-        back_->labelcolor((Fl_Color)2);
+        back_->labelcolor((fltk3::Color)2);
         back_->callback((fltk3::Callback*)cb_back_);
       } // fltk3::Button* back_
       { forward_ = new fltk3::Button(45, 10, 25, 25, "@->");
         forward_->tooltip("Show the next help page.");
         forward_->shortcut(0xff53);
-        forward_->labelcolor((Fl_Color)2);
+        forward_->labelcolor((fltk3::Color)2);
         forward_->callback((fltk3::Callback*)cb_forward_);
       } // fltk3::Button* forward_
       { smaller_ = new fltk3::Button(80, 10, 25, 25, "F");
@@ -176,7 +176,7 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
       } // fltk3::Button* larger_
       { fltk3::Group* o = new fltk3::Group(350, 10, 171, 25);
         o->box(fltk3::DOWN_BOX);
-        o->color(FL_BACKGROUND2_COLOR);
+        o->color(fltk3::BACKGROUND2_COLOR);
         { find_ = new fltk3::Input(375, 12, 143, 21, "@search");
           find_->tooltip("find text in document");
           find_->box(fltk3::FLAT_BOX);

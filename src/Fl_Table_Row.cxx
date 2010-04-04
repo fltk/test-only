@@ -181,8 +181,8 @@ int Fl_Table_Row::handle(int event) {
   // The following code disables cell selection.. why was it added? -erco 05/18/03
   // if ( ret ) { _last_y = fltk3::event_y(); return(1); }	// base class 'handled' it (eg. column resize)
   
-  int shiftstate = (fltk3::event_state() & FL_CTRL) ? FL_CTRL :
-  (fltk3::event_state() & FL_SHIFT) ? FL_SHIFT : 0;
+  int shiftstate = (fltk3::event_state() & fltk3::CTRL) ? fltk3::CTRL :
+  (fltk3::event_state() & fltk3::SHIFT) ? fltk3::SHIFT : 0;
   
   // Which row/column are we over?
   int R, C;  				// row/column being worked on
@@ -200,11 +200,11 @@ int Fl_Table_Row::handle(int event) {
         if ( context == CONTEXT_CELL ) {
           // Ctrl key? Toggle selection state
           switch ( shiftstate ) {
-            case FL_CTRL:
+            case fltk3::CTRL:
               select_row(R, 2);		// toggle
               break;
               
-            case FL_SHIFT:
+            case fltk3::SHIFT:
             {
               select_row(R, 1);
               if ( _last_row > -1 ) {
@@ -265,13 +265,13 @@ int Fl_Table_Row::handle(int event) {
         }
         if ( context == CONTEXT_CELL ) {
           switch ( shiftstate ) {
-            case FL_CTRL:
+            case fltk3::CTRL:
               if ( R != _last_row ) {		// toggle if dragged to new row
                 select_row(R, 2);		// 2=toggle
               }
               break;
               
-            case FL_SHIFT:
+            case fltk3::SHIFT:
             default:
               select_row(R, 1);
               if ( _last_row > -1 ) {

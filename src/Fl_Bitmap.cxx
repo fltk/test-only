@@ -297,13 +297,13 @@ void Fl_Bitmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
   if (use_print_algo) { // algorithm for bitmap output to Fl_GDI_Printer
     Fl_Offscreen tmp_id = fl_create_offscreen(W, H);
     fl_begin_offscreen(tmp_id);
-    Fl_Color save_c = fl_color(); // save bitmap's desired color
+    fltk3::Color save_c = fl_color(); // save bitmap's desired color
     uchar r, g, b;
     fltk3::get_color(save_c, r, g, b);
     r = 255-r;
     g = 255-g;
     b = 255-b;
-    Fl_Color background = fl_rgb_color(r, g, b); // a color very different from the bitmap's
+    fltk3::Color background = fl_rgb_color(r, g, b); // a color very different from the bitmap's
     fl_color(background);
     fl_rectf(0,0,W,H); // use this color as offscreen background
     fl_color(save_c); // back to bitmap's color

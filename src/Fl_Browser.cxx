@@ -529,7 +529,7 @@ void Fl_Browser::item_draw(void* item, int X, int Y, int W, int H) const {
     }
     int tsize = textsize();
     Fl_Font font = textfont();
-    Fl_Color lcol = textcolor();
+    fltk3::Color lcol = textcolor();
     fltk3::Align talign = fltk3::ALIGN_LEFT;
     // check for all the @-lines recognized by XForms:
     //#if defined(__GNUC__)
@@ -547,26 +547,26 @@ void Fl_Browser::item_draw(void* item, int X, int Y, int W, int H) const {
       case 'r': talign = fltk3::ALIGN_RIGHT; break;
       case 'B': 
 	if (!(l->flags & SELECTED)) {
-	  fl_color((Fl_Color)strtol(str, &str, 10));
+	  fl_color((fltk3::Color)strtol(str, &str, 10));
 	  fl_rectf(X, Y, w1, H);
 	} else strtol(str, &str, 10);
         break;
       case 'C':
-	lcol = (Fl_Color)strtol(str, &str, 10);
+	lcol = (fltk3::Color)strtol(str, &str, 10);
 	break;
       case 'F':
 	font = (Fl_Font)strtol(str, &str, 10);
 	break;
       case 'N':
-	lcol = FL_INACTIVE_COLOR;
+	lcol = fltk3::INACTIVE_COLOR;
 	break;
       case 'S':
 	tsize = strtol(str, &str, 10);
 	break;
       case '-':
-	fl_color(FL_DARK3);
+	fl_color(fltk3::DARK3);
 	fl_line(X+3, Y+H/2, X+w1-3, Y+H/2);
-	fl_color(FL_LIGHT3);
+	fl_color(fltk3::LIGHT3);
 	fl_line(X+3, Y+H/2+1, X+w1-3, Y+H/2+1);
 	break;
       case 'u':

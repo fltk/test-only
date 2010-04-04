@@ -42,7 +42,7 @@ const float hourhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -7.0f}};
 const float  minhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -11.5f}};
 const float  sechand[4][2] = {{-0.1f, 0}, {0, 2.0f}, {0.1f, 0}, {0, -11.5f}};
 
-static void drawhand(double ang,const float v[][2],Fl_Color fill,Fl_Color line)
+static void drawhand(double ang,const float v[][2],fltk3::Color fill,fltk3::Color line)
 {
   fl_push_matrix();
   fl_rotate(ang);
@@ -53,7 +53,7 @@ static void drawhand(double ang,const float v[][2],Fl_Color fill,Fl_Color line)
   fl_pop_matrix();
 }
 
-void Fl_Clock_Output::drawhands(Fl_Color fill, Fl_Color line) {
+void Fl_Clock_Output::drawhands(fltk3::Color fill, fltk3::Color line) {
   if (!active_r()) {
     fill = fl_inactive(fill);
     line = fl_inactive(line);
@@ -79,8 +79,8 @@ static void rect(double x, double y, double w, double h) {
   \param[in] X, Y, W, H position and size
 */
 void Fl_Clock_Output::draw(int X, int Y, int W, int H) {
-  Fl_Color box_color = type()==FL_ROUND_CLOCK ? FL_GRAY : color();
-  Fl_Color shadow_color = fl_color_average(box_color, FL_BLACK, 0.5);
+  fltk3::Color box_color = type()==FL_ROUND_CLOCK ? fltk3::GRAY : color();
+  fltk3::Color shadow_color = fl_color_average(box_color, fltk3::BLACK, 0.5);
   draw_box(box(), X, Y, W, H, box_color);
   fl_push_matrix();
   fl_translate(X+W/2.0-.5, Y+H/2.0-.5);
@@ -88,7 +88,7 @@ void Fl_Clock_Output::draw(int X, int Y, int W, int H) {
   if (type() == FL_ROUND_CLOCK) {
     fl_color(active_r() ? color() : fl_inactive(color()));
     fl_begin_polygon(); fl_circle(0,0,14); fl_end_polygon();
-    fl_color(active_r() ? FL_FOREGROUND_COLOR : fl_inactive(FL_FOREGROUND_COLOR));
+    fl_color(active_r() ? fltk3::FOREGROUND_COLOR : fl_inactive(fltk3::FOREGROUND_COLOR));
     fl_begin_loop(); fl_circle(0,0,14); fl_end_loop();
   }
   // draw the shadows:
@@ -98,7 +98,7 @@ void Fl_Clock_Output::draw(int X, int Y, int W, int H) {
   fl_pop_matrix();
   // draw the tick marks:
   fl_push_matrix();
-  fl_color(active_r() ? FL_FOREGROUND_COLOR : fl_inactive(FL_FOREGROUND_COLOR));
+  fl_color(active_r() ? fltk3::FOREGROUND_COLOR : fl_inactive(fltk3::FOREGROUND_COLOR));
   for (int i=0; i<12; i++) {
     if (i==6) rect(-0.5, 9, 1, 2);
     else if (i==3 || i==0 || i== 9) rect(-0.5, 9.5, 1, 1);
@@ -107,7 +107,7 @@ void Fl_Clock_Output::draw(int X, int Y, int W, int H) {
   }
   fl_pop_matrix();
   // draw the hands:
-  drawhands(selection_color(), FL_FOREGROUND_COLOR); // color was 54
+  drawhands(selection_color(), fltk3::FOREGROUND_COLOR); // color was 54
   fl_pop_matrix();
 }
 

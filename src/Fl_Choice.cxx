@@ -67,8 +67,8 @@ void fltk3::Choice::draw() {
       fl_yxline(x1 - 6, y1 - 8, y1 + 8);
     }
   } else {
-    if (fl_contrast(textcolor(), FL_BACKGROUND2_COLOR) == textcolor()) {
-      draw_box(fltk3::DOWN_BOX, FL_BACKGROUND2_COLOR);
+    if (fl_contrast(textcolor(), fltk3::BACKGROUND2_COLOR) == textcolor()) {
+      draw_box(fltk3::DOWN_BOX, fltk3::BACKGROUND2_COLOR);
     } else {
       draw_box(fltk3::DOWN_BOX, fl_lighter(color()));
     }
@@ -98,7 +98,7 @@ void fltk3::Choice::draw() {
       l.font = m.labelsize_ || m.labelfont_ ? m.labelfont_ : textfont();
       l.size = m.labelsize_ ? m.labelsize_ : textsize();
       l.color= m.labelcolor_ ? m.labelcolor_ : textcolor();
-      if (!m.active()) l.color = fl_inactive((Fl_Color)l.color);
+      if (!m.active()) l.color = fl_inactive((fltk3::Color)l.color);
       fl_draw_shortcut = 2; // hack value to make '&' disappear
       l.draw(xx+3, yy, ww>6 ? ww-6 : 0, hh, fltk3::ALIGN_LEFT);
       fl_draw_shortcut = 0;
@@ -171,18 +171,18 @@ int fltk3::Choice::handle(int e) {
 
   case fltk3::KEY:
     if (fltk3::event_key() != ' ' ||
-        (fltk3::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) return 0;
+        (fltk3::event_state() & (fltk3::SHIFT | fltk3::CTRL | fltk3::ALT | fltk3::META))) return 0;
   case fltk3::PUSH:
     if (fltk3::visible_focus()) fltk3::focus(this);
   J1:
     if (fltk3::scheme()
-	|| fl_contrast(textcolor(), FL_BACKGROUND2_COLOR) != textcolor()) {
+	|| fl_contrast(textcolor(), fltk3::BACKGROUND2_COLOR) != textcolor()) {
       v = menu()->pulldown(x(), y(), w(), h(), mvalue(), this);
     } else {
       // In order to preserve the old look-n-feel of "white" menus,
       // temporarily override the color() of this widget...
-      Fl_Color c = color();
-      color(FL_BACKGROUND2_COLOR);
+      fltk3::Color c = color();
+      color(fltk3::BACKGROUND2_COLOR);
       v = menu()->pulldown(x(), y(), w(), h(), mvalue(), this);
       color(c);
     }

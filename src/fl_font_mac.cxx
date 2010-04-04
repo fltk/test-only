@@ -407,7 +407,7 @@ void fltk3::Device::draw(const char* str, int n, int x, int y) {
 }
 
 
-static CGColorRef flcolortocgcolor(Fl_Color i)
+static CGColorRef flcolortocgcolor(fltk3::Color i)
 {
   uchar r, g, b;
   fltk3::get_color(i, r, g, b);

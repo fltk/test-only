@@ -113,10 +113,10 @@ int fltk3::Menu_::item_pathname(char *name, int namelen, const fltk3::MenuItem *
     // [..]
     fltk3::MenuItem *item;
     if ( ( item = (fltk3::MenuItem*)menubar->find_item("File/&Open") ) != NULL ) {
-	item->labelcolor(FL_RED);
+	item->labelcolor(fltk3::RED);
     }
     if ( ( item = (fltk3::MenuItem*)menubar->find_item("Edit/&Copy") ) != NULL ) {
-	item->labelcolor(FL_GREEN);
+	item->labelcolor(fltk3::GREEN);
     }
   \endcode
   \returns The item found, or NULL if not found.
@@ -251,10 +251,10 @@ fltk3::Menu_::Menu_(int X,int Y,int W,int H,const char* l)
   when(fltk3::WHEN_RELEASE_ALWAYS);
   value_ = menu_ = 0;
   alloc = 0;
-  selection_color(FL_SELECTION_COLOR);
+  selection_color(fltk3::SELECTION_COLOR);
   textfont(fltk3::HELVETICA);
   textsize(FL_NORMAL_SIZE);
-  textcolor(FL_FOREGROUND_COLOR);
+  textcolor(fltk3::FOREGROUND_COLOR);
   down_box(fltk3::NO_BOX);
 }
 

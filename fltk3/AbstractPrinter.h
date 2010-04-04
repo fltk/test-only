@@ -45,7 +45,7 @@ namespace fltk3 {
 /**
  \brief A virtual class for print support with several platform-specific implementations.
  *
- This class has no public constructor: don't instantiate it; use Fl_Printer or fltk3::PSFileDevice instead.
+ This class has no public constructor: don't instantiate it; use fltk3::Printer or fltk3::PSFileDevice instead.
  */
 class AbstractPrinter : public Device {
   friend class ::Fl_Pixmap;

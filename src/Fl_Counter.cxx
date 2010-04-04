@@ -31,7 +31,7 @@
 
 void Fl_Counter::draw() {
   int i; fltk3::Boxtype boxtype[5];
-  Fl_Color selcolor;
+  fltk3::Color selcolor;
 
   boxtype[0] = box();
   if (boxtype[0] == fltk3::UP_BOX) boxtype[0] = fltk3::DOWN_BOX;
@@ -59,7 +59,7 @@ void Fl_Counter::draw() {
     xx[4] = 0;	         ww[4] = 0;
   }
 
-  draw_box(boxtype[0], xx[0], y(), ww[0], h(), FL_BACKGROUND2_COLOR);
+  draw_box(boxtype[0], xx[0], y(), ww[0], h(), fltk3::BACKGROUND2_COLOR);
   fl_font(textfont(), textsize());
   fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
   char str[128]; format(str);
@@ -155,10 +155,10 @@ int Fl_Counter::handle(int event) {
     return 1;
   case fltk3::KEY :
     switch (fltk3::event_key()) {
-      case FL_Left:
+      case fltk3::LeftKey:
 	handle_drag(clamp(increment(value(),-1)));
 	return 1;
-      case FL_Right:
+      case fltk3::RightKey:
 	handle_drag(clamp(increment(value(),1)));
 	return 1;
       default:
@@ -195,7 +195,7 @@ Fl_Counter::~Fl_Counter() {
 Fl_Counter::Fl_Counter(int X, int Y, int W, int H, const char* L)
   : fltk3::Valuator(X, Y, W, H, L) {
   box(fltk3::UP_BOX);
-  selection_color(FL_INACTIVE_COLOR); // was FL_BLUE
+  selection_color(fltk3::INACTIVE_COLOR); // was fltk3::BLUE
   align(fltk3::ALIGN_BOTTOM);
   bounds(-1000000.0, 1000000.0);
   fltk3::Valuator::step(1, 10);
@@ -203,7 +203,7 @@ Fl_Counter::Fl_Counter(int X, int Y, int W, int H, const char* L)
   mouseobj = 0;
   textfont_ = fltk3::HELVETICA;
   textsize_ = FL_NORMAL_SIZE;
-  textcolor_ = FL_FOREGROUND_COLOR;
+  textcolor_ = fltk3::FOREGROUND_COLOR;
 }
 
 //

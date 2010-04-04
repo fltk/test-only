@@ -56,7 +56,7 @@ protected:
   uchar down_box_;
   Fl_Font textfont_;
   Fl_Fontsize textsize_;
-  Fl_Color textcolor_;
+  fltk3::Color textcolor_;
 
 public:
   Menu_(int,int,int,int,const char * =0);
@@ -120,22 +120,22 @@ public:
   /**  Sets the font size of menu item labels.  */
   void textsize(Fl_Fontsize c) {textsize_=c;}
   /** Get the current color of menu item labels.  */
-  Fl_Color textcolor() const {return textcolor_;}
+  fltk3::Color textcolor() const {return textcolor_;}
   /** Sets the current color of menu item labels. */
-  void textcolor(Fl_Color c) {textcolor_=c;}
+  void textcolor(fltk3::Color c) {textcolor_=c;}
 
   /**
     This box type is used to surround the currently-selected items in the
     menus.  If this is fltk3::NO_BOX then it acts like 
     fltk3::THIN_UP_BOX and selection_color() acts like 
-    FL_WHITE, for back compatibility.    
+    fltk3::WHITE, for back compatibility.    
   */
   fltk3::Boxtype down_box() const {return (fltk3::Boxtype)down_box_;}
   /**    See fltk3::Boxtype Menu_::down_box() const   */
   void down_box(fltk3::Boxtype b) {down_box_ = b;}
 
   /** For back compatibility, same as selection_color() */
-  Fl_Color down_color() const {return selection_color();}
+  fltk3::Color down_color() const {return selection_color();}
   /** For back compatibility, same as selection_color() */
   void down_color(unsigned c) {selection_color(c);}
 };

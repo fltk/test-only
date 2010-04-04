@@ -131,7 +131,7 @@ int Fl_Positioner::handle(int e) {
 Fl_Positioner::Fl_Positioner(int X, int Y, int W, int H, const char* l)
 : fltk3::Widget(X, Y, W, H, l) {
   box(fltk3::DOWN_BOX);
-  selection_color(FL_RED);
+  selection_color(fltk3::RED);
   align(fltk3::ALIGN_BOTTOM);
   when(fltk3::WHEN_CHANGED);
   xmin = ymin = 0;

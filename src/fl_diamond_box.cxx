@@ -36,7 +36,7 @@
 
 extern uchar* fl_gray_ramp();
 
-void fl_diamond_up_box(int x,int y,int w,int h,Fl_Color bgcolor) {
+void fl_diamond_up_box(int x,int y,int w,int h,fltk3::Color bgcolor) {
   w &= -2;
   h &= -2;
   int x1 = x+w/2;
@@ -52,7 +52,7 @@ void fl_diamond_up_box(int x,int y,int w,int h,Fl_Color bgcolor) {
   fl_color(g['A']); fl_loop(x, y1, x1, y, x+w, y1, x1, y+h);
 }
 
-void fl_diamond_down_box(int x,int y,int w,int h,Fl_Color bgcolor) {
+void fl_diamond_down_box(int x,int y,int w,int h,fltk3::Color bgcolor) {
   w &= -2;
   h &= -2;
   int x1 = x+w/2;

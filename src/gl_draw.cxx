@@ -328,7 +328,7 @@ extern int fl_overlay_depth;
   For color-index modes it will use fl_xpixel(c), which is only
   right if the window uses the default colormap!
   */
-void gl_color(Fl_Color i) {
+void gl_color(fltk3::Color i) {
 #if HAVE_GL_OVERLAY
 #if defined(WIN32)
   if (fl_overlay && fl_overlay_depth) {
@@ -340,7 +340,7 @@ void gl_color(Fl_Color i) {
       else if (i >= size-2) glIndexi(size-1);
       else glIndexi(i);
     } else {
-      glIndexi(i ? i : FL_GRAY_RAMP);
+      glIndexi(i ? i : fltk3::GRAY_RAMP);
     }
     return;
   }

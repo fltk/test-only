@@ -319,15 +319,13 @@ enum When { // fltk3::Widget::when():
 
 /*@}*/		// group: When Conditions
 
-} // namespace fltk3
-
 
 /** \name Mouse and Keyboard Events
 
 	This and the following constants define the non-ASCII keys on the
 	keyboard for fltk3::KEY and fltk3::SHORTCUT events.
 
-	\todo	FL_Button and FL_key... constants could be structured better
+	\todo	fltk3::MouseButton and FL_key... constants could be structured better
 		(use an enum or some doxygen grouping ?)
   
 	\sa	fltk3::event_key() and fltk3::get_key(int) (use ascii letters for all other keys):
@@ -337,42 +335,67 @@ enum When { // fltk3::Widget::when():
 
 // FIXME: These codes collide with valid Unicode keys
 
-#define FL_Button	0xfee8	///< A mouse button; use FL_Button + n for mouse button n.
-#define FL_BackSpace	0xff08	///< The backspace key.
-#define FL_Tab		0xff09	///< The tab key.
-#define FL_Enter	0xff0d	///< The enter key. 
-#define FL_Pause	0xff13	///< The pause key.
-#define FL_Scroll_Lock	0xff14	///< The scroll lock key.
-#define FL_Escape	0xff1b	///< The escape key.
-#define FL_Home		0xff50	///< The home key.
-#define FL_Left		0xff51	///< The left arrow key.
-#define FL_Up		0xff52	///< The up arrow key.
-#define FL_Right	0xff53	///< The right arrow key.
-#define FL_Down		0xff54	///< The down arrow key.
-#define FL_Page_Up	0xff55	///< The page-up key.
-#define FL_Page_Down	0xff56	///< The page-down key.
-#define FL_End		0xff57	///< The end key.
-#define FL_Print	0xff61	///< The print (or print-screen) key.
-#define FL_Insert	0xff63	///< The insert key. 
-#define FL_Menu		0xff67	///< The menu key.
-#define FL_Help		0xff68	///< The 'help' key on Mac keyboards
-#define FL_Num_Lock	0xff7f	///< The num lock key.
-#define FL_KP		0xff80	///< One of the keypad numbers; use FL_KP + n for number n.
-#define FL_KP_Enter	0xff8d	///< The enter key on the keypad, same as Fl_KP+'\\r'.
-#define FL_KP_Last	0xffbd	///< The last keypad key; use to range-check keypad.
-#define FL_F		0xffbd	///< One of the function keys; use FL_F + n for function key n.
-#define FL_F_Last	0xffe0	///< The last function key; use to range-check function keys.
-#define FL_Shift_L	0xffe1	///< The lefthand shift key.
-#define FL_Shift_R	0xffe2	///< The righthand shift key.
-#define FL_Control_L	0xffe3	///< The lefthand control key.
-#define FL_Control_R	0xffe4	///< The righthand control key.
-#define FL_Caps_Lock	0xffe5	///< The caps lock key.
-#define FL_Meta_L	0xffe7	///< The left meta/Windows key.
-#define FL_Meta_R	0xffe8	///< The right meta/Windows key.
-#define FL_Alt_L	0xffe9	///< The left alt key.
-#define FL_Alt_R	0xffea	///< The right alt key. 
-#define FL_Delete	0xffff	///< The delete key.
-
+enum {
+    MouseButton     = 0xfee8,	///< A mouse button; use fltk3::MouseButton + n for mouse button n.
+    BackSpaceKey    = 0xff08,	///< The backspace key.
+    TabKey          = 0xff09,	///< The tab key.
+    EnterKey        = 0xff0d,	///< The enter key. 
+    PauseKey        = 0xff13,	///< The pause key.
+    ScrollLockKey   = 0xff14,	///< The scroll lock key.
+    EscapeKey       = 0xff1b,	///< The escape key.
+    HomeKey         = 0xff50,	///< The home key.
+    LeftKey         = 0xff51,	///< The left arrow key.
+    UpKey           = 0xff52,	///< The up arrow key.
+    RightKey        = 0xff53,	///< The right arrow key.
+    DownKey         = 0xff54,	///< The down arrow key.
+    PageUpKey       = 0xff55,	///< The page-up key.
+    PageDownKey     = 0xff56,	///< The page-down key.
+    EndKey          = 0xff57,	///< The end key.
+    PrintKey        = 0xff61,	///< The print (or print-screen) key.
+    InsertKey       = 0xff63,	///< The insert key. 
+    MenuKey         = 0xff67,	///< The menu key.
+    HelpKey         = 0xff68,	///< The 'help' key on Mac keyboards
+    NumLockKey      = 0xff7f,	///< The num lock key.
+    Keypad          = 0xff80,	///< One of the keypad numbers; use fltk3::Keypad + n for number n.
+    Keypad0         = Keypad+'0',
+    Keypad1         = Keypad+'1',
+    Keypad2         = Keypad+'2',
+    Keypad3         = Keypad+'3',
+    Keypad4         = Keypad+'4',
+    Keypad5         = Keypad+'5',
+    Keypad6         = Keypad+'6',
+    Keypad7         = Keypad+'7',
+    Keypad8         = Keypad+'8',
+    Keypad9         = Keypad+'9',
+    KeypadEnter     = 0xff8d,	///< The enter key on the keypad, same as Fl_KP+'\\r'.
+    KeypadLast      = 0xffbd,	///< The last keypad key; use to range-check keypad.
+    FKey            = 0xffbd,
+    F0Key           = 0xffbd,
+    F1Key           = F0Key+1,
+    F2Key           = F0Key+2,
+    F3Key           = F0Key+3,
+    F4Key           = F0Key+4,
+    F5Key           = F0Key+5,
+    F6Key           = F0Key+6,
+    F7Key           = F0Key+7,
+    F8Key           = F0Key+8,
+    F9Key           = F0Key+9,
+    F10Key          = F0Key+10,
+    F11Key          = F0Key+11,
+    F12Key          = F0Key+12,
+    LastFunctionKey = F0Key+35,
+    LeftShiftKey    = 0xffe1,	///< The lefthand shift key.
+    RightShiftKey   = 0xffe2,	///< The righthand shift key.
+    LeftControlKey  = 0xffe3,	///< The lefthand control key.
+    RightControlKey = 0xffe4,	///< The righthand control key.
+    CapsLockKey     = 0xffe5,	///< The caps lock key.
+    LeftMetaKey     = 0xffe7,	///< The left meta/Windows key.
+    RightMetaKey    = 0xffe8,	///< The right meta/Windows key.
+    LeftAltKey      = 0xffe9,	///< The left alt key.
+    RightAltKey     = 0xffea,	///< The right alt key. 
+    DeleteKey       = 0xffff	///< The delete key.
+};
+  
 /*@}*/	// group: Mouse and Keyboard Events
 
 /** \name Mouse Buttons
@@ -384,9 +407,9 @@ enum When { // fltk3::Widget::when():
 
 /*@{*/
 
-#define FL_LEFT_MOUSE	1	///< The left mouse button
-#define FL_MIDDLE_MOUSE	2	///< The middle mouse button
-#define FL_RIGHT_MOUSE	3	///< The right mouse button
+  const unsigned int LEFT_MOUSE = 1;	///< The left mouse button
+  const unsigned int MIDDLE_MOUSE = 2;	///< The middle mouse button
+  const unsigned int RIGHT_MOUSE = 3;	///< The right mouse button
 
 /*@}*/		// group: Mouse Buttons
 
@@ -400,37 +423,39 @@ enum When { // fltk3::Widget::when():
 
 // FIXME: it would be nice to have the modifiers in the upper 8 bit so that
 //        a unicode ke (24bit) can be sent as an unsigned with the modifiers.
-
-#define FL_SHIFT	0x00010000	///< One of the shift keys is down
-#define FL_CAPS_LOCK	0x00020000	///< The caps lock is on
-#define FL_CTRL		0x00040000	///< One of the ctrl keys is down
-#define FL_ALT		0x00080000	///< One of the alt keys is down
-#define FL_NUM_LOCK	0x00100000	///< The num lock is on
-					// most X servers do this?
-#define FL_META		0x00400000	///< One of the meta/Windows keys is down
-					// correct for XFree86
-#define FL_SCROLL_LOCK	0x00800000	///< The scroll lock is on
-					// correct for XFree86
-#define FL_BUTTON1	0x01000000	///< Mouse button 1 is pushed
-#define FL_BUTTON2	0x02000000	///< Mouse button 2 is pushed
-#define FL_BUTTON3	0x04000000	///< Mouse button 3 is pushed
-#define FL_BUTTONS	0x7f000000	///< Any mouse button is pushed
-#define FL_BUTTON(n)	(0x00800000<<(n)) ///< Mouse button n (n > 0) is pushed
-
-#define FL_KEY_MASK 0x0000ffff  ///< All keys are 16 bit for now 
-                                //   FIXME: Unicode needs 24 bits!
-
+  enum {
+    SHIFT = 0x00010000,     ///< One of the shift keys is down
+    CAPS_LOCK = 0x00020000, ///< The caps lock is on
+    CTRL = 0x00040000,      ///< One of the ctrl keys is down
+    ALT = 0x00080000,       ///< One of the alt keys is down
+    NUM_LOCK = 0x00100000,  ///< The num lock is on
+                            // most X servers do this?
+    META = 0x00400000,      ///< One of the meta/Windows keys is down
+                            // correct for XFree86
+    SCROLL_LOCK = 0x00800000, ///< The scroll lock is on
+                              // correct for XFree86
 #ifdef __APPLE__
-#  define FL_COMMAND	FL_META   ///< An alias for FL_CTRL on WIN32 and X11, or FL_META on MacOS X
-#  define FL_CONTROL  FL_CTRL   ///< An alias for FL_META on WIN32 and X11, or FL_META on MacOS X
+    COMMAND = META,         ///< An alias for fltk3::CTRL on WIN32 and X11, or fltk3::META on MacOS X
+    CONTROL = CTRL,      ///< An alias for fltk3::META on WIN32 and X11, or fltk3::META on MacOS X
 #else
-#  define FL_COMMAND	FL_CTRL		///< An alias for FL_CTRL on WIN32 and X11, or FL_META on MacOS X
-#  define FL_CONTROL  FL_META   ///< An alias for FL_META on WIN32 and X11, or FL_META on MacOS X
+    COMMAND = CTRL,         ///< An alias for fltk3::CTRL on WIN32 and X11, or fltk3::META on MacOS X
+    CONTROL = META,         ///< An alias for fltk3::META on WIN32 and X11, or fltk3::META on MacOS X
 #endif // __APPLE__
+    
+    BUTTON1 = 0x01000000,   ///< Mouse button 1 is pushed
+    BUTTON2 = 0x02000000,   ///< Mouse button 2 is pushed
+    BUTTON3 = 0x04000000,   ///< Mouse button 3 is pushed
+    BUTTONS = 0x7f000000,   ///< Any mouse button is pushed
+    KEY_MASK = 0x0000ffff   ///< All keys are 16 bit for now 
+                            //   FIXME: Unicode needs 24 bits!
+  };
+  
+  inline unsigned int BUTTON(unsigned int n)	{ return 0x00800000<<(n); } ///< Mouse button n (n > 0) is pushed
+
+
 
 /*@}*/		// group: Event States
 
-namespace fltk3 {
 
 /** \name Box Types
     \brief FLTK standard box types
@@ -450,104 +475,59 @@ namespace fltk3 {
 */
 /*@{*/
 enum Boxtype { // boxtypes (if you change these you must fix fl_boxtype.C):
-  NO_BOX = 0,		///< nothing is drawn at all, this box is invisible
-  FLAT_BOX,			///< a flat box
-  UP_BOX,			///< see figure 1
-  DOWN_BOX,			///< see figure 1
-  UP_FRAME,			///< see figure 1
-  DOWN_FRAME,		///< see figure 1
-  THIN_UP_BOX,		///< see figure 1
-  THIN_DOWN_BOX,		///< see figure 1
-  THIN_UP_FRAME,		///< see figure 1
-  THIN_DOWN_FRAME,		///< see figure 1
-  ENGRAVED_BOX,		///< see figure 1
-  EMBOSSED_BOX,		///< see figure 1
-  ENGRAVED_FRAME,		///< see figure 1
-  EMBOSSED_FRAME,		///< see figure 1
-  BORDER_BOX,		///< see figure 1
-  SHADOW_BOX,		///< see figure 1
-  BORDER_FRAME,		///< see figure 1
-  SHADOW_FRAME,		///< see figure 1
-  ROUNDED_BOX,		///< see figure 1
-  RSHADOW_BOX,		///< see figure 1
-  ROUNDED_FRAME,		///< see figure 1
-  RFLAT_BOX,		///< see figure 1
-  ROUND_UP_BOX,		///< see figure 1
-  ROUND_DOWN_BOX,		///< see figure 1
-  DIAMOND_UP_BOX,		///< see figure 1
-  DIAMOND_DOWN_BOX,		///< see figure 1
-  OVAL_BOX,			///< see figure 1
-  OSHADOW_BOX,		///< see figure 1
-  OVAL_FRAME,		///< see figure 1
-  OFLAT_BOX,		///< see figure 1
-  PLASTIC_UP_BOX,		///< plastic version of UP_BOX
-  PLASTIC_DOWN_BOX,		///< plastic version of DOWN_BOX
-  PLASTIC_UP_FRAME,		///< plastic version of UP_FRAME
-  PLASTIC_DOWN_FRAME,	///< plastic version of DOWN_FRAME
-  PLASTIC_THIN_UP_BOX,	///< plastic version of THIN_UP_BOX
-  PLASTIC_THIN_DOWN_BOX,	///< plastic version of THIN_DOWN_BOX
-  PLASTIC_ROUND_UP_BOX,	///< plastic version of ROUND_UP_BOX
-  PLASTIC_ROUND_DOWN_BOX,	///< plastic version of ROUND_DOWN_BOX
-  GTK_UP_BOX,		///< gtk+ version of UP_BOX
-  GTK_DOWN_BOX,		///< gtk+ version of DOWN_BOX
-  GTK_UP_FRAME,		///< gtk+ version of UP_FRAME
-  GTK_DOWN_FRAME,		///< gtk+ version of DOWN_RAME
-  GTK_THIN_UP_BOX,		///< gtk+ version of THIN_UP_BOX
-  GTK_THIN_DOWN_BOX,	///< gtk+ version of THIN_DOWN_BOX
-  GTK_THIN_UP_FRAME,	///< gtk+ version of UP_FRAME
-  GTK_THIN_DOWN_FRAME,	///< gtk+ version of THIN_DOWN_FRAME
-  GTK_ROUND_UP_BOX,		///< gtk+ version of ROUND_UP_BOX
-  GTK_ROUND_DOWN_BOX,	///< gtk+ version of ROUND_DOWN_BOX
-  FREE_BOXTYPE		///< the first free box type for creation of new box types
+  NO_BOX = 0,             ///< nothing is drawn at all, this box is invisible
+  FLAT_BOX,               ///< a flat box
+  UP_BOX,                 ///< see figure 1
+  DOWN_BOX,               ///< see figure 1
+  UP_FRAME,               ///< see figure 1
+  DOWN_FRAME,             ///< see figure 1
+  THIN_UP_BOX,            ///< see figure 1
+  THIN_DOWN_BOX,          ///< see figure 1
+  THIN_UP_FRAME,          ///< see figure 1
+  THIN_DOWN_FRAME,        ///< see figure 1
+  ENGRAVED_BOX,           ///< see figure 1
+  EMBOSSED_BOX,           ///< see figure 1
+  ENGRAVED_FRAME,         ///< see figure 1
+  EMBOSSED_FRAME,         ///< see figure 1
+  BORDER_BOX,             ///< see figure 1
+  SHADOW_BOX,             ///< see figure 1
+  BORDER_FRAME,           ///< see figure 1
+  SHADOW_FRAME,           ///< see figure 1
+  ROUNDED_BOX,            ///< see figure 1
+  RSHADOW_BOX,            ///< see figure 1
+  ROUNDED_FRAME,          ///< see figure 1
+  RFLAT_BOX,              ///< see figure 1
+  ROUND_UP_BOX,           ///< see figure 1
+  ROUND_DOWN_BOX,         ///< see figure 1
+  DIAMOND_UP_BOX,         ///< see figure 1
+  DIAMOND_DOWN_BOX,       ///< see figure 1
+  OVAL_BOX,               ///< see figure 1
+  OSHADOW_BOX,            ///< see figure 1
+  OVAL_FRAME,             ///< see figure 1
+  OFLAT_BOX,              ///< see figure 1
+  PLASTIC_UP_BOX,         ///< plastic version of UP_BOX
+  PLASTIC_DOWN_BOX,       ///< plastic version of DOWN_BOX
+  PLASTIC_UP_FRAME,       ///< plastic version of UP_FRAME
+  PLASTIC_DOWN_FRAME,     ///< plastic version of DOWN_FRAME
+  PLASTIC_THIN_UP_BOX,    ///< plastic version of THIN_UP_BOX
+  PLASTIC_THIN_DOWN_BOX,  ///< plastic version of THIN_DOWN_BOX
+  PLASTIC_ROUND_UP_BOX,   ///< plastic version of ROUND_UP_BOX
+  PLASTIC_ROUND_DOWN_BOX, ///< plastic version of ROUND_DOWN_BOX
+  GTK_UP_BOX,             ///< gtk+ version of UP_BOX
+  GTK_DOWN_BOX,           ///< gtk+ version of DOWN_BOX
+  GTK_UP_FRAME,           ///< gtk+ version of UP_FRAME
+  GTK_DOWN_FRAME,         ///< gtk+ version of DOWN_RAME
+  GTK_THIN_UP_BOX,        ///< gtk+ version of THIN_UP_BOX
+  GTK_THIN_DOWN_BOX,      ///< gtk+ version of THIN_DOWN_BOX
+  GTK_THIN_UP_FRAME,      ///< gtk+ version of UP_FRAME
+  GTK_THIN_DOWN_FRAME,    ///< gtk+ version of THIN_DOWN_FRAME
+  GTK_ROUND_UP_BOX,       ///< gtk+ version of ROUND_UP_BOX
+  GTK_ROUND_DOWN_BOX,     ///< gtk+ version of ROUND_DOWN_BOX
+  FREE_BOXTYPE            ///< the first free box type for creation of new box types
 };
   
 }
 
-/*
-extern FL_EXPORT fltk3::Boxtype fl_define_FL_ROUND_UP_BOX();
-#define FL_ROUND_UP_BOX fl_define_FL_ROUND_UP_BOX()
-#define FL_ROUND_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_ROUND_UP_BOX()+1)
-extern FL_EXPORT fltk3::Boxtype fl_define_FL_SHADOW_BOX();
-#define FL_SHADOW_BOX fl_define_FL_SHADOW_BOX()
-#define FL_SHADOW_FRAME (fltk3::Boxtype)(fl_define_FL_SHADOW_BOX()+2)
-extern FL_EXPORT fltk3::Boxtype fl_define_FL_ROUNDED_BOX();
-#define fltk3::ROUNDED_BOX fl_define_FL_ROUNDED_BOX()
-#define fltk3::ROUNDED_FRAME (fltk3::Boxtype)(fl_define_FL_ROUNDED_BOX()+2)
-extern FL_EXPORT fltk3::Boxtype fl_define_FL_RFLAT_BOX();
-#define FL_RFLAT_BOX fl_define_FL_RFLAT_BOX()
-extern FL_EXPORT fltk3::Boxtype fl_define_FL_RSHADOW_BOX();
-#define FL_RSHADOW_BOX fl_define_FL_RSHADOW_BOX()
-extern FL_EXPORT fltk3::Boxtype fl_define_FL_DIAMOND_BOX();
-#define fltk3::DIAMOND_UP_BOX fl_define_FL_DIAMOND_BOX()
-#define fltk3::DIAMOND_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_DIAMOND_BOX()+1)
-extern FL_EXPORT fltk3::Boxtype fl_define_FL_OVAL_BOX();
-#define FL_OVAL_BOX fl_define_FL_OVAL_BOX()
-#define FL_OSHADOW_BOX (fltk3::Boxtype)(fl_define_FL_OVAL_BOX()+1)
-#define FL_OVAL_FRAME (fltk3::Boxtype)(fl_define_FL_OVAL_BOX()+2)
-#define FL_OFLAT_BOX (fltk3::Boxtype)(fl_define_FL_OVAL_BOX()+3)
-
-extern FL_EXPORT fltk3::Boxtype fl_define_FL_PLASTIC_UP_BOX();
-#define fltk3::PLASTIC_UP_BOX fl_define_FL_PLASTIC_UP_BOX()
-#define fltk3::PLASTIC_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+1)
-#define fltk3::PLASTIC_UP_FRAME (fltk3::Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+2)
-#define fltk3::PLASTIC_DOWN_FRAME (fltk3::Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+3)
-#define fltk3::PLASTIC_THIN_UP_BOX (fltk3::Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+4)
-#define fltk3::PLASTIC_THIN_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+5)
-#define fltk3::PLASTIC_ROUND_UP_BOX (fltk3::Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+6)
-#define fltk3::PLASTIC_ROUND_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+7)
-
-extern FL_EXPORT fltk3::Boxtype fl_define_FL_GTK_UP_BOX();
-#define fltk3::GTK_UP_BOX fl_define_FL_GTK_UP_BOX()
-#define fltk3::GTK_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+1)
-#define fltk3::GTK_UP_FRAME (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+2)
-#define fltk3::GTK_DOWN_FRAME (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+3)
-#define fltk3::GTK_THIN_UP_BOX (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+4)
-#define fltk3::GTK_THIN_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+5)
-#define fltk3::GTK_THIN_UP_FRAME (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+6)
-#define fltk3::GTK_THIN_DOWN_FRAME (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+7)
-#define fltk3::GTK_ROUND_UP_BOX (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+8)
-#define fltk3::GTK_ROUND_DOWN_BOX (fltk3::Boxtype)(fl_define_FL_GTK_UP_BOX()+9)
-*/
  
 // conversions of box types to other boxtypes:
 /**
@@ -611,42 +591,41 @@ enum Labeltype {      // labeltypes:
  */
 typedef unsigned Align;
   /** Align the label horizontally in the middle. */
-const Align ALIGN_CENTER		= (Align)0;
+const Align ALIGN_CENTER          = (Align)0;
   /** Align the label at the top of the widget. Inside labels appear below the top,
    *  outside labels are drawn on top of the widget. */
-const Align ALIGN_TOP		= (Align)1;
+const Align ALIGN_TOP             = (Align)1;
   /** Align the label at the bottom of the widget. */
-const Align ALIGN_BOTTOM		= (Align)2;
+const Align ALIGN_BOTTOM          = (Align)2;
   /** Align the label at the left of the widget. Inside labels appear left-justified
    *  starting at the left side of the widget, outside labels are right-justified and
    *  drawn to the left of the widget. */
-const Align ALIGN_LEFT		= (Align)4;
+const Align ALIGN_LEFT            = (Align)4;
   /** Align the label to the right of the widget. */
-const Align ALIGN_RIGHT		= (Align)8;
+const Align ALIGN_RIGHT           = (Align)8;
   /** Draw the label inside of the widget. */
-const Align ALIGN_INSIDE		= (Align)16;
+const Align ALIGN_INSIDE          = (Align)16;
   /** If the label contains an image, draw the text on top of the image. */
-const Align ALIGN_TEXT_OVER_IMAGE	= (Align)32;
+const Align ALIGN_TEXT_OVER_IMAGE = (Align)32;
   /** If the label contains an image, draw the text below the image. */
-const Align ALIGN_IMAGE_OVER_TEXT	= (Align)0;
+const Align ALIGN_IMAGE_OVER_TEXT = (Align)0;
   /** All parts of the label that are lager than the widget will not be drawn . */
-const Align ALIGN_CLIP		= (Align)64;
+const Align ALIGN_CLIP            = (Align)64;
   /** Wrap text that does not fit the width of the widget. */
-const Align ALIGN_WRAP		= (Align)128;
-const Align ALIGN_TOP_LEFT	= ALIGN_TOP | ALIGN_LEFT;
-const Align ALIGN_TOP_RIGHT	= ALIGN_TOP | ALIGN_RIGHT;
-const Align ALIGN_BOTTOM_LEFT	= ALIGN_BOTTOM | ALIGN_LEFT;
-const Align ALIGN_BOTTOM_RIGHT	= ALIGN_BOTTOM | ALIGN_RIGHT;
-const Align ALIGN_LEFT_TOP	= ALIGN_TOP_LEFT;
-const Align ALIGN_RIGHT_TOP	= ALIGN_TOP_RIGHT;
-const Align ALIGN_LEFT_BOTTOM	= ALIGN_BOTTOM_LEFT;
-const Align ALIGN_RIGHT_BOTTOM	= ALIGN_BOTTOM_RIGHT;
-const Align ALIGN_NOWRAP		= (Align)0; // for back compatability
+const Align ALIGN_WRAP            = (Align)128;
+const Align ALIGN_TOP_LEFT        = ALIGN_TOP | ALIGN_LEFT;
+const Align ALIGN_TOP_RIGHT       = ALIGN_TOP | ALIGN_RIGHT;
+const Align ALIGN_BOTTOM_LEFT     = ALIGN_BOTTOM | ALIGN_LEFT;
+const Align ALIGN_BOTTOM_RIGHT    = ALIGN_BOTTOM | ALIGN_RIGHT;
+const Align ALIGN_LEFT_TOP        = ALIGN_TOP_LEFT;
+const Align ALIGN_RIGHT_TOP       = ALIGN_TOP_RIGHT;
+const Align ALIGN_LEFT_BOTTOM     = ALIGN_BOTTOM_LEFT;
+const Align ALIGN_RIGHT_BOTTOM    = ALIGN_BOTTOM_RIGHT;
+const Align ALIGN_NOWRAP          = (Align)0; // for back compatability
 /*@}*/
+
+}
   
-} //namespace fltk3
-
-
 /** \name Font Numbers */
 /*@{*/
 /** A font number is an index into the internal font table.
@@ -679,7 +658,7 @@ const Fl_Font FREE_FONT              = 16;	///< first one to allocate
 const Fl_Font BOLD                   = 1;	///< add this to helvetica, courier, or times
 const Fl_Font ITALIC                 = 2;	///< add this to helvetica, courier, or times
 const Fl_Font BOLD_ITALIC            = 3;	///< add this to helvetica, courier, or times
-}
+} // namespace fltk3
 /*@}*/
 
 /** Size of a font in pixels.
@@ -689,9 +668,12 @@ typedef int Fl_Fontsize;
 
 extern FL_EXPORT Fl_Fontsize FL_NORMAL_SIZE;	///< normal font size
 
+
+namespace fltk3 {
+  
 /** \name Colors */
 /*@{*/
-/** The Fl_Color type holds an FLTK color value.
+/** The fltk3::Color type holds an FLTK color value.
 
     Colors are either 8-bit indexes into a virtual colormap
     or 24-bit RGB color values.
@@ -700,7 +682,7 @@ extern FL_EXPORT Fl_Fontsize FL_NORMAL_SIZE;	///< normal font size
     RGB colors occupy the upper 24 bits, for a byte organization of RGBI.
     
 <pre>
- Fl_Color => 0xrrggbbii
+ fltk3::Color => 0xrrggbbii
                 | | | |
                 | | | +--- index between 0 and 255
                 | | +----- blue color component (8 bit)
@@ -713,82 +695,84 @@ extern FL_EXPORT Fl_Fontsize FL_NORMAL_SIZE;	///< normal font size
  
  */
 
-typedef unsigned int Fl_Color;
+typedef unsigned int Color;
 
 // Standard colors. These are used as default colors in widgets and altered as necessary
-const Fl_Color FL_FOREGROUND_COLOR  = 0;	///< the default foreground color (0) used for labels and text
-const Fl_Color FL_BACKGROUND2_COLOR = 7;	///< the default background color for text, list, and valuator widgets
-const Fl_Color FL_INACTIVE_COLOR    = 8;	///< the inactive foreground color
-const Fl_Color FL_SELECTION_COLOR   = 15;	///< the default selection/highlight color
+const Color FOREGROUND_COLOR  = 0;	///< the default foreground color (0) used for labels and text
+const Color BACKGROUND2_COLOR = 7;	///< the default background color for text, list, and valuator widgets
+const Color INACTIVE_COLOR    = 8;	///< the inactive foreground color
+const Color SELECTION_COLOR   = 15;	///< the default selection/highlight color
 
   // boxtypes generally limit themselves to these colors so
   // the whole ramp is not allocated:
 
-const Fl_Color FL_GRAY0   = 32;	// 'A'
-const Fl_Color FL_DARK3   = 39;	// 'H'
-const Fl_Color FL_DARK2   = 45; // 'N'
-const Fl_Color FL_DARK1   = 47;	// 'P'
-const Fl_Color FL_BACKGROUND_COLOR  = 49;	// 'R' default background color
-const Fl_Color FL_LIGHT1  = 50;	// 'S'
-const Fl_Color FL_LIGHT2  = 52;	// 'U'
-const Fl_Color FL_LIGHT3  = 54;	// 'W'
+const Color GRAY0   = 32;	// 'A'
+const Color DARK3   = 39;	// 'H'
+const Color DARK2   = 45; // 'N'
+const Color DARK1   = 47;	// 'P'
+const Color BACKGROUND_COLOR  = 49;	// 'R' default background color
+const Color LIGHT1  = 50;	// 'S'
+const Color LIGHT2  = 52;	// 'U'
+const Color LIGHT3  = 54;	// 'W'
 
   // FLTK provides a 5x8x5 color cube that is used with colormap visuals
 
-const Fl_Color FL_BLACK   = 56;
-const Fl_Color FL_RED     = 88;
-const Fl_Color FL_GREEN   = 63;
-const Fl_Color FL_YELLOW  = 95;
-const Fl_Color FL_BLUE    = 216;
-const Fl_Color FL_MAGENTA = 248;
-const Fl_Color FL_CYAN    = 223;
-const Fl_Color FL_DARK_RED = 72;
+const Color BLACK   = 56;
+const Color RED     = 88;
+const Color GREEN   = 63;
+const Color YELLOW  = 95;
+const Color BLUE    = 216;
+const Color MAGENTA = 248;
+const Color CYAN    = 223;
+const Color DARK_RED = 72;
 
-const Fl_Color FL_DARK_GREEN    = 60;
-const Fl_Color FL_DARK_YELLOW   = 76;
-const Fl_Color FL_DARK_BLUE     = 136;
-const Fl_Color FL_DARK_MAGENTA  = 152;
-const Fl_Color FL_DARK_CYAN     = 140;
+const Color DARK_GREEN    = 60;
+const Color DARK_YELLOW   = 76;
+const Color DARK_BLUE     = 136;
+const Color DARK_MAGENTA  = 152;
+const Color DARK_CYAN     = 140;
 
-const Fl_Color FL_WHITE         = 255;
+const Color WHITE         = 255;
 
 
-#define FL_FREE_COLOR     (Fl_Color)16
-#define FL_NUM_FREE_COLOR 16
-#define FL_GRAY_RAMP      (Fl_Color)32
-#define FL_NUM_GRAY       24
-#define FL_GRAY           FL_BACKGROUND_COLOR
-#define FL_COLOR_CUBE     (Fl_Color)56
-#define FL_NUM_RED        5
-#define FL_NUM_GREEN      8
-#define FL_NUM_BLUE       5
+  const Color FREE_COLOR = 16;
+  const unsigned int NUM_FREE_COLOR = 16;
+  const Color GRAY_RAMP = 32;
+  const unsigned int NUM_GRAY = 24;
+  const Color GRAY = BACKGROUND_COLOR;
+  const unsigned int COLOR_CUBE = 56;
+  const unsigned int NUM_RED = 5;
+  const unsigned int NUM_GREEN = 8;
+  const unsigned int NUM_BLUE = 5;
 
-FL_EXPORT Fl_Color fl_inactive(Fl_Color c);
+}
+  
+FL_EXPORT fltk3::Color fl_inactive(fltk3::Color c);
 
-FL_EXPORT Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg);
+FL_EXPORT fltk3::Color fl_contrast(fltk3::Color fg, fltk3::Color bg);
 
-FL_EXPORT Fl_Color fl_color_average(Fl_Color c1, Fl_Color c2, float weight);
+FL_EXPORT fltk3::Color fl_color_average(fltk3::Color c1, fltk3::Color c2, float weight);
 
-inline Fl_Color fl_lighter(Fl_Color c) { return fl_color_average(c, FL_WHITE, .67f); }
+inline fltk3::Color fl_lighter(fltk3::Color c) { return fl_color_average(c, fltk3::WHITE, .67f); }
 
-inline Fl_Color fl_darker(Fl_Color c) { return fl_color_average(c, FL_BLACK, .67f); }
+inline fltk3::Color fl_darker(fltk3::Color c) { return fl_color_average(c, fltk3::BLACK, .67f); }
 
 /** return 24-bit color value closest to \p r, \p g, \p b. */
-inline Fl_Color fl_rgb_color(uchar r, uchar g, uchar b) {
-  if (!r && !g && !b) return FL_BLACK;
-  else return (Fl_Color)(((((r << 8) | g) << 8) | b) << 8);
+inline fltk3::Color fl_rgb_color(uchar r, uchar g, uchar b) {
+  if (!r && !g && !b) return fltk3::BLACK;
+  else return (fltk3::Color)(((((r << 8) | g) << 8) | b) << 8);
 }
 
 /** return 24-bit color value closest to \p grayscale */
-inline Fl_Color fl_rgb_color(uchar g) {
-  if (!g) return FL_BLACK;
-  else return (Fl_Color)(((((g << 8) | g) << 8) | g) << 8);
+inline fltk3::Color fl_rgb_color(uchar g) {
+  if (!g) return fltk3::BLACK;
+  else return (fltk3::Color)(((((g << 8) | g) << 8) | g) << 8);
 }
 
-inline Fl_Color fl_gray_ramp(int i) {return (Fl_Color)(i+FL_GRAY_RAMP);}
+inline fltk3::Color fl_gray_ramp(int i) {return (fltk3::Color)(i+fltk3::GRAY_RAMP);}
 
-inline Fl_Color fl_color_cube(int r, int g, int b) {
-  return (Fl_Color)((b*FL_NUM_RED + r) * FL_NUM_GREEN + g + FL_COLOR_CUBE);}
+inline fltk3::Color fl_color_cube(int r, int g, int b) {
+  return (fltk3::Color)((b*fltk3::NUM_RED + r) * fltk3::NUM_GREEN + g + fltk3::COLOR_CUBE);}
 
 //*@}*/		// group: Colors
 

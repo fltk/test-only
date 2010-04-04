@@ -131,18 +131,18 @@ static int navkey() {
   switch (fltk3::event_key()) {
   case 0: // not an fltk3::KEY/fltk3::SHORTCUT event
     break;
-  case FL_Tab:
-    if (!fltk3::event_state(FL_SHIFT)) return FL_Right;
+  case fltk3::TabKey:
+    if (!fltk3::event_state(fltk3::SHIFT)) return fltk3::RightKey;
   case 0xfe20: // XK_ISO_Left_Tab
-    return FL_Left;
-  case FL_Right:
-    return FL_Right;
-  case FL_Left:
-    return FL_Left;
-  case FL_Up:
-    return FL_Up;
-  case FL_Down:
-    return FL_Down;
+    return fltk3::LeftKey;
+  case fltk3::RightKey:
+    return fltk3::RightKey;
+  case fltk3::LeftKey:
+    return fltk3::LeftKey;
+  case fltk3::UpKey:
+    return fltk3::UpKey;
+  case fltk3::DownKey:
+    return fltk3::DownKey;
   }
   return 0;
 }
@@ -159,12 +159,12 @@ int fltk3::Group::handle(int event) {
     switch (navkey()) {
     default:
       if (savedfocus_ && savedfocus_->take_focus()) return 1;
-    case FL_Right:
-    case FL_Down:
+    case fltk3::RightKey:
+    case fltk3::DownKey:
       for (i = children(); i--;) if ((*a++)->take_focus()) return 1;
       break;
-    case FL_Left:
-    case FL_Up:
+    case fltk3::LeftKey:
+    case fltk3::UpKey:
       for (i = children(); i--;) if (a[i]->take_focus()) return 1;
       break;
     }
@@ -188,7 +188,7 @@ int fltk3::Group::handle(int event) {
       if (o->takesevents() && !fltk3::event_inside(o) && send(o,fltk3::SHORTCUT))
 	return 1;
     }
-    if ((fltk3::event_key() == FL_Enter || fltk3::event_key() == FL_KP_Enter)) return navigation(FL_Down);
+    if ((fltk3::event_key() == fltk3::EnterKey || fltk3::event_key() == fltk3::KeypadEnter)) return navigation(fltk3::DownKey);
     return 0;
 
   case fltk3::ENTER:
@@ -329,16 +329,16 @@ int fltk3::Group::navigation(int key) {
 
   for (;;) {
     switch (key) {
-    case FL_Right:
-    case FL_Down:
+    case fltk3::RightKey:
+    case fltk3::DownKey:
       i++;
       if (i >= children_) {
 	if (parent()) return 0;
 	i = 0;
       }
       break;
-    case FL_Left:
-    case FL_Up:
+    case fltk3::LeftKey:
+    case fltk3::UpKey:
       if (i) i--;
       else {
 	if (parent()) return 0;
@@ -351,8 +351,8 @@ int fltk3::Group::navigation(int key) {
     fltk3::Widget* o = array_[i];
     if (o == previous) return 0;
     switch (key) {
-    case FL_Down:
-    case FL_Up:
+    case fltk3::DownKey:
+    case fltk3::UpKey:
       // for up/down, the widgets have to overlap horizontally:
       if (o->x() >= previous->x()+previous->w() ||
 	  o->x()+o->w() <= previous->x()) continue;

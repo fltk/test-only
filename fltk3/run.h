@@ -76,7 +76,7 @@ typedef void (Fl_Label_Draw_F)(const fltk3::Label *label, int x, int y, int w, i
 typedef void (Fl_Label_Measure_F)(const fltk3::Label *label, int &width, int &height);
 
 /** signature of some box drawing functions passed as parameters */
-typedef void (Fl_Box_Draw_F)(int x, int y, int w, int h, Fl_Color color);
+typedef void (Fl_Box_Draw_F)(int x, int y, int w, int h, fltk3::Color color);
 
 /** signature of some timeout callback functions passed as parameters */
 typedef void (*Fl_Timeout_Handler)(void *data);
@@ -124,7 +124,7 @@ namespace fltk3 {
   extern int e_state;
   extern int e_clicks;
   extern int e_is_click;
-  extern int e_keysym;
+  extern unsigned int e_keysym;
   extern char* e_text;
   extern int e_length;
   extern fltk3::Widget* belowmouse_;
@@ -161,7 +161,7 @@ namespace fltk3 {
   extern const char* scheme_;
   extern fltk3::Image* scheme_bg_;
 
-  extern int e_original_keysym; // late addition
+  extern unsigned int e_original_keysym; // late addition
   extern int scrollbar_size_;
 #endif
 
@@ -497,28 +497,28 @@ namespace fltk3 {
   /**
     Gets which particular mouse button caused the current event. 
     This returns garbage if the most recent event was not a fltk3::PUSH or fltk3::RELEASE event.
-    \retval FL_LEFT_MOUSE \retval FL_MIDDLE_MOUSE \retval FL_RIGHT_MOUSE.
+    \retval fltk3::LEFT_MOUSE \retval fltk3::MIDDLE_MOUSE \retval fltk3::RIGHT_MOUSE.
     \see fltk3::event_buttons()
   */
-  inline int event_button()	{return e_keysym-FL_Button;}
+  inline int event_button()	{return e_keysym-fltk3::MouseButton;}
   /**
     This is a bitfield of what shift states were on and what mouse buttons
     were held down during the most recent event. The second version
     returns non-zero if any of the passed bits are turned on.
     The legal bits are:
     
-    \li FL_SHIFT
-    \li FL_CAPS_LOCK
-    \li FL_CTRL
-    \li FL_ALT
-    \li FL_NUM_LOCK
-    \li FL_META
+    \li fltk3::SHIFT
+    \li fltk3::CAPS_LOCK
+    \li fltk3::CTRL
+    \li fltk3::ALT
+    \li fltk3::NUM_LOCK
+    \li fltk3::META
     \li FL_SCROLL_LOCK
-    \li FL_BUTTON1
-    \li FL_BUTTON2
-    \li FL_BUTTON3
+    \li fltk3::BUTTON1
+    \li fltk3::BUTTON2
+    \li fltk3::BUTTON3
     
-    X servers do not agree on shift states, and FL_NUM_LOCK, FL_META, and
+    X servers do not agree on shift states, and fltk3::NUM_LOCK, fltk3::META, and
     FL_SCROLL_LOCK may not work. The values were selected to match the
     XFree86 server on Linux. In addition there is a bug in the way X works
     so that the shift state is not correctly reported until the first event
@@ -565,26 +565,26 @@ namespace fltk3 {
 	character use the value of that ASCII character (as though shift,
 	ctrl, and caps lock were not on). The space bar is 32.
     \li All keys on the numeric keypad producing a printable ASCII
-	character use the value of that ASCII character plus FL_KP.
-	The highest possible value is FL_KP_Last so you can
+	character use the value of that ASCII character plus fltk3::Keypad.
+	The highest possible value is fltk3::Keypad_Last so you can
 	range-check to see if something is  on the keypad.
     \li All numbered function keys use the number on the function key plus 
-	FL_F.  The highest possible number is FL_F_Last, so you
+	fltk3::FKey.  The highest possible number is FL_F_Last, so you
 	can range-check a value.
     \li Buttons on the mouse are considered keys, and use the button
-	number (where the left button is 1) plus FL_Button.
-    \li All other keys on the keypad have a symbol: FL_Escape,
-	FL_BackSpace, FL_Tab, FL_Enter, FL_Print, FL_Scroll_Lock, FL_Pause,
-	FL_Insert, FL_Home, FL_Page_Up, FL_Delete, FL_End, FL_Page_Down,
-	FL_Left, FL_Up, FL_Right, FL_Down, FL_Shift_L, FL_Shift_R,
-	FL_Control_L, FL_Control_R, FL_Caps_Lock, FL_Alt_L, FL_Alt_R,
-	FL_Meta_L, FL_Meta_R, FL_Menu, FL_Num_Lock, FL_KP_Enter.  Be
+	number (where the left button is 1) plus fltk3::MouseButton.
+    \li All other keys on the keypad have a symbol: fltk3::EscapeKey,
+	fltk3::BackSpaceKey, fltk3::TabKey, fltk3::EnterKey, fltk3::PrintKey, fltk3::ScrollLockKey, fltk3::PauseKey,
+	FL_Insert, fltk3::HomeKey, fltk3::PageUpKey, fltk3::DeleteKey, fltk3::EndKey, fltk3::PageDownKey,
+	fltk3::LeftKey, fltk3::UpKey, fltk3::RightKey, fltk3::DownKey, fltk3::LeftShiftKey, fltk3::RightShiftKey,
+	fltk3::LeftControlKey, fltk3::RightControlKey, fltk3::CapsLockKey, fltk3::LeftAltKey, fltk3::RightAltKey,
+	fltk3::LeftMetaKey, fltk3::RightMetaKey, fltk3::MenuKey, fltk3::NumLockKey, fltk3::Keypad_Enter.  Be
 	careful not to confuse these with the very similar, but all-caps,
 	symbols used by fltk3::event_state().
 
-    On X fltk3::get_key(FL_Button+n) does not work.
+    On X fltk3::get_key(fltk3::MouseButton+n) does not work.
     
-    On WIN32 fltk3::get_key(FL_KP_Enter) and fltk3::event_key(FL_KP_Enter) do not work.
+    On WIN32 fltk3::get_key(fltk3::Keypad_Enter) and fltk3::event_key(fltk3::Keypad_Enter) do not work.
   */
   extern int event_key(int key);
   /** 
@@ -712,20 +712,20 @@ namespace fltk3 {
      @{ */
  
   // color map:
-  extern void	set_color(Fl_Color, uchar, uchar, uchar);
+  extern void	set_color(fltk3::Color, uchar, uchar, uchar);
   /**
     Sets an entry in the fl_color index table. You can set it to any
     8-bit RGB color. The color is not allocated until fl_color(i) is used.
   */
-  extern void	set_color(Fl_Color, unsigned); // platform dependent
-  extern Fl_Color get_color(Fl_Color);
-  extern void	get_color(Fl_Color, uchar&, uchar&, uchar&);
+  extern void	set_color(fltk3::Color, unsigned); // platform dependent
+  extern fltk3::Color get_color(fltk3::Color);
+  extern void	get_color(fltk3::Color, uchar&, uchar&, uchar&);
   /**
     Frees the specified color from the colormap, if applicable.
     If overlay is non-zero then the color is freed from the
     overlay colormap.
   */
-  extern void	free_color(Fl_Color, int overlay = 0); // platform dependent
+  extern void	free_color(fltk3::Color, int overlay = 0); // platform dependent
 
   // fonts:
   extern const char* get_font(Fl_Font);
@@ -814,37 +814,37 @@ namespace fltk3 {
   /** \addtogroup fl_events 
     @{ */
   /** Returns non-zero if the Shift key is pressed. */
-  inline int event_shift() {return e_state&FL_SHIFT;}
+  inline int event_shift() {return e_state&fltk3::SHIFT;}
   /** Returns non-zero if the Control key is pressed. */
-  inline int event_ctrl() {return e_state&FL_CTRL;}
-  /** Returns non-zero if the FL_COMMAND key is pressed, either FL_CTRL or on OSX FL_META. */
-  inline int event_command() {return e_state&FL_COMMAND;}
+  inline int event_ctrl() {return e_state&fltk3::CTRL;}
+  /** Returns non-zero if the fltk3::COMMAND key is pressed, either fltk3::CTRL or on OSX fltk3::META. */
+  inline int event_command() {return e_state&fltk3::COMMAND;}
   /** Returns non-zero if the Alt key is pressed. */
-  inline int event_alt() {return e_state&FL_ALT;}
+  inline int event_alt() {return e_state&fltk3::ALT;}
   /**
     Returns the mouse buttons state bits; if non-zero, then at least one
     button is pressed now.  This function returns the button state at the 
     time of the event. During an fltk3::RELEASE event, the state 
     of the released button will be 0. To find out, which button 
     caused an fltk3::RELEASE event, you can use fltk3::event_button() instead.
-    \return a bit mask value like { [FL_BUTTON1] | [FL_BUTTON2] | [FL_BUTTON3] }
+    \return a bit mask value like { [fltk3::BUTTON1] | [fltk3::BUTTON2] | [fltk3::BUTTON3] }
   */
   inline int event_buttons() {return e_state&0x7f000000;}
   /**
     Returns non-zero if mouse button 1 is currently held down.
     For more details, see fltk3::event_buttons().
   */
-  inline int event_button1() {return e_state&FL_BUTTON1;}
+  inline int event_button1() {return e_state&fltk3::BUTTON1;}
   /**
     Returns non-zero if button 2 is currently held down.
     For more details, see fltk3::event_buttons().
   */
-  inline int event_button2() {return e_state&FL_BUTTON2;}
+  inline int event_button2() {return e_state&fltk3::BUTTON2;}
   /**
     Returns non-zero if button 3 is currently held down.
     For more details, see fltk3::event_buttons().
   */
-  inline int event_button3() {return e_state&FL_BUTTON3;}
+  inline int event_button3() {return e_state&fltk3::BUTTON3;}
   /**   @} */
 
   /**

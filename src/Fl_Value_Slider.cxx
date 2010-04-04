@@ -39,7 +39,7 @@ fltk3::ValueSlider::ValueSlider(int X, int Y, int W, int H, const char*l)
   step(1,100);
   textfont_ = fltk3::HELVETICA;
   textsize_ = 10;
-  textcolor_ = FL_FOREGROUND_COLOR;
+  textcolor_ = fltk3::FOREGROUND_COLOR;
 }
 
 void fltk3::ValueSlider::draw() {

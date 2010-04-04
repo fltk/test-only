@@ -164,10 +164,10 @@
 /** \fn Fl_File_Chooser::~Fl_File_Chooser()
   Destroys the widget and frees all memory used by it.*/
 
-/** \fn void Fl_File_Chooser::color(Fl_Color c)
+/** \fn void Fl_File_Chooser::color(fltk3::Color c)
   Sets or gets the background color of the Fl_File_Browser list.*/
 
-/** \fn Fl_Color Fl_File_Chooser::color()
+/** \fn fltk3::Color Fl_File_Chooser::color()
   Sets or gets the background color of the Fl_File_Browser list.*/
 
 /** \fn int Fl_File_Chooser::count()
@@ -236,10 +236,10 @@
 /** \fn void Fl_File_Chooser::show()
   Shows the Fl_File_Chooser window.*/
 
-/** \fn void Fl_File_Chooser::textcolor(Fl_Color c)
+/** \fn void Fl_File_Chooser::textcolor(fltk3::Color c)
   Sets or gets the current Fl_File_Browser text color.*/
 
-/** \fn Fl_Color Fl_File_Chooser::textcolor()
+/** \fn fltk3::Color Fl_File_Chooser::textcolor()
   Sets or gets the current Fl_File_Browser text color.*/
 
 /** \fn void Fl_File_Chooser::textfont(Fl_Font f)
@@ -837,7 +837,7 @@ Fl_File_Chooser::fileNameCB()
   filename = pathname;
 
   // Now process things according to the key pressed...
-  if (fltk3::event_key() == FL_Enter || fltk3::event_key() == FL_KP_Enter) {
+  if (fltk3::event_key() == fltk3::EnterKey || fltk3::event_key() == fltk3::KeypadEnter) {
     // Enter pressed - select or change directory...
 #if (defined(WIN32) && ! defined(__CYGWIN__)) || defined(__EMX__)
     if ((isalpha(pathname[0] & 255) && pathname[1] == ':' && !pathname[2]) ||
@@ -864,8 +864,8 @@ Fl_File_Chooser::fileNameCB()
       fltk3::alert("%s",existing_file_label);
     }
   }
-  else if (fltk3::event_key() != FL_Delete &&
-           fltk3::event_key() != FL_BackSpace) {
+  else if (fltk3::event_key() != fltk3::DeleteKey &&
+           fltk3::event_key() != fltk3::BackSpaceKey) {
     // Check to see if the user has entered a directory...
     if ((slash = strrchr(pathname, '/')) == NULL)
       slash = strrchr(pathname, '\\');
@@ -976,7 +976,7 @@ Fl_File_Chooser::fileNameCB()
       okButton->deactivate();
     }
   } else {
-    // FL_Delete or FL_BackSpace
+    // fltk3::DeleteKey or fltk3::BackSpaceKey
     fileList->deselect(0);
     fileList->redraw();
     if (((type_ & CREATE) || !access(fileName->value(), 0)) &&
@@ -1255,13 +1255,13 @@ Fl_File_Chooser::update_favorites()
   favoritesButton->clear();
   favoritesButton->add("bla");
   favoritesButton->clear();
-  favoritesButton->add(add_favorites_label, FL_ALT + 'a', 0);
-  favoritesButton->add(manage_favorites_label, FL_ALT + 'm', 0, 0, fltk3::MENU_DIVIDER);
-  favoritesButton->add(filesystems_label, FL_ALT + 'f', 0);
+  favoritesButton->add(add_favorites_label, fltk3::ALT + 'a', 0);
+  favoritesButton->add(manage_favorites_label, fltk3::ALT + 'm', 0, 0, fltk3::MENU_DIVIDER);
+  favoritesButton->add(filesystems_label, fltk3::ALT + 'f', 0);
     
   if ((home = getenv("HOME")) != NULL) {
     quote_pathname(menuname, home, sizeof(menuname));
-    favoritesButton->add(menuname, FL_ALT + 'h', 0);
+    favoritesButton->add(menuname, fltk3::ALT + 'h', 0);
   }
 
   for (i = 0; i < 100; i ++) {
@@ -1271,7 +1271,7 @@ Fl_File_Chooser::update_favorites()
 
     quote_pathname(menuname, pathname, sizeof(menuname));
 
-    if (i < 10) favoritesButton->add(menuname, FL_ALT + '0' + i, 0);
+    if (i < 10) favoritesButton->add(menuname, fltk3::ALT + '0' + i, 0);
     else favoritesButton->add(menuname);
   }
 

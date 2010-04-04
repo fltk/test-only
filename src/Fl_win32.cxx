@@ -672,12 +672,12 @@ static int mouse_event(fltk3::Window *window, int what, int button,
   ulong state = fltk3::e_state & 0xff0000; // keep shift key states
 #if 0
   // mouse event reports some shift flags, perhaps save them?
-  if (wParam & MK_SHIFT) state |= FL_SHIFT;
-  if (wParam & MK_CONTROL) state |= FL_CTRL;
+  if (wParam & MK_SHIFT) state |= fltk3::SHIFT;
+  if (wParam & MK_CONTROL) state |= fltk3::CTRL;
 #endif
-  if (wParam & MK_LBUTTON) state |= FL_BUTTON1;
-  if (wParam & MK_MBUTTON) state |= FL_BUTTON2;
-  if (wParam & MK_RBUTTON) state |= FL_BUTTON3;
+  if (wParam & MK_LBUTTON) state |= fltk3::BUTTON1;
+  if (wParam & MK_MBUTTON) state |= fltk3::BUTTON2;
+  if (wParam & MK_RBUTTON) state |= fltk3::BUTTON3;
   fltk3::e_state = state;
 
   switch (what) {
@@ -691,14 +691,14 @@ static int mouse_event(fltk3::Window *window, int what, int button,
 #else
     if (!fl_capture) SetCapture(fl_xid(window));	// use main window
 #endif
-    fltk3::e_keysym = FL_Button + button;
+    fltk3::e_keysym = fltk3::MouseButton + button;
     fltk3::e_is_click = 1;
     px = pmx = fltk3::e_x_root; py = pmy = fltk3::e_y_root;
     return fltk3::handle(fltk3::PUSH,window);
 
   case 2: // release:
     if (!fl_capture) ReleaseCapture();
-    fltk3::e_keysym = FL_Button + button;
+    fltk3::e_keysym = fltk3::MouseButton + button;
     return fltk3::handle(fltk3::RELEASE,window);
 
   case 3: // move:
@@ -716,38 +716,38 @@ static int mouse_event(fltk3::Window *window, int what, int button,
 // See also the inverse converter in Fl_get_key_win32.cxx
 // This table is in numeric order by VK:
 static const struct {unsigned short vk, fltk, extended;} vktab[] = {
-  {VK_BACK,	FL_BackSpace},
-  {VK_TAB,	FL_Tab},
-  {VK_CLEAR,	FL_KP+'5',	0xff0b/*XK_Clear*/},
-  {VK_RETURN,	FL_Enter,	FL_KP_Enter},
-  {VK_SHIFT,	FL_Shift_L,	FL_Shift_R},
-  {VK_CONTROL,	FL_Control_L,	FL_Control_R},
-  {VK_MENU,	FL_Alt_L,	FL_Alt_R},
-  {VK_PAUSE,	FL_Pause},
-  {VK_CAPITAL,	FL_Caps_Lock},
-  {VK_ESCAPE,	FL_Escape},
+  {VK_BACK,	fltk3::BackSpaceKey},
+  {VK_TAB,	fltk3::TabKey},
+  {VK_CLEAR,	fltk3::Keypad+'5',	0xff0b/*XK_Clear*/},
+  {VK_RETURN,	fltk3::EnterKey,	fltk3::Keypad_Enter},
+  {VK_SHIFT,	fltk3::LeftShiftKey,	fltk3::RightShiftKey},
+  {VK_CONTROL,	fltk3::LeftControlKey,	fltk3::RightControlKey},
+  {VK_MENU,	fltk3::LeftAltKey,	fltk3::RightAltKey},
+  {VK_PAUSE,	fltk3::PauseKey},
+  {VK_CAPITAL,	fltk3::CapsLockKey},
+  {VK_ESCAPE,	fltk3::EscapeKey},
   {VK_SPACE,	' '},
-  {VK_PRIOR,	FL_KP+'9',	FL_Page_Up},
-  {VK_NEXT,	FL_KP+'3',	FL_Page_Down},
-  {VK_END,	FL_KP+'1',	FL_End},
-  {VK_HOME,	FL_KP+'7',	FL_Home},
-  {VK_LEFT,	FL_KP+'4',	FL_Left},
-  {VK_UP,	FL_KP+'8',	FL_Up},
-  {VK_RIGHT,	FL_KP+'6',	FL_Right},
-  {VK_DOWN,	FL_KP+'2',	FL_Down},
-  {VK_SNAPSHOT,	FL_Print},	// does not work on NT
-  {VK_INSERT,	FL_KP+'0',	FL_Insert},
-  {VK_DELETE,	FL_KP+'.',	FL_Delete},
-  {VK_LWIN,	FL_Meta_L},
-  {VK_RWIN,	FL_Meta_R},
-  {VK_APPS,	FL_Menu},
-  {VK_MULTIPLY,	FL_KP+'*'},
-  {VK_ADD,	FL_KP+'+'},
-  {VK_SUBTRACT,	FL_KP+'-'},
-  {VK_DECIMAL,	FL_KP+'.'},
-  {VK_DIVIDE,	FL_KP+'/'},
-  {VK_NUMLOCK,	FL_Num_Lock},
-  {VK_SCROLL,	FL_Scroll_Lock},
+  {VK_PRIOR,	fltk3::Keypad+'9',	fltk3::PageUpKey},
+  {VK_NEXT,	fltk3::Keypad+'3',	fltk3::PageDownKey},
+  {VK_END,	fltk3::Keypad+'1',	fltk3::EndKey},
+  {VK_HOME,	fltk3::Keypad+'7',	fltk3::HomeKey},
+  {VK_LEFT,	fltk3::Keypad+'4',	fltk3::LeftKey},
+  {VK_UP,	fltk3::Keypad+'8',	fltk3::UpKey},
+  {VK_RIGHT,	fltk3::Keypad+'6',	fltk3::RightKey},
+  {VK_DOWN,	fltk3::Keypad+'2',	fltk3::DownKey},
+  {VK_SNAPSHOT,	fltk3::PrintKey},	// does not work on NT
+  {VK_INSERT,	fltk3::Keypad+'0',	FL_Insert},
+  {VK_DELETE,	fltk3::Keypad+'.',	fltk3::DeleteKey},
+  {VK_LWIN,	fltk3::LeftMetaKey},
+  {VK_RWIN,	fltk3::RightMetaKey},
+  {VK_APPS,	fltk3::MenuKey},
+  {VK_MULTIPLY,	fltk3::Keypad+'*'},
+  {VK_ADD,	fltk3::Keypad+'+'},
+  {VK_SUBTRACT,	fltk3::Keypad+'-'},
+  {VK_DECIMAL,	fltk3::Keypad+'.'},
+  {VK_DIVIDE,	fltk3::Keypad+'/'},
+  {VK_NUMLOCK,	fltk3::NumLockKey},
+  {VK_SCROLL,	fltk3::ScrollLockKey},
   {0xba,	';'},
   {0xbb,	'='},
   {0xbc,	','},
@@ -766,8 +766,8 @@ static int ms2fltk(int vk, int extended) {
   if (!vklut[1]) { // init the table
     unsigned int i;
     for (i = 0; i < 256; i++) vklut[i] = tolower(i);
-    for (i=VK_F1; i<=VK_F16; i++) vklut[i] = i+(FL_F-(VK_F1-1));
-    for (i=VK_NUMPAD0; i<=VK_NUMPAD9; i++) vklut[i] = i+(FL_KP+'0'-VK_NUMPAD0);
+    for (i=VK_F1; i<=VK_F16; i++) vklut[i] = i+(fltk3::FKey-(VK_F1-1));
+    for (i=VK_NUMPAD0; i<=VK_NUMPAD9; i++) vklut[i] = i+(fltk3::Keypad+'0'-VK_NUMPAD0);
     for (i = 0; i < sizeof(vktab)/sizeof(*vktab); i++) {
       vklut[vktab[i].vk] = vktab[i].fltk;
       extendedlut[vktab[i].vk] = vktab[i].extended;
@@ -956,13 +956,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (wParam)
     {
       ulong state = 0;
-      if (GetAsyncKeyState(VK_CAPITAL)) state |= FL_CAPS_LOCK;
-      if (GetAsyncKeyState(VK_NUMLOCK)) state |= FL_NUM_LOCK;
+      if (GetAsyncKeyState(VK_CAPITAL)) state |= fltk3::CAPS_LOCK;
+      if (GetAsyncKeyState(VK_NUMLOCK)) state |= fltk3::NUM_LOCK;
       if (GetAsyncKeyState(VK_SCROLL)) state |= FL_SCROLL_LOCK;
-      if (GetAsyncKeyState(VK_CONTROL)&~1) state |= FL_CTRL;
-      if (GetAsyncKeyState(VK_SHIFT)&~1) state |= FL_SHIFT;
-      if (GetAsyncKeyState(VK_MENU)) state |= FL_ALT;
-      if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1) state |= FL_META;
+      if (GetAsyncKeyState(VK_CONTROL)&~1) state |= fltk3::CTRL;
+      if (GetAsyncKeyState(VK_SHIFT)&~1) state |= fltk3::SHIFT;
+      if (GetAsyncKeyState(VK_MENU)) state |= fltk3::ALT;
+      if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1) state |= fltk3::META;
       fltk3::e_state = state;
       return 0;
     }
@@ -1000,19 +1000,19 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SYSCHAR: {
     ulong state = fltk3::e_state & 0xff000000; // keep the mouse button state
     // if GetKeyState is expensive we might want to comment some of these out:
-    if (GetKeyState(VK_SHIFT)&~1) state |= FL_SHIFT;
-    if (GetKeyState(VK_CAPITAL)) state |= FL_CAPS_LOCK;
-    if (GetKeyState(VK_CONTROL)&~1) state |= FL_CTRL;
+    if (GetKeyState(VK_SHIFT)&~1) state |= fltk3::SHIFT;
+    if (GetKeyState(VK_CAPITAL)) state |= fltk3::CAPS_LOCK;
+    if (GetKeyState(VK_CONTROL)&~1) state |= fltk3::CTRL;
     // Alt gets reported for the Alt-GR switch on foreign keyboards.
     // so we need to check the event as well to get it right:
     if ((lParam&(1<<29)) //same as GetKeyState(VK_MENU)
-	&& uMsg != WM_CHAR) state |= FL_ALT;
-    if (GetKeyState(VK_NUMLOCK)) state |= FL_NUM_LOCK;
+	&& uMsg != WM_CHAR) state |= fltk3::ALT;
+    if (GetKeyState(VK_NUMLOCK)) state |= fltk3::NUM_LOCK;
     if ((GetKeyState(VK_LWIN)|GetKeyState(VK_RWIN))&~1) {
       // WIN32 bug?  GetKeyState returns garbage if the user hit the
       // meta key to pop up start menu.  Sigh.
       if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1)
-	state |= FL_META;
+	state |= fltk3::META;
     }
     if (GetKeyState(VK_SCROLL)) state |= FL_SCROLL_LOCK;
     fltk3::e_state = state;
@@ -1025,51 +1025,51 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       buffer[fltk3::e_length] = 0;
 
 
-    } else if (fltk3::e_keysym >= FL_KP && fltk3::e_keysym <= FL_KP_Last) {
-      if (state & FL_NUM_LOCK) {
+    } else if (fltk3::e_keysym >= fltk3::Keypad && fltk3::e_keysym <= fltk3::Keypad_Last) {
+      if (state & fltk3::NUM_LOCK) {
         // Convert to regular keypress...
-	buffer[0] = fltk3::e_keysym-FL_KP;
+	buffer[0] = fltk3::e_keysym-fltk3::Keypad;
 	fltk3::e_length = 1;
       } else {
         // Convert to special keypress...
 	buffer[0] = 0;
 	fltk3::e_length = 0;
 	switch (fltk3::e_keysym) {
-	  case FL_KP + '0' :
+	  case fltk3::Keypad + '0' :
 	    fltk3::e_keysym = FL_Insert;
 	    break;
-	  case FL_KP + '1' :
-	    fltk3::e_keysym = FL_End;
+	  case fltk3::Keypad + '1' :
+	    fltk3::e_keysym = fltk3::EndKey;
 	    break;
-	  case FL_KP + '2' :
-	    fltk3::e_keysym = FL_Down;
+	  case fltk3::Keypad + '2' :
+	    fltk3::e_keysym = fltk3::DownKey;
 	    break;
-	  case FL_KP + '3' :
-	    fltk3::e_keysym = FL_Page_Down;
+	  case fltk3::Keypad + '3' :
+	    fltk3::e_keysym = fltk3::PageDownKey;
 	    break;
-	  case FL_KP + '4' :
-	    fltk3::e_keysym = FL_Left;
+	  case fltk3::Keypad + '4' :
+	    fltk3::e_keysym = fltk3::LeftKey;
 	    break;
-	  case FL_KP + '6' :
-	    fltk3::e_keysym = FL_Right;
+	  case fltk3::Keypad + '6' :
+	    fltk3::e_keysym = fltk3::RightKey;
 	    break;
-	  case FL_KP + '7' :
-	    fltk3::e_keysym = FL_Home;
+	  case fltk3::Keypad + '7' :
+	    fltk3::e_keysym = fltk3::HomeKey;
 	    break;
-	  case FL_KP + '8' :
-	    fltk3::e_keysym = FL_Up;
+	  case fltk3::Keypad + '8' :
+	    fltk3::e_keysym = fltk3::UpKey;
 	    break;
-	  case FL_KP + '9' :
-	    fltk3::e_keysym = FL_Page_Up;
+	  case fltk3::Keypad + '9' :
+	    fltk3::e_keysym = fltk3::PageUpKey;
 	    break;
-	  case FL_KP + '.' :
-	    fltk3::e_keysym = FL_Delete;
+	  case fltk3::Keypad + '.' :
+	    fltk3::e_keysym = fltk3::DeleteKey;
 	    break;
-	  case FL_KP + '/' :
-	  case FL_KP + '*' :
-	  case FL_KP + '-' :
-	  case FL_KP + '+' :
-	    buffer[0] = fltk3::e_keysym-FL_KP;
+	  case fltk3::Keypad + '/' :
+	  case fltk3::Keypad + '*' :
+	  case fltk3::Keypad + '-' :
+	  case fltk3::Keypad + '+' :
+	    buffer[0] = fltk3::e_keysym-fltk3::Keypad;
 	    fltk3::e_length = 1;
 	    break;
 	}
@@ -1421,7 +1421,7 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
       w->icon((void *)LoadIcon(NULL, IDI_APPLICATION));
     wcw.hIcon = wcw.hIconSm = (HICON)w->icon();
     wcw.hCursor = fl_default_cursor = LoadCursor(NULL, IDC_ARROW);
-    //uchar r,g,b; fltk3::get_color(FL_GRAY,r,g,b);
+    //uchar r,g,b; fltk3::get_color(fltk3::GRAY,r,g,b);
     //wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(r,g,b));
     wcw.hbrBackground = NULL;
     wcw.lpszMenuName = NULL;
@@ -1757,7 +1757,7 @@ void fltk3::Window::label(const char *name,const char *iname) {
 // actually *be* faster by drawing the frame only, this is done by
 // setting fl_boxcheat, which is seen by code in fl_drawbox.cxx:
 // For WIN32 it looks like all windows share a background color, so
-// I use FL_GRAY for this and only do this cheat for windows that are
+// I use fltk3::GRAY for this and only do this cheat for windows that are
 // that color.
 // Actually it is totally disabled.
 // fltk3::Widget *fl_boxcheat;
@@ -1933,13 +1933,13 @@ Fl_Region XRectangleRegion(int x, int y, int w, int h) {
 }
 
 #ifdef USE_PRINT_BUTTON
-// to test the Fl_Printer class creating a "Print front window" button in a separate window
+// to test the fltk3::Printer class creating a "Print front window" button in a separate window
 // contains also preparePrintFront call above
-#include <fltk3/Fl_Printer.H>
+#include <fltk3/Printer.h>
 #include <fltk3/Button.h>
 void printFront(fltk3::Widget *o, void *data)
 {
-  Fl_Printer printer;
+  fltk3::Printer printer;
   o->window()->hide();
   fltk3::Window *win = fltk3::first_window();
   if(!win) return;

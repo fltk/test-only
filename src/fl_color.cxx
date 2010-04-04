@@ -125,9 +125,9 @@ Fl_XColor fl_xmap[1][256];
 #  endif
 
 /** Current color for drawing operations */
-Fl_Color fl_color_;
+fltk3::Color fl_color_;
 
-void fltk3::Device::color(Fl_Color i) {
+void fltk3::Device::color(fltk3::Color i) {
   if (i & 0xffffff00) {
     unsigned rgb = (unsigned)i;
     fl_color((uchar)(rgb >> 24), (uchar)(rgb >> 16), (uchar)(rgb >> 8));
@@ -164,12 +164,12 @@ ulong fl_xpixel(uchar r,uchar g,uchar b) {
 #  if USE_COLORMAP
   if (!fl_redmask) {
     // find closest entry in the colormap:
-    Fl_Color i =
-      fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
+    fltk3::Color i =
+      fl_color_cube(r*fltk3::NUM_RED/256,g*fltk3::NUM_GREEN/256,b*fltk3::NUM_BLUE/256);
     Fl_XColor &xmap = fl_xmap[fl_overlay][i];
     if (xmap.mapped) return xmap.pixel;
     // if not black or white, change the entry to be an exact match:
-    if (i != FL_COLOR_CUBE && i != 0xFF)
+    if (i != fltk3::COLOR_CUBE && i != 0xFF)
       fl_cmap[i] = (r<<24)|(g<<16)|(b<<8);
     return fl_xpixel(i); // allocate an X color
   }
@@ -212,7 +212,7 @@ static inline uchar realcolor(uchar color, uchar mask) {
   \param[in] i color index
   \return X pixel number
 */
-ulong fl_xpixel(Fl_Color i) {
+ulong fl_xpixel(fltk3::Color i) {
   if (i & 0xffffff00) {
     return fl_xpixel((i >> 24) & 255, (i >> 16) & 255, (i >> 8) & 255);
   }
@@ -325,7 +325,7 @@ ulong fl_xpixel(Fl_Color i) {
   \param[in] i color index
   \param[in] overlay 0 for normal, 1 for overlay color
 */
-void fltk3::free_color(Fl_Color i, int overlay) {
+void fltk3::free_color(fltk3::Color i, int overlay) {
 #  if HAVE_OVERLAY
 #  else
   if (overlay) return;
@@ -349,7 +349,7 @@ void fltk3::free_color(Fl_Color i, int overlay) {
   \param[in] i color index
   \param[in] c color
 */
-void fltk3::set_color(Fl_Color i, unsigned c) {
+void fltk3::set_color(fltk3::Color i, unsigned c) {
   if (fl_cmap[i] != c) {
     free_color(i,0);
 #  if HAVE_OVERLAY
@@ -370,7 +370,7 @@ void fltk3::set_color(Fl_Color i, unsigned c) {
     The second form returns the red, green, and blue values
     separately in referenced variables.
 */
-unsigned fltk3::get_color(Fl_Color i) {
+unsigned fltk3::get_color(fltk3::Color i) {
   if (i & 0xffffff00) return (i);
   else return fl_cmap[i];
 }
@@ -379,12 +379,12 @@ unsigned fltk3::get_color(Fl_Color i) {
     any 8-bit RGB color.  The color is not allocated until fl_color(i)
     is used.
 */
-void fltk3::set_color(Fl_Color i, uchar red, uchar green, uchar blue) {
-  fltk3::set_color((Fl_Color)(i & 255),
+void fltk3::set_color(fltk3::Color i, uchar red, uchar green, uchar blue) {
+  fltk3::set_color((fltk3::Color)(i & 255),
 	((unsigned)red<<24)+((unsigned)green<<16)+((unsigned)blue<<8));
 }
-/** See unsigned get_color(Fl_Color c) */
-void fltk3::get_color(Fl_Color i, uchar &red, uchar &green, uchar &blue) {
+/** See unsigned get_color(fltk3::Color c) */
+void fltk3::get_color(fltk3::Color i, uchar &red, uchar &green, uchar &blue) {
   unsigned c;
 
   if (i & 0xffffff00) c = (unsigned)i;
@@ -406,7 +406,7 @@ void fltk3::get_color(Fl_Color i, uchar &red, uchar &green, uchar &blue) {
   \param[in] color1, color2 boundary colors
   \param[in] weight weighting factor
 */
-Fl_Color fl_color_average(Fl_Color color1, Fl_Color color2, float weight) {
+fltk3::Color fl_color_average(fltk3::Color color1, fltk3::Color color2, float weight) {
   unsigned rgb1;
   unsigned rgb2;
   uchar r, g, b;
@@ -427,19 +427,19 @@ Fl_Color fl_color_average(Fl_Color color1, Fl_Color color2, float weight) {
 /**
   Returns the inactive, dimmed version of the given color
 */
-Fl_Color fl_inactive(Fl_Color c) {
-  return fl_color_average(c, FL_GRAY, .33f);
+fltk3::Color fl_inactive(fltk3::Color c) {
+  return fl_color_average(c, fltk3::GRAY, .33f);
 }
 
 /**
   Returns a color that contrasts with the background color.
   This will be the foreground color if it contrasts sufficiently with the
-  background color. Otherwise, returns \p FL_WHITE or \p FL_BLACK depending
+  background color. Otherwise, returns \p fltk3::WHITE or \p fltk3::BLACK depending
   on which color provides the best contrast.
   \param[in] fg,bg foreground and background colors
   \return contrasting color
 */
-Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
+fltk3::Color fl_contrast(fltk3::Color fg, fltk3::Color bg) {
   unsigned c1, c2;	// RGB colors
   int l1, l2;		// Luminosities
 
@@ -458,8 +458,8 @@ Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
   // Compare and return the contrasting color...
   if ((l1 - l2) > 99) return fg;
   else if ((l2 - l1) > 99) return fg;
-  else if (l2 > 127) return FL_BLACK;
-  else return FL_WHITE;
+  else if (l2 > 127) return fltk3::BLACK;
+  else return fltk3::WHITE;
 }
 /**
    @}

@@ -61,7 +61,7 @@ struct Fl_Help_Block
   const char	*start,		// Start of text
 		*end;		// End of text
   uchar		border;		// Draw border?
-  Fl_Color	bgcolor;	// Background color
+  fltk3::Color	bgcolor;	// Background color
   int		x,		// Indentation/starting X coordinate
 		y,		// Starting Y coordinate
 		w,		// Width
@@ -91,10 +91,10 @@ struct Fl_Help_Link
 struct Fl_Help_Font_Style {
   Fl_Font      f;  ///< Font
   Fl_Fontsize  s;  ///< Font Size
-  Fl_Color     c;  ///< Font Color
-  void get(Fl_Font &afont, Fl_Fontsize &asize, Fl_Color &acolor) {afont=f; asize=s; acolor=c;} ///< Gets current font attributes
-  void set(Fl_Font afont, Fl_Fontsize asize, Fl_Color acolor) {f=afont; s=asize; c=acolor;} ///< Sets current font attributes
-  Fl_Help_Font_Style(Fl_Font afont, Fl_Fontsize asize, Fl_Color acolor) {set(afont, asize, acolor);}
+  fltk3::Color     c;  ///< Font Color
+  void get(Fl_Font &afont, Fl_Fontsize &asize, fltk3::Color &acolor) {afont=f; asize=s; acolor=c;} ///< Gets current font attributes
+  void set(Fl_Font afont, Fl_Fontsize asize, fltk3::Color acolor) {f=afont; s=asize; c=acolor;} ///< Sets current font attributes
+  Fl_Help_Font_Style(Fl_Font afont, Fl_Fontsize asize, fltk3::Color acolor) {set(afont, asize, acolor);}
   Fl_Help_Font_Style(){} // For in table use
 };
 
@@ -107,22 +107,22 @@ struct Fl_Help_Font_Stack {
     nfonts_ = 0;
   }
 
-  void init(Fl_Font f, Fl_Fontsize s, Fl_Color c) { 
+  void init(Fl_Font f, Fl_Fontsize s, fltk3::Color c) { 
     nfonts_ = 0;
     elts_[nfonts_].set(f, s, c);
     fl_font(f, s); 
     fl_color(c);
   }
   /** Gets the top (current) element on the stack. */
-  void top(Fl_Font &f, Fl_Fontsize &s, Fl_Color &c) { elts_[nfonts_].get(f, s, c); }
+  void top(Fl_Font &f, Fl_Fontsize &s, fltk3::Color &c) { elts_[nfonts_].get(f, s, c); }
   /** Pushes the font style triplet on the stack, also calls fl_font() & fl_color() adequately */
-  void push(Fl_Font f, Fl_Fontsize s, Fl_Color c) { 
+  void push(Fl_Font f, Fl_Fontsize s, fltk3::Color c) { 
     if (nfonts_ <  MAX_FL_HELP_FS_ELTS-1) nfonts_ ++;
     elts_[nfonts_].set(f, s, c);
     fl_font(f, s); fl_color(c); 
   }
   /** Pops from the stack the font style triplet and calls fl_font() & fl_color() adequately */
-  void pop(Fl_Font &f, Fl_Fontsize &s, Fl_Color &c) { 
+  void pop(Fl_Font &f, Fl_Fontsize &s, fltk3::Color &c) { 
     if (nfonts_ > 0) nfonts_ --;
     top(f, s, c);
     fl_font(f, s); fl_color(c);
@@ -213,7 +213,7 @@ class FL_EXPORT Fl_Help_View : public fltk3::Group	// Help viewer widget
   enum { RIGHT = -1, CENTER, LEFT };	///< Alignments
 
   char		title_[1024];		///< Title string
-  Fl_Color	defcolor_,		///< Default text color
+  fltk3::Color	defcolor_,		///< Default text color
 		bgcolor_,		///< Background color
 		textcolor_,		///< Text color
 		linkcolor_;		///< Link color
@@ -257,14 +257,14 @@ class FL_EXPORT Fl_Help_View : public fltk3::Group	// Help viewer widget
   static int    mouse_y;
   static int    current_pos;
   static Fl_Help_View *current_view;
-  static Fl_Color hv_selection_color;
-  static Fl_Color hv_selection_text_color;
+  static fltk3::Color hv_selection_color;
+  static fltk3::Color hv_selection_text_color;
 
 
-  void initfont(Fl_Font &f, Fl_Fontsize &s, Fl_Color &c) { f = textfont_; s = textsize_; c = textcolor_; fstack_.init(f, s, c); }
+  void initfont(Fl_Font &f, Fl_Fontsize &s, fltk3::Color &c) { f = textfont_; s = textsize_; c = textcolor_; fstack_.init(f, s, c); }
   void pushfont(Fl_Font f, Fl_Fontsize s) {fstack_.push(f, s, textcolor_);}
-  void pushfont(Fl_Font f, Fl_Fontsize s, Fl_Color c) {fstack_.push(f, s, c);}
-  void popfont(Fl_Font &f, Fl_Fontsize &s, Fl_Color &c) {fstack_.pop(f, s, c);}
+  void pushfont(Fl_Font f, Fl_Fontsize s, fltk3::Color c) {fstack_.push(f, s, c);}
+  void popfont(Fl_Font &f, Fl_Fontsize &s, fltk3::Color &c) {fstack_.pop(f, s, c);}
 
   Fl_Help_Block	*add_block(const char *s, int xx, int yy, int ww, int hh, uchar border = 0);
   void		add_link(const char *n, int xx, int yy, int ww, int hh);
@@ -277,7 +277,7 @@ class FL_EXPORT Fl_Help_View : public fltk3::Group	// Help viewer widget
   void		free_data();
   int		get_align(const char *p, int a);
   const char	*get_attr(const char *p, const char *n, char *buf, int bufsize);
-  Fl_Color	get_color(const char *n, Fl_Color c);
+  fltk3::Color	get_color(const char *n, fltk3::Color c);
   Fl_Shared_Image *get_image(const char *name, int W, int H);
   int		get_length(const char *l);
   int		handle(int);
@@ -330,9 +330,9 @@ public:
   int		size() const { return (size_); }
   void		size(int W, int H) { fltk3::Widget::size(W, H); }
   /** Sets the default text color. */
-  void		textcolor(Fl_Color c) { if (textcolor_ == defcolor_) textcolor_ = c; defcolor_ = c; }
+  void		textcolor(fltk3::Color c) { if (textcolor_ == defcolor_) textcolor_ = c; defcolor_ = c; }
   /** Returns the current default text color. */
-  Fl_Color	textcolor() const { return (defcolor_); }
+  fltk3::Color	textcolor() const { return (defcolor_); }
   /** Sets the default text font. */
   void		textfont(Fl_Font f) { textfont_ = f; format(); }
   /** Returns the current default text font. */

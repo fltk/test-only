@@ -35,14 +35,14 @@
 #define ARCINC	(2.0*M_PI/360.0)
 
 // this function is in fl_boxtype.cxx:
-void fl_rectbound(int x,int y,int w,int h, Fl_Color color);
+void fl_rectbound(int x,int y,int w,int h, fltk3::Color color);
 
 /* Widget specific information */
 
 static void draw_barchart(int x,int y,int w,int h,
 			  int numb, FL_CHART_ENTRY entries[],
 			  double min, double max, int autosize, int maxnumb,
-			  Fl_Color textcolor)
+			  fltk3::Color textcolor)
 /* Draws a bar chart. x,y,w,h is the bounding box, entries the array of
    numb entries and min and max the boundaries. */
 {
@@ -67,9 +67,9 @@ static void draw_barchart(int x,int y,int w,int h,
   for (i=0; i<numb; i++) {
       int hh = (int)rint(entries[i].val*incr);
       if (hh < 0)
-	fl_rectbound(x+i*bwidth,zeroh,bwidth+1,-hh+1, (Fl_Color)entries[i].col);
+	fl_rectbound(x+i*bwidth,zeroh,bwidth+1,-hh+1, (fltk3::Color)entries[i].col);
       else if (hh > 0)
-	fl_rectbound(x+i*bwidth,zeroh-hh,bwidth+1,hh+1,(Fl_Color)entries[i].col);
+	fl_rectbound(x+i*bwidth,zeroh-hh,bwidth+1,hh+1,(fltk3::Color)entries[i].col);
   }
   /* Draw the labels */
   fl_color(textcolor);
@@ -82,7 +82,7 @@ static void draw_barchart(int x,int y,int w,int h,
 static void draw_horbarchart(int x,int y,int w,int h,
 			     int numb, FL_CHART_ENTRY entries[],
 			     double min, double max, int autosize, int maxnumb,
-			     Fl_Color textcolor)
+			     fltk3::Color textcolor)
 /* Draws a horizontal bar chart. x,y,w,h is the bounding box, entries the
    array of numb entries and min and max the boundaries. */
 {
@@ -113,9 +113,9 @@ static void draw_horbarchart(int x,int y,int w,int h,
   for (i=0; i<numb; i++) {
       int ww = (int)rint(entries[i].val*incr);
       if (ww > 0)
-	fl_rectbound(zeroh,y+i*bwidth,ww+1,bwidth+1, (Fl_Color)entries[i].col);
+	fl_rectbound(zeroh,y+i*bwidth,ww+1,bwidth+1, (fltk3::Color)entries[i].col);
       else if (ww < 0)
-	fl_rectbound(zeroh+ww,y+i*bwidth,-ww+1,bwidth+1,(Fl_Color)entries[i].col);
+	fl_rectbound(zeroh+ww,y+i*bwidth,-ww+1,bwidth+1,(fltk3::Color)entries[i].col);
   }
   /* Draw the labels */
   fl_color(textcolor);
@@ -128,7 +128,7 @@ static void draw_horbarchart(int x,int y,int w,int h,
 static void draw_linechart(int type, int x,int y,int w,int h,
 			   int numb, FL_CHART_ENTRY entries[],
 			   double min, double max, int autosize, int maxnumb,
-			   Fl_Color textcolor)
+			   fltk3::Color textcolor)
 /* Draws a line chart. x,y,w,h is the bounding box, entries the array of
    numb entries and min and max the boundaries. */
 {
@@ -146,13 +146,13 @@ static void draw_linechart(int type, int x,int y,int w,int h,
       int yy0 = i ? zeroh - (int)rint(entries[i-1].val*incr) : 0;
       int yy1 = zeroh - (int)rint(entries[i].val*incr);
       if (type == FL_SPIKE_CHART) {
-	  fl_color((Fl_Color)entries[i].col);
+	  fl_color((fltk3::Color)entries[i].col);
 	  fl_line(x1, zeroh, x1, yy1);
       } else if (type == FL_LINE_CHART && i != 0) {
-	  fl_color((Fl_Color)entries[i-1].col);
+	  fl_color((fltk3::Color)entries[i-1].col);
 	  fl_line(x0,yy0,x1,yy1);
       } else if (type == FL_FILLED_CHART && i != 0) {
-	  fl_color((Fl_Color)entries[i-1].col);
+	  fl_color((fltk3::Color)entries[i-1].col);
 	  if ((entries[i-1].val>0.0)!=(entries[i].val>0.0)) {
 	      double ttt = entries[i-1].val/(entries[i-1].val-entries[i].val);
 	      int xt = x + (int)rint((i-.5+ttt)*bwidth);
@@ -177,7 +177,7 @@ static void draw_linechart(int type, int x,int y,int w,int h,
 
 static void draw_piechart(int x,int y,int w,int h,
 			  int numb, FL_CHART_ENTRY entries[], int special,
-			  Fl_Color textcolor)
+			  fltk3::Color textcolor)
 /* Draws a pie chart. x,y,w,h is the bounding box, entries the array of
    numb entries */
 {
@@ -210,7 +210,7 @@ static void draw_piechart(int x,int y,int w,int h,
         txc += 0.3*rad*cos(ARCINC*(curang+0.5*incr*entries[i].val));
         tyc -= 0.3*rad*sin(ARCINC*(curang+0.5*incr*entries[i].val));
       }
-      fl_color((Fl_Color)entries[i].col);
+      fl_color((fltk3::Color)entries[i].col);
       fl_begin_polygon(); fl_vertex(txc,tyc);
       fl_arc(txc,tyc,rad,curang, curang+incr*entries[i].val);
       fl_end_polygon();
@@ -302,7 +302,7 @@ fltk3::Widget(X,Y,W,H,L) {
   min = max  = 0;
   textfont_  = fltk3::HELVETICA;
   textsize_  = 10;
-  textcolor_ = FL_FOREGROUND_COLOR;
+  textcolor_ = fltk3::FOREGROUND_COLOR;
   entries    = (FL_CHART_ENTRY *)calloc(sizeof(FL_CHART_ENTRY), FL_CHART_MAX + 1);
 }
 

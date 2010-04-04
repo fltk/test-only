@@ -107,7 +107,7 @@ int Fl_Scrollbar::handle(int event) {
     if (val >= 1.0) sliderx = ww-S;
     else if (val <= 0.0) sliderx = 0;
     else sliderx = int(val*(ww-S)+.5);
-    if (fltk3::event_button() == FL_MIDDLE_MOUSE) area = 8;
+    if (fltk3::event_button() == fltk3::MIDDLE_MOUSE) area = 8;
     else if (relx < sliderx) area = 5;
     else if (relx >= sliderx+S) area = 6;
     else area = 8;
@@ -157,10 +157,10 @@ int Fl_Scrollbar::handle(int event) {
     int ls = maximum()>=minimum() ? linesize_ : -linesize_;
     if (horizontal()) {
       switch (fltk3::event_key()) {
-      case FL_Left:
+      case fltk3::LeftKey:
 	v -= ls;
 	break;
-      case FL_Right:
+      case fltk3::RightKey:
 	v += ls;
 	break;
       default:
@@ -168,26 +168,26 @@ int Fl_Scrollbar::handle(int event) {
       }
     } else { // vertical
       switch (fltk3::event_key()) {
-      case FL_Up:
+      case fltk3::UpKey:
 	v -= ls;
 	break;
-      case FL_Down:
+      case fltk3::DownKey:
 	v += ls;
 	break;
-      case FL_Page_Up:
+      case fltk3::PageUpKey:
 	if (slider_size() >= 1.0) return 0;
 	v -= int((maximum()-minimum())*slider_size()/(1.0-slider_size()));
 	v += ls;
 	break;
-      case FL_Page_Down:
+      case fltk3::PageDownKey:
 	if (slider_size() >= 1.0) return 0;
 	v += int((maximum()-minimum())*slider_size()/(1.0-slider_size()));
 	v -= ls;
 	break;
-      case FL_Home:
+      case fltk3::HomeKey:
 	v = int(minimum());
 	break;
-      case FL_End:
+      case fltk3::EndKey:
 	v = int(maximum());
 	break;
       default:
@@ -273,7 +273,7 @@ void Fl_Scrollbar::draw() {
 Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
   : fltk3::Slider(X, Y, W, H, L) {
   box(fltk3::FLAT_BOX);
-  color(FL_DARK2);
+  color(fltk3::DARK2);
   slider(fltk3::UP_BOX);
   linesize_ = 16;
   pushed_ = 0;

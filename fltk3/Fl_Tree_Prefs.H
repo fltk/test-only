@@ -95,11 +95,11 @@ class Fl_Tree_Prefs {
   int _connectorwidth;			// connector width (right of open/close icon)
   int _linespacing;			// vertical space between lines
   // Colors
-  Fl_Color _fgcolor;			// label's foreground color
-  Fl_Color _bgcolor;			// background color
-  Fl_Color _selectcolor;		// selection color
-  Fl_Color _inactivecolor;		// inactive color
-  Fl_Color _connectorcolor;		// connector dotted line color
+  fltk3::Color _fgcolor;			// label's foreground color
+  fltk3::Color _bgcolor;			// background color
+  fltk3::Color _selectcolor;		// selection color
+  fltk3::Color _inactivecolor;		// inactive color
+  fltk3::Color _connectorcolor;		// connector dotted line color
   Fl_Tree_Connector _connectorstyle;	// connector line style
   fltk3::Image *_openimage;			// the 'open' icon [+]
   fltk3::Image *_closeimage;		// the 'close' icon [-]
@@ -204,43 +204,43 @@ public:
   // Colors and Styles
   ////////////////////////////
   /// Get the default label foreground color
-  inline Fl_Color fgcolor() const {
+  inline fltk3::Color fgcolor() const {
     return(_fgcolor);
   }
   /// Set the default label foreground color
-  inline void fgcolor(Fl_Color val) {
+  inline void fgcolor(fltk3::Color val) {
     _fgcolor = val;
   }
   /// Get the default label background color
-  inline Fl_Color bgcolor() const {
+  inline fltk3::Color bgcolor() const {
     return(_bgcolor);
   }
   /// Set the default label background color
-  inline void bgcolor(Fl_Color val) {
+  inline void bgcolor(fltk3::Color val) {
     _bgcolor = val;
   }
   /// Get the default selection color
-  inline Fl_Color selectcolor() const {
+  inline fltk3::Color selectcolor() const {
     return(_selectcolor);
   }
   /// Set the default selection color
-  inline void selectcolor(Fl_Color val) {
+  inline void selectcolor(fltk3::Color val) {
     _selectcolor = val;
   }
   /// Get the default inactive color
-  inline Fl_Color inactivecolor() const {
+  inline fltk3::Color inactivecolor() const {
     return(_inactivecolor);
   }
   /// Set the default inactive color
-  inline void inactivecolor(Fl_Color val) {
+  inline void inactivecolor(fltk3::Color val) {
     _inactivecolor = val;
   }
   /// Get the connector color; the color used for tree connection lines
-  inline Fl_Color connectorcolor() const {
+  inline fltk3::Color connectorcolor() const {
     return(_connectorcolor);
   }
   /// Set the connector color; the color used for tree connection lines
-  inline void connectorcolor(Fl_Color val) {
+  inline void connectorcolor(fltk3::Color val) {
     _connectorcolor = val;
   }
   /// Get the connector style

@@ -54,8 +54,8 @@ void Fl_Dial::draw(int X, int Y, int W, int H) {
     else fl_color(fl_inactive(selection_color()));
     fl_pie(X, Y, W, H, 270-angle, 270-a1);
     if (foo) {
-      if (active_r()) fl_color(FL_FOREGROUND_COLOR);
-      else fl_color(fl_inactive(FL_FOREGROUND_COLOR));
+      if (active_r()) fl_color(fltk3::FOREGROUND_COLOR);
+      else fl_color(fl_inactive(fltk3::FOREGROUND_COLOR));
       fl_arc(X, Y, W, H, 0, 360);
     }
     return;
@@ -78,8 +78,8 @@ void Fl_Dial::draw(int X, int Y, int W, int H) {
     fl_vertex(-0.25, 0.25);
     fl_vertex(0.0,   0.04);
     fl_end_polygon();
-    if (active_r()) fl_color(FL_FOREGROUND_COLOR);
-    else fl_color(fl_inactive(FL_FOREGROUND_COLOR));
+    if (active_r()) fl_color(fltk3::FOREGROUND_COLOR);
+    else fl_color(fl_inactive(fltk3::FOREGROUND_COLOR));
     fl_begin_loop();
     fl_vertex(0.0,   0.0);
     fl_vertex(-0.04, 0.0);
@@ -88,8 +88,8 @@ void Fl_Dial::draw(int X, int Y, int W, int H) {
     fl_end_loop();
   } else {
     fl_begin_polygon(); fl_circle(-0.20, 0.20, 0.07); fl_end_polygon();
-    if (active_r()) fl_color(FL_FOREGROUND_COLOR);
-    else fl_color(fl_inactive(FL_FOREGROUND_COLOR));
+    if (active_r()) fl_color(fltk3::FOREGROUND_COLOR);
+    else fl_color(fl_inactive(fltk3::FOREGROUND_COLOR));
     fl_begin_loop(); fl_circle(-0.20, 0.20, 0.07); fl_end_loop();
   }
   fl_pop_matrix();
@@ -156,7 +156,7 @@ Fl_Dial::Fl_Dial(int X, int Y, int W, int H, const char* l)
 */
 : fltk3::Valuator(X, Y, W, H, l) {
   box(fltk3::OVAL_BOX);
-  selection_color(FL_INACTIVE_COLOR); // was 37
+  selection_color(fltk3::INACTIVE_COLOR); // was 37
   a1 = 45;
   a2 = 315;
 }

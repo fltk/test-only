@@ -200,8 +200,8 @@ private:
   int _redraw_botrow;
   int _redraw_leftcol;
   int _redraw_rightcol;
-  Fl_Color _row_header_color;
-  Fl_Color _col_header_color;
+  fltk3::Color _row_header_color;
+  fltk3::Color _col_header_color;
   
   int _auto_drag;
   int _selecting;
@@ -386,7 +386,7 @@ protected:
    fl_push_clip(X, Y, W, H);
    {
    fl_draw_box(fltk3::THIN_UP_BOX, X, Y, W, H, color());
-   fl_color(FL_BLACK);
+   fl_color(fltk3::BLACK);
    fl_draw(s, X, Y, W, H, fltk3::ALIGN_CENTER);
    }
    fl_pop_clip();
@@ -396,15 +396,15 @@ protected:
    fl_push_clip(X, Y, W, H);
    {
    // BG COLOR
-   fl_color( row_selected(R) ? selection_color() : FL_WHITE);
+   fl_color( row_selected(R) ? selection_color() : fltk3::WHITE);
    fl_rectf(X, Y, W, H);
    
    // TEXT
-   fl_color(FL_BLACK);
+   fl_color(fltk3::BLACK);
    fl_draw(s, X, Y, W, H, fltk3::ALIGN_CENTER);
    
    // BORDER
-   fl_color(FL_LIGHT2);
+   fl_color(fltk3::LIGHT2);
    fl_rect(X, Y, W, H);
    }
    fl_pop_clip();
@@ -694,7 +694,7 @@ public:
   /**
    Sets the row header color and causes the screen to redraw.
    */
-  inline void row_header_color(Fl_Color val) {	// set/get row header color
+  inline void row_header_color(fltk3::Color val) {	// set/get row header color
     _row_header_color = val;
     redraw();
   }
@@ -702,14 +702,14 @@ public:
   /**
    Returns the current row header color.
    */
-  inline Fl_Color row_header_color() {
+  inline fltk3::Color row_header_color() {
     return(_row_header_color);
   } 
   
   /**
    Sets the color for column headers and redraws the table.
    */
-  inline void col_header_color(Fl_Color val) {	// set/get col header color
+  inline void col_header_color(fltk3::Color val) {	// set/get col header color
     _col_header_color = val;
     redraw();
   }
@@ -717,7 +717,7 @@ public:
   /**
    Gets the color for column headers.
    */
-  inline Fl_Color col_header_color() {
+  inline fltk3::Color col_header_color() {
     return(_col_header_color);
   }
   

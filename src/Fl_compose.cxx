@@ -115,22 +115,22 @@ int fltk3::compose(int& del) {
   // OSX users sometimes need to hold down ALT for keys, so we only check
   // for META on OSX...
 #ifdef __APPLE__
-  if ((e_state & FL_META) && !(ascii & 128)) return 0;
+  if ((e_state & fltk3::META) && !(ascii & 128)) return 0;
 #else
-  if ((e_state & (FL_ALT|FL_META)) && !(ascii & 128)) return 0;
+  if ((e_state & (fltk3::ALT|fltk3::META)) && !(ascii & 128)) return 0;
 #endif // __APPLE__
 
   if (compose_state == 1) { // after the compose key
     if ( // do not get distracted by any modifier keys
-      e_keysym==FL_Shift_L||
-      e_keysym==FL_Shift_R ||
-      e_keysym==FL_Alt_L ||
-      e_keysym==FL_Alt_R ||
-      e_keysym==FL_Meta_L ||
-      e_keysym==FL_Meta_R ||
-      e_keysym==FL_Control_R ||
-      e_keysym==FL_Control_L ||
-      e_keysym==FL_Menu
+      e_keysym==fltk3::LeftShiftKey||
+      e_keysym==fltk3::RightShiftKey ||
+      e_keysym==fltk3::LeftAltKey ||
+      e_keysym==fltk3::RightAltKey ||
+      e_keysym==fltk3::LeftMetaKey ||
+      e_keysym==fltk3::RightMetaKey ||
+      e_keysym==fltk3::RightControlKey ||
+      e_keysym==fltk3::LeftControlKey ||
+      e_keysym==fltk3::MenuKey
       ) return 0;
 
     if (ascii == ' ') { // space turns into nbsp
@@ -201,7 +201,7 @@ int fltk3::compose(int& del) {
   int i = e_keysym;
 
   // See if they type the compose prefix key:
-  if (i == FL_Control_R || i == 0xff20/* Multi-Key */) {
+  if (i == fltk3::RightControlKey || i == 0xff20/* Multi-Key */) {
     compose_state = 1;
     return 1;
   }

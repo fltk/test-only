@@ -93,8 +93,8 @@ public:
     The first form returns the current shortcut key for the Input.
     <P>The second form sets the shortcut key to key. Setting this
     overrides the use of '&' in the label().  The value is a bitwise
-    OR of a key and a set of shift flags, for example FL_ALT | 'a'
-    , FL_ALT | (FL_F + 10), or just 'a'.  A value
+    OR of a key and a set of shift flags, for example fltk3::ALT | 'a'
+    , fltk3::ALT | (fltk3::FKey + 10), or just 'a'.  A value
     of 0 disables the shortcut. </P>
     <P>The key can be any value returned by 
     fltk3::event_key(), but will usually be an ASCII letter.  Use
@@ -118,13 +118,13 @@ public:
   /** Sets the size of the text in the value box.  */
   void textsize(Fl_Fontsize s) {input.textsize(s);}
   /** Gets the color of the text in the value box.  */
-  Fl_Color textcolor() const {return input.textcolor();}
+  fltk3::Color textcolor() const {return input.textcolor();}
   /** Sets the color of the text in the value box.*/
-  void textcolor(Fl_Color n) {input.textcolor(n);}
+  void textcolor(fltk3::Color n) {input.textcolor(n);}
   /** Gets the color of the text cursor. The text cursor is black by default. */
-  Fl_Color cursor_color() const {return input.cursor_color();}
+  fltk3::Color cursor_color() const {return input.cursor_color();}
   /** Sets the color of the text cursor. The text cursor is black by default. */
-  void cursor_color(Fl_Color n) {input.cursor_color(n);}
+  void cursor_color(fltk3::Color n) {input.cursor_color(n);}
 
 };
 

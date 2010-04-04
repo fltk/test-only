@@ -122,7 +122,7 @@ fltk3::Widget::Widget(int X, int Y, int W, int H, const char* L) {
   label_.type	 = fltk3::NORMAL_LABEL;
   label_.font	 = fltk3::HELVETICA;
   label_.size	 = FL_NORMAL_SIZE;
-  label_.color	 = FL_FOREGROUND_COLOR;
+  label_.color	 = fltk3::FOREGROUND_COLOR;
   label_.align_	 = fltk3::ALIGN_CENTER;
   tooltip_       = 0;
   callback_	 = default_callback;
@@ -131,8 +131,8 @@ fltk3::Widget::Widget(int X, int Y, int W, int H, const char* L) {
   flags_	 = VISIBLE_FOCUS;
   damage_	 = 0;
   box_		 = fltk3::NO_BOX;
-  color_	 = FL_GRAY;
-  color2_	 = FL_GRAY;
+  color_	 = fltk3::GRAY;
+  color2_	 = fltk3::GRAY;
   when_		 = fltk3::WHEN_RELEASE;
 
   parent_ = 0;
@@ -198,7 +198,7 @@ fltk3::Widget::draw_focus(fltk3::Boxtype B, int X, int Y, int W, int H) const {
       break;
   }
 
-  fl_color(fl_contrast(FL_BLACK, color()));
+  fl_color(fl_contrast(fltk3::BLACK, color()));
 
 #if defined(USE_X11) || defined(__APPLE_QUARTZ__)
   fl_line_style(FL_DOT);

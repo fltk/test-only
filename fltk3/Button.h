@@ -131,8 +131,8 @@ public:
     Sets the shortcut key to \c s.
     Setting this overrides the use of '\&' in the label().
     The value is a bitwise OR of a key and a set of shift flags, for example:
-    <tt>FL_ALT | 'a'</tt>, or
-    <tt>FL_ALT | (FL_F + 10)</tt>, or just
+    <tt>fltk3::ALT | 'a'</tt>, or
+    <tt>fltk3::ALT | (fltk3::FKey + 10)</tt>, or just
     <tt>'a'</tt>.
     A value of 0 disables the shortcut.
 
@@ -165,7 +165,7 @@ public:
   void shortcut(const char *s) {shortcut(fl_old_shortcut(s));}
 
   /// (for backwards compatibility)
-  Fl_Color down_color() const {return selection_color();}
+  fltk3::Color down_color() const {return selection_color();}
 
   /// (for backwards compatibility)
   void down_color(unsigned c) {selection_color(c);}

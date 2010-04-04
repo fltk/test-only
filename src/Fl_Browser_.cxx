@@ -719,11 +719,11 @@ int Fl_Browser_::handle(int event) {
     if (l) {
       if (type()==FL_HOLD_BROWSER) {
         switch (fltk3::event_key()) {
-        case FL_Down:
+        case fltk3::DownKey:
           while ((l = item_next(l)))
             if (item_height(l)>0) {select_only(l, when()); break;}
             return 1;
-        case FL_Up:
+        case fltk3::UpKey:
           while ((l = item_prev(l))) {
 	    if (item_height(l)>0) {
 	      select_only(l, when());
@@ -734,8 +734,8 @@ int Fl_Browser_::handle(int event) {
         } 
       } else  {
         switch (fltk3::event_key()) {
-        case FL_Enter:
-        case FL_KP_Enter:
+        case fltk3::EnterKey:
+        case fltk3::KeypadEnter:
             select_only(l, when() & ~fltk3::WHEN_ENTER_KEY);
 	  if (wp.deleted()) return 1;
 	  if (when() & fltk3::WHEN_ENTER_KEY) {
@@ -747,17 +747,17 @@ int Fl_Browser_::handle(int event) {
           selection_ = l;
             select(l, !item_selected(l), when() & ~fltk3::WHEN_ENTER_KEY);
           return 1;
-        case FL_Down:
+        case fltk3::DownKey:
           while ((l = item_next(l))) {
-            if (fltk3::event_state(FL_SHIFT|FL_CTRL))
+            if (fltk3::event_state(fltk3::SHIFT|fltk3::CTRL))
               select(l, l1 ? item_selected(l1) : 1, when());
 	    if (wp.deleted()) return 1;
             if (item_height(l)>0) goto J1;
           }
           return 1;
-        case FL_Up:
+        case fltk3::UpKey:
           while ((l = item_prev(l))) {
-            if (fltk3::event_state(FL_SHIFT|FL_CTRL))
+            if (fltk3::event_state(fltk3::SHIFT|fltk3::CTRL))
               select(l, l1 ? item_selected(l1) : 1, when());
 	    if (wp.deleted()) return 1;
             if (item_height(l)>0) goto J1;
@@ -820,7 +820,7 @@ J1:
     } else {
       void* l = find_item(my);
       whichway = 1;
-      if (fltk3::event_state(FL_CTRL)) { // toggle selection:
+      if (fltk3::event_state(fltk3::CTRL)) { // toggle selection:
       TOGGLE:
 	if (l) {
 	  whichway = !item_selected(l);
@@ -832,7 +832,7 @@ J1:
 	    if (wp.deleted()) return 1;
 	  }
 	}
-      } else if (fltk3::event_state(FL_SHIFT)) { // extend selection:
+      } else if (fltk3::event_state(fltk3::SHIFT)) { // extend selection:
 	if (l == selection_) goto TOGGLE;
 	// state of previous selection determines new value:
 	whichway = l ? !item_selected(l) : 1;
@@ -970,14 +970,14 @@ Fl_Browser_::Fl_Browser_(int X, int Y, int W, int H, const char* L)
   top_ = 0;
   when(fltk3::WHEN_RELEASE_ALWAYS);
   selection_ = 0;
-  color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
+  color(fltk3::BACKGROUND2_COLOR, fltk3::SELECTION_COLOR);
   scrollbar.callback(scrollbar_callback);
 //scrollbar.align(fltk3::ALIGN_LEFT|fltk3::ALIGN_BOTTOM); // back compatibility?
   hscrollbar.callback(hscrollbar_callback);
   hscrollbar.type(FL_HORIZONTAL);
   textfont_ = fltk3::HELVETICA;
   textsize_ = FL_NORMAL_SIZE;
-  textcolor_ = FL_FOREGROUND_COLOR;
+  textcolor_ = fltk3::FOREGROUND_COLOR;
   has_scrollbar_ = BOTH;
   max_width = 0;
   max_width_item = 0;

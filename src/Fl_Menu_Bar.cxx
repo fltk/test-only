@@ -43,9 +43,9 @@ void Fl_Menu_Bar::draw() {
       int y2 = y1 + h() - fltk3::box_dh(box()) - 1;
 
       // Draw a vertical divider between menus...
-      fl_color(FL_DARK3);
+      fl_color(fltk3::DARK3);
       fl_yxline(X - 6, y1, y2);
-      fl_color(FL_LIGHT3);
+      fl_color(fltk3::LIGHT3);
       fl_yxline(X - 5, y1, y2);
     }
   }
