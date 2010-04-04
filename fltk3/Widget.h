@@ -34,7 +34,6 @@
 #include "Enumerations.H"
 #include "Wrapper.h"
 
-class Fl_Image;
 class Fl_Widget; // needed by the fltk1 wrapper
 
 namespace fltk3 {
@@ -42,6 +41,7 @@ namespace fltk3 {
   class Window;
   class Widget;
   class Group;
+  class Image;
 
   /** Default callback type definition for all fltk widgets (by far the most used) */
   typedef void (Callback )(Widget*, void*);
@@ -60,9 +60,9 @@ struct FL_EXPORT Label {
   /** label text */
   const char* value;
   /** optional image for an active label */
-  Fl_Image* image;
+  fltk3::Image* image;
   /** optional image for a deactivated label */
-  Fl_Image* deimage;
+  fltk3::Image* deimage;
   /** label font used in text */
   Fl_Font font;
   /** size of label font */
@@ -506,37 +506,37 @@ public:
       This image is used when drawing the widget in the active state.
       \return the current image
    */
-  Fl_Image* image() {return label_.image;}
+  fltk3::Image* image() {return label_.image;}
 
   /** Sets the image to use as part of the widget label.
       This image is used when drawing the widget in the active state.
       \param[in] img the new image for the label 
    */
-  void image(Fl_Image* img) {label_.image=img;}
+  void image(fltk3::Image* img) {label_.image=img;}
 
   /** Sets the image to use as part of the widget label.
       This image is used when drawing the widget in the active state.
       \param[in] img the new image for the label 
    */
-  void image(Fl_Image& img) {label_.image=&img;}
+  void image(fltk3::Image& img) {label_.image=&img;}
 
   /** Gets the image that is used as part of the widget label.  
       This image is used when drawing the widget in the inactive state.
       \return the current image for the deactivated widget
    */
-  Fl_Image* deimage() {return label_.deimage;}
+  fltk3::Image* deimage() {return label_.deimage;}
 
   /** Sets the image to use as part of the widget label.  
       This image is used when drawing the widget in the inactive state.
       \param[in] img the new image for the deactivated widget
    */
-  void deimage(Fl_Image* img) {label_.deimage=img;}
+  void deimage(fltk3::Image* img) {label_.deimage=img;}
 
   /** Sets the image to use as part of the widget label.  
       This image is used when drawing the widget in the inactive state.
       \param[in] img the new image for the deactivated widget
    */
-  void deimage(Fl_Image& img) {label_.deimage=&img;}
+  void deimage(fltk3::Image& img) {label_.deimage=&img;}
 
   /** Gets the current tooltip text.
       \return a pointer to the tooltip text or NULL

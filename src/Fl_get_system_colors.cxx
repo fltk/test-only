@@ -261,7 +261,7 @@ extern void	fl_thin_down_frame(int, int, int, int, Fl_Color);
 
 #ifndef FL_DOXYGEN
 const char	*fltk3::scheme_ = (const char *)0;	    // current scheme 
-Fl_Image	*fltk3::scheme_bg_ = (Fl_Image *)0;    // current background image for the scheme
+fltk3::Image	*fltk3::scheme_bg_ = (fltk3::Image *)0;    // current background image for the scheme
 #endif
 
 static Fl_Pixmap	tile(tile_xpm);
@@ -369,7 +369,7 @@ int fltk3::reload_scheme() {
     // Use a GTK+ inspired look-n-feel...
     if (scheme_bg_) {
       delete scheme_bg_;
-      scheme_bg_ = (Fl_Image *)0;
+      scheme_bg_ = (fltk3::Image *)0;
     }
 
     set_boxtype(fltk3::UP_FRAME,        fltk3::GTK_UP_FRAME);
@@ -390,7 +390,7 @@ int fltk3::reload_scheme() {
     // Use the standard FLTK look-n-feel...
     if (scheme_bg_) {
       delete scheme_bg_;
-      scheme_bg_ = (Fl_Image *)0;
+      scheme_bg_ = (fltk3::Image *)0;
     }
 
     set_boxtype(fltk3::UP_FRAME,        fl_up_frame, D1, D1, D2, D2);

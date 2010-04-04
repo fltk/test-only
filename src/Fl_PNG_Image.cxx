@@ -61,7 +61,7 @@ extern "C"
   the image.
 */
 Fl_PNG_Image::Fl_PNG_Image(const char *png) // I - File to read
-  : Fl_RGB_Image(0,0,0) {
+  : fltk3::RGBImage(0,0,0) {
 #if defined(HAVE_LIBPNG) && defined(HAVE_LIBZ)
   int		i;			// Looping var
   FILE		*fp;			// File pointer

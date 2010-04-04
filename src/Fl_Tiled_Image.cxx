@@ -34,10 +34,10 @@
   The constructors create a new tiled image containing the specified image.
   Use a width and height of 0 to tile the whole window/widget.
 */
-Fl_Tiled_Image::Fl_Tiled_Image(Fl_Image *i,	// I - Image to tile
+Fl_Tiled_Image::Fl_Tiled_Image(fltk3::Image *i,	// I - Image to tile
                                int      W,	// I - Width of tiled area
 			       int      H) :	// I - Height of tiled area
-  Fl_Image(W,H,0) {
+  fltk3::Image(W,H,0) {
   image_       = i;
   alloc_image_ = 0;
 
@@ -57,7 +57,7 @@ Fl_Tiled_Image::Fl_Tiled_Image(Fl_Image *i,	// I - Image to tile
 // 'Fl_Tiled_Image::copy()' - Copy and resize a tiled image...
 //
 
-Fl_Image *			// O - New image
+fltk3::Image *			// O - New image
 Fl_Tiled_Image::copy(int W,	// I - New width
                      int H) {	// I - New height
   if (W == w() && H == h()) return this;

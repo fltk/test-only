@@ -30,7 +30,7 @@
 
 #ifndef Fl_PNM_Image_H
 #define Fl_PNM_Image_H
-#  include "Fl_Image.H"
+#  include "Image.h"
 
 /**
   The Fl_PNM_Image class supports loading, caching,
@@ -38,7 +38,7 @@
   loads bitmap, grayscale, and full-color images in both ASCII and
   binary formats.
 */
-class FL_EXPORT Fl_PNM_Image : public Fl_RGB_Image {
+class FL_EXPORT Fl_PNM_Image : public fltk3::RGBImage {
 
   public:
 

@@ -30,7 +30,7 @@
 #include <fltk3/x.H>
 #include <fltk3/Widget.h>
 #include <fltk3/MenuItem.h>
-#include <fltk3/Fl_Image.H>
+#include <fltk3/Image.h>
 #include "flstring.h"
 
 #ifdef WIN32
@@ -47,7 +47,7 @@ void fl_restore_clip(); // from fl_rect.cxx
   The destructor is a virtual method that frees all memory used
   by the image.
 */
-Fl_Image::~Fl_Image() {
+fltk3::Image::~Image() {
 }
 
 /**
@@ -55,10 +55,10 @@ Fl_Image::~Fl_Image() {
   data. This allows you to change the data used for the image and
   then redraw it without recreating an image object.
 */
-void Fl_Image::uncache() {
+void fltk3::Image::uncache() {
 }
 
-void Fl_Image::draw(int XP, int YP, int, int, int, int) {
+void fltk3::Image::draw(int XP, int YP, int, int, int, int) {
   draw_empty(XP, YP);
 }
 
@@ -67,7 +67,7 @@ void Fl_Image::draw(int XP, int YP, int, int, int, int) {
   an X in it. It can be used to draw any image that lacks image
   data.
 */
-void Fl_Image::draw_empty(int X, int Y) {
+void fltk3::Image::draw_empty(int X, int Y) {
   if (w() > 0 && h() > 0) {
     fl_color(FL_FOREGROUND_COLOR);
     fl_rect(X, Y, w(), h());
@@ -83,8 +83,8 @@ void Fl_Image::draw_empty(int X, int Y) {
   the case of Fl_Shared_Image, released) when you are done
   with it.
 */
-Fl_Image *Fl_Image::copy(int W, int H) {
-  return new Fl_Image(W, H, d());
+fltk3::Image *fltk3::Image::copy(int W, int H) {
+  return new fltk3::Image(W, H, d());
 }
 
 /**
@@ -96,7 +96,7 @@ Fl_Image *Fl_Image::copy(int W, int H) {
   color. <I>The original image data is not altered by this
   method.</I>
 */
-void Fl_Image::color_average(Fl_Color, float) {
+void fltk3::Image::color_average(Fl_Color, float) {
 }
 
 /**
@@ -105,7 +105,7 @@ void Fl_Image::color_average(Fl_Color, float) {
   the alpha channel is preserved. <I>This method does not alter
   the original image data.</I>
 */
-void Fl_Image::desaturate() {
+void fltk3::Image::desaturate() {
 }
 
 /**
@@ -115,7 +115,7 @@ void Fl_Image::desaturate() {
   fltk3::Widget and fltk3::MenuItem classes
   instead.
 */
-void Fl_Image::label(fltk3::Widget* widget) {
+void fltk3::Image::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 
@@ -126,22 +126,22 @@ void Fl_Image::label(fltk3::Widget* widget) {
   fltk3::Widget and fltk3::MenuItem classes
   instead.
 */
-void Fl_Image::label(fltk3::MenuItem* m) {
+void fltk3::Image::label(fltk3::MenuItem* m) {
   fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
   m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }
 
 void
-Fl_Image::labeltype(const fltk3::Label *lo,		// I - Label
+fltk3::Image::labeltype(const fltk3::Label *lo,		// I - Label
                     int            lx,		// I - X position
 		    int            ly,		// I - Y position
 		    int            lw,		// I - Width of label
 		    int            lh,		// I - Height of label
 		    fltk3::Align       la) {	// I - Alignment
-  Fl_Image	*img;				// Image pointer
+  fltk3::Image	*img;				// Image pointer
   int		cx, cy;				// Image position
 
-  img = (Fl_Image *)(lo->value);
+  img = (fltk3::Image *)(lo->value);
 
   if (la & fltk3::ALIGN_LEFT) cx = 0;
   else if (la & fltk3::ALIGN_RIGHT) cx = img->w() - lw;
@@ -157,12 +157,12 @@ Fl_Image::labeltype(const fltk3::Label *lo,		// I - Label
 }
 
 void
-Fl_Image::measure(const fltk3::Label *lo,		// I - Label
+fltk3::Image::measure(const fltk3::Label *lo,		// I - Label
                   int            &lw,		// O - Width of image
 		  int            &lh) {		// O - Height of image
-  Fl_Image *img;				// Image pointer
+  fltk3::Image *img;				// Image pointer
 
-  img = (Fl_Image *)(lo->value);
+  img = (fltk3::Image *)(lo->value);
 
   lw = img->w();
   lh = img->h();
@@ -172,13 +172,14 @@ Fl_Image::measure(const fltk3::Label *lo,		// I - Label
 //
 // RGB image class...
 //
+
 /**  The destructor free all memory and server resources that are used by  the image. */
-Fl_RGB_Image::~Fl_RGB_Image() {
+fltk3::RGBImage::~RGBImage() {
   uncache();
   if (alloc_array) delete[] (uchar *)array;
 }
 
-void Fl_RGB_Image::uncache() {
+void fltk3::RGBImage::uncache() {
 #ifdef __APPLE_QUARTZ__
   if (id_) {
     CGImageRelease((CGImageRef)id_);
@@ -197,8 +198,8 @@ void Fl_RGB_Image::uncache() {
 #endif
 }
 
-Fl_Image *Fl_RGB_Image::copy(int W, int H) {
-  Fl_RGB_Image	*new_image;	// New RGB image
+fltk3::Image *fltk3::RGBImage::copy(int W, int H) {
+  fltk3::RGBImage	*new_image;	// New RGB image
   uchar		*new_array;	// New array for image data
 
   // Optimize the simple copy where the width and height are the same,
@@ -206,7 +207,7 @@ Fl_Image *Fl_RGB_Image::copy(int W, int H) {
   if ((W == w() && H == h()) ||
       !w() || !h() || !d() || !array) {
     if (array) {
-      // Make a copy of the image data and return a new Fl_RGB_Image...
+      // Make a copy of the image data and return a new fltk3::RGBImage...
       new_array = new uchar[w() * h() * d()];
       if (ld() && ld()!=w()*d()) {
         const uchar *src = array;
@@ -220,11 +221,11 @@ Fl_Image *Fl_RGB_Image::copy(int W, int H) {
       } else {
         memcpy(new_array, array, w() * h() * d());
       }
-      new_image = new Fl_RGB_Image(new_array, w(), h(), d());
+      new_image = new fltk3::RGBImage(new_array, w(), h(), d());
       new_image->alloc_array = 1;
 
       return new_image;
-    } else return new Fl_RGB_Image(array, w(), h(), d(), ld());
+    } else return new fltk3::RGBImage(array, w(), h(), d(), ld());
   }
   if (W <= 0 || H <= 0) return 0;
 
@@ -249,7 +250,7 @@ Fl_Image *Fl_RGB_Image::copy(int W, int H) {
 
   // Allocate memory for the new image...
   new_array = new uchar [W * H * d()];
-  new_image = new Fl_RGB_Image(new_array, W, H, d());
+  new_image = new fltk3::RGBImage(new_array, W, H, d());
   new_image->alloc_array = 1;
 
   // Scale the image using a nearest-neighbor algorithm...
@@ -277,7 +278,7 @@ Fl_Image *Fl_RGB_Image::copy(int W, int H) {
   return new_image;
 }
 
-void Fl_RGB_Image::color_average(Fl_Color c, float i) {
+void fltk3::RGBImage::color_average(Fl_Color c, float i) {
   // Don't average an empty image...
   if (!w() || !h() || !d() || !array) return;
 
@@ -336,7 +337,7 @@ void Fl_RGB_Image::color_average(Fl_Color c, float i) {
   }
 }
 
-void Fl_RGB_Image::desaturate() {
+void fltk3::RGBImage::desaturate() {
   // Don't desaturate an empty image...
   if (!w() || !h() || !d() || !array) return;
 
@@ -378,7 +379,7 @@ void Fl_RGB_Image::desaturate() {
 #if !defined(WIN32) && !defined(__APPLE_QUARTZ__)
 // Composite an image with alpha on systems that don't have accelerated
 // alpha compositing...
-static void alpha_blend(Fl_RGB_Image *img, int X, int Y, int W, int H, int cx, int cy) {
+static void alpha_blend(fltk3::RGBImage *img, int X, int Y, int W, int H, int cx, int cy) {
   uchar *srcptr = (uchar*)img->array + img->d() * (img->w() * cy + cx);
   int srcskip = img->d() * (img->w() - W);
 
@@ -433,7 +434,7 @@ static void alpha_blend(Fl_RGB_Image *img, int X, int Y, int W, int H, int cx, i
 }
 #endif // !WIN32 && !__APPLE_QUARTZ__
 
-void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
+void fltk3::RGBImage::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
   if(fl_device->type() == fltk3::Device::postscript_device) {
     fl_device->draw(this, XP, YP, WP, HP, cx, cy);
     return;
@@ -544,11 +545,11 @@ void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
 #endif
 }
 
-void Fl_RGB_Image::label(fltk3::Widget* widget) {
+void fltk3::RGBImage::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 
-void Fl_RGB_Image::label(fltk3::MenuItem* m) {
+void fltk3::RGBImage::label(fltk3::MenuItem* m) {
   fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
   m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }

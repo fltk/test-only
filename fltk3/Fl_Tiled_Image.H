@@ -31,7 +31,7 @@
 #ifndef Fl_Tiled_Image_H
 #  define Fl_Tiled_Image_H
 
-#  include "Fl_Image.H"
+#  include "Image.h"
 
 
 /**
@@ -42,25 +42,25 @@
   or inactive()
   methods.
 */
-class FL_EXPORT Fl_Tiled_Image : public Fl_Image {
+class FL_EXPORT Fl_Tiled_Image : public fltk3::Image {
   protected:
 
-  Fl_Image	*image_;		// The image that is shared
+  fltk3::Image	*image_;		// The image that is shared
   int		alloc_image_;		// Did we allocate this image?
 
   public:
 
-  Fl_Tiled_Image(Fl_Image *i, int W = 0, int H = 0);
+  Fl_Tiled_Image(fltk3::Image *i, int W = 0, int H = 0);
   virtual ~Fl_Tiled_Image();
 
-  virtual Fl_Image *copy(int W, int H);
-  Fl_Image *copy() { return copy(w(), h()); }
+  virtual fltk3::Image *copy(int W, int H);
+  fltk3::Image *copy() { return copy(w(), h()); }
   virtual void color_average(Fl_Color c, float i);
   virtual void desaturate();
   virtual void draw(int X, int Y, int W, int H, int cx, int cy);
   void draw(int X, int Y) { draw(X, Y, w(), h(), 0, 0); }
   /** Gets The image that is shared */ 
-  Fl_Image *image() { return image_; }
+  fltk3::Image *image() { return image_; }
 };
 
 #endif // !Fl_Tiled_Image_H

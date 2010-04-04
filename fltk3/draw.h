@@ -38,7 +38,7 @@
 #include "Device.h"
 
 // Image class...
-class Fl_Image;
+class fltk3::Image;
 
 // Label flags...
 FL_EXPORT extern char fl_draw_shortcut;
@@ -564,11 +564,11 @@ FL_EXPORT void fl_measure(const char* str, int& x, int& y,
                           int draw_symbols = 1);
 FL_EXPORT void fl_draw(const char* str, int x, int y, int w, int h,
                        fltk3::Align align,
-                       Fl_Image* img=0, int draw_symbols = 1);
+                       fltk3::Image* img=0, int draw_symbols = 1);
 FL_EXPORT void fl_draw(const char* str, int x, int y, int w, int h,
                        fltk3::Align align,
                        void (*callthis)(const char *,int,int,int),
-                       Fl_Image* img=0, int draw_symbols = 1);
+                       fltk3::Image* img=0, int draw_symbols = 1);
 
 // boxtypes:
 FL_EXPORT void fl_frame(const char* s, int x, int y, int w, int h);

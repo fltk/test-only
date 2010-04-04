@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_RGB_Image.H 6942 2009-11-18 12:22:51Z AlbrechtS $"
+// "$Id: RGBImage.H 6942 2009-11-18 12:22:51Z AlbrechtS $"
 //
 // RGB Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -25,11 +25,13 @@
 //     http://www.fltk.org/str.php
 //
 
-#ifndef Fl_RGB_Image_H
-# define Fl_RGB_Image_H
-# include "Fl_Image.H"
+#ifndef Fltk3_RGB_Image_H
+# define Fltk3_RGB_Image_H
+
+# include "Image.h"
+
 #endif // !Fl_RGB_Image_H
 
 //
-// End of "$Id: Fl_RGB_Image.H 6942 2009-11-18 12:22:51Z AlbrechtS $".
+// End of "$Id: RGBImage.H 6942 2009-11-18 12:22:51Z AlbrechtS $".
 //

@@ -33,7 +33,7 @@
 #include <fltk3/Widget.h>
 #include <fltk3/Group.h>
 #include <fltk3/draw.h>
-#include <fltk3/Fl_Image.H>
+#include <fltk3/Image.h>
 
 extern void fl_shadow_label(const fltk3::Label*,int,int,int,int,fltk3::Align);
 extern void fl_engraved_label(const fltk3::Label*,int,int,int,int,fltk3::Align);

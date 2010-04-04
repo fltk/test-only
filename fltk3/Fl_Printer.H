@@ -34,7 +34,7 @@
 #include <fltk3/AbstractPrinter.h>
 #include <fltk3/draw.h>
 #include <fltk3/Fl_Pixmap.H>
-#include <fltk3/Fl_RGB_Image.H>
+#include <fltk3/RGBImage.h>
 #include <fltk3/Fl_Bitmap.H>
 #include <stdio.h>
 

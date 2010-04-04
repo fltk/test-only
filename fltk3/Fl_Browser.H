@@ -36,7 +36,7 @@
 #define Fl_Browser_H
 
 #include "Fl_Browser_.H"
-#include "Fl_Image.H"
+#include "Image.h"
 
 struct FL_BLINE;
 
@@ -308,8 +308,8 @@ public:
   }
 
   // icon support
-  void icon(int line, Fl_Image* icon);
-  Fl_Image* icon(int line) const;
+  void icon(int line, fltk3::Image* icon);
+  fltk3::Image* icon(int line) const;
   void remove_icon(int line);
 
   /** For back compatibility only. */

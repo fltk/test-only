@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.H 7273 2010-03-15 23:47:47Z AlbrechtS $"
+// "$Id: Image.H 7273 2010-03-15 23:47:47Z AlbrechtS $"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,38 +26,36 @@
 //
 
 /* \file
-   Fl_Image, Fl_RGB_Image classes . */
+   Image, fltk3::RGBImage classes . */
 
-#ifndef Fl_Image_H
-#  define Fl_Image_H
+#ifndef Fltk3_Image_H
+#  define Fltk3_Image_H
 
 #  include "Enumerations.H"
 
 namespace fltk3 {
   class Widget;
   struct MenuItem;
-}
-
-struct fltk3::Label;
+struct Label;
 
 /**
-  Fl_Image is the base class used for caching and
+  Image is the base class used for caching and
   drawing all kinds of images in FLTK. This class keeps track of
   common image data such as the pixels, colormap, width, height,
   and depth. Virtual methods are used to provide type-specific
   image handling.</P>
   
-  <P>Since the Fl_Image class does not support image
+  <P>Since the Image class does not support image
   drawing by itself, calling the draw() method results in
   a box with an X in it being drawn instead.
 */
-class FL_EXPORT Fl_Image {
+class FL_EXPORT Image {
   int w_, h_, d_, ld_, count_;
   const char * const *data_;
 
   // Forbid use of copy contructor and assign operator
-  Fl_Image & operator=(const Fl_Image &);
-  Fl_Image(const Fl_Image &);
+  Image & operator=(const Image &);
+  Image(const Image &);
 
   protected:
 
@@ -97,9 +95,9 @@ class FL_EXPORT Fl_Image {
 
   public:
 
-  /** See void Fl_Image::w(int) */
+  /** See void Image::w(int) */
   int w() const {return w_;}
-  /** See void Fl_Image::h(int) */
+  /** See void Image::h(int) */
   int h() const {return h_;}
   /**
     The first form of the d() method returns the current
@@ -142,9 +140,9 @@ class FL_EXPORT Fl_Image {
     The depth is 0 for bitmaps, 1 for pixmap (colormap) images, and
     1 to 4 for color images.
   */
-  Fl_Image(int W, int H, int D) {w_ = W; h_ = H; d_ = D; ld_ = 0; count_ = 0; data_ = 0;}
-  virtual ~Fl_Image();
-  virtual Fl_Image *copy(int W, int H);
+  Image(int W, int H, int D) {w_ = W; h_ = H; d_ = D; ld_ = 0; count_ = 0; data_ = 0;}
+  virtual ~Image();
+  virtual Image *copy(int W, int H);
   /**
     The copy() method creates a copy of the specified
     image. If the width and height are provided, the image is
@@ -152,7 +150,7 @@ class FL_EXPORT Fl_Image {
     the case of Fl_Shared_Image, released) when you are done
     with it.
   */
-  Fl_Image *copy() { return copy(w(), h()); }
+  Image *copy() { return copy(w(), h()); }
   virtual void color_average(Fl_Color c, float i);
   /**
     The inactive() method calls
@@ -180,17 +178,17 @@ class FL_EXPORT Fl_Image {
 };
 
 /**
-  The Fl_RGB_Image class supports caching and drawing
+  The fltk3::RGBImage class supports caching and drawing
   of full-color images with 1 to 4 channels of color information.
   Images with an even number of channels are assumed to contain
   alpha information, which is used to blend the image with the
   contents of the screen.</P>
   
-  <P>Fl_RGB_Image is defined in
-  &lt;fltk3/Fl_Image.H&gt;, however for compatibility reasons
-  &lt;fltk3/Fl_RGB_Image.H&gt; should be included.
+  <P>fltk3::RGBImage is defined in
+  &lt;fltk3/Image.H&gt;, however for compatibility reasons
+  &lt;fltk3/fltk3::RGBImage.H&gt; should be included.
 */
-class FL_EXPORT Fl_RGB_Image : public Fl_Image {
+class FL_EXPORT RGBImage : public Image {
   public:
 
   const uchar *array;
@@ -209,11 +207,11 @@ class FL_EXPORT Fl_RGB_Image : public Fl_Image {
   public:
 
 /**  The constructor creates a new image from the specified data. */
-  Fl_RGB_Image(const uchar *bits, int W, int H, int D=3, int LD=0) :
-    Fl_Image(W,H,D), array(bits), alloc_array(0), id_(0), mask_(0) {data((const char **)&array, 1); ld(LD);}
-  virtual ~Fl_RGB_Image();
-  virtual Fl_Image *copy(int W, int H);
-  Fl_Image *copy() { return copy(w(), h()); }
+  RGBImage(const uchar *bits, int W, int H, int D=3, int LD=0) :
+    Image(W,H,D), array(bits), alloc_array(0), id_(0), mask_(0) {data((const char **)&array, 1); ld(LD);}
+  virtual ~RGBImage();
+  virtual Image *copy(int W, int H);
+  Image *copy() { return copy(w(), h()); }
   virtual void color_average(Fl_Color c, float i);
   virtual void desaturate();
   virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
@@ -223,8 +221,10 @@ class FL_EXPORT Fl_RGB_Image : public Fl_Image {
   virtual void uncache();
 };
 
-#endif // !Fl_Image_H
+} // namespace fltk3
+
+#endif // !Image_H
 
 //
-// End of "$Id: Fl_Image.H 7273 2010-03-15 23:47:47Z AlbrechtS $".
+// End of "$Id: Image.H 7273 2010-03-15 23:47:47Z AlbrechtS $".
 //

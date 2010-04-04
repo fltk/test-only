@@ -235,7 +235,7 @@ void Fl_Pixmap::label(fltk3::Widget* widget) {
 }
 
 void Fl_Pixmap::label(fltk3::MenuItem* m) {
-  fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, Fl_Image::measure);
+  fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, fltk3::Image::measure);
   m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }
 
@@ -288,7 +288,7 @@ void Fl_Pixmap::copy_data() {
   alloc_data = 1;  
 }
 
-Fl_Image *Fl_Pixmap::copy(int W, int H) {
+fltk3::Image *Fl_Pixmap::copy(int W, int H) {
   Fl_Pixmap	*new_image;	// New pixmap
 
   // Optimize the simple copy where the width and height are the same...

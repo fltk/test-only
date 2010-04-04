@@ -50,9 +50,8 @@ namespace fltk3 {
   class Window;
   class Widget;
   struct Label;
+  class Image;
 }
-
-class Fl_Image;
 
 
 /** \defgroup  callback_functions Callback function typedefs
@@ -160,7 +159,7 @@ namespace fltk3 {
   extern int awake_ring_head_;
   extern int awake_ring_tail_;
   extern const char* scheme_;
-  extern Fl_Image* scheme_bg_;
+  extern fltk3::Image* scheme_bg_;
 
   extern int e_original_keysym; // late addition
   extern int scrollbar_size_;

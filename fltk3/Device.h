@@ -34,10 +34,10 @@
 
 #include <fltk3/x.H>
 #include <fltk3/Fl_Plugin.H>
-#include <fltk3/Fl_Image.H>
+#include <fltk3/Image.h>
 #include <fltk3/Fl_Bitmap.H>
 #include <fltk3/Fl_Pixmap.H>
-#include <fltk3/Fl_RGB_Image.H>
+#include <fltk3/RGBImage.h>
 #ifdef WIN32
 #include <commdlg.h>
 #elif defined(__APPLE__)
@@ -47,7 +47,7 @@
 
 class Fl_Pixmap;
 class Fl_Bitmap;
-class Fl_RGB_Image;
+class fltk3::RGBImage;
 
 namespace fltk3 {
   class Widget;
@@ -148,7 +148,7 @@ protected:
   uchar bg_b_; 
   friend class ::Fl_Pixmap;
   friend class ::Fl_Bitmap;
-  friend class ::Fl_RGB_Image;
+  friend class ::fltk3::RGBImage;
   friend void ::fl_rect(int x, int y, int w, int h);
   friend void ::fl_rectf(int x, int y, int w, int h);
   friend void ::fl_line_style(int style, int width, char* dashes);
@@ -296,7 +296,7 @@ protected:
   /** \brief see fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D). */
   virtual   void draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1);
   // Image classes
-  virtual   void draw(Fl_RGB_Image * rgb,int XP, int YP, int WP, int HP, int cx, int cy);
+  virtual   void draw(fltk3::RGBImage * rgb,int XP, int YP, int WP, int HP, int cx, int cy);
   virtual   void draw(Fl_Bitmap * bmp,int XP, int YP, int WP, int HP, int cx, int cy);  
   virtual   void draw(Fl_Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy);
   

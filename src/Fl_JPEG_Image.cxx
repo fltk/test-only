@@ -100,7 +100,7 @@ extern "C" {
  \param filename a full path and name pointing to a valid jpeg file.
  */
 Fl_JPEG_Image::Fl_JPEG_Image(const char *filename)	// I - File to load
-: Fl_RGB_Image(0,0,0) {
+: fltk3::RGBImage(0,0,0) {
 #ifdef HAVE_LIBJPEG
   FILE				*fp;	// File pointer
   jpeg_decompress_struct	dinfo;	// Decompressor info
@@ -276,7 +276,7 @@ static void jpeg_mem_src(j_decompress_ptr cinfo, const unsigned char *data)
  \param data a pointer to the memorry location of the jpeg image
  */
 Fl_JPEG_Image::Fl_JPEG_Image(const char *name, const unsigned char *data)
-: Fl_RGB_Image(0,0,0) {
+: fltk3::RGBImage(0,0,0) {
 #ifdef HAVE_LIBJPEG
   jpeg_decompress_struct	dinfo;	// Decompressor info
   fl_jpeg_error_mgr		jerr;	// Error handler info

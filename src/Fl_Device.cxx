@@ -28,9 +28,9 @@
 #include <fltk3/run.h>
 #include <fltk3/Device.h>
 //#include <fltk3/draw.h>
-#include <fltk3/Fl_Image.H>
+#include <fltk3/Image.h>
 
-/** \brief Draws an Fl_RGB_Image object to the device. 
+/** \brief Draws an fltk3::RGBImage object to the device. 
  *
  Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
  the image offset by the cx and cy arguments.
@@ -55,7 +55,7 @@ void fltk3::Device::draw(Fl_Bitmap *bm,int XP, int YP, int WP, int HP, int cx, i
  Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
  the image offset by the cx and cy arguments.
  */
-void fltk3::Device::draw(Fl_RGB_Image *rgb,int XP, int YP, int WP, int HP, int cx, int cy)
+void fltk3::Device::draw(fltk3::RGBImage *rgb,int XP, int YP, int WP, int HP, int cx, int cy)
 {
   rgb->draw(XP, YP, WP, HP, cx, cy);
 }

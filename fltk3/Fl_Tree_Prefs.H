@@ -101,9 +101,9 @@ class Fl_Tree_Prefs {
   Fl_Color _inactivecolor;		// inactive color
   Fl_Color _connectorcolor;		// connector dotted line color
   Fl_Tree_Connector _connectorstyle;	// connector line style
-  Fl_Image *_openimage;			// the 'open' icon [+]
-  Fl_Image *_closeimage;		// the 'close' icon [-]
-  Fl_Image *_userimage;			// user's own icon
+  fltk3::Image *_openimage;			// the 'open' icon [+]
+  fltk3::Image *_closeimage;		// the 'close' icon [-]
+  fltk3::Image *_userimage;			// user's own icon
   char _showcollapse;			// 1=show collapse icons, 0=don't
   char _showroot;			// show the root item as part of the tree
   Fl_Tree_Sort   _sortorder;		// none, ascening, descending, etc.
@@ -268,27 +268,27 @@ public:
   // Icons
   ////////////////////////////
   /// Get the current default 'open' icon.
-  ///     Returns the Fl_Image* of the icon, or 0 if none.
+  ///     Returns the fltk3::Image* of the icon, or 0 if none.
   ///
-  inline Fl_Image *openicon() const {
+  inline fltk3::Image *openicon() const {
     return(_openimage);
   }
-  void openicon(Fl_Image *val);
+  void openicon(fltk3::Image *val);
   /// Gets the default 'close' icon
-  ///     Returns the Fl_Image* of the icon, or 0 if none.
+  ///     Returns the fltk3::Image* of the icon, or 0 if none.
   ///
-  inline Fl_Image *closeicon() const {
+  inline fltk3::Image *closeicon() const {
     return(_closeimage);
   }
-  void closeicon(Fl_Image *val);
+  void closeicon(fltk3::Image *val);
   /// Gets the default 'user icon' (default is 0)
-  inline Fl_Image *usericon() const {
+  inline fltk3::Image *usericon() const {
     return(_userimage);
   }
   /// Sets the default 'user icon'
-  ///     Returns the Fl_Image* of the icon, or 0 if none (default).
+  ///     Returns the fltk3::Image* of the icon, or 0 if none (default).
   ///
-  inline void usericon(Fl_Image *val) {
+  inline void usericon(fltk3::Image *val) {
     _userimage = val;
   }
   

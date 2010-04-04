@@ -29,7 +29,7 @@
 #define Fltk3_Menu_Item_H
 
 #  include "Widget.h"
-#  include "Fl_Image.H"
+#  include "Image.h"
 
 #  if defined(__APPLE__) && defined(check)
 #    undef check
@@ -330,10 +330,10 @@ struct FL_EXPORT MenuItem {
   // compatibility for FLUID so it can set the image of a menu item...
 
   /** compatibility api for FLUID, same as a->label(this) */
-  void image(Fl_Image* a) {a->label(this);}
+  void image(fltk3::Image* a) {a->label(this);}
 
   /** compatibility api for FLUID, same as a.label(this) */
-  void image(Fl_Image& a) {a.label(this);}
+  void image(fltk3::Image& a) {a.label(this);}
 
   // used by menubar:
   int measure(int* h, const fltk3::Menu_*) const;

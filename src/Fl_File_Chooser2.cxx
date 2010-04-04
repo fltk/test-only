@@ -1423,11 +1423,11 @@ Fl_File_Chooser::update_preview()
       }
 
       oldimage = (Fl_Shared_Image *)image->copy(w, h);
-      previewBox->image((Fl_Image *)oldimage);
+      previewBox->image((fltk3::Image *)oldimage);
 
       image->release();
     } else {
-      previewBox->image((Fl_Image *)image);
+      previewBox->image((fltk3::Image *)image);
     }
 
     previewBox->align(fltk3::ALIGN_CLIP);

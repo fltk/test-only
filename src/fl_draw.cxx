@@ -36,7 +36,7 @@
 #include <fltk3/fl_utf8.h>
 #include <fltk3/run.h>
 #include <fltk3/draw.h>
-#include <fltk3/Fl_Image.H>
+#include <fltk3/Image.h>
 
 #include "flstring.h"
 #include <ctype.h>
@@ -177,7 +177,7 @@ fl_expand_text(const char* from, char* buf, int maxbuf, double maxw, int& n,
 }
 
 /**
-  The same as fl_draw(const char*,int,int,int,int,fltk3::Align,Fl_Image*,int) with
+  The same as fl_draw(const char*,int,int,int,int,fltk3::Align,fltk3::Image*,int) with
   the addition of the \p callthis parameter, which is a pointer to a text drawing
   function such as fl_draw(const char*, int, int, int) to do the real work
 */
@@ -186,7 +186,7 @@ void fl_draw(
     int x, int y, int w, int h,	// bounding box
     fltk3::Align align,
     void (*callthis)(const char*,int,int,int),
-    Fl_Image* img, int draw_symbols) {
+    fltk3::Image* img, int draw_symbols) {
   const char* p;
   const char* e;
   char buf[MAXBUF];
@@ -345,7 +345,7 @@ void fl_draw(
   const char* str,
   int x, int y, int w, int h,
   fltk3::Align align,
-  Fl_Image* img,
+  fltk3::Image* img,
   int draw_symbols)
 {
   if ((!str || !*str) && !img) return;

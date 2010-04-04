@@ -30,7 +30,7 @@
 
 #ifndef Fl_PNG_Image_H
 #define Fl_PNG_Image_H
-#  include "Fl_Image.H"
+#  include "Image.h"
 
 /**
   The Fl_PNG_Image class supports loading, caching,
@@ -38,7 +38,7 @@
   class loads colormapped and full-color images and handles color-
   and alpha-based transparency.
 */
-class FL_EXPORT Fl_PNG_Image : public Fl_RGB_Image {
+class FL_EXPORT Fl_PNG_Image : public fltk3::RGBImage {
 
   public:
 

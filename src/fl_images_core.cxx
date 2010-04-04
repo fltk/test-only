@@ -50,7 +50,7 @@
 // the extra image formats that aren't part of the core FLTK library.
 //
 
-static Fl_Image	*fl_check_images(const char *name, uchar *header, int headerlen);
+static fltk3::Image	*fl_check_images(const char *name, uchar *header, int headerlen);
 
 
 //
@@ -66,7 +66,7 @@ void fl_register_images() {
 // 'fl_check_images()' - Check for a supported image format.
 //
 
-Fl_Image *					// O - Image, if found
+fltk3::Image *					// O - Image, if found
 fl_check_images(const char *name,		// I - Filename
                 uchar      *header,		// I - Header data from file
 		int) {				// I - Amount of data (not used)

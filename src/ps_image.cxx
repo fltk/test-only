@@ -483,7 +483,7 @@ void fltk3::PSFileDevice::draw(Fl_Pixmap * pxm,int XP, int YP, int WP, int HP, i
   fl_mask_bitmap=0;
 };
 
-void fltk3::PSFileDevice::draw(Fl_RGB_Image * rgb,int XP, int YP, int WP, int HP, int cx, int cy){
+void fltk3::PSFileDevice::draw(fltk3::RGBImage * rgb,int XP, int YP, int WP, int HP, int cx, int cy){
   const uchar  * di = rgb->array;
   int w = rgb->w();
   int h = rgb->h();

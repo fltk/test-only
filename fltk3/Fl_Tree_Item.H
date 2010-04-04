@@ -7,7 +7,7 @@
 
 #include <fltk3/run.h>
 #include <fltk3/Widget.h>
-#include <fltk3/Fl_Image.H>
+#include <fltk3/Image.h>
 #include <fltk3/draw.h>
 
 #include <fltk3/Fl_Tree_Item_Array.H>
@@ -70,7 +70,7 @@ class Fl_Tree_Item {
   int                     _collapse_xywh[4];	// xywh of collapse icon (if any)
   int                     _label_xywh[4];	// xywh of label
   fltk3::Widget              *_widget;		// item's label widget (optional)
-  Fl_Image               *_usericon;		// item's user-specific icon (optional)
+  fltk3::Image               *_usericon;		// item's user-specific icon (optional)
   Fl_Tree_Item_Array      _children;		// array of child items
   Fl_Tree_Item           *_parent;		// parent item (=0 if root)
   void                   *_userdata;    	// user data that can be associated with an item
@@ -294,11 +294,11 @@ public:
     return(_active);
   }
   /// Set the user icon's image. '0' will disable.
-  void usericon(Fl_Image *val) {
+  void usericon(fltk3::Image *val) {
     _usericon = val;
   }
   /// Get the user icon. Returns '0' if disabled.
-  Fl_Image *usericon() const {
+  fltk3::Image *usericon() const {
     return(_usericon);
   }
   //////////////////

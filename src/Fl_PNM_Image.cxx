@@ -52,7 +52,7 @@
 */
 
 Fl_PNM_Image::Fl_PNM_Image(const char *name)	// I - File to read
-  : Fl_RGB_Image(0,0,0) {
+  : fltk3::RGBImage(0,0,0) {
   FILE		*fp;		// File pointer
   int		x, y;		// Looping vars
   char		line[1024],	// Input line

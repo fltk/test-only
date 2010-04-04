@@ -226,7 +226,7 @@ FL_EXPORT class PSFileDevice : public AbstractPrinter {
     void draw_image_mono(Fl_Draw_Image_Cb call, void* data, int x,int y, int w, int h, int delta=1){draw_scaled_image_mono(call, data, x, y, w, h, w, h, delta);};
     
     void draw(Fl_Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy);
-    void draw(Fl_RGB_Image * rgb,int XP, int YP, int WP, int HP, int cx, int cy);
+    void draw(fltk3::RGBImage * rgb,int XP, int YP, int WP, int HP, int cx, int cy);
     void draw(Fl_Bitmap * bitmap,int XP, int YP, int WP, int HP, int cx, int cy);
     
   public:

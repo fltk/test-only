@@ -31,11 +31,11 @@
 #ifndef Fl_Shared_Image_H
 #  define Fl_Shared_Image_H
 
-#  include "Fl_Image.H"
+#  include "Image.h"
 
 
 // Test function for adding new formats
-typedef Fl_Image *(*Fl_Shared_Handler)(const char *name, uchar *header,
+typedef fltk3::Image *(*Fl_Shared_Handler)(const char *name, uchar *header,
                                        int headerlen);
 
 // Shared images class. 
@@ -46,7 +46,7 @@ typedef Fl_Image *(*Fl_Shared_Handler)(const char *name, uchar *header,
   fl_register_images()
   function to support standard image formats such as BMP, GIF, JPEG, and PNG.
 */
-class FL_EXPORT Fl_Shared_Image : public Fl_Image {
+class FL_EXPORT Fl_Shared_Image : public fltk3::Image {
   protected:
 
   static Fl_Shared_Image **images_;	// Shared images
@@ -59,14 +59,14 @@ class FL_EXPORT Fl_Shared_Image : public Fl_Image {
   const char	*name_;			// Name of image file
   int		original_;		// Original image?
   int		refcount_;		// Number of times this image has been used
-  Fl_Image	*image_;		// The image that is shared
+  fltk3::Image	*image_;		// The image that is shared
   int		alloc_image_;		// Was the image allocated?
 
   static int	compare(Fl_Shared_Image **i0, Fl_Shared_Image **i1);
 
   // Use get() and release() to load/delete images in memory...
   Fl_Shared_Image();
-  Fl_Shared_Image(const char *n, Fl_Image *img = 0);
+  Fl_Shared_Image(const char *n, fltk3::Image *img = 0);
   virtual ~Fl_Shared_Image();
   void add();
   void update();
@@ -79,8 +79,8 @@ class FL_EXPORT Fl_Shared_Image : public Fl_Image {
   void		release();
   void		reload();
 
-  virtual Fl_Image *copy(int W, int H);
-  Fl_Image *copy() { return copy(w(), h()); }
+  virtual fltk3::Image *copy(int W, int H);
+  fltk3::Image *copy() { return copy(w(), h()); }
   virtual void color_average(Fl_Color c, float i);
   virtual void desaturate();
   virtual void draw(int X, int Y, int W, int H, int cx, int cy);
