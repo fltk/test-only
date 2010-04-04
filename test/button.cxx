@@ -32,27 +32,25 @@
 #include <fltk3/Window.h>
 #include <fltk3/Button.h>
 
-using namespace fltk3;
-
-void beepcb(Widget *, void *) {
-  beep();
+void beepcb(fltk3::Widget *, void *) {
+  fltk3::beep();
 }
 
-void exitcb(Widget *, void *) {
+void exitcb(fltk3::Widget *, void *) {
   exit(0);
 }
 
 int main(int argc, char ** argv) {
-  Window *window = new Window(320,65);
+  fltk3::Window *window = new fltk3::Window(320,65);
   window->begin();
-  Button *b1 = new Button(20, 20, 80, 25, "&Beep");
+  fltk3::Button *b1 = new fltk3::Button(20, 20, 80, 25, "&Beep");
   b1->callback(beepcb,0);
-  new Button(120,20, 80, 25, "&no op");
-  Button *b3 = new Button(220,20, 80, 25, "E&xit");
+  new fltk3::Button(120,20, 80, 25, "&no op");
+  fltk3::Button *b3 = new fltk3::Button(220,20, 80, 25, "E&xit");
   b3->callback(exitcb,0);
   window->end();
   window->show(argc,argv);
-  return run();
+  return fltk3::run();
 }
 
 //

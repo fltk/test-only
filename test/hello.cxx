@@ -29,17 +29,15 @@
 #include <fltk3/Window.h>
 #include <fltk3/Widget.h>
 
-using namespace fltk3;
-
 int main(int argc, char **argv) {
-  Window *window = new Window(300,180);
+  fltk3::Window *window = new fltk3::Window(300,180);
   window->begin(); 
   {
-    Widget *box = new Widget(20,40,260,100,"Hello, World!");
-    box->box(UP_BOX);
-    box->labelfont(BOLD+ITALIC);
+    fltk3::Widget *box = new fltk3::Widget(20,40,260,100,"Hello, World!");
+    box->box(fltk3::UP_BOX);
+    box->labelfont(fltk3::BOLD+fltk3::ITALIC);
     box->labelsize(36);
-    box->labeltype(SHADOW_LABEL);
+    box->labeltype(fltk3::SHADOW_LABEL);
   }
   window->end();
   window->show(argc, argv);

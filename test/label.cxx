@@ -35,51 +35,50 @@
 #include <fltk3/Input.h>
 #include <fltk3/Choice.h>
 
-using namespace fltk3;
 
-ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*clipb,*wrapb;
-Widget *text;
-Input *input;
-HorValueSlider *fonts;
-HorValueSlider *sizes;
-DoubleBufferWindow *window;
+fltk3::ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*clipb,*wrapb;
+fltk3::Widget *text;
+fltk3::Input *input;
+fltk3::HorValueSlider *fonts;
+fltk3::HorValueSlider *sizes;
+fltk3::DoubleBufferWindow *window;
 
 
-void button_cb(Widget *,void *) {
+void button_cb(fltk3::Widget *,void *) {
   int i = 0;
-  if (leftb->value()) i |= ALIGN_LEFT;
-  if (rightb->value()) i |= ALIGN_RIGHT;
-  if (topb->value()) i |= ALIGN_TOP;
-  if (bottomb->value()) i |= ALIGN_BOTTOM;
-  if (insideb->value()) i |= ALIGN_INSIDE;
-  if (clipb->value()) i |= ALIGN_CLIP;
-  if (wrapb->value()) i |= ALIGN_WRAP;
+  if (leftb->value())   i |= fltk3::ALIGN_LEFT;
+  if (rightb->value())  i |= fltk3::ALIGN_RIGHT;
+  if (topb->value())    i |= fltk3::ALIGN_TOP;
+  if (bottomb->value()) i |= fltk3::ALIGN_BOTTOM;
+  if (insideb->value()) i |= fltk3::ALIGN_INSIDE;
+  if (clipb->value())   i |= fltk3::ALIGN_CLIP;
+  if (wrapb->value())   i |= fltk3::ALIGN_WRAP;
   text->align(i);
   window->redraw();
 }
 
-void font_cb(Widget *,void *) {
+void font_cb(fltk3::Widget *,void *) {
   text->labelfont(int(fonts->value()));
   window->redraw();
 }
 
-void size_cb(Widget *,void *) {
+void size_cb(fltk3::Widget *,void *) {
   text->labelsize(int(sizes->value()));
   window->redraw();
 }
 
-void input_cb(Widget *,void *) {
+void input_cb(fltk3::Widget *,void *) {
   text->label(input->value());
   window->redraw();
 }
 
-void normal_cb(Widget *,void *) {
-  text->labeltype(NORMAL_LABEL);
+void normal_cb(fltk3::Widget *,void *) {
+  text->labeltype(fltk3::NORMAL_LABEL);
   window->redraw();
 }
 
-void symbol_cb(Widget *,void *) {
-  text->labeltype(NORMAL_LABEL);
+void symbol_cb(fltk3::Widget *,void *) {
+  text->labeltype(fltk3::NORMAL_LABEL);
   if (input->value()[0] != '@') {
     input->static_value("@->");
     text->label("@->");
@@ -87,86 +86,86 @@ void symbol_cb(Widget *,void *) {
   window->redraw();
 }
 
-void shadow_cb(Widget *,void *) {
-  text->labeltype(SHADOW_LABEL);
+void shadow_cb(fltk3::Widget *,void *) {
+  text->labeltype(fltk3::SHADOW_LABEL);
   window->redraw();
 }
 
-void embossed_cb(Widget *,void *) {
-  text->labeltype(EMBOSSED_LABEL);
+void embossed_cb(fltk3::Widget *,void *) {
+  text->labeltype(fltk3::EMBOSSED_LABEL);
   window->redraw();
 }
 
-void engraved_cb(Widget *,void *) {
-  text->labeltype(ENGRAVED_LABEL);
+void engraved_cb(fltk3::Widget *,void *) {
+  text->labeltype(fltk3::ENGRAVED_LABEL);
   window->redraw();
 }
 
-MenuItem choices[] = {
-  {"NORMAL_LABEL",0,normal_cb},
-  {"SYMBOL_LABEL",0,symbol_cb},
-  {"SHADOW_LABEL",0,shadow_cb},
-  {"ENGRAVED_LABEL",0,engraved_cb},
-  {"EMBOSSED_LABEL",0,embossed_cb},
-  {0}
+fltk3::MenuItem choices[] = {
+  { "NORMAL_LABEL",   0, normal_cb },
+  { "SYMBOL_LABEL",   0, symbol_cb },
+  { "SHADOW_LABEL",   0, shadow_cb },
+  { "ENGRAVED_LABEL", 0, engraved_cb },
+  { "EMBOSSED_LABEL", 0, embossed_cb },
+  { 0 }
 };
 
 int main(int argc, char **argv) {
-  window = new DoubleBufferWindow(400,400);
+  window = new fltk3::DoubleBufferWindow(400,400);
   window->begin();
   {
     
-    input = new Input(50,375,350,25);
+    input = new fltk3::Input(50,375,350,25);
     input->static_value("The quick brown fox jumped over the lazy dog.");
-    input->when(WHEN_CHANGED);
+    input->when(fltk3::WHEN_CHANGED);
     input->callback(input_cb);
     
-    sizes= new HorValueSlider(50,350,350,25,"Size:");
-    sizes->align(ALIGN_LEFT);
+    sizes= new fltk3::HorValueSlider(50,350,350,25,"Size:");
+    sizes->align(fltk3::ALIGN_LEFT);
     sizes->bounds(1,64);
     sizes->step(1);
     sizes->value(14);
     sizes->callback(size_cb);
     
-    fonts=new HorValueSlider(50,325,350,25,"Font:");
-    fonts->align(ALIGN_LEFT);
+    fonts=new fltk3::HorValueSlider(50,325,350,25,"Font:");
+    fonts->align(fltk3::ALIGN_LEFT);
     fonts->bounds(0,15);
     fonts->step(1);
     fonts->value(0);
     fonts->callback(font_cb);
     
-    Group *g = new Group(50,300,350,25);
+    fltk3::Group *g = new fltk3::Group(50,300,350,25);
     g->begin();
     {
-      leftb = new ToggleButton(50,300,50,25,"left");
+      leftb = new fltk3::ToggleButton(50,300,50,25,"left");
       leftb->callback(button_cb);
-      rightb = new ToggleButton(100,300,50,25,"right");
+      rightb = new fltk3::ToggleButton(100,300,50,25,"right");
       rightb->callback(button_cb);
-      topb = new ToggleButton(150,300,50,25,"top");
+      topb = new fltk3::ToggleButton(150,300,50,25,"top");
       topb->callback(button_cb);
-      bottomb = new ToggleButton(200,300,50,25,"bottom");
+      bottomb = new fltk3::ToggleButton(200,300,50,25,"bottom");
       bottomb->callback(button_cb);
-      insideb = new ToggleButton(250,300,50,25,"inside");
+      insideb = new fltk3::ToggleButton(250,300,50,25,"inside");
       insideb->callback(button_cb);
-      wrapb = new ToggleButton(300,300,50,25,"wrap");
+      wrapb = new fltk3::ToggleButton(300,300,50,25,"wrap");
       wrapb->callback(button_cb);
-      clipb = new ToggleButton(350,300,50,25,"clip");
+      clipb = new fltk3::ToggleButton(350,300,50,25,"clip");
       clipb->callback(button_cb);
       g->resizable(insideb);
     }
     g->end();
     
-    Choice *c = new Choice(50,275,200,25);
+    fltk3::Choice *c = new fltk3::Choice(50,275,200,25);
     c->menu(choices);
     
-    text = new Widget(100,75,200,100,input->value());
-    text->box(BORDER_BOX);
-    text->align(ALIGN_CENTER);
+    text = new fltk3::Widget(100,75,200,100,input->value());
+    text->box(fltk3::BORDER_BOX);
+    text->align(fltk3::ALIGN_CENTER);
     window->resizable(text);
   }
   window->end();
   window->show(argc,argv);
-  return run();
+  return fltk3::run();
 }
 
 //
