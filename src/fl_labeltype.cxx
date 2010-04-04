@@ -35,19 +35,19 @@
 #include <fltk3/draw.h>
 #include <fltk3/Fl_Image.H>
 
-extern void fl_shadow_label(const Fl_Label*,int,int,int,int,fltk3::Align);
-extern void fl_engraved_label(const Fl_Label*,int,int,int,int,fltk3::Align);
-extern void fl_embossed_label(const Fl_Label*,int,int,int,int,fltk3::Align);
-extern void fl_icon_label(const Fl_Label*,int,int,int,int,fltk3::Align);
+extern void fl_shadow_label(const fltk3::Label*,int,int,int,int,fltk3::Align);
+extern void fl_engraved_label(const fltk3::Label*,int,int,int,int,fltk3::Align);
+extern void fl_embossed_label(const fltk3::Label*,int,int,int,int,fltk3::Align);
+extern void fl_icon_label(const fltk3::Label*,int,int,int,int,fltk3::Align);
 
-extern void fl_multi_measure(const Fl_Label* o, int& w, int& h);
-extern void fl_multi_labeltype(const Fl_Label* o, int x, int y, int w, int h, fltk3::Align a);
+extern void fl_multi_measure(const fltk3::Label* o, int& w, int& h);
+extern void fl_multi_labeltype(const fltk3::Label* o, int x, int y, int w, int h, fltk3::Align a);
 
 
-void fl_no_label(const Fl_Label*,int,int,int,int,fltk3::Align) {}
+void fl_no_label(const fltk3::Label*,int,int,int,int,fltk3::Align) {}
 
 void
-fl_normal_label(const Fl_Label* o, int X, int Y, int W, int H, fltk3::Align align)
+fl_normal_label(const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
   fl_font(o->font, o->size);
   fl_color((Fl_Color)o->color);
@@ -55,7 +55,7 @@ fl_normal_label(const Fl_Label* o, int X, int Y, int W, int H, fltk3::Align alig
 }
 
 void
-fl_normal_measure(const Fl_Label* o, int& W, int& H) {
+fl_normal_measure(const fltk3::Label* o, int& W, int& H) {
   fl_font(o->font, o->size);
   fl_measure(o->value, W, H);
   if (o->image) {
@@ -98,7 +98,7 @@ void fltk3::set_labeltype(fltk3::Labeltype t,Fl_Label_Draw_F* f,Fl_Label_Measure
 ////////////////////////////////////////////////////////////////
 
 /** Draws a label with arbitrary alignment in an arbitrary box. */
-void Fl_Label::draw(int X, int Y, int W, int H, fltk3::Align align) const {
+void fltk3::Label::draw(int X, int Y, int W, int H, fltk3::Align align) const {
   if (!value && !image) return;
   table[type](this, X, Y, W, H, align);
 }
@@ -107,7 +107,7 @@ void Fl_Label::draw(int X, int Y, int W, int H, fltk3::Align align) const {
     \param[in,out] W, H : this is the requested size for the label text plus image;
          on return, this will contain the size needed to fit the label
 */
-void Fl_Label::measure(int& W, int& H) const {
+void fltk3::Label::measure(int& W, int& H) const {
   if (!value && !image) {
     W = H = 0;
     return;
@@ -141,7 +141,7 @@ void fltk3::Widget::draw_label(int X, int Y, int W, int H) const {
  */
 void fltk3::Widget::draw_label(int X, int Y, int W, int H, fltk3::Align a) const {
   if (flags()&SHORTCUT_LABEL) fl_draw_shortcut = 1;
-  Fl_Label l1 = label_;
+  fltk3::Label l1 = label_;
   if (!active_r()) {
     l1.color = fl_inactive((Fl_Color)l1.color);
     if (l1.deimage) l1.image = l1.deimage;

@@ -124,7 +124,7 @@ class FL_EXPORT Fl_File_Icon			//// Icon data
 
   void		label(fltk3::Widget *w);
 
-  static void	labeltype(const Fl_Label *o, int x, int y, int w, int h, fltk3::Align a);
+  static void	labeltype(const fltk3::Label *o, int x, int y, int w, int h, fltk3::Align a);
   void		load(const char *f);
   int		load_fti(const char *fti);
   int		load_image(const char *i);

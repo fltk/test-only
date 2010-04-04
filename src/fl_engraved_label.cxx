@@ -34,7 +34,7 @@
 // data[] is dx, dy, color triples
 
 static void innards(
-    const Fl_Label* o, int X, int Y, int W, int H, fltk3::Align align,
+    const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align,
     int data[][3], int n)
 {
   fltk3::Align a1 = align;
@@ -49,14 +49,14 @@ static void innards(
 }
 
 void fl_shadow_label(
-    const Fl_Label* o, int X, int Y, int W, int H, fltk3::Align align)
+    const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
   static int data[2][3] = {{2,2,FL_DARK3},{0,0,0}};
   innards(o, X, Y, W, H, align, data, 2);
 }
 
 void fl_engraved_label(
-    const Fl_Label* o, int X, int Y, int W, int H, fltk3::Align align)
+    const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
   static int data[7][3] = {
     {1,0,FL_LIGHT3},{1,1,FL_LIGHT3},{0,1,FL_LIGHT3},
@@ -66,7 +66,7 @@ void fl_engraved_label(
 }
 
 void fl_embossed_label(
-    const Fl_Label* o, int X, int Y, int W, int H, fltk3::Align align)
+    const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
   static int data[7][3] = {
     {-1,0,FL_LIGHT3},{-1,-1,FL_LIGHT3},{0,-1,FL_LIGHT3},

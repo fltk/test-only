@@ -26,7 +26,7 @@
 //
 
 /* \file
-   fltk3::Widget, Fl_Label classes . */
+   fltk3::Widget, fltk3::Label classes . */
 
 #ifndef Fltk3_Widget_H
 #define Fltk3_Widget_H
@@ -35,7 +35,7 @@
 #include "Wrapper.h"
 
 class Fl_Image;
-class Fl_Widget;
+class Fl_Widget; // needed by the fltk1 wrapper
 
 namespace fltk3 {
   
@@ -51,17 +51,12 @@ namespace fltk3 {
   typedef void (Callback0)(Widget*);
   /** Callback type definition passing the widget and a long data value */
   typedef void (Callback1)(Widget*, long);
-  
-} // namespace fltk3
 
-/** This struct stores all information for a text or mixed graphics label.
-
-    \todo For FLTK 1.3, the Fl_Label type will become a widget by itself. That way
-          we will be avoiding a lot of code duplication by handling labels in 
-          a similar fashion to widgets containing text. We also provide an easy
-          interface for very complex labels, containing html or vector graphics.
+/* 
+ This struct is depreciated in FLTK3. It will be replaced by the FLTK2
+ Style system.
  */
-struct FL_EXPORT Fl_Label {
+struct FL_EXPORT Label {
   /** label text */
   const char* value;
   /** optional image for an active label */
@@ -84,8 +79,6 @@ struct FL_EXPORT Fl_Label {
   void measure(int &w, int &h) const ;
 };
 
-namespace fltk3 {
-
 /** fltk3::Widget is the base class for all widgets in FLTK.  
   
     You can't create one of these because the constructor is not public.
@@ -106,7 +99,7 @@ class FL_EXPORT Widget {
   Callback* callback_;
   void* user_data_;
   int x_,y_,w_,h_;
-  Fl_Label label_;
+  fltk3::Label label_;
   unsigned int flags_;
   Fl_Color color_;
   Fl_Color color2_;
