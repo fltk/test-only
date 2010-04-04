@@ -248,7 +248,7 @@ Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *array) 
 }
 
 void Fl_Bitmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
-  if(fl_device->type() == Fl_Device::postscript_device) {
+  if(fl_device->type() == fltk3::Device::postscript_device) {
     fl_device->draw(this, XP, YP, WP, HP, cx, cy);
     return;
   }
@@ -286,7 +286,7 @@ void Fl_Bitmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
   HDC tempdc;
   int save;
   BOOL use_print_algo = false;
-  if (fl_device->type() == Fl_Device::gdi_printer) {
+  if (fl_device->type() == fltk3::Device::gdi_printer) {
     static HMODULE hMod = NULL;
     if (!hMod) {
       hMod = LoadLibrary("MSIMG32.DLL");

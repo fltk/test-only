@@ -32,14 +32,14 @@
 #ifndef Fl_Abstract_Printer_H
 #define Fl_Abstract_Printer_H
 
-#include <fltk3/Fl_Device.H>
+#include <fltk3/Device.h>
 
 /**
  \brief A virtual class for print support with several platform-specific implementations.
  *
  This class has no public constructor: don't instantiate it; use Fl_Printer or Fl_PSfile_Device instead.
  */
-class Fl_Abstract_Printer : public Fl_Device {
+class Fl_Abstract_Printer : public fltk3::Device {
   friend class Fl_Pixmap;
   friend class Fl_RGB_Image;
   friend class Fl_Bitmap;
@@ -69,7 +69,7 @@ protected:
   void delete_image_list(); 
 #endif
 public:
-  Fl_Device *set_current(void);
+  fltk3::Device *set_current(void);
   virtual int start_job(int pagecount, int *frompage = NULL, int *topage = NULL);
   virtual int start_page(void);
   virtual int printable_rect(int *w, int *h);

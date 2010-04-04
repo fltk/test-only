@@ -35,7 +35,7 @@
 
 #include "Enumerations.H"  // for the color names
 #include "Window.h"	   // for fl_set_spot()
-#include "Fl_Device.H"
+#include "Device.h"
 
 // Image class...
 class Fl_Image;

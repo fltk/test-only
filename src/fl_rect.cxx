@@ -43,10 +43,10 @@
 
 #ifdef __APPLE_QUARTZ__
 extern float fl_quartz_line_width_;
-#define USINGQUARTZPRINTER  (Fl_Device::current()->type() == quartz_printer)
+#define USINGQUARTZPRINTER  (fltk3::Device::current()->type() == quartz_printer)
 #endif
 
-void Fl_Device::rect(int x, int y, int w, int h) {
+void fltk3::Device::rect(int x, int y, int w, int h) {
 
   if (w<=0 || h<=0) return;
 #if defined(USE_X11)
@@ -67,7 +67,7 @@ void Fl_Device::rect(int x, int y, int w, int h) {
 #endif
 }
 
-void Fl_Device::rectf(int x, int y, int w, int h) {
+void fltk3::Device::rectf(int x, int y, int w, int h) {
   if (w<=0 || h<=0) return;
 #if defined(USE_X11)
   if (w && h) XFillRectangle(fl_display, fl_window, fl_gc, x, y, w, h);
@@ -86,7 +86,7 @@ void Fl_Device::rectf(int x, int y, int w, int h) {
 #endif
 }
 
-void Fl_Device::xyline(int x, int y, int x1) {
+void fltk3::Device::xyline(int x, int y, int x1) {
 #if defined(USE_X11)
   XDrawLine(fl_display, fl_window, fl_gc, x, y, x1, y);
 #elif defined(WIN32)
@@ -102,7 +102,7 @@ void Fl_Device::xyline(int x, int y, int x1) {
 #endif
 }
 
-void Fl_Device::xyline(int x, int y, int x1, int y2) {
+void fltk3::Device::xyline(int x, int y, int x1, int y2) {
 #if defined (USE_X11)
   XPoint p[3];
   p[0].x = x;  p[0].y = p[1].y = y;
@@ -126,7 +126,7 @@ void Fl_Device::xyline(int x, int y, int x1, int y2) {
 #endif
 }
 
-void Fl_Device::xyline(int x, int y, int x1, int y2, int x3) {
+void fltk3::Device::xyline(int x, int y, int x1, int y2, int x3) {
 #if defined(USE_X11)
   XPoint p[4];
   p[0].x = x;  p[0].y = p[1].y = y;
@@ -153,7 +153,7 @@ void Fl_Device::xyline(int x, int y, int x1, int y2, int x3) {
 #endif
 }
 
-void Fl_Device::yxline(int x, int y, int y1) {
+void fltk3::Device::yxline(int x, int y, int y1) {
 #if defined(USE_X11)
   XDrawLine(fl_display, fl_window, fl_gc, x, y, x, y1);
 #elif defined(WIN32)
@@ -171,7 +171,7 @@ void Fl_Device::yxline(int x, int y, int y1) {
 #endif
 }
 
-void Fl_Device::yxline(int x, int y, int y1, int x2) {
+void fltk3::Device::yxline(int x, int y, int y1, int x2) {
 #if defined(USE_X11)
   XPoint p[3];
   p[0].x = p[1].x = x;  p[0].y = y;
@@ -195,7 +195,7 @@ void Fl_Device::yxline(int x, int y, int y1, int x2) {
 #endif
 }
 
-void Fl_Device::yxline(int x, int y, int y1, int x2, int y3) {
+void fltk3::Device::yxline(int x, int y, int y1, int x2, int y3) {
 #if defined(USE_X11)
   XPoint p[4];
   p[0].x = p[1].x = x;  p[0].y = y;
@@ -222,7 +222,7 @@ void Fl_Device::yxline(int x, int y, int y1, int x2, int y3) {
 #endif
 }
 
-void Fl_Device::line(int x, int y, int x1, int y1) {
+void fltk3::Device::line(int x, int y, int x1, int y1) {
 #if defined(USE_X11)
   XDrawLine(fl_display, fl_window, fl_gc, x, y, x1, y1);
 #elif defined(WIN32)
@@ -242,7 +242,7 @@ void Fl_Device::line(int x, int y, int x1, int y1) {
 #endif
 }
 
-void Fl_Device::line(int x, int y, int x1, int y1, int x2, int y2) {
+void fltk3::Device::line(int x, int y, int x1, int y1, int x2, int y2) {
 #if defined(USE_X11)
   XPoint p[3];
   p[0].x = x;  p[0].y = y;
@@ -268,7 +268,7 @@ void Fl_Device::line(int x, int y, int x1, int y1, int x2, int y2) {
 #endif
 }
 
-void Fl_Device::loop(int x, int y, int x1, int y1, int x2, int y2) {
+void fltk3::Device::loop(int x, int y, int x1, int y1, int x2, int y2) {
 #if defined(USE_X11)
   XPoint p[4];
   p[0].x = x;  p[0].y = y;
@@ -294,7 +294,7 @@ void Fl_Device::loop(int x, int y, int x1, int y1, int x2, int y2) {
 #endif
 }
 
-void Fl_Device::loop(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
+void fltk3::Device::loop(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
 #if defined(USE_X11)
   XPoint p[5];
   p[0].x = x;  p[0].y = y;
@@ -323,7 +323,7 @@ void Fl_Device::loop(int x, int y, int x1, int y1, int x2, int y2, int x3, int y
 #endif
 }
 
-void Fl_Device::polygon(int x, int y, int x1, int y1, int x2, int y2) {
+void fltk3::Device::polygon(int x, int y, int x1, int y1, int x2, int y2) {
   XPoint p[4];
   p[0].x = x;  p[0].y = y;
   p[1].x = x1; p[1].y = y1;
@@ -348,7 +348,7 @@ void Fl_Device::polygon(int x, int y, int x1, int y1, int x2, int y2) {
 #endif
 }
 
-void Fl_Device::polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
+void fltk3::Device::polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
   XPoint p[5];
   p[0].x = x;  p[0].y = y;
   p[1].x = x1; p[1].y = y1;
@@ -375,7 +375,7 @@ void Fl_Device::polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, in
 #endif
 }
 
-void Fl_Device::point(int x, int y) {
+void fltk3::Device::point(int x, int y) {
 #if defined(USE_X11)
   XDrawPoint(fl_display, fl_window, fl_gc, x, y);
 #elif defined(WIN32)
@@ -450,7 +450,7 @@ Fl_Region fl_clip_region() {
   return rstack[rstackptr];
 }
 
-void Fl_Device::push_clip(int x, int y, int w, int h) {
+void fltk3::Device::push_clip(int x, int y, int w, int h) {
   Fl_Region r;
   if (w > 0 && h > 0) {
     r = XRectangleRegion(x,y,w,h);
@@ -487,14 +487,14 @@ void Fl_Device::push_clip(int x, int y, int w, int h) {
 }
 
 // make there be no clip (used by fl_begin_offscreen() only!)
-void Fl_Device::push_no_clip() {
+void fltk3::Device::push_no_clip() {
   if (rstackptr < STACK_MAX) rstack[++rstackptr] = 0;
   else fltk3::warning("fl_push_no_clip: clip stack overflow!\n");
   fl_restore_clip();
 }
 
 // pop back to previous clip:
-void Fl_Device::pop_clip() {
+void fltk3::Device::pop_clip() {
   if (rstackptr > 0) {
     Fl_Region oldr = rstack[rstackptr--];
     if (oldr) XDestroyRegion(oldr);
@@ -502,7 +502,7 @@ void Fl_Device::pop_clip() {
   fl_restore_clip();
 }
 
-int Fl_Device::not_clipped(int x, int y, int w, int h) {
+int fltk3::Device::not_clipped(int x, int y, int w, int h) {
   if (x+w <= 0 || y+h <= 0) return 0;
   Fl_Region r = rstack[rstackptr];
 #if defined (USE_X11)
@@ -510,7 +510,7 @@ int Fl_Device::not_clipped(int x, int y, int w, int h) {
 #elif defined(WIN32)
   if (!r) return 1;
   RECT rect;
-  if (Fl_Device::current()->type() == Fl_Device::gdi_printer) { // in case of print context, convert coords from logical to device
+  if (fltk3::Device::current()->type() == fltk3::Device::gdi_printer) { // in case of print context, convert coords from logical to device
     POINT pt[2] = { {x, y}, {x + w, y + h} };
     LPtoDP(fl_gc, pt, 2);
     rect.left = pt[0].x; rect.top = pt[0].y; rect.right = pt[1].x; rect.bottom = pt[1].y;
@@ -533,7 +533,7 @@ int Fl_Device::not_clipped(int x, int y, int w, int h) {
 }
 
 // return rectangle surrounding intersection of this rectangle and clip:
-int Fl_Device::clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H){
+int fltk3::Device::clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H){
   X = x; Y = y; W = w; H = h;
   Fl_Region r = rstack[rstackptr];
   if (!r) return 0;
@@ -572,7 +572,7 @@ int Fl_Device::clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int&
   } else {	// partial intersection
     RECT rect;
     GetRgnBox(temp, &rect);
-    if(Fl_Device::current()->type() == Fl_Device::gdi_printer) { // if print context, convert coords from device to logical
+    if(fltk3::Device::current()->type() == fltk3::Device::gdi_printer) { // if print context, convert coords from device to logical
       POINT pt[2] = { {rect.left, rect.top}, {rect.right, rect.bottom} };
       DPtoLP(fl_gc, pt, 2);
       X = pt[0].x; Y = pt[0].y; W = pt[1].x - X; H = pt[1].y - Y;

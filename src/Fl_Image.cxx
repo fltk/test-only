@@ -434,7 +434,7 @@ static void alpha_blend(Fl_RGB_Image *img, int X, int Y, int W, int H, int cx, i
 #endif // !WIN32 && !__APPLE_QUARTZ__
 
 void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
-  if(fl_device->type() == Fl_Device::postscript_device) {
+  if(fl_device->type() == fltk3::Device::postscript_device) {
     fl_device->draw(this, XP, YP, WP, HP, cx, cy);
     return;
   }

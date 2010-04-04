@@ -861,7 +861,7 @@ void Fl_PSfile_Device::font(int f, int s) {
     f = fltk3::COURIER;
   fprintf(output, "/%s SF\n" , _fontNames[f]);
   fprintf(output,"%i FS\n", s);
-  Fl_Device::display_device()->font(f,s); // Use display fonts for font measurement
+  fltk3::Device::display_device()->font(f,s); // Use display fonts for font measurement
   font_ = f; size_ = s;
 };
 
@@ -1275,7 +1275,7 @@ void Fl_PSfile_Device::end_job (void)
     delete c;
   }
   if (close_cmd_) (*close_cmd_)(output);
-  Fl_Device::display_device()->set_current();
+  fltk3::Device::display_device()->set_current();
 }
 
 #if ! (defined(__APPLE__) || defined(WIN32) )

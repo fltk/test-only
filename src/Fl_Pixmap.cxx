@@ -74,7 +74,7 @@ void Fl_Pixmap::measure() {
 }
 
 void Fl_Pixmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
-  if(fl_device->type() == Fl_Device::postscript_device) {
+  if(fl_device->type() == fltk3::Device::postscript_device) {
     fl_device->draw(this, XP, YP, WP, HP, cx, cy);
     return;
     }
@@ -143,7 +143,7 @@ void Fl_Pixmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
     fl_restore_clip();
   }
 #elif defined(WIN32)
-  if (fl_device->type() == Fl_Device::gdi_printer) {
+  if (fl_device->type() == fltk3::Device::gdi_printer) {
     typedef BOOL (WINAPI* fl_transp_func)  (HDC,int,int,int,int,HDC,int,int,int,int,UINT);
     static HMODULE hMod = NULL;
     static fl_transp_func fl_TransparentBlt = NULL;

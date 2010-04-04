@@ -111,7 +111,7 @@ int Fl_Printer::start_job (int pagecount, int *frompage, int *topage)
 
 void Fl_Printer::end_job (void)
 {
-  Fl_Device::display_device()->set_current();
+  fltk3::Device::display_device()->set_current();
   if (hPr != NULL) {
     if (! abortPrint) {
       prerr = EndDoc (hPr);

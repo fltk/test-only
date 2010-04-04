@@ -124,7 +124,7 @@ void Fl_Abstract_Printer::origin(int *x, int *y)
 void Fl_Abstract_Printer::print_window_part(fltk3::Window *win, int x, int y, int w, int h, int delta_x, int delta_y)
 {
   int slice, width, offset, count = 0;
-  Fl_Device::display_device()->set_current();
+  fltk3::Device::display_device()->set_current();
   fltk3::Window *save_front = fltk3::first_window();
   win->show();
   fl_gc = NULL;
@@ -177,7 +177,7 @@ void Fl_Abstract_Printer::delete_image_list()
 }
 #endif
 
-Fl_Device *Fl_Abstract_Printer::set_current(void)
+fltk3::Device *Fl_Abstract_Printer::set_current(void)
 {
 #ifdef __APPLE__
   fl_gc = (CGContextRef)gc;
@@ -186,7 +186,7 @@ Fl_Device *Fl_Abstract_Printer::set_current(void)
 #else
   fl_gc = (_XGC*)gc;
 #endif
-  return this->Fl_Device::set_current();
+  return this->fltk3::Device::set_current();
 }
 
 

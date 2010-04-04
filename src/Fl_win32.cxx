@@ -97,7 +97,7 @@
 
 static Fl_GDI_Display fl_gdi_device;
 FL_EXPORT Fl_Display *fl_display_device = (Fl_Display*)&fl_gdi_device; // does not change
-FL_EXPORT Fl_Device *fl_device = (Fl_Device*)&fl_gdi_device; // the current target device of graphics operations
+FL_EXPORT fltk3::Device *fl_device = (fltk3::Device*)&fl_gdi_device; // the current target device of graphics operations
 
 // dynamic wsock dll handling api:
 #if defined(__CYGWIN__) && !defined(SOCKET)
@@ -1925,7 +1925,7 @@ void fl_cleanup_dc_list(void) {          // clean up the list
 }
 
 Fl_Region XRectangleRegion(int x, int y, int w, int h) {
-  if (Fl_Device::current()->type() < 256) return CreateRectRgn(x,y,x+w,y+h);
+  if (fltk3::Device::current()->type() < 256) return CreateRectRgn(x,y,x+w,y+h);
   // because rotation may apply, the rectangle becomes a polygon in device coords
   POINT pt[4] = { {x, y}, {x + w, y}, {x + w, y + h}, {x, y + h} };
   LPtoDP(fl_gc, pt, 4);

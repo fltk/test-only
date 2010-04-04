@@ -45,7 +45,7 @@
 #define VK_APPS 0x5D
 #endif
 
-#include <fltk3/Fl_Device.H>
+#include <fltk3/Device.h>
 
 // some random X equivalents
 typedef HWND NativeWindow;

@@ -132,7 +132,7 @@ void fl_font(Fl_Font fnum, Fl_Fontsize size, int angle) {
   fl_xftfont = (void*)f->font;
 }
 
-void Fl_Device::font(Fl_Font fnum, Fl_Fontsize size) {
+void fltk3::Device::font(Fl_Font fnum, Fl_Fontsize size) {
   fl_font(fnum,size,0);
 }
 
@@ -498,7 +498,7 @@ void fl_destroy_xft_draw(NativeWindow id) {
 #endif
 }
 
-void Fl_Device::draw(const char *str, int n, int x, int y) {
+void fltk3::Device::draw(const char *str, int n, int x, int y) {
   if ( !current_font ) {
     fl_font(fltk3::HELVETICA, 14);
   }
@@ -535,7 +535,7 @@ void Fl_Device::draw(const char *str, int n, int x, int y) {
   XftDrawStringUtf8(draw_, &color, current_font, x, y, (XftChar8 *)str, n);
 }
 
-void Fl_Device::draw(int angle, const char *str, int n, int x, int y) {
+void fltk3::Device::draw(int angle, const char *str, int n, int x, int y) {
   fl_font(fl_font_, fl_size_, angle);
   fl_draw(str, n, (int)x, (int)y);
   fl_font(fl_font_, fl_size_);

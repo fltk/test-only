@@ -38,7 +38,7 @@
 #include <fltk3/draw.h>
 #include <math.h>
 
-void Fl_Device::curve(double X0, double Y0,
+void fltk3::Device::curve(double X0, double Y0,
 	      double X1, double Y1,
 	      double X2, double Y2,
 	      double X3, double Y3) {

@@ -143,7 +143,7 @@ void fl_font(Fl_Font fnum, Fl_Fontsize size, int angle) {
   fl_fontsize = find(fnum, size, angle);
 }
 
-void Fl_Device::font(Fl_Font fnum, Fl_Fontsize size) {
+void fltk3::Device::font(Fl_Font fnum, Fl_Fontsize size) {
   fl_font(fnum, size, 0);
 }
 
@@ -247,7 +247,7 @@ static void on_printer_extents_update(int &dx, int &dy, int &w, int &h)
 
 // if printer context, extents shd be converted to logical coords
 #define EXTENTS_UPDATE(x,y,w,h) \
-  if (Fl_Device::current()->type() == Fl_Device::gdi_printer) { on_printer_extents_update(x,y,w,h); }
+  if (fltk3::Device::current()->type() == fltk3::Device::gdi_printer) { on_printer_extents_update(x,y,w,h); }
 
 static unsigned short *ext_buff = NULL; // UTF-16 converted version of input UTF-8 string
 static unsigned wc_len = 0; // current string buffer dimension
@@ -331,7 +331,7 @@ exit_error:
   return;
 } // fl_text_extents
 
-void Fl_Device::draw(const char* str, int n, int x, int y) {
+void fltk3::Device::draw(const char* str, int n, int x, int y) {
   int i = 0;
   int lx = 0;
   char *end = (char *)&str[n];
@@ -359,7 +359,7 @@ void Fl_Device::draw(const char* str, int n, int x, int y) {
   SetTextColor(fl_gc, oldColor);
 }
 
-void Fl_Device::draw(int angle, const char* str, int n, int x, int y) {
+void fltk3::Device::draw(int angle, const char* str, int n, int x, int y) {
   fl_font(fl_font_, fl_size_, angle);
 //  fl_draw(str, n, (int)x, (int)y);
   int i = 0, i2=0;

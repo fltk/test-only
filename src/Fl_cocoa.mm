@@ -133,7 +133,7 @@ static void cocoaMouseHandler(NSEvent *theEvent);
 
 static Fl_Quartz_Display fl_quartz_device;
 FL_EXPORT Fl_Display *fl_display_device = (Fl_Display*)&fl_quartz_device; // does not change
-FL_EXPORT Fl_Device *fl_device = (Fl_Device*)&fl_quartz_device; // the current target device of graphics operations
+FL_EXPORT fltk3::Device *fl_device = (fltk3::Device*)&fl_quartz_device; // the current target device of graphics operations
 
 // public variables
 int fl_screen;
@@ -3475,7 +3475,7 @@ WindowRef MACwindowRef(fltk3::Window *w)
 
 // so a CGRect matches exactly what is denoted x,y,w,h for clipping purposes
 CGRect fl_cgrectmake_cocoa(int x, int y, int w, int h) {
-  if (Fl_Device::current()->type() == Fl_Device::quartz_printer) return CGRectMake(x, y, w-1.5 , h-1.5 ); 
+  if (fltk3::Device::current()->type() == fltk3::Device::quartz_printer) return CGRectMake(x, y, w-1.5 , h-1.5 ); 
   return CGRectMake(x, y, w > 0 ? w - 0.9 : 0, h > 0 ? h - 0.9 : 0);
 }
 

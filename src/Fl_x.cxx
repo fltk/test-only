@@ -53,7 +53,7 @@
 
 static Fl_Xlib_Display fl_xlib_device;
 FL_EXPORT Fl_Display *fl_display_device = (Fl_Display*)&fl_xlib_device; // does not change
-FL_EXPORT Fl_Device *fl_device = (Fl_Device*)&fl_xlib_device; // the current target device of graphics operations
+FL_EXPORT fltk3::Device *fl_device = (fltk3::Device*)&fl_xlib_device; // the current target device of graphics operations
 
 ////////////////////////////////////////////////////////////////
 // interface to poll/select call:

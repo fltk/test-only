@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// implementation of Fl_Device class for the Fast Light Tool Kit (FLTK).
+// implementation of fltk3::Device class for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 2010 by Bill Spitzak and others.
 //
@@ -26,7 +26,7 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/Fl_Device.H>
+#include <fltk3/Device.h>
 //#include <fltk3/draw.h>
 #include <fltk3/Fl_Image.H>
 
@@ -35,7 +35,7 @@
  Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
  the image offset by the cx and cy arguments.
  */
-void Fl_Device::draw(Fl_Pixmap *pxm,int XP, int YP, int WP, int HP, int cx, int cy)
+void fltk3::Device::draw(Fl_Pixmap *pxm,int XP, int YP, int WP, int HP, int cx, int cy)
 {
   pxm->draw(XP, YP, WP, HP, cx, cy);
 }
@@ -45,7 +45,7 @@ void Fl_Device::draw(Fl_Pixmap *pxm,int XP, int YP, int WP, int HP, int cx, int 
  Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
  the image offset by the cx and cy arguments.
  */
-void Fl_Device::draw(Fl_Bitmap *bm,int XP, int YP, int WP, int HP, int cx, int cy)
+void fltk3::Device::draw(Fl_Bitmap *bm,int XP, int YP, int WP, int HP, int cx, int cy)
 {
   bm->draw(XP, YP, WP, HP, cx, cy);
 }
@@ -55,7 +55,7 @@ void Fl_Device::draw(Fl_Bitmap *bm,int XP, int YP, int WP, int HP, int cx, int c
  Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
  the image offset by the cx and cy arguments.
  */
-void Fl_Device::draw(Fl_RGB_Image *rgb,int XP, int YP, int WP, int HP, int cx, int cy)
+void fltk3::Device::draw(Fl_RGB_Image *rgb,int XP, int YP, int WP, int HP, int cx, int cy)
 {
   rgb->draw(XP, YP, WP, HP, cx, cy);
 }
@@ -65,9 +65,9 @@ void Fl_Device::draw(Fl_RGB_Image *rgb,int XP, int YP, int WP, int HP, int cx, i
  *
  @return  The current target device of graphics calls.
  */
-Fl_Device *Fl_Device::set_current(void)
+fltk3::Device *fltk3::Device::set_current(void)
 {
-  Fl_Device *current = fl_device;
+  fltk3::Device *current = fl_device;
   fl_device = this;
   return current;
 }
@@ -75,7 +75,7 @@ Fl_Device *Fl_Device::set_current(void)
 /**
  @brief    Returns the current target device of graphics calls.
  */
-Fl_Device *Fl_Device::current(void)
+fltk3::Device *fltk3::Device::current(void)
 {
   return fl_device;
 }
