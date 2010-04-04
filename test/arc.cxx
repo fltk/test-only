@@ -30,12 +30,10 @@
 #include <fltk3/HorValueSlider.h>
 #include <fltk3/draw.h>
 
-using namespace fltk3;
-
 double dargs[6] = {140, 140, 50, 0, 360, 0};
 const char* name[6] = {"X", "Y", "R", "start", "end", "rotate"};
 
-class Drawing : public Widget {
+class Drawing : public fltk3::Widget {
   void draw() {
     fl_push_clip(x(),y(),w(),h());
     fl_color(FL_DARK3);
@@ -61,36 +59,36 @@ class Drawing : public Widget {
     fl_pop_clip();
   }
 public:
-  Drawing(int X,int Y,int W,int H) : Widget(X,Y,W,H) {}
+  Drawing(int X,int Y,int W,int H) : fltk3::Widget(X,Y,W,H) {}
 };
 
 Drawing *d;
 
-void slider_cb(Widget* o, void* v) {
-  Slider* s = (Slider*)o;
+void slider_cb(fltk3::Widget* o, void* v) {
+  fltk3::Slider* s = (fltk3::Slider*)o;
   dargs[long(v)] = s->value();
   d->redraw();
 }
 
 int main(int argc, char** argv) {
-  DoubleBufferWindow window(300,500);
+  fltk3::DoubleBufferWindow window(300,500);
   window.begin();
   Drawing drawing(10,10,280,280);
   d = &drawing;
   int y = 300;
   for (int n = 0; n<6; n++) {
-    Slider* s = new HorValueSlider(50,y,240,25,name[n]); y += 25;
+    fltk3::Slider* s = new fltk3::HorValueSlider(50,y,240,25,name[n]); y += 25;
     if (n<3) {s->minimum(0); s->maximum(300);}
     else if (n==5) {s->minimum(0); s->maximum(360);}
     else {s->minimum(-360); s->maximum(360);}
     s->step(1);
     s->value(dargs[n]);
-    s->align(ALIGN_LEFT);
+    s->align(fltk3::ALIGN_LEFT);
     s->callback(slider_cb, (void*)n);
   }
   window.end();
   window.show(argc,argv);
-  return run();
+  return fltk3::run();
 }
 
 
