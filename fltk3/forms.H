@@ -88,11 +88,11 @@ typedef fltk3::Window FL_FORM;
 #define FL_TOMATO	((fltk3::Color)(131))
 #define FL_INDIANRED	((fltk3::Color)(164))
 #define FL_SLATEBLUE	((fltk3::Color)(195))
-#define fltk3::DARKGOLD	((fltk3::Color)(84))
+#define FL_DARKGOLD	((fltk3::Color)(84))
 #define FL_PALEGREEN	((fltk3::Color)(157))
 #define FL_ORCHID	((fltk3::Color)(203))
-#define fltk3::DARKCYAN	((fltk3::Color)(189))
-#define fltk3::DARKTOMATO	((fltk3::Color)(113))
+#define FL_DARKCYAN	((fltk3::Color)(189))
+#define FL_DARKTOMATO	((fltk3::Color)(113))
 #define FL_WHEAT	((fltk3::Color)(174))
 
 #define FL_ALIGN_BESIDE	fltk3::ALIGN_INSIDE
@@ -159,7 +159,7 @@ typedef fltk3::Window FL_FORM;
 #define FL_BOUND_WIDTH	3
 
 typedef int FL_Coord;
-typedef int fltk3::COLOR;
+typedef int FL_COLOR;
 
 ////////////////////////////////////////////////////////////////
 // fltk interaction:
@@ -216,7 +216,7 @@ inline void fl_set_object_lcol(fltk3::Widget* o, fltk3::Color a) {o->labelcolor(
 #define fl_set_object_lcolor  fl_set_object_lcol
 inline void fl_set_object_lalign(fltk3::Widget* o, fltk3::Align a) {o->align(a);}
 #define fl_set_object_align fl_set_object_lalign
-inline void fl_set_object_color(fltk3::Widget* o,fltk3::Color a,fltk3::Color b) {o->color(a,b);}
+inline void fl_set_object_color(fltk3::Widget* o, fltk3::Color a, fltk3::Color b) {o->color(a,b);}
 inline void fl_set_object_label(fltk3::Widget* o, const char* a) {o->label(a); o->redraw();}
 inline void fl_set_object_position(fltk3::Widget*o,int x,int y) {o->position(x,y);}
 inline void fl_set_object_size(fltk3::Widget* o, int w, int h) {o->size(w,h);}
