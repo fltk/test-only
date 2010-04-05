@@ -3,7 +3,7 @@
 //
 // Shortcut support routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -52,10 +52,10 @@
 #endif
 
 /**
-    Test the current event, which must be an fltk3::KEY or 
-    fltk3::SHORTCUT, against a shortcut value (described in 
+    Test the current event, which must be an fltk3::KEY or
+    fltk3::SHORTCUT, against a shortcut value (described in
     fltk3::Button).  Returns non-zero if there is a match.  Not to
-    be confused with 
+    be confused with
     fltk3::Widget::test_shortcut().
 */
 int fltk3::test_shortcut(unsigned int shortcut) {
@@ -110,10 +110,10 @@ static Keyname table[] = {
   {fltk3::PageDownKey,"Page_Down"}, // X says "Next"
   {fltk3::EndKey,	"End"},
   {fltk3::PrintKey,	"Print"},
-  {FL_Insert,	"Insert"},
+  {fltk3::InsertKey,	"Insert"},
   {fltk3::MenuKey,	"Menu"},
   {fltk3::NumLockKey,	"Num_Lock"},
-  {fltk3::Keypad_Enter,	"KP_Enter"},
+  {fltk3::KeypadEnter,	"KP_Enter"},
   {fltk3::LeftShiftKey,	"Shift_L"},
   {fltk3::RightShiftKey,	"Shift_R"},
   {fltk3::LeftControlKey,"Control_L"},
@@ -125,7 +125,7 @@ static Keyname table[] = {
   {fltk3::RightAltKey,	"Alt_R"},
   {fltk3::DeleteKey,	"Delete"}
 };
-#elif defined(__APPLE__) 
+#elif defined(__APPLE__)
 static Keyname table[] = {
                                  // v - this column contains utf8 characters
   {' ', "Space"},
@@ -178,7 +178,7 @@ const char* fl_shortcut_label(unsigned int shortcut) {
   return fl_shortcut_label(shortcut, 0L);
 }
 
-/** 
+/**
   Get a human-readable string from a shortcut value.
 
   \param [in] shortcut the integer value containing the ascii charcter or extended keystroke plus modifiers
@@ -223,7 +223,7 @@ const char* fl_shortcut_label(unsigned int shortcut, const char **eom) {
       int c = (a+b)/2;
       if (table[c].key == key) {
         if (p > buf) {
-          strcpy(p,table[c].name); 
+          strcpy(p,table[c].name);
           return buf;
         } else {
           const char *sp = table[c].name;
@@ -240,7 +240,7 @@ const char* fl_shortcut_label(unsigned int shortcut, const char **eom) {
       *p++ = uchar(key & 127);
     } else {
       // if none found, use the keystroke as a match:
-      p += fl_utf8encode(fl_toupper(key), p); 
+      p += fl_utf8encode(fl_toupper(key), p);
     }
   }
   *p = 0;
@@ -251,12 +251,12 @@ const char* fl_shortcut_label(unsigned int shortcut, const char **eom) {
   else if (key > 32 && key < 0x100) q = 0;
   else q = XKeysymToString(key);
   if (!q) {
-    p += fl_utf8encode(fl_toupper(key), p); 
-    *p = 0; 
+    p += fl_utf8encode(fl_toupper(key), p);
+    *p = 0;
     return buf;
   }
   if (p > buf) {
-    strcpy(p,q); 
+    strcpy(p,q);
     return buf;
   } else {
     if (eom) *eom = q;

@@ -3,7 +3,7 @@
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -112,7 +112,7 @@ typedef int (*Fl_Args_Handler)(int argc, char **argv, int &i);
   state information and global methods for the current application.
 */
 namespace fltk3 {
-  
+
 #ifndef FL_DOXYGEN
   extern int e_number;
   extern int e_x;
@@ -145,7 +145,7 @@ namespace fltk3 {
 
   /**
     The currently executing idle callback function: DO NOT USE THIS DIRECTLY!
-    
+
     This is now used as part of a higher level system allowing multiple
     idle callback functions to be called.
     \see add_idle(), remove_idle()
@@ -207,10 +207,10 @@ namespace fltk3 {
   extern int scheme(const char*);
   /** See void scheme(const char *name) */
   inline const char* scheme() {return scheme_;}
-  /** 
-    Called by scheme according to scheme name. 
-    Loads or reloads the current scheme selection. 
-    See void scheme(const char *name) 
+  /**
+    Called by scheme according to scheme name.
+    Loads or reloads the current scheme selection.
+    See void scheme(const char *name)
   */
   extern int reload_scheme(); // platform dependent
   extern int scrollbar_size();
@@ -227,22 +227,22 @@ namespace fltk3 {
   Adds a one-shot timeout callback.  The function will be called by
   fltk3::wait() at <i>t</i> seconds after this function is called.
   The optional void* argument is passed to the callback.
-  
+
   You can have multiple timeout callbacks. To remove a timeout
   callback use fltk3::remove_timeout().
-  
+
   If you need more accurate, repeated timeouts, use fltk3::repeat_timeout() to
   reschedule the subsequent timeouts.
-  
+
   The following code will print "TICK" each second on
   stdout with a fair degree of accuracy:
-  
+
   \code
      void callback(void*) {
        puts("TICK");
        fltk3::repeat_timeout(1.0, callback);
      }
-  
+
      int main() {
        fltk3::add_timeout(1.0, callback);
        return fltk3::run();
@@ -254,16 +254,16 @@ namespace fltk3 {
   Repeats a timeout callback from the expiration of the
   previous timeout, allowing for more accurate timing. You may only call
   this method inside a timeout callback.
-  
+
   The following code will print "TICK" each second on
   stdout with a fair degree of accuracy:
-  
+
   \code
      void callback(void*) {
        puts("TICK");
        fltk3::repeat_timeout(1.0, callback);
      }
-  
+
      int main() {
        fltk3::add_timeout(1.0, callback);
        return fltk3::run();
@@ -278,19 +278,19 @@ namespace fltk3 {
   extern void remove_check(Fl_Timeout_Handler, void* = 0);
   /**
     Adds file descriptor fd to listen to.
-    
+
     When the fd becomes ready for reading fltk3::wait() will call the
     callback and then return. The callback is passed the fd and the
     arbitrary void* argument.
-    
+
     The second version takes a when bitfield, with the bits
     FL_READ, FL_WRITE, and FL_EXCEPT defined,
     to indicate when the callback should be done.
-    
-    There can only be one callback of each type for a file descriptor. 
+
+    There can only be one callback of each type for a file descriptor.
     fltk3::remove_fd() gets rid of <I>all</I> the callbacks for a given
     file descriptor.
-    
+
     Under UNIX <I>any</I> file descriptor can be monitored (files,
     devices, pipes, sockets, etc.). Due to limitations in Microsoft Windows,
     WIN32 applications can only monitor sockets.
@@ -314,7 +314,7 @@ namespace fltk3 {
     @{ */
   /**
   FLTK calls fltk3::warning() to output a warning message.
-  
+
   The default version on Windows returns \e without printing a warning
   message, because Windows programs normally don't have stderr (a console
   window) enabled.
@@ -332,7 +332,7 @@ namespace fltk3 {
   extern void (*warning)(const char*, ...);
   /**
   FLTK calls fltk3::error() to output a normal error message.
-  
+
   The default version on Windows displays the error message in a MessageBox window.
 
   The default version on all other platforms prints the error message to stderr.
@@ -346,11 +346,11 @@ namespace fltk3 {
   extern void (*error)(const char*, ...);
   /**
   FLTK calls fltk3::fatal() to output a fatal error message.
-  
+
   The default version on Windows displays the error message in a MessageBox window.
 
   The default version on all other platforms prints the error message to stderr.
-  
+
   You can override the behavior by setting the function pointer to your
   own routine.
 
@@ -381,7 +381,7 @@ namespace fltk3 {
   inline fltk3::Window* modal() {return modal_;}
   /**
     This is used when pop-up menu systems are active.
-    
+
     Send all events to the passed window no matter where the pointer or
     focus is (including in other programs). The window <I>does not have
     to be shown()</I> , this lets the handle() method of a
@@ -389,18 +389,18 @@ namespace fltk3 {
     map and unmap a complex set of windows (under both X and WIN32
     <I>some</I> window must be mapped because the system interface needs a
     window id).
-    
+
     If grab() is on it will also affect show() of windows by doing
     system-specific operations (on X it turns on override-redirect).
     These are designed to make menus popup reliably
     and faster on the system.
-    
+
     To turn off grabbing do fltk3::grab(0).
-    
+
     <I>Be careful that your program does not enter an infinite loop
     while grab() is on.  On X this will lock up your screen!</I>
-    To avoid this potential lockup, all newer operating systems seem to 
-    limit mouse pointer grabbing to the time during which a mouse button 
+    To avoid this potential lockup, all newer operating systems seem to
+    limit mouse pointer grabbing to the time during which a mouse button
     is held down. Some OS's may not support grabbing at all.
   */
   inline fltk3::Window* grab() {return grab_;}
@@ -432,14 +432,14 @@ namespace fltk3 {
   /**
     Returns the mouse position on the screen of the event.  To find the
     absolute position of an fltk3::Window on the screen, use the
-    difference between event_x_root(),event_y_root() and 
+    difference between event_x_root(),event_y_root() and
     event_x(),event_y().
   */
   inline int event_x_root()	{return e_x_root;}
   /**
     Returns the mouse position on the screen of the event.  To find the
     absolute position of an fltk3::Window on the screen, use the
-    difference between event_x_root(),event_y_root() and 
+    difference between event_x_root(),event_y_root() and
     event_x(),event_y().
   */
   inline int event_y_root()	{return e_y_root;}
@@ -455,7 +455,7 @@ namespace fltk3 {
   inline int event_dy()	{return e_dy;}
   /**
     Return where the mouse is on the screen by doing a round-trip query to
-    the server.  You should use fltk3::event_x_root() and 
+    the server.  You should use fltk3::event_x_root() and
     fltk3::event_y_root() if possible, but this is necessary if you are
     not sure if a mouse event has been processed recently (such as to
     position your first window).  If the display is not open, this will
@@ -464,15 +464,15 @@ namespace fltk3 {
   extern void get_mouse(int &,int &); // platform dependent
   /**
     Returns non zero if we had a double click event.
-    \retval Non-zero if the most recent fltk3::PUSH or fltk3::KEY was a "double click".  
-    \retval  N-1 for  N clicks. 
+    \retval Non-zero if the most recent fltk3::PUSH or fltk3::KEY was a "double click".
+    \retval  N-1 for  N clicks.
     A double click is counted if the same button is pressed
     again while event_is_click() is true.
-    
+
    */
   inline int event_clicks()	{return e_clicks;}
   /**
-    Manually sets the number returned by fltk3::event_clicks().  
+    Manually sets the number returned by fltk3::event_clicks().
     This can be used to set it to zero so that
     later code does not think an item was double-clicked.
     \param[in] i corresponds to no double-click if 0, i+1 mouse clicks otherwise
@@ -481,7 +481,7 @@ namespace fltk3 {
   inline void event_clicks(int i) {e_clicks = i;}
   /**
     The first form returns non-zero if the mouse has not moved far enough
-    and not enough time has passed since the last fltk3::PUSH or 
+    and not enough time has passed since the last fltk3::PUSH or
     fltk3::KEY event for it to be considered a "drag" rather than a
     "click".  You can test this on fltk3::DRAG, fltk3::RELEASE,
     and fltk3::MOVE events.  The second form clears the value returned
@@ -491,11 +491,11 @@ namespace fltk3 {
   */
   inline int event_is_click()	{return e_is_click;}
   /**
-    Only i=0 works! See int event_is_click(). 
+    Only i=0 works! See int event_is_click().
   */
   inline void event_is_click(int i) {e_is_click = i;}
   /**
-    Gets which particular mouse button caused the current event. 
+    Gets which particular mouse button caused the current event.
     This returns garbage if the most recent event was not a fltk3::PUSH or fltk3::RELEASE event.
     \retval fltk3::LEFT_MOUSE \retval fltk3::MIDDLE_MOUSE \retval fltk3::RIGHT_MOUSE.
     \see fltk3::event_buttons()
@@ -506,7 +506,7 @@ namespace fltk3 {
     were held down during the most recent event. The second version
     returns non-zero if any of the passed bits are turned on.
     The legal bits are:
-    
+
     \li fltk3::SHIFT
     \li fltk3::CAPS_LOCK
     \li fltk3::CTRL
@@ -517,7 +517,7 @@ namespace fltk3 {
     \li fltk3::BUTTON1
     \li fltk3::BUTTON2
     \li fltk3::BUTTON3
-    
+
     X servers do not agree on shift states, and fltk3::NUM_LOCK, fltk3::META, and
     FL_SCROLL_LOCK may not work. The values were selected to match the
     XFree86 server on Linux. In addition there is a bug in the way X works
@@ -531,36 +531,36 @@ namespace fltk3 {
     Gets which key on the keyboard was last pushed.
 
     The returned integer 'key code' is not necessarily a text
-    equivalent for the keystroke. For instance: if someone presses '5' on the 
+    equivalent for the keystroke. For instance: if someone presses '5' on the
     numeric keypad with numlock on, fltk3::event_key() may return the 'key code'
     for this key, and NOT the character '5'. To always get the '5', use fltk3::event_text() instead.
-    
+
     \returns an integer 'key code', or 0 if the last event was not a key press or release.
     \see int event_key(int), event_text(), compose(int&).
   */
   inline int event_key()	{return e_keysym;}
   /**
     Returns the keycode of the last key event, regardless of the NumLock state.
-      
-    If NumLock is deactivated, FLTK translates events from the 
-    numeric keypad into the corresponding arrow key events. 
+
+    If NumLock is deactivated, FLTK translates events from the
+    numeric keypad into the corresponding arrow key events.
     event_key() returns the translated key code, whereas
     event_original_key() returns the keycode before NumLock translation.
   */
   inline int event_original_key(){return e_original_keysym;}
-  /** 
+  /**
     Returns true if the given \p key was held
     down (or pressed) <I>during</I> the last event.  This is constant until
     the next event is read from the server.
-    
+
     fltk3::get_key(int) returns true if the given key is held down <I>now</I>.
     Under X this requires a round-trip to the server and is <I>much</I>
     slower than fltk3::event_key(int).
-    
+
     Keys are identified by the <I>unshifted</I> values. FLTK defines a
     set of symbols that should work on most modern machines for every key
     on the keyboard:
-    
+
     \li All keys on the main keyboard producing a printable ASCII
 	character use the value of that ASCII character (as though shift,
 	ctrl, and caps lock were not on). The space bar is 32.
@@ -568,7 +568,7 @@ namespace fltk3 {
 	character use the value of that ASCII character plus fltk3::Keypad.
 	The highest possible value is fltk3::Keypad_Last so you can
 	range-check to see if something is  on the keypad.
-    \li All numbered function keys use the number on the function key plus 
+    \li All numbered function keys use the number on the function key plus
 	fltk3::FKey.  The highest possible number is FL_F_Last, so you
 	can range-check a value.
     \li Buttons on the mouse are considered keys, and use the button
@@ -583,22 +583,22 @@ namespace fltk3 {
 	symbols used by fltk3::event_state().
 
     On X fltk3::get_key(fltk3::MouseButton+n) does not work.
-    
+
     On WIN32 fltk3::get_key(fltk3::Keypad_Enter) and fltk3::event_key(fltk3::Keypad_Enter) do not work.
   */
   extern int event_key(int key);
-  /** 
-    Returns true if the given \p key is held down <I>now</I>.  
+  /**
+    Returns true if the given \p key is held down <I>now</I>.
     Under X this requires a round-trip to the server and is <I>much</I>
     slower than fltk3::event_key(int). \see event_key(int)
   */
   extern int get_key(int key); // platform dependent
-  /** 
+  /**
     Returns the text associated with the current event, including fltk3::PASTE or fltk3::DND_RELEASE events.
     This can be used in response to fltk3::KEYUP, fltk3::KEY, fltk3::PASTE, fltk3::DND_RELEASE.
 
     When responding to fltk3::KEYUP/fltk3::KEY, use this function instead of fltk3::event_key()
-    to get the text equivalent of keystrokes suitable for inserting into strings 
+    to get the text equivalent of keystrokes suitable for inserting into strings
     and text widgets.
 
     The returned string is guaranteed to be be NULL terminated.
@@ -630,7 +630,7 @@ namespace fltk3 {
 
   // event destinations:
   extern int handle(int, fltk3::Window*);
-  /**  Gets the widget that is below the mouse. 
+  /**  Gets the widget that is below the mouse.
        \see  belowmouse(fltk3::Widget*) */
   inline fltk3::Widget* belowmouse() {return belowmouse_;}
   extern void belowmouse(fltk3::Widget*);
@@ -657,9 +657,9 @@ namespace fltk3 {
   */
   extern void copy(const char* stuff, int len, int clipboard = 0); // platform dependent
   /**
-    Pastes the data from the selection (0) or primary (1) clipboard into receiver.  
-    The selection clipboard is used for middle-mouse pastes and for 
-    drag-and-drop selections. The primary clipboard is used for 
+    Pastes the data from the selection (0) or primary (1) clipboard into receiver.
+    The selection clipboard is used for middle-mouse pastes and for
+    drag-and-drop selections. The primary clipboard is used for
     traditional copy/cut/paste operations.
   */
   extern void paste(fltk3::Widget &receiver, int clipboard /*=0*/); // platform dependent
@@ -672,7 +672,7 @@ namespace fltk3 {
   extern int dnd(); // platform dependent
 
   // These are for back-compatibility only:
-  /**  back-compatibility only: Gets the widget owning the current selection  
+  /**  back-compatibility only: Gets the widget owning the current selection
        \see fltk3::Widget* selection_owner(fltk3::Widget*) */
   inline fltk3::Widget* selection_owner() {return selection_owner_;}
   extern void selection_owner(fltk3::Widget*);
@@ -694,23 +694,23 @@ namespace fltk3 {
 
   // multi-head support:
   extern int screen_count();
-  /** 
+  /**
       Gets the bounding box of a screen that contains the mouse pointer.
       \param[out]  X,Y,W,H the corresponding screen bounding box
-      \see void screen_xywh(int &x, int &y, int &w, int &h, int mx, int my) 
+      \see void screen_xywh(int &x, int &y, int &w, int &h, int mx, int my)
   */
   extern void screen_xywh(int &X, int &Y, int &W, int &H, int mx, int my);
   extern void screen_xywh(int &X, int &Y, int &W, int &H, int n);
   inline void screen_xywh(int &X, int &Y, int &W, int &H) {
     screen_xywh(X, Y, W, H, e_x_root, e_y_root);
   }
-  
+
   /**   @} */
 
   /** \defgroup  fl_attributes  Color & Font functions
 	fl global color, font functions
      @{ */
- 
+
   // color map:
   extern void	set_color(fltk3::Color, uchar, uchar, uchar);
   /**
@@ -734,9 +734,9 @@ namespace fltk3 {
     is useful if you are presenting a choice to the user.  There is no
     guarantee that each face has a different name.  The return value points
     to a static buffer that is overwritten each call.
-    
+
     The integer pointed to by \p attributes (if the pointer is not
-    zero) is set to zero, fltk3::BOLD or fltk3::ITALIC or 
+    zero) is set to zero, fltk3::BOLD or fltk3::ITALIC or
     fltk3::BOLD | fltk3::ITALIC.  To locate a "family" of fonts, search
     forward and back for a set with non-zero attributes, these faces along
     with the face with a zero attribute before them constitute a family.
@@ -761,7 +761,7 @@ namespace fltk3 {
     face table.  It will attempt to put "families" of faces together, so
     that the normal one is first, followed by bold, italic, and bold
     italic.
-    
+
     The optional argument is a string to describe the set of fonts to
     add.  Passing NULL will select only fonts that have the
     ISO8859-1 character set (and are thus usable by normal text).  Passing
@@ -771,7 +771,7 @@ namespace fltk3 {
     values may be useful but are system dependent.  With WIN32 NULL
     selects fonts with ISO8859-1 encoding and non-NULL selects
     all fonts.
-    
+
     The return value is how many faces are in the table after this is done.
   */
   extern Fl_Font set_fonts(const char* = 0); // platform dependent
@@ -799,7 +799,7 @@ namespace fltk3 {
   extern int draw_box_active();
 
   // back compatibility:
-  /** \addtogroup fl_windows 
+  /** \addtogroup fl_windows
     @{ */
   /** For back compatibility, sets the void fltk3::fatal handler callback */
   inline void set_abort(Fl_Abort_Handler f) {fatal = f;}
@@ -811,7 +811,7 @@ namespace fltk3 {
   inline void set_atclose(Fl_Atclose_Handler f) {atclose = f;}
   /**   @} */
 
-  /** \addtogroup fl_events 
+  /** \addtogroup fl_events
     @{ */
   /** Returns non-zero if the Shift key is pressed. */
   inline int event_shift() {return e_state&fltk3::SHIFT;}
@@ -823,9 +823,9 @@ namespace fltk3 {
   inline int event_alt() {return e_state&fltk3::ALT;}
   /**
     Returns the mouse buttons state bits; if non-zero, then at least one
-    button is pressed now.  This function returns the button state at the 
-    time of the event. During an fltk3::RELEASE event, the state 
-    of the released button will be 0. To find out, which button 
+    button is pressed now.  This function returns the button state at the
+    time of the event. During an fltk3::RELEASE event, the state
+    of the released button will be 0. To find out, which button
     caused an fltk3::RELEASE event, you can use fltk3::event_button() instead.
     \return a bit mask value like { [fltk3::BUTTON1] | [fltk3::BUTTON2] | [fltk3::BUTTON3] }
   */
@@ -902,7 +902,7 @@ namespace fltk3 {
   /**
     The thread_message() method returns the last message
     that was sent from a child by the awake() method.
-    
+
     See also: multithreading
   */
   extern void* thread_message(); // platform dependent
@@ -946,32 +946,32 @@ namespace fltk3 {
   /** @} */
 
 #ifdef HAVE_CAIRO
-  /** \defgroup group_cairo Cairo support functions and classes 
-      @{ 
+  /** \defgroup group_cairo Cairo support functions and classes
+      @{
   */
 /* public: */
   // Cairo support API
   extern cairo_t * cairo_make_current(fltk3::Window* w);
-   /** when HAVE_CAIRO is defined and cairo_autolink_context() is true, 
+   /** when HAVE_CAIRO is defined and cairo_autolink_context() is true,
       any current window dc is linked to a current context.
       This is not the default, because it may not be necessary
       to add cairo support to all fltk supported windows.
       When you wish to associate a cairo context in this mode,
       you need to call explicitly in your draw() overridden method,
       FL::cairo_make_current(fltk3::Window*). This will create a cairo context
-      but only for this Window. 
-      Still in custom cairo application it is possible to handle 
+      but only for this Window.
+      Still in custom cairo application it is possible to handle
       completely this process automatically by setting \p alink to true.
       In this last case, you don't need anymore to call fltk3::cairo_make_current().
       You can use fltk3::cairo_cc() to get the current cairo context anytime.
      \note Only available when configure has the --enable-cairo option
   */
   inline void cairo_autolink_context(bool alink) {cairo_state_.autolink(alink);}
-  /** 
+  /**
     Gets the current autolink mode for cairo support.
-    \retval false if no cairo context autolink is made for each window. 
-    \retval true if any fltk window is attached a cairo context when it 
-    is current. \see void cairo_autolink_context(bool alink) 
+    \retval false if no cairo context autolink is made for each window.
+    \retval true if any fltk window is attached a cairo context when it
+    is current. \see void cairo_autolink_context(bool alink)
     \note Only available when configure has the --enable-cairo option
  */
   inline bool cairo_autolink_context() {return cairo_state_.autolink();}
@@ -981,14 +981,14 @@ namespace fltk3 {
       Set \p own to true if you want fltk to handle this cc deletion.
      \note Only available when configure has the --enable-cairo option
 */
-  inline void cairo_cc(cairo_t * c, bool own=false){ cairo_state_.cc(c, own); } 
+  inline void cairo_cc(cairo_t * c, bool own=false){ cairo_state_.cc(c, own); }
 
 /* private: */
   extern cairo_t * cairo_make_current(void* gc);
   extern cairo_t * cairo_make_current(void* gc, int W, int H);
   extern Fl_Cairo_State cairo_state_;
 /* public: */
-  /** @} */ 
+  /** @} */
 
 #endif // HAVE_CAIRO
 
@@ -1009,7 +1009,7 @@ namespace fltk3 {
   such that the automatic destructor is called when the object's
   scope is left. This ensures that no stale widget pointers are
   left in the widget watch list (see example below).
-  
+
   You can also create Fl_Widget_Tracker objects with \c new, but then it
   is your responsibility to delete the object (and thus remove the
   widget pointer from the watch list) when it is not needed any more.

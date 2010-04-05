@@ -719,7 +719,7 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_BACK,	fltk3::BackSpaceKey},
   {VK_TAB,	fltk3::TabKey},
   {VK_CLEAR,	fltk3::Keypad+'5',	0xff0b/*XK_Clear*/},
-  {VK_RETURN,	fltk3::EnterKey,	fltk3::Keypad_Enter},
+  {VK_RETURN,	fltk3::EnterKey,	fltk3::KeypadEnter},
   {VK_SHIFT,	fltk3::LeftShiftKey,	fltk3::RightShiftKey},
   {VK_CONTROL,	fltk3::LeftControlKey,	fltk3::RightControlKey},
   {VK_MENU,	fltk3::LeftAltKey,	fltk3::RightAltKey},
@@ -736,7 +736,7 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_RIGHT,	fltk3::Keypad+'6',	fltk3::RightKey},
   {VK_DOWN,	fltk3::Keypad+'2',	fltk3::DownKey},
   {VK_SNAPSHOT,	fltk3::PrintKey},	// does not work on NT
-  {VK_INSERT,	fltk3::Keypad+'0',	FL_Insert},
+  {VK_INSERT,	fltk3::Keypad+'0',	fltk3::InsertKey},
   {VK_DELETE,	fltk3::Keypad+'.',	fltk3::DeleteKey},
   {VK_LWIN,	fltk3::LeftMetaKey},
   {VK_RWIN,	fltk3::RightMetaKey},
@@ -958,7 +958,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       ulong state = 0;
       if (GetAsyncKeyState(VK_CAPITAL)) state |= fltk3::CAPS_LOCK;
       if (GetAsyncKeyState(VK_NUMLOCK)) state |= fltk3::NUM_LOCK;
-      if (GetAsyncKeyState(VK_SCROLL)) state |= FL_SCROLL_LOCK;
+      if (GetAsyncKeyState(VK_SCROLL)) state |= fltk3::SCROLL_LOCK;
       if (GetAsyncKeyState(VK_CONTROL)&~1) state |= fltk3::CTRL;
       if (GetAsyncKeyState(VK_SHIFT)&~1) state |= fltk3::SHIFT;
       if (GetAsyncKeyState(VK_MENU)) state |= fltk3::ALT;
@@ -1014,7 +1014,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1)
 	state |= fltk3::META;
     }
-    if (GetKeyState(VK_SCROLL)) state |= FL_SCROLL_LOCK;
+    if (GetKeyState(VK_SCROLL)) state |= fltk3::SCROLL_LOCK;
     fltk3::e_state = state;
     static char buffer[1024];
     if (uMsg == WM_CHAR || uMsg == WM_SYSCHAR) {
@@ -1025,7 +1025,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       buffer[fltk3::e_length] = 0;
 
 
-    } else if (fltk3::e_keysym >= fltk3::Keypad && fltk3::e_keysym <= fltk3::Keypad_Last) {
+    } else if (fltk3::e_keysym >= fltk3::Keypad && fltk3::e_keysym <= fltk3::KeypadLast) {
       if (state & fltk3::NUM_LOCK) {
         // Convert to regular keypress...
 	buffer[0] = fltk3::e_keysym-fltk3::Keypad;
@@ -1036,7 +1036,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	fltk3::e_length = 0;
 	switch (fltk3::e_keysym) {
 	  case fltk3::Keypad + '0' :
-	    fltk3::e_keysym = FL_Insert;
+	    fltk3::e_keysym = fltk3::InsertKey;
 	    break;
 	  case fltk3::Keypad + '1' :
 	    fltk3::e_keysym = fltk3::EndKey;

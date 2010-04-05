@@ -87,7 +87,7 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   {VK_NEXT,	fltk3::PageDownKey},
   {VK_END,	fltk3::EndKey},
   {VK_SNAPSHOT,	fltk3::PrintKey},
-  {VK_INSERT,	FL_Insert},
+  {VK_INSERT,	fltk3::InsertKey},
   {VK_APPS,	fltk3::MenuKey},
   {VK_NUMLOCK,	fltk3::NumLockKey},
 //{VK_???,	fltk3::Keypad_Enter},
