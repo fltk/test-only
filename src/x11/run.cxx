@@ -102,7 +102,7 @@ static XFontSet fl_xim_fs = NULL;
 static char fl_is_over_the_spot = 0;
 static XRectangle status_area;
 
-static void fl_new_ic()
+static void fl_new_ic(XWindow xid)
 {
   // Give up if this failed earlier:
   if (!fl_xim_im)
@@ -125,7 +125,7 @@ static void fl_new_ic()
   if (XGetIMValues(fl_xim_im, XNQueryInputStyle,
 		   &xim_styles, NULL, NULL) ||
       !xim_styles || !xim_styles->count_styles) {
-    warning("No XIM style found\n");
+    warning("No XIM style found");
     XCloseIM(fl_xim_im);
     fl_xim_im = NULL;
     return;
@@ -162,6 +162,7 @@ static void fl_new_ic()
 			    XNInputStyle, (XIMPreeditPosition | XIMStatusArea),
 			    XNPreeditAttributes, preedit_attr,
 			    XNStatusAttributes, status_attr,
+                            XNClientWindow, xid,
 			    NULL);
       XFree(status_attr);
     }
@@ -169,15 +170,18 @@ static void fl_new_ic()
       fl_xim_ic = XCreateIC(fl_xim_im,
 			    XNInputStyle,XIMPreeditPosition | XIMStatusNothing,
 			    XNPreeditAttributes, preedit_attr,
+                            XNClientWindow, xid,
 			    NULL);
     XFree(preedit_attr);
     if (fl_xim_ic) {
       fl_is_over_the_spot = 1;
+#if 0 // This appears to have been done in the "if (sarea)" above
       XVaNestedList status_attr;
       status_attr = XVaCreateNestedList(0, XNAreaNeeded, &status_area, NULL);
       if (status_area.height != 0)
 	XGetICValues(fl_xim_ic, XNStatusAttributes, status_attr, NULL);
       XFree(status_attr);
+#endif
       return;
     }
   }
@@ -186,9 +190,10 @@ static void fl_new_ic()
   fl_is_over_the_spot = 0;
   fl_xim_ic = XCreateIC(fl_xim_im,
 			XNInputStyle, (XIMPreeditNothing | XIMStatusNothing),
+                        XNClientWindow, xid,
 			NULL);
   if (!fl_xim_ic) {
-    warning("XCreateIC() failed\n");
+    warning("XCreateIC() failed");
     XCloseIM(fl_xim_im);
     fl_xim_im = NULL;
   }
@@ -203,7 +208,7 @@ static void fl_init_xim()
   fl_xim_im = XOpenIM(xdisplay, NULL, NULL, NULL);
 
   if (!fl_xim_im)
-    warning("XOpenIM() failed\n");
+    warning("XOpenIM() failed");
 }
 
 void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
@@ -1575,8 +1580,6 @@ bool fltk::handle()
 
   case FocusIn:
 #if USE_XIM
-    // For some reason, always destroying & recreating seems to help this work:
-    /*if (!fl_xim_ic)*/ fl_new_ic();
     if (fl_xim_ic) {
       XSetICValues(fl_xim_ic,
 		   XNClientWindow, xevent.xclient.window,
@@ -1619,6 +1622,8 @@ bool fltk::handle()
     int len;
     KeySym keysym;
 #if USE_XIM
+    if (!fl_xim_ic)
+        fl_new_ic(xevent.xany.window);
     if (fl_xim_ic) {
       Status status;
     RETRY:
