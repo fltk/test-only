@@ -102,7 +102,7 @@ void Widget::draw_box(const Rectangle& r ) const {
     redrawing them anyway (ie anything displaying text).
 */
 void Widget::draw_frame() const {
-  drawstyle(style(), flags_ & ~OUTPUT | INVISIBLE);
+  drawstyle(style(), (flags_ & ~OUTPUT) | INVISIBLE);
   box()->draw(Rectangle(w(),h()));
   setdrawflags(flags_);
 }
@@ -116,7 +116,7 @@ void Widget::draw_label() const {
   Flags flags = this->flags();
   // Do a quick test to see if we don't want to draw anything:
   if (!image() && (!label() || !*label() ||
-		   (flags&15) && !(flags & ALIGN_INSIDE))) return;
+		   ((flags&15) && !(flags & ALIGN_INSIDE)))) return;
   // figure out the inside of the box():
   Rectangle r(w(),h()); box()->inset(r);
   // and draw it:
@@ -274,7 +274,7 @@ void Group::draw_outside_label(Widget& w) const {
       if (flags & ALIGN_RIGHT) {
 	r.x(r.r()+3);
 	r.set_r(this->w());
-	flags = flags&~ALIGN_RIGHT | ALIGN_LEFT;
+	flags = (flags & ~ALIGN_RIGHT) | ALIGN_LEFT;
       } else {
 	r.x(0);
 	r.w(w.x()-3);
@@ -298,7 +298,7 @@ void Group::draw_outside_label(Widget& w) const {
     r.x(r.r()+3);
     r.set_r(this->w());
   }
-  flags = flags & ~(HIGHLIGHT|PUSHED) | OUTPUT;
+  flags = (flags & ~(HIGHLIGHT|PUSHED)) | OUTPUT;
   drawstyle(w.style(), flags);
   //push_clip(X, Y, W, H); // this will break some old fltk programs
   w.labeltype()->draw(w.label(), r, flags);

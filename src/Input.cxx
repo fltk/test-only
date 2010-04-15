@@ -440,7 +440,7 @@ void Input::draw(const Rectangle& r)
 
   CONTINUE2:
     // draw the cursor:
-    if ((this==dnd_target || focused() && selstart == selend) &&
+    if ((this==dnd_target || (focused() && selstart == selend)) &&
 	cursor_position >= p-text_ && cursor_position <= e-text_) {
       setcolor(textcolor);
       fillrect(xpos+curx-1, r.y()+ypos, 2, height);
@@ -868,7 +868,7 @@ bool Input::insert(const char* text) {
   was probably many calls to replace()). Returns true if any change
   was made. */
 bool Input::undo() {
-  if (undowidget != this || !undocut && !undoinsert) return false;
+  if (undowidget != this || !(undocut || undoinsert)) return false;
   was_up_down = false;
 
   int ilen = undocut;
@@ -1475,8 +1475,8 @@ int Input::handle(int event, const Rectangle& r) {
     // to see if they hold it long enough to start dragging:
     if (!event_state(ALT|META|CTRL|SHIFT) &&
 	focused() && type()!=SECRET &&
-	(newpos >= mark() && newpos < position() ||
-	newpos >= position() && newpos < mark())) {
+	((newpos >= mark() && newpos < position()) ||
+	 (newpos >= position() && newpos < mark()))) {
       drag_start = newpos;
       add_timeout(.25);
       return 1;

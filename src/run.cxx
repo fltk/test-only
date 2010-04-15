@@ -96,7 +96,7 @@ static Window *xmousewin; // which window X thinks has ENTER
 static void fix_focus() {
   Widget* w = xfocus;
   // Modal overrides whatever the system says the focus is:
-  if (grab_ || w && modal_) w = modal_;
+  if (grab_ || (w && modal_)) w = modal_;
   if (w) {
     if (w->contains(focus())) return; // already has it
     unsigned saved = e_keysym;
@@ -459,7 +459,7 @@ int fltk::wait(float time_to_wait) {
   }
 
   // run the system-specific part that waits for sockets & events:
-  if (time_to_wait <= 0 || idle && !in_idle) time_to_wait = 0;
+  if (time_to_wait <= 0 || (idle && !in_idle)) time_to_wait = 0;
   int ret = fl_wait(time_to_wait);
 
   if (first_timeout) {

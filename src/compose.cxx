@@ -377,7 +377,7 @@ bool fltk::compose(int& del) {
     char c1 = char(compose_state); // retrieve first character
     // now search for the pair in either order:
     for (const char *p = compose_pairs; *p; p += 2) {
-      if (p[0] == ascii && p[1] == c1 || p[1] == ascii && p[0] == c1) {
+      if ((p[0] == ascii && p[1] == c1) || (p[1] == ascii && p[0] == c1)) {
 	int code = (p-compose_pairs)/2+0xA0;
 	// convert code to utf8:
 	e_text = textbuffer;

@@ -170,7 +170,7 @@ int Scrollbar::handle(int event) {
     // Clicking on the slider or middle or right click on the trough
     // gives us normal slider behavior:
     if (which_part == SLIDER ||
-	event_button() > 1 && which_part > DOWN_ARROW) {
+	(event_button() > 1 && which_part > DOWN_ARROW)) {
       which_pushed = SLIDER;
       return Slider::handle(event, r);
     }

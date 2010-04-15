@@ -126,7 +126,7 @@ void DefaultGlyph::_draw(const Rectangle& rr) const
 */
 void Widget::draw_glyph(int which, const Rectangle& rectangle) const {
   int savedflags = drawflags_;
-  drawflags_ = savedflags&~ALIGN_MASK | which;
+  drawflags_ = (savedflags&~ALIGN_MASK) | which;
   glyph()->draw(rectangle);
   drawflags_ = savedflags;
 }

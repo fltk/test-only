@@ -102,25 +102,25 @@ const char *get_indent_string(int level)
 
 const char *get_opening_brace(int isfunction)
 {
-	static char buffer[256];
-	if(isfunction && !gbrace_functions)
-		return " {\n";
-	if(gbrace_style == 1)
-		if(isfunction)
-			return " {\n";
-		else
-			return " {";
-	if(gbrace_style == 2)
-	{
-		sprintf(buffer, "\n%s{\n", indent());
-		return buffer;
-	}
-	if(gbrace_style == 3) {
-	   static char buffer[20];
-	   sprintf(buffer, "\n%s{\n", get_indent_string(1));
-	   return(buffer);
-    }
-	return " {\n";
+  static char buffer[256];
+  if (isfunction && !gbrace_functions)
+    return " {\n";
+  if (gbrace_style == 1) {
+    if(isfunction)
+      return " {\n";
+    else
+      return " {";
+  }
+  if (gbrace_style == 2) {
+    sprintf(buffer, "\n%s{\n", indent());
+    return buffer;
+  }
+  if (gbrace_style == 3) {
+    static char buffer[20];
+    sprintf(buffer, "\n%s{\n", get_indent_string(1));
+    return(buffer);
+  }
+  return " {\n";
 }
 
 void show_coding_style_cb(fltk::Widget *, void *)

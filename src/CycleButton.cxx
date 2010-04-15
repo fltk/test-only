@@ -81,7 +81,7 @@ void CycleButton::draw() {
       setcolor(bg);
       fillrect(r);
     } else if (damage()&DAMAGE_EXPOSE ||
-	       bg && (damage()&DAMAGE_HIGHLIGHT)) {
+	       (bg && (damage()&DAMAGE_HIGHLIGHT))) {
       draw_background();
     }
   }

@@ -331,8 +331,12 @@ static char *decodeText( const char *src )
   const char *s = src;
   for ( ; *s; s++, len++ )
   {
-    if ( *s == '\\' )
-      if ( isdigit( s[1] ) ) s+=3; else s+=1;
+    if ( *s == '\\' ) {
+      if ( isdigit( s[1] ) )
+	s+=3;
+      else
+	s+=1;
+    }
   }
   char *dst = new char[len+1];
   char *d = dst;

@@ -635,8 +635,8 @@ void Widget::draw()
     // check for completely blank widgets. We must not clip to their
     // area because it will break lots of programs that assumme these
     // can overlap any other widgets:
-    if (!image() && (!label() ||
-		     align() != ALIGN_CENTER && !(align()&ALIGN_INSIDE))) {
+    if (!image() &&
+	(!label() || (align() != ALIGN_CENTER && !(align()&ALIGN_INSIDE)))) {
       fl_did_clipping = this;
       return;
     }

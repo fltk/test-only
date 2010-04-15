@@ -291,8 +291,8 @@ FileBrowser::load(const char     *directory,// I - Directory to load
 
         icon = FileIcon::find(filename);
 	//printf("%s\n",files[i]->d_name);
-	if (!strcmp(files[i]->d_name, ".") || !strcmp(files[i]->d_name, "./") || 
-	    !show_hidden_ &&  files[i]->d_name[0]=='.' &&  strncmp(files[i]->d_name,"../",2)) 
+	if (!strcmp(files[i]->d_name, ".") || !strcmp(files[i]->d_name, "./") ||
+	    (!show_hidden_ &&  files[i]->d_name[0]=='.' &&  strncmp(files[i]->d_name,"../",2)))
 	  continue;
 	if ((icon && icon->type() == FileIcon::DIRECTORY) ||
 	     fltk::filename_isdir(filename)) {

@@ -244,7 +244,7 @@ static Widget* push_ = 0;
 
 int TabGroup::push(Widget *o) {
   if (push_ == o) return 0;
-  if (push_ && !push_->visible() || o && !o->visible())
+  if ((push_ && !push_->visible()) || (o && !o->visible()))
     redraw(DAMAGE_VALUE);
   push_ = o;
   return 1;

@@ -1531,7 +1531,7 @@ const char* WidgetType::array_name() const {
     if (!e) continue;
     if (strncmp(c,e,d-c)) continue;
     int n1 = strtol(e+(d-c)+1,0,0);
-    if (n1 > num || n1==num && sawthis) return 0;
+    if (n1 > num || (n1 == num && sawthis)) return 0;
   }
   static char buffer[128];
   strncpy(buffer,c,d-c+1);

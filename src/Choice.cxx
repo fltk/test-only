@@ -81,7 +81,7 @@ void Choice::draw() {
   r.move_r(-w1);
   // draw the little mark at the right:
   if (damage() & (DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
-    drawstyle(style(), flags() & ~FOCUSED | OUTPUT);
+    drawstyle(style(), (flags() & ~FOCUSED) | OUTPUT);
     Rectangle gr(r.r(), r.y(), w1, r.h());
     draw_glyph(ALIGN_BOTTOM|ALIGN_INSIDE, gr);
   }

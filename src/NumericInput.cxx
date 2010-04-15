@@ -201,7 +201,7 @@ int NumericInput::handle_arrow(int dir)
     // down to a smaller absolute value:
     // first check if all the digits are zero, if so we reverse the sign:
     for (p = q; ; p--) {
-      if (p < 0 || (at(p) < '0' || at(p) > '9') && at(p) != '.') {
+      if (p < 0 || ((at(p) < '0' || at(p) > '9') && at(p) != '.')) {
 	if (p >= 0 && at(p) == '-') {
 	  Input::replace(p, p+1, 0,0);
 	  q--;
@@ -222,7 +222,7 @@ int NumericInput::handle_arrow(int dir)
 	// delete leading zeros:
 	int g = p;
 	while (g > 0 && at(g-1)=='0') g--;
-	if (!(g > 0 && (at(g-1)>='0' && at(g-1)<='9' || at(g-1)=='.'))) {
+	if (!(g > 0 && ((at(g-1)>='0' && at(g-1)<='9') || at(g-1)=='.'))) {
 	  if (p < q) {
 	    Input::replace(g, p+1, 0, 0);
 	    q -= p-g+1;

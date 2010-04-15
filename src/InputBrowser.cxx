@@ -345,7 +345,7 @@ InputBrowser::draw() {
     m_input.set_damage(0);
   }
   if (damage()&(DAMAGE_ALL|DAMAGE_VALUE|DAMAGE_HIGHLIGHT)) {
-    Flags f = flags() & ~FOCUSED | OUTPUT;
+    Flags f = (flags() & ~FOCUSED) | OUTPUT;
     if (over_now) f |= HIGHLIGHT;
     drawstyle(style(),f);
 

@@ -104,7 +104,7 @@ void ValueInput::draw() {
   }
   if (damage() & (DAMAGE_ALL | DAMAGE_HIGHLIGHT)) {
     Flags f[2];
-    f[0] = f[1] = flags() & ~(HIGHLIGHT|FOCUSED) | OUTPUT;
+    f[0] = f[1] = (flags() & ~(HIGHLIGHT|FOCUSED)) | OUTPUT;
     if (which_highlight && flag(HIGHLIGHT))
       f[which_highlight-1] |= HIGHLIGHT;
     if (which_pushed && pushed())

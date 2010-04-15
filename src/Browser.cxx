@@ -1407,7 +1407,7 @@ int Browser::handle(int event) {
   case RELEASE:
     goto_mark(FOCUS);
     if (!item()) goto RELEASE;
-    if (openclose_drag == 1 || event_clicks() && item_is_parent()) {
+    if (openclose_drag == 1 || (event_clicks() && item_is_parent())) {
       // toggle the open/close state of this item:
       set_item_opened(!item_is_open());
       event_is_click(0); // make next click not be double
@@ -1523,7 +1523,7 @@ Widget* Browser::goto_index(const int* indexes, unsigned level) {
     return 0;
   }
   // go to the 0'th item if needed (otherwise go to the focus):
-  if (!indexes[0] && !level || layout_damage() || !goto_mark(FOCUS)) {
+  if (!(indexes[0] || level) || layout_damage() || !goto_mark(FOCUS)) {
     HERE.level = 0;
     HERE.open_level = 0;
     HERE.position = 0;

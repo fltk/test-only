@@ -55,10 +55,10 @@ bool xpmImage::fetch() {
 bool xpmImage::fetch(Image& i, const char * const * array) {
   int n, ncolors, chars_per_pixel, width, height;
 
-  n = sscanf(array[0],"%d %d %d %d",&width,&height,&ncolors,&chars_per_pixel);
-  if (n<4 || chars_per_pixel!=1 && chars_per_pixel!=2) return false;
-  i.setsize(width,height);
-  if (width<=0 || height<=0) return false;
+  n = sscanf(array[0], "%d %d %d %d", &width, &height, &ncolors, &chars_per_pixel);
+  if (n < 4 || (chars_per_pixel != 1 && chars_per_pixel != 2)) return false;
+  i.setsize(width, height);
+  if (width <= 0 || height <= 0) return false;
 
   // note that this array is unsigned char and skips the first line:
   const uchar*const* data = (const uchar*const*)(array+1);

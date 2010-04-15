@@ -211,7 +211,7 @@ class keyCompareFunctor : public AssociationFunctor {
 
       // turn letters into lower-case to match event_key()
       if (!(shortcut & 0xff00u))
-        shortcut = shortcut&0xffff0000u|tolower(shortcut&0xffu);
+        shortcut = (shortcut & 0xffff0000u) | tolower(shortcut & 0xffu);
 
       // we must match all bits in the keysym, all shift keys that
       // must be held down, and the main shift keys must match if off:

@@ -150,11 +150,11 @@ void PackedGroup::layout() {
 
     // A non-resizable widget will become the size of its items:
     int W = w();
-    if (r.w()<0 || !resizable() && !saw_horizontal) {
+    if (r.w()<0 || !(resizable() || saw_horizontal)) {
       W -= r.w()+(saw_vertical?spacing_:0);
     }
     int H = h();
-    if (r.h()<0 || !resizable() && !saw_vertical) {
+    if (r.h()<0 || !(resizable() || saw_vertical)) {
       H -= r.h()+(saw_horizontal?spacing_:0);
     }
     Widget::resize(W,H);

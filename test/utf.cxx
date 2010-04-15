@@ -30,9 +30,9 @@ Drawing *drawing;
 // Return color to draw behind given code
 Color code_color(unsigned ucs) {
   if (ucs < 32 || ucs==127 // ascii control characters
-      // || ucs >= 0x80 && ucs <= 0x9f // C1 control characters
-      || ucs >= 0xd800 && ucs <= 0xdfff // surrogate pairs
-      || ucs >= 0xfdd0 && ucs <= 0xfdef // noncharacters
+      || (ucs >= 0x80 && ucs <= 0x9f) // C1 control characters
+      || (ucs >= 0xd800 && ucs <= 0xdfff) // surrogate pairs
+      || (ucs >= 0xfdd0 && ucs <= 0xfdef) // noncharacters
       || (ucs&0xffff) >= 0xfffe // noncharacters
       ) return GRAY50;
   if (ucs & 0x100) return GRAY80;

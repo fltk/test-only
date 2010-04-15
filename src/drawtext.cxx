@@ -194,7 +194,7 @@ public:
   LeftSymbol() : Symbol("l") {}
   void _draw(const Rectangle&) const {}
   void _measure(int& w, int& h) const {
-    flags = flags&(~ALIGN_RIGHT)|ALIGN_LEFT;
+    flags = (flags & ~ALIGN_RIGHT) | ALIGN_LEFT;
     w = h = 0;
   }
 };
@@ -216,7 +216,7 @@ public:
   RightSymbol() : Symbol("r") {}
   void _draw(const Rectangle&) const {}
   void _measure(int& w, int& h) const {
-    flags = flags&(~ALIGN_LEFT)|ALIGN_RIGHT;
+    flags = (flags & ~ALIGN_LEFT) | ALIGN_RIGHT;
     w = h = 0;
   }
 };

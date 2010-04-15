@@ -366,10 +366,10 @@ void WindowType::newposition(WidgetType *o,int &X,int &Y,int &R,int &T) {
     int ox = 0; int oy = 0;
     fltk::Group* p = o->o->parent();
     while (p->parent()) {ox += p->x(); oy += p->y(); p = p->parent();}
-    if (drag&LEFT) if (X+ox==bx) X += dx; else if (X<bx+dx-ox) X = bx+dx-ox;
-    if (drag&BOTTOM) if (Y+oy==by) Y += dy; else if (Y<by+dy-oy) Y = by+dy-oy;
-    if (drag&RIGHT) if (R+ox==br) R += dx; else if (R>br+dx-ox) R = br+dx-ox;
-    if (drag&TOP) if (T+oy==bt) T += dy; else if (T>bt+dx-oy) T = bt+dx-oy;
+    if (drag&LEFT) {if (X+ox==bx) X += dx; else if (X<bx+dx-ox) X = bx+dx-ox;}
+    if (drag&BOTTOM) {if (Y+oy==by) Y += dy; else if (Y<by+dy-oy) Y = by+dy-oy;}
+    if (drag&RIGHT) {if (R+ox==br) R += dx; else if (R>br+dx-ox) R = br+dx-ox;}
+    if (drag&TOP) {if (T+oy==bt) T += dy; else if (T>bt+dx-oy) T = bt+dx-oy;}
   }
   if (R<X) {int n = X; X = R; R = n;}
   if (T<Y) {int n = Y; Y = T; T = n;}

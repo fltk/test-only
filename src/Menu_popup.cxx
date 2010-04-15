@@ -296,7 +296,7 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
 
   Item::set_style(widget, widget->parent()!=0);
   if (!widget->shortcut() ||
-      widget->style()->hide_underscore() && !event_state(ACCELERATOR) )
+      (widget->style()->hide_underscore() && !event_state(ACCELERATOR)))
     fl_hide_underscore = true;
 
   const bool horizontal = widget->horizontal();
@@ -714,7 +714,7 @@ int MWindow::handle(int event) {
       else if (p.level+1 < p.nummenus) forward(p, p.level+1);
       return 1;
     case RightKey:
-      if (p.hmenubar && (p.level<=0 || p.level==1 && p.nummenus==2))
+      if (p.hmenubar && (p.level<=0 || (p.level==1 && p.nummenus==2)))
 	forward(p, 0);
       else if (p.level+1 < p.nummenus) forward(p, p.level+1);
       return 1;

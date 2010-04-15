@@ -29,7 +29,7 @@
 #include <fltk/ask.h>
 #include <fltk/Preferences.h>
 #include <fltk/Browser.h>
-#include <string.h>
+#include <fltk/string.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -253,8 +253,8 @@ void FunctionType::write_code() {
     FluidType *child;
     char attr[256];
     if (attributes) {
-	strncpy(attr, attributes, 255);
-	strcat(attr, " ");
+      strlcpy(attr, attributes, sizeof(attr));
+      strlcat(attr, " ", sizeof(attr));
     } else
 	attr[0] = 0;
     for (child = first_child; child; child = child->next_brother)
@@ -531,11 +531,11 @@ void DeclType::write_code() {
     const char* c = name();
     if (!c) return;
     // handle putting #include or extern or typedef into decl:
-    if (!isalpha(*c) && *c != '~'
-	|| !strncmp(c,"extern",6) && isspace(c[6])
-	|| !strncmp(c,"class",5) && isspace(c[5])
-	|| !strncmp(c,"typedef",7) && isspace(c[7])
-	//    || !strncmp(c,"struct",6) && isspace(c[6])
+    if ((!isalpha(*c) && *c != '~')
+	|| (!strncmp(c,"extern",6) && isspace(c[6]))
+	|| (!strncmp(c,"class",5) && isspace(c[5]))
+	|| (!strncmp(c,"typedef",7) && isspace(c[7]))
+	//    || (!strncmp(c,"struct",6) && isspace(c[6]))
 	) {
 	if (public_) {
 	    char * s = strdup(c);
@@ -1029,10 +1029,10 @@ const char * NamespaceType::get_full_string() const {
 	    parent=parent->parent_namespace;
 	} while (parent);
 	
-	strncpy(sFull,list[nlist-1],sizeof(sFull));
+	strlcpy(sFull, list[nlist-1], sizeof(sFull));
 	for (i=nlist-2; i>=0;i--) {
-	    if (i<nlist-1) strncat(sFull,"::",sizeof(sFull));
-	    strncat(sFull,list[i],sizeof(sFull));
+	    if (i<nlist-1) strlcat(sFull, "::", sizeof(sFull));
+	    strlcat(sFull, list[i], sizeof(sFull));
 	}
     }
     return sFull;
