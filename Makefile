@@ -68,6 +68,7 @@ distclean: clean
 	$(RM) documentation/fltk.pdf
 	$(RM) documentation/fltk.ps
 	$(RM) -r documentation/fltk.d
+	$(RM) lib/*.*
 	for file in test/*.fl; do\
 		$(RM) test/`basename $file .fl`.cxx; \
 		$(RM) test/`basename $file .fl`.h; \
