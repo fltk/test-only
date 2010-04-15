@@ -73,7 +73,7 @@ public:
     set(3, &img0, f1, &img1, f2, &img2); 
   }
   MultiImage(const Symbol& img0, Flags f1, const Symbol& img1, Flags f2, const Symbol& img2, Flags f3, const Symbol& img3) {
-    set(4, &img0, f1, &img1, f2, &img2, f3); 
+    set(4, &img0, f1, &img1, f2, &img2, f3, &img3);
   }
   MultiImage(const Symbol& img0, Flags f1, const Symbol& img1, Flags f2, const Symbol& img2, Flags f3, const Symbol& img3,
 	     Flags f4, const Symbol& img4) {
