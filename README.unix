@@ -9,7 +9,9 @@ BUILDING AND INSTALLING FLTK UNDER LINUX AND UNIX
     are the X11, OpenGL (or Mesa), and JPEG header and library files.
     Make sure that they are in the standard include/library locations.
     If they aren't you need to define the CFLAGS, CXXFLAGS, and LDFLAGS
-    environment variables.
+    environment variables. Ubuntu users should make sure they install
+    the jpeg, png, and zlib "dev" packages to avoid fltk compiling it's
+    own copy of these.
 
     If you aren't using the GNU compilers or a compiler / platform
     supported by one of the build scripts, you will need to run
@@ -21,7 +23,7 @@ BUILDING AND INSTALLING FLTK UNDER LINUX AND UNIX
     You can get the exact setup you need. Options that you can pass to
     ./configure include:
 
-	--enable-xft            - Enable the Xft library (anti-aliased fonts)
+	--disable-xft           - Don't use Xft/XRender (anti-aliased fonts)
 	--enable-debug          - Enable debugging code & symbols
 	--enable-shared         - Enable generation of shared libraries
 
@@ -37,21 +39,6 @@ BUILDING AND INSTALLING FLTK UNDER LINUX AND UNIX
     To install the library, become root and type "make install".  This
     will copy the "fluid" executable to "bindir", the header files to
     "includedir"/fltk, and the library files to "libdir".
-
-
-MESA
-
-    On older Linux systems the best way to get OpenGL is to use Mesa.
-    FLTK has been tested with Mesa on several machines (and also with
-    "real" OpenGL on SGI machines).
-
-    Mesa is available at "http://www.mesa3d.org".
-
-    The configure script will not see Mesa unless it is installed as
-    either libGL or libMesaGL.  If you don't want to do this you will
-    have to edit config.h (set HAVE_GL to 1) and makeinclude (add the
-    libraries).
-
 
 For crosscompiling see also README.mingw32_cross
 

@@ -12,13 +12,13 @@ WHAT IS FLTK?
 
 LICENSING
 
-    FLTK comes with complete free source code. FLTK is (C)1998-2003 by
+    FLTK comes with complete free source code. FLTK is (C)1998-2010 by
     Bill Spitzak and others.  Use and distribution of FLTK is governed
     by the FLTK LIBRARY LICENSE (which is the GNU Library General
     Public License with an exception added that allows you to
     distribute statically-linked programs using the library without
     providing source code to the program or the library).  You can use
-    it in commercial software!
+    it in commercial and closed-source software!
 
 
 ON-LINE DOCUMENTATION
@@ -86,9 +86,9 @@ TRADEMARKS
 
 COPYRIGHT
 
-    FLTK is copyright (C) 1998-2003 by the following individuals:
+    FLTK is copyright (C) 1998-2010 by the following individuals:
 
-	Bill Spitzak <spitzak@cinenet.net>
+	Bill Spitzak <spitzak@gmail.com>
         Craig P. Earls <cpearls@mit.edu>
 	Curtis Edwards <curtise@fa.disney.com>
 	Gustavo Hime <hime@centroin.com.br>
