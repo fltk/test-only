@@ -166,7 +166,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="glu32.lib opengl32.lib glaux.lib ws2_32.lib msimg32.lib"
+				AdditionalDependencies="glu32.lib opengl32.lib ws2_32.lib msimg32.lib"
 				OutputFile="../../test/fractalsd.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
