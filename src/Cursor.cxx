@@ -109,7 +109,7 @@ FL_API fltk::Cursor *fltk::cursor(void *raw) {
 }
 
 #ifdef USE_XCURSOR
-#warning we assume PixelType = 6 ARGB32 in test it is true for color images
+//#warning we assume PixelType = 6 ARGB32 in test it is true for color images
 static XcursorImage* create_cursor_image(Image *cimg, int x, int y) {
   XcursorImage *xcimage = XcursorImageCreate(cimg->w(),cimg->h());
   XcursorPixel *dest;
@@ -278,7 +278,7 @@ FL_API fltk::Cursor *fltk::cursor(void *raw) {
 
 //thanx to gtk team for reference
 //http://www.dotnet247.com/247reference/msgs/13/66301.aspx
-#warning we assume PixelType = 6 ARGB32 in test it is true for color images
+//#warning we assume PixelType = 6 ARGB32 in test it is true for color images
 
 #include <stdio.h>
 
