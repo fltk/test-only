@@ -2594,3 +2594,7 @@ This fixes cursor positioning issues when wrap mode is on in
 TextEditor (FLTK 1.1 - STR #1227). This has also been discussed in
 fltk.bugs in Dec. 2008 (please refer to STR #2276), but not yet
 completely fixed.
+
+////////////////////////////////////////////////////////////////
+
+Fixed double free of ValueSlider's label (STR #2412)
