@@ -1751,6 +1751,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;
 
   case WM_PALETTECHANGED:
+    if (!window) break; // see STR #1902
     if ((HWND)wParam != hWnd) {
       CreatedWindow* i = CreatedWindow::find(window);
       if (fl_select_palette(i->dc)) UpdateColors(i->dc);
