@@ -311,14 +311,12 @@ static HCURSOR create_cursor_from_image(Image *img, int x, int y)
 
   ReleaseDC(NULL,hdc);
 
-  printf("Img format:%d\n",img->buffer_pixeltype());
   int w = img->w() , h = img->h();
   unsigned char* isrc = img->buffer();
   DWORD *lpdwPixel = (DWORD *)lpBits;
   for (int i=0;i<cw;i++)
     for (int j=0;j<ch;j++)
     {
-    fprintf(stderr,"%d %d\n",i,j);
     unsigned char* src = isrc + 4*(j + w*(cw - i -1));
     //*lpdwPixel = (src[0] << 24) | (src[1] << 16) | (src[2] << 8) | src[3];
     *lpdwPixel = (src[3] << 24) | (src[2] << 16) | (src[1] << 8) | src[0];
