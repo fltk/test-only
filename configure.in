@@ -67,6 +67,15 @@ OPTIM="${OPTIM:=}"
 
 AC_SUBST(OPTIM)
 
+dnl in case of cross-compiling mingw32 under linux we must change uname for Win32 GUI
+dnl run ./configure --host=i686-pc-ming32 try use X11 without change uname
+if test "x$cross_compiling" != xno ; then
+  case $host_alias in
+    *mingw*)
+    uname=MINGW
+    ;;
+  esac
+fi
 dnl OS-specific pre-tests...
 case $uname in
     CYGWIN*)
@@ -206,7 +215,7 @@ if test x$enable_shared = xyes; then
 
 			PICFLAG=0
 			SHAREDSUFFIX=".dll"
-			DSOCOMMAND="\$(CXX) -Wl,--out-implib,lib\$(DSONAME).a -shared -DFL_SHARED -DFL_LIBRARY -DFL_IMAGES_LIBRARY -DFL_GLUT_LIBRARY -DFL_FORMS_LIBRARY -DFL_GL_LIBRARY $DEBUGFLAG -o"
+			DSOCOMMAND="\$(CXX) -Wl,--out-implib,../lib/lib\$(DSONAME).a -shared -DFL_SHARED -DFL_LIBRARY -DFL_IMAGES_LIBRARY -DFL_GLUT_LIBRARY -DFL_FORMS_LIBRARY -DFL_GL_LIBRARY $DEBUGFLAG -o"
 	        CFLAGS="$CFLAGS -D_WIN32"
 			CPPFLAGS="$CPPFLAGS -D_WIN32"
 	        CXXFLAGS="$CXXFLAGS -D_WIN32"
@@ -707,7 +716,7 @@ case $uname in
 
   dnl Check for the XCursor library
   AC_CHECK_HEADER(
-	  X11/Xcursor/Xcursor.h,
+	  X11/Xcursor/XcursorSSS.h,
 	  AC_CHECK_LIB(Xcursor, XcursorImageLoadCursor,
 	  AC_DEFINE(USE_XCURSOR)
 	  LIBS="-lXcursor $LIBS",
