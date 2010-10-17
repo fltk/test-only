@@ -69,7 +69,7 @@ void TiledImage::_draw(const Rectangle& r) const
   Rectangle ir(iw,ih);
 
   while (-cy < cr.h()) {
-    ir.y(cr.x()-cy);
+    ir.y(cr.y()-cy);
     while (-cx < cr.w()) {
       ir.x(cr.x()-cx);
       image_->draw(ir);
