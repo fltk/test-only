@@ -181,20 +181,20 @@ if test x$enable_shared = xyes; then
             fi
 	    ;;
 	IRIX*)
-            DSOCOMMAND="\$(CXX) -Wl,-soname,\$@,-set_version,sgi1.1 \$(LDLIBS) -shared $DEBUGFLAG -o"
+            DSOCOMMAND="\$(CXX) -Wl,-soname,\$(DSONAME),-set_version,sgi1.1 \$(LDLIBS) -shared $DEBUGFLAG -o"
 	    if test "$libdir" != "/usr/lib" - a "$libdir" != "/usr/lib32"; then
 		    DSOLINK="-Wl,-rpath,$libdir"
             fi
 	    ;;
 	OSF1*)
-            DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
+            DSOCOMMAND="\$(CXX) -Wl,-soname,\$(DSONAME) \$(LDLIBS) -shared $DEBUGFLAG -o"
 	    if test "$libdir" != "/usr/lib" - a "$libdir" != "/usr/lib32"; then
 		    DSOLINK="-Wl,-rpath,$libdir"
             fi
 	    ;;
 	Linux* | *BSD*)
-#           DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
-            DSOCOMMAND="\$(CXX) \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
+            DSOCOMMAND="\$(CXX) -Wl,-soname,\$(DSONAME) \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
+#           DSOCOMMAND="\$(CXX) \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
 	    if test "$libdir" != "/usr/lib"; then
 		    DSOLINK="-Wl,-rpath,$libdir"
             fi
@@ -223,7 +223,7 @@ if test x$enable_shared = xyes; then
 		;;
 	*)
             AC_MSG_WARN(Shared libraries may not be supported.  Trying -shared option with compiler.)
-            DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
+            DSOCOMMAND="\$(CXX) -Wl,-soname,\$(DSONAME) \$(LDLIBS) -shared $DEBUGFLAG -o"
 	    ;;
     esac
 
