@@ -78,6 +78,7 @@ header files directly.
 #include "draw.h"
 
 extern FL_API Region	XRectangleRegion(int x, int y, int w, int h);
+const int XSTATE_MASK = 0x1fff;
 
 namespace fltk {
 

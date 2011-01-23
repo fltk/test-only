@@ -690,7 +690,7 @@ static void button_to_keysym( EventRef event ) {
   UInt32 chord;
   GetEventParameter( event, kEventParamMouseChord,
 		     typeUInt32, NULL, sizeof(UInt32), NULL, &chord );
-  e_state = ( e_state & 0xff0000 ) | state[ chord & 0x07 ];
+  e_state = ( e_state & ANY_BUTTON ) | state[ chord & 0x07 ];
 
   // make the stylus data produce something useful if there's no pen
   //if (no_stylus) {
@@ -792,7 +792,7 @@ static void mods_to_e_state( UInt32 mods )
   if ( mods & (controlKey|rightControlKey) ) state |= CTRL;
   if ( mods & (shiftKey|rightShiftKey) ) state |= SHIFT;
   if ( mods & alphaLock ) state |= CAPSLOCK;
-  e_state = ( e_state & 0xff000000 ) | state;
+  e_state = ( e_state & ANY_BUTTON ) | state;
   //printf( "State 0x%08x (%04x)\n", e_state, mods );
 }
 

@@ -180,7 +180,7 @@ enum {
   BUTTON1	= 0x01000000,	/*!< Left mouse button held down */
   BUTTON2	= 0x02000000,	/*!< Middle mouse button held down */
   BUTTON3	= 0x04000000,	/*!< Right mouse button held down */
-  ANY_BUTTON	= 0x7f000000, /*!< Any mouse button (up to 8) */
+  ANY_BUTTON	= 0xff000000, /*!< Any mouse button (up to 8) */
 #if defined(__APPLE__)
   ACCELERATOR	= CTRL,
   OPTION	= ALT,

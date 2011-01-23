@@ -1217,7 +1217,12 @@ static void set_event_xy(bool push) {
   e_x = xevent.xbutton.x;
   e_y_root = xevent.xbutton.y_root;
   e_y = xevent.xbutton.y;
-  e_state = (xevent.xbutton.state << 16) | extra_state;
+  // Only the 1st to the 13th bit in XButtonEvent::state are
+  // relevant to mouse buttons; the rest are a keymap mask,
+  // which can cause problems for FLTK's 6th, 7th and 8th mouse buttons.
+  // If we bitwise & the state member with XSTATE_MASK (defined in fltk/x11.h)
+  // we remove the conflict.
+  e_state = ((xevent.xbutton.state & XSTATE_MASK) << 16) | extra_state;
   event_time = xevent.xbutton.time;
   // turn off is_click if enough time or mouse movement has passed:
   static int px, py;
@@ -1548,7 +1553,7 @@ bool fltk::handle()
 
   case EnterNotify:
     set_event_xy(false);
-    e_state = xevent.xcrossing.state << 16;
+    e_state = (xevent.xcrossing.state & XSTATE_MASK) << 16;
     if (xevent.xcrossing.detail == NotifyInferior) {event=MOVE; break;}
 //      printf("EnterNotify window %s, xmousewin %s\n",
 //	   window ? window->label() : "NULL",
@@ -1569,7 +1574,7 @@ bool fltk::handle()
 
   case LeaveNotify:
     set_event_xy(false);
-    e_state = xevent.xcrossing.state << 16;
+    e_state = (xevent.xcrossing.state & XSTATE_MASK) << 16;
     if (xevent.xcrossing.detail == NotifyInferior) {event=MOVE; break;}
 //      printf("LeaveNotify window %s, xmousewin %s\n",
 //	   window ? window->label() : "NULL",

@@ -1591,7 +1591,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // Mask keeps the mouse button state:
     // Alt gets reported for the Alt-GR switch on foreign keyboards,
     // so we ignore it for WM_CHAR messages:
-    e_state = (e_state & 0xff000000) | shiftflags(uMsg==WM_CHAR);
+    e_state = (e_state & ANY_BUTTON) | shiftflags(uMsg==WM_CHAR);
     if (lParam & (1<<31)) { // key up events.
       e_is_click = (recent_keysym == e_keysym);
       recent_keysym = 0;
