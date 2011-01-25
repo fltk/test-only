@@ -1475,7 +1475,7 @@ int Browser::handle(int event) {
     break;
 
   case MOUSEWHEEL:
-    if (event_dx()) hscrollbar.send(event);
+    if (event_key() == WheelLeft || event_key() == WheelRight) return hscrollbar.send(event);
     return scrollbar.send(event);
 #if 0
     int n = event_dy() * Style::wheel_scroll_lines;

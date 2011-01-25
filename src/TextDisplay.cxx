@@ -2231,6 +2231,7 @@ void TextDisplay::update_h_scrollbar(int longestvline) {
   if (longestvline==0) longestvline = longest_vline();
   int sliderMax = max(longestvline, text_area.w() + horiz_offset_);
   hscrollbar->value(horiz_offset_, text_area.w(), 0, sliderMax);
+  hscrollbar->linesize(3);
   /*if (longestvline < text_area.w()) {
     hscrollbar->deactivate();
   } else {
@@ -3106,7 +3107,11 @@ int TextDisplay::handle(int event) {
   }
 
   case MOUSEWHEEL:
-    return vscrollbar->handle(event);
+    if (event_key() == WheelUp || event_key() == WheelDown) {
+      return vscrollbar->handle(event);
+    } else {
+      return hscrollbar->handle(event);
+    }
 
   case FOCUS:
   case UNFOCUS:

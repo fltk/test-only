@@ -505,8 +505,11 @@ int ScrollGroup::handle(int event) {
     {
       if ( (scrollbar.visible()||hscrollbar.visible())
            && !fltk::event_state( fltk::ALT ) ) {
-        hscrollbar.send(event);
-        return scrollbar.send(event);
+        if (event_key() == WheelLeft || event_key() == WheelRight) {
+          return hscrollbar.send(event);
+        } else {
+          return scrollbar.send(event);
+	}
       } else {
         return Group::handle( event );
       }

@@ -1243,6 +1243,8 @@ static void set_event_xy(bool push) {
 
 static unsigned wheel_up_button = 4;
 static unsigned wheel_down_button = 5;
+static unsigned wheel_left_button = 6;
+static unsigned wheel_right_button = 7;
 
 int fl_actual_keysym;
 
@@ -1515,6 +1517,12 @@ bool fltk::handle()
     } else if (n == wheel_down_button) {
       e_dy = +1;
       event = MOUSEWHEEL;
+    } else if (n == wheel_left_button) {
+      e_dx = -1;
+      event = MOUSEWHEEL;
+    } else if (n == wheel_right_button) {
+      e_dx = +1;
+      event = MOUSEWHEEL;
     } else {
       // turn off is_click if enough time or mouse movement has passed:
       if (e_is_click == e_keysym) {
@@ -1545,7 +1553,7 @@ bool fltk::handle()
     unsigned n = xevent.xbutton.button;
     e_keysym = n;
     set_event_xy(false);
-    //if (n == wheel_up_button || n == wheel_down_button) break;
+    if (n == wheel_up_button || n == wheel_down_button || n == wheel_left_button || n == wheel_right_button) return 1;
     e_state &= ~BUTTON(n);
     event = RELEASE;}
     set_stylus_data();

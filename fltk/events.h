@@ -81,9 +81,13 @@ enum {
   buttons on Windows.
 */
 enum {
-  LeftButton	= 1,		/*!< PUSH/RELEASE set event_key to this */
-  MiddleButton	= 2,		/*!< PUSH/RELEASE set event_key to this */
-  RightButton	= 3,		/*!< PUSH/RELEASE set event_key to this */
+  LeftButton	= 1,		/*!< PUSH/RELEASE sets event_key to this */
+  MiddleButton	= 2,		/*!< PUSH/RELEASE sets event_key to this */
+  RightButton	= 3,		/*!< PUSH/RELEASE sets event_key to this */
+  WheelUp	= 4,		/*!< MOUSEWHEEL sets event_key to this */
+  WheelDown	= 5,		/*!< MOUSEWHEEL sets event_key to this */
+  WheelLeft	= 6,		/*!< MOUSEWHEEL sets event_key to this */
+  WheelRight	= 7,		/*!< MOUSEWHEEL sets event_key to this */
   SpaceKey	= 32,		/*!< Same as ' ' or 32 */
   // 'a'-'z', and all punctuation go here in numerical order
   BackSpaceKey	= 0xff08,	/*!< Backspace */
