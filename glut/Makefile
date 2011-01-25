@@ -109,7 +109,7 @@ include makedepend
 
 ../lib/fltk2_glut.dll: $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS) $(LOCAL_IMAGELIBS) $(LINKFLTK) $(GLDLIBS)
+	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS) $(LOCAL_IMAGELIBS) $(LINKFLTKGL) $(GLDLIBS)
 	cp ../lib/fltk2_glut.dll ./
 
 #
