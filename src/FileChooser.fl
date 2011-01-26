@@ -62,6 +62,8 @@ namespace fltk {open
     decl {void update_favorites();} {}
     decl {void update_preview();} {}
     decl {int favorites_showing;} {}
+    decl {void activate_okButton_if_file();} {}
+    decl {void directory(const char *d, bool);} {}
     Function {FileChooser(const char *d, const char *p, int t, const char *title)} {open
     } {
       {fltk::Window} window {

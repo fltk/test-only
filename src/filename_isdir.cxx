@@ -71,6 +71,12 @@ bool fltk::filename_isdir(const char* name) {
   return (last_stat.st_mode&0170000)==0040000;
 }
 
+/** Returns true if the file exists and is a regular file. */
+bool fltk::filename_isfile(const char* name) {
+  if (!fill_stat(name)) return false;
+  return (last_stat.st_mode&0170000)==0100000;
+}
+
 /** Returns the size of the file in bytes. Returns zero if it does not exist.*/
 FL_FILESIZE_T fltk::filename_size(const char* name) {
   if (!fill_stat(name)) return 0;

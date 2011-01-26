@@ -55,7 +55,11 @@ public:
   void			errorcolor(Color c) { errorcolor_ = c; }
   int			text(const char*);
   int			text(const char*, int);
-  const char *		text() { return Input::text(); }
+  const char *		text() const { return Input::text(); }
+
+  int		value(const char* v) { return text(v); }
+  int		value(const char* v, int n) { return text(v,n); }
+  const char*	value() const { return text(); }
 };
 
 }

@@ -27,6 +27,7 @@
 //
 
 #include <fltk/FileInput.h>
+#include <fltk/filename.h>
 #include <fltk/Window.h>
 #include <fltk/draw.h>
 #include <fltk/damage.h>
@@ -333,13 +334,33 @@ FileInput::handle_button(int event)		// I - Event
     }
 
     if (i < 0) {
+	char c = *start; // possibly start == basename
+	const char *basename = 0;
+	if (!fltk::filename_isdir(newtext))
+	    if (!*(basename = fltk::filename_name(newtext)))
+		basename = 0;
+
 	// Found the end; truncate the text and update the buttons...
 	*start = '\0';
-	text(newtext, start - newtext);
 
-	// Then do the callbacks, if necessary...
-	set_changed();
-	if (when() & WHEN_CHANGED) do_callback();
+	// Prevent users from cursing us: keep basename, if not a directory
+	if (basename) {
+	    *start = c;
+	    memmove(start, basename, strlen(basename)+1);
+	    // Should have some 'ftype_' field to reflect the caller's
+	    // intentions, but for now we get along without...
+	    //if (!(ftype_ & CREATE) && !fltk::filename_isfile(newtext))
+		//*start = 0;
+	    //else
+		if (start == basename) i = 0; // unchanged!
+	}
+	if (i < 0) {
+	    text(newtext);
+
+	    // Then do the callbacks, if necessary...
+	    set_changed();
+	    if (when() & WHEN_CHANGED) do_callback();
+	}
     }
 
     return 1;

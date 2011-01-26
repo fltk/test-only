@@ -26,17 +26,19 @@
 //
 // Contents:
 //
-//   FileChooser::count()             - Return the number of selected files.
-//   FileChooser::directory()         - Set the directory in the file chooser.
-//   FileChooser::filter()            - Set the filter(s) for the chooser.
-//   FileChooser::newdir()            - Make a new directory.
-//   FileChooser::value()             - Return a selected filename.
-//   FileChooser::rescan()            - Rescan the current directory.
-//   FileChooser::favoritesButtonCB() - Handle favorites selections.
-//   FileChooser::fileListCB()        - Handle clicks (and double-clicks)
-//                                          in the Fl_File_Browser.
-//   FileChooser::fileNameCB()        - Handle text entry in the FileBrowser.
-//   FileChooser::showChoiceCB()      - Handle show selections.
+//   FileChooser::count()                     - Return the number of selected files.
+//   FileChooser::directory()                 - Set the directory in the file chooser.
+//   FileChooser::filter()                    - Set the filter(s) for the chooser.
+//   FileChooser::newdir()                    - Make a new directory.
+//   FileChooser::value()                     - Return a selected filename.
+//   FileChooser::rescan()                    - Rescan the current directory.
+//   FileChooser::favoritesButtonCB()         - Handle favorites selections.
+//   FileChooser::fileListCB()                - Handle clicks (and double-clicks)
+//                                                  in the FileBrowser.
+//   FileChooser::fileNameCB()                - Handle text entry in the FileBrowser.
+//   FileChooser::showChoiceCB()              - Handle show selections.
+//   FileChooser::activate_okButton_if_file() - Ungrey the OK button if the user
+//                                                  chooses a file
 //   compare_dirnames()                   - Compare two directory names.
 //   quote_pathname()                     - Quote a pathname for a menu.
 //   unquote_pathname()                   - Unquote a pathname from a menu.
@@ -116,12 +118,13 @@ static void	quote_pathname(char *, const char *, int);
 static void	unquote_pathname(char *, const char *, int);
 
 
-//
-// 'FileChooser::count()' - Return the number of selected files.
-//
+/**
+  Calculate the number of selected files.
+  
+  \return the number of selected files.
+*/
 
-int				// O - Number of selected files
-FileChooser::count() {
+int FileChooser::count() {
   int		i;		// Looping var
   int		fcount;		// Number of selected files
   const char	*filename;	// Filename in input field or list
@@ -149,18 +152,32 @@ FileChooser::count() {
   else return 1;
 }
 
+/**
+  Set the directory in the file chooser.
 
-//
-// 'FileChooser::directory()' - Set the directory in the file chooser.
-//
+  Modify the FileChooser's current directory.
 
-void
-FileChooser::directory(const char *d)// I - Directory to change to
-{
+  \param d The directory to change to
+  \return void
+  \see directory(const char* d, bool f)
+*/
+
+void FileChooser::directory(const char *d) {
+  return directory(d, true);
+}
+
+/**
+  Modifies the FileChooser's directory, with the option to modify the displayed "name" field
+
+  Updates the FileChooser's current directory by making the filename absolute, stripping trailing '..' or '.'. This also keeps the 'suggested filename' of a file as directories are traversed.
+  
+  \param d A const char* containing the FileChooser's new directory
+  \param f A boolean representing whether or not to update the displayed filename
+  \return void
+*/
+
+void FileChooser::directory(const char *d, bool f) {
   char	*dirptr;			// Pointer into directory
-
-
-//  printf("FileChooser::directory(\"%s\")\n", d == NULL ? "(null)" : d);
 
   // NULL == current directory
   if (d == NULL)
@@ -180,7 +197,6 @@ FileChooser::directory(const char *d)// I - Directory to change to
     d = fixpath;
   }
 #endif // WIN32
-
   if (d[0] != '\0')
   {
     // Make the directory absolute...
@@ -192,6 +208,7 @@ FileChooser::directory(const char *d)// I - Directory to change to
       fltk::filename_absolute(directory_, sizeof(directory_), d);
     else
       strlcpy(directory_, d, sizeof(directory_));
+
 
     // Strip any trailing slash...
     dirptr = directory_ + strlen(directory_) - 1;
@@ -218,6 +235,24 @@ FileChooser::directory(const char *d)// I - Directory to change to
   else
     directory_[0] = '\0';
 
+  if (f) {
+    // Update the current filename accordingly...
+    char* pathname = new char [sizeof(directory_)];	// New pathname for filename field
+
+    strlcpy(pathname, directory_, sizeof(directory_));
+    if (pathname[0] && pathname[strlen(pathname) - 1] != '/')
+      strlcat(pathname, "/", sizeof(pathname));
+    // Prevent users from cursing us: keep basename, if not a directory
+    if (!fltk::filename_isdir(fileName->text())) {
+      dirptr = strchr(pathname, 0);
+      strlcat(pathname, fltk::filename_name(fileName->text()), sizeof(pathname));
+      if (!(type_ & CREATE) && !fltk::filename_isfile(pathname))
+        *dirptr = 0;
+    }
+    fileName->text(pathname);
+	delete [] pathname;
+  }
+
   if (shown()) {
     // Rescan the directory...
     rescan();
@@ -225,13 +260,15 @@ FileChooser::directory(const char *d)// I - Directory to change to
 }
 
 
-//
-// 'FileChooser::favoritesButtonCB()' - Handle favorites selections.
-//
+/**
+  'FileChooser::favoritesButtonCB()' - Handle favorites selections.
+  
+   This function deals with adding and/or removing favorites from the FileChooser's drop down menu. It allows a user to quickly navigate amongst pre-set or personalised favorite directories.
 
-void
-FileChooser::favoritesButtonCB()
-{
+   \return void
+*/
+
+void FileChooser::favoritesButtonCB() {
   int		v;			// Current selection
   char		pathname[1024],		// Pathname
 		menuname[2048];		// Menu name
@@ -268,14 +305,17 @@ FileChooser::favoritesButtonCB()
 }
 
 
-//
-// 'FileChooser::favoritesCB()' - Handle favorites dialog.
-//
+/**
+  Handle the favorites window
 
-void
-FileChooser::favoritesCB(Widget *w)
-					// I - Widget
-{
+  This function creates, populates and navigates the favorites window, opened when a user clicks "Manage Favorites". It allows users to shuffle their favorites in the order of most-used or remove favorites.
+
+  \param w The clicked-on (or used) widget
+  \see update_favorites()
+  \return void
+*/
+
+void FileChooser::favoritesCB(Widget *w) {
   int		i;			// Looping var
   char		name[32],		// Preference name
 		pathname[1024];		// Directory in list
@@ -390,14 +430,15 @@ FileChooser::favoritesCB(Widget *w)
 }
 
 
-//
-// 'FileChooser::fileListCB()' - Handle clicks (and double-clicks) in the
-//                                   FileBrowser.
-//
+/**
+  Handle clicks (and double-clicks) in the FileBrowser.
 
-void
-FileChooser::fileListCB()
-{
+  This function interprets single clicks and double clicks - a single click selects a file whereas a double click either traverses into a directory or assumes the user has selected the file they want
+
+  \return void
+*/
+
+void FileChooser::fileListCB() {
   char	*filename,			// New filename
 	pathname[1024];			// Full pathname to file
 
@@ -421,7 +462,7 @@ FileChooser::fileListCB()
 #endif /* WIN32 || __EMX__ */
     {
       // Change directories...
-      directory(pathname);
+      directory(pathname, true);
 
       // Reset the click count so that a click in the same spot won't
       // be treated as a triple-click.  We use a value of -1 because
@@ -430,15 +471,11 @@ FileChooser::fileListCB()
       //fltk::event_clicks(-1); // fabien: doesn't seems to be useful
       fileList->deselect();	// after directory the file is already 
 				// selected from previous state so deselect it
-    }
-    else
-    {
+    } else {
       // Hide the window - picked the file...
       window->hide();
     }
-  }
-  else
-  {
+  } else {
     // Check if the user clicks on a directory when picking files;
     // if so, make sure only that item is selected...
     filename = pathname + strlen(pathname) - 1;
@@ -464,7 +501,10 @@ FileChooser::fileListCB()
     if (*filename == '/') *filename = '\0';
 
 //    puts("Setting fileName from fileListCB...");
-    fileName->value(pathname);
+    if (fltk::filename_isdir(pathname))
+      directory(pathname, true);
+    else
+      fileName->value(pathname);
 
     // Update the preview box...
     fltk::remove_timeout((TimeoutHandler)previewCB, this);
@@ -474,7 +514,7 @@ FileChooser::fileListCB()
     if (callback_) (*callback_)(this, data_);
 
     // Activate the OK button as needed...
-    if (!fltk::filename_isdir(pathname) || (type_ & DIRECTORY))
+    if (!fltk::filename_isdir(fileName->text()) || (type_ & DIRECTORY))
       okButton->activate();
     else
       okButton->deactivate();
@@ -482,9 +522,13 @@ FileChooser::fileListCB()
 }
 
 
-//
-// 'FileChooser::fileNameCB()' - Handle text entry in the FileBrowser.
-//
+/**
+  Handle text entry in the FileChooser.
+
+  If a user tries to manually enter a path into the FileChooser's input box, instead of using the FileChooser to navigate, this function will make sure what is entered is in line with what is required by the FileChooser - for instance, it expands ~ to the user's home directory. It also attempts to offer tabcompletion for paths and files.
+
+  \return void
+*/
 void FileChooser::fileNameCB() {
   char		*filename,	// New filename
 		*slash,		// Pointer to trailing slash
@@ -541,7 +585,7 @@ void FileChooser::fileNameCB() {
     if (fltk::filename_isdir(pathname) &&
 	compare_dirnames(pathname, directory_)) {
 #endif /* WIN32 || __EMX__ */
-      directory(pathname);
+      directory(pathname, false);
     } else if ((type_ & CREATE) || access(pathname, 0) == 0) {
       if (!fltk::filename_isdir(pathname) || (type_ & DIRECTORY)) {
 	// Update the preview box...
@@ -580,7 +624,7 @@ void FileChooser::fileNameCB() {
       int p = fileName->position();
       int m = fileName->mark();
 
-      directory(pathname);
+      directory(pathname, false);
 
       if (filename[0]) {
 	char tempname[1024];
@@ -663,33 +707,28 @@ void FileChooser::fileNameCB() {
     }
 
     // See if we need to enable the OK button...
-    if (((type_ & CREATE) || !access(fileName->text(), 0)) &&
-        (!fltk::filename_isdir(fileName->text()) || (type_ & DIRECTORY))) {
-      okButton->activate();
-    } else {
-      okButton->deactivate();
-    }
+    activate_okButton_if_file();
+
   } else {
     // fltk::DeleteKey or fltk::BackSpace
     fileList->deselect(0);
     fileList->redraw();
-    if (((type_ & CREATE) || !access(fileName->text(), 0)) &&
-        (!fltk::filename_isdir(fileName->text()) || (type_ & DIRECTORY))) {
-      okButton->activate();
-    } else {
-      okButton->deactivate();
-    }
+    activate_okButton_if_file();
   }
 }
 
 
-//
-// 'FileChooser::filter()' - Set the filter(s) for the chooser.
-//
+/**
+  Set the filter(s) for the FileChooser.
 
-void
-FileChooser::filter(const char *p)		// I - Pattern(s)
-{
+  This function allows the FileChooser to use globs and (eventually) regular expressions to select multiple files of the same filetype or same filename.
+
+  \param p This const char* represents the pattern to match files against.
+  \todo Full Regex matchings
+  \return void
+*/
+
+void FileChooser::filter(const char *p) {
   char		*copyp,				// Copy of pattern
 		*start,				// Start of pattern
 		*end;				// End of pattern
@@ -731,13 +770,16 @@ FileChooser::filter(const char *p)		// I - Pattern(s)
 }
 
 
-//
-// 'FileChooser::newdir()' - Make a new directory.
-//
+/**
+  Make a new directory.
+  
+  This function creates a new directory on the user's computer from inside the FileChooser. It also allows the user to name this directory.
+  After this directory is created, the user is moved into this directory.
 
-void
-FileChooser::newdir()
-{
+  \return void
+*/
+
+void FileChooser::newdir() {
   const char	*dir;		// New directory name
   char		pathname[1024];	// Full path of directory
 
@@ -773,15 +815,19 @@ FileChooser::newdir()
 }
 
 
-//
-// 'FileChooser::preview()' - Enable or disable the preview tile.
-//
+/**
+  Enable or disable the preview tile.
+  
+  The preview tile allows a user to view a 'snapshot' of the file they have currently selected. This loads all forms of files, from images to source code to pdf documents, but requires a SharedImage handler to correctly decypher the file data and then display it as an image.
 
-void
-FileChooser::preview(int e)// I - 1 = enable preview, 0 = disable preview
-{
-    previewButton->value(e ? true : false);
-  prefs_.set("preview", e);
+  \param e A boolean flag representing whether or not to turn previews on. False turns them off, true turns them on.
+  \see SharedImage::add_handler()
+  \return void
+*/
+
+void FileChooser::preview(bool e) {
+  previewButton->value(e);
+  prefs_.set("preview", e ? 1 : 0);
 
   Group *p = previewBox->parent();
   if (e) {
@@ -805,38 +851,31 @@ FileChooser::preview(int e)// I - 1 = enable preview, 0 = disable preview
 }
 
 
-//
-// 'FileChooser::previewCB()' - Timeout handler for the preview box.
-//
+/**
+  Timeout handler for the preview box.
 
-void
-FileChooser::previewCB(FileChooser *fc) {	// I - File chooser
+  This function calls update_preview on the FileChooser after a time lapse of half a second from when a file is first selected
+
+  \param fc Which FileChooser to use
+  \see update_preview()
+  \return void
+*/
+
+void FileChooser::previewCB(FileChooser *fc) {
   fc->update_preview();
 }
 
 
-//
-// 'FileChooser::rescan()' - Rescan the current directory.
-//
+/**
+  Rescan the current directory.
+  
+  This function re-loads the current directory, scanning for new files or folders
 
-void
-FileChooser::rescan()
-{
-  char	pathname[1024];		// New pathname for filename field
+  \return void
+*/
 
-
-  // Clear the current filename
-  strlcpy(pathname, directory_, sizeof(pathname));
-  if (pathname[0] && pathname[strlen(pathname) - 1] != '/') {
-    strlcat(pathname, "/", sizeof(pathname));
-  }
-//  puts("Setting fileName in rescan()");
-  fileName->text(pathname);
-
-  if (type_ & DIRECTORY)
-    okButton->activate();
-  else
-    okButton->deactivate();
+void FileChooser::rescan() {
+  activate_okButton_if_file();
 
   // Build the file list...
   fileList->load(directory_, sort);
@@ -846,13 +885,16 @@ FileChooser::rescan()
 }
 
 
-//
-// 'FileChooser::showChoiceCB()' - Handle show selections.
-//
+/**
+  Handle "Show" menu selections.
 
-void
-FileChooser::showChoiceCB()
-{
+  This function handles all the options in the drop-down "Show" menu. This also allows users to enter their own manual filename patterns or select from ones previously used.
+
+  \see filter(const char* p)
+  \return void
+*/
+
+void FileChooser::showChoiceCB() {
   const char	*item,			// Selected item
 		*patstart;		// Start of pattern
   char		*patend;		// End of pattern
@@ -886,13 +928,16 @@ FileChooser::showChoiceCB()
 }
 
 
-//
-// 'FileChooser::update_favorites()' - Update the favorites menu.
-//
+/**
+  Update the favorites menu.
+  
+  This function allows users to add or remove from the favorites menu
 
-void
-FileChooser::update_favorites()
-{
+  \see favoritesCB()
+  \return void
+*/
+
+void FileChooser::update_favorites() {
   if(favorites_showing) {
 	favoritesButton->show();
   } else {
@@ -932,13 +977,15 @@ FileChooser::update_favorites()
 }
 
 
-//
-// 'FileChooser::update_preview()' - Update the preview box...
-//
+/**
+  Update the preview box
 
-void
-FileChooser::update_preview()
-{
+  This function updates the contents of the preview box with an image, or failing that attempts to load the first 1 kilobyte of a file (if it contains printable characters). Failing this, the function just prints a large "?" in the place of the file to be previewed.
+
+  \return void
+*/
+
+void FileChooser::update_preview() {
   const char		*filename;	// Current filename
   SharedImage	*image,		// New image
 			*oldimage;	// Old image
@@ -1038,13 +1085,17 @@ FileChooser::update_preview()
 }
 
 
-//
-// 'FileChooser::value()' - Return a selected filename.
-//
+/**
+  Return a selected filename.
 
-const char *			// O - Filename or NULL
-FileChooser::value(int f)	// I - File number
-{
+  Finds and then returns the fth file in the directory, where f is the number of the file. 
+  If the value of f is higher than the amount of files in the directory, this function returns either the value in the filename field, or failing that, NULL
+
+  \param f The 'f'th file in the directory
+  \return The 'f'th filename in the directory. If f is too large, it returns the file listed in the filename field, or NULL if there is no file in the filename field and the 'f'th file doesn't exist.
+*/
+
+const char * FileChooser::value(int f) {
   int		i;		// Looping var
   int		fcount;		// Number of selected files
   const char	*name;		// Current filename
@@ -1084,14 +1135,18 @@ FileChooser::value(int f)	// I - File number
 }
 
 
-//
-// 'FileChooser::value()' - Set the current filename.
-//
+/** 
+  Set the current filename.
 
-void
-FileChooser::value(const char *filename)
-					// I - Filename + directory
-{
+  Takes the passed filename and sets the current directory (and filename) to this name. 
+  If no name is passed, this function essentially just deactivates the OK button.
+
+  \param filename The filename and/or directory
+  \see directory(const char* d, bool f)
+  \return void
+*/
+
+void FileChooser::value(const char *filename) {
   int	i,				// Looping var
   	fcount;				// Number of items in list
   char	*slash;				// Directory separator
@@ -1103,7 +1158,7 @@ FileChooser::value(const char *filename)
   // See if the filename is the "My System" directory...
   if (filename == NULL || !filename[0]) {
     // Yes, just change the current directory...
-    directory(filename);
+    directory(filename, false);
     fileName->value("");
     okButton->deactivate();
     return;
@@ -1125,25 +1180,26 @@ FileChooser::value(const char *filename)
 
   // See if there is a directory in there...
   fltk::filename_absolute(pathname, sizeof(pathname), filename);
-  char dir[1024]="";
-  strlcpy(dir,pathname,sizeof(dir));
-  if ((slash = strrchr(dir, '/')) != NULL) {
+  if ((slash = strrchr(pathname, '/')) != NULL) {
     // Yes, change the display to the directory... 
-    if (!fltk::filename_isdir(dir)) *slash++ = '\0';
+    if (fltk::filename_isdir(pathname))
+      slash = pathname;
+    else
+      *slash++ = 0;
 
-    directory(dir);
-    if (!shown()) fileList->load(dir);
-    if (*slash == '/') slash = dir;
+    directory(pathname, false);
+    if (!shown()) fileList->load(pathname);
+    if (slash > pathname) {
+      --slash; *slash = '/'; slash++;
+    }
   } else {
-    directory(".");
-    slash = dir;
+    directory(".", false);
+    slash = pathname;
   }
 
   // Set the input field to the absolute path...
-  if (slash > dir) slash[-1] = '/';
-
-  if (slash && *slash) fileName->value(pathname);
-  fileName->position(0, strlen(dir));
+  fileName->value(pathname);
+  fileName->position(0, strlen(pathname));
   okButton->activate();
 
   // Then find the file in the file list and select it...
@@ -1165,6 +1221,20 @@ FileChooser::value(const char *filename)
       okButton->activate();
       break;
     }
+}
+
+
+/**
+  Activates the OK button if a file is selected.
+
+  \return void
+*/
+void FileChooser::activate_okButton_if_file() {
+    if (((type_ & CREATE) || !access(fileName->text(), 0)) &&
+        (!fltk::filename_isdir(fileName->text()) || (type_ & DIRECTORY)))
+      okButton->activate();
+    else
+      okButton->deactivate();
 }
 
 

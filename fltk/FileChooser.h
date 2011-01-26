@@ -43,6 +43,8 @@ private:
   void update_favorites();
   void update_preview();
   int favorites_showing;
+  void activate_okButton_if_file();
+  void directory(const char *d, bool);
 public:
   FileChooser(const char *d, const char *p, int t, const char *title);
 private:
@@ -123,7 +125,7 @@ public:
   const char * label();
   void ok_label(const char *l);
   const char * ok_label();
-  void preview(int e);
+  void preview(bool e);
   int preview() const { return previewButton->value(); };
   void rescan();
   void show();
