@@ -184,6 +184,10 @@ enum {
   BUTTON1	= 0x01000000,	/*!< Left mouse button held down */
   BUTTON2	= 0x02000000,	/*!< Middle mouse button held down */
   BUTTON3	= 0x04000000,	/*!< Right mouse button held down */
+  BUTTON4	= 0x08000000,	/*!< Mouse wheel scroll up */
+  BUTTON5	= 0x10000000,	/*!< Mouse wheel scroll down */
+  BUTTON6	= 0x20000000,	/*!< Mouse wheel scroll left */
+  BUTTON7	= 0x40000000,	/*!< Mouse wheel scroll right */
   ANY_BUTTON	= 0xff000000, /*!< Any mouse button (up to 8) */
 #if defined(__APPLE__)
   ACCELERATOR	= CTRL,

@@ -38,6 +38,7 @@
 #include <fltk/utf.h>
 #include <fltk/Monitor.h>
 #include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <limits.h>
@@ -112,6 +113,10 @@ using namespace fltk;
 
 #ifndef WM_MOUSEWHEEL
 #  define WM_MOUSEWHEEL 0x020a
+#endif
+
+#ifndef WM_MOUSEHWHEEL
+#  define WM_MOUSEHWHEEL 0x020e
 #endif
 
 #ifndef WHEEL_DELTA
@@ -1648,13 +1653,37 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return 0;}
 
   case WM_MOUSEWHEEL: {
-    static int delta = 0; // running total of all motion
-    delta -= (SHORT)(HIWORD(wParam));
-    if ((e_dy = delta / WHEEL_DELTA)) {
-      delta -= e_dy * WHEEL_DELTA;
+    static int ydelta = 0; // running total of all motion
+    ydelta -= (SHORT)(HIWORD(wParam));
+    if ((e_dy = ydelta / WHEEL_DELTA)) {
+      if ((SHORT)(HIWORD(wParam)) < 0) {
+        e_keysym = WheelUp;
+	e_state |= BUTTON4;
+      } else {
+        e_keysym = WheelDown;
+	e_state |= BUTTON5;
+      }
+      ydelta -= e_dy * WHEEL_DELTA;
       handle(MOUSEWHEEL, xmousewin ? xmousewin : window);
     }
     return 0;
+  }
+
+  case WM_MOUSEHWHEEL: {
+	  puts("MOUSEHWHEEL!");
+    static int xdelta = 0;
+    xdelta -= (SHORT)(HIWORD(wParam));
+    if ((e_dx = xdelta / WHEEL_DELTA)) {
+      if ((SHORT)(HIWORD(wParam)) < 0) {
+        e_keysym = WheelLeft;
+	e_state |= BUTTON6;
+      } else {
+        e_keysym = WheelRight;
+	e_state |= BUTTON7;
+      }
+      xdelta -= e_dx * WHEEL_DELTA;
+      handle(MOUSEWHEEL, xmousewin ? xmousewin : window);
+    }
   }
 
   case WM_GETMINMAXINFO:
