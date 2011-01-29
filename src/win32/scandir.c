@@ -22,7 +22,6 @@
 // Emulation of posix scandir() call
 // This source file is #include'd by scandir.c
 // THIS IS A C FILE! DO NOT CHANGE TO C++!!!
-
 #include <string.h>
 #include <windows.h>
 #include <stdlib.h>
@@ -41,22 +40,40 @@ struct dirent { char d_name[1]; };
 int scandir(const char *dirname, struct dirent ***namelist,
     int (*select)(struct dirent *),
     int (*compar)(struct dirent **, struct dirent **)) {
-  char *d;
-  WIN32_FIND_DATA find;
+  WIN32_FIND_DATAW find;
   HANDLE h;
-  int nDir = 0, NDir = 0;
+  int nDir = 0, NDir = 0, len;
   struct dirent **dir = 0, *selectDir;
   unsigned long ret;
-  char findIn[MAX_PATH];
+  char *findIn, *d, *temp;
+  unsigned widelen;
+  unsigned short* widebuff = NULL;
 
-  strlcpy ( findIn, dirname, MAX_PATH );
+  len = strlen(dirname);
+  findIn = (char*)malloc(len+10);
+
+  if(!findIn) return -1;
+  strcpy(findIn, dirname);
+
   d = findIn+strlen(findIn);
   if (d==findIn) *d++ = '.';
   if (*(d-1)!='/' && *(d-1)!='\\') *d++ = '/';
   *d++ = '*';
   *d++ = 0;
+ 
 
-  if ((h=FindFirstFile(findIn, &find))==INVALID_HANDLE_VALUE) {
+  // Change the filename to a wchar_t* representation
+  // so we can read unicode filenames (if any exist)
+  widelen = utf8frommb(NULL, 0, findIn, strlen(findIn));
+  temp = (char*)malloc(sizeof(char)*widelen+2);
+  utf8frommb(temp, widelen+1, findIn, strlen(findIn));
+  widelen = utf8towc(temp, widelen, NULL, 0);
+  widebuff = (unsigned short*)malloc(sizeof(unsigned short)*widelen+2);
+  utf8towc(temp, strlen(temp), widebuff, widelen+1);
+  free(temp);
+  free(findIn);
+
+  if ((h=FindFirstFileW(widebuff, &find))==INVALID_HANDLE_VALUE) {
     ret = GetLastError();
     if (ret != ERROR_NO_MORE_FILES) {
       // TODO: return some error code
@@ -64,9 +81,11 @@ int scandir(const char *dirname, struct dirent ***namelist,
     *namelist = dir;
     return nDir;
   }
+  free(widebuff);
   do {
-    selectDir=(struct dirent*)malloc(sizeof(struct dirent)+strlen(find.cFileName));
-    strcpy(selectDir->d_name, find.cFileName);
+    selectDir=(struct dirent*)malloc(sizeof(struct dirent)+wcslen(find.cFileName)*5+1);
+	// convert the filename back to UTF-8, as this is what FLTK uses internally
+	utf8fromwc(selectDir->d_name, sizeof(struct dirent)+wcslen(find.cFileName)*5+1, find.cFileName, wcslen(find.cFileName));
     if (!select || (*select)(selectDir)) {
       if (nDir==NDir) {
 	struct dirent **tempDir = (struct dirent **)calloc(sizeof(struct dirent*), NDir+33);
@@ -81,7 +100,7 @@ int scandir(const char *dirname, struct dirent ***namelist,
     } else {
       free(selectDir);
     }
-  } while (FindNextFile(h, &find));
+  } while (FindNextFileW(h, &find));
   ret = GetLastError();
   if (ret != ERROR_NO_MORE_FILES) {
     // TODO: return some error code

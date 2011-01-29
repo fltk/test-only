@@ -26,6 +26,7 @@
 #include <config.h>
 #include <fltk/filename.h>
 #include <fltk/string.h>
+#include <fltk/utf.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #if defined(_WIN32) && !defined(__CYGWIN__)
@@ -41,6 +42,25 @@ static struct stat last_stat;
 static const char *last_statname = 0;
 static bool last_result = false;
 
+/** Portably calls the system's stat() function, to deal with UTF-8 
+    and UTF-16 filenames.
+    Has the same return values and use as the system's stat.
+*/
+int fltk::fltk_stat(const char* name, struct stat *buffer) {
+#if defined(_WIN32) && !defined (__CYGWIN__)
+  wchar_t * nativeFilename = NULL;
+  int length = utf8towc(name, strlen(name), NULL, 0);
+  nativeFilename = new wchar_t[length+2];
+  utf8towc(name, strlen(name), nativeFilename, length+1);
+  int ret = _wstat(nativeFilename, buffer);
+  delete [] nativeFilename;
+#else
+  int ret = stat(nativeFilename, buffer);
+#endif
+  return ret;
+}
+
+
 static bool fill_stat(const char *name) {
   if (last_statname && strcmp(last_statname, name)==0) return last_result;
   delete[] const_cast<char *>( last_statname ); // otherwize VC++ will scream
@@ -55,8 +75,10 @@ static bool fill_stat(const char *name) {
     buffer[3] = 0;
     name = buffer;
   }
-#endif // _WIN32 || __EMX__
-  last_result = (stat(name, &last_stat)==0);
+  // on _WIN32 && !__CYGWIN__, all strings into this file will be UTF-8
+
+#endif// _WIN32 || __EMX__
+  last_result = (fltk::fltk_stat(name, &last_stat)==0);
   return last_result;
 }
 

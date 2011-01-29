@@ -40,6 +40,7 @@
 #include <fltk/string.h>
 #include <fltk/Item.h>
 #include <fltk/Browser.h>
+#include <fltk/utf.h>
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -215,10 +216,9 @@ FileIcon::find(const char *filename,	// I - Name of file */
   FileIcon	*current;		// Current file in list
   struct stat	fileinfo;		// Information on file
 
-
   // Get file information if needed...
   if (filetype == ANY)
-    if (!stat(filename, &fileinfo))
+    if (!fltk_stat(filename, &fileinfo))
     {
       if (S_ISDIR(fileinfo.st_mode))
 	filetype = DIRECTORY;

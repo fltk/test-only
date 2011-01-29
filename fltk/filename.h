@@ -26,9 +26,16 @@
 #define fltk_filename_h
 
 #include "FL_API.h"
+#include <sys/types.h>
+#include <sys/stat.h>
 
 ////////////////////////////////////////////////////////////////
 #ifndef DOXYGEN
+
+#if defined (_WIN32) && !defined (__CYGWIN__)
+# define stat _stat
+#endif
+
 // dirent (what a pain)...
 
 // FC: UNDER WIN32/VC6 long long is undefined, so use __int64 instead
@@ -102,6 +109,7 @@ namespace fltk {
 /// Some functions to manipulate filenames, to make portable programs.
 //@{
 
+FL_API int fltk_stat(const char* name, struct stat *buffer);
 FL_API int filename_absolute(char *to, int tolen, const char *from, const char* cwd=0);
 FL_API int filename_relative(char *to, int tolen, const char *from, const char* cwd=0);
 FL_API const char *filename_name(const char *);
