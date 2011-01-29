@@ -55,7 +55,7 @@ int fltk::fltk_stat(const char* name, struct stat *buffer) {
   int ret = _wstat(nativeFilename, buffer);
   delete [] nativeFilename;
 #else
-  int ret = stat(nativeFilename, buffer);
+  int ret = stat(name, buffer);
 #endif
   return ret;
 }
