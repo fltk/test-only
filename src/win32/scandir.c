@@ -45,33 +45,33 @@ int scandir(const char *dirname, struct dirent ***namelist,
   int nDir = 0, NDir = 0, len;
   struct dirent **dir = 0, *selectDir;
   unsigned long ret;
-  char *findIn, *d, *temp;
+  char *temp;
   unsigned widelen;
-  unsigned short* widebuff = NULL;
+  unsigned short* widebuff = NULL, *d;
+  
+  len = widelen = strlen(dirname);
 
-  len = strlen(dirname);
-  findIn = (char*)malloc(len+10);
-
-  if(!findIn) return -1;
-  strcpy(findIn, dirname);
-
-  d = findIn+strlen(findIn);
-  if (d==findIn) *d++ = '.';
+  // If the filename is already encoded into utf8,
+  // We needn't (and shouldn't) bother about converting it into utf8 again!
+  if (!utf8test(dirname, len)) {
+    widelen = utf8frommb(NULL, 0, dirname, len);
+    temp = (char*)malloc(sizeof(char)*widelen+11);
+    utf8frommb(temp, widelen+1, dirname, len+1);
+  } else {
+    temp = (char*)malloc(sizeof(char)*widelen+11);
+    strcpy(temp, dirname);
+  }
+  // Change the filename to a wchar_t* representation
+  // so we can read filenames in any charset (if they exist).
+  // Windows needs this to be a wchar_t to deal with its stupid UTF16 format.
+  widelen = utf8towc(temp, widelen, NULL, 0);
+  widebuff = (unsigned short*)calloc(widelen+15, sizeof(unsigned short));
+  utf8towc(temp, strlen(temp), widebuff, widelen+5);
+  
+  d = widebuff+wcslen(widebuff);
+  if (d==widebuff) *d++ = '.';
   if (*(d-1)!='/' && *(d-1)!='\\') *d++ = '/';
   *d++ = '*';
-  *d++ = 0;
- 
-
-  // Change the filename to a wchar_t* representation
-  // so we can read unicode filenames (if any exist)
-  widelen = utf8frommb(NULL, 0, findIn, strlen(findIn));
-  temp = (char*)malloc(sizeof(char)*widelen+2);
-  utf8frommb(temp, widelen+1, findIn, strlen(findIn));
-  widelen = utf8towc(temp, widelen, NULL, 0);
-  widebuff = (unsigned short*)malloc(sizeof(unsigned short)*widelen+2);
-  utf8towc(temp, strlen(temp), widebuff, widelen+1);
-  free(temp);
-  free(findIn);
 
   if ((h=FindFirstFileW(widebuff, &find))==INVALID_HANDLE_VALUE) {
     ret = GetLastError();
@@ -81,7 +81,6 @@ int scandir(const char *dirname, struct dirent ***namelist,
     *namelist = dir;
     return nDir;
   }
-  free(widebuff);
   do {
     selectDir=(struct dirent*)malloc(sizeof(struct dirent)+wcslen(find.cFileName)*5+1);
 	// convert the filename back to UTF-8, as this is what FLTK uses internally
@@ -106,6 +105,8 @@ int scandir(const char *dirname, struct dirent ***namelist,
     // TODO: return some error code
   }
   FindClose(h);
+  free(temp);
+  free(widebuff);
 
   if (compar) qsort (dir, nDir, sizeof(*dir),
 		     (int(*)(const void*, const void*))compar);
