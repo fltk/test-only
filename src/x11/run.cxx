@@ -2791,6 +2791,10 @@ void Window::system_layout() {
   }
 }
 
+FILE* fltk::fltk_fopen(const char* name, const char* flags) {
+  return fopen(name, flags);
+}
+
 //
 // End of "$Id$".
 //

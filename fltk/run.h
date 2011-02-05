@@ -79,6 +79,7 @@ enum {READ = 1, WRITE = 4, EXCEPT = 8};
 FL_API void add_fd(int fd, int when, FileHandler, void* =0);
 FL_API void add_fd(int fd, FileHandler, void* = 0);
 FL_API void remove_fd(int, int when = -1);
+FL_API FILE* fltk_fopen(const char* name, const char* flags);
 
 FL_API void lock();
 FL_API void unlock();

@@ -31,6 +31,7 @@
 #include <sys/stat.h>
 #if defined(_WIN32) && !defined(__CYGWIN__)
 # include <io.h>
+# include <windows.h>
 #else
 # include <unistd.h>
 #endif
@@ -42,9 +43,11 @@ static struct stat last_stat;
 static const char *last_statname = 0;
 static bool last_result = false;
 
-/** Portably calls the system's stat() function, to deal with UTF-8 
-    and UTF-16 filenames.
+/** Portably calls the system's stat() function, to deal with
+    native Unicode filenames.
     Has the same return values and use as the system's stat.
+    The string passed to fltk_stat \b must be UTF8 (note that ASCII is
+    a subset of UTF8)
 */
 int fltk::fltk_stat(const char* name, struct stat *buffer) {
 #if defined(_WIN32) && !defined (__CYGWIN__)
@@ -90,7 +93,7 @@ bool fltk::filename_exist(const char* name) {
 /** Returns true if the file exists and is a directory. */
 bool fltk::filename_isdir(const char* name) {
   if (!fill_stat(name)) return false;
-  return (last_stat.st_mode&0170000)==0040000;
+  return ((last_stat.st_mode & 0170000) == 0040000);
 }
 
 /** Returns true if the file exists and is a regular file. */

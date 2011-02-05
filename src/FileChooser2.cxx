@@ -56,6 +56,7 @@
 #include <fltk/SharedImage.h>
 #include <fltk/Item.h>
 #include <fltk/string.h>
+#include <fltk/utf.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -986,16 +987,25 @@ void FileChooser::update_favorites() {
 */
 
 void FileChooser::update_preview() {
-  const char		*filename;	// Current filename
-  SharedImage	*image,		// New image
+  const char		*cfilename;	// Current filename
+  char			*filename; 	// UTF-8 converted filename
+  SharedImage		*image,		// New image
 			*oldimage;	// Old image
   int			pbw, pbh;	// Width and height of preview box
   int			w, h;		// Width and height of preview image
 
 
   if (!previewButton->value()) return;
-
-  if ((filename = value()) == NULL || fltk::filename_isdir(filename)) image = NULL;
+  cfilename = value();
+  if (cfilename != NULL && !utf8test(cfilename, strlen(cfilename))) {
+    int length = utf8frommb(NULL, 0, cfilename, strlen(cfilename));
+    filename = (char*)malloc(sizeof(char)*length+11);
+    utf8frommb(filename, length+1, cfilename, length+1);
+  } else {
+    filename = (char*)malloc(sizeof(char)*strlen(cfilename)+11);
+    strcpy(filename, cfilename);
+  }
+  if (filename == NULL || fltk::filename_isdir(filename)) image = NULL;
   else {
     window->cursor(fltk::CURSOR_WAIT);
     fltk::check();

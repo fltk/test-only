@@ -2582,6 +2582,23 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 
 }; /* extern "C" */
 
+
+FILE* fltk::fltk_fopen(const char* name, const char* flags) {
+	wchar_t *wname, *wflags;
+	unsigned namelen, flaglen;
+
+	flaglen = utf8towc(flags, strlen(flags), NULL, 0);
+	wflags = new wchar_t [flaglen+10];
+	utf8towc(flags, strlen(flags), wflags, flaglen+1);
+	namelen = utf8towc(name, strlen(name), NULL, 0);
+	wname = new wchar_t [namelen+10];
+	utf8towc(name, strlen(name), wname, namelen+1);
+
+	FILE* ret = _wfopen(wname, wflags);
+	delete [] wname;
+	delete [] wflags;
+	return ret;
+}
 //
 // End of "$Id$".
 //

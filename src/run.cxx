@@ -1327,6 +1327,18 @@ bool fltk::handle(int event, Window* window)
   return false;
 }
 
+/*! \fn FILE* fltk::fltk_fopen(const char* name, const char* flags)
+  Portably calls the fopen() function for different systems.
+  Note that ALL calls to this function MUST make sure the filename is
+  UTF8 encoded.
+
+  \param name UTF8 encoded directory name
+  \param flags Flags to pass to fopen (commonly 'r', 'w', etc...)
+  \see fltk::utf8froma()
+  \see fltk::utf8frommb();
+  \see fltk::utf8test();
+  \return Returns the same FILE* that fopen() returns
+*/
 //
 // End of "$Id$".
 //

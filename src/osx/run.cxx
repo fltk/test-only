@@ -1930,6 +1930,10 @@ WindowPtr fltk::xid(const Window*w) {
   return CreatedWindow::find(w)->xid;
 }
 
+FILE* fltk::fltk_fopen(const char* name, const char* flags) {
+  return fopen(name, flags);
+}
+
 //
 // End of "$Id$".
 //
