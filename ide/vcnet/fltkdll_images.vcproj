@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="fltkdll_images"
 	ProjectGUID="{42E898D9-E86F-47D5-AAD0-2810F474B5A1}"
 	>
@@ -47,7 +47,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../images/zlib,../visualc,.,../..,../../fltk/compat"
-				PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;_LIB"
 				MinimalRebuild="true"
 				RuntimeLibrary="1"
 				PrecompiledHeaderFile=".\fltkdlld/fltkdll_images.pch"
@@ -72,9 +72,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk2dlld.lib fltk2_zd.lib fltk2_pngd.lib fltk2_jpegd.lib opengl32.lib ws2_32.lib msimg32.lib"
+				AdditionalDependencies="fltk2dlld.lib ws2_32.lib msimg32.lib"
 				OutputFile="..\..\lib\fltk2dll_imagesd.dll"
-				Version="1.0"
+				Version="2.0"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="../../lib"
@@ -245,7 +245,7 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
 				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc,../../images/zlib"
-				PreprocessorDefinitions="NDEBUG;FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				PreprocessorDefinitions="FL_SHARED;FL_IMAGES_LIBRARY;WIN32;_WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;_LIB"
 				RuntimeLibrary="0"
 				PrecompiledHeaderFile=".\fltkdll/fltkdll_images.pch"
 				AssemblerListingLocation=".\fltkdll/"
@@ -267,7 +267,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk2dll.lib fltk2_z.lib fltk2_png.lib fltk2_jpeg.lib opengl32.lib ws2_32.lib msimg32.lib"
+				AdditionalDependencies="fltk2dll.lib ws2_32.lib msimg32.lib"
 				OutputFile="..\..\lib\fltk2dll_images.dll"
 				Version="1.0"
 				LinkIncremental="1"
@@ -310,6 +310,442 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="libjpeg"
+			>
+			<Filter
+				Name="Header Files"
+				>
+				<File
+					RelativePath="..\..\images\libjpeg\jchuff.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jconfig.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdct.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdhuff.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jerror.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jinclude.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jmemsys.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jmorecfg.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jpegint.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jpeglib.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jversion.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Source Files"
+				>
+				<File
+					RelativePath="..\..\images\libjpeg\jcapimin.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jcapistd.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jccoefct.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jccolor.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jcdctmgr.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jchuff.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jcinit.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jcmainct.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jcmarker.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jcmaster.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jcomapi.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jcparam.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jcphuff.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jcprepct.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jcsample.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jctrans.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdapimin.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdapistd.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdatadst.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdatasrc.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdcoefct.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdcolor.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jddctmgr.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdhuff.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdinput.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdmainct.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdmarker.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdmaster.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdmerge.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdphuff.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdpostct.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdsample.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jdtrans.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jerror.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jfdctflt.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jfdctfst.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jfdctint.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jidctflt.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jidctfst.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jidctint.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jidctred.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jmemmgr.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jmemnobs.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jquant1.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jquant2.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libjpeg\jutils.c"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="libpng"
+			>
+			<Filter
+				Name="Header Files"
+				>
+				<File
+					RelativePath="..\..\images\libpng\png.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngasmrd.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngconf.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Source Files"
+				>
+				<File
+					RelativePath="..\..\images\libpng\png.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngerror.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngget.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngmem.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngpread.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngread.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngrio.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngrtran.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngrutil.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngset.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngtrans.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngwio.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngwrite.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngwtran.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\libpng\pngwutil.c"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="zlib"
+			>
+			<Filter
+				Name="Header Files"
+				>
+				<File
+					RelativePath="..\..\images\zlib\deflate.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\infblock.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\infcodes.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\inffast.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\inffixed.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\inftrees.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\infutil.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\trees.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\zconf.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\zlib.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\zutil.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Source Files"
+				>
+				<File
+					RelativePath="..\..\images\zlib\adler32.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\compress.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\crc32.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\deflate.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\gzio.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\infblock.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\infcodes.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\inffast.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\inflate.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\inftrees.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\infutil.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\trees.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\uncompr.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\images\zlib\zutil.c"
+					>
+				</File>
+			</Filter>
+		</Filter>
 		<File
 			RelativePath="..\..\images\FileIcon2.cxx"
 			>

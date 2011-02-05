@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="fltkdll"
 	ProjectGUID="{2B18B740-7A7F-47B8-A587-1F64ABACEB95}"
 	>
@@ -49,7 +49,7 @@
 				InlineFunctionExpansion="2"
 				FavorSizeOrSpeed="2"
 				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
-				PreprocessorDefinitions="NDEBUG;FL_SHARED;FL_LIBRARY;FL_GL_LIBRARY;FL_GLUT_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				PreprocessorDefinitions="FL_SHARED;FL_LIBRARY;FL_FORMS_LIBRARY;_WIN32;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				RuntimeLibrary="0"
 				PrecompiledHeaderFile=".\fltkdll/fltkdll.pch"
 				AssemblerListingLocation=".\fltkdll/"
@@ -71,7 +71,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib ws2_32.lib msimg32.lib"
+				AdditionalDependencies="ws2_32.lib msimg32.lib"
 				OutputFile="..\..\lib\fltk2dll.dll"
 				Version="2.0"
 				LinkIncremental="1"
@@ -241,7 +241,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".,../..,../../fltk/compat,../visualc"
-				PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_LIBRARY;FL_GL_LIBRARY;FL_GLUT_LIBRARY;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
+				PreprocessorDefinitions="_DEBUG;FL_SHARED;FL_LIBRARY;FL_FORMS_LIBRARY;_WIN32;WIN32;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN"
 				MinimalRebuild="true"
 				RuntimeLibrary="1"
 				PrecompiledHeaderFile=".\fltkdlld/fltkdll.pch"
@@ -266,7 +266,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib ws2_32.lib msimg32.lib"
+				AdditionalDependencies="ws2_32.lib msimg32.lib"
 				OutputFile="..\..\lib\fltk2dlld.dll"
 				Version="2.0"
 				LinkIncremental="2"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="zlib"
 	ProjectGUID="{7CDD7B9E-10A4-4DD9-BAE2-B6E83F4AD00D}"
 	>

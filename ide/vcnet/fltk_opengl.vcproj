@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="fltk_opengl"
 	ProjectGUID="{A1660643-CBDC-48E4-9F90-E899A9332253}"
 	>
@@ -367,37 +367,6 @@
 			</File>
 			<File
 				RelativePath="..\..\OpenGL\gl_start.cxx"
-				>
-				<FileConfiguration
-					Name="Release MinSize|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\glut\glut_compatability.cxx"
 				>
 				<FileConfiguration
 					Name="Release MinSize|Win32"

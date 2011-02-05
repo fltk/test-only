@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="arc"
 	ProjectGUID="{8733F9F2-F046-438B-9FBB-DB1E32478349}"
 	>
@@ -260,7 +260,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cairo.lib fltk2.lib ws2_32.lib msimg32.lib"
+				AdditionalDependencies="fltk2.lib ws2_32.lib msimg32.lib"
 				OutputFile="../../test/arc.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

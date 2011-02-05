@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="resize"
 	ProjectGUID="{72A6AA24-49DC-49D6-A2BA-5137BDE5B0AA}"
 	>
@@ -165,7 +165,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fltk.lib ws2_32.lib msimg32.lib"
+				AdditionalDependencies="fltk2.lib ws2_32.lib msimg32.lib"
 				OutputFile="../../test/resize.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
