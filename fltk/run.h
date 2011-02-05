@@ -24,6 +24,7 @@
 #define fltk_run_h
 
 #include "FL_API.h"
+#include <stdio.h>
 #ifdef check
 # undef check
 #endif
