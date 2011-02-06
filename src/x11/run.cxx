@@ -1228,7 +1228,7 @@ static void set_event_xy(bool push) {
   static int px, py;
   static ulong ptime;
   if (abs(e_x_root-px)+abs(e_y_root-py) > 3
-      || event_time >= ptime+(push?1000:200)) {
+      || event_time >= ptime+(push?400:1000)) {
     e_is_click = 0;
     recent_keycode = 0;
   }
