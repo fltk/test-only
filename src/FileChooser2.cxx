@@ -563,7 +563,7 @@ void FileChooser::fileNameCB() {
 #endif /* WIN32 || __EMX__ */
     fltk::filename_absolute(pathname, sizeof(pathname), filename);
     value(pathname);
-    fileName->mark(fileName->position()); // no selection after expansion
+    fileName->position(fileName->mark()); // no selection after expansion
   } else if (filename != pathname) {
     // Finally, make sure that we have a writable copy...
     strlcpy(pathname, filename, sizeof(pathname));
