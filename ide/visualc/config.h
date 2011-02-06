@@ -156,7 +156,7 @@
 
 /* Standard autoconf stuff to figure out readdir() header files.
    (ignored for _WIN32) */
-#define HAVE_DIRENT_H 1
+#define HAVE_DIRENT_H 0
 /* #undef HAVE_SYS_NDIR_H */
 /* #undef HAVE_SYS_DIR_H */
 /* #undef HAVE_NDIR_H */
