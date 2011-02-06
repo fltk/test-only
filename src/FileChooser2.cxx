@@ -238,10 +238,10 @@ void FileChooser::directory(const char *d, bool f) {
 
   if (f) {
     // Update the current filename accordingly...
-    char* pathname = new char [sizeof(directory_)];	// New pathname for filename field
+    char pathname[1024];	// New pathname for filename field
 
-    strlcpy(pathname, directory_, sizeof(directory_));
-    if (pathname[0] && pathname[strlen(pathname) - 1] != '/')
+    strlcpy(pathname, directory_, sizeof(pathname));
+    if ((pathname[0] && pathname[strlen(pathname) - 1] != '/') || !pathname[0])
       strlcat(pathname, "/", sizeof(pathname));
     // Prevent users from cursing us: keep basename, if not a directory
     if (!fltk::filename_isdir(fileName->text())) {
@@ -251,7 +251,6 @@ void FileChooser::directory(const char *d, bool f) {
         *dirptr = 0;
     }
     fileName->text(pathname);
-	delete [] pathname;
   }
 
   if (shown()) {
