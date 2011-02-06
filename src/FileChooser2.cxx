@@ -501,11 +501,7 @@ void FileChooser::fileListCB() {
     // Strip any trailing slash from the directory name...
     if (*filename == '/') *filename = '\0';
 
-//    puts("Setting fileName from fileListCB...");
-    if (fltk::filename_isdir(pathname))
-      directory(pathname, true);
-    else
-      fileName->value(pathname);
+    fileName->value(pathname);
 
     // Update the preview box...
     fltk::remove_timeout((TimeoutHandler)previewCB, this);
