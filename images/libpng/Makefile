@@ -38,9 +38,9 @@ endif
 #
 
 CPPFILES =
-CFILES	= png.c pngset.c pngget.c pngrutil.c pngtrans.c pngwutil.c \
-		pngread.c pngrio.c pngwio.c pngwrite.c pngrtran.c \
-		pngwtran.c pngmem.c pngerror.c pngpread.c
+CFILES	= png.c pngerror.c pngget.c pngmem.c pngread.c pngpread.c pngrio.c \
+		pngrtran.c pngrutil.c pngset.c pngtrans.c pngwio.c pngwrite.c \
+		pngwtran.c pngwutil.c
 
 LIBNAME	=	$(LIBPREFIX)fltk2_png$(LIBSUFFIX)
 OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
@@ -76,7 +76,8 @@ depend:
 #
 # Include automatically generated dependencies...
 #
-
+makedepend:
+	touch makedepend
 include makedepend
 
 

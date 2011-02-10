@@ -62,7 +62,7 @@ bool pngImage::test(const uchar* datas, unsigned size)
 #if !HAVE_LIBPNG
   return 0;
 #else
-  return png_check_sig((png_byte*)datas, (int)size)!=0;
+  return !png_sig_cmp((png_bytep)datas, (png_size_t)0, (png_size_t)size);
 #endif
 }
 
@@ -111,7 +111,7 @@ bool pngImage::fetch()
     png_set_sig_bytes(png_ptr, 8);
   }
 
-  if (setjmp(png_ptr->jmpbuf))
+  if (setjmp(png_jmpbuf(png_ptr)))
     goto error;
 
   png_read_info(png_ptr, info_ptr);
