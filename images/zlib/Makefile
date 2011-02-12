@@ -35,9 +35,9 @@ include ../../makeinclude
 #
 
 CPPFILES =
-CFILES	= adler32.c compress.c crc32.c gzio.c uncompr.c deflate.c \
-		trees.c zutil.c inflate.c infblock.c inftrees.c infcodes.c \
-		infutil.c inffast.c
+CFILES	= adler32.c compress.c crc32.c deflate.c gzclose.c gzlib.c \
+		gzread.c gzwrite.c infback.c inffast.c inflate.c \
+		inftrees.c trees.c uncompr.c zutil.c
 
 LIBNAME	=	$(LIBPREFIX)fltk2_z$(LIBSUFFIX)
 OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
