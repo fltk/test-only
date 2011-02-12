@@ -1,6 +1,9 @@
+
+/* libpng STANDARD API DEFINITION */
+
 /* pnglibconf.h - library build configuration */
 
-/* libpng version 1.5.0 - January 6, 2011 */
+/* libpng version 1.5.0 - last changed on January 6, 2011 */
 
 /* Copyright (c) 1998-2011 Glenn Randers-Pehrson */
 
@@ -145,7 +148,6 @@
 #define PNG_WRITE_INVERT_ALPHA_SUPPORTED
 #define PNG_sCAL_SUPPORTED
 #define PNG_WRITE_zTXt_SUPPORTED
-#define PNG_USER_TRANSFORM_INFO_SUPPORTED
 #define PNG_sBIT_SUPPORTED
 #define PNG_cHRM_SUPPORTED
 #define PNG_bKGD_SUPPORTED
@@ -153,6 +155,7 @@
 #define PNG_WRITE_iTXt_SUPPORTED
 #define PNG_oFFs_SUPPORTED
 #define PNG_USER_TRANSFORM_PTR_SUPPORTED
+#define PNG_USER_TRANSFORM_INFO_SUPPORTED
 #define PNG_hIST_SUPPORTED
 #define PNG_iCCP_SUPPORTED
 #define PNG_sRGB_SUPPORTED
