@@ -1,5 +1,5 @@
 #
-# "$Id$"
+# "$Id: Makefile 4923 2006-04-10 12:02:26Z fabien $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -35,16 +35,16 @@ CFLAGS += -I../..
 #
 
 CPPFILES =
-CFILES	= jmemnobs.c \
+CFILES	= jaricom.c jmemnobs.c \
 		jcapimin.c jcapistd.c jccoefct.c jccolor.c jcdctmgr.c \
 		jchuff.c jcinit.c jcmainct.c jcmarker.c jcmaster.c jcomapi.c \
-		jcparam.c jcphuff.c jcprepct.c jcsample.c jctrans.c \
+		jcparam.c jcprepct.c jcsample.c jctrans.c jmemansi.c \
 		jdapimin.c jdapistd.c jdatadst.c jdatasrc.c jdcoefct.c \
 		jdcolor.c jddctmgr.c jdhuff.c jdinput.c jdmainct.c jdmarker.c \
-		jdmaster.c jdmerge.c jdphuff.c jdpostct.c jdsample.c \
-		jdtrans.c jerror.c jfdctflt.c jfdctfst.c jfdctint.c \
-		jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c \
-		jquant2.c jutils.c jmemmgr.c
+		jdmaster.c jdmerge.c jdpostct.c jdsample.c jmemname.c \
+		jdtrans.c jerror.c jfdctflt.c jfdctfst.c jfdctint.c jmemmgr.c \
+		jidctflt.c jidctfst.c jidctint.c jquant1.c jcarith.c jdarith.c \
+		jquant2.c jutils.c # jmemmac.c jmemdos.c
 
 LIBNAME	=	$(LIBPREFIX)fltk2_jpeg$(LIBSUFFIX)
 OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
@@ -108,5 +108,5 @@ uninstall:
 
 
 #
-# End of "$Id$".
+# End of "$Id: Makefile 4923 2006-04-10 12:02:26Z fabien $".
 #
