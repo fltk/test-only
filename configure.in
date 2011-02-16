@@ -356,7 +356,7 @@ if test "$ac_cv_cxx_scandir_posix" = yes; then
 fi
 
 AC_CHECK_FUNC(scandir,[
-    if test \("$uname" = SunOS -o "$uname" = QNX\ -a "$ac_cv_cxx_scandir_posix" != yes; then
+    if test \( "$uname" = SunOS -o "$uname" = QNX \) -a "$ac_cv_cxx_scandir_posix" != yes; then
         AC_MSG_WARN(Not using $uname scandir emulation function.)
     else
         AC_DEFINE(HAVE_SCANDIR)
