@@ -337,7 +337,7 @@ AC_CHECK_HEADER(sys/select.h,AC_DEFINE(HAVE_SYS_SELECT_H))
 AC_CHECK_HEADER(sys/stdtypes.h,AC_DEFINE(HAVE_SYS_SELECT_H))
 AC_CHECK_FUNC(scandir,[
     if test "$uname" = SunOS -o "$uname" = QNX; then
-        AC_MSG_WARN(Not using $uname scandir emulation function.)
+        AC_MSG_WARN(Not using $uname scandir emulation function unless POSIX compatible definitions are found.)
     else
         AC_DEFINE(HAVE_SCANDIR)
     fi])
@@ -358,6 +358,7 @@ AC_CACHE_CHECK([whether we have the POSIX compatible scandir() prototype],
     ])
 
 if test "$ac_cv_cxx_scandir_posix" = yes; then
+    AC_DEFINE(HAVE_SCANDIR)
     AC_DEFINE(HAVE_SCANDIR_POSIX)
 fi
 
