@@ -996,9 +996,11 @@ void FileChooser::update_preview() {
     int length = utf8frommb(NULL, 0, cfilename, strlen(cfilename));
     filename = (char*)malloc(sizeof(char)*length+11);
     utf8frommb(filename, length+1, cfilename, length+1);
-  } else {
+  } else if(cfilename != NULL) {
     filename = (char*)malloc(sizeof(char)*strlen(cfilename)+11);
     strcpy(filename, cfilename);
+  } else {
+    filename = NULL;
   }
   if (filename == NULL || fltk::filename_isdir(filename)) image = NULL;
   else {
