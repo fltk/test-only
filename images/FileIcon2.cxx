@@ -44,6 +44,7 @@
 #include <fltk/draw.h>
 #include <fltk/SharedImage.h>
 #include <fltk/Color.h>
+#include <fltk/run.h>
 #include <config.h>
 
 #include <stdio.h>
@@ -72,6 +73,7 @@ using namespace fltk;
 
 static void	load_kde_icons(const char *directory, const char *icondir);
 static void	load_kde_mimelnk(const char *filename, const char *icondir);
+static void	load_gnome_icons(const char *directory, const char *icondir);
 static char	*kde_to_fltk_pattern(const char *kdepattern);
 static char	*get_kde_val(char *str, const char *key);
 
@@ -399,54 +401,52 @@ FileIcon::load_system_icons(void)
   if (!init)
   {
     fltk::register_images();
-    if (!kdedir) {
-      // Figure out where KDE is installed...
-      if ((kdedir = getenv("KDEDIR")) == NULL) {
-        if (!access("/opt/kde", F_OK)) kdedir = "/opt/kde";
-	else if (!access("/usr/local/share/mimelnk", F_OK)) kdedir = "/usr/local";
-        else kdedir = "/usr";
+    if (getenv("KDE_FULL_SESSION")) {
+      if (!kdedir) {
+        // Figure out where KDE is installed...
+        if ((kdedir = getenv("KDEDIR")) == NULL) {
+          if (!access("/opt/kde", F_OK)) kdedir = "/opt/kde";
+          else if (!access("/usr/local/share/mimelnk", F_OK)) kdedir = "/usr/local";
+          else kdedir = "/usr";
+        }
       }
-    }
-    // fix : get a chance to use the relocated kdedir
-    snprintf(icondir, sizeof(icondir), "%s/share/mimelnk", kdedir);
-    if (!access(icondir, F_OK))
-    {
-      // Load KDE icons...
-      icon = new FileIcon("*", FileIcon::PLAIN);
-
-      for (i = 0; icondirs[i]; i ++) {
-	snprintf(icondir, sizeof(icondir), "%s/share/icons/%s", kdedir,
+      // fix : get a chance to use the relocated kdedir
+      snprintf(icondir, sizeof(icondir), "%s/share/mimelnk", kdedir);
+      if (!access(icondir, F_OK)) {
+        // Load KDE icons...
+        icon = new FileIcon("*", FileIcon::PLAIN);
+  
+        for (i = 0; icondirs[i]; i ++) {
+	  snprintf(icondir, sizeof(icondir), "%s/share/icons/%s", kdedir,
 		 icondirs[i]);
+  
+          if (!access(icondir, F_OK)) break;
+        }
 
-        if (!access(icondir, F_OK)) break;
+        if (icondirs[i]) {
+          snprintf(filename, sizeof(filename), "%s/16x16/mimetypes/unknown.png",
+	           icondir);
+        } else {
+	  snprintf(filename, sizeof(filename), "%s/share/icons/unknown.xpm",
+	           kdedir);
+        }
+
+        if (!access(filename, F_OK)) icon->load(filename);
+
+        icon = new FileIcon("*", FileIcon::LINK);
+
+        snprintf(filename, sizeof(filename), "%s/16x16/filesystems/link.png",
+                 icondir);
+
+        if (!access(filename, F_OK)) icon->load(filename);
+
+        snprintf(filename, sizeof(filename), "%s/share/mimelnk", kdedir);
+        load_kde_icons(filename, icondir);
       }
-
-      if (icondirs[i]) {
-        snprintf(filename, sizeof(filename), "%s/16x16/mimetypes/unknown.png",
-	         icondir);
-      } else {
-	snprintf(filename, sizeof(filename), "%s/share/icons/unknown.xpm",
-	         kdedir);
-      }
-
-      if (!access(filename, F_OK)) icon->load(filename);
-
-      icon = new FileIcon("*", FileIcon::LINK);
-
-      snprintf(filename, sizeof(filename), "%s/16x16/filesystems/link.png",
-               icondir);
-
-      if (!access(filename, F_OK)) icon->load(filename);
-
-      snprintf(filename, sizeof(filename), "%s/share/mimelnk", kdedir);
-      load_kde_icons(filename, icondir);
-    } else if (!access("/usr/share/icons/folder.xpm", F_OK)) {
+    } else if (getenv("DESKTOP_SESSION") != NULL && !access("/usr/share/icons/gnome/32x32", R_OK)) {
       // Load GNOME icons...
-      icon = new FileIcon("*", FileIcon::PLAIN);
-      icon->load("/usr/share/icons/page.xpm");
+      load_gnome_icons("/usr/share/icons/gnome", NULL);
 
-      icon = new FileIcon("*", FileIcon::DIRECTORY);
-      icon->load("/usr/share/icons/folder.xpm");
     } else if (!access("/usr/dt/appconfig/icons", F_OK)) {
       // Load CDE icons...
       icon = new FileIcon("*", FileIcon::PLAIN);
@@ -556,7 +556,6 @@ load_kde_icons(const char *directory,	// I - Directory to load
   free((void*)entries);
 }
 
-
 //
 // 'load_kde_mimelnk()' - Load a KDE "mimelnk" file.
 //
@@ -578,7 +577,7 @@ load_kde_mimelnk(const char *filename,	// I - mimelnk filename
   pattern[0]      = '\0';
   iconfilename[0] = '\0';
 
-  if ((fp = fopen(filename, "rb")) != NULL) {
+  if ((fp = fltk_fopen(filename, "rb")) != NULL) {
     while (fgets(tmp, sizeof(tmp), fp)) {
       if ((val = get_kde_val(tmp, "Icon")) != NULL)
 	strlcpy(iconfilename, val, sizeof(iconfilename));
@@ -693,6 +692,36 @@ load_kde_mimelnk(const char *filename,	// I - mimelnk filename
   }
 }
 
+/*! 
+  \todo Load all icons with a mimetype on gnome, a la KDE
+*/
+static void
+load_gnome_icons(const char* directory,
+		 const char* icondir) {
+
+// GNOME mime names have a specific prefix and suffix that will need to be stripped.
+#define ICON_NAME_MIME_PREFIX           "gnome-mime-"
+#define ICON_NAME_MIME_SUFFIX           "-x-generic"
+
+  FileIcon* icon;
+  icon = new FileIcon("*", FileIcon::PLAIN);
+  icon->load("/usr/share/icons/gnome/32x32/mimetypes/document.png");
+  
+  icon = new FileIcon("*", FileIcon::DIRECTORY);
+  icon->load("/usr/share/icons/gnome/32x32/places/folder.png");
+
+  icon = new FileIcon("*", FileIcon::DEVICE);
+  icon->load("/usr/share/icons/gnome/32x32/devices/drive-harddisk.png");
+
+  icon = new FileIcon("*", FileIcon::LINK);
+  icon->load("/usr/share/icons/gnome/32x32/emblems/emblem-symbolic-link.png");
+
+  icon = new FileIcon("*.{bmp|bw|gif|jpeg|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", FileIcon::PLAIN);
+  icon->load("/usr/share/icons/gnome/32x32/mimetypes/image.png");
+
+  icon = new FileIcon("*.{html|htm|xhtml|xht|xml|css}", FileIcon::PLAIN);
+  icon->load("/usr/share/icons/gnome/32x32/mimetypes/html.png");
+}
 
 //
 // 'kde_to_fltk_pattern()' - Convert a KDE pattern to a FLTK pattern.
