@@ -537,7 +537,7 @@ void fltk::setfont(Font* font, float psize) {
 
   // See if the current font is correct:
   if (font == current_font_ && psize == current_size_ &&
-      (f->encoding==encoding_ ||
+      ((f && f->encoding && encoding_ && f->encoding == encoding_) ||
 	   (!encoding_ || !strcmp(f->encoding, encoding_))))
     return;
   current_font_ = font; current_size_ = psize;

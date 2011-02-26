@@ -61,7 +61,14 @@ static Widget* append(
   } else {
     o = new Item();
   }
-  o->copy_label(label);
+  char buf[1024];
+  const char *p;
+  char *q;
+  for (p = label, q = buf; *p; *q++ = *p++)
+    if (*p == '\\' && p[1]) p++;
+  *q = 0;
+
+  o->copy_label(buf);
   if (flags & MENU_RADIO) o->type(Item::RADIO);
   else if (flags & MENU_TOGGLE) o->type(Item::TOGGLE);
   // Shift the old flags values over to where they are in fltk,
