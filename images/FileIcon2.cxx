@@ -443,7 +443,7 @@ FileIcon::load_system_icons(void)
         snprintf(filename, sizeof(filename), "%s/share/mimelnk", kdedir);
         load_kde_icons(filename, icondir);
       }
-    } else if (getenv("DESKTOP_SESSION") != NULL && !access("/usr/share/icons/gnome/32x32", R_OK)) {
+    } else if (getenv("DESKTOP_SESSION") != NULL && !access("/usr/share/icons/gnome/32x32", F_OK)) {
       // Load GNOME icons...
       load_gnome_icons("/usr/share/icons/gnome", NULL);
 
