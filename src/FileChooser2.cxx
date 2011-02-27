@@ -284,6 +284,7 @@ void FileChooser::favoritesButtonCB() {
     sprintf(menuname, "favorite%02d", v);
 
     prefs_.set(menuname, directory_);
+	prefs_.flush();
 
     quote_pathname(menuname, directory_, sizeof(menuname));
     favoritesButton->add(menuname);
