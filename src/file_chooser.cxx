@@ -196,10 +196,11 @@ const char * fltk::file_chooser(const char *message, const char *pattern,
     
     if (fnameW) {
       memset(filenamebuffer, 0, MAX_PATH);
-      if((filenamebuffer[1] == ':') && (_getdrive() + 'A' - 1 == filenamebuffer[0]))
+      // BS: Commented this out, as the memset() seems to render it redundant
+      /*if((filenamebuffer[1] == ':') && (_getdrive() + 'A' - 1 == filenamebuffer[0]))
 	wcsncpy(filenamebuffer, fnameW + 2, MAX_PATH);
-      else
-	wcsncat(filenamebuffer, fnameW, MAX_PATH);
+      else*/
+      wcsncat(filenamebuffer, fnameW, MAX_PATH);
     }
     wreq.lpstrFile = filenamebuffer;
     GetCurrentDirectoryW(MAX_PATH, currentDirBuffer);
@@ -210,7 +211,7 @@ const char * fltk::file_chooser(const char *message, const char *pattern,
       char temp[PATH_MAX], dir[PATH_MAX];
       memset(temp, 0, PATH_MAX); memset(dir, 0, PATH_MAX);
       ret[0] = 0;
-      int count = utf8fromwc(temp, PATH_MAX, wreq.lpstrFile, windowsWLen(wreq.lpstrFile)+1);
+      utf8fromwc(temp, PATH_MAX, wreq.lpstrFile, windowsWLen(wreq.lpstrFile)+1);
       sprintf(dir, "%s\\", temp);
       for (char *s = temp + strlen(temp) + 1; s && *s; s += strlen(s) + 1) {
 	sprintf(ret + strlen(ret), "%s%s\n", dir, s);
