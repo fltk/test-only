@@ -407,15 +407,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\images\libjpeg\jmemansi.c"
-				>
-			</File>
-			<File
 				RelativePath="..\..\images\libjpeg\jmemmgr.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\images\libjpeg\jmemname.c"
 				>
 			</File>
 			<File
