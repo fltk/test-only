@@ -40,7 +40,9 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <fltk/FileChooser.h>
+#include <fltk/file_chooser.h>
 #include <fltk/FileIcon.h>
 #include <fltk/SharedImage.h>
 #include <fltk/pnmImage.h>
@@ -48,7 +50,6 @@
 #include <fltk/LightButton.h>
 #include <fltk/run.h>
 #include <string.h>
-#include <fltk/file_chooser.h>
 #include <fltk/ask.h>
 
 using namespace fltk;
@@ -347,7 +348,8 @@ main(int  argc,		// I - Number of command-line arguments
 
 #else
   const char *defaultname = "images/testimg.jpg";
-  const char * name = fltk::file_chooser("Open","Image Files (*.{bmp,gif,jpg,png})\t", defaultname );
+  fltk::use_system_file_chooser(true);
+  const char * name = fltk::file_chooser("Open","Image Files (*.{bmp,gif,jpg,png})\t", defaultname);
   fltk::message("File selected is : %s", name && strlen(name) ? name : "<no_selection>");
 #endif
 
