@@ -182,6 +182,7 @@ void ScrollGroup::draw() {
 void ScrollGroup::layout() {
 
   int layout_damage = this->layout_damage();
+  uchar type=Widget::type() & ~GROUP_TYPE;
 
   // handle movement in xy without wasting time:
   if (!(layout_damage&(LAYOUT_WH|LAYOUT_DAMAGE|LAYOUT_CHILD))) {
@@ -195,8 +196,8 @@ void ScrollGroup::layout() {
   for (int repeat=0; repeat<2; repeat++) {
 
     layout_damage &= ~LAYOUT_WH;
-    if (!(type()&HORIZONTAL)) layout_damage |= LAYOUT_W;
-    if (!(type()&VERTICAL)) layout_damage |= LAYOUT_H;
+    if (!(type&HORIZONTAL)) layout_damage |= LAYOUT_W;
+    if (!(type&VERTICAL)) layout_damage |= LAYOUT_H;
     Group::layout(rectangle, layout_damage);
 
     // move all the children and accumulate their bounding boxes:
@@ -225,16 +226,16 @@ void ScrollGroup::layout() {
     // widgets to use up the available space.
     int newDx = 0;
     int newDy = 0;
-    if ( type() & VERTICAL ) {
-      if ( b < rectangle.b() ) {
+    if (type & VERTICAL) {
+      if (b < rectangle.b()) {
 	int space = rectangle.b()-b;
 	int hidden = rectangle.y()-t;
 	newDy = (space>hidden) ? hidden : space;
 	newDy = (newDy>0) ? newDy : 0;
       }
     }
-    if ( type() & HORIZONTAL ) {
-      if ( r < rectangle.r() ) {
+    if (type & HORIZONTAL) {
+      if (r < rectangle.r()) {
 	int space = rectangle.r()-r;
 	int hidden = rectangle.x()-l; // ell
 	newDx = (space>hidden) ? hidden : space;
@@ -243,7 +244,7 @@ void ScrollGroup::layout() {
     }
 
     // Move the child widgets again if they are to be kept inside.
-    if ( newDx || newDy ) {
+    if (newDx || newDy) {
       for (int i=0; i < numchildren; i++) {
 	Widget* o = child(i);
 	o->position(o->x()+newDx, o->y()+newDy);
@@ -252,8 +253,8 @@ void ScrollGroup::layout() {
     }
 
     // Turn on/off the scrollbars if it fits:
-    if ((type() & VERTICAL) &&
-	((type() & ALWAYS_ON) || t < rectangle.y() || b > rectangle.b())) {
+    if ((type & VERTICAL) &&
+	((type & ALWAYS_ON) || t < rectangle.y() || b > rectangle.b())) {
       // turn on the vertical scrollbar
       if (!scrollbar.visible()) {
 	scrollbar.set_visible();
@@ -266,8 +267,8 @@ void ScrollGroup::layout() {
       }
     }
 
-    if ((type() & HORIZONTAL) &&
-	((type() & ALWAYS_ON) || l < rectangle.x() || r > rectangle.r())) {
+    if ((type & HORIZONTAL) &&
+	((type & ALWAYS_ON) || l < rectangle.x() || r > rectangle.r())) {
       // turn on the horizontal scrollbar
       if (!hscrollbar.visible()) {
 	hscrollbar.set_visible();
@@ -356,7 +357,7 @@ ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L,bool begin)
     scrollbar(nogroup(X)+W-SLIDER_WIDTH,Y,SLIDER_WIDTH,H-SLIDER_WIDTH),
     hscrollbar(X,Y+H-SLIDER_WIDTH,W-SLIDER_WIDTH,SLIDER_WIDTH)
 {
-  type(BOTH | GROUP_TYPE);
+  type(BOTH);
   xposition_ = 0;
   yposition_ = 0;
   scrolldx = scrolldy = layoutdx = layoutdy = 0;

@@ -67,13 +67,14 @@ public:
   ScrollGroup(int x,int y,int w,int h, const char*l=0, bool begin=false);
 
   enum { // values for type()
-    HORIZONTAL = 1,
-    VERTICAL = 2,
-    BOTH = 3,
-    ALWAYS_ON = 4,
-    HORIZONTAL_ALWAYS = 5,
-    VERTICAL_ALWAYS = 6,
-    BOTH_ALWAYS = 7
+    NONE = GROUP_TYPE, // Added to avoid using 0 and messing up with RTTI funcionality.
+    HORIZONTAL = 1 | GROUP_TYPE,
+    VERTICAL = 2 | GROUP_TYPE,
+    BOTH = 3 | GROUP_TYPE,
+    ALWAYS_ON = 4 | GROUP_TYPE,
+    HORIZONTAL_ALWAYS = 5 | GROUP_TYPE,
+    VERTICAL_ALWAYS = 6 | GROUP_TYPE,
+    BOTH_ALWAYS = 7 | GROUP_TYPE
   };
 
   int xposition() const {return xposition_;}

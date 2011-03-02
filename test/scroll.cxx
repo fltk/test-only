@@ -84,7 +84,7 @@ void type_cb(Widget*, void* v) {
 
 void load_menu_choice (Choice* c)  {
  c->begin();
-  new Item("0", 0, type_cb, (void*)0);
+  new Item("None", 0, type_cb, (void*)ScrollGroup::NONE);
   new Item("HORIZONTAL", 0, type_cb, (void*)ScrollGroup::HORIZONTAL);
   new Item("VERTICAL", 0, type_cb, (void*)ScrollGroup::VERTICAL);
   new Item("BOTH", 0, type_cb, (void*)ScrollGroup::BOTH);
@@ -135,7 +135,7 @@ int main(int argc, char** argv) {
 
   Choice choice(150, 335, 200, 25, "type():");
   load_menu_choice(&choice);
-  choice.value(3);
+  choice.value(2);
 
   Choice achoice(150, 360, 200, 25, "scrollbar_align():");
   load_menu_achoice(&achoice);
