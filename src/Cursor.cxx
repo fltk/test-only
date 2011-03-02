@@ -311,7 +311,7 @@ static HCURSOR create_cursor_from_image(Image *img, int x, int y)
 
   ReleaseDC(NULL,hdc);
 
-  int w = img->w() , h = img->h();
+  int w = img->w()/* , h = img->h()*/;
   unsigned char* isrc = img->buffer();
   DWORD *lpdwPixel = (DWORD *)lpBits;
   for (int i=0;i<cw;i++)

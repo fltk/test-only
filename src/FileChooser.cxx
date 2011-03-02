@@ -498,3 +498,4 @@ int FileChooser::favorites() const {
 }
 
 //  End of "$Id$"
+
