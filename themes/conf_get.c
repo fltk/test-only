@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_get.c,v 1.5 2003/01/14 06:51:03 spitzak Exp $"
+   "$Id$"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -273,5 +273,5 @@ conf_clear_cache() {
 #endif
 
 /*
-    End of "$Id: conf_get.c,v 1.5 2003/01/14 06:51:03 spitzak Exp $".
+    End of "$Id$".
 */

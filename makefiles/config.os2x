@@ -1,5 +1,5 @@
 /*
- * "$Id: config.os2x,v 1.4 2001/07/23 09:50:04 spitzak Exp $"
+ * "$Id$"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -20,7 +20,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA.
  *
- * Please report all bugs and problems to "FLTK-bugs@fltk.org".
+ * Please report all bugs and problems to the following page:
+ *
+ *    http://www.fltk.org/str.php
  */
 
 

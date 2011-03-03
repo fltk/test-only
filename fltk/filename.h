@@ -14,7 +14,9 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *
- * Please report all bugs and problems to "fltk-bugs@fltk.org".
+ * Please report all bugs and problems to the following page:
+ *
+ *    http://www.fltk.org/str.php
  *
  * These functions are not in the fltk namespace because they really
  * should not be part of fltk. They are used by the file chooser.

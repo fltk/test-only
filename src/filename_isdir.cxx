@@ -21,7 +21,9 @@
 // original author. If the original contributor agrees, simply change this
 // comment to match the filename_ext.cxx one.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//    http://www.fltk.org/str.php
 
 #include <config.h>
 #include <fltk/filename.h>

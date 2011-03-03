@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//    http://www.fltk.org/str.php
 //
 
 const char *copyright =
@@ -42,7 +44,9 @@ const char *copyright =
 "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 "
 "USA.\n"
 "\n"
-"Please report bugs to fltk-bugs@fltk.org.";
+"Please report bugs to the following page:\n"
+"\n"
+"    http://www.fltk.org/str.php";
 
 #include <config.h>
 #include <fltk/run.h>

@@ -3,8 +3,10 @@ CREDITS - Fast Light Tool Kit (FLTK) Version 2.0
 
     This file lists the people responsible for the toolkit you
     are now using.  If you've looking for your name in lights
-    but we've forgotten you here, please send an email to
-    "fltk-bugs@fltk.org" and we'll update this file accordingly.
+    but we've forgotten you here, please report this to following page
+    and we'll update this file accordingly.
+
+        http://www.fltk.org/str.php
 
 
 CORE DEVELOPERS
@@ -27,6 +29,7 @@ CORE DEVELOPERS
     Robert Kesterson (robertk@users.sf.net)
     Talbot Hughes
     Vincent Penne (vincentp@users.sf.net)
+
 
 
 OTHER CONTRIBUTORS

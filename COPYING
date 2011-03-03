@@ -12,7 +12,7 @@ exceptions:
 
        The authors do request that such modifications be
        contributed to the FLTK project - send all
-       contributions to "fltk-bugs@fltk.org".
+       contributions to "http://www.fltk.org/str.php".
 
     2. Widgets that are subclassed from FLTK widgets do not
        constitute a derivative work.

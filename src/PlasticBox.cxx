@@ -18,7 +18,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//    http://www.fltk.org/str.php
 
 // Aqua-like boxes. This needs some significant rewrite so they are faster.
 // I also think they should be put into the themes, but it looks like too

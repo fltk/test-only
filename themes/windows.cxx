@@ -1,5 +1,5 @@
 //
-// "$Id: windows.cxx,v 1.19 2004/03/10 07:41:46 spitzak Exp $"
+// "$Id$"
 //
 // Theme plugin file for FLTK
 //
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems on the following page:
+//
+//    http://www.fltk.org/str.php
 //
 
 // Theme plugin for fltk to more accurately emulate the Windows 98 GUI
@@ -83,5 +85,5 @@ extern "C" bool fltk_theme()
 }
 
 //
-// End of "$Id: windows.cxx,v 1.19 2004/03/10 07:41:46 spitzak Exp $"
+// End of "$Id$"
 //

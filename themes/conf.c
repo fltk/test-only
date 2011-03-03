@@ -1,5 +1,5 @@
 /*
-   "$Id: conf.c,v 1.4 2002/12/09 04:52:32 spitzak Exp $"
+   "$Id$"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -65,5 +65,5 @@ char	    conf_comment_sep = '#';						/* this denotes comments */
 int         conf_comment_column = 51;						/* what column comments start in */
 
 /*
-    End of "$Id: conf.c,v 1.4 2002/12/09 04:52:32 spitzak Exp $".
+    End of "$Id$".
 */

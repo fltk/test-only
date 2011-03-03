@@ -22,7 +22,9 @@ dnl License along with this library; if not, write to the Free Software
 dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 dnl USA.
 dnl
-dnl Please report all bugs and problems to "fltk-bugs@fltk.org".
+dnl Please report all bugs and problems to the following website:
+dnl 
+dnl     http://www.fltk.org/str.php
 dnl
 
 dnl We need at least autoconf 2.50...
@@ -1050,9 +1052,9 @@ else
 	    ;;
 	*)
 	    # Running some other operating system; inform the user they
-	    # should contribute the necessary options to fltk-bugs@fltk.org...
+	    # should contribute the necessary options to the STR system...
 	    AC_MSG_WARN(Building FLTK with default compiler optimizations)
-	    AC_MSG_WARN(Contact fltk-bugs@fltk.org with uname and compiler options.)
+	    AC_MSG_WARN(Contact the FLTK developers via http://www.fltk.org/str.php with uname and compiler options.)
 	    ;;
     esac
 fi

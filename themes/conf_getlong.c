@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_getlong.c,v 1.4 2002/12/09 04:52:32 spitzak Exp $"
+   "$Id$"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -55,5 +55,5 @@ getconf_long(const char *configfile, const char *key, long *lvalue)
 } /* getconf_long() */
 
 /*
-    End of "$Id: conf_getlong.c,v 1.4 2002/12/09 04:52:32 spitzak Exp $".
+    End of "$Id$".
 */

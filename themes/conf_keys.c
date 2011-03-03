@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_keys.c,v 1.5 2003/01/14 06:51:03 spitzak Exp $"
+   "$Id$"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -192,5 +192,5 @@ getconf_list(const conf_list list, const char *k, char *svalue, int slen)
 } /* getconf_list() */
 
 /*
-    End of "$Id: conf_keys.c,v 1.5 2003/01/14 06:51:03 spitzak Exp $".
+    End of "$Id$".
 */
