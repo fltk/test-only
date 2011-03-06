@@ -506,7 +506,7 @@ void FileChooser::fileListCB() {
     if (!fltk::filename_isfile(pathname)) {
       filename = strrchr((char*)fileName->text(), '/');
       if (filename && filename+1) filename++;
-      sprintf(pathname, "%s%s%s", pathname, filename ? "/" : "", filename);
+      sprintf(pathname, "%s%s%s", pathname, filename ? "/" : "", filename ? filename : "");
     }
     fileName->value(pathname);
 
