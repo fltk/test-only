@@ -503,12 +503,11 @@ void FileChooser::fileListCB() {
     // Strip any trailing slash from the directory name...
     if (*filename == '/') *filename = '\0';
 
-    filename = strrchr((char*)fileName->text(), '/');
-	puts(pathname);
-	puts((filename&&filename+1)? filename+1:"\0");
-    sprintf(pathname, "%s/%s", pathname, (filename && filename+1) ? filename+1 : '\0'); 
-    if (*filename == '/') *filename = '\0';
-
+    if (!fltk::filename_isfile(pathname)) {
+      filename = strrchr((char*)fileName->text(), '/');
+      if (filename && filename+1) filename++;
+      sprintf(pathname, "%s%s%s", pathname, filename ? "/" : "", filename);
+    }
     fileName->value(pathname);
 
     // Update the preview box...
