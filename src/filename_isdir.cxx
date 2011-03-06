@@ -122,6 +122,12 @@ long int fltk::filename_mtime(const char *name) {
   return (long) last_stat.st_ctime;
 }
 
+/**
+  Sorts two files based on their modification date.
+*/
+int fltk::modificationsort(const dirent*const* a, const dirent*const* b) {
+  return fltk::filename_mtime((*a)->d_name) < fltk::filename_mtime((*b)->d_name);
+}
 //
 // End of "$Id$".
 //

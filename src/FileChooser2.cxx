@@ -95,6 +95,7 @@ const char	*FileChooser::all_files_label = "All Files (*)";
 const char	*FileChooser::custom_filter_label = "Custom Filter";
 const char	*FileChooser::existing_file_label = "Please choose an existing file!";
 const char	*FileChooser::favorites_label = "Favorites";
+const char	*FileChooser::sort_menu_label = "Sort method";
 const char	*FileChooser::filename_label = "Filename:";
 #ifdef WIN32
 const char	*FileChooser::filesystems_label = "My Computer";
@@ -107,7 +108,7 @@ const char	*FileChooser::new_directory_tooltip = "Create a new directory.";
 const char	*FileChooser::preview_label = "Preview";
 const char	*FileChooser::save_label = "Save";
 const char	*FileChooser::show_label = "Show:";
-File_Sort_F	*FileChooser::sort = fltk::numericsort;
+FileSortF	*FileChooser::sort = fltk::casenumericsort;
 
 
 //
@@ -232,6 +233,7 @@ void FileChooser::directory(const char *d, bool f) {
       // Strip trailing "."...
       dirptr[1] = '\0';
     }
+
   }
   else
     directory_[0] = '\0';
@@ -250,6 +252,7 @@ void FileChooser::directory(const char *d, bool f) {
       if (!(type_ & CREATE) && !fltk::filename_isfile(pathname))
         *dirptr = 0;
     }
+   
     fileName->text(pathname);
   }
 
@@ -430,7 +433,6 @@ void FileChooser::favoritesCB(Widget *w) {
   }
 }
 
-
 /**
   Handle clicks (and double-clicks) in the FileBrowser.
 
@@ -499,6 +501,12 @@ void FileChooser::fileListCB() {
       }
     }
     // Strip any trailing slash from the directory name...
+    if (*filename == '/') *filename = '\0';
+
+    filename = strrchr((char*)fileName->text(), '/');
+	puts(pathname);
+	puts((filename&&filename+1)? filename+1:"\0");
+    sprintf(pathname, "%s/%s", pathname, (filename && filename+1) ? filename+1 : '\0'); 
     if (*filename == '/') *filename = '\0';
 
     fileName->value(pathname);
@@ -1092,6 +1100,36 @@ void FileChooser::update_preview() {
   previewBox->redraw();
 }
 
+/** Update the sorting method
+
+  This function completely re-loads the displayed FileList.
+  This may be slow for large directories as it rescans completely
+  \todo Only resort the contents of the directory, not rescan
+*/
+  
+void FileChooser::update_sort() {
+  fileList->load(directory_, sort);
+};
+
+/** Toggle the visibility of the sort menu
+
+  \param e determines whether or not to show the menu
+*/
+
+void FileChooser::sort_visible(int e) { 
+  if (e)
+    sortButton->show();
+  else sortButton->hide();
+  sortButton->relayout();
+}
+
+/** Tests the visility of the sort menu
+
+  \return whether or not the sort menu is visible.
+*/
+int FileChooser::sort_visible() const {
+  return (int)sortButton->visible();
+}
 
 /**
   Return a selected filename.

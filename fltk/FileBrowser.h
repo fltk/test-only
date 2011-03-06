@@ -63,7 +63,7 @@ public:
   void	filter(const char *pattern);
   const char	*filter() const { return (pattern_); };
 
-  int		load(const char *directory, File_Sort_F *sort = (File_Sort_F*) fltk::numericsort);
+  int		load(const char *directory, FileSortF *sort = (FileSortF*) fltk::numericsort);
 
   float		textsize() const { return (Browser::textsize()); };
   void		textsize(float s) { Browser::textsize(s); icon_size_ = (uchar)(3 * s / 2); };

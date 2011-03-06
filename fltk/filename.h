@@ -130,12 +130,13 @@ FL_API bool filename_isfile(const char*);
 FL_API FL_FILESIZE_T filename_size(const char *); // return size of file
 FL_API long int filename_mtime(const char *); // return modification time
 
-typedef int (File_Sort_F)(const dirent*const*, const dirent*const*);
+typedef int (FileSortF)(const dirent*const*, const dirent*const*);
 FL_API int alphasort(const dirent*const*, const dirent*const*);
 FL_API int casealphasort(const dirent*const*, const dirent*const*);
 FL_API int casenumericsort(const dirent*const*, const dirent*const*);
 FL_API int numericsort(const dirent*const*, const dirent*const*);
-FL_API int filename_list(const char *d, dirent ***list, File_Sort_F *sort);
+FL_API int modificationsort(const dirent*const*, const dirent*const*);
+FL_API int filename_list(const char *d, dirent ***list, FileSortF *sort);
 FL_API int filename_list(const char *d, dirent ***list); // uses numericsort
 
 //@}

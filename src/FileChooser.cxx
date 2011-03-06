@@ -52,8 +52,18 @@ void FileChooser::cb_showChoice(fltk::Choice* o, void* v) {
 inline void FileChooser::cb_favoritesButton_i(fltk::PopupMenu*, void*) {
   favoritesButtonCB();
 }
+
 void FileChooser::cb_favoritesButton(fltk::PopupMenu* o, void* v) {
   ((FileChooser*)(o->parent()->parent()->user_data()))->cb_favoritesButton_i(o,v);
+}
+
+void FileChooser::cb_sortButton_i(fltk::PopupMenu* o, void* v) {
+  FileChooser::sort = (FileSortF*)o->item()->user_data();
+  update_sort();
+}
+
+void FileChooser::cb_sortButton(fltk::PopupMenu* o, void* v) {
+  ((FileChooser*)(o->parent()->parent()->parent()->user_data()))->cb_sortButton_i(o,v);
 }
 
 inline void FileChooser::cb_newButton_i(fltk::Button*, void*) {
@@ -205,7 +215,7 @@ FileChooser::FileChooser(const char *d, const char *p, int t, const char *title)
         o->labelsize(14);
         o->callback((fltk::Callback*)cb_fileList);
         ((fltk::Window*)(o->parent()->parent()))->hotspot(o);
-                    fileList->type(0);fileList->when(fltk::WHEN_CHANGED);
+        fileList->type(0);fileList->when(fltk::WHEN_CHANGED);
       }
        {fltk::InvisibleBox* o = previewBox = new fltk::InvisibleBox(295, 0, 175, 225, "?");
         o->set_vertical();
@@ -233,7 +243,12 @@ FileChooser::FileChooser(const char *d, const char *p, int t, const char *title)
           o->callback((fltk::Callback*)cb_showHiddenButton);
           o->value(fileList->show_hidden() ? 1 : 0);
         }
-        new fltk::InvisibleBox(180, 0, 290, 20);
+         {fltk::PopupMenu* o = sortButton = new fltk::PopupMenu(270, 0, 200, 20, "Sort method");
+          o->callback((fltk::Callback*)cb_sortButton);
+          o->align(fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE);
+          sortButton->label(sort_menu_label);
+        }
+        //new fltk::InvisibleBox(180, 0, 290, 20);
         o->end();
       }
        {fltk::FileInput* o = fileName = new fltk::FileInput(105, 25, 365, 35);
@@ -327,6 +342,7 @@ FileChooser::FileChooser(const char *d, const char *p, int t, const char *title)
   type(t);
   filter(p);
   update_favorites();
+  sortButton->hide();
   value(d);
   type(t);
   int e;
@@ -340,54 +356,9 @@ FileChooser::~FileChooser() {
   delete favWindow;
 }
 
-void FileChooser::callback(void (*cb)(FileChooser *, void *), void *d ) {
-  callback_ = cb;
-  data_     = d;
-}
-
-void FileChooser::color(Color c) {
-  fileList->color(c);
-}
-
-Color FileChooser::color() {
-  return (fileList->color());
-}
-
-char * FileChooser::directory() {
-  return directory_;
-}
-
-const char * FileChooser::filter() {
-  return (fileList->filter());
-}
-
-int FileChooser::filter_value() {
-  return showChoice->value();
-}
-
 void FileChooser::filter_value(int f) {
   showChoice->value(f);
   showChoiceCB();
-}
-
-void FileChooser::hide() {
-  window->hide();
-}
-
-void FileChooser::icon_size(uchar s) {
-  fileList->icon_size(s);
-}
-
-uchar FileChooser::icon_size() {
-  return ((uchar) fileList->icon_size());
-}
-
-void FileChooser::label(const char *l) {
-  window->label(l);
-}
-
-const char * FileChooser::label() {
-  return (window->label());
 }
 
 void FileChooser::ok_label(const char *l) {
@@ -397,10 +368,6 @@ void FileChooser::ok_label(const char *l) {
   w+=70;
   okButton->resize(cancelButton->x()- w, cancelButton->y(),w-10, 25);
   okButton->parent()->init_sizes();
-}
-
-const char * FileChooser::ok_label() {
-  return (okButton->label());
 }
 
 void FileChooser::show() {
@@ -428,34 +395,6 @@ bool FileChooser::exec(Window* p, bool grab) {
   return window->exec(p, grab);
 }
 
-int FileChooser::shown() {
-  return window->shown();
-}
-
-void FileChooser::textcolor(Color c) {
-  fileList->textcolor(c);
-}
-
-Color FileChooser::textcolor() {
-  return (fileList->textcolor());
-}
-
-void FileChooser::textfont(Font* f) {
-  fileList->textfont(f);
-}
-
-Font* FileChooser::textfont() {
-  return (fileList->textfont());
-}
-
-void FileChooser::textsize(float s) {
-  fileList->textsize(s);
-}
-
-float FileChooser::textsize() {
-  return (fileList->textsize());
-}
-
 void FileChooser::type(int t) {
   type_ = t;
   if (t & MULTI)
@@ -472,29 +411,9 @@ void FileChooser::type(int t) {
     fileList->filetype(FileBrowser::FILES);
 }
 
-int FileChooser::type() {
-  return (type_);
-}
-
-void * FileChooser::user_data() const {
-  return (data_);
-}
-
-void FileChooser::user_data(void *d) {
-  data_ = d;
-}
-
-int FileChooser::visible() {
-  return window->visible();
-}
-
 void FileChooser::favorites(int e) {
   favorites_showing = e;
   update_favorites();
-}
-
-int FileChooser::favorites() const {
-  return favorites_showing;
 }
 
 //  End of "$Id$"

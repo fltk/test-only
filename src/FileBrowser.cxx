@@ -103,7 +103,7 @@ FileBrowser::FileBrowser(int        X,  // I - Upper-lefthand X coordinate
 
 int						// O - Number of files loaded
 FileBrowser::load(const char     *directory,// I - Directory to load
-                      File_Sort_F *sort)	// I - Sort function to use
+                      FileSortF *sort)	// I - Sort function to use
 {
   int		i;				// Looping var
   int		num_files;			// Number of files in directory

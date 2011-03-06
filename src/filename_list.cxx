@@ -54,7 +54,7 @@ int fltk::casealphasort(const dirent*const*a, const dirent*const*b) {
 }
 
 int fltk::filename_list(const char *d, dirent ***list,
-                     File_Sort_F *sort) {
+                     FileSortF *sort) {
   // Nobody defines the comparison function prototype correctly!
   // It should be "const dirent* const*". I don't seem to be able to
   // do this even for our own internal version because some compilers

@@ -61,6 +61,7 @@ private:
   void showChoiceCB();
   void update_favorites();
   void update_preview();
+  void update_sort();
   int favorites_showing;
   void activate_okButton_if_file();
   void directory(const char *d, bool);
@@ -150,54 +151,64 @@ private:
   inline void cb_favOkButton_i(fltk::ReturnButton*, void*);
   static void cb_favOkButton(fltk::ReturnButton*, void*);
 
+  // Sort button
+  fltk::PopupMenu *sortButton;
+  void cb_sortButton_i(fltk::PopupMenu*, void*);
+  static void cb_sortButton(fltk::PopupMenu*, void*);
+
 public:
   enum { SINGLE = 0, MULTI = 1, CREATE = 2, DIRECTORY = 4 };
   FileChooser(const char *d, const char *p, int t, const char *title);
   ~FileChooser();
-  void callback(void (*cb)(FileChooser *, void *), void *d = 0);
-  void color(Color c);
-  Color color();
+  inline void add_sort_fn(const char* label, FileSortF func) { sortButton->add(label, (void*)func); }
+  inline void callback(void (*cb)(FileChooser *, void *), void *d = 0) { callback_ = cb, data_ = d; }
+  inline void color(Color c) { fileList->color(c); }
+  inline Color color() const { return fileList->color(); }
   int count();
   void directory(const char *d);
-  char * directory();
+  inline char * directory() const { return (char*)directory_ ; }
+  bool exec(Window* p, bool grab);
+  void favorites(int e);
+  inline int favorites() const { return favorites_showing; }
   void filter(const char *p);
-  const char * filter();
-  int filter_value();
+  inline const char * filter() const { return fileList->filter(); }
+  inline int filter_value() const { return showChoice->value(); }
   void filter_value(int f);
-  void hide();
-  void icon_size(uchar s);
-  uchar icon_size();
-  void label(const char *l);
-  const char * label();
+  inline void hide() { return window->hide(); }
+  void icon_size(uchar s) { fileList->icon_size(s); }
+  inline uchar icon_size() const { return (uchar)fileList->icon_size(); }
+  inline void label(const char *l) { window->label(l); }
+  inline const char * label() const { return window->label(); }
   void ok_label(const char *l);
-  const char * ok_label();
+  inline const char * ok_label() const { return okButton->label(); }
   void preview(bool e);
-  int preview() const { return previewButton->value(); };
+  inline int preview() const { return previewButton->value(); };
+  inline void remove_sort_fn(const char* label) { sortButton->remove(label); }
   void rescan();
   void show();
   void show(int x, int y);
-  bool exec(Window* p, bool grab);
-  int shown();
-  void textcolor(Color c);
-  Color textcolor();
-  void textfont(Font* f);
-  Font* textfont();
-  void textsize(float s);
-  float textsize();
+  inline int shown() const { return window->shown(); }
+  void sort_visible(int e);
+  int sort_visible() const;
+  inline void textcolor(Color c) { fileList->textcolor(c); }
+  inline Color textcolor() const { return fileList->textcolor(); }
+  inline void textfont(Font* f) { fileList->textfont(f); }
+  inline Font* textfont() const { return fileList->textfont(); }
+  inline void textsize(float s) { fileList->textsize(s); }
+  inline float textsize() const { return fileList->textsize(); }
   void type(int t);
-  int type();
-  void * user_data() const;
-  void user_data(void *d);
+  inline int type() const { return type_; }
+  inline void * user_data() const { return data_; }
+  inline void user_data(void *d) { data_ = d; }
   const char *value(int f = 1);
   void value(const char *filename);
-  int visible();
-  void favorites(int e);
-  int favorites() const;
+  inline int visible() const { return window->visible(); }
   static const char *add_favorites_label;
   static const char *all_files_label;
   static const char *custom_filter_label;
   static const char *existing_file_label;
   static const char *favorites_label;
+  static const char *sort_menu_label;
   static const char *filename_label;
   static const char *filesystems_label;
   static const char *manage_favorites_label;
@@ -206,7 +217,7 @@ public:
   static const char *preview_label;
   static const char *save_label;
   static const char *show_label;
-  static File_Sort_F *sort;
+  static FileSortF *sort;
 
   fltk::Button *newButton;
   fltk::CheckButton *previewButton;
