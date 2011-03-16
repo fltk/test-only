@@ -33,6 +33,7 @@
 
 #include <fltk/ask.h>
 #include <fltk/run.h>
+#include <fltk/draw.h>
 #include <fltk/ReturnButton.h>
 #include <fltk/SecretInput.h>
 #include <fltk/TextDisplay.h>
@@ -219,17 +220,27 @@ static int innards(
 
   // Button with '*' is default, if none the left-most one is:
   int default_button = 0;
-  int i;
-  for (i = 2; i >= 0; i--) if (blabels[i]) {
+  // counter to determine how far left we place the buttons
+  int counter_bx = 0;
+  for (int i = 2; i >= 0; i--) if (blabels[i]) {
+    // emulates Button->measure_label(&w, &h)
+    int w = 300, h = 300;
+	measure(blabels[i], w, h, 0);
+	// Add room for the width + padding between buttons
+    counter_bx += (w + 10) < MIN_BUTTON_W ? MIN_BUTTON_W: w + 10;
+	// Add room for the border
+	counter_bx += BORDER_W;
     if (!default_button) default_button = i;
     if (blabels[i][0] == '*') {blabels[i]++; default_button = i;}
   }
-
-#if 1
-  int bx = window.w();
+  // Take into account the default glyph size of the return button
+  counter_bx += 2*getsize();
+  
+  // Move the starting point back as far as it needs.
+  int bx = window.w() - counter_bx;
   int by = window.h()-(BORDER_H+BUTTON_H);
   int bh = BUTTON_H;
-  for (i = 3; i--;) {
+  for (int i = 3; i--;) {
     if (blabels[i]) {
       fltk::Button* button;
       int glyph_width=0;
@@ -262,34 +273,14 @@ static int innards(
       // enforce button min size
       bw = bw < MIN_BUTTON_W ? MIN_BUTTON_W : bw;
 
-      // accumulate the horizontal button position based on button widths
-      bx -= bw + BORDER_W;
-
       // finally position and size the button
       button->resize(bx, by, bw, bh);
+	  
+	  // accumulate the horizontal button position based on button widths
+      bx += bw + BORDER_W;
+
     }
   }
-
-#else // the old way of placing constant sized buttons
-
-  for (i = 3; i--;) if (blabels[i]) {
-    fltk::Button* button;
-    if (i == default_button) {
-      button = new ReturnButton(
-	window.w()-(BUTTON_W+BORDER_W)*(i+1),
-	window.h()-(BORDER_H+BUTTON_H), BUTTON_W, BUTTON_H, blabels[i]);
-      window.hotspot(button);
-      if (!istr) window.set_focus(button);
-    } else {
-      button = new fltk::Button(
-	window.w()-(BUTTON_W+BORDER_W)*(i+1),
-	window.h()-(BORDER_H+BUTTON_H), BUTTON_W, BUTTON_H, blabels[i]);
-    }
-    button->callback(set_button_number, i);
-  }
-
-#endif
-
 
   window.end();
 
