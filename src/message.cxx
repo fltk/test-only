@@ -399,7 +399,7 @@ int fltk::choice(const char*fmt,const char *b0,const char *b1,const char *b2,...
     if (fltk::beep_on_dialog()) (fltk::beep(fltk::BEEP_QUESTION));
   va_list ap;
   va_start(ap, b2);
-  int r = innards("?", 0, 0, fmt, ap, b2, b1, b0);
+  int r = innards("?", 0, 0, fmt, ap, b0, b1, b2);
   va_end(ap);
   if(r<0)
 	  return r;
@@ -411,7 +411,7 @@ int fltk::choice_alert(const char*fmt,const char *b0,const char *b1,const char *
   if (fltk::beep_on_dialog()) (fltk::beep(fltk::BEEP_QUESTION));
   va_list ap;
   va_start(ap, b2);
-  int r = innards("!", 0, 0, fmt, ap, b2, b1, b0);
+  int r = innards("!", 0, 0, fmt, ap, b0, b1, b2);
   va_end(ap);
   if(r<0)
 	  return r;
