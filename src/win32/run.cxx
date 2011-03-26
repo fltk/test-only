@@ -1435,6 +1435,14 @@ static inline int ms2fltk(int vk, LPARAM lParam) {
     }
     for (i = 0; i < 256; i++) if (!extendedlut[i]) extendedlut[i] = vklut[i];
   }
+  static bool rShiftWasOn = false;
+  if (HIWORD(GetKeyState(VK_RSHIFT)) && !rShiftWasOn) {
+    rShiftWasOn = true;
+    lParam |= 1 << 24;
+  } else if (rShiftWasOn) {
+    rShiftWasOn = false;
+    lParam |= 1 << 24;
+  }
   if (lParam&(1<<24)) {
     if (!(lParam&(1<<31))) fl_last_was_extended = true;
     return extendedlut[vk];
