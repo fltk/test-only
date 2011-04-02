@@ -1436,10 +1436,11 @@ static inline int ms2fltk(int vk, LPARAM lParam) {
     for (i = 0; i < 256; i++) if (!extendedlut[i]) extendedlut[i] = vklut[i];
   }
   static bool rShiftWasOn = false;
-  if (HIWORD(GetKeyState(VK_RSHIFT)) && !rShiftWasOn) {
+  
+  if (vk == VK_SHIFT && HIWORD(GetKeyState(VK_RSHIFT)) && !rShiftWasOn) {
     rShiftWasOn = true;
-    lParam |= 1 << 24;
-  } else if (rShiftWasOn) {
+    if (rShiftWasOn) lParam |= 1 << 24;
+  } else if (vk == VK_SHIFT && rShiftWasOn && !HIWORD(GetKeyState(VK_RSHIFT))) {
     rShiftWasOn = false;
     lParam |= 1 << 24;
   }
