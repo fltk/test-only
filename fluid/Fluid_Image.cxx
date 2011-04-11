@@ -353,7 +353,7 @@ Fluid_Image::~Fluid_Image() {
 
 Fluid_Image *ui_find_image(Fluid_Image *old) {
   const char *name = fltk::file_chooser("Image", "*.{bm|xbm|xpm|gif|png|bmp|jpg|jpeg}",
-				     old ? old->name() : 0);
+				     old ? old->name() : 0, 0, 0);
   Fluid_Image *ret = (name && *name) ? Fluid_Image::find(name) : 0;
   return ret;
 }
@@ -372,7 +372,7 @@ extern void fix_images_dir();
 void browse_dir_cb()
 {
   const char *f = fltk::file_chooser("Images directory","",
-				     images_dir_input->value());
+				     images_dir_input->value(), 0, 0);
   if (f) images_dir_input->value(f);
 }
 

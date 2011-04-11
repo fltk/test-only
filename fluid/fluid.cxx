@@ -219,7 +219,7 @@ void save_position(Window *w, const char *prefsName) {
 void save_cb(Widget *, void *v) {
     const char *c = filename;
     if (v || !c || !*c) {
-	if (!(c=file_chooser("Save to:", "*.f[ld]", c))) return;
+	if (!(c=file_chooser("Save to:", "*.f[ld]", c, 0, 0))) return;
 	if (v != (void *)2L) set_filename(c);
     }
     if (!write_file(c)) {
@@ -481,7 +481,7 @@ void exit_cb(Widget *,void *) {
 void open_cb(Widget *, void *v) {
   if (!v && modflag && !ask("Discard changes?")) return;
   const char *c;
-  if (!(c = file_chooser("Open:", "*.f[ld]", filename))) return;
+  if (!(c = file_chooser("Open:", "*.f[ld]", filename, 0, 0))) return;
   if (!fltk::filename_exist(c)) {
     message("%s not found", c);
     return;
@@ -660,7 +660,7 @@ void new_cb(Widget *, void *v) {
 /*void new_cb(Widget *, void *v) {
     if (!v && modflag && !ask("Discard changes?")) return;
     const char *c;
-    if (!(c = file_chooser("New:", "*.f[ld]", 0))) return;
+    if (!(c = file_chooser("New:", "*.f[ld]", 0, 0, 0))) return;
     delete_all();
     set_filename(c);
     modflag = 0;
