@@ -386,9 +386,9 @@ InputBrowser::popup() {
       win->end();
       win->box(UP_BOX);
 
-      browser = list;
-      ib = this;
     }
+    browser = list;
+    ib = this;
 
     share_list.other = this;
     list->list(&share_list);
