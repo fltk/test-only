@@ -6,6 +6,12 @@
 #include <cstdio>
 #include <cstring>
 
+#define PAPERCOLOUR  0xFFFFFF00
+#define BGCOLOUR     0xF4F4EC00
+#define SLIDERCOLOUR 0xC7DAFF00
+#define BUTTONCOLOUR GRAY75
+#define BARCOLOUR    lerp(GRAY75, 0x8EA2E200, .1)
+
 using namespace fltk;
 /* BS: The below is a trial of an XP theme. For now they're not in the
    public API, because I really don't think they should be
@@ -98,55 +104,60 @@ enum {
   V_KNURL_PUSHED
 }; // 13 frames each
 
+static void draw_arrows(const Rectangle& R, int drawflags) {
+  if (drawflags & ALIGN_TOP) {
+    if (drawflags & PUSHED)
+      set_frame(V_UP_ARROW_PUSHED);
+    else if (drawflags & HIGHLIGHT)
+      set_frame(V_UP_ARROW_HI);
+    else
+      set_frame(V_UP_ARROW);
+    img_frame->draw(R);
+  } else if (drawflags & ALIGN_BOTTOM) {
+    if (drawflags & PUSHED)
+      set_frame(V_DOWN_ARROW_PUSHED);
+    else if (drawflags & HIGHLIGHT)
+      set_frame(V_DOWN_ARROW_HI);
+    else
+      set_frame(V_DOWN_ARROW);
+    img_frame->draw(R);
+    
+  } else if (drawflags & ALIGN_LEFT) {
+    if (drawflags & PUSHED)
+      set_frame(H_LEFT_ARROW_PUSHED);
+    else if (drawflags & HIGHLIGHT)
+      set_frame(H_LEFT_ARROW_HI);
+    else
+      set_frame(H_LEFT_ARROW);
+    img_frame->draw(R);
+  } else if (drawflags & ALIGN_RIGHT) {
+    if (drawflags & PUSHED)
+      set_frame(H_RIGHT_ARROW_PUSHED);
+    else if (drawflags & HIGHLIGHT)
+      set_frame(H_RIGHT_ARROW_HI);
+    else
+      set_frame(H_RIGHT_ARROW);
+    img_frame->draw(R);
+  }
+}
+
 static class XPScrollBarGlyph : public Symbol {
   public:
     void _draw(const Rectangle& R) const {
       scroll_glyph_init_check();
-
       if (drawflags() & ALIGN_MASK) {
-	if (drawflags() & ALIGN_TOP) {
-	  if (drawflags() & PUSHED)
-	    set_frame(V_UP_ARROW_PUSHED);
-	  else if (drawflags() & HIGHLIGHT)
-	    set_frame(V_UP_ARROW_HI);
-	  else
-	    set_frame(V_UP_ARROW);
-	  img_frame->draw(R);
-	} else if (drawflags() & ALIGN_BOTTOM) {
-	  if (drawflags() & PUSHED)
-	    set_frame(V_DOWN_ARROW_PUSHED);
-	  else if (drawflags() & HIGHLIGHT)
-	    set_frame(V_DOWN_ARROW_HI);
-	  else
-	    set_frame(V_DOWN_ARROW);
-	  img_frame->draw(R);
+	draw_arrows(R, drawflags());
+	if (drawflags() & ALIGN_BOTTOM) {
 	  if (R.h() > R.w()) {
             set_frame(V_TRACK);
             img_frame->draw_diced(R);
           } else if (R.w() > R.h()) {
             set_frame(H_TRACK);
-	    img_frame->draw_diced(R);
-	  }
-	} else if (drawflags() & ALIGN_LEFT) {
-	  if (drawflags() & PUSHED)
-	    set_frame(H_LEFT_ARROW_PUSHED);
-	  else if (drawflags() & HIGHLIGHT)
-	    set_frame(H_LEFT_ARROW_HI);
-	  else
-	    set_frame(H_LEFT_ARROW);
-	  img_frame->draw(R);
-	} else if (drawflags() & ALIGN_RIGHT) {
-	  if (drawflags() & PUSHED)
-	    set_frame(H_RIGHT_ARROW_PUSHED);
-	  else if (drawflags() & HIGHLIGHT)
-	    set_frame(H_RIGHT_ARROW_HI);
-	  else
-	    set_frame(H_RIGHT_ARROW);
-	  img_frame->draw(R);
+            img_frame->draw_diced(R);
+          }
 	}
       } else {
 	if (R.x() == 0) { // Vertical
-
 	  if (drawflags() & PUSHED)
 	    set_frame(V_SLIDER_PUSHED);
 	  else if (drawflags() & HIGHLIGHT)
@@ -154,10 +165,10 @@ static class XPScrollBarGlyph : public Symbol {
 	  else
 	    set_frame(V_SLIDER);
 	  img_frame->draw_diced(R);
-
+	  
 	  if (drawflags() & PUSHED)
 	    set_frame(V_KNURL_PUSHED);
-	  if (drawflags() & HIGHLIGHT)
+	  else if (drawflags() & HIGHLIGHT)
 	    set_frame(V_KNURL_HI);
 	  else
 	    set_frame(V_KNURL);
@@ -171,7 +182,7 @@ static class XPScrollBarGlyph : public Symbol {
 	    rr.h(FRAME_SIZE);
 	  }
 	  push_clip(rr);
-	  img_frame->draw(rr);
+	  img_frame->draw_diced(rr);
 	  pop_clip();
 	} else if (R.y() == 0){
 	  if (drawflags() & PUSHED)
@@ -202,7 +213,6 @@ static class XPScrollBarGlyph : public Symbol {
 	  pop_clip();
 	}
       }
-
     }
     XPScrollBarGlyph() : Symbol("XPScrollBarGlyph") {}
     ~XPScrollBarGlyph() {
@@ -213,39 +223,7 @@ static class XPScrollBarGlyph : public Symbol {
 static class ArrowGlyph : public Symbol {
   public:
     void _draw(const Rectangle& R) const {
-      if (drawflags() & ALIGN_TOP) {
-        if (drawflags() & PUSHED)
-	  set_frame(V_UP_ARROW_PUSHED);
-	else if (drawflags() & HIGHLIGHT)
-	  set_frame(V_UP_ARROW_HI);
-	else
-	   set_frame(V_UP_ARROW);
-	img_frame->draw_diced(R);
-      } else if (drawflags() & ALIGN_BOTTOM) {
-	if (drawflags() & PUSHED)
-          set_frame(V_DOWN_ARROW_PUSHED);
-	else if (drawflags() & HIGHLIGHT)
-	  set_frame(V_DOWN_ARROW_HI);
-	else
-	   set_frame(V_DOWN_ARROW);
-	img_frame->draw_diced(R);
-      } else if (drawflags() & ALIGN_LEFT) {
-	if (drawflags() & PUSHED)
-	  set_frame(H_LEFT_ARROW_PUSHED); 
-	else if (drawflags() & HIGHLIGHT) 
-	  set_frame(H_LEFT_ARROW_HI);
-	else
-	  set_frame(H_LEFT_ARROW);
-	img_frame->draw_diced(R);
-      } else if (drawflags() & ALIGN_RIGHT) {
-	if (drawflags() & PUSHED)
-	  set_frame(H_RIGHT_ARROW_PUSHED);
-	else if (drawflags() & HIGHLIGHT)
-	  set_frame(H_RIGHT_ARROW_HI);
-	else
-	  set_frame(H_RIGHT_ARROW);
-	img_frame->draw_diced(R);
-      } 
+      draw_arrows(R, drawflags());
     }
     ArrowGlyph() : Symbol("arrow glyph") {}
 } arrow_glyph;
@@ -295,16 +273,29 @@ static class XPBox : public Box {
           data_(pattern), down_(down) {
       set_inset(dx, dy, -dw, -dh);
       if(strcmp(pattern, "return") == 0)
-        type_return_ = false;
-      else
         type_return_ = true;
+      else
+        type_return_ = false;
     }
 
 } xp_box("XPDownBox", 5, 5, 10, 10, "down"), xp_return_box("XPDownBox", 5, 5, 10, 10, "return", &xp_box);
 
 extern "C" bool fltk_theme() {
   Style* s;
-  if((s = Style::find("Scrollbar"))) {
+  if((s = Style::find("default"))) {
+    s->scrollbar_width(17);
+    s->color(PAPERCOLOUR);
+    s->buttoncolor(BUTTONCOLOUR);
+    s->labelsize(12.0);
+    s->textsize(12.0);
+    s->leading(4);
+    s->selection_color(0x316AC500);
+    s->alt_color(BARCOLOUR); // used by some buttons
+  }
+  if ((s = Style::find("Window"))) {
+    s->color(BGCOLOUR);
+  }
+  if ((s = Style::find("Scrollbar"))) {
     s->highlight_color(s->color());
     s->color(-1);
     s->glyph(&xp_glyph);
@@ -336,10 +327,14 @@ extern "C" bool fltk_theme() {
   }
   if ((s = Style::find("Adjuster"))) {
     s->buttonbox(&xp_box);
+    s->color(BGCOLOUR);
+    s->buttoncolor(SLIDERCOLOUR);
     s->highlight_color(s->color());
   }
   if ((s = Style::find("Slider"))) {
     s->buttonbox(&xp_box);
+    s->color(BGCOLOUR);
+    s->buttoncolor(SLIDERCOLOUR);
     s->highlight_color(s->color());
   }
   if ((s = Style::find("InputBrowser"))) {
@@ -348,7 +343,8 @@ extern "C" bool fltk_theme() {
   }
   if ((s = Style::find("ValueInput"))) {
     s->glyph(&arrow_glyph);
-    s->color(-1);
+    s->color(PAPERCOLOUR);
+    s->buttoncolor(SLIDERCOLOUR);
     s->highlight_color(s->color());
   }
   if ((s = Style::find("CycleButton"))) {
@@ -356,12 +352,18 @@ extern "C" bool fltk_theme() {
     s->highlight_color(s->color());
   }
   if ((s = Style::find("Menu"))) {
-    s->color(GRAY75); //FIXME: Placeholder
+    s->color(BGCOLOUR);
     s->highlight_color(DARK_BLUE);
   }
   if ((s = Style::find("BarGroup"))) {
     s->glyph(&arrow_glyph);
     s->highlight_color(s->color());
+  }
+  if ((s = Style::find("Item"))) {
+    s->color(PAPERCOLOUR);
+    s->buttoncolor(SLIDERCOLOUR);
+    s->selection_color(0x316AC500);
+    s->leading(5);
   }
   return true;
  
