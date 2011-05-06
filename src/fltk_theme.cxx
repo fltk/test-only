@@ -1,6 +1,7 @@
 // fltk_theme.cxx
 
 #include <config.h>
+#include <fltk/SharedImage.h>
 
 /*! \fn bool fltk_theme();
 
@@ -34,23 +35,23 @@
 
 extern "C" FL_API bool fltk_theme();
 
-#if USE_X11
+//#if USE_X11
 
-extern "C" bool fltk_theme() {return false; /* true? */}
+//extern "C" bool fltk_theme() {return false; /* true? */}
 /* Maybe _WIN32 should use the Windows version anyway? It would work! */
-//# include "x11/fltk_theme.cxx"
+# include "x11/fltk_theme.cxx"
 
-#elif defined(_WIN32)
+//#elif defined(_WIN32)
 
 # include "win32/fltk_theme.cxx"
 
-#elif USE_QUARTZ
+//#elif USE_QUARTZ
 
 //+++ implement Quartz support for themes
-extern "C" bool fltk_theme() {return false; /* true? */}
+//extern "C" bool fltk_theme() {return false; /* true? */}
 
-#else
+//#else
 
-extern "C" bool fltk_theme() {return false; /* true? */}
+//extern "C" bool fltk_theme() {return false; /* true? */}
 
-#endif
+//#endif

@@ -34,6 +34,7 @@ using namespace fltk;
 
 /*! Fill the rectangle with the current color. */
 void fltk::fillrect(int x, int y, int w, int h) {
+  if (getcolor() < 0) return; 
   if (w <= 0 || h <= 0) return;
   transform(x,y,w,h);
 #if USE_CAIRO

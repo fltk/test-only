@@ -238,6 +238,7 @@ int Item::handle(int event) {
 /** Unlike other widgets the constructor does not take any dimensions,
   since it is assummed the container widget will size this
   correctly. */
+
 ItemGroup::ItemGroup(const char* l, bool begin) :
   Menu(0,0,0,0,l,begin)
 {

@@ -27,12 +27,15 @@
 
 #include <config.h>
 #include <fltk/Scrollbar.h>
+#include <fltk/Image.h>
 #include <fltk/events.h>
 #include <fltk/damage.h>
 #include <fltk/Box.h>
 #include <fltk/draw.h>
 #include <math.h>
+#include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 using namespace fltk;
 
 /*! \class fltk::Scrollbar
@@ -254,7 +257,6 @@ void Scrollbar::draw() {
   if (pushed_ == SLIDER) f5 |= PUSHED;
   if (highlight_ == UP_ARROW) f5 &=~HIGHLIGHT; else f1 &= ~HIGHLIGHT;
   if (highlight_ == DOWN_ARROW) f5 &=~HIGHLIGHT; else f2 &= ~HIGHLIGHT; 
-
   Rectangle ir(r); // interior after removing arrow buttons
   if (vertical() && r.h() >= 3*r.w()) {
     Rectangle br(r); br.h(r.w());
@@ -268,7 +270,6 @@ void Scrollbar::draw() {
       draw_glyph(ALIGN_BOTTOM|ALIGN_INSIDE, br);
     }
     ir.move_y(r.w()); ir.move_b(-r.w());
-
   } else if (r.w() >= 3*r.h()) { // horizontal:
     Rectangle br(r); br.w(r.h());
     if (damage()&(DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
@@ -282,9 +283,8 @@ void Scrollbar::draw() {
     }
     ir.move_x(r.h()); ir.move_r(-r.h());
   }
-
   setcolor(color());
-  fillrect(ir);
+  //fillrect(ir);
   Slider::draw(ir, f5, false);
 }
 

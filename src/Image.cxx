@@ -621,6 +621,49 @@ void Image::draw(int x, int y) const {
 }
 
 /**
+  Cubes an image and draws the 4 corners.
+  It then expands the middle of the cube as far as needed, whilst
+  only expanding the top and side edges horizontally/vertically as needed.
+  With an image that has pixels set out as such:
+  ABA
+  CDC
+  ABA
+  The final image looks as follows, and is expanded to fit the required rectangle:
+  AABBBBBAA
+  AABBBBBAA
+  CCDDDDDCC
+  CCDDDDDCC
+  CCDDDDDCC
+  CCDDDDDCC
+  CCDDDDDCC
+  AABBBBBAA
+  AABBBBBAA
+  This function is mostly called from within FLTK's themes.
+*/
+void Image::draw_diced(const Rectangle& R) {
+//  fetch_if_needed();
+  int w, h; measure(w, h);
+  int cw = w / 3;            // Corner width 
+  int lw = w - 2*cw;         // Top width
+  int ch = h / 3;            // Corner height
+  int lh = h - 2*ch;         // Top height
+  int dx = R.x();
+  int dy = R.y();
+  int dlw = R.w() - 2*cw;
+  int dlh = R.h() - 2*ch;
+  draw(Rectangle(0, 0, cw, ch), 		Rectangle(dx, dy, cw, ch));
+  draw(Rectangle(cw, 0, lw, ch),		Rectangle(dx + cw, dy, dlw, ch));
+  draw(Rectangle(cw + lw, 0, cw, ch), 		Rectangle(dx + cw + dlw, dy, cw, ch));
+  draw(Rectangle(0, ch, cw, lh),		Rectangle(dx, dy + ch, cw, dlh));
+  draw(Rectangle(cw + lw, ch, cw, lh),		Rectangle(dx + cw + dlw, dy + ch, cw, dlh));
+  draw(Rectangle(0, ch + lh, cw, ch),		Rectangle(dx, dy + ch + dlh, cw, ch));
+  draw(Rectangle(cw + lw, ch + lh, cw, ch), 	Rectangle(dx + cw + dlw, dy + ch + dlh, cw, ch));
+  draw(Rectangle(cw, ch + lh, lw, ch), 		Rectangle(dx + cw, dy + ch + dlh, dlw, ch));
+  draw(Rectangle(cw, ch, lw, lh), 		Rectangle(dx + cw, dy + ch, dlw, dlh));
+};
+
+
+/**
   Resizes the image to fit in the rectangle. This is the virtual
   method from the Symbol base class, so this is what is called if
   the image is used as a label or box type.

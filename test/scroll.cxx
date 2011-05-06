@@ -125,7 +125,7 @@ int main(int argc, char** argv) {
     Button* b = new Button(x*75,y*25+(y>=8?5*75:0),75,25);
     b->copy_label(buf);
     b->color(n);
-    b->labelcolor(fltk::WHITE);
+//    b->labelcolor(fltk::WHITE);
   }
   Drawing drawing(0,8*25,5*75,5*75,0);
   scroll.end();

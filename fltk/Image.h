@@ -90,6 +90,7 @@ public:
   void draw(int x, int y) const;
   void draw(const Rectangle& r) const {_draw(r);}
   void draw(const Rectangle& from, const Rectangle& to) const;
+  void draw_diced(const Rectangle& R);
 
   void _draw(const Rectangle&) const; // Symbol virtual method
   void _measure(int& W, int& H) const; // Symbol virtual method

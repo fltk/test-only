@@ -219,6 +219,7 @@ public:
 
   Box*	box()			const;
   Box*	buttonbox()		const;
+  Box*  focusbox()		const;
   Symbol* glyph()		const;
   Font*	labelfont()		const;
   Font*	textfont()		const;
@@ -239,6 +240,7 @@ public:
 
   void box(Box*)		;
   void buttonbox(Box*)		;
+  void focusbox(Box*)		;
   void glyph(Symbol*)		;
   void labelfont(Font*)		;
   void textfont(Font*)		;

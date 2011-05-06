@@ -329,7 +329,7 @@ InputBrowser::draw() {
   drawstyle(style(),flags());
   minw_ = w();
   Rectangle r(w(),h()); box()->inset(r);
-  int W1 = r.h()*4/5;
+  int W1 = r.h()*5/5;
   if (damage()&(DAMAGE_ALL|DAMAGE_CHILD)) {
     if (damage()&DAMAGE_ALL) draw_frame();
     m_input.resize(r.x(), r.y(), r.w()-W1, r.h());

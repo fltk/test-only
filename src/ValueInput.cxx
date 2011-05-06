@@ -29,6 +29,7 @@
 #include <fltk/draw.h>
 #include <fltk/math.h>
 #include <stdlib.h>
+#include <stdio.h>
 using namespace fltk;
 
 /*! \class fltk::ValueInput
@@ -98,7 +99,7 @@ static char which_pushed = 0;
 void ValueInput::draw() {
   drawstyle(style(),flags());
   Rectangle r(w(),h()); box()->inset(r);
-  int bw = r.h(); if (bw*4>r.w()) bw = (r.w()+3)/4; r.move_r(-bw);
+  int bw = r.h()/2; if (bw*2>r.w()) bw = (r.w()+3)/2; r.move_r(-bw);
   const int bh = r.h()/2;
   if (damage() & DAMAGE_ALL) {
     draw_frame();
@@ -117,14 +118,16 @@ void ValueInput::draw() {
     gr.move_y(bh);
     gr.h(r.h()-bh);
     drawstyle(style(),f[1]);
-    if (gr.h() == bh) {
+    // BS: Removed all this as it doesn't seem necessary; I couldn't
+    // discern any difference on my machine, even with tiny buttons.
+//    if (gr.h() == bh) {
       draw_glyph(ALIGN_BOTTOM|ALIGN_INSIDE, gr);
-    } else {
-      draw_glyph(ALIGN_INSIDE, gr); // draw the box
-      gr.h(bh);
-      buttonbox()->inset(gr);
-      draw_glyph(ALIGN_BOTTOM, gr); // draw the arrow same size as up arrow
-    }
+//    } else {
+//      gr.h(bh);
+//      draw_glyph(ALIGN_INSIDE, gr); // draw the box
+//      buttonbox()->inset(gr);
+//      draw_glyph(ALIGN_BOTTOM, gr); // draw the arrow same size as up arrow
+//    }
   }
   input.label(label());
   input.align(align());
@@ -266,8 +269,18 @@ void ValueInput::value_damage() {
 
 static int nogroup(int x) {Group::current(0); return x;}
 
+static void revert(Style* s) {
+  s->box_ = FLAT_BOX;
+  s->color_ = GRAY60;
+  s->glyph_ = Widget::default_glyph;
+}
+
+static NamedStyle style("ValueInput", revert, &ValueInput::default_style);
+NamedStyle* ValueInput::default_style = &::style;
+
 ValueInput::ValueInput(int x, int y, int w, int h, const char* l)
 : Valuator(x, y, w, h, l), input(nogroup(x), y, w, h, 0) {
+  style(default_style);
   input.parent((Group*)this); // kludge!
   input.callback(input_cb, this);
   clear_flag(ALIGN_MASK);

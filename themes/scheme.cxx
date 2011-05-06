@@ -166,7 +166,7 @@ extern "C" bool fltk_theme() {
 
       // box around buttons within widget
       if (!getconf_list(key_list, "button box", valstr, sizeof(valstr)))
-        if ( (boxtype = fltk::Box::find(valstr)) ) style->buttonbox = boxtype;
+        if ( (boxtype = fltk::Box::find(valstr)) ) style->buttonbox = (Box*)boxtype;
 
       // color of widget background
       if (!getconf_list(key_list, "color", valstr, sizeof(valstr)))

@@ -74,11 +74,13 @@ static void revert(Style* s) {
   s->parent_		= 0;	// this is the topmost style always
   s->box_		= DOWN_BOX;
   s->buttonbox_		= UP_BOX;
+  s->focusbox_		= DEFAULT_FOCUS_BOX;
   s->glyph_		= Widget::default_glyph;
   s->labelfont_		= HELVETICA;
   s->textfont_		= HELVETICA;
   s->labeltype_		= NORMAL_LABEL;
   s->color_		= WHITE; // GRAY99?
+  s->alt_color_ 	= 0xE0E0E000;	
   s->textcolor_		= BLACK;
   s->selection_color_	= WINDOWS_BLUE;
   s->selection_textcolor_= WHITE;
@@ -115,7 +117,7 @@ int Style::wheel_scroll_lines_ = 3;
   that draws the white box and the checkmark if VALUE is true.
 
   Im most cases the fltk::drawflags() are examined to decide between
-  differnt symbols. The default value draws empty squares and arrow
+  different symbols. The default value draws empty squares and arrow
   buttons if ALIGN flags are on, see Widget::default_glpyh.
 
 */
@@ -283,6 +285,7 @@ void Widget::FIELD(TYPE v) {		\
 
 style_functions(Box*,	box		)
 style_functions(Box*,	buttonbox	)
+style_functions(Box*,	focusbox	)
 style_functions(Symbol*,	glyph		)
 style_functions(Font*,		labelfont	)
 style_functions(Font*,		textfont	)

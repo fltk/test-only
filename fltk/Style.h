@@ -42,6 +42,7 @@ typedef Symbol Box;
 
 extern FL_API Box* const UP_BOX;
 extern FL_API Box* const DOWN_BOX;
+extern FL_API Box* const DEFAULT_FOCUS_BOX;
 extern FL_API Box* const THIN_UP_BOX;
 extern FL_API Box* const THIN_DOWN_BOX;
 extern FL_API Box* const ENGRAVED_BOX;
@@ -100,11 +101,13 @@ class FL_API Style {
   const Style* parent_;
   Box*		box_;
   Box*		buttonbox_;
+  Box*		focusbox_;	
   Symbol*	glyph_;
   Font*		labelfont_;
   Font*		textfont_;
   LabelType*	labeltype_;
   Color		color_;
+  Color		alt_color_;	
   Color		textcolor_;
   Color		selection_color_;
   Color		selection_textcolor_;
@@ -126,11 +129,13 @@ class FL_API Style {
   // Get functions, which search parents if value is zero:
   Box*		box()		const;
   Box*		buttonbox()	const;
+  Box*		focusbox()	const;
   Symbol*	glyph()		const;
   Font*		labelfont()	const;
   Font*		textfont()	const;
   LabelType*	labeltype()	const;
   Color		color()		const;
+  Color		alt_color()	const;
   Color		textcolor()	const;
   Color		selection_color() const;
   Color		selection_textcolor() const;
@@ -151,11 +156,13 @@ class FL_API Style {
   // Set functions:
   void box		(Box* v)	{box_ = v;		}
   void buttonbox	(Box* v)	{buttonbox_ = v;	}
+  void focusbox		(Box* v)	{focusbox_ = v;		}
   void glyph		(Symbol* v)	{glyph_ = v; 		}
   void labelfont	(Font* v)	{labelfont_ = v;	}
   void textfont		(Font* v)	{textfont_ = v;		}
   void labeltype	(LabelType* v)	{labeltype_ = v; 	}
   void color		(Color v)	{color_ = v; 		}
+  void alt_color	(Color v)	{alt_color_ = v;	}
   void textcolor	(Color v)	{textcolor_ = v; 	}
   void selection_color	(Color v)	{selection_color_ = v;	}
   void selection_textcolor(Color v)	{selection_textcolor_ = v;}

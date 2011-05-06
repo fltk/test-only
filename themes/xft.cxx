@@ -25,8 +25,8 @@
 //    http://www.fltk.org/str.php
 //
 
-#include <fltk/Fl.h>
-#include <fltk/fl_theme.h>
+#include <fltk/run.h>
+#include <fltk/Style.h>
 
 extern "C" int fltk_plugin() {
   return fl_xft();

@@ -154,6 +154,36 @@ void Symbol::draw_symbol_overlay(const fltk::Rectangle& r1) const {
 
 ////////////////////////////////////////////////////////////////
 
+/*! \class fltk::DefaultFocusBox
+    Draws the default focus box under a specific theme. Currently
+	only works under the Windows XP theme, but is here for users to easily be able to create their own themes
+*/
+class DefaultFocusBox : public Symbol {
+  public:
+    DefaultFocusBox(const char* name) : Box(name) {};
+	void _draw(const fltk::Rectangle& r) const;
+};
+
+void DefaultFocusBox::_draw(const fltk::Rectangle& r) const {
+  if (!drawflags(FOCUSED)) return;
+  fltk::Rectangle R(r);
+  inset(R);
+  if (R.w() > 12) { R.move_x(1); R.move_r(-1); }
+  else if (R.w() <= 3) return;
+  if (R.h() > 15) { R.move_y(1); R.move_b(-1); }
+  else if (R.h() <= 3) return;
+
+  drawFocusRect(R);
+}
+
+DefaultFocusBox defaultFocusBox("DEFAULT_FOCUS_BOX");
+/*! 
+  Draws a standard box based on the current theme 
+*/
+Box* const fltk::DEFAULT_FOCUS_BOX = &defaultFocusBox;
+
+////////////////////////////////////////////////////////////////
+
 class NoBox : public Box {
 public:
   void _draw(const fltk::Rectangle&) const {}

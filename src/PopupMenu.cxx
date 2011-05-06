@@ -84,8 +84,10 @@ void PopupMenu::draw() {
   Rectangle r1(r); box->inset(r1);
   draw_label(r1, flags);
   // draw the little mark at the right:
-  int w1 = int(textsize());
-  r.move_x(w()-w1);
+  box->inset(r);
+  int w1 = r.h();
+  r.move_r(-r.h());
+  r.x(r.r()); r.w(w1);
   const Color saved_color = getcolor();
   setcolor(selection_color());
   draw_glyph(ALIGN_BOTTOM, r);

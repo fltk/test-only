@@ -39,17 +39,35 @@ THEMES = \
 	none.theme \
 	windows.theme
 
+CPPFILES = \
+	windows.cxx \
+	none.cxx \
+	scheme.cxx
+
 ################################################################
 
 include ../makeinclude
 
-all : $(BUILDTARGETS)
+LIBNAME = 	$(LIBPREFIX)fltk2_themes$(LIBSUFFIX)
+DSONAME = 	$(DSOPREFIX)fltk2_themes$(DSOSUFFIX)
+DSOLINK = 	$(DSOPREFIX)fltk2_themes$(DSOSUFFIX)
+OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-static: $(LIBRARY)$(LIBEXT)
+all: 		$(LIBTARGET) $(DSOTARGET)
 
-shared: $(THEMES)
+static: 	../lib/$(LIBNAME)
 
-programs:
+shared:		../lib/$(DSONAME)
+
+clean:
+	$(RM) *.bck
+	$(RM) *.o
+	$(RM) core*
+	$(RM) ../lib/$(LIBNAME)
+	$(RM) ../lib/$(DSONAME)
+        ifeq ($(DSONAME), fltk_themes.dll)
+	$(RM) lib$(DSONAME).a $(DSONAME)
+        endif
 
 $(LIBRARY).a: $(OBJECTS)
 	@rm -f $@
@@ -88,8 +106,12 @@ NONE_OBJ = none.o
 none.theme : $(NONE_OBJ)
 	$(THEMECOMMAND) $@ $(NONE_OBJ) $(DSOLIBS) $(THEMELIBS)
 
-clean :
-	-@ rm -f *.o $(LIBRARY)$(LIBEXT) $(THEMES) core *~
+../lib/$(LIBNAME): $(OBJECTS)
+	$(RM) $@
+	echo $(LIBCOMMAND) $@ ...
+	$(LIBCOMMAND) $@ $(OBJECTS)
+	$(RANLIB) $@
+
 
 install : $(INSTALLTARGETS)
 

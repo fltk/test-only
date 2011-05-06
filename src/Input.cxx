@@ -77,7 +77,7 @@ static void changed_stuff(Input* i) {
     Also you need to do this if you want both the enter key and
     either WHEN_CHANGED or WHEN_RELEASE, in this case you can tell
     if Enter was typed by testing fltk::event_key()==fltk::EnterKey.
-  - fltk::WHEN_RELEASE: Depreciated. The callback is done if the
+  - fltk::WHEN_RELEASE: Deprecated. The callback is done if the
     text has changed and the user clicks on another widget or the
     focus moves (which can happen due to the window this widget
     is on being closed).

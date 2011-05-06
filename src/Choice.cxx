@@ -79,8 +79,8 @@ extern bool fl_hide_underscore;
 void Choice::draw() {
   if (damage() & DAMAGE_ALL) draw_frame();
   Rectangle r(w(),h()); box()->inset(r);
-  int w1 = r.h()*4/5;
-  r.move_r(-w1);
+  int w1 = r.h()*4/4;
+  r.move_r(-r.h());
   // draw the little mark at the right:
   if (damage() & (DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
     drawstyle(style(), (flags() & ~FOCUSED) | OUTPUT);
