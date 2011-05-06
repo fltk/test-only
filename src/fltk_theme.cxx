@@ -43,7 +43,7 @@ extern "C" FL_API bool fltk_theme();
 
 //#elif defined(_WIN32)
 
-# include "win32/fltk_theme.cxx"
+//# include "win32/fltk_theme.cxx"
 
 //#elif USE_QUARTZ
 
