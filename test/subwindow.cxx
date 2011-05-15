@@ -8,7 +8,7 @@
 // Buttons and pop-up menu should work, indicating that mouse positions
 // are being correctly translated.
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -172,7 +172,7 @@ int main(int argc, char **argv) {
   subwindow->end();
   subwindow->use_cursor(FL_CURSOR_HAND);
   (new Fl_Box(FL_NO_BOX,0,0,400,100,
-	     "A child Fl_Window with children of it's own may "
+	     "A child Fl_Window with children of its own may "
 	     "be useful for imbedding controls into a GL or display "
 	     "that needs a different visual.  There are bugs with the "
 	     "origins being different between drawing and events, "

@@ -3,7 +3,7 @@
 //
 // Simple counter header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,10 +34,10 @@
 #include "Fl_Counter.H"
 /** 
   This widget creates a counter with only 2 arrow buttons 
-  <P align=center>\image html counter.gif</P> 
-  \image latex  counter.eps "Fl_Simple_Counter" width=4cm
+  <P align=center>\image html counter.png</P> 
+  \image latex  counter.png "Fl_Simple_Counter" width=4cm
 */
-class Fl_Simple_Counter : public Fl_Counter {
+class FL_EXPORT Fl_Simple_Counter : public Fl_Counter {
 public:
     Fl_Simple_Counter(int x,int y,int w,int h, const char *l = 0)
 	: Fl_Counter(x,y,w,h,l) {type(FL_SIMPLE_COUNTER);}

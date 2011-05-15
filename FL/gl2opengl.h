@@ -6,7 +6,7 @@
 
 */
 
-#include <fltk3/gl.h>
+#include <FL/gl.h>
 #include "gl_draw.H"
 
 inline void clear() {glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);}

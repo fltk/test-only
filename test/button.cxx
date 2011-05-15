@@ -27,30 +27,40 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <fltk3/run.h>
-#include <fltk3/ask.h>
-#include <fltk3/Window.h>
-#include <fltk3/Button.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Button.H>
 
-void beepcb(fltk3::Widget *, void *) {
-  fltk3::beep();
+void beepcb(Fl_Widget *, void *) {
+  printf("\007"); fflush(stdout);
 }
 
-void exitcb(fltk3::Widget *, void *) {
+void exitcb(Fl_Widget *, void *) {
   exit(0);
 }
 
+#if 0
+// test Fl::add_fd()...
+void stdin_cb(int, void*) {
+  char buf[1000];
+  fgets(buf, sizeof(buf), stdin);
+  printf("stdin callback\n");
+}
+#endif
+
 int main(int argc, char ** argv) {
-  fltk3::Window *window = new fltk3::Window(320,65);
-  window->begin();
-  fltk3::Button *b1 = new fltk3::Button(20, 20, 80, 25, "&Beep");
+  Fl_Window *window = new Fl_Window(320,65);
+  Fl_Button *b1 = new Fl_Button(20, 20, 80, 25, "&Beep");
   b1->callback(beepcb,0);
-  new fltk3::Button(120,20, 80, 25, "&no op");
-  fltk3::Button *b3 = new fltk3::Button(220,20, 80, 25, "E&xit");
+  /*Fl_Button *b2 =*/ new Fl_Button(120,20, 80, 25, "&no op");
+  Fl_Button *b3 = new Fl_Button(220,20, 80, 25, "E&xit");
   b3->callback(exitcb,0);
   window->end();
   window->show(argc,argv);
-  return fltk3::run();
+#if 0
+  Fl::add_fd(0, stdin_cb);
+#endif
+  return Fl::run();
 }
 
 //

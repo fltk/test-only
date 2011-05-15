@@ -3,7 +3,7 @@
 //
 // Overlay window code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,7 +29,7 @@
   You must subclass Fl_Overlay_Window and provide this method.
   It is just like a draw() method, except it draws the overlay.
   The overlay will have already been "cleared" when this is called.  You
-  can use any of the routines described in &lt;fltk3/draw.h&gt;.
+  can use any of the routines described in &lt;FL/fl_draw.H&gt;.
 */
 
 // A window using double-buffering and able to draw an overlay
@@ -37,18 +37,18 @@
 // possible, otherwise it just draws in the front buffer.
 
 #include <config.h>
-#include <fltk3/run.h>
-#include <fltk3/Fl_Overlay_Window.H>
-#include <fltk3/draw.h>
-#include <fltk3/x.H>
+#include <FL/Fl.H>
+#include <FL/Fl_Overlay_Window.H>
+#include <FL/fl_draw.H>
+#include <FL/x.H>
 
 void Fl_Overlay_Window::show() {
-  fltk3::DoubleBufferWindow::show();
+  Fl_Double_Window::show();
   if (overlay_ && overlay_ != this) overlay_->show();
 }
 
 void Fl_Overlay_Window::hide() {
-  fltk3::DoubleBufferWindow::hide();
+  Fl_Double_Window::hide();
 }
 
 void Fl_Overlay_Window::flush() {
@@ -56,19 +56,19 @@ void Fl_Overlay_Window::flush() {
   if (overlay_ && overlay_ != this && overlay_->shown()) {
     // all drawing to windows hidden by overlay windows is ignored, fix this
     XUnmapWindow(fl_display, fl_xid(overlay_));
-    fltk3::DoubleBufferWindow::flush(0);
+    Fl_Double_Window::flush(0);
     XMapWindow(fl_display, fl_xid(overlay_));
     return;
   }
 #endif
-  int erase_overlay = (damage()&FL_DAMAGE_OVERLAY);
+  int erase_overlay = (damage()&FL_DAMAGE_OVERLAY) | (overlay_ == this);
   clear_damage((uchar)(damage()&~FL_DAMAGE_OVERLAY));
-  fltk3::DoubleBufferWindow::flush(erase_overlay);
+  Fl_Double_Window::flush(erase_overlay);
   if (overlay_ == this) draw_overlay();
 }
 
 void Fl_Overlay_Window::resize(int X, int Y, int W, int H) {
-  fltk3::DoubleBufferWindow::resize(X,Y,W,H);
+  Fl_Double_Window::resize(X,Y,W,H);
   if (overlay_ && overlay_!=this) overlay_->resize(0,0,w(),h());
 }
 
@@ -93,7 +93,7 @@ int Fl_Overlay_Window::can_do_overlay() {return 0;}
 void Fl_Overlay_Window::redraw_overlay() {
   overlay_ = this;
   clear_damage((uchar)(damage()|FL_DAMAGE_OVERLAY));
-  fltk3::damage(FL_DAMAGE_CHILD);
+  Fl::damage(FL_DAMAGE_CHILD);
 }
 
 #else
@@ -105,13 +105,13 @@ extern unsigned long fl_transparent_pixel;
 static GC gc;	// the GC used by all X windows
 extern uchar fl_overlay; // changes how fl_color(x) works
 
-class _Fl_Overlay : public fltk3::Window {
+class _Fl_Overlay : public Fl_Window {
   friend class Fl_Overlay_Window;
   void flush();
   void show();
 public:
   _Fl_Overlay(int x, int y, int w, int h) :
-  fltk3::Window(x,y,w,h) {set_flag(INACTIVE);}
+    Fl_Window(x,y,w,h) {set_flag(INACTIVE);}
 };
 
 int Fl_Overlay_Window::can_do_overlay() {
@@ -119,13 +119,13 @@ int Fl_Overlay_Window::can_do_overlay() {
 }
 
 void _Fl_Overlay::show() {
-  if (shown()) {fltk3::Window::show(); return;}
+  if (shown()) {Fl_Window::show(); return;}
   fl_background_pixel = int(fl_transparent_pixel);
   Fl_X::make_xid(this, fl_overlay_visual, fl_overlay_colormap);
   fl_background_pixel = -1;
   // find the outermost window to tell wm about the colormap:
-  fltk3::Window *w = window();
-  for (;;) {fltk3::Window *w1 = w->window(); if (!w1) break; w = w1;}
+  Fl_Window *w = window();
+  for (;;) {Fl_Window *w1 = w->window(); if (!w1) break; w = w1;}
   XSetWMColormapWindows(fl_display, fl_xid(w), &(Fl_X::i(this)->xid), 1);
 }
 
@@ -135,8 +135,8 @@ void _Fl_Overlay::flush() {
 	  gc = XCreateGC(fl_display, fl_xid(this), 0, 0);
   }
   fl_gc = gc;
-#if defined(USE_CAIRO)
-      if (fltk3::cairo_autolink_context()) fltk3::cairo_make_current(this); // capture gc changes automatically to update the cairo context adequately
+#if defined(FLTK_USE_CAIRO)
+      if (Fl::cairo_autolink_context()) Fl::cairo_make_current(this); // capture gc changes automatically to update the cairo context adequately
 #endif
   fl_overlay = 1;
   Fl_Overlay_Window *w = (Fl_Overlay_Window *)parent();
@@ -151,9 +151,9 @@ void Fl_Overlay_Window::redraw_overlay() {
   if (!fl_display) return; // this prevents fluid -c from opening display
   if (!overlay_) {
     if (can_do_overlay()) {
-      fltk3::Group::current(this);
+      Fl_Group::current(this);
       overlay_ = new _Fl_Overlay(0,0,w(),h());
-      fltk3::Group::current(0);
+      Fl_Group::current(0);
     } else {
       overlay_ = this;	// fake the overlay
     }
@@ -161,7 +161,7 @@ void Fl_Overlay_Window::redraw_overlay() {
   if (shown()) {
     if (overlay_ == this) {
       clear_damage(damage()|FL_DAMAGE_OVERLAY);
-      fltk3::damage(FL_DAMAGE_CHILD);
+      Fl::damage(FL_DAMAGE_CHILD);
     } else if (!overlay_->shown())
       overlay_->show();
     else

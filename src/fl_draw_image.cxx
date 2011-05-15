@@ -3,7 +3,7 @@
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -59,9 +59,9 @@
 
 ////////////////////////////////////////////////////////////////
 
-#  include <fltk3/run.h>
-#  include <fltk3/draw.h>
-#  include <fltk3/x.H>
+#  include <FL/Fl.H>
+#  include <FL/fl_draw.H>
+#  include <FL/x.H>
 #  include "Fl_XColor.H"
 #  include "flstring.h"
 
@@ -98,7 +98,7 @@ static void color8_converter(const uchar *from, uchar *to, int w, int delta) {
     r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
     g += from[1]; if (g < 0) g = 0; else if (g>255) g = 255;
     b += from[2]; if (b < 0) b = 0; else if (b>255) b = 255;
-    fltk3::Color i = fl_color_cube(r*fltk3::NUM_RED/256,g*fltk3::NUM_GREEN/256,b*fltk3::NUM_BLUE/256);
+    Fl_Color i = fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
     Fl_XColor& xmap = fl_xmap[0][i];
     if (!xmap.mapped) {if (!fl_redmask) fl_xpixel(r,g,b); else fl_xpixel(i);}
     r -= xmap.r;
@@ -127,7 +127,7 @@ static void mono8_converter(const uchar *from, uchar *to, int w, int delta) {
     r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
     g += from[0]; if (g < 0) g = 0; else if (g>255) g = 255;
     b += from[0]; if (b < 0) b = 0; else if (b>255) b = 255;
-    fltk3::Color i = fl_color_cube(r*fltk3::NUM_RED/256,g*fltk3::NUM_GREEN/256,b*fltk3::NUM_BLUE/256);
+    Fl_Color i = fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
     Fl_XColor& xmap = fl_xmap[0][i];
     if (!xmap.mapped) {if (!fl_redmask) fl_xpixel(r,g,b); else fl_xpixel(i);}
     r -= xmap.r;
@@ -351,14 +351,14 @@ mono32_converter(const uchar *from,uchar *to,int w, int delta) {
 
 static void figure_out_visual() {
 
-  fl_xpixel(fltk3::BLACK); // setup fl_redmask, etc, in fl_color.cxx
-  fl_xpixel(fltk3::WHITE); // also make sure white is allocated
+  fl_xpixel(FL_BLACK); // setup fl_redmask, etc, in fl_color.cxx
+  fl_xpixel(FL_WHITE); // also make sure white is allocated
 
   static XPixmapFormatValues *pfvlist;
-  static int fltk3::NUM_pfv;
-  if (!pfvlist) pfvlist = XListPixmapFormats(fl_display,&fltk3::NUM_pfv);
+  static int FL_NUM_pfv;
+  if (!pfvlist) pfvlist = XListPixmapFormats(fl_display,&FL_NUM_pfv);
   XPixmapFormatValues *pfv;
-  for (pfv = pfvlist; pfv < pfvlist+fltk3::NUM_pfv; pfv++)
+  for (pfv = pfvlist; pfv < pfvlist+FL_NUM_pfv; pfv++)
     if (pfv->depth == fl_visual->depth) break;
   xi.format = ZPixmap;
   xi.byte_order = ImageByteOrder(fl_display);
@@ -373,7 +373,7 @@ static void figure_out_visual() {
 
   unsigned int n = pfv->scanline_pad/8;
   if (pfv->scanline_pad & 7 || (n&(n-1)))
-    fltk3::fatal("Can't do scanline_pad of %d",pfv->scanline_pad);
+    Fl::fatal("Can't do scanline_pad of %d",pfv->scanline_pad);
   if (n < sizeof(STORETYPE)) n = sizeof(STORETYPE);
   scanline_add = n-1;
   scanline_mask = -n;
@@ -385,7 +385,7 @@ static void figure_out_visual() {
     return;
   }
   if (!fl_visual->red_mask)
-    fltk3::fatal("Can't do %d bits_per_pixel colormap",xi.bits_per_pixel);
+    Fl::fatal("Can't do %d bits_per_pixel colormap",xi.bits_per_pixel);
 #  endif
 
   // otherwise it is a TrueColor visual:
@@ -422,7 +422,7 @@ static void figure_out_visual() {
       converter = bgr_converter;
       mono_converter = rrr_converter;
     } else {
-      fltk3::fatal("Can't do arbitrary 24bit color");
+      Fl::fatal("Can't do arbitrary 24bit color");
     }
     break;
 
@@ -449,7 +449,7 @@ static void figure_out_visual() {
     break;
 
   default:
-    fltk3::fatal("Can't do %d bits_per_pixel",xi.bits_per_pixel);
+    Fl::fatal("Can't do %d bits_per_pixel",xi.bits_per_pixel);
   }
 
 }
@@ -543,17 +543,17 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   }
 }
 
-void fltk3::Device::draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
+void Fl_Xlib_Graphics_Driver::draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
   innards(buf,x,y,w,h,d,l,(d<3&&d>-3),0,0);
 }
-void fltk3::Device::draw_image(Fl_Draw_Image_Cb cb, void* data,
+void Fl_Xlib_Graphics_Driver::draw_image(Fl_Draw_Image_Cb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   innards(0,x,y,w,h,d,0,(d<3&&d>-3),cb,data);
 }
-void fltk3::Device::draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
+void Fl_Xlib_Graphics_Driver::draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
   innards(buf,x,y,w,h,d,l,1,0,0);
 }
-void fltk3::Device::draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
+void Fl_Xlib_Graphics_Driver::draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   innards(0,x,y,w,h,d,0,1,cb,data);
 }

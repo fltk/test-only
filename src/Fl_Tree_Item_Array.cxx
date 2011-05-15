@@ -6,15 +6,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <fltk3/Fl_Tree_Item_Array.H>
-#include <fltk3/Fl_Tree_Item.H>
+#include <FL/Fl_Tree_Item_Array.H>
+#include <FL/Fl_Tree_Item.H>
 
 //////////////////////
 // Fl_Tree_Item_Array.cxx
 //////////////////////
 //
 // Fl_Tree -- This file is part of the Fl_Tree widget for FLTK
-// Copyright (C) 2009 by Greg Ercolano.
+// Copyright (C) 2009-2010 by Greg Ercolano.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public

@@ -2,7 +2,7 @@
 //
 // FLTK native OS file chooser widget
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 // Copyright 2004 Greg Ercolano.
 //
 // This library is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
 //
 
 #include <string.h>
-#include <fltk3/Enumerations.H>
+#include <FL/Enumerations.H>
 
 // COPY A STRING WITH 'new'
 //    Value can be NULL
@@ -56,6 +56,7 @@ static char *strfree(char *val) {
 //	char *s = strnew("foo");	// s = "foo"
 //      s = strapp(s, "bar");		// s = "foobar"
 //
+#if !defined(WIN32)
 static char *strapp(char *s, const char *val) {
   if ( ! val ) {
     return(s);			// Nothing to append? return s
@@ -69,6 +70,7 @@ static char *strapp(char *s, const char *val) {
   delete [] s;			// delete old string
   return(news);			// return new copy
 }
+#endif
 
 // APPEND A CHARACTER TO A STRING
 //     This does NOT allocate space for the new character.

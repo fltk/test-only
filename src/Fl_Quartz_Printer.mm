@@ -26,26 +26,31 @@
 //
 
 #ifdef __APPLE__
-#include <fltk3/Printer.h>
-#include <fltk3/run.h>
-#include <fltk3/ask.h>
-#include <fltk3/draw.h>
+#include <FL/Fl_Printer.H>
+
+#include <FL/Fl.H>
+#include <FL/fl_ask.H>
+#include <FL/fl_draw.H>
 #import <Cocoa/Cocoa.h>
 
 extern void fl_quartz_restore_line_style_();
 
-fltk3::Printer::Printer(void)
+Fl_System_Printer::Fl_System_Printer(void)
 {
   x_offset = 0;
   y_offset = 0;
-  type_ = quartz_printer;
+  scale_x = scale_y = 1.;
+  gc = 0;
+  driver(Fl_Display_Device::display_device()->driver());
 }
 
-int fltk3::Printer::start_job (int pagecount, int *frompage, int *topage)
+Fl_System_Printer::~Fl_System_Printer(void) {}
+
+int Fl_System_Printer::start_job (int pagecount, int *frompage, int *topage)
 //printing using a Quartz graphics context
 //returns 0 iff OK
 {
-  OSStatus status;
+  OSStatus status = 0;
   Fl_X::q_release_context();
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
   if( [NSPrintPanel instancesRespondToSelector:@selector(runModalWithPrintInfo:)] &&
@@ -60,7 +65,7 @@ int fltk3::Printer::start_job (int pagecount, int *frompage, int *topage)
       retval = (NSInteger)[panel runModalWithPrintInfo:info];//from 10.5 only
     }
     if(retval != NSOKButton) {
-      fltk3::first_window()->show();
+      Fl::first_window()->show();
       [localPool release];
       return 1;
     }
@@ -86,9 +91,13 @@ int fltk3::Printer::start_job (int pagecount, int *frompage, int *topage)
     status = PMCreatePageFormat(&pageFormat);
     status = PMSessionDefaultPageFormat(printSession, pageFormat);
     if (status != noErr) return 1;
-    status = PMSessionPageSetupDialog(printSession, pageFormat, &accepted);
+    // get pointer to the PMSessionPageSetupDialog Carbon function
+    typedef OSStatus (*dialog_f)(PMPrintSession, PMPageFormat, Boolean *);
+    static dialog_f f = NULL;
+    if (!f) f = (dialog_f)Fl_X::get_carbon_function("PMSessionPageSetupDialog");
+    status = (*f)(printSession, pageFormat, &accepted);
     if (status != noErr || !accepted) {
-      fltk3::first_window()->show();
+      Fl::first_window()->show();
       return 1;
     }
     status = PMCreatePrintSettings(&printSettings);
@@ -96,10 +105,14 @@ int fltk3::Printer::start_job (int pagecount, int *frompage, int *topage)
     status = PMSessionDefaultPrintSettings (printSession, printSettings);
     if (status != noErr) return 1;
     PMSetPageRange(printSettings, 1, (UInt32)kPMPrintAllPages);
-    status = PMSessionPrintDialog(printSession, printSettings, pageFormat, &accepted);
+    // get pointer to the PMSessionPrintDialog Carbon function
+    typedef OSStatus (*dialog_f2)(PMPrintSession, PMPrintSettings, PMPageFormat, Boolean *);
+    static dialog_f2 f2 = NULL;
+    if (!f2) f2 = (dialog_f2)Fl_X::get_carbon_function("PMSessionPrintDialog");
+    status = (*f2)(printSession, printSettings, pageFormat, &accepted);
     if (!accepted) status = kPMCancel;
     if (status != noErr) {
-      fltk3::first_window()->show();
+      Fl::first_window()->show();
       return 1;
     }
     UInt32 from32, to32;
@@ -125,7 +138,7 @@ int fltk3::Printer::start_job (int pagecount, int *frompage, int *topage)
   return 0;
 }
 
-void fltk3::Printer::margins(int *left, int *top, int *right, int *bottom)
+void Fl_System_Printer::margins(int *left, int *top, int *right, int *bottom)
 {
   PMPaper paper;
   PMGetPageFormatPaper(pageFormat, &paper);
@@ -147,7 +160,7 @@ void fltk3::Printer::margins(int *left, int *top, int *right, int *bottom)
   }
 }
 
-int fltk3::Printer::printable_rect(int *w, int *h)
+int Fl_System_Printer::printable_rect(int *w, int *h)
 //returns 0 iff OK
 {
   OSStatus status;
@@ -159,12 +172,12 @@ int fltk3::Printer::printable_rect(int *w, int *h)
   
   x = (int)pmRect.left;
   y = (int)pmRect.top;
-  *w = (int)(pmRect.right - x) / scale_x + 1;
-  *h = (int)(pmRect.bottom - y) / scale_y + 1;
+  *w = int((int)(pmRect.right - x) / scale_x + 1);
+  *h = int((int)(pmRect.bottom - y) / scale_y + 1);
   return 0;
 }
 
-void fltk3::Printer::origin(int x, int y)
+void Fl_System_Printer::origin(int x, int y)
 {
   x_offset = x;
   y_offset = y;
@@ -177,8 +190,9 @@ void fltk3::Printer::origin(int x, int y)
   CGContextSaveGState(fl_gc);
 }
 
-void fltk3::Printer::scale (float s_x, float s_y)
+void Fl_System_Printer::scale (float s_x, float s_y)
 {
+  if (s_y == 0.) s_y = s_x;
   scale_x = s_x;
   scale_y = s_y;
   CGContextRestoreGState(fl_gc);
@@ -190,7 +204,7 @@ void fltk3::Printer::scale (float s_x, float s_y)
   CGContextSaveGState(fl_gc);
 }
 
-void fltk3::Printer::rotate (float rot_angle)
+void Fl_System_Printer::rotate (float rot_angle)
 {
   angle = - rot_angle * M_PI / 180.;
   CGContextRestoreGState(fl_gc);
@@ -202,20 +216,20 @@ void fltk3::Printer::rotate (float rot_angle)
   CGContextSaveGState(fl_gc);
 }
 
-void fltk3::Printer::translate(int x, int y)
+void Fl_System_Printer::translate(int x, int y)
 {
   CGContextSaveGState(fl_gc);
   CGContextTranslateCTM(fl_gc, x, y );
   CGContextSaveGState(fl_gc);
 }
 
-void fltk3::Printer::untranslate(void)
+void Fl_System_Printer::untranslate(void)
 {
   CGContextRestoreGState(fl_gc);
   CGContextRestoreGState(fl_gc);
 }
 
-int fltk3::Printer::start_page (void)
+int Fl_System_Printer::start_page (void)
 {	
   OSStatus status = PMSessionBeginPageNoDialog(printSession, pageFormat, NULL);
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
@@ -247,7 +261,6 @@ int fltk3::Printer::start_page (void)
   angle = 0;
   scale_x = scale_y = 1;
   win_scale_x = win_scale_y = 1;
-  image_list_ = NULL;
   if(orientation == kPMPortrait)
     CGContextTranslateCTM(fl_gc, margins.left, margins.bottom + h);
   else
@@ -264,29 +277,28 @@ int fltk3::Printer::start_page (void)
   return status != noErr;
 }
 
-int fltk3::Printer::end_page (void)
+int Fl_System_Printer::end_page (void)
 {	
   CGContextFlush(fl_gc);
   CGContextRestoreGState(fl_gc);
   CGContextRestoreGState(fl_gc);
   OSStatus status = PMSessionEndPageNoDialog(printSession);
-  delete_image_list();
   gc = NULL;
   return status != noErr;
 }
 
-void fltk3::Printer::end_job (void)
+void Fl_System_Printer::end_job (void)
 {
   OSStatus status;
   
   status = PMSessionError(printSession);
   if (status != noErr) {
-    fltk3::alert ("PM Session error %d", (int)status);
+    fl_alert ("PM Session error %d", (int)status);
   }
   PMSessionEndDocumentNoDialog(printSession);
-  fltk3::Device::display_device()->set_current();
+  Fl_Display_Device::display_device()->set_current();
   fl_gc = 0;
-  fltk3::first_window()->show();
+  Fl::first_window()->show();
 }
 
 #endif // __APPLE__

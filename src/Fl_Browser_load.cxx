@@ -3,7 +3,7 @@
 //
 // File loading routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_Browser.H>
+#include <FL/Fl.H>
+#include <FL/Fl_Browser.H>
 #include <stdio.h>
-#include <fltk3/fl_utf8.h>
+#include <FL/fl_utf8.h>
 
 /**
   Clears the browser and reads the file, adding each line from the file

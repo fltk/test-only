@@ -3,7 +3,7 @@
 //
 // MacOS font utilities for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -41,29 +41,36 @@
 #define ENDOFBUFFER 127 // sizeof(Fl_Font.fontname)-1
 
 // turn a stored font name into a pretty name:
-const char* fltk3::get_font_name(Fl_Font fnum, int* ap) {
+const char* Fl::get_font_name(Fl_Font fnum, int* ap) {
   Fl_Fontdesc *f = fl_fonts + fnum;
   if (!f->fontname[0]) {
     const char* p = f->name;
     if (!p || !*p) {if (ap) *ap = 0; return "";}
     strlcpy(f->fontname, p, ENDOFBUFFER);
     int type = 0;
-    if (strstr(f->name, "Bold")) type |= fltk3::BOLD;
-    if (strstr(f->name, "Italic")) type |= fltk3::ITALIC;
+    if (strstr(f->name, "Bold")) type |= FL_BOLD;
+    if (strstr(f->name, "Italic")) type |= FL_ITALIC;
     f->fontname[ENDOFBUFFER] = (char)type;
   }
   if (ap) *ap = f->fontname[ENDOFBUFFER];
   return f->fontname;
 }
 
-static int fl_free_font = fltk3::FREE_FONT;
-
-Fl_Font fltk3::set_fonts(const char* xstarname) {
-#pragma unused ( xstarname )
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-static SInt32 MACsystemVersion = 0;
-if(MACsystemVersion == 0) Gestalt(gestaltSystemVersion, &MACsystemVersion);
-if(MACsystemVersion >= 0x1050) {
+static int name_compare(const void *a, const void *b)
+{
+  return strcmp(*(char**)a, *(char**)b);
+}
+#endif
+
+static int fl_free_font = FL_FREE_FONT;
+
+Fl_Font Fl::set_fonts(const char* xstarname) {
+#pragma unused ( xstarname )
+if (fl_free_font > FL_FREE_FONT) return (Fl_Font)fl_free_font; // if already called
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+if(fl_mac_os_version >= 100500) {
 //if(CTFontCreateWithFontDescriptor != NULL) {// CTFontCreateWithFontDescriptor != NULL on 10.4 also!
   int value[1] = {1};
   CFDictionaryRef dict = CFDictionaryCreate(NULL, 
@@ -75,17 +82,23 @@ if(MACsystemVersion >= 0x1050) {
   CFRelease(fcref);
   CFIndex count = CFArrayGetCount(arrayref);
   CFIndex i;
+  char **tabfontnames = new char*[count];
   for (i = 0; i < count; i++) {
 	CTFontDescriptorRef fdesc = (CTFontDescriptorRef)CFArrayGetValueAtIndex(arrayref, i);
 	CTFontRef font = CTFontCreateWithFontDescriptor(fdesc, 0., NULL);
-	CFStringRef cfname = CTFontCopyPostScriptName(font);
+	CFStringRef cfname = CTFontCopyFullName(font);
 	CFRelease(font);
 	static char fname[100];
 	CFStringGetCString(cfname, fname, sizeof(fname), kCFStringEncodingUTF8);
+	tabfontnames[i] = strdup(fname); // never free'ed
 	CFRelease(cfname);
-	fltk3::set_font((Fl_Font)(fl_free_font++), strdup(fname));
 	}
   CFRelease(arrayref);
+  qsort(tabfontnames, count, sizeof(char*), name_compare);
+  for (i = 0; i < count; i++) {
+    Fl::set_font((Fl_Font)(fl_free_font++), tabfontnames[i]);
+    }
+  delete[] tabfontnames;
   return (Fl_Font)fl_free_font;
 }
 else {
@@ -120,7 +133,7 @@ else {
       oName[511] = 0;
     else
       oName[actualLength] = 0;
-	fltk3::set_font((Fl_Font)(fl_free_font++), strdup(oName));
+	Fl::set_font((Fl_Font)(fl_free_font++), strdup(oName));
 //	free(oName);
   }
   free(oFontIDs);
@@ -129,11 +142,11 @@ else {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
   }
 #endif
-  return 0; // FIXME: I do not understand the shuffeling of the above ifdef's and why they are here!
+  return 0;
 }
 
 static int array[128];
-int fltk3::get_font_sizes(Fl_Font fnum, int*& sizep) {
+int Fl::get_font_sizes(Fl_Font fnum, int*& sizep) {
   Fl_Fontdesc *s = fl_fonts+fnum;
   if (!s->name) s = fl_fonts; // empty slot in table, use entry 0
   int cnt = 0;

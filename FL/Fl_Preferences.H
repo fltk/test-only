@@ -3,7 +3,7 @@
 //
 // Preferences .
 //
-// Copyright 2002-2009 by Matthias Melcher.
+// Copyright 2002-2010 by Matthias Melcher.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -32,8 +32,7 @@
 #  define Fl_Preferences_H
 
 #  include <stdio.h>
-#  include "Fl_Export.H"
-
+#  include "Fl_Export.H" 
 
 /**
    \brief Fl_Preferences provides methods to store user
@@ -67,11 +66,9 @@
    current chracter set or code page which renders them incompatible
    for text entries using international characters.
  */
-class FL_EXPORT Fl_Preferences 
-{
+class FL_EXPORT Fl_Preferences {
 
-public:
-
+public: 
   /**
      Define the scope of the preferences.
    */
@@ -85,7 +82,7 @@ public:
    
    ID's can be retrieved from an Fl_Preferences-Group and can then be used
    to create more Fl_Preference references to the same data set, as long as the 
-   databse remains open.
+   database remains open.
    */
   typedef void *ID;
   
@@ -99,15 +96,15 @@ public:
   Fl_Preferences( Fl_Preferences *parent, int groupIndex );
   Fl_Preferences(const Fl_Preferences&);
   Fl_Preferences( ID id );
-  ~Fl_Preferences();
+  virtual ~Fl_Preferences();
   
   /** Return an ID that can later be reused to open more references to this dataset.
    */
   ID id() { return (ID)node; }
   
-  /** Remove the group with this ID from a databse.
+  /** Remove the group with this ID from a database.
    */
-  static char remove(ID id) { return ((Node*)id)->remove(); }
+  static char remove(ID id_) { return ((Node*)id_)->remove(); }
 
   /** Return the name of this entry.
    */
@@ -156,8 +153,6 @@ public:
   // char export( const char *filename, Type fileFormat );
   // char import( const char *filename );
   
-  char copyTo(class Fl_Tree*);
-
   /**
      'Name' provides a simple method to create numerical or more complex 
      procedural names for entries and groups on the fly.
@@ -173,8 +168,7 @@ public:
 
     char *data_;
 
-  public:
-
+  public: 
     Name( unsigned int n );
     Name( const char *format, ... );
 
@@ -187,13 +181,11 @@ public:
   };
 
   /** \internal An entry associates a preference name to its corresponding value */
-  struct Entry
-  {
+  struct Entry {
     char *name, *value;
   };
 
-private:
-
+private: 
   Fl_Preferences() : node(0), rootNode(0) { }
   Fl_Preferences &operator=(const Fl_Preferences&);
 
@@ -203,12 +195,12 @@ private:
 
   class RootNode;
   
-  class FL_EXPORT Node // a node contains a list to all its entries 
-  {          // and all means to manage the tree structure
+  class FL_EXPORT Node {	// a node contains a list to all its entries 
+            			// and all means to manage the tree structure
     Node *child_, *next_;
-    union { // these two are mutually exclusive
-      Node *parent_;    // top_ bit clear
-      RootNode *root_;  // top_ bit set
+    union { 			// these two are mutually exclusive
+      Node *parent_;   		// top_ bit clear
+      RootNode *root_; 		// top_ bit set
     };
     char *path_;
     Entry *entry_;
@@ -227,7 +219,6 @@ private:
   public:
     Node( const char *path );
     ~Node();
-    char copyTo(class Fl_Tree*, class Fl_Tree_Item*);
     // node methods
     int write( FILE *f );
     const char *name();
@@ -258,8 +249,7 @@ private:
   };
   friend class Node;
 
-  class FL_EXPORT RootNode  // the root node manages file paths and basic reading and writing
-  {
+  class FL_EXPORT RootNode {		// the root node manages file paths and basic reading and writing
     Fl_Preferences *prefs_;
     char *filename_;
     char *vendor_, *application_;
@@ -275,11 +265,9 @@ private:
   friend class RootNode;
 
 protected:
-  
   Node *node;
   RootNode *rootNode;
 };
-
 
 #endif // !Fl_Preferences_H
 

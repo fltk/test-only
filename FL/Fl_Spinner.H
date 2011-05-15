@@ -3,7 +3,7 @@
 //
 // Spinner widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -35,10 +35,10 @@
 // Include necessary headers...
 //
 
-#  include <fltk3/Enumerations.H>
-#  include <fltk3/Fl_Group.H>
-#  include <fltk3/Fl_Input.H>
-#  include <fltk3/Fl_Repeat_Button.H>
+#  include <FL/Enumerations.H>
+#  include <FL/Fl_Group.H>
+#  include <FL/Fl_Input.H>
+#  include <FL/Fl_Repeat_Button.H>
 #  include <stdio.h>
 #  include <stdlib.h>
 
@@ -48,8 +48,8 @@
   widget and repeat buttons. The user can either type into the
   input area or use the buttons to change the value.
 */
-class Fl_Spinner : public fltk3::Group
-{
+class FL_EXPORT Fl_Spinner : public Fl_Group {
+  
   double	value_;			// Current value
   double	minimum_;		// Minimum value
   double	maximum_;		// Maximum value
@@ -62,7 +62,7 @@ class Fl_Spinner : public fltk3::Group
 		down_button_;		// Down button
 
 
-  static void	sb_cb(fltk3::Widget *w, Fl_Spinner *sb) {
+  static void	sb_cb(Fl_Widget *w, Fl_Spinner *sb) {
 		  double v;		// New value
 
 		  if (w == &(sb->input_)) {
@@ -124,7 +124,7 @@ class Fl_Spinner : public fltk3::Group
 		  <P>Inherited destructor Destroys the widget and any value associated with it.
 		*/
 		Fl_Spinner(int X, int Y, int W, int H, const char *L = 0)
-  : fltk3::Group(X, Y, W, H, L),
+		  : Fl_Group(X, Y, W, H, L),
 		    input_(X, Y, W - H / 2 - 2, H),
 		    up_button_(X + W - H / 2 - 2, Y, H / 2 + 2, H / 2, "@-42<"),
 		    down_button_(X + W - H / 2 - 2, Y + H - H / 2,
@@ -158,10 +158,10 @@ class Fl_Spinner : public fltk3::Group
 		  switch (event) {
 		    case FL_KEYDOWN :
 		    case FL_SHORTCUT :
-		      if (fltk3::event_key() == FL_Up) {
+		      if (Fl::event_key() == FL_Up) {
 			up_button_.do_callback();
 			return 1;
-		      } else if (fltk3::event_key() == FL_Down) {
+		      } else if (Fl::event_key() == FL_Down) {
 			down_button_.do_callback();
 			return 1;
 		      } else return 0;
@@ -171,7 +171,7 @@ class Fl_Spinner : public fltk3::Group
 		      else return 0;
 		  }
 
-    return fltk3::Group::handle(event);
+		  return Fl_Group::handle(event);
 		}
 
   /** Speling mistakes retained for source compatibility \deprecated */
@@ -189,7 +189,7 @@ class Fl_Spinner : public fltk3::Group
   /** Sets the minimum and maximum values for the widget. */
   void		range(double a, double b) { minimum_ = a; maximum_ = b; }
   void		resize(int X, int Y, int W, int H) {
-    fltk3::Group::resize(X,Y,W,H);
+		  Fl_Group::resize(X,Y,W,H);
 
 		  input_.resize(X, Y, W - H / 2 - 2, H);
 		  up_button_.resize(X + W - H / 2 - 2, Y, H / 2 + 2, H / 2);
@@ -233,14 +233,16 @@ class Fl_Spinner : public fltk3::Group
   void		textsize(Fl_Fontsize s) {
 		  input_.textsize(s);
 		}
-  /** Sets or Gets the numeric representation in the input field.
-    Valid values are FL_INT_INPUT and FL_FLOAT_INPUT.
-    The first form also changes the format() template.
-    Setting a new spinner type via a superclass pointer will not work.
-    \note  type is not a virtual function. 
+  /** Gets the numeric representation in the input field.
+   \see Fl_Spinner::type(uchar) 
   */
   uchar		type() const { return (input_.type()); }
-  /** See uchar	Fl_Spinner::type() const */
+  /** Sets the numeric representation in the input field.
+   Valid values are FL_INT_INPUT and FL_FLOAT_INPUT.
+   Also changes the format() template.
+   Setting a new spinner type via a superclass pointer will not work.
+   \note  type is not a virtual function. 
+   */
   void		type(uchar v) { 
                   if (v==FL_FLOAT_INPUT) {
                     format("%.*f");

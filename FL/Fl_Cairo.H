@@ -3,7 +3,7 @@
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,12 +31,12 @@
 
 #ifndef FL_CAIRO_H
 # define FL_CAIRO_H
-# ifdef HAVE_CAIRO
+# ifdef FLTK_HAVE_CAIRO
 
 // Cairo is currently supported for the following platforms:
 // Win32, Apple Quartz, X11
 
-# include <fltk3/Fl_Export.H>
+# include <FL/Fl_Export.H>
 
 # if defined(USE_X11) // X11
 #  include <cairo-xlib.h>
@@ -66,7 +66,7 @@ public:
 
     // access attributes
     cairo_t* cc() const {return cc_;}		 ///< Gets the current cairo context
-    bool autolink() const {return autolink_;}	 ///< Gets the autolink option. See fltk3::cairo_autolink_context(bool)
+    bool autolink() const {return autolink_;}	 ///< Gets the autolink option. See Fl::cairo_autolink_context(bool)
     /** Sets the current cairo context, \p own indicates cc deletion is handle externally by user */
     void cc(cairo_t* c, bool own=true)  {	 
 	if (cc_ && own_cc_) cairo_destroy(cc_); 
@@ -89,7 +89,7 @@ private:
 
 /** @} */
 
-# endif // HAVE_CAIRO
+# endif // FLTK_HAVE_CAIRO
 #endif // FL_CAIRO_H
 
 //

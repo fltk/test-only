@@ -3,7 +3,7 @@
 //
 // Overlay support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,8 +30,8 @@
 // to erase the overlay before drawing anything that might intersect
 // it.
 
-#include <fltk3/x.H>
-#include <fltk3/draw.h>
+#include <FL/x.H>
+#include <FL/fl_draw.H>
 #ifdef __APPLE__
 #include <config.h>
 #endif
@@ -60,7 +60,7 @@ static void draw_current_rect() {
 # elif defined(__APPLE_QUARTZ__)
   // warning: Quartz does not support xor drawing
   // Use the Fl_Overlay_Window instead.
-  fl_color(fltk3::WHITE);
+  fl_color(FL_WHITE);
   fl_rect(px, py, pw, ph);
 # else
 #  error unsupported platform
@@ -78,10 +78,10 @@ static void draw_current_rect() {
     bgx = px; bgy = py;
     bgw = pw; bgh = ph;
   }
-  fl_color(fltk3::WHITE);
+  fl_color(FL_WHITE);
   fl_line_style(FL_SOLID);
   fl_rect(px, py, pw, ph);
-  fl_color(fltk3::BLACK);
+  fl_color(FL_BLACK);
   fl_line_style(FL_DOT);
   fl_rect(px, py, pw, ph);
   fl_line_style(FL_SOLID);

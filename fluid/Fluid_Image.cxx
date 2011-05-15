@@ -3,7 +3,7 @@
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -111,7 +111,7 @@ void Fluid_Image::write_static() {
     write_c("static unsigned char %s[] =\n",
 	    unique_id(this, "idata", fl_filename_name(name()), 0));
         
-    FILE *f = fopen(name(), "rb");
+    FILE *f = fl_fopen(name(), "rb");
     if (!f) {
       // message = "Can't include binary file. Can't open";
     } else {
@@ -120,7 +120,7 @@ void Fluid_Image::write_static() {
       fseek(f, 0, SEEK_SET);
       if (nData) {
         char *data = (char*)calloc(nData, 1);
-        fread(data, nData, 1, f);
+        if (fread(data, nData, 1, f)==0) { /* ignore */ }
         write_cdata(data, nData);
         free(data);
       }
@@ -180,7 +180,7 @@ Fluid_Image* Fluid_Image::find(const char *iname) {
   // no, so now see if the file exists:
 
   goto_source_dir();
-  FILE *f = fopen(iname,"rb");
+  FILE *f = fl_fopen(iname,"rb");
   if (!f) {
     read_error("%s : %s",iname,strerror(errno));
     leave_source_dir();

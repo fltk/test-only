@@ -3,7 +3,7 @@
 //
 // Repeat button widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,43 +25,43 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/RepeatButton.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Repeat_Button.H>
 
 #define INITIALREPEAT .5
 #define REPEAT .1
 
-void fltk3::RepeatButton::repeat_callback(void *v) {
-  fltk3::Button *b = (fltk3::Button*)v;
-  fltk3::add_timeout(REPEAT,repeat_callback,b);
+void Fl_Repeat_Button::repeat_callback(void *v) {
+  Fl_Button *b = (Fl_Button*)v;
+  Fl::add_timeout(REPEAT,repeat_callback,b);
   b->do_callback();
 }
 
-int fltk3::RepeatButton::handle(int event) {
+int Fl_Repeat_Button::handle(int event) {
   int newval;
   switch (event) {
-  case fltk3::HIDE:
-  case fltk3::DEACTIVATE:
-  case fltk3::RELEASE:
+  case FL_HIDE:
+  case FL_DEACTIVATE:
+  case FL_RELEASE:
     newval = 0; goto J1;
-  case fltk3::PUSH:
-  case fltk3::DRAG:
-    if (fltk3::visible_focus()) fltk3::focus(this);
-    newval = fltk3::event_inside(this);
+  case FL_PUSH:
+  case FL_DRAG:
+    if (Fl::visible_focus()) Fl::focus(this);
+    newval = Fl::event_inside(this);
   J1:
     if (!active()) 
       newval = 0;
     if (value(newval)) {
       if (newval) {
-	fltk3::add_timeout(INITIALREPEAT,repeat_callback,this);
+	Fl::add_timeout(INITIALREPEAT,repeat_callback,this);
 	do_callback();
       } else {
-	fltk3::remove_timeout(repeat_callback,this);
+	Fl::remove_timeout(repeat_callback,this);
       }
     }
     return 1;
   default:
-    return fltk3::Button::handle(event);
+    return Fl_Button::handle(event);
   }
 }
 

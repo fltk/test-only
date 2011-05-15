@@ -27,30 +27,28 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <fltk3/run.h>
-#include <fltk3/Window.h>
-#include <fltk3/Button.h>
-#include <fltk3/ReturnButton.h>
-#include <fltk3/RepeatButton.h>
-#include <fltk3/CheckButton.h>
-#include <fltk3/LightButton.h>
-#include <fltk3/RoundButton.h>
-#include <fltk3/Tooltip.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Return_Button.H>
+#include <FL/Fl_Repeat_Button.H>
+#include <FL/Fl_Check_Button.H>
+#include <FL/Fl_Light_Button.H>
+#include <FL/Fl_Round_Button.H>
+#include <FL/Fl_Tooltip.H>
 
 int main(int argc, char ** argv) {
-  fltk3::Window *window = new fltk3::Window(320,130);
-  window->begin();
-  {
-    (new fltk3::Button(10, 10, 130, 30, "Button"))->tooltip("This is a Tooltip.");
-    new fltk3::ReturnButton(150, 10, 160, 30, "ReturnButton");
-    new fltk3::RepeatButton(10,50,130,30,"RepeatButton");
-    new fltk3::LightButton(10,90,130,30,"LightButton");
-    new fltk3::RoundButton(150,50,160,30,"RoundButton");
-    new fltk3::CheckButton(150,90,160,30,"CheckButton");
-  }
+  Fl_Window *window = new Fl_Window(320,130);
+  Fl_Button *b = new Fl_Button(10, 10, 130, 30, "Fl_Button");
+  b->tooltip("This is a Tooltip.");
+  new Fl_Return_Button(150, 10, 160, 30, "Fl_Return_Button");
+  new Fl_Repeat_Button(10,50,130,30,"Fl_Repeat_Button");
+  new Fl_Light_Button(10,90,130,30,"Fl_Light_Button");
+  new Fl_Round_Button(150,50,160,30,"Fl_Round_Button");
+  new Fl_Check_Button(150,90,160,30,"Fl_Check_Button");
   window->end();
   window->show(argc,argv);
-  return fltk3::run();
+  return Fl::run();
 }
 
 //

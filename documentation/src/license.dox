@@ -13,9 +13,10 @@ exceptions:
 	a specific platform do not constitute a modified or
 	derivative work.<BR>
 	<BR>
-	The authors do request that such modifications be
-	contributed to the FLTK project - send all
-	contributions to "fltk-bugs@fltk.org".<BR>
+        The authors do request that such modifications be
+        contributed to the FLTK project - send all contributions
+        through the "Software Trouble Report" on the following page:
+        http://www.fltk.org/str.php<BR>
 	<BR>
 -#	Widgets that are subclassed from FLTK widgets do not
 	constitute a derivative work.<BR>
@@ -502,7 +503,7 @@ DAMAGES.
     </a>
   </td>
   <td width="10%" align="CENTER">
-    <a class="el" href="main.html">[Index]</a>
+    <a class="el" href="index.html">[Index]</a>
   </td>
   <td width="45%" align="RIGHT">
     <a class="el" href="examples.html">

@@ -3,7 +3,7 @@
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,47 +25,47 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_Menu_Bar.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Menu_Bar.H>
+#include <FL/fl_draw.H>
 
 void Fl_Menu_Bar::draw() {
   draw_box();
   if (!menu() || !menu()->text) return;
-  const fltk3::MenuItem* m;
+  const Fl_Menu_Item* m;
   int X = x()+6;
   for (m=menu()->first(); m->text; m = m->next()) {
     int W = m->measure(0,this) + 16;
     m->draw(X, y(), W, h(), this);
     X += W;
-    if (m->flags & fltk3::MENU_DIVIDER) {
-      int y1 = y() + fltk3::box_dy(box());
-      int y2 = y1 + h() - fltk3::box_dh(box()) - 1;
+    if (m->flags & FL_MENU_DIVIDER) {
+      int y1 = y() + Fl::box_dy(box());
+      int y2 = y1 + h() - Fl::box_dh(box()) - 1;
 
       // Draw a vertical divider between menus...
-      fl_color(fltk3::DARK3);
+      fl_color(FL_DARK3);
       fl_yxline(X - 6, y1, y2);
-      fl_color(fltk3::LIGHT3);
+      fl_color(FL_LIGHT3);
       fl_yxline(X - 5, y1, y2);
     }
   }
 }
 
 int Fl_Menu_Bar::handle(int event) {
-  const fltk3::MenuItem* v;
+  const Fl_Menu_Item* v;
   if (menu() && menu()->text) switch (event) {
-  case fltk3::ENTER:
-  case fltk3::LEAVE:
+  case FL_ENTER:
+  case FL_LEAVE:
     return 1;
-  case fltk3::PUSH:
+  case FL_PUSH:
     v = 0;
   J1:
     v = menu()->pulldown(x(), y(), w(), h(), v, this, 0, 1);
     picked(v);
     return 1;
-  case fltk3::SHORTCUT:
+  case FL_SHORTCUT:
     if (visible_r()) {
-      v = menu()->find_shortcut();
+      v = menu()->find_shortcut(0, true);
       if (v && v->submenu()) goto J1;
     }
     return test_shortcut() != 0;

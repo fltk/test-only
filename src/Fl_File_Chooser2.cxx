@@ -3,7 +3,7 @@
 //
 // More Fl_File_Chooser routines.
 //
-// Copyright 1999-2009 by Michael Sweet.
+// Copyright 1999-2011 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,7 +34,7 @@
   dialog that supports various selection modes.
   
   \image html Fl_File_Chooser.jpg 
-  \image latex  Fl_File_Chooser.eps "Fl_File_Chooser" width=12cm
+  \image latex  Fl_File_Chooser.jpg "Fl_File_Chooser" width=12cm
   
   The Fl_File_Chooser class also exports several static values
   that may be used to localize or customize the appearance of all file chooser
@@ -74,7 +74,11 @@
   	<TD>"My Computer" (WIN32)<BR>
   	"File Systems" (all others)</TD>
   </TR>
-  <TR>
+ <TR>
+	<TD>hidden_label</TD>
+	<TD>"Show hidden files:"</TD>
+ </TR>
+ <TR>
   	<TD>manage_favorites_label</TD>
   	<TD>"Manage Favorites"</TD>
   </TR>
@@ -98,7 +102,7 @@
   	<TD>show_label</TD>
   	<TD>"Show:"</TD>
   </TR>
-  <TR>
+ <TR>
   	<TD>sort</TD>
   	<TD>fl_numericsort</TD>
   </TR>
@@ -164,20 +168,20 @@
 /** \fn Fl_File_Chooser::~Fl_File_Chooser()
   Destroys the widget and frees all memory used by it.*/
 
-/** \fn void Fl_File_Chooser::color(fltk3::Color c)
-  Sets or gets the background color of the Fl_File_Browser list.*/
+/** \fn void Fl_File_Chooser::color(Fl_Color c)
+  Sets the background color of the Fl_File_Browser list.*/
 
-/** \fn fltk3::Color Fl_File_Chooser::color()
-  Sets or gets the background color of the Fl_File_Browser list.*/
+/** \fn Fl_Color Fl_File_Chooser::color()
+  Gets the background color of the Fl_File_Browser list.*/
 
 /** \fn int Fl_File_Chooser::count()
   Returns the number of selected files.*/
 
 /** \fn void Fl_File_Chooser::directory(const char *pathname)
-  Sets or gets the current directory.*/
+  Sets the current directory.*/
 
 /** \fn const char *Fl_File_Chooser::directory()
-  Sets or gets the current directory.*/
+  Gets the current directory.*/
 
 /** \fn void Fl_File_Chooser::filter(const char *pattern)
   Sets or gets the current filename filter patterns. The filter
@@ -195,36 +199,36 @@
   See void filter(const char *pattern)*/
 
 /** \fn void Fl_File_Chooser::filter_value(int f)
-  Sets or gets the current filename filter selection.*/
+  Sets the current filename filter selection.*/
 
 /** \fn int Fl_File_Chooser::filter_value()
-  Sets or gets the current filename filter selection.*/
+  Gets the current filename filter selection.*/
 
 /** \fn void Fl_File_Chooser::hide()
   Hides the Fl_File_Chooser window.*/
 
 /** \fn void Fl_File_Chooser::iconsize(uchar s)
-  Sets or gets the size of the icons in the Fl_File_Browser.  By
+  Sets the size of the icons in the Fl_File_Browser.  By
   default the icon size is set to 1.5 times the textsize().
 */
 
 /** \fn uchar Fl_File_Chooser::iconsize()
-  Sets or gets the size of the icons in the Fl_File_Browser.  By
+  Gets the size of the icons in the Fl_File_Browser.  By
   default the icon size is set to 1.5 times the textsize().
 */
 
 /** \fn void Fl_File_Chooser::label(const char *l)
-  Sets or gets the title bar text for the Fl_File_Chooser.*/
+  Sets the title bar text for the Fl_File_Chooser.*/
 
 /** \fn const char *Fl_File_Chooser::label()
-  Sets or gets the title bar text for the Fl_File_Chooser.*/
+  Gets the title bar text for the Fl_File_Chooser.*/
 
 /** \fn void Fl_File_Chooser::ok_label(const char *l)
-  Sets or gets the label for the "ok" button in the Fl_File_Chooser.
+  Sets the label for the "ok" button in the Fl_File_Chooser.
 */
 
 /** \fn const char *Fl_File_Chooser::ok_label()
-  Sets or gets the label for the "ok" button in the Fl_File_Chooser.
+  Gets the label for the "ok" button in the Fl_File_Chooser.
 */
 
 /** \fn int Fl_File_Chooser::preview() const
@@ -236,54 +240,54 @@
 /** \fn void Fl_File_Chooser::show()
   Shows the Fl_File_Chooser window.*/
 
-/** \fn void Fl_File_Chooser::textcolor(fltk3::Color c)
-  Sets or gets the current Fl_File_Browser text color.*/
+/** \fn void Fl_File_Chooser::textcolor(Fl_Color c)
+  Sets the current Fl_File_Browser text color.*/
 
-/** \fn fltk3::Color Fl_File_Chooser::textcolor()
-  Sets or gets the current Fl_File_Browser text color.*/
+/** \fn Fl_Color Fl_File_Chooser::textcolor()
+  Gets the current Fl_File_Browser text color.*/
 
 /** \fn void Fl_File_Chooser::textfont(Fl_Font f)
-  Sets or gets the current Fl_File_Browser text font.*/
+  Sets the current Fl_File_Browser text font.*/
 
 /** \fn Fl_Font Fl_File_Chooser::textfont()
-  Sets or gets the current Fl_File_Browser text font.*/
+  Gets the current Fl_File_Browser text font.*/
 
 /** \fn void Fl_File_Chooser::textsize(Fl_Fontsize s)
-  Sets or gets the current Fl_File_Browser text size.*/
+  Sets the current Fl_File_Browser text size.*/
 
 /** \fn Fl_Fontsize Fl_File_Chooser::textsize()
-  Sets or gets the current Fl_File_Browser text size.*/
+  Gets the current Fl_File_Browser text size.*/
 
 /** \fn void Fl_File_Chooser::type(int t)
-  Sets or gets the current type of Fl_File_Chooser.*/
+  Sets the current type of Fl_File_Chooser.*/
 
 /** \fn int Fl_File_Chooser::type()
-  Sets or gets the current type of Fl_File_Chooser.*/
+  Gets the current type of Fl_File_Chooser.*/
 
-/** \fn const char *Fl_File_Chooser::value(const char *pathname)
-  Sets or gets the current value of the selected file.
-  
-  In the second form, \p file is a \c 1-based index into a list of
-  file names. The number of selected files is returned by
-  Fl_File_Chooser::count().
-  
-  This sample code loops through all selected files:
-  \code
-  // Get list of filenames user selected from a MULTI chooser
-  for ( int t=1; t<=chooser->count(); t++ ) {
-     const char *filename = chooser->value(t);
-     ...
-  }
-  \endcode
+/** \fn void Fl_File_Chooser::value(const char *pathname)
+  Sets the current value of the selected file.
 */
 
-/** \fn const char *Fl_File_Chooser::value(int file)
-  See const char *value(const char *pathname)*/
+/** \fn const char *Fl_File_Chooser::value(int f)
+ Gets the current value of the selected file(s).
+ \p f is a \c 1-based index into a list of
+ file names. The number of selected files is returned by
+ Fl_File_Chooser::count().
+ 
+ This sample code loops through all selected files:
+ \code
+ // Get list of filenames user selected from a MULTI chooser
+ for ( int t=1; t<=chooser->count(); t++ ) {
+ const char *filename = chooser->value(t);
+ ...
+ }
+ \endcode
+ */
 
 /** \fn int Fl_File_Chooser::visible()
   Returns 1 if the Fl_File_Chooser window is visible.*/
 
-/** \fn fltk3::Widget* Fl_File_Chooser::add_extra(fltk3::Widget*)
+/** \fn Fl_Widget* Fl_File_Chooser::add_extra(Fl_Widget*)
   Adds extra widget at the bottom of Fl_File_Chooser window.
   Returns pointer for previous extra widget or NULL if not set previously.
   If argument is NULL only remove previous extra widget.
@@ -293,7 +297,7 @@
 */
   /** \fn int Fl_File_Chooser::shown()
     Returns non-zero if the file chooser main window show() has been called (but not hide()
-    see fltk3::Window::shown()
+    see Fl_Window::shown()
   */
 
   /** \fn void Fl_File_Chooser::callback(void (*cb)(Fl_File_Chooser *, void *), void *d = 0)
@@ -338,11 +342,11 @@
 // Include necessary headers.
 //
 
-#include <fltk3/Fl_File_Chooser.H>
-#include <fltk3/filename.H>
-#include <fltk3/ask.h>
-#include <fltk3/x.H>
-#include <fltk3/Fl_Shared_Image.H>
+#include <FL/Fl_File_Chooser.H>
+#include <FL/filename.H>
+#include <FL/fl_ask.H>
+#include <FL/x.H>
+#include <FL/Fl_Shared_Image.H>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -392,6 +396,7 @@ const char	*Fl_File_Chooser::new_directory_tooltip = "Create a new directory.";
 const char	*Fl_File_Chooser::preview_label = "Preview";
 const char	*Fl_File_Chooser::save_label = "Save";
 const char	*Fl_File_Chooser::show_label = "Show:";
+const char      *Fl_File_Chooser::hidden_label = "Show hidden files";
 Fl_File_Sort_F	*Fl_File_Chooser::sort = fl_numericsort;
 
 
@@ -460,7 +465,7 @@ Fl_File_Chooser::directory(const char *d)// I - Directory to change to
 #ifdef WIN32
   // See if the filename contains backslashes...
   char	*slash;				// Pointer to slashes
-  char	fixpath[1024];			// Path with slashes converted
+  char	fixpath[FL_PATH_MAX];			// Path with slashes converted
   if (strchr(d, '\\')) {
     // Convert backslashes to slashes...
     strlcpy(fixpath, d, sizeof(fixpath));
@@ -524,8 +529,8 @@ void
 Fl_File_Chooser::favoritesButtonCB()
 {
   int		v;			// Current selection
-  char		pathname[1024],		// Pathname
-		menuname[2048];		// Menu name
+  char		pathname[FL_PATH_MAX],		// Pathname
+		menuname[FL_PATH_MAX];		// Menu name
 
 
   v = favoritesButton->value();
@@ -544,7 +549,7 @@ Fl_File_Chooser::favoritesButtonCB()
     favoritesButton->add(menuname);
 
     if (favoritesButton->size() > 104) {
-      ((fltk3::MenuItem *)favoritesButton->menu())[0].deactivate();
+      ((Fl_Menu_Item *)favoritesButton->menu())[0].deactivate();
     }
   } else if (v == 1) {
     // Manage favorites...
@@ -564,7 +569,7 @@ Fl_File_Chooser::favoritesButtonCB()
 //
 
 void
-Fl_File_Chooser::favoritesCB(fltk3::Widget *w)
+Fl_File_Chooser::favoritesCB(Fl_Widget *w)
 					// I - Widget
 {
   int		i;			// Looping var
@@ -691,7 +696,7 @@ void
 Fl_File_Chooser::fileListCB()
 {
   char	*filename,			// New filename
-	pathname[1024];			// Full pathname to file
+	pathname[FL_PATH_MAX];			// Full pathname to file
 
 
   filename = (char *)fileList->text(fileList->value());
@@ -706,7 +711,7 @@ Fl_File_Chooser::fileListCB()
     snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
   }
 
-  if (fltk3::event_clicks()) {
+  if (Fl::event_clicks()) {
 #if (defined(WIN32) && ! defined(__CYGWIN__)) || defined(__EMX__)
     if ((strlen(pathname) == 2 && pathname[1] == ':') ||
         _fl_filename_isdir_quick(pathname))
@@ -721,12 +726,13 @@ Fl_File_Chooser::fileListCB()
       // be treated as a triple-click.  We use a value of -1 because
       // the next click will increment click count to 0, which is what
       // we really want...
-      fltk3::event_clicks(-1);
+      Fl::event_clicks(-1);
     }
     else
     {
       // Hide the window - picked the file...
       window->hide();
+      if (callback_) (*callback_)(this, data_);
     }
   }
   else
@@ -767,8 +773,8 @@ Fl_File_Chooser::fileListCB()
     fileName->value(pathname);
 
     // Update the preview box...
-    fltk3::remove_timeout((Fl_Timeout_Handler)previewCB, this);
-    fltk3::add_timeout(1.0, (Fl_Timeout_Handler)previewCB, this);
+    Fl::remove_timeout((Fl_Timeout_Handler)previewCB, this);
+    Fl::add_timeout(1.0, (Fl_Timeout_Handler)previewCB, this);
 
     // Do any callback that is registered...
     if (callback_) (*callback_)(this, data_);
@@ -791,8 +797,8 @@ Fl_File_Chooser::fileNameCB()
 {
   char		*filename,	// New filename
 		*slash,		// Pointer to trailing slash
-		pathname[1024],	// Full pathname to file
-		matchname[256];	// Matching filename
+		pathname[FL_PATH_MAX],	// Full pathname to file
+		matchname[FL_PATH_MAX];	// Matching filename
   int		i,		// Looping var
 		min_match,	// Minimum number of matching chars
 		max_match,	// Maximum number of matching chars
@@ -801,7 +807,7 @@ Fl_File_Chooser::fileNameCB()
   const char	*file;		// File from directory
 
 //  puts("fileNameCB()");
-//  printf("Event: %s\n", fl_eventnames[fltk3::event()]);
+//  printf("Event: %s\n", fl_eventnames[Fl::event()]);
 
   // Get the filename from the text field...
   filename = (char *)fileName->value();
@@ -837,12 +843,12 @@ Fl_File_Chooser::fileNameCB()
   filename = pathname;
 
   // Now process things according to the key pressed...
-  if (fltk3::event_key() == fltk3::EnterKey || fltk3::event_key() == fltk3::KeypadEnter) {
+  if (Fl::event_key() == FL_Enter || Fl::event_key() == FL_KP_Enter) {
     // Enter pressed - select or change directory...
 #if (defined(WIN32) && ! defined(__CYGWIN__)) || defined(__EMX__)
     if ((isalpha(pathname[0] & 255) && pathname[1] == ':' && !pathname[2]) ||
-        _fl_filename_isdir_quick(pathname) &&
-	compare_dirnames(pathname, directory_)) {
+        (_fl_filename_isdir_quick(pathname) &&
+	 compare_dirnames(pathname, directory_))) {
 #else
     if (_fl_filename_isdir_quick(pathname) &&
 	compare_dirnames(pathname, directory_)) {
@@ -861,11 +867,11 @@ Fl_File_Chooser::fileNameCB()
       }
     } else {
       // File doesn't exist, so beep at and alert the user...
-      fltk3::alert("%s",existing_file_label);
+      fl_alert("%s",existing_file_label);
     }
   }
-  else if (fltk3::event_key() != fltk3::DeleteKey &&
-           fltk3::event_key() != fltk3::BackSpaceKey) {
+  else if (Fl::event_key() != FL_Delete &&
+           Fl::event_key() != FL_BackSpace) {
     // Check to see if the user has entered a directory...
     if ((slash = strrchr(pathname, '/')) == NULL)
       slash = strrchr(pathname, '\\');
@@ -889,7 +895,7 @@ Fl_File_Chooser::fileNameCB()
       directory(pathname);
 
       if (filename[0]) {
-	char tempname[1024];
+	char tempname[FL_PATH_MAX];
 
 	snprintf(tempname, sizeof(tempname), "%s/%s", directory_, filename);
 	fileName->value(tempname);
@@ -976,7 +982,7 @@ Fl_File_Chooser::fileNameCB()
       okButton->deactivate();
     }
   } else {
-    // fltk3::DeleteKey or fltk3::BackSpaceKey
+    // FL_Delete or FL_BackSpace
     fileList->deselect(0);
     fileList->redraw();
     if (((type_ & CREATE) || !access(fileName->value(), 0)) &&
@@ -1000,7 +1006,7 @@ Fl_File_Chooser::filter(const char *p)		// I - Pattern(s)
 		*start,				// Start of pattern
 		*end;				// End of pattern
   int		allfiles;			// Do we have a "*" pattern?
-  char		temp[1024];			// Temporary pattern string
+  char		temp[FL_PATH_MAX];			// Temporary pattern string
 
 
   // Make sure we have a pattern...
@@ -1031,7 +1037,7 @@ Fl_File_Chooser::filter(const char *p)		// I - Pattern(s)
   if (!allfiles) showChoice->add(all_files_label);
 
   showChoice->add(custom_filter_label);
-
+  
   showChoice->value(0);
   showChoiceCB();
 }
@@ -1045,11 +1051,11 @@ void
 Fl_File_Chooser::newdir()
 {
   const char	*dir;		// New directory name
-  char		pathname[1024];	// Full path of directory
+  char		pathname[FL_PATH_MAX];	// Full path of directory
 
 
   // Get a directory name from the user
-  if ((dir = fltk3::input("%s", NULL, new_directory_label)) == NULL)
+  if ((dir = fl_input("%s", NULL, new_directory_label)) == NULL)
     return;
 
   // Make it relative to the current directory as needed...
@@ -1070,7 +1076,7 @@ Fl_File_Chooser::newdir()
 #endif /* WIN32 */
     if (errno != EEXIST)
     {
-      fltk3::alert("%s", strerror(errno));
+      fl_alert("%s", strerror(errno));
       return;
     }
 
@@ -1087,7 +1093,7 @@ void Fl_File_Chooser::preview(int e)
   prefs_.set("preview", e);
   prefs_.flush();
 
-  fltk3::Group *p = previewBox->parent();
+  Fl_Group *p = previewBox->parent();
   if (e) {
     int w = p->w() * 2 / 3;
     fileList->resize(fileList->x(), fileList->y(),
@@ -1126,7 +1132,7 @@ Fl_File_Chooser::previewCB(Fl_File_Chooser *fc) {	// I - File chooser
 void
 Fl_File_Chooser::rescan()
 {
-  char	pathname[1024];		// New pathname for filename field
+  char	pathname[FL_PATH_MAX];		// New pathname for filename field
 
 
   // Clear the current filename
@@ -1144,7 +1150,9 @@ Fl_File_Chooser::rescan()
 
   // Build the file list...
   fileList->load(directory_, sort);
-
+#ifndef WIN32	
+  if (!show_hidden->value()) remove_hidden_files();
+#endif
   // Update the preview box...
   update_preview();
 }
@@ -1164,12 +1172,14 @@ void Fl_File_Chooser::rescan_keep_filename()
   }
 
   int   i;
-  char	pathname[1024];		// New pathname for filename field
+  char	pathname[FL_PATH_MAX];		// New pathname for filename field
   strlcpy(pathname, fn, sizeof(pathname));
 
   // Build the file list...
   fileList->load(directory_, sort);
-
+#ifndef WIN32	
+  if (!show_hidden->value()) remove_hidden_files();
+#endif
   // Update the preview box...
   update_preview();
 
@@ -1210,13 +1220,13 @@ Fl_File_Chooser::showChoiceCB()
   const char	*item,			// Selected item
 		*patstart;		// Start of pattern
   char		*patend;		// End of pattern
-  char		temp[1024];		// Temporary string for pattern
+  char		temp[FL_PATH_MAX];		// Temporary string for pattern
 
 
   item = showChoice->text(showChoice->value());
 
   if (strcmp(item, custom_filter_label) == 0) {
-    if ((item = fltk3::input("%s", pattern_, custom_filter_label)) != NULL) {
+    if ((item = fl_input("%s", pattern_, custom_filter_label)) != NULL) {
       strlcpy(pattern_, item, sizeof(pattern_));
 
       quote_pathname(temp, item, sizeof(temp));
@@ -1247,7 +1257,7 @@ void
 Fl_File_Chooser::update_favorites()
 {
   int		i;			// Looping var
-  char		pathname[1024],		// Pathname
+  char		pathname[FL_PATH_MAX],		// Pathname
 		menuname[2048];		// Menu name
   const char	*home;			// Home directory
 
@@ -1255,13 +1265,13 @@ Fl_File_Chooser::update_favorites()
   favoritesButton->clear();
   favoritesButton->add("bla");
   favoritesButton->clear();
-  favoritesButton->add(add_favorites_label, fltk3::ALT + 'a', 0);
-  favoritesButton->add(manage_favorites_label, fltk3::ALT + 'm', 0, 0, fltk3::MENU_DIVIDER);
-  favoritesButton->add(filesystems_label, fltk3::ALT + 'f', 0);
+  favoritesButton->add(add_favorites_label, FL_ALT + 'a', 0);
+  favoritesButton->add(manage_favorites_label, FL_ALT + 'm', 0, 0, FL_MENU_DIVIDER);
+  favoritesButton->add(filesystems_label, FL_ALT + 'f', 0);
     
   if ((home = getenv("HOME")) != NULL) {
     quote_pathname(menuname, home, sizeof(menuname));
-    favoritesButton->add(menuname, fltk3::ALT + 'h', 0);
+    favoritesButton->add(menuname, FL_ALT + 'h', 0);
   }
 
   for (i = 0; i < 100; i ++) {
@@ -1271,11 +1281,11 @@ Fl_File_Chooser::update_favorites()
 
     quote_pathname(menuname, pathname, sizeof(menuname));
 
-    if (i < 10) favoritesButton->add(menuname, fltk3::ALT + '0' + i, 0);
+    if (i < 10) favoritesButton->add(menuname, FL_ALT + '0' + i, 0);
     else favoritesButton->add(menuname);
   }
 
-  if (i == 100) ((fltk3::MenuItem *)favoritesButton->menu())[0].deactivate();
+  if (i == 100) ((Fl_Menu_Item *)favoritesButton->menu())[0].deactivate();
 }
 
 
@@ -1293,7 +1303,6 @@ Fl_File_Chooser::update_preview()
   int			pbw, pbh;	// Width and height of preview box
   int			w, h;		// Width and height of preview image
   int                   set = 0;        // Set this flag as soon as a decent preview is found
-
 
   if (!previewButton->value()) return;
 
@@ -1319,13 +1328,13 @@ Fl_File_Chooser::update_preview()
       } else {
         // if this file is an image, try to load it
         window->cursor(FL_CURSOR_WAIT);
-        fltk3::check();
+        Fl::check();
         
         image = Fl_Shared_Image::get(filename);
         
         if (image) {
           window->cursor(FL_CURSOR_DEFAULT);
-          fltk3::check();
+          Fl::check();
           set = 1;
         }
       }
@@ -1343,7 +1352,7 @@ Fl_File_Chooser::update_preview()
     int		bytes;
     char	*ptr;
 
-    if (filename) fp = fopen(filename, "rb");
+    if (filename) fp = fl_fopen(filename, "rb");
     else fp = NULL;
 
     if (fp != NULL) {
@@ -1357,7 +1366,7 @@ Fl_File_Chooser::update_preview()
     }
 
     window->cursor(FL_CURSOR_DEFAULT);
-    fltk3::check();
+    Fl::check();
 
     // Scan the buffer for printable UTF8 chars...
     for (ptr = preview_text_; *ptr; ptr++) {
@@ -1394,20 +1403,20 @@ Fl_File_Chooser::update_preview()
     if (*ptr || ptr == preview_text_) {
       // Non-printable file, just show a big ?...
       previewBox->label(filename ? "?" : 0);
-      previewBox->align(fltk3::ALIGN_CLIP);
+      previewBox->align(FL_ALIGN_CLIP);
       previewBox->labelsize(75);
-      previewBox->labelfont(fltk3::HELVETICA);
+      previewBox->labelfont(FL_HELVETICA);
     } else {
       // Show the first 1k of text...
       int size = previewBox->h() / 20;
       if (size < 6) size = 6;
-      else if (size > 14) size = 14;
+      else if (size > FL_NORMAL_SIZE) size = FL_NORMAL_SIZE;
 
       previewBox->label(preview_text_);
-      previewBox->align((fltk3::Align)(fltk3::ALIGN_CLIP | fltk3::ALIGN_INSIDE |
-                                   fltk3::ALIGN_LEFT | fltk3::ALIGN_TOP));
+      previewBox->align((Fl_Align)(FL_ALIGN_CLIP | FL_ALIGN_INSIDE |
+                                   FL_ALIGN_LEFT | FL_ALIGN_TOP));
       previewBox->labelsize(size);
-      previewBox->labelfont(fltk3::COURIER);
+      previewBox->labelfont(FL_COURIER);
     }
   } else if (image) {
     pbw = previewBox->w() - 20;
@@ -1423,20 +1432,20 @@ Fl_File_Chooser::update_preview()
       }
 
       oldimage = (Fl_Shared_Image *)image->copy(w, h);
-      previewBox->image((fltk3::Image *)oldimage);
+      previewBox->image((Fl_Image *)oldimage);
 
       image->release();
     } else {
-      previewBox->image((fltk3::Image *)image);
+      previewBox->image((Fl_Image *)image);
     }
 
-    previewBox->align(fltk3::ALIGN_CLIP);
+    previewBox->align(FL_ALIGN_CLIP);
     previewBox->label(0);
   } else if (newlabel) {
     previewBox->label(newlabel);
-    previewBox->align(fltk3::ALIGN_CLIP);
+    previewBox->align(FL_ALIGN_CLIP);
     previewBox->labelsize(newlabel[0]=='@'?75:12);
-    previewBox->labelfont(fltk3::HELVETICA);
+    previewBox->labelfont(FL_HELVETICA);
   }
 
   previewBox->redraw();
@@ -1453,7 +1462,7 @@ Fl_File_Chooser::value(int f)	// I - File number
   int		i;		// Looping var
   int		fcount;		// Number of selected files
   const char	*name;		// Current filename
-  static char	pathname[1024];	// Filename + directory
+  static char	pathname[FL_PATH_MAX];	// Filename + directory
 
 
   name = fileName->value();
@@ -1500,7 +1509,7 @@ Fl_File_Chooser::value(const char *filename)
   int	i,				// Looping var
   	fcount;				// Number of items in list
   char	*slash;				// Directory separator
-  char	pathname[1024];			// Local copy of filename
+  char	pathname[FL_PATH_MAX];		// Local copy of filename
 
 
 //  printf("Fl_File_Chooser::value(\"%s\")\n", filename == NULL ? "(null)" : filename);
@@ -1516,7 +1525,7 @@ Fl_File_Chooser::value(const char *filename)
 
 #ifdef WIN32
   // See if the filename contains backslashes...
-  char	fixpath[1024];			// Path with slashes converted
+  char	fixpath[FL_PATH_MAX];			// Path with slashes converted
   if (strchr(filename, '\\')) {
     // Convert backslashes to slashes...
     strlcpy(fixpath, filename, sizeof(fixpath));

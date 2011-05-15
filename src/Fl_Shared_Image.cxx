@@ -3,7 +3,7 @@
 //
 // Shared image code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -27,13 +27,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <fltk3/fl_utf8.h>
+#include <FL/fl_utf8.h>
 #include "flstring.h"
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_Shared_Image.H>
-#include <fltk3/Fl_XBM_Image.H>
-#include <fltk3/Fl_XPM_Image.H>
+#include <FL/Fl.H>
+#include <FL/Fl_Shared_Image.H>
+#include <FL/Fl_XBM_Image.H>
+#include <FL/Fl_XPM_Image.H>
 
 
 //
@@ -92,7 +92,7 @@ Fl_Shared_Image::compare(Fl_Shared_Image **i0,		// I - First image
   <P>The constructors are protected and cannot be used directly
   from a program. Use the get() method instead.
 */
-Fl_Shared_Image::Fl_Shared_Image() : fltk3::Image(0,0,0) {
+Fl_Shared_Image::Fl_Shared_Image() : Fl_Image(0,0,0) {
   name_        = 0;
   refcount_    = 1;
   original_    = 0;
@@ -102,15 +102,15 @@ Fl_Shared_Image::Fl_Shared_Image() : fltk3::Image(0,0,0) {
 
 
 /** 
-  Creates a shared image from its filename and its corresponding fltk3::Image* img.
+  Creates a shared image from its filename and its corresponding Fl_Image* img.
   The constructors create a new shared image record in the image cache.
   
   <P>The constructors are protected and cannot be used directly
   from a program. Use the get() method instead.
 */
 Fl_Shared_Image::Fl_Shared_Image(const char *n,		// I - Filename
-                                 fltk3::Image   *img)	// I - Image
-  : fltk3::Image(0,0,0) {
+                                 Fl_Image   *img)	// I - Image
+  : Fl_Image(0,0,0) {
   name_ = new char[strlen(n) + 1];
   strcpy((char *)name_, n);
 
@@ -223,12 +223,12 @@ void Fl_Shared_Image::reload() {
   int		i;		// Looping var
   FILE		*fp;		// File pointer
   uchar		header[64];	// Buffer for auto-detecting files
-  fltk3::Image	*img;		// New image
+  Fl_Image	*img;		// New image
 
   if (!name_) return;
 
   if ((fp = fl_fopen(name_, "rb")) != NULL) {
-    fread(header, 1, sizeof(header), fp);
+    if (fread(header, 1, sizeof(header), fp)==0) { /* ignore */ }
     fclose(fp);
   } else {
     return;
@@ -255,7 +255,7 @@ void Fl_Shared_Image::reload() {
 
     if ((img->w() != w() && w()) || (img->h() != h() && h())) {
       // Make sure the reloaded image is the same size as the existing one.
-      fltk3::Image *temp = img->copy(w(), h());
+      Fl_Image *temp = img->copy(w(), h());
       delete img;
       image_ = temp;
     } else {
@@ -271,9 +271,9 @@ void Fl_Shared_Image::reload() {
 // 'Fl_Shared_Image::copy()' - Copy and resize a shared image...
 //
 
-fltk3::Image *
+Fl_Image *
 Fl_Shared_Image::copy(int W, int H) {
-  fltk3::Image		*temp_image;	// New image file
+  Fl_Image		*temp_image;	// New image file
   Fl_Shared_Image	*temp_shared;	// New shared image
 
   // Make a copy of the image we're sharing...
@@ -301,7 +301,7 @@ Fl_Shared_Image::copy(int W, int H) {
 //
 
 void
-Fl_Shared_Image::color_average(fltk3::Color c,	// I - Color to blend with
+Fl_Shared_Image::color_average(Fl_Color c,	// I - Color to blend with
                                float    i) {	// I - Blend fraction
   if (!image_) return;
 
@@ -330,7 +330,7 @@ Fl_Shared_Image::desaturate() {
 void
 Fl_Shared_Image::draw(int X, int Y, int W, int H, int cx, int cy) {
   if (image_) image_->draw(X, Y, W, H, cx, cy);
-  else fltk3::Image::draw(X, Y, W, H, cx, cy);
+  else Fl_Image::draw(X, Y, W, H, cx, cy);
 }
 
 
@@ -374,11 +374,24 @@ Fl_Shared_Image* Fl_Shared_Image::find(const char *n, int W, int H) {
 
 
 /** 
-  Gets a shared image, if it exists already ; it will return it.
-  If it does not exist or if it exist but with other size, 
-  then the existing image is deleted and replaced
-  by a new image from the n filename of the proper dimension.
-  If n is not a valid image filename, then get() will return NULL.
+ \brief Find or load an image that can be shared by multiple widgets.
+ 
+ Gets a shared image, if it exists already ; it will return it.
+ If it does not exist or if it exist but with other size, 
+ then the existing image is deleted and replaced
+ by a new image from the n filename of the proper dimension.
+ If n is not a valid image filename, then get() will return NULL.
+ 
+ Shared JPEG and PNG images can also be created from memory by using their 
+ named memory access constructor.
+ 
+ \param n name of the image
+ \param W, H desired size
+ 
+ \see Fl_Shared_Image::find(const char *n, int W, int H)
+ \see Fl_Shared_Image::release() 
+ \see Fl_JPEG_Image::Fl_JPEG_Image(const char *name, const unsigned char *data)
+ \see Fl_PNG_Image::Fl_PNG_Image (const char *name_png, const unsigned char *buffer, int maxsize)
 */
 Fl_Shared_Image* Fl_Shared_Image::get(const char *n, int W, int H) {
   Fl_Shared_Image	*temp;		// Image

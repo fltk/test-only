@@ -3,7 +3,7 @@
 //
 // MacOS color functions for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,9 +34,9 @@
 // matt: Quartz support done
 
 #include <config.h>
-#include <fltk3/run.h>
-#include <fltk3/x.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/x.H>
+#include <FL/fl_draw.H>
 
 static unsigned fl_cmap[256] = {
 #include "fl_cmap.h" // this is a file produced by "cmap.cxx":
@@ -47,10 +47,8 @@ Fl_XMap fl_xmap[256];
 
 Fl_XMap* fl_current_xmap;
 
-fltk3::Color fl_color_;
-
-void fltk3::Device::color(fltk3::Color i) {
-  fl_color_ = i;
+void Fl_Quartz_Graphics_Driver::color(Fl_Color i) {
+  Fl_Graphics_Driver::color(i);
   int index;
   uchar r, g, b;
   if (i & 0xFFFFFF00) {
@@ -74,8 +72,8 @@ void fltk3::Device::color(fltk3::Color i) {
   CGContextSetRGBStrokeColor(fl_gc, fr, fg, fb, 1.0f);
 }
 
-void fltk3::Device::color(uchar r, uchar g, uchar b) {
-  fl_color_ = fl_rgb_color(r, g, b);
+void Fl_Quartz_Graphics_Driver::color(uchar r, uchar g, uchar b) {
+  Fl_Graphics_Driver::color( fl_rgb_color(r, g, b) );
   float fr = r/255.0f;
   float fg = g/255.0f;
   float fb = b/255.0f;
@@ -83,7 +81,7 @@ void fltk3::Device::color(uchar r, uchar g, uchar b) {
   CGContextSetRGBStrokeColor(fl_gc, fr, fg, fb, 1.0f);
 }
 
-void fltk3::set_color(fltk3::Color i, unsigned c) {
+void Fl::set_color(Fl_Color i, unsigned c) {
   if (fl_cmap[i] != c) {
     fl_cmap[i] = c;
   }

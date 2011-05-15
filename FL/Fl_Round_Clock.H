@@ -3,7 +3,7 @@
 //
 // Round clock header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,7 +34,7 @@
 #include "Fl_Clock.H"
 
 /** A clock widget of type FL_ROUND_CLOCK. Has no box. */
-class Fl_Round_Clock : public Fl_Clock {
+class FL_EXPORT Fl_Round_Clock : public Fl_Clock {
 public:
     /** Creates the clock widget, setting his type and box. */
     Fl_Round_Clock(int x,int y,int w,int h, const char *l = 0)

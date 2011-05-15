@@ -9,7 +9,7 @@
 // This file also contains code to make Fl_Menu_Button, Fl_Menu_Bar,
 // etc widgets.
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -112,10 +112,10 @@ Fl_Type *Fl_Menu_Item_Type::make() {
   Fl_Type* q = Fl_Type::current;
   Fl_Type* p = q;
   if (p) {
-    if (force_parent && q->is_menu_item() || !q->is_parent()) p = p->parent;
+    if ( (force_parent && q->is_menu_item()) || !q->is_parent()) p = p->parent;
   }
   force_parent = 0;
-  if (!p || !(p->is_menu_button() || p->is_menu_item() && p->is_parent())) {
+  if (!p || !(p->is_menu_button() || (p->is_menu_item() && p->is_parent()))) {
     fl_message("Please select a menu to add to");
     return 0;
   }
@@ -211,10 +211,14 @@ void Fl_Menu_Item_Type::write_static() {
     write_c("\n}\n");
     if (k) {
       write_c("void %s::%s(Fl_Menu_* o, %s v) {\n", k, cn, ut);
-      write_c("  ((%s*)(o->", k);
+      write_c("  ((%s*)(o", k);
       Fl_Type* t = parent; while (t->is_menu_item()) t = t->parent;
-      for (t = t->parent; t && t->is_widget() && !is_class(); t = t->parent) write_c("parent()->");
-      write_c("user_data()))->%s_i(o,v);\n}\n", cn);
+      Fl_Type *q = 0;
+      for (t = t->parent; t && t->is_widget() && !is_class(); q = t, t = t->parent) 
+        write_c("->parent()");
+      if (!q || strcmp(q->type_name(), "widget_class"))
+        write_c("->user_data()");
+      write_c("))->%s_i(o,v);\n}\n", cn);
     }
   }
   if (image) {
@@ -228,9 +232,13 @@ void Fl_Menu_Item_Type::write_static() {
   // entire array out:
   const char* k = class_name(1);
   if (k) {
-    int i; write_c("\nFl_Menu_Item %s::%s[] = {\n", k, menu_name(i));
+    int i; 
+    if (i18n_type) write_c("\nunsigned char %s::%s_i18n_done = 0;", k, menu_name(i));
+    write_c("\nFl_Menu_Item %s::%s[] = {\n", k, menu_name(i));
   } else {
-    int i; write_c("\nFl_Menu_Item %s[] = {\n", menu_name(i));
+    int i; 
+    if (i18n_type) write_c("\nunsigned char %s_i18n_done = 0;", menu_name(i));
+    write_c("\nFl_Menu_Item %s[] = {\n", menu_name(i));
   }
   Fl_Type* t = prev; while (t && t->is_menu_item()) t = t->prev;
   for (Fl_Type* q = t->next; q && q->is_menu_item(); q = q->next) {
@@ -291,24 +299,7 @@ void Fl_Menu_Item_Type::write_item() {
 
   write_c(" {");
   if (image) write_c("0");
-  else if (label()) {
-    switch (i18n_type) {
-    case 0 : /* None */
-        write_cstring(label());
-        break;
-    case 1 : /* GNU gettext */
-        write_c("%s(", i18n_function);
-        write_cstring(label());
-	write_c(")");
-        break;
-    case 2 : /* POSIX catgets */
-        write_c("catgets(%s,%s,%d,", i18n_file[0] ? i18n_file : "_catalog",
-	        i18n_set, msgnum());
-        write_cstring(label());
-	write_c(")");
-        break;
-    }
-  }
+  else if (label()) write_cstring(label()); // we will call i18n when the widget is instantiated for the first time
   else write_c("\"\"");
   if (((Fl_Button*)o)->shortcut()) {
 		int s = ((Fl_Button*)o)->shortcut();
@@ -341,10 +332,13 @@ void Fl_Menu_Item_Type::write_code1() {
   int i; const char* mname = menu_name(i);
   if (!prev->is_menu_item()) {
     // for first menu item, declare the array
-    if (class_name(1))
+    if (class_name(1)) {
+      if (i18n_type) write_h("  static unsigned char %s_i18n_done;\n", mname);
       write_h("  static Fl_Menu_Item %s[];\n", mname);
-    else
+    } else {
+      if (i18n_type) write_h("extern unsigned char %s_i18n_done;\n", mname);
       write_h("extern Fl_Menu_Item %s[];\n", mname);
+    }
   }
 
   const char *c = array_name(this);
@@ -468,9 +462,42 @@ Fl_Type* Fl_Menu_Type::click_test(int, int) {
 }
 
 void Fl_Menu_Type::write_code2() {
-  if (next && next->is_menu_item())
+  if (next && next->is_menu_item()) {
+    if (i18n_type) {
+      // take care of i18n now!
+      Fl_Menu_Item_Type *mi = (Fl_Menu_Item_Type*)next;
+      int i, nItem = 0, nLabel = 0;
+      const char *mName = mi->menu_name(i);
+      for (Fl_Type* q = next; q && q->is_menu_item(); q = q->next) {
+        if (((Fl_Menu_Item_Type*)q)->label()) nLabel++;
+	int thislevel = q->level; if (q->is_parent()) thislevel++;
+	int nextlevel =
+	    (q->next && q->next->is_menu_item()) ? q->next->level : next->level+1;
+	nItem += 1 + ((thislevel > nextlevel) ? (thislevel-nextlevel) : 0);
+      }
+      if (nLabel) {
+        write_c("%sif (!%s_i18n_done) {\n", indent(), mName);
+        write_c("%s  int i=0;\n", indent());
+        write_c("%s  for ( ; i<%d; i++)\n", indent(), nItem);
+        write_c("%s    if (%s[i].label())\n", indent(), mName);
+        switch (i18n_type) {
+          case 1:
+            write_c("%s      %s[i].label(%s(%s[i].label()));\n",
+                    indent(), mName, i18n_function, mName);
+            break;
+          case 2:
+            write_c("%s      %s[i].label(catgets(%s,%s,i+%d,%s[i].label()));\n",
+                    indent(), mName, i18n_file[0] ? i18n_file : "_catalog", 
+                    i18n_set, mi->msgnum(), mName);
+            break;
+        }
+        write_c("%s  %s_i18n_done = 1;\n", indent(), mName);
+        write_c("%s}\n", indent());
+      }
+    }
     write_c("%s%s->menu(%s);\n", indent(), name() ? name() : "o",
 	    unique_id(this, "menu", name(), label()));
+  }
   Fl_Widget_Type::write_code2();
 }
 
@@ -565,17 +592,17 @@ int Shortcut_Button::handle(int e) {
   if (e == FL_KEYBOARD) {
     if (!value()) return 0;
     int v = Fl::event_text()[0];
-    if (v > 32 && v < 0x7f || v > 0xa0 && v <= 0xff) {
+    if ( (v > 32 && v < 0x7f) || (v > 0xa0 && v <= 0xff) ) {
       if (isupper(v)) {
         v = tolower(v);
         v |= FL_SHIFT;
       }
-      v = v | Fl::event_state()&(FL_META|FL_ALT|FL_CTRL);
+      v = v | (Fl::event_state()&(FL_META|FL_ALT|FL_CTRL));
     } else {
-      v = Fl::event_state()&(FL_META|FL_ALT|FL_CTRL|FL_SHIFT) | Fl::event_key();
+      v = (Fl::event_state()&(FL_META|FL_ALT|FL_CTRL|FL_SHIFT)) | Fl::event_key();
       if (v == FL_BackSpace && svalue) v = 0;
     }
-		if (v != svalue) {svalue = v; set_changed(); redraw(); do_callback(); }
+    if (v != svalue) {svalue = v; set_changed(); redraw(); do_callback(); }
     return 1;
   } else if (e == FL_UNFOCUS) {
     int c = changed(); value(0); if (c) set_changed();

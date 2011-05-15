@@ -3,7 +3,7 @@
 //
 // File_Input header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 // Original version Copyright 1998 by Curtis Edwards.
 //
 // This library is free software; you can redistribute it and/or
@@ -26,10 +26,11 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_File_Input.H>
-#include <fltk3/Window.h>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_File_Input.H>
+#include <FL/Fl_Window.H>
+#include <FL/fl_draw.H>
+#include <FL/filename.H>
 #include <stdio.h>
 #include "flstring.h"
 
@@ -50,18 +51,18 @@
 
 /**
   Creates a new Fl_File_Input widget using the given position,
-  size, and label string. The default boxtype is fltk3::DOWN_BOX.
+  size, and label string. The default boxtype is FL_DOWN_BOX.
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
 */
 Fl_File_Input::Fl_File_Input(int X, int Y, int W, int H, const char *L)
-  : fltk3::Input(X, Y, W, H, L) {
+  : Fl_Input(X, Y, W, H, L) {
   buttons_[0] = 0;
-  errorcolor_ = fltk3::RED;
+  errorcolor_ = FL_RED;
   ok_entry_   = 1;
   pressed_    = -1;
 
-  down_box(fltk3::UP_BOX);
+  down_box(FL_UP_BOX);
 }
 
 /**
@@ -81,14 +82,14 @@ void Fl_File_Input::draw_buttons() {
     if ((X + buttons_[i]) > xscroll()) {
       if (X < xscroll()) {
         draw_box(pressed_ == i ? fl_down(down_box()) : down_box(),
-                 x(), y(), X + buttons_[i] - xscroll(), DIR_HEIGHT, fltk3::GRAY);
+                 x(), y(), X + buttons_[i] - xscroll(), DIR_HEIGHT, FL_GRAY);
       } else if ((X + buttons_[i] - xscroll()) > w()) {
 	draw_box(pressed_ == i ? fl_down(down_box()) : down_box(),
         	 x() + X - xscroll(), y(), w() - X + xscroll(), DIR_HEIGHT,
-		 fltk3::GRAY);
+		 FL_GRAY);
       } else {
         draw_box(pressed_ == i ? fl_down(down_box()) : down_box(),
-	         x() + X - xscroll(), y(), buttons_[i], DIR_HEIGHT, fltk3::GRAY);
+	         x() + X - xscroll(), y(), buttons_[i], DIR_HEIGHT, FL_GRAY);
       }
     }
 
@@ -97,7 +98,7 @@ void Fl_File_Input::draw_buttons() {
 
   if (X < w()) {
     draw_box(pressed_ == i ? fl_down(down_box()) : down_box(),
-             x() + X - xscroll(), y(), w() - X + xscroll(), DIR_HEIGHT, fltk3::GRAY);
+             x() + X - xscroll(), y(), w() - X + xscroll(), DIR_HEIGHT, FL_GRAY);
   }
 }
 
@@ -129,7 +130,7 @@ void Fl_File_Input::update_buttons() {
     end ++;
 
     buttons_[i] = (short)fl_width(start, end - start);
-    if (!i) buttons_[i] += fltk3::box_dx(box()) + 6;
+    if (!i) buttons_[i] += Fl::box_dx(box()) + 6;
   }
 
 //  printf("    found %d components/buttons...\n", i);
@@ -148,7 +149,7 @@ int						// O - TRUE on success
 Fl_File_Input::value(const char *str,		// I - New string value
                      int        len) {		// I - Length of value
   damage(FL_DAMAGE_BAR);
-  return fltk3::Input::value(str,len);
+  return Fl_Input::value(str,len);
 }
 
 
@@ -160,7 +161,7 @@ Fl_File_Input::value(const char *str,		// I - New string value
 int						// O - TRUE on success
 Fl_File_Input::value(const char *str) {		// I - New string value
   damage(FL_DAMAGE_BAR);
-  return fltk3::Input::value(str);
+  return Fl_Input::value(str);
 }
 
 
@@ -168,16 +169,16 @@ Fl_File_Input::value(const char *str) {		// I - New string value
   Draws the file input widget
 */
 void Fl_File_Input::draw() {
-  fltk3::Boxtype b = box();
+  Fl_Boxtype b = box();
   if (damage() & (FL_DAMAGE_BAR | FL_DAMAGE_ALL)) draw_buttons();
-  // this flag keeps fltk3::Input_::drawtext from drawing a bogus box!
+  // this flag keeps Fl_Input_::drawtext from drawing a bogus box!
   char must_trick_fl_input_ = 
-    fltk3::focus()!=this && !size() && !(damage()&FL_DAMAGE_ALL);
+    Fl::focus()!=this && !size() && !(damage()&FL_DAMAGE_ALL);
   if ((damage() & FL_DAMAGE_ALL) || must_trick_fl_input_) 
     draw_box(b,x(),y()+DIR_HEIGHT,w(),h()-DIR_HEIGHT,color());
   if (!must_trick_fl_input_) 
-    fltk3::Input_::drawtext(x()+fltk3::box_dx(b)+3, y()+fltk3::box_dy(b)+DIR_HEIGHT,
-		        w()-fltk3::box_dw(b)-6, h()-fltk3::box_dh(b)-DIR_HEIGHT);
+    Fl_Input_::drawtext(x()+Fl::box_dx(b)+3, y()+Fl::box_dy(b)+DIR_HEIGHT,
+		        w()-Fl::box_dw(b)-6, h()-Fl::box_dh(b)-DIR_HEIGHT);
 }
 
 
@@ -194,10 +195,10 @@ Fl_File_Input::handle(int event) 		// I - Event
   static char inButtonBar = 0;
 
   switch (event) {
-    case fltk3::MOVE :
-    case fltk3::ENTER :
+    case FL_MOVE :
+    case FL_ENTER :
       if (active_r()) {
-	if (fltk3::event_y() < (y() + DIR_HEIGHT)) 
+	if (Fl::event_y() < (y() + DIR_HEIGHT)) 
           window()->cursor(FL_CURSOR_DEFAULT);
 	else 
           window()->cursor(FL_CURSOR_INSERT);
@@ -205,18 +206,18 @@ Fl_File_Input::handle(int event) 		// I - Event
 
       return 1;
 
-    case fltk3::PUSH :
-      inButtonBar = (fltk3::event_y() < (y() + DIR_HEIGHT));
-    case fltk3::RELEASE :
-    case fltk3::DRAG :
+    case FL_PUSH :
+      inButtonBar = (Fl::event_y() < (y() + DIR_HEIGHT));
+    case FL_RELEASE :
+    case FL_DRAG :
       if (inButtonBar) 
         return handle_button(event);
       else
-        return fltk3::Input::handle(event);
+        return Fl_Input::handle(event);
 
     default :
       { Fl_Widget_Tracker wp(this);
-	if (fltk3::Input::handle(event)) {
+	if (Fl_Input::handle(event)) {
 	  if (wp.exists())
 	    damage(FL_DAMAGE_BAR);
 	  return 1;
@@ -240,7 +241,7 @@ Fl_File_Input::handle_button(int event)		// I - Event
 		X;				// Current X position
   char		*start,				// Start of path component
 		*end;				// End of path component
-  char		newvalue[1024];			// New value
+  char		newvalue[FL_PATH_MAX];		// New value
 
 
   // Figure out which button is being pressed...
@@ -248,13 +249,13 @@ Fl_File_Input::handle_button(int event)		// I - Event
   {
     X += buttons_[i];
 
-    if (X > xscroll() && fltk3::event_x() < (x() + X - xscroll())) break;
+    if (X > xscroll() && Fl::event_x() < (x() + X - xscroll())) break;
   }
 
 //  printf("handle_button(event = %d), button = %d\n", event, i);
 
   // Redraw the directory bar...
-  if (event == fltk3::RELEASE) pressed_ = -1;
+  if (event == FL_RELEASE) pressed_ = -1;
   else pressed_ = (short)i;
 
   window()->make_current();
@@ -262,7 +263,7 @@ Fl_File_Input::handle_button(int event)		// I - Event
 
   // Return immediately if the user is clicking on the last button or
   // has not released the mouse button...
-  if (!buttons_[i] || event != fltk3::RELEASE) return 1;
+  if (!buttons_[i] || event != FL_RELEASE) return 1;
 
   // Figure out where to truncate the path...
   strlcpy(newvalue, value(), sizeof(newvalue));
@@ -285,7 +286,7 @@ Fl_File_Input::handle_button(int event)		// I - Event
 
     // Then do the callbacks, if necessary...
     set_changed();
-    if (when() & (fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE) ) do_callback();
+    if (when() & (FL_WHEN_CHANGED|FL_WHEN_RELEASE) ) do_callback();
   }
 
   return 1;

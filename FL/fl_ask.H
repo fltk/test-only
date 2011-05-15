@@ -3,7 +3,7 @@
 //
 // Standard dialog header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,34 +25,29 @@
 //     http://www.fltk.org/str.php
 //
 
-#ifndef fltk1_ask_H
-#  define fltk1_ask_H
+#ifndef fl_ask_H
+#  define fl_ask_H
 
 #  include "Enumerations.H"
 
-#include <fltk3/ask.h>
-
+class Fl_Widget;
 /** Different system beeps available. \relatesalso fl_beep(int) */
 enum {
-  FL_BEEP_DEFAULT       = fltk3::BEEP_DEFAULT,
-  FL_BEEP_MESSAGE       = fltk3::BEEP_MESSAGE,
-  FL_BEEP_ERROR         = fltk3::BEEP_ERROR,
-  FL_BEEP_QUESTION      = fltk3::BEEP_QUESTION,
-  FL_BEEP_PASSWORD      = fltk3::BEEP_PASSWORD,
-  FL_BEEP_NOTIFICATION  = fltk3::BEEP_NOTIFICATION
+  FL_BEEP_DEFAULT = 0,
+  FL_BEEP_MESSAGE,
+  FL_BEEP_ERROR,
+  FL_BEEP_QUESTION,
+  FL_BEEP_PASSWORD,
+  FL_BEEP_NOTIFICATION
 };
 
 #  ifdef __GNUC__
 #    define __fl_attr(x) __attribute__ (x)
-#    if __GNUC__ < 3
-#      define __deprecated__
-#    endif // __GNUC__ < 3
 #  else
 #    define __fl_attr(x)
 #  endif // __GNUC__
 
-inline void fl_beep(int type = FL_BEEP_DEFAULT) { fltk3::beep(type); }
-
+FL_EXPORT void fl_beep(int type = FL_BEEP_DEFAULT);
 FL_EXPORT void fl_message(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
 FL_EXPORT void fl_alert(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
 // fl_ask() is deprecated since it uses "Yes" and "No" for the buttons,
@@ -63,11 +58,17 @@ FL_EXPORT int fl_choice(const char *q,const char *b0,const char *b1,const char *
 FL_EXPORT const char *fl_input(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
 FL_EXPORT const char *fl_password(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
 
-FL_EXPORT fltk3::Widget *fl_message_icon();
+FL_EXPORT Fl_Widget *fl_message_icon();
 extern FL_EXPORT Fl_Font fl_message_font_;
 extern FL_EXPORT Fl_Fontsize fl_message_size_;
 inline void fl_message_font(Fl_Font f, Fl_Fontsize s) {
   fl_message_font_ = f; fl_message_size_ = s;}
+
+FL_EXPORT void fl_message_hotspot(int enable);
+FL_EXPORT int fl_message_hotspot(void);
+
+FL_EXPORT void fl_message_title(const char *title);
+FL_EXPORT void fl_message_title_default(const char *title);
 
 // pointers you can use to change FLTK to a foreign language:
 extern FL_EXPORT const char* fl_no;

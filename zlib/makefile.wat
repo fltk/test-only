@@ -3,7 +3,7 @@
 #
 # GNU ZIP library makefile for the Fast Light Toolkit (FLTK).
 #
-# Copyright 1997-2004 by Easy Software Products.
+# Copyright 1998-2011 by Bill Spitzak and others.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA.
 #
-# Please report all bugs and problems to "fltk-bugs@fltk.org".
+# Please report all bugs and problems on the following page:
+#
+#     http://www.fltk.org/str.php
 #
 
 LIBNAMEROOT=ftlk_z
@@ -32,8 +34,9 @@ LIBNAMEROOT=ftlk_z
 # Object files...
 #
 
-LIBOBJS = adler32.obj compress.obj crc32.obj gzio.obj uncompr.obj deflate.obj &
-          trees.obj zutil.obj inflate.obj inftrees.obj inffast.obj
+LIBOBJS = adler32.obj compress.obj crc32.obj uncompr.obj deflate.obj &
+          trees.obj zutil.obj inflate.obj inftrees.obj inffast.obj &
+		  gzclose.obj gzlib.obj gzread.obj gzwrite.obj infback.obj
 
 
 #

@@ -3,7 +3,7 @@
 //
 // Cursor test program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -39,7 +39,7 @@ Fl_Cursor cursor = FL_CURSOR_DEFAULT;
 Fl_Hor_Value_Slider *cursor_slider;
 
 void choice_cb(Fl_Widget *, void *v) {
-  cursor = (Fl_Cursor)(long)v;
+  cursor = (Fl_Cursor)(fl_intptr_t)v;
   cursor_slider->value(cursor);
   fl_cursor(cursor,fg,bg);
 }

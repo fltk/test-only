@@ -3,7 +3,7 @@
 //
 // System color support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,16 +25,16 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/draw.h>
-#include <fltk3/x.H>
-#include <fltk3/math.h>
-#include <fltk3/fl_utf8.h>
+#include <FL/Fl.H>
+#include <FL/fl_draw.H>
+#include <FL/x.H>
+#include <FL/math.h>
+#include <FL/fl_utf8.h>
 #include "flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <fltk3/Fl_Pixmap.H>
-#include <fltk3/Fl_Tiled_Image.H>
+#include <FL/Fl_Pixmap.H>
+#include <FL/Fl_Tiled_Image.H>
 #include "tile.xpm"
 
 #if defined(WIN32) && !defined(__CYGWIN__) && !defined(__WATCOMC__)
@@ -48,57 +48,57 @@ static char	fl_bg2_set = 0;
 static char	fl_fg_set = 0;
 
 /**
-    Changes fl_color(fltk3::BACKGROUND_COLOR) to the given color, 
+    Changes fl_color(FL_BACKGROUND_COLOR) to the given color, 
     and changes the gray ramp from 32 to 56 to black to white.  These are 
     the colors used as backgrounds by almost all widgets and used to draw 
     the edges of all the boxtypes.
 */
-void fltk3::background(uchar r, uchar g, uchar b) {
+void Fl::background(uchar r, uchar g, uchar b) {
   fl_bg_set = 1;
 
-  // replace the gray ramp so that fltk3::GRAY is this color
+  // replace the gray ramp so that FL_GRAY is this color
   if (!r) r = 1; else if (r==255) r = 254;
-  double powr = log(r/255.0)/log((fltk3::GRAY-fltk3::GRAY_RAMP)/(fltk3::NUM_GRAY-1.0));
+  double powr = log(r/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
   if (!g) g = 1; else if (g==255) g = 254;
-  double powg = log(g/255.0)/log((fltk3::GRAY-fltk3::GRAY_RAMP)/(fltk3::NUM_GRAY-1.0));
+  double powg = log(g/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
   if (!b) b = 1; else if (b==255) b = 254;
-  double powb = log(b/255.0)/log((fltk3::GRAY-fltk3::GRAY_RAMP)/(fltk3::NUM_GRAY-1.0));
-  for (unsigned int i = 0; i < fltk3::NUM_GRAY; i++) {
-    double gray = i/(fltk3::NUM_GRAY-1.0);
-    fltk3::set_color(fl_gray_ramp(i),
+  double powb = log(b/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  for (int i = 0; i < FL_NUM_GRAY; i++) {
+    double gray = i/(FL_NUM_GRAY-1.0);
+    Fl::set_color(fl_gray_ramp(i),
 		  uchar(pow(gray,powr)*255+.5),
 		  uchar(pow(gray,powg)*255+.5),
 		  uchar(pow(gray,powb)*255+.5));
   }
 }
-/** Changes fl_color(fltk3::FOREGROUND_COLOR). */
-void fltk3::foreground(uchar r, uchar g, uchar b) {
+/** Changes fl_color(FL_FOREGROUND_COLOR). */
+void Fl::foreground(uchar r, uchar g, uchar b) {
   fl_fg_set = 1;
 
-  fltk3::set_color(fltk3::FOREGROUND_COLOR,r,g,b);
+  Fl::set_color(FL_FOREGROUND_COLOR,r,g,b);
 }
 
 /**
     Changes the alternative background color. This color is used as a 
-    background by fltk3::Input and other text widgets.
-    <P>This call may change fl_color(fltk3::FOREGROUND_COLOR) if it 
-    does not provide sufficient contrast to fltk3::BACKGROUND2_COLOR.
+    background by Fl_Input and other text widgets.
+    <P>This call may change fl_color(FL_FOREGROUND_COLOR) if it 
+    does not provide sufficient contrast to FL_BACKGROUND2_COLOR.
 */
-void fltk3::background2(uchar r, uchar g, uchar b) {
+void Fl::background2(uchar r, uchar g, uchar b) {
   fl_bg2_set = 1;
 
-  fltk3::set_color(fltk3::BACKGROUND2_COLOR,r,g,b);
-  fltk3::set_color(fltk3::FOREGROUND_COLOR,
-                get_color(fl_contrast(fltk3::FOREGROUND_COLOR,fltk3::BACKGROUND2_COLOR)));
+  Fl::set_color(FL_BACKGROUND2_COLOR,r,g,b);
+  Fl::set_color(FL_FOREGROUND_COLOR,
+                get_color(fl_contrast(FL_FOREGROUND_COLOR,FL_BACKGROUND2_COLOR)));
 }
 
-// these are set by fltk3::args() and override any system colors:
+// these are set by Fl::args() and override any system colors:
 const char *fl_fg = NULL;
 const char *fl_bg = NULL;
 const char *fl_bg2 = NULL;
 
 static void set_selection_color(uchar r, uchar g, uchar b) {
-  fltk3::set_color(fltk3::SELECTION_COLOR,r,g,b);
+  Fl::set_color(FL_SELECTION_COLOR,r,g,b);
 }
 
 #if defined(WIN32) || defined(__APPLE__)
@@ -139,11 +139,11 @@ int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b) {
   } else return 0;
 }
 #endif // WIN32 || __APPLE__
-/** \fn fltk3::get_system_colors()
+/** \fn Fl::get_system_colors()
     Read the user preference colors from the system and use them to call
-    fltk3::foreground(), fltk3::background(), and 
-    fltk3::background2().  This is done by
-    fltk3::Window::show(argc,argv) before applying the -fg and -bg
+    Fl::foreground(), Fl::background(), and 
+    Fl::background2().  This is done by
+    Fl_Window::show(argc,argv) before applying the -fg and -bg
     switches.
     
     <P>On X this reads some common values from the Xdefaults database.
@@ -158,7 +158,7 @@ getsyscolor(int what, const char* arg, void (*func)(uchar,uchar,uchar))
   if (arg) {
     uchar r,g,b;
     if (!fl_parse_color(arg, r,g,b))
-      fltk3::error("Unknown color: %s", arg);
+      Fl::error("Unknown color: %s", arg);
     else
       func(r,g,b);
   } else {
@@ -167,10 +167,10 @@ getsyscolor(int what, const char* arg, void (*func)(uchar,uchar,uchar))
   }
 }
 
-void fltk3::get_system_colors() {
-  if (!fl_bg2_set) getsyscolor(COLOR_WINDOW,	fl_bg2,fltk3::background2);
-  if (!fl_fg_set) getsyscolor(COLOR_WINDOWTEXT,	fl_fg, fltk3::foreground);
-  if (!fl_bg_set) getsyscolor(COLOR_BTNFACE,	fl_bg, fltk3::background);
+void Fl::get_system_colors() {
+  if (!fl_bg2_set) getsyscolor(COLOR_WINDOW,	fl_bg2,Fl::background2);
+  if (!fl_fg_set) getsyscolor(COLOR_WINDOWTEXT,	fl_fg, Fl::foreground);
+  if (!fl_bg_set) getsyscolor(COLOR_BTNFACE,	fl_bg, Fl::background);
   getsyscolor(COLOR_HIGHLIGHT,	0,     set_selection_color);
 }
 
@@ -178,9 +178,9 @@ void fltk3::get_system_colors() {
 // MacOS X currently supports two color schemes - Blue and Graphite.
 // Since we aren't emulating the Aqua interface (even if Apple would
 // let us), we use some defaults that are similar to both.  The
-// fltk3::scheme("plastic") color/box scheme provides a usable Aqua-like
+// Fl::scheme("plastic") color/box scheme provides a usable Aqua-like
 // look-n-feel...
-void fltk3::get_system_colors()
+void Fl::get_system_colors()
 {
   fl_open_display();
 
@@ -223,45 +223,45 @@ getsyscolor(const char *key1, const char* key2, const char *arg, const char *def
   }
   XColor x;
   if (!XParseColor(fl_display, fl_colormap, arg, &x))
-    fltk3::error("Unknown color: %s", arg);
+    Fl::error("Unknown color: %s", arg);
   else
     func(x.red>>8, x.green>>8, x.blue>>8);
 }
 
-void fltk3::get_system_colors()
+void Fl::get_system_colors()
 {
   fl_open_display();
   const char* key1 = 0;
-  if (fltk3::first_window()) key1 = fltk3::first_window()->xclass();
+  if (Fl::first_window()) key1 = Fl::first_window()->xclass();
   if (!key1) key1 = "fltk";
-  if (!fl_bg2_set) getsyscolor("Text","background",	fl_bg2,	"#ffffff", fltk3::background2);
-  if (!fl_fg_set) getsyscolor(key1,  "foreground",	fl_fg,	"#000000", fltk3::foreground);
-  if (!fl_bg_set) getsyscolor(key1,  "background",	fl_bg,	"#c0c0c0", fltk3::background);
+  if (!fl_bg2_set) getsyscolor("Text","background",	fl_bg2,	"#ffffff", Fl::background2);
+  if (!fl_fg_set) getsyscolor(key1,  "foreground",	fl_fg,	"#000000", Fl::foreground);
+  if (!fl_bg_set) getsyscolor(key1,  "background",	fl_bg,	"#c0c0c0", Fl::background);
   getsyscolor("Text", "selectBackground", 0, "#000080", set_selection_color);
 }
 
 #endif
 
 
-//// Simple implementation of 2.0 fltk3::scheme() interface...
+//// Simple implementation of 2.0 Fl::scheme() interface...
 #define D1 BORDER_WIDTH
 #define D2 (BORDER_WIDTH+BORDER_WIDTH)
 
-extern void	fl_up_box(int, int, int, int, fltk3::Color);
-extern void	fl_down_box(int, int, int, int, fltk3::Color);
-extern void	fl_thin_up_box(int, int, int, int, fltk3::Color);
-extern void	fl_thin_down_box(int, int, int, int, fltk3::Color);
-extern void	fl_round_up_box(int, int, int, int, fltk3::Color);
-extern void	fl_round_down_box(int, int, int, int, fltk3::Color);
+extern void	fl_up_box(int, int, int, int, Fl_Color);
+extern void	fl_down_box(int, int, int, int, Fl_Color);
+extern void	fl_thin_up_box(int, int, int, int, Fl_Color);
+extern void	fl_thin_down_box(int, int, int, int, Fl_Color);
+extern void	fl_round_up_box(int, int, int, int, Fl_Color);
+extern void	fl_round_down_box(int, int, int, int, Fl_Color);
 
-extern void	fl_up_frame(int, int, int, int, fltk3::Color);
-extern void	fl_down_frame(int, int, int, int, fltk3::Color);
-extern void	fl_thin_up_frame(int, int, int, int, fltk3::Color);
-extern void	fl_thin_down_frame(int, int, int, int, fltk3::Color);
+extern void	fl_up_frame(int, int, int, int, Fl_Color);
+extern void	fl_down_frame(int, int, int, int, Fl_Color);
+extern void	fl_thin_up_frame(int, int, int, int, Fl_Color);
+extern void	fl_thin_down_frame(int, int, int, int, Fl_Color);
 
 #ifndef FL_DOXYGEN
-const char	*fltk3::scheme_ = (const char *)0;	    // current scheme 
-fltk3::Image	*fltk3::scheme_bg_ = (fltk3::Image *)0;    // current background image for the scheme
+const char	*Fl::scheme_ = (const char *)0;	    // current scheme 
+Fl_Image	*Fl::scheme_bg_ = (Fl_Image *)0;    // current background image for the scheme
 #endif
 
 static Fl_Pixmap	tile(tile_xpm);
@@ -285,12 +285,12 @@ static Fl_Pixmap	tile(tile_xpm);
     
     </ul>
 */
-int fltk3::scheme(const char *s) {
+int Fl::scheme(const char *s) {
   if (!s) {
     if ((s = getenv("FLTK_SCHEME")) == NULL) {
 #if !defined(WIN32) && !defined(__APPLE__)
       const char* key = 0;
-      if (fltk3::first_window()) key = fltk3::first_window()->xclass();
+      if (Fl::first_window()) key = Fl::first_window()->xclass();
       if (!key) key = "fltk";
       fl_open_display();
       s = XGetDefault(fl_display, key, "scheme");
@@ -316,8 +316,8 @@ int fltk3::scheme(const char *s) {
   return reload_scheme();
 }
 
-int fltk3::reload_scheme() {
-  fltk3::Window *win;
+int Fl::reload_scheme() {
+  Fl_Window *win;
 
   if (scheme_ && !strcasecmp(scheme_, "plastic")) {
     // Update the tile image to match the background color...
@@ -328,9 +328,9 @@ int fltk3::reload_scheme() {
     // OSX 10.3 and higher use a background with less contrast...
     static uchar levels[3] = { 0xff, 0xf8, 0xf4 };
 
-    get_color(fltk3::GRAY, r, g, b);
+    get_color(FL_GRAY, r, g, b);
 
-//    printf("fltk3::GRAY = 0x%02x 0x%02x 0x%02x\n", r, g, b);
+//    printf("FL_GRAY = 0x%02x 0x%02x 0x%02x\n", r, g, b);
 
     for (i = 0; i < 3; i ++) {
       nr = levels[i] * r / 0xe8;
@@ -351,68 +351,68 @@ int fltk3::reload_scheme() {
     if (!scheme_bg_) scheme_bg_ = new Fl_Tiled_Image(&tile, w(), h());
 
     // Load plastic buttons, etc...
-    set_boxtype(fltk3::UP_FRAME,        fltk3::PLASTIC_UP_FRAME);
-    set_boxtype(fltk3::DOWN_FRAME,      fltk3::PLASTIC_DOWN_FRAME);
-    set_boxtype(fltk3::THIN_UP_FRAME,   fltk3::PLASTIC_UP_FRAME);
-    set_boxtype(fltk3::THIN_DOWN_FRAME, fltk3::PLASTIC_DOWN_FRAME);
+    set_boxtype(FL_UP_FRAME,        FL_PLASTIC_UP_FRAME);
+    set_boxtype(FL_DOWN_FRAME,      FL_PLASTIC_DOWN_FRAME);
+    set_boxtype(FL_THIN_UP_FRAME,   FL_PLASTIC_UP_FRAME);
+    set_boxtype(FL_THIN_DOWN_FRAME, FL_PLASTIC_DOWN_FRAME);
 
-    set_boxtype(fltk3::UP_BOX,          fltk3::PLASTIC_UP_BOX);
-    set_boxtype(fltk3::DOWN_BOX,        fltk3::PLASTIC_DOWN_BOX);
-    set_boxtype(fltk3::THIN_UP_BOX,     fltk3::PLASTIC_THIN_UP_BOX);
-    set_boxtype(fltk3::THIN_DOWN_BOX,   fltk3::PLASTIC_THIN_DOWN_BOX);
-    set_boxtype(fltk3::ROUND_UP_BOX,   fltk3::PLASTIC_ROUND_UP_BOX);
-    set_boxtype(fltk3::ROUND_DOWN_BOX, fltk3::PLASTIC_ROUND_DOWN_BOX);
+    set_boxtype(FL_UP_BOX,          FL_PLASTIC_UP_BOX);
+    set_boxtype(FL_DOWN_BOX,        FL_PLASTIC_DOWN_BOX);
+    set_boxtype(FL_THIN_UP_BOX,     FL_PLASTIC_THIN_UP_BOX);
+    set_boxtype(FL_THIN_DOWN_BOX,   FL_PLASTIC_THIN_DOWN_BOX);
+    set_boxtype(_FL_ROUND_UP_BOX,   FL_PLASTIC_ROUND_UP_BOX);
+    set_boxtype(_FL_ROUND_DOWN_BOX, FL_PLASTIC_ROUND_DOWN_BOX);
 
     // Use standard size scrollbars...
-    fltk3::scrollbar_size(16);
+    Fl::scrollbar_size(16);
   } else if (scheme_ && !strcasecmp(scheme_, "gtk+")) {
     // Use a GTK+ inspired look-n-feel...
     if (scheme_bg_) {
       delete scheme_bg_;
-      scheme_bg_ = (fltk3::Image *)0;
+      scheme_bg_ = (Fl_Image *)0;
     }
 
-    set_boxtype(fltk3::UP_FRAME,        fltk3::GTK_UP_FRAME);
-    set_boxtype(fltk3::DOWN_FRAME,      fltk3::GTK_DOWN_FRAME);
-    set_boxtype(fltk3::THIN_UP_FRAME,   fltk3::GTK_THIN_UP_FRAME);
-    set_boxtype(fltk3::THIN_DOWN_FRAME, fltk3::GTK_THIN_DOWN_FRAME);
+    set_boxtype(FL_UP_FRAME,        FL_GTK_UP_FRAME);
+    set_boxtype(FL_DOWN_FRAME,      FL_GTK_DOWN_FRAME);
+    set_boxtype(FL_THIN_UP_FRAME,   FL_GTK_THIN_UP_FRAME);
+    set_boxtype(FL_THIN_DOWN_FRAME, FL_GTK_THIN_DOWN_FRAME);
 
-    set_boxtype(fltk3::UP_BOX,          fltk3::GTK_UP_BOX);
-    set_boxtype(fltk3::DOWN_BOX,        fltk3::GTK_DOWN_BOX);
-    set_boxtype(fltk3::THIN_UP_BOX,     fltk3::GTK_THIN_UP_BOX);
-    set_boxtype(fltk3::THIN_DOWN_BOX,   fltk3::GTK_THIN_DOWN_BOX);
-    set_boxtype(fltk3::ROUND_UP_BOX,   fltk3::GTK_ROUND_UP_BOX);
-    set_boxtype(fltk3::ROUND_DOWN_BOX, fltk3::GTK_ROUND_DOWN_BOX);
+    set_boxtype(FL_UP_BOX,          FL_GTK_UP_BOX);
+    set_boxtype(FL_DOWN_BOX,        FL_GTK_DOWN_BOX);
+    set_boxtype(FL_THIN_UP_BOX,     FL_GTK_THIN_UP_BOX);
+    set_boxtype(FL_THIN_DOWN_BOX,   FL_GTK_THIN_DOWN_BOX);
+    set_boxtype(_FL_ROUND_UP_BOX,   FL_GTK_ROUND_UP_BOX);
+    set_boxtype(_FL_ROUND_DOWN_BOX, FL_GTK_ROUND_DOWN_BOX);
 
     // Use slightly thinner scrollbars...
-    fltk3::scrollbar_size(15);
+    Fl::scrollbar_size(15);
   } else {
     // Use the standard FLTK look-n-feel...
     if (scheme_bg_) {
       delete scheme_bg_;
-      scheme_bg_ = (fltk3::Image *)0;
+      scheme_bg_ = (Fl_Image *)0;
     }
 
-    set_boxtype(fltk3::UP_FRAME,        fl_up_frame, D1, D1, D2, D2);
-    set_boxtype(fltk3::DOWN_FRAME,      fl_down_frame, D1, D1, D2, D2);
-    set_boxtype(fltk3::THIN_UP_FRAME,   fl_thin_up_frame, 1, 1, 2, 2);
-    set_boxtype(fltk3::THIN_DOWN_FRAME, fl_thin_down_frame, 1, 1, 2, 2);
+    set_boxtype(FL_UP_FRAME,        fl_up_frame, D1, D1, D2, D2);
+    set_boxtype(FL_DOWN_FRAME,      fl_down_frame, D1, D1, D2, D2);
+    set_boxtype(FL_THIN_UP_FRAME,   fl_thin_up_frame, 1, 1, 2, 2);
+    set_boxtype(FL_THIN_DOWN_FRAME, fl_thin_down_frame, 1, 1, 2, 2);
 
-    set_boxtype(fltk3::UP_BOX,          fl_up_box, D1, D1, D2, D2);
-    set_boxtype(fltk3::DOWN_BOX,        fl_down_box, D1, D1, D2, D2);
-    set_boxtype(fltk3::THIN_UP_BOX,     fl_thin_up_box, 1, 1, 2, 2);
-    set_boxtype(fltk3::THIN_DOWN_BOX,   fl_thin_down_box, 1, 1, 2, 2);
-    set_boxtype(fltk3::ROUND_UP_BOX,   fl_round_up_box, 3, 3, 6, 6);
-    set_boxtype(fltk3::ROUND_DOWN_BOX, fl_round_down_box, 3, 3, 6, 6);
+    set_boxtype(FL_UP_BOX,          fl_up_box, D1, D1, D2, D2);
+    set_boxtype(FL_DOWN_BOX,        fl_down_box, D1, D1, D2, D2);
+    set_boxtype(FL_THIN_UP_BOX,     fl_thin_up_box, 1, 1, 2, 2);
+    set_boxtype(FL_THIN_DOWN_BOX,   fl_thin_down_box, 1, 1, 2, 2);
+    set_boxtype(_FL_ROUND_UP_BOX,   fl_round_up_box, 3, 3, 6, 6);
+    set_boxtype(_FL_ROUND_DOWN_BOX, fl_round_down_box, 3, 3, 6, 6);
 
     // Use standard size scrollbars...
-    fltk3::scrollbar_size(16);
+    Fl::scrollbar_size(16);
   }
 
   // Set (or clear) the background tile for all windows...
   for (win = first_window(); win; win = next_window(win)) {
-    win->labeltype(scheme_bg_ ? fltk3::NORMAL_LABEL : fltk3::NO_LABEL);
-    win->align(fltk3::ALIGN_CENTER | fltk3::ALIGN_INSIDE | fltk3::ALIGN_CLIP);
+    win->labeltype(scheme_bg_ ? FL_NORMAL_LABEL : FL_NO_LABEL);
+    win->align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_CLIP);
     win->image(scheme_bg_);
     win->redraw();
   }

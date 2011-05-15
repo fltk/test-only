@@ -5,7 +5,7 @@
 //
 // KDE icon code donated by Maarten De Boer.
 //
-// Copyright 1999-2009 by Michael Sweet.
+// Copyright 1999-2010 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -43,7 +43,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <fltk3/fl_utf8.h>
+#include <FL/fl_utf8.h>
 #include "flstring.h"
 #include <errno.h>
 #include <sys/types.h>
@@ -55,10 +55,10 @@
 #  include <unistd.h>
 #endif /* WIN32 || __EMX__ */
 
-#include <fltk3/Fl_File_Icon.H>
-#include <fltk3/Widget.h>
-#include <fltk3/draw.h>
-#include <fltk3/filename.H>
+#include <FL/Fl_File_Icon.H>
+#include <FL/Fl_Widget.H>
+#include <FL/fl_draw.H>
+#include <FL/filename.H>
 
 
 //
@@ -258,10 +258,10 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
         	   int      y,		// I - Upper-lefthand Y
 		   int      w,		// I - Width of bounding box
 		   int      h,		// I - Height of bounding box
-        	   fltk3::Color ic,		// I - Icon color...
+        	   Fl_Color ic,		// I - Icon color...
         	   int      active)	// I - Active or inactive?
 {
-  fltk3::Color	c,		// Current color
+  Fl_Color	c,		// Current color
 		oc;		// Outline color
   short		*d,		// Pointer to data
 		*dend;		// End of data...
@@ -314,7 +314,7 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
 	      case OUTLINEPOLYGON :
 		  fl_end_complex_polygon();
 
-        	  oc = (fltk3::Color)((((unsigned short *)prim)[1] << 16) | 
+        	  oc = (Fl_Color)((((unsigned short *)prim)[1] << 16) | 
 	                	  ((unsigned short *)prim)[2]);
                   if (active)
 		  {
@@ -350,7 +350,7 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
 	  break;
 
       case COLOR :
-          c = (fltk3::Color)((((unsigned short *)d)[1] << 16) | 
+          c = (Fl_Color)((((unsigned short *)d)[1] << 16) | 
 	                   ((unsigned short *)d)[2]);
 
           if (c == FL_ICON_COLOR)
@@ -416,7 +416,7 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
       case OUTLINEPOLYGON :
 	  fl_end_polygon();
 
-          oc = (fltk3::Color)((((unsigned short *)prim)[1] << 16) | 
+          oc = (Fl_Color)((((unsigned short *)prim)[1] << 16) | 
 	                  ((unsigned short *)prim)[2]);
           if (active)
 	  {
@@ -456,9 +456,10 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
   label type as needed.
   \param[in] w widget for which this icon will become the label
 */
-void Fl_File_Icon::label(fltk3::Widget *w)	// I - Widget to label
+void Fl_File_Icon::label(Fl_Widget *w)	// I - Widget to label
 {
-  w->label(fltk3::ICON_LABEL, (const char*)this);
+  Fl::set_labeltype(_FL_ICON_LABEL, labeltype, 0);
+  w->label(_FL_ICON_LABEL, (const char*)this);
 }
 
 
@@ -469,12 +470,12 @@ void Fl_File_Icon::label(fltk3::Widget *w)	// I - Widget to label
   \param[in] a label alignment [not used]
 */
 void
-Fl_File_Icon::labeltype(const fltk3::Label *o,	// I - Label data
+Fl_File_Icon::labeltype(const Fl_Label *o,	// I - Label data
                 	int            x,	// I - X position of label
 			int            y,	// I - Y position of label
 			int            w,	// I - Width of label
 			int            h,	// I - Height of label
-			fltk3::Align       a)	// I - Label alignment (not used)
+			Fl_Align       a)	// I - Label alignment (not used)
 {
   Fl_File_Icon *icon;			// Pointer to icon data
 
@@ -482,12 +483,7 @@ Fl_File_Icon::labeltype(const fltk3::Label *o,	// I - Label data
   (void)a;
 
   icon = (Fl_File_Icon *)(o->value);
-  if (icon) icon->draw(x, y, w, h, (fltk3::Color)(o->color));
-}
-
-void fl_icon_label(const fltk3::Label *o,int x,int y,int w,int h,fltk3::Align a)
-{
-  Fl_File_Icon::labeltype(o, x, y, w, h, a);
+  if (icon) icon->draw(x, y, w, h, (Fl_Color)(o->color));
 }
 
 

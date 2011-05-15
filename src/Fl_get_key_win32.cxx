@@ -29,9 +29,8 @@
 // which are actually X keysyms.  So this has to translate to MSWindows
 // VK_x symbols.
 
-#include <fltk3/run.h>
-#include <fltk3/x.H>
-#include <config.h>
+#include <FL/Fl.H>
+#include <FL/x.H>
 
 // convert an Fltk (X) keysym to a MSWindows VK symbol:
 // See also the inverse converter in Fl_win32.cxx
@@ -71,49 +70,49 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   {0xdc,	'|'},
   {0xdd,	'}'},
   {0xc0,	'~'},
-  {VK_BACK,	fltk3::BackSpaceKey},
-  {VK_TAB,	fltk3::TabKey},
+  {VK_BACK,	FL_BackSpace},
+  {VK_TAB,	FL_Tab},
   {VK_CLEAR,	0xff0b/*XK_Clear*/},
-  {VK_RETURN,	fltk3::EnterKey},
-  {VK_PAUSE,	fltk3::PauseKey},
-  {VK_SCROLL,	fltk3::ScrollLockKey},
-  {VK_ESCAPE,	fltk3::EscapeKey},
-  {VK_HOME,	fltk3::HomeKey},
-  {VK_LEFT,	fltk3::LeftKey},
-  {VK_UP,	fltk3::UpKey},
-  {VK_RIGHT,	fltk3::RightKey},
-  {VK_DOWN,	fltk3::DownKey},
-  {VK_PRIOR,	fltk3::PageUpKey},
-  {VK_NEXT,	fltk3::PageDownKey},
-  {VK_END,	fltk3::EndKey},
-  {VK_SNAPSHOT,	fltk3::PrintKey},
-  {VK_INSERT,	fltk3::InsertKey},
-  {VK_APPS,	fltk3::MenuKey},
-  {VK_NUMLOCK,	fltk3::NumLockKey},
-//{VK_???,	fltk3::Keypad_Enter},
-  {VK_MULTIPLY,	fltk3::Keypad+'*'},
-  {VK_ADD,	fltk3::Keypad+'+'},
-  {VK_SUBTRACT,	fltk3::Keypad+'-'},
-  {VK_DECIMAL,	fltk3::Keypad+'.'},
-  {VK_DIVIDE,	fltk3::Keypad+'/'},
-  {VK_LSHIFT,	fltk3::LeftShiftKey},
-  {VK_RSHIFT,	fltk3::RightShiftKey},
-  {VK_LCONTROL,	fltk3::LeftControlKey},
-  {VK_RCONTROL,	fltk3::RightControlKey},
-  {VK_CAPITAL,	fltk3::CapsLockKey},
-  {VK_LWIN,	fltk3::LeftMetaKey},
-  {VK_RWIN,	fltk3::RightMetaKey},
-  {VK_LMENU,	fltk3::LeftAltKey},
-  {VK_RMENU,	fltk3::RightAltKey},
-  {VK_DELETE,	fltk3::DeleteKey}
+  {VK_RETURN,	FL_Enter},
+  {VK_PAUSE,	FL_Pause},
+  {VK_SCROLL,	FL_Scroll_Lock},
+  {VK_ESCAPE,	FL_Escape},
+  {VK_HOME,	FL_Home},
+  {VK_LEFT,	FL_Left},
+  {VK_UP,	FL_Up},
+  {VK_RIGHT,	FL_Right},
+  {VK_DOWN,	FL_Down},
+  {VK_PRIOR,	FL_Page_Up},
+  {VK_NEXT,	FL_Page_Down},
+  {VK_END,	FL_End},
+  {VK_SNAPSHOT,	FL_Print},
+  {VK_INSERT,	FL_Insert},
+  {VK_APPS,	FL_Menu},
+  {VK_NUMLOCK,	FL_Num_Lock},
+//{VK_???,	FL_KP_Enter},
+  {VK_MULTIPLY,	FL_KP+'*'},
+  {VK_ADD,	FL_KP+'+'},
+  {VK_SUBTRACT,	FL_KP+'-'},
+  {VK_DECIMAL,	FL_KP+'.'},
+  {VK_DIVIDE,	FL_KP+'/'},
+  {VK_LSHIFT,	FL_Shift_L},
+  {VK_RSHIFT,	FL_Shift_R},
+  {VK_LCONTROL,	FL_Control_L},
+  {VK_RCONTROL,	FL_Control_R},
+  {VK_CAPITAL,	FL_Caps_Lock},
+  {VK_LWIN,	FL_Meta_L},
+  {VK_RWIN,	FL_Meta_R},
+  {VK_LMENU,	FL_Alt_L},
+  {VK_RMENU,	FL_Alt_R},
+  {VK_DELETE,	FL_Delete}
 };
 
 static int fltk2ms(int fltk) {
   if (fltk >= '0' && fltk <= '9') return fltk;
   if (fltk >= 'A' && fltk <= 'Z') return fltk;
   if (fltk >= 'a' && fltk <= 'z') return fltk-('a'-'A');
-  if (fltk > fltk3::FKey && fltk <= fltk3::FKey+16) return fltk-(fltk3::FKey-(VK_F1-1));
-  if (fltk >= fltk3::Keypad+'0' && fltk<=fltk3::Keypad+'9') return fltk-(fltk3::Keypad+'0'-VK_NUMPAD0);
+  if (fltk > FL_F && fltk <= FL_F+16) return fltk-(FL_F-(VK_F1-1));
+  if (fltk >= FL_KP+'0' && fltk<=FL_KP+'9') return fltk-(FL_KP+'0'-VK_NUMPAD0);
   int a = 0;
   int b = sizeof(vktab)/sizeof(*vktab);
   while (a < b) {
@@ -124,11 +123,11 @@ static int fltk2ms(int fltk) {
   return 0;
 }
 
-int fltk3::event_key(int k) {
+int Fl::event_key(int k) {
   return GetKeyState(fltk2ms(k))&~1;
 }
 
-int fltk3::get_key(int k) {
+int Fl::get_key(int k) {
   uchar foo[256];
   GetKeyboardState(foo);
   return foo[fltk2ms(k)]&~1;

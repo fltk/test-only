@@ -3,7 +3,7 @@
 //
 // Floating point input header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -39,7 +39,7 @@
   that only allows the user to type floating point numbers (sign,
   digits, decimal point, more digits, 'E' or 'e', sign, digits).
 */
-class Fl_Float_Input : public Fl_Input {
+class Fl_Float_Input : public Fl_Input { // don't use FL_EXPORT here !
 public:
   /**
       Creates a new Fl_Float_Input widget using the given position,

@@ -3,7 +3,7 @@
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -188,7 +188,7 @@ void Fl_Function_Type::open() {
   function_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert(message);
+    if (message) fl_alert("%s", message);
     for (;;) {
       Fl_Widget* w = Fl::readqueue();
       if (w == f_panel_cancel) goto BREAK2;
@@ -332,7 +332,7 @@ void Fl_Function_Type::write_code1() {
           skipc = skipc ? 0 : 1;
         if(!skips && !skipc && plevel==1 && *nptr =='=' && 
            !(nc && *(nptr-1)=='\'') ) // ignore '=' case 
-          while(*++nptr  && (skips || skipc || (*nptr!=',' && *nptr!=')' || plevel!=1) )) {
+          while(*++nptr  && (skips || skipc || ( (*nptr!=',' && *nptr!=')') || plevel!=1) )) {
             if ( *nptr=='"' &&  *(nptr-1)!='\\' ) 
               skips = skips ? 0 : 1;
             else if(!skips && *nptr=='\'' &&  *(nptr-1)!='\\')
@@ -374,7 +374,7 @@ void Fl_Function_Type::write_code1() {
           skipc = skipc ? 0 : 1;
         if(!skips && !skipc && plevel==1 && *nptr =='=' && 
            !(nc && *(nptr-1)=='\'') ) // ignore '=' case 
-          while(*++nptr  && (skips || skipc || (*nptr!=',' && *nptr!=')' || plevel!=1) )) {
+          while(*++nptr  && (skips || skipc || ( (*nptr!=',' && *nptr!=')') || plevel!=1) )) {
             if ( *nptr=='"' &&  *(nptr-1)!='\\' ) 
               skips = skips ? 0 : 1;
             else if(!skips && *nptr=='\'' &&  *(nptr-1)!='\\')
@@ -449,7 +449,7 @@ void Fl_Code_Type::open() {
   code_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert(message);
+    if (message) fl_alert("%s", message);
     for (;;) {
       Fl_Widget* w = Fl::readqueue();
       if (w == code_panel_cancel) goto BREAK2;
@@ -471,7 +471,15 @@ Fl_Code_Type Fl_Code_type;
 void Fl_Code_Type::write_code1() {
   const char* c = name();
   if (!c) return;
-  write_c("%s%s\n", indent(), c);
+  const char *pch;
+  const char *ind = indent();
+  while( (pch=strchr(c,'\n')) )
+  {
+    int line_len = pch - c;
+    write_c("%s%.*s\n", ind, line_len, c);
+    c = pch+1;
+  }
+  write_c("%s%s\n", ind, c);
 }
 
 void Fl_Code_Type::write_code2() {}
@@ -516,7 +524,7 @@ void Fl_CodeBlock_Type::open() {
   codeblock_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert(message);
+    if (message) fl_alert("%s", message);
     for (;;) {
       Fl_Widget* w = Fl::readqueue();
       if (w == codeblock_panel_cancel) goto BREAK2;
@@ -620,7 +628,7 @@ void Fl_Decl_Type::open() {
   decl_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert(message);
+    if (message) fl_alert("%s", message);
     for (;;) {
       Fl_Widget* w = Fl::readqueue();
       if (w == decl_panel_cancel) goto BREAK2;
@@ -668,11 +676,10 @@ void Fl_Decl_Type::write_code1() {
   const char* c = name();
   if (!c) return;
   // handle a few keywords differently if inside a class
-  if (is_in_class() && (
-                        !strncmp(c,"class",5) && isspace(c[5])
-                        || !strncmp(c,"typedef",7) && isspace(c[7])
-                        || !strncmp(c,"FL_EXPORT",9) && isspace(c[9])
-                        || !strncmp(c,"struct",6) && isspace(c[6])
+  if (is_in_class() && (   (!strncmp(c,"class",5) && isspace(c[5]))
+                        || (!strncmp(c,"typedef",7) && isspace(c[7]))
+                        || (!strncmp(c,"FL_EXPORT",9) && isspace(c[9]))
+                        || (!strncmp(c,"struct",6) && isspace(c[6]))
                         ) ) {
     write_public(public_);
     write_comment_h("  ");
@@ -680,12 +687,12 @@ void Fl_Decl_Type::write_code1() {
     return;
   }
   // handle putting #include, extern, using or typedef into decl:
-  if (!isalpha(*c) && *c != '~'
-      || !strncmp(c,"extern",6) && isspace(c[6])
-      || !strncmp(c,"class",5) && isspace(c[5])
-      || !strncmp(c,"typedef",7) && isspace(c[7])
-      || !strncmp(c,"using",5) && isspace(c[5])
-      || !strncmp(c,"FL_EXPORT",9) && isspace(c[9])
+  if (   (!isalpha(*c) && *c != '~')
+      || (!strncmp(c,"extern",6) && isspace(c[6]))
+      || (!strncmp(c,"class",5) && isspace(c[5]))
+      || (!strncmp(c,"typedef",7) && isspace(c[7]))
+      || (!strncmp(c,"using",5) && isspace(c[5]))
+      || (!strncmp(c,"FL_EXPORT",9) && isspace(c[9]))
       //    || !strncmp(c,"struct",6) && isspace(c[6])
       ) {
     if (public_) {
@@ -779,7 +786,7 @@ void Fl_Data_Type::open() {
   data_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert(message);
+    if (message) fl_alert("%s", message);
     for (;;) {
       Fl_Widget* w = Fl::readqueue();
       if (w == data_panel_cancel) goto BREAK2;
@@ -872,7 +879,7 @@ void Fl_Data_Type::write_code1() {
   int nData = -1;
   // path should be set correctly already
   if (filename_ && !write_sourceview) {
-    FILE *f = fopen(filename_, "rb");
+    FILE *f = fl_fopen(filename_, "rb");
     if (!f) {
       message = "Can't include binary file. Can't open";
     } else {
@@ -881,7 +888,7 @@ void Fl_Data_Type::write_code1() {
       fseek(f, 0, SEEK_SET);
       if (nData) {
         data = (char*)calloc(nData, 1);
-        fread(data, nData, 1, f);
+        if (fread(data, nData, 1, f)==0) { /* use default */ }
       }
       fclose(f);
     }
@@ -891,8 +898,8 @@ void Fl_Data_Type::write_code1() {
   if (is_in_class()) {
     write_public(public_);
     write_comment_h("  ");
-    write_h("  static unsigned char %s[];\n", c);
-    write_c("unsigned char %s::%s[] = /* binary data included from %s */\n", class_name(1), c, fn);
+    write_h("  static unsigned char %s[%d];\n", c, nData);
+    write_c("unsigned char %s::%s[%d] = /* binary data included from %s */\n", class_name(1), c, nData, fn);
     if (message) write_c("#error %s %s\n", message, fn);
     write_cdata(data, nData);
     write_c(";\n");
@@ -900,22 +907,22 @@ void Fl_Data_Type::write_code1() {
     // the "header only" option does not apply here!
     if (public_) {
       if (static_) {
-        write_h("extern unsigned char %s[];\n", c);
+        write_h("extern unsigned char %s[%d];\n", c, nData);
         write_comment_c();
-        write_c("unsigned char %s[] = /* binary data included from %s */\n", c, fn);
+        write_c("unsigned char %s[%d] = /* binary data included from %s */\n", c, nData, fn);
         if (message) write_c("#error %s %s\n", message, fn);
         write_cdata(data, nData);
         write_c(";\n");
       } else {
         write_comment_h();
         write_h("#error Unsupported declaration loading binary data %s\n", fn);
-        write_h("unsigned char %s[] = { 1, 2, 3 };\n", c);
+        write_h("unsigned char %s[3] = { 1, 2, 3 };\n", c);
       }
     } else {
       write_comment_c();
       if (static_) 
         write_c("static ");
-      write_c("unsigned char %s[] = /* binary data included from %s */\n", c, fn);
+      write_c("unsigned char %s[%d] = /* binary data included from %s */\n", c, nData, fn);
       if (message) write_c("#error %s %s\n", message, fn);
       write_cdata(data, nData);
       write_c(";\n");
@@ -980,7 +987,7 @@ void Fl_DeclBlock_Type::open() {
   declblock_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert(message);
+    if (message) fl_alert("%s", message);
     for (;;) {
       Fl_Widget* w = Fl::readqueue();
       if (w == declblock_panel_cancel) goto BREAK2;
@@ -1100,10 +1107,10 @@ void Fl_Comment_Type::open() {
   comment_in_header->value(in_h_);
   comment_panel->show();
   const char* message = 0;
-  char itempath[256]; itempath[0] = 0;
+  char itempath[FL_PATH_MAX]; itempath[0] = 0;
   int last_selected_item = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert(message);
+    if (message) fl_alert("%s", message);
     for (;;) {
       Fl_Widget* w = Fl::readqueue();
       if (w == comment_panel_cancel) goto BREAK2;
@@ -1343,7 +1350,7 @@ void Fl_Class_Type::read_property(const char *c) {
 
 void Fl_Class_Type::open() {
   if (!class_panel) make_class_panel();
-  char fullname[1024]="";
+  char fullname[FL_PATH_MAX]="";
   if (prefix() && strlen(prefix())) 
     sprintf(fullname,"%s %s",prefix(),name());
   else 
@@ -1359,7 +1366,7 @@ void Fl_Class_Type::open() {
   char *na=0,*pr=0,*p=0; // name and prefix substrings
   
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert(message);
+    if (message) fl_alert("%s", message);
     for (;;) {
       Fl_Widget* w = Fl::readqueue();
       if (w == c_panel_cancel) goto BREAK2;

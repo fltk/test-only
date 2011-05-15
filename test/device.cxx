@@ -23,7 +23,7 @@
 #include <FL/Fl_Light_Button.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Clock.H>
-#include <test/pixmaps/porsche.xpm>
+#include "pixmaps/porsche.xpm"
 #include <FL/Fl_Pixmap.H>
 #include <FL/Fl_Bitmap.H>
 #include <FL/Fl_Round_Button.H>
@@ -599,16 +599,14 @@ void print(Fl_Widget *, void *w) {
     Fl_Widget * g = (Fl_Widget *)w;
  
   Fl_Printer * p = new Fl_Printer();
-    //p->page(Fl_Printer::A4);
-    //p->place(g, 70, 70, p->page_width() - 140, p->page_height() - 140,  FL_ALIGN_CENTER);
   if (!p->start_job(1)) {
     p->start_page();
-    p->print_widget(g);
+    p->print_window(g->window());
     p->end_page();
     p->end_job();
   }
   delete p;
-};
+}
 
 /*void print2(Fl_Widget *, void *w) {
   Fl_Widget * g = (Fl_Widget *)w;
@@ -716,7 +714,7 @@ b_bitmap.labelcolor(FL_GREEN);
   tx.box(FL_SHADOW_BOX);
   tx.labelsize(12);
 
-
+  tx.hide();
 
   c2->end();
   Fl_Button *b4 = new Fl_Button(10,5, 150, 25, "Print");
@@ -731,4 +729,4 @@ b_bitmap.labelcolor(FL_GREEN);
 
 	Fl::run();
 	return 0;
-};
+}

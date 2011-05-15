@@ -3,7 +3,7 @@
 //
 // Filename expansion routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,8 +30,8 @@
    to & from may be the same buffer.
 */
 
-#include <fltk3/filename.H>
-#include <fltk3/fl_utf8.h>
+#include <FL/filename.H>
+#include <FL/fl_utf8.h>
 #include <stdlib.h>
 #include "flstring.h"
 #if defined(WIN32) && !defined(__CYGWIN__)
@@ -57,7 +57,7 @@ static inline int isdirsep(char c) {return c=='/' || c=='\\';}
 
     \b Examples:
     \code
-    #include <fltk3/filename.H>
+    #include <FL/filename.H>
     [..]
     putenv("TMPDIR=/var/tmp");
     fl_filename_expand(out, sizeof(out), "~fred/.cshrc");     // out="/usr/fred/.cshrc"

@@ -3,7 +3,7 @@
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,30 +28,30 @@
 // Change the current cursor.
 // Under X the cursor is attached to the X window.  I tried to hide
 // this and pretend that changing the cursor is a drawing function.
-// This avoids a field in the fltk3::Window, and I suspect is more
+// This avoids a field in the Fl_Window, and I suspect is more
 // portable to other systems.
 
-#include <fltk3/run.h>
-#include <fltk3/Window.h>
-#include <fltk3/x.H>
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/x.H>
 #if !defined(WIN32) && !defined(__APPLE__)
 #  include <X11/cursorfont.h>
 #endif
-#include <fltk3/draw.h>
+#include <FL/fl_draw.H>
 
 /**
   Sets the cursor for the current window to the specified shape and colors.
-  The cursors are defined in the <fltk3/Enumerations.H> header file. 
+  The cursors are defined in the <FL/Enumerations.H> header file. 
   */
-void fl_cursor(Fl_Cursor c, fltk3::Color fg, fltk3::Color bg) {
-  if (fltk3::first_window()) fltk3::first_window()->cursor(c,fg,bg);
+void fl_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
+  if (Fl::first_window()) Fl::first_window()->cursor(c,fg,bg);
 }
 /** 
     Sets the default window cursor as well as its color.
 
     For back compatibility only.
 */
-void fltk3::Window::default_cursor(Fl_Cursor c, fltk3::Color fg, fltk3::Color bg) {
+void Fl_Window::default_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
 //  if (c == FL_CURSOR_DEFAULT) c = FL_CURSOR_ARROW;
 
   cursor_default = c;
@@ -67,10 +67,10 @@ void fltk3::Window::default_cursor(Fl_Cursor c, fltk3::Color fg, fltk3::Color bg
 #    define IDC_HAND	MAKEINTRESOURCE(32649)
 #  endif // !IDC_HAND
 
-void fltk3::Window::cursor(Fl_Cursor c, fltk3::Color c1, fltk3::Color c2) {
+void Fl_Window::cursor(Fl_Cursor c, Fl_Color c1, Fl_Color c2) {
   if (!shown()) return;
   // the cursor must be set for the top level window, not for subwindows
-  fltk3::Window *w = window(), *toplevel = this;
+  Fl_Window *w = window(), *toplevel = this;
   while (w) { toplevel = w; w = w->window(); }
   if (toplevel != this) { toplevel->cursor(c, c1, c2); return; }
   // now set the actual cursor
@@ -134,25 +134,24 @@ void fltk3::Window::cursor(Fl_Cursor c, fltk3::Color c1, fltk3::Color c2) {
 # error "Either __LITTLE_ENDIAN__ or __BIG_ENDIAN__ must be defined"
 #endif
 
-extern void *MACSetCursor(Fl_Cursor c);
 extern Fl_Offscreen fl_create_offscreen_with_alpha(int w, int h);
 
 
-CGContextRef CreateHelpImage(void)
+CGContextRef Fl_X::help_cursor_image(void)
 {
   int w = 20, h = 20;
   Fl_Offscreen off = fl_create_offscreen_with_alpha(w, h);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fl_rectf(0,0,w,h);
-  fl_color(fltk3::BLACK);
-  fl_font(fltk3::COURIER_BOLD, 20);
+  fl_color(FL_BLACK);
+  fl_font(FL_COURIER_BOLD, 20);
   fl_draw("?", 1, h-1);
   fl_end_offscreen();
   return (CGContextRef)off;
 }
 
-CGContextRef CreateNoneImage(void)
+CGContextRef Fl_X::none_cursor_image(void)
 {
   int w = 20, h = 20;
   Fl_Offscreen off = fl_create_offscreen_with_alpha(w, h);
@@ -163,7 +162,7 @@ CGContextRef CreateNoneImage(void)
   return (CGContextRef)off;
 }
 
-CGContextRef CreateWatchImage(void)
+CGContextRef Fl_X::watch_cursor_image(void)
 {
   int w, h, r = 5;
   w = 2*r+6;
@@ -173,22 +172,22 @@ CGContextRef CreateWatchImage(void)
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fl_rectf(0,0,w,h);
   CGContextTranslateCTM( (CGContextRef)off, w/2, h/2);
-  fl_color(fltk3::WHITE);
+  fl_color(FL_WHITE);
   fl_circle(0, 0, r+1);
-  fl_color(fltk3::BLACK);
-  fl_rectf(-r*0.7, -r*1.7, 1.4*r, 3.4*r);
+  fl_color(FL_BLACK);
+  fl_rectf(int(-r*0.7), int(-r*1.7), int(1.4*r), int(3.4*r));
   fl_rectf(r-1, -1, 3, 3);
-  fl_color(fltk3::WHITE);
+  fl_color(FL_WHITE);
   fl_pie(-r, -r, 2*r, 2*r, 0, 360);
-  fl_color(fltk3::BLACK);
+  fl_color(FL_BLACK);
   fl_circle(0,0,r);
-  fl_xyline(0, 0, -r*.7);
-  fl_xyline(0, 0, 0, -r*.7);
+  fl_xyline(0, 0, int(-r*.7));
+  fl_xyline(0, 0, 0, int(-r*.7));
   fl_end_offscreen();
   return (CGContextRef)off;
 }
 
-CGContextRef CreateNESWImage(void)
+CGContextRef Fl_X::nesw_cursor_image(void)
 {
   int c = 7, r = 2*c;
   int w = r, h = r;
@@ -198,7 +197,7 @@ CGContextRef CreateNESWImage(void)
   fl_rectf(0,0,w,h);
   CGContextTranslateCTM( (CGContextRef)off, 0, h);
   CGContextScaleCTM( (CGContextRef)off, 1, -1);
-  fl_color(fltk3::BLACK);
+  fl_color(FL_BLACK);
   fl_polygon(0, 0, c, 0, 0, c);
   fl_polygon(r, r, r, r-c, r-c, r);
   fl_line_style(FL_SOLID, 2, 0);
@@ -208,7 +207,7 @@ CGContextRef CreateNESWImage(void)
   return (CGContextRef)off;
 }
 
-CGContextRef CreateNWSEImage(void)
+CGContextRef Fl_X::nwse_cursor_image(void)
 {
   int c = 7, r = 2*c;
   int w = r, h = r;
@@ -218,7 +217,7 @@ CGContextRef CreateNWSEImage(void)
   fl_rectf(0,0,w,h);
   CGContextTranslateCTM( (CGContextRef)off, 0, h);
   CGContextScaleCTM( (CGContextRef)off, 1, -1);
-  fl_color(fltk3::BLACK);
+  fl_color(FL_BLACK);
   fl_polygon(r-1, 0, r-1, c, r-1-c, 0);
   fl_polygon(-1, r, c-1, r, -1, r-c);
   fl_line_style(FL_SOLID, 2, 0);
@@ -228,14 +227,11 @@ CGContextRef CreateNWSEImage(void)
   return (CGContextRef)off;
 }
 
-void fltk3::Window::cursor(Fl_Cursor c, fltk3::Color, fltk3::Color) {
+void Fl_Window::cursor(Fl_Cursor c, Fl_Color, Fl_Color) {
   if (c == FL_CURSOR_DEFAULT) {
     c = cursor_default;
   }
-  void *cursor = MACSetCursor( c );
-  if (i) {
-	  i->cursor = cursor;
-  }
+  if (i) i->set_cursor(c);
 }
 
 #else
@@ -284,7 +280,7 @@ static struct TableEntry {
   {{0}, {0}} // FL_CURSOR_NONE & unknown
 };
 
-void fltk3::Window::cursor(Fl_Cursor c, fltk3::Color fg, fltk3::Color bg) {
+void Fl_Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
   if (!shown()) return;
   Cursor xc;
   int deleteit = 0;
@@ -319,10 +315,10 @@ void fltk3::Window::cursor(Fl_Cursor c, fltk3::Color fg, fltk3::Color bg) {
     }
     XColor fgc;
     uchar r,g,b;
-    fltk3::get_color(fg,r,g,b);
+    Fl::get_color(fg,r,g,b);
     fgc.red = r<<8; fgc.green = g<<8; fgc.blue = b<<8;
     XColor bgc;
-    fltk3::get_color(bg,r,g,b);
+    Fl::get_color(bg,r,g,b);
     bgc.red = r<<8; bgc.green = g<<8; bgc.blue = b<<8;
     XRecolorCursor(fl_display, xc, &fgc, &bgc);
   }

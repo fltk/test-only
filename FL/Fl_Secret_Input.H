@@ -3,7 +3,7 @@
 //
 // Secret input header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -38,7 +38,7 @@
   that displays its input as a string of asterisks.  This subclass is
   usually used to receive passwords and other "secret" information.
 */
-class Fl_Secret_Input : public Fl_Input {
+class FL_EXPORT Fl_Secret_Input : public Fl_Input {
 public:
   /**
     Creates a new Fl_Secret_Input widget using the given

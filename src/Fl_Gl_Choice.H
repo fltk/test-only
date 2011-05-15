@@ -3,7 +3,7 @@
 //
 // OpenGL definitions for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // Internal interface to set up OpenGL.
@@ -55,7 +57,7 @@
 // Warning: whatever GLContext is defined to must take exactly the same
 // space in a structure as a void*!!!
 #ifdef WIN32
-#  include <fltk3/gl.h>
+#  include <FL/gl.h>
 #  define GLContext HGLRC
 #elif defined(__APPLE_QUARTZ__)
 // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
@@ -89,29 +91,29 @@ public:
   static Fl_Gl_Choice *find(int mode, const int *);
 };
 
-class fltk3::Window;
+class Fl_Window;
 
 #ifdef WIN32
 
-GLContext fl_create_gl_context(fltk3::Window*, const Fl_Gl_Choice*, int layer=0);
+GLContext fl_create_gl_context(Fl_Window*, const Fl_Gl_Choice*, int layer=0);
 
 #elif defined(__APPLE_QUARTZ__)
 // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
 
-GLContext fl_create_gl_context(fltk3::Window*, const Fl_Gl_Choice*, int layer=0);
+GLContext fl_create_gl_context(Fl_Window*, const Fl_Gl_Choice*, int layer=0);
 
 #else
 
 GLContext fl_create_gl_context(XVisualInfo* vis);
 
 static inline
-GLContext fl_create_gl_context(fltk3::Window*, const Fl_Gl_Choice* g) {
+GLContext fl_create_gl_context(Fl_Window*, const Fl_Gl_Choice* g) {
   return fl_create_gl_context(g->vis);
 }
 
 #endif
 
-void fl_set_gl_context(fltk3::Window*, GLContext);
+void fl_set_gl_context(Fl_Window*, GLContext);
 void fl_no_gl_context();
 void fl_delete_gl_context(GLContext);
 

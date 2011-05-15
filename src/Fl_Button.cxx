@@ -3,7 +3,7 @@
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,14 +25,18 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Button.h>
-#include <fltk3/Group.h>
-#include <fltk3/Window.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Group.H>
+#include <FL/Fl_Window.H>
+
+
+Fl_Widget_Tracker *Fl_Button::key_release_tracker = 0;
+
 
 // There are a lot of subclasses, named Fl_*_Button.  Some of
 // them are implemented by setting the type() value and testing it
-// here.  This includes fltk3::RadioButton and Fl_Toggle_Button
+// here.  This includes Fl_Radio_Button and Fl_Toggle_Button
 
 /**
   Sets the current value of the button.
@@ -40,7 +44,7 @@
   \param[in] v button value.
   \see set(), clear()
  */
-int fltk3::Button::value(int v) {
+int Fl_Button::value(int v) {
   v = v ? 1 : 0;
   oldval = v;
   clear_changed();
@@ -58,40 +62,41 @@ int fltk3::Button::value(int v) {
   Turns on this button and turns off all other radio buttons in the group
   (calling \c value(1) or \c set() does not do this).
  */
-void fltk3::Button::setonly() { // set this radio button on, turn others off
+void Fl_Button::setonly() { // set this radio button on, turn others off
   value(1);
-  fltk3::Group* g = parent();
-  fltk3::Widget*const* a = g->array();
+  Fl_Group* g = parent();
+  Fl_Widget*const* a = g->array();
   for (int i = g->children(); i--;) {
-    fltk3::Widget* o = *a++;
-    if (o != this && o->type()==FL_RADIO_BUTTON) ((fltk3::Button*)o)->value(0);
+    Fl_Widget* o = *a++;
+    if (o != this && o->type()==FL_RADIO_BUTTON) ((Fl_Button*)o)->value(0);
   }
 }
 
-void fltk3::Button::draw() {
+void Fl_Button::draw() {
   if (type() == FL_HIDDEN_BUTTON) return;
-  fltk3::Color col = value() ? selection_color() : color();
+  Fl_Color col = value() ? selection_color() : color();
   draw_box(value() ? (down_box()?down_box():fl_down(box())) : box(), col);
-  if (labeltype() == fltk3::NORMAL_LABEL && value()) {
-    fltk3::Color c = labelcolor();
+  draw_backdrop();
+  if (labeltype() == FL_NORMAL_LABEL && value()) {
+    Fl_Color c = labelcolor();
     labelcolor(fl_contrast(c, col));
     draw_label();
     labelcolor(c);
   } else draw_label();
-  if (fltk3::focus() == this) draw_focus();
+  if (Fl::focus() == this) draw_focus();
 }
 
-int fltk3::Button::handle(int event) {
+int Fl_Button::handle(int event) {
   int newval;
   switch (event) {
-  case fltk3::ENTER: /* FALLTHROUGH */
-  case fltk3::LEAVE:
-//  if ((value_?selection_color():color())==fltk3::GRAY) redraw();
+  case FL_ENTER: /* FALLTHROUGH */
+  case FL_LEAVE:
+//  if ((value_?selection_color():color())==FL_GRAY) redraw();
     return 1;
-  case fltk3::PUSH:
-    if (fltk3::visible_focus() && handle(fltk3::FOCUS)) fltk3::focus(this);
-  case fltk3::DRAG:
-    if (fltk3::event_inside(this)) {
+  case FL_PUSH:
+    if (Fl::visible_focus() && handle(FL_FOCUS)) Fl::focus(this);
+  case FL_DRAG:
+    if (Fl::event_inside(this)) {
       if (type() == FL_RADIO_BUTTON) newval = 1;
       else newval = !oldval;
     } else
@@ -103,12 +108,12 @@ int fltk3::Button::handle(int event) {
       value_ = newval;
       set_changed();
       redraw();
-      if (when() & fltk3::WHEN_CHANGED) do_callback();
+      if (when() & FL_WHEN_CHANGED) do_callback();
     }
     return 1;
-  case fltk3::RELEASE:
+  case FL_RELEASE:
     if (value_ == oldval) {
-      if (when() & fltk3::WHEN_NOT_CHANGED) do_callback();
+      if (when() & FL_WHEN_NOT_CHANGED) do_callback();
       return 1;
     }
     set_changed();
@@ -117,37 +122,24 @@ int fltk3::Button::handle(int event) {
     else {
       value(oldval);
       set_changed();
-      if (when() & fltk3::WHEN_CHANGED) {
+      if (when() & FL_WHEN_CHANGED) {
 	Fl_Widget_Tracker wp(this);
         do_callback();
         if (wp.deleted()) return 1;
       }
     }
-    if (when() & fltk3::WHEN_RELEASE) do_callback();
+    if (when() & FL_WHEN_RELEASE) do_callback();
     return 1;
-  case fltk3::SHORTCUT:
+  case FL_SHORTCUT:
     if (!(shortcut() ?
-	  fltk3::test_shortcut(shortcut()) : test_shortcut())) return 0;
-    
-    if (fltk3::visible_focus() && handle(fltk3::FOCUS)) fltk3::focus(this);
-
-    if (type() == FL_RADIO_BUTTON && !value_) {
-      setonly();
-      set_changed();
-      if (when() & (fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE) ) 
-	  do_callback();
-    } else if (type() == FL_TOGGLE_BUTTON) {
-      value(!value());
-      set_changed();
-      if (when() & (fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE)) 
-	  do_callback();
-    } else if (when() & fltk3::WHEN_RELEASE) do_callback();
-    return 1;
-  case fltk3::FOCUS : /* FALLTHROUGH */
-  case fltk3::UNFOCUS :
-    if (fltk3::visible_focus()) {
-      if (box() == fltk3::NO_BOX) {
-	// Widgets with the fltk3::NO_BOX boxtype need a parent to
+	  Fl::test_shortcut(shortcut()) : test_shortcut())) return 0;    
+    if (Fl::visible_focus() && handle(FL_FOCUS)) Fl::focus(this);
+    goto triggered_by_keyboard;
+  case FL_FOCUS : /* FALLTHROUGH */
+  case FL_UNFOCUS :
+    if (Fl::visible_focus()) {
+      if (box() == FL_NO_BOX) {
+	// Widgets with the FL_NO_BOX boxtype need a parent to
 	// redraw, since it is responsible for redrawing the
 	// background...
 	int X = x() > 0 ? x() - 1 : 0;
@@ -156,20 +148,23 @@ int fltk3::Button::handle(int event) {
       } else redraw();
       return 1;
     } else return 0;
-  case fltk3::KEY :
-    if (fltk3::focus() == this && fltk3::event_key() == ' ' &&
-        !(fltk3::event_state() & (fltk3::SHIFT | fltk3::CTRL | fltk3::ALT | fltk3::META))) {
+  case FL_KEYBOARD :
+    if (Fl::focus() == this && Fl::event_key() == ' ' &&
+        !(Fl::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) {
       set_changed();
+    triggered_by_keyboard:
       Fl_Widget_Tracker wp(this);
       if (type() == FL_RADIO_BUTTON && !value_) {
 	setonly();
-	if (when() & fltk3::WHEN_CHANGED) do_callback();
+	if (when() & FL_WHEN_CHANGED) do_callback();
       } else if (type() == FL_TOGGLE_BUTTON) {
 	value(!value());
-	if (when() & fltk3::WHEN_CHANGED) do_callback();
+	if (when() & FL_WHEN_CHANGED) do_callback();
+      } else {
+        simulate_key_action();
       }
       if (wp.deleted()) return 1;
-      if (when() & fltk3::WHEN_RELEASE) do_callback();
+      if (when() & FL_WHEN_RELEASE) do_callback();
       return 1;
     }
   default:
@@ -177,15 +172,42 @@ int fltk3::Button::handle(int event) {
   }
 }
 
+void Fl_Button::simulate_key_action()
+{
+  if (key_release_tracker) {
+    Fl::remove_timeout(key_release_timeout, key_release_tracker);
+    key_release_timeout(key_release_tracker);
+  }
+  value(1); 
+  redraw();
+  key_release_tracker = new Fl_Widget_Tracker(this);
+  Fl::add_timeout(0.15, key_release_timeout, key_release_tracker);
+}
+
+void Fl_Button::key_release_timeout(void *d)
+{
+  Fl_Widget_Tracker *wt = (Fl_Widget_Tracker*)d;
+  if (!wt)
+    return;
+  if (wt==key_release_tracker) 
+    key_release_tracker = 0L;
+  Fl_Button *btn = (Fl_Button*)wt->widget();
+  if (btn) {
+    btn->value(0);
+    btn->redraw();
+  }
+  delete wt;
+}
+
 /**
   The constructor creates the button using the given position, size and label.
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
-fltk3::Button::Button(int X, int Y, int W, int H, const char *L)
-: fltk3::Widget(X,Y,W,H,L) {
-  box(fltk3::UP_BOX);
-  down_box(fltk3::NO_BOX);
+Fl_Button::Fl_Button(int X, int Y, int W, int H, const char *L)
+: Fl_Widget(X,Y,W,H,L) {
+  box(FL_UP_BOX);
+  down_box(FL_NO_BOX);
   value_ = oldval = 0;
   shortcut_ = 0;
   set_flag(SHORTCUT_LABEL);

@@ -3,7 +3,7 @@
 //
 // Font utilities for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,9 +28,9 @@
 // Add a font to the internal table.
 // Also see fl_set_fonts.cxx which adds all possible fonts.
 
-#include <fltk3/run.h>
-#include <fltk3/x.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/x.H>
+#include <FL/fl_draw.H>
 #include "flstring.h"
 #include "Fl_Font.H"
 #include <stdlib.h>
@@ -40,14 +40,14 @@ static int table_size;
   Changes a face.  The string pointer is simply stored,
   the string is not copied, so the string must be in static memory.
 */    
-void fltk3::set_font(Fl_Font fnum, const char* name) {
+void Fl::set_font(Fl_Font fnum, const char* name) {
   while (fnum >= table_size) {
     int i = table_size;
     if (!i) {	// don't realloc the built-in table
-      table_size = 2*fltk3::FREE_FONT;
-      i = fltk3::FREE_FONT;
+      table_size = 2*FL_FREE_FONT;
+      i = FL_FREE_FONT;
       Fl_Fontdesc* t = (Fl_Fontdesc*)malloc(table_size*sizeof(Fl_Fontdesc));
-      memcpy(t, fl_fonts, fltk3::FREE_FONT*sizeof(Fl_Fontdesc));
+      memcpy(t, fl_fonts, FL_FREE_FONT*sizeof(Fl_Fontdesc));
       fl_fonts = t;
     } else {
       table_size = 2*table_size;
@@ -82,15 +82,15 @@ void fltk3::set_font(Fl_Font fnum, const char* name) {
   fl_font(-1, 0);
 }
 /** Copies one face to another. */
-void fltk3::set_font(Fl_Font fnum, Fl_Font from) {
-  fltk3::set_font(fnum, get_font(from));
+void Fl::set_font(Fl_Font fnum, Fl_Font from) {
+  Fl::set_font(fnum, get_font(from));
 }
 /**
     Gets the string for this face.  This string is different for each
     face. Under X this value is passed to XListFonts to get all the sizes
     of this face.
 */
-const char* fltk3::get_font(Fl_Font fnum) {return fl_fonts[fnum].name;}
+const char* Fl::get_font(Fl_Font fnum) {return fl_fonts[fnum].name;}
 
 //
 // End of "$Id$".

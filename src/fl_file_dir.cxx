@@ -3,7 +3,7 @@
 //
 // File chooser widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,14 +26,14 @@
 //
 
 #include "flstring.h"
-#include <fltk3/filename.H>
-#include <fltk3/Fl_File_Chooser.H>
-#include <fltk3/ask.h>
+#include <FL/filename.H>
+#include <FL/Fl_File_Chooser.H>
+#include <FL/fl_ask.H>
 
 
 static Fl_File_Chooser	*fc = (Fl_File_Chooser *)0;
 static void		(*current_callback)(const char*) = 0;
-static const char	*current_label = fltk3::text_ok;
+static const char	*current_label = fl_ok;
 
 
 // Do a file chooser callback...
@@ -45,39 +45,45 @@ static void callback(Fl_File_Chooser *, void*) {
 /** \addtogroup  group_comdlg 
     @{ */
 
-/** \relatesalso Fl_File_Chooser
+/** 
     Set the file chooser callback
+    \note \#include <FL/Fl_File_Chooser.H>
+    \relates Fl_File_Chooser
 */
 void fl_file_chooser_callback(void (*cb)(const char*)) {
   current_callback = cb;
 }
 
 
-/** \relatesalso Fl_File_Chooser
+/** 
     Set the "OK" button label
+    \note \#include <FL/Fl_File_Chooser.H>
+    \relates Fl_File_Chooser
 */
 void fl_file_chooser_ok_label(const char *l) {
   if (l) current_label = l;
-  else current_label = fltk3::text_ok;
+  else current_label = fl_ok;
 }
 
-/** \relates Fl_File_Chooser
+/** 
     Shows a file chooser dialog and gets a filename. 
+    \note \#include <FL/Fl_File_Chooser.H>
     \image html Fl_File_Chooser.jpg 
-    \image latex  Fl_File_Chooser.eps "Fl_File_Chooser" width=12cm
+    \image latex  Fl_File_Chooser.jpg "Fl_File_Chooser" width=12cm
     \param[in] message text in title bar
     \param[in] pat filename pattern filter
     \param[in] fname initial/default filename selection
     \param[in] relative 0 for absolute path name, relative path name otherwise
     \return the user selected filename, in absolute or relative format 
             or NULL if user cancels
+    \relates Fl_File_Chooser
 */
 char *					// O - Filename or NULL
 fl_file_chooser(const char *message,	// I - Message in titlebar
                 const char *pat,	// I - Filename pattern
 		const char *fname,	// I - Initial filename selection
 		int        relative) {	// I - 0 for absolute path
-  static char	retname[1024];		// Returned filename
+  static char	retname[FL_PATH_MAX];		// Returned filename
 
   if (!fc) {
     if (!fname || !*fname) fname = ".";
@@ -136,7 +142,7 @@ fl_file_chooser(const char *message,	// I - Message in titlebar
   fc->show();
 
   while (fc->shown())
-    fltk3::wait();
+    Fl::wait();
 
   if (fc->value() && relative) {
     fl_filename_relative(retname, sizeof(retname), fc->value());
@@ -146,20 +152,20 @@ fl_file_chooser(const char *message,	// I - Message in titlebar
   else return 0;
 }
 
-/**  \relates Fl_File_Chooser
-    Shows a file chooser dialog and gets a directory.
+/** Shows a file chooser dialog and gets a directory.
+    \note \#include <FL/Fl_File_Chooser.H>
     \param[in] message title bar text
     \param[in] fname initial/default directory name
     \param[in] relative 0 for absolute path return, relative otherwise
     \return the directory path string chosen by the user or NULL if user cancels
+    \relates Fl_File_Chooser
 */
-
 char *					// O - Directory or NULL
 fl_dir_chooser(const char *message,	// I - Message for titlebar
                const char *fname,	// I - Initial directory name
 	       int        relative)	// I - 0 for absolute
 {
-  static char	retname[1024];		// Returned directory name
+  static char	retname[FL_PATH_MAX];		// Returned directory name
 
   if (!fc) {
     if (!fname || !*fname) fname = ".";
@@ -177,7 +183,7 @@ fl_dir_chooser(const char *message,	// I - Message for titlebar
   fc->show();
 
   while (fc->shown())
-    fltk3::wait();
+    Fl::wait();
 
   if (fc->value() && relative) {
     fl_filename_relative(retname, sizeof(retname), fc->value());

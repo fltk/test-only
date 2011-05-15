@@ -3,7 +3,7 @@
 //
 // Fl_Scroll test program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -71,7 +71,7 @@ void box_cb(Fl_Widget* o, void*) {
 }
 
 void type_cb(Fl_Widget*, void* v) {
-  thescroll->type((uchar)((long)v));
+  thescroll->type((uchar)((fl_intptr_t)v));
   thescroll->redraw();
 }
 
@@ -87,7 +87,7 @@ Fl_Menu_Item choices[] = {
 };
 
 void align_cb(Fl_Widget*, void* v) {
-  thescroll->scrollbar.align((uchar)((long)v));
+  thescroll->scrollbar.align((uchar)((fl_intptr_t)v));
   thescroll->redraw();
 }
 

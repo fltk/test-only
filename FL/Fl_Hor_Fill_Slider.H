@@ -3,7 +3,7 @@
 //
 // Horizontal fill slider header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -33,7 +33,7 @@
 
 #include "Fl_Slider.H"
 
-class Fl_Hor_Fill_Slider : public Fl_Slider {
+class FL_EXPORT Fl_Hor_Fill_Slider : public Fl_Slider {
 public:
     Fl_Hor_Fill_Slider(int x,int y,int w,int h,const char *l=0)
 	: Fl_Slider(x,y,w,h,l) {type(FL_HOR_FILL_SLIDER);}

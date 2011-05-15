@@ -12,7 +12,7 @@
 // but it was easier to implement this by using the file read/write
 // that is needed to save the setup anyways.
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -75,8 +75,8 @@ public:	// things that should not be public:
   Fl_Type *factory;
   const char *callback_name();
 
-  int code_line, header_line;
-  int code_line_end, header_line_end;
+  int code_position, header_position;
+  int code_position_end, header_position_end;
 
 protected:
   int user_defined(const char* cbname) const;
@@ -166,6 +166,13 @@ class Fl_Function_Type : public Fl_Type {
   const char* return_type;
   char public_, cdecl_, constructor, havewidgets;
 public:
+  Fl_Function_Type() : 
+    Fl_Type(), 
+    return_type(0L), public_(0), cdecl_(0), constructor(0), havewidgets(0)
+  { }
+  ~Fl_Function_Type() {
+    if (return_type) free((void*)return_type);
+  }
   Fl_Type *make();
   void write_code1();
   void write_code2();
@@ -199,6 +206,10 @@ public:
 class Fl_CodeBlock_Type : public Fl_Type {
   const char* after;
 public:
+  Fl_CodeBlock_Type() : Fl_Type(), after(0L) { }
+  ~Fl_CodeBlock_Type() {
+    if (after) free((void*)after);
+  }
   Fl_Type *make();
   void write_code1();
   void write_code2();
@@ -229,8 +240,12 @@ public:
 };
 
 class Fl_Data_Type : public Fl_Decl_Type {
-	const char *filename_;
+  const char *filename_;
 public:
+  Fl_Data_Type() : Fl_Decl_Type(), filename_(0L) { }
+  ~Fl_Data_Type() {
+    if (filename_) free((void*)filename_);
+  }
   Fl_Type *make();
   void write_code1();
   void write_code2();
@@ -245,6 +260,10 @@ class Fl_DeclBlock_Type : public Fl_Type {
   const char* after;
   char public_;
 public:
+  Fl_DeclBlock_Type() : Fl_Type(), after(0L) { }
+  ~Fl_DeclBlock_Type() {
+    if (after) free((void*)after);
+  }
   Fl_Type *make();
   void write_code1();
   void write_code2();
@@ -279,6 +298,11 @@ class Fl_Class_Type : public Fl_Type {
   const char* subclass_of;
   char public_;
 public:
+  Fl_Class_Type() : Fl_Type(), subclass_of(0L) { }
+  ~Fl_Class_Type() {
+    if (subclass_of) free((void*)subclass_of);
+  }
+  
   // state variables for output:
   char write_public_state; // true when public: has been printed
   Fl_Class_Type* parent_class; // save class if nested
@@ -439,6 +463,21 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Pack_Type();}
   int pixmapID() { return 22; }
   void copy_properties();
+};
+
+extern const char table_type_name[];
+
+class Fl_Table_Type : public Fl_Group_Type {
+public:
+  virtual const char *type_name() {return table_type_name;}
+  virtual const char *alt_type_name() {return "fltk::TableGroup";}
+  Fl_Widget_Type *_make() {return new Fl_Table_Type();}
+  Fl_Widget *widget(int X,int Y,int W,int H);
+  int pixmapID() { return 51; }
+  virtual Fl_Widget *enter_live_mode(int top=0);
+  void add_child(Fl_Type*, Fl_Type*);
+  void move_child(Fl_Type*, Fl_Type*);
+  void remove_child(Fl_Type*);
 };
 
 extern const char tabs_type_name[];

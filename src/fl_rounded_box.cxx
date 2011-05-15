@@ -3,7 +3,7 @@
 //
 // Rounded box drawing routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/fl_draw.H>
 
 #define RN	5
 #define RS	15
@@ -54,26 +54,44 @@ static void rbox(int fill, int x, int y, int w, int h) {
   if (fill) fl_end_polygon(); else fl_end_loop();
 }
 
-void fl_rflat_box(int x, int y, int w, int h, fltk3::Color c) {
+static void fl_rflat_box(int x, int y, int w, int h, Fl_Color c) {
   fl_color(c); rbox(1, x, y, w, h); rbox(0, x, y, w, h);
 }
 
-void fl_rounded_frame(int x, int y, int w, int h, fltk3::Color c) {
+static void fl_rounded_frame(int x, int y, int w, int h, Fl_Color c) {
   fl_color(c); rbox(0, x, y, w, h);
 }
 
-void fl_rounded_box(int x, int y, int w, int h, fltk3::Color c) {
+static void fl_rounded_box(int x, int y, int w, int h, Fl_Color c) {
   fl_color(c); rbox(1, x, y, w, h);
-  fl_color(fltk3::BLACK); rbox(0, x, y, w, h);
+  fl_color(FL_BLACK); rbox(0, x, y, w, h);
 }
 
-void fl_rshadow_box(int x, int y, int w, int h, fltk3::Color c) {
+static void fl_rshadow_box(int x, int y, int w, int h, Fl_Color c) {
   // draw shadow:
-  fl_color(fltk3::DARK3);
+  fl_color(FL_DARK3);
   rbox(1, x+BW, y+BW, w, h);
   rbox(0, x+BW, y+BW, w, h);
   // draw the box:
   fl_rounded_box(x, y, w, h, c);
+}
+
+extern void fl_internal_boxtype(Fl_Boxtype, Fl_Box_Draw_F*);
+
+Fl_Boxtype fl_define_FL_ROUNDED_BOX() {
+  fl_internal_boxtype(_FL_ROUNDED_FRAME, fl_rounded_frame);
+  fl_internal_boxtype(_FL_ROUNDED_BOX, fl_rounded_box);
+  return _FL_ROUNDED_BOX;
+}
+
+Fl_Boxtype fl_define_FL_RFLAT_BOX() {
+  fl_internal_boxtype(_FL_RFLAT_BOX, fl_rflat_box);
+  return _FL_RFLAT_BOX;
+}
+
+Fl_Boxtype fl_define_FL_RSHADOW_BOX() {
+  fl_internal_boxtype(_FL_RSHADOW_BOX, fl_rshadow_box);
+  return _FL_RSHADOW_BOX;
 }
 
 //

@@ -3,7 +3,7 @@
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,12 +25,12 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/draw.h>
-#include <fltk3/x.H>
-#include <fltk3/Widget.h>
-#include <fltk3/MenuItem.h>
-#include <fltk3/Image.h>
+#include <FL/Fl.H>
+#include <FL/fl_draw.H>
+#include <FL/x.H>
+#include <FL/Fl_Widget.H>
+#include <FL/Fl_Menu_Item.H>
+#include <FL/Fl_Image.H>
 #include "flstring.h"
 
 #ifdef WIN32
@@ -47,7 +47,7 @@ void fl_restore_clip(); // from fl_rect.cxx
   The destructor is a virtual method that frees all memory used
   by the image.
 */
-fltk3::Image::~Image() {
+Fl_Image::~Fl_Image() {
 }
 
 /**
@@ -55,10 +55,10 @@ fltk3::Image::~Image() {
   data. This allows you to change the data used for the image and
   then redraw it without recreating an image object.
 */
-void fltk3::Image::uncache() {
+void Fl_Image::uncache() {
 }
 
-void fltk3::Image::draw(int XP, int YP, int, int, int, int) {
+void Fl_Image::draw(int XP, int YP, int, int, int, int) {
   draw_empty(XP, YP);
 }
 
@@ -67,9 +67,9 @@ void fltk3::Image::draw(int XP, int YP, int, int, int, int) {
   an X in it. It can be used to draw any image that lacks image
   data.
 */
-void fltk3::Image::draw_empty(int X, int Y) {
+void Fl_Image::draw_empty(int X, int Y) {
   if (w() > 0 && h() > 0) {
-    fl_color(fltk3::FOREGROUND_COLOR);
+    fl_color(FL_FOREGROUND_COLOR);
     fl_rect(X, Y, w(), h());
     fl_line(X, Y, X + w() - 1, Y + h() - 1);
     fl_line(X, Y + h() - 1, X + w() - 1, Y);
@@ -83,8 +83,8 @@ void fltk3::Image::draw_empty(int X, int Y) {
   the case of Fl_Shared_Image, released) when you are done
   with it.
 */
-fltk3::Image *fltk3::Image::copy(int W, int H) {
-  return new fltk3::Image(W, H, d());
+Fl_Image *Fl_Image::copy(int W, int H) {
+  return new Fl_Image(W, H, d());
 }
 
 /**
@@ -96,7 +96,7 @@ fltk3::Image *fltk3::Image::copy(int W, int H) {
   color. <I>The original image data is not altered by this
   method.</I>
 */
-void fltk3::Image::color_average(fltk3::Color, float) {
+void Fl_Image::color_average(Fl_Color, float) {
 }
 
 /**
@@ -105,17 +105,17 @@ void fltk3::Image::color_average(fltk3::Color, float) {
   the alpha channel is preserved. <I>This method does not alter
   the original image data.</I>
 */
-void fltk3::Image::desaturate() {
+void Fl_Image::desaturate() {
 }
 
 /**
   The label() methods are an obsolete way to set the
   image attribute of a widget or menu item. Use the
   image() or deimage() methods of the
-  fltk3::Widget and fltk3::MenuItem classes
+  Fl_Widget and Fl_Menu_Item classes
   instead.
 */
-void fltk3::Image::label(fltk3::Widget* widget) {
+void Fl_Image::label(Fl_Widget* widget) {
   widget->image(this);
 }
 
@@ -123,46 +123,46 @@ void fltk3::Image::label(fltk3::Widget* widget) {
   The label() methods are an obsolete way to set the
   image attribute of a widget or menu item. Use the
   image() or deimage() methods of the
-  fltk3::Widget and fltk3::MenuItem classes
+  Fl_Widget and Fl_Menu_Item classes
   instead.
 */
-void fltk3::Image::label(fltk3::MenuItem* m) {
-  fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
-  m->label(fltk3::IMAGE_LABEL, (const char*)this);
+void Fl_Image::label(Fl_Menu_Item* m) {
+  Fl::set_labeltype(_FL_IMAGE_LABEL, labeltype, measure);
+  m->label(_FL_IMAGE_LABEL, (const char*)this);
 }
 
 void
-fltk3::Image::labeltype(const fltk3::Label *lo,		// I - Label
+Fl_Image::labeltype(const Fl_Label *lo,		// I - Label
                     int            lx,		// I - X position
 		    int            ly,		// I - Y position
 		    int            lw,		// I - Width of label
 		    int            lh,		// I - Height of label
-		    fltk3::Align       la) {	// I - Alignment
-  fltk3::Image	*img;				// Image pointer
+		    Fl_Align       la) {	// I - Alignment
+  Fl_Image	*img;				// Image pointer
   int		cx, cy;				// Image position
 
-  img = (fltk3::Image *)(lo->value);
+  img = (Fl_Image *)(lo->value);
 
-  if (la & fltk3::ALIGN_LEFT) cx = 0;
-  else if (la & fltk3::ALIGN_RIGHT) cx = img->w() - lw;
+  if (la & FL_ALIGN_LEFT) cx = 0;
+  else if (la & FL_ALIGN_RIGHT) cx = img->w() - lw;
   else cx = (img->w() - lw) / 2;
 
-  if (la & fltk3::ALIGN_TOP) cy = 0;
-  else if (la & fltk3::ALIGN_BOTTOM) cy = img->h() - lh;
+  if (la & FL_ALIGN_TOP) cy = 0;
+  else if (la & FL_ALIGN_BOTTOM) cy = img->h() - lh;
   else cy = (img->h() - lh) / 2;
 
-  fl_color((fltk3::Color)lo->color);
+  fl_color((Fl_Color)lo->color);
 
   img->draw(lx, ly, lw, lh, cx, cy);
 }
 
 void
-fltk3::Image::measure(const fltk3::Label *lo,		// I - Label
+Fl_Image::measure(const Fl_Label *lo,		// I - Label
                   int            &lw,		// O - Width of image
 		  int            &lh) {		// O - Height of image
-  fltk3::Image *img;				// Image pointer
+  Fl_Image *img;				// Image pointer
 
-  img = (fltk3::Image *)(lo->value);
+  img = (Fl_Image *)(lo->value);
 
   lw = img->w();
   lh = img->h();
@@ -172,14 +172,13 @@ fltk3::Image::measure(const fltk3::Label *lo,		// I - Label
 //
 // RGB image class...
 //
-
 /**  The destructor free all memory and server resources that are used by  the image. */
-fltk3::RGBImage::~RGBImage() {
+Fl_RGB_Image::~Fl_RGB_Image() {
   uncache();
   if (alloc_array) delete[] (uchar *)array;
 }
 
-void fltk3::RGBImage::uncache() {
+void Fl_RGB_Image::uncache() {
 #ifdef __APPLE_QUARTZ__
   if (id_) {
     CGImageRelease((CGImageRef)id_);
@@ -198,8 +197,8 @@ void fltk3::RGBImage::uncache() {
 #endif
 }
 
-fltk3::Image *fltk3::RGBImage::copy(int W, int H) {
-  fltk3::RGBImage	*new_image;	// New RGB image
+Fl_Image *Fl_RGB_Image::copy(int W, int H) {
+  Fl_RGB_Image	*new_image;	// New RGB image
   uchar		*new_array;	// New array for image data
 
   // Optimize the simple copy where the width and height are the same,
@@ -207,7 +206,7 @@ fltk3::Image *fltk3::RGBImage::copy(int W, int H) {
   if ((W == w() && H == h()) ||
       !w() || !h() || !d() || !array) {
     if (array) {
-      // Make a copy of the image data and return a new fltk3::RGBImage...
+      // Make a copy of the image data and return a new Fl_RGB_Image...
       new_array = new uchar[w() * h() * d()];
       if (ld() && ld()!=w()*d()) {
         const uchar *src = array;
@@ -221,11 +220,11 @@ fltk3::Image *fltk3::RGBImage::copy(int W, int H) {
       } else {
         memcpy(new_array, array, w() * h() * d());
       }
-      new_image = new fltk3::RGBImage(new_array, w(), h(), d());
+      new_image = new Fl_RGB_Image(new_array, w(), h(), d());
       new_image->alloc_array = 1;
 
       return new_image;
-    } else return new fltk3::RGBImage(array, w(), h(), d(), ld());
+    } else return new Fl_RGB_Image(array, w(), h(), d(), ld());
   }
   if (W <= 0 || H <= 0) return 0;
 
@@ -250,7 +249,7 @@ fltk3::Image *fltk3::RGBImage::copy(int W, int H) {
 
   // Allocate memory for the new image...
   new_array = new uchar [W * H * d()];
-  new_image = new fltk3::RGBImage(new_array, W, H, d());
+  new_image = new Fl_RGB_Image(new_array, W, H, d());
   new_image->alloc_array = 1;
 
   // Scale the image using a nearest-neighbor algorithm...
@@ -278,7 +277,7 @@ fltk3::Image *fltk3::RGBImage::copy(int W, int H) {
   return new_image;
 }
 
-void fltk3::RGBImage::color_average(fltk3::Color c, float i) {
+void Fl_RGB_Image::color_average(Fl_Color c, float i) {
   // Don't average an empty image...
   if (!w() || !h() || !d() || !array) return;
 
@@ -296,7 +295,7 @@ void fltk3::RGBImage::color_average(fltk3::Color c, float i) {
   uchar		r, g, b;
   unsigned	ia, ir, ig, ib;
 
-  fltk3::get_color(c, r, g, b);
+  Fl::get_color(c, r, g, b);
   if (i < 0.0f) i = 0.0f;
   else if (i > 1.0f) i = 1.0f;
 
@@ -337,7 +336,7 @@ void fltk3::RGBImage::color_average(fltk3::Color c, float i) {
   }
 }
 
-void fltk3::RGBImage::desaturate() {
+void Fl_RGB_Image::desaturate() {
   // Don't desaturate an empty image...
   if (!w() || !h() || !d() || !array) return;
 
@@ -379,9 +378,11 @@ void fltk3::RGBImage::desaturate() {
 #if !defined(WIN32) && !defined(__APPLE_QUARTZ__)
 // Composite an image with alpha on systems that don't have accelerated
 // alpha compositing...
-static void alpha_blend(fltk3::RGBImage *img, int X, int Y, int W, int H, int cx, int cy) {
-  uchar *srcptr = (uchar*)img->array + img->d() * (img->w() * cy + cx);
-  int srcskip = img->d() * (img->w() - W);
+static void alpha_blend(Fl_RGB_Image *img, int X, int Y, int W, int H, int cx, int cy) {
+  int ld = img->ld();
+  if (ld == 0) ld = img->w() * img->d();
+  uchar *srcptr = (uchar*)img->array + cy * ld + cx * img->d();
+  int srcskip = ld - img->d() * W;
 
   uchar *dst = new uchar[W * H * 3];
   uchar *dstptr = dst;
@@ -393,7 +394,6 @@ static void alpha_blend(fltk3::RGBImage *img, int X, int Y, int W, int H, int cx
 
   if (img->d() == 2) {
     // Composite grayscale + alpha over RGB...
-    // Composite RGBA over RGB...
     for (int y = H; y > 0; y--, srcptr+=srcskip)
       for (int x = W; x > 0; x--) {
 	srcg = *srcptr++;
@@ -434,124 +434,155 @@ static void alpha_blend(fltk3::RGBImage *img, int X, int Y, int W, int H, int cx
 }
 #endif // !WIN32 && !__APPLE_QUARTZ__
 
-void fltk3::RGBImage::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
-  if(fl_device->type() == fltk3::Device::postscript_device) {
-    fl_device->draw(this, XP, YP, WP, HP, cx, cy);
-    return;
-  }
-  // Don't draw an empty image...
-  if (!d() || !array) {
-    draw_empty(XP, YP);
-    return;
-  }
+void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
+  fl_graphics_driver->draw(this, XP, YP, WP, HP, cx, cy);
+}
 
+static int start(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int w, int h, int &cx, int &cy, 
+		 int &X, int &Y, int &W, int &H)
+{
   // account for current clip region (faster on Irix):
-  int X,Y,W,H; fl_clip_box(XP,YP,WP,HP,X,Y,W,H);
+  fl_clip_box(XP,YP,WP,HP,X,Y,W,H);
   cx += X-XP; cy += Y-YP;
   // clip the box down to the size of image, quit if empty:
   if (cx < 0) {W += cx; X -= cx; cx = 0;}
-  if (cx+W > w()) W = w()-cx;
-  if (W <= 0) return;
+  if (cx+W > w) W = w-cx;
+  if (W <= 0) return 1;
   if (cy < 0) {H += cy; Y -= cy; cy = 0;}
-  if (cy+H > h()) H = h()-cy;
-  if (H <= 0) return;
-  if (!id_) {
-#ifdef __APPLE_QUARTZ__
+  if (cy+H > h) H = h-cy;
+  if (H <= 0) return 1;
+  return 0;
+}
+
+#ifdef __APPLE__
+void Fl_Quartz_Graphics_Driver::draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy) {
+  int X, Y, W, H;
+  // Don't draw an empty image...
+  if (!img->d() || !img->array) {
+    img->draw_empty(XP, YP);
+    return;
+  }
+  if (start(img, XP, YP, WP, HP, img->w(), img->h(), cx, cy, X, Y, W, H)) {
+    return;
+  }
+  if (!img->id_) {
     CGColorSpaceRef lut = 0;
-    if (d()<=2)
+    if (img->d()<=2)
       lut = CGColorSpaceCreateDeviceGray();
     else
       lut = CGColorSpaceCreateDeviceRGB();
-    CGDataProviderRef src = CGDataProviderCreateWithData( 0L, array, w()*h()*d(), 0L);
-    id_ = CGImageCreate( w(), h(), 8, d()*8, ld()?ld():w()*d(),
-        lut, (d()&1)?kCGImageAlphaNone:kCGImageAlphaLast,
-        src, 0L, false, kCGRenderingIntentDefault);
+    CGDataProviderRef src = CGDataProviderCreateWithData( 0L, img->array, img->w()*img->h()*img->d(), 0L);
+    img->id_ = CGImageCreate( img->w(), img->h(), 8, img->d()*8, img->ld()?img->ld():img->w()*img->d(),
+			lut, (img->d()&1)?kCGImageAlphaNone:kCGImageAlphaLast,
+			src, 0L, false, kCGRenderingIntentDefault);
     CGColorSpaceRelease(lut);
     CGDataProviderRelease(src);
+  }
+  if (img->id_ && fl_gc) {
+    CGRect rect = { { X, Y }, { W, H } };
+    Fl_X::q_begin_image(rect, cx, cy, img->w(), img->h());
+    CGContextDrawImage(fl_gc, rect, (CGImageRef)img->id_);
+    Fl_X::q_end_image();
+  }
+}
+
 #elif defined(WIN32)
-    id_ = fl_create_offscreen(w(), h());
-    if ((d() == 2 || d() == 4) && fl_can_do_alpha_blending()) {
-      fl_begin_offscreen((Fl_Offscreen)id_);
-      fl_draw_image(array, 0, 0, w(), h(), d()|FL_IMAGE_WITH_ALPHA, ld());
+void Fl_GDI_Graphics_Driver::draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy) {
+  int X, Y, W, H;
+  // Don't draw an empty image...
+  if (!img->d() || !img->array) {
+    img->draw_empty(XP, YP);
+    return;
+  }
+  if (start(img, XP, YP, WP, HP, img->w(), img->h(), cx, cy, X, Y, W, H)) {
+    return;
+  }
+  if (!img->id_) {
+    img->id_ = fl_create_offscreen(img->w(), img->h());
+    if ((img->d() == 2 || img->d() == 4) && fl_can_do_alpha_blending()) {
+      fl_begin_offscreen((Fl_Offscreen)img->id_);
+      fl_draw_image(img->array, 0, 0, img->w(), img->h(), img->d()|FL_IMAGE_WITH_ALPHA, img->ld());
       fl_end_offscreen();
     } else {
-      fl_begin_offscreen((Fl_Offscreen)id_);
-      fl_draw_image(array, 0, 0, w(), h(), d(), ld());
+      fl_begin_offscreen((Fl_Offscreen)img->id_);
+      fl_draw_image(img->array, 0, 0, img->w(), img->h(), img->d(), img->ld());
       fl_end_offscreen();
-      if (d() == 2 || d() == 4) {
-        mask_ = fl_create_alphamask(w(), h(), d(), ld(), array);
+      if (img->d() == 2 || img->d() == 4) {
+        img->mask_ = fl_create_alphamask(img->w(), img->h(), img->d(), img->ld(), img->array);
       }
     }
+  }
+  if (img->mask_) {
+    HDC new_gc = CreateCompatibleDC(fl_gc);
+    int save = SaveDC(new_gc);
+    SelectObject(new_gc, (void*)img->mask_);
+    BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCAND);
+    SelectObject(new_gc, (void*)img->id_);
+    BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCPAINT);
+    RestoreDC(new_gc,save);
+    DeleteDC(new_gc);
+  } else if (img->d()==2 || img->d()==4) {
+    fl_copy_offscreen_with_alpha(X, Y, W, H, (Fl_Offscreen)img->id_, cx, cy);
+  } else {
+    fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)img->id_, cx, cy);
+  }
+}
+
 #else
-    if (d() == 1 || d() == 3) {
-      id_ = fl_create_offscreen(w(), h());
-      fl_begin_offscreen((Fl_Offscreen)id_);
-      fl_draw_image(array, 0, 0, w(), h(), d(), ld());
+void Fl_Xlib_Graphics_Driver::draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy) {
+  int X, Y, W, H;
+  // Don't draw an empty image...
+  if (!img->d() || !img->array) {
+    img->draw_empty(XP, YP);
+    return;
+  }
+  if (start(img, XP, YP, WP, HP, img->w(), img->h(), cx, cy, X, Y, W, H)) {
+    return;
+  }
+  if (!img->id_) {
+    if (img->d() == 1 || img->d() == 3) {
+      img->id_ = fl_create_offscreen(img->w(), img->h());
+      fl_begin_offscreen((Fl_Offscreen)img->id_);
+      fl_draw_image(img->array, 0, 0, img->w(), img->h(), img->d(), img->ld());
       fl_end_offscreen();
     }
-#endif
   }
-
-#if defined(USE_X11)
-  if (id_) {
-    if (mask_) {
+  if (img->id_) {
+    if (img->mask_) {
       // I can't figure out how to combine a mask with existing region,
       // so cut the image down to a clipped rectangle:
       int nx, ny; fl_clip_box(X,Y,W,H,nx,ny,W,H);
       cx += nx-X; X = nx;
       cy += ny-Y; Y = ny;
       // make X use the bitmap as a mask:
-      XSetClipMask(fl_display, fl_gc, mask_);
-      int ox = X-cx; if (ox < 0) ox += w();
-      int oy = Y-cy; if (oy < 0) oy += h();
+      XSetClipMask(fl_display, fl_gc, img->mask_);
+      int ox = X-cx; if (ox < 0) ox += img->w();
+      int oy = Y-cy; if (oy < 0) oy += img->h();
       XSetClipOrigin(fl_display, fl_gc, X-cx, Y-cy);
     }
-
-    fl_copy_offscreen(X, Y, W, H, id_, cx, cy);
-
-    if (mask_) {
+    
+    fl_copy_offscreen(X, Y, W, H, img->id_, cx, cy);
+    
+    if (img->mask_) {
       // put the old clip region back
       XSetClipOrigin(fl_display, fl_gc, 0, 0);
       fl_restore_clip();
     }
   } else {
     // Composite image with alpha manually each time...
-    alpha_blend(this, X, Y, W, H, cx, cy);
+    alpha_blend(img, X, Y, W, H, cx, cy);
   }
-#elif defined(WIN32)
-  if (mask_) {
-    HDC new_gc = CreateCompatibleDC(fl_gc);
-    int save = SaveDC(new_gc);
-    SelectObject(new_gc, (void*)mask_);
-    BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCAND);
-    SelectObject(new_gc, (void*)id_);
-    BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCPAINT);
-    RestoreDC(new_gc,save);
-    DeleteDC(new_gc);
-  } else if (d()==2 || d()==4) {
-    fl_copy_offscreen_with_alpha(X, Y, W, H, (Fl_Offscreen)id_, cx, cy);
-  } else {
-    fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)id_, cx, cy);
-  }
-#elif defined(__APPLE_QUARTZ__)
-  if (id_ && fl_gc) {
-    CGRect rect = { { X, Y }, { W, H } };
-    Fl_X::q_begin_image(rect, cx, cy, w(), h());
-    CGContextDrawImage(fl_gc, rect, (CGImageRef)id_);
-    Fl_X::q_end_image();
-  }
-#else
-# error unsupported platform
-#endif
 }
 
-void fltk3::RGBImage::label(fltk3::Widget* widget) {
+#endif
+
+void Fl_RGB_Image::label(Fl_Widget* widget) {
   widget->image(this);
 }
 
-void fltk3::RGBImage::label(fltk3::MenuItem* m) {
-  fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
-  m->label(fltk3::IMAGE_LABEL, (const char*)this);
+void Fl_RGB_Image::label(Fl_Menu_Item* m) {
+  Fl::set_labeltype(_FL_IMAGE_LABEL, labeltype, measure);
+  m->label(_FL_IMAGE_LABEL, (const char*)this);
 }
 
 

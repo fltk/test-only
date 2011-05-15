@@ -3,7 +3,7 @@
  *
  * WIN32 DLL export .
  *
- * Copyright 1998-2009 by Bill Spitzak and others.
+ * Copyright 1998-2010 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,7 +32,7 @@
  * The following is only used when building DLLs under WIN32...
  */
 
-#  if defined(FL_DLL) && (defined(_MSC_VER) || defined(__MWERKS__) || defined(__BORLANDC__) || __GNUC__ >= 3)
+#  if defined(FL_DLL)
 #    ifdef FL_LIBRARY
 #      define FL_EXPORT	__declspec(dllexport)
 #    else

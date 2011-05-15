@@ -3,7 +3,7 @@
 //
 // OpenGL context routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,7 +29,7 @@
 // show() of any windows.  Mesa will crash if you try to use a visual
 // not returned by glxChooseVisual.
 
-// This does not work with fltk3::DoubleBufferWindow's!  It will try to draw
+// This does not work with Fl_Double_Window's!  It will try to draw
 // into the front buffer.  Depending on the system this will either
 // crash or do nothing (when pixmaps are being used as back buffer
 // and GL is being done by hardware), work correctly (when GL is done
@@ -40,13 +40,11 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <fltk3/run.h>
-#include <fltk3/Window.h>
-#include <fltk3/x.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/x.H>
+#include <FL/fl_draw.H>
 #include "Fl_Gl_Choice.H"
-
-extern int fl_clip_state_number; // in fl_rect.cxx
 
 static GLContext context;
 static int clip_state_number=-1;
@@ -68,34 +66,34 @@ void gl_start() {
 #if defined(USE_X11)
     context = fl_create_gl_context(fl_visual);
 #elif defined(WIN32)
-    if (!gl_choice) fltk3::gl_visual(0);
-    context = fl_create_gl_context(fltk3::Window::current(), gl_choice);
+    if (!gl_choice) Fl::gl_visual(0);
+    context = fl_create_gl_context(Fl_Window::current(), gl_choice);
 #elif defined(__APPLE_QUARTZ__)
     // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
-    context = fl_create_gl_context(fltk3::Window::current(), gl_choice);
+    context = fl_create_gl_context(Fl_Window::current(), gl_choice);
 #else
 #  error Unsupported platform
 #endif
   }
-  fl_set_gl_context(fltk3::Window::current(), context);
+  fl_set_gl_context(Fl_Window::current(), context);
 #if !defined(WIN32) && !defined(__APPLE__)
   glXWaitX();
 #endif
-  if (pw != fltk3::Window::current()->w() || ph != fltk3::Window::current()->h()) {
-    pw = fltk3::Window::current()->w();
-    ph = fltk3::Window::current()->h();
+  if (pw != Fl_Window::current()->w() || ph != Fl_Window::current()->h()) {
+    pw = Fl_Window::current()->w();
+    ph = Fl_Window::current()->h();
     glLoadIdentity();
     glViewport(0, 0, pw, ph);
     glOrtho(0, pw, 0, ph, -1, 1);
     glDrawBuffer(GL_FRONT);
   }
-  if (clip_state_number != fl_clip_state_number) {
-    clip_state_number = fl_clip_state_number;
+  if (clip_state_number != fl_graphics_driver->fl_clip_state_number) {
+    clip_state_number = fl_graphics_driver->fl_clip_state_number;
     int x, y, w, h;
-    if (fl_clip_box(0, 0, fltk3::Window::current()->w(), fltk3::Window::current()->h(),
+    if (fl_clip_box(0, 0, Fl_Window::current()->w(), Fl_Window::current()->h(),
 		    x, y, w, h)) {
       fl_clip_region(XRectangleRegion(x,y,w,h));
-      glScissor(x, fltk3::Window::current()->h()-(y+h), w, h);
+      glScissor(x, Fl_Window::current()->h()-(y+h), w, h);
       glEnable(GL_SCISSOR_TEST);
     } else {
       glDisable(GL_SCISSOR_TEST);
@@ -111,7 +109,7 @@ void gl_finish() {
 #endif
 }
 
-int fltk3::gl_visual(int mode, int *alist) {
+int Fl::gl_visual(int mode, int *alist) {
   Fl_Gl_Choice *c = Fl_Gl_Choice::find(mode,alist);
   if (!c) return 0;
 #if defined(USE_X11)

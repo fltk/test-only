@@ -3,7 +3,7 @@
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -35,9 +35,9 @@
 // before use.
 
 #include <config.h>
-#include <fltk3/run.h>
-#include <fltk3/x.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/x.H>
+#include <FL/fl_draw.H>
 
 static unsigned fl_cmap[256] = {
 #include "fl_cmap.h" // this is a file produced by "cmap.cxx":
@@ -92,14 +92,12 @@ static void set_xmap(Fl_XMap& xmap, COLORREF c) {
   xmap.brush = -1;
 }
 
-fltk3::Color fl_color_;
-
-void fltk3::Device::color(fltk3::Color i) {
+void Fl_GDI_Graphics_Driver::color(Fl_Color i) {
   if (i & 0xffffff00) {
     unsigned rgb = (unsigned)i;
     fl_color((uchar)(rgb >> 24), (uchar)(rgb >> 16), (uchar)(rgb >> 8));
   } else {
-    fl_color_ = i;
+    Fl_Graphics_Driver::color(i);
     Fl_XMap &xmap = fl_xmap[i];
     if (!xmap.pen) {
 #if USE_COLORMAP
@@ -118,10 +116,10 @@ void fltk3::Device::color(fltk3::Color i) {
   }
 }
 
-void fltk3::Device::color(uchar r, uchar g, uchar b) {
+void Fl_GDI_Graphics_Driver::color(uchar r, uchar g, uchar b) {
   static Fl_XMap xmap;
   COLORREF c = RGB(r,g,b);
-  fl_color_ = fl_rgb_color(r, g, b);
+  Fl_Graphics_Driver::color( fl_rgb_color(r, g, b) );
   if (!xmap.pen || c != xmap.rgb) {
     clear_xmap(xmap);
     set_xmap(xmap, c);
@@ -191,12 +189,12 @@ CREATE_BRUSH:
   return brushes[i].brush;
 }
 
-void fltk3::free_color(fltk3::Color i, int overlay) {
+void Fl::free_color(Fl_Color i, int overlay) {
   if (overlay) return; // do something about GL overlay?
   clear_xmap(fl_xmap[i]);
 }
 
-void fltk3::set_color(fltk3::Color i, unsigned c) {
+void Fl::set_color(Fl_Color i, unsigned c) {
   if (fl_cmap[i] != c) {
     clear_xmap(fl_xmap[i]);
     fl_cmap[i] = c;

@@ -3,7 +3,7 @@
 //
 // Tooltip source file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,21 +25,21 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/Tooltip.h>
-#include <fltk3/draw.h>
-#include <fltk3/Fl_Menu_Window.H>
+#include <FL/Fl_Tooltip.H>
+#include <FL/fl_draw.H>
+#include <FL/Fl_Menu_Window.H>
 
 #include <stdio.h>
+#include <string.h>	// strdup()
 
-float		fltk3::Tooltip::delay_ = 1.0f;
-float		fltk3::Tooltip::hoverdelay_ = 0.2f;
-int		fltk3::Tooltip::enabled_ = 1;
-fltk3::Color	fltk3::Tooltip::color_ = fl_color_cube(fltk3::NUM_RED - 1,
-		                                   fltk3::NUM_GREEN - 1,
-						   fltk3::NUM_BLUE - 2);
-fltk3::Color	fltk3::Tooltip::textcolor_ = fltk3::BLACK;
-Fl_Font         fltk3::Tooltip::font_ = fltk3::HELVETICA;
-Fl_Fontsize    fltk3::Tooltip::size_ = FL_NORMAL_SIZE;
+float		Fl_Tooltip::delay_ = 1.0f;
+float		Fl_Tooltip::hoverdelay_ = 0.2f;
+Fl_Color	Fl_Tooltip::color_ = fl_color_cube(FL_NUM_RED - 1,
+		                                   FL_NUM_GREEN - 1,
+						   FL_NUM_BLUE - 2);
+Fl_Color	Fl_Tooltip::textcolor_ = FL_BLACK;
+Fl_Font         Fl_Tooltip::font_ = FL_HELVETICA;
+Fl_Fontsize     Fl_Tooltip::size_ = -1;
 
 #define MAX_WIDTH 400
 
@@ -63,29 +63,37 @@ public:
   }
 };
 
-fltk3::Widget* fltk3::Tooltip::widget_ = 0;
+Fl_Widget* Fl_Tooltip::widget_ = 0;
 static Fl_TooltipBox *window = 0;
 static int Y,H;
 
+#ifdef __APPLE__
+// returns the unique tooltip window
+Fl_Window *Fl_Tooltip::current_window(void)
+{
+  return (Fl_Window*)window;
+}
+#endif
+
 void Fl_TooltipBox::layout() {
-  fl_font(fltk3::Tooltip::font(), fltk3::Tooltip::size());
+  fl_font(Fl_Tooltip::font(), Fl_Tooltip::size());
   int ww, hh;
   ww = MAX_WIDTH;
-  fl_measure(tip, ww, hh, fltk3::ALIGN_LEFT|fltk3::ALIGN_WRAP|fltk3::ALIGN_INSIDE);
+  fl_measure(tip, ww, hh, FL_ALIGN_LEFT|FL_ALIGN_WRAP|FL_ALIGN_INSIDE);
   ww += 6; hh += 6;
 
   // find position on the screen of the widget:
-  int ox = fltk3::event_x_root();
+  int ox = Fl::event_x_root();
   int oy = Y + H+2;
-  for (fltk3::Widget* p = fltk3::Tooltip::current(); p; p = p->window()) {
+  for (Fl_Widget* p = Fl_Tooltip::current(); p; p = p->window()) {
     oy += p->y();
   }
   int scr_x, scr_y, scr_w, scr_h;
-  fltk3::screen_xywh(scr_x, scr_y, scr_w, scr_h);
+  Fl::screen_xywh(scr_x, scr_y, scr_w, scr_h);
   if (ox+ww > scr_x+scr_w) ox = scr_x+scr_w - ww;
   if (ox < scr_x) ox = scr_x;
   if (H > 30) {
-    oy = fltk3::event_y_root()+13;
+    oy = Fl::event_y_root()+13;
     if (oy+hh > scr_y+scr_h) oy -= 23+hh;
   } else {
     if (oy+hh > scr_y+scr_h) oy -= (4+hh+H);
@@ -96,10 +104,10 @@ void Fl_TooltipBox::layout() {
 }
 
 void Fl_TooltipBox::draw() {
-  draw_box(fltk3::BORDER_BOX, 0, 0, w(), h(), fltk3::Tooltip::color());
-  fl_color(fltk3::Tooltip::textcolor());
-  fl_font(fltk3::Tooltip::font(), fltk3::Tooltip::size());
-  fl_draw(tip, 3, 3, w()-6, h()-6, fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_WRAP));
+  draw_box(FL_BORDER_BOX, 0, 0, w(), h(), Fl_Tooltip::color());
+  fl_color(Fl_Tooltip::textcolor());
+  fl_font(Fl_Tooltip::font(), Fl_Tooltip::size());
+  fl_draw(tip, 3, 3, w()-6, h()-6, Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_WRAP));
 }
 
 static char recent_tooltip;
@@ -124,39 +132,44 @@ static void tooltip_timeout(void*) {
   if (!tip || !*tip) {
     if (window) window->hide();
   } else {
-    //if (fltk3::grab()) return;
-    if (!window) window = new Fl_TooltipBox;
-    // this cast bypasses the normal fltk3::Window label() code:
-    ((fltk3::Widget*)window)->label(tip);
-    window->layout();
-    window->redraw();
-//    printf("tooltip_timeout: Showing window %p with tooltip \"%s\"...\n",
-//           window, tip ? tip : "(null)");
-    window->show();
+    int condition = 1;
+#if !(defined(__APPLE__) || defined(WIN32))
+    condition = (Fl::grab() == NULL);
+#endif
+    if ( condition ) {
+      if (!window) window = new Fl_TooltipBox;
+      // this cast bypasses the normal Fl_Window label() code:
+      ((Fl_Widget*)window)->label(tip);
+      window->layout();
+      window->redraw();
+  //    printf("tooltip_timeout: Showing window %p with tooltip \"%s\"...\n",
+  //           window, tip ? tip : "(null)");
+      window->show();
+    }
   }
 
-  fltk3::remove_timeout(recent_timeout);
+  Fl::remove_timeout(recent_timeout);
   recent_tooltip = 1;
   recursion = 0;
 }
 
 /**
    This method is called when the mouse pointer enters a  widget.
-   <P>If this widget or one of it's parents has a tooltip, enter it. This
+   <P>If this widget or one of its parents has a tooltip, enter it. This
    will do nothing if this is the current widget (even if the mouse moved
    out so an exit() was done and then moved back in). If no tooltip can
-   be found do fltk3::Tooltip::exit_(). If you don't want this behavior (for instance
+   be found do Fl_Tooltip::exit_(). If you don't want this behavior (for instance
    if you want the tooltip to reappear when the mouse moves back in)
    call the fancier enter_area() below.
 */
-void fltk3::Tooltip::enter_(fltk3::Widget* w) {
+void Fl_Tooltip::enter_(Fl_Widget* w) {
 #ifdef DEBUG
-  printf("fltk3::Tooltip::enter_(w=%p)\n", w);
+  printf("Fl_Tooltip::enter_(w=%p)\n", w);
   printf("    window=%p\n", window);
 #endif // DEBUG
 
   // find the enclosing group with a tooltip:
-  fltk3::Widget* tw = w;
+  Fl_Widget* tw = w;
   for (;;) {
     if (!tw) {exit_(0); return;}
     if (tw == widget_) return;
@@ -172,39 +185,39 @@ void fltk3::Tooltip::enter_(fltk3::Widget* w) {
      a modal overlapping window is deleted. FLTK does this automatically
      when you click the mouse button.
 */
-void fltk3::Tooltip::current(fltk3::Widget* w) {
+void Fl_Tooltip::current(Fl_Widget* w) {
 #ifdef DEBUG
-  printf("fltk3::Tooltip::current(w=%p)\n", w);
+  printf("Fl_Tooltip::current(w=%p)\n", w);
 #endif // DEBUG
 
   exit_(0);
   // find the enclosing group with a tooltip:
-  fltk3::Widget* tw = w;
+  Fl_Widget* tw = w;
   for (;;) {
     if (!tw) return;
     if (tw->tooltip()) break;
     tw = tw->parent();
   }
-  // act just like fltk3::Tooltip::enter_() except we can remember a zero:
+  // act just like Fl_Tooltip::enter_() except we can remember a zero:
   widget_ = w;
 }
 
 // Hide any visible tooltip.
 /**  This method is called when the mouse pointer leaves a  widget. */
-void fltk3::Tooltip::exit_(fltk3::Widget *w) {
+void Fl_Tooltip::exit_(Fl_Widget *w) {
 #ifdef DEBUG
-  printf("fltk3::Tooltip::exit_(w=%p)\n", w);
+  printf("Fl_Tooltip::exit_(w=%p)\n", w);
   printf("    widget=%p, window=%p\n", widget_, window);
 #endif // DEBUG
 
   if (!widget_ || (w && w == window)) return;
   widget_ = 0;
-  fltk3::remove_timeout(tooltip_timeout);
-  fltk3::remove_timeout(recent_timeout);
+  Fl::remove_timeout(tooltip_timeout);
+  Fl::remove_timeout(recent_timeout);
   if (window && window->visible()) window->hide();
   if (recent_tooltip) {
-    if (fltk3::event_state() & fltk3::BUTTONS) recent_tooltip = 0;
-    else fltk3::add_timeout(fltk3::Tooltip::hoverdelay(), recent_timeout);
+    if (Fl::event_state() & FL_BUTTONS) recent_tooltip = 0;
+    else Fl::add_timeout(Fl_Tooltip::hoverdelay(), recent_timeout);
   }
 }
 
@@ -214,7 +227,7 @@ void fltk3::Tooltip::exit_(fltk3::Widget *w) {
 // inside or near the box).
 /**
   You may be able to use this to provide tooltips for internal pieces
-  of your widget. Call this after setting fltk3::belowmouse() to
+  of your widget. Call this after setting Fl::belowmouse() to
   your widget (because that calls the above enter() method). Then figure
   out what thing the mouse is pointing at, and call this with the widget
   (this pointer is used to remove the tooltip if the widget is deleted
@@ -223,13 +236,13 @@ void fltk3::Tooltip::exit_(fltk3::Widget *w) {
   where to put the tooltip), and the text of the tooltip (which must be
   a pointer to static data as it is not copied).
 */
-void fltk3::Tooltip::enter_area(fltk3::Widget* wid, int x,int y,int w,int h, const char* t)
+void Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char* t)
 {
   (void)x;
   (void)w;
 
 #ifdef DEBUG
-  printf("fltk3::Tooltip::enter_area(wid=%p, x=%d, y=%d, w=%d, h=%d, t=\"%s\")\n",
+  printf("Fl_Tooltip::enter_area(wid=%p, x=%d, y=%d, w=%d, h=%d, t=\"%s\")\n",
          wid, x, y, w, h, t ? t : "(null)");
   printf("    recursion=%d, window=%p\n", recursion, window);
 #endif // DEBUG
@@ -241,15 +254,15 @@ void fltk3::Tooltip::enter_area(fltk3::Widget* wid, int x,int y,int w,int h, con
   }
   // do nothing if it is the same:
   if (wid==widget_ /*&& x==X && y==Y && w==W && h==H*/ && t==tip) return;
-  fltk3::remove_timeout(tooltip_timeout);
-  fltk3::remove_timeout(recent_timeout);
+  Fl::remove_timeout(tooltip_timeout);
+  Fl::remove_timeout(recent_timeout);
   // remember it:
   widget_ = wid; Y = y; H = h; tip = t;
   // popup the tooltip immediately if it was recently up:
   if (recent_tooltip) {
     if (window) window->hide();
-    fltk3::add_timeout(fltk3::Tooltip::hoverdelay(), tooltip_timeout);
-  } else if (fltk3::Tooltip::delay() < .1) {
+    Fl::add_timeout(Fl_Tooltip::hoverdelay(), tooltip_timeout);
+  } else if (Fl_Tooltip::delay() < .1) {
 #ifdef WIN32
     // possible fix for the Windows titlebar, it seems to want the
     // window to be destroyed, moving it messes up the parenting:
@@ -258,7 +271,7 @@ void fltk3::Tooltip::enter_area(fltk3::Widget* wid, int x,int y,int w,int h, con
     tooltip_timeout(0);
   } else {
     if (window && window->visible()) window->hide();
-    fltk3::add_timeout(fltk3::Tooltip::delay(), tooltip_timeout);
+    Fl::add_timeout(Fl_Tooltip::delay(), tooltip_timeout);
   }
 
 #ifdef DEBUG
@@ -267,14 +280,68 @@ void fltk3::Tooltip::enter_area(fltk3::Widget* wid, int x,int y,int w,int h, con
 #endif // DEBUG
 }
 
-void fltk3::Widget::tooltip(const char *tt) {
+void Fl_Tooltip::set_enter_exit_once_() {
   static char beenhere = 0;
   if (!beenhere) {
     beenhere          = 1;
-    fltk3::Tooltip::enter = fltk3::Tooltip::enter_;
-    fltk3::Tooltip::exit  = fltk3::Tooltip::exit_;
+    Fl_Tooltip::enter = Fl_Tooltip::enter_;
+    Fl_Tooltip::exit  = Fl_Tooltip::exit_;
   }
-  tooltip_ = tt;
+}
+
+/**
+  Sets the current tooltip text. 
+
+  Sets a string of text to display in a popup tooltip window when the user 
+  hovers the mouse over the widget. The string is <I>not</I> copied, so 
+  make sure any formatted string is stored in a static, global, 
+  or allocated buffer. If you want a copy made and managed for you,
+  use the copy_tooltip() method, which will manage the tooltip string
+  automatically.
+
+  If no tooltip is set, the tooltip of the parent is inherited. Setting a 
+  tooltip for a group and setting no tooltip for a child will show the 
+  group's tooltip instead. To avoid this behavior, you can set the child's 
+  tooltip to an empty string ("").
+  \param[in] text New tooltip text (no copy is made)
+  \see copy_tooltip(const char*), tooltip()
+*/
+void Fl_Widget::tooltip(const char *text) {
+  Fl_Tooltip::set_enter_exit_once_();
+  if (flags() & COPIED_TOOLTIP) {
+    // reassigning a copied tooltip remains the same copied tooltip
+    if (tooltip_ == text) return;
+    free((void*)(tooltip_));            // free maintained copy
+    clear_flag(COPIED_TOOLTIP);         // disable copy flag (WE don't make copies)
+  }
+  tooltip_ = text;
+}
+
+/**
+  Sets the current tooltip text. 
+  Unlike tooltip(), this method allocates a copy of the tooltip 
+  string instead of using the original string pointer.
+
+  The internal copy will automatically be freed whenever you assign
+  a new tooltip or when the widget is destroyed.
+
+  If no tooltip is set, the tooltip of the parent is inherited. Setting a 
+  tooltip for a group and setting no tooltip for a child will show the 
+  group's tooltip instead. To avoid this behavior, you can set the child's 
+  tooltip to an empty string ("").
+  \param[in] text New tooltip text (an internal copy is made and managed)
+  \see tooltip(const char*), tooltip()
+*/
+void Fl_Widget::copy_tooltip(const char *text) {
+  Fl_Tooltip::set_enter_exit_once_();
+  if (flags() & COPIED_TOOLTIP) free((void *)(tooltip_));
+  if (text) {
+    set_flag(COPIED_TOOLTIP);
+    tooltip_ = strdup(text);
+  } else {
+    clear_flag(COPIED_TOOLTIP);
+    tooltip_ = (char *)0;
+  }
 }
 
 //

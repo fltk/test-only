@@ -1,10 +1,10 @@
 //
 // "$Id$"
 //
-// Definition of classes Fl_Device, Fl_Display, Fl_Quartz_Display, Fl_GDI_Display,
-// and Fl_Xlib_Display for the Fast Light Tool Kit (FLTK).
+// Definition of classes Fl_Device, Fl_Graphics_Driver, Fl_Surface_Device, Fl_Display_Device
+// for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 2010 by Bill Spitzak and others.
+// Copyright 2010-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,33 +26,24 @@
 //     http://www.fltk.org/str.php
 //
 /** \file Fl_Device.H 
- \brief declaration of classes Fl_Device, Fl_Display.
+ \brief declaration of classes Fl_Device, Fl_Graphics_Driver, Fl_Surface_Device, 
+ Fl_Display_Device, Fl_Device_Plugin.
 */
 
 #ifndef Fl_Device_H
 #define Fl_Device_H
 
-#include <fltk3/x.H>
-#include <fltk3/Fl_Plugin.H>
-#include <fltk3/Fl_Image.H>
-#include <fltk3/Fl_Bitmap.H>
-#include <fltk3/Fl_Pixmap.H>
-#include <fltk3/Fl_RGB_Image.H>
-#ifdef WIN32
-#include <commdlg.h>
-#elif defined(__APPLE__)
-#else
-#include <stdio.h>
-#endif
+#include <FL/x.H>
+#include <FL/Fl_Plugin.H>
+#include <FL/Fl_Image.H>
+#include <FL/Fl_Bitmap.H>
+#include <FL/Fl_Pixmap.H>
+#include <FL/Fl_RGB_Image.H>
 
-class fltk3::Widget;
-class Fl_Device;
-class Fl_Display;
-class Fl_Abstract_Printer;
-/** \brief Points to the device that currently receives all graphics requests */
-FL_EXPORT extern Fl_Device *fl_device;
-/** \brief Points to the platform's display device */
-FL_EXPORT extern Fl_Display *fl_display_device;
+class Fl_Graphics_Driver;
+class Fl_Font_Descriptor;
+/** \brief Points to the driver that currently receives all graphics requests */
+FL_EXPORT extern Fl_Graphics_Driver *fl_graphics_driver;
 
 /**
  signature of image generation callback function.
@@ -64,31 +55,93 @@ FL_EXPORT extern Fl_Display *fl_display_device;
  */
 typedef void (*Fl_Draw_Image_Cb)(void* data,int x,int y,int w,uchar* buf);
 
+// typedef what the x,y fields in a point are:
+#ifdef WIN32
+typedef int COORD_T;
+#  define XPOINT XPoint
+#elif defined(__APPLE__)
+typedef float COORD_T;
+typedef struct { float x; float y; } QPoint;
+#  define XPOINT QPoint
+extern float fl_quartz_line_width_;
+#else
+typedef short COORD_T;
+#  define XPOINT XPoint
+#endif
+
 /**
- \brief A pure virtual class subclassed to send the output of drawing functions to display, printers, or local files.
+ \brief All graphical output devices and all graphics systems.
+ */
+class FL_EXPORT Fl_Device {
+public:
+  /** A string that identifies each subclass of Fl_Device.
+     Function class_name() applied to a device of this class returns this string.
+   */
+  static const char *class_id;
+  /** 
+   Returns the name of the class of this object. 
+   The class of an instance of an Fl_Device subclass can be checked with code such as:
+   \code
+   if ( instance->class_name() == Fl_Printer::class_id ) { ... }
+   \endcode
+   */
+  virtual const char *class_name() {return class_id;};
+  /** 
+   Virtual destructor.
+   
+   The destructor of Fl_Device must be virtual to make the destructors of
+   derived classes being called correctly on destruction.
+   */
+  virtual ~Fl_Device() {};
+};
+
+#define FL_REGION_STACK_SIZE 10
+#define FL_MATRIX_STACK_SIZE 32
+/**
+ \brief A virtual class subclassed for each graphics driver FLTK uses.
  *
- The protected virtual methods of this class are those that a device should implement to
+ The virtual methods of this class are those that a graphics driver should implement to
  support all of FLTK drawing functions.
- <br> The preferred FLTK API for drawing operations is the function collection of the 
- \ref fl_drawings and \ref fl_attributes modules. 
- <br> Alternatively, member functions of the Fl_Device class can be called
- using the global variable Fl_Device * \ref fl_device that points at all time to the single device 
- (an instance of an Fl_Device subclass) that's currently receiving graphics requests:
- \code fl_device->rect(x, y, w, h); \endcode
- <br>Each member function of the Fl_Device class has the same effect and parameter list as the
- function of the \ref fl_drawings and \ref fl_attributes modules which bears the same name
- prefixed with fl_ .
+ <br> The public API for drawing operations is functionally presented in \ref drawing and as function lists
+ in the \ref fl_drawings and \ref fl_attributes modules. 
   */
-class Fl_Device {
+class FL_EXPORT Fl_Graphics_Driver : public Fl_Device {
+public:
+  /** A 2D coordinate transformation matrix
+   */
+  struct matrix {double a, b, c, d, x, y;};
+private:
+  static const matrix m0;
+  Fl_Font font_; // current font
+  Fl_Fontsize size_; // current font size
+  Fl_Color color_; // current color
+  enum {LINE, LOOP, POLYGON, POINT_};
+  int sptr;
+  static const int matrix_stack_size = FL_MATRIX_STACK_SIZE;
+  matrix stack[FL_MATRIX_STACK_SIZE];
+  matrix m;
+  int n, p_size, gap_;
+  XPOINT *p;
+  int what;
+  int fl_clip_state_number;
+  int rstackptr;
+  static const int region_stack_max = FL_REGION_STACK_SIZE - 1;
+  Fl_Region rstack[FL_REGION_STACK_SIZE];
+#ifdef WIN32
+  int numcount;
+  int counts[20];
+#endif
+  Fl_Font_Descriptor *font_descriptor_;
+  void transformed_vertex0(COORD_T x, COORD_T y);
+  void fixloop();
+  
 protected:
-  /** \brief The device type */
-  int type_; 
-  /** \brief red color for background and/or mixing if device does not support masking or alpha */
+/*  ** \brief red color for background and/or mixing if device does not support masking or alpha *
   uchar bg_r_; 
-  /** \brief green color for background and/or mixing if device does not support masking or alpha */
+  ** \brief green color for background and/or mixing if device does not support masking or alpha *
   uchar bg_g_; 
-  /** \brief blue color for background and/or mixing if device does not support masking or alpha */
-  uchar bg_b_; 
+  ** \brief blue color for background and/or mixing if device does not support masking or alpha *
+  uchar bg_b_; */
   friend class Fl_Pixmap;
   friend class Fl_Bitmap;
   friend class Fl_RGB_Image;
@@ -104,7 +157,11 @@ protected:
   friend void fl_line(int x, int y, int x1, int y1);
   friend void fl_line(int x, int y, int x1, int y1, int x2, int y2);
   friend void fl_draw(const char *str, int n, int x, int y);
+#ifdef __APPLE__
+  friend void fl_draw(const char *str, int n, float x, float y);
+#endif
   friend void fl_draw(int angle, const char *str, int n, int x, int y);
+  friend void fl_rtl_draw(const char *str, int n, int x, int y);
   friend void fl_font(Fl_Font face, Fl_Fontsize size);
   friend void fl_color(Fl_Color c);
   friend void fl_color(uchar r, uchar g, uchar b);
@@ -136,11 +193,31 @@ protected:
   friend void fl_begin_complex_polygon();
   friend void fl_gap();
   friend void fl_end_complex_polygon();
+  friend void fl_push_matrix();
+  friend void fl_pop_matrix();
+  friend void fl_mult_matrix(double a, double b, double c, double d, double x, double y);
+  friend void fl_scale(double x, double y);
+  friend void fl_scale(double x);
+  friend void fl_translate(double x, double y);
+  friend void fl_rotate(double d);
+  friend double fl_transform_x(double x, double y);
+  friend double fl_transform_y(double x, double y);
+  friend double fl_transform_dx(double x, double y);
+  friend double fl_transform_dy(double x, double y);
+  friend Fl_Region fl_clip_region();
+  friend void fl_clip_region(Fl_Region r);
+  friend void fl_restore_clip();
+  
   friend void fl_draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L);
   friend void fl_draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D, int L);
   friend void fl_draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D);
   friend FL_EXPORT void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D);
-  
+  friend FL_EXPORT void gl_start();
+
+  matrix *fl_matrix; /**< Points to the current coordinate transformation matrix */
+
+  /** \brief The constructor. */
+  Fl_Graphics_Driver();
   /** \brief see fl_rect(int x, int y, int w, int h). */
   virtual void rect(int x, int y, int w, int h);
   /** \brief see fl_rectf(int x, int y, int w, int h). */
@@ -164,15 +241,18 @@ protected:
   /** \brief see fl_line(int x, int y, int x1, int y1, int x2, int y2). */
   virtual void line(int x, int y, int x1, int y1, int x2, int y2);
   /** \brief see fl_draw(const char *str, int n, int x, int y). */
-  virtual void draw(const char *str, int n, int x, int y);
+  virtual void draw(const char *str, int n, int x, int y) = 0;
+#ifdef __APPLE__
+  virtual void draw(const char *str, int n, float x, float y) = 0;
+#endif
   /** \brief see fl_draw(int angle, const char *str, int n, int x, int y). */
-  virtual void draw(int angle, const char *str, int n, int x, int y);
-  /** \brief see fl_font(Fl_Font face, Fl_Fontsize size). */
-  virtual void font(Fl_Font face, Fl_Fontsize size);
+  virtual void draw(int angle, const char *str, int n, int x, int y) = 0;
+  /** \brief see fl_rtl_draw(const char *str, int n, int x, int y). */
+  virtual void rtl_draw(const char *str, int n, int x, int y) = 0;
   /** \brief see fl_color(Fl_Color c). */
-  virtual void color(Fl_Color c);
+  virtual void color(Fl_Color c) {color_ = c;}
   /** \brief see fl_color(uchar r, uchar g, uchar b). */
-  virtual void color(uchar r, uchar g, uchar b);
+  virtual void color(uchar r, uchar g, uchar b) = 0;
   /** \brief see fl_point(int x, int y). */
   virtual void point(int x, int y);
   /** \brief see fl_loop(int x0, int y0, int x1, int y1, int x2, int y2). */
@@ -229,83 +309,247 @@ protected:
   virtual void push_no_clip();
   /** \brief see fl_pop_clip(). */
   virtual void pop_clip();
+    
+  /** \brief see fl_push_matrix(). */
+  void push_matrix();
+  /** \brief see fl_pop_matrix(). */
+  void pop_matrix();
+  /** \brief see fl_mult_matrix(double a, double b, double c, double d, double x, double y). */
+  void mult_matrix(double a, double b, double c, double d, double x, double y);
+  /** \brief see fl_scale(double x, double y). */
+  inline void scale(double x, double y) { mult_matrix(x,0,0,y,0,0); }
+  /** \brief see fl_scale(double x). */
+  inline void scale(double x) { mult_matrix(x,0,0,x,0,0); }
+  /** \brief see fl_translate(double x, double y). */
+  inline void translate(double x,double y) { mult_matrix(1,0,0,1,x,y); }
+  /** \brief see fl_rotate(double d). */
+  void rotate(double d);
+  /** \brief see fl_transform_x(double x, double y). */
+  double transform_x(double x, double y);
+  /** \brief see fl_transform_y(double x, double y). */
+  double transform_y(double x, double y);
+  /** \brief see fl_transform_dx(double x, double y). */
+  double transform_dx(double x, double y);
+  /** \brief see fl_transform_dy(double x, double y). */
+  double transform_dy(double x, double y);
+  /** \brief see fl_clip_region(). */
+  Fl_Region clip_region();
+  /** \brief see fl_clip_region(Fl_Region r). */
+  void clip_region(Fl_Region r);
+  /** \brief see fl_restore_clip(). */
+  void restore_clip();
+  
   // Images
   /** \brief see fl_draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L). */
-  virtual   void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0);
+  virtual   void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0) = 0;
   /** \brief see fl_draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D, int L). */
-  virtual   void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0);
+  virtual   void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0) = 0;
   /** \brief see fl_draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D). */
-  virtual   void draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3);
+  virtual   void draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3) = 0;
   /** \brief see fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D). */
-  virtual   void draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1);
+  virtual   void draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1) = 0;
   // Image classes
-  virtual   void draw(Fl_RGB_Image * rgb,int XP, int YP, int WP, int HP, int cx, int cy);
-  virtual   void draw(Fl_Bitmap * bmp,int XP, int YP, int WP, int HP, int cx, int cy);  
-  virtual   void draw(Fl_Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy);
-  
+  /** \brief Draws an Fl_RGB_Image object to the device. 
+   *
+   Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
+   the image offset by the cx and cy arguments.
+   */
+  virtual   void draw(Fl_RGB_Image * rgb,int XP, int YP, int WP, int HP, int cx, int cy) = 0;
+  /** \brief Draws an Fl_Pixmap object to the device. 
+   *
+   Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
+   the image offset by the cx and cy arguments.
+   */
+  virtual   void draw(Fl_Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy) = 0;
+  /** \brief Draws an Fl_Bitmap object to the device. 
+   *
+   Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
+   the image offset by the cx and cy arguments.
+   */
+  virtual void draw(Fl_Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) = 0;
+    
 public:
-  /** 
-   @brief All implemented graphics output devices.
-   */
-  enum device_types { 
-    xlib_display = 0, /**< The X11 display. */
-    quartz_display,  /**< The Mac OS X display. */
-    gdi_display,  /**< The MSWindows display. */
-    gdi_printer = 256,  /**< The MSWindows printer. */
-    quartz_printer,  /**< The Mac OS X printer. */
-    postscript_device  /**< The PostScript device. */
-  };
-  /** 
-   @brief An RTTI emulation of device classes. It returns values < 256 if it is a display device 
-   */
-  inline int type() {return type_;};
-  virtual Fl_Device *set_current(void);
-  
-  virtual ~Fl_Device() {};
-  static Fl_Device *current();
-  
-  /**
-   @brief    Returns the platform's display device.
-   */
-  static Fl_Display *display_device() { return fl_display_device; };
-  
-};
-extern FL_EXPORT Fl_Device *fl_device;
-
-/**
- @brief A virtual class subclassed for OS-specific display graphics.
- */
-class Fl_Display : public Fl_Device {
-  friend class Fl_PSfile_Device;
+  static const char *class_id;
+  virtual const char *class_name() {return class_id;};
+  /** \brief see fl_font(Fl_Font face, Fl_Fontsize size). */
+  virtual void font(Fl_Font face, Fl_Fontsize size) {font_ = face; size_ = size;}
+  /** \brief see fl_font(void). */
+  Fl_Font font() {return font_; }
+  /** \brief see fl_size(). */
+  Fl_Fontsize size() {return size_; }
+  /** \brief see fl_width(const char *str, int n). */
+  virtual double width(const char *str, int n) = 0;
+  /** \brief see fl_width(unsigned int n). */
+  virtual inline double width(unsigned int c) { char ch = (char)c; return width(&ch, 1); }
+  /** \brief see fl_text_extents(const char*, int n, int& dx, int& dy, int& w, int& h). */
+  virtual void text_extents(const char*, int n, int& dx, int& dy, int& w, int& h);
+  /** \brief see fl_height(). */
+  virtual int height() = 0;
+  /** \brief see fl_descent(). */
+  virtual int descent() = 0;
+  /** \brief see fl_color(void). */
+  Fl_Color color() {return color_;}
+  /** Returns a pointer to the current Fl_Font_Descriptor for the graphics driver */
+  inline Fl_Font_Descriptor *font_descriptor() { return font_descriptor_;}
+  /** Sets the current Fl_Font_Descriptor for the graphics driver */
+  inline void font_descriptor(Fl_Font_Descriptor *d) { font_descriptor_ = d;}
+  /** \brief The destructor */
+  virtual ~Fl_Graphics_Driver() {};
 };
 
 #if defined(__APPLE__) || defined(FL_DOXYGEN)
 /**
- @brief The Mac OS X-specific display graphics class.
+ \brief The Mac OS X-specific graphics class.
+ *
+ This class is implemented only on the Mac OS X platform.
  */
-class Fl_Quartz_Display : public Fl_Display {
+class FL_EXPORT Fl_Quartz_Graphics_Driver : public Fl_Graphics_Driver {
 public:
-  Fl_Quartz_Display() { type_ = quartz_display; };
+  static const char *class_id;
+  const char *class_name() {return class_id;};
+  void color(Fl_Color c);
+  void color(uchar r, uchar g, uchar b);
+  void draw(const char* str, int n, int x, int y);
+#ifdef __APPLE__
+  void draw(const char *str, int n, float x, float y);
+#endif
+  void draw(int angle, const char *str, int n, int x, int y);
+  void rtl_draw(const char* str, int n, int x, int y);
+  void font(Fl_Font face, Fl_Fontsize size);
+  void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(Fl_Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0);
+  void draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3);
+  void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0);
+  void draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1);
+  double width(const char *str, int n);
+  double width(unsigned int c);
+  void text_extents(const char*, int n, int& dx, int& dy, int& w, int& h);
+  int height();
+  int descent();
 };
 #endif
 #if defined(WIN32) || defined(FL_DOXYGEN)
 /**
- @brief The MSWindows-specific display graphics class.
+ \brief The MSWindows-specific graphics class.
+ *
+ This class is implemented only on the MSWindows platform.
  */
-class Fl_GDI_Display : public Fl_Display {
+class FL_EXPORT Fl_GDI_Graphics_Driver : public Fl_Graphics_Driver {
 public:
-  Fl_GDI_Display() { type_ = gdi_display; };
+  static const char *class_id;
+  const char *class_name() {return class_id;};
+  void color(Fl_Color c);
+  void color(uchar r, uchar g, uchar b);
+  void draw(const char* str, int n, int x, int y);
+  void draw(int angle, const char *str, int n, int x, int y);
+  void rtl_draw(const char* str, int n, int x, int y);
+  void font(Fl_Font face, Fl_Fontsize size);
+  void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(Fl_Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0);
+  void draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3);
+  void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0);
+  void draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1);
+  double width(const char *str, int n);
+  double width(unsigned int c);
+  void text_extents(const char*, int n, int& dx, int& dy, int& w, int& h);
+  int height();
+  int descent();
 };
 #endif
-#if !( defined(__APPLE__) || defined(WIN32)) || defined(FL_DOXYGEN)
+#if !(defined(__APPLE__) || defined(WIN32))
 /**
- @brief The X11-specific display graphics class.
+ \brief The Xlib-specific graphics class.
+ *
+ This class is implemented only on the Xlib platform.
  */
-class Fl_Xlib_Display : public Fl_Display {
+class Fl_Xlib_Graphics_Driver : public Fl_Graphics_Driver {
 public:
-  Fl_Xlib_Display() { type_ = xlib_display; };
+  static const char *class_id;
+  const char *class_name() {return class_id;};
+  void color(Fl_Color c);
+  void color(uchar r, uchar g, uchar b);
+  void draw(const char* str, int n, int x, int y);
+  void draw(int angle, const char *str, int n, int x, int y);
+  void rtl_draw(const char* str, int n, int x, int y);
+  void font(Fl_Font face, Fl_Fontsize size);
+  void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(Fl_Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0);
+  void draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3);
+  void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0);
+  void draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1);
+  double width(const char *str, int n);
+  double width(unsigned int c);
+  void text_extents(const char*, int n, int& dx, int& dy, int& w, int& h);
+  int height();
+  int descent();
 };
 #endif
+
+/**
+ \brief A surface that's susceptible to receive graphical output.
+ */
+class FL_EXPORT Fl_Surface_Device : public Fl_Device {
+  /** \brief The graphics driver in use by this surface. */
+  Fl_Graphics_Driver *_driver;
+  static Fl_Surface_Device *_surface; // the surface that currently receives graphics output
+protected:
+  /** \brief Constructor that sets the graphics driver to use for the created surface. */
+  Fl_Surface_Device(Fl_Graphics_Driver *graphics_driver) {_driver = graphics_driver; };
+public:
+  static const char *class_id;
+  const char *class_name() {return class_id;};
+  virtual void set_current(void);
+  /** \brief Sets the graphics driver of this drawing surface. */
+  inline void driver(Fl_Graphics_Driver *graphics_driver) {_driver = graphics_driver;};
+  /** \brief Returns the graphics driver of this drawing surface. */
+  inline Fl_Graphics_Driver *driver() {return _driver; };
+  /** \brief the surface that currently receives graphics output */
+  static inline Fl_Surface_Device *surface() {return _surface; }; 
+  /** \brief The destructor. */
+  virtual ~Fl_Surface_Device() {}
+};
+
+/**
+ \brief A display to which the computer can draw.
+ */
+class FL_EXPORT Fl_Display_Device : public Fl_Surface_Device {
+  static Fl_Display_Device *_display; // the platform display device
+public:
+  static const char *class_id;
+  const char *class_name() {return class_id;};
+  /** \brief A constructor that sets the graphics driver used by the display */
+  Fl_Display_Device(Fl_Graphics_Driver *graphics_driver);
+  /** Returns the platform display device. */
+  static inline Fl_Display_Device *display_device() {return _display;};
+};
+
+/**
+ This plugin socket allows the integration of new device drivers for special
+ window or screen types. It is currently used to provide an automated printing
+ service for OpenGL windows, if linked with fltk_gl.
+ */
+class FL_EXPORT Fl_Device_Plugin : public Fl_Plugin {
+public:
+  /** \brief The constructor */
+  Fl_Device_Plugin(const char *name)
+  : Fl_Plugin(klass(), name) { }
+  /** \brief Returns the class name */
+  virtual const char *klass() { return "fltk:device"; }
+  /** \brief Returns the plugin name */
+  virtual const char *name() = 0;
+  /** \brief Prints a widget 
+   \param w the widget
+   \param x,y offsets where to print relatively to coordinates origin
+   \param height height of the current drawing area
+   */
+  virtual int print(Fl_Widget* w, int x, int y, int height) = 0;
+};
 
 #endif // Fl_Device_H
 

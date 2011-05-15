@@ -3,7 +3,7 @@
 //
 // Bitmap header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -32,7 +32,7 @@
 #define Fl_Bitmap_H
 #  include "Fl_Image.H"
 
-class fltk3::Widget;
+class Fl_Widget;
 struct Fl_Menu_Item;
 
 /**
@@ -40,7 +40,10 @@ struct Fl_Menu_Item;
   (bitmap) images. Images are drawn using the current color.
 */
 class FL_EXPORT Fl_Bitmap : public Fl_Image {
-  public:
+  friend class Fl_Quartz_Graphics_Driver;
+  friend class Fl_GDI_Graphics_Driver;
+  friend class Fl_Xlib_Graphics_Driver;
+public:
 
   /** pointer to raw bitmap data */
   const uchar *array;
@@ -70,7 +73,7 @@ class FL_EXPORT Fl_Bitmap : public Fl_Image {
   Fl_Image *copy() { return copy(w(), h()); }
   virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
   void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
-  virtual void label(fltk3::Widget*w);
+  virtual void label(Fl_Widget*w);
   virtual void label(Fl_Menu_Item*m);
   virtual void uncache();
 };

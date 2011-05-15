@@ -3,7 +3,7 @@
 //
 // Window minification code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,11 +25,11 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/x.H>
+#include <FL/x.H>
 
 extern char fl_show_iconic; // in Fl_x.cxx
 
-void fltk3::Window::iconize() {
+void Fl_Window::iconize() {
   if (!shown()) {
     fl_show_iconic = 1;
     show();
@@ -37,7 +37,7 @@ void fltk3::Window::iconize() {
 #ifdef WIN32
     ShowWindow(i->xid, SW_SHOWMINNOACTIVE);
 #elif defined(__APPLE__)
-    MacCollapseWindow((NativeWindow)i->xid);
+    i->collapse();
 #else
     XIconifyWindow(fl_display, i->xid, fl_screen);
 #endif

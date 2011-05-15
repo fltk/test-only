@@ -3,7 +3,7 @@
 //
 // Bezier curve functions for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -35,10 +35,10 @@
   If anybody has a better algorithm, please send it!
 */
 
-#include <fltk3/draw.h>
+#include <FL/fl_draw.H>
 #include <math.h>
 
-void fltk3::Device::curve(double X0, double Y0,
+void Fl_Graphics_Driver::curve(double X0, double Y0,
 	      double X1, double Y1,
 	      double X2, double Y2,
 	      double X3, double Y3) {

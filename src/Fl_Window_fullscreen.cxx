@@ -3,7 +3,7 @@
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -35,12 +35,12 @@
 // the window full screen will lose the size of the border off the
 // bottom and right.
 
-#include <fltk3/run.h>
-#include <fltk3/x.H>
+#include <FL/Fl.H>
+#include <FL/x.H>
 
 #include <config.h>
 
-void fltk3::Window::border(int b) {
+void Fl_Window::border(int b) {
   if (b) {
     if (border()) return;
     clear_flag(NOBORDER);
@@ -60,29 +60,32 @@ void fltk3::Window::border(int b) {
 #endif
 }
 
-void fltk3::Window::fullscreen() {
+void Fl_Window::fullscreen() {
 #ifndef WIN32
   //this would clobber the fake wm, since it relies on the border flags to
   //determine its thickness
   border(0);
 #endif
-#if defined(__APPLE__) || defined(WIN32)
+#if defined(__APPLE__) || defined(WIN32) || defined(USE_X11)
   int sx, sy, sw, sh;
-  fltk3::screen_xywh(sx, sy, sw, sh, x()+w()/2, y()+h()/2);
+  Fl::screen_xywh(sx, sy, sw, sh, x(), y(), w(), h());
   // if we are on the main screen, we will leave the system menu bar unobstructed
-  if (fltk3::x()>=sx && fltk3::y()>=sy && fltk3::x()+fltk3::w()<=sx+sw && fltk3::y()+fltk3::h()<=sy+sh) {
-    sx = fltk3::x(); sy = fltk3::y(); 
-    sw = fltk3::w(); sh = fltk3::h();
+  if (Fl::x()>=sx && Fl::y()>=sy && Fl::x()+Fl::w()<=sx+sw && Fl::y()+Fl::h()<=sy+sh) {
+    sx = Fl::x(); sy = Fl::y(); 
+    sw = Fl::w(); sh = Fl::h();
   }
   if (x()==sx) x(sx+1); // make sure that we actually execute the resize
+#if defined(USE_X11)
+  resize(0, 0, w(), h()); // work around some quirks in X11
+#endif
   resize(sx, sy, sw, sh);
 #else
-  if (!x()) x(1); // force it to call XResizeWindow()
-  resize(0,0,fltk3::w(),fltk3::h());
+  if (!x()) x(1); // make sure that we actually execute the resize
+  resize(0,0,Fl::w(),Fl::h());
 #endif
 }
 
-void fltk3::Window::fullscreen_off(int X,int Y,int W,int H) {
+void Fl_Window::fullscreen_off(int X,int Y,int W,int H) {
   // this order produces less blinking on IRIX:
   resize(X,Y,W,H);
 #ifndef WIN32

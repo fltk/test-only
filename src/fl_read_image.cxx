@@ -3,7 +3,7 @@
 //
 // X11 image reading routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/x.H>
-#include <fltk3/run.h>
-#include <fltk3/draw.h>
+#include <FL/x.H>
+#include <FL/Fl.H>
+#include <FL/fl_draw.H>
 #include "flstring.h"
 
 #ifdef DEBUG
@@ -92,6 +92,7 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
               int   X,		// I - Left position
 	      int   Y,		// I - Top position
 	      int   w,		// I - Width of area to read
+	                        // negative allows capture of window title bar and frame
 	      int   h,		// I - Height of area to read
 	      int   alpha) {	// I - Alpha value for image (0 for none)
   XImage	*image;		// Captured image
@@ -118,6 +119,8 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
   // ReadDisplay extension which does all of the really hard work for
   // us...
   //
+  int allow_outside = w < 0;    // negative w allows negative X or Y, that is, window frame
+  if (w < 0) w = - w;
 
 #  ifdef __sgi
   if (XReadDisplayQueryExtension(fl_display, &i, &i)) {
@@ -130,13 +133,16 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
   if (!image) {
     // fetch absolute coordinates
     int dx, dy, sx, sy, sw, sh;
-    NativeWindow child_win;
-    fltk3::Window *win = fl_find(fl_window);
+    Window child_win;
+    
+    Fl_Window *win;
+    if (allow_outside) win = (Fl_Window*)1;
+    else win = fl_find(fl_window);
     if (win) {
       XTranslateCoordinates(fl_display, fl_window,
           RootWindow(fl_display, fl_screen), X, Y, &dx, &dy, &child_win);
       // screen dimensions
-      fltk3::screen_xywh(sx, sy, sw, sh, fl_screen);
+      Fl::screen_xywh(sx, sy, sw, sh, fl_screen);
     }
     if (!win || (dx >= sx && dy >= sy && dx + w <= sw && dy + h <= sh)) {
       // the image is fully contained, we can use the traditional method

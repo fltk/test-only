@@ -3,7 +3,7 @@
 //
 // Print panel for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -32,20 +32,20 @@
 
 #ifndef print_panel_h
 #define print_panel_h
-#include <fltk3/run.h>
-#include <fltk3/DoubleBufferWindow.h>
-#include <fltk3/Group.h>
-#include <fltk3/Choice.h>
-#include <fltk3/Button.h>
-#include <fltk3/Fl_Box.H>
-#include <fltk3/RoundButton.h>
-#include <fltk3/Input.h>
-#include <fltk3/Fl_Spinner.H>
-#include <fltk3/CheckButton.h>
-#include <fltk3/ReturnButton.h>
-#include <fltk3/Fl_Progress.H>
-static fltk3::DoubleBufferWindow* make_print_panel();
-static void print_cb(fltk3::ReturnButton *, void *); 
+#include <FL/Fl.H>
+#include <FL/Fl_Double_Window.H>
+#include <FL/Fl_Group.H>
+#include <FL/Fl_Choice.H>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Box.H>
+#include <FL/Fl_Round_Button.H>
+#include <FL/Fl_Input.H>
+#include <FL/Fl_Spinner.H>
+#include <FL/Fl_Check_Button.H>
+#include <FL/Fl_Return_Button.H>
+#include <FL/Fl_Progress.H>
+static Fl_Double_Window* make_print_panel();
+static void print_cb(Fl_Return_Button *, void *); 
 static void print_load();
 static void print_update_status();
 #endif

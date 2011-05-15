@@ -31,9 +31,9 @@
 //
 
 #include <stdio.h>		// for debugging
-#include <fltk3/run.h>
-#include <fltk3/draw.h>
-#include <fltk3/Fl_Table_Row.H>
+#include <FL/Fl.H>
+#include <FL/fl_draw.H>
+#include <FL/Fl_Table_Row.H>
 
 // Is row selected?
 int Fl_Table_Row::row_selected(int row) {
@@ -45,16 +45,14 @@ int Fl_Table_Row::row_selected(int row) {
 void Fl_Table_Row::type(TableRowSelectMode val) {
   _selectmode = val;
   switch ( _selectmode ) {
-    case SELECT_NONE:
-    {
+    case SELECT_NONE: {
       for ( int row=0; row<rows(); row++ ) {
         _rowselect[row] = 0;
       }
       redraw();
       break;
     }
-    case SELECT_SINGLE:
-    {
+    case SELECT_SINGLE: {
       int count = 0;
       for ( int row=0; row<rows(); row++ ) {
         if ( _rowselect[row] ) {
@@ -90,8 +88,7 @@ int Fl_Table_Row::select_row(int row, int flag) {
     case SELECT_NONE:
       return(-1);
       
-    case SELECT_SINGLE:
-    {
+    case SELECT_SINGLE: {
       int oldval;
       for ( int t=0; t<rows(); t++ ) {
         if ( t == row ) {
@@ -111,8 +108,7 @@ int Fl_Table_Row::select_row(int row, int flag) {
       break;
     }
       
-    case SELECT_MULTI:
-    {
+    case SELECT_MULTI: {
       int oldval = _rowselect[row];
       if ( flag == 2 ) { _rowselect[row] ^= 1; }
       else             { _rowselect[row] = flag; }
@@ -138,8 +134,7 @@ void Fl_Table_Row::select_all_rows(int flag) {
       if ( flag != 0 ) return;
       //FALLTHROUGH
       
-    case SELECT_MULTI:
-    {
+    case SELECT_MULTI: {
       char changed = 0;
       if ( flag == 2 ) {
         for ( int row=0; row<(int)_rowselect.size(); row++ ) {
@@ -173,26 +168,26 @@ void Fl_Table_Row::rows(int val) {
 int Fl_Table_Row::handle(int event) {
   
   //  fprintf(stderr, "** EVENT: %s: EVENT XY=%d,%d\n", 
-  //      eventnames[event], fltk3::event_x(), fltk3::event_y());	// debugging
+  //      eventnames[event], Fl::event_x(), Fl::event_y());	// debugging
   
   // Let base class handle event
   int ret = Fl_Table::handle(event);
   
   // The following code disables cell selection.. why was it added? -erco 05/18/03
-  // if ( ret ) { _last_y = fltk3::event_y(); return(1); }	// base class 'handled' it (eg. column resize)
+  // if ( ret ) { _last_y = Fl::event_y(); return(1); }	// base class 'handled' it (eg. column resize)
   
-  int shiftstate = (fltk3::event_state() & fltk3::CTRL) ? fltk3::CTRL :
-  (fltk3::event_state() & fltk3::SHIFT) ? fltk3::SHIFT : 0;
+  int shiftstate = (Fl::event_state() & FL_CTRL) ? FL_CTRL :
+  (Fl::event_state() & FL_SHIFT) ? FL_SHIFT : 0;
   
   // Which row/column are we over?
   int R, C;  				// row/column being worked on
   ResizeFlag resizeflag;		// which resizing area are we over? (0=none)
   TableContext context = cursor2rowcol(R, C, resizeflag);
   switch ( event ) {
-    case fltk3::PUSH:
-      if ( fltk3::event_button() == 1 ) {
-        _last_push_x = fltk3::event_x();	// save regardless of context
-        _last_push_y = fltk3::event_y();	// " "
+    case FL_PUSH:
+      if ( Fl::event_button() == 1 ) {
+        _last_push_x = Fl::event_x();	// save regardless of context
+        _last_push_y = Fl::event_y();	// " "
         
         // Handle selection in table.
         //     Select cell under cursor, and enable drag selection mode.
@@ -200,12 +195,11 @@ int Fl_Table_Row::handle(int event) {
         if ( context == CONTEXT_CELL ) {
           // Ctrl key? Toggle selection state
           switch ( shiftstate ) {
-            case fltk3::CTRL:
+            case FL_CTRL:
               select_row(R, 2);		// toggle
               break;
               
-            case fltk3::SHIFT:
-            {
+            case FL_SHIFT: {
               select_row(R, 1);
               if ( _last_row > -1 ) {
                 int srow = R, erow = _last_row;
@@ -228,14 +222,13 @@ int Fl_Table_Row::handle(int event) {
           
           _last_row = R;
           _dragging_select = 1;
-          ret = 1;      // fltk3::PUSH handled (ensures fltk3::DRAG will be sent)
+          ret = 1;      // FL_PUSH handled (ensures FL_DRAG will be sent)
           // redraw();  // redraw() handled by select_row()
         }
       } 
       break;
       
-    case fltk3::DRAG:
-    {
+    case FL_DRAG: {
       if ( _dragging_select ) {
         // Dragged off table edges? Handle scrolling
         int offtop = toy - _last_y;			// >0 if off top of table
@@ -243,7 +236,7 @@ int Fl_Table_Row::handle(int event) {
         
         if ( offtop > 0 && row_position() > 0 ) {
           // Only scroll in upward direction
-          int diff = _last_y - fltk3::event_y();
+          int diff = _last_y - Fl::event_y();
           if ( diff < 1 ) {
             ret = 1;
             break;
@@ -254,7 +247,7 @@ int Fl_Table_Row::handle(int event) {
         }
         else if ( offbot > 0 && botrow < rows() ) {
           // Only scroll in downward direction
-          int diff = fltk3::event_y() - _last_y;
+          int diff = Fl::event_y() - _last_y;
           if ( diff < 1 ) {
             ret = 1;
             break;
@@ -265,13 +258,13 @@ int Fl_Table_Row::handle(int event) {
         }
         if ( context == CONTEXT_CELL ) {
           switch ( shiftstate ) {
-            case fltk3::CTRL:
+            case FL_CTRL:
               if ( R != _last_row ) {		// toggle if dragged to new row
                 select_row(R, 2);		// 2=toggle
               }
               break;
               
-            case fltk3::SHIFT:
+            case FL_SHIFT:
             default:
               select_row(R, 1);
               if ( _last_row > -1 ) {
@@ -293,8 +286,8 @@ int Fl_Table_Row::handle(int event) {
       break;
     }
       
-    case fltk3::RELEASE:
-      if ( fltk3::event_button() == 1 ) {
+    case FL_RELEASE:
+      if ( Fl::event_button() == 1 ) {
         _dragging_select = 0;
         ret = 1;			// release handled
         // Clicked off edges of data table? 
@@ -303,8 +296,8 @@ int Fl_Table_Row::handle(int event) {
         int databot = tiy + table_h,
         dataright = tix + table_w;
         if ( 
-            ( _last_push_x > dataright && fltk3::event_x() > dataright ) ||
-            ( _last_push_y > databot && fltk3::event_y() > databot )
+            ( _last_push_x > dataright && Fl::event_x() > dataright ) ||
+            ( _last_push_y > databot && Fl::event_y() > databot )
             ) {
           select_all_rows(0);			// clear previous selections
         }
@@ -314,7 +307,7 @@ int Fl_Table_Row::handle(int event) {
     default:
       break;
   }
-  _last_y = fltk3::event_y();
+  _last_y = Fl::event_y();
   return(ret);
 }
 

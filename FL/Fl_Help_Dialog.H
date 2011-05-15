@@ -3,7 +3,7 @@
 //
 // Fl_Help_Dialog dialog for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -32,19 +32,19 @@
 
 #ifndef Fl_Help_Dialog_H
 #define Fl_Help_Dialog_H
-#include <fltk3/Fl.H>
-#include <fltk3/Fl_Double_Window.H>
-#include <fltk3/Fl_Group.H>
-#include <fltk3/Fl_Button.H>
-#include <fltk3/Fl_Input.H>
-#include <fltk3/Fl_Box.H>
-#include <fltk3/Fl_Help_View.H>
+#include <FL/Fl.H>
+#include <FL/Fl_Double_Window.H>
+#include <FL/Fl_Group.H>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Input.H>
+#include <FL/Fl_Box.H>
+#include <FL/Fl_Help_View.H>
 
 class FL_EXPORT Fl_Help_Dialog {
   int index_; 
   int max_; 
-  int line_[100]; 
-  char file_[100][256]; 
+  int line_[100];                 // FIXME: we must remove those static numbers
+  char file_[100][FL_PATH_MAX];   // FIXME: we must remove those static numbers
   int find_pos_; 
 public:
   Fl_Help_Dialog();

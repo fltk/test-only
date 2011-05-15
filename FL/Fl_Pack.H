@@ -3,7 +3,7 @@
 //
 // Pack header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,7 +31,7 @@
 #ifndef Fl_Pack_H
 #define Fl_Pack_H
 
-#include <fltk3/Fl_Group.H>
+#include <FL/Fl_Group.H>
 
 /**
   This widget was designed to add the functionality of compressing and
@@ -47,9 +47,9 @@
   Fl_Scroll.
 
   <P>The resizable for Fl_Pack is set to NULL by default.</p>
-  <P>See also: fltk3::Group::resizable()
+  <P>See also: Fl_Group::resizable()
 */
-class FL_EXPORT Fl_Pack : public fltk3::Group {
+class FL_EXPORT Fl_Pack : public Fl_Group {
   int spacing_;
 
 public:
@@ -73,7 +73,7 @@ public:
     between the children.
   */
   void spacing(int i) {spacing_ = i;}
-  /** Same as fltk3::Group::type() */
+  /** Same as Fl_Group::type() */
   uchar horizontal() const {return type();}
 };
 

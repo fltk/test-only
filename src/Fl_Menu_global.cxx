@@ -3,7 +3,7 @@
 //
 // Global menu shortcut code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,29 +29,29 @@
 // Currently only one menu at a time and you cannot destruct the menu,
 // is this sufficient?
 
-#include <fltk3/run.h>
-#include <fltk3/Menu_.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Menu_.H>
 
-static fltk3::Menu_* the_widget;
+static Fl_Menu_* the_widget;
 
 static int handler(int e) {
-  if (e != fltk3::SHORTCUT || fltk3::modal()) return 0;
-  fltk3::first_window(the_widget->window());
+  if (e != FL_SHORTCUT || Fl::modal()) return 0;
+  Fl::first_window(the_widget->window());
   return the_widget->handle(e);
 }
 
 /**
   Make the shortcuts for this menu work no matter what window has the
   focus when you type it.  This is done by using 
-  fltk3::add_handler().  This fltk3::Menu_ widget does not
+  Fl::add_handler().  This Fl_Menu_ widget does not
   have to be visible (ie the window it is in can be hidden, or it does
   not have to be put in a window at all).
   <P>Currently there can be only one global()menu.  Setting a new
   one will replace the old one.  There is no way to remove the 
   global() setting (so don't destroy the widget!)
 */
-void fltk3::Menu_::global() {
-  if (!the_widget) fltk3::add_handler(handler);
+void Fl_Menu_::global() {
+  if (!the_widget) Fl::add_handler(handler);
   the_widget = this;
 }
 

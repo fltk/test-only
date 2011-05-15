@@ -3,7 +3,7 @@
 #
 # PNG library makefile for the Fast Light Toolkit (FLTK).
 #
-# Copyright 1997-2009 by Easy Software Products.
+# Copyright 1997-2011 by Easy Software Products.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA.
 #
-# Please report all bugs and problems to "fltk-bugs@fltk.org".
+# Please report all bugs and problems on the following page:
+#
+#     http://www.fltk.org/str.php
 #
 
 include ../makeinclude
@@ -65,6 +67,7 @@ install: $(LIBPNG)
 	-$(INSTALL_DIR) $(DESTDIR)$(includedir)/FL/images
 	$(INSTALL_DATA) png.h $(DESTDIR)$(includedir)/FL/images
 	$(INSTALL_DATA) pngconf.h $(DESTDIR)$(includedir)/FL/images
+	$(INSTALL_DATA) pnglibconf.h $(DESTDIR)$(includedir)/FL/images
 
 
 #
@@ -77,6 +80,7 @@ uninstall:
 	echo "Uninstalling png headers in $(includedir)/FL/images..."
 	$(RM) $(DESTDIR)$(includedir)/FL/images/png.h
 	$(RM) $(DESTDIR)$(includedir)/FL/images/pngconf.h
+	$(RM) $(DESTDIR)$(includedir)/FL/images/pnglibconf.h
 
 
 #

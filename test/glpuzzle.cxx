@@ -6,7 +6,7 @@
 // This is a GLUT demo program to demonstrate fltk's GLUT emulation.
 // Search for "fltk" to find all the changes
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,7 +29,7 @@
 //
 
 // this block added for fltk's distribtion so it will compile w/o OpenGL:
-#include "config.h"
+#include <config.h>
 #if !HAVE_GL || !HAVE_GL_GLU_H
 #include <FL/Fl.H>
 #include <FL/fl_message.H>

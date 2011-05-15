@@ -3,7 +3,7 @@
 //
 // Clock header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -53,14 +53,14 @@
 
   \htmlonly <BR>  <table align=CENTER border=1 cellpadding=5 >  
   <caption align=bottom>type() FL_SQUARE_CLOCK and FL_ROUND_CLOCK </caption> <TR><TD> \endhtmlonly
-  \image html clock.gif  
+  \image html clock.png  
   \htmlonly </TD> <TD> \endhtmlonly
-  \image html round_clock.gif 
+  \image html round_clock.png 
   \htmlonly </TD> </TR> </table> \endhtmlonly
-  \image latex clock.eps "FL_SQUARE_CLOCK type" width=4cm
-  \image latex round_clock.eps "FL_ROUND_CLOCK type" width=4cm
+  \image latex clock.png "FL_SQUARE_CLOCK type" width=4cm
+  \image latex round_clock.png "FL_ROUND_CLOCK type" width=4cm
  */
-class FL_EXPORT Fl_Clock_Output : public fltk3::Widget {
+class FL_EXPORT Fl_Clock_Output : public Fl_Widget {
   int hour_, minute_, second_;
   ulong value_;
   void drawhands(Fl_Color,Fl_Color); // part of draw
@@ -108,16 +108,16 @@ public:
   \brief This widget provides a round analog clock display.
 
   Fl_Clock is provided for Forms compatibility. 
-  It installs a 1-second timeout callback using fltk3::add_timeout().
+  It installs a 1-second timeout callback using Fl::add_timeout().
   You can choose the rounded or square type of the clock with type(), see below.
   \htmlonly <BR>  <table align=CENTER border=1 cellpadding=5 >  
   <caption align=bottom>type() FL_SQUARE_CLOCK and FL_ROUND_CLOCK </caption> <TR><TD> \endhtmlonly
-  \image html clock.gif  
+  \image html clock.png  
   \htmlonly </TD> <TD> \endhtmlonly
-  \image html round_clock.gif 
+  \image html round_clock.png 
   \htmlonly </TD> </TR> </table> \endhtmlonly
-  \image latex clock.eps "FL_SQUARE_CLOCK type" width=4cm  
-  \image latex round_clock.eps "FL_ROUND_CLOCK type" width=4cm
+  \image latex clock.png "FL_SQUARE_CLOCK type" width=4cm  
+  \image latex round_clock.png "FL_ROUND_CLOCK type" width=4cm
  */
 class FL_EXPORT Fl_Clock : public Fl_Clock_Output {
 public:

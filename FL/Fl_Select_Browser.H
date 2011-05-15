@@ -3,7 +3,7 @@
 //
 // Select browser header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -41,7 +41,7 @@
   user presses the mouse, but you can change this with when().
   <P>See Fl_Browser for  methods to add and remove lines from the browser.
 */
-class Fl_Select_Browser : public Fl_Browser {
+class FL_EXPORT Fl_Select_Browser : public Fl_Browser {
 public:
   /** 
     Creates a new Fl_Select_Browser widget using the given

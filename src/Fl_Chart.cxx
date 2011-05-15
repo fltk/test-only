@@ -3,7 +3,7 @@
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,24 +25,24 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/math.h>
-#include <fltk3/run.h>
-#include <fltk3/Fl_Chart.H>
-#include <fltk3/draw.h>
+#include <FL/math.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Chart.H>
+#include <FL/fl_draw.H>
 #include "flstring.h"
 #include <stdlib.h>
 
 #define ARCINC	(2.0*M_PI/360.0)
 
 // this function is in fl_boxtype.cxx:
-void fl_rectbound(int x,int y,int w,int h, fltk3::Color color);
+void fl_rectbound(int x,int y,int w,int h, Fl_Color color);
 
 /* Widget specific information */
 
 static void draw_barchart(int x,int y,int w,int h,
 			  int numb, FL_CHART_ENTRY entries[],
 			  double min, double max, int autosize, int maxnumb,
-			  fltk3::Color textcolor)
+			  Fl_Color textcolor)
 /* Draws a bar chart. x,y,w,h is the bounding box, entries the array of
    numb entries and min and max the boundaries. */
 {
@@ -67,22 +67,22 @@ static void draw_barchart(int x,int y,int w,int h,
   for (i=0; i<numb; i++) {
       int hh = (int)rint(entries[i].val*incr);
       if (hh < 0)
-	fl_rectbound(x+i*bwidth,zeroh,bwidth+1,-hh+1, (fltk3::Color)entries[i].col);
+	fl_rectbound(x+i*bwidth,zeroh,bwidth+1,-hh+1, (Fl_Color)entries[i].col);
       else if (hh > 0)
-	fl_rectbound(x+i*bwidth,zeroh-hh,bwidth+1,hh+1,(fltk3::Color)entries[i].col);
+	fl_rectbound(x+i*bwidth,zeroh-hh,bwidth+1,hh+1,(Fl_Color)entries[i].col);
   }
   /* Draw the labels */
   fl_color(textcolor);
   for (i=0; i<numb; i++)
       fl_draw(entries[i].str,
 	      x+i*bwidth+bwidth/2,zeroh,0,0,
-	      fltk3::ALIGN_TOP);
+	      FL_ALIGN_TOP);
 }
 
 static void draw_horbarchart(int x,int y,int w,int h,
 			     int numb, FL_CHART_ENTRY entries[],
 			     double min, double max, int autosize, int maxnumb,
-			     fltk3::Color textcolor)
+			     Fl_Color textcolor)
 /* Draws a horizontal bar chart. x,y,w,h is the bounding box, entries the
    array of numb entries and min and max the boundaries. */
 {
@@ -113,22 +113,22 @@ static void draw_horbarchart(int x,int y,int w,int h,
   for (i=0; i<numb; i++) {
       int ww = (int)rint(entries[i].val*incr);
       if (ww > 0)
-	fl_rectbound(zeroh,y+i*bwidth,ww+1,bwidth+1, (fltk3::Color)entries[i].col);
+	fl_rectbound(zeroh,y+i*bwidth,ww+1,bwidth+1, (Fl_Color)entries[i].col);
       else if (ww < 0)
-	fl_rectbound(zeroh+ww,y+i*bwidth,-ww+1,bwidth+1,(fltk3::Color)entries[i].col);
+	fl_rectbound(zeroh+ww,y+i*bwidth,-ww+1,bwidth+1,(Fl_Color)entries[i].col);
   }
   /* Draw the labels */
   fl_color(textcolor);
   for (i=0; i<numb; i++)
       fl_draw(entries[i].str,
 	      zeroh-2,y+i*bwidth+bwidth/2,0,0,
-	      fltk3::ALIGN_RIGHT);
+	      FL_ALIGN_RIGHT);
 }
 
 static void draw_linechart(int type, int x,int y,int w,int h,
 			   int numb, FL_CHART_ENTRY entries[],
 			   double min, double max, int autosize, int maxnumb,
-			   fltk3::Color textcolor)
+			   Fl_Color textcolor)
 /* Draws a line chart. x,y,w,h is the bounding box, entries the array of
    numb entries and min and max the boundaries. */
 {
@@ -146,13 +146,13 @@ static void draw_linechart(int type, int x,int y,int w,int h,
       int yy0 = i ? zeroh - (int)rint(entries[i-1].val*incr) : 0;
       int yy1 = zeroh - (int)rint(entries[i].val*incr);
       if (type == FL_SPIKE_CHART) {
-	  fl_color((fltk3::Color)entries[i].col);
+	  fl_color((Fl_Color)entries[i].col);
 	  fl_line(x1, zeroh, x1, yy1);
       } else if (type == FL_LINE_CHART && i != 0) {
-	  fl_color((fltk3::Color)entries[i-1].col);
+	  fl_color((Fl_Color)entries[i-1].col);
 	  fl_line(x0,yy0,x1,yy1);
       } else if (type == FL_FILLED_CHART && i != 0) {
-	  fl_color((fltk3::Color)entries[i-1].col);
+	  fl_color((Fl_Color)entries[i-1].col);
 	  if ((entries[i-1].val>0.0)!=(entries[i].val>0.0)) {
 	      double ttt = entries[i-1].val/(entries[i-1].val-entries[i].val);
 	      int xt = x + (int)rint((i-.5+ttt)*bwidth);
@@ -172,12 +172,12 @@ static void draw_linechart(int type, int x,int y,int w,int h,
   for (i=0; i<numb; i++)
       fl_draw(entries[i].str,
 	      x+(int)rint((i+.5)*bwidth), zeroh - (int)rint(entries[i].val*incr),0,0,
-	      entries[i].val>=0 ? fltk3::ALIGN_BOTTOM : fltk3::ALIGN_TOP);
+	      entries[i].val>=0 ? FL_ALIGN_BOTTOM : FL_ALIGN_TOP);
 }
 
 static void draw_piechart(int x,int y,int w,int h,
 			  int numb, FL_CHART_ENTRY entries[], int special,
-			  fltk3::Color textcolor)
+			  Fl_Color textcolor)
 /* Draws a pie chart. x,y,w,h is the bounding box, entries the array of
    numb entries */
 {
@@ -210,7 +210,7 @@ static void draw_piechart(int x,int y,int w,int h,
         txc += 0.3*rad*cos(ARCINC*(curang+0.5*incr*entries[i].val));
         tyc -= 0.3*rad*sin(ARCINC*(curang+0.5*incr*entries[i].val));
       }
-      fl_color((fltk3::Color)entries[i].col);
+      fl_color((Fl_Color)entries[i].col);
       fl_begin_polygon(); fl_vertex(txc,tyc);
       fl_arc(txc,tyc,rad,curang, curang+incr*entries[i].val);
       fl_end_polygon();
@@ -225,7 +225,7 @@ static void draw_piechart(int x,int y,int w,int h,
 	      (int)rint(xl),
 	      (int)rint(tyc - 1.1*rad*sin(ARCINC*curang)),
 	      0, 0,
-	      xl<txc ? fltk3::ALIGN_RIGHT : fltk3::ALIGN_LEFT);
+	      xl<txc ? FL_ALIGN_RIGHT : FL_ALIGN_LEFT);
       curang += 0.5 * incr * entries[i].val;
     }
 }
@@ -233,11 +233,11 @@ static void draw_piechart(int x,int y,int w,int h,
 void Fl_Chart::draw() {
 
     draw_box();
-    fltk3::Boxtype b = box();
-    int xx = x()+fltk3::box_dx(b); // was 9 instead of dx...
-    int yy = y()+fltk3::box_dy(b);
-    int ww = w()-fltk3::box_dw(b);
-    int hh = h()-fltk3::box_dh(b);
+    Fl_Boxtype b = box();
+    int xx = x()+Fl::box_dx(b); // was 9 instead of dx...
+    int yy = y()+Fl::box_dy(b);
+    int ww = w()-Fl::box_dw(b);
+    int hh = h()-Fl::box_dh(b);
     fl_push_clip(xx, yy, ww, hh);
 
     ww--; hh--; // adjust for line thickness
@@ -280,29 +280,29 @@ void Fl_Chart::draw() {
 
 /*------------------------------*/
 
-#define FL_CHART_BOXTYPE	fltk3::BORDER_BOX
+#define FL_CHART_BOXTYPE	FL_BORDER_BOX
 #define FL_CHART_COL1		FL_COL1
 #define FL_CHART_LCOL		FL_LCOL
-#define FL_CHART_ALIGN		fltk3::ALIGN_BOTTOM
+#define FL_CHART_ALIGN		FL_ALIGN_BOTTOM
 
 /**
   Create a new Fl_Chart widget using the given position, size and label string.
-  The default boxstyle is \c fltk3::NO_BOX.
+  The default boxstyle is \c FL_NO_BOX.
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
 Fl_Chart::Fl_Chart(int X, int Y, int W, int H,const char *L) :
-fltk3::Widget(X,Y,W,H,L) {
-  box(fltk3::BORDER_BOX);
-  align(fltk3::ALIGN_BOTTOM);
+Fl_Widget(X,Y,W,H,L) {
+  box(FL_BORDER_BOX);
+  align(FL_ALIGN_BOTTOM);
   numb       = 0;
   maxnumb    = 0;
   sizenumb   = FL_CHART_MAX;
   autosize_  = 1;
   min = max  = 0;
-  textfont_  = fltk3::HELVETICA;
+  textfont_  = FL_HELVETICA;
   textsize_  = 10;
-  textcolor_ = fltk3::FOREGROUND_COLOR;
+  textcolor_ = FL_FOREGROUND_COLOR;
   entries    = (FL_CHART_ENTRY *)calloc(sizeof(FL_CHART_ENTRY), FL_CHART_MAX + 1);
 }
 

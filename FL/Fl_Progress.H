@@ -3,7 +3,7 @@
 //
 // Progress bar widget definitions.
 //
-// Copyright 2000-2009 by Michael Sweet.
+// Copyright 2000-2010 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -44,8 +44,8 @@
 /**
     Displays a progress bar for the user.
 */
-class FL_EXPORT Fl_Progress : public fltk3::Widget
-{
+class FL_EXPORT Fl_Progress : public Fl_Widget {
+  
   float	value_,
 	minimum_,
 	maximum_;

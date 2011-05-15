@@ -3,7 +3,7 @@
 //
 // Widget panel for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -45,6 +45,8 @@ extern void image_browse_cb(Fl_Button*, void*);
 extern void inactive_cb(Fl_Input*, void*);
 extern void inactive_browse_cb(Fl_Button*, void*);
 extern void align_cb(Fl_Button*, void*);
+extern void align_text_image_cb(Fl_Choice*, void*);
+extern void align_position_cb(Fl_Choice*, void*);
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Value_Input.H>
 extern void x_cb(Fl_Value_Input*, void*);
@@ -115,6 +117,8 @@ extern Fl_Button *wLiveMode;
 Fl_Double_Window* make_widget_panel();
 extern Fl_Menu_Item menu_[];
 extern Fl_Menu_Item menu_1[];
+extern Fl_Menu_Item menu_2[];
+extern Fl_Menu_Item menu_3[];
 #endif
 
 //

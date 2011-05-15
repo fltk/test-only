@@ -3,7 +3,7 @@
 //
 // Main demo program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,105 +25,6 @@
 //     http://www.fltk.org/str.php
 //
 
-const char *default_menu[] = {
-  "# Menu description file for the generic demo program\n",
-  "#\n",
-  "# Each line consists of three fields, separated by :\n",
-  "#\n",
-  "# - menu name	: To which the item belongs (starts with @)\n",
-  "# - item name	: Placed on button. (use \\n for newline)\n",
-  "# - command name: To be executed. Use a menu name to define a submenu.\n",
-  "#\n",
-  "# @main indicates the main menu.\n",
-  "#\n",
-  "\n",
-  "@main:Widget\\nTests:@x\n",
-  "@x:Fl_Browser:browser browser.cxx\n",
-  "@x:Fl_Input:input\n",
-  "@x:Fl_Output:output\n",
-  "@x:Fl_Button:radio\n",
-  "@x:Fl_Tabs:tabs\n",
-  "@x:Fl_Tile:tile\n",
-  "@x:Fl_Scroll:scroll\n",
-  "@x:Fl_Pack:pack\n",
-  "@x:more...:@xm\n",
-  "@xm:Fl_Menu:menubar\n",
-  "@xm:Fl_Table:table\n",
-  "@xm:Fl_Tree:tree\n",
-  "\n",
-  "@main:Window\\nTests:@w\n",
-  "@w:overlay:overlay\n",
-  "@w:subwindow:subwindow\n",
-  "@w:double\\nbuffer:doublebuffer\n",
-  "@w:GL window:cube\n",
-  "@w:GL overlay:gl_overlay\n",
-  "@w:iconize:iconize\n",
-  "@w:fullscreen:fullscreen\n",
-  "@w:resizable:resizebox\n",
-  "@w:resize:resize\n",
-  "\n",
-  "@main:Drawing\\nTests:@d\n",
-  "@d:Images:@di\n",
-  "@di:Fl_Bitmap:bitmap\n",
-  "@di:Fl_Pixmap:pixmap\n",
-  "@di:Fl_RGB\\n_Image:image\n",
-  "@di:Fl_Shared\\n_Image:pixmap_browser\n",
-  "@di:Fl_Tiled\\n_Image:tiled_image\n",
-  "@d:cursor:cursor\n",
-  "@d:labels:label\n",
-  "@d:fl_arc:arc\n",
-  "@d:fl_curve:curve\n",
-  "@d:fl_line_style:line_style\n",
-  "\n",
-  "@main:Events:@u\n",
-  "@u:navigation:navigation\n",
-  "@u:minimum update:minimum\n",
-  "@u:keyboard:keyboard\n",
-  "@u:fast && slow widgets:fast_slow\n",
-  "@u:inactive:inactive\n",
-  "\n",
-  "@main:Fluid\\n(UI design tool):../fluid/fluid valuators.fl\n",
-  "\n",
-  "@main:Cool\\nDemos:@e\n",
-  "@e:X Color\\nBrowser:colbrowser\n",
-  "@e:Mandelbrot:mandelbrot\n",
-  "@e:Fractals:fractals\n",
-  "@e:Puzzle:glpuzzle\n",
-  "@e:Block\\nAttack!:blocks\n",
-  "@e:Checkers:checkers\n",
-  "@e:Sudoku:sudoku\n",
-  "@e:Print\nsupport:device\n",
-  "\n",
-  "@main:Other\\nTests:@o\n",
-  "@o:Color Choosers:color_chooser\n",
-  "@o:File Chooser:file_chooser\n",
-  "@o:Native File Chooser:native-filechooser\n",
-  "@o:Font Tests:@of\n",
-  "@of:Fonts:fonts\n",
-  "@of:UTF-8:utf8\n",
-  "@o:HelpDialog:help\n",
-  "@o:Input Choice:input_choice\n",
-  "@o:Preferences:preferences\n",
-  "@o:Threading:threads\n",
-  "@o:XForms Emulation:forms\n",
-  "\n",
-  "@main:Tutorial\\nfrom\\nManual:@j\n",
-  "@j:ask\\n(modified):ask\n",
-  "@j:button:button\n",
-  "@j:CubeView:CubeView\n",
-  "@j:editor:editor editor.cxx\n",
-  "@j:hello:hello\n",
-  "@j:shape:shape\n",
-  "\n",
-  "@main:Images\\nfor\\nManual:@i\n",
-  "@i:valuators:valuators\n",
-  "@i:symbols:symbols\n",
-  "@i:buttons:buttons\n",
-  "@i:clock:clock\n",
-  "@i:popups:message\n",
-  "@i:boxtypes:boxtype\n",
-  0 };
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -135,6 +36,12 @@ const char *default_menu[] = {
 #    define chdir _chdir
 #    define putenv _putenv
 #  endif // !__WATCOMC__
+#elif defined USING_XCODE
+#include <ApplicationServices/ApplicationServices.h>
+#include <unistd.h> // for chdir()
+#include <stdio.h>
+#include <stdlib.h> // for system()
+#include <string.h>
 #else
 #  include <unistd.h>
 #endif
@@ -380,7 +287,7 @@ void dobut(Fl_Widget *, long arg)
     
     char command[2048], path[2048], app_path[2048];
     
-    // this neat litle block of cose ensures that the current directory is set 
+    // this neat litle block of code ensures that the current directory is set 
     // to the location of the Demo application.
     CFBundleRef app = CFBundleGetMainBundle();
     CFURLRef url = CFBundleCopyBundleURL(app);    
@@ -416,7 +323,7 @@ void dobut(Fl_Widget *, long arg)
     char* command = new char[icommand_length+5]; // 5 for extra './' and ' &\0' 
     
     sprintf(command, "./%s &", menus[men].icommand[bn]);
-    system(command);
+    if (system(command)==-1) { /* ignore */ }
     
     delete[] command;
 #endif // WIN32
@@ -432,11 +339,10 @@ int load_the_menu(const char* fname)
 {
   FILE *fin = 0;
   char line[256], mname[64],iname[64],cname[64];
-  int i,j, mi = 0;
-  fin = fopen(fname,"r");
-  if (fin == NULL)
-  {
-#if defined ( __APPLE__ )
+  int i, j;
+  fin = fl_fopen(fname,"r");
+#if defined ( USING_XCODE )
+  if (fin == NULL) {
     // mac os bundle menu detection:
     char* pos = strrchr(fname,'/');
     if (!pos) return 0;
@@ -444,19 +350,14 @@ int load_the_menu(const char* fname)
     pos = strrchr(fname,'/');
     if (!pos) return 0;
     strcpy(pos,"/Resources/demo.menu");
-    fin  = fopen(fname,"r");
-#endif
+    fin  = fl_fopen(fname,"r");
   }
-  // if "fin" is still NULL, we will read the menu from the string array in the 
-  // beginning of the file.
+#endif
+  if (fin == NULL) {
+    return 0;
+  }
   for (;;) {
-    if (fin) {
-      if (fgets(line,256,fin) == NULL) break;
-    } else {
-      const char *m = default_menu[mi++];
-      if (!m) break;
-      strcpy(line, m);
-    }
+    if (fgets(line,256,fin) == NULL) break;
     // remove all carriage returns that Cygwin may have inserted
     char *s = line, *d = line;
     for (;;++d) {
@@ -490,14 +391,13 @@ int load_the_menu(const char* fname)
     cname[j] = '\0';
     addto_menu(mname,iname,cname);
   }
-  if (fin)
-    fclose(fin);
+  fclose(fin);
   return 1;
 }
 
 int main(int argc, char **argv) {
   putenv((char *)"FLTK_DOCDIR=../documentation/html");
-  char buf[256];
+  char buf[FL_PATH_MAX];
   strcpy(buf, argv[0]);
 #if ( defined _MSC_VER || defined __MWERKS__ ) && defined _DEBUG
   // MS_VisualC appends a 'd' to debugging executables. remove it.
@@ -517,7 +417,10 @@ int main(int argc, char **argv) {
   if (buf!=fname)
     strcpy(buf,fname);
   const char *c = fl_filename_name(buf);
-  if (c > buf) {buf[c-buf] = 0; chdir(buf);}
+  if (c > buf) {
+    buf[c-buf] = 0; 
+    if (chdir(buf)==-1) { /* ignore */ }
+  }
   push_menu("@main");
   form->show(argc,argv);
   Fl::run();

@@ -3,7 +3,7 @@
 //
 // Event names header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -37,11 +37,11 @@
 /**
   This is an array of event names you can use to convert event numbers into names.
 
-  The array gets defined inline wherever your '\#include <fltk3/names.h>' appears.
+  The array gets defined inline wherever your '\#include <FL/names.h>' appears.
 
   \b Example:
   \code
-  #include <fltk3/names.h>		// array will be defined here
+  #include <FL/names.h>		// array will be defined here
   int MyClass::handle(int e) {
       printf("Event was %s (%d)\n", fl_eventnames[e], e);
       // ..resulting output might be e.g. "Event was FL_PUSH (1)"..
@@ -80,12 +80,12 @@ const char * const fl_eventnames[] =
 /**
   This is an array of font names you can use to convert font numbers into names.
 
-  The array gets defined inline wherever your '\#include <fltk3/names.h>' appears.
+  The array gets defined inline wherever your '\#include <FL/names.h>' appears.
 
   \b Example:
   \code
-  #include <fltk3/names.h>		// array will be defined here
-  int MyClass::my_callback(fltk3::Widget *w, void*) {
+  #include <FL/names.h>		// array will be defined here
+  int MyClass::my_callback(Fl_Widget *w, void*) {
       int fnum = w->labelfont();
       // Resulting output might be e.g. "Label's font is FL_HELVETICA (0)"
       printf("Label's font is %s (%d)\n", fl_fontnames[fnum], fnum);

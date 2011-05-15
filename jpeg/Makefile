@@ -3,7 +3,7 @@
 #
 # JPEG library makefile for the Fast Light Toolkit (FLTK).
 #
-# Copyright 1997-2009 by Easy Software Products.
+# Copyright 1997-2011 by Bill Spitzak and others.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
@@ -20,7 +20,9 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA.
 #
-# Please report all bugs and problems to "fltk-bugs@fltk.org".
+# Please report all bugs and problems on the following page:
+#
+#     http://www.fltk.org/str.php
 #
 
 include ../makeinclude
@@ -30,16 +32,53 @@ include ../makeinclude
 # Object files...
 #
 
-OBJS	=	jmemnobs.o \
-		jcapimin.o jcapistd.o jccoefct.o jccolor.o jcdctmgr.o \
-		jchuff.o jcinit.o jcmainct.o jcmarker.o jcmaster.o jcomapi.o \
-		jcparam.o jcphuff.o jcprepct.o jcsample.o jctrans.o \
-		jdapimin.o jdapistd.o jdatadst.o jdatasrc.o jdcoefct.o \
-		jdcolor.o jddctmgr.o jdhuff.o jdinput.o jdmainct.o jdmarker.o \
-		jdmaster.o jdmerge.o jdphuff.o jdpostct.o jdsample.o \
-		jdtrans.o jerror.o jfdctflt.o jfdctfst.o jfdctint.o \
-		jidctflt.o jidctfst.o jidctint.o jidctred.o jquant1.o \
-		jquant2.o jutils.o jmemmgr.o
+OBJS	=	\
+		jaricom.o \
+		jcapimin.o \
+		jcapistd.o \
+		jcarith.o \
+		jccoefct.o \
+		jccolor.o \
+		jcdctmgr.o \
+		jchuff.o \
+		jcinit.o \
+		jcmainct.o \
+		jcmarker.o \
+		jcmaster.o \
+		jcomapi.o \
+		jcparam.o \
+		jcprepct.o \
+		jcsample.o \
+		jctrans.o \
+		jdapimin.o \
+		jdapistd.o \
+		jdarith.o \
+		jdatadst.o \
+		jdatasrc.o \
+		jdcoefct.o \
+		jdcolor.o \
+		jddctmgr.o \
+		jdhuff.o \
+		jdinput.o \
+		jdmainct.o \
+		jdmarker.o \
+		jdmaster.o \
+		jdmerge.o \
+		jdpostct.o \
+		jdsample.o \
+		jdtrans.o \
+		jerror.o \
+		jfdctflt.o \
+		jfdctfst.o \
+		jfdctint.o \
+		jidctflt.o \
+		jidctfst.o \
+		jidctint.o \
+		jmemmgr.o \
+		jmemnobs.o \
+		jquant1.o \
+		jquant2.o \
+		jutils.o
 
 LIBJPEG	=	../lib/libfltk_jpeg$(LIBEXT)
 

@@ -3,7 +3,7 @@
 //
 // Fl_File_Browser routines.
 //
-// Copyright 1999-2009 by Michael Sweet.
+// Copyright 1999-2010 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -39,10 +39,10 @@
 // Include necessary header files...
 //
 
-#include <fltk3/Fl_File_Browser.H>
-#include <fltk3/draw.h>
-#include <fltk3/filename.H>
-#include <fltk3/Image.h>	// icon
+#include <FL/Fl_File_Browser.H>
+#include <FL/fl_draw.H>
+#include <FL/filename.H>
+#include <FL/Fl_Image.H>	// icon
 #include <stdio.h>
 #include <stdlib.h>
 #include "flstring.h"
@@ -88,7 +88,7 @@ struct FL_BLINE			// data is in a linked list of these
   FL_BLINE	*prev;		// Previous item in list
   FL_BLINE	*next;		// Next item in list
   void		*data;		// Pointer to data (function)
-  fltk3::Image      *icon;		// Pointer to optional icon
+  Fl_Image      *icon;		// Pointer to optional icon
   short		length;		// sizeof(txt)-1, may be longer than string
   char		flags;		// selected, displayed
   char		txt[1];		// start of allocated array
@@ -177,7 +177,7 @@ Fl_File_Browser::item_width(void *p) const	// I - List item data
 
   // Set the font and size...
   if (line->txt[strlen(line->txt) - 1] == '/')
-    fl_font(textfont() | fltk3::BOLD, textsize());
+    fl_font(textfont() | FL_BOLD, textsize());
   else
     fl_font(textfont(), textsize());
 
@@ -269,7 +269,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
 {
   int		i;			// Looping var
   FL_BLINE	*line;			// Pointer to line
-  fltk3::Color	c;			// Text color
+  Fl_Color	c;			// Text color
   char		*t,			// Pointer into text
 		*ptr,			// Pointer into fragment
 		fragment[10240];	// Fragment of text
@@ -283,7 +283,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
   line = (FL_BLINE *)p;
 
   if (line->txt[strlen(line->txt) - 1] == '/')
-    fl_font(textfont() | fltk3::BOLD, textsize());
+    fl_font(textfont() | FL_BOLD, textsize());
   else
     fl_font(textfont(), textsize());
 
@@ -303,8 +303,8 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
     // Draw the icon if it is set...
     if (line->data)
       ((Fl_File_Icon *)line->data)->draw(X, Y, iconsize_, iconsize_,
-                                	(line->flags & SELECTED) ? fltk3::YELLOW :
-				                                   fltk3::LIGHT2,
+                                	(line->flags & SELECTED) ? FL_YELLOW :
+				                                   FL_LIGHT2,
 					active_r());
 
     // Draw the text offset to the right...
@@ -340,7 +340,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
       *ptr = '\0';
 
       fl_draw(fragment, X + width, Y, W - width, fl_height(),
-              (fltk3::Align)(fltk3::ALIGN_LEFT | fltk3::ALIGN_CLIP), 0, 0);
+              (Fl_Align)(FL_ALIGN_LEFT | FL_ALIGN_CLIP), 0, 0);
 
       // Point back to the start of the fragment...
       ptr    = fragment;
@@ -365,7 +365,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
       }
 
       fl_draw(fragment, X + width, Y, cW, fl_height(),
-              (fltk3::Align)(fltk3::ALIGN_LEFT | fltk3::ALIGN_CLIP), 0, 0);
+              (Fl_Align)(FL_ALIGN_LEFT | FL_ALIGN_CLIP), 0, 0);
 
       // Advance to the next column...
       column ++;
@@ -388,7 +388,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
     *ptr = '\0';
 
     fl_draw(fragment, X + width, Y, W - width, fl_height(),
-            (fltk3::Align)(fltk3::ALIGN_LEFT | fltk3::ALIGN_CLIP), 0, 0);
+            (Fl_Align)(FL_ALIGN_LEFT | FL_ALIGN_CLIP), 0, 0);
   }
 }
 
@@ -536,7 +536,7 @@ Fl_File_Browser::load(const char     *directory,// I - Directory to load
     // UNIX code uses /etc/fstab or similar...
     //
     FILE	*mtab;		// /etc/mtab or /etc/mnttab file
-    char	line[1024];	// Input line
+    char	line[FL_PATH_MAX];	// Input line
 
     //
     // Open the file that contains a list of mounted filesystems...

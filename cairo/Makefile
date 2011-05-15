@@ -20,9 +20,12 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA.
 #
-# Please report all bugs and problems to "fltk-bugs@fltk.org".
+# Please report all bugs and problems on the following page:
+#
+#     http://www.fltk.org/str.php
 #
 
+FLTKFLAGS = -DFL_LIBRARY
 include ../makeinclude
 
 #
@@ -107,17 +110,17 @@ install: $(CAIROLIBNAME) $(CAIRODSONAME)
 	if test x$(CAIRODSONAME) = xlibfltk_cairo.so.1.3; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_cairo.so*;\
 		$(INSTALL_LIB) libfltk_cairo.so.1.3 $(DESTDIR)$(libdir); \
-		$(LN) $(DESTDIR)$(libdir)/libfltk_cairo.so.1.3 $(DESTDIR)$(libdir)/libfltk_cairo.so;\
+		$(LN) libfltk_cairo.so.1.3 $(DESTDIR)$(libdir)/libfltk_cairo.so;\
 	fi
 	if test x$(CAIRODSONAME) = xsrc/libfltk_cairo.sl.1.3; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_cairo.sl*;\
 		$(INSTALL_LIB) libfltk_cairo.sl.1.3 $(DESTDIR)$(libdir); \
-		$(LN) $(DESTDIR)$(libdir)/libfltk_cairo.sl.1.3 $(DESTDIR)$(libdir)/libfltk_cairo.sl;\
+		$(LN) libfltk_cairo.sl.1.3 $(DESTDIR)$(libdir)/libfltk_cairo.sl;\
 	fi
 	if test x$(CAIRODSONAME) = xlibfltk_cairo.1.3.dylib; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_cairo.*dylib;\
 		$(INSTALL_LIB) libfltk_cairo.1.3.dylib $(DESTDIR)$(libdir); \
-		$(LN) $(DESTDIR)$(libdir)/libfltk_cairo.1.3.dylib $(DESTDIR)$(libdir)/libfltk_cairo.dylib;\
+		$(LN) libfltk_cairo.1.3.dylib $(DESTDIR)$(libdir)/libfltk_cairo.dylib;\
 	fi
 	if test x$(CAIRODSONAME) = xlibfltk_cairo_s.a; then\
 		$(RM) $(DESTDIR)$(libdir)/libfltk_cairo_s.a;\

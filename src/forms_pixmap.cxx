@@ -3,7 +3,7 @@
 //
 // Forms pixmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/forms.H>
+#include <FL/forms.H>
 
 /**
   Creates a new Fl_FormsPixmap widget using the given box type, position,
@@ -35,12 +35,12 @@
   \param[in] L widget label, default is no label
 */
 Fl_FormsPixmap::Fl_FormsPixmap(
-  fltk3::Boxtype t, int X, int Y, int W, int H, const char* L)
-: fltk3::Widget(X, Y, W, H, L) {
+  Fl_Boxtype t, int X, int Y, int W, int H, const char* L)
+: Fl_Widget(X, Y, W, H, L) {
   box(t);
   b = 0;
-  color(fltk3::BLACK);
-  align(fltk3::ALIGN_BOTTOM);
+  color(FL_BLACK);
+  align(FL_ALIGN_BOTTOM);
 }
 
 /**

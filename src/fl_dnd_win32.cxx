@@ -3,7 +3,7 @@
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,16 +20,18 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 
 // This file contains win32-specific code for fltk which is always linked
 // in.  Search other files for "WIN32" or filenames ending in _win32.cxx
 // for other system-specific code.
 
-#include <fltk3/run.h>
-#include <fltk3/x.H>
-#include <fltk3/Window.h>
-#include <fltk3/fl_utf8.h>
+#include <FL/Fl.H>
+#include <FL/x.H>
+#include <FL/Fl_Window.H>
+#include <FL/fl_utf8.h>
 #include "flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,8 +41,6 @@
 #if defined(__CYGWIN__)
 #include <sys/time.h>
 #include <unistd.h>
-#else
-#include <winsock2.h>
 #endif
 
 extern char *fl_selection_buffer[2];
@@ -50,10 +50,7 @@ extern char fl_i_own_selection[2];
 extern char *fl_locale2utf8(const char *s, UINT codepage = 0);
 extern unsigned int fl_codepage;
 
-fltk3::Window *fl_dnd_target_window = 0;
-
-// All of the following code requires GCC 3.x or a non-GNU compiler...
-#if !defined(__GNUC__) || __GNUC__ >= 3
+Fl_Window *fl_dnd_target_window = 0;
 
 #include <ole2.h>
 #include <shellapi.h>
@@ -93,19 +90,19 @@ public:
     // set e_modifiers here from grfKeyState, set e_x and e_root_x
     // check if FLTK handles this drag and return if it can't (i.e. BMP drag without filename)
     POINT ppt;
-    fltk3::e_x_root = ppt.x = pt.x;
-    fltk3::e_y_root = ppt.y = pt.y;
+    Fl::e_x_root = ppt.x = pt.x;
+    Fl::e_y_root = ppt.y = pt.y;
     HWND hWnd = WindowFromPoint( ppt );
-    fltk3::Window *target = fl_find( hWnd );
+    Fl_Window *target = fl_find( hWnd );
     if (target) {
-      fltk3::e_x = fltk3::e_x_root-target->x();
-      fltk3::e_y = fltk3::e_y_root-target->y();
+      Fl::e_x = Fl::e_x_root-target->x();
+      Fl::e_y = Fl::e_y_root-target->y();
     }
     fl_dnd_target_window = target;
     px = pt.x; py = pt.y;
     if (fillCurrentDragData(pDataObj)) {
       // FLTK has no mechanism yet for the different drop effects, so we allow move and copy
-      if ( target && fltk3::handle( fltk3::DND_ENTER, target ) )
+      if ( target && Fl::handle( FL_DND_ENTER, target ) )
         *pdwEffect = DROPEFFECT_MOVE|DROPEFFECT_COPY; //|DROPEFFECT_LINK;
       else
         *pdwEffect = DROPEFFECT_NONE;
@@ -127,15 +124,15 @@ public:
       return S_OK;
     }
     // set e_modifiers here from grfKeyState, set e_x and e_root_x
-    fltk3::e_x_root = pt.x;
-    fltk3::e_y_root = pt.y;
+    Fl::e_x_root = pt.x;
+    Fl::e_y_root = pt.y;
     if (fl_dnd_target_window) {
-      fltk3::e_x = fltk3::e_x_root-fl_dnd_target_window->x();
-      fltk3::e_y = fltk3::e_y_root-fl_dnd_target_window->y();
+      Fl::e_x = Fl::e_x_root-fl_dnd_target_window->x();
+      Fl::e_y = Fl::e_y_root-fl_dnd_target_window->y();
     }
     if (fillCurrentDragData(0)) {
-      // fltk3::Group will change DND_DRAG into DND_ENTER and DND_LEAVE if needed
-      if ( fltk3::handle( fltk3::DND_DRAG, fl_dnd_target_window ) )
+      // Fl_Group will change DND_DRAG into DND_ENTER and DND_LEAVE if needed
+      if ( Fl::handle( FL_DND_DRAG, fl_dnd_target_window ) )
         *pdwEffect = DROPEFFECT_MOVE|DROPEFFECT_COPY; //|DROPEFFECT_LINK;
       else
         *pdwEffect = DROPEFFECT_NONE;
@@ -149,7 +146,7 @@ public:
   HRESULT STDMETHODCALLTYPE DragLeave() {
     if ( fl_dnd_target_window && fillCurrentDragData(0))
     {
-      fltk3::handle( fltk3::DND_LEAVE, fl_dnd_target_window );
+      Fl::handle( FL_DND_LEAVE, fl_dnd_target_window );
       fl_dnd_target_window = 0;
       clearCurrentDragData();
     }
@@ -158,25 +155,34 @@ public:
   HRESULT STDMETHODCALLTYPE Drop( IDataObject *data, DWORD /*grfKeyState*/, POINTL pt, DWORD* /*pdwEffect*/) {
     if ( !fl_dnd_target_window )
       return S_OK;
-    fltk3::Window *target = fl_dnd_target_window;
+    Fl_Window *target = fl_dnd_target_window;
     fl_dnd_target_window = 0;
-    fltk3::e_x_root = pt.x;
-    fltk3::e_y_root = pt.y;
+    Fl::e_x_root = pt.x;
+    Fl::e_y_root = pt.y;
     if (target) {
-      fltk3::e_x = fltk3::e_x_root-target->x();
-      fltk3::e_y = fltk3::e_y_root-target->y();
+      Fl::e_x = Fl::e_x_root-target->x();
+      Fl::e_y = Fl::e_y_root-target->y();
     }
     // tell FLTK that the user released an object on this widget
-    if ( !fltk3::handle( fltk3::DND_RELEASE, target ) )
+    if ( !Fl::handle( FL_DND_RELEASE, target ) )
       return S_OK;
 
-    fltk3::Widget *w = target;
+    Fl_Widget *w = target;
     while (w->parent()) w = w->window();
-    HWND hwnd = fl_xid( (fltk3::Window*)w );
+    HWND hwnd = fl_xid( (Fl_Window*)w );
     if (fillCurrentDragData(data)) {
-      int old_event = fltk3::e_number;
-      fltk3::belowmouse()->handle(fltk3::e_number = fltk3::PASTE); // e_text will be invalid after this call
-      fltk3::e_number = old_event;
+      int old_event = Fl::e_number;
+      char *a, *b;
+      a = b = currDragData;
+      while (*a) { // strip the CRLF pairs
+	if (*a == '\r' && a[1] == '\n') a++;
+	else *b++ = *a++;
+      }
+      *b = 0;
+      Fl::e_text = currDragData;
+      Fl::e_length = b - currDragData;
+      Fl::belowmouse()->handle(Fl::e_number = FL_PASTE); // e_text will be invalid after this call
+      Fl::e_number = old_event;
       SetForegroundWindow( hwnd );
       clearCurrentDragData();
       return S_OK;
@@ -208,20 +214,53 @@ private:
 
     // clear currDrag* for a new drag event
     clearCurrentDragData();
-
-    // fill currDrag* with ASCII data, if available
+    
+    currDragRef = data;
+    // fill currDrag* with UTF-8 data, if available
     FORMATETC fmt = { 0 };
     STGMEDIUM medium = { 0 };
     fmt.tymed = TYMED_HGLOBAL;
     fmt.dwAspect = DVASPECT_CONTENT;
     fmt.lindex = -1;
-    fmt.cfFormat = CF_TEXT;
-    // if it is ASCII text, return a copy of it
+    fmt.cfFormat = CF_UNICODETEXT;
+    // if it is UNICODE text, return a UTF-8-converted copy of it
     if ( data->GetData( &fmt, &medium )==S_OK )
     {
       void *stuff = GlobalLock( medium.hGlobal );
-      fltk3::e_length = strlen((char*)stuff);
-      fltk3::e_text = strdup((char*)stuff);
+      unsigned srclen = 0;
+      const wchar_t *wstuff = (const wchar_t *)stuff;
+      while (*wstuff++) srclen++;
+      wstuff = (const wchar_t *)stuff;
+      unsigned utf8len = fl_utf8fromwc(NULL, 0, wstuff, srclen);
+      currDragSize = utf8len;
+      currDragData = (char*)malloc(utf8len + 1);
+      fl_utf8fromwc(currDragData, currDragSize+1, wstuff, srclen+1); // include null-byte
+      GlobalUnlock( medium.hGlobal );
+      ReleaseStgMedium( &medium );
+      currDragResult = 1;
+      return currDragResult;
+    }
+    fmt.cfFormat = CF_TEXT;
+    // if it is CP1252 text, return a UTF-8-converted copy of it
+    if ( data->GetData( &fmt, &medium )==S_OK )
+    {
+      int len;
+      char *p, *q, *last;
+      unsigned u;
+      void *stuff = GlobalLock( medium.hGlobal );
+      currDragData = (char*)malloc(3 * strlen((char*)stuff) + 10);
+      p = (char*)stuff; 
+      last = p + strlen(p);
+      q = currDragData;
+      while (p < last) {
+	u = fl_utf8decode(p, last, &len);
+	p += len;
+	len = fl_utf8encode(u, q);
+	q += len;
+	}
+      *q = 0;
+      currDragSize = q - currDragData;
+      currDragData = (char*)realloc(currDragData, currDragSize + 1);
       GlobalUnlock( medium.hGlobal );
       ReleaseStgMedium( &medium );
       currDragResult = 1;
@@ -233,7 +272,7 @@ private:
     fmt.dwAspect = DVASPECT_CONTENT;
     fmt.lindex = -1;
     fmt.cfFormat = CF_HDROP;
-    // if it is a pathname list, send an fltk3::PASTE with a \n separated list of filepaths
+    // if it is a pathname list, send an FL_PASTE with a \n separated list of filepaths
     if ( data->GetData( &fmt, &medium )==S_OK )
     {
       HDROP hdrop = (HDROP)medium.hGlobal;
@@ -251,14 +290,14 @@ private:
         }
          *dst=0;
 
-        fltk3::e_text = (char*) malloc(nn * 5 + 1);
-//      fltk3::e_length = fl_unicode2utf(bu, nn, fltk3::e_text);
-        fltk3::e_length = fl_utf8fromwc(fltk3::e_text, (nn*5+1), bu, nn);
-        fltk3::e_text[fltk3::e_length] = 0;
+        currDragData = (char*) malloc(nn * 5 + 1);
+//      Fl::e_length = fl_unicode2utf(bu, nn, Fl::e_text);
+        currDragSize = fl_utf8fromwc(currDragData, (nn*5+1), bu, nn);
+        currDragData[currDragSize] = 0;
         free(bu);
 
-//    fltk3::belowmouse()->handle(FL_DROP);
-//      free( fltk3::e_text );
+//    Fl::belowmouse()->handle(FL_DROP);
+//      free( Fl::e_text );
       ReleaseStgMedium( &medium );
       currDragResult = 1;
       return currDragResult;
@@ -376,7 +415,7 @@ public:
     n = 0;
   }
 
-  ~FLEnum(void) {
+  virtual ~FLEnum(void) {
     n = 0;
   }
 };
@@ -411,16 +450,16 @@ public:
       delete this;
     return nTemp;
   }
-  // GetData currently allows ASCII text through Global Memory only
+  // GetData currently allows UNICODE text through Global Memory only
   HRESULT STDMETHODCALLTYPE GetData( FORMATETC *pformatetcIn, STGMEDIUM *pmedium ) {
     if ((pformatetcIn->dwAspect & DVASPECT_CONTENT) &&
         (pformatetcIn->tymed & TYMED_HGLOBAL) &&
-        (pformatetcIn->cfFormat == CF_TEXT))
+        (pformatetcIn->cfFormat == CF_UNICODETEXT))
     {
-      HGLOBAL gh = GlobalAlloc( GHND, fl_selection_length[0]+1 );
+      int utf16_len = fl_utf8toUtf16(fl_selection_buffer[0], fl_selection_length[0], 0, 0);
+      HGLOBAL gh = GlobalAlloc( GHND, utf16_len * 2 + 2 );
       char *pMem = (char*)GlobalLock( gh );
-      memmove( pMem, fl_selection_buffer[0], fl_selection_length[0] );
-      pMem[ fl_selection_length[0] ] = 0;
+      fl_utf8toUtf16(fl_selection_buffer[0], fl_selection_length[0], (unsigned short*)pMem, utf16_len + 1);
 //      HGLOBAL gh = GlobalAlloc( GHND| GMEM_SHARE,
 //                            (fl_selection_length[0]+4) * sizeof(short)
 //                            + sizeof(DROPFILES));
@@ -462,7 +501,7 @@ public:
   {
     if ((pformatetc->dwAspect & DVASPECT_CONTENT) &&
         (pformatetc->tymed & TYMED_HGLOBAL) &&
-        (pformatetc->cfFormat == CF_TEXT))
+        (pformatetc->cfFormat == CF_UNICODETEXT))
       return S_OK;
     return DV_E_FORMATETC;
   }
@@ -484,14 +523,7 @@ public:
 };
 
 
-/**
-   Drag and drop whatever is in the cut-copy-paste buffer.
-
-   Create a selection first using:
-
-     fltk3::copy(const char *stuff, int len, 0)
-*/
-int fltk3::dnd()
+int Fl::dnd()
 {
   DWORD dropEffect;
   ReleaseCapture();
@@ -506,25 +538,17 @@ int fltk3::dnd()
   fdo->Release();
   fds->Release();
 
-  fltk3::Widget *w = fltk3::pushed();
+  Fl_Widget *w = Fl::pushed();
   if ( w )
   {
-    int old_event = fltk3::e_number;
-    w->handle(fltk3::e_number = fltk3::RELEASE);
-    fltk3::e_number = old_event;
-    fltk3::pushed( 0 );
+    int old_event = Fl::e_number;
+    w->handle(Fl::e_number = FL_RELEASE);
+    Fl::e_number = old_event;
+    Fl::pushed( 0 );
   }
   if ( ret==DRAGDROP_S_DROP ) return 1; // or DD_S_CANCEL
   return 0;
 }
-#else
-int fltk3::dnd()
-{
-  // Always indicate DnD failed when using GCC < 3...
-  return 1;
-}
-#endif // !__GNUC__ || __GNUC__ >= 3
-
 
 //
 // End of "$Id$".

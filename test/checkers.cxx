@@ -6,7 +6,7 @@
 // Hours of fun: the FLTK checkers game!
 // Based on a very old algorithm, but it still works!
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,7 +30,7 @@
 
 const char* copyright = 
 "Checkers game\n"
-"Copyright (C) 1997 Bill Spitzak    spitzak@d2.com\n"
+"Copyright (C) 1997-2010 Bill Spitzak    spitzak@d2.com\n"
 "Original Pascal code:\n"
 "Copyright 1978, Oregon Minicomputer Software, Inc.\n"
 "2340 SW Canyon Road, Portland, Oregon 97201\n"
@@ -65,6 +65,10 @@ const char* copyright =
 #include <stdio.h>
 #include <stdarg.h>
 #include <time.h>
+
+#ifdef VT100
+#include <ctype.h>	// toupper
+#endif
 
 ////////////////////////////////////////////////////////////////
 // The algorithim:
@@ -191,14 +195,14 @@ char check(int target,int direction) {
   piece aa = tb[target]; piece bb = tb[src];
   tb[target] = EMPTY; tb[src] = EMPTY;
   int safe =
-    (tb[src-4]&FRIEND && tb[src-8]&ENEMY
-     ||tb[src-5]&FRIEND && tb[src-10]&ENEMY
-     ||tb[dst-4]&ENEMY && !tb[dst+4]
-     ||tb[dst-5]&ENEMY && !tb[dst+5]
-     ||tb[src+4]&FRIEND && tb[src+8]==ENEMYKING
-     ||tb[src+5]&FRIEND && tb[src+10]==ENEMYKING
-     ||tb[dst+4]==ENEMYKING && !tb[dst-4]
-     ||tb[dst+5]==ENEMYKING && !tb[dst-5]);
+    (   (tb[src-4]&FRIEND && tb[src-8]&ENEMY)
+     || (tb[src-5]&FRIEND && tb[src-10]&ENEMY)
+     || (tb[dst-4]&ENEMY && !tb[dst+4])
+     || (tb[dst-5]&ENEMY && !tb[dst+5])
+     || (tb[src+4]&FRIEND && tb[src+8]==ENEMYKING)
+     || (tb[src+5]&FRIEND && tb[src+10]==ENEMYKING)
+     || (tb[dst+4]==ENEMYKING && !tb[dst-4])
+     || (tb[dst+5]==ENEMYKING && !tb[dst-5]));
   tb[target] = aa; tb[src] = bb;
   return(safe);
 }
@@ -286,7 +290,7 @@ void evaluateboard(node *n,int print) {
   for (i=9; i<40; i++) {
     int x = (gradient[i-4]+gradient[i-5])/2;
     if (tb[i]==FRIEND) total += x;
-    gradient[i] = (tb[i]&FRIEND || !tb[i] && !is_protected[i]) ? x : 0;
+    gradient[i] = (tb[i]&FRIEND || (!tb[i] && !is_protected[i])) ? x : 0;
   }
   n->gradient = total;
 
@@ -732,7 +736,7 @@ node *getusermove(void) {
   else
     printf("\033[1mCommand?\033[0m ");
   abortflag = 0;
-  if (!gets(line)) {
+  if (!fgets(line, sizeof(line), stdin)) {
     putchar('\n');
     if (feof(stdin)) fixexit(0);
     return 0;
@@ -958,13 +962,16 @@ int squarey(int i) {return (usermoves(i,2)-'1')*BOXSIZE+BMOFFSET;}
 
 void Board::draw() {
   make_bitmaps();
+  // -- draw the board itself
   fl_draw_box(box(),0,0,w(),h(),color());
+  // -- draw all dark tiles
   fl_color((Fl_Color)10 /*107*/);
   int x; for (x=0; x<8; x++) for (int y=0; y<8; y++) {
     if (!((x^y)&1)) fl_rectf(BORDER+x*BOXSIZE, BORDER+y*BOXSIZE,
 			     BOXSIZE-BORDER, BOXSIZE-BORDER);
   }
-  fl_color(FL_DARK3 /*FL_GRAY_RAMP+4*/);
+  // -- draw outlines around the fileds
+  fl_color(FL_DARK3);
   for (x=0; x<9; x++) {
     fl_rectf(x*BOXSIZE,0,BORDER,h());
     fl_rectf(0,x*BOXSIZE,w(),BORDER);
@@ -1008,7 +1015,7 @@ void Board::draw() {
 
 // drag the piece on square i to dx dy, or undo drag if i is zero:
 void Board::drag_piece(int j, int dx, int dy) {
-  dy = (dy&-2) | dx&1; // make halftone shadows line up
+  dy = (dy&-2) | (dx&1); // make halftone shadows line up
   if (j != erase_this) drop_piece(erase_this); // should not happen
   if (!erase_this) { // pick up old piece
     dragx = squarex(j); dragy = squarey(j);
@@ -1163,6 +1170,7 @@ void quit_cb(Fl_Widget*, void*) {exit(0);}
 int FLTKmain(int argc, char** argv) {
   Fl::visual(FL_DOUBLE|FL_INDEX);
   Board b(BOARDSIZE,BOARDSIZE);
+  b.color(FL_BACKGROUND_COLOR);
   b.callback(quit_cb);
   b.show(argc,argv);
   return Fl::run();

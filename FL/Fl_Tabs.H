@@ -3,7 +3,7 @@
 //
 // Tab header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -38,12 +38,12 @@
   interface that allows you to put lots and lots of buttons and
   switches in a panel, as popularized by many toolkits.
   
-  \image html  tabs.gif
-  \image latex tabs.eps "Fl_Tabs" width=8cm
+  \image html  tabs.png
+  \image latex tabs.png "Fl_Tabs" width=8cm
   
   Clicking the tab makes a child visible() by calling
   show() on it, and all other children are made invisible
-  by calling hide() on them. Usually the children are fltk3::Group widgets
+  by calling hide() on them. Usually the children are Fl_Group widgets
   containing several widgets themselves.
   
   Each child makes a card, and its label() is printed
@@ -59,24 +59,30 @@
   fluid browser to select each child group and resize them until
   the tabs look the way you want them to.
 */
-class FL_EXPORT Fl_Tabs : public fltk3::Group {
-  fltk3::Widget *value_;
-  fltk3::Widget *push_;
-  int tab_positions(int*, int*);
+class FL_EXPORT Fl_Tabs : public Fl_Group {
+  Fl_Widget *value_;
+  Fl_Widget *push_;
+  int *tab_pos;		// array of x-offsets of tabs per child + 1
+  int *tab_width;	// array of widths of tabs per child + 1
+  int tab_count;	// array size
+  int tab_positions();	// allocate and calculate tab positions
+  void clear_tab_positions();
   int tab_height();
-  void draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int sel=0);
+  void draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int sel=0);
 protected:
   void redraw_tabs();
   void draw();
 
 public:
   int handle(int);
-  fltk3::Widget *value();
-  int value(fltk3::Widget *);
-  fltk3::Widget *push() const {return push_;}
-  int push(fltk3::Widget *);
+  Fl_Widget *value();
+  int value(Fl_Widget *);
+  Fl_Widget *push() const {return push_;}
+  int push(Fl_Widget *);
   Fl_Tabs(int,int,int,int,const char * = 0);
-  fltk3::Widget *which(int event_x, int event_y);
+  Fl_Widget *which(int event_x, int event_y);
+  ~Fl_Tabs();
+  void client_area(int &rx, int &ry, int &rw, int &rh, int tabh=0);
 };
 
 #endif

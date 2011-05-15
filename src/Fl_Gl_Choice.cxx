@@ -3,7 +3,7 @@
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,17 +28,17 @@
 #include <config.h>
 #if HAVE_GL
 
-#  include <fltk3/run.h>
-#  include <fltk3/x.H>
+#  include <FL/Fl.H>
+#  include <FL/x.H>
 #  include <stdlib.h>
 #  include "Fl_Gl_Choice.H"
-#  include <fltk3/gl_draw.H>
+#  include <FL/gl_draw.H>
 #  include "flstring.h"
-#  include <fltk3/fl_utf8.h>
+#  include <FL/fl_utf8.h>
 
 #  ifdef __APPLE__
-#    include <fltk3/Window.h>
-#    include <Carbon/Carbon.h>
+#    include <ApplicationServices/ApplicationServices.h>
+#    include <FL/Fl_Window.H>
 #  endif
 
 #  ifdef WIN32
@@ -274,7 +274,7 @@ GLContext fl_create_gl_context(XVisualInfo* vis) {
 
 #elif defined(WIN32)
 
-GLContext fl_create_gl_context(fltk3::Window* window, const Fl_Gl_Choice* g, int layer) {
+GLContext fl_create_gl_context(Fl_Window* window, const Fl_Gl_Choice* g, int layer) {
   Fl_X* i = Fl_X::i(window);
   HDC hdc = i->private_dc;
   if (!hdc) {
@@ -296,8 +296,18 @@ GLContext fl_create_gl_context(fltk3::Window* window, const Fl_Gl_Choice* g, int
 }
 
 #  elif defined(__APPLE_QUARTZ__)
+#if !(MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5 && __LP64__)
+static CGrafPtr fl_GetWindowPort(WindowRef window)
+{
+  typedef CGrafPtr (*wf)(WindowRef);
+  static wf f = NULL;
+  if ( ! f) f = (wf)Fl_X::get_carbon_function("GetWindowPort");
+  return (*f)(window);
+}
+#endif
+
 // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
-GLContext fl_create_gl_context(fltk3::Window* window, const Fl_Gl_Choice* g, int layer) {
+GLContext fl_create_gl_context(Fl_Window* window, const Fl_Gl_Choice* g, int layer) {
   GLContext context, shared_ctx = 0;
   if (context_list && nContext) shared_ctx = context_list[0];
   context = aglCreateContext( g->pixelformat, shared_ctx);
@@ -312,17 +322,17 @@ GLContext fl_create_gl_context(fltk3::Window* window, const Fl_Gl_Choice* g, int
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
 #if __LP64__
   // 64 bit version
-  aglSetWindowRef(context, MACwindowRef(window) );
+  aglSetWindowRef(context, Fl_X::i(window)->window_ref() );
 #else
   // 32 bit version >= 10.5
   if (aglSetWindowRef != NULL)
-    aglSetWindowRef(context, MACwindowRef(window) );
+    aglSetWindowRef(context, Fl_X::i(window)->window_ref() );
   else
-    aglSetDrawable( context, GetWindowPort( MACwindowRef(window) ) );
+    aglSetDrawable( context, fl_GetWindowPort( Fl_X::i(window)->window_ref() ) );
 #endif
 #else
   // 32 bit version < 10.5
-  aglSetDrawable( context, GetWindowPort( MACwindowRef(window) ) );
+  aglSetDrawable( context, fl_GetWindowPort( Fl_X::i(window)->window_ref() ) );
 #endif
   return (context);
 }
@@ -331,9 +341,9 @@ GLContext fl_create_gl_context(fltk3::Window* window, const Fl_Gl_Choice* g, int
 #  endif
 
 static GLContext cached_context;
-static fltk3::Window* cached_window;
+static Fl_Window* cached_window;
 
-void fl_set_gl_context(fltk3::Window* w, GLContext context) {
+void fl_set_gl_context(Fl_Window* w, GLContext context) {
   if (context != cached_context || w != cached_window) {
     cached_context = context;
     cached_window = w;
@@ -349,11 +359,21 @@ void fl_set_gl_context(fltk3::Window* w, GLContext context) {
       aglSetInteger( context, AGL_BUFFER_RECT, rect );
       aglEnable( context, AGL_BUFFER_RECT );
     }
-#     if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-  aglSetWindowRef(context, MACwindowRef(w) );
-#     else
-  aglSetDrawable( context, GetWindowPort( MACwindowRef(w) ) );
-#     endif
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+#if __LP64__
+    // 64 bit version
+    aglSetWindowRef(context, Fl_X::i(w)->window_ref() );
+#else
+    // 32 bit version >= 10.5
+    if (aglSetWindowRef != NULL)
+      aglSetWindowRef(context, Fl_X::i(w)->window_ref() );
+    else
+      aglSetDrawable( context, fl_GetWindowPort( Fl_X::i(w)->window_ref() ) );
+#endif
+#else
+    // 32 bit version < 10.5
+    aglSetDrawable( context, fl_GetWindowPort( Fl_X::i(w)->window_ref() ) );
+#endif
     aglSetCurrentContext(context);
 #  else
 #   error unsupported platform
@@ -370,12 +390,13 @@ void fl_no_gl_context() {
   wglMakeCurrent(0, 0);
 #  elif defined(__APPLE_QUARTZ__)
   // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
-  AGLContext ctx = aglGetCurrentContext();
-#   if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-  if (ctx) aglSetWindowRef(ctx, NULL);
-#    else
-  if (ctx) aglSetDrawable(ctx, NULL);
-#    endif
+  AGLContext ctx = aglGetCurrentContext();  
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
+  if (aglSetWindowRef != NULL)
+    { if(ctx) aglSetWindowRef(ctx, NULL ); }
+  else
+#endif
+  if(ctx) aglSetDrawable( ctx, NULL );
   aglSetCurrentContext(0);
 #  else
 #    error unsupported platform

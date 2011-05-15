@@ -3,7 +3,7 @@
 //
 // Browser header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,7 +28,7 @@
 /* \file
    Fl_Browser widget . */
 
-// Forms-compatable browser.  Probably useful for other
+// Forms-compatible browser.  Probably useful for other
 // lists of textual data.  Notice that the line numbers
 // start from 1, and 0 means "no line".
 
@@ -148,7 +148,7 @@ public:
     Returns 0 if browser is empty.
   */
   int size() const { return lines; }
-  void size(int W, int H) { fltk3::Widget::size(W, H); }
+  void size(int W, int H) { Fl_Widget::size(W, H); }
 
   int topline() const ;
   /** For internal use only? */
@@ -180,10 +180,10 @@ public:
   int selected(int line) const ;
   void show(int line);
   /** Shows the entire Fl_Browser widget -- opposite of hide(). */
-  void show() { fltk3::Widget::show(); }
+  void show() { Fl_Widget::show(); }
   void hide(int line);
   /** Hides the entire Fl_Browser widget -- opposite of show(). */
-  void hide() { fltk3::Widget::hide(); }
+  void hide() { Fl_Widget::hide(); }
   int visible(int line) const ;
 
   int value() const ;

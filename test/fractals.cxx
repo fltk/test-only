@@ -7,7 +7,7 @@
 // demonstrate how to add FLTK controls to a GLUT program.   The GLUT
 // code is unchanged except for the end (search for FLTK to find changes).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,7 +29,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include "config.h"
+#include <config.h>
 #if !HAVE_GL || !HAVE_GL_GLU_H
 #include <FL/Fl.H>
 #include <FL/fl_message.H>
@@ -312,10 +312,8 @@ long TreeSeed;   /* for srand48 - remember so we can build "same tree"
  /*
   * recursive tree drawing thing, fleshed out from class notes pseudocode 
   */
-void FractalTree(int level)
+void FractalTree(int level, long level_seed)
 {
-  long savedseed;  /* need to save seeds while building tree too */
-
   if (level == Level) {
       glPushMatrix();
         glRotatef(drand48()*180, 0, 1, 0);
@@ -328,26 +326,25 @@ void FractalTree(int level)
     glTranslatef(0, 1, 0);
     glScalef(0.7, 0.7, 0.7);
 
-      savedseed = (long)((ulong)drand48()*ULONG_MAX);
+      srand48(level_seed+1);
       glPushMatrix();    
         glRotatef(110 + drand48()*40, 0, 1, 0);
         glRotatef(30 + drand48()*20, 0, 0, 1);
-        FractalTree(level + 1);
+        FractalTree(level + 1, level_seed+4);
       glPopMatrix();
 
-      srand48(savedseed);
-      savedseed = (long)((ulong)drand48()*ULONG_MAX);
+      srand48(level_seed+2);
       glPushMatrix();
         glRotatef(-130 + drand48()*40, 0, 1, 0);
         glRotatef(30 + drand48()*20, 0, 0, 1);
-        FractalTree(level + 1);
+        FractalTree(level + 1, level_seed+5);
       glPopMatrix();
 
-      srand48(savedseed);
+      srand48(level_seed+3);
       glPushMatrix();
         glRotatef(-20 + drand48()*40, 0, 1, 0);
         glRotatef(30 + drand48()*20, 0, 0, 1);
-        FractalTree(level + 1);
+        FractalTree(level + 1, level_seed+6);
       glPopMatrix();
 
     glPopMatrix();
@@ -421,7 +418,7 @@ void CreateTree(void)
     glPushAttrib(GL_LIGHTING_BIT);
     glCallList(TREE_MAT);
     glTranslatef(0, -1, 0);
-    FractalTree(0);
+    FractalTree(0, TreeSeed);
     glPopAttrib();
     glPopMatrix();
   glEndList();  
@@ -768,11 +765,11 @@ void MenuInit(void)
 /***************************************************************/
 
 // FLTK-style callbacks to Glut menu callback translators:
-void setlevel(Fl_Widget*, void *value) {setlevel(long(value));}
+void setlevel(Fl_Widget*, void *value) {setlevel(fl_intptr_t(value));}
 
-void choosefract(Fl_Widget*, void *value) {choosefract(long(value));}
+void choosefract(Fl_Widget*, void *value) {choosefract(fl_intptr_t(value));}
 
-void handlemenu(Fl_Widget*, void *value) {handlemenu(long(value));}
+void handlemenu(Fl_Widget*, void *value) {handlemenu(fl_intptr_t(value));}
 
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Group.H>

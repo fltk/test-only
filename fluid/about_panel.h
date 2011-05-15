@@ -3,7 +3,7 @@
 //
 // About dialog for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -37,6 +37,7 @@ extern Fl_Double_Window *about_panel;
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Return_Button.H>
 Fl_Double_Window* make_about_panel();
+extern unsigned char fluid_org_png[12690];
 #endif
 
 //

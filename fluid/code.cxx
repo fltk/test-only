@@ -3,7 +3,7 @@
 //
 // Code output routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -47,7 +47,7 @@ extern const char* i18n_set;
 // return true if c can be in a C identifier.  I needed this so
 // it is not messed up by locale settings:
 int is_id(char c) {
-  return c>='a' && c<='z' || c>='A' && c<='Z' || c>='0' && c<='9' || c=='_';
+  return (c>='a' && c<='z') || (c>='A' && c<='Z') || (c>='0' && c<='9') || c=='_';
 }
 
 ////////////////////////////////////////////////////////////////
@@ -215,7 +215,7 @@ void write_cstring(const char *w, int length) {
       // consume them as part of the quoted sequence.  Use string constant
       // pasting to avoid this:
       c = *w;
-      if (w < e && (c>='0'&&c<='9' || c>='a'&&c<='f' || c>='A'&&c<='F')) {
+      if (w < e && ( (c>='0'&&c<='9') || (c>='a'&&c<='f') || (c>='A'&&c<='F') )) {
 	putc('\"', code_file); linelength++;
 	if (linelength >= 79) {fputs("\n",code_file); linelength = 0;}
 	putc('\"', code_file); linelength++;
@@ -290,9 +290,9 @@ extern Fl_Widget_Class_Type *current_widget_class;
 // of the parent code:
 static Fl_Type* write_code(Fl_Type* p) {
   if (write_sourceview) {
-    p->code_line = (int)ftell(code_file);
-    if (p->header_line_end==-1)
-      p->header_line = (int)ftell(header_file);
+    p->code_position = (int)ftell(code_file);
+    if (p->header_position_end==-1)
+      p->header_position = (int)ftell(header_file);
   }
   // write all code that come before the children code
   // (but don't write the last comment until the very end)
@@ -333,9 +333,9 @@ static Fl_Type* write_code(Fl_Type* p) {
     p->write_code2();
   }
   if (write_sourceview) {
-    p->code_line_end = (int)ftell(code_file);
-    if (p->header_line_end==-1)
-      p->header_line_end = (int)ftell(header_file);
+    p->code_position_end = (int)ftell(code_file);
+    if (p->header_position_end==-1)
+      p->header_position_end = (int)ftell(header_file);
   }
   return q;
 }
@@ -354,13 +354,13 @@ int write_code(const char *s, const char *t) {
   current_widget_class = 0L;
   if (!s) code_file = stdout;
   else {
-    FILE *f = fopen(s, filemode);
+    FILE *f = fl_fopen(s, filemode);
     if (!f) return 0;
     code_file = f;
   }
   if (!t) header_file = stdout;
   else {
-    FILE *f = fopen(t, filemode);
+    FILE *f = fl_fopen(t, filemode);
     if (!f) {fclose(code_file); return 0;}
     header_file = f;
   }
@@ -369,14 +369,14 @@ int write_code(const char *s, const char *t) {
   Fl_Type* first_type = Fl_Type::first;
   if (first_type && first_type->is_comment()) {
     if (write_sourceview) {
-      first_type->code_line = (int)ftell(code_file);
-      first_type->header_line = (int)ftell(header_file);
+      first_type->code_position = (int)ftell(code_file);
+      first_type->header_position = (int)ftell(header_file);
     }
     // it is ok to write non-recusive code here, because comments have no children or code2 blocks
     first_type->write_code1();
     if (write_sourceview) {
-      first_type->code_line_end = (int)ftell(code_file);
-      first_type->header_line_end = (int)ftell(header_file);
+      first_type->code_position_end = (int)ftell(code_file);
+      first_type->header_position_end = (int)ftell(header_file);
     }
     first_type = first_type->next;
   }
@@ -423,18 +423,18 @@ int write_code(const char *s, const char *t) {
   }
   for (Fl_Type* p = first_type; p;) {
     // write all static data for this & all children first
-    if (write_sourceview) p->header_line = (int)ftell(header_file);
+    if (write_sourceview) p->header_position = (int)ftell(header_file);
     p->write_static();
     if (write_sourceview) {
-      p->header_line_end = (int)ftell(header_file);
-      if (p->header_line==p->header_line_end) p->header_line_end = -1;
+      p->header_position_end = (int)ftell(header_file);
+      if (p->header_position==p->header_position_end) p->header_position_end = -1;
     }
     for (Fl_Type* q = p->next; q && q->level > p->level; q = q->next) {
-      if (write_sourceview) q->header_line = (int)ftell(header_file);
+      if (write_sourceview) q->header_position = (int)ftell(header_file);
       q->write_static();
       if (write_sourceview) {
-        q->header_line_end = (int)ftell(header_file);
-        if (q->header_line==q->header_line_end) q->header_line_end = -1;
+        q->header_position_end = (int)ftell(header_file);
+        if (q->header_position==q->header_position_end) q->header_position_end = -1;
       }
     }
     // then write the nested code:
@@ -450,13 +450,13 @@ int write_code(const char *s, const char *t) {
   Fl_Type* last_type = Fl_Type::last;
   if (last_type && last_type->is_comment()) {
     if (write_sourceview) {
-      last_type->code_line = (int)ftell(code_file);
-      last_type->header_line = (int)ftell(header_file);
+      last_type->code_position = (int)ftell(code_file);
+      last_type->header_position = (int)ftell(header_file);
     }
     last_type->write_code1();
     if (write_sourceview) {
-      last_type->code_line_end = (int)ftell(code_file);
-      last_type->header_line_end = (int)ftell(header_file);
+      last_type->code_position_end = (int)ftell(code_file);
+      last_type->header_position_end = (int)ftell(header_file);
     }
   }
 
@@ -468,7 +468,7 @@ int write_code(const char *s, const char *t) {
 }
 
 int write_strings(const char *sfile) {
-  FILE *fp = fopen(sfile, "w");
+  FILE *fp = fl_fopen(sfile, "w");
   Fl_Type *p;
   Fl_Widget_Type *w;
   int i;

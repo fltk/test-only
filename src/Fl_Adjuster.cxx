@@ -3,7 +3,7 @@
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_Adjuster.H>
-#include <fltk3/Fl_Bitmap.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Adjuster.H>
+#include <FL/Fl_Bitmap.H>
+#include <FL/fl_draw.H>
 
 #include "fastarrow.h"
 static Fl_Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
@@ -49,9 +49,9 @@ void Fl_Adjuster::draw() {
     dx = 0; W = w();
     dy = H = h()/3;
   }
-  draw_box(drag==1?fltk3::DOWN_BOX:box(), x(),  y()+2*dy, W, H, color());
-  draw_box(drag==2?fltk3::DOWN_BOX:box(), x()+dx, y()+dy, W, H, color());
-  draw_box(drag==3?fltk3::DOWN_BOX:box(), x()+2*dx,  y(), W, H, color());
+  draw_box(drag==1?FL_DOWN_BOX:box(), x(),  y()+2*dy, W, H, color());
+  draw_box(drag==2?FL_DOWN_BOX:box(), x()+dx, y()+dy, W, H, color());
+  draw_box(drag==3?FL_DOWN_BOX:box(), x()+2*dx,  y(), W, H, color());
   if (active_r())
     fl_color(selection_color());
   else
@@ -62,29 +62,29 @@ void Fl_Adjuster::draw() {
 		   y()+dy+(H-mediumarrow_height)/2, W, H);
   slowarrow.draw(x()+2*dx+(W-slowarrow_width)/2,
 		 y()+(H-slowarrow_width)/2, W, H);
-  if (fltk3::focus() == this) draw_focus();
+  if (Fl::focus() == this) draw_focus();
 }
 
 int Fl_Adjuster::handle(int event) {
   double v;
   int delta;
-  int mx = fltk3::event_x();
+  int mx = Fl::event_x();
   // Fl_Widget_Tracker wp(this);
   switch (event) {
-    case fltk3::PUSH:
-      if (fltk3::visible_focus()) fltk3::focus(this);
+    case FL_PUSH:
+      if (Fl::visible_focus()) Fl::focus(this);
       ix = mx;
       if (w()>=h())
 	drag = 3*(mx-x())/w() + 1;
       else
-	drag = 3-3*(fltk3::event_y()-y()-1)/h();
+	drag = 3-3*(Fl::event_y()-y()-1)/h();
       { Fl_Widget_Tracker wp(this);
 	handle_push();
 	if (wp.deleted()) return 1;
       }
       redraw();
       return 1;
-    case fltk3::DRAG:
+    case FL_DRAG:
       if (w() >= h()) {
 	delta = x()+(drag-1)*w()/3;	// left edge of button
 	if (mx < delta)
@@ -108,9 +108,9 @@ int Fl_Adjuster::handle(int event) {
       }
       handle_drag(soft() ? softclamp(v) : clamp(v));
       return 1;
-    case fltk3::RELEASE:
-      if (fltk3::event_is_click()) { // detect click but no drag
-	if (fltk3::event_state()&0xF0000) delta = -10;
+    case FL_RELEASE:
+      if (Fl::event_is_click()) { // detect click but no drag
+	if (Fl::event_state()&0xF0000) delta = -10;
 	else delta = 10;
 	switch (drag) {
 	  case 3: v = increment(previous_value(), delta); break;
@@ -125,21 +125,21 @@ int Fl_Adjuster::handle(int event) {
       redraw();
       handle_release();
       return 1;
-    case fltk3::KEY :
-      switch (fltk3::event_key()) {
-	case fltk3::UpKey:
+    case FL_KEYBOARD :
+      switch (Fl::event_key()) {
+	case FL_Up:
           if (w() > h()) return 0;
 	  handle_drag(clamp(increment(value(),-1)));
 	  return 1;
-	case fltk3::DownKey:
+	case FL_Down:
           if (w() > h()) return 0;
 	  handle_drag(clamp(increment(value(),1)));
 	  return 1;
-	case fltk3::LeftKey:
+	case FL_Left:
           if (w() < h()) return 0;
 	  handle_drag(clamp(increment(value(),-1)));
 	  return 1;
-	case fltk3::RightKey:
+	case FL_Right:
           if (w() < h()) return 0;
 	  handle_drag(clamp(increment(value(),1)));
 	  return 1;
@@ -148,15 +148,15 @@ int Fl_Adjuster::handle(int event) {
       }
       // break not required because of switch...
 
-    case fltk3::FOCUS:
-    case fltk3::UNFOCUS:
-      if (fltk3::visible_focus()) {
+    case FL_FOCUS:
+    case FL_UNFOCUS:
+      if (Fl::visible_focus()) {
         redraw();
         return 1;
       } else return 0;
 
-    case fltk3::ENTER :
-    case fltk3::LEAVE :
+    case FL_ENTER :
+    case FL_LEAVE :
       return 1;
   }
   return 0;
@@ -169,10 +169,10 @@ int Fl_Adjuster::handle(int event) {
   <P> Inherited destructor destroys the Valuator.
 */
 Fl_Adjuster::Fl_Adjuster(int X, int Y, int W, int H, const char* l)
-  : fltk3::Valuator(X, Y, W, H, l) {
-  box(fltk3::UP_BOX);
+  : Fl_Valuator(X, Y, W, H, l) {
+  box(FL_UP_BOX);
   step(1, 10000);
-  selection_color(fltk3::SELECTION_COLOR);
+  selection_color(FL_SELECTION_COLOR);
   drag = 0;
   soft_ = 1;
 }

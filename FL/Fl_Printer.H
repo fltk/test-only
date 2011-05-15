@@ -25,56 +25,46 @@
 //     http://www.fltk.org/str.php
 //
 /** \file Fl_Printer.H 
- \brief declaration of classes Fl_Printer,  Fl_Device_Plugin.
+ \brief declaration of classes Fl_Printer, Fl_System_Printer and Fl_PostScript_Printer.
  */
 
 #ifndef Fl_Printer_H
 #define Fl_Printer_H
 
-#include <fltk3/Fl_Abstract_Printer.H>
-#include <fltk3/draw.h>
-#include <fltk3/Fl_Pixmap.H>
-#include <fltk3/Fl_RGB_Image.H>
-#include <fltk3/Fl_Bitmap.H>
+#include <FL/x.H>
+#include <FL/Fl_Paged_Device.H>
+#include <FL/fl_draw.H>
+#include <FL/Fl_Pixmap.H>
+#include <FL/Fl_RGB_Image.H>
+#include <FL/Fl_Bitmap.H>
 #include <stdio.h>
+#if !(defined(__APPLE__) || defined(WIN32))
+#include <FL/Fl_PostScript.H>
+#elif defined(WIN32)
+#include <commdlg.h>
+#endif
 
 #if defined(__APPLE__) || defined(WIN32) || defined(FL_DOXYGEN)
 /**
- * @brief Provides an OS-independent interface to printing.
- *
- It allows to use all FLTK drawing, color, text, and clip functions, and to have them operate
- on printed page(s). There are two main, non exclusive, ways to use it.
- <ul><li>Print any widget (standard, custom, fltk3::Window, Fl_Gl_Window) as it appears 
- on screen, with optional translation and scaling. This is done by calling print_widget() 
- or print_window_part().
- <li>Use a series of FLTK graphics commands (e.g., font, text, lines, colors, clip) to
- compose a page appropriately shaped for printing. 
- </ul>
- In both cases, begin by start_job(), start_page(), printable_rect() and origin() calls
- and finish by end_page() and end_job() calls.
- <p>On Xlib-based platforms (<i>e.g.</i>, Linux, Unix), this class is implemented as
- a subclass of Fl_PSfile_Device.
- <p>On Xlib-based platforms, the static public attributes of this class
- can be used to set the print dialog to other languages than English. For example, the "Printer:"
- dialog item Fl_Printer::dialog_printer can be set to French with:
- \code
- Fl_Printer::dialog_printer = "Imprimante:";
- Fl_Printer myprinter;
- myprinter.start_job();
- \endcode
- Use Fl_PSfile_Device::file_chooser_title to customize the title of the file chooser dialog that opens
- when using the "Print To File" option of the print dialog.
- \see Fl_PSfile_Device.
+ Print support under MSWindows and Mac OS.
+
+ Class Fl_System_Printer is implemented only on the MSWindows and Mac OS platforms.
+ It has no public constructor.
+ Use Fl_Printer instead that is cross-platform and has the same API.
  */
-class Fl_Printer : public Fl_Abstract_Printer {
+class Fl_System_Printer : public Fl_Paged_Device {
+  friend class Fl_Printer;
 private:
+  /** \brief the printer's graphics context, if there's one, NULL otherwise */
+  void *gc; 
+  void set_current(void);
 #ifdef __APPLE__
   float scale_x;
   float scale_y;
   float angle; // rotation angle in radians
-  PMPrintSession  printSession;
-  PMPageFormat    pageFormat;
-  PMPrintSettings printSettings;
+  Fl_PMPrintSession  printSession;
+  Fl_PMPageFormat    pageFormat;
+  Fl_PMPrintSettings printSettings;
 #elif defined(WIN32)
   int   abortPrint;
   PRINTDLG      pd;
@@ -84,127 +74,137 @@ private:
   int top_margin;
   void absolute_printable_rect(int *x, int *y, int *w, int *h);
 #endif
+protected:
+  /** \brief The constructor */
+  Fl_System_Printer(void);
 public:
-  /** 
-   @brief The constructor.
-   */
-  Fl_Printer(void);
+  static const char *class_id;
+  const char *class_name() {return class_id;};
   int start_job(int pagecount, int *frompage = NULL, int *topage = NULL);
   int start_page (void);
   int printable_rect(int *w, int *h);
   void margins(int *left, int *top, int *right, int *bottom);
-  void origin(int x, int y);
-#ifdef FL_DOXYGEN  
   void origin(int *x, int *y);
-#endif
-  void scale (float scale_x, float scale_y);
+  void origin(int x, int y);
+  void scale (float scale_x, float scale_y = 0.);
   void rotate(float angle);
   void translate(int x, int y);
   void untranslate(void);
-#ifdef FL_DOXYGEN  
-  void print_widget(fltk3::Widget* widget, int delta_x = 0, int delta_y = 0);
-  void print_window_part(fltk3::Window *win, int x, int y, int w, int h, int delta_x = 0, int delta_y = 0);
-#endif  
   int end_page (void);
   void end_job (void);
-#ifdef FL_DOXYGEN
-  /** \name These attributes apply to the Xlib platform only.
-   \{
-   */  
-  /** [this text may be customized at run-time] */
-  static const char *dialog_title; 
-  /** [this text may be customized at run-time] */
-  static const char *dialog_printer; 
-  /** [this text may be customized at run-time] */
-  static const char *dialog_range; 
-  /** [this text may be customized at run-time] */
-  static const char *dialog_copies; 
-  /** [this text may be customized at run-time] */
-  static const char *dialog_all; 
-  /** [this text may be customized at run-time] */
-  static const char *dialog_pages;
-  /** [this text may be customized at run-time] */
-  static const char *dialog_from;
-  /** [this text may be customized at run-time] */
-  static const char *dialog_to;
-  /** "Properties..." [this text may be customized at run-time] */
-  static const char *dialog_properties;
-  /** [this text may be customized at run-time] */
-  static const char *dialog_copyNo;
-  /** [this text may be customized at run-time] */
-  static const char *dialog_print_button;
-  /** [this text may be customized at run-time] */
-  static const char *dialog_cancel_button;
-  /** [this text may be customized at run-time] */
-  static const char *dialog_print_to_file;
-  /** [this text may be customized at run-time] */
-  static const char *property_title;
-  /** [this text may be customized at run-time] */
-  static const char *property_pagesize;
-  /** [this text may be customized at run-time] */
-  static const char *property_mode;
-  /** [this text may be customized at run-time] */
-  static const char *property_use;
-  /** [this text may be customized at run-time] */
-  static const char *property_save;
-  /** [this text may be customized at run-time] */
-  static const char *property_cancel;
-  /** \} */
+  /** \brief The destructor */
+  ~Fl_System_Printer(void);
+}; // class Fl_System_Printer
+
 #endif
-};
-
-#else
-
-#include <fltk3/Fl_PSfile_Device.H>
-
-class Fl_Printer : public Fl_PSfile_Device {
+  
+#if !(defined(__APPLE__) || defined(WIN32) )
+/**
+ Print support under Unix/Linux.
+ 
+ Class Fl_PostScript_Printer is implemented only on the Unix/Linux platform.
+ It has no public constructor.
+ Use Fl_Printer instead that is cross-platform and has the same API.
+ */
+class Fl_PostScript_Printer : public Fl_PostScript_File_Device {
+  friend class Fl_Printer;
+protected:
+  /** The constructor */
+  Fl_PostScript_Printer(void) {};
 public:
-  static const char *dialog_title; // all of this must be duplicated above for correct documentation
-  static const char *dialog_printer; 
-  static const char *dialog_range; 
-  static const char *dialog_copies; 
-  static const char *dialog_all; 
-  static const char *dialog_pages;
-  static const char *dialog_from;
-  static const char *dialog_to;
-  static const char *dialog_properties;
-  static const char *dialog_copyNo;
-  static const char *dialog_print_button;
-  static const char *dialog_cancel_button;
-  static const char *dialog_print_to_file;
-  static const char *property_title;
-  static const char *property_pagesize;
-  static const char *property_mode;
-  static const char *property_use;
-  static const char *property_save;
-  static const char *property_cancel;
-
-  Fl_Printer(void) {};
-  ~Fl_Printer(void) {};
+  static const char *class_id;
+  const char *class_name() {return class_id;};
   int start_job(int pages, int *firstpage = NULL, int *lastpage = NULL);
 };
-#endif  
+
+#endif
 
 /**
- This plugin socket allows the integration of new device drivers for special
- window or screen types. It is currently used to provide an automated printing
- service for OpenGL windows, if linked with fltk_gl.
+ * \brief OS-independent print support.
+ *
+ Fl_Printer allows to use all FLTK drawing, color, text, and clip functions, and to have them operate
+ on printed page(s). There are two main, non exclusive, ways to use it.
+ <ul><li>Print any widget (standard, custom, Fl_Window, Fl_Gl_Window) as it appears 
+ on screen, with optional translation, scaling and rotation. This is done by calling print_widget() 
+ or print_window_part().
+ <li>Use a series of FLTK graphics commands (e.g., font, text, lines, colors, clip, image) to
+ compose a page appropriately shaped for printing. 
+ </ul>
+ In both cases, begin by start_job(), start_page(), printable_rect() and origin() calls
+ and finish by end_page() and end_job() calls.
+ <p><b>Platform specifics</b>
+ <ul>
+ <li>Unix/Linux platforms:
+ Class Fl_RGB_Image prints but loses its transparency if it has one.
+ See class Fl_PostScript_Graphics_Driver for a description of how UTF-8 strings appear in print.
+ Use the static public attributes of this class to set the print dialog to other languages 
+ than English. For example, the "Printer:" dialog item Fl_Printer::dialog_printer can be set to French with:
+ \code
+ Fl_Printer::dialog_printer = "Imprimante:";
+ \endcode
+ before creation of the Fl_Printer object.
+ Use Fl_PostScript_File_Device::file_chooser_title to customize the title of the file chooser dialog that opens
+ when using the "Print To File" option of the print dialog. 
+ <li>MSWindows platform: Transparent Fl_RGB_Image 's don't print with exact transparency on most printers.
+ Fl_RGB_Image 's don't rotate() well.
+ A workaround is to use the print_window_part() call. 
+ <li>Mac OS X platform: all graphics requests print as on display.
+ </ul>
  */
-class Fl_Device_Plugin : public Fl_Plugin {
+class Fl_Printer : public Fl_Paged_Device {
 public:
+  static const char *class_id;
+  const char *class_name() {return class_id;};
   /** \brief The constructor */
-  Fl_Device_Plugin(const char *name)
-  : Fl_Plugin(klass(), name) { }
-  /** \brief Returns the class name */
-  virtual const char *klass() { return "fltk:device"; }
-  /** \brief Returns the plugin name */
-  virtual const char *name() = 0;
-  /** \brief Prints a widget 
-   \param p the printer
-   \param w the widget
-   \param x,y offsets where to print relatively to coordinates origin
-   */
-  virtual int print(Fl_Abstract_Printer* p, fltk3::Widget* w, int x, int y) { return 0; }
+  Fl_Printer(void);
+  int start_job(int pagecount, int *frompage = NULL, int *topage = NULL);
+  int start_page(void);
+  int printable_rect(int *w, int *h);
+  void margins(int *left, int *top, int *right, int *bottom);
+  void origin(int *x, int *y);
+  void origin(int x, int y);
+  void scale(float scale_x, float scale_y = 0.);
+  void rotate(float angle);
+  void translate(int x, int y);
+  void untranslate(void);
+  int end_page (void);
+  void end_job (void);
+  void print_widget(Fl_Widget* widget, int delta_x=0, int delta_y=0);
+  void print_window_part(Fl_Window *win, int x, int y, int w, int h, int delta_x=0, int delta_y=0);
+  void set_current(void);
+  Fl_Graphics_Driver* driver(void);
+  /** \brief The destructor */
+  ~Fl_Printer(void);
+ 
+  /** \name These attributes are effective under the Xlib platform only.
+   \{
+   */  
+  static const char *dialog_title; 
+  static const char *dialog_printer; 
+  static const char *dialog_range; 
+  static const char *dialog_copies; 
+  static const char *dialog_all; 
+  static const char *dialog_pages;
+  static const char *dialog_from;
+  static const char *dialog_to;
+  static const char *dialog_properties;
+  static const char *dialog_copyNo;
+  static const char *dialog_print_button;
+  static const char *dialog_cancel_button;
+  static const char *dialog_print_to_file;
+  static const char *property_title;
+  static const char *property_pagesize;
+  static const char *property_mode;
+  static const char *property_use;
+  static const char *property_save;
+  static const char *property_cancel;
+  /** \} */ 
+private:
+#if defined(WIN32) || defined(__APPLE__)
+  Fl_System_Printer *printer;
+#else
+  Fl_PostScript_Printer *printer;
+#endif
 };
 
 #endif // Fl_Printer_H

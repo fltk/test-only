@@ -3,7 +3,7 @@
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,9 +26,9 @@
 //
 
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_Scrollbar.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Scrollbar.H>
+#include <FL/fl_draw.H>
 #include <math.h>
 #include "flstring.h"
 
@@ -69,7 +69,7 @@ void Fl_Scrollbar::increment_cb() {
 void Fl_Scrollbar::timeout_cb(void* v) {
   Fl_Scrollbar* s = (Fl_Scrollbar*)v;
   s->increment_cb();
-  fltk3::add_timeout(REPEAT, timeout_cb, s);
+  Fl::add_timeout(REPEAT, timeout_cb, s);
 }
 
 int Fl_Scrollbar::handle(int event) {
@@ -88,10 +88,10 @@ int Fl_Scrollbar::handle(int event) {
   int relx;
   int ww;
   if (horizontal()) {
-    relx = fltk3::event_x()-X;
+    relx = Fl::event_x()-X;
     ww = W;
   } else {
-    relx = fltk3::event_y()-Y;
+    relx = Fl::event_y()-Y;
     ww = H;
   }
   if (relx < 0) area = 1;
@@ -107,87 +107,87 @@ int Fl_Scrollbar::handle(int event) {
     if (val >= 1.0) sliderx = ww-S;
     else if (val <= 0.0) sliderx = 0;
     else sliderx = int(val*(ww-S)+.5);
-    if (fltk3::event_button() == fltk3::MIDDLE_MOUSE) area = 8;
+    if (Fl::event_button() == FL_MIDDLE_MOUSE) area = 8;
     else if (relx < sliderx) area = 5;
     else if (relx >= sliderx+S) area = 6;
     else area = 8;
   }
 
   switch (event) {
-  case fltk3::ENTER:
-  case fltk3::LEAVE:
+  case FL_ENTER:
+  case FL_LEAVE:
     return 1;
-  case fltk3::RELEASE:
+  case FL_RELEASE:
       damage(FL_DAMAGE_ALL);
     if (pushed_) {
-      fltk3::remove_timeout(timeout_cb, this);
+      Fl::remove_timeout(timeout_cb, this);
       pushed_ = 0;
     }
     handle_release();
     return 1;
-  case fltk3::PUSH:
+  case FL_PUSH:
     if (pushed_) return 1;
     if (area != 8) pushed_ = area;
     if (pushed_) {
       handle_push();
-      fltk3::add_timeout(INITIALREPEAT, timeout_cb, this);
+      Fl::add_timeout(INITIALREPEAT, timeout_cb, this);
       increment_cb();
       damage(FL_DAMAGE_ALL);
       return 1;
     }
-    return fltk3::Slider::handle(event, X,Y,W,H);
-  case fltk3::DRAG:
+    return Fl_Slider::handle(event, X,Y,W,H);
+  case FL_DRAG:
     if (pushed_) return 1;
-    return fltk3::Slider::handle(event, X,Y,W,H);
-  case fltk3::MOUSEWHEEL :
+    return Fl_Slider::handle(event, X,Y,W,H);
+  case FL_MOUSEWHEEL :
     if (horizontal()) {
-      if (fltk3::e_dx==0) return 0;
+      if (Fl::e_dx==0) return 0;
       int ls = maximum()>=minimum() ? linesize_ : -linesize_;
-      handle_drag(clamp(value() + ls * fltk3::e_dx));
+      handle_drag(clamp(value() + ls * Fl::e_dx));
       return 1;
     } else {
-      if (fltk3::e_dy==0) return 0;
+      if (Fl::e_dy==0) return 0;
       int ls = maximum()>=minimum() ? linesize_ : -linesize_;
-      handle_drag(clamp(value() + ls * fltk3::e_dy));
+      handle_drag(clamp(value() + ls * Fl::e_dy));
       return 1;
     }
-  case fltk3::SHORTCUT:
-  case fltk3::KEY: {
+  case FL_SHORTCUT:
+  case FL_KEYBOARD: {
     int v = value();
     int ls = maximum()>=minimum() ? linesize_ : -linesize_;
     if (horizontal()) {
-      switch (fltk3::event_key()) {
-      case fltk3::LeftKey:
+      switch (Fl::event_key()) {
+      case FL_Left:
 	v -= ls;
 	break;
-      case fltk3::RightKey:
+      case FL_Right:
 	v += ls;
 	break;
       default:
 	return 0;
       }
     } else { // vertical
-      switch (fltk3::event_key()) {
-      case fltk3::UpKey:
+      switch (Fl::event_key()) {
+      case FL_Up:
 	v -= ls;
 	break;
-      case fltk3::DownKey:
+      case FL_Down:
 	v += ls;
 	break;
-      case fltk3::PageUpKey:
+      case FL_Page_Up:
 	if (slider_size() >= 1.0) return 0;
 	v -= int((maximum()-minimum())*slider_size()/(1.0-slider_size()));
 	v += ls;
 	break;
-      case fltk3::PageDownKey:
+      case FL_Page_Down:
 	if (slider_size() >= 1.0) return 0;
 	v += int((maximum()-minimum())*slider_size()/(1.0-slider_size()));
 	v -= ls;
 	break;
-      case fltk3::HomeKey:
+      case FL_Home:
 	v = int(minimum());
 	break;
-      case fltk3::EndKey:
+      case FL_End:
 	v = int(maximum());
 	break;
       default:
@@ -196,7 +196,7 @@ int Fl_Scrollbar::handle(int event) {
     }
     v = int(clamp(v));
     if (v != value()) {
-      fltk3::Slider::value(v);
+      Fl_Slider::value(v);
       value_damage();
       set_changed();
       do_callback();
@@ -208,13 +208,13 @@ int Fl_Scrollbar::handle(int event) {
 
 void Fl_Scrollbar::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_box();
-  int X = x()+fltk3::box_dx(box());
-  int Y = y()+fltk3::box_dy(box());
-  int W = w()-fltk3::box_dw(box());
-  int H = h()-fltk3::box_dh(box());
+  int X = x()+Fl::box_dx(box());
+  int Y = y()+Fl::box_dy(box());
+  int W = w()-Fl::box_dw(box());
+  int H = h()-Fl::box_dh(box());
   if (horizontal()) {
-    if (W < 3*H) {fltk3::Slider::draw(X,Y,W,H); return;}
-    fltk3::Slider::draw(X+H,Y,W-2*H,H);
+    if (W < 3*H) {Fl_Slider::draw(X,Y,W,H); return;}
+    Fl_Slider::draw(X+H,Y,W-2*H,H);
     if (damage()&FL_DAMAGE_ALL) {
       draw_box((pushed_==1) ? fl_down(slider()) : slider(),
 	       X, Y, H, H, selection_color());
@@ -227,7 +227,7 @@ void Fl_Scrollbar::draw() {
       int w1 = (H-4)/3; if (w1 < 1) w1 = 1;
       int x1 = X+(H-w1-1)/2;
       int yy1 = Y+(H-2*w1-1)/2;
-      if (fltk3::scheme_ && !strcmp(fltk3::scheme_, "gtk+")) {
+      if (Fl::scheme_ && !strcmp(Fl::scheme_, "gtk+")) {
 	fl_polygon(x1, yy1+w1, x1+w1, yy1+2*w1, x1+w1-1, yy1+w1, x1+w1, yy1);
 	x1 += (W-H);
 	fl_polygon(x1, yy1, x1+1, yy1+w1, x1, yy1+2*w1, x1+w1, yy1+w1);
@@ -238,8 +238,8 @@ void Fl_Scrollbar::draw() {
       }
     }
   } else { // vertical
-    if (H < 3*W) {fltk3::Slider::draw(X,Y,W,H); return;}
-    fltk3::Slider::draw(X,Y+W,W,H-2*W);
+    if (H < 3*W) {Fl_Slider::draw(X,Y,W,H); return;}
+    Fl_Slider::draw(X,Y+W,W,H-2*W);
     if (damage()&FL_DAMAGE_ALL) {
       draw_box((pushed_==1) ? fl_down(slider()) : slider(),
 	       X, Y, W, W, selection_color());
@@ -252,7 +252,7 @@ void Fl_Scrollbar::draw() {
       int w1 = (W-4)/3; if (w1 < 1) w1 = 1;
       int x1 = X+(W-2*w1-1)/2;
       int yy1 = Y+(W-w1-1)/2;
-      if (fltk3::scheme_ && !strcmp(fltk3::scheme_, "gtk+")) {
+      if (Fl::scheme_ && !strcmp(Fl::scheme_, "gtk+")) {
 	fl_polygon(x1, yy1+w1, x1+w1, yy1+w1-1, x1+2*w1, yy1+w1, x1+w1, yy1);
 	yy1 += H-W;
 	fl_polygon(x1, yy1, x1+w1, yy1+1, x1+w1, yy1+w1);
@@ -271,10 +271,10 @@ void Fl_Scrollbar::draw() {
   You need to do type(FL_HORIZONTAL) if you want a horizontal scrollbar.
 */
 Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
-  : fltk3::Slider(X, Y, W, H, L) {
-  box(fltk3::FLAT_BOX);
-  color(fltk3::DARK2);
-  slider(fltk3::UP_BOX);
+  : Fl_Slider(X, Y, W, H, L) {
+  box(FL_FLAT_BOX);
+  color(FL_DARK2);
+  slider(FL_UP_BOX);
   linesize_ = 16;
   pushed_ = 0;
   step(1);
@@ -283,7 +283,7 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 /**  Destroys the Scrollbar. */
 Fl_Scrollbar::~Fl_Scrollbar() {
   if (pushed_)
-    fltk3::remove_timeout(timeout_cb, this);
+    Fl::remove_timeout(timeout_cb, this);
 }
 
 

@@ -3,7 +3,7 @@
 //
 // Integer input header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -37,7 +37,7 @@
   The Fl_Int_Input class is a subclass of Fl_Input
   that only allows the user to type decimal digits (or hex numbers of the form 0xaef).
 */
-class Fl_Int_Input : public Fl_Input {
+class FL_EXPORT Fl_Int_Input : public Fl_Input {
 public:
   /**
     Creates a new Fl_Int_Input widget using the given position,

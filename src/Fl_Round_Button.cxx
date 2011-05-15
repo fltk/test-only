@@ -3,7 +3,7 @@
 //
 // Round button for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,22 +25,22 @@
 //     http://www.fltk.org/str.php
 //
 
-// A subclass of fltk3::Button that always draws as a round circle.  This
+// A subclass of Fl_Button that always draws as a round circle.  This
 // circle is smaller than the widget size and can be surrounded by
 // another box type, for compatibility with Forms.
 
-#include <fltk3/run.h>
-#include <fltk3/RoundButton.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Round_Button.H>
 
 /**
-  Creates a new fltk3::RoundButton widget using the given
+  Creates a new Fl_Round_Button widget using the given
   position, size, and label string.
 */
-fltk3::RoundButton::RoundButton(int X,int Y,int W,int H, const char *l)
-: fltk3::LightButton(X,Y,W,H,l) {
-  box(fltk3::NO_BOX);
-  down_box(fltk3::ROUND_DOWN_BOX);
-  selection_color(fltk3::FOREGROUND_COLOR);
+Fl_Round_Button::Fl_Round_Button(int X,int Y,int W,int H, const char *l)
+: Fl_Light_Button(X,Y,W,H,l) {
+  box(FL_NO_BOX);
+  down_box(FL_ROUND_DOWN_BOX);
+  selection_color(FL_FOREGROUND_COLOR);
 }
 
 //

@@ -8,7 +8,7 @@
 // They are somewhat similar to tcl, using matching { and }
 // to quote strings.
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -43,7 +43,7 @@ static FILE *fout;
 
 int open_write(const char *s) {
   if (!s) {fout = stdout; return 1;}
-  FILE *f = fopen(s,"w");
+  FILE *f = fl_fopen(s,"w");
   if (!f) return 0;
   fout = f;
   return 1;
@@ -135,7 +135,7 @@ static const char *fname;
 int open_read(const char *s) {
   lineno = 1;
   if (!s) {fin = stdin; fname = "stdin"; return 1;}
-  FILE *f = fopen(s,"r");
+  FILE *f = fl_fopen(s,"r");
   if (!f) return 0;
   fin = f;
   fname = s;
@@ -159,7 +159,7 @@ void read_error(const char *format, ...) {
   if (!fin) {
     char buffer[1024];
     vsnprintf(buffer, sizeof(buffer), format, args);
-    fl_message(buffer);
+    fl_message("%s", buffer);
   } else {
     fprintf(stderr, "%s:%d: ", fname, lineno);
     vfprintf(stderr, format, args);

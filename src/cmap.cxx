@@ -3,7 +3,7 @@
 //
 // Colormap generation program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,14 +20,15 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems on the following page:
+//
+//     http://www.fltk.org/str.php
 //
 
 // This program produces the contents of "fl_cmap.h" as stdout
 
 // #include <gl/gl.h>
 #include <stdio.h>
-#include <fltk3/Enumerations.H>
 
 // This table is initialized with color values I got by reading the
 // colormap on an IRIX 4.3 machine:
@@ -60,7 +61,7 @@ static short cmap[256][3] = {
   {113,113,198},	// pale blue
   {142, 56,142},	// purple, orchid, pale magenta
   { 56,142,142},	// cadet blue, aquamarine, pale cyan
-// The next location is used for fltk3::SELECTION_COLOR. It formerly was 2/3 gray
+// The next location is used for FL_SELECTION_COLOR. It formerly was 2/3 gray
 // but this is changed to be the Windows blue color. This allows the default
 // behavior on both X and Windows to match:
   {  0,  0,128},
@@ -110,24 +111,27 @@ static short cmap[256][3] = {
 // The rest of the colormap is a gray ramp and table, filled in below:
 };
 
-// This is fltk3::background from Fl_get_system_colors.cxx, with modifications:
+// This is Fl::background from Fl_get_system_colors.cxx, with modifications:
 
+#define FL_GRAY_RAMP 32
+#define FL_NUM_GRAY  24
+#define FL_GRAY 49 // old value is 47
 typedef unsigned char uchar;
 #include <math.h>
 
 void background(uchar r, uchar g, uchar b) {
   // replace the gray ramp so that color 47 (by default 2/3) is this color
   if (!r) r = 1; else if (r==255) r = 254;
-  double powr = log(r/255.0)/log((fltk3::GRAY-fltk3::GRAY_RAMP)/(fltk3::NUM_GRAY-1.0));
+  double powr = log(r/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
   if (!g) g = 1; else if (g==255) g = 254;
-  double powg = log(g/255.0)/log((fltk3::GRAY-fltk3::GRAY_RAMP)/(fltk3::NUM_GRAY-1.0));
+  double powg = log(g/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
   if (!b) b = 1; else if (b==255) b = 254;
-  double powb = log(b/255.0)/log((fltk3::GRAY-fltk3::GRAY_RAMP)/(fltk3::NUM_GRAY-1.0));
-  for (unsigned int i = 0; i < fltk3::NUM_GRAY; i++) {
-    double gray = i/(fltk3::NUM_GRAY-1.0);
-    cmap[i+fltk3::GRAY_RAMP][0] = uchar(pow(gray,powr)*255+.5);
-    cmap[i+fltk3::GRAY_RAMP][1] = uchar(pow(gray,powg)*255+.5);
-    cmap[i+fltk3::GRAY_RAMP][2] = uchar(pow(gray,powb)*255+.5);
+  double powb = log(b/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  for (int i = 0; i < FL_NUM_GRAY; i++) {
+    double gray = i/(FL_NUM_GRAY-1.0);
+    cmap[i+FL_GRAY_RAMP][0] = uchar(pow(gray,powr)*255+.5);
+    cmap[i+FL_GRAY_RAMP][1] = uchar(pow(gray,powg)*255+.5);
+    cmap[i+FL_GRAY_RAMP][2] = uchar(pow(gray,powb)*255+.5);
   }
 }
 

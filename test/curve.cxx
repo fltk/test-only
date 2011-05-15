@@ -3,7 +3,7 @@
 //
 // Curve test program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -83,7 +83,7 @@ void points_cb(Fl_Widget* o, void*) {
 
 void slider_cb(Fl_Widget* o, void* v) {
   Fl_Slider* s = (Fl_Slider*)o;
-  args[long(v)] = s->value();
+  args[fl_intptr_t(v)] = s->value();
   d->redraw();
 }
 

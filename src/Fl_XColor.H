@@ -3,7 +3,7 @@
 //
 // X-specific color definitions for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,7 +26,7 @@
 //
 
 #include <config.h>
-#include <fltk3/Enumerations.H>
+#include <FL/Enumerations.H>
 
 // one of these for each color in fltk's "colormap":
 // if overlays are enabled, another one for the overlay

@@ -3,7 +3,7 @@
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,12 +31,12 @@
 
 #ifndef FL_CAIRO_WINDOW_H
 # define FL_CAIRO_WINDOW_H
-# ifdef HAVE_CAIRO
+# ifdef FLTK_HAVE_CAIRO
 
 // Cairo is currently supported for the following platforms:
 // Win32, Apple Quartz, X11
-#  include <fltk3/Fl.H>
-#  include <fltk3/Fl_Double_Window.H>
+#  include <FL/Fl.H>
+#  include <FL/Fl_Double_Window.H>
 
 /** 
    \addtogroup group_cairo
@@ -50,9 +50,9 @@
    All cairo context handling is achieved transparently.
    \note You can alternatively define your custom cairo fltk window,
    and thus at least override the draw() method to provide custom cairo
-   support. In this case you will probably use fltk3::cairo_make_current(fltk3::Window*)
+   support. In this case you will probably use Fl::cairo_make_current(Fl_Window*)
    to attach a context to your window. You should do it only when your window is 
-   the current window. \see fltk3::Window::current()
+   the current window. \see Fl_Window::current()
 */
 class FL_EXPORT Fl_Cairo_Window : public Fl_Double_Window {
 
@@ -64,9 +64,9 @@ protected:
   void draw() {
     Fl_Double_Window::draw();
     // manual method ? if yes explicitly get a cairo_context here
-    if (!fltk3::cairo_autolink_context()) 
-      fltk3::cairo_make_current(this); 
-    if (draw_cb_) draw_cb_(this, fltk3::cairo_cc());
+    if (!Fl::cairo_autolink_context()) 
+      Fl::cairo_make_current(this); 
+    if (draw_cb_) draw_cb_(this, Fl::cairo_cc());
   }
 
 public:
@@ -84,7 +84,7 @@ private:
 
 /** @} */
 
-# endif // HAVE_CAIRO
+# endif // FLTK_HAVE_CAIRO
 #endif // FL_CAIRO_WINDOW_H
 
 //

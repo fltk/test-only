@@ -2,9 +2,9 @@
 // "$Id$"
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_Pixmap.H>
-#include <fltk3/Fl_Tree_Prefs.H>
+#include <FL/Fl.H>
+#include <FL/Fl_Pixmap.H>
+#include <FL/Fl_Tree_Prefs.H>
 #include <string.h>
 
 //////////////////////
@@ -12,7 +12,7 @@
 //////////////////////
 //
 // Fl_Tree -- This file is part of the Fl_Tree widget for FLTK
-// Copyright (C) 2009 by Greg Ercolano.
+// Copyright (C) 2009-2010 by Greg Ercolano.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,6 +34,22 @@
 //    These can be replaced via prefs.openicon()/closeicon()
 //
 static const char *L_open_xpm[] = {
+#ifdef __APPLE__
+  "11 11 2 1",
+  ".  c None",
+  "@  c #000000",
+  "...@.......",
+  "...@@......",
+  "...@@@.....",
+  "...@@@@....",
+  "...@@@@@...",
+  "...@@@@@@..",
+  "...@@@@@...",
+  "...@@@@....",
+  "...@@@.....",
+  "...@@......",
+  "...@......."
+#else
   "11 11 3 1",
   ".	c #fefefe",
   "#	c #444444",
@@ -48,10 +64,28 @@ static const char *L_open_xpm[] = {
   "#....@....#",
   "#.........#",
   "#.........#",
-  "###########"};
+  "###########"
+#endif
+};
 static Fl_Pixmap L_openpixmap(L_open_xpm);
 
 static const char *L_close_xpm[] = {
+#ifdef __APPLE__
+  "11 11 2 1",
+  ".  c None",
+  "@  c #000000",
+  "...........",
+  "...........",
+  "...........",
+  "...........",
+  "...........",
+  "@@@@@@@@@@@",
+  ".@@@@@@@@@.",
+  "..@@@@@@@..",
+  "...@@@@@...",
+  "....@@@....",
+  ".....@....."
+#else
   "11 11 3 1",
   ".	c #fefefe",
   "#	c #444444",
@@ -66,7 +100,9 @@ static const char *L_close_xpm[] = {
   "#.........#",
   "#.........#",
   "#.........#",
-  "###########"};
+  "###########"
+#endif
+};
 static Fl_Pixmap L_closepixmap(L_close_xpm);
 
 /// Sets the default icon to be used as the 'open' icon
@@ -75,7 +111,7 @@ static Fl_Pixmap L_closepixmap(L_close_xpm);
 ///
 /// \param[in] val -- The new image, or zero to use the default [+] icon.
 ///
-void Fl_Tree_Prefs::openicon(fltk3::Image *val) {
+void Fl_Tree_Prefs::openicon(Fl_Image *val) {
   _openimage = val ? val : &L_openpixmap;
 }
 
@@ -84,13 +120,13 @@ void Fl_Tree_Prefs::openicon(fltk3::Image *val) {
 ///
 /// \param[in] val -- The new image, or zero to use the default [-] icon.
 ///
-void Fl_Tree_Prefs::closeicon(fltk3::Image *val) {
+void Fl_Tree_Prefs::closeicon(Fl_Image *val) {
   _closeimage = val ? val : &L_closepixmap;
 }
 
 /// Fl_Tree_Prefs constructor
 Fl_Tree_Prefs::Fl_Tree_Prefs() {
-  _labelfont              = fltk3::HELVETICA;
+  _labelfont              = FL_HELVETICA;
   _labelsize              = FL_NORMAL_SIZE;
   _marginleft             = 6;
   _margintop              = 3;
@@ -100,12 +136,14 @@ Fl_Tree_Prefs::Fl_Tree_Prefs() {
   _usericonmarginleft     = 3;
   _labelmarginleft        = 3;
   _linespacing            = 0;
-  _fgcolor                = fltk3::BLACK;
-  _bgcolor                = fltk3::WHITE;
-  _selectcolor            = fltk3::DARK_BLUE;
-  _inactivecolor          = fltk3::GRAY;
-  _connectorcolor         = fltk3::Color(43);
+  _labelfgcolor           = FL_BLACK;
+  _labelbgcolor           = FL_WHITE;
+  _connectorcolor         = Fl_Color(43);
+#ifdef __APPLE__
+  _connectorstyle         = FL_TREE_CONNECTOR_NONE;
+#else
   _connectorstyle         = FL_TREE_CONNECTOR_DOTTED;
+#endif
   _openimage              = &L_openpixmap;
   _closeimage             = &L_closepixmap;
   _userimage              = 0;
@@ -113,14 +151,14 @@ Fl_Tree_Prefs::Fl_Tree_Prefs() {
   _showroot               = 1;
   _connectorwidth         = 17;
   _sortorder              = FL_TREE_SORT_NONE;
-  _selectbox              = fltk3::FLAT_BOX;
+  _selectbox              = FL_FLAT_BOX;
   _selectmode             = FL_TREE_SELECT_SINGLE;
   // Let fltk's current 'scheme' affect defaults
-  if ( fltk3::scheme() ) {
-    if ( strcmp(fltk3::scheme(), "gtk+") == 0 ) {
-      _selectbox = fltk3::GTK_THIN_UP_BOX;
-    } else if ( strcmp(fltk3::scheme(), "plastic") == 0 ) {
-      _selectbox = fltk3::PLASTIC_THIN_UP_BOX;
+  if ( Fl::scheme() ) {
+    if ( strcmp(Fl::scheme(), "gtk+") == 0 ) {
+      _selectbox = _FL_GTK_THIN_UP_BOX;
+    } else if ( strcmp(Fl::scheme(), "plastic") == 0 ) {
+      _selectbox = _FL_PLASTIC_THIN_UP_BOX;
     }
   }
 }

@@ -3,7 +3,7 @@
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 #
-# Copyright 1998-2009 by Bill Spitzak and others.
+# Copyright 1998-2010 by Bill Spitzak and others.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
@@ -36,7 +36,7 @@ mandir		= @mandir@
 srcdir		= @srcdir@
 docdir		= $(datadir)/doc/fltk
 VPATH		= @srcdir@
-
+USEMMFILES  = @USEMMFILES@
 # programs we use...
 HTMLDOC		= @HTMLDOC@
 DOXYDOC		= @DOXYDOC@
@@ -53,11 +53,14 @@ CXX		= @CXX@
 CC		= @CC@
 MAKEDEPEND	= @MAKEDEPEND@
 
+# (Windows) resource compiler
+RC		= @RC@
+
 # flags for C++ compiler:
 ARCHFLAGS	= @ARCHFLAGS@
 OPTIM		= @OPTIM@
 CFLAGS		= $(OPTIM) @LARGEFILE@ @PTHREAD_FLAGS@ @CPPFLAGS@ @CFLAGS@
-CXXFLAGS	= $(OPTIM) @LARGEFILE@ @PTHREAD_FLAGS@ @CPPFLAGS@ @CXXFLAGS@
+CXXFLAGS	= $(OPTIM) @LARGEFILE@ @PTHREAD_FLAGS@ @CPPFLAGS@ @CXXFLAGS@ $(FLTKFLAGS)
 
 # program to make the archive:
 LIBNAME		= @LIBNAME@
@@ -140,7 +143,7 @@ UNINSTALL_DESKTOP = @UNINSTALL_DESKTOP@
 .SILENT:
 
 # Build commands and filename extensions...
-.SUFFIXES:	.0 .1 .3 .6 .c .cxx .h .fl .man .o .z $(EXEEXT)
+.SUFFIXES:	.0 .1 .3 .6 .c .cxx .mm .h .fl .man .o .z $(EXEEXT)
 
 .o$(EXEEXT):
 	echo Linking $@...
@@ -152,15 +155,12 @@ UNINSTALL_DESKTOP = @UNINSTALL_DESKTOP@
 
 .cxx.o:
 	echo Compiling $<...
-	@if test `uname` = Darwin -a $< = Fl.cxx ; then \
-		$(CXX) -I.. $(ARCHFLAGS) @PNGINC@ @JPEGINC@ @ZLIBINC@ $(CXXFLAGS) -x objective-c++ -c $< -o $@; \
-	elif test `uname` = Darwin -a  $< = Fl_Native_File_Chooser.cxx ; then \
-		$(CXX) -I.. $(ARCHFLAGS) @PNGINC@ @JPEGINC@ @ZLIBINC@ $(CXXFLAGS) -x objective-c++ -c $< -o $@; \
-	elif test `uname` = Darwin -a  $< = Fl_Printer.cxx ; then \
-		$(CXX) -I.. $(ARCHFLAGS) @PNGINC@ @JPEGINC@ @ZLIBINC@ $(CXXFLAGS) -x objective-c++ -c $< -o $@; \
-	else \
-		$(CXX) -I.. $(ARCHFLAGS) @PNGINC@ @JPEGINC@ @ZLIBINC@ $(CXXFLAGS) -c $< -o $@; \
-	fi
+	$(CXX) -I.. $(ARCHFLAGS) @PNGINC@ @JPEGINC@ @ZLIBINC@ $(CXXFLAGS) -c $< -o $@
+	
+.mm.o:
+	echo Compiling $<...
+	$(CXX) -I.. $(ARCHFLAGS) $(CXXFLAGS) -x objective-c++ -c $< -o $@
+
 
 .man.0 .man.1 .man.3 .man.6:
 	echo Formatting $<...

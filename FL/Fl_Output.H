@@ -3,7 +3,7 @@
 //
 // Output header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -38,8 +38,8 @@
   which is useful for program-generated values.  The user may select
   portions of the text using the mouse and paste the contents into other
   fields or programs.
-  <P align=CENTER>\image html text.gif</P> 
-  \image latex text.eps "Fl_Output" width=8cm
+  <P align=CENTER>\image html text.png</P> 
+  \image latex text.png "Fl_Output" width=8cm
   <P>There is a single subclass, 
   Fl_Multiline_Output, which allows you to display multiple lines of
   text. Fl_Multiline_Output does not provide scroll bars. If a more 
@@ -50,7 +50,7 @@
   assumes the font can draw any characters in the ISO-Latin1 character
   set.
 */
-class Fl_Output : public Fl_Input {
+class Fl_Output : public Fl_Input { // don't use FL_EXPORT here !
 public:
   /**
     Creates a new Fl_Output widget using the given position,

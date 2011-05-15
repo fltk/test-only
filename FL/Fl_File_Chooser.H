@@ -3,7 +3,7 @@
 //
 // Fl_File_Chooser dialog for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,23 +29,23 @@
 
 #ifndef Fl_File_Chooser_H
 #define Fl_File_Chooser_H
-#include <fltk3/run.h>
-#include <fltk3/DoubleBufferWindow.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Double_Window.H>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fltk3/Group.h>
-#include <fltk3/Choice.h>
-#include <fltk3/Fl_Menu_Button.H>
-#include <fltk3/Fl_Button.H>
-#include <fltk3/Fl_Preferences.H>
-#include <fltk3/Fl_Tile.H>
-#include <fltk3/Fl_File_Browser.H>
-#include <fltk3/Fl_Box.H>
-#include <fltk3/Fl_Check_Button.H>
-#include <fltk3/Fl_File_Input.H>
-#include <fltk3/Fl_Return_Button.H>
-#include <fltk3/fl_ask.H>
+#include <FL/Fl_Group.H>
+#include <FL/Fl_Choice.H>
+#include <FL/Fl_Menu_Button.H>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Preferences.H>
+#include <FL/Fl_Tile.H>
+#include <FL/Fl_File_Browser.H>
+#include <FL/Fl_Box.H>
+#include <FL/Fl_Check_Button.H>
+#include <FL/Fl_File_Input.H>
+#include <FL/Fl_Return_Button.H>
+#include <FL/fl_ask.H>
 
 class FL_EXPORT Fl_File_Chooser {
 public:
@@ -54,12 +54,12 @@ private:
   static Fl_Preferences prefs_; 
   void (*callback_)(Fl_File_Chooser*, void *); 
   void *data_; 
-  char directory_[1024]; 
-  char pattern_[1024]; 
+  char directory_[FL_PATH_MAX]; 
+  char pattern_[FL_PATH_MAX]; 
   char preview_text_[2048]; 
   int type_; 
   void favoritesButtonCB(); 
-  void favoritesCB(fltk3::Widget *w); 
+  void favoritesCB(Fl_Widget *w); 
   void fileListCB(); 
   void fileNameCB(); 
   void newdir(); 
@@ -123,6 +123,11 @@ private:
   Fl_Return_Button *favOkButton;
   void cb_favOkButton_i(Fl_Return_Button*, void*);
   static void cb_favOkButton(Fl_Return_Button*, void*);
+#ifndef WIN32
+  Fl_Check_Button *show_hidden;
+  static void show_hidden_cb(Fl_Check_Button*, void*);
+  void remove_hidden_files();
+#endif
 public:
   ~Fl_File_Chooser();
   void callback(void (*cb)(Fl_File_Chooser *, void *), void *d = 0);
@@ -213,15 +218,19 @@ public:
      [standard text may be customized at run-time]
   */
   static const char *show_label; 
+  /** 
+     [standard text may be customized at run-time]
+ */
+  static const char *hidden_label;
   /**
      the sort function that is used when loading
      the contents of a directory.
   */
   static Fl_File_Sort_F *sort; 
 private:
-  fltk3::Widget* ext_group; 
+  Fl_Widget* ext_group; 
 public:
-  fltk3::Widget* add_extra(fltk3::Widget* gr);
+  Fl_Widget* add_extra(Fl_Widget* gr);
   Fl_File_Browser *browser(void) {return fileList; };
 };
 FL_EXPORT char *fl_dir_chooser(const char *message,const char *fname,int relative=0);

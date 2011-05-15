@@ -1,39 +1,67 @@
-MACRO(CREATE_EXAMPLE NAME SOURCES LIBRARIES)
-	SET(srcs)
-	FOREACH(src ${SOURCES})
-		IF("${src}" MATCHES ".fl$")
-			GET_FILENAME_COMPONENT(fname ${src} NAME_WE)
-			SET(fluid_name "${CMAKE_CURRENT_SOURCE_DIR}/${fname}.fl")
-			SET(cxx_name "${CMAKE_CURRENT_BINARY_DIR}/${fname}.cxx")
-			SET(h_name "${CMAKE_CURRENT_BINARY_DIR}/${fname}.cxx")
-			SET(srcs ${srcs} "${cxx_name}")
-			ADD_CUSTOM_COMMAND(
-				OUTPUT ${cxx_name}
-				DEPENDS "${fluid_name}" "${FLUID_COMMAND}"
-				COMMAND ${FLUID_COMMAND}
-				ARGS -c ${fluid_name})
-			ADD_CUSTOM_COMMAND(
-				OUTPUT ${h_name}
-				DEPENDS "${fluid_name}" "${FLUID_COMMAND}"
-				COMMAND ${FLUID_COMMAND}
-				ARGS -c ${fluid_name})
-		ELSE("${src}" MATCHES ".fl$")
-			SET(srcs ${srcs} ${src})
-		ENDIF("${src}" MATCHES ".fl$")
-	ENDFOREACH(src)
-	ADD_EXECUTABLE(${NAME} ${srcs})
-	TARGET_LINK_LIBRARIES(${NAME} ${LIBRARIES})
-ENDMACRO(CREATE_EXAMPLE)
+set(EXECUTABLE_OUTPUT_PATH ${FLTK_BINARY_DIR}/bin/examples)
 
-INCLUDE_DIRECTORIES(
+#######################################################################
+# audio libs for test apps
+if(WIN32)
+   set(AUDIOLIBS winmm)
+elseif(APPLE)
+   set(AUDIOLIBS "-framework CoreAudio")
+elseif(HAVE_ALSA_ASOUNDLIB_H)
+   set(AUDIOLIBS -lasound)
+endif(WIN32)
+
+#######################################################################
+macro(CREATE_EXAMPLE NAME SOURCES LIBRARIES)
+	set(srcs)
+	set(flsrcs)
+	foreach(src ${SOURCES})
+		if("${src}" MATCHES ".fl$")
+         list(APPEND flsrcs ${src})
+		else()
+			list(APPEND srcs ${src})
+		endif("${src}" MATCHES ".fl$")
+	endforeach(src)
+
+   if(flsrcs)
+      fltk_wrap_ui(${NAME} ${flsrcs})
+   endif(flsrcs)
+
+	add_executable(${NAME} WIN32 ${srcs} ${${NAME}_FLTK_UI_SRCS})
+   if(flsrcs)
+      add_dependencies(${NAME} ${FLTK_FLUID_EXECUTABLE})
+   endif(flsrcs)
+	target_link_libraries(${NAME} ${LIBRARIES})
+
+   # link in optional libraries
+   if(FLTK_HAVE_CAIRO)
+      target_link_libraries(${NAME} fltk_cairo)
+   endif(FLTK_HAVE_CAIRO)
+
+   if(USE_XFT)
+      target_link_libraries(${NAME} ${X11_Xft_LIB})
+   endif(USE_XFT)
+
+   if(HAVE_XINERAMA)
+      target_link_libraries(${NAME} ${X11_Xinerama_LIB})
+   endif(HAVE_XINERAMA)
+
+   install(TARGETS ${NAME}
+      DESTINATION ${PREFIX_DOC}/examples
+      )
+endmacro(CREATE_EXAMPLE NAME SOURCES LIBRARIES)
+
+#######################################################################
+include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
   )
 
+#######################################################################
 CREATE_EXAMPLE(adjuster adjuster.cxx fltk)
 CREATE_EXAMPLE(arc arc.cxx fltk)
 CREATE_EXAMPLE(ask ask.cxx fltk)
 CREATE_EXAMPLE(bitmap bitmap.cxx fltk)
+CREATE_EXAMPLE(blocks blocks.cxx "fltk;${AUDIOLIBS}")
 CREATE_EXAMPLE(boxtype boxtype.cxx fltk)
 CREATE_EXAMPLE(browser browser.cxx fltk)
 CREATE_EXAMPLE(button button.cxx fltk)
@@ -45,6 +73,7 @@ CREATE_EXAMPLE(color_chooser color_chooser.cxx fltk)
 CREATE_EXAMPLE(cursor cursor.cxx fltk)
 CREATE_EXAMPLE(curve curve.cxx fltk)
 CREATE_EXAMPLE(demo demo.cxx "fltk;fltk_forms")
+CREATE_EXAMPLE(device device.cxx fltk)
 CREATE_EXAMPLE(doublebuffer doublebuffer.cxx fltk)
 CREATE_EXAMPLE(editor editor.cxx fltk)
 CREATE_EXAMPLE(fast_slow fast_slow.fl fltk)
@@ -57,6 +86,7 @@ CREATE_EXAMPLE(iconize iconize.cxx fltk)
 CREATE_EXAMPLE(image image.cxx fltk)
 CREATE_EXAMPLE(inactive inactive.fl fltk)
 CREATE_EXAMPLE(input input.cxx fltk)
+CREATE_EXAMPLE(input_choice input_choice.cxx fltk)
 CREATE_EXAMPLE(keyboard "keyboard.cxx;keyboard_ui.fl" fltk)
 CREATE_EXAMPLE(label label.cxx "fltk;fltk_forms")
 CREATE_EXAMPLE(line_style line_style.cxx fltk)
@@ -76,20 +106,23 @@ CREATE_EXAMPLE(preferences preferences.fl fltk)
 CREATE_EXAMPLE(radio radio.fl fltk)
 CREATE_EXAMPLE(resize resize.fl fltk)
 CREATE_EXAMPLE(resizebox resizebox.cxx fltk)
+CREATE_EXAMPLE(rotated_text rotated_text.cxx fltk)
 CREATE_EXAMPLE(scroll scroll.cxx fltk)
 CREATE_EXAMPLE(subwindow subwindow.cxx fltk)
+CREATE_EXAMPLE(sudoku sudoku.cxx "fltk;fltk_images;${AUDIOLIBS}")
 CREATE_EXAMPLE(symbols symbols.cxx fltk)
 CREATE_EXAMPLE(tabs tabs.fl fltk)
 CREATE_EXAMPLE(table table.cxx fltk)
 CREATE_EXAMPLE(threads threads.cxx fltk)
 CREATE_EXAMPLE(tile tile.cxx fltk)
 CREATE_EXAMPLE(tiled_image tiled_image.cxx fltk)
-CREATE_EXAMPLE(tree tree.cxx fltk)
+CREATE_EXAMPLE(tree tree.fl fltk)
+CREATE_EXAMPLE(utf8 utf8.cxx fltk)
 CREATE_EXAMPLE(valuators valuators.fl fltk)
 CREATE_EXAMPLE(unittests unittests.cxx fltk)
 
 # OpenGL demos...
-IF(OPENGL_FOUND)
+if(OPENGL_FOUND)
 CREATE_EXAMPLE(CubeView "CubeMain.cxx;CubeView.cxx;CubeViewUI.fl" "fltk;fltk_gl")
 CREATE_EXAMPLE(cube cube.cxx "fltk;fltk_gl;${OPENGL_LIBRARIES}")
 CREATE_EXAMPLE(fractals "fractals.cxx;fracviewer.cxx" "fltk;fltk_gl")
@@ -97,4 +130,9 @@ CREATE_EXAMPLE(fullscreen fullscreen.cxx "fltk;fltk_gl")
 CREATE_EXAMPLE(glpuzzle glpuzzle.cxx "fltk;fltk_gl;${OPENGL_LIBRARIES}")
 CREATE_EXAMPLE(gl_overlay gl_overlay.cxx "fltk;fltk_gl;${OPENGL_LIBRARIES}")
 CREATE_EXAMPLE(shape shape.cxx "fltk;fltk_gl;${OPENGL_LIBRARIES}")
-ENDIF(OPENGL_FOUND)
+endif(OPENGL_FOUND)
+
+# Cairo demo
+if(FLTK_HAVE_CAIRO)
+   CREATE_EXAMPLE(cairo_test cairo_test.cxx fltk)
+endif(FLTK_HAVE_CAIRO)

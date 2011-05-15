@@ -4,7 +4,7 @@
 // Unicode to UTF-8 conversion functions.
 //
 // Author: Jean-Marc Lienher ( http://oksid.ch )
-// Copyright 2000-2009 by O'ksi'D.
+// Copyright 2000-2010 by O'ksi'D.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -27,7 +27,7 @@
 
 
 #include <config.h>
-#include <fltk3/filename.H>
+#include <FL/filename.H>
 #include <stdarg.h>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
@@ -60,18 +60,18 @@ extern "C" {
 extern "C" {
   int XUtf8Tolower(int ucs);
   unsigned short XUtf8IsNonSpacing(unsigned int ucs);
-};
+}
 
 #else // X-windows platform
 
-# include <fltk3/Xutf8.h>
+# include <FL/Xutf8.h>
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <unistd.h>
 #endif // WIN32
 
-#include <fltk3/fl_utf8.h>
+#include <FL/fl_utf8.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -112,9 +112,11 @@ Toupper(
 }
 
 /**
-  return the byte length of the UTF-8 sequence with first byte \p c,
-  or -1 if \p c is not valid.
-  */
+ return the byte length of the UTF-8 sequence with first byte \p c,
+ or -1 if \p c is not valid.
+ This function is helpful for finding faulty UTF8 sequences.
+ \see fl_utf8len1
+ */
 int fl_utf8len(char c)
 {
   if (!(c & 0x80)) return 1;
@@ -137,15 +139,34 @@ int fl_utf8len(char c)
 } // fl_utf8len
 
 
-#if 0
-int fl_utflen(
-        const unsigned char     *buf,
-        int                     len)
+/**
+ Return the byte length of the UTF-8 sequence with first byte \p c,
+ or 1 if \p c is not valid. 
+ This function can be used to scan faulty UTF8 sequence, albeit ignoring invalid
+ codes.
+ \see fl_utf8len
+ */
+int fl_utf8len1(char c)
 {
-	unsigned int ucs;
-	return fl_utf2ucs(buf, len, &ucs);
-}
-#endif
+  if (!(c & 0x80)) return 1;
+  if (c & 0x40) {
+    if (c & 0x20) {
+      if (c & 0x10) {
+        if (c & 0x08) {
+          if (c & 0x04) {
+            return 6;
+          }
+          return 5;
+        }
+        return 4;
+      }
+      return 3;
+    }
+    return 2;
+  }
+  return 1;
+} // fl_utf8len1
+
 
 /**
   returns the number of Unicode chars in the UTF-8 string
@@ -399,9 +420,10 @@ static char *buf = NULL;
 static int buf_len = 0;
 static unsigned short *wbufa = NULL;
 
+// FIXME: This should *maybe* return 'const char *' instead of 'char *'
 char *fl_utf8_to_locale(const char *s, int len, UINT codepage)
 {
-	if (!s) return "";
+	if (!s) return (char *)"";
 	int l = 0;
 //	if (buf_len < len * 2 + 1) {
 //		buf_len = len * 2 + 1;
@@ -426,9 +448,10 @@ char *fl_utf8_to_locale(const char *s, int len, UINT codepage)
 	return buf;
 }
 
+// FIXME: This should maybe return 'const char *' instead of 'char *'
 char *fl_locale_to_utf8(const char *s, int len, UINT codepage)
 {
-	if (!s) return "";
+	if (!s) return (char *)"";
 	int l = 0;
 	if (buf_len < len * 5 + 1) {
 		buf_len = len * 5 + 1;

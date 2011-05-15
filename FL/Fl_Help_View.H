@@ -3,7 +3,7 @@
 //
 // Help Viewer widget definitions.
 //
-// Copyright 1997-2009 by Easy Software Products.
+// Copyright 1997-2010 by Easy Software Products.
 // Image support by Matthias Melcher, Copyright 2000-2009.
 //
 // This library is free software; you can redistribute it and/or
@@ -42,6 +42,7 @@
 #  include "Fl_Scrollbar.H"
 #  include "fl_draw.H"
 #  include "Fl_Shared_Image.H"
+#  include "filename.H"
 
 
 //
@@ -49,15 +50,14 @@
 //
 
 
-typedef const char *(Fl_Help_Func)(fltk3::Widget *, const char *);
+typedef const char *(Fl_Help_Func)(Fl_Widget *, const char *);
 
 
 //
 // Fl_Help_Block structure...
 //
 
-struct Fl_Help_Block
-{
+struct Fl_Help_Block {
   const char	*start,		// Start of text
 		*end;		// End of text
   uchar		border;		// Draw border?
@@ -73,8 +73,7 @@ struct Fl_Help_Block
 // Fl_Help_Link structure...
 //
 /** Definition of a link for the html viewer. */
-struct Fl_Help_Link
-{
+struct Fl_Help_Link {
   char		filename[192],	///< Reference filename
 		name[32];	///< Link target (blank if none)
   int		x,		///< X offset of link text
@@ -88,7 +87,7 @@ struct Fl_Help_Link
  */
 
 /** Fl_Help_View font stack element definition. */
-struct Fl_Help_Font_Style {
+struct FL_EXPORT Fl_Help_Font_Style {
   Fl_Font      f;  ///< Font
   Fl_Fontsize  s;  ///< Font Size
   Fl_Color     c;  ///< Font Color
@@ -101,7 +100,7 @@ struct Fl_Help_Font_Style {
 /** Fl_Help_View font stack definition. */
 const size_t MAX_FL_HELP_FS_ELTS = 100;
 
-struct Fl_Help_Font_Stack {
+struct FL_EXPORT Fl_Help_Font_Stack {
   /** font stack construction, initialize attributes. */
   Fl_Help_Font_Stack() {
     nfonts_ = 0;
@@ -137,8 +136,7 @@ protected:
 
 /** Fl_Help_Target structure */
 
-struct Fl_Help_Target
-{
+struct Fl_Help_Target {
   char		name[32];	///< Target name
   int		y;		///< Y offset of target
 };
@@ -208,8 +206,8 @@ struct Fl_Help_Target
      - yen Yuml yuml
 
 */
-class FL_EXPORT Fl_Help_View : public fltk3::Group	// Help viewer widget
-{
+class FL_EXPORT Fl_Help_View : public Fl_Group {	// Help viewer widget
+  
   enum { RIGHT = -1, CENTER, LEFT };	///< Alignments
 
   char		title_[1024];		///< Title string
@@ -220,7 +218,7 @@ class FL_EXPORT Fl_Help_View : public fltk3::Group	// Help viewer widget
   Fl_Font       textfont_;		///< Default font for text
   Fl_Fontsize  textsize_;		///< Default font size
   const char	*value_;		///< HTML text value
-  Fl_Help_Font_Stack fstack_;           ///< font stack management
+  Fl_Help_Font_Stack fstack_;		///< font stack management
   int		nblocks_,		///< Number of blocks/paragraphs
 		ablocks_;		///< Allocated blocks
   Fl_Help_Block	*blocks_;		///< Blocks
@@ -235,8 +233,8 @@ class FL_EXPORT Fl_Help_View : public fltk3::Group	// Help viewer widget
 		atargets_;		///< Allocated targets
   Fl_Help_Target *targets_;		///< Targets
 
-  char		directory_[1024];	///< Directory for current file
-  char		filename_[1024];	///< Current filename
+  char		directory_[FL_PATH_MAX];///< Directory for current file
+  char		filename_[FL_PATH_MAX];	///< Current filename
   int		topline_,		///< Top line in document
 		leftline_,		///< Lefthand position
 		size_,			///< Total document length
@@ -311,7 +309,7 @@ public:
     It must return a pathname that can be opened as a local file or NULL:
     
     \code
-    const char *fn(fltk3::Widget *w, const char *uri);
+    const char *fn(Fl_Widget *w, const char *uri);
     \endcode
     
     The link function can be used to retrieve remote or virtual
@@ -328,7 +326,7 @@ public:
   void		resize(int,int,int,int);
   /** Gets the size of the help view. */
   int		size() const { return (size_); }
-  void		size(int W, int H) { fltk3::Widget::size(W, H); }
+  void		size(int W, int H) { Fl_Widget::size(W, H); }
   /** Sets the default text color. */
   void		textcolor(Fl_Color c) { if (textcolor_ == defcolor_) textcolor_ = c; defcolor_ = c; }
   /** Returns the current default text color. */
@@ -359,10 +357,10 @@ public:
     Gets the current size of the scrollbars' troughs, in pixels.
 
     If this value is zero (default), this widget will use the 
-    fltk3::scrollbar_size() value as the scrollbar's width.
+    Fl::scrollbar_size() value as the scrollbar's width.
   
-    \returns Scrollbar size in pixels, or 0 if the global fltk3::scrollbar_size() is being used.
-    \see fltk3::scrollbar_size(int)
+    \returns Scrollbar size in pixels, or 0 if the global Fl::scrollbar_size() is being used.
+    \see Fl::scrollbar_size(int)
   */
   int scrollbar_size() const {
       return(scrollbar_size_);
@@ -371,7 +369,7 @@ public:
     Sets the pixel size of the scrollbars' troughs to the \p size, in pixels.
 
     Normally you should not need this method, and should use
-    fltk3::scrollbar_size(int) instead to manage the size of ALL 
+    Fl::scrollbar_size(int) instead to manage the size of ALL 
     your widgets' scrollbars. This ensures your application 
     has a consistent UI, is the default behavior, and is normally
     what you want.
@@ -380,11 +378,11 @@ public:
     scrollbar size. The need for this should be rare.
     
     Setting \p size to the special value of 0 causes the widget to
-    track the global fltk3::scrollbar_size(), which is the default.
+    track the global Fl::scrollbar_size(), which is the default.
     
     \param[in] size Sets the scrollbar size in pixels.\n
-                    If 0 (default), scrollbar size tracks the global fltk3::scrollbar_size()
-    \see fltk3::scrollbar_size()
+                    If 0 (default), scrollbar size tracks the global Fl::scrollbar_size()
+    \see Fl::scrollbar_size()
   */
   void scrollbar_size(int size) {
       scrollbar_size_ = size;

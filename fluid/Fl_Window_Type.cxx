@@ -7,7 +7,7 @@
 // for interacting with the overlay, which allows the user to
 // select, move, and resize the children widgets.
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -84,7 +84,7 @@ void guides_cb(Fl_Check_Button *i, long) {
   }
 }
 
-void grid_cb(Fl_Input *i, long v) {
+void grid_cb(Fl_Int_Input *i, long v) {
   int n = atoi(i->value());
   if (n < 0) n = 0;
   switch (v) {
@@ -165,16 +165,23 @@ void i18n_type_cb(Fl_Choice *c, void *) {
 
 void i18n_text_cb(Fl_Input *i, void *) {
   undo_checkpoint();
-
+  
   if (i == i18n_function_input)
     i18n_function = i->value();
   else if (i == i18n_file_input)
     i18n_file = i->value();
-  else if (i == i18n_set_input)
-    i18n_set = i->value();
   else if (i == i18n_include_input)
     i18n_include = i->value();
+  
+  set_modflag(1);
+}
 
+void i18n_int_cb(Fl_Int_Input *i, void *) {
+  undo_checkpoint();
+  
+  if (i == i18n_set_input)
+    i18n_set = i->value();
+  
   set_modflag(1);
 }
 
@@ -236,6 +243,11 @@ void show_grid_cb(Fl_Widget *, void *) {
 void show_settings_cb(Fl_Widget *, void *) {
   settings_window->hotspot(settings_window);
   settings_window->show();
+}
+
+void show_global_settings_cb(Fl_Widget *, void *) {
+  global_settings_window->hotspot(global_settings_window);
+  show_global_settings_window();
 }
 
 void header_input_cb(Fl_Input* i, void*) {
@@ -573,10 +585,34 @@ void Fl_Window_Type::newposition(Fl_Widget_Type *myo,int &X,int &Y,int &R,int &T
     R += dx;
     T += dy;
   } else {
-    if (drag&LEFT) if (X==bx) X += dx; else if (X<bx+dx) X = bx+dx;
-    if (drag&TOP) if (Y==by) Y += dy; else if (Y<by+dy) Y = by+dy;
-    if (drag&RIGHT) if (R==br) R += dx; else if (R>br+dx) R = br+dx;
-    if (drag&BOTTOM) if (T==bt) T += dy; else if (T>bt+dx) T = bt+dx;
+    if (drag&LEFT) {
+      if (X==bx) {
+        X += dx; 
+      } else {
+        if (X<bx+dx) X = bx+dx;
+      }
+    }
+    if (drag&TOP) {
+      if (Y==by) {
+        Y += dy;
+      } else {
+        if (Y<by+dy) Y = by+dy;
+      }
+    }
+    if (drag&RIGHT) {
+      if (R==br) {
+        R += dx; 
+      } else {
+        if (R>br+dx) R = br+dx;
+      }
+    }
+    if (drag&BOTTOM) {
+      if (T==bt) {
+        T += dy; 
+      } else {
+        if (T>bt+dx) T = bt+dx;
+      }
+    }
   }
   if (R<X) {int n = X; X = R; R = n;}
   if (T<Y) {int n = Y; Y = T; T = n;}
@@ -1260,8 +1296,6 @@ int Fl_Window_Type::handle(int event) {
       ((Fl_Window*)o)->hide();
       return 1;
 
-    case 0xFE20: // backtab
-      backtab = 1;
     case FL_Tab: {
       if (Fl::event_state(FL_SHIFT)) backtab = 1;
       // find current child:

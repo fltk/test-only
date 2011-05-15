@@ -3,7 +3,7 @@
 //
 // Line dial header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -33,7 +33,7 @@
 
 #include "Fl_Dial.H"
 
-class Fl_Line_Dial : public Fl_Dial {
+class FL_EXPORT Fl_Line_Dial : public Fl_Dial {
 public:
     Fl_Line_Dial(int x,int y,int w,int h, const char *l = 0)
 	: Fl_Dial(x,y,w,h,l) {type(FL_LINE_DIAL);}

@@ -3,7 +3,7 @@
 //
 // Idle routine support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,7 +28,7 @@
 // Allows you to manage an arbitrary set of idle() callbacks.
 // Replaces the older set_idle() call (which is used to implement this)
 
-#include <fltk3/run.h>
+#include <FL/Fl.H>
 
 struct idle_cb {
   void (*cb)(void*);
@@ -50,23 +50,23 @@ static void call_idle() {
 }
 
 /**
-  Adds a callback function that is called every time by fltk3::wait() and also
-  makes it act as though the timeout is zero (this makes fltk3::wait() return
+  Adds a callback function that is called every time by Fl::wait() and also
+  makes it act as though the timeout is zero (this makes Fl::wait() return
   immediately, so if it is in a loop it is called repeatedly, and thus the
   idle fucntion is called repeatedly).  The idle function can be used to get
   background processing done.
     
   You can have multiple idle callbacks. To remove an idle callback use
-  fltk3::remove_idle().
+  Fl::remove_idle().
     
-  fltk3::wait() and fltk3::check() call idle callbacks, but fltk3::ready() does not.
+  Fl::wait() and Fl::check() call idle callbacks, but Fl::ready() does not.
     
-  The idle callback can call any FLTK functions, including fltk3::wait(),
-  fltk3::check(), and fltk3::ready().
+  The idle callback can call any FLTK functions, including Fl::wait(),
+  Fl::check(), and Fl::ready().
 
   FLTK will not recursively call the idle callback.
 */
-void fltk3::add_idle(Fl_Idle_Handler cb, void* data) {
+void Fl::add_idle(Fl_Idle_Handler cb, void* data) {
   idle_cb* p = freelist;
   if (p) freelist = p->next;
   else p = new idle_cb;
@@ -86,7 +86,7 @@ void fltk3::add_idle(Fl_Idle_Handler cb, void* data) {
 /**
   Returns true if the specified idle callback is currently installed.
 */
-int fltk3::has_idle(Fl_Idle_Handler cb, void* data) {
+int Fl::has_idle(Fl_Idle_Handler cb, void* data) {
   idle_cb* p = first;
   if (!p) return 0;
   for (;; p = p->next) {
@@ -98,7 +98,7 @@ int fltk3::has_idle(Fl_Idle_Handler cb, void* data) {
 /**
   Removes the specified idle callback, if it is installed.
 */
-void fltk3::remove_idle(Fl_Idle_Handler cb, void* data) {
+void Fl::remove_idle(Fl_Idle_Handler cb, void* data) {
   idle_cb* p = first;
   if (!p) return;
   idle_cb* l = last;

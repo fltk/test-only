@@ -3,7 +3,7 @@
 //
 // Old Fl_Object header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-// This file is provided for back compatibility only.  Please use fltk3::Widget
+// This file is provided for back compatibility only.  Please use Fl_Widget
 #ifndef Fl_Object
-#define Fl_Object fltk3::Widget
+#define Fl_Object Fl_Widget
 #endif
 #include "Fl_Widget.H"
 

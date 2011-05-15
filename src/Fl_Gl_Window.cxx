@@ -3,7 +3,7 @@
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -32,12 +32,15 @@ extern int fl_gl_load_plugin;
 
 static int temp = fl_gl_load_plugin;
 
-#include <fltk3/run.h>
-#include <fltk3/x.H>
+#include <FL/Fl.H>
+#include <FL/x.H>
+#ifdef __APPLE__
+#include <FL/gl.h>
+#endif
 #include "Fl_Gl_Choice.H"
-#include <fltk3/Fl_Gl_Window.H>
+#include <FL/Fl_Gl_Window.H>
 #include <stdlib.h>
-#include <fltk3/fl_utf8.h>
+#include <FL/fl_utf8.h>
 
 ////////////////////////////////////////////////////////////////
 
@@ -83,7 +86,7 @@ void Fl_Gl_Window::show() {
       }
 
       if (!g) {
-        fltk3::error("Insufficient GL support");
+        Fl::error("Insufficient GL support");
 	return;
       }
     }
@@ -91,12 +94,10 @@ void Fl_Gl_Window::show() {
     Fl_X::make_xid(this, g->vis, g->colormap);
     if (overlay && overlay != this) ((Fl_Gl_Window*)overlay)->show();
 #elif defined(__APPLE__)
-    extern void MACsetContainsGLsubwindow(fltk3::Window *);
 	if( ! parent() ) need_redraw=1;
-	else MACsetContainsGLsubwindow( window() );
 #endif
   }
-  fltk3::Window::show();
+  Fl_Window::show();
 
 #ifdef __APPLE__
   set_visible();
@@ -278,12 +279,12 @@ void Fl_Gl_Window::flush() {
   // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
   //: clear previous clipping in this shared port
 #if ! __LP64__
-  GrafPtr port = GetWindowPort( MACwindowRef(this) );
+/*GrafPtr port = GetWindowPort( Fl_X::i(this)->window_ref() );
   Rect rect; SetRect( &rect, 0, 0, 0x7fff, 0x7fff );
   GrafPtr old; GetPort( &old );
   SetPort( port );
   ClipRect( &rect );
-  SetPort( old );
+  SetPort( old );*/
 #endif
 #endif
 
@@ -324,7 +325,7 @@ void Fl_Gl_Window::flush() {
     glDrawBuffer(GL_BACK);
 
     if (!SWAP_TYPE) {
-#if defined __APPLE_QUARTZ__
+#if defined (__APPLE_QUARTZ__) || defined (USE_X11)
       SWAP_TYPE = COPY;
 #else
       SWAP_TYPE = UNDEFINED;
@@ -334,6 +335,7 @@ void Fl_Gl_Window::flush() {
 	if (!strcmp(c,"COPY")) SWAP_TYPE = COPY;
 	else if (!strcmp(c, "NODAMAGE")) SWAP_TYPE = NODAMAGE;
 	else if (!strcmp(c, "SWAP")) SWAP_TYPE = SWAP;
+	else SWAP_TYPE = UNDEFINED;
       }
     }
 
@@ -350,7 +352,12 @@ void Fl_Gl_Window::flush() {
       if (damage() != FL_DAMAGE_OVERLAY || !save_valid) draw();
 	  swap_buffers();
 
-    } else { // SWAP_TYPE == UNDEFINED
+    } else if (SWAP_TYPE == SWAP){
+      damage(FL_DAMAGE_ALL);
+      draw();
+      if (overlay == this) draw_overlay();
+      swap_buffers();
+    } else if (SWAP_TYPE == UNDEFINED){ // SWAP_TYPE == UNDEFINED
 
       // If we are faking the overlay, use CopyPixels to act like
       // SWAP_TYPE == COPY.  Otherwise overlay redraw is way too slow.
@@ -386,7 +393,7 @@ void Fl_Gl_Window::flush() {
 
     }
 
-    if (overlay==this) { // fake overlay in front buffer
+    if (overlay==this && SWAP_TYPE != SWAP) { // fake overlay in front buffer
       glDrawBuffer(GL_FRONT);
       draw_overlay();
       glDrawBuffer(GL_BACK);
@@ -422,7 +429,7 @@ void Fl_Gl_Window::resize(int X,int Y,int W,int H) {
   }
 #endif
 
-  fltk3::Window::resize(X,Y,W,H);
+  Fl_Window::resize(X,Y,W,H);
 }
 
 /**
@@ -454,7 +461,7 @@ void Fl_Gl_Window::hide() {
     overlay = 0;
   }
 #endif
-  fltk3::Window::hide();
+  Fl_Window::hide();
 }
 
 /**
@@ -464,11 +471,16 @@ void Fl_Gl_Window::hide() {
 Fl_Gl_Window::~Fl_Gl_Window() {
   hide();
 //  delete overlay; this is done by ~Fl_Group
+#ifdef __APPLE__
+  // resets the pile of string textures used to draw strings
+  extern void gl_texture_reset();
+  gl_texture_reset();
+#endif
 }
 
 void Fl_Gl_Window::init() {
   end(); // we probably don't want any children
-  box(fltk3::NO_BOX);
+  box(FL_NO_BOX);
 
   mode_    = FL_RGB | FL_DEPTH | FL_DOUBLE;
   alist    = 0;
@@ -513,15 +525,37 @@ void Fl_Gl_Window::draw_overlay() {}
   initialization if it is false.
 
   The draw() method can <I>only</I> use OpenGL calls.  Do not
-  attempt to call X, any of the functions in <fltk3/draw.h>, or glX
+  attempt to call X, any of the functions in <FL/fl_draw.H>, or glX
   directly.  Do not call gl_start() or gl_finish().
 
   If double-buffering is enabled in the window, the back and front
   buffers are swapped after this function is completed.
 */
 void Fl_Gl_Window::draw() {
-    fltk3::fatal("Fl_Gl_Window::draw() *must* be overriden. Please refer to the documentation.");
+    Fl::fatal("Fl_Gl_Window::draw() *must* be overriden. Please refer to the documentation.");
 }
+
+
+/**
+ Handle some FLTK events as needed.
+ */
+int Fl_Gl_Window::handle(int event) 
+{
+#ifdef __APPLE_QUARTZ__
+  /*if (event==FL_HIDE) {
+    // if we are not hidden, just the parent was hidden, so we must throw away the context
+    if (!visible_r())
+      context(0); // remove context without setting the hidden flags
+  }
+  if (event==FL_SHOW) {
+    // if we are not hidden, just the parent was shown, so we must create a new context
+    if (visible_r())
+      show(); //
+  }*/
+#endif
+  return Fl_Window::handle(event);
+}
+
 //
 // End of "$Id$".
 //

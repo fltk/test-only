@@ -3,7 +3,7 @@
 //
 // Fl_PNM_Image routines.
 //
-// Copyright 1997-2009 by Easy Software Products.
+// Copyright 1997-2010 by Easy Software Products.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,11 +34,11 @@
 // Include necessary header files...
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_PNM_Image.H>
+#include <FL/Fl.H>
+#include <FL/Fl_PNM_Image.H>
 #include <stdio.h>
 #include <stdlib.h>
-#include <fltk3/fl_utf8.h>
+#include <FL/fl_utf8.h>
 #include "flstring.h"
 
 
@@ -52,7 +52,7 @@
 */
 
 Fl_PNM_Image::Fl_PNM_Image(const char *name)	// I - File to read
-  : fltk3::RGBImage(0,0,0) {
+  : Fl_RGB_Image(0,0,0) {
   FILE		*fp;		// File pointer
   int		x, y;		// Looping vars
   char		line[1024],	// Input line
@@ -83,7 +83,7 @@ Fl_PNM_Image::Fl_PNM_Image(const char *name)	// I - File to read
   lineptr = fgets(line, sizeof(line), fp);
   if (!lineptr) {
     fclose(fp);
-    fltk3::error("Early end-of-file in PNM file \"%s\"!", name);
+    Fl::error("Early end-of-file in PNM file \"%s\"!", name);
     return;
   }
 
@@ -166,7 +166,7 @@ Fl_PNM_Image::Fl_PNM_Image(const char *name)	// I - File to read
       case 5 :
       case 6 :
         if (maxval < 256) {
-          fread(ptr, w(), d(), fp);
+          if (fread(ptr, w(), d(), fp)) { /* ignored */ }
         } else {
           for (x = d() * w(); x > 0; x --) {
             val = (uchar)getc(fp);

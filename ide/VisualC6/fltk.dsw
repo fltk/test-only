@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "Fluid"=".\Fluid.dsp" - Package Owner=<4>
+Project: "CubeView"=".\CubeView.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -15,230 +15,11 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkforms
+    Project_Dep_Name fltk_gl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkimages
+    Project_Dep_Name Fluid
     End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name fltkjpeg
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name fltkpng
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name zlib
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "fltk"=".\fltk.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "fltkgl"=".\fltkgl.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "fltkimages"=".\fltkimages.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name fltkpng
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name fltkjpeg
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "fltkpng"=".\fltkpng.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name zlib
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "fltkjpeg"=".\fltkjpeg.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "fltkforms"=".\fltkforms.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "zlib"=".\zlib.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "fltkdll"=".\fltkdll.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "fltkgldll"=".\fltkgldll.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "fltkimagesdll"=".\fltkimagesdll.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name fltkpng
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name fltkjpeg
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "fltkpngdll"=".\fltkpngdll.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name zlib
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "fltkjpegdll"=".\fltkjpegdll.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "fltkformsdll"=".\fltkformsdll.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "zlibdll"=".\zlibdll.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
 }}}
 
 ###############################################################################
@@ -307,6 +88,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name curve
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name device
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name doublebuffer
@@ -456,7 +240,37 @@ Package=<4>
     Project_Dep_Name valuators
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name device
+    Project_Dep_Name rotated_text
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Fluid"=".\Fluid.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_forms
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_images
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_jpeg
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_png
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_zlib
     End Project Dependency
 }}}
 
@@ -639,7 +453,7 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkforms
+    Project_Dep_Name fltk_forms
     End Project Dependency
 }}}
 
@@ -672,28 +486,7 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkgl
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "CubeView"=".\CubeView.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name fltkgl
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name Fluid
+    Project_Dep_Name fltk_gl
     End Project Dependency
 }}}
 
@@ -724,6 +517,33 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "device"=".\device.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_images
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_jpeg
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_png
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_zlib
     End Project Dependency
 }}}
 
@@ -789,17 +609,215 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkimages
+    Project_Dep_Name fltk_images
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkjpeg
+    Project_Dep_Name fltk_jpeg
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkpng
+    Project_Dep_Name fltk_png
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name zlib
+    Project_Dep_Name fltk_zlib
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "fltk"=".\fltk.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk_jpeg
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_png
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "fltk_forms"=".\fltk_forms.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "fltk_formsdll"=".\fltk_formsdll.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "fltk_gl"=".\fltk_gl.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "fltk_gldll"=".\fltk_gldll.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "fltk_images"=".\fltk_images.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "fltk_imagesdll"=".\fltk_imagesdll.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "fltk_jpeg"=".\fltk_jpeg.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fltk_jpegdll"=".\fltk_jpegdll.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fltk_png"=".\fltk_png.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk_zlib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "fltk_pngdll"=".\fltk_pngdll.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk_zlib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "fltk_zlib"=".\fltk_zlib.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fltk_zlibdll"=".\fltk_zlibdll.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fltkdll"=".\fltkdll.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
@@ -831,7 +849,7 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkforms
+    Project_Dep_Name fltk_forms
     End Project Dependency
 }}}
 
@@ -849,10 +867,10 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkgl
+    Project_Dep_Name fltk_gl
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkforms
+    Project_Dep_Name fltk_forms
     End Project Dependency
 }}}
 
@@ -870,7 +888,7 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkgl
+    Project_Dep_Name fltk_gl
     End Project Dependency
 }}}
 
@@ -888,7 +906,7 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkgl
+    Project_Dep_Name fltk_gl
     End Project Dependency
 }}}
 
@@ -906,7 +924,7 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkgl
+    Project_Dep_Name fltk_gl
     End Project Dependency
 }}}
 
@@ -939,16 +957,16 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkimages
+    Project_Dep_Name fltk_images
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkjpeg
+    Project_Dep_Name fltk_jpeg
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkpng
+    Project_Dep_Name fltk_png
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name zlib
+    Project_Dep_Name fltk_zlib
     End Project Dependency
 }}}
 
@@ -1062,7 +1080,7 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkforms
+    Project_Dep_Name fltk_forms
     End Project Dependency
 }}}
 
@@ -1161,7 +1179,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "navigation"=".\navigation.dsp" - Package Owner=<4>
+Project: "native-filechooser"=".\native-filechooser.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1176,7 +1194,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "native-filechooser"=".\native-filechooser.dsp" - Package Owner=<4>
+Project: "navigation"=".\navigation.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1203,7 +1221,7 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkforms
+    Project_Dep_Name fltk_forms
     End Project Dependency
 }}}
 
@@ -1239,6 +1257,21 @@ Package=<4>
 
 ###############################################################################
 
+Project: "pixmap"=".\pixmap.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "pixmap_browser"=".\pixmap_browser.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -1251,31 +1284,16 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkimages
+    Project_Dep_Name fltk_images
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkjpeg
+    Project_Dep_Name fltk_jpeg
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkpng
+    Project_Dep_Name fltk_png
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name zlib
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "pixmap"=".\pixmap.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
+    Project_Dep_Name fltk_zlib
     End Project Dependency
 }}}
 
@@ -1317,6 +1335,24 @@ Package=<4>
 
 ###############################################################################
 
+Project: "resize"=".\resize.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Fluid
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "resizebox"=".\resizebox.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -1332,7 +1368,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "resize"=".\resize.dsp" - Package Owner=<4>
+Project: "rotated_text"=".\rotated_text.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -1342,9 +1378,6 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name fltk
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name Fluid
     End Project Dependency
 }}}
 
@@ -1377,7 +1410,7 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkgl
+    Project_Dep_Name fltk_gl
     End Project Dependency
 }}}
 
@@ -1410,16 +1443,16 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkimages
+    Project_Dep_Name fltk_images
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkjpeg
+    Project_Dep_Name fltk_jpeg
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkpng
+    Project_Dep_Name fltk_png
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name zlib
+    Project_Dep_Name fltk_zlib
     End Project Dependency
 }}}
 
@@ -1515,16 +1548,16 @@ Package=<4>
     Project_Dep_Name fltk
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkimages
+    Project_Dep_Name fltk_images
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkjpeg
+    Project_Dep_Name fltk_jpeg
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name fltkpng
+    Project_Dep_Name fltk_png
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name zlib
+    Project_Dep_Name fltk_zlib
     End Project Dependency
 }}}
 
@@ -1540,6 +1573,9 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name fltk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Fluid
     End Project Dependency
 }}}
 
@@ -1578,29 +1614,14 @@ Package=<4>
 
 ###############################################################################
 
-Project: "device"=".\device.dsp" - Package Owner=<4>
+Global:
 
 Package=<5>
 {{{
 }}}
 
-Package=<4>
+Package=<3>
 {{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name fltkimages
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name fltkjpeg
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name fltkpng
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name zlib
-    End Project Dependency
 }}}
 
 ###############################################################################

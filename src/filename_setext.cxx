@@ -3,7 +3,7 @@
 //
 // Filename extension routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -27,7 +27,7 @@
 
 // Replace .ext with new extension
 
-#include <fltk3/filename.H>
+#include <FL/filename.H>
 #include "flstring.h"
 
 /**
@@ -38,9 +38,9 @@
 
    \b Example
    \code
-   #include <fltk3/filename.H>
+   #include <FL/filename.H>
    [..]
-   char buf[1024] = "/path/myfile.cxx";
+   char buf[FL_PATH_MAX] = "/path/myfile.cxx";
    fl_filename_setext(buf, sizeof(buf), ".txt");      // buf[] becomes "/path/myfile.txt"
    \endcode
 

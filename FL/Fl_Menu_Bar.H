@@ -3,7 +3,7 @@
 //
 // Menu bar header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -44,13 +44,13 @@
   top level menu defines the items in the menubar, while the submenus
   define the pull-down menus. Sub-sub menus and lower pop up to the right
   of the submenus. </P>
-  <P ALIGN=CENTER>\image html  menubar.gif</P>
-  \image latex  menubar.eps " menubar" width=12cm
+  <P ALIGN=CENTER>\image html  menubar.png</P>
+  \image latex  menubar.png " menubar" width=12cm
   <P>If there is an item in the top menu that is not a title of a
   submenu, then it acts like a "button" in the menubar.  Clicking on it
   will pick it. </P>
   <P>When the user picks an item off the menu, the item's callback is
-  done with the menubar as the fltk3::Widget* argument.  If the item
+  done with the menubar as the Fl_Widget* argument.  If the item
   does not have a callback the menubar's callback is done instead. </P>
   <P>Submenus will also pop up in response to shortcuts indicated by
   putting a '&' character in the name field of the menu item. If you put a

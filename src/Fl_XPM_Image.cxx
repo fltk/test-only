@@ -3,7 +3,7 @@
 //
 // Fl_XPM_Image routines.
 //
-// Copyright 1997-2009 by Bill Spitzak and others.
+// Copyright 1997-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -32,11 +32,11 @@
 // Include necessary header files...
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_XPM_Image.H>
+#include <FL/Fl.H>
+#include <FL/Fl_XPM_Image.H>
 #include <stdio.h>
 #include <stdlib.h>
-#include <fltk3/fl_utf8.h>
+#include <FL/fl_utf8.h>
 #include "flstring.h"
 
 
@@ -77,7 +77,7 @@ Fl_XPM_Image::Fl_XPM_Image(const char *name) : Fl_Pixmap((char *const*)0) {
       if (*q == '\\') switch (*++q) {
       case '\r':
       case '\n':
-	fgets(q,(buffer+MAXSIZE+20)-q,f); break;
+	if (!fgets(q,(buffer+MAXSIZE+20)-q,f)) { /* no problem if we hit EOF */ } break;
       case 0:
 	break;
       case 'x': {

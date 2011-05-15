@@ -3,7 +3,7 @@
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,18 +25,17 @@
 //     http://www.fltk.org/str.php
 //
 
-// Implementation of fl_draw(const char*,int,int,int,int,fltk3::Align)
+// Implementation of fl_draw(const char*,int,int,int,int,Fl_Align)
 // Used to draw all the labels and text, this routine:
 // Word wraps the labels to fit into their bounding box.
 // Breaks them into lines at the newlines.
 // Expands all unprintable characters to ^X or \nnn notation
 // Aligns them against the inside of the box.
 
-#define min(a,b) ((a)<(b)?(a):(b))
-#include <fltk3/fl_utf8.h>
-#include <fltk3/run.h>
-#include <fltk3/draw.h>
-#include <fltk3/Image.h>
+#include <FL/fl_utf8.h>
+#include <FL/Fl.H>
+#include <FL/fl_draw.H>
+#include <FL/Fl_Image.H>
 
 #include "flstring.h"
 #include <ctype.h>
@@ -177,27 +176,31 @@ fl_expand_text(const char* from, char* buf, int maxbuf, double maxw, int& n,
 }
 
 /**
-  The same as fl_draw(const char*,int,int,int,int,fltk3::Align,fltk3::Image*,int) with
+  The same as fl_draw(const char*,int,int,int,int,Fl_Align,Fl_Image*,int) with
   the addition of the \p callthis parameter, which is a pointer to a text drawing
   function such as fl_draw(const char*, int, int, int) to do the real work
 */
 void fl_draw(
     const char* str,	// the (multi-line) string
     int x, int y, int w, int h,	// bounding box
-    fltk3::Align align,
+    Fl_Align align,
     void (*callthis)(const char*,int,int,int),
-    fltk3::Image* img, int draw_symbols) {
+    Fl_Image* img, int draw_symbols) 
+{
   const char* p;
   const char* e;
   char buf[MAXBUF];
   int buflen;
   char symbol[2][255], *symptr;
-  int symwidth[2], symoffset, symtotal;
+  int symwidth[2], symoffset, symtotal, imgtotal;
 
   // count how many lines and put the last one into the buffer:
   int lines;
   double width;
 
+  // if the image is set as a backdrop, ignore it here
+  if (img && (align & FL_ALIGN_IMAGE_BACKDROP)) img = 0;
+      
   symbol[0][0] = '\0';
   symwidth[0]  = 0;
 
@@ -212,71 +215,99 @@ void fl_draw(
            *symptr++ = *str++);
       *symptr = '\0';
       if (isspace(*str)) str++;
-      symwidth[0] = min(w,h);
+      symwidth[0] = (w < h ? w : h);
     }
 
     if (str && (p = strrchr(str, '@')) != NULL && p > (str + 1) && p[-1] != '@') {
       strlcpy(symbol[1], p, sizeof(symbol[1]));
-      symwidth[1] = min(w,h);
+      symwidth[1] = (w < h ? w : h);
     }
   }
 
   symtotal = symwidth[0] + symwidth[1];
+  imgtotal = (img && (align&FL_ALIGN_IMAGE_NEXT_TO_TEXT)) ? img->w() : 0;
+  
+  int strw = 0;
+  int strh;
 
   if (str) {
-  for (p = str, lines=0; p;) {
-      e = fl_expand_text(p, buf, MAXBUF, w - symtotal, buflen, width, 
-		align&fltk3::ALIGN_WRAP, draw_symbols);
-    lines++;
-    if (!*e || (*e == '@' && e[1] != '@' && draw_symbols)) break;
-    p = e;
-  }
+    for (p = str, lines=0; p;) {
+      e = fl_expand_text(p, buf, MAXBUF, w - symtotal - imgtotal, buflen, width, 
+                         align&FL_ALIGN_WRAP, draw_symbols);
+      if (strw<width) strw = (int)width;
+      lines++;
+      if (!*e || (*e == '@' && e[1] != '@' && draw_symbols)) break;
+      p = e;
+    }
   } else lines = 0;
-
+  
   if ((symwidth[0] || symwidth[1]) && lines) {
     if (symwidth[0]) symwidth[0] = lines * fl_height();
     if (symwidth[1]) symwidth[1] = lines * fl_height();
   }
 
   symtotal = symwidth[0] + symwidth[1];
+  strh = lines * fl_height();
   
   // figure out vertical position of the first line:
   int xpos;
   int ypos;
   int height = fl_height();
-  int imgh = img ? img->h() : 0;
+  int imgvert = ((align&FL_ALIGN_IMAGE_NEXT_TO_TEXT)==0);
+  int imgh = img && imgvert ? img->h() : 0;
+  int imgw[2] = {0, 0};
 
   symoffset = 0;
 
-  if (align & fltk3::ALIGN_BOTTOM) ypos = y+h-(lines-1)*height-imgh;
-  else if (align & fltk3::ALIGN_TOP) ypos = y+height;
+  if (align & FL_ALIGN_BOTTOM) ypos = y+h-(lines-1)*height-imgh;
+  else if (align & FL_ALIGN_TOP) ypos = y+height;
   else ypos = y+(h-lines*height-imgh)/2+height;
 
   // draw the image unless the "text over image" alignment flag is set...
-  if (img && !(align & fltk3::ALIGN_TEXT_OVER_IMAGE)) {
+  if (img && imgvert && !(align & FL_ALIGN_TEXT_OVER_IMAGE)) {
     if (img->w() > symoffset) symoffset = img->w();
 
-    if (align & fltk3::ALIGN_LEFT) xpos = x + symwidth[0];
-    else if (align & fltk3::ALIGN_RIGHT) xpos = x + w - img->w() - symwidth[1];
+    if (align & FL_ALIGN_LEFT) xpos = x + symwidth[0];
+    else if (align & FL_ALIGN_RIGHT) xpos = x + w - img->w() - symwidth[1];
     else xpos = x + (w - img->w() - symtotal) / 2 + symwidth[0];
 
     img->draw(xpos, ypos - height);
     ypos += img->h();
   }
 
+  // draw the image to the side of the text
+  if (img && !imgvert /* && (align & !FL_ALIGN_TEXT_NEXT_TO_IMAGE)*/ ) {
+    if (align & FL_ALIGN_TEXT_OVER_IMAGE) { // image is right of text
+      imgw[1] = img->w();
+      if (align & FL_ALIGN_LEFT) xpos = x + symwidth[0] + strw + 1;
+      else if (align & FL_ALIGN_RIGHT) xpos = x + w - symwidth[1] - imgw[1] + 1;
+      else xpos = x + (w - strw - symtotal - imgw[1]) / 2 + symwidth[0] + strw + 1;
+    } else { // image is to the left of the text
+      imgw[0] = img->w();
+      if (align & FL_ALIGN_LEFT) xpos = x + symwidth[0] - 1;
+      else if (align & FL_ALIGN_RIGHT) xpos = x + w - symwidth[1] - strw - imgw[0] - 1;
+      else xpos = x + (w - strw - symtotal - imgw[0]) / 2 - 1;
+    }
+    int yimg = ypos - height;
+    if (align & FL_ALIGN_TOP) ;
+    else if (align & FL_ALIGN_BOTTOM) yimg += strh - img->h() - 1;
+    else yimg += (strh - img->h() - 1) / 2;
+    img->draw(xpos, yimg);
+  }
+  
   // now draw all the lines:
   if (str) {
     int desc = fl_descent();
     for (p=str; ; ypos += height) {
-      if (lines>1) e = fl_expand_text(p, buf, MAXBUF, w - symtotal, buflen, 
-				width, align&fltk3::ALIGN_WRAP, draw_symbols);
+      if (lines>1) e = fl_expand_text(p, buf, MAXBUF, w - symtotal - imgtotal, buflen, 
+				width, align&FL_ALIGN_WRAP, draw_symbols);
       else e = "";
 
       if (width > symoffset) symoffset = (int)(width + 0.5);
 
-      if (align & fltk3::ALIGN_LEFT) xpos = x + symwidth[0];
-      else if (align & fltk3::ALIGN_RIGHT) xpos = x + w - (int)(width + .5) - symwidth[1];
-      else xpos = x + (w - (int)(width + .5) - symtotal) / 2 + symwidth[0];
+      if (align & FL_ALIGN_LEFT) xpos = x + symwidth[0] + imgw[0];
+      else if (align & FL_ALIGN_RIGHT) xpos = x + w - (int)(width + .5) - symwidth[1] - imgw[1];
+      else xpos = x + (w - (int)(width + .5) - symtotal - imgw[0] - imgw[1]) / 2 + symwidth[0] + imgw[0];
 
       callthis(buf,buflen,xpos,ypos-desc);
 
@@ -289,11 +320,11 @@ void fl_draw(
   }
 
   // draw the image if the "text over image" alignment flag is set...
-  if (img && (align & fltk3::ALIGN_TEXT_OVER_IMAGE)) {
+  if (img && imgvert && (align & FL_ALIGN_TEXT_OVER_IMAGE)) {
     if (img->w() > symoffset) symoffset = img->w();
 
-    if (align & fltk3::ALIGN_LEFT) xpos = x + symwidth[0];
-    else if (align & fltk3::ALIGN_RIGHT) xpos = x + w - img->w() - symwidth[1];
+    if (align & FL_ALIGN_LEFT) xpos = x + symwidth[0];
+    else if (align & FL_ALIGN_RIGHT) xpos = x + w - img->w() - symwidth[1];
     else xpos = x + (w - img->w() - symtotal) / 2 + symwidth[0];
 
     img->draw(xpos, ypos);
@@ -302,12 +333,12 @@ void fl_draw(
   // draw the symbols, if any...
   if (symwidth[0]) {
     // draw to the left
-    if (align & fltk3::ALIGN_LEFT) xpos = x;
-    else if (align & fltk3::ALIGN_RIGHT) xpos = x + w - symtotal - symoffset;
+    if (align & FL_ALIGN_LEFT) xpos = x;
+    else if (align & FL_ALIGN_RIGHT) xpos = x + w - symtotal - symoffset;
     else xpos = x + (w - symoffset - symtotal) / 2;
 
-    if (align & fltk3::ALIGN_BOTTOM) ypos = y + h - symwidth[0];
-    else if (align & fltk3::ALIGN_TOP) ypos = y;
+    if (align & FL_ALIGN_BOTTOM) ypos = y + h - symwidth[0];
+    else if (align & FL_ALIGN_TOP) ypos = y;
     else ypos = y + (h - symwidth[0]) / 2;
 
     fl_draw_symbol(symbol[0], xpos, ypos, symwidth[0], symwidth[0], fl_color());
@@ -315,12 +346,12 @@ void fl_draw(
 
   if (symwidth[1]) {
     // draw to the right
-    if (align & fltk3::ALIGN_LEFT) xpos = x + symoffset + symwidth[0];
-    else if (align & fltk3::ALIGN_RIGHT) xpos = x + w - symwidth[1];
+    if (align & FL_ALIGN_LEFT) xpos = x + symoffset + symwidth[0];
+    else if (align & FL_ALIGN_RIGHT) xpos = x + w - symwidth[1];
     else xpos = x + (w - symoffset - symtotal) / 2 + symoffset + symwidth[0];
 
-    if (align & fltk3::ALIGN_BOTTOM) ypos = y + h - symwidth[1];
-    else if (align & fltk3::ALIGN_TOP) ypos = y;
+    if (align & FL_ALIGN_BOTTOM) ypos = y + h - symwidth[1];
+    else if (align & FL_ALIGN_TOP) ypos = y;
     else ypos = y + (h - symwidth[1]) / 2;
 
     fl_draw_symbol(symbol[1], xpos, ypos, symwidth[1], symwidth[1], fl_color());
@@ -333,7 +364,7 @@ void fl_draw(
   The string is formatted and aligned inside the passed box.
   Handles '\\t' and '\\n', expands all other control characters to '^X',
   and aligns inside or against the edges of the box.
-  See fltk3::Widget::align() for values of \p align. The value fltk3::ALIGN_INSIDE
+  See Fl_Widget::align() for values of \p align. The value FL_ALIGN_INSIDE
   is ignored, as this function always prints inside the box.
   If \p img is provided and is not \p NULL, the image is drawn above or
   below the text as specified by the \p align value.
@@ -344,16 +375,16 @@ void fl_draw(
 void fl_draw(
   const char* str,
   int x, int y, int w, int h,
-  fltk3::Align align,
-  fltk3::Image* img,
+  Fl_Align align,
+  Fl_Image* img,
   int draw_symbols)
 {
   if ((!str || !*str) && !img) return;
-  if (w && h && !fl_not_clipped(x, y, w, h) && (align & fltk3::ALIGN_INSIDE)) return;
-  if (align & fltk3::ALIGN_CLIP) 
+  if (w && h && !fl_not_clipped(x, y, w, h) && (align & FL_ALIGN_INSIDE)) return;
+  if (align & FL_ALIGN_CLIP) 
     fl_push_clip(x, y, w, h);
   fl_draw(str, x, y, w, h, align, fl_draw, img, draw_symbols);
-  if (align & fltk3::ALIGN_CLIP) 
+  if (align & FL_ALIGN_CLIP) 
     fl_pop_clip();
 }
 

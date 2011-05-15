@@ -3,7 +3,7 @@
 //
 // Warning/error message code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,7 +29,7 @@
 // do not need to be included in Fl.cxx:
 // You can also override this by redefining all of these.
 
-#include <fltk3/run.h>
+#include <FL/Fl.H>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -93,9 +93,9 @@ static void fatal(const char *format, ...) {
 
 #endif
 
-void (*fltk3::warning)(const char* format, ...) = ::warning;
-void (*fltk3::error)(const char* format, ...) = ::error;
-void (*fltk3::fatal)(const char* format, ...) = ::fatal;
+void (*Fl::warning)(const char* format, ...) = ::warning;
+void (*Fl::error)(const char* format, ...) = ::error;
+void (*Fl::fatal)(const char* format, ...) = ::fatal;
 
 //
 // End of "$Id$".

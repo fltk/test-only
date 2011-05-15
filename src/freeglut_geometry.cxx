@@ -3,7 +3,7 @@
  *
  * Freeglut geometry rendering methods.
  *
- * Copyright (c) 1999-2009 Pawel W. Olszta. All Rights Reserved.
+ * Copyright (c) 1999-2010 Pawel W. Olszta. All Rights Reserved.
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
  * Creation date: Fri Dec 3 1999
  *
@@ -25,8 +25,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <fltk3/glut.H>
-#include <fltk3/math.h>
+#include <FL/glut.H>
+#include <FL/math.h>
 #include <stdlib.h>
 
 /*

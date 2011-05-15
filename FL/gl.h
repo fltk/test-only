@@ -3,7 +3,7 @@
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // You must include this instead of GL/gl.h to get the Microsoft
 // APIENTRY stuff included (from <windows.h>) prior to the OpenGL
@@ -73,7 +73,7 @@ FL_EXPORT void gl_start();
 FL_EXPORT void gl_finish();
 
 FL_EXPORT void gl_color(Fl_Color i);
-/** back compatability */
+/** back compatibility */
 inline void gl_color(int c) {gl_color((Fl_Color)c);}
 
 FL_EXPORT void gl_rect(int x,int y,int w,int h);
@@ -98,6 +98,10 @@ FL_EXPORT void gl_draw(const char*, int n, int x, int y);
 FL_EXPORT void gl_draw(const char*, int n, float x, float y);
 FL_EXPORT void gl_draw(const char*, int x, int y, int w, int h, Fl_Align);
 FL_EXPORT void gl_measure(const char*, int& x, int& y);
+#ifdef __APPLE__
+extern FL_EXPORT void gl_texture_pile_height(int max);
+extern FL_EXPORT int gl_texture_pile_height();
+#endif
 
 FL_EXPORT void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
 

@@ -3,7 +3,7 @@
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
-# Copyright 1998-2009 by Bill Spitzak and others.
+# Copyright 1998-2010 by Bill Spitzak and others.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
@@ -193,16 +193,17 @@ include makedepend
 clean:
 	$(RM) $(ALL) $(GLALL) core
 	$(RM) *.o core.* *~ *.bck *.bak
-	$(RM) CubeViewUI.cxx
-	$(RM) fast_slow.cxx
-	$(RM) inactive.cxx
-	$(RM) keyboard_ui.cxx
-	$(RM) mandelbrot_ui.cxx
-	$(RM) preferences.cxx
-	$(RM) radio.cxx
-	$(RM) resize.cxx
-	$(RM) tabs.cxx
-	$(RM) valuators.cxx
+	$(RM) CubeViewUI.cxx CubeViewUI.h
+	$(RM) fast_slow.cxx fast_slow.h
+	$(RM) inactive.cxx inactive.h
+	$(RM) keyboard_ui.cxx keyboard_ui.h
+	$(RM) mandelbrot_ui.cxx mandelbrot_ui.h
+	$(RM) preferences.cxx preferences.h
+	$(RM) radio.cxx radio.h
+	$(RM) resize.cxx resize.h
+	$(RM) tabs.cxx tabs.h
+	$(RM) tree.cxx tree.h
+	$(RM) valuators.cxx valuators.h
 	$(OSX_ONLY) $(RM) blocks.app/Contents/MacOS/blocks$(EXEEXT)
 	$(OSX_ONLY) $(RM) checkers.app/Contents/MacOS/checkers$(EXEEXT)
 	$(OSX_ONLY) $(RM) sudoku.app/Contents/MacOS/sudoku$(EXEEXT)
@@ -391,8 +392,6 @@ native-filechooser$(EXEEXT): native-filechooser.o $(IMGLIBNAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) native-filechooser.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
 
-native-filechooser.o: ../FL/Fl_Native_File_Chooser_WIN32.H ../FL/Fl_Native_File_Chooser_MAC.H
-
 navigation$(EXEEXT): navigation.o
 
 output$(EXEEXT): output.o $(FLLIBNAME)
@@ -435,7 +434,7 @@ sudoku: sudoku.o
 
 sudoku.exe: sudoku.o sudoku.rc
 	echo Linking $@...
-	windres sudoku.rc sudokures.o
+	$(RC) sudoku.rc sudokures.o
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) sudoku.o sudokures.o -o $@ $(AUDIOLIBS) $(LINKFLTKIMG) $(LDLIBS)
 
 symbols$(EXEEXT): symbols.o
@@ -455,6 +454,7 @@ tile$(EXEEXT): tile.o
 tiled_image$(EXEEXT): tiled_image.o
 
 tree$(EXEEXT): tree.o
+tree.cxx:	tree.fl ../fluid/fluid$(EXEEXT)
 
 valuators$(EXEEXT): valuators.o
 valuators.cxx:	valuators.fl ../fluid/fluid$(EXEEXT)

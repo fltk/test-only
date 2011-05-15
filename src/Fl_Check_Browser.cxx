@@ -3,7 +3,7 @@
 //
 // Fl_Check_Browser header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,8 +28,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "flstring.h"
-#include <fltk3/draw.h>
-#include <fltk3/Fl_Check_Browser.H>
+#include <FL/fl_draw.H>
+#include <FL/Fl_Check_Browser.H>
 
 /* This uses a cache for faster access when you're scanning the list
 either forwards or backwards. */
@@ -88,7 +88,7 @@ Fl_Check_Browser::Fl_Check_Browser(int X, int Y, int W, int H, const char *l)
 /**  The constructor makes an empty browser.*/
 : Fl_Browser_(X, Y, W, H, l) {
 	type(FL_SELECT_BROWSER);
-	when(fltk3::WHEN_NEVER);
+	when(FL_WHEN_NEVER);
 	first = last = 0;
 	nitems_ = nchecked_ = 0;
 	cached_item = -1;
@@ -121,11 +121,11 @@ void Fl_Check_Browser::item_draw(void *v, int X, int Y, int, int) const {
 	cb_item *i = (cb_item *)v;
 	char *s = i->text;
 	int tsize = textsize();
-	fltk3::Color col = active_r() ? textcolor() : fl_inactive(textcolor());
+	Fl_Color col = active_r() ? textcolor() : fl_inactive(textcolor());
 	int cy = Y + (tsize + 1 - CHECK_SIZE) / 2;
 	X += 2;
 
-	fl_color(active_r() ? fltk3::FOREGROUND_COLOR : fl_inactive(fltk3::FOREGROUND_COLOR));
+	fl_color(active_r() ? FL_FOREGROUND_COLOR : fl_inactive(FL_FOREGROUND_COLOR));
 	fl_loop(X, cy, X, cy + CHECK_SIZE,
 	        X + CHECK_SIZE, cy + CHECK_SIZE, X + CHECK_SIZE, cy);
 	if (i->checked) {
@@ -166,15 +166,18 @@ int Fl_Check_Browser::item_selected(void *v) const {
 	return i->selected;
 }
 /**
-    Add a new unchecked line to the end of the browser.  The text is copied
-    using the strdup() function.  It may also be NULL to make
-    a blank line.  The second form can set the item checked.
+ Add a new unchecked line to the end of the browser.  
+ \see add(char *s, int b)
 */
 int Fl_Check_Browser::add(char *s) {
 	return (add(s, 0));
 }
 
-/** See int Fl_Check_Browser::add(char *s) */
+/** 
+ Add a new line to the end of the browser.  The text is copied
+ using the strdup() function.  It may also be NULL to make
+ a blank line.  It can set the item checked if \p b is not 0.
+ */
 int Fl_Check_Browser::add(char *s, int b) {
 	cb_item *p = (cb_item *)malloc(sizeof(cb_item));
 	p->next = 0;
@@ -316,7 +319,7 @@ void Fl_Check_Browser::check_none() {
 }
 
 int Fl_Check_Browser::handle(int event) {
-  if (event==fltk3::PUSH)
+  if (event==FL_PUSH)
     deselect();
   return Fl_Browser_::handle(event);
 }

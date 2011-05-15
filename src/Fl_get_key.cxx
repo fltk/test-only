@@ -3,7 +3,7 @@
 //
 // Keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -35,20 +35,20 @@
 // keys (mostly) by the X keysym.  So this turns the keysym into a keycode
 // and looks it up in the X key bit vector, which Fl_x.cxx keeps track of.
 
-#  include <fltk3/run.h>
-#  include <fltk3/x.H>
+#  include <FL/Fl.H>
+#  include <FL/x.H>
 
 extern char fl_key_vector[32]; // in Fl_x.cxx
 
-int fltk3::event_key(int k) {
-  if (k > fltk3::MouseButton && k <= fltk3::MouseButton+8)
-    return fltk3::event_state(8<<(k-fltk3::MouseButton));
+int Fl::event_key(int k) {
+  if (k > FL_Button && k <= FL_Button+8)
+    return Fl::event_state(8<<(k-FL_Button));
   int i;
 #  ifdef __sgi
   // get some missing PC keyboard keys:
-  if (k == fltk3::LeftMetaKey) i = 147;
-  else if (k == fltk3::RightMetaKey) i = 148;
-  else if (k == fltk3::MenuKey) i = 149;
+  if (k == FL_Meta_L) i = 147;
+  else if (k == FL_Meta_R) i = 148;
+  else if (k == FL_Menu) i = 149;
   else
 #  endif
     i = XKeysymToKeycode(fl_display, k);
@@ -56,7 +56,7 @@ int fltk3::event_key(int k) {
   return fl_key_vector[i/8] & (1 << (i%8));
 }
 
-int fltk3::get_key(int k) {
+int Fl::get_key(int k) {
   fl_open_display();
   XQueryKeymap(fl_display, fl_key_vector);
   return event_key(k);

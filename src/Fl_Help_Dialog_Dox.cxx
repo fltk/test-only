@@ -3,7 +3,7 @@
 //
 // Fl_Help_Dialog dialog for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,8 +31,8 @@
   The Fl_Help_Dialog widget displays a standard help dialog window
   using the Fl_Help_View widget.
   
-  <P ALIGN=CENTER> \image html Fl_Help_Dialog.gif </P> 
-  \image latex  Fl_Help_Dialog.eps "Fl_Help_Dialog" width=8cm
+  <P ALIGN=CENTER> \image html Fl_Help_Dialog.png </P> 
+  \image latex  Fl_Help_Dialog.png "Fl_Help_Dialog" width=8cm
 */
 
 /** \fn Fl_Help_Dialog::Fl_Help_Dialog()
@@ -105,11 +105,11 @@
 
 /** \fn void Fl_Help_Dialog::show()
   Shows the main Help Dialog Window
-  Delegates call to encapsulated window_ void fltk3::Window::show() method */
+  Delegates call to encapsulated window_ void Fl_Window::show() method */
 
 /** \fn void Fl_Help_Dialog::show(int argc, char **argv)
   Shows the main Help Dialog Window
-  Delegates call to encapsulated window_ void fltk3::Window::show(int argc, char **argv) instance method */
+  Delegates call to encapsulated window_ void Fl_Window::show(int argc, char **argv) instance method */
 
 /** \fn void Fl_Help_Dialog::textsize(Fl_Fontsize s)
   Sets the internal Fl_Help_View instance text size.

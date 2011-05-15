@@ -3,7 +3,7 @@
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,26 +25,27 @@
 //     http://www.fltk.org/str.php
 //
 
-// Functions from <fltk3/gl.h>
+// Functions from <FL/gl.h>
 // See also Fl_Gl_Window and gl_start.cxx
 
 #include "flstring.h"
-#if HAVE_GL
+#if HAVE_GL || defined(FL_DOXYGEN)
 
-#include <fltk3/run.h>
-#include <fltk3/gl.h>
-#include <fltk3/x.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/gl.h>
+#include <FL/x.H>
+#include <FL/fl_draw.H>
+#include <FL/Fl_Device.H>
 #include "Fl_Gl_Choice.H"
 #include "Fl_Font.H"
-#include <fltk3/fl_utf8.h>
+#include <FL/fl_utf8.h>
 
 #if !defined(WIN32) && !defined(__APPLE__)
-#include <fltk3/Xutf8.h>
+#include <FL/Xutf8.h>
 #endif
 
 #if USE_XFT
-extern XFontStruct* fl_xxfont();
+//extern XFontStruct* fl_xxfont();
 #endif // USE_XFT
 
 /** Returns the current font's height */
@@ -60,6 +61,7 @@ double gl_width(uchar c) {return fl_width(c);}
 
 static Fl_Font_Descriptor *gl_fontsize;
 
+#define GL_DRAW_USES_TEXTURES  (defined(__APPLE__) && !__ppc__) // 1 only for non-PPC OSX
 #ifndef __APPLE__
 #  define USE_OksiD_style_GL_font_selection 1  // Most hosts except OSX
 #else
@@ -75,6 +77,8 @@ static Fl_Font_Descriptor *gl_fontsize;
   */
 void  gl_font(int fontid, int size) {
   fl_font(fontid, size);
+  Fl_Font_Descriptor *fl_fontsize = fl_graphics_driver->font_descriptor();
+#if !GL_DRAW_USES_TEXTURES
   if (!fl_fontsize->listbase) {
 
 #ifdef  USE_OksiD_style_GL_font_selection
@@ -82,27 +86,19 @@ void  gl_font(int fontid, int size) {
 #else // Fltk-1.1.8 style GL font selection
 
 #if defined (USE_X11) // X-windows options follow, either XFT or "plain" X
-#  if USE_XFT // XFT case
-#    warning We really need a glXUseXftFont implementation here...
-//    fl_xfont = fl_xxfont();
-    XFontStruct *font = fl_xxfont();
+// FIXME:  warning Ideally, for XFT, we really need a glXUseXftFont implementation here...
+// FIXME:  warning GL font selection is basically wrong here
+/* OksiD had a fairly sophisticated scheme for storing multiple X fonts in a XUtf8FontStruct,
+ * then sorting through them at draw time (for normal X rendering) to find which one can
+ * render the current glyph... But for now, just use the first font in the list for GL...
+ */
+    XFontStruct *font = fl_xfont;
     int base = font->min_char_or_byte2;
     int count = font->max_char_or_byte2-base+1;
     fl_fontsize->listbase = glGenLists(256);
     glXUseXFont(font->fid, base, count, fl_fontsize->listbase+base);
-#  else // plain X
-#    warning GL font selection is basically wrong here
-/* OksiD has a fairly sophisticated scheme for storing multiple X fonts in a XUtf8FontStruct,
- * then sorting through them at draw time (for normal X rendering) to find which one can
- * render the current glyph... But for now, just use the first font in the list for GL...
- */
-    XFontStruct *tmp_font = fl_fontsize->font->fonts[0];  // this is certainly wrong!
-    int base = tmp_font->min_char_or_byte2;
-    int count = tmp_font->max_char_or_byte2-base+1;
-    fl_fontsize->listbase = glGenLists(256);
-    glXUseXFont(tmp_font->fid, base, count, fl_fontsize->listbase+base);
-#  endif // USE_XFT
 # elif defined(WIN32)
+    // this is unused because USE_OksiD_style_GL_font_selection == 1
     int base = fl_fontsize->metr.tmFirstChar;
     int count = fl_fontsize->metr.tmLastChar-base+1;
     HFONT oldFid = (HFONT)SelectObject(fl_gc, fl_fontsize->fid);
@@ -110,7 +106,6 @@ void  gl_font(int fontid, int size) {
     wglUseFontBitmaps(fl_gc, base, count, fl_fontsize->listbase+base);
     SelectObject(fl_gc, oldFid);
 # elif defined(__APPLE_QUARTZ__)
-    /* FIXME: no OpenGL Font Selection in Cocoa!
 //AGL is not supported for use in 64-bit applications:
 //http://developer.apple.com/mac/library/documentation/Carbon/Conceptual/Carbon64BitGuide/OtherAPIChanges/OtherAPIChanges.html
     short font, face, size;
@@ -123,22 +118,18 @@ void  gl_font(int fontid, int size) {
     fl_fontsize->listbase = glGenLists(256);
 	aglUseFont(aglGetCurrentContext(), font, face,
                size, 0, 256, fl_fontsize->listbase);
-     */
 # else 
 #   error unsupported platform
 # endif
 
 #endif // USE_OksiD_style_GL_font_selection
-
   }
-  gl_fontsize = fl_fontsize;
-#ifndef __APPLE_QUARTZ__
   glListBase(fl_fontsize->listbase);
-#endif
+#endif // !GL_DRAW_USES_TEXTURES
+  gl_fontsize = fl_fontsize;
 }
 
 #ifndef __APPLE__
-// The OSX build does not use this at present... It probbaly should, though...
 static void get_list(int r) {
   gl_fontsize->glok[r] = 1;
 #if defined(USE_X11)
@@ -160,7 +151,7 @@ static void get_list(int r) {
   wglUseFontBitmapsW(fl_gc, ii, ii + 0x03ff, gl_fontsize->listbase+ii);
   SelectObject(fl_gc, oldFid);
 #elif defined(__APPLE_QUARTZ__)
-// FIXME:
+// handled by textures
 #else
 #  error unsupported platform
 #endif
@@ -172,8 +163,7 @@ void gl_remove_displaylist_fonts()
 # if HAVE_GL
 
   // clear variables used mostly in fl_font
-  fl_font_ = 0;
-  fl_size_ = 0;
+  fl_graphics_driver->font(0, 0);
 
   for (int j = 0 ; j < FL_FREE_FONT ; ++j)
   {
@@ -206,26 +196,27 @@ void gl_remove_displaylist_fonts()
 #endif
 }
 
+#if GL_DRAW_USES_TEXTURES
+static void gl_draw_textures(const char* str, int n);
+#endif
+
 /**
   Draws an array of n characters of the string in the current font
   at the current position.
+ \see On the Mac OS X platform, see gl_texture_pile_height(int)
   */
-#ifdef __APPLE__
-static void gl_draw_cocoa(const char* str, int n);
-#endif
-
 void gl_draw(const char* str, int n) {
 #ifdef __APPLE__  
-  gl_draw_cocoa(str, n);  
+  
+#if GL_DRAW_USES_TEXTURES
+  gl_draw_textures(str, n);
+#else
+  glCallLists(n, GL_UNSIGNED_BYTE, str);
+#endif
+  
 #else
   static xchar *buf = NULL;
   static int l = 0;
-//  if (n > l) {
-//    buf = (xchar*) realloc(buf, sizeof(xchar) * (n + 20));
-//    l = n + 20;
-//  }
-//  n = fl_utf2unicode((const unsigned char*)str, n, buf);
-
   int wn = fl_utf8toUtf16(str, n, (unsigned short*)buf, l);
   if(wn >= l) {
     buf = (xchar*) realloc(buf, sizeof(xchar) * (wn + 1));
@@ -246,6 +237,7 @@ void gl_draw(const char* str, int n) {
 
 /**
   Draws n characters of the string in the current font at the given position 
+ \see On the Mac OS X platform, see gl_texture_pile_height(int)
   */
 void gl_draw(const char* str, int n, int x, int y) {
   glRasterPos2i(x, y);
@@ -254,6 +246,7 @@ void gl_draw(const char* str, int n, int x, int y) {
 
 /**
   Draws n characters of the string in the current font at the given position 
+ \see On the Mac OS X platform, see gl_texture_pile_height(int)
   */
 void gl_draw(const char* str, int n, float x, float y) {
   glRasterPos2f(x, y);
@@ -262,6 +255,7 @@ void gl_draw(const char* str, int n, float x, float y) {
 
 /**
   Draws a nul-terminated string in the current font at the current position
+ \see On the Mac OS X platform, see gl_texture_pile_height(int)
   */
 void gl_draw(const char* str) {
   gl_draw(str, strlen(str));
@@ -269,6 +263,7 @@ void gl_draw(const char* str) {
 
 /**
   Draws a nul-terminated string in the current font at the given position 
+ \see On the Mac OS X platform, see gl_texture_pile_height(int)
   */
 void gl_draw(const char* str, int x, int y) {
   gl_draw(str, strlen(str), x, y);
@@ -276,6 +271,7 @@ void gl_draw(const char* str, int x, int y) {
 
 /**
   Draws a nul-terminated string in the current font at the given position 
+ \see On the Mac OS X platform, see gl_texture_pile_height(int)
   */
 void gl_draw(const char* str, float x, float y) {
   gl_draw(str, strlen(str), x, y);
@@ -294,10 +290,11 @@ static void gl_draw_invert(const char* str, int n, int x, int y) {
 void gl_draw(
   const char* str, 	// the (multi-line) string
   int x, int y, int w, int h, 	// bounding box
-  fltk3::Align align) {
+  Fl_Align align) {
   fl_draw(str, x, -y-h, w, h, align, gl_draw_invert);
 }
 
+/** Measure how wide and tall the string will be when drawn by the gl_draw() function */
 void gl_measure(const char* str, int& x, int& y) {fl_measure(str,x,y);}
 
 /**
@@ -328,7 +325,7 @@ extern int fl_overlay_depth;
   For color-index modes it will use fl_xpixel(c), which is only
   right if the window uses the default colormap!
   */
-void gl_color(fltk3::Color i) {
+void gl_color(Fl_Color i) {
 #if HAVE_GL_OVERLAY
 #if defined(WIN32)
   if (fl_overlay && fl_overlay_depth) {
@@ -340,7 +337,7 @@ void gl_color(fltk3::Color i) {
       else if (i >= size-2) glIndexi(size-1);
       else glIndexi(i);
     } else {
-      glIndexi(i ? i : fltk3::GRAY_RAMP);
+      glIndexi(i ? i : FL_GRAY_RAMP);
     }
     return;
   }
@@ -349,7 +346,7 @@ void gl_color(fltk3::Color i) {
 #endif
 #endif
   uchar red, green, blue;
-  fltk3::get_color(i, red, green, blue);
+  Fl::get_color(i, red, green, blue);
   glColor3ub(red, green, blue);
 }
 
@@ -360,13 +357,56 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
   glDrawPixels(w,h,d<4?GL_RGB:GL_RGBA,GL_UNSIGNED_BYTE,(const ulong*)b);
 }
 
-#ifdef __APPLE__
+#if GL_DRAW_USES_TEXTURES || defined(FL_DOXYGEN)
 
-#include <fltk3/glu.h>
+#include <FL/glu.h>
 
-static void gl_draw_cocoa(const char* str, int n) 
+// manages a fifo pile of pre-computed string textures
+class gl_texture_fifo {
+  friend void gl_draw_textures(const char *, int);
+private:
+  typedef struct { // information for a pre-computed texture
+    GLuint texName; // its name
+    char *utf8; //its text
+    Fl_Font_Descriptor *fdesc; // its font
+    int width; // its width
+    int height; // its height
+  } data;
+  data *fifo; // array of pile elements
+  int size_; // pile height
+  int current; // the oldest texture to have entered the pile
+  int last; // pile top
+  int textures_generated; // true iff glGenTextures has been called
+  void display_texture(int rank);
+  int compute_texture(const char* str, int n);
+  int already_known(const char *str, int n);
+public:
+  gl_texture_fifo(int max = 100); // 100 = default height of texture pile
+  inline int size(void) {return size_; };
+  ~gl_texture_fifo(void);
+};
+
+gl_texture_fifo::gl_texture_fifo(int max)
 {
-//setup matrices
+  size_ = max;
+  last = current = -1;
+  textures_generated = 0;
+  fifo = (data*)calloc(size_, sizeof(data));
+}
+
+gl_texture_fifo::~gl_texture_fifo()
+{
+  for (int i = 0; i < size_; i++) {
+    if (fifo[i].utf8) free(fifo[i].utf8);
+    if (textures_generated) glDeleteTextures(1, &fifo[i].texName);
+    }
+  free(fifo);
+}
+
+// displays a pre-computed texture on the GL scene
+void gl_texture_fifo::display_texture(int rank)
+{
+  //setup matrices
   GLint matrixMode;
   glGetIntegerv (GL_MATRIX_MODE, &matrixMode);
   glMatrixMode (GL_PROJECTION);
@@ -375,68 +415,46 @@ static void gl_draw_cocoa(const char* str, int n)
   glMatrixMode (GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity ();
-  float winw = fltk3::Window::current()->w();
-  float winh = fltk3::Window::current()->h();
+  float winw = Fl_Window::current()->w();
+  float winh = Fl_Window::current()->h();
   glScalef (2.0f / winw, 2.0f /  winh, 1.0f);
   glTranslatef (-winw / 2.0f, -winh / 2.0f, 0.0f);
-//write str to a bitmap just big enough  
-  int w = 0, h = 0;
-  fl_measure(str, w, h, 0);
-  CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
-  void *base = calloc(4*w, h);
-  if(base == NULL) return;
-  fl_gc = CGBitmapContextCreate(base, w, h, 8, w*4, lut, kCGImageAlphaPremultipliedLast);
-  CGColorSpaceRelease(lut);
-  fl_fontsize = gl_fontsize;
-  fl_draw(str, 0, h - fl_descent());
-//put this bitmap in a texture  
-  static GLuint texName = 0;
-  glPushAttrib(GL_TEXTURE_BIT);
-  if (0 == texName) glGenTextures (1, &texName);
-  glBindTexture (GL_TEXTURE_RECTANGLE_EXT, texName);
-  glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, w, h, 0,  GL_RGBA, GL_UNSIGNED_BYTE, base);
-  glPopAttrib();
-  CGContextRelease(fl_gc);
-  fl_gc = NULL;
-  free(base);
+  //write the texture on screen
   GLfloat pos[4];
   glGetFloatv(GL_CURRENT_RASTER_POSITION, pos);
-  if (texName) {//write the texture on screen
-	CGRect bounds = CGRectMake (pos[0], pos[1] - fl_descent(), w, h);
-	glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT | GL_COLOR_BUFFER_BIT); // GL_COLOR_BUFFER_BIT for glBlendFunc, GL_ENABLE_BIT for glEnable / glDisable
-	
-	glDisable (GL_DEPTH_TEST); // ensure text is not removed by depth buffer test.
-	glEnable (GL_BLEND); // for text fading
-	glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA); // ditto
-	glEnable (GL_TEXTURE_RECTANGLE_EXT);	
-	
-	glBindTexture (GL_TEXTURE_RECTANGLE_EXT, texName);
-	glBegin (GL_QUADS);
-	glTexCoord2f (0.0f, 0.0f); // draw lower left in world coordinates
-	glVertex2f (bounds.origin.x, bounds.origin.y);
-	
-	glTexCoord2f (0.0f, h); // draw upper left in world coordinates
-	glVertex2f (bounds.origin.x, bounds.origin.y + bounds.size.height);
-	
-	glTexCoord2f (w, h); // draw upper right in world coordinates
-	glVertex2f (bounds.origin.x + bounds.size.width, bounds.origin.y + bounds.size.height);
-	
-	glTexCoord2f (w, 0.0f); // draw lower right in world coordinates
-	glVertex2f (bounds.origin.x + bounds.size.width, bounds.origin.y);
-	glEnd ();
-	
-	glPopAttrib();
-	glDeleteTextures(1, &texName);
-  }
+  CGRect bounds = CGRectMake (pos[0], pos[1] - fl_descent(), fifo[rank].width, fifo[rank].height);
+  
+  // GL_COLOR_BUFFER_BIT for glBlendFunc, GL_ENABLE_BIT for glEnable / glDisable
+  glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT | GL_COLOR_BUFFER_BIT); 
+  glDisable (GL_DEPTH_TEST); // ensure text is not removed by depth buffer test.
+  glEnable (GL_BLEND); // for text fading
+  glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA); // ditto
+  glEnable (GL_TEXTURE_RECTANGLE_EXT);	
+  glDisable(GL_LIGHTING);
+  glBindTexture (GL_TEXTURE_RECTANGLE_EXT, fifo[rank].texName);
+  glBegin (GL_QUADS);
+  glTexCoord2f (0.0f, 0.0f); // draw lower left in world coordinates
+  glVertex2f (bounds.origin.x, bounds.origin.y);
+  
+  glTexCoord2f (0.0f, fifo[rank].height); // draw upper left in world coordinates
+  glVertex2f (bounds.origin.x, bounds.origin.y + bounds.size.height);
+  
+  glTexCoord2f (fifo[rank].width, fifo[rank].height); // draw upper right in world coordinates
+  glVertex2f (bounds.origin.x + bounds.size.width, bounds.origin.y + bounds.size.height);
+  
+  glTexCoord2f (fifo[rank].width, 0.0f); // draw lower right in world coordinates
+  glVertex2f (bounds.origin.x + bounds.size.width, bounds.origin.y);
+  glEnd ();
+  glPopAttrib();
+  
   // reset original matrices
   glPopMatrix(); // GL_MODELVIEW
   glMatrixMode (GL_PROJECTION);
   glPopMatrix();
   glMatrixMode (matrixMode);
-//set the raster position to end of string
-  pos[0] += w;
+  
+  //set the raster position to end of string
+  pos[0] += fifo[rank].width;
   GLdouble modelmat[16];
   glGetDoublev (GL_MODELVIEW_MATRIX, modelmat);
   GLdouble projmat[16];
@@ -447,9 +465,115 @@ static void gl_draw_cocoa(const char* str, int n)
   gluUnProject(pos[0], pos[1], pos[2], modelmat, projmat, viewport, &objX, &objY, &objZ);
   glRasterPos2d(objX, objY);
 }
-#endif
 
-#endif
+// pre-computes a string texture
+int gl_texture_fifo::compute_texture(const char* str, int n)
+{
+  current = (current + 1) % size_;
+  if (current > last) last = current;
+  //write str to a bitmap just big enough  
+  if ( fifo[current].utf8 ) free(fifo[current].utf8);
+  fifo[current].utf8 = (char *)malloc(n + 1);
+  memcpy(fifo[current].utf8, str, n);
+  fifo[current].utf8[n] = 0;
+  fifo[current].width = 0, fifo[current].height = 0;
+  fl_measure(fifo[current].utf8, fifo[current].width, fifo[current].height, 0);
+  CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
+  void *base = calloc(4*fifo[current].width, fifo[current].height);
+  if (base == NULL) return -1;
+  fl_gc = CGBitmapContextCreate(base, fifo[current].width, fifo[current].height, 8, fifo[current].width*4, lut, kCGImageAlphaPremultipliedLast);
+  CGColorSpaceRelease(lut);
+  fl_graphics_driver->font_descriptor(gl_fontsize);
+  GLfloat colors[4];
+  glGetFloatv(GL_CURRENT_COLOR, colors);
+  fl_color((uchar)(colors[0]*255), (uchar)(colors[1]*255), (uchar)(colors[2]*255));
+  fl_draw(str, n, 0, fifo[current].height - fl_descent());
+  //put this bitmap in a texture  
+  glPushAttrib(GL_TEXTURE_BIT);
+  glBindTexture (GL_TEXTURE_RECTANGLE_EXT, fifo[current].texName);
+  glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_RECTANGLE_EXT, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexImage2D(GL_TEXTURE_RECTANGLE_EXT, 0, GL_RGBA, fifo[current].width, fifo[current].height, 0,  GL_RGBA, GL_UNSIGNED_BYTE, base);
+  glPopAttrib();
+  CGContextRelease(fl_gc);
+  fl_gc = NULL;
+  free(base);
+  fifo[current].fdesc = gl_fontsize;
+  return current;
+}
+
+// returns rank of pre-computed texture for a string if it exists
+int gl_texture_fifo::already_known(const char *str, int n)
+{
+  int rank;
+  for ( rank = 0; rank <= last; rank++) {
+    if ( memcmp(str, fifo[rank].utf8, n) == 0 && fifo[rank].utf8[n] == 0 &&
+      fifo[rank].fdesc == gl_fontsize) return rank;
+  }
+  return -1;
+}
+
+static gl_texture_fifo *gl_fifo = NULL; // points to the texture pile class instance
+
+// draws a utf8 string using pre-computed texture if available
+static void gl_draw_textures(const char* str, int n) 
+{
+  if (! gl_fifo) gl_fifo = new gl_texture_fifo();
+  if (!gl_fifo->textures_generated) {
+    for (int i = 0; i < gl_fifo->size_; i++) glGenTextures (1, &(gl_fifo->fifo[i].texName));
+    gl_fifo->textures_generated = 1;
+  }
+  int rank = gl_fifo->already_known(str, n);
+  if (rank == -1) {
+    rank = gl_fifo->compute_texture(str, n);
+  }
+  gl_fifo->display_texture(rank);
+}
+
+/** \addtogroup group_macosx
+ @{ */
+
+/**
+ \brief Returns the current height of the pile of pre-computed string textures
+ *
+ The default value is 100
+ */
+int gl_texture_pile_height(void)
+{
+  if (! gl_fifo) gl_fifo = new gl_texture_fifo();
+  return gl_fifo->size();
+}
+
+/**
+ \brief Changes the height of the pile of pre-computed string textures
+ *
+ Strings that are often re-displayed can be processed much faster if
+ this pile is set high enough to hold all of them.
+ \param max Height of the texture pile
+ */
+void gl_texture_pile_height(int max)
+{
+  if (gl_fifo) delete gl_fifo;
+  gl_fifo = new gl_texture_fifo(max);
+}
+
+/** @} */
+
+#elif defined(__APPLE__)
+// used only if __ppc__
+int gl_texture_pile_height(void) {return 0;}
+void gl_texture_pile_height(int max) {}
+#endif // GL_DRAW_USES_TEXTURES
+#if defined(__APPLE__)
+void gl_texture_reset()
+{
+#if GL_DRAW_USES_TEXTURES
+  if (gl_fifo) gl_texture_pile_height(gl_texture_pile_height());
+#endif // GL_DRAW_USES_TEXTURES
+}
+#endif // __APPLE__
+
+#endif // HAVE_GL
 
 //
 // End of "$Id$".

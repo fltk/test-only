@@ -3,7 +3,7 @@
 //
 // Menu window code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -33,10 +33,10 @@
 // can be used to dismiss the menus.
 
 #include <config.h>
-#include <fltk3/run.h>
-#include <fltk3/x.H>
-#include <fltk3/draw.h>
-#include <fltk3/Fl_Menu_Window.H>
+#include <FL/Fl.H>
+#include <FL/x.H>
+#include <FL/fl_draw.H>
+#include <FL/Fl_Menu_Window.H>
 
 // WIN32 note: HAVE_OVERLAY is false
 #if HAVE_OVERLAY
@@ -69,8 +69,8 @@ void Fl_Menu_Window::flush() {
   fl_window = myi->xid;
   if (!gc) {
 	  gc = XCreateGC(fl_display, myi->xid, 0, 0);
-# if defined(USE_CAIRO)
-	  if(fltk3::autolink_context()) fltk3::cairo_make_current(gc); // capture gc changes automatically to update the cairo context adequately
+# if defined(FLTK_USE_CAIRO)
+	  if(Fl::autolink_context()) Fl::cairo_make_current(gc); // capture gc changes automatically to update the cairo context adequately
 # endif
   }
   fl_gc = gc;

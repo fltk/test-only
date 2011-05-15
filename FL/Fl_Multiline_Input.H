@@ -3,7 +3,7 @@
 //
 // Multiline input header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -38,17 +38,21 @@
   This input field displays '\n' characters as new lines rather than ^J,
   and accepts the Return, Tab, and up and down arrow keys.  This is for
   editing multiline text.
-  <P>
+
   This is far from the nirvana of text editors, and is probably only
   good for small bits of text, 10 lines at most. Note that this widget
   does not support scrollbars or per-character color control.
-  <P>
+
   If you are presenting large amounts of text and need scrollbars
   or full color control of characters, you probably want Fl_Text_Editor
   instead.
-  <P>
+
+  In FLTK 1.3.x, the default behavior of the 'Tab' key was changed
+  to support consistent focus navigation. To get the older FLTK 1.1.x
+  behavior, set Fl_Input_::tab_nav() to 0. Newer programs should consider using
+  Fl_Text_Editor.
 */
-class Fl_Multiline_Input : public Fl_Input {
+class FL_EXPORT Fl_Multiline_Input : public Fl_Input {
 public:
   /**
     Creates a new Fl_Multiline_Input widget using the given

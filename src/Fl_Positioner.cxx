@@ -3,7 +3,7 @@
 //
 // Positioner widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,9 +29,9 @@
 // The positioner widget from Forms, gives 2D input
 // Written by: Mark Overmars
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_Positioner.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Positioner.H>
+#include <FL/fl_draw.H>
 
 static double flinear(double val, double smin, double smax, double gmin, double gmax)
 {
@@ -78,14 +78,14 @@ int Fl_Positioner::yvalue(double Y) {
 
 int Fl_Positioner::handle(int event, int X, int Y, int W, int H) {
   switch (event) {
-  case fltk3::PUSH:
-  case fltk3::DRAG:
-  case fltk3::RELEASE: {
+  case FL_PUSH:
+  case FL_DRAG:
+  case FL_RELEASE: {
     double x1 = X + 4;
     double y1 = Y + 4;
     double w1 = W - 2 * 4;
     double h1 = H - 2 * 4;
-    double xx = flinear(fltk3::event_x(), x1, x1+w1-1.0, xmin, xmax);
+    double xx = flinear(Fl::event_x(), x1, x1+w1-1.0, xmin, xmax);
     if (xstep_) xx = int(xx/xstep_+0.5) * xstep_;
     if (xmin < xmax) {
       if (xx < xmin) xx = xmin;
@@ -94,7 +94,7 @@ int Fl_Positioner::handle(int event, int X, int Y, int W, int H) {
       if (xx > xmin) xx = xmin;
       if (xx < xmax) xx = xmax;
     }
-    double yy = flinear(fltk3::event_y(), y1, y1+h1-1.0, ymin, ymax);
+    double yy = flinear(Fl::event_y(), y1, y1+h1-1.0, ymin, ymax);
     if (ystep_) yy = int(yy/ystep_+0.5) * ystep_;
     if (ymin < ymax) {
       if (yy < ymin) yy = ymin;
@@ -108,10 +108,10 @@ int Fl_Positioner::handle(int event, int X, int Y, int W, int H) {
       set_changed();
       redraw();
                    } }
-    if (!(when() & fltk3::WHEN_CHANGED ||
-	  (when() & fltk3::WHEN_RELEASE && event == fltk3::RELEASE))) return 1;
-    if (changed() || when()&fltk3::WHEN_NOT_CHANGED) {
-      if (event == fltk3::RELEASE) clear_changed();
+    if (!(when() & FL_WHEN_CHANGED ||
+	  (when() & FL_WHEN_RELEASE && event == FL_RELEASE))) return 1;
+    if (changed() || when()&FL_WHEN_NOT_CHANGED) {
+      if (event == FL_RELEASE) clear_changed();
       do_callback();
     }
     return 1;
@@ -126,14 +126,14 @@ int Fl_Positioner::handle(int e) {
 
 /**
   Creates a new Fl_Positioner widget using the given position,
-  size, and label string. The default boxtype is fltk3::NO_BOX.
+  size, and label string. The default boxtype is FL_NO_BOX.
 */
 Fl_Positioner::Fl_Positioner(int X, int Y, int W, int H, const char* l)
-: fltk3::Widget(X, Y, W, H, l) {
-  box(fltk3::DOWN_BOX);
-  selection_color(fltk3::RED);
-  align(fltk3::ALIGN_BOTTOM);
-  when(fltk3::WHEN_CHANGED);
+: Fl_Widget(X, Y, W, H, l) {
+  box(FL_DOWN_BOX);
+  selection_color(FL_RED);
+  align(FL_ALIGN_BOTTOM);
+  when(FL_WHEN_CHANGED);
   xmin = ymin = 0;
   xmax = ymax = 1;
   xvalue_ = yvalue_ = .5;

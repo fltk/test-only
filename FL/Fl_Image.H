@@ -3,7 +3,7 @@
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -33,7 +33,7 @@
 
 #  include "Enumerations.H"
 
-class fltk3::Widget;
+class Fl_Widget;
 struct Fl_Menu_Item;
 struct Fl_Label;
 
@@ -59,33 +59,24 @@ class FL_EXPORT Fl_Image {
   protected:
 
   /**
-    The first form of the w() method returns the current
-    image width in pixels.</P>
-    
-    <P>The second form is a protected method that sets the current
-    image width.
+    Sets the current image width in pixels.
   */
   void w(int W) {w_ = W;}
   /**
-    The first form of the h() method returns the current
-    image height in pixels.</P>
-    
-    <P>The second form is a protected method that sets the current
-    image height.
+    Sets the current image height in pixels.
   */
   void h(int H) {h_ = H;}
   /**
-    The first form of the d() method returns the current
-    image depth. The return value will be 0 for bitmaps, 1 for
-    pixmaps, and 1 to 4 for color images.</P>
-    
-    <P>The second form is a protected method that sets the current
-    image depth.
+    Sets the current image depth.
   */
   void d(int D) {d_ = D;}
-  /**    See int ld()  */
+  /**
+   Sets the current line data size in bytes.
+   */
   void ld(int LD) {ld_ = LD;}
-  /**    See const char * const *data()  */
+  /** 
+   Sets the current array pointer and count of pointers in the array.
+   */
   void data(const char * const *p, int c) {data_ = p; count_ = c;}
   void draw_empty(int X, int Y);
 
@@ -94,26 +85,23 @@ class FL_EXPORT Fl_Image {
 
   public:
 
-  /** See void Fl_Image::w(int) */
+  /** 
+   Returns the current image width in pixels.
+  */
   int w() const {return w_;}
-  /** See void Fl_Image::h(int) */
+  /**     Returns the current image height in pixels.
+   */
   int h() const {return h_;}
   /**
-    The first form of the d() method returns the current
-    image depth. The return value will be 0 for bitmaps, 1 for
+    Returns the current image depth. 
+   The return value will be 0 for bitmaps, 1 for
     pixmaps, and 1 to 4 for color images.</P>
-    
-    <P>The second form is a protected method that sets the current
-    image depth.
   */
   int d() const {return d_;}
   /**
-    The first form of the ld() method returns the current
-    line data size in bytes. Line data is extra data that is included
-    after each line of color image data and is normally not present.</P>
-    
-    <P>The second form is a protected method that sets the current
-    line data size in bytes.
+    Returns the current line data size in bytes. 
+    Line data is extra data that is included
+    after each line of color image data and is normally not present.
   */
   int ld() const {return ld_;}
   /**
@@ -124,12 +112,8 @@ class FL_EXPORT Fl_Image {
   */
   int count() const {return count_;}
   /**
-    The first form of the data() method returns a
-    pointer to the current image data array. Use the
-    count() method to find the size of the data array.</P>
-    
-    <P>The second form is a protected method that sets the current
-    array pointer and count of pointers in the array.
+    Returns a pointer to the current image data array. 
+    Use the count() method to find the size of the data array.
   */
   const char * const *data() const {return data_;}
   
@@ -159,18 +143,19 @@ class FL_EXPORT Fl_Image {
   */
   void inactive() { color_average(FL_GRAY, .33f); }
   virtual void desaturate();
-  virtual void label(fltk3::Widget*w);
+  virtual void label(Fl_Widget*w);
   virtual void label(Fl_Menu_Item*m);
   /**
-    The draw() methods draw the image. This form specifies
+    Draws the image with a bounding box. 
+    This form specifies
     a bounding box for the image, with the origin
     (upper-lefthand corner) of the image offset by the cx
     and cy arguments.
   */
   virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0); // platform dependent
   /**
-    The draw() methods draw the image. This form
-    specifies the upper-lefthand corner of the image
+    Draws the image. 
+    This form specifies the upper-lefthand corner of the image.
   */
   void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);} // platform dependent
   virtual void uncache();
@@ -184,11 +169,14 @@ class FL_EXPORT Fl_Image {
   contents of the screen.</P>
   
   <P>Fl_RGB_Image is defined in
-  &lt;fltk3/Fl_Image.H&gt;, however for compatibility reasons
-  &lt;fltk3/Fl_RGB_Image.H&gt; should be included.
+  &lt;FL/Fl_Image.H&gt;, however for compatibility reasons
+  &lt;FL/Fl_RGB_Image.H&gt; should be included.
 */
 class FL_EXPORT Fl_RGB_Image : public Fl_Image {
-  public:
+  friend class Fl_Quartz_Graphics_Driver;
+  friend class Fl_GDI_Graphics_Driver;
+  friend class Fl_Xlib_Graphics_Driver;
+public:
 
   const uchar *array;
   int alloc_array; // Non-zero if array was allocated
@@ -215,7 +203,7 @@ class FL_EXPORT Fl_RGB_Image : public Fl_Image {
   virtual void desaturate();
   virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
   void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
-  virtual void label(fltk3::Widget*w);
+  virtual void label(Fl_Widget*w);
   virtual void label(Fl_Menu_Item*m);
   virtual void uncache();
 };

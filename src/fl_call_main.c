@@ -1,7 +1,7 @@
 /*
  * "$Id$"
  *
- * Copyright 1998-2009 by Bill Spitzak and others.
+ * Copyright 1998-2010 by Bill Spitzak and others.
  *
  * fl_call_main() calls main() for you Windows people.  Needs to be done in C
  * because Borland C++ won't let you call main() from C++.
@@ -51,7 +51,7 @@
 #  include <windows.h>
 #  include <stdio.h>
 #  include <stdlib.h>
-#  include <fltk3/fl_utf8.h>
+#  include <FL/fl_utf8.h>
 
 extern int main(int, char *[]);
 

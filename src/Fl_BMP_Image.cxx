@@ -3,7 +3,7 @@
 //
 // Fl_BMP_Image routines.
 //
-// Copyright 1997-2009 by Easy Software Products.
+// Copyright 1997-2010 by Easy Software Products.
 // Image support by Matthias Melcher, Copyright 2000-2009.
 //
 // This library is free software; you can redistribute it and/or
@@ -34,7 +34,8 @@
 // Include necessary header files...
 //
 
-#include <fltk3/Fl_BMP_Image.H>
+#include <FL/Fl_BMP_Image.H>
+#include <FL/fl_utf8.h>
 #include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -67,7 +68,7 @@ static unsigned int	read_dword(FILE *fp);
   the image
 */
 Fl_BMP_Image::Fl_BMP_Image(const char *bmp) // I - File to read
-  : fltk3::RGBImage(0,0,0) {
+  : Fl_RGB_Image(0,0,0) {
   FILE		*fp;		// File pointer
   int		info_size,	// Size of info header
 		depth,		// Depth of image (bits)
@@ -93,7 +94,7 @@ Fl_BMP_Image::Fl_BMP_Image(const char *bmp) // I - File to read
 
 
   // Open the file...
-  if ((fp = fopen(bmp, "rb")) == NULL) return;
+  if ((fp = fl_fopen(bmp, "rb")) == NULL) return;
 
   // Get the header...
   byte = (uchar)getc(fp);	// Check "BM" sync chars
@@ -177,7 +178,7 @@ Fl_BMP_Image::Fl_BMP_Image(const char *bmp) // I - File to read
 
   for (repcount = 0; repcount < colors_used; repcount ++) {
     // Read BGR color...
-    fread(colormap[repcount], 1, 3, fp);
+    if (fread(colormap[repcount], 1, 3, fp)==0) { /* ignore */ }
 
     // Skip pad byte for new BMP files...
     if (info_size > 12) getc(fp);

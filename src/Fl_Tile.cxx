@@ -3,7 +3,7 @@
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,9 +30,9 @@
 // The size of the first child determines where the resize border is.
 // The resizebox is used to limit where the border can be dragged to.
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_Tile.H>
-#include <fltk3/Window.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Tile.H>
+#include <FL/Fl_Window.H>
 #include <stdlib.h>
 
 // Drag the edges that were initially at oldx,oldy to newx,newy:
@@ -42,27 +42,27 @@
   This redraws all the necessary children.
 */
 void Fl_Tile::position(int oix, int oiy, int newx, int newy) {
-  fltk3::Widget*const* a = array();
+  Fl_Widget*const* a = array();
   int *p = sizes();
   p += 8; // skip group & resizable's saved size
   for (int i=children(); i--; p += 4) {
-    fltk3::Widget* o = *a++;
+    Fl_Widget* o = *a++;
     if (o == resizable()) continue;
     int X = o->x();
     int R = X+o->w();
     if (oix) {
       int t = p[0];
-      if (t == oix || t>oix && X<newx || t<oix && X>newx) X = newx;
+      if (t == oix || (t>oix && X<newx) || (t<oix && X>newx) ) X = newx;
       t = p[1];
-      if (t == oix || t>oix && R<newx || t<oix && R>newx) R = newx;
+      if (t == oix || (t>oix && R<newx) || (t<oix && R>newx) ) R = newx;
     }
     int Y = o->y();
     int B = Y+o->h();
     if (oiy) {
       int t = p[2];
-      if (t == oiy || t>oiy && Y<newy || t<oiy && Y>newy) Y = newy;
+      if (t == oiy || (t>oiy && Y<newy) || (t<oiy && Y>newy) ) Y = newy;
       t = p[3];
-      if (t == oiy || t>oiy && B<newy || t<oiy && B>newy) B = newy;
+      if (t == oiy || (t>oiy && B<newy) || (t<oiy && B>newy) ) B = newy;
     }
     o->damage_resize(X,Y,R-X,B-Y);
   }
@@ -70,7 +70,7 @@ void Fl_Tile::position(int oix, int oiy, int newx, int newy) {
 
 // move the lower-right corner (sort of):
 void Fl_Tile::resize(int X,int Y,int W,int H) {
-  //fltk3::Group::resize(X, Y, W, H);
+  //Fl_Group::resize(X, Y, W, H);
   //return;
   // remember how much to move the child widgets:
   int dx = X-x();
@@ -78,18 +78,18 @@ void Fl_Tile::resize(int X,int Y,int W,int H) {
   int dw = W-w();
   int dh = H-h();
   int *p = sizes();
-  // resize this (skip the fltk3::Group resize):
-  fltk3::Widget::resize(X,Y,W,H);
+  // resize this (skip the Fl_Group resize):
+  Fl_Widget::resize(X,Y,W,H);
   // find bottom-right of resiable:
   int OR = p[5];
   int NR = X+W-(p[1]-OR);
   int OB = p[7];
   int NB = Y+H-(p[3]-OB);
   // move everything to be on correct side of new resizable:
-  fltk3::Widget*const* a = array();
+  Fl_Widget*const* a = array();
   p += 8;
   for (int i=children(); i--;) {
-    fltk3::Widget* o = *a++;
+    Fl_Widget* o = *a++;
     int xx = o->x()+dx;
     int R = xx+o->w();
     if (*p++ >= OR) xx += dw; else if (xx > NR) xx = NR;
@@ -109,7 +109,7 @@ static void set_cursor(Fl_Tile*t, Fl_Cursor c) {
   if (cursor == c || !t->window()) return;
   cursor = c;
 #ifdef __sgi
-  t->window()->cursor(c,fltk3::RED,fltk3::WHITE);
+  t->window()->cursor(c,FL_RED,FL_WHITE);
 #else
   t->window()->cursor(c);
 #endif
@@ -129,14 +129,14 @@ int Fl_Tile::handle(int event) {
 #define DRAGV 2
 #define GRABAREA 4
 
-  int mx = fltk3::event_x();
-  int my = fltk3::event_y();
+  int mx = Fl::event_x();
+  int my = Fl::event_y();
 
   switch (event) {
 
-  case fltk3::MOVE:
-  case fltk3::ENTER:
-  case fltk3::PUSH:
+  case FL_MOVE:
+  case FL_ENTER:
+  case FL_PUSH:
     // don't potentially change the mouse cursor if inactive:
     if (!active()) break; // will cascade inherited handle()
     {
@@ -144,11 +144,11 @@ int Fl_Tile::handle(int event) {
     int mindy = 100;
     int oldx = 0;
     int oldy = 0;
-      fltk3::Widget*const* a = array();
+    Fl_Widget*const* a = array();
     int *q = sizes();
     int *p = q+8;
     for (int i=children(); i--; p += 4) {
-      fltk3::Widget* o = *a++;
+      Fl_Widget* o = *a++;
       if (o == resizable()) continue;
       if (p[1]<q[1] && o->y()<=my+GRABAREA && o->y()+o->h()>=my-GRABAREA) {
 	int t = mx - (o->x()+o->w());
@@ -172,41 +172,41 @@ int Fl_Tile::handle(int event) {
     if (mindy <= GRABAREA) {sdrag |= DRAGV; sy = oldy;}
     set_cursor(this, cursors[sdrag]);
     if (sdrag) return 1;
-      return fltk3::Group::handle(event);
+    return Fl_Group::handle(event);
   }
 
-  case fltk3::LEAVE:
+  case FL_LEAVE:
     set_cursor(this, FL_CURSOR_DEFAULT);
     break;
 
-  case fltk3::DRAG:
+  case FL_DRAG:
     // This is necessary if CONSOLIDATE_MOTION in Fl_x.cxx is turned off:
     // if (damage()) return 1; // don't fall behind
-  case fltk3::RELEASE: {
+  case FL_RELEASE: {
     if (!sdrag) return 0; // should not happen
-    fltk3::Widget* r = resizable(); if (!r) r = this;
+    Fl_Widget* r = resizable(); if (!r) r = this;
     int newx;
     if (sdrag&DRAGH) {
-      newx = fltk3::event_x()-sdx;
+      newx = Fl::event_x()-sdx;
       if (newx < r->x()) newx = r->x();
       else if (newx > r->x()+r->w()) newx = r->x()+r->w();
     } else
       newx = sx;
     int newy;
     if (sdrag&DRAGV) {
-      newy = fltk3::event_y()-sdy;
+      newy = Fl::event_y()-sdy;
       if (newy < r->y()) newy = r->y();
       else if (newy > r->y()+r->h()) newy = r->y()+r->h();
     } else
       newy = sy;
     position(sx,sy,newx,newy);
-    if (event == fltk3::DRAG) set_changed();
+    if (event == FL_DRAG) set_changed();
     do_callback();
     return 1;}
 
   }
 
-  return fltk3::Group::handle(event);
+  return Fl_Group::handle(event);
 }
 
 //

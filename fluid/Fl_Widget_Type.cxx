@@ -3,7 +3,7 @@
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Group.H>
+#include <FL/Fl_Table.H>
 #include <FL/Fl_Input.H>
 #include "Fl_Widget_Type.h"
 #include "alignment_panel.h"
@@ -67,6 +68,10 @@ const char* subclassname(Fl_Type* l) {
     if (c) return c;
     if (l->is_class()) return "Fl_Group";
     if (p->o->type() == FL_WINDOW+1) return "Fl_Double_Window";
+    if (strcmp(p->type_name(), "Fl_Input") == 0) {
+      if (p->o->type() == FL_FLOAT_INPUT) return "Fl_Float_Input";
+      if (p->o->type() == FL_INT_INPUT) return "Fl_Int_Input";
+    }
   }
   return l->type_name();
 }
@@ -198,7 +203,8 @@ void Fl_Widget_Type::setlabel(const char *n) {
 }
 
 Fl_Widget_Type::Fl_Widget_Type() {
-  for (int n=0; n<NUM_EXTRA_CODE; n++) {extra_code_[n] = 0; subclass_ = 0;}
+  for (int n=0; n<NUM_EXTRA_CODE; n++) {extra_code_[n] = 0; }
+  subclass_ = 0;
   hotspot_ = 0;
   tooltip_ = 0;
   image_name_ = 0;
@@ -215,6 +221,13 @@ Fl_Widget_Type::~Fl_Widget_Type() {
     o->hide();
     if (o->parent()) ((Fl_Group*)o->parent())->remove(*o);
     delete o;
+  }
+  if (subclass_) free((void*)subclass_);
+  if (tooltip_) free((void*)tooltip_);
+  if (image_name_) free((void*)image_name_);
+  if (inactive_name_) free((void*)inactive_name_);
+  for (int n=0; n<NUM_EXTRA_CODE; n++) {
+    if (extra_code_[n]) free((void*) extra_code_[n]);
   }
 }
 
@@ -260,7 +273,7 @@ void Fl_Widget_Type::redraw() {
 Fl_Type *sort(Fl_Type *parent) {
   Fl_Type *f,*n=0;
   for (f = parent ? parent->next : Fl_Type::first; ; f = n) {
-    if (!f || parent && f->level <= parent->level) return f;
+    if (!f || (parent && f->level <= parent->level)) return f;
     n = sort(f);
     if (!f->selected || (!f->is_widget() || f->is_menu_item())) continue;
     Fl_Widget* fw = ((Fl_Widget_Type*)f)->o;
@@ -291,6 +304,7 @@ static Fl_Window *the_panel;
 // initialized parts of the widget that are nyi by fluid.
 
 Fl_Widget_Type *current_widget; // one of the selected ones
+void* const LOAD = (void *)"LOAD"; // "magic" pointer to indicate that we need to load values into the dialog
 static int numselected; // number selected
 static int haderror;
 
@@ -1133,7 +1147,7 @@ static Fl_Menu_Item alignmenu[] = {
 {0}};
 
 void align_cb(Fl_Button* i, void *v) {
-  Fl_Align b = Fl_Align(long(i->user_data()));
+  Fl_Align b = Fl_Align(fl_uintptr_t(i->user_data()));
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
     i->value(current_widget->o->align() & b);
@@ -1159,6 +1173,64 @@ void align_cb(Fl_Button* i, void *v) {
 	} else {
 	  y = x & ~b;
 	}
+	if (x != y) {
+          q->o->align(y);
+	  q->redraw();
+	  mod = 1;
+	}
+      }
+    }
+    if (mod) set_modflag(1);
+  }
+}
+
+void align_position_cb(Fl_Choice *i, void *v) {
+  if (v == LOAD) {
+    if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
+    Fl_Menu_Item *mi = (Fl_Menu_Item*)i->menu();
+    Fl_Align b = current_widget->o->align() & FL_ALIGN_POSITION_MASK;
+    for (;mi->text;mi++) {
+      if ((Fl_Align)(mi->argument())==b)
+        i->value(mi);
+    }
+  } else {
+    const Fl_Menu_Item *mi = i->menu() + i->value();
+    Fl_Align b = Fl_Align(fl_uintptr_t(mi->user_data()));
+    int mod = 0;
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
+      if (o->selected && o->is_widget()) {
+	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
+	Fl_Align x = q->o->align();
+	Fl_Align y = (x & ~FL_ALIGN_POSITION_MASK) | b;
+	if (x != y) {
+          q->o->align(y);
+	  q->redraw();
+	  mod = 1;
+	}
+      }
+    }
+    if (mod) set_modflag(1);
+  }
+}
+
+void align_text_image_cb(Fl_Choice *i, void *v) {
+  if (v == LOAD) {
+    if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
+    Fl_Menu_Item *mi = (Fl_Menu_Item*)i->menu();
+    Fl_Align b = current_widget->o->align() & FL_ALIGN_IMAGE_MASK;
+    for (;mi->text;mi++) {
+      if ((Fl_Align)(mi->argument())==b)
+        i->value(mi);
+    }
+  } else {
+    const Fl_Menu_Item *mi = i->menu() + i->value();
+    Fl_Align b = Fl_Align(fl_uintptr_t(mi->user_data()));
+    int mod = 0;
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
+      if (o->selected && o->is_widget()) {
+	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
+	Fl_Align x = q->o->align();
+	Fl_Align y = (x & ~FL_ALIGN_IMAGE_MASK) | b;
 	if (x != y) {
           q->o->align(y);
 	  q->redraw();
@@ -1244,7 +1316,7 @@ void user_data_type_cb(Fl_Input *i, void *v) {
 // "v_attributes" let user type in random code for attribute settings:
 
 void v_input_cb(Fl_Input* i, void* v) {
-  int n = int(long(i->user_data()));
+  int n = fl_intptr_t(i->user_data());
   if (v == LOAD) {
     i->static_value(current_widget->extra_code(n));
   } else {
@@ -1728,6 +1800,7 @@ void live_mode_cb(Fl_Button*o,void *) {
   }
   if (o->value()) {
     if (numselected == 1) {
+      Fl_Group::current(0L);
       live_widget = current_widget->enter_live_mode(1);
       if (live_widget) {
         live_type = current_widget;
@@ -1745,8 +1818,9 @@ void live_mode_cb(Fl_Button*o,void *) {
         Fl_Button *btn = new Fl_Button(10, h+20, 100, 25, "Exit Live Mode");
         btn->labelsize(12);
         btn->callback(leave_live_mode_cb);
-        live_widget->position(10, 10);
+        rsz->end();
         live_window->add(live_widget);
+        live_widget->position(10, 10);
         live_window->resizable(live_widget);
         live_window->set_modal(); // block all other UI
         live_window->callback(leave_live_mode_cb);
@@ -1880,7 +1954,7 @@ const char *array_name(Fl_Widget_Type *o) {
     if (!e) continue;
     if (strncmp(c,e,d-c)) continue;
     int n1 = atoi(e+(d-c)+1);
-    if (n1 > num || n1==num && sawthis) return 0;
+    if (n1 > num || (n1==num && sawthis)) return 0;
   }
   static char buffer[128];
   // MRS: we want strncpy() here...

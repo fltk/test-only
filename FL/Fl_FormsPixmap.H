@@ -3,7 +3,7 @@
 //
 // Forms pixmap header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -37,7 +37,7 @@
   \class Fl_FormsPixmap
   \brief Forms pixmap drawing routines
 */
-class FL_EXPORT Fl_FormsPixmap : public fltk3::Widget {
+class FL_EXPORT Fl_FormsPixmap : public Fl_Widget {
     Fl_Pixmap *b;
 protected:
     void draw();

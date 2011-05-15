@@ -3,7 +3,7 @@
 //
 // Directory detection routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,8 +31,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <ctype.h>
-#include <fltk3/filename.H>
-#include <fltk3/fl_utf8.h>
+#include <FL/filename.H>
+#include <FL/fl_utf8.h>
 
 
 #if defined(WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
@@ -50,7 +50,7 @@ int _fl_filename_isdir_quick(const char* n) {
 /**
    Determines if a file exists and is a directory from its filename.
    \code
-   #include <fltk3/filename.H>
+   #include <FL/filename.H>
    [..]
    fl_filename_isdir("/etc");		// returns non-zero
    fl_filename_isdir("/etc/hosts");	// returns 0
@@ -60,7 +60,7 @@ int _fl_filename_isdir_quick(const char* n) {
 */
 int fl_filename_isdir(const char* n) {
   struct stat	s;
-  char		fn[1024];
+  char		fn[FL_PATH_MAX];
   int		length;
 
   length = strlen(n);

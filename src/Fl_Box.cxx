@@ -3,7 +3,7 @@
 //
 // Box widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/Widget.h>
-#include <fltk3/Fl_Box.H>
+#include <FL/Fl_Widget.H>
+#include <FL/Fl_Box.H>
 
 void Fl_Box::draw() {
   draw_box();
@@ -34,7 +34,7 @@ void Fl_Box::draw() {
 }
 
 int Fl_Box::handle(int event) {
-  if (event == fltk3::ENTER || event == fltk3::LEAVE) return 1;
+  if (event == FL_ENTER || event == FL_LEAVE) return 1;
   else return 0;
 }
 

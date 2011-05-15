@@ -3,7 +3,7 @@
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,12 +28,12 @@
 // OPTIONAL initialization code for a program using fltk.
 // You do not need to call this!  Feel free to make up your own switches.
 
-#include <fltk3/run.h>
-#include <fltk3/x.H>
-#include <fltk3/Window.h>
-#include <fltk3/Tooltip.h>
-#include <fltk3/filename.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/x.H>
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Tooltip.H>
+#include <FL/filename.H>
+#include <FL/fl_draw.H>
 #include <ctype.h>
 #include "flstring.h"
 
@@ -68,13 +68,75 @@ extern const char *fl_bg;
 extern const char *fl_bg2;
 
 /**
-  Consume a single switch from argv, starting at word i.
+  Parse a single switch from \p argv, starting at word \p i.
   Returns the number of words eaten (1 or 2, or 0 if it is not
-  recognized) and adds the same value to i.  You can use this
-  function if you prefer to control the incrementing through the
-  arguments yourself.
+  recognized) and adds the same value to \p i. 
+  
+  This is the default argument handler used internally by Fl::args(...),
+  but you can use this function if you prefer to step through the
+  standard FLTK switches yourself.
+  
+  All standard FLTK switches except -bg2 may be abbreviated to just
+  one letter and case is ignored:
+  
+  \li -bg color or -background color
+  <br>
+  Sets the background color using Fl::background().
+  
+  \li -bg2 color or -background2 color
+  <br>
+  Sets the secondary background color using Fl::background2().
+  
+  \li -display host:n.n
+  <br>
+  Sets the X display to use; this option is silently
+  ignored under WIN32 and MacOS.
+  
+  \li -dnd and -nodnd
+  <br>
+  Enables or disables drag and drop text operations
+  using Fl::dnd_text_ops().
+  
+  \li -fg color or -foreground color
+  <br>
+  Sets the foreground color using Fl::foreground().
+  
+  \li -geometry WxH+X+Y
+  <br>
+  Sets the initial window position and size according
+  to the standard X geometry string.
+  
+  \li -iconic
+  <br>
+  Iconifies the window using Fl_Window::iconize().
+  
+  \li -kbd and -nokbd
+  <br>
+  Enables or disables visible keyboard focus for
+  non-text widgets using Fl::visible_focus().
+  
+  \li -name string
+  <br>
+  Sets the window class using Fl_Window::xclass().
+  
+  \li -scheme string
+  <br>
+  Sets the widget scheme using Fl::scheme().
+  
+  \li -title string
+  <br>
+  Sets the window title using Fl_Window::label().
+  
+  \li -tooltips and -notooltips
+  <br>
+  Enables or disables tooltips using Fl_Tooltip::enable().
+  
+  
+  If your program requires other switches in addition to the standard
+  FLTK options, you will need to pass your own argument handler to
+  Fl::args(int,char**,int&,Fl_Args_Handler) explicitly.
 */
-int fltk3::arg(int argc, char **argv, int &i) {
+int Fl::arg(int argc, char **argv, int &i) {
   arg_called = 1;
   const char *s = argv[i];
 
@@ -93,27 +155,27 @@ int fltk3::arg(int argc, char **argv, int &i) {
     i++;
     return 1;
   } else if (fl_match(s, "kbd")) {
-    fltk3::visible_focus(1);
+    Fl::visible_focus(1);
     i++;
     return 1;
   } else if (fl_match(s, "nokbd", 3)) {
-    fltk3::visible_focus(0);
+    Fl::visible_focus(0);
     i++;
     return 1;
   } else if (fl_match(s, "dnd", 2)) {
-    fltk3::dnd_text_ops(1);
+    Fl::dnd_text_ops(1);
     i++;
     return 1;
   } else if (fl_match(s, "nodnd", 3)) {
-    fltk3::dnd_text_ops(0);
+    Fl::dnd_text_ops(0);
     i++;
     return 1;
   } else if (fl_match(s, "tooltips", 2)) {
-    fltk3::Tooltip::enable();
+    Fl_Tooltip::enable();
     i++;
     return 1;
   } else if (fl_match(s, "notooltips", 3)) {
-    fltk3::Tooltip::disable();
+    Fl_Tooltip::disable();
     i++;
     return 1;
   }
@@ -139,7 +201,7 @@ int fltk3::arg(int argc, char **argv, int &i) {
 
 #if !defined(WIN32) && !defined(__APPLE__)
   } else if (fl_match(s, "display", 2)) {
-    fltk3::display(v);
+    Fl::display(v);
 #endif
 
   } else if (fl_match(s, "title", 2)) {
@@ -158,7 +220,7 @@ int fltk3::arg(int argc, char **argv, int &i) {
     fl_fg = v;
 
   } else if (fl_match(s, "scheme", 1)) {
-    fltk3::scheme(v);
+    Fl::scheme(v);
 
   } else return 0; // unrecognized
 
@@ -167,117 +229,62 @@ int fltk3::arg(int argc, char **argv, int &i) {
 }
 
 
-/** 
-  Consume all switches from argv.  Returns number of words eaten
-  Returns zero on error.  'i' will either point at first word that
-  does not start with '-', at the error word, or after a '--', or at
-  argc.  If your program does not take any word arguments you can
-  report an error if i < argc.
+/**
+  Parse command line switches using the \p cb argument handler.
   
-  <P>FLTK provides an <I>entirely optional</I> command-line switch parser.
-  You don't have to call it if you don't like them! Everything it can do
-  can be done with other calls to FLTK.
+  Returns 0 on error, or the number of words processed.
   
-  <P>To use the switch parser, call fltk3::args(...) near the start
-  of your program.  This does <I>not</I> open the display, instead
-  switches that need the display open are stashed into static variables.
-  Then you <I>must</I> display your first window by calling 
-  window-&gt;show(argc,argv), which will do anything stored in the
-  static variables.
+  FLTK provides this as an <i>entirely optional</i> command line
+  switch parser. You don't have to call it if you don't want to.
+  Everything it can do can be done with other calls to FLTK.
   
-  <P>callback lets you define your own switches.  It is called
-  with the same argc and argv, and with i the
-  index of each word. The callback should return zero if the switch is
-  unrecognized, and not change i.  It should return non-zero if
-  the switch is recognized, and add at least 1 to i (it can add
-  more to consume words after the switch).  This function is called
-  <i>before</i> any other tests, so <i>you can override any FLTK
-  switch</i> (this is why FLTK can use very short switches instead of
+  To use the switch parser, call Fl::args(...) near the start
+  of your program.  This does \b not open the display, instead
+  switches that need the display open are stashed into static
+  variables. Then you \b must display your first window by calling
+  <tt>window->show(argc,argv)</tt>, which will do anything stored
+  in the static variables.
+  
+  Providing an argument handler callback \p cb lets you define
+  your own switches. It is called with the same \p argc and \p argv,
+  and with \p i set to the index of the switch to be processed.
+  The \p cb handler should return zero if the switch is unrecognized,
+  and not change \p i. It should return non-zero to indicate the
+  number of words processed if the switch is recognized, i.e. 1 for
+  just the switch, and more than 1 for the switch plus associated
+  parameters. \p i should be incremented by the same amount.
+  
+  The \p cb handler is called \b before any other tests, so
+  <i>you can also override any standard FLTK switch</i>
+  (this is why FLTK can use very short switches instead of
   the long ones all other toolkits force you to use).
-  
-  <P>On return i is set to the index of the first non-switch.
+  See Fl::arg() for descriptions of the standard switches.
+ 
+  On return \p i is set to the index of the first non-switch.
   This is either:
   
-  <UL>
-  <LI>The first word that does not start with '-'. </LI>
-  <LI>The word '-' (used by many programs to name stdin as a file) </LI>
-  <LI>The first unrecognized switch (return value is 0). </LI>
-  <LI>argc</LI>
-  </UL>
+  \li The first word that does not start with '-'.
+  \li The word '-' (used by many programs to name stdin as a file)
+  \li The first unrecognized switch (return value is 0).
+  \li \p argc
   
-  <P>The return value is i unless an unrecognized switch is found,
-  in which case it is zero.  If your program takes no arguments other
+  The return value is \p i unless an unrecognized switch is found,
+  in which case it is zero. If your program takes no arguments other
   than switches you should produce an error if the return value is less
-  than argc.
+  than \p argc.
   
-  <P>All switches except -bg2 may be abbreviated one letter and case is ignored:
   
-  <UL>
+  A usage string is displayed if Fl::args() detects an invalid argument
+  on the command-line. You can change the message by setting the
+  Fl::help pointer.
   
-  	<LI>-bg color or -background color
+  A very simple command line parser can be found in <tt>examples/howto-parse-args.cxx</tt>
   
-  	<P>Sets the background color using fltk3::background().</LI>
-  
-  	<LI>-bg2 color or -background2 color
-  
-  	<P>Sets the secondary background color using fltk3::background2().</LI>
-  
-  	<LI>-display host:n.n
-  
-  	<P>Sets the X display to use; this option is silently
-  	ignored under WIN32 and MacOS.</LI>
-  
-  	<LI>-dnd and -nodnd
-  
-  	<P>Enables or disables drag and drop text operations
-  	using fltk3::dnd_text_ops().</LI>
-  
-  	<LI>-fg color or -foreground color
-  
-  	<P>Sets the foreground color using fltk3::foreground().</LI>
-  
-  	<LI>-geometry WxH+X+Y
-  
-  	<P>Sets the initial window position and size according
-  	to the standard X geometry string.</LI>
-  
-  	<LI>-iconic
-  
-  	<P>Iconifies the window using fltk3::Window::iconize().</LI>
-  
-  	<LI>-kbd and -nokbd
-  
-  	<P>Enables or disables visible keyboard focus for
-  	non-text widgets using fltk3::visible_focus().</LI>
-  
-  	<LI>-name string
-  
-  	<P>Sets the window class using fltk3::Window::xclass().</LI>
-  
-  	<LI>-scheme string
-  
-  	<P>Sets the widget scheme using fltk3::scheme().</LI>
-  
-  	<LI>-title string
-  
-  	<P>Sets the window title using fltk3::Window::label().</LI>
-  
-  	<LI>-tooltips and -notooltips
-  
-  	<P>Enables or disables tooltips using fltk3::Tooltip::enable().</LI>
-  
-  </UL>
-  
-  <P>The second form of fltk3::args() is useful if your program does
-  not have command line switches of its own. It parses all the switches,
-  and if any are not recognized it calls fltk3::abort(fltk3::help).
-  
-  <P>A usage string is displayed if fltk3::args() detects an invalid
-  argument on the command-line. You can change the message by setting the
-  fltk3::help pointer.
+  The simpler Fl::args(int argc, char **argv) form is useful if your program
+  does not have command line switches of its own.
 */
 
-int fltk3::args(int argc, char** argv, int& i, Fl_Args_Handler cb) {
+int Fl::args(int argc, char** argv, int& i, Fl_Args_Handler cb) {
   arg_called = 1;
   i = 1; // skip argv[0]
   while (i < argc) {
@@ -288,30 +295,30 @@ int fltk3::args(int argc, char** argv, int& i, Fl_Args_Handler cb) {
 }
 
 // show a main window, use any parsed arguments
-void fltk3::Window::show(int argc, char **argv) {
-  if (argc && !arg_called) fltk3::args(argc,argv);
+void Fl_Window::show(int argc, char **argv) {
+  if (argc && !arg_called) Fl::args(argc,argv);
 
-  fltk3::get_system_colors();
+  Fl::get_system_colors();
 
 #if !defined(WIN32) && !defined(__APPLE__)
   // Get defaults for drag-n-drop and focus...
   const char *key = 0, *val;
 
-  if (fltk3::first_window()) key = fltk3::first_window()->xclass();
+  if (Fl::first_window()) key = Fl::first_window()->xclass();
   if (!key) key = "fltk";
 
   val = XGetDefault(fl_display, key, "dndTextOps");
-  if (val) fltk3::dnd_text_ops(strcasecmp(val, "true") == 0 ||
+  if (val) Fl::dnd_text_ops(strcasecmp(val, "true") == 0 ||
                             strcasecmp(val, "on") == 0 ||
                             strcasecmp(val, "yes") == 0);
 
   val = XGetDefault(fl_display, key, "tooltips");
-  if (val) fltk3::Tooltip::enable(strcasecmp(val, "true") == 0 ||
+  if (val) Fl_Tooltip::enable(strcasecmp(val, "true") == 0 ||
                               strcasecmp(val, "on") == 0 ||
                               strcasecmp(val, "yes") == 0);
 
   val = XGetDefault(fl_display, key, "visibleFocus");
-  if (val) fltk3::visible_focus(strcasecmp(val, "true") == 0 ||
+  if (val) Fl::visible_focus(strcasecmp(val, "true") == 0 ||
                              strcasecmp(val, "on") == 0 ||
                              strcasecmp(val, "yes") == 0);
 #endif // !WIN32 && !__APPLE__
@@ -322,12 +329,12 @@ void fltk3::Window::show(int argc, char **argv) {
     if (geometry) {
       int fl = 0, gx = x(), gy = y(); unsigned int gw = w(), gh = h();
       fl = XParseGeometry(geometry, &gx, &gy, &gw, &gh);
-      if (fl & XNegative) gx = fltk3::w()-w()+gx;
-      if (fl & YNegative) gy = fltk3::h()-h()+gy;
+      if (fl & XNegative) gx = Fl::w()-w()+gx;
+      if (fl & YNegative) gy = Fl::h()-h()+gy;
       //  int mw,mh; minsize(mw,mh);
       //  if (mw > gw) gw = mw;
       //  if (mh > gh) gh = mh;
-      fltk3::Widget *r = resizable();
+      Fl_Widget *r = resizable();
       if (!r) resizable(this);
       // for WIN32 we assume window is not mapped yet:
       if (fl & (XValue | YValue))
@@ -347,7 +354,7 @@ void fltk3::Window::show(int argc, char **argv) {
 
   if (!beenhere) {
     beenhere = 1;
-    fltk3::scheme(fltk3::scheme()); // opens display!  May call fltk3::fatal()
+    Fl::scheme(Fl::scheme()); // opens display!  May call Fl::fatal()
   }
 
   // Show the window AFTER we have set the colors and scheme.
@@ -386,10 +393,18 @@ static const char * const helpmsg =
 " -ti[tle] windowtitle\n"
 " -to[oltips]";
 
-const char * const fltk3::help = helpmsg+13;
-/** See fltk3::args(int argc, char **argv, int& i, int (*cb)(int,char**,int&)) */
-void fltk3::args(int argc, char **argv) {
-  int i; if (fltk3::args(argc,argv,i) < argc) fltk3::error(helpmsg);
+const char * const Fl::help = helpmsg+13;
+
+/**
+ Parse all command line switches matching standard FLTK options only.
+ 
+ It parses all the switches, and if any are not recognized it calls
+ Fl::abort(Fl::help), i.e. unlike the long form, an unrecognized
+ switch generates an error message and causes the program to exit.
+ 
+ */
+void Fl::args(int argc, char **argv) {
+  int i; if (Fl::args(argc,argv,i) < argc) Fl::error(helpmsg);
 }
 
 #if defined(WIN32) || defined(__APPLE__)

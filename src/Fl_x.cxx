@@ -3,7 +3,7 @@
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -36,12 +36,13 @@
 /* #define BACKSPACE_HACK 1 */
 
 #  include <config.h>
-#  include <fltk3/run.h>
-#  include <fltk3/x.H>
-#  include <fltk3/Window.h>
-#  include <fltk3/fl_utf8.h>
-#  include <fltk3/Tooltip.h>
-#  include <fltk3/draw.h>
+#  include <FL/Fl.H>
+#  include <FL/x.H>
+#  include <FL/Fl_Window.H>
+#  include <FL/fl_utf8.h>
+#  include <FL/Fl_Tooltip.H>
+#  include <FL/fl_draw.H>
+#  include <FL/Fl_Paged_Device.H>
 #  include <stdio.h>
 #  include <stdlib.h>
 #  include "flstring.h"
@@ -50,10 +51,13 @@
 #  include <X11/Xmd.h>
 #  include <X11/Xlocale.h>
 #  include <X11/Xlib.h>
+#  include <X11/keysym.h>
 
-static fltk3::XlibDisplay fl_xlib_device;
-FL_EXPORT fltk3::Display *fl_display_device = (fltk3::Display*)&fl_xlib_device; // does not change
-FL_EXPORT fltk3::Device *fl_device = (fltk3::Device*)&fl_xlib_device; // the current target device of graphics operations
+static Fl_Xlib_Graphics_Driver fl_xlib_driver;
+static Fl_Display_Device fl_xlib_display(&fl_xlib_driver);
+FL_EXPORT Fl_Graphics_Driver *fl_graphics_driver = (Fl_Graphics_Driver*)&fl_xlib_driver; // the current target device of graphics operations
+Fl_Surface_Device* Fl_Surface_Device::_surface = (Fl_Surface_Device*)&fl_xlib_display; // the current target surface of graphics operations
+Fl_Display_Device *Fl_Display_Device::_display = &fl_xlib_display;// the platform display
 
 ////////////////////////////////////////////////////////////////
 // interface to poll/select call:
@@ -92,7 +96,7 @@ struct FD {
 
 static FD *fd = 0;
 
-void fltk3::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
+void Fl::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
   remove_fd(n,events);
   int i = nfds++;
   if (i >= fd_array_size) {
@@ -130,13 +134,15 @@ void fltk3::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
 #  endif
 }
 
-void fltk3::add_fd(int n, void (*cb)(int, void*), void* v) {
-  fltk3::add_fd(n, POLLIN, cb, v);
+void Fl::add_fd(int n, void (*cb)(int, void*), void* v) {
+  Fl::add_fd(n, POLLIN, cb, v);
 }
 
-void fltk3::remove_fd(int n, int events) {
+void Fl::remove_fd(int n, int events) {
   int i,j;
+# if !USE_POLL
   maxfd = -1; // recalculate maxfd on the fly
+# endif
   for (i=j=0; i<nfds; i++) {
 #  if USE_POLL
     if (pollfds[i].fd == n) {
@@ -150,8 +156,8 @@ void fltk3::remove_fd(int n, int events) {
       if (!e) continue; // if no events left, delete this fd
       fd[i].events = e;
     }
-#  endif
     if (fd[i].fd > maxfd) maxfd = fd[i].fd;
+#  endif
     // move it down in the array if necessary:
     if (j<i) {
       fd[j] = fd[i];
@@ -169,13 +175,13 @@ void fltk3::remove_fd(int n, int events) {
 #  endif
 }
 
-void fltk3::remove_fd(int n) {
+void Fl::remove_fd(int n) {
   remove_fd(n, -1);
 }
 
 #if CONSOLIDATE_MOTION
-static fltk3::Window* send_motion;
-extern fltk3::Window* fl_xmousewin;
+static Fl_Window* send_motion;
+extern Fl_Window* fl_xmousewin;
 #endif
 static bool in_a_window; // true if in any of our windows, even destroyed ones
 static void do_queued_events() {
@@ -185,17 +191,17 @@ static void do_queued_events() {
     XNextEvent(fl_display, &xevent);
     fl_handle(xevent);
   }
-  // we send fltk3::LEAVE only if the mouse did not enter some other window:
-  if (!in_a_window) fltk3::handle(fltk3::LEAVE, 0);
+  // we send FL_LEAVE only if the mouse did not enter some other window:
+  if (!in_a_window) Fl::handle(FL_LEAVE, 0);
 #if CONSOLIDATE_MOTION
   else if (send_motion == fl_xmousewin) {
     send_motion = 0;
-    fltk3::handle(fltk3::MOVE, fl_xmousewin);
+    Fl::handle(FL_MOVE, fl_xmousewin);
   }
 #endif
 }
 
-// these pointers are set by the fltk3::lock() function:
+// these pointers are set by the Fl::lock() function:
 static void nothing() {}
 void (*fl_lock_function)() = nothing;
 void (*fl_unlock_function)() = nothing;
@@ -274,10 +280,21 @@ int fl_ready() {
 #  endif
 }
 
+// replace \r\n by \n
+static void convert_crlf(unsigned char *string, long& len) {
+  unsigned char *a, *b;
+  a = b = string;
+  while (*a) {
+    if (*a == '\r' && a[1] == '\n') { a++; len--; }
+    else *b++ = *a++;
+  }
+  *b = 0;
+}
+
 ////////////////////////////////////////////////////////////////
 
 Display *fl_display;
-NativeWindow fl_message_window = 0;
+Window fl_message_window = 0;
 int fl_screen;
 XVisualInfo *fl_visual;
 Colormap fl_colormap;
@@ -303,8 +320,22 @@ Atom fl_XdndActionCopy;
 Atom fl_XdndFinished;
 //Atom fl_XdndProxy;
 Atom fl_XdndURIList;
+Atom fl_Xatextplainutf;
+Atom fl_Xatextplain;
+static Atom fl_XaText;
+Atom fl_XaCompoundText;
 Atom fl_XaUtf8String;
 Atom fl_XaTextUriList;
+Atom fl_NET_WM_NAME;			// utf8 aware window label
+Atom fl_NET_WM_ICON_NAME;		// utf8 aware window icon name
+
+/*
+  X defines 32-bit-entities to have a format value of max. 32,
+  although sizeof(atom) can be 8 (64 bits) on a 64-bit OS.
+  See also fl_open_display() for sizeof(atom) < 4.
+  Used for XChangeProperty (see STR #2419).
+*/
+static int atom_bits = 32;
 
 static void fd_callback(int,void *) {
   do_queued_events();
@@ -312,7 +343,7 @@ static void fd_callback(int,void *) {
 
 extern "C" {
   static int io_error_handler(Display*) {
-    fltk3::fatal("X I/O error");
+    Fl::fatal("X I/O error");
     return 0;
   }
 
@@ -321,7 +352,7 @@ extern "C" {
     sprintf(buf1, "XRequest.%d", e->request_code);
     XGetErrorDatabaseText(d,"",buf1,buf1,buf2,128);
     XGetErrorText(d, e->error_code, buf1, 128);
-    fltk3::warning("%s: %s 0x%lx", buf2, buf1, e->resourceid);
+    Fl::warning("%s: %s 0x%lx", buf2, buf1, e->resourceid);
     return 0;
   }
 }
@@ -334,7 +365,6 @@ void fl_new_ic()
   XVaNestedList status_attr = NULL;
   static XFontSet fs = NULL;
   char *fnt;
-  bool must_free_fnt = true;
   char **missing_list;
   int missing_count;
   char *def_string;
@@ -346,21 +376,22 @@ void fl_new_ic()
 #if USE_XFT
 
 #if defined(__GNUC__)
-#warning XFT support here
+// FIXME: warning XFT support here
 #endif /*__GNUC__*/
 
   if (!fs) {
-    fnt = NULL;//fl_get_font_xfld(0, 14);
-    if (!fnt) {fnt = "-misc-fixed-*";must_free_fnt=false;}
+    fnt = (char*)"-misc-fixed-*";
     fs = XCreateFontSet(fl_display, fnt, &missing_list,
                         &missing_count, &def_string);
   }
 #else
   if (!fs) {
+    bool must_free_fnt = true;
     fnt = fl_get_font_xfld(0, 14);
-    if (!fnt) {fnt = "-misc-fixed-*";must_free_fnt=false;}
+    if (!fnt) {fnt = (char*)"-misc-fixed-*";must_free_fnt=false;}
     fs = XCreateFontSet(fl_display, fnt, &missing_list,
                         &missing_count, &def_string);
+    if (must_free_fnt) free(fnt);
   }
 #endif
   preedit_attr = XVaCreateNestedList(0,
@@ -429,7 +460,7 @@ void fl_reset_spot(void)
   //if (fl_xim_ic) XUnsetICFocus(fl_xim_ic);
 }
 
-void fl_set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *win)
+void fl_set_spot(int font, int size, int X, int Y, int W, int H, Fl_Window *win)
 {
   int change = 0;
   XVaNestedList preedit_attr;
@@ -461,16 +492,16 @@ void fl_set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *
 #if USE_XFT
 
 #if defined(__GNUC__)
-#warning XFT support here
+// FIXME: warning XFT support here
 #endif /*__GNUC__*/
 
     fnt = NULL; // fl_get_font_xfld(font, size);
-    if (!fnt) {fnt = "-misc-fixed-*";must_free_fnt=false;}
+    if (!fnt) {fnt = (char*)"-misc-fixed-*";must_free_fnt=false;}
     fs = XCreateFontSet(fl_display, fnt, &missing_list,
                         &missing_count, &def_string);
 #else
     fnt = fl_get_font_xfld(font, size);
-    if (!fnt) {fnt = "-misc-fixed-*";must_free_fnt=false;}
+    if (!fnt) {fnt = (char*)"-misc-fixed-*";must_free_fnt=false;}
     fs = XCreateFontSet(fl_display, fnt, &missing_list,
                         &missing_count, &def_string);
 #endif
@@ -505,8 +536,10 @@ void fl_set_status(int x, int y, int w, int h)
   XFree(status_attr);
 }
 
-void fl_init_xim()
-{
+void fl_init_xim() {
+  static int xim_warning = 2;
+  if (xim_warning > 0) xim_warning--;
+
   //XIMStyle *style;
   XIMStyles *xim_styles;
   if (!fl_display) return;
@@ -520,26 +553,33 @@ void fl_init_xim()
     XGetIMValues (fl_xim_im, XNQueryInputStyle,
                   &xim_styles, NULL, NULL);
   } else {
-    fltk3::warning("XOpenIM() failed\n");
+    if (xim_warning)
+      Fl::warning("XOpenIM() failed");
+    // if xim_styles is allocated, free it now
+    if (xim_styles) XFree(xim_styles);
     return;
   }
 
   if (xim_styles && xim_styles->count_styles) {
     fl_new_ic();
    } else {
-     fltk3::warning("No XIM style found\n");
+     if (xim_warning)
+       Fl::warning("No XIM style found");
      XCloseIM(fl_xim_im);
      fl_xim_im = NULL;
+     // if xim_styles is allocated, free it now
+     if (xim_styles) XFree(xim_styles);
      return;
   }
   if (!fl_xim_ic) {
-    fltk3::warning("XCreateIC() failed\n");
+    if (xim_warning)
+      Fl::warning("XCreateIC() failed");
     XCloseIM(fl_xim_im);
-    XFree(xim_styles);
     fl_xim_im = NULL;
   }
+  // if xim_styles is still allocated, free it now
+  if(xim_styles) XFree(xim_styles);
 }
-
 
 void fl_open_display() {
   if (fl_display) return;
@@ -551,7 +591,7 @@ void fl_open_display() {
   XSetErrorHandler(xerror_handler);
 
   Display *d = XOpenDisplay(0);
-  if (!d) fltk3::fatal("Can't open display: %s",XDisplayName(0));
+  if (!d) Fl::fatal("Can't open display: %s",XDisplayName(0));
 
   fl_open_display(d);
 }
@@ -577,10 +617,19 @@ void fl_open_display(Display* d) {
   //fl_XdndProxy        = XInternAtom(d, "XdndProxy",           0);
   fl_XdndEnter          = XInternAtom(d, "XdndEnter",           0);
   fl_XdndURIList        = XInternAtom(d, "text/uri-list",       0);
+  fl_Xatextplainutf     = XInternAtom(d, "text/plain;charset=UTF-8",0);
+  fl_Xatextplain        = XInternAtom(d, "text/plain",          0);
+  fl_XaText             = XInternAtom(d, "TEXT",                0);
+  fl_XaCompoundText     = XInternAtom(d, "COMPOUND_TEXT",       0);
   fl_XaUtf8String       = XInternAtom(d, "UTF8_STRING",         0);
   fl_XaTextUriList      = XInternAtom(d, "text/uri-list",       0);
+  fl_NET_WM_NAME        = XInternAtom(d, "_NET_WM_NAME",        0);
+  fl_NET_WM_ICON_NAME   = XInternAtom(d, "_NET_WM_ICON_NAME",   0);
 
-  fltk3::add_fd(ConnectionNumber(d), POLLIN, fd_callback);
+  if (sizeof(Atom) < 4)
+    atom_bits = sizeof(Atom) * 8;
+
+  Fl::add_fd(ConnectionNumber(d), POLLIN, fd_callback);
 
   fl_screen = DefaultScreen(d);
 
@@ -595,12 +644,12 @@ void fl_open_display(Display* d) {
   fl_init_xim();
 
 #if !USE_COLORMAP
-  fltk3::visual(FL_RGB);
+  Fl::visual(FL_RGB);
 #endif
 }
 
 void fl_close_display() {
-  fltk3::remove_fd(ConnectionNumber(fl_display));
+  Fl::remove_fd(ConnectionNumber(fl_display));
   XCloseDisplay(fl_display);
 }
 
@@ -636,30 +685,30 @@ static void fl_init_workarea() {
   }
 }
 
-int fltk3::x() {
+int Fl::x() {
   if (fl_workarea_xywh[0] < 0) fl_init_workarea();
   return fl_workarea_xywh[0];
 }
 
-int fltk3::y() {
+int Fl::y() {
   if (fl_workarea_xywh[0] < 0) fl_init_workarea();
   return fl_workarea_xywh[1];
 }
 
-int fltk3::w() {
+int Fl::w() {
   if (fl_workarea_xywh[0] < 0) fl_init_workarea();
   return fl_workarea_xywh[2];
 }
 
-int fltk3::h() {
+int Fl::h() {
   if (fl_workarea_xywh[0] < 0) fl_init_workarea();
   return fl_workarea_xywh[3];
 }
 
-void fltk3::get_mouse(int &xx, int &yy) {
+void Fl::get_mouse(int &xx, int &yy) {
   fl_open_display();
-  NativeWindow root = RootWindow(fl_display, fl_screen);
-  NativeWindow c; int mx,my,cx,cy; unsigned int mask;
+  Window root = RootWindow(fl_display, fl_screen);
+  Window c; int mx,my,cx,cy; unsigned int mask;
   XQueryPointer(fl_display,root,&root,&c,&mx,&my,&cx,&cy,&mask);
   xx = mx;
   yy = my;
@@ -668,38 +717,38 @@ void fltk3::get_mouse(int &xx, int &yy) {
 ////////////////////////////////////////////////////////////////
 // Code used for paste and DnD into the program:
 
-fltk3::Widget *fl_selection_requestor;
+Fl_Widget *fl_selection_requestor;
 char *fl_selection_buffer[2];
 int fl_selection_length[2];
 int fl_selection_buffer_length[2];
 char fl_i_own_selection[2] = {0,0};
 
 // Call this when a "paste" operation happens:
-void fltk3::paste(fltk3::Widget &receiver, int clipboard) {
+void Fl::paste(Fl_Widget &receiver, int clipboard) {
   if (fl_i_own_selection[clipboard]) {
     // We already have it, do it quickly without window server.
     // Notice that the text is clobbered if set_selection is
-    // called in response to fltk3::PASTE!
-    fltk3::e_text = fl_selection_buffer[clipboard];
-    fltk3::e_length = fl_selection_length[clipboard];
-    if (!fltk3::e_text) fltk3::e_text = (char *)"";
-    receiver.handle(fltk3::PASTE);
+    // called in response to FL_PASTE!
+    Fl::e_text = fl_selection_buffer[clipboard];
+    Fl::e_length = fl_selection_length[clipboard];
+    if (!Fl::e_text) Fl::e_text = (char *)"";
+    receiver.handle(FL_PASTE);
     return;
   }
   // otherwise get the window server to return it:
   fl_selection_requestor = &receiver;
   Atom property = clipboard ? CLIPBOARD : XA_PRIMARY;
-  XConvertSelection(fl_display, property, fl_XaUtf8String, property,
-                    fl_xid(fltk3::first_window()), fl_event_time);
+  XConvertSelection(fl_display, property, TARGETS, property,
+                    fl_xid(Fl::first_window()), fl_event_time);
 }
 
-NativeWindow fl_dnd_source_window;
+Window fl_dnd_source_window;
 Atom *fl_dnd_source_types; // null-terminated list of data types being supplied
 Atom fl_dnd_type;
 Atom fl_dnd_source_action;
 Atom fl_dnd_action;
 
-void fl_sendClientMessage(NativeWindow window, Atom message,
+void fl_sendClientMessage(Window window, Atom message,
                                  unsigned long d0,
                                  unsigned long d1=0,
                                  unsigned long d2=0,
@@ -722,7 +771,7 @@ void fl_sendClientMessage(NativeWindow window, Atom message,
 ////////////////////////////////////////////////////////////////
 // Code for copying to clipboard and DnD out of the program:
 
-void fltk3::copy(const char *stuff, int len, int clipboard) {
+void Fl::copy(const char *stuff, int len, int clipboard) {
   if (!stuff || len<0) return;
   if (len+1 > fl_selection_buffer_length[clipboard]) {
     delete[] fl_selection_buffer[clipboard];
@@ -742,7 +791,7 @@ void fltk3::copy(const char *stuff, int len, int clipboard) {
 const XEvent* fl_xevent; // the current x event
 ulong fl_event_time; // the last timestamp from an x event
 
-char fl_key_vector[32]; // used by fltk3::get_key()
+char fl_key_vector[32]; // used by Fl::get_key()
 
 // Record event mouse position and state from an XEvent:
 
@@ -753,49 +802,69 @@ static void set_event_xy() {
 #  if CONSOLIDATE_MOTION
   send_motion = 0;
 #  endif
-  fltk3::e_x_root  = fl_xevent->xbutton.x_root;
-  fltk3::e_x       = fl_xevent->xbutton.x;
-  fltk3::e_y_root  = fl_xevent->xbutton.y_root;
-  fltk3::e_y       = fl_xevent->xbutton.y;
-  fltk3::e_state   = fl_xevent->xbutton.state << 16;
+  Fl::e_x_root  = fl_xevent->xbutton.x_root;
+  Fl::e_x       = fl_xevent->xbutton.x;
+  Fl::e_y_root  = fl_xevent->xbutton.y_root;
+  Fl::e_y       = fl_xevent->xbutton.y;
+  Fl::e_state   = fl_xevent->xbutton.state << 16;
   fl_event_time = fl_xevent->xbutton.time;
 #  ifdef __sgi
   // get the meta key off PC keyboards:
-  if (fl_key_vector[18]&0x18) fltk3::e_state |= fltk3::META;
+  if (fl_key_vector[18]&0x18) Fl::e_state |= FL_META;
 #  endif
   // turn off is_click if enough time or mouse movement has passed:
-  if (abs(fltk3::e_x_root-px)+abs(fltk3::e_y_root-py) > 3 ||
+  if (abs(Fl::e_x_root-px)+abs(Fl::e_y_root-py) > 3 ||
       fl_event_time >= ptime+1000)
-    fltk3::e_is_click = 0;
+    Fl::e_is_click = 0;
 }
 
 // if this is same event as last && is_click, increment click count:
 static inline void checkdouble() {
-  if (fltk3::e_is_click == fltk3::e_keysym)
-    fltk3::e_clicks++;
+  if (Fl::e_is_click == Fl::e_keysym)
+    Fl::e_clicks++;
   else {
-    fltk3::e_clicks = 0;
-    fltk3::e_is_click = fltk3::e_keysym;
+    Fl::e_clicks = 0;
+    Fl::e_is_click = Fl::e_keysym;
   }
-  px = fltk3::e_x_root;
-  py = fltk3::e_y_root;
+  px = Fl::e_x_root;
+  py = Fl::e_y_root;
   ptime = fl_event_time;
 }
 
-static fltk3::Window* resize_bug_fix;
+static Fl_Window* resize_bug_fix;
 
 ////////////////////////////////////////////////////////////////
 
 static char unknown[] = "<unknown>";
 const int unknown_len = 10;
 
+extern "C" {
+
+static int xerror = 0;
+
+static int ignoreXEvents(Display *display, XErrorEvent *event) {
+  xerror = 1;
+  return 0;
+}
+
+static XErrorHandler catchXExceptions() {
+  xerror = 0;
+  return ignoreXEvents;
+}
+
+static int wasXExceptionRaised() {
+  return xerror;
+}
+
+}
+
+
 int fl_handle(const XEvent& thisevent)
 {
   XEvent xevent = thisevent;
   fl_xevent = &thisevent;
-  NativeWindow xid = xevent.xany.window;
-  int filtered = 0;
-  static NativeWindow xim_win = 0;
+  Window xid = xevent.xany.window;
+  static Window xim_win = 0;
 
   if (fl_xim_ic && xevent.type == DestroyNotify &&
         xid != xim_win && !fl_find(xid))
@@ -830,8 +899,8 @@ int fl_handle(const XEvent& thisevent)
         }
         fl_set_spot(spotf, spots, spot.x, spot.y, spot.width, spot.height);
 #else
-    if (fltk3::first_window() && fltk3::first_window()->modal()) {
-      NativeWindow x  = fl_xid(fltk3::first_window());
+    if (Fl::first_window() && Fl::first_window()->modal()) {
+      Window x  = fl_xid(Fl::first_window());
       if (x != xim_win) {
         xim_win  = x;
         XSetICValues(fl_xim_ic,
@@ -853,10 +922,8 @@ int fl_handle(const XEvent& thisevent)
 #endif
   }
 
-  filtered = XFilterEvent((XEvent *)&xevent, 0);
-  if (filtered) {
-    return 1;
-  }
+  if ( XFilterEvent((XEvent *)&xevent, 0) )
+      return(1);
 
   switch (xevent.type) {
 
@@ -885,22 +952,48 @@ int fl_handle(const XEvent& thisevent)
                              bytesread/4, 65536, 1, 0,
                              &actual, &format, &count, &remaining,
                              &portion)) break; // quit on error
-      if (bytesread) { // append to the accumulated buffer
-        buffer = (unsigned char*)realloc(buffer, bytesread+count*format/8+remaining);
-        memcpy(buffer+bytesread, portion, count*format/8);
-        XFree(portion);
-      } else {  // Use the first section without moving the memory:
-        buffer = portion;
+      if (actual == TARGETS || actual == XA_ATOM) {
+	Atom type = XA_STRING;
+	for (unsigned i = 0; i<count; i++) {
+	  Atom t = ((Atom*)portion)[i];
+	    if (t == fl_Xatextplainutf ||
+		  t == fl_Xatextplain ||
+		  t == fl_XaUtf8String) {type = t; break;}
+	    // rest are only used if no utf-8 available:
+	    if (t == fl_XaText ||
+		  t == fl_XaTextUriList ||
+		  t == fl_XaCompoundText) type = t;
+	}
+	XFree(portion);
+	Atom property = xevent.xselection.property;
+	XConvertSelection(fl_display, property, type, property,
+	      fl_xid(Fl::first_window()),
+	      fl_event_time);
+	return true;
       }
-      bytesread += count*format/8;
-      buffer[bytesread] = 0;
+      XTextProperty text_prop;
+      text_prop.value=portion;
+      text_prop.format=format;
+      text_prop.encoding=actual;
+      text_prop.nitems=count;
+      char **text_list;
+      text_list = (char**)&portion;
+      int bytesnew = strlen(*text_list)+1;
+      buffer = (unsigned char*)realloc(buffer, bytesread+bytesnew+remaining);
+      memcpy(buffer+bytesread, *text_list, bytesnew);
+      XFree(portion);
+      bytesread += bytesnew - 1;
       if (!remaining) break;
     }
-    fltk3::e_text = buffer ? (char*)buffer : (char *)"";
-    fltk3::e_length = bytesread;
-    int old_event = fltk3::e_number;
-    fl_selection_requestor->handle(fltk3::e_number = fltk3::PASTE);
-    fltk3::e_number = old_event;
+    if (buffer) {
+      buffer[bytesread] = 0;
+      convert_crlf(buffer, bytesread);
+    }
+    Fl::e_text = buffer ? (char*)buffer : (char *)"";
+    Fl::e_length = bytesread;
+    int old_event = Fl::e_number;
+    fl_selection_requestor->handle(Fl::e_number = FL_PASTE);
+    Fl::e_number = old_event;
     // Detect if this paste is due to Xdnd by the property name (I use
     // XA_SECONDARY for that) and send an XdndFinished message. It is not
     // clear if this has to be delayed until now or if it can be done
@@ -928,14 +1021,25 @@ int fl_handle(const XEvent& thisevent)
     e.time = fl_xevent->xselectionrequest.time;
     e.property = fl_xevent->xselectionrequest.property;
     if (e.target == TARGETS) {
-      Atom a = fl_XaUtf8String; //XA_STRING;
+      Atom a[3] = {fl_XaUtf8String, XA_STRING, fl_XaText};
       XChangeProperty(fl_display, e.requestor, e.property,
-                      XA_ATOM, sizeof(Atom)*8, 0, (unsigned char*)&a, 1);
+                      XA_ATOM, atom_bits, 0, (unsigned char*)a, 3);
     } else if (/*e.target == XA_STRING &&*/ fl_selection_length[clipboard]) {
-      XChangeProperty(fl_display, e.requestor, e.property,
-                      e.target, 8, 0,
-                      (unsigned char *)fl_selection_buffer[clipboard],
-                      fl_selection_length[clipboard]);
+    if (e.target == fl_XaUtf8String ||
+	     e.target == XA_STRING ||
+	     e.target == fl_XaCompoundText ||
+	     e.target == fl_XaText ||
+	     e.target == fl_Xatextplain ||
+	     e.target == fl_Xatextplainutf) {
+	// clobber the target type, this seems to make some applications
+	// behave that insist on asking for XA_TEXT instead of UTF8_STRING
+	// Does not change XA_STRING as that breaks xclipboard.
+	if (e.target != XA_STRING) e.target = fl_XaUtf8String;
+	XChangeProperty(fl_display, e.requestor, e.property,
+			 e.target, 8, 0,
+			 (unsigned char *)fl_selection_buffer[clipboard],
+			 fl_selection_length[clipboard]);
+      }
     } else {
 //    char* x = XGetAtomName(fl_display,e.target);
 //    fprintf(stderr,"selection request of %s\n",x);
@@ -962,7 +1066,7 @@ int fl_handle(const XEvent& thisevent)
   }
 
   int event = 0;
-  fltk3::Window* window = fl_find(xid);
+  Fl_Window* window = fl_find(xid);
 
   if (window) switch (xevent.type) {
 
@@ -970,7 +1074,7 @@ int fl_handle(const XEvent& thisevent)
     Atom message = fl_xevent->xclient.message_type;
     const long* data = fl_xevent->xclient.data.l;
     if ((Atom)(data[0]) == WM_DELETE_WINDOW) {
-      event = fltk3::CLOSE;
+      event = FL_CLOSE;
     } else if (message == fl_XdndEnter) {
       fl_xmousewin = window;
       in_a_window = true;
@@ -1021,27 +1125,27 @@ int fl_handle(const XEvent& thisevent)
       else
         fl_dnd_type = fl_dnd_source_types[0];
 
-      event = fltk3::DND_ENTER;
-      fltk3::e_text = unknown;
-      fltk3::e_length = unknown_len;
+      event = FL_DND_ENTER;
+      Fl::e_text = unknown;
+      Fl::e_length = unknown_len;
       break;
 
     } else if (message == fl_XdndPosition) {
       fl_xmousewin = window;
       in_a_window = true;
       fl_dnd_source_window = data[0];
-      fltk3::e_x_root = data[2]>>16;
-      fltk3::e_y_root = data[2]&0xFFFF;
+      Fl::e_x_root = data[2]>>16;
+      Fl::e_y_root = data[2]&0xFFFF;
       if (window) {
-        fltk3::e_x = fltk3::e_x_root-window->x();
-        fltk3::e_y = fltk3::e_y_root-window->y();
+        Fl::e_x = Fl::e_x_root-window->x();
+        Fl::e_y = Fl::e_y_root-window->y();
       }
       fl_event_time = data[3];
       fl_dnd_source_action = data[4];
       fl_dnd_action = fl_XdndActionCopy;
-      fltk3::e_text = unknown;
-      fltk3::e_length = unknown_len;
-      int accept = fltk3::handle(fltk3::DND_DRAG, window);
+      Fl::e_text = unknown;
+      Fl::e_length = unknown_len;
+      int accept = Fl::handle(FL_DND_DRAG, window);
       fl_sendClientMessage(data[0], fl_XdndStatus,
                            fl_xevent->xclient.window,
                            accept ? 1 : 0,
@@ -1052,9 +1156,9 @@ int fl_handle(const XEvent& thisevent)
 
     } else if (message == fl_XdndLeave) {
       fl_dnd_source_window = 0; // don't send a finished message to it
-      event = fltk3::DND_LEAVE;
-      fltk3::e_text = unknown;
-      fltk3::e_length = unknown_len;
+      event = FL_DND_LEAVE;
+      Fl::e_text = unknown;
+      Fl::e_length = unknown_len;
       break;
 
     } else if (message == fl_XdndDrop) {
@@ -1062,11 +1166,11 @@ int fl_handle(const XEvent& thisevent)
       in_a_window = true;
       fl_dnd_source_window = data[0];
       fl_event_time = data[2];
-      NativeWindow to_window = fl_xevent->xclient.window;
-      fltk3::e_text = unknown;
-      fltk3::e_length = unknown_len;
-      if (fltk3::handle(fltk3::DND_RELEASE, window)) {
-        fl_selection_requestor = fltk3::belowmouse();
+      Window to_window = fl_xevent->xclient.window;
+      Fl::e_text = unknown;
+      Fl::e_length = unknown_len;
+      if (Fl::handle(FL_DND_RELEASE, window)) {
+        fl_selection_requestor = Fl::belowmouse();
         XConvertSelection(fl_display, fl_XdndSelection,
                           fl_dnd_type, XA_SECONDARY,
                           to_window, fl_event_time);
@@ -1084,7 +1188,7 @@ int fl_handle(const XEvent& thisevent)
     break;}
 
   case UnmapNotify:
-    event = fltk3::HIDE;
+    event = FL_HIDE;
     break;
 
   case Expose:
@@ -1092,8 +1196,8 @@ int fl_handle(const XEvent& thisevent)
 #  if 0
     // try to keep windows on top even if WM_TRANSIENT_FOR does not work:
     // opaque move/resize window managers do not like this, so I disabled it.
-    if (fltk3::first_window()->non_modal() && window != fltk3::first_window())
-      fltk3::first_window()->show();
+    if (Fl::first_window()->non_modal() && window != Fl::first_window())
+      Fl::first_window()->show();
 #  endif
 
   case GraphicsExpose:
@@ -1103,12 +1207,12 @@ int fl_handle(const XEvent& thisevent)
 
   case FocusIn:
     if (fl_xim_ic) XSetICFocus(fl_xim_ic);
-    event = fltk3::FOCUS;
+    event = FL_FOCUS;
     break;
 
   case FocusOut:
     if (fl_xim_ic) XUnsetICFocus(fl_xim_ic);
-    event = fltk3::UNFOCUS;
+    event = FL_UNFOCUS;
     break;
 
   case KeyPress:
@@ -1125,64 +1229,61 @@ int fl_handle(const XEvent& thisevent)
       buffer = (char*) malloc(buffer_len);
     }
     if (xevent.type == KeyPress) {
-      event = fltk3::KEY;
+      event = FL_KEYDOWN;
       int len = 0;
 
       if (fl_xim_ic) {
-        if (!filtered) {
-          Status status;
-          len = XUtf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
-                               buffer, buffer_len, &keysym, &status);
+	Status status;
+	len = XUtf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
+			     buffer, buffer_len, &keysym, &status);
 
-          while (status == XBufferOverflow && buffer_len < 50000) {
-            buffer_len = buffer_len * 5 + 1;
-            buffer = (char*)realloc(buffer, buffer_len);
-            len = XUtf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
-                               buffer, buffer_len, &keysym, &status);
-          }
-        } else {
+	while (status == XBufferOverflow && buffer_len < 50000) {
+	  buffer_len = buffer_len * 5 + 1;
+	  buffer = (char*)realloc(buffer, buffer_len);
+	  len = XUtf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
+			     buffer, buffer_len, &keysym, &status);
+	}
+	keysym = XKeycodeToKeysym(fl_display, keycode, 0);
+      } else {
+        //static XComposeStatus compose;
+        len = XLookupString((XKeyEvent*)&(xevent.xkey),
+                             buffer, buffer_len, &keysym, 0/*&compose*/);
+        if (keysym && keysym < 0x400) { // a character in latin-1,2,3,4 sets
+          // force it to type a character (not sure if this ever is needed):
+          // if (!len) {buffer[0] = char(keysym); len = 1;}
+          len = fl_utf8encode(XKeysymToUcs(keysym), buffer);
+          if (len < 1) len = 1;
+          // ignore all effects of shift on the keysyms, which makes it a lot
+          // easier to program shortcuts and is Windoze-compatible:
           keysym = XKeycodeToKeysym(fl_display, keycode, 0);
         }
-      } else {
-      //static XComposeStatus compose;
-      len = XLookupString((XKeyEvent*)&(xevent.xkey),
-                             buffer, buffer_len, &keysym, 0/*&compose*/);
-      if (keysym && keysym < 0x400) { // a character in latin-1,2,3,4 sets
-        // force it to type a character (not sure if this ever is needed):
-        // if (!len) {buffer[0] = char(keysym); len = 1;}
-        len = fl_utf8encode(XKeysymToUcs(keysym), buffer);
-        if (len < 1) len = 1;
-        // ignore all effects of shift on the keysyms, which makes it a lot
-        // easier to program shortcuts and is Windoze-compatable:
-        keysym = XKeycodeToKeysym(fl_display, keycode, 0);
       }
-      }
-      // MRS: Can't use fltk3::event_state(fltk3::CTRL) since the state is not
+      // MRS: Can't use Fl::event_state(FL_CTRL) since the state is not
       //      set until set_event_xy() is called later...
       if ((xevent.xkey.state & ControlMask) && keysym == '-') buffer[0] = 0x1f; // ^_
       buffer[len] = 0;
-      fltk3::e_text = buffer;
-      fltk3::e_length = len;
+      Fl::e_text = buffer;
+      Fl::e_length = len;
     } else {
       // Stupid X sends fake key-up events when a repeating key is held
       // down, probably due to some back compatibility problem. Fortunately
       // we can detect this because the repeating KeyPress event is in
       // the queue, get it and execute it instead:
-      
+
       // Bool XkbSetDetectableAutorepeat ( display, detectable, supported_rtrn )
       // Display * display ;
       // Bool detectable ;
       // Bool * supported_rtrn ;
-      // ...would be the easy way to corrct this isuue. Unfortunatly, this call is also 
+      // ...would be the easy way to corrct this isuue. Unfortunatly, this call is also
       // broken on many Unix distros including Ubuntu and Solaris (as of Dec 2009)
 
-      // Bogus KeyUp events are generated by repeated KeyDown events. One 
+      // Bogus KeyUp events are generated by repeated KeyDown events. One
       // neccessary condition is an identical key event pending right after
       // the bogus KeyUp.
       // The new code introduced Dec 2009 differs in that it only check the very
       // next event in the queue, not the entire queue of events.
       // This function wrongly detects a repeat key if a software keyboard
-      // sends a burst of events containing two consecutive equal keys. However, 
+      // sends a burst of events containing two consecutive equal keys. However,
       // in every non-gaming situation, this is no problem because both KeyPress
       // events will cause the expected behavior.
       XEvent peekevent;
@@ -1196,8 +1297,8 @@ int fl_handle(const XEvent& thisevent)
           goto KEYPRESS;
         }
       }
-      
-      event = fltk3::KEYUP;
+
+      event = FL_KEYUP;
       fl_key_vector[keycode/8] &= ~(1 << (keycode%8));
       // keyup events just get the unshifted keysym:
       keysym = XKeycodeToKeysym(fl_display, keycode, 0);
@@ -1206,9 +1307,9 @@ int fl_handle(const XEvent& thisevent)
     // You can plug a microsoft keyboard into an sgi but the extra shift
     // keys are not translated.  Make them translate like XFree86 does:
     if (!keysym) switch(keycode) {
-    case 147: keysym = fltk3::LeftMetaKey; break;
-    case 148: keysym = fltk3::RightMetaKey; break;
-    case 149: keysym = fltk3::MenuKey; break;
+    case 147: keysym = FL_Meta_L; break;
+    case 148: keysym = FL_Meta_R; break;
+    case 149: keysym = FL_Menu; break;
     }
 #  endif
 #  if BACKSPACE_HACK
@@ -1217,10 +1318,25 @@ int fl_handle(const XEvent& thisevent)
     // very few of these remain?
     static int got_backspace = 0;
     if (!got_backspace) {
-      if (keysym == fltk3::DeleteKey) keysym = fltk3::BackSpaceKey;
-      else if (keysym == fltk3::BackSpaceKey) got_backspace = 1;
+      if (keysym == FL_Delete) keysym = FL_BackSpace;
+      else if (keysym == FL_BackSpace) got_backspace = 1;
     }
 #  endif
+    // For the first few years, there wasn't a good consensus on what the
+    // Windows keys should be mapped to for X11. So we need to help out a
+    // bit and map all variants to the same FLTK key...
+    switch (keysym) {
+	case XK_Meta_L:
+	case XK_Hyper_L:
+	case XK_Super_L:
+	  keysym = FL_Meta_L;
+	  break;
+	case XK_Meta_R:
+	case XK_Hyper_R:
+	case XK_Super_R:
+	  keysym = FL_Meta_R;
+	  break;
+      }
     // We have to get rid of the XK_KP_function keys, because they are
     // not produced on Windoze and thus case statements tend not to check
     // for them.  There are 15 of these in the range 0xff91 ... 0xff9f
@@ -1228,44 +1344,48 @@ int fl_handle(const XEvent& thisevent)
       // Map keypad keysym to character or keysym depending on
       // numlock state...
       unsigned long keysym1 = XKeycodeToKeysym(fl_display, keycode, 1);
-      if (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= fltk3::Keypad_Last))
-        fltk3::e_original_keysym = (int)(keysym1 | fltk3::Keypad);
+      if (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= FL_KP_Last))
+        Fl::e_original_keysym = (int)(keysym1 | FL_KP);
       if ((xevent.xkey.state & Mod2Mask) &&
-          (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= fltk3::Keypad_Last))) {
+          (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= FL_KP_Last))) {
         // Store ASCII numeric keypad value...
-        keysym = keysym1 | fltk3::Keypad;
+        keysym = keysym1 | FL_KP;
         buffer[0] = char(keysym1) & 0x7F;
         len = 1;
       } else {
         // Map keypad to special key...
         static const unsigned short table[15] = {
-          fltk3::FKey+1, fltk3::FKey+2, fltk3::FKey+3, fltk3::FKey+4,
-          fltk3::HomeKey, fltk3::LeftKey, fltk3::UpKey, fltk3::RightKey,
-          fltk3::DownKey, fltk3::PageUpKey, fltk3::PageDownKey, fltk3::EndKey,
-          0xff0b/*XK_Clear*/, FL_Insert, fltk3::DeleteKey};
+          FL_F+1, FL_F+2, FL_F+3, FL_F+4,
+          FL_Home, FL_Left, FL_Up, FL_Right,
+          FL_Down, FL_Page_Up, FL_Page_Down, FL_End,
+          0xff0b/*XK_Clear*/, FL_Insert, FL_Delete};
         keysym = table[keysym-0xff91];
       }
     } else {
       // Store this so we can later know if the KP was used
-      fltk3::e_original_keysym = (int)keysym;
+      Fl::e_original_keysym = (int)keysym;
     }
-    fltk3::e_keysym = int(keysym);
+    Fl::e_keysym = int(keysym);
+
+    // replace XK_ISO_Left_Tab (Shift-TAB) with FL_Tab (modifier flags are set correctly by X11)
+    if (Fl::e_keysym == 0xfe20) Fl::e_keysym = FL_Tab;
+
     set_event_xy();
-    fltk3::e_is_click = 0;
+    Fl::e_is_click = 0;
     break;}
 
   case ButtonPress:
-    fltk3::e_keysym = fltk3::MouseButton + xevent.xbutton.button;
+    Fl::e_keysym = FL_Button + xevent.xbutton.button;
     set_event_xy();
     if (xevent.xbutton.button == Button4) {
-      fltk3::e_dy = -1; // Up
-      event = fltk3::MOUSEWHEEL;
+      Fl::e_dy = -1; // Up
+      event = FL_MOUSEWHEEL;
     } else if (xevent.xbutton.button == Button5) {
-      fltk3::e_dy = +1; // Down
-      event = fltk3::MOUSEWHEEL;
+      Fl::e_dy = +1; // Down
+      event = FL_MOUSEWHEEL;
     } else {
-      fltk3::e_state |= (fltk3::BUTTON1 << (xevent.xbutton.button-1));
-      event = fltk3::PUSH;
+      Fl::e_state |= (FL_BUTTON1 << (xevent.xbutton.button-1));
+      event = FL_PUSH;
       checkdouble();
     }
 
@@ -1280,19 +1400,19 @@ int fl_handle(const XEvent& thisevent)
     in_a_window = true;
     return 0;
 #  else
-    event = fltk3::MOVE;
+    event = FL_MOVE;
     fl_xmousewin = window;
     in_a_window = true;
     break;
 #  endif
 
   case ButtonRelease:
-    fltk3::e_keysym = fltk3::MouseButton + xevent.xbutton.button;
+    Fl::e_keysym = FL_Button + xevent.xbutton.button;
     set_event_xy();
-    fltk3::e_state &= ~(fltk3::BUTTON1 << (xevent.xbutton.button-1));
+    Fl::e_state &= ~(FL_BUTTON1 << (xevent.xbutton.button-1));
     if (xevent.xbutton.button == Button4 ||
         xevent.xbutton.button == Button5) return 0;
-    event = fltk3::RELEASE;
+    event = FL_RELEASE;
 
     fl_xmousewin = window;
     in_a_window = true;
@@ -1302,19 +1422,25 @@ int fl_handle(const XEvent& thisevent)
     if (xevent.xcrossing.detail == NotifyInferior) break;
     // XInstallColormap(fl_display, Fl_X::i(window)->colormap);
     set_event_xy();
-    fltk3::e_state = xevent.xcrossing.state << 16;
-    event = fltk3::ENTER;
+    Fl::e_state = xevent.xcrossing.state << 16;
+    event = FL_ENTER;
 
     fl_xmousewin = window;
     in_a_window = true;
+    { XIMStyles *xim_styles = NULL;
+      if(!fl_xim_im || XGetIMValues(fl_xim_im, XNQueryInputStyle, &xim_styles, NULL, NULL)) {
+	fl_init_xim();
+      }
+      if (xim_styles) XFree(xim_styles);
+    }
     break;
 
   case LeaveNotify:
     if (xevent.xcrossing.detail == NotifyInferior) break;
     set_event_xy();
-    fltk3::e_state = xevent.xcrossing.state << 16;
+    Fl::e_state = xevent.xcrossing.state << 16;
     fl_xmousewin = 0;
-    in_a_window = false; // make do_queued_events produce fltk3::LEAVE event
+    in_a_window = false; // make do_queued_events produce FL_LEAVE event
     return 0;
 
   // We cannot rely on the x,y position in the configure notify event.
@@ -1325,7 +1451,7 @@ int fl_handle(const XEvent& thisevent)
   // window managers do not send this fake event anyway)
   // So anyway, do a round trip to find the correct x,y:
   case MapNotify:
-    event = fltk3::SHOW;
+    event = FL_SHOW;
 
   case ConfigureNotify: {
     if (window->parent()) break; // ignore child windows
@@ -1333,11 +1459,11 @@ int fl_handle(const XEvent& thisevent)
     // figure out where OS really put window
     XWindowAttributes actual;
     XGetWindowAttributes(fl_display, fl_xid(window), &actual);
-    NativeWindow cr; int X, Y, W = actual.width, H = actual.height;
+    Window cr; int X, Y, W = actual.width, H = actual.height;
     XTranslateCoordinates(fl_display, fl_xid(window), actual.root,
                           0, 0, &X, &Y, &cr);
 
-    // tell fltk3::Window about it and set flag to prevent echoing:
+    // tell Fl_Window about it and set flag to prevent echoing:
     resize_bug_fix = window;
     window->resize(X, Y, W, H);
     break; // allow add_handler to do something too
@@ -1345,7 +1471,10 @@ int fl_handle(const XEvent& thisevent)
 
   case ReparentNotify: {
     int xpos, ypos;
-    NativeWindow junk;
+    Window junk;
+
+    // on some systems, the ReparentNotify event is not handled as we would expect.
+    XErrorHandler oldHandler = XSetErrorHandler(catchXExceptions());
 
     //ReparentNotify gives the new position of the window relative to
     //the new parent. FLTK cares about the position on the root window.
@@ -1353,29 +1482,33 @@ int fl_handle(const XEvent& thisevent)
                           XRootWindow(fl_display, fl_screen),
                           xevent.xreparent.x, xevent.xreparent.y,
                           &xpos, &ypos, &junk);
+    XSetErrorHandler(oldHandler);
 
-    // tell fltk3::Window about it and set flag to prevent echoing:
-    resize_bug_fix = window;
-    window->position(xpos, ypos);
+    // tell Fl_Window about it and set flag to prevent echoing:
+    if ( !wasXExceptionRaised() ) {
+      resize_bug_fix = window;
+      window->position(xpos, ypos);
+    }
     break;
     }
   }
 
-  return fltk3::handle(event, window);
+  return Fl::handle(event, window);
 }
 
 ////////////////////////////////////////////////////////////////
 
-void fltk3::Window::resize(int X,int Y,int W,int H) {
+void Fl_Window::resize(int X,int Y,int W,int H) {
   int is_a_move = (X != x() || Y != y());
   int is_a_resize = (W != w() || H != h());
+  int is_a_enlarge = (W > w() || H > h());
   int resize_from_program = (this != resize_bug_fix);
   if (!resize_from_program) resize_bug_fix = 0;
   if (is_a_move && resize_from_program) set_flag(FORCE_POSITION);
   else if (!is_a_resize && !is_a_move) return;
   if (is_a_resize) {
-    fltk3::Group::resize(X,Y,W,H);
-    if (shown()) {redraw(); i->wait_for_expose = 1;}
+    Fl_Group::resize(X,Y,W,H);
+    if (shown()) {redraw(); if(is_a_enlarge) i->wait_for_expose = 1;}
   } else {
     x(X); y(Y);
   }
@@ -1399,12 +1532,12 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
 
 ////////////////////////////////////////////////////////////////
 
-// A subclass of fltk3::Window may call this to associate an X window it
-// creates with the fltk3::Window:
+// A subclass of Fl_Window may call this to associate an X window it
+// creates with the Fl_Window:
 
-void fl_fix_focus(); // in fltk3.cxx
+void fl_fix_focus(); // in Fl.cxx
 
-Fl_X* Fl_X::set_xid(fltk3::Window* win, NativeWindow winxid) {
+Fl_X* Fl_X::set_xid(Fl_Window* win, Window winxid) {
   Fl_X* xp = new Fl_X;
   xp->xid = winxid;
   xp->other_xid = 0;
@@ -1414,7 +1547,7 @@ Fl_X* Fl_X::set_xid(fltk3::Window* win, NativeWindow winxid) {
   xp->wait_for_expose = 1;
   xp->backbuffer_bad = 1;
   Fl_X::first = xp;
-  if (win->modal()) {fltk3::modal_ = win; fl_fix_focus();}
+  if (win->modal()) {Fl::modal_ = win; fl_fix_focus();}
   return xp;
 }
 
@@ -1436,9 +1569,9 @@ ExposureMask|StructureNotifyMask
 |EnterWindowMask|LeaveWindowMask
 |PointerMotionMask;
 
-void Fl_X::make_xid(fltk3::Window* win, XVisualInfo *visual, Colormap colormap)
+void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
 {
-  fltk3::Group::current(0); // get rid of very common user bug: forgot end()
+  Fl_Group::current(0); // get rid of very common user bug: forgot end()
 
   int X = win->x();
   int Y = win->y();
@@ -1446,10 +1579,10 @@ void Fl_X::make_xid(fltk3::Window* win, XVisualInfo *visual, Colormap colormap)
   if (W <= 0) W = 1; // X don't like zero...
   int H = win->h();
   if (H <= 0) H = 1; // X don't like zero...
-  if (!win->parent() && !fltk3::grab()) {
+  if (!win->parent() && !Fl::grab()) {
     // center windows in case window manager does not do anything:
 #ifdef FL_CENTER_WINDOWS
-    if (!(win->flags() & fltk3::Widget::FORCE_POSITION)) {
+    if (!(win->flags() & Fl_Widget::FORCE_POSITION)) {
       win->x(X = scr_x+(scr_w-W)/2);
       win->y(Y = scr_y+(scr_h-H)/2);
     }
@@ -1458,7 +1591,7 @@ void Fl_X::make_xid(fltk3::Window* win, XVisualInfo *visual, Colormap colormap)
     // force the window to be on-screen.  Usually the X window manager
     // does this, but a few don't, so we do it here for consistency:
     int scr_x, scr_y, scr_w, scr_h;
-    fltk3::screen_xywh(scr_x, scr_y, scr_w, scr_h, X, Y);
+    Fl::screen_xywh(scr_x, scr_y, scr_w, scr_h, X, Y);
 
     if (win->border()) {
       // ensure border is on screen:
@@ -1501,7 +1634,7 @@ void Fl_X::make_xid(fltk3::Window* win, XVisualInfo *visual, Colormap colormap)
     attr.save_under = 1;
     mask |= CWOverrideRedirect | CWSaveUnder;
   } else attr.override_redirect = 0;
-  if (fltk3::grab()) {
+  if (Fl::grab()) {
     attr.save_under = 1; mask |= CWSaveUnder;
     if (!win->border()) {attr.override_redirect = 1; mask |= CWOverrideRedirect;}
   }
@@ -1550,12 +1683,12 @@ void Fl_X::make_xid(fltk3::Window* win, XVisualInfo *visual, Colormap colormap)
 
     if (win->non_modal() && xp->next && !fl_disable_transient_for) {
       // find some other window to be "transient for":
-      fltk3::Window* wp = xp->next->w;
+      Fl_Window* wp = xp->next->w;
       while (wp->parent()) wp = wp->window();
       XSetTransientForHint(fl_display, xp->xid, fl_xid(wp));
       if (!wp->visible()) showit = 0; // guess that wm will not show it
     }
-   
+
     // Make sure that borderless windows do not show in the task bar
     if (!win->border()) {
       Atom net_wm_state = XInternAtom (fl_display, "_NET_WM_STATE", 0);
@@ -1586,12 +1719,19 @@ void Fl_X::make_xid(fltk3::Window* win, XVisualInfo *visual, Colormap colormap)
     XFree(hints);
   }
 
+  // set the window type for menu and tooltip windows to avoid animations (compiz)
+  if (win->menu_window() || win->tooltip_window()) {
+    Atom net_wm_type = XInternAtom(fl_display, "_NET_WM_WINDOW_TYPE", False);
+    Atom net_wm_type_kind = XInternAtom(fl_display, "_NET_WM_WINDOW_TYPE_MENU", False);
+    XChangeProperty(fl_display, xp->xid, net_wm_type, XA_ATOM, 32, PropModeReplace, (unsigned char*)&net_wm_type_kind, 1);
+  }
+
   XMapWindow(fl_display, xp->xid);
   if (showit) {
     win->set_visible();
-    int old_event = fltk3::e_number;
-    win->handle(fltk3::e_number = fltk3::SHOW); // get child windows to appear
-    fltk3::e_number = old_event;
+    int old_event = Fl::e_number;
+    win->handle(Fl::e_number = FL_SHOW); // get child windows to appear
+    Fl::e_number = old_event;
     win->redraw();
   }
 }
@@ -1604,7 +1744,7 @@ void Fl_X::sendxjunk() {
 
   if (!w->size_range_set) { // default size_range based on resizable():
     if (w->resizable()) {
-      fltk3::Widget *o = w->resizable();
+      Fl_Widget *o = w->resizable();
       int minw = o->w(); if (minw > 100) minw = 100;
       int minh = o->h(); if (minh > 100) minh = 100;
       w->size_range(w->w() - o->w() + minw, w->h() - o->h() + minh, 0, 0);
@@ -1638,8 +1778,8 @@ void Fl_X::sendxjunk() {
       // unfortunately we can't set just one maximum size.  Guess a
       // value for the other one.  Some window managers will make the
       // window fit on screen when maximized, others will put it off screen:
-      if (hints->max_width < hints->min_width) hints->max_width = fltk3::w();
-      if (hints->max_height < hints->min_height) hints->max_height = fltk3::h();
+      if (hints->max_width < hints->min_width) hints->max_width = Fl::w();
+      if (hints->max_height < hints->min_height) hints->max_height = Fl::h();
     }
     if (hints->width_inc && hints->height_inc) hints->flags |= PResizeInc;
     if (w->aspect) {
@@ -1655,7 +1795,7 @@ void Fl_X::sendxjunk() {
     prop[1] = 1|2|16; // MWM_FUNC_ALL | MWM_FUNC_RESIZE | MWM_FUNC_MAXIMIZE
   }
 
-  if (w->flags() & fltk3::Widget::FORCE_POSITION) {
+  if (w->flags() & Fl_Widget::FORCE_POSITION) {
     hints->flags |= USPosition;
     hints->x = w->x();
     hints->y = w->y();
@@ -1673,7 +1813,7 @@ void Fl_X::sendxjunk() {
   XFree(hints);
 }
 
-void fltk3::Window::size_range_() {
+void Fl_Window::size_range_() {
   size_range_set = 1;
   if (shown()) i->sendxjunk();
 }
@@ -1688,21 +1828,23 @@ const char *fl_filename_name(const char *name) {
   return q;
 }
 
-void fltk3::Window::label(const char *name,const char *iname) {
-  fltk3::Widget::label(name);
+void Fl_Window::label(const char *name,const char *iname) {
+  Fl_Widget::label(name);
   iconlabel_ = iname;
   if (shown() && !parent()) {
     if (!name) name = "";
-    XChangeProperty(fl_display, i->xid, XA_WM_NAME,
-                    fl_XaUtf8String, 8, 0, (uchar*)name, strlen(name));
+    int namelen = strlen(name);
     if (!iname) iname = fl_filename_name(name);
-    XChangeProperty(fl_display, i->xid, XA_WM_ICON_NAME,
-                    fl_XaUtf8String, 8, 0, (uchar*)iname, strlen(iname));
+    int inamelen = strlen(iname);
+    XChangeProperty(fl_display, i->xid, fl_NET_WM_NAME,      fl_XaUtf8String, 8, 0, (uchar*)name,  namelen);	// utf8
+    XChangeProperty(fl_display, i->xid, XA_WM_NAME,          XA_STRING,       8, 0, (uchar*)name,  namelen);	// non-utf8
+    XChangeProperty(fl_display, i->xid, fl_NET_WM_ICON_NAME, fl_XaUtf8String, 8, 0, (uchar*)iname, inamelen);	// utf8
+    XChangeProperty(fl_display, i->xid, XA_WM_ICON_NAME,     XA_STRING,       8, 0, (uchar*)iname, inamelen);	// non-utf8
   }
 }
 
 ////////////////////////////////////////////////////////////////
-// Implement the virtual functions for the base fltk3::Window class:
+// Implement the virtual functions for the base Fl_Window class:
 
 // If the box is a filled rectangle, we can make the redisplay *look*
 // faster by using X's background pixel erasing.  We can make it
@@ -1713,18 +1855,18 @@ void fltk3::Window::label(const char *name,const char *iname) {
 // is resized while a save-behind window is atop it.  The previous
 // contents are restored to the area, but this assumes the area
 // is cleared to background color.  So this is disabled in this version.
-// fltk3::Window *fl_boxcheat;
-static inline int can_boxcheat(uchar b) {return (b==1 || (b&2) && b<=15);}
+// Fl_Window *fl_boxcheat;
+static inline int can_boxcheat(uchar b) {return (b==1 || ((b&2) && b<=15));}
 
-void fltk3::Window::show() {
-  image(fltk3::scheme_bg_);
-  if (fltk3::scheme_bg_) {
-    labeltype(fltk3::NORMAL_LABEL);
-    align(fltk3::ALIGN_CENTER | fltk3::ALIGN_INSIDE | fltk3::ALIGN_CLIP);
+void Fl_Window::show() {
+  image(Fl::scheme_bg_);
+  if (Fl::scheme_bg_) {
+    labeltype(FL_NORMAL_LABEL);
+    align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_CLIP);
   } else {
-    labeltype(fltk3::NO_LABEL);
+    labeltype(FL_NO_LABEL);
   }
-  fltk3::Tooltip::exit(this);
+  Fl_Tooltip::exit(this);
   if (!shown()) {
     fl_open_display();
     // Don't set background pixel for double-buffered windows...
@@ -1741,12 +1883,12 @@ preparePrintFront();
 #endif
 }
 
-NativeWindow fl_window;
-fltk3::Window *fltk3::Window::current_;
+Window fl_window;
+Fl_Window *Fl_Window::current_;
 GC fl_gc;
 
 // make X drawing go into this window (called by subclass flush() impl.)
-void fltk3::Window::make_current() {
+void Fl_Window::make_current() {
   static GC gc; // the GC used by all X windows
   if (!gc) gc = XCreateGC(fl_display, i->xid, 0, 0);
   fl_window = i->xid;
@@ -1754,23 +1896,90 @@ void fltk3::Window::make_current() {
   current_ = this;
   fl_clip_region(0);
 
-#ifdef USE_CAIRO
+#ifdef FLTK_USE_CAIRO
   // update the cairo_t context
-  if (fltk3::cairo_autolink_context()) fltk3::cairo_make_current(this);
+  if (Fl::cairo_autolink_context()) Fl::cairo_make_current(this);
 #endif
-
 }
 
-#ifdef USE_PRINT_BUTTON
-// to test the fltk3::Printer class creating a "Print front window" button in a separate window
-// contains also preparePrintFront call above
-#include <fltk3/Printer.h>
-#include <fltk3/Button.h>
-void printFront(fltk3::Widget *o, void *data)
+Window fl_xid_(const Fl_Window* w)
 {
-  fltk3::Printer printer;
+  return Fl_X::i(w)->xid;
+}
+
+
+int Fl_Window::decorated_h()
+{
+  if (parent() || !shown()) return h();
+  Window root, parent, *children;
+  unsigned n;
+  XQueryTree(fl_display, i->xid, &root, &parent, &children, &n); if (n) XFree(children);
+  XWindowAttributes attributes;
+  XGetWindowAttributes(fl_display, parent, &attributes);
+  return attributes.height;
+}
+
+int Fl_Window::decorated_w()
+{
+  if (parent() || !shown()) return w();
+  Window root, parent, *children;
+  unsigned n;
+  XQueryTree(fl_display, i->xid, &root, &parent, &children, &n); if (n) XFree(children);
+  XWindowAttributes attributes;
+  XGetWindowAttributes(fl_display, parent, &attributes);
+  return attributes.width;
+}
+
+void Fl_Paged_Device::print_window(Fl_Window *win, int x_offset, int y_offset)
+{
+  if (win->parent() || !win->border()) {
+    this->print_widget(win, x_offset, y_offset);
+    return;
+    }
+  Fl_Display_Device::display_device()->set_current();
+  win->show();
+  Fl::check();
+  win->make_current();
+  Window root, parent, *children, child_win, from;
+  unsigned n;
+  int bx, bt;
+  from = fl_window;
+  XQueryTree(fl_display, fl_window, &root, &parent, &children, &n); if (n) XFree(children);
+  XTranslateCoordinates(fl_display, fl_window, parent, 0, 0, &bx, &bt, &child_win);
+  fl_window = parent;
+  uchar *top_image = 0, *left_image = 0, *right_image = 0, *bottom_image = 0;
+  top_image = fl_read_image(NULL, 0, 0, - (win->w() + 2 * bx), bt);
+  if (bx) {
+    left_image = fl_read_image(NULL, 0, bt, -bx, win->h() + bx);
+    right_image = fl_read_image(NULL, win->w() + bx, bt, -bx, win->h() + bx);
+    bottom_image = fl_read_image(NULL, 0, bt + win->h(), -(win->w() + 2*bx), bx);
+  }
+  fl_window = from;
+  this->set_current();
+  fl_draw_image(top_image, x_offset, y_offset, win->w() + 2 * bx, bt, 3);
+  delete[] top_image;
+  if (bx) {
+    if (left_image) fl_draw_image(left_image, x_offset, y_offset + bt, bx, win->h() + bx, 3);
+    if (right_image) fl_draw_image(right_image, x_offset + win->w() + bx, y_offset + bt, bx, win->h() + bx, 3);
+    if (bottom_image) fl_draw_image(bottom_image, x_offset, y_offset + bt + win->h(), win->w() + 2*bx, bx, 3);
+    if (left_image) delete[] left_image;
+    if (right_image) delete[] right_image;
+    if (bottom_image) delete[] bottom_image;
+  }
+  this->print_widget( win, x_offset + bx, y_offset + bt );
+}
+
+
+#ifdef USE_PRINT_BUTTON
+// to test the Fl_Printer class creating a "Print front window" button in a separate window
+// contains also preparePrintFront call above
+#include <FL/Fl_Printer.H>
+#include <FL/Fl_Button.H>
+void printFront(Fl_Widget *o, void *data)
+{
+  Fl_Printer printer;
   o->window()->hide();
-  fltk3::Window *win = fltk3::first_window();
+  Fl_Window *win = Fl::first_window();
   if(!win) return;
   int w, h;
   if( printer.start_job(1) ) { o->window()->show(); return; }
@@ -1778,9 +1987,11 @@ void printFront(fltk3::Widget *o, void *data)
   printer.printable_rect(&w,&h);
   // scale the printer device so that the window fits on the page
   float scale = 1;
-  if (win->w() > w || win->h() > h) {
-    scale = (float)w/win->w();
-    if ((float)h/win->h() < scale) scale = (float)h/win->h();
+  int ww = win->decorated_w();
+  int wh = win->decorated_h();
+  if (ww > w || wh > h) {
+    scale = (float)w/ww;
+    if ((float)h/wh < scale) scale = (float)h/wh;
     printer.scale(scale, scale);
   }
 
@@ -1792,9 +2003,8 @@ void printFront(fltk3::Widget *o, void *data)
   printer.rotate(ROTATE);
   printer.print_widget( win, - win->w()/2, - win->h()/2 );
   //printer.print_window_part( win, 0,0, win->w(), win->h(), - win->w()/2, - win->h()/2 );
-#else
-  printer.print_widget( win );
-  //printer.print_window_part( win, 0,0,win->w(), win->h() );
+#else  
+  printer.print_window(win);
 #endif
 
   printer.end_page();
@@ -1807,8 +2017,8 @@ void preparePrintFront(void)
   static int first=1;
   if(!first) return;
   first=0;
-  static fltk3::Window w(0,0,150,30);
-  static fltk3::Button b(0,0,w.w(),w.h(), "Print front window");
+  static Fl_Window w(0,0,150,30);
+  static Fl_Button b(0,0,w.w(),w.h(), "Print front window");
   b.callback(printFront);
   w.end();
   w.show();

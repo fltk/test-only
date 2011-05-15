@@ -3,7 +3,7 @@
 //
 // Timer header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -45,9 +45,9 @@
   making a timeout callback every 1/5 second.  This is wasteful and
   inaccurate if you just want something to happen a fixed time in the
   future.  You should directly call 
-  fltk3::add_timeout() instead.
+  Fl::add_timeout() instead.
 */
-class FL_EXPORT Fl_Timer : public fltk3::Widget {
+class FL_EXPORT Fl_Timer : public Fl_Widget {
   static void stepcb(void *);
   void step();
   char on, direction_;

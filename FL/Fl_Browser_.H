@@ -3,7 +3,7 @@
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -37,7 +37,7 @@
 #include "Fl_Group.H"
 #endif
 #include "Fl_Scrollbar.H"
-#include <fltk3/Fl.H>		// Fl::scrollbar_size()
+#include <FL/Fl.H>		// Fl::scrollbar_size()
 
 #define FL_NORMAL_BROWSER	0	/**< type() of Fl_Browser */
 #define FL_SELECT_BROWSER	1	/**< type() of FL_Select_Browser */
@@ -64,7 +64,7 @@
   accessing image data or doing stat() on a file or doing some
   other slow operation.
 */
-class FL_EXPORT Fl_Browser_ : public fltk3::Group {
+class FL_EXPORT Fl_Browser_ : public Fl_Group {
   int position_;	// where user wants it scrolled to
   int real_position_;	// the current vertical scrolling position
   int hposition_;	// where user wants it panned to
@@ -138,20 +138,20 @@ protected:
     \param[in] item The item whose label text is returned.
     \returns The item's text label. (Can be NULL if blank)
    */
-  virtual const char *item_text(void *item) const { return 0L; }
+  virtual const char *item_text(void *item) const { (void)item; return 0L; }
   /**
     This optional method should be provided by the subclass 
     to efficiently swap browser items \p a and \p b, such as for sorting.
     \param[in] a,b The two items to be swapped.
    */
-  virtual void item_swap(void *a,void *b) { }
+  virtual void item_swap(void *a,void *b) { (void)a; (void)b; }
   /**
     This method must be provided by the subclass 
     to return the item for the specified \p index. 
     \param[in] index The \p index of the item to be returned
     \returns The item at the specified \p index.
    */
-  virtual void *item_at(int index) const { return 0L; }
+  virtual void *item_at(int index) const { (void)index; return 0L; }
   // you don't have to provide these but it may help speed it up:
   virtual int full_width() const ;	// current width of all items
   virtual int full_height() const ;	// current height of all items
@@ -307,10 +307,10 @@ public:
     Gets the current size of the scrollbars' troughs, in pixels.
 
     If this value is zero (default), this widget will use the 
-    fltk3::scrollbar_size() value as the scrollbar's width.
+    Fl::scrollbar_size() value as the scrollbar's width.
   
-    \returns Scrollbar size in pixels, or 0 if the global fltk3::scrollsize() is being used.
-    \see fltk3::scrollbar_size(int)
+    \returns Scrollbar size in pixels, or 0 if the global Fl::scrollsize() is being used.
+    \see Fl::scrollbar_size(int)
   */
   int scrollbar_size() const {
       return(scrollbar_size_);
@@ -319,7 +319,7 @@ public:
     Sets the pixel size of the scrollbars' troughs to the \p size, in pixels.
 
     Normally you should not need this method, and should use
-    fltk3::scrollbar_size(int) instead to manage the size of ALL 
+    Fl::scrollbar_size(int) instead to manage the size of ALL 
     your widgets' scrollbars. This ensures your application 
     has a consistent UI, is the default behavior, and is normally
     what you want.
@@ -328,11 +328,11 @@ public:
     scrollbar size. The need for this should be rare.
     
     Setting \p size to the special value of 0 causes the widget to
-    track the global fltk3::scrollbar_size(), which is the default.
+    track the global Fl::scrollbar_size(), which is the default.
     
     \param[in] size Sets the scrollbar size in pixels.\n
-                    If 0 (default), scrollbar size tracks the global fltk3::scrollbar_size()
-    \see fltk3::scrollbar_size()
+                    If 0 (default), scrollbar size tracks the global Fl::scrollbar_size()
+    \see Fl::scrollbar_size()
   */
   void scrollbar_size(int size) {
       scrollbar_size_ = size;
@@ -340,22 +340,22 @@ public:
   /**
     This method has been deprecated, existing for backwards compatibility only.
     Use scrollbar_size() instead.
-    This method always returns the global value fltk3::scrollbar_size().
-    \returns Always returns the global value fltk3::scrollbar_size().
+    This method always returns the global value Fl::scrollbar_size().
+    \returns Always returns the global value Fl::scrollbar_size().
     \todo This method should eventually be removed in 1.4+
   */
   int scrollbar_width() const {
-      return(fltk3::scrollbar_size());
+      return(Fl::scrollbar_size());
   }
   /**
     This method has been deprecated, existing for backwards compatibility only.
     Use scrollbar_size(int) instead.
-    This method sets the global fltk3::scrollbar_size(), and forces this
+    This method sets the global Fl::scrollbar_size(), and forces this
     instance of the widget to use it.
     \todo This method should eventually be removed in 1.4+
   */
   void scrollbar_width(int width) {
-      fltk3::scrollbar_size(width);
+      Fl::scrollbar_size(width);
       scrollbar_size_ = 0;
   }
   /**

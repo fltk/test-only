@@ -3,7 +3,7 @@
 //
 // Multi-threading support code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,7 +26,7 @@
 //
 
 
-#include <fltk3/run.h>
+#include <FL/Fl.H>
 #include <config.h>
 
 #include <stdlib.h>
@@ -48,31 +48,31 @@
 
    The API:
 
-   fltk3::lock() - recursive lock.  You must call this before the
-   first call to fltk3::wait()/run() to initialize the thread
+   Fl::lock() - recursive lock.  You must call this before the
+   first call to Fl::wait()/run() to initialize the thread
    system. The lock is locked all the time except when
-   fltk3::wait() is waiting for events.
+   Fl::wait() is waiting for events.
 
-   fltk3::unlock() - release the recursive lock.
+   Fl::unlock() - release the recursive lock.
 
-   fltk3::awake(void*) - Causes fltk3::wait() to return (with the lock
+   Fl::awake(void*) - Causes Fl::wait() to return (with the lock
    locked) even if there are no events ready.
 
-   fltk3::awake(void (*cb)(void *), void*) - Call a function
+   Fl::awake(void (*cb)(void *), void*) - Call a function
    in the main thread from within another thread of execution.
 
-   fltk3::thread_message() - returns an argument sent to an
-   fltk3::awake() call, or returns NULL if none.  WARNING: the
+   Fl::thread_message() - returns an argument sent to an
+   Fl::awake() call, or returns NULL if none.  WARNING: the
    current implementation only has a one-entry queue and only
    returns the most recent value!
 */
 
 #ifndef FL_DOXYGEN
-Fl_Awake_Handler *fltk3::awake_ring_;
-void **fltk3::awake_data_;
-int fltk3::awake_ring_size_;
-int fltk3::awake_ring_head_;
-int fltk3::awake_ring_tail_;
+Fl_Awake_Handler *Fl::awake_ring_;
+void **Fl::awake_data_;
+int Fl::awake_ring_size_;
+int Fl::awake_ring_head_;
+int Fl::awake_ring_tail_;
 #endif
 
 static const int AWAKE_RING_SIZE = 1024;
@@ -81,7 +81,7 @@ static void unlock_ring();
 
 
 /** Adds an awake handler for use in awake(). */
-int fltk3::add_awake_handler_(Fl_Awake_Handler func, void *data)
+int Fl::add_awake_handler_(Fl_Awake_Handler func, void *data)
 {
   int ret = 0;
   lock_ring();
@@ -104,7 +104,7 @@ int fltk3::add_awake_handler_(Fl_Awake_Handler func, void *data)
   return ret;
 }
 /** Gets the last stored awake handler for use in awake(). */
-int fltk3::get_awake_handler_(Fl_Awake_Handler &func, void *&data)
+int Fl::get_awake_handler_(Fl_Awake_Handler &func, void *&data)
 {
   int ret = 0;
   lock_ring();
@@ -121,26 +121,31 @@ int fltk3::get_awake_handler_(Fl_Awake_Handler &func, void *&data)
   return ret;
 }
 
-//
 /**
-  Let the main thread know an update is pending
-  and have it call a specific function
-  See void awake(void* message=0). 
+ Let the main thread know an update is pending and have it call a specific function.
+ Registers a function that will be 
+ called by the main thread during the next message handling cycle. 
+ Returns 0 if the callback function was registered, 
+ and -1 if registration failed. Over a thousand awake callbacks can be
+ registered simultaneously.
+ 
+ \see Fl::awake(void* message=0)
 */
-int fltk3::awake(Fl_Awake_Handler func, void *data) {
+int Fl::awake(Fl_Awake_Handler func, void *data) {
   int ret = add_awake_handler_(func, data);
-  fltk3::awake();
+  Fl::awake();
   return ret;
 }
 
 ////////////////////////////////////////////////////////////////
 // Windows threading...
-/** \fn void fltk3::lock()
+/** \fn int Fl::lock()
     The lock() method blocks the current thread until it
     can safely access FLTK widgets and data. Child threads should
     call this method prior to updating any widgets or accessing
     data. The main thread must call lock() to initialize
-    the threading support in FLTK.
+    the threading support in FLTK. lock() will return non-zero
+    if threading is not available on the platform.
     
     Child threads must call unlock() when they are done
     accessing FLTK.
@@ -150,10 +155,13 @@ int fltk3::awake(Fl_Awake_Handler func, void *data) {
     Similarly, when the main thread needs to do processing, it will
     wait until all child threads have called unlock() before processing
     additional data.
+ 
+    \return 0 if threading is available on the platform; non-zero
+    otherwise.
     
     See also: \ref advanced_multithreading
 */
-/** \fn void fltk3::unlock()
+/** \fn void Fl::unlock()
     The unlock() method releases the lock that was set
     using the lock() method. Child
     threads should call this method as soon as they are finished
@@ -161,35 +169,29 @@ int fltk3::awake(Fl_Awake_Handler func, void *data) {
     
     See also: \ref advanced_multithreading
 */
-/** \fn void fltk3::awake(void* msg)
-    The awake() method sends a message pointer to the main thread, 
-    causing any pending fltk3::wait() call to 
+/** \fn void Fl::awake(void* msg)
+    Sends a message pointer to the main thread, 
+    causing any pending Fl::wait() call to 
     terminate so that the main thread can retrieve the message and any pending 
     redraws can be processed.
     
-    Multiple calls to fltk3::awake() will queue multiple pointers 
+    Multiple calls to Fl::awake() will queue multiple pointers 
     for the main thread to process, up to a system-defined (typically several 
     thousand) depth. The default message handler saves the last message which 
     can be accessed using the 
-    fltk3::thread_message() function.
-    
-    The second form of awake() registers a function that will be 
-    called by the main thread during the next message handling cycle. 
-    awake() will return 0 if the callback function was registered, 
-    and -1 if registration failed. Over a thousand awake callbacks can be
-    registered simultaneously.
+    Fl::thread_message() function.
 
-    In the context of a threaded application, a call to fltk3::awake() with no
+    In the context of a threaded application, a call to Fl::awake() with no
     argument will trigger event loop handling in the main thread. Since
-    it is not possible to call fltk3::flush() from a subsidiary thread,
-    fltk3::awake() is the best (and only, really) substitute.
+    it is not possible to call Fl::flush() from a subsidiary thread,
+    Fl::awake() is the best (and only, really) substitute.
     
     See also: \ref advanced_multithreading
 */
 #ifdef WIN32
 #  include <windows.h>
 #  include <process.h>
-#  include <fltk3/x.H>
+#  include <FL/x.H>
 
 // These pointers are in Fl_win32.cxx:
 extern void (*fl_lock_function)();
@@ -230,7 +232,7 @@ static void lock_function() {
   EnterCriticalSection(&cs);
 }
 
-void fltk3::lock() {
+int Fl::lock() {
   if (!main_thread) InitializeCriticalSection(&cs);
 
   lock_function();
@@ -240,13 +242,14 @@ void fltk3::lock() {
     fl_unlock_function = unlock_function;
     main_thread        = GetCurrentThreadId();
   }
+  return 0;
 }
 
-void fltk3::unlock() {
+void Fl::unlock() {
   unlock_function();
 }
 
-void fltk3::awake(void* msg) {
+void Fl::awake(void* msg) {
   PostThreadMessage( main_thread, fl_wake_msg, (WPARAM)msg, 0);
 }
 
@@ -257,10 +260,10 @@ void fltk3::awake(void* msg) {
 #  include <fcntl.h>
 #  include <pthread.h>
 
-// Pipe for thread messaging via fltk3::awake()...
+// Pipe for thread messaging via Fl::awake()...
 static int thread_filedes[2];
 
-// Mutex and state information for fltk3::lock() and fltk3::unlock()...
+// Mutex and state information for Fl::lock() and Fl::unlock()...
 static pthread_mutex_t fltk_mutex;
 static pthread_t owner;
 static int counter;
@@ -303,22 +306,24 @@ static void unlock_function_rec() {
 }
 #  endif // PTHREAD_MUTEX_RECURSIVE
 
-void fltk3::awake(void* msg) {
-  write(thread_filedes[1], &msg, sizeof(void*));
+void Fl::awake(void* msg) {
+  if (write(thread_filedes[1], &msg, sizeof(void*))==0) { /* ignore */ }
 }
 
 static void* thread_message_;
-void* fltk3::thread_message() {
+void* Fl::thread_message() {
   void* r = thread_message_;
   thread_message_ = 0;
   return r;
 }
 
 static void thread_awake_cb(int fd, void*) {
-  read(fd, &thread_message_, sizeof(void*));
+  if (read(fd, &thread_message_, sizeof(void*))==0) { 
+    /* This should never happen */
+  }
   Fl_Awake_Handler func;
   void *data;
-  while (fltk3::get_awake_handler_(func, data)==0) {
+  while (Fl::get_awake_handler_(func, data)==0) {
     (*func)(data);
   }
 }
@@ -327,11 +332,13 @@ static void thread_awake_cb(int fd, void*) {
 extern void (*fl_lock_function)();
 extern void (*fl_unlock_function)();
 
-void fltk3::lock() {
+int Fl::lock() {
   if (!thread_filedes[1]) {
     // Initialize thread communication pipe to let threads awake FLTK
-    // from fltk3::wait()
-    pipe(thread_filedes);
+    // from Fl::wait()
+    if (pipe(thread_filedes)==-1) {
+      /* this should not happen */
+    }
 
     // Make the write side of the pipe non-blocking to avoid deadlock
     // conditions (STR #1537)
@@ -339,9 +346,9 @@ void fltk3::lock() {
           fcntl(thread_filedes[1], F_GETFL) | O_NONBLOCK);
 
     // Monitor the read side of the pipe so that messages sent via
-    // fltk3::awake() from a thread will "wake up" the main thread in
-    // fltk3::wait().
-    fltk3::add_fd(thread_filedes[0], FL_READ, thread_awake_cb);
+    // Fl::awake() from a thread will "wake up" the main thread in
+    // Fl::wait().
+    Fl::add_fd(thread_filedes[0], FL_READ, thread_awake_cb);
 
     // Set lock/unlock functions for this system, using a system-supplied
     // recursive mutex if supported...
@@ -360,9 +367,10 @@ void fltk3::lock() {
   }
 
   fl_lock_function();
+  return 0;
 }
 
-void fltk3::unlock() {
+void Fl::unlock() {
   fl_unlock_function();
 }
 
@@ -389,7 +397,18 @@ void unlock_ring() {
 void lock_ring() {
 }
 
-void fltk3::awake(void*) {
+void Fl::awake(void*) {
+}
+
+int Fl::lock() {
+  return 1;
+}
+
+void Fl::unlock() {
+}
+
+void* Fl::thread_message() {
+  return NULL;
 }
 
 #endif // WIN32

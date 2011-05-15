@@ -3,7 +3,7 @@
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -40,9 +40,9 @@
 
 // Select fonts from the FLTK font table.
 #include "flstring.h"
-#include <fltk3/run.h>
-#include <fltk3/draw.h>
-#include <fltk3/x.H>
+#include <FL/Fl.H>
+#include <FL/fl_draw.H>
+#include <FL/x.H>
 #include "Fl_Font.H"
 
 #include <stdio.h>
@@ -81,11 +81,13 @@ void fl_text_extents(const char *c, int &dx, int &dy, int &w, int &h) {
 } // fl_text_extents
 
 
-#if !USE_XFT && !__APPLE__
 void fl_draw(const char* str, int l, float x, float y) {
+#ifdef __APPLE__
+  fl_graphics_driver->draw(str, l, x, y);
+#else
   fl_draw(str, l, (int)x, (int)y);
-}
 #endif
+}
 //
 // End of "$Id$".
 //

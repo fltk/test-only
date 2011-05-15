@@ -5,7 +5,7 @@
 //
 // This program is described in Chapter 4 of the FLTK Programmer's Guide.
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -45,32 +45,33 @@
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Double_Window.H>
 #include <FL/fl_ask.H>
-#include <FL/Fl_File_Chooser.H>
+#include <FL/Fl_Native_File_Chooser.H>
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Return_Button.H>
 #include <FL/Fl_Text_Buffer.H>
 #include <FL/Fl_Text_Editor.H>
-
+#include <FL/filename.H>
 
 int                changed = 0;
-char               filename[256] = "";
-char               title[256];
+char               filename[FL_PATH_MAX] = "";
+char               title[FL_PATH_MAX];
 Fl_Text_Buffer     *textbuf = 0;
 
 
 // Syntax highlighting stuff...
+#define TS 14 // default editor textsize
 Fl_Text_Buffer     *stylebuf = 0;
 Fl_Text_Display::Style_Table_Entry
                    styletable[] = {	// Style table
-		     { FL_BLACK,      FL_COURIER,        14 }, // A - Plain
-		     { FL_DARK_GREEN, FL_COURIER_ITALIC, 14 }, // B - Line comments
-		     { FL_DARK_GREEN, FL_COURIER_ITALIC, 14 }, // C - Block comments
-		     { FL_BLUE,       FL_COURIER,        14 }, // D - Strings
-		     { FL_DARK_RED,   FL_COURIER,        14 }, // E - Directives
-		     { FL_DARK_RED,   FL_COURIER_BOLD,   14 }, // F - Types
-		     { FL_BLUE,       FL_COURIER_BOLD,   14 }  // G - Keywords
+		     { FL_BLACK,      FL_COURIER,           TS }, // A - Plain
+		     { FL_DARK_GREEN, FL_HELVETICA_ITALIC,  TS }, // B - Line comments
+		     { FL_DARK_GREEN, FL_HELVETICA_ITALIC,  TS }, // C - Block comments
+		     { FL_BLUE,       FL_COURIER,           TS }, // D - Strings
+		     { FL_DARK_RED,   FL_COURIER,           TS }, // E - Directives
+		     { FL_DARK_RED,   FL_COURIER_BOLD,      TS }, // F - Types
+		     { FL_BLUE,       FL_COURIER_BOLD,      TS }, // G - Keywords
 		   };
 const char         *code_keywords[] = {	// List of known C/C++ keywords...
 		     "and",
@@ -209,13 +210,13 @@ style_parse(const char *text,
 	continue;
       } else if (*text == '\"') {
         current = 'D';
-      } else if (!last && (islower(*text) || *text == '_')) {
+      } else if (!last && (islower((*text)&255) || *text == '_')) {
         // Might be a keyword...
 	for (temp = text, bufptr = buf;
-	     (islower(*temp) || *temp == '_') && bufptr < (buf + sizeof(buf) - 1);
+	     (islower((*temp)&255) || *temp == '_') && bufptr < (buf + sizeof(buf) - 1);
 	     *bufptr++ = *temp++);
 
-        if (!islower(*temp) && *temp != '_') {
+        if (!islower((*temp)&255) && *temp != '_') {
 	  *bufptr = '\0';
 
           bufptr = buf;
@@ -284,7 +285,7 @@ style_parse(const char *text,
     else *style++ = current;
     col ++;
 
-    last = isalnum(*text) || *text == '_' || *text == '.';
+    last = isalnum((*text)&255) || *text == '_' || *text == '.';
 
     if (*text == '\n') {
       // Reset column and possibly reset the style
@@ -303,7 +304,6 @@ void
 style_init(void) {
   char *style = new char[textbuf->length() + 1];
   char *text = textbuf->text();
-  
 
   memset(style, 'A', textbuf->length());
   style[textbuf->length()] = '\0';
@@ -389,7 +389,7 @@ style_update(int        pos,		// I - Position of update
 
   style_parse(text, style, end - start);
 
-//  printf("new style = \"%s\", new last='%c'...\n", 
+//  printf("new style = \"%s\", new last='%c'...\n",
 //         style, style[end - start - 1]);
 
   stylebuf->replace(start, end, style);
@@ -397,7 +397,7 @@ style_update(int        pos,		// I - Position of update
 
   if (start==end || last != style[end - start - 1]) {
 //    printf("Recalculate the rest of the buffer style\n");
-    // Either the user deleted some text, or the last character 
+    // Either the user deleted some text, or the last character
     // on the line changed styles, so reparse the
     // remainder of the buffer...
     free(text);
@@ -484,7 +484,7 @@ int check_save(void) {
 }
 
 int loading = 0;
-void load_file(char *newfile, int ipos) {
+void load_file(const char *newfile, int ipos) {
   loading = 1;
   int insert = (ipos != -1);
   changed = insert;
@@ -492,6 +492,7 @@ void load_file(char *newfile, int ipos) {
   int r;
   if (!insert) r = textbuf->loadfile(newfile);
   else r = textbuf->insertfile(newfile, ipos);
+  changed = changed || textbuf->input_file_was_transcoded;
   if (r)
     fl_alert("Error reading from file \'%s\':\n%s.", newfile, strerror(errno));
   else
@@ -500,7 +501,7 @@ void load_file(char *newfile, int ipos) {
   textbuf->call_modify_callbacks();
 }
 
-void save_file(char *newfile) {
+void save_file(const char *newfile) {
   if (textbuf->savefile(newfile))
     fl_alert("Error writing to file \'%s\':\n%s.", newfile, strerror(errno));
   else
@@ -590,15 +591,21 @@ void new_cb(Fl_Widget*, void*) {
 
 void open_cb(Fl_Widget*, void*) {
   if (!check_save()) return;
+  Fl_Native_File_Chooser fnfc;
+  fnfc.title("Open file");
+  fnfc.type(Fl_Native_File_Chooser::BROWSE_FILE);
+  if ( fnfc.show() ) return;
+  load_file(fnfc.filename(), -1);
 
-  char *newfile = fl_file_chooser("Open File?", "*", filename);
-  if (newfile != NULL) load_file(newfile, -1);
 }
 
 void insert_cb(Fl_Widget*, void *v) {
-  char *newfile = fl_file_chooser("Insert File?", "*", filename);
+  Fl_Native_File_Chooser fnfc;
+  fnfc.title("Insert file");
+  fnfc.type(Fl_Native_File_Chooser::BROWSE_FILE);
+  if ( fnfc.show() ) return;
   EditorWindow *w = (EditorWindow *)v;
-  if (newfile != NULL) load_file(newfile, w->editor->insert_position());
+  load_file(fnfc.filename(), w->editor->insert_position());
 }
 
 void paste_cb(Fl_Widget*, void* v) {
@@ -621,7 +628,7 @@ void close_cb(Fl_Widget*, void* v) {
   textbuf->remove_modify_callback(style_update, w->editor);
   textbuf->remove_modify_callback(changed_cb, w);
   Fl::delete_widget(w);
-  
+
   num_windows--;
   if (!num_windows) exit(0);
 }
@@ -718,10 +725,11 @@ void save_cb() {
 }
 
 void saveas_cb() {
-  char *newfile;
-
-  newfile = fl_file_chooser("Save File As?", "*", filename);
-  if (newfile != NULL) save_file(newfile);
+  Fl_Native_File_Chooser fnfc;
+  fnfc.title("Save File As?");
+  fnfc.type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+  if ( fnfc.show() ) return;
+  save_file(fnfc.filename());
 }
 
 Fl_Window* new_view();
@@ -734,27 +742,31 @@ void view_cb(Fl_Widget*, void*) {
 Fl_Menu_Item menuitems[] = {
   { "&File",              0, 0, 0, FL_SUBMENU },
     { "&New File",        0, (Fl_Callback *)new_cb },
-    { "&Open File...",    FL_CTRL + 'o', (Fl_Callback *)open_cb },
-    { "&Insert File...",  FL_CTRL + 'i', (Fl_Callback *)insert_cb, 0, FL_MENU_DIVIDER },
-    { "&Save File",       FL_CTRL + 's', (Fl_Callback *)save_cb },
-    { "Save File &As...", FL_CTRL + FL_SHIFT + 's', (Fl_Callback *)saveas_cb, 0, FL_MENU_DIVIDER },
-    { "New &View", FL_ALT + 'v', (Fl_Callback *)view_cb, 0 },
-    { "&Close View", FL_CTRL + 'w', (Fl_Callback *)close_cb, 0, FL_MENU_DIVIDER },
-    { "E&xit", FL_CTRL + 'q', (Fl_Callback *)quit_cb, 0 },
+    { "&Open File...",    FL_COMMAND + 'o', (Fl_Callback *)open_cb },
+    { "&Insert File...",  FL_COMMAND + 'i', (Fl_Callback *)insert_cb, 0, FL_MENU_DIVIDER },
+    { "&Save File",       FL_COMMAND + 's', (Fl_Callback *)save_cb },
+    { "Save File &As...", FL_COMMAND + FL_SHIFT + 's', (Fl_Callback *)saveas_cb, 0, FL_MENU_DIVIDER },
+    { "New &View",        FL_ALT
+#ifdef __APPLE__
+      + FL_COMMAND
+#endif
+      + 'v', (Fl_Callback *)view_cb, 0 },
+    { "&Close View",      FL_COMMAND + 'w', (Fl_Callback *)close_cb, 0, FL_MENU_DIVIDER },
+    { "E&xit",            FL_COMMAND + 'q', (Fl_Callback *)quit_cb, 0 },
     { 0 },
 
   { "&Edit", 0, 0, 0, FL_SUBMENU },
-    { "Cu&t",        FL_CTRL + 'x', (Fl_Callback *)cut_cb },
-    { "&Copy",       FL_CTRL + 'c', (Fl_Callback *)copy_cb },
-    { "&Paste",      FL_CTRL + 'v', (Fl_Callback *)paste_cb },
-    { "&Delete",     0, (Fl_Callback *)delete_cb },
+    { "Cu&t",             FL_COMMAND + 'x', (Fl_Callback *)cut_cb },
+    { "&Copy",            FL_COMMAND + 'c', (Fl_Callback *)copy_cb },
+    { "&Paste",           FL_COMMAND + 'v', (Fl_Callback *)paste_cb },
+    { "&Delete",          0, (Fl_Callback *)delete_cb },
     { 0 },
 
   { "&Search", 0, 0, 0, FL_SUBMENU },
-    { "&Find...",       FL_CTRL + 'f', (Fl_Callback *)find_cb },
-    { "F&ind Again",    FL_CTRL + 'g', find2_cb },
-    { "&Replace...",    FL_CTRL + 'r', replace_cb },
-    { "Re&place Again", FL_CTRL + 't', replace2_cb },
+    { "&Find...",         FL_COMMAND + 'f', (Fl_Callback *)find_cb },
+    { "F&ind Again",      FL_COMMAND + 'g', find2_cb },
+    { "&Replace...",      FL_COMMAND + 'r', replace_cb },
+    { "Re&place Again",   FL_COMMAND + 't', replace2_cb },
     { 0 },
 
   { 0 }
@@ -766,11 +778,15 @@ Fl_Window* new_view() {
     Fl_Menu_Bar* m = new Fl_Menu_Bar(0, 0, 660, 30);
     m->copy(menuitems, w);
     w->editor = new Fl_Text_Editor(0, 30, 660, 370);
+    w->editor->textfont(FL_COURIER);
+    w->editor->textsize(TS);
+  //w->editor->wrap_mode(Fl_Text_Editor::WRAP_AT_BOUNDS, 250);
     w->editor->buffer(textbuf);
     w->editor->highlight_data(stylebuf, styletable,
                               sizeof(styletable) / sizeof(styletable[0]),
 			      'A', style_unfinished_cb, 0);
-    w->editor->textfont(FL_COURIER);
+  textbuf->text();
+  style_init();
   w->end();
   w->resizable(w->editor);
   w->callback((Fl_Callback *)close_cb, w);
@@ -784,6 +800,7 @@ Fl_Window* new_view() {
 
 int main(int argc, char **argv) {
   textbuf = new Fl_Text_Buffer;
+//textbuf->transcoding_warning_action = NULL;
   style_init();
 
   Fl_Window* window = new_view();

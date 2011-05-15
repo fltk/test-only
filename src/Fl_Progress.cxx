@@ -3,7 +3,7 @@
 //
 // Progress bar widget routines.
 //
-// Copyright 2000-2009 by Michael Sweet.
+// Copyright 2000-2010 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -35,13 +35,13 @@
 // Include necessary header files...
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_Progress.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Progress.H>
+#include <FL/fl_draw.H>
 
 
 //
-// Fl_Progress is a progress bar widget based off fltk3::Widget that shows a
+// Fl_Progress is a progress bar widget based off Fl_Widget that shows a
 // standard progress bar...
 //
 
@@ -59,10 +59,10 @@ void Fl_Progress::draw()
 
 
   // Get the box borders...
-  bx = fltk3::box_dx(box());
-  by = fltk3::box_dy(box());
-  bw = fltk3::box_dw(box());
-  bh = fltk3::box_dh(box());
+  bx = Fl::box_dx(box());
+  by = Fl::box_dy(box());
+  bw = Fl::box_dw(box());
+  bh = Fl::box_dh(box());
 
   tx = x() + bx;
   tw = w() - bw;
@@ -75,7 +75,7 @@ void Fl_Progress::draw()
 
   // Draw the box and label...
   if (progress > 0) {
-    fltk3::Color c = labelcolor();
+    Fl_Color c = labelcolor();
     labelcolor(fl_contrast(labelcolor(), selection_color()));
 
     fl_push_clip(x(), y(), progress + bx, h());
@@ -105,13 +105,13 @@ void Fl_Progress::draw()
     progress bar color with selection_color(), or you can set both colors
     together with color(unsigned bg, unsigned sel).
     
-    The default colors are fltk3::BACKGROUND2_COLOR and fltk3::YELOW, resp.
+    The default colors are FL_BACKGROUND2_COLOR and FL_YELLOW, resp.
 */
 Fl_Progress::Fl_Progress(int X, int Y, int W, int H, const char* L)
-: fltk3::Widget(X, Y, W, H, L) {
-  align(fltk3::ALIGN_INSIDE);
-  box(fltk3::DOWN_BOX);
-  color(fltk3::BACKGROUND2_COLOR, fltk3::YELLOW);
+: Fl_Widget(X, Y, W, H, L) {
+  align(FL_ALIGN_INSIDE);
+  box(FL_DOWN_BOX);
+  color(FL_BACKGROUND2_COLOR, FL_YELLOW);
   minimum(0.0f);
   maximum(100.0f);
   value(0.0f);

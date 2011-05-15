@@ -1,10 +1,10 @@
 #!/bin/sh
 #
 # "$Id$"
-# 
+#
 # FLTK configuration utility.
 #
-# Copyright 2000-2009 by Bill Spitzak and others.
+# Copyright 2000-2010 by Bill Spitzak and others.
 # Original version Copyright 2000 by James Dean Palmer
 # Adapted by Vincent Penne and Michael Sweet
 #
@@ -123,6 +123,8 @@ Options telling what information we request:
 	[--ldstaticflags] return flags to link against static FLTK library
                                           even if there are DSOs installed
 	[--libs]          return FLTK libraries full path for dependencies
+	[--prefix]        return FLTK install time --prefix directory
+	[--includedir]    return FLTK install time include directory
 
 Options to compile and link an application:
 	[-g]              compile the program with debugging information
@@ -143,10 +145,10 @@ post=
 debug=
 
 # Parse command line options
-while test $# -gt 0 
+while test $# -gt 0
 do
     case "$1" in
-	-*=*) 
+	-*=*)
 	    optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'`
 	    ;;
 	*)
@@ -196,6 +198,12 @@ do
 	    ;;
 	--libs)
 	    echo_libs=yes
+	    ;;
+	--prefix)
+	    echo_prefix=yes
+	    ;;
+	--includedir)
+	    echo_includedir=yes
 	    ;;
 	-g)
 	    debug=-g
@@ -299,7 +307,7 @@ if test -n "$post"; then
 
 	    # Make a shell script that runs the bundled executable
 	    echo "#!/bin/sh" >"$post"
-	    echo 'dir="`dirname '"'"'$0'"'"'`"' >>"$post"
+	    echo 'dir="`dirname \"$0\"`"' >>"$post"
 	    echo 'exec "$dir/'"$post.app/Contents/MacOS/$post"'" "$@"' >>"$post"
 	    chmod +x "$post"
 
@@ -358,29 +366,39 @@ if test "$echo_ldstaticflags" = "yes"; then
 fi
 
 if test "$echo_libs" = "yes"; then
-    echo $libdir/libfltk.a
+    USELIBS="$libdir/libfltk.a"
 
     if test x$use_forms = xyes; then
-        echo $libdir/libfltk_forms.a
+        USELIBS="$libdir/libfltk_forms.a $USELIBS"
     fi
 
     if test x$use_gl = xyes; then
-        echo $libdir/libfltk_gl.a
+        USELIBS="$libdir/libfltk_gl.a $USELIBS"
     fi
 
     if test x$use_cairo = xyes; then
-        echo $libdir/libfltk_cairo.a
+        USELIBS="$libdir/libfltk_cairo.a $USELIBS"
     fi
 
     if test x$use_images = xyes; then
-        echo $libdir/libfltk_images.a
+        USELIBS="$libdir/libfltk_images.a $USELIBS"
 
         for lib in fltk_jpeg fltk_png fltk_z; do
             if test -f $libdir/lib$lib.a; then
-                echo $libdir/lib$lib.a
+                USELIBS="$libdir/lib$lib.a $USELIBS"
             fi
 	done
     fi
+
+    echo $USELIBS
+fi
+
+if test "$echo_prefix" = "yes"; then
+    echo $prefix
+fi
+
+if test "$echo_includedir" = "yes"; then
+    echo $includedir
 fi
 
 #

@@ -3,7 +3,7 @@
 //
 // Visual support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,10 +28,10 @@
 // Set the default visual according to passed switches:
 
 #include <config.h>
-#include <fltk3/run.h>
-#include <fltk3/x.H>
+#include <FL/Fl.H>
+#include <FL/x.H>
 
-/** \fn  fltk3::visual(int flags)
+/** \fn  Fl::visual(int flags)
     Selects a visual so that your graphics are drawn correctly.  This is
     only allowed before you call show() on any windows.  This does nothing
     if the default visual satisfies the capabilities, or if no visual
@@ -41,23 +41,23 @@
     <P>Only the following combinations do anything useful:
     
     <UL>
-    <LI>fltk3::visual(FL_RGB)
+    <LI>Fl::visual(FL_RGB)
     <BR>Full/true color (if there are several depths FLTK chooses  the
     largest).  Do this if you use fl_draw_image
     for much better (non-dithered)  output.
     <BR>&nbsp; </LI>
-    <LI>fltk3::visual(FL_RGB8)
+    <LI>Fl::visual(FL_RGB8)
     <BR>Full color with at least 24 bits of color. FL_RGB will
     always  pick this if available, but if not it will happily return a
     less-than-24 bit deep visual.  This call fails if 24 bits are not
     available.
     <BR>&nbsp; </LI>
-    <LI>fltk3::visual(FL_DOUBLE|FL_INDEX)
+    <LI>Fl::visual(FL_DOUBLE|FL_INDEX)
     <BR>Hardware double buffering.  Call this if you are going to use 
-    fltk3::DoubleBufferWindow.
+    Fl_Double_Window.
     <BR>&nbsp; </LI>
-    <LI>fltk3::visual(FL_DOUBLE|FL_RGB)</LI>
-    <LI>fltk3::visual(FL_DOUBLE|FL_RGB8)
+    <LI>Fl::visual(FL_DOUBLE|FL_RGB)</LI>
+    <LI>Fl::visual(FL_DOUBLE|FL_RGB8)
     <BR>Hardware double buffering and full color.
     </UL>
     
@@ -66,7 +66,7 @@
     this returns false (it just won't look as good).
 */
 #ifdef WIN32
-int fltk3::visual(int flags) {
+int Fl::visual(int flags) {
   fl_GetDC(0);
   if (flags & FL_DOUBLE) return 0;
   if (!(flags & FL_INDEX) &&
@@ -77,7 +77,7 @@ int fltk3::visual(int flags) {
 #elif defined(__APPLE__)
 
 // \todo Mac : need to implement Visual flags
-int fltk3::visual(int flags) {
+int Fl::visual(int flags) {
   (void)flags;
   return 1;
 }
@@ -124,7 +124,7 @@ static int test_visual(XVisualInfo& v, int flags) {
   return 1;
 }
 
-int fltk3::visual(int flags) {
+int Fl::visual(int flags) {
 #if USE_XDBE == 0
   if (flags & FL_DOUBLE) return 0;
 #endif

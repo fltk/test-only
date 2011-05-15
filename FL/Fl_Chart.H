@@ -3,7 +3,7 @@
 //
 // Forms chart header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -61,8 +61,8 @@ struct FL_CHART_ENTRY {
   \brief Fl_Chart displays simple charts.
   It is provided for Forms compatibility.
 
-  \image html charts.gif  
-  \image latex charts.eps  "Fl_Chart" width=10cm
+  \image html charts.png  
+  \image latex charts.png  "Fl_Chart" width=10cm
   \todo Refactor Fl_Chart::type() information.
 
   The type of an Fl_Chart object can be set using type(uchar t) to:
@@ -78,7 +78,7 @@ struct FL_CHART_ENTRY {
          separated from the pie.
   \li \c FL_SPIKE_CHART: Each sample value is drawn as a vertical line.
  */
-class FL_EXPORT Fl_Chart : public fltk3::Widget {
+class FL_EXPORT Fl_Chart : public Fl_Widget {
     int numb;
     int maxnumb;
     int sizenumb;
@@ -116,7 +116,7 @@ public:
      */
     int size() const {return numb;}
 
-  void size(int W, int H) { fltk3::Widget::size(W, H); }
+    void size(int W, int H) { Fl_Widget::size(W, H); }
 
     /**
       Gets the maximum number of data values for a chart.

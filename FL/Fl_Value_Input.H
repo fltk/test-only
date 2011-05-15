@@ -3,7 +3,7 @@
 //
 // Value input header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -59,8 +59,8 @@
   of numbers are limited to integers instead of floating point
   values.
   
-  <P ALIGN="CENTER">\image html Fl_Value_Input.gif 
-  \image latex  Fl_Value_Input.eps "Fl_Value_Input" width=8cm
+  <P ALIGN="CENTER">\image html Fl_Value_Input.png 
+  \image latex  Fl_Value_Input.png "Fl_Value_Input" width=4cm
 */
 class FL_EXPORT Fl_Value_Input : public Fl_Valuator {
 public:
@@ -69,7 +69,7 @@ public:
   Fl_Input input;
 private:
   char soft_;
-  static void input_cb(fltk3::Widget*,void*);
+  static void input_cb(Fl_Widget*,void*);
   virtual void value_damage(); // cause damage() due to value() changing
 public:
   int handle(int);
@@ -90,23 +90,27 @@ public:
   */
   char soft() const {return soft_;}
   /**
-    The first form returns the current shortcut key for the Input.
-    <P>The second form sets the shortcut key to key. Setting this
-    overrides the use of '&' in the label().  The value is a bitwise
-    OR of a key and a set of shift flags, for example FL_ALT | 'a'
-    , FL_ALT | (FL_F + 10), or just 'a'.  A value
-    of 0 disables the shortcut. </P>
-    <P>The key can be any value returned by 
-    fltk3::event_key(), but will usually be an ASCII letter.  Use
-    a lower-case letter unless you require the shift key to be held down. </P>
-    <P>The shift flags can be any set of values accepted by 
-    fltk3::event_state().  If the bit is on that shift key must
-    be pushed.  Meta, Alt, Ctrl, and Shift must be off if they are not in
-    the shift flags (zero for the other bits indicates a "don't care"
-    setting).
+   Returns the current shortcut key for the Input.
+   \see Fl_Value_Input::shortcut(int) 
   */
   int shortcut() const {return input.shortcut();}
-  /** See int Fl_Value_Input::shortcut() const */
+  /** 
+   Sets the shortcut key to \p s. Setting this
+   overrides the use of '&' in the label().  The value is a bitwise
+   OR of a key and a set of shift flags, for example FL_ALT | 'a'
+   , FL_ALT | (FL_F + 10), or just 'a'.  A value
+   of 0 disables the shortcut.
+   
+   The key can be any value returned by 
+   Fl::event_key(), but will usually be an ASCII letter.  Use
+   a lower-case letter unless you require the shift key to be held down.
+   
+   The shift flags can be any set of values accepted by 
+   Fl::event_state().  If the bit is on that shift key must
+   be pushed.  Meta, Alt, Ctrl, and Shift must be off if they are not in
+   the shift flags (zero for the other bits indicates a "don't care"
+   setting).
+   */
   void shortcut(int s) {input.shortcut(s);}
 
   /** Gets the typeface of the text in the value box.  */

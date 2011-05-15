@@ -3,7 +3,7 @@
 //
 // Pixmap header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -32,7 +32,7 @@
 #define Fl_Pixmap_H
 #  include "Fl_Image.H"
 
-class fltk3::Widget;
+class Fl_Widget;
 struct Fl_Menu_Item;
 
 // Older C++ compilers don't support the explicit keyword... :(
@@ -45,6 +45,9 @@ struct Fl_Menu_Item;
   (pixmap) images, including transparency.
 */
 class FL_EXPORT Fl_Pixmap : public Fl_Image {
+  friend class Fl_Quartz_Graphics_Driver;
+  friend class Fl_GDI_Graphics_Driver;
+  friend class Fl_Xlib_Graphics_Driver;
   void copy_data();
   void delete_data();
   void set_data(const char * const *p);
@@ -84,7 +87,7 @@ class FL_EXPORT Fl_Pixmap : public Fl_Image {
   virtual void desaturate();
   virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
   void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
-  virtual void label(fltk3::Widget*w);
+  virtual void label(Fl_Widget*w);
   virtual void label(Fl_Menu_Item*m);
   virtual void uncache();
 };

@@ -3,7 +3,7 @@
 //
 // Filename extension routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -27,11 +27,11 @@
 
 // returns pointer to the last '.' or to the null if none:
 
-#include <fltk3/filename.H>
+#include <FL/filename.H>
 
 /** Gets the extensions of a filename.
    \code
-   #include <fltk3/filename.H>
+   #include <FL/filename.H>
    [..]
    const char *out;
    out = fl_filename_ext("/some/path/foo.txt");        // result: ".txt"

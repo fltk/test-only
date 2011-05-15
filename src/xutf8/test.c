@@ -89,7 +89,7 @@ int main(int argc, char**argv) {
   unsigned long mask;
   Display* dpy;
   int scr;
-  NativeWindow w, root;
+  Window w, root;
   XSetWindowAttributes set_attr;
   int i;
   XIMStyle *style;
@@ -201,7 +201,7 @@ int main(int argc, char**argv) {
     nb_font--;
     if (fontset->fonts[nb_font]) {
       printf("encoding=\"\" fid=%d \n  %s\n", 
-      //     fontset->encodings[nb_font],
+      /*     fontset->encodings[nb_font], */
 	     fontset->fonts[nb_font]->fid,
 	     fontset->font_name_list[nb_font]);
     }

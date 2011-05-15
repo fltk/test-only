@@ -3,7 +3,7 @@
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,13 +26,14 @@
 //
 
 #include <config.h>
-#include <fltk3/run.h>
-#include <fltk3/DoubleBufferWindow.h>
-#include <fltk3/x.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Double_Window.H>
+#include <FL/Fl_Printer.H>
+#include <FL/x.H>
+#include <FL/fl_draw.H>
 
 // On systems that support double buffering "naturally" the base
-// fltk3::Window class will probably do double-buffer and this subclass
+// Fl_Window class will probably do double-buffer and this subclass
 // does nothing.
 
 #if USE_XDBE
@@ -51,20 +52,53 @@ static int can_xdbe() {
     int numscreens = 1;
     XdbeScreenVisualInfo *a = XdbeGetVisualInfo(fl_display,&root,&numscreens);
     if (!a) return 0;
-    for (int j = 0; j < a->count; j++)
+    for (int j = 0; j < a->count; j++) {
       if (a->visinfo[j].visual == fl_visual->visualid
-	  /*&& a->visinfo[j].perflevel > 0*/) {use_xdbe = 1; break;}
+	  /*&& a->visinfo[j].perflevel > 0*/) {
+        use_xdbe = 1; break;
+      }
+    }
     XdbeFreeVisualInfo(a);
   }
   return use_xdbe;
 }
 #endif
 
-void fltk3::DoubleBufferWindow::show() {
-  fltk3::Window::show();
+void Fl_Double_Window::show() {
+  Fl_Window::show();
 }
 
+static void fl_copy_offscreen_to_display(int x, int y, int w, int h, Fl_Offscreen pixmap, int srcx, int srcy);
+
+/** \addtogroup fl_drawings
+ @{
+ */
+/** Copy a rectangular area of the given offscreen buffer into the current drawing destination.
+ \param x,y	position where to draw the copied rectangle
+ \param w,h	size of the copied rectangle
+ \param pixmap  offscreen buffer containing the rectangle to copy
+ \param srcx,srcy origin in offscreen buffer of rectangle to copy
+ */
+void fl_copy_offscreen(int x, int y, int w, int h, Fl_Offscreen pixmap, int srcx, int srcy) {
+  if (fl_graphics_driver == Fl_Display_Device::display_device()->driver()) {
+    fl_copy_offscreen_to_display(x, y, w, h, pixmap, srcx, srcy);
+  }
+  else { // when copy is not to the display
+    fl_begin_offscreen(pixmap);
+    uchar *img = fl_read_image(NULL, srcx, srcy, w, h, 0);
+    fl_end_offscreen();
+    fl_draw_image(img, x, y, w, h, 3, 0);
+    delete[] img;
+  }
+}
+/** @} */
+
 #if defined(USE_X11)
+
+static void fl_copy_offscreen_to_display(int x, int y, int w, int h, Fl_Offscreen pixmap, int srcx, int srcy) {
+  XCopyArea(fl_display, pixmap, fl_window, fl_gc, srcx, srcy, w, h, x, y);
+}
+
 
 // maybe someone feels inclined to implement alpha blending on X11?
 char fl_can_do_alpha_blending() {
@@ -133,7 +167,7 @@ HDC fl_makeDC(HBITMAP bitmap) {
   return new_gc;
 }
 
-void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP bitmap,int srcx,int srcy) {
+static void fl_copy_offscreen_to_display(int x,int y,int w,int h,HBITMAP bitmap,int srcx,int srcy) {
   HDC new_gc = CreateCompatibleDC(fl_gc);
   int save = SaveDC(new_gc);
   SelectObject(new_gc, bitmap);
@@ -148,30 +182,25 @@ void fl_copy_offscreen_with_alpha(int x,int y,int w,int h,HBITMAP bitmap,int src
   SelectObject(new_gc, bitmap);
   BOOL alpha_ok = 0;
   // first try to alpha blend
-  if (fl_can_do_alpha_blending())
+  // if to printer, always try alpha_blend
+  int to_display = Fl_Surface_Device::surface()->class_name() == Fl_Display_Device::class_id; // true iff display output
+  if ( (to_display && fl_can_do_alpha_blending()) || Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id) {
     alpha_ok = fl_alpha_blend(fl_gc, x, y, w, h, new_gc, srcx, srcy, w, h, blendfunc);
-  // if that failed (it shouldn,t), still copy the bitmap over, but now alpha is 1
-  if (!alpha_ok)
+  }
+  // if that failed (it shouldn't), still copy the bitmap over, but now alpha is 1
+  if (!alpha_ok) {
     BitBlt(fl_gc, x, y, w, h, new_gc, srcx, srcy, SRCCOPY);
+  }
   RestoreDC(new_gc, save);
   DeleteDC(new_gc);
 }
 
 extern void fl_restore_clip();
 
-#elif defined(__APPLE_QUARTZ__)
+#elif defined(__APPLE_QUARTZ__) || defined(FL_DOXYGEN)
 
 char fl_can_do_alpha_blending() {
   return 1;
-}
-
-Fl_Offscreen fl_create_offscreen(int w, int h) {
-  void *data = calloc(w*h,4);
-  CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
-  CGContextRef ctx = CGBitmapContextCreate(
-    data, w, h, 8, w*4, lut, kCGImageAlphaNoneSkipLast);
-  CGColorSpaceRelease(lut);
-  return (Fl_Offscreen)ctx;
 }
 
 Fl_Offscreen fl_create_offscreen_with_alpha(int w, int h) {
@@ -183,14 +212,41 @@ Fl_Offscreen fl_create_offscreen_with_alpha(int w, int h) {
   return (Fl_Offscreen)ctx;
 }
 
-void fl_copy_offscreen(int x,int y,int w,int h,Fl_Offscreen osrc,int srcx,int srcy) {
+/** \addtogroup fl_drawings
+ @{
+ */
+
+/** 
+  Creation of an offscreen graphics buffer.
+ \param w,h     width and height in pixels of the buffer.
+ \return    the created graphics buffer.
+ */
+Fl_Offscreen fl_create_offscreen(int w, int h) {
+  void *data = calloc(w*h,4);
+  CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
+  CGContextRef ctx = CGBitmapContextCreate(
+    data, w, h, 8, w*4, lut, kCGImageAlphaNoneSkipLast);
+  CGColorSpaceRelease(lut);
+  return (Fl_Offscreen)ctx;
+}
+
+static void bmProviderRelease (void *src, const void *data, size_t size) {
+  CFIndex count = CFGetRetainCount(src);
+  CFRelease(src);
+  if(count == 1) free((void*)data);
+}
+
+static void fl_copy_offscreen_to_display(int x,int y,int w,int h,Fl_Offscreen osrc,int srcx,int srcy) {
   CGContextRef src = (CGContextRef)osrc;
   void *data = CGBitmapContextGetData(src);
   int sw = CGBitmapContextGetWidth(src);
   int sh = CGBitmapContextGetHeight(src);
   CGImageAlphaInfo alpha = CGBitmapContextGetAlphaInfo(src);
   CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
-  CGDataProviderRef src_bytes = CGDataProviderCreateWithData( 0L, data, sw*sh*4, 0L);
+  // when output goes to a Quartz printercontext, release of the bitmap must be
+  // delayed after the end of the print page
+  CFRetain(src);
+  CGDataProviderRef src_bytes = CGDataProviderCreateWithData( src, data, sw*sh*4, bmProviderRelease);
   CGImageRef img = CGImageCreate( sw, sh, 8, 4*8, 4*sw, lut, alpha,
     src_bytes, 0L, false, kCGRenderingIntentDefault);
   // fl_push_clip();
@@ -203,20 +259,29 @@ void fl_copy_offscreen(int x,int y,int w,int h,Fl_Offscreen osrc,int srcx,int sr
   CGDataProviderRelease(src_bytes);
 }
 
+/**  Deletion of an offscreen graphics buffer.
+ \param ctx     the buffer to be deleted.
+ */
 void fl_delete_offscreen(Fl_Offscreen ctx) {
   if (!ctx) return;
   void *data = CGBitmapContextGetData((CGContextRef)ctx);
+  CFIndex count = CFGetRetainCount(ctx);
   CGContextRelease((CGContextRef)ctx);
-  if (!data) return;
-  free(data);
+  if(count == 1) free(data);
 }
 
 const int stack_max = 16;
 static int stack_ix = 0;
 static CGContextRef stack_gc[stack_max];
-static NativeWindow stack_window[stack_max];
+static Window stack_window[stack_max];
+static Fl_Surface_Device *_ss;
 
+/**  Send all subsequent drawing commands to this offscreen buffer.
+ \param ctx     the offscreen buffer.
+ */
 void fl_begin_offscreen(Fl_Offscreen ctx) {
+  _ss = Fl_Surface_Device::surface(); 
+  Fl_Display_Device::display_device()->set_current();
   if (stack_ix<stack_max) {
     stack_gc[stack_ix] = fl_gc;
     stack_window[stack_ix] = fl_window;
@@ -226,14 +291,15 @@ void fl_begin_offscreen(Fl_Offscreen ctx) {
 
   fl_gc = (CGContextRef)ctx;
   fl_window = 0;
-  //fl_push_no_clip();
   CGContextSaveGState(fl_gc);
-  Fl_X::q_fill_context();
+  fl_push_no_clip();
 }
 
+/** Quit sending drawing commands to the current offscreen buffer.
+ */
 void fl_end_offscreen() {
   Fl_X::q_release_context();
-  //fl_pop_clip();
+  fl_pop_clip();
   if (stack_ix>0)
     stack_ix--;
   else
@@ -242,7 +308,10 @@ void fl_end_offscreen() {
     fl_gc = stack_gc[stack_ix];
     fl_window = stack_window[stack_ix];
   }
+  _ss->set_current();
 }
+
+/** @} */
 
 extern void fl_restore_clip();
 
@@ -253,7 +322,7 @@ extern void fl_restore_clip();
 /**
   Forces the window to be redrawn.
 */
-void fltk3::DoubleBufferWindow::flush() {flush(0);}
+void Fl_Double_Window::flush() {flush(0);}
 
 /**
   Forces the window to be redrawn.
@@ -263,14 +332,13 @@ void fltk3::DoubleBufferWindow::flush() {flush(0);}
   front everywhere, even if damage() == 0, thus erasing the overlay,
   and leaving the clip region set to the entire window.
 */
-void fltk3::DoubleBufferWindow::flush(int eraseoverlay) {
+void Fl_Double_Window::flush(int eraseoverlay) {
   make_current(); // make sure fl_gc is non-zero
   Fl_X *myi = Fl_X::i(this);
   if (!myi->other_xid) {
 #if USE_XDBE
     if (can_xdbe()) {
-      myi->other_xid =
-        XdbeAllocateBackBufferName(fl_display, fl_xid(this), XdbeCopied);
+      myi->other_xid = XdbeAllocateBackBufferName(fl_display, fl_xid(this), XdbeCopied);
       myi->backbuffer_bad = 1;
     } else
 #endif
@@ -288,7 +356,7 @@ void fltk3::DoubleBufferWindow::flush(int eraseoverlay) {
   }
 #if USE_XDBE
   if (use_xdbe) {
-    if (myi->backbuffer_bad) {
+    if (myi->backbuffer_bad || eraseoverlay) {
       // Make sure we do a complete redraw...
       if (myi->region) {XDestroyRegion(myi->region); myi->region = 0;}
       clear_damage(FL_DAMAGE_ALL);
@@ -322,8 +390,8 @@ void fltk3::DoubleBufferWindow::flush(int eraseoverlay) {
     RestoreDC(fl_gc, save);
     DeleteDC(fl_gc);
     fl_gc = _sgc;
-    //# if defined(USE_CAIRO)
-    //if fltk3::cairo_autolink_context() fltk3::cairo_make_current(this); // capture gc changes automatically to update the cairo context adequately
+    //# if defined(FLTK_USE_CAIRO)
+    //if Fl::cairo_autolink_context() Fl::cairo_make_current(this); // capture gc changes automatically to update the cairo context adequately
     //# endif
 #elif defined(__APPLE__)
     if ( myi->other_xid ) {
@@ -347,12 +415,20 @@ void fltk3::DoubleBufferWindow::flush(int eraseoverlay) {
   if (myi->other_xid) fl_copy_offscreen(X, Y, W, H, myi->other_xid, X, Y);
 }
 
-void fltk3::DoubleBufferWindow::resize(int X,int Y,int W,int H) {
+void Fl_Double_Window::resize(int X,int Y,int W,int H) {
   int ow = w();
   int oh = h();
-  fltk3::Window::resize(X,Y,W,H);
+  Fl_Window::resize(X,Y,W,H);
 #if USE_XDBE
-  if (use_xdbe) return;
+  if (use_xdbe) {
+    Fl_X* myi = Fl_X::i(this);
+    if (myi && myi->other_xid && (ow < w() || oh < h())) {
+      // STR #2152: Deallocate the back buffer to force creation of a new one.
+      XdbeDeallocateBackBufferName(fl_display,myi->other_xid);
+      myi->other_xid = 0;
+    }
+    return;
+  }
 #endif
   Fl_X* myi = Fl_X::i(this);
   if (myi && myi->other_xid && (ow != w() || oh != h())) {
@@ -361,7 +437,7 @@ void fltk3::DoubleBufferWindow::resize(int X,int Y,int W,int H) {
   }
 }
 
-void fltk3::DoubleBufferWindow::hide() {
+void Fl_Double_Window::hide() {
   Fl_X* myi = Fl_X::i(this);
   if (myi && myi->other_xid) {
 #if USE_XDBE
@@ -369,7 +445,7 @@ void fltk3::DoubleBufferWindow::hide() {
 #endif
       fl_delete_offscreen(myi->other_xid);
   }
-  fltk3::Window::hide();
+  Fl_Window::hide();
 }
 
 /**
@@ -377,7 +453,7 @@ void fltk3::DoubleBufferWindow::hide() {
   whole tree to be deleted at once, without having to keep a pointer to
   all the children in the user code.
 */
-fltk3::DoubleBufferWindow::~DoubleBufferWindow() {
+Fl_Double_Window::~Fl_Double_Window() {
   hide();
 }
 

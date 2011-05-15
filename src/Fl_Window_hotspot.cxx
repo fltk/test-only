@@ -3,7 +3,7 @@
 //
 // Common hotspot routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,23 +25,23 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Window.h>
-#include <fltk3/x.H>
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/x.H>
 #include <stdio.h>
 
-void fltk3::Window::hotspot(int X, int Y, int offscreen) {
+void Fl_Window::hotspot(int X, int Y, int offscreen) {
   int mx,my;
 
   // Update the screen position based on the mouse position.
-  fltk3::get_mouse(mx,my);
+  Fl::get_mouse(mx,my);
   X = mx-X; Y = my-Y;
 
   // If offscreen is 0 (the default), make sure that the window
   // stays on the screen, if possible.
   if (!offscreen) {
     int scr_x, scr_y, scr_w, scr_h;
-    fltk3::screen_xywh(scr_x, scr_y, scr_w, scr_h);
+    Fl::screen_xywh(scr_x, scr_y, scr_w, scr_h);
 
     int top = 0;
     int left = 0;
@@ -84,7 +84,7 @@ void fltk3::Window::hotspot(int X, int Y, int offscreen) {
   position(X,Y);
 }
 
-void fltk3::Window::hotspot(const fltk3::Widget *o, int offscreen) {
+void Fl_Window::hotspot(const Fl_Widget *o, int offscreen) {
   int X = o->w()/2;
   int Y = o->h()/2;
   while (o != this && o) {

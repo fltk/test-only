@@ -3,7 +3,7 @@
 //
 // Scroll bar header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -46,8 +46,8 @@
   have to use casts to get at the floating-point versions of value()
   from Fl_Slider.
 
-  \image html  scrollbar.gif 
-  \image latex scrollbar.eps "Fl_Scrollbar" width=4cm
+  \image html  scrollbar.png 
+  \image latex scrollbar.png "Fl_Scrollbar" width=4cm
 */
 class FL_EXPORT Fl_Scrollbar : public Fl_Slider {
 

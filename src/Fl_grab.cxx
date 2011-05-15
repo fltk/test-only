@@ -3,7 +3,7 @@
 //
 // Grab/release code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,15 +26,15 @@
 //
 
 #include <config.h>
-#include <fltk3/run.h>
-#include <fltk3/x.H>
+#include <FL/Fl.H>
+#include <FL/x.H>
 
 ////////////////////////////////////////////////////////////////
 // "Grab" is done while menu systems are up.  This has several effects:
 // Events are all sent to the "grab window", which does not even
 // have to be displayed (and in the case of Fl_Menu.cxx it isn't).
 // The system is also told to "grab" events and send them to this app.
-// This also modifies how fltk3::Window::show() works, on X it turns on
+// This also modifies how Fl_Window::show() works, on X it turns on
 // override_redirect, it does similar things on WIN32.
 
 extern void fl_fix_focus(); // in Fl.cxx
@@ -47,11 +47,10 @@ extern HWND fl_capture;
 #endif
 
 #ifdef __APPLE__
-extern void MACsetkeywindow(void *nsw);
 extern void *fl_capture;
 #endif
 
-void fltk3::grab(fltk3::Window* win) {
+void Fl::grab(Fl_Window* win) {
   if (win) {
     if (!grab_) {
 #ifdef WIN32
@@ -59,7 +58,7 @@ void fltk3::grab(fltk3::Window* win) {
       SetCapture(fl_capture);
 #elif defined(__APPLE__)
       fl_capture = Fl_X::i(first_window())->xid;
-      MACsetkeywindow(fl_capture);
+      Fl_X::i(first_window())->set_key_window();
 #else
       XGrabPointer(fl_display,
 		   fl_xid(first_window()),

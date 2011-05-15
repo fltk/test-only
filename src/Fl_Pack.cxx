@@ -3,7 +3,7 @@
 //
 // Packing widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,13 +30,13 @@
 // them on each redraw (only if box() is zero)
 // Bugs: ?
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_Pack.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Pack.H>
+#include <FL/fl_draw.H>
 
 /**
   Creates a new Fl_Pack widget using the given position, size,
-  and label string. The default boxtype is fltk3::NO_BOX.
+  and label string. The default boxtype is FL_NO_BOX.
   <P>The destructor <I>also deletes all the children</I>. This allows a
   whole tree to be deleted at once, without having to keep a pointer to
   all the children in the user code. A kludge has been done so the 
@@ -45,22 +45,22 @@
   that it is destroyed last.
 */
 Fl_Pack::Fl_Pack(int X, int Y, int W, int H,const char *l)
-: fltk3::Group(X, Y, W, H, l) {
+: Fl_Group(X, Y, W, H, l) {
   resizable(0);
   spacing_ = 0;
   // type(VERTICAL); // already set like this
 }
 
 void Fl_Pack::draw() {
-  int tx = x()+fltk3::box_dx(box());
-  int ty = y()+fltk3::box_dy(box());
-  int tw = w()-fltk3::box_dw(box());
-  int th = h()-fltk3::box_dh(box());
+  int tx = x()+Fl::box_dx(box());
+  int ty = y()+Fl::box_dy(box());
+  int tw = w()-Fl::box_dw(box());
+  int th = h()-Fl::box_dh(box());
   int rw, rh;
   int current_position = horizontal() ? tx : ty;
   int maximum_position = current_position;
   uchar d = damage();
-  fltk3::Widget*const* a = array();
+  Fl_Widget*const* a = array();
   if (horizontal()) {
     rw = -spacing_;
     rh = th;
@@ -81,7 +81,7 @@ void Fl_Pack::draw() {
       }
   }
   for (int i = children(); i--;) {
-    fltk3::Widget* o = *a++;
+    Fl_Widget* o = *a++;
     if (o->visible()) {
       int X,Y,W,H;
       if (horizontal()) {
@@ -140,10 +140,10 @@ void Fl_Pack::draw() {
     th = maximum_position-ty;
   }
   
-  tw += fltk3::box_dw(box()); if (tw <= 0) tw = 1;
-  th += fltk3::box_dh(box()); if (th <= 0) th = 1;
+  tw += Fl::box_dw(box()); if (tw <= 0) tw = 1;
+  th += Fl::box_dh(box()); if (th <= 0) th = 1;
   if (tw != w() || th != h()) {
-    fltk3::Widget::resize(x(),y(),tw,th);
+    Fl_Widget::resize(x(),y(),tw,th);
     d = FL_DAMAGE_ALL;
   }
   if (d&FL_DAMAGE_ALL) {

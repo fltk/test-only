@@ -1,7 +1,7 @@
 /* "$Id$"
  *
  * Author: Jean-Marc Lienher ( http://oksid.ch )
- * Copyright 2000-2009 by O'ksi'D.
+ * Copyright 2000-2010 by O'ksi'D.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,8 +28,6 @@
  * with the functions provided in OksiD's fltk-1.1.6-utf8 port
  */
 
-/*** NOTE : all functions are LIMITED to 24 bits Unicode values !!! ***/
-
 /**
   \file fl_utf8.h
   \brief header for Unicode and UTF8 chracter handling
@@ -38,8 +36,8 @@
 #ifndef _HAVE_FL_UTF8_HDR_
 #define _HAVE_FL_UTF8_HDR_
 
-#include "fltk3/Fl_Export.H"
-#include "fltk3/fl_types.h"
+#include "Fl_Export.H"
+#include "fl_types.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -100,6 +98,9 @@ FL_EXPORT int fl_utf8bytes(unsigned ucs);
 /* OD: returns the byte length of the first UTF-8 char sequence (returns -1 if not valid) */
 FL_EXPORT int fl_utf8len(char c);
 
+/* OD: returns the byte length of the first UTF-8 char sequence (returns +1 if not valid) */
+FL_EXPORT int fl_utf8len1(char c);
+
 /* OD: returns the number of Unicode chars in the UTF-8 string */
 FL_EXPORT int fl_utf_nb_char(const unsigned char *buf, int len);
 
@@ -114,6 +115,9 @@ FL_EXPORT const char* fl_utf8fwd(const char* p, const char* start, const char* e
 
 /* F2: Move backward to the previous valid UTF8 sequence start */
 FL_EXPORT const char* fl_utf8back(const char* p, const char* start, const char* end);
+
+/* XX: Convert a single 32-bit Unicode value into UTF16 */
+FL_EXPORT unsigned fl_ucs_to_Utf16(const unsigned ucs, unsigned short *dst, const unsigned dstlen);
 
 /* F2: Convert a UTF8 string into UTF16 */
 FL_EXPORT unsigned fl_utf8toUtf16(const char* src, unsigned srclen, unsigned short* dst, unsigned dstlen);
@@ -141,6 +145,15 @@ FL_EXPORT int fl_utf8locale();
  * NOTE: The value returned is not simply boolean - it contains information about the probable
  * type of the src text. */
 FL_EXPORT int fl_utf8test(const char *src, unsigned len);
+
+/* XX: return width of "raw" ucs character in columns.
+ * for internal use only */
+FL_EXPORT int fl_wcwidth_(unsigned int ucs);
+
+/* XX: return width of utf-8 character string in columns.
+ * NOTE: this may also do C1 control character (0x80 to 0x9f) to CP1252 mapping,
+ * depending on original build options */
+FL_EXPORT int fl_wcwidth(const char *src);
 
 /* OD: Return true if the character is non-spacing */
 FL_EXPORT unsigned int fl_nonspacing(unsigned int ucs);

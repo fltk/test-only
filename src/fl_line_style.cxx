@@ -3,7 +3,7 @@
 //
 // Line style code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,11 +30,17 @@
   \brief Line style drawing utility hiding different platforms.
 */
 
-#include <fltk3/run.h>
-#include <fltk3/draw.h>
-#include <fltk3/x.H>
+#include <FL/Fl.H>
+#include <FL/fl_draw.H>
+#include <FL/x.H>
+#include <FL/Fl_Printer.H>
 #include "flstring.h"
 #include <stdio.h>
+
+// We save the current line width (absolute value) here.
+// This is currently used only for X11 clipping, see src/fl_rect.cxx.
+// FIXME: this would probably better be in class Fl::
+int fl_line_width_ = 0;
 
 #ifdef __APPLE_QUARTZ__
 float fl_quartz_line_width_ = 1.0f;
@@ -50,7 +56,11 @@ void fl_quartz_restore_line_style_() {
 }
 #endif
 
-void fltk3::Device::line_style(int style, int width, char* dashes) {
+void Fl_Graphics_Driver::line_style(int style, int width, char* dashes) {
+
+  // save line width in global variable for X11 clipping
+  if (width == 0) fl_line_width_ = 1;
+  else fl_line_width_ = width>0 ? width : -width;
 
 #if defined(USE_X11)
   int ndashes = dashes ? strlen(dashes) : 0;
@@ -101,7 +111,7 @@ void fltk3::Device::line_style(int style, int width, char* dashes) {
   LOGBRUSH penbrush = {BS_SOLID,fl_RGB(),0}; // can this be fl_brush()?
   HPEN newpen = ExtCreatePen(s1, width, &penbrush, n, n ? a : 0);
   if (!newpen) {
-    fltk3::error("fl_line_style(): Could not create GDI pen object.");
+    Fl::error("fl_line_style(): Could not create GDI pen object.");
     return;
   }
   HPEN oldpen = (HPEN)SelectObject(fl_gc, newpen);
@@ -117,7 +127,9 @@ void fltk3::Device::line_style(int style, int width, char* dashes) {
   fl_quartz_line_width_ = (float)width; 
   fl_quartz_line_cap_ = Cap[(style>>8)&3];
   // when printing kCGLineCapSquare seems better for solid lines
-  if (fltk3::Device::current()->type() == quartz_printer && style == FL_SOLID) fl_quartz_line_cap_ = kCGLineCapSquare;
+  if ( Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id && style == FL_SOLID && dashes == NULL ) {
+    fl_quartz_line_cap_ = kCGLineCapSquare;
+    }
   fl_quartz_line_join_ = Join[(style>>12)&3];
   char *d = dashes; 
   static CGFloat pattern[16];

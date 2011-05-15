@@ -3,7 +3,7 @@
 //
 // FileBrowser definitions.
 //
-// Copyright 1999-2009 by Michael Sweet.
+// Copyright 1999-2010 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -45,8 +45,8 @@
 //
 
 /** The Fl_File_Browser widget displays a list of filenames, optionally with file-specific icons. */
-class FL_EXPORT Fl_File_Browser : public Fl_Browser
-{
+class FL_EXPORT Fl_File_Browser : public Fl_Browser {
+  
   int		filetype_;
   const char	*directory_;
   uchar		iconsize_;

@@ -3,7 +3,7 @@
 //
 // Widget panel for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -33,6 +33,35 @@ static void cb_(Fl_Tabs* o, void* v) {
   propagate_load((Fl_Group *)o,v);
 }
 
+Fl_Menu_Item menu_[] = {
+ {"   Image Alignment   ", 0,  0, (void*)(0xFFFFFFFF), 1, FL_NORMAL_LABEL, 2, 11, 0},
+ {"image over text", 0,  0, (void*)(FL_ALIGN_IMAGE_OVER_TEXT), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"text over image", 0,  0, (void*)(FL_ALIGN_TEXT_OVER_IMAGE), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"text next to image", 0,  0, (void*)(FL_ALIGN_TEXT_NEXT_TO_IMAGE), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"image next to text", 0,  0, (void*)(FL_ALIGN_IMAGE_NEXT_TO_TEXT), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"image is backdrop", 0,  0, (void*)(FL_ALIGN_IMAGE_BACKDROP), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {0,0,0,0,0,0,0,0,0}
+};
+
+Fl_Menu_Item menu_1[] = {
+ {"   Inside && Outside   ", 0,  0, (void*)(0xFFFFFFFF), 1, FL_NORMAL_LABEL, 2, 11, 0},
+ {"top left", 0,  0, (void*)(FL_ALIGN_TOP_LEFT), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"top", 0,  0, (void*)(FL_ALIGN_TOP), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"top right", 0,  0, (void*)(FL_ALIGN_TOP_RIGHT), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"left", 0,  0, (void*)(FL_ALIGN_LEFT), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"center", 0,  0, (void*)(FL_ALIGN_CENTER), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"right", 0,  0, (void*)(FL_ALIGN_RIGHT), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"bottom left", 0,  0, (void*)(FL_ALIGN_BOTTOM_LEFT), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"bottom", 0,  0, (void*)(FL_ALIGN_BOTTOM), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"bottom right", 0,  0, (void*)(FL_ALIGN_BOTTOM_RIGHT), 128, FL_NORMAL_LABEL, 0, 11, 0},
+ {"   Outside Alignment   ", 0,  0, (void*)(0xFFFFFFFF), 1, FL_NORMAL_LABEL, 2, 11, 0},
+ {"left top", 0,  0, (void*)(FL_ALIGN_LEFT_TOP), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"right top", 0,  0, (void*)(FL_ALIGN_RIGHT_TOP), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"left bottom", 0,  0, (void*)(FL_ALIGN_LEFT_BOTTOM), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {"right bottom", 0,  0, (void*)(FL_ALIGN_RIGHT_BOTTOM), 0, FL_NORMAL_LABEL, 0, 11, 0},
+ {0,0,0,0,0,0,0,0,0}
+};
+
 Fl_Value_Input *widget_x_input=(Fl_Value_Input *)0;
 
 Fl_Value_Input *widget_y_input=(Fl_Value_Input *)0;
@@ -41,14 +70,14 @@ Fl_Value_Input *widget_w_input=(Fl_Value_Input *)0;
 
 Fl_Value_Input *widget_h_input=(Fl_Value_Input *)0;
 
-Fl_Menu_Item menu_[] = {
+Fl_Menu_Item menu_2[] = {
  {"private", 0,  0, (void*)(0), 0, FL_NORMAL_LABEL, 0, 11, 0},
  {"public", 0,  0, (void*)(1), 0, FL_NORMAL_LABEL, 0, 11, 0},
  {"protected", 0,  0, (void*)(2), 0, FL_NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Menu_Item menu_1[] = {
+Fl_Menu_Item menu_3[] = {
  {"local", 0,  0, (void*)(0), 0, FL_NORMAL_LABEL, 0, 11, 0},
  {"global", 0,  0, (void*)(1), 0, FL_NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
@@ -63,7 +92,7 @@ Fl_Double_Window* make_widget_panel() {
   { Fl_Double_Window* o = new Fl_Double_Window(420, 360);
     w = o;
     o->labelsize(11);
-    o->align(FL_ALIGN_CLIP|FL_ALIGN_INSIDE);
+    o->align(Fl_Align(FL_ALIGN_CLIP|FL_ALIGN_INSIDE));
     o->hotspot(o);
     { Fl_Tabs* o = new Fl_Tabs(10, 10, 400, 310);
       o->selection_color((Fl_Color)12);
@@ -75,12 +104,11 @@ Fl_Double_Window* make_widget_panel() {
         o->labelsize(11);
         o->callback((Fl_Callback*)propagate_load);
         o->when(FL_WHEN_NEVER);
-        o->hide();
         { Fl_Group* o = new Fl_Group(95, 40, 309, 20, "Label:");
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { Fl_Input* o = new Fl_Input(95, 40, 190, 20);
             o->tooltip("The label text for the widget.\nUse Ctrl-J for newlines.");
             o->labelfont(1);
@@ -106,7 +134,7 @@ Fl_Double_Window* make_widget_panel() {
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { Fl_Input* o = new Fl_Input(95, 65, 240, 20);
             o->tooltip("The active image for the widget.");
             o->labelfont(1);
@@ -126,7 +154,7 @@ Fl_Double_Window* make_widget_panel() {
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { Fl_Input* o = new Fl_Input(95, 90, 240, 20);
             o->tooltip("The inactive image for the widget.");
             o->labelfont(1);
@@ -146,28 +174,21 @@ Fl_Double_Window* make_widget_panel() {
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
-          { Fl_Button* o = new Fl_Button(95, 115, 45, 20, "Clip");
+          o->align(Fl_Align(FL_ALIGN_LEFT));
+          { Fl_Button* o = new Fl_Button(95, 115, 30, 20, "Clip");
             o->tooltip("Clip the label to the inside of the widget.");
             o->type(1);
             o->selection_color(FL_INACTIVE_COLOR);
             o->labelsize(11);
             o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_CLIP));
-            o->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
+            o->align(Fl_Align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE));
           } // Fl_Button* o
-          { Fl_Button* o = new Fl_Button(145, 115, 50, 20, "Wrap");
+          { Fl_Button* o = new Fl_Button(130, 115, 30, 20, "Wrap");
             o->tooltip("Wrap the label text.");
             o->type(1);
             o->selection_color(FL_INACTIVE_COLOR);
             o->labelsize(11);
             o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_WRAP));
-          } // Fl_Button* o
-          { Fl_Button* o = new Fl_Button(200, 115, 65, 20, "Text/Image");
-            o->tooltip("Show the label text over the image.");
-            o->type(1);
-            o->selection_color(FL_INACTIVE_COLOR);
-            o->labelsize(11);
-            o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_TEXT_OVER_IMAGE));
           } // Fl_Button* o
           { Fl_Button* o = new Fl_Button(270, 115, 20, 20, "@-1<-");
             o->tooltip("Left-align the label.");
@@ -176,6 +197,7 @@ Fl_Double_Window* make_widget_panel() {
             o->labelsize(11);
             o->labelcolor(FL_INACTIVE_COLOR);
             o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_LEFT));
+            o->hide();
           } // Fl_Button* o
           { Fl_Button* o = new Fl_Button(295, 115, 20, 20, "@-1->");
             o->tooltip("Right-align the label.");
@@ -184,6 +206,7 @@ Fl_Double_Window* make_widget_panel() {
             o->labelsize(11);
             o->labelcolor(FL_INACTIVE_COLOR);
             o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_RIGHT));
+            o->hide();
           } // Fl_Button* o
           { Fl_Button* o = new Fl_Button(320, 115, 20, 20, "@-18");
             o->tooltip("Top-align the label.");
@@ -192,6 +215,7 @@ Fl_Double_Window* make_widget_panel() {
             o->labelsize(11);
             o->labelcolor(FL_INACTIVE_COLOR);
             o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_TOP));
+            o->hide();
           } // Fl_Button* o
           { Fl_Button* o = new Fl_Button(345, 115, 20, 20, "@-12");
             o->tooltip("Bottom-align the label.");
@@ -200,7 +224,22 @@ Fl_Double_Window* make_widget_panel() {
             o->labelsize(11);
             o->labelcolor(FL_INACTIVE_COLOR);
             o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_BOTTOM));
+            o->hide();
           } // Fl_Button* o
+          { Fl_Choice* o = new Fl_Choice(165, 115, 110, 20);
+            o->down_box(FL_BORDER_BOX);
+            o->labelsize(11);
+            o->textsize(11);
+            o->callback((Fl_Callback*)align_text_image_cb);
+            o->menu(menu_);
+          } // Fl_Choice* o
+          { Fl_Choice* o = new Fl_Choice(280, 115, 85, 20);
+            o->down_box(FL_BORDER_BOX);
+            o->labelsize(11);
+            o->textsize(11);
+            o->callback((Fl_Callback*)align_position_cb);
+            o->menu(menu_1);
+          } // Fl_Choice* o
           { Fl_Button* o = new Fl_Button(370, 115, 20, 20, "@-3square");
             o->tooltip("Show the label inside the widget.");
             o->type(1);
@@ -219,7 +258,7 @@ Fl_Double_Window* make_widget_panel() {
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { widget_x_input = new Fl_Value_Input(95, 150, 55, 20, "X:");
             widget_x_input->tooltip("The X position of the widget.");
             widget_x_input->labelsize(11);
@@ -227,7 +266,7 @@ Fl_Double_Window* make_widget_panel() {
             widget_x_input->step(1);
             widget_x_input->textsize(11);
             widget_x_input->callback((Fl_Callback*)x_cb);
-            widget_x_input->align(FL_ALIGN_TOP_LEFT);
+            widget_x_input->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           } // Fl_Value_Input* widget_x_input
           { widget_y_input = new Fl_Value_Input(155, 150, 55, 20, "Y:");
             widget_y_input->tooltip("The Y position of the widget.");
@@ -236,7 +275,7 @@ Fl_Double_Window* make_widget_panel() {
             widget_y_input->step(1);
             widget_y_input->textsize(11);
             widget_y_input->callback((Fl_Callback*)y_cb);
-            widget_y_input->align(FL_ALIGN_TOP_LEFT);
+            widget_y_input->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           } // Fl_Value_Input* widget_y_input
           { widget_w_input = new Fl_Value_Input(215, 150, 55, 20, "Width:");
             widget_w_input->tooltip("The width of the widget.");
@@ -245,7 +284,7 @@ Fl_Double_Window* make_widget_panel() {
             widget_w_input->step(1);
             widget_w_input->textsize(11);
             widget_w_input->callback((Fl_Callback*)w_cb);
-            widget_w_input->align(FL_ALIGN_TOP_LEFT);
+            widget_w_input->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           } // Fl_Value_Input* widget_w_input
           { widget_h_input = new Fl_Value_Input(275, 150, 55, 20, "Height:");
             widget_h_input->tooltip("The height of the widget.");
@@ -254,7 +293,7 @@ Fl_Double_Window* make_widget_panel() {
             widget_h_input->step(1);
             widget_h_input->textsize(11);
             widget_h_input->callback((Fl_Callback*)h_cb);
-            widget_h_input->align(FL_ALIGN_TOP_LEFT);
+            widget_h_input->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           } // Fl_Value_Input* widget_h_input
           { Fl_Light_Button* o = new Fl_Light_Button(335, 150, 55, 20, "Relative");
             o->tooltip("If set, widgets inside a widget class of type Fl_Group are repositioned relat\
@@ -271,21 +310,21 @@ ive to the origin at construction time");
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { Fl_Value_Input* o = new Fl_Value_Input(95, 185, 55, 20, "Size:");
             o->tooltip("The size of the slider.");
             o->labelsize(11);
             o->step(0.010101);
             o->textsize(11);
             o->callback((Fl_Callback*)slider_size_cb);
-            o->align(FL_ALIGN_TOP_LEFT);
+            o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           } // Fl_Value_Input* o
           { Fl_Value_Input* o = new Fl_Value_Input(155, 185, 55, 20, "Minimum:");
             o->tooltip("The minimum value of the widget.");
             o->labelsize(11);
             o->textsize(11);
             o->callback((Fl_Callback*)min_cb);
-            o->align(FL_ALIGN_TOP_LEFT);
+            o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           } // Fl_Value_Input* o
           { Fl_Value_Input* o = new Fl_Value_Input(215, 185, 55, 20, "Maximum:");
             o->tooltip("The maximum value of the widget.");
@@ -293,21 +332,21 @@ ive to the origin at construction time");
             o->value(1);
             o->textsize(11);
             o->callback((Fl_Callback*)max_cb);
-            o->align(FL_ALIGN_TOP_LEFT);
+            o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           } // Fl_Value_Input* o
           { Fl_Value_Input* o = new Fl_Value_Input(275, 185, 55, 20, "Step:");
             o->tooltip("The resolution of the widget value.");
             o->labelsize(11);
             o->textsize(11);
             o->callback((Fl_Callback*)step_cb);
-            o->align(FL_ALIGN_TOP_LEFT);
+            o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           } // Fl_Value_Input* o
           { Fl_Value_Input* o = new Fl_Value_Input(335, 185, 55, 20, "Value:");
             o->tooltip("The current widget value.");
             o->labelsize(11);
             o->textsize(11);
             o->callback((Fl_Callback*)value_cb);
-            o->align(FL_ALIGN_TOP_LEFT);
+            o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           } // Fl_Value_Input* o
           { Fl_Box* o = new Fl_Box(395, 185, 0, 20);
             Fl_Group::current()->resizable(o);
@@ -318,7 +357,7 @@ ive to the origin at construction time");
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           o->hide();
           { Fl_Value_Input* o = new Fl_Value_Input(95, 185, 55, 20, "Minimum Size:");
             o->tooltip("The size of the slider.");
@@ -327,7 +366,7 @@ ive to the origin at construction time");
             o->step(1);
             o->textsize(11);
             o->callback((Fl_Callback*)min_w_cb);
-            o->align(FL_ALIGN_TOP_LEFT);
+            o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           } // Fl_Value_Input* o
           { Fl_Value_Input* o = new Fl_Value_Input(155, 185, 55, 20);
             o->tooltip("The minimum value of the widget.");
@@ -336,7 +375,7 @@ ive to the origin at construction time");
             o->step(1);
             o->textsize(11);
             o->callback((Fl_Callback*)min_h_cb);
-            o->align(FL_ALIGN_TOP_LEFT);
+            o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           } // Fl_Value_Input* o
           { Fl_Button* o = new Fl_Button(215, 185, 25, 20, "set");
             o->labelsize(11);
@@ -349,7 +388,7 @@ ive to the origin at construction time");
             o->step(1);
             o->textsize(11);
             o->callback((Fl_Callback*)max_w_cb);
-            o->align(FL_ALIGN_TOP_LEFT);
+            o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           } // Fl_Value_Input* o
           { Fl_Value_Input* o = new Fl_Value_Input(305, 185, 55, 20);
             o->tooltip("The resolution of the widget value.");
@@ -358,7 +397,7 @@ ive to the origin at construction time");
             o->step(1);
             o->textsize(11);
             o->callback((Fl_Callback*)max_h_cb);
-            o->align(FL_ALIGN_TOP_LEFT);
+            o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           } // Fl_Value_Input* o
           { Fl_Button* o = new Fl_Button(365, 185, 25, 20, "set");
             o->labelsize(11);
@@ -379,14 +418,14 @@ ive to the origin at construction time");
           o->labelsize(11);
           o->labelcolor(FL_FOREGROUND_COLOR);
           o->callback((Fl_Callback*)shortcut_in_cb);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           o->when(FL_WHEN_RELEASE);
         } // Shortcut_Button* o
         { Fl_Group* o = new Fl_Group(95, 235, 300, 20, "X Class:");
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { Fl_Input* o = new Fl_Input(95, 235, 95, 20, ":");
             o->tooltip("The X resource class.");
             o->labelfont(1);
@@ -412,7 +451,7 @@ ive to the origin at construction time");
             o->selection_color((Fl_Color)1);
             o->labelsize(11);
             o->callback((Fl_Callback*)non_modal_cb);
-            o->align(132|FL_ALIGN_INSIDE);
+            o->align(Fl_Align(132|FL_ALIGN_INSIDE));
           } // Fl_Light_Button* o
           o->end();
         } // Fl_Group* o
@@ -420,7 +459,7 @@ ive to the origin at construction time");
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { Fl_Light_Button* o = new Fl_Light_Button(95, 260, 60, 20, "Visible");
             o->tooltip("Show the widget.");
             o->selection_color((Fl_Color)1);
@@ -476,7 +515,7 @@ ive to the origin at construction time");
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { Fl_Choice* o = new Fl_Choice(95, 40, 170, 20);
             o->tooltip("The style of the label text.");
             o->box(FL_THIN_UP_BOX);
@@ -508,7 +547,7 @@ ive to the origin at construction time");
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { Fl_Choice* o = new Fl_Choice(95, 65, 219, 20);
             o->tooltip("The \"up\" box of the widget.");
             o->box(FL_THIN_UP_BOX);
@@ -531,7 +570,7 @@ ive to the origin at construction time");
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { Fl_Choice* o = new Fl_Choice(95, 90, 219, 20);
             o->tooltip("The \"down\" box of the widget.");
             o->box(FL_THIN_UP_BOX);
@@ -554,7 +593,7 @@ ive to the origin at construction time");
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { Fl_Choice* o = new Fl_Choice(95, 115, 170, 20);
             o->tooltip("The value text style.");
             o->box(FL_DOWN_BOX);
@@ -592,11 +631,12 @@ ive to the origin at construction time");
         o->labelsize(11);
         o->callback((Fl_Callback*)propagate_load);
         o->when(FL_WHEN_NEVER);
+        o->hide();
         { Fl_Group* o = new Fl_Group(95, 40, 310, 20, "Class:");
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { Fl_Input* o = new Fl_Input(95, 40, 172, 20);
             o->tooltip("The widget subclass.");
             o->labelfont(1);
@@ -620,7 +660,7 @@ ive to the origin at construction time");
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { Fl_Input* o = new Fl_Input(95, 65, 235, 20);
             o->tooltip("The name of the widget.");
             o->labelfont(1);
@@ -636,7 +676,7 @@ ive to the origin at construction time");
             o->textsize(11);
             o->callback((Fl_Callback*)name_public_member_cb);
             o->when(FL_WHEN_CHANGED);
-            o->menu(menu_);
+            o->menu(menu_2);
           } // Fl_Choice* o
           { Fl_Choice* o = new Fl_Choice(330, 65, 75, 20);
             o->tooltip("Change widget accessibility.");
@@ -645,7 +685,7 @@ ive to the origin at construction time");
             o->textsize(11);
             o->callback((Fl_Callback*)name_public_cb);
             o->when(FL_WHEN_CHANGED);
-            o->menu(menu_1);
+            o->menu(menu_3);
           } // Fl_Choice* o
           o->end();
         } // Fl_Group* o
@@ -691,7 +731,7 @@ access the Widget pointer and \'v\' to access the user value.");
           o->textfont(4);
           o->textsize(11);
           o->callback((Fl_Callback*)callback_cb);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           o->when(FL_WHEN_RELEASE);
           Fl_Group::current()->resizable(o);
         } // CodeEditor* o
@@ -699,7 +739,7 @@ access the Widget pointer and \'v\' to access the user value.");
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { Fl_Input* o = new Fl_Input(95, 270, 158, 20);
             o->tooltip("The user data to pass into the callback code.");
             o->labelfont(1);
@@ -726,7 +766,7 @@ access the Widget pointer and \'v\' to access the user value.");
           o->labelfont(1);
           o->labelsize(11);
           o->callback((Fl_Callback*)propagate_load);
-          o->align(FL_ALIGN_LEFT);
+          o->align(Fl_Align(FL_ALIGN_LEFT));
           { Fl_Input* o = new Fl_Input(95, 295, 158, 20);
             o->tooltip("The type of the user data.");
             o->labelfont(1);

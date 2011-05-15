@@ -3,7 +3,7 @@
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_Clock.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Clock.H>
+#include <FL/fl_draw.H>
 #include <math.h>
 #include <time.h>
 #ifndef WIN32
@@ -42,7 +42,7 @@ const float hourhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -7.0f}};
 const float  minhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -11.5f}};
 const float  sechand[4][2] = {{-0.1f, 0}, {0, 2.0f}, {0.1f, 0}, {0, -11.5f}};
 
-static void drawhand(double ang,const float v[][2],fltk3::Color fill,fltk3::Color line)
+static void drawhand(double ang,const float v[][2],Fl_Color fill,Fl_Color line)
 {
   fl_push_matrix();
   fl_rotate(ang);
@@ -53,7 +53,7 @@ static void drawhand(double ang,const float v[][2],fltk3::Color fill,fltk3::Colo
   fl_pop_matrix();
 }
 
-void Fl_Clock_Output::drawhands(fltk3::Color fill, fltk3::Color line) {
+void Fl_Clock_Output::drawhands(Fl_Color fill, Fl_Color line) {
   if (!active_r()) {
     fill = fl_inactive(fill);
     line = fl_inactive(line);
@@ -79,8 +79,8 @@ static void rect(double x, double y, double w, double h) {
   \param[in] X, Y, W, H position and size
 */
 void Fl_Clock_Output::draw(int X, int Y, int W, int H) {
-  fltk3::Color box_color = type()==FL_ROUND_CLOCK ? fltk3::GRAY : color();
-  fltk3::Color shadow_color = fl_color_average(box_color, fltk3::BLACK, 0.5);
+  Fl_Color box_color = type()==FL_ROUND_CLOCK ? FL_GRAY : color();
+  Fl_Color shadow_color = fl_color_average(box_color, FL_BLACK, 0.5);
   draw_box(box(), X, Y, W, H, box_color);
   fl_push_matrix();
   fl_translate(X+W/2.0-.5, Y+H/2.0-.5);
@@ -88,7 +88,7 @@ void Fl_Clock_Output::draw(int X, int Y, int W, int H) {
   if (type() == FL_ROUND_CLOCK) {
     fl_color(active_r() ? color() : fl_inactive(color()));
     fl_begin_polygon(); fl_circle(0,0,14); fl_end_polygon();
-    fl_color(active_r() ? fltk3::FOREGROUND_COLOR : fl_inactive(fltk3::FOREGROUND_COLOR));
+    fl_color(active_r() ? FL_FOREGROUND_COLOR : fl_inactive(FL_FOREGROUND_COLOR));
     fl_begin_loop(); fl_circle(0,0,14); fl_end_loop();
   }
   // draw the shadows:
@@ -98,7 +98,7 @@ void Fl_Clock_Output::draw(int X, int Y, int W, int H) {
   fl_pop_matrix();
   // draw the tick marks:
   fl_push_matrix();
-  fl_color(active_r() ? fltk3::FOREGROUND_COLOR : fl_inactive(fltk3::FOREGROUND_COLOR));
+  fl_color(active_r() ? FL_FOREGROUND_COLOR : fl_inactive(FL_FOREGROUND_COLOR));
   for (int i=0; i<12; i++) {
     if (i==6) rect(-0.5, 9, 1, 2);
     else if (i==3 || i==0 || i== 9) rect(-0.5, 9.5, 1, 1);
@@ -107,7 +107,7 @@ void Fl_Clock_Output::draw(int X, int Y, int W, int H) {
   }
   fl_pop_matrix();
   // draw the hands:
-  drawhands(selection_color(), fltk3::FOREGROUND_COLOR); // color was 54
+  drawhands(selection_color(), FL_FOREGROUND_COLOR); // color was 54
   fl_pop_matrix();
 }
 
@@ -150,15 +150,15 @@ void Fl_Clock_Output::value(ulong v) {
 
 /**
   Create a new Fl_Clock_Output widget with the given position, size and label.
-  The default boxtype is \c fltk3::NO_BOX.
+  The default boxtype is \c FL_NO_BOX.
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
 Fl_Clock_Output::Fl_Clock_Output(int X, int Y, int W, int H, const char *L)
-: fltk3::Widget(X, Y, W, H, L) {
-  box(fltk3::UP_BOX);
+: Fl_Widget(X, Y, W, H, L) {
+  box(FL_UP_BOX);
   selection_color(fl_gray_ramp(5));
-  align(fltk3::ALIGN_BOTTOM);
+  align(FL_ALIGN_BOTTOM);
   hour_ = 0;
   minute_ = 0;
   second_ = 0;
@@ -169,7 +169,7 @@ Fl_Clock_Output::Fl_Clock_Output(int X, int Y, int W, int H, const char *L)
 
 /**
   Create an Fl_Clock widget using the given position, size, and label string.
-  The default boxtype is \c fltk3::NO_BOX.
+  The default boxtype is \c FL_NO_BOX.
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
@@ -186,21 +186,21 @@ Fl_Clock::Fl_Clock(int X, int Y, int W, int H, const char *L)
 Fl_Clock::Fl_Clock(uchar t, int X, int Y, int W, int H, const char *L)
   : Fl_Clock_Output(X, Y, W, H, L) {
   type(t);
-  box(t==FL_ROUND_CLOCK ? fltk3::NO_BOX : fltk3::UP_BOX);
+  box(t==FL_ROUND_CLOCK ? FL_NO_BOX : FL_UP_BOX);
 }
 
 static void tick(void *v) {
   ((Fl_Clock*)v)->value(time(0));
-  fltk3::add_timeout(1.0, tick, v);
+  Fl::add_timeout(1.0, tick, v);
 }
 
 int Fl_Clock::handle(int event) {
   switch (event) {
-  case fltk3::SHOW:
+  case FL_SHOW:
     tick(this);
     break;
-  case fltk3::HIDE:
-    fltk3::remove_timeout(tick, this);
+  case FL_HIDE:
+    Fl::remove_timeout(tick, this);
     break;
   }
   return Fl_Clock_Output::handle(event);
@@ -210,7 +210,7 @@ int Fl_Clock::handle(int event) {
   The destructor removes the clock.
  */
 Fl_Clock::~Fl_Clock() {
-  fltk3::remove_timeout(tick, this);
+  Fl::remove_timeout(tick, this);
 }
 
 //

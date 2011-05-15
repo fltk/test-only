@@ -3,7 +3,7 @@
 //
 // Fl_JPEG_Image routines.
 //
-// Copyright 1997-2009 by Easy Software Products.
+// Copyright 1997-2011 by Easy Software Products.
 // Image support by Matthias Melcher, Copyright 2000-2009.
 //
 // This library is free software; you can redistribute it and/or
@@ -34,7 +34,9 @@
 // Include necessary header files...
 //
 
-#include <fltk3/Fl_JPEG_Image.H>
+#include <FL/Fl_JPEG_Image.H>
+#include <FL/Fl_Shared_Image.H>
+#include <FL/fl_utf8.h>
 #include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -97,10 +99,10 @@ extern "C" {
  There is no error function in this class. If the image has loaded correctly, 
  w(), h(), and d() should return values greater zero.
  
- \param filename a full path and name pointing to a valid jpeg file.
+ \param[in] filename a full path and name pointing to a valid jpeg file.
  */
 Fl_JPEG_Image::Fl_JPEG_Image(const char *filename)	// I - File to load
-: fltk3::RGBImage(0,0,0) {
+: Fl_RGB_Image(0,0,0) {
 #ifdef HAVE_LIBJPEG
   FILE				*fp;	// File pointer
   jpeg_decompress_struct	dinfo;	// Decompressor info
@@ -117,7 +119,7 @@ Fl_JPEG_Image::Fl_JPEG_Image(const char *filename)	// I - File to load
   array = (uchar *)0;
   
   // Open the image file...
-  if ((fp = fopen(filename, "rb")) == NULL) return;
+  if ((fp = fl_fopen(filename, "rb")) == NULL) return;
   
   // Setup the decompressor info and read the header...
   dinfo.err                = jpeg_std_error((jpeg_error_mgr *)&jerr);
@@ -205,7 +207,7 @@ Fl_JPEG_Image::Fl_JPEG_Image(const char *filename)	// I - File to load
 //         JOCTET * next_output_byte;  /* => next byte to write in buffer */
 //         size_t free_in_buffer;      /* # of byte spaces remaining in buffer */
 
-
+#ifdef HAVE_LIBJPEG
 typedef struct {
   struct jpeg_source_mgr pub;
   const unsigned char *data, *s;
@@ -261,22 +263,28 @@ static void jpeg_mem_src(j_decompress_ptr cinfo, const unsigned char *data)
   src->data = data;
   src->s = data;
 }
+#endif // HAVE_LIBJPEG
 
 
 /**
  \brief The constructor loads the JPEG image from memory.
- 
+
+ Construct an image from a block of memory inside the application. Fluid offers
+ "binary Data" chunks as a great way to add image data into the C++ source code.
+ name_png can be NULL. If a name is given, the image is added to the list of 
+ shared images (see: Fl_Shared_Image) and will be available by that name.
+
  The inherited destructor frees all memory and server resources that are used 
  by the image.
- 
+
  There is no error function in this class. If the image has loaded correctly, 
  w(), h(), and d() should return values greater zero.
- 
- \param name developer shoud provide a unique name for this image
- \param data a pointer to the memorry location of the jpeg image
+
+ \param name A unique name or NULL
+ \param data A pointer to the memory location of the JPEG image
  */
 Fl_JPEG_Image::Fl_JPEG_Image(const char *name, const unsigned char *data)
-: fltk3::RGBImage(0,0,0) {
+: Fl_RGB_Image(0,0,0) {
 #ifdef HAVE_LIBJPEG
   jpeg_decompress_struct	dinfo;	// Decompressor info
   fl_jpeg_error_mgr		jerr;	// Error handler info
@@ -360,6 +368,11 @@ Fl_JPEG_Image::Fl_JPEG_Image(const char *name, const unsigned char *data)
   
   free(max_destroy_decompress_err);
   free(max_finish_decompress_err);
+
+  if (w() && h() && name) {
+    Fl_Shared_Image *si = new Fl_Shared_Image(name, this);
+    si->add();
+  }
 #endif // HAVE_LIBJPEG
 }
 

@@ -2,8 +2,6 @@
 
  \page	examples	Example Source Code
 
-\par March 19, 2005
-
 The FLTK distribution contains over 60 sample applications written
 in, or ported to, FLTK. If the FLTK archive you received does not
 contain a 'test' directory, you can download the complete FLTK
@@ -12,6 +10,10 @@ distribution from \b http://fltk.org/software.php .
 Most of the example programs were created while testing a group of widgets. 
 They are not meant to be great achievements in clean C++ programming, but
 merely a test platform to verify the functionality of the FLTK library.
+
+Note that extra example programs are also available in an additional
+'examples' directory, but these are \b NOT built automatically when
+you build FLTK, unlike those in the 'test' directory shown below.
 
 \section example_applications  Example Applications
 
@@ -101,6 +103,7 @@ merely a test platform to verify the functionality of the FLTK library.
 <td> \ref examples_tile            </td>
 <td> \ref examples_tiled_image     </td>
 <td> \ref examples_valuators       </td>
+<td> \ref examples_device       </td>
 <td>      &nbsp;                   </td>
 <td>      &nbsp;                   </td>
 </tr>
@@ -227,6 +230,11 @@ on few systems (some version of Irix for example).
 This tool allows quick access to all programs in the \c test directory. 
 \c demo is based on the visuals of the IrixGL demo program. The menu 
 tree can be changed by editing <tt>test/demo.menu</tt>.
+
+\subsection examples_device device
+
+\par
+Shows how a wide variety of graphics requests can be printed using the Fl_Printer class.
 
 \subsection examples_doublebuffer doublebuffer
 
@@ -589,7 +597,7 @@ for more details.
     </a>
   </td>
   <td width="10%" align="CENTER">
-    <a class="el" href="main.html">[Index]</a>
+    <a class="el" href="index.html">[Index]</a>
   </td>
   <td width="45%" align="RIGHT">
     &nbsp;

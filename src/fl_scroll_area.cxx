@@ -3,7 +3,7 @@
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,9 +30,9 @@
 // into the drawing area.
 
 #include <config.h>
-#include <fltk3/run.h>
-#include <fltk3/x.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/x.H>
+#include <FL/fl_draw.H>
 
 // scroll a rectangle and redraw the newly exposed portions:
 /**
@@ -151,8 +151,7 @@ void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
   BitBlt(fl_gc, dest_x, dest_y, src_w, src_h, fl_gc, src_x, src_y,SRCCOPY);
 
 #elif defined(__APPLE_QUARTZ__)
-  extern CGImageRef MAC_CGImageFromRectOfWindow(fltk3::Window*, int x, int y, int w, int h);
-  CGImageRef img = MAC_CGImageFromRectOfWindow(fltk3::Window::current(), src_x, src_y, src_w, src_h);
+  CGImageRef img = Fl_X::CGImage_from_window_rect(Fl_Window::current(), src_x, src_y, src_w, src_h);
   CGRect rect = { { dest_x, dest_y }, { src_w, src_h } };
   Fl_X::q_begin_image(rect, 0, 0, src_w, src_h);
   CGContextDrawImage(fl_gc, rect, img);

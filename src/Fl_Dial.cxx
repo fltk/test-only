@@ -3,7 +3,7 @@
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,11 +25,11 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_Dial.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Dial.H>
+#include <FL/fl_draw.H>
 #include <stdlib.h>
-#include <fltk3/math.h>
+#include <FL/math.h>
 
 // All angles are measured with 0 to the right and counter-clockwise
 /**
@@ -38,14 +38,14 @@
 */
 void Fl_Dial::draw(int X, int Y, int W, int H) {
   if (damage()&FL_DAMAGE_ALL) draw_box(box(), X, Y, W, H, color());
-  X += fltk3::box_dx(box());
-  Y += fltk3::box_dy(box());
-  W -= fltk3::box_dw(box());
-  H -= fltk3::box_dh(box());
+  X += Fl::box_dx(box());
+  Y += Fl::box_dy(box());
+  W -= Fl::box_dw(box());
+  H -= Fl::box_dh(box());
   double angle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;
   if (type() == FL_FILL_DIAL) {
     // foo: draw this nicely in certain round box types
-    int foo = (box() > fltk3::ROUND_UP_BOX && fltk3::box_dx(box()));
+    int foo = (box() > _FL_ROUND_UP_BOX && Fl::box_dx(box()));
     if (foo) {X--; Y--; W+=2; H+=2;}
     if (active_r()) fl_color(color());
     else fl_color(fl_inactive(color()));
@@ -54,8 +54,8 @@ void Fl_Dial::draw(int X, int Y, int W, int H) {
     else fl_color(fl_inactive(selection_color()));
     fl_pie(X, Y, W, H, 270-angle, 270-a1);
     if (foo) {
-      if (active_r()) fl_color(fltk3::FOREGROUND_COLOR);
-      else fl_color(fl_inactive(fltk3::FOREGROUND_COLOR));
+      if (active_r()) fl_color(FL_FOREGROUND_COLOR);
+      else fl_color(fl_inactive(FL_FOREGROUND_COLOR));
       fl_arc(X, Y, W, H, 0, 360);
     }
     return;
@@ -78,8 +78,8 @@ void Fl_Dial::draw(int X, int Y, int W, int H) {
     fl_vertex(-0.25, 0.25);
     fl_vertex(0.0,   0.04);
     fl_end_polygon();
-    if (active_r()) fl_color(fltk3::FOREGROUND_COLOR);
-    else fl_color(fl_inactive(fltk3::FOREGROUND_COLOR));
+    if (active_r()) fl_color(FL_FOREGROUND_COLOR);
+    else fl_color(fl_inactive(FL_FOREGROUND_COLOR));
     fl_begin_loop();
     fl_vertex(0.0,   0.0);
     fl_vertex(-0.04, 0.0);
@@ -88,8 +88,8 @@ void Fl_Dial::draw(int X, int Y, int W, int H) {
     fl_end_loop();
   } else {
     fl_begin_polygon(); fl_circle(-0.20, 0.20, 0.07); fl_end_polygon();
-    if (active_r()) fl_color(fltk3::FOREGROUND_COLOR);
-    else fl_color(fl_inactive(fltk3::FOREGROUND_COLOR));
+    if (active_r()) fl_color(FL_FOREGROUND_COLOR);
+    else fl_color(fl_inactive(FL_FOREGROUND_COLOR));
     fl_begin_loop(); fl_circle(-0.20, 0.20, 0.07); fl_end_loop();
   }
   fl_pop_matrix();
@@ -109,13 +109,13 @@ void Fl_Dial::draw() {
 */
 int Fl_Dial::handle(int event, int X, int Y, int W, int H) {
   switch (event) {
-  case fltk3::PUSH: {
+  case FL_PUSH: {
     Fl_Widget_Tracker wp(this);  
     handle_push();
     if (wp.deleted()) return 1; }
-  case fltk3::DRAG: {
-    int mx = (fltk3::event_x()-X-W/2)*H;
-    int my = (fltk3::event_y()-Y-H/2)*W;
+  case FL_DRAG: {
+    int mx = (Fl::event_x()-X-W/2)*H;
+    int my = (Fl::event_y()-Y-H/2)*W;
     if (!mx && !my) return 1;
     double angle = 270-atan2((float)-my, (float)mx)*180/M_PI;
     double oldangle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;
@@ -131,11 +131,11 @@ int Fl_Dial::handle(int event, int X, int Y, int W, int H) {
     }
     handle_drag(clamp(round(val)));
   } return 1;
-  case fltk3::RELEASE:
+  case FL_RELEASE:
     handle_release();
     return 1;
-  case fltk3::ENTER : /* FALLTHROUGH */
-  case fltk3::LEAVE :
+  case FL_ENTER : /* FALLTHROUGH */
+  case FL_LEAVE :
     return 1;
   default:
     return 0;
@@ -154,9 +154,9 @@ Fl_Dial::Fl_Dial(int X, int Y, int W, int H, const char* l)
   Creates a new Fl_Dial widget using the given position, size,
   and label string. The default type is FL_NORMAL_DIAL.
 */
-: fltk3::Valuator(X, Y, W, H, l) {
-  box(fltk3::OVAL_BOX);
-  selection_color(fltk3::INACTIVE_COLOR); // was 37
+: Fl_Valuator(X, Y, W, H, l) {
+  box(FL_OVAL_BOX);
+  selection_color(FL_INACTIVE_COLOR); // was 37
   a1 = 45;
   a2 = 315;
 }

@@ -72,7 +72,7 @@
  * OpenGL(TM) is a trademark of Silicon Graphics, Inc.
  */
 
-#include <fltk3/glut.H>
+#include <FL/glut.H>
 #include "freeglut_teapot_data.h"
 
 /* -- PRIVATE FUNCTIONS ---------------------------------------------------- */

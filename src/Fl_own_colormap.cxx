@@ -3,7 +3,7 @@
 //
 // Private colormap support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,10 +34,10 @@
 // get huge color changes when switching windows.
 
 #include <config.h>
-#include <fltk3/run.h>
-#include <fltk3/x.H>
+#include <FL/Fl.H>
+#include <FL/x.H>
 
-/** \fn fltk3::own_colormap()
+/** \fn Fl::own_colormap()
     Makes FLTK use its own colormap.  This may make FLTK display better
     and will reduce conflicts with other programs that want lots of colors.
     However the colors may flash as you move the cursor between windows.
@@ -48,16 +48,16 @@
 // There is probably something relevant to do on MSWindows 8-bit displays
 // but I don't know what it is
 
-void fltk3::own_colormap() {}
+void Fl::own_colormap() {}
 
 #elif defined(__APPLE__)
 // MacOS X always provides a TrueColor interface...
 
-void fltk3::own_colormap() {}
+void Fl::own_colormap() {}
 #else
 // X version
 
-void fltk3::own_colormap() {
+void Fl::own_colormap() {
   fl_open_display();
 #if USE_COLORMAP
   switch (fl_visual->c_class) {

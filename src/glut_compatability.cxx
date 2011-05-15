@@ -3,7 +3,7 @@
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -38,7 +38,7 @@
 #include "flstring.h"
 #if HAVE_GL
 
-#  include <fltk3/glut.H>
+#  include <FL/glut.H>
 #  ifdef HAVE_GLXGETPROCADDRESSARB
 #    define GLX_GLXEXT_LEGACY
 #    include <GL/glx.h>
@@ -87,14 +87,14 @@ static void domenu(int, int, int);
 
 int Fl_Glut_Window::handle(int event) {
   make_current();
-  int ex = fltk3::event_x();
-  int ey = fltk3::event_y();
+  int ex = Fl::event_x();
+  int ey = Fl::event_y();
   int button;
   switch (event) {
 
-  case fltk3::PUSH:
-    if (keyboard || special) fltk3::focus(this);
-    button = fltk3::event_button()-1;
+  case FL_PUSH:
+    if (keyboard || special) Fl::focus(this);
+    button = Fl::event_button()-1;
     if (button<0) button = 0;
     if (button>2) button = 2;
     if (menu[button]) {domenu(menu[button],ex,ey); return 1;}
@@ -103,63 +103,63 @@ int Fl_Glut_Window::handle(int event) {
     if (motion) return 1;
     break;
 
-  case fltk3::MOUSEWHEEL:
-    button = fltk3::event_dy();
-    while (button < 0) {mouse(3,GLUT_DOWN,ex,ey); ++button;}
-    while (button > 0) {mouse(4,GLUT_DOWN,ex,ey); --button;}
+  case FL_MOUSEWHEEL:
+    button = Fl::event_dy();
+    while (button < 0) {if (mouse) mouse(3,GLUT_DOWN,ex,ey); ++button;}
+    while (button > 0) {if (mouse) mouse(4,GLUT_DOWN,ex,ey); --button;}
     return 1;
 
-  case fltk3::RELEASE:
+  case FL_RELEASE:
     for (button = 0; button < 3; button++) if (mouse_down & (1<<button)) {
       if (mouse) mouse(button,GLUT_UP,ex,ey);
     }
     mouse_down = 0;
     return 1;
 
-  case fltk3::ENTER:
+  case FL_ENTER:
     if (entry) {entry(GLUT_ENTERED); return 1;}
     if (passivemotion) return 1;
     break;
 
-  case fltk3::LEAVE:
+  case FL_LEAVE:
     if (entry) {entry(GLUT_LEFT); return 1;}
     if (passivemotion) return 1;
     break;
 
-  case fltk3::DRAG:
+  case FL_DRAG:
     if (motion) {motion(ex, ey); return 1;}
     break;
 
-  case fltk3::MOVE:
+  case FL_MOVE:
     if (passivemotion) {passivemotion(ex, ey); return 1;}
     break;
 
-  case fltk3::FOCUS:
+  case FL_FOCUS:
     if (keyboard || special) return 1;
     break;
 
-  case fltk3::SHORTCUT:
+  case FL_SHORTCUT:
     if (!keyboard && !special) break;
 
-  case fltk3::KEY:
-    if (fltk3::event_text()[0]) {
-      if (keyboard) {keyboard(fltk3::event_text()[0],ex,ey); return 1;}
+  case FL_KEYBOARD:
+    if (Fl::event_text()[0]) {
+      if (keyboard) {keyboard(Fl::event_text()[0],ex,ey); return 1;}
       break;
     } else {
       if (special) {
-	int k = fltk3::event_key();
-	if (k > fltk3::FKey && k <= FL_F_Last) k -= fltk3::FKey;
+	int k = Fl::event_key();
+	if (k > FL_F && k <= FL_F_Last) k -= FL_F;
 	special(k,ex,ey);
 	return 1;
       }
       break;
     }
 
-  case fltk3::HIDE:
+  case FL_HIDE:
     if (visibility) visibility(GLUT_NOT_VISIBLE);
     break;
 
-  case fltk3::SHOW:
+  case FL_SHOW:
     if (visibility) visibility(GLUT_VISIBLE);
     break;
   }
@@ -204,7 +204,7 @@ void glutInit(int *argc, char **argv) {
   int i,j;
   for (i=0; i<=*argc; i++) initargv[i] = argv[i];
   for (i=j=1; i<*argc; ) {
-    if (fltk3::arg(*argc,argv,i));
+    if (Fl::arg(*argc,argv,i));
     else argv[j++] = argv[i++];
   }
   argv[j] = 0;
@@ -215,7 +215,7 @@ void glutInitDisplayMode(unsigned int mode) {
   glut_mode = mode;
 }
 
-void glutMainLoop() {fltk3::run();}
+void glutMainLoop() {Fl::run();}
 
 ////////////////////////////////////////////////////////////////
 
@@ -281,11 +281,11 @@ void glutSetWindow(int win) {
 }
 
 ////////////////////////////////////////////////////////////////
-#include <fltk3/MenuItem.h>
+#include <FL/Fl_Menu_Item.H>
 
 struct menu {
   void (*cb)(int);
-  fltk3::MenuItem *m;
+  Fl_Menu_Item *m;
   int size;
   int alloc;
 };
@@ -298,7 +298,7 @@ static void domenu(int n, int ex, int ey) {
   menu *m = &menus[n];
   if (glut_menustate_function) glut_menustate_function(1);
   if (glut_menustatus_function) glut_menustatus_function(1,ex,ey);
-  const fltk3::MenuItem* g = m->m->popup(fltk3::event_x(), fltk3::event_y(), 0);
+  const Fl_Menu_Item* g = m->m->popup(Fl::event_x(), Fl::event_y(), 0);
   if (g && g->callback_) ((void (*)(int))(g->callback_))(int(g->argument()));
   if (glut_menustatus_function) glut_menustatus_function(0,ex,ey);
   if (glut_menustate_function) glut_menustate_function(0);
@@ -320,17 +320,17 @@ void glutDestroyMenu(int n) {
   m->size = m->alloc = 0;
 }
 
-static fltk3::MenuItem* additem(menu *m) {
+static Fl_Menu_Item* additem(menu *m) {
   if (m->size+1 >= m->alloc) {
     m->alloc = m->size*2+10;
-    fltk3::MenuItem* nm = new fltk3::MenuItem[m->alloc];
+    Fl_Menu_Item* nm = new Fl_Menu_Item[m->alloc];
     for (int i=0; i<m->size; i++) nm[i] = m->m[i];
     delete[] m->m;
     m->m = nm;
   }
   int n = m->size++;
   m->m[n+1].text = 0;
-  fltk3::MenuItem* i = &(m->m[n]);
+  Fl_Menu_Item* i = &(m->m[n]);
   i->shortcut_ = 0;
   i->flags = 0;
   i->labeltype_ = i->labelfont_ = i->labelsize_ = i->labelcolor_ = 0;
@@ -339,15 +339,15 @@ static fltk3::MenuItem* additem(menu *m) {
 
 void glutAddMenuEntry(char *label, int value) {
   menu *m = &menus[glut_menu];
-  fltk3::MenuItem* i = additem(m);
+  Fl_Menu_Item* i = additem(m);
   i->text = label;
-  i->callback_ = (fltk3::Callback*)(m->cb);
+  i->callback_ = (Fl_Callback*)(m->cb);
   i->user_data_ = (void *)value;
 }
 
 void glutAddSubMenu(char *label, int submenu) {
   menu *m = &menus[glut_menu];
-  fltk3::MenuItem* i = additem(m);
+  Fl_Menu_Item* i = additem(m);
   i->text = label;
   i->callback_ = 0;
   i->user_data_ = (void *)(menus[submenu].m);
@@ -356,16 +356,16 @@ void glutAddSubMenu(char *label, int submenu) {
 
 void glutChangeToMenuEntry(int item, char *label, int value) {
   menu *m = &menus[glut_menu];
-  fltk3::MenuItem* i = &m->m[item-1];
+  Fl_Menu_Item* i = &m->m[item-1];
   i->text = label;
-  i->callback_ = (fltk3::Callback*)(m->cb);
+  i->callback_ = (Fl_Callback*)(m->cb);
   i->user_data_ = (void *)value;
   i->flags = 0;
 }
 
 void glutChangeToSubMenu(int item, char *label, int submenu) {
   menu *m = &menus[glut_menu];
-  fltk3::MenuItem* i = &m->m[item-1];
+  Fl_Menu_Item* i = &m->m[item-1];
   i->text = label;
   i->callback_ = 0;
   i->user_data_ = (void *)(menus[submenu].m);
@@ -395,8 +395,8 @@ int glutGet(GLenum type) {
       return 0;
 //case GLUT_WINDOW_NUM_CHILDREN:
 //case GLUT_WINDOW_CURSOR: return 
-  case GLUT_SCREEN_WIDTH: return fltk3::w();
-  case GLUT_SCREEN_HEIGHT: return fltk3::h();
+  case GLUT_SCREEN_WIDTH: return Fl::w();
+  case GLUT_SCREEN_HEIGHT: return Fl::h();
 //case GLUT_SCREEN_WIDTH_MM:
 //case GLUT_SCREEN_HEIGHT_MM:
   case GLUT_MENU_NUM_ITEMS: return menus[glut_menu].size;
@@ -508,9 +508,9 @@ void glutIdleFunc(void (*f)())
   // no change
   if(glut_idle_func == f) return;
   // remove current idle
-  if(glut_idle_func) fltk3::remove_idle((void (*)(void *))glut_idle_func);
+  if(glut_idle_func) Fl::remove_idle((void (*)(void *))glut_idle_func);
   // install new idle func - if one was passed
-  if(f) fltk3::add_idle((void (*)(void *))f);
+  if(f) Fl::add_idle((void (*)(void *))f);
   // record new idle func - even if it is NULL
   glut_idle_func = f;
 } // glutIdleFunc

@@ -3,7 +3,7 @@
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,18 +25,18 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Choice.h>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Choice.H>
+#include <FL/fl_draw.H>
 #include "flstring.h"
 
 // Emulates the Forms choice widget.  This is almost exactly the same
 // as an Fl_Menu_Button.  The only difference is the appearance of the
 // button: it draws the text of the current pick and a down-arrow.
 
-void fltk3::Choice::draw() {
-  int dx = fltk3::box_dx(fltk3::DOWN_BOX);
-  int dy = fltk3::box_dy(fltk3::DOWN_BOX);
+void Fl_Choice::draw() {
+  int dx = Fl::box_dx(FL_DOWN_BOX);
+  int dy = Fl::box_dy(FL_DOWN_BOX);
   int H = h() - 2 * dy;
   int W = (H > 20) ? 20 : H;
   int X = x() + w() - W - dx;
@@ -45,11 +45,11 @@ void fltk3::Choice::draw() {
   int x1 = X + (W - 2 * w1 - 1) / 2;
   int y1 = Y + (H - w1 - 1) / 2;
 
-  if (fltk3::scheme()) {
-    draw_box(fltk3::UP_BOX, color());
+  if (Fl::scheme()) {
+    draw_box(FL_UP_BOX, color());
 
     fl_color(active_r() ? labelcolor() : fl_inactive(labelcolor()));
-    if (!strcmp(fltk3::scheme(), "plastic")) {
+    if (!strcmp(Fl::scheme(), "plastic")) {
       // Show larger up/down arrows...
       fl_polygon(x1, y1 + 3, x1 + w1, y1 + w1 + 3, x1 + 2 * w1, y1 + 3);
       fl_polygon(x1, y1 + 1, x1 + w1, y1 - w1 + 1, x1 + 2 * w1, y1 + 1);
@@ -67,12 +67,12 @@ void fltk3::Choice::draw() {
       fl_yxline(x1 - 6, y1 - 8, y1 + 8);
     }
   } else {
-    if (fl_contrast(textcolor(), fltk3::BACKGROUND2_COLOR) == textcolor()) {
-      draw_box(fltk3::DOWN_BOX, fltk3::BACKGROUND2_COLOR);
+    if (fl_contrast(textcolor(), FL_BACKGROUND2_COLOR) == textcolor()) {
+      draw_box(FL_DOWN_BOX, FL_BACKGROUND2_COLOR);
     } else {
-      draw_box(fltk3::DOWN_BOX, fl_lighter(color()));
+      draw_box(FL_DOWN_BOX, fl_lighter(color()));
     }
-    draw_box(fltk3::UP_BOX,X,Y,W,H,color());
+    draw_box(FL_UP_BOX,X,Y,W,H,color());
 
     fl_color(active_r() ? labelcolor() : fl_inactive(labelcolor()));
     fl_polygon(x1, y1, x1 + w1, y1 + w1, x1 + 2 * w1, y1);
@@ -81,7 +81,7 @@ void fltk3::Choice::draw() {
   W += 2 * dx;
 
   if (mvalue()) {
-    fltk3::MenuItem m = *mvalue();
+    Fl_Menu_Item m = *mvalue();
     if (active_r()) m.activate(); else m.deactivate();
 
     // ERCO
@@ -89,8 +89,8 @@ void fltk3::Choice::draw() {
 
     fl_push_clip(xx, yy, ww, hh);
 
-    if ( fltk3::scheme()) {
-      fltk3::Label l;
+    if ( Fl::scheme()) {
+      Fl_Label l;
       l.value = m.text;
       l.image = 0;
       l.deimage = 0;
@@ -98,15 +98,15 @@ void fltk3::Choice::draw() {
       l.font = m.labelsize_ || m.labelfont_ ? m.labelfont_ : textfont();
       l.size = m.labelsize_ ? m.labelsize_ : textsize();
       l.color= m.labelcolor_ ? m.labelcolor_ : textcolor();
-      if (!m.active()) l.color = fl_inactive((fltk3::Color)l.color);
+      if (!m.active()) l.color = fl_inactive((Fl_Color)l.color);
       fl_draw_shortcut = 2; // hack value to make '&' disappear
-      l.draw(xx+3, yy, ww>6 ? ww-6 : 0, hh, fltk3::ALIGN_LEFT);
+      l.draw(xx+3, yy, ww>6 ? ww-6 : 0, hh, FL_ALIGN_LEFT);
       fl_draw_shortcut = 0;
-      if ( fltk3::focus() == this ) draw_focus(box(), xx, yy, ww, hh);
+      if ( Fl::focus() == this ) draw_focus(box(), xx, yy, ww, hh);
     }
     else {
       fl_draw_shortcut = 2; // hack value to make '&' disappear
-      m.draw(xx, yy, ww, hh, this, fltk3::focus() == this);
+      m.draw(xx, yy, ww, hh, this, Fl::focus() == this);
       fl_draw_shortcut = 0;
     }
 
@@ -117,22 +117,22 @@ void fltk3::Choice::draw() {
 }
 
 /**
-  Create a new fltk3::Choice widget using the given position, size and label string.
-  The default boxtype is \c fltk3::UP_BOX.
+  Create a new Fl_Choice widget using the given position, size and label string.
+  The default boxtype is \c FL_UP_BOX.
 
   The constructor sets menu() to NULL.
-  See fltk3::Menu_ for the methods to set or change the menu.
+  See Fl_Menu_ for the methods to set or change the menu.
 
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
-fltk3::Choice::Choice(int X, int Y, int W, int H, const char *L)
-: fltk3::Menu_(X,Y,W,H,L) {
-  align(fltk3::ALIGN_LEFT);
-  when(fltk3::WHEN_RELEASE);
-  textfont(fltk3::HELVETICA);
-  box(fltk3::FLAT_BOX);
-  down_box(fltk3::BORDER_BOX);
+Fl_Choice::Fl_Choice(int X, int Y, int W, int H, const char *L)
+: Fl_Menu_(X,Y,W,H,L) {
+  align(FL_ALIGN_LEFT);
+  when(FL_WHEN_RELEASE);
+  textfont(FL_HELVETICA);
+  box(FL_FLAT_BOX);
+  down_box(FL_BORDER_BOX);
 }
 
 /**
@@ -141,8 +141,8 @@ fltk3::Choice::Choice(int X, int Y, int W, int H, const char *L)
   \param[in] v pointer to menu item in the menu item array.
   \returns non-zero if the new value is different to the old one.
  */
-int fltk3::Choice::value(const fltk3::MenuItem *v) {
-  if (!fltk3::Menu_::value(v)) return 0;
+int Fl_Choice::value(const Fl_Menu_Item *v) {
+  if (!Fl_Menu_::value(v)) return 0;
   redraw();
   return 1;
 }
@@ -153,36 +153,36 @@ int fltk3::Choice::value(const fltk3::MenuItem *v) {
   \param[in] v index of value in the menu item array.
   \returns non-zero if the new value is different to the old one.
  */
-int fltk3::Choice::value(int v) {
-  if (v == -1) return value((const fltk3::MenuItem *)0);
+int Fl_Choice::value(int v) {
+  if (v == -1) return value((const Fl_Menu_Item *)0);
   if (v < 0 || v >= (size() - 1)) return 0;
-  if (!fltk3::Menu_::value(v)) return 0;
+  if (!Fl_Menu_::value(v)) return 0;
   redraw();
   return 1;
 }
 
-int fltk3::Choice::handle(int e) {
+int Fl_Choice::handle(int e) {
   if (!menu() || !menu()->text) return 0;
-  const fltk3::MenuItem* v;
+  const Fl_Menu_Item* v;
   switch (e) {
-  case fltk3::ENTER:
-  case fltk3::LEAVE:
+  case FL_ENTER:
+  case FL_LEAVE:
     return 1;
 
-  case fltk3::KEY:
-    if (fltk3::event_key() != ' ' ||
-        (fltk3::event_state() & (fltk3::SHIFT | fltk3::CTRL | fltk3::ALT | fltk3::META))) return 0;
-  case fltk3::PUSH:
-    if (fltk3::visible_focus()) fltk3::focus(this);
+  case FL_KEYBOARD:
+    if (Fl::event_key() != ' ' ||
+        (Fl::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) return 0;
+  case FL_PUSH:
+    if (Fl::visible_focus()) Fl::focus(this);
   J1:
-    if (fltk3::scheme()
-	|| fl_contrast(textcolor(), fltk3::BACKGROUND2_COLOR) != textcolor()) {
+    if (Fl::scheme()
+	|| fl_contrast(textcolor(), FL_BACKGROUND2_COLOR) != textcolor()) {
       v = menu()->pulldown(x(), y(), w(), h(), mvalue(), this);
     } else {
       // In order to preserve the old look-n-feel of "white" menus,
       // temporarily override the color() of this widget...
-      fltk3::Color c = color();
-      color(fltk3::BACKGROUND2_COLOR);
+      Fl_Color c = color();
+      color(FL_BACKGROUND2_COLOR);
       v = menu()->pulldown(x(), y(), w(), h(), mvalue(), this);
       color(c);
     }
@@ -190,16 +190,16 @@ int fltk3::Choice::handle(int e) {
     if (v != mvalue()) redraw();
     picked(v);
     return 1;
-  case fltk3::SHORTCUT:
-      if (fltk3::Widget::test_shortcut()) goto J1;
+  case FL_SHORTCUT:
+    if (Fl_Widget::test_shortcut()) goto J1;
     v = menu()->test_shortcut();
     if (!v) return 0;
     if (v != mvalue()) redraw();
     picked(v);
     return 1;
-  case fltk3::FOCUS:
-  case fltk3::UNFOCUS:
-    if (fltk3::visible_focus()) {
+  case FL_FOCUS:
+  case FL_UNFOCUS:
+    if (Fl::visible_focus()) {
       redraw();
       return 1;
     } else return 0;

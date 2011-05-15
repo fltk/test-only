@@ -3,7 +3,7 @@
 //
 // Convert MSWindows-1252 (Latin-1) encoded text to the local encoding.
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/draw.h>
-#include <fltk3/Enumerations.H>
+#include <FL/fl_draw.H>
+#include <FL/Enumerations.H>
 #include <stdlib.h>
 #include "flstring.h"
 

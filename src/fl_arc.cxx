@@ -3,7 +3,7 @@
 //
 // Arc functions for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,8 +34,8 @@
 // the current fl_begin/fl_vertex/fl_end path.
 // Incremental math implementation:
 
-#include <fltk3/draw.h>
-#include <fltk3/math.h>
+#include <FL/fl_draw.H>
+#include <FL/math.h>
 
 // avoid problems with some platforms that don't 
 // implement hypot.
@@ -43,7 +43,7 @@ static double _fl_hypot(double x, double y) {
   return sqrt(x*x + y*y);
 }
 
-void fltk3::Device::arc(double x, double y, double r, double start, double end) {
+void Fl_Graphics_Driver::arc(double x, double y, double r, double start, double end) {
 
   // draw start point accurately:
   

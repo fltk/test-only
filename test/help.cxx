@@ -3,7 +3,7 @@
 //
 // Fl_Help_Dialog test program.
 //
-// Copyright 1999-2009 by Easy Software Products.
+// Copyright 1999-2010 by Easy Software Products.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -36,6 +36,25 @@
 #include <FL/Fl_Help_Dialog.H>
 
 
+#ifdef USING_XCODE
+#include <ApplicationServices/ApplicationServices.h>
+void set_app_dir() {
+  char app_path[2048];
+  CFBundleRef app = CFBundleGetMainBundle();
+  CFURLRef url = CFBundleCopyBundleURL(app);    
+  CFStringRef cc_app_path = CFURLCopyFileSystemPath(url, kCFURLPOSIXPathStyle);
+  CFStringGetCString(cc_app_path, app_path, 2048, kCFStringEncodingUTF8);
+  if (*app_path) {
+    char *n = strrchr(app_path, '/');
+    if (n) {
+      *n = 0;
+      chdir(app_path);
+    }
+  }
+}
+#endif
+
+
 //
 // 'main()' - Display the help GUI...
 //
@@ -49,11 +68,28 @@ main(int  argc,			// I - Number of command-line arguments
 
   help = new Fl_Help_Dialog;
 
-  if (argc < 2)
-    help->load("../documentation/html/main.html");
+  int argn = 1;
+  
+#ifdef USING_XCODE
+  
+  if (argc>argn && strncmp(argv[1], "-psn_", 5)==0)
+    argn++;
+  set_app_dir();
+  
+  if (argc <= argn)
+    help->load("../../../../documentation/html/intro.html");
+  else
+    help->load(argv[argn]);
+  
+#else
+  
+  if (argc <= argn)
+    help->load("../documentation/html/intro.html");
   else
     help->load(argv[1]);
-
+  
+#endif
+  
   help->show(1, argv);
 
   Fl::run();

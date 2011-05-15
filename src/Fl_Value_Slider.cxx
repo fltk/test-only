@@ -3,7 +3,7 @@
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,24 +25,24 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/ValueSlider.h>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Value_Slider.H>
+#include <FL/fl_draw.H>
 #include <math.h>
 
 /**
-  Creates a new fltk3::ValueSlider widget using the given
-  position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
+  Creates a new Fl_Value_Slider widget using the given
+  position, size, and label string. The default boxtype is FL_DOWN_BOX.
 */
-fltk3::ValueSlider::ValueSlider(int X, int Y, int W, int H, const char*l)
-: fltk3::Slider(X,Y,W,H,l) {
+Fl_Value_Slider::Fl_Value_Slider(int X, int Y, int W, int H, const char*l)
+: Fl_Slider(X,Y,W,H,l) {
   step(1,100);
-  textfont_ = fltk3::HELVETICA;
+  textfont_ = FL_HELVETICA;
   textsize_ = 10;
-  textcolor_ = fltk3::FOREGROUND_COLOR;
+  textcolor_ = FL_FOREGROUND_COLOR;
 }
 
-void fltk3::ValueSlider::draw() {
+void Fl_Value_Slider::draw() {
   int sxx = x(), syy = y(), sww = w(), shh = h();
   int bxx = x(), byy = y(), bww = w(), bhh = h();
   if (horizontal()) {
@@ -51,21 +51,21 @@ void fltk3::ValueSlider::draw() {
     syy += 25; bhh = 25; shh -= 25;
   }
   if (damage()&FL_DAMAGE_ALL) draw_box(box(),sxx,syy,sww,shh,color());
-  fltk3::Slider::draw(sxx+fltk3::box_dx(box()),
-		  syy+fltk3::box_dy(box()),
-		  sww-fltk3::box_dw(box()),
-		  shh-fltk3::box_dh(box()));
+  Fl_Slider::draw(sxx+Fl::box_dx(box()),
+		  syy+Fl::box_dy(box()),
+		  sww-Fl::box_dw(box()),
+		  shh-Fl::box_dh(box()));
   draw_box(box(),bxx,byy,bww,bhh,color());
   char buf[128];
   format(buf);
   fl_font(textfont(), textsize());
   fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
-  fl_draw(buf, bxx, byy, bww, bhh, fltk3::ALIGN_CLIP);
+  fl_draw(buf, bxx, byy, bww, bhh, FL_ALIGN_CLIP);
 }
 
-int fltk3::ValueSlider::handle(int event) {
-  if (event == fltk3::PUSH && fltk3::visible_focus()) {
-    fltk3::focus(this);
+int Fl_Value_Slider::handle(int event) {
+  if (event == FL_PUSH && Fl::visible_focus()) {
+    Fl::focus(this);
     redraw();
   }
   int sxx = x(), syy = y(), sww = w(), shh = h();
@@ -74,11 +74,11 @@ int fltk3::ValueSlider::handle(int event) {
   } else {
     syy += 25; shh -= 25;
   }
-  return fltk3::Slider::handle(event,
-			   sxx+fltk3::box_dx(box()),
-			   syy+fltk3::box_dy(box()),
-			   sww-fltk3::box_dw(box()),
-			   shh-fltk3::box_dh(box()));
+  return Fl_Slider::handle(event,
+			   sxx+Fl::box_dx(box()),
+			   syy+Fl::box_dy(box()),
+			   sww-Fl::box_dw(box()),
+			   shh-Fl::box_dh(box()));
 }
 
 //

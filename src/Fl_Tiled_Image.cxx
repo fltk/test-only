@@ -3,7 +3,7 @@
 //
 // Tiled image code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,23 +26,23 @@
 //
 
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_Tiled_Image.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Tiled_Image.H>
+#include <FL/fl_draw.H>
 
 /**
   The constructors create a new tiled image containing the specified image.
   Use a width and height of 0 to tile the whole window/widget.
 */
-Fl_Tiled_Image::Fl_Tiled_Image(fltk3::Image *i,	// I - Image to tile
+Fl_Tiled_Image::Fl_Tiled_Image(Fl_Image *i,	// I - Image to tile
                                int      W,	// I - Width of tiled area
 			       int      H) :	// I - Height of tiled area
-  fltk3::Image(W,H,0) {
+  Fl_Image(W,H,0) {
   image_       = i;
   alloc_image_ = 0;
 
-  if (W == 0) w(fltk3::w());
-  if (H == 0) h(fltk3::h());
+  if (W == 0) w(Fl::w());
+  if (H == 0) h(Fl::h());
 }
 /**
   The destructor frees all memory and server resources that are used by
@@ -57,7 +57,7 @@ Fl_Tiled_Image::Fl_Tiled_Image(fltk3::Image *i,	// I - Image to tile
 // 'Fl_Tiled_Image::copy()' - Copy and resize a tiled image...
 //
 
-fltk3::Image *			// O - New image
+Fl_Image *			// O - New image
 Fl_Tiled_Image::copy(int W,	// I - New width
                      int H) {	// I - New height
   if (W == w() && H == h()) return this;
@@ -70,7 +70,7 @@ Fl_Tiled_Image::copy(int W,	// I - New width
 //
 
 void
-Fl_Tiled_Image::color_average(fltk3::Color c,	// I - Color to blend with
+Fl_Tiled_Image::color_average(Fl_Color c,	// I - Color to blend with
                               float    i) {	// I - Blend fraction
   if (!alloc_image_) {
     image_       = image_->copy();
@@ -108,8 +108,8 @@ Fl_Tiled_Image::draw(int X,	// I - Starting X position
 		     int cx,	// I - "Source" X position
 		     int cy) {	// I - "Source" Y position
   if (!image_->w() || !image_->h()) return;
-  if (W == 0) W = fltk3::w();
-  if (H == 0) H = fltk3::h();
+  if (W == 0) W = Fl::w();
+  if (H == 0) H = Fl::h();
 
   fl_push_clip(X, Y, W, H);
 

@@ -3,7 +3,7 @@
 //
 // Fl_Wizard widget definitions.
 //
-// Copyright 1999-2009 by Easy Software Products.
+// Copyright 1999-2010 by Easy Software Products.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@
 #ifndef _Fl_Wizard_H_
 #  define _Fl_Wizard_H_
 
-#  include <fltk3/Fl_Group.H>
+#  include <FL/Fl_Group.H>
 
 
 /**
@@ -45,11 +45,11 @@
     step a user through configuration or troubleshooting tasks.
 
     <P>As with Fl_Tabs, wizard panes are composed of child (usually
-    fltk3::Group) widgets. Navigation buttons must be added separately.
+    Fl_Group) widgets. Navigation buttons must be added separately.
 */
-class FL_EXPORT Fl_Wizard : public fltk3::Group
-{
-  fltk3::Widget *value_;
+class FL_EXPORT Fl_Wizard : public Fl_Group {
+
+  Fl_Widget *value_;
 
   void draw();
 
@@ -59,8 +59,8 @@ class FL_EXPORT Fl_Wizard : public fltk3::Group
 
   void		next();
   void		prev();
-  fltk3::Widget	*value();
-  void		value(fltk3::Widget *);
+  Fl_Widget	*value();
+  void		value(Fl_Widget *);
 };
 
 #endif // !_Fl_Wizard_H_

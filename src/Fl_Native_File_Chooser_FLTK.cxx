@@ -2,7 +2,7 @@
 //
 // FLTK native OS file chooser widget
 //
-// Copyright 1998-2005 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 // Copyright 2004 Greg Ercolano.
 // API changes + filter improvements by Nathan Vander Wilt 2005
 //
@@ -26,8 +26,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/Fl_Native_File_Chooser.H>
-#include <fltk3/Fl_File_Icon.H>
+#include <FL/Fl_Native_File_Chooser.H>
+#include <FL/Fl_File_Icon.H>
 #define FLTK_CHOOSER_SINGLE    Fl_File_Chooser::SINGLE
 #define FLTK_CHOOSER_DIRECTORY Fl_File_Chooser::DIRECTORY
 #define FLTK_CHOOSER_MULTI     Fl_File_Chooser::MULTI
@@ -64,16 +64,6 @@ Fl_Native_File_Chooser::Fl_Native_File_Chooser(int val) {
   _file_chooser = new Fl_File_Chooser(NULL, NULL, 0, NULL);
   type(val);			// do this after _file_chooser created
   _nfilters    = 0;
-
-  // Added by MG
-  fltk3::Button *b = _file_chooser->previewButton;
-  fltk3::Window *w = b->window();
-  fltk3::Group::current(w);		// adds a "Show hidden files" check button in _file_chooser's window
-  show_hidden = new fltk3::CheckButton(b->x() + b->w() + 10, b->y(), 145, b->h(), "Show hidden files");
-  show_hidden->callback((fltk3::Callback*)show_hidden_cb, this);
-  my_fileList = _file_chooser->browser();
-  _old_dir = 0;						// to detect directory changes
-  prev_filtervalue = _file_chooser->filter_value();	// to detect filter changes
 } 
 
 /**
@@ -88,7 +78,6 @@ Fl_Native_File_Chooser::~Fl_Native_File_Chooser() {
   _prevvalue   = strfree(_prevvalue);
   _directory   = strfree(_directory);
   _errmsg      = strfree(_errmsg);
-  _old_dir     = strfree(_old_dir);
 }
 
 // PRIVATE: SET ERROR MESSAGE
@@ -198,15 +187,7 @@ int Fl_Native_File_Chooser::show() {
 
   // BLOCK WHILE BROWSER SHOWN
   while ( _file_chooser->shown() ) {
-    if (_old_dir==0 || strcmp(_old_dir, _file_chooser->directory()) != 0) {
-      _old_dir = strfree(_old_dir);
-      _old_dir = strnew(_file_chooser->directory());
-      if (!show_hidden->value()) remove_hidden_files(my_fileList);
-    } else if (prev_filtervalue != _file_chooser->filter_value() ) {
-      prev_filtervalue = _file_chooser->filter_value();
-      if (!show_hidden->value() ) remove_hidden_files(my_fileList);
-    }
-    fltk3::wait();
+    Fl::wait();
   }
 
   if ( _file_chooser->value() && _file_chooser->value()[0] ) {
@@ -471,32 +452,9 @@ const char* Fl_Native_File_Chooser::preset_file() const {
   return(_preset_file);
 }
 
-void Fl_Native_File_Chooser::show_hidden_cb(fltk3::CheckButton *o, void *data)
-{
-  Fl_Native_File_Chooser *mychooser = (Fl_Native_File_Chooser *)data;
-  if (o->value()) {
-    mychooser->my_fileList->load(mychooser->_file_chooser->directory());
-  } else {
-    remove_hidden_files(mychooser->my_fileList);
-    mychooser->my_fileList->redraw();
-  }
-}
 
-// PRIVATE: Don't show hidden files
-void Fl_Native_File_Chooser::remove_hidden_files(Fl_File_Browser *my_fileList)
-{
-  int count = my_fileList->size();
-  for(int num = count; num >= 1; num--) {
-    const char *p = my_fileList->text(num);
-    if (*p == '.' && strcmp(p, "../") != 0) my_fileList->remove(num);
-  }
-  my_fileList->topline(1);
-}
-
-// PRIVATE: Don't show hidden files
 int Fl_Native_File_Chooser::exist_dialog() {
-  return(fltk3::choice("File exists. Are you sure you want to overwrite?", 
-		   "Cancel", "   OK   ", NULL));
+  return(fl_choice("%s", fl_cancel, fl_ok, NULL, file_exists_message));
 }
 
 //

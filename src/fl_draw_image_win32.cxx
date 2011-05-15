@@ -3,7 +3,7 @@
 //
 // WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -45,9 +45,10 @@
 ////////////////////////////////////////////////////////////////
 
 #include <config.h>
-#include <fltk3/run.h>
-#include <fltk3/draw.h>
-#include <fltk3/x.H>
+#include <FL/Fl.H>
+#include <FL/Fl_Printer.H>
+#include <FL/fl_draw.H>
+#include <FL/x.H>
 
 #define MAXBUFFER 0x40000 // 256k
 
@@ -71,15 +72,15 @@ static void dither(uchar* to, const uchar* from, int w, int delta) {
   }
   for (; w--; from += d, to += td) {
     r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
-    int rr = r*fltk3::NUM_RED/256;
-    r -= rr*255/(fltk3::NUM_RED-1);
+    int rr = r*FL_NUM_RED/256;
+    r -= rr*255/(FL_NUM_RED-1);
     g += from[1]; if (g < 0) g = 0; else if (g>255) g = 255;
-    int gg = g*fltk3::NUM_GREEN/256;
-    g -= gg*255/(fltk3::NUM_GREEN-1);
+    int gg = g*FL_NUM_GREEN/256;
+    g -= gg*255/(FL_NUM_GREEN-1);
     b += from[2]; if (b < 0) b = 0; else if (b>255) b = 255;
-    int bb = b*fltk3::NUM_BLUE/256;
-    b -= bb*255/(fltk3::NUM_BLUE-1);
-    *to = uchar(fltk3::COLOR_CUBE+(bb*fltk3::NUM_RED+rr)*fltk3::NUM_GREEN+gg);
+    int bb = b*FL_NUM_BLUE/256;
+    b -= bb*255/(FL_NUM_BLUE-1);
+    *to = uchar(FL_COLOR_CUBE+(bb*FL_NUM_RED+rr)*FL_NUM_GREEN+gg);
   }
   ri = r; gi = g; bi = b;
 }
@@ -102,9 +103,9 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
   }
   for (; w--; from += d, to += td) {
     r += *from; if (r < 0) r = 0; else if (r>255) r = 255;
-    int rr = r*fltk3::NUM_GRAY/256;
-    r -= rr*255/(fltk3::NUM_GRAY-1);
-    *to = uchar(fltk3::GRAY_RAMP+rr);
+    int rr = r*FL_NUM_GRAY/256;
+    r -= rr*255/(FL_NUM_GRAY-1);
+    *to = uchar(FL_GRAY_RAMP+rr);
   }
   ri = r;
 }
@@ -173,13 +174,14 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   int linesize = (pixelsize*w+3)&~3;
   
   static U32* buffer;
+  static long buffer_size;
   int blocking = h;
   {int size = linesize*h;
-  if (size > MAXBUFFER) {
+  // when printing, don't limit buffer size not to get a crash in StretchDIBits
+  if (size > MAXBUFFER && Fl_Surface_Device::surface()->class_name() != Fl_Printer::class_id) {
     size = MAXBUFFER;
     blocking = MAXBUFFER/linesize;
   }
-  static long buffer_size;
   if (size > buffer_size) {
     delete[] buffer;
     buffer_size = size;
@@ -254,7 +256,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
         }            
       }
     }
-    if(fltk3::Device::current()->type() == fltk3::Device::gdi_printer) {
+    if(Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id) {
       // if print context, device and logical units are not equal, so SetDIBitsToDevice
       // does not do the expected job, whereas StretchDIBits does it.
       StretchDIBits(fl_gc, x, y+j-k, w, k, 0, 0, w, k,
@@ -266,6 +268,9 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 		    DIB_RGB_COLORS
 #endif
 		    , SRCCOPY );
+      delete[] buffer;
+      buffer = NULL;
+      buffer_size = 0;
     }
     else {
       SetDIBitsToDevice(fl_gc, x, y+j-k, w, k, 0, 0, 0, k,
@@ -283,7 +288,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 
 static int fl_abs(int v) { return v<0 ? -v : v; }
 
-void fltk3::Device::draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
+void Fl_GDI_Graphics_Driver::draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
   if (fl_abs(d)&FL_IMAGE_WITH_ALPHA) {
     d ^= FL_IMAGE_WITH_ALPHA;
     innards(buf,x,y,w,h,d,l,fl_abs(d),0,0);
@@ -292,7 +297,7 @@ void fltk3::Device::draw_image(const uchar* buf, int x, int y, int w, int h, int
   }
 }
 
-void fltk3::Device::draw_image(Fl_Draw_Image_Cb cb, void* data,
+void Fl_GDI_Graphics_Driver::draw_image(Fl_Draw_Image_Cb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   if (fl_abs(d)&FL_IMAGE_WITH_ALPHA) {
     d ^= FL_IMAGE_WITH_ALPHA;
@@ -302,7 +307,7 @@ void fltk3::Device::draw_image(Fl_Draw_Image_Cb cb, void* data,
   }
 }
 
-void fltk3::Device::draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
+void Fl_GDI_Graphics_Driver::draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
   if (fl_abs(d)&FL_IMAGE_WITH_ALPHA) {
     d ^= FL_IMAGE_WITH_ALPHA;
     innards(buf,x,y,w,h,d,l,1,0,0);
@@ -311,7 +316,7 @@ void fltk3::Device::draw_image_mono(const uchar* buf, int x, int y, int w, int h
   }
 }
 
-void fltk3::Device::draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
+void Fl_GDI_Graphics_Driver::draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   if (fl_abs(d)&FL_IMAGE_WITH_ALPHA) {
     d ^= FL_IMAGE_WITH_ALPHA;

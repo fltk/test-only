@@ -3,7 +3,7 @@
 //
 // File_Input header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 // Original version Copyright 1998 by Curtis Edwards.
 //
 // This library is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@
 #ifndef Fl_File_Input_H
 #  define Fl_File_Input_H
 
-#  include <fltk3/Fl_Input.H>
+#  include <FL/Fl_Input.H>
 
 /**
   \class Fl_File_Input
@@ -44,15 +44,15 @@
   and also FL_WHEN_RELEASE for button release when changing to parent dir.
   FL_WHEN_RELEASE callback won't be called if the directory clicked 
   is the same that the current one.
-  <P align=CENTER> \image html Fl_File_Input.gif </P> 
-  \image latex Fl_File_Input.eps "Fl_File_Input"  width=6cm
+  <P align=CENTER> \image html Fl_File_Input.png </P> 
+  \image latex Fl_File_Input.png "Fl_File_Input"  width=6cm
   \note As all Fl_Input derived objects, Fl_File_Input may call its callback
   when loosing focus (see FL_UNFOCUS) to update its state like its cursor shape.
   One resulting side effect is that you should call clear_changed() early in your callback
   to avoid reentrant calls if you plan to show another window or dialog box in the callback.
 */
-class FL_EXPORT Fl_File_Input : public Fl_Input
-{
+class FL_EXPORT Fl_File_Input : public Fl_Input {
+  
   Fl_Color	errorcolor_;
   char		ok_entry_;
   uchar		down_box_;

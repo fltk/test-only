@@ -7,7 +7,7 @@
 // as an icon or postage stamp.  Use fl_draw_image to go directly
 // from an buffered image that changes often.
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -124,7 +124,6 @@ int main(int argc, char **argv) {
   Fl_Double_Window window(400,400); ::w = &window;
   window.color(FL_WHITE);
   Fl_Button b(140,160,120,120,"Image w/Alpha"); ::b = &b;
-  b.color(FL_YELLOW);
 
   Fl_RGB_Image *rgb;
   Fl_Image *dergb;

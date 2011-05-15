@@ -3,7 +3,7 @@
 //
 // Single-buffered window for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,10 +31,10 @@
 //	buffered.  You can turn it off using this subclass in case
 //	your display looks better without it.
 
-#include <fltk3/Fl_Single_Window.H>
+#include <FL/Fl_Single_Window.H>
 
-void Fl_Single_Window::show() {fltk3::Window::show();}
-void Fl_Single_Window::flush() {fltk3::Window::flush();}
+void Fl_Single_Window::show() {Fl_Window::show();}
+void Fl_Single_Window::flush() {Fl_Window::flush();}
 
 //
 // End of "$Id$".

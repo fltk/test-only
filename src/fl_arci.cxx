@@ -3,7 +3,7 @@
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -40,14 +40,14 @@
 
 // 3/10/98: created
 
-#include <fltk3/draw.h>
-#include <fltk3/x.H>
+#include <FL/fl_draw.H>
+#include <FL/x.H>
 #ifdef WIN32
-#  include <fltk3/math.h>
+#  include <FL/math.h>
 #endif
 #include <config.h>
 
-void fltk3::Device::arc(int x,int y,int w,int h,double a1,double a2) {
+void Fl_Graphics_Driver::arc(int x,int y,int w,int h,double a1,double a2) {
   if (w <= 0 || h <= 0) return;
 
 #if defined(USE_X11)
@@ -82,7 +82,7 @@ void fltk3::Device::arc(int x,int y,int w,int h,double a1,double a2) {
 #endif
 }
 
-void fltk3::Device::pie(int x,int y,int w,int h,double a1,double a2) {
+void Fl_Graphics_Driver::pie(int x,int y,int w,int h,double a1,double a2) {
   if (w <= 0 || h <= 0) return;
 
 #if defined(USE_X11)

@@ -3,7 +3,7 @@
 //
 // OpenGL overlay code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,10 +28,10 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <fltk3/run.h>
-#include <fltk3/x.H>
+#include <FL/Fl.H>
+#include <FL/x.H>
 #include "Fl_Gl_Choice.H"
-#include <fltk3/Fl_Gl_Window.H>
+#include <FL/Fl_Gl_Window.H>
 #include <stdlib.h>
 
 #if !HAVE_GL_OVERLAY
@@ -113,8 +113,8 @@ void _Fl_Gl_Overlay::show() {
     Fl_X::make_xid(this, fl_overlay_visual, fl_overlay_colormap);
     fl_background_pixel = -1;
     // find the outermost window to tell wm about the colormap:
-    fltk3::Window *w = window();
-    for (;;) {fltk3::Window *w1 = w->window(); if (!w1) break; w = w1;}
+    Fl_Window *w = window();
+    for (;;) {Fl_Window *w1 = w->window(); if (!w1) break; w = w1;}
     XSetWMColormapWindows(fl_display, fl_xid(w), &(Fl_X::i(this)->xid), 1);
     context(fl_create_gl_context(fl_overlay_visual), 1);
     valid(0);
@@ -164,7 +164,7 @@ void Fl_Gl_Window::make_overlay() {
     int n = (1<<fl_overlay_depth)-1;
     // copy all colors except #0 into the overlay palette:
     for (int i = 0; i <= n; i++) {
-      uchar r,g,b; fltk3::get_color((fltk3::Color)i,r,g,b);
+      uchar r,g,b; Fl::get_color((Fl_Color)i,r,g,b);
       palette[i] = RGB(r,g,b);
     }
     // always provide black & white in the last 2 pixels:

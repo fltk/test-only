@@ -1,9 +1,9 @@
 //
 // "$Id$"
 //
-// implementation of fltk3::Device class for the Fast Light Tool Kit (FLTK).
+// implementation of Fl_Device class for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 2010 by Bill Spitzak and others.
+// Copyright 2010-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,60 +25,65 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Device.h>
-//#include <fltk3/draw.h>
-#include <fltk3/Image.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Device.H>
+#include <FL/Fl_Image.H>
 
-/** \brief Draws an fltk3::RGBImage object to the device. 
- *
- Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
- the image offset by the cx and cy arguments.
- */
-void fltk3::Device::draw(Fl_Pixmap *pxm,int XP, int YP, int WP, int HP, int cx, int cy)
+const char *Fl_Device::class_id = "Fl_Device";
+const char *Fl_Surface_Device::class_id = "Fl_Surface_Device";
+const char *Fl_Display_Device::class_id = "Fl_Display_Device";
+const char *Fl_Graphics_Driver::class_id = "Fl_Graphics_Driver";
+#if defined(__APPLE__) || defined(FL_DOXYGEN)
+const char *Fl_Quartz_Graphics_Driver::class_id = "Fl_Quartz_Graphics_Driver";
+#endif
+#if defined(WIN32) || defined(FL_DOXYGEN)
+const char *Fl_GDI_Graphics_Driver::class_id = "Fl_GDI_Graphics_Driver";
+#endif
+#if !(defined(__APPLE__) || defined(WIN32))
+const char *Fl_Xlib_Graphics_Driver::class_id = "Fl_Xlib_Graphics_Driver";
+#endif
+
+
+/** \brief Use this drawing surface for future graphics requests. */
+void Fl_Surface_Device::set_current(void)
 {
-  pxm->draw(XP, YP, WP, HP, cx, cy);
+  fl_graphics_driver = _driver;
+  _surface = this;
 }
 
-/** \brief Draws an Fl_Bitmap object to the device. 
- *
- Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
- the image offset by the cx and cy arguments.
- */
-void fltk3::Device::draw(Fl_Bitmap *bm,int XP, int YP, int WP, int HP, int cx, int cy)
+const Fl_Graphics_Driver::matrix Fl_Graphics_Driver::m0 = {1, 0, 0, 1, 0, 0};
+
+Fl_Graphics_Driver::Fl_Graphics_Driver() {
+  font_ = 0;
+  size_ = 0;
+  sptr=0; rstackptr=0; 
+  fl_clip_state_number=0;
+  m = m0; 
+  fl_matrix = &m; 
+  p = (XPOINT *)0;
+  font_descriptor_ = NULL;
+};
+
+void Fl_Graphics_Driver::text_extents(const char*t, int n, int& dx, int& dy, int& w, int& h)
 {
-  bm->draw(XP, YP, WP, HP, cx, cy);
+  w = (int)width(t, n);
+  h = - height();
+  dx = 0;
+  dy = descent();
 }
 
-/** \brief Draws an Fl_Pixmap object to the device. 
- *
- Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
- the image offset by the cx and cy arguments.
- */
-void fltk3::Device::draw(fltk3::RGBImage *rgb,int XP, int YP, int WP, int HP, int cx, int cy)
-{
-  rgb->draw(XP, YP, WP, HP, cx, cy);
-}
+Fl_Display_Device::Fl_Display_Device(Fl_Graphics_Driver *graphics_driver) : Fl_Surface_Device( graphics_driver) {
+#ifdef __APPLE__
+  SInt32 versionMajor = 0;
+  SInt32 versionMinor = 0;
+  SInt32 versionBugFix = 0;
+  Gestalt( gestaltSystemVersionMajor, &versionMajor );
+  Gestalt( gestaltSystemVersionMinor, &versionMinor );
+  Gestalt( gestaltSystemVersionBugFix, &versionBugFix );
+  fl_mac_os_version = versionMajor * 10000 + versionMinor * 100 + versionBugFix;
+#endif
+};
 
-/**
- @brief Sets this device (display, printer, local file) as the target of future graphics calls.
- *
- @return  The current target device of graphics calls.
- */
-fltk3::Device *fltk3::Device::set_current(void)
-{
-  fltk3::Device *current = fl_device;
-  fl_device = this;
-  return current;
-}
-
-/**
- @brief    Returns the current target device of graphics calls.
- */
-fltk3::Device *fltk3::Device::current(void)
-{
-  return fl_device;
-}
 
 //
 // End of "$Id$".

@@ -3,7 +3,7 @@
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
-# Copyright 1998-2009 by Bill Spitzak and others.
+# Copyright 1998-2010 by Bill Spitzak and others.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
@@ -120,6 +120,19 @@ native-dist:
 
 etags:
 	etags FL/*.H FL/*.h src/*.cxx src/*.c src/*.h src/xutf8/*.h src/xutf8/*.c cairo/*.cxx fluid/*.h fluid/*.cxx test/*.h test/*.cxx
+
+#
+# Run the clang.llvm.org static code analysis tool on the C sources.
+# (at least checker-231 is required for scan-build to work this way)
+#
+
+.PHONY: clang clang-changes
+clang:
+	$(RM) -r clang
+	scan-build -V -k -o `pwd`/clang $(MAKE) $(MFLAGS) clean all
+clang-changes:
+	scan-build -V -k -o `pwd`/clang $(MAKE) $(MFLAGS) all
+
 
 #
 # End of "$Id$".

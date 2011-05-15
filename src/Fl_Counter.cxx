@@ -3,7 +3,7 @@
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,17 +25,17 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/run.h>
-#include <fltk3/Fl_Counter.H>
-#include <fltk3/draw.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Counter.H>
+#include <FL/fl_draw.H>
 
 void Fl_Counter::draw() {
-  int i; fltk3::Boxtype boxtype[5];
-  fltk3::Color selcolor;
+  int i; Fl_Boxtype boxtype[5];
+  Fl_Color selcolor;
 
   boxtype[0] = box();
-  if (boxtype[0] == fltk3::UP_BOX) boxtype[0] = fltk3::DOWN_BOX;
-  if (boxtype[0] == fltk3::THIN_UP_BOX) boxtype[0] = fltk3::THIN_DOWN_BOX;
+  if (boxtype[0] == FL_UP_BOX) boxtype[0] = FL_DOWN_BOX;
+  if (boxtype[0] == FL_THIN_UP_BOX) boxtype[0] = FL_THIN_DOWN_BOX;
   for (i=1; i<5; i++)
     if (mouseobj == i)
       boxtype[i] = fl_down(box());
@@ -59,12 +59,12 @@ void Fl_Counter::draw() {
     xx[4] = 0;	         ww[4] = 0;
   }
 
-  draw_box(boxtype[0], xx[0], y(), ww[0], h(), fltk3::BACKGROUND2_COLOR);
+  draw_box(boxtype[0], xx[0], y(), ww[0], h(), FL_BACKGROUND2_COLOR);
   fl_font(textfont(), textsize());
   fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
   char str[128]; format(str);
-  fl_draw(str, xx[0], y(), ww[0], h(), fltk3::ALIGN_CENTER);
-  if (fltk3::focus() == this) draw_focus(boxtype[0], xx[0], y(), ww[0], h());
+  fl_draw(str, xx[0], y(), ww[0], h(), FL_ALIGN_CENTER);
+  if (Fl::focus() == this) draw_focus(boxtype[0], xx[0], y(), ww[0], h());
   if (!(damage()&FL_DAMAGE_ALL)) return; // only need to redraw text
 
   if (active_r())
@@ -104,7 +104,7 @@ void Fl_Counter::increment_cb() {
 void Fl_Counter::repeat_callback(void* v) {
   Fl_Counter* b = (Fl_Counter*)v;
   if (b->mouseobj) {
-    fltk3::add_timeout(REPEAT, repeat_callback, b);
+    Fl::add_timeout(REPEAT, repeat_callback, b);
     b->increment_cb();
   }
 }
@@ -112,14 +112,14 @@ void Fl_Counter::repeat_callback(void* v) {
 int Fl_Counter::calc_mouseobj() {
   if (type() == FL_NORMAL_COUNTER) {
     int W = w()*15/100;
-    if (fltk3::event_inside(x(), y(), W, h())) return 1;
-    if (fltk3::event_inside(x()+W, y(), W, h())) return 2;
-    if (fltk3::event_inside(x()+w()-2*W, y(), W, h())) return 3;
-    if (fltk3::event_inside(x()+w()-W, y(), W, h())) return 4;
+    if (Fl::event_inside(x(), y(), W, h())) return 1;
+    if (Fl::event_inside(x()+W, y(), W, h())) return 2;
+    if (Fl::event_inside(x()+w()-2*W, y(), W, h())) return 3;
+    if (Fl::event_inside(x()+w()-W, y(), W, h())) return 4;
   } else {
     int W = w()*20/100;
-    if (fltk3::event_inside(x(), y(), W, h())) return 2;
-    if (fltk3::event_inside(x()+w()-W, y(), W, h())) return 3;
+    if (Fl::event_inside(x(), y(), W, h())) return 2;
+    if (Fl::event_inside(x()+w()-W, y(), W, h())) return 3;
   }
   return -1;
 }
@@ -127,52 +127,52 @@ int Fl_Counter::calc_mouseobj() {
 int Fl_Counter::handle(int event) {
   int i;
   switch (event) {
-  case fltk3::RELEASE:
+  case FL_RELEASE:
     if (mouseobj) {
-      fltk3::remove_timeout(repeat_callback, this);
+      Fl::remove_timeout(repeat_callback, this);
       mouseobj = 0;
       redraw();
     }
     handle_release();
     return 1;
-  case fltk3::PUSH:
-    if (fltk3::visible_focus()) fltk3::focus(this);
+  case FL_PUSH:
+    if (Fl::visible_focus()) Fl::focus(this);
     { Fl_Widget_Tracker wp(this);
       handle_push();
       if (wp.deleted()) return 1;
     }
-  case fltk3::DRAG:
+  case FL_DRAG:
     i = calc_mouseobj();
     if (i != mouseobj) {
-      fltk3::remove_timeout(repeat_callback, this);
+      Fl::remove_timeout(repeat_callback, this);
       mouseobj = (uchar)i;
-      if (i) fltk3::add_timeout(INITIALREPEAT, repeat_callback, this);
+      if (i) Fl::add_timeout(INITIALREPEAT, repeat_callback, this);
       Fl_Widget_Tracker wp(this);
       increment_cb();
       if (wp.deleted()) return 1;
       redraw();
     }
     return 1;
-  case fltk3::KEY :
-    switch (fltk3::event_key()) {
-      case fltk3::LeftKey:
+  case FL_KEYBOARD :
+    switch (Fl::event_key()) {
+      case FL_Left:
 	handle_drag(clamp(increment(value(),-1)));
 	return 1;
-      case fltk3::RightKey:
+      case FL_Right:
 	handle_drag(clamp(increment(value(),1)));
 	return 1;
       default:
         return 0;
     }
     // break not required because of switch...
-  case fltk3::FOCUS : /* FALLTHROUGH */
-  case fltk3::UNFOCUS :
-    if (fltk3::visible_focus()) {
+  case FL_FOCUS : /* FALLTHROUGH */
+  case FL_UNFOCUS :
+    if (Fl::visible_focus()) {
       redraw();
       return 1;
     } else return 0;
-  case fltk3::ENTER : /* FALLTHROUGH */
-  case fltk3::LEAVE :
+  case FL_ENTER : /* FALLTHROUGH */
+  case FL_LEAVE :
     return 1;
   default:
     return 0;
@@ -183,7 +183,7 @@ int Fl_Counter::handle(int event) {
   Destroys the valuator.
  */
 Fl_Counter::~Fl_Counter() {
-  fltk3::remove_timeout(repeat_callback, this);
+  Fl::remove_timeout(repeat_callback, this);
 }
 
 /**
@@ -193,17 +193,17 @@ Fl_Counter::~Fl_Counter() {
   \param[in] L widget label, default is no label
  */
 Fl_Counter::Fl_Counter(int X, int Y, int W, int H, const char* L)
-  : fltk3::Valuator(X, Y, W, H, L) {
-  box(fltk3::UP_BOX);
-  selection_color(fltk3::INACTIVE_COLOR); // was fltk3::BLUE
-  align(fltk3::ALIGN_BOTTOM);
+  : Fl_Valuator(X, Y, W, H, L) {
+  box(FL_UP_BOX);
+  selection_color(FL_INACTIVE_COLOR); // was FL_BLUE
+  align(FL_ALIGN_BOTTOM);
   bounds(-1000000.0, 1000000.0);
-  fltk3::Valuator::step(1, 10);
+  Fl_Valuator::step(1, 10);
   lstep_ = 1.0;
   mouseobj = 0;
-  textfont_ = fltk3::HELVETICA;
+  textfont_ = FL_HELVETICA;
   textsize_ = FL_NORMAL_SIZE;
-  textcolor_ = fltk3::FOREGROUND_COLOR;
+  textcolor_ = FL_FOREGROUND_COLOR;
 }
 
 //

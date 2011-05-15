@@ -3,7 +3,7 @@
 //
 // Fl_Wizard widget routines.
 //
-// Copyright 1997-2009 by Easy Software Products.
+// Copyright 1997-2010 by Easy Software Products.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -39,9 +39,9 @@
 // Include necessary header files...
 //
 
-#include <fltk3/Fl_Wizard.H>
-#include <fltk3/Window.h>
-#include <fltk3/draw.h>
+#include <FL/Fl_Wizard.H>
+#include <FL/Fl_Window.H>
+#include <FL/fl_draw.H>
 
 
 //
@@ -58,18 +58,18 @@ Fl_Wizard::Fl_Wizard(int        xx,	// I - Lefthand position
 		     int        ww,	// I - Width
 		     int        hh,	// I - Height
 		     const char *l) :	// I - Label
-fltk3::Group(xx, yy, ww, hh, l)
+    Fl_Group(xx, yy, ww, hh, l)
 {
-  box(fltk3::THIN_UP_BOX);
+  box(FL_THIN_UP_BOX);
 
-  value_ = (fltk3::Widget *)0;
+  value_ = (Fl_Widget *)0;
 }
 
 
 //
 /** Draws the wizard border and visible child. */
 void Fl_Wizard::draw() {
-  fltk3::Widget	*kid;	// Visible child
+  Fl_Widget	*kid;	// Visible child
 
 
   kid = value();
@@ -97,7 +97,7 @@ void Fl_Wizard::draw() {
 */
 void Fl_Wizard::next() {
   int			num_kids;
-  fltk3::Widget	* const *kids;
+  Fl_Widget	* const *kids;
 
 
   if ((num_kids = children()) == 0)
@@ -115,7 +115,7 @@ void Fl_Wizard::next() {
 void Fl_Wizard::prev()
 {
   int			num_kids;
-  fltk3::Widget	* const *kids;
+  Fl_Widget	* const *kids;
 
 
   if ((num_kids = children()) == 0)
@@ -130,17 +130,17 @@ void Fl_Wizard::prev()
 }
 
 /**  Gets the current visible child widget. */
-fltk3::Widget* Fl_Wizard::value()
+Fl_Widget* Fl_Wizard::value()
 {
   int			num_kids;
-  fltk3::Widget	* const *kids;
-  fltk3::Widget		*kid;
+  Fl_Widget	* const *kids;
+  Fl_Widget		*kid;
 
 
   if ((num_kids = children()) == 0)
-    return ((fltk3::Widget *)0);
+    return ((Fl_Widget *)0);
 
-  for (kids = array(), kid = (fltk3::Widget *)0; num_kids > 0; kids ++, num_kids --)
+  for (kids = array(), kid = (Fl_Widget *)0; num_kids > 0; kids ++, num_kids --)
   {
     if ((*kids)->visible())
     {
@@ -162,10 +162,10 @@ fltk3::Widget* Fl_Wizard::value()
 }
 
 /**  Sets the child widget that is visible.*/
-void Fl_Wizard::value(fltk3::Widget *kid)
+void Fl_Wizard::value(Fl_Widget *kid)
 {
   int			num_kids;
-  fltk3::Widget	* const *kids;
+  Fl_Widget	* const *kids;
 
 
   if ((num_kids = children()) == 0)

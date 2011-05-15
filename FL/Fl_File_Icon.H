@@ -3,7 +3,7 @@
 //
 // Fl_File_Icon definitions.
 //
-// Copyright 1999-2009 by Michael Sweet.
+// Copyright 1999-2010 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -53,8 +53,8 @@
   The Fl_File_Icon class manages icon images that can be used 
   as labels in other widgets and as icons in the FileBrowser widget.
 */
-class FL_EXPORT Fl_File_Icon			//// Icon data
-{
+class FL_EXPORT Fl_File_Icon {			//// Icon data
+
   static Fl_File_Icon *first_;	// Pointer to first icon/filetype
   Fl_File_Icon	*next_;		// Pointer to next icon/filetype
   const char	*pattern_;	// Pattern string
@@ -122,7 +122,7 @@ class FL_EXPORT Fl_File_Icon			//// Icon data
 
   void		draw(int x, int y, int w, int h, Fl_Color ic, int active = 1);
 
-  void		label(fltk3::Widget *w);
+  void		label(Fl_Widget *w);
 
   static void	labeltype(const Fl_Label *o, int x, int y, int w, int h, Fl_Align a);
   void		load(const char *f);

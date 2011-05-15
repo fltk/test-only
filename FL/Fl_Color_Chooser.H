@@ -3,7 +3,7 @@
 //
 // Color chooser header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2009 by Bill Spitzak and others.
+// Copyright 1998-2010 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -35,35 +35,35 @@
 #ifndef Fl_Color_Chooser_H
 #define Fl_Color_Chooser_H
 
-#include <fltk3/Fl_Group.H>
-#include <fltk3/Fl_Box.H>
-#include <fltk3/Fl_Return_Button.H>
-#include <fltk3/Fl_Choice.H>
-#include <fltk3/Fl_Value_Input.H>
+#include <FL/Fl_Group.H>
+#include <FL/Fl_Box.H>
+#include <FL/Fl_Return_Button.H>
+#include <FL/Fl_Choice.H>
+#include <FL/Fl_Value_Input.H>
 
 #ifndef FL_DOXYGEN
 
 /** For internal use only */
-class FL_EXPORT Flcc_HueBox : public fltk3::Widget {
+class FL_EXPORT Flcc_HueBox : public Fl_Widget {
   int px, py;
 protected:
   void draw();
   int handle_key(int);
 public:
   int handle(int);
-  Flcc_HueBox(int X, int Y, int W, int H) : fltk3::Widget(X,Y,W,H) {
+  Flcc_HueBox(int X, int Y, int W, int H) : Fl_Widget(X,Y,W,H) {
   px = py = 0;}
 };
 
 /** For internal use only */
-class FL_EXPORT Flcc_ValueBox : public fltk3::Widget {
+class FL_EXPORT Flcc_ValueBox : public Fl_Widget {
   int py;
 protected:
   void draw();
   int handle_key(int);
 public:
   int handle(int);
-  Flcc_ValueBox(int X, int Y, int W, int H) : fltk3::Widget(X,Y,W,H) {
+  Flcc_ValueBox(int X, int Y, int W, int H) : Fl_Widget(X,Y,W,H) {
   py = 0;}
 };
 
@@ -84,7 +84,7 @@ public:
   \brief The Fl_Color_Chooser widget provides a standard RGB color chooser.
 
   \image html fl_color_chooser.jpg
-  \image latex fl_color_chooser.eps "fl_color_chooser()" width=5cm
+  \image latex fl_color_chooser.jpg "fl_color_chooser()" width=5cm
 
   You can place any number of the widgets into a panel of your own design.
   The diagram shows the widget as part of a color chooser dialog created by
@@ -113,7 +113,7 @@ public:
   color using dithering.
  */
 /** @} */
-class FL_EXPORT Fl_Color_Chooser : public fltk3::Group {
+class FL_EXPORT Fl_Color_Chooser : public Fl_Group {
   Flcc_HueBox huebox;
   Flcc_ValueBox valuebox;
   Fl_Choice choice;
@@ -124,12 +124,22 @@ class FL_EXPORT Fl_Color_Chooser : public fltk3::Group {
   double hue_, saturation_, value_;
   double r_, g_, b_;
   void set_valuators();
-  static void rgb_cb(fltk3::Widget*, void*);
-  static void mode_cb(fltk3::Widget*, void*);
+  static void rgb_cb(Fl_Widget*, void*);
+  static void mode_cb(Fl_Widget*, void*);
 public:
-  /** Returns which Fl_Color_Chooser variant is currently active */
+  
+  /** 
+   Returns which Fl_Color_Chooser variant is currently active 
+   \return color modes are rgb(0), byte(1), hex(2), or hsv(3)   
+   */
   int mode() {return choice.value();}
-
+  
+  /** 
+   Set which Fl_Color_Chooser variant is currently active 
+   \param[in] newMode color modes are rgb(0), byte(1), hex(2), or hsv(3)   
+   */
+  void mode(int newMode);
+  
   /**
     Returns the current hue.
     0 <= hue < 6. Zero is red, one is yellow, two is green, etc.
@@ -179,8 +189,8 @@ public:
   Fl_Color_Chooser(int X, int Y, int W, int H, const char *L = 0);
 };
 
-FL_EXPORT int fl_color_chooser(const char* name, double& r, double& g, double& b);
-FL_EXPORT int fl_color_chooser(const char* name, uchar& r, uchar& g, uchar& b);
+FL_EXPORT int fl_color_chooser(const char* name, double& r, double& g, double& b, int m=-1);
+FL_EXPORT int fl_color_chooser(const char* name, uchar& r, uchar& g, uchar& b, int m=-1);
 
 #endif
 

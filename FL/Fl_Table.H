@@ -39,11 +39,11 @@
 #include <stdlib.h>		// UNIX: malloc/realloc
 #endif /*WIN32*/
 
-#include <fltk3/Fl.H>
-#include <fltk3/Fl_Group.H>
-#include <fltk3/Fl_Scroll.H>
-#include <fltk3/Fl_Box.H>
-#include <fltk3/Fl_Scrollbar.H>
+#include <FL/Fl.H>
+#include <FL/Fl_Group.H>
+#include <FL/Fl_Scroll.H>
+#include <FL/Fl_Box.H>
+#include <FL/Fl_Scrollbar.H>
 
 /**
  A table of widgets or other content.
@@ -61,12 +61,19 @@
  
  This widget can be used in several ways:
  
- - As a custom widget; see test/testtablerow.cxx. Very optimal for even 
- extremely large tables.
- - As a table made up of a single FLTK widget instanced all over the table;
- see test/singleinput.cxx. Very optimal for even extremely large tables;
+ - As a custom widget; see examples/table-simple.cxx and test/table.cxx.
+   Very optimal for even extremely large tables.
+ - As a table made up of a single FLTK widget instanced all over the table,
+   simulating a numeric spreadsheet. See examples/table-spreadsheet.cxx and
+   examples/table-spreadsheet-with-keyboard-nav.cxx. Optimal for large tables.
  - As a regular container of FLTK widgets, one widget per cell.
- See test/widgettable.cxx. \em Not recommended for large tables.
+   See examples/table-as-container.cxx. \em Not recommended for large tables.
+ 
+ \image html table-simple.png
+ \image latex table-simple.png "table-simple example" width=6cm
+
+ \image html table-as-container.png
+ \image latex table-as-container.png "table-as-container example" width=6cm
  
  When acting as part of a custom widget, events on the cells and/or headings
  generate callbacks when they are clicked by the user. You control when events 
@@ -74,11 +81,12 @@
  
  When acting as a container for FLTK widgets, the FLTK widgets maintain 
  themselves. Although the draw_cell() method must be overridden, its contents 
- can be very simple. See the draw_cell() code in test/widgettable.cxx.
+ can be very simple. See the draw_cell() code in examples/table-simple.cxx.
  
  The following variables are available to classes deriving from Fl_Table:
  
- \image html table-dimensions.gif
+ \image html table-dimensions.png
+ \image latex table-dimensions.png "Fl_Table Dimensions" width=6cm
  
  <table border=0>
  <tr><td>x()/y()/w()/h()</td>
@@ -117,11 +125,12 @@
  LICENSE
  
  Greg added the following license to the original distribution of Fl_Table. He 
- kindly gave his permission to integrate Fl_Table and Fl_Table_row into FLTK,
+ kindly gave his permission to integrate Fl_Table and Fl_Table_Row into FLTK,
  allowing FLTK license to apply while his widgets are part of the library.
  
  If used on its own, this is the license that applies:
- 
+
+ \verbatim 
  Fl_Table License
  December 16, 2002
  
@@ -165,20 +174,24 @@
  
  [program/widget] is based in part on the work of
  the Fl_Table project http://seriss.com/people/erco/fltk/Fl_Table/
+ \endverbatim
  
  
  */
-class Fl_Table : public fltk3::Group {
+class FL_EXPORT Fl_Table : public Fl_Group {
 public:
+  /**
+   The context bit flags for Fl_Table related callbacks (eg. draw_cell(), callback(), etc)
+   */
   enum TableContext {
-    CONTEXT_NONE       = 0,
-    CONTEXT_STARTPAGE  = 0x01,	// before a page is redrawn
-    CONTEXT_ENDPAGE    = 0x02,	// after a page is redrawn
-    CONTEXT_ROW_HEADER = 0x04,	// in the row header
-    CONTEXT_COL_HEADER = 0x08,	// in the col header
-    CONTEXT_CELL       = 0x10,	// in one of the cells
-    CONTEXT_TABLE      = 0x20,	// in the table
-    CONTEXT_RC_RESIZE  = 0x40 	// column or row being resized
+    CONTEXT_NONE       = 0,	///< no known context
+    CONTEXT_STARTPAGE  = 0x01,	///< before a page is redrawn
+    CONTEXT_ENDPAGE    = 0x02,	///< after a page is redrawn
+    CONTEXT_ROW_HEADER = 0x04,	///< in the row header
+    CONTEXT_COL_HEADER = 0x08,	///< in the col header
+    CONTEXT_CELL       = 0x10,	///< in one of the cells
+    CONTEXT_TABLE      = 0x20,	///< in a dead zone of table
+    CONTEXT_RC_RESIZE  = 0x40 	///< column or row being resized
   };
   
 private:
@@ -207,7 +220,7 @@ private:
   int _selecting;
   
   // An STL-ish vector without templates
-  class IntVector {
+  class FL_EXPORT IntVector {
     int *arr;
     unsigned int _size;
     void init() {
@@ -326,38 +339,47 @@ protected:
    <table border=1>
    <tr>
    <td>\p Fl_Table::CONTEXT_STARTPAGE</td>
-   <td> When table, or parts of the table, are about to be redrawn.
-   Use to initialize static data, such as font selections.
-   r/c will be zero, x/y/w/h will be the dimensions of the
-   table's entire data area.
-   (Useful for locking a database before accessing; see
-   also visible_cells())</td>
+   <td>When table, or parts of the table, are about to be redrawn.<br>
+       Use to initialize static data, such as font selections.<p>
+       R/C will be zero,<br>
+       X/Y/W/H will be the dimensions of the table's entire data area.<br>
+       (Useful for locking a database before accessing; see
+       also visible_cells())</td>
    </tr><tr>
    <td>\p Fl_Table::CONTEXT_ENDPAGE</td>
-   <td>When table has completed being redrawn.
-   r/c will be zero, x/y/w/h dimensions of table's data area.
-   (Useful for unlocking a database after accessing)</td>
+   <td>When table has completed being redrawn.<br>
+       R/C will be zero, X/Y/W/H dimensions of table's data area.<br>
+       (Useful for unlocking a database after accessing)</td>
    </tr><tr>
    <td>\p Fl_Table::CONTEXT_ROW_HEADER</td>
-   <td>Whenever a row header cell needs to be drawn.</td>
+   <td>Whenever a row header cell needs to be drawn.<br>
+       R will be the row number of the header being redrawn,<br>
+       C will be zero,<br>
+       X/Y/W/H will be the fltk drawing area of the row header in the window </td>
    </tr><tr>
    <td>\p Fl_Table::CONTEXT_COL_HEADER</td>
-   <td>Whenever a column header cell needs to be drawn.</td>
+   <td>Whenever a column header cell needs to be drawn.<br>
+       R will be zero, <br>
+       C will be the column number of the header being redrawn,<br>
+       X/Y/W/H will be the fltk drawing area of the column header in the window </td>
    </tr><tr>
    <td>\p Fl_Table::CONTEXT_CELL</td>
-   <td>Whenever a data cell in the table needs to be drawn.</td>
+   <td>Whenever a data cell in the table needs to be drawn.<br>
+       R/C will be the row/column of the cell to be drawn,<br>
+       X/Y/W/H will be the fltk drawing area of the cell in the window </td>
    </tr><tr>
    <td>\p Fl_Table::CONTEXT_RC_RESIZE</td>
    <td>Whenever table or row/column is resized or scrolled,
-   either interactively or via col_width() or row_height().
-   
-   Useful for fltk containers that need to resize or move
-   the child fltk widgets.</td>
+       either interactively or via col_width() or row_height().<br>
+       R/C/X/Y/W/H will all be zero.
+       <p> 
+       Useful for fltk containers that need to resize or move
+       the child fltk widgets.</td>
    </tr>
    </table>
    
    \p row and \p col will be set to the row and column number
-   the user clicked on. In the case of row headers, \p col will be \a 0.
+   of the cell being drawn. In the case of row headers, \p col will be \a 0.
    In the case of column headers, \p row will be \a 0.
    
    <tt>x/y/w/h</tt> will be the position and dimensions of where the cell
@@ -371,64 +393,62 @@ protected:
    
    \code
    // This is called whenever Fl_Table wants you to draw a cell
-   void MyTable::draw_cell(TableContext context, int R=0, int C=0, int X=0, int Y=0, int W=0, int H=0)
-   {
-   static char s[40];
-   sprintf(s, "%d/%d", R, C);              // text for each cell
-   switch ( context )
-   {
-   case CONTEXT_STARTPAGE:             // Fl_Table telling us its starting to draw page
-   fl_font(FL_HELVETICA, 16);
-   return;
-   
-   case CONTEXT_ROW_HEADER:            // Fl_Table telling us it's draw row/col headers
-   case CONTEXT_COL_HEADER:
-   fl_push_clip(X, Y, W, H);
-   {
-   fl_draw_box(FL_THIN_UP_BOX, X, Y, W, H, color());
-   fl_color(FL_BLACK);
-   fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
-   }
-   fl_pop_clip();
-   return;
-   
-   case CONTEXT_CELL:                  // Fl_Table telling us to draw cells
-   fl_push_clip(X, Y, W, H);
-   {
-   // BG COLOR
-   fl_color( row_selected(R) ? selection_color() : FL_WHITE);
-   fl_rectf(X, Y, W, H);
-   
-   // TEXT
-   fl_color(FL_BLACK);
-   fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
-   
-   // BORDER
-   fl_color(FL_LIGHT2);
-   fl_rect(X, Y, W, H);
-   }
-   fl_pop_clip();
-   return;
-   
-   default:
-   return;
-   }
-   //NOTREACHED
+   void MyTable::draw_cell(TableContext context, int R=0, int C=0, int X=0, int Y=0, int W=0, int H=0) {
+       static char s[40];
+       sprintf(s, "%d/%d", R, C);              // text for each cell
+       switch ( context ) {
+	   case CONTEXT_STARTPAGE:             // Fl_Table telling us its starting to draw page
+	       fl_font(FL_HELVETICA, 16);
+	       return;
+       
+	   case CONTEXT_ROW_HEADER:            // Fl_Table telling us it's draw row/col headers
+	   case CONTEXT_COL_HEADER:
+	       fl_push_clip(X, Y, W, H);
+	       {
+		   fl_draw_box(FL_THIN_UP_BOX, X, Y, W, H, color());
+		   fl_color(FL_BLACK);
+		   fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
+	       }
+	       fl_pop_clip();
+	       return;
+	   
+	   case CONTEXT_CELL:                  // Fl_Table telling us to draw cells
+	       fl_push_clip(X, Y, W, H);
+	       {
+		   // BG COLOR
+		   fl_color( row_selected(R) ? selection_color() : FL_WHITE);
+		   fl_rectf(X, Y, W, H);
+		   
+		   // TEXT
+		   fl_color(FL_BLACK);
+		   fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
+		   
+		   // BORDER
+		   fl_color(FL_LIGHT2);
+		   fl_rect(X, Y, W, H);
+	       }
+	       fl_pop_clip();
+	       return;
+	   
+       default:
+	   return;
+       }
+       //NOTREACHED
    }
    \endcode
    */
   virtual void draw_cell(TableContext context, int R=0, int C=0, 
                          int X=0, int Y=0, int W=0, int H=0)
-  { }					// overridden by deriving class
+  { }						// overridden by deriving class
   
   long row_scroll_position(int row);		// find scroll position of row (in pixels)
   long col_scroll_position(int col);		// find scroll position of col (in pixels)
   
   int is_fltk_container() { 			// does table contain fltk widgets?
-    return( fltk3::Group::children() > 3 );		// (ie. more than box and 2 scrollbars?)
+    return( Fl_Group::children() > 3 );		// (ie. more than box and 2 scrollbars?)
   }
   
-  static void scroll_cb(fltk3::Widget*,void*);	// h/v scrollbar callback
+  static void scroll_cb(Fl_Widget*,void*);	// h/v scrollbar callback
   
   void damage_zone(int r1, int c1, int r2, int c2, int r3 = 0, int c3 = 0);
   
@@ -472,9 +492,7 @@ public:
    */
   virtual void clear() { rows(0); cols(0); }
   
-  // topline()
-  // middleline()
-  // bottomline()
+  // \todo: add topline(), middleline(), bottomline()
   
   /**
    Sets the kind of box drawn around the data table,
@@ -518,22 +536,22 @@ public:
   }
   
   /**
-   Returns the range of row and column numbers for all the
-   visible (and partially visible) cells in the table.
+   Returns the range of row and column numbers for all visible 
+   and partially visible cells in the table.
    
    These values can be used e.g. by your draw_cell() routine during
-   CONTEXT_STARTPAGE to figure out what cells are about to be redrawn,
+   CONTEXT_STARTPAGE to figure out what cells are about to be redrawn
    for the purposes of locking the data from a database before it's drawn.
    
    \code
-   leftcol             rightcol
-   :                   :
+          leftcol             rightcol
+             :                   :
    toprow .. .-------------------.
-   |                   |
-   |  V I S I B L E    |
-   |                   |
-   |    T A B L E      |
-   |                   |
+             |                   |
+             |  V I S I B L E    |
+             |                   |
+             |    T A B L E      |
+             |                   |
    botrow .. '-------------------`
    \endcode
    
@@ -811,8 +829,8 @@ public:
     return(row_position());
   }
   int is_selected(int r, int c);		// selected cell
-  void get_selection(int& s_top, int& s_left, int& s_bottom, int& s_right);
-  void set_selection(int s_top, int s_left, int s_bottom, int s_right);
+  void get_selection(int &row_top, int &col_left, int &row_bot, int &col_right);
+  void set_selection(int row_top, int col_left, int row_bot, int col_right);
   int move_cursor(int R, int C);
   
   /**
@@ -823,13 +841,13 @@ public:
   
   // This crashes sortapp() during init.
   //  void box(Fl_Boxtype val) {
-  //    fltk3::Group::box(val);
+  //    Fl_Group::box(val);
   //    if ( table ) {
   //      resize(x(), y(), w(), h());
   //    }
   //  }
   //  Fl_Boxtype box(void) const {
-  //    return(fltk3::Group::box());
+  //    return(Fl_Group::box());
   //  }
   
   // Child group
@@ -837,19 +855,19 @@ public:
     table->init_sizes();
     table->redraw();
   }
-  void add(fltk3::Widget& w) {
+  void add(Fl_Widget& w) {
     table->add(w);
   }
-  void add(fltk3::Widget* w) {
+  void add(Fl_Widget* w) {
     table->add(w);
   }
-  void insert(fltk3::Widget& w, int n) {
+  void insert(Fl_Widget& w, int n) {
     table->insert(w,n);
   }
-  void insert(fltk3::Widget& w, fltk3::Widget* w2) {
+  void insert(Fl_Widget& w, Fl_Widget* w2) {
     table->insert(w,w2);
   }
-  void remove(fltk3::Widget& w) {
+  void remove(Fl_Widget& w) {
     table->remove(w);
   }
   void begin() {
@@ -865,9 +883,9 @@ public:
     } else {
       table->hide();
     } 
-    fltk3::Group::current(fltk3::Group::parent());
+    Fl_Group::current(Fl_Group::parent());
   }
-  fltk3::Widget * const *array() {
+  Fl_Widget * const *array() {
     return(table->array());
   }
   
@@ -879,14 +897,13 @@ public:
    
    Typically used in loops, eg:
    \code
-   for ( int i=0; i<children(); i++ )
-   {
-   fltk3::Widget *w = child(i);
-   [..]
+   for ( int i=0; i<children(); i++ ) {
+     Fl_Widget *w = child(i);
+     [..]
    }
    \endcode
    */
-  fltk3::Widget *child(int n) const {
+  Fl_Widget *child(int n) const {
     return(table->child(n));
   }
   
@@ -901,10 +918,10 @@ public:
   int children() const {
     return(table->children()-2);    // -2: skip Fl_Scroll's h/v scrollbar widgets
   }
-  int find(const fltk3::Widget *w) const {
+  int find(const Fl_Widget *w) const {
     return(table->find(w));
   }
-  int find(const fltk3::Widget &w) const {
+  int find(const Fl_Widget &w) const {
     return(table->find(w));
   } 
   // CALLBACKS
@@ -940,12 +957,12 @@ public:
     _callback_context = context;
     _callback_row = row;
     _callback_col = col;
-    fltk3::Widget::do_callback();
+    Fl_Widget::do_callback();
   }
   
-#if DOXYGEN
+#if FL_DOXYGEN
   /**
-   The fltk3::Widget::when() function is used to set a group of flags, determining
+   The Fl_Widget::when() function is used to set a group of flags, determining
    when the widget callback is called:
    
    <table border=1>
@@ -969,15 +986,15 @@ public:
    event occurred in, such as in a cell, in a header, or elsewhere on the table.  
    When an event occurs in a cell or header, callback_row() and 
    callback_col() can be used to determine the row and column. The callback can 
-   also look at the regular fltk event values (ie. fltk3::event() and fltk3::button()) 
+   also look at the regular fltk event values (ie. Fl::event() and Fl::button()) 
    to determine what kind of event is occurring.
    */
   void when(Fl_When flags);
 #endif
   
-#if DOXYGEN
+#if FL_DOXYGEN
   /**
-   Callbacks will be called depending on the setting of fltk3::Widget::when().
+   Callbacks will be called depending on the setting of Fl_Widget::when().
    
    Callback functions should use the following functions to determine the 
    context/row/column:
@@ -1025,38 +1042,35 @@ public:
    </table>
    
    \code
-   class MyTable
-   {
-   [..]
+   class MyTable : public Fl_Table {
+     [..]
    private:
-   // Handle events that happen on the table
-   void event_callback2()
-   {
-   int R = callback_row(),                     // row where event occurred
-   C = callback_col();                         // column where event occurred
-   TableContext context = callback_context();  // which part of table
-   fprintf(stderr, "callback: Row=%d Col=%d Context=%d Event=%d\n",
-   R, C, (int)context, (int)fltk3::event());
-   }
+     // Handle events that happen on the table
+     void event_callback2() {
+       int R = callback_row(),                         // row where event occurred
+       C = callback_col();                             // column where event occurred
+       TableContext context = callback_context();      // which part of table
+       fprintf(stderr, "callback: Row=%d Col=%d Context=%d Event=%d\n",
+               R, C, (int)context, (int)Fl::event());
+     }
    
-   // Actual static callback
-   static void event_callback(fltk3::Widget*, void* data)
-   {
-   MyTable *o = (MyTable*)data;
-   o-&gt;event_callback2();
-   }
-   
+     // Actual static callback
+     static void event_callback(Fl_Widget*, void* data) {
+       MyTable *o = (MyTable*)data;
+       o-&gt;event_callback2();
+     }
+     
    public:
-   MyTable()                      // Constructor
-   {
-   [..]
-   table.callback(&event_callback, (void*)this);       // setup callback
-   table.when(FL_WHEN_CHANGED|FL_WHEN_RELEASE);        // when to call it
-   }
+     // Constructor
+     MyTable() {
+       [..]
+       table.callback(&event_callback, (void*)this);   // setup callback
+       table.when(FL_WHEN_CHANGED|FL_WHEN_RELEASE);    // when to call it
+     }
    };
    \endcode
    */
-  void callback(fltk3::Widget*, void*);
+  void callback(Fl_Widget*, void*);
 #endif
 };
 
