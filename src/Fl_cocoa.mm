@@ -46,14 +46,14 @@ extern "C" {
 }
 
 
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Tooltip.H>
-#include <FL/Fl_Sys_Menu_Bar.H>
-#include <FL/Fl_Printer.H>
-#include <FL/Fl_Input_.H>
-#include <FL/Fl_Text_Display.H>
+#include <fltk3/run.h>
+#include <fltk3/x.h>
+#include <fltk3/Window.h>
+#include <fltk3/Tooltip.h>
+#include <fltk3/SysMenuBar.h>
+#include <fltk3/Printer.h>
+#include <fltk3/Input_.h>
+#include <fltk3/TextDisplay.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "flstring.h"
@@ -2868,7 +2868,7 @@ void Fl_X::set_cursor(Fl_Cursor c)
                 	     nil];
     [NSApp  orderFrontStandardAboutPanelWithOptions:options];
   }
-//#include <FL/Fl_PostScript.H>
+//#include <fltk3/PostScript.h>
 - (void)printPanel
 {
   Fl_Printer printer;

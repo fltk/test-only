@@ -26,12 +26,12 @@
 //
 
 #include <config.h>
-#include <FL/Fl_Printer.H>
-#include <FL/Fl_Gl_Window.H>
+#include <fltk3/Printer.h>
+#include <fltk3/GlWindow.h>
 #include "Fl_Gl_Choice.H"
-#include "FL/Fl.H"
+#include <fltk3//run.h>
 #ifndef __APPLE__
-#include "FL/fl_draw.H"
+#include <fltk3/draw.h>
 #endif
 
 #if defined(__APPLE__)

@@ -29,20 +29,20 @@
 
 #ifndef template_panel_h
 #define template_panel_h
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
+#include <fltk3/run.h>
+#include <fltk3/DoubleWindow.h>
 extern Fl_Double_Window *template_panel;
-#include <FL/Fl_Browser.H>
+#include <fltk3/Browser.h>
 extern Fl_Browser *template_browser;
-#include <FL/Fl_Box.H>
+#include <fltk3/Box.h>
 extern Fl_Box *template_preview;
-#include <FL/Fl_Input.H>
+#include <fltk3/Input.h>
 extern Fl_Input *template_name;
 extern Fl_Input *template_instance;
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Button.H>
+#include <fltk3/Group.h>
+#include <fltk3/Button.h>
 extern Fl_Button *template_delete;
-#include <FL/Fl_Return_Button.H>
+#include <fltk3/ReturnButton.h>
 extern Fl_Return_Button *template_submit;
 Fl_Double_Window* make_template_panel();
 void template_clear();

@@ -26,8 +26,8 @@
 //
 
 
-#include <FL/Fl.H>
-#include <FL/x.H>
+#include <fltk3/run.h>
+#include <fltk3/x.h>
 #include <config.h>
 
 

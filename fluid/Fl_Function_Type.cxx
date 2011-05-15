@@ -25,12 +25,12 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Preferences.H>
-#include <FL/Fl_File_Chooser.H>
+#include <fltk3/run.h>
+#include <fltk3/Preferences.h>
+#include <fltk3/FileChooser.h>
 #include "Fl_Type.h"
-#include <FL/fl_show_input.H>
-#include <FL/Fl_File_Chooser.H>
+#include <fltk3/showInput.h>
+#include <fltk3/FileChooser.h>
 #include "../src/flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -167,7 +167,7 @@ void Fl_Function_Type::read_property(const char *c) {
 }
 
 #include "function_panel.h"
-#include <FL/fl_ask.H>
+#include <fltk3/ask.h>
 
 void Fl_Function_Type::open() {
   if (!function_panel) make_function_panel();

@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Color_Chooser.H>
-#include <FL/fl_draw.H>
-#include <FL/math.h>
+#include <fltk3/run.h>
+#include <fltk3/ColorChooser.h>
+#include <fltk3/draw.h>
+#include <fltk3/math.h>
 #include <stdio.h>
 
 // Besides being a useful object on it's own, the Fl_Color_Chooser was
@@ -503,9 +503,9 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
 ////////////////////////////////////////////////////////////////
 // fl_color_chooser():
 
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Return_Button.H>
+#include <fltk3/Window.h>
+#include <fltk3/Box.h>
+#include <fltk3/ReturnButton.h>
 
 class ColorChip : public Fl_Widget {
   void draw();
@@ -560,7 +560,7 @@ static void cc_cancel_cb (Fl_Widget *o, void *p) {
     @{ */
 /**
   \brief Pops up a window to let the user pick an arbitrary RGB color.
-  \note \#include <FL/Fl_Color_Chooser.H>
+  \note \#include <fltk3/ColorChooser.h>
   \image html fl_color_chooser.jpg 
   \image latex  fl_color_chooser.jpg "fl_color_chooser" width=8cm
   \param[in] name Title label for the window
@@ -603,7 +603,7 @@ int fl_color_chooser(const char* name, double& r, double& g, double& b, int cmod
 
 /**
   \brief Pops up a window to let the user pick an arbitrary RGB color.
-  \note \#include <FL/Fl_Color_Chooser.H>
+  \note \#include <fltk3/ColorChooser.h>
   \image html fl_color_chooser.jpg 
   \image latex  fl_color_chooser.jpg "fl_color_chooser" width=8cm
   \param[in] name Title label for the window

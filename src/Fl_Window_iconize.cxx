@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/x.H>
+#include <fltk3/x.h>
 
 extern char fl_show_iconic; // in Fl_x.cxx
 

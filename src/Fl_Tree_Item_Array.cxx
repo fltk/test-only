@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <FL/Fl_Tree_Item_Array.H>
-#include <FL/Fl_Tree_Item.H>
+#include <fltk3/TreeItemArray.h>
+#include <fltk3/TreeItem.h>
 
 //////////////////////
 // Fl_Tree_Item_Array.cxx

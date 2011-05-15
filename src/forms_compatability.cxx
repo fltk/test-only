@@ -28,7 +28,7 @@
 // Forms library compatibility functions.
 // Many more functions are defined as inlines in forms.h!
 
-#include <FL/forms.H>
+#include <fltk3/forms.h>
 #include <stdlib.h>
 
 char fl_flip = 2;
@@ -148,8 +148,8 @@ void Fl_FormsText::draw() {
 
 // Create a forms button by selecting correct fltk subclass:
 
-#include <FL/Fl_Return_Button.H>
-#include <FL/Fl_Repeat_Button.H>
+#include <fltk3/ReturnButton.h>
+#include <fltk3/RepeatButton.h>
 
 Fl_Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
   Fl_Button *b;

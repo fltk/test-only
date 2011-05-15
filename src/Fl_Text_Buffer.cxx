@@ -27,12 +27,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/fl_utf8.h>
+#include <fltk3/utf8.h>
 #include "flstring.h"
 #include <ctype.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Text_Buffer.H>
-#include <FL/fl_ask.H>
+#include <fltk3/run.h>
+#include <fltk3/TextBuffer.h>
+#include <fltk3/ask.h>
 
 
 /*

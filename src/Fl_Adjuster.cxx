@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Adjuster.H>
-#include <FL/Fl_Bitmap.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/Adjuster.h>
+#include <fltk3/Bitmap.h>
+#include <fltk3/draw.h>
 
 #include "fastarrow.h"
 static Fl_Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);

@@ -33,10 +33,10 @@
 // Clicking the tab makes that card visible.
 
 #include <stdio.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Tabs.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Tooltip.H>
+#include <fltk3/run.h>
+#include <fltk3/TabGroup.h>
+#include <fltk3/draw.h>
+#include <fltk3/Tooltip.h>
 
 #define BORDER 2
 #define EXTRASPACE 10

@@ -28,9 +28,9 @@
 // Add a font to the internal table.
 // Also see fl_set_fonts.cxx which adds all possible fonts.
 
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/x.h>
+#include <fltk3/draw.h>
 #include "flstring.h"
 #include "Fl_Font.H"
 #include <stdlib.h>

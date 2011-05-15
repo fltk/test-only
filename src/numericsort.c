@@ -49,7 +49,7 @@
 #    endif /* HAVE_NDIR_H */
 #  endif /* HAVE_DIRENT_H */
 #else /* For WIN32 variants */
-#  include <FL/filename.H>
+#  include <fltk3/filename.h>
 #endif /* !WIN32 || __CYGWIN__ */
 
 /*

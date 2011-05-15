@@ -28,7 +28,7 @@
 #ifndef flstring_h
 #  define flstring_h
 
-#  include <FL/Fl_Export.H>
+#  include <fltk3/Export.h>
 #  include <config.h>
 #  include <stdio.h>
 #  include <stdarg.h>

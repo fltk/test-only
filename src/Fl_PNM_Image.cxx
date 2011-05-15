@@ -34,11 +34,11 @@
 // Include necessary header files...
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_PNM_Image.H>
+#include <fltk3/run.h>
+#include <fltk3/PNMImage.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/fl_utf8.h>
+#include <fltk3/utf8.h>
 #include "flstring.h"
 
 

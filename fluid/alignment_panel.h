@@ -29,10 +29,10 @@
 
 #ifndef alignment_panel_h
 #define alignment_panel_h
-#include <FL/Fl.H>
-#include <FL/Fl_Text_Buffer.H>
-#include <FL/Fl_Text_Display.H>
-#include <FL/filename.H>
+#include <fltk3/run.h>
+#include <fltk3/TextBuffer.h>
+#include <fltk3/TextDisplay.h>
+#include <fltk3/filename.h>
 extern void load_history();
 extern void redraw_browser();
 extern int show_comments;
@@ -40,31 +40,31 @@ extern int show_coredevmenus;
 extern struct Fl_Menu_Item *dbmanager_item;
 extern Fl_Preferences fluid_prefs;
 extern Fl_Text_Buffer *shell_run_buffer; 
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Preferences.H>
-#include <FL/Fl_Tooltip.H>
+#include <fltk3/DoubleWindow.h>
+#include <fltk3/Preferences.h>
+#include <fltk3/Tooltip.h>
 extern Fl_Double_Window *project_window;
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Tabs.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Input.H>
+#include <fltk3/Button.h>
+#include <fltk3/TabGroup.h>
+#include <fltk3/Group.h>
+#include <fltk3/Box.h>
+#include <fltk3/Input.h>
 extern void header_input_cb(Fl_Input*, void*);
 extern Fl_Input *header_file_input;
 extern void code_input_cb(Fl_Input*, void*);
 extern Fl_Input *code_file_input;
-#include <FL/Fl_Check_Button.H>
+#include <fltk3/CheckButton.h>
 extern void include_H_from_C_button_cb(Fl_Check_Button*, void*);
 extern Fl_Check_Button *include_H_from_C_button;
 extern void use_FL_COMMAND_button_cb(Fl_Check_Button*, void*);
 extern Fl_Check_Button *use_FL_COMMAND_button;
-#include <FL/Fl_Choice.H>
+#include <fltk3/Choice.h>
 extern void i18n_type_cb(Fl_Choice*, void*);
 extern Fl_Choice *i18n_type_chooser;
 extern void i18n_text_cb(Fl_Input*, void*);
 extern Fl_Input *i18n_include_input;
 extern Fl_Input *i18n_file_input;
-#include <FL/Fl_Int_Input.H>
+#include <fltk3/IntInput.h>
 extern void i18n_int_cb(Fl_Int_Input*, void*);
 extern Fl_Int_Input *i18n_set_input;
 extern Fl_Input *i18n_function_input;
@@ -80,7 +80,7 @@ extern Fl_Check_Button *completion_button;
 extern Fl_Check_Button *openlast_button;
 extern Fl_Check_Button *prevpos_button;
 extern Fl_Check_Button *show_comments_button;
-#include <FL/Fl_Spinner.H>
+#include <fltk3/Spinner.h>
 extern Fl_Spinner *recent_spinner;
 Fl_Double_Window* make_settings_window();
 extern Fl_Menu_Item menu_scheme_choice[];
@@ -89,10 +89,10 @@ extern Fl_Input *shell_command_input;
 extern Fl_Check_Button *shell_writecode_button;
 extern Fl_Check_Button *shell_writemsgs_button;
 extern Fl_Check_Button *shell_savefl_button;
-#include <FL/Fl_Return_Button.H>
+#include <fltk3/ReturnButton.h>
 extern void do_shell_command(Fl_Return_Button*, void*);
 extern Fl_Double_Window *shell_run_window;
-#include <FL/Fl_Text_Display.H>
+#include <fltk3/TextDisplay.h>
 extern Fl_Text_Display *shell_run_display;
 extern Fl_Return_Button *shell_run_button;
 Fl_Double_Window* make_shell_window();
@@ -103,7 +103,7 @@ extern Fl_Int_Input *vertical_input;
 extern Fl_Int_Input *snap_input;
 extern void guides_cb(Fl_Check_Button*, long);
 extern Fl_Check_Button *guides_toggle;
-#include <FL/Fl_Round_Button.H>
+#include <fltk3/RoundButton.h>
 extern void default_widget_size_cb(Fl_Round_Button*, long);
 extern Fl_Round_Button *def_widget_size[6];
 Fl_Double_Window* make_layout_window();

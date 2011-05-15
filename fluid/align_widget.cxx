@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
 #include "Fl_Widget_Type.h"
 #include "undo.h"
 

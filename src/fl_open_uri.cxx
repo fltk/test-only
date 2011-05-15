@@ -29,7 +29,7 @@
 // Include necessary headers...
 //
 
-#include <FL/filename.H>
+#include <fltk3/filename.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -75,7 +75,7 @@ static int	run_program(const char *program, char **argv, char *msg, int msglen);
  *
  * \b Example
  * \code
- * #include <FL/filename.H>
+ * #include <fltk3/filename.h>
  * [..]
  * char errmsg[512];
  * if ( !fl_open_uri("http://google.com/", errmsg, sizeof(errmsg)) ) {

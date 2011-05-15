@@ -39,9 +39,9 @@
 // Include necessary header files...
 //
 
-#include <FL/Fl_Wizard.H>
-#include <FL/Fl_Window.H>
-#include <FL/fl_draw.H>
+#include <fltk3/WizardGroup.h>
+#include <fltk3/Window.h>
+#include <fltk3/draw.h>
 
 
 //

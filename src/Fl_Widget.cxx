@@ -25,11 +25,11 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Tooltip.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/Widget.h>
+#include <fltk3/Group.h>
+#include <fltk3/Tooltip.h>
+#include <fltk3/draw.h>
 #include <stdlib.h>
 #include "flstring.h"
 

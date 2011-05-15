@@ -27,7 +27,7 @@
 
 /* Modified to obey rfc3629, which limits unicode to 0-0x10ffff */
 
-#include <FL/fl_utf8.h>
+#include <fltk3/utf8.h>
 #include <string.h>
 #include <stdlib.h>
 

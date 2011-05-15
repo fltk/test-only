@@ -32,7 +32,7 @@
 #ifndef FLUID_IMAGE_H
 #  define FLUID_IMAGE_H
 
-#  include <FL/Fl_Shared_Image.H>
+#  include <fltk3/SharedImage.h>
 
 
 class Fluid_Image {

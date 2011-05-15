@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Single_Window.H>
-#include <FL/fl_draw.H>
-#include <FL/fl_show_colormap.H>
+#include <fltk3/run.h>
+#include <fltk3/SingleWindow.h>
+#include <fltk3/draw.h>
+#include <fltk3/showColormap.h>
 #include <config.h>
 
 #define BOXSIZE 14

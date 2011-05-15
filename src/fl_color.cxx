@@ -46,9 +46,9 @@
 // before use.
 
 #  include "Fl_XColor.H"
-#  include <FL/Fl.H>
-#  include <FL/x.H>
-#  include <FL/fl_draw.H>
+#  include <fltk3/run.h>
+#  include <fltk3/x.h>
+#  include <fltk3/draw.h>
 
 ////////////////////////////////////////////////////////////////
 // figure_out_visual() calculates masks & shifts for generating

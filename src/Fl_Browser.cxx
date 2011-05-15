@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Browser.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/Browser.h>
+#include <fltk3/draw.h>
 #include "flstring.h"
 #include <stdlib.h>
 #include <math.h>

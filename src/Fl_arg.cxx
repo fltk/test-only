@@ -28,12 +28,12 @@
 // OPTIONAL initialization code for a program using fltk.
 // You do not need to call this!  Feel free to make up your own switches.
 
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Tooltip.H>
-#include <FL/filename.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/x.h>
+#include <fltk3/Window.h>
+#include <fltk3/Tooltip.h>
+#include <fltk3/filename.h>
+#include <fltk3/draw.h>
 #include <ctype.h>
 #include "flstring.h"
 

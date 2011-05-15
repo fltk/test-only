@@ -34,9 +34,9 @@
 // Version 2.1 a
 // Date: Oct  2, 1992
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/math.h>
+#include <fltk3/run.h>
+#include <fltk3/draw.h>
+#include <fltk3/math.h>
 #include "flstring.h"
 
 typedef struct {

@@ -30,7 +30,7 @@
 #include "../src/flstring.h"
 #include <stdarg.h>
 
-#include <FL/Fl.H>
+#include <fltk3/run.h>
 #include "Fl_Type.h"
 #include "alignment_panel.h"
 
@@ -281,7 +281,7 @@ void write_h(const char* format,...) {
   va_end(args);
 }
 
-#include <FL/filename.H>
+#include <fltk3/filename.h>
 int write_number;
 int write_sourceview;
 extern Fl_Widget_Class_Type *current_widget_class;
@@ -396,7 +396,7 @@ int write_code(const char *s, const char *t) {
   fprintf(header_file, "#define %s\n", define_name);
   }  
 
-  write_declare("#include <FL/Fl.H>");
+  write_declare("#include <fltk3/run.h>");
   if (i18n_type && i18n_include[0]) {
     if (i18n_include[0] != '<' &&
         i18n_include[0] != '\"')

@@ -29,24 +29,24 @@
 
 #ifndef function_panel_h
 #define function_panel_h
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
+#include <fltk3/run.h>
+#include <fltk3/DoubleWindow.h>
 extern Fl_Double_Window *function_panel;
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Choice.H>
+#include <fltk3/Group.h>
+#include <fltk3/Choice.h>
 extern Fl_Choice *f_public_member_choice;
 extern Fl_Choice *f_public_choice;
-#include <FL/Fl_Light_Button.H>
+#include <fltk3/LightButton.h>
 extern Fl_Light_Button *f_c_button;
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Input.H>
+#include <fltk3/Box.h>
+#include <fltk3/Input.h>
 extern Fl_Input *f_name_input;
 extern Fl_Input *f_return_type_input;
-#include <FL/Fl_Return_Button.H>
+#include <fltk3/ReturnButton.h>
 extern Fl_Return_Button *f_panel_ok;
-#include <FL/Fl_Button.H>
+#include <fltk3/Button.h>
 extern Fl_Button *f_panel_cancel;
-#include <FL/Fl_Text_Editor.H>
+#include <fltk3/TextEditor.h>
 extern Fl_Text_Editor *f_comment_input;
 Fl_Double_Window* make_function_panel();
 extern Fl_Menu_Item menu_f_public_member_choice[];
@@ -108,17 +108,17 @@ extern Fl_Return_Button *comment_panel_ok;
 extern Fl_Button *comment_panel_cancel;
 extern Fl_Light_Button *comment_in_source;
 extern Fl_Light_Button *comment_in_header;
-#include <FL/Fl_Menu_Button.H>
+#include <fltk3/MenuButton.h>
 extern Fl_Menu_Button *comment_predefined;
 extern Fl_Button *comment_load;
 Fl_Double_Window* make_comment_panel();
 void type_make_cb(Fl_Widget*,void*d);
-#include <FL/Fl_Window.H>
+#include <fltk3/Window.h>
 extern Fl_Window *widgetbin_panel;
 Fl_Window* make_widgetbin();
 extern void toggle_sourceview_cb(Fl_Double_Window*, void*);
 extern Fl_Double_Window *sourceview_panel;
-#include <FL/Fl_Tabs.H>
+#include <fltk3/TabGroup.h>
 extern void update_sourceview_position_cb(Fl_Tabs*, void*);
 extern Fl_Tabs *sv_tab;
 extern CodeViewer *sv_source;

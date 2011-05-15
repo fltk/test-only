@@ -25,16 +25,16 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#include <FL/math.h>
-#include <FL/fl_utf8.h>
+#include <fltk3/run.h>
+#include <fltk3/draw.h>
+#include <fltk3/x.h>
+#include <fltk3/math.h>
+#include <fltk3/utf8.h>
 #include "flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/Fl_Pixmap.H>
-#include <FL/Fl_Tiled_Image.H>
+#include <fltk3/Pixmap.h>
+#include <fltk3/TiledImage.h>
 #include "tile.xpm"
 
 #if defined(WIN32) && !defined(__CYGWIN__) && !defined(__WATCOMC__)

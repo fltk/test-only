@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl_Printer.H>
+#include <fltk3/Printer.h>
 
 static int fl_angle_ = 0;
 
@@ -93,7 +93,7 @@ Fl_Font_Descriptor::~Fl_Font_Descriptor() {
 ////////////////////////////////////////////////////////////////
 
 // WARNING: if you add to this table, you must redefine FL_FREE_FONT
-// in Enumerations.H & recompile!!
+// in enumerations.h & recompile!!
 static Fl_Fontdesc built_in_table[] = {
 {" Arial"},
 {"BArial"},

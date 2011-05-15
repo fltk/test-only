@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl_Tooltip.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Menu_Window.H>
+#include <fltk3/Tooltip.h>
+#include <fltk3/draw.h>
+#include <fltk3/MenuWindow.h>
 
 #include <stdio.h>
 #include <string.h>	// strdup()

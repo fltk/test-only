@@ -26,8 +26,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl_Native_File_Chooser.H>
-#include <FL/Fl_File_Icon.H>
+#include <fltk3/NativeFileChooser.h>
+#include <fltk3/FileIcon.h>
 #define FLTK_CHOOSER_SINGLE    Fl_File_Chooser::SINGLE
 #define FLTK_CHOOSER_DIRECTORY Fl_File_Chooser::DIRECTORY
 #define FLTK_CHOOSER_MULTI     Fl_File_Chooser::MULTI

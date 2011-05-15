@@ -504,53 +504,53 @@ fl_set_fonts.o:	fl_set_fonts_mac.cxx fl_set_fonts_x.cxx \
 		fl_set_fonts_xft.cxx fl_set_fonts_win32.cxx
 Fl_Printer.o: Fl_GDI_Printer.cxx Fl_PostScript.cxx
 Fl_Quartz_Printer.o:	Fl_Quartz_Printer.mm
-fl_arci.o:	../FL/mac.H ../FL/win32.H
-Fl_arg.o:	../FL/mac.H ../FL/win32.H
-fl_ask.o:	../FL/mac.H ../FL/win32.H
-Fl_Bitmap.o:	../FL/mac.H ../FL/win32.H
-fl_color.o:	../FL/mac.H ../FL/win32.H
-fl_cursor.o:	../FL/mac.H ../FL/win32.H
-fl_dnd.o:	../FL/mac.H ../FL/win32.H
-Fl.o:	../FL/mac.H ../FL/win32.H
-Fl_Double_Window.o:	../FL/mac.H ../FL/win32.H
-fl_draw_image.o:	../FL/mac.H ../FL/win32.H
-fl_draw_image_mac.o:	../FL/mac.H ../FL/win32.H
-fl_draw_image_win32.o:	../FL/mac.H ../FL/win32.H
-fl_draw_pixmap.o:	../FL/mac.H ../FL/win32.H
-fl_encoding_latin1.o:	../FL/mac.H ../FL/win32.H
-fl_encoding_mac_roman.o:   ../FL/mac.H ../FL/win32.H
-Fl_File_Chooser2.o:	../FL/mac.H ../FL/win32.H
-fl_font.o:	../FL/mac.H ../FL/win32.H
-Fl_get_key.o:	../FL/mac.H ../FL/win32.H
-Fl_get_system_colors.o:	../FL/mac.H ../FL/win32.H
-Fl_Gl_Choice.o:	../FL/mac.H ../FL/win32.H
-Fl_Gl_Overlay.o:	../FL/mac.H ../FL/win32.H
-Fl_Gl_Window.o:	../FL/mac.H ../FL/win32.H
-Fl_grab.o:	../FL/mac.H ../FL/win32.H
-Fl_Image.o:	../FL/mac.H ../FL/win32.H
-fl_line_style.o:	../FL/mac.H ../FL/win32.H
-Fl_Menu_Window.o:	../FL/mac.H ../FL/win32.H
-fl_overlay.o:	../FL/mac.H ../FL/win32.H
-fl_overlay_visual.o:	../FL/mac.H ../FL/win32.H
-Fl_Overlay_Window.o:	../FL/mac.H ../FL/win32.H
-Fl_own_colormap.o:	../FL/mac.H ../FL/win32.H
-Fl_Pixmap.o:	../FL/mac.H ../FL/win32.H
-Fl_Printer.o:  ../FL/mac.H ../FL/win32.H
-fl_read_image.o:	../FL/mac.H ../FL/win32.H
-fl_read_image_mac.o:	../FL/mac.H ../FL/win32.H
-fl_read_image_win32.o:	../FL/mac.H ../FL/win32.H
-fl_rect.o:	../FL/mac.H ../FL/win32.H
-fl_scroll_area.o:	../FL/mac.H ../FL/win32.H
-fl_set_font.o:	../FL/mac.H ../FL/win32.H
-fl_set_fonts.o:	../FL/mac.H ../FL/win32.H
-fl_shortcut.o:	../FL/mac.H ../FL/win32.H
-fl_vertex.o:	../FL/mac.H ../FL/win32.H
-Fl_visual.o:	../FL/mac.H ../FL/win32.H
-Fl_Window_fullscreen.o:	../FL/mac.H ../FL/win32.H
-Fl_Window_iconize.o:	../FL/mac.H ../FL/win32.H
-Fl_x.o:	../FL/mac.H ../FL/win32.H
-gl_draw.o:	../FL/mac.H ../FL/win32.H
-gl_start.o:	../FL/mac.H ../FL/win32.H
+fl_arci.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_arg.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_ask.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_Bitmap.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_color.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_cursor.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_dnd.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_Double_Window.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_draw_image.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_draw_image_mac.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_draw_image_win32.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_draw_pixmap.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_encoding_latin1.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_encoding_mac_roman.o:   ../fltk3/osx.h ../fltk3/win32.h
+Fl_File_Chooser2.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_font.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_get_key.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_get_system_colors.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_Gl_Choice.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_Gl_Overlay.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_Gl_Window.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_grab.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_Image.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_line_style.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_Menu_Window.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_overlay.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_overlay_visual.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_Overlay_Window.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_own_colormap.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_Pixmap.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_Printer.o:  ../fltk3/osx.h ../fltk3/win32.h
+fl_read_image.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_read_image_mac.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_read_image_win32.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_rect.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_scroll_area.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_set_font.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_set_fonts.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_shortcut.o:	../fltk3/osx.h ../fltk3/win32.h
+fl_vertex.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_visual.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_Window_fullscreen.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_Window_iconize.o:	../fltk3/osx.h ../fltk3/win32.h
+Fl_x.o:	../fltk3/osx.h ../fltk3/win32.h
+gl_draw.o:	../fltk3/osx.h ../fltk3/win32.h
+gl_start.o:	../fltk3/osx.h ../fltk3/win32.h
 
 ################################################################
 
@@ -808,3 +808,4 @@ uninstall:
 #
 # End of "$Id$".
 #
+# DO NOT DELETE

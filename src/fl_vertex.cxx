@@ -38,10 +38,10 @@
 //       operations for reasons of compatibility and maintainability
 
 #include <config.h>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#include <FL/Fl.H>
-#include <FL/math.h>
+#include <fltk3/draw.h>
+#include <fltk3/x.h>
+#include <fltk3/run.h>
+#include <fltk3/math.h>
 #include <stdlib.h>
 
 void Fl_Graphics_Driver::push_matrix() {

@@ -32,10 +32,10 @@
 #include <stdlib.h>
 #include "../src/flstring.h"
 #include <errno.h>
-#include <FL/filename.H>
-#include <FL/fl_ask.H>
-#include <FL/Fl_Shared_Image.H>
-#include <FL/Fl_Preferences.H>
+#include <fltk3/filename.h>
+#include <fltk3/ask.h>
+#include <fltk3/SharedImage.h>
+#include <fltk3/Preferences.h>
 #if defined(WIN32) && !defined(__CYGWIN__)
 #include <io.h>
 #else

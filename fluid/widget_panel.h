@@ -29,26 +29,26 @@
 
 #ifndef widget_panel_h
 #define widget_panel_h
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Tabs.H>
-#include <FL/Fl_Group.H>
+#include <fltk3/run.h>
+#include <fltk3/DoubleWindow.h>
+#include <fltk3/TabGroup.h>
+#include <fltk3/Group.h>
 extern void propagate_load(Fl_Group*, void*);
-#include <FL/Fl_Input.H>
+#include <fltk3/Input.h>
 extern void label_cb(Fl_Input*, void*);
-#include <FL/Fl_Choice.H>
+#include <fltk3/Choice.h>
 extern Fl_Menu_Item labeltypemenu[];
 extern void labeltype_cb(Fl_Choice*, void*);
 extern void image_cb(Fl_Input*, void*);
-#include <FL/Fl_Button.H>
+#include <fltk3/Button.h>
 extern void image_browse_cb(Fl_Button*, void*);
 extern void inactive_cb(Fl_Input*, void*);
 extern void inactive_browse_cb(Fl_Button*, void*);
 extern void align_cb(Fl_Button*, void*);
 extern void align_text_image_cb(Fl_Choice*, void*);
 extern void align_position_cb(Fl_Choice*, void*);
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Value_Input.H>
+#include <fltk3/Box.h>
+#include <fltk3/ValueInput.h>
 extern void x_cb(Fl_Value_Input*, void*);
 extern Fl_Value_Input *widget_x_input;
 extern void y_cb(Fl_Value_Input*, void*);
@@ -57,7 +57,7 @@ extern void w_cb(Fl_Value_Input*, void*);
 extern Fl_Value_Input *widget_w_input;
 extern void h_cb(Fl_Value_Input*, void*);
 extern Fl_Value_Input *widget_h_input;
-#include <FL/Fl_Light_Button.H>
+#include <fltk3/LightButton.h>
 extern void wc_relative_cb(Fl_Light_Button*, void*);
 extern void slider_size_cb(Fl_Value_Input*, void*);
 extern void min_cb(Fl_Value_Input*, void*);
@@ -109,7 +109,7 @@ extern void user_data_type_cb(Fl_Input*, void*);
 extern void when_button_cb(Fl_Light_Button*, void*);
 extern void overlay_cb(Fl_Button*, void*);
 extern void revert_cb(Fl_Button*, void*);
-#include <FL/Fl_Return_Button.H>
+#include <fltk3/ReturnButton.h>
 extern void ok_cb(Fl_Return_Button*, void*);
 extern void cancel_cb(Fl_Button*, void*);
 extern void live_mode_cb(Fl_Button*, void*);

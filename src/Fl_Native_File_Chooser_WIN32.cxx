@@ -39,7 +39,7 @@ typedef const wchar_t *LPCWSTR; //MG
 LPCWSTR utf8towchar(const char *in); //MG
 char *wchartoutf8(LPCWSTR in);  //MG
 
-#include <FL/Fl_Native_File_Chooser.H>
+#include <fltk3/NativeFileChooser.h>
 
 #define LCURLY_CHR	'{'
 #define RCURLY_CHR	'}'

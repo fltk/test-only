@@ -35,13 +35,13 @@
 // Include necessary header files...
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_PNG_Image.H>
-#include <FL/Fl_Shared_Image.H>
+#include <fltk3/run.h>
+#include <fltk3/PNGImage.h>
+#include <fltk3/SharedImage.h>
 #include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/fl_utf8.h>
+#include <fltk3/utf8.h>
 
 #if defined(HAVE_LIBPNG) && defined(HAVE_LIBZ)
 extern "C"

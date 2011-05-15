@@ -27,9 +27,9 @@
 
 // Drawing code for XForms style engraved & embossed labels
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/Widget.h>
+#include <fltk3/draw.h>
 
 // data[] is dx, dy, color triples
 

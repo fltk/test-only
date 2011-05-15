@@ -26,12 +26,12 @@
 //
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/fl_ask.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/ask.h>
+#include <fltk3/draw.h>
 #include <stdio.h>
-#include <FL/Fl_PostScript.H>
-#include <FL/Fl_Native_File_Chooser.H>
+#include <fltk3/PostScript.h>
+#include <fltk3/NativeFileChooser.h>
 #if defined(USE_X11)
 #include "Fl_Font.H"
 #if USE_XFT

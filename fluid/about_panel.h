@@ -29,13 +29,13 @@
 
 #ifndef about_panel_h
 #define about_panel_h
-#include <FL/Fl.H>
+#include <fltk3/run.h>
 extern void show_help(const char *name); 
-#include <FL/Fl_Double_Window.H>
+#include <fltk3/DoubleWindow.h>
 extern Fl_Double_Window *about_panel;
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Return_Button.H>
+#include <fltk3/Box.h>
+#include <fltk3/Button.h>
+#include <fltk3/ReturnButton.h>
 Fl_Double_Window* make_about_panel();
 extern unsigned char fluid_org_png[12690];
 #endif

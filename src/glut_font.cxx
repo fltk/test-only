@@ -35,7 +35,7 @@
 
 #include <config.h>
 #if HAVE_GL
-#  include <FL/glut.H>
+#  include <fltk3/glut.h>
 
 Fl_Glut_Bitmap_Font glutBitmap9By15 = {FL_SCREEN, 15};
 Fl_Glut_Bitmap_Font glutBitmap8By13 = {FL_SCREEN, 13};

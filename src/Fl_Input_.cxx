@@ -25,13 +25,13 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Input_.H>
-#include <FL/Fl_Window.H>
-#include <FL/fl_draw.H>
-#include <FL/fl_ask.H>
+#include <fltk3/run.h>
+#include <fltk3/Input_.h>
+#include <fltk3/Window.h>
+#include <fltk3/draw.h>
+#include <fltk3/ask.h>
 #include <math.h>
-#include <FL/fl_utf8.h>
+#include <fltk3/utf8.h>
 #include "flstring.h"
 #include <stdlib.h>
 #include <ctype.h>

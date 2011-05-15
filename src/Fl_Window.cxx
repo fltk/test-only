@@ -30,14 +30,14 @@
 // crap you need to do to communicate with X is in Fl_x.cxx, the
 // equivalent (but totally different) crap for MSWindows is in Fl_win32.cxx
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/Fl_Window.H>
+#include <fltk3/run.h>
+#include <fltk3/x.h>
+#include <fltk3/Window.h>
 #include <stdlib.h>
 #include "flstring.h"
 
 #ifdef __APPLE_QUARTZ__
-#include <FL/fl_draw.H>
+#include <fltk3/draw.h>
 #endif
 
 char *Fl_Window::default_xclass_ = 0L;

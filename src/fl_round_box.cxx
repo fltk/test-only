@@ -29,8 +29,8 @@
 // These box types are in separate files so they are not linked
 // in if not used.
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/draw.h>
 
 // A compiler from a certain very large software company will not compile
 // the function pointer assignment due to the name conflict with fl_arc.

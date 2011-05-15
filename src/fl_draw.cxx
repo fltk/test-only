@@ -32,10 +32,10 @@
 // Expands all unprintable characters to ^X or \nnn notation
 // Aligns them against the inside of the box.
 
-#include <FL/fl_utf8.h>
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Image.H>
+#include <fltk3/utf8.h>
+#include <fltk3/run.h>
+#include <fltk3/draw.h>
+#include <fltk3/Image.h>
 
 #include "flstring.h"
 #include <ctype.h>

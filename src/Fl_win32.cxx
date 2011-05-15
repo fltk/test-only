@@ -32,13 +32,13 @@
 // This file must be #include'd in Fl.cxx and not compiled separately.
 
 #ifndef FL_DOXYGEN
-#include <FL/Fl.H>
-#include <FL/fl_utf8.h>
-#include <FL/Fl_Window.H>
-#include <FL/fl_draw.H>
-#include <FL/Enumerations.H>
-#include <FL/Fl_Tooltip.H>
-#include <FL/Fl_Paged_Device.H>
+#include <fltk3/run.h>
+#include <fltk3/utf8.h>
+#include <fltk3/Window.h>
+#include <fltk3/draw.h>
+#include <fltk3/enumerations.h>
+#include <fltk3/Tooltip.h>
+#include <fltk3/PagedDevice.h>
 #include "flstring.h"
 #include "Fl_Font.H"
 #include <stdio.h>
@@ -1728,7 +1728,7 @@ void Fl_X::set_minmax(LPMINMAXINFO minmax)
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/filename.H> // need so FL_EXPORT fl_filename_name works
+#include <fltk3/filename.h> // need so FL_EXPORT fl_filename_name works
 
 // returns pointer to the filename, or null if name ends with '/'
 const char *fl_filename_name(const char *name) {
@@ -2004,8 +2004,8 @@ void Fl_Paged_Device::print_window(Fl_Window *win, int x_offset, int y_offset)
 #ifdef USE_PRINT_BUTTON
 // to test the Fl_Printer class creating a "Print front window" button in a separate window
 // contains also preparePrintFront call above
-#include <FL/Fl_Printer.H>
-#include <FL/Fl_Button.H>
+#include <fltk3/Printer.h>
+#include <fltk3/Button.h>
 void printFront(Fl_Widget *o, void *data)
 {
   Fl_Printer printer;

@@ -26,11 +26,11 @@
 //
 
 #ifdef WIN32
-#include <FL/Fl_Printer.H>
+#include <fltk3/Printer.h>
 
 
-#include <FL/fl_ask.H>
-#include <FL/math.h>
+#include <fltk3/ask.h>
+#include <fltk3/math.h>
 
 extern HWND fl_window;
 

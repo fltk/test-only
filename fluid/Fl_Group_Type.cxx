@@ -30,10 +30,10 @@
 //
 
 
-#include <FL/Fl.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Table.H>
-#include <FL/fl_message.H>
+#include <fltk3/run.h>
+#include <fltk3/Group.h>
+#include <fltk3/Table.h>
+#include <fltk3/message.h>
 #include "Fl_Widget_Type.h"
 #include "../src/flstring.h"
 
@@ -396,7 +396,7 @@ void Fl_Group_Type::copy_properties() {
 ////////////////////////////////////////////////////////////////
 // some other group subclasses that fluid does not treat specially:
 
-#include <FL/Fl_Scroll.H>
+#include <fltk3/ScrollGroup.h>
 
 const char scroll_type_name[] = "Fl_Scroll";
 

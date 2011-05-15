@@ -35,8 +35,8 @@
 // keys (mostly) by the X keysym.  So this turns the keysym into a keycode
 // and looks it up in the X key bit vector, which Fl_x.cxx keeps track of.
 
-#  include <FL/Fl.H>
-#  include <FL/x.H>
+#  include <fltk3/run.h>
+#  include <fltk3/x.h>
 
 extern char fl_key_vector[32]; // in Fl_x.cxx
 

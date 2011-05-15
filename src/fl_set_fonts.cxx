@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/x.H>
+#include <fltk3/run.h>
+#include <fltk3/x.h>
 #include "Fl_Font.H"
 #include "flstring.h"
 #include <stdlib.h>

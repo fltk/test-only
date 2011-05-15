@@ -32,7 +32,7 @@ void show_help(const char *name);
 
 Fl_Double_Window *about_panel=(Fl_Double_Window *)0;
 
-#include <FL/Fl_Pixmap.H>
+#include <fltk3/Pixmap.h>
 static const char *idata_fluid[] = {
 "96 96 32 1",
 " \tc None",

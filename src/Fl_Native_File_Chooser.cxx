@@ -32,7 +32,7 @@
 
 // Use Apple's chooser
 #ifdef __APPLE__
-#include <FL/Fl_Native_File_Chooser.H>
+#include <fltk3/NativeFileChooser.h>
 #endif
 
 // All else falls back to FLTK's own chooser

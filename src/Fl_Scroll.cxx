@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Tiled_Image.H>
-#include <FL/Fl_Scroll.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/TiledImage.h>
+#include <fltk3/ScrollGroup.h>
+#include <fltk3/draw.h>
 
 /** Clear all but the scrollbars... */
 void Fl_Scroll::clear() {

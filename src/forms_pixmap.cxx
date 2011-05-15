@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/forms.H>
+#include <fltk3/forms.h>
 
 /**
   Creates a new Fl_FormsPixmap widget using the given box type, position,

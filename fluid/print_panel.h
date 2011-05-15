@@ -29,32 +29,32 @@
 
 #ifndef print_panel_h
 #define print_panel_h
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
+#include <fltk3/run.h>
+#include <fltk3/DoubleWindow.h>
 extern Fl_Double_Window *print_panel;
-#include <FL/Fl_Group.H>
+#include <fltk3/Group.h>
 extern Fl_Group *print_panel_controls;
-#include <FL/Fl_Choice.H>
+#include <fltk3/Choice.h>
 extern Fl_Choice *print_choice;
-#include <FL/Fl_Button.H>
+#include <fltk3/Button.h>
 extern Fl_Button *print_properties;
-#include <FL/Fl_Box.H>
+#include <fltk3/Box.h>
 extern Fl_Box *print_status;
-#include <FL/Fl_Round_Button.H>
+#include <fltk3/RoundButton.h>
 extern Fl_Round_Button *print_all;
 extern Fl_Round_Button *print_pages;
 extern Fl_Round_Button *print_selection;
-#include <FL/Fl_Int_Input.H>
+#include <fltk3/IntInput.h>
 extern Fl_Int_Input *print_from;
 extern Fl_Int_Input *print_to;
-#include <FL/Fl_Spinner.H>
+#include <fltk3/Spinner.h>
 extern Fl_Spinner *print_copies;
-#include <FL/Fl_Check_Button.H>
+#include <fltk3/CheckButton.h>
 extern Fl_Check_Button *print_collate_button;
 extern Fl_Group *print_collate_group[2];
-#include <FL/Fl_Return_Button.H>
+#include <fltk3/ReturnButton.h>
 extern void print_cb(Fl_Return_Button*, void*);
-#include <FL/Fl_Progress.H>
+#include <fltk3/Progress.h>
 extern Fl_Progress *print_progress;
 extern Fl_Double_Window *print_properties_panel;
 extern Fl_Choice *print_page_size;

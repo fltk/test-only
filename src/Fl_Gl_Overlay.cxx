@@ -28,10 +28,10 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <FL/Fl.H>
-#include <FL/x.H>
+#include <fltk3/run.h>
+#include <fltk3/x.h>
 #include "Fl_Gl_Choice.H"
-#include <FL/Fl_Gl_Window.H>
+#include <fltk3/GlWindow.h>
 #include <stdlib.h>
 
 #if !HAVE_GL_OVERLAY

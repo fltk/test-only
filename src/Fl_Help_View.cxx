@@ -55,14 +55,14 @@
 // Include necessary header files...
 //
 
-#include <FL/Fl_Help_View.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Pixmap.H>
-#include <FL/x.H>
+#include <fltk3/HelpView.h>
+#include <fltk3/Window.h>
+#include <fltk3/Pixmap.h>
+#include <fltk3/x.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/fl_utf8.h>
-#include <FL/filename.H>	// fl_open_uri()
+#include <fltk3/utf8.h>
+#include <fltk3/filename.h>	// fl_open_uri()
 #include "flstring.h"
 #include <ctype.h>
 #include <errno.h>
@@ -222,7 +222,7 @@ img->draw()
 */
 
 // We don't put the offscreen buffer in the help view class because
-// we'd need to include x.H in the header...
+// we'd need to include x.h in the header...
 static Fl_Offscreen fl_help_view_buffer;
 int Fl_Help_View::selection_first = 0;
 int Fl_Help_View::selection_last = 0;

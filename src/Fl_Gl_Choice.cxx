@@ -28,17 +28,17 @@
 #include <config.h>
 #if HAVE_GL
 
-#  include <FL/Fl.H>
-#  include <FL/x.H>
+#  include <fltk3/run.h>
+#  include <fltk3/x.h>
 #  include <stdlib.h>
 #  include "Fl_Gl_Choice.H"
-#  include <FL/gl_draw.H>
+#  include <fltk3/glDraw.h>
 #  include "flstring.h"
-#  include <FL/fl_utf8.h>
+#  include <fltk3/utf8.h>
 
 #  ifdef __APPLE__
 #    include <ApplicationServices/ApplicationServices.h>
-#    include <FL/Fl_Window.H>
+#    include <fltk3/Window.h>
 #  endif
 
 #  ifdef WIN32

@@ -32,8 +32,8 @@
 // These box types are in separate files so they are not linked
 // in if not used.
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/draw.h>
 
 extern void fl_internal_boxtype(Fl_Boxtype, Fl_Box_Draw_F*);
 

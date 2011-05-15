@@ -28,7 +28,7 @@
 // Allows you to manage an arbitrary set of idle() callbacks.
 // Replaces the older set_idle() call (which is used to implement this)
 
-#include <FL/Fl.H>
+#include <fltk3/run.h>
 
 struct idle_cb {
   void (*cb)(void*);

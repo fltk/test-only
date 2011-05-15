@@ -25,15 +25,15 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Preferences.H>
-#include <FL/Fl_Plugin.H>
-#include <FL/filename.H>
+#include <fltk3/run.h>
+#include <fltk3/Preferences.h>
+#include <fltk3/Plugin.h>
+#include <fltk3/filename.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include <FL/fl_utf8.h>
+#include <fltk3/utf8.h>
 #include "flstring.h"
 #include <sys/stat.h>
 #include <time.h>

@@ -1,3 +1,4 @@
+#error header has not been ported to 3.0 yet
 //
 // "$Id: Fl_Plugin.H 6995 2010-01-12 08:48:55Z matt $"
 //

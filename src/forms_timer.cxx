@@ -29,9 +29,9 @@
 // You don't want to use this if you just want a timeout, call
 // Fl::add_timeout directly!
 
-#include <FL/Fl.H>
-#include <FL/Fl_Timer.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/Timer.h>
+#include <fltk3/draw.h>
 #ifdef WIN32
 #  ifdef __MWERKS__
 #    include <time.h>

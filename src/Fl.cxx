@@ -31,17 +31,17 @@
 //          to implement clipping. This should be changed into pure
 //          Quartz calls in the near future.
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Tooltip.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/Tooltip.h>
 
 // recent versions of MinGW warn: "Please include winsock2.h before windows.h",
-// hence we must include winsock2.h before FL/x.H (A.S. Dec. 2010)
+// hence we must include winsock2.h before FL/x.h (A.S. Dec. 2010)
 #if defined(WIN32) && !defined(__CYGWIN__)
 #  include <winsock2.h>
 #endif
 
-#include <FL/x.H>
+#include <fltk3/x.h>
 
 #include <ctype.h>
 #include <stdio.h>
@@ -1546,7 +1546,7 @@ void Fl::paste(Fl_Widget &receiver) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/fl_draw.H>
+#include <fltk3/draw.h>
 
 void Fl_Widget::redraw() {
   damage(FL_DAMAGE_ALL);

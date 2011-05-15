@@ -27,7 +27,7 @@
 
 
 #include <config.h>
-#include <FL/filename.H>
+#include <fltk3/filename.h>
 #include <stdarg.h>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
@@ -64,14 +64,14 @@ extern "C" {
 
 #else // X-windows platform
 
-# include <FL/Xutf8.h>
+# include <fltk3/Xutf8.h>
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <unistd.h>
 #endif // WIN32
 
-#include <FL/fl_utf8.h>
+#include <fltk3/utf8.h>
 #include <string.h>
 #include <stdlib.h>
 

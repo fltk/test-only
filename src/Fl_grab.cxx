@@ -26,8 +26,8 @@
 //
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/x.H>
+#include <fltk3/run.h>
+#include <fltk3/x.h>
 
 ////////////////////////////////////////////////////////////////
 // "Grab" is done while menu systems are up.  This has several effects:

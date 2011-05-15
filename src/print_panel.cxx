@@ -45,8 +45,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../src/flstring.h"
-#include <FL/Fl_Preferences.H>
-#include <FL/Fl_Int_Input.H>
+#include <fltk3/Preferences.h>
+#include <fltk3/IntInput.h>
 
 static Fl_Preferences print_prefs(Fl_Preferences::USER, "fltk.org", "printers");
 static Fl_Double_Window *print_panel=(Fl_Double_Window *)0;
@@ -125,7 +125,7 @@ static Fl_Menu_Item menu_print_page_size[] = {
  {0,0,0,0,0,0,0,0,0}
 };
 
-#include <FL/Fl_Pixmap.H>
+#include <fltk3/Pixmap.h>
 static const char *idata_print_color[] = {
 "24 24 17 1",
 " \tc None",

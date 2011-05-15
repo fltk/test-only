@@ -25,23 +25,23 @@
 //     http://www.fltk.org/str.php
 //
 
-// Functions from <FL/gl.h>
+// Functions from <fltk3/gl.h>
 // See also Fl_Gl_Window and gl_start.cxx
 
 #include "flstring.h"
 #if HAVE_GL || defined(FL_DOXYGEN)
 
-#include <FL/Fl.H>
-#include <FL/gl.h>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Device.H>
+#include <fltk3/run.h>
+#include <fltk3/gl.h>
+#include <fltk3/x.h>
+#include <fltk3/draw.h>
+#include <fltk3/Device.h>
 #include "Fl_Gl_Choice.H"
 #include "Fl_Font.H"
-#include <FL/fl_utf8.h>
+#include <fltk3/utf8.h>
 
 #if !defined(WIN32) && !defined(__APPLE__)
-#include <FL/Xutf8.h>
+#include <fltk3/Xutf8.h>
 #endif
 
 #if USE_XFT
@@ -359,7 +359,7 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 
 #if GL_DRAW_USES_TEXTURES || defined(FL_DOXYGEN)
 
-#include <FL/glu.h>
+#include <fltk3/glu.h>
 
 // manages a fifo pile of pre-computed string textures
 class gl_texture_fifo {

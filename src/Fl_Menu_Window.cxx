@@ -33,10 +33,10 @@
 // can be used to dismiss the menus.
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Menu_Window.H>
+#include <fltk3/run.h>
+#include <fltk3/x.h>
+#include <fltk3/draw.h>
+#include <fltk3/MenuWindow.h>
 
 // WIN32 note: HAVE_OVERLAY is false
 #if HAVE_OVERLAY

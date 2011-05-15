@@ -30,17 +30,17 @@
   \brief Drawing and clipping routines for rectangles.
 */
 
-// These routines from fl_draw.H are used by the standard boxtypes
+// These routines from draw.h are used by the standard boxtypes
 // and thus are always linked into an fltk program.
 // Also all fl_clip routines, since they are always linked in so
 // that minimal update works.
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Printer.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
+#include <fltk3/run.h>
+#include <fltk3/Widget.h>
+#include <fltk3/Printer.h>
+#include <fltk3/draw.h>
+#include <fltk3/x.h>
 
 // fl_line_width_ must contain the absolute value of the current
 // line width to be used for X11 clipping (see below).
@@ -515,7 +515,7 @@ void Fl_Graphics_Driver::point(int x, int y) {
 
 #if !defined(WIN32) && !defined(__APPLE__)
 // Missing X call: (is this the fastest way to init a 1-rectangle region?)
-// MSWindows equivalent exists, implemented inline in win32.H
+// MSWindows equivalent exists, implemented inline in win32.h
 Fl_Region XRectangleRegion(int x, int y, int w, int h) {
   XRectangle R;
   clip_to_short(x, y, w, h);

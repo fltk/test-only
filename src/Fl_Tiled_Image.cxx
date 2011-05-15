@@ -26,9 +26,9 @@
 //
 
 
-#include <FL/Fl.H>
-#include <FL/Fl_Tiled_Image.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/TiledImage.h>
+#include <fltk3/draw.h>
 
 /**
   The constructors create a new tiled image containing the specified image.

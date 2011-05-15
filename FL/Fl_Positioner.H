@@ -1,3 +1,4 @@
+#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //

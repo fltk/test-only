@@ -62,7 +62,7 @@ Fl_Font_Descriptor::~Fl_Font_Descriptor() {
 ////////////////////////////////////////////////////////////////
 
 // WARNING: if you add to this table, you must redefine FL_FREE_FONT
-// in Enumerations.H & recompile!!
+// in enumerations.h & recompile!!
 static Fl_Fontdesc built_in_table[] = {
 {"-*-helvetica-medium-r-normal--*"},
 {"-*-helvetica-bold-r-normal--*"},

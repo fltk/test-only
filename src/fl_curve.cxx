@@ -35,7 +35,7 @@
   If anybody has a better algorithm, please send it!
 */
 
-#include <FL/fl_draw.H>
+#include <fltk3/draw.h>
 #include <math.h>
 
 void Fl_Graphics_Driver::curve(double X0, double Y0,

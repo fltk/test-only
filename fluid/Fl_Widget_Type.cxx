@@ -25,16 +25,16 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Table.H>
-#include <FL/Fl_Input.H>
+#include <fltk3/run.h>
+#include <fltk3/Group.h>
+#include <fltk3/Table.h>
+#include <fltk3/Input.h>
 #include "Fl_Widget_Type.h"
 #include "alignment_panel.h"
-#include <FL/fl_message.H>
-#include <FL/Fl_Slider.H>
-#include <FL/Fl_Spinner.H>
-#include <FL/Fl_Window.H>
+#include <fltk3/message.h>
+#include <fltk3/Slider.h>
+#include <fltk3/Spinner.h>
+#include <fltk3/Window.h>
 #include "../src/flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -292,7 +292,7 @@ Fl_Type *sort(Fl_Type *parent) {
 // The control panels!
 
 #include "widget_panel.h"
-#include <FL/fl_show_colormap.H>
+#include <fltk3/showColormap.h>
 
 static Fl_Window *the_panel;
 
@@ -1976,7 +1976,7 @@ int isdeclare(const char *c) {
 void Fl_Widget_Type::write_static() {
   const char* t = subclassname(this);
   if (!subclass() || (is_class() && !strncmp(t, "Fl_", 3))) {
-    write_declare("#include <FL/%s.H>", t);
+    write_declare("#include <fltk3/%s.H>", t);
   }
   for (int n=0; n < NUM_EXTRA_CODE; n++) {
     if (extra_code(n) && isdeclare(extra_code(n)))

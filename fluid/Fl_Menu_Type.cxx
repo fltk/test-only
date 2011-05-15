@@ -31,14 +31,14 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
+#include <fltk3/run.h>
 #include "Fl_Widget_Type.h"
 #include "alignment_panel.h"
-#include <FL/fl_message.H>
-#include <FL/Fl_Menu_.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Value_Input.H>
-#include <FL/Fl_Text_Display.H>
+#include <fltk3/message.h>
+#include <fltk3/Menu_.h>
+#include <fltk3/Button.h>
+#include <fltk3/ValueInput.h>
+#include <fltk3/TextDisplay.h>
 #include "../src/flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -513,7 +513,7 @@ void Fl_Menu_Type::copy_properties() {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Menu_Button.H>
+#include <fltk3/MenuButton.h>
 Fl_Menu_Item button_type_menu[] = {
   {"normal",0,0,(void*)0},
   {"popup1",0,0,(void*)Fl_Menu_Button::POPUP1},
@@ -570,9 +570,9 @@ Fl_Menu_Bar_Type Fl_Menu_Bar_type;
 ////////////////////////////////////////////////////////////////
 // Shortcut entry item in panel:
 
-#include <FL/Fl_Output.H>
+#include <fltk3/Output.h>
 #include "Shortcut_Button.h"
-#include <FL/fl_draw.H>
+#include <fltk3/draw.h>
 
 void Shortcut_Button::draw() {
   if (value()) draw_box(FL_DOWN_BOX, (Fl_Color)9);

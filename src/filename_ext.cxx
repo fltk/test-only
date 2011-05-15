@@ -27,11 +27,11 @@
 
 // returns pointer to the last '.' or to the null if none:
 
-#include <FL/filename.H>
+#include <fltk3/filename.h>
 
 /** Gets the extensions of a filename.
    \code
-   #include <FL/filename.H>
+   #include <fltk3/filename.h>
    [..]
    const char *out;
    out = fl_filename_ext("/some/path/foo.txt");        // result: ".txt"

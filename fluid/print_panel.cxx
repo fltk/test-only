@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../src/flstring.h"
-#include <FL/Fl_Preferences.H>
+#include <fltk3/Preferences.h>
 extern Fl_Preferences fluid_prefs;
 
 Fl_Double_Window *print_panel=(Fl_Double_Window *)0;
@@ -122,7 +122,7 @@ Fl_Menu_Item menu_print_page_size[] = {
  {0,0,0,0,0,0,0,0,0}
 };
 
-#include <FL/Fl_Pixmap.H>
+#include <fltk3/Pixmap.h>
 static const char *idata_print_color[] = {
 "24 24 17 1",
 " \tc None",

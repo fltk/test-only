@@ -34,9 +34,9 @@
 // matt: Quartz support done
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/x.h>
+#include <fltk3/draw.h>
 
 static unsigned fl_cmap[256] = {
 #include "fl_cmap.h" // this is a file produced by "cmap.cxx":

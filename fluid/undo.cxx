@@ -25,11 +25,11 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
+#include <fltk3/run.h>
 #include "Fl_Type.h"
 #include "undo.h"
-#include <FL/Fl_Preferences.H>
-#include <FL/filename.H>
+#include <fltk3/Preferences.h>
+#include <fltk3/filename.h>
 #include "../src/flstring.h"
 #if defined(WIN32) && !defined(__CYGWIN__)
 #  include <io.h>

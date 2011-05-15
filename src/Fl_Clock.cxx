@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Clock.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/Clock.h>
+#include <fltk3/draw.h>
 #include <math.h>
 #include <time.h>
 #ifndef WIN32

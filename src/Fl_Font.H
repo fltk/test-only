@@ -38,7 +38,7 @@
 #  if USE_XFT
 typedef struct _XftFont XftFont;
 #  elif !defined(WIN32) && !defined(__APPLE__)
-#    include <FL/Xutf8.h>
+#    include <fltk3/Xutf8.h>
 #  endif // USE_XFT
 
 /**

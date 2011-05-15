@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/x.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/x.h>
 #include <stdio.h>
 
 void Fl_Window::hotspot(int X, int Y, int offscreen) {

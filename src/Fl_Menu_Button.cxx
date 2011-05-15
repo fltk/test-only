@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Menu_Button.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/MenuButton.h>
+#include <fltk3/draw.h>
 
 
 static Fl_Menu_Button	*pressed_menu_button_ = 0;

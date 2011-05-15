@@ -33,11 +33,11 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Menu_Item.H>
-#include <FL/Fl_Pixmap.H>
-#include <FL/Fl_Tree.H>
+#include <fltk3/run.h>
+#include <fltk3/Group.h>
+#include <fltk3/MenuItem.h>
+#include <fltk3/Pixmap.h>
+#include <fltk3/Tree.h>
 #include <stdio.h>
 #include "../src/flstring.h"
 #include "undo.h"
@@ -74,7 +74,7 @@ strcasecmp(const char *s, const char *t) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Box.H>
+#include <fltk3/Box.h>
 class Fl_Box_Type : public Fl_Widget_Type {
 public:
   virtual const char *type_name() {return "Fl_Box";}
@@ -88,7 +88,7 @@ static Fl_Box_Type Fl_Box_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Button.H>
+#include <fltk3/Button.h>
 static Fl_Menu_Item buttontype_menu[] = {
   {"Normal",0,0,(void*)0},
   {"Toggle",0,0,(void*)FL_TOGGLE_BUTTON},
@@ -114,7 +114,7 @@ static Fl_Button_Type Fl_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Return_Button.H>
+#include <fltk3/ReturnButton.h>
 class Fl_Return_Button_Type : public Fl_Button_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
@@ -134,7 +134,7 @@ static Fl_Return_Button_Type Fl_Return_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Repeat_Button.H>
+#include <fltk3/RepeatButton.h>
 class Fl_Repeat_Button_Type : public Fl_Widget_Type {
 public:
   virtual const char *type_name() {return "Fl_Repeat_Button";}
@@ -148,7 +148,7 @@ static Fl_Repeat_Button_Type Fl_Repeat_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Light_Button.H>
+#include <fltk3/LightButton.h>
 class Fl_Light_Button_Type : public Fl_Button_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
@@ -166,7 +166,7 @@ static Fl_Light_Button_Type Fl_Light_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Check_Button.H>
+#include <fltk3/CheckButton.h>
 class Fl_Check_Button_Type : public Fl_Button_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
@@ -184,7 +184,7 @@ static Fl_Check_Button_Type Fl_Check_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Round_Button.H>
+#include <fltk3/RoundButton.h>
 class Fl_Round_Button_Type : public Fl_Button_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
@@ -204,9 +204,9 @@ static Fl_Round_Button_Type Fl_Round_Button_type;
 
 extern int compile_only;
 
-#include <FL/Fl_Browser.H>
-#include <FL/Fl_Check_Browser.H>
-#include <FL/Fl_File_Browser.H>
+#include <fltk3/Browser.h>
+#include <fltk3/CheckBrowser.h>
+#include <fltk3/FileBrowser.h>
 
 static Fl_Menu_Item browser_type_menu[] = {
   {"No Select",0,0,(void*)FL_NORMAL_BROWSER},
@@ -383,7 +383,7 @@ int Fl_File_Browser_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Counter.H>
+#include <fltk3/Counter.h>
 static Fl_Menu_Item counter_type_menu[] = {
   {"Normal",0,0,(void*)FL_NORMAL_COUNTER},
   {"Simple",0,0,(void*)FL_SIMPLE_COUNTER},
@@ -416,7 +416,7 @@ int Fl_Counter_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Spinner.H>
+#include <fltk3/Spinner.h>
 static Fl_Menu_Item spinner_type_menu[] = {
   {"Integer",0,0,(void*)FL_INT_INPUT},
   {"Float",  0,0,(void*)FL_FLOAT_INPUT},
@@ -459,7 +459,7 @@ int Fl_Spinner_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Input.H>
+#include <fltk3/Input.h>
 static Fl_Menu_Item input_type_menu[] = {
   {"Normal",0,0,(void*)FL_NORMAL_INPUT},
   {"Multiline",0,0,(void*)FL_MULTILINE_INPUT},
@@ -516,7 +516,7 @@ int Fl_Input_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_File_Input.H>
+#include <fltk3/FileInput.h>
 class Fl_File_Input_Type : public Fl_Widget_Type {
   Fl_Menu_Item *subtypes() {return 0;}
   int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
@@ -558,7 +558,7 @@ int Fl_File_Input_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Text_Display.H>
+#include <fltk3/TextDisplay.h>
 class Fl_Text_Display_Type : public Fl_Widget_Type {
   int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
 public:
@@ -600,7 +600,7 @@ int Fl_Text_Display_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Text_Editor.H>
+#include <fltk3/TextEditor.h>
 class Fl_Text_Editor_Type : public Fl_Widget_Type {
   int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
 public:
@@ -642,7 +642,7 @@ int Fl_Text_Editor_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Clock.H>
+#include <fltk3/Clock.h>
 class Fl_Clock_Type : public Fl_Widget_Type {
 public:
   virtual const char *type_name() {return "Fl_Clock";}
@@ -656,7 +656,7 @@ static Fl_Clock_Type Fl_Clock_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Help_View.H>
+#include <fltk3/HelpView.h>
 class Fl_Help_View_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
@@ -687,7 +687,7 @@ static Fl_Help_View_Type Fl_Help_View_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Progress.H>
+#include <fltk3/Progress.h>
 class Fl_Progress_Type : public Fl_Widget_Type {
 public:
   virtual const char *type_name() {return "Fl_Progress";}
@@ -703,7 +703,7 @@ static Fl_Progress_Type Fl_Progress_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Adjuster.H>
+#include <fltk3/Adjuster.h>
 class Fl_Adjuster_Type : public Fl_Widget_Type {
   int is_valuator() const {return 1;}
 public:
@@ -718,7 +718,7 @@ static Fl_Adjuster_Type Fl_Adjuster_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Dial.H>
+#include <fltk3/Dial.h>
 static Fl_Menu_Item dial_type_menu[] = {
   {"Dot",0,0,(void*)0},
   {"Line",0,0,(void*)FL_LINE_DIAL},
@@ -739,7 +739,7 @@ static Fl_Dial_Type Fl_Dial_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Roller.H>
+#include <fltk3/Roller.h>
 static Fl_Menu_Item roller_type_menu[] = {
   {"Vertical",0,0,(void*)0},
   {"Horizontal",0,0,(void*)FL_HORIZONTAL},
@@ -759,7 +759,7 @@ static Fl_Roller_Type Fl_Roller_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Scrollbar.H>
+#include <fltk3/Scrollbar.h>
 static Fl_Menu_Item slider_type_menu[] = {
   {"Vertical",0,0,(void*)FL_VERT_SLIDER},
   {"Horizontal",0,0,(void*)FL_HOR_SLIDER},
@@ -800,7 +800,7 @@ static Fl_Scrollbar_Type Fl_Scrollbar_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Output.H>
+#include <fltk3/Output.h>
 static Fl_Menu_Item output_type_menu[] = {
   {"Normal",0,0,(void*)FL_NORMAL_OUTPUT},
   {"Multiline",0,0,(void*)FL_MULTILINE_OUTPUT},
@@ -832,7 +832,7 @@ static Fl_Output_Type Fl_Output_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Value_Input.H>
+#include <fltk3/ValueInput.h>
 class Fl_Value_Input_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
@@ -873,7 +873,7 @@ int Fl_Value_Input_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Value_Output.H>
+#include <fltk3/ValueOutput.h>
 class Fl_Value_Output_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
@@ -913,7 +913,7 @@ int Fl_Value_Output_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Value_Slider.H>
+#include <fltk3/ValueSlider.h>
 class Fl_Value_Slider_Type : public Fl_Slider_Type {
   int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
 public:
@@ -967,7 +967,7 @@ extern class Fl_Wizard_Type Fl_Wizard_type;
 extern void select(Fl_Type *,int);
 extern void select_only(Fl_Type *);
 
-#include <FL/Fl_Window.H>
+#include <fltk3/Window.h>
 
 static void cb(Fl_Widget *, void *v) {
   undo_checkpoint();
@@ -1079,7 +1079,7 @@ Fl_Menu_Item New_Menu[] = {
 {0},
 {0}};
 
-#include <FL/Fl_Multi_Label.H>
+#include <fltk3/MultiLabel.h>
 
 // modify a menuitem to display an icon in front of the label
 static void make_iconlabel( Fl_Menu_Item *mi, Fl_Image *ic, const char *txt )

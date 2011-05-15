@@ -34,7 +34,7 @@
 // Not at all guaranteed to be Forms compatible, especially with any
 // string with a % sign in it!
 
-#include <FL/Fl_Menu_.H>
+#include <fltk3/Menu_.h>
 #include "flstring.h"
 #include <stdio.h>
 #include <stdlib.h>

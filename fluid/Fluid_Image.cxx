@@ -25,15 +25,15 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
+#include <fltk3/run.h>
+#include <fltk3/Widget.h>
 #include "Fl_Type.h"
 #include "Fluid_Image.h"
 #include "../src/flstring.h"
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <FL/filename.H>
+#include <fltk3/filename.h>
 
 extern void goto_source_dir(); // in fluid.C
 extern void leave_source_dir(); // in fluid.C
@@ -57,7 +57,7 @@ void Fluid_Image::write_static() {
     // Write Pixmap data...
     write_c("\n");
     if (pixmap_header_written != write_number) {
-      write_c("#include <FL/Fl_Pixmap.H>\n");
+      write_c("#include <fltk3/Pixmap.h>\n");
       pixmap_header_written = write_number;
     }
     write_c("static const char *%s[] = {\n",
@@ -90,7 +90,7 @@ void Fluid_Image::write_static() {
     // Write Bitmap data...
     write_c("\n");
     if (bitmap_header_written != write_number) {
-      write_c("#include <FL/Fl_Bitmap.H>\n");
+      write_c("#include <fltk3/Bitmap.h>\n");
       bitmap_header_written = write_number;
     }
     write_c("static unsigned char %s[] =\n",
@@ -105,7 +105,7 @@ void Fluid_Image::write_static() {
     // Write jpeg image data...
     write_c("\n");
     if (jpeg_header_written != write_number) {
-      write_c("#include <FL/Fl_JPEG_Image.H>\n");
+      write_c("#include <fltk3/JPEGImage.h>\n");
       jpeg_header_written = write_number;
     }
     write_c("static unsigned char %s[] =\n",
@@ -136,7 +136,7 @@ void Fluid_Image::write_static() {
     // Write image data...
     write_c("\n");
     if (image_header_written != write_number) {
-      write_c("#include <FL/Fl_Image.H>\n");
+      write_c("#include <fltk3/Image.h>\n");
       image_header_written = write_number;
     }
     write_c("static unsigned char %s[] =\n",
@@ -241,7 +241,7 @@ Fluid_Image::~Fluid_Image() {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_File_Chooser.H>
+#include <fltk3/FileChooser.h>
 
 const char *ui_find_image_name;
 Fluid_Image *ui_find_image(const char *oldname) {

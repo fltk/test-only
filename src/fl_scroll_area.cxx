@@ -30,9 +30,9 @@
 // into the drawing area.
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/x.h>
+#include <fltk3/draw.h>
 
 // scroll a rectangle and redraw the newly exposed portions:
 /**

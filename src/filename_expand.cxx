@@ -30,8 +30,8 @@
    to & from may be the same buffer.
 */
 
-#include <FL/filename.H>
-#include <FL/fl_utf8.h>
+#include <fltk3/filename.h>
+#include <fltk3/utf8.h>
 #include <stdlib.h>
 #include "flstring.h"
 #if defined(WIN32) && !defined(__CYGWIN__)
@@ -57,7 +57,7 @@ static inline int isdirsep(char c) {return c=='/' || c=='\\';}
 
     \b Examples:
     \code
-    #include <FL/filename.H>
+    #include <fltk3/filename.h>
     [..]
     putenv("TMPDIR=/var/tmp");
     fl_filename_expand(out, sizeof(out), "~fred/.cshrc");     // out="/usr/fred/.cshrc"

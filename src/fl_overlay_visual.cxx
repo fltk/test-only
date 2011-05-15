@@ -32,8 +32,8 @@
 
 #include <config.h>
 #if HAVE_OVERLAY
-#include <FL/Fl.H>
-#include <FL/x.H>
+#include <fltk3/run.h>
+#include <fltk3/x.h>
 
 // SERVER_OVERLAY_VISUALS property element:
 struct OverlayInfo {

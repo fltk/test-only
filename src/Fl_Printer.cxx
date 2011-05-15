@@ -26,7 +26,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl_Printer.H>
+#include <fltk3/Printer.h>
 
 #ifdef __APPLE__
 //#include "Fl_Quartz_Printer.mm"

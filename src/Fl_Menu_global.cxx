@@ -29,8 +29,8 @@
 // Currently only one menu at a time and you cannot destruct the menu,
 // is this sufficient?
 
-#include <FL/Fl.H>
-#include <FL/Fl_Menu_.H>
+#include <fltk3/run.h>
+#include <fltk3/Menu_.h>
 
 static Fl_Menu_* the_widget;
 

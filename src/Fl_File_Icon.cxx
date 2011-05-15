@@ -43,7 +43,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/fl_utf8.h>
+#include <fltk3/utf8.h>
 #include "flstring.h"
 #include <errno.h>
 #include <sys/types.h>
@@ -55,10 +55,10 @@
 #  include <unistd.h>
 #endif /* WIN32 || __EMX__ */
 
-#include <FL/Fl_File_Icon.H>
-#include <FL/Fl_Widget.H>
-#include <FL/fl_draw.H>
-#include <FL/filename.H>
+#include <fltk3/FileIcon.h>
+#include <fltk3/Widget.h>
+#include <fltk3/draw.h>
+#include <fltk3/filename.h>
 
 
 //

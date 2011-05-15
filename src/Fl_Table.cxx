@@ -23,11 +23,11 @@
 //
 
 #include <stdio.h>		// fprintf
-#include <FL/fl_draw.H>
-#include <FL/Fl_Table.H>
+#include <fltk3/draw.h>
+#include <fltk3/Table.h>
 
 #if defined(USE_UTF8) && ( defined(MICROSOFT) || defined(LINUX) )
-#include <FL/fl_utf8.H>	// currently only Windows and Linux
+#include <fltk3/fl_utf8.H>	// currently only Windows and Linux
 #endif
 
 #define SCROLLBAR_SIZE	16

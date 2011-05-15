@@ -34,11 +34,11 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Menu.H>
-#include <FL/Fl_Plugin.H>
+#include <fltk3/Widget.h>
+#include <fltk3/Menu.h>
+#include <fltk3/Plugin.h>
 #include "Fluid_Image.h"
-#include <FL/fl_draw.H>
+#include <fltk3/draw.h>
 
 void set_modflag(int mf);
 
@@ -405,9 +405,9 @@ public:
   void redraw();
 };
 
-#include <FL/Fl_Tabs.H>
-#include <FL/Fl_Pack.H>
-#include <FL/Fl_Wizard.H>
+#include <fltk3/TabGroup.h>
+#include <fltk3/PackedGroup.h>
+#include <fltk3/WizardGroup.h>
 
 class igroup : public Fl_Group {
 public:
@@ -663,7 +663,7 @@ public:
 };
 
 
-#include <FL/Fl_Menu_.H>
+#include <fltk3/Menu_.h>
 class Fl_Menu_Type : public Fl_Widget_Type {
   int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
     Fl_Menu_ *myo = (Fl_Menu_*)(w==4 ? ((Fl_Widget_Type*)this->factory)->o : this->o);
@@ -695,7 +695,7 @@ public:
 
 extern Fl_Menu_Item button_type_menu[];
 
-#include <FL/Fl_Menu_Button.H>
+#include <fltk3/MenuButton.h>
 class Fl_Menu_Button_Type : public Fl_Menu_Type {
   Fl_Menu_Item *subtypes() {return button_type_menu;}
 public:
@@ -716,7 +716,7 @@ public:
 
 extern Fl_Menu_Item dummymenu[];
 
-#include <FL/Fl_Choice.H>
+#include <fltk3/Choice.h>
 class Fl_Choice_Type : public Fl_Menu_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
@@ -741,7 +741,7 @@ public:
   int pixmapID() { return 15; }
 };
 
-#include <FL/Fl_Input_Choice.H>
+#include <fltk3/InputChoice.h>
 class Fl_Input_Choice_Type : public Fl_Menu_Type {
   int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
     Fl_Input_Choice *myo = (Fl_Input_Choice*)(w==4 ? ((Fl_Widget_Type*)this->factory)->o : this->o);
@@ -780,8 +780,8 @@ public:
   void copy_properties();
 };
 
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Menu_Bar.H>
+#include <fltk3/Window.h>
+#include <fltk3/MenuBar.h>
 class Fl_Menu_Bar_Type : public Fl_Menu_Type {
 public:
   virtual void ideal_size(int &w, int &h) {

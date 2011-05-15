@@ -25,22 +25,22 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_File_Icon.H>
-#include <FL/Fl_Help_Dialog.H>
-#include <FL/Fl_Hold_Browser.H>
-#include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Plugin.H>
-#include <FL/fl_ask.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_File_Chooser.H>
-#include <FL/Fl_PNG_Image.H>
-#include <FL/fl_message.H>
-#include <FL/filename.H>
+#include <fltk3/run.h>
+#include <fltk3/DoubleWindow.h>
+#include <fltk3/Box.h>
+#include <fltk3/Button.h>
+#include <fltk3/FileIcon.h>
+#include <fltk3/HelpDialog.h>
+#include <fltk3/HoldBrowser.h>
+#include <fltk3/MenuBar.h>
+#include <fltk3/Input.h>
+#include <fltk3/Plugin.h>
+#include <fltk3/ask.h>
+#include <fltk3/draw.h>
+#include <fltk3/FileChooser.h>
+#include <fltk3/PNGImage.h>
+#include <fltk3/message.h>
+#include <fltk3/filename.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -61,7 +61,7 @@
 #  include <io.h>
 #  include <fcntl.h>
 #  include <commdlg.h>
-#  include <FL/x.H>
+#  include <fltk3/x.h>
 #  ifndef __WATCOMC__
 // Visual C++ 2005 incorrectly displays a warning about the use of POSIX APIs
 // on Windows, which is supposed to be POSIX compliant...
@@ -417,7 +417,7 @@ void exit_cb(Fl_Widget *,void *) {
 }
 
 #ifdef __APPLE__
-#  include <FL/x.H>
+#  include <fltk3/x.h>
 
 void
 apple_open_cb(const char *c) {

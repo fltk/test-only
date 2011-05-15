@@ -34,9 +34,9 @@
 // Include necessary header files...
 //
 
-#include <FL/Fl_JPEG_Image.H>
-#include <FL/Fl_Shared_Image.H>
-#include <FL/fl_utf8.h>
+#include <fltk3/JPEGImage.h>
+#include <fltk3/SharedImage.h>
+#include <fltk3/utf8.h>
 #include <config.h>
 #include <stdio.h>
 #include <stdlib.h>

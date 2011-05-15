@@ -32,18 +32,18 @@
 
 #ifndef print_panel_h
 #define print_panel_h
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Choice.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Round_Button.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Spinner.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Return_Button.H>
-#include <FL/Fl_Progress.H>
+#include <fltk3/run.h>
+#include <fltk3/DoubleWindow.h>
+#include <fltk3/Group.h>
+#include <fltk3/Choice.h>
+#include <fltk3/Button.h>
+#include <fltk3/Box.h>
+#include <fltk3/RoundButton.h>
+#include <fltk3/Input.h>
+#include <fltk3/Spinner.h>
+#include <fltk3/CheckButton.h>
+#include <fltk3/ReturnButton.h>
+#include <fltk3/Progress.h>
 static Fl_Double_Window* make_print_panel();
 static void print_cb(Fl_Return_Button *, void *); 
 static void print_load();

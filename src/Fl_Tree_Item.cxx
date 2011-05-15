@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Tree_Item.H>
-#include <FL/Fl_Tree_Prefs.H>
+#include <fltk3/Widget.h>
+#include <fltk3/TreeItem.h>
+#include <fltk3/TreePrefs.h>
 
 //////////////////////
 // Fl_Tree_Item.cxx

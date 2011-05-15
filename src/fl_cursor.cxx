@@ -31,17 +31,17 @@
 // This avoids a field in the Fl_Window, and I suspect is more
 // portable to other systems.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/x.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/x.h>
 #if !defined(WIN32) && !defined(__APPLE__)
 #  include <X11/cursorfont.h>
 #endif
-#include <FL/fl_draw.H>
+#include <fltk3/draw.h>
 
 /**
   Sets the cursor for the current window to the specified shape and colors.
-  The cursors are defined in the <FL/Enumerations.H> header file. 
+  The cursors are defined in the <fltk3/enumerations.h> header file. 
   */
 void fl_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
   if (Fl::first_window()) Fl::first_window()->cursor(c,fg,bg);

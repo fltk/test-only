@@ -342,11 +342,11 @@
 // Include necessary headers.
 //
 
-#include <FL/Fl_File_Chooser.H>
-#include <FL/filename.H>
-#include <FL/fl_ask.H>
-#include <FL/x.H>
-#include <FL/Fl_Shared_Image.H>
+#include <fltk3/FileChooser.h>
+#include <fltk3/filename.h>
+#include <fltk3/ask.h>
+#include <fltk3/x.h>
+#include <fltk3/SharedImage.h>
 
 #include <stdio.h>
 #include <stdlib.h>

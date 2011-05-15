@@ -40,10 +40,10 @@
 
 // 3/10/98: created
 
-#include <FL/fl_draw.H>
-#include <FL/x.H>
+#include <fltk3/draw.h>
+#include <fltk3/x.h>
 #ifdef WIN32
-#  include <FL/math.h>
+#  include <fltk3/math.h>
 #endif
 #include <config.h>
 

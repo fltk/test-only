@@ -26,7 +26,7 @@
 //
 
 #include <config.h>
-#include <FL/Enumerations.H>
+#include <fltk3/enumerations.h>
 
 // one of these for each color in fltk's "colormap":
 // if overlays are enabled, another one for the overlay

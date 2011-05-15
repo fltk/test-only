@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <FL/Fl_Tree.H>
-#include <FL/Fl_Preferences.H>
+#include <fltk3/Tree.h>
+#include <fltk3/Preferences.h>
 
 //////////////////////
 // Fl_Tree.cxx
@@ -501,7 +501,7 @@ Fl_Tree_Item *Fl_Tree::next_selected_item(Fl_Tree_Item *item) {
 int Fl_Tree::handle(int e) {
   int ret = 0;
   // Developer note: Fl_Browser_::handle() used for reference here..
-  // #include <FL/names.h>	// for event debugging
+  // #include <fltk3/names.h>	// for event debugging
   // fprintf(stderr, "DEBUG: %s (%d)\n", fl_eventnames[e], e);
   if (e == FL_ENTER || e == FL_LEAVE) return(1);
   switch (e) {

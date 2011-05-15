@@ -31,13 +31,13 @@
 /** \fn Fl_Bitmap::Fl_Bitmap(const unsigned char *array, int W, int H)
   The constructors create a new bitmap from the specified bitmap data.*/
 
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Menu_Item.H>
-#include <FL/Fl_Bitmap.H>
-#include <FL/Fl_Printer.H>
+#include <fltk3/run.h>
+#include <fltk3/x.h>
+#include <fltk3/draw.h>
+#include <fltk3/Widget.h>
+#include <fltk3/MenuItem.h>
+#include <fltk3/Bitmap.h>
+#include <fltk3/Printer.h>
 #include "flstring.h"
 
 #if defined(__APPLE_QUARTZ__)

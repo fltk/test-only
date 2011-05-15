@@ -34,9 +34,9 @@
 // boxtypes.  Other box types are in separate files so they are not
 // linked in if not used.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/Widget.h>
+#include <fltk3/draw.h>
 #include <config.h>
 
 ////////////////////////////////////////////////////////////////
@@ -253,7 +253,7 @@ static struct {
   uchar dx, dy, dw, dh;
   int set;
 } fl_box_table[256] = {
-// must match list in Enumerations.H!!!
+// must match list in enumerations.h!!!
   {fl_no_box,		0,0,0,0,1},		
   {fl_rectf,		0,0,0,0,1}, // FL_FLAT_BOX
   {fl_up_box,		D1,D1,D2,D2,1},

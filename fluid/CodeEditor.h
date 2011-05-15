@@ -36,9 +36,9 @@
 #  include <stdlib.h>
 #  include <string.h>
 #  include <ctype.h>
-#  include <FL/Fl.H>
-#  include <FL/Fl_Text_Buffer.H>
-#  include <FL/Fl_Text_Editor.H>
+#  include <fltk3/run.h>
+#  include <fltk3/TextBuffer.h>
+#  include <fltk3/TextEditor.h>
 
 
 class CodeEditor : public Fl_Text_Editor {

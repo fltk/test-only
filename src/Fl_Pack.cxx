@@ -30,9 +30,9 @@
 // them on each redraw (only if box() is zero)
 // Bugs: ?
 
-#include <FL/Fl.H>
-#include <FL/Fl_Pack.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/PackedGroup.h>
+#include <fltk3/draw.h>
 
 /**
   Creates a new Fl_Pack widget using the given position, size,

@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl_Button.H>
+#include <fltk3/Button.h>
 
 class Shortcut_Button : public Fl_Button {
 public:

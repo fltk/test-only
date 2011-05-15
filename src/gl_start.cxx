@@ -40,10 +40,10 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/x.h>
+#include <fltk3/draw.h>
 #include "Fl_Gl_Choice.H"
 
 static GLContext context;

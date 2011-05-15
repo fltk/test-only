@@ -151,7 +151,7 @@ int close_read() {
   return 1;
 }
 
-#include <FL/fl_message.H>
+#include <fltk3/message.h>
 
 void read_error(const char *format, ...) {
   va_list args;
@@ -301,7 +301,7 @@ const char *read_word(int wantbrace) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl.H>
+#include <fltk3/run.h>
 #include "Fl_Widget_Type.h"
 
 // global int variables:
@@ -557,7 +557,7 @@ int read_fdesign_line(const char*& name, const char*& value) {
 
 int fdesign_flip;
 int fdesign_magic;
-#include <FL/Fl_Group.H>
+#include <fltk3/Group.h>
 
 static const char *class_matcher[] = {
 "FL_CHECKBUTTON", "Fl_Check_Button",

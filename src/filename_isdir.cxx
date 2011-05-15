@@ -31,8 +31,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <ctype.h>
-#include <FL/filename.H>
-#include <FL/fl_utf8.h>
+#include <fltk3/filename.h>
+#include <fltk3/utf8.h>
 
 
 #if defined(WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
@@ -50,7 +50,7 @@ int _fl_filename_isdir_quick(const char* n) {
 /**
    Determines if a file exists and is a directory from its filename.
    \code
-   #include <FL/filename.H>
+   #include <fltk3/filename.h>
    [..]
    fl_filename_isdir("/etc");		// returns non-zero
    fl_filename_isdir("/etc/hosts");	// returns 0

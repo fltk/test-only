@@ -29,13 +29,13 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Overlay_Window.H>
-#include <FL/fl_message.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#include <FL/Fl_Menu_Item.H>
-#include <FL/Fl_Round_Button.H>
+#include <fltk3/run.h>
+#include <fltk3/OverlayWindow.h>
+#include <fltk3/message.h>
+#include <fltk3/draw.h>
+#include <fltk3/x.h>
+#include <fltk3/MenuItem.h>
+#include <fltk3/RoundButton.h>
 #include "Fl_Widget_Type.h"
 #include "undo.h"
 #include <math.h>

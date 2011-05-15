@@ -41,13 +41,13 @@
 // Implemented without using the xpm library (which I can't use because
 // it interferes with the color cube used by fl_draw_image).
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Menu_Item.H>
-#include <FL/Fl_Pixmap.H>
-#include <FL/Fl_Printer.H>
+#include <fltk3/run.h>
+#include <fltk3/draw.h>
+#include <fltk3/x.h>
+#include <fltk3/Widget.h>
+#include <fltk3/MenuItem.h>
+#include <fltk3/Pixmap.h>
+#include <fltk3/Printer.h>
 
 #include <stdio.h>
 #include "flstring.h"

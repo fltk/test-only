@@ -27,13 +27,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/fl_utf8.h>
+#include <fltk3/utf8.h>
 #include "flstring.h"
 
-#include <FL/Fl.H>
-#include <FL/Fl_Shared_Image.H>
-#include <FL/Fl_XBM_Image.H>
-#include <FL/Fl_XPM_Image.H>
+#include <fltk3/run.h>
+#include <fltk3/SharedImage.h>
+#include <fltk3/XBMImage.h>
+#include <fltk3/XPMImage.h>
 
 
 //

@@ -26,11 +26,11 @@
 //
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Printer.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/DoubleWindow.h>
+#include <fltk3/Printer.h>
+#include <fltk3/x.h>
+#include <fltk3/draw.h>
 
 // On systems that support double buffering "naturally" the base
 // Fl_Window class will probably do double-buffer and this subclass
@@ -107,7 +107,7 @@ char fl_can_do_alpha_blending() {
 #elif defined(WIN32)
 
 // Code used to switch output to an off-screen window.  See macros in
-// win32.H which save the old state in local variables.
+// win32.h which save the old state in local variables.
 
 typedef struct { BYTE a; BYTE b; BYTE c; BYTE d; } FL_BLENDFUNCTION;
 typedef BOOL (WINAPI* fl_alpha_blend_func)

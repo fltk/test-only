@@ -37,9 +37,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Browser_.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/Browser_.h>
+#include <fltk3/draw.h>
 #include <stdlib.h>
 #include "../src/flstring.h"
 #include <stdio.h>
@@ -47,7 +47,7 @@
 #include "Fl_Type.h"
 #include "undo.h"
 
-#include <FL/Fl_Pixmap.H>
+#include <fltk3/Pixmap.h>
 #include "pixmaps/lock.xpm"
 #include "pixmaps/protected.xpm"
 //#include "pixmaps/unlock.xpm"
