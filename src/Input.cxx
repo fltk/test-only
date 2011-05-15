@@ -174,6 +174,7 @@ static Input* erase_cursor_only;
   avoid blinking, not to make draw() less expensive. A few minor attempts
   to make draw() not think about clipped text are implemented, though.
 */
+
 void Input::minimal_update(int p) {
   if (erase_cursor_only == this) erase_cursor_only = 0;
   // Sometimes DAMAGE_ALL is set, but widget not redrawed because it's out of clip region.
@@ -1020,7 +1021,13 @@ bool Input::static_text(const char* str, int len) {
     int i = 0;
     // find first different character:
     if (text_) {
-      for (; i<size_ && i<len && str[i]==text_[i]; i++);
+      for (; i<size_ && i<len; ){
+	 int length, dummy;
+	 int strBytes = utf8bytes(str[i]), textBytes = utf8bytes(text_[i]);
+	 if(utf8decode(str+i, str+i+strBytes, &length) == utf8decode(text_+i, text_+i+textBytes, &dummy))
+	   i += length;
+	 else break;
+      }
       if (i==size_ && i==len) ret = false;
     }
     if (ret) minimal_update(i);

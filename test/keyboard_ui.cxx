@@ -13,12 +13,12 @@ fltk::Window* make_window() {
     w = o;
     o->shortcut(0xff1b);
     o->begin();
-     {fltk::Output* o = key_output = new fltk::Output(15, 15, 170, 30, "Fl::event_key():");
+     {fltk::Output* o = key_output = new fltk::Output(15, 15, 170, 30, "fltk::event_key():");
       o->textfont(fltk::COURIER);
       o->labelsize(10);
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
     }
-     {fltk::Output* o = text_output = new fltk::Output(195, 15, 190, 30, "Fl::event_text():");
+     {fltk::Output* o = text_output = new fltk::Output(195, 15, 190, 30, "fltk::event_text():");
       o->textfont(fltk::COURIER);
       o->labelsize(10);
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
