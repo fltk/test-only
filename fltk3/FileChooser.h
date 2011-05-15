@@ -89,7 +89,7 @@ private:
   Fl_File_Browser *fileList;
   void cb_fileList_i(Fl_File_Browser*, void*);
   static void cb_fileList(Fl_File_Browser*, void*);
-  Fl_Box *previewBox;
+  fltk3::Box *previewBox;
 public:
   Fl_Check_Button *previewButton;
 private:

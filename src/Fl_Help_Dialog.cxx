@@ -187,9 +187,9 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
         } // Fl_Input* find_
         o->end();
       } // Fl_Group* o
-      { Fl_Box* o = new Fl_Box(150, 10, 190, 25);
+      { fltk3::Box* o = new fltk3::Box(150, 10, 190, 25);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     { view_ = new Fl_Help_View(10, 45, 510, 330);

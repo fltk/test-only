@@ -144,7 +144,7 @@ public:
     and distance from the top-left corner.
 
     It is possible to achieve any type of resize behavior by using an
-    invisible Fl_Box as the resizable and/or by using a hierarchy
+    invisible fltk3::Box as the resizable and/or by using a hierarchy
     of child Fl_Group's.
   */
   void resizable(Fl_Widget* o) {resizable_ = o;}

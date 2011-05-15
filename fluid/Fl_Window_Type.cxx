@@ -1421,7 +1421,7 @@ void Fl_Window_Type::read_property(const char *c) {
 
 int Fl_Window_Type::read_fdesign(const char* propname, const char* value) {
   int x;
-  o->box(FL_NO_BOX); // because fdesign always puts an Fl_Box next
+  o->box(FL_NO_BOX); // because fdesign always puts an fltk3::Box next
   if (!strcmp(propname,"Width")) {
     if (sscanf(value,"%d",&x) == 1) o->size(x,o->h());
   } else if (!strcmp(propname,"Height")) {

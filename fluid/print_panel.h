@@ -39,7 +39,7 @@ extern Fl_Choice *print_choice;
 #include <fltk3/Button.h>
 extern Fl_Button *print_properties;
 #include <fltk3/Box.h>
-extern Fl_Box *print_status;
+extern fltk3::Box *print_status;
 #include <fltk3/RoundButton.h>
 extern Fl_Round_Button *print_all;
 extern Fl_Round_Button *print_pages;

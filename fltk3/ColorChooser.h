@@ -120,7 +120,7 @@ class FL_EXPORT Fl_Color_Chooser : public Fl_Group {
   Flcc_Value_Input rvalue;
   Flcc_Value_Input gvalue;
   Flcc_Value_Input bvalue;
-  Fl_Box resize_box;
+  fltk3::Box resize_box;
   double hue_, saturation_, value_;
   double r_, g_, b_;
   void set_valuators();

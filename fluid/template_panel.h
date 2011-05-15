@@ -35,7 +35,7 @@ extern Fl_Double_Window *template_panel;
 #include <fltk3/Browser.h>
 extern Fl_Browser *template_browser;
 #include <fltk3/Box.h>
-extern Fl_Box *template_preview;
+extern fltk3::Box *template_preview;
 #include <fltk3/Input.h>
 extern Fl_Input *template_name;
 extern Fl_Input *template_instance;

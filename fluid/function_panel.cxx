@@ -91,9 +91,9 @@ Fl_Double_Window* make_function_panel() {
         f_c_button->tooltip("Declare with a C interface instead of C++.");
         f_c_button->labelsize(11);
       } // Fl_Light_Button* f_c_button
-      { Fl_Box* o = new Fl_Box(235, 10, 45, 20);
+      { fltk3::Box* o = new fltk3::Box(235, 10, 45, 20);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     { f_name_input = new Fl_Input(10, 50, 320, 20, "Name(args): (blank for main())");
@@ -125,9 +125,9 @@ Fl_Double_Window* make_function_panel() {
         f_panel_cancel->shortcut(0xff1b);
         f_panel_cancel->labelsize(11);
       } // Fl_Button* f_panel_cancel
-      { Fl_Box* o = new Fl_Box(10, 200, 205, 20);
+      { fltk3::Box* o = new fltk3::Box(10, 200, 205, 20);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     { f_comment_input = new Fl_Text_Editor(10, 125, 320, 65, "Comment:");
@@ -183,10 +183,10 @@ Fl_Double_Window* make_code_panel() {
         code_panel_cancel->shortcut(0xff1b);
         code_panel_cancel->labelsize(11);
       } // Fl_Button* code_panel_cancel
-      { Fl_Box* o = new Fl_Box(10, 150, 380, 20);
+      { fltk3::Box* o = new fltk3::Box(10, 150, 380, 20);
         o->labelsize(11);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     o->size_range(200, 150);
@@ -235,9 +235,9 @@ Fl_Double_Window* make_codeblock_panel() {
         codeblock_panel_cancel->shortcut(0xff1b);
         codeblock_panel_cancel->labelsize(11);
       } // Fl_Button* codeblock_panel_cancel
-      { Fl_Box* o = new Fl_Box(10, 85, 140, 20);
+      { fltk3::Box* o = new fltk3::Box(10, 85, 140, 20);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     o->size_range(o->w(), o->h(), Fl::w(), o->h());
@@ -285,9 +285,9 @@ Fl_Double_Window* make_declblock_panel() {
         declblock_public_button_x->when(FL_WHEN_NEVER);
         declblock_public_button_x->hide();
       } // Fl_Light_Button* declblock_public_button_x
-      { Fl_Box* o = new Fl_Box(155, 10, 135, 20);
+      { fltk3::Box* o = new fltk3::Box(155, 10, 135, 20);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     { decl_before_input = new Fl_Input(10, 40, 280, 20);
@@ -316,9 +316,9 @@ Fl_Double_Window* make_declblock_panel() {
         declblock_panel_cancel->shortcut(0xff1b);
         declblock_panel_cancel->labelsize(11);
       } // Fl_Button* declblock_panel_cancel
-      { Fl_Box* o = new Fl_Box(10, 105, 140, 20);
+      { fltk3::Box* o = new fltk3::Box(10, 105, 140, 20);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     o->size_range(o->w(), o->h(), Fl::w(), o->h());
@@ -361,9 +361,9 @@ Fl_Double_Window* make_decl_panel() {
   { decl_panel = new Fl_Double_Window(343, 237, "Declaration Properties");
     decl_panel->align(Fl_Align(FL_ALIGN_CLIP|FL_ALIGN_INSIDE));
     { Fl_Group* o = new Fl_Group(10, 10, 270, 20);
-      { Fl_Box* o = new Fl_Box(200, 10, 80, 20);
+      { fltk3::Box* o = new fltk3::Box(200, 10, 80, 20);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       { decl_choice = new Fl_Choice(10, 10, 185, 20);
         decl_choice->down_box(FL_BORDER_BOX);
         decl_choice->labelsize(11);
@@ -398,9 +398,9 @@ n int foo();\", a #directive like \"#include <foo.h>\", a comment like \"//foo\
         decl_panel_cancel->shortcut(0xff1b);
         decl_panel_cancel->labelsize(11);
       } // Fl_Button* decl_panel_cancel
-      { Fl_Box* o = new Fl_Box(10, 205, 185, 20);
+      { fltk3::Box* o = new fltk3::Box(10, 205, 185, 20);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     { decl_comment_input = new Fl_Text_Editor(10, 130, 320, 65, "Comment:");
@@ -457,9 +457,9 @@ Fl_Double_Window* make_data_panel() {
   { data_panel = new Fl_Double_Window(343, 237, "Binary Data Properties");
     data_panel->align(Fl_Align(FL_ALIGN_CLIP|FL_ALIGN_INSIDE));
     { Fl_Group* o = new Fl_Group(10, 10, 270, 20);
-      { Fl_Box* o = new Fl_Box(200, 10, 80, 20);
+      { fltk3::Box* o = new fltk3::Box(200, 10, 80, 20);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       { data_choice = new Fl_Choice(10, 10, 185, 20);
         data_choice->down_box(FL_BORDER_BOX);
         data_choice->labelsize(11);
@@ -504,9 +504,9 @@ Fl_Double_Window* make_data_panel() {
         data_panel_cancel->shortcut(0xff1b);
         data_panel_cancel->labelsize(11);
       } // Fl_Button* data_panel_cancel
-      { Fl_Box* o = new Fl_Box(10, 205, 185, 20);
+      { fltk3::Box* o = new fltk3::Box(10, 205, 185, 20);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     { data_comment_input = new Fl_Text_Editor(10, 130, 320, 65, "Comment:");
@@ -551,9 +551,9 @@ Fl_Double_Window* make_class_panel() {
         c_public_button->when(FL_WHEN_NEVER);
         c_public_button->hide();
       } // Fl_Light_Button* c_public_button
-      { Fl_Box* o = new Fl_Box(80, 10, 210, 20);
+      { fltk3::Box* o = new fltk3::Box(80, 10, 210, 20);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     { c_name_input = new Fl_Input(10, 20, 320, 20, "Name:");
@@ -594,9 +594,9 @@ Fl_Double_Window* make_class_panel() {
         c_panel_cancel->shortcut(0xff1b);
         c_panel_cancel->labelsize(11);
       } // Fl_Button* c_panel_cancel
-      { Fl_Box* o = new Fl_Box(10, 165, 185, 20);
+      { fltk3::Box* o = new fltk3::Box(10, 165, 185, 20);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     class_panel->set_modal();
@@ -650,10 +650,10 @@ Fl_Double_Window* make_comment_panel() {
         comment_panel_cancel->shortcut(0xff1b);
         comment_panel_cancel->labelsize(11);
       } // Fl_Button* comment_panel_cancel
-      { Fl_Box* o = new Fl_Box(110, 250, 250, 20);
+      { fltk3::Box* o = new fltk3::Box(110, 250, 250, 20);
         o->labelsize(11);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     { Fl_Group* o = new Fl_Group(10, 10, 90, 243);
@@ -675,10 +675,10 @@ Fl_Double_Window* make_comment_panel() {
       { comment_load = new Fl_Button(10, 100, 90, 20, "Import...");
         comment_load->labelsize(11);
       } // Fl_Button* comment_load
-      { Fl_Box* o = new Fl_Box(10, 132, 90, 121);
+      { fltk3::Box* o = new fltk3::Box(10, 132, 90, 121);
         o->labelsize(11);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     o->size_range(320, 180);
@@ -1027,7 +1027,7 @@ Fl_Window* make_widgetbin() {
       { Fl_Button* o = new Fl_Button(517, 5, 24, 24);
         o->tooltip("Box");
         o->box(FL_THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Box"));
+        o->callback((Fl_Callback*)type_make_cb, (void*)("fltk3::Box"));
         o->image(pixmap[5]);
       } // Fl_Button* o
       { Fl_Button* o = new Fl_Button(542, 5, 24, 24);
@@ -1133,9 +1133,9 @@ Fl_Double_Window* make_sourceview() {
         o->labelsize(11);
         o->callback((Fl_Callback*)toggle_sourceview_b_cb);
       } // Fl_Button* o
-      { Fl_Box* o = new Fl_Box(265, 460, 190, 20);
+      { fltk3::Box* o = new fltk3::Box(265, 460, 190, 20);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     sourceview_panel->size_range(384, 120);

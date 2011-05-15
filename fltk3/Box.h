@@ -26,41 +26,45 @@
 //
 
 /* \file
-   Fl_Box widget . */
+ fltk3::Box widget . */
 
-#ifndef Fl_Box_H
-#define Fl_Box_H
+#ifndef FLTK3_BOX_H
+#define FLTK3_BOX_H
 
-#ifndef Fl_Widget_H
 #include "Widget.h"
-#endif
 
-/**
-  This widget simply draws its box, and possibly it's label.  Putting it
-  before some other widgets and making it big enough to surround them
-  will let you draw a frame around them.
-*/
-class FL_EXPORT Fl_Box : public Fl_Widget {
-protected:
-  void draw();
-public:
+class Fl_Widget;
+
+namespace fltk3 {
+  
   /**
-    - The first constructor sets box() to FL_NO_BOX, which
-    means it is invisible. However such widgets are useful as placeholders
-    or Fl_Group::resizable()
-    values.  To change the box to something visible, use box(n).
-    - The second form of the constructor sets the box to the specified box
-    type.
-    <P>The destructor removes the box.
-  */
-    Fl_Box(int X, int Y, int W, int H, const char *l=0)
-	: Fl_Widget(X,Y,W,H,l) {}
-  /**    See Fl_Box::Fl_Box(int x, int y, int w, int h, const char * = 0)   */
-    Fl_Box(Fl_Boxtype b, int X, int Y, int W, int H, const char *l)
-	: Fl_Widget(X,Y,W,H,l) {box(b);}
-
-  virtual int handle(int);
-};
+   This widget simply draws its box, and possibly it's label.  Putting it
+   before some other widgets and making it big enough to surround them
+   will let you draw a frame around them.
+   */
+  class FL_EXPORT Box : public Fl_Widget {
+  protected:
+    void draw();
+  public:
+    /**
+     - The first constructor sets box() to FL_NO_BOX, which
+     means it is invisible. However such widgets are useful as placeholders
+     or Fl_Group::resizable()
+     values.  To change the box to something visible, use box(n).
+     - The second form of the constructor sets the box to the specified box
+     type.
+     <P>The destructor removes the box.
+     */
+    Box(int X, int Y, int W, int H, const char *l=0)
+    : Fl_Widget(X,Y,W,H,l) {}
+    /**    See fltk3::Box::fltk3::Box(int x, int y, int w, int h, const char * = 0)   */
+    Box(Fl_Boxtype b, int X, int Y, int W, int H, const char *l)
+    : Fl_Widget(X,Y,W,H,l) {box(b);}
+    
+    virtual int handle(int);
+  };
+  
+} // namespace
 
 #endif
 

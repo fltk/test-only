@@ -105,7 +105,7 @@ if (img) {
 };
 }
 
-Fl_Box *template_preview=(Fl_Box *)0;
+fltk3::Box *template_preview=(fltk3::Box *)0;
 
 Fl_Input *template_name=(Fl_Input *)0;
 
@@ -151,11 +151,11 @@ Fl_Double_Window* make_template_panel() {
       template_browser->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       template_browser->when(3);
     } // Fl_Browser* template_browser
-    { template_preview = new Fl_Box(200, 28, 250, 250);
+    { template_preview = new fltk3::Box(200, 28, 250, 250);
       template_preview->box(FL_THIN_DOWN_BOX);
       template_preview->align(Fl_Align(69|FL_ALIGN_INSIDE));
       Fl_Group::current()->resizable(template_preview);
-    } // Fl_Box* template_preview
+    } // fltk3::Box* template_preview
     { template_name = new Fl_Input(124, 288, 326, 25, "Template Name:");
       template_name->labelfont(1);
       template_name->textfont(4);
@@ -171,9 +171,9 @@ Fl_Double_Window* make_template_panel() {
       { template_delete = new Fl_Button(10, 323, 133, 25, "Delete Template");
         template_delete->callback((Fl_Callback*)template_delete_cb);
       } // Fl_Button* template_delete
-      { Fl_Box* o = new Fl_Box(153, 323, 126, 25);
+      { fltk3::Box* o = new fltk3::Box(153, 323, 126, 25);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       { Fl_Button* o = new Fl_Button(289, 323, 72, 25, "Cancel");
         o->callback((Fl_Callback*)cb_Cancel);
       } // Fl_Button* o

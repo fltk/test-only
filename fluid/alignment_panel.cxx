@@ -73,9 +73,9 @@ Fl_Double_Window* make_project_window() {
       o->selection_color((Fl_Color)12);
       { Fl_Group* o = new Fl_Group(10, 36, 378, 169, "Output");
         o->hide();
-        { Fl_Box* o = new Fl_Box(100, 49, 236, 49, "Use \"name.ext\" to set a file name or just \".ext\" to set extension.");
+        { fltk3::Box* o = new fltk3::Box(100, 49, 236, 49, "Use \"name.ext\" to set a file name or just \".ext\" to set extension.");
           o->align(Fl_Align(FL_ALIGN_WRAP|FL_ALIGN_INSIDE));
-        } // Fl_Box* o
+        } // fltk3::Box* o
         { header_file_input = new Fl_Input(99, 103, 272, 20, "Header File:");
           header_file_input->tooltip("The name of the generated header file.");
           header_file_input->box(FL_THIN_DOWN_BOX);
@@ -224,10 +224,10 @@ Fl_Double_Window* make_settings_window() {
     { Fl_Group* o = new Fl_Group(116, 43, 220, 126);
       o->labelfont(1);
       o->align(Fl_Align(FL_ALIGN_CENTER));
-      { Fl_Box* o = new Fl_Box(116, 43, 1, 25, "Options: ");
+      { fltk3::Box* o = new fltk3::Box(116, 43, 1, 25, "Options: ");
         o->labelfont(1);
         o->align(Fl_Align(FL_ALIGN_LEFT));
-      } // Fl_Box* o
+      } // fltk3::Box* o
       { tooltips_button = new Fl_Check_Button(116, 43, 113, 25, "Show Tooltips");
         tooltips_button->down_box(FL_DOWN_BOX);
         tooltips_button->callback((Fl_Callback*)cb_tooltips_button);
@@ -430,68 +430,68 @@ Fl_Double_Window* make_layout_window() {
       o->tooltip("Close this dialog.");
       o->callback((Fl_Callback*)cb_Close2);
     } // Fl_Button* o
-    { Fl_Box* o = new Fl_Box(26, 10, 70, 25, "Grid:");
+    { fltk3::Box* o = new fltk3::Box(26, 10, 70, 25, "Grid:");
       o->labelfont(1);
       o->align(Fl_Align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE));
-    } // Fl_Box* o
-    { Fl_Box* o = new Fl_Box(-1, 115, 97, 25, "Widget Size:");
+    } // fltk3::Box* o
+    { fltk3::Box* o = new fltk3::Box(-1, 115, 97, 25, "Widget Size:");
       o->labelfont(1);
       o->align(Fl_Align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE));
-    } // Fl_Box* o
+    } // fltk3::Box* o
     { Fl_Group* o = new Fl_Group(105, 115, 170, 75);
       { def_widget_size[0] = new Fl_Round_Button(105, 115, 70, 25);
         def_widget_size[0]->type(102);
         def_widget_size[0]->down_box(FL_ROUND_DOWN_BOX);
         def_widget_size[0]->callback((Fl_Callback*)default_widget_size_cb, (void*)(8));
       } // Fl_Round_Button* def_widget_size[0]
-      { Fl_Box* o = new Fl_Box(120, 115, 50, 25, "tiny");
+      { fltk3::Box* o = new fltk3::Box(120, 115, 50, 25, "tiny");
         o->labelsize(8);
         o->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
-      } // Fl_Box* o
+      } // fltk3::Box* o
       { def_widget_size[1] = new Fl_Round_Button(180, 115, 70, 25);
         def_widget_size[1]->type(102);
         def_widget_size[1]->down_box(FL_ROUND_DOWN_BOX);
         def_widget_size[1]->callback((Fl_Callback*)default_widget_size_cb, (void*)(11));
       } // Fl_Round_Button* def_widget_size[1]
-      { Fl_Box* o = new Fl_Box(195, 115, 50, 25, "small");
+      { fltk3::Box* o = new fltk3::Box(195, 115, 50, 25, "small");
         o->labelsize(11);
         o->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
-      } // Fl_Box* o
+      } // fltk3::Box* o
       { def_widget_size[2] = new Fl_Round_Button(105, 140, 70, 25);
         def_widget_size[2]->type(102);
         def_widget_size[2]->down_box(FL_ROUND_DOWN_BOX);
         def_widget_size[2]->callback((Fl_Callback*)default_widget_size_cb, (void*)(14));
       } // Fl_Round_Button* def_widget_size[2]
-      { Fl_Box* o = new Fl_Box(120, 140, 50, 25, "normal");
+      { fltk3::Box* o = new fltk3::Box(120, 140, 50, 25, "normal");
         o->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
-      } // Fl_Box* o
+      } // fltk3::Box* o
       { def_widget_size[3] = new Fl_Round_Button(180, 140, 90, 25);
         def_widget_size[3]->type(102);
         def_widget_size[3]->down_box(FL_ROUND_DOWN_BOX);
         def_widget_size[3]->callback((Fl_Callback*)default_widget_size_cb, (void*)(18));
       } // Fl_Round_Button* def_widget_size[3]
-      { Fl_Box* o = new Fl_Box(195, 140, 68, 25, "medium");
+      { fltk3::Box* o = new fltk3::Box(195, 140, 68, 25, "medium");
         o->labelsize(18);
         o->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
-      } // Fl_Box* o
+      } // fltk3::Box* o
       { def_widget_size[4] = new Fl_Round_Button(105, 165, 75, 25);
         def_widget_size[4]->type(102);
         def_widget_size[4]->down_box(FL_ROUND_DOWN_BOX);
         def_widget_size[4]->callback((Fl_Callback*)default_widget_size_cb, (void*)(24));
       } // Fl_Round_Button* def_widget_size[4]
-      { Fl_Box* o = new Fl_Box(120, 165, 64, 25, "large");
+      { fltk3::Box* o = new fltk3::Box(120, 165, 64, 25, "large");
         o->labelsize(24);
         o->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
-      } // Fl_Box* o
+      } // fltk3::Box* o
       { def_widget_size[5] = new Fl_Round_Button(180, 165, 95, 25);
         def_widget_size[5]->type(102);
         def_widget_size[5]->down_box(FL_ROUND_DOWN_BOX);
         def_widget_size[5]->callback((Fl_Callback*)default_widget_size_cb, (void*)(32));
       } // Fl_Round_Button* def_widget_size[5]
-      { Fl_Box* o = new Fl_Box(195, 165, 76, 25, "huge");
+      { fltk3::Box* o = new fltk3::Box(195, 165, 76, 25, "huge");
         o->labelsize(32);
         o->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
-      } // Fl_Box* o
+      } // fltk3::Box* o
       o->end();
     } // Fl_Group* o
     grid_window->set_non_modal();

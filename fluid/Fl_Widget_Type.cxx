@@ -1812,7 +1812,7 @@ void live_mode_cb(Fl_Button*o,void *) {
         live_window->color(FL_GREEN);
         Fl_Group *rsz = new Fl_Group(0, h+20, 130, 35);
         rsz->box(FL_NO_BOX);
-        Fl_Box *rsz_dummy = new Fl_Box(110, h+20, 1, 25);
+        fltk3::Box *rsz_dummy = new fltk3::Box(110, h+20, 1, 25);
         rsz_dummy->box(FL_NO_BOX);
         rsz->resizable(rsz_dummy);
         Fl_Button *btn = new Fl_Button(10, h+20, 100, 25, "Exit Live Mode");

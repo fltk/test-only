@@ -248,10 +248,10 @@ Fl_Double_Window* make_widget_panel() {
             o->labelcolor(FL_INACTIVE_COLOR);
             o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_INSIDE));
           } // Fl_Button* o
-          { Fl_Box* o = new Fl_Box(395, 115, 0, 20);
+          { fltk3::Box* o = new fltk3::Box(395, 115, 0, 20);
             o->labelsize(11);
             Fl_Group::current()->resizable(o);
-          } // Fl_Box* o
+          } // fltk3::Box* o
           o->end();
         } // Fl_Group* o
         { Fl_Group* o = new Fl_Group(95, 150, 300, 20, "Position:");
@@ -301,9 +301,9 @@ ive to the origin at construction time");
             o->labelsize(11);
             o->callback((Fl_Callback*)wc_relative_cb);
           } // Fl_Light_Button* o
-          { Fl_Box* o = new Fl_Box(394, 150, 1, 20);
+          { fltk3::Box* o = new fltk3::Box(394, 150, 1, 20);
             Fl_Group::current()->resizable(o);
-          } // Fl_Box* o
+          } // fltk3::Box* o
           o->end();
         } // Fl_Group* o
         { Fl_Group* o = new Fl_Group(95, 185, 300, 20, "Values:");
@@ -348,9 +348,9 @@ ive to the origin at construction time");
             o->callback((Fl_Callback*)value_cb);
             o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           } // Fl_Value_Input* o
-          { Fl_Box* o = new Fl_Box(395, 185, 0, 20);
+          { fltk3::Box* o = new fltk3::Box(395, 185, 0, 20);
             Fl_Group::current()->resizable(o);
-          } // Fl_Box* o
+          } // fltk3::Box* o
           o->end();
         } // Fl_Group* o
         { Fl_Group* o = new Fl_Group(95, 185, 300, 20, "Size Range:");
@@ -403,9 +403,9 @@ ive to the origin at construction time");
             o->labelsize(11);
             o->callback((Fl_Callback*)set_max_size_cb);
           } // Fl_Button* o
-          { Fl_Box* o = new Fl_Box(395, 185, 0, 20);
+          { fltk3::Box* o = new fltk3::Box(395, 185, 0, 20);
             Fl_Group::current()->resizable(o);
-          } // Fl_Box* o
+          } // fltk3::Box* o
           o->end();
         } // Fl_Group* o
         { Shortcut_Button* o = new Shortcut_Button(95, 210, 310, 20, "Shortcut:");
@@ -486,10 +486,10 @@ ive to the origin at construction time");
             o->callback((Fl_Callback*)hotspot_cb);
             o->when(FL_WHEN_CHANGED);
           } // Fl_Light_Button* o
-          { Fl_Box* o = new Fl_Box(395, 260, 0, 20);
+          { fltk3::Box* o = new fltk3::Box(395, 260, 0, 20);
             o->labelsize(11);
             Fl_Group::current()->resizable(o);
-          } // Fl_Box* o
+          } // fltk3::Box* o
           o->end();
         } // Fl_Group* o
         { Fl_Input* o = new Fl_Input(95, 285, 310, 20, "Tooltip:");
@@ -499,10 +499,10 @@ ive to the origin at construction time");
           o->textsize(11);
           o->callback((Fl_Callback*)tooltip_cb);
         } // Fl_Input* o
-        { Fl_Box* o = new Fl_Box(95, 305, 300, 5);
+        { fltk3::Box* o = new fltk3::Box(95, 305, 300, 5);
           o->labelsize(11);
           Fl_Group::current()->resizable(o);
-        } // Fl_Box* o
+        } // fltk3::Box* o
         o->end();
         Fl_Group::current()->resizable(o);
       } // Fl_Group* o
@@ -621,10 +621,10 @@ ive to the origin at construction time");
           } // Fl_Button* o
           o->end();
         } // Fl_Group* o
-        { Fl_Box* o = new Fl_Box(95, 140, 300, 40);
+        { fltk3::Box* o = new fltk3::Box(95, 140, 300, 40);
           o->labelsize(11);
           Fl_Group::current()->resizable(o);
-        } // Fl_Box* o
+        } // fltk3::Box* o
         o->end();
       } // Fl_Group* o
       { Fl_Group* o = new Fl_Group(10, 30, 400, 290, "C++");
@@ -791,10 +791,10 @@ access the Widget pointer and \'v\' to access the user value.");
     } // Fl_Tabs* o
     { Fl_Group* o = new Fl_Group(9, 330, 400, 20);
       o->labelsize(11);
-      { Fl_Box* o = new Fl_Box(9, 330, 20, 20);
+      { fltk3::Box* o = new fltk3::Box(9, 330, 20, 20);
         o->labelsize(11);
         Fl_Group::current()->resizable(o);
-      } // Fl_Box* o
+      } // fltk3::Box* o
       { Fl_Button* o = new Fl_Button(240, 330, 99, 20, "Hide &Overlays");
         o->tooltip("Hide the widget overlay box.");
         o->labelsize(11);

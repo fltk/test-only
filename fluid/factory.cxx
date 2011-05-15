@@ -77,10 +77,10 @@ strcasecmp(const char *s, const char *t) {
 #include <fltk3/Box.h>
 class Fl_Box_Type : public Fl_Widget_Type {
 public:
-  virtual const char *type_name() {return "Fl_Box";}
+  virtual const char *type_name() {return "fltk3::Box";}
   virtual const char *alt_type_name() {return "fltk::Widget";}
   Fl_Widget *widget(int x,int y,int w, int h) {
-    return new Fl_Box(x,y,w,h,"label");}
+    return new fltk3::Box(x,y,w,h,"label");}
   Fl_Widget_Type *_make() {return new Fl_Box_Type();}
   int pixmapID() { return 5; }
 };

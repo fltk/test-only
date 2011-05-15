@@ -412,7 +412,7 @@ inline void fl_set_pixmap_align(Fl_Widget* o,Fl_Align a,int,int) {o->align(a);}
 //inline void fl_set_pixmap_colorcloseness(int, int, int);
 
 #include "Box.h"
-forms_constructorb(Fl_Box, fl_add_box)
+forms_constructorb(fltk3::Box, fl_add_box)
 
 #include "Browser.h"
 forms_constructor(Fl_Browser, fl_add_browser)
@@ -809,7 +809,7 @@ inline void fl_set_slider_precision(Fl_Widget* o, int i) {
     ((Fl_Value_Slider*)o)->precision(i);}
 // filter function!
 
-// The forms text object was the same as an Fl_Box except it inverted the
+// The forms text object was the same as an fltk3::Box except it inverted the
 // meaning of FL_ALIGN_INSIDE.  Implementation in forms.cxx
 class FL_EXPORT Fl_FormsText : public Fl_Widget {
 protected:

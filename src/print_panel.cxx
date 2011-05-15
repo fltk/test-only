@@ -53,7 +53,7 @@ static Fl_Double_Window *print_panel=(Fl_Double_Window *)0;
 static Fl_Group *print_panel_controls=(Fl_Group *)0;
 static Fl_Choice *print_choice=(Fl_Choice *)0;
 static Fl_Button *print_properties=(Fl_Button *)0;
-static Fl_Box *print_status=(Fl_Box *)0;
+static fltk3::Box *print_status=(fltk3::Box *)0;
 static Fl_Round_Button *print_all=(Fl_Round_Button *)0;
 static Fl_Round_Button *print_pages=(Fl_Round_Button *)0;
 static Fl_Round_Button *print_selection=(Fl_Round_Button *)0;
@@ -258,9 +258,9 @@ Fl_Double_Window* make_print_panel() {
       { print_properties = new Fl_Button(314, 10, 115, 25, Fl_Printer::dialog_properties);
         print_properties->callback((Fl_Callback*)cb_print_properties);
       } // Fl_Button* print_properties
-      { print_status = new Fl_Box(0, 41, print_panel_controls->w(), 17, "printer/job status");
+      { print_status = new fltk3::Box(0, 41, print_panel_controls->w(), 17, "printer/job status");
         print_status->align(Fl_Align(FL_ALIGN_CLIP|FL_ALIGN_INSIDE|FL_ALIGN_LEFT));
-      } // Fl_Box* print_status
+      } // fltk3::Box* print_status
       { Fl_Group* o = new Fl_Group(10, 86, 227, 105, Fl_Printer::dialog_range);
         o->box(FL_THIN_DOWN_BOX);
         o->labelfont(1);
@@ -309,128 +309,128 @@ Fl_Double_Window* make_print_panel() {
         } // Fl_Check_Button* print_collate_button
         { print_collate_group[0] = new Fl_Group(257, 131, 191, 50);
           print_collate_group[0]->deactivate();
-          { Fl_Box* o = new Fl_Box(287, 141, 30, 40, "1");
+          { fltk3::Box* o = new fltk3::Box(287, 141, 30, 40, "1");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
             o->deactivate();
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(272, 136, 30, 40, "1");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(272, 136, 30, 40, "1");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
             o->deactivate();
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(257, 131, 30, 40, "1");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(257, 131, 30, 40, "1");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
             o->deactivate();
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(352, 141, 30, 40, "2");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(352, 141, 30, 40, "2");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
             o->deactivate();
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(337, 136, 30, 40, "2");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(337, 136, 30, 40, "2");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
             o->deactivate();
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(322, 131, 30, 40, "2");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(322, 131, 30, 40, "2");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
             o->deactivate();
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(417, 141, 30, 40, "3");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(417, 141, 30, 40, "3");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
             o->deactivate();
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(402, 136, 30, 40, "3");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(402, 136, 30, 40, "3");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
             o->deactivate();
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(387, 131, 30, 40, "3");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(387, 131, 30, 40, "3");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
             o->deactivate();
-          } // Fl_Box* o
+          } // fltk3::Box* o
           print_collate_group[0]->end();
         } // Fl_Group* print_collate_group[0]
         { print_collate_group[1] = new Fl_Group(257, 131, 191, 50);
           print_collate_group[1]->hide();
           print_collate_group[1]->deactivate();
-          { Fl_Box* o = new Fl_Box(287, 141, 30, 40, "3");
+          { fltk3::Box* o = new fltk3::Box(287, 141, 30, 40, "3");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(272, 136, 30, 40, "2");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(272, 136, 30, 40, "2");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(257, 131, 30, 40, "1");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(257, 131, 30, 40, "1");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(352, 141, 30, 40, "3");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(352, 141, 30, 40, "3");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(337, 136, 30, 40, "2");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(337, 136, 30, 40, "2");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(322, 131, 30, 40, "1");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(322, 131, 30, 40, "1");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(417, 141, 30, 40, "3");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(417, 141, 30, 40, "3");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(402, 136, 30, 40, "2");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(402, 136, 30, 40, "2");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
-          } // Fl_Box* o
-          { Fl_Box* o = new Fl_Box(387, 131, 30, 40, "1");
+          } // fltk3::Box* o
+          { fltk3::Box* o = new fltk3::Box(387, 131, 30, 40, "1");
             o->box(FL_BORDER_BOX);
             o->color(FL_BACKGROUND2_COLOR);
             o->labelsize(11);
             o->align(Fl_Align(FL_ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE));
-          } // Fl_Box* o
+          } // fltk3::Box* o
           print_collate_group[1]->end();
         } // Fl_Group* print_collate_group[1]
         o->end();
