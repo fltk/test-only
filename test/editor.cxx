@@ -469,7 +469,7 @@ int check_save(void) {
 
   int r = fltk::choice("The current file has not been saved.\n"
                     "Would you like to save it now?",
-                    "Cancel", "Save", "Don't Save");
+                    "Don't Save", "Save", "Cancel");
 
   if (r == 1) {
     save_cb(); // Save the file...

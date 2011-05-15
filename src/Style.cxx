@@ -110,6 +110,11 @@ int Style::wheel_scroll_lines_ = 3;
   fltk::Button uses box, however). The default is fltk::UP_BOX.
 */
 
+/*! \fn Box* Style::focusbox() const;
+  The type of box to draw when a widget takes focus. The default is
+  fltk::DEFAULT_FOCUS_BOX
+*/
+
 /*! \fn Symbol* Style::glyph() const;
 
   A small image that some Widgets use to draw part of themselves.
