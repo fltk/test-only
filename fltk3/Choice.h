@@ -76,10 +76,10 @@
       This method sets the changed() flag.
   \li <tt>void Fl_Widget::clear_changed()</tt>
       This method clears the changed() flag.
-  \li <tt>Fl_Boxtype Fl_Choice::down_box() const</tt>
+  \li <tt>fltk3::Boxtype Fl_Choice::down_box() const</tt>
       Gets the current down box, which is used when the menu is popped up.
-      The default down box type is \c FL_DOWN_BOX.
-  \li <tt>void Fl_Choice::down_box(Fl_Boxtype b)</tt>
+      The default down box type is \c fltk3::DOWN_BOX.
+  \li <tt>void Fl_Choice::down_box(fltk3::Boxtype b)</tt>
       Sets the current down box type to \p b.
  */
 class FL_EXPORT Fl_Choice : public Fl_Menu_ {

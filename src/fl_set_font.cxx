@@ -40,14 +40,14 @@ static int table_size;
   Changes a face.  The string pointer is simply stored,
   the string is not copied, so the string must be in static memory.
 */    
-void Fl::set_font(Fl_Font fnum, const char* name) {
+void Fl::set_font(fltk3::Font fnum, const char* name) {
   while (fnum >= table_size) {
     int i = table_size;
     if (!i) {	// don't realloc the built-in table
-      table_size = 2*FL_FREE_FONT;
-      i = FL_FREE_FONT;
+      table_size = 2*fltk3::FREE_FONT;
+      i = fltk3::FREE_FONT;
       Fl_Fontdesc* t = (Fl_Fontdesc*)malloc(table_size*sizeof(Fl_Fontdesc));
-      memcpy(t, fl_fonts, FL_FREE_FONT*sizeof(Fl_Fontdesc));
+      memcpy(t, fl_fonts, fltk3::FREE_FONT*sizeof(Fl_Fontdesc));
       fl_fonts = t;
     } else {
       table_size = 2*table_size;
@@ -82,7 +82,7 @@ void Fl::set_font(Fl_Font fnum, const char* name) {
   fl_font(-1, 0);
 }
 /** Copies one face to another. */
-void Fl::set_font(Fl_Font fnum, Fl_Font from) {
+void Fl::set_font(fltk3::Font fnum, fltk3::Font from) {
   Fl::set_font(fnum, get_font(from));
 }
 /**
@@ -90,7 +90,7 @@ void Fl::set_font(Fl_Font fnum, Fl_Font from) {
     face. Under X this value is passed to XListFonts to get all the sizes
     of this face.
 */
-const char* Fl::get_font(Fl_Font fnum) {return fl_fonts[fnum].name;}
+const char* Fl::get_font(fltk3::Font fnum) {return fl_fonts[fnum].name;}
 
 //
 // End of "$Id$".

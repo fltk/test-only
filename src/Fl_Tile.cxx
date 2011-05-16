@@ -104,22 +104,22 @@ void Fl_Tile::resize(int X,int Y,int W,int H) {
   }
 }
 
-static void set_cursor(Fl_Tile*t, Fl_Cursor c) {
-  static Fl_Cursor cursor;
+static void set_cursor(Fl_Tile*t, fltk3::Cursor c) {
+  static fltk3::Cursor cursor;
   if (cursor == c || !t->window()) return;
   cursor = c;
 #ifdef __sgi
-  t->window()->cursor(c,FL_RED,FL_WHITE);
+  t->window()->cursor(c,fltk3::RED,fltk3::WHITE);
 #else
   t->window()->cursor(c);
 #endif
 }
 
-static Fl_Cursor cursors[4] = {
-  FL_CURSOR_DEFAULT,
-  FL_CURSOR_WE,
-  FL_CURSOR_NS,
-  FL_CURSOR_MOVE};
+static fltk3::Cursor cursors[4] = {
+  fltk3::CURSOR_DEFAULT,
+  fltk3::CURSOR_WE,
+  fltk3::CURSOR_NS,
+  fltk3::CURSOR_MOVE};
 
 int Fl_Tile::handle(int event) {
   static int sdrag;
@@ -134,9 +134,9 @@ int Fl_Tile::handle(int event) {
 
   switch (event) {
 
-  case FL_MOVE:
-  case FL_ENTER:
-  case FL_PUSH:
+  case fltk3::MOVE:
+  case fltk3::ENTER:
+  case fltk3::PUSH:
     // don't potentially change the mouse cursor if inactive:
     if (!active()) break; // will cascade inherited handle()
     {
@@ -175,14 +175,14 @@ int Fl_Tile::handle(int event) {
     return Fl_Group::handle(event);
   }
 
-  case FL_LEAVE:
-    set_cursor(this, FL_CURSOR_DEFAULT);
+  case fltk3::LEAVE:
+    set_cursor(this, fltk3::CURSOR_DEFAULT);
     break;
 
-  case FL_DRAG:
+  case fltk3::DRAG:
     // This is necessary if CONSOLIDATE_MOTION in Fl_x.cxx is turned off:
     // if (damage()) return 1; // don't fall behind
-  case FL_RELEASE: {
+  case fltk3::RELEASE: {
     if (!sdrag) return 0; // should not happen
     Fl_Widget* r = resizable(); if (!r) r = this;
     int newx;
@@ -200,7 +200,7 @@ int Fl_Tile::handle(int event) {
     } else
       newy = sy;
     position(sx,sy,newx,newy);
-    if (event == FL_DRAG) set_changed();
+    if (event == fltk3::DRAG) set_changed();
     do_callback();
     return 1;}
 

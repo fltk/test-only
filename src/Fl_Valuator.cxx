@@ -37,11 +37,11 @@
 Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
 /**
   Creates a new Fl_Valuator widget using the given position,
-  size, and label string. The default boxtype is FL_NO_BOX.
+  size, and label string. The default boxtype is fltk3::NO_BOX.
 */
 : Fl_Widget(X,Y,W,H,L) {
-  align(FL_ALIGN_BOTTOM);
-  when(FL_WHEN_CHANGED);
+  align(fltk3::ALIGN_BOTTOM);
+  when(fltk3::WHEN_CHANGED);
   value_ = 0;
   previous_value_ = 1;
   min = 0;
@@ -66,7 +66,7 @@ void Fl_Valuator::precision(int p) {
   for (B = 1; p--;) B *= 10;
 }
 /** Asks for partial redraw */
-void Fl_Valuator::value_damage() {damage(FL_DAMAGE_EXPOSE);} // by default do partial-redraw
+void Fl_Valuator::value_damage() {damage(fltk3::DAMAGE_EXPOSE);} // by default do partial-redraw
 
 /**
     Sets the current value. The new value is <I>not</I>
@@ -95,24 +95,24 @@ double Fl_Valuator::softclamp(double v) {
 }
 
 // inline void Fl_Valuator::handle_push() {previous_value_ = value_;}
-/** Called during a drag operation, after an FL_WHEN_CHANGED event is received and before the callback. */
+/** Called during a drag operation, after an fltk3::WHEN_CHANGED event is received and before the callback. */
 void Fl_Valuator::handle_drag(double v) {
   if (v != value_) {
     value_ = v;
     value_damage();
     set_changed();
-    if (when() & FL_WHEN_CHANGED) do_callback();
+    if (when() & fltk3::WHEN_CHANGED) do_callback();
   }
 }
-/** Called after an FL_WHEN_RELEASE event is received and before the callback. */
+/** Called after an fltk3::WHEN_RELEASE event is received and before the callback. */
 void Fl_Valuator::handle_release() {
-  if (when()&FL_WHEN_RELEASE) {
+  if (when()&fltk3::WHEN_RELEASE) {
     // insure changed() is off even if no callback is done.  It may have
     // been turned on by the drag, and then the slider returned to it's
     // initial position:
     clear_changed();
     // now do the callback only if slider in new position or always is on:
-    if (value_ != previous_value_ || when() & FL_WHEN_NOT_CHANGED) {
+    if (value_ != previous_value_ || when() & fltk3::WHEN_NOT_CHANGED) {
       do_callback();
     }
   }

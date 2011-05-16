@@ -35,7 +35,7 @@ static CGAffineTransform font_mx = { 1, 0, 0, -1, 0, 0 };
 static CFMutableDictionaryRef attributes = NULL;
 #endif
 
-Fl_Font_Descriptor::Fl_Font_Descriptor(const char* name, Fl_Fontsize Size) {
+Fl_Font_Descriptor::Fl_Font_Descriptor(const char* name, fltk3::Fontsize Size) {
   next = 0;
 #  if HAVE_GL
   listbase = 0;
@@ -234,7 +234,7 @@ static UniChar *mac_Utf8_to_Utf16(const char *txt, int len, int *new_len)
 
 Fl_Fontdesc* fl_fonts = built_in_table;
 
-static Fl_Font_Descriptor* find(Fl_Font fnum, Fl_Fontsize size) {
+static Fl_Font_Descriptor* find(fltk3::Font fnum, fltk3::Fontsize size) {
   Fl_Fontdesc* s = fl_fonts+fnum;
   if (!s->name) s = fl_fonts; // use 0 if fnum undefined
   Fl_Font_Descriptor* f;
@@ -249,7 +249,7 @@ static Fl_Font_Descriptor* find(Fl_Font fnum, Fl_Fontsize size) {
 ////////////////////////////////////////////////////////////////
 // Public interface:
 
-void Fl_Quartz_Graphics_Driver::font(Fl_Font fnum, Fl_Fontsize size) {
+void Fl_Quartz_Graphics_Driver::font(fltk3::Font fnum, fltk3::Fontsize size) {
   if (fnum==-1) {
     Fl_Graphics_Driver::font(0, 0);
     return;
@@ -259,13 +259,13 @@ void Fl_Quartz_Graphics_Driver::font(Fl_Font fnum, Fl_Fontsize size) {
 }
 
 int Fl_Quartz_Graphics_Driver::height() {
-  if (!font_descriptor()) font(FL_HELVETICA, FL_NORMAL_SIZE);
+  if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
   Fl_Font_Descriptor *fl_fontsize = font_descriptor();
   return fl_fontsize->ascent + fl_fontsize->descent;
 }
 
 int Fl_Quartz_Graphics_Driver::descent() {
-  if (!font_descriptor()) font(FL_HELVETICA, FL_NORMAL_SIZE);
+  if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
   Fl_Font_Descriptor *fl_fontsize = font_descriptor();
   return fl_fontsize->descent+1;
 }
@@ -376,12 +376,12 @@ if (fl_mac_os_version >= 100500) {
 double Fl_Quartz_Graphics_Driver::width(const char* txt, int n) {
   int wc_len = n;
   UniChar *uniStr = mac_Utf8_to_Utf16(txt, n, &wc_len);
-  if (!font_descriptor()) font(FL_HELVETICA, FL_NORMAL_SIZE);
+  if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
   return fl_mac_width(uniStr, wc_len, font_descriptor());
 }
 
 double Fl_Quartz_Graphics_Driver::width(unsigned int wc) {
-  if (!font_descriptor()) font(FL_HELVETICA, FL_NORMAL_SIZE);
+  if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
 
   UniChar utf16[3];
   int l = 1;
@@ -399,7 +399,7 @@ double Fl_Quartz_Graphics_Driver::width(unsigned int wc) {
 
 // text extent calculation
 void Fl_Quartz_Graphics_Driver::text_extents(const char *str8, int n, int &dx, int &dy, int &w, int &h) {
-  if (!font_descriptor()) font(FL_HELVETICA, FL_NORMAL_SIZE);
+  if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
   Fl_Font_Descriptor *fl_fontsize = font_descriptor();
   UniChar *txt = mac_Utf8_to_Utf16(str8, n, &n);
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
@@ -454,7 +454,7 @@ else {
 } // fl_text_extents
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-static CGColorRef flcolortocgcolor(Fl_Color i)
+static CGColorRef flcolortocgcolor(fltk3::Color i)
 {
   uchar r, g, b;
   Fl::get_color(i, r, g, b);
@@ -512,13 +512,13 @@ static void fl_mac_draw(const char *str, int n, float x, float y, Fl_Graphics_Dr
 
 void Fl_Quartz_Graphics_Driver::draw(const char *str, int n, float x, float y) {
   // avoid a crash if no font has been selected by user yet !
-  if (!font_descriptor()) font(FL_HELVETICA, FL_NORMAL_SIZE);
+  if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
   fl_mac_draw(str, n, x, y, this);
 }
 
 void Fl_Quartz_Graphics_Driver::draw(const char* str, int n, int x, int y) {
   // avoid a crash if no font has been selected by user yet !
-  if (!font_descriptor()) font(FL_HELVETICA, FL_NORMAL_SIZE);
+  if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
   fl_mac_draw(str, n, (float)x-0.0f, (float)y+0.5f, this);
 }
 

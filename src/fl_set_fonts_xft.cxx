@@ -36,26 +36,26 @@
 // making the name, and then forgot about it. To avoid having to change
 // the header files I decided to store this value in the last character
 // of the font name array.
-#define ENDOFBUFFER 127 // sizeof(Fl_Font.fontname)-1
+#define ENDOFBUFFER 127 // sizeof(fltk3::Font.fontname)-1
 
 // turn a stored font name into a pretty name:
-const char* Fl::get_font_name(Fl_Font fnum, int* ap) {
+const char* Fl::get_font_name(fltk3::Font fnum, int* ap) {
   Fl_Fontdesc *f = fl_fonts + fnum;
   if (!f->fontname[0]) {
     const char* p = f->name;
     int type;
     switch (p[0]) {
-    case 'B': type = FL_BOLD; break;
-    case 'I': type = FL_ITALIC; break;
-    case 'P': type = FL_BOLD | FL_ITALIC; break;
+    case 'B': type = fltk3::BOLD; break;
+    case 'I': type = fltk3::ITALIC; break;
+    case 'P': type = fltk3::BOLD | fltk3::ITALIC; break;
     default:  type = 0; break;
     }
 
   // NOTE: This can cause duplications in fonts that already have Bold or Italic in
   // their "name". Maybe we need to find a cleverer way?
     strlcpy(f->fontname, p+1, ENDOFBUFFER);
-    if (type & FL_BOLD) strlcat(f->fontname, " bold", ENDOFBUFFER);
-    if (type & FL_ITALIC) strlcat(f->fontname, " italic", ENDOFBUFFER);
+    if (type & fltk3::BOLD) strlcat(f->fontname, " bold", ENDOFBUFFER);
+    if (type & fltk3::ITALIC) strlcat(f->fontname, " italic", ENDOFBUFFER);
     f->fontname[ENDOFBUFFER] = (char)type;
   }
   if (ap) *ap = f->fontname[ENDOFBUFFER];
@@ -198,7 +198,7 @@ STYLE_DONE:
 
 ///////////////////////////////////////////////////////////
 
-static int fl_free_font = FL_FREE_FONT;
+static int fl_free_font = fltk3::FREE_FONT;
 
 // Uses the fontconfig lib to construct a list of all installed fonts.
 // I tried using XftListFonts for this, but the API is tricky - and when
@@ -207,7 +207,7 @@ static int fl_free_font = FL_FREE_FONT;
 // Also, for now I'm ignoring the "pattern_name" and just getting everything...
 // AND I don't try and skip the fonts we've already loaded in the defaults.
 // Blimey! What a hack!
-Fl_Font Fl::set_fonts(const char* pattern_name)
+fltk3::Font Fl::set_fonts(const char* pattern_name)
 {
   FcFontSet  *fnt_set;     // Will hold the list of fonts we find
   FcPattern   *fnt_pattern; // Holds the generic "match all names" pattern
@@ -217,8 +217,8 @@ Fl_Font Fl::set_fonts(const char* pattern_name)
   int font_count; // Total number of fonts found to process
   char **full_list; // The list of font names we build
 
-  if (fl_free_font > FL_FREE_FONT) // already been here
-    return (Fl_Font)fl_free_font;
+  if (fl_free_font > fltk3::FREE_FONT) // already been here
+    return (fltk3::Font)fl_free_font;
   
   fl_open_display(); // Just in case...
     
@@ -227,7 +227,7 @@ Fl_Font Fl::set_fonts(const char* pattern_name)
   if (!FcInit())
   {
     // What to do? Just return defaults...
-    return FL_FREE_FONT;
+    return fltk3::FREE_FONT;
   }
 
   // Create a search pattern that will match every font name - I think this
@@ -325,7 +325,7 @@ Fl_Font Fl::set_fonts(const char* pattern_name)
         // NOTE: This just adds on AFTER the default fonts - no attempt is made
         // to identify already loaded fonts. Is this bad?
         stored_name = strdup(xft_name);
-        Fl::set_font((Fl_Font)(j + FL_FREE_FONT), stored_name);
+        Fl::set_font((fltk3::Font)(j + fltk3::FREE_FONT), stored_name);
         fl_free_font ++;
         
         free(full_list[j]); // release that name from our internal array
@@ -334,7 +334,7 @@ Fl_Font Fl::set_fonts(const char* pattern_name)
     // Now we are done with the list, release it fully
     free(full_list);
   }
-  return (Fl_Font)fl_free_font;
+  return (fltk3::Font)fl_free_font;
 } // ::set_fonts
 ////////////////////////////////////////////////////////////////
 
@@ -350,7 +350,7 @@ static int int_sort(const void *aa, const void *bb) {
 // Return all the point sizes supported by this font:
 // Suprisingly enough Xft works exactly like fltk does and returns
 // the same list. Except there is no way to tell if the font is scalable.
-int Fl::get_font_sizes(Fl_Font fnum, int*& sizep) {
+int Fl::get_font_sizes(fltk3::Font fnum, int*& sizep) {
   Fl_Fontdesc *s = fl_fonts+fnum;
   if (!s->name) s = fl_fonts; // empty slot in table, use entry 0
 

@@ -51,7 +51,7 @@ void Fl_Paged_Device::print_widget(Fl_Widget* widget, int delta_x, int delta_y)
   int old_x, old_y, new_x, new_y, is_window;
   if ( ! widget->visible() ) return;
   is_window = (widget->as_window() != NULL);
-  widget->damage(FL_DAMAGE_ALL);
+  widget->damage(fltk3::DAMAGE_ALL);
   // set origin to the desired top-left position of the widget
   origin(&old_x, &old_y);
   new_x = old_x + delta_x;

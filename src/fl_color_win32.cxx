@@ -92,7 +92,7 @@ static void set_xmap(Fl_XMap& xmap, COLORREF c) {
   xmap.brush = -1;
 }
 
-void Fl_GDI_Graphics_Driver::color(Fl_Color i) {
+void Fl_GDI_Graphics_Driver::color(fltk3::Color i) {
   if (i & 0xffffff00) {
     unsigned rgb = (unsigned)i;
     fl_color((uchar)(rgb >> 24), (uchar)(rgb >> 16), (uchar)(rgb >> 8));
@@ -119,7 +119,7 @@ void Fl_GDI_Graphics_Driver::color(Fl_Color i) {
 void Fl_GDI_Graphics_Driver::color(uchar r, uchar g, uchar b) {
   static Fl_XMap xmap;
   COLORREF c = RGB(r,g,b);
-  Fl_Graphics_Driver::color( fl_rgb_color(r, g, b) );
+  Fl_Graphics_Driver::color( fltk3::rgbColor(r, g, b) );
   if (!xmap.pen || c != xmap.rgb) {
     clear_xmap(xmap);
     set_xmap(xmap, c);
@@ -189,12 +189,12 @@ CREATE_BRUSH:
   return brushes[i].brush;
 }
 
-void Fl::free_color(Fl_Color i, int overlay) {
+void Fl::free_color(fltk3::Color i, int overlay) {
   if (overlay) return; // do something about GL overlay?
   clear_xmap(fl_xmap[i]);
 }
 
-void Fl::set_color(Fl_Color i, unsigned c) {
+void Fl::set_color(fltk3::Color i, unsigned c) {
   if (fl_cmap[i] != c) {
     clear_xmap(fl_xmap[i]);
     fl_cmap[i] = c;

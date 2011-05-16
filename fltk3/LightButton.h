@@ -36,8 +36,8 @@
 /**
   This subclass displays the "on" state by turning on a light, 
   rather than drawing pushed in.  The shape of the  "light" 
-  is initially set to FL_DOWN_BOX.  The color of the light when
-  on is controlled with selection_color(), which defaults to FL_YELLOW.
+  is initially set to fltk3::DOWN_BOX.  The color of the light when
+  on is controlled with selection_color(), which defaults to fltk3::YELLOW.
 
   Buttons generate callbacks when they are clicked by the user.  You
   control exactly when and how by changing the values for type() and when().

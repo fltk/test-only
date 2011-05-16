@@ -53,13 +53,13 @@ class Fl_Widget_Tracker;
   \brief Buttons generate callbacks when they are clicked by the user.
   
   You control exactly when and how by changing the values for type() and
-  when().  Buttons can also generate callbacks in response to \c FL_SHORTCUT
+  when().  Buttons can also generate callbacks in response to \c fltk3::SHORTCUT
   events.  The button can either have an explicit shortcut(int s) value or a
   letter shortcut can be indicated in the label() with an '\&' character
   before it.  For the label shortcut it does not matter if \e Alt is held
   down, but if you have an input field in the same window, the user will have
   to hold down the \e Alt key so that the input field does not eat the event
-  first as an \c FL_KEYBOARD event.
+  first as an \c fltk3::KEYBOARD event.
 
   \todo Refactor the doxygen comments for Fl_Button type() documentation.
 
@@ -73,11 +73,11 @@ class Fl_Widget_Tracker;
   \todo Refactor the doxygen comments for Fl_Button when() documentation.
 
   For an Fl_Button object, the following when() values are useful, the default
-  being \c FL_WHEN_RELEASE:
+  being \c fltk3::WHEN_RELEASE:
   \li \c 0: The callback is not done, instead changed() is turned on.
-  \li \c FL_WHEN_RELEASE: The callback is done after the user successfully
+  \li \c fltk3::WHEN_RELEASE: The callback is done after the user successfully
          clicks the button, or when a shortcut is typed.
-  \li \c FL_WHEN_CHANGED: The callback is done each time the value() changes
+  \li \c fltk3::WHEN_CHANGED: The callback is done each time the value() changes
          (when the user pushes and releases the button, and as the mouse is
 	 dragged around in and out of the button).
 */
@@ -133,8 +133,8 @@ public:
     Sets the shortcut key to \c s.
     Setting this overrides the use of '\&' in the label().
     The value is a bitwise OR of a key and a set of shift flags, for example:
-    <tt>FL_ALT | 'a'</tt>, or
-    <tt>FL_ALT | (FL_F + 10)</tt>, or just
+    <tt>fltk3::ALT | 'a'</tt>, or
+    <tt>fltk3::ALT | (fltk3::FKey + 10)</tt>, or just
     <tt>'a'</tt>.
     A value of 0 disables the shortcut.
 
@@ -152,22 +152,22 @@ public:
 
   /**
     Returns the current down box type, which is drawn when value() is non-zero.
-    \retval Fl_Boxtype
+    \retval fltk3::Boxtype
    */
-  Fl_Boxtype down_box() const {return (Fl_Boxtype)down_box_;}
+  fltk3::Boxtype down_box() const {return (fltk3::Boxtype)down_box_;}
 
   /**
     Sets the down box type. The default value of 0 causes FLTK to figure out
     the correct matching down version of box().
     \param[in] b down box type
    */
-  void down_box(Fl_Boxtype b) {down_box_ = b;}
+  void down_box(fltk3::Boxtype b) {down_box_ = b;}
 
   /// (for backwards compatibility)
   void shortcut(const char *s) {shortcut(fl_old_shortcut(s));}
 
   /// (for backwards compatibility)
-  Fl_Color down_color() const {return selection_color();}
+  fltk3::Color down_color() const {return selection_color();}
 
   /// (for backwards compatibility)
   void down_color(unsigned c) {selection_color(c);}

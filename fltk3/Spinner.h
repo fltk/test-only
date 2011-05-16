@@ -137,11 +137,11 @@ class FL_EXPORT Fl_Spinner : public Fl_Group {
 		  step_    = 1.0;
 		  format_  = "%g";
 
-		  align(FL_ALIGN_LEFT);
+		  align(fltk3::ALIGN_LEFT);
 
 		  input_.value("1");
 		  input_.type(FL_INT_INPUT);
-		  input_.when(FL_WHEN_ENTER_KEY | FL_WHEN_RELEASE);
+		  input_.when(fltk3::WHEN_ENTER_KEY | fltk3::WHEN_RELEASE);
 		  input_.callback((Fl_Callback *)sb_cb, this);
 
 		  up_button_.callback((Fl_Callback *)sb_cb, this);
@@ -157,16 +157,16 @@ class FL_EXPORT Fl_Spinner : public Fl_Group {
   int		handle(int event) {
 		  switch (event) {
 		    case FL_KEYDOWN :
-		    case FL_SHORTCUT :
-		      if (Fl::event_key() == FL_Up) {
+		    case fltk3::SHORTCUT :
+		      if (Fl::event_key() == fltk3::UpKey) {
 			up_button_.do_callback();
 			return 1;
-		      } else if (Fl::event_key() == FL_Down) {
+		      } else if (Fl::event_key() == fltk3::DownKey) {
 			down_button_.do_callback();
 			return 1;
 		      } else return 0;
 
-		    case FL_FOCUS :
+		    case fltk3::FOCUS :
 		      if (input_.take_focus()) return 1;
 		      else return 0;
 		  }
@@ -210,27 +210,27 @@ class FL_EXPORT Fl_Spinner : public Fl_Group {
 		  update();
 		}
   /** Gets the color of the text in the input field. */
-  Fl_Color	textcolor() const {
+  fltk3::Color	textcolor() const {
 		  return (input_.textcolor());
 		}
   /** Sets the color of the text in the input field. */
-  void		textcolor(Fl_Color c) {
+  void		textcolor(fltk3::Color c) {
 		  input_.textcolor(c);
 		}
   /** Gets the font of the text in the input field. */
-  Fl_Font       textfont() const {
+  fltk3::Font       textfont() const {
 		  return (input_.textfont());
 		}
   /** Sets the font of the text in the input field. */
-  void		textfont(Fl_Font f) {
+  void		textfont(fltk3::Font f) {
 		  input_.textfont(f);
 		}
   /** Gets the size of the text in the input field. */
-  Fl_Fontsize  textsize() const {
+  fltk3::Fontsize  textsize() const {
 		  return (input_.textsize());
 		}
   /** Sets the size of the text in the input field. */
-  void		textsize(Fl_Fontsize s) {
+  void		textsize(fltk3::Fontsize s) {
 		  input_.textsize(s);
 		}
   /** Gets the numeric representation in the input field.

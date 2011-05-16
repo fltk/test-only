@@ -41,7 +41,7 @@ void Fl_Value_Input::input_cb(Fl_Widget*, void* v) {
   double nv;
   if ((t.step() - floor(t.step()))>0.0 || t.step() == 0.0) nv = strtod(t.input.value(), 0);
   else nv = strtol(t.input.value(), 0, 0);
-  if (nv != t.value() || t.when() & FL_WHEN_NOT_CHANGED) {
+  if (nv != t.value() || t.when() & fltk3::WHEN_NOT_CHANGED) {
     t.set_value(nv);
     t.set_changed();
     if (t.when()) t.do_callback();
@@ -49,7 +49,7 @@ void Fl_Value_Input::input_cb(Fl_Widget*, void* v) {
 }
 
 void Fl_Value_Input::draw() {
-  if (damage()&~FL_DAMAGE_CHILD) input.clear_damage(FL_DAMAGE_ALL);
+  if (damage()&~fltk3::DAMAGE_CHILD) input.clear_damage(fltk3::DAMAGE_ALL);
   input.box(box());
   input.color(color(), selection_color());
   Fl_Widget *i = &input; i->draw(); // calls protected input.draw()
@@ -75,13 +75,13 @@ int Fl_Value_Input::handle(int event) {
   static int ix, drag;
   input.when(when());
   switch (event) {
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (!step()) goto DEFAULT;
     ix = mx;
     drag = Fl::event_button();
     handle_push();
     return 1;
-  case FL_DRAG:
+  case fltk3::DRAG:
     if (!step()) goto DEFAULT;
     delta = mx-ix;
     if (delta > 5) delta -= 5;
@@ -95,20 +95,20 @@ int Fl_Value_Input::handle(int event) {
     v = round(v);
     handle_drag(soft()?softclamp(v):clamp(v));;
     return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     if (!step()) goto DEFAULT;
     if (value() != previous_value() || !Fl::event_is_click())
       handle_release();
     else {
       Fl_Widget_Tracker wp(&input);
-      input.handle(FL_PUSH);
+      input.handle(fltk3::PUSH);
       if (wp.exists())
-	input.handle(FL_RELEASE);
+	input.handle(fltk3::RELEASE);
     }
     return 1;
-  case FL_FOCUS:
+  case fltk3::FOCUS:
     return input.take_focus();
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
     return input.handle(event);
   default:
   DEFAULT:
@@ -120,7 +120,7 @@ int Fl_Value_Input::handle(int event) {
 /**
   Creates a new Fl_Value_Input widget using the given
   position, size, and label string. The default boxtype is
-  FL_DOWN_BOX.
+  fltk3::DOWN_BOX.
 */
 Fl_Value_Input::Fl_Value_Input(int X, int Y, int W, int H, const char* l)
 : Fl_Valuator(X, Y, W, H, l), input(X, Y, W, H, 0) {
@@ -129,11 +129,11 @@ Fl_Value_Input::Fl_Value_Input(int X, int Y, int W, int H, const char* l)
     input.parent()->remove(input);
   input.parent((Fl_Group *)this); // kludge!
   input.callback(input_cb, this);
-  input.when(FL_WHEN_CHANGED);
+  input.when(fltk3::WHEN_CHANGED);
   box(input.box());
   color(input.color());
   selection_color(input.selection_color());
-  align(FL_ALIGN_LEFT);
+  align(fltk3::ALIGN_LEFT);
   value_damage();
   set_flag(SHORTCUT_LABEL);
 }

@@ -80,9 +80,9 @@ void Fl_Gl_Window::show() {
     if (!g) {
       g = Fl_Gl_Choice::find(mode_,alist);
 
-      if (!g && (mode_ & FL_DOUBLE) == FL_SINGLE) {
-        g = Fl_Gl_Choice::find(mode_ | FL_DOUBLE,alist);
-	if (g) mode_ |= FL_FAKE_SINGLE;
+      if (!g && (mode_ & fltk3::DOUBLE) == fltk3::SINGLE) {
+        g = Fl_Gl_Choice::find(mode_ | fltk3::DOUBLE,alist);
+	if (g) mode_ |= fltk3::FAKE_SINGLE;
       }
 
       if (!g) {
@@ -138,12 +138,12 @@ int Fl_Gl_Window::mode(int m, const int *a) {
 
 #if defined(USE_X11)
     // under X, if the visual changes we must make a new X window (yuck!):
-    if (!g || g->vis->visualid!=oldg->vis->visualid || (oldmode^m)&FL_DOUBLE) {
+    if (!g || g->vis->visualid!=oldg->vis->visualid || (oldmode^m)&fltk3::DOUBLE) {
       hide();
       show();
     }
 #elif defined(WIN32)
-    if (!g || (oldmode^m)&(FL_DOUBLE|FL_STEREO)) {
+    if (!g || (oldmode^m)&(fltk3::DOUBLE|fltk3::STEREO)) {
       hide();
       show();
     }
@@ -207,7 +207,7 @@ void Fl_Gl_Window::make_current() {
     RealizePalette(fl_gc);
   }
 #endif // USE_COLORMAP
-  if (mode_ & FL_FAKE_SINGLE) {
+  if (mode_ & fltk3::FAKE_SINGLE) {
     glDrawBuffer(GL_FRONT);
     glReadBuffer(GL_FRONT);
   }
@@ -294,7 +294,7 @@ void Fl_Gl_Window::flush() {
 
   // Draw into hardware overlay planes if they are damaged:
   if (overlay && overlay != this
-      && (damage()&(FL_DAMAGE_OVERLAY|FL_DAMAGE_EXPOSE) || !save_valid)) {
+      && (damage()&(fltk3::DAMAGE_OVERLAY|fltk3::DAMAGE_EXPOSE) || !save_valid)) {
     // SGI 320 messes up overlay with user-defined cursors:
     if (Fl_X::i(this)->cursor && Fl_X::i(this)->cursor != fl_default_cursor) {
       fixcursor = true; // make it restore cursor later
@@ -311,7 +311,7 @@ void Fl_Gl_Window::flush() {
     valid_f_ = save_valid_f;
     wglSwapLayerBuffers(Fl_X::i(this)->private_dc, WGL_SWAP_OVERLAY1);
     // if only the overlay was damaged we are done, leave main layer alone:
-    if (damage() == FL_DAMAGE_OVERLAY) {
+    if (damage() == fltk3::DAMAGE_OVERLAY) {
       if (fixcursor) SetCursor(Fl_X::i(this)->cursor);
       return;
     }
@@ -320,7 +320,7 @@ void Fl_Gl_Window::flush() {
 
   make_current();
 
-  if (mode_ & FL_DOUBLE) {
+  if (mode_ & fltk3::DOUBLE) {
 
     glDrawBuffer(GL_BACK);
 
@@ -342,18 +342,18 @@ void Fl_Gl_Window::flush() {
     if (SWAP_TYPE == NODAMAGE) {
 
       // don't draw if only overlay damage or expose events:
-      if ((damage()&~(FL_DAMAGE_OVERLAY|FL_DAMAGE_EXPOSE)) || !save_valid)
+      if ((damage()&~(fltk3::DAMAGE_OVERLAY|fltk3::DAMAGE_EXPOSE)) || !save_valid)
 	draw();
       swap_buffers();
 
     } else if (SWAP_TYPE == COPY) {
 
       // don't draw if only the overlay is damaged:
-      if (damage() != FL_DAMAGE_OVERLAY || !save_valid) draw();
+      if (damage() != fltk3::DAMAGE_OVERLAY || !save_valid) draw();
 	  swap_buffers();
 
     } else if (SWAP_TYPE == SWAP){
-      damage(FL_DAMAGE_ALL);
+      damage(fltk3::DAMAGE_ALL);
       draw();
       if (overlay == this) draw_overlay();
       swap_buffers();
@@ -363,7 +363,7 @@ void Fl_Gl_Window::flush() {
       // SWAP_TYPE == COPY.  Otherwise overlay redraw is way too slow.
       if (overlay == this) {
 	// don't draw if only the overlay is damaged:
-	if (damage1_ || damage() != FL_DAMAGE_OVERLAY || !save_valid) draw();
+	if (damage1_ || damage() != fltk3::DAMAGE_OVERLAY || !save_valid) draw();
 	// we use a separate context for the copy because rasterpos must be 0
 	// and depth test needs to be off:
 	static GLContext ortho_context = 0;
@@ -480,9 +480,9 @@ Fl_Gl_Window::~Fl_Gl_Window() {
 
 void Fl_Gl_Window::init() {
   end(); // we probably don't want any children
-  box(FL_NO_BOX);
+  box(fltk3::NO_BOX);
 
-  mode_    = FL_RGB | FL_DEPTH | FL_DOUBLE;
+  mode_    = fltk3::RGB | fltk3::DEPTH | fltk3::DOUBLE;
   alist    = 0;
   context_ = 0;
   g        = 0;
@@ -542,12 +542,12 @@ void Fl_Gl_Window::draw() {
 int Fl_Gl_Window::handle(int event) 
 {
 #ifdef __APPLE_QUARTZ__
-  /*if (event==FL_HIDE) {
+  /*if (event==fltk3::HIDE) {
     // if we are not hidden, just the parent was hidden, so we must throw away the context
     if (!visible_r())
       context(0); // remove context without setting the hidden flags
   }
-  if (event==FL_SHOW) {
+  if (event==fltk3::SHOW) {
     // if we are not hidden, just the parent was shown, so we must create a new context
     if (visible_r())
       show(); //

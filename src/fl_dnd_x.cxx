@@ -70,7 +70,7 @@ static int dnd_aware(Window& window) {
 }
 
 static int grabfunc(int event) {
-  if (event == FL_RELEASE) Fl::pushed(0);
+  if (event == fltk3::RELEASE) Fl::pushed(0);
   return 0;
 }
 
@@ -88,7 +88,7 @@ static int local_handle(int event, Fl_Window* window) {
 
 int Fl::dnd() {
   Fl_Window *source_fl_win = Fl::first_window();
-  Fl::first_window()->cursor(FL_CURSOR_MOVE);
+  Fl::first_window()->cursor(fltk3::CURSOR_MOVE);
   Window source_window = fl_xid(Fl::first_window());
   fl_local_grab = grabfunc;
   Window target_window = 0;
@@ -116,7 +116,7 @@ int Fl::dnd() {
 
     if (new_window != target_window) {
       if (local_window) {
-	local_handle(FL_DND_LEAVE, local_window);
+	local_handle(fltk3::DND_LEAVE, local_window);
       } else if (dndversion) {
 	fl_sendClientMessage(target_window, fl_XdndLeave, source_window);
       }
@@ -124,7 +124,7 @@ int Fl::dnd() {
       target_window = new_window;
       local_window = new_local_window;
       if (local_window) {
-	local_handle(FL_DND_ENTER, local_window);
+	local_handle(fltk3::DND_ENTER, local_window);
       } else if (dndversion) {
         // Send an X-DND message to the target window.  In order to
 	// support dragging of files/URLs as well as arbitrary text,
@@ -155,7 +155,7 @@ int Fl::dnd() {
       }
     }
     if (local_window) {
-      local_handle(FL_DND_DRAG, local_window);
+      local_handle(fltk3::DND_DRAG, local_window);
     } else if (dndversion) {
       fl_sendClientMessage(target_window, fl_XdndPosition, source_window,
 			   0, (e_x_root<<16)|e_y_root, fl_event_time,
@@ -166,7 +166,7 @@ int Fl::dnd() {
 
   if (local_window) {
     fl_i_own_selection[0] = 1;
-    if (local_handle(FL_DND_RELEASE, local_window)) paste(*belowmouse(), 0);
+    if (local_handle(fltk3::DND_RELEASE, local_window)) paste(*belowmouse(), 0);
   } else if (dndversion) {
     fl_sendClientMessage(target_window, fl_XdndDrop, source_window,
 			 0, fl_event_time);
@@ -192,7 +192,7 @@ int Fl::dnd() {
   }
 
   fl_local_grab = 0;
-  source_fl_win->cursor(FL_CURSOR_DEFAULT);
+  source_fl_win->cursor(fltk3::CURSOR_DEFAULT);
   return 1;
 }
 

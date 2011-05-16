@@ -37,7 +37,7 @@
   \param[in] X, Y, W, H position and size
 */
 void Fl_Dial::draw(int X, int Y, int W, int H) {
-  if (damage()&FL_DAMAGE_ALL) draw_box(box(), X, Y, W, H, color());
+  if (damage()&fltk3::DAMAGE_ALL) draw_box(box(), X, Y, W, H, color());
   X += Fl::box_dx(box());
   Y += Fl::box_dy(box());
   W -= Fl::box_dw(box());
@@ -45,24 +45,24 @@ void Fl_Dial::draw(int X, int Y, int W, int H) {
   double angle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;
   if (type() == FL_FILL_DIAL) {
     // foo: draw this nicely in certain round box types
-    int foo = (box() > _FL_ROUND_UP_BOX && Fl::box_dx(box()));
+    int foo = (box() > fltk3::ROUND_UP_BOX && Fl::box_dx(box()));
     if (foo) {X--; Y--; W+=2; H+=2;}
     if (active_r()) fl_color(color());
-    else fl_color(fl_inactive(color()));
+    else fl_color(fltk3::inactive(color()));
     fl_pie(X, Y, W, H, 270-a1, angle > a1 ? 360+270-angle : 270-360-angle);
     if (active_r()) fl_color(selection_color());
-    else fl_color(fl_inactive(selection_color()));
+    else fl_color(fltk3::inactive(selection_color()));
     fl_pie(X, Y, W, H, 270-angle, 270-a1);
     if (foo) {
-      if (active_r()) fl_color(FL_FOREGROUND_COLOR);
-      else fl_color(fl_inactive(FL_FOREGROUND_COLOR));
+      if (active_r()) fl_color(fltk3::FOREGROUND_COLOR);
+      else fl_color(fltk3::inactive(fltk3::FOREGROUND_COLOR));
       fl_arc(X, Y, W, H, 0, 360);
     }
     return;
   }
-  if (!(damage()&FL_DAMAGE_ALL)) {
+  if (!(damage()&fltk3::DAMAGE_ALL)) {
     if (active_r()) fl_color(color());
-    else fl_color(fl_inactive(color()));
+    else fl_color(fltk3::inactive(color()));
     fl_pie(X+1, Y+1, W-2, H-2, 0, 360);
   }
   fl_push_matrix();
@@ -70,7 +70,7 @@ void Fl_Dial::draw(int X, int Y, int W, int H) {
   fl_scale(W-1, H-1);
   fl_rotate(45-angle);
   if (active_r()) fl_color(selection_color());
-  else fl_color(fl_inactive(selection_color()));
+  else fl_color(fltk3::inactive(selection_color()));
   if (type()) { // FL_LINE_DIAL
     fl_begin_polygon();
     fl_vertex(0.0,   0.0);
@@ -78,8 +78,8 @@ void Fl_Dial::draw(int X, int Y, int W, int H) {
     fl_vertex(-0.25, 0.25);
     fl_vertex(0.0,   0.04);
     fl_end_polygon();
-    if (active_r()) fl_color(FL_FOREGROUND_COLOR);
-    else fl_color(fl_inactive(FL_FOREGROUND_COLOR));
+    if (active_r()) fl_color(fltk3::FOREGROUND_COLOR);
+    else fl_color(fltk3::inactive(fltk3::FOREGROUND_COLOR));
     fl_begin_loop();
     fl_vertex(0.0,   0.0);
     fl_vertex(-0.04, 0.0);
@@ -88,8 +88,8 @@ void Fl_Dial::draw(int X, int Y, int W, int H) {
     fl_end_loop();
   } else {
     fl_begin_polygon(); fl_circle(-0.20, 0.20, 0.07); fl_end_polygon();
-    if (active_r()) fl_color(FL_FOREGROUND_COLOR);
-    else fl_color(fl_inactive(FL_FOREGROUND_COLOR));
+    if (active_r()) fl_color(fltk3::FOREGROUND_COLOR);
+    else fl_color(fltk3::inactive(fltk3::FOREGROUND_COLOR));
     fl_begin_loop(); fl_circle(-0.20, 0.20, 0.07); fl_end_loop();
   }
   fl_pop_matrix();
@@ -109,11 +109,11 @@ void Fl_Dial::draw() {
 */
 int Fl_Dial::handle(int event, int X, int Y, int W, int H) {
   switch (event) {
-  case FL_PUSH: {
+  case fltk3::PUSH: {
     Fl_Widget_Tracker wp(this);  
     handle_push();
     if (wp.deleted()) return 1; }
-  case FL_DRAG: {
+  case fltk3::DRAG: {
     int mx = (Fl::event_x()-X-W/2)*H;
     int my = (Fl::event_y()-Y-H/2)*W;
     if (!mx && !my) return 1;
@@ -131,11 +131,11 @@ int Fl_Dial::handle(int event, int X, int Y, int W, int H) {
     }
     handle_drag(clamp(round(val)));
   } return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     handle_release();
     return 1;
-  case FL_ENTER : /* FALLTHROUGH */
-  case FL_LEAVE :
+  case fltk3::ENTER : /* FALLTHROUGH */
+  case fltk3::LEAVE :
     return 1;
   default:
     return 0;
@@ -155,8 +155,8 @@ Fl_Dial::Fl_Dial(int X, int Y, int W, int H, const char* l)
   and label string. The default type is FL_NORMAL_DIAL.
 */
 : Fl_Valuator(X, Y, W, H, l) {
-  box(FL_OVAL_BOX);
-  selection_color(FL_INACTIVE_COLOR); // was 37
+  box(fltk3::OVAL_BOX);
+  selection_color(fltk3::INACTIVE_COLOR); // was 37
   a1 = 45;
   a2 = 315;
 }

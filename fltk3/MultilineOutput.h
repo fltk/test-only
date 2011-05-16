@@ -50,7 +50,7 @@ class FL_EXPORT Fl_Multiline_Output : public Fl_Output {
 public:
   /**
     Creates a new Fl_Multiline_Output widget using the given
-    position, size, and label string. The default boxtype is FL_DOWN_BOX
+    position, size, and label string. The default boxtype is fltk3::DOWN_BOX
     <P> Inherited destructor destroys the widget and any value associated with it.
   */
   Fl_Multiline_Output(int X,int Y,int W,int H,const char *l = 0)

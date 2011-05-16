@@ -151,10 +151,10 @@ void Fl_Tabs::redraw_tabs()
   int H = tab_height();
   if (H >= 0) {
     H += Fl::box_dy(box());
-    damage(FL_DAMAGE_SCROLL, x(), y(), w(), H);
+    damage(fltk3::DAMAGE_SCROLL, x(), y(), w(), H);
   } else {
     H = Fl::box_dy(box()) - H;
-    damage(FL_DAMAGE_SCROLL, x(), y() + h() - H, w(), H);
+    damage(fltk3::DAMAGE_SCROLL, x(), y() + h() - H, w(), H);
   }
 }
 
@@ -165,7 +165,7 @@ int Fl_Tabs::handle(int event) {
 
   switch (event) {
 
-  case FL_PUSH: {
+  case fltk3::PUSH: {
     int H = tab_height();
     if (H >= 0) {
       if (Fl::event_y() > y()+H) return Fl_Group::handle(event);
@@ -173,10 +173,10 @@ int Fl_Tabs::handle(int event) {
       if (Fl::event_y() < y()+h()+H) return Fl_Group::handle(event);
     }}
     /* FALLTHROUGH */
-  case FL_DRAG:
-  case FL_RELEASE:
+  case fltk3::DRAG:
+  case fltk3::RELEASE:
     o = which(Fl::event_x(), Fl::event_y());
-    if (event == FL_RELEASE) {
+    if (event == fltk3::RELEASE) {
       push(0);
       if (o && Fl::visible_focus() && Fl::focus()!=this) { 
         Fl::focus(this);
@@ -193,7 +193,7 @@ int Fl_Tabs::handle(int event) {
       push(o);
     }
     return 1;
-  case FL_MOVE: {
+  case fltk3::MOVE: {
     int ret = Fl_Group::handle(event);
     Fl_Widget *o = Fl_Tooltip::current(), *n = o;
     int H = tab_height();
@@ -208,22 +208,22 @@ int Fl_Tabs::handle(int event) {
     if (n!=o)
       Fl_Tooltip::enter(n);
     return ret; }
-  case FL_FOCUS:
-  case FL_UNFOCUS:
+  case fltk3::FOCUS:
+  case fltk3::UNFOCUS:
     if (!Fl::visible_focus()) return Fl_Group::handle(event);
-    if (Fl::event() == FL_RELEASE ||
-	Fl::event() == FL_SHORTCUT ||
-	Fl::event() == FL_KEYBOARD ||
-	Fl::event() == FL_FOCUS ||
-	Fl::event() == FL_UNFOCUS) {
+    if (Fl::event() == fltk3::RELEASE ||
+	Fl::event() == fltk3::SHORTCUT ||
+	Fl::event() == fltk3::KEYBOARD ||
+	Fl::event() == fltk3::FOCUS ||
+	Fl::event() == fltk3::UNFOCUS) {
       redraw_tabs();
-      if (Fl::event() == FL_FOCUS) return Fl_Group::handle(event);
-      if (Fl::event() == FL_UNFOCUS) return 0;
+      if (Fl::event() == fltk3::FOCUS) return Fl_Group::handle(event);
+      if (Fl::event() == fltk3::UNFOCUS) return 0;
       else return 1;
     } else return Fl_Group::handle(event);
-  case FL_KEYBOARD:
+  case fltk3::KEYBOARD:
     switch (Fl::event_key()) {
-      case FL_Left:
+      case fltk3::LeftKey:
         if (child(0)->visible()) return 0;
 	for (i = 1; i < children(); i ++)
 	  if (child(i)->visible()) break;
@@ -231,7 +231,7 @@ int Fl_Tabs::handle(int event) {
 	set_changed();
 	do_callback();
         return 1;
-      case FL_Right:
+      case fltk3::RightKey:
         if (child(children() - 1)->visible()) return 0;
 	for (i = 0; i < children(); i ++)
 	  if (child(i)->visible()) break;
@@ -239,14 +239,14 @@ int Fl_Tabs::handle(int event) {
 	set_changed();
 	do_callback();
         return 1;
-      case FL_Down:
+      case fltk3::DownKey:
         redraw();
-        return Fl_Group::handle(FL_FOCUS);
+        return Fl_Group::handle(fltk3::FOCUS);
       default:
         break;
     }
     return Fl_Group::handle(event);
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
     for (i = 0; i < children(); ++i) {
       Fl_Widget *c = child(i);
       if (c->test_shortcut(c->label())) {
@@ -258,7 +258,7 @@ int Fl_Tabs::handle(int event) {
       }
     }
     return Fl_Group::handle(event);
-  case FL_SHOW:
+  case fltk3::SHOW:
     value(); // update visibilities and fall through
   default:
     return Fl_Group::handle(event);
@@ -319,8 +319,8 @@ void Fl_Tabs::draw() {
   Fl_Widget *v = value();
   int H = tab_height();
 
-  if (damage() & FL_DAMAGE_ALL) { // redraw the entire thing:
-    Fl_Color c = v ? v->color() : color();
+  if (damage() & fltk3::DAMAGE_ALL) { // redraw the entire thing:
+    fltk3::Color c = v ? v->color() : color();
 
     draw_box(box(), x(), y()+(H>=0?H:0), w(), h()-(H>=0?H:-H), c);
 
@@ -336,7 +336,7 @@ void Fl_Tabs::draw() {
   } else { // redraw the child
     if (v) update_child(*v);
   }
-  if (damage() & (FL_DAMAGE_SCROLL|FL_DAMAGE_ALL)) {
+  if (damage() & (fltk3::DAMAGE_SCROLL|fltk3::DAMAGE_ALL)) {
     int nc = children();
     int selected = tab_positions();
     int i;
@@ -362,7 +362,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
   char prev_draw_shortcut = fl_draw_shortcut;
   fl_draw_shortcut = 1;
 
-  Fl_Boxtype bt = (o==push_ &&!sel) ? fl_down(box()) : box();
+  fltk3::Boxtype bt = (o==push_ &&!sel) ? fltk3::down(box()) : box();
 
   // compute offsets to make selected tab look bigger
   int yofs = sel ? 0 : BORDER;
@@ -375,16 +375,16 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
 
     H += dh;
 
-    Fl_Color c = sel ? selection_color() : o->selection_color();
+    fltk3::Color c = sel ? selection_color() : o->selection_color();
 
     draw_box(bt, x1, y() + yofs, W, H + 10 - yofs, c);
 
     // Save the previous label color
-    Fl_Color oc = o->labelcolor();
+    fltk3::Color oc = o->labelcolor();
 
     // Draw the label using the current color...
     o->labelcolor(sel ? labelcolor() : o->labelcolor());    
-    o->draw_label(x1, y() + yofs, W, H - yofs, FL_ALIGN_CENTER);
+    o->draw_label(x1, y() + yofs, W, H - yofs, fltk3::ALIGN_CENTER);
 
     // Restore the original label color...
     o->labelcolor(oc);
@@ -401,16 +401,16 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
 
     H += dh;
 
-    Fl_Color c = sel ? selection_color() : o->selection_color();
+    fltk3::Color c = sel ? selection_color() : o->selection_color();
 
     draw_box(bt, x1, y() + h() - H - 10, W, H + 10 - yofs, c);
 
     // Save the previous label color
-    Fl_Color oc = o->labelcolor();
+    fltk3::Color oc = o->labelcolor();
 
     // Draw the label using the current color...
     o->labelcolor(sel ? labelcolor() : o->labelcolor());
-    o->draw_label(x1, y() + h() - H, W, H - yofs, FL_ALIGN_CENTER);
+    o->draw_label(x1, y() + h() - H, W, H - yofs, fltk3::ALIGN_CENTER);
 
     // Restore the original label color...
     o->labelcolor(oc);
@@ -425,7 +425,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
 
 /**
     Creates a new Fl_Tabs widget using the given position, size,
-    and label string. The default boxtype is FL_THIN_UP_BOX.
+    and label string. The default boxtype is fltk3::THIN_UP_BOX.
 
     Use add(Fl_Widget*) to add each child, which are usually
     Fl_Group widgets. The children should be sized to stay
@@ -447,7 +447,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
 Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l) :
   Fl_Group(X,Y,W,H,l)
 {
-  box(FL_THIN_UP_BOX);
+  box(fltk3::THIN_UP_BOX);
   push_ = 0;
   tab_pos = 0;
   tab_width = 0;

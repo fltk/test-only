@@ -56,9 +56,9 @@
 */
 class FL_EXPORT Fl_Counter : public Fl_Valuator {
 
-  Fl_Font textfont_;
-  Fl_Fontsize textsize_;
-  Fl_Color textcolor_;
+  fltk3::Font textfont_;
+  fltk3::Fontsize textsize_;
+  fltk3::Color textcolor_;
   double lstep_;
   uchar mouseobj;
   static void repeat_callback(void *);
@@ -101,19 +101,19 @@ public:
   double step() const {return Fl_Valuator::step();}
 
   /** Gets the text font */
-  Fl_Font textfont() const {return textfont_;}
+  fltk3::Font textfont() const {return textfont_;}
   /** Sets the text font to \p s */
-  void textfont(Fl_Font s) {textfont_ = s;}
+  void textfont(fltk3::Font s) {textfont_ = s;}
 
   /** Gets the font size */
-  Fl_Fontsize textsize() const {return textsize_;}
+  fltk3::Fontsize textsize() const {return textsize_;}
   /** Sets the font size to \p s */
-  void textsize(Fl_Fontsize s) {textsize_ = s;}
+  void textsize(fltk3::Fontsize s) {textsize_ = s;}
 
   /** Gets the font color */
-  Fl_Color textcolor() const {return textcolor_;}
+  fltk3::Color textcolor() const {return textcolor_;}
   /** Sets the font color to \p s */
-  void textcolor(Fl_Color s) {textcolor_ = s;}
+  void textcolor(fltk3::Color s) {textcolor_ = s;}
 
 };
 

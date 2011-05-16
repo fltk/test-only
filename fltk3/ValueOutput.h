@@ -48,10 +48,10 @@
   \image latex  Fl_Value_Output.png "Fl_Value_Output" width=4cm
 */
 class FL_EXPORT Fl_Value_Output : public Fl_Valuator {
-  Fl_Font textfont_;
-  Fl_Fontsize textsize_;
+  fltk3::Font textfont_;
+  fltk3::Fontsize textsize_;
   uchar soft_;
-  Fl_Color textcolor_;
+  fltk3::Color textcolor_;
 
 protected:
   void draw();
@@ -76,16 +76,16 @@ public:
   uchar soft() const {return soft_;}
 
   /**    Gets the typeface of the text in the value box.  */
-  Fl_Font textfont() const {return textfont_;}
+  fltk3::Font textfont() const {return textfont_;}
   /**    Sets the typeface of the text in the value box.  */
-  void textfont(Fl_Font s) {textfont_ = s;}
+  void textfont(fltk3::Font s) {textfont_ = s;}
   /**    Gets the size of the text in the value box.  */
-  Fl_Fontsize textsize() const {return textsize_;}
-  void textsize(Fl_Fontsize s) {textsize_ = s;}
+  fltk3::Fontsize textsize() const {return textsize_;}
+  void textsize(fltk3::Fontsize s) {textsize_ = s;}
   /**    Sets the color of the text in the value box.  */
-  Fl_Color textcolor() const {return textcolor_;}
+  fltk3::Color textcolor() const {return textcolor_;}
   /**    Gets the color of the text in the value box.  */
-  void textcolor(Fl_Color s) {textcolor_ = s;}
+  void textcolor(fltk3::Color s) {textcolor_ = s;}
 };
 
 #endif

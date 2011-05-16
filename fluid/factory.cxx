@@ -216,7 +216,7 @@ static Fl_Menu_Item browser_type_menu[] = {
   {0}};
 class Fl_Browser_Type : public Fl_Widget_Type {
   Fl_Menu_Item *subtypes() {return browser_type_menu;}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
+  int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Browser *myo = (Fl_Browser *)o;
@@ -250,7 +250,7 @@ public:
 };
 static Fl_Browser_Type Fl_Browser_type;
 
-int Fl_Browser_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+int Fl_Browser_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
   Fl_Browser *myo = (Fl_Browser*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
@@ -264,7 +264,7 @@ int Fl_Browser_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 
 class Fl_Check_Browser_Type : public Fl_Widget_Type {
   Fl_Menu_Item *subtypes() {return browser_type_menu;}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
+  int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Check_Browser *myo = (Fl_Check_Browser *)o;
@@ -298,7 +298,7 @@ public:
 };
 static Fl_Check_Browser_Type Fl_Check_Browser_type;
 
-int Fl_Check_Browser_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+int Fl_Check_Browser_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
   Fl_Check_Browser *myo = (Fl_Check_Browser*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
@@ -339,7 +339,7 @@ static Fl_Tree_Type Fl_Tree_type;
 
 class Fl_File_Browser_Type : public Fl_Widget_Type {
   Fl_Menu_Item *subtypes() {return browser_type_menu;}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
+  int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_File_Browser *myo = (Fl_File_Browser *)o;
@@ -369,7 +369,7 @@ public:
 };
 static Fl_File_Browser_Type Fl_File_Browser_type;
 
-int Fl_File_Browser_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+int Fl_File_Browser_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
   Fl_File_Browser *myo = (Fl_File_Browser*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
@@ -390,7 +390,7 @@ static Fl_Menu_Item counter_type_menu[] = {
   {0}};
 class Fl_Counter_Type : public Fl_Widget_Type {
   Fl_Menu_Item *subtypes() {return counter_type_menu;}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
+  int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
   int is_valuator() const {return 1;}
   int pixmapID() { return 41; }
 public:
@@ -402,7 +402,7 @@ public:
 };
 static Fl_Counter_Type Fl_Counter_type;
 
-int Fl_Counter_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+int Fl_Counter_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
   Fl_Counter *myo = (Fl_Counter*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
@@ -423,7 +423,7 @@ static Fl_Menu_Item spinner_type_menu[] = {
   {0}};
 class Fl_Spinner_Type : public Fl_Widget_Type {
   Fl_Menu_Item *subtypes() {return spinner_type_menu;}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
+  int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
   int pixmapID() { return 47; }
 public:
   virtual void ideal_size(int &w, int &h) {
@@ -445,11 +445,11 @@ public:
 };
 static Fl_Spinner_Type Fl_Spinner_type;
 
-int Fl_Spinner_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+int Fl_Spinner_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
   Fl_Spinner *myo = (Fl_Spinner*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
-    case 0: f = (Fl_Font)myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
+    case 0: f = (fltk3::Font)myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
     case 1: myo->textfont(f); break;
     case 2: myo->textsize(s); break;
     case 3: myo->textcolor(c); break;
@@ -469,7 +469,7 @@ static Fl_Menu_Item input_type_menu[] = {
   {0}};
 class Fl_Input_Type : public Fl_Widget_Type {
   Fl_Menu_Item *subtypes() {return input_type_menu;}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
+  int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Input *myo = (Fl_Input *)o;
@@ -502,7 +502,7 @@ public:
 };
 static Fl_Input_Type Fl_Input_type;
 
-int Fl_Input_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+int Fl_Input_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
   Fl_Input_ *myo = (Fl_Input_*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
@@ -519,7 +519,7 @@ int Fl_Input_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 #include <fltk3/FileInput.h>
 class Fl_File_Input_Type : public Fl_Widget_Type {
   Fl_Menu_Item *subtypes() {return 0;}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
+  int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_File_Input *myo = (Fl_File_Input *)o;
@@ -544,7 +544,7 @@ public:
 };
 static Fl_File_Input_Type Fl_File_Input_type;
 
-int Fl_File_Input_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+int Fl_File_Input_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
   Fl_File_Input *myo = (Fl_File_Input*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
@@ -560,7 +560,7 @@ int Fl_File_Input_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 
 #include <fltk3/TextDisplay.h>
 class Fl_Text_Display_Type : public Fl_Widget_Type {
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
+  int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Text_Display *myo = (Fl_Text_Display *)o;
@@ -586,7 +586,7 @@ public:
 };
 static Fl_Text_Display_Type Fl_Text_Display_type;
 
-int Fl_Text_Display_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+int Fl_Text_Display_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
   Fl_Text_Display *myo = (Fl_Text_Display*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
@@ -602,7 +602,7 @@ int Fl_Text_Display_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 
 #include <fltk3/TextEditor.h>
 class Fl_Text_Editor_Type : public Fl_Widget_Type {
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
+  int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Text_Editor *myo = (Fl_Text_Editor *)o;
@@ -628,7 +628,7 @@ public:
 };
 static Fl_Text_Editor_Type Fl_Text_Editor_type;
 
-int Fl_Text_Editor_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+int Fl_Text_Editor_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
   Fl_Text_Editor *myo = (Fl_Text_Editor*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
@@ -847,7 +847,7 @@ public:
   }
   virtual const char *type_name() {return "Fl_Value_Input";}
   virtual const char *alt_type_name() {return "fltk::ValueInput";}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
+  int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
   int is_valuator() const {return 1;}
   int is_value_input() const {return 1;}
   Fl_Widget *widget(int x,int y,int w,int h) {
@@ -859,7 +859,7 @@ public:
 };
 static Fl_Value_Input_Type Fl_Value_Input_type;
 
-int Fl_Value_Input_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+int Fl_Value_Input_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
   Fl_Value_Input *myo = (Fl_Value_Input*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
@@ -888,7 +888,7 @@ public:
   }
   virtual const char *type_name() {return "Fl_Value_Output";}
   virtual const char *alt_type_name() {return "fltk::ValueOutput";}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
+  int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
   int is_valuator() const {return 1;}
   Fl_Widget *widget(int x,int y,int w,int h) {
     Fl_Value_Output *myo = new Fl_Value_Output(x,y,w,h,"value:");
@@ -899,7 +899,7 @@ public:
 };
 static Fl_Value_Output_Type Fl_Value_Output_type;
 
-int Fl_Value_Output_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+int Fl_Value_Output_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
   Fl_Value_Output *myo = (Fl_Value_Output*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
@@ -915,7 +915,7 @@ int Fl_Value_Output_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
 
 #include <fltk3/ValueSlider.h>
 class Fl_Value_Slider_Type : public Fl_Slider_Type {
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c);
+  int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual const char *type_name() {return "Fl_Value_Slider";}
   virtual const char *alt_type_name() {return "fltk::ValueSlider";}
@@ -926,7 +926,7 @@ public:
 };
 static Fl_Value_Slider_Type Fl_Value_Slider_type;
 
-int Fl_Value_Slider_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+int Fl_Value_Slider_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
   Fl_Value_Slider *myo = (Fl_Value_Slider*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
@@ -980,9 +980,9 @@ static void cb(Fl_Widget *, void *v) {
       // Set font sizes...
       wt->o->labelsize(Fl_Widget_Type::default_size);
 
-      Fl_Font f;
+      fltk3::Font f;
       int s = Fl_Widget_Type::default_size;
-      Fl_Color c;
+      fltk3::Color c;
 
       wt->textstuff(2, f, s, c);
 
@@ -1094,7 +1094,7 @@ static void make_iconlabel( Fl_Menu_Item *mi, Fl_Image *ic, const char *txt )
     ml->labela = (char*)ic;
     ml->labelb = t1;
     ml->typea = _FL_IMAGE_LABEL;
-    ml->typeb = FL_NORMAL_LABEL;
+    ml->typeb = fltk3::normalLabel;
     ml->label( mi );
   }
   else if (txt!=mi->text)
@@ -1142,40 +1142,40 @@ Fl_Type *Fl_Type_make(const char *tn) {
 struct symbol {const char *name; int value;};
 
 static symbol table[] = {
-  {"BLACK",	FL_BLACK},
-  {"RED",	FL_RED},
-  {"GREEN",	FL_GREEN},
-  {"YELLOW",	FL_YELLOW},
-  {"BLUE",	FL_BLUE},
-  {"MAGENTA",	FL_MAGENTA},
-  {"CYAN",	FL_CYAN},
-  {"WHITE",	FL_WHITE},
+  {"BLACK",	fltk3::BLACK},
+  {"RED",	fltk3::RED},
+  {"GREEN",	fltk3::GREEN},
+  {"YELLOW",	fltk3::YELLOW},
+  {"BLUE",	fltk3::BLUE},
+  {"MAGENTA",	fltk3::MAGENTA},
+  {"CYAN",	fltk3::CYAN},
+  {"WHITE",	fltk3::WHITE},
 
-  {"LCOL",		 FL_BLACK},
-  {"COL1",		 FL_GRAY},
-  {"MCOL",		 FL_LIGHT1},
-  {"LEFT_BCOL",		 FL_LIGHT3},
-  {"TOP_BCOL",		 FL_LIGHT2},
-  {"BOTTOM_BCOL",	 FL_DARK2},
-  {"RIGHT_BCOL",		 FL_DARK3},
-  {"INACTIVE",		 FL_INACTIVE_COLOR},
-  {"INACTIVE_COL",	 FL_INACTIVE_COLOR},
-  {"FREE_COL1",		 FL_FREE_COLOR},
-  {"FREE_COL2",		 FL_FREE_COLOR+1},
-  {"FREE_COL3",		 FL_FREE_COLOR+2},
-  {"FREE_COL4",		 FL_FREE_COLOR+3},
-  {"FREE_COL5",		 FL_FREE_COLOR+4},
-  {"FREE_COL6",		 FL_FREE_COLOR+5},
-  {"FREE_COL7",		 FL_FREE_COLOR+6},
-  {"FREE_COL8",		 FL_FREE_COLOR+7},
-  {"FREE_COL9",		 FL_FREE_COLOR+8},
-  {"FREE_COL10",		 FL_FREE_COLOR+9},
-  {"FREE_COL11",		 FL_FREE_COLOR+10},
-  {"FREE_COL12",		 FL_FREE_COLOR+11},
-  {"FREE_COL13",		 FL_FREE_COLOR+12},
-  {"FREE_COL14",		 FL_FREE_COLOR+13},
-  {"FREE_COL15",		 FL_FREE_COLOR+14},
-  {"FREE_COL16",		 FL_FREE_COLOR+15},
+  {"LCOL",		 fltk3::BLACK},
+  {"COL1",		 fltk3::GRAY},
+  {"MCOL",		 fltk3::LIGHT1},
+  {"LEFT_BCOL",		 fltk3::LIGHT3},
+  {"TOP_BCOL",		 fltk3::LIGHT2},
+  {"BOTTOM_BCOL",	 fltk3::DARK2},
+  {"RIGHT_BCOL",		 fltk3::DARK3},
+  {"INACTIVE",		 fltk3::INACTIVE_COLOR},
+  {"INACTIVE_COL",	 fltk3::INACTIVE_COLOR},
+  {"FREE_COL1",		 fltk3::FREE_COLOR},
+  {"FREE_COL2",		 fltk3::FREE_COLOR+1},
+  {"FREE_COL3",		 fltk3::FREE_COLOR+2},
+  {"FREE_COL4",		 fltk3::FREE_COLOR+3},
+  {"FREE_COL5",		 fltk3::FREE_COLOR+4},
+  {"FREE_COL6",		 fltk3::FREE_COLOR+5},
+  {"FREE_COL7",		 fltk3::FREE_COLOR+6},
+  {"FREE_COL8",		 fltk3::FREE_COLOR+7},
+  {"FREE_COL9",		 fltk3::FREE_COLOR+8},
+  {"FREE_COL10",		 fltk3::FREE_COLOR+9},
+  {"FREE_COL11",		 fltk3::FREE_COLOR+10},
+  {"FREE_COL12",		 fltk3::FREE_COLOR+11},
+  {"FREE_COL13",		 fltk3::FREE_COLOR+12},
+  {"FREE_COL14",		 fltk3::FREE_COLOR+13},
+  {"FREE_COL15",		 fltk3::FREE_COLOR+14},
+  {"FREE_COL16",		 fltk3::FREE_COLOR+15},
   {"TOMATO",		 131},
   {"INDIANRED",		 164},
   {"SLATEBLUE",		 195},
@@ -1185,62 +1185,62 @@ static symbol table[] = {
   {"DARKCYAN",		 189},
   {"DARKTOMATO",		 113},
   {"WHEAT",		 174},
-  {"ALIGN_CENTER",	FL_ALIGN_CENTER},
-  {"ALIGN_TOP",		FL_ALIGN_TOP},
-  {"ALIGN_BOTTOM",	FL_ALIGN_BOTTOM},
-  {"ALIGN_LEFT",	FL_ALIGN_LEFT},
-  {"ALIGN_RIGHT",	FL_ALIGN_RIGHT},
-  {"ALIGN_INSIDE",	FL_ALIGN_INSIDE},
-  {"ALIGN_TOP_LEFT",	 FL_ALIGN_TOP | FL_ALIGN_LEFT},
-  {"ALIGN_TOP_RIGHT",	 FL_ALIGN_TOP | FL_ALIGN_RIGHT},
-  {"ALIGN_BOTTOM_LEFT",	 FL_ALIGN_BOTTOM | FL_ALIGN_LEFT},
-  {"ALIGN_BOTTOM_RIGHT", FL_ALIGN_BOTTOM | FL_ALIGN_RIGHT},
-  {"ALIGN_CENTER|FL_ALIGN_INSIDE",	FL_ALIGN_CENTER|FL_ALIGN_INSIDE},
-  {"ALIGN_TOP|FL_ALIGN_INSIDE",		FL_ALIGN_TOP|FL_ALIGN_INSIDE},
-  {"ALIGN_BOTTOM|FL_ALIGN_INSIDE",	FL_ALIGN_BOTTOM|FL_ALIGN_INSIDE},
-  {"ALIGN_LEFT|FL_ALIGN_INSIDE",	FL_ALIGN_LEFT|FL_ALIGN_INSIDE},
-  {"ALIGN_RIGHT|FL_ALIGN_INSIDE",	FL_ALIGN_RIGHT|FL_ALIGN_INSIDE},
-  {"ALIGN_INSIDE|FL_ALIGN_INSIDE",	FL_ALIGN_INSIDE|FL_ALIGN_INSIDE},
-  {"ALIGN_TOP_LEFT|FL_ALIGN_INSIDE",	FL_ALIGN_TOP|FL_ALIGN_LEFT|FL_ALIGN_INSIDE},
-  {"ALIGN_TOP_RIGHT|FL_ALIGN_INSIDE",	FL_ALIGN_TOP|FL_ALIGN_RIGHT|FL_ALIGN_INSIDE},
-  {"ALIGN_BOTTOM_LEFT|FL_ALIGN_INSIDE",	FL_ALIGN_BOTTOM|FL_ALIGN_LEFT|FL_ALIGN_INSIDE},
-  {"ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE",FL_ALIGN_BOTTOM|FL_ALIGN_RIGHT|FL_ALIGN_INSIDE},
+  {"ALIGN_CENTER",	fltk3::ALIGN_CENTER},
+  {"ALIGN_TOP",		fltk3::ALIGN_TOP},
+  {"ALIGN_BOTTOM",	fltk3::ALIGN_BOTTOM},
+  {"ALIGN_LEFT",	fltk3::ALIGN_LEFT},
+  {"ALIGN_RIGHT",	fltk3::ALIGN_RIGHT},
+  {"ALIGN_INSIDE",	fltk3::ALIGN_INSIDE},
+  {"ALIGN_TOP_LEFT",	 fltk3::ALIGN_TOP | fltk3::ALIGN_LEFT},
+  {"ALIGN_TOP_RIGHT",	 fltk3::ALIGN_TOP | fltk3::ALIGN_RIGHT},
+  {"ALIGN_BOTTOM_LEFT",	 fltk3::ALIGN_BOTTOM | fltk3::ALIGN_LEFT},
+  {"ALIGN_BOTTOM_RIGHT", fltk3::ALIGN_BOTTOM | fltk3::ALIGN_RIGHT},
+  {"ALIGN_CENTER|fltk3::ALIGN_INSIDE",	fltk3::ALIGN_CENTER|fltk3::ALIGN_INSIDE},
+  {"ALIGN_TOP|fltk3::ALIGN_INSIDE",		fltk3::ALIGN_TOP|fltk3::ALIGN_INSIDE},
+  {"ALIGN_BOTTOM|fltk3::ALIGN_INSIDE",	fltk3::ALIGN_BOTTOM|fltk3::ALIGN_INSIDE},
+  {"ALIGN_LEFT|fltk3::ALIGN_INSIDE",	fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE},
+  {"ALIGN_RIGHT|fltk3::ALIGN_INSIDE",	fltk3::ALIGN_RIGHT|fltk3::ALIGN_INSIDE},
+  {"ALIGN_INSIDE|fltk3::ALIGN_INSIDE",	fltk3::ALIGN_INSIDE|fltk3::ALIGN_INSIDE},
+  {"ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE",	fltk3::ALIGN_TOP|fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE},
+  {"ALIGN_TOP_RIGHT|fltk3::ALIGN_INSIDE",	fltk3::ALIGN_TOP|fltk3::ALIGN_RIGHT|fltk3::ALIGN_INSIDE},
+  {"ALIGN_BOTTOM_LEFT|fltk3::ALIGN_INSIDE",	fltk3::ALIGN_BOTTOM|fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE},
+  {"ALIGN_BOTTOM_RIGHT|fltk3::ALIGN_INSIDE",fltk3::ALIGN_BOTTOM|fltk3::ALIGN_RIGHT|fltk3::ALIGN_INSIDE},
 
-  {"ALIGN_LEFT_TOP",	 FL_ALIGN_TOP | FL_ALIGN_LEFT},
-  {"ALIGN_RIGHT_TOP",	 FL_ALIGN_TOP | FL_ALIGN_RIGHT},
-  {"ALIGN_LEFT_BOTTOM",	 FL_ALIGN_BOTTOM | FL_ALIGN_LEFT},
-  {"ALIGN_RIGHT_BOTTOM", FL_ALIGN_BOTTOM | FL_ALIGN_RIGHT},
+  {"ALIGN_LEFT_TOP",	 fltk3::ALIGN_TOP | fltk3::ALIGN_LEFT},
+  {"ALIGN_RIGHT_TOP",	 fltk3::ALIGN_TOP | fltk3::ALIGN_RIGHT},
+  {"ALIGN_LEFT_BOTTOM",	 fltk3::ALIGN_BOTTOM | fltk3::ALIGN_LEFT},
+  {"ALIGN_RIGHT_BOTTOM", fltk3::ALIGN_BOTTOM | fltk3::ALIGN_RIGHT},
   {"INVALID_STYLE",	 255},
-  {"NORMAL_STYLE",	 FL_HELVETICA},
-  {"BOLD_STYLE",		 FL_HELVETICA|FL_BOLD},
-  {"ITALIC_STYLE",	 FL_HELVETICA|FL_ITALIC},
-  {"BOLDITALIC_STYLE",	 FL_HELVETICA|FL_BOLD|FL_ITALIC},
-  {"FIXED_STYLE",	 FL_COURIER},
-  {"FIXEDBOLD_STYLE",	 FL_COURIER|FL_BOLD},
-  {"FIXEDITALIC_STYLE",	 FL_COURIER|FL_ITALIC},
-  {"FIXEDBOLDITALIC_STYLE",  FL_COURIER|FL_BOLD|FL_ITALIC},
-  {"TIMES_STYLE",	 FL_TIMES},
-  {"TIMESBOLD_STYLE",	 FL_TIMES|FL_BOLD},
-  {"TIMESITALIC_STYLE",	 FL_TIMES|FL_ITALIC},
-  {"TIMESBOLDITALIC_STYLE",  FL_TIMES|FL_BOLD|FL_ITALIC},
+  {"NORMAL_STYLE",	 fltk3::HELVETICA},
+  {"BOLD_STYLE",		 fltk3::HELVETICA|fltk3::BOLD},
+  {"ITALIC_STYLE",	 fltk3::HELVETICA|fltk3::ITALIC},
+  {"BOLDITALIC_STYLE",	 fltk3::HELVETICA|fltk3::BOLD|fltk3::ITALIC},
+  {"FIXED_STYLE",	 fltk3::COURIER},
+  {"FIXEDBOLD_STYLE",	 fltk3::COURIER|fltk3::BOLD},
+  {"FIXEDITALIC_STYLE",	 fltk3::COURIER|fltk3::ITALIC},
+  {"FIXEDBOLDITALIC_STYLE",  fltk3::COURIER|fltk3::BOLD|fltk3::ITALIC},
+  {"TIMES_STYLE",	 fltk3::TIMES},
+  {"TIMESBOLD_STYLE",	 fltk3::TIMES|fltk3::BOLD},
+  {"TIMESITALIC_STYLE",	 fltk3::TIMES|fltk3::ITALIC},
+  {"TIMESBOLDITALIC_STYLE",  fltk3::TIMES|fltk3::BOLD|fltk3::ITALIC},
   {"SHADOW_STYLE",	(_FL_SHADOW_LABEL<<8)},
   {"ENGRAVED_STYLE",	(_FL_ENGRAVED_LABEL<<8)},
   {"EMBOSSED_STYLE",	(_FL_EMBOSSED_LABEL<<0)},
   {"TINY_SIZE",		 8},
   {"SMALL_SIZE",		 11},
-  {"NORMAL_SIZE",	 FL_NORMAL_SIZE},
+  {"NORMAL_SIZE",	 fltk3::NORMAL_SIZE},
   {"MEDIUM_SIZE",	 18},
   {"LARGE_SIZE",		 24},
   {"HUGE_SIZE",		 32},
-  {"DEFAULT_SIZE",	 FL_NORMAL_SIZE},
+  {"DEFAULT_SIZE",	 fltk3::NORMAL_SIZE},
   {"TINY_FONT",		 8},
   {"SMALL_FONT",		 11},
-  {"NORMAL_FONT",	 FL_NORMAL_SIZE},
+  {"NORMAL_FONT",	 fltk3::NORMAL_SIZE},
   {"MEDIUM_FONT",	 18},
   {"LARGE_FONT",		 24},
   {"HUGE_FONT",		 32},
   {"NORMAL_FONT1",	 11},
-  {"NORMAL_FONT2",	 FL_NORMAL_SIZE},
+  {"NORMAL_FONT2",	 fltk3::NORMAL_SIZE},
   {"DEFAULT_FONT",	 11},
   {"RETURN_END_CHANGED",  0},
   {"RETURN_CHANGED",	 1},

@@ -60,7 +60,7 @@ Fl_Wizard::Fl_Wizard(int        xx,	// I - Lefthand position
 		     const char *l) :	// I - Label
     Fl_Group(xx, yy, ww, hh, l)
 {
-  box(FL_THIN_UP_BOX);
+  box(fltk3::THIN_UP_BOX);
 
   value_ = (Fl_Widget *)0;
 }
@@ -74,7 +74,7 @@ void Fl_Wizard::draw() {
 
   kid = value();
 
-  if (damage() & FL_DAMAGE_ALL)
+  if (damage() & fltk3::DAMAGE_ALL)
   {
     // Redraw everything...
     if (kid)
@@ -185,7 +185,7 @@ void Fl_Wizard::value(Fl_Widget *kid)
   // This will restore the mouse pointer to the window's default cursor
   // whenever the wizard pane is changed.  Otherwise text widgets that
   // show the next pane may leave the cursor set to the I beam, etc...
-  if (window()) window()->cursor(FL_CURSOR_DEFAULT);
+  if (window()) window()->cursor(fltk3::CURSOR_DEFAULT);
 }
 
 

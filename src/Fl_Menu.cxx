@@ -141,9 +141,9 @@ int Fl_Menu_Item::measure(int* hp, const Fl_Menu_* m) const {
   l.image   = 0;
   l.deimage = 0;
   l.type    = labeltype_;
-  l.font    = labelsize_ || labelfont_ ? labelfont_ : (m ? m->textfont() : FL_HELVETICA);
-  l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : FL_NORMAL_SIZE;
-  l.color   = FL_FOREGROUND_COLOR; // this makes no difference?
+  l.font    = labelsize_ || labelfont_ ? labelfont_ : (m ? m->textfont() : fltk3::HELVETICA);
+  l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : fltk3::NORMAL_SIZE;
+  l.color   = fltk3::FOREGROUND_COLOR; // this makes no difference?
   fl_draw_shortcut = 1;
   int w = 0; int h = 0;
   l.measure(w, hp ? *hp : h);
@@ -160,24 +160,24 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
   l.image   = 0;
   l.deimage = 0;
   l.type    = labeltype_;
-  l.font    = labelsize_ || labelfont_ ? labelfont_ : (m ? m->textfont() : FL_HELVETICA);
-  l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : FL_NORMAL_SIZE;
-  l.color   = labelcolor_ ? labelcolor_ : m ? m->textcolor() : int(FL_FOREGROUND_COLOR);
-  if (!active()) l.color = fl_inactive((Fl_Color)l.color);
-  Fl_Color color = m ? m->color() : FL_GRAY;
+  l.font    = labelsize_ || labelfont_ ? labelfont_ : (m ? m->textfont() : fltk3::HELVETICA);
+  l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : fltk3::NORMAL_SIZE;
+  l.color   = labelcolor_ ? labelcolor_ : m ? m->textcolor() : int(fltk3::FOREGROUND_COLOR);
+  if (!active()) l.color = fltk3::inactive((fltk3::Color)l.color);
+  fltk3::Color color = m ? m->color() : fltk3::GRAY;
   if (selected) {
-    Fl_Color r = m ? m->selection_color() : FL_SELECTION_COLOR;
-    Fl_Boxtype b = m && m->down_box() ? m->down_box() : FL_FLAT_BOX;
-    if (fl_contrast(r,color)!=r) { // back compatibility boxtypes
+    fltk3::Color r = m ? m->selection_color() : fltk3::SELECTION_COLOR;
+    fltk3::Boxtype b = m && m->down_box() ? m->down_box() : fltk3::FLAT_BOX;
+    if (fltk3::contrast(r,color)!=r) { // back compatibility boxtypes
       if (selected == 2) { // menu title
 	r = color;
-	b = m ? m->box() : FL_UP_BOX;
+	b = m ? m->box() : fltk3::UP_BOX;
       } else {
-	r = (Fl_Color)(FL_COLOR_CUBE-1); // white
-	l.color = fl_contrast((Fl_Color)labelcolor_, r);
+	r = (fltk3::Color)(fltk3::COLOR_CUBE-1); // white
+	l.color = fltk3::contrast((fltk3::Color)labelcolor_, r);
       }
     } else {
-      l.color = fl_contrast((Fl_Color)labelcolor_, r);
+      l.color = fltk3::contrast((fltk3::Color)labelcolor_, r);
     }
     if (selected == 2) { // menu title
       fl_draw_box(b, x, y, w, h, r);
@@ -189,25 +189,25 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
   }
 
   if (flags & (FL_MENU_TOGGLE|FL_MENU_RADIO)) {
-    int d = (h - FL_NORMAL_SIZE + 1) / 2;
+    int d = (h - fltk3::NORMAL_SIZE + 1) / 2;
     int W = h - 2 * d;
 
     if (flags & FL_MENU_RADIO) {
-      fl_draw_box(FL_ROUND_DOWN_BOX, x+2, y+d, W, W, FL_BACKGROUND2_COLOR);
+      fl_draw_box(fltk3::ROUND_DOWN_BOX, x+2, y+d, W, W, fltk3::BACKGROUND2_COLOR);
       if (value()) {
-	int tW = (W - Fl::box_dw(FL_ROUND_DOWN_BOX)) / 2 + 1;
+	int tW = (W - Fl::box_dw(fltk3::ROUND_DOWN_BOX)) / 2 + 1;
 	if ((W - tW) & 1) tW++;	// Make sure difference is even to center
-	int td = Fl::box_dx(FL_ROUND_DOWN_BOX) + 1;
+	int td = Fl::box_dx(fltk3::ROUND_DOWN_BOX) + 1;
         if (Fl::scheme()) {
 	  // Offset the radio circle...
 	  td ++;
 
 	  if (!strcmp(Fl::scheme(), "gtk+")) {
-	    fl_color(FL_SELECTION_COLOR);
+	    fl_color(fltk3::SELECTION_COLOR);
 	    tW --;
 	    fl_pie(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
 	    fl_arc(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
-	    fl_color(fl_color_average(FL_WHITE, FL_SELECTION_COLOR, 0.2f));
+	    fl_color(fltk3::colorAverage(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.2f));
 	  } else fl_color(labelcolor_);
 	} else fl_color(labelcolor_);
 
@@ -238,15 +238,15 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
 	}
 
 	if (Fl::scheme() && !strcmp(Fl::scheme(), "gtk+")) {
-	  fl_color(fl_color_average(FL_WHITE, FL_SELECTION_COLOR, 0.5));
+	  fl_color(fltk3::colorAverage(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
 	  fl_arc(x + td + 2, y + d + td, tW + 1, tW + 1, 60.0, 180.0);
 	}
       }
     } else {
-      fl_draw_box(FL_DOWN_BOX, x+2, y+d, W, W, FL_BACKGROUND2_COLOR);
+      fl_draw_box(fltk3::DOWN_BOX, x+2, y+d, W, W, fltk3::BACKGROUND2_COLOR);
       if (value()) {
 	if (Fl::scheme() && !strcmp(Fl::scheme(), "gtk+")) {
-	  fl_color(FL_SELECTION_COLOR);
+	  fl_color(fltk3::SELECTION_COLOR);
 	} else {
 	  fl_color(labelcolor_);
 	}
@@ -266,7 +266,7 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
   }
 
   if (!fl_draw_shortcut) fl_draw_shortcut = 1;
-  l.draw(x+3, y, w>6 ? w-6 : 0, h, FL_ALIGN_LEFT);
+  l.draw(x+3, y, w>6 ? w-6 : 0, h, fltk3::ALIGN_LEFT);
   fl_draw_shortcut = 0;
 }
 
@@ -277,7 +277,7 @@ menutitle::menutitle(int X, int Y, int W, int H, const Fl_Menu_Item* L) :
   clear_border();
   set_menu_window();
   menu = L;
-  if (L->labelcolor_ || Fl::scheme() || L->labeltype_ > FL_NO_LABEL) clear_overlay();
+  if (L->labelcolor_ || Fl::scheme() || L->labeltype_ > fltk3::noLabel) clear_overlay();
 }
 
 menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
@@ -300,11 +300,11 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   drawn_selected = -1;
   if (button) {
     box(button->box());
-    if (box() == FL_NO_BOX || box() == FL_FLAT_BOX) box(FL_UP_BOX);
+    if (box() == fltk3::NO_BOX || box() == fltk3::FLAT_BOX) box(fltk3::UP_BOX);
   } else {
-    box(FL_UP_BOX);
+    box(fltk3::UP_BOX);
   }
-  color(button && !Fl::scheme() ? button->color() : FL_GRAY);
+  color(button && !Fl::scheme() ? button->color() : fltk3::GRAY);
   selected = -1;
   {
     int j = 0;
@@ -356,7 +356,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
         }
       }
     }
-    if (m->labelcolor_ || Fl::scheme() || m->labeltype_ > FL_NO_LABEL) clear_overlay();
+    if (m->labelcolor_ || Fl::scheme() || m->labeltype_ > fltk3::noLabel) clear_overlay();
   }
   shortcutWidth = hotKeysw;
   if (selected >= 0 && !Wp) X -= W/2;
@@ -460,26 +460,26 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int n, int eraseit) {
     int x1 = xx+ww-sz-3;
     fl_polygon(x1+2, y1, x1+2, y1+sz, x1+sz/2+2, y1+sz/2);
   } else if (m->shortcut_) {
-    Fl_Font f = m->labelsize_ || m->labelfont_ ? (Fl_Font)m->labelfont_ :
-                    button ? button->textfont() : FL_HELVETICA;
+    fltk3::Font f = m->labelsize_ || m->labelfont_ ? (fltk3::Font)m->labelfont_ :
+                    button ? button->textfont() : fltk3::HELVETICA;
     fl_font(f, m->labelsize_ ? m->labelsize_ :
-                   button ? button->textsize() : FL_NORMAL_SIZE);
+                   button ? button->textsize() : fltk3::NORMAL_SIZE);
     const char *k, *s = fl_shortcut_label(m->shortcut_, &k);
     if (fl_utf_nb_char((const unsigned char*)k, strlen(k))<=4) {
       // righ-align the modifiers and left-align the key
       char buf[32]; strcpy(buf, s); buf[k-s] = 0;
-      fl_draw(buf, xx, yy, ww-shortcutWidth, hh, FL_ALIGN_RIGHT);
-      fl_draw(  k, xx+ww-shortcutWidth, yy, shortcutWidth, hh, FL_ALIGN_LEFT);
+      fl_draw(buf, xx, yy, ww-shortcutWidth, hh, fltk3::ALIGN_RIGHT);
+      fl_draw(  k, xx+ww-shortcutWidth, yy, shortcutWidth, hh, fltk3::ALIGN_LEFT);
     } else {
       // right-align to the menu
-      fl_draw(s, xx, yy, ww-4, hh, FL_ALIGN_RIGHT);
+      fl_draw(s, xx, yy, ww-4, hh, fltk3::ALIGN_RIGHT);
     }
   }
 
   if (m->flags & FL_MENU_DIVIDER) {
-    fl_color(FL_DARK3);
+    fl_color(fltk3::DARK3);
     fl_xyline(BW-1, yy+hh+(LEADING-2)/2, W-2*BW+2);
-    fl_color(FL_LIGHT3);
+    fl_color(fltk3::LIGHT3);
     fl_xyline(BW-1, yy+hh+((LEADING-2)/2+1), W-2*BW+2);
   }
 }
@@ -489,14 +489,14 @@ void menutitle::draw() {
 }
 
 void menuwindow::draw() {
-  if (damage() != FL_DAMAGE_CHILD) {	// complete redraw
+  if (damage() != fltk3::DAMAGE_CHILD) {	// complete redraw
     fl_draw_box(box(), 0, 0, w(), h(), button ? button->color() : color());
     if (menu) {
       const Fl_Menu_Item* m; int j;
       for (m=menu->first(), j=0; m->text; j++, m = m->next()) drawentry(m, j, 0);
     }
   } else {
-    if (damage() & FL_DAMAGE_CHILD && selected!=drawn_selected) { // change selection
+    if (damage() & fltk3::DAMAGE_CHILD && selected!=drawn_selected) { // change selection
       drawentry(menu->next(drawn_selected), drawn_selected, 1);
       drawentry(menu->next(selected), selected, 1);
     }
@@ -505,7 +505,7 @@ void menuwindow::draw() {
 }
 
 void menuwindow::set_selected(int n) {
-  if (n != selected) {selected = n; damage(FL_DAMAGE_CHILD);}
+  if (n != selected) {selected = n; damage(fltk3::DAMAGE_CHILD);}
 }
 
 ////////////////////////////////////////////////////////////////
@@ -668,13 +668,13 @@ int menuwindow::early_hide_handle(int e) {
 #endif
   menustate &pp = *p;
   switch (e) {
-  case FL_KEYBOARD:
+  case fltk3::KEYBOARD:
     switch (Fl::event_key()) {
-    case FL_BackSpace:
+    case fltk3::BackSpaceKey:
     BACKTAB:
       if (!backward(pp.menu_number)) {pp.item_number = -1;backward(pp.menu_number);}
       return 1;
-    case FL_Up:
+    case fltk3::UpKey:
       if (pp.menubar && pp.menu_number == 0) {
         // Do nothing...
       } else if (backward(pp.menu_number)) {
@@ -683,11 +683,11 @@ int menuwindow::early_hide_handle(int e) {
         setitem(0, pp.p[0]->selected);
       }
       return 1;
-    case FL_Tab:
+    case fltk3::TabKey:
       if (Fl::event_shift()) goto BACKTAB;
-    case FL_Down:
+    case fltk3::DownKey:
       if (pp.menu_number || !pp.menubar) {
-        if (!forward(pp.menu_number) && Fl::event_key()==FL_Tab) {
+        if (!forward(pp.menu_number) && Fl::event_key()==fltk3::TabKey) {
           pp.item_number = -1;
           forward(pp.menu_number);
         }
@@ -695,28 +695,28 @@ int menuwindow::early_hide_handle(int e) {
         forward(pp.menu_number+1);
       }
       return 1;
-    case FL_Right:
+    case fltk3::RightKey:
       if (pp.menubar && (pp.menu_number<=0 || (pp.menu_number==1 && pp.nummenus==2)))
 	forward(0);
       else if (pp.menu_number < pp.nummenus-1) forward(pp.menu_number+1);
       return 1;
-    case FL_Left:
+    case fltk3::LeftKey:
       if (pp.menubar && pp.menu_number<=1) backward(0);
       else if (pp.menu_number>0)
 	setitem(pp.menu_number-1, pp.p[pp.menu_number-1]->selected);
       return 1;
-    case FL_Enter:
-    case FL_KP_Enter:
+    case fltk3::EnterKey:
+    case fltk3::KPEnterKey:
     case ' ':
       pp.state = DONE_STATE;
       return 1;
-    case FL_Escape:
+    case fltk3::EscapeKey:
       setitem(0, -1, 0);
       pp.state = DONE_STATE;
       return 1;
     }
     break;
-  case FL_SHORTCUT: 
+  case fltk3::SHORTCUT: 
     {
       for (int mymenu = pp.nummenus; mymenu--;) {
 	menuwindow &mw = *(pp.p[mymenu]);
@@ -729,16 +729,16 @@ int menuwindow::early_hide_handle(int e) {
       }
     }
     break;
-    case FL_MOVE:
+    case fltk3::MOVE:
 #if ! (defined(WIN32) || defined(__APPLE__))
       if (pp.state == DONE_STATE) {
 	return 1; // Fix for STR #2619
       }
       /* FALLTHROUGH */
 #endif
-  case FL_ENTER:
-  case FL_PUSH:
-  case FL_DRAG:
+  case fltk3::ENTER:
+  case fltk3::PUSH:
+  case fltk3::DRAG:
     {
       int mx = Fl::event_x_root();
       int my = Fl::event_y_root();
@@ -746,7 +746,7 @@ int menuwindow::early_hide_handle(int e) {
       // Clicking or dragging outside menu cancels it...
       if ((!pp.menubar || mymenu) && !pp.is_inside(mx, my)) {
 	setitem(0, -1, 0);
-	if (e==FL_PUSH)
+	if (e==fltk3::PUSH)
 	  pp.state = DONE_STATE;
 	return 1;
       }
@@ -756,12 +756,12 @@ int menuwindow::early_hide_handle(int e) {
 	  break;
 	if (mymenu <= 0) {
 	  // buttons in menubars must be deselected if we move outside of them!
-	  if (pp.menu_number==-1 && e==FL_PUSH) {
+	  if (pp.menu_number==-1 && e==fltk3::PUSH) {
 	    pp.state = DONE_STATE;
 	    return 1;
 	  }
 	  if (pp.current_item && pp.menu_number==0 && !pp.current_item->submenu()) {
-	    if (e==FL_PUSH)
+	    if (e==fltk3::PUSH)
 	      pp.state = DONE_STATE;
 	    setitem(0, -1, 0);
 	    return 1;
@@ -772,7 +772,7 @@ int menuwindow::early_hide_handle(int e) {
       }
       if (my == 0 && item > 0) setitem(mymenu, item - 1);
       else setitem(mymenu, item);
-      if (e == FL_PUSH) {
+      if (e == fltk3::PUSH) {
 	if (pp.current_item && pp.current_item->submenu() // this is a menu title
 	    && item != pp.p[mymenu]->selected // and it is not already on
 	    && !pp.current_item->callback_) // and it does not have a callback
@@ -782,7 +782,7 @@ int menuwindow::early_hide_handle(int e) {
       }
     }
     return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     // Mouse must either be held down/dragged some, or this must be
     // the second click (not the one that popped up the menu):
     if (   !Fl::event_is_click() 
@@ -851,7 +851,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
   pp.current_item = 0; pp.menu_number = 0; pp.item_number = -1;
   if (menubar) {
     // find the initial menu
-    if (!mw.handle(FL_DRAG)) {
+    if (!mw.handle(fltk3::DRAG)) {
       Fl::grab(0);
       return 0;
     }
@@ -1004,8 +1004,8 @@ const Fl_Menu_Item* Fl_Menu_Item::popup(
   Search only the top level menu for a shortcut.  
   Either &x in the label or the shortcut fields are used.
 
-  This tests the current event, which must be an FL_KEYBOARD or 
-  FL_SHORTCUT, against a shortcut value.
+  This tests the current event, which must be an fltk3::KEYBOARD or 
+  fltk3::SHORTCUT, against a shortcut value.
 
   \param ip returns the index of the item, if \p ip is not NULL.
   \param require_alt if true: match only if Alt key is pressed.
@@ -1030,7 +1030,7 @@ const Fl_Menu_Item* Fl_Menu_Item::find_shortcut(int* ip, const bool require_alt)
 // shortcut.  Only uses the shortcut field, ignores &x in the labels:
 /**
   This is designed to be called by a widgets handle() method in
-  response to a FL_SHORTCUT event.  If the current event matches
+  response to a fltk3::SHORTCUT event.  If the current event matches
   one of the items shortcut, that item is returned.  If the keystroke
   does not match any shortcuts then NULL is returned.  This only
   matches the shortcut() fields, not the letters in the title

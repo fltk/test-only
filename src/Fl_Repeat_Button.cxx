@@ -40,12 +40,12 @@ void Fl_Repeat_Button::repeat_callback(void *v) {
 int Fl_Repeat_Button::handle(int event) {
   int newval;
   switch (event) {
-  case FL_HIDE:
-  case FL_DEACTIVATE:
-  case FL_RELEASE:
+  case fltk3::HIDE:
+  case fltk3::DEACTIVATE:
+  case fltk3::RELEASE:
     newval = 0; goto J1;
-  case FL_PUSH:
-  case FL_DRAG:
+  case fltk3::PUSH:
+  case fltk3::DRAG:
     if (Fl::visible_focus()) Fl::focus(this);
     newval = Fl::event_inside(this);
   J1:

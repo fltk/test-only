@@ -47,7 +47,7 @@ Fl_XMap fl_xmap[256];
 
 Fl_XMap* fl_current_xmap;
 
-void Fl_Quartz_Graphics_Driver::color(Fl_Color i) {
+void Fl_Quartz_Graphics_Driver::color(fltk3::Color i) {
   Fl_Graphics_Driver::color(i);
   int index;
   uchar r, g, b;
@@ -73,7 +73,7 @@ void Fl_Quartz_Graphics_Driver::color(Fl_Color i) {
 }
 
 void Fl_Quartz_Graphics_Driver::color(uchar r, uchar g, uchar b) {
-  Fl_Graphics_Driver::color( fl_rgb_color(r, g, b) );
+  Fl_Graphics_Driver::color( fltk3::rgbColor(r, g, b) );
   float fr = r/255.0f;
   float fg = g/255.0f;
   float fb = b/255.0f;
@@ -81,7 +81,7 @@ void Fl_Quartz_Graphics_Driver::color(uchar r, uchar g, uchar b) {
   CGContextSetRGBStrokeColor(fl_gc, fr, fg, fb, 1.0f);
 }
 
-void Fl::set_color(Fl_Color i, unsigned c) {
+void Fl::set_color(fltk3::Color i, unsigned c) {
   if (fl_cmap[i] != c) {
     fl_cmap[i] = c;
   }

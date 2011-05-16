@@ -212,7 +212,7 @@ struct fl_margins {
 The following functions are also used to draw stuff and should be replaced with
 local copies that are much faster when merely counting:
 
-fl_color(Fl_Color);
+fl_color(fltk3::Color);
 fl_rectf(int, int, int, int);
 fl_push_clip(int, int, int, int);
 fl_xyline(int, int, int);
@@ -236,8 +236,8 @@ int Fl_Help_View::mouse_x = 0;
 int Fl_Help_View::mouse_y = 0;
 int Fl_Help_View::current_pos = 0;
 Fl_Help_View *Fl_Help_View::current_view = 0L;
-Fl_Color Fl_Help_View::hv_selection_color;
-Fl_Color Fl_Help_View::hv_selection_text_color;
+fltk3::Color Fl_Help_View::hv_selection_color;
+fltk3::Color Fl_Help_View::hv_selection_text_color;
 
 /*
  * Limitation: if a word contains &code; notations, we will calculate a wrong length.
@@ -247,7 +247,7 @@ Fl_Color Fl_Help_View::hv_selection_text_color;
 void Fl_Help_View::hv_draw(const char *t, int x, int y)
 {
   if (selected && current_view==this && current_pos<selection_last && current_pos>=selection_first) {
-    Fl_Color c = fl_color();
+    fltk3::Color c = fl_color();
     fl_color(hv_selection_color);
     int w = (int)fl_width(t);
     if (current_pos+(int)strlen(t)<selection_last) 
@@ -446,12 +446,12 @@ Fl_Help_View::draw()
 			attr[1024];	// Attribute buffer
   int			xx, yy, ww, hh;	// Current positions and sizes
   int			line;		// Current line
-  Fl_Font               font;
-  Fl_Fontsize           fsize;          // Current font and size
-  Fl_Color              fcolor;         // current font color 
+  fltk3::Font               font;
+  fltk3::Fontsize           fsize;          // Current font and size
+  fltk3::Color              fcolor;         // current font color 
   int			head, pre,	// Flags for text
 			needspace;	// Do we need whitespace?
-  Fl_Boxtype		b = box() ? box() : FL_DOWN_BOX;
+  fltk3::Boxtype		b = box() ? box() : fltk3::DOWN_BOX;
 					// Box to draw...
   int			underline,	// Underline text?
                         xtra_ww;        // Extra width for underlined space between words
@@ -488,7 +488,7 @@ Fl_Help_View::draw()
     }
     if ( hor_vis && ver_vis ) {
       // Both scrollbars visible? Draw little gray box in corner
-      fl_color(FL_GRAY);
+      fl_color(fltk3::GRAY);
       fl_rectf(scorn_x, scorn_y, scrollsize, scrollsize);
     }
   }
@@ -497,8 +497,8 @@ Fl_Help_View::draw()
     return;
 
   if (current_view == this && selected) {
-    hv_selection_color      = FL_SELECTION_COLOR;
-    hv_selection_text_color = fl_contrast(textcolor_, FL_SELECTION_COLOR);
+    hv_selection_color      = fltk3::SELECTION_COLOR;
+    hv_selection_text_color = fltk3::contrast(textcolor_, fltk3::SELECTION_COLOR);
   }
   current_pos = 0;
 
@@ -694,24 +694,24 @@ Fl_Help_View::draw()
 	  {
             if (tolower(buf[0]) == 'h')
 	    {
-	      font  = FL_HELVETICA_BOLD;
+	      font  = fltk3::HELVETICA_BOLD;
 	      fsize = textsize_ + '7' - buf[1];
 	    }
 	    else if (strcasecmp(buf, "DT") == 0)
 	    {
-	      font  = textfont_ | FL_ITALIC;
+	      font  = textfont_ | fltk3::ITALIC;
 	      fsize = textsize_;
 	    }
 	    else if (strcasecmp(buf, "PRE") == 0)
 	    {
-	      font  = FL_COURIER;
+	      font  = fltk3::COURIER;
 	      fsize = textsize_;
 	      pre   = 1;
 	    }
 
             if (strcasecmp(buf, "LI") == 0)
 	    {
-//            fl_font(FL_SYMBOL, fsize); // The default SYMBOL font on my XP box is not Unicode...
+//            fl_font(fltk3::SYMBOL, fsize); // The default SYMBOL font on my XP box is not Unicode...
               char buf[8];
               wchar_t b[] = {0x2022, 0x0};
 //            buf[fl_unicode2utf(b, 1, buf)] = 0;
@@ -742,11 +742,11 @@ Fl_Help_View::draw()
             if (get_attr(attrs, "FACE", attr, sizeof(attr)) != NULL) {
 	      if (!strncasecmp(attr, "helvetica", 9) ||
 	          !strncasecmp(attr, "arial", 5) ||
-		  !strncasecmp(attr, "sans", 4)) font = FL_HELVETICA;
+		  !strncasecmp(attr, "sans", 4)) font = fltk3::HELVETICA;
               else if (!strncasecmp(attr, "times", 5) ||
-	               !strncasecmp(attr, "serif", 5)) font = FL_TIMES;
-              else if (!strncasecmp(attr, "symbol", 6)) font = FL_SYMBOL;
-	      else font = FL_COURIER;
+	               !strncasecmp(attr, "serif", 5)) font = fltk3::TIMES;
+              else if (!strncasecmp(attr, "symbol", 6)) font = fltk3::SYMBOL;
+	      else font = fltk3::COURIER;
             }
 
             if (get_attr(attrs, "SIZE", attr, sizeof(attr)) != NULL) {
@@ -771,14 +771,14 @@ Fl_Help_View::draw()
 	    underline = 0;
 	  else if (strcasecmp(buf, "B") == 0 ||
 	           strcasecmp(buf, "STRONG") == 0)
-	    pushfont(font |= FL_BOLD, fsize);
+	    pushfont(font |= fltk3::BOLD, fsize);
 	  else if (strcasecmp(buf, "TD") == 0 ||
 	           strcasecmp(buf, "TH") == 0)
           {
 	    int tx, ty, tw, th;
 
 	    if (tolower(buf[1]) == 'h')
-	      pushfont(font |= FL_BOLD, fsize);
+	      pushfont(font |= fltk3::BOLD, fsize);
 	    else
 	      pushfont(font = textfont_, fsize);
 
@@ -814,14 +814,14 @@ Fl_Help_View::draw()
 	  }
 	  else if (strcasecmp(buf, "I") == 0 ||
                    strcasecmp(buf, "EM") == 0)
-	    pushfont(font |= FL_ITALIC, fsize);
+	    pushfont(font |= fltk3::ITALIC, fsize);
 	  else if (strcasecmp(buf, "CODE") == 0 ||
 	           strcasecmp(buf, "TT") == 0)
-	    pushfont(font = FL_COURIER, fsize);
+	    pushfont(font = fltk3::COURIER, fsize);
 	  else if (strcasecmp(buf, "KBD") == 0)
-	    pushfont(font = FL_COURIER_BOLD, fsize);
+	    pushfont(font = fltk3::COURIER_BOLD, fsize);
 	  else if (strcasecmp(buf, "VAR") == 0)
-	    pushfont(font = FL_COURIER_ITALIC, fsize);
+	    pushfont(font = fltk3::COURIER_ITALIC, fsize);
 	  else if (strcasecmp(buf, "/HEAD") == 0)
             head = 0;
 	  else if (strcasecmp(buf, "/H1") == 0 ||
@@ -1073,9 +1073,9 @@ void Fl_Help_View::format() {
   int		xx, yy, ww, hh;	// Size of current text fragment
   int		line;		// Current line in block
   int		links;		// Links for current line
-  Fl_Font       font;
-  Fl_Fontsize   fsize;          // Current font and size
-  Fl_Color      fcolor;         // Current font color
+  fltk3::Font       font;
+  fltk3::Fontsize   fsize;          // Current font and size
+  fltk3::Color      fcolor;         // Current font color
   unsigned char	border;		// Draw border?
   int		talign,		// Current alignment
 		newalign,	// New alignment
@@ -1087,8 +1087,8 @@ void Fl_Help_View::format() {
   int		column,		// Current table column number
 		columns[MAX_COLUMNS];
 				// Column widths
-  Fl_Color	tc, rc;		// Table/row background color
-  Fl_Boxtype	b = box() ? box() : FL_DOWN_BOX;
+  fltk3::Color	tc, rc;		// Table/row background color
+  fltk3::Boxtype	b = box() ? box() : fltk3::DOWN_BOX;
 				// Box to draw...
   fl_margins	margins;	// Left margin stack...
 
@@ -1108,7 +1108,7 @@ void Fl_Help_View::format() {
     size_      = 0;
     bgcolor_   = color();
     textcolor_ = textcolor();
-    linkcolor_ = fl_contrast(FL_BLUE, color());
+    linkcolor_ = fltk3::contrast(fltk3::BLUE, color());
 
     tc = rc = bgcolor_;
 
@@ -1299,7 +1299,7 @@ void Fl_Help_View::format() {
           textcolor_ = get_color(get_attr(attrs, "TEXT", attr, sizeof(attr)),
 	                	 textcolor());
           linkcolor_ = get_color(get_attr(attrs, "LINK", attr, sizeof(attr)),
-	                	 fl_contrast(FL_BLUE, color()));
+	                	 fltk3::contrast(fltk3::BLUE, color()));
 	}
 	else if (strcasecmp(buf, "BR") == 0)
 	{
@@ -1383,17 +1383,17 @@ void Fl_Help_View::format() {
 
           if (tolower(buf[0]) == 'h' && isdigit(buf[1]))
 	  {
-	    font  = FL_HELVETICA_BOLD;
+	    font  = fltk3::HELVETICA_BOLD;
 	    fsize = textsize_ + '7' - buf[1];
 	  }
 	  else if (strcasecmp(buf, "DT") == 0)
 	  {
-	    font  = textfont_ | FL_ITALIC;
+	    font  = textfont_ | fltk3::ITALIC;
 	    fsize = textsize_;
 	  }
 	  else if (strcasecmp(buf, "PRE") == 0)
 	  {
-	    font  = FL_COURIER;
+	    font  = fltk3::COURIER;
 	    fsize = textsize_;
 	    pre   = 1;
 	  }
@@ -1575,7 +1575,7 @@ void Fl_Help_View::format() {
 	  block->h   += hh;
 
           if (strcasecmp(buf, "TH") == 0)
-	    font = textfont_ | FL_BOLD;
+	    font = textfont_ | fltk3::BOLD;
 	  else
 	    font = textfont_;
 
@@ -1631,11 +1631,11 @@ void Fl_Help_View::format() {
           if (get_attr(attrs, "FACE", attr, sizeof(attr)) != NULL) {
 	    if (!strncasecmp(attr, "helvetica", 9) ||
 	        !strncasecmp(attr, "arial", 5) ||
-		!strncasecmp(attr, "sans", 4)) font = FL_HELVETICA;
+		!strncasecmp(attr, "sans", 4)) font = fltk3::HELVETICA;
             else if (!strncasecmp(attr, "times", 5) ||
-	             !strncasecmp(attr, "serif", 5)) font = FL_TIMES;
-            else if (!strncasecmp(attr, "symbol", 6)) font = FL_SYMBOL;
-	    else font = FL_COURIER;
+	             !strncasecmp(attr, "serif", 5)) font = fltk3::TIMES;
+            else if (!strncasecmp(attr, "symbol", 6)) font = fltk3::SYMBOL;
+	    else font = fltk3::COURIER;
           }
 
           if (get_attr(attrs, "SIZE", attr, sizeof(attr)) != NULL) {
@@ -1654,17 +1654,17 @@ void Fl_Help_View::format() {
 	  popfont(font, fsize, fcolor);
 	else if (strcasecmp(buf, "B") == 0 ||
         	 strcasecmp(buf, "STRONG") == 0)
-	  pushfont(font |= FL_BOLD, fsize);
+	  pushfont(font |= fltk3::BOLD, fsize);
 	else if (strcasecmp(buf, "I") == 0 ||
         	 strcasecmp(buf, "EM") == 0)
-	  pushfont(font |= FL_ITALIC, fsize);
+	  pushfont(font |= fltk3::ITALIC, fsize);
 	else if (strcasecmp(buf, "CODE") == 0 ||
 	         strcasecmp(buf, "TT") == 0)
-	  pushfont(font = FL_COURIER, fsize);
+	  pushfont(font = fltk3::COURIER, fsize);
 	else if (strcasecmp(buf, "KBD") == 0)
-	  pushfont(font = FL_COURIER_BOLD, fsize);
+	  pushfont(font = fltk3::COURIER_BOLD, fsize);
 	else if (strcasecmp(buf, "VAR") == 0)
-	  pushfont(font = FL_COURIER_ITALIC, fsize);
+	  pushfont(font = fltk3::COURIER_ITALIC, fsize);
 	else if (strcasecmp(buf, "/B") == 0 ||
 		 strcasecmp(buf, "/STRONG") == 0 ||
 		 strcasecmp(buf, "/I") == 0 ||
@@ -1897,9 +1897,9 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
 		*attrs,					// Pointer to attributes
 		*start;					// Start of element
   int		minwidths[MAX_COLUMNS];			// Minimum widths for each column
-  Fl_Font       font;
-  Fl_Fontsize   fsize;				        // Current font and size
-  Fl_Color      fcolor;                                 // Currrent font color
+  fltk3::Font       font;
+  fltk3::Fontsize   fsize;				        // Current font and size
+  fltk3::Color      fcolor;                                 // Currrent font color
 
   // Clear widths...
   *table_width = 0;
@@ -1990,17 +1990,17 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
 
         if (tolower(buf[0]) == 'h' && isdigit(buf[1]))
 	{
-	  font  = FL_HELVETICA_BOLD;
+	  font  = fltk3::HELVETICA_BOLD;
 	  fsize = textsize_ + '7' - buf[1];
 	}
 	else if (strcasecmp(buf, "DT") == 0)
 	{
-	  font  = textfont_ | FL_ITALIC;
+	  font  = textfont_ | fltk3::ITALIC;
 	  fsize = textsize_;
 	}
 	else if (strcasecmp(buf, "PRE") == 0)
 	{
-	  font  = FL_COURIER;
+	  font  = fltk3::COURIER;
 	  fsize = textsize_;
 	  pre   = 1;
 	}
@@ -2105,7 +2105,7 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
 	incell    = 1;
 
         if (strcasecmp(buf, "TH") == 0)
-	  font = textfont_ | FL_BOLD;
+	  font = textfont_ | fltk3::BOLD;
 	else
 	  font = textfont_;
 
@@ -2128,17 +2128,17 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
       }
       else if (strcasecmp(buf, "B") == 0 ||
                strcasecmp(buf, "STRONG") == 0)
-	pushfont(font |= FL_BOLD, fsize);
+	pushfont(font |= fltk3::BOLD, fsize);
       else if (strcasecmp(buf, "I") == 0 ||
                strcasecmp(buf, "EM") == 0)
-	pushfont(font |= FL_ITALIC, fsize);
+	pushfont(font |= fltk3::ITALIC, fsize);
       else if (strcasecmp(buf, "CODE") == 0 ||
                strcasecmp(buf, "TT") == 0)
-	pushfont(font = FL_COURIER, fsize);
+	pushfont(font = fltk3::COURIER, fsize);
       else if (strcasecmp(buf, "KBD") == 0)
-	pushfont(font = FL_COURIER_BOLD, fsize);
+	pushfont(font = fltk3::COURIER_BOLD, fsize);
       else if (strcasecmp(buf, "VAR") == 0)
-	pushfont(font = FL_COURIER_ITALIC, fsize);
+	pushfont(font = fltk3::COURIER_ITALIC, fsize);
       else if (strcasecmp(buf, "/B") == 0 ||
 	       strcasecmp(buf, "/STRONG") == 0 ||
 	       strcasecmp(buf, "/I") == 0 ||
@@ -2503,9 +2503,9 @@ Fl_Help_View::get_attr(const char *p,		// I - Pointer to start of attributes
 
 
 /** Gets a color attribute. */
-Fl_Color				// O - Color value
+fltk3::Color				// O - Color value
 Fl_Help_View::get_color(const char *n,	// I - Color name
-                        Fl_Color   c)	// I - Default color value
+                        fltk3::Color   c)	// I - Default color value
 {
   int	i;				// Looping var
   int	rgb, r, g, b;			// RGB values
@@ -2550,11 +2550,11 @@ Fl_Help_View::get_color(const char *n,	// I - Color name
       g = ((rgb >> 4) & 15) * 17;
       b = (rgb & 15) * 17;
     }
-    return (fl_rgb_color((uchar)r, (uchar)g, (uchar)b));
+    return (fltk3::rgbColor((uchar)r, (uchar)g, (uchar)b));
   } else {
     for (i = 0; i < (int)(sizeof(colors) / sizeof(colors[0])); i ++)
       if (!strcasecmp(n, colors[i].name)) {
-        return fl_rgb_color(colors[i].r, colors[i].g, colors[i].b);
+        return fltk3::rgbColor(colors[i].r, colors[i].g, colors[i].b);
       }
     return c;
   }
@@ -2953,58 +2953,58 @@ Fl_Help_View::handle(int event)	// I - Event to handle
 
   switch (event)
   {
-    case FL_FOCUS:
+    case fltk3::FOCUS:
       redraw();
       return 1;
-    case FL_UNFOCUS:
+    case fltk3::UNFOCUS:
       clear_selection();
       redraw();
       return 1;
-    case FL_ENTER :
+    case fltk3::ENTER :
       Fl_Group::handle(event);
       return 1;
-    case FL_LEAVE :
-      fl_cursor(FL_CURSOR_DEFAULT);
+    case fltk3::LEAVE :
+      fl_cursor(fltk3::CURSOR_DEFAULT);
       break;
-    case FL_MOVE:
-      if (find_link(xx, yy)) fl_cursor(FL_CURSOR_HAND);
-      else fl_cursor(FL_CURSOR_DEFAULT);
+    case fltk3::MOVE:
+      if (find_link(xx, yy)) fl_cursor(fltk3::CURSOR_HAND);
+      else fl_cursor(fltk3::CURSOR_DEFAULT);
       return 1;
-    case FL_PUSH:
+    case fltk3::PUSH:
       if (Fl_Group::handle(event)) return 1;
       linkp = find_link(xx, yy);
       if (linkp) {
-        fl_cursor(FL_CURSOR_HAND);
+        fl_cursor(fltk3::CURSOR_HAND);
         return 1;
       }
       if (begin_selection()) {
-        fl_cursor(FL_CURSOR_INSERT);
+        fl_cursor(fltk3::CURSOR_INSERT);
         return 1;
       }
-      fl_cursor(FL_CURSOR_DEFAULT);
+      fl_cursor(fltk3::CURSOR_DEFAULT);
       return 1;
-    case FL_DRAG:
+    case fltk3::DRAG:
       if (linkp) {
         if (Fl::event_is_click()) {
-          fl_cursor(FL_CURSOR_HAND);
+          fl_cursor(fltk3::CURSOR_HAND);
         } else {
-          fl_cursor(FL_CURSOR_DEFAULT); // should be "FL_CURSOR_CANCEL" if we had it
+          fl_cursor(fltk3::CURSOR_DEFAULT); // should be "fltk3::CURSOR_CANCEL" if we had it
         }
         return 1;
       }
       if (current_view==this && selection_push_last) {
         if (extend_selection()) redraw();
-        fl_cursor(FL_CURSOR_INSERT);
+        fl_cursor(fltk3::CURSOR_INSERT);
         return 1;
       }
-      fl_cursor(FL_CURSOR_DEFAULT);
+      fl_cursor(fltk3::CURSOR_DEFAULT);
       return 1;
-    case FL_RELEASE:
+    case fltk3::RELEASE:
       if (linkp) {
         if (Fl::event_is_click()) {
           follow_link(linkp);
         }
-        fl_cursor(FL_CURSOR_DEFAULT);
+        fl_cursor(fltk3::CURSOR_DEFAULT);
         linkp = 0;
         return 1;
       }
@@ -3013,7 +3013,7 @@ Fl_Help_View::handle(int event)	// I - Event to handle
         return 1;
       }
       return 1;
-    case FL_SHORTCUT: {
+    case fltk3::SHORTCUT: {
       char ascii = Fl::event_text()[0];
       switch (ascii) {
         case ctrl('A'): select_all(); redraw(); return 1;
@@ -3040,14 +3040,14 @@ Fl_Help_View::Fl_Help_View(int        xx,	// I - Left position
       hscrollbar_(xx, yy + hh - Fl::scrollbar_size(),
                   ww - Fl::scrollbar_size(), Fl::scrollbar_size())
 {
-  color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
+  color(fltk3::BACKGROUND2_COLOR, fltk3::SELECTION_COLOR);
 
   title_[0]     = '\0';
-  defcolor_     = FL_FOREGROUND_COLOR;
-  bgcolor_      = FL_BACKGROUND_COLOR;
-  textcolor_    = FL_FOREGROUND_COLOR;
-  linkcolor_    = FL_SELECTION_COLOR;
-  textfont_     = FL_TIMES;
+  defcolor_     = fltk3::FOREGROUND_COLOR;
+  bgcolor_      = fltk3::BACKGROUND_COLOR;
+  textcolor_    = fltk3::FOREGROUND_COLOR;
+  linkcolor_    = fltk3::SELECTION_COLOR;
+  textfont_     = fltk3::TIMES;
   textsize_     = 12;
   value_        = NULL;
 
@@ -3236,7 +3236,7 @@ Fl_Help_View::resize(int xx,	// I - New left position
 		     int ww,	// I - New width
 		     int hh)	// I - New height
 {
-  Fl_Boxtype		b = box() ? box() : FL_DOWN_BOX;
+  fltk3::Boxtype		b = box() ? box() : fltk3::DOWN_BOX;
 					// Box to draw...
 
 

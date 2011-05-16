@@ -69,13 +69,13 @@ struct Fl_Label;
   @{ */
 
 /** Signature of some label drawing functions passed as parameters */
-typedef void (Fl_Label_Draw_F)(const Fl_Label *label, int x, int y, int w, int h, Fl_Align align);
+typedef void (Fl_Label_Draw_F)(const Fl_Label *label, int x, int y, int w, int h, fltk3::Align align);
 
 /** Signature of some label measurement functions passed as parameters */
 typedef void (Fl_Label_Measure_F)(const Fl_Label *label, int &width, int &height);
 
 /** Signature of some box drawing functions passed as parameters */
-typedef void (Fl_Box_Draw_F)(int x, int y, int w, int h, Fl_Color color);
+typedef void (Fl_Box_Draw_F)(int x, int y, int w, int h, fltk3::Color color);
 
 /** Signature of some timeout callback functions passed as parameters */
 typedef void (*Fl_Timeout_Handler)(void *data);
@@ -346,7 +346,7 @@ public:
     arbitrary void* argument.
     
     The second version takes a when bitfield, with the bits
-    FL_READ, FL_WRITE, and FL_EXCEPT defined,
+    fltk3::READ, fltk3::WRITE, and fltk3::EXCEPT defined,
     to indicate when the callback should be done.
     
     There can only be one callback of each type for a file descriptor. 
@@ -514,12 +514,12 @@ public:
   static int event_y_root()	{return e_y_root;}
   /**
     Returns the current horizontal mouse scrolling associated with the
-    FL_MOUSEWHEEL event. Right is positive.
+    fltk3::MOUSEWHEEL event. Right is positive.
   */
   static int event_dx()	{return e_dx;}
   /**
     Returns the current vertical mouse scrolling associated with the
-    FL_MOUSEWHEEL event. Down is positive.
+    fltk3::MOUSEWHEEL event. Down is positive.
   */
   static int event_dy()	{return e_dy;}
   /**
@@ -533,7 +533,7 @@ public:
   static void get_mouse(int &,int &); // platform dependent
   /**
     Returns non zero if we had a double click event.
-    \retval Non-zero if the most recent FL_PUSH or FL_KEYBOARD was a "double click".  
+    \retval Non-zero if the most recent fltk3::PUSH or fltk3::KEYBOARD was a "double click".  
     \retval  N-1 for  N clicks. 
     A double click is counted if the same button is pressed
     again while event_is_click() is true.
@@ -550,10 +550,10 @@ public:
   static void event_clicks(int i) {e_clicks = i;}
   /**
   Returns non-zero if the mouse has not moved far enough
-  and not enough time has passed since the last FL_PUSH or 
-  FL_KEYBOARD event for it to be considered a "drag" rather than a
-  "click".  You can test this on FL_DRAG, FL_RELEASE,
-  and FL_MOVE events.  
+  and not enough time has passed since the last fltk3::PUSH or 
+  fltk3::KEYBOARD event for it to be considered a "drag" rather than a
+  "click".  You can test this on fltk3::DRAG, fltk3::RELEASE,
+  and fltk3::MOVE events.  
   */
   static int event_is_click()	{return e_is_click;}
   /**
@@ -565,30 +565,30 @@ public:
   static void event_is_click(int i) {e_is_click = i;}
   /**
     Gets which particular mouse button caused the current event. 
-    This returns garbage if the most recent event was not a FL_PUSH or FL_RELEASE event.
-    \retval FL_LEFT_MOUSE \retval FL_MIDDLE_MOUSE \retval FL_RIGHT_MOUSE.
+    This returns garbage if the most recent event was not a fltk3::PUSH or fltk3::RELEASE event.
+    \retval fltk3::leftMouseButton \retval fltk3::middleMouseButton \retval fltk3::rightMouseButton.
     \see Fl::event_buttons()
   */
-  static int event_button()	{return e_keysym-FL_Button;}
+  static int event_button()	{return e_keysym-fltk3::MouseButton;}
   /**
     This is a bitfield of what shift states were on and what mouse buttons
     were held down during the most recent event. The second version
     returns non-zero if any of the passed bits are turned on.
     The legal bits are:
     
-    \li FL_SHIFT
-    \li FL_CAPS_LOCK
-    \li FL_CTRL
-    \li FL_ALT
-    \li FL_NUM_LOCK
-    \li FL_META
-    \li FL_SCROLL_LOCK
-    \li FL_BUTTON1
-    \li FL_BUTTON2
-    \li FL_BUTTON3
+    \li fltk3::SHIFT
+    \li fltk3::CAPS_LOCK
+    \li fltk3::CTRL
+    \li fltk3::ALT
+    \li fltk3::NUM_LOCK
+    \li fltk3::META
+    \li fltk3::SCROLL_LOCK
+    \li fltk3::BUTTON1
+    \li fltk3::BUTTON2
+    \li fltk3::BUTTON3
     
-    X servers do not agree on shift states, and FL_NUM_LOCK, FL_META, and
-    FL_SCROLL_LOCK may not work. The values were selected to match the
+    X servers do not agree on shift states, and fltk3::NUM_LOCK, fltk3::META, and
+    fltk3::SCROLL_LOCK may not work. The values were selected to match the
     XFree86 server on Linux. In addition there is a bug in the way X works
     so that the shift state is not correctly reported until the first event
     <I>after</I> the shift key is pressed or released.
@@ -634,26 +634,26 @@ public:
 	character use the value of that ASCII character (as though shift,
 	ctrl, and caps lock were not on). The space bar is 32.
     \li All keys on the numeric keypad producing a printable ASCII
-	character use the value of that ASCII character plus FL_KP.
-	The highest possible value is FL_KP_Last so you can
+	character use the value of that ASCII character plus fltk3::KPKey.
+	The highest possible value is fltk3::KPLastKey so you can
 	range-check to see if something is  on the keypad.
     \li All numbered function keys use the number on the function key plus 
-	FL_F.  The highest possible number is FL_F_Last, so you
+	fltk3::FKey.  The highest possible number is fltk3::FLastKey, so you
 	can range-check a value.
     \li Buttons on the mouse are considered keys, and use the button
-	number (where the left button is 1) plus FL_Button.
-    \li All other keys on the keypad have a symbol: FL_Escape,
-	FL_BackSpace, FL_Tab, FL_Enter, FL_Print, FL_Scroll_Lock, FL_Pause,
-	FL_Insert, FL_Home, FL_Page_Up, FL_Delete, FL_End, FL_Page_Down,
-	FL_Left, FL_Up, FL_Right, FL_Down, FL_Shift_L, FL_Shift_R,
-	FL_Control_L, FL_Control_R, FL_Caps_Lock, FL_Alt_L, FL_Alt_R,
-	FL_Meta_L, FL_Meta_R, FL_Menu, FL_Num_Lock, FL_KP_Enter.  Be
+	number (where the left button is 1) plus fltk3::MouseButton.
+    \li All other keys on the keypad have a symbol: fltk3::EscapeKey,
+	fltk3::BackSpaceKey, fltk3::TabKey, fltk3::EnterKey, fltk3::PrintKey, fltk3::ScrollLockKey, fltk3::PauseKey,
+	fltk3::InsertKey, fltk3::HomeKey, fltk3::PageUpKey, fltk3::DeleteKey, fltk3::EndKey, fltk3::PageDownKey,
+	fltk3::LeftKey, fltk3::UpKey, fltk3::RightKey, fltk3::DownKey, fltk3::ShiftLKey, fltk3::ShiftRKey,
+	fltk3::ControlLKey, fltk3::ControlRKey, fltk3::CapsLockKey, fltk3::AltLKey, fltk3::AltRKey,
+	fltk3::MetaLKey, fltk3::MetaRKey, fltk3::MenuKey, fltk3::NumLockKey, fltk3::KPEnterKey.  Be
 	careful not to confuse these with the very similar, but all-caps,
 	symbols used by Fl::event_state().
 
-    On X Fl::get_key(FL_Button+n) does not work.
+    On X Fl::get_key(fltk3::MouseButton+n) does not work.
     
-    On WIN32 Fl::get_key(FL_KP_Enter) and Fl::event_key(FL_KP_Enter) do not work.
+    On WIN32 Fl::get_key(fltk3::KPEnterKey) and Fl::event_key(fltk3::KPEnterKey) do not work.
   */
   static int event_key(int key);
   /** 
@@ -663,10 +663,10 @@ public:
   */
   static int get_key(int key); // platform dependent
   /** 
-    Returns the text associated with the current event, including FL_PASTE or FL_DND_RELEASE events.
-    This can be used in response to FL_KEYUP, FL_KEYDOWN, FL_PASTE, FL_DND_RELEASE.
+    Returns the text associated with the current event, including fltk3::PASTE or fltk3::DND_RELEASE events.
+    This can be used in response to fltk3::KEYUP, FL_KEYDOWN, fltk3::PASTE, fltk3::DND_RELEASE.
 
-    When responding to FL_KEYUP/FL_KEYDOWN, use this function instead of Fl::event_key()
+    When responding to fltk3::KEYUP/FL_KEYDOWN, use this function instead of Fl::event_key()
     to get the text equivalent of keystrokes suitable for inserting into strings 
     and text widgets.
 
@@ -728,7 +728,7 @@ public:
   /**
   Pastes the data from the selection buffer (\p source is 0) or the clipboard 
   (\p source is 1) into \p receiver.  
-  Set things up so the receiver widget will be called with an FL_PASTE event some
+  Set things up so the receiver widget will be called with an fltk3::PASTE event some
   time in the future with the data from the specified \p source in Fl::event_text()
   and the number of characters in Fl::event_length().
   The receiver
@@ -798,23 +798,23 @@ public:
      @{ */
  
   // color map:
-  static void	set_color(Fl_Color, uchar, uchar, uchar);
+  static void	set_color(fltk3::Color, uchar, uchar, uchar);
   /**
     Sets an entry in the fl_color index table. You can set it to any
     8-bit RGB color. The color is not allocated until fl_color(i) is used.
   */
-  static void	set_color(Fl_Color i, unsigned c); // platform dependent
-  static unsigned get_color(Fl_Color i);
-  static void	get_color(Fl_Color i, uchar &red, uchar &green, uchar &blue);
+  static void	set_color(fltk3::Color i, unsigned c); // platform dependent
+  static unsigned get_color(fltk3::Color i);
+  static void	get_color(fltk3::Color i, uchar &red, uchar &green, uchar &blue);
   /**
     Frees the specified color from the colormap, if applicable.
     If overlay is non-zero then the color is freed from the
     overlay colormap.
   */
-  static void	free_color(Fl_Color i, int overlay = 0); // platform dependent
+  static void	free_color(fltk3::Color i, int overlay = 0); // platform dependent
 
   // fonts:
-  static const char* get_font(Fl_Font);
+  static const char* get_font(fltk3::Font);
   /**
     Get a human-readable string describing the family of this face.  This
     is useful if you are presenting a choice to the user.  There is no
@@ -822,12 +822,12 @@ public:
     to a static buffer that is overwritten each call.
     
     The integer pointed to by \p attributes (if the pointer is not
-    zero) is set to zero, FL_BOLD or FL_ITALIC or 
-    FL_BOLD | FL_ITALIC.  To locate a "family" of fonts, search
+    zero) is set to zero, fltk3::BOLD or fltk3::ITALIC or 
+    fltk3::BOLD | fltk3::ITALIC.  To locate a "family" of fonts, search
     forward and back for a set with non-zero attributes, these faces along
     with the face with a zero attribute before them constitute a family.
   */
-  static const char* get_font_name(Fl_Font, int* attributes = 0);
+  static const char* get_font_name(fltk3::Font, int* attributes = 0);
   /**
     Return an array of sizes in \p sizep.  The return value is the
     length of this array.  The sizes are sorted from smallest to largest
@@ -839,9 +839,9 @@ public:
     points at a static buffer that is overwritten each call.  Under X this
     will open the display.
   */
-  static int get_font_sizes(Fl_Font, int*& sizep);
-  static void set_font(Fl_Font, const char*);
-  static void set_font(Fl_Font, Fl_Font);
+  static int get_font_sizes(fltk3::Font, int*& sizep);
+  static void set_font(fltk3::Font, const char*);
+  static void set_font(fltk3::Font, fltk3::Font);
   /**
     FLTK will open the display, and add every fonts on the server to the
     face table.  It will attempt to put "families" of faces together, so
@@ -860,7 +860,7 @@ public:
     
     The return value is how many faces are in the table after this is done.
   */
-  static Fl_Font set_fonts(const char* = 0); // platform dependent
+  static fltk3::Font set_fonts(const char* = 0); // platform dependent
 
   /**   @} */
  /** \defgroup  fl_drawings  Drawing functions
@@ -872,18 +872,18 @@ public:
  /** @} */
 
   // labeltypes:
-  static void set_labeltype(Fl_Labeltype,Fl_Label_Draw_F*,Fl_Label_Measure_F*);
+  static void set_labeltype(fltk3::Labeltype,Fl_Label_Draw_F*,Fl_Label_Measure_F*);
   /** Sets the functions to call to draw and measure a specific labeltype. */
-  static void set_labeltype(Fl_Labeltype, Fl_Labeltype from); // is it defined ?
+  static void set_labeltype(fltk3::Labeltype, fltk3::Labeltype from); // is it defined ?
 
   // boxtypes:
-  static Fl_Box_Draw_F *get_boxtype(Fl_Boxtype);
-  static void set_boxtype(Fl_Boxtype, Fl_Box_Draw_F*,uchar,uchar,uchar,uchar);
-  static void set_boxtype(Fl_Boxtype, Fl_Boxtype from);
-  static int box_dx(Fl_Boxtype);
-  static int box_dy(Fl_Boxtype);
-  static int box_dw(Fl_Boxtype);
-  static int box_dh(Fl_Boxtype);
+  static Fl_Box_Draw_F *get_boxtype(fltk3::Boxtype);
+  static void set_boxtype(fltk3::Boxtype, Fl_Box_Draw_F*,uchar,uchar,uchar,uchar);
+  static void set_boxtype(fltk3::Boxtype, fltk3::Boxtype from);
+  static int box_dx(fltk3::Boxtype);
+  static int box_dy(fltk3::Boxtype);
+  static int box_dw(fltk3::Boxtype);
+  static int box_dh(fltk3::Boxtype);
   static int draw_box_active();
 
   // back compatibility:
@@ -902,37 +902,37 @@ public:
   /** \addtogroup fl_events 
     @{ */
   /** Returns non-zero if the Shift key is pressed. */
-  static int event_shift() {return e_state&FL_SHIFT;}
+  static int event_shift() {return e_state&fltk3::SHIFT;}
   /** Returns non-zero if the Control key is pressed. */
-  static int event_ctrl() {return e_state&FL_CTRL;}
-  /** Returns non-zero if the FL_COMMAND key is pressed, either FL_CTRL or on OSX FL_META. */
-  static int event_command() {return e_state&FL_COMMAND;}
+  static int event_ctrl() {return e_state&fltk3::CTRL;}
+  /** Returns non-zero if the fltk3::COMMAND key is pressed, either fltk3::CTRL or on OSX fltk3::META. */
+  static int event_command() {return e_state&fltk3::COMMAND;}
   /** Returns non-zero if the Alt key is pressed. */
-  static int event_alt() {return e_state&FL_ALT;}
+  static int event_alt() {return e_state&fltk3::ALT;}
   /**
     Returns the mouse buttons state bits; if non-zero, then at least one
     button is pressed now.  This function returns the button state at the 
-    time of the event. During an FL_RELEASE event, the state 
+    time of the event. During an fltk3::RELEASE event, the state 
     of the released button will be 0. To find out, which button 
-    caused an FL_RELEASE event, you can use Fl::event_button() instead.
-    \return a bit mask value like { [FL_BUTTON1] | [FL_BUTTON2] | [FL_BUTTON3] }
+    caused an fltk3::RELEASE event, you can use Fl::event_button() instead.
+    \return a bit mask value like { [fltk3::BUTTON1] | [fltk3::BUTTON2] | [fltk3::BUTTON3] }
   */
   static int event_buttons() {return e_state&0x7f000000;}
   /**
     Returns non-zero if mouse button 1 is currently held down.
     For more details, see Fl::event_buttons().
   */
-  static int event_button1() {return e_state&FL_BUTTON1;}
+  static int event_button1() {return e_state&fltk3::BUTTON1;}
   /**
     Returns non-zero if button 2 is currently held down.
     For more details, see Fl::event_buttons().
   */
-  static int event_button2() {return e_state&FL_BUTTON2;}
+  static int event_button2() {return e_state&fltk3::BUTTON2;}
   /**
     Returns non-zero if button 3 is currently held down.
     For more details, see Fl::event_buttons().
   */
-  static int event_button3() {return e_state&FL_BUTTON3;}
+  static int event_button3() {return e_state&fltk3::BUTTON3;}
   /**   @} */
 
   /**

@@ -30,7 +30,7 @@
 static int fl_angle_ = 0;
 
 #ifndef FL_DOXYGEN
-Fl_Font_Descriptor::Fl_Font_Descriptor(const char* name, Fl_Fontsize fsize) {
+Fl_Font_Descriptor::Fl_Font_Descriptor(const char* name, fltk3::Fontsize fsize) {
   int weight = FW_NORMAL;
   int italic = 0;
   switch (*name++) {
@@ -92,7 +92,7 @@ Fl_Font_Descriptor::~Fl_Font_Descriptor() {
 
 ////////////////////////////////////////////////////////////////
 
-// WARNING: if you add to this table, you must redefine FL_FREE_FONT
+// WARNING: if you add to this table, you must redefine fltk3::FREE_FONT
 // in enumerations.h & recompile!!
 static Fl_Fontdesc built_in_table[] = {
 {" Arial"},
@@ -115,7 +115,7 @@ static Fl_Fontdesc built_in_table[] = {
 
 Fl_Fontdesc* fl_fonts = built_in_table;
 
-static Fl_Font_Descriptor* find(Fl_Font fnum, Fl_Fontsize size, int angle) {
+static Fl_Font_Descriptor* find(fltk3::Font fnum, fltk3::Fontsize size, int angle) {
   Fl_Fontdesc* s = fl_fonts+fnum;
   if (!s->name) s = fl_fonts; // use 0 if fnum undefined
   Fl_Font_Descriptor* f;
@@ -130,7 +130,7 @@ static Fl_Font_Descriptor* find(Fl_Font fnum, Fl_Fontsize size, int angle) {
 ////////////////////////////////////////////////////////////////
 // Public interface:
 
-static void fl_font(Fl_Graphics_Driver *driver, Fl_Font fnum, Fl_Fontsize size, int angle) {
+static void fl_font(Fl_Graphics_Driver *driver, fltk3::Font fnum, fltk3::Fontsize size, int angle) {
   if (fnum==-1) { // just make sure that we will load a new font next time
     fl_angle_ = 0;
     driver->Fl_Graphics_Driver::font(0, 0);
@@ -142,7 +142,7 @@ static void fl_font(Fl_Graphics_Driver *driver, Fl_Font fnum, Fl_Fontsize size, 
   driver->font_descriptor( find(fnum, size, angle) );
 }
 
-void Fl_GDI_Graphics_Driver::font(Fl_Font fnum, Fl_Fontsize size) {
+void Fl_GDI_Graphics_Driver::font(fltk3::Font fnum, fltk3::Fontsize size) {
   fl_font(this, fnum, size, 0);
 }
 

@@ -75,11 +75,11 @@ void Fl_Progress::draw()
 
   // Draw the box and label...
   if (progress > 0) {
-    Fl_Color c = labelcolor();
-    labelcolor(fl_contrast(labelcolor(), selection_color()));
+    fltk3::Color c = labelcolor();
+    labelcolor(fltk3::contrast(labelcolor(), selection_color()));
 
     fl_push_clip(x(), y(), progress + bx, h());
-      draw_box(box(), x(), y(), w(), h(), active_r() ? selection_color() : fl_inactive(selection_color()));
+      draw_box(box(), x(), y(), w(), h(), active_r() ? selection_color() : fltk3::inactive(selection_color()));
       draw_label(tx, y() + by, tw, h() - bh);
     fl_pop_clip();
 
@@ -87,12 +87,12 @@ void Fl_Progress::draw()
 
     if (progress<w()) {
       fl_push_clip(tx + progress, y(), w() - progress, h());
-        draw_box(box(), x(), y(), w(), h(), active_r() ? color() : fl_inactive(color()));
+        draw_box(box(), x(), y(), w(), h(), active_r() ? color() : fltk3::inactive(color()));
         draw_label(tx, y() + by, tw, h() - bh);
       fl_pop_clip();
     }
   } else {
-    draw_box(box(), x(), y(), w(), h(), active_r() ? color() : fl_inactive(color()));
+    draw_box(box(), x(), y(), w(), h(), active_r() ? color() : fltk3::inactive(color()));
     draw_label(tx, y() + by, tw, h() - bh);
   }
 }
@@ -105,13 +105,13 @@ void Fl_Progress::draw()
     progress bar color with selection_color(), or you can set both colors
     together with color(unsigned bg, unsigned sel).
     
-    The default colors are FL_BACKGROUND2_COLOR and FL_YELLOW, resp.
+    The default colors are fltk3::BACKGROUND2_COLOR and fltk3::YELLOW, resp.
 */
 Fl_Progress::Fl_Progress(int X, int Y, int W, int H, const char* L)
 : Fl_Widget(X, Y, W, H, L) {
-  align(FL_ALIGN_INSIDE);
-  box(FL_DOWN_BOX);
-  color(FL_BACKGROUND2_COLOR, FL_YELLOW);
+  align(fltk3::ALIGN_INSIDE);
+  box(fltk3::DOWN_BOX);
+  color(fltk3::BACKGROUND2_COLOR, fltk3::YELLOW);
   minimum(0.0f);
   maximum(100.0f);
   value(0.0f);

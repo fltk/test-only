@@ -141,7 +141,7 @@ void fl_set_graphics_mode(int /*r*/,int /*d*/) {}
 #ifndef FL_DOXYGEN // FIXME: suppress doxygen warning
 void Fl_FormsText::draw() {
   draw_box();
-  align(align()|FL_ALIGN_INSIDE); // questionable method of compatibility
+  align(align()|fltk3::ALIGN_INSIDE); // questionable method of compatibility
   draw_label();
 }
 #endif
@@ -174,7 +174,7 @@ Fl_Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
     b->type(FL_HIDDEN_BUTTON);
     break;
   case FL_INOUT_BUTTON:
-    b->when(FL_WHEN_CHANGED);
+    b->when(fltk3::WHEN_CHANGED);
     break;
   }
   return b;

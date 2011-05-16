@@ -60,7 +60,7 @@
 /** \fn void Fl_Help_Dialog::show()
   Shows the Fl_Help_Dialog window.*/
 
-/** \fn void Fl_Help_Dialog::textsize(Fl_Fontsize s)
+/** \fn void Fl_Help_Dialog::textsize(fltk3::Fontsize s)
   Sets or gets the default text size for the help view.*/
 
 /** \fn uchar Fl_Help_Dialog::textsize()
@@ -111,9 +111,9 @@
   Shows the main Help Dialog Window
   Delegates call to encapsulated window_ void Fl_Window::show(int argc, char **argv) instance method */
 
-/** \fn void Fl_Help_Dialog::textsize(Fl_Fontsize s)
+/** \fn void Fl_Help_Dialog::textsize(fltk3::Fontsize s)
   Sets the internal Fl_Help_View instance text size.
-  Delegates call to encapsulated view_ void Fl_Help_View::textsize(Fl_Fontsize s) instance method */
+  Delegates call to encapsulated view_ void Fl_Help_View::textsize(fltk3::Fontsize s) instance method */
 
 //
 // End of "$Id$".

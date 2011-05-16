@@ -66,8 +66,8 @@
 ///
 ///     The callback() is invoked depending on the value of when():
 ///
-///         - FL_WHEN_RELEASE -- callback invoked when left mouse button is released on an item
-///         - FL_WHEN_CHANGED -- callback invoked when left mouse changes selection state
+///         - fltk3::WHEN_RELEASE -- callback invoked when left mouse button is released on an item
+///         - fltk3::WHEN_CHANGED -- callback invoked when left mouse changes selection state
 ///
 ///     The simple way to define a tree:
 /// \code
@@ -159,8 +159,8 @@
 ///     To change the default label font and color for creating new items:
 /// \code
 ///  tree = new Fl_Tree(..);
-///  tree->item_labelfont(FL_COURIER);	// Use Courier font for all new items
-///  tree->item_labelfgcolor(FL_RED);	// Use red color for labels of all new items
+///  tree->item_labelfont(fltk3::COURIER);	// Use Courier font for all new items
+///  tree->item_labelfgcolor(fltk3::RED);	// Use red color for labels of all new items
 ///  [..]
 ///  // Now create the items in the tree using the above defaults.
 ///  tree->add("Aaa");
@@ -172,8 +172,8 @@
 /// \code
 /// // Change the font and color of all items currently in the tree
 /// for ( Fl_Tree_Item *item = tree->first(); item; item = tree->next(item) ) {
-///     item->labelfont(FL_COURIER);
-///     item->labelcolor(FL_RED);
+///     item->labelfont(fltk3::COURIER);
+///     item->labelcolor(fltk3::RED);
 /// }
 /// \endcode
 ///
@@ -679,51 +679,51 @@ public:
   /////////////////////////////////
   
   /// Get the default label fontsize used for creating new items.
-  Fl_Fontsize item_labelsize() const {
+  fltk3::Fontsize item_labelsize() const {
     return(_prefs.labelsize());
   }
   /// Set the default label font size used for creating new items.
-  /// To change the font size on a per-item basis, use Fl_Tree_Item::labelsize(Fl_Fontsize)
+  /// To change the font size on a per-item basis, use Fl_Tree_Item::labelsize(fltk3::Fontsize)
   ///
-  void item_labelsize(Fl_Fontsize val) {
+  void item_labelsize(fltk3::Fontsize val) {
     _prefs.labelsize(val);
   }
   /// Get the default font face used for creating new items.
-  Fl_Font item_labelfont() const {
+  fltk3::Font item_labelfont() const {
     return(_prefs.labelfont());
   }
   /// Set the default font face used for creating new items.
-  /// To change the font face on a per-item basis, use Fl_Tree_Item::labelfont(Fl_Font)
+  /// To change the font face on a per-item basis, use Fl_Tree_Item::labelfont(fltk3::Font)
   ///
-  void item_labelfont(Fl_Font val) {
+  void item_labelfont(fltk3::Font val) {
     _prefs.labelfont(val);
   }
   /// Get the default label foreground color used for creating new items.
-  Fl_Color item_labelfgcolor(void) const {
+  fltk3::Color item_labelfgcolor(void) const {
     return(_prefs.labelfgcolor());
   }
   /// Set the default label foreground color used for creating new items.
-  /// To change the foreground color on a per-item basis, use Fl_Tree_Item::labelfgcolor(Fl_Color)
+  /// To change the foreground color on a per-item basis, use Fl_Tree_Item::labelfgcolor(fltk3::Color)
   ///
-  void item_labelfgcolor(Fl_Color val) {
+  void item_labelfgcolor(fltk3::Color val) {
     _prefs.labelfgcolor(val);
   }
   /// Get the default label background color used for creating new items.
-  Fl_Color item_labelbgcolor(void) const {
+  fltk3::Color item_labelbgcolor(void) const {
     return(_prefs.labelbgcolor());
   }
   /// Set the default label background color used for creating new items.
-  /// To change the background color on a per-item basis, use Fl_Tree_Item::labelbgcolor(Fl_Color)
+  /// To change the background color on a per-item basis, use Fl_Tree_Item::labelbgcolor(fltk3::Color)
   ///
-  void item_labelbgcolor(Fl_Color val) {
+  void item_labelbgcolor(fltk3::Color val) {
     _prefs.labelbgcolor(val);
   }
   /// Get the connector color used for tree connection lines.
-  Fl_Color connectorcolor() const {
+  fltk3::Color connectorcolor() const {
     return(_prefs.connectorcolor());
   }
   /// Set the connector color used for tree connection lines.
-  void connectorcolor(Fl_Color val) {
+  void connectorcolor(fltk3::Color val) {
     _prefs.connectorcolor(val);
   }
   /// Get the amount of white space (in pixels) that should appear
@@ -879,17 +879,17 @@ public:
     // no redraw().. only affects new add()itions
   }
   /// Sets the style of box used to draw selected items.
-  /// This is an fltk Fl_Boxtype.
+  /// This is an fltk fltk3::Boxtype.
   /// The default is influenced by FLTK's current Fl::scheme()
   ///
-  Fl_Boxtype selectbox() const {
+  fltk3::Boxtype selectbox() const {
     return(_prefs.selectbox());
   }
   /// Gets the style of box used to draw selected items.
-  /// This is an fltk Fl_Boxtype.
+  /// This is an fltk fltk3::Boxtype.
   /// The default is influenced by FLTK's current Fl::scheme()
   ///
-  void selectbox(Fl_Boxtype val) {
+  void selectbox(fltk3::Boxtype val) {
     _prefs.selectbox(val);
     redraw();
   }

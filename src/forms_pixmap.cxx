@@ -35,12 +35,12 @@
   \param[in] L widget label, default is no label
 */
 Fl_FormsPixmap::Fl_FormsPixmap(
-  Fl_Boxtype t, int X, int Y, int W, int H, const char* L)
+  fltk3::Boxtype t, int X, int Y, int W, int H, const char* L)
 : Fl_Widget(X, Y, W, H, L) {
   box(t);
   b = 0;
-  color(FL_BLACK);
-  align(FL_ALIGN_BOTTOM);
+  color(fltk3::BLACK);
+  align(fltk3::ALIGN_BOTTOM);
 }
 
 /**

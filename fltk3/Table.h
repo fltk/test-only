@@ -95,7 +95,7 @@
  
  <tr><td>wix/wiy/wiw/wih</td>
  <td>Fl_Table widget's inner dimension. The inner edge of the border of the 
- Fl_Table. eg. if the Fl_Table's box() is FL_NO_BOX, these values are the same 
+ Fl_Table. eg. if the Fl_Table's box() is fltk3::NO_BOX, these values are the same 
  as x()/y()/w()/h(). (Yellow in the diagram above)</td></tr>
  
  <tr><td>tox/toy/tow/toh</td>
@@ -106,7 +106,7 @@
  <tr><td>tix/tiy/tiw/tih</td>
  <td>The table's inner dimension. The inner edge of the border around the cells,
  but inside the row/col headings and scrollbars. AKA the table's clip region. 
- eg. if the table_box() is FL_NO_BOX, these values are the same as
+ eg. if the table_box() is fltk3::NO_BOX, these values are the same as
  tox/toyy/tow/toh. (Blue in the diagram above)
  </td></tr></table>
  
@@ -213,8 +213,8 @@ private:
   int _redraw_botrow;
   int _redraw_leftcol;
   int _redraw_rightcol;
-  Fl_Color _row_header_color;
-  Fl_Color _col_header_color;
+  fltk3::Color _row_header_color;
+  fltk3::Color _col_header_color;
   
   int _auto_drag;
   int _selecting;
@@ -257,7 +257,7 @@ private:
   IntVector _colwidths;			// column widths in pixels
   IntVector _rowheights;		// row heights in pixels
   
-  Fl_Cursor _last_cursor;		// last mouse cursor before changed to 'resize' cursor
+  fltk3::Cursor _last_cursor;		// last mouse cursor before changed to 'resize' cursor
   
   // EVENT CALLBACK DATA
   TableContext _callback_context;	// event context
@@ -271,7 +271,7 @@ private:
   int _resizing_row;			// row being dragged
   int _dragging_x;			// starting x position for horiz drag
   int _dragging_y;			// starting y position for vert drag
-  int _last_row;			// last row we FL_PUSH'ed
+  int _last_row;			// last row we fltk3::PUSH'ed
   
   // Redraw single cell
   void _redraw_cell(TableContext context, int R, int C);
@@ -319,7 +319,7 @@ protected:
   void table_scrolled();			// table scrolled; recalc
   void get_bounds(TableContext context,		// return x/y/w/h bounds for context
                   int &X, int &Y, int &W, int &H);
-  void change_cursor(Fl_Cursor newcursor);	// change mouse cursor to some other shape
+  void change_cursor(fltk3::Cursor newcursor);	// change mouse cursor to some other shape
   TableContext cursor2rowcol(int &R, int &C, ResizeFlag &resizeflag);
   // find r/c given current x/y event
   int find_cell(TableContext context,		// find cell's x/y/w/h given r/c
@@ -398,16 +398,16 @@ protected:
        sprintf(s, "%d/%d", R, C);              // text for each cell
        switch ( context ) {
 	   case CONTEXT_STARTPAGE:             // Fl_Table telling us its starting to draw page
-	       fl_font(FL_HELVETICA, 16);
+	       fl_font(fltk3::HELVETICA, 16);
 	       return;
        
 	   case CONTEXT_ROW_HEADER:            // Fl_Table telling us it's draw row/col headers
 	   case CONTEXT_COL_HEADER:
 	       fl_push_clip(X, Y, W, H);
 	       {
-		   fl_draw_box(FL_THIN_UP_BOX, X, Y, W, H, color());
-		   fl_color(FL_BLACK);
-		   fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
+		   fl_draw_box(fltk3::THIN_UP_BOX, X, Y, W, H, color());
+		   fl_color(fltk3::BLACK);
+		   fl_draw(s, X, Y, W, H, fltk3::ALIGN_CENTER);
 	       }
 	       fl_pop_clip();
 	       return;
@@ -416,15 +416,15 @@ protected:
 	       fl_push_clip(X, Y, W, H);
 	       {
 		   // BG COLOR
-		   fl_color( row_selected(R) ? selection_color() : FL_WHITE);
+		   fl_color( row_selected(R) ? selection_color() : fltk3::WHITE);
 		   fl_rectf(X, Y, W, H);
 		   
 		   // TEXT
-		   fl_color(FL_BLACK);
-		   fl_draw(s, X, Y, W, H, FL_ALIGN_CENTER);
+		   fl_color(fltk3::BLACK);
+		   fl_draw(s, X, Y, W, H, fltk3::ALIGN_CENTER);
 		   
 		   // BORDER
-		   fl_color(FL_LIGHT2);
+		   fl_color(fltk3::LIGHT2);
 		   fl_rect(X, Y, W, H);
 	       }
 	       fl_pop_clip();
@@ -468,7 +468,7 @@ protected:
     }
     
     // Indicate partial redraw needed of some cells
-    damage(FL_DAMAGE_CHILD);
+    damage(fltk3::DAMAGE_CHILD);
   }
   
 public:
@@ -496,10 +496,10 @@ public:
   
   /**
    Sets the kind of box drawn around the data table,
-   the default being FL_NO_BOX. Changing this value will cause the table
+   the default being fltk3::NO_BOX. Changing this value will cause the table
    to redraw.
    */
-  inline void table_box(Fl_Boxtype val) {
+  inline void table_box(fltk3::Boxtype val) {
     table->box(val);
     table_resized();
   }
@@ -507,7 +507,7 @@ public:
   /**
    Returns the current box type used for the data table.
    */
-  inline Fl_Boxtype table_box( void ) {
+  inline fltk3::Boxtype table_box( void ) {
     return(table->box());
   }
   
@@ -712,7 +712,7 @@ public:
   /**
    Sets the row header color and causes the screen to redraw.
    */
-  inline void row_header_color(Fl_Color val) {	// set/get row header color
+  inline void row_header_color(fltk3::Color val) {	// set/get row header color
     _row_header_color = val;
     redraw();
   }
@@ -720,14 +720,14 @@ public:
   /**
    Returns the current row header color.
    */
-  inline Fl_Color row_header_color() {
+  inline fltk3::Color row_header_color() {
     return(_row_header_color);
   } 
   
   /**
    Sets the color for column headers and redraws the table.
    */
-  inline void col_header_color(Fl_Color val) {	// set/get col header color
+  inline void col_header_color(fltk3::Color val) {	// set/get col header color
     _col_header_color = val;
     redraw();
   }
@@ -735,7 +735,7 @@ public:
   /**
    Gets the color for column headers.
    */
-  inline Fl_Color col_header_color() {
+  inline fltk3::Color col_header_color() {
     return(_col_header_color);
   }
   
@@ -743,7 +743,7 @@ public:
    Sets the height of the specified row in pixels,
    and the table is redrawn.
    callback() will be invoked with CONTEXT_RC_RESIZE
-   if the row's height was actually changed, and when() is FL_WHEN_CHANGED.
+   if the row's height was actually changed, and when() is fltk3::WHEN_CHANGED.
    */
   void row_height(int row, int height);		// set/get row height
   
@@ -757,7 +757,7 @@ public:
   /**
    Sets the width of the specified column in pixels, and the table is redrawn.
    callback() will be invoked with CONTEXT_RC_RESIZE
-   if the column's width was actually changed, and when() is FL_WHEN_CHANGED.
+   if the column's width was actually changed, and when() is fltk3::WHEN_CHANGED.
    */   
   void col_width(int col, int width);		// set/get a column's width
   
@@ -840,13 +840,13 @@ public:
   void draw(void);				// fltk draw() override
   
   // This crashes sortapp() during init.
-  //  void box(Fl_Boxtype val) {
+  //  void box(fltk3::Boxtype val) {
   //    Fl_Group::box(val);
   //    if ( table ) {
   //      resize(x(), y(), w(), h());
   //    }
   //  }
-  //  Fl_Boxtype box(void) const {
+  //  fltk3::Boxtype box(void) const {
   //    return(Fl_Group::box());
   //  }
   
@@ -876,7 +876,7 @@ public:
   void end() {
     table->end();
     // HACK: Avoid showing Fl_Scroll; seems to erase screen
-    //       causing unnecessary flicker, even if its box() is FL_NO_BOX.
+    //       causing unnecessary flicker, even if its box() is fltk3::NO_BOX.
     //
     if ( table->children() > 2 ) {
       table->show();
@@ -967,16 +967,16 @@ public:
    
    <table border=1>
    <tr>
-   <td>\p FL_WHEN_CHANGED</td>
+   <td>\p fltk3::WHEN_CHANGED</td>
    <td>
    callback() will be called when rows or columns are resized (interactively or 
    via col_width() or row_height()), passing CONTEXT_RC_RESIZE via 
    callback_context().
    </td>
    </tr><tr>
-   <td>\p FL_WHEN_RELEASE</td>
+   <td>\p fltk3::WHEN_RELEASE</td>
    <td>
-   callback() will be called during FL_RELEASE events, such as when someone 
+   callback() will be called during fltk3::RELEASE events, such as when someone 
    releases a mouse button somewhere on the table.
    </td>
    </tr>
@@ -989,7 +989,7 @@ public:
    also look at the regular fltk event values (ie. Fl::event() and Fl::button()) 
    to determine what kind of event is occurring.
    */
-  void when(Fl_When flags);
+  void when(fltk3::When flags);
 #endif
   
 #if FL_DOXYGEN
@@ -1020,8 +1020,8 @@ public:
    <td>
    Someone clicked on a cell.
    
-   To receive callbacks for FL_RELEASE events, you must set
-   when(FL_WHEN_RELEASE).
+   To receive callbacks for fltk3::RELEASE events, you must set
+   when(fltk3::WHEN_RELEASE).
    </td>
    </tr><tr>
    <td><tt>Fl_Table::CONTEXT_RC_RESIZE</tt></td>
@@ -1036,7 +1036,7 @@ public:
    
    If resizing a row, C=0 and R=row being resized.
    
-   NOTE: To receive resize events, you must set when(FL_WHEN_CHANGED).
+   NOTE: To receive resize events, you must set when(fltk3::WHEN_CHANGED).
    </td>
    </tr>
    </table>
@@ -1065,7 +1065,7 @@ public:
      MyTable() {
        [..]
        table.callback(&event_callback, (void*)this);   // setup callback
-       table.when(FL_WHEN_CHANGED|FL_WHEN_RELEASE);    // when to call it
+       table.when(fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE);    // when to call it
      }
    };
    \endcode

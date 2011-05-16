@@ -116,10 +116,10 @@ int Fl_Menu_::item_pathname(char *name, int namelen, const Fl_Menu_Item *findite
     // [..]
     Fl_Menu_Item *item;
     if ( ( item = (Fl_Menu_Item*)menubar->find_item("File/&Open") ) != NULL ) {
-	item->labelcolor(FL_RED);
+	item->labelcolor(fltk3::RED);
     }
     if ( ( item = (Fl_Menu_Item*)menubar->find_item("Edit/&Copy") ) != NULL ) {
-	item->labelcolor(FL_GREEN);
+	item->labelcolor(fltk3::GREEN);
     }
   \endcode
 
@@ -274,8 +274,8 @@ const Fl_Menu_Item* Fl_Menu_::picked(const Fl_Menu_Item* v) {
       set_changed();
     }
     value_ = v;
-    if (when()&(FL_WHEN_CHANGED|FL_WHEN_RELEASE)) {
-      if (changed() || when()&FL_WHEN_NOT_CHANGED) {
+    if (when()&(fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE)) {
+      if (changed() || when()&fltk3::WHEN_NOT_CHANGED) {
 	if (value_ && value_->callback_) value_->do_callback((Fl_Widget*)this);
 	else do_callback();
       }
@@ -307,15 +307,15 @@ void Fl_Menu_Item::setonly() {
 Fl_Menu_::Fl_Menu_(int X,int Y,int W,int H,const char* l)
 : Fl_Widget(X,Y,W,H,l) {
   set_flag(SHORTCUT_LABEL);
-  box(FL_UP_BOX);
-  when(FL_WHEN_RELEASE_ALWAYS);
+  box(fltk3::UP_BOX);
+  when(fltk3::WHEN_RELEASE_ALWAYS);
   value_ = menu_ = 0;
   alloc = 0;
-  selection_color(FL_SELECTION_COLOR);
-  textfont(FL_HELVETICA);
-  textsize(FL_NORMAL_SIZE);
-  textcolor(FL_FOREGROUND_COLOR);
-  down_box(FL_NO_BOX);
+  selection_color(fltk3::SELECTION_COLOR);
+  textfont(fltk3::HELVETICA);
+  textsize(fltk3::NORMAL_SIZE);
+  textcolor(fltk3::FOREGROUND_COLOR);
+  down_box(fltk3::NO_BOX);
 }
 
 /**

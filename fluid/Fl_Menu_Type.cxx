@@ -287,14 +287,14 @@ int Fl_Menu_Item_Type::flags() {
 
 void Fl_Menu_Item_Type::write_item() {
   static const char * const labeltypes[] = {
-    "FL_NORMAL_LABEL",
-    "FL_NO_LABEL",
-    "FL_SHADOW_LABEL",
-    "FL_ENGRAVED_LABEL",
-    "FL_EMBOSSED_LABEL",
-    "FL_MULTI_LABEL",
-    "FL_ICON_LABEL",
-    "FL_IMAGE_LABEL"
+    "fltk3::normalLabel",
+    "fltk3::noLabel",
+    "fltk3::shadowLabel",
+    "fltk3::engravedLabel",
+    "fltk3::embossedLabel",
+    "fltk3::multiLabel",
+    "fltk3::iconLabel",
+    "fltk3::imageLabel"
   };
 
   write_c(" {");
@@ -303,8 +303,8 @@ void Fl_Menu_Item_Type::write_item() {
   else write_c("\"\"");
   if (((Fl_Button*)o)->shortcut()) {
 		int s = ((Fl_Button*)o)->shortcut();
-		if (use_FL_COMMAND && (s & (FL_CTRL|FL_META))) {
-			write_c(", FL_COMMAND|0x%x, ", s & ~(FL_CTRL|FL_META));
+		if (use_FL_COMMAND && (s & (fltk3::CTRL|fltk3::META))) {
+			write_c(", fltk3::COMMAND|0x%x, ", s & ~(fltk3::CTRL|fltk3::META));
 		} else {
 			write_c(", 0x%x, ", s);
 		}
@@ -450,7 +450,7 @@ Fl_Type* Fl_Menu_Type::click_test(int, int) {
   const Fl_Menu_Item* save = w->mvalue();
   w->value((Fl_Menu_Item*)0);
   Fl::pushed(w);
-  w->handle(FL_PUSH);
+  w->handle(fltk3::PUSH);
   const Fl_Menu_Item* m = w->mvalue();
   if (m) {
     // restore the settings of toggles & radio items:
@@ -552,7 +552,7 @@ Fl_Type* Fl_Input_Choice_Type::click_test(int, int) {
   const Fl_Menu_Item* save = w->mvalue();
   w->value((Fl_Menu_Item*)0);
   Fl::pushed(w);
-  w->handle(FL_PUSH);
+  w->handle(fltk3::PUSH);
   const Fl_Menu_Item* m = w->mvalue();
   if (m) {
     // restore the settings of toggles & radio items:
@@ -575,43 +575,43 @@ Fl_Menu_Bar_Type Fl_Menu_Bar_type;
 #include <fltk3/draw.h>
 
 void Shortcut_Button::draw() {
-  if (value()) draw_box(FL_DOWN_BOX, (Fl_Color)9);
-  else draw_box(FL_UP_BOX, FL_WHITE);
-  fl_font(FL_HELVETICA,14); fl_color(FL_FOREGROUND_COLOR);
-	if (use_FL_COMMAND && (svalue & (FL_CTRL|FL_META))) {
+  if (value()) draw_box(fltk3::DOWN_BOX, (fltk3::Color)9);
+  else draw_box(fltk3::UP_BOX, fltk3::WHITE);
+  fl_font(fltk3::HELVETICA,14); fl_color(fltk3::FOREGROUND_COLOR);
+	if (use_FL_COMMAND && (svalue & (fltk3::CTRL|fltk3::META))) {
 		char buf[1024];
-		fl_snprintf(buf, 1023, "Command+%s", fl_shortcut_label(svalue&~(FL_CTRL|FL_META)));
-		fl_draw(buf,x()+6,y(),w(),h(),FL_ALIGN_LEFT);
+		fl_snprintf(buf, 1023, "Command+%s", fl_shortcut_label(svalue&~(fltk3::CTRL|fltk3::META)));
+		fl_draw(buf,x()+6,y(),w(),h(),fltk3::ALIGN_LEFT);
 	} else {
-		fl_draw(fl_shortcut_label(svalue),x()+6,y(),w(),h(),FL_ALIGN_LEFT);
+		fl_draw(fl_shortcut_label(svalue),x()+6,y(),w(),h(),fltk3::ALIGN_LEFT);
 	}
 }
 
 int Shortcut_Button::handle(int e) {
   when(0); type(FL_TOGGLE_BUTTON);
-  if (e == FL_KEYBOARD) {
+  if (e == fltk3::KEYBOARD) {
     if (!value()) return 0;
     int v = Fl::event_text()[0];
     if ( (v > 32 && v < 0x7f) || (v > 0xa0 && v <= 0xff) ) {
       if (isupper(v)) {
         v = tolower(v);
-        v |= FL_SHIFT;
+        v |= fltk3::SHIFT;
       }
-      v = v | (Fl::event_state()&(FL_META|FL_ALT|FL_CTRL));
+      v = v | (Fl::event_state()&(fltk3::META|fltk3::ALT|fltk3::CTRL));
     } else {
-      v = (Fl::event_state()&(FL_META|FL_ALT|FL_CTRL|FL_SHIFT)) | Fl::event_key();
-      if (v == FL_BackSpace && svalue) v = 0;
+      v = (Fl::event_state()&(fltk3::META|fltk3::ALT|fltk3::CTRL|fltk3::SHIFT)) | Fl::event_key();
+      if (v == fltk3::BackSpaceKey && svalue) v = 0;
     }
     if (v != svalue) {svalue = v; set_changed(); redraw(); do_callback(); }
     return 1;
-  } else if (e == FL_UNFOCUS) {
+  } else if (e == fltk3::UNFOCUS) {
     int c = changed(); value(0); if (c) set_changed();
     return 1;
-  } else if (e == FL_FOCUS) {
+  } else if (e == fltk3::FOCUS) {
     return value();
   } else {
     int r = Fl_Button::handle(e);
-    if (e == FL_RELEASE && value() && Fl::focus() != this) take_focus();
+    if (e == fltk3::RELEASE && value() && Fl::focus() != this) take_focus();
     return r;
   }
 }

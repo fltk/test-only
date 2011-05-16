@@ -55,7 +55,7 @@ class FL_EXPORT Fl_Tiled_Image : public Fl_Image {
 
   virtual Fl_Image *copy(int W, int H);
   Fl_Image *copy() { return copy(w(), h()); }
-  virtual void color_average(Fl_Color c, float i);
+  virtual void color_average(fltk3::Color c, float i);
   virtual void desaturate();
   virtual void draw(int X, int Y, int W, int H, int cx, int cy);
   void draw(int X, int Y) { draw(X, Y, w(), h(), 0, 0); }

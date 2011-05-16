@@ -124,7 +124,7 @@ Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : Fl_Group(X,Y,W,H
   rightcol          = 0;
   toprow_scrollpos  = -1;
   leftcol_scrollpos = -1;
-  _last_cursor      = FL_CURSOR_DEFAULT;
+  _last_cursor      = fltk3::CURSOR_DEFAULT;
   _resizing_col     = -1;
   _resizing_row     = -1;
   _dragging_x       = -1;
@@ -136,7 +136,7 @@ Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : Fl_Group(X,Y,W,H
   select_row        = -1;
   select_col        = -1;
   
-  box(FL_THIN_DOWN_FRAME);
+  box(fltk3::THIN_DOWN_FRAME);
   
   vscrollbar = new Fl_Scrollbar(x()+w()-SCROLLBAR_SIZE, y(),
                                 SCROLLBAR_SIZE, h()-SCROLLBAR_SIZE);
@@ -149,7 +149,7 @@ Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : Fl_Group(X,Y,W,H
   hscrollbar->callback(scroll_cb, (void*)this);
   
   table = new Fl_Scroll(x(), y(), w(), h());
-  table->box(FL_NO_BOX);
+  table->box(fltk3::NO_BOX);
   table->type(0);		// don't show Fl_Scroll's scrollbars -- use our own
   table->hide();		// hide unless children are present
   table->end();
@@ -186,7 +186,7 @@ void Fl_Table::row_height(int row, int height) {
     redraw();
   }
   // ROW RESIZE CALLBACK
-  if ( Fl_Widget::callback() && when() & FL_WHEN_CHANGED ) {
+  if ( Fl_Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
     do_callback(CONTEXT_RC_RESIZE, row, 0);
   }
 }
@@ -212,7 +212,7 @@ void Fl_Table::col_width(int col, int width)
     redraw();
   }
   // COLUMN RESIZE CALLBACK
-  if ( Fl_Widget::callback() && when() & FL_WHEN_CHANGED ) {
+  if ( Fl_Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
     do_callback(CONTEXT_RC_RESIZE, 0, col);
   }
 }
@@ -453,7 +453,7 @@ void Fl_Table::_auto_drag_cb() {
     _dragging_y = Fl::e_y + 30;
   }
   _auto_drag = 2;
-  handle(FL_DRAG);
+  handle(fltk3::DRAG);
   _auto_drag = 1;
   Fl::e_x = lx;
   Fl::e_y = ly;
@@ -632,9 +632,9 @@ void Fl_Table::cols(int val) {
 }
 
 // Change mouse cursor to different type
-void Fl_Table::change_cursor(Fl_Cursor newcursor) {
+void Fl_Table::change_cursor(fltk3::Cursor newcursor) {
   if ( newcursor != _last_cursor ) {
-    fl_cursor(newcursor, FL_BLACK, FL_WHITE);
+    fl_cursor(newcursor, fltk3::BLACK, fltk3::WHITE);
     _last_cursor = newcursor;
   }
 }
@@ -678,7 +678,7 @@ int Fl_Table::move_cursor(int R, int C) {
   damage_zone(current_row, current_col, select_row, select_col, R, C);
   select_row = R;
   select_col = C;
-  if (!Fl::event_state(FL_SHIFT)) {
+  if (!Fl::event_state(fltk3::SHIFT)) {
     current_row = R;
     current_col = C;
   }
@@ -709,7 +709,7 @@ int Fl_Table::handle(int event) {
   ResizeFlag resizeflag;		// which resizing area are we over? (0=none)
   TableContext context = cursor2rowcol(R, C, resizeflag);
   switch ( event ) {
-    case FL_PUSH:
+    case fltk3::PUSH:
       if (Fl::event_button() == 1 && !Fl::event_clicks()) {
         if (Fl::focus() != this) {
           take_focus();
@@ -733,12 +733,12 @@ int Fl_Table::handle(int event) {
       }
       switch ( context ) {
         case CONTEXT_CELL:
-          // FL_PUSH on a cell?
-          ret = 1; 			// express interest in FL_RELEASE
+          // fltk3::PUSH on a cell?
+          ret = 1; 			// express interest in fltk3::RELEASE
           break;
           
         case CONTEXT_NONE:
-          // FL_PUSH on table corner?
+          // fltk3::PUSH on table corner?
           if ( Fl::event_button() == 1 && 
               Fl::event_x() < x() + row_header_width()) {
             current_col = 0;
@@ -751,7 +751,7 @@ int Fl_Table::handle(int event) {
           break;
           
         case CONTEXT_COL_HEADER:
-          // FL_PUSH on a column header?
+          // fltk3::PUSH on a column header?
           if ( Fl::event_button() == 1) {
             // Resizing? Handle it
             if ( resizeflag ) {
@@ -777,7 +777,7 @@ int Fl_Table::handle(int event) {
           break;
           
         case CONTEXT_ROW_HEADER:
-          // FL_PUSH on a row header?
+          // fltk3::PUSH on a row header?
           if ( Fl::event_button() == 1 ) {
             // Resizing? Handle it
             if ( resizeflag ) {
@@ -809,7 +809,7 @@ int Fl_Table::handle(int event) {
       _last_row = R;
       break;
       
-    case FL_DRAG:
+    case fltk3::DRAG:
       if (_auto_drag == 1) {
         ret = 1;
         break;
@@ -819,7 +819,7 @@ int Fl_Table::handle(int event) {
         //
         //    Let user drag even /outside/ the row/col widget.
         //    Don't allow column width smaller than 1.
-        //    Continue to show FL_CURSOR_WE at all times during drag.
+        //    Continue to show fltk3::CURSOR_WE at all times during drag.
         //
         int offset = _dragging_x - Fl::event_x();
         int new_w = col_width(_resizing_col) - offset;
@@ -828,9 +828,9 @@ int Fl_Table::handle(int event) {
         _dragging_x = Fl::event_x();
         table_resized();
         redraw();
-        change_cursor(FL_CURSOR_WE);
+        change_cursor(fltk3::CURSOR_WE);
         ret = 1;
-        if ( Fl_Widget::callback() && when() & FL_WHEN_CHANGED ) {
+        if ( Fl_Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
           do_callback(CONTEXT_RC_RESIZE, R, C);
         }
       }
@@ -839,7 +839,7 @@ int Fl_Table::handle(int event) {
         //
         //    Let user drag even /outside/ the row/col widget.
         //    Don't allow row width smaller than 1.
-        //    Continue to show FL_CURSOR_NS at all times during drag.
+        //    Continue to show fltk3::CURSOR_NS at all times during drag.
         //
         int offset = _dragging_y - Fl::event_y();
         int new_h = row_height(_resizing_row) - offset;
@@ -848,9 +848,9 @@ int Fl_Table::handle(int event) {
         _dragging_y = Fl::event_y();
         table_resized();
         redraw();
-        change_cursor(FL_CURSOR_NS);
+        change_cursor(fltk3::CURSOR_NS);
         ret = 1;
-        if ( Fl_Widget::callback() && when() & FL_WHEN_CHANGED ) {
+        if ( Fl_Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
           do_callback(CONTEXT_RC_RESIZE, R, C);
         }
       } else {
@@ -894,7 +894,7 @@ int Fl_Table::handle(int event) {
           }
       break;
       
-    case FL_RELEASE:
+    case fltk3::RELEASE:
       _stop_auto_drag();
       switch ( context ) {
         case CONTEXT_ROW_HEADER:		// release on row header
@@ -904,7 +904,7 @@ int Fl_Table::handle(int event) {
           if ( _resizing_col == -1 &&		// not resizing a column
               _resizing_row == -1 &&		// not resizing a row
               Fl_Widget::callback() && 	// callback defined
-              when() & FL_WHEN_RELEASE && 	// on button release
+              when() & fltk3::WHEN_RELEASE && 	// on button release
               _last_row == R ) {		// release on same row PUSHed?
             // Need this for eg. left clicking on a cell to select it
             do_callback(context, R, C);
@@ -915,82 +915,82 @@ int Fl_Table::handle(int event) {
           break;
       }
       if ( Fl::event_button() == 1 ) {
-        change_cursor(FL_CURSOR_DEFAULT);
+        change_cursor(fltk3::CURSOR_DEFAULT);
         _resizing_col = -1;
         _resizing_row = -1;
         ret = 1;
       }
       break;
       
-    case FL_MOVE:
+    case fltk3::MOVE:
       if ( context == CONTEXT_COL_HEADER && 		// in column header?
           resizeflag ) {				// resize + near boundary?
-        change_cursor(FL_CURSOR_WE);			// show resize cursor
+        change_cursor(fltk3::CURSOR_WE);			// show resize cursor
       }
       else if ( context == CONTEXT_ROW_HEADER && 	// in row header?
                resizeflag ) {				// resize + near boundary?
-        change_cursor(FL_CURSOR_NS);			// show resize cursor
+        change_cursor(fltk3::CURSOR_NS);			// show resize cursor
       } else {
-        change_cursor(FL_CURSOR_DEFAULT);		// normal cursor
+        change_cursor(fltk3::CURSOR_DEFAULT);		// normal cursor
       }
       ret = 1;
       break;
       
-    case FL_ENTER:		// See FLTK event docs on the FL_ENTER widget
+    case fltk3::ENTER:		// See FLTK event docs on the fltk3::ENTER widget
       if (!ret) take_focus();
       ret = 1;
       //FALLTHROUGH
       
-    case FL_LEAVE:		// We want to track the mouse if resizing is allowed.
+    case fltk3::LEAVE:		// We want to track the mouse if resizing is allowed.
       if ( resizeflag ) {
         ret = 1;
       }
-      if ( event == FL_LEAVE ) {
+      if ( event == fltk3::LEAVE ) {
         _stop_auto_drag();
-        change_cursor(FL_CURSOR_DEFAULT);
+        change_cursor(fltk3::CURSOR_DEFAULT);
       }
       break;
       
-    case FL_FOCUS:
+    case fltk3::FOCUS:
       Fl::focus(this);
       //FALLTHROUGH
       
-    case FL_UNFOCUS:
+    case fltk3::UNFOCUS:
       _stop_auto_drag();
       ret = 1;
       break;
       
-    case FL_KEYBOARD: {
+    case fltk3::KEYBOARD: {
       ret = 0;
       int is_row = select_row;
       int is_col = select_col;
       switch(Fl::event_key()) {
-        case FL_Home:
+        case fltk3::HomeKey:
           ret = move_cursor(0, -1000000);
           break;
-        case FL_End:
+        case fltk3::EndKey:
           ret = move_cursor(0, 1000000);
           break;
-        case FL_Page_Up:
+        case fltk3::PageUpKey:
           ret = move_cursor(-(botrow - toprow - 1), 0);
           break;
-        case FL_Page_Down:
+        case fltk3::PageDownKey:
           ret = move_cursor(botrow - toprow - 1 , 0);
           break;
-        case FL_Left:
+        case fltk3::LeftKey:
           ret = move_cursor(0, -1);
           break;
-        case FL_Right:
+        case fltk3::RightKey:
           ret = move_cursor(0, 1);
           break;
-        case FL_Up:
+        case fltk3::UpKey:
           ret = move_cursor(-1, 0);
           break;
-        case FL_Down:
+        case fltk3::DownKey:
           ret = move_cursor(1, 0);
           break;
-	case FL_Tab:
-	  if ( Fl::event_state() & FL_SHIFT ) {
+	case fltk3::TabKey:
+	  if ( Fl::event_state() & fltk3::SHIFT ) {
             ret = move_cursor(0, -1);		// shift-tab -> left
 	  } else {
 	    ret = move_cursor(0, 1);		// tab -> right
@@ -1001,10 +1001,10 @@ int Fl_Table::handle(int event) {
         do_callback(CONTEXT_TABLE, -1, -1);
         take_focus();
       }
-      //if (!ret && Fl_Widget::callback() && when() & FL_WHEN_NOT_CHANGED  )
+      //if (!ret && Fl_Widget::callback() && when() & fltk3::WHEN_NOT_CHANGED  )
       if ( Fl_Widget::callback() && 
           (
-           ( !ret && when() & FL_WHEN_NOT_CHANGED ) || 
+           ( !ret && when() & fltk3::WHEN_NOT_CHANGED ) || 
            ( is_row!= select_row || is_col!= select_col ) 
            )
           ) {
@@ -1016,7 +1016,7 @@ int Fl_Table::handle(int event) {
     }
       
     default:
-      change_cursor(FL_CURSOR_DEFAULT);
+      change_cursor(fltk3::CURSOR_DEFAULT);
       break;
   }
   return(ret);
@@ -1139,7 +1139,7 @@ void Fl_Table::draw() {
   //    that leak around the border.
   //
   if ( ! table->visible() ) {
-    if ( damage() & FL_DAMAGE_ALL || damage() & FL_DAMAGE_CHILD ) {
+    if ( damage() & fltk3::DAMAGE_ALL || damage() & fltk3::DAMAGE_CHILD ) {
       draw_box(table->box(), tox, toy, tow, toh, table->color());
     }
   } 
@@ -1147,7 +1147,7 @@ void Fl_Table::draw() {
   fl_push_clip(wix, wiy, wiw, wih);
   {
     // Only redraw a few cells?
-    if ( ! ( damage() & FL_DAMAGE_ALL ) && _redraw_leftcol != -1 ) {
+    if ( ! ( damage() & fltk3::DAMAGE_ALL ) && _redraw_leftcol != -1 ) {
       fl_push_clip(tix, tiy, tiw, tih);
       for ( int c = _redraw_leftcol; c <= _redraw_rightcol; c++ ) {
         for ( int r = _redraw_toprow; r <= _redraw_botrow; r++ ) { 
@@ -1156,7 +1156,7 @@ void Fl_Table::draw() {
       }
       fl_pop_clip();
     }
-    if ( damage() & FL_DAMAGE_ALL ) {
+    if ( damage() & fltk3::DAMAGE_ALL ) {
       int X,Y,W,H;
       // Draw row headers, if any
       if ( row_header() ) {
@@ -1225,7 +1225,7 @@ void Fl_Table::draw() {
         if ( row_header() ) {
           // NOTE:
           //     Careful with that lower corner; don't use tih; when eg. 
-          //     table->box(FL_THIN_UPFRAME) and hscrollbar hidden, 
+          //     table->box(fltk3::THIN_UPFRAME) and hscrollbar hidden, 
           //     leaves a row of dead pixels.
           //
           fl_rectf(wix, tiy + table_h, row_header_width(), 

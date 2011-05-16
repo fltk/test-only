@@ -141,7 +141,7 @@ public:
   void collapse(void);
   WindowRef window_ref(void);
   void set_key_window(void);
-  void set_cursor(Fl_Cursor);
+  void set_cursor(fltk3::Cursor);
   static CGImageRef CGImage_from_window_rect(Fl_Window *win, int x, int y, int w, int h);
   static unsigned char *bitmap_from_window_rect(Fl_Window *win, int x, int y, int w, int h, int *bytesPerPixel);
   static Fl_Region intersect_region_and_rect(Fl_Region current, int x,int y,int w, int h);
@@ -200,7 +200,7 @@ extern void fl_open_callback(void (*cb)(const char *));
  * \param cb   a callback that will be called by "About myprog" menu item
  *		   with NULL 1st argument.
  * \param user_data   a pointer transmitted as 2nd argument to the callback.
- * \param shortcut    optional shortcut to attach to the "About myprog" menu item (e.g., FL_META+'a')
+ * \param shortcut    optional shortcut to attach to the "About myprog" menu item (e.g., fltk3::META+'a')
  */
 extern void fl_mac_set_about( Fl_Callback *cb, void *user_data, int shortcut = 0);
 

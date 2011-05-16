@@ -55,8 +55,8 @@ static Fl_Input *input;
 static int ret_val;
 static const char *iconlabel = "?";
 static const char *message_title_default;
-Fl_Font fl_message_font_ = FL_HELVETICA;
-Fl_Fontsize fl_message_size_ = -1;
+fltk3::Font fl_message_font_ = fltk3::HELVETICA;
+fltk3::Fontsize fl_message_size_ = -1;
 static int enableHotspot = 1;
 #ifdef __APPLE__
 extern "C" void NSBeep(void);
@@ -88,16 +88,16 @@ static Fl_Window *makeform() {
  Fl_Window *w = message_form = new Fl_Window(410,103);
  message_form->callback(button_cb,(void *)0);
  // w->clear_border();
- // w->box(FL_UP_BOX);
+ // w->box(fltk3::UP_BOX);
  (message = new fltk3::Box(60, 25, 340, 20))
-   ->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
+   ->align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE|fltk3::ALIGN_WRAP);
  (input = new Fl_Input(60, 37, 340, 23))->hide();
  {fltk3::Box* o = icon = new fltk3::Box(10, 10, 50, 50);
-  o->box(FL_THIN_UP_BOX);
-  o->labelfont(FL_TIMES_BOLD);
+  o->box(fltk3::THIN_UP_BOX);
+  o->labelfont(fltk3::TIMES_BOLD);
   o->labelsize(34);
-  o->color(FL_WHITE);
-  o->labelcolor(FL_BLUE);
+  o->color(fltk3::WHITE);
+  o->labelcolor(fltk3::BLUE);
  }
  w->end(); // don't add the buttons automatically
  // create the buttons (right to left)
@@ -106,10 +106,10 @@ static Fl_Window *makeform() {
      button[b] = new Fl_Return_Button(x, 70, 90, 23);
    else
      button[b] = new Fl_Button(x, 70, 90, 23);
-   button[b]->align(FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
+   button[b]->align(fltk3::ALIGN_INSIDE|fltk3::ALIGN_WRAP);
    button[b]->callback(button_cb,(void *)b);
  }
- button[0]->shortcut(FL_Escape);
+ button[0]->shortcut(fltk3::EscapeKey);
  // add the buttons (left to right)
  for (int b=2; b>=0; b--)
    w->add(button[b]);
@@ -219,7 +219,7 @@ static int innards(const char* fmt, va_list ap,
 
   message->labelfont(fl_message_font_);
   if (fl_message_size_ == -1)
-    message->labelsize(FL_NORMAL_SIZE);
+    message->labelsize(fltk3::NORMAL_SIZE);
   else
     message->labelsize(fl_message_size_);
   if (b0) {button[0]->show(); button[0]->label(b0); button[1]->position(210,70);}
@@ -240,7 +240,7 @@ static int innards(const char* fmt, va_list ap,
   if (b0 && Fl_Widget::label_shortcut(b0))
     button[0]->shortcut(0);
   else
-    button[0]->shortcut(FL_Escape);
+    button[0]->shortcut(fltk3::EscapeKey);
 
   // set default window title, if defined and a specific title is not set
   if (!message_form->label() && message_title_default)

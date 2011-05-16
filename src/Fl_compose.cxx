@@ -36,7 +36,7 @@ int Fl::compose_state = 0;
 extern XIC fl_xim_ic;
 #endif
 
-/** Any text editing widget should call this for each FL_KEYBOARD event.
+/** Any text editing widget should call this for each fltk3::KEYBOARD event.
  Use of this function is very simple.
  
  <p>If <i>true</i> is returned, then it has modified the
@@ -59,16 +59,16 @@ int Fl::compose(int& del) {
   del = 0;
 #if defined(__APPLE__)
   // this stuff is to be treated as a function key
-  if(Fl::e_length == 0 || Fl::e_keysym == FL_Enter || Fl::e_keysym == FL_KP_Enter || 
-     Fl::e_keysym == FL_Tab || Fl::e_keysym == FL_Escape || Fl::e_state&(FL_META | FL_CTRL) ) {
+  if(Fl::e_length == 0 || Fl::e_keysym == fltk3::EnterKey || Fl::e_keysym == fltk3::KPEnterKey || 
+     Fl::e_keysym == fltk3::TabKey || Fl::e_keysym == fltk3::EscapeKey || Fl::e_state&(fltk3::META | fltk3::CTRL) ) {
     return 0;
   }
 #elif defined(WIN32)
   unsigned char ascii = (unsigned)e_text[0];
-  if ((e_state & (FL_ALT | FL_META)) && !(ascii & 128)) return 0;
+  if ((e_state & (fltk3::ALT | fltk3::META)) && !(ascii & 128)) return 0;
 #else
   unsigned char ascii = (unsigned)e_text[0];
-  if ((e_state & (FL_ALT | FL_META | FL_CTRL)) && !(ascii & 128)) return 0;
+  if ((e_state & (fltk3::ALT | fltk3::META | fltk3::CTRL)) && !(ascii & 128)) return 0;
 #endif
   if(Fl::compose_state) {
     del = Fl::compose_state;

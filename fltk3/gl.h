@@ -72,9 +72,9 @@
 FL_EXPORT void gl_start();
 FL_EXPORT void gl_finish();
 
-FL_EXPORT void gl_color(Fl_Color i);
+FL_EXPORT void gl_color(fltk3::Color i);
 /** back compatibility */
-inline void gl_color(int c) {gl_color((Fl_Color)c);}
+inline void gl_color(int c) {gl_color((fltk3::Color)c);}
 
 FL_EXPORT void gl_rect(int x,int y,int w,int h);
 /**
@@ -96,7 +96,7 @@ FL_EXPORT void gl_draw(const char*, int x, int y);
 FL_EXPORT void gl_draw(const char*, float x, float y);
 FL_EXPORT void gl_draw(const char*, int n, int x, int y);
 FL_EXPORT void gl_draw(const char*, int n, float x, float y);
-FL_EXPORT void gl_draw(const char*, int x, int y, int w, int h, Fl_Align);
+FL_EXPORT void gl_draw(const char*, int x, int y, int w, int h, fltk3::Align);
 FL_EXPORT void gl_measure(const char*, int& x, int& y);
 #ifdef __APPLE__
 extern FL_EXPORT void gl_texture_pile_height(int max);

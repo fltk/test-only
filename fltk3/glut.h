@@ -92,17 +92,17 @@ FL_EXPORT void glutInit(int *argcp, char **argv); // creates first window
 
 FL_EXPORT void glutInitDisplayMode(unsigned int mode);
 // the FL_ symbols have the same value as the GLUT ones:
-#  define GLUT_RGB	FL_RGB
-#  define GLUT_RGBA	FL_RGB
-#  define GLUT_INDEX	FL_INDEX
-#  define GLUT_SINGLE	FL_SINGLE
-#  define GLUT_DOUBLE	FL_DOUBLE
-#  define GLUT_ACCUM	FL_ACCUM
-#  define GLUT_ALPHA	FL_ALPHA
-#  define GLUT_DEPTH	FL_DEPTH
-#  define GLUT_STENCIL	FL_STENCIL
-#  define GLUT_MULTISAMPLE FL_MULTISAMPLE
-#  define GLUT_STEREO	FL_STEREO
+#  define GLUT_RGB	fltk3::RGB
+#  define GLUT_RGBA	fltk3::RGB
+#  define GLUT_INDEX	fltk3::INDEX
+#  define GLUT_SINGLE	fltk3::SINGLE
+#  define GLUT_DOUBLE	fltk3::DOUBLE
+#  define GLUT_ACCUM	fltk3::ACCUM
+#  define GLUT_ALPHA	fltk3::ALPHA
+#  define GLUT_DEPTH	fltk3::DEPTH
+#  define GLUT_STENCIL	fltk3::STENCIL
+#  define GLUT_MULTISAMPLE fltk3::MULTISAMPLE
+#  define GLUT_STEREO	fltk3::STEREO
 // #  define GLUT_LUMINANCE		512
 
 FL_EXPORT void glutInitWindowPosition(int x, int y);
@@ -148,31 +148,31 @@ inline void glutHideWindow() {glut_window->hide();}
 
 inline void glutFullScreen() {glut_window->fullscreen();}
 
-inline void glutSetCursor(Fl_Cursor cursor) {glut_window->cursor(cursor);}
+inline void glutSetCursor(fltk3::Cursor cursor) {glut_window->cursor(cursor);}
 // notice that the numeric values are different than glut:
-#  define GLUT_CURSOR_RIGHT_ARROW		((Fl_Cursor)2)
-#  define GLUT_CURSOR_LEFT_ARROW		((Fl_Cursor)67)
-#  define GLUT_CURSOR_INFO			FL_CURSOR_HAND
-#  define GLUT_CURSOR_DESTROY			((Fl_Cursor)45)
-#  define GLUT_CURSOR_HELP			FL_CURSOR_HELP
-#  define GLUT_CURSOR_CYCLE			((Fl_Cursor)26)
-#  define GLUT_CURSOR_SPRAY			((Fl_Cursor)63)
-#  define GLUT_CURSOR_WAIT			FL_CURSOR_WAIT
-#  define GLUT_CURSOR_TEXT			FL_CURSOR_INSERT
-#  define GLUT_CURSOR_CROSSHAIR			FL_CURSOR_CROSS
-#  define GLUT_CURSOR_UP_DOWN			FL_CURSOR_NS
-#  define GLUT_CURSOR_LEFT_RIGHT		FL_CURSOR_WE
-#  define GLUT_CURSOR_TOP_SIDE			FL_CURSOR_N
-#  define GLUT_CURSOR_BOTTOM_SIDE		FL_CURSOR_S
-#  define GLUT_CURSOR_LEFT_SIDE			FL_CURSOR_W
-#  define GLUT_CURSOR_RIGHT_SIDE		FL_CURSOR_E
-#  define GLUT_CURSOR_TOP_LEFT_CORNER		FL_CURSOR_NW
-#  define GLUT_CURSOR_TOP_RIGHT_CORNER		FL_CURSOR_NE
-#  define GLUT_CURSOR_BOTTOM_RIGHT_CORNER	FL_CURSOR_SE
-#  define GLUT_CURSOR_BOTTOM_LEFT_CORNER	FL_CURSOR_SW
-#  define GLUT_CURSOR_INHERIT			FL_CURSOR_DEFAULT
-#  define GLUT_CURSOR_NONE			FL_CURSOR_NONE
-#  define GLUT_CURSOR_FULL_CROSSHAIR		FL_CURSOR_CROSS
+#  define GLUT_CURSOR_RIGHT_ARROW		((fltk3::Cursor)2)
+#  define GLUT_CURSOR_LEFT_ARROW		((fltk3::Cursor)67)
+#  define GLUT_CURSOR_INFO			fltk3::CURSOR_HAND
+#  define GLUT_CURSOR_DESTROY			((fltk3::Cursor)45)
+#  define GLUT_CURSOR_HELP			fltk3::CURSOR_HELP
+#  define GLUT_CURSOR_CYCLE			((fltk3::Cursor)26)
+#  define GLUT_CURSOR_SPRAY			((fltk3::Cursor)63)
+#  define GLUT_CURSOR_WAIT			fltk3::CURSOR_WAIT
+#  define GLUT_CURSOR_TEXT			fltk3::CURSOR_INSERT
+#  define GLUT_CURSOR_CROSSHAIR			fltk3::CURSOR_CROSS
+#  define GLUT_CURSOR_UP_DOWN			fltk3::CURSOR_NS
+#  define GLUT_CURSOR_LEFT_RIGHT		fltk3::CURSOR_WE
+#  define GLUT_CURSOR_TOP_SIDE			fltk3::CURSOR_N
+#  define GLUT_CURSOR_BOTTOM_SIDE		fltk3::CURSOR_S
+#  define GLUT_CURSOR_LEFT_SIDE			fltk3::CURSOR_W
+#  define GLUT_CURSOR_RIGHT_SIDE		fltk3::CURSOR_E
+#  define GLUT_CURSOR_TOP_LEFT_CORNER		fltk3::CURSOR_NW
+#  define GLUT_CURSOR_TOP_RIGHT_CORNER		fltk3::CURSOR_NE
+#  define GLUT_CURSOR_BOTTOM_RIGHT_CORNER	fltk3::CURSOR_SE
+#  define GLUT_CURSOR_BOTTOM_LEFT_CORNER	fltk3::CURSOR_SW
+#  define GLUT_CURSOR_INHERIT			fltk3::CURSOR_DEFAULT
+#  define GLUT_CURSOR_NONE			fltk3::CURSOR_NONE
+#  define GLUT_CURSOR_FULL_CROSSHAIR		fltk3::CURSOR_CROSS
 
 inline void glutWarpPointer(int, int) { /* do nothing */ }
 
@@ -267,15 +267,15 @@ inline void glutSpecialFunc(void (*f)(int key, int x, int y)) {
 #  define GLUT_KEY_F11			11
 #  define GLUT_KEY_F12			12
 // WARNING: Different values than GLUT uses:
-#  define GLUT_KEY_LEFT			FL_Left
-#  define GLUT_KEY_UP			FL_Up
-#  define GLUT_KEY_RIGHT		FL_Right
-#  define GLUT_KEY_DOWN			FL_Down
-#  define GLUT_KEY_PAGE_UP		FL_Page_Up
-#  define GLUT_KEY_PAGE_DOWN		FL_Page_Down
-#  define GLUT_KEY_HOME			FL_Home
-#  define GLUT_KEY_END			FL_End
-#  define GLUT_KEY_INSERT		FL_Insert
+#  define GLUT_KEY_LEFT			fltk3::LeftKey
+#  define GLUT_KEY_UP			fltk3::UpKey
+#  define GLUT_KEY_RIGHT		fltk3::RightKey
+#  define GLUT_KEY_DOWN			fltk3::DownKey
+#  define GLUT_KEY_PAGE_UP		fltk3::PageUpKey
+#  define GLUT_KEY_PAGE_DOWN		fltk3::PageDownKey
+#  define GLUT_KEY_HOME			fltk3::HomeKey
+#  define GLUT_KEY_END			fltk3::EndKey
+#  define GLUT_KEY_INSERT		fltk3::InsertKey
 
 //inline void glutSpaceballMotionFunc(void (*)(int x, int y, int z));
 
@@ -368,9 +368,9 @@ enum {
 FL_EXPORT int glutDeviceGet(GLenum type);
 
 // WARNING: these values are different than GLUT uses:
-#  define GLUT_ACTIVE_SHIFT               FL_SHIFT
-#  define GLUT_ACTIVE_CTRL                FL_CTRL
-#  define GLUT_ACTIVE_ALT                 FL_ALT
+#  define GLUT_ACTIVE_SHIFT               fltk3::SHIFT
+#  define GLUT_ACTIVE_CTRL                fltk3::CTRL
+#  define GLUT_ACTIVE_ALT                 fltk3::ALT
 inline int glutGetModifiers() {return Fl::event_state() & (GLUT_ACTIVE_SHIFT | GLUT_ACTIVE_CTRL | GLUT_ACTIVE_ALT);}
 
 FL_EXPORT int glutLayerGet(GLenum);
@@ -409,7 +409,7 @@ FL_EXPORT GLUTproc glutGetProcAddress(const char *procName);
 
 // Font argument must be a void* for compatibility, so...
 /** fltk glut font/size attributes used in the glutXXX functions */
-struct Fl_Glut_Bitmap_Font {Fl_Font font; Fl_Fontsize size;};
+struct Fl_Glut_Bitmap_Font {fltk3::Font font; fltk3::Fontsize size;};
 
 extern FL_EXPORT struct Fl_Glut_Bitmap_Font
   glutBitmap9By15, glutBitmap8By13, glutBitmapTimesRoman10,

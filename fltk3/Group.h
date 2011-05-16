@@ -91,7 +91,7 @@ public:
   void resize(int,int,int,int);
   /**
     Creates a new Fl_Group widget using the given position, size,
-    and label string. The default boxtype is FL_NO_BOX.
+    and label string. The default boxtype is fltk3::NO_BOX.
   */
   Fl_Group(int,int,int,int, const char * = 0);
   virtual ~Fl_Group();

@@ -32,6 +32,11 @@
 #include <fltk3/run.h>
 #include <fltk3/draw.h>
 
+namespace fltk3 {
+  extern uchar* grayRamp();
+}
+
+
 // A compiler from a certain very large software company will not compile
 // the function pointer assignment due to the name conflict with fl_arc.
 // This function is to fix that:
@@ -41,7 +46,7 @@ static void fl_arc_i(int x,int y,int w,int h,double a1,double a2) {
 
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
 
-static void draw(int which, int x,int y,int w,int h, int inset, Fl_Color color)
+static void draw(int which, int x,int y,int w,int h, int inset, fltk3::Color color)
 {
   if (inset*2 >= w) inset = (w-1)/2;
   if (inset*2 >= h) inset = (h-1)/2;
@@ -82,41 +87,32 @@ static void draw(int which, int x,int y,int w,int h, int inset, Fl_Color color)
   fl_line_style(0);
 }
 
-extern uchar* fl_gray_ramp();
-
-void fl_round_down_box(int x, int y, int w, int h, Fl_Color bgcolor) {
-  uchar *g = fl_gray_ramp();
+void fl_round_down_box(int x, int y, int w, int h, fltk3::Color bgcolor) {
+  uchar *g = fltk3::grayRamp();
   draw(FILL,	    x,   y, w,   h, 2, bgcolor);
-  draw(UPPER_LEFT,  x+1, y, w-2, h, 0, (Fl_Color)g['N']);
-  draw(UPPER_LEFT,  x+1, y, w-2, h, 1, (Fl_Color)g['H']);
-  draw(UPPER_LEFT,  x,   y, w,   h, 0, (Fl_Color)g['N']);
-  draw(UPPER_LEFT,  x,   y, w,   h, 1, (Fl_Color)g['H']);
-  draw(LOWER_RIGHT, x,   y, w,   h, 0, (Fl_Color)g['S']);
-  draw(LOWER_RIGHT, x+1, y, w-2, h, 0, (Fl_Color)g['U']);
-  draw(LOWER_RIGHT, x,   y, w,   h, 1, (Fl_Color)g['U']);
-  draw(LOWER_RIGHT, x+1, y, w-2, h, 1, (Fl_Color)g['W']);
-  draw(CLOSED,	    x,   y, w,   h, 2, (Fl_Color)g['A']);
+  draw(UPPER_LEFT,  x+1, y, w-2, h, 0, (fltk3::Color)g['N']);
+  draw(UPPER_LEFT,  x+1, y, w-2, h, 1, (fltk3::Color)g['H']);
+  draw(UPPER_LEFT,  x,   y, w,   h, 0, (fltk3::Color)g['N']);
+  draw(UPPER_LEFT,  x,   y, w,   h, 1, (fltk3::Color)g['H']);
+  draw(LOWER_RIGHT, x,   y, w,   h, 0, (fltk3::Color)g['S']);
+  draw(LOWER_RIGHT, x+1, y, w-2, h, 0, (fltk3::Color)g['U']);
+  draw(LOWER_RIGHT, x,   y, w,   h, 1, (fltk3::Color)g['U']);
+  draw(LOWER_RIGHT, x+1, y, w-2, h, 1, (fltk3::Color)g['W']);
+  draw(CLOSED,	    x,   y, w,   h, 2, (fltk3::Color)g['A']);
 }
 
-void fl_round_up_box(int x, int y, int w, int h, Fl_Color bgcolor) {
-  uchar *g = fl_gray_ramp();
+void fl_round_up_box(int x, int y, int w, int h, fltk3::Color bgcolor) {
+  uchar *g = fltk3::grayRamp();
   draw(FILL,	    x,   y, w,   h, 2, bgcolor);
-  draw(LOWER_RIGHT, x+1, y, w-2, h, 0, (Fl_Color)g['H']);
-  draw(LOWER_RIGHT, x+1, y, w-2, h, 1, (Fl_Color)g['N']);
-  draw(LOWER_RIGHT, x,   y, w,   h, 1, (Fl_Color)g['H']);
-  draw(LOWER_RIGHT, x,   y, w,   h, 2, (Fl_Color)g['N']);
-  draw(UPPER_LEFT,  x,   y, w,   h, 2, (Fl_Color)g['U']);
-  draw(UPPER_LEFT,  x+1, y, w-2, h, 1, (Fl_Color)g['S']);
-  draw(UPPER_LEFT,  x,   y, w,   h, 1, (Fl_Color)g['W']);
-  draw(UPPER_LEFT,  x+1, y, w-2, h, 0, (Fl_Color)g['U']);
-  draw(CLOSED,	    x,   y, w,   h, 0, (Fl_Color)g['A']);
-}
-
-extern void fl_internal_boxtype(Fl_Boxtype, Fl_Box_Draw_F*);
-Fl_Boxtype fl_define_FL_ROUND_UP_BOX() {
-  fl_internal_boxtype(_FL_ROUND_DOWN_BOX, fl_round_down_box);
-  fl_internal_boxtype(_FL_ROUND_UP_BOX, fl_round_up_box);
-  return _FL_ROUND_UP_BOX;
+  draw(LOWER_RIGHT, x+1, y, w-2, h, 0, (fltk3::Color)g['H']);
+  draw(LOWER_RIGHT, x+1, y, w-2, h, 1, (fltk3::Color)g['N']);
+  draw(LOWER_RIGHT, x,   y, w,   h, 1, (fltk3::Color)g['H']);
+  draw(LOWER_RIGHT, x,   y, w,   h, 2, (fltk3::Color)g['N']);
+  draw(UPPER_LEFT,  x,   y, w,   h, 2, (fltk3::Color)g['U']);
+  draw(UPPER_LEFT,  x+1, y, w-2, h, 1, (fltk3::Color)g['S']);
+  draw(UPPER_LEFT,  x,   y, w,   h, 1, (fltk3::Color)g['W']);
+  draw(UPPER_LEFT,  x+1, y, w-2, h, 0, (fltk3::Color)g['U']);
+  draw(CLOSED,	    x,   y, w,   h, 0, (fltk3::Color)g['A']);
 }
 
 //

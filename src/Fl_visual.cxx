@@ -41,23 +41,23 @@
     <P>Only the following combinations do anything useful:
     
     <UL>
-    <LI>Fl::visual(FL_RGB)
+    <LI>Fl::visual(fltk3::RGB)
     <BR>Full/true color (if there are several depths FLTK chooses  the
     largest).  Do this if you use fl_draw_image
     for much better (non-dithered)  output.
     <BR>&nbsp; </LI>
-    <LI>Fl::visual(FL_RGB8)
-    <BR>Full color with at least 24 bits of color. FL_RGB will
+    <LI>Fl::visual(fltk3::RGB8)
+    <BR>Full color with at least 24 bits of color. fltk3::RGB will
     always  pick this if available, but if not it will happily return a
     less-than-24 bit deep visual.  This call fails if 24 bits are not
     available.
     <BR>&nbsp; </LI>
-    <LI>Fl::visual(FL_DOUBLE|FL_INDEX)
+    <LI>Fl::visual(fltk3::DOUBLE|fltk3::INDEX)
     <BR>Hardware double buffering.  Call this if you are going to use 
     Fl_Double_Window.
     <BR>&nbsp; </LI>
-    <LI>Fl::visual(FL_DOUBLE|FL_RGB)</LI>
-    <LI>Fl::visual(FL_DOUBLE|FL_RGB8)
+    <LI>Fl::visual(fltk3::DOUBLE|fltk3::RGB)</LI>
+    <LI>Fl::visual(fltk3::DOUBLE|fltk3::RGB8)
     <BR>Hardware double buffering and full color.
     </UL>
     
@@ -68,10 +68,10 @@
 #ifdef WIN32
 int Fl::visual(int flags) {
   fl_GetDC(0);
-  if (flags & FL_DOUBLE) return 0;
-  if (!(flags & FL_INDEX) &&
+  if (flags & fltk3::DOUBLE) return 0;
+  if (!(flags & fltk3::INDEX) &&
     GetDeviceCaps(fl_gc,BITSPIXEL) <= 8) return 0;
-  if ((flags & FL_RGB8) && GetDeviceCaps(fl_gc,BITSPIXEL)<24) return 0;
+  if ((flags & fltk3::RGB8) && GetDeviceCaps(fl_gc,BITSPIXEL)<24) return 0;
   return 1;
 }
 #elif defined(__APPLE__)
@@ -91,11 +91,11 @@ int Fl::visual(int flags) {
 static int test_visual(XVisualInfo& v, int flags) {
   if (v.screen != fl_screen) return 0;
 #if USE_COLORMAP
-  if (!(flags & FL_INDEX)) {
+  if (!(flags & fltk3::INDEX)) {
     if (v.c_class != StaticColor && v.c_class != TrueColor) return 0;
     if (v.depth <= 8) return 0; // fltk will work better in colormap mode
   }
-  if (flags & FL_RGB8) {
+  if (flags & fltk3::RGB8) {
     if (v.depth < 24) return 0;
   }
   // for now, fltk does not like colormaps of more than 8 bits:
@@ -105,7 +105,7 @@ static int test_visual(XVisualInfo& v, int flags) {
   if (v.c_class != StaticColor && v.c_class != TrueColor) return 0;
 #endif
 #if USE_XDBE
-  if (flags & FL_DOUBLE) {
+  if (flags & fltk3::DOUBLE) {
     static XdbeScreenVisualInfo *xdbejunk;
     if (!xdbejunk) {
       int event_base, error_base;
@@ -126,7 +126,7 @@ static int test_visual(XVisualInfo& v, int flags) {
 
 int Fl::visual(int flags) {
 #if USE_XDBE == 0
-  if (flags & FL_DOUBLE) return 0;
+  if (flags & fltk3::DOUBLE) return 0;
 #endif
   fl_open_display();
   // always use default if possible:

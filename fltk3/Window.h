@@ -70,8 +70,8 @@ class FL_EXPORT Fl_Window : public Fl_Group {
   int dw, dh, aspect;
   uchar size_range_set;
   // cursor stuff
-  Fl_Cursor cursor_default;
-  Fl_Color cursor_fg, cursor_bg;
+  fltk3::Cursor cursor_default;
+  fltk3::Color cursor_fg, cursor_bg;
   void size_range_();
   void _Fl_Window(); // constructor innards
 
@@ -132,10 +132,10 @@ public:
     have visible() set to 1 and parent() set to
     the parent window pointer.
     
-    Fl_Widget::box() defaults to FL_FLAT_BOX. If you plan to
+    Fl_Widget::box() defaults to fltk3::FLAT_BOX. If you plan to
     completely fill the window with children widgets you should
-    change this to FL_NO_BOX. If you turn the window border off
-    you may want to change this to FL_UP_BOX.
+    change this to fltk3::NO_BOX. If you turn the window border off
+    you may want to change this to fltk3::UP_BOX.
 
     \see Fl_Window(int x, int y, int w, int h, const char* title)
   */
@@ -400,8 +400,8 @@ public:
     Call show() to restore the window.
 
     When a window is iconified/restored (either by these calls or by the
-    user) the handle() method is called with FL_HIDE and 
-    FL_SHOW events and visible() is turned on and off.
+    user) the handle() method is called with fltk3::HIDE and 
+    fltk3::SHOW events and visible() is turned on and off.
 
     There is no way to control what is drawn in the icon except with the
     string passed to Fl_Window::xclass().  You should not rely on
@@ -433,15 +433,15 @@ public:
     you set it in a static variable and call this only if the new cursor
     is different.
 
-    The type Fl_Cursor is an enumeration defined in <fltk3/enumerations.h>.
+    The type fltk3::Cursor is an enumeration defined in <fltk3/enumerations.h>.
     (Under X you can get any XC_cursor value by passing 
-    Fl_Cursor((XC_foo/2)+1)).  The colors only work on X, they are
+    fltk3::Cursor((XC_foo/2)+1)).  The colors only work on X, they are
     not implemented on WIN32.
 
     For back compatibility only.
   */
-  void cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE); // platform dependent
-  void default_cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
+  void cursor(fltk3::Cursor, fltk3::Color=fltk3::BLACK, fltk3::Color=fltk3::WHITE); // platform dependent
+  void default_cursor(fltk3::Cursor, fltk3::Color=fltk3::BLACK, fltk3::Color=fltk3::WHITE);
   static void default_callback(Fl_Window*, void* v);
   
   /** Returns the window width including any frame added by the window manager.

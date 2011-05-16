@@ -112,7 +112,7 @@ Fl_Input *template_name=(Fl_Input *)0;
 static void cb_template_name(Fl_Input*, void*) {
   if (strlen(template_name->value())) {
   template_submit->activate();
-  if (Fl::event_key() == FL_Enter) template_panel->hide();
+  if (Fl::event_key() == fltk3::EnterKey) template_panel->hide();
 } else template_submit->deactivate();
 }
 
@@ -148,12 +148,12 @@ Fl_Double_Window* make_template_panel() {
       template_browser->type(2);
       template_browser->labelfont(1);
       template_browser->callback((Fl_Callback*)cb_template_browser);
-      template_browser->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      template_browser->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       template_browser->when(3);
     } // Fl_Browser* template_browser
     { template_preview = new fltk3::Box(200, 28, 250, 250);
-      template_preview->box(FL_THIN_DOWN_BOX);
-      template_preview->align(Fl_Align(69|FL_ALIGN_INSIDE));
+      template_preview->box(fltk3::THIN_DOWN_BOX);
+      template_preview->align(fltk3::Align(69|fltk3::ALIGN_INSIDE));
       Fl_Group::current()->resizable(template_preview);
     } // fltk3::Box* template_preview
     { template_name = new Fl_Input(124, 288, 326, 25, "Template Name:");

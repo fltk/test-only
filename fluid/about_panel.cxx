@@ -272,24 +272,24 @@ static void cb_Close(Fl_Return_Button* o, void*) {
 
 Fl_Double_Window* make_about_panel() {
   { about_panel = new Fl_Double_Window(345, 180, "About FLUID");
-    about_panel->color(FL_LIGHT1);
-    about_panel->selection_color(FL_DARK1);
+    about_panel->color(fltk3::LIGHT1);
+    about_panel->selection_color(fltk3::DARK1);
     about_panel->hotspot(about_panel);
     { fltk3::Box* o = new fltk3::Box(10, 10, 115, 120);
       o->image(image_fluid);
     } // fltk3::Box* o
     { fltk3::Box* o = new fltk3::Box(135, 10, 200, 70, "FLTK User\nInterface Designer\nVersion 1.3.0");
-      o->color((Fl_Color)12);
-      o->selection_color(FL_DARK1);
+      o->color((fltk3::Color)12);
+      o->selection_color(fltk3::DARK1);
       o->labelfont(1);
       o->labelsize(18);
-      o->align(Fl_Align(FL_ALIGN_TOP_LEFT|FL_ALIGN_INSIDE));
+      o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE));
     } // fltk3::Box* o
     { fltk3::Box* o = new fltk3::Box(135, 90, 200, 45, "Copyright 1998-2010 by\nBill Spitzak and others");
-      o->align(Fl_Align(132|FL_ALIGN_INSIDE));
+      o->align(fltk3::Align(132|fltk3::ALIGN_INSIDE));
     } // fltk3::Box* o
     { Fl_Button* o = new Fl_Button(115, 145, 123, 25, "View License...");
-      o->labelcolor(FL_DARK_BLUE);
+      o->labelcolor(fltk3::DARK_BLUE);
       o->callback((Fl_Callback*)cb_View);
     } // Fl_Button* o
     { Fl_Return_Button* o = new Fl_Return_Button(250, 145, 83, 25, "Close");

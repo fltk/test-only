@@ -30,15 +30,15 @@
 #include <fltk3/draw.h>
 
 void Fl_Counter::draw() {
-  int i; Fl_Boxtype boxtype[5];
-  Fl_Color selcolor;
+  int i; fltk3::Boxtype boxtype[5];
+  fltk3::Color selcolor;
 
   boxtype[0] = box();
-  if (boxtype[0] == FL_UP_BOX) boxtype[0] = FL_DOWN_BOX;
-  if (boxtype[0] == FL_THIN_UP_BOX) boxtype[0] = FL_THIN_DOWN_BOX;
+  if (boxtype[0] == fltk3::UP_BOX) boxtype[0] = fltk3::DOWN_BOX;
+  if (boxtype[0] == fltk3::THIN_UP_BOX) boxtype[0] = fltk3::THIN_DOWN_BOX;
   for (i=1; i<5; i++)
     if (mouseobj == i)
-      boxtype[i] = fl_down(box());
+      boxtype[i] = fltk3::down(box());
     else
       boxtype[i] = box();
 
@@ -59,18 +59,18 @@ void Fl_Counter::draw() {
     xx[4] = 0;	         ww[4] = 0;
   }
 
-  draw_box(boxtype[0], xx[0], y(), ww[0], h(), FL_BACKGROUND2_COLOR);
+  draw_box(boxtype[0], xx[0], y(), ww[0], h(), fltk3::BACKGROUND2_COLOR);
   fl_font(textfont(), textsize());
-  fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
+  fl_color(active_r() ? textcolor() : fltk3::inactive(textcolor()));
   char str[128]; format(str);
-  fl_draw(str, xx[0], y(), ww[0], h(), FL_ALIGN_CENTER);
+  fl_draw(str, xx[0], y(), ww[0], h(), fltk3::ALIGN_CENTER);
   if (Fl::focus() == this) draw_focus(boxtype[0], xx[0], y(), ww[0], h());
-  if (!(damage()&FL_DAMAGE_ALL)) return; // only need to redraw text
+  if (!(damage()&fltk3::DAMAGE_ALL)) return; // only need to redraw text
 
   if (active_r())
     selcolor = labelcolor();
   else
-    selcolor = fl_inactive(labelcolor());
+    selcolor = fltk3::inactive(labelcolor());
 
   if (type() == FL_NORMAL_COUNTER) {
     draw_box(boxtype[1], xx[1], y(), ww[1], h(), color());
@@ -127,7 +127,7 @@ int Fl_Counter::calc_mouseobj() {
 int Fl_Counter::handle(int event) {
   int i;
   switch (event) {
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     if (mouseobj) {
       Fl::remove_timeout(repeat_callback, this);
       mouseobj = 0;
@@ -135,13 +135,13 @@ int Fl_Counter::handle(int event) {
     }
     handle_release();
     return 1;
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (Fl::visible_focus()) Fl::focus(this);
     { Fl_Widget_Tracker wp(this);
       handle_push();
       if (wp.deleted()) return 1;
     }
-  case FL_DRAG:
+  case fltk3::DRAG:
     i = calc_mouseobj();
     if (i != mouseobj) {
       Fl::remove_timeout(repeat_callback, this);
@@ -153,26 +153,26 @@ int Fl_Counter::handle(int event) {
       redraw();
     }
     return 1;
-  case FL_KEYBOARD :
+  case fltk3::KEYBOARD :
     switch (Fl::event_key()) {
-      case FL_Left:
+      case fltk3::LeftKey:
 	handle_drag(clamp(increment(value(),-1)));
 	return 1;
-      case FL_Right:
+      case fltk3::RightKey:
 	handle_drag(clamp(increment(value(),1)));
 	return 1;
       default:
         return 0;
     }
     // break not required because of switch...
-  case FL_FOCUS : /* FALLTHROUGH */
-  case FL_UNFOCUS :
+  case fltk3::FOCUS : /* FALLTHROUGH */
+  case fltk3::UNFOCUS :
     if (Fl::visible_focus()) {
       redraw();
       return 1;
     } else return 0;
-  case FL_ENTER : /* FALLTHROUGH */
-  case FL_LEAVE :
+  case fltk3::ENTER : /* FALLTHROUGH */
+  case fltk3::LEAVE :
     return 1;
   default:
     return 0;
@@ -194,16 +194,16 @@ Fl_Counter::~Fl_Counter() {
  */
 Fl_Counter::Fl_Counter(int X, int Y, int W, int H, const char* L)
   : Fl_Valuator(X, Y, W, H, L) {
-  box(FL_UP_BOX);
-  selection_color(FL_INACTIVE_COLOR); // was FL_BLUE
-  align(FL_ALIGN_BOTTOM);
+  box(fltk3::UP_BOX);
+  selection_color(fltk3::INACTIVE_COLOR); // was fltk3::BLUE
+  align(fltk3::ALIGN_BOTTOM);
   bounds(-1000000.0, 1000000.0);
   Fl_Valuator::step(1, 10);
   lstep_ = 1.0;
   mouseobj = 0;
-  textfont_ = FL_HELVETICA;
-  textsize_ = FL_NORMAL_SIZE;
-  textcolor_ = FL_FOREGROUND_COLOR;
+  textfont_ = fltk3::HELVETICA;
+  textsize_ = fltk3::NORMAL_SIZE;
+  textcolor_ = fltk3::FOREGROUND_COLOR;
 }
 
 //

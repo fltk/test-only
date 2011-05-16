@@ -61,8 +61,8 @@ void Fl_Overlay_Window::flush() {
     return;
   }
 #endif
-  int erase_overlay = (damage()&FL_DAMAGE_OVERLAY) | (overlay_ == this);
-  clear_damage((uchar)(damage()&~FL_DAMAGE_OVERLAY));
+  int erase_overlay = (damage()&fltk3::DAMAGE_OVERLAY) | (overlay_ == this);
+  clear_damage((uchar)(damage()&~fltk3::DAMAGE_OVERLAY));
   Fl_Double_Window::flush(erase_overlay);
   if (overlay_ == this) draw_overlay();
 }
@@ -92,8 +92,8 @@ int Fl_Overlay_Window::can_do_overlay() {return 0;}
 */
 void Fl_Overlay_Window::redraw_overlay() {
   overlay_ = this;
-  clear_damage((uchar)(damage()|FL_DAMAGE_OVERLAY));
-  Fl::damage(FL_DAMAGE_CHILD);
+  clear_damage((uchar)(damage()|fltk3::DAMAGE_OVERLAY));
+  Fl::damage(fltk3::DAMAGE_CHILD);
 }
 
 #else
@@ -141,7 +141,7 @@ void _Fl_Overlay::flush() {
   fl_overlay = 1;
   Fl_Overlay_Window *w = (Fl_Overlay_Window *)parent();
   Fl_X *myi = Fl_X::i(this);
-  if (damage() != FL_DAMAGE_EXPOSE) XClearWindow(fl_display, fl_xid(this));
+  if (damage() != fltk3::DAMAGE_EXPOSE) XClearWindow(fl_display, fl_xid(this));
   fl_clip_region(myi->region); myi->region = 0;
   w->draw_overlay();
   fl_overlay = 0;
@@ -160,8 +160,8 @@ void Fl_Overlay_Window::redraw_overlay() {
   }
   if (shown()) {
     if (overlay_ == this) {
-      clear_damage(damage()|FL_DAMAGE_OVERLAY);
-      Fl::damage(FL_DAMAGE_CHILD);
+      clear_damage(damage()|fltk3::DAMAGE_OVERLAY);
+      Fl::damage(fltk3::DAMAGE_CHILD);
     } else if (!overlay_->shown())
       overlay_->show();
     else

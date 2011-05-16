@@ -65,40 +65,40 @@ Fl_Gl_Choice *Fl_Gl_Choice::find(int m, const int *alistp) {
     blist = alistp;
   else {
     int n = 0;
-    if (m & FL_INDEX) {
+    if (m & fltk3::INDEX) {
       list[n++] = GLX_BUFFER_SIZE;
       list[n++] = 8; // glut tries many sizes, but this should work...
     } else {
       list[n++] = GLX_RGBA;
       list[n++] = GLX_GREEN_SIZE;
-      list[n++] = (m & FL_RGB8) ? 8 : 1;
-      if (m & FL_ALPHA) {
+      list[n++] = (m & fltk3::RGB8) ? 8 : 1;
+      if (m & fltk3::ALPHA) {
 	list[n++] = GLX_ALPHA_SIZE;
-	list[n++] = (m & FL_RGB8) ? 8 : 1;
+	list[n++] = (m & fltk3::RGB8) ? 8 : 1;
       }
-      if (m & FL_ACCUM) {
+      if (m & fltk3::ACCUM) {
 	list[n++] = GLX_ACCUM_GREEN_SIZE;
 	list[n++] = 1;
-	if (m & FL_ALPHA) {
+	if (m & fltk3::ALPHA) {
 	  list[n++] = GLX_ACCUM_ALPHA_SIZE;
 	  list[n++] = 1;
 	}
       }
     }
-    if (m & FL_DOUBLE) {
+    if (m & fltk3::DOUBLE) {
       list[n++] = GLX_DOUBLEBUFFER;
     }
-    if (m & FL_DEPTH) {
+    if (m & fltk3::DEPTH) {
       list[n++] = GLX_DEPTH_SIZE; list[n++] = 1;
     }
-    if (m & FL_STENCIL) {
+    if (m & fltk3::STENCIL) {
       list[n++] = GLX_STENCIL_SIZE; list[n++] = 1;
     }
-    if (m & FL_STEREO) {
+    if (m & fltk3::STEREO) {
       list[n++] = GLX_STEREO;
     }
 #    if defined(GLX_VERSION_1_1) && defined(GLX_SGIS_multisample)
-    if (m & FL_MULTISAMPLE) {
+    if (m & fltk3::MULTISAMPLE) {
       list[n++] = GLX_SAMPLES_SGIS;
       list[n++] = 4; // value Glut uses
     }
@@ -111,7 +111,7 @@ Fl_Gl_Choice *Fl_Gl_Choice::find(int m, const int *alistp) {
   XVisualInfo *visp = glXChooseVisual(fl_display, fl_screen, (int *)blist);
   if (!visp) {
 #    if defined(GLX_VERSION_1_1) && defined(GLX_SGIS_multisample)
-    if (m&FL_MULTISAMPLE) return find(m&~FL_MULTISAMPLE,0);
+    if (m&fltk3::MULTISAMPLE) return find(m&~FL_MULTISAMPLE,0);
 #    endif
     return 0;
   }
@@ -125,37 +125,37 @@ Fl_Gl_Choice *Fl_Gl_Choice::find(int m, const int *alistp) {
     blist = alistp;
   else {
     int n = 0;
-    if (m & FL_INDEX) {
+    if (m & fltk3::INDEX) {
       list[n++] = AGL_BUFFER_SIZE;
       list[n++] = 8; // glut tries many sizes, but this should work...
     } else {
       list[n++] = AGL_RGBA;
       list[n++] = AGL_GREEN_SIZE;
-      list[n++] = (m & FL_RGB8) ? 8 : 1;
-      if (m & FL_ALPHA) {
+      list[n++] = (m & fltk3::RGB8) ? 8 : 1;
+      if (m & fltk3::ALPHA) {
         list[n++] = AGL_ALPHA_SIZE;
-        list[n++] = (m & FL_RGB8) ? 8 : 1;
+        list[n++] = (m & fltk3::RGB8) ? 8 : 1;
       }
-      if (m & FL_ACCUM) {
+      if (m & fltk3::ACCUM) {
         list[n++] = AGL_ACCUM_GREEN_SIZE;
         list[n++] = 1;
-        if (m & FL_ALPHA) {
+        if (m & fltk3::ALPHA) {
           list[n++] = AGL_ACCUM_ALPHA_SIZE;
           list[n++] = 1;
         }
       }
     }
-    if (m & FL_DOUBLE) {
+    if (m & fltk3::DOUBLE) {
       list[n++] = AGL_DOUBLEBUFFER;
     }
-    if (m & FL_DEPTH) {
+    if (m & fltk3::DEPTH) {
       list[n++] = AGL_DEPTH_SIZE; list[n++] = 24;
     }
-    if (m & FL_STENCIL) {
+    if (m & fltk3::STENCIL) {
       list[n++] = AGL_STENCIL_SIZE; list[n++] = 1;
     }
 #    ifdef AGL_STEREO
-    if (m & FL_STEREO) {
+    if (m & fltk3::STEREO) {
       list[n++] = AGL_STEREO;
     }
 #    endif
@@ -178,13 +178,13 @@ Fl_Gl_Choice *Fl_Gl_Choice::find(int m, const int *alistp) {
     if (!DescribePixelFormat(fl_gc, i, sizeof(pfd), &pfd)) break;
     // continue if it does not satisfy our requirements:
     if (~pfd.dwFlags & (PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL)) continue;
-    if (pfd.iPixelType != ((m&FL_INDEX)?PFD_TYPE_COLORINDEX:PFD_TYPE_RGBA)) continue;
-    if ((m & FL_ALPHA) && !pfd.cAlphaBits) continue;
-    if ((m & FL_ACCUM) && !pfd.cAccumBits) continue;
-    if ((!(m & FL_DOUBLE)) != (!(pfd.dwFlags & PFD_DOUBLEBUFFER))) continue;
-    if ((!(m & FL_STEREO)) != (!(pfd.dwFlags & PFD_STEREO))) continue;
-    if ((m & FL_DEPTH) && !pfd.cDepthBits) continue;
-    if ((m & FL_STENCIL) && !pfd.cStencilBits) continue;
+    if (pfd.iPixelType != ((m&fltk3::INDEX)?PFD_TYPE_COLORINDEX:PFD_TYPE_RGBA)) continue;
+    if ((m & fltk3::ALPHA) && !pfd.cAlphaBits) continue;
+    if ((m & fltk3::ACCUM) && !pfd.cAccumBits) continue;
+    if ((!(m & fltk3::DOUBLE)) != (!(pfd.dwFlags & PFD_DOUBLEBUFFER))) continue;
+    if ((!(m & fltk3::STEREO)) != (!(pfd.dwFlags & PFD_STEREO))) continue;
+    if ((m & fltk3::DEPTH) && !pfd.cDepthBits) continue;
+    if ((m & fltk3::STENCIL) && !pfd.cStencilBits) continue;
     // see if better than the one we have already:
     if (pixelformat) {
       // offering non-generic rendering is better (read: hardware accelleration)

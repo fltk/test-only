@@ -41,7 +41,7 @@ class FL_EXPORT Fl_FormsBitmap : public Fl_Widget {
 protected:
     void draw();
 public:
-    Fl_FormsBitmap(Fl_Boxtype, int, int, int, int, const char * = 0);
+    Fl_FormsBitmap(fltk3::Boxtype, int, int, int, int, const char * = 0);
     void set(int W, int H, const uchar *bits);
     /** Sets a new bitmap. */
     void bitmap(Fl_Bitmap *B) {b = B;}

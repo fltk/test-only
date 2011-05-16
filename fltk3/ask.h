@@ -59,9 +59,9 @@ FL_EXPORT const char *fl_input(const char *label, const char *deflt = 0, ...) __
 FL_EXPORT const char *fl_password(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
 
 FL_EXPORT Fl_Widget *fl_message_icon();
-extern FL_EXPORT Fl_Font fl_message_font_;
-extern FL_EXPORT Fl_Fontsize fl_message_size_;
-inline void fl_message_font(Fl_Font f, Fl_Fontsize s) {
+extern FL_EXPORT fltk3::Font fl_message_font_;
+extern FL_EXPORT fltk3::Fontsize fl_message_size_;
+inline void fl_message_font(fltk3::Font f, fltk3::Fontsize s) {
   fl_message_font_ = f; fl_message_size_ = s;}
 
 FL_EXPORT void fl_message_hotspot(int enable);

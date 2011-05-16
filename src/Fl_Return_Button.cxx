@@ -36,20 +36,20 @@ int fl_return_arrow(int x, int y, int w, int h) {
   int x0 = x+(w-2*d-2*t-1)/2;
   int x1 = x0+d;
   int y0 = y+h/2;
-  fl_color(FL_LIGHT3);
+  fl_color(fltk3::LIGHT3);
   fl_line(x0, y0, x1, y0+d);
   fl_yxline(x1, y0+d, y0+t, x1+d+2*t, y0-d);
   fl_yxline(x1, y0-t, y0-d);
-  fl_color(fl_gray_ramp(0));
+  fl_color(fltk3::grayRamp(0));
   fl_line(x0, y0, x1, y0-d);
-  fl_color(FL_DARK3);
+  fl_color(fltk3::DARK3);
   fl_xyline(x1+1, y0-t, x1+d, y0-d, x1+d+2*t);
   return 1;
 }
 
 void Fl_Return_Button::draw() {
   if (type() == FL_HIDDEN_BUTTON) return;
-  draw_box(value() ? (down_box()?down_box():fl_down(box())) : box(),
+  draw_box(value() ? (down_box()?down_box():fltk3::down(box())) : box(),
 	   value() ? selection_color() : color());
   int W = h();
   if (w()/3 < W) W = w()/3;
@@ -59,8 +59,8 @@ void Fl_Return_Button::draw() {
 }
 
 int Fl_Return_Button::handle(int event) {
-  if (event == FL_SHORTCUT &&
-      (Fl::event_key() == FL_Enter || Fl::event_key() == FL_KP_Enter)) {
+  if (event == fltk3::SHORTCUT &&
+      (Fl::event_key() == fltk3::EnterKey || Fl::event_key() == fltk3::KPEnterKey)) {
     simulate_key_action();
     do_callback();
     return 1;

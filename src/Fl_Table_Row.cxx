@@ -176,15 +176,15 @@ int Fl_Table_Row::handle(int event) {
   // The following code disables cell selection.. why was it added? -erco 05/18/03
   // if ( ret ) { _last_y = Fl::event_y(); return(1); }	// base class 'handled' it (eg. column resize)
   
-  int shiftstate = (Fl::event_state() & FL_CTRL) ? FL_CTRL :
-  (Fl::event_state() & FL_SHIFT) ? FL_SHIFT : 0;
+  int shiftstate = (Fl::event_state() & fltk3::CTRL) ? fltk3::CTRL :
+  (Fl::event_state() & fltk3::SHIFT) ? fltk3::SHIFT : 0;
   
   // Which row/column are we over?
   int R, C;  				// row/column being worked on
   ResizeFlag resizeflag;		// which resizing area are we over? (0=none)
   TableContext context = cursor2rowcol(R, C, resizeflag);
   switch ( event ) {
-    case FL_PUSH:
+    case fltk3::PUSH:
       if ( Fl::event_button() == 1 ) {
         _last_push_x = Fl::event_x();	// save regardless of context
         _last_push_y = Fl::event_y();	// " "
@@ -195,11 +195,11 @@ int Fl_Table_Row::handle(int event) {
         if ( context == CONTEXT_CELL ) {
           // Ctrl key? Toggle selection state
           switch ( shiftstate ) {
-            case FL_CTRL:
+            case fltk3::CTRL:
               select_row(R, 2);		// toggle
               break;
               
-            case FL_SHIFT: {
+            case fltk3::SHIFT: {
               select_row(R, 1);
               if ( _last_row > -1 ) {
                 int srow = R, erow = _last_row;
@@ -222,13 +222,13 @@ int Fl_Table_Row::handle(int event) {
           
           _last_row = R;
           _dragging_select = 1;
-          ret = 1;      // FL_PUSH handled (ensures FL_DRAG will be sent)
+          ret = 1;      // fltk3::PUSH handled (ensures fltk3::DRAG will be sent)
           // redraw();  // redraw() handled by select_row()
         }
       } 
       break;
       
-    case FL_DRAG: {
+    case fltk3::DRAG: {
       if ( _dragging_select ) {
         // Dragged off table edges? Handle scrolling
         int offtop = toy - _last_y;			// >0 if off top of table
@@ -258,13 +258,13 @@ int Fl_Table_Row::handle(int event) {
         }
         if ( context == CONTEXT_CELL ) {
           switch ( shiftstate ) {
-            case FL_CTRL:
+            case fltk3::CTRL:
               if ( R != _last_row ) {		// toggle if dragged to new row
                 select_row(R, 2);		// 2=toggle
               }
               break;
               
-            case FL_SHIFT:
+            case fltk3::SHIFT:
             default:
               select_row(R, 1);
               if ( _last_row > -1 ) {
@@ -286,7 +286,7 @@ int Fl_Table_Row::handle(int event) {
       break;
     }
       
-    case FL_RELEASE:
+    case fltk3::RELEASE:
       if ( Fl::event_button() == 1 ) {
         _dragging_select = 0;
         ret = 1;			// release handled

@@ -44,10 +44,10 @@
   \image html fl_show_colormap.png
   \image latex fl_show_colormap.png "fl_show_colormap" height=10cm
   \param[in] oldcol color to be highlighted when grid is shown.
-  \retval Fl_Color value of the chosen colormap entry.
+  \retval fltk3::Color value of the chosen colormap entry.
   \see Fl_Color_Chooser
 */
-FL_EXPORT Fl_Color fl_show_colormap(Fl_Color oldcol);
+FL_EXPORT fltk3::Color fl_show_colormap(fltk3::Color oldcol);
 
 /** @} */
 

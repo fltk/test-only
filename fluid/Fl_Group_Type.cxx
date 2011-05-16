@@ -159,9 +159,9 @@ class Fluid_Table : public Fl_Table {
   //
   void DrawHeader(const char *s, int X, int Y, int W, int H) {
     fl_push_clip(X,Y,W,H);
-    fl_draw_box(FL_THIN_UP_BOX, X,Y,W,H, row_header_color());
-    fl_color(FL_BLACK);
-    fl_draw(s, X,Y,W,H, FL_ALIGN_CENTER);
+    fl_draw_box(fltk3::THIN_UP_BOX, X,Y,W,H, row_header_color());
+    fl_color(fltk3::BLACK);
+    fl_draw(s, X,Y,W,H, fltk3::ALIGN_CENTER);
     fl_pop_clip();
   } 
   // Draw the cell data
@@ -170,9 +170,9 @@ class Fluid_Table : public Fl_Table {
   void DrawData(const char *s, int X, int Y, int W, int H) {
     fl_push_clip(X,Y,W,H);
     // Draw cell bg
-    fl_color(FL_WHITE); fl_rectf(X,Y,W,H);
+    fl_color(fltk3::WHITE); fl_rectf(X,Y,W,H);
     // Draw cell data
-    fl_color(FL_GRAY0); fl_draw(s, X,Y,W,H, FL_ALIGN_CENTER);
+    fl_color(fltk3::GRAY0); fl_draw(s, X,Y,W,H, fltk3::ALIGN_CENTER);
     // Draw box border
     fl_color(color()); fl_rect(X,Y,W,H);
     fl_pop_clip();
@@ -185,7 +185,7 @@ class Fluid_Table : public Fl_Table {
     static char s[40];
     switch ( context ) {
       case CONTEXT_STARTPAGE:                   // before page is drawn..
-        fl_font(FL_HELVETICA, 16);              // set the font for our drawing operations
+        fl_font(fltk3::HELVETICA, 16);              // set the font for our drawing operations
         return; 
       case CONTEXT_COL_HEADER:                  // Draw column headers
         sprintf(s,"%c",'A'+COL);                // "A", "B", "C", etc.
@@ -254,7 +254,7 @@ Fl_Type* Fl_Tabs_Type::click_test(int x, int y) {
   // source code, so mark this project as changed.
   int changed = (a!=t->value());
   // okay, run the tabs ui until they let go of mouse:
-  t->handle(FL_PUSH);
+  t->handle(fltk3::PUSH);
   Fl::pushed(t);
   while (Fl::pushed()==t) Fl::wait();
   if (changed) set_modflag(1);

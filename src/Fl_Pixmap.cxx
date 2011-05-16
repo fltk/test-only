@@ -117,7 +117,7 @@ void Fl_Quartz_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int
   if (!pxm->id_) {
     pxm->id_ = fl_create_offscreen_with_alpha(pxm->w(), pxm->h());
     fl_begin_offscreen((Fl_Offscreen)pxm->id_);
-    fl_draw_pixmap(pxm->data(), 0, 0, FL_GREEN);
+    fl_draw_pixmap(pxm->data(), 0, 0, fltk3::GREEN);
     fl_end_offscreen();
     }
   fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)pxm->id_, cx, cy);
@@ -137,7 +137,7 @@ void Fl_GDI_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP
     fl_begin_offscreen((Fl_Offscreen)pxm->id_);
     uchar *bitmap = 0;
     fl_mask_bitmap = &bitmap;
-    fl_draw_pixmap(pxm->data(), 0, 0, FL_BLACK);
+    fl_draw_pixmap(pxm->data(), 0, 0, fltk3::BLACK);
     fl_mask_bitmap = 0;
     if (bitmap) {
       pxm->mask_ = fl_create_bitmask(pxm->w(), pxm->h(), bitmap);
@@ -203,7 +203,7 @@ void Fl_Xlib_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int H
     fl_begin_offscreen((Fl_Offscreen)pxm->id_);
     uchar *bitmap = 0;
     fl_mask_bitmap = &bitmap;
-    fl_draw_pixmap(pxm->data(), 0, 0, FL_BLACK);
+    fl_draw_pixmap(pxm->data(), 0, 0, fltk3::BLACK);
     fl_mask_bitmap = 0;
     if (bitmap) {
       pxm->mask_ = fl_create_bitmask(pxm->w(), pxm->h(), bitmap);
@@ -259,8 +259,7 @@ void Fl_Pixmap::label(Fl_Widget* widget) {
 }
 
 void Fl_Pixmap::label(Fl_Menu_Item* m) {
-  Fl::set_labeltype(_FL_IMAGE_LABEL, labeltype, Fl_Image::measure);
-  m->label(_FL_IMAGE_LABEL, (const char*)this);
+  m->label(fltk3::imageLabel, (const char*)this);
 }
 
 void Fl_Pixmap::copy_data() {
@@ -410,7 +409,7 @@ Fl_Image *Fl_Pixmap::copy(int W, int H) {
   return new_image;
 }
 
-void Fl_Pixmap::color_average(Fl_Color c, float i) {
+void Fl_Pixmap::color_average(fltk3::Color c, float i) {
   // Delete any existing pixmap/mask objects...
   uncache();
 

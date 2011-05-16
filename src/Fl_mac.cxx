@@ -148,25 +148,25 @@ static unsigned short macKeyLookUp[128] =
     'y', 't', '1', '2', '3', '4', '6', '5',
     '=', '9', '7', '-', '8', '0', ']', 'o',
 
-    'u', '[', 'i', 'p', FL_Enter, 'l', 'j', '\'',
+    'u', '[', 'i', 'p', fltk3::EnterKey, 'l', 'j', '\'',
     'k', ';', '\\', ',', '/', 'n', 'm', '.',
 
-    FL_Tab, ' ', '`', FL_BackSpace, 
-    FL_KP_Enter, FL_Escape, 0, 0/*FL_Meta_L*/,
-    0/*FL_Shift_L*/, 0/*FL_Caps_Lock*/, 0/*FL_Alt_L*/, 0/*FL_Control_L*/, 
-    0/*FL_Shift_R*/, 0/*FL_Alt_R*/, 0/*FL_Control_R*/, 0,
+    fltk3::TabKey, ' ', '`', fltk3::BackSpaceKey, 
+    fltk3::KPEnterKey, fltk3::EscapeKey, 0, 0/*fltk3::MetaLKey*/,
+    0/*fltk3::ShiftLKey*/, 0/*fltk3::CapsLockKey*/, 0/*fltk3::AltLKey*/, 0/*fltk3::ControlLKey*/, 
+    0/*fltk3::ShiftRKey*/, 0/*fltk3::AltRKey*/, 0/*fltk3::ControlRKey*/, 0,
 
-    0, FL_KP+'.', FL_Right, FL_KP+'*', 0, FL_KP+'+', FL_Left, FL_Delete,
-    FL_Down, 0, 0, FL_KP+'/', FL_KP_Enter, FL_Up, FL_KP+'-', 0,
+    0, fltk3::KPKey+'.', fltk3::RightKey, fltk3::KPKey+'*', 0, fltk3::KPKey+'+', fltk3::LeftKey, fltk3::DeleteKey,
+    fltk3::DownKey, 0, 0, fltk3::KPKey+'/', fltk3::KPEnterKey, fltk3::UpKey, fltk3::KPKey+'-', 0,
 
-    0, FL_KP+'=', FL_KP+'0', FL_KP+'1', FL_KP+'2', FL_KP+'3', FL_KP+'4', FL_KP+'5',
-    FL_KP+'6', FL_KP+'7', 0, FL_KP+'8', FL_KP+'9', 0, 0, 0,
+    0, fltk3::KPKey+'=', fltk3::KPKey+'0', fltk3::KPKey+'1', fltk3::KPKey+'2', fltk3::KPKey+'3', fltk3::KPKey+'4', fltk3::KPKey+'5',
+    fltk3::KPKey+'6', fltk3::KPKey+'7', 0, fltk3::KPKey+'8', fltk3::KPKey+'9', 0, 0, 0,
 
-    FL_F+5, FL_F+6, FL_F+7, FL_F+3, FL_F+8, FL_F+9, 0, FL_F+11,
-    0, 0/*FL_F+13*/, FL_Print, FL_Scroll_Lock, 0, FL_F+10, FL_Menu, FL_F+12,
+    fltk3::FKey+5, fltk3::FKey+6, fltk3::FKey+7, fltk3::FKey+3, fltk3::FKey+8, fltk3::FKey+9, 0, fltk3::FKey+11,
+    0, 0/*fltk3::FKey+13*/, fltk3::PrintKey, fltk3::ScrollLockKey, 0, fltk3::FKey+10, fltk3::MenuKey, fltk3::FKey+12,
 
-    0, FL_Pause, FL_Help, FL_Home, FL_Page_Up, FL_Delete, FL_F+4, FL_End,
-    FL_F+2, FL_Page_Down, FL_F+1, FL_Left, FL_Right, FL_Down, FL_Up, 0/*FL_Power*/,
+    0, fltk3::PauseKey, fltk3::HelpKey, fltk3::HomeKey, fltk3::PageUpKey, fltk3::DeleteKey, fltk3::FKey+4, fltk3::EndKey,
+    fltk3::FKey+2, fltk3::PageDownKey, fltk3::FKey+1, fltk3::LeftKey, fltk3::RightKey, fltk3::DownKey, fltk3::UpKey, 0/*FL_Power*/,
 };
 
 /**
@@ -175,12 +175,12 @@ static unsigned short macKeyLookUp[128] =
 static unsigned int mods_to_e_state( UInt32 mods )
 {
   long state = 0;
-  if ( mods & kEventKeyModifierNumLockMask ) state |= FL_NUM_LOCK;
-  if ( mods & cmdKey ) state |= FL_META;
-  if ( mods & (optionKey|rightOptionKey) ) state |= FL_ALT;
-  if ( mods & (controlKey|rightControlKey) ) state |= FL_CTRL;
-  if ( mods & (shiftKey|rightShiftKey) ) state |= FL_SHIFT;
-  if ( mods & alphaLock ) state |= FL_CAPS_LOCK;
+  if ( mods & kEventKeyModifierNumLockMask ) state |= fltk3::NUM_LOCK;
+  if ( mods & cmdKey ) state |= fltk3::META;
+  if ( mods & (optionKey|rightOptionKey) ) state |= fltk3::ALT;
+  if ( mods & (controlKey|rightControlKey) ) state |= fltk3::CTRL;
+  if ( mods & (shiftKey|rightShiftKey) ) state |= fltk3::SHIFT;
+  if ( mods & alphaLock ) state |= fltk3::CAPS_LOCK;
   unsigned int ret = ( Fl::e_state & 0xff000000 ) | state;
   Fl::e_state = ret;
   //printf( "State 0x%08x (%04x)\n", Fl::e_state, mods );
@@ -193,15 +193,15 @@ static unsigned int mods_to_e_state( UInt32 mods )
  */
 static void mods_to_e_keysym( UInt32 mods )
 {
-  if ( mods & cmdKey ) Fl::e_keysym = FL_Meta_L;
-  else if ( mods & kEventKeyModifierNumLockMask ) Fl::e_keysym = FL_Num_Lock;
-  else if ( mods & optionKey ) Fl::e_keysym = FL_Alt_L;
-  else if ( mods & rightOptionKey ) Fl::e_keysym = FL_Alt_R;
-  else if ( mods & controlKey ) Fl::e_keysym = FL_Control_L;
-  else if ( mods & rightControlKey ) Fl::e_keysym = FL_Control_R;
-  else if ( mods & shiftKey ) Fl::e_keysym = FL_Shift_L;
-  else if ( mods & rightShiftKey ) Fl::e_keysym = FL_Shift_R;
-  else if ( mods & alphaLock ) Fl::e_keysym = FL_Caps_Lock;
+  if ( mods & cmdKey ) Fl::e_keysym = fltk3::MetaLKey;
+  else if ( mods & kEventKeyModifierNumLockMask ) Fl::e_keysym = fltk3::NumLockKey;
+  else if ( mods & optionKey ) Fl::e_keysym = fltk3::AltLKey;
+  else if ( mods & rightOptionKey ) Fl::e_keysym = fltk3::AltRKey;
+  else if ( mods & controlKey ) Fl::e_keysym = fltk3::ControlLKey;
+  else if ( mods & rightControlKey ) Fl::e_keysym = fltk3::ControlRKey;
+  else if ( mods & shiftKey ) Fl::e_keysym = fltk3::ShiftLKey;
+  else if ( mods & rightShiftKey ) Fl::e_keysym = fltk3::ShiftRKey;
+  else if ( mods & alphaLock ) Fl::e_keysym = fltk3::CapsLockKey;
   else Fl::e_keysym = 0;
   //printf( "to sym 0x%08x (%04x)\n", Fl::e_keysym, mods );
 }
@@ -775,7 +775,7 @@ static double do_queued_events( double time = 0.0 )
 #if CONSOLIDATE_MOTION
   if (send_motion && send_motion == fl_xmousewin) {
     send_motion = 0;
-    Fl::handle(FL_MOVE, fl_xmousewin);
+    Fl::handle(fltk3::MOVE, fl_xmousewin);
   }
 #endif
 
@@ -807,7 +807,7 @@ static OSErr QuitAppleEventHandler( const AppleEvent *appleEvt, AppleEvent* repl
 
   while ( Fl_X::first ) {
     Fl_X *x = Fl_X::first;
-    Fl::handle( FL_CLOSE, x->w );
+    Fl::handle( fltk3::CLOSE, x->w );
     if ( Fl_X::first == x ) {
       fl_unlock_function();
       return noErr; // FLTK has not close all windows, so we return to the main program now
@@ -866,22 +866,22 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
     {
       GetWindowClass( fl_xid( window ), &winClass );
       if ( winClass != kHelpWindowClass ) {	// help windows can't get the focus!
-        Fl::handle( FL_FOCUS, window);
+        Fl::handle( fltk3::FOCUS, window);
         activeWindow = window;
       }
-      Fl::handle( FL_SHOW, window);
+      Fl::handle( fltk3::SHOW, window);
       mods_to_e_state(GetCurrentKeyModifiers());
     }
     break;
   case kEventWindowHidden:
-    if ( !window->parent() ) Fl::handle( FL_HIDE, window);
+    if ( !window->parent() ) Fl::handle( fltk3::HIDE, window);
     break;
   case kEventWindowActivated:
     if ( window->shown() && window!=activeWindow )
     {
       GetWindowClass( fl_xid( window ), &winClass );
       if ( winClass != kHelpWindowClass ) {	// help windows can't get the focus!
-        Fl::handle( FL_FOCUS, window);
+        Fl::handle( fltk3::FOCUS, window);
         activeWindow = window;
       }
     }
@@ -889,12 +889,12 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
   case kEventWindowDeactivated:
     if ( window==activeWindow ) 
     {
-      Fl::handle( FL_UNFOCUS, window);
+      Fl::handle( fltk3::UNFOCUS, window);
       activeWindow = 0;
     }
     break;
   case kEventWindowClose:
-    Fl::handle( FL_CLOSE, window ); // this might or might not close the window
+    Fl::handle( fltk3::CLOSE, window ); // this might or might not close the window
     // if there are no more windows, send a high-level quit event
     if (!Fl_X::first) QuitAppleEventHandler( 0, 0, 0 );
     ret = noErr; // returning noErr tells Carbon to stop following up on this event
@@ -941,11 +941,11 @@ static pascal OSStatus carbonMousewheelHandler( EventHandlerCallRef nextHandler,
   if ( axis == kEventMouseWheelAxisX ) {
     Fl::e_dx = -delta;
     Fl::e_dy = 0;
-    if ( Fl::e_dx) Fl::handle( FL_MOUSEWHEEL, window );
+    if ( Fl::e_dx) Fl::handle( fltk3::MOUSEWHEEL, window );
   } else if ( axis == kEventMouseWheelAxisY ) {
     Fl::e_dx = 0;
     Fl::e_dy = -delta;
-    if ( Fl::e_dy) Fl::handle( FL_MOUSEWHEEL, window );
+    if ( Fl::e_dy) Fl::handle( fltk3::MOUSEWHEEL, window );
   } else {
     fl_unlock_function();
 
@@ -965,9 +965,9 @@ static void chord_to_e_state( UInt32 chord )
 {
   static ulong state[] = 
   { 
-    0, FL_BUTTON1, FL_BUTTON3, FL_BUTTON1|FL_BUTTON3, FL_BUTTON2,
-    FL_BUTTON2|FL_BUTTON1, FL_BUTTON2|FL_BUTTON3, 
-    FL_BUTTON2|FL_BUTTON1|FL_BUTTON3
+    0, fltk3::BUTTON1, fltk3::BUTTON3, fltk3::BUTTON1|fltk3::BUTTON3, fltk3::BUTTON2,
+    fltk3::BUTTON2|fltk3::BUTTON1, fltk3::BUTTON2|fltk3::BUTTON3, 
+    fltk3::BUTTON2|fltk3::BUTTON1|fltk3::BUTTON3
   };
   Fl::e_state = ( Fl::e_state & 0xff0000 ) | state[ chord & 0x07 ];
 }
@@ -978,7 +978,7 @@ static void chord_to_e_state( UInt32 chord )
  */
 static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, EventRef event, void *userData )
 {
-  static int keysym[] = { 0, FL_Button+1, FL_Button+3, FL_Button+2 };
+  static int keysym[] = { 0, fltk3::MouseButton+1, fltk3::MouseButton+3, fltk3::MouseButton+2 };
   static int px, py;
   static char suppressed = 0;
 
@@ -1027,7 +1027,7 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
     }
     // normal handling of mouse-down follows
     fl_os_capture = xid;
-    sendEvent = FL_PUSH;
+    sendEvent = fltk3::PUSH;
     Fl::e_is_click = 1; px = pos.h; py = pos.v;
     if (clickCount>1) 
       Fl::e_clicks++;
@@ -1041,20 +1041,20 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
     }
     if ( !window ) break;
     if ( !sendEvent ) {
-      sendEvent = FL_RELEASE; 
+      sendEvent = fltk3::RELEASE; 
     }
     Fl::e_keysym = keysym[ btn ];
     // fall through
   case kEventMouseMoved:
     suppressed = 0;
     if ( !sendEvent ) { 
-      sendEvent = FL_MOVE; chord = 0; 
+      sendEvent = fltk3::MOVE; chord = 0; 
     }
     // fall through
   case kEventMouseDragged:
     if (suppressed) break;
     if ( !sendEvent ) {
-      sendEvent = FL_MOVE; // Fl::handle will convert into FL_DRAG
+      sendEvent = fltk3::MOVE; // Fl::handle will convert into fltk3::DRAG
       if (abs(pos.h-px)>5 || abs(pos.v-py)>5) 
         Fl::e_is_click = 0;
     }
@@ -1219,8 +1219,8 @@ static int keycode_wrap_old(
                 unsigned char key,
                 unsigned short sym)
 {
-  if ( (sym >= FL_KP && sym <= FL_KP_Last) || !(sym & 0xff00) ||
-        sym == FL_Tab || sym == FL_Enter) {
+  if ( (sym >= fltk3::KPKey && sym <= fltk3::KPLastKey) || !(sym & 0xff00) ||
+        sym == fltk3::TabKey || sym == fltk3::EnterKey) {
     buffer[0] = key;
     return 1;
   } else {
@@ -1257,10 +1257,10 @@ pascal OSStatus carbonTextHandler(
   Fl::e_length = len;
   Fl::e_text = utf8buf;
   while (window->parent()) window = window->window();
-  Fl::handle(FL_KEYBOARD, window);
+  Fl::handle(fltk3::KEYBOARD, window);
   fl_unlock_function();
   fl_lock_function();
-  Fl::handle(FL_KEYUP, window);
+  Fl::handle(fltk3::KEYUP, window);
   fl_unlock_function();
   // for some reason, the window does not redraw until the next mouse move or button push
   // sending a 'redraw()' or 'awake()' does not solve the issue!
@@ -1336,11 +1336,11 @@ pascal OSStatus carbonKeyboardHandler(
       Fl::e_state &= 0xbfffffff; // clear the deadkey flag
     }
 */
-    sendEvent = FL_KEYBOARD;
+    sendEvent = fltk3::KEYBOARD;
     // fall through
   case kEventRawKeyUp:
     if ( !sendEvent ) {
-      sendEvent = FL_KEYUP;
+      sendEvent = fltk3::KEYUP;
       Fl::e_state &= 0xbfffffff; // clear the deadkey flag
     }
     // if the user pressed alt/option, event_key should have the keycap, 
@@ -1348,12 +1348,12 @@ pascal OSStatus carbonKeyboardHandler(
     sym = macKeyLookUp[maskedKeyCode];
     if ( isalpha(key) )
       sym = tolower(key);
-    else if ( Fl::e_state&FL_CTRL && key<32 && sym<0xff00)
+    else if ( Fl::e_state&fltk3::CTRL && key<32 && sym<0xff00)
       sym = key+96;
-    else if ( Fl::e_state&FL_ALT && sym<0xff00) // find the keycap of this key
+    else if ( Fl::e_state&fltk3::ALT && sym<0xff00) // find the keycap of this key
       sym = keycode_to_sym( maskedKeyCode, 0, macKeyLookUp[ maskedKeyCode ] );
     Fl::e_keysym = Fl::e_original_keysym = sym;
-    // Handle FL_KP_Enter on regular keyboards and on Powerbooks
+    // Handle fltk3::KPEnterKey on regular keyboards and on Powerbooks
     if ( maskedKeyCode==0x4c || maskedKeyCode==0x34) key=0x0d;    
     // Handle the Delete key on the keypad
     // Matt: the Mac has no concept of a NumLock key, or at least not visible
@@ -1375,7 +1375,7 @@ pascal OSStatus carbonKeyboardHandler(
     {
       mods_to_e_keysym( tMods );
       if ( Fl::e_keysym ) 
-        sendEvent = ( prevMods<mods ) ? FL_KEYBOARD : FL_KEYUP;
+        sendEvent = ( prevMods<mods ) ? fltk3::KEYBOARD : fltk3::KEYUP;
       Fl::e_length = 0;
       buffer[0] = 0;
       prevMods = mods;
@@ -1677,11 +1677,11 @@ void handleUpdateEvent( WindowPtr xid )
   }
   for ( Fl_X *cx = i->xidChildren; cx; cx = cx->xidNext )
   {
-    cx->w->clear_damage(window->damage()|FL_DAMAGE_EXPOSE);
+    cx->w->clear_damage(window->damage()|fltk3::DAMAGE_EXPOSE);
     cx->flush();
     cx->w->clear_damage();
   }
-  window->clear_damage(window->damage()|FL_DAMAGE_EXPOSE);
+  window->clear_damage(window->damage()|fltk3::DAMAGE_EXPOSE);
   i->flush();
   window->clear_damage();
   SetPort( oldPort );
@@ -1998,10 +1998,10 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     Fl::e_x = px - target->x();
     Fl::e_y = py - target->y();
     fl_dnd_target_window = target;
-    if ( Fl::handle( FL_DND_ENTER, target ) )
-      fl_cursor( FL_CURSOR_HAND ); //ShowDragHilite( ); // modify the mouse cursor?!
+    if ( Fl::handle( fltk3::DND_ENTER, target ) )
+      fl_cursor( fltk3::CURSOR_HAND ); //ShowDragHilite( ); // modify the mouse cursor?!
     else
-      fl_cursor( FL_CURSOR_DEFAULT ); //HideDragHilite( dragRef );
+      fl_cursor( fltk3::CURSOR_DEFAULT ); //HideDragHilite( dragRef );
     breakMacEventLoop();
     return noErr;
   case kDragTrackingInWindow:
@@ -2013,19 +2013,19 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     Fl::e_x = px - target->x();
     Fl::e_y = py - target->y();
     fl_dnd_target_window = target;
-    if ( Fl::handle( FL_DND_DRAG, target ) )
-      fl_cursor( FL_CURSOR_HAND ); //ShowDragHilite( ); // modify the mouse cursor?!
+    if ( Fl::handle( fltk3::DND_DRAG, target ) )
+      fl_cursor( fltk3::CURSOR_HAND ); //ShowDragHilite( ); // modify the mouse cursor?!
     else
-      fl_cursor( FL_CURSOR_DEFAULT ); //HideDragHilite( dragRef );
+      fl_cursor( fltk3::CURSOR_DEFAULT ); //HideDragHilite( dragRef );
     breakMacEventLoop();
     return noErr;
     break;
   case kDragTrackingLeaveWindow:
     // HideDragHilite()
-    fl_cursor( FL_CURSOR_DEFAULT ); //HideDragHilite( dragRef );
+    fl_cursor( fltk3::CURSOR_DEFAULT ); //HideDragHilite( dragRef );
     if ( fl_dnd_target_window )
     {
-      Fl::handle( FL_DND_LEAVE, fl_dnd_target_window );
+      Fl::handle( fltk3::DND_LEAVE, fl_dnd_target_window );
       fl_dnd_target_window = 0;
     }
     breakMacEventLoop();
@@ -2050,7 +2050,7 @@ static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReferenc
   Fl::e_y_root = mp.v;
   Fl::e_x = Fl::e_x_root - target->x();
   Fl::e_y = Fl::e_y_root - target->y();
-  if ( !Fl::handle( FL_DND_RELEASE, target ) )
+  if ( !Fl::handle( fltk3::DND_RELEASE, target ) )
     return userCanceledErr;
 
   ret = fillCurrentDragData(dragRef);
@@ -2061,7 +2061,7 @@ static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReferenc
   Fl::e_text = currDragData;
 //  printf("Sending following text to widget %p:\n%s\n", Fl::belowmouse(), Fl::e_text);
   int old_event = Fl::e_number;
-  Fl::belowmouse()->handle(Fl::e_number = FL_PASTE);
+  Fl::belowmouse()->handle(Fl::e_number = fltk3::PASTE);
   Fl::e_number = old_event;
   
   if (currDragData) {
@@ -2129,7 +2129,7 @@ void Fl_X::make(Fl_Window* w)
       x->next = Fl_X::first; // must be in the list for ::flush()
       Fl_X::first = x;
       int old_event = Fl::e_number;
-      w->handle(Fl::e_number = FL_SHOW);
+      w->handle(Fl::e_number = fltk3::SHOW);
       Fl::e_number = old_event;
       w->redraw(); // force draw to happen
     }
@@ -2312,7 +2312,7 @@ void Fl_X::make(Fl_Window* w)
     w->w(rect.right-rect.left); w->h(rect.bottom-rect.top);
 
     int old_event = Fl::e_number;
-    w->handle(Fl::e_number = FL_SHOW);
+    w->handle(Fl::e_number = fltk3::SHOW);
     Fl::e_number = old_event;
     w->redraw(); // force draw to happen
     
@@ -2374,10 +2374,10 @@ void Fl_Window::label(const char *name,const char */*iname*/) {
 void Fl_Window::show() {
   image(Fl::scheme_bg_);
   if (Fl::scheme_bg_) {
-    labeltype(FL_NORMAL_LABEL);
-    align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_CLIP);
+    labeltype(fltk3::normalLabel);
+    align(fltk3::ALIGN_CENTER | fltk3::ALIGN_INSIDE | fltk3::ALIGN_CLIP);
   } else {
-    labeltype(FL_NO_LABEL);
+    labeltype(fltk3::noLabel);
   }
   Fl_Tooltip::exit(this);
   if (!shown() || !i) {
@@ -2497,7 +2497,7 @@ void Fl_Window::make_current()
 }
 
 // helper function to manage the current CGContext fl_gc
-extern Fl_Color fl_color_;
+extern fltk3::Color fl_color_;
 extern class Fl_Font_Descriptor *fl_fontsize;
 extern void fl_font(class Fl_Font_Descriptor*);
 extern void fl_quartz_restore_line_style_();
@@ -2723,7 +2723,7 @@ void Fl::paste(Fl_Widget &receiver, int clipboard) {
     Fl::e_text = fl_selection_buffer[clipboard];
     Fl::e_length = fl_selection_length[clipboard];
     if (!Fl::e_text) Fl::e_text = (char *)"";
-    receiver.handle(FL_PASTE);
+    receiver.handle(fltk3::PASTE);
 }
 
 void Fl::add_timeout(double time, Fl_Timeout_Handler cb, void* data)

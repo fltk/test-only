@@ -72,15 +72,15 @@ static void dither(uchar* to, const uchar* from, int w, int delta) {
   }
   for (; w--; from += d, to += td) {
     r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
-    int rr = r*FL_NUM_RED/256;
-    r -= rr*255/(FL_NUM_RED-1);
+    int rr = r*fltk3::NUM_RED/256;
+    r -= rr*255/(fltk3::NUM_RED-1);
     g += from[1]; if (g < 0) g = 0; else if (g>255) g = 255;
-    int gg = g*FL_NUM_GREEN/256;
-    g -= gg*255/(FL_NUM_GREEN-1);
+    int gg = g*fltk3::NUM_GREEN/256;
+    g -= gg*255/(fltk3::NUM_GREEN-1);
     b += from[2]; if (b < 0) b = 0; else if (b>255) b = 255;
-    int bb = b*FL_NUM_BLUE/256;
-    b -= bb*255/(FL_NUM_BLUE-1);
-    *to = uchar(FL_COLOR_CUBE+(bb*FL_NUM_RED+rr)*FL_NUM_GREEN+gg);
+    int bb = b*fltk3::NUM_BLUE/256;
+    b -= bb*255/(fltk3::NUM_BLUE-1);
+    *to = uchar(fltk3::COLOR_CUBE+(bb*fltk3::NUM_RED+rr)*fltk3::NUM_GREEN+gg);
   }
   ri = r; gi = g; bi = b;
 }
@@ -103,9 +103,9 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
   }
   for (; w--; from += d, to += td) {
     r += *from; if (r < 0) r = 0; else if (r>255) r = 255;
-    int rr = r*FL_NUM_GRAY/256;
-    r -= rr*255/(FL_NUM_GRAY-1);
-    *to = uchar(FL_GRAY_RAMP+rr);
+    int rr = r*fltk3::NUM_GRAY/256;
+    r -= rr*255/(fltk3::NUM_GRAY-1);
+    *to = uchar(fltk3::GRAY_RAMP+rr);
   }
   ri = r;
 }

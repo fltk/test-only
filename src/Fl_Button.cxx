@@ -74,12 +74,12 @@ void Fl_Button::setonly() { // set this radio button on, turn others off
 
 void Fl_Button::draw() {
   if (type() == FL_HIDDEN_BUTTON) return;
-  Fl_Color col = value() ? selection_color() : color();
-  draw_box(value() ? (down_box()?down_box():fl_down(box())) : box(), col);
+  fltk3::Color col = value() ? selection_color() : color();
+  draw_box(value() ? (down_box()?down_box():fltk3::down(box())) : box(), col);
   draw_backdrop();
-  if (labeltype() == FL_NORMAL_LABEL && value()) {
-    Fl_Color c = labelcolor();
-    labelcolor(fl_contrast(c, col));
+  if (labeltype() == fltk3::normalLabel && value()) {
+    fltk3::Color c = labelcolor();
+    labelcolor(fltk3::contrast(c, col));
     draw_label();
     labelcolor(c);
   } else draw_label();
@@ -89,13 +89,13 @@ void Fl_Button::draw() {
 int Fl_Button::handle(int event) {
   int newval;
   switch (event) {
-  case FL_ENTER: /* FALLTHROUGH */
-  case FL_LEAVE:
-//  if ((value_?selection_color():color())==FL_GRAY) redraw();
+  case fltk3::ENTER: /* FALLTHROUGH */
+  case fltk3::LEAVE:
+//  if ((value_?selection_color():color())==fltk3::GRAY) redraw();
     return 1;
-  case FL_PUSH:
-    if (Fl::visible_focus() && handle(FL_FOCUS)) Fl::focus(this);
-  case FL_DRAG:
+  case fltk3::PUSH:
+    if (Fl::visible_focus() && handle(fltk3::FOCUS)) Fl::focus(this);
+  case fltk3::DRAG:
     if (Fl::event_inside(this)) {
       if (type() == FL_RADIO_BUTTON) newval = 1;
       else newval = !oldval;
@@ -108,12 +108,12 @@ int Fl_Button::handle(int event) {
       value_ = newval;
       set_changed();
       redraw();
-      if (when() & FL_WHEN_CHANGED) do_callback();
+      if (when() & fltk3::WHEN_CHANGED) do_callback();
     }
     return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     if (value_ == oldval) {
-      if (when() & FL_WHEN_NOT_CHANGED) do_callback();
+      if (when() & fltk3::WHEN_NOT_CHANGED) do_callback();
       return 1;
     }
     set_changed();
@@ -122,49 +122,49 @@ int Fl_Button::handle(int event) {
     else {
       value(oldval);
       set_changed();
-      if (when() & FL_WHEN_CHANGED) {
+      if (when() & fltk3::WHEN_CHANGED) {
 	Fl_Widget_Tracker wp(this);
         do_callback();
         if (wp.deleted()) return 1;
       }
     }
-    if (when() & FL_WHEN_RELEASE) do_callback();
+    if (when() & fltk3::WHEN_RELEASE) do_callback();
     return 1;
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
     if (!(shortcut() ?
 	  Fl::test_shortcut(shortcut()) : test_shortcut())) return 0;    
-    if (Fl::visible_focus() && handle(FL_FOCUS)) Fl::focus(this);
+    if (Fl::visible_focus() && handle(fltk3::FOCUS)) Fl::focus(this);
     goto triggered_by_keyboard;
-  case FL_FOCUS : /* FALLTHROUGH */
-  case FL_UNFOCUS :
+  case fltk3::FOCUS : /* FALLTHROUGH */
+  case fltk3::UNFOCUS :
     if (Fl::visible_focus()) {
-      if (box() == FL_NO_BOX) {
-	// Widgets with the FL_NO_BOX boxtype need a parent to
+      if (box() == fltk3::NO_BOX) {
+	// Widgets with the fltk3::NO_BOX boxtype need a parent to
 	// redraw, since it is responsible for redrawing the
 	// background...
 	int X = x() > 0 ? x() - 1 : 0;
 	int Y = y() > 0 ? y() - 1 : 0;
-	if (window()) window()->damage(FL_DAMAGE_ALL, X, Y, w() + 2, h() + 2);
+	if (window()) window()->damage(fltk3::DAMAGE_ALL, X, Y, w() + 2, h() + 2);
       } else redraw();
       return 1;
     } else return 0;
-  case FL_KEYBOARD :
+  case fltk3::KEYBOARD :
     if (Fl::focus() == this && Fl::event_key() == ' ' &&
-        !(Fl::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) {
+        !(Fl::event_state() & (fltk3::SHIFT | fltk3::CTRL | fltk3::ALT | fltk3::META))) {
       set_changed();
     triggered_by_keyboard:
       Fl_Widget_Tracker wp(this);
       if (type() == FL_RADIO_BUTTON && !value_) {
 	setonly();
-	if (when() & FL_WHEN_CHANGED) do_callback();
+	if (when() & fltk3::WHEN_CHANGED) do_callback();
       } else if (type() == FL_TOGGLE_BUTTON) {
 	value(!value());
-	if (when() & FL_WHEN_CHANGED) do_callback();
+	if (when() & fltk3::WHEN_CHANGED) do_callback();
       } else {
         simulate_key_action();
       }
       if (wp.deleted()) return 1;
-      if (when() & FL_WHEN_RELEASE) do_callback();
+      if (when() & fltk3::WHEN_RELEASE) do_callback();
       return 1;
     }
   default:
@@ -206,8 +206,8 @@ void Fl_Button::key_release_timeout(void *d)
  */
 Fl_Button::Fl_Button(int X, int Y, int W, int H, const char *L)
 : Fl_Widget(X,Y,W,H,L) {
-  box(FL_UP_BOX);
-  down_box(FL_NO_BOX);
+  box(fltk3::UP_BOX);
+  down_box(fltk3::NO_BOX);
   value_ = oldval = 0;
   shortcut_ = 0;
   set_flag(SHORTCUT_LABEL);

@@ -184,16 +184,16 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
     window->callback((Fl_Callback*)cb_window, (void*)(this));
     { Fl_Group* o = new Fl_Group(10, 10, 470, 25);
       { showChoice = new Fl_Choice(65, 10, 215, 25, "Show:");
-        showChoice->down_box(FL_BORDER_BOX);
+        showChoice->down_box(fltk3::BORDER_BOX);
         showChoice->labelfont(1);
         showChoice->callback((Fl_Callback*)cb_showChoice);
         Fl_Group::current()->resizable(showChoice);
         showChoice->label(show_label);
       } // Fl_Choice* showChoice
       { favoritesButton = new Fl_Menu_Button(290, 10, 155, 25, "Favorites");
-        favoritesButton->down_box(FL_BORDER_BOX);
+        favoritesButton->down_box(fltk3::BORDER_BOX);
         favoritesButton->callback((Fl_Callback*)cb_favoritesButton);
-        favoritesButton->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
+        favoritesButton->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
         favoritesButton->label(favorites_label);
       } // Fl_Menu_Button* favoritesButton
       { Fl_Button* o = newButton = new Fl_Button(455, 10, 25, 25);
@@ -212,9 +212,9 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
         fileList->window()->hotspot(fileList);
       } // Fl_File_Browser* fileList
       { previewBox = new fltk3::Box(305, 45, 175, 225, "?");
-        previewBox->box(FL_DOWN_BOX);
+        previewBox->box(fltk3::DOWN_BOX);
         previewBox->labelsize(100);
-        previewBox->align(Fl_Align(FL_ALIGN_CLIP|FL_ALIGN_INSIDE));
+        previewBox->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
       } // fltk3::Box* previewBox
       o->end();
       Fl_Group::current()->resizable(o);
@@ -223,7 +223,7 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
       { Fl_Group* o = new Fl_Group(10, 275, 470, 20);
         { previewButton = new Fl_Check_Button(10, 275, 73, 20, "Preview");
           previewButton->shortcut(0x80070);
-          previewButton->down_box(FL_DOWN_BOX);
+          previewButton->down_box(fltk3::DOWN_BOX);
           previewButton->value(1);
           previewButton->callback((Fl_Callback*)cb_previewButton);
           previewButton->label(preview_label);
@@ -231,7 +231,7 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
 #ifndef WIN32	
         { show_hidden = new Fl_Check_Button(
 	    previewButton->x() + previewButton->w() + 30, 275, 140, 20, "Show hidden files");
-          show_hidden->down_box(FL_DOWN_BOX);
+          show_hidden->down_box(fltk3::DOWN_BOX);
           show_hidden->value(0);
           show_hidden->callback((Fl_Callback*)show_hidden_cb, this);
           show_hidden->label(hidden_label);
@@ -245,13 +245,13 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
       { fileName = new Fl_File_Input(115, 300, 365, 35);
         fileName->labelfont(1);
         fileName->callback((Fl_Callback*)cb_fileName);
-        fileName->when(FL_WHEN_ENTER_KEY);
+        fileName->when(fltk3::WHEN_ENTER_KEY);
         Fl_Group::current()->resizable(fileName);
-        fileName->when(FL_WHEN_CHANGED | FL_WHEN_ENTER_KEY);
+        fileName->when(fltk3::WHEN_CHANGED | fltk3::WHEN_ENTER_KEY);
       } // Fl_File_Input* fileName
       { fltk3::Box* o = new fltk3::Box(10, 310, 105, 25, "Filename:");
         o->labelfont(1);
-        o->align(Fl_Align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE));
+        o->align(fltk3::Align(fltk3::ALIGN_RIGHT|fltk3::ALIGN_INSIDE));
         o->label(filename_label);
       } // fltk3::Box* o
       { Fl_Group* o = new Fl_Group(10, 345, 470, 25);
@@ -342,11 +342,11 @@ void Fl_File_Chooser::callback(void (*cb)(Fl_File_Chooser *, void *), void *d ) 
 data_     = d;
 }
 
-void Fl_File_Chooser::color(Fl_Color c) {
+void Fl_File_Chooser::color(fltk3::Color c) {
   fileList->color(c);
 }
 
-Fl_Color Fl_File_Chooser::color() {
+fltk3::Color Fl_File_Chooser::color() {
   return (fileList->color());
 }
 
@@ -404,9 +404,9 @@ void Fl_File_Chooser::show() {
   window->hotspot(fileList);
 window->show();
 Fl::flush();
-fl_cursor(FL_CURSOR_WAIT);
+fl_cursor(fltk3::CURSOR_WAIT);
 rescan_keep_filename();
-fl_cursor(FL_CURSOR_DEFAULT);
+fl_cursor(fltk3::CURSOR_DEFAULT);
 fileName->take_focus();
 }
 
@@ -414,27 +414,27 @@ int Fl_File_Chooser::shown() {
   return window->shown();
 }
 
-void Fl_File_Chooser::textcolor(Fl_Color c) {
+void Fl_File_Chooser::textcolor(fltk3::Color c) {
   fileList->textcolor(c);
 }
 
-Fl_Color Fl_File_Chooser::textcolor() {
+fltk3::Color Fl_File_Chooser::textcolor() {
   return (fileList->textcolor());
 }
 
-void Fl_File_Chooser::textfont(Fl_Font f) {
+void Fl_File_Chooser::textfont(fltk3::Font f) {
   fileList->textfont(f);
 }
 
-Fl_Font Fl_File_Chooser::textfont() {
+fltk3::Font Fl_File_Chooser::textfont() {
   return (fileList->textfont());
 }
 
-void Fl_File_Chooser::textsize(Fl_Fontsize s) {
+void Fl_File_Chooser::textsize(fltk3::Fontsize s) {
   fileList->textsize(s);
 }
 
-Fl_Fontsize Fl_File_Chooser::textsize() {
+fltk3::Fontsize Fl_File_Chooser::textsize() {
   return (fileList->textsize());
 }
 

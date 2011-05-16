@@ -47,7 +47,7 @@ namespace fltk3 {
     void draw();
   public:
     /**
-     - The first constructor sets box() to FL_NO_BOX, which
+     - The first constructor sets box() to fltk3::NO_BOX, which
      means it is invisible. However such widgets are useful as placeholders
      or Fl_Group::resizable()
      values.  To change the box to something visible, use box(n).
@@ -58,7 +58,7 @@ namespace fltk3 {
     Box(int X, int Y, int W, int H, const char *l=0)
     : Fl_Widget(X,Y,W,H,l) {}
     /**    See fltk3::Box::fltk3::Box(int x, int y, int w, int h, const char * = 0)   */
-    Box(Fl_Boxtype b, int X, int Y, int W, int H, const char *l)
+    Box(fltk3::Boxtype b, int X, int Y, int W, int H, const char *l)
     : Fl_Widget(X,Y,W,H,l) {box(b);}
     
     virtual int handle(int);

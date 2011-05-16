@@ -4521,6 +4521,7 @@
 		C9568C151380730900CDA5BF /* XBMImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XBMImage.h; path = ../../fltk3/XBMImage.h; sourceTree = "<group>"; };
 		C9568C161380730900CDA5BF /* XPMImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XPMImage.h; path = ../../fltk3/XPMImage.h; sourceTree = "<group>"; };
 		C9568C171380730900CDA5BF /* Xutf8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Xutf8.h; path = ../../fltk3/Xutf8.h; sourceTree = "<group>"; };
+		C9568D261381308F00CDA5BF /* make3.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = make3.sh; path = ../../make3.sh; sourceTree = "<group>"; };
 		C9628FFD1274D0B3007D3CFE /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		C96290E11274D0EF007D3CFE /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = System/Library/Frameworks/AGL.framework; sourceTree = SDKROOT; };
 		C96290E51274D100007D3CFE /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -5695,6 +5696,7 @@
 			isa = PBXGroup;
 			children = (
 				C9EDD143127338F600ADB21C /* README.OSX.txt */,
+				C9568D261381308F00CDA5BF /* make3.sh */,
 				5D444464FCF5714805936107 /* Applications */,
 				188555DBC553F66588792C6B /* Frameworks */,
 				015D2BD894993395B263D6C0 /* Tests */,

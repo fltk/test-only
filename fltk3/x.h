@@ -79,7 +79,7 @@ extern FL_EXPORT Colormap fl_colormap;
 // drawing functions:
 extern FL_EXPORT GC fl_gc;
 extern FL_EXPORT Window fl_window;
-FL_EXPORT ulong fl_xpixel(Fl_Color i);
+FL_EXPORT ulong fl_xpixel(fltk3::Color i);
 FL_EXPORT ulong fl_xpixel(uchar r, uchar g, uchar b);
 FL_EXPORT void fl_clip_region(Fl_Region);
 FL_EXPORT Fl_Region fl_clip_region();

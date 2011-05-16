@@ -94,8 +94,8 @@ public:
   */
   int		load(const char *directory, Fl_File_Sort_F *sort = fl_numericsort);
 
-  Fl_Fontsize  textsize() const { return Fl_Browser::textsize(); };
-  void		textsize(Fl_Fontsize s) { Fl_Browser::textsize(s); iconsize_ = (uchar)(3 * s / 2); };
+  fltk3::Fontsize  textsize() const { return Fl_Browser::textsize(); };
+  void		textsize(fltk3::Fontsize s) { Fl_Browser::textsize(s); iconsize_ = (uchar)(3 * s / 2); };
 
   /**
     Sets or gets the file browser type, FILES or

@@ -34,7 +34,7 @@
 #include <fltk3/MultiLabel.h>
 
 static void multi_labeltype(
-    const Fl_Label* o, int x, int y, int w, int h, Fl_Align a)
+    const Fl_Label* o, int x, int y, int w, int h, fltk3::Align a)
 {
   Fl_Multi_Label* b = (Fl_Multi_Label*)(o->value);
   Fl_Label local = *o;
@@ -42,10 +42,10 @@ static void multi_labeltype(
   local.type = b->typea;
   int W = w; int H = h; local.measure(W, H);
   local.draw(x,y,w,h,a);
-  if (a & FL_ALIGN_BOTTOM) h -= H;
-  else if (a & FL_ALIGN_TOP) {y += H; h -= H;}
-  else if (a & FL_ALIGN_RIGHT) w -= W;
-  else if (a & FL_ALIGN_LEFT) {x += W; w -= W;}
+  if (a & fltk3::ALIGN_BOTTOM) h -= H;
+  else if (a & fltk3::ALIGN_TOP) {y += H; h -= H;}
+  else if (a & fltk3::ALIGN_RIGHT) w -= W;
+  else if (a & fltk3::ALIGN_LEFT) {x += W; w -= W;}
   else {int d = (h+H)/2; y += d; h -= d;}
   local.value = b->labelb;
   local.type = b->typeb;
@@ -66,13 +66,13 @@ static void multi_measure(const Fl_Label* o, int& w, int& h) {
 }
 
 void Fl_Multi_Label::label(Fl_Widget* o) {
-  Fl::set_labeltype(_FL_MULTI_LABEL, multi_labeltype, multi_measure);
-  o->label(_FL_MULTI_LABEL, (const char*)this);
+  Fl::set_labeltype(fltk3::multiLabel, multi_labeltype, multi_measure);
+  o->label(fltk3::multiLabel, (const char*)this);
 }
 
 void Fl_Multi_Label::label(Fl_Menu_Item* o) {
-  Fl::set_labeltype(_FL_MULTI_LABEL, multi_labeltype, multi_measure);
-  o->label(_FL_MULTI_LABEL, (const char*)this);
+  Fl::set_labeltype(fltk3::multiLabel, multi_labeltype, multi_measure);
+  o->label(fltk3::multiLabel, (const char*)this);
 }
 
 //

@@ -113,7 +113,7 @@ void *fl_xftfont = 0;
 //const char* fl_encoding_ = "iso8859-1";
 const char* fl_encoding_ = "iso10646-1";
 
-static void fl_xft_font(Fl_Xlib_Graphics_Driver *driver, Fl_Font fnum, Fl_Fontsize size, int angle) {
+static void fl_xft_font(Fl_Xlib_Graphics_Driver *driver, fltk3::Font fnum, fltk3::Fontsize size, int angle) {
   if (fnum==-1) { // special case to stop font caching
     driver->Fl_Graphics_Driver::font(0, 0);
     return;
@@ -142,11 +142,11 @@ static void fl_xft_font(Fl_Xlib_Graphics_Driver *driver, Fl_Font fnum, Fl_Fontsi
   fl_xftfont = (void*)f->font;
 }
 
-void Fl_Xlib_Graphics_Driver::font(Fl_Font fnum, Fl_Fontsize size) {
+void Fl_Xlib_Graphics_Driver::font(fltk3::Font fnum, fltk3::Fontsize size) {
   fl_xft_font(this,fnum,size,0);
 }
 
-static XftFont* fontopen(const char* name, Fl_Fontsize size, bool core, int angle) {
+static XftFont* fontopen(const char* name, fltk3::Fontsize size, bool core, int angle) {
   // Check: does it look like we have been passed an old-school XLFD fontname?
   bool is_xlfd = false;
   int hyphen_count = 0;
@@ -333,7 +333,7 @@ puts("Font Opened"); fflush(stdout);
   }
 } // end of fontopen
 
-Fl_Font_Descriptor::Fl_Font_Descriptor(const char* name, Fl_Fontsize fsize, int fangle) {
+Fl_Font_Descriptor::Fl_Font_Descriptor(const char* name, fltk3::Fontsize fsize, int fangle) {
 //  encoding = fl_encoding_;
   size = fsize;
   angle = fangle;
@@ -581,7 +581,7 @@ void fl_destroy_xft_draw(Window id) {
 
 void Fl_Xlib_Graphics_Driver::draw(const char *str, int n, int x, int y) {
   if ( !this->font_descriptor() ) {
-    this->font(FL_HELVETICA, FL_NORMAL_SIZE);
+    this->font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
   }
 #if USE_OVERLAY
   XftDraw*& draw_ = fl_overlay ? draw_overlay : ::draw_;

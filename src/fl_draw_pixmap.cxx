@@ -171,7 +171,7 @@ uchar **fl_mask_bitmap; // if non-zero, create bitmap and store pointer here
   \param[in] bg   background color
   \returns 0 if there was any error decoding the XPM data.
   */
-int fl_draw_pixmap(/*const*/ char* const* data, int x,int y,Fl_Color bg) {
+int fl_draw_pixmap(/*const*/ char* const* data, int x,int y,fltk3::Color bg) {
   return fl_draw_pixmap((const char*const*)data,x,y,bg);
 }
 
@@ -211,9 +211,9 @@ static void make_unused_color(uchar &r, uchar &g, uchar &b)
 
 /**
   Draw XPM image data, with the top-left corner at the given position.
-  \see fl_draw_pixmap(char* const* data, int x, int y, Fl_Color bg)
+  \see fl_draw_pixmap(char* const* data, int x, int y, fltk3::Color bg)
   */
-int fl_draw_pixmap(const char*const* cdata, int x, int y, Fl_Color bg) {
+int fl_draw_pixmap(const char*const* cdata, int x, int y, fltk3::Color bg) {
   pixmap_data d;
   if (!fl_measure_pixmap(cdata, d.w, d.h)) return 0;
   const uchar*const* data = (const uchar*const*)(cdata+1);

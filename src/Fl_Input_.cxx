@@ -174,14 +174,14 @@ double Fl_Input_::expandpos(
   \param [in] p start of update range
 */
 void Fl_Input_::minimal_update(int p) {
-  if (damage() & FL_DAMAGE_ALL) return; // don't waste time if it won't be done
-  if (damage() & FL_DAMAGE_EXPOSE) {
+  if (damage() & fltk3::DAMAGE_ALL) return; // don't waste time if it won't be done
+  if (damage() & fltk3::DAMAGE_EXPOSE) {
     if (p < mu_p) mu_p = p;
   } else {
     mu_p = p;
   }
 
-  damage(FL_DAMAGE_EXPOSE);
+  damage(fltk3::DAMAGE_EXPOSE);
   erase_cursor_only = 0;
 }
 
@@ -217,14 +217,14 @@ void Fl_Input_::setfont() const {
 /**
   Draws the text in the passed bounding box.  
 
-  If <tt>damage() & FL_DAMAGE_ALL</tt> is true, this assumes the 
+  If <tt>damage() & fltk3::DAMAGE_ALL</tt> is true, this assumes the 
   area has already been erased to color(). Otherwise it does
   minimal update and erases the area itself.
 
   \param X, Y, W, H area that must be redrawn
 */
 void Fl_Input_::drawtext(int X, int Y, int W, int H) {
-  int do_mu = !(damage()&FL_DAMAGE_ALL);
+  int do_mu = !(damage()&fltk3::DAMAGE_ALL);
 
   if (Fl::focus()!=this && !size()) {
     if (do_mu) { // we have to erase it if cursor was there
@@ -293,7 +293,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
   }
 
   fl_push_clip(X, Y, W, H);
-  Fl_Color tc = active_r() ? textcolor() : fl_inactive(textcolor());
+  fltk3::Color tc = active_r() ? textcolor() : fltk3::inactive(textcolor());
 
   p = value();
   // visit each line and draw it:
@@ -350,7 +350,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
       else offset2 = strlen(buf);
       fl_color(selection_color());
       fl_rectf((int)(x1+0.5), Y+ypos, (int)(x2-x1+0.5), height);
-      fl_color(fl_contrast(textcolor(), selection_color()));
+      fl_color(fltk3::contrast(textcolor(), selection_color()));
       fl_draw(buf+offset1, offset2-offset1, x1, (float)(Y+ypos+desc));
       if (pp < e) {
 	fl_color(tc);
@@ -634,7 +634,7 @@ int Fl_Input_::position(int p, int m) {
     // new position is a cursor
     if (position_ == mark_) {
       // old position was just a cursor
-      if (Fl::focus() == this && !(damage()&FL_DAMAGE_EXPOSE)) {
+      if (Fl::focus() == this && !(damage()&fltk3::DAMAGE_EXPOSE)) {
 	minimal_update(position_); erase_cursor_only = 1;
       }
     } else { // old position was a selection
@@ -732,7 +732,7 @@ static void undobuffersize(int n) {
   equal to the other), and then inserts the string \p text
   at that point and moves the mark() and
   position() to the end of the insertion. Does the callback if
-  <tt>when() & FL_WHEN_CHANGED</tt> and there is a change.
+  <tt>when() & fltk3::WHEN_CHANGED</tt> and there is a change.
 
   Set \p b and \p e equal to not delete anything.
   Set \p text to \c NULL to not insert anything.
@@ -844,7 +844,7 @@ int Fl_Input_::replace(int b, int e, const char* text, int ilen) {
   mark_ = position_ = undoat;
 
   set_changed();
-  if (when()&FL_WHEN_CHANGED) do_callback();
+  if (when()&fltk3::WHEN_CHANGED) do_callback();
   return 1;
 }
 
@@ -891,7 +891,7 @@ int Fl_Input_::undo() {
     while (b1 > 0 && index(b1)!='\n') b1--;
   minimal_update(b1);
   set_changed();
-  if (when()&FL_WHEN_CHANGED) do_callback();
+  if (when()&fltk3::WHEN_CHANGED) do_callback();
   return 1;
 }
 
@@ -916,7 +916,7 @@ int Fl_Input_::copy_cuts() {
   Checks the when() field and does a callback if indicated.
 */
 void Fl_Input_::maybe_do_callback() {
-  if (changed() || (when()&FL_WHEN_NOT_CHANGED)) {
+  if (changed() || (when()&fltk3::WHEN_NOT_CHANGED)) {
     do_callback();
   }
 }
@@ -930,16 +930,16 @@ void Fl_Input_::maybe_do_callback() {
 int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
   switch (event) {
 
-  case FL_ENTER:
-  case FL_MOVE:
-    if (active_r() && window()) window()->cursor(FL_CURSOR_INSERT);
+  case fltk3::ENTER:
+  case fltk3::MOVE:
+    if (active_r() && window()) window()->cursor(fltk3::CURSOR_INSERT);
     return 1;
 
-  case FL_LEAVE:
-    if (active_r() && window()) window()->cursor(FL_CURSOR_DEFAULT);
+  case fltk3::LEAVE:
+    if (active_r() && window()) window()->cursor(fltk3::CURSOR_DEFAULT);
     return 1;
 
-  case FL_FOCUS:
+  case fltk3::FOCUS:
     fl_set_spot(textfont(), textsize(), x(), y(), w(), h(), window());
     if (mark_ == position_) {
       minimal_update(size()+1);
@@ -947,38 +947,38 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
       minimal_update(mark_, position_);
     return 1;
 
-  case FL_UNFOCUS:
-    if (active_r() && window()) window()->cursor(FL_CURSOR_DEFAULT);
+  case fltk3::UNFOCUS:
+    if (active_r() && window()) window()->cursor(fltk3::CURSOR_DEFAULT);
     if (mark_ == position_) {
-      if (!(damage()&FL_DAMAGE_EXPOSE)) {minimal_update(position_); erase_cursor_only = 1;}
+      if (!(damage()&fltk3::DAMAGE_EXPOSE)) {minimal_update(position_); erase_cursor_only = 1;}
     } else //if (Fl::selection_owner() != this)
       minimal_update(mark_, position_);
-  case FL_HIDE:
+  case fltk3::HIDE:
     fl_reset_spot();
-    if (!readonly() && (when() & FL_WHEN_RELEASE))
+    if (!readonly() && (when() & fltk3::WHEN_RELEASE))
       maybe_do_callback();
     return 1;
 
-  case FL_PUSH:
-    if (active_r() && window()) window()->cursor(FL_CURSOR_INSERT);
+  case fltk3::PUSH:
+    if (active_r() && window()) window()->cursor(fltk3::CURSOR_INSERT);
 
-    handle_mouse(X, Y, W, H, Fl::event_state(FL_SHIFT));
+    handle_mouse(X, Y, W, H, Fl::event_state(fltk3::SHIFT));
 
     if (Fl::focus() != this) {
       Fl::focus(this);
-      handle(FL_FOCUS);
+      handle(fltk3::FOCUS);
     }
     return 1;
 
-  case FL_DRAG:
+  case fltk3::DRAG:
     handle_mouse(X, Y, W, H, 1);
     return 1;
 
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     copy(0);
     return 1;
 
-  case FL_PASTE: {
+  case fltk3::PASTE: {
     // Don't allow pastes into readonly widgets...
     if (readonly()) {
       fl_beep(FL_BEEP_ERROR);
@@ -1028,10 +1028,10 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
     }
     return replace(position(), mark(), t, e-t);}
 
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
     if (!(shortcut() ? Fl::test_shortcut(shortcut()) : test_shortcut())) 
       return 0;
-    if (Fl::visible_focus() && handle(FL_FOCUS)) {
+    if (Fl::visible_focus() && handle(fltk3::FOCUS)) {
       Fl::focus(this);
       return 1;
     } // else fall through
@@ -1048,20 +1048,20 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
 
   This function creates a new Fl_Input_ widget and adds it to the current
   Fl_Group. The value() is set to \c NULL.
-  The default boxtype is \c FL_DOWN_BOX.
+  The default boxtype is \c fltk3::DOWN_BOX.
 
   \param X, Y, W, H the dimensions of the new widget
   \param l an optional label text
 */
 Fl_Input_::Fl_Input_(int X, int Y, int W, int H, const char* l)
 : Fl_Widget(X, Y, W, H, l) {
-  box(FL_DOWN_BOX);
-  color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
-  align(FL_ALIGN_LEFT);
-  textsize_ = FL_NORMAL_SIZE;
-  textfont_ = FL_HELVETICA;
-  textcolor_ = FL_FOREGROUND_COLOR;
-  cursor_color_ = FL_FOREGROUND_COLOR; // was FL_BLUE
+  box(fltk3::DOWN_BOX);
+  color(fltk3::BACKGROUND2_COLOR, fltk3::SELECTION_COLOR);
+  align(fltk3::ALIGN_LEFT);
+  textsize_ = fltk3::NORMAL_SIZE;
+  textfont_ = fltk3::HELVETICA;
+  textcolor_ = fltk3::FOREGROUND_COLOR;
+  cursor_color_ = fltk3::FOREGROUND_COLOR; // was fltk3::BLUE
   mark_ = position_ = size_ = 0;
   bufsize = 0;
   buffer  = 0;

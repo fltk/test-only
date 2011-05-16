@@ -153,13 +153,13 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
       { back_ = new Fl_Button(10, 10, 25, 25, "@<-");
         back_->tooltip("Show the previous help page.");
         back_->shortcut(0xff51);
-        back_->labelcolor((Fl_Color)2);
+        back_->labelcolor((fltk3::Color)2);
         back_->callback((Fl_Callback*)cb_back_);
       } // Fl_Button* back_
       { forward_ = new Fl_Button(45, 10, 25, 25, "@->");
         forward_->tooltip("Show the next help page.");
         forward_->shortcut(0xff53);
-        forward_->labelcolor((Fl_Color)2);
+        forward_->labelcolor((fltk3::Color)2);
         forward_->callback((Fl_Callback*)cb_forward_);
       } // Fl_Button* forward_
       { smaller_ = new Fl_Button(80, 10, 25, 25, "F");
@@ -175,15 +175,15 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
         larger_->callback((Fl_Callback*)cb_larger_);
       } // Fl_Button* larger_
       { Fl_Group* o = new Fl_Group(350, 10, 171, 25);
-        o->box(FL_DOWN_BOX);
-        o->color(FL_BACKGROUND2_COLOR);
+        o->box(fltk3::DOWN_BOX);
+        o->color(fltk3::BACKGROUND2_COLOR);
         { find_ = new Fl_Input(375, 12, 143, 21, "@search");
           find_->tooltip("find text in document");
-          find_->box(FL_FLAT_BOX);
+          find_->box(fltk3::FLAT_BOX);
           find_->labelsize(13);
           find_->textfont(4);
           find_->callback((Fl_Callback*)cb_find_);
-          find_->when(FL_WHEN_ENTER_KEY_ALWAYS);
+          find_->when(fltk3::WHEN_ENTER_KEY_ALWAYS);
         } // Fl_Input* find_
         o->end();
       } // Fl_Group* o
@@ -193,7 +193,7 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
       o->end();
     } // Fl_Group* o
     { view_ = new Fl_Help_View(10, 45, 510, 330);
-      view_->box(FL_DOWN_BOX);
+      view_->box(fltk3::DOWN_BOX);
       view_->callback((Fl_Callback*)cb_view_);
       Fl_Group::current()->resizable(view_);
     } // Fl_Help_View* view_
@@ -244,7 +244,7 @@ void Fl_Help_Dialog::show(int argc, char **argv) {
   window_->show(argc, argv);
 }
 
-void Fl_Help_Dialog::textsize(Fl_Fontsize s) {
+void Fl_Help_Dialog::textsize(fltk3::Fontsize s) {
   view_->textsize(s);
 
 if (s <= 8)
@@ -258,7 +258,7 @@ else
   larger_->activate();
 }
 
-Fl_Fontsize Fl_Help_Dialog::textsize() {
+fltk3::Fontsize Fl_Help_Dialog::textsize() {
   return (view_->textsize());
 }
 

@@ -470,7 +470,7 @@ void Fl_PostScript_Graphics_Driver::draw(Fl_Pixmap * pxm,int XP, int YP, int WP,
   mx = WP;
   my = HP;
   push_clip(XP, YP, WP, HP);
-  fl_draw_pixmap(di,XP -cx, YP -cy, FL_BLACK );
+  fl_draw_pixmap(di,XP -cx, YP -cy, fltk3::BLACK );
   pop_clip();
   delete[] mask;
   mask=0;

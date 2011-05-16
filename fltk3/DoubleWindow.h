@@ -41,7 +41,7 @@
   <P>It is highly recommended that you put the following code before the
   first show() of <I>any</I> window in your program: </P>
   \code
-  Fl::visual(FL_DOUBLE|FL_INDEX)
+  Fl::visual(fltk3::DOUBLE|fltk3::INDEX)
   \endcode
   This makes sure you can use Xdbe on servers where double buffering
   does not exist for every visual.

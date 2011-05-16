@@ -63,7 +63,7 @@ void Fl_Free::step(void *v) {
   The event argument contains the event type:
   \code
   // old event names for compatibility:
-  #define FL_MOUSE		FL_DRAG
+  #define FL_MOUSE		fltk3::DRAG
   #define FL_DRAW		0
   #define FL_STEP		9
   #define FL_FREEMEM		12
@@ -94,15 +94,15 @@ void Fl_Free::draw() {hfunc(this,FL_DRAW,0,0,0);}
 int Fl_Free::handle(int e) {
   char key = Fl::event_key();
   switch (e) {
-  case FL_FOCUS:
+  case fltk3::FOCUS:
     if (type()!=FL_INPUT_FREE && type()!=FL_ALL_FREE) return 0;
     break;
-  case FL_PUSH:
-  case FL_DRAG:
-  case FL_RELEASE:
+  case fltk3::PUSH:
+  case fltk3::DRAG:
+  case fltk3::RELEASE:
     key = 4-Fl::event_button();
     break;
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
     return 0;
   }
   if (hfunc(this, e, float(Fl::event_x()), float(Fl::event_y()), key)) do_callback();

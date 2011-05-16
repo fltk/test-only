@@ -36,7 +36,7 @@
 
 /**
   Creates a new Fl_Pack widget using the given position, size,
-  and label string. The default boxtype is FL_NO_BOX.
+  and label string. The default boxtype is fltk3::NO_BOX.
   <P>The destructor <I>also deletes all the children</I>. This allows a
   whole tree to be deleted at once, without having to keep a pointer to
   all the children in the user code. A kludge has been done so the 
@@ -103,7 +103,7 @@ void Fl_Pack::draw() {
           H = th - rh;
       }
       if (spacing_ && current_position>maximum_position && box() &&
-        (X != o->x() || Y != o->y() || d&FL_DAMAGE_ALL)) {
+        (X != o->x() || Y != o->y() || d&fltk3::DAMAGE_ALL)) {
         fl_color(color());
         if (horizontal())
           fl_rectf(maximum_position, ty, spacing_, th);
@@ -112,9 +112,9 @@ void Fl_Pack::draw() {
       }
       if (X != o->x() || Y != o->y() || W != o->w() || H != o->h()) {
         o->resize(X,Y,W,H);
-        o->clear_damage(FL_DAMAGE_ALL);
+        o->clear_damage(fltk3::DAMAGE_ALL);
       }
-      if (d&FL_DAMAGE_ALL) {
+      if (d&fltk3::DAMAGE_ALL) {
         draw_child(*o);
         draw_outside_label(*o);
       } else update_child(*o);
@@ -144,9 +144,9 @@ void Fl_Pack::draw() {
   th += Fl::box_dh(box()); if (th <= 0) th = 1;
   if (tw != w() || th != h()) {
     Fl_Widget::resize(x(),y(),tw,th);
-    d = FL_DAMAGE_ALL;
+    d = fltk3::DAMAGE_ALL;
   }
-  if (d&FL_DAMAGE_ALL) {
+  if (d&fltk3::DAMAGE_ALL) {
     draw_box();
     draw_label();
   }

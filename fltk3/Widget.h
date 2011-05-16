@@ -78,18 +78,18 @@ struct FL_EXPORT Fl_Label {
   /** optional image for a deactivated label */
   Fl_Image* deimage;
   /** label font used in text */
-  Fl_Font font;
+  fltk3::Font font;
   /** size of label font */
-  Fl_Fontsize size;
+  fltk3::Fontsize size;
   /** text color */
-  Fl_Color color;
+  fltk3::Color color;
   /** alignment of label */
-  Fl_Align align_;
-  /** type of label. \see Fl_Labeltype */
+  fltk3::Align align_;
+  /** type of label. \see fltk3::Labeltype */
   uchar type;
 
   /** Draws the label aligned to the given box */
-  void draw(int,int,int,int, Fl_Align) const ;
+  void draw(int,int,int,int, fltk3::Align) const ;
   void measure(int &w, int &h) const ;
 };
 
@@ -115,8 +115,8 @@ class FL_EXPORT Fl_Widget {
   int x_,y_,w_,h_;
   Fl_Label label_;
   unsigned int flags_;
-  Fl_Color color_;
-  Fl_Color color2_;
+  fltk3::Color color_;
+  fltk3::Color color2_;
   uchar type_;
   uchar damage_;
   uchar box_;
@@ -185,12 +185,12 @@ protected:
         USERFLAG1       = 1<<31   ///< reserved for 3rd party extensions
   };
   void draw_box() const;
-  void draw_box(Fl_Boxtype t, Fl_Color c) const;
-  void draw_box(Fl_Boxtype t, int x,int y,int w,int h, Fl_Color c) const;
+  void draw_box(fltk3::Boxtype t, fltk3::Color c) const;
+  void draw_box(fltk3::Boxtype t, int x,int y,int w,int h, fltk3::Color c) const;
   void draw_backdrop() const;
   /** draws a focus rectangle around the widget */
   void draw_focus() {draw_focus(box(),x(),y(),w(),h());}
-  void draw_focus(Fl_Boxtype t, int x,int y,int w,int h) const;
+  void draw_focus(fltk3::Boxtype t, int x,int y,int w,int h) const;
   void draw_label() const;
   void draw_label(int, int, int, int) const;
 
@@ -339,67 +339,67 @@ public:
   /** Gets the label alignment.
 
       \return label alignment
-      \see label(), align(Fl_Align), Fl_Align
+      \see label(), align(fltk3::Align), fltk3::Align
    */
-  Fl_Align align() const {return label_.align_;}
+  fltk3::Align align() const {return label_.align_;}
 
   /** Sets the label alignment.
       This controls how the label is displayed next to or inside the widget. 
-      The default value is FL_ALIGN_CENTER, which centers the label inside 
+      The default value is fltk3::ALIGN_CENTER, which centers the label inside 
       the widget.
       \param[in] alignment new label alignment
-      \see align(), Fl_Align
+      \see align(), fltk3::Align
    */
-  void align(Fl_Align alignment) {label_.align_ = alignment;}
+  void align(fltk3::Align alignment) {label_.align_ = alignment;}
 
   /** Gets the box type of the widget.
       \return the current box type
-      \see box(Fl_Boxtype), Fl_Boxtype
+      \see box(fltk3::Boxtype), fltk3::Boxtype
    */
-  Fl_Boxtype box() const {return (Fl_Boxtype)box_;}
+  fltk3::Boxtype box() const {return (fltk3::Boxtype)box_;}
   
   /** Sets the box type for the widget. 
       This identifies a routine that draws the background of the widget.
-      See Fl_Boxtype for the available types. The default depends on the 
-      widget, but is usually FL_NO_BOX or FL_UP_BOX.
+      See fltk3::Boxtype for the available types. The default depends on the 
+      widget, but is usually fltk3::NO_BOX or fltk3::UP_BOX.
       \param[in] new_box the new box type
-      \see box(), Fl_Boxtype
+      \see box(), fltk3::Boxtype
    */
-  void box(Fl_Boxtype new_box) {box_ = new_box;}
+  void box(fltk3::Boxtype new_box) {box_ = new_box;}
 
   /** Gets the background color of the widget.
       \return current background color
-      \see color(Fl_Color), color(Fl_Color, Fl_Color)
+      \see color(fltk3::Color), color(fltk3::Color, fltk3::Color)
    */
-  Fl_Color color() const {return color_;}
+  fltk3::Color color() const {return color_;}
 
   /** Sets the background color of the widget. 
       The color is passed to the box routine. The color is either an index into 
       an internal table of RGB colors or an RGB color value generated using 
-      fl_rgb_color().
+      fltk3::rgbColor().
       
-      The default for most widgets is FL_BACKGROUND_COLOR. Use Fl::set_color()
+      The default for most widgets is fltk3::BACKGROUND_COLOR. Use Fl::set_color()
       to redefine colors in the color map.
       \param[in] bg background color
-      \see color(), color(Fl_Color, Fl_Color), selection_color(Fl_Color)
+      \see color(), color(fltk3::Color, fltk3::Color), selection_color(fltk3::Color)
    */
-  void color(Fl_Color bg) {color_ = bg;}
+  void color(fltk3::Color bg) {color_ = bg;}
 
   /** Gets the selection color.
       \return the current selection color
-      \see selection_color(Fl_Color), color(Fl_Color, Fl_Color)
+      \see selection_color(fltk3::Color), color(fltk3::Color, fltk3::Color)
    */
-  Fl_Color selection_color() const {return color2_;}
+  fltk3::Color selection_color() const {return color2_;}
 
   /** Sets the selection color.
       The selection color is defined for Forms compatibility and is usually 
       used to color the widget when it is selected, although some widgets 
       use this color for other purposes. You can set both colors at once 
-      with color(Fl_Color bg, Fl_Color sel).
+      with color(fltk3::Color bg, fltk3::Color sel).
       \param[in] a the new selection color
-      \see selection_color(), color(Fl_Color, Fl_Color)
+      \see selection_color(), color(fltk3::Color, fltk3::Color)
    */
-  void selection_color(Fl_Color a) {color2_ = a;}
+  void selection_color(fltk3::Color a) {color2_ = a;}
 
   /** Sets the background and selection color of the widget. 
 
@@ -408,7 +408,7 @@ public:
       \param[in] sel selection color
       \see color(unsigned), selection_color(unsigned)
    */
-  void color(Fl_Color bg, Fl_Color sel) {color_=bg; color2_=sel;}
+  void color(fltk3::Color bg, fltk3::Color sel) {color_=bg; color2_=sel;}
 
   /** Gets the current label text.
       \return a pointer to the current label text
@@ -441,67 +441,67 @@ public:
   void copy_label(const char *new_label);
 
   /** Shortcut to set the label text and type in one call.
-      \see label(const char *), labeltype(Fl_Labeltype)
+      \see label(const char *), labeltype(fltk3::Labeltype)
    */
-  void label(Fl_Labeltype a, const char* b) {label_.type = a; label_.value = b;}
+  void label(fltk3::Labeltype a, const char* b) {label_.type = a; label_.value = b;}
 
   /** Gets the label type.
       \return the current label type.
-      \see Fl_Labeltype
+      \see fltk3::Labeltype
    */
-  Fl_Labeltype labeltype() const {return (Fl_Labeltype)label_.type;}
+  fltk3::Labeltype labeltype() const {return (fltk3::Labeltype)label_.type;}
 
   /** Sets the label type. 
       The label type identifies the function that draws the label of the widget. 
       This is generally used for special effects such as embossing or for using 
       the label() pointer as another form of data such as an icon. The value 
-      FL_NORMAL_LABEL prints the label as plain text.
+      fltk3::normalLabel prints the label as plain text.
       \param[in] a new label type
-      \see Fl_Labeltype
+      \see fltk3::Labeltype
    */
-  void labeltype(Fl_Labeltype a) {label_.type = a;}
+  void labeltype(fltk3::Labeltype a) {label_.type = a;}
 
   /** Gets the label color. 
-      The default color is FL_FOREGROUND_COLOR. 
+      The default color is fltk3::FOREGROUND_COLOR. 
       \return the current label color
    */
-  Fl_Color labelcolor() const {return label_.color;}
+  fltk3::Color labelcolor() const {return label_.color;}
 
   /** Sets the label color. 
-      The default color is FL_FOREGROUND_COLOR. 
+      The default color is fltk3::FOREGROUND_COLOR. 
       \param[in] c the new label color
    */
-  void labelcolor(Fl_Color c) {label_.color=c;}
+  void labelcolor(fltk3::Color c) {label_.color=c;}
 
   /** Gets the font to use. 
       Fonts are identified by indexes into a table. The default value
       uses a Helvetica typeface (Arial for Microsoft&reg; Windows&reg;).
       The function Fl::set_font() can define new typefaces.
       \return current font used by the label
-      \see Fl_Font
+      \see fltk3::Font
    */
-  Fl_Font labelfont() const {return label_.font;}
+  fltk3::Font labelfont() const {return label_.font;}
 
   /** Sets the font to use. 
       Fonts are identified by indexes into a table. The default value
       uses a Helvetica typeface (Arial for Microsoft&reg; Windows&reg;).
       The function Fl::set_font() can define new typefaces.
       \param[in] f the new font for the label
-      \see Fl_Font
+      \see fltk3::Font
    */
-  void labelfont(Fl_Font f) {label_.font=f;}
+  void labelfont(fltk3::Font f) {label_.font=f;}
 
   /** Gets the font size in pixels. 
       The default size is 14 pixels.
       \return the current font size
    */
-  Fl_Fontsize labelsize() const {return label_.size;}
+  fltk3::Fontsize labelsize() const {return label_.size;}
 
   /** Sets the font size in pixels.
       \param[in] pix the new font size
-      \see Fl_Fontsize labelsize()
+      \see fltk3::Fontsize labelsize()
    */
-  void labelsize(Fl_Fontsize pix) {label_.size=pix;}
+  void labelsize(fltk3::Fontsize pix) {label_.size=pix;}
 
   /** Gets the image that is used as part of the widget label.
       This image is used when drawing the widget in the active state.
@@ -607,22 +607,22 @@ public:
   /** Returns the conditions under which the callback is called.
 
       You can set the flags with when(uchar), the default value is
-      FL_WHEN_RELEASE.
+      fltk3::WHEN_RELEASE.
 
       \return set of flags
       \see when(uchar)
    */
-  Fl_When when() const {return (Fl_When)when_;}
+  fltk3::When when() const {return (fltk3::When)when_;}
 
   /** Sets the flags used to decide when a callback is called.
 
      This controls when callbacks are done. The following values are useful,
-     the default value is FL_WHEN_RELEASE:
+     the default value is fltk3::WHEN_RELEASE:
      
      \li 0: The callback is not done, but changed() is turned on.
-     \li FL_WHEN_CHANGED: The callback is done each time the text is
+     \li fltk3::WHEN_CHANGED: The callback is done each time the text is
          changed by the user.
-     \li FL_WHEN_RELEASE: The callback will be done when this widget loses 
+     \li fltk3::WHEN_RELEASE: The callback will be done when this widget loses 
          the focus, including when the window is unmapped. This is a useful 
 	 value for text fields in a panel where doing the callback on every
   	 change is wasteful. However the callback will also happen if the 
@@ -630,11 +630,11 @@ public:
 	 anything visible (like pop up an error message).
 	 You might do better setting this to zero, and scanning all the
 	 items for changed() when the OK button on a panel is pressed.
-     \li FL_WHEN_ENTER_KEY: If the user types the Enter key, the entire 
+     \li fltk3::WHEN_ENTER_KEY: If the user types the Enter key, the entire 
          text is selected, and the callback is done if the text has changed. 
 	 Normally the Enter key will navigate to the next field (or insert 
 	 a newline for a Fl_Multiline_Input) - this changes the behavior.
-     \li FL_WHEN_ENTER_KEY|FL_WHEN_NOT_CHANGED: The Enter key will do the
+     \li fltk3::WHEN_ENTER_KEY|fltk3::WHEN_NOT_CHANGED: The Enter key will do the
          callback even if the text has not changed. Useful for command fields.
       Fl_Widget::when() is a set of bitflags used by subclasses of 
       Fl_Widget to decide when to do the callback.
@@ -662,16 +662,16 @@ public:
   /** Makes a widget visible.
 
       An invisible widget never gets redrawn and does not get keyboard
-      or mouse events, but can receive a few other events like FL_SHOW.
+      or mouse events, but can receive a few other events like fltk3::SHOW.
 
       The visible() method returns true if the widget is set to be
       visible. The visible_r() method returns true if the widget and
       all of its parents are visible. A widget is only visible if
       visible() is true on it <I>and all of its parents</I>.
 
-      Changing it will send FL_SHOW or FL_HIDE events to the widget.
+      Changing it will send fltk3::SHOW or fltk3::HIDE events to the widget.
       <I>Do not change it if the parent is not visible, as this
-      will send false FL_SHOW or FL_HIDE events to the widget</I>.
+      will send false fltk3::SHOW or fltk3::HIDE events to the widget</I>.
       redraw() is called if necessary on this or the parent.
 
       \see hide(), visible(), visible_r()
@@ -708,7 +708,7 @@ public:
   int active_r() const;
 
   /** Activates the widget.
-      Changing this value will send FL_ACTIVATE to the widget if 
+      Changing this value will send fltk3::ACTIVATE to the widget if 
       active_r() is true.
       \see active(), active_r(), deactivate()
    */
@@ -717,11 +717,11 @@ public:
   /** Deactivates the widget.
       Inactive widgets will be drawn "grayed out", e.g. with less contrast 
       than the active widget. Inactive widgets will not receive any keyboard 
-      or mouse button events. Other events (including FL_ENTER, FL_MOVE, 
-      FL_LEAVE, FL_SHORTCUT, and others) will still be sent. A widget is 
+      or mouse button events. Other events (including fltk3::ENTER, fltk3::MOVE, 
+      fltk3::LEAVE, fltk3::SHORTCUT, and others) will still be sent. A widget is 
       only active if active() is true on it <I>and all of its parents</I>.  
 
-      Changing this value will send FL_DEACTIVATE to the widget if 
+      Changing this value will send fltk3::DEACTIVATE to the widget if 
       active_r() is true.
 
       Currently you cannot deactivate Fl_Window widgets.
@@ -786,7 +786,7 @@ public:
 
   /** Gives the widget the keyboard focus.
       Tries to make this widget be the Fl::focus() widget, by first sending 
-      it an FL_FOCUS event, and if it returns non-zero, setting 
+      it an fltk3::FOCUS event, and if it returns non-zero, setting 
       Fl::focus() to this widget. You should use this method to 
       assign the focus to a widget.  
       \return true if the widget accepted the focus.
@@ -916,7 +916,7 @@ public:
    */
   void damage(uchar c, int x, int y, int w, int h);
 
-  void draw_label(int, int, int, int, Fl_Align) const;
+  void draw_label(int, int, int, int, fltk3::Align) const;
 
   /** Sets width ww and height hh accordingly with the label size.
       Labels with images will return w() and h() of the image.
@@ -984,7 +984,7 @@ public:
   /** For back compatibility only.
       \deprecated Use selection_color() instead.
   */
-  Fl_Color color2() const {return (Fl_Color)color2_;}
+  fltk3::Color color2() const {return (fltk3::Color)color2_;}
 
   /** For back compatibility only.
       \deprecated Use selection_color(unsigned) instead.

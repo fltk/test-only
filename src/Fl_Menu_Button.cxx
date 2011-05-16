@@ -34,16 +34,16 @@ static Fl_Menu_Button	*pressed_menu_button_ = 0;
 
 void Fl_Menu_Button::draw() {
   if (!box() || type()) return;
-  draw_box(pressed_menu_button_ == this ? fl_down(box()) : box(), color());
+  draw_box(pressed_menu_button_ == this ? fltk3::down(box()) : box(), color());
   draw_label();
   if (Fl::focus() == this) draw_focus();
-  // ** if (box() == FL_FLAT_BOX) return; // for XForms compatibility
+  // ** if (box() == fltk3::FLAT_BOX) return; // for XForms compatibility
   int H = (labelsize()-3)&-2;
   int X = x()+w()-H*2;
   int Y = y()+(h()-H)/2;
-  fl_color(active_r() ? FL_DARK3 : fl_inactive(FL_DARK3));
+  fl_color(active_r() ? fltk3::DARK3 : fltk3::inactive(fltk3::DARK3));
   fl_line(X+H/2, Y+H, X, Y, X+H, Y);
-  fl_color(active_r() ? FL_LIGHT3 : fl_inactive(FL_LIGHT3));
+  fl_color(active_r() ? fltk3::LIGHT3 : fltk3::inactive(fltk3::LIGHT3));
   fl_line(X+H, Y, X+H/2, Y+H);
 }
 
@@ -73,10 +73,10 @@ const Fl_Menu_Item* Fl_Menu_Button::popup() {
 int Fl_Menu_Button::handle(int e) {
   if (!menu() || !menu()->text) return 0;
   switch (e) {
-  case FL_ENTER: /* FALLTHROUGH */
-  case FL_LEAVE:
+  case fltk3::ENTER: /* FALLTHROUGH */
+  case fltk3::LEAVE:
     return (box() && !type()) ? 1 : 0;
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (!box()) {
       if (Fl::event_button() != 3) return 0;
     } else if (type()) {
@@ -85,18 +85,18 @@ int Fl_Menu_Button::handle(int e) {
     if (Fl::visible_focus()) Fl::focus(this);
     popup();
     return 1;
-  case FL_KEYBOARD:
+  case fltk3::KEYBOARD:
     if (!box()) return 0;
     if (Fl::event_key() == ' ' &&
-        !(Fl::event_state() & (FL_SHIFT | FL_CTRL | FL_ALT | FL_META))) {
+        !(Fl::event_state() & (fltk3::SHIFT | fltk3::CTRL | fltk3::ALT | fltk3::META))) {
       popup();
       return 1;
     } else return 0;
-  case FL_SHORTCUT:
+  case fltk3::SHORTCUT:
     if (Fl_Widget::test_shortcut()) {popup(); return 1;}
     return test_shortcut() != 0;
-  case FL_FOCUS: /* FALLTHROUGH */
-  case FL_UNFOCUS:
+  case fltk3::FOCUS: /* FALLTHROUGH */
+  case fltk3::UNFOCUS:
     if (box() && Fl::visible_focus()) {
       redraw();
       return 1;
@@ -108,13 +108,13 @@ int Fl_Menu_Button::handle(int e) {
 
 /**
   Creates a new Fl_Menu_Button widget using the given position,
-  size, and label string. The default boxtype is FL_UP_BOX.
+  size, and label string. The default boxtype is fltk3::UP_BOX.
   <P>The constructor sets menu() to NULL.  See 
   Fl_Menu_ for the methods to set or change the menu.
 */
 Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
 : Fl_Menu_(X,Y,W,H,l) {
-  down_box(FL_NO_BOX);
+  down_box(fltk3::NO_BOX);
 }
 
 //

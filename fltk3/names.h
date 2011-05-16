@@ -44,37 +44,37 @@
   #include <fltk3/names.h>		// array will be defined here
   int MyClass::handle(int e) {
       printf("Event was %s (%d)\n", fl_eventnames[e], e);
-      // ..resulting output might be e.g. "Event was FL_PUSH (1)"..
+      // ..resulting output might be e.g. "Event was fltk3::PUSH (1)"..
       [..]
   }
   \endcode
  */
 const char * const fl_eventnames[] =
 {
-  "FL_NO_EVENT",
-  "FL_PUSH",
-  "FL_RELEASE",
-  "FL_ENTER",
-  "FL_LEAVE",
-  "FL_DRAG",
-  "FL_FOCUS",
-  "FL_UNFOCUS",
+  "fltk3::NO_EVENT",
+  "fltk3::PUSH",
+  "fltk3::RELEASE",
+  "fltk3::ENTER",
+  "fltk3::LEAVE",
+  "fltk3::DRAG",
+  "fltk3::FOCUS",
+  "fltk3::UNFOCUS",
   "FL_KEYDOWN",
-  "FL_KEYUP",
-  "FL_CLOSE",
-  "FL_MOVE",
-  "FL_SHORTCUT",
-  "FL_DEACTIVATE",
-  "FL_ACTIVATE",
-  "FL_HIDE",
-  "FL_SHOW",
-  "FL_PASTE",
-  "FL_SELECTIONCLEAR",
-  "FL_MOUSEWHEEL",
-  "FL_DND_ENTER",
-  "FL_DND_DRAG",
-  "FL_DND_LEAVE",
-  "FL_DND_RELEASE",
+  "fltk3::KEYUP",
+  "fltk3::CLOSE",
+  "fltk3::MOVE",
+  "fltk3::SHORTCUT",
+  "fltk3::DEACTIVATE",
+  "fltk3::ACTIVATE",
+  "fltk3::HIDE",
+  "fltk3::SHOW",
+  "fltk3::PASTE",
+  "fltk3::SELECTIONCLEAR",
+  "fltk3::MOUSEWHEEL",
+  "fltk3::DND_ENTER",
+  "fltk3::DND_DRAG",
+  "fltk3::DND_LEAVE",
+  "fltk3::DND_RELEASE",
 };
 
 /**
@@ -87,31 +87,31 @@ const char * const fl_eventnames[] =
   #include <fltk3/names.h>		// array will be defined here
   int MyClass::my_callback(Fl_Widget *w, void*) {
       int fnum = w->labelfont();
-      // Resulting output might be e.g. "Label's font is FL_HELVETICA (0)"
+      // Resulting output might be e.g. "Label's font is fltk3::HELVETICA (0)"
       printf("Label's font is %s (%d)\n", fl_fontnames[fnum], fnum);
-      // ..resulting output might be e.g. "Label's font is FL_HELVETICA (0)"..
+      // ..resulting output might be e.g. "Label's font is fltk3::HELVETICA (0)"..
       [..]
   }
   \endcode
  */
 const char * const fl_fontnames[] =
 {
-  "FL_HELVETICA",
-  "FL_HELVETICA_BOLD",
-  "FL_HELVETICA_ITALIC",
-  "FL_HELVETICA_BOLD_ITALIC",
-  "FL_COURIER",
-  "FL_COURIER_BOLD",
-  "FL_COURIER_ITALIC",
-  "FL_COURIER_BOLD_ITALIC",
-  "FL_TIMES",
-  "FL_TIMES_BOLD",
-  "FL_TIMES_ITALIC",
-  "FL_TIMES_BOLD_ITALIC",
-  "FL_SYMBOL",
-  "FL_SCREEN",
-  "FL_SCREEN_BOLD",
-  "FL_ZAPF_DINGBATS",
+  "fltk3::HELVETICA",
+  "fltk3::HELVETICA_BOLD",
+  "fltk3::HELVETICA_ITALIC",
+  "fltk3::HELVETICA_BOLD_ITALIC",
+  "fltk3::COURIER",
+  "fltk3::COURIER_BOLD",
+  "fltk3::COURIER_ITALIC",
+  "fltk3::COURIER_BOLD_ITALIC",
+  "fltk3::TIMES",
+  "fltk3::TIMES_BOLD",
+  "fltk3::TIMES_ITALIC",
+  "fltk3::TIMES_BOLD_ITALIC",
+  "fltk3::SYMBOL",
+  "fltk3::SCREEN",
+  "fltk3::SCREEN_BOLD",
+  "fltk3::ZAPF_DINGBATS",
 };
 
 /** @} */

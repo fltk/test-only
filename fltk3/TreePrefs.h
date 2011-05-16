@@ -83,8 +83,8 @@ enum Fl_Tree_Select {
 /// instead of trying to accessing tree's preferences settings directly.
 ///
 class FL_EXPORT Fl_Tree_Prefs {
-  Fl_Font _labelfont;			// label's font face
-  Fl_Fontsize _labelsize;		// label's font size
+  fltk3::Font _labelfont;			// label's font face
+  fltk3::Fontsize _labelsize;		// label's font size
   int _margintop;			// -- 
   int _marginleft;			//   |- tree's margins
   //int _marginright;			//   |
@@ -95,9 +95,9 @@ class FL_EXPORT Fl_Tree_Prefs {
   int _connectorwidth;			// connector width (right of open/close icon)
   int _linespacing;			// vertical space between lines
   // Colors
-  Fl_Color _labelfgcolor;		// label's foreground color
-  Fl_Color _labelbgcolor;		// background color
-  Fl_Color _connectorcolor;		// connector dotted line color
+  fltk3::Color _labelfgcolor;		// label's foreground color
+  fltk3::Color _labelbgcolor;		// background color
+  fltk3::Color _connectorcolor;		// connector dotted line color
   Fl_Tree_Connector _connectorstyle;	// connector line style
   Fl_Image *_openimage;			// the 'open' icon [+]
   Fl_Image *_closeimage;		// the 'close' icon [-]
@@ -105,7 +105,7 @@ class FL_EXPORT Fl_Tree_Prefs {
   char _showcollapse;			// 1=show collapse icons, 0=don't
   char _showroot;			// show the root item as part of the tree
   Fl_Tree_Sort   _sortorder;		// none, ascening, descending, etc.
-  Fl_Boxtype     _selectbox;		// selection box type
+  fltk3::Boxtype     _selectbox;		// selection box type
   Fl_Tree_Select _selectmode;		// selection mode
 public:
   Fl_Tree_Prefs();
@@ -114,19 +114,19 @@ public:
   // Labels
   ////////////////////////////
   /// Return the label's font.
-  inline Fl_Font labelfont() const {
+  inline fltk3::Font labelfont() const {
     return(_labelfont);
   }
   /// Set the label's font to \p val.
-  inline void labelfont(Fl_Font val) {
+  inline void labelfont(fltk3::Font val) {
     _labelfont = val;
   }
   /// Return the label's size in pixels.
-  inline Fl_Fontsize labelsize() const {
+  inline fltk3::Fontsize labelsize() const {
     return(_labelsize);
   }
   /// Set the label's size in pixels to \p val.
-  inline void labelsize(Fl_Fontsize val) {
+  inline void labelsize(fltk3::Fontsize val) {
     _labelsize = val;
   }
   
@@ -202,27 +202,27 @@ public:
   // Colors and Styles
   ////////////////////////////
   /// Get the default label foreground color
-  inline Fl_Color labelfgcolor() const {
+  inline fltk3::Color labelfgcolor() const {
     return(_labelfgcolor);
   }
   /// Set the default label foreground color
-  inline void labelfgcolor(Fl_Color val) {
+  inline void labelfgcolor(fltk3::Color val) {
     _labelfgcolor = val;
   }
   /// Get the default label background color
-  inline Fl_Color labelbgcolor() const {
+  inline fltk3::Color labelbgcolor() const {
     return(_labelbgcolor);
   }
   /// Set the default label background color
-  inline void labelbgcolor(Fl_Color val) {
+  inline void labelbgcolor(fltk3::Color val) {
     _labelbgcolor = val;
   }
   /// Get the connector color used for tree connection lines.
-  inline Fl_Color connectorcolor() const {
+  inline fltk3::Color connectorcolor() const {
     return(_connectorcolor);
   }
   /// Set the connector color used for tree connection lines.
-  inline void connectorcolor(Fl_Color val) {
+  inline void connectorcolor(fltk3::Color val) {
     _connectorcolor = val;
   }
   /// Get the connector style.
@@ -303,12 +303,12 @@ public:
   inline void sortorder(Fl_Tree_Sort val) {
     _sortorder = val;
   }
-  /// Get the default selection box's box drawing style as an Fl_Boxtype.
-  inline Fl_Boxtype selectbox() const {
+  /// Get the default selection box's box drawing style as an fltk3::Boxtype.
+  inline fltk3::Boxtype selectbox() const {
     return(_selectbox);
   }
   /// Set the default selection box's box drawing style to \p val.
-  inline void selectbox(Fl_Boxtype val) {
+  inline void selectbox(fltk3::Boxtype val) {
     _selectbox = val;
   }
   /// Returns 1 if the root item is to be shown, or 0 if not.

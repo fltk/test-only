@@ -43,7 +43,7 @@ class Fl_Float_Input : public Fl_Input { // don't use FL_EXPORT here !
 public:
   /**
       Creates a new Fl_Float_Input widget using the given position,
-    size, and label string. The default boxtype is FL_DOWN_BOX.
+    size, and label string. The default boxtype is fltk3::DOWN_BOX.
   <P> Inherited destructor destroys the widget and any value associated with it
   */
   Fl_Float_Input(int X,int Y,int W,int H,const char *l = 0)

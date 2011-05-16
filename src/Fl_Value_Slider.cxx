@@ -32,14 +32,14 @@
 
 /**
   Creates a new Fl_Value_Slider widget using the given
-  position, size, and label string. The default boxtype is FL_DOWN_BOX.
+  position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
 */
 Fl_Value_Slider::Fl_Value_Slider(int X, int Y, int W, int H, const char*l)
 : Fl_Slider(X,Y,W,H,l) {
   step(1,100);
-  textfont_ = FL_HELVETICA;
+  textfont_ = fltk3::HELVETICA;
   textsize_ = 10;
-  textcolor_ = FL_FOREGROUND_COLOR;
+  textcolor_ = fltk3::FOREGROUND_COLOR;
 }
 
 void Fl_Value_Slider::draw() {
@@ -50,7 +50,7 @@ void Fl_Value_Slider::draw() {
   } else {
     syy += 25; bhh = 25; shh -= 25;
   }
-  if (damage()&FL_DAMAGE_ALL) draw_box(box(),sxx,syy,sww,shh,color());
+  if (damage()&fltk3::DAMAGE_ALL) draw_box(box(),sxx,syy,sww,shh,color());
   Fl_Slider::draw(sxx+Fl::box_dx(box()),
 		  syy+Fl::box_dy(box()),
 		  sww-Fl::box_dw(box()),
@@ -59,12 +59,12 @@ void Fl_Value_Slider::draw() {
   char buf[128];
   format(buf);
   fl_font(textfont(), textsize());
-  fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
-  fl_draw(buf, bxx, byy, bww, bhh, FL_ALIGN_CLIP);
+  fl_color(active_r() ? textcolor() : fltk3::inactive(textcolor()));
+  fl_draw(buf, bxx, byy, bww, bhh, fltk3::ALIGN_CLIP);
 }
 
 int Fl_Value_Slider::handle(int event) {
-  if (event == FL_PUSH && Fl::visible_focus()) {
+  if (event == fltk3::PUSH && Fl::visible_focus()) {
     Fl::focus(this);
     redraw();
   }

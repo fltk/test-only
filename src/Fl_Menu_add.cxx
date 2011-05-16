@@ -79,7 +79,7 @@ static Fl_Menu_Item* array_insert(
   m->user_data_ = 0;
   m->flags = flags;
   m->labeltype_ = m->labelsize_ = m->labelcolor_ = 0;
-  m->labelfont_ = FL_HELVETICA; 
+  m->labelfont_ = fltk3::HELVETICA; 
   return array;
 }
 
@@ -135,7 +135,7 @@ int Fl_Menu_Item::add(
  \param sc keyboard shortcut for new item
  \param cb callback function for new item
  \param data user data for new item
- \param myflags menu flags as described in FL_Menu_Item
+ \param myflags menu flags as described in fltk3::Menu_Item
  \returns the index into the menu() array, where the entry was added
 */
 int Fl_Menu_Item::insert(
@@ -222,7 +222,7 @@ int Fl_Menu_Item::insert(
   Adds a new menu item.
   
   \param[in] label    The text label for the menu item.
-  \param[in] shortcut Optional keyboard shortcut that can be an int or string; (FL_CTRL+'a') or "^a". Default 0 if none.
+  \param[in] shortcut Optional keyboard shortcut that can be an int or string; (fltk3::CTRL+'a') or "^a". Default 0 if none.
   \param[in] callback Optional callback invoked when user clicks the item. Default 0 if none.
   \param[in] userdata Optional user data passed as an argument to the callback. Default 0 if none.
   \param[in] flags    Optional flags that control the type of menu item; see below. Default is 0 for none.
@@ -265,13 +265,13 @@ int Fl_Menu_Item::insert(
   \par 
   This parameter is optional, and defaults to 0 to indicate no shortcut.
   \par
-  The shortcut can either be a raw integer value (eg. FL_CTRL+'A')
+  The shortcut can either be a raw integer value (eg. fltk3::CTRL+'A')
   or a string (eg. "^c" or "^97").
   \par
   Raw integer shortcuts can be a combination of keyboard chars (eg. 'A')
-  and optional keyboard modifiers (see Fl::event_state(), e.g. FL_SHIFT, etc).
-  In addition, FL_COMMAND can be used to denote FL_META under Mac OS X and
-  FL_CTRL under other platforms.
+  and optional keyboard modifiers (see Fl::event_state(), e.g. fltk3::SHIFT, etc).
+  In addition, fltk3::COMMAND can be used to denote fltk3::META under Mac OS X and
+  fltk3::CTRL under other platforms.
   \par
   String shortcuts can be specified in one of two ways:
   \par
@@ -348,7 +348,7 @@ int Fl_Menu_::add(const char *label,int shortcut,Fl_Callback *callback,void *use
   \param[in] label    The text label for the menu item. If the label 
                       is a menu pathname, \p index is ignored, and the pathname
 		      indicates the position of the new item.
-  \param[in] shortcut Optional keyboard shortcut. Can be an int (FL_CTRL+'a')
+  \param[in] shortcut Optional keyboard shortcut. Can be an int (fltk3::CTRL+'a')
                       or a string ("^a"). Default is 0.
   \param[in] callback Optional callback invoked when user clicks the item.
                       Default 0 if none.

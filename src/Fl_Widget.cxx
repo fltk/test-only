@@ -108,7 +108,7 @@ int Fl_Widget::handle(int) {
 }
 
 /** Default font size for widgets */
-Fl_Fontsize FL_NORMAL_SIZE = 14;
+fltk3::Fontsize fltk3::NORMAL_SIZE = 14;
 
 Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
 
@@ -117,21 +117,21 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
   label_.value	 = L;
   label_.image   = 0;
   label_.deimage = 0;
-  label_.type	 = FL_NORMAL_LABEL;
-  label_.font	 = FL_HELVETICA;
-  label_.size	 = FL_NORMAL_SIZE;
-  label_.color	 = FL_FOREGROUND_COLOR;
-  label_.align_	 = FL_ALIGN_CENTER;
+  label_.type	 = fltk3::normalLabel;
+  label_.font	 = fltk3::HELVETICA;
+  label_.size	 = fltk3::NORMAL_SIZE;
+  label_.color	 = fltk3::FOREGROUND_COLOR;
+  label_.align_	 = fltk3::ALIGN_CENTER;
   tooltip_       = 0;
   callback_	 = default_callback;
   user_data_ 	 = 0;
   type_		 = 0;
   flags_	 = VISIBLE_FOCUS;
   damage_	 = 0;
-  box_		 = FL_NO_BOX;
-  color_	 = FL_GRAY;
-  color2_	 = FL_GRAY;
-  when_		 = FL_WHEN_RELEASE;
+  box_		 = fltk3::NO_BOX;
+  color_	 = fltk3::GRAY;
+  color2_	 = fltk3::GRAY;
+  when_		 = fltk3::WHEN_RELEASE;
 
   parent_ = 0;
   if (Fl_Group::current()) Fl_Group::current()->add(this);
@@ -152,7 +152,7 @@ int Fl_Widget::damage_resize(int X, int Y, int W, int H) {
 int Fl_Widget::take_focus() {
   if (!takesevents()) return 0;
   if (!visible_focus()) return 0;
-  if (!handle(FL_FOCUS)) return 0; // see if it wants it
+  if (!handle(fltk3::FOCUS)) return 0; // see if it wants it
   if (contains(Fl::focus())) return 1; // it called Fl::focus for us
   Fl::focus(this);
   return 1;
@@ -184,20 +184,20 @@ Fl_Widget::~Fl_Widget() {
 
 /** Draws a focus box for the widget at the given position and size */
 void
-Fl_Widget::draw_focus(Fl_Boxtype B, int X, int Y, int W, int H) const {
+Fl_Widget::draw_focus(fltk3::Boxtype B, int X, int Y, int W, int H) const {
   if (!Fl::visible_focus()) return;
   switch (B) {
-    case FL_DOWN_BOX:
-    case FL_DOWN_FRAME:
-    case FL_THIN_DOWN_BOX:
-    case FL_THIN_DOWN_FRAME:
+    case fltk3::DOWN_BOX:
+    case fltk3::DOWN_FRAME:
+    case fltk3::THIN_DOWN_BOX:
+    case fltk3::THIN_DOWN_FRAME:
       X ++;
       Y ++;
     default:
       break;
   }
 
-  fl_color(fl_contrast(FL_BLACK, color()));
+  fl_color(fltk3::contrast(fltk3::BLACK, color()));
 
 #if defined(USE_X11) || defined(__APPLE_QUARTZ__)
   fl_line_style(FL_DOT);
@@ -234,7 +234,7 @@ void Fl_Widget::activate() {
     if (active_r()) {
       redraw();
       redraw_label();
-      handle(FL_ACTIVATE);
+      handle(fltk3::ACTIVATE);
       if (inside(Fl::focus())) Fl::focus()->take_focus();
     }
   }
@@ -245,7 +245,7 @@ void Fl_Widget::deactivate() {
     set_flag(INACTIVE);
     redraw();
     redraw_label();
-    handle(FL_DEACTIVATE);
+    handle(fltk3::DEACTIVATE);
     fl_throw_focus(this);
   } else {
     set_flag(INACTIVE);
@@ -264,7 +264,7 @@ void Fl_Widget::show() {
     if (visible_r()) {
       redraw();
       redraw_label();
-      handle(FL_SHOW);
+      handle(fltk3::SHOW);
       if (inside(Fl::focus())) Fl::focus()->take_focus();
     }
   }
@@ -275,7 +275,7 @@ void Fl_Widget::hide() {
     set_flag(INVISIBLE);
     for (Fl_Widget *p = parent(); p; p = p->parent())
       if (p->box() || !p->parent()) {p->redraw(); break;}
-    handle(FL_HIDE);
+    handle(fltk3::HIDE);
     fl_throw_focus(this);
   } else {
     set_flag(INVISIBLE);

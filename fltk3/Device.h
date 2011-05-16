@@ -112,9 +112,9 @@ public:
   struct matrix {double a, b, c, d, x, y;};
 private:
   static const matrix m0;
-  Fl_Font font_; // current font
-  Fl_Fontsize size_; // current font size
-  Fl_Color color_; // current color
+  fltk3::Font font_; // current font
+  fltk3::Fontsize size_; // current font size
+  fltk3::Color color_; // current color
   enum {LINE, LOOP, POLYGON, POINT_};
   int sptr;
   static const int matrix_stack_size = FL_MATRIX_STACK_SIZE;
@@ -162,8 +162,8 @@ protected:
 #endif
   friend void fl_draw(int angle, const char *str, int n, int x, int y);
   friend void fl_rtl_draw(const char *str, int n, int x, int y);
-  friend void fl_font(Fl_Font face, Fl_Fontsize size);
-  friend void fl_color(Fl_Color c);
+  friend void fl_font(fltk3::Font face, fltk3::Fontsize size);
+  friend void fl_color(fltk3::Color c);
   friend void fl_color(uchar r, uchar g, uchar b);
   friend void fl_point(int x, int y);
   friend void fl_loop(int x0, int y0, int x1, int y1, int x2, int y2);
@@ -249,8 +249,8 @@ protected:
   virtual void draw(int angle, const char *str, int n, int x, int y) = 0;
   /** \brief see fl_rtl_draw(const char *str, int n, int x, int y). */
   virtual void rtl_draw(const char *str, int n, int x, int y) = 0;
-  /** \brief see fl_color(Fl_Color c). */
-  virtual void color(Fl_Color c) {color_ = c;}
+  /** \brief see fl_color(fltk3::Color c). */
+  virtual void color(fltk3::Color c) {color_ = c;}
   /** \brief see fl_color(uchar r, uchar g, uchar b). */
   virtual void color(uchar r, uchar g, uchar b) = 0;
   /** \brief see fl_point(int x, int y). */
@@ -371,12 +371,12 @@ protected:
 public:
   static const char *class_id;
   virtual const char *class_name() {return class_id;};
-  /** \brief see fl_font(Fl_Font face, Fl_Fontsize size). */
-  virtual void font(Fl_Font face, Fl_Fontsize size) {font_ = face; size_ = size;}
+  /** \brief see fl_font(fltk3::Font face, fltk3::Fontsize size). */
+  virtual void font(fltk3::Font face, fltk3::Fontsize size) {font_ = face; size_ = size;}
   /** \brief see fl_font(void). */
-  Fl_Font font() {return font_; }
+  fltk3::Font font() {return font_; }
   /** \brief see fl_size(). */
-  Fl_Fontsize size() {return size_; }
+  fltk3::Fontsize size() {return size_; }
   /** \brief see fl_width(const char *str, int n). */
   virtual double width(const char *str, int n) = 0;
   /** \brief see fl_width(unsigned int n). */
@@ -388,7 +388,7 @@ public:
   /** \brief see fl_descent(). */
   virtual int descent() = 0;
   /** \brief see fl_color(void). */
-  Fl_Color color() {return color_;}
+  fltk3::Color color() {return color_;}
   /** Returns a pointer to the current Fl_Font_Descriptor for the graphics driver */
   inline Fl_Font_Descriptor *font_descriptor() { return font_descriptor_;}
   /** Sets the current Fl_Font_Descriptor for the graphics driver */
@@ -407,7 +407,7 @@ class FL_EXPORT Fl_Quartz_Graphics_Driver : public Fl_Graphics_Driver {
 public:
   static const char *class_id;
   const char *class_name() {return class_id;};
-  void color(Fl_Color c);
+  void color(fltk3::Color c);
   void color(uchar r, uchar g, uchar b);
   void draw(const char* str, int n, int x, int y);
 #ifdef __APPLE__
@@ -415,7 +415,7 @@ public:
 #endif
   void draw(int angle, const char *str, int n, int x, int y);
   void rtl_draw(const char* str, int n, int x, int y);
-  void font(Fl_Font face, Fl_Fontsize size);
+  void font(fltk3::Font face, fltk3::Fontsize size);
   void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(Fl_Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy);
@@ -440,12 +440,12 @@ class FL_EXPORT Fl_GDI_Graphics_Driver : public Fl_Graphics_Driver {
 public:
   static const char *class_id;
   const char *class_name() {return class_id;};
-  void color(Fl_Color c);
+  void color(fltk3::Color c);
   void color(uchar r, uchar g, uchar b);
   void draw(const char* str, int n, int x, int y);
   void draw(int angle, const char *str, int n, int x, int y);
   void rtl_draw(const char* str, int n, int x, int y);
-  void font(Fl_Font face, Fl_Fontsize size);
+  void font(fltk3::Font face, fltk3::Fontsize size);
   void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(Fl_Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy);
@@ -470,12 +470,12 @@ class Fl_Xlib_Graphics_Driver : public Fl_Graphics_Driver {
 public:
   static const char *class_id;
   const char *class_name() {return class_id;};
-  void color(Fl_Color c);
+  void color(fltk3::Color c);
   void color(uchar r, uchar g, uchar b);
   void draw(const char* str, int n, int x, int y);
   void draw(int angle, const char *str, int n, int x, int y);
   void rtl_draw(const char* str, int n, int x, int y);
-  void font(Fl_Font face, Fl_Fontsize size);
+  void font(fltk3::Font face, fltk3::Fontsize size);
   void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(Fl_Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy);

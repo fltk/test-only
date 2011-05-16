@@ -51,16 +51,16 @@ class Fl_Font_Descriptor {
 public:
   /** linked list for this Fl_Fontdesc */
   Fl_Font_Descriptor *next;	
-  Fl_Fontsize size; /**< font size */
+  fltk3::Fontsize size; /**< font size */
 #ifndef FL_DOXYGEN // don't bother with platorm dependant details in the doc. 
 #  ifdef WIN32
   HFONT fid;
   int *width[64];
   TEXTMETRIC metr;
   int angle;
-  FL_EXPORT Fl_Font_Descriptor(const char* fontname, Fl_Fontsize size);
+  FL_EXPORT Fl_Font_Descriptor(const char* fontname, fltk3::Fontsize size);
 #  elif defined(__APPLE_QUARTZ__)
-  FL_EXPORT Fl_Font_Descriptor(const char* fontname, Fl_Fontsize size);
+  FL_EXPORT Fl_Font_Descriptor(const char* fontname, fltk3::Fontsize size);
   ATSUTextLayout layout;
 #     if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
   CTFontRef fontref;
@@ -74,7 +74,7 @@ public:
   XftFont* font;
   //const char* encoding;
   int angle;
-  FL_EXPORT Fl_Font_Descriptor(const char* xfontname, Fl_Fontsize size, int angle);
+  FL_EXPORT Fl_Font_Descriptor(const char* xfontname, fltk3::Fontsize size, int angle);
 #  else
   XUtf8FontStruct* font;	// X UTF-8 font information
   FL_EXPORT Fl_Font_Descriptor(const char* xfontname);

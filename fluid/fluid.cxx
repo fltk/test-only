@@ -1056,7 +1056,7 @@ void print_menu_cb(Fl_Widget *, void *) {
     // Draw header...
     StartPage(dialog.hDC);
 
-    fl_font(FL_HELVETICA_BOLD, fontsize);
+    fl_font(fltk3::HELVETICA_BOLD, fontsize);
     fl_color(0, 0, 0);
 
     fl_draw(basename, 0, fontsize);
@@ -1117,7 +1117,7 @@ void print_menu_cb(Fl_Widget *, void *) {
     fl_color(0, 0, 255);
     fl_rectf(ulx, uly - 4 * yborder, ww, 4 * yborder);
 
-    fl_font(FL_HELVETICA_BOLD, 2 * yborder);
+    fl_font(fltk3::HELVETICA_BOLD, 2 * yborder);
     fl_color(255, 255, 255);
     fl_draw(win->label() ? win->label() : "Window",
             ulx + xborder, uly - 3 * yborder);
@@ -1638,51 +1638,51 @@ void toggle_sourceview_cb(Fl_Double_Window *, void *);
 
 Fl_Menu_Item Main_Menu[] = {
 {"&File",0,0,0,FL_SUBMENU},
-  {"&New...", FL_COMMAND+'n', new_cb, 0},
-  {"&Open...", FL_COMMAND+'o', open_cb, 0},
-  {"&Insert...", FL_COMMAND+'i', open_cb, (void*)1, FL_MENU_DIVIDER},
-  {"&Save", FL_COMMAND+'s', save_cb, 0},
-  {"Save &As...", FL_COMMAND+FL_SHIFT+'s', save_cb, (void*)1},
+  {"&New...", fltk3::COMMAND+'n', new_cb, 0},
+  {"&Open...", fltk3::COMMAND+'o', open_cb, 0},
+  {"&Insert...", fltk3::COMMAND+'i', open_cb, (void*)1, FL_MENU_DIVIDER},
+  {"&Save", fltk3::COMMAND+'s', save_cb, 0},
+  {"Save &As...", fltk3::COMMAND+fltk3::SHIFT+'s', save_cb, (void*)1},
   {"Sa&ve A Copy...", 0, save_cb, (void*)2},
   {"Save &Template...", 0, save_template_cb},
   {"&Revert...", 0, revert_cb, 0, FL_MENU_DIVIDER},
-  {"&Print...", FL_COMMAND+'p', print_menu_cb},
-  {"Write &Code...", FL_COMMAND+FL_SHIFT+'c', write_cb, 0},
-  {"&Write Strings...", FL_COMMAND+FL_SHIFT+'w', write_strings_cb, 0, FL_MENU_DIVIDER},
-  {relative_history[0], FL_COMMAND+'0', open_history_cb, absolute_history[0]},
-  {relative_history[1], FL_COMMAND+'1', open_history_cb, absolute_history[1]},
-  {relative_history[2], FL_COMMAND+'2', open_history_cb, absolute_history[2]},
-  {relative_history[3], FL_COMMAND+'3', open_history_cb, absolute_history[3]},
-  {relative_history[4], FL_COMMAND+'4', open_history_cb, absolute_history[4]},
-  {relative_history[5], FL_COMMAND+'5', open_history_cb, absolute_history[5]},
-  {relative_history[6], FL_COMMAND+'6', open_history_cb, absolute_history[6]},
-  {relative_history[7], FL_COMMAND+'7', open_history_cb, absolute_history[7]},
-  {relative_history[8], FL_COMMAND+'8', open_history_cb, absolute_history[8]},
-  {relative_history[9], FL_COMMAND+'9', open_history_cb, absolute_history[9], FL_MENU_DIVIDER},
-  {"&Quit", FL_COMMAND+'q', exit_cb},
+  {"&Print...", fltk3::COMMAND+'p', print_menu_cb},
+  {"Write &Code...", fltk3::COMMAND+fltk3::SHIFT+'c', write_cb, 0},
+  {"&Write Strings...", fltk3::COMMAND+fltk3::SHIFT+'w', write_strings_cb, 0, FL_MENU_DIVIDER},
+  {relative_history[0], fltk3::COMMAND+'0', open_history_cb, absolute_history[0]},
+  {relative_history[1], fltk3::COMMAND+'1', open_history_cb, absolute_history[1]},
+  {relative_history[2], fltk3::COMMAND+'2', open_history_cb, absolute_history[2]},
+  {relative_history[3], fltk3::COMMAND+'3', open_history_cb, absolute_history[3]},
+  {relative_history[4], fltk3::COMMAND+'4', open_history_cb, absolute_history[4]},
+  {relative_history[5], fltk3::COMMAND+'5', open_history_cb, absolute_history[5]},
+  {relative_history[6], fltk3::COMMAND+'6', open_history_cb, absolute_history[6]},
+  {relative_history[7], fltk3::COMMAND+'7', open_history_cb, absolute_history[7]},
+  {relative_history[8], fltk3::COMMAND+'8', open_history_cb, absolute_history[8]},
+  {relative_history[9], fltk3::COMMAND+'9', open_history_cb, absolute_history[9], FL_MENU_DIVIDER},
+  {"&Quit", fltk3::COMMAND+'q', exit_cb},
   {0},
 {"&Edit",0,0,0,FL_SUBMENU},
-  {"&Undo", FL_COMMAND+'z', undo_cb},
-  {"&Redo", FL_COMMAND+FL_SHIFT+'z', redo_cb, 0, FL_MENU_DIVIDER},
-  {"C&ut", FL_COMMAND+'x', cut_cb},
-  {"&Copy", FL_COMMAND+'c', copy_cb},
-  {"&Paste", FL_COMMAND+'v', paste_cb},
-  {"Dup&licate", FL_COMMAND+'u', duplicate_cb},
-  {"&Delete", FL_Delete, delete_cb, 0, FL_MENU_DIVIDER},
-  {"Select &All", FL_COMMAND+'a', select_all_cb},
-  {"Select &None", FL_COMMAND+FL_SHIFT+'a', select_none_cb, 0, FL_MENU_DIVIDER},
-  {"Pr&operties...", FL_F+1, openwidget_cb},
+  {"&Undo", fltk3::COMMAND+'z', undo_cb},
+  {"&Redo", fltk3::COMMAND+fltk3::SHIFT+'z', redo_cb, 0, FL_MENU_DIVIDER},
+  {"C&ut", fltk3::COMMAND+'x', cut_cb},
+  {"&Copy", fltk3::COMMAND+'c', copy_cb},
+  {"&Paste", fltk3::COMMAND+'v', paste_cb},
+  {"Dup&licate", fltk3::COMMAND+'u', duplicate_cb},
+  {"&Delete", fltk3::DeleteKey, delete_cb, 0, FL_MENU_DIVIDER},
+  {"Select &All", fltk3::COMMAND+'a', select_all_cb},
+  {"Select &None", fltk3::COMMAND+fltk3::SHIFT+'a', select_none_cb, 0, FL_MENU_DIVIDER},
+  {"Pr&operties...", fltk3::FKey+1, openwidget_cb},
   {"&Sort",0,sort_cb},
-  {"&Earlier", FL_F+2, earlier_cb},
-  {"&Later", FL_F+3, later_cb},
-  {"&Group", FL_F+7, group_cb},
-  {"Ung&roup", FL_F+8, ungroup_cb,0, FL_MENU_DIVIDER},
-  {"Hide O&verlays",FL_COMMAND+FL_SHIFT+'o',toggle_overlays},
-  {"Show Widget &Bin...",FL_ALT+'b',toggle_widgetbin_cb},
-  {"Show Source Code...",FL_ALT+FL_SHIFT+'s', (Fl_Callback*)toggle_sourceview_cb, 0, FL_MENU_DIVIDER},
-  {"Pro&ject Settings...",FL_ALT+'p',show_project_cb},
-  {"GU&I Settings...",FL_ALT+FL_SHIFT+'p',show_settings_cb,0,FL_MENU_DIVIDER},
-  {"Global &FLTK Settings...",FL_ALT+FL_SHIFT+'g',show_global_settings_cb},
+  {"&Earlier", fltk3::FKey+2, earlier_cb},
+  {"&Later", fltk3::FKey+3, later_cb},
+  {"&Group", fltk3::FKey+7, group_cb},
+  {"Ung&roup", fltk3::FKey+8, ungroup_cb,0, FL_MENU_DIVIDER},
+  {"Hide O&verlays",fltk3::COMMAND+fltk3::SHIFT+'o',toggle_overlays},
+  {"Show Widget &Bin...",fltk3::ALT+'b',toggle_widgetbin_cb},
+  {"Show Source Code...",fltk3::ALT+fltk3::SHIFT+'s', (Fl_Callback*)toggle_sourceview_cb, 0, FL_MENU_DIVIDER},
+  {"Pro&ject Settings...",fltk3::ALT+'p',show_project_cb},
+  {"GU&I Settings...",fltk3::ALT+fltk3::SHIFT+'p',show_settings_cb,0,FL_MENU_DIVIDER},
+  {"Global &FLTK Settings...",fltk3::ALT+fltk3::SHIFT+'g',show_global_settings_cb},
   {0},
 {"&New", 0, 0, (void *)New_Menu, FL_SUBMENU_POINTER},
 {"&Layout",0,0,0,FL_SUBMENU},
@@ -1708,18 +1708,18 @@ Fl_Menu_Item Main_Menu[] = {
     {"&Vertical",0,(Fl_Callback *)align_widget_cb,(void*)41},
     {0},
   {"Set &Widget Size",0,0,0,FL_SUBMENU|FL_MENU_DIVIDER},
-    {"&Tiny",FL_ALT+'1',(Fl_Callback *)widget_size_cb,(void*)8,0,FL_NORMAL_LABEL,FL_HELVETICA,8},
-    {"&Small",FL_ALT+'2',(Fl_Callback *)widget_size_cb,(void*)11,0,FL_NORMAL_LABEL,FL_HELVETICA,11},
-    {"&Normal",FL_ALT+'3',(Fl_Callback *)widget_size_cb,(void*)14,0,FL_NORMAL_LABEL,FL_HELVETICA,14},
-    {"&Medium",FL_ALT+'4',(Fl_Callback *)widget_size_cb,(void*)18,0,FL_NORMAL_LABEL,FL_HELVETICA,18},
-    {"&Large",FL_ALT+'5',(Fl_Callback *)widget_size_cb,(void*)24,0,FL_NORMAL_LABEL,FL_HELVETICA,24},
-    {"&Huge",FL_ALT+'6',(Fl_Callback *)widget_size_cb,(void*)32,0,FL_NORMAL_LABEL,FL_HELVETICA,32},
+    {"&Tiny",fltk3::ALT+'1',(Fl_Callback *)widget_size_cb,(void*)8,0,fltk3::normalLabel,fltk3::HELVETICA,8},
+    {"&Small",fltk3::ALT+'2',(Fl_Callback *)widget_size_cb,(void*)11,0,fltk3::normalLabel,fltk3::HELVETICA,11},
+    {"&Normal",fltk3::ALT+'3',(Fl_Callback *)widget_size_cb,(void*)14,0,fltk3::normalLabel,fltk3::HELVETICA,14},
+    {"&Medium",fltk3::ALT+'4',(Fl_Callback *)widget_size_cb,(void*)18,0,fltk3::normalLabel,fltk3::HELVETICA,18},
+    {"&Large",fltk3::ALT+'5',(Fl_Callback *)widget_size_cb,(void*)24,0,fltk3::normalLabel,fltk3::HELVETICA,24},
+    {"&Huge",fltk3::ALT+'6',(Fl_Callback *)widget_size_cb,(void*)32,0,fltk3::normalLabel,fltk3::HELVETICA,32},
     {0},
-  {"&Grid and Size Settings...",FL_COMMAND+'g',show_grid_cb},
+  {"&Grid and Size Settings...",fltk3::COMMAND+'g',show_grid_cb},
   {0},
 {"&Shell",0,0,0,FL_SUBMENU},
-  {"Execute &Command...",FL_ALT+'x',(Fl_Callback *)show_shell_window},
-  {"Execute &Again...",FL_ALT+'g',(Fl_Callback *)do_shell_command},
+  {"Execute &Command...",fltk3::ALT+'x',(Fl_Callback *)show_shell_window},
+  {"Execute &Again...",fltk3::ALT+'g',(Fl_Callback *)do_shell_command},
   {0},
 {"&Help",0,0,0,FL_SUBMENU},
   {"&Rapid development with FLUID...",0,help_cb},
@@ -1820,9 +1820,9 @@ void make_main_window() {
   if (!main_window) {
     Fl_Widget *o;
     main_window = new Fl_Double_Window(WINWIDTH,WINHEIGHT,"fluid");
-    main_window->box(FL_NO_BOX);
+    main_window->box(fltk3::NO_BOX);
     o = make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
-    o->box(FL_FLAT_BOX);
+    o->box(fltk3::FLAT_BOX);
     o->tooltip("Double-click to view or change an item.");
     main_window->resizable(o);
     main_menubar = new Fl_Menu_Bar(0,0,BROWSERWIDTH,MENUHEIGHT);
@@ -2391,7 +2391,7 @@ int main(int argc,char **argv) {
 #ifdef __APPLE__
     fl_open_callback(apple_open_cb);
 #endif // __APPLE__
-    Fl::visual((Fl_Mode)(FL_DOUBLE|FL_INDEX));
+    Fl::visual((Fl_Mode)(fltk3::DOUBLE|fltk3::INDEX));
     Fl_File_Icon::load_system_icons();
     main_window->callback(exit_cb);
     position_window(main_window,"main_window_pos", 1, 10, 30, WINWIDTH, WINHEIGHT );

@@ -43,7 +43,7 @@
   \image latex  Fl_Scroll.png "Fl_Scroll" width=4cm
 
   If all of the child widgets are packed together into a solid
-  rectangle then you want to set box() to FL_NO_BOX or
+  rectangle then you want to set box() to fltk3::NO_BOX or
   one of the _FRAME types. This will result in the best output.
   However, if the child widgets are a sparse arrangement you must
   set box() to a real _BOX type. This can result in some
@@ -64,11 +64,11 @@
   <LI>Fl_Scroll::BOTH_ALWAYS       - Both always on. </LI>
   </UL>
 
-  Use <B> scrollbar.align(int) ( see void Fl_Widget::align(Fl_Align) ) :</B>
+  Use <B> scrollbar.align(int) ( see void Fl_Widget::align(fltk3::Align) ) :</B>
   to change what side the scrollbars are drawn on.
 
-  If the FL_ALIGN_LEFT bit is on, the vertical scrollbar is on the left.
-  If the FL_ALIGN_TOP bit is on, the horizontal scrollbar is on
+  If the fltk3::ALIGN_LEFT bit is on, the vertical scrollbar is on the left.
+  If the fltk3::ALIGN_TOP bit is on, the horizontal scrollbar is on
   the top. Note that only the alignment flags in scrollbar are 
   considered. The flags in hscrollbar however are ignored.
 

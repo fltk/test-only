@@ -350,7 +350,7 @@ protected:
   void write_extra_code();
   void write_block_close();
   void write_code2();
-  void write_color(const char*, Fl_Color);
+  void write_color(const char*, fltk3::Color);
   Fl_Widget *live_widget;
 
 public:
@@ -384,7 +384,7 @@ public:
   uchar resizable() const;
   void resizable(uchar v);
 
-  virtual int textstuff(int what, Fl_Font &, int &, Fl_Color &);
+  virtual int textstuff(int what, fltk3::Font &, int &, fltk3::Color &);
   virtual Fl_Menu_Item *subtypes();
 
   virtual int is_widget() const;
@@ -665,7 +665,7 @@ public:
 
 #include <fltk3/Menu_.h>
 class Fl_Menu_Type : public Fl_Widget_Type {
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+  int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
     Fl_Menu_ *myo = (Fl_Menu_*)(w==4 ? ((Fl_Widget_Type*)this->factory)->o : this->o);
     switch (w) {
     case 4:
@@ -743,11 +743,11 @@ public:
 
 #include <fltk3/InputChoice.h>
 class Fl_Input_Choice_Type : public Fl_Menu_Type {
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
+  int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
     Fl_Input_Choice *myo = (Fl_Input_Choice*)(w==4 ? ((Fl_Widget_Type*)this->factory)->o : this->o);
     switch (w) {
     case 4:
-    case 0: f = (Fl_Font)myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
+    case 0: f = (fltk3::Font)myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
     case 1: myo->textfont(f); break;
     case 2: myo->textsize(s); break;
     case 3: myo->textcolor(c); break;

@@ -104,9 +104,9 @@ public:
    with an attribute mask matching attr
    */
   struct Style_Table_Entry {
-    Fl_Color    color;
-    Fl_Font     font;
-    Fl_Fontsize size;
+    fltk3::Color    color;
+    fltk3::Font     font;
+    fltk3::Fontsize size;
     unsigned    attr;
   };
   
@@ -172,13 +172,13 @@ public:
    Gets the text cursor color.  
    \return cursor color
    */
-  Fl_Color cursor_color() const {return mCursor_color;}
+  fltk3::Color cursor_color() const {return mCursor_color;}
   
   /**    
    Sets the text cursor color.
    \param n new cursor color
    */
-  void cursor_color(Fl_Color n) {mCursor_color = n;}
+  void cursor_color(fltk3::Color n) {mCursor_color = n;}
   
   /**   
    Gets the width/height of the scrollbars.
@@ -196,13 +196,13 @@ public:
    Gets the scrollbar alignment type.
    \return scrollbar alignment
    */
-  Fl_Align scrollbar_align() const { return scrollbar_align_; }
+  fltk3::Align scrollbar_align() const { return scrollbar_align_; }
   
   /**
    Sets the scrollbar alignment type.
    \param a new scrollbar alignment
    */
-  void scrollbar_align(Fl_Align a) { scrollbar_align_ = a; }
+  void scrollbar_align(fltk3::Align a) { scrollbar_align_ = a; }
   
   /**
    Moves the insert position to the beginning of the current word.
@@ -245,37 +245,37 @@ public:
    Gets the default font used when drawing text in the widget.
    \return current text font face unless overridden by a style
    */
-  Fl_Font textfont() const {return textfont_;}
+  fltk3::Font textfont() const {return textfont_;}
   
   /**
    Sets the default font used when drawing text in the widget.
    \param s default text font face
    */
-  void textfont(Fl_Font s) {textfont_ = s; mColumnScale = 0;}
+  void textfont(fltk3::Font s) {textfont_ = s; mColumnScale = 0;}
   
   /**
    Gets the default size of text in the widget.
    \return current text height unless overridden by a style
    */
-  Fl_Fontsize textsize() const {return textsize_;}
+  fltk3::Fontsize textsize() const {return textsize_;}
   
   /**
    Sets the default size of text in the widget.
    \param s new text size
    */
-  void textsize(Fl_Fontsize s) {textsize_ = s; mColumnScale = 0;}
+  void textsize(fltk3::Fontsize s) {textsize_ = s; mColumnScale = 0;}
   
   /**
    Gets the default color of text in the widget.
    \return text color unless overridden by a style
    */
-  Fl_Color textcolor() const {return textcolor_;}
+  fltk3::Color textcolor() const {return textcolor_;}
   
   /**
    Sets the default color of text in the widget.
    \param n new text color
    */
-  void textcolor(Fl_Color n) {textcolor_ = n;}
+  void textcolor(fltk3::Color n) {textcolor_ = n;}
   
   int wrapped_column(int row, int column) const;
   int wrapped_row(int row) const;
@@ -449,21 +449,21 @@ protected:
                                  needs to be mutable so that it can be calculated
                                  within a method marked as "const" */
   
-  Fl_Color mCursor_color;
+  fltk3::Color mCursor_color;
   
   Fl_Scrollbar* mHScrollBar;
   Fl_Scrollbar* mVScrollBar;
   int scrollbar_width_;
-  Fl_Align scrollbar_align_;
+  fltk3::Align scrollbar_align_;
   int dragPos, dragType, dragging;
   int display_insert_position_hint;
   struct { int x, y, w, h; } text_area;
   
   int shortcut_;
   
-  Fl_Font textfont_;
-  Fl_Fontsize textsize_;
-  Fl_Color textcolor_;
+  fltk3::Font textfont_;
+  fltk3::Fontsize textsize_;
+  fltk3::Color textcolor_;
   
   // The following are not presently used from the original NEdit code,
   // but are being put here so that future versions of Fl_Text_Display

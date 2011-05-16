@@ -28,12 +28,12 @@
 #include <fltk3/forms.h>
 /** Creates a bitmap widget from a box type, position, size and optional label specification */
 Fl_FormsBitmap::Fl_FormsBitmap(
-  Fl_Boxtype t, int X, int Y, int W, int H, const char* l)
+  fltk3::Boxtype t, int X, int Y, int W, int H, const char* l)
 : Fl_Widget(X, Y, W, H, l) {
   box(t);
   b = 0;
-  color(FL_BLACK);
-  align(FL_ALIGN_BOTTOM);
+  color(fltk3::BLACK);
+  align(fltk3::ALIGN_BOTTOM);
 }
 /** Sets a new bitmap bits with size W,H. Deletes the previous one.*/
 void Fl_FormsBitmap::set(int W, int H, const uchar *bits) {

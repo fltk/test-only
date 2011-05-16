@@ -226,7 +226,7 @@ Widget_Browser::Widget_Browser(int X,int Y,int W,int H,const char*l)
 : Fl_Browser_(X,Y,W,H,l) {
   type(FL_MULTI_BROWSER);
   Fl_Widget::callback(Widget_Browser_callback);
-  when(FL_WHEN_RELEASE);
+  when(fltk3::WHEN_RELEASE);
 }
 
 void *Widget_Browser::item_first() const {return Fl_Type::first;}
@@ -278,15 +278,15 @@ void Widget_Browser::item_draw(void *v, int X, int Y, int, int) const {
     }
     *d = 0;
     comment_incr = textsize()-1;
-    if (l->new_selected) fl_color(fl_contrast(FL_DARK_GREEN,FL_SELECTION_COLOR));
-    else fl_color(fl_contrast(FL_DARK_GREEN,color()));
-    fl_font(textfont()+FL_ITALIC, textsize()-2);
+    if (l->new_selected) fl_color(fltk3::contrast(fltk3::DARK_GREEN,fltk3::SELECTION_COLOR));
+    else fl_color(fltk3::contrast(fltk3::DARK_GREEN,color()));
+    fl_font(textfont()+fltk3::ITALIC, textsize()-2);
     fl_draw(buf, (l->is_parent())?X+12:X, Y+12);
     Y += comment_incr/2;
     comment_incr -= comment_incr/2;
   }
-  if (l->new_selected) fl_color(fl_contrast(FL_FOREGROUND_COLOR,FL_SELECTION_COLOR));
-  else fl_color(FL_FOREGROUND_COLOR);
+  if (l->new_selected) fl_color(fltk3::contrast(fltk3::FOREGROUND_COLOR,fltk3::SELECTION_COLOR));
+  else fl_color(fltk3::FOREGROUND_COLOR);
   Fl_Pixmap *pm = pixmap[l->pixmapID()];
   if (pm) pm->draw(X-18, Y);
   switch (l->is_public()) {
@@ -318,7 +318,7 @@ void Widget_Browser::item_draw(void *v, int X, int Y, int, int) const {
     X += int(fl_width(c)+fl_width('n'));
     c = l->name();
     if (c) {
-      fl_font(textfont()|FL_BOLD, textsize());
+      fl_font(textfont()|fltk3::BOLD, textsize());
       fl_draw(c, X, Y+13);
     } else if ((c=l->label())) {
       char buf[50]; char* p = buf;
@@ -341,7 +341,7 @@ void Widget_Browser::item_draw(void *v, int X, int Y, int, int) const {
     }
     if (*c) {strcpy(p,"..."); p+=3;}
     *p = 0;
-    fl_font(textfont() | (l->is_code_block() && (l->level==0 || l->parent->is_class())?0:FL_BOLD), textsize());
+    fl_font(textfont() | (l->is_code_block() && (l->level==0 || l->parent->is_class())?0:fltk3::BOLD), textsize());
     fl_draw(buf, X, Y+13);
   }
 }
@@ -361,7 +361,7 @@ int Widget_Browser::item_width(void *v) const {
     W += int(fl_width(c) + fl_width('n'));
     c = l->name();
     if (c) {
-      fl_font(textfont()|FL_BOLD, textsize());
+      fl_font(textfont()|fltk3::BOLD, textsize());
       W += int(fl_width(c));
     } else if ((c=l->label())) {
       char buf[50]; char* p = buf;
@@ -384,7 +384,7 @@ int Widget_Browser::item_width(void *v) const {
     }
     if (*c) {strcpy(p,"..."); p+=3;}
     *p = 0;
-    fl_font(textfont() | (l->is_code_block() && (l->level==0 || l->parent->is_class())?0:FL_BOLD), textsize());
+    fl_font(textfont() | (l->is_code_block() && (l->level==0 || l->parent->is_class())?0:fltk3::BOLD), textsize());
     W += int(fl_width(buf));
   }
 
@@ -404,7 +404,7 @@ int Widget_Browser::handle(int e) {
   Fl_Type *l;
   int X,Y,W,H; bbox(X,Y,W,H);
   switch (e) {
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (!Fl::event_inside(X,Y,W,H)) break;
     l = (Fl_Type*)find_item(Fl::event_y());
     if (l) {
@@ -416,7 +416,7 @@ int Widget_Browser::handle(int e) {
       }
     }
     break;
-  case FL_DRAG:
+  case fltk3::DRAG:
     if (!title) break;
     l = (Fl_Type*)find_item(Fl::event_y());
     if (l) {
@@ -430,10 +430,10 @@ int Widget_Browser::handle(int e) {
       pushedtitle = l;
     }
     return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     if (!title) {
       l = (Fl_Type*)find_item(Fl::event_y());
-      if (l && l->new_selected && (Fl::event_clicks() || Fl::event_state(FL_CTRL)))
+      if (l && l->new_selected && (Fl::event_clicks() || Fl::event_state(fltk3::CTRL)))
 	l->open();
       break;
     }

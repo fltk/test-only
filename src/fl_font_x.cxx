@@ -61,7 +61,7 @@ Fl_Font_Descriptor::~Fl_Font_Descriptor() {
 
 ////////////////////////////////////////////////////////////////
 
-// WARNING: if you add to this table, you must redefine FL_FREE_FONT
+// WARNING: if you add to this table, you must redefine fltk3::FREE_FONT
 // in enumerations.h & recompile!!
 static Fl_Fontdesc built_in_table[] = {
 {"-*-helvetica-medium-r-normal--*"},
@@ -264,7 +264,7 @@ XFontStruct* Fl_XFont_On_Demand::value() {
   return ptr;
 }
 
-void Fl_Xlib_Graphics_Driver::font(Fl_Font fnum, Fl_Fontsize size) {
+void Fl_Xlib_Graphics_Driver::font(fltk3::Font fnum, fltk3::Fontsize size) {
   if (fnum==-1) {
     Fl_Graphics_Driver::font(0, 0);
     return;
@@ -301,7 +301,7 @@ double Fl_Xlib_Graphics_Driver::width(unsigned int c) {
 
 void Fl_Xlib_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &dy, int &W, int &H) {
   if (font_gc != fl_gc) {
-    if (!font_descriptor()) font(FL_HELVETICA, FL_NORMAL_SIZE);
+    if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
     font_gc = fl_gc;
     XSetFont(fl_display, fl_gc, font_descriptor()->font->fid);
   }
@@ -319,7 +319,7 @@ void Fl_Xlib_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &d
 
 void Fl_Xlib_Graphics_Driver::draw(const char* c, int n, int x, int y) {
   if (font_gc != fl_gc) {
-    if (!font_descriptor()) this->font(FL_HELVETICA, FL_NORMAL_SIZE);
+    if (!font_descriptor()) this->font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
     font_gc = fl_gc;
     XSetFont(fl_display, fl_gc, font_descriptor()->font->fid);
   }
@@ -333,7 +333,7 @@ void Fl_Xlib_Graphics_Driver::draw(int angle, const char *str, int n, int x, int
 
 void Fl_Xlib_Graphics_Driver::rtl_draw(const char* c, int n, int x, int y) {
   if (font_gc != fl_gc) {
-    if (!font_descriptor()) this->font(FL_HELVETICA, FL_NORMAL_SIZE);
+    if (!font_descriptor()) this->font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
     font_gc = fl_gc;
   }
   if (fl_gc) XUtf8DrawRtlString(fl_display, fl_window, font_descriptor()->font, fl_gc, x, y, c, n);

@@ -34,12 +34,12 @@
 #include <fltk3/draw.h>
 
 void Fl_Value_Output::draw() {
-  Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;
+  fltk3::Boxtype b = box() ? box() : fltk3::DOWN_BOX;
   int X = x()+Fl::box_dx(b);
   int Y = y()+Fl::box_dy(b);
   int W = w()-Fl::box_dw(b);
   int H = h()-Fl::box_dh(b);
-  if (damage()&~FL_DAMAGE_CHILD)
+  if (damage()&~fltk3::DAMAGE_CHILD)
     draw_box(b, color());
   else {
     fl_color(color());
@@ -47,9 +47,9 @@ void Fl_Value_Output::draw() {
   }
   char buf[128];
   format(buf);
-  fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
+  fl_color(active_r() ? textcolor() : fltk3::inactive(textcolor()));
   fl_font(textfont(), textsize());
-  fl_draw(buf,X,Y,W,H,FL_ALIGN_LEFT);
+  fl_draw(buf,X,Y,W,H,fltk3::ALIGN_LEFT);
 }
 
 int Fl_Value_Output::handle(int event) {
@@ -59,12 +59,12 @@ int Fl_Value_Output::handle(int event) {
   int mx = Fl::event_x();
   static int ix, drag;
   switch (event) {
-  case FL_PUSH:
+  case fltk3::PUSH:
     ix = mx;
     drag = Fl::event_button();
     handle_push();
     return 1;
-  case FL_DRAG:
+  case fltk3::DRAG:
     delta = Fl::event_x()-ix;
     if (delta > 5) delta -= 5;
     else if (delta < -5) delta += 5;
@@ -77,11 +77,11 @@ int Fl_Value_Output::handle(int event) {
     v = round(v);
     handle_drag(soft()?softclamp(v):clamp(v));;
     return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     handle_release();
     return 1;
-  case FL_ENTER :
-  case FL_LEAVE :
+  case fltk3::ENTER :
+  case fltk3::LEAVE :
     return 1;
   default:
     return 0;
@@ -90,16 +90,16 @@ int Fl_Value_Output::handle(int event) {
 
 /**
   Creates a new Fl_Value_Output widget using the given
-  position, size, and label string. The default boxtype is FL_NO_BOX.
+  position, size, and label string. The default boxtype is fltk3::NO_BOX.
   <P> Inherited destructor destroys the Valuator.
 */
 Fl_Value_Output::Fl_Value_Output(int X, int Y, int W, int H,const char *l)
 : Fl_Valuator(X,Y,W,H,l) {
-  box(FL_NO_BOX);
-  align(FL_ALIGN_LEFT);
-  textfont_ = FL_HELVETICA;
-  textsize_ = FL_NORMAL_SIZE;
-  textcolor_ = FL_FOREGROUND_COLOR;
+  box(fltk3::NO_BOX);
+  align(fltk3::ALIGN_LEFT);
+  textfont_ = fltk3::HELVETICA;
+  textsize_ = fltk3::NORMAL_SIZE;
+  textcolor_ = fltk3::FOREGROUND_COLOR;
   soft_ = 0;
 }
 

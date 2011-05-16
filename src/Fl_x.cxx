@@ -191,12 +191,12 @@ static void do_queued_events() {
     XNextEvent(fl_display, &xevent);
     fl_handle(xevent);
   }
-  // we send FL_LEAVE only if the mouse did not enter some other window:
-  if (!in_a_window) Fl::handle(FL_LEAVE, 0);
+  // we send fltk3::LEAVE only if the mouse did not enter some other window:
+  if (!in_a_window) Fl::handle(fltk3::LEAVE, 0);
 #if CONSOLIDATE_MOTION
   else if (send_motion == fl_xmousewin) {
     send_motion = 0;
-    Fl::handle(FL_MOVE, fl_xmousewin);
+    Fl::handle(fltk3::MOVE, fl_xmousewin);
   }
 #endif
 }
@@ -644,7 +644,7 @@ void fl_open_display(Display* d) {
   fl_init_xim();
 
 #if !USE_COLORMAP
-  Fl::visual(FL_RGB);
+  Fl::visual(fltk3::RGB);
 #endif
 }
 
@@ -728,11 +728,11 @@ void Fl::paste(Fl_Widget &receiver, int clipboard) {
   if (fl_i_own_selection[clipboard]) {
     // We already have it, do it quickly without window server.
     // Notice that the text is clobbered if set_selection is
-    // called in response to FL_PASTE!
+    // called in response to fltk3::PASTE!
     Fl::e_text = fl_selection_buffer[clipboard];
     Fl::e_length = fl_selection_length[clipboard];
     if (!Fl::e_text) Fl::e_text = (char *)"";
-    receiver.handle(FL_PASTE);
+    receiver.handle(fltk3::PASTE);
     return;
   }
   // otherwise get the window server to return it:
@@ -810,7 +810,7 @@ static void set_event_xy() {
   fl_event_time = fl_xevent->xbutton.time;
 #  ifdef __sgi
   // get the meta key off PC keyboards:
-  if (fl_key_vector[18]&0x18) Fl::e_state |= FL_META;
+  if (fl_key_vector[18]&0x18) Fl::e_state |= fltk3::META;
 #  endif
   // turn off is_click if enough time or mouse movement has passed:
   if (abs(Fl::e_x_root-px)+abs(Fl::e_y_root-py) > 3 ||
@@ -992,7 +992,7 @@ int fl_handle(const XEvent& thisevent)
     Fl::e_text = buffer ? (char*)buffer : (char *)"";
     Fl::e_length = bytesread;
     int old_event = Fl::e_number;
-    fl_selection_requestor->handle(Fl::e_number = FL_PASTE);
+    fl_selection_requestor->handle(Fl::e_number = fltk3::PASTE);
     Fl::e_number = old_event;
     // Detect if this paste is due to Xdnd by the property name (I use
     // XA_SECONDARY for that) and send an XdndFinished message. It is not
@@ -1074,7 +1074,7 @@ int fl_handle(const XEvent& thisevent)
     Atom message = fl_xevent->xclient.message_type;
     const long* data = fl_xevent->xclient.data.l;
     if ((Atom)(data[0]) == WM_DELETE_WINDOW) {
-      event = FL_CLOSE;
+      event = fltk3::CLOSE;
     } else if (message == fl_XdndEnter) {
       fl_xmousewin = window;
       in_a_window = true;
@@ -1125,7 +1125,7 @@ int fl_handle(const XEvent& thisevent)
       else
         fl_dnd_type = fl_dnd_source_types[0];
 
-      event = FL_DND_ENTER;
+      event = fltk3::DND_ENTER;
       Fl::e_text = unknown;
       Fl::e_length = unknown_len;
       break;
@@ -1145,7 +1145,7 @@ int fl_handle(const XEvent& thisevent)
       fl_dnd_action = fl_XdndActionCopy;
       Fl::e_text = unknown;
       Fl::e_length = unknown_len;
-      int accept = Fl::handle(FL_DND_DRAG, window);
+      int accept = Fl::handle(fltk3::DND_DRAG, window);
       fl_sendClientMessage(data[0], fl_XdndStatus,
                            fl_xevent->xclient.window,
                            accept ? 1 : 0,
@@ -1156,7 +1156,7 @@ int fl_handle(const XEvent& thisevent)
 
     } else if (message == fl_XdndLeave) {
       fl_dnd_source_window = 0; // don't send a finished message to it
-      event = FL_DND_LEAVE;
+      event = fltk3::DND_LEAVE;
       Fl::e_text = unknown;
       Fl::e_length = unknown_len;
       break;
@@ -1169,7 +1169,7 @@ int fl_handle(const XEvent& thisevent)
       Window to_window = fl_xevent->xclient.window;
       Fl::e_text = unknown;
       Fl::e_length = unknown_len;
-      if (Fl::handle(FL_DND_RELEASE, window)) {
+      if (Fl::handle(fltk3::DND_RELEASE, window)) {
         fl_selection_requestor = Fl::belowmouse();
         XConvertSelection(fl_display, fl_XdndSelection,
                           fl_dnd_type, XA_SECONDARY,
@@ -1188,7 +1188,7 @@ int fl_handle(const XEvent& thisevent)
     break;}
 
   case UnmapNotify:
-    event = FL_HIDE;
+    event = fltk3::HIDE;
     break;
 
   case Expose:
@@ -1201,18 +1201,18 @@ int fl_handle(const XEvent& thisevent)
 #  endif
 
   case GraphicsExpose:
-    window->damage(FL_DAMAGE_EXPOSE, xevent.xexpose.x, xevent.xexpose.y,
+    window->damage(fltk3::DAMAGE_EXPOSE, xevent.xexpose.x, xevent.xexpose.y,
                    xevent.xexpose.width, xevent.xexpose.height);
     return 1;
 
   case FocusIn:
     if (fl_xim_ic) XSetICFocus(fl_xim_ic);
-    event = FL_FOCUS;
+    event = fltk3::FOCUS;
     break;
 
   case FocusOut:
     if (fl_xim_ic) XUnsetICFocus(fl_xim_ic);
-    event = FL_UNFOCUS;
+    event = fltk3::UNFOCUS;
     break;
 
   case KeyPress:
@@ -1258,7 +1258,7 @@ int fl_handle(const XEvent& thisevent)
           keysym = XKeycodeToKeysym(fl_display, keycode, 0);
         }
       }
-      // MRS: Can't use Fl::event_state(FL_CTRL) since the state is not
+      // MRS: Can't use Fl::event_state(fltk3::CTRL) since the state is not
       //      set until set_event_xy() is called later...
       if ((xevent.xkey.state & ControlMask) && keysym == '-') buffer[0] = 0x1f; // ^_
       buffer[len] = 0;
@@ -1298,7 +1298,7 @@ int fl_handle(const XEvent& thisevent)
         }
       }
 
-      event = FL_KEYUP;
+      event = fltk3::KEYUP;
       fl_key_vector[keycode/8] &= ~(1 << (keycode%8));
       // keyup events just get the unshifted keysym:
       keysym = XKeycodeToKeysym(fl_display, keycode, 0);
@@ -1307,9 +1307,9 @@ int fl_handle(const XEvent& thisevent)
     // You can plug a microsoft keyboard into an sgi but the extra shift
     // keys are not translated.  Make them translate like XFree86 does:
     if (!keysym) switch(keycode) {
-    case 147: keysym = FL_Meta_L; break;
-    case 148: keysym = FL_Meta_R; break;
-    case 149: keysym = FL_Menu; break;
+    case 147: keysym = fltk3::MetaLKey; break;
+    case 148: keysym = fltk3::MetaRKey; break;
+    case 149: keysym = fltk3::MenuKey; break;
     }
 #  endif
 #  if BACKSPACE_HACK
@@ -1318,8 +1318,8 @@ int fl_handle(const XEvent& thisevent)
     // very few of these remain?
     static int got_backspace = 0;
     if (!got_backspace) {
-      if (keysym == FL_Delete) keysym = FL_BackSpace;
-      else if (keysym == FL_BackSpace) got_backspace = 1;
+      if (keysym == fltk3::DeleteKey) keysym = fltk3::BackSpaceKey;
+      else if (keysym == fltk3::BackSpaceKey) got_backspace = 1;
     }
 #  endif
     // For the first few years, there wasn't a good consensus on what the
@@ -1329,12 +1329,12 @@ int fl_handle(const XEvent& thisevent)
 	case XK_Meta_L:
 	case XK_Hyper_L:
 	case XK_Super_L:
-	  keysym = FL_Meta_L;
+	  keysym = fltk3::MetaLKey;
 	  break;
 	case XK_Meta_R:
 	case XK_Hyper_R:
 	case XK_Super_R:
-	  keysym = FL_Meta_R;
+	  keysym = fltk3::MetaRKey;
 	  break;
       }
     // We have to get rid of the XK_KP_function keys, because they are
@@ -1344,21 +1344,21 @@ int fl_handle(const XEvent& thisevent)
       // Map keypad keysym to character or keysym depending on
       // numlock state...
       unsigned long keysym1 = XKeycodeToKeysym(fl_display, keycode, 1);
-      if (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= FL_KP_Last))
-        Fl::e_original_keysym = (int)(keysym1 | FL_KP);
+      if (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= fltk3::KPLastKey))
+        Fl::e_original_keysym = (int)(keysym1 | fltk3::KPKey);
       if ((xevent.xkey.state & Mod2Mask) &&
-          (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= FL_KP_Last))) {
+          (keysym1 <= 0x7f || (keysym1 > 0xff9f && keysym1 <= fltk3::KPLastKey))) {
         // Store ASCII numeric keypad value...
-        keysym = keysym1 | FL_KP;
+        keysym = keysym1 | fltk3::KPKey;
         buffer[0] = char(keysym1) & 0x7F;
         len = 1;
       } else {
         // Map keypad to special key...
         static const unsigned short table[15] = {
-          FL_F+1, FL_F+2, FL_F+3, FL_F+4,
-          FL_Home, FL_Left, FL_Up, FL_Right,
-          FL_Down, FL_Page_Up, FL_Page_Down, FL_End,
-          0xff0b/*XK_Clear*/, FL_Insert, FL_Delete};
+          fltk3::FKey+1, fltk3::FKey+2, fltk3::FKey+3, fltk3::FKey+4,
+          fltk3::HomeKey, fltk3::LeftKey, fltk3::UpKey, fltk3::RightKey,
+          fltk3::DownKey, fltk3::PageUpKey, fltk3::PageDownKey, fltk3::EndKey,
+          0xff0b/*XK_Clear*/, fltk3::InsertKey, fltk3::DeleteKey};
         keysym = table[keysym-0xff91];
       }
     } else {
@@ -1367,25 +1367,25 @@ int fl_handle(const XEvent& thisevent)
     }
     Fl::e_keysym = int(keysym);
 
-    // replace XK_ISO_Left_Tab (Shift-TAB) with FL_Tab (modifier flags are set correctly by X11)
-    if (Fl::e_keysym == 0xfe20) Fl::e_keysym = FL_Tab;
+    // replace XK_ISO_Left_Tab (Shift-TAB) with fltk3::TabKey (modifier flags are set correctly by X11)
+    if (Fl::e_keysym == 0xfe20) Fl::e_keysym = fltk3::TabKey;
 
     set_event_xy();
     Fl::e_is_click = 0;
     break;}
 
   case ButtonPress:
-    Fl::e_keysym = FL_Button + xevent.xbutton.button;
+    Fl::e_keysym = fltk3::MouseButton + xevent.xbutton.button;
     set_event_xy();
     if (xevent.xbutton.button == Button4) {
       Fl::e_dy = -1; // Up
-      event = FL_MOUSEWHEEL;
+      event = fltk3::MOUSEWHEEL;
     } else if (xevent.xbutton.button == Button5) {
       Fl::e_dy = +1; // Down
-      event = FL_MOUSEWHEEL;
+      event = fltk3::MOUSEWHEEL;
     } else {
-      Fl::e_state |= (FL_BUTTON1 << (xevent.xbutton.button-1));
-      event = FL_PUSH;
+      Fl::e_state |= (fltk3::BUTTON1 << (xevent.xbutton.button-1));
+      event = fltk3::PUSH;
       checkdouble();
     }
 
@@ -1400,19 +1400,19 @@ int fl_handle(const XEvent& thisevent)
     in_a_window = true;
     return 0;
 #  else
-    event = FL_MOVE;
+    event = fltk3::MOVE;
     fl_xmousewin = window;
     in_a_window = true;
     break;
 #  endif
 
   case ButtonRelease:
-    Fl::e_keysym = FL_Button + xevent.xbutton.button;
+    Fl::e_keysym = fltk3::MouseButton + xevent.xbutton.button;
     set_event_xy();
-    Fl::e_state &= ~(FL_BUTTON1 << (xevent.xbutton.button-1));
+    Fl::e_state &= ~(fltk3::BUTTON1 << (xevent.xbutton.button-1));
     if (xevent.xbutton.button == Button4 ||
         xevent.xbutton.button == Button5) return 0;
-    event = FL_RELEASE;
+    event = fltk3::RELEASE;
 
     fl_xmousewin = window;
     in_a_window = true;
@@ -1423,7 +1423,7 @@ int fl_handle(const XEvent& thisevent)
     // XInstallColormap(fl_display, Fl_X::i(window)->colormap);
     set_event_xy();
     Fl::e_state = xevent.xcrossing.state << 16;
-    event = FL_ENTER;
+    event = fltk3::ENTER;
 
     fl_xmousewin = window;
     in_a_window = true;
@@ -1440,7 +1440,7 @@ int fl_handle(const XEvent& thisevent)
     set_event_xy();
     Fl::e_state = xevent.xcrossing.state << 16;
     fl_xmousewin = 0;
-    in_a_window = false; // make do_queued_events produce FL_LEAVE event
+    in_a_window = false; // make do_queued_events produce fltk3::LEAVE event
     return 0;
 
   // We cannot rely on the x,y position in the configure notify event.
@@ -1451,7 +1451,7 @@ int fl_handle(const XEvent& thisevent)
   // window managers do not send this fake event anyway)
   // So anyway, do a round trip to find the correct x,y:
   case MapNotify:
-    event = FL_SHOW;
+    event = fltk3::SHOW;
 
   case ConfigureNotify: {
     if (window->parent()) break; // ignore child windows
@@ -1730,7 +1730,7 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
   if (showit) {
     win->set_visible();
     int old_event = Fl::e_number;
-    win->handle(Fl::e_number = FL_SHOW); // get child windows to appear
+    win->handle(Fl::e_number = fltk3::SHOW); // get child windows to appear
     Fl::e_number = old_event;
     win->redraw();
   }
@@ -1861,10 +1861,10 @@ static inline int can_boxcheat(uchar b) {return (b==1 || ((b&2) && b<=15));}
 void Fl_Window::show() {
   image(Fl::scheme_bg_);
   if (Fl::scheme_bg_) {
-    labeltype(FL_NORMAL_LABEL);
-    align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_CLIP);
+    labeltype(fltk3::normalLabel);
+    align(fltk3::ALIGN_CENTER | fltk3::ALIGN_INSIDE | fltk3::ALIGN_CLIP);
   } else {
-    labeltype(FL_NO_LABEL);
+    labeltype(fltk3::noLabel);
   }
   Fl_Tooltip::exit(this);
   if (!shown()) {

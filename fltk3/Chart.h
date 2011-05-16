@@ -85,9 +85,9 @@ class FL_EXPORT Fl_Chart : public Fl_Widget {
     FL_CHART_ENTRY *entries;
     double min,max;
     uchar autosize_;
-    Fl_Font textfont_;
-    Fl_Fontsize textsize_;
-    Fl_Color textcolor_;
+    fltk3::Font textfont_;
+    fltk3::Fontsize textsize_;
+    fltk3::Color textcolor_;
 protected:
     void draw();
 public:
@@ -126,19 +126,19 @@ public:
     void maxsize(int m);
 
     /** Gets the chart's text font */
-    Fl_Font textfont() const {return textfont_;}
+    fltk3::Font textfont() const {return textfont_;}
     /** Sets the chart's text font to \p s. */
-    void textfont(Fl_Font s) {textfont_ = s;}
+    void textfont(fltk3::Font s) {textfont_ = s;}
 
     /** Gets the chart's text size */
-    Fl_Fontsize textsize() const {return textsize_;}
+    fltk3::Fontsize textsize() const {return textsize_;}
     /** gets the chart's text size to \p s. */
-    void textsize(Fl_Fontsize s) {textsize_ = s;}
+    void textsize(fltk3::Fontsize s) {textsize_ = s;}
 
     /** Gets the chart's text color */
-    Fl_Color textcolor() const {return textcolor_;}
+    fltk3::Color textcolor() const {return textcolor_;}
     /** gets the chart's text color to \p n. */
-    void textcolor(Fl_Color n) {textcolor_ = n;}
+    void textcolor(fltk3::Color n) {textcolor_ = n;}
 
     /**
       Get whether the chart will automatically adjust the bounds of the chart.

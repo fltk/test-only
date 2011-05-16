@@ -142,22 +142,22 @@ public:
     Set or change the OpenGL capabilites of the window.  The value can be
     any of the following OR'd together:
 
-    - \c FL_RGB - RGB color (not indexed)
-    - \c FL_RGB8 - RGB color with at least 8 bits of each color
-    - \c FL_INDEX - Indexed mode
-    - \c FL_SINGLE - not double buffered
-    - \c FL_DOUBLE - double buffered
-    - \c FL_ACCUM - accumulation buffer
-    - \c FL_ALPHA - alpha channel in color
-    - \c FL_DEPTH - depth buffer
-    - \c FL_STENCIL - stencil buffer
-    - \c FL_MULTISAMPLE - multisample antialiasing
+    - \c fltk3::RGB - RGB color (not indexed)
+    - \c fltk3::RGB8 - RGB color with at least 8 bits of each color
+    - \c fltk3::INDEX - Indexed mode
+    - \c fltk3::SINGLE - not double buffered
+    - \c fltk3::DOUBLE - double buffered
+    - \c fltk3::ACCUM - accumulation buffer
+    - \c fltk3::ALPHA - alpha channel in color
+    - \c fltk3::DEPTH - depth buffer
+    - \c fltk3::STENCIL - stencil buffer
+    - \c fltk3::MULTISAMPLE - multisample antialiasing
 
-    FL_RGB and FL_SINGLE have a value of zero, so they
-    are "on" unless you give FL_INDEX or FL_DOUBLE.
+    fltk3::RGB and fltk3::SINGLE have a value of zero, so they
+    are "on" unless you give fltk3::INDEX or fltk3::DOUBLE.
 
     If the desired combination cannot be done, FLTK will try turning off 
-    FL_MULTISAMPLE.  If this also fails the show() will call 
+    fltk3::MULTISAMPLE.  If this also fails the show() will call 
     Fl::error() and not show the window.
 
     You can change the mode while the window is displayed.  This is most
@@ -212,13 +212,13 @@ public:
   ~Fl_Gl_Window();
   /**
     Creates a new Fl_Gl_Window widget using the given size, and label string. 
-    The default boxtype is FL_NO_BOX. The default mode is FL_RGB|FL_DOUBLE|FL_DEPTH.
+    The default boxtype is fltk3::NO_BOX. The default mode is fltk3::RGB|fltk3::DOUBLE|fltk3::DEPTH.
   */
   Fl_Gl_Window(int W, int H, const char *l=0) : Fl_Window(W,H,l) {init();}
   /**
     Creates a new Fl_Gl_Window widget using the given position,
-    size, and label string. The default boxtype is FL_NO_BOX. The
-    default mode is FL_RGB|FL_DOUBLE|FL_DEPTH.
+    size, and label string. The default boxtype is fltk3::NO_BOX. The
+    default mode is fltk3::RGB|fltk3::DOUBLE|fltk3::DEPTH.
   */
 
   Fl_Gl_Window(int X, int Y, int W, int H, const char *l=0)

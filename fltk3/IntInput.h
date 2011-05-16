@@ -41,7 +41,7 @@ class FL_EXPORT Fl_Int_Input : public Fl_Input {
 public:
   /**
     Creates a new Fl_Int_Input widget using the given position,
-    size, and label string. The default boxtype is FL_DOWN_BOX.
+    size, and label string. The default boxtype is fltk3::DOWN_BOX.
     <P>Inherited destructor Destroys the widget and any value associated with it.
   */
   Fl_Int_Input(int X,int Y,int W,int H,const char *l = 0)

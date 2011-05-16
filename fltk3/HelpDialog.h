@@ -77,8 +77,8 @@ public:
   void resize(int xx, int yy, int ww, int hh);
   void show();
   void show(int argc, char **argv);
-  void textsize(Fl_Fontsize s);
-  Fl_Fontsize textsize();
+  void textsize(fltk3::Fontsize s);
+  fltk3::Fontsize textsize();
   void topline(const char *n);
   void topline(int n);
   void value(const char *f);

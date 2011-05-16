@@ -54,9 +54,9 @@ protected:
 
   uchar alloc;			// flag indicates if menu_ is a dynamic copy (=1) or not (=0)
   uchar down_box_;
-  Fl_Font textfont_;
-  Fl_Fontsize textsize_;
-  Fl_Color textcolor_;
+  fltk3::Font textfont_;
+  fltk3::Fontsize textsize_;
+  fltk3::Color textcolor_;
 
 public:
   Fl_Menu_(int,int,int,int,const char * =0);
@@ -74,7 +74,7 @@ public:
     Returns the menu item with the entered shortcut (key value).
 
     This searches the complete menu() for a shortcut that matches the
-    entered key value.  It must be called for a FL_KEYBOARD or FL_SHORTCUT
+    entered key value.  It must be called for a fltk3::KEYBOARD or fltk3::SHORTCUT
     event.
 
     If a match is found, the menu's callback will be called.
@@ -133,30 +133,30 @@ public:
   const char *text(int i) const {return menu_[i].text;}
 
   /** Gets the current font of menu item labels.  */
-  Fl_Font textfont() const {return textfont_;}
+  fltk3::Font textfont() const {return textfont_;}
   /**  Sets the current font of menu item labels.  */
-  void textfont(Fl_Font c) {textfont_=c;}
+  void textfont(fltk3::Font c) {textfont_=c;}
   /**  Gets the font size of menu item labels.  */
-  Fl_Fontsize textsize() const {return textsize_;}
+  fltk3::Fontsize textsize() const {return textsize_;}
   /**  Sets the font size of menu item labels.  */
-  void textsize(Fl_Fontsize c) {textsize_=c;}
+  void textsize(fltk3::Fontsize c) {textsize_=c;}
   /** Get the current color of menu item labels.  */
-  Fl_Color textcolor() const {return textcolor_;}
+  fltk3::Color textcolor() const {return textcolor_;}
   /** Sets the current color of menu item labels. */
-  void textcolor(Fl_Color c) {textcolor_=c;}
+  void textcolor(fltk3::Color c) {textcolor_=c;}
 
   /**
     This box type is used to surround the currently-selected items in the
-    menus.  If this is FL_NO_BOX then it acts like 
-    FL_THIN_UP_BOX and selection_color() acts like 
-    FL_WHITE, for back compatibility.    
+    menus.  If this is fltk3::NO_BOX then it acts like 
+    fltk3::THIN_UP_BOX and selection_color() acts like 
+    fltk3::WHITE, for back compatibility.    
   */
-  Fl_Boxtype down_box() const {return (Fl_Boxtype)down_box_;}
-  /**    See Fl_Boxtype Fl_Menu_::down_box() const   */
-  void down_box(Fl_Boxtype b) {down_box_ = b;}
+  fltk3::Boxtype down_box() const {return (fltk3::Boxtype)down_box_;}
+  /**    See fltk3::Boxtype Fl_Menu_::down_box() const   */
+  void down_box(fltk3::Boxtype b) {down_box_ = b;}
 
   /** For back compatibility, same as selection_color() */
-  Fl_Color down_color() const {return selection_color();}
+  fltk3::Color down_color() const {return selection_color();}
   /** For back compatibility, same as selection_color() */
   void down_color(unsigned c) {selection_color(c);}
 };

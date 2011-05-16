@@ -63,7 +63,7 @@
 class FL_EXPORT Fl_Clock_Output : public Fl_Widget {
   int hour_, minute_, second_;
   ulong value_;
-  void drawhands(Fl_Color,Fl_Color); // part of draw
+  void drawhands(fltk3::Color,fltk3::Color); // part of draw
 protected:
   void draw();
   void draw(int X, int Y, int W, int H);

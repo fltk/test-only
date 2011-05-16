@@ -344,11 +344,11 @@ void Fl_Double_Window::flush(int eraseoverlay) {
 #endif
 #if defined(USE_X11) || defined(WIN32)
     myi->other_xid = fl_create_offscreen(w(), h());
-    clear_damage(FL_DAMAGE_ALL);
+    clear_damage(fltk3::DAMAGE_ALL);
 #elif defined(__APPLE_QUARTZ__)
     if (force_doublebuffering_) {
       myi->other_xid = fl_create_offscreen(w(), h());
-      clear_damage(FL_DAMAGE_ALL);
+      clear_damage(fltk3::DAMAGE_ALL);
     }
 #else
 # error unsupported platform
@@ -359,7 +359,7 @@ void Fl_Double_Window::flush(int eraseoverlay) {
     if (myi->backbuffer_bad || eraseoverlay) {
       // Make sure we do a complete redraw...
       if (myi->region) {XDestroyRegion(myi->region); myi->region = 0;}
-      clear_damage(FL_DAMAGE_ALL);
+      clear_damage(fltk3::DAMAGE_ALL);
       myi->backbuffer_bad = 0;
     }
 
@@ -379,7 +379,7 @@ void Fl_Double_Window::flush(int eraseoverlay) {
     return;
   } else
 #endif
-  if (damage() & ~FL_DAMAGE_EXPOSE) {
+    if (damage() & ~fltk3::DAMAGE_EXPOSE) {
     fl_clip_region(myi->region); myi->region = 0;
 #ifdef WIN32
     HDC _sgc = fl_gc;

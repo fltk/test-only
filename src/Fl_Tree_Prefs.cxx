@@ -126,8 +126,8 @@ void Fl_Tree_Prefs::closeicon(Fl_Image *val) {
 
 /// Fl_Tree_Prefs constructor
 Fl_Tree_Prefs::Fl_Tree_Prefs() {
-  _labelfont              = FL_HELVETICA;
-  _labelsize              = FL_NORMAL_SIZE;
+  _labelfont              = fltk3::HELVETICA;
+  _labelsize              = fltk3::NORMAL_SIZE;
   _marginleft             = 6;
   _margintop              = 3;
   //_marginright          = 3;
@@ -136,9 +136,9 @@ Fl_Tree_Prefs::Fl_Tree_Prefs() {
   _usericonmarginleft     = 3;
   _labelmarginleft        = 3;
   _linespacing            = 0;
-  _labelfgcolor           = FL_BLACK;
-  _labelbgcolor           = FL_WHITE;
-  _connectorcolor         = Fl_Color(43);
+  _labelfgcolor           = fltk3::BLACK;
+  _labelbgcolor           = fltk3::WHITE;
+  _connectorcolor         = fltk3::Color(43);
 #ifdef __APPLE__
   _connectorstyle         = FL_TREE_CONNECTOR_NONE;
 #else
@@ -151,14 +151,14 @@ Fl_Tree_Prefs::Fl_Tree_Prefs() {
   _showroot               = 1;
   _connectorwidth         = 17;
   _sortorder              = FL_TREE_SORT_NONE;
-  _selectbox              = FL_FLAT_BOX;
+  _selectbox              = fltk3::FLAT_BOX;
   _selectmode             = FL_TREE_SELECT_SINGLE;
   // Let fltk's current 'scheme' affect defaults
   if ( Fl::scheme() ) {
     if ( strcmp(Fl::scheme(), "gtk+") == 0 ) {
-      _selectbox = _FL_GTK_THIN_UP_BOX;
+      _selectbox = fltk3::GTK_THIN_UP_BOX;
     } else if ( strcmp(Fl::scheme(), "plastic") == 0 ) {
-      _selectbox = _FL_PLASTIC_THIN_UP_BOX;
+      _selectbox = fltk3::PLASTIC_THIN_UP_BOX;
     }
   }
 }

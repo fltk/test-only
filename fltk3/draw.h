@@ -58,9 +58,9 @@ FL_EXPORT extern char fl_draw_shortcut;
  the foreground is not set for the current window.
  \param[in] c color 
  */
-inline void	fl_color(Fl_Color c) {fl_graphics_driver->color(c); } // select indexed color
-/** for back compatibility - use fl_color(Fl_Color c) instead */
-inline void fl_color(int c) {fl_color((Fl_Color)c);}
+inline void	fl_color(fltk3::Color c) {fl_graphics_driver->color(c); } // select indexed color
+/** for back compatibility - use fl_color(fltk3::Color c) instead */
+inline void fl_color(int c) {fl_color((fltk3::Color)c);}
 /**
  Sets the color for all subsequent drawing operations.
  The closest possible match to the RGB color is used.
@@ -76,7 +76,7 @@ inline void	fl_color(uchar r, uchar g, uchar b) {fl_graphics_driver->color(r,g,b
   Returns the last fl_color() that was set.
   This can be used for state save/restore.
 */
-inline Fl_Color fl_color() {return fl_graphics_driver->color();}
+inline fltk3::Color fl_color() {return fl_graphics_driver->color();}
 /** @} */
 
 /** \addtogroup fl_drawings
@@ -210,11 +210,11 @@ enum {
 inline void fl_rect(int x, int y, int w, int h) { fl_graphics_driver->rect(x,y,w,h); }
 
 /** Draws with passed color a 1-pixel border \e inside the given bounding box */
-inline void fl_rect(int x, int y, int w, int h, Fl_Color c) {fl_color(c); fl_rect(x,y,w,h);}
+inline void fl_rect(int x, int y, int w, int h, fltk3::Color c) {fl_color(c); fl_rect(x,y,w,h);}
 /** Colors with current color a rectangle that exactly fills the given bounding box */
 inline void fl_rectf(int x, int y, int w, int h) { fl_graphics_driver->rectf(x,y,w,h); }
 /** Colors with passed color a rectangle that exactly fills the given bounding box */
-inline void fl_rectf(int x, int y, int w, int h, Fl_Color c) {fl_color(c); fl_rectf(x,y,w,h);}
+inline void fl_rectf(int x, int y, int w, int h, fltk3::Color c) {fl_color(c); fl_rectf(x,y,w,h);}
 
 /**
   Colors a rectangle with "exactly" the passed <tt>r,g,b</tt> color.
@@ -497,18 +497,18 @@ inline void fl_transformed_vertex(double xf, double yf) {fl_graphics_driver->tra
   The size of the font is measured in pixels and not "points".
   Lines should be spaced \p size pixels apart or more.
 */
-inline void fl_font(Fl_Font face, Fl_Fontsize size) { fl_graphics_driver->font(face,size); }
+inline void fl_font(fltk3::Font face, fltk3::Fontsize size) { fl_graphics_driver->font(face,size); }
 
 /**
   Returns the \p face set by the most recent call to fl_font().
   This can be used to save/restore the font.
 */
-inline Fl_Font fl_font() {return fl_graphics_driver->font();}
+inline fltk3::Font fl_font() {return fl_graphics_driver->font();}
 /**
   Returns the \p size set by the most recent call to fl_font().
   This can be used to save/restore the font.
 */
-inline Fl_Fontsize fl_size() {return fl_graphics_driver->size();}
+inline fltk3::Fontsize fl_size() {return fl_graphics_driver->size();}
 
 // information you can get about the current font:
 /**
@@ -614,17 +614,19 @@ inline void fl_rtl_draw(const char* str, int n, int x, int y) {fl_graphics_drive
 FL_EXPORT void fl_measure(const char* str, int& x, int& y,
                           int draw_symbols = 1);
 FL_EXPORT void fl_draw(const char* str, int x, int y, int w, int h,
-                       Fl_Align align,
+                       fltk3::Align align,
                        Fl_Image* img=0, int draw_symbols = 1);
 FL_EXPORT void fl_draw(const char* str, int x, int y, int w, int h,
-                       Fl_Align align,
+                       fltk3::Align align,
                        void (*callthis)(const char *,int,int,int),
                        Fl_Image* img=0, int draw_symbols = 1);
 
 // boxtypes:
-FL_EXPORT void fl_frame(const char* s, int x, int y, int w, int h);
+namespace fltk3 {
+FL_EXPORT void frame(const char* s, int x, int y, int w, int h);
+}
 FL_EXPORT void fl_frame2(const char* s, int x, int y, int w, int h);
-FL_EXPORT void fl_draw_box(Fl_Boxtype, int x, int y, int w, int h, Fl_Color);
+FL_EXPORT void fl_draw_box(fltk3::Boxtype, int x, int y, int w, int h, fltk3::Color);
 
 // images:
 
@@ -647,7 +649,7 @@ FL_EXPORT void fl_draw_box(Fl_Boxtype, int x, int y, int w, int h, Fl_Color);
   first <tt>show()</tt> of \e any window in your program to get rid of
   the dithering if possible:
   \code
-  Fl::visual(FL_RGB);
+  Fl::visual(fltk3::RGB);
   \endcode
 
   Gray scale (1-channel) images may be drawn. This is done if
@@ -744,8 +746,8 @@ FL_EXPORT char fl_can_do_alpha_blending();
 FL_EXPORT uchar *fl_read_image(uchar *p,int X,int Y,int W,int H,int alpha=0);
 
 // pixmaps:
-FL_EXPORT int fl_draw_pixmap(/*const*/ char* const* data, int x,int y,Fl_Color=FL_GRAY);
-FL_EXPORT int fl_draw_pixmap(const char* const* cdata, int x,int y,Fl_Color=FL_GRAY);
+FL_EXPORT int fl_draw_pixmap(/*const*/ char* const* data, int x,int y,fltk3::Color=fltk3::GRAY);
+FL_EXPORT int fl_draw_pixmap(const char* const* cdata, int x,int y,fltk3::Color=fltk3::GRAY);
 FL_EXPORT int fl_measure_pixmap(/*const*/ char* const* data, int &w, int &h);
 FL_EXPORT int fl_measure_pixmap(const char* const* cdata, int &w, int &h);
 
@@ -757,7 +759,7 @@ FL_EXPORT const char* fl_shortcut_label(unsigned int shortcut, const char **eom)
 FL_EXPORT unsigned int fl_old_shortcut(const char* s);
 FL_EXPORT void fl_overlay_rect(int x,int y,int w,int h);
 FL_EXPORT void fl_overlay_clear();
-FL_EXPORT void fl_cursor(Fl_Cursor, Fl_Color fg=FL_BLACK, Fl_Color bg=FL_WHITE);
+FL_EXPORT void fl_cursor(fltk3::Cursor, fltk3::Color fg=fltk3::BLACK, fltk3::Color bg=fltk3::WHITE);
 FL_EXPORT const char* fl_expand_text(const char* from, char* buf, int maxbuf,
                                      double maxw, int& n, double &width,
                                      int wrap, int draw_symbols = 0);
@@ -773,8 +775,8 @@ FL_EXPORT void fl_reset_spot(void);
 
 
 // XForms symbols:
-FL_EXPORT int fl_draw_symbol(const char* label,int x,int y,int w,int h, Fl_Color);
-FL_EXPORT int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scalable);
+FL_EXPORT int fl_draw_symbol(const char* label,int x,int y,int w,int h, fltk3::Color);
+FL_EXPORT int fl_add_symbol(const char* name, void (*drawit)(fltk3::Color), int scalable);
 /** @} */
 
 #endif

@@ -44,13 +44,13 @@ char *Fl_Window::default_xclass_ = 0L;
 
 void Fl_Window::_Fl_Window() {
   type(FL_WINDOW);
-  box(FL_FLAT_BOX);
+  box(fltk3::FLAT_BOX);
   if (Fl::scheme_bg_) {
-    labeltype(FL_NORMAL_LABEL);
-    align(FL_ALIGN_CENTER | FL_ALIGN_INSIDE | FL_ALIGN_CLIP);
+    labeltype(fltk3::normalLabel);
+    align(fltk3::ALIGN_CENTER | fltk3::ALIGN_INSIDE | fltk3::ALIGN_CLIP);
     image(Fl::scheme_bg_);
   } else {
-    labeltype(FL_NO_LABEL);
+    labeltype(fltk3::noLabel);
   }
   i = 0;
   xclass_ = 0;
@@ -64,9 +64,9 @@ void Fl_Window::_Fl_Window() {
 
 Fl_Window::Fl_Window(int X,int Y,int W, int H, const char *l)
 : Fl_Group(X, Y, W, H, l) {
-  cursor_default = FL_CURSOR_DEFAULT;
-  cursor_fg      = FL_BLACK;
-  cursor_bg      = FL_WHITE;
+  cursor_default = fltk3::CURSOR_DEFAULT;
+  cursor_fg      = fltk3::BLACK;
+  cursor_bg      = fltk3::WHITE;
 
   _Fl_Window();
   set_flag(FORCE_POSITION);
@@ -75,9 +75,9 @@ Fl_Window::Fl_Window(int X,int Y,int W, int H, const char *l)
 Fl_Window::Fl_Window(int W, int H, const char *l)
 // fix common user error of a missing end() with current(0):
   : Fl_Group((Fl_Group::current(0),0), 0, W, H, l) {
-  cursor_default = FL_CURSOR_DEFAULT;
-  cursor_fg      = FL_BLACK;
-  cursor_bg      = FL_WHITE;
+  cursor_default = fltk3::CURSOR_DEFAULT;
+  cursor_fg      = fltk3::BLACK;
+  cursor_bg      = fltk3::WHITE;
 
   _Fl_Window();
   clear_visible();
@@ -107,7 +107,7 @@ void Fl_Window::draw() {
   //  - we draw the box with x=0 and y=0 instead of x() and y()
   //  - we don't draw a label
 
-  if (damage() & ~FL_DAMAGE_CHILD) {	 // draw the entire thing
+  if (damage() & ~fltk3::DAMAGE_CHILD) {	 // draw the entire thing
     draw_box(box(),0,0,w(),h(),color()); // draw box with x/y = 0
   }
   draw_children();
@@ -122,11 +122,11 @@ void Fl_Window::draw() {
     if (dx<=0) dx = 1;
     if (dy<=0) dy = 1;
     int x1 = w()-dx-1, x2 = x1, y1 = h()-dx-1, y2 = y1;
-    Fl_Color c[4] = {
+    fltk3::Color c[4] = {
       color(),
-      fl_color_average(color(), FL_WHITE, 0.7f),
-      fl_color_average(color(), FL_BLACK, 0.6f),
-      fl_color_average(color(), FL_BLACK, 0.8f),
+      fltk3::colorAverage(color(), fltk3::WHITE, 0.7f),
+      fltk3::colorAverage(color(), fltk3::BLACK, 0.6f),
+      fltk3::colorAverage(color(), fltk3::BLACK, 0.8f),
     };
     int i;
     for (i=dx; i<12; i++) {

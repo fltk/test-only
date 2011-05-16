@@ -214,10 +214,10 @@ public:
     \li <tt>'\@l'</tt> Use a LARGE (24 point) font
     \li <tt>'\@m'</tt> Use a medium large (18 point) font
     \li <tt>'\@s'</tt> Use a <SMALL>small</SMALL> (11 point) font
-    \li <tt>'\@b'</tt> Use a <B>bold</B> font (adds FL_BOLD to font)
-    \li <tt>'\@i'</tt> Use an <I>italic</I> font (adds FL_ITALIC to font)
+    \li <tt>'\@b'</tt> Use a <B>bold</B> font (adds fltk3::BOLD to font)
+    \li <tt>'\@i'</tt> Use an <I>italic</I> font (adds fltk3::ITALIC to font)
     \li <tt>'\@f' or '\@t'</tt> Use a fixed-pitch
-    font (sets font to FL_COURIER)
+    font (sets font to fltk3::COURIER)
     \li <tt>'\@c'</tt> Center the line horizontally
     \li <tt>'\@r'</tt> Right-justify the text
     \li <tt>'\@B0', '\@B1', ... '\@B255'</tt> Fill the backgound with

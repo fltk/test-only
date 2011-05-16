@@ -54,7 +54,7 @@
 // own system of font management and not use this code.
 
 // turn word N of a X font name into either some attribute bits
-// (right now 0, FL_BOLD, or FL_ITALIC), or into -1 indicating that
+// (right now 0, fltk3::BOLD, or fltk3::ITALIC), or into -1 indicating that
 // the word should be put into the name:
 
 static int attribute(int n, const char *p) {
@@ -65,10 +65,10 @@ static int attribute(int n, const char *p) {
 	!strncmp(p,"light",5) ||
 	!strncmp(p,"medium",6) ||
 	!strncmp(p,"book",4)) return 0;
-    if (!strncmp(p,"bold",4) || !strncmp(p,"demi",4)) return FL_BOLD;
+    if (!strncmp(p,"bold",4) || !strncmp(p,"demi",4)) return fltk3::BOLD;
   } else if (n == 4) { // slant
     if (*p == 'r') return 0;
-    if (*p == 'i' || *p == 'o') return FL_ITALIC;
+    if (*p == 'i' || *p == 'o') return fltk3::ITALIC;
   } else if (n == 5) { // sWidth
     if (!strncmp(p,"normal",6)) return 0;
   }
@@ -85,10 +85,10 @@ static int use_registry(const char *p) {
 // making the name, and then forgot about it. To avoid having to change
 // the header files I decided to store this value in the last character
 // of the font name array.
-#define ENDOFBUFFER 127 // sizeof(Fl_Font.fontname)-1
+#define ENDOFBUFFER 127 // sizeof(fltk3::Font.fontname)-1
 
 // turn a stored (with *'s) X font name into a pretty name:
-const char* Fl::get_font_name(Fl_Font fnum, int* ap) {
+const char* Fl::get_font_name(fltk3::Font fnum, int* ap) {
   Fl_Fontdesc *f = fl_fonts + fnum;
   if (!f->fontname[0]) {
     int type = 0;
@@ -100,8 +100,8 @@ const char* Fl::get_font_name(Fl_Font fnum, int* ap) {
     char *o = f->fontname;
 
     if (*p != '-') { // non-standard font, just replace * with spaces:
-      if (strstr(p,"bold")) type = FL_BOLD;
-      if (strstr(p,"ital")) type |= FL_ITALIC;
+      if (strstr(p,"bold")) type = fltk3::BOLD;
+      if (strstr(p,"ital")) type |= fltk3::ITALIC;
       for (;*p; p++) {
 	if (*p == '*' || *p == ' ' || *p == '-') {
 	  do p++; while (*p == '*' || *p == ' ' || *p == '-');
@@ -153,8 +153,8 @@ const char* Fl::get_font_name(Fl_Font fnum, int* ap) {
       if (*x) {x++; *o++ = '('; while (*x) *o++ = *x++; *o++ = ')';}
 
       *o = 0;
-      if (type & FL_BOLD) strlcat(f->fontname, " bold", ENDOFBUFFER);
-      if (type & FL_ITALIC) strlcat(f->fontname, " italic", ENDOFBUFFER);
+      if (type & fltk3::BOLD) strlcat(f->fontname, " bold", ENDOFBUFFER);
+      if (type & fltk3::ITALIC) strlcat(f->fontname, " italic", ENDOFBUFFER);
     }
     f->fontname[ENDOFBUFFER] = (char)type;
   }
@@ -257,11 +257,11 @@ static int to_canonical(char *to, const char *from, size_t tolen) {
   return size;
 }
 
-static unsigned int fl_free_font = FL_FREE_FONT;
+static unsigned int fl_free_font = fltk3::FREE_FONT;
 
-Fl_Font Fl::set_fonts(const char* xstarname) {
-  if (fl_free_font > (unsigned)FL_FREE_FONT) // already been here
-    return (Fl_Font)fl_free_font;
+fltk3::Font Fl::set_fonts(const char* xstarname) {
+  if (fl_free_font > (unsigned)fltk3::FREE_FONT) // already been here
+    return (fltk3::Font)fl_free_font;
   fl_open_display();
   int xlistsize;
   char buf[20];
@@ -270,7 +270,7 @@ Fl_Font Fl::set_fonts(const char* xstarname) {
     xstarname = buf;
   }
   char **xlist = XListFonts(fl_display, xstarname, 10000, &xlistsize);
-  if (!xlist) return (Fl_Font)fl_free_font;
+  if (!xlist) return (fltk3::Font)fl_free_font;
   qsort(xlist, xlistsize, sizeof(*xlist), ultrasort);
   int used_xlist = 0;
   for (int i=0; i<xlistsize;) {
@@ -291,14 +291,14 @@ Fl_Font Fl::set_fonts(const char* xstarname) {
     }
     unsigned int j;
     for (j = 0;; j++) {
-      /*if (j < FL_FREE_FONT) {
+      /*if (j < fltk3::FREE_FONT) {
 	// see if it is one of our built-in fonts:
 	// if so, set the list of x fonts, since we have it anyway
 	if (fl_fonts[j].name && !strcmp(fl_fonts[j].name, p)) break;
       } else */{
 	j = fl_free_font++;
 	if (p == canon) p = strdup(p); else used_xlist = 1;
-	Fl::set_font((Fl_Font)j, p);
+	Fl::set_font((fltk3::Font)j, p);
 	break;
       }
     }
@@ -309,10 +309,10 @@ Fl_Font Fl::set_fonts(const char* xstarname) {
     }
   }
   if (!used_xlist) XFreeFontNames(xlist);
-  return (Fl_Font)fl_free_font;
+  return (fltk3::Font)fl_free_font;
 }
 
-int Fl::get_font_sizes(Fl_Font fnum, int*& sizep) {
+int Fl::get_font_sizes(fltk3::Font fnum, int*& sizep) {
   Fl_Fontdesc *s = fl_fonts+fnum;
   if (!s->name) s = fl_fonts; // empty slot in table, use entry 0
   if (!s->xlist) {

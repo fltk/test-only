@@ -165,7 +165,7 @@ void gl_remove_displaylist_fonts()
   // clear variables used mostly in fl_font
   fl_graphics_driver->font(0, 0);
 
-  for (int j = 0 ; j < FL_FREE_FONT ; ++j)
+  for (int j = 0 ; j < fltk3::FREE_FONT ; ++j)
   {
     Fl_Font_Descriptor* past = 0;
     Fl_Fontdesc* s    = fl_fonts + j ;
@@ -290,7 +290,7 @@ static void gl_draw_invert(const char* str, int n, int x, int y) {
 void gl_draw(
   const char* str, 	// the (multi-line) string
   int x, int y, int w, int h, 	// bounding box
-  Fl_Align align) {
+  fltk3::Align align) {
   fl_draw(str, x, -y-h, w, h, align, gl_draw_invert);
 }
 
@@ -325,7 +325,7 @@ extern int fl_overlay_depth;
   For color-index modes it will use fl_xpixel(c), which is only
   right if the window uses the default colormap!
   */
-void gl_color(Fl_Color i) {
+void gl_color(fltk3::Color i) {
 #if HAVE_GL_OVERLAY
 #if defined(WIN32)
   if (fl_overlay && fl_overlay_depth) {
@@ -337,7 +337,7 @@ void gl_color(Fl_Color i) {
       else if (i >= size-2) glIndexi(size-1);
       else glIndexi(i);
     } else {
-      glIndexi(i ? i : FL_GRAY_RAMP);
+      glIndexi(i ? i : fltk3::GRAY_RAMP);
     }
     return;
   }

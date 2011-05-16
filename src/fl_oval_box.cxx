@@ -32,33 +32,24 @@
 #include <fltk3/run.h>
 #include <fltk3/draw.h>
 
-static void fl_oval_flat_box(int x, int y, int w, int h, Fl_Color c) {
+static void fl_oval_flat_box(int x, int y, int w, int h, fltk3::Color c) {
   fl_color(c);
   fl_pie(x, y, w, h, 0, 360);
 }
 
-static void fl_oval_frame(int x, int y, int w, int h, Fl_Color c) {
+static void fl_oval_frame(int x, int y, int w, int h, fltk3::Color c) {
   fl_color(c);
   fl_arc(x, y, w, h, 0, 360);
 }
 
-static void fl_oval_box(int x, int y, int w, int h, Fl_Color c) {
+static void fl_oval_box(int x, int y, int w, int h, fltk3::Color c) {
   fl_oval_flat_box(x,y,w,h,c);
-  fl_oval_frame(x,y,w,h,FL_BLACK);
+  fl_oval_frame(x,y,w,h,fltk3::BLACK);
 }
 
-static void fl_oval_shadow_box(int x, int y, int w, int h, Fl_Color c) {
-  fl_oval_flat_box(x+3,y+3,w,h,FL_DARK3);
+static void fl_oval_shadow_box(int x, int y, int w, int h, fltk3::Color c) {
+  fl_oval_flat_box(x+3,y+3,w,h,fltk3::DARK3);
   fl_oval_box(x,y,w,h,c);
-}
-
-extern void fl_internal_boxtype(Fl_Boxtype, Fl_Box_Draw_F*);
-Fl_Boxtype fl_define_FL_OVAL_BOX() {
-  fl_internal_boxtype(_FL_OSHADOW_BOX,fl_oval_shadow_box);
-  fl_internal_boxtype(_FL_OVAL_FRAME,fl_oval_frame);
-  fl_internal_boxtype(_FL_OFLAT_BOX,fl_oval_flat_box);
-  fl_internal_boxtype(_FL_OVAL_BOX,fl_oval_box);
-  return _FL_OVAL_BOX;
 }
 
 //

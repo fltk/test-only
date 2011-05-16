@@ -71,7 +71,7 @@ void fl_gettime(long* sec, long* usec) {
 
 void Fl_Timer::draw() {
   int tt;
-  Fl_Color col;
+  fltk3::Color col;
   char str[32];
   if (!on || delay>0.0)
     col = color();
@@ -90,7 +90,7 @@ void Fl_Timer::draw() {
     }
     fl_font(labelfont(), labelsize());
     fl_color(labelcolor());
-    fl_draw(str, x(), y(), w(), h(), FL_ALIGN_CENTER);
+    fl_draw(str, x(), y(), w(), h(), fltk3::ALIGN_CENTER);
   } else
     draw_label();
 }
@@ -122,7 +122,7 @@ void Fl_Timer::step() {
 }
 
 int Fl_Timer::handle(int event) {
-  if (event == FL_RELEASE && delay <= 0) value(0.0);
+  if (event == fltk3::RELEASE && delay <= 0) value(0.0);
   return 0;
 }
 
@@ -148,14 +148,14 @@ Fl_Timer::~Fl_Timer() {
 Fl_Timer::Fl_Timer(uchar t, int X, int Y, int W, int H, const char* l)
 
 : Fl_Widget(X, Y, W, H, l) {
-  box(FL_DOWN_BOX);
-  selection_color(FL_RED);
+  box(fltk3::DOWN_BOX);
+  selection_color(fltk3::RED);
   delay = 0;
   on = 0;
   direction_ = 0;
   type(t);
   if (t == FL_HIDDEN_TIMER) clear_visible();
-  if (t == FL_VALUE_TIMER) align(FL_ALIGN_LEFT);
+  if (t == FL_VALUE_TIMER) align(fltk3::ALIGN_LEFT);
 }
 /** Sets the current timer value */
 void Fl_Timer::value(double d) {

@@ -37,7 +37,7 @@
 
 #define FL_NORMAL_FREE		1 /**< normal event handling */
 #define FL_SLEEPING_FREE	2 /**< deactivate event handling */
-#define FL_INPUT_FREE		3 /**< accepts FL_FOCUS events */
+#define FL_INPUT_FREE		3 /**< accepts fltk3::FOCUS events */
 #define FL_CONTINUOUS_FREE	4 /**< repeated timeout handling */
 #define FL_ALL_FREE		5 /**< FL_INPUT_FREE and FL_CONTINOUS_FREE */
 
@@ -56,7 +56,7 @@ typedef int (*FL_HANDLEPTR)(Fl_Widget *, int , float, float, char);
   
   \li \c FL_NORMAL_FREE      normal event handling.
   \li \c FL_SLEEPING_FREE    deactivates event handling (widget is inactive).
-  \li \c FL_INPUT_FREE       accepts FL_FOCUS events.
+  \li \c FL_INPUT_FREE       accepts fltk3::FOCUS events.
   \li \c FL_CONTINUOUS_FREE  sets a timeout callback 100 times a second and
                              provides an FL_STEP event. This has obvious
 			     detrimental effects on machine performance.
@@ -75,7 +75,7 @@ public:
 };
 
 // old event names for compatibility:
-#define FL_MOUSE	FL_DRAG /**< for backward compatibility */
+#define FL_MOUSE	fltk3::DRAG /**< for backward compatibility */
 #define FL_DRAW		100     /**< for backward compatibility [UNUSED]*/
 #define FL_STEP		101     /**< for backward compatibility */
 #define FL_FREEMEM	102     /**< for backward compatibility [UNUSED]*/

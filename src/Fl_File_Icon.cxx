@@ -258,10 +258,10 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
         	   int      y,		// I - Upper-lefthand Y
 		   int      w,		// I - Width of bounding box
 		   int      h,		// I - Height of bounding box
-        	   Fl_Color ic,		// I - Icon color...
+        	   fltk3::Color ic,		// I - Icon color...
         	   int      active)	// I - Active or inactive?
 {
-  Fl_Color	c,		// Current color
+  fltk3::Color	c,		// Current color
 		oc;		// Outline color
   short		*d,		// Pointer to data
 		*dend;		// End of data...
@@ -290,7 +290,7 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
   if (active)
     fl_color(c);
   else
-    fl_color(fl_inactive(c));
+    fl_color(fltk3::inactive(c));
 
   while (d < dend)
     switch (*d)
@@ -314,7 +314,7 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
 	      case OUTLINEPOLYGON :
 		  fl_end_complex_polygon();
 
-        	  oc = (Fl_Color)((((unsigned short *)prim)[1] << 16) | 
+        	  oc = (fltk3::Color)((((unsigned short *)prim)[1] << 16) | 
 	                	  ((unsigned short *)prim)[2]);
                   if (active)
 		  {
@@ -326,9 +326,9 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
 		  else
 		  {
                     if (oc == FL_ICON_COLOR)
-		      fl_color(fl_inactive(ic));
+		      fl_color(fltk3::inactive(ic));
 		    else
-		      fl_color(fl_inactive(oc));
+		      fl_color(fltk3::inactive(oc));
 		  }
 
 		  fl_begin_loop();
@@ -350,14 +350,14 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
 	  break;
 
       case COLOR :
-          c = (Fl_Color)((((unsigned short *)d)[1] << 16) | 
+          c = (fltk3::Color)((((unsigned short *)d)[1] << 16) | 
 	                   ((unsigned short *)d)[2]);
 
           if (c == FL_ICON_COLOR)
 	    c = ic;
 
           if (!active)
-	    c = fl_inactive(c);
+	    c = fltk3::inactive(c);
 
           fl_color(c);
 	  d += 3;
@@ -416,7 +416,7 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
       case OUTLINEPOLYGON :
 	  fl_end_polygon();
 
-          oc = (Fl_Color)((((unsigned short *)prim)[1] << 16) | 
+          oc = (fltk3::Color)((((unsigned short *)prim)[1] << 16) | 
 	                  ((unsigned short *)prim)[2]);
           if (active)
 	  {
@@ -428,9 +428,9 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
 	  else
 	  {
             if (oc == FL_ICON_COLOR)
-	      fl_color(fl_inactive(ic));
+	      fl_color(fltk3::inactive(ic));
 	    else
-	      fl_color(fl_inactive(oc));
+	      fl_color(fltk3::inactive(oc));
 	  }
 
 	  fl_begin_loop();
@@ -458,8 +458,7 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
 */
 void Fl_File_Icon::label(Fl_Widget *w)	// I - Widget to label
 {
-  Fl::set_labeltype(_FL_ICON_LABEL, labeltype, 0);
-  w->label(_FL_ICON_LABEL, (const char*)this);
+  w->label(fltk3::iconLabel, (const char*)this);
 }
 
 
@@ -475,7 +474,7 @@ Fl_File_Icon::labeltype(const Fl_Label *o,	// I - Label data
 			int            y,	// I - Y position of label
 			int            w,	// I - Width of label
 			int            h,	// I - Height of label
-			Fl_Align       a)	// I - Label alignment (not used)
+			fltk3::Align       a)	// I - Label alignment (not used)
 {
   Fl_File_Icon *icon;			// Pointer to icon data
 
@@ -483,7 +482,7 @@ Fl_File_Icon::labeltype(const Fl_Label *o,	// I - Label data
   (void)a;
 
   icon = (Fl_File_Icon *)(o->value);
-  if (icon) icon->draw(x, y, w, h, (Fl_Color)(o->color));
+  if (icon) icon->draw(x, y, w, h, (fltk3::Color)(o->color));
 }
 
 

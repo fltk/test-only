@@ -33,7 +33,7 @@
 #include <fltk3/PostScript.h>
 #include <fltk3/NativeFileChooser.h>
 #if defined(USE_X11)
-#include "Fl_Font.H"
+#include "Font.H"
 #if USE_XFT
 #include <X11/Xft/Xft.h>
 #endif
@@ -602,7 +602,7 @@ void Fl_PostScript_Graphics_Driver::reset(){
   gap_=1;
   clip_=0;
   cr_=cg_=cb_=0;
-  Fl_Graphics_Driver::font(FL_HELVETICA, 12);
+  Fl_Graphics_Driver::font(fltk3::HELVETICA, 12);
   linewidth_=0;
   linestyle_=FL_SOLID;
   strcpy(linedash_,"");
@@ -937,7 +937,7 @@ void Fl_PostScript_Graphics_Driver::font(int f, int s) {
   Fl_Graphics_Driver::font(f, s);
   Fl_Font_Descriptor *desc = driver->font_descriptor();
   this->font_descriptor(desc);
-  if (f < FL_FREE_FONT) {
+  if (f < fltk3::FREE_FONT) {
     float ps_size = s;
     fprintf(output, "/%s SF\n" , _fontNames[f]);
 #if defined(USE_X11) 
@@ -978,13 +978,13 @@ void Fl_PostScript_Graphics_Driver::text_extents(const char *c, int n, int &dx, 
 }
 
 
-void Fl_PostScript_Graphics_Driver::color(Fl_Color c) {
+void Fl_PostScript_Graphics_Driver::color(fltk3::Color c) {
   Fl::get_color(c, cr_, cg_, cb_);
   color(cr_, cg_, cb_);
 }
 
 void Fl_PostScript_Graphics_Driver::color(unsigned char r, unsigned char g, unsigned char b) {
-  Fl_Graphics_Driver::color( fl_rgb_color(r, g, b) );
+  Fl_Graphics_Driver::color( fltk3::rgbColor(r, g, b) );
   cr_ = r; cg_ = g; cb_ = b;
   if (r == g && g == b) {
     double gray = r/255.0;
@@ -1007,7 +1007,7 @@ void Fl_PostScript_Graphics_Driver::draw(int angle, const char *str, int n, int 
 
 
 // computes the mask for the RGB image img of all pixels with color != bg
-static uchar *calc_mask(uchar *img, int w, int h, Fl_Color bg)
+static uchar *calc_mask(uchar *img, int w, int h, fltk3::Color bg)
 {
   uchar red, green, blue, r, g, b;
   uchar bit, byte, *q;
@@ -1045,13 +1045,13 @@ static void transformed_draw_extra(const char* str, int n, double x, double y, i
 #else
   float scale = 2;
 #endif
-  Fl_Fontsize old_size = driver->size();
-  Fl_Font fontnum = driver->font();
+  fltk3::Fontsize old_size = driver->size();
+  fltk3::Font fontnum = driver->font();
   int w_scaled =  (int)(w * (scale + 0.5));
   int h = (int)(driver->height() * scale);
   // create an offscreen image of the string
-  Fl_Color text_color = driver->color();
-  Fl_Color bg_color = fl_contrast(FL_WHITE, text_color);
+  fltk3::Color text_color = driver->color();
+  fltk3::Color bg_color = fltk3::contrast(fltk3::WHITE, text_color);
   Fl_Offscreen off = fl_create_offscreen(w_scaled, (int)(h+3*scale) );
   fl_begin_offscreen(off);
   fl_color(bg_color);
@@ -1063,7 +1063,7 @@ static void transformed_draw_extra(const char* str, int n, double x, double y, i
   fl_graphics_driver->font_descriptor(NULL);
   fl_font(fontnum, 0);
 #endif
-  fl_font(fontnum, (Fl_Fontsize)(scale * old_size) );
+  fl_font(fontnum, (fltk3::Fontsize)(scale * old_size) );
   int w2 = (int)fl_width(str, n);
   // draw string in offscreen
   if (rtl) fl_rtl_draw(str, n, w2, (int)(h * 0.8) );
@@ -1123,7 +1123,7 @@ void Fl_PostScript_Graphics_Driver::transformed_draw(const char* str, int n, dou
   // compute display width of string
   int w = (int)width(str, n);
   if (w == 0) return;
-  if (Fl_Graphics_Driver::font() >= FL_FREE_FONT) {
+  if (Fl_Graphics_Driver::font() >= fltk3::FREE_FONT) {
     transformed_draw_extra(str, n, x, y, w, output, this, false);
     return;
     }

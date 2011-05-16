@@ -36,7 +36,7 @@ int Fl_Roller::handle(int event) {
   static int ipos;
   int newpos = horizontal() ? Fl::event_x() : Fl::event_y();
   switch (event) {
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (Fl::visible_focus()) {
       Fl::focus(this);
       redraw();
@@ -44,27 +44,27 @@ int Fl_Roller::handle(int event) {
     handle_push();
     ipos = newpos;
     return 1;
-  case FL_DRAG:
+  case fltk3::DRAG:
     handle_drag(clamp(round(increment(previous_value(),newpos-ipos))));
     return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     handle_release();
     return 1;
-  case FL_KEYBOARD :
+  case fltk3::KEYBOARD :
     switch (Fl::event_key()) {
-      case FL_Up:
+      case fltk3::UpKey:
         if (horizontal()) return 0;
 	handle_drag(clamp(increment(value(),-1)));
 	return 1;
-      case FL_Down:
+      case fltk3::DownKey:
         if (horizontal()) return 0;
 	handle_drag(clamp(increment(value(),1)));
 	return 1;
-      case FL_Left:
+      case fltk3::LeftKey:
         if (!horizontal()) return 0;
 	handle_drag(clamp(increment(value(),-1)));
 	return 1;
-      case FL_Right:
+      case fltk3::RightKey:
         if (!horizontal()) return 0;
 	handle_drag(clamp(increment(value(),1)));
 	return 1;
@@ -72,14 +72,14 @@ int Fl_Roller::handle(int event) {
         return 0;
     }
     // break not required because of switch...
-  case FL_FOCUS :
-  case FL_UNFOCUS :
+  case fltk3::FOCUS :
+  case fltk3::UNFOCUS :
     if (Fl::visible_focus()) {
       redraw();
       return 1;
     } else return 0;
-  case FL_ENTER :
-  case FL_LEAVE :
+  case fltk3::ENTER :
+  case fltk3::LEAVE :
     return 1;
   default:
     return 0;
@@ -87,7 +87,7 @@ int Fl_Roller::handle(int event) {
 }
 
 void Fl_Roller::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_box();
+  if (damage()&fltk3::DAMAGE_ALL) draw_box();
   int X = x()+Fl::box_dx(box());
   int Y = y()+Fl::box_dy(box());
   int W = w()-Fl::box_dw(box())-1;
@@ -101,8 +101,8 @@ void Fl_Roller::draw() {
     int h1 = W/4+1; // distance from end that shading starts
     fl_color(color()); fl_rectf(X+h1,Y,W-2*h1,H);
     for (int i=0; h1; i++) {
-      fl_color((Fl_Color)(FL_GRAY-i-1));
-      int h2 = FL_GRAY-i-1 > FL_DARK3 ? 2*h1/3+1 : 0;
+      fl_color((fltk3::Color)(fltk3::GRAY-i-1));
+      int h2 = fltk3::GRAY-i-1 > fltk3::DARK3 ? 2*h1/3+1 : 0;
       fl_rectf(X+h2,Y,h1-h2,H);
       fl_rectf(X+W-h1,Y,h1-h2,H);
       h1 = h2;
@@ -114,18 +114,18 @@ void Fl_Roller::draw() {
 	   yy += delta) {
 	int yy1 = int((sin(yy)/sin(ARC)+1)*W/2);
 	if (yy1 <= 0) continue; else if (yy1 >= W-1) break;
-	fl_color(FL_DARK3); fl_yxline(X+yy1,Y+1,Y+H-1);
+	fl_color(fltk3::DARK3); fl_yxline(X+yy1,Y+1,Y+H-1);
 	if (yy < 0) yy1--; else yy1++;
-	fl_color(FL_LIGHT1);fl_yxline(X+yy1,Y+1,Y+H-1);
+	fl_color(fltk3::LIGHT1);fl_yxline(X+yy1,Y+1,Y+H-1);
       }
       // draw edges:
       h1 = W/8+1; // distance from end the color inverts
-      fl_color(FL_DARK2);
+      fl_color(fltk3::DARK2);
       fl_xyline(X+h1,Y+H-1,X+W-h1);
-      fl_color(FL_DARK3);
+      fl_color(fltk3::DARK3);
       fl_yxline(X,Y+H,Y,X+h1);
       fl_xyline(X+W-h1,Y,X+W);
-      fl_color(FL_LIGHT2);
+      fl_color(fltk3::LIGHT2);
       fl_xyline(X+h1,Y-1,X+W-h1);
       fl_yxline(X+W,Y,Y+H,X+W-h1);
       fl_xyline(X+h1,Y+H,X);
@@ -135,8 +135,8 @@ void Fl_Roller::draw() {
     int h1 = H/4+1; // distance from end that shading starts
     fl_color(color()); fl_rectf(X,Y+h1,W,H-2*h1);
     for (int i=0; h1; i++) {
-      fl_color((Fl_Color)(FL_GRAY-i-1));
-      int h2 = FL_GRAY-i-1 > FL_DARK3 ? 2*h1/3+1 : 0;
+      fl_color((fltk3::Color)(fltk3::GRAY-i-1));
+      int h2 = fltk3::GRAY-i-1 > fltk3::DARK3 ? 2*h1/3+1 : 0;
       fl_rectf(X,Y+h2,W,h1-h2);
       fl_rectf(X,Y+H-h1,W,h1-h2);
       h1 = h2;
@@ -148,35 +148,35 @@ void Fl_Roller::draw() {
 	   ; yy += delta) {
 	int yy1 = int((sin(yy)/sin(ARC)+1)*H/2);
 	if (yy1 <= 0) continue; else if (yy1 >= H-1) break;
-	fl_color(FL_DARK3); fl_xyline(X+1,Y+yy1,X+W-1);
+	fl_color(fltk3::DARK3); fl_xyline(X+1,Y+yy1,X+W-1);
 	if (yy < 0) yy1--; else yy1++;
-	fl_color(FL_LIGHT1);fl_xyline(X+1,Y+yy1,X+W-1);
+	fl_color(fltk3::LIGHT1);fl_xyline(X+1,Y+yy1,X+W-1);
       }
       // draw edges:
       h1 = H/8+1; // distance from end the color inverts
-      fl_color(FL_DARK2);
+      fl_color(fltk3::DARK2);
       fl_yxline(X+W-1,Y+h1,Y+H-h1);
-      fl_color(FL_DARK3);
+      fl_color(fltk3::DARK3);
       fl_xyline(X+W,Y,X,Y+h1);
       fl_yxline(X,Y+H-h1,Y+H);
-      fl_color(FL_LIGHT2);
+      fl_color(fltk3::LIGHT2);
       fl_yxline(X,Y+h1,Y+H-h1);
       fl_xyline(X,Y+H,X+W,Y+H-h1);
       fl_yxline(X+W,Y+h1,Y);
     }
   }
 
-  if (Fl::focus() == this) draw_focus(FL_THIN_UP_FRAME, x(), y(), w(), h());
+  if (Fl::focus() == this) draw_focus(fltk3::THIN_UP_FRAME, x(), y(), w(), h());
 }
 
 /**
   Creates a new Fl_Roller widget using the given position,
-  size, and label string. The default boxtype is FL_NO_BOX.
+  size, and label string. The default boxtype is fltk3::NO_BOX.
   <P>Inherited destructor destroys the valuator.
 */
 Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L)
   : Fl_Valuator(X,Y,W,H,L) {
-  box(FL_UP_BOX);
+  box(fltk3::UP_BOX);
   step(1,1000);
 }
 

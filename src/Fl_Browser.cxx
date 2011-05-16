@@ -378,7 +378,7 @@ int Fl_Browser::item_height(void *item) const {
     long int dummy;
     // do each column separately as they may all set different fonts:
     for (char* str = l->txt; str && *str; str++) {
-      Fl_Font font = textfont(); // default font
+      fltk3::Font font = textfont(); // default font
       int tsize = textsize(); // default size
       while (*str==format_char()) {
 	str++;
@@ -386,12 +386,12 @@ int Fl_Browser::item_height(void *item) const {
 	case 'l': case 'L': tsize = 24; break;
 	case 'm': case 'M': tsize = 18; break;
 	case 's': tsize = 11; break;
-	case 'b': font = (Fl_Font)(font|FL_BOLD); break;
-	case 'i': font = (Fl_Font)(font|FL_ITALIC); break;
-	case 'f': case 't': font = FL_COURIER; break;
+	case 'b': font = (fltk3::Font)(font|fltk3::BOLD); break;
+	case 'i': font = (fltk3::Font)(font|fltk3::ITALIC); break;
+	case 'f': case 't': font = fltk3::COURIER; break;
 	case 'B':
 	case 'C': dummy = strtol(str, &str, 10); break;// skip a color number
-	case 'F': font = (Fl_Font)strtol(str,&str,10); break;
+	case 'F': font = (fltk3::Font)strtol(str,&str,10); break;
 	case 'S': tsize = strtol(str,&str,10); break;
 	case 0: case '@': str--;
 	case '.': goto END_FORMAT;
@@ -439,7 +439,7 @@ int Fl_Browser::item_width(void *item) const {
 
   // OK, we gotta parse the string and find the string width...
   int tsize = textsize();
-  Fl_Font font = textfont();
+  fltk3::Font font = textfont();
   int done = 0;
 
   while (*str == format_char_ && str[1] && str[1] != format_char_) {
@@ -449,12 +449,12 @@ int Fl_Browser::item_width(void *item) const {
     case 'l': case 'L': tsize = 24; break;
     case 'm': case 'M': tsize = 18; break;
     case 's': tsize = 11; break;
-    case 'b': font = (Fl_Font)(font|FL_BOLD); break;
-    case 'i': font = (Fl_Font)(font|FL_ITALIC); break;
-    case 'f': case 't': font = FL_COURIER; break;
+    case 'b': font = (fltk3::Font)(font|fltk3::BOLD); break;
+    case 'i': font = (fltk3::Font)(font|fltk3::ITALIC); break;
+    case 'f': case 't': font = fltk3::COURIER; break;
     case 'B':
     case 'C': dummy = strtol(str, &str, 10); break;// skip a color number
-    case 'F': font = (Fl_Font)strtol(str, &str, 10); break;
+    case 'F': font = (fltk3::Font)strtol(str, &str, 10); break;
     case 'S': tsize = strtol(str, &str, 10); break;
     case '.':
       done = 1;
@@ -530,9 +530,9 @@ void Fl_Browser::item_draw(void* item, int X, int Y, int W, int H) const {
       }
     }
     int tsize = textsize();
-    Fl_Font font = textfont();
-    Fl_Color lcol = textcolor();
-    Fl_Align talign = FL_ALIGN_LEFT;
+    fltk3::Font font = textfont();
+    fltk3::Color lcol = textcolor();
+    fltk3::Align talign = fltk3::ALIGN_LEFT;
     // check for all the @-lines recognized by XForms:
     //#if defined(__GNUC__)
     //#warning FIXME This maybe needs to be more UTF8 aware now...?
@@ -543,33 +543,33 @@ void Fl_Browser::item_draw(void* item, int X, int Y, int W, int H) const {
       case 'l': case 'L': tsize = 24; break;
       case 'm': case 'M': tsize = 18; break;
       case 's': tsize = 11; break;
-      case 'b': font = (Fl_Font)(font|FL_BOLD); break;
-      case 'i': font = (Fl_Font)(font|FL_ITALIC); break;
-      case 'f': case 't': font = FL_COURIER; break;
-      case 'c': talign = FL_ALIGN_CENTER; break;
-      case 'r': talign = FL_ALIGN_RIGHT; break;
+      case 'b': font = (fltk3::Font)(font|fltk3::BOLD); break;
+      case 'i': font = (fltk3::Font)(font|fltk3::ITALIC); break;
+      case 'f': case 't': font = fltk3::COURIER; break;
+      case 'c': talign = fltk3::ALIGN_CENTER; break;
+      case 'r': talign = fltk3::ALIGN_RIGHT; break;
       case 'B': 
 	if (!(l->flags & SELECTED)) {
-	  fl_color((Fl_Color)strtol(str, &str, 10));
+	  fl_color((fltk3::Color)strtol(str, &str, 10));
 	  fl_rectf(X, Y, w1, H);
 	} else dummy = strtol(str, &str, 10);
         break;
       case 'C':
-	lcol = (Fl_Color)strtol(str, &str, 10);
+	lcol = (fltk3::Color)strtol(str, &str, 10);
 	break;
       case 'F':
-	font = (Fl_Font)strtol(str, &str, 10);
+	font = (fltk3::Font)strtol(str, &str, 10);
 	break;
       case 'N':
-	lcol = FL_INACTIVE_COLOR;
+	lcol = fltk3::INACTIVE_COLOR;
 	break;
       case 'S':
 	tsize = strtol(str, &str, 10);
 	break;
       case '-':
-	fl_color(FL_DARK3);
+	fl_color(fltk3::DARK3);
 	fl_line(X+3, Y+H/2, X+w1-3, Y+H/2);
-	fl_color(FL_LIGHT3);
+	fl_color(fltk3::LIGHT3);
 	fl_line(X+3, Y+H/2+1, X+w1-3, Y+H/2+1);
 	break;
       case 'u':
@@ -586,10 +586,10 @@ void Fl_Browser::item_draw(void* item, int X, int Y, int W, int H) const {
   BREAK:
     fl_font(font, tsize);
     if (l->flags & SELECTED)
-      lcol = fl_contrast(lcol, selection_color());
-    if (!active_r()) lcol = fl_inactive(lcol);
+      lcol = fltk3::contrast(lcol, selection_color());
+    if (!active_r()) lcol = fltk3::inactive(lcol);
     fl_color(lcol);
-    fl_draw(str, X+3, Y, w1-6, H, e ? Fl_Align(talign|FL_ALIGN_CLIP) : talign, 0, 0);
+    fl_draw(str, X+3, Y, w1-6, H, e ? fltk3::Align(talign|fltk3::ALIGN_CLIP) : talign, 0, 0);
     if (!e) break; // no more fields...
     *e = column_char(); // put the separator back
     X += w1;

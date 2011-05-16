@@ -42,7 +42,7 @@ class FL_EXPORT Fl_FormsPixmap : public Fl_Widget {
 protected:
     void draw();
 public:
-    Fl_FormsPixmap(Fl_Boxtype t, int X, int Y, int W, int H, const char *L= 0);
+    Fl_FormsPixmap(fltk3::Boxtype t, int X, int Y, int W, int H, const char *L= 0);
 
     void set(/*const*/char * const * bits);
 

@@ -41,9 +41,9 @@
   \image latex  Fl_Round_Button.png " Fl_Round_Button" width=4cm
   <P>The Fl_Round_Button subclass display the "on" state by
   turning on a light, rather than drawing pushed in.  The shape of the
-  "light" is initially set to FL_ROUND_DOWN_BOX.  The color of the light
+  "light" is initially set to fltk3::ROUND_DOWN_BOX.  The color of the light
   when on is controlled with selection_color(), which defaults to
-  FL_RED.
+  fltk3::RED.
 */
 class FL_EXPORT Fl_Round_Button : public Fl_Light_Button {
 public:

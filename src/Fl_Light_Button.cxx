@@ -38,9 +38,9 @@
 #include "flstring.h"
 
 void Fl_Light_Button::draw() {
-  if (box()) draw_box(this==Fl::pushed() ? fl_down(box()) : box(), color());
-  Fl_Color col = value() ? (active_r() ? selection_color() :
-                            fl_inactive(selection_color())) : color();
+  if (box()) draw_box(this==Fl::pushed() ? fltk3::down(box()) : box(), color());
+  fltk3::Color col = value() ? (active_r() ? selection_color() :
+                            fltk3::inactive(selection_color())) : color();
   int W;
   int dx, dy;
 
@@ -52,15 +52,15 @@ void Fl_Light_Button::draw() {
   if (down_box()) {
     // draw other down_box() styles:
     switch (down_box()) {
-      case FL_DOWN_BOX :
-      case FL_UP_BOX :
-      case _FL_PLASTIC_DOWN_BOX :
-      case _FL_PLASTIC_UP_BOX :
+      case fltk3::DOWN_BOX :
+      case fltk3::UP_BOX :
+      case fltk3::PLASTIC_DOWN_BOX :
+      case fltk3::PLASTIC_UP_BOX :
         // Check box...
-        draw_box(down_box(), x()+dx, y()+dy, W, W, FL_BACKGROUND2_COLOR);
+        draw_box(down_box(), x()+dx, y()+dy, W, W, fltk3::BACKGROUND2_COLOR);
 	if (value()) {
 	  if (Fl::scheme() && !strcmp(Fl::scheme(), "gtk+")) {
-	    fl_color(FL_SELECTION_COLOR);
+	    fl_color(fltk3::SELECTION_COLOR);
 	  } else {
 	    fl_color(col);
 	  }
@@ -75,10 +75,10 @@ void Fl_Light_Button::draw() {
 	  }
 	}
         break;
-      case _FL_ROUND_DOWN_BOX :
-      case _FL_ROUND_UP_BOX :
+      case fltk3::ROUND_DOWN_BOX :
+      case fltk3::ROUND_UP_BOX :
         // Radio button...
-        draw_box(down_box(), x()+dx, y()+dy, W, W, FL_BACKGROUND2_COLOR);
+        draw_box(down_box(), x()+dx, y()+dy, W, W, fltk3::BACKGROUND2_COLOR);
 	if (value()) {
 	  int tW = (W - Fl::box_dw(down_box())) / 2 + 1;
 	  if ((W - tW) & 1) tW++; // Make sure difference is even to center
@@ -86,11 +86,11 @@ void Fl_Light_Button::draw() {
 	  int tdy = dy + (W - tW) / 2;
 
 	  if (Fl::scheme() && !strcmp(Fl::scheme(), "gtk+")) {
-	    fl_color(FL_SELECTION_COLOR);
+	    fl_color(fltk3::SELECTION_COLOR);
 	    tW --;
 	    fl_pie(x() + tdx - 1, y() + tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
 	    fl_arc(x() + tdx - 1, y() + tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
-	    fl_color(fl_color_average(FL_WHITE, FL_SELECTION_COLOR, 0.2f));
+	    fl_color(fltk3::colorAverage(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.2f));
 	  } else fl_color(col);
 
 	  switch (tW) {
@@ -120,7 +120,7 @@ void Fl_Light_Button::draw() {
 	  }
 
 	  if (Fl::scheme() && !strcmp(Fl::scheme(), "gtk+")) {
-	    fl_color(fl_color_average(FL_WHITE, FL_SELECTION_COLOR, 0.5));
+	    fl_color(fltk3::colorAverage(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
 	    fl_arc(x() + tdx, y() + tdy, tW + 1, tW + 1, 60.0, 180.0);
 	  }
 	}
@@ -136,11 +136,11 @@ void Fl_Light_Button::draw() {
     int xx = dx;
     if (w()<ww+2*xx) xx = (w()-ww)/2;
     if (Fl::scheme() && !strcmp(Fl::scheme(), "plastic")) {
-      col = active_r() ? selection_color() : fl_inactive(selection_color());
-      fl_color(value() ? col : fl_color_average(col, FL_BLACK, 0.5f));
+      col = active_r() ? selection_color() : fltk3::inactive(selection_color());
+      fl_color(value() ? col : fltk3::colorAverage(col, fltk3::BLACK, 0.5f));
       fl_pie(x()+xx, y()+dy+1, ww, hh, 0, 360);
     } else {
-      draw_box(FL_THIN_DOWN_BOX, x()+xx, y()+dy+1, ww, hh, col);
+      draw_box(fltk3::THIN_DOWN_BOX, x()+xx, y()+dy+1, ww, hh, col);
     }
     dx = (ww + 2 * dx - W) / 2;
   }
@@ -150,7 +150,7 @@ void Fl_Light_Button::draw() {
 
 int Fl_Light_Button::handle(int event) {
   switch (event) {
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     if (box()) redraw();
   default:
     return Fl_Button::handle(event);
@@ -165,8 +165,8 @@ int Fl_Light_Button::handle(int event) {
 Fl_Light_Button::Fl_Light_Button(int X, int Y, int W, int H, const char* l)
 : Fl_Button(X, Y, W, H, l) {
   type(FL_TOGGLE_BUTTON);
-  selection_color(FL_YELLOW);
-  align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+  selection_color(fltk3::YELLOW);
+  align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE);
 }
 
 //

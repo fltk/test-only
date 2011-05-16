@@ -107,39 +107,39 @@ int Fl_Scrollbar::handle(int event) {
     if (val >= 1.0) sliderx = ww-S;
     else if (val <= 0.0) sliderx = 0;
     else sliderx = int(val*(ww-S)+.5);
-    if (Fl::event_button() == FL_MIDDLE_MOUSE) area = 8;
+    if (Fl::event_button() == fltk3::middleMouseButton) area = 8;
     else if (relx < sliderx) area = 5;
     else if (relx >= sliderx+S) area = 6;
     else area = 8;
   }
 
   switch (event) {
-  case FL_ENTER:
-  case FL_LEAVE:
+  case fltk3::ENTER:
+  case fltk3::LEAVE:
     return 1;
-  case FL_RELEASE:
-      damage(FL_DAMAGE_ALL);
+  case fltk3::RELEASE:
+      damage(fltk3::DAMAGE_ALL);
     if (pushed_) {
       Fl::remove_timeout(timeout_cb, this);
       pushed_ = 0;
     }
     handle_release();
     return 1;
-  case FL_PUSH:
+  case fltk3::PUSH:
     if (pushed_) return 1;
     if (area != 8) pushed_ = area;
     if (pushed_) {
       handle_push();
       Fl::add_timeout(INITIALREPEAT, timeout_cb, this);
       increment_cb();
-      damage(FL_DAMAGE_ALL);
+      damage(fltk3::DAMAGE_ALL);
       return 1;
     }
     return Fl_Slider::handle(event, X,Y,W,H);
-  case FL_DRAG:
+  case fltk3::DRAG:
     if (pushed_) return 1;
     return Fl_Slider::handle(event, X,Y,W,H);
-  case FL_MOUSEWHEEL :
+  case fltk3::MOUSEWHEEL :
     if (horizontal()) {
       if (Fl::e_dx==0) return 0;
       int ls = maximum()>=minimum() ? linesize_ : -linesize_;
@@ -151,16 +151,16 @@ int Fl_Scrollbar::handle(int event) {
       handle_drag(clamp(value() + ls * Fl::e_dy));
       return 1;
     }
-  case FL_SHORTCUT:
-  case FL_KEYBOARD: {
+  case fltk3::SHORTCUT:
+  case fltk3::KEYBOARD: {
     int v = value();
     int ls = maximum()>=minimum() ? linesize_ : -linesize_;
     if (horizontal()) {
       switch (Fl::event_key()) {
-      case FL_Left:
+      case fltk3::LeftKey:
 	v -= ls;
 	break;
-      case FL_Right:
+      case fltk3::RightKey:
 	v += ls;
 	break;
       default:
@@ -168,26 +168,26 @@ int Fl_Scrollbar::handle(int event) {
       }
     } else { // vertical
       switch (Fl::event_key()) {
-      case FL_Up:
+      case fltk3::UpKey:
 	v -= ls;
 	break;
-      case FL_Down:
+      case fltk3::DownKey:
 	v += ls;
 	break;
-      case FL_Page_Up:
+      case fltk3::PageUpKey:
 	if (slider_size() >= 1.0) return 0;
 	v -= int((maximum()-minimum())*slider_size()/(1.0-slider_size()));
 	v += ls;
 	break;
-      case FL_Page_Down:
+      case fltk3::PageDownKey:
 	if (slider_size() >= 1.0) return 0;
 	v += int((maximum()-minimum())*slider_size()/(1.0-slider_size()));
 	v -= ls;
 	break;
-      case FL_Home:
+      case fltk3::HomeKey:
 	v = int(minimum());
 	break;
-      case FL_End:
+      case fltk3::EndKey:
 	v = int(maximum());
 	break;
       default:
@@ -207,7 +207,7 @@ int Fl_Scrollbar::handle(int event) {
 }
 
 void Fl_Scrollbar::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_box();
+  if (damage()&fltk3::DAMAGE_ALL) draw_box();
   int X = x()+Fl::box_dx(box());
   int Y = y()+Fl::box_dy(box());
   int W = w()-Fl::box_dw(box());
@@ -215,15 +215,15 @@ void Fl_Scrollbar::draw() {
   if (horizontal()) {
     if (W < 3*H) {Fl_Slider::draw(X,Y,W,H); return;}
     Fl_Slider::draw(X+H,Y,W-2*H,H);
-    if (damage()&FL_DAMAGE_ALL) {
-      draw_box((pushed_==1) ? fl_down(slider()) : slider(),
+    if (damage()&fltk3::DAMAGE_ALL) {
+      draw_box((pushed_==1) ? fltk3::down(slider()) : slider(),
 	       X, Y, H, H, selection_color());
-      draw_box((pushed_==2) ? fl_down(slider()) : slider(),
+      draw_box((pushed_==2) ? fltk3::down(slider()) : slider(),
 	       X+W-H, Y, H, H, selection_color());
       if (active_r())
         fl_color(labelcolor());
       else
-        fl_color(fl_inactive(labelcolor()));
+        fl_color(fltk3::inactive(labelcolor()));
       int w1 = (H-4)/3; if (w1 < 1) w1 = 1;
       int x1 = X+(H-w1-1)/2;
       int yy1 = Y+(H-2*w1-1)/2;
@@ -240,15 +240,15 @@ void Fl_Scrollbar::draw() {
   } else { // vertical
     if (H < 3*W) {Fl_Slider::draw(X,Y,W,H); return;}
     Fl_Slider::draw(X,Y+W,W,H-2*W);
-    if (damage()&FL_DAMAGE_ALL) {
-      draw_box((pushed_==1) ? fl_down(slider()) : slider(),
+    if (damage()&fltk3::DAMAGE_ALL) {
+      draw_box((pushed_==1) ? fltk3::down(slider()) : slider(),
 	       X, Y, W, W, selection_color());
-      draw_box((pushed_==2) ? fl_down(slider()) : slider(),
+      draw_box((pushed_==2) ? fltk3::down(slider()) : slider(),
 	       X, Y+H-W, W, W, selection_color());
       if (active_r())
         fl_color(labelcolor());
       else
-        fl_color(fl_inactive(labelcolor()));
+        fl_color(fltk3::inactive(labelcolor()));
       int w1 = (W-4)/3; if (w1 < 1) w1 = 1;
       int x1 = X+(W-2*w1-1)/2;
       int yy1 = Y+(W-w1-1)/2;
@@ -272,9 +272,9 @@ void Fl_Scrollbar::draw() {
 */
 Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
   : Fl_Slider(X, Y, W, H, L) {
-  box(FL_FLAT_BOX);
-  color(FL_DARK2);
-  slider(FL_UP_BOX);
+  box(fltk3::FLAT_BOX);
+  color(fltk3::DARK2);
+  slider(fltk3::UP_BOX);
   linesize_ = 16;
   pushed_ = 0;
   step(1);

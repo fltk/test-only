@@ -88,7 +88,7 @@ Fl_Check_Browser::Fl_Check_Browser(int X, int Y, int W, int H, const char *l)
 /**  The constructor makes an empty browser.*/
 : Fl_Browser_(X, Y, W, H, l) {
 	type(FL_SELECT_BROWSER);
-	when(FL_WHEN_NEVER);
+	when(fltk3::WHEN_NEVER);
 	first = last = 0;
 	nitems_ = nchecked_ = 0;
 	cached_item = -1;
@@ -121,11 +121,11 @@ void Fl_Check_Browser::item_draw(void *v, int X, int Y, int, int) const {
 	cb_item *i = (cb_item *)v;
 	char *s = i->text;
 	int tsize = textsize();
-	Fl_Color col = active_r() ? textcolor() : fl_inactive(textcolor());
+	fltk3::Color col = active_r() ? textcolor() : fltk3::inactive(textcolor());
 	int cy = Y + (tsize + 1 - CHECK_SIZE) / 2;
 	X += 2;
 
-	fl_color(active_r() ? FL_FOREGROUND_COLOR : fl_inactive(FL_FOREGROUND_COLOR));
+	fl_color(active_r() ? fltk3::FOREGROUND_COLOR : fltk3::inactive(fltk3::FOREGROUND_COLOR));
 	fl_loop(X, cy, X, cy + CHECK_SIZE,
 	        X + CHECK_SIZE, cy + CHECK_SIZE, X + CHECK_SIZE, cy);
 	if (i->checked) {
@@ -141,7 +141,7 @@ void Fl_Check_Browser::item_draw(void *v, int X, int Y, int, int) const {
 	}
 	fl_font(textfont(), tsize);
 	if (i->selected) {
-		col = fl_contrast(col, selection_color());
+		col = fltk3::contrast(col, selection_color());
 	}
 	fl_color(col);
 	fl_draw(s, X + CHECK_SIZE + 8, Y + tsize - 1);
@@ -319,7 +319,7 @@ void Fl_Check_Browser::check_none() {
 }
 
 int Fl_Check_Browser::handle(int event) {
-  if (event==FL_PUSH)
+  if (event==fltk3::PUSH)
     deselect();
   return Fl_Browser_::handle(event);
 }

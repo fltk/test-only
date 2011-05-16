@@ -47,7 +47,7 @@ class FL_EXPORT Fl_Multi_Browser : public Fl_Browser {
 public:
   /**
       Creates a new Fl_Multi_Browser widget using the given
-    position, size, and label string. The default boxtype is FL_DOWN_BOX.
+    position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
     The constructor specializes Fl_Browser() by setting the type to FL_MULTI_BROWSER.
     The destructor destroys the widget and frees all memory that has been allocated.
   */

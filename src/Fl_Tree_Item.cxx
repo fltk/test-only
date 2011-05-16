@@ -507,19 +507,19 @@ Fl_Tree_Item *Fl_Tree_Item::find_clicked(const Fl_Tree_Prefs &prefs) {
   return(0);
 }
 
-static void draw_item_focus(Fl_Boxtype B, Fl_Color C, int X, int Y, int W, int H) {
+static void draw_item_focus(fltk3::Boxtype B, fltk3::Color C, int X, int Y, int W, int H) {
   if (!Fl::visible_focus()) return;
   switch (B) {
-    case FL_DOWN_BOX:
-    case FL_DOWN_FRAME:
-    case FL_THIN_DOWN_BOX:
-    case FL_THIN_DOWN_FRAME:
+    case fltk3::DOWN_BOX:
+    case fltk3::DOWN_FRAME:
+    case fltk3::THIN_DOWN_BOX:
+    case fltk3::THIN_DOWN_FRAME:
       X ++;
       Y ++;
     default:
       break;
   }
-  fl_color(fl_contrast(FL_BLACK, C));
+  fl_color(fltk3::contrast(fltk3::BLACK, C));
 
 #if defined(USE_X11) || defined(__APPLE_QUARTZ__)
   fl_line_style(FL_DOT);
@@ -562,11 +562,11 @@ void Fl_Tree_Item::draw(int X, int &Y, int W, Fl_Widget *tree,
     W += prefs.openicon()->w();
   }
   // Colors, fonts
-  Fl_Color fg = _selected ? fl_contrast(_labelfgcolor, tree->selection_color())
+  fltk3::Color fg = _selected ? fltk3::contrast(_labelfgcolor, tree->selection_color())
                           : _active ? _labelfgcolor 
-			            : fl_inactive(_labelfgcolor);
-  Fl_Color bg = _selected ? _active ? tree->selection_color() 
-                                    : fl_inactive(tree->selection_color())
+			            : fltk3::inactive(_labelfgcolor);
+  fltk3::Color bg = _selected ? _active ? tree->selection_color() 
+                                    : fltk3::inactive(tree->selection_color())
                           : _labelbgcolor;
   // Update the xywh of this item
   _xywh[0] = X;
@@ -675,7 +675,7 @@ void Fl_Tree_Item::draw(int X, int &Y, int W, Fl_Widget *tree,
     }
     if ( this == itemfocus && Fl::visible_focus() && Fl::focus() == tree) {
       // Draw focus box around this item
-      draw_item_focus(FL_NO_BOX,bg,bx+1,by+1,bw-1,bh-1);
+      draw_item_focus(fltk3::NO_BOX,bg,bx+1,by+1,bw-1,bh-1);
     }
     Y += H;
   }			// end drawthis

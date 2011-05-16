@@ -177,7 +177,7 @@ Fl_File_Browser::item_width(void *p) const	// I - List item data
 
   // Set the font and size...
   if (line->txt[strlen(line->txt) - 1] == '/')
-    fl_font(textfont() | FL_BOLD, textsize());
+    fl_font(textfont() | fltk3::BOLD, textsize());
   else
     fl_font(textfont(), textsize());
 
@@ -269,7 +269,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
 {
   int		i;			// Looping var
   FL_BLINE	*line;			// Pointer to line
-  Fl_Color	c;			// Text color
+  fltk3::Color	c;			// Text color
   char		*t,			// Pointer into text
 		*ptr,			// Pointer into fragment
 		fragment[10240];	// Fragment of text
@@ -283,12 +283,12 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
   line = (FL_BLINE *)p;
 
   if (line->txt[strlen(line->txt) - 1] == '/')
-    fl_font(textfont() | FL_BOLD, textsize());
+    fl_font(textfont() | fltk3::BOLD, textsize());
   else
     fl_font(textfont(), textsize());
 
   if (line->flags & SELECTED)
-    c = fl_contrast(textcolor(), selection_color());
+    c = fltk3::contrast(textcolor(), selection_color());
   else
     c = textcolor();
 
@@ -303,8 +303,8 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
     // Draw the icon if it is set...
     if (line->data)
       ((Fl_File_Icon *)line->data)->draw(X, Y, iconsize_, iconsize_,
-                                	(line->flags & SELECTED) ? FL_YELLOW :
-				                                   FL_LIGHT2,
+                                	(line->flags & SELECTED) ? fltk3::YELLOW :
+				                                   fltk3::LIGHT2,
 					active_r());
 
     // Draw the text offset to the right...
@@ -331,7 +331,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
   if (active_r())
     fl_color(c);
   else
-    fl_color(fl_inactive(c));
+    fl_color(fltk3::inactive(c));
 
   for (t = line->txt, ptr = fragment; *t != '\0'; t ++)
     if (*t == '\n')
@@ -340,7 +340,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
       *ptr = '\0';
 
       fl_draw(fragment, X + width, Y, W - width, fl_height(),
-              (Fl_Align)(FL_ALIGN_LEFT | FL_ALIGN_CLIP), 0, 0);
+              (fltk3::Align)(fltk3::ALIGN_LEFT | fltk3::ALIGN_CLIP), 0, 0);
 
       // Point back to the start of the fragment...
       ptr    = fragment;
@@ -365,7 +365,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
       }
 
       fl_draw(fragment, X + width, Y, cW, fl_height(),
-              (Fl_Align)(FL_ALIGN_LEFT | FL_ALIGN_CLIP), 0, 0);
+              (fltk3::Align)(fltk3::ALIGN_LEFT | fltk3::ALIGN_CLIP), 0, 0);
 
       // Advance to the next column...
       column ++;
@@ -388,7 +388,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
     *ptr = '\0';
 
     fl_draw(fragment, X + width, Y, W - width, fl_height(),
-            (Fl_Align)(FL_ALIGN_LEFT | FL_ALIGN_CLIP), 0, 0);
+            (fltk3::Align)(fltk3::ALIGN_LEFT | fltk3::ALIGN_CLIP), 0, 0);
   }
 }
 

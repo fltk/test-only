@@ -101,11 +101,11 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H, const char* l)
   display_insert_position_hint = 0;
   shortcut_ = 0;
   
-  color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
-  box(FL_DOWN_FRAME);
-  textsize(FL_NORMAL_SIZE);
-  textcolor(FL_FOREGROUND_COLOR);
-  textfont(FL_HELVETICA);
+  color(fltk3::BACKGROUND2_COLOR, fltk3::SELECTION_COLOR);
+  box(fltk3::DOWN_FRAME);
+  textsize(fltk3::NORMAL_SIZE);
+  textcolor(fltk3::FOREGROUND_COLOR);
+  textfont(fltk3::HELVETICA);
   set_flag(SHORTCUT_LABEL);
   
   text_area.x = 0;
@@ -122,7 +122,7 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H, const char* l)
   end();
   
   scrollbar_width(Fl::scrollbar_size());
-  scrollbar_align(FL_ALIGN_BOTTOM_RIGHT);
+  scrollbar_align(fltk3::ALIGN_BOTTOM_RIGHT);
   
   mCursorOn = 0;
   mCursorPos = 0;
@@ -139,7 +139,7 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H, const char* l)
   mNeedAbsTopLineNum = 0;
   mHorizOffset = mHorizOffsetHint = 0;
   
-  mCursor_color = FL_FOREGROUND_COLOR;
+  mCursor_color = fltk3::FOREGROUND_COLOR;
   
   mStyleBuffer = 0;
   mStyleTable = 0;
@@ -261,7 +261,7 @@ void Fl_Text_Display::highlight_data(Fl_Text_Buffer *styleBuffer,
   mColumnScale = 0;
   
   mStyleBuffer->canUndo(0);
-  damage(FL_DAMAGE_EXPOSE);
+  damage(fltk3::DAMAGE_EXPOSE);
 }
 
 
@@ -350,11 +350,11 @@ void Fl_Text_Display::resize(int X, int Y, int W, int H) {
     // figure the scrollbars
     if (scrollbar_width()) {
       /* Decide if the vertical scrollbar needs to be visible */
-      if (scrollbar_align() & (FL_ALIGN_LEFT|FL_ALIGN_RIGHT) &&
+      if (scrollbar_align() & (fltk3::ALIGN_LEFT|fltk3::ALIGN_RIGHT) &&
           mNBufferLines >= mNVisibleLines - 1)
       {
         mVScrollBar->set_visible();
-        if (scrollbar_align() & FL_ALIGN_LEFT) {
+        if (scrollbar_align() & fltk3::ALIGN_LEFT) {
           text_area.x = X+scrollbar_width()+LEFT_MARGIN;
           text_area.w = W-scrollbar_width()-LEFT_MARGIN-RIGHT_MARGIN;
           mVScrollBar->resize(X, text_area.y-TOP_MARGIN, scrollbar_width(),
@@ -388,14 +388,14 @@ void Fl_Text_Display::resize(int X, int Y, int W, int H) {
       /* WAS: Suggestion: Try turning the horizontal scrollbar on when
        you first see a line that is too wide in the window, but then
        don't turn it off (ie mix both of your solutions). */
-      if (scrollbar_align() & (FL_ALIGN_TOP|FL_ALIGN_BOTTOM) &&
+      if (scrollbar_align() & (fltk3::ALIGN_TOP|fltk3::ALIGN_BOTTOM) &&
           (mVScrollBar->visible() || longest_vline() > text_area.w))
       {
         if (!mHScrollBar->visible()) {
           mHScrollBar->set_visible();
           again = 1; // loop again to see if we now need vert. & recalc sizes
         }
-        if (scrollbar_align() & FL_ALIGN_TOP) {
+        if (scrollbar_align() & fltk3::ALIGN_TOP) {
           text_area.y = Y + scrollbar_width()+TOP_MARGIN;
           text_area.h = H - scrollbar_width()-TOP_MARGIN-BOTTOM_MARGIN;
           mHScrollBar->resize(text_area.x-LEFT_MARGIN, Y,
@@ -503,7 +503,7 @@ void Fl_Text_Display::redisplay_range(int startpos, int endpos) {
     damage_range2_start = min(damage_range2_start, startpos);
     damage_range2_end = max(damage_range2_end, endpos);
   }
-  damage(FL_DAMAGE_SCROLL);
+  damage(fltk3::DAMAGE_SCROLL);
 }
 
 
@@ -1484,7 +1484,7 @@ void Fl_Text_Display::buffer_modified_cb( int pos, int nInserted, int nDeleted,
   
   /* If the changes caused scrolling, re-paint everything and we're done. */
   if ( scrolled ) {
-    textD->damage(FL_DAMAGE_EXPOSE);
+    textD->damage(fltk3::DAMAGE_EXPOSE);
     if ( textD->mStyleBuffer )   /* See comments in extendRangeForStyleMods */
       textD->mStyleBuffer->primary_selection()->selected(0);
     return;
@@ -1925,10 +1925,10 @@ void Fl_Text_Display::draw_string(int style,
    pre-allocated and pre-configured.  For syntax highlighting, GCs are
    configured here, on the fly. */
   
-  Fl_Font font = textfont();
+  fltk3::Font font = textfont();
   int fsize = textsize();
-  Fl_Color foreground;
-  Fl_Color background;
+  fltk3::Color foreground;
+  fltk3::Color background;
   
   if ( style & STYLE_LOOKUP_MASK ) {
     int si = (style & STYLE_LOOKUP_MASK) - 'A';
@@ -1941,20 +1941,20 @@ void Fl_Text_Display::draw_string(int style,
     
     if (style & PRIMARY_MASK) {
       if (Fl::focus() == (Fl_Widget*)this) background = selection_color();
-      else background = fl_color_average(color(), selection_color(), 0.4f);
+      else background = fltk3::colorAverage(color(), selection_color(), 0.4f);
     } else if (style & HIGHLIGHT_MASK) {
-      if (Fl::focus() == (Fl_Widget*)this) background = fl_color_average(color(), selection_color(), 0.5f);
-      else background = fl_color_average(color(), selection_color(), 0.6f);
+      if (Fl::focus() == (Fl_Widget*)this) background = fltk3::colorAverage(color(), selection_color(), 0.5f);
+      else background = fltk3::colorAverage(color(), selection_color(), 0.6f);
     } else background = color();
-    foreground = fl_contrast(styleRec->color, background);
+    foreground = fltk3::contrast(styleRec->color, background);
   } else if (style & PRIMARY_MASK) {
     if (Fl::focus() == (Fl_Widget*)this) background = selection_color();
-    else background = fl_color_average(color(), selection_color(), 0.4f);
-    foreground = fl_contrast(textcolor(), background);
+    else background = fltk3::colorAverage(color(), selection_color(), 0.4f);
+    foreground = fltk3::contrast(textcolor(), background);
   } else if (style & HIGHLIGHT_MASK) {
-    if (Fl::focus() == (Fl_Widget*)this) background = fl_color_average(color(), selection_color(), 0.5f);
-    else background = fl_color_average(color(), selection_color(), 0.6f);
-    foreground = fl_contrast(textcolor(), background);
+    if (Fl::focus() == (Fl_Widget*)this) background = fltk3::colorAverage(color(), selection_color(), 0.5f);
+    else background = fltk3::colorAverage(color(), selection_color(), 0.6f);
+    foreground = fltk3::contrast(textcolor(), background);
   } else {
     foreground = textcolor();
     background = color();
@@ -2016,13 +2016,13 @@ void Fl_Text_Display::clear_rect(int style,
     if (Fl::focus()==(Fl_Widget*)this) {
       fl_color(selection_color());
     } else {
-      fl_color(fl_color_average(color(), selection_color(), 0.4f));
+      fl_color(fltk3::colorAverage(color(), selection_color(), 0.4f));
     }
   } else if (style & HIGHLIGHT_MASK) {
     if (Fl::focus()==(Fl_Widget*)this) {
-      fl_color(fl_color_average(color(), selection_color(), 0.5f));
+      fl_color(fltk3::colorAverage(color(), selection_color(), 0.5f));
     } else {
-      fl_color(fl_color_average(color(), selection_color(), 0.6f));
+      fl_color(fltk3::colorAverage(color(), selection_color(), 0.6f));
     }
   } else {
     fl_color( color() );
@@ -2172,8 +2172,8 @@ int Fl_Text_Display::position_style( int lineStartPos, int lineLen, int lineInde
 double Fl_Text_Display::string_width( const char *string, int length, int style ) const {
   IS_UTF8_ALIGNED(string)
 
-  Fl_Font font;
-  Fl_Fontsize fsize;
+  fltk3::Font font;
+  fltk3::Fontsize fsize;
   
   if ( mNStyles && (style & STYLE_LOOKUP_MASK) ) {
     int si = (style & STYLE_LOOKUP_MASK) - 'A';
@@ -2563,7 +2563,7 @@ int Fl_Text_Display::scroll_(int topLineNum, int horizOffset) {
   mHorizOffset = horizOffset;
   
   // redraw all text
-  damage(FL_DAMAGE_EXPOSE);
+  damage(fltk3::DAMAGE_EXPOSE);
   return 1;
 }
 
@@ -3359,7 +3359,7 @@ void Fl_Text_Display::draw(void) {
   fl_push_clip(x(),y(),w(),h());	// prevent drawing outside widget area
   
   // draw the non-text, non-scrollbar areas.
-  if (damage() & FL_DAMAGE_ALL) {
+  if (damage() & fltk3::DAMAGE_ALL) {
     //    printf("drawing all (box = %d)\n", box());
     if (Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id) {
       // if to printer, draw the background
@@ -3396,11 +3396,11 @@ void Fl_Text_Display::draw(void) {
     if (mVScrollBar->visible() && mHScrollBar->visible())
       fl_rectf(mVScrollBar->x(), mHScrollBar->y(),
                mVScrollBar->w(), mHScrollBar->h(),
-               FL_GRAY);
+               fltk3::GRAY);
     
     // blank the previous cursor protrusions
   }
-  else if (damage() & (FL_DAMAGE_SCROLL | FL_DAMAGE_EXPOSE)) {
+  else if (damage() & (fltk3::DAMAGE_SCROLL | fltk3::DAMAGE_EXPOSE)) {
     //    printf("blanking previous cursor extrusions at Y: %d\n", mCursorOldY);
     // CET - FIXME - save old cursor position instead and just draw side needed?
     fl_push_clip(text_area.x-LEFT_MARGIN,
@@ -3415,15 +3415,15 @@ void Fl_Text_Display::draw(void) {
   }
   
   // draw the scrollbars
-  if (damage() & (FL_DAMAGE_ALL | FL_DAMAGE_CHILD)) {
-    mVScrollBar->damage(FL_DAMAGE_ALL);
-    mHScrollBar->damage(FL_DAMAGE_ALL);
+  if (damage() & (fltk3::DAMAGE_ALL | fltk3::DAMAGE_CHILD)) {
+    mVScrollBar->damage(fltk3::DAMAGE_ALL);
+    mHScrollBar->damage(fltk3::DAMAGE_ALL);
   }
   update_child(*mVScrollBar);
   update_child(*mHScrollBar);
   
   // draw all of the text
-  if (damage() & (FL_DAMAGE_ALL | FL_DAMAGE_EXPOSE)) {
+  if (damage() & (fltk3::DAMAGE_ALL | fltk3::DAMAGE_EXPOSE)) {
     //printf("drawing all text\n");
     int X, Y, W, H;
     if (fl_clip_box(text_area.x, text_area.y, text_area.w, text_area.h,
@@ -3436,7 +3436,7 @@ void Fl_Text_Display::draw(void) {
       draw_text(text_area.x, text_area.y, text_area.w, text_area.h);
     }
   }
-  else if (damage() & FL_DAMAGE_SCROLL) {
+  else if (damage() & fltk3::DAMAGE_SCROLL) {
     // draw some lines of text
     fl_push_clip(text_area.x, text_area.y,
                  text_area.w, text_area.h);
@@ -3452,7 +3452,7 @@ void Fl_Text_Display::draw(void) {
   }
   
   // draw the text cursor
-  if (damage() & (FL_DAMAGE_ALL | FL_DAMAGE_SCROLL | FL_DAMAGE_EXPOSE)
+  if (damage() & (fltk3::DAMAGE_ALL | fltk3::DAMAGE_SCROLL | fltk3::DAMAGE_EXPOSE)
       && !buffer()->primary_selection()->selected() &&
       mCursorOn && Fl::focus() == (Fl_Widget*)this ) {
     fl_push_clip(text_area.x-LEFT_MARGIN,
@@ -3549,47 +3549,47 @@ int Fl_Text_Display::handle(int event) {
   if (!buffer()) return 0;
   // This isn't very elegant!
   if (!Fl::event_inside(text_area.x, text_area.y, text_area.w, text_area.h) &&
-      !dragging && event != FL_LEAVE && event != FL_ENTER &&
-      event != FL_MOVE && event != FL_FOCUS && event != FL_UNFOCUS &&
-      event != FL_KEYBOARD && event != FL_KEYUP) {
+      !dragging && event != fltk3::LEAVE && event != fltk3::ENTER &&
+      event != fltk3::MOVE && event != fltk3::FOCUS && event != fltk3::UNFOCUS &&
+      event != fltk3::KEYBOARD && event != fltk3::KEYUP) {
     return Fl_Group::handle(event);
   }
   
   switch (event) {
-    case FL_ENTER:
-    case FL_MOVE:
+    case fltk3::ENTER:
+    case fltk3::MOVE:
       if (active_r()) {
         if (Fl::event_inside(text_area.x, text_area.y, text_area.w,
-	                     text_area.h)) window()->cursor(FL_CURSOR_INSERT);
-	else window()->cursor(FL_CURSOR_DEFAULT);
+	                     text_area.h)) window()->cursor(fltk3::CURSOR_INSERT);
+	else window()->cursor(fltk3::CURSOR_DEFAULT);
 	return 1;
       } else {
         return 0;
       }
       
-    case FL_LEAVE:
-    case FL_HIDE:
+    case fltk3::LEAVE:
+    case fltk3::HIDE:
       if (active_r() && window()) {
-        window()->cursor(FL_CURSOR_DEFAULT);
+        window()->cursor(fltk3::CURSOR_DEFAULT);
         
 	return 1;
       } else {
 	return 0;
       }
       
-    case FL_PUSH: {
+    case fltk3::PUSH: {
       if (active_r() && window()) {
         if (Fl::event_inside(text_area.x, text_area.y, text_area.w,
-                             text_area.h)) window()->cursor(FL_CURSOR_INSERT);
-        else window()->cursor(FL_CURSOR_DEFAULT);
+                             text_area.h)) window()->cursor(fltk3::CURSOR_INSERT);
+        else window()->cursor(fltk3::CURSOR_DEFAULT);
       }
       
       if (Fl::focus() != this) {
         Fl::focus(this);
-        handle(FL_FOCUS);
+        handle(fltk3::FOCUS);
       }
       if (Fl_Group::handle(event)) return 1;
-      if (Fl::event_state()&FL_SHIFT) return handle(FL_DRAG);
+      if (Fl::event_state()&fltk3::SHIFT) return handle(fltk3::DRAG);
       dragging = 1;
       int pos = xy_to_position(Fl::event_x(), Fl::event_y(), CURSOR_POS);
       dragPos = pos;
@@ -3615,7 +3615,7 @@ int Fl_Text_Display::handle(int event) {
       return 1;
     }
       
-    case FL_DRAG: {
+    case fltk3::DRAG: {
       if (dragType==DRAG_NONE)
         return 1;
       if (dragType==DRAG_START_DND) {
@@ -3669,13 +3669,13 @@ int Fl_Text_Display::handle(int event) {
       return 1;
     }
       
-    case FL_RELEASE: {
+    case fltk3::RELEASE: {
       if (Fl::event_is_click() && (! Fl::event_clicks()) && 
-	  buffer()->primary_selection()->includes(dragPos) && !(Fl::event_state()&FL_SHIFT) ) {
+	  buffer()->primary_selection()->includes(dragPos) && !(Fl::event_state()&fltk3::SHIFT) ) {
 	buffer()->unselect(); // clicking in the selection: unselect and move cursor
 	insert_position(dragPos);
 	return 1;
-      } else if (Fl::event_clicks() == DRAG_LINE && Fl::event_button() == FL_LEFT_MOUSE) {
+      } else if (Fl::event_clicks() == DRAG_LINE && Fl::event_button() == fltk3::leftMouseButton) {
         buffer()->select(buffer()->line_start(dragPos), buffer()->next_char(buffer()->line_end(dragPos)));
 	dragPos = line_start(dragPos);
 	dragType = DRAG_CHAR;
@@ -3700,13 +3700,13 @@ int Fl_Text_Display::handle(int event) {
       return 1;
     }
       
-    case FL_MOUSEWHEEL:
+    case fltk3::MOUSEWHEEL:
       if (Fl::event_dy()) return mVScrollBar->handle(event);
       else return mHScrollBar->handle(event);
       
-    case FL_UNFOCUS:
-      if (active_r() && window()) window()->cursor(FL_CURSOR_DEFAULT);
-    case FL_FOCUS:
+    case fltk3::UNFOCUS:
+      if (active_r() && window()) window()->cursor(fltk3::CURSOR_DEFAULT);
+    case fltk3::FOCUS:
       if (buffer()->selected()) {
         int start, end;
         if (buffer()->selection_position(&start, &end))
@@ -3724,9 +3724,9 @@ int Fl_Text_Display::handle(int event) {
       }
       return 1;
       
-    case FL_KEYBOARD:
+    case fltk3::KEYBOARD:
       // Copy?
-      if ((Fl::event_state()&(FL_CTRL|FL_COMMAND)) && Fl::event_key()=='c') {
+      if ((Fl::event_state()&(fltk3::CTRL|fltk3::COMMAND)) && Fl::event_key()=='c') {
         if (!buffer()->selected()) return 1;
         const char *copy = buffer()->selection_text();
         if (*copy) Fl::copy(copy, strlen(copy), 1);
@@ -3735,7 +3735,7 @@ int Fl_Text_Display::handle(int event) {
       }
       
       // Select all ?
-      if ((Fl::event_state()&(FL_CTRL|FL_COMMAND)) && Fl::event_key()=='a') {
+      if ((Fl::event_state()&(fltk3::CTRL|fltk3::COMMAND)) && Fl::event_key()=='a') {
         buffer()->select(0,buffer()->length());
         const char *copy = buffer()->selection_text();
         if (*copy) Fl::copy(copy, strlen(copy), 0);
@@ -3748,10 +3748,10 @@ int Fl_Text_Display::handle(int event) {
       
       break;
       
-    case FL_SHORTCUT:
+    case fltk3::SHORTCUT:
       if (!(shortcut() ? Fl::test_shortcut(shortcut()) : test_shortcut()))
         return 0;
-      if (Fl::visible_focus() && handle(FL_FOCUS)) {
+      if (Fl::visible_focus() && handle(fltk3::FOCUS)) {
         Fl::focus(this);
         return 1;
       }

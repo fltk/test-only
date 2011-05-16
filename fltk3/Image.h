@@ -80,7 +80,7 @@ class FL_EXPORT Fl_Image {
   void data(const char * const *p, int c) {data_ = p; count_ = c;}
   void draw_empty(int X, int Y);
 
-  static void labeltype(const Fl_Label *lo, int lx, int ly, int lw, int lh, Fl_Align la);
+  static void labeltype(const Fl_Label *lo, int lx, int ly, int lw, int lh, fltk3::Align la);
   static void measure(const Fl_Label *lo, int &lw, int &lh);
 
   public:
@@ -134,14 +134,14 @@ class FL_EXPORT Fl_Image {
     with it.
   */
   Fl_Image *copy() { return copy(w(), h()); }
-  virtual void color_average(Fl_Color c, float i);
+  virtual void color_average(fltk3::Color c, float i);
   /**
     The inactive() method calls
-    color_average(FL_BACKGROUND_COLOR, 0.33f) to produce 
+    color_average(fltk3::BACKGROUND_COLOR, 0.33f) to produce 
     an image that appears grayed out. <I>This method does not 
     alter the original image data.</I>
   */
-  void inactive() { color_average(FL_GRAY, .33f); }
+  void inactive() { color_average(fltk3::GRAY, .33f); }
   virtual void desaturate();
   virtual void label(Fl_Widget*w);
   virtual void label(Fl_Menu_Item*m);
@@ -199,7 +199,7 @@ public:
   virtual ~Fl_RGB_Image();
   virtual Fl_Image *copy(int W, int H);
   Fl_Image *copy() { return copy(w(), h()); }
-  virtual void color_average(Fl_Color c, float i);
+  virtual void color_average(fltk3::Color c, float i);
   virtual void desaturate();
   virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
   void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
