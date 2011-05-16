@@ -69,7 +69,7 @@ class FL_EXPORT Fl_Tree_Item {
   int                     _xywh[4];		// xywh of this widget (if visible)
   int                     _collapse_xywh[4];	// xywh of collapse icon (if any)
   int                     _label_xywh[4];	// xywh of label
-  Fl_Widget              *_widget;		// item's label widget (optional)
+  fltk3::Widget              *_widget;		// item's label widget (optional)
   Fl_Image               *_usericon;		// item's user-specific icon (optional)
   Fl_Tree_Item_Array      _children;		// array of child items
   Fl_Tree_Item           *_parent;		// parent item (=0 if root)
@@ -87,7 +87,7 @@ public:
   int y() const { return(_xywh[1]); }
   int w() const { return(_xywh[2]); }
   int h() const { return(_xywh[3]); }
-  void draw(int X, int &Y, int W, Fl_Widget *tree, Fl_Tree_Item *itemfocus, const Fl_Tree_Prefs &prefs, int lastchild=1);
+  void draw(int X, int &Y, int W, fltk3::Widget *tree, Fl_Tree_Item *itemfocus, const Fl_Tree_Prefs &prefs, int lastchild=1);
   void show_self(const char *indent = "") const;
   void label(const char *val);
   const char *label() const;
@@ -139,11 +139,11 @@ public:
     return(_labelbgcolor); 
   }
   /// Assign an FLTK widget to this item.
-  void widget(Fl_Widget *val) {
+  void widget(fltk3::Widget *val) {
     _widget = val; 
   }
   /// Return FLTK widget assigned to this item.
-  Fl_Widget *widget() const {
+  fltk3::Widget *widget() const {
     return(_widget); 
   }
   /// Return the number of children this item has.

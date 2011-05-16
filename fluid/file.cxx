@@ -616,14 +616,14 @@ void read_fdesign() {
     } else if (!strcmp(name,"class")) {
 
       if (!strcmp(value,"FL_BEGIN_GROUP")) {
-	group = widget = (Fl_Widget_Type*)Fl_Type_make("Fl_Group");
+	group = widget = (Fl_Widget_Type*)Fl_Type_make("fltk3::Group");
 	Fl_Type::current = group;
       } else if (!strcmp(value,"FL_END_GROUP")) {
 	if (group) {
-	  Fl_Group* g = (Fl_Group*)(group->o);
+	  fltk3::Group* g = (fltk3::Group*)(group->o);
 	  g->begin();
 	  g->forms_end();
-	  Fl_Group::current(0);
+	  fltk3::Group::current(0);
 	}
 	group = widget = 0;
 	Fl_Type::current = window;

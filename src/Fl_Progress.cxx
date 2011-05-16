@@ -41,7 +41,7 @@
 
 
 //
-// Fl_Progress is a progress bar widget based off Fl_Widget that shows a
+// Fl_Progress is a progress bar widget based off fltk3::Widget that shows a
 // standard progress bar...
 //
 
@@ -108,7 +108,7 @@ void Fl_Progress::draw()
     The default colors are fltk3::BACKGROUND2_COLOR and fltk3::YELLOW, resp.
 */
 Fl_Progress::Fl_Progress(int X, int Y, int W, int H, const char* L)
-: Fl_Widget(X, Y, W, H, L) {
+: fltk3::Widget(X, Y, W, H, L) {
   align(fltk3::ALIGN_INSIDE);
   box(fltk3::DOWN_BOX);
   color(fltk3::BACKGROUND2_COLOR, fltk3::YELLOW);

@@ -59,11 +59,11 @@
  4 = redraw all items
  */
 
-static void scrollbar_callback(Fl_Widget* s, void*) {
+static void scrollbar_callback(fltk3::Widget* s, void*) {
   ((Fl_Browser_*)(s->parent()))->position(int(((Fl_Scrollbar*)s)->value()));
 }
 
-static void hscrollbar_callback(Fl_Widget* s, void*) {
+static void hscrollbar_callback(fltk3::Widget* s, void*) {
   ((Fl_Browser_*)(s->parent()))->hposition(int(((Fl_Scrollbar*)s)->value()));
 }
 
@@ -106,14 +106,14 @@ int Fl_Browser_::leftedge() const {
 
 // The scrollbars may be moved again by draw(), since each one's size
 // depends on whether the other is visible or not.  This skips over
-// Fl_Group::resize since it moves the scrollbars uselessly.
+// fltk3::Group::resize since it moves the scrollbars uselessly.
 /**
  Repositions and/or resizes the browser.
  \param[in] X,Y,W,H The new position and size for the browser, in pixels.
  */
 void Fl_Browser_::resize(int X, int Y, int W, int H) {
   int scrollsize = scrollbar_size_ ? scrollbar_size_ : Fl::scrollbar_size();
-  Fl_Widget::resize(X, Y, W, H);
+  fltk3::Widget::resize(X, Y, W, H);
   // move the scrollbars so they can respond to events:
   bbox(X,Y,W,H);
   scrollbar.resize(
@@ -773,7 +773,7 @@ int Fl_Browser_::handle(int event) {
     }
   }
   
-  if (Fl_Group::handle(event)) return 1;
+  if (fltk3::Group::handle(event)) return 1;
   if (wp.deleted()) return 1;
   
   int X, Y, W, H; bbox(X, Y, W, H);
@@ -958,7 +958,7 @@ int Fl_Browser_::handle(int event) {
  \param[in] L The label string, may be NULL.
  */
 Fl_Browser_::Fl_Browser_(int X, int Y, int W, int H, const char* L)
-: Fl_Group(X, Y, W, H, L),
+: fltk3::Group(X, Y, W, H, L),
 scrollbar(0, 0, 0, 0, 0), // they will be resized by draw()
 hscrollbar(0, 0, 0, 0, 0)
 {

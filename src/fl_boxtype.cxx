@@ -398,14 +398,14 @@ void fl_draw_box(fltk3::Boxtype t, int x, int y, int w, int h, fltk3::Color c) {
   if (t && fl_box_table[t].f) fl_box_table[t].f(x,y,w,h,c);
 }
 
-//extern Fl_Widget *fl_boxcheat; // hack set by Fl_Window.cxx
+//extern fltk3::Widget *fl_boxcheat; // hack set by Fl_Window.cxx
 /** Draws the widget box according its box style */
-void Fl_Widget::draw_box() const {
+void fltk3::Widget::draw_box() const {
   if (box_) draw_box((fltk3::Boxtype)box_, x_, y_, w_, h_, color_);
   draw_backdrop();
 }
 /** If fltk3::ALIGN_IMAGE_BACKDROP is set, the image or deimage will be drawn */
-void Fl_Widget::draw_backdrop() const {
+void fltk3::Widget::draw_backdrop() const {
   if (align() & fltk3::ALIGN_IMAGE_BACKDROP) {
     const Fl_Image *img = image();
     // if there is no image, we will not draw the deimage either
@@ -416,11 +416,11 @@ void Fl_Widget::draw_backdrop() const {
   }
 }
 /** Draws a box of type t, of color c at the widget's position and size. */
-void Fl_Widget::draw_box(fltk3::Boxtype t, fltk3::Color c) const {
+void fltk3::Widget::draw_box(fltk3::Boxtype t, fltk3::Color c) const {
   draw_box(t, x_, y_, w_, h_, c);
 }
 /** Draws a box of type t, of color c at the position X,Y and size W,H. */
-void Fl_Widget::draw_box(fltk3::Boxtype t, int X, int Y, int W, int H, fltk3::Color c) const {
+void fltk3::Widget::draw_box(fltk3::Boxtype t, int X, int Y, int W, int H, fltk3::Color c) const {
   draw_it_active = active_r();
   fl_box_table[t].f(X, Y, W, H, c);
   draw_it_active = 1;

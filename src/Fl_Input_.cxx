@@ -1047,14 +1047,14 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
   Creates a new Fl_Input_ widget.
 
   This function creates a new Fl_Input_ widget and adds it to the current
-  Fl_Group. The value() is set to \c NULL.
+  fltk3::Group. The value() is set to \c NULL.
   The default boxtype is \c fltk3::DOWN_BOX.
 
   \param X, Y, W, H the dimensions of the new widget
   \param l an optional label text
 */
 Fl_Input_::Fl_Input_(int X, int Y, int W, int H, const char* l)
-: Fl_Widget(X, Y, W, H, l) {
+: fltk3::Widget(X, Y, W, H, l) {
   box(fltk3::DOWN_BOX);
   color(fltk3::BACKGROUND2_COLOR, fltk3::SELECTION_COLOR);
   align(fltk3::ALIGN_LEFT);
@@ -1219,19 +1219,19 @@ int Fl_Input_::value(const char* str) {
   Changes the size of the widget.
   This call updates the text layout so that the cursor is visible.
   \param [in] X, Y, W, H new size of the widget
-  \see Fl_Widget::resize(int, int, int, int)
+  \see fltk3::Widget::resize(int, int, int, int)
 */
 void Fl_Input_::resize(int X, int Y, int W, int H) {
   if (W != w()) xscroll_ = 0;
   if (H != h()) yscroll_ = 0;
-  Fl_Widget::resize(X, Y, W, H);
+  fltk3::Widget::resize(X, Y, W, H);
 }
 
 /**
   Destroys the widget.
 
   The destructor clears all allocated buffers and removes the widget
-  from the parent Fl_Group.
+  from the parent fltk3::Group.
 */
 Fl_Input_::~Fl_Input_() {
   if (undowidget == this) undowidget = 0;

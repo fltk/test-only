@@ -170,7 +170,7 @@ void Fl_Printer::end_job (void)
   printer->end_job();
 }
 
-void Fl_Printer::print_widget(Fl_Widget* widget, int delta_x, int delta_y)
+void Fl_Printer::print_widget(fltk3::Widget* widget, int delta_x, int delta_y)
 {
   printer->print_widget(widget, delta_x, delta_y);
 }

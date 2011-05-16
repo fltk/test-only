@@ -43,7 +43,7 @@
   <P ALIGN=CENTER>\image html  positioner.png </P> 
   \image latex  positioner.png " Fl_Positioner" width=4cm
 */
-class FL_EXPORT Fl_Positioner : public Fl_Widget {
+class FL_EXPORT Fl_Positioner : public fltk3::Widget {
 
   double xmin, ymin;
   double xmax, ymax;

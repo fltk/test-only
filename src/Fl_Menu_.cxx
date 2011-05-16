@@ -46,7 +46,7 @@
     \b Example:
     \code
       Fl_Menu_Bar *menubar = 0;
-      void my_menu_callback(Fl_Widget*,void*) {
+      void my_menu_callback(fltk3::Widget*,void*) {
         char name[80];
         if ( menubar->item_pathname(name, sizeof(name)-1) == 0 ) {   // recently picked item
           if ( strcmp(name, "File/&Open") == 0 ) { .. }              // open invoked
@@ -276,7 +276,7 @@ const Fl_Menu_Item* Fl_Menu_::picked(const Fl_Menu_Item* v) {
     value_ = v;
     if (when()&(fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE)) {
       if (changed() || when()&fltk3::WHEN_NOT_CHANGED) {
-	if (value_ && value_->callback_) value_->do_callback((Fl_Widget*)this);
+	if (value_ && value_->callback_) value_->do_callback((fltk3::Widget*)this);
 	else do_callback();
       }
     }
@@ -305,7 +305,7 @@ void Fl_Menu_Item::setonly() {
  and label string.  menu() is initialized to null.
  */
 Fl_Menu_::Fl_Menu_(int X,int Y,int W,int H,const char* l)
-: Fl_Widget(X,Y,W,H,l) {
+: fltk3::Widget(X,Y,W,H,l) {
   set_flag(SHORTCUT_LABEL);
   box(fltk3::UP_BOX);
   when(fltk3::WHEN_RELEASE_ALWAYS);

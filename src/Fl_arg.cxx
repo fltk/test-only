@@ -334,7 +334,7 @@ void Fl_Window::show(int argc, char **argv) {
       //  int mw,mh; minsize(mw,mh);
       //  if (mw > gw) gw = mw;
       //  if (mh > gh) gh = mh;
-      Fl_Widget *r = resizable();
+      fltk3::Widget *r = resizable();
       if (!r) resizable(this);
       // for WIN32 we assume window is not mapped yet:
       if (fl & (XValue | YValue))

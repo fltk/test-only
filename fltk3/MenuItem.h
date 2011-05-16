@@ -377,27 +377,27 @@ struct FL_EXPORT Fl_Menu_Item {
   const Fl_Menu_Item* find_shortcut(int *ip=0, const bool require_alt = false) const;
 
   /**
-    Calls the Fl_Menu_Item item's callback, and provides the Fl_Widget argument.
+    Calls the Fl_Menu_Item item's callback, and provides the fltk3::Widget argument.
     The callback is called with the stored user_data() as its second argument.
     You must first check that callback() is non-zero before calling this.
   */
-  void do_callback(Fl_Widget* o) const {callback_(o, user_data_);}
+  void do_callback(fltk3::Widget* o) const {callback_(o, user_data_);}
 
   /**
-    Calls the Fl_Menu_Item item's callback, and provides the Fl_Widget argument.
+    Calls the Fl_Menu_Item item's callback, and provides the fltk3::Widget argument.
     This call overrides the callback's second argument with the given value \p arg.
     You must first check that callback() is non-zero before calling this.
   */
-  void do_callback(Fl_Widget* o,void* arg) const {callback_(o, arg);}
+  void do_callback(fltk3::Widget* o,void* arg) const {callback_(o, arg);}
 
   /**
-    Calls the Fl_Menu_Item item's callback, and provides the Fl_Widget argument.
+    Calls the Fl_Menu_Item item's callback, and provides the fltk3::Widget argument.
     This call overrides the callback's second argument with the
     given value \p arg. long \p arg is cast to void* when calling
     the callback.
     You must first check that callback() is non-zero before calling this.
   */
-  void do_callback(Fl_Widget* o,long arg) const {callback_(o, (void*)arg);}
+  void do_callback(fltk3::Widget* o,long arg) const {callback_(o, (void*)arg);}
 
   // back-compatibility, do not use:
 

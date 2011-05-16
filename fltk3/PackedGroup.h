@@ -47,9 +47,9 @@
   Fl_Scroll.
 
   <P>The resizable for Fl_Pack is set to NULL by default.</p>
-  <P>See also: Fl_Group::resizable()
+  <P>See also: fltk3::Group::resizable()
 */
-class FL_EXPORT Fl_Pack : public Fl_Group {
+class FL_EXPORT Fl_Pack : public fltk3::Group {
   int spacing_;
 
 public:
@@ -73,7 +73,7 @@ public:
     between the children.
   */
   void spacing(int i) {spacing_ = i;}
-  /** Same as Fl_Group::type() */
+  /** Same as fltk3::Group::type() */
   uchar horizontal() const {return type();}
 };
 

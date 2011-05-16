@@ -364,7 +364,7 @@ void fl_draw(
   The string is formatted and aligned inside the passed box.
   Handles '\\t' and '\\n', expands all other control characters to '^X',
   and aligns inside or against the edges of the box.
-  See Fl_Widget::align() for values of \p align. The value fltk3::ALIGN_INSIDE
+  See fltk3::Widget::align() for values of \p align. The value fltk3::ALIGN_INSIDE
   is ignored, as this function always prints inside the box.
   If \p img is provided and is not \p NULL, the image is drawn above or
   below the text as specified by the \p align value.

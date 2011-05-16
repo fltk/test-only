@@ -90,7 +90,7 @@ static int scroll_x = 0;
  \param l label text, defaults to none
  */
 Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H, const char* l)
-: Fl_Group(X, Y, W, H, l) {
+: fltk3::Group(X, Y, W, H, l) {
   int i;
   
   mMaxsize = 0;
@@ -293,7 +293,7 @@ void Fl_Text_Display::resize(int X, int Y, int W, int H) {
 #ifdef DEBUG
   printf("    oldWidth=%d, mContinuousWrap=%d, mWrapMargin=%d\n", oldWidth, mContinuousWrap, mWrapMargin);
 #endif // DEBUG
-  Fl_Widget::resize(X,Y,W,H);
+  fltk3::Widget::resize(X,Y,W,H);
   if (!buffer()) return;
   X += Fl::box_dx(box());
   Y += Fl::box_dy(box());
@@ -1940,19 +1940,19 @@ void Fl_Text_Display::draw_string(int style,
     fsize = styleRec->size;
     
     if (style & PRIMARY_MASK) {
-      if (Fl::focus() == (Fl_Widget*)this) background = selection_color();
+      if (Fl::focus() == (fltk3::Widget*)this) background = selection_color();
       else background = fltk3::colorAverage(color(), selection_color(), 0.4f);
     } else if (style & HIGHLIGHT_MASK) {
-      if (Fl::focus() == (Fl_Widget*)this) background = fltk3::colorAverage(color(), selection_color(), 0.5f);
+      if (Fl::focus() == (fltk3::Widget*)this) background = fltk3::colorAverage(color(), selection_color(), 0.5f);
       else background = fltk3::colorAverage(color(), selection_color(), 0.6f);
     } else background = color();
     foreground = fltk3::contrast(styleRec->color, background);
   } else if (style & PRIMARY_MASK) {
-    if (Fl::focus() == (Fl_Widget*)this) background = selection_color();
+    if (Fl::focus() == (fltk3::Widget*)this) background = selection_color();
     else background = fltk3::colorAverage(color(), selection_color(), 0.4f);
     foreground = fltk3::contrast(textcolor(), background);
   } else if (style & HIGHLIGHT_MASK) {
-    if (Fl::focus() == (Fl_Widget*)this) background = fltk3::colorAverage(color(), selection_color(), 0.5f);
+    if (Fl::focus() == (fltk3::Widget*)this) background = fltk3::colorAverage(color(), selection_color(), 0.5f);
     else background = fltk3::colorAverage(color(), selection_color(), 0.6f);
     foreground = fltk3::contrast(textcolor(), background);
   } else {
@@ -2013,13 +2013,13 @@ void Fl_Text_Display::clear_rect(int style,
     return;
   
   if (style & PRIMARY_MASK) {
-    if (Fl::focus()==(Fl_Widget*)this) {
+    if (Fl::focus()==(fltk3::Widget*)this) {
       fl_color(selection_color());
     } else {
       fl_color(fltk3::colorAverage(color(), selection_color(), 0.4f));
     }
   } else if (style & HIGHLIGHT_MASK) {
-    if (Fl::focus()==(Fl_Widget*)this) {
+    if (Fl::focus()==(fltk3::Widget*)this) {
       fl_color(fltk3::colorAverage(color(), selection_color(), 0.5f));
     } else {
       fl_color(fltk3::colorAverage(color(), selection_color(), 0.6f));
@@ -3454,7 +3454,7 @@ void Fl_Text_Display::draw(void) {
   // draw the text cursor
   if (damage() & (fltk3::DAMAGE_ALL | fltk3::DAMAGE_SCROLL | fltk3::DAMAGE_EXPOSE)
       && !buffer()->primary_selection()->selected() &&
-      mCursorOn && Fl::focus() == (Fl_Widget*)this ) {
+      mCursorOn && Fl::focus() == (fltk3::Widget*)this ) {
     fl_push_clip(text_area.x-LEFT_MARGIN,
                  text_area.y,
                  text_area.w+LEFT_MARGIN+RIGHT_MARGIN,
@@ -3552,7 +3552,7 @@ int Fl_Text_Display::handle(int event) {
       !dragging && event != fltk3::LEAVE && event != fltk3::ENTER &&
       event != fltk3::MOVE && event != fltk3::FOCUS && event != fltk3::UNFOCUS &&
       event != fltk3::KEYBOARD && event != fltk3::KEYUP) {
-    return Fl_Group::handle(event);
+    return fltk3::Group::handle(event);
   }
   
   switch (event) {
@@ -3588,7 +3588,7 @@ int Fl_Text_Display::handle(int event) {
         Fl::focus(this);
         handle(fltk3::FOCUS);
       }
-      if (Fl_Group::handle(event)) return 1;
+      if (fltk3::Group::handle(event)) return 1;
       if (Fl::event_state()&fltk3::SHIFT) return handle(fltk3::DRAG);
       dragging = 1;
       int pos = xy_to_position(Fl::event_x(), Fl::event_y(), CURSOR_POS);

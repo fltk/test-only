@@ -81,7 +81,7 @@ class Fl_Widget_Tracker;
          (when the user pushes and releases the button, and as the mouse is
 	 dragged around in and out of the button).
 */
-class FL_EXPORT Fl_Button : public Fl_Widget {
+class FL_EXPORT Fl_Button : public fltk3::Widget {
 
   int shortcut_;
   char value_;

@@ -456,7 +456,7 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
   label type as needed.
   \param[in] w widget for which this icon will become the label
 */
-void Fl_File_Icon::label(Fl_Widget *w)	// I - Widget to label
+void Fl_File_Icon::label(fltk3::Widget *w)	// I - Widget to label
 {
   w->label(fltk3::iconLabel, (const char*)this);
 }

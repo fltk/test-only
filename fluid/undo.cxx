@@ -80,7 +80,7 @@ static char *undo_filename(int level, char *buf, int bufsize) {
 
 
 // Redo menu callback
-void redo_cb(Fl_Widget *, void *) {
+void redo_cb(fltk3::Widget *, void *) {
   char	filename[FL_PATH_MAX];			// Undo checkpoint file
 
   if (undo_current >= undo_last) return;
@@ -103,7 +103,7 @@ void redo_cb(Fl_Widget *, void *) {
 }
 
 // Undo menu callback
-void undo_cb(Fl_Widget *, void *) {
+void undo_cb(fltk3::Widget *, void *) {
   char	filename[FL_PATH_MAX];			// Undo checkpoint file
 
   if (undo_current <= 0) return;

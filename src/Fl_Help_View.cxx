@@ -93,8 +93,8 @@ extern "C"
 //
 
 static int	quote_char(const char *);
-static void	scrollbar_callback(Fl_Widget *s, void *);
-static void	hscrollbar_callback(Fl_Widget *s, void *);
+static void	scrollbar_callback(fltk3::Widget *s, void *);
+static void	hscrollbar_callback(fltk3::Widget *s, void *);
 
 //
 // global flag for image loading (see get_image).
@@ -2961,7 +2961,7 @@ Fl_Help_View::handle(int event)	// I - Event to handle
       redraw();
       return 1;
     case fltk3::ENTER :
-      Fl_Group::handle(event);
+      fltk3::Group::handle(event);
       return 1;
     case fltk3::LEAVE :
       fl_cursor(fltk3::CURSOR_DEFAULT);
@@ -2971,7 +2971,7 @@ Fl_Help_View::handle(int event)	// I - Event to handle
       else fl_cursor(fltk3::CURSOR_DEFAULT);
       return 1;
     case fltk3::PUSH:
-      if (Fl_Group::handle(event)) return 1;
+      if (fltk3::Group::handle(event)) return 1;
       linkp = find_link(xx, yy);
       if (linkp) {
         fl_cursor(fltk3::CURSOR_HAND);
@@ -3022,7 +3022,7 @@ Fl_Help_View::handle(int event)	// I - Event to handle
       }
       break; }
   }
-  return (Fl_Group::handle(event));
+  return (fltk3::Group::handle(event));
 }
 
 /** 
@@ -3034,7 +3034,7 @@ Fl_Help_View::Fl_Help_View(int        xx,	// I - Left position
 			   int        ww,	// I - Width in pixels
 			   int        hh,	// I - Height in pixels
 			   const char *l)
-    : Fl_Group(xx, yy, ww, hh, l),
+    : fltk3::Group(xx, yy, ww, hh, l),
       scrollbar_(xx + ww - Fl::scrollbar_size(), yy,
                  Fl::scrollbar_size(), hh - Fl::scrollbar_size()),
       hscrollbar_(xx, yy + hh - Fl::scrollbar_size(),
@@ -3240,7 +3240,7 @@ Fl_Help_View::resize(int xx,	// I - New left position
 					// Box to draw...
 
 
-  Fl_Widget::resize(xx, yy, ww, hh);
+  fltk3::Widget::resize(xx, yy, ww, hh);
 
   int scrollsize = scrollbar_size_ ? scrollbar_size_ : Fl::scrollbar_size();
   scrollbar_.resize(x() + w() - scrollsize - Fl::box_dw(b) + Fl::box_dx(b),
@@ -3500,7 +3500,7 @@ quote_char(const char *p) {	// I - Quoted string
 
 /** The vertical scrollbar callback. */
 static void
-scrollbar_callback(Fl_Widget *s, void *)
+scrollbar_callback(fltk3::Widget *s, void *)
 {
   ((Fl_Help_View *)(s->parent()))->topline(int(((Fl_Scrollbar*)s)->value()));
 }
@@ -3508,7 +3508,7 @@ scrollbar_callback(Fl_Widget *s, void *)
 
 /** The horizontal scrollbar callback. */
 static void
-hscrollbar_callback(Fl_Widget *s, void *)
+hscrollbar_callback(fltk3::Widget *s, void *)
 {
   ((Fl_Help_View *)(s->parent()))->leftline(int(((Fl_Scrollbar*)s)->value()));
 }

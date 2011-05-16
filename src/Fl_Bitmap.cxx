@@ -390,7 +390,7 @@ void Fl_Bitmap::uncache() {
   }
 }
 
-void Fl_Bitmap::label(Fl_Widget* widget) {
+void Fl_Bitmap::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 

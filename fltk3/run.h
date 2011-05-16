@@ -39,7 +39,7 @@
 #  include "utf8.h"
 #  include "enumerations.h"
 #  ifndef Fl_Object
-#    define Fl_Object Fl_Widget	/**< for back compatibility - use Fl_Widget! */
+#    define Fl_Object fltk3::Widget	/**< for back compatibility - use fltk3::Widget! */
 #  endif
 
 #  ifdef check
@@ -47,7 +47,7 @@
 #  endif
 
 
-class Fl_Widget;
+namespace fltk3 { class Widget; }
 class Fl_Window;
 class Fl_Image;
 struct Fl_Label;
@@ -134,11 +134,11 @@ public: // should be private!
   static char* e_text;
   static int e_length;
   static Fl_Event_Dispatch e_dispatch;
-  static Fl_Widget* belowmouse_;
-  static Fl_Widget* pushed_;
-  static Fl_Widget* focus_;
+  static fltk3::Widget* belowmouse_;
+  static fltk3::Widget* pushed_;
+  static fltk3::Widget* focus_;
   static int damage_;
-  static Fl_Widget* selection_owner_;
+  static fltk3::Widget* selection_owner_;
   static Fl_Window* modal_;
   static Fl_Window* grab_;
   static int compose_state;
@@ -284,7 +284,7 @@ public:
   static int check();
   static int ready();
   static int run();
-  static Fl_Widget* readqueue();
+  static fltk3::Widget* readqueue();
   /**
   Adds a one-shot timeout callback.  The function will be called by
   Fl::wait() at <i>t</i> seconds after this function is called.
@@ -688,23 +688,23 @@ public:
   static int compose(int &del);
   static void compose_reset();
   static int event_inside(int,int,int,int);
-  static int event_inside(const Fl_Widget*);
+  static int event_inside(const fltk3::Widget*);
   static int test_shortcut(Fl_Shortcut);
 
   // event destinations:
   static int handle(int, Fl_Window*);
   static int handle_(int, Fl_Window*);
   /**  Gets the widget that is below the mouse. 
-       \see  belowmouse(Fl_Widget*) */
-  static Fl_Widget* belowmouse() {return belowmouse_;}
-  static void belowmouse(Fl_Widget*);
+       \see  belowmouse(fltk3::Widget*) */
+  static fltk3::Widget* belowmouse() {return belowmouse_;}
+  static void belowmouse(fltk3::Widget*);
   /** Gets the widget that is being pushed.
-      \see void pushed(Fl_Widget*) */
-  static Fl_Widget* pushed()	{return pushed_;}
-  static void pushed(Fl_Widget*);
-  /** Gets the current Fl::focus() widget. \sa Fl::focus(Fl_Widget*) */
-  static Fl_Widget* focus()	{return focus_;}
-  static void focus(Fl_Widget*);
+      \see void pushed(fltk3::Widget*) */
+  static fltk3::Widget* pushed()	{return pushed_;}
+  static void pushed(fltk3::Widget*);
+  /** Gets the current Fl::focus() widget. \sa Fl::focus(fltk3::Widget*) */
+  static fltk3::Widget* focus()	{return focus_;}
+  static void focus(fltk3::Widget*);
   static void add_handler(Fl_Event_Handler h);
   static void remove_handler(Fl_Event_Handler h);
   static void event_dispatch(Fl_Event_Dispatch d);
@@ -742,7 +742,7 @@ public:
   drag-and-drop selections. The clipboard is used for traditional 
   copy/cut/paste operations.
   */
-  static void paste(Fl_Widget &receiver, int source /*=0*/); // platform dependent
+  static void paste(fltk3::Widget &receiver, int source /*=0*/); // platform dependent
   /**
     Initiate a Drag And Drop operation. The selection buffer should be
     filled with relevant data before calling this method. FLTK will
@@ -756,11 +756,11 @@ public:
 
   // These are for back-compatibility only:
   /**  back-compatibility only: Gets the widget owning the current selection  
-       \see Fl_Widget* selection_owner(Fl_Widget*) */
-  static Fl_Widget* selection_owner() {return selection_owner_;}
-  static void selection_owner(Fl_Widget*);
-  static void selection(Fl_Widget &owner, const char*, int len);
-  static void paste(Fl_Widget &receiver);
+       \see fltk3::Widget* selection_owner(fltk3::Widget*) */
+  static fltk3::Widget* selection_owner() {return selection_owner_;}
+  static void selection_owner(fltk3::Widget*);
+  static void selection(fltk3::Widget &owner, const char*, int len);
+  static void paste(fltk3::Widget &receiver);
 /** @} */
 /** \defgroup  fl_screen  Screen functions
 	fl global screen functions declared in <fltk3/run.h>
@@ -1001,7 +1001,7 @@ public:
     These functions, declared in <fltk3/run.h>, support deletion of widgets inside callbacks.
 
     Fl::delete_widget() should be called when deleting widgets
-    or complete widget trees (Fl_Group, Fl_Window, ...) inside
+    or complete widget trees (fltk3::Group, Fl_Window, ...) inside
     callbacks.
 
     The other functions are intended for internal use. The preferred
@@ -1026,11 +1026,11 @@ public:
 
    @{ */
   // Widget deletion:
-  static void delete_widget(Fl_Widget *w);
+  static void delete_widget(fltk3::Widget *w);
   static void do_widget_deletion();
-  static void watch_widget_pointer(Fl_Widget *&w);
-  static void release_widget_pointer(Fl_Widget *&w);
-  static void clear_widget_pointer(Fl_Widget const *w);
+  static void watch_widget_pointer(fltk3::Widget *&w);
+  static void release_widget_pointer(fltk3::Widget *&w);
+  static void clear_widget_pointer(fltk3::Widget const *w);
   /** @} */
 
 #ifdef FLTK_HAVE_CAIRO
@@ -1124,11 +1124,11 @@ public:
 */
 class FL_EXPORT Fl_Widget_Tracker {
 
-  Fl_Widget* wp_;
+  fltk3::Widget* wp_;
 
 public:
 
-  Fl_Widget_Tracker(Fl_Widget *wi);
+  Fl_Widget_Tracker(fltk3::Widget *wi);
   ~Fl_Widget_Tracker();
 
   /**
@@ -1136,7 +1136,7 @@ public:
 
     This pointer is \c NULL, if the widget has been deleted.
   */
-  Fl_Widget *widget() {return wp_;}
+  fltk3::Widget *widget() {return wp_;}
 
   /**
     Returns 1, if the watched widget has been deleted.

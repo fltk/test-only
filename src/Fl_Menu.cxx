@@ -821,7 +821,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
     const Fl_Menu_* pbutton,
     const Fl_Menu_Item* t,
     int menubar) const {
-  Fl_Group::current(0); // fix possible user error...
+  fltk3::Group::current(0); // fix possible user error...
 
   button = pbutton;
   if (pbutton) {
@@ -1017,7 +1017,7 @@ const Fl_Menu_Item* Fl_Menu_Item::find_shortcut(int* ip, const bool require_alt)
   if (m) for (int ii = 0; m->text; m = next_visible_or_not(m), ii++) {
     if (m->active()) {
       if (Fl::test_shortcut(m->shortcut_)
-	 || Fl_Widget::test_shortcut(m->text, require_alt)) {
+	 || fltk3::Widget::test_shortcut(m->text, require_alt)) {
 	if (ip) *ip=ii;
 	return m;
       }
@@ -1043,7 +1043,7 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
     if (m->active()) {
       // return immediately any match of an item in top level menu:
       if (Fl::test_shortcut(m->shortcut_)) return m;
-      // if (Fl_Widget::test_shortcut(m->text)) return m;
+      // if (fltk3::Widget::test_shortcut(m->text)) return m;
       // only return matches from lower menu if nothing found in top menu:
       if (!ret && m->submenu()) {
 	const Fl_Menu_Item* s =

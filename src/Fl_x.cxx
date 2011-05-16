@@ -717,14 +717,14 @@ void Fl::get_mouse(int &xx, int &yy) {
 ////////////////////////////////////////////////////////////////
 // Code used for paste and DnD into the program:
 
-Fl_Widget *fl_selection_requestor;
+fltk3::Widget *fl_selection_requestor;
 char *fl_selection_buffer[2];
 int fl_selection_length[2];
 int fl_selection_buffer_length[2];
 char fl_i_own_selection[2] = {0,0};
 
 // Call this when a "paste" operation happens:
-void Fl::paste(Fl_Widget &receiver, int clipboard) {
+void Fl::paste(fltk3::Widget &receiver, int clipboard) {
   if (fl_i_own_selection[clipboard]) {
     // We already have it, do it quickly without window server.
     // Notice that the text is clobbered if set_selection is
@@ -1507,7 +1507,7 @@ void Fl_Window::resize(int X,int Y,int W,int H) {
   if (is_a_move && resize_from_program) set_flag(FORCE_POSITION);
   else if (!is_a_resize && !is_a_move) return;
   if (is_a_resize) {
-    Fl_Group::resize(X,Y,W,H);
+    fltk3::Group::resize(X,Y,W,H);
     if (shown()) {redraw(); if(is_a_enlarge) i->wait_for_expose = 1;}
   } else {
     x(X); y(Y);
@@ -1571,7 +1571,7 @@ ExposureMask|StructureNotifyMask
 
 void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
 {
-  Fl_Group::current(0); // get rid of very common user bug: forgot end()
+  fltk3::Group::current(0); // get rid of very common user bug: forgot end()
 
   int X = win->x();
   int Y = win->y();
@@ -1582,7 +1582,7 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
   if (!win->parent() && !Fl::grab()) {
     // center windows in case window manager does not do anything:
 #ifdef FL_CENTER_WINDOWS
-    if (!(win->flags() & Fl_Widget::FORCE_POSITION)) {
+    if (!(win->flags() & fltk3::Widget::FORCE_POSITION)) {
       win->x(X = scr_x+(scr_w-W)/2);
       win->y(Y = scr_y+(scr_h-H)/2);
     }
@@ -1744,7 +1744,7 @@ void Fl_X::sendxjunk() {
 
   if (!w->size_range_set) { // default size_range based on resizable():
     if (w->resizable()) {
-      Fl_Widget *o = w->resizable();
+      fltk3::Widget *o = w->resizable();
       int minw = o->w(); if (minw > 100) minw = 100;
       int minh = o->h(); if (minh > 100) minh = 100;
       w->size_range(w->w() - o->w() + minw, w->h() - o->h() + minh, 0, 0);
@@ -1795,7 +1795,7 @@ void Fl_X::sendxjunk() {
     prop[1] = 1|2|16; // MWM_FUNC_ALL | MWM_FUNC_RESIZE | MWM_FUNC_MAXIMIZE
   }
 
-  if (w->flags() & Fl_Widget::FORCE_POSITION) {
+  if (w->flags() & fltk3::Widget::FORCE_POSITION) {
     hints->flags |= USPosition;
     hints->x = w->x();
     hints->y = w->y();
@@ -1829,7 +1829,7 @@ const char *fl_filename_name(const char *name) {
 }
 
 void Fl_Window::label(const char *name,const char *iname) {
-  Fl_Widget::label(name);
+  fltk3::Widget::label(name);
   iconlabel_ = iname;
   if (shown() && !parent()) {
     if (!name) name = "";
@@ -1975,7 +1975,7 @@ void Fl_Paged_Device::print_window(Fl_Window *win, int x_offset, int y_offset)
 // contains also preparePrintFront call above
 #include <fltk3/Printer.h>
 #include <fltk3/Button.h>
-void printFront(Fl_Widget *o, void *data)
+void printFront(fltk3::Widget *o, void *data)
 {
   Fl_Printer printer;
   o->window()->hide();

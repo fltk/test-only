@@ -44,26 +44,26 @@
 #ifndef FL_DOXYGEN
 
 /** For internal use only */
-class FL_EXPORT Flcc_HueBox : public Fl_Widget {
+class FL_EXPORT Flcc_HueBox : public fltk3::Widget {
   int px, py;
 protected:
   void draw();
   int handle_key(int);
 public:
   int handle(int);
-  Flcc_HueBox(int X, int Y, int W, int H) : Fl_Widget(X,Y,W,H) {
+  Flcc_HueBox(int X, int Y, int W, int H) : fltk3::Widget(X,Y,W,H) {
   px = py = 0;}
 };
 
 /** For internal use only */
-class FL_EXPORT Flcc_ValueBox : public Fl_Widget {
+class FL_EXPORT Flcc_ValueBox : public fltk3::Widget {
   int py;
 protected:
   void draw();
   int handle_key(int);
 public:
   int handle(int);
-  Flcc_ValueBox(int X, int Y, int W, int H) : Fl_Widget(X,Y,W,H) {
+  Flcc_ValueBox(int X, int Y, int W, int H) : fltk3::Widget(X,Y,W,H) {
   py = 0;}
 };
 
@@ -113,7 +113,7 @@ public:
   color using dithering.
  */
 /** @} */
-class FL_EXPORT Fl_Color_Chooser : public Fl_Group {
+class FL_EXPORT Fl_Color_Chooser : public fltk3::Group {
   Flcc_HueBox huebox;
   Flcc_ValueBox valuebox;
   Fl_Choice choice;
@@ -124,8 +124,8 @@ class FL_EXPORT Fl_Color_Chooser : public Fl_Group {
   double hue_, saturation_, value_;
   double r_, g_, b_;
   void set_valuators();
-  static void rgb_cb(Fl_Widget*, void*);
-  static void mode_cb(Fl_Widget*, void*);
+  static void rgb_cb(fltk3::Widget*, void*);
+  static void mode_cb(fltk3::Widget*, void*);
 public:
   
   /** 

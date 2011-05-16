@@ -46,7 +46,7 @@ const char *Fl_Paged_Device::class_id = "Fl_Paged_Device";
  to the current origin of graphics functions.
  @param[in] delta_y Same as above, vertically.
  */
-void Fl_Paged_Device::print_widget(Fl_Widget* widget, int delta_x, int delta_y) 
+void Fl_Paged_Device::print_widget(fltk3::Widget* widget, int delta_x, int delta_y) 
 { 
   int old_x, old_y, new_x, new_y, is_window;
   if ( ! widget->visible() ) return;
@@ -89,13 +89,13 @@ void Fl_Paged_Device::print_widget(Fl_Widget* widget, int delta_x, int delta_y)
 }
 
 
-void Fl_Paged_Device::traverse(Fl_Widget *widget)
+void Fl_Paged_Device::traverse(fltk3::Widget *widget)
 {
-  Fl_Group *g = widget->as_group();
+  fltk3::Group *g = widget->as_group();
   if (!g) return;
   int n = g->children();
   for (int i = 0; i < n; i++) {
-    Fl_Widget *c = g->child(i);
+    fltk3::Widget *c = g->child(i);
     if ( !c->visible() ) continue;
     if ( c->as_window() ) {
       print_widget(c, c->x(), c->y());

@@ -37,7 +37,7 @@
   \class Fl_FormsPixmap
   \brief Forms pixmap drawing routines
 */
-class FL_EXPORT Fl_FormsPixmap : public Fl_Widget {
+class FL_EXPORT Fl_FormsPixmap : public fltk3::Widget {
     Fl_Pixmap *b;
 protected:
     void draw();

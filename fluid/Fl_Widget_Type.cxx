@@ -41,8 +41,8 @@
 
 // Make an Fl_Widget_Type subclass instance.
 // It figures out the automatic size and parent of the new widget,
-// creates the Fl_Widget (by calling the virtual function _make),
-// adds it to the Fl_Widget hierarchy, creates a new Fl_Type
+// creates the fltk3::Widget (by calling the virtual function _make),
+// adds it to the fltk3::Widget hierarchy, creates a new Fl_Type
 // instance, sets the widget pointers, and makes all the display
 // update correctly...
 
@@ -66,7 +66,7 @@ const char* subclassname(Fl_Type* l) {
     Fl_Widget_Type* p = (Fl_Widget_Type*)l;
     const char* c = p->subclass();
     if (c) return c;
-    if (l->is_class()) return "Fl_Group";
+    if (l->is_class()) return "fltk3::Group";
     if (p->o->type() == FL_WINDOW+1) return "Fl_Double_Window";
     if (strcmp(p->type_name(), "Fl_Input") == 0) {
       if (p->o->type() == FL_FLOAT_INPUT) return "Fl_Float_Input";
@@ -162,13 +162,13 @@ Fl_Type *Fl_Widget_Type::make() {
   Fl_Widget_Type *t = _make();
   if (!o) o = widget(0,0,100,100); // create template widget
   t->factory = this;
-  // Construct the Fl_Widget:
+  // Construct the fltk3::Widget:
   t->o = widget(X,Y,W,H);
   if (reading_file) t->o->label(0);
   else if (t->o->label()) t->label(t->o->label()); // allow editing
   t->o->user_data((void*)t);
   // Put it in the parent:
-  //  ((Fl_Group *)(p->o))->add(t->o); (done by Fl_Type::add())
+  //  ((fltk3::Group *)(p->o))->add(t->o); (done by Fl_Type::add())
   // add to browser:
   t->add(p);
   t->redraw();
@@ -219,7 +219,7 @@ Fl_Widget_Type::Fl_Widget_Type() {
 Fl_Widget_Type::~Fl_Widget_Type() {
   if (o) {
     o->hide();
-    if (o->parent()) ((Fl_Group*)o->parent())->remove(*o);
+    if (o->parent()) ((fltk3::Group*)o->parent())->remove(*o);
     delete o;
   }
   if (subclass_) free((void*)subclass_);
@@ -276,11 +276,11 @@ Fl_Type *sort(Fl_Type *parent) {
     if (!f || (parent && f->level <= parent->level)) return f;
     n = sort(f);
     if (!f->selected || (!f->is_widget() || f->is_menu_item())) continue;
-    Fl_Widget* fw = ((Fl_Widget_Type*)f)->o;
+    fltk3::Widget* fw = ((Fl_Widget_Type*)f)->o;
     Fl_Type *g; // we will insert before this
     for (g = parent->next; g != f; g = g->next) {
       if (!g->selected || g->level > f->level) continue;
-      Fl_Widget* gw = ((Fl_Widget_Type*)g)->o;
+      fltk3::Widget* gw = ((Fl_Widget_Type*)g)->o;
       if (gw->y() > fw->y()) break;
       if (gw->y() == fw->y() && gw->x() > fw->x()) break;
     }
@@ -514,7 +514,7 @@ void x_cb(Fl_Value_Input *i, void *v) {
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_widget()) {
-        Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+        fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	w->resize((int)i->value(), w->y(), w->w(), w->h());
 	if (w->window()) w->window()->redraw();
 	if (o->is_window()) {
@@ -539,7 +539,7 @@ void y_cb(Fl_Value_Input *i, void *v) {
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_widget()) {
-        Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+        fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	w->resize(w->x(), (int)i->value(), w->w(), w->h());
 	if (w->window()) w->window()->redraw();
 	if (o->is_window()) {
@@ -564,7 +564,7 @@ void w_cb(Fl_Value_Input *i, void *v) {
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_widget()) {
-        Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+        fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	w->resize(w->x(), w->y(), (int)i->value(), w->h());
 	if (w->window()) w->window()->redraw();
 	if (o->is_window()) {
@@ -589,7 +589,7 @@ void h_cb(Fl_Value_Input *i, void *v) {
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_widget()) {
-        Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+        fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	w->resize(w->x(), w->y(), w->w(), (int)i->value());
 	if (w->window()) w->window()->redraw();
 	if (o->is_window()) {
@@ -853,7 +853,7 @@ void when_button_cb(Fl_Light_Button* i, void *v) {
 
 uchar Fl_Widget_Type::resizable() const {
   if (is_window()) return ((Fl_Window*)o)->resizable() != 0;
-  Fl_Group* p = (Fl_Group*)o->parent();
+  fltk3::Group* p = (fltk3::Group*)o->parent();
   if (p) return p->resizable() == o;
   else return 0;
 }
@@ -863,7 +863,7 @@ void Fl_Widget_Type::resizable(uchar v) {
     if (resizable()) return;
     if (is_window()) ((Fl_Window*)o)->resizable(o);
     else {
-      Fl_Group* p = (Fl_Group*)o->parent();
+      fltk3::Group* p = (fltk3::Group*)o->parent();
       if (p) p->resizable(o);
     }
   } else {
@@ -871,7 +871,7 @@ void Fl_Widget_Type::resizable(uchar v) {
     if (is_window()) {
       ((Fl_Window*)o)->resizable(0);
     } else {
-      Fl_Group* p = (Fl_Group*)o->parent();
+      fltk3::Group* p = (fltk3::Group*)o->parent();
       if (p) p->resizable(0);
     }
   }
@@ -1121,8 +1121,8 @@ void labelcolor_cb(Fl_Button* i, void *v) {
   i->color(c); i->labelcolor(fltk3::contrast(fltk3::BLACK,c)); i->redraw();
 }
 
-static Fl_Button* relative(Fl_Widget* o, int i) {
-  Fl_Group* g = (Fl_Group*)(o->parent());
+static Fl_Button* relative(fltk3::Widget* o, int i) {
+  fltk3::Group* g = (fltk3::Group*)(o->parent());
   return (Fl_Button*)(g->child(g->find(*o)+i));
 }
 
@@ -1740,11 +1740,11 @@ void subtype_cb(Fl_Choice* i, void* v) {
 
 ////////////////////////////////////////////////////////////////
 
-void propagate_load(Fl_Group* g, void* v) {
+void propagate_load(fltk3::Group* g, void* v) {
   if (v == LOAD) {
-    Fl_Widget*const* a = g->array();
+    fltk3::Widget*const* a = g->array();
     for (int i=g->children(); i--;) {
-      Fl_Widget* o = *a++;
+      fltk3::Widget* o = *a++;
       o->do_callback(o,LOAD);
     }
   }
@@ -1752,9 +1752,9 @@ void propagate_load(Fl_Group* g, void* v) {
 
 void set_cb(Fl_Button*, void*) {
   haderror = 0;
-  Fl_Widget*const* a = the_panel->array();
+  fltk3::Widget*const* a = the_panel->array();
   for (int i=the_panel->children(); i--;) {
-    Fl_Widget* o = *a++;
+    fltk3::Widget* o = *a++;
     if (o->changed()) {
       o->do_callback();
       if (haderror) return;
@@ -1780,18 +1780,18 @@ void cancel_cb(Fl_Button* o, void* v) {
   the_panel->hide();
 }
 
-void toggle_overlays(Fl_Widget *,void *); // in Fl_Window_Type.cxx
+void toggle_overlays(fltk3::Widget *,void *); // in Fl_Window_Type.cxx
 void overlay_cb(Fl_Button*o,void *v) {
   toggle_overlays(o,v);
 }
 
-void leave_live_mode_cb(Fl_Widget*, void*);
+void leave_live_mode_cb(fltk3::Widget*, void*);
 
 void live_mode_cb(Fl_Button*o,void *) {
   /// \todo live mode should end gracefully when the application quits
   ///       or when the user closes the live widget
   static Fl_Type *live_type = 0L;
-  static Fl_Widget *live_widget = 0L;
+  static fltk3::Widget *live_widget = 0L;
   static Fl_Window *live_window = 0L;
   // if 'o' is 0, we must quit live mode
   if (!o) {
@@ -1800,17 +1800,17 @@ void live_mode_cb(Fl_Button*o,void *) {
   }
   if (o->value()) {
     if (numselected == 1) {
-      Fl_Group::current(0L);
+      fltk3::Group::current(0L);
       live_widget = current_widget->enter_live_mode(1);
       if (live_widget) {
         live_type = current_widget;
-        Fl_Group::current(0);
+        fltk3::Group::current(0);
         int w = live_widget->w();
         int h = live_widget->h();
         live_window = new Fl_Double_Window(w+20, h+55, "Fluid Live Mode Widget");
         live_window->box(fltk3::FLAT_BOX);
         live_window->color(fltk3::GREEN);
-        Fl_Group *rsz = new Fl_Group(0, h+20, 130, 35);
+        fltk3::Group *rsz = new fltk3::Group(0, h+20, 130, 35);
         rsz->box(fltk3::NO_BOX);
         fltk3::Box *rsz_dummy = new fltk3::Box(110, h+20, 1, 25);
         rsz_dummy->box(fltk3::NO_BOX);
@@ -1853,7 +1853,7 @@ void live_mode_cb(Fl_Button*o,void *) {
 static void load_panel() {
   if (!the_panel) return;
 
-  // find all the Fl_Widget subclasses currently selected:
+  // find all the fltk3::Widget subclasses currently selected:
   numselected = 0;
   current_widget = 0;
   if (Fl_Type::current) {
@@ -2131,7 +2131,7 @@ void Fl_Widget_Type::write_code1() {
   if (varused) write_c("%s* o = ", t);
   if (name()) write_c("%s = ", name());
   if (is_window()) {
-    // Handle special case where user is faking a Fl_Group type as a window,
+    // Handle special case where user is faking a fltk3::Group type as a window,
     // there is no 2-argument constructor in that case:
     if (!strstr(t, "Window"))
       write_c("new %s(0, 0, %d, %d", t, o->w(), o->h());
@@ -2208,7 +2208,7 @@ void Fl_Widget_Type::write_color(const char* field, fltk3::Color color) {
 
 // this is split from write_code1() for Fl_Window_Type:
 void Fl_Widget_Type::write_widget_code() {
-  Fl_Widget* tplate = ((Fl_Widget_Type*)factory)->o;
+  fltk3::Widget* tplate = ((Fl_Widget_Type*)factory)->o;
   const char *var = is_class() ? "this" : name() ? name() : "o";
 
   if (tooltip() && *tooltip()) {
@@ -2406,7 +2406,7 @@ void Fl_Widget_Type::write_properties() {
     write_word(inactive_name());
   }
   write_string("xywh {%d %d %d %d}", o->x(), o->y(), o->w(), o->h());
-  Fl_Widget* tplate = ((Fl_Widget_Type*)factory)->o;
+  fltk3::Widget* tplate = ((Fl_Widget_Type*)factory)->o;
   if (is_spinner() && ((Fl_Spinner*)o)->type() != ((Fl_Spinner*)tplate)->type()) {
     write_string("type");
     write_word(item_name(subtypes(), ((Fl_Spinner*)o)->type()));
@@ -2764,11 +2764,11 @@ int Fl_Widget_Type::read_fdesign(const char* propname, const char* value) {
   return 1;
 }
 
-void leave_live_mode_cb(Fl_Widget*, void*) {
+void leave_live_mode_cb(fltk3::Widget*, void*) {
   live_mode_cb(0, 0);
 }
 
-Fl_Widget *Fl_Widget_Type::enter_live_mode(int) {
+fltk3::Widget *Fl_Widget_Type::enter_live_mode(int) {
   live_widget = widget(o->x(), o->y(), o->w(), o->h());
   if (live_widget)
     copy_properties();
@@ -2786,7 +2786,7 @@ void Fl_Widget_Type::copy_properties() {
     return;
 
   // copy all attributes common to all widget types
-  Fl_Widget *w = live_widget;
+  fltk3::Widget *w = live_widget;
   w->label(o->label());
   w->tooltip(tooltip());
   w->type(o->type());

@@ -33,7 +33,7 @@
 #include <fltk3/DoubleWindow.h>
 extern Fl_Double_Window *print_panel;
 #include <fltk3/Group.h>
-extern Fl_Group *print_panel_controls;
+extern fltk3::Group *print_panel_controls;
 #include <fltk3/Choice.h>
 extern Fl_Choice *print_choice;
 #include <fltk3/Button.h>
@@ -51,7 +51,7 @@ extern Fl_Int_Input *print_to;
 extern Fl_Spinner *print_copies;
 #include <fltk3/CheckButton.h>
 extern Fl_Check_Button *print_collate_button;
-extern Fl_Group *print_collate_group[2];
+extern fltk3::Group *print_collate_group[2];
 #include <fltk3/ReturnButton.h>
 extern void print_cb(Fl_Return_Button*, void*);
 #include <fltk3/Progress.h>

@@ -38,11 +38,11 @@
 extern void goto_source_dir(); // in fluid.C
 extern void leave_source_dir(); // in fluid.C
 
-void Fluid_Image::image(Fl_Widget *o) {
+void Fluid_Image::image(fltk3::Widget *o) {
   if (o->window() != o) o->image(img);
 }
 
-void Fluid_Image::deimage(Fl_Widget *o) {
+void Fluid_Image::deimage(fltk3::Widget *o) {
   if (o->window() != o) o->deimage(img);
 }
 

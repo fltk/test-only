@@ -137,7 +137,7 @@ class Fl_Gl_Device_Plugin : public Fl_Device_Plugin {
 public:
   Fl_Gl_Device_Plugin() : Fl_Device_Plugin(name()) { }
   virtual const char *name() { return "opengl.device.fltk.org"; }
-  virtual int print(Fl_Widget *w, int x, int y, int height) {
+  virtual int print(fltk3::Widget *w, int x, int y, int height) {
     Fl_Gl_Window *glw = w->as_gl_window();
     if (!glw) return 0;
     print_gl_window(glw, x, y, height);

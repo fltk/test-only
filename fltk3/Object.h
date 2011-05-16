@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-// This file is provided for back compatibility only.  Please use Fl_Widget
+// This file is provided for back compatibility only.  Please use fltk3::Widget
 #ifndef Fl_Object
-#define Fl_Object Fl_Widget
+#define Fl_Object fltk3::Widget
 #endif
 #include "Widget.h"
 

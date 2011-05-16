@@ -3,7 +3,7 @@
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
-// Type for creating all subclasses of Fl_Widget
+// Type for creating all subclasses of fltk3::Widget
 // This should have the widget pointer in it, but it is still in the
 // Fl_Type base class.
 //

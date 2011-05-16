@@ -190,7 +190,7 @@ void Fl_Function_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      Fl_Widget* w = Fl::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == f_panel_cancel) goto BREAK2;
       else if (w == f_panel_ok) break;
       else if (!w) Fl::wait();
@@ -451,7 +451,7 @@ void Fl_Code_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      Fl_Widget* w = Fl::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == code_panel_cancel) goto BREAK2;
       else if (w == code_panel_ok) break;
       else if (!w) Fl::wait();
@@ -526,7 +526,7 @@ void Fl_CodeBlock_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      Fl_Widget* w = Fl::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == codeblock_panel_cancel) goto BREAK2;
       else if (w == codeblock_panel_ok) break;
       else if (!w) Fl::wait();
@@ -630,7 +630,7 @@ void Fl_Decl_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      Fl_Widget* w = Fl::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == decl_panel_cancel) goto BREAK2;
       else if (w == decl_panel_ok) break;
       else if (!w) Fl::wait();
@@ -788,7 +788,7 @@ void Fl_Data_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      Fl_Widget* w = Fl::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == data_panel_cancel) goto BREAK2;
       else if (w == data_panel_ok) break;
       else if (w == data_filebrowser) {
@@ -989,7 +989,7 @@ void Fl_DeclBlock_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      Fl_Widget* w = Fl::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == declblock_panel_cancel) goto BREAK2;
       else if (w == declblock_panel_ok) break;
       else if (!w) Fl::wait();
@@ -1112,7 +1112,7 @@ void Fl_Comment_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      Fl_Widget* w = Fl::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == comment_panel_cancel) goto BREAK2;
       else if (w == comment_panel_ok) break;
       else if (w == comment_predefined) {
@@ -1368,7 +1368,7 @@ void Fl_Class_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      Fl_Widget* w = Fl::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == c_panel_cancel) goto BREAK2;
       else if (w == c_panel_ok) break;
       else if (!w) Fl::wait();

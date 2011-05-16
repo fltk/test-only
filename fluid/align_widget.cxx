@@ -38,7 +38,7 @@
 #define BREAK_ON_FIRST break
 //#define BREAK_ON_FIRST
 
-void align_widget_cb(Fl_Widget*, long how) 
+void align_widget_cb(fltk3::Widget*, long how) 
 {
   const int max = 32768, min = -32768;
   int left, right, top, bot, wdt, hgt, n;
@@ -52,7 +52,7 @@ void align_widget_cb(Fl_Widget*, long how)
     for (o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget())
       {
-	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	if (w->x()<left)
 	  left = w->x();
 	BREAK_ON_FIRST;
@@ -67,7 +67,7 @@ void align_widget_cb(Fl_Widget*, long how)
 	    undo_checkpoint();
 	  }
 
-	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	  fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	  if (o->next && o->next->level > o->level && !o->next->selected &&
 	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
@@ -85,7 +85,7 @@ void align_widget_cb(Fl_Widget*, long how)
     for (o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget())
       {
-	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	if (w->x()<left)
 	  left = w->x();
 	if (w->x()+w->w()>right)
@@ -104,7 +104,7 @@ void align_widget_cb(Fl_Widget*, long how)
 	    undo_checkpoint();
 	  }
 
-	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	  fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	  if (o->next && o->next->level > o->level && !o->next->selected &&
 	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
@@ -123,7 +123,7 @@ void align_widget_cb(Fl_Widget*, long how)
     for (o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget())
       {
-	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	if (w->x()+w->w()>right)
 	  right = w->x()+w->w();
 	BREAK_ON_FIRST;
@@ -138,7 +138,7 @@ void align_widget_cb(Fl_Widget*, long how)
 	    undo_checkpoint();
 	  }
 
-	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	  fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	  if (o->next && o->next->level > o->level && !o->next->selected &&
 	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
@@ -156,7 +156,7 @@ void align_widget_cb(Fl_Widget*, long how)
     for (o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget())
       {
-	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	if (w->y()<top)
 	  top = w->y();
 	BREAK_ON_FIRST;
@@ -171,7 +171,7 @@ void align_widget_cb(Fl_Widget*, long how)
 	    undo_checkpoint();
 	  }
 
-	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	  fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	  if (o->next && o->next->level > o->level && !o->next->selected &&
 	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
@@ -189,7 +189,7 @@ void align_widget_cb(Fl_Widget*, long how)
     for (o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget())
       {
-	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	if (w->y()<top)
 	  top = w->y();
 	if (w->y()+w->h()>bot)
@@ -208,7 +208,7 @@ void align_widget_cb(Fl_Widget*, long how)
 	    undo_checkpoint();
 	  }
 
-	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	  fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	  if (o->next && o->next->level > o->level && !o->next->selected &&
 	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
@@ -227,7 +227,7 @@ void align_widget_cb(Fl_Widget*, long how)
     for (o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget())
       {
-	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	if (w->y()+w->h()>bot)
 	  bot = w->y()+w->h();
 	BREAK_ON_FIRST;
@@ -242,7 +242,7 @@ void align_widget_cb(Fl_Widget*, long how)
 	    undo_checkpoint();
 	  }
 
-	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	  fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	  if (o->next && o->next->level > o->level && !o->next->selected &&
 	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
@@ -261,7 +261,7 @@ void align_widget_cb(Fl_Widget*, long how)
     for (o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget())
       {
-	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	if (w->x()<left)
 	  left = w->x();
 	if (w->x()+w->w()>right)
@@ -283,7 +283,7 @@ void align_widget_cb(Fl_Widget*, long how)
 	    undo_checkpoint();
 	  }
 
-	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	  fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	  if (o->next && o->next->level > o->level && !o->next->selected &&
 	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
@@ -304,7 +304,7 @@ void align_widget_cb(Fl_Widget*, long how)
     for (o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget())
       {
-	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	if (w->y()<top)
 	  top = w->y();
 	if (w->y()+w->h()>bot)
@@ -326,7 +326,7 @@ void align_widget_cb(Fl_Widget*, long how)
 	    undo_checkpoint();
 	  }
 
-	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	  fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	  if (o->next && o->next->level > o->level && !o->next->selected &&
 	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
@@ -348,7 +348,7 @@ void align_widget_cb(Fl_Widget*, long how)
     for (o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget())
       {
-	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	if (w->w()>wdt)
 	  wdt = w->w();
 	BREAK_ON_FIRST;
@@ -363,7 +363,7 @@ void align_widget_cb(Fl_Widget*, long how)
 	    undo_checkpoint();
 	  }
 
-	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	  fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	  if (o->next && o->next->level > o->level && !o->next->selected &&
 	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
@@ -381,7 +381,7 @@ void align_widget_cb(Fl_Widget*, long how)
     for (o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget())
       {
-	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	if (w->h()>hgt)
 	  hgt = w->h();
 	BREAK_ON_FIRST;
@@ -396,7 +396,7 @@ void align_widget_cb(Fl_Widget*, long how)
 	    undo_checkpoint();
 	  }
 
-	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	  fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	  if (o->next && o->next->level > o->level && !o->next->selected &&
 	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
@@ -414,7 +414,7 @@ void align_widget_cb(Fl_Widget*, long how)
     for (o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget())
       {
-	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	if (w->w()>wdt)
 	  wdt = w->w();
 	if (w->h()>hgt)
@@ -431,7 +431,7 @@ void align_widget_cb(Fl_Widget*, long how)
 	    undo_checkpoint();
 	  }
 
-	  Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+	  fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
 	  if (o->next && o->next->level > o->level && !o->next->selected &&
 	      !o->is_menu_button()) {
 	    // When resizing a group, make sure we also move the children...
@@ -455,8 +455,8 @@ void align_widget_cb(Fl_Widget*, long how)
 	  undo_checkpoint();
 	}
 
-	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
-	Fl_Widget *p = ((Fl_Widget_Type *)o->parent)->o;
+	fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
+	fltk3::Widget *p = ((Fl_Widget_Type *)o->parent)->o;
 	int center2;
 
 	if (w->window() == p) center2 = p->w();
@@ -484,8 +484,8 @@ void align_widget_cb(Fl_Widget*, long how)
 	  undo_checkpoint();
 	}
 
-	Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
-	Fl_Widget *p = ((Fl_Widget_Type *)o->parent)->o;
+	fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
+	fltk3::Widget *p = ((Fl_Widget_Type *)o->parent)->o;
 	int center2;
 
 	if (w->window() == p) center2 = p->h();
@@ -509,7 +509,7 @@ void align_widget_cb(Fl_Widget*, long how)
 
 
 // Set sizes of selected widgets...
-void widget_size_cb(Fl_Widget *, long size) {
+void widget_size_cb(fltk3::Widget *, long size) {
   // Update any selected widgets...
   int changed = 0;
   for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
@@ -520,7 +520,7 @@ void widget_size_cb(Fl_Widget *, long size) {
 	undo_checkpoint();
       }
 
-      Fl_Widget *w = ((Fl_Widget_Type *)o)->o;
+      fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
       w->labelsize((fltk3::Font)size);
       fltk3::Font f;
       int s = (int)size;

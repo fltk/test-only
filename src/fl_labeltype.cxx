@@ -105,7 +105,7 @@ void Fl_Label::measure(int& W, int& H) const {
 /** Draws the widget's label at the defined label position.
     This is the normal call for a widget's draw() method.
  */
-void Fl_Widget::draw_label() const {
+void fltk3::Widget::draw_label() const {
   int X = x_+Fl::box_dx(box());
   int W = w_-Fl::box_dw(box());
   if (W > 11 && align()&(fltk3::ALIGN_LEFT|fltk3::ALIGN_RIGHT)) {X += 3; W -= 6;}
@@ -115,7 +115,7 @@ void Fl_Widget::draw_label() const {
 /** Draws the label in an arbitrary bounding box.
     draw() can use this instead of draw_label(void) to change the bounding box
  */
-void Fl_Widget::draw_label(int X, int Y, int W, int H) const {
+void fltk3::Widget::draw_label(int X, int Y, int W, int H) const {
   // quit if we are not drawing a label inside the widget:
   if ((align()&15) && !(align() & fltk3::ALIGN_INSIDE)) return;
   draw_label(X,Y,W,H,align());
@@ -124,7 +124,7 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H) const {
 /** Draws the label in an arbitrary bounding box with an arbitrary alignment.
     Anybody can call this to force the label to draw anywhere.
  */
-void Fl_Widget::draw_label(int X, int Y, int W, int H, fltk3::Align a) const {
+void fltk3::Widget::draw_label(int X, int Y, int W, int H, fltk3::Align a) const {
   if (flags()&SHORTCUT_LABEL) fl_draw_shortcut = 1;
   Fl_Label l1 = label_;
   if (!active_r()) {

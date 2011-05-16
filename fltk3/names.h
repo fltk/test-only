@@ -85,7 +85,7 @@ const char * const fl_eventnames[] =
   \b Example:
   \code
   #include <fltk3/names.h>		// array will be defined here
-  int MyClass::my_callback(Fl_Widget *w, void*) {
+  int MyClass::my_callback(fltk3::Widget *w, void*) {
       int fnum = w->labelfont();
       // Resulting output might be e.g. "Label's font is fltk3::HELVETICA (0)"
       printf("Label's font is %s (%d)\n", fl_fontnames[fnum], fnum);

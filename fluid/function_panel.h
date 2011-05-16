@@ -112,7 +112,7 @@ extern Fl_Light_Button *comment_in_header;
 extern Fl_Menu_Button *comment_predefined;
 extern Fl_Button *comment_load;
 Fl_Double_Window* make_comment_panel();
-void type_make_cb(Fl_Widget*,void*d);
+void type_make_cb(fltk3::Widget*,void*d);
 #include <fltk3/Window.h>
 extern Fl_Window *widgetbin_panel;
 Fl_Window* make_widgetbin();

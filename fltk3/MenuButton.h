@@ -52,7 +52,7 @@
   The '&' character in menu item names are only looked at when the menu is
   popped up, however. </P>
   <P>When the user picks an item off the menu, the item's callback is
-  done with the menu_button as the Fl_Widget* argument.  If the
+  done with the menu_button as the fltk3::Widget* argument.  If the
   item does not have a callback the menu_button's callback is done
   instead.
 */

@@ -2104,7 +2104,7 @@ void Fl_X::make(Fl_Window* w)
   static int xyPos = 100;
   if ( w->parent() ) // create a subwindow
   {
-    Fl_Group::current(0);
+    fltk3::Group::current(0);
     Rect wRect;
     wRect.top    = w->y();
     wRect.left   = w->x();
@@ -2137,7 +2137,7 @@ void Fl_X::make(Fl_Window* w)
   }
   else // create a desktop window
   {
-    Fl_Group::current(0);
+    fltk3::Group::current(0);
     fl_open_display();
     int winclass = kDocumentWindowClass;
     int winattr = kWindowStandardHandlerAttribute | kWindowCloseBoxAttribute | kWindowCollapseBoxAttribute;
@@ -2150,7 +2150,7 @@ void Fl_X::make(Fl_Window* w)
         winattr |= kWindowFullZoomAttribute | kWindowResizableAttribute | kWindowLiveResizeAttribute;
     } else {
       if (w->resizable()) {
-        Fl_Widget *o = w->resizable();
+        fltk3::Widget *o = w->resizable();
         int minw = o->w(); if (minw > 100) minw = 100;
         int minh = o->h(); if (minh > 100) minh = 100;
         w->size_range(w->w() - o->w() + minw, w->h() - o->h() + minh, 0, 0);
@@ -2177,7 +2177,7 @@ void Fl_X::make(Fl_Window* w)
       wp += 2*bx;
       hp += 2*by+bt;
     }
-    if (!(w->flags() & Fl_Widget::FORCE_POSITION)) {
+    if (!(w->flags() & fltk3::Widget::FORCE_POSITION)) {
       // use the Carbon functions below for default window positioning
       w->x(xyPos+Fl::x());
       w->y(xyPos+Fl::y());
@@ -2224,7 +2224,7 @@ void Fl_X::make(Fl_Window* w)
       SetWindowClass(x->xid, kFloatingWindowClass);
       SetWindowActivationScope(x->xid, kWindowActivationScopeAll);
     }
-    if (!(w->flags() & Fl_Widget::FORCE_POSITION))
+    if (!(w->flags() & fltk3::Widget::FORCE_POSITION))
     {
       WindowRef pw = Fl_X::first ? Fl_X::first->xid : 0 ;
       if (w->modal()) {
@@ -2360,7 +2360,7 @@ const char *fl_filename_name( const char *name )
  * \todo make the titlebar icon work!
  */
 void Fl_Window::label(const char *name,const char */*iname*/) {
-  Fl_Widget::label(name);
+  fltk3::Widget::label(name);
 
   if (shown() || i) {
     q_set_window_title(fl_xid(this), name);
@@ -2427,7 +2427,7 @@ void Fl_Window::resize(int X,int Y,int W,int H) {
   }
   resize_from_system = 0;
   if (is_a_resize) {
-    Fl_Group::resize(X,Y,W,H);
+    fltk3::Group::resize(X,Y,W,H);
     if (shown()) { 
       redraw(); 
     }
@@ -2580,7 +2580,7 @@ const CFStringEncoding encodings[] = {
 const size_t handledFlavorsCount = sizeof(encodings)/sizeof(CFStringEncoding);
 
 // clipboard variables definitions :
-Fl_Widget *fl_selection_requestor = 0;
+fltk3::Widget *fl_selection_requestor = 0;
 char *fl_selection_buffer[2];
 int fl_selection_length[2];
 static int fl_selection_buffer_length[2];
@@ -2643,7 +2643,7 @@ void Fl::copy(const char *stuff, int len, int clipboard) {
 }
 
 // Call this when a "paste" operation happens:
-void Fl::paste(Fl_Widget &receiver, int clipboard) {
+void Fl::paste(fltk3::Widget &receiver, int clipboard) {
     if (clipboard) {
 	// see if we own the selection, if not go get it:
 	fl_selection_length[1] = 0;

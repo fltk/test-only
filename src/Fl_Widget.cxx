@@ -42,14 +42,14 @@
 
 const int QUEUE_SIZE = 20;
 
-static Fl_Widget *obj_queue[QUEUE_SIZE];
+static fltk3::Widget *obj_queue[QUEUE_SIZE];
 static int obj_head, obj_tail;
 
-void Fl_Widget::default_callback(Fl_Widget *o, void * /*v*/) {
+void fltk3::Widget::default_callback(fltk3::Widget *o, void * /*v*/) {
 #if 0
   // This is necessary for strict forms compatibility but is confusing.
   // Use the parent's callback if this widget does not have one.
-  for (Fl_Widget *p = o->parent(); p; p = p->parent())
+  for (fltk3::Widget *p = o->parent(); p; p = p->parent())
     if (p->callback() != default_callback) {
       p->do_callback(o,v);
       return;
@@ -67,20 +67,20 @@ void Fl_Widget::default_callback(Fl_Widget *o, void * /*v*/) {
     default callback that puts a pointer to the widget in this queue,
     and this method reads the oldest widget out of this queue.
 */
-Fl_Widget *Fl::readqueue() {
+fltk3::Widget *Fl::readqueue() {
   if (obj_tail==obj_head) return 0;
-  Fl_Widget *o = obj_queue[obj_tail++];
+  fltk3::Widget *o = obj_queue[obj_tail++];
   if (obj_tail >= QUEUE_SIZE) obj_tail = 0;
   return o;
 }
 /*
     This static internal function removes all pending callbacks for a
     specific widget from the default callback queue (Fl::readqueue()).
-    It is only called from Fl_Widget's destructor if the widget
+    It is only called from fltk3::Widget's destructor if the widget
     doesn't have an own callback.
     Note: There's no need to have this in the Fl:: namespace.
 */
-static void cleanup_readqueue(Fl_Widget *w) {
+static void cleanup_readqueue(fltk3::Widget *w) {
 
   if (obj_tail==obj_head) return;
   
@@ -91,7 +91,7 @@ static void cleanup_readqueue(Fl_Widget *w) {
   int entry = obj_tail;		// oldest entry
   obj_head = obj_tail;		// new queue start
   for (;;) {
-    Fl_Widget *o = obj_queue[entry++];
+    fltk3::Widget *o = obj_queue[entry++];
     if (entry >= QUEUE_SIZE) entry = 0;
     if (o != w) { // valid entry
       obj_queue[obj_head++] = o;
@@ -103,14 +103,14 @@ static void cleanup_readqueue(Fl_Widget *w) {
 }
 ////////////////////////////////////////////////////////////////
 
-int Fl_Widget::handle(int) {
+int fltk3::Widget::handle(int) {
   return 0;
 }
 
 /** Default font size for widgets */
 fltk3::Fontsize fltk3::NORMAL_SIZE = 14;
 
-Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
+fltk3::Widget::Widget(int X, int Y, int W, int H, const char* L) {
 
   x_ = X; y_ = Y; w_ = W; h_ = H;
 
@@ -134,22 +134,22 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
   when_		 = fltk3::WHEN_RELEASE;
 
   parent_ = 0;
-  if (Fl_Group::current()) Fl_Group::current()->add(this);
+  if (fltk3::Group::current()) fltk3::Group::current()->add(this);
 }
 
-void Fl_Widget::resize(int X, int Y, int W, int H) {
+void fltk3::Widget::resize(int X, int Y, int W, int H) {
   x_ = X; y_ = Y; w_ = W; h_ = H;
 }
 
 // this is useful for parent widgets to call to resize children:
-int Fl_Widget::damage_resize(int X, int Y, int W, int H) {
+int fltk3::Widget::damage_resize(int X, int Y, int W, int H) {
   if (x() == X && y() == Y && w() == W && h() == H) return 0;
   resize(X, Y, W, H);
   redraw();
   return 1;
 }
 
-int Fl_Widget::take_focus() {
+int fltk3::Widget::take_focus() {
   if (!takesevents()) return 0;
   if (!visible_focus()) return 0;
   if (!handle(fltk3::FOCUS)) return 0; // see if it wants it
@@ -158,14 +158,14 @@ int Fl_Widget::take_focus() {
   return 1;
 }
 
-extern void fl_throw_focus(Fl_Widget*); // in Fl_x.cxx
+extern void fl_throw_focus(fltk3::Widget*); // in Fl_x.cxx
 
 /**
    Destroys the widget, taking care of throwing focus before if any.
    Destruction removes the widget from any parent group! And groups when
    destroyed destroy all their children. This is convenient and fast.
 */
-Fl_Widget::~Fl_Widget() {
+fltk3::Widget::~Widget() {
   Fl::clear_widget_pointer(this);
   if (flags() & COPIED_LABEL) free((void *)(label_.value));
   if (flags() & COPIED_TOOLTIP) free((void *)(tooltip_));
@@ -173,7 +173,7 @@ Fl_Widget::~Fl_Widget() {
   if (parent_) parent_->remove(this);
 #ifdef DEBUG_DELETE
   if (parent_) { // this should never happen
-    printf("*** Fl_Widget: parent_->remove(this) failed [%p,%p]\n",parent_,this);
+    printf("*** fltk3::Widget: parent_->remove(this) failed [%p,%p]\n",parent_,this);
   }
 #endif // DEBUG_DELETE
   parent_ = 0; // Don't throw focus to a parent widget.
@@ -184,7 +184,7 @@ Fl_Widget::~Fl_Widget() {
 
 /** Draws a focus box for the widget at the given position and size */
 void
-Fl_Widget::draw_focus(fltk3::Boxtype B, int X, int Y, int W, int H) const {
+fltk3::Widget::draw_focus(fltk3::Boxtype B, int X, int Y, int W, int H) const {
   if (!Fl::visible_focus()) return;
   switch (B) {
     case fltk3::DOWN_BOX:
@@ -228,7 +228,7 @@ Fl_Widget::draw_focus(fltk3::Boxtype B, int X, int Y, int W, int H) const {
 }
 
 
-void Fl_Widget::activate() {
+void fltk3::Widget::activate() {
   if (!active()) {
     clear_flag(INACTIVE);
     if (active_r()) {
@@ -240,7 +240,7 @@ void Fl_Widget::activate() {
   }
 }
 
-void Fl_Widget::deactivate() {
+void fltk3::Widget::deactivate() {
   if (active_r()) {
     set_flag(INACTIVE);
     redraw();
@@ -252,13 +252,13 @@ void Fl_Widget::deactivate() {
   }
 }
 
-int Fl_Widget::active_r() const {
-  for (const Fl_Widget* o = this; o; o = o->parent())
+int fltk3::Widget::active_r() const {
+  for (const fltk3::Widget* o = this; o; o = o->parent())
     if (!o->active()) return 0;
   return 1;
 }
 
-void Fl_Widget::show() {
+void fltk3::Widget::show() {
   if (!visible()) {
     clear_flag(INVISIBLE);
     if (visible_r()) {
@@ -270,10 +270,10 @@ void Fl_Widget::show() {
   }
 }
 
-void Fl_Widget::hide() {
+void fltk3::Widget::hide() {
   if (visible_r()) {
     set_flag(INVISIBLE);
-    for (Fl_Widget *p = parent(); p; p = p->parent())
+    for (fltk3::Widget *p = parent(); p; p = p->parent())
       if (p->box() || !p->parent()) {p->redraw(); break;}
     handle(fltk3::HIDE);
     fl_throw_focus(this);
@@ -282,22 +282,22 @@ void Fl_Widget::hide() {
   }
 }
 
-int Fl_Widget::visible_r() const {
-  for (const Fl_Widget* o = this; o; o = o->parent())
+int fltk3::Widget::visible_r() const {
+  for (const fltk3::Widget* o = this; o; o = o->parent())
     if (!o->visible()) return 0;
   return 1;
 }
 
 // return true if widget is inside (or equal to) this:
 // Returns false for null widgets.
-int Fl_Widget::contains(const Fl_Widget *o) const {
+int fltk3::Widget::contains(const fltk3::Widget *o) const {
   for (; o; o = o->parent_) if (o == this) return 1;
   return 0;
 }
 
 
 void
-Fl_Widget::label(const char *a) {
+fltk3::Widget::label(const char *a) {
   if (flags() & COPIED_LABEL) {
     // reassigning a copied label remains the same copied label
     if (label_.value == a)
@@ -311,7 +311,7 @@ Fl_Widget::label(const char *a) {
 
 
 void
-Fl_Widget::copy_label(const char *a) {
+fltk3::Widget::copy_label(const char *a) {
   if (flags() & COPIED_LABEL) free((void *)(label_.value));
   if (a) {
     set_flag(COPIED_LABEL);
@@ -332,7 +332,7 @@ Fl_Widget::copy_label(const char *a) {
   \see callback()
 */
 void
-Fl_Widget::do_callback(Fl_Widget* o,void* arg) {
+fltk3::Widget::do_callback(fltk3::Widget* o,void* arg) {
   Fl_Widget_Tracker wp(this);
   callback_(o,arg);
   if (wp.deleted()) return;

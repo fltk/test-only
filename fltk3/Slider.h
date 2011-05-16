@@ -50,7 +50,7 @@
   maximum().  The minimum() may be greater than the maximum() to
   reverse the slider direction.
 
-  Use void Fl_Widget::type(int) to set how the slider is drawn, 
+  Use void fltk3::Widget::type(int) to set how the slider is drawn, 
   which can be one of the following:
   
   \li FL_VERTICAL - Draws a vertical slider (this is the default).

@@ -64,10 +64,10 @@ int Fl_Button::value(int v) {
  */
 void Fl_Button::setonly() { // set this radio button on, turn others off
   value(1);
-  Fl_Group* g = parent();
-  Fl_Widget*const* a = g->array();
+  fltk3::Group* g = parent();
+  fltk3::Widget*const* a = g->array();
   for (int i = g->children(); i--;) {
-    Fl_Widget* o = *a++;
+    fltk3::Widget* o = *a++;
     if (o != this && o->type()==FL_RADIO_BUTTON) ((Fl_Button*)o)->value(0);
   }
 }
@@ -205,7 +205,7 @@ void Fl_Button::key_release_timeout(void *d)
   \param[in] L widget label, default is no label
  */
 Fl_Button::Fl_Button(int X, int Y, int W, int H, const char *L)
-: Fl_Widget(X,Y,W,H,L) {
+: fltk3::Widget(X,Y,W,H,L) {
   box(fltk3::UP_BOX);
   down_box(fltk3::NO_BOX);
   value_ = oldval = 0;

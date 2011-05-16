@@ -60,7 +60,7 @@
   \image latex clock.png "FL_SQUARE_CLOCK type" width=4cm
   \image latex round_clock.png "FL_ROUND_CLOCK type" width=4cm
  */
-class FL_EXPORT Fl_Clock_Output : public Fl_Widget {
+class FL_EXPORT Fl_Clock_Output : public fltk3::Widget {
   int hour_, minute_, second_;
   ulong value_;
   void drawhands(fltk3::Color,fltk3::Color); // part of draw

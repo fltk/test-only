@@ -429,7 +429,7 @@ int Flcc_ValueBox::handle_key(int key) {
 
 ////////////////////////////////////////////////////////////////
 
-void Fl_Color_Chooser::rgb_cb(Fl_Widget* o, void*) {
+void Fl_Color_Chooser::rgb_cb(fltk3::Widget* o, void*) {
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)(o->parent());
   double R = c->rvalue.value();
   double G = c->gvalue.value();
@@ -446,7 +446,7 @@ void Fl_Color_Chooser::rgb_cb(Fl_Widget* o, void*) {
   if (c->rgb(R,G,B)) c->do_callback();
 }
 
-void Fl_Color_Chooser::mode_cb(Fl_Widget* o, void*) {
+void Fl_Color_Chooser::mode_cb(fltk3::Widget* o, void*) {
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)(o->parent());
   // force them to redraw even if value is the same:
   c->rvalue.value(-1);
@@ -472,7 +472,7 @@ void Fl_Color_Chooser::mode(int newMode)
   \param[in] L widget label, default is no label
  */
 Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
-  : Fl_Group(0,0,195,115,L),
+  : fltk3::Group(0,0,195,115,L),
     huebox(0,0,115,115),
     valuebox(115,0,20,115),
     choice(140,0,55,25),
@@ -507,11 +507,11 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
 #include <fltk3/Box.h>
 #include <fltk3/ReturnButton.h>
 
-class ColorChip : public Fl_Widget {
+class ColorChip : public fltk3::Widget {
   void draw();
 public:
   uchar r,g,b;
-  ColorChip(int X, int Y, int W, int H) : Fl_Widget(X,Y,W,H) {
+  ColorChip(int X, int Y, int W, int H) : fltk3::Widget(X,Y,W,H) {
     box(fltk3::ENGRAVED_FRAME);}
 };
 
@@ -523,7 +523,7 @@ void ColorChip::draw() {
 	   h()-Fl::box_dh(box()),r,g,b);
 }
 
-static void chooser_cb(Fl_Widget* o, void* vv) {
+static void chooser_cb(fltk3::Widget* o, void* vv) {
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)o;
   ColorChip* v = (ColorChip*)vv;
   v->r = uchar(255*c->r()+.5);
@@ -539,7 +539,7 @@ extern const char* fl_cancel;
 //  [in] o is a pointer to okay_button (below) 
 //  [in] p is a pointer to an int to receive the return value (1)
 // closes the fl_color_chooser window
-static void cc_ok_cb (Fl_Widget *o, void *p) {
+static void cc_ok_cb (fltk3::Widget *o, void *p) {
   *((int *)p) = 1; // set return value
   o->window()->hide();
 }
@@ -548,7 +548,7 @@ static void cc_ok_cb (Fl_Widget *o, void *p) {
 //  [in] o is a pointer to cancel_button (below) _or_ the dialog window
 //  [in] p is a pointer to an int to receive the return value (0)
 // closes the fl_color_chooser window
-static void cc_cancel_cb (Fl_Widget *o, void *p) {
+static void cc_cancel_cb (fltk3::Widget *o, void *p) {
   *((int *)p) = 0; // set return value
   if (o->window()) // cancel button
     o->window()->hide();

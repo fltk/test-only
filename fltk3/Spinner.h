@@ -48,7 +48,7 @@
   widget and repeat buttons. The user can either type into the
   input area or use the buttons to change the value.
 */
-class FL_EXPORT Fl_Spinner : public Fl_Group {
+class FL_EXPORT Fl_Spinner : public fltk3::Group {
   
   double	value_;			// Current value
   double	minimum_;		// Minimum value
@@ -62,7 +62,7 @@ class FL_EXPORT Fl_Spinner : public Fl_Group {
 		down_button_;		// Down button
 
 
-  static void	sb_cb(Fl_Widget *w, Fl_Spinner *sb) {
+  static void	sb_cb(fltk3::Widget *w, Fl_Spinner *sb) {
 		  double v;		// New value
 
 		  if (w == &(sb->input_)) {
@@ -124,7 +124,7 @@ class FL_EXPORT Fl_Spinner : public Fl_Group {
 		  <P>Inherited destructor Destroys the widget and any value associated with it.
 		*/
 		Fl_Spinner(int X, int Y, int W, int H, const char *L = 0)
-		  : Fl_Group(X, Y, W, H, L),
+		  : fltk3::Group(X, Y, W, H, L),
 		    input_(X, Y, W - H / 2 - 2, H),
 		    up_button_(X + W - H / 2 - 2, Y, H / 2 + 2, H / 2, "@-42<"),
 		    down_button_(X + W - H / 2 - 2, Y + H - H / 2,
@@ -171,7 +171,7 @@ class FL_EXPORT Fl_Spinner : public Fl_Group {
 		      else return 0;
 		  }
 
-		  return Fl_Group::handle(event);
+		  return fltk3::Group::handle(event);
 		}
 
   /** Speling mistakes retained for source compatibility \deprecated */
@@ -189,7 +189,7 @@ class FL_EXPORT Fl_Spinner : public Fl_Group {
   /** Sets the minimum and maximum values for the widget. */
   void		range(double a, double b) { minimum_ = a; maximum_ = b; }
   void		resize(int X, int Y, int W, int H) {
-		  Fl_Group::resize(X,Y,W,H);
+		  fltk3::Group::resize(X,Y,W,H);
 
 		  input_.resize(X, Y, W - H / 2 - 2, H);
 		  up_button_.resize(X + W - H / 2 - 2, Y, H / 2 + 2, H / 2);

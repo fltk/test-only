@@ -74,7 +74,7 @@ Fl_Tree_Item::~Fl_Tree_Item() {
     free((void*)_label);
     _label = 0;
   }
-  _widget = 0;			// Fl_Group will handle destruction
+  _widget = 0;			// fltk3::Group will handle destruction
   _usericon = 0;		// user handled allocation
   //_children.clear();		// array's destructor handles itself
 }
@@ -548,7 +548,7 @@ static void draw_item_focus(fltk3::Boxtype B, fltk3::Color C, int X, int Y, int 
 }
 
 /// Draw this item and its children.
-void Fl_Tree_Item::draw(int X, int &Y, int W, Fl_Widget *tree,
+void Fl_Tree_Item::draw(int X, int &Y, int W, fltk3::Widget *tree,
 			Fl_Tree_Item *itemfocus,
                         const Fl_Tree_Prefs &prefs, int lastchild) {
   if ( ! _visible ) return; 

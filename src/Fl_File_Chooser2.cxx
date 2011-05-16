@@ -287,7 +287,7 @@
 /** \fn int Fl_File_Chooser::visible()
   Returns 1 if the Fl_File_Chooser window is visible.*/
 
-/** \fn Fl_Widget* Fl_File_Chooser::add_extra(Fl_Widget*)
+/** \fn fltk3::Widget* Fl_File_Chooser::add_extra(fltk3::Widget*)
   Adds extra widget at the bottom of Fl_File_Chooser window.
   Returns pointer for previous extra widget or NULL if not set previously.
   If argument is NULL only remove previous extra widget.
@@ -569,7 +569,7 @@ Fl_File_Chooser::favoritesButtonCB()
 //
 
 void
-Fl_File_Chooser::favoritesCB(Fl_Widget *w)
+Fl_File_Chooser::favoritesCB(fltk3::Widget *w)
 					// I - Widget
 {
   int		i;			// Looping var
@@ -1093,7 +1093,7 @@ void Fl_File_Chooser::preview(int e)
   prefs_.set("preview", e);
   prefs_.flush();
 
-  Fl_Group *p = previewBox->parent();
+  fltk3::Group *p = previewBox->parent();
   if (e) {
     int w = p->w() * 2 / 3;
     fileList->resize(fileList->x(), fileList->y(),

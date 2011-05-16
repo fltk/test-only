@@ -99,7 +99,7 @@ long Fl_Table::col_scroll_position(int col) {
 }
 
 // Ctor
-Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : Fl_Group(X,Y,W,H,l) {
+Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : fltk3::Group(X,Y,W,H,l) {
   _rows             = 0;
   _cols             = 0;
   _row_header_w     = 40;
@@ -157,14 +157,14 @@ Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : Fl_Group(X,Y,W,H
   table_resized();
   redraw();
   
-  Fl_Group::end();		// end the group's begin()
+  fltk3::Group::end();		// end the group's begin()
   
   table->begin();		// leave with fltk children getting added to the scroll
 }
 
 // Dtor
 Fl_Table::~Fl_Table() {
-  // The parent Fl_Group takes care of destroying scrollbars
+  // The parent fltk3::Group takes care of destroying scrollbars
 }
 
 // Set height of a row
@@ -186,7 +186,7 @@ void Fl_Table::row_height(int row, int height) {
     redraw();
   }
   // ROW RESIZE CALLBACK
-  if ( Fl_Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
+  if ( fltk3::Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
     do_callback(CONTEXT_RC_RESIZE, row, 0);
   }
 }
@@ -212,7 +212,7 @@ void Fl_Table::col_width(int col, int width)
     redraw();
   }
   // COLUMN RESIZE CALLBACK
-  if ( Fl_Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
+  if ( fltk3::Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
     do_callback(CONTEXT_RC_RESIZE, 0, col);
   }
 }
@@ -577,7 +577,7 @@ void Fl_Table::table_resized() {
   }
   
   // Tell FLTK child widgets were resized
-  Fl_Group::init_sizes();
+  fltk3::Group::init_sizes();
   
   // Recalc top/bot/left/right
   table_scrolled();
@@ -587,7 +587,7 @@ void Fl_Table::table_resized() {
 }
 
 // Someone moved a scrollbar
-void Fl_Table::scroll_cb(Fl_Widget*w, void *data) {
+void Fl_Table::scroll_cb(fltk3::Widget*w, void *data) {
   Fl_Table *o = (Fl_Table*)data;
   o->recalc_dimensions();	// recalc tix, tiy, etc.
   o->table_scrolled();
@@ -699,7 +699,7 @@ fprintf(stderr,"Table %s: ** Event: %s --\n", (label()?label():"none"), eventnam
 // Handle FLTK events
 int Fl_Table::handle(int event) {
   PRINTEVENT;
-  int ret = Fl_Group::handle(event);	// let FLTK group handle events first
+  int ret = fltk3::Group::handle(event);	// let FLTK group handle events first
   if (ret) {
     if (Fl::event_inside(hscrollbar) || Fl::event_inside(vscrollbar)) return 1;
     if (Fl::focus() != this && contains(Fl::focus())) return 1;
@@ -727,7 +727,7 @@ int Fl_Table::handle(int event) {
         }
       }
       // Need this for eg. right click to pop up a menu
-      if ( Fl_Widget::callback() &&		// callback defined?
+      if ( fltk3::Widget::callback() &&		// callback defined?
           resizeflag == RESIZE_NONE ) {	// not resizing?
         do_callback(context, R, C);		// do callback
       }
@@ -830,7 +830,7 @@ int Fl_Table::handle(int event) {
         redraw();
         change_cursor(fltk3::CURSOR_WE);
         ret = 1;
-        if ( Fl_Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
+        if ( fltk3::Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
           do_callback(CONTEXT_RC_RESIZE, R, C);
         }
       }
@@ -850,7 +850,7 @@ int Fl_Table::handle(int event) {
         redraw();
         change_cursor(fltk3::CURSOR_NS);
         ret = 1;
-        if ( Fl_Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
+        if ( fltk3::Widget::callback() && when() & fltk3::WHEN_CHANGED ) {
           do_callback(CONTEXT_RC_RESIZE, R, C);
         }
       } else {
@@ -903,7 +903,7 @@ int Fl_Table::handle(int event) {
         case CONTEXT_TABLE:			// release on dead zone
           if ( _resizing_col == -1 &&		// not resizing a column
               _resizing_row == -1 &&		// not resizing a row
-              Fl_Widget::callback() && 	// callback defined
+              fltk3::Widget::callback() && 	// callback defined
               when() & fltk3::WHEN_RELEASE && 	// on button release
               _last_row == R ) {		// release on same row PUSHed?
             // Need this for eg. left clicking on a cell to select it
@@ -1001,8 +1001,8 @@ int Fl_Table::handle(int event) {
         do_callback(CONTEXT_TABLE, -1, -1);
         take_focus();
       }
-      //if (!ret && Fl_Widget::callback() && when() & fltk3::WHEN_NOT_CHANGED  )
-      if ( Fl_Widget::callback() && 
+      //if (!ret && fltk3::Widget::callback() && when() & fltk3::WHEN_NOT_CHANGED  )
+      if ( fltk3::Widget::callback() && 
           (
            ( !ret && when() & fltk3::WHEN_NOT_CHANGED ) || 
            ( is_row!= select_row || is_col!= select_col ) 
@@ -1027,7 +1027,7 @@ int Fl_Table::handle(int event) {
 //
 void Fl_Table::resize(int X, int Y, int W, int H) {
   // Tell group to resize, and recalc our own widget as well
-  Fl_Group::resize(X, Y, W, H);
+  fltk3::Group::resize(X, Y, W, H);
   table_resized();
   redraw();
 }
@@ -1127,7 +1127,7 @@ void Fl_Table::draw() {
   //
   fl_push_clip(wix, wiy, wiw, wih);
   {
-    Fl_Group::draw();
+    fltk3::Group::draw();
   }
   fl_pop_clip();
   
@@ -1135,7 +1135,7 @@ void Fl_Table::draw() {
   draw_box(box(), x(), y(), w(), h(), color());
   
   // If Fl_Scroll 'table' is hidden, draw its box
-  //    Do this after Fl_Group::draw() so we draw over scrollbars
+  //    Do this after fltk3::Group::draw() so we draw over scrollbars
   //    that leak around the border.
   //
   if ( ! table->visible() ) {

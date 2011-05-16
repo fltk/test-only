@@ -112,10 +112,10 @@ void Fl_Image::desaturate() {
   The label() methods are an obsolete way to set the
   image attribute of a widget or menu item. Use the
   image() or deimage() methods of the
-  Fl_Widget and Fl_Menu_Item classes
+  fltk3::Widget and Fl_Menu_Item classes
   instead.
 */
-void Fl_Image::label(Fl_Widget* widget) {
+void Fl_Image::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 
@@ -123,7 +123,7 @@ void Fl_Image::label(Fl_Widget* widget) {
   The label() methods are an obsolete way to set the
   image attribute of a widget or menu item. Use the
   image() or deimage() methods of the
-  Fl_Widget and Fl_Menu_Item classes
+  fltk3::Widget and Fl_Menu_Item classes
   instead.
 */
 void Fl_Image::label(Fl_Menu_Item* m) {
@@ -576,7 +576,7 @@ void Fl_Xlib_Graphics_Driver::draw(Fl_RGB_Image *img, int XP, int YP, int WP, in
 
 #endif
 
-void Fl_RGB_Image::label(Fl_Widget* widget) {
+void Fl_RGB_Image::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 

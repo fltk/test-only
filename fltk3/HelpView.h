@@ -50,7 +50,7 @@
 //
 
 
-typedef const char *(Fl_Help_Func)(Fl_Widget *, const char *);
+typedef const char *(Fl_Help_Func)(fltk3::Widget *, const char *);
 
 
 //
@@ -206,7 +206,7 @@ struct Fl_Help_Target {
      - yen Yuml yuml
 
 */
-class FL_EXPORT Fl_Help_View : public Fl_Group {	// Help viewer widget
+class FL_EXPORT Fl_Help_View : public fltk3::Group {	// Help viewer widget
   
   enum { RIGHT = -1, CENTER, LEFT };	///< Alignments
 
@@ -309,7 +309,7 @@ public:
     It must return a pathname that can be opened as a local file or NULL:
     
     \code
-    const char *fn(Fl_Widget *w, const char *uri);
+    const char *fn(fltk3::Widget *w, const char *uri);
     \endcode
     
     The link function can be used to retrieve remote or virtual
@@ -326,7 +326,7 @@ public:
   void		resize(int,int,int,int);
   /** Gets the size of the help view. */
   int		size() const { return (size_); }
-  void		size(int W, int H) { Fl_Widget::size(W, H); }
+  void		size(int W, int H) { fltk3::Widget::size(W, H); }
   /** Sets the default text color. */
   void		textcolor(fltk3::Color c) { if (textcolor_ == defcolor_) textcolor_ = c; defcolor_ = c; }
   /** Returns the current default text color. */

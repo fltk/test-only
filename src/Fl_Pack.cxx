@@ -45,7 +45,7 @@
   that it is destroyed last.
 */
 Fl_Pack::Fl_Pack(int X, int Y, int W, int H,const char *l)
-: Fl_Group(X, Y, W, H, l) {
+: fltk3::Group(X, Y, W, H, l) {
   resizable(0);
   spacing_ = 0;
   // type(VERTICAL); // already set like this
@@ -60,7 +60,7 @@ void Fl_Pack::draw() {
   int current_position = horizontal() ? tx : ty;
   int maximum_position = current_position;
   uchar d = damage();
-  Fl_Widget*const* a = array();
+  fltk3::Widget*const* a = array();
   if (horizontal()) {
     rw = -spacing_;
     rh = th;
@@ -81,7 +81,7 @@ void Fl_Pack::draw() {
       }
   }
   for (int i = children(); i--;) {
-    Fl_Widget* o = *a++;
+    fltk3::Widget* o = *a++;
     if (o->visible()) {
       int X,Y,W,H;
       if (horizontal()) {
@@ -143,7 +143,7 @@ void Fl_Pack::draw() {
   tw += Fl::box_dw(box()); if (tw <= 0) tw = 1;
   th += Fl::box_dh(box()); if (th <= 0) th = 1;
   if (tw != w() || th != h()) {
-    Fl_Widget::resize(x(),y(),tw,th);
+    fltk3::Widget::resize(x(),y(),tw,th);
     d = fltk3::DAMAGE_ALL;
   }
   if (d&fltk3::DAMAGE_ALL) {

@@ -154,7 +154,7 @@ Fl_Double_Window* make_template_panel() {
     { template_preview = new fltk3::Box(200, 28, 250, 250);
       template_preview->box(fltk3::THIN_DOWN_BOX);
       template_preview->align(fltk3::Align(69|fltk3::ALIGN_INSIDE));
-      Fl_Group::current()->resizable(template_preview);
+      fltk3::Group::current()->resizable(template_preview);
     } // fltk3::Box* template_preview
     { template_name = new Fl_Input(124, 288, 326, 25, "Template Name:");
       template_name->labelfont(1);
@@ -167,12 +167,12 @@ Fl_Double_Window* make_template_panel() {
       template_instance->textfont(4);
       template_instance->hide();
     } // Fl_Input* template_instance
-    { Fl_Group* o = new Fl_Group(10, 323, 440, 25);
+    { fltk3::Group* o = new fltk3::Group(10, 323, 440, 25);
       { template_delete = new Fl_Button(10, 323, 133, 25, "Delete Template");
         template_delete->callback((Fl_Callback*)template_delete_cb);
       } // Fl_Button* template_delete
       { fltk3::Box* o = new fltk3::Box(153, 323, 126, 25);
-        Fl_Group::current()->resizable(o);
+        fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
       { Fl_Button* o = new Fl_Button(289, 323, 72, 25, "Cancel");
         o->callback((Fl_Callback*)cb_Cancel);
@@ -181,7 +181,7 @@ Fl_Double_Window* make_template_panel() {
         template_submit->callback((Fl_Callback*)cb_template_submit);
       } // Fl_Return_Button* template_submit
       o->end();
-    } // Fl_Group* o
+    } // fltk3::Group* o
     template_panel->set_modal();
     template_panel->end();
   } // Fl_Double_Window* template_panel

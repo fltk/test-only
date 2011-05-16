@@ -36,7 +36,7 @@
 /** 
     Forms compatibility Bitmap Image Widget
 */
-class FL_EXPORT Fl_FormsBitmap : public Fl_Widget {
+class FL_EXPORT Fl_FormsBitmap : public fltk3::Widget {
     Fl_Bitmap *b;
 protected:
     void draw();

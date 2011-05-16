@@ -149,7 +149,7 @@ void Fl_Help_Dialog::cb_view_(Fl_Help_View* o, void* v) {
 Fl_Help_Dialog::Fl_Help_Dialog() {
   { window_ = new Fl_Double_Window(530, 385, "Help Dialog");
     window_->user_data((void*)(this));
-    { Fl_Group* o = new Fl_Group(10, 10, 511, 25);
+    { fltk3::Group* o = new fltk3::Group(10, 10, 511, 25);
       { back_ = new Fl_Button(10, 10, 25, 25, "@<-");
         back_->tooltip("Show the previous help page.");
         back_->shortcut(0xff51);
@@ -174,7 +174,7 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
         larger_->labelsize(16);
         larger_->callback((Fl_Callback*)cb_larger_);
       } // Fl_Button* larger_
-      { Fl_Group* o = new Fl_Group(350, 10, 171, 25);
+      { fltk3::Group* o = new fltk3::Group(350, 10, 171, 25);
         o->box(fltk3::DOWN_BOX);
         o->color(fltk3::BACKGROUND2_COLOR);
         { find_ = new Fl_Input(375, 12, 143, 21, "@search");
@@ -186,16 +186,16 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
           find_->when(fltk3::WHEN_ENTER_KEY_ALWAYS);
         } // Fl_Input* find_
         o->end();
-      } // Fl_Group* o
+      } // fltk3::Group* o
       { fltk3::Box* o = new fltk3::Box(150, 10, 190, 25);
-        Fl_Group::current()->resizable(o);
+        fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
       o->end();
-    } // Fl_Group* o
+    } // fltk3::Group* o
     { view_ = new Fl_Help_View(10, 45, 510, 330);
       view_->box(fltk3::DOWN_BOX);
       view_->callback((Fl_Callback*)cb_view_);
-      Fl_Group::current()->resizable(view_);
+      fltk3::Group::current()->resizable(view_);
     } // Fl_Help_View* view_
     window_->size_range(260, 150);
     window_->end();

@@ -191,7 +191,7 @@ int Fl_Choice::handle(int e) {
     picked(v);
     return 1;
   case fltk3::SHORTCUT:
-    if (Fl_Widget::test_shortcut()) goto J1;
+    if (fltk3::Widget::test_shortcut()) goto J1;
     v = menu()->test_shortcut();
     if (!v) return 0;
     if (v != mvalue()) redraw();

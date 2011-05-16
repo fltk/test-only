@@ -195,7 +195,7 @@ static char* cutfname(int which = 0) {
   return name[which];
 }
 
-void save_cb(Fl_Widget *, void *v) {
+void save_cb(fltk3::Widget *, void *v) {
   const char *c = filename;
   if (v || !c || !*c) {
     fl_file_chooser_ok_label("Save");
@@ -232,7 +232,7 @@ void save_cb(Fl_Widget *, void *v) {
   }
 }
 
-void save_template_cb(Fl_Widget *, void *) {
+void save_template_cb(fltk3::Widget *, void *) {
   // Setup the template panel...
   if (!template_panel) make_template_panel();
 
@@ -363,7 +363,7 @@ void save_template_cb(Fl_Widget *, void *) {
 #endif // HAVE_LIBPNG && HAVE_LIBZ
 }
 
-void revert_cb(Fl_Widget *,void *) {
+void revert_cb(fltk3::Widget *,void *) {
   if (modflag) {
     if (!fl_choice("This user interface has been changed. Really revert?",
                    "Cancel", "Revert", NULL)) return;
@@ -379,7 +379,7 @@ void revert_cb(Fl_Widget *,void *) {
   undo_clear();
 }
 
-void exit_cb(Fl_Widget *,void *) {
+void exit_cb(fltk3::Widget *,void *) {
   if (modflag)
     switch (fl_choice("Do you want to save changes to this user\n"
                       "interface before exiting?", "Cancel",
@@ -455,7 +455,7 @@ apple_open_cb(const char *c) {
 }
 #endif // __APPLE__
 
-void open_cb(Fl_Widget *, void *v) {
+void open_cb(fltk3::Widget *, void *v) {
   if (!v && modflag) {
     switch (fl_choice("Do you want to save changes to this user\n"
                       "interface before opening another one?", "Cancel",
@@ -501,7 +501,7 @@ void open_cb(Fl_Widget *, void *v) {
   }
 }
 
-void open_history_cb(Fl_Widget *, void *v) {
+void open_history_cb(fltk3::Widget *, void *v) {
   if (modflag) {
     switch (fl_choice("Do you want to save changes to this user\n"
                       "interface before opening another one?", "Cancel",
@@ -533,7 +533,7 @@ void open_history_cb(Fl_Widget *, void *v) {
   if (oldfilename) free((void *)oldfilename);
 }
 
-void new_cb(Fl_Widget *, void *v) {
+void new_cb(fltk3::Widget *, void *v) {
   // Check if the current file has been modified...
   if (!v && modflag) {
     // Yes, ask the user what to do...
@@ -654,7 +654,7 @@ const char* i18n_file = "";
 const char* i18n_set = "";
 char i18n_program[FL_PATH_MAX] = "";
 
-void write_cb(Fl_Widget *, void *) {
+void write_cb(fltk3::Widget *, void *) {
   if (!filename) {
     save_cb(0,0);
     if (!filename) return;
@@ -691,7 +691,7 @@ void write_cb(Fl_Widget *, void *) {
   }
 }
 
-void write_strings_cb(Fl_Widget *, void *) {
+void write_strings_cb(fltk3::Widget *, void *) {
   static const char *exts[] = { ".txt", ".po", ".msg" };
   if (!filename) {
     save_cb(0,0);
@@ -714,7 +714,7 @@ void write_strings_cb(Fl_Widget *, void *) {
   }
 }
 
-void openwidget_cb(Fl_Widget *, void *) {
+void openwidget_cb(fltk3::Widget *, void *) {
   if (!Fl_Type::current) {
     fl_message("Please select a widget");
     return;
@@ -722,19 +722,19 @@ void openwidget_cb(Fl_Widget *, void *) {
   Fl_Type::current->open();
 }
 
-void toggle_overlays(Fl_Widget *,void *);
+void toggle_overlays(fltk3::Widget *,void *);
 
-void select_all_cb(Fl_Widget *,void *);
-void select_none_cb(Fl_Widget *,void *);
+void select_all_cb(fltk3::Widget *,void *);
+void select_none_cb(fltk3::Widget *,void *);
 
-void group_cb(Fl_Widget *, void *);
+void group_cb(fltk3::Widget *, void *);
 
-void ungroup_cb(Fl_Widget *, void *);
+void ungroup_cb(fltk3::Widget *, void *);
 
 extern int pasteoffset;
 static int ipasteoffset;
 
-void copy_cb(Fl_Widget*, void*) {
+void copy_cb(fltk3::Widget*, void*) {
   if (!Fl_Type::current) {
     fl_beep();
     return;
@@ -747,7 +747,7 @@ void copy_cb(Fl_Widget*, void*) {
 }
 
 extern void select_only(Fl_Type *);
-void cut_cb(Fl_Widget *, void *) {
+void cut_cb(fltk3::Widget *, void *) {
   if (!Fl_Type::current) {
     fl_beep();
     return;
@@ -765,7 +765,7 @@ void cut_cb(Fl_Widget *, void *) {
   if (p) select_only(p);
 }
 
-void delete_cb(Fl_Widget *, void *) {
+void delete_cb(fltk3::Widget *, void *) {
   if (!Fl_Type::current) {
     fl_beep();
     return;
@@ -781,7 +781,7 @@ void delete_cb(Fl_Widget *, void *) {
 
 extern int force_parent;
 
-void paste_cb(Fl_Widget*, void*) {
+void paste_cb(fltk3::Widget*, void*) {
   //if (ipasteoffset) force_parent = 1;
   pasteoffset = ipasteoffset;
   if (gridx>1) pasteoffset = ((pasteoffset-1)/gridx+1)*gridx;
@@ -798,7 +798,7 @@ void paste_cb(Fl_Widget*, void*) {
 }
 
 // Duplicate the selected widgets...
-void duplicate_cb(Fl_Widget*, void*) {
+void duplicate_cb(fltk3::Widget*, void*) {
   if (!Fl_Type::current) {
     fl_beep();
     return;
@@ -823,25 +823,25 @@ void duplicate_cb(Fl_Widget*, void*) {
   force_parent = 0;
 }
 
-void earlier_cb(Fl_Widget*,void*);
+void earlier_cb(fltk3::Widget*,void*);
 
-void later_cb(Fl_Widget*,void*);
+void later_cb(fltk3::Widget*,void*);
 
 Fl_Type *sort(Fl_Type *parent);
 
-static void sort_cb(Fl_Widget *,void *) {
+static void sort_cb(fltk3::Widget *,void *) {
   sort((Fl_Type*)0);
 }
 
-void show_project_cb(Fl_Widget *, void *);
-void show_grid_cb(Fl_Widget *, void *);
-void show_settings_cb(Fl_Widget *, void *);
-void show_global_settings_cb(Fl_Widget *, void *);
+void show_project_cb(fltk3::Widget *, void *);
+void show_grid_cb(fltk3::Widget *, void *);
+void show_settings_cb(fltk3::Widget *, void *);
+void show_global_settings_cb(fltk3::Widget *, void *);
 
-void align_widget_cb(Fl_Widget *, long);
-void widget_size_cb(Fl_Widget *, long);
+void align_widget_cb(fltk3::Widget *, long);
+void widget_size_cb(fltk3::Widget *, long);
 
-void about_cb(Fl_Widget *, void *) {
+void about_cb(fltk3::Widget *, void *) {
   if (!about_panel) make_about_panel();
   about_panel->show();
 }
@@ -920,11 +920,11 @@ void show_help(const char *name) {
   help_dialog->show();
 }
 
-void help_cb(Fl_Widget *, void *) {
+void help_cb(fltk3::Widget *, void *) {
   show_help("fluid.html");
 }
 
-void manual_cb(Fl_Widget *, void *) {
+void manual_cb(fltk3::Widget *, void *) {
   show_help("index.html");
 }
 
@@ -947,7 +947,7 @@ static void win_box(int x, int y, int w, int h) {
 }
 
 // Load and show the print dialog...
-void print_menu_cb(Fl_Widget *, void *) {
+void print_menu_cb(fltk3::Widget *, void *) {
   PRINTDLG	dialog;			// Print dialog
   DOCINFO	docinfo;		// Document info
   int		first, last;		// First and last page
@@ -1178,7 +1178,7 @@ void print_menu_cb(Fl_Widget *, void *) {
 }
 #else
 // Load and show the print dialog...
-void print_menu_cb(Fl_Widget *, void *) {
+void print_menu_cb(fltk3::Widget *, void *) {
   if (!print_panel) make_print_panel();
 
   print_load();
@@ -1633,7 +1633,7 @@ void print_cb(Fl_Return_Button *, void *) {
 
 extern Fl_Menu_Item New_Menu[];
 
-void toggle_widgetbin_cb(Fl_Widget *, void *);
+void toggle_widgetbin_cb(fltk3::Widget *, void *);
 void toggle_sourceview_cb(Fl_Double_Window *, void *);
 
 Fl_Menu_Item Main_Menu[] = {
@@ -1758,7 +1758,7 @@ void scheme_cb(Fl_Choice *, void *) {
   fluid_prefs.set("scheme", scheme_choice->value());
 }
 
-void toggle_widgetbin_cb(Fl_Widget *, void *) {
+void toggle_widgetbin_cb(fltk3::Widget *, void *) {
   if (!widgetbin_panel) {
     make_widgetbin();
     if (!position_window(widgetbin_panel,"widgetbin_pos", 1, 320, 30)) return;
@@ -1818,7 +1818,7 @@ void make_main_window() {
   }
 
   if (!main_window) {
-    Fl_Widget *o;
+    fltk3::Widget *o;
     main_window = new Fl_Double_Window(WINWIDTH,WINHEIGHT,"fluid");
     main_window->box(fltk3::NO_BOX);
     o = make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);

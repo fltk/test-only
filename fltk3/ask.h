@@ -30,7 +30,7 @@
 
 #  include "enumerations.h"
 
-class Fl_Widget;
+namespace fltk3 { class Widget; }
 /** Different system beeps available. \relatesalso fl_beep(int) */
 enum {
   FL_BEEP_DEFAULT = 0,
@@ -58,7 +58,7 @@ FL_EXPORT int fl_choice(const char *q,const char *b0,const char *b1,const char *
 FL_EXPORT const char *fl_input(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
 FL_EXPORT const char *fl_password(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
 
-FL_EXPORT Fl_Widget *fl_message_icon();
+FL_EXPORT fltk3::Widget *fl_message_icon();
 extern FL_EXPORT fltk3::Font fl_message_font_;
 extern FL_EXPORT fltk3::Fontsize fl_message_size_;
 inline void fl_message_font(fltk3::Font f, fltk3::Fontsize s) {

@@ -90,7 +90,7 @@ namespace fltk3 {
    window manager.
    
    Events are identified by the integer argument passed to the 
-   Fl_Widget::handle() virtual method. Other information about the 
+   fltk3::Widget::handle() virtual method. Other information about the 
    most recent event is stored in static locations and acquired  by 
    calling the Fl::event_*() methods. This static information remains 
    valid until the next event is read from the window system, so it 
@@ -108,9 +108,9 @@ namespace fltk3 {
      Fl::event_y().
      
      A widget indicates that it "wants" the mouse click by returning non-zero 
-     from its Fl_Widget::handle() method. It will then become the 
+     from its fltk3::Widget::handle() method. It will then become the 
      Fl::pushed() widget and will get fltk3::DRAG and the matching fltk3::RELEASE events.  
-     If Fl_Widget::handle() returns zero then FLTK will try sending the fltk3::PUSH 
+     If fltk3::Widget::handle() returns zero then FLTK will try sending the fltk3::PUSH 
      to another widget. 
      */
     PUSH		= 1,
@@ -228,31 +228,31 @@ namespace fltk3 {
      */
     SHORTCUT		= 12,
     
-    /** This widget is no longer active, due to Fl_Widget::deactivate() 
-     being called on it or one of its parents. Fl_Widget::active() may 
-     still be true after this, the widget is only active if Fl_Widget::active()
-     is true on it and all its parents (use Fl_Widget::active_r() to check this).
+    /** This widget is no longer active, due to fltk3::Widget::deactivate() 
+     being called on it or one of its parents. fltk3::Widget::active() may 
+     still be true after this, the widget is only active if fltk3::Widget::active()
+     is true on it and all its parents (use fltk3::Widget::active_r() to check this).
      */
     DEACTIVATE		= 13,
     
-    /** This widget is now active, due to Fl_Widget::activate() being 
+    /** This widget is now active, due to fltk3::Widget::activate() being 
      called on it or one of its parents.
      */
     ACTIVATE		= 14,
     
-    /** This widget is no longer visible, due to Fl_Widget::hide() being 
+    /** This widget is no longer visible, due to fltk3::Widget::hide() being 
      called on it or one of its parents, or due to a parent window being 
-     minimized.  Fl_Widget::visible() may still be true after this, but the 
+     minimized.  fltk3::Widget::visible() may still be true after this, but the 
      widget is visible only if visible() is true for it and all its 
-     parents (use Fl_Widget::visible_r() to check this).
+     parents (use fltk3::Widget::visible_r() to check this).
      */
     HIDE		= 15,
     
-    /** This widget is visible again, due to Fl_Widget::show() being called on 
+    /** This widget is visible again, due to fltk3::Widget::show() being called on 
      it or one of its parents, or due to a parent window being restored. 
      Child Fl_Windows respond to this by actually creating the window if not 
      done already, so if you subclass a window, be sure to pass fltk3::SHOW 
-     to the base class Fl_Widget::handle() method!
+     to the base class fltk3::Widget::handle() method!
      */
     SHOW		= 16,
     
@@ -302,10 +302,10 @@ namespace fltk3 {
   /*@{*/
   /** These constants determine when a callback is performed.
    
-   \sa Fl_Widget::when();
+   \sa fltk3::Widget::when();
    \todo doxygen comments for values are incomplete and maybe wrong or unclear
    */
-  enum When { // Fl_Widget::when():
+  enum When { // fltk3::Widget::when():
     WHEN_NEVER		= 0,	///< Never call the callback
     WHEN_CHANGED	= 1,	///< Do the callback only when the widget value changes
     WHEN_NOT_CHANGED	= 2,	///< Do the callback whenever the user interacts with the widget

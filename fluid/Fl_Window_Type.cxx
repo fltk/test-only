@@ -188,7 +188,7 @@ void i18n_int_cb(Fl_Int_Input *i, void *) {
 extern const char* header_file_name;
 extern const char* code_file_name;
 
-void show_project_cb(Fl_Widget *, void *) {
+void show_project_cb(fltk3::Widget *, void *) {
   if(project_window==0) make_project_window();
   include_H_from_C_button->value(include_H_from_C);
   use_FL_COMMAND_button->value(use_FL_COMMAND);
@@ -223,7 +223,7 @@ void show_project_cb(Fl_Widget *, void *) {
   project_window->show();
 }
 
-void show_grid_cb(Fl_Widget *, void *) {
+void show_grid_cb(fltk3::Widget *, void *) {
   char buf[128];
   sprintf(buf,"%d",gridx); horizontal_input->value(buf);
   sprintf(buf,"%d",gridy); vertical_input->value(buf);
@@ -240,12 +240,12 @@ void show_grid_cb(Fl_Widget *, void *) {
   grid_window->show();
 }
 
-void show_settings_cb(Fl_Widget *, void *) {
+void show_settings_cb(fltk3::Widget *, void *) {
   settings_window->hotspot(settings_window);
   settings_window->show();
 }
 
-void show_global_settings_cb(Fl_Widget *, void *) {
+void show_global_settings_cb(fltk3::Widget *, void *) {
   global_settings_window->hotspot(global_settings_window);
   show_global_settings_window();
 }
@@ -284,7 +284,7 @@ Fl_Menu_Item window_type_menu[] = {
 
 static int overlays_invisible;
 
-// The following Fl_Widget is used to simulate the windows.  It has
+// The following fltk3::Widget is used to simulate the windows.  It has
 // an overlay for the fluid ui, and special-cases the fltk3::NO_BOX.
 
 class Overlay_Window : public Fl_Overlay_Window {
@@ -293,7 +293,7 @@ class Overlay_Window : public Fl_Overlay_Window {
 public:
   Fl_Window_Type *window;
   int handle(int);
-  Overlay_Window(int W,int H) : Fl_Overlay_Window(W,H) {Fl_Group::current(0);}
+  Overlay_Window(int W,int H) : Fl_Overlay_Window(W,H) {fltk3::Group::current(0);}
   void resize(int,int,int,int);
   uchar *read_image(int &ww, int &hh);
 };
@@ -371,7 +371,7 @@ Fl_Type *Fl_Window_Type::make() {
   Fl_Window_Type *myo = new Fl_Window_Type();
   if (!this->o) {// template widget
     this->o = new Fl_Window(100,100);
-    Fl_Group::current(0);
+    fltk3::Group::current(0);
   }
   // Set the size ranges for this window; in order to avoid opening the
   // X display we use an arbitrary maximum size...
@@ -393,7 +393,7 @@ Fl_Type *Fl_Window_Type::make() {
 void Fl_Window_Type::add_child(Fl_Type* cc, Fl_Type* before) {
   if (!cc->is_widget()) return;
   Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
-  Fl_Widget* b = before ? ((Fl_Widget_Type*)before)->o : 0;
+  fltk3::Widget* b = before ? ((Fl_Widget_Type*)before)->o : 0;
   ((Fl_Window*)o)->insert(*(c->o), b);
   o->redraw();
 }
@@ -407,7 +407,7 @@ void Fl_Window_Type::remove_child(Fl_Type* cc) {
 void Fl_Window_Type::move_child(Fl_Type* cc, Fl_Type* before) {
   Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
   ((Fl_Window*)o)->remove(c->o);
-  Fl_Widget* b = before ? ((Fl_Widget_Type*)before)->o : 0;
+  fltk3::Widget* b = before ? ((Fl_Widget_Type*)before)->o : 0;
   ((Fl_Window*)o)->insert(*(c->o), b);
   o->redraw();
 }
@@ -422,7 +422,7 @@ void Fl_Window_Type::open() {
     w->show();
     Fl_Widget_Type::open();
   } else {
-    Fl_Widget *p = w->resizable();
+    fltk3::Widget *p = w->resizable();
     if (!p) w->resizable(w);
     w->show();
     w->resizable(p);
@@ -513,7 +513,7 @@ Fl_Window_Type Fl_Window_type;
 
 // Resize from window manager...
 void Overlay_Window::resize(int X,int Y,int W,int H) {
-  Fl_Widget* t = resizable(); resizable(0);
+  fltk3::Widget* t = resizable(); resizable(0);
 
   // do not set the mod flag if the window was not resized. In FLUID, all
   // windows are opened without a given x/y position, so modifying x/y
@@ -635,26 +635,26 @@ static void draw_h_arrow(int x1, int y, int x2) {
   fl_line(x2-dx*5, y+2, x2-dx, y);
 }
 
-static void draw_top_brace(const Fl_Widget *w) {
+static void draw_top_brace(const fltk3::Widget *w) {
   fl_yxline(w->x(), w->y()-2, w->y()+6);
   fl_yxline(w->x()+w->w()-1, w->y()-2, w->y()+6);
   fl_xyline(w->x()-2, w->y(), w->x()+w->w()+1);
 }
 
-static void draw_left_brace(const Fl_Widget *w) {
+static void draw_left_brace(const fltk3::Widget *w) {
   fl_xyline(w->x()-2, w->y(), w->x()+6);
   fl_xyline(w->x()-2, w->y()+w->h()-1, w->x()+6);
   fl_yxline(w->x(), w->y()-2, w->y()+w->h()+1);
 }
 
-static void draw_right_brace(const Fl_Widget *w) {
+static void draw_right_brace(const fltk3::Widget *w) {
   int xx = w->x() + w->w() - 1;
   fl_xyline(xx-6, w->y(), xx+2);
   fl_xyline(xx-6, w->y()+w->h()-1, xx+2);
   fl_yxline(xx, w->y()-2, w->y()+w->h()+1);
 }
 
-static void draw_bottom_brace(const Fl_Widget *w) {
+static void draw_bottom_brace(const fltk3::Widget *w) {
   int yy = w->y() + w->h() - 1;
   fl_yxline(w->x(), yy-6, yy+2);
   fl_yxline(w->x()+w->w()-1, yy-6, yy+2);
@@ -1123,7 +1123,7 @@ void redraw_overlays() {
     if (o->is_window()) ((Fl_Window_Type*)o)->fix_overlay();
 }
 
-void toggle_overlays(Fl_Widget *,void *) {
+void toggle_overlays(fltk3::Widget *,void *) {
   overlays_invisible = !overlays_invisible;
 
   if (overlays_invisible) Main_Menu[40].label("Show O&verlays");
@@ -1202,7 +1202,7 @@ int Fl_Window_Type::handle(int event) {
     {for (Fl_Type* i=next; i && i->level>level; i=i->next)
       if (i->is_widget() && !i->is_menu_item()) {
       Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
-      for (Fl_Widget *o1 = myo->o; o1; o1 = o1->parent())
+      for (fltk3::Widget *o1 = myo->o; o1; o1 = o1->parent())
 	if (!o1->visible()) goto CONTINUE2;
       if (Fl::event_inside(myo->o)) {
         selection = myo;
@@ -1268,7 +1268,7 @@ int Fl_Window_Type::handle(int event) {
       for (Fl_Type*i=next; i&&i->level>level; i=i->next)
 	if (i->is_widget() && !i->is_menu_item()) {
 	Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
-	for (Fl_Widget *o1 = myo->o; o1; o1 = o1->parent())
+	for (fltk3::Widget *o1 = myo->o; o1; o1 = o1->parent())
 	  if (!o1->visible()) goto CONTINUE;
 	if (Fl::event_inside(myo->o)) selection = myo;
 	if (myo->o->x()>=x1 && myo->o->y()>y1 &&
@@ -1451,7 +1451,7 @@ Fl_Type *Fl_Widget_Class_Type::make() {
 
   if (!this->o) {// template widget
     this->o = new Fl_Window(100,100);
-    Fl_Group::current(0);
+    fltk3::Group::current(0);
   }
   // Set the size ranges for this window; in order to avoid opening the
   // X display we use an arbitrary maximum size...
@@ -1494,7 +1494,7 @@ void Fl_Widget_Class_Type::write_code1() {
   write_public_state = 1;
 
   const char *c = subclass();
-  if (!c) c = "Fl_Group";
+  if (!c) c = "fltk3::Group";
 
   write_h("\nclass %s : public %s {\n", name(), c);
   if (strstr(c, "Window")) {
@@ -1566,7 +1566,7 @@ void Fl_Widget_Class_Type::write_code2() {
 ////////////////////////////////////////////////////////////////
 // live mode support
 
-Fl_Widget *Fl_Window_Type::enter_live_mode(int) {
+fltk3::Widget *Fl_Window_Type::enter_live_mode(int) {
   Fl_Window *win = new Fl_Window(o->x(), o->y(), o->w(), o->h());
   live_widget = win;
   if (live_widget) {

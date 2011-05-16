@@ -47,8 +47,8 @@ public:
   static Fluid_Image* find(const char *);
   void decrement(); // reference counting & automatic free
   void increment();
-  void image(Fl_Widget *); // set the image of this widget
-  void deimage(Fl_Widget *); // set the deimage of this widget
+  void image(fltk3::Widget *); // set the image of this widget
+  void deimage(fltk3::Widget *); // set the deimage of this widget
   void write_static();
   void write_code(const char *var, int inactive = 0);
   const char *name() const {return name_;}

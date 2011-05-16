@@ -98,7 +98,7 @@
 ///     next_selected_item().
 ///     Items can be found by their pathname using find_item(const char*),
 ///     and an item's pathname can be found with item_pathname().
-///     The selected items' colors are controlled by selection_color() (inherited from Fl_Widget).
+///     The selected items' colors are controlled by selection_color() (inherited from fltk3::Widget).
 ///
 ///     The tree can have different selection behaviors controlled by selectmode().
 ///
@@ -118,7 +118,7 @@
 ///     callback_item() and callback_reason() can be used to determine the cause of the callback. eg:
 ///
 /// \code
-/// void MyTreeCallback(Fl_Widget *w, void *data) {
+/// void MyTreeCallback(fltk3::Widget *w, void *data) {
 ///   Fl_Tree      *tree = (Fl_Tree*)w;
 ///   Fl_Tree_Item *item = (Fl_Tree_Item*)tree->callback_item();	// get selected item
 ///   switch ( tree->callback_reason() ) {
@@ -196,7 +196,7 @@ enum Fl_Tree_Reason {
 };
 
 
-class FL_EXPORT Fl_Tree : public Fl_Group {
+class FL_EXPORT Fl_Tree : public fltk3::Group {
   Fl_Tree_Item  *_root;				// can be null!
   Fl_Tree_Item  *_item_focus;			// item that has focus box
   Fl_Tree_Item  *_callback_item;		// item invoked during callback (can be NULL)
@@ -214,7 +214,7 @@ protected:
   void do_callback_for_item(Fl_Tree_Item* item, Fl_Tree_Reason reason) {
     callback_reason(reason);
     callback_item(item);
-    do_callback((Fl_Widget*)this, user_data());
+    do_callback((fltk3::Widget*)this, user_data());
   }
   Fl_Tree_Item *next_visible_item(Fl_Tree_Item *start, int dir);
 
@@ -915,7 +915,7 @@ public:
   /// Use this to skip over the scrollbars when walking the child() array. Example:
   /// \code
   /// for ( int i=0; i<tree->children(); i++ ) {    // walk children
-  ///     Fl_Widget *w= tree->child(i);
+  ///     fltk3::Widget *w= tree->child(i);
   ///     if ( brow->is_scrollbar(w) ) continue;    // skip scrollbars
   ///     ..do work here..
   /// }
@@ -923,7 +923,7 @@ public:
   /// \param[in] w Widget to test
   /// \returns 1 if \p w is a scrollbar, 0 if not.
   ///
-  int is_scrollbar(Fl_Widget *w) {
+  int is_scrollbar(fltk3::Widget *w) {
       return( ( w == _vscroll ) ? 1 : 0 );
   }
   /// Gets the current size of the scrollbars' troughs, in pixels.
@@ -989,7 +989,7 @@ public:
   ///
   /// The callback() can use this value to see why it was called. Example:
   /// \code
-  ///     void MyTreeCallback(Fl_Widget *w, void *userdata) {
+  ///     void MyTreeCallback(fltk3::Widget *w, void *userdata) {
   ///         Fl_Tree *tree = (Fl_Tree*)w;
   ///         Fl_Tree_Item *item = tree->callback_item();    // the item changed (can be NULL if more than one item was changed!)
   ///         switch ( tree->callback_reason() ) {           // reason callback was invoked

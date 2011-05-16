@@ -33,13 +33,13 @@
 
 char fl_flip = 2;
 void fl_end_form() {
-  while (Fl_Group::current()) Fl_Group::current()->forms_end();
+  while (fltk3::Group::current()) fltk3::Group::current()->forms_end();
 }
-void Fl_Group::forms_end() {
+void fltk3::Group::forms_end() {
   // set the dimensions of a group to surround contents
   if (children() && !w()) {
-    Fl_Widget*const* a = array();
-    Fl_Widget* o = *a++;
+    fltk3::Widget*const* a = array();
+    fltk3::Widget* o = *a++;
     int rx = o->x();
     int ry = o->y();
     int rw = rx+o->w();
@@ -58,11 +58,11 @@ void Fl_Group::forms_end() {
   }
   // flip all the children's coordinate systems:
   if (fl_flip) {
-    Fl_Widget* o = (type()>=FL_WINDOW) ? this : window();
+    fltk3::Widget* o = (type()>=FL_WINDOW) ? this : window();
     int Y = o->h();
-    Fl_Widget*const* a = array();
+    fltk3::Widget*const* a = array();
     for (int i=children(); i--;) {
-      Fl_Widget* ow = *a++;
+      fltk3::Widget* ow = *a++;
       int newy = Y-ow->y()-ow->h();
       ow->y(newy);
     }
@@ -125,13 +125,13 @@ void fl_show_form(Fl_Window *f,int place,int b,const char *n) {
   else f->show();
 }
 
-Fl_Widget *fl_do_forms(void) {
-  Fl_Widget *obj;
+fltk3::Widget *fl_do_forms(void) {
+  fltk3::Widget *obj;
   while (!(obj = Fl::readqueue())) if (!Fl::wait()) exit(0);
   return obj;
 }
 
-Fl_Widget *fl_check_forms() {
+fltk3::Widget *fl_check_forms() {
   Fl::check();
   return Fl::readqueue();
 }

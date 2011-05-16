@@ -1944,7 +1944,7 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
 - (NSRect)firstRectForCharacterRange:(NSRange)aRange {
   NSRect glyphRect;
   fl_lock_function();
-  Fl_Widget *focus = Fl::focus();
+  fltk3::Widget *focus = Fl::focus();
   Fl_Window *wfocus = focus->window();
   while (wfocus->window()) wfocus = wfocus->window();
   glyphRect.size.width = 0;
@@ -1986,7 +1986,7 @@ void Fl_X::make(Fl_Window* w)
 {
   static int xyPos = 100;
   if ( w->parent() ) {		// create a subwindow
-    Fl_Group::current(0);
+    fltk3::Group::current(0);
     // our subwindow needs this structure to know about its clipping. 
     Fl_X* x = new Fl_X;
     x->subwindow = true;
@@ -2021,7 +2021,7 @@ void Fl_X::make(Fl_Window* w)
     fl_show_iconic = 0;
   }
   else {			// create a desktop window
-    Fl_Group::current(0);
+    fltk3::Group::current(0);
     fl_open_display();
     NSInteger winlevel = NSNormalWindowLevel;
     NSUInteger winstyle;
@@ -2037,7 +2037,7 @@ void Fl_X::make(Fl_Window* w)
       }
     } else {
       if (w->resizable()) {
-        Fl_Widget *o = w->resizable();
+        fltk3::Widget *o = w->resizable();
         int minw = o->w(); if (minw > 100) minw = 100;
         int minh = o->h(); if (minh > 100) minh = 100;
         w->size_range(w->w() - o->w() + minw, w->h() - o->h() + minh, 0, 0);
@@ -2217,7 +2217,7 @@ const char *fl_filename_name( const char *name )
  * set the window title bar name
  */
 void Fl_Window::label(const char *name, const char *mininame) {
-  Fl_Widget::label(name);
+  fltk3::Widget::label(name);
   iconlabel_ = mininame;
   if (shown() || i) {
     NSWindow* nsw = (NSWindow*)i->xid;
@@ -2294,7 +2294,7 @@ void Fl_Window::resize(int X,int Y,int W,int H) {
   }
   resize_from_system = 0;
   if (is_a_resize) {
-    Fl_Group::resize(X,Y,W,H);
+    fltk3::Group::resize(X,Y,W,H);
     if (shown()) { 
       redraw(); 
     }
@@ -2483,7 +2483,7 @@ void Fl::copy(const char *stuff, int len, int clipboard) {
 }
 
 // Call this when a "paste" operation happens:
-void Fl::paste(Fl_Widget &receiver, int clipboard) {
+void Fl::paste(fltk3::Widget &receiver, int clipboard) {
   if (clipboard) {
     // see if we own the selection, if not go get it:
     fl_selection_length[1] = 0;
@@ -3280,7 +3280,7 @@ int Fl::dnd(void)
   [mypasteboard declareTypes:[NSArray arrayWithObjects:@"public.utf8-plain-text", nil] owner:nil];
   [mypasteboard setData:(NSData*)text forType:@"public.utf8-plain-text"];
   CFRelease(text);
-  Fl_Widget *w = Fl::pushed();
+  fltk3::Widget *w = Fl::pushed();
   Fl_Window *win = w->window();
   if (win == NULL) {
     win = (Fl_Window*)w;

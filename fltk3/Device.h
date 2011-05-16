@@ -548,7 +548,7 @@ public:
    \param x,y offsets where to print relatively to coordinates origin
    \param height height of the current drawing area
    */
-  virtual int print(Fl_Widget* w, int x, int y, int height) = 0;
+  virtual int print(fltk3::Widget* w, int x, int y, int height) = 0;
 };
 
 #endif // Fl_Device_H

@@ -585,7 +585,7 @@ int Fl_Input::handle_key() {
 
 int Fl_Input::handle(int event) {
   static int dnd_save_position, dnd_save_mark, drag_start = -1, newpos;
-  static Fl_Widget *dnd_save_focus;
+  static fltk3::Widget *dnd_save_focus;
   switch (event) {
     case fltk3::FOCUS:
       switch (Fl::event_key()) {

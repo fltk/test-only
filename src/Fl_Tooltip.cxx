@@ -63,7 +63,7 @@ public:
   }
 };
 
-Fl_Widget* Fl_Tooltip::widget_ = 0;
+fltk3::Widget* Fl_Tooltip::widget_ = 0;
 static Fl_TooltipBox *window = 0;
 static int Y,H;
 
@@ -85,7 +85,7 @@ void Fl_TooltipBox::layout() {
   // find position on the screen of the widget:
   int ox = Fl::event_x_root();
   int oy = Y + H+2;
-  for (Fl_Widget* p = Fl_Tooltip::current(); p; p = p->window()) {
+  for (fltk3::Widget* p = Fl_Tooltip::current(); p; p = p->window()) {
     oy += p->y();
   }
   int scr_x, scr_y, scr_w, scr_h;
@@ -139,7 +139,7 @@ static void tooltip_timeout(void*) {
     if ( condition ) {
       if (!window) window = new Fl_TooltipBox;
       // this cast bypasses the normal Fl_Window label() code:
-      ((Fl_Widget*)window)->label(tip);
+      ((fltk3::Widget*)window)->label(tip);
       window->layout();
       window->redraw();
   //    printf("tooltip_timeout: Showing window %p with tooltip \"%s\"...\n",
@@ -162,14 +162,14 @@ static void tooltip_timeout(void*) {
    if you want the tooltip to reappear when the mouse moves back in)
    call the fancier enter_area() below.
 */
-void Fl_Tooltip::enter_(Fl_Widget* w) {
+void Fl_Tooltip::enter_(fltk3::Widget* w) {
 #ifdef DEBUG
   printf("Fl_Tooltip::enter_(w=%p)\n", w);
   printf("    window=%p\n", window);
 #endif // DEBUG
 
   // find the enclosing group with a tooltip:
-  Fl_Widget* tw = w;
+  fltk3::Widget* tw = w;
   for (;;) {
     if (!tw) {exit_(0); return;}
     if (tw == widget_) return;
@@ -185,14 +185,14 @@ void Fl_Tooltip::enter_(Fl_Widget* w) {
      a modal overlapping window is deleted. FLTK does this automatically
      when you click the mouse button.
 */
-void Fl_Tooltip::current(Fl_Widget* w) {
+void Fl_Tooltip::current(fltk3::Widget* w) {
 #ifdef DEBUG
   printf("Fl_Tooltip::current(w=%p)\n", w);
 #endif // DEBUG
 
   exit_(0);
   // find the enclosing group with a tooltip:
-  Fl_Widget* tw = w;
+  fltk3::Widget* tw = w;
   for (;;) {
     if (!tw) return;
     if (tw->tooltip()) break;
@@ -204,7 +204,7 @@ void Fl_Tooltip::current(Fl_Widget* w) {
 
 // Hide any visible tooltip.
 /**  This method is called when the mouse pointer leaves a  widget. */
-void Fl_Tooltip::exit_(Fl_Widget *w) {
+void Fl_Tooltip::exit_(fltk3::Widget *w) {
 #ifdef DEBUG
   printf("Fl_Tooltip::exit_(w=%p)\n", w);
   printf("    widget=%p, window=%p\n", widget_, window);
@@ -236,7 +236,7 @@ void Fl_Tooltip::exit_(Fl_Widget *w) {
   where to put the tooltip), and the text of the tooltip (which must be
   a pointer to static data as it is not copied).
 */
-void Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char* t)
+void Fl_Tooltip::enter_area(fltk3::Widget* wid, int x,int y,int w,int h, const char* t)
 {
   (void)x;
   (void)w;
@@ -306,7 +306,7 @@ void Fl_Tooltip::set_enter_exit_once_() {
   \param[in] text New tooltip text (no copy is made)
   \see copy_tooltip(const char*), tooltip()
 */
-void Fl_Widget::tooltip(const char *text) {
+void fltk3::Widget::tooltip(const char *text) {
   Fl_Tooltip::set_enter_exit_once_();
   if (flags() & COPIED_TOOLTIP) {
     // reassigning a copied tooltip remains the same copied tooltip
@@ -332,7 +332,7 @@ void Fl_Widget::tooltip(const char *text) {
   \param[in] text New tooltip text (an internal copy is made and managed)
   \see tooltip(const char*), tooltip()
 */
-void Fl_Widget::copy_tooltip(const char *text) {
+void fltk3::Widget::copy_tooltip(const char *text) {
   Fl_Tooltip::set_enter_exit_once_();
   if (flags() & COPIED_TOOLTIP) free((void *)(tooltip_));
   if (text) {

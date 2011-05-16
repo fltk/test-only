@@ -47,7 +47,7 @@
   future.  You should directly call 
   Fl::add_timeout() instead.
 */
-class FL_EXPORT Fl_Timer : public Fl_Widget {
+class FL_EXPORT Fl_Timer : public fltk3::Widget {
   static void stepcb(void *);
   void step();
   char on, direction_;

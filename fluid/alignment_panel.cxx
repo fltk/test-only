@@ -71,7 +71,7 @@ Fl_Double_Window* make_project_window() {
     } // Fl_Button* o
     { Fl_Tabs* o = new Fl_Tabs(10, 10, 378, 195);
       o->selection_color((fltk3::Color)12);
-      { Fl_Group* o = new Fl_Group(10, 36, 378, 169, "Output");
+      { fltk3::Group* o = new fltk3::Group(10, 36, 378, 169, "Output");
         o->hide();
         { fltk3::Box* o = new fltk3::Box(100, 49, 236, 49, "Use \"name.ext\" to set a file name or just \".ext\" to set extension.");
           o->align(fltk3::Align(fltk3::ALIGN_WRAP|fltk3::ALIGN_INSIDE));
@@ -103,8 +103,8 @@ Fl_Double_Window* make_project_window() {
           use_FL_COMMAND_button->callback((Fl_Callback*)use_FL_COMMAND_button_cb);
         } // Fl_Check_Button* use_FL_COMMAND_button
         o->end();
-      } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(10, 36, 378, 169, "Internationalization");
+      } // fltk3::Group* o
+      { fltk3::Group* o = new fltk3::Group(10, 36, 378, 169, "Internationalization");
         { i18n_type_chooser = new Fl_Choice(100, 48, 136, 25, "Use:");
           i18n_type_chooser->tooltip("Type of internationalization to use.");
           i18n_type_chooser->box(fltk3::THIN_UP_BOX);
@@ -143,7 +143,7 @@ Fl_Double_Window* make_project_window() {
           i18n_function_input->callback((Fl_Callback*)i18n_text_cb);
         } // Fl_Input* i18n_function_input
         o->end();
-      } // Fl_Group* o
+      } // fltk3::Group* o
       o->end();
     } // Fl_Tabs* o
     project_window->set_modal();
@@ -221,7 +221,7 @@ Fl_Double_Window* make_settings_window() {
       scheme_choice->value(s);
       scheme_cb(0, 0);
     } // Fl_Choice* scheme_choice
-    { Fl_Group* o = new Fl_Group(116, 43, 220, 126);
+    { fltk3::Group* o = new fltk3::Group(116, 43, 220, 126);
       o->labelfont(1);
       o->align(fltk3::Align(fltk3::ALIGN_CENTER));
       { fltk3::Box* o = new fltk3::Box(116, 43, 1, 25, "Options: ");
@@ -264,7 +264,7 @@ Fl_Double_Window* make_settings_window() {
         show_comments_button->value(show_comments);
       } // Fl_Check_Button* show_comments_button
       o->end();
-    } // Fl_Group* o
+    } // fltk3::Group* o
     { recent_spinner = new Fl_Spinner(115, 173, 40, 25, "# Recent Files: ");
       recent_spinner->labelfont(1);
       recent_spinner->callback((Fl_Callback*)cb_recent_spinner);
@@ -367,7 +367,7 @@ Fl_Double_Window* make_shell_window() {
     { shell_run_display = new Fl_Text_Display(10, 10, 535, 375);
       shell_run_display->box(fltk3::DOWN_BOX);
       shell_run_display->textfont(4);
-      Fl_Group::current()->resizable(shell_run_display);
+      fltk3::Group::current()->resizable(shell_run_display);
       shell_run_buffer = new Fl_Text_Buffer();
       shell_run_display->buffer(shell_run_buffer);
     } // Fl_Text_Display* shell_run_display
@@ -438,7 +438,7 @@ Fl_Double_Window* make_layout_window() {
       o->labelfont(1);
       o->align(fltk3::Align(fltk3::ALIGN_RIGHT|fltk3::ALIGN_INSIDE));
     } // fltk3::Box* o
-    { Fl_Group* o = new Fl_Group(105, 115, 170, 75);
+    { fltk3::Group* o = new fltk3::Group(105, 115, 170, 75);
       { def_widget_size[0] = new Fl_Round_Button(105, 115, 70, 25);
         def_widget_size[0]->type(102);
         def_widget_size[0]->down_box(fltk3::ROUND_DOWN_BOX);
@@ -493,7 +493,7 @@ Fl_Double_Window* make_layout_window() {
         o->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
       } // fltk3::Box* o
       o->end();
-    } // Fl_Group* o
+    } // fltk3::Group* o
     grid_window->set_non_modal();
     grid_window->end();
   } // Fl_Double_Window* grid_window
@@ -667,7 +667,7 @@ global_settings_window->hide();
 Fl_Double_Window* make_global_settings_window() {
   { global_settings_window = new Fl_Double_Window(403, 317, "FLTK Preferences");
     global_settings_window->color(fltk3::LIGHT1);
-    { Fl_Group* o = new Fl_Group(10, 10, 380, 100, "Keyboard Focus Options");
+    { fltk3::Group* o = new fltk3::Group(10, 10, 380, 100, "Keyboard Focus Options");
       o->box(fltk3::GTK_DOWN_BOX);
       o->labelfont(2);
       o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE));
@@ -691,8 +691,8 @@ hen switched off, the cursor will stop at the end of the text. Pressing Tab or\
         wArrowFocus->menu(menu_wArrowFocus);
       } // Fl_Choice* wArrowFocus
       o->end();
-    } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(10, 120, 380, 65, "Tooltip Options");
+    } // fltk3::Group* o
+    { fltk3::Group* o = new fltk3::Group(10, 120, 380, 65, "Tooltip Options");
       o->box(fltk3::GTK_DOWN_BOX);
       o->labelfont(2);
       o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE));
@@ -705,8 +705,8 @@ ves the widget. If disabled, no tooltip is shown.\n\nDefault is on.");
         wShowTooltips->menu(menu_wShowTooltips);
       } // Fl_Choice* wShowTooltips
       o->end();
-    } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(10, 194, 380, 66, "Drag And Drop Options");
+    } // fltk3::Group* o
+    { fltk3::Group* o = new fltk3::Group(10, 194, 380, 66, "Drag And Drop Options");
       o->box(fltk3::GTK_DOWN_BOX);
       o->labelfont(2);
       o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE));
@@ -719,7 +719,7 @@ dropping text from other applications still works.\n\nDefault is on.");
         wDNDText->menu(menu_wDNDText);
       } // Fl_Choice* wDNDText
       o->end();
-    } // Fl_Group* o
+    } // fltk3::Group* o
     { wUserOrSystem = new Fl_Choice(14, 275, 141, 25);
       wUserOrSystem->tooltip("Change settings for the current user, or default values for all users of this\
  computer. Individual users can override system options, if they set their opt\

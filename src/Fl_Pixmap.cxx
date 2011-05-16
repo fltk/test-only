@@ -254,7 +254,7 @@ void Fl_Pixmap::uncache() {
   }
 }
 
-void Fl_Pixmap::label(Fl_Widget* widget) {
+void Fl_Pixmap::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 

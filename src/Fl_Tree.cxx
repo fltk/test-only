@@ -33,7 +33,7 @@
 //
 
 // INTERNAL: scroller callback
-static void scroll_cb(Fl_Widget*,void *data) {
+static void scroll_cb(fltk3::Widget*,void *data) {
   ((Fl_Tree*)data)->redraw();
 }
 
@@ -95,7 +95,7 @@ static int find_total_children(Fl_Tree_Item *item, int count=0) {
 }
 
 /// Constructor.
-Fl_Tree::Fl_Tree(int X, int Y, int W, int H, const char *L) : Fl_Group(X,Y,W,H,L) { 
+Fl_Tree::Fl_Tree(int X, int Y, int W, int H, const char *L) : fltk3::Group(X,Y,W,H,L) { 
   _root = new Fl_Tree_Item(_prefs);
   _root->parent(0);				// we are root of tree
   _root->label("ROOT");
@@ -268,8 +268,8 @@ void Fl_Tree::draw() {
   // We handle drawing children ourselves by calling each item's draw()
   //
   // Handle group's bg
-  Fl_Group::draw_box();
-  Fl_Group::draw_label();
+  fltk3::Group::draw_box();
+  fltk3::Group::draw_label();
   // Handle tree
   if ( ! _root ) return;
   int cx = x() + Fl::box_dx(box());
@@ -316,7 +316,7 @@ void Fl_Tree::draw() {
     _vscroll->hide();
   }
   fl_push_clip(cx,cy,cw,ch);
-  Fl_Group::draw_children();	// draws any FLTK children set via Fl_Tree::widget()
+  fltk3::Group::draw_children();	// draws any FLTK children set via Fl_Tree::widget()
   fl_pop_clip();
 }
 
@@ -616,8 +616,8 @@ int Fl_Tree::handle(int e) {
     }
   }
   
-  // Let Fl_Group take a shot at handling the event
-  if (Fl_Group::handle(e)) {
+  // Let fltk3::Group take a shot at handling the event
+  if (fltk3::Group::handle(e)) {
     return(1);			// handled? don't continue below
   }
   

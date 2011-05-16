@@ -45,7 +45,7 @@ void set_modflag(int mf);
 class Fl_Type {
 
   friend class Widget_Browser;
-  friend Fl_Widget *make_type_browser(int,int,int,int,const char *l=0);
+  friend fltk3::Widget *make_type_browser(int,int,int,int,const char *l=0);
   friend class Fl_Window_Type;
   virtual void setlabel(const char *); // virtual part of label(char*)
 
@@ -130,7 +130,7 @@ public:
   void write_comment_c(const char *ind=""); // write the commentary text into the source file
 
   // live mode
-  virtual Fl_Widget *enter_live_mode(int top=0); // build wdgets needed for live mode
+  virtual fltk3::Widget *enter_live_mode(int top=0); // build wdgets needed for live mode
   virtual void leave_live_mode(); // free allocated resources
   virtual void copy_properties(); // copy properties from this type into a potetial live object
 
@@ -331,7 +331,7 @@ private:
 #define NUM_EXTRA_CODE 4
 
 class Fl_Widget_Type : public Fl_Type {
-  virtual Fl_Widget *widget(int,int,int,int) = 0;
+  virtual fltk3::Widget *widget(int,int,int,int) = 0;
   virtual Fl_Widget_Type *_make() = 0; // virtual constructor
   virtual void setlabel(const char *);
 
@@ -351,13 +351,13 @@ protected:
   void write_block_close();
   void write_code2();
   void write_color(const char*, fltk3::Color);
-  Fl_Widget *live_widget;
+  fltk3::Widget *live_widget;
 
 public:
   static int default_size;
 
   const char *xclass; // junk string, used for shortcut
-  Fl_Widget *o;
+  fltk3::Widget *o;
   int public_;
 
   Fluid_Image *image;
@@ -394,7 +394,7 @@ public:
   virtual void read_property(const char *);
   virtual int read_fdesign(const char*, const char*);
 
-  virtual Fl_Widget *enter_live_mode(int top=0);
+  virtual fltk3::Widget *enter_live_mode(int top=0);
   virtual void leave_live_mode();
   virtual void copy_properties();
 
@@ -409,33 +409,33 @@ public:
 #include <fltk3/PackedGroup.h>
 #include <fltk3/WizardGroup.h>
 
-class igroup : public Fl_Group {
+class igroup : public fltk3::Group {
 public:
   void resize(int,int,int,int);
-  void full_resize(int X, int Y, int W, int H) { Fl_Group::resize(X, Y, W, H); }
-  igroup(int X,int Y,int W,int H) : Fl_Group(X,Y,W,H) {Fl_Group::current(0);}
+  void full_resize(int X, int Y, int W, int H) { fltk3::Group::resize(X, Y, W, H); }
+  igroup(int X,int Y,int W,int H) : fltk3::Group(X,Y,W,H) {fltk3::Group::current(0);}
 };
 
 class itabs : public Fl_Tabs {
 public:
   void resize(int,int,int,int);
-  void full_resize(int X, int Y, int W, int H) { Fl_Group::resize(X, Y, W, H); }
+  void full_resize(int X, int Y, int W, int H) { fltk3::Group::resize(X, Y, W, H); }
   itabs(int X,int Y,int W,int H) : Fl_Tabs(X,Y,W,H) {}
 };
 
 class iwizard : public Fl_Wizard {
 public:
   void resize(int,int,int,int);
-  void full_resize(int X, int Y, int W, int H) { Fl_Group::resize(X, Y, W, H); }
+  void full_resize(int X, int Y, int W, int H) { fltk3::Group::resize(X, Y, W, H); }
   iwizard(int X,int Y,int W,int H) : Fl_Wizard(X,Y,W,H) {}
 };
 
 class Fl_Group_Type : public Fl_Widget_Type {
 public:
-  virtual const char *type_name() {return "Fl_Group";}
+  virtual const char *type_name() {return "fltk3::Group";}
   virtual const char *alt_type_name() {return "fltk::Group";}
-  Fl_Widget *widget(int X,int Y,int W,int H) {
-    igroup *g = new igroup(X,Y,W,H); Fl_Group::current(0); return g;}
+  fltk3::Widget *widget(int X,int Y,int W,int H) {
+    igroup *g = new igroup(X,Y,W,H); fltk3::Group::current(0); return g;}
   Fl_Widget_Type *_make() {return new Fl_Group_Type();}
   Fl_Type *make();
   void write_code1();
@@ -447,7 +447,7 @@ public:
   int is_group() const {return 1;}
   int pixmapID() { return 6; }
 
-  virtual Fl_Widget *enter_live_mode(int top=0);
+  virtual fltk3::Widget *enter_live_mode(int top=0);
   virtual void leave_live_mode();
   virtual void copy_properties();
 };
@@ -472,9 +472,9 @@ public:
   virtual const char *type_name() {return table_type_name;}
   virtual const char *alt_type_name() {return "fltk::TableGroup";}
   Fl_Widget_Type *_make() {return new Fl_Table_Type();}
-  Fl_Widget *widget(int X,int Y,int W,int H);
+  fltk3::Widget *widget(int X,int Y,int W,int H);
   int pixmapID() { return 51; }
-  virtual Fl_Widget *enter_live_mode(int top=0);
+  virtual fltk3::Widget *enter_live_mode(int top=0);
   void add_child(Fl_Type*, Fl_Type*);
   void move_child(Fl_Type*, Fl_Type*);
   void remove_child(Fl_Type*);
@@ -491,14 +491,14 @@ public:
   }
   virtual const char *type_name() {return tabs_type_name;}
   virtual const char *alt_type_name() {return "fltk::TabGroup";}
-  Fl_Widget *widget(int X,int Y,int W,int H) {
-    itabs *g = new itabs(X,Y,W,H); Fl_Group::current(0); return g;}
+  fltk3::Widget *widget(int X,int Y,int W,int H) {
+    itabs *g = new itabs(X,Y,W,H); fltk3::Group::current(0); return g;}
   Fl_Widget_Type *_make() {return new Fl_Tabs_Type();}
   Fl_Type* click_test(int,int);
   void add_child(Fl_Type*, Fl_Type*);
   void remove_child(Fl_Type*);
   int pixmapID() { return 13; }
-  Fl_Widget *enter_live_mode(int top=0);
+  fltk3::Widget *enter_live_mode(int top=0);
 };
 
 extern const char scroll_type_name[];
@@ -511,7 +511,7 @@ public:
   virtual const char *alt_type_name() {return "fltk::ScrollGroup";}
   Fl_Widget_Type *_make() {return new Fl_Scroll_Type();}
   int pixmapID() { return 19; }
-  Fl_Widget *enter_live_mode(int top=0);
+  fltk3::Widget *enter_live_mode(int top=0);
   void copy_properties();
 };
 
@@ -532,8 +532,8 @@ class Fl_Wizard_Type : public Fl_Group_Type {
 public:
   virtual const char *type_name() {return wizard_type_name;}
   virtual const char *alt_type_name() {return "fltk::WizardGroup";}
-  Fl_Widget *widget(int X,int Y,int W,int H) {
-    iwizard *g = new iwizard(X,Y,W,H); Fl_Group::current(0); return g;}
+  fltk3::Widget *widget(int X,int Y,int W,int H) {
+    iwizard *g = new iwizard(X,Y,W,H); fltk3::Group::current(0); return g;}
   Fl_Widget_Type *_make() {return new Fl_Wizard_Type();}
   int pixmapID() { return 21; }
 };
@@ -562,7 +562,7 @@ protected:
   void write_code1();
   void write_code2();
   Fl_Widget_Type *_make() {return 0;} // we don't call this
-  Fl_Widget *widget(int,int,int,int) {return 0;}
+  fltk3::Widget *widget(int,int,int,int) {return 0;}
   int recalc;		// set by fix_overlay()
   void moveallchildren();
   int pixmapID() { return 1; }
@@ -593,7 +593,7 @@ public:
   int is_group() const {return 1;}
   int is_window() const {return 1;}
 
-  Fl_Widget *enter_live_mode(int top=0);
+  fltk3::Widget *enter_live_mode(int top=0);
   void leave_live_mode();
   void copy_properties();
 
@@ -608,7 +608,7 @@ public:
   }
   // state variables for output:
   char write_public_state; // true when public: has been printed
-  char wc_relative; // if true, reposition all child widgets in an Fl_Group
+  char wc_relative; // if true, reposition all child widgets in an fltk3::Group
 
   virtual void write_properties();
   virtual void read_property(const char *);
@@ -635,7 +635,7 @@ public:
   Fl_Type* make();
   int is_menu_item() const {return 1;}
   int is_button() const {return 1;} // this gets shortcut to work
-  Fl_Widget* widget(int,int,int,int) {return 0;}
+  fltk3::Widget* widget(int,int,int,int) {return 0;}
   Fl_Widget_Type* _make() {return 0;}
   const char* menu_name(int& i);
   int flags();
@@ -708,7 +708,7 @@ public:
   }
   virtual const char *type_name() {return "Fl_Menu_Button";}
   virtual const char *alt_type_name() {return "fltk::MenuButton";}
-  Fl_Widget *widget(int X,int Y,int W,int H) {
+  fltk3::Widget *widget(int X,int Y,int W,int H) {
     return new Fl_Menu_Button(X,Y,W,H,"menu");}
   Fl_Widget_Type *_make() {return new Fl_Menu_Button_Type();}
   int pixmapID() { return 26; }
@@ -732,7 +732,7 @@ public:
   }
   virtual const char *type_name() {return "Fl_Choice";}
   virtual const char *alt_type_name() {return "fltk::Choice";}
-  Fl_Widget *widget(int X,int Y,int W,int H) {
+  fltk3::Widget *widget(int X,int Y,int W,int H) {
     Fl_Choice *myo = new Fl_Choice(X,Y,W,H,"choice:");
     myo->menu(dummymenu);
     return myo;
@@ -768,7 +768,7 @@ public:
   virtual const char *type_name() {return "Fl_Input_Choice";}
   virtual const char *alt_type_name() {return "fltk::ComboBox";}
   virtual Fl_Type* click_test(int,int);
-  Fl_Widget *widget(int X,int Y,int W,int H) {
+  fltk3::Widget *widget(int X,int Y,int W,int H) {
     Fl_Input_Choice *myo = new Fl_Input_Choice(X,Y,W,H,"input choice:");
     myo->menu(dummymenu);
     myo->value("input");
@@ -791,12 +791,12 @@ public:
   }
   virtual const char *type_name() {return "Fl_Menu_Bar";}
   virtual const char *alt_type_name() {return "fltk::MenuBar";}
-  Fl_Widget *widget(int X,int Y,int W,int H) {return new Fl_Menu_Bar(X,Y,W,H);}
+  fltk3::Widget *widget(int X,int Y,int W,int H) {return new Fl_Menu_Bar(X,Y,W,H);}
   Fl_Widget_Type *_make() {return new Fl_Menu_Bar_Type();}
   int pixmapID() { return 17; }
 };
 // object list operations:
-Fl_Widget *make_widget_browser(int X,int Y,int W,int H);
+fltk3::Widget *make_widget_browser(int X,int Y,int W,int H);
 extern int modflag;
 void delete_all(int selected_only=0);
 void selection_changed(Fl_Type* new_current);

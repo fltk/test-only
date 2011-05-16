@@ -64,7 +64,7 @@
   <LI>Fl_Scroll::BOTH_ALWAYS       - Both always on. </LI>
   </UL>
 
-  Use <B> scrollbar.align(int) ( see void Fl_Widget::align(fltk3::Align) ) :</B>
+  Use <B> scrollbar.align(int) ( see void fltk3::Widget::align(fltk3::Align) ) :</B>
   to change what side the scrollbars are drawn on.
 
   If the fltk3::ALIGN_LEFT bit is on, the vertical scrollbar is on the left.
@@ -93,13 +93,13 @@
   clipping is not conveyed to it when drawn, and it will draw over the
   scrollbars and neighboring objects.</I>
 */
-class FL_EXPORT Fl_Scroll : public Fl_Group {
+class FL_EXPORT Fl_Scroll : public fltk3::Group {
 
   int xposition_, yposition_;
   int oldx, oldy;
   int scrollbar_size_;
-  static void hscrollbar_cb(Fl_Widget*, void*);
-  static void scrollbar_cb(Fl_Widget*, void*);
+  static void hscrollbar_cb(fltk3::Widget*, void*);
+  static void scrollbar_cb(fltk3::Widget*, void*);
   void fix_scrollbar_order();
   static void draw_clip(void*,int,int,int,int);
 

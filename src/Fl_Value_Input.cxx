@@ -27,7 +27,7 @@
 
 // FLTK widget for drag-adjusting a floating point value.
 // Warning: this works by making a child Fl_Input object, even
-// though this object is *not* an Fl_Group.  May be a kludge?
+// though this object is *not* an fltk3::Group.  May be a kludge?
 
 #include <fltk3/run.h>
 #include <fltk3/ValueInput.h>
@@ -36,7 +36,7 @@
 #include <fltk3/math.h>
 
 
-void Fl_Value_Input::input_cb(Fl_Widget*, void* v) {
+void Fl_Value_Input::input_cb(fltk3::Widget*, void* v) {
   Fl_Value_Input& t = *(Fl_Value_Input*)v;
   double nv;
   if ((t.step() - floor(t.step()))>0.0 || t.step() == 0.0) nv = strtod(t.input.value(), 0);
@@ -52,7 +52,7 @@ void Fl_Value_Input::draw() {
   if (damage()&~fltk3::DAMAGE_CHILD) input.clear_damage(fltk3::DAMAGE_ALL);
   input.box(box());
   input.color(color(), selection_color());
-  Fl_Widget *i = &input; i->draw(); // calls protected input.draw()
+  fltk3::Widget *i = &input; i->draw(); // calls protected input.draw()
   input.clear_damage();
 }
 
@@ -127,7 +127,7 @@ Fl_Value_Input::Fl_Value_Input(int X, int Y, int W, int H, const char* l)
   soft_ = 0;
   if (input.parent())  // defeat automatic-add
     input.parent()->remove(input);
-  input.parent((Fl_Group *)this); // kludge!
+  input.parent((fltk3::Group *)this); // kludge!
   input.callback(input_cb, this);
   input.when(fltk3::WHEN_CHANGED);
   box(input.box());
@@ -140,7 +140,7 @@ Fl_Value_Input::Fl_Value_Input(int X, int Y, int W, int H, const char* l)
 
 Fl_Value_Input::~Fl_Value_Input() {
 
-  if (input.parent() == (Fl_Group *)this)
+  if (input.parent() == (fltk3::Group *)this)
     input.parent(0);   // *revert* ctor kludge!
 }
 

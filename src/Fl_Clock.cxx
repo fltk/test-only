@@ -155,7 +155,7 @@ void Fl_Clock_Output::value(ulong v) {
   \param[in] L widget label, default is no label
  */
 Fl_Clock_Output::Fl_Clock_Output(int X, int Y, int W, int H, const char *L)
-: Fl_Widget(X, Y, W, H, L) {
+: fltk3::Widget(X, Y, W, H, L) {
   box(fltk3::UP_BOX);
   selection_color(fltk3::grayRamp(5));
   align(fltk3::ALIGN_BOTTOM);

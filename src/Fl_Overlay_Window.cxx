@@ -151,9 +151,9 @@ void Fl_Overlay_Window::redraw_overlay() {
   if (!fl_display) return; // this prevents fluid -c from opening display
   if (!overlay_) {
     if (can_do_overlay()) {
-      Fl_Group::current(this);
+      fltk3::Group::current(this);
       overlay_ = new _Fl_Overlay(0,0,w(),h());
-      Fl_Group::current(0);
+      fltk3::Group::current(0);
     } else {
       overlay_ = this;	// fake the overlay
     }

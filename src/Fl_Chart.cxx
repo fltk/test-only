@@ -292,7 +292,7 @@ void Fl_Chart::draw() {
   \param[in] L widget label, default is no label
  */
 Fl_Chart::Fl_Chart(int X, int Y, int W, int H,const char *L) :
-Fl_Widget(X,Y,W,H,L) {
+fltk3::Widget(X,Y,W,H,L) {
   box(fltk3::BORDER_BOX);
   align(fltk3::ALIGN_BOTTOM);
   numb       = 0;

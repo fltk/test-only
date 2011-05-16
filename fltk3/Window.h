@@ -44,9 +44,9 @@ class Fl_X;
   or a "subwindow" inside a window.  This is controlled by whether or not
   the window has a parent().
 
-  Once you create a window, you usually add children Fl_Widget
+  Once you create a window, you usually add children fltk3::Widget
   's to it by using window->add(child) for each new widget.
-  See Fl_Group for more information on how to add and remove children.
+  See fltk3::Group for more information on how to add and remove children.
 
   There are several subclasses of Fl_Window that provide
   double-buffering, overlay, menu, and OpenGL support.
@@ -55,7 +55,7 @@ class Fl_X;
   using the window manager and Fl::modal() is zero or equal to the
   window. Fl_Window has a default callback that calls Fl_Window::hide().
 */
-class FL_EXPORT Fl_Window : public Fl_Group {
+class FL_EXPORT Fl_Window : public fltk3::Group {
 
   static char *default_xclass_;
 
@@ -113,7 +113,7 @@ public:
 
   /**
     Creates a window from the given size and title. 
-    If Fl_Group::current() is not NULL, the window is created as a 
+    If fltk3::Group::current() is not NULL, the window is created as a 
     subwindow of the parent window.
     
     The (w,h) form of the constructor creates a top-level window
@@ -132,7 +132,7 @@ public:
     have visible() set to 1 and parent() set to
     the parent window pointer.
     
-    Fl_Widget::box() defaults to fltk3::FLAT_BOX. If you plan to
+    fltk3::Widget::box() defaults to fltk3::FLAT_BOX. If you plan to
     completely fill the window with children widgets you should
     change this to fltk3::NO_BOX. If you turn the window border off
     you may want to change this to fltk3::UP_BOX.
@@ -162,9 +162,9 @@ public:
     these changes are communicated to the window server (which may
     refuse that size and cause a further resize).  If shown() is
     false, the size and position are used when show() is called.
-    See Fl_Group for the effect of resizing on the child widgets.
+    See fltk3::Group for the effect of resizing on the child widgets.
 
-    You can also call the Fl_Widget methods size(x,y) and position(w,h),
+    You can also call the fltk3::Widget methods size(x,y) and position(w,h),
     which are inline wrappers for this virtual function.
 
     A top-level window can not force, but merely suggest a position and 
@@ -262,9 +262,9 @@ public:
   */
   void hotspot(int x, int y, int offscreen = 0);
   /** See void Fl_Window::hotspot(int x, int y, int offscreen = 0) */
-  void hotspot(const Fl_Widget*, int offscreen = 0);
+  void hotspot(const fltk3::Widget*, int offscreen = 0);
   /** See void Fl_Window::hotspot(int x, int y, int offscreen = 0) */
-  void hotspot(const Fl_Widget& p, int offscreen = 0) {hotspot(&p,offscreen);}
+  void hotspot(const fltk3::Widget& p, int offscreen = 0) {hotspot(&p,offscreen);}
 
   /**
     Undoes the effect of a previous resize() or show() so that the next time
@@ -315,7 +315,7 @@ public:
     minw=a; minh=b; maxw=c; maxh=d; dw=e; dh=f; aspect=g; size_range_();}
 
   /** See void Fl_Window::label(const char*)   */
-  const char* label() const	{return Fl_Widget::label();}
+  const char* label() const	{return fltk3::Widget::label();}
   /**  See void Fl_Window::iconlabel(const char*)   */
   const char* iconlabel() const	{return iconlabel_;}
   /** Sets the window title bar label. */

@@ -231,6 +231,9 @@ rename fl_darker darker
 rename fl_rgb_color rgbColor
 rename fl_gray_ramp grayRamp
 
+renameClass Fl_Widget Widget
+renameClass Fl_Group Group
+renameClass Fl_Window Window
 
 
 

@@ -32,7 +32,7 @@
 #define Fl_Bitmap_H
 #  include "Image.h"
 
-class Fl_Widget;
+namespace fltk3 { class Widget; }
 struct Fl_Menu_Item;
 
 /**
@@ -73,7 +73,7 @@ public:
   Fl_Image *copy() { return copy(w(), h()); }
   virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
   void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
-  virtual void label(Fl_Widget*w);
+  virtual void label(fltk3::Widget*w);
   virtual void label(Fl_Menu_Item*m);
   virtual void uncache();
 };

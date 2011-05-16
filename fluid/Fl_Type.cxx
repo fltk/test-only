@@ -197,7 +197,7 @@ public:
 };
 
 static Widget_Browser *widget_browser;
-Fl_Widget *make_widget_browser(int x,int y,int w,int h) {
+fltk3::Widget *make_widget_browser(int x,int y,int w,int h) {
   return (widget_browser = new Widget_Browser(x,y,w,h));
 }
 
@@ -218,14 +218,14 @@ void deselect() {
 Fl_Type *Fl_Type::first;
 Fl_Type *Fl_Type::last;
 
-static void Widget_Browser_callback(Fl_Widget *o,void *) {
+static void Widget_Browser_callback(fltk3::Widget *o,void *) {
   ((Widget_Browser *)o)->callback();
 }
 
 Widget_Browser::Widget_Browser(int X,int Y,int W,int H,const char*l)
 : Fl_Browser_(X,Y,W,H,l) {
   type(FL_MULTI_BROWSER);
-  Fl_Widget::callback(Widget_Browser_callback);
+  fltk3::Widget::callback(Widget_Browser_callback);
   when(fltk3::WHEN_RELEASE);
 }
 
@@ -696,7 +696,7 @@ int Fl_CodeBlock_Type::is_public()const { return -1; }
 
 Fl_Type *in_this_only; // set if menu popped-up in window
 
-void select_all_cb(Fl_Widget *,void *) {
+void select_all_cb(fltk3::Widget *,void *) {
   Fl_Type *p = Fl_Type::current ? Fl_Type::current->parent : 0;
   if (in_this_only) {
     Fl_Type *t = p;
@@ -720,7 +720,7 @@ void select_all_cb(Fl_Widget *,void *) {
   selection_changed(p);
 }
 
-void select_none_cb(Fl_Widget *,void *) {
+void select_none_cb(fltk3::Widget *,void *) {
   Fl_Type *p = Fl_Type::current ? Fl_Type::current->parent : 0;
   if (in_this_only) {
     Fl_Type *t = p;
@@ -793,7 +793,7 @@ void Fl_Type::move_before(Fl_Type* g) {
 }
 
 // move selected widgets in their parent's list:
-void earlier_cb(Fl_Widget*,void*) {
+void earlier_cb(fltk3::Widget*,void*) {
   Fl_Type *f;
   int mod = 0;
   for (f = Fl_Type::first; f; ) {
@@ -811,7 +811,7 @@ void earlier_cb(Fl_Widget*,void*) {
   if (mod) set_modflag(1);
 }
 
-void later_cb(Fl_Widget*,void*) {
+void later_cb(fltk3::Widget*,void*) {
   Fl_Type *f;
   int mod = 0;
   for (f = Fl_Type::last; f; ) {
@@ -991,7 +991,7 @@ void reveal_in_browser(Fl_Type *t) {
  * \return a widget pointer that the live mode initiator can 'show()'
  * \see leave_live_mode()
  */
-Fl_Widget *Fl_Type::enter_live_mode(int) {
+fltk3::Widget *Fl_Type::enter_live_mode(int) {
   return 0L;
 }
 

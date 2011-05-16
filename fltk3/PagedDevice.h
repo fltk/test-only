@@ -108,7 +108,7 @@ public:
    */
   static const page_format page_formats[NO_PAGE_FORMATS];  
 private:
-  void traverse(Fl_Widget *widget); // finds subwindows of widget and prints them
+  void traverse(fltk3::Widget *widget); // finds subwindows of widget and prints them
 protected:
   /** \brief horizontal offset to the origin of graphics coordinates */
   int x_offset;
@@ -131,7 +131,7 @@ public:
   virtual void rotate(float angle);
   virtual void translate(int x, int y);
   virtual void untranslate(void);
-  virtual void print_widget(Fl_Widget* widget, int delta_x = 0, int delta_y = 0);
+  virtual void print_widget(fltk3::Widget* widget, int delta_x = 0, int delta_y = 0);
   /** Prints a window with its title bar and frame if any.
    
    \p x_offset and \p y_offset are optional coordinates of where to position the window top left.

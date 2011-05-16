@@ -78,7 +78,7 @@ struct FL_CHART_ENTRY {
          separated from the pie.
   \li \c FL_SPIKE_CHART: Each sample value is drawn as a vertical line.
  */
-class FL_EXPORT Fl_Chart : public Fl_Widget {
+class FL_EXPORT Fl_Chart : public fltk3::Widget {
     int numb;
     int maxnumb;
     int sizenumb;
@@ -116,7 +116,7 @@ public:
      */
     int size() const {return numb;}
 
-    void size(int W, int H) { Fl_Widget::size(W, H); }
+    void size(int W, int H) { fltk3::Widget::size(W, H); }
 
     /**
       Gets the maximum number of data values for a chart.

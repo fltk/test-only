@@ -69,7 +69,7 @@ public:
   Fl_Input input;
 private:
   char soft_;
-  static void input_cb(Fl_Widget*,void*);
+  static void input_cb(fltk3::Widget*,void*);
   virtual void value_damage(); // cause damage() due to value() changing
 public:
   int handle(int);
