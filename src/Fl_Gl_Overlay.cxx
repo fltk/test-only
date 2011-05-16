@@ -113,8 +113,8 @@ void _Fl_Gl_Overlay::show() {
     Fl_X::make_xid(this, fl_overlay_visual, fl_overlay_colormap);
     fl_background_pixel = -1;
     // find the outermost window to tell wm about the colormap:
-    Fl_Window *w = window();
-    for (;;) {Fl_Window *w1 = w->window(); if (!w1) break; w = w1;}
+    fltk3::Window *w = window();
+    for (;;) {fltk3::Window *w1 = w->window(); if (!w1) break; w = w1;}
     XSetWMColormapWindows(fl_display, fl_xid(w), &(Fl_X::i(this)->xid), 1);
     context(fl_create_gl_context(fl_overlay_visual), 1);
     valid(0);

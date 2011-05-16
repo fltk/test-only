@@ -3,7 +3,7 @@
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
-// The widget describing an Fl_Window.  This is also all the code
+// The widget describing an fltk3::Window.  This is also all the code
 // for interacting with the overlay, which allows the user to
 // select, move, and resize the children widgets.
 //
@@ -110,7 +110,7 @@ void grid_cb(Fl_Int_Input *i, long v) {
   for (p = Fl_Type::first; p; p = p->next) {
     if (p->is_window()) {
       w = (Fl_Window_Type *)p;
-      ((Fl_Window *)(w->o))->size_range(gridx, gridy,
+      ((fltk3::Window *)(w->o))->size_range(gridx, gridy,
                                         Fl::w(), Fl::h(),
                                         gridx, gridy, 0);
     }
@@ -313,7 +313,7 @@ void Overlay_Window::draw() {
   Fl_Overlay_Window::draw();
 }
 
-extern Fl_Window *main_window;
+extern fltk3::Window *main_window;
 
 // Read an image of the overlay window
 uchar *Overlay_Window::read_image(int &ww, int &hh) {
@@ -370,12 +370,12 @@ Fl_Type *Fl_Window_Type::make() {
   }
   Fl_Window_Type *myo = new Fl_Window_Type();
   if (!this->o) {// template widget
-    this->o = new Fl_Window(100,100);
+    this->o = new fltk3::Window(100,100);
     fltk3::Group::current(0);
   }
   // Set the size ranges for this window; in order to avoid opening the
   // X display we use an arbitrary maximum size...
-  ((Fl_Window *)(this->o))->size_range(gridx, gridy,
+  ((fltk3::Window *)(this->o))->size_range(gridx, gridy,
                                        3072, 2048,
                                        gridx, gridy, 0);
   myo->factory = this;
@@ -394,21 +394,21 @@ void Fl_Window_Type::add_child(Fl_Type* cc, Fl_Type* before) {
   if (!cc->is_widget()) return;
   Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
   fltk3::Widget* b = before ? ((Fl_Widget_Type*)before)->o : 0;
-  ((Fl_Window*)o)->insert(*(c->o), b);
+  ((fltk3::Window*)o)->insert(*(c->o), b);
   o->redraw();
 }
 
 void Fl_Window_Type::remove_child(Fl_Type* cc) {
   Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
-  ((Fl_Window*)o)->remove(c->o);
+  ((fltk3::Window*)o)->remove(c->o);
   o->redraw();
 }
 
 void Fl_Window_Type::move_child(Fl_Type* cc, Fl_Type* before) {
   Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
-  ((Fl_Window*)o)->remove(c->o);
+  ((fltk3::Window*)o)->remove(c->o);
   fltk3::Widget* b = before ? ((Fl_Widget_Type*)before)->o : 0;
-  ((Fl_Window*)o)->insert(*(c->o), b);
+  ((fltk3::Window*)o)->insert(*(c->o), b);
   o->redraw();
 }
 
@@ -469,9 +469,9 @@ void border_cb(Fl_Light_Button* i, void* v) {
   if (v == LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
-    i->value(((Fl_Window*)(current_widget->o))->border());
+    i->value(((fltk3::Window*)(current_widget->o))->border());
   } else {
-    ((Fl_Window*)(current_widget->o))->border(i->value());
+    ((fltk3::Window*)(current_widget->o))->border(i->value());
     set_modflag(1);
   }
 }
@@ -494,7 +494,7 @@ void xclass_cb(Fl_Input* i, void* v) {
 	Fl_Widget_Type* w = (Fl_Widget_Type*)o;
 	if (w->is_window() || w->is_button())
 	  storestring(i->value(),w->xclass);
-	if (w->is_window()) ((Fl_Window*)(w->o))->xclass(w->xclass);
+	if (w->is_window()) ((fltk3::Window*)(w->o))->xclass(w->xclass);
 	else if (w->is_menu_item()) w->redraw();
       }
     }
@@ -505,7 +505,7 @@ void xclass_cb(Fl_Input* i, void* v) {
 ////////////////////////////////////////////////////////////////
 
 void Fl_Window_Type::setlabel(const char *n) {
-  if (o) ((Fl_Window *)o)->label(n);
+  if (o) ((fltk3::Window *)o)->label(n);
 }
 
 // make() is called on this widget when user picks window off New menu:
@@ -1293,7 +1293,7 @@ int Fl_Window_Type::handle(int event) {
     switch (Fl::event_key()) {
 
     case fltk3::EscapeKey:
-      ((Fl_Window*)o)->hide();
+      ((fltk3::Window*)o)->hide();
       return 1;
 
     case fltk3::TabKey: {
@@ -1362,7 +1362,7 @@ void Fl_Window_Type::write_code2() {
   write_extra_code();
   if (modal) write_c("%s%s->set_modal();\n", indent(), var);
   else if (non_modal) write_c("%s%s->set_non_modal();\n", indent(), var);
-  if (!((Fl_Window*)o)->border()) {
+  if (!((fltk3::Window*)o)->border()) {
     write_c("%s%s->clear_border();\n", indent(), var);
   }
   if (xclass) {
@@ -1377,7 +1377,7 @@ void Fl_Window_Type::write_code2() {
     write_c("%s%s->size_range(%d, %d);\n", indent(), var, sr_min_w, sr_min_h);
   }
   write_c("%s%s->end();\n", indent(), var);
-  if (((Fl_Window*)o)->resizable() == o)
+  if (((fltk3::Window*)o)->resizable() == o)
     write_c("%s%s->resizable(%s);\n", indent(), var, var);
   write_block_close();
 }
@@ -1386,7 +1386,7 @@ void Fl_Window_Type::write_properties() {
   Fl_Widget_Type::write_properties();
   if (modal) write_string("modal");
   else if (non_modal) write_string("non_modal");
-  if (!((Fl_Window*)o)->border()) write_string("noborder");
+  if (!((fltk3::Window*)o)->border()) write_string("noborder");
   if (xclass) {write_string("xclass"); write_word(xclass);}
   if (sr_min_w || sr_min_h || sr_max_w || sr_max_h)
     write_string("size_range {%d %d %d %d}", sr_min_w, sr_min_h, sr_max_w, sr_max_h);
@@ -1402,10 +1402,10 @@ void Fl_Window_Type::read_property(const char *c) {
   } else if (!strcmp(c, "visible")) {
     if (Fl::first_window()) open(); // only if we are using user interface
   } else if (!strcmp(c,"noborder")) {
-    ((Fl_Window*)o)->border(0);
+    ((fltk3::Window*)o)->border(0);
   } else if (!strcmp(c,"xclass")) {
     storestring(read_word(),xclass);
-    ((Fl_Window*)o)->xclass(xclass);
+    ((fltk3::Window*)o)->xclass(xclass);
   } else if (!strcmp(c,"size_range")) {
     int mw, mh, MW, MH;
     if (sscanf(read_word(),"%d %d %d %d",&mw,&mh,&MW,&MH) == 4) {
@@ -1429,7 +1429,7 @@ int Fl_Window_Type::read_fdesign(const char* propname, const char* value) {
   } else if (!strcmp(propname,"NumberofWidgets")) {
     return 1; // we can figure out count from file
   } else if (!strcmp(propname,"border")) {
-    if (sscanf(value,"%d",&x) == 1) ((Fl_Window*)o)->border(x);
+    if (sscanf(value,"%d",&x) == 1) ((fltk3::Window*)o)->border(x);
   } else if (!strcmp(propname,"title")) {
     label(value);
   } else {
@@ -1450,12 +1450,12 @@ Fl_Type *Fl_Widget_Class_Type::make() {
   myo->name("UserInterface");
 
   if (!this->o) {// template widget
-    this->o = new Fl_Window(100,100);
+    this->o = new fltk3::Window(100,100);
     fltk3::Group::current(0);
   }
   // Set the size ranges for this window; in order to avoid opening the
   // X display we use an arbitrary maximum size...
-  ((Fl_Window *)(this->o))->size_range(gridx, gridy,
+  ((fltk3::Window *)(this->o))->size_range(gridx, gridy,
                                        3072, 2048,
                                        gridx, gridy, 0);
   myo->factory = this;
@@ -1551,14 +1551,14 @@ void Fl_Widget_Class_Type::write_code2() {
   if (wc_relative) write_c("%sposition(X, Y);\n", indent());
   if (modal) write_c("%sset_modal();\n", indent());
   else if (non_modal) write_c("%sset_non_modal();\n", indent());
-  if (!((Fl_Window*)o)->border()) write_c("%sclear_border();\n", indent());
+  if (!((fltk3::Window*)o)->border()) write_c("%sclear_border();\n", indent());
   if (xclass) {
     write_c("%sxclass(", indent());
     write_cstring(xclass);
     write_c(");\n");
   }
   write_c("%send();\n", indent());
-  if (((Fl_Window*)o)->resizable() == o)
+  if (((fltk3::Window*)o)->resizable() == o)
     write_c("%sresizable(this);\n", indent());
   write_c("}\n");
 }
@@ -1567,7 +1567,7 @@ void Fl_Widget_Class_Type::write_code2() {
 // live mode support
 
 fltk3::Widget *Fl_Window_Type::enter_live_mode(int) {
-  Fl_Window *win = new Fl_Window(o->x(), o->y(), o->w(), o->h());
+  fltk3::Window *win = new fltk3::Window(o->x(), o->y(), o->w(), o->h());
   live_widget = win;
   if (live_widget) {
     copy_properties();

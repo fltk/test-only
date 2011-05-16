@@ -201,8 +201,8 @@ namespace fltk3 {
     
     /** The user clicked the close button of a window.
      This event is used internally only to trigger the callback of
-     Fl_Window derived classed. The default callback closes the 
-     window calling Fl_Window::hide().
+     fltk3::Window derived classed. The default callback closes the 
+     window calling fltk3::Window::hide().
      */
     CLOSE		= 10,
     

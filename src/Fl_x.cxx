@@ -180,8 +180,8 @@ void Fl::remove_fd(int n) {
 }
 
 #if CONSOLIDATE_MOTION
-static Fl_Window* send_motion;
-extern Fl_Window* fl_xmousewin;
+static fltk3::Window* send_motion;
+extern fltk3::Window* fl_xmousewin;
 #endif
 static bool in_a_window; // true if in any of our windows, even destroyed ones
 static void do_queued_events() {
@@ -460,7 +460,7 @@ void fl_reset_spot(void)
   //if (fl_xim_ic) XUnsetICFocus(fl_xim_ic);
 }
 
-void fl_set_spot(int font, int size, int X, int Y, int W, int H, Fl_Window *win)
+void fl_set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *win)
 {
   int change = 0;
   XVaNestedList preedit_attr;
@@ -831,7 +831,7 @@ static inline void checkdouble() {
   ptime = fl_event_time;
 }
 
-static Fl_Window* resize_bug_fix;
+static fltk3::Window* resize_bug_fix;
 
 ////////////////////////////////////////////////////////////////
 
@@ -1066,7 +1066,7 @@ int fl_handle(const XEvent& thisevent)
   }
 
   int event = 0;
-  Fl_Window* window = fl_find(xid);
+  fltk3::Window* window = fl_find(xid);
 
   if (window) switch (xevent.type) {
 
@@ -1463,7 +1463,7 @@ int fl_handle(const XEvent& thisevent)
     XTranslateCoordinates(fl_display, fl_xid(window), actual.root,
                           0, 0, &X, &Y, &cr);
 
-    // tell Fl_Window about it and set flag to prevent echoing:
+    // tell fltk3::Window about it and set flag to prevent echoing:
     resize_bug_fix = window;
     window->resize(X, Y, W, H);
     break; // allow add_handler to do something too
@@ -1484,7 +1484,7 @@ int fl_handle(const XEvent& thisevent)
                           &xpos, &ypos, &junk);
     XSetErrorHandler(oldHandler);
 
-    // tell Fl_Window about it and set flag to prevent echoing:
+    // tell fltk3::Window about it and set flag to prevent echoing:
     if ( !wasXExceptionRaised() ) {
       resize_bug_fix = window;
       window->position(xpos, ypos);
@@ -1498,7 +1498,7 @@ int fl_handle(const XEvent& thisevent)
 
 ////////////////////////////////////////////////////////////////
 
-void Fl_Window::resize(int X,int Y,int W,int H) {
+void fltk3::Window::resize(int X,int Y,int W,int H) {
   int is_a_move = (X != x() || Y != y());
   int is_a_resize = (W != w() || H != h());
   int is_a_enlarge = (W > w() || H > h());
@@ -1532,12 +1532,12 @@ void Fl_Window::resize(int X,int Y,int W,int H) {
 
 ////////////////////////////////////////////////////////////////
 
-// A subclass of Fl_Window may call this to associate an X window it
-// creates with the Fl_Window:
+// A subclass of fltk3::Window may call this to associate an X window it
+// creates with the fltk3::Window:
 
 void fl_fix_focus(); // in Fl.cxx
 
-Fl_X* Fl_X::set_xid(Fl_Window* win, Window winxid) {
+Fl_X* Fl_X::set_xid(fltk3::Window* win, Window winxid) {
   Fl_X* xp = new Fl_X;
   xp->xid = winxid;
   xp->other_xid = 0;
@@ -1569,7 +1569,7 @@ ExposureMask|StructureNotifyMask
 |EnterWindowMask|LeaveWindowMask
 |PointerMotionMask;
 
-void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
+void Fl_X::make_xid(fltk3::Window* win, XVisualInfo *visual, Colormap colormap)
 {
   fltk3::Group::current(0); // get rid of very common user bug: forgot end()
 
@@ -1683,7 +1683,7 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
 
     if (win->non_modal() && xp->next && !fl_disable_transient_for) {
       // find some other window to be "transient for":
-      Fl_Window* wp = xp->next->w;
+      fltk3::Window* wp = xp->next->w;
       while (wp->parent()) wp = wp->window();
       XSetTransientForHint(fl_display, xp->xid, fl_xid(wp));
       if (!wp->visible()) showit = 0; // guess that wm will not show it
@@ -1813,7 +1813,7 @@ void Fl_X::sendxjunk() {
   XFree(hints);
 }
 
-void Fl_Window::size_range_() {
+void fltk3::Window::size_range_() {
   size_range_set = 1;
   if (shown()) i->sendxjunk();
 }
@@ -1828,7 +1828,7 @@ const char *fl_filename_name(const char *name) {
   return q;
 }
 
-void Fl_Window::label(const char *name,const char *iname) {
+void fltk3::Window::label(const char *name,const char *iname) {
   fltk3::Widget::label(name);
   iconlabel_ = iname;
   if (shown() && !parent()) {
@@ -1844,7 +1844,7 @@ void Fl_Window::label(const char *name,const char *iname) {
 }
 
 ////////////////////////////////////////////////////////////////
-// Implement the virtual functions for the base Fl_Window class:
+// Implement the virtual functions for the base fltk3::Window class:
 
 // If the box is a filled rectangle, we can make the redisplay *look*
 // faster by using X's background pixel erasing.  We can make it
@@ -1855,10 +1855,10 @@ void Fl_Window::label(const char *name,const char *iname) {
 // is resized while a save-behind window is atop it.  The previous
 // contents are restored to the area, but this assumes the area
 // is cleared to background color.  So this is disabled in this version.
-// Fl_Window *fl_boxcheat;
+// fltk3::Window *fl_boxcheat;
 static inline int can_boxcheat(uchar b) {return (b==1 || ((b&2) && b<=15));}
 
-void Fl_Window::show() {
+void fltk3::Window::show() {
   image(Fl::scheme_bg_);
   if (Fl::scheme_bg_) {
     labeltype(fltk3::normalLabel);
@@ -1884,11 +1884,11 @@ preparePrintFront();
 }
 
 Window fl_window;
-Fl_Window *Fl_Window::current_;
+fltk3::Window *fltk3::Window::current_;
 GC fl_gc;
 
 // make X drawing go into this window (called by subclass flush() impl.)
-void Fl_Window::make_current() {
+void fltk3::Window::make_current() {
   static GC gc; // the GC used by all X windows
   if (!gc) gc = XCreateGC(fl_display, i->xid, 0, 0);
   fl_window = i->xid;
@@ -1902,13 +1902,13 @@ void Fl_Window::make_current() {
 #endif
 }
 
-Window fl_xid_(const Fl_Window* w)
+Window fl_xid_(const fltk3::Window* w)
 {
   return Fl_X::i(w)->xid;
 }
 
 
-int Fl_Window::decorated_h()
+int fltk3::Window::decorated_h()
 {
   if (parent() || !shown()) return h();
   Window root, parent, *children;
@@ -1919,7 +1919,7 @@ int Fl_Window::decorated_h()
   return attributes.height;
 }
 
-int Fl_Window::decorated_w()
+int fltk3::Window::decorated_w()
 {
   if (parent() || !shown()) return w();
   Window root, parent, *children;
@@ -1930,7 +1930,7 @@ int Fl_Window::decorated_w()
   return attributes.width;
 }
 
-void Fl_Paged_Device::print_window(Fl_Window *win, int x_offset, int y_offset)
+void Fl_Paged_Device::print_window(fltk3::Window *win, int x_offset, int y_offset)
 {
   if (win->parent() || !win->border()) {
     this->print_widget(win, x_offset, y_offset);
@@ -1979,7 +1979,7 @@ void printFront(fltk3::Widget *o, void *data)
 {
   Fl_Printer printer;
   o->window()->hide();
-  Fl_Window *win = Fl::first_window();
+  fltk3::Window *win = Fl::first_window();
   if(!win) return;
   int w, h;
   if( printer.start_job(1) ) { o->window()->show(); return; }
@@ -2017,7 +2017,7 @@ void preparePrintFront(void)
   static int first=1;
   if(!first) return;
   first=0;
-  static Fl_Window w(0,0,150,30);
+  static fltk3::Window w(0,0,150,30);
   static Fl_Button b(0,0,w.w(),w.h(), "Print front window");
   b.callback(printFront);
   w.end();

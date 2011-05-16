@@ -38,7 +38,7 @@
  This widget creates a modal window for selecting a color from the colormap.
  Pretty much unchanged from Forms.
 */
-class ColorMenu : public Fl_Window {
+class ColorMenu : public fltk3::Window {
   fltk3::Color initial;
   fltk3::Color which, previous;
   int done;
@@ -51,7 +51,7 @@ public:
 };
 
 ColorMenu::ColorMenu(fltk3::Color oldcol) :
-  Fl_Window(BOXSIZE*8+1+2*BORDER, BOXSIZE*32+1+2*BORDER) {
+  fltk3::Window(BOXSIZE*8+1+2*BORDER, BOXSIZE*32+1+2*BORDER) {
   clear_border();
   set_modal();
   initial = which = oldcol;

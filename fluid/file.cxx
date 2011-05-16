@@ -608,7 +608,7 @@ void read_fdesign() {
 
     if (!strcmp(name,"Name")) {
 
-      window = (Fl_Widget_Type*)Fl_Type_make("Fl_Window");
+      window = (Fl_Widget_Type*)Fl_Type_make("fltk3::Window");
       window->name(value);
       window->label(value);
       Fl_Type::current = widget = window;

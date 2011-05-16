@@ -701,17 +701,17 @@ void type_make_cb(fltk3::Widget*,void*d) {
     }
 }
 
-Fl_Window *widgetbin_panel=(Fl_Window *)0;
+fltk3::Window *widgetbin_panel=(fltk3::Window *)0;
 
-static void cb_widgetbin_panel(Fl_Window* o, void* v) {
+static void cb_widgetbin_panel(fltk3::Window* o, void* v) {
   if (Fl::event()==fltk3::SHORTCUT && Fl::event_key()==fltk3::EscapeKey)
   exit_cb((fltk3::Widget*)o, v);
 else  
   toggle_widgetbin_cb((fltk3::Widget*)o, v);
 }
 
-Fl_Window* make_widgetbin() {
-  { widgetbin_panel = new Fl_Window(574, 85, "Widget Bin");
+fltk3::Window* make_widgetbin() {
+  { widgetbin_panel = new fltk3::Window(574, 85, "Widget Bin");
     widgetbin_panel->callback((Fl_Callback*)cb_widgetbin_panel);
     widgetbin_panel->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
     { fltk3::Group* o = new fltk3::Group(3, 3, 79, 79);
@@ -775,7 +775,7 @@ Fl_Window* make_widgetbin() {
       { Fl_Button* o = new Fl_Button(89, 5, 24, 24);
         o->tooltip("Window");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Window"));
+        o->callback((Fl_Callback*)type_make_cb, (void*)("fltk3::Window"));
         o->image(pixmap[1]);
       } // Fl_Button* o
       { Fl_Button* o = new Fl_Button(114, 5, 24, 24);
@@ -1052,7 +1052,7 @@ Fl_Window* make_widgetbin() {
     } // fltk3::Group* o
     widgetbin_panel->set_non_modal();
     widgetbin_panel->end();
-  } // Fl_Window* widgetbin_panel
+  } // fltk3::Window* widgetbin_panel
   return widgetbin_panel;
 }
 

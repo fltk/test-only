@@ -27,7 +27,7 @@
 
 // The fltk3::Group is the only defined container type in FLTK.
 
-// Fl_Window itself is a subclass of this, and most of the event
+// fltk3::Window itself is a subclass of this, and most of the event
 // handling is designed so windows themselves work correctly.
 
 #include <stdio.h>
@@ -68,7 +68,7 @@ int fltk3::Group::find(const fltk3::Widget* o) const {
   tree by just constructing the widgets.
 
   begin() is automatically called by the constructor for fltk3::Group (and thus for
-  Fl_Window as well). begin() <I>is exactly the same as</I> current(this).
+  fltk3::Window as well). begin() <I>is exactly the same as</I> current(this).
   <I>Don't forget to end() the group or window!</I>
 */
 void fltk3::Group::begin() {current_ = this;}

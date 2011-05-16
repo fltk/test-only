@@ -267,7 +267,7 @@ static void cb_View(Fl_Button*, void*) {
 }
 
 static void cb_Close(Fl_Return_Button* o, void*) {
-  ((Fl_Window*)(o->parent()))->hide();
+  ((fltk3::Window*)(o->parent()))->hide();
 }
 
 Fl_Double_Window* make_about_panel() {

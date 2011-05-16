@@ -40,7 +40,7 @@
 
 #include <config.h>
 
-void Fl_Window::border(int b) {
+void fltk3::Window::border(int b) {
   if (b) {
     if (border()) return;
     clear_flag(NOBORDER);
@@ -60,7 +60,7 @@ void Fl_Window::border(int b) {
 #endif
 }
 
-void Fl_Window::fullscreen() {
+void fltk3::Window::fullscreen() {
 #ifndef WIN32
   //this would clobber the fake wm, since it relies on the border flags to
   //determine its thickness
@@ -85,7 +85,7 @@ void Fl_Window::fullscreen() {
 #endif
 }
 
-void Fl_Window::fullscreen_off(int X,int Y,int W,int H) {
+void fltk3::Window::fullscreen_off(int X,int Y,int W,int H) {
   // this order produces less blinking on IRIX:
   resize(X,Y,W,H);
 #ifndef WIN32

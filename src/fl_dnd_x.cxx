@@ -77,7 +77,7 @@ static int grabfunc(int event) {
 extern int (*fl_local_grab)(int); // in Fl.cxx
 
 // send an event to an fltk window belonging to this program:
-static int local_handle(int event, Fl_Window* window) {
+static int local_handle(int event, fltk3::Window* window) {
   fl_local_grab = 0;
   Fl::e_x = Fl::e_x_root-window->x();
   Fl::e_y = Fl::e_y_root-window->y();
@@ -87,12 +87,12 @@ static int local_handle(int event, Fl_Window* window) {
 }
 
 int Fl::dnd() {
-  Fl_Window *source_fl_win = Fl::first_window();
+  fltk3::Window *source_fl_win = Fl::first_window();
   Fl::first_window()->cursor(fltk3::CURSOR_MOVE);
   Window source_window = fl_xid(Fl::first_window());
   fl_local_grab = grabfunc;
   Window target_window = 0;
-  Fl_Window* local_window = 0;
+  fltk3::Window* local_window = 0;
   int dndversion = 4; int dest_x, dest_y;
   XSetSelectionOwner(fl_display, fl_XdndSelection, fl_message_window, fl_event_time);
 
@@ -100,7 +100,7 @@ int Fl::dnd() {
 
     // figure out what window we are pointing at:
     Window new_window = 0; int new_version = 0;
-    Fl_Window* new_local_window = 0;
+    fltk3::Window* new_local_window = 0;
     for (Window child = RootWindow(fl_display, fl_screen);;) {
       Window root; unsigned int junk3;
       XQueryPointer(fl_display, child, &root, &child,

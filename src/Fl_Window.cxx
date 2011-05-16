@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-// The Fl_Window is a window in the fltk library.
+// The fltk3::Window is a window in the fltk library.
 // This is the system-independent portions.  The huge amount of 
 // crap you need to do to communicate with X is in Fl_x.cxx, the
 // equivalent (but totally different) crap for MSWindows is in Fl_win32.cxx
@@ -40,9 +40,9 @@
 #include <fltk3/draw.h>
 #endif
 
-char *Fl_Window::default_xclass_ = 0L;
+char *fltk3::Window::default_xclass_ = 0L;
 
-void Fl_Window::_Fl_Window() {
+void fltk3::Window::_Fl_Window() {
   type(FL_WINDOW);
   box(fltk3::FLAT_BOX);
   if (Fl::scheme_bg_) {
@@ -62,7 +62,7 @@ void Fl_Window::_Fl_Window() {
   callback((Fl_Callback*)default_callback);
 }
 
-Fl_Window::Fl_Window(int X,int Y,int W, int H, const char *l)
+fltk3::Window::Window(int X,int Y,int W, int H, const char *l)
 : fltk3::Group(X, Y, W, H, l) {
   cursor_default = fltk3::CURSOR_DEFAULT;
   cursor_fg      = fltk3::BLACK;
@@ -72,7 +72,7 @@ Fl_Window::Fl_Window(int X,int Y,int W, int H, const char *l)
   set_flag(FORCE_POSITION);
 }
 
-Fl_Window::Fl_Window(int W, int H, const char *l)
+fltk3::Window::Window(int W, int H, const char *l)
 // fix common user error of a missing end() with current(0):
   : fltk3::Group((fltk3::Group::current(0),0), 0, W, H, l) {
   cursor_default = fltk3::CURSOR_DEFAULT;
@@ -83,25 +83,25 @@ Fl_Window::Fl_Window(int W, int H, const char *l)
   clear_visible();
 }
 
-Fl_Window *fltk3::Widget::window() const {
+fltk3::Window *fltk3::Widget::window() const {
   for (fltk3::Widget *o = parent(); o; o = o->parent())
-    if (o->type() >= FL_WINDOW) return (Fl_Window*)o;
+    if (o->type() >= FL_WINDOW) return (fltk3::Window*)o;
   return 0;
 }
 /** Gets the x position of the window on the screen */
-int Fl_Window::x_root() const {
-  Fl_Window *p = window();
+int fltk3::Window::x_root() const {
+  fltk3::Window *p = window();
   if (p) return p->x_root() + x();
   return x();
 }
 /** Gets the y position of the window on the screen */
-int Fl_Window::y_root() const {
-  Fl_Window *p = window();
+int fltk3::Window::y_root() const {
+  fltk3::Window *p = window();
   if (p) return p->y_root() + y();
   return y();
 }
 
-void Fl_Window::draw() {
+void fltk3::Window::draw() {
 
   // The following is similar to fltk3::Group::draw(), but ...
   //  - we draw the box with x=0 and y=0 instead of x() and y()
@@ -141,11 +141,11 @@ void Fl_Window::draw() {
 # endif
 }
 
-void Fl_Window::label(const char *name) {
+void fltk3::Window::label(const char *name) {
   label(name, iconlabel());
 }
 
-void Fl_Window::copy_label(const char *a) {
+void fltk3::Window::copy_label(const char *a) {
   if (flags() & COPIED_LABEL) {
     free((void *)label());
     clear_flag(COPIED_LABEL);
@@ -156,7 +156,7 @@ void Fl_Window::copy_label(const char *a) {
 }
 
 
-void Fl_Window::iconlabel(const char *iname) {
+void fltk3::Window::iconlabel(const char *iname) {
   label(label(), iname);
 }
 
@@ -164,28 +164,28 @@ void Fl_Window::iconlabel(const char *iname) {
 // can now just change the callback for the window instead.
 
 /** Default callback for window widgets. It hides the window and then calls the default widget callback. */
-void Fl::default_atclose(Fl_Window* window, void* v) {
+void Fl::default_atclose(fltk3::Window* window, void* v) {
   window->hide();
   fltk3::Widget::default_callback(window, v); // put on Fl::read_queue()
 }
 /** Back compatibility: default window callback handler \see Fl::set_atclose() */
-void (*Fl::atclose)(Fl_Window*, void*) = default_atclose;
+void (*Fl::atclose)(fltk3::Window*, void*) = default_atclose;
 /** Back compatibility: Sets the default callback v for win to call on close event */
-void Fl_Window::default_callback(Fl_Window* win, void* v) {
+void fltk3::Window::default_callback(fltk3::Window* win, void* v) {
   Fl::atclose(win, v);
 }
 
-/**  Returns the last window that was made current. \see Fl_Window::make_current() */
-Fl_Window *Fl_Window::current() {
+/**  Returns the last window that was made current. \see fltk3::Window::make_current() */
+fltk3::Window *fltk3::Window::current() {
   return current_;
 }
 
 /** Returns the default xclass.
 
-  \see Fl_Window::default_xclass(const char *)
+  \see fltk3::Window::default_xclass(const char *)
 
  */
-const char *Fl_Window::default_xclass()
+const char *fltk3::Window::default_xclass()
 {
   if (default_xclass_) {
     return default_xclass_;
@@ -207,14 +207,14 @@ const char *Fl_Window::default_xclass()
   If you don't call this, the default xclass for all windows will be "FLTK".
   You can reset the default xclass by specifying NULL for \p xc.
 
-  If you call Fl_Window::xclass(const char *) for any window, then
+  If you call fltk3::Window::xclass(const char *) for any window, then
   this also sets the default xclass, unless it has been set before.
 
   \param[in] xc default xclass for all windows subsequently created
 
-  \see Fl_Window::xclass(const char *)
+  \see fltk3::Window::xclass(const char *)
 */
-void Fl_Window::default_xclass(const char *xc)
+void fltk3::Window::default_xclass(const char *xc)
 {
   if (default_xclass_) {
     free(default_xclass_);
@@ -247,9 +247,9 @@ void Fl_Window::default_xclass(const char *xc)
   If the default xclass has not yet been set, this also sets the
   default xclass for all windows created subsequently.
 
-  \see Fl_Window::default_xclass(const char *)
+  \see fltk3::Window::default_xclass(const char *)
 */
-void Fl_Window::xclass(const char *xc) 
+void fltk3::Window::xclass(const char *xc) 
 {
   if (xclass_) {
     free(xclass_);
@@ -265,10 +265,10 @@ void Fl_Window::xclass(const char *xc)
 
 /** Returns the xclass for this window, or a default.
 
-  \see Fl_Window::default_xclass(const char *)
-  \see Fl_Window::xclass(const char *)
+  \see fltk3::Window::default_xclass(const char *)
+  \see fltk3::Window::xclass(const char *)
 */
-const char *Fl_Window::xclass() const
+const char *fltk3::Window::xclass() const
 {
   if (xclass_) {
     return xclass_;
@@ -278,12 +278,12 @@ const char *Fl_Window::xclass() const
 }
 
 /** Gets the current icon window target dependent data. */
-const void *Fl_Window::icon() const {
+const void *fltk3::Window::icon() const {
   return icon_;
 }
 
 /** Sets the current icon window target dependent data. */
-void Fl_Window::icon(const void * ic) {
+void fltk3::Window::icon(const void * ic) {
   icon_ = ic;
 }
 

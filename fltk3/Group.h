@@ -39,7 +39,7 @@ namespace fltk3 {
    The fltk3::Group class is the FLTK container widget. It maintains
    an array of child widgets. These children can themselves be any widget
    including fltk3::Group. The most important subclass of fltk3::Group
-   is Fl_Window, however groups can also be used to control radio buttons 
+   is fltk3::Window, however groups can also be used to control radio buttons 
    or to enforce resize behavior.
    */
   class FL_EXPORT Group : public Widget {
@@ -138,7 +138,7 @@ namespace fltk3 {
      
      The resizable may be set to the group itself, in which case all the
      contents are resized. This is the default value for fltk3::Group,
-     although NULL is the default for Fl_Window and Fl_Pack.
+     although NULL is the default for fltk3::Window and Fl_Pack.
      
      If the resizable is NULL then all widgets remain a fixed size
      and distance from the top-left corner.

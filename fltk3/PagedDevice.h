@@ -136,11 +136,11 @@ public:
    
    \p x_offset and \p y_offset are optional coordinates of where to position the window top left.
    Equivalent to print_widget() if \p win is a subwindow or has no border.
-   Use Fl_Window::decorated_w() and Fl_Window::decorated_h() to get the size of the
+   Use fltk3::Window::decorated_w() and fltk3::Window::decorated_h() to get the size of the
    printed window.
    */
-  void print_window(Fl_Window *win, int x_offset = 0, int y_offset = 0);
-  virtual void print_window_part(Fl_Window *win, int x, int y, int w, int h, int delta_x = 0, int delta_y = 0);
+  void print_window(fltk3::Window *win, int x_offset = 0, int y_offset = 0);
+  virtual void print_window_part(fltk3::Window *win, int x, int y, int w, int h, int delta_x = 0, int delta_y = 0);
   virtual int end_page (void);
   virtual void end_job (void);
 };

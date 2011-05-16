@@ -47,7 +47,7 @@
 #include <fltk3/x.h>
 #include <fltk3/draw.h>
 
-static Fl_Window *message_form;
+static fltk3::Window *message_form;
 static fltk3::Box *message;
 static fltk3::Box *icon;
 static Fl_Button *button[3];
@@ -68,14 +68,14 @@ static char avoidRecursion = 0;
 // Note: this is used for the button callbacks and the window
 // callback (closing the window with the close button or menu).
 // The first argument (fltk3::Widget *) can either be an Fl_Button*
-// pointer to one of the buttons or an Fl_Window* pointer to the
+// pointer to one of the buttons or an fltk3::Window* pointer to the
 // message window (message_form).
 static void button_cb(fltk3::Widget *, void *val) {
   ret_val = (fl_intptr_t)val;
   message_form->hide();
 }
 
-static Fl_Window *makeform() {
+static fltk3::Window *makeform() {
  if (message_form) {
    message_form->size(410,103);
    return message_form;
@@ -85,7 +85,7 @@ static Fl_Window *makeform() {
  fltk3::Group *previously_current_group = fltk3::Group::current();
  fltk3::Group::current(0);
  // create a new top level window
- Fl_Window *w = message_form = new Fl_Window(410,103);
+ fltk3::Window *w = message_form = new fltk3::Window(410,103);
  message_form->callback(button_cb,(void *)0);
  // w->clear_border();
  // w->box(fltk3::UP_BOX);
@@ -247,7 +247,7 @@ static int innards(const char* fmt, va_list ap,
     message_form->label(message_title_default);
 
   // deactivate Fl::grab(), because it is incompatible with modal windows
-  Fl_Window* g = Fl::grab();
+  fltk3::Window* g = Fl::grab();
   if (g) Fl::grab(0);
   message_form->show();
   while (message_form->shown()) Fl::wait();

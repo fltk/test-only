@@ -398,7 +398,7 @@ void fl_draw_box(fltk3::Boxtype t, int x, int y, int w, int h, fltk3::Color c) {
   if (t && fl_box_table[t].f) fl_box_table[t].f(x,y,w,h,c);
 }
 
-//extern fltk3::Widget *fl_boxcheat; // hack set by Fl_Window.cxx
+//extern fltk3::Widget *fl_boxcheat; // hack set by fltk3::Window.cxx
 /** Draws the widget box according its box style */
 void fltk3::Widget::draw_box() const {
   if (box_) draw_box((fltk3::Boxtype)box_, x_, y_, w_, h_, color_);

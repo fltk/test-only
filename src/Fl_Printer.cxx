@@ -175,7 +175,7 @@ void Fl_Printer::print_widget(fltk3::Widget* widget, int delta_x, int delta_y)
   printer->print_widget(widget, delta_x, delta_y);
 }
 
-void Fl_Printer::print_window_part(Fl_Window *win, int x, int y, int w, int h, int delta_x, int delta_y)
+void Fl_Printer::print_window_part(fltk3::Window *win, int x, int y, int w, int h, int delta_x, int delta_y)
 {
   printer->print_window_part(win, x, y, w, h, delta_x, delta_y);
 }

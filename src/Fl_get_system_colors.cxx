@@ -143,7 +143,7 @@ int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b) {
     Read the user preference colors from the system and use them to call
     Fl::foreground(), Fl::background(), and 
     Fl::background2().  This is done by
-    Fl_Window::show(argc,argv) before applying the -fg and -bg
+    fltk3::Window::show(argc,argv) before applying the -fg and -bg
     switches.
     
     <P>On X this reads some common values from the Xdefaults database.
@@ -317,7 +317,7 @@ int Fl::scheme(const char *s) {
 }
 
 int Fl::reload_scheme() {
-  Fl_Window *win;
+  fltk3::Window *win;
 
   if (scheme_ && !strcasecmp(scheme_, "plastic")) {
     // Update the tile image to match the background color...

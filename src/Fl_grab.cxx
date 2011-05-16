@@ -34,7 +34,7 @@
 // Events are all sent to the "grab window", which does not even
 // have to be displayed (and in the case of Fl_Menu.cxx it isn't).
 // The system is also told to "grab" events and send them to this app.
-// This also modifies how Fl_Window::show() works, on X it turns on
+// This also modifies how fltk3::Window::show() works, on X it turns on
 // override_redirect, it does similar things on WIN32.
 
 extern void fl_fix_focus(); // in Fl.cxx
@@ -50,7 +50,7 @@ extern HWND fl_capture;
 extern void *fl_capture;
 #endif
 
-void Fl::grab(Fl_Window* win) {
+void Fl::grab(fltk3::Window* win) {
   if (win) {
     if (!grab_) {
 #ifdef WIN32

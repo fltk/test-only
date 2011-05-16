@@ -114,8 +114,8 @@ extern Fl_Button *comment_load;
 Fl_Double_Window* make_comment_panel();
 void type_make_cb(fltk3::Widget*,void*d);
 #include <fltk3/Window.h>
-extern Fl_Window *widgetbin_panel;
-Fl_Window* make_widgetbin();
+extern fltk3::Window *widgetbin_panel;
+fltk3::Window* make_widgetbin();
 extern void toggle_sourceview_cb(Fl_Double_Window*, void*);
 extern Fl_Double_Window *sourceview_panel;
 #include <fltk3/TabGroup.h>

@@ -135,8 +135,8 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
     int dx, dy, sx, sy, sw, sh;
     Window child_win;
     
-    Fl_Window *win;
-    if (allow_outside) win = (Fl_Window*)1;
+    fltk3::Window *win;
+    if (allow_outside) win = (fltk3::Window*)1;
     else win = fl_find(fl_window);
     if (win) {
       XTranslateCoordinates(fl_display, fl_window,

@@ -97,7 +97,7 @@ void Fl_Gl_Window::show() {
 	if( ! parent() ) need_redraw=1;
 #endif
   }
-  Fl_Window::show();
+  fltk3::Window::show();
 
 #ifdef __APPLE__
   set_visible();
@@ -429,7 +429,7 @@ void Fl_Gl_Window::resize(int X,int Y,int W,int H) {
   }
 #endif
 
-  Fl_Window::resize(X,Y,W,H);
+  fltk3::Window::resize(X,Y,W,H);
 }
 
 /**
@@ -461,7 +461,7 @@ void Fl_Gl_Window::hide() {
     overlay = 0;
   }
 #endif
-  Fl_Window::hide();
+  fltk3::Window::hide();
 }
 
 /**
@@ -553,7 +553,7 @@ int Fl_Gl_Window::handle(int event)
       show(); //
   }*/
 #endif
-  return Fl_Window::handle(event);
+  return fltk3::Window::handle(event);
 }
 
 //

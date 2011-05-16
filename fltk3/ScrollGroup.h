@@ -89,7 +89,7 @@
   fit inside the Fl_Scroll without scrolling.  Be sure to leave
   space for the scrollbars, as Fluid won't show these either.
 
-  <I>You cannot use Fl_Window as a child of this since the
+  <I>You cannot use fltk3::Window as a child of this since the
   clipping is not conveyed to it when drawn, and it will draw over the
   scrollbars and neighboring objects.</I>
 */

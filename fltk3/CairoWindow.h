@@ -50,9 +50,9 @@
    All cairo context handling is achieved transparently.
    \note You can alternatively define your custom cairo fltk window,
    and thus at least override the draw() method to provide custom cairo
-   support. In this case you will probably use Fl::cairo_make_current(Fl_Window*)
+   support. In this case you will probably use Fl::cairo_make_current(fltk3::Window*)
    to attach a context to your window. You should do it only when your window is 
-   the current window. \see Fl_Window::current()
+   the current window. \see fltk3::Window::current()
 */
 class FL_EXPORT Fl_Cairo_Window : public Fl_Double_Window {
 

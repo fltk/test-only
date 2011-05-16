@@ -52,8 +52,8 @@ typedef unsigned long fl_uintptr_t;
 namespace fltk3 { 
   class Widget; 
   class Group;
+  class Window;
 }
-class Fl_Window;
 class Fl_Image;
 
 /** Default callback type definition for all fltk widgets (by far the most used) */
@@ -168,18 +168,18 @@ namespace fltk3 {
       INACTIVE        = 1<<0,   ///< the widget can't receive focus, and is disabled but potentially visible
       INVISIBLE       = 1<<1,   ///< the widget is not drawn, but can receive a few special events
       OUTPUT          = 1<<2,   ///< for output only
-      NOBORDER        = 1<<3,   ///< don't draw a decoration (Fl_Window)
-      FORCE_POSITION  = 1<<4,   ///< don't let the window manager position the window (Fl_Window)
-      NON_MODAL       = 1<<5,   ///< this is a hovering toolbar window (Fl_Window)
+      NOBORDER        = 1<<3,   ///< don't draw a decoration (fltk3::Window)
+      FORCE_POSITION  = 1<<4,   ///< don't let the window manager position the window (fltk3::Window)
+      NON_MODAL       = 1<<5,   ///< this is a hovering toolbar window (fltk3::Window)
       SHORTCUT_LABEL  = 1<<6,   ///< the label contains a shortcut we need to draw
       CHANGED         = 1<<7,   ///< the widget value changed
-      OVERRIDE        = 1<<8,   ///< position window on top (Fl_Window)
+      OVERRIDE        = 1<<8,   ///< position window on top (fltk3::Window)
       VISIBLE_FOCUS   = 1<<9,   ///< accepts keyboard focus navigation if the widget can have the focus
       COPIED_LABEL    = 1<<10,  ///< the widget label is internally copied, its destruction is handled by the widget
       CLIP_CHILDREN   = 1<<11,  ///< all drawing within this widget will be clipped (fltk3::Group)
-      MENU_WINDOW     = 1<<12,  ///< a temporary popup window, dismissed by clicking outside (Fl_Window)
-      TOOLTIP_WINDOW  = 1<<13,  ///< a temporary popup, transparent to events, and dismissed easily (Fl_Window)
-      MODAL           = 1<<14,  ///< a window blocking input to all other winows (Fl_Window)
+      MENU_WINDOW     = 1<<12,  ///< a temporary popup window, dismissed by clicking outside (fltk3::Window)
+      TOOLTIP_WINDOW  = 1<<13,  ///< a temporary popup, transparent to events, and dismissed easily (fltk3::Window)
+      MODAL           = 1<<14,  ///< a window blocking input to all other winows (fltk3::Window)
       NO_OVERLAY      = 1<<15,  ///< window not using a hardware overlay plane (Fl_Menu_Window)
       GROUP_RELATIVE  = 1<<16,  ///< position this widget relative to the parent group, not to the window
       COPIED_TOOLTIP  = 1<<17,  ///< the widget tooltip is internally copied, its destruction is handled by the widget
@@ -247,7 +247,7 @@ namespace fltk3 {
     virtual int handle(int event);
     
     /** Returns a pointer to the parent widget.  
-     Usually this is a fltk3::Group or Fl_Window. 
+     Usually this is a fltk3::Group or fltk3::Window. 
      \retval NULL if the widget has no parent
      \see fltk3::Group::add(fltk3::Widget*)
      */
@@ -728,7 +728,7 @@ namespace fltk3 {
      Changing this value will send fltk3::DEACTIVATE to the widget if 
      active_r() is true.
      
-     Currently you cannot deactivate Fl_Window widgets.
+     Currently you cannot deactivate fltk3::Window widgets.
      
      \see activate(), active(), active_r()
      */
@@ -927,12 +927,12 @@ namespace fltk3 {
      */
     void measure_label(int& ww, int& hh) const {label_.measure(ww, hh);}
     
-    /** Returns a pointer to the primary Fl_Window widget.
+    /** Returns a pointer to the primary fltk3::Window widget.
      \retval  NULL if no window is associated with this widget.  
-     \note for an Fl_Window widget, this returns its <I>parent</I> window 
+     \note for an fltk3::Window widget, this returns its <I>parent</I> window 
      (if any), not <I>this</I> window.
      */
-    Fl_Window* window() const ;
+    fltk3::Window* window() const ;
     
     /** Returns an fltk3::Group pointer if this widget is an fltk3::Group.
      
@@ -959,19 +959,19 @@ namespace fltk3 {
      */
     virtual fltk3::Group* as_group() {return 0;}
     
-    /** Returns an Fl_Window pointer if this widget is an Fl_Window.
+    /** Returns an fltk3::Window pointer if this widget is an fltk3::Window.
      
      Use this method if you have a widget (pointer) and need to
-     know whether this widget is derived from Fl_Window. If it returns
-     non-NULL, then the widget in question is derived from Fl_Window,
+     know whether this widget is derived from fltk3::Window. If it returns
+     non-NULL, then the widget in question is derived from fltk3::Window,
      and you can use the returned pointer to access its children
-     or other Fl_Window-specific methods.
+     or other fltk3::Window-specific methods.
      
-     \retval NULL if this widget is not derived from Fl_Window.
+     \retval NULL if this widget is not derived from fltk3::Window.
      \note This method is provided to avoid dynamic_cast.
      \see fltk3::Widget::as_group(), fltk3::Widget::as_gl_window()
      */
-    virtual Fl_Window* as_window() {return 0;}
+    virtual fltk3::Window* as_window() {return 0;}
     
     /** Returns an Fl_Gl_Window pointer if this widget is an Fl_Gl_Window.
      

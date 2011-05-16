@@ -573,8 +573,8 @@ public:
   uchar modal, non_modal;
 
   Fl_Type *make();
-  virtual const char *type_name() {return "Fl_Window";}
-  virtual const char *alt_type_name() {return "fltk::Window";}
+  virtual const char *type_name() {return "fltk3::Window";}
+  virtual const char *alt_type_name() {return "fltk3::Window";}
 
   void open();
 

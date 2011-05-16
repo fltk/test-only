@@ -51,7 +51,7 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
     if( (sw - x < w) || (sh - y < h) )  return NULL;
     }
   else { // reading from current window
-    Fl_Window *window = Fl_Window::current();
+    fltk3::Window *window = fltk3::Window::current();
     while(window->window()) window = window->window();
     base = Fl_X::bitmap_from_window_rect(window,x,y,w,h,&delta);
     rowBytes = delta*w;

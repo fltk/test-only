@@ -34,29 +34,29 @@
 #include "Window.h"
 
 /**
-  This is the same as Fl_Window.  However, it is possible that
+  This is the same as fltk3::Window.  However, it is possible that
   some implementations will provide double-buffered windows by default.
   This subcan be used to force single-buffering.  This may be
   useful for modifying existing programs that use incremental update, or
   for some types of image data, such as a movie flipbook.
 */
-class FL_EXPORT Fl_Single_Window : public Fl_Window {
+class FL_EXPORT Fl_Single_Window : public fltk3::Window {
 public:
   void show();
-  void show(int a, char **b) {Fl_Window::show(a,b);}
+  void show(int a, char **b) {fltk3::Window::show(a,b);}
   void flush();
    /**
     Creates a new Fl_Single_Window widget using the given
     size, and label (title) string.
   */
   Fl_Single_Window(int W, int H, const char *l=0)
-    : Fl_Window(W,H,l) {}
+    : fltk3::Window(W,H,l) {}
   /**
     Creates a new Fl_Single_Window widget using the given
     position, size, and label (title) string.
   */
   Fl_Single_Window(int X, int Y, int W, int H, const char *l=0)
-    : Fl_Window(X,Y,W,H,l) {}
+    : fltk3::Window(X,Y,W,H,l) {}
   int make_current();
 };
 

@@ -69,9 +69,9 @@ static int Y,H;
 
 #ifdef __APPLE__
 // returns the unique tooltip window
-Fl_Window *Fl_Tooltip::current_window(void)
+fltk3::Window *Fl_Tooltip::current_window(void)
 {
-  return (Fl_Window*)window;
+  return (fltk3::Window*)window;
 }
 #endif
 
@@ -138,7 +138,7 @@ static void tooltip_timeout(void*) {
 #endif
     if ( condition ) {
       if (!window) window = new Fl_TooltipBox;
-      // this cast bypasses the normal Fl_Window label() code:
+      // this cast bypasses the normal fltk3::Window label() code:
       ((fltk3::Widget*)window)->label(tip);
       window->layout();
       window->redraw();

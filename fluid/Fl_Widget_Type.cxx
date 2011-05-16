@@ -294,7 +294,7 @@ Fl_Type *sort(Fl_Type *parent) {
 #include "widget_panel.h"
 #include <fltk3/showColormap.h>
 
-static Fl_Window *the_panel;
+static fltk3::Window *the_panel;
 
 // All the callbacks use the argument to indicate whether to load or store.
 // This avoids the need for pointers to all the widgets, and keeps the
@@ -327,7 +327,7 @@ void name_cb(Fl_Input* o, void *v) {
       // I don't update window title, as it probably is being closed
       // and wm2 (a window manager) barfs if you retitle and then
       // hide a window:
-      // ((Fl_Window*)(o->parent()->parent()->parent()))->label(current_widget->title());
+      // ((fltk3::Window*)(o->parent()->parent()->parent()))->label(current_widget->title());
     }
   }
 }
@@ -518,7 +518,7 @@ void x_cb(Fl_Value_Input *i, void *v) {
 	w->resize((int)i->value(), w->y(), w->w(), w->h());
 	if (w->window()) w->window()->redraw();
 	if (o->is_window()) {
-          ((Fl_Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
+          ((fltk3::Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
                                        gridx, gridy, 0);
 	}
 	mod = 1;
@@ -543,7 +543,7 @@ void y_cb(Fl_Value_Input *i, void *v) {
 	w->resize(w->x(), (int)i->value(), w->w(), w->h());
 	if (w->window()) w->window()->redraw();
 	if (o->is_window()) {
-          ((Fl_Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
+          ((fltk3::Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
                                        gridx, gridy, 0);
 	}
 	mod = 1;
@@ -568,7 +568,7 @@ void w_cb(Fl_Value_Input *i, void *v) {
 	w->resize(w->x(), w->y(), (int)i->value(), w->h());
 	if (w->window()) w->window()->redraw();
 	if (o->is_window()) {
-          ((Fl_Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
+          ((fltk3::Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
                                        gridx, gridy, 0);
 	}
 	mod = 1;
@@ -593,7 +593,7 @@ void h_cb(Fl_Value_Input *i, void *v) {
 	w->resize(w->x(), w->y(), w->w(), (int)i->value());
 	if (w->window()) w->window()->redraw();
 	if (o->is_window()) {
-          ((Fl_Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
+          ((fltk3::Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
                                        gridx, gridy, 0);
 	}
 	mod = 1;
@@ -852,7 +852,7 @@ void when_button_cb(Fl_Light_Button* i, void *v) {
 }
 
 uchar Fl_Widget_Type::resizable() const {
-  if (is_window()) return ((Fl_Window*)o)->resizable() != 0;
+  if (is_window()) return ((fltk3::Window*)o)->resizable() != 0;
   fltk3::Group* p = (fltk3::Group*)o->parent();
   if (p) return p->resizable() == o;
   else return 0;
@@ -861,7 +861,7 @@ uchar Fl_Widget_Type::resizable() const {
 void Fl_Widget_Type::resizable(uchar v) {
   if (v) {
     if (resizable()) return;
-    if (is_window()) ((Fl_Window*)o)->resizable(o);
+    if (is_window()) ((fltk3::Window*)o)->resizable(o);
     else {
       fltk3::Group* p = (fltk3::Group*)o->parent();
       if (p) p->resizable(o);
@@ -869,7 +869,7 @@ void Fl_Widget_Type::resizable(uchar v) {
   } else {
     if (!resizable()) return;
     if (is_window()) {
-      ((Fl_Window*)o)->resizable(0);
+      ((fltk3::Window*)o)->resizable(0);
     } else {
       fltk3::Group* p = (fltk3::Group*)o->parent();
       if (p) p->resizable(0);
@@ -1792,7 +1792,7 @@ void live_mode_cb(Fl_Button*o,void *) {
   ///       or when the user closes the live widget
   static Fl_Type *live_type = 0L;
   static fltk3::Widget *live_widget = 0L;
-  static Fl_Window *live_window = 0L;
+  static fltk3::Window *live_window = 0L;
   // if 'o' is 0, we must quit live mode
   if (!o) {
     o = wLiveMode;

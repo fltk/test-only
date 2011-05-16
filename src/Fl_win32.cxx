@@ -181,7 +181,7 @@ static HMODULE get_imm_module() {
 # define USE_TRACK_MOUSE
 #endif // NO_TRACK_MOUSE
 
-static Fl_Window *track_mouse_win=0;	// current TrackMouseEvent() window
+static fltk3::Window *track_mouse_win=0;	// current TrackMouseEvent() window
 
 // USE_CAPTURE_MOUSE_WIN - this must be defined for TrackMouseEvent to work
 // correctly with subwindows - otherwise a single mouse click and release
@@ -263,10 +263,10 @@ void fl_reset_spot()
 {
 }
 
-void fl_set_spot(int font, int size, int X, int Y, int W, int H, Fl_Window *win)
+void fl_set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *win)
 {
   if (!win) return;
-  Fl_Window* tw = win;
+  fltk3::Window* tw = win;
   while (tw->parent()) tw = tw->window(); // find top level window
 
   get_imm_module();
@@ -651,7 +651,7 @@ void fl_get_codepage()
 
 HWND fl_capture;
 
-static int mouse_event(Fl_Window *window, int what, int button,
+static int mouse_event(fltk3::Window *window, int what, int button,
 		       WPARAM wParam, LPARAM lParam)
 {
   static int px, py, pmx, pmy;
@@ -662,7 +662,7 @@ static int mouse_event(Fl_Window *window, int what, int button,
   Fl::e_x_root = pt.x;
   Fl::e_y_root = pt.y;
 #ifdef USE_CAPTURE_MOUSE_WIN
-  Fl_Window *mouse_window = window;	// save "mouse window"
+  fltk3::Window *mouse_window = window;	// save "mouse window"
 #endif
   while (window->parent()) {
     Fl::e_x += window->x();
@@ -821,7 +821,7 @@ static void delete_timer(Win32Timer& t)
 /// END TIMERS
 /////////////////////////////////////////////////////////////////////////////
 
-static Fl_Window* resize_bug_fix;
+static fltk3::Window* resize_bug_fix;
 
 extern void fl_save_pen(void);
 extern void fl_restore_pen(void);
@@ -839,7 +839,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   //fl_msg.pt = ???
   //fl_msg.lPrivate = ???
 
-  Fl_Window *window = fl_find(hWnd);
+  fltk3::Window *window = fl_find(hWnd);
 
   if (window) switch (uMsg) {
 
@@ -925,7 +925,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   case WM_MOUSELEAVE:
     if (track_mouse_win == window) { // we left the top level window !
-      Fl_Window *tw = window;
+      fltk3::Window *tw = window;
       while (tw->parent()) tw = tw->window(); // find top level window
       Fl::belowmouse(0);
       Fl::handle(fltk3::LEAVE, tw);
@@ -1215,7 +1215,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 //   1   |  fix   |   yes
 //   2   |  size  |   yes
 
-int Fl_X::fake_X_wm(const Fl_Window* w,int &X,int &Y, int &bt,int &bx, int &by) {
+int Fl_X::fake_X_wm(const fltk3::Window* w,int &X,int &Y, int &bt,int &bx, int &by) {
   int W, H, xoff, yoff, dx, dy;
   int ret = bx = by = bt = 0;
 
@@ -1307,7 +1307,7 @@ int Fl_X::fake_X_wm(const Fl_Window* w,int &X,int &Y, int &bt,int &bx, int &by) 
 
 ////////////////////////////////////////////////////////////////
 
-void Fl_Window::resize(int X,int Y,int W,int H) {
+void fltk3::Window::resize(int X,int Y,int W,int H) {
   UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER 
              | SWP_NOACTIVATE | SWP_NOOWNERZORDER;
   int is_a_resize = (W != w() || H != h());
@@ -1388,13 +1388,13 @@ private:
 
 void fl_fix_focus(); // in Fl.cxx
 
-char fl_show_iconic;	// hack for Fl_Window::iconic()
+char fl_show_iconic;	// hack for fltk3::Window::iconic()
 // int fl_background_pixel = -1; // color to use for background
 HCURSOR fl_default_cursor;
 UINT fl_wake_msg = 0;
 int fl_disable_transient_for; // secret method of removing TRANSIENT_FOR
 
-Fl_X* Fl_X::make(Fl_Window* w) {
+Fl_X* Fl_X::make(fltk3::Window* w) {
   fltk3::Group::current(0); // get rid of very common user bug: forgot end()
 
   // if the window is a subwindow and our parent is not mapped yet, we
@@ -1510,7 +1510,7 @@ Fl_X* Fl_X::make(Fl_Window* w) {
     parent = 0;
     if (w->non_modal() && Fl_X::first && !fl_disable_transient_for) {
       // find some other window to be "transient for":
-      Fl_Window* w = Fl_X::first->w;
+      fltk3::Window* w = Fl_X::first->w;
       while (w->parent()) w = w->window();
       parent = fl_xid(w);
       if (!w->visible()) showit = 0;
@@ -1701,7 +1701,7 @@ void Fl::remove_timeout(Fl_Timeout_Handler cb, void* data)
 
 HINSTANCE fl_display = GetModuleHandle(NULL);
 
-void Fl_Window::size_range_() {
+void fltk3::Window::size_range_() {
   size_range_set = 1;
 }
 
@@ -1740,7 +1740,7 @@ const char *fl_filename_name(const char *name) {
   return q;
 }
 
-void Fl_Window::label(const char *name,const char *iname) {
+void fltk3::Window::label(const char *name,const char *iname) {
   fltk3::Widget::label(name);
   iconlabel_ = iname;
   if (shown() && !parent()) {
@@ -1759,7 +1759,7 @@ void Fl_Window::label(const char *name,const char *iname) {
 }
 
 ////////////////////////////////////////////////////////////////
-// Implement the virtual functions for the base Fl_Window class:
+// Implement the virtual functions for the base fltk3::Window class:
 
 // If the box is a filled rectangle, we can make the redisplay *look*
 // faster by using X's background pixel erasing.  We can make it
@@ -1772,7 +1772,7 @@ void Fl_Window::label(const char *name,const char *iname) {
 // fltk3::Widget *fl_boxcheat;
 //static inline int can_boxcheat(uchar b) {return (b==1 || (b&2) && b<=15);}
 
-void Fl_Window::show() {
+void fltk3::Window::show() {
   image(Fl::scheme_bg_);
   if (Fl::scheme_bg_) {
     labeltype(fltk3::normalLabel);
@@ -1796,7 +1796,7 @@ preparePrintFront();
 #endif
 }
 
-Fl_Window *Fl_Window::current_;
+fltk3::Window *fltk3::Window::current_;
 // the current context
 HDC fl_gc = 0;
 // the current window handle, initially set to -1 so we can correctly
@@ -1820,7 +1820,7 @@ HDC fl_GetDC(HWND w) {
 }
 
 // make X drawing go into this window (called by subclass flush() impl.)
-void Fl_Window::make_current() {
+void fltk3::Window::make_current() {
   fl_GetDC(fl_xid(this));
 
 #if USE_COLORMAP
@@ -1941,12 +1941,12 @@ Fl_Region XRectangleRegion(int x, int y, int w, int h) {
   return CreatePolygonRgn(pt, 4, ALTERNATE);
 }
 
-Window fl_xid_(const Fl_Window *w) {
+Window fl_xid_(const fltk3::Window *w) {
   Fl_X *temp = Fl_X::i(w); 
   return temp ? temp->xid : 0;
 }
 
-int Fl_Window::decorated_w()
+int fltk3::Window::decorated_w()
 {
   if (parent() || !shown()) return w();
   int X, Y, bt, bx, by;
@@ -1954,7 +1954,7 @@ int Fl_Window::decorated_w()
   return w() + 2 * bx;
 }
 
-int Fl_Window::decorated_h()
+int fltk3::Window::decorated_h()
 {
   if (this->parent() || !shown()) return h();
   int X, Y, bt, bx, by;
@@ -1962,7 +1962,7 @@ int Fl_Window::decorated_h()
   return h() + bt + 2 * by;
 }
 
-void Fl_Paged_Device::print_window(Fl_Window *win, int x_offset, int y_offset)
+void Fl_Paged_Device::print_window(fltk3::Window *win, int x_offset, int y_offset)
 {
   if (win->parent() || !win->border()) {
     this->print_widget(win, x_offset, y_offset);
@@ -2010,7 +2010,7 @@ void printFront(fltk3::Widget *o, void *data)
 {
   Fl_Printer printer;
   o->window()->hide();
-  Fl_Window *win = Fl::first_window();
+  fltk3::Window *win = Fl::first_window();
   if(!win) return;
   int w, h;
   if( printer.start_job(1) ) { o->window()->show(); return; }
@@ -2047,7 +2047,7 @@ void preparePrintFront(void)
   static BOOL first=TRUE;
   if(!first) return;
   first=FALSE;
-  static Fl_Window w(0,0,120,30);
+  static fltk3::Window w(0,0,120,30);
   static Fl_Button b(0,0,w.w(),w.h(), "Print front window");
   b.callback(printFront);
   w.end();

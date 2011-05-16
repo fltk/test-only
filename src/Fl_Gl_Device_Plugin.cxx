@@ -58,7 +58,7 @@ static void print_gl_window(Fl_Gl_Window *glw, int x, int y, int height)
   Fl_Display_Device::display_device()->set_current();
 #ifdef WIN32
   Fl::check();
-  Fl_Window *win = (Fl_Window*)glw;
+  fltk3::Window *win = (fltk3::Window*)glw;
   while( win->window() ) win = win->window();
   win->redraw();
   Fl::check();

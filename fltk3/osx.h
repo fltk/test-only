@@ -114,7 +114,7 @@ class Fl_X {
 public:
   Window xid;              // pointer to the Cocoa window object (FLWindow*)
   Fl_Offscreen other_xid;  // pointer for offscreen bitmaps (overlay window)
-  Fl_Window *w;            // FLTK window for 
+  fltk3::Window *w;            // FLTK window for 
   Fl_Region region;
   Fl_Region subRegion;     // region for this specific subwindow
   Fl_X *next;              // linked tree to support subwindows
@@ -122,9 +122,9 @@ public:
   int wait_for_expose;
   void *cursor;	           // is really NSCursor*
   static Fl_X* first;
-  static Fl_X* i(const Fl_Window* w) {return w->i;}
-  static int fake_X_wm(const Fl_Window*,int&,int&,int&,int&,int&);
-  static void make(Fl_Window*);
+  static Fl_X* i(const fltk3::Window* w) {return w->i;}
+  static int fake_X_wm(const fltk3::Window*,int&,int&,int&,int&,int&);
+  static void make(fltk3::Window*);
   void flush();
   // Quartz additions:
   CGContextRef gc;                 // graphics context (NULL when using QD)
@@ -142,8 +142,8 @@ public:
   WindowRef window_ref(void);
   void set_key_window(void);
   void set_cursor(fltk3::Cursor);
-  static CGImageRef CGImage_from_window_rect(Fl_Window *win, int x, int y, int w, int h);
-  static unsigned char *bitmap_from_window_rect(Fl_Window *win, int x, int y, int w, int h, int *bytesPerPixel);
+  static CGImageRef CGImage_from_window_rect(fltk3::Window *win, int x, int y, int w, int h);
+  static unsigned char *bitmap_from_window_rect(fltk3::Window *win, int x, int y, int w, int h, int *bytesPerPixel);
   static Fl_Region intersect_region_and_rect(Fl_Region current, int x,int y,int w, int h);
   static CGContextRef watch_cursor_image(void);
   static CGContextRef help_cursor_image(void);
@@ -152,7 +152,7 @@ public:
   static CGContextRef none_cursor_image(void);
   static void *get_carbon_function(const char *name);
 private:
-  static void relink(Fl_Window*, Fl_Window*);
+  static void relink(fltk3::Window*, fltk3::Window*);
   bool subwindow;
 };
 
@@ -167,7 +167,7 @@ extern FL_EXPORT Window fl_window;
 extern FL_EXPORT Fl_CGContextRef fl_gc;
 extern FL_EXPORT class Fl_Sys_Menu_Bar *fl_sys_menu_bar;
 
-extern Window fl_xid(const Fl_Window*);
+extern Window fl_xid(const fltk3::Window*);
 void fl_clip_region(Fl_Region);
 
 extern FL_EXPORT Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data);

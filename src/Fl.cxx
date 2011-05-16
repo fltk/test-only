@@ -104,10 +104,10 @@ unsigned char   Fl::options_[] = { 0, 0 };
 unsigned char   Fl::options_read_ = 0;
 
 
-Fl_Window *fl_xfocus;	// which window X thinks has focus
-Fl_Window *fl_xmousewin;// which window X thinks has fltk3::ENTER
-Fl_Window *Fl::grab_;	// most recent Fl::grab()
-Fl_Window *Fl::modal_;	// topmost modal() window
+fltk3::Window *fl_xfocus;	// which window X thinks has focus
+fltk3::Window *fl_xmousewin;// which window X thinks has fltk3::ENTER
+fltk3::Window *Fl::grab_;	// most recent Fl::grab()
+fltk3::Window *Fl::modal_;	// topmost modal() window
 
 #endif // FL_DOXYGEN
 
@@ -650,7 +650,7 @@ int Fl::ready() {
 Fl_X* Fl_X::first;
 #endif
 
-Fl_Window* fl_find(Window xid) {
+fltk3::Window* fl_find(Window xid) {
   Fl_X *window;
   for (Fl_X **pp = &Fl_X::first; (window = *pp); pp = &window->next)
 #if defined(WIN32) || defined(USE_X11)
@@ -678,7 +678,7 @@ Fl_Window* fl_find(Window xid) {
   a modal() window is shown this is the top-most modal window, otherwise
   it is the most recent window to get an event.
 */
-Fl_Window* Fl::first_window() {
+fltk3::Window* Fl::first_window() {
   Fl_X* i = Fl_X::first;
   return i ? i->w : 0;
 }
@@ -688,7 +688,7 @@ Fl_Window* Fl::first_window() {
   You can use this call to iterate through all the windows that are shown().
   \param[in] window	must be shown and not NULL
 */
-Fl_Window* Fl::next_window(const Fl_Window* window) {
+fltk3::Window* Fl::next_window(const fltk3::Window* window) {
   Fl_X* i = Fl_X::i(window)->next;
   return i ? i->w : 0;
 }
@@ -701,7 +701,7 @@ Fl_Window* Fl::next_window(const Fl_Window* window) {
  is used to set the "parent" of modal windows, this is often
  useful.
  */
-void Fl::first_window(Fl_Window* window) {
+void Fl::first_window(fltk3::Window* window) {
   if (!window || !window->shown()) return;
   fl_find( Fl_X::i(window)->xid );
 }
@@ -729,7 +729,7 @@ void Fl::flush() {
     damage_ = 0;
     for (Fl_X* i = Fl_X::first; i; i = i->next) {
       if (i->wait_for_expose) {damage_ = 1; continue;}
-      Fl_Window* wi = i->w;
+      fltk3::Window* wi = i->w;
       if (!wi->visible_r()) continue;
       if (wi->damage()) {i->flush(); wi->clear_damage();}
       // destroy damage regions for windows that don't use them:
@@ -778,7 +778,7 @@ static handler_link *handlers = 0;
 
  \see Fl::remove_handler(Fl_Event_Handler)
  \see Fl::event_dispatch(Fl_Event_Dispatch d)
- \see Fl::handle(int, Fl_Window*)
+ \see Fl::handle(int, fltk3::Window*)
 */
 void Fl::add_handler(Fl_Event_Handler ha) {
   handler_link *l = new handler_link;
@@ -790,7 +790,7 @@ void Fl::add_handler(Fl_Event_Handler ha) {
 
 /**
  Removes a previously added event handler.
- \see Fl::handle(int, Fl_Window*)
+ \see Fl::handle(int, fltk3::Window*)
 */
 void Fl::remove_handler(Fl_Event_Handler ha) {
   handler_link *l, *p;
@@ -842,7 +842,7 @@ void Fl::focus(fltk3::Widget *o) {
     // make sure that fl_xfocus is set to the top level window
     // of this widget, or fl_fix_focus will clear our focus again
     if (o) {
-      Fl_Window *win = 0, *w1 = o->as_window();
+      fltk3::Window *win = 0, *w1 = o->as_window();
       if (!w1) w1 = o->window();
       while (w1) { win=w1; w1=win->window(); }
       if (win) {
@@ -1009,7 +1009,7 @@ void fl_throw_focus(fltk3::Widget *o) {
 // Call to->handle(), but first replace the mouse x/y with the correct
 // values to account for nested windows. 'window' is the outermost
 // window the event was posted to by the system:
-static int send(int event, fltk3::Widget* to, Fl_Window* window) {
+static int send(int event, fltk3::Widget* to, fltk3::Window* window) {
   int dx, dy;
   int old_event = Fl::e_number;
   if (window) {
@@ -1036,7 +1036,7 @@ static int send(int event, fltk3::Widget* to, Fl_Window* window) {
  The event dispatch function is called after native events are converted to
  FLTK events, but before they are handled by FLTK. If the dispatch function
  Fl_Event_Dispatch \p d is set, it is up to the dispatch function to call
- Fl::handle_(int, Fl_Window*) or to ignore the event.
+ Fl::handle_(int, fltk3::Window*) or to ignore the event.
 
  The dispatch function itself must return 0 if it ignored the event,
  or non-zero if it used the event. If you call Fl::handle_(), then
@@ -1046,7 +1046,7 @@ static int send(int event, fltk3::Widget* to, Fl_Window* window) {
  callbacks before they reach the native event handler:
 
  \code
- int myHandler(int e, Fl_Window *w) {
+ int myHandler(int e, fltk3::Window *w) {
    try {
      return Fl::handle_(e, w);
    } catch () {
@@ -1063,8 +1063,8 @@ static int send(int event, fltk3::Widget* to, Fl_Window* window) {
 
  \param d new dispatch function, or NULL 
  \see Fl::add_handler(Fl_Event_Handler)
- \see Fl::handle(int, Fl_Window*)
- \see Fl::handle_(int, Fl_Window*)
+ \see Fl::handle(int, fltk3::Window*)
+ \see Fl::handle_(int, fltk3::Window*)
  */
 void Fl::event_dispatch(Fl_Event_Dispatch d)
 {
@@ -1085,7 +1085,7 @@ Fl_Event_Dispatch Fl::event_dispatch()
  \brief Handle events from the window system.
 
  This is called from the native event dispatch after native events have been
- converted to FLTK notation. This function calls Fl::handle_(int, Fl_Window*) 
+ converted to FLTK notation. This function calls Fl::handle_(int, fltk3::Window*) 
  unless the user sets a dispatch function. If a user dispatch function is set,
  the user must make sure that Fl::handle_() is called, or the event will be
  ignored.
@@ -1097,7 +1097,7 @@ Fl_Event_Dispatch Fl::event_dispatch()
  \see Fl::add_handler(Fl_Event_Handler)
  \see Fl::event_dispatch(Fl_Event_Dispatch)
  */
-int Fl::handle(int e, Fl_Window* window)
+int Fl::handle(int e, fltk3::Window* window)
 {
   if (e_dispatch) {
     return e_dispatch(e, window);
@@ -1112,7 +1112,7 @@ int Fl::handle(int e, Fl_Window* window)
 
  This function is called from the native event dispatch, unless the user sets 
  another dispatch function. In that case, the user dispatch function must 
- decide when to call Fl::handle_(int, Fl_Window*)
+ decide when to call Fl::handle_(int, fltk3::Window*)
 
  \param e the event type (Fl::event_number() is not yet set)
  \param window the window that caused this event
@@ -1120,7 +1120,7 @@ int Fl::handle(int e, Fl_Window* window)
 
  \see Fl::event_dispatch(Fl_Event_Dispatch)
  */
-int Fl::handle_(int e, Fl_Window* window)
+int Fl::handle_(int e, fltk3::Window* window)
 {  
   e_number = e;
   if (fl_local_grab) return fl_local_grab(e);
@@ -1135,11 +1135,11 @@ int Fl::handle_(int e, Fl_Window* window)
     return 1;
 
   case fltk3::SHOW:
-    wi->fltk3::Widget::show(); // this calls fltk3::Widget::show(), not Fl_Window::show()
+    wi->fltk3::Widget::show(); // this calls fltk3::Widget::show(), not fltk3::Window::show()
     return 1;
 
   case fltk3::HIDE:
-    wi->fltk3::Widget::hide(); // this calls fltk3::Widget::hide(), not Fl_Window::hide()
+    wi->fltk3::Widget::hide(); // this calls fltk3::Widget::hide(), not fltk3::Window::hide()
     return 1;
 
   case fltk3::PUSH:
@@ -1187,7 +1187,7 @@ int Fl::handle_(int e, Fl_Window* window)
 #ifdef __APPLE__
       if (fl_mac_os_version < 100500) {
         // before 10.5, mouse moved events aren't sent to borderless windows such as tooltips
-	Fl_Window *tooltip = Fl_Tooltip::current_window();
+	fltk3::Window *tooltip = Fl_Tooltip::current_window();
 	int inside = 0;
 	if (tooltip && tooltip->shown() ) { // check if a tooltip window is currently opened
 	  // check if mouse is inside the tooltip
@@ -1349,7 +1349,7 @@ int Fl::handle_(int e, Fl_Window* window)
 extern void fl_destroy_xft_draw(Window);
 #endif
 
-void Fl_Window::hide() {
+void fltk3::Window::hide() {
   clear_visible();
 
   if (!shown()) return;
@@ -1370,7 +1370,7 @@ void Fl_Window::hide() {
 
   // recursively remove any subwindows:
   for (Fl_X *wi = Fl_X::first; wi;) {
-    Fl_Window* W = wi->w;
+    fltk3::Window* W = wi->w;
     if (W->window() == this) {
       W->hide();
       W->set_visible();
@@ -1379,7 +1379,7 @@ void Fl_Window::hide() {
   }
 
   if (this == Fl::modal_) { // we are closing the modal window, find next one:
-    Fl_Window* W;
+    fltk3::Window* W;
     for (W = Fl::first_window(); W; W = Fl::next_window(W))
       if (W->modal()) break;
     Fl::modal_ = W;
@@ -1393,7 +1393,7 @@ void Fl_Window::hide() {
   // this little trick keeps the current clipboard alive, even if we are about
   // to destroy the window that owns the selection.
   if (GetClipboardOwner()==ip->xid) {
-    Fl_Window *w1 = Fl::first_window();
+    fltk3::Window *w1 = Fl::first_window();
     if (w1 && OpenClipboard(fl_xid(w1))) {
       EmptyClipboard();
       SetClipboardData(CF_TEXT, NULL);
@@ -1408,7 +1408,7 @@ void Fl_Window::hide() {
       fl_window = (HWND)-1;
       fl_gc = 0;
 # ifdef FLTK_USE_CAIRO
-      if (Fl::cairo_autolink_context()) Fl::cairo_make_current((Fl_Window*) 0);
+      if (Fl::cairo_autolink_context()) Fl::cairo_make_current((fltk3::Window*) 0);
 # endif
     }
 #elif defined(__APPLE_QUARTZ__)
@@ -1446,7 +1446,7 @@ void Fl_Window::hide() {
   delete ip;
 }
 
-Fl_Window::~Fl_Window() {
+fltk3::Window::~Window() {
   hide();
   if (xclass_) {
     free(xclass_);
@@ -1458,10 +1458,10 @@ Fl_Window::~Fl_Window() {
 
 // For top-level windows it is assumed the window has already been
 // mapped or unmapped!!!  This is because this should only happen when
-// Fl_Window::show() or Fl_Window::hide() is called, or in response to
+// fltk3::Window::show() or fltk3::Window::hide() is called, or in response to
 // iconize/deiconize events from the system.
 
-int Fl_Window::handle(int ev)
+int fltk3::Window::handle(int ev)
 {
   if (parent()) {
     switch (ev) {
@@ -1615,7 +1615,7 @@ void fltk3::Widget::damage(uchar fl) {
     damage(fl, x(), y(), w(), h());
   } else {
     // damage entire window by deleting the region:
-    Fl_X* i = Fl_X::i((Fl_Window*)this);
+    Fl_X* i = Fl_X::i((fltk3::Window*)this);
     if (!i) return; // window not mapped, so ignore it
     if (i->region) {XDestroyRegion(i->region); i->region = 0;}
     damage_ |= fl;
@@ -1632,7 +1632,7 @@ void fltk3::Widget::damage(uchar fl, int X, int Y, int W, int H) {
     if (!wi) return;
     fl = fltk3::DAMAGE_CHILD;
   }
-  Fl_X* i = Fl_X::i((Fl_Window*)wi);
+  Fl_X* i = Fl_X::i((fltk3::Window*)wi);
   if (!i) return; // window not mapped, so ignore it
 
   // clip the damage to the window and quit if none:
@@ -1682,7 +1682,7 @@ void fltk3::Widget::damage(uchar fl, int X, int Y, int W, int H) {
   }
   Fl::damage(fltk3::DAMAGE_CHILD);
 }
-void Fl_Window::flush() {
+void fltk3::Window::flush() {
   make_current();
 //if (damage() == fltk3::DAMAGE_EXPOSE && can_boxcheat(box())) fl_boxcheat = this;
   fl_clip_region(i->region); i->region = 0;

@@ -30,7 +30,7 @@
 #include <fltk3/x.h>
 #include <stdio.h>
 
-void Fl_Window::hotspot(int X, int Y, int offscreen) {
+void fltk3::Window::hotspot(int X, int Y, int offscreen) {
   int mx,my;
 
   // Update the screen position based on the mouse position.
@@ -84,7 +84,7 @@ void Fl_Window::hotspot(int X, int Y, int offscreen) {
   position(X,Y);
 }
 
-void Fl_Window::hotspot(const fltk3::Widget *o, int offscreen) {
+void fltk3::Window::hotspot(const fltk3::Widget *o, int offscreen) {
   int X = o->w()/2;
   int Y = o->h()/2;
   while (o != this && o) {

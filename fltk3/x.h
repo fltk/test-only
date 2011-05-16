@@ -154,36 +154,36 @@ class FL_EXPORT Fl_X {
 public:
   Window xid;
   Window other_xid;
-  Fl_Window *w;
+  fltk3::Window *w;
   Fl_Region region;
   Fl_X *next;
   char wait_for_expose;
   char backbuffer_bad; // used for XDBE
   static Fl_X* first;
-  static Fl_X* i(const Fl_Window* wi) {return wi->i;}
-  void setwindow(Fl_Window* wi) {w=wi; wi->i=this;}
+  static Fl_X* i(const fltk3::Window* wi) {return wi->i;}
+  void setwindow(fltk3::Window* wi) {w=wi; wi->i=this;}
   void sendxjunk();
-  static void make_xid(Fl_Window*,XVisualInfo* =fl_visual, Colormap=fl_colormap);
-  static Fl_X* set_xid(Fl_Window*, Window);
+  static void make_xid(fltk3::Window*,XVisualInfo* =fl_visual, Colormap=fl_colormap);
+  static Fl_X* set_xid(fltk3::Window*, Window);
   // kludges to get around protection:
   void flush() {w->flush();}
-  static void x(Fl_Window* wi, int X) {wi->x(X);}
-  static void y(Fl_Window* wi, int Y) {wi->y(Y);}
+  static void x(fltk3::Window* wi, int X) {wi->x(X);}
+  static void y(fltk3::Window* wi, int Y) {wi->y(Y);}
 };
 
 extern FL_EXPORT char fl_override_redirect; // hack into Fl_X::make_xid()
 extern FL_EXPORT int fl_background_pixel;  // hack into Fl_X::make_xid()
 
-inline Window fl_xid(const Fl_Window* w) { return Fl_X::i(w)->xid; }
+inline Window fl_xid(const fltk3::Window* w) { return Fl_X::i(w)->xid; }
 
 #else
 
-extern Window fl_xid_(const Fl_Window* w);
+extern Window fl_xid_(const fltk3::Window* w);
 #define fl_xid(w) fl_xid_(w)
 
 #endif // FL_LIBRARY || FL_INTERNALS
 
-FL_EXPORT Fl_Window* fl_find(Window xid);
+FL_EXPORT fltk3::Window* fl_find(Window xid);
 
 
 // Dummy function to register a function for opening files via the window manager...

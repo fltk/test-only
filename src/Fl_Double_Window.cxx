@@ -33,7 +33,7 @@
 #include <fltk3/draw.h>
 
 // On systems that support double buffering "naturally" the base
-// Fl_Window class will probably do double-buffer and this subclass
+// fltk3::Window class will probably do double-buffer and this subclass
 // does nothing.
 
 #if USE_XDBE
@@ -65,7 +65,7 @@ static int can_xdbe() {
 #endif
 
 void Fl_Double_Window::show() {
-  Fl_Window::show();
+  fltk3::Window::show();
 }
 
 static void fl_copy_offscreen_to_display(int x, int y, int w, int h, Fl_Offscreen pixmap, int srcx, int srcy);
@@ -418,7 +418,7 @@ void Fl_Double_Window::flush(int eraseoverlay) {
 void Fl_Double_Window::resize(int X,int Y,int W,int H) {
   int ow = w();
   int oh = h();
-  Fl_Window::resize(X,Y,W,H);
+  fltk3::Window::resize(X,Y,W,H);
 #if USE_XDBE
   if (use_xdbe) {
     Fl_X* myi = Fl_X::i(this);
@@ -445,7 +445,7 @@ void Fl_Double_Window::hide() {
 #endif
       fl_delete_offscreen(myi->other_xid);
   }
-  Fl_Window::hide();
+  fltk3::Window::hide();
 }
 
 /**

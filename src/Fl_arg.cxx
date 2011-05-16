@@ -108,7 +108,7 @@ extern const char *fl_bg2;
   
   \li -iconic
   <br>
-  Iconifies the window using Fl_Window::iconize().
+  Iconifies the window using fltk3::Window::iconize().
   
   \li -kbd and -nokbd
   <br>
@@ -117,7 +117,7 @@ extern const char *fl_bg2;
   
   \li -name string
   <br>
-  Sets the window class using Fl_Window::xclass().
+  Sets the window class using fltk3::Window::xclass().
   
   \li -scheme string
   <br>
@@ -125,7 +125,7 @@ extern const char *fl_bg2;
   
   \li -title string
   <br>
-  Sets the window title using Fl_Window::label().
+  Sets the window title using fltk3::Window::label().
   
   \li -tooltips and -notooltips
   <br>
@@ -295,7 +295,7 @@ int Fl::args(int argc, char** argv, int& i, Fl_Args_Handler cb) {
 }
 
 // show a main window, use any parsed arguments
-void Fl_Window::show(int argc, char **argv) {
+void fltk3::Window::show(int argc, char **argv) {
   if (argc && !arg_called) Fl::args(argc,argv);
 
   Fl::get_system_colors();

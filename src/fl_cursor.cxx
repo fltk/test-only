@@ -28,7 +28,7 @@
 // Change the current cursor.
 // Under X the cursor is attached to the X window.  I tried to hide
 // this and pretend that changing the cursor is a drawing function.
-// This avoids a field in the Fl_Window, and I suspect is more
+// This avoids a field in the fltk3::Window, and I suspect is more
 // portable to other systems.
 
 #include <fltk3/run.h>
@@ -51,7 +51,7 @@ void fl_cursor(fltk3::Cursor c, fltk3::Color fg, fltk3::Color bg) {
 
     For back compatibility only.
 */
-void Fl_Window::default_cursor(fltk3::Cursor c, fltk3::Color fg, fltk3::Color bg) {
+void fltk3::Window::default_cursor(fltk3::Cursor c, fltk3::Color fg, fltk3::Color bg) {
 //  if (c == fltk3::CURSOR_DEFAULT) c = fltk3::CURSOR_ARROW;
 
   cursor_default = c;
@@ -67,10 +67,10 @@ void Fl_Window::default_cursor(fltk3::Cursor c, fltk3::Color fg, fltk3::Color bg
 #    define IDC_HAND	MAKEINTRESOURCE(32649)
 #  endif // !IDC_HAND
 
-void Fl_Window::cursor(fltk3::Cursor c, fltk3::Color c1, fltk3::Color c2) {
+void fltk3::Window::cursor(fltk3::Cursor c, fltk3::Color c1, fltk3::Color c2) {
   if (!shown()) return;
   // the cursor must be set for the top level window, not for subwindows
-  Fl_Window *w = window(), *toplevel = this;
+  fltk3::Window *w = window(), *toplevel = this;
   while (w) { toplevel = w; w = w->window(); }
   if (toplevel != this) { toplevel->cursor(c, c1, c2); return; }
   // now set the actual cursor
@@ -227,7 +227,7 @@ CGContextRef Fl_X::nwse_cursor_image(void)
   return (CGContextRef)off;
 }
 
-void Fl_Window::cursor(fltk3::Cursor c, fltk3::Color, fltk3::Color) {
+void fltk3::Window::cursor(fltk3::Cursor c, fltk3::Color, fltk3::Color) {
   if (c == fltk3::CURSOR_DEFAULT) {
     c = cursor_default;
   }
@@ -280,7 +280,7 @@ static struct TableEntry {
   {{0}, {0}} // fltk3::CURSOR_NONE & unknown
 };
 
-void Fl_Window::cursor(fltk3::Cursor c, fltk3::Color fg, fltk3::Color bg) {
+void fltk3::Window::cursor(fltk3::Cursor c, fltk3::Color fg, fltk3::Color bg) {
   if (!shown()) return;
   Cursor xc;
   int deleteit = 0;

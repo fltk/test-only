@@ -89,7 +89,7 @@ void fl_initialize(int *argc, char **argv, const char *, FL_CMD_OPT *, int) {
 
 char fl_modal_next; // set by fl_freeze_forms()
 
-void fl_show_form(Fl_Window *f,int place,int b,const char *n) {
+void fl_show_form(fltk3::Window *f,int place,int b,const char *n) {
 
   f->label(n);
   if (!b) f->clear_border();

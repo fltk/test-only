@@ -50,7 +50,7 @@ extern char fl_i_own_selection[2];
 extern char *fl_locale2utf8(const char *s, UINT codepage = 0);
 extern unsigned int fl_codepage;
 
-Fl_Window *fl_dnd_target_window = 0;
+fltk3::Window *fl_dnd_target_window = 0;
 
 #include <ole2.h>
 #include <shellapi.h>
@@ -93,7 +93,7 @@ public:
     Fl::e_x_root = ppt.x = pt.x;
     Fl::e_y_root = ppt.y = pt.y;
     HWND hWnd = WindowFromPoint( ppt );
-    Fl_Window *target = fl_find( hWnd );
+    fltk3::Window *target = fl_find( hWnd );
     if (target) {
       Fl::e_x = Fl::e_x_root-target->x();
       Fl::e_y = Fl::e_y_root-target->y();
@@ -155,7 +155,7 @@ public:
   HRESULT STDMETHODCALLTYPE Drop( IDataObject *data, DWORD /*grfKeyState*/, POINTL pt, DWORD* /*pdwEffect*/) {
     if ( !fl_dnd_target_window )
       return S_OK;
-    Fl_Window *target = fl_dnd_target_window;
+    fltk3::Window *target = fl_dnd_target_window;
     fl_dnd_target_window = 0;
     Fl::e_x_root = pt.x;
     Fl::e_y_root = pt.y;
@@ -169,7 +169,7 @@ public:
 
     fltk3::Widget *w = target;
     while (w->parent()) w = w->window();
-    HWND hwnd = fl_xid( (Fl_Window*)w );
+    HWND hwnd = fl_xid( (fltk3::Window*)w );
     if (fillCurrentDragData(data)) {
       int old_event = Fl::e_number;
       char *a, *b;

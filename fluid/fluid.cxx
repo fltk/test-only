@@ -151,7 +151,7 @@ void leave_source_dir() {
   in_source_dir = 0;
 }
 
-char position_window(Fl_Window *w, const char *prefsName, int Visible, int X, int Y, int W=0, int H=0 ) {
+char position_window(fltk3::Window *w, const char *prefsName, int Visible, int X, int Y, int W=0, int H=0 ) {
   Fl_Preferences pos(fluid_prefs, prefsName);
   if (prevpos_button->value()) {
     pos.get("x", X, X);
@@ -168,7 +168,7 @@ char position_window(Fl_Window *w, const char *prefsName, int Visible, int X, in
   return Visible;
 }
 
-void save_position(Fl_Window *w, const char *prefsName) {
+void save_position(fltk3::Window *w, const char *prefsName) {
   Fl_Preferences pos(fluid_prefs, prefsName);
   pos.set("x", w->x());
   pos.set("y", w->y());
@@ -177,7 +177,7 @@ void save_position(Fl_Window *w, const char *prefsName) {
   pos.set("visible", (int)(w->shown() && w->visible()));
 }
 
-Fl_Window *main_window;
+fltk3::Window *main_window;
 Fl_Menu_Bar *main_menubar;
 
 static char* cutfname(int which = 0) {
@@ -1071,10 +1071,10 @@ void print_menu_cb(fltk3::Widget *, void *) {
     int		w, h;			// Window image dimensions
     int		ww, hh;			// Scaled size
     int		ulx, uly;		// Upper-lefthand corner
-    Fl_Window	*win;			// Window widget
+    fltk3::Window	*win;			// Window widget
     BITMAPINFO	info;			// Bitmap information
 
-    win    = (Fl_Window *)(windows[winpage]->o);
+    win    = (fltk3::Window *)(windows[winpage]->o);
     pixels = windows[winpage]->read_image(w, h);
 
     // Swap colors: FLTK uses R-G-B --> Windows GDI uses B-G-R
@@ -1431,9 +1431,9 @@ void print_cb(Fl_Return_Button *, void *) {
 	float	border;			// Width of 1 pixel
         float	llx, lly,		// Lower-lefthand corner
 		urx, ury;		// Upper-righthand corner
-	Fl_Window *win;			// Window widget
+	fltk3::Window *win;			// Window widget
 
-        win    = (Fl_Window *)(windows[winpage]->o);
+        win    = (fltk3::Window *)(windows[winpage]->o);
 	pixels = windows[winpage]->read_image(w, h);
 
         // Figure out the window size, first at 100 PPI and then scaled

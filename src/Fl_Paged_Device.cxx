@@ -127,11 +127,11 @@ void Fl_Paged_Device::origin(int *x, int *y)
  @param delta_x Optional horizontal offset from current graphics origin where to print the captured rectangle.
  @param delta_y As above, vertically.
  */
-void Fl_Paged_Device::print_window_part(Fl_Window *win, int x, int y, int w, int h, int delta_x, int delta_y)
+void Fl_Paged_Device::print_window_part(fltk3::Window *win, int x, int y, int w, int h, int delta_x, int delta_y)
 {
   Fl_Surface_Device *current = Fl_Surface_Device::surface();
   Fl_Display_Device::display_device()->set_current();
-  Fl_Window *save_front = Fl::first_window();
+  fltk3::Window *save_front = Fl::first_window();
   win->show();
   fl_gc = NULL;
   Fl::check();

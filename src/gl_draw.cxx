@@ -415,8 +415,8 @@ void gl_texture_fifo::display_texture(int rank)
   glMatrixMode (GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity ();
-  float winw = Fl_Window::current()->w();
-  float winh = Fl_Window::current()->h();
+  float winw = fltk3::Window::current()->w();
+  float winh = fltk3::Window::current()->h();
   glScalef (2.0f / winw, 2.0f /  winh, 1.0f);
   glTranslatef (-winw / 2.0f, -winh / 2.0f, 0.0f);
   //write the texture on screen
