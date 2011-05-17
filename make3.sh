@@ -234,8 +234,7 @@ rename fl_gray_ramp gray_ramp
 renameClass Fl_Widget Widget
 renameClass Fl_Group Group
 renameClass Fl_Window Window
-
-
+renameClass Fl_Widget_Tracker WidgetTracker
 
 
 

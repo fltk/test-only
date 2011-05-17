@@ -69,7 +69,7 @@ int Fl_Adjuster::handle(int event) {
   double v;
   int delta;
   int mx = Fl::event_x();
-  // Fl_Widget_Tracker wp(this);
+  // fltk3::WidgetTracker wp(this);
   switch (event) {
     case fltk3::PUSH:
       if (Fl::visible_focus()) Fl::focus(this);
@@ -78,7 +78,7 @@ int Fl_Adjuster::handle(int event) {
 	drag = 3*(mx-x())/w() + 1;
       else
 	drag = 3-3*(Fl::event_y()-y()-1)/h();
-      { Fl_Widget_Tracker wp(this);
+      { fltk3::WidgetTracker wp(this);
 	handle_push();
 	if (wp.deleted()) return 1;
       }
@@ -117,7 +117,7 @@ int Fl_Adjuster::handle(int event) {
 	  case 2: v = increment(previous_value(), delta*10); break;
 	  default:v = increment(previous_value(), delta*100); break;
 	}
-	Fl_Widget_Tracker wp(this);
+	fltk3::WidgetTracker wp(this);
 	handle_drag(soft() ? softclamp(v) : clamp(v));
 	if (wp.deleted()) return 1;
       }

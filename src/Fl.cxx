@@ -1769,7 +1769,7 @@ static int max_widget_watch = 0;
 /**
   Adds a widget pointer to the widget watch list.
   
-  \note Internal use only, please use class Fl_Widget_Tracker instead.
+  \note Internal use only, please use class fltk3::WidgetTracker instead.
 
   This can be used, if it is possible that a widget might be deleted during
   a callback or similar function. The widget pointer must be added to the
@@ -1806,10 +1806,10 @@ static int max_widget_watch = 0;
    \see Fl::clear_widget_pointer()
 
    An easier and more convenient method to control widget deletion during
-   callbacks is to use the class Fl_Widget_Tracker with a local (automatic)
+   callbacks is to use the class fltk3::WidgetTracker with a local (automatic)
    variable.
 
-   \see class Fl_Widget_Tracker
+   \see class fltk3::WidgetTracker
 */
 void Fl::watch_widget_pointer(fltk3::Widget *&w) 
 {
@@ -1836,7 +1836,7 @@ void Fl::watch_widget_pointer(fltk3::Widget *&w)
   This is used to remove a widget pointer that has been added to the watch list
   with Fl::watch_widget_pointer(), when it is not needed anymore.
   
-  \note Internal use only, please use class Fl_Widget_Tracker instead.
+  \note Internal use only, please use class fltk3::WidgetTracker instead.
 
   \see Fl::watch_widget_pointer()
 */
@@ -1874,10 +1874,10 @@ void Fl::release_widget_pointer(fltk3::Widget *&w)
   This method searches the widget watch list for pointers to the widget and
   clears each pointer that points to it. Widget pointers can be added to the
   widget watch list by calling Fl::watch_widget_pointer() or by using the
-  helper class Fl_Widget_Tracker (recommended).
+  helper class fltk3::WidgetTracker (recommended).
 
   \see Fl::watch_widget_pointer()
-  \see class Fl_Widget_Tracker
+  \see class fltk3::WidgetTracker
 */
 void Fl::clear_widget_pointer(fltk3::Widget const *w) 
 {
@@ -1982,12 +1982,12 @@ void Fl::option(Fl_Option opt, bool val)
 }
 
 
-// Helper class Fl_Widget_Tracker
+// Helper class fltk3::WidgetTracker
 
 /**
   The constructor adds a widget to the watch list.
 */
-Fl_Widget_Tracker::Fl_Widget_Tracker(fltk3::Widget *wi) 
+fltk3::WidgetTracker::WidgetTracker(fltk3::Widget *wi) 
 {
   wp_ = wi;
   Fl::watch_widget_pointer(wp_); // add pointer to watch list
@@ -1996,7 +1996,7 @@ Fl_Widget_Tracker::Fl_Widget_Tracker(fltk3::Widget *wi)
 /**
   The destructor removes a widget from the watch list.
 */
-Fl_Widget_Tracker::~Fl_Widget_Tracker() 
+fltk3::WidgetTracker::~WidgetTracker() 
 {
   Fl::release_widget_pointer(wp_); // remove pointer from watch list
 }

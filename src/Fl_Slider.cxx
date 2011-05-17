@@ -222,10 +222,10 @@ void Fl_Slider::draw() {
 }
 
 int Fl_Slider::handle(int event, int X, int Y, int W, int H) {
-  // Fl_Widget_Tracker wp(this);
+  // fltk3::WidgetTracker wp(this);
   switch (event) {
   case fltk3::PUSH: {
-    Fl_Widget_Tracker wp(this);
+    fltk3::WidgetTracker wp(this);
     if (!Fl::event_inside(X, Y, W, H)) return 0;
     handle_push();
     if (wp.deleted()) return 1; }
@@ -298,7 +298,7 @@ int Fl_Slider::handle(int event, int X, int Y, int W, int H) {
     handle_release();
     return 1;
   case fltk3::KEYBOARD:
-    { Fl_Widget_Tracker wp(this);
+    { fltk3::WidgetTracker wp(this);
       switch (Fl::event_key()) {
 	case fltk3::UpKey:
 	  if (horizontal()) return 0;

@@ -4525,6 +4525,7 @@
 		C9628FFD1274D0B3007D3CFE /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		C96290E11274D0EF007D3CFE /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = System/Library/Frameworks/AGL.framework; sourceTree = SDKROOT; };
 		C96290E51274D100007D3CFE /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		C96FA1A4138275F800FF34AA /* Wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wrapper.h; path = ../../fltk3/Wrapper.h; sourceTree = "<group>"; };
 		C984AFA712D02A1800D66DAD /* demo.menu */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = demo.menu; path = ../../test/demo.menu; sourceTree = SOURCE_ROOT; };
 		C9EDD143127338F600ADB21C /* README.OSX.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.OSX.txt; path = ../../README.OSX.txt; sourceTree = SOURCE_ROOT; };
 		C9EDD4DE1274BB6600ADB21C /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = png.h; path = ../../png/png.h; sourceTree = SOURCE_ROOT; };
@@ -6543,6 +6544,7 @@
 				C9568C111380730900CDA5BF /* win32.h */,
 				C9568C121380730900CDA5BF /* Window.h */,
 				C9568C131380730900CDA5BF /* WizardGroup.h */,
+				C96FA1A4138275F800FF34AA /* Wrapper.h */,
 				C9568C141380730900CDA5BF /* x.h */,
 				C9568C151380730900CDA5BF /* XBMImage.h */,
 				C9568C161380730900CDA5BF /* XPMImage.h */,

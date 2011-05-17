@@ -110,7 +110,7 @@ void Fl_Dial::draw() {
 int Fl_Dial::handle(int event, int X, int Y, int W, int H) {
   switch (event) {
   case fltk3::PUSH: {
-    Fl_Widget_Tracker wp(this);  
+    fltk3::WidgetTracker wp(this);  
     handle_push();
     if (wp.deleted()) return 1; }
   case fltk3::DRAG: {

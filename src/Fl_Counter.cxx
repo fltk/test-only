@@ -137,7 +137,7 @@ int Fl_Counter::handle(int event) {
     return 1;
   case fltk3::PUSH:
     if (Fl::visible_focus()) Fl::focus(this);
-    { Fl_Widget_Tracker wp(this);
+    { fltk3::WidgetTracker wp(this);
       handle_push();
       if (wp.deleted()) return 1;
     }
@@ -147,7 +147,7 @@ int Fl_Counter::handle(int event) {
       Fl::remove_timeout(repeat_callback, this);
       mouseobj = (uchar)i;
       if (i) Fl::add_timeout(INITIALREPEAT, repeat_callback, this);
-      Fl_Widget_Tracker wp(this);
+      fltk3::WidgetTracker wp(this);
       increment_cb();
       if (wp.deleted()) return 1;
       redraw();

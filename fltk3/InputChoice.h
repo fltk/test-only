@@ -76,7 +76,7 @@ class FL_EXPORT Fl_Input_Choice : public fltk3::Group {
 
   static void menu_cb(fltk3::Widget*, void *data) { 
     Fl_Input_Choice *o=(Fl_Input_Choice *)data;
-    Fl_Widget_Tracker wp(o);
+    fltk3::WidgetTracker wp(o);
     const Fl_Menu_Item *item = o->menubutton()->mvalue();
     if (item && item->flags & (FL_SUBMENU|FL_SUBMENU_POINTER)) return;	// ignore submenus
     if (!strcmp(o->inp_->value(), o->menu_->text()))
@@ -105,7 +105,7 @@ class FL_EXPORT Fl_Input_Choice : public fltk3::Group {
 
   static void inp_cb(fltk3::Widget*, void *data) { 
     Fl_Input_Choice *o=(Fl_Input_Choice *)data;
-    Fl_Widget_Tracker wp(o);
+    fltk3::WidgetTracker wp(o);
     if (o->inp_->changed()) {
       o->fltk3::Widget::set_changed();
       if (o->when() & (fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE))

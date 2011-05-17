@@ -79,9 +79,9 @@
 
 namespace fltk3 {
   
-/**
- * \brief a base class for any kind of langage wrapper around FLTK3.
- */
+  /**
+   * \brief a base class for any kind of langage wrapper around FLTK3.
+   */
   class Wrapper {
   protected:
   public:
@@ -97,7 +97,7 @@ namespace fltk3 {
     static const unsigned int pVCallWidgetResize  = 1<<3;
     static const unsigned int pVCallWidgetShow    = 1<<4;
     static const unsigned int pVCallWidgetHide    = 1<<5;
-
+    
     virtual void draw() { /* call _p->draw() with a flag set */ }
   };
   
@@ -109,8 +109,8 @@ namespace fltk3 {
                                 draw(),
                                 Draw)
     FLTK3_WRAPPER_VCALLS_OBJECT_INT(handle(int event),
-                                handle(event),
-                                Handle)
+                                    handle(event),
+                                    Handle)
     FLTK3_WRAPPER_VCALLS_OBJECT(resize(int x, int y, int w, int h),
                                 resize(x, y, w, h),
                                 Resize)

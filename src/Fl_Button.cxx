@@ -31,7 +31,7 @@
 #include <fltk3/Window.h>
 
 
-Fl_Widget_Tracker *Fl_Button::key_release_tracker = 0;
+fltk3::WidgetTracker *Fl_Button::key_release_tracker = 0;
 
 
 // There are a lot of subclasses, named Fl_*_Button.  Some of
@@ -123,7 +123,7 @@ int Fl_Button::handle(int event) {
       value(oldval);
       set_changed();
       if (when() & fltk3::WHEN_CHANGED) {
-	Fl_Widget_Tracker wp(this);
+	fltk3::WidgetTracker wp(this);
         do_callback();
         if (wp.deleted()) return 1;
       }
@@ -153,7 +153,7 @@ int Fl_Button::handle(int event) {
         !(Fl::event_state() & (fltk3::SHIFT | fltk3::CTRL | fltk3::ALT | fltk3::META))) {
       set_changed();
     triggered_by_keyboard:
-      Fl_Widget_Tracker wp(this);
+      fltk3::WidgetTracker wp(this);
       if (type() == FL_RADIO_BUTTON && !value_) {
 	setonly();
 	if (when() & fltk3::WHEN_CHANGED) do_callback();
@@ -180,13 +180,13 @@ void Fl_Button::simulate_key_action()
   }
   value(1); 
   redraw();
-  key_release_tracker = new Fl_Widget_Tracker(this);
+  key_release_tracker = new fltk3::WidgetTracker(this);
   Fl::add_timeout(0.15, key_release_timeout, key_release_tracker);
 }
 
 void Fl_Button::key_release_timeout(void *d)
 {
-  Fl_Widget_Tracker *wt = (Fl_Widget_Tracker*)d;
+  fltk3::WidgetTracker *wt = (fltk3::WidgetTracker*)d;
   if (!wt)
     return;
   if (wt==key_release_tracker) 

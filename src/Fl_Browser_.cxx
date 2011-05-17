@@ -678,7 +678,7 @@ int Fl_Browser_::deselect(int docallbacks) {
 int Fl_Browser_::select_only(void* item, int docallbacks) {
   if (!item) return deselect(docallbacks);
   int change = 0;
-  Fl_Widget_Tracker wp(this);
+  fltk3::WidgetTracker wp(this);
   if (type() == FL_MULTI_BROWSER) {
     for (void* p = item_first(); p; p = item_next(p)) {
       if (p != item) change |= select(p, 0, docallbacks);
@@ -699,7 +699,7 @@ int Fl_Browser_::select_only(void* item, int docallbacks) {
 int Fl_Browser_::handle(int event) {
   
   // NOTE:
-  // We use Fl_Widget_Tracker to test if the user has deleted
+  // We use fltk3::WidgetTracker to test if the user has deleted
   // this widget in a callback. Callbacks can be called by:
   //  - do_callback()
   //  - select()
@@ -709,7 +709,7 @@ int Fl_Browser_::handle(int event) {
   // unless we return directly after one of these.
   // If wp.deleted() is true, we return 1 because we used the event.
   
-  Fl_Widget_Tracker wp(this);
+  fltk3::WidgetTracker wp(this);
   
   // must do shortcuts first or the scrollbar will get them...
   if (event == fltk3::ENTER || event == fltk3::LEAVE) return 1;

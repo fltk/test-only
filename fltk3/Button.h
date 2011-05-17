@@ -46,7 +46,7 @@
 
 extern FL_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
 
-class Fl_Widget_Tracker;
+class fltk3::WidgetTracker;
 
 /**
   \class Fl_Button
@@ -90,7 +90,7 @@ class FL_EXPORT Fl_Button : public fltk3::Widget {
 
 protected:
 
-  static Fl_Widget_Tracker *key_release_tracker;
+  static fltk3::WidgetTracker *key_release_tracker;
   static void key_release_timeout(void*);
   void simulate_key_action();
   

@@ -27,6 +27,7 @@
 
 #include <fltk3/run.h>
 #include <fltk3/Widget.h>
+#include <fltk3/Wrapper.h>
 #include <fltk3/Group.h>
 #include <fltk3/Tooltip.h>
 #include <fltk3/draw.h>
@@ -333,12 +334,30 @@ fltk3::Widget::copy_label(const char *a) {
 */
 void
 fltk3::Widget::do_callback(fltk3::Widget* o,void* arg) {
-  Fl_Widget_Tracker wp(this);
+  fltk3::WidgetTracker wp(this);
   callback_(o,arg);
   if (wp.deleted()) return;
   if (callback_ != default_callback)
     clear_changed();
 }
+
+
+// ========================= Wrapper Support ===================================
+
+fltk3::Object::~Object() {
+  if ( pWrapper && !(pWrapper->pVCalls&Wrapper::pVCallDtor) ) {
+    pWrapper->pVCalls |= Wrapper::pVCallDtor;
+    delete pWrapper;
+  }
+}
+
+fltk3::Wrapper::~Wrapper() {
+  if ( !(pVCalls&pVCallDtor) ) {
+    pVCalls |= pVCallDtor;
+    delete _p;
+  }
+}
+
 
 //
 // End of "$Id$".

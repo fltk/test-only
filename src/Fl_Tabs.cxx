@@ -183,7 +183,7 @@ int Fl_Tabs::handle(int event) {
         redraw_tabs();
       }
       if (o && value(o)) {
-        Fl_Widget_Tracker wp(o);
+        fltk3::WidgetTracker wp(o);
         set_changed();
 	do_callback();
 	if (wp.deleted()) return 1;

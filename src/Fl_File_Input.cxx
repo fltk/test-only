@@ -218,7 +218,7 @@ Fl_File_Input::handle(int event) 		// I - Event
         return Fl_Input::handle(event);
 
     default :
-      { Fl_Widget_Tracker wp(this);
+      { fltk3::WidgetTracker wp(this);
 	if (Fl_Input::handle(event)) {
 	  if (wp.exists())
 	    damage(fltk3::DAMAGE_BAR);

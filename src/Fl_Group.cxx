@@ -227,7 +227,7 @@ int fltk3::Group::handle(int event) {
     for (i = children(); i--;) {
       o = a[i];
       if (o->takesevents() && Fl::event_inside(o)) {
-	Fl_Widget_Tracker wp(o);
+	fltk3::WidgetTracker wp(o);
 	if (send(o,fltk3::PUSH)) {
 	  if (Fl::pushed() && wp.exists() && !o->contains(Fl::pushed())) Fl::pushed(o);
 	  return 1;

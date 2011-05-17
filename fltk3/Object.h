@@ -26,7 +26,7 @@
 //
 
 /* \file
-   fltk3::Object */
+ fltk3::Object */
 
 #ifndef FLTK3_OBJECT_H
 #define FLTK3_OBJECT_H
@@ -34,18 +34,42 @@
 namespace fltk3 {
   
   class Wrapper; 
-
-/**
- * \brief a base class for any kind of langage wrapper around FLTK3.
- */
+  
+  /**
+   \brief A base class for any kind of langage wrapper around FLTK3.
+   
+   fltk3::Object is a way to inject code into the existing library at
+   run-time. When used as a base class, external languages and interfaces can 
+   use the counterpart fltk3::Wrapper to allow for external overrides of every 
+   fltk3 class.  
+   
+   Practical examples for this are the FLTK1 and FLTK2 emulation. It all looks
+   a bit convoluted at first, but the use is straight forward and creates a true
+   relationship between this library and any other frontend.
+   */
   class Object {
+    
   protected:
     Wrapper *pWrapper;
+    
   public:
+    
+    /**
+     \brief Creator. This adds one pointer to the class.
+     */ 
     Object() 
     : pWrapper(0L) { }
+    
     virtual ~Object();
+    
+    /**
+     \brief Return the class that is injecting code.
+     */
     Wrapper *wrapper() { return this?pWrapper:0L; }
+    
+    /**
+     \brief Set the class that can then inject code.
+     */
     void wrapper(Wrapper *w) { pWrapper = w; }
   };
   
