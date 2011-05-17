@@ -118,9 +118,9 @@ static void cb_template_name(Fl_Input*, void*) {
 
 Fl_Input *template_instance=(Fl_Input *)0;
 
-Fl_Button *template_delete=(Fl_Button *)0;
+fltk3::Button *template_delete=(fltk3::Button *)0;
 
-static void cb_Cancel(Fl_Button*, void*) {
+static void cb_Cancel(fltk3::Button*, void*) {
   Fl_Shared_Image *img = (Fl_Shared_Image *)template_preview->image();
 if (img) img->release();
 template_preview->image(0);
@@ -143,11 +143,11 @@ template_panel->hide();
 
 Fl_Double_Window* make_template_panel() {
   { template_panel = new Fl_Double_Window(460, 355, "New/Save Template");
-    template_panel->callback((Fl_Callback*)cb_template_panel);
+    template_panel->callback((fltk3::Callback*)cb_template_panel);
     { template_browser = new Fl_Browser(10, 28, 180, 250, "Available Templates:");
       template_browser->type(2);
       template_browser->labelfont(1);
-      template_browser->callback((Fl_Callback*)cb_template_browser);
+      template_browser->callback((fltk3::Callback*)cb_template_browser);
       template_browser->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       template_browser->when(3);
     } // Fl_Browser* template_browser
@@ -159,7 +159,7 @@ Fl_Double_Window* make_template_panel() {
     { template_name = new Fl_Input(124, 288, 326, 25, "Template Name:");
       template_name->labelfont(1);
       template_name->textfont(4);
-      template_name->callback((Fl_Callback*)cb_template_name);
+      template_name->callback((fltk3::Callback*)cb_template_name);
       template_name->when(3);
     } // Fl_Input* template_name
     { template_instance = new Fl_Input(124, 288, 326, 25, "Instance Name:");
@@ -168,17 +168,17 @@ Fl_Double_Window* make_template_panel() {
       template_instance->hide();
     } // Fl_Input* template_instance
     { fltk3::Group* o = new fltk3::Group(10, 323, 440, 25);
-      { template_delete = new Fl_Button(10, 323, 133, 25, "Delete Template");
-        template_delete->callback((Fl_Callback*)template_delete_cb);
-      } // Fl_Button* template_delete
+      { template_delete = new fltk3::Button(10, 323, 133, 25, "Delete Template");
+        template_delete->callback((fltk3::Callback*)template_delete_cb);
+      } // fltk3::Button* template_delete
       { fltk3::Box* o = new fltk3::Box(153, 323, 126, 25);
         fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
-      { Fl_Button* o = new Fl_Button(289, 323, 72, 25, "Cancel");
-        o->callback((Fl_Callback*)cb_Cancel);
-      } // Fl_Button* o
+      { fltk3::Button* o = new fltk3::Button(289, 323, 72, 25, "Cancel");
+        o->callback((fltk3::Callback*)cb_Cancel);
+      } // fltk3::Button* o
       { template_submit = new Fl_Return_Button(371, 323, 79, 25, "Save");
-        template_submit->callback((Fl_Callback*)cb_template_submit);
+        template_submit->callback((fltk3::Callback*)cb_template_submit);
       } // Fl_Return_Button* template_submit
       o->end();
     } // fltk3::Group* o
@@ -200,7 +200,7 @@ void template_clear() {
   template_browser->clear();
 }
 
-void template_delete_cb(Fl_Button *, void *) {
+void template_delete_cb(fltk3::Button *, void *) {
   int item = template_browser->value();
   if (item < 1) return;
   

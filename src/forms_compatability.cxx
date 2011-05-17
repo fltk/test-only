@@ -151,8 +151,8 @@ void Fl_FormsText::draw() {
 #include <fltk3/ReturnButton.h>
 #include <fltk3/RepeatButton.h>
 
-Fl_Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
-  Fl_Button *b;
+fltk3::Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
+  fltk3::Button *b;
   switch (t) {
   case FL_RETURN_BUTTON:
   case FL_HIDDEN_RET_BUTTON:
@@ -162,7 +162,7 @@ Fl_Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
     b = new Fl_Repeat_Button(x,y,w,h,l);
     break;
   default:
-    b = new Fl_Button(x,y,w,h,l);
+    b = new fltk3::Button(x,y,w,h,l);
   }
   switch (t) {
   case FL_TOGGLE_BUTTON:

@@ -90,7 +90,7 @@ void Fl_Choice::draw() {
     fl_push_clip(xx, yy, ww, hh);
 
     if ( fltk3::scheme()) {
-      Fl_Label l;
+      fltk3::Label l;
       l.value = m.text;
       l.image = 0;
       l.deimage = 0;

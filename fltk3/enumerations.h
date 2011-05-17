@@ -334,7 +334,7 @@ namespace fltk3 {
   
   // FIXME: These codes collide with valid Unicode keys
   
-  const unsigned int MouseButton	= 0xfee8;	///< A mouse button; use Fl_Button + n for mouse button n.
+  const unsigned int MouseButton	= 0xfee8;	///< A mouse button; use fltk3::Button + n for mouse button n.
   const unsigned int BackSpaceKey	= 0xff08;	///< The backspace key.
   const unsigned int TabKey	= 0xff09;	///< The tab key.
   const unsigned int EnterKey	= 0xff0d;	///< The enter key. 

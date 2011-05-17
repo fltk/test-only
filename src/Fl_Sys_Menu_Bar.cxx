@@ -209,9 +209,9 @@ void Fl_Sys_Menu_Bar::menu(const Fl_Menu_Item *m)
  * add to the system menu bar a new menu item, with a title string, shortcut int,
  * callback, argument to the callback, and flags.
  *
- * @see Fl_Menu_::add(const char* label, int shortcut, Fl_Callback *cb, void *user_data, int flags) 
+ * @see Fl_Menu_::add(const char* label, int shortcut, fltk3::Callback *cb, void *user_data, int flags) 
  */
-int Fl_Sys_Menu_Bar::add(const char* label, int shortcut, Fl_Callback *cb, void *user_data, int flags)
+int Fl_Sys_Menu_Bar::add(const char* label, int shortcut, fltk3::Callback *cb, void *user_data, int flags)
 {
   fl_open_display();
   int rank = Fl_Menu_::add(label, shortcut, cb, user_data, flags);
@@ -225,9 +225,9 @@ int Fl_Sys_Menu_Bar::add(const char* label, int shortcut, Fl_Callback *cb, void 
  * insert in the system menu bar a new menu item, with a title string, shortcut int,
  * callback, argument to the callback, and flags.
  *
- * @see Fl_Menu_::insert(int index, const char* label, int shortcut, Fl_Callback *cb, void *user_data, int flags) 
+ * @see Fl_Menu_::insert(int index, const char* label, int shortcut, fltk3::Callback *cb, void *user_data, int flags) 
  */
-int Fl_Sys_Menu_Bar::insert(int index, const char* label, int shortcut, Fl_Callback *cb, void *user_data, int flags)
+int Fl_Sys_Menu_Bar::insert(int index, const char* label, int shortcut, fltk3::Callback *cb, void *user_data, int flags)
 {
   fl_open_display();
   int rank = Fl_Menu_::insert(index, label, shortcut, cb, user_data, flags);

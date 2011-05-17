@@ -202,7 +202,7 @@ extern void fl_open_callback(void (*cb)(const char *));
  * \param user_data   a pointer transmitted as 2nd argument to the callback.
  * \param shortcut    optional shortcut to attach to the "About myprog" menu item (e.g., fltk3::META+'a')
  */
-extern void fl_mac_set_about( Fl_Callback *cb, void *user_data, int shortcut = 0);
+extern void fl_mac_set_about( fltk3::Callback *cb, void *user_data, int shortcut = 0);
 
 /** \brief The version number of the running Mac OS X (e.g., 100604 for 10.6.4)
  */

@@ -36,10 +36,10 @@
 #include <fltk3/Image.h>
 
 void
-fl_no_label(const Fl_Label*,int,int,int,int,fltk3::Align) {}
+fl_no_label(const fltk3::Label*,int,int,int,int,fltk3::Align) {}
 
 void
-fl_normal_label(const Fl_Label* o, int X, int Y, int W, int H, fltk3::Align align)
+fl_normal_label(const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
   fl_font(o->font, o->size);
   fl_color((fltk3::Color)o->color);
@@ -47,7 +47,7 @@ fl_normal_label(const Fl_Label* o, int X, int Y, int W, int H, fltk3::Align alig
 }
 
 void
-fl_normal_measure(const Fl_Label* o, int& W, int& H) {
+fl_normal_measure(const fltk3::Label* o, int& W, int& H) {
   fl_font(o->font, o->size);
   fl_measure(o->value, W, H);
   if (o->image) {
@@ -83,7 +83,7 @@ void fltk3::set_labeltype(fltk3::Labeltype t,fltk3::LabelDrawF* f,fltk3::LabelMe
 ////////////////////////////////////////////////////////////////
 
 /** Draws a label with arbitrary alignment in an arbitrary box. */
-void Fl_Label::draw(int X, int Y, int W, int H, fltk3::Align align) const {
+void fltk3::Label::draw(int X, int Y, int W, int H, fltk3::Align align) const {
   if (!value && !image) return;
   table[type](this, X, Y, W, H, align);
 }
@@ -92,7 +92,7 @@ void Fl_Label::draw(int X, int Y, int W, int H, fltk3::Align align) const {
     \param[in,out] W, H : this is the requested size for the label text plus image;
          on return, this will contain the size needed to fit the label
 */
-void Fl_Label::measure(int& W, int& H) const {
+void fltk3::Label::measure(int& W, int& H) const {
   if (!value && !image) {
     W = H = 0;
     return;
@@ -126,7 +126,7 @@ void fltk3::Widget::draw_label(int X, int Y, int W, int H) const {
  */
 void fltk3::Widget::draw_label(int X, int Y, int W, int H, fltk3::Align a) const {
   if (flags()&SHORTCUT_LABEL) fl_draw_shortcut = 1;
-  Fl_Label l1 = label_;
+  fltk3::Label l1 = label_;
   if (!active_r()) {
     l1.color = fltk3::inactive((fltk3::Color)l1.color);
     if (l1.deimage) l1.image = l1.deimage;

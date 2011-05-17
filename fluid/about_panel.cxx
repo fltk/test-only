@@ -262,7 +262,7 @@ static const char *idata_fluid[] = {
 };
 static Fl_Pixmap image_fluid(idata_fluid);
 
-static void cb_View(Fl_Button*, void*) {
+static void cb_View(fltk3::Button*, void*) {
   show_help("license.html");
 }
 
@@ -288,12 +288,12 @@ Fl_Double_Window* make_about_panel() {
     { fltk3::Box* o = new fltk3::Box(135, 90, 200, 45, "Copyright 1998-2010 by\nBill Spitzak and others");
       o->align(fltk3::Align(132|fltk3::ALIGN_INSIDE));
     } // fltk3::Box* o
-    { Fl_Button* o = new Fl_Button(115, 145, 123, 25, "View License...");
+    { fltk3::Button* o = new fltk3::Button(115, 145, 123, 25, "View License...");
       o->labelcolor(fltk3::DARK_BLUE);
-      o->callback((Fl_Callback*)cb_View);
-    } // Fl_Button* o
+      o->callback((fltk3::Callback*)cb_View);
+    } // fltk3::Button* o
     { Fl_Return_Button* o = new Fl_Return_Button(250, 145, 83, 25, "Close");
-      o->callback((Fl_Callback*)cb_Close);
+      o->callback((fltk3::Callback*)cb_Close);
     } // Fl_Return_Button* o
     about_panel->set_non_modal();
     about_panel->end();

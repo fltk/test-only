@@ -26,7 +26,7 @@
 //
 
 /** \file
- fltk3::Widget, Fl_Label classes . */
+ fltk3::Widget, fltk3::Label classes . */
 
 #ifndef Fl_Widget_H
 #define Fl_Widget_H
@@ -57,47 +57,46 @@ namespace fltk3 {
 }
 class Fl_Image;
 
-/** Default callback type definition for all fltk widgets (by far the most used) */
-typedef void (Fl_Callback )(fltk3::Widget*, void*);
-/** Default callback type pointer definition for all fltk widgets */
-typedef Fl_Callback* Fl_Callback_p; // needed for BORLAND
-/** One parameter callback type definition passing only the widget */
-typedef void (Fl_Callback0)(fltk3::Widget*);
-/** Callback type definition passing the widget and a long data value */
-typedef void (Fl_Callback1)(fltk3::Widget*, long);
-
-/** This struct stores all information for a text or mixed graphics label.
- 
- \todo For FLTK 1.3, the Fl_Label type will become a widget by itself. That way
- we will be avoiding a lot of code duplication by handling labels in 
- a similar fashion to widgets containing text. We also provide an easy
- interface for very complex labels, containing html or vector graphics.
- */
-struct FL_EXPORT Fl_Label {
-  /** label text */
-  const char* value;
-  /** optional image for an active label */
-  Fl_Image* image;
-  /** optional image for a deactivated label */
-  Fl_Image* deimage;
-  /** label font used in text */
-  fltk3::Font font;
-  /** size of label font */
-  fltk3::Fontsize size;
-  /** text color */
-  fltk3::Color color;
-  /** alignment of label */
-  fltk3::Align align_;
-  /** type of label. \see fltk3::Labeltype */
-  uchar type;
+namespace fltk3 { 
+  /** Default callback type definition for all fltk widgets (by far the most used) */
+  typedef void (Callback)(Widget*, void*);
+  /** Default callback type pointer definition for all fltk widgets */
+  typedef Callback* CallbackPtr; // needed for BORLAND
+  /** One parameter callback type definition passing only the widget */
+  typedef void (Callback0)(Widget*);
+  /** Callback type definition passing the widget and a long data value */
+  typedef void (Callback1)(Widget*, long);
   
-  /** Draws the label aligned to the given box */
-  void draw(int,int,int,int, fltk3::Align) const ;
-  void measure(int &w, int &h) const ;
-};
-
-
-namespace fltk3 {
+  /** This struct stores all information for a text or mixed graphics label.
+   
+   \todo For FLTK 1.3, the fltk3::Label type will become a widget by itself. That way
+   we will be avoiding a lot of code duplication by handling labels in 
+   a similar fashion to widgets containing text. We also provide an easy
+   interface for very complex labels, containing html or vector graphics.
+   */
+  struct FL_EXPORT Label {
+    /** label text */
+    const char* value;
+    /** optional image for an active label */
+    Fl_Image* image;
+    /** optional image for a deactivated label */
+    Fl_Image* deimage;
+    /** label font used in text */
+    fltk3::Font font;
+    /** size of label font */
+    fltk3::Fontsize size;
+    /** text color */
+    fltk3::Color color;
+    /** alignment of label */
+    fltk3::Align align_;
+    /** type of label. \see fltk3::Labeltype */
+    uchar type;
+    
+    /** Draws the label aligned to the given box */
+    void draw(int,int,int,int, fltk3::Align) const ;
+    void measure(int &w, int &h) const ;
+  };
+  
   
   /** fltk3::Widget is the base class for all widgets in FLTK.  
    
@@ -115,10 +114,10 @@ namespace fltk3 {
     friend class Group;
     
     fltk3::Group* parent_;
-    Fl_Callback* callback_;
+    fltk3::Callback* callback_;
     void* user_data_;
     int x_,y_,w_,h_;
-    Fl_Label label_;
+    Label label_;
     unsigned int flags_;
     Color color_;
     Color color2_;
@@ -559,33 +558,33 @@ namespace fltk3 {
      Each widget has a single callback.
      \return current callback
      */
-    Fl_Callback_p callback() const {return callback_;}
+    CallbackPtr callback() const {return callback_;}
     
     /** Sets the current callback function for the widget.
      Each widget has a single callback.
      \param[in] cb new callback
      \param[in] p user data
      */
-    void callback(Fl_Callback* cb, void* p) {callback_=cb; user_data_=p;}
+    void callback(fltk3::Callback* cb, void* p) {callback_=cb; user_data_=p;}
     
     /** Sets the current callback function for the widget.
      Each widget has a single callback.
      \param[in] cb new callback
      */
-    void callback(Fl_Callback* cb) {callback_=cb;}
+    void callback(fltk3::Callback* cb) {callback_=cb;}
     
     /** Sets the current callback function for the widget.
      Each widget has a single callback.
      \param[in] cb new callback
      */
-    void callback(Fl_Callback0*cb) {callback_=(Fl_Callback*)cb;}
+    void callback(fltk3::Callback0*cb) {callback_=(fltk3::Callback*)cb;}
     
     /** Sets the current callback function for the widget.
      Each widget has a single callback.
      \param[in] cb new callback
      \param[in] p user data
      */
-    void callback(Fl_Callback1*cb, long p=0) {callback_=(Fl_Callback*)cb; user_data_=(void*)p;}
+    void callback(fltk3::Callback1*cb, long p=0) {callback_=(fltk3::Callback*)cb; user_data_=(void*)p;}
     
     /** Gets the user data for this widget.
      Gets the current user data (void *) argument that is passed to the callback function.

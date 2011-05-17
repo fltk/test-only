@@ -64,7 +64,7 @@ Fl_Input *f_return_type_input=(Fl_Input *)0;
 
 Fl_Return_Button *f_panel_ok=(Fl_Return_Button *)0;
 
-Fl_Button *f_panel_cancel=(Fl_Button *)0;
+fltk3::Button *f_panel_cancel=(fltk3::Button *)0;
 
 Fl_Text_Editor *f_comment_input=(Fl_Text_Editor *)0;
 
@@ -120,11 +120,11 @@ Fl_Double_Window* make_function_panel() {
         f_panel_ok->labelsize(11);
         f_panel_ok->window()->hotspot(f_panel_ok);
       } // Fl_Return_Button* f_panel_ok
-      { f_panel_cancel = new Fl_Button(280, 200, 50, 20, "Cancel");
+      { f_panel_cancel = new fltk3::Button(280, 200, 50, 20, "Cancel");
         f_panel_cancel->tooltip("Cancel the changes.");
         f_panel_cancel->shortcut(0xff1b);
         f_panel_cancel->labelsize(11);
-      } // Fl_Button* f_panel_cancel
+      } // fltk3::Button* f_panel_cancel
       { fltk3::Box* o = new fltk3::Box(10, 200, 205, 20);
         fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
@@ -153,7 +153,7 @@ CodeEditor *code_input=(CodeEditor *)0;
 
 Fl_Return_Button *code_panel_ok=(Fl_Return_Button *)0;
 
-Fl_Button *code_panel_cancel=(Fl_Button *)0;
+fltk3::Button *code_panel_cancel=(fltk3::Button *)0;
 
 Fl_Double_Window* make_code_panel() {
   { Fl_Double_Window* o = code_panel = new Fl_Double_Window(540, 180, "Code Properties");
@@ -179,10 +179,10 @@ Fl_Double_Window* make_code_panel() {
         code_panel_ok->labelsize(11);
         code_panel_ok->window()->hotspot(code_panel_ok);
       } // Fl_Return_Button* code_panel_ok
-      { code_panel_cancel = new Fl_Button(470, 150, 60, 20, "Cancel");
+      { code_panel_cancel = new fltk3::Button(470, 150, 60, 20, "Cancel");
         code_panel_cancel->shortcut(0xff1b);
         code_panel_cancel->labelsize(11);
-      } // Fl_Button* code_panel_cancel
+      } // fltk3::Button* code_panel_cancel
       { fltk3::Box* o = new fltk3::Box(10, 150, 380, 20);
         o->labelsize(11);
         fltk3::Group::current()->resizable(o);
@@ -204,7 +204,7 @@ Fl_Input *code_after_input=(Fl_Input *)0;
 
 Fl_Return_Button *codeblock_panel_ok=(Fl_Return_Button *)0;
 
-Fl_Button *codeblock_panel_cancel=(Fl_Button *)0;
+fltk3::Button *codeblock_panel_cancel=(fltk3::Button *)0;
 
 Fl_Double_Window* make_codeblock_panel() {
   { Fl_Double_Window* o = codeblock_panel = new Fl_Double_Window(300, 115, "Code Block Properties");
@@ -231,10 +231,10 @@ Fl_Double_Window* make_codeblock_panel() {
         codeblock_panel_ok->labelsize(11);
         codeblock_panel_ok->window()->hotspot(codeblock_panel_ok);
       } // Fl_Return_Button* codeblock_panel_ok
-      { codeblock_panel_cancel = new Fl_Button(230, 85, 60, 20, "Cancel");
+      { codeblock_panel_cancel = new fltk3::Button(230, 85, 60, 20, "Cancel");
         codeblock_panel_cancel->shortcut(0xff1b);
         codeblock_panel_cancel->labelsize(11);
-      } // Fl_Button* codeblock_panel_cancel
+      } // fltk3::Button* codeblock_panel_cancel
       { fltk3::Box* o = new fltk3::Box(10, 85, 140, 20);
         fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
@@ -265,7 +265,7 @@ Fl_Input *decl_after_input=(Fl_Input *)0;
 
 Fl_Return_Button *declblock_panel_ok=(Fl_Return_Button *)0;
 
-Fl_Button *declblock_panel_cancel=(Fl_Button *)0;
+fltk3::Button *declblock_panel_cancel=(fltk3::Button *)0;
 
 Fl_Double_Window* make_declblock_panel() {
   { Fl_Double_Window* o = declblock_panel = new Fl_Double_Window(300, 135, "Declaration Block Properties");
@@ -312,10 +312,10 @@ Fl_Double_Window* make_declblock_panel() {
         declblock_panel_ok->labelsize(11);
         declblock_panel_ok->window()->hotspot(declblock_panel_ok);
       } // Fl_Return_Button* declblock_panel_ok
-      { declblock_panel_cancel = new Fl_Button(230, 105, 60, 20, "Cancel");
+      { declblock_panel_cancel = new fltk3::Button(230, 105, 60, 20, "Cancel");
         declblock_panel_cancel->shortcut(0xff1b);
         declblock_panel_cancel->labelsize(11);
-      } // Fl_Button* declblock_panel_cancel
+      } // fltk3::Button* declblock_panel_cancel
       { fltk3::Box* o = new fltk3::Box(10, 105, 140, 20);
         fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
@@ -353,7 +353,7 @@ Fl_Input *decl_input=(Fl_Input *)0;
 
 Fl_Return_Button *decl_panel_ok=(Fl_Return_Button *)0;
 
-Fl_Button *decl_panel_cancel=(Fl_Button *)0;
+fltk3::Button *decl_panel_cancel=(fltk3::Button *)0;
 
 Fl_Text_Editor *decl_comment_input=(Fl_Text_Editor *)0;
 
@@ -394,10 +394,10 @@ n int foo();\", a #directive like \"#include <foo.h>\", a comment like \"//foo\
         decl_panel_ok->labelsize(11);
         decl_panel_ok->window()->hotspot(decl_panel_ok);
       } // Fl_Return_Button* decl_panel_ok
-      { decl_panel_cancel = new Fl_Button(270, 205, 60, 20, "Cancel");
+      { decl_panel_cancel = new fltk3::Button(270, 205, 60, 20, "Cancel");
         decl_panel_cancel->shortcut(0xff1b);
         decl_panel_cancel->labelsize(11);
-      } // Fl_Button* decl_panel_cancel
+      } // fltk3::Button* decl_panel_cancel
       { fltk3::Box* o = new fltk3::Box(10, 205, 185, 20);
         fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
@@ -445,11 +445,11 @@ Fl_Input *data_input=(Fl_Input *)0;
 
 Fl_Input *data_filename=(Fl_Input *)0;
 
-Fl_Button *data_filebrowser=(Fl_Button *)0;
+fltk3::Button *data_filebrowser=(fltk3::Button *)0;
 
 Fl_Return_Button *data_panel_ok=(Fl_Return_Button *)0;
 
-Fl_Button *data_panel_cancel=(Fl_Button *)0;
+fltk3::Button *data_panel_cancel=(fltk3::Button *)0;
 
 Fl_Text_Editor *data_comment_input=(Fl_Text_Editor *)0;
 
@@ -492,18 +492,18 @@ Fl_Double_Window* make_data_panel() {
       data_filename->align(fltk3::Align(133));
       data_filename->when(fltk3::WHEN_NEVER);
     } // Fl_Input* data_filename
-    { data_filebrowser = new Fl_Button(290, 90, 40, 20, "@fileopen");
+    { data_filebrowser = new fltk3::Button(290, 90, 40, 20, "@fileopen");
       data_filebrowser->labelcolor((fltk3::Color)134);
-    } // Fl_Button* data_filebrowser
+    } // fltk3::Button* data_filebrowser
     { fltk3::Group* o = new fltk3::Group(10, 205, 320, 20);
       { data_panel_ok = new Fl_Return_Button(200, 205, 60, 20, "OK");
         data_panel_ok->labelsize(11);
         data_panel_ok->window()->hotspot(data_panel_ok);
       } // Fl_Return_Button* data_panel_ok
-      { data_panel_cancel = new Fl_Button(270, 205, 60, 20, "Cancel");
+      { data_panel_cancel = new fltk3::Button(270, 205, 60, 20, "Cancel");
         data_panel_cancel->shortcut(0xff1b);
         data_panel_cancel->labelsize(11);
-      } // Fl_Button* data_panel_cancel
+      } // fltk3::Button* data_panel_cancel
       { fltk3::Box* o = new fltk3::Box(10, 205, 185, 20);
         fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
@@ -538,7 +538,7 @@ Fl_Text_Editor *c_comment_input=(Fl_Text_Editor *)0;
 
 Fl_Return_Button *c_panel_ok=(Fl_Return_Button *)0;
 
-Fl_Button *c_panel_cancel=(Fl_Button *)0;
+fltk3::Button *c_panel_cancel=(fltk3::Button *)0;
 
 Fl_Double_Window* make_class_panel() {
   { class_panel = new Fl_Double_Window(342, 196, "Class Properties");
@@ -590,10 +590,10 @@ Fl_Double_Window* make_class_panel() {
         c_panel_ok->labelsize(11);
         c_panel_ok->window()->hotspot(c_panel_ok);
       } // Fl_Return_Button* c_panel_ok
-      { c_panel_cancel = new Fl_Button(270, 165, 60, 20, "Cancel");
+      { c_panel_cancel = new fltk3::Button(270, 165, 60, 20, "Cancel");
         c_panel_cancel->shortcut(0xff1b);
         c_panel_cancel->labelsize(11);
-      } // Fl_Button* c_panel_cancel
+      } // fltk3::Button* c_panel_cancel
       { fltk3::Box* o = new fltk3::Box(10, 165, 185, 20);
         fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
@@ -612,7 +612,7 @@ CodeEditor *comment_input=(CodeEditor *)0;
 
 Fl_Return_Button *comment_panel_ok=(Fl_Return_Button *)0;
 
-Fl_Button *comment_panel_cancel=(Fl_Button *)0;
+fltk3::Button *comment_panel_cancel=(fltk3::Button *)0;
 
 Fl_Light_Button *comment_in_source=(Fl_Light_Button *)0;
 
@@ -620,7 +620,7 @@ Fl_Light_Button *comment_in_header=(Fl_Light_Button *)0;
 
 Fl_Menu_Button *comment_predefined=(Fl_Menu_Button *)0;
 
-Fl_Button *comment_load=(Fl_Button *)0;
+fltk3::Button *comment_load=(fltk3::Button *)0;
 
 Fl_Double_Window* make_comment_panel() {
   { Fl_Double_Window* o = comment_panel = new Fl_Double_Window(550, 280, "Comment Properties");
@@ -646,10 +646,10 @@ Fl_Double_Window* make_comment_panel() {
         comment_panel_ok->labelsize(11);
         comment_panel_ok->window()->hotspot(comment_panel_ok);
       } // Fl_Return_Button* comment_panel_ok
-      { comment_panel_cancel = new Fl_Button(460, 250, 80, 20, "Cancel");
+      { comment_panel_cancel = new fltk3::Button(460, 250, 80, 20, "Cancel");
         comment_panel_cancel->shortcut(0xff1b);
         comment_panel_cancel->labelsize(11);
-      } // Fl_Button* comment_panel_cancel
+      } // fltk3::Button* comment_panel_cancel
       { fltk3::Box* o = new fltk3::Box(110, 250, 250, 20);
         o->labelsize(11);
         fltk3::Group::current()->resizable(o);
@@ -672,9 +672,9 @@ Fl_Double_Window* make_comment_panel() {
         comment_predefined->labelsize(11);
         comment_predefined->textsize(11);
       } // Fl_Menu_Button* comment_predefined
-      { comment_load = new Fl_Button(10, 100, 90, 20, "Import...");
+      { comment_load = new fltk3::Button(10, 100, 90, 20, "Import...");
         comment_load->labelsize(11);
-      } // Fl_Button* comment_load
+      } // fltk3::Button* comment_load
       { fltk3::Box* o = new fltk3::Box(10, 132, 90, 121);
         o->labelsize(11);
         fltk3::Group::current()->resizable(o);
@@ -712,342 +712,342 @@ else
 
 fltk3::Window* make_widgetbin() {
   { widgetbin_panel = new fltk3::Window(574, 85, "Widget Bin");
-    widgetbin_panel->callback((Fl_Callback*)cb_widgetbin_panel);
+    widgetbin_panel->callback((fltk3::Callback*)cb_widgetbin_panel);
     widgetbin_panel->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
     { fltk3::Group* o = new fltk3::Group(3, 3, 79, 79);
-      { Fl_Button* o = new Fl_Button(5, 5, 24, 24);
+      { fltk3::Button* o = new fltk3::Button(5, 5, 24, 24);
         o->tooltip("Function");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Function"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Function"));
         o->image(pixmap[7]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(30, 5, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(30, 5, 24, 24);
         o->tooltip("Class");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Class"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Class"));
         o->image(pixmap[12]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(55, 5, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(55, 5, 24, 24);
         o->tooltip("Comment");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("comment"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("comment"));
         o->image(pixmap[46]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(5, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(5, 30, 24, 24);
         o->tooltip("Code");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Code"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Code"));
         o->image(pixmap[8]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(30, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(30, 30, 24, 24);
         o->tooltip("Code Block");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("CodeBlock"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("CodeBlock"));
         o->image(pixmap[9]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(55, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(55, 30, 24, 24);
         o->tooltip("Widget Class");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("widget_class"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("widget_class"));
         o->image(pixmap[48]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(5, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(5, 55, 24, 24);
         o->tooltip("Declaration");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("decl"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("decl"));
         o->image(pixmap[10]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(30, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(30, 55, 24, 24);
         o->tooltip("Declaration Block");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("declblock"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("declblock"));
         o->image(pixmap[11]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(55, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(55, 55, 24, 24);
         o->tooltip("Binary Data");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("data"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("data"));
         o->image(pixmap[49]);
-      } // Fl_Button* o
+      } // fltk3::Button* o
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(87, 3, 79, 79);
-      { Fl_Button* o = new Fl_Button(89, 5, 24, 24);
+      { fltk3::Button* o = new fltk3::Button(89, 5, 24, 24);
         o->tooltip("Window");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("fltk3::Window"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Window"));
         o->image(pixmap[1]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(114, 5, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(114, 5, 24, 24);
         o->tooltip("Group");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("fltk3::Group"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Group"));
         o->image(pixmap[6]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(139, 5, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(139, 5, 24, 24);
         o->tooltip("Pack");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Pack"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Pack"));
         o->image(pixmap[22]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(89, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(89, 30, 24, 24);
         o->tooltip("Tabs");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Tabs"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Tabs"));
         o->image(pixmap[13]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(114, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(114, 30, 24, 24);
         o->tooltip("Scroll");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Scroll"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Scroll"));
         o->image(pixmap[19]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(139, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(139, 30, 24, 24);
         o->tooltip("Table");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Table"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Table"));
         o->image(pixmap[51]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(89, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(89, 55, 24, 24);
         o->tooltip("Tile");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Tile"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Tile"));
         o->image(pixmap[20]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(114, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(114, 55, 24, 24);
         o->tooltip("Wizard");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Wizard"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Wizard"));
         o->image(pixmap[21]);
-      } // Fl_Button* o
+      } // fltk3::Button* o
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(171, 3, 54, 79);
-      { Fl_Button* o = new Fl_Button(173, 5, 24, 24);
+      { fltk3::Button* o = new fltk3::Button(173, 5, 24, 24);
         o->tooltip("Button");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Button"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Button"));
         o->image(pixmap[2]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(198, 5, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(198, 5, 24, 24);
         o->tooltip("Return Button");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Return_Button"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Return_Button"));
         o->image(pixmap[23]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(173, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(173, 30, 24, 24);
         o->tooltip("Light Button");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Light_Button"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Light_Button"));
         o->image(pixmap[24]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(198, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(198, 30, 24, 24);
         o->tooltip("Repeat Button");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Repeat_Button"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Repeat_Button"));
         o->image(pixmap[25]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(173, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(173, 55, 24, 24);
         o->tooltip("Check Button");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Check_Button"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Check_Button"));
         o->image(pixmap[3]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(198, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(198, 55, 24, 24);
         o->tooltip("Round Button");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Round_Button"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Round_Button"));
         o->image(pixmap[4]);
-      } // Fl_Button* o
+      } // fltk3::Button* o
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(230, 3, 104, 79);
-      { Fl_Button* o = new Fl_Button(232, 5, 24, 24);
+      { fltk3::Button* o = new fltk3::Button(232, 5, 24, 24);
         o->tooltip("Slider");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Slider"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Slider"));
         o->image(pixmap[37]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(257, 5, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(257, 5, 24, 24);
         o->tooltip("Scroll Bar");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Scrollbar"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Scrollbar"));
         o->image(pixmap[38]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(282, 5, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(282, 5, 24, 24);
         o->tooltip("Value Slider");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Value_Slider"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Value_Slider"));
         o->image(pixmap[39]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(307, 5, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(307, 5, 24, 24);
         o->tooltip("Value Output");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Value_Output"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Value_Output"));
         o->image(pixmap[45]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(232, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(232, 30, 24, 24);
         o->tooltip("Adjuster");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Adjuster"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Adjuster"));
         o->image(pixmap[40]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(257, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(257, 30, 24, 24);
         o->tooltip("Counter");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Counter"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Counter"));
         o->image(pixmap[41]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(282, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(282, 30, 24, 24);
         o->tooltip("Dial");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Dial"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Dial"));
         o->image(pixmap[42]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(232, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(232, 55, 24, 24);
         o->tooltip("Roller");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Roller"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Roller"));
         o->image(pixmap[43]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(257, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(257, 55, 24, 24);
         o->tooltip("Spinner");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Spinner"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Spinner"));
         o->image(pixmap[47]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(282, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(282, 55, 24, 24);
         o->tooltip("Value Input");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Value_Input"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Value_Input"));
         o->image(pixmap[44]);
-      } // Fl_Button* o
+      } // fltk3::Button* o
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(339, 3, 54, 79);
-      { Fl_Button* o = new Fl_Button(341, 5, 24, 24);
+      { fltk3::Button* o = new fltk3::Button(341, 5, 24, 24);
         o->tooltip("Input");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Input"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Input"));
         o->image(pixmap[14]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(366, 5, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(366, 5, 24, 24);
         o->tooltip("Output");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Output"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Output"));
         o->image(pixmap[27]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(341, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(341, 30, 24, 24);
         o->tooltip("Text Edit");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Text_Editor"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Text_Editor"));
         o->image(pixmap[29]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(366, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(366, 30, 24, 24);
         o->tooltip("Text Display");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Text_Display"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Text_Display"));
         o->image(pixmap[28]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(341, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(341, 55, 24, 24);
         o->tooltip("File Input");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_File_Input"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_File_Input"));
         o->image(pixmap[30]);
-      } // Fl_Button* o
+      } // fltk3::Button* o
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(398, 3, 54, 79);
-      { Fl_Button* o = new Fl_Button(400, 5, 24, 24);
+      { fltk3::Button* o = new fltk3::Button(400, 5, 24, 24);
         o->tooltip("Menu Bar");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Menu_Bar"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Menu_Bar"));
         o->image(pixmap[17]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(425, 5, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(425, 5, 24, 24);
         o->tooltip("Input Choice");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Input_Choice"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Input_Choice"));
         o->image(pixmap[15]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(400, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(400, 30, 24, 24);
         o->tooltip("Menu Button");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Menu_Button"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Menu_Button"));
         o->image(pixmap[26]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(425, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(425, 30, 24, 24);
         o->tooltip("Menu Item");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("menuitem"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("menuitem"));
         o->image(pixmap[16]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(400, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(400, 55, 24, 24);
         o->tooltip("Choice");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Choice"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Choice"));
         o->image(pixmap[15]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(425, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(425, 55, 24, 24);
         o->tooltip("Sub Menu");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("submenu"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("submenu"));
         o->image(pixmap[18]);
-      } // Fl_Button* o
+      } // fltk3::Button* o
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(457, 3, 54, 79);
-      { Fl_Button* o = new Fl_Button(459, 5, 24, 24);
+      { fltk3::Button* o = new fltk3::Button(459, 5, 24, 24);
         o->tooltip("Browser");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Browser"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Browser"));
         o->image(pixmap[31]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(484, 5, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(484, 5, 24, 24);
         o->tooltip("Tree");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Tree"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Tree"));
         o->image(pixmap[50]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(459, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(459, 30, 24, 24);
         o->tooltip("Check Browser");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Check_Browser"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Check_Browser"));
         o->image(pixmap[32]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(459, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(459, 55, 24, 24);
         o->tooltip("File Browser");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_File_Browser"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_File_Browser"));
         o->image(pixmap[33]);
-      } // Fl_Button* o
+      } // fltk3::Button* o
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(515, 3, 55, 79);
-      { Fl_Button* o = new Fl_Button(517, 5, 24, 24);
+      { fltk3::Button* o = new fltk3::Button(517, 5, 24, 24);
         o->tooltip("Box");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("fltk3::Box"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Box"));
         o->image(pixmap[5]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(542, 5, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(542, 5, 24, 24);
         o->tooltip("Clock");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Clock"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Clock"));
         o->image(pixmap[34]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(517, 30, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(517, 30, 24, 24);
         o->tooltip("Help Browser");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Help_View"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Help_View"));
         o->image(pixmap[35]);
-      } // Fl_Button* o
-      { Fl_Button* o = new Fl_Button(517, 55, 24, 24);
+      } // fltk3::Button* o
+      { fltk3::Button* o = new fltk3::Button(517, 55, 24, 24);
         o->tooltip("Progress");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((Fl_Callback*)type_make_cb, (void*)("Fl_Progress"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Progress"));
         o->image(pixmap[36]);
-      } // Fl_Button* o
+      } // fltk3::Button* o
       o->end();
     } // fltk3::Group* o
     widgetbin_panel->set_non_modal();
@@ -1070,12 +1070,12 @@ Fl_Light_Button *sv_autoposition=(Fl_Light_Button *)0;
 
 Fl_Double_Window* make_sourceview() {
   { sourceview_panel = new Fl_Double_Window(520, 490, "Code View");
-    sourceview_panel->callback((Fl_Callback*)toggle_sourceview_cb);
+    sourceview_panel->callback((fltk3::Callback*)toggle_sourceview_cb);
     sourceview_panel->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
     { sv_tab = new Fl_Tabs(10, 10, 500, 440);
       sv_tab->selection_color((fltk3::Color)4);
       sv_tab->labelcolor(fltk3::BACKGROUND2_COLOR);
-      sv_tab->callback((Fl_Callback*)update_sourceview_position_cb);
+      sv_tab->callback((fltk3::Callback*)update_sourceview_position_cb);
       { fltk3::Group* o = new fltk3::Group(10, 35, 500, 415, "Source");
         o->labelsize(13);
         o->hide();
@@ -1118,21 +1118,21 @@ Fl_Double_Window* make_sourceview() {
       fltk3::Group::current()->resizable(sv_tab);
     } // Fl_Tabs* sv_tab
     { fltk3::Group* o = new fltk3::Group(10, 460, 500, 20);
-      { Fl_Button* o = new Fl_Button(10, 460, 61, 20, "Refresh");
+      { fltk3::Button* o = new fltk3::Button(10, 460, 61, 20, "Refresh");
         o->labelsize(11);
-        o->callback((Fl_Callback*)update_sourceview_cb);
-      } // Fl_Button* o
+        o->callback((fltk3::Callback*)update_sourceview_cb);
+      } // fltk3::Button* o
       { Fl_Light_Button* o = sv_autorefresh = new Fl_Light_Button(76, 460, 91, 20, "Auto-Refresh");
         sv_autorefresh->labelsize(11);
-        o->callback((Fl_Callback*)update_sourceview_cb);
+        o->callback((fltk3::Callback*)update_sourceview_cb);
       } // Fl_Light_Button* sv_autorefresh
       { sv_autoposition = new Fl_Light_Button(172, 460, 89, 20, "Auto-Position");
         sv_autoposition->labelsize(11);
       } // Fl_Light_Button* sv_autoposition
-      { Fl_Button* o = new Fl_Button(460, 460, 50, 20, "Close");
+      { fltk3::Button* o = new fltk3::Button(460, 460, 50, 20, "Close");
         o->labelsize(11);
-        o->callback((Fl_Callback*)toggle_sourceview_b_cb);
-      } // Fl_Button* o
+        o->callback((fltk3::Callback*)toggle_sourceview_b_cb);
+      } // fltk3::Button* o
       { fltk3::Box* o = new fltk3::Box(265, 460, 190, 20);
         fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o

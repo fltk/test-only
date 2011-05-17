@@ -29,7 +29,7 @@
 #include <fltk3/CheckButton.h>
 
 // TODO Correct incorrect Fl_Check_Button comments.
-// A subclass of Fl_Button that always draws as a diamond box.  This
+// A subclass of fltk3::Button that always draws as a diamond box.  This
 // diamond is smaller than the widget size and can be surchecked by
 // another box type, for compatibility with Forms.
 

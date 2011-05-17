@@ -125,7 +125,7 @@ int Fl_Menu_::item_pathname(char *name, int namelen, const Fl_Menu_Item *findite
 
   \param pathname The path and name of the menu item
   \returns The item found, or NULL if not found
-  \see find_index(const char*), find_item(Fl_Callback*), item_pathname() 
+  \see find_index(const char*), find_item(fltk3::Callback*), item_pathname() 
 */
 const Fl_Menu_Item * Fl_Menu_::find_item(const char *pathname) {
   int i = find_index(pathname);
@@ -170,7 +170,7 @@ int Fl_Menu_::find_index(const Fl_Menu_Item *item) const {
  \returns  The index of the item with the specific callback, or -1 if not found
  \see      find_index(const char*)
  */
-int Fl_Menu_::find_index(Fl_Callback *cb) const {
+int Fl_Menu_::find_index(fltk3::Callback *cb) const {
   for ( int t=0; t < size(); t++ )
     if (menu_[t].callback_==cb)
       return(t);
@@ -231,7 +231,7 @@ int Fl_Menu_::find_index(const char *pathname) const {
  \returns The item found, or NULL if not found
  \see find_item(const char*)
  */
-const Fl_Menu_Item * Fl_Menu_::find_item(Fl_Callback *cb) {
+const Fl_Menu_Item * Fl_Menu_::find_item(fltk3::Callback *cb) {
   for ( int t=0; t < size(); t++ ) {
     const Fl_Menu_Item *m = menu_ + t;
     if (m->callback_==cb) {

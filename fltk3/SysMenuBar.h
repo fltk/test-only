@@ -53,8 +53,8 @@ public:
     fl_sys_menu_bar = this;
   }
   void menu(const Fl_Menu_Item *m);
-  int add(const char* label, int shortcut, Fl_Callback*, void *user_data=0, int flags=0);
-  int insert(int index, const char* label, int shortcut, Fl_Callback *cb, void *user_data=0, int flags=0);
+  int add(const char* label, int shortcut, fltk3::Callback*, void *user_data=0, int flags=0);
+  int insert(int index, const char* label, int shortcut, fltk3::Callback *cb, void *user_data=0, int flags=0);
   void remove(int n);
   void replace(int rank, const char *name);
   void clear();

@@ -102,10 +102,10 @@ public:
     w += 2 * (o->labelsize() - 4);
     h = (h / 5) * 5;
   }
-  virtual const char *type_name() {return "Fl_Button";}
+  virtual const char *type_name() {return "fltk3::Button";}
   virtual const char *alt_type_name() {return "fltk::Button";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Button(x,y,w,h,"button");}
+    return new fltk3::Button(x,y,w,h,"button");}
   Fl_Widget_Type *_make() {return new Fl_Button_Type();}
   int is_button() const {return 1;}
   int pixmapID() { return 2; }

@@ -34,12 +34,12 @@
 #include "Button.h"
 
 /**
-  The Fl_Repeat_Button is a subclass of Fl_Button that
+  The Fl_Repeat_Button is a subclass of fltk3::Button that
   generates a callback when it is pressed and then repeatedly generates
   callbacks as long as it is held down.  The speed of the repeat is fixed
   and depends on the implementation.
 */
-class FL_EXPORT Fl_Repeat_Button : public Fl_Button {
+class FL_EXPORT Fl_Repeat_Button : public fltk3::Button {
   static void repeat_callback(void *);
 public:
   int handle(int);
@@ -49,10 +49,10 @@ public:
     Deletes the button.
   */
   Fl_Repeat_Button(int X,int Y,int W,int H,const char *l=0)
-    : Fl_Button(X,Y,W,H,l) {}
+    : fltk3::Button(X,Y,W,H,l) {}
   void deactivate() {
     fltk3::remove_timeout(repeat_callback,this);
-    Fl_Button::deactivate();
+    fltk3::Button::deactivate();
   }
 };
 

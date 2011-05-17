@@ -65,10 +65,10 @@ public:
   int item_pathname(char *name, int namelen, const Fl_Menu_Item *finditem=0) const;
   const Fl_Menu_Item* picked(const Fl_Menu_Item*);
   const Fl_Menu_Item* find_item(const char *name);
-  const Fl_Menu_Item* find_item(Fl_Callback*);
+  const Fl_Menu_Item* find_item(fltk3::Callback*);
   int find_index(const char *name) const;
   int find_index(const Fl_Menu_Item *item) const;
-  int find_index(Fl_Callback *cb) const;
+  int find_index(fltk3::Callback *cb) const;
 
   /**
     Returns the menu item with the entered shortcut (key value).
@@ -91,14 +91,14 @@ public:
   const Fl_Menu_Item *menu() const {return menu_;}
   void menu(const Fl_Menu_Item *m);
   void copy(const Fl_Menu_Item *m, void* user_data = 0);
-  int insert(int index, const char*, int shortcut, Fl_Callback*, void* = 0, int = 0);
-  int  add(const char*, int shortcut, Fl_Callback*, void* = 0, int = 0);
-  /** See int Fl_Menu_::add(const char* label, int shortcut, Fl_Callback*, void *user_data=0, int flags=0) */
-  int  add(const char* a, const char* b, Fl_Callback* c, void* d = 0, int e = 0) {
+  int insert(int index, const char*, int shortcut, fltk3::Callback*, void* = 0, int = 0);
+  int  add(const char*, int shortcut, fltk3::Callback*, void* = 0, int = 0);
+  /** See int Fl_Menu_::add(const char* label, int shortcut, fltk3::Callback*, void *user_data=0, int flags=0) */
+  int  add(const char* a, const char* b, fltk3::Callback* c, void* d = 0, int e = 0) {
       return add(a,fl_old_shortcut(b),c,d,e);
   }
-  /** See int Fl_Menu_::insert(const char* label, int shortcut, Fl_Callback*, void *user_data=0, int flags=0) */
-  int insert(int index, const char* a, const char* b, Fl_Callback* c, void* d = 0, int e = 0) {
+  /** See int Fl_Menu_::insert(const char* label, int shortcut, fltk3::Callback*, void *user_data=0, int flags=0) */
+  int insert(int index, const char* a, const char* b, fltk3::Callback* c, void* d = 0, int e = 0) {
       return insert(index,a,fl_old_shortcut(b),c,d,e);
   }
   int  add(const char *);

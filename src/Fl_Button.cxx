@@ -31,7 +31,7 @@
 #include <fltk3/Window.h>
 
 
-fltk3::WidgetTracker *Fl_Button::key_release_tracker = 0;
+fltk3::WidgetTracker *fltk3::Button::key_release_tracker = 0;
 
 
 // There are a lot of subclasses, named Fl_*_Button.  Some of
@@ -44,7 +44,7 @@ fltk3::WidgetTracker *Fl_Button::key_release_tracker = 0;
   \param[in] v button value.
   \see set(), clear()
  */
-int Fl_Button::value(int v) {
+int fltk3::Button::value(int v) {
   v = v ? 1 : 0;
   oldval = v;
   clear_changed();
@@ -62,17 +62,17 @@ int Fl_Button::value(int v) {
   Turns on this button and turns off all other radio buttons in the group
   (calling \c value(1) or \c set() does not do this).
  */
-void Fl_Button::setonly() { // set this radio button on, turn others off
+void fltk3::Button::setonly() { // set this radio button on, turn others off
   value(1);
   fltk3::Group* g = parent();
   fltk3::Widget*const* a = g->array();
   for (int i = g->children(); i--;) {
     fltk3::Widget* o = *a++;
-    if (o != this && o->type()==FL_RADIO_BUTTON) ((Fl_Button*)o)->value(0);
+    if (o != this && o->type()==FL_RADIO_BUTTON) ((fltk3::Button*)o)->value(0);
   }
 }
 
-void Fl_Button::draw() {
+void fltk3::Button::draw() {
   if (type() == FL_HIDDEN_BUTTON) return;
   fltk3::Color col = value() ? selection_color() : color();
   draw_box(value() ? (down_box()?down_box():fltk3::down(box())) : box(), col);
@@ -86,7 +86,7 @@ void Fl_Button::draw() {
   if (fltk3::focus() == this) draw_focus();
 }
 
-int Fl_Button::handle(int event) {
+int fltk3::Button::handle(int event) {
   int newval;
   switch (event) {
   case fltk3::ENTER: /* FALLTHROUGH */
@@ -172,7 +172,7 @@ int Fl_Button::handle(int event) {
   }
 }
 
-void Fl_Button::simulate_key_action()
+void fltk3::Button::simulate_key_action()
 {
   if (key_release_tracker) {
     fltk3::remove_timeout(key_release_timeout, key_release_tracker);
@@ -184,14 +184,14 @@ void Fl_Button::simulate_key_action()
   fltk3::add_timeout(0.15, key_release_timeout, key_release_tracker);
 }
 
-void Fl_Button::key_release_timeout(void *d)
+void fltk3::Button::key_release_timeout(void *d)
 {
   fltk3::WidgetTracker *wt = (fltk3::WidgetTracker*)d;
   if (!wt)
     return;
   if (wt==key_release_tracker) 
     key_release_tracker = 0L;
-  Fl_Button *btn = (Fl_Button*)wt->widget();
+  fltk3::Button *btn = (fltk3::Button*)wt->widget();
   if (btn) {
     btn->value(0);
     btn->redraw();
@@ -204,7 +204,7 @@ void Fl_Button::key_release_timeout(void *d)
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
-Fl_Button::Fl_Button(int X, int Y, int W, int H, const char *L)
+fltk3::Button::Button(int X, int Y, int W, int H, const char *L)
 : fltk3::Widget(X,Y,W,H,L) {
   box(fltk3::UP_BOX);
   down_box(fltk3::NO_BOX);

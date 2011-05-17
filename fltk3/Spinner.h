@@ -142,11 +142,11 @@ class FL_EXPORT Fl_Spinner : public fltk3::Group {
 		  input_.value("1");
 		  input_.type(FL_INT_INPUT);
 		  input_.when(fltk3::WHEN_ENTER_KEY | fltk3::WHEN_RELEASE);
-		  input_.callback((Fl_Callback *)sb_cb, this);
+		  input_.callback((fltk3::Callback *)sb_cb, this);
 
-		  up_button_.callback((Fl_Callback *)sb_cb, this);
+		  up_button_.callback((fltk3::Callback *)sb_cb, this);
 
-		  down_button_.callback((Fl_Callback *)sb_cb, this);
+		  down_button_.callback((fltk3::Callback *)sb_cb, this);
 		}
 
   /** Sets or returns the format string for the value. */

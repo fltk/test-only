@@ -420,7 +420,7 @@ void image_cb(Fl_Input* i, void *v) {
   }
 }
 
-void image_browse_cb(Fl_Button* b, void *v) {
+void image_browse_cb(fltk3::Button* b, void *v) {
   if (v == LOAD) {
     if (current_widget->is_widget() && !current_widget->is_window())
       b->activate();
@@ -462,7 +462,7 @@ void inactive_cb(Fl_Input* i, void *v) {
   }
 }
 
-void inactive_browse_cb(Fl_Button* b, void *v) {
+void inactive_browse_cb(fltk3::Button* b, void *v) {
   if (v == LOAD) {
     if (current_widget->is_widget() && !current_widget->is_window()) 
       b->activate();
@@ -752,7 +752,7 @@ void down_box_cb(Fl_Choice* i, void *v) {
   if (v == LOAD) {
     int n;
     if (current_widget->is_button() && !current_widget->is_menu_item())
-      n = ((Fl_Button*)(current_widget->o))->down_box();
+      n = ((fltk3::Button*)(current_widget->o))->down_box();
     else if (!strcmp(current_widget->type_name(), "Fl_Input_Choice"))
       n = ((Fl_Input_Choice*)(current_widget->o))->down_box();
     else if (current_widget->is_menu_button())
@@ -774,8 +774,8 @@ void down_box_cb(Fl_Choice* i, void *v) {
       if (o->selected) {
 	if (o->is_button() && !o->is_menu_item()) {
 	  Fl_Widget_Type* q = (Fl_Widget_Type*)o;
-          ((Fl_Button*)(q->o))->down_box((fltk3::Boxtype)n);
-          if (((Fl_Button*)(q->o))->value()) q->redraw();
+          ((fltk3::Button*)(q->o))->down_box((fltk3::Boxtype)n);
+          if (((fltk3::Button*)(q->o))->value()) q->redraw();
 	} else if (!strcmp(o->type_name(), "Fl_Input_Choice")) {
 	  Fl_Widget_Type* q = (Fl_Widget_Type*)o;
 	  ((Fl_Input_Choice*)(q->o))->down_box((fltk3::Boxtype)n);
@@ -1057,7 +1057,7 @@ void labeltype_cb(Fl_Choice* i, void *v) {
 
 ////////////////////////////////////////////////////////////////
 
-void color_cb(Fl_Button* i, void *v) {
+void color_cb(fltk3::Button* i, void *v) {
   fltk3::Color c = current_widget->o->color();
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
@@ -1081,7 +1081,7 @@ void color_cb(Fl_Button* i, void *v) {
   i->color(c); i->labelcolor(fltk3::contrast(fltk3::BLACK,c)); i->redraw();
 }
 
-void color2_cb(Fl_Button* i, void *v) {
+void color2_cb(fltk3::Button* i, void *v) {
   fltk3::Color c = current_widget->o->selection_color();
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
@@ -1102,7 +1102,7 @@ void color2_cb(Fl_Button* i, void *v) {
   i->color(c); i->labelcolor(fltk3::contrast(fltk3::BLACK,c)); i->redraw();
 }
 
-void labelcolor_cb(Fl_Button* i, void *v) {
+void labelcolor_cb(fltk3::Button* i, void *v) {
   fltk3::Color c = current_widget->o->labelcolor();
   if (v != LOAD) {
     int mod = 0;
@@ -1121,9 +1121,9 @@ void labelcolor_cb(Fl_Button* i, void *v) {
   i->color(c); i->labelcolor(fltk3::contrast(fltk3::BLACK,c)); i->redraw();
 }
 
-static Fl_Button* relative(fltk3::Widget* o, int i) {
+static fltk3::Button* relative(fltk3::Widget* o, int i) {
   fltk3::Group* g = (fltk3::Group*)(o->parent());
-  return (Fl_Button*)(g->child(g->find(*o)+i));
+  return (fltk3::Button*)(g->child(g->find(*o)+i));
 }
 
 static Fl_Menu_Item alignmenu[] = {
@@ -1146,7 +1146,7 @@ static Fl_Menu_Item alignmenu[] = {
   {"fltk3::ALIGN_RIGHT_BOTTOM",0,0,(void*)(fltk3::ALIGN_RIGHT_BOTTOM)},
 {0}};
 
-void align_cb(Fl_Button* i, void *v) {
+void align_cb(fltk3::Button* i, void *v) {
   fltk3::Align b = fltk3::Align(fl_uintptr_t(i->user_data()));
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
@@ -1161,12 +1161,12 @@ void align_cb(Fl_Button* i, void *v) {
 	if (i->value()) {
 	  y = x | b;
 	  if (b == fltk3::ALIGN_LEFT || b == fltk3::ALIGN_TOP) {
-	    Fl_Button *b1 = relative(i,+1);
+	    fltk3::Button *b1 = relative(i,+1);
 	    b1->clear();
 	    y = y & ~(b1->argument());
 	  }
 	  if (b == fltk3::ALIGN_RIGHT || b == fltk3::ALIGN_BOTTOM) {
-	    Fl_Button *b1 = relative(i,-1);
+	    fltk3::Button *b1 = relative(i,-1);
 	    b1->clear();
 	    y = y & ~(b1->argument());
 	  }
@@ -1404,7 +1404,7 @@ void textsize_cb(Fl_Value_Input* i, void* v) {
   i->value(s);
 }
 
-void textcolor_cb(Fl_Button* i, void* v) {
+void textcolor_cb(fltk3::Button* i, void* v) {
   fltk3::Font n; int s; fltk3::Color c;
   if (v == LOAD) {
     if (!current_widget->textstuff(0,n,s,c)) {i->deactivate(); return;}
@@ -1499,7 +1499,7 @@ void max_h_cb(Fl_Value_Input* i, void* v) {
   }
 }
 
-void set_min_size_cb(Fl_Button*, void* v) {
+void set_min_size_cb(fltk3::Button*, void* v) {
   if (v == LOAD) {
   } else {
     int mod = 0;
@@ -1516,7 +1516,7 @@ void set_min_size_cb(Fl_Button*, void* v) {
   }
 }
 
-void set_max_size_cb(Fl_Button*, void* v) {
+void set_max_size_cb(fltk3::Button*, void* v) {
   if (v == LOAD) {
   } else {
     int mod = 0;
@@ -1665,7 +1665,7 @@ void value_cb(Fl_Value_Input* i, void* v) {
       i->value(((Fl_Valuator*)(current_widget->o))->value());
     } else if (current_widget->is_button()) {
       i->activate();
-      i->value(((Fl_Button*)(current_widget->o))->value());
+      i->value(((fltk3::Button*)(current_widget->o))->value());
     } else if (current_widget->is_spinner()) {
       i->activate();
       i->value(((Fl_Spinner*)(current_widget->o))->value());
@@ -1681,7 +1681,7 @@ void value_cb(Fl_Value_Input* i, void* v) {
 	  ((Fl_Valuator*)(q->o))->value(n);
 	  mod = 1;
 	} else if (q->is_button()) {
-	  ((Fl_Button*)(q->o))->value(n != 0);
+	  ((fltk3::Button*)(q->o))->value(n != 0);
 	  if (q->is_menu_item()) q->redraw();
 	  mod = 1;
         } else if (q->is_spinner()) {
@@ -1750,7 +1750,7 @@ void propagate_load(fltk3::Group* g, void* v) {
   }
 }
 
-void set_cb(Fl_Button*, void*) {
+void set_cb(fltk3::Button*, void*) {
   haderror = 0;
   fltk3::Widget*const* a = the_panel->array();
   for (int i=the_panel->children(); i--;) {
@@ -1768,26 +1768,26 @@ void ok_cb(Fl_Return_Button* o, void* v) {
   if (!haderror) the_panel->hide();
 }
 
-void revert_cb(Fl_Button*, void*) {
+void revert_cb(fltk3::Button*, void*) {
   // We have to revert all dynamically changing fields:
   // but for now only the first label works...
   if (numselected == 1) current_widget->label(oldlabel);
   propagate_load(the_panel, LOAD);
 }
 
-void cancel_cb(Fl_Button* o, void* v) {
+void cancel_cb(fltk3::Button* o, void* v) {
   revert_cb(o,v);
   the_panel->hide();
 }
 
 void toggle_overlays(fltk3::Widget *,void *); // in Fl_Window_Type.cxx
-void overlay_cb(Fl_Button*o,void *v) {
+void overlay_cb(fltk3::Button*o,void *v) {
   toggle_overlays(o,v);
 }
 
 void leave_live_mode_cb(fltk3::Widget*, void*);
 
-void live_mode_cb(Fl_Button*o,void *) {
+void live_mode_cb(fltk3::Button*o,void *) {
   /// \todo live mode should end gracefully when the application quits
   ///       or when the user closes the live widget
   static Fl_Type *live_type = 0L;
@@ -1815,7 +1815,7 @@ void live_mode_cb(Fl_Button*o,void *) {
         fltk3::Box *rsz_dummy = new fltk3::Box(110, h+20, 1, 25);
         rsz_dummy->box(fltk3::NO_BOX);
         rsz->resizable(rsz_dummy);
-        Fl_Button *btn = new Fl_Button(10, h+20, 100, 25, "Exit Live Mode");
+        fltk3::Button *btn = new fltk3::Button(10, h+20, 100, 25, "Exit Live Mode");
         btn->labelsize(12);
         btn->callback(leave_live_mode_cb);
         rsz->end();
@@ -2241,7 +2241,7 @@ void Fl_Widget_Type::write_widget_code() {
 
   // write shortcut command if needed
   int shortcut = 0;
-  if (is_button()) shortcut = ((Fl_Button*)o)->shortcut();
+  if (is_button()) shortcut = ((fltk3::Button*)o)->shortcut();
   else if (is_input()) shortcut = ((Fl_Input_*)o)->shortcut();
   else if (is_value_input()) shortcut = ((Fl_Value_Input*)o)->shortcut();
   else if (is_text_display()) shortcut = ((Fl_Text_Display*)o)->shortcut();
@@ -2254,7 +2254,7 @@ void Fl_Widget_Type::write_widget_code() {
   }
 
   if (is_button()) {
-    Fl_Button* b = (Fl_Button*)o;
+    fltk3::Button* b = (fltk3::Button*)o;
     if (b->down_box()) write_c("%s%s->down_box(FL_%s);\n", indent(), var,
 			       boxname(b->down_box()));
     if (b->value()) write_c("%s%s->value(1);\n", indent(), var);
@@ -2326,7 +2326,7 @@ void Fl_Widget_Type::write_widget_code() {
   const char* ud = user_data();
   if (class_name(1) && !parent->is_widget()) ud = "this";
   if (callback()) {
-    write_c("%s%s->callback((Fl_Callback*)%s", indent(), var, callback_name());
+    write_c("%s%s->callback((fltk3::Callback*)%s", indent(), var, callback_name());
     if (ud)
       write_c(", (void*)(%s));\n", ud);
     else
@@ -2429,7 +2429,7 @@ void Fl_Widget_Type::write_properties() {
     if (b->shortcut()) write_string("shortcut 0x%x", b->shortcut());
   }
   if (is_button()) {
-    Fl_Button* b = (Fl_Button*)o;
+    fltk3::Button* b = (fltk3::Button*)o;
     if (b->down_box()) {
       write_string("down_box"); write_word(boxname(b->down_box()));}
     if (b->shortcut()) write_string("shortcut 0x%x", b->shortcut());
@@ -2544,7 +2544,7 @@ void Fl_Widget_Type::read_property(const char *c) {
     const char* value = read_word();
     if ((x = boxnumber(value))) {
       if (x == ZERO_ENTRY) x = 0;
-      ((Fl_Button*)o)->down_box((fltk3::Boxtype)x);
+      ((fltk3::Button*)o)->down_box((fltk3::Boxtype)x);
     }
   } else if (!strcmp(type_name(), "Fl_Input_Choice") && !strcmp(c,"down_box")) {
     const char* value = read_word();
@@ -2560,7 +2560,7 @@ void Fl_Widget_Type::read_property(const char *c) {
     }
   } else if (is_button() && !strcmp(c,"value")) {
     const char* value = read_word();
-    ((Fl_Button*)o)->value(atoi(value));
+    ((fltk3::Button*)o)->value(atoi(value));
   } else if (!strcmp(c,"color")) {
     const char *cw = read_word();
     if (cw[0]=='0' && cw[1]=='x') {
@@ -2630,7 +2630,7 @@ void Fl_Widget_Type::read_property(const char *c) {
     subclass(read_word());
   } else if (!strcmp(c,"shortcut")) {
     int shortcut = strtol(read_word(),0,0);
-    if (is_button()) ((Fl_Button*)o)->shortcut(shortcut);
+    if (is_button()) ((fltk3::Button*)o)->shortcut(shortcut);
     else if (is_input()) ((Fl_Input_*)o)->shortcut(shortcut);
     else if (is_value_input()) ((Fl_Value_Input*)o)->shortcut(shortcut);
     else if (is_text_display()) ((Fl_Text_Display*)o)->shortcut(shortcut);
@@ -2799,9 +2799,9 @@ void Fl_Widget_Type::copy_properties() {
   w->labelcolor(o->labelcolor());
   w->align(o->align());
 
-  // copy all attributes specific to widgets derived from Fl_Button
+  // copy all attributes specific to widgets derived from fltk3::Button
   if (is_button()) {
-    Fl_Button* d = (Fl_Button*)live_widget, *s = (Fl_Button*)o;
+    fltk3::Button* d = (fltk3::Button*)live_widget, *s = (fltk3::Button*)o;
     d->down_box(s->down_box());
     d->shortcut(s->shortcut());
     d->value(s->value());

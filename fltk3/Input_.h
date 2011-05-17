@@ -371,14 +371,14 @@ public:
 
   /** Return the shortcut key associated with this widget.
     \return shortcut keystroke
-    \see Fl_Button::shortcut() */
+    \see fltk3::Button::shortcut() */
   int shortcut() const {return shortcut_;}
 
   /** 
     Sets the shortcut key associated with this widget.
     Pressing the shortcut key gives text editing focus to this widget.
     \param [in] s new shortcut keystroke 
-    \see Fl_Button::shortcut() 
+    \see fltk3::Button::shortcut() 
   */
   void shortcut(int s) {shortcut_ = s;}
 

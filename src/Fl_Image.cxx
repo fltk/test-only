@@ -132,7 +132,7 @@ void Fl_Image::label(Fl_Menu_Item* m) {
 }
 
 void
-Fl_Image::labeltype(const Fl_Label *lo,		// I - Label
+Fl_Image::labeltype(const fltk3::Label *lo,		// I - Label
                     int            lx,		// I - X position
 		    int            ly,		// I - Y position
 		    int            lw,		// I - Width of label
@@ -157,7 +157,7 @@ Fl_Image::labeltype(const Fl_Label *lo,		// I - Label
 }
 
 void
-Fl_Image::measure(const Fl_Label *lo,		// I - Label
+Fl_Image::measure(const fltk3::Label *lo,		// I - Label
                   int            &lw,		// O - Width of image
 		  int            &lh) {		// O - Height of image
   Fl_Image *img;				// Image pointer

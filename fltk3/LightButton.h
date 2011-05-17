@@ -44,7 +44,7 @@
   <P ALIGN=CENTER>\image html Fl_Light_Button.png</P> 
   \image latex Fl_Light_Button.png "Fl_Light_Button" width=4cm
 */
-class FL_EXPORT Fl_Light_Button : public Fl_Button {
+class FL_EXPORT Fl_Light_Button : public fltk3::Button {
 protected:
     virtual void draw();
 public:

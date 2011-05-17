@@ -50,7 +50,7 @@
 static fltk3::Window *message_form;
 static fltk3::Box *message;
 static fltk3::Box *icon;
-static Fl_Button *button[3];
+static fltk3::Button *button[3];
 static Fl_Input *input;
 static int ret_val;
 static const char *iconlabel = "?";
@@ -67,7 +67,7 @@ static char avoidRecursion = 0;
 // Sets the global return value (ret_val) and closes the window.
 // Note: this is used for the button callbacks and the window
 // callback (closing the window with the close button or menu).
-// The first argument (fltk3::Widget *) can either be an Fl_Button*
+// The first argument (fltk3::Widget *) can either be an fltk3::Button*
 // pointer to one of the buttons or an fltk3::Window* pointer to the
 // message window (message_form).
 static void button_cb(fltk3::Widget *, void *val) {
@@ -105,7 +105,7 @@ static fltk3::Window *makeform() {
    if (b==1)
      button[b] = new Fl_Return_Button(x, 70, 90, 23);
    else
-     button[b] = new Fl_Button(x, 70, 90, 23);
+     button[b] = new fltk3::Button(x, 70, 90, 23);
    button[b]->align(fltk3::ALIGN_INSIDE|fltk3::ALIGN_WRAP);
    button[b]->callback(button_cb,(void *)b);
  }

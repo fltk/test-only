@@ -33,9 +33,11 @@
 
 #  include "enumerations.h"
 
-namespace fltk3 { class Widget; }
+namespace fltk3 { 
+  class Widget; 
+  struct Label;
+}
 struct Fl_Menu_Item;
-struct Fl_Label;
 
 /**
   Fl_Image is the base class used for caching and
@@ -80,8 +82,8 @@ class FL_EXPORT Fl_Image {
   void data(const char * const *p, int c) {data_ = p; count_ = c;}
   void draw_empty(int X, int Y);
 
-  static void labeltype(const Fl_Label *lo, int lx, int ly, int lw, int lh, fltk3::Align la);
-  static void measure(const Fl_Label *lo, int &lw, int &lh);
+  static void labeltype(const fltk3::Label *lo, int lx, int ly, int lw, int lh, fltk3::Align la);
+  static void measure(const fltk3::Label *lo, int &lw, int &lh);
 
   public:
 

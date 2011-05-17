@@ -27,13 +27,13 @@
 
 #include <fltk3/Button.h>
 
-class Shortcut_Button : public Fl_Button {
+class Shortcut_Button : public fltk3::Button {
 public:
   int svalue;
   int handle(int);
   void draw();
   Shortcut_Button(int X,int Y,int W,int H, const char* l = 0) :
-    Fl_Button(X,Y,W,H,l) {svalue = 0;}
+    fltk3::Button(X,Y,W,H,l) {svalue = 0;}
 };
 
 //

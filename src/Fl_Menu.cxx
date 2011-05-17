@@ -136,7 +136,7 @@ extern char fl_draw_shortcut;
   Optionally, can get height if hp is not NULL. 
 */
 int Fl_Menu_Item::measure(int* hp, const Fl_Menu_* m) const {
-  Fl_Label l;
+  fltk3::Label l;
   l.value   = text;
   l.image   = 0;
   l.deimage = 0;
@@ -155,7 +155,7 @@ int Fl_Menu_Item::measure(int* hp, const Fl_Menu_* m) const {
 /** Draws the menu item in bounding box x,y,w,h, optionally selects the item. */
 void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
 			int selected) const {
-  Fl_Label l;
+  fltk3::Label l;
   l.value   = text;
   l.image   = 0;
   l.deimage = 0;

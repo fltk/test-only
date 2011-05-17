@@ -2018,7 +2018,7 @@ void preparePrintFront(void)
   if(!first) return;
   first=0;
   static fltk3::Window w(0,0,150,30);
-  static Fl_Button b(0,0,w.w(),w.h(), "Print front window");
+  static fltk3::Button b(0,0,w.w(),w.h(), "Print front window");
   b.callback(printFront);
   w.end();
   w.show();

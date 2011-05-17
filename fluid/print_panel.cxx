@@ -44,9 +44,9 @@ static void cb_print_choice(Fl_Choice*, void*) {
   print_update_status();
 }
 
-Fl_Button *print_properties=(Fl_Button *)0;
+fltk3::Button *print_properties=(fltk3::Button *)0;
 
-static void cb_print_properties(Fl_Button*, void*) {
+static void cb_print_properties(fltk3::Button*, void*) {
   print_properties_panel->show();
 }
 
@@ -101,7 +101,7 @@ print_collate_group[1 - i]->hide();
 
 fltk3::Group *print_collate_group[2]={(fltk3::Group *)0};
 
-static void cb_Cancel(Fl_Button*, void*) {
+static void cb_Cancel(fltk3::Button*, void*) {
   print_panel->hide();
 }
 
@@ -215,7 +215,7 @@ static const char *idata_print_gray[] = {
 };
 static Fl_Pixmap image_print_gray(idata_print_gray);
 
-Fl_Button *print_output_mode[4]={(Fl_Button *)0};
+fltk3::Button *print_output_mode[4]={(fltk3::Button *)0};
 
 static void cb_Save(Fl_Return_Button*, void*) {
   print_properties_panel->hide();
@@ -234,12 +234,12 @@ for (val = 0; val < 4; val ++) {
 fluid_prefs.set(name, val);
 }
 
-static void cb_Cancel1(Fl_Button*, void*) {
+static void cb_Cancel1(fltk3::Button*, void*) {
   print_properties_panel->hide();
 print_update_status();
 }
 
-static void cb_Use(Fl_Button*, void*) {
+static void cb_Use(fltk3::Button*, void*) {
   print_properties_panel->hide();
 }
 
@@ -249,12 +249,12 @@ Fl_Double_Window* make_print_panel() {
       { print_choice = new Fl_Choice(113, 10, 181, 25, "Printer:");
         print_choice->down_box(fltk3::BORDER_BOX);
         print_choice->labelfont(1);
-        print_choice->callback((Fl_Callback*)cb_print_choice);
+        print_choice->callback((fltk3::Callback*)cb_print_choice);
         print_choice->when(fltk3::WHEN_CHANGED);
       } // Fl_Choice* print_choice
-      { print_properties = new Fl_Button(294, 10, 105, 25, "Properties...");
-        print_properties->callback((Fl_Callback*)cb_print_properties);
-      } // Fl_Button* print_properties
+      { print_properties = new fltk3::Button(294, 10, 105, 25, "Properties...");
+        print_properties->callback((fltk3::Callback*)cb_print_properties);
+      } // fltk3::Button* print_properties
       { print_status = new fltk3::Box(111, 41, 288, 17, "printer/job status");
         print_status->align(fltk3::Align(68|fltk3::ALIGN_INSIDE));
       } // fltk3::Box* print_status
@@ -266,17 +266,17 @@ Fl_Double_Window* make_print_panel() {
           print_all->type(102);
           print_all->down_box(fltk3::ROUND_DOWN_BOX);
           print_all->value(1);
-          print_all->callback((Fl_Callback*)cb_print_all);
+          print_all->callback((fltk3::Callback*)cb_print_all);
         } // Fl_Round_Button* print_all
         { print_pages = new Fl_Round_Button(20, 126, 64, 25, "Pages");
           print_pages->type(102);
           print_pages->down_box(fltk3::ROUND_DOWN_BOX);
-          print_pages->callback((Fl_Callback*)cb_print_pages);
+          print_pages->callback((fltk3::Callback*)cb_print_pages);
         } // Fl_Round_Button* print_pages
         { print_selection = new Fl_Round_Button(20, 156, 82, 25, "Selection");
           print_selection->type(102);
           print_selection->down_box(fltk3::ROUND_DOWN_BOX);
-          print_selection->callback((Fl_Callback*)cb_print_selection);
+          print_selection->callback((fltk3::Callback*)cb_print_selection);
         } // Fl_Round_Button* print_selection
         { print_from = new Fl_Int_Input(136, 126, 28, 25, "From:");
           print_from->type(2);
@@ -295,12 +295,12 @@ Fl_Double_Window* make_print_panel() {
         o->labelfont(1);
         o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
         { print_copies = new Fl_Spinner(321, 96, 45, 25, "# Copies:");
-          print_copies->callback((Fl_Callback*)cb_print_copies);
+          print_copies->callback((fltk3::Callback*)cb_print_copies);
           print_copies->when(fltk3::WHEN_CHANGED);
         } // Fl_Spinner* print_copies
         { print_collate_button = new Fl_Check_Button(376, 96, 64, 25, "Collate");
           print_collate_button->down_box(fltk3::DOWN_BOX);
-          print_collate_button->callback((Fl_Callback*)cb_print_collate_button);
+          print_collate_button->callback((fltk3::Callback*)cb_print_collate_button);
           print_collate_button->when(fltk3::WHEN_CHANGED);
           print_collate_button->deactivate();
         } // Fl_Check_Button* print_collate_button
@@ -433,11 +433,11 @@ Fl_Double_Window* make_print_panel() {
         o->end();
       } // fltk3::Group* o
       { Fl_Return_Button* o = new Fl_Return_Button(309, 201, 70, 25, "Print");
-        o->callback((Fl_Callback*)print_cb);
+        o->callback((fltk3::Callback*)print_cb);
       } // Fl_Return_Button* o
-      { Fl_Button* o = new Fl_Button(389, 201, 68, 25, "Cancel");
-        o->callback((Fl_Callback*)cb_Cancel);
-      } // Fl_Button* o
+      { fltk3::Button* o = new fltk3::Button(389, 201, 68, 25, "Cancel");
+        o->callback((fltk3::Callback*)cb_Cancel);
+      } // fltk3::Button* o
       print_panel_controls->end();
     } // fltk3::Group* print_panel_controls
     { print_progress = new Fl_Progress(10, 203, 289, 21);
@@ -448,7 +448,7 @@ Fl_Double_Window* make_print_panel() {
     print_panel->end();
   } // Fl_Double_Window* print_panel
   { print_properties_panel = new Fl_Double_Window(290, 130, "Printer Properties");
-    print_properties_panel->callback((Fl_Callback*)cb_print_properties_panel);
+    print_properties_panel->callback((fltk3::Callback*)cb_print_properties_panel);
     { print_page_size = new Fl_Choice(110, 10, 80, 25, "Page Size:");
       print_page_size->down_box(fltk3::BORDER_BOX);
       print_page_size->labelfont(1);
@@ -457,7 +457,7 @@ Fl_Double_Window* make_print_panel() {
     { fltk3::Group* o = new fltk3::Group(110, 45, 170, 40, "Output Mode:");
       o->labelfont(1);
       o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-      { print_output_mode[0] = new Fl_Button(110, 45, 30, 40);
+      { print_output_mode[0] = new fltk3::Button(110, 45, 30, 40);
         print_output_mode[0]->type(102);
         print_output_mode[0]->box(fltk3::BORDER_BOX);
         print_output_mode[0]->down_box(fltk3::BORDER_BOX);
@@ -465,42 +465,42 @@ Fl_Double_Window* make_print_panel() {
         print_output_mode[0]->color(fltk3::BACKGROUND2_COLOR);
         print_output_mode[0]->selection_color(fltk3::FOREGROUND_COLOR);
         print_output_mode[0]->image(image_print_color);
-      } // Fl_Button* print_output_mode[0]
-      { print_output_mode[1] = new Fl_Button(150, 50, 40, 30);
+      } // fltk3::Button* print_output_mode[0]
+      { print_output_mode[1] = new fltk3::Button(150, 50, 40, 30);
         print_output_mode[1]->type(102);
         print_output_mode[1]->box(fltk3::BORDER_BOX);
         print_output_mode[1]->down_box(fltk3::BORDER_BOX);
         print_output_mode[1]->color(fltk3::BACKGROUND2_COLOR);
         print_output_mode[1]->selection_color(fltk3::FOREGROUND_COLOR);
         print_output_mode[1]->image(image_print_color);
-      } // Fl_Button* print_output_mode[1]
-      { print_output_mode[2] = new Fl_Button(200, 45, 30, 40);
+      } // fltk3::Button* print_output_mode[1]
+      { print_output_mode[2] = new fltk3::Button(200, 45, 30, 40);
         print_output_mode[2]->type(102);
         print_output_mode[2]->box(fltk3::BORDER_BOX);
         print_output_mode[2]->down_box(fltk3::BORDER_BOX);
         print_output_mode[2]->color(fltk3::BACKGROUND2_COLOR);
         print_output_mode[2]->selection_color(fltk3::FOREGROUND_COLOR);
         print_output_mode[2]->image(image_print_gray);
-      } // Fl_Button* print_output_mode[2]
-      { print_output_mode[3] = new Fl_Button(240, 50, 40, 30);
+      } // fltk3::Button* print_output_mode[2]
+      { print_output_mode[3] = new fltk3::Button(240, 50, 40, 30);
         print_output_mode[3]->type(102);
         print_output_mode[3]->box(fltk3::BORDER_BOX);
         print_output_mode[3]->down_box(fltk3::BORDER_BOX);
         print_output_mode[3]->color(fltk3::BACKGROUND2_COLOR);
         print_output_mode[3]->selection_color(fltk3::FOREGROUND_COLOR);
         print_output_mode[3]->image(image_print_gray);
-      } // Fl_Button* print_output_mode[3]
+      } // fltk3::Button* print_output_mode[3]
       o->end();
     } // fltk3::Group* o
     { Fl_Return_Button* o = new Fl_Return_Button(123, 95, 79, 25, "Save");
-      o->callback((Fl_Callback*)cb_Save);
+      o->callback((fltk3::Callback*)cb_Save);
     } // Fl_Return_Button* o
-    { Fl_Button* o = new Fl_Button(212, 95, 68, 25, "Cancel");
-      o->callback((Fl_Callback*)cb_Cancel1);
-    } // Fl_Button* o
-    { Fl_Button* o = new Fl_Button(60, 95, 53, 25, "Use");
-      o->callback((Fl_Callback*)cb_Use);
-    } // Fl_Button* o
+    { fltk3::Button* o = new fltk3::Button(212, 95, 68, 25, "Cancel");
+      o->callback((fltk3::Callback*)cb_Cancel1);
+    } // fltk3::Button* o
+    { fltk3::Button* o = new fltk3::Button(60, 95, 53, 25, "Use");
+      o->callback((fltk3::Callback*)cb_Use);
+    } // fltk3::Button* o
     print_properties_panel->set_modal();
     print_properties_panel->end();
   } // Fl_Double_Window* print_properties_panel

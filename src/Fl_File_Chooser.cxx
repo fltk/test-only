@@ -54,10 +54,10 @@ void Fl_File_Chooser::cb_favoritesButton(Fl_Menu_Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_favoritesButton_i(o,v);
 }
 
-void Fl_File_Chooser::cb_newButton_i(Fl_Button*, void*) {
+void Fl_File_Chooser::cb_newButton_i(fltk3::Button*, void*) {
   newdir();
 }
-void Fl_File_Chooser::cb_newButton(Fl_Button* o, void* v) {
+void Fl_File_Chooser::cb_newButton(fltk3::Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_newButton_i(o,v);
 }
 
@@ -126,13 +126,13 @@ void Fl_File_Chooser::cb_okButton(Fl_Return_Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->parent()->user_data()))->cb_okButton_i(o,v);
 }
 
-void Fl_File_Chooser::cb_cancelButton_i(Fl_Button*, void*) {
+void Fl_File_Chooser::cb_cancelButton_i(fltk3::Button*, void*) {
   fileName->value("");
 fileList->deselect();
 fltk3::remove_timeout((fltk3::TimeoutHandler)previewCB, this);
 window->hide();
 }
-void Fl_File_Chooser::cb_cancelButton(Fl_Button* o, void* v) {
+void Fl_File_Chooser::cb_cancelButton(fltk3::Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->parent()->user_data()))->cb_cancelButton_i(o,v);
 }
 
@@ -143,31 +143,31 @@ void Fl_File_Chooser::cb_favList(Fl_File_Browser* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->user_data()))->cb_favList_i(o,v);
 }
 
-void Fl_File_Chooser::cb_favUpButton_i(Fl_Button*, void*) {
+void Fl_File_Chooser::cb_favUpButton_i(fltk3::Button*, void*) {
   favoritesCB(favUpButton);
 }
-void Fl_File_Chooser::cb_favUpButton(Fl_Button* o, void* v) {
+void Fl_File_Chooser::cb_favUpButton(fltk3::Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_favUpButton_i(o,v);
 }
 
-void Fl_File_Chooser::cb_favDeleteButton_i(Fl_Button*, void*) {
+void Fl_File_Chooser::cb_favDeleteButton_i(fltk3::Button*, void*) {
   favoritesCB(favDeleteButton);
 }
-void Fl_File_Chooser::cb_favDeleteButton(Fl_Button* o, void* v) {
+void Fl_File_Chooser::cb_favDeleteButton(fltk3::Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_favDeleteButton_i(o,v);
 }
 
-void Fl_File_Chooser::cb_favDownButton_i(Fl_Button*, void*) {
+void Fl_File_Chooser::cb_favDownButton_i(fltk3::Button*, void*) {
   favoritesCB(favDownButton);
 }
-void Fl_File_Chooser::cb_favDownButton(Fl_Button* o, void* v) {
+void Fl_File_Chooser::cb_favDownButton(fltk3::Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_favDownButton_i(o,v);
 }
 
-void Fl_File_Chooser::cb_favCancelButton_i(Fl_Button*, void*) {
+void Fl_File_Chooser::cb_favCancelButton_i(fltk3::Button*, void*) {
   favWindow->hide();
 }
-void Fl_File_Chooser::cb_favCancelButton(Fl_Button* o, void* v) {
+void Fl_File_Chooser::cb_favCancelButton(fltk3::Button* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_favCancelButton_i(o,v);
 }
 
@@ -181,34 +181,34 @@ void Fl_File_Chooser::cb_favOkButton(Fl_Return_Button* o, void* v) {
 Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char *title) {
   fltk3::Group *prev_current = fltk3::Group::current();
   { window = new Fl_Double_Window(490, 380, "Choose File");
-    window->callback((Fl_Callback*)cb_window, (void*)(this));
+    window->callback((fltk3::Callback*)cb_window, (void*)(this));
     { fltk3::Group* o = new fltk3::Group(10, 10, 470, 25);
       { showChoice = new Fl_Choice(65, 10, 215, 25, "Show:");
         showChoice->down_box(fltk3::BORDER_BOX);
         showChoice->labelfont(1);
-        showChoice->callback((Fl_Callback*)cb_showChoice);
+        showChoice->callback((fltk3::Callback*)cb_showChoice);
         fltk3::Group::current()->resizable(showChoice);
         showChoice->label(show_label);
       } // Fl_Choice* showChoice
       { favoritesButton = new Fl_Menu_Button(290, 10, 155, 25, "Favorites");
         favoritesButton->down_box(fltk3::BORDER_BOX);
-        favoritesButton->callback((Fl_Callback*)cb_favoritesButton);
+        favoritesButton->callback((fltk3::Callback*)cb_favoritesButton);
         favoritesButton->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
         favoritesButton->label(favorites_label);
       } // Fl_Menu_Button* favoritesButton
-      { Fl_Button* o = newButton = new Fl_Button(455, 10, 25, 25);
+      { fltk3::Button* o = newButton = new fltk3::Button(455, 10, 25, 25);
         newButton->image(image_new);
         newButton->labelsize(8);
-        newButton->callback((Fl_Callback*)cb_newButton);
+        newButton->callback((fltk3::Callback*)cb_newButton);
         o->tooltip(new_directory_tooltip);
-      } // Fl_Button* newButton
+      } // fltk3::Button* newButton
       o->end();
     } // fltk3::Group* o
     { Fl_Tile* o = new Fl_Tile(10, 45, 470, 225);
-      o->callback((Fl_Callback*)cb_);
+      o->callback((fltk3::Callback*)cb_);
       { fileList = new Fl_File_Browser(10, 45, 295, 225);
         fileList->type(2);
-        fileList->callback((Fl_Callback*)cb_fileList);
+        fileList->callback((fltk3::Callback*)cb_fileList);
         fileList->window()->hotspot(fileList);
       } // Fl_File_Browser* fileList
       { previewBox = new fltk3::Box(305, 45, 175, 225, "?");
@@ -225,7 +225,7 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
           previewButton->shortcut(0x80070);
           previewButton->down_box(fltk3::DOWN_BOX);
           previewButton->value(1);
-          previewButton->callback((Fl_Callback*)cb_previewButton);
+          previewButton->callback((fltk3::Callback*)cb_previewButton);
           previewButton->label(preview_label);
         } // Fl_Check_Button* previewButton
 #ifndef WIN32	
@@ -233,7 +233,7 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
 	    previewButton->x() + previewButton->w() + 30, 275, 140, 20, "Show hidden files");
           show_hidden->down_box(fltk3::DOWN_BOX);
           show_hidden->value(0);
-          show_hidden->callback((Fl_Callback*)show_hidden_cb, this);
+          show_hidden->callback((fltk3::Callback*)show_hidden_cb, this);
           show_hidden->label(hidden_label);
         } // Fl_Check_Button* show_hidden
 #endif	
@@ -244,7 +244,7 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
       } // fltk3::Group* o
       { fileName = new Fl_File_Input(115, 300, 365, 35);
         fileName->labelfont(1);
-        fileName->callback((Fl_Callback*)cb_fileName);
+        fileName->callback((fltk3::Callback*)cb_fileName);
         fileName->when(fltk3::WHEN_ENTER_KEY);
         fltk3::Group::current()->resizable(fileName);
         fileName->when(fltk3::WHEN_CHANGED | fltk3::WHEN_ENTER_KEY);
@@ -256,13 +256,13 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
       } // fltk3::Box* o
       { fltk3::Group* o = new fltk3::Group(10, 345, 470, 25);
         { okButton = new Fl_Return_Button(313, 345, 85, 25, "OK");
-          okButton->callback((Fl_Callback*)cb_okButton);
+          okButton->callback((fltk3::Callback*)cb_okButton);
           okButton->label(fl_ok);
         } // Fl_Return_Button* okButton
-        { Fl_Button* o = cancelButton = new Fl_Button(408, 345, 72, 25, "Cancel");
-          cancelButton->callback((Fl_Callback*)cb_cancelButton);
+        { fltk3::Button* o = cancelButton = new fltk3::Button(408, 345, 72, 25, "Cancel");
+          cancelButton->callback((fltk3::Callback*)cb_cancelButton);
           o->label(fl_cancel);
-        } // Fl_Button* cancelButton
+        } // fltk3::Button* cancelButton
         { fltk3::Box* o = new fltk3::Box(10, 345, 30, 25);
           fltk3::Group::current()->resizable(o);
         } // fltk3::Box* o
@@ -278,30 +278,30 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
     favWindow->user_data((void*)(this));
     { favList = new Fl_File_Browser(10, 10, 300, 95);
       favList->type(2);
-      favList->callback((Fl_Callback*)cb_favList);
+      favList->callback((fltk3::Callback*)cb_favList);
       fltk3::Group::current()->resizable(favList);
     } // Fl_File_Browser* favList
     { fltk3::Group* o = new fltk3::Group(320, 10, 25, 95);
-      { favUpButton = new Fl_Button(320, 10, 25, 25, "@8>");
-        favUpButton->callback((Fl_Callback*)cb_favUpButton);
-      } // Fl_Button* favUpButton
-      { favDeleteButton = new Fl_Button(320, 45, 25, 25, "X");
+      { favUpButton = new fltk3::Button(320, 10, 25, 25, "@8>");
+        favUpButton->callback((fltk3::Callback*)cb_favUpButton);
+      } // fltk3::Button* favUpButton
+      { favDeleteButton = new fltk3::Button(320, 45, 25, 25, "X");
         favDeleteButton->labelfont(1);
-        favDeleteButton->callback((Fl_Callback*)cb_favDeleteButton);
+        favDeleteButton->callback((fltk3::Callback*)cb_favDeleteButton);
         fltk3::Group::current()->resizable(favDeleteButton);
-      } // Fl_Button* favDeleteButton
-      { favDownButton = new Fl_Button(320, 80, 25, 25, "@2>");
-        favDownButton->callback((Fl_Callback*)cb_favDownButton);
-      } // Fl_Button* favDownButton
+      } // fltk3::Button* favDeleteButton
+      { favDownButton = new fltk3::Button(320, 80, 25, 25, "@2>");
+        favDownButton->callback((fltk3::Callback*)cb_favDownButton);
+      } // fltk3::Button* favDownButton
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(10, 113, 335, 29);
-      { favCancelButton = new Fl_Button(273, 115, 72, 25, "Cancel");
-        favCancelButton->callback((Fl_Callback*)cb_favCancelButton);
+      { favCancelButton = new fltk3::Button(273, 115, 72, 25, "Cancel");
+        favCancelButton->callback((fltk3::Callback*)cb_favCancelButton);
         favCancelButton->label(fl_cancel);
-      } // Fl_Button* favCancelButton
+      } // fltk3::Button* favCancelButton
       { favOkButton = new Fl_Return_Button(181, 115, 79, 25, "Save");
-        favOkButton->callback((Fl_Callback*)cb_favOkButton);
+        favOkButton->callback((fltk3::Callback*)cb_favOkButton);
         favOkButton->label(save_label);
       } // Fl_Return_Button* favOkButton
       { fltk3::Box* o = new fltk3::Box(10, 115, 161, 25);

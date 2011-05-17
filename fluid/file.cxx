@@ -633,8 +633,8 @@ void read_fdesign() {
 	    value = class_matcher[i+1]; break;}
 	widget = (Fl_Widget_Type*)Fl_Type_make(value);
 	if (!widget) {
-	  printf("class %s not found, using Fl_Button\n", value);
-	  widget = (Fl_Widget_Type*)Fl_Type_make("Fl_Button");
+	  printf("class %s not found, using fltk3::Button\n", value);
+	  widget = (Fl_Widget_Type*)Fl_Type_make("fltk3::Button");
 	}
       }
 

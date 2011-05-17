@@ -110,7 +110,7 @@ static int compare(const char* a, const char* b) {
 int Fl_Menu_Item::add(
   const char *mytext,
   int sc,
-  Fl_Callback *cb,	
+  fltk3::Callback *cb,	
   void *data,
   int myflags
 ) {
@@ -142,7 +142,7 @@ int Fl_Menu_Item::insert(
   int index,
   const char *mytext,
   int sc,
-  Fl_Callback *cb,	
+  fltk3::Callback *cb,	
   void *data,
   int myflags
 ) {
@@ -324,7 +324,7 @@ int Fl_Menu_Item::insert(
   \todo Raw integer shortcut needs examples. 
         Dependent on responses to http://fltk.org/newsgroups.php?gfltk.development+v:10086 and results of STR#2344
  */
-int Fl_Menu_::add(const char *label,int shortcut,Fl_Callback *callback,void *userdata,int flags) {
+int Fl_Menu_::add(const char *label,int shortcut,fltk3::Callback *callback,void *userdata,int flags) {
   return(insert(-1,label,shortcut,callback,userdata,flags));	// -1: append
 }
 
@@ -365,7 +365,7 @@ int Fl_Menu_::insert(
   int index,
   const char *label,
   int shortcut,
-  Fl_Callback *callback,
+  fltk3::Callback *callback,
   void *userdata,
   int flags
 ) {

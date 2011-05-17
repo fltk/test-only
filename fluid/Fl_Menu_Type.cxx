@@ -89,7 +89,7 @@ void Fl_Input_Choice_Type::build_menu() {
         m->label(i->o->label() ? i->o->label() : "(nolabel)");
         m->labeltype(i->o->labeltype());
       }
-      m->shortcut(((Fl_Button*)(i->o))->shortcut());
+      m->shortcut(((fltk3::Button*)(i->o))->shortcut());
       m->callback(0,(void*)i);
       m->flags = i->flags();
       m->labelfont(i->o->labelfont());
@@ -120,12 +120,12 @@ Fl_Type *Fl_Menu_Item_Type::make() {
     return 0;
   }
   if (!o) {
-    o = new Fl_Button(0,0,100,20); // create template widget
+    o = new fltk3::Button(0,0,100,20); // create template widget
     o->labelsize(Fl_Widget_Type::default_size);
   }
 
   Fl_Menu_Item_Type* t = submenuflag ? new Fl_Submenu_Type() : new Fl_Menu_Item_Type();
-  t->o = new Fl_Button(0,0,100,20);
+  t->o = new fltk3::Button(0,0,100,20);
   t->factory = this;
   t->add(p);
   if (!reading_file) t->label(submenuflag ? "submenu" : "item");
@@ -274,7 +274,7 @@ void Fl_Menu_Item_Type::write_static() {
 
 int Fl_Menu_Item_Type::flags() {
   int i = o->type();
-  if (((Fl_Button*)o)->value()) i |= FL_MENU_VALUE;
+  if (((fltk3::Button*)o)->value()) i |= FL_MENU_VALUE;
   if (!o->active()) i |= FL_MENU_INACTIVE;
   if (!o->visible()) i |= FL_MENU_INVISIBLE;
   if (is_parent()) {
@@ -301,8 +301,8 @@ void Fl_Menu_Item_Type::write_item() {
   if (image) write_c("0");
   else if (label()) write_cstring(label()); // we will call i18n when the widget is instantiated for the first time
   else write_c("\"\"");
-  if (((Fl_Button*)o)->shortcut()) {
-		int s = ((Fl_Button*)o)->shortcut();
+  if (((fltk3::Button*)o)->shortcut()) {
+		int s = ((fltk3::Button*)o)->shortcut();
 		if (use_FL_COMMAND && (s & (fltk3::CTRL|fltk3::META))) {
 			write_c(", fltk3::COMMAND|0x%x, ", s & ~(fltk3::CTRL|fltk3::META));
 		} else {
@@ -313,9 +313,9 @@ void Fl_Menu_Item_Type::write_item() {
   if (callback()) {
     const char* k = is_name(callback()) ? 0 : class_name(1);
     if (k) {
-      write_c(" (Fl_Callback*)%s::%s,", k, callback_name());
+      write_c(" (fltk3::Callback*)%s::%s,", k, callback_name());
     } else {
-      write_c(" (Fl_Callback*)%s,", callback_name());
+      write_c(" (fltk3::Callback*)%s,", callback_name());
     }
   } else
     write_c(" 0,");
@@ -426,7 +426,7 @@ void Fl_Menu_Type::build_menu() {
         m->label(i->o->label() ? i->o->label() : "(nolabel)");
         m->labeltype(i->o->labeltype());
       }
-      m->shortcut(((Fl_Button*)(i->o))->shortcut());
+      m->shortcut(((fltk3::Button*)(i->o))->shortcut());
       m->callback(0,(void*)i);
       m->flags = i->flags();
       m->labelfont(i->o->labelfont());
@@ -610,7 +610,7 @@ int Shortcut_Button::handle(int e) {
   } else if (e == fltk3::FOCUS) {
     return value();
   } else {
-    int r = Fl_Button::handle(e);
+    int r = fltk3::Button::handle(e);
     if (e == fltk3::RELEASE && value() && fltk3::focus() != this) take_focus();
     return r;
   }
@@ -619,7 +619,7 @@ int Shortcut_Button::handle(int e) {
 void shortcut_in_cb(Shortcut_Button* i, void* v) {
   if (v == LOAD) {
     if (current_widget->is_button())
-      i->svalue = ((Fl_Button*)(current_widget->o))->shortcut();
+      i->svalue = ((fltk3::Button*)(current_widget->o))->shortcut();
     else if (current_widget->is_input())
       i->svalue = ((Fl_Input_*)(current_widget->o))->shortcut();
     else if (current_widget->is_value_input())
@@ -636,7 +636,7 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_button()) {
-	Fl_Button* b = (Fl_Button*)(((Fl_Widget_Type*)o)->o);
+	fltk3::Button* b = (fltk3::Button*)(((Fl_Widget_Type*)o)->o);
         if (b->shortcut()!=i->svalue) mod = 1;
 	b->shortcut(i->svalue);
 	if (o->is_menu_item()) ((Fl_Widget_Type*)o)->redraw();

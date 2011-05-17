@@ -234,6 +234,8 @@ rename fl_gray_ramp gray_ramp
 renameClass Fl_Widget Widget
 renameClass Fl_Group Group
 renameClass Fl_Window Window
+renameClass Fl_Button Button
+renameClass Fl_Label Label
 renameClass Fl_Widget_Tracker WidgetTracker
 
 renameType Fl_Label_Draw_F LabelDrawF
@@ -249,7 +251,8 @@ renameType Fl_Abort_Handler Fl_Abort_HandlerAbortHandler
 renameType Fl_Atclose_Handler FlAtcloseHandler
 renameType Fl_Args_Handler ArgsHandler
 renameType Fl_Event_Dispatch EventDispatch
-
+renameType Fl_Callback Callback
+renameType Fl_Callback_p CallbackPtr
 
 
 

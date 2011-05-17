@@ -1679,7 +1679,7 @@ Fl_Menu_Item Main_Menu[] = {
   {"Ung&roup", fltk3::FKey+8, ungroup_cb,0, FL_MENU_DIVIDER},
   {"Hide O&verlays",fltk3::COMMAND+fltk3::SHIFT+'o',toggle_overlays},
   {"Show Widget &Bin...",fltk3::ALT+'b',toggle_widgetbin_cb},
-  {"Show Source Code...",fltk3::ALT+fltk3::SHIFT+'s', (Fl_Callback*)toggle_sourceview_cb, 0, FL_MENU_DIVIDER},
+  {"Show Source Code...",fltk3::ALT+fltk3::SHIFT+'s', (fltk3::Callback*)toggle_sourceview_cb, 0, FL_MENU_DIVIDER},
   {"Pro&ject Settings...",fltk3::ALT+'p',show_project_cb},
   {"GU&I Settings...",fltk3::ALT+fltk3::SHIFT+'p',show_settings_cb,0,FL_MENU_DIVIDER},
   {"Global &FLTK Settings...",fltk3::ALT+fltk3::SHIFT+'g',show_global_settings_cb},
@@ -1687,39 +1687,39 @@ Fl_Menu_Item Main_Menu[] = {
 {"&New", 0, 0, (void *)New_Menu, FL_SUBMENU_POINTER},
 {"&Layout",0,0,0,FL_SUBMENU},
   {"&Align",0,0,0,FL_SUBMENU},
-    {"&Left",0,(Fl_Callback *)align_widget_cb,(void*)10},
-    {"&Center",0,(Fl_Callback *)align_widget_cb,(void*)11},
-    {"&Right",0,(Fl_Callback *)align_widget_cb,(void*)12},
-    {"&Top",0,(Fl_Callback *)align_widget_cb,(void*)13},
-    {"&Middle",0,(Fl_Callback *)align_widget_cb,(void*)14},
-    {"&Bottom",0,(Fl_Callback *)align_widget_cb,(void*)15},
+    {"&Left",0,(fltk3::Callback *)align_widget_cb,(void*)10},
+    {"&Center",0,(fltk3::Callback *)align_widget_cb,(void*)11},
+    {"&Right",0,(fltk3::Callback *)align_widget_cb,(void*)12},
+    {"&Top",0,(fltk3::Callback *)align_widget_cb,(void*)13},
+    {"&Middle",0,(fltk3::Callback *)align_widget_cb,(void*)14},
+    {"&Bottom",0,(fltk3::Callback *)align_widget_cb,(void*)15},
     {0},
   {"&Space Evenly",0,0,0,FL_SUBMENU},
-    {"&Across",0,(Fl_Callback *)align_widget_cb,(void*)20},
-    {"&Down",0,(Fl_Callback *)align_widget_cb,(void*)21},
+    {"&Across",0,(fltk3::Callback *)align_widget_cb,(void*)20},
+    {"&Down",0,(fltk3::Callback *)align_widget_cb,(void*)21},
     {0},
   {"&Make Same Size",0,0,0,FL_SUBMENU},
-    {"&Width",0,(Fl_Callback *)align_widget_cb,(void*)30},
-    {"&Height",0,(Fl_Callback *)align_widget_cb,(void*)31},
-    {"&Both",0,(Fl_Callback *)align_widget_cb,(void*)32},
+    {"&Width",0,(fltk3::Callback *)align_widget_cb,(void*)30},
+    {"&Height",0,(fltk3::Callback *)align_widget_cb,(void*)31},
+    {"&Both",0,(fltk3::Callback *)align_widget_cb,(void*)32},
     {0},
   {"&Center In Group",0,0,0,FL_SUBMENU},
-    {"&Horizontal",0,(Fl_Callback *)align_widget_cb,(void*)40},
-    {"&Vertical",0,(Fl_Callback *)align_widget_cb,(void*)41},
+    {"&Horizontal",0,(fltk3::Callback *)align_widget_cb,(void*)40},
+    {"&Vertical",0,(fltk3::Callback *)align_widget_cb,(void*)41},
     {0},
   {"Set &Widget Size",0,0,0,FL_SUBMENU|FL_MENU_DIVIDER},
-    {"&Tiny",fltk3::ALT+'1',(Fl_Callback *)widget_size_cb,(void*)8,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,8},
-    {"&Small",fltk3::ALT+'2',(Fl_Callback *)widget_size_cb,(void*)11,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,11},
-    {"&Normal",fltk3::ALT+'3',(Fl_Callback *)widget_size_cb,(void*)14,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,14},
-    {"&Medium",fltk3::ALT+'4',(Fl_Callback *)widget_size_cb,(void*)18,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,18},
-    {"&Large",fltk3::ALT+'5',(Fl_Callback *)widget_size_cb,(void*)24,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,24},
-    {"&Huge",fltk3::ALT+'6',(Fl_Callback *)widget_size_cb,(void*)32,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,32},
+    {"&Tiny",fltk3::ALT+'1',(fltk3::Callback *)widget_size_cb,(void*)8,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,8},
+    {"&Small",fltk3::ALT+'2',(fltk3::Callback *)widget_size_cb,(void*)11,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,11},
+    {"&Normal",fltk3::ALT+'3',(fltk3::Callback *)widget_size_cb,(void*)14,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,14},
+    {"&Medium",fltk3::ALT+'4',(fltk3::Callback *)widget_size_cb,(void*)18,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,18},
+    {"&Large",fltk3::ALT+'5',(fltk3::Callback *)widget_size_cb,(void*)24,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,24},
+    {"&Huge",fltk3::ALT+'6',(fltk3::Callback *)widget_size_cb,(void*)32,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,32},
     {0},
   {"&Grid and Size Settings...",fltk3::COMMAND+'g',show_grid_cb},
   {0},
 {"&Shell",0,0,0,FL_SUBMENU},
-  {"Execute &Command...",fltk3::ALT+'x',(Fl_Callback *)show_shell_window},
-  {"Execute &Again...",fltk3::ALT+'g',(Fl_Callback *)do_shell_command},
+  {"Execute &Command...",fltk3::ALT+'x',(fltk3::Callback *)show_shell_window},
+  {"Execute &Again...",fltk3::ALT+'g',(fltk3::Callback *)do_shell_command},
   {0},
 {"&Help",0,0,0,FL_SUBMENU},
   {"&Rapid development with FLUID...",0,help_cb},
@@ -1777,7 +1777,7 @@ void toggle_widgetbin_cb(fltk3::Widget *, void *) {
 void toggle_sourceview_cb(Fl_Double_Window *, void *) {
   if (!sourceview_panel) {
     make_sourceview();
-    sourceview_panel->callback((Fl_Callback*)toggle_sourceview_cb);
+    sourceview_panel->callback((fltk3::Callback*)toggle_sourceview_cb);
     Fl_Preferences svp(fluid_prefs, "sourceview");
     int autorefresh;
     svp.get("autorefresh", autorefresh, 1);
@@ -1801,7 +1801,7 @@ void toggle_sourceview_cb(Fl_Double_Window *, void *) {
   }
 }
 
-void toggle_sourceview_b_cb(Fl_Button*, void *) {
+void toggle_sourceview_b_cb(fltk3::Button*, void *) {
   toggle_sourceview_cb(0,0);
 }
 
@@ -1831,7 +1831,7 @@ void make_main_window() {
     save_item = (Fl_Menu_Item*)main_menubar->find_item(save_cb);
     history_item = (Fl_Menu_Item*)main_menubar->find_item(open_history_cb);
     widgetbin_item = (Fl_Menu_Item*)main_menubar->find_item(toggle_widgetbin_cb);
-    sourceview_item = (Fl_Menu_Item*)main_menubar->find_item((Fl_Callback*)toggle_sourceview_cb);
+    sourceview_item = (Fl_Menu_Item*)main_menubar->find_item((fltk3::Callback*)toggle_sourceview_cb);
     main_menubar->global();
     fill_in_New_Menu();
     main_window->end();
@@ -2209,7 +2209,7 @@ static char *sv_header_filename = 0;
 // Generate a header and source file in a temporary directory and
 // load those into the Code Viewer widgets.
 //
-void update_sourceview_cb(Fl_Button*, void*)
+void update_sourceview_cb(fltk3::Button*, void*)
 {
   if (!sourceview_panel || !sourceview_panel->visible())
     return;

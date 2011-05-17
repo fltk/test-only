@@ -29,8 +29,8 @@
  fltk3 namespace
  */
 
-#ifndef Fl_H
-#  define Fl_H
+#ifndef FLTK3_RUN_H
+#  define FLTK3_RUN_H
 
 #ifdef FLTK_HAVE_CAIRO
 # include <fltk3/Cairo.h>
@@ -50,9 +50,9 @@
 namespace fltk3 { 
   class Widget;
   class Window;
+  struct Label;
 }
 class Fl_Image;
-struct Fl_Label;
 
 
 namespace fltk3 {
@@ -73,10 +73,10 @@ namespace fltk3 {
    @{ */
   
   /** Signature of some label drawing functions passed as parameters */
-  typedef void (LabelDrawF)(const Fl_Label *label, int x, int y, int w, int h, fltk3::Align align);
+  typedef void (LabelDrawF)(const fltk3::Label *label, int x, int y, int w, int h, fltk3::Align align);
   
   /** Signature of some label measurement functions passed as parameters */
-  typedef void (LabelMeasureF)(const Fl_Label *label, int &width, int &height);
+  typedef void (LabelMeasureF)(const fltk3::Label *label, int &width, int &height);
   
   /** Signature of some box drawing functions passed as parameters */
   typedef void (BoxDrawF)(int x, int y, int w, int h, fltk3::Color color);
@@ -897,7 +897,7 @@ namespace fltk3 {
   void default_atclose(fltk3::Window*,void*);
   /** For back compatibility, sets the fltk3::atclose handler callback. You
    can now simply change the callback for the window instead.
-   \see fltk3::Window::callback(Fl_Callback*) */
+   \see fltk3::Window::callback(fltk3::Callback*) */
   inline void set_atclose(fltk3::AtcloseHandler f) {atclose = f;}
   /**   @} */
   
