@@ -935,8 +935,8 @@ void fl_fix_focus() {
   fltk3::Widget* w = fl_xfocus;
   if (w) {
     int saved = Fl::e_keysym;
-    if (Fl::e_keysym < (fltk3::MouseButton + fltk3::leftMouseButton) ||
-        Fl::e_keysym > (fltk3::MouseButton + fltk3::rightMouseButton))
+    if (Fl::e_keysym < (fltk3::MouseButton + fltk3::LEFT_MOUSE) ||
+        Fl::e_keysym > (fltk3::MouseButton + fltk3::RIGHT_MOUSE))
       Fl::e_keysym = 0; // make sure widgets don't think a keystroke moved focus
     while (w->parent()) w = w->parent();
     if (Fl::modal()) w = Fl::modal();

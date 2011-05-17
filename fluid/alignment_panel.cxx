@@ -49,9 +49,9 @@ Fl_Check_Button *use_FL_COMMAND_button=(Fl_Check_Button *)0;
 Fl_Choice *i18n_type_chooser=(Fl_Choice *)0;
 
 Fl_Menu_Item menu_i18n_type_chooser[] = {
- {"None", 0,  0, 0, 0, fltk3::normalLabel, 0, 14, 0},
- {"GNU gettext", 0,  0, 0, 0, fltk3::normalLabel, 0, 14, 0},
- {"POSIX catgets", 0,  0, 0, 0, fltk3::normalLabel, 0, 14, 0},
+ {"None", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"GNU gettext", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"POSIX catgets", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
@@ -158,10 +158,10 @@ Fl_Double_Window *settings_window=(Fl_Double_Window *)0;
 Fl_Choice *scheme_choice=(Fl_Choice *)0;
 
 Fl_Menu_Item menu_scheme_choice[] = {
- {"Default", 0,  0, 0, 0, fltk3::normalLabel, 0, 14, 0},
- {"None", 0,  0, 0, 0, fltk3::normalLabel, 0, 14, 0},
- {"Plastic", 0,  0, 0, 0, fltk3::normalLabel, 0, 14, 0},
- {"GTK+", 0,  0, 0, 0, fltk3::normalLabel, 0, 14, 0},
+ {"Default", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"None", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"Plastic", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"GTK+", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
@@ -595,9 +595,9 @@ opt[Fl::OPTION_VISIBLE_FOCUS][mode] = wVisibleFocus->value();
 }
 
 Fl_Menu_Item menu_wVisibleFocus[] = {
- {"off", 0,  0, (void*)(0), 0, fltk3::normalLabel, 0, 14, 0},
- {"on", 0,  0, (void*)(1), 128, fltk3::normalLabel, 0, 14, 0},
- {"default", 0,  0, (void*)(2), 0, fltk3::normalLabel, 0, 14, 0},
+ {"off", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"on", 0,  0, (void*)(1), 128, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"default", 0,  0, (void*)(2), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
@@ -609,9 +609,9 @@ opt[Fl::OPTION_ARROW_FOCUS][mode] = wArrowFocus->value();
 }
 
 Fl_Menu_Item menu_wArrowFocus[] = {
- {"off", 0,  0, (void*)(0), 0, fltk3::normalLabel, 0, 14, 0},
- {"on", 0,  0, (void*)(1), 128, fltk3::normalLabel, 0, 14, 0},
- {"default", 0,  0, (void*)(2), 0, fltk3::normalLabel, 0, 14, 0},
+ {"off", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"on", 0,  0, (void*)(1), 128, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"default", 0,  0, (void*)(2), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
@@ -623,9 +623,9 @@ opt[Fl::OPTION_SHOW_TOOLTIPS][mode] = wShowTooltips->value();
 }
 
 Fl_Menu_Item menu_wShowTooltips[] = {
- {"off", 0,  0, (void*)(0), 0, fltk3::normalLabel, 0, 14, 0},
- {"on", 0,  0, (void*)(1), 128, fltk3::normalLabel, 0, 14, 0},
- {"default", 0,  0, (void*)(2), 0, fltk3::normalLabel, 0, 14, 0},
+ {"off", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"on", 0,  0, (void*)(1), 128, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"default", 0,  0, (void*)(2), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
@@ -637,9 +637,9 @@ opt[Fl::OPTION_DND_TEXT][mode] = wDNDText->value();
 }
 
 Fl_Menu_Item menu_wDNDText[] = {
- {"off", 0,  0, (void*)(0), 0, fltk3::normalLabel, 0, 14, 0},
- {"on", 0,  0, (void*)(1), 128, fltk3::normalLabel, 0, 14, 0},
- {"default", 0,  0, (void*)(2), 0, fltk3::normalLabel, 0, 14, 0},
+ {"off", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"on", 0,  0, (void*)(1), 128, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"default", 0,  0, (void*)(2), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
@@ -650,8 +650,8 @@ static void cb_wUserOrSystem(Fl_Choice*, void*) {
 }
 
 Fl_Menu_Item menu_wUserOrSystem[] = {
- {"User Settings", 0,  0, (void*)(0), 0, fltk3::normalLabel, 0, 14, 0},
- {"System Settings", 0,  0, (void*)(1), 0, fltk3::normalLabel, 0, 14, 0},
+ {"User Settings", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
+ {"System Settings", 0,  0, (void*)(1), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 

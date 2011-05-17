@@ -117,7 +117,7 @@ fltk3::Widget::Widget(int X, int Y, int W, int H, const char* L) {
   label_.value	 = L;
   label_.image   = 0;
   label_.deimage = 0;
-  label_.type	 = fltk3::normalLabel;
+  label_.type	 = fltk3::NORMAL_LABEL;
   label_.font	 = fltk3::HELVETICA;
   label_.size	 = fltk3::NORMAL_SIZE;
   label_.color	 = fltk3::FOREGROUND_COLOR;

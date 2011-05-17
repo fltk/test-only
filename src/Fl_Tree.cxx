@@ -637,7 +637,7 @@ int Fl_Tree::handle(int e) {
       set_item_focus(o);				// becomes new focus widget
       redraw();
       ret |= 1;						// handled
-      if ( Fl::event_button() == fltk3::leftMouseButton ) {
+      if ( Fl::event_button() == fltk3::LEFT_MOUSE ) {
 	if ( o->event_on_collapse_icon(_prefs) ) {	// collapse icon clicked?
 	  open_toggle(o);
 	} else if ( o->event_on_label(_prefs) && 	// label clicked?
@@ -677,7 +677,7 @@ int Fl_Tree::handle(int e) {
 	if ( p > (int)_vscroll->maximum() ) p = (int)_vscroll->maximum();
         vposition(p);
       }
-      if ( Fl::event_button() != fltk3::leftMouseButton ) break;
+      if ( Fl::event_button() != fltk3::LEFT_MOUSE ) break;
       Fl_Tree_Item *o = _root->find_clicked(_prefs);
       if ( ! o ) break;
       set_item_focus(o);			// becomes new focus widget

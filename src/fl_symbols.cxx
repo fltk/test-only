@@ -527,7 +527,7 @@ static void draw_filesave(fltk3::Color c) {
 static void draw_filesaveas(fltk3::Color c) {
   draw_filesave(c);
 
-  fl_color(fltk3::colorAverage(c, fltk3::WHITE, 0.25f));
+  fl_color(fltk3::color_average(c, fltk3::WHITE, 0.25f));
   BP;
     vv(0.6, -0.8);
     vv(1.0, -0.4);
@@ -563,7 +563,7 @@ static void draw_fileprint(fltk3::Color c) {
     vv(-1.0, 0.2);
   EP;
 
-  fl_color(fltk3::colorAverage(c, fltk3::WHITE, 0.25f));
+  fl_color(fltk3::color_average(c, fltk3::WHITE, 0.25f));
   BP;
     vv(-0.6, 0.0);
     vv(-0.6, -1.0);

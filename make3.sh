@@ -74,9 +74,9 @@ renameMacro FL_Alt_L AltLKey
 renameMacro FL_Alt_R AltRKey
 renameMacro FL_Delete DeleteKey
 
-renameMacro FL_LEFT_MOUSE leftMouseButton
-renameMacro FL_MIDDLE_MOUSE middleMouseButton
-renameMacro FL_RIGHT_MOUSE rightMouseButton
+renameMacro FL_LEFT_MOUSE LEFT_MOUSE
+renameMacro FL_MIDDLE_MOUSE MIDDLE_MOUSE
+renameMacro FL_RIGHT_MOUSE RIGHT_MOUSE
 
 renameMacro FL_SHIFT SHIFT
 renameMacro FL_CAPS_LOCK CAPS_LOCK
@@ -130,15 +130,15 @@ renameEnumType Fl_Align Align
 renameEnum FL_ALIGN_* ALIGN_
 
 renameEnumType Fl_Labeltype Labeltype
-renameEnum FL_NORMAL_LABEL normalLabel
-renameEnum FL_SYMBOL_LABEL symbolLabel
-renameEnum FL_NO_LABEL noLabel
-renameEnum FL_SHADOW_LABEL shadowLabel
-renameEnum FL_ENGRAVED_LABEL engravedLabel
-renameEnum FL_EMBOSSED_LABEL embossedLabel
-renameEnum FL_MULTI_LABEL multiLabel
-renameEnum FL_ICON_LABEL iconLabel
-renameEnum FL_IMAGE_LABLE imageLabel
+renameEnum FL_NORMAL_LABEL NORMAL_LABEL
+renameEnum FL_SYMBOL_LABEL SYMBOL_LABEL
+renameEnum FL_NO_LABEL NO_LABEL
+renameEnum FL_SHADOW_LABEL SHADOW_LABEL
+renameEnum FL_ENGRAVED_LABEL ENGRAVED_LABEL
+renameEnum FL_EMBOSSED_LABEL EMBOSSED_LABEL
+renameEnum FL_MULTI_LABEL MULTI_LABEL
+renameEnum FL_ICON_LABEL ICON_LABEL
+renameEnum FL_IMAGE_LABEL IMAGE_LABEL
 renameEnum FL_FREE_LABELTYPE freeLabel
 
 rename Fl_Font Font
@@ -225,11 +225,11 @@ rename FL_NUM_GREEN NUM_GREEN
 rename FL_NUM_BLUE NUM_BLUE
 rename fl_inactive inactive
 rename fl_contrast contrast
-rename fl_color_average colorAverage
+rename fl_color_average color_average
 rename fl_lighter lighter
 rename fl_darker darker
-rename fl_rgb_color rgbColor
-rename fl_gray_ramp grayRamp
+rename fl_rgb_color rgb_color
+rename fl_gray_ramp gray_ramp
 
 renameClass Fl_Widget Widget
 renameClass Fl_Group Group

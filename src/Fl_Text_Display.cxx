@@ -1941,19 +1941,19 @@ void Fl_Text_Display::draw_string(int style,
     
     if (style & PRIMARY_MASK) {
       if (Fl::focus() == (fltk3::Widget*)this) background = selection_color();
-      else background = fltk3::colorAverage(color(), selection_color(), 0.4f);
+      else background = fltk3::color_average(color(), selection_color(), 0.4f);
     } else if (style & HIGHLIGHT_MASK) {
-      if (Fl::focus() == (fltk3::Widget*)this) background = fltk3::colorAverage(color(), selection_color(), 0.5f);
-      else background = fltk3::colorAverage(color(), selection_color(), 0.6f);
+      if (Fl::focus() == (fltk3::Widget*)this) background = fltk3::color_average(color(), selection_color(), 0.5f);
+      else background = fltk3::color_average(color(), selection_color(), 0.6f);
     } else background = color();
     foreground = fltk3::contrast(styleRec->color, background);
   } else if (style & PRIMARY_MASK) {
     if (Fl::focus() == (fltk3::Widget*)this) background = selection_color();
-    else background = fltk3::colorAverage(color(), selection_color(), 0.4f);
+    else background = fltk3::color_average(color(), selection_color(), 0.4f);
     foreground = fltk3::contrast(textcolor(), background);
   } else if (style & HIGHLIGHT_MASK) {
-    if (Fl::focus() == (fltk3::Widget*)this) background = fltk3::colorAverage(color(), selection_color(), 0.5f);
-    else background = fltk3::colorAverage(color(), selection_color(), 0.6f);
+    if (Fl::focus() == (fltk3::Widget*)this) background = fltk3::color_average(color(), selection_color(), 0.5f);
+    else background = fltk3::color_average(color(), selection_color(), 0.6f);
     foreground = fltk3::contrast(textcolor(), background);
   } else {
     foreground = textcolor();
@@ -2016,13 +2016,13 @@ void Fl_Text_Display::clear_rect(int style,
     if (Fl::focus()==(fltk3::Widget*)this) {
       fl_color(selection_color());
     } else {
-      fl_color(fltk3::colorAverage(color(), selection_color(), 0.4f));
+      fl_color(fltk3::color_average(color(), selection_color(), 0.4f));
     }
   } else if (style & HIGHLIGHT_MASK) {
     if (Fl::focus()==(fltk3::Widget*)this) {
-      fl_color(fltk3::colorAverage(color(), selection_color(), 0.5f));
+      fl_color(fltk3::color_average(color(), selection_color(), 0.5f));
     } else {
-      fl_color(fltk3::colorAverage(color(), selection_color(), 0.6f));
+      fl_color(fltk3::color_average(color(), selection_color(), 0.6f));
     }
   } else {
     fl_color( color() );
@@ -3675,7 +3675,7 @@ int Fl_Text_Display::handle(int event) {
 	buffer()->unselect(); // clicking in the selection: unselect and move cursor
 	insert_position(dragPos);
 	return 1;
-      } else if (Fl::event_clicks() == DRAG_LINE && Fl::event_button() == fltk3::leftMouseButton) {
+      } else if (Fl::event_clicks() == DRAG_LINE && Fl::event_button() == fltk3::LEFT_MOUSE) {
         buffer()->select(buffer()->line_start(dragPos), buffer()->next_char(buffer()->line_end(dragPos)));
 	dragPos = line_start(dragPos);
 	dragType = DRAG_CHAR;

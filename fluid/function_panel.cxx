@@ -42,17 +42,17 @@ Fl_Double_Window *function_panel=(Fl_Double_Window *)0;
 Fl_Choice *f_public_member_choice=(Fl_Choice *)0;
 
 Fl_Menu_Item menu_f_public_member_choice[] = {
- {"private", 0,  0, (void*)(0), 0, fltk3::normalLabel, 0, 11, 0},
- {"public", 0,  0, (void*)(1), 0, fltk3::normalLabel, 0, 11, 0},
- {"protected", 0,  0, (void*)(2), 0, fltk3::normalLabel, 0, 11, 0},
+ {"private", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"public", 0,  0, (void*)(1), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"protected", 0,  0, (void*)(2), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
 Fl_Choice *f_public_choice=(Fl_Choice *)0;
 
 Fl_Menu_Item menu_f_public_choice[] = {
- {"local", 0,  0, (void*)(0), 0, fltk3::normalLabel, 0, 11, 0},
- {"global", 0,  0, (void*)(1), 0, fltk3::normalLabel, 0, 11, 0},
+ {"local", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"global", 0,  0, (void*)(1), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
@@ -162,7 +162,7 @@ Fl_Double_Window* make_code_panel() {
       code_input->box(fltk3::DOWN_BOX);
       code_input->color(fltk3::BACKGROUND2_COLOR);
       code_input->selection_color(fltk3::SELECTION_COLOR);
-      code_input->labeltype(fltk3::normalLabel);
+      code_input->labeltype(fltk3::NORMAL_LABEL);
       code_input->labelfont(0);
       code_input->labelsize(11);
       code_input->labelcolor(fltk3::FOREGROUND_COLOR);
@@ -252,8 +252,8 @@ Fl_Double_Window *declblock_panel=(Fl_Double_Window *)0;
 Fl_Choice *declblock_public_choice=(Fl_Choice *)0;
 
 Fl_Menu_Item menu_declblock_public_choice[] = {
- {"in source code only", 0,  0, (void*)(0), 0, fltk3::normalLabel, 0, 11, 0},
- {"in header and source", 0,  0, (void*)(1), 0, fltk3::normalLabel, 0, 11, 0},
+ {"in source code only", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"in header and source", 0,  0, (void*)(1), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
@@ -333,19 +333,19 @@ Fl_Double_Window *decl_panel=(Fl_Double_Window *)0;
 Fl_Choice *decl_choice=(Fl_Choice *)0;
 
 Fl_Menu_Item menu_decl_choice[] = {
- {"in source file only", 0,  0, 0, 0, fltk3::normalLabel, 0, 11, 0},
- {"in header file only", 0,  0, 0, 0, fltk3::normalLabel, 0, 11, 0},
- {"\"static\" in source file", 0,  0, 0, 0, fltk3::normalLabel, 0, 11, 0},
- {"in source and \"extern\" in header", 0,  0, 0, 0, fltk3::normalLabel, 0, 11, 0},
+ {"in source file only", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"in header file only", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"\"static\" in source file", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"in source and \"extern\" in header", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
 Fl_Choice *decl_class_choice=(Fl_Choice *)0;
 
 Fl_Menu_Item menu_decl_class_choice[] = {
- {"private", 0,  0, 0, 0, fltk3::normalLabel, 0, 11, 0},
- {"public", 0,  0, 0, 0, fltk3::normalLabel, 0, 11, 0},
- {"protected", 0,  0, 0, 0, fltk3::normalLabel, 0, 11, 0},
+ {"private", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"public", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"protected", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
@@ -425,19 +425,19 @@ Fl_Double_Window *data_panel=(Fl_Double_Window *)0;
 Fl_Choice *data_choice=(Fl_Choice *)0;
 
 Fl_Menu_Item menu_data_choice[] = {
- {"in source file only", 0,  0, 0, 0, fltk3::normalLabel, 0, 11, 0},
- {"in header file only", 0,  0, 0, 16, fltk3::normalLabel, 0, 11, 0},
- {"\"static\" in source file", 0,  0, 0, 0, fltk3::normalLabel, 0, 11, 0},
- {"in source and \"extern\" in header", 0,  0, 0, 0, fltk3::normalLabel, 0, 11, 0},
+ {"in source file only", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"in header file only", 0,  0, 0, 16, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"\"static\" in source file", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"in source and \"extern\" in header", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
 Fl_Choice *data_class_choice=(Fl_Choice *)0;
 
 Fl_Menu_Item menu_data_class_choice[] = {
- {"private", 0,  0, 0, 0, fltk3::normalLabel, 0, 11, 0},
- {"public", 0,  0, 0, 0, fltk3::normalLabel, 0, 11, 0},
- {"protected", 0,  0, 0, 0, fltk3::normalLabel, 0, 11, 0},
+ {"private", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"public", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"protected", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
@@ -629,7 +629,7 @@ Fl_Double_Window* make_comment_panel() {
       comment_input->box(fltk3::DOWN_BOX);
       comment_input->color(fltk3::BACKGROUND2_COLOR);
       comment_input->selection_color(fltk3::SELECTION_COLOR);
-      comment_input->labeltype(fltk3::normalLabel);
+      comment_input->labeltype(fltk3::NORMAL_LABEL);
       comment_input->labelfont(0);
       comment_input->labelsize(11);
       comment_input->labelcolor(fltk3::FOREGROUND_COLOR);
@@ -1083,7 +1083,7 @@ Fl_Double_Window* make_sourceview() {
           sv_source->box(fltk3::DOWN_FRAME);
           sv_source->color(fltk3::BACKGROUND2_COLOR);
           sv_source->selection_color(fltk3::SELECTION_COLOR);
-          sv_source->labeltype(fltk3::normalLabel);
+          sv_source->labeltype(fltk3::NORMAL_LABEL);
           sv_source->labelfont(0);
           sv_source->labelsize(14);
           sv_source->labelcolor(fltk3::FOREGROUND_COLOR);
@@ -1102,7 +1102,7 @@ Fl_Double_Window* make_sourceview() {
           sv_header->box(fltk3::DOWN_FRAME);
           sv_header->color(fltk3::BACKGROUND2_COLOR);
           sv_header->selection_color(fltk3::SELECTION_COLOR);
-          sv_header->labeltype(fltk3::normalLabel);
+          sv_header->labeltype(fltk3::NORMAL_LABEL);
           sv_header->labelfont(0);
           sv_header->labelsize(14);
           sv_header->labelcolor(fltk3::FOREGROUND_COLOR);

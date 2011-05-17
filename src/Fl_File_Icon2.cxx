@@ -257,7 +257,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
 	{
 	  // Composite color; compute average...
 	  c = -c;
-	  add_color(fltk3::colorAverage((fltk3::Color)(c >> 4),
+	  add_color(fltk3::color_average((fltk3::Color)(c >> 4),
 	                             (fltk3::Color)(c & 15), 0.5f));
 	}
 	else
@@ -296,7 +296,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
 	{
 	  // Composite color; compute average...
 	  c = -c;
-	  cval = fltk3::colorAverage((fltk3::Color)(c >> 4), (fltk3::Color)(c & 15), 0.5f);
+	  cval = fltk3::color_average((fltk3::Color)(c >> 4), (fltk3::Color)(c & 15), 0.5f);
 	}
 	else
 	  cval = c;
@@ -373,20 +373,20 @@ int Fl_File_Icon::load_image(const char *ifile)	// I - File to read from
 	switch (img->d())
 	{
           case 1 :
-              temp = fltk3::rgbColor(row[0], row[0], row[0]);
+              temp = fltk3::rgb_color(row[0], row[0], row[0]);
 	      break;
           case 2 :
 	      if (row[1] > 127)
-        	temp = fltk3::rgbColor(row[0], row[0], row[0]);
+        	temp = fltk3::rgb_color(row[0], row[0], row[0]);
 	      else
 		temp = (fltk3::Color)-1;
 	      break;
 	  case 3 :
-              temp = fltk3::rgbColor(row[0], row[1], row[2]);
+              temp = fltk3::rgb_color(row[0], row[1], row[2]);
 	      break;
 	  default :
 	      if (row[3] > 127)
-        	temp = fltk3::rgbColor(row[0], row[1], row[2]);
+        	temp = fltk3::rgb_color(row[0], row[1], row[2]);
 	      else
 		temp = (fltk3::Color)-1;
 	      break;
@@ -456,7 +456,7 @@ int Fl_File_Icon::load_image(const char *ifile)	// I - File to read from
       ncolors = -ncolors;
 
       for (i = 0, cmapptr = (const uchar *)*ptr; i < ncolors; i ++, cmapptr += 4)
-        colors[cmapptr[0]] = fltk3::rgbColor(cmapptr[1], cmapptr[2], cmapptr[3]);
+        colors[cmapptr[0]] = fltk3::rgb_color(cmapptr[1], cmapptr[2], cmapptr[3]);
 
       ptr ++;
     } else {
@@ -521,7 +521,7 @@ int Fl_File_Icon::load_image(const char *ifile)	// I - File to read from
 		break;
 	  }
 
-	  colors[ch] = fltk3::rgbColor((uchar)red, (uchar)green, (uchar)blue);
+	  colors[ch] = fltk3::rgb_color((uchar)red, (uchar)green, (uchar)blue);
 	} else {
 	  // Read a color name...
 	  if (strncasecmp(lineptr + 2, "white", 5) == 0) colors[ch] = fltk3::WHITE;

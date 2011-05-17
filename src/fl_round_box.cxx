@@ -33,7 +33,7 @@
 #include <fltk3/draw.h>
 
 namespace fltk3 {
-  extern uchar* grayRamp();
+  extern uchar* gray_ramp();
 }
 
 
@@ -88,7 +88,7 @@ static void draw(int which, int x,int y,int w,int h, int inset, fltk3::Color col
 }
 
 void fl_round_down_box(int x, int y, int w, int h, fltk3::Color bgcolor) {
-  uchar *g = fltk3::grayRamp();
+  uchar *g = fltk3::gray_ramp();
   draw(FILL,	    x,   y, w,   h, 2, bgcolor);
   draw(UPPER_LEFT,  x+1, y, w-2, h, 0, (fltk3::Color)g['N']);
   draw(UPPER_LEFT,  x+1, y, w-2, h, 1, (fltk3::Color)g['H']);
@@ -102,7 +102,7 @@ void fl_round_down_box(int x, int y, int w, int h, fltk3::Color bgcolor) {
 }
 
 void fl_round_up_box(int x, int y, int w, int h, fltk3::Color bgcolor) {
-  uchar *g = fltk3::grayRamp();
+  uchar *g = fltk3::gray_ramp();
   draw(FILL,	    x,   y, w,   h, 2, bgcolor);
   draw(LOWER_RIGHT, x+1, y, w-2, h, 0, (fltk3::Color)g['H']);
   draw(LOWER_RIGHT, x+1, y, w-2, h, 1, (fltk3::Color)g['N']);

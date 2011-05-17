@@ -1861,10 +1861,10 @@ static inline int can_boxcheat(uchar b) {return (b==1 || ((b&2) && b<=15));}
 void fltk3::Window::show() {
   image(Fl::scheme_bg_);
   if (Fl::scheme_bg_) {
-    labeltype(fltk3::normalLabel);
+    labeltype(fltk3::NORMAL_LABEL);
     align(fltk3::ALIGN_CENTER | fltk3::ALIGN_INSIDE | fltk3::ALIGN_CLIP);
   } else {
-    labeltype(fltk3::noLabel);
+    labeltype(fltk3::NO_LABEL);
   }
   Fl_Tooltip::exit(this);
   if (!shown()) {

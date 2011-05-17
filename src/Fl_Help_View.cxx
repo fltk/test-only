@@ -2550,11 +2550,11 @@ Fl_Help_View::get_color(const char *n,	// I - Color name
       g = ((rgb >> 4) & 15) * 17;
       b = (rgb & 15) * 17;
     }
-    return (fltk3::rgbColor((uchar)r, (uchar)g, (uchar)b));
+    return (fltk3::rgb_color((uchar)r, (uchar)g, (uchar)b));
   } else {
     for (i = 0; i < (int)(sizeof(colors) / sizeof(colors[0])); i ++)
       if (!strcasecmp(n, colors[i].name)) {
-        return fltk3::rgbColor(colors[i].r, colors[i].g, colors[i].b);
+        return fltk3::rgb_color(colors[i].r, colors[i].g, colors[i].b);
       }
     return c;
   }

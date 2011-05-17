@@ -382,9 +382,9 @@ namespace fltk3 {
   
   /*@{*/
   
-  const unsigned int leftMouseButton    = 1;	///< The left mouse button
-  const unsigned int middleMouseButton  = 2;	///< The middle mouse button
-  const unsigned int rightMouseButton   = 3;	///< The right mouse button
+  const unsigned int LEFT_MOUSE    = 1;	///< The left mouse button
+  const unsigned int MIDDLE_MOUSE  = 2;	///< The middle mouse button
+  const unsigned int RIGHT_MOUSE   = 3;	///< The right mouse button
   
   /*@}*/		// group: Mouse Buttons
   
@@ -532,16 +532,16 @@ namespace fltk3 {
    The following standard label types are included:
    */
   enum Labeltype {	// labeltypes:
-    normalLabel	= 0,	///< draws the text (0)
-    symbolLabel   = 0,
-    noLabel,			///< does nothing
-    shadowLabel,		///< draws a drop shadow under the text
-    engravedLabel,		///< draws edges as though the text is engraved
-    embossedLabel,		///< draws edges as though the text is raised
-    multiLabel,		///< ?
-    iconLabel,		///< draws the icon associated with the text
-    imageLabel,		///< ?
-    freeLabel		///< first free labeltype to use for creating own labeltypes
+    NORMAL_LABEL	= 0,	///< draws the text (0)
+    SYMBOL_LABEL   = 0,
+    NO_LABEL,			///< does nothing
+    SHADOW_LABEL,		///< draws a drop shadow under the text
+    ENGRAVED_LABEL,		///< draws edges as though the text is engraved
+    EMBOSSED_LABEL,		///< draws edges as though the text is raised
+    MULTI_LABEL,		///< ?
+    ICON_LABEL,		///< draws the icon associated with the text
+    IMAGE_LABEL,		///< ?
+    FREE_LABELTYPE		///< first free labeltype to use for creating own labeltypes
   };
   
   
@@ -738,22 +738,22 @@ namespace fltk3 {
   
   FL_EXPORT Color contrast(Color fg, Color bg);
   
-  FL_EXPORT Color colorAverage(Color c1, Color c2, float weight);
+  FL_EXPORT Color color_average(Color c1, Color c2, float weight);
   
   /** Returns a lighter version of the specified color. */
-  inline Color lighter(Color c) { return colorAverage(c, WHITE, .67f); }
+  inline Color lighter(Color c) { return color_average(c, WHITE, .67f); }
   
   /** Returns a darker version of the specified color. */
-  inline Color darker(Color c) { return colorAverage(c, BLACK, .67f); }
+  inline Color darker(Color c) { return color_average(c, BLACK, .67f); }
   
   /** Returns the 24-bit color value closest to \p r, \p g, \p b. */
-  inline Color rgbColor(uchar r, uchar g, uchar b) {
+  inline Color rgb_color(uchar r, uchar g, uchar b) {
     if (!r && !g && !b) return BLACK;
     else return (Color)(((((r << 8) | g) << 8) | b) << 8);
   }
   
   /** Returns the 24-bit color value closest to \p g (grayscale). */
-  inline Color rgbColor(uchar g) {
+  inline Color rgb_color(uchar g) {
     if (!g) return BLACK;
     else return (Color)(((((g << 8) | g) << 8) | g) << 8);
   }
@@ -763,10 +763,10 @@ namespace fltk3 {
    To get the closest FLTK gray value to an 8-bit grayscale color 'I' use:
    
    \code 
-   fltk3::grayRamp(I * (fltk3::NUM_GRAY - 1) / 255)
+   fltk3::gray_ramp(I * (fltk3::NUM_GRAY - 1) / 255)
    \endcode
    */ 
-  inline Color grayRamp(int i) {return (Color)(i+GRAY_RAMP);}
+  inline Color gray_ramp(int i) {return (Color)(i+GRAY_RAMP);}
   
   /** Returns a color out of the color cube.
    

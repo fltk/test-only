@@ -164,7 +164,7 @@ struct FL_EXPORT Fl_Menu_Item {
     A labeltype identifies a routine that draws the label of the
     widget.  This can be used for special effects such as emboss, or to use
     the label() pointer as another form of data such as a bitmap.
-    The value fltk3::normalLabel prints the label as text.
+    The value fltk3::NORMAL_LABEL prints the label as text.
   */
   fltk3::Labeltype labeltype() const {return (fltk3::Labeltype)labeltype_;}
 
@@ -173,7 +173,7 @@ struct FL_EXPORT Fl_Menu_Item {
     A labeltype identifies a routine that draws the label of the
     widget.  This can be used for special effects such as emboss, or to use
     the label() pointer as another form of data such as a bitmap.
-    The value fltk3::normalLabel prints the label as text.
+    The value fltk3::NORMAL_LABEL prints the label as text.
   */
   void labeltype(fltk3::Labeltype a) {labeltype_ = a;}
 

@@ -73,7 +73,7 @@ void Fl_Quartz_Graphics_Driver::color(fltk3::Color i) {
 }
 
 void Fl_Quartz_Graphics_Driver::color(uchar r, uchar g, uchar b) {
-  Fl_Graphics_Driver::color( fltk3::rgbColor(r, g, b) );
+  Fl_Graphics_Driver::color( fltk3::rgb_color(r, g, b) );
   float fr = r/255.0f;
   float fg = g/255.0f;
   float fb = b/255.0f;

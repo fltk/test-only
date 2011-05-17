@@ -40,7 +40,7 @@ int fl_return_arrow(int x, int y, int w, int h) {
   fl_line(x0, y0, x1, y0+d);
   fl_yxline(x1, y0+d, y0+t, x1+d+2*t, y0-d);
   fl_yxline(x1, y0-t, y0-d);
-  fl_color(fltk3::grayRamp(0));
+  fl_color(fltk3::gray_ramp(0));
   fl_line(x0, y0, x1, y0-d);
   fl_color(fltk3::DARK3);
   fl_xyline(x1+1, y0-t, x1+d, y0-d, x1+d+2*t);

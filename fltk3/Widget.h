@@ -32,6 +32,7 @@
 #define Fl_Widget_H
 
 #include "enumerations.h"
+#include "Object.h"
 
 /**
  \todo	typedef's fl_intptr_t and fl_uintptr_t should be documented.
@@ -110,7 +111,7 @@ namespace fltk3 {
    functions, even if they change the widget's appearance. It is up to the 
    user code to call redraw() after these.
    */
-  class FL_EXPORT Widget {
+  class FL_EXPORT Widget : public Object {
     friend class Group;
     
     fltk3::Group* parent_;
@@ -380,7 +381,7 @@ namespace fltk3 {
     /** Sets the background color of the widget. 
      The color is passed to the box routine. The color is either an index into 
      an internal table of RGB colors or an RGB color value generated using 
-     fltk3::rgbColor().
+     fltk3::rgb_color().
      
      The default for most widgets is fltk3::BACKGROUND_COLOR. Use Fl::set_color()
      to redefine colors in the color map.
@@ -459,7 +460,7 @@ namespace fltk3 {
      The label type identifies the function that draws the label of the widget. 
      This is generally used for special effects such as embossing or for using 
      the label() pointer as another form of data such as an icon. The value 
-     fltk3::normalLabel prints the label as plain text.
+     fltk3::NORMAL_LABEL prints the label as plain text.
      \param[in] a new label type
      \see fltk3::Labeltype
      */

@@ -287,14 +287,14 @@ int Fl_Menu_Item_Type::flags() {
 
 void Fl_Menu_Item_Type::write_item() {
   static const char * const labeltypes[] = {
-    "fltk3::normalLabel",
-    "fltk3::noLabel",
-    "fltk3::shadowLabel",
-    "fltk3::engravedLabel",
-    "fltk3::embossedLabel",
-    "fltk3::multiLabel",
-    "fltk3::iconLabel",
-    "fltk3::imageLabel"
+    "fltk3::NORMAL_LABEL",
+    "fltk3::NO_LABEL",
+    "fltk3::SHADOW_LABEL",
+    "fltk3::ENGRAVED_LABEL",
+    "fltk3::EMBOSSED_LABEL",
+    "fltk3::MULTI_LABEL",
+    "fltk3::ICON_LABEL",
+    "fltk3::IMAGE_LABEL"
   };
 
   write_c(" {");

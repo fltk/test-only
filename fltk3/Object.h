@@ -1,7 +1,7 @@
 //
-// "$Id: Object.h 7903 2010-11-28 21:06:39Z matt $"
+// "$Id: Wrapper.h 7365 2010-03-30 15:18:29Z matt $"
 //
-// Old Fl_Object header file for the Fast Light Tool Kit (FLTK).
+// Widget header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
 //
@@ -25,12 +25,35 @@
 //     http://www.fltk.org/str.php
 //
 
-// This file is provided for back compatibility only.  Please use fltk3::Widget
-#ifndef Fl_Object
-#define Fl_Object fltk3::Widget
+/* \file
+   fltk3::Object */
+
+#ifndef FLTK3_OBJECT_H
+#define FLTK3_OBJECT_H
+
+namespace fltk3 {
+  
+  class Wrapper; 
+
+/**
+ * \brief a base class for any kind of langage wrapper around FLTK3.
+ */
+  class Object {
+  protected:
+    Wrapper *pWrapper;
+  public:
+    Object() 
+    : pWrapper(0L) { }
+    virtual ~Object();
+    Wrapper *wrapper() { return this?pWrapper:0L; }
+    void wrapper(Wrapper *w) { pWrapper = w; }
+  };
+  
+}; // namespace fltk3
+
+
 #endif
-#include "Widget.h"
 
 //
-// End of "$Id: Object.h 7903 2010-11-28 21:06:39Z matt $".
+// End of "$Id: Wrapper.h 7365 2010-03-30 15:18:29Z matt $".
 //

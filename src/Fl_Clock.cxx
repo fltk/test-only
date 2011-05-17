@@ -80,7 +80,7 @@ static void rect(double x, double y, double w, double h) {
 */
 void Fl_Clock_Output::draw(int X, int Y, int W, int H) {
   fltk3::Color box_color = type()==FL_ROUND_CLOCK ? fltk3::GRAY : color();
-  fltk3::Color shadow_color = fltk3::colorAverage(box_color, fltk3::BLACK, 0.5);
+  fltk3::Color shadow_color = fltk3::color_average(box_color, fltk3::BLACK, 0.5);
   draw_box(box(), X, Y, W, H, box_color);
   fl_push_matrix();
   fl_translate(X+W/2.0-.5, Y+H/2.0-.5);
@@ -157,7 +157,7 @@ void Fl_Clock_Output::value(ulong v) {
 Fl_Clock_Output::Fl_Clock_Output(int X, int Y, int W, int H, const char *L)
 : fltk3::Widget(X, Y, W, H, L) {
   box(fltk3::UP_BOX);
-  selection_color(fltk3::grayRamp(5));
+  selection_color(fltk3::gray_ramp(5));
   align(fltk3::ALIGN_BOTTOM);
   hour_ = 0;
   minute_ = 0;

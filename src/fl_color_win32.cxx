@@ -119,7 +119,7 @@ void Fl_GDI_Graphics_Driver::color(fltk3::Color i) {
 void Fl_GDI_Graphics_Driver::color(uchar r, uchar g, uchar b) {
   static Fl_XMap xmap;
   COLORREF c = RGB(r,g,b);
-  Fl_Graphics_Driver::color( fltk3::rgbColor(r, g, b) );
+  Fl_Graphics_Driver::color( fltk3::rgb_color(r, g, b) );
   if (!xmap.pen || c != xmap.rgb) {
     clear_xmap(xmap);
     set_xmap(xmap, c);

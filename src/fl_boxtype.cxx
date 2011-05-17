@@ -64,7 +64,7 @@ static int draw_it_active = 1;
 int Fl::draw_box_active() { return draw_it_active; }
 
 namespace fltk3 {
-  uchar *grayRamp() {return (draw_it_active?active_ramp:inactive_ramp)-'A';}
+  uchar *gray_ramp() {return (draw_it_active?active_ramp:inactive_ramp)-'A';}
 }
 
 /**
@@ -80,7 +80,7 @@ namespace fltk3 {
   \param[in] x, y, w, h position and size
 */
 void fltk3::frame(const char* s, int x, int y, int w, int h) {
-  uchar *g = fltk3::grayRamp();
+  uchar *g = fltk3::gray_ramp();
   if (h > 0 && w > 0) for (;*s;) {
     // draw top line:
     fl_color(g[(int)*s++]);
@@ -114,7 +114,7 @@ void fltk3::frame(const char* s, int x, int y, int w, int h) {
   \param[in] x, y, w, h position and size
 */
 void fl_frame2(const char* s, int x, int y, int w, int h) {
-  uchar *g = fltk3::grayRamp();
+  uchar *g = fltk3::gray_ramp();
   if (h > 0 && w > 0) for (;*s;) {
     // draw bottom line:
     fl_color(g[(int)*s++]);

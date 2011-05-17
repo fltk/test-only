@@ -34,31 +34,31 @@ static void cb_(Fl_Tabs* o, void* v) {
 }
 
 Fl_Menu_Item menu_[] = {
- {"   Image Alignment   ", 0,  0, (void*)(0xFFFFFFFF), 1, fltk3::normalLabel, 2, 11, 0},
- {"image over text", 0,  0, (void*)(fltk3::ALIGN_IMAGE_OVER_TEXT), 0, fltk3::normalLabel, 0, 11, 0},
- {"text over image", 0,  0, (void*)(fltk3::ALIGN_TEXT_OVER_IMAGE), 0, fltk3::normalLabel, 0, 11, 0},
- {"text next to image", 0,  0, (void*)(fltk3::ALIGN_TEXT_NEXT_TO_IMAGE), 0, fltk3::normalLabel, 0, 11, 0},
- {"image next to text", 0,  0, (void*)(fltk3::ALIGN_IMAGE_NEXT_TO_TEXT), 0, fltk3::normalLabel, 0, 11, 0},
- {"image is backdrop", 0,  0, (void*)(fltk3::ALIGN_IMAGE_BACKDROP), 0, fltk3::normalLabel, 0, 11, 0},
+ {"   Image Alignment   ", 0,  0, (void*)(0xFFFFFFFF), 1, fltk3::NORMAL_LABEL, 2, 11, 0},
+ {"image over text", 0,  0, (void*)(fltk3::ALIGN_IMAGE_OVER_TEXT), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"text over image", 0,  0, (void*)(fltk3::ALIGN_TEXT_OVER_IMAGE), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"text next to image", 0,  0, (void*)(fltk3::ALIGN_TEXT_NEXT_TO_IMAGE), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"image next to text", 0,  0, (void*)(fltk3::ALIGN_IMAGE_NEXT_TO_TEXT), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"image is backdrop", 0,  0, (void*)(fltk3::ALIGN_IMAGE_BACKDROP), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
 Fl_Menu_Item menu_1[] = {
- {"   Inside && Outside   ", 0,  0, (void*)(0xFFFFFFFF), 1, fltk3::normalLabel, 2, 11, 0},
- {"top left", 0,  0, (void*)(fltk3::ALIGN_TOP_LEFT), 0, fltk3::normalLabel, 0, 11, 0},
- {"top", 0,  0, (void*)(fltk3::ALIGN_TOP), 0, fltk3::normalLabel, 0, 11, 0},
- {"top right", 0,  0, (void*)(fltk3::ALIGN_TOP_RIGHT), 0, fltk3::normalLabel, 0, 11, 0},
- {"left", 0,  0, (void*)(fltk3::ALIGN_LEFT), 0, fltk3::normalLabel, 0, 11, 0},
- {"center", 0,  0, (void*)(fltk3::ALIGN_CENTER), 0, fltk3::normalLabel, 0, 11, 0},
- {"right", 0,  0, (void*)(fltk3::ALIGN_RIGHT), 0, fltk3::normalLabel, 0, 11, 0},
- {"bottom left", 0,  0, (void*)(fltk3::ALIGN_BOTTOM_LEFT), 0, fltk3::normalLabel, 0, 11, 0},
- {"bottom", 0,  0, (void*)(fltk3::ALIGN_BOTTOM), 0, fltk3::normalLabel, 0, 11, 0},
- {"bottom right", 0,  0, (void*)(fltk3::ALIGN_BOTTOM_RIGHT), 128, fltk3::normalLabel, 0, 11, 0},
- {"   Outside Alignment   ", 0,  0, (void*)(0xFFFFFFFF), 1, fltk3::normalLabel, 2, 11, 0},
- {"left top", 0,  0, (void*)(fltk3::ALIGN_LEFT_TOP), 0, fltk3::normalLabel, 0, 11, 0},
- {"right top", 0,  0, (void*)(fltk3::ALIGN_RIGHT_TOP), 0, fltk3::normalLabel, 0, 11, 0},
- {"left bottom", 0,  0, (void*)(fltk3::ALIGN_LEFT_BOTTOM), 0, fltk3::normalLabel, 0, 11, 0},
- {"right bottom", 0,  0, (void*)(fltk3::ALIGN_RIGHT_BOTTOM), 0, fltk3::normalLabel, 0, 11, 0},
+ {"   Inside && Outside   ", 0,  0, (void*)(0xFFFFFFFF), 1, fltk3::NORMAL_LABEL, 2, 11, 0},
+ {"top left", 0,  0, (void*)(fltk3::ALIGN_TOP_LEFT), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"top", 0,  0, (void*)(fltk3::ALIGN_TOP), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"top right", 0,  0, (void*)(fltk3::ALIGN_TOP_RIGHT), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"left", 0,  0, (void*)(fltk3::ALIGN_LEFT), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"center", 0,  0, (void*)(fltk3::ALIGN_CENTER), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"right", 0,  0, (void*)(fltk3::ALIGN_RIGHT), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"bottom left", 0,  0, (void*)(fltk3::ALIGN_BOTTOM_LEFT), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"bottom", 0,  0, (void*)(fltk3::ALIGN_BOTTOM), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"bottom right", 0,  0, (void*)(fltk3::ALIGN_BOTTOM_RIGHT), 128, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"   Outside Alignment   ", 0,  0, (void*)(0xFFFFFFFF), 1, fltk3::NORMAL_LABEL, 2, 11, 0},
+ {"left top", 0,  0, (void*)(fltk3::ALIGN_LEFT_TOP), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"right top", 0,  0, (void*)(fltk3::ALIGN_RIGHT_TOP), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"left bottom", 0,  0, (void*)(fltk3::ALIGN_LEFT_BOTTOM), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"right bottom", 0,  0, (void*)(fltk3::ALIGN_RIGHT_BOTTOM), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
@@ -71,15 +71,15 @@ Fl_Value_Input *widget_w_input=(Fl_Value_Input *)0;
 Fl_Value_Input *widget_h_input=(Fl_Value_Input *)0;
 
 Fl_Menu_Item menu_2[] = {
- {"private", 0,  0, (void*)(0), 0, fltk3::normalLabel, 0, 11, 0},
- {"public", 0,  0, (void*)(1), 0, fltk3::normalLabel, 0, 11, 0},
- {"protected", 0,  0, (void*)(2), 0, fltk3::normalLabel, 0, 11, 0},
+ {"private", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"public", 0,  0, (void*)(1), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"protected", 0,  0, (void*)(2), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
 Fl_Menu_Item menu_3[] = {
- {"local", 0,  0, (void*)(0), 0, fltk3::normalLabel, 0, 11, 0},
- {"global", 0,  0, (void*)(1), 0, fltk3::normalLabel, 0, 11, 0},
+ {"local", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
+ {"global", 0,  0, (void*)(1), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
@@ -413,7 +413,7 @@ ive to the origin at construction time");
           o->box(fltk3::DOWN_BOX);
           o->color(fltk3::BACKGROUND2_COLOR);
           o->selection_color(fltk3::BACKGROUND2_COLOR);
-          o->labeltype(fltk3::normalLabel);
+          o->labeltype(fltk3::NORMAL_LABEL);
           o->labelfont(1);
           o->labelsize(11);
           o->labelcolor(fltk3::FOREGROUND_COLOR);
@@ -724,7 +724,7 @@ access the Widget pointer and \'v\' to access the user value.");
           o->box(fltk3::DOWN_BOX);
           o->color(fltk3::BACKGROUND2_COLOR);
           o->selection_color(fltk3::SELECTION_COLOR);
-          o->labeltype(fltk3::normalLabel);
+          o->labeltype(fltk3::NORMAL_LABEL);
           o->labelfont(1);
           o->labelsize(11);
           o->labelcolor(fltk3::FOREGROUND_COLOR);

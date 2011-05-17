@@ -1025,10 +1025,10 @@ extern const char *ui_find_image_name;
 
 Fl_Menu_Item labeltypemenu[] = {
   {"NORMAL_LABEL",0,0,(void*)0},
-  {"SHADOW_LABEL",0,0,(void*)fltk3::shadowLabel},
-  {"ENGRAVED_LABEL",0,0,(void*)fltk3::engravedLabel},
-  {"EMBOSSED_LABEL",0,0,(void*)fltk3::embossedLabel},
-  {"NO_LABEL",0,0,(void*)(fltk3::noLabel)},
+  {"SHADOW_LABEL",0,0,(void*)fltk3::SHADOW_LABEL},
+  {"ENGRAVED_LABEL",0,0,(void*)fltk3::ENGRAVED_LABEL},
+  {"EMBOSSED_LABEL",0,0,(void*)fltk3::EMBOSSED_LABEL},
+  {"NO_LABEL",0,0,(void*)(fltk3::NO_LABEL)},
 {0}};
 
 void labeltype_cb(Fl_Choice* i, void *v) {

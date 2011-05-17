@@ -107,7 +107,7 @@ int Fl_Scrollbar::handle(int event) {
     if (val >= 1.0) sliderx = ww-S;
     else if (val <= 0.0) sliderx = 0;
     else sliderx = int(val*(ww-S)+.5);
-    if (Fl::event_button() == fltk3::middleMouseButton) area = 8;
+    if (Fl::event_button() == fltk3::MIDDLE_MOUSE) area = 8;
     else if (relx < sliderx) area = 5;
     else if (relx >= sliderx+S) area = 6;
     else area = 8;

@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
   box->box(UP_BOX);
   box->labelfont(BOLD+ITALIC);
   box->labelsize(36);
-  box->labeltype(shadowLabel);
+  box->labeltype(SHADOW_LABEL);
   window->end();
   window->show(argc, argv);
   return Fl::run();

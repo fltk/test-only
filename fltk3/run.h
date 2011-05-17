@@ -568,7 +568,7 @@ public:
   /**
     Gets which particular mouse button caused the current event. 
     This returns garbage if the most recent event was not a fltk3::PUSH or fltk3::RELEASE event.
-    \retval fltk3::leftMouseButton \retval fltk3::middleMouseButton \retval fltk3::rightMouseButton.
+    \retval fltk3::LEFT_MOUSE \retval fltk3::MIDDLE_MOUSE \retval fltk3::RIGHT_MOUSE.
     \see Fl::event_buttons()
   */
   static int event_button()	{return e_keysym-fltk3::MouseButton;}

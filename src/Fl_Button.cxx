@@ -77,7 +77,7 @@ void Fl_Button::draw() {
   fltk3::Color col = value() ? selection_color() : color();
   draw_box(value() ? (down_box()?down_box():fltk3::down(box())) : box(), col);
   draw_backdrop();
-  if (labeltype() == fltk3::normalLabel && value()) {
+  if (labeltype() == fltk3::NORMAL_LABEL && value()) {
     fltk3::Color c = labelcolor();
     labelcolor(fltk3::contrast(c, col));
     draw_label();

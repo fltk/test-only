@@ -136,7 +136,7 @@ void Fl_Xlib_Graphics_Driver::color(fltk3::Color i) {
 }
 
 void Fl_Xlib_Graphics_Driver::color(uchar r,uchar g,uchar b) {
-  Fl_Graphics_Driver::color( fltk3::rgbColor(r, g, b) );
+  Fl_Graphics_Driver::color( fltk3::rgb_color(r, g, b) );
   if(!fl_gc) return; // don't get a default gc if current window is not yet created/valid
   XSetForeground(fl_display, fl_gc, fl_xpixel(r,g,b));
 }
@@ -408,7 +408,7 @@ void Fl::get_color(fltk3::Color i, uchar &red, uchar &green, uchar &blue) {
   \param[in] color1, color2 boundary colors
   \param[in] weight weighting factor
 */
-fltk3::Color fltk3::colorAverage(fltk3::Color color1, fltk3::Color color2, float weight) {
+fltk3::Color fltk3::color_average(fltk3::Color color1, fltk3::Color color2, float weight) {
   unsigned rgb1;
   unsigned rgb2;
   uchar r, g, b;
@@ -423,14 +423,14 @@ fltk3::Color fltk3::colorAverage(fltk3::Color color1, fltk3::Color color2, float
   g = (uchar)(((uchar)(rgb1>>16))*weight + ((uchar)(rgb2>>16))*(1-weight));
   b = (uchar)(((uchar)(rgb1>>8))*weight + ((uchar)(rgb2>>8))*(1-weight));
 
-  return fltk3::rgbColor(r, g, b);
+  return fltk3::rgb_color(r, g, b);
 }
 
 /**
   Returns the inactive, dimmed version of the given color
 */
 fltk3::Color fltk3::inactive(fltk3::Color c) {
-  return fltk3::colorAverage(c, fltk3::GRAY, .33f);
+  return fltk3::color_average(c, fltk3::GRAY, .33f);
 }
 
 /**

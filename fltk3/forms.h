@@ -129,9 +129,9 @@ typedef fltk3::Window FL_FORM;
 #define fltk3::TIMESBOLDITALIC_STYLE fltk3::TIMES_BOLD_ITALIC
 
 // hacks to change the labeltype() when passed to fl_set_object_lstyle():
-#define fltk3::SHADOW_STYLE		(fltk3::shadowLabel<<8)
-#define FL_ENGRAVED_STYLE	(fltk3::engravedLabel<<8)
-#define FL_EMBOSSED_STYLE	(fltk3::embossedLabel<<0)
+#define fltk3::SHADOW_STYLE		(fltk3::SHADOW_LABEL<<8)
+#define FL_ENGRAVED_STYLE	(fltk3::ENGRAVED_LABEL<<8)
+#define FL_EMBOSSED_STYLE	(fltk3::EMBOSSED_LABEL<<0)
 
 // size values are different from XForms, match older Forms:
 #define FL_TINY_SIZE	8

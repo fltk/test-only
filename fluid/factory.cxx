@@ -1094,7 +1094,7 @@ static void make_iconlabel( Fl_Menu_Item *mi, Fl_Image *ic, const char *txt )
     ml->labela = (char*)ic;
     ml->labelb = t1;
     ml->typea = _FL_IMAGE_LABEL;
-    ml->typeb = fltk3::normalLabel;
+    ml->typeb = fltk3::NORMAL_LABEL;
     ml->label( mi );
   }
   else if (txt!=mi->text)

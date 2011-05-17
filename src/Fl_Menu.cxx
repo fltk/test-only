@@ -207,7 +207,7 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
 	    tW --;
 	    fl_pie(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
 	    fl_arc(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
-	    fl_color(fltk3::colorAverage(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.2f));
+	    fl_color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.2f));
 	  } else fl_color(labelcolor_);
 	} else fl_color(labelcolor_);
 
@@ -238,7 +238,7 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
 	}
 
 	if (Fl::scheme() && !strcmp(Fl::scheme(), "gtk+")) {
-	  fl_color(fltk3::colorAverage(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
+	  fl_color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
 	  fl_arc(x + td + 2, y + d + td, tW + 1, tW + 1, 60.0, 180.0);
 	}
       }
@@ -277,7 +277,7 @@ menutitle::menutitle(int X, int Y, int W, int H, const Fl_Menu_Item* L) :
   clear_border();
   set_menu_window();
   menu = L;
-  if (L->labelcolor_ || Fl::scheme() || L->labeltype_ > fltk3::noLabel) clear_overlay();
+  if (L->labelcolor_ || Fl::scheme() || L->labeltype_ > fltk3::NO_LABEL) clear_overlay();
 }
 
 menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
@@ -356,7 +356,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
         }
       }
     }
-    if (m->labelcolor_ || Fl::scheme() || m->labeltype_ > fltk3::noLabel) clear_overlay();
+    if (m->labelcolor_ || Fl::scheme() || m->labeltype_ > fltk3::NO_LABEL) clear_overlay();
   }
   shortcutWidth = hotKeysw;
   if (selected >= 0 && !Wp) X -= W/2;

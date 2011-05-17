@@ -46,11 +46,11 @@ void fltk3::Window::_Fl_Window() {
   type(FL_WINDOW);
   box(fltk3::FLAT_BOX);
   if (Fl::scheme_bg_) {
-    labeltype(fltk3::normalLabel);
+    labeltype(fltk3::NORMAL_LABEL);
     align(fltk3::ALIGN_CENTER | fltk3::ALIGN_INSIDE | fltk3::ALIGN_CLIP);
     image(Fl::scheme_bg_);
   } else {
-    labeltype(fltk3::noLabel);
+    labeltype(fltk3::NO_LABEL);
   }
   i = 0;
   xclass_ = 0;
@@ -124,9 +124,9 @@ void fltk3::Window::draw() {
     int x1 = w()-dx-1, x2 = x1, y1 = h()-dx-1, y2 = y1;
     fltk3::Color c[4] = {
       color(),
-      fltk3::colorAverage(color(), fltk3::WHITE, 0.7f),
-      fltk3::colorAverage(color(), fltk3::BLACK, 0.6f),
-      fltk3::colorAverage(color(), fltk3::BLACK, 0.8f),
+      fltk3::color_average(color(), fltk3::WHITE, 0.7f),
+      fltk3::color_average(color(), fltk3::BLACK, 0.6f),
+      fltk3::color_average(color(), fltk3::BLACK, 0.8f),
     };
     int i;
     for (i=dx; i<12; i++) {

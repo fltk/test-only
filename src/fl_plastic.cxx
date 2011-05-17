@@ -45,13 +45,13 @@
 #define USE_OLD_PLASTIC_COLOR
 
 namespace fltk3 {
-  extern uchar* grayRamp();
+  extern uchar* gray_ramp();
 }
 
 
 inline fltk3::Color shade_color(uchar gc, fltk3::Color bc) {
 #ifdef USE_OLD_PLASTIC_COLOR
-  return fltk3::colorAverage((fltk3::Color)gc, bc, 0.75f);
+  return fltk3::color_average((fltk3::Color)gc, bc, 0.75f);
 #else
   unsigned	grgb = Fl::get_color((fltk3::Color)gc),
 		brgb = Fl::get_color(bc);
@@ -75,15 +75,15 @@ inline fltk3::Color shade_color(uchar gc, fltk3::Color bc) {
     blue = 255;
 
   if (Fl::draw_box_active())
-    return fltk3::rgbColor(red, green, blue);
+    return fltk3::rgb_color(red, green, blue);
   else
-    return fltk3::colorAverage(fltk3::GRAY, fltk3::rgbColor(red, green, blue), 0.75f);
+    return fltk3::color_average(fltk3::GRAY, fltk3::rgb_color(red, green, blue), 0.75f);
 #endif // USE_OLD_PLASTIC_COLOR
 }
 
 
 static void frame_rect(int x, int y, int w, int h, const char *c, fltk3::Color bc) {
-  uchar *g = fltk3::grayRamp();
+  uchar *g = fltk3::gray_ramp();
   int b = strlen(c) / 4 + 1;
 
   for (x += b, y += b, w -= 2 * b, h -= 2 * b; b > 1; b --)
@@ -103,7 +103,7 @@ static void frame_rect(int x, int y, int w, int h, const char *c, fltk3::Color b
 
 
 static void frame_round(int x, int y, int w, int h, const char *c, fltk3::Color bc) {
-  uchar *g = fltk3::grayRamp();
+  uchar *g = fltk3::gray_ramp();
   int b = strlen(c) / 4 + 1;
 
   if (w==h) {
@@ -157,7 +157,7 @@ static void frame_round(int x, int y, int w, int h, const char *c, fltk3::Color 
 
 
 static void shade_rect(int x, int y, int w, int h, const char *c, fltk3::Color bc) {
-  uchar		*g = fltk3::grayRamp();
+  uchar		*g = fltk3::gray_ramp();
   int		i, j;
   int		clen = strlen(c) - 1;
   int		chalf = clen / 2;
@@ -229,7 +229,7 @@ static void shade_rect(int x, int y, int w, int h, const char *c, fltk3::Color b
 }
 
 static void shade_round(int x, int y, int w, int h, const char *c, fltk3::Color bc) {
-  uchar		*g = fltk3::grayRamp();
+  uchar		*g = fltk3::gray_ramp();
   int		i;
   int		clen = strlen(c) - 1;
   int		chalf = clen / 2;
@@ -289,7 +289,7 @@ static void up_frame(int x, int y, int w, int h, fltk3::Color c) {
 
 static void narrow_thin_box(int x, int y, int w, int h, fltk3::Color c) {
   if (h<=0 || w<=0) return;
-  uchar *g = fltk3::grayRamp();
+  uchar *g = fltk3::gray_ramp();
   fl_color(shade_color(g['R'], c));
   fl_rectf(x+1, y+1, w-2, h-2);
   fl_color(shade_color(g['I'], c));

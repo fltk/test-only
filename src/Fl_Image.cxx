@@ -127,8 +127,8 @@ void Fl_Image::label(fltk3::Widget* widget) {
   instead.
 */
 void Fl_Image::label(Fl_Menu_Item* m) {
-  Fl::set_labeltype(fltk3::imageLabel, labeltype, measure);
-  m->label(fltk3::imageLabel, (const char*)this);
+  Fl::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
+  m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }
 
 void
@@ -581,7 +581,7 @@ void Fl_RGB_Image::label(fltk3::Widget* widget) {
 }
 
 void Fl_RGB_Image::label(Fl_Menu_Item* m) {
-  m->label(fltk3::imageLabel, (const char*)this);
+  m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }
 
 

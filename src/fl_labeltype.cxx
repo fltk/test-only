@@ -66,7 +66,7 @@ static Fl_Label_Draw_F* table[MAX_LABELTYPE] = {
   fl_normal_label,	// _FL_EMBOSSED_LABEL,
   fl_no_label,		// _FL_MULTI_LABEL,
   fl_no_label,		// _FL_ICON_LABEL,
-  // fltk3::freeLabel+n:
+  // fltk3::FREE_LABELTYPE+n:
   fl_no_label, fl_no_label, fl_no_label,
   fl_no_label, fl_no_label, fl_no_label,
   fl_no_label, fl_no_label, fl_no_label

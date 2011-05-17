@@ -321,7 +321,7 @@ void Fl_GDI_Graphics_Driver::draw(Fl_Bitmap *bm, int XP, int YP, int WP, int HP,
     r = 255-r;
     g = 255-g;
     b = 255-b;
-    fltk3::Color background = fltk3::rgbColor(r, g, b); // a color very different from the bitmap's
+    fltk3::Color background = fltk3::rgb_color(r, g, b); // a color very different from the bitmap's
     fl_color(background);
     fl_rectf(0,0,W,H); // use this color as offscreen background
     fl_color(save_c); // back to bitmap's color
@@ -395,8 +395,8 @@ void Fl_Bitmap::label(fltk3::Widget* widget) {
 }
 
 void Fl_Bitmap::label(Fl_Menu_Item* m) {
-  Fl::set_labeltype(fltk3::imageLabel, labeltype, measure);
-  m->label(fltk3::imageLabel, (const char*)this);
+  Fl::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
+  m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }
 
 Fl_Image *Fl_Bitmap::copy(int W, int H) {

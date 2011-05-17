@@ -65,7 +65,7 @@ void Fl::background(uchar r, uchar g, uchar b) {
   double powb = log(b/255.0)/log((fltk3::GRAY-fltk3::GRAY_RAMP)/(fltk3::NUM_GRAY-1.0));
   for (int i = 0; i < fltk3::NUM_GRAY; i++) {
     double gray = i/(fltk3::NUM_GRAY-1.0);
-    Fl::set_color(fltk3::grayRamp(i),
+    Fl::set_color(fltk3::gray_ramp(i),
 		  uchar(pow(gray,powr)*255+.5),
 		  uchar(pow(gray,powg)*255+.5),
 		  uchar(pow(gray,powb)*255+.5));
@@ -411,7 +411,7 @@ int Fl::reload_scheme() {
 
   // Set (or clear) the background tile for all windows...
   for (win = first_window(); win; win = next_window(win)) {
-    win->labeltype(scheme_bg_ ? fltk3::normalLabel : fltk3::noLabel);
+    win->labeltype(scheme_bg_ ? fltk3::NORMAL_LABEL : fltk3::NO_LABEL);
     win->align(fltk3::ALIGN_CENTER | fltk3::ALIGN_INSIDE | fltk3::ALIGN_CLIP);
     win->image(scheme_bg_);
     win->redraw();
