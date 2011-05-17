@@ -158,7 +158,7 @@ public:
 
     If the desired combination cannot be done, FLTK will try turning off 
     fltk3::MULTISAMPLE.  If this also fails the show() will call 
-    Fl::error() and not show the window.
+    fltk3::error() and not show the window.
 
     You can change the mode while the window is displayed.  This is most
     useful for turning double-buffering on and off.  Under X this will

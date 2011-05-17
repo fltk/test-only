@@ -117,7 +117,7 @@ static HMODULE get_wsock_mod() {
   if (!s_wsock_mod) {
     s_wsock_mod = LoadLibrary(WSCK_DLL_NAME);
     if (s_wsock_mod==NULL)
-      Fl::fatal("FLTK Lib Error: %s file not found! Please check your winsock dll accessibility.\n",WSCK_DLL_NAME);
+      fltk3::fatal("FLTK Lib Error: %s file not found! Please check your winsock dll accessibility.\n",WSCK_DLL_NAME);
     s_wsock_select = (fl_wsk_select_f) GetProcAddress(s_wsock_mod, "select");
     fl_wsk_fd_is_set = (fl_wsk_fd_is_set_f) GetProcAddress(s_wsock_mod, "__WSAFDIsSet");
   }
@@ -144,7 +144,7 @@ static HMODULE get_imm_module() {
   if (!s_imm_module) {
     s_imm_module = LoadLibrary("IMM32.DLL");
     if (!s_imm_module)
-      Fl::fatal("FLTK Lib Error: IMM32.DLL file not found!\n\n"
+      fltk3::fatal("FLTK Lib Error: IMM32.DLL file not found!\n\n"
         "Please check your input method manager library accessibility.");
     flImmGetContext = (flTypeImmGetContext)GetProcAddress(s_imm_module, "ImmGetContext");
     flImmSetCompositionWindow = (flTypeImmSetCompositionWindow)GetProcAddress(s_imm_module, "ImmSetCompositionWindow");
@@ -241,7 +241,7 @@ static fltk3::Window *track_mouse_win=0;	// current TrackMouseEvent() window
 // POLLIN, POLLOUT, and POLLERR with conflicting values WRT what we
 // used before (STR #2301).  Therefore we must not use these values
 // for our internal purposes, but use fltk3::READ, fltk3::WRITE, and
-// fltk3::EXCEPT, as defined for use in Fl::add_fd().
+// fltk3::EXCEPT, as defined for use in fltk3::add_fd().
 //
 static int maxfd = 0;
 static fd_set fdsets[3];
@@ -287,7 +287,7 @@ void fl_set_status(int x, int y, int w, int h)
 {
 }
 
-void Fl::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
+void fltk3::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
   remove_fd(n,events);
   int i = nfds++;
   if (i >= fd_array_size) {
@@ -305,11 +305,11 @@ void Fl::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
   if (n > maxfd) maxfd = n;
 }
 
-void Fl::add_fd(int fd, void (*cb)(int, void*), void* v) {
-  Fl::add_fd(fd, fltk3::READ, cb, v);
+void fltk3::add_fd(int fd, void (*cb)(int, void*), void* v) {
+  fltk3::add_fd(fd, fltk3::READ, cb, v);
 }
 
-void Fl::remove_fd(int n, int events) {
+void fltk3::remove_fd(int n, int events) {
   int i,j;
   for (i=j=0; i<nfds; i++) {
     if (fd[i].fd == n) {
@@ -330,17 +330,17 @@ void Fl::remove_fd(int n, int events) {
   if (events & fltk3::EXCEPT) FD_CLR(unsigned(n), &fdsets[2]);
 }
 
-void Fl::remove_fd(int n) {
+void fltk3::remove_fd(int n) {
   remove_fd(n, -1);
 }
 
-// these pointers are set by the Fl::lock() function:
+// these pointers are set by the fltk3::lock() function:
 static void nothing() {}
 void (*fl_lock_function)() = nothing;
 void (*fl_unlock_function)() = nothing;
 
 static void* thread_message_;
-void* Fl::thread_message() {
+void* fltk3::thread_message() {
   void* r = thread_message_;
   thread_message_ = 0;
   return r;
@@ -361,9 +361,9 @@ int fl_wait(double time_to_wait) {
 
   // idle processing
   static char in_idle;
-  if (Fl::idle && !in_idle) {
+  if (fltk3::idle && !in_idle) {
     in_idle = 1;
-    Fl::idle();
+    fltk3::idle();
     in_idle = 0;
   }
   
@@ -393,12 +393,12 @@ int fl_wait(double time_to_wait) {
     }
   }
 
-  if (Fl::idle || Fl::damage()) 
+  if (fltk3::idle || fltk3::damage()) 
     time_to_wait = 0.0;
 
   // if there are no more windows and this timer is set
   // to FOREVER, continue through or look up indefinitely
-  if (!Fl::first_window() && time_to_wait==1e20)
+  if (!fltk3::first_window() && time_to_wait==1e20)
     time_to_wait = 0.0;
 
   fl_unlock_function();
@@ -417,9 +417,9 @@ int fl_wait(double time_to_wait) {
       if (fl_msg.message == fl_wake_msg) {
         // Used for awaking wait() from another thread
 	thread_message_ = (void*)fl_msg.wParam;
-        Fl_Awake_Handler func;
+        fltk3::AwakeHandler func;
         void *data;
-        while (Fl::get_awake_handler_(func, data)==0) {
+        while (fltk3::get_awake_handler_(func, data)==0) {
           func(data);
         }
       }
@@ -429,7 +429,7 @@ int fl_wait(double time_to_wait) {
       have_message = PeekMessageW(&fl_msg, NULL, 0, 0, PM_REMOVE);
     }
   }
-  Fl::flush();
+  fltk3::flush();
 
   // This should return 0 if only timer events were handled:
   return 1;
@@ -449,7 +449,7 @@ int fl_ready() {
 
 ////////////////////////////////////////////////////////////////
 
-int Fl::x()
+int fltk3::x()
 {
   RECT r;
 
@@ -457,7 +457,7 @@ int Fl::x()
   return r.left;
 }
 
-int Fl::y()
+int fltk3::y()
 {
   RECT r;
 
@@ -465,7 +465,7 @@ int Fl::y()
   return r.top;
 }
 
-int Fl::h()
+int fltk3::h()
 {
   RECT r;
 
@@ -473,7 +473,7 @@ int Fl::h()
   return r.bottom - r.top;
 }
 
-int Fl::w()
+int fltk3::w()
 {
   RECT r;
 
@@ -481,7 +481,7 @@ int Fl::w()
   return r.right - r.left;
 }
 
-void Fl::get_mouse(int &x, int &y) {
+void fltk3::get_mouse(int &x, int &y) {
   POINT p;
   GetCursorPos(&p);
   x = p.x;
@@ -543,7 +543,7 @@ public:
 };
 
 // call this when you create a selection:
-void Fl::copy(const char *stuff, int len, int clipboard) {
+void fltk3::copy(const char *stuff, int len, int clipboard) {
   if (!stuff || len<0) return;
 
   // Convert \n -> \r\n (for old apps like Notepad, DOS)
@@ -581,7 +581,7 @@ void Fl::copy(const char *stuff, int len, int clipboard) {
 }
 
 // Call this when a "paste" operation happens:
-void Fl::paste(fltk3::Widget &receiver, int clipboard) {
+void fltk3::paste(fltk3::Widget &receiver, int clipboard) {
   if (!clipboard || fl_i_own_selection[clipboard]) {
     // We already have it, do it quickly without window server.
     // Notice that the text is clobbered if set_selection is
@@ -590,41 +590,41 @@ void Fl::paste(fltk3::Widget &receiver, int clipboard) {
     // Convert \r\n -> \n
     char *i = fl_selection_buffer[clipboard];
     if (i==0L) {
-      Fl::e_text = 0; 
+      fltk3::e_text = 0; 
       return;
     }
-    Fl::e_text = new char[fl_selection_length[clipboard]+1];
-    char *o = Fl::e_text;
+    fltk3::e_text = new char[fl_selection_length[clipboard]+1];
+    char *o = fltk3::e_text;
     while (*i) {
       if ( *i == '\r' && *(i+1) == '\n') i++;
       else *o++ = *i++;
     }
     *o = 0;
-    Fl::e_length = o - Fl::e_text;
+    fltk3::e_length = o - fltk3::e_text;
     receiver.handle(fltk3::PASTE);
-    delete [] Fl::e_text;
-    Fl::e_text = 0;
+    delete [] fltk3::e_text;
+    fltk3::e_text = 0;
   } else {
     if (!OpenClipboard(NULL)) return;
     HANDLE h = GetClipboardData(CF_UNICODETEXT);
     if (h) {
       wchar_t *memLock = (wchar_t*) GlobalLock(h);
       int utf16_len = wcslen(memLock);
-      Fl::e_text = (char*) malloc (utf16_len * 4 + 1);
-      int utf8_len = fl_utf8fromwc(Fl::e_text, utf16_len * 4, memLock, utf16_len);
-      *(Fl::e_text + utf8_len) = 0;
+      fltk3::e_text = (char*) malloc (utf16_len * 4 + 1);
+      int utf8_len = fl_utf8fromwc(fltk3::e_text, utf16_len * 4, memLock, utf16_len);
+      *(fltk3::e_text + utf8_len) = 0;
       LPSTR a,b;
-      a = b = Fl::e_text;
+      a = b = fltk3::e_text;
       while (*a) { // strip the CRLF pairs ($%$#@^)
         if (*a == '\r' && a[1] == '\n') a++;
         else *b++ = *a++;
       }
       *b = 0;
-      Fl::e_length = b - Fl::e_text;
+      fltk3::e_length = b - fltk3::e_text;
       receiver.handle(fltk3::PASTE);
       GlobalUnlock(h);
-      free(Fl::e_text);
-      Fl::e_text = 0;
+      free(fltk3::e_text);
+      fltk3::e_text = 0;
     }
     CloseClipboard();
   }
@@ -656,21 +656,21 @@ static int mouse_event(fltk3::Window *window, int what, int button,
 {
   static int px, py, pmx, pmy;
   POINT pt;
-  Fl::e_x = pt.x = (signed short)LOWORD(lParam);
-  Fl::e_y = pt.y = (signed short)HIWORD(lParam);
+  fltk3::e_x = pt.x = (signed short)LOWORD(lParam);
+  fltk3::e_y = pt.y = (signed short)HIWORD(lParam);
   ClientToScreen(fl_xid(window), &pt);
-  Fl::e_x_root = pt.x;
-  Fl::e_y_root = pt.y;
+  fltk3::e_x_root = pt.x;
+  fltk3::e_y_root = pt.y;
 #ifdef USE_CAPTURE_MOUSE_WIN
   fltk3::Window *mouse_window = window;	// save "mouse window"
 #endif
   while (window->parent()) {
-    Fl::e_x += window->x();
-    Fl::e_y += window->y();
+    fltk3::e_x += window->x();
+    fltk3::e_y += window->y();
     window = window->window();
   }
 
-  ulong state = Fl::e_state & 0xff0000; // keep shift key states
+  ulong state = fltk3::e_state & 0xff0000; // keep shift key states
 #if 0
   // mouse event reports some shift flags, perhaps save them?
   if (wParam & MK_SHIFT) state |= fltk3::SHIFT;
@@ -679,36 +679,36 @@ static int mouse_event(fltk3::Window *window, int what, int button,
   if (wParam & MK_LBUTTON) state |= fltk3::BUTTON1;
   if (wParam & MK_MBUTTON) state |= fltk3::BUTTON2;
   if (wParam & MK_RBUTTON) state |= fltk3::BUTTON3;
-  Fl::e_state = state;
+  fltk3::e_state = state;
 
   switch (what) {
   case 1: // double-click
-    if (Fl::e_is_click) {Fl::e_clicks++; goto J1;}
+    if (fltk3::e_is_click) {fltk3::e_clicks++; goto J1;}
   case 0: // single-click
-    Fl::e_clicks = 0;
+    fltk3::e_clicks = 0;
   J1:
 #ifdef USE_CAPTURE_MOUSE_WIN
     if (!fl_capture) SetCapture(fl_xid(mouse_window));  // use mouse window
 #else
     if (!fl_capture) SetCapture(fl_xid(window));	// use main window
 #endif
-    Fl::e_keysym = fltk3::MouseButton + button;
-    Fl::e_is_click = 1;
-    px = pmx = Fl::e_x_root; py = pmy = Fl::e_y_root;
-    return Fl::handle(fltk3::PUSH,window);
+    fltk3::e_keysym = fltk3::MouseButton + button;
+    fltk3::e_is_click = 1;
+    px = pmx = fltk3::e_x_root; py = pmy = fltk3::e_y_root;
+    return fltk3::handle(fltk3::PUSH,window);
 
   case 2: // release:
     if (!fl_capture) ReleaseCapture();
-    Fl::e_keysym = fltk3::MouseButton + button;
-    return Fl::handle(fltk3::RELEASE,window);
+    fltk3::e_keysym = fltk3::MouseButton + button;
+    return fltk3::handle(fltk3::RELEASE,window);
 
   case 3: // move:
   default: // avoid compiler warning
     // MSWindows produces extra events even if mouse does not move, ignore em:
-    if (Fl::e_x_root == pmx && Fl::e_y_root == pmy) return 1;
-    pmx = Fl::e_x_root; pmy = Fl::e_y_root;
-    if (abs(Fl::e_x_root-px)>5 || abs(Fl::e_y_root-py)>5) Fl::e_is_click = 0;
-    return Fl::handle(fltk3::MOVE,window);
+    if (fltk3::e_x_root == pmx && fltk3::e_y_root == pmy) return 1;
+    pmx = fltk3::e_x_root; pmy = fltk3::e_y_root;
+    if (abs(fltk3::e_x_root-px)>5 || abs(fltk3::e_y_root-py)>5) fltk3::e_is_click = 0;
+    return fltk3::handle(fltk3::MOVE,window);
 
   }
 }
@@ -790,7 +790,7 @@ extern HPALETTE fl_select_palette(void); // in fl_color_win32.cxx
 struct Win32Timer
 {
   UINT_PTR handle;
-  Fl_Timeout_Handler callback;
+  fltk3::TimeoutHandler callback;
   void *data;
 };
 static Win32Timer* win32_timers;
@@ -844,10 +844,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   if (window) switch (uMsg) {
 
   case WM_QUIT: // this should not happen?
-    Fl::fatal("WM_QUIT message");
+    fltk3::fatal("WM_QUIT message");
 
   case WM_CLOSE: // user clicked close box
-    Fl::handle(fltk3::CLOSE, window);
+    fltk3::handle(fltk3::CLOSE, window);
     PostQuitMessage(0);
     return 0;
 
@@ -889,7 +889,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     window->clear_damage((uchar)(window->damage()|fltk3::DAMAGE_EXPOSE));
     // These next two statements should not be here, so that all update
-    // is deferred until Fl::flush() is called during idle.  However WIN32
+    // is deferred until fltk3::flush() is called during idle.  However WIN32
     // apparently is very unhappy if we don't obey it and draw right now.
     // Very annoying!
     fl_GetDC(hWnd); // Make sure we have a DC for this window...
@@ -927,24 +927,24 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (track_mouse_win == window) { // we left the top level window !
       fltk3::Window *tw = window;
       while (tw->parent()) tw = tw->window(); // find top level window
-      Fl::belowmouse(0);
-      Fl::handle(fltk3::LEAVE, tw);
+      fltk3::belowmouse(0);
+      fltk3::handle(fltk3::LEAVE, tw);
     }
     track_mouse_win = 0; // force TrackMouseEvent() restart
     break;
 
   case WM_SETFOCUS:
-    Fl::handle(fltk3::FOCUS, window);
+    fltk3::handle(fltk3::FOCUS, window);
     break;
 
   case WM_KILLFOCUS:
-    Fl::handle(fltk3::UNFOCUS, window);
-    Fl::flush(); // it never returns to main loop when deactivated...
+    fltk3::handle(fltk3::UNFOCUS, window);
+    fltk3::flush(); // it never returns to main loop when deactivated...
     break;
 
   case WM_SHOWWINDOW:
     if (!window->parent()) {
-      Fl::handle(wParam ? fltk3::SHOW : fltk3::HIDE, window);
+      fltk3::handle(wParam ? fltk3::SHOW : fltk3::HIDE, window);
     }
     break;
 
@@ -964,7 +964,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       if (GetAsyncKeyState(VK_SHIFT)&~1) state |= fltk3::SHIFT;
       if (GetAsyncKeyState(VK_MENU)) state |= fltk3::ALT;
       if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1) state |= fltk3::META;
-      Fl::e_state = state;
+      fltk3::e_state = state;
       return 0;
     }
     break;
@@ -987,7 +987,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_KEYUP:
   case WM_SYSKEYUP:
     // save the keysym until we figure out the characters:
-    Fl::e_keysym = Fl::e_original_keysym = ms2fltk(wParam,lParam&(1<<24));
+    fltk3::e_keysym = fltk3::e_original_keysym = ms2fltk(wParam,lParam&(1<<24));
     // See if TranslateMessage turned it into a WM_*CHAR message:
     if (PeekMessageW(&fl_msg, hWnd, WM_CHAR, WM_SYSDEADCHAR, PM_REMOVE))
     {
@@ -999,7 +999,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SYSDEADCHAR:
   case WM_CHAR:
   case WM_SYSCHAR: {
-    ulong state = Fl::e_state & 0xff000000; // keep the mouse button state
+    ulong state = fltk3::e_state & 0xff000000; // keep the mouse button state
     // if GetKeyState is expensive we might want to comment some of these out:
     if (GetKeyState(VK_SHIFT)&~1) state |= fltk3::SHIFT;
     if (GetKeyState(VK_CAPITAL)) state |= fltk3::CAPS_LOCK;
@@ -1016,62 +1016,62 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	state |= fltk3::META;
     }
     if (GetKeyState(VK_SCROLL)) state |= fltk3::SCROLL_LOCK;
-    Fl::e_state = state;
+    fltk3::e_state = state;
     static char buffer[1024];
     if (uMsg == WM_CHAR || uMsg == WM_SYSCHAR) {
 
       xchar u = (xchar) wParam;
-//    Fl::e_length = fl_unicode2utf(&u, 1, buffer);
-      Fl::e_length = fl_utf8fromwc(buffer, 1024, &u, 1);
-      buffer[Fl::e_length] = 0;
+//    fltk3::e_length = fl_unicode2utf(&u, 1, buffer);
+      fltk3::e_length = fl_utf8fromwc(buffer, 1024, &u, 1);
+      buffer[fltk3::e_length] = 0;
 
 
-    } else if (Fl::e_keysym >= fltk3::KPKey && Fl::e_keysym <= fltk3::KPLastKey) {
+    } else if (fltk3::e_keysym >= fltk3::KPKey && fltk3::e_keysym <= fltk3::KPLastKey) {
       if (state & fltk3::NUM_LOCK) {
         // Convert to regular keypress...
-	buffer[0] = Fl::e_keysym-fltk3::KPKey;
-	Fl::e_length = 1;
+	buffer[0] = fltk3::e_keysym-fltk3::KPKey;
+	fltk3::e_length = 1;
       } else {
         // Convert to special keypress...
 	buffer[0] = 0;
-	Fl::e_length = 0;
-	switch (Fl::e_keysym) {
+	fltk3::e_length = 0;
+	switch (fltk3::e_keysym) {
 	  case fltk3::KPKey + '0' :
-	    Fl::e_keysym = fltk3::InsertKey;
+	    fltk3::e_keysym = fltk3::InsertKey;
 	    break;
 	  case fltk3::KPKey + '1' :
-	    Fl::e_keysym = fltk3::EndKey;
+	    fltk3::e_keysym = fltk3::EndKey;
 	    break;
 	  case fltk3::KPKey + '2' :
-	    Fl::e_keysym = fltk3::DownKey;
+	    fltk3::e_keysym = fltk3::DownKey;
 	    break;
 	  case fltk3::KPKey + '3' :
-	    Fl::e_keysym = fltk3::PageDownKey;
+	    fltk3::e_keysym = fltk3::PageDownKey;
 	    break;
 	  case fltk3::KPKey + '4' :
-	    Fl::e_keysym = fltk3::LeftKey;
+	    fltk3::e_keysym = fltk3::LeftKey;
 	    break;
 	  case fltk3::KPKey + '6' :
-	    Fl::e_keysym = fltk3::RightKey;
+	    fltk3::e_keysym = fltk3::RightKey;
 	    break;
 	  case fltk3::KPKey + '7' :
-	    Fl::e_keysym = fltk3::HomeKey;
+	    fltk3::e_keysym = fltk3::HomeKey;
 	    break;
 	  case fltk3::KPKey + '8' :
-	    Fl::e_keysym = fltk3::UpKey;
+	    fltk3::e_keysym = fltk3::UpKey;
 	    break;
 	  case fltk3::KPKey + '9' :
-	    Fl::e_keysym = fltk3::PageUpKey;
+	    fltk3::e_keysym = fltk3::PageUpKey;
 	    break;
 	  case fltk3::KPKey + '.' :
-	    Fl::e_keysym = fltk3::DeleteKey;
+	    fltk3::e_keysym = fltk3::DeleteKey;
 	    break;
 	  case fltk3::KPKey + '/' :
 	  case fltk3::KPKey + '*' :
 	  case fltk3::KPKey + '-' :
 	  case fltk3::KPKey + '+' :
-	    buffer[0] = Fl::e_keysym-fltk3::KPKey;
-	    Fl::e_length = 1;
+	    buffer[0] = fltk3::e_keysym-fltk3::KPKey;
+	    fltk3::e_length = 1;
 	    break;
 	}
       }
@@ -1079,27 +1079,27 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 #ifdef FLTK_PREVIEW_DEAD_KEYS
       if ((lParam & (1<<24))==0) { // clear if dead key (always?)
         xchar u = (xchar) wParam;
-        Fl::e_length = fl_utf8fromwc(buffer, 1024, &u, 1);
-        buffer[Fl::e_length] = 0;
+        fltk3::e_length = fl_utf8fromwc(buffer, 1024, &u, 1);
+        buffer[fltk3::e_length] = 0;
       } else { // set if "extended key" (never printable?)
         buffer[0] = 0;
-        Fl::e_length = 0;
+        fltk3::e_length = 0;
       }
 #else
       buffer[0] = 0;
-      Fl::e_length = 0;
+      fltk3::e_length = 0;
 #endif
     }
-    Fl::e_text = buffer;
+    fltk3::e_text = buffer;
     if (lParam & (1<<31)) { // key up events.
-      if (Fl::handle(fltk3::KEYUP, window)) return 0;
+      if (fltk3::handle(fltk3::KEYUP, window)) return 0;
       break;
     }
     // for (int i = lParam&0xff; i--;)
     while (window->parent()) window = window->window();
-    if (Fl::handle(fltk3::KEYBOARD,window)) {
+    if (fltk3::handle(fltk3::KEYBOARD,window)) {
 	  if (uMsg==WM_DEADCHAR || uMsg==WM_SYSDEADCHAR)
-		Fl::compose_state = 1;
+		fltk3::compose_state = 1;
 	  return 0;
 	}
     break;}
@@ -1107,9 +1107,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_MOUSEWHEEL: {
     static int delta = 0; // running total of all motion
     delta += (SHORT)(HIWORD(wParam));
-    Fl::e_dy = -delta / WHEEL_DELTA;
-    delta += Fl::e_dy * WHEEL_DELTA;
-    if (Fl::e_dy) Fl::handle(fltk3::MOUSEWHEEL, window);
+    fltk3::e_dy = -delta / WHEEL_DELTA;
+    delta += fltk3::e_dy * WHEEL_DELTA;
+    if (fltk3::e_dy) fltk3::handle(fltk3::MOUSEWHEEL, window);
     return 0;
   }
 
@@ -1120,9 +1120,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SIZE:
     if (!window->parent()) {
       if (wParam == SIZE_MINIMIZED || wParam == SIZE_MAXHIDE) {
-	Fl::handle(fltk3::HIDE, window);
+	fltk3::handle(fltk3::HIDE, window);
       } else {
-	Fl::handle(fltk3::SHOW, window);
+	fltk3::handle(fltk3::SHOW, window);
 	resize_bug_fix = window;
 	window->size(LOWORD(lParam), HIWORD(lParam));
       }
@@ -1196,7 +1196,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return 1;}
 
   default:
-    if (Fl::handle(0,0)) return 0;
+    if (fltk3::handle(0,0)) return 0;
     break;
   }
 
@@ -1286,7 +1286,7 @@ int Fl_X::fake_X_wm(const fltk3::Window* w,int &X,int &Y, int &bt,int &bx, int &
   //Proceed to positioning the window fully inside the screen, if possible
   //Make border's lower right corner visible
   int scr_x, scr_y, scr_w, scr_h;
-  Fl::screen_xywh(scr_x, scr_y, scr_w, scr_h, X, Y);
+  fltk3::screen_xywh(scr_x, scr_y, scr_w, scr_h, X, Y);
   if (scr_x+scr_w < X+W) X = scr_x+scr_w - W;
   if (scr_y+scr_h < Y+H) Y = scr_y+scr_h - H;
   //Make border's upper left corner visible
@@ -1439,7 +1439,7 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
       w->icon((void *)LoadIcon(NULL, IDI_APPLICATION));
     wcw.hIcon = wcw.hIconSm = (HICON)w->icon();
     wcw.hCursor = fl_default_cursor = LoadCursor(NULL, IDC_ARROW);
-    //uchar r,g,b; Fl::get_color(fltk3::GRAY,r,g,b);
+    //uchar r,g,b; fltk3::get_color(fltk3::GRAY,r,g,b);
     //wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(r,g,b));
     wcw.hbrBackground = NULL;
     wcw.lpszMenuName = NULL;
@@ -1499,7 +1499,7 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
     if (!w->force_position()) {
       xp = yp = CW_USEDEFAULT;
     } else {
-      if (!Fl::grab()) {
+      if (!fltk3::grab()) {
 	xp = xwm; yp = ywm;
         w->x(xp);w->y(yp);
       }
@@ -1514,7 +1514,7 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
       while (w->parent()) w = w->window();
       parent = fl_xid(w);
       if (!w->visible()) showit = 0;
-    } else if (Fl::grab()) parent = fl_xid(Fl::grab());
+    } else if (fltk3::grab()) parent = fl_xid(fltk3::grab());
   }
 
   Fl_X* x = new Fl_X;
@@ -1555,15 +1555,15 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
   if (fl_show_iconic) {showit = 0; fl_show_iconic = 0;}
   if (showit) {
     w->set_visible();
-    int old_event = Fl::e_number;
-    w->handle(Fl::e_number = fltk3::SHOW); // get child windows to appear
-    Fl::e_number = old_event;
+    int old_event = fltk3::e_number;
+    w->handle(fltk3::e_number = fltk3::SHOW); // get child windows to appear
+    fltk3::e_number = old_event;
     w->redraw(); // force draw to happen
   }
   // If we've captured the mouse, we dont want to activate any
   // other windows from the code, or we lose the capture.
   ShowWindow(x->xid, !showit ? SW_SHOWMINNOACTIVE :
-	     (Fl::grab() || (style & WS_POPUP)) ? SW_SHOWNOACTIVATE : SW_SHOWNORMAL);
+	     (fltk3::grab() || (style & WS_POPUP)) ? SW_SHOWNOACTIVATE : SW_SHOWNORMAL);
 
   // Register all windows for potential drag'n'drop operations
   fl_OleInitialize();
@@ -1577,7 +1577,7 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
     }
   }
 
-  if (w->modal()) {Fl::modal_ = w; fl_fix_focus();}
+  if (w->modal()) {fltk3::modal_ = w; fl_fix_focus();}
   return x;
 }
 
@@ -1597,7 +1597,7 @@ static LRESULT CALLBACK s_TimerProc(HWND hwnd, UINT msg,
     {
       unsigned int id = wParam - 1;
       if (id < (unsigned int)win32_timer_used && win32_timers[id].handle) {
-        Fl_Timeout_Handler cb   = win32_timers[id].callback;
+        fltk3::TimeoutHandler cb   = win32_timers[id].callback;
         void*              data = win32_timers[id].data;
         delete_timer(win32_timers[id]);
         if (cb) {
@@ -1614,12 +1614,12 @@ static LRESULT CALLBACK s_TimerProc(HWND hwnd, UINT msg,
   return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-void Fl::add_timeout(double time, Fl_Timeout_Handler cb, void* data)
+void fltk3::add_timeout(double time, fltk3::TimeoutHandler cb, void* data)
 {
   repeat_timeout(time, cb, data);
 }
 
-void Fl::repeat_timeout(double time, Fl_Timeout_Handler cb, void* data)
+void fltk3::repeat_timeout(double time, fltk3::TimeoutHandler cb, void* data)
 {
   int timer_id = -1;
   for (int i = 0;  i < win32_timer_used;  ++i) {
@@ -1669,7 +1669,7 @@ void Fl::repeat_timeout(double time, Fl_Timeout_Handler cb, void* data)
     SetTimer(s_TimerWnd, timer_id + 1, elapsed, NULL);
 }
 
-int Fl::has_timeout(Fl_Timeout_Handler cb, void* data)
+int fltk3::has_timeout(fltk3::TimeoutHandler cb, void* data)
 {
   for (int i = 0;  i < win32_timer_used;  ++i) {
     Win32Timer& t = win32_timers[i];
@@ -1680,7 +1680,7 @@ int Fl::has_timeout(Fl_Timeout_Handler cb, void* data)
   return 0;
 }
 
-void Fl::remove_timeout(Fl_Timeout_Handler cb, void* data)
+void fltk3::remove_timeout(fltk3::TimeoutHandler cb, void* data)
 {
   int i;
   for (i = 0;  i < win32_timer_used;  ++i) {
@@ -1773,8 +1773,8 @@ void fltk3::Window::label(const char *name,const char *iname) {
 //static inline int can_boxcheat(uchar b) {return (b==1 || (b&2) && b<=15);}
 
 void fltk3::Window::show() {
-  image(Fl::scheme_bg_);
-  if (Fl::scheme_bg_) {
+  image(fltk3::scheme_bg_);
+  if (fltk3::scheme_bg_) {
     labeltype(fltk3::NORMAL_LABEL);
     align(fltk3::ALIGN_CENTER | fltk3::ALIGN_INSIDE | fltk3::ALIGN_CLIP);
   } else {
@@ -1839,7 +1839,7 @@ void fltk3::Window::make_current() {
 }
 
 /* Make sure that all allocated fonts are released. This works only if 
-   Fl::run() is allowed to exit by closing all windows. Calling 'exit(int)'
+   fltk3::run() is allowed to exit by closing all windows. Calling 'exit(int)'
    will not automatically free any fonts. */
 void fl_free_fonts(void)
 {
@@ -1974,7 +1974,7 @@ void Fl_Paged_Device::print_window(fltk3::Window *win, int x_offset, int y_offse
   wh = win->h() + bt + 2 * by;
   Fl_Display_Device::display_device()->set_current(); // make window current
   win->show();
-  Fl::check();
+  fltk3::check();
   win->make_current();
   HDC save_gc = fl_gc;
   fl_gc = GetDC(NULL); // get the screen device context
@@ -2010,7 +2010,7 @@ void printFront(fltk3::Widget *o, void *data)
 {
   Fl_Printer printer;
   o->window()->hide();
-  fltk3::Window *win = Fl::first_window();
+  fltk3::Window *win = fltk3::first_window();
   if(!win) return;
   int w, h;
   if( printer.start_job(1) ) { o->window()->show(); return; }

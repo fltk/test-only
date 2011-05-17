@@ -34,11 +34,11 @@
 
 int Fl_Roller::handle(int event) {
   static int ipos;
-  int newpos = horizontal() ? Fl::event_x() : Fl::event_y();
+  int newpos = horizontal() ? fltk3::event_x() : fltk3::event_y();
   switch (event) {
   case fltk3::PUSH:
-    if (Fl::visible_focus()) {
-      Fl::focus(this);
+    if (fltk3::visible_focus()) {
+      fltk3::focus(this);
       redraw();
     }
     handle_push();
@@ -51,7 +51,7 @@ int Fl_Roller::handle(int event) {
     handle_release();
     return 1;
   case fltk3::KEYBOARD :
-    switch (Fl::event_key()) {
+    switch (fltk3::event_key()) {
       case fltk3::UpKey:
         if (horizontal()) return 0;
 	handle_drag(clamp(increment(value(),-1)));
@@ -74,7 +74,7 @@ int Fl_Roller::handle(int event) {
     // break not required because of switch...
   case fltk3::FOCUS :
   case fltk3::UNFOCUS :
-    if (Fl::visible_focus()) {
+    if (fltk3::visible_focus()) {
       redraw();
       return 1;
     } else return 0;
@@ -88,10 +88,10 @@ int Fl_Roller::handle(int event) {
 
 void Fl_Roller::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
-  int X = x()+Fl::box_dx(box());
-  int Y = y()+Fl::box_dy(box());
-  int W = w()-Fl::box_dw(box())-1;
-  int H = h()-Fl::box_dh(box())-1;
+  int X = x()+fltk3::box_dx(box());
+  int Y = y()+fltk3::box_dy(box());
+  int W = w()-fltk3::box_dw(box())-1;
+  int H = h()-fltk3::box_dh(box())-1;
   if (W<=0 || H <=0) return;
   int offset = step() ? int(value()/step()) : 0;
   const double ARC = 1.5; // 1/2 the number of radians visible
@@ -166,7 +166,7 @@ void Fl_Roller::draw() {
     }
   }
 
-  if (Fl::focus() == this) draw_focus(fltk3::THIN_UP_FRAME, x(), y(), w(), h());
+  if (fltk3::focus() == this) draw_focus(fltk3::THIN_UP_FRAME, x(), y(), w(), h());
 }
 
 /**

@@ -35,15 +35,15 @@
 static Fl_Menu_* the_widget;
 
 static int handler(int e) {
-  if (e != fltk3::SHORTCUT || Fl::modal()) return 0;
-  Fl::first_window(the_widget->window());
+  if (e != fltk3::SHORTCUT || fltk3::modal()) return 0;
+  fltk3::first_window(the_widget->window());
   return the_widget->handle(e);
 }
 
 /**
   Make the shortcuts for this menu work no matter what window has the
   focus when you type it.  This is done by using 
-  Fl::add_handler().  This Fl_Menu_ widget does not
+  fltk3::add_handler().  This Fl_Menu_ widget does not
   have to be visible (ie the window it is in can be hidden, or it does
   not have to be put in a window at all).
   <P>Currently there can be only one global()menu.  Setting a new
@@ -51,7 +51,7 @@ static int handler(int e) {
   global() setting (so don't destroy the widget!)
 */
 void Fl_Menu_::global() {
-  if (!the_widget) Fl::add_handler(handler);
+  if (!the_widget) fltk3::add_handler(handler);
   the_widget = this;
 }
 

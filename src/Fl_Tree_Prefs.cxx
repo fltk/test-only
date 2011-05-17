@@ -154,10 +154,10 @@ Fl_Tree_Prefs::Fl_Tree_Prefs() {
   _selectbox              = fltk3::FLAT_BOX;
   _selectmode             = FL_TREE_SELECT_SINGLE;
   // Let fltk's current 'scheme' affect defaults
-  if ( Fl::scheme() ) {
-    if ( strcmp(Fl::scheme(), "gtk+") == 0 ) {
+  if ( fltk3::scheme() ) {
+    if ( strcmp(fltk3::scheme(), "gtk+") == 0 ) {
       _selectbox = fltk3::GTK_THIN_UP_BOX;
-    } else if ( strcmp(Fl::scheme(), "plastic") == 0 ) {
+    } else if ( strcmp(fltk3::scheme(), "plastic") == 0 ) {
       _selectbox = fltk3::PLASTIC_THIN_UP_BOX;
     }
   }

@@ -31,7 +31,7 @@
 #include <fltk3/run.h>
 #include <fltk3/x.h>
 
-/** \fn  Fl::visual(int flags)
+/** \fn  fltk3::visual(int flags)
     Selects a visual so that your graphics are drawn correctly.  This is
     only allowed before you call show() on any windows.  This does nothing
     if the default visual satisfies the capabilities, or if no visual
@@ -41,23 +41,23 @@
     <P>Only the following combinations do anything useful:
     
     <UL>
-    <LI>Fl::visual(fltk3::RGB)
+    <LI>fltk3::visual(fltk3::RGB)
     <BR>Full/true color (if there are several depths FLTK chooses  the
     largest).  Do this if you use fl_draw_image
     for much better (non-dithered)  output.
     <BR>&nbsp; </LI>
-    <LI>Fl::visual(fltk3::RGB8)
+    <LI>fltk3::visual(fltk3::RGB8)
     <BR>Full color with at least 24 bits of color. fltk3::RGB will
     always  pick this if available, but if not it will happily return a
     less-than-24 bit deep visual.  This call fails if 24 bits are not
     available.
     <BR>&nbsp; </LI>
-    <LI>Fl::visual(fltk3::DOUBLE|fltk3::INDEX)
+    <LI>fltk3::visual(fltk3::DOUBLE|fltk3::INDEX)
     <BR>Hardware double buffering.  Call this if you are going to use 
     Fl_Double_Window.
     <BR>&nbsp; </LI>
-    <LI>Fl::visual(fltk3::DOUBLE|fltk3::RGB)</LI>
-    <LI>Fl::visual(fltk3::DOUBLE|fltk3::RGB8)
+    <LI>fltk3::visual(fltk3::DOUBLE|fltk3::RGB)</LI>
+    <LI>fltk3::visual(fltk3::DOUBLE|fltk3::RGB8)
     <BR>Hardware double buffering and full color.
     </UL>
     
@@ -66,7 +66,7 @@
     this returns false (it just won't look as good).
 */
 #ifdef WIN32
-int Fl::visual(int flags) {
+int fltk3::visual(int flags) {
   fl_GetDC(0);
   if (flags & fltk3::DOUBLE) return 0;
   if (!(flags & fltk3::INDEX) &&
@@ -77,7 +77,7 @@ int Fl::visual(int flags) {
 #elif defined(__APPLE__)
 
 // \todo Mac : need to implement Visual flags
-int Fl::visual(int flags) {
+int fltk3::visual(int flags) {
   (void)flags;
   return 1;
 }
@@ -124,7 +124,7 @@ static int test_visual(XVisualInfo& v, int flags) {
   return 1;
 }
 
-int Fl::visual(int flags) {
+int fltk3::visual(int flags) {
 #if USE_XDBE == 0
   if (flags & fltk3::DOUBLE) return 0;
 #endif

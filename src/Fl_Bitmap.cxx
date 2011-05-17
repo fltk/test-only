@@ -317,7 +317,7 @@ void Fl_GDI_Graphics_Driver::draw(Fl_Bitmap *bm, int XP, int YP, int WP, int HP,
     fl_begin_offscreen(tmp_id);
     fltk3::Color save_c = fl_color(); // save bitmap's desired color
     uchar r, g, b;
-    Fl::get_color(save_c, r, g, b);
+    fltk3::get_color(save_c, r, g, b);
     r = 255-r;
     g = 255-g;
     b = 255-b;
@@ -395,7 +395,7 @@ void Fl_Bitmap::label(fltk3::Widget* widget) {
 }
 
 void Fl_Bitmap::label(Fl_Menu_Item* m) {
-  Fl::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
+  fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
   m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }
 

@@ -65,7 +65,7 @@ typedef void* Fl_PMPrintSession;
 
 // Standard MacOS C/C++ includes...
 #include <ApplicationServices/ApplicationServices.h>
-#undef check // because of Fl::check()
+#undef check // because of fltk3::check()
 
 typedef CGContextRef	Fl_CGContextRef;
 typedef PMPrintSettings Fl_PMPrintSettings;

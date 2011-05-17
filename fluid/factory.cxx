@@ -221,12 +221,12 @@ public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Browser *myo = (Fl_Browser *)o;
     fl_font(myo->textfont(), myo->textsize());
-    h -= Fl::box_dh(o->box());
-    w -= Fl::box_dw(o->box());
+    h -= fltk3::box_dh(o->box());
+    w -= fltk3::box_dw(o->box());
     int ww = (int)fl_width('m');
-    w = ((w + ww - 1) / ww) * ww + Fl::box_dw(o->box());
+    w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     h = ((h + fl_height() - 1) / fl_height()) * fl_height() +
-        Fl::box_dh(o->box());
+        fltk3::box_dh(o->box());
     if (h < 30) h = 30;
     if (w < 50) w = 50;
   }
@@ -269,12 +269,12 @@ public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Check_Browser *myo = (Fl_Check_Browser *)o;
     fl_font(myo->textfont(), myo->textsize());
-    h -= Fl::box_dh(o->box());
-    w -= Fl::box_dw(o->box()) - fl_height();
+    h -= fltk3::box_dh(o->box());
+    w -= fltk3::box_dw(o->box()) - fl_height();
     int ww = (int)fl_width('m');
-    w = ((w + ww - 1) / ww) * ww + Fl::box_dw(o->box());
+    w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     h = ((h + fl_height() - 1) / fl_height()) * fl_height() +
-        Fl::box_dh(o->box());
+        fltk3::box_dh(o->box());
     if (h < 30) h = 30;
     if (w < 50) w = 50;
   }
@@ -344,12 +344,12 @@ public:
   virtual void ideal_size(int &w, int &h) {
     Fl_File_Browser *myo = (Fl_File_Browser *)o;
     fl_font(myo->textfont(), myo->textsize());
-    h -= Fl::box_dh(o->box());
-    w -= Fl::box_dw(o->box()) + fl_height();
+    h -= fltk3::box_dh(o->box());
+    w -= fltk3::box_dw(o->box()) + fl_height();
     int ww = (int)fl_width('m');
-    w = ((w + ww - 1) / ww) * ww + Fl::box_dw(o->box());
+    w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     h = ((h + fl_height() - 1) / fl_height()) * fl_height() +
-        Fl::box_dh(o->box());
+        fltk3::box_dh(o->box());
     if (h < 30) h = 30;
     if (w < 50) w = 50;
   }
@@ -431,9 +431,9 @@ public:
     fl_font(myo->textfont(), myo->textsize());
     h = fl_height() + myo->textsize() - 6;
     if (h < 15) h = 15;
-    w -= Fl::box_dw(o->box());
+    w -= fltk3::box_dw(o->box());
     int ww = (int)fl_width('m');
-    w = ((w + ww - 1) / ww) * ww + Fl::box_dw(o->box()) + h / 2;
+    w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box()) + h / 2;
     if (w < 40) w = 40	;
   }
   virtual const char *type_name() {return "Fl_Spinner";}
@@ -475,9 +475,9 @@ public:
     Fl_Input *myo = (Fl_Input *)o;
     fl_font(myo->textfont(), myo->textsize());
     h = fl_height() + myo->textsize() - 6;
-    w -= Fl::box_dw(o->box());
+    w -= fltk3::box_dw(o->box());
     int ww = (int)fl_width('m');
-    w = ((w + ww - 1) / ww) * ww + Fl::box_dw(o->box());
+    w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     if (h < 15) h = 15;
     if (w < 15) w = 15;
   }
@@ -525,9 +525,9 @@ public:
     Fl_File_Input *myo = (Fl_File_Input *)o;
     fl_font(myo->textfont(), myo->textsize());
     h = fl_height() + myo->textsize() + 4;
-    w -= Fl::box_dw(o->box());
+    w -= fltk3::box_dw(o->box());
     int ww = (int)fl_width('m');
-    w = ((w + ww - 1) / ww) * ww + Fl::box_dw(o->box());
+    w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     if (h < 20) h = 20;
     if (w < 50) w = 50;
   }
@@ -565,12 +565,12 @@ public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Text_Display *myo = (Fl_Text_Display *)o;
     fl_font(myo->textfont(), myo->textsize());
-    h -= Fl::box_dh(o->box());
-    w -= Fl::box_dw(o->box());
+    h -= fltk3::box_dh(o->box());
+    w -= fltk3::box_dw(o->box());
     int ww = (int)fl_width('m');
-    w = ((w + ww - 1) / ww) * ww + Fl::box_dw(o->box());
+    w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     h = ((h + fl_height() - 1) / fl_height()) * fl_height() +
-        Fl::box_dh(o->box());
+        fltk3::box_dh(o->box());
     if (h < 30) h = 30;
     if (w < 50) w = 50;
   }
@@ -607,12 +607,12 @@ public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Text_Editor *myo = (Fl_Text_Editor *)o;
     fl_font(myo->textfont(), myo->textsize());
-    h -= Fl::box_dh(o->box());
-    w -= Fl::box_dw(o->box());
+    h -= fltk3::box_dh(o->box());
+    w -= fltk3::box_dw(o->box());
     int ww = (int)fl_width('m');
-    w = ((w + ww - 1) / ww) * ww + Fl::box_dw(o->box());
+    w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     h = ((h + fl_height() - 1) / fl_height()) * fl_height() +
-        Fl::box_dh(o->box());
+        fltk3::box_dh(o->box());
     if (h < 30) h = 30;
     if (w < 50) w = 50;
   }
@@ -662,12 +662,12 @@ public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Help_View *myo = (Fl_Help_View *)o;
     fl_font(myo->textfont(), myo->textsize());
-    h -= Fl::box_dh(o->box());
-    w -= Fl::box_dw(o->box());
+    h -= fltk3::box_dh(o->box());
+    w -= fltk3::box_dw(o->box());
     int ww = (int)fl_width('m');
-    w = ((w + ww - 1) / ww) * ww + Fl::box_dw(o->box());
+    w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     h = ((h + fl_height() - 1) / fl_height()) * fl_height() +
-        Fl::box_dh(o->box());
+        fltk3::box_dh(o->box());
     if (h < 30) h = 30;
     if (w < 50) w = 50;
   }
@@ -812,9 +812,9 @@ public:
     Fl_Output *myo = (Fl_Output *)o;
     fl_font(myo->textfont(), myo->textsize());
     h = fl_height() + myo->textsize() - 6;
-    w -= Fl::box_dw(o->box());
+    w -= fltk3::box_dw(o->box());
     int ww = (int)fl_width('m');
-    w = ((w + ww - 1) / ww) * ww + Fl::box_dw(o->box());
+    w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     if (h < 15) h = 15;
     if (w < 15) w = 15;
   }
@@ -839,9 +839,9 @@ public:
     Fl_Value_Input *myo = (Fl_Value_Input *)o;
     fl_font(myo->textfont(), myo->textsize());
     h = fl_height() + myo->textsize() - 6;
-    w -= Fl::box_dw(o->box());
+    w -= fltk3::box_dw(o->box());
     int ww = (int)fl_width('m');
-    w = ((w + ww - 1) / ww) * ww + Fl::box_dw(o->box());
+    w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     if (h < 15) h = 15;
     if (w < 15) w = 15;
   }
@@ -880,9 +880,9 @@ public:
     Fl_Value_Output *myo = (Fl_Value_Output *)o;
     fl_font(myo->textfont(), myo->textsize());
     h = fl_height() + myo->textsize() - 6;
-    w = o->w() - Fl::box_dw(o->box());
+    w = o->w() - fltk3::box_dw(o->box());
     int ww = (int)fl_width('m');
-    w = ((w + ww - 1) / ww) * ww + Fl::box_dw(o->box());
+    w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     if (h < 15) h = 15;
     if (w < 15) w = 15;
   }

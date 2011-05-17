@@ -83,7 +83,7 @@ Fl_PNM_Image::Fl_PNM_Image(const char *name)	// I - File to read
   lineptr = fgets(line, sizeof(line), fp);
   if (!lineptr) {
     fclose(fp);
-    Fl::error("Early end-of-file in PNM file \"%s\"!", name);
+    fltk3::error("Early end-of-file in PNM file \"%s\"!", name);
     return;
   }
 

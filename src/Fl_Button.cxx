@@ -83,7 +83,7 @@ void Fl_Button::draw() {
     draw_label();
     labelcolor(c);
   } else draw_label();
-  if (Fl::focus() == this) draw_focus();
+  if (fltk3::focus() == this) draw_focus();
 }
 
 int Fl_Button::handle(int event) {
@@ -94,9 +94,9 @@ int Fl_Button::handle(int event) {
 //  if ((value_?selection_color():color())==fltk3::GRAY) redraw();
     return 1;
   case fltk3::PUSH:
-    if (Fl::visible_focus() && handle(fltk3::FOCUS)) Fl::focus(this);
+    if (fltk3::visible_focus() && handle(fltk3::FOCUS)) fltk3::focus(this);
   case fltk3::DRAG:
-    if (Fl::event_inside(this)) {
+    if (fltk3::event_inside(this)) {
       if (type() == FL_RADIO_BUTTON) newval = 1;
       else newval = !oldval;
     } else
@@ -132,12 +132,12 @@ int Fl_Button::handle(int event) {
     return 1;
   case fltk3::SHORTCUT:
     if (!(shortcut() ?
-	  Fl::test_shortcut(shortcut()) : test_shortcut())) return 0;    
-    if (Fl::visible_focus() && handle(fltk3::FOCUS)) Fl::focus(this);
+	  fltk3::test_shortcut(shortcut()) : test_shortcut())) return 0;    
+    if (fltk3::visible_focus() && handle(fltk3::FOCUS)) fltk3::focus(this);
     goto triggered_by_keyboard;
   case fltk3::FOCUS : /* FALLTHROUGH */
   case fltk3::UNFOCUS :
-    if (Fl::visible_focus()) {
+    if (fltk3::visible_focus()) {
       if (box() == fltk3::NO_BOX) {
 	// Widgets with the fltk3::NO_BOX boxtype need a parent to
 	// redraw, since it is responsible for redrawing the
@@ -149,8 +149,8 @@ int Fl_Button::handle(int event) {
       return 1;
     } else return 0;
   case fltk3::KEYBOARD :
-    if (Fl::focus() == this && Fl::event_key() == ' ' &&
-        !(Fl::event_state() & (fltk3::SHIFT | fltk3::CTRL | fltk3::ALT | fltk3::META))) {
+    if (fltk3::focus() == this && fltk3::event_key() == ' ' &&
+        !(fltk3::event_state() & (fltk3::SHIFT | fltk3::CTRL | fltk3::ALT | fltk3::META))) {
       set_changed();
     triggered_by_keyboard:
       fltk3::WidgetTracker wp(this);
@@ -175,13 +175,13 @@ int Fl_Button::handle(int event) {
 void Fl_Button::simulate_key_action()
 {
   if (key_release_tracker) {
-    Fl::remove_timeout(key_release_timeout, key_release_tracker);
+    fltk3::remove_timeout(key_release_timeout, key_release_tracker);
     key_release_timeout(key_release_tracker);
   }
   value(1); 
   redraw();
   key_release_tracker = new fltk3::WidgetTracker(this);
-  Fl::add_timeout(0.15, key_release_timeout, key_release_tracker);
+  fltk3::add_timeout(0.15, key_release_timeout, key_release_tracker);
 }
 
 void Fl_Button::key_release_timeout(void *d)

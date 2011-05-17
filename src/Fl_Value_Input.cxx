@@ -71,14 +71,14 @@ void Fl_Value_Input::value_damage() {
 int Fl_Value_Input::handle(int event) {
   double v;
   int delta;
-  int mx = Fl::event_x_root();
+  int mx = fltk3::event_x_root();
   static int ix, drag;
   input.when(when());
   switch (event) {
   case fltk3::PUSH:
     if (!step()) goto DEFAULT;
     ix = mx;
-    drag = Fl::event_button();
+    drag = fltk3::event_button();
     handle_push();
     return 1;
   case fltk3::DRAG:
@@ -97,7 +97,7 @@ int Fl_Value_Input::handle(int event) {
     return 1;
   case fltk3::RELEASE:
     if (!step()) goto DEFAULT;
-    if (value() != previous_value() || !Fl::event_is_click())
+    if (value() != previous_value() || !fltk3::event_is_click())
       handle_release();
     else {
       fltk3::WidgetTracker wp(&input);

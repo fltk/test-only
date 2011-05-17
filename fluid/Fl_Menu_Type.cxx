@@ -449,7 +449,7 @@ Fl_Type* Fl_Menu_Type::click_test(int, int) {
   if (!menusize) return 0;
   const Fl_Menu_Item* save = w->mvalue();
   w->value((Fl_Menu_Item*)0);
-  Fl::pushed(w);
+  fltk3::pushed(w);
   w->handle(fltk3::PUSH);
   const Fl_Menu_Item* m = w->mvalue();
   if (m) {
@@ -551,7 +551,7 @@ Fl_Type* Fl_Input_Choice_Type::click_test(int, int) {
   if (!menusize) return 0;
   const Fl_Menu_Item* save = w->mvalue();
   w->value((Fl_Menu_Item*)0);
-  Fl::pushed(w);
+  fltk3::pushed(w);
   w->handle(fltk3::PUSH);
   const Fl_Menu_Item* m = w->mvalue();
   if (m) {
@@ -591,15 +591,15 @@ int Shortcut_Button::handle(int e) {
   when(0); type(FL_TOGGLE_BUTTON);
   if (e == fltk3::KEYBOARD) {
     if (!value()) return 0;
-    int v = Fl::event_text()[0];
+    int v = fltk3::event_text()[0];
     if ( (v > 32 && v < 0x7f) || (v > 0xa0 && v <= 0xff) ) {
       if (isupper(v)) {
         v = tolower(v);
         v |= fltk3::SHIFT;
       }
-      v = v | (Fl::event_state()&(fltk3::META|fltk3::ALT|fltk3::CTRL));
+      v = v | (fltk3::event_state()&(fltk3::META|fltk3::ALT|fltk3::CTRL));
     } else {
-      v = (Fl::event_state()&(fltk3::META|fltk3::ALT|fltk3::CTRL|fltk3::SHIFT)) | Fl::event_key();
+      v = (fltk3::event_state()&(fltk3::META|fltk3::ALT|fltk3::CTRL|fltk3::SHIFT)) | fltk3::event_key();
       if (v == fltk3::BackSpaceKey && svalue) v = 0;
     }
     if (v != svalue) {svalue = v; set_changed(); redraw(); do_callback(); }
@@ -611,7 +611,7 @@ int Shortcut_Button::handle(int e) {
     return value();
   } else {
     int r = Fl_Button::handle(e);
-    if (e == fltk3::RELEASE && value() && Fl::focus() != this) take_focus();
+    if (e == fltk3::RELEASE && value() && fltk3::focus() != this) take_focus();
     return r;
   }
 }

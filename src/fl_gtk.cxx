@@ -35,11 +35,11 @@
 #include <fltk3/run.h>
 #include <fltk3/draw.h>
 
-extern void fl_internal_boxtype(fltk3::Boxtype, Fl_Box_Draw_F*);
+extern void fl_internal_boxtype(fltk3::Boxtype, fltk3::BoxDrawF*);
 
 
 static void gtk_color(fltk3::Color c) {
-  if (Fl::draw_box_active()) fl_color(c);
+  if (fltk3::draw_box_active()) fl_color(c);
   else fl_color(fltk3::inactive(c));
 }
 

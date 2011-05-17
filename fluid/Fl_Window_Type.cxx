@@ -111,7 +111,7 @@ void grid_cb(Fl_Int_Input *i, long v) {
     if (p->is_window()) {
       w = (Fl_Window_Type *)p;
       ((fltk3::Window *)(w->o))->size_range(gridx, gridy,
-                                        Fl::w(), Fl::h(),
+                                        fltk3::w(), fltk3::h(),
                                         gridx, gridy, 0);
     }
   }
@@ -330,7 +330,7 @@ uchar *Overlay_Window::read_image(int &ww, int &hh) {
   // Redraw the window into the offscreen buffer...
   fl_begin_offscreen(offscreen);
 
-  if (!shown()) image(Fl::scheme_bg_);
+  if (!shown()) image(fltk3::scheme_bg_);
 
   redraw();
   draw();
@@ -428,8 +428,8 @@ void Fl_Window_Type::open() {
     w->resizable(p);
   }
 
-  w->image(Fl::scheme_bg_);
-  w->size_range(gridx, gridy, Fl::w(), Fl::h(), gridx, gridy, 0);
+  w->image(fltk3::scheme_bg_);
+  w->size_range(gridx, gridy, fltk3::w(), fltk3::h(), gridx, gridy, 0);
 }
 
 // Read an image of the window
@@ -530,7 +530,7 @@ void Overlay_Window::resize(int X,int Y,int W,int H) {
 // nearest multiple of gridsize, and snap to original position
 void Fl_Window_Type::newdx() {
   int mydx, mydy;
-  if (Fl::event_state(fltk3::ALT) || !snap) {
+  if (fltk3::event_state(fltk3::ALT) || !snap) {
     mydx = mx-x1;
     mydy = my-y1;
 
@@ -1185,11 +1185,11 @@ int Fl_Window_Type::handle(int event) {
   static Fl_Type* selection;
   switch (event) {
   case fltk3::PUSH:
-    x1 = mx = Fl::event_x();
-    y1 = my = Fl::event_y();
+    x1 = mx = fltk3::event_x();
+    y1 = my = fltk3::event_y();
     drag = dx = dy = 0;
     // test for popup menu:
-    if (Fl::event_button() >= 3) {
+    if (fltk3::event_button() >= 3) {
       in_this_only = this; // modifies how some menu items work.
       static const Fl_Menu_Item* myprev;
       const Fl_Menu_Item* m = New_Menu->popup(mx,my,"New",myprev);
@@ -1204,15 +1204,15 @@ int Fl_Window_Type::handle(int event) {
       Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
       for (fltk3::Widget *o1 = myo->o; o1; o1 = o1->parent())
 	if (!o1->visible()) goto CONTINUE2;
-      if (Fl::event_inside(myo->o)) {
+      if (fltk3::event_inside(myo->o)) {
         selection = myo;
-        if (Fl::event_clicks()==1)
+        if (fltk3::event_clicks()==1)
           reveal_in_browser(myo);
       }
     CONTINUE2:;
     }}
     // see if user grabs edges of selected region:
-    if (numselected && !(Fl::event_state(fltk3::SHIFT)) &&
+    if (numselected && !(fltk3::event_state(fltk3::SHIFT)) &&
 	mx<=br+snap && mx>=bx-snap && my<=bt+snap && my>=by-snap) {
       int snap1 = snap>5 ? snap : 5;
       int w1 = (br-bx)/4; if (w1 > snap1) w1 = snap1;
@@ -1227,8 +1227,8 @@ int Fl_Window_Type::handle(int event) {
     {Fl_Type* t = selection->click_test(mx, my);
     if (t) {
       //if (t == selection) return 1; // indicates mouse eaten w/o change
-      if (Fl::event_state(fltk3::SHIFT)) {
-	Fl::event_is_click(0);
+      if (fltk3::event_state(fltk3::SHIFT)) {
+	fltk3::event_is_click(0);
 	select(t, !t->selected);
       } else {
 	deselect();
@@ -1244,33 +1244,33 @@ int Fl_Window_Type::handle(int event) {
 
   case fltk3::DRAG:
     if (!drag) return 0;
-    mx = Fl::event_x();
-    my = Fl::event_y();
+    mx = fltk3::event_x();
+    my = fltk3::event_y();
     newdx();
     return 1;
 
   case fltk3::RELEASE:
     if (!drag) return 0;
-    mx = Fl::event_x();
-    my = Fl::event_y();
-    if (drag != BOX && (dx || dy || !Fl::event_is_click())) {
+    mx = fltk3::event_x();
+    my = fltk3::event_y();
+    if (drag != BOX && (dx || dy || !fltk3::event_is_click())) {
       if (dx || dy) moveallchildren();
-    } else if ((Fl::event_clicks() || Fl::event_state(fltk3::CTRL))) {
+    } else if ((fltk3::event_clicks() || fltk3::event_state(fltk3::CTRL))) {
       Fl_Widget_Type::open();
     } else {
       if (mx<x1) {int t = x1; x1 = mx; mx = t;}
       if (my<y1) {int t = y1; y1 = my; my = t;}
       int n = 0;
-      int toggle = Fl::event_state(fltk3::SHIFT);
+      int toggle = fltk3::event_state(fltk3::SHIFT);
       // clear selection on everything:
-      if (!toggle) deselect(); else Fl::event_is_click(0);
+      if (!toggle) deselect(); else fltk3::event_is_click(0);
       // select everything in box:
       for (Fl_Type*i=next; i&&i->level>level; i=i->next)
 	if (i->is_widget() && !i->is_menu_item()) {
 	Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
 	for (fltk3::Widget *o1 = myo->o; o1; o1 = o1->parent())
 	  if (!o1->visible()) goto CONTINUE;
-	if (Fl::event_inside(myo->o)) selection = myo;
+	if (fltk3::event_inside(myo->o)) selection = myo;
 	if (myo->o->x()>=x1 && myo->o->y()>y1 &&
 	    myo->o->x()+myo->o->w()<mx && myo->o->y()+myo->o->h()<my) {
 	  n++;
@@ -1290,14 +1290,14 @@ int Fl_Window_Type::handle(int event) {
   case fltk3::KEYBOARD: {
 
     int backtab = 0;
-    switch (Fl::event_key()) {
+    switch (fltk3::event_key()) {
 
     case fltk3::EscapeKey:
       ((fltk3::Window*)o)->hide();
       return 1;
 
     case fltk3::TabKey: {
-      if (Fl::event_state(fltk3::SHIFT)) backtab = 1;
+      if (fltk3::event_state(fltk3::SHIFT)) backtab = 1;
       // find current child:
       Fl_Type *i = Fl_Type::current;
       while (i && (!i->is_widget() || i->is_menu_item())) i = i->parent;
@@ -1322,8 +1322,8 @@ int Fl_Window_Type::handle(int event) {
     case fltk3::DownKey:  dx = 0; dy = +1; goto ARROW;
     ARROW:
       // for some reason BOTTOM/TOP are swapped... should be fixed...
-      drag = (Fl::event_state(fltk3::SHIFT)) ? (RIGHT|TOP) : DRAG;
-      if (Fl::event_state(fltk3::CTRL)) {dx *= gridx; dy *= gridy;}
+      drag = (fltk3::event_state(fltk3::SHIFT)) ? (RIGHT|TOP) : DRAG;
+      if (fltk3::event_state(fltk3::CTRL)) {dx *= gridx; dy *= gridy;}
       moveallchildren();
       drag = 0;
       return 1;
@@ -1400,7 +1400,7 @@ void Fl_Window_Type::read_property(const char *c) {
   } else if (!strcmp(c,"non_modal")) {
     non_modal = 1;
   } else if (!strcmp(c, "visible")) {
-    if (Fl::first_window()) open(); // only if we are using user interface
+    if (fltk3::first_window()) open(); // only if we are using user interface
   } else if (!strcmp(c,"noborder")) {
     ((fltk3::Window*)o)->border(0);
   } else if (!strcmp(c,"xclass")) {

@@ -38,14 +38,14 @@
 */
 void Fl_Dial::draw(int X, int Y, int W, int H) {
   if (damage()&fltk3::DAMAGE_ALL) draw_box(box(), X, Y, W, H, color());
-  X += Fl::box_dx(box());
-  Y += Fl::box_dy(box());
-  W -= Fl::box_dw(box());
-  H -= Fl::box_dh(box());
+  X += fltk3::box_dx(box());
+  Y += fltk3::box_dy(box());
+  W -= fltk3::box_dw(box());
+  H -= fltk3::box_dh(box());
   double angle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;
   if (type() == FL_FILL_DIAL) {
     // foo: draw this nicely in certain round box types
-    int foo = (box() > fltk3::ROUND_UP_BOX && Fl::box_dx(box()));
+    int foo = (box() > fltk3::ROUND_UP_BOX && fltk3::box_dx(box()));
     if (foo) {X--; Y--; W+=2; H+=2;}
     if (active_r()) fl_color(color());
     else fl_color(fltk3::inactive(color()));
@@ -114,8 +114,8 @@ int Fl_Dial::handle(int event, int X, int Y, int W, int H) {
     handle_push();
     if (wp.deleted()) return 1; }
   case fltk3::DRAG: {
-    int mx = (Fl::event_x()-X-W/2)*H;
-    int my = (Fl::event_y()-Y-H/2)*W;
+    int mx = (fltk3::event_x()-X-W/2)*H;
+    int my = (fltk3::event_y()-Y-H/2)*W;
     if (!mx && !my) return 1;
     double angle = 270-atan2((float)-my, (float)mx)*180/M_PI;
     double oldangle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;

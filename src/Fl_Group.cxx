@@ -94,7 +94,7 @@ fltk3::Group *fltk3::Group::current() {return current_;}
 */
 void fltk3::Group::current(fltk3::Group *g) {current_ = g;}
 
-extern fltk3::Widget* fl_oldfocus; // set by Fl::focus
+extern fltk3::Widget* fl_oldfocus; // set by fltk3::focus
 
 // For back-compatibility, we must adjust all events sent to child
 // windows so they are relative to that window.
@@ -106,21 +106,21 @@ static int send(fltk3::Widget* o, int event) {
   case fltk3::DND_ENTER: /* FALLTHROUGH */
   case fltk3::DND_DRAG:
     // figure out correct type of event:
-    event = (o->contains(Fl::belowmouse())) ? fltk3::DND_DRAG : fltk3::DND_ENTER;
+    event = (o->contains(fltk3::belowmouse())) ? fltk3::DND_DRAG : fltk3::DND_ENTER;
   }
-  int save_x = Fl::e_x; Fl::e_x -= o->x();
-  int save_y = Fl::e_y; Fl::e_y -= o->y();
+  int save_x = fltk3::e_x; fltk3::e_x -= o->x();
+  int save_y = fltk3::e_y; fltk3::e_y -= o->y();
   int ret = o->handle(event);
-  Fl::e_y = save_y;
-  Fl::e_x = save_x;
+  fltk3::e_y = save_y;
+  fltk3::e_x = save_x;
   switch ( event )
   {
   case fltk3::ENTER: /* FALLTHROUGH */
   case fltk3::DND_ENTER:
     // Successful completion of fltk3::ENTER means the widget is now the
-    // belowmouse widget, but only call Fl::belowmouse if the child
+    // belowmouse widget, but only call fltk3::belowmouse if the child
     // widget did not do so:
-    if (!o->contains(Fl::belowmouse())) Fl::belowmouse(o);
+    if (!o->contains(fltk3::belowmouse())) fltk3::belowmouse(o);
     break;
   }
   return ret;
@@ -129,11 +129,11 @@ static int send(fltk3::Widget* o, int event) {
 // translate the current keystroke into up/down/left/right for navigation:
 #define ctrl(x) (x^0x40)
 static int navkey() {
-  switch (Fl::event_key()) {
+  switch (fltk3::event_key()) {
   case 0: // not an fltk3::KEYBOARD/fltk3::SHORTCUT event
     break;
   case fltk3::TabKey:
-    if (!Fl::event_state(fltk3::SHIFT)) return fltk3::RightKey;
+    if (!fltk3::event_state(fltk3::SHIFT)) return fltk3::RightKey;
     return fltk3::LeftKey;
   case fltk3::RightKey:
     return fltk3::RightKey;
@@ -180,56 +180,56 @@ int fltk3::Group::handle(int event) {
   case fltk3::SHORTCUT:
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && Fl::event_inside(o) && send(o,fltk3::SHORTCUT))
+      if (o->takesevents() && fltk3::event_inside(o) && send(o,fltk3::SHORTCUT))
 	return 1;
     }
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && !Fl::event_inside(o) && send(o,fltk3::SHORTCUT))
+      if (o->takesevents() && !fltk3::event_inside(o) && send(o,fltk3::SHORTCUT))
 	return 1;
     }
-    if ((Fl::event_key() == fltk3::EnterKey || Fl::event_key() == fltk3::KPEnterKey)) return navigation(fltk3::DownKey);
+    if ((fltk3::event_key() == fltk3::EnterKey || fltk3::event_key() == fltk3::KPEnterKey)) return navigation(fltk3::DownKey);
     return 0;
 
   case fltk3::ENTER:
   case fltk3::MOVE:
     for (i = children(); i--;) {
       o = a[i];
-      if (o->visible() && Fl::event_inside(o)) {
-	if (o->contains(Fl::belowmouse())) {
+      if (o->visible() && fltk3::event_inside(o)) {
+	if (o->contains(fltk3::belowmouse())) {
 	  return send(o,fltk3::MOVE);
 	} else {
-	  Fl::belowmouse(o);
+	  fltk3::belowmouse(o);
 	  if (send(o,fltk3::ENTER)) return 1;
 	}
       }
     }
-    Fl::belowmouse(this);
+    fltk3::belowmouse(this);
     return 1;
 
   case fltk3::DND_ENTER:
   case fltk3::DND_DRAG:
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && Fl::event_inside(o)) {
-	if (o->contains(Fl::belowmouse())) {
+      if (o->takesevents() && fltk3::event_inside(o)) {
+	if (o->contains(fltk3::belowmouse())) {
 	  return send(o,fltk3::DND_DRAG);
 	} else if (send(o,fltk3::DND_ENTER)) {
-	  if (!o->contains(Fl::belowmouse())) Fl::belowmouse(o);
+	  if (!o->contains(fltk3::belowmouse())) fltk3::belowmouse(o);
 	  return 1;
 	}
       }
     }
-    Fl::belowmouse(this);
+    fltk3::belowmouse(this);
     return 0;
 
   case fltk3::PUSH:
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && Fl::event_inside(o)) {
+      if (o->takesevents() && fltk3::event_inside(o)) {
 	fltk3::WidgetTracker wp(o);
 	if (send(o,fltk3::PUSH)) {
-	  if (Fl::pushed() && wp.exists() && !o->contains(Fl::pushed())) Fl::pushed(o);
+	  if (fltk3::pushed() && wp.exists() && !o->contains(fltk3::pushed())) fltk3::pushed(o);
 	  return 1;
 	}
       }
@@ -238,13 +238,13 @@ int fltk3::Group::handle(int event) {
 
   case fltk3::RELEASE:
   case fltk3::DRAG:
-    o = Fl::pushed();
+    o = fltk3::pushed();
     if (o == this) return 0;
     else if (o) send(o,event);
     else {
       for (i = children(); i--;) {
 	o = a[i];
-	if (o->takesevents() && Fl::event_inside(o)) {
+	if (o->takesevents() && fltk3::event_inside(o)) {
 	  if (send(o,event)) return 1;
 	}
       }
@@ -254,12 +254,12 @@ int fltk3::Group::handle(int event) {
   case fltk3::MOUSEWHEEL:
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && Fl::event_inside(o) && send(o,fltk3::MOUSEWHEEL))
+      if (o->takesevents() && fltk3::event_inside(o) && send(o,fltk3::MOUSEWHEEL))
 	return 1;
     }
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && !Fl::event_inside(o) && send(o,fltk3::MOUSEWHEEL))
+      if (o->takesevents() && !fltk3::event_inside(o) && send(o,fltk3::MOUSEWHEEL))
 	return 1;
     }
     return 0;
@@ -276,12 +276,12 @@ int fltk3::Group::handle(int event) {
   case fltk3::HIDE:
     for (i = children(); i--;) {
       o = *a++;
-      if (event == fltk3::HIDE && o == Fl::focus()) {
+      if (event == fltk3::HIDE && o == fltk3::focus()) {
         // Give up input focus...
-	int old_event = Fl::e_number;
-        o->handle(Fl::e_number = fltk3::UNFOCUS);
-	Fl::e_number = old_event;
-	Fl::focus(0);
+	int old_event = fltk3::e_number;
+        o->handle(fltk3::e_number = fltk3::UNFOCUS);
+	fltk3::e_number = old_event;
+	fltk3::focus(0);
       }
       if (o->visible()) o->handle(event);
     }
@@ -290,7 +290,7 @@ int fltk3::Group::handle(int event) {
   default:
     // For all other events, try to give to each child, starting at focus:
     for (i = 0; i < children(); i ++)
-      if (Fl::focus_ == a[i]) break;
+      if (fltk3::focus_ == a[i]) break;
 
     if (i >= children()) i = 0;
 
@@ -307,7 +307,7 @@ int fltk3::Group::handle(int event) {
   }
 }
 
-//void fltk3::Group::focus(fltk3::Widget *o) {Fl::focus(o); o->handle(fltk3::FOCUS);}
+//void fltk3::Group::focus(fltk3::Widget *o) {fltk3::focus(o); o->handle(fltk3::FOCUS);}
 
 #if 0
 const char *nameof(fltk3::Widget *o) {
@@ -323,7 +323,7 @@ int fltk3::Group::navigation(int key) {
   int i;
   for (i = 0; ; i++) {
     if (i >= children_) return 0;
-    if (array_[i]->contains(Fl::focus())) break;
+    if (array_[i]->contains(fltk3::focus())) break;
   }
   fltk3::Widget *previous = array_[i];
 
@@ -388,14 +388,14 @@ void fltk3::Group::clear() {
   resizable_ = this;
   init_sizes();
 
-  // we must change the Fl::pushed() widget, if it is one of
+  // we must change the fltk3::pushed() widget, if it is one of
   // the group's children. Otherwise fl_fix_focus() would send
   // lots of events to children that are about to be deleted
   // anyway.
 
-  fltk3::Widget *pushed = Fl::pushed();	// save pushed() widget
+  fltk3::Widget *pushed = fltk3::pushed();	// save pushed() widget
   if (contains(pushed)) pushed = this;	// set it to be the group, if it's a child
-  Fl::pushed(this);			// for fl_fix_focus etc.
+  fltk3::pushed(this);			// for fl_fix_focus etc.
 
   // okay, now it is safe to destroy the children:
 
@@ -430,7 +430,7 @@ void fltk3::Group::clear() {
     }
   }
 
-  if (pushed != this) Fl::pushed(pushed); // reset pushed() widget
+  if (pushed != this) fltk3::pushed(pushed); // reset pushed() widget
 
 }
 
@@ -719,10 +719,10 @@ void fltk3::Group::draw_children() {
   fltk3::Widget*const* a = array();
 
   if (clip_children()) {
-    fl_push_clip(x() + Fl::box_dx(box()),
-                 y() + Fl::box_dy(box()),
-		 w() - Fl::box_dw(box()),
-		 h() - Fl::box_dh(box()));
+    fl_push_clip(x() + fltk3::box_dx(box()),
+                 y() + fltk3::box_dy(box()),
+		 w() - fltk3::box_dw(box()),
+		 h() - fltk3::box_dh(box()));
   }
 
   if (damage() & ~fltk3::DAMAGE_CHILD) { // redraw the entire thing:

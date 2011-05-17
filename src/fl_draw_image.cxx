@@ -373,7 +373,7 @@ static void figure_out_visual() {
 
   unsigned int n = pfv->scanline_pad/8;
   if (pfv->scanline_pad & 7 || (n&(n-1)))
-    Fl::fatal("Can't do scanline_pad of %d",pfv->scanline_pad);
+    fltk3::fatal("Can't do scanline_pad of %d",pfv->scanline_pad);
   if (n < sizeof(STORETYPE)) n = sizeof(STORETYPE);
   scanline_add = n-1;
   scanline_mask = -n;
@@ -385,7 +385,7 @@ static void figure_out_visual() {
     return;
   }
   if (!fl_visual->red_mask)
-    Fl::fatal("Can't do %d bits_per_pixel colormap",xi.bits_per_pixel);
+    fltk3::fatal("Can't do %d bits_per_pixel colormap",xi.bits_per_pixel);
 #  endif
 
   // otherwise it is a TrueColor visual:
@@ -422,7 +422,7 @@ static void figure_out_visual() {
       converter = bgr_converter;
       mono_converter = rrr_converter;
     } else {
-      Fl::fatal("Can't do arbitrary 24bit color");
+      fltk3::fatal("Can't do arbitrary 24bit color");
     }
     break;
 
@@ -449,7 +449,7 @@ static void figure_out_visual() {
     break;
 
   default:
-    Fl::fatal("Can't do %d bits_per_pixel",xi.bits_per_pixel);
+    fltk3::fatal("Can't do %d bits_per_pixel",xi.bits_per_pixel);
   }
 
 }

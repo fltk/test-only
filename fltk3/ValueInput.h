@@ -102,11 +102,11 @@ public:
    of 0 disables the shortcut.
    
    The key can be any value returned by 
-   Fl::event_key(), but will usually be an ASCII letter.  Use
+   fltk3::event_key(), but will usually be an ASCII letter.  Use
    a lower-case letter unless you require the shift key to be held down.
    
    The shift flags can be any set of values accepted by 
-   Fl::event_state().  If the bit is on that shift key must
+   fltk3::event_state().  If the bit is on that shift key must
    be pushed.  Meta, Alt, Ctrl, and Shift must be off if they are not in
    the shift flags (zero for the other bits indicates a "don't care"
    setting).

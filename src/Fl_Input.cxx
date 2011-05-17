@@ -49,17 +49,17 @@ void Fl_Input::draw() {
   if (input_type() == FL_HIDDEN_INPUT) return;
   fltk3::Boxtype b = box();
   if (damage() & fltk3::DAMAGE_ALL) draw_box(b, color());
-  Fl_Input_::drawtext(x()+Fl::box_dx(b), y()+Fl::box_dy(b),
-		      w()-Fl::box_dw(b), h()-Fl::box_dh(b));
+  Fl_Input_::drawtext(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
+		      w()-fltk3::box_dw(b), h()-fltk3::box_dh(b));
 }
 
 // kludge so shift causes selection to extend:
 int Fl_Input::shift_position(int p) {
-  return position(p, Fl::event_state(fltk3::SHIFT) ? mark() : p);
+  return position(p, fltk3::event_state(fltk3::SHIFT) ? mark() : p);
 }
 
 int Fl_Input::shift_up_down_position(int p) {
-  return up_down_position(p, Fl::event_state(fltk3::SHIFT));
+  return up_down_position(p, fltk3::event_state(fltk3::SHIFT));
 }
 
 // Old text from FLTK 1.1 for reference:
@@ -68,13 +68,13 @@ int Fl_Input::shift_up_down_position(int p) {
 // cursor into the next field:
 // define it as 1 to prevent cursor movement from going to next field:
 //
-// Note: this has been replaced by Fl::option(Fl::OPTION_ARROW_FOCUS)
+// Note: this has been replaced by fltk3::option(fltk3::OPTION_ARROW_FOCUS)
 // in FLTK 1.3.  This option has "inverted" values:
 //   1 = Arrow keys move focus (previously 0)
 //   0 = Arrow keys don't move focus (previously 1)
 // Hence we define ...
 //
-#define NORMAL_INPUT_MOVE (Fl::option(Fl::OPTION_ARROW_FOCUS) ? 0 : 1)
+#define NORMAL_INPUT_MOVE (fltk3::option(fltk3::OPTION_ARROW_FOCUS) ? 0 : 1)
 
 #define ctrl(x) ((x)^0x40)
 
@@ -96,7 +96,7 @@ static const char *legal_fp_chars = ".eE+-";
 int Fl_Input::kf_lines_up(int repeat_num) {
   int i = position();
   if (!line_start(i)) {
-    //UNNEEDED if (input_type()==FL_MULTILINE_INPUT && !Fl::option(Fl::OPTION_ARROW_FOCUS)) return 1;
+    //UNNEEDED if (input_type()==FL_MULTILINE_INPUT && !fltk3::option(fltk3::OPTION_ARROW_FOCUS)) return 1;
     return NORMAL_INPUT_MOVE;
   }
   while(repeat_num--) {
@@ -114,7 +114,7 @@ int Fl_Input::kf_lines_up(int repeat_num) {
 int Fl_Input::kf_lines_down(int repeat_num) {
   int i = position();
   if (line_end(i) >= size()) {
-    //UNNEEDED if (input_type()==FL_MULTILINE_INPUT && !Fl::option(Fl::OPTION_ARROW_FOCUS)) return 1;
+    //UNNEEDED if (input_type()==FL_MULTILINE_INPUT && !fltk3::option(fltk3::OPTION_ARROW_FOCUS)) return 1;
     return NORMAL_INPUT_MOVE;
   }
   while (repeat_num--) {  
@@ -212,7 +212,7 @@ int Fl_Input::kf_clear_eol() {
 //
 int Fl_Input::kf_move_char_left() {
   int i = shift_position(position()-1) + NORMAL_INPUT_MOVE;
-  return Fl::option(Fl::OPTION_ARROW_FOCUS) ? i : 1;
+  return fltk3::option(fltk3::OPTION_ARROW_FOCUS) ? i : 1;
 }
 
 // Move cursor one character to the right
@@ -220,7 +220,7 @@ int Fl_Input::kf_move_char_left() {
 //
 int Fl_Input::kf_move_char_right() {
   int i = shift_position(position()+1) + NORMAL_INPUT_MOVE;
-  return Fl::option(Fl::OPTION_ARROW_FOCUS) ? i : 1;
+  return fltk3::option(fltk3::OPTION_ARROW_FOCUS) ? i : 1;
 }
 
 // Move cursor word-left
@@ -289,7 +289,7 @@ int Fl_Input::kf_copy() {
 // Do a paste operation
 int Fl_Input::kf_paste() {
   if (readonly()) { fl_beep(); return 1; }
-  Fl::paste(*this, 1);
+  fltk3::paste(*this, 1);
   return 1;
 }
 
@@ -305,14 +305,14 @@ int Fl_Input::kf_copy_cut() {
 //
 int Fl_Input::handle_key() {
   
-  char ascii = Fl::event_text()[0];
+  char ascii = fltk3::event_text()[0];
   
   int del;
-  if (Fl::compose(del)) {
+  if (fltk3::compose(del)) {
     
     // Insert characters into numeric fields after checking for legality:
     if (input_type() == FL_FLOAT_INPUT || input_type() == FL_INT_INPUT) {
-      Fl::compose_reset(); // ignore any foreign letters...
+      fltk3::compose_reset(); // ignore any foreign letters...
       
       // initialize the list of legal characters inside a floating point number
 #ifdef HAVE_LOCALECONV
@@ -355,16 +355,16 @@ int Fl_Input::handle_key() {
       return 1;
     }
     
-    if (del || Fl::event_length()) {
+    if (del || fltk3::event_length()) {
       if (readonly()) fl_beep();
       else replace(position(), del ? position()-del : mark(),
-	           Fl::event_text(), Fl::event_length());
+	           fltk3::event_text(), fltk3::event_length());
     }
     return 1;
   }
   
-  unsigned int mods = Fl::event_state() & (fltk3::META|fltk3::CTRL|fltk3::ALT);
-  unsigned int shift = Fl::event_state() & fltk3::SHIFT;
+  unsigned int mods = fltk3::event_state() & (fltk3::META|fltk3::CTRL|fltk3::ALT);
+  unsigned int shift = fltk3::event_state() & fltk3::SHIFT;
   unsigned int multiline = (input_type() == FL_MULTILINE_INPUT) ? 1 : 0;
   //
   // The following lists apps that support these keypresses.
@@ -378,7 +378,7 @@ int Fl_Input::handle_key() {
   //
   // Example: (NP,WP,!WO) means supported in notepad + wordpad, but NOT word.
   //
-  switch (Fl::event_key()) {
+  switch (fltk3::event_key()) {
 
     case fltk3::InsertKey:
       // Note: Mac has no "Insert" key; it's the "Help" key.
@@ -588,7 +588,7 @@ int Fl_Input::handle(int event) {
   static fltk3::Widget *dnd_save_focus;
   switch (event) {
     case fltk3::FOCUS:
-      switch (Fl::event_key()) {
+      switch (fltk3::event_key()) {
         case fltk3::RightKey:
           position(0);
           break;
@@ -615,8 +615,8 @@ int Fl_Input::handle(int event) {
       // where tab is entered as a character: make sure user attempt to 'tab over'
       // widget doesn't destroy the field, replacing it with a tab character.
       //
-      if (Fl::event_key() == fltk3::TabKey 			// Tab key?
-          && !Fl::event_state(fltk3::SHIFT)			// no shift?
+      if (fltk3::event_key() == fltk3::TabKey 			// Tab key?
+          && !fltk3::event_state(fltk3::SHIFT)			// no shift?
           && !tab_nav()					// with tab navigation disabled?
 	  && input_type() == FL_MULTILINE_INPUT		// with a multiline input?
           && (mark()==0 && position()==size())) {	// while entire field selected?
@@ -627,21 +627,21 @@ int Fl_Input::handle(int event) {
           position(position());
         return (1);
       } else {
-        if (active_r() && window() && this == Fl::belowmouse()) 
+        if (active_r() && window() && this == fltk3::belowmouse()) 
           window()->cursor(fltk3::CURSOR_NONE);
         return handle_key();
       }
       //NOTREACHED
       
     case fltk3::PUSH:
-      if (Fl::dnd_text_ops()) {
+      if (fltk3::dnd_text_ops()) {
         int oldpos = position(), oldmark = mark();
         fltk3::Boxtype b = box();
-        Fl_Input_::handle_mouse(x()+Fl::box_dx(b), y()+Fl::box_dy(b),
-                                w()-Fl::box_dw(b), h()-Fl::box_dh(b), 0);
+        Fl_Input_::handle_mouse(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
+                                w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
         newpos = position(); 
         position( oldpos, oldmark );
-        if (Fl::focus()==this && !Fl::event_state(fltk3::SHIFT) && input_type()!=FL_SECRET_INPUT &&
+        if (fltk3::focus()==this && !fltk3::event_state(fltk3::SHIFT) && input_type()!=FL_SECRET_INPUT &&
            ( (newpos >= mark() && newpos < position()) || 
              (newpos >= position() && newpos < mark()) ) ) {
           // user clicked in the selection, may be trying to drag
@@ -651,38 +651,38 @@ int Fl_Input::handle(int event) {
         drag_start = -1;
       }
       
-      if (Fl::focus() != this) {
-        Fl::focus(this);
+      if (fltk3::focus() != this) {
+        fltk3::focus(this);
         handle(fltk3::FOCUS);
       }
       break;
       
     case fltk3::DRAG:
-      if (Fl::dnd_text_ops()) {
+      if (fltk3::dnd_text_ops()) {
         if (drag_start >= 0) {
-          if (Fl::event_is_click()) return 1; // debounce the mouse
+          if (fltk3::event_is_click()) return 1; // debounce the mouse
                                               // save the position because sometimes we don't get DND_ENTER:
           dnd_save_position = position();
           dnd_save_mark = mark();
           // drag the data:
-          copy(0); Fl::dnd();
+          copy(0); fltk3::dnd();
           return 1;
         }
       }
       break;
       
     case fltk3::RELEASE:
-      if (Fl::event_button() == 2) {
-        Fl::event_is_click(0); // stop double click from picking a word
-        Fl::paste(*this, 0);
-      } else if (!Fl::event_is_click()) {
+      if (fltk3::event_button() == 2) {
+        fltk3::event_is_click(0); // stop double click from picking a word
+        fltk3::paste(*this, 0);
+      } else if (!fltk3::event_is_click()) {
         // copy drag-selected text to the clipboard.
         copy(0);
-      } else if (Fl::event_is_click() && drag_start >= 0) {
+      } else if (fltk3::event_is_click() && drag_start >= 0) {
         // user clicked in the field and wants to reset the cursor position...
         position(drag_start, drag_start);
         drag_start = -1;
-      } else if (Fl::event_clicks()) {
+      } else if (fltk3::event_clicks()) {
         // user double or triple clicked to select word or whole text
         copy(0);
       }
@@ -694,19 +694,19 @@ int Fl_Input::handle(int event) {
       return 1;
       
     case fltk3::DND_ENTER:
-      Fl::belowmouse(this); // send the leave events first
+      fltk3::belowmouse(this); // send the leave events first
       dnd_save_position = position();
       dnd_save_mark = mark();
-      dnd_save_focus = Fl::focus();
+      dnd_save_focus = fltk3::focus();
       if (dnd_save_focus != this) {
-        Fl::focus(this);
+        fltk3::focus(this);
         handle(fltk3::FOCUS);
       }
       // fall through:
     case fltk3::DND_DRAG: 
       //int p = mouse_position(X, Y, W, H);
 #if DND_OUT_XXXX
-      if (Fl::focus()==this && (p>=dnd_save_position && p<=dnd_save_mark ||
+      if (fltk3::focus()==this && (p>=dnd_save_position && p<=dnd_save_mark ||
                                 p>=dnd_save_mark && p<=dnd_save_position)) {
         position(dnd_save_position, dnd_save_mark);
         return 0;
@@ -714,8 +714,8 @@ int Fl_Input::handle(int event) {
 #endif
       {
         fltk3::Boxtype b = box();
-        Fl_Input_::handle_mouse(x()+Fl::box_dx(b), y()+Fl::box_dy(b),
-                                w()-Fl::box_dw(b), h()-Fl::box_dh(b), 0);
+        Fl_Input_::handle_mouse(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
+                                w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
       }
       return 1;
       
@@ -725,11 +725,11 @@ int Fl_Input::handle(int event) {
       if (!focused())
 #endif
         if (dnd_save_focus != this) {
-          Fl::focus(dnd_save_focus);
+          fltk3::focus(dnd_save_focus);
           handle(fltk3::UNFOCUS);
         }
 #if !(defined(__APPLE__) || defined(WIN32))
-      Fl::first_window()->cursor(fltk3::CURSOR_MOVE);
+      fltk3::first_window()->cursor(fltk3::CURSOR_MOVE);
 #endif
       return 1;
       
@@ -741,18 +741,18 @@ int Fl_Input::handle(int event) {
        That clipping happens in drawtext(). Do we change the clipping or should 
        we move the cursor (ouch)?
        case fltk3::MOUSEWHEEL:
-       if (Fl::e_dy > 0) {
-       yscroll( yscroll() - Fl::e_dy*15 );
-       } else if (Fl::e_dy < 0) {
-       yscroll( yscroll() - Fl::e_dy*15 );
+       if (fltk3::e_dy > 0) {
+       yscroll( yscroll() - fltk3::e_dy*15 );
+       } else if (fltk3::e_dy < 0) {
+       yscroll( yscroll() - fltk3::e_dy*15 );
        }
        return 1;
        */
   }
   fltk3::Boxtype b = box();
   return Fl_Input_::handletext(event,
-                               x()+Fl::box_dx(b), y()+Fl::box_dy(b),
-                               w()-Fl::box_dw(b), h()-Fl::box_dh(b));
+                               x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
+                               w()-fltk3::box_dw(b), h()-fltk3::box_dh(b));
 }
 
 /**

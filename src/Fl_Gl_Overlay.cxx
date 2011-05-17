@@ -164,7 +164,7 @@ void Fl_Gl_Window::make_overlay() {
     int n = (1<<fl_overlay_depth)-1;
     // copy all colors except #0 into the overlay palette:
     for (int i = 0; i <= n; i++) {
-      uchar r,g,b; Fl::get_color((fltk3::Color)i,r,g,b);
+      uchar r,g,b; fltk3::get_color((fltk3::Color)i,r,g,b);
       palette[i] = RGB(r,g,b);
     }
     // always provide black & white in the last 2 pixels:

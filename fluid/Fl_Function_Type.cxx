@@ -190,10 +190,10 @@ void Fl_Function_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = Fl::readqueue();
+      fltk3::Widget* w = fltk3::readqueue();
       if (w == f_panel_cancel) goto BREAK2;
       else if (w == f_panel_ok) break;
-      else if (!w) Fl::wait();
+      else if (!w) fltk3::wait();
     }
     const char*c = f_name_input->value();
     while (isspace(*c)) c++;
@@ -407,7 +407,7 @@ void Fl_Function_Type::write_code2() {
   
   if (ismain()) {
     if (havewidgets) write_c("  %s->show(argc, argv);\n", var);
-    if (havechildren) write_c("  return Fl::run();\n");
+    if (havechildren) write_c("  return fltk3::run();\n");
   } else if (havewidgets && !constructor && !return_type) {
     write_c("  return %s;\n", var);
   }
@@ -451,10 +451,10 @@ void Fl_Code_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = Fl::readqueue();
+      fltk3::Widget* w = fltk3::readqueue();
       if (w == code_panel_cancel) goto BREAK2;
       else if (w == code_panel_ok) break;
-      else if (!w) Fl::wait();
+      else if (!w) fltk3::wait();
     }
     char*c = code_input->buffer()->text();
     message = c_check(c); if (message) continue;
@@ -526,10 +526,10 @@ void Fl_CodeBlock_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = Fl::readqueue();
+      fltk3::Widget* w = fltk3::readqueue();
       if (w == codeblock_panel_cancel) goto BREAK2;
       else if (w == codeblock_panel_ok) break;
-      else if (!w) Fl::wait();
+      else if (!w) fltk3::wait();
     }
     const char*c = code_before_input->value();
     message = c_check(c); if (message) continue;
@@ -630,10 +630,10 @@ void Fl_Decl_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = Fl::readqueue();
+      fltk3::Widget* w = fltk3::readqueue();
       if (w == decl_panel_cancel) goto BREAK2;
       else if (w == decl_panel_ok) break;
-      else if (!w) Fl::wait();
+      else if (!w) fltk3::wait();
     }
     const char*c = decl_input->value();
     while (isspace(*c)) c++;
@@ -788,7 +788,7 @@ void Fl_Data_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = Fl::readqueue();
+      fltk3::Widget* w = fltk3::readqueue();
       if (w == data_panel_cancel) goto BREAK2;
       else if (w == data_panel_ok) break;
       else if (w == data_filebrowser) {
@@ -801,7 +801,7 @@ void Fl_Data_Type::open() {
           data_filename->value(fn);
         }
       }
-      else if (!w) Fl::wait();
+      else if (!w) fltk3::wait();
     }
     // store the variable name:
     const char*c = data_input->value();
@@ -989,10 +989,10 @@ void Fl_DeclBlock_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = Fl::readqueue();
+      fltk3::Widget* w = fltk3::readqueue();
       if (w == declblock_panel_cancel) goto BREAK2;
       else if (w == declblock_panel_ok) break;
-      else if (!w) Fl::wait();
+      else if (!w) fltk3::wait();
     }
     const char*c = decl_before_input->value();
     while (isspace(*c)) c++;
@@ -1112,7 +1112,7 @@ void Fl_Comment_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = Fl::readqueue();
+      fltk3::Widget* w = fltk3::readqueue();
       if (w == comment_panel_cancel) goto BREAK2;
       else if (w == comment_panel_ok) break;
       else if (w == comment_predefined) {
@@ -1180,7 +1180,7 @@ void Fl_Comment_Type::open() {
           }
         }
       }
-      else if (!w) Fl::wait();
+      else if (!w) fltk3::wait();
     }
     char*c = comment_input->buffer()->text();
     name(c);
@@ -1368,10 +1368,10 @@ void Fl_Class_Type::open() {
   for (;;) { // repeat as long as there are errors
     if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = Fl::readqueue();
+      fltk3::Widget* w = fltk3::readqueue();
       if (w == c_panel_cancel) goto BREAK2;
       else if (w == c_panel_ok) break;
-      else if (!w) Fl::wait();
+      else if (!w) fltk3::wait();
     }
     const char*c = c_name_input->value();
     char *s = strdup(c);

@@ -72,7 +72,7 @@ static void figure_out_visual() {
     fl_redmask = 0;
     return;
 #  else
-    Fl::fatal("Requires true color visual");
+    fltk3::fatal("Requires true color visual");
 #  endif
   }
 
@@ -322,7 +322,7 @@ ulong fl_xpixel(fltk3::Color i) {
   \param[in] i color index
   \param[in] overlay 0 for normal, 1 for overlay color
 */
-void Fl::free_color(fltk3::Color i, int overlay) {
+void fltk3::free_color(fltk3::Color i, int overlay) {
 #  if HAVE_OVERLAY
 #  else
   if (overlay) return;
@@ -346,7 +346,7 @@ void Fl::free_color(fltk3::Color i, int overlay) {
   \param[in] i color index
   \param[in] c color
 */
-void Fl::set_color(fltk3::Color i, unsigned c) {
+void fltk3::set_color(fltk3::Color i, unsigned c) {
   if (fl_cmap[i] != c) {
     free_color(i,0);
 #  if HAVE_OVERLAY
@@ -365,7 +365,7 @@ void Fl::set_color(fltk3::Color i, unsigned c) {
     in the next 8 bits, and the blue value in bits 8-15.  The lower
     8 bits will always be 0.
 */
-unsigned Fl::get_color(fltk3::Color i) {
+unsigned fltk3::get_color(fltk3::Color i) {
   if (i & 0xffffff00) return (i);
   else return fl_cmap[i];
 }
@@ -374,8 +374,8 @@ unsigned Fl::get_color(fltk3::Color i) {
     any 8-bit RGB color.  The color is not allocated until fl_color(i)
     is used.
 */
-void Fl::set_color(fltk3::Color i, uchar red, uchar green, uchar blue) {
-  Fl::set_color((fltk3::Color)(i & 255),
+void fltk3::set_color(fltk3::Color i, uchar red, uchar green, uchar blue) {
+  fltk3::set_color((fltk3::Color)(i & 255),
 	((unsigned)red<<24)+((unsigned)green<<16)+((unsigned)blue<<8));
 }
 /**
@@ -386,7 +386,7 @@ void Fl::set_color(fltk3::Color i, uchar red, uchar green, uchar blue) {
 
     See also unsigned get_color(fltk3::Color c)
  */
-void Fl::get_color(fltk3::Color i, uchar &red, uchar &green, uchar &blue) {
+void fltk3::get_color(fltk3::Color i, uchar &red, uchar &green, uchar &blue) {
   unsigned c;
 
   if (i & 0xffffff00) c = (unsigned)i;

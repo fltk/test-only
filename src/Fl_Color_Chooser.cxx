@@ -217,31 +217,31 @@ int Flcc_HueBox::handle(int e) {
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   switch (e) {
   case fltk3::PUSH:
-    if (Fl::visible_focus()) {
-      Fl::focus(this);
+    if (fltk3::visible_focus()) {
+      fltk3::focus(this);
       redraw();
     }
     ih = c->hue();
     is = c->saturation();
   case fltk3::DRAG: {
     double Xf, Yf, H, S;
-    Xf = (Fl::event_x()-x()-Fl::box_dx(box()))/double(w()-Fl::box_dw(box()));
-    Yf = (Fl::event_y()-y()-Fl::box_dy(box()))/double(h()-Fl::box_dh(box()));
+    Xf = (fltk3::event_x()-x()-fltk3::box_dx(box()))/double(w()-fltk3::box_dw(box()));
+    Yf = (fltk3::event_y()-y()-fltk3::box_dy(box()))/double(h()-fltk3::box_dh(box()));
     tohs(Xf, Yf, H, S);
     if (fabs(H-ih) < 3*6.0/w()) H = ih;
     if (fabs(S-is) < 3*1.0/h()) S = is;
-    if (Fl::event_state(fltk3::CTRL)) H = ih;
+    if (fltk3::event_state(fltk3::CTRL)) H = ih;
     if (c->hsv(H, S, c->value())) c->do_callback();
     } return 1;
   case fltk3::FOCUS : /* FALLTHROUGH */
   case fltk3::UNFOCUS :
-    if (Fl::visible_focus()) {
+    if (fltk3::visible_focus()) {
       redraw();
       return 1;
     }
     else return 1;
   case fltk3::KEYBOARD :
-    return handle_key(Fl::event_key());
+    return handle_key(fltk3::event_key());
   default:
     return 0;
   }
@@ -250,8 +250,8 @@ int Flcc_HueBox::handle(int e) {
 
 static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
   Flcc_HueBox* v = (Flcc_HueBox*)vv;
-  int iw = v->w()-Fl::box_dw(v->box());
-  double Yf = double(Y)/(v->h()-Fl::box_dh(v->box()));
+  int iw = v->w()-fltk3::box_dw(v->box());
+  double Yf = double(Y)/(v->h()-fltk3::box_dh(v->box()));
 #ifdef UPDATE_HUE_BOX
   const double V = ((Fl_Color_Chooser*)(v->parent()))->value();
 #else
@@ -270,8 +270,8 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
 
 #ifndef FL_DOXYGEN
 int Flcc_HueBox::handle_key(int key) {
-  int w1 = w()-Fl::box_dw(box())-6;
-  int h1 = h()-Fl::box_dh(box())-6;
+  int w1 = w()-fltk3::box_dw(box())-6;
+  int h1 = h()-fltk3::box_dh(box())-6;
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
 
 #ifdef CIRCLE
@@ -312,10 +312,10 @@ int Flcc_HueBox::handle_key(int key) {
 #ifndef FL_DOXYGEN
 void Flcc_HueBox::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
-  int x1 = x()+Fl::box_dx(box());
-  int yy1 = y()+Fl::box_dy(box());
-  int w1 = w()-Fl::box_dw(box());
-  int h1 = h()-Fl::box_dh(box());
+  int x1 = x()+fltk3::box_dx(box());
+  int yy1 = y()+fltk3::box_dy(box());
+  int w1 = w()-fltk3::box_dw(box());
+  int h1 = h()-fltk3::box_dh(box());
   if (damage() == fltk3::DAMAGE_EXPOSE) fl_push_clip(x1+px,yy1+py,6,6);
   fl_draw_image(generate_image, this, x1, yy1, w1, h1);
   if (damage() == fltk3::DAMAGE_EXPOSE) fl_pop_clip();
@@ -330,7 +330,7 @@ void Flcc_HueBox::draw() {
   if (X < 0) X = 0; else if (X > w1-6) X = w1-6;
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
   //  fl_color(c->value()>.75 ? fltk3::BLACK : fltk3::WHITE);
-  draw_box(fltk3::UP_BOX,x1+X,yy1+Y,6,6,Fl::focus() == this ? fltk3::FOREGROUND_COLOR : fltk3::GRAY);
+  draw_box(fltk3::UP_BOX,x1+X,yy1+Y,6,6,fltk3::focus() == this ? fltk3::FOREGROUND_COLOR : fltk3::GRAY);
   px = X; py = Y;
 }
 #endif // !FL_DOXYGEN
@@ -343,26 +343,26 @@ int Flcc_ValueBox::handle(int e) {
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   switch (e) {
   case fltk3::PUSH:
-    if (Fl::visible_focus()) {
-      Fl::focus(this);
+    if (fltk3::visible_focus()) {
+      fltk3::focus(this);
       redraw();
     }
     iv = c->value();
   case fltk3::DRAG: {
     double Yf;
-    Yf = 1-(Fl::event_y()-y()-Fl::box_dy(box()))/double(h()-Fl::box_dh(box()));
+    Yf = 1-(fltk3::event_y()-y()-fltk3::box_dy(box()))/double(h()-fltk3::box_dh(box()));
     if (fabs(Yf-iv)<(3*1.0/h())) Yf = iv;
     if (c->hsv(c->hue(),c->saturation(),Yf)) c->do_callback();
     } return 1;
   case fltk3::FOCUS : /* FALLTHROUGH */
   case fltk3::UNFOCUS :
-    if (Fl::visible_focus()) {
+    if (fltk3::visible_focus()) {
       redraw();
       return 1;
     }
     else return 1;
   case fltk3::KEYBOARD :
-    return handle_key(Fl::event_key());
+    return handle_key(fltk3::event_key());
   default:
     return 0;
   }
@@ -372,7 +372,7 @@ int Flcc_ValueBox::handle(int e) {
 static double tr, tg, tb;
 static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
   Flcc_ValueBox* v = (Flcc_ValueBox*)vv;
-  double Yf = 255*(1.0-double(Y)/(v->h()-Fl::box_dh(v->box())));
+  double Yf = 255*(1.0-double(Y)/(v->h()-fltk3::box_dh(v->box())));
   uchar r = uchar(tr*Yf+.5);
   uchar g = uchar(tg*Yf+.5);
   uchar b = uchar(tb*Yf+.5);
@@ -386,23 +386,23 @@ void Flcc_ValueBox::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   c->hsv2rgb(c->hue(),c->saturation(),1.0,tr,tg,tb);
-  int x1 = x()+Fl::box_dx(box());
-  int yy1 = y()+Fl::box_dy(box());
-  int w1 = w()-Fl::box_dw(box());
-  int h1 = h()-Fl::box_dh(box());
+  int x1 = x()+fltk3::box_dx(box());
+  int yy1 = y()+fltk3::box_dy(box());
+  int w1 = w()-fltk3::box_dw(box());
+  int h1 = h()-fltk3::box_dh(box());
   if (damage() == fltk3::DAMAGE_EXPOSE) fl_push_clip(x1,yy1+py,w1,6);
   fl_draw_image(generate_vimage, this, x1, yy1, w1, h1);
   if (damage() == fltk3::DAMAGE_EXPOSE) fl_pop_clip();
   int Y = int((1-c->value()) * (h1-6));
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
-  draw_box(fltk3::UP_BOX,x1,yy1+Y,w1,6,Fl::focus() == this ? fltk3::FOREGROUND_COLOR : fltk3::GRAY);
+  draw_box(fltk3::UP_BOX,x1,yy1+Y,w1,6,fltk3::focus() == this ? fltk3::FOREGROUND_COLOR : fltk3::GRAY);
   py = Y;
 }
 #endif // !FL_DOXYGEN
 
 #ifndef FL_DOXYGEN
 int Flcc_ValueBox::handle_key(int key) {
-  int h1 = h()-Fl::box_dh(box())-6;
+  int h1 = h()-fltk3::box_dh(box())-6;
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
 
   int Y = int((1-c->value()) * h1);
@@ -517,10 +517,10 @@ public:
 
 void ColorChip::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
-  fl_rectf(x()+Fl::box_dx(box()),
-	   y()+Fl::box_dy(box()),
-	   w()-Fl::box_dw(box()),
-	   h()-Fl::box_dh(box()),r,g,b);
+  fl_rectf(x()+fltk3::box_dx(box()),
+	   y()+fltk3::box_dy(box()),
+	   w()-fltk3::box_dw(box()),
+	   h()-fltk3::box_dh(box()),r,g,b);
 }
 
 static void chooser_cb(fltk3::Widget* o, void* vv) {
@@ -592,7 +592,7 @@ int fl_color_chooser(const char* name, double& r, double& g, double& b, int cmod
   window.set_modal();
   window.hotspot(window);
   window.show();
-  while (window.shown()) Fl::wait();
+  while (window.shown()) fltk3::wait();
   if (ret) { // ok_button or Enter
     r = chooser.r();
     g = chooser.g();

@@ -46,14 +46,14 @@
 
 void Fl_Graphics_Driver::push_matrix() {
   if (sptr==matrix_stack_size)
-    Fl::error("fl_push_matrix(): matrix stack overflow.");
+    fltk3::error("fl_push_matrix(): matrix stack overflow.");
   else
     stack[sptr++] = m;
 }
 
 void Fl_Graphics_Driver::pop_matrix() {
   if (sptr==0)
-    Fl::error("fl_pop_matrix(): matrix stack underflow.");
+    fltk3::error("fl_pop_matrix(): matrix stack underflow.");
   else 
     m = stack[--sptr];
 }

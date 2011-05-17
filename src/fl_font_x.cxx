@@ -29,7 +29,7 @@
 Fl_Font_Descriptor::Fl_Font_Descriptor(const char* name) {
   font = XCreateUtf8FontStruct(fl_display, name);
   if (!font) {
-    Fl::warning("bad font: %s", name);
+    fltk3::warning("bad font: %s", name);
     font = XCreateUtf8FontStruct(fl_display, "fixed");
   }
 #  if HAVE_GL

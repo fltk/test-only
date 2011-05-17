@@ -59,10 +59,10 @@ void Fl_Progress::draw()
 
 
   // Get the box borders...
-  bx = Fl::box_dx(box());
-  by = Fl::box_dy(box());
-  bw = Fl::box_dw(box());
-  bh = Fl::box_dh(box());
+  bx = fltk3::box_dx(box());
+  by = fltk3::box_dy(box());
+  bw = fltk3::box_dw(box());
+  bh = fltk3::box_dh(box());
 
   tx = x() + bx;
   tw = w() - bw;

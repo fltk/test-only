@@ -131,7 +131,7 @@ void Fl_PNG_Image::load_png_(const char *name_png, const unsigned char *buffer_p
   if (!pp || !info) {
     if (pp) png_destroy_read_struct(&pp, NULL, NULL);
     if (!from_memory) fclose(fp);
-    Fl::warning("Cannot allocate memory to read PNG file or data \"%s\".\n", name_png);
+    fltk3::warning("Cannot allocate memory to read PNG file or data \"%s\".\n", name_png);
     return;
   }
   
@@ -139,7 +139,7 @@ void Fl_PNG_Image::load_png_(const char *name_png, const unsigned char *buffer_p
   {
     png_destroy_read_struct(&pp, &info, NULL);
     if (!from_memory) fclose(fp);
-    Fl::warning("PNG file or data \"%s\" contains errors!\n", name_png);
+    fltk3::warning("PNG file or data \"%s\" contains errors!\n", name_png);
     return;
   }
 

@@ -59,7 +59,7 @@ template_panel->hide();
 Fl_Browser *template_browser=(Fl_Browser *)0;
 
 static void cb_template_browser(Fl_Browser*, void*) {
-  if (Fl::event_clicks()) {
+  if (fltk3::event_clicks()) {
   template_panel->hide();
   return;
 }
@@ -112,7 +112,7 @@ Fl_Input *template_name=(Fl_Input *)0;
 static void cb_template_name(Fl_Input*, void*) {
   if (strlen(template_name->value())) {
   template_submit->activate();
-  if (Fl::event_key() == fltk3::EnterKey) template_panel->hide();
+  if (fltk3::event_key() == fltk3::EnterKey) template_panel->hide();
 } else template_submit->deactivate();
 }
 

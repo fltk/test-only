@@ -67,7 +67,7 @@ int Fl_Tabs::tab_positions() {
   char prev_draw_shortcut = fl_draw_shortcut;
   fl_draw_shortcut = 1;
 
-  tab_pos[0] = Fl::box_dx(box());
+  tab_pos[0] = fltk3::box_dx(box());
   for (i=0; i<nc; i++) {
     fltk3::Widget* o = *a++;
     if (o->visible()) selected = i;
@@ -150,10 +150,10 @@ void Fl_Tabs::redraw_tabs()
 {
   int H = tab_height();
   if (H >= 0) {
-    H += Fl::box_dy(box());
+    H += fltk3::box_dy(box());
     damage(fltk3::DAMAGE_SCROLL, x(), y(), w(), H);
   } else {
-    H = Fl::box_dy(box()) - H;
+    H = fltk3::box_dy(box()) - H;
     damage(fltk3::DAMAGE_SCROLL, x(), y() + h() - H, w(), H);
   }
 }
@@ -168,18 +168,18 @@ int Fl_Tabs::handle(int event) {
   case fltk3::PUSH: {
     int H = tab_height();
     if (H >= 0) {
-      if (Fl::event_y() > y()+H) return fltk3::Group::handle(event);
+      if (fltk3::event_y() > y()+H) return fltk3::Group::handle(event);
     } else {
-      if (Fl::event_y() < y()+h()+H) return fltk3::Group::handle(event);
+      if (fltk3::event_y() < y()+h()+H) return fltk3::Group::handle(event);
     }}
     /* FALLTHROUGH */
   case fltk3::DRAG:
   case fltk3::RELEASE:
-    o = which(Fl::event_x(), Fl::event_y());
+    o = which(fltk3::event_x(), fltk3::event_y());
     if (event == fltk3::RELEASE) {
       push(0);
-      if (o && Fl::visible_focus() && Fl::focus()!=this) { 
-        Fl::focus(this);
+      if (o && fltk3::visible_focus() && fltk3::focus()!=this) { 
+        fltk3::focus(this);
         redraw_tabs();
       }
       if (o && value(o)) {
@@ -197,12 +197,12 @@ int Fl_Tabs::handle(int event) {
     int ret = fltk3::Group::handle(event);
     fltk3::Widget *o = Fl_Tooltip::current(), *n = o;
     int H = tab_height();
-    if ( (H>=0) && (Fl::event_y()>y()+H) )
+    if ( (H>=0) && (fltk3::event_y()>y()+H) )
       return ret;
-    else if ( (H<0) && (Fl::event_y() < y()+h()+H) )
+    else if ( (H<0) && (fltk3::event_y() < y()+h()+H) )
       return ret;
     else { 
-      n = which(Fl::event_x(), Fl::event_y());
+      n = which(fltk3::event_x(), fltk3::event_y());
       if (!n) n = this;
     }
     if (n!=o)
@@ -210,19 +210,19 @@ int Fl_Tabs::handle(int event) {
     return ret; }
   case fltk3::FOCUS:
   case fltk3::UNFOCUS:
-    if (!Fl::visible_focus()) return fltk3::Group::handle(event);
-    if (Fl::event() == fltk3::RELEASE ||
-	Fl::event() == fltk3::SHORTCUT ||
-	Fl::event() == fltk3::KEYBOARD ||
-	Fl::event() == fltk3::FOCUS ||
-	Fl::event() == fltk3::UNFOCUS) {
+    if (!fltk3::visible_focus()) return fltk3::Group::handle(event);
+    if (fltk3::event() == fltk3::RELEASE ||
+	fltk3::event() == fltk3::SHORTCUT ||
+	fltk3::event() == fltk3::KEYBOARD ||
+	fltk3::event() == fltk3::FOCUS ||
+	fltk3::event() == fltk3::UNFOCUS) {
       redraw_tabs();
-      if (Fl::event() == fltk3::FOCUS) return fltk3::Group::handle(event);
-      if (Fl::event() == fltk3::UNFOCUS) return 0;
+      if (fltk3::event() == fltk3::FOCUS) return fltk3::Group::handle(event);
+      if (fltk3::event() == fltk3::UNFOCUS) return 0;
       else return 1;
     } else return fltk3::Group::handle(event);
   case fltk3::KEYBOARD:
-    switch (Fl::event_key()) {
+    switch (fltk3::event_key()) {
       case fltk3::LeftKey:
         if (child(0)->visible()) return 0;
 	for (i = 1; i < children(); i ++)
@@ -357,8 +357,8 @@ void Fl_Tabs::draw() {
 
 void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what) {
   int sel = (what == SELECTED);
-  int dh = Fl::box_dh(box());
-  int dy = Fl::box_dy(box());
+  int dh = fltk3::box_dh(box());
+  int dy = fltk3::box_dy(box());
   char prev_draw_shortcut = fl_draw_shortcut;
   fl_draw_shortcut = 1;
 
@@ -389,7 +389,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
     // Restore the original label color...
     o->labelcolor(oc);
 
-    if (Fl::focus() == this && o->visible())
+    if (fltk3::focus() == this && o->visible())
       draw_focus(box(), x1, y(), W, H);
 
     fl_pop_clip();
@@ -415,7 +415,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
     // Restore the original label color...
     o->labelcolor(oc);
 
-    if (Fl::focus() == this && o->visible())
+    if (fltk3::focus() == this && o->visible())
       draw_focus(box(), x1, y() + h() - H, W, H);
 
     fl_pop_clip();

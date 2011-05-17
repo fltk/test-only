@@ -92,31 +92,31 @@ namespace fltk3 {
    Events are identified by the integer argument passed to the 
    fltk3::Widget::handle() virtual method. Other information about the 
    most recent event is stored in static locations and acquired  by 
-   calling the Fl::event_*() methods. This static information remains 
+   calling the fltk3::event_*() methods. This static information remains 
    valid until the next event is read from the window system, so it 
    is ok to look at it outside of the handle() method.
    
-   \sa Fl::event_text(), Fl::event_key(), class Fl::
+   \sa fltk3::event_text(), fltk3::event_key(), class fltk3::
    */
   enum Event {	// events
     /** No event. */
     NO_EVENT		= 0,
     
     /** A mouse button has gone down with the mouse pointing at this
-     widget. You can find out what button by calling Fl::event_button(). 
-     You find out the mouse position by calling Fl::event_x() and
-     Fl::event_y().
+     widget. You can find out what button by calling fltk3::event_button(). 
+     You find out the mouse position by calling fltk3::event_x() and
+     fltk3::event_y().
      
      A widget indicates that it "wants" the mouse click by returning non-zero 
      from its fltk3::Widget::handle() method. It will then become the 
-     Fl::pushed() widget and will get fltk3::DRAG and the matching fltk3::RELEASE events.  
+     fltk3::pushed() widget and will get fltk3::DRAG and the matching fltk3::RELEASE events.  
      If fltk3::Widget::handle() returns zero then FLTK will try sending the fltk3::PUSH 
      to another widget. 
      */
     PUSH		= 1,
     
     /** A mouse button has been released. You can find out what button by 
-     calling Fl::event_button().
+     calling fltk3::event_button().
      
      In order to receive the fltk3::RELEASE event, the widget must return 
      non-zero when handling fltk3::PUSH.
@@ -127,7 +127,7 @@ namespace fltk3 {
      be used for highlighting feedback.  If a widget wants to
      highlight or otherwise track the mouse, it indicates this by
      returning non-zero from its handle() method. It then
-     becomes the Fl::belowmouse() widget and will receive 
+     becomes the fltk3::belowmouse() widget and will receive 
      fltk3::MOVE and fltk3::LEAVE events.
      */
     ENTER		= 3,
@@ -139,8 +139,8 @@ namespace fltk3 {
     LEAVE		= 4,
     
     /** The mouse has moved with a button held down. The current button state 
-     is in Fl::event_state(). The mouse position is in Fl::event_x() and 
-     Fl::event_y().
+     is in fltk3::event_state(). The mouse position is in fltk3::event_x() and 
+     fltk3::event_y().
      
      In order to receive fltk3::DRAG events, the widget must return non-zero 
      when handling fltk3::PUSH.
@@ -151,27 +151,27 @@ namespace fltk3 {
      
      If a widget wants the focus, it should change itself to display the 
      fact that it has the focus, and return non-zero from its handle() method.
-     It then becomes the Fl::focus() widget and gets FL_KEYDOWN, fltk3::KEYUP, 
+     It then becomes the fltk3::focus() widget and gets FL_KEYDOWN, fltk3::KEYUP, 
      and fltk3::UNFOCUS events.
      
      The focus will change either because the window manager changed which 
      window gets the focus, or because the user tried to navigate using tab, 
-     arrows, or other keys. You can check Fl::event_key() to figure out why 
+     arrows, or other keys. You can check fltk3::event_key() to figure out why 
      it moved. For navigation it will be the key pressed and for interaction 
      with the window manager it will be zero.
      */
     FOCUS		= 6,
     
-    /** This event is sent to the previous Fl::focus() widget when another 
+    /** This event is sent to the previous fltk3::focus() widget when another 
      widget gets the focus or the window loses focus.
      */
     UNFOCUS		= 7,
     
     /** A key was pressed (FL_KEYDOWN) or released (fltk3::KEYUP). 
      Fl_KEYBOARD is a synonym for FL_KEYDOWN.
-     The key can be found in Fl::event_key().
-     The text that the key should insert can be found with Fl::event_text() 
-     and its length is in Fl::event_length(). If you use the key handle()
+     The key can be found in fltk3::event_key().
+     The text that the key should insert can be found with fltk3::event_text() 
+     and its length is in fltk3::event_length(). If you use the key handle()
      should return 1. If you return zero then FLTK assumes you ignored the 
      key and will then attempt to send it to a parent widget. If none of 
      them want it, it will change the event into a fltk3::SHORTCUT event.
@@ -180,7 +180,7 @@ namespace fltk3 {
      and fltk3::UNFOCUS events.
      
      If you are writing a text-editing widget you may also want to call 
-     the Fl::compose() function to translate individual keystrokes into 
+     the fltk3::compose() function to translate individual keystrokes into 
      non-ASCII characters.
      
      fltk3::KEYUP events are sent to the widget that currently has focus. This 
@@ -207,22 +207,22 @@ namespace fltk3 {
     CLOSE		= 10,
     
     /** The mouse has moved without any mouse buttons held down. 
-     This event is sent to the Fl::belowmouse() widget.
+     This event is sent to the fltk3::belowmouse() widget.
      
      In order to receive fltk3::MOVE events, the widget must return 
      non-zero when handling fltk3::ENTER.
      */
     MOVE		= 11,
     
-    /** If the Fl::focus() widget is zero or ignores an fltk3::KEYBOARD
+    /** If the fltk3::focus() widget is zero or ignores an fltk3::KEYBOARD
      event then FLTK tries sending this event to every widget it 
      can, until one of them returns non-zero. fltk3::SHORTCUT is first 
-     sent to the Fl::belowmouse() widget, then its parents and siblings, 
+     sent to the fltk3::belowmouse() widget, then its parents and siblings, 
      and eventually to every widget in the window, trying to find an 
      object that returns non-zero. FLTK tries really hard to not to ignore 
      any keystrokes!
      
-     You can also make "global" shortcuts by using Fl::add_handler(). A 
+     You can also make "global" shortcuts by using fltk3::add_handler(). A 
      global shortcut will work no matter what windows are displayed or 
      which one has the focus.
      */
@@ -256,20 +256,20 @@ namespace fltk3 {
      */
     SHOW		= 16,
     
-    /** You should get this event some time after you call Fl::paste(). 
-     The contents of Fl::event_text() is the text to insert and the number 
-     of characters is in Fl::event_length().
+    /** You should get this event some time after you call fltk3::paste(). 
+     The contents of fltk3::event_text() is the text to insert and the number 
+     of characters is in fltk3::event_length().
      */
     PASTE		= 17,
     
-    /** The Fl::selection_owner() will get this event before the selection is 
+    /** The fltk3::selection_owner() will get this event before the selection is 
      moved to another widget. This indicates that some other widget or program 
      has claimed the selection. Motif programs used this to clear the selection 
      indication. Most modern programs ignore this.
      */
     SELECTIONCLEAR	= 18,
     
-    /** The user has moved the mouse wheel. The Fl::event_dx() and Fl::event_dy()
+    /** The user has moved the mouse wheel. The fltk3::event_dx() and fltk3::event_dy()
      methods can be used to find the amount to scroll horizontally and vertically.
      */
     MOUSEWHEEL		= 19,
@@ -327,7 +327,7 @@ namespace fltk3 {
    \todo	fltk3::MouseButton and FL_key... constants could be structured better
    (use an enum or some doxygen grouping ?)
    
-   \sa	Fl::event_key() and Fl::get_key(int) (use ascii letters for all other keys):
+   \sa	fltk3::event_key() and fltk3::get_key(int) (use ascii letters for all other keys):
    */
   
   /*@{*/
@@ -377,7 +377,7 @@ namespace fltk3 {
    
    These constants define the button numbers for fltk3::PUSH and fltk3::RELEASE events.
    
-   \sa Fl::event_button()
+   \sa fltk3::event_button()
    */
   
   /*@{*/
@@ -391,7 +391,7 @@ namespace fltk3 {
   
   /** \name	Event States
    
-   The following constants define bits in the Fl::event_state() value.
+   The following constants define bits in the fltk3::event_state() value.
    */
   
   /*@{*/		// group: Event States
@@ -827,7 +827,7 @@ namespace fltk3 {
   
   
   /** FD "when" conditions */
-  enum { // values for "when" passed to Fl::add_fd()
+  enum { // values for "when" passed to fltk3::add_fd()
     READ   = 1, /**< Call the callback when there is data to be read. */
     WRITE  = 4, /**< Call the callback when data can be written without blocking. */
     EXCEPT = 8  /**< Call the callback if an exception occurs on the file. */

@@ -269,7 +269,7 @@ int Fl_Menu_Item::insert(
   or a string (eg. "^c" or "^97").
   \par
   Raw integer shortcuts can be a combination of keyboard chars (eg. 'A')
-  and optional keyboard modifiers (see Fl::event_state(), e.g. fltk3::SHIFT, etc).
+  and optional keyboard modifiers (see fltk3::event_state(), e.g. fltk3::SHIFT, etc).
   In addition, fltk3::COMMAND can be used to denote fltk3::META under Mac OS X and
   fltk3::CTRL under other platforms.
   \par

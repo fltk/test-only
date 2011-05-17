@@ -236,8 +236,19 @@ renameClass Fl_Group Group
 renameClass Fl_Window Window
 renameClass Fl_Widget_Tracker WidgetTracker
 
-
-
+renameType Fl_Label_Draw_F LabelDrawF
+renameType Fl_Label_Measure_F LabelMeasureF
+renameType Fl_Box_Draw_F BoxDrawF
+renameType Fl_Timeout_Handler TimeoutHandler
+renameType Fl_Awake_Handler AwakeHandler
+renameType Fl_Idle_Handler IdleHandler
+renameType Fl_Old_Idle_Handler OldIdleHandler
+renameType Fl_FD_Handler FDHandler
+renameType Fl_Event_Handler EventHandler
+renameType Fl_Abort_Handler Fl_Abort_HandlerAbortHandler
+renameType Fl_Atclose_Handler FlAtcloseHandler
+renameType Fl_Args_Handler ArgsHandler
+renameType Fl_Event_Dispatch EventDispatch
 
 
 

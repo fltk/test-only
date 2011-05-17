@@ -79,7 +79,7 @@ void fl_initialize(int *argc, char **argv, const char *, FL_CMD_OPT *, int) {
   int i,j;
   for (i=0; i<=*argc; i++) initargv[i] = argv[i];
   for (i=j=1; i<*argc; ) {
-    if (Fl::arg(*argc,argv,i));
+    if (fltk3::arg(*argc,argv,i));
     else argv[j++] = argv[i++];
   }
   argv[j] = 0;
@@ -99,7 +99,7 @@ void fl_show_form(fltk3::Window *f,int place,int b,const char *n) {
 
   if (place & FL_PLACE_CENTER) {
     int scr_x, scr_y, scr_w, scr_h;
-    Fl::screen_xywh(scr_x, scr_y, scr_w, scr_h);
+    fltk3::screen_xywh(scr_x, scr_y, scr_w, scr_h);
     f->position(scr_x+(scr_w-f->w())/2, scr_y+(scr_h-f->h())/2);
   }
 
@@ -108,8 +108,8 @@ void fl_show_form(fltk3::Window *f,int place,int b,const char *n) {
 
   if (place & (FL_PLACE_POSITION | FL_PLACE_GEOMETRY))
     f->position(
-      (f->x() < 0) ? Fl::w()-f->w()+f->x()-1 : f->x(),
-      (f->y() < 0) ? Fl::h()-f->h()+f->y()-1 : f->y());
+      (f->x() < 0) ? fltk3::w()-f->w()+f->x()-1 : f->x(),
+      (f->y() < 0) ? fltk3::h()-f->h()+f->y()-1 : f->y());
 
 // if (place & FL_PLACE_ASPECT) {
 // this is not yet implemented
@@ -127,13 +127,13 @@ void fl_show_form(fltk3::Window *f,int place,int b,const char *n) {
 
 fltk3::Widget *fl_do_forms(void) {
   fltk3::Widget *obj;
-  while (!(obj = Fl::readqueue())) if (!Fl::wait()) exit(0);
+  while (!(obj = fltk3::readqueue())) if (!fltk3::wait()) exit(0);
   return obj;
 }
 
 fltk3::Widget *fl_check_forms() {
-  Fl::check();
-  return Fl::readqueue();
+  fltk3::check();
+  return fltk3::readqueue();
 }
 
 void fl_set_graphics_mode(int /*r*/,int /*d*/) {}

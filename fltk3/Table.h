@@ -986,7 +986,7 @@ public:
    event occurred in, such as in a cell, in a header, or elsewhere on the table.  
    When an event occurs in a cell or header, callback_row() and 
    callback_col() can be used to determine the row and column. The callback can 
-   also look at the regular fltk event values (ie. Fl::event() and Fl::button()) 
+   also look at the regular fltk event values (ie. fltk3::event() and fltk3::button()) 
    to determine what kind of event is occurring.
    */
   void when(fltk3::When flags);
@@ -1051,7 +1051,7 @@ public:
        C = callback_col();                             // column where event occurred
        TableContext context = callback_context();      // which part of table
        fprintf(stderr, "callback: Row=%d Col=%d Context=%d Event=%d\n",
-               R, C, (int)context, (int)Fl::event());
+               R, C, (int)context, (int)fltk3::event());
      }
    
      // Actual static callback

@@ -82,12 +82,12 @@ static int fltk2mac(int fltk) {
 }
 
 //: returns true, if that key was pressed during the last event
-int Fl::event_key(int k) {
+int fltk3::event_key(int k) {
   return get_key(k);
 }
 
 //: returns true, if that key is pressed right now
-int Fl::get_key(int k) {
+int fltk3::get_key(int k) {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
   if(CGEventSourceKeyState != NULL) {
     return (int)CGEventSourceKeyState(kCGEventSourceStateCombinedSessionState, fltk2mac(k) );

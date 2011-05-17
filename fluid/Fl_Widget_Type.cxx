@@ -82,8 +82,8 @@ Fl_Widget_Type::ideal_size(int &w, int &h) {
   h = o->labelsize();
   o->measure_label(w, h);
 
-  w += Fl::box_dw(o->box());
-  h += Fl::box_dh(o->box());
+  w += fltk3::box_dw(o->box());
+  h += fltk3::box_dh(o->box());
 
   if (w < 15) w = 15;
   if (h < 15) h = 15;
@@ -518,7 +518,7 @@ void x_cb(Fl_Value_Input *i, void *v) {
 	w->resize((int)i->value(), w->y(), w->w(), w->h());
 	if (w->window()) w->window()->redraw();
 	if (o->is_window()) {
-          ((fltk3::Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
+          ((fltk3::Window *)w)->size_range(gridx, gridy, fltk3::w(), fltk3::h(),
                                        gridx, gridy, 0);
 	}
 	mod = 1;
@@ -543,7 +543,7 @@ void y_cb(Fl_Value_Input *i, void *v) {
 	w->resize(w->x(), (int)i->value(), w->w(), w->h());
 	if (w->window()) w->window()->redraw();
 	if (o->is_window()) {
-          ((fltk3::Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
+          ((fltk3::Window *)w)->size_range(gridx, gridy, fltk3::w(), fltk3::h(),
                                        gridx, gridy, 0);
 	}
 	mod = 1;
@@ -568,7 +568,7 @@ void w_cb(Fl_Value_Input *i, void *v) {
 	w->resize(w->x(), w->y(), (int)i->value(), w->h());
 	if (w->window()) w->window()->redraw();
 	if (o->is_window()) {
-          ((fltk3::Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
+          ((fltk3::Window *)w)->size_range(gridx, gridy, fltk3::w(), fltk3::h(),
                                        gridx, gridy, 0);
 	}
 	mod = 1;
@@ -593,7 +593,7 @@ void h_cb(Fl_Value_Input *i, void *v) {
 	w->resize(w->x(), w->y(), w->w(), (int)i->value());
 	if (w->window()) w->window()->redraw();
 	if (o->is_window()) {
-          ((fltk3::Window *)w)->size_range(gridx, gridy, Fl::w(), Fl::h(),
+          ((fltk3::Window *)w)->size_range(gridx, gridy, fltk3::w(), fltk3::h(),
                                        gridx, gridy, 0);
 	}
 	mod = 1;
@@ -1841,7 +1841,7 @@ void live_mode_cb(Fl_Button*o,void *) {
       live_type->leave_live_mode();
     if (live_window) {
       live_window->hide();
-      Fl::delete_widget(live_window);
+      fltk3::delete_widget(live_window);
     }
     live_type = 0L;
     live_widget = 0L;

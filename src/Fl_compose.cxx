@@ -29,7 +29,7 @@
 #include <fltk3/x.h>
 
 #ifndef FL_DOXYGEN
-int Fl::compose_state = 0;
+int fltk3::compose_state = 0;
 #endif
 
 #if !defined(WIN32) && !defined(__APPLE__)
@@ -40,11 +40,11 @@ extern XIC fl_xim_ic;
  Use of this function is very simple.
  
  <p>If <i>true</i> is returned, then it has modified the
- Fl::event_text() and Fl::event_length() to a set of <i>bytes</i> to
+ fltk3::event_text() and fltk3::event_length() to a set of <i>bytes</i> to
  insert (it may be of zero length!).  In will also set the "del"
  parameter to the number of <i>bytes</i> to the left of the cursor to
  delete, this is used to delete the results of the previous call to
- Fl::compose().
+ fltk3::compose().
  
  <p>If <i>false</i> is returned, the keys should be treated as function
  keys, and del is set to zero. You could insert the text anyways, if
@@ -54,13 +54,13 @@ extern XIC fl_xim_ic;
  versions may take quite awhile, as they may pop up a window or do
  other user-interface things to allow characters to be selected.
  */
-int Fl::compose(int& del) {
+int fltk3::compose(int& del) {
   // character composition is now handled by the OS
   del = 0;
 #if defined(__APPLE__)
   // this stuff is to be treated as a function key
-  if(Fl::e_length == 0 || Fl::e_keysym == fltk3::EnterKey || Fl::e_keysym == fltk3::KPEnterKey || 
-     Fl::e_keysym == fltk3::TabKey || Fl::e_keysym == fltk3::EscapeKey || Fl::e_state&(fltk3::META | fltk3::CTRL) ) {
+  if(fltk3::e_length == 0 || fltk3::e_keysym == fltk3::EnterKey || fltk3::e_keysym == fltk3::KPEnterKey || 
+     fltk3::e_keysym == fltk3::TabKey || fltk3::e_keysym == fltk3::EscapeKey || fltk3::e_state&(fltk3::META | fltk3::CTRL) ) {
     return 0;
   }
 #elif defined(WIN32)
@@ -70,9 +70,9 @@ int Fl::compose(int& del) {
   unsigned char ascii = (unsigned)e_text[0];
   if ((e_state & (fltk3::ALT | fltk3::META | fltk3::CTRL)) && !(ascii & 128)) return 0;
 #endif
-  if(Fl::compose_state) {
-    del = Fl::compose_state;
-    Fl::compose_state = 0;
+  if(fltk3::compose_state) {
+    del = fltk3::compose_state;
+    fltk3::compose_state = 0;
 #ifndef __APPLE__
   } else {
     // Only insert non-control characters:
@@ -83,14 +83,14 @@ int Fl::compose(int& del) {
 }
 
 /**
- If the user moves the cursor, be sure to call Fl::compose_reset().
- The next call to Fl::compose() will start out in an initial state. In
+ If the user moves the cursor, be sure to call fltk3::compose_reset().
+ The next call to fltk3::compose() will start out in an initial state. In
  particular it will not set "del" to non-zero. This call is very fast
  so it is ok to call it many times and in many places.
  */
-void Fl::compose_reset()
+void fltk3::compose_reset()
 {
-  Fl::compose_state = 0;
+  fltk3::compose_state = 0;
 #if !defined(WIN32) && !defined(__APPLE__)
   if (fl_xim_ic) XmbResetIC(fl_xim_ic);
 #endif

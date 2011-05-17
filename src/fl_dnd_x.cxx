@@ -70,7 +70,7 @@ static int dnd_aware(Window& window) {
 }
 
 static int grabfunc(int event) {
-  if (event == fltk3::RELEASE) Fl::pushed(0);
+  if (event == fltk3::RELEASE) fltk3::pushed(0);
   return 0;
 }
 
@@ -79,24 +79,24 @@ extern int (*fl_local_grab)(int); // in Fl.cxx
 // send an event to an fltk window belonging to this program:
 static int local_handle(int event, fltk3::Window* window) {
   fl_local_grab = 0;
-  Fl::e_x = Fl::e_x_root-window->x();
-  Fl::e_y = Fl::e_y_root-window->y();
-  int ret = Fl::handle(event,window);
+  fltk3::e_x = fltk3::e_x_root-window->x();
+  fltk3::e_y = fltk3::e_y_root-window->y();
+  int ret = fltk3::handle(event,window);
   fl_local_grab = grabfunc;
   return ret;
 }
 
-int Fl::dnd() {
-  fltk3::Window *source_fl_win = Fl::first_window();
-  Fl::first_window()->cursor(fltk3::CURSOR_MOVE);
-  Window source_window = fl_xid(Fl::first_window());
+int fltk3::dnd() {
+  fltk3::Window *source_fl_win = fltk3::first_window();
+  fltk3::first_window()->cursor(fltk3::CURSOR_MOVE);
+  Window source_window = fl_xid(fltk3::first_window());
   fl_local_grab = grabfunc;
   Window target_window = 0;
   fltk3::Window* local_window = 0;
   int dndversion = 4; int dest_x, dest_y;
   XSetSelectionOwner(fl_display, fl_XdndSelection, fl_message_window, fl_event_time);
 
-  while (Fl::pushed()) {
+  while (fltk3::pushed()) {
 
     // figure out what window we are pointing at:
     Window new_window = 0; int new_version = 0;
@@ -161,7 +161,7 @@ int Fl::dnd() {
 			   0, (e_x_root<<16)|e_y_root, fl_event_time,
 			   fl_XdndActionCopy);
     }
-    Fl::wait();
+    fltk3::wait();
   }
 
   if (local_window) {
@@ -180,8 +180,8 @@ int Fl::dnd() {
     msg.time = fl_event_time+1;
     msg.x = dest_x;
     msg.y = dest_y;
-    msg.x_root = Fl::e_x_root;
-    msg.y_root = Fl::e_y_root;
+    msg.x_root = fltk3::e_x_root;
+    msg.y_root = fltk3::e_y_root;
     msg.state = 0x0;
     msg.button = Button2;
     XSendEvent(fl_display, target_window, False, 0L, (XEvent*)&msg);

@@ -57,17 +57,17 @@ static void print_gl_window(Fl_Gl_Window *glw, int x, int y, int height)
   fl_gc = NULL;
   Fl_Display_Device::display_device()->set_current();
 #ifdef WIN32
-  Fl::check();
+  fltk3::check();
   fltk3::Window *win = (fltk3::Window*)glw;
   while( win->window() ) win = win->window();
   win->redraw();
-  Fl::check();
+  fltk3::check();
   glw->make_current();
 #else
   glw->make_current();
   glw->redraw();
   glFlush();
-  Fl::check();
+  fltk3::check();
   glFinish();
 #endif
   // Read OpenGL context pixels directly.

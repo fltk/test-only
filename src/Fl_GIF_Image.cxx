@@ -89,7 +89,7 @@ Fl_GIF_Image::Fl_GIF_Image(const char *infname) : Fl_Pixmap((char *const*)0) {
   char **new_data;	// Data array
 
   if ((GifFile = fl_fopen(infname, "rb")) == NULL) {
-    Fl::error("Fl_GIF_Image: Unable to open %s!", infname);
+    fltk3::error("Fl_GIF_Image: Unable to open %s!", infname);
     return;
   }
 
@@ -100,11 +100,11 @@ Fl_GIF_Image::Fl_GIF_Image(const char *infname) : Fl_Pixmap((char *const*)0) {
   }
   if (b[0]!='G' || b[1]!='I' || b[2] != 'F') {
     fclose(GifFile);
-    Fl::error("Fl_GIF_Image: %s is not a GIF file.\n", infname);
+    fltk3::error("Fl_GIF_Image: %s is not a GIF file.\n", infname);
     return;
   }
   if (b[3]!='8' || b[4]>'9' || b[5]!= 'a')
-    Fl::warning("%s is version %c%c%c.",infname,b[3],b[4],b[5]);
+    fltk3::warning("%s is version %c%c%c.",infname,b[3],b[4],b[5]);
   }
 
   int Width; GETSHORT(Width);
@@ -130,7 +130,7 @@ Fl_GIF_Image::Fl_GIF_Image(const char *infname) : Fl_Pixmap((char *const*)0) {
       Blue[i] = NEXTBYTE;
     }
   } else {
-    Fl::warning("%s does not have a colormap.", infname);
+    fltk3::warning("%s does not have a colormap.", infname);
     for (int i = 0; i < ColorMapSize; i++)
       Red[i] = Green[i] = Blue[i] = (uchar)(255 * i / (ColorMapSize-1));
   }
@@ -143,7 +143,7 @@ Fl_GIF_Image::Fl_GIF_Image(const char *infname) : Fl_Pixmap((char *const*)0) {
     int i = NEXTBYTE;
     if (i<0) {
       fclose(GifFile);
-      Fl::error("Fl_GIF_Image: %s - unexpected EOF",infname); 
+      fltk3::error("Fl_GIF_Image: %s - unexpected EOF",infname); 
       return;
     }
     int blocklen;
@@ -168,7 +168,7 @@ Fl_GIF_Image::Fl_GIF_Image(const char *infname) : Fl_Pixmap((char *const*)0) {
 	;
 
       } else if (ch != 0xFE) { //Gif Comment
-	Fl::warning("%s: unknown gif extension 0x%02x.", infname, ch);
+	fltk3::warning("%s: unknown gif extension 0x%02x.", infname, ch);
       }
     } else if (i == 0x2c) {	// an image
 
@@ -190,7 +190,7 @@ Fl_GIF_Image::Fl_GIF_Image(const char *infname) : Fl_Pixmap((char *const*)0) {
       CodeSize = NEXTBYTE+1;
       break; // okay, this is the image we want
     } else {
-      Fl::warning("%s: unknown gif code 0x%02x", infname, i);
+      fltk3::warning("%s: unknown gif code 0x%02x", infname, i);
       blocklen = 0;
     }
 
@@ -270,7 +270,7 @@ Fl_GIF_Image::Fl_GIF_Image(const char *infname) : Fl_Pixmap((char *const*)0) {
     int i;
     if (CurCode < FreeCode) i = CurCode;
     else if (CurCode == FreeCode) {*tp++ = (uchar)FinChar; i = OldCode;}
-    else {Fl::error("Fl_GIF_Image: %s - LZW Barf!", infname); break;}
+    else {fltk3::error("Fl_GIF_Image: %s - LZW Barf!", infname); break;}
 
     while (i >= ColorMapSize) {*tp++ = Suffix[i]; i = Prefix[i];}
     *tp++ = FinChar = i;

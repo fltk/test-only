@@ -240,7 +240,7 @@ Fl_Double_Window* make_codeblock_panel() {
       } // fltk3::Box* o
       o->end();
     } // fltk3::Group* o
-    o->size_range(o->w(), o->h(), Fl::w(), o->h());
+    o->size_range(o->w(), o->h(), fltk3::w(), o->h());
     codeblock_panel->set_modal();
     codeblock_panel->end();
   } // Fl_Double_Window* codeblock_panel
@@ -321,7 +321,7 @@ Fl_Double_Window* make_declblock_panel() {
       } // fltk3::Box* o
       o->end();
     } // fltk3::Group* o
-    o->size_range(o->w(), o->h(), Fl::w(), o->h());
+    o->size_range(o->w(), o->h(), fltk3::w(), o->h());
     declblock_panel->set_modal();
     declblock_panel->end();
   } // Fl_Double_Window* declblock_panel
@@ -704,7 +704,7 @@ void type_make_cb(fltk3::Widget*,void*d) {
 fltk3::Window *widgetbin_panel=(fltk3::Window *)0;
 
 static void cb_widgetbin_panel(fltk3::Window* o, void* v) {
-  if (Fl::event()==fltk3::SHORTCUT && Fl::event_key()==fltk3::EscapeKey)
+  if (fltk3::event()==fltk3::SHORTCUT && fltk3::event_key()==fltk3::EscapeKey)
   exit_cb((fltk3::Widget*)o, v);
 else  
   toggle_widgetbin_cb((fltk3::Widget*)o, v);

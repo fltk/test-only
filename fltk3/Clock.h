@@ -108,7 +108,7 @@ public:
   \brief This widget provides a round analog clock display.
 
   Fl_Clock is provided for Forms compatibility. 
-  It installs a 1-second timeout callback using Fl::add_timeout().
+  It installs a 1-second timeout callback using fltk3::add_timeout().
   You can choose the rounded or square type of the clock with type(), see below.
   \htmlonly <BR>  <table align=CENTER border=1 cellpadding=5 >  
   <caption align=bottom>type() FL_SQUARE_CLOCK and FL_ROUND_CLOCK </caption> <TR><TD> \endhtmlonly

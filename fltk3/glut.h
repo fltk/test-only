@@ -242,7 +242,7 @@ FL_EXPORT void glutIdleFunc(void (*f)());
 
 // Warning: this cast may not work on all machines:
 inline void glutTimerFunc(unsigned int msec, void (*f)(int), int value) {
-  Fl::add_timeout(msec*.001, (void (*)(void *))f, (void *)value);
+  fltk3::add_timeout(msec*.001, (void (*)(void *))f, (void *)value);
 }
 
 inline void glutMenuStateFunc(void (*f)(int state)) {
@@ -371,7 +371,7 @@ FL_EXPORT int glutDeviceGet(GLenum type);
 #  define GLUT_ACTIVE_SHIFT               fltk3::SHIFT
 #  define GLUT_ACTIVE_CTRL                fltk3::CTRL
 #  define GLUT_ACTIVE_ALT                 fltk3::ALT
-inline int glutGetModifiers() {return Fl::event_state() & (GLUT_ACTIVE_SHIFT | GLUT_ACTIVE_CTRL | GLUT_ACTIVE_ALT);}
+inline int glutGetModifiers() {return fltk3::event_state() & (GLUT_ACTIVE_SHIFT | GLUT_ACTIVE_CTRL | GLUT_ACTIVE_ALT);}
 
 FL_EXPORT int glutLayerGet(GLenum);
 #  define GLUT_OVERLAY_POSSIBLE		800

@@ -457,7 +457,7 @@ else {
 static CGColorRef flcolortocgcolor(fltk3::Color i)
 {
   uchar r, g, b;
-  Fl::get_color(i, r, g, b);
+  fltk3::get_color(i, r, g, b);
   CGFloat components[4] = {r/255.0f, g/255.0f, b/255.0f, 1.};
   static CGColorSpaceRef cspace = NULL;
   if (cspace == NULL) {

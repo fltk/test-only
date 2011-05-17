@@ -255,7 +255,7 @@ void save_template_cb(fltk3::Widget *, void *) {
 
   // Show the panel and wait for the user to do something...
   template_panel->show();
-  while (template_panel->shown()) Fl::wait();
+  while (template_panel->shown()) fltk3::wait();
 
   // Get the template name, return if it is empty...
   const char *c = template_name->value();
@@ -572,7 +572,7 @@ void new_cb(fltk3::Widget *, void *v) {
 
   // Show the panel and wait for the user to do something...
   template_panel->show();
-  while (template_panel->shown()) Fl::wait();
+  while (template_panel->shown()) fltk3::wait();
 
   // See if the user chose anything...
   int item = template_browser->value();
@@ -1273,7 +1273,7 @@ void print_cb(Fl_Return_Button *, void *) {
   print_progress->minimum(0);
   print_progress->maximum(num_pages);
   print_progress->value(0);
-  Fl::check();
+  fltk3::check();
 
   // Get the base filename...
   const char *basename = strrchr(filename, '/');
@@ -1400,7 +1400,7 @@ void print_cb(Fl_Return_Button *, void *) {
 	sprintf(progress, "Printing page %d/%d...", page, num_pages);
 	print_progress->value(page);
 	print_progress->label(progress);
-	Fl::check();
+	fltk3::check();
 
         // Add common page stuff...
 	fprintf(outfile,
@@ -1742,16 +1742,16 @@ void scheme_cb(Fl_Choice *, void *) {
 
   switch (scheme_choice->value()) {
     case 0 : // Default
-      Fl::scheme(NULL);
+      fltk3::scheme(NULL);
       break;
     case 1 : // None
-      Fl::scheme("none");
+      fltk3::scheme("none");
       break;
     case 2 : // Plastic
-      Fl::scheme("plastic");
+      fltk3::scheme("plastic");
       break;
     case 3 : // GTK+
-      Fl::scheme("gtk+");
+      fltk3::scheme("gtk+");
       break;
   }
 
@@ -2079,7 +2079,7 @@ shell_pipe_cb(int, void*) {
     shell_run_buffer->append(line);
   } else {
     // End of file; tell the parent...
-    Fl::remove_fd(fileno(s_proc.desc()));
+    fltk3::remove_fd(fileno(s_proc.desc()));
     s_proc.close();
     shell_run_buffer->append("... END SHELL COMMAND ...\n");
   }
@@ -2109,15 +2109,15 @@ do_shell_command(Fl_Return_Button*, void*) {
   shell_run_window->hotspot(shell_run_display);
   shell_run_window->show();
 
-  Fl::add_fd(fileno(s_proc.desc()), shell_pipe_cb);
+  fltk3::add_fd(fileno(s_proc.desc()), shell_pipe_cb);
 
-  while (s_proc.desc()) Fl::wait();
+  while (s_proc.desc()) fltk3::wait();
 
   shell_run_button->activate();
   shell_run_window->label("Shell Command Complete");
   fl_beep();
 
-  while (shell_run_window->shown()) Fl::wait();
+  while (shell_run_window->shown()) fltk3::wait();
 }
 #else
 // Just do basic shell command stuff, no status window...
@@ -2285,8 +2285,8 @@ void set_modflag(int mf) {
     // we will only update ealiest 0.5 seconds after the last change, and only
     // if no other change was made, so dragging a widget will not generate any
     // CPU load
-    Fl::remove_timeout(update_sourceview_timer, 0);
-    Fl::add_timeout(0.5, update_sourceview_timer, 0);
+    fltk3::remove_timeout(update_sourceview_timer, 0);
+    fltk3::add_timeout(0.5, update_sourceview_timer, 0);
   }
 
   // Enable/disable the Save menu item...
@@ -2347,14 +2347,14 @@ static void sigint(SIGARG) {
 int main(int argc,char **argv) {
   int i = 1;
   
-  if (!Fl::args(argc,argv,i,arg) || i < argc-1) {
+  if (!fltk3::args(argc,argv,i,arg) || i < argc-1) {
     static const char *msg = 
       "usage: %s <switches> name.fl\n"
       " -c : write .cxx and .h and exit\n"
       " -cs : write .cxx and .h and strings and exit\n"
       " -o <name> : .cxx output filename, or extension if <name> starts with '.'\n"
       " -h <name> : .h output filename, or extension if <name> starts with '.'\n";
-    int len = strlen(msg) + strlen(argv[0]) + strlen(Fl::help);
+    int len = strlen(msg) + strlen(argv[0]) + strlen(fltk3::help);
     Fl_Plugin_Manager pm("commandline");
     int i, n = pm.plugins();
     for (i=0; i<n; i++) {
@@ -2367,7 +2367,7 @@ int main(int argc,char **argv) {
       Fl_Commandline_Plugin *pi = (Fl_Commandline_Plugin*)pm.plugin(i);
       if (pi) strcat(buf, pi->help());
     }
-    strcat(buf, Fl::help);
+    strcat(buf, fltk3::help);
 #ifdef _MSC_VER
     fl_message("%s\n", buf);
 #else
@@ -2391,7 +2391,7 @@ int main(int argc,char **argv) {
 #ifdef __APPLE__
     fl_open_callback(apple_open_cb);
 #endif // __APPLE__
-    Fl::visual((Fl_Mode)(fltk3::DOUBLE|fltk3::INDEX));
+    fltk3::visual((Fl_Mode)(fltk3::DOUBLE|fltk3::INDEX));
     Fl_File_Icon::load_system_icons();
     main_window->callback(exit_cb);
     position_window(main_window,"main_window_pos", 1, 10, 30, WINWIDTH, WINHEIGHT );
@@ -2426,9 +2426,9 @@ int main(int argc,char **argv) {
   grid_cb(horizontal_input, 0); // Makes sure that windows get snap params...
 
 #ifdef WIN32
-  Fl::run();
+  fltk3::run();
 #else
-  while (!quit_flag) Fl::wait();
+  while (!quit_flag) fltk3::wait();
 
   if (quit_flag) exit_cb(0,0);
 #endif // WIN32

@@ -54,7 +54,7 @@ namespace fltk3 {
    double-buffering, overlay, menu, and OpenGL support.
    
    The window's callback is done if the user tries to close a window
-   using the window manager and Fl::modal() is zero or equal to the
+   using the window manager and fltk3::modal() is zero or equal to the
    window. fltk3::Window has a default callback that calls fltk3::Window::hide().
    */
   class FL_EXPORT Window : public Group {
@@ -201,7 +201,7 @@ namespace fltk3 {
      remain on top of the other windows (if the X window manager supports
      the "transient for" property).  Several modal windows may be shown at
      once, in which case only the last one shown gets events.  You can see
-     which window (if any) is modal by calling Fl::modal().
+     which window (if any) is modal by calling fltk3::modal().
      */
     void set_modal()	{set_flag(MODAL);}
     /**  Returns true if this window is modal.  */

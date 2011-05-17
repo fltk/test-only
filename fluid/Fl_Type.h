@@ -721,7 +721,7 @@ class Fl_Choice_Type : public Fl_Menu_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Widget_Type::ideal_size(w, h);
-    int w1 = o->h() - Fl::box_dh(o->box());
+    int w1 = o->h() - fltk3::box_dh(o->box());
     if (w1 > 20) w1 = 20;
     w1 = (w1 - 4) / 3;
     if (w1 < 1) w1 = 1;
@@ -759,9 +759,9 @@ public:
     Fl_Input_Choice *myo = (Fl_Input_Choice *)o;
     fl_font(myo->textfont(), myo->textsize());
     h = fl_height() + myo->textsize() - 6;
-    w = o->w() - 20 - Fl::box_dw(o->box());
+    w = o->w() - 20 - fltk3::box_dw(o->box());
     int ww = (int)fl_width('m');
-    w = ((w + ww - 1) / ww) * ww + 20 + Fl::box_dw(o->box());
+    w = ((w + ww - 1) / ww) * ww + 20 + fltk3::box_dw(o->box());
     if (h < 15) h = 15;
     if (w < (15 + h)) w = 15 + h;
   }
@@ -786,7 +786,7 @@ class Fl_Menu_Bar_Type : public Fl_Menu_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     w = o->window()->w();
-    h = ((o->labelsize() + Fl::box_dh(o->box()) + 4) / 5) * 5;
+    h = ((o->labelsize() + fltk3::box_dh(o->box()) + 4) / 5) * 5;
     if (h < 15) h = 15;
   }
   virtual const char *type_name() {return "Fl_Menu_Bar";}

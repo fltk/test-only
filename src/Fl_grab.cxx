@@ -50,7 +50,7 @@ extern HWND fl_capture;
 extern void *fl_capture;
 #endif
 
-void Fl::grab(fltk3::Window* win) {
+void fltk3::grab(fltk3::Window* win) {
   if (win) {
     if (!grab_) {
 #ifdef WIN32

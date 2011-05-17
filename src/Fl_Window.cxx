@@ -45,10 +45,10 @@ char *fltk3::Window::default_xclass_ = 0L;
 void fltk3::Window::_Fl_Window() {
   type(FL_WINDOW);
   box(fltk3::FLAT_BOX);
-  if (Fl::scheme_bg_) {
+  if (fltk3::scheme_bg_) {
     labeltype(fltk3::NORMAL_LABEL);
     align(fltk3::ALIGN_CENTER | fltk3::ALIGN_INSIDE | fltk3::ALIGN_CLIP);
-    image(Fl::scheme_bg_);
+    image(fltk3::scheme_bg_);
   } else {
     labeltype(fltk3::NO_LABEL);
   }
@@ -117,8 +117,8 @@ void fltk3::Window::draw() {
   // corner. This code draws a little ribbed triangle for dragging.
   extern CGContextRef fl_gc;
   if (fl_gc && !parent() && resizable() && (!size_range_set || minh!=maxh || minw!=maxw)) {
-    int dx = Fl::box_dw(box())-Fl::box_dx(box());
-    int dy = Fl::box_dh(box())-Fl::box_dy(box());
+    int dx = fltk3::box_dw(box())-fltk3::box_dx(box());
+    int dy = fltk3::box_dh(box())-fltk3::box_dy(box());
     if (dx<=0) dx = 1;
     if (dy<=0) dy = 1;
     int x1 = w()-dx-1, x2 = x1, y1 = h()-dx-1, y2 = y1;
@@ -137,7 +137,7 @@ void fltk3::Window::draw() {
 #endif
 
 # if defined(FLTK_USE_CAIRO)
-  Fl::cairo_make_current(this); // checkout if an update is necessary
+  fltk3::cairo_make_current(this); // checkout if an update is necessary
 # endif
 }
 
@@ -160,19 +160,19 @@ void fltk3::Window::iconlabel(const char *iname) {
   label(label(), iname);
 }
 
-// the Fl::atclose pointer is provided for back compatibility.  You
+// the fltk3::atclose pointer is provided for back compatibility.  You
 // can now just change the callback for the window instead.
 
 /** Default callback for window widgets. It hides the window and then calls the default widget callback. */
-void Fl::default_atclose(fltk3::Window* window, void* v) {
+void fltk3::default_atclose(fltk3::Window* window, void* v) {
   window->hide();
-  fltk3::Widget::default_callback(window, v); // put on Fl::read_queue()
+  fltk3::Widget::default_callback(window, v); // put on fltk3::read_queue()
 }
-/** Back compatibility: default window callback handler \see Fl::set_atclose() */
-void (*Fl::atclose)(fltk3::Window*, void*) = default_atclose;
+/** Back compatibility: default window callback handler \see fltk3::set_atclose() */
+void (*fltk3::atclose)(fltk3::Window*, void*) = default_atclose;
 /** Back compatibility: Sets the default callback v for win to call on close event */
 void fltk3::Window::default_callback(fltk3::Window* win, void* v) {
-  Fl::atclose(win, v);
+  fltk3::atclose(win, v);
 }
 
 /**  Returns the last window that was made current. \see fltk3::Window::make_current() */

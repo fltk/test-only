@@ -172,7 +172,7 @@ static XftFont* fontopen(const char* name, fltk3::Fontsize size, bool core, int 
      * by 'I' (italic) 'B' (bold) 'P' (bold italic) or ' ' (regular) modifiers.
      * This gives a fairly limited font selection ability, but is retained for
      * compatibility reasons. If you really need a more complex choice, you are best
-     * calling Fl::set_fonts(*) then selecting the font by font-index rather than by
+     * calling fltk3::set_fonts(*) then selecting the font by font-index rather than by
      * name anyway. Probably.
      * If you want to load a font who's name does actually begin with I, B or P, you
      * MUST use a leading space OR simply use lowercase for the name...
@@ -287,7 +287,7 @@ static XftFont* fontopen(const char* name, fltk3::Fontsize size, bool core, int 
                         NULL);
       XftPatternDestroy(fnt_pat);
       if (!the_font) {
-        Fl::error("Unable to find fonts. Check your FontConfig configuration.\n");
+        fltk3::error("Unable to find fonts. Check your FontConfig configuration.\n");
         exit(1);
       }
       return the_font;
@@ -607,7 +607,7 @@ void Fl_Xlib_Graphics_Driver::draw(const char *str, int n, int x, int y) {
   // XftCollorAllocValue returns:
   XftColor color;
   color.pixel = fl_xpixel(Fl_Graphics_Driver::color());
-  uchar r,g,b; Fl::get_color(Fl_Graphics_Driver::color(), r,g,b);
+  uchar r,g,b; fltk3::get_color(Fl_Graphics_Driver::color(), r,g,b);
   color.color.red   = ((int)r)*0x101;
   color.color.green = ((int)g)*0x101;
   color.color.blue  = ((int)b)*0x101;
@@ -652,7 +652,7 @@ static void fl_drawUCS4(Fl_Graphics_Driver *driver, const FcChar32 *str, int n, 
   // XftCollorAllocValue returns:
   XftColor color;
   color.pixel = fl_xpixel(driver->color());
-  uchar r,g,b; Fl::get_color(driver->color(), r,g,b);
+  uchar r,g,b; fltk3::get_color(driver->color(), r,g,b);
   color.color.red   = ((int)r)*0x101;
   color.color.green = ((int)g)*0x101;
   color.color.blue  = ((int)b)*0x101;

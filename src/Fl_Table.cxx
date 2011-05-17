@@ -289,18 +289,18 @@ Fl_Table::TableContext Fl_Table::cursor2rowcol(int &R, int &C, ResizeFlag &resiz
   if ( row_header() ) {
     // Inside a row heading?
     get_bounds(CONTEXT_ROW_HEADER, X, Y, W, H);
-    if ( Fl::event_inside(X, Y, W, H) ) {
+    if ( fltk3::event_inside(X, Y, W, H) ) {
       // Scan visible rows until found
       for ( R = toprow; R <= botrow; R++ ) {
         find_cell(CONTEXT_ROW_HEADER, R, 0, X, Y, W, H);
-        if ( Fl::event_y() >= Y && Fl::event_y() < (Y+H) ) {
+        if ( fltk3::event_y() >= Y && fltk3::event_y() < (Y+H) ) {
           // Found row?
           //     If cursor over resize boundary, and resize enabled,
           //     enable the appropriate resize flag.
           //
           if ( row_resize() ) {
-            if ( Fl::event_y() <= (Y+3-0) ) { resizeflag = RESIZE_ROW_ABOVE; }
-            if ( Fl::event_y() >= (Y+H-3) ) { resizeflag = RESIZE_ROW_BELOW; }
+            if ( fltk3::event_y() <= (Y+3-0) ) { resizeflag = RESIZE_ROW_ABOVE; }
+            if ( fltk3::event_y() >= (Y+H-3) ) { resizeflag = RESIZE_ROW_BELOW; }
           }
           return(CONTEXT_ROW_HEADER);
         }
@@ -313,18 +313,18 @@ Fl_Table::TableContext Fl_Table::cursor2rowcol(int &R, int &C, ResizeFlag &resiz
   if ( col_header() ) {
     // Inside a column heading?
     get_bounds(CONTEXT_COL_HEADER, X, Y, W, H);
-    if ( Fl::event_inside(X, Y, W, H) ) {
+    if ( fltk3::event_inside(X, Y, W, H) ) {
       // Scan visible columns until found
       for ( C = leftcol; C <= rightcol; C++ ) {
         find_cell(CONTEXT_COL_HEADER, 0, C, X, Y, W, H);
-        if ( Fl::event_x() >= X && Fl::event_x() < (X+W) ) {
+        if ( fltk3::event_x() >= X && fltk3::event_x() < (X+W) ) {
           // Found column?
           //     If cursor over resize boundary, and resize enabled,
           //     enable the appropriate resize flag.
           //
           if ( col_resize() ) {
-            if ( Fl::event_x() <= (X+3-0) ) { resizeflag = RESIZE_COL_LEFT; }
-            if ( Fl::event_x() >= (X+W-3) ) { resizeflag = RESIZE_COL_RIGHT; }
+            if ( fltk3::event_x() <= (X+3-0) ) { resizeflag = RESIZE_COL_LEFT; }
+            if ( fltk3::event_x() >= (X+W-3) ) { resizeflag = RESIZE_COL_RIGHT; }
           }
           return(CONTEXT_COL_HEADER);
         }
@@ -336,14 +336,14 @@ Fl_Table::TableContext Fl_Table::cursor2rowcol(int &R, int &C, ResizeFlag &resiz
   // Mouse somewhere in table?
   //     Scan visible r/c's until we find it.
   //
-  if ( Fl::event_inside(tox, toy, tow, toh) ) {
+  if ( fltk3::event_inside(tox, toy, tow, toh) ) {
     for ( R = toprow; R <= botrow; R++ ) {
       find_cell(CONTEXT_CELL, R, C, X, Y, W, H);
-      if ( Fl::event_y() < Y ) break;		// OPT: thanks lars
-      if ( Fl::event_y() >= (Y+H) ) continue;	// OPT: " "
+      if ( fltk3::event_y() < Y ) break;		// OPT: thanks lars
+      if ( fltk3::event_y() >= (Y+H) ) continue;	// OPT: " "
       for ( C = leftcol; C <= rightcol; C++ ) {
         find_cell(CONTEXT_CELL, R, C, X, Y, W, H);
-        if ( Fl::event_inside(X, Y, W, H) ) {
+        if ( fltk3::event_inside(X, Y, W, H) ) {
           return(CONTEXT_CELL);			// found it
         }
       }
@@ -399,13 +399,13 @@ int Fl_Table::find_cell(TableContext context, int R, int C, int &X, int &Y, int 
 void Fl_Table::_start_auto_drag() {
   if (_auto_drag) return;
   _auto_drag = 1;
-  Fl::add_timeout(0.3, _auto_drag_cb2, this);
+  fltk3::add_timeout(0.3, _auto_drag_cb2, this);
 }
 
 // Disable automatic scroll-selection
 void Fl_Table::_stop_auto_drag() {
   if (!_auto_drag) return;
-  Fl::remove_timeout(_auto_drag_cb2, this);
+  fltk3::remove_timeout(_auto_drag_cb2, this);
   _auto_drag = 0;
 }
 
@@ -415,62 +415,62 @@ void Fl_Table::_auto_drag_cb2(void *d) {
 
 // Handle automatic scroll-selection if mouse selection dragged off table edge
 void Fl_Table::_auto_drag_cb() {
-  int lx = Fl::e_x;
-  int ly = Fl::e_y;
+  int lx = fltk3::e_x;
+  int ly = fltk3::e_y;
   if (_selecting == CONTEXT_COL_HEADER)
   { ly = y() + col_header_height(); }
   else if (_selecting == CONTEXT_ROW_HEADER)
   { lx = x() + row_header_width(); }
   if (lx > x() + w() - 20) {
-    Fl::e_x = x() + w() - 20;
+    fltk3::e_x = x() + w() - 20;
     if (hscrollbar->visible())
       ((Fl_Slider*)hscrollbar)->value(hscrollbar->clamp(hscrollbar->value() + 30));
     hscrollbar->do_callback();
-    _dragging_x = Fl::e_x - 30;
+    _dragging_x = fltk3::e_x - 30;
   }
   else if (lx < (x() + row_header_width())) {
-    Fl::e_x = x() + row_header_width() + 1;
+    fltk3::e_x = x() + row_header_width() + 1;
     if (hscrollbar->visible()) {
       ((Fl_Slider*)hscrollbar)->value(hscrollbar->clamp(hscrollbar->value() - 30));
     }
     hscrollbar->do_callback();
-    _dragging_x = Fl::e_x + 30;
+    _dragging_x = fltk3::e_x + 30;
   }
   if (ly > y() + h() - 20) {
-    Fl::e_y = y() + h() - 20;
+    fltk3::e_y = y() + h() - 20;
     if (vscrollbar->visible()) {
       ((Fl_Slider*)vscrollbar)->value(vscrollbar->clamp(vscrollbar->value() + 30));
     }
     vscrollbar->do_callback();
-    _dragging_y = Fl::e_y - 30;
+    _dragging_y = fltk3::e_y - 30;
   }
   else if (ly < (y() + col_header_height())) {
-    Fl::e_y = y() + col_header_height() + 1;
+    fltk3::e_y = y() + col_header_height() + 1;
     if (vscrollbar->visible()) {
       ((Fl_Slider*)vscrollbar)->value(vscrollbar->clamp(vscrollbar->value() - 30));
     }
     vscrollbar->do_callback();
-    _dragging_y = Fl::e_y + 30;
+    _dragging_y = fltk3::e_y + 30;
   }
   _auto_drag = 2;
   handle(fltk3::DRAG);
   _auto_drag = 1;
-  Fl::e_x = lx;
-  Fl::e_y = ly;
-  Fl::check();
-  Fl::flush();
-  if (Fl::event_buttons() && _auto_drag) {
-    Fl::add_timeout(0.05, _auto_drag_cb2, this);
+  fltk3::e_x = lx;
+  fltk3::e_y = ly;
+  fltk3::check();
+  fltk3::flush();
+  if (fltk3::event_buttons() && _auto_drag) {
+    fltk3::add_timeout(0.05, _auto_drag_cb2, this);
   }
 }
 
 // Recalculate the window dimensions
 void Fl_Table::recalc_dimensions() {
   // Recalc to* (Table Outer), ti* (Table Inner), wi* ( Widget Inner)
-  wix = ( x() + Fl::box_dx(box())); tox = wix; tix = tox + Fl::box_dx(table->box());
-  wiy = ( y() + Fl::box_dy(box())); toy = wiy; tiy = toy + Fl::box_dy(table->box());
-  wiw = ( w() - Fl::box_dw(box())); tow = wiw; tiw = tow - Fl::box_dw(table->box());
-  wih = ( h() - Fl::box_dh(box())); toh = wih; tih = toh - Fl::box_dh(table->box());
+  wix = ( x() + fltk3::box_dx(box())); tox = wix; tix = tox + fltk3::box_dx(table->box());
+  wiy = ( y() + fltk3::box_dy(box())); toy = wiy; tiy = toy + fltk3::box_dy(table->box());
+  wiw = ( w() - fltk3::box_dw(box())); tow = wiw; tiw = tow - fltk3::box_dw(table->box());
+  wih = ( h() - fltk3::box_dh(box())); toh = wih; tih = toh - fltk3::box_dh(table->box());
   // Trim window if headers enabled
   if ( col_header() ) {
     tiy += col_header_height(); toy += col_header_height();
@@ -678,7 +678,7 @@ int Fl_Table::move_cursor(int R, int C) {
   damage_zone(current_row, current_col, select_row, select_col, R, C);
   select_row = R;
   select_col = C;
-  if (!Fl::event_state(fltk3::SHIFT)) {
+  if (!fltk3::event_state(fltk3::SHIFT)) {
     current_row = R;
     current_col = C;
   }
@@ -701,8 +701,8 @@ int Fl_Table::handle(int event) {
   PRINTEVENT;
   int ret = fltk3::Group::handle(event);	// let FLTK group handle events first
   if (ret) {
-    if (Fl::event_inside(hscrollbar) || Fl::event_inside(vscrollbar)) return 1;
-    if (Fl::focus() != this && contains(Fl::focus())) return 1;
+    if (fltk3::event_inside(hscrollbar) || fltk3::event_inside(vscrollbar)) return 1;
+    if (fltk3::focus() != this && contains(fltk3::focus())) return 1;
   }
   // Which row/column are we over?
   int R, C;  				// row/column being worked on
@@ -710,8 +710,8 @@ int Fl_Table::handle(int event) {
   TableContext context = cursor2rowcol(R, C, resizeflag);
   switch ( event ) {
     case fltk3::PUSH:
-      if (Fl::event_button() == 1 && !Fl::event_clicks()) {
-        if (Fl::focus() != this) {
+      if (fltk3::event_button() == 1 && !fltk3::event_clicks()) {
+        if (fltk3::focus() != this) {
           take_focus();
           do_callback(CONTEXT_TABLE, -1, -1);
           ret = 1;
@@ -739,8 +739,8 @@ int Fl_Table::handle(int event) {
           
         case CONTEXT_NONE:
           // fltk3::PUSH on table corner?
-          if ( Fl::event_button() == 1 && 
-              Fl::event_x() < x() + row_header_width()) {
+          if ( fltk3::event_button() == 1 && 
+              fltk3::event_x() < x() + row_header_width()) {
             current_col = 0;
             select_col = cols() - 1;
             current_row = 0;
@@ -752,7 +752,7 @@ int Fl_Table::handle(int event) {
           
         case CONTEXT_COL_HEADER:
           // fltk3::PUSH on a column header?
-          if ( Fl::event_button() == 1) {
+          if ( fltk3::event_button() == 1) {
             // Resizing? Handle it
             if ( resizeflag ) {
               // Start resize if left click on column border.
@@ -762,7 +762,7 @@ int Fl_Table::handle(int event) {
               //
               _resizing_col = ( resizeflag & RESIZE_COL_LEFT ) ? C-1 : C; 
               _resizing_row = -1;
-              _dragging_x = Fl::event_x(); 
+              _dragging_x = fltk3::event_x(); 
               ret = 1;
             } else {
               // Not resizing? Select the column
@@ -778,7 +778,7 @@ int Fl_Table::handle(int event) {
           
         case CONTEXT_ROW_HEADER:
           // fltk3::PUSH on a row header?
-          if ( Fl::event_button() == 1 ) {
+          if ( fltk3::event_button() == 1 ) {
             // Resizing? Handle it
             if ( resizeflag ) {
               // Start resize if left mouse clicked on row border.
@@ -788,7 +788,7 @@ int Fl_Table::handle(int event) {
               //
               _resizing_row = ( resizeflag & RESIZE_ROW_ABOVE ) ? R-1 : R; 
               _resizing_col = -1;
-              _dragging_y = Fl::event_y(); 
+              _dragging_y = fltk3::event_y(); 
               ret = 1;
             } else {
               // Not resizing? Select the row
@@ -821,11 +821,11 @@ int Fl_Table::handle(int event) {
         //    Don't allow column width smaller than 1.
         //    Continue to show fltk3::CURSOR_WE at all times during drag.
         //
-        int offset = _dragging_x - Fl::event_x();
+        int offset = _dragging_x - fltk3::event_x();
         int new_w = col_width(_resizing_col) - offset;
         if ( new_w < _col_resize_min ) new_w = _col_resize_min;
         col_width(_resizing_col, new_w);
-        _dragging_x = Fl::event_x();
+        _dragging_x = fltk3::event_x();
         table_resized();
         redraw();
         change_cursor(fltk3::CURSOR_WE);
@@ -841,11 +841,11 @@ int Fl_Table::handle(int event) {
         //    Don't allow row width smaller than 1.
         //    Continue to show fltk3::CURSOR_NS at all times during drag.
         //
-        int offset = _dragging_y - Fl::event_y();
+        int offset = _dragging_y - fltk3::event_y();
         int new_h = row_height(_resizing_row) - offset;
         if ( new_h < _row_resize_min ) new_h = _row_resize_min;
         row_height(_resizing_row, new_h);
-        _dragging_y = Fl::event_y();
+        _dragging_y = fltk3::event_y();
         table_resized();
         redraw();
         change_cursor(fltk3::CURSOR_NS);
@@ -854,7 +854,7 @@ int Fl_Table::handle(int event) {
           do_callback(CONTEXT_RC_RESIZE, R, C);
         }
       } else {
-        if (Fl::event_button() == 1 && 
+        if (fltk3::event_button() == 1 && 
             _selecting == CONTEXT_CELL &&
             context == CONTEXT_CELL) {
           if (select_row != R || select_col != C) {
@@ -864,7 +864,7 @@ int Fl_Table::handle(int event) {
           select_col = C;
           ret = 1;
         }
-        else if (Fl::event_button() == 1 && 
+        else if (fltk3::event_button() == 1 && 
                  _selecting == CONTEXT_ROW_HEADER && 
                  context & (CONTEXT_ROW_HEADER|CONTEXT_COL_HEADER|CONTEXT_CELL)) {
           if (select_row != R) {
@@ -873,7 +873,7 @@ int Fl_Table::handle(int event) {
           select_row = R;
           ret = 1;
         }
-        else if (Fl::event_button() == 1 && 
+        else if (fltk3::event_button() == 1 && 
                  _selecting == CONTEXT_COL_HEADER 
                  && context & (CONTEXT_ROW_HEADER|CONTEXT_COL_HEADER|CONTEXT_CELL)) {
           if (select_col != C) {
@@ -885,10 +885,10 @@ int Fl_Table::handle(int event) {
       }
       // Enable autodrag if not resizing, and mouse has moved off table edge
       if ( _resizing_row < 0 && _resizing_col < 0 && _auto_drag == 0 && 
-          ( Fl::event_x() > x() + w() - 20 ||
-           Fl::event_x() < x() + row_header_width() || 
-           Fl::event_y() > y() + h() - 20 ||
-           Fl::event_y() < y() + col_header_height()
+          ( fltk3::event_x() > x() + w() - 20 ||
+           fltk3::event_x() < x() + row_header_width() || 
+           fltk3::event_y() > y() + h() - 20 ||
+           fltk3::event_y() < y() + col_header_height()
            ) ) {
             _start_auto_drag();
           }
@@ -914,7 +914,7 @@ int Fl_Table::handle(int event) {
         default:
           break;
       }
-      if ( Fl::event_button() == 1 ) {
+      if ( fltk3::event_button() == 1 ) {
         change_cursor(fltk3::CURSOR_DEFAULT);
         _resizing_col = -1;
         _resizing_row = -1;
@@ -952,7 +952,7 @@ int Fl_Table::handle(int event) {
       break;
       
     case fltk3::FOCUS:
-      Fl::focus(this);
+      fltk3::focus(this);
       //FALLTHROUGH
       
     case fltk3::UNFOCUS:
@@ -964,7 +964,7 @@ int Fl_Table::handle(int event) {
       ret = 0;
       int is_row = select_row;
       int is_col = select_col;
-      switch(Fl::event_key()) {
+      switch(fltk3::event_key()) {
         case fltk3::HomeKey:
           ret = move_cursor(0, -1000000);
           break;
@@ -990,14 +990,14 @@ int Fl_Table::handle(int event) {
           ret = move_cursor(1, 0);
           break;
 	case fltk3::TabKey:
-	  if ( Fl::event_state() & fltk3::SHIFT ) {
+	  if ( fltk3::event_state() & fltk3::SHIFT ) {
             ret = move_cursor(0, -1);		// shift-tab -> left
 	  } else {
 	    ret = move_cursor(0, 1);		// tab -> right
 	  }
           break;
       }
-      if (ret && Fl::focus() != this) {
+      if (ret && fltk3::focus() != this) {
         do_callback(CONTEXT_TABLE, -1, -1);
         take_focus();
       }
@@ -1198,10 +1198,10 @@ void Fl_Table::draw() {
       // Table has a boxtype? Close those few dead pixels
       if ( table->box() ) {
         if ( col_header() ) {
-          fl_rectf(tox, wiy, Fl::box_dx(table->box()), col_header_height(), color());
+          fl_rectf(tox, wiy, fltk3::box_dx(table->box()), col_header_height(), color());
         }
         if ( row_header() ) {
-          fl_rectf(wix, toy, row_header_width(), Fl::box_dx(table->box()), color());
+          fl_rectf(wix, toy, row_header_width(), fltk3::box_dx(table->box()), color());
         }
       }
       
@@ -1213,8 +1213,8 @@ void Fl_Table::draw() {
           fl_rectf(tix + table_w, 
                    wiy, 
                    // get that corner just right..
-                   (tiw - table_w + Fl::box_dw(table->box()) - 
-                    Fl::box_dx(table->box())),
+                   (tiw - table_w + fltk3::box_dw(table->box()) - 
+                    fltk3::box_dx(table->box())),
                    col_header_height(),
                    color());
         }

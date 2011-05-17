@@ -204,7 +204,7 @@ static int innards(const char* fmt, va_list ap,
   const char *b1,
   const char *b2)
 {
-  Fl::pushed(0); // stop dragging (STR #2159)
+  fltk3::pushed(0); // stop dragging (STR #2159)
 
   avoidRecursion = 1;
 
@@ -246,13 +246,13 @@ static int innards(const char* fmt, va_list ap,
   if (!message_form->label() && message_title_default)
     message_form->label(message_title_default);
 
-  // deactivate Fl::grab(), because it is incompatible with modal windows
-  fltk3::Window* g = Fl::grab();
-  if (g) Fl::grab(0);
+  // deactivate fltk3::grab(), because it is incompatible with modal windows
+  fltk3::Window* g = fltk3::grab();
+  if (g) fltk3::grab(0);
   message_form->show();
-  while (message_form->shown()) Fl::wait();
+  while (message_form->shown()) fltk3::wait();
   if (g) // regrab the previous popup menu, if there was one
-    Fl::grab(g);
+    fltk3::grab(g);
   icon->label(prev_icon_label);
   message_form->label(0); // reset window title
 

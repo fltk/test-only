@@ -52,10 +52,10 @@ Fl_Pack::Fl_Pack(int X, int Y, int W, int H,const char *l)
 }
 
 void Fl_Pack::draw() {
-  int tx = x()+Fl::box_dx(box());
-  int ty = y()+Fl::box_dy(box());
-  int tw = w()-Fl::box_dw(box());
-  int th = h()-Fl::box_dh(box());
+  int tx = x()+fltk3::box_dx(box());
+  int ty = y()+fltk3::box_dy(box());
+  int tw = w()-fltk3::box_dw(box());
+  int th = h()-fltk3::box_dh(box());
   int rw, rh;
   int current_position = horizontal() ? tx : ty;
   int maximum_position = current_position;
@@ -140,8 +140,8 @@ void Fl_Pack::draw() {
     th = maximum_position-ty;
   }
   
-  tw += Fl::box_dw(box()); if (tw <= 0) tw = 1;
-  th += Fl::box_dh(box()); if (th <= 0) th = 1;
+  tw += fltk3::box_dw(box()); if (tw <= 0) tw = 1;
+  th += fltk3::box_dh(box()); if (th <= 0) th = 1;
   if (tw != w() || th != h()) {
     fltk3::Widget::resize(x(),y(),tw,th);
     d = fltk3::DAMAGE_ALL;

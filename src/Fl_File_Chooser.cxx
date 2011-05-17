@@ -33,7 +33,7 @@
 void Fl_File_Chooser::cb_window_i(Fl_Double_Window*, void*) {
   fileName->value("");
 fileList->deselect();
-Fl::remove_timeout((Fl_Timeout_Handler)previewCB, this);
+fltk3::remove_timeout((fltk3::TimeoutHandler)previewCB, this);
 window->hide();
 }
 void Fl_File_Chooser::cb_window(Fl_Double_Window* o, void* v) {
@@ -129,7 +129,7 @@ void Fl_File_Chooser::cb_okButton(Fl_Return_Button* o, void* v) {
 void Fl_File_Chooser::cb_cancelButton_i(Fl_Button*, void*) {
   fileName->value("");
 fileList->deselect();
-Fl::remove_timeout((Fl_Timeout_Handler)previewCB, this);
+fltk3::remove_timeout((fltk3::TimeoutHandler)previewCB, this);
 window->hide();
 }
 void Fl_File_Chooser::cb_cancelButton(Fl_Button* o, void* v) {
@@ -317,7 +317,7 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
   callback_ = 0;
 data_ = 0;
 directory_[0] = 0;
-window->size_range(window->w(), window->h(), Fl::w(), Fl::h());
+window->size_range(window->w(), window->h(), fltk3::w(), fltk3::h());
 type(t);
 filter(p);
 update_favorites();
@@ -331,7 +331,7 @@ fltk3::Group::current(prev_current);
 }
 
 Fl_File_Chooser::~Fl_File_Chooser() {
-  Fl::remove_timeout((Fl_Timeout_Handler)previewCB, this);
+  fltk3::remove_timeout((fltk3::TimeoutHandler)previewCB, this);
 if(ext_group)window->remove(ext_group);
 delete window;
 delete favWindow;
@@ -403,7 +403,7 @@ const char * Fl_File_Chooser::ok_label() {
 void Fl_File_Chooser::show() {
   window->hotspot(fileList);
 window->show();
-Fl::flush();
+fltk3::flush();
 fl_cursor(fltk3::CURSOR_WAIT);
 rescan_keep_filename();
 fl_cursor(fltk3::CURSOR_DEFAULT);

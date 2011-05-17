@@ -234,10 +234,10 @@ void Fl_Chart::draw() {
 
     draw_box();
     fltk3::Boxtype b = box();
-    int xx = x()+Fl::box_dx(b); // was 9 instead of dx...
-    int yy = y()+Fl::box_dy(b);
-    int ww = w()-Fl::box_dw(b);
-    int hh = h()-Fl::box_dh(b);
+    int xx = x()+fltk3::box_dx(b); // was 9 instead of dx...
+    int yy = y()+fltk3::box_dy(b);
+    int ww = w()-fltk3::box_dw(b);
+    int hh = h()-fltk3::box_dh(b);
     fl_push_clip(xx, yy, ww, hh);
 
     ww--; hh--; // adjust for line thickness

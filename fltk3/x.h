@@ -87,7 +87,7 @@ FL_EXPORT Fl_Region fl_clip_region();
 // feed events into fltk:
 FL_EXPORT int fl_handle(const XEvent&);
 
-// you can use these in Fl::add_handler() to look at events:
+// you can use these in fltk3::add_handler() to look at events:
 extern FL_EXPORT const XEvent* fl_xevent;
 extern FL_EXPORT ulong fl_event_time;
 
@@ -96,7 +96,7 @@ typedef ulong Fl_Offscreen;
 #   define fl_create_offscreen(w,h) \
   XCreatePixmap(fl_display, \
 	      (Fl_Surface_Device::surface()->class_name() == Fl_Display_Device::class_id ? \
-	      fl_window : fl_xid(Fl::first_window()) ) , \
+	      fl_window : fl_xid(fltk3::first_window()) ) , \
 	      w, h, fl_visual->depth)
 // begin/end are macros that save the old state in local variables:
 #    define fl_begin_offscreen(pixmap) \

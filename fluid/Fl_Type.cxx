@@ -405,11 +405,11 @@ int Widget_Browser::handle(int e) {
   int X,Y,W,H; bbox(X,Y,W,H);
   switch (e) {
   case fltk3::PUSH:
-    if (!Fl::event_inside(X,Y,W,H)) break;
-    l = (Fl_Type*)find_item(Fl::event_y());
+    if (!fltk3::event_inside(X,Y,W,H)) break;
+    l = (Fl_Type*)find_item(fltk3::event_y());
     if (l) {
       X += 12*l->level + 18 - hposition();
-      if (l->is_parent() && Fl::event_x()>X && Fl::event_x()<X+13) {
+      if (l->is_parent() && fltk3::event_x()>X && fltk3::event_x()<X+13) {
 	title = pushedtitle = l;
 	redraw_line(l);
 	return 1;
@@ -418,10 +418,10 @@ int Widget_Browser::handle(int e) {
     break;
   case fltk3::DRAG:
     if (!title) break;
-    l = (Fl_Type*)find_item(Fl::event_y());
+    l = (Fl_Type*)find_item(fltk3::event_y());
     if (l) {
       X += 12*l->level + 18 - hposition();
-      if (l->is_parent() && Fl::event_x()>X && Fl::event_x()<X+13) ;
+      if (l->is_parent() && fltk3::event_x()>X && fltk3::event_x()<X+13) ;
       else l = 0;
     }
     if (l != pushedtitle) {
@@ -432,8 +432,8 @@ int Widget_Browser::handle(int e) {
     return 1;
   case fltk3::RELEASE:
     if (!title) {
-      l = (Fl_Type*)find_item(Fl::event_y());
-      if (l && l->new_selected && (Fl::event_clicks() || Fl::event_state(fltk3::CTRL)))
+      l = (Fl_Type*)find_item(fltk3::event_y());
+      if (l && l->new_selected && (fltk3::event_clicks() || fltk3::event_state(fltk3::CTRL)))
 	l->open();
       break;
     }

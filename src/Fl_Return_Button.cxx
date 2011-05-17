@@ -55,12 +55,12 @@ void Fl_Return_Button::draw() {
   if (w()/3 < W) W = w()/3;
   fl_return_arrow(x()+w()-W-4, y(), W, h());
   draw_label(x(), y(), w()-W+4, h());
-  if (Fl::focus() == this) draw_focus();
+  if (fltk3::focus() == this) draw_focus();
 }
 
 int Fl_Return_Button::handle(int event) {
   if (event == fltk3::SHORTCUT &&
-      (Fl::event_key() == fltk3::EnterKey || Fl::event_key() == fltk3::KPEnterKey)) {
+      (fltk3::event_key() == fltk3::EnterKey || fltk3::event_key() == fltk3::KPEnterKey)) {
     simulate_key_action();
     do_callback();
     return 1;

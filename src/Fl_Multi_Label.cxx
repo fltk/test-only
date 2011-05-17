@@ -66,12 +66,12 @@ static void multi_measure(const Fl_Label* o, int& w, int& h) {
 }
 
 void Fl_Multi_Label::label(fltk3::Widget* o) {
-  Fl::set_labeltype(fltk3::MULTI_LABEL, multi_labeltype, multi_measure);
+  fltk3::set_labeltype(fltk3::MULTI_LABEL, multi_labeltype, multi_measure);
   o->label(fltk3::MULTI_LABEL, (const char*)this);
 }
 
 void Fl_Multi_Label::label(Fl_Menu_Item* o) {
-  Fl::set_labeltype(fltk3::MULTI_LABEL, multi_labeltype, multi_measure);
+  fltk3::set_labeltype(fltk3::MULTI_LABEL, multi_labeltype, multi_measure);
   o->label(fltk3::MULTI_LABEL, (const char*)this);
 }
 

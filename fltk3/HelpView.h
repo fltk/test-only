@@ -357,10 +357,10 @@ public:
     Gets the current size of the scrollbars' troughs, in pixels.
 
     If this value is zero (default), this widget will use the 
-    Fl::scrollbar_size() value as the scrollbar's width.
+    fltk3::scrollbar_size() value as the scrollbar's width.
   
-    \returns Scrollbar size in pixels, or 0 if the global Fl::scrollbar_size() is being used.
-    \see Fl::scrollbar_size(int)
+    \returns Scrollbar size in pixels, or 0 if the global fltk3::scrollbar_size() is being used.
+    \see fltk3::scrollbar_size(int)
   */
   int scrollbar_size() const {
       return(scrollbar_size_);
@@ -369,7 +369,7 @@ public:
     Sets the pixel size of the scrollbars' troughs to the \p size, in pixels.
 
     Normally you should not need this method, and should use
-    Fl::scrollbar_size(int) instead to manage the size of ALL 
+    fltk3::scrollbar_size(int) instead to manage the size of ALL 
     your widgets' scrollbars. This ensures your application 
     has a consistent UI, is the default behavior, and is normally
     what you want.
@@ -378,11 +378,11 @@ public:
     scrollbar size. The need for this should be rare.
     
     Setting \p size to the special value of 0 causes the widget to
-    track the global Fl::scrollbar_size(), which is the default.
+    track the global fltk3::scrollbar_size(), which is the default.
     
     \param[in] size Sets the scrollbar size in pixels.\n
-                    If 0 (default), scrollbar size tracks the global Fl::scrollbar_size()
-    \see Fl::scrollbar_size()
+                    If 0 (default), scrollbar size tracks the global fltk3::scrollbar_size()
+    \see fltk3::scrollbar_size()
   */
   void scrollbar_size(int size) {
       scrollbar_size_ = size;

@@ -383,7 +383,7 @@ namespace fltk3 {
      an internal table of RGB colors or an RGB color value generated using 
      fltk3::rgb_color().
      
-     The default for most widgets is fltk3::BACKGROUND_COLOR. Use Fl::set_color()
+     The default for most widgets is fltk3::BACKGROUND_COLOR. Use fltk3::set_color()
      to redefine colors in the color map.
      \param[in] bg background color
      \see color(), color(fltk3::Color, fltk3::Color), selection_color(fltk3::Color)
@@ -481,7 +481,7 @@ namespace fltk3 {
     /** Gets the font to use. 
      Fonts are identified by indexes into a table. The default value
      uses a Helvetica typeface (Arial for Microsoft&reg; Windows&reg;).
-     The function Fl::set_font() can define new typefaces.
+     The function fltk3::set_font() can define new typefaces.
      \return current font used by the label
      \see fltk3::Font
      */
@@ -490,7 +490,7 @@ namespace fltk3 {
     /** Sets the font to use. 
      Fonts are identified by indexes into a table. The default value
      uses a Helvetica typeface (Arial for Microsoft&reg; Windows&reg;).
-     The function Fl::set_font() can define new typefaces.
+     The function fltk3::set_font() can define new typefaces.
      \param[in] f the new font for the label
      \see fltk3::Font
      */
@@ -790,9 +790,9 @@ namespace fltk3 {
     void clear_changed() {flags_ &= ~CHANGED;}
     
     /** Gives the widget the keyboard focus.
-     Tries to make this widget be the Fl::focus() widget, by first sending 
+     Tries to make this widget be the fltk3::focus() widget, by first sending 
      it an fltk3::FOCUS event, and if it returns non-zero, setting 
-     Fl::focus() to this widget. You should use this method to 
+     fltk3::focus() to this widget. You should use this method to 
      assign the focus to a widget.  
      \return true if the widget accepted the focus.
      */
@@ -826,10 +826,10 @@ namespace fltk3 {
     
     /** Sets the default callback for all widgets.
      Sets the default callback, which puts a pointer to the widget on the queue 
-     returned by Fl::readqueue(). You may want to call this from your own callback.
+     returned by fltk3::readqueue(). You may want to call this from your own callback.
      \param[in] cb the new callback
      \param[in] d user data associated with that callback
-     \see callback(), do_callback(), Fl::readqueue()
+     \see callback(), do_callback(), fltk3::readqueue()
      */
     static void default_callback(fltk3::Widget *cb, void *d);
     

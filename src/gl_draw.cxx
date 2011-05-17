@@ -346,7 +346,7 @@ void gl_color(fltk3::Color i) {
 #endif
 #endif
   uchar red, green, blue;
-  Fl::get_color(i, red, green, blue);
+  fltk3::get_color(i, red, green, blue);
   glColor3ub(red, green, blue);
 }
 

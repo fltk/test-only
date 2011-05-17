@@ -27,7 +27,7 @@
 
 // Emulate the Forms Timer object
 // You don't want to use this if you just want a timeout, call
-// Fl::add_timeout directly!
+// fltk3::add_timeout directly!
 
 #include <fltk3/run.h>
 #include <fltk3/Timer.h>
@@ -111,13 +111,13 @@ void Fl_Timer::step() {
       delay = 0;
     } else {
       redraw();
-      Fl::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
+      fltk3::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
     }
     set_changed();
     do_callback();
   } else {
     if (type() == FL_VALUE_TIMER) redraw();
-    Fl::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
+    fltk3::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
   }
 }
 
@@ -130,7 +130,7 @@ int Fl_Timer::handle(int event) {
  Destroys the timer and removes the timeout.
 */
 Fl_Timer::~Fl_Timer() {
-  Fl::remove_timeout(stepcb, this);
+  fltk3::remove_timeout(stepcb, this);
 }
 
 /**
@@ -163,8 +163,8 @@ void Fl_Timer::value(double d) {
   on = (d > 0.0);
   fl_gettime(&(lastsec), &(lastusec));
   if (type() != FL_HIDDEN_TIMER) redraw();
-  Fl::remove_timeout(stepcb, this);
-  if (on) Fl::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
+  fltk3::remove_timeout(stepcb, this);
+  if (on) fltk3::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
 }
 
 /** Gets or sets whether the timer is suspended.*/
@@ -173,11 +173,11 @@ void Fl_Timer::suspended(char d) {
     if (on) return;
     on = (delay > 0.0);
     fl_gettime(&(lastsec), &(lastusec));
-    if (on) Fl::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
+    if (on) fltk3::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
   } else {
     if (!on) return;
     on = 0;
-    Fl::remove_timeout(stepcb, this);
+    fltk3::remove_timeout(stepcb, this);
   }
 }
 

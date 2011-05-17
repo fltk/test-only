@@ -90,19 +90,19 @@ public:
     // set e_modifiers here from grfKeyState, set e_x and e_root_x
     // check if FLTK handles this drag and return if it can't (i.e. BMP drag without filename)
     POINT ppt;
-    Fl::e_x_root = ppt.x = pt.x;
-    Fl::e_y_root = ppt.y = pt.y;
+    fltk3::e_x_root = ppt.x = pt.x;
+    fltk3::e_y_root = ppt.y = pt.y;
     HWND hWnd = WindowFromPoint( ppt );
     fltk3::Window *target = fl_find( hWnd );
     if (target) {
-      Fl::e_x = Fl::e_x_root-target->x();
-      Fl::e_y = Fl::e_y_root-target->y();
+      fltk3::e_x = fltk3::e_x_root-target->x();
+      fltk3::e_y = fltk3::e_y_root-target->y();
     }
     fl_dnd_target_window = target;
     px = pt.x; py = pt.y;
     if (fillCurrentDragData(pDataObj)) {
       // FLTK has no mechanism yet for the different drop effects, so we allow move and copy
-      if ( target && Fl::handle( fltk3::DND_ENTER, target ) )
+      if ( target && fltk3::handle( fltk3::DND_ENTER, target ) )
         *pdwEffect = DROPEFFECT_MOVE|DROPEFFECT_COPY; //|DROPEFFECT_LINK;
       else
         *pdwEffect = DROPEFFECT_NONE;
@@ -124,15 +124,15 @@ public:
       return S_OK;
     }
     // set e_modifiers here from grfKeyState, set e_x and e_root_x
-    Fl::e_x_root = pt.x;
-    Fl::e_y_root = pt.y;
+    fltk3::e_x_root = pt.x;
+    fltk3::e_y_root = pt.y;
     if (fl_dnd_target_window) {
-      Fl::e_x = Fl::e_x_root-fl_dnd_target_window->x();
-      Fl::e_y = Fl::e_y_root-fl_dnd_target_window->y();
+      fltk3::e_x = fltk3::e_x_root-fl_dnd_target_window->x();
+      fltk3::e_y = fltk3::e_y_root-fl_dnd_target_window->y();
     }
     if (fillCurrentDragData(0)) {
       // fltk3::Group will change DND_DRAG into DND_ENTER and DND_LEAVE if needed
-      if ( Fl::handle( fltk3::DND_DRAG, fl_dnd_target_window ) )
+      if ( fltk3::handle( fltk3::DND_DRAG, fl_dnd_target_window ) )
         *pdwEffect = DROPEFFECT_MOVE|DROPEFFECT_COPY; //|DROPEFFECT_LINK;
       else
         *pdwEffect = DROPEFFECT_NONE;
@@ -146,7 +146,7 @@ public:
   HRESULT STDMETHODCALLTYPE DragLeave() {
     if ( fl_dnd_target_window && fillCurrentDragData(0))
     {
-      Fl::handle( fltk3::DND_LEAVE, fl_dnd_target_window );
+      fltk3::handle( fltk3::DND_LEAVE, fl_dnd_target_window );
       fl_dnd_target_window = 0;
       clearCurrentDragData();
     }
@@ -157,21 +157,21 @@ public:
       return S_OK;
     fltk3::Window *target = fl_dnd_target_window;
     fl_dnd_target_window = 0;
-    Fl::e_x_root = pt.x;
-    Fl::e_y_root = pt.y;
+    fltk3::e_x_root = pt.x;
+    fltk3::e_y_root = pt.y;
     if (target) {
-      Fl::e_x = Fl::e_x_root-target->x();
-      Fl::e_y = Fl::e_y_root-target->y();
+      fltk3::e_x = fltk3::e_x_root-target->x();
+      fltk3::e_y = fltk3::e_y_root-target->y();
     }
     // tell FLTK that the user released an object on this widget
-    if ( !Fl::handle( fltk3::DND_RELEASE, target ) )
+    if ( !fltk3::handle( fltk3::DND_RELEASE, target ) )
       return S_OK;
 
     fltk3::Widget *w = target;
     while (w->parent()) w = w->window();
     HWND hwnd = fl_xid( (fltk3::Window*)w );
     if (fillCurrentDragData(data)) {
-      int old_event = Fl::e_number;
+      int old_event = fltk3::e_number;
       char *a, *b;
       a = b = currDragData;
       while (*a) { // strip the CRLF pairs
@@ -179,10 +179,10 @@ public:
 	else *b++ = *a++;
       }
       *b = 0;
-      Fl::e_text = currDragData;
-      Fl::e_length = b - currDragData;
-      Fl::belowmouse()->handle(Fl::e_number = fltk3::PASTE); // e_text will be invalid after this call
-      Fl::e_number = old_event;
+      fltk3::e_text = currDragData;
+      fltk3::e_length = b - currDragData;
+      fltk3::belowmouse()->handle(fltk3::e_number = fltk3::PASTE); // e_text will be invalid after this call
+      fltk3::e_number = old_event;
       SetForegroundWindow( hwnd );
       clearCurrentDragData();
       return S_OK;
@@ -291,13 +291,13 @@ private:
          *dst=0;
 
         currDragData = (char*) malloc(nn * 5 + 1);
-//      Fl::e_length = fl_unicode2utf(bu, nn, Fl::e_text);
+//      fltk3::e_length = fl_unicode2utf(bu, nn, fltk3::e_text);
         currDragSize = fl_utf8fromwc(currDragData, (nn*5+1), bu, nn);
         currDragData[currDragSize] = 0;
         free(bu);
 
-//    Fl::belowmouse()->handle(FL_DROP);
-//      free( Fl::e_text );
+//    fltk3::belowmouse()->handle(FL_DROP);
+//      free( fltk3::e_text );
       ReleaseStgMedium( &medium );
       currDragResult = 1;
       return currDragResult;
@@ -523,7 +523,7 @@ public:
 };
 
 
-int Fl::dnd()
+int fltk3::dnd()
 {
   DWORD dropEffect;
   ReleaseCapture();
@@ -538,13 +538,13 @@ int Fl::dnd()
   fdo->Release();
   fds->Release();
 
-  fltk3::Widget *w = Fl::pushed();
+  fltk3::Widget *w = fltk3::pushed();
   if ( w )
   {
-    int old_event = Fl::e_number;
-    w->handle(Fl::e_number = fltk3::RELEASE);
-    Fl::e_number = old_event;
-    Fl::pushed( 0 );
+    int old_event = fltk3::e_number;
+    w->handle(fltk3::e_number = fltk3::RELEASE);
+    fltk3::e_number = old_event;
+    fltk3::pushed( 0 );
   }
   if ( ret==DRAGDROP_S_DROP ) return 1; // or DD_S_CANCEL
   return 0;

@@ -509,10 +509,10 @@ static int opt[10][2];
 */
 static void refreshUI() {
   int mode = wUserOrSystem->value();
-  wVisibleFocus->value(opt[Fl::OPTION_VISIBLE_FOCUS][mode]);
-  wArrowFocus->value(opt[Fl::OPTION_ARROW_FOCUS][mode]);
-  wShowTooltips->value(opt[Fl::OPTION_SHOW_TOOLTIPS][mode]);
-  wDNDText->value(opt[Fl::OPTION_DND_TEXT][mode]);
+  wVisibleFocus->value(opt[fltk3::OPTION_VISIBLE_FOCUS][mode]);
+  wArrowFocus->value(opt[fltk3::OPTION_ARROW_FOCUS][mode]);
+  wShowTooltips->value(opt[fltk3::OPTION_SHOW_TOOLTIPS][mode]);
+  wDNDText->value(opt[fltk3::OPTION_DND_TEXT][mode]);
 }
 
 /**
@@ -523,18 +523,18 @@ static void readPrefs() {
   {
     Fl_Preferences prefs(Fl_Preferences::SYSTEM, "fltk.org", "fltk");
     Fl_Preferences opt_prefs(prefs, "options");
-    opt_prefs.get("ArrowFocus", opt[Fl::OPTION_ARROW_FOCUS][1], 2);
-    opt_prefs.get("VisibleFocus", opt[Fl::OPTION_VISIBLE_FOCUS][1], 2);
-    opt_prefs.get("DNDText", opt[Fl::OPTION_DND_TEXT][1], 2);
-    opt_prefs.get("ShowTooltips", opt[Fl::OPTION_SHOW_TOOLTIPS][1], 2);
+    opt_prefs.get("ArrowFocus", opt[fltk3::OPTION_ARROW_FOCUS][1], 2);
+    opt_prefs.get("VisibleFocus", opt[fltk3::OPTION_VISIBLE_FOCUS][1], 2);
+    opt_prefs.get("DNDText", opt[fltk3::OPTION_DND_TEXT][1], 2);
+    opt_prefs.get("ShowTooltips", opt[fltk3::OPTION_SHOW_TOOLTIPS][1], 2);
   }
   {
     Fl_Preferences prefs(Fl_Preferences::USER, "fltk.org", "fltk");
     Fl_Preferences opt_prefs(prefs, "options");
-    opt_prefs.get("ArrowFocus", opt[Fl::OPTION_ARROW_FOCUS][0], 2);
-    opt_prefs.get("VisibleFocus", opt[Fl::OPTION_VISIBLE_FOCUS][0], 2);
-    opt_prefs.get("DNDText", opt[Fl::OPTION_DND_TEXT][0], 2);
-    opt_prefs.get("ShowTooltips", opt[Fl::OPTION_SHOW_TOOLTIPS][0], 2);
+    opt_prefs.get("ArrowFocus", opt[fltk3::OPTION_ARROW_FOCUS][0], 2);
+    opt_prefs.get("VisibleFocus", opt[fltk3::OPTION_VISIBLE_FOCUS][0], 2);
+    opt_prefs.get("DNDText", opt[fltk3::OPTION_DND_TEXT][0], 2);
+    opt_prefs.get("ShowTooltips", opt[fltk3::OPTION_SHOW_TOOLTIPS][0], 2);
   }
   refreshUI();
 }
@@ -547,26 +547,26 @@ static void writePrefs() {
   {
     Fl_Preferences prefs(Fl_Preferences::SYSTEM, "fltk.org", "fltk");
     Fl_Preferences opt_prefs(prefs, "options");
-    if (opt[Fl::OPTION_ARROW_FOCUS][1]==2) opt_prefs.deleteEntry("ArrowFocus");
-    else opt_prefs.set("ArrowFocus", opt[Fl::OPTION_ARROW_FOCUS][1]);
-    if (opt[Fl::OPTION_VISIBLE_FOCUS][1]==2) opt_prefs.deleteEntry("VisibleFocus");
-    else opt_prefs.set("VisibleFocus", opt[Fl::OPTION_VISIBLE_FOCUS][1]);
-    if (opt[Fl::OPTION_DND_TEXT][1]==2) opt_prefs.deleteEntry("DNDText");
-    else opt_prefs.set("DNDText", opt[Fl::OPTION_DND_TEXT][1]);
-    if (opt[Fl::OPTION_SHOW_TOOLTIPS][1]==2) opt_prefs.deleteEntry("ShowTooltips");
-    else opt_prefs.set("ShowTooltips", opt[Fl::OPTION_SHOW_TOOLTIPS][1]);
+    if (opt[fltk3::OPTION_ARROW_FOCUS][1]==2) opt_prefs.deleteEntry("ArrowFocus");
+    else opt_prefs.set("ArrowFocus", opt[fltk3::OPTION_ARROW_FOCUS][1]);
+    if (opt[fltk3::OPTION_VISIBLE_FOCUS][1]==2) opt_prefs.deleteEntry("VisibleFocus");
+    else opt_prefs.set("VisibleFocus", opt[fltk3::OPTION_VISIBLE_FOCUS][1]);
+    if (opt[fltk3::OPTION_DND_TEXT][1]==2) opt_prefs.deleteEntry("DNDText");
+    else opt_prefs.set("DNDText", opt[fltk3::OPTION_DND_TEXT][1]);
+    if (opt[fltk3::OPTION_SHOW_TOOLTIPS][1]==2) opt_prefs.deleteEntry("ShowTooltips");
+    else opt_prefs.set("ShowTooltips", opt[fltk3::OPTION_SHOW_TOOLTIPS][1]);
   }
   {
     Fl_Preferences prefs(Fl_Preferences::USER, "fltk.org", "fltk");
     Fl_Preferences opt_prefs(prefs, "options");
-    if (opt[Fl::OPTION_ARROW_FOCUS][0]==2) opt_prefs.deleteEntry("ArrowFocus");
-    else opt_prefs.set("ArrowFocus", opt[Fl::OPTION_ARROW_FOCUS][0]);
-    if (opt[Fl::OPTION_VISIBLE_FOCUS][0]==2) opt_prefs.deleteEntry("VisibleFocus");
-    else opt_prefs.set("VisibleFocus", opt[Fl::OPTION_VISIBLE_FOCUS][0]);
-    if (opt[Fl::OPTION_DND_TEXT][0]==2) opt_prefs.deleteEntry("DNDText");
-    else opt_prefs.set("DNDText", opt[Fl::OPTION_DND_TEXT][0]);
-    if (opt[Fl::OPTION_SHOW_TOOLTIPS][0]==2) opt_prefs.deleteEntry("ShowTooltips");
-    else opt_prefs.set("ShowTooltips", opt[Fl::OPTION_SHOW_TOOLTIPS][0]);
+    if (opt[fltk3::OPTION_ARROW_FOCUS][0]==2) opt_prefs.deleteEntry("ArrowFocus");
+    else opt_prefs.set("ArrowFocus", opt[fltk3::OPTION_ARROW_FOCUS][0]);
+    if (opt[fltk3::OPTION_VISIBLE_FOCUS][0]==2) opt_prefs.deleteEntry("VisibleFocus");
+    else opt_prefs.set("VisibleFocus", opt[fltk3::OPTION_VISIBLE_FOCUS][0]);
+    if (opt[fltk3::OPTION_DND_TEXT][0]==2) opt_prefs.deleteEntry("DNDText");
+    else opt_prefs.set("DNDText", opt[fltk3::OPTION_DND_TEXT][0]);
+    if (opt[fltk3::OPTION_SHOW_TOOLTIPS][0]==2) opt_prefs.deleteEntry("ShowTooltips");
+    else opt_prefs.set("ShowTooltips", opt[fltk3::OPTION_SHOW_TOOLTIPS][0]);
   }
 }
 
@@ -591,7 +591,7 @@ Fl_Choice *wVisibleFocus=(Fl_Choice *)0;
 
 static void cb_wVisibleFocus(Fl_Choice*, void*) {
   int mode = wUserOrSystem->value();
-opt[Fl::OPTION_VISIBLE_FOCUS][mode] = wVisibleFocus->value();
+opt[fltk3::OPTION_VISIBLE_FOCUS][mode] = wVisibleFocus->value();
 }
 
 Fl_Menu_Item menu_wVisibleFocus[] = {
@@ -605,7 +605,7 @@ Fl_Choice *wArrowFocus=(Fl_Choice *)0;
 
 static void cb_wArrowFocus(Fl_Choice*, void*) {
   int mode = wUserOrSystem->value();
-opt[Fl::OPTION_ARROW_FOCUS][mode] = wArrowFocus->value();
+opt[fltk3::OPTION_ARROW_FOCUS][mode] = wArrowFocus->value();
 }
 
 Fl_Menu_Item menu_wArrowFocus[] = {
@@ -619,7 +619,7 @@ Fl_Choice *wShowTooltips=(Fl_Choice *)0;
 
 static void cb_wShowTooltips(Fl_Choice*, void*) {
   int mode = wUserOrSystem->value();
-opt[Fl::OPTION_SHOW_TOOLTIPS][mode] = wShowTooltips->value();
+opt[fltk3::OPTION_SHOW_TOOLTIPS][mode] = wShowTooltips->value();
 }
 
 Fl_Menu_Item menu_wShowTooltips[] = {
@@ -633,7 +633,7 @@ Fl_Choice *wDNDText=(Fl_Choice *)0;
 
 static void cb_wDNDText(Fl_Choice*, void*) {
   int mode = wUserOrSystem->value();
-opt[Fl::OPTION_DND_TEXT][mode] = wDNDText->value();
+opt[fltk3::OPTION_DND_TEXT][mode] = wDNDText->value();
 }
 
 Fl_Menu_Item menu_wDNDText[] = {
@@ -737,7 +737,7 @@ ions to specific values (not \'default\').");
     global_settings_window->end();
   } // Fl_Double_Window* global_settings_window
   readPrefs();
-    Fl::option(Fl::OPTION_SHOW_TOOLTIPS,1); // make sure tooltips are on !
+    fltk3::option(fltk3::OPTION_SHOW_TOOLTIPS,1); // make sure tooltips are on !
   return global_settings_window;
 }
 

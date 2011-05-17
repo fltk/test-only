@@ -86,7 +86,7 @@ void Fl_Gl_Window::show() {
       }
 
       if (!g) {
-        Fl::error("Insufficient GL support");
+        fltk3::error("Insufficient GL support");
 	return;
       }
     }
@@ -532,7 +532,7 @@ void Fl_Gl_Window::draw_overlay() {}
   buffers are swapped after this function is completed.
 */
 void Fl_Gl_Window::draw() {
-    Fl::fatal("Fl_Gl_Window::draw() *must* be overriden. Please refer to the documentation.");
+    fltk3::fatal("Fl_Gl_Window::draw() *must* be overriden. Please refer to the documentation.");
 }
 
 

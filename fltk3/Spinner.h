@@ -158,10 +158,10 @@ class FL_EXPORT Fl_Spinner : public fltk3::Group {
 		  switch (event) {
 		    case FL_KEYDOWN :
 		    case fltk3::SHORTCUT :
-		      if (Fl::event_key() == fltk3::UpKey) {
+		      if (fltk3::event_key() == fltk3::UpKey) {
 			up_button_.do_callback();
 			return 1;
-		      } else if (Fl::event_key() == fltk3::DownKey) {
+		      } else if (fltk3::event_key() == fltk3::DownKey) {
 			down_button_.do_callback();
 			return 1;
 		      } else return 0;

@@ -86,9 +86,9 @@ int ColorMenu::handle(int e) {
   switch (e) {
   case fltk3::PUSH:
   case fltk3::DRAG: {
-    int X = (Fl::event_x_root() - x() - BORDER);
+    int X = (fltk3::event_x_root() - x() - BORDER);
     if (X >= 0) X = X/BOXSIZE;
-    int Y = (Fl::event_y_root() - y() - BORDER);
+    int Y = (fltk3::event_y_root() - y() - BORDER);
     if (Y >= 0) Y = Y/BOXSIZE;
     if (X >= 0 && X < 8 && Y >= 0 && Y < 32)
       c = 8*Y + X;
@@ -99,7 +99,7 @@ int ColorMenu::handle(int e) {
     done = 1;
     return 1;
   case fltk3::KEYBOARD:
-    switch (Fl::event_key()) {
+    switch (fltk3::event_key()) {
     case fltk3::UpKey: if (c > 7) c -= 8; break;
     case fltk3::DownKey: if (c < 256-8) c += 8; break;
     case fltk3::LeftKey: if (c > 0) c--; break;
@@ -120,7 +120,7 @@ int ColorMenu::handle(int e) {
     int px = x();
     int py = y();
     int scr_x, scr_y, scr_w, scr_h;
-    Fl::screen_xywh(scr_x, scr_y, scr_w, scr_h);
+    fltk3::screen_xywh(scr_x, scr_y, scr_w, scr_h);
     if (px < scr_x) px = scr_x;
     if (px+bx+BOXSIZE+BORDER >= scr_x+scr_w) px = scr_x+scr_w-bx-BOXSIZE-BORDER;
     if (py < scr_y) py = scr_y;
@@ -139,16 +139,16 @@ extern char fl_override_redirect; // hack for menus
 #endif
 fltk3::Color ColorMenu::run() {
   if (which < 0 || which > 255) {
-    position(Fl::event_x_root()-w()/2, Fl::event_y_root()-y()/2);
+    position(fltk3::event_x_root()-w()/2, fltk3::event_y_root()-y()/2);
   } else {
-    position(Fl::event_x_root()-(initial%8)*BOXSIZE-BOXSIZE/2-BORDER,
-	     Fl::event_y_root()-(initial/8)*BOXSIZE-BOXSIZE/2-BORDER);
+    position(fltk3::event_x_root()-(initial%8)*BOXSIZE-BOXSIZE/2-BORDER,
+	     fltk3::event_y_root()-(initial/8)*BOXSIZE-BOXSIZE/2-BORDER);
   }
   show();
-  Fl::grab(*this);
+  fltk3::grab(*this);
   done = 0;
-  while (!done) Fl::wait();
-  Fl::grab(0);
+  while (!done) fltk3::wait();
+  fltk3::grab(0);
   return which;
 }
 

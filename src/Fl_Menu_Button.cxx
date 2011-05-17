@@ -36,7 +36,7 @@ void Fl_Menu_Button::draw() {
   if (!box() || type()) return;
   draw_box(pressed_menu_button_ == this ? fltk3::down(box()) : box(), color());
   draw_label();
-  if (Fl::focus() == this) draw_focus();
+  if (fltk3::focus() == this) draw_focus();
   // ** if (box() == fltk3::FLAT_BOX) return; // for XForms compatibility
   int H = (labelsize()-3)&-2;
   int X = x()+w()-H*2;
@@ -60,7 +60,7 @@ const Fl_Menu_Item* Fl_Menu_Button::popup() {
   redraw();
   fltk3::WidgetTracker mb(this);
   if (!box() || type()) {
-    m = menu()->popup(Fl::event_x(), Fl::event_y(), label(), mvalue(), this);
+    m = menu()->popup(fltk3::event_x(), fltk3::event_y(), label(), mvalue(), this);
   } else {
     m = menu()->pulldown(x(), y(), w(), h(), 0, this);
   }
@@ -78,17 +78,17 @@ int Fl_Menu_Button::handle(int e) {
     return (box() && !type()) ? 1 : 0;
   case fltk3::PUSH:
     if (!box()) {
-      if (Fl::event_button() != 3) return 0;
+      if (fltk3::event_button() != 3) return 0;
     } else if (type()) {
-      if (!(type() & (1 << (Fl::event_button()-1)))) return 0;
+      if (!(type() & (1 << (fltk3::event_button()-1)))) return 0;
     }
-    if (Fl::visible_focus()) Fl::focus(this);
+    if (fltk3::visible_focus()) fltk3::focus(this);
     popup();
     return 1;
   case fltk3::KEYBOARD:
     if (!box()) return 0;
-    if (Fl::event_key() == ' ' &&
-        !(Fl::event_state() & (fltk3::SHIFT | fltk3::CTRL | fltk3::ALT | fltk3::META))) {
+    if (fltk3::event_key() == ' ' &&
+        !(fltk3::event_state() & (fltk3::SHIFT | fltk3::CTRL | fltk3::ALT | fltk3::META))) {
       popup();
       return 1;
     } else return 0;
@@ -97,7 +97,7 @@ int Fl_Menu_Button::handle(int e) {
     return test_shortcut() != 0;
   case fltk3::FOCUS: /* FALLTHROUGH */
   case fltk3::UNFOCUS:
-    if (box() && Fl::visible_focus()) {
+    if (box() && fltk3::visible_focus()) {
       redraw();
       return 1;
     }

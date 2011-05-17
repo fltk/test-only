@@ -66,7 +66,7 @@ void gl_start() {
 #if defined(USE_X11)
     context = fl_create_gl_context(fl_visual);
 #elif defined(WIN32)
-    if (!gl_choice) Fl::gl_visual(0);
+    if (!gl_choice) fltk3::gl_visual(0);
     context = fl_create_gl_context(fltk3::Window::current(), gl_choice);
 #elif defined(__APPLE_QUARTZ__)
     // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
@@ -109,7 +109,7 @@ void gl_finish() {
 #endif
 }
 
-int Fl::gl_visual(int mode, int *alist) {
+int fltk3::gl_visual(int mode, int *alist) {
   Fl_Gl_Choice *c = Fl_Gl_Choice::find(mode,alist);
   if (!c) return 0;
 #if defined(USE_X11)

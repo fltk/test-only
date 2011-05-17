@@ -39,7 +39,7 @@
 
 // We save the current line width (absolute value) here.
 // This is currently used only for X11 clipping, see src/fl_rect.cxx.
-// FIXME: this would probably better be in class Fl::
+// FIXME: this would probably better be in class fltk3::
 int fl_line_width_ = 0;
 
 #ifdef __APPLE_QUARTZ__
@@ -111,7 +111,7 @@ void Fl_Graphics_Driver::line_style(int style, int width, char* dashes) {
   LOGBRUSH penbrush = {BS_SOLID,fl_RGB(),0}; // can this be fl_brush()?
   HPEN newpen = ExtCreatePen(s1, width, &penbrush, n, n ? a : 0);
   if (!newpen) {
-    Fl::error("fl_line_style(): Could not create GDI pen object.");
+    fltk3::error("fl_line_style(): Could not create GDI pen object.");
     return;
   }
   HPEN oldpen = (HPEN)SelectObject(fl_gc, newpen);

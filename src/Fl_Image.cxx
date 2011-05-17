@@ -127,7 +127,7 @@ void Fl_Image::label(fltk3::Widget* widget) {
   instead.
 */
 void Fl_Image::label(Fl_Menu_Item* m) {
-  Fl::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
+  fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
   m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }
 
@@ -295,7 +295,7 @@ void Fl_RGB_Image::color_average(fltk3::Color c, float i) {
   uchar		r, g, b;
   unsigned	ia, ir, ig, ib;
 
-  Fl::get_color(c, r, g, b);
+  fltk3::get_color(c, r, g, b);
   if (i < 0.0f) i = 0.0f;
   else if (i > 1.0f) i = 1.0f;
 

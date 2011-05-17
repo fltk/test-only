@@ -255,8 +255,8 @@ Fl_Type* Fl_Tabs_Type::click_test(int x, int y) {
   int changed = (a!=t->value());
   // okay, run the tabs ui until they let go of mouse:
   t->handle(fltk3::PUSH);
-  Fl::pushed(t);
-  while (Fl::pushed()==t) Fl::wait();
+  fltk3::pushed(t);
+  while (fltk3::pushed()==t) fltk3::wait();
   if (changed) set_modflag(1);
   return (Fl_Type*)(t->value()->user_data());
 }

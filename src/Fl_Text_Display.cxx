@@ -121,7 +121,7 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H, const char* l)
   
   end();
   
-  scrollbar_width(Fl::scrollbar_size());
+  scrollbar_width(fltk3::scrollbar_size());
   scrollbar_align(fltk3::ALIGN_BOTTOM_RIGHT);
   
   mCursorOn = 0;
@@ -173,7 +173,7 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H, const char* l)
  */
 Fl_Text_Display::~Fl_Text_Display() {
   if (scroll_direction) {
-    Fl::remove_timeout(scroll_timer_cb, this);
+    fltk3::remove_timeout(scroll_timer_cb, this);
     scroll_direction = 0;
   }
   if (mBuffer) {
@@ -295,10 +295,10 @@ void Fl_Text_Display::resize(int X, int Y, int W, int H) {
 #endif // DEBUG
   fltk3::Widget::resize(X,Y,W,H);
   if (!buffer()) return;
-  X += Fl::box_dx(box());
-  Y += Fl::box_dy(box());
-  W -= Fl::box_dw(box());
-  H -= Fl::box_dh(box());
+  X += fltk3::box_dx(box());
+  Y += fltk3::box_dy(box());
+  W -= fltk3::box_dw(box());
+  H -= fltk3::box_dh(box());
   
   text_area.x = X+LEFT_MARGIN;
   text_area.y = Y+TOP_MARGIN;
@@ -1644,7 +1644,7 @@ int Fl_Text_Display::position_to_line( int pos, int *lineNum ) const {
     if ( empty_vlines() ) {
       if ( mLastChar < mBuffer->length() ) {
         if ( !position_to_line( mLastChar, lineNum ) ) {
-          Fl::error("Fl_Text_Display::position_to_line(): Consistency check ptvl failed");
+          fltk3::error("Fl_Text_Display::position_to_line(): Consistency check ptvl failed");
           return 0;
         }
         return ++( *lineNum ) <= mNVisibleLines - 1;
@@ -1940,19 +1940,19 @@ void Fl_Text_Display::draw_string(int style,
     fsize = styleRec->size;
     
     if (style & PRIMARY_MASK) {
-      if (Fl::focus() == (fltk3::Widget*)this) background = selection_color();
+      if (fltk3::focus() == (fltk3::Widget*)this) background = selection_color();
       else background = fltk3::color_average(color(), selection_color(), 0.4f);
     } else if (style & HIGHLIGHT_MASK) {
-      if (Fl::focus() == (fltk3::Widget*)this) background = fltk3::color_average(color(), selection_color(), 0.5f);
+      if (fltk3::focus() == (fltk3::Widget*)this) background = fltk3::color_average(color(), selection_color(), 0.5f);
       else background = fltk3::color_average(color(), selection_color(), 0.6f);
     } else background = color();
     foreground = fltk3::contrast(styleRec->color, background);
   } else if (style & PRIMARY_MASK) {
-    if (Fl::focus() == (fltk3::Widget*)this) background = selection_color();
+    if (fltk3::focus() == (fltk3::Widget*)this) background = selection_color();
     else background = fltk3::color_average(color(), selection_color(), 0.4f);
     foreground = fltk3::contrast(textcolor(), background);
   } else if (style & HIGHLIGHT_MASK) {
-    if (Fl::focus() == (fltk3::Widget*)this) background = fltk3::color_average(color(), selection_color(), 0.5f);
+    if (fltk3::focus() == (fltk3::Widget*)this) background = fltk3::color_average(color(), selection_color(), 0.5f);
     else background = fltk3::color_average(color(), selection_color(), 0.6f);
     foreground = fltk3::contrast(textcolor(), background);
   } else {
@@ -2013,13 +2013,13 @@ void Fl_Text_Display::clear_rect(int style,
     return;
   
   if (style & PRIMARY_MASK) {
-    if (Fl::focus()==(fltk3::Widget*)this) {
+    if (fltk3::focus()==(fltk3::Widget*)this) {
       fl_color(selection_color());
     } else {
       fl_color(fltk3::color_average(color(), selection_color(), 0.4f));
     }
   } else if (style & HIGHLIGHT_MASK) {
-    if (Fl::focus()==(fltk3::Widget*)this) {
+    if (fltk3::focus()==(fltk3::Widget*)this) {
       fl_color(fltk3::color_average(color(), selection_color(), 0.5f));
     } else {
       fl_color(fltk3::color_average(color(), selection_color(), 0.6f));
@@ -3454,7 +3454,7 @@ void Fl_Text_Display::draw(void) {
   // draw the text cursor
   if (damage() & (fltk3::DAMAGE_ALL | fltk3::DAMAGE_SCROLL | fltk3::DAMAGE_EXPOSE)
       && !buffer()->primary_selection()->selected() &&
-      mCursorOn && Fl::focus() == (fltk3::Widget*)this ) {
+      mCursorOn && fltk3::focus() == (fltk3::Widget*)this ) {
     fl_push_clip(text_area.x-LEFT_MARGIN,
                  text_area.y,
                  text_area.w+LEFT_MARGIN+RIGHT_MARGIN,
@@ -3537,7 +3537,7 @@ void Fl_Text_Display::scroll_timer_cb(void *user_data) {
       return;
   }
   fl_text_drag_me(pos, w);
-  Fl::repeat_timeout(.1, scroll_timer_cb, user_data);
+  fltk3::repeat_timeout(.1, scroll_timer_cb, user_data);
 }
 
 
@@ -3548,7 +3548,7 @@ void Fl_Text_Display::scroll_timer_cb(void *user_data) {
 int Fl_Text_Display::handle(int event) {
   if (!buffer()) return 0;
   // This isn't very elegant!
-  if (!Fl::event_inside(text_area.x, text_area.y, text_area.w, text_area.h) &&
+  if (!fltk3::event_inside(text_area.x, text_area.y, text_area.w, text_area.h) &&
       !dragging && event != fltk3::LEAVE && event != fltk3::ENTER &&
       event != fltk3::MOVE && event != fltk3::FOCUS && event != fltk3::UNFOCUS &&
       event != fltk3::KEYBOARD && event != fltk3::KEYUP) {
@@ -3559,7 +3559,7 @@ int Fl_Text_Display::handle(int event) {
     case fltk3::ENTER:
     case fltk3::MOVE:
       if (active_r()) {
-        if (Fl::event_inside(text_area.x, text_area.y, text_area.w,
+        if (fltk3::event_inside(text_area.x, text_area.y, text_area.w,
 	                     text_area.h)) window()->cursor(fltk3::CURSOR_INSERT);
 	else window()->cursor(fltk3::CURSOR_DEFAULT);
 	return 1;
@@ -3579,28 +3579,28 @@ int Fl_Text_Display::handle(int event) {
       
     case fltk3::PUSH: {
       if (active_r() && window()) {
-        if (Fl::event_inside(text_area.x, text_area.y, text_area.w,
+        if (fltk3::event_inside(text_area.x, text_area.y, text_area.w,
                              text_area.h)) window()->cursor(fltk3::CURSOR_INSERT);
         else window()->cursor(fltk3::CURSOR_DEFAULT);
       }
       
-      if (Fl::focus() != this) {
-        Fl::focus(this);
+      if (fltk3::focus() != this) {
+        fltk3::focus(this);
         handle(fltk3::FOCUS);
       }
       if (fltk3::Group::handle(event)) return 1;
-      if (Fl::event_state()&fltk3::SHIFT) return handle(fltk3::DRAG);
+      if (fltk3::event_state()&fltk3::SHIFT) return handle(fltk3::DRAG);
       dragging = 1;
-      int pos = xy_to_position(Fl::event_x(), Fl::event_y(), CURSOR_POS);
+      int pos = xy_to_position(fltk3::event_x(), fltk3::event_y(), CURSOR_POS);
       dragPos = pos;
       if (buffer()->primary_selection()->includes(pos)) {
         dragType = DRAG_START_DND;
         return 1;
       }
-      dragType = Fl::event_clicks();
+      dragType = fltk3::event_clicks();
       if (dragType == DRAG_CHAR) {
         buffer()->unselect();
-	Fl::copy("", 0, 0);
+	fltk3::copy("", 0, 0);
       }
       else if (dragType == DRAG_WORD) {
         buffer()->select(word_start(pos), word_end(pos));
@@ -3619,47 +3619,47 @@ int Fl_Text_Display::handle(int event) {
       if (dragType==DRAG_NONE)
         return 1;
       if (dragType==DRAG_START_DND) {
-        if (!Fl::event_is_click() && Fl::dnd_text_ops()) {
+        if (!fltk3::event_is_click() && fltk3::dnd_text_ops()) {
           const char* copy = buffer()->selection_text();
-          Fl::dnd();
+          fltk3::dnd();
           free((void*)copy);
         }
         return 1;
       }
-      int X = Fl::event_x(), Y = Fl::event_y(), pos = insert_position();
+      int X = fltk3::event_x(), Y = fltk3::event_y(), pos = insert_position();
       // if we leave the text_area, we start a timer event
       // that will take care of scrolling and selecting
       if (Y < text_area.y) {
         scroll_x = X;
         scroll_amount = (Y - text_area.y) / 5 - 1;
         if (!scroll_direction) {
-          Fl::add_timeout(.01, scroll_timer_cb, this);
+          fltk3::add_timeout(.01, scroll_timer_cb, this);
         }
         scroll_direction = 3;
       } else if (Y >= text_area.y+text_area.h) {
         scroll_x = X;
         scroll_amount = (Y - text_area.y - text_area.h) / 5 + 1;
         if (!scroll_direction) {
-          Fl::add_timeout(.01, scroll_timer_cb, this);
+          fltk3::add_timeout(.01, scroll_timer_cb, this);
         }
         scroll_direction = 4;
       } else if (X < text_area.x) {
         scroll_y = Y;
         scroll_amount = (X - text_area.x) / 2 - 1;
         if (!scroll_direction) {
-          Fl::add_timeout(.01, scroll_timer_cb, this);
+          fltk3::add_timeout(.01, scroll_timer_cb, this);
         }
         scroll_direction = 2;
       } else if (X >= text_area.x+text_area.w) {
         scroll_y = Y;
         scroll_amount = (X - text_area.x - text_area.w) / 2 + 1;
         if (!scroll_direction) {
-          Fl::add_timeout(.01, scroll_timer_cb, this);
+          fltk3::add_timeout(.01, scroll_timer_cb, this);
         }
         scroll_direction = 1;
       } else {
         if (scroll_direction) {
-          Fl::remove_timeout(scroll_timer_cb, this);
+          fltk3::remove_timeout(scroll_timer_cb, this);
           scroll_direction = 0;
         }
         pos = xy_to_position(X, Y, CURSOR_POS);
@@ -3670,19 +3670,19 @@ int Fl_Text_Display::handle(int event) {
     }
       
     case fltk3::RELEASE: {
-      if (Fl::event_is_click() && (! Fl::event_clicks()) && 
-	  buffer()->primary_selection()->includes(dragPos) && !(Fl::event_state()&fltk3::SHIFT) ) {
+      if (fltk3::event_is_click() && (! fltk3::event_clicks()) && 
+	  buffer()->primary_selection()->includes(dragPos) && !(fltk3::event_state()&fltk3::SHIFT) ) {
 	buffer()->unselect(); // clicking in the selection: unselect and move cursor
 	insert_position(dragPos);
 	return 1;
-      } else if (Fl::event_clicks() == DRAG_LINE && Fl::event_button() == fltk3::LEFT_MOUSE) {
+      } else if (fltk3::event_clicks() == DRAG_LINE && fltk3::event_button() == fltk3::LEFT_MOUSE) {
         buffer()->select(buffer()->line_start(dragPos), buffer()->next_char(buffer()->line_end(dragPos)));
 	dragPos = line_start(dragPos);
 	dragType = DRAG_CHAR;
       } else {
 	dragging = 0;
 	if (scroll_direction) {
-	  Fl::remove_timeout(scroll_timer_cb, this);
+	  fltk3::remove_timeout(scroll_timer_cb, this);
 	  scroll_direction = 0;
 	}
 	
@@ -3695,13 +3695,13 @@ int Fl_Text_Display::handle(int event) {
       }
       
       const char* copy = buffer()->selection_text();
-      if (*copy) Fl::copy(copy, strlen(copy), 0);
+      if (*copy) fltk3::copy(copy, strlen(copy), 0);
       free((void*)copy);
       return 1;
     }
       
     case fltk3::MOUSEWHEEL:
-      if (Fl::event_dy()) return mVScrollBar->handle(event);
+      if (fltk3::event_dy()) return mVScrollBar->handle(event);
       else return mHScrollBar->handle(event);
       
     case fltk3::UNFOCUS:
@@ -3726,19 +3726,19 @@ int Fl_Text_Display::handle(int event) {
       
     case fltk3::KEYBOARD:
       // Copy?
-      if ((Fl::event_state()&(fltk3::CTRL|fltk3::COMMAND)) && Fl::event_key()=='c') {
+      if ((fltk3::event_state()&(fltk3::CTRL|fltk3::COMMAND)) && fltk3::event_key()=='c') {
         if (!buffer()->selected()) return 1;
         const char *copy = buffer()->selection_text();
-        if (*copy) Fl::copy(copy, strlen(copy), 1);
+        if (*copy) fltk3::copy(copy, strlen(copy), 1);
         free((void*)copy);
         return 1;
       }
       
       // Select all ?
-      if ((Fl::event_state()&(fltk3::CTRL|fltk3::COMMAND)) && Fl::event_key()=='a') {
+      if ((fltk3::event_state()&(fltk3::CTRL|fltk3::COMMAND)) && fltk3::event_key()=='a') {
         buffer()->select(0,buffer()->length());
         const char *copy = buffer()->selection_text();
-        if (*copy) Fl::copy(copy, strlen(copy), 0);
+        if (*copy) fltk3::copy(copy, strlen(copy), 0);
         free((void*)copy);
         return 1;
       }
@@ -3749,10 +3749,10 @@ int Fl_Text_Display::handle(int event) {
       break;
       
     case fltk3::SHORTCUT:
-      if (!(shortcut() ? Fl::test_shortcut(shortcut()) : test_shortcut()))
+      if (!(shortcut() ? fltk3::test_shortcut(shortcut()) : test_shortcut()))
         return 0;
-      if (Fl::visible_focus() && handle(fltk3::FOCUS)) {
-        Fl::focus(this);
+      if (fltk3::visible_focus() && handle(fltk3::FOCUS)) {
+        fltk3::focus(this);
         return 1;
       }
       break;

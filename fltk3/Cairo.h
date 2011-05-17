@@ -66,7 +66,7 @@ public:
 
     // access attributes
     cairo_t* cc() const {return cc_;}		 ///< Gets the current cairo context
-    bool autolink() const {return autolink_;}	 ///< Gets the autolink option. See Fl::cairo_autolink_context(bool)
+    bool autolink() const {return autolink_;}	 ///< Gets the autolink option. See fltk3::cairo_autolink_context(bool)
     /** Sets the current cairo context, \p own indicates cc deletion is handle externally by user */
     void cc(cairo_t* c, bool own=true)  {	 
 	if (cc_ && own_cc_) cairo_destroy(cc_); 

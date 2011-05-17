@@ -132,7 +132,7 @@ void Fl_File_Input::update_buttons() {
     end ++;
 
     buttons_[i] = (short)fl_width(start, end - start);
-    if (!i) buttons_[i] += Fl::box_dx(box()) + 6;
+    if (!i) buttons_[i] += fltk3::box_dx(box()) + 6;
   }
 
 //  printf("    found %d components/buttons...\n", i);
@@ -175,12 +175,12 @@ void Fl_File_Input::draw() {
   if (damage() & (fltk3::DAMAGE_BAR | fltk3::DAMAGE_ALL)) draw_buttons();
   // this flag keeps Fl_Input_::drawtext from drawing a bogus box!
   char must_trick_fl_input_ = 
-    Fl::focus()!=this && !size() && !(damage()&fltk3::DAMAGE_ALL);
+    fltk3::focus()!=this && !size() && !(damage()&fltk3::DAMAGE_ALL);
   if ((damage() & fltk3::DAMAGE_ALL) || must_trick_fl_input_) 
     draw_box(b,x(),y()+DIR_HEIGHT,w(),h()-DIR_HEIGHT,color());
   if (!must_trick_fl_input_) 
-    Fl_Input_::drawtext(x()+Fl::box_dx(b)+3, y()+Fl::box_dy(b)+DIR_HEIGHT,
-		        w()-Fl::box_dw(b)-6, h()-Fl::box_dh(b)-DIR_HEIGHT);
+    Fl_Input_::drawtext(x()+fltk3::box_dx(b)+3, y()+fltk3::box_dy(b)+DIR_HEIGHT,
+		        w()-fltk3::box_dw(b)-6, h()-fltk3::box_dh(b)-DIR_HEIGHT);
 }
 
 
@@ -200,7 +200,7 @@ Fl_File_Input::handle(int event) 		// I - Event
     case fltk3::MOVE :
     case fltk3::ENTER :
       if (active_r()) {
-	if (Fl::event_y() < (y() + DIR_HEIGHT)) 
+	if (fltk3::event_y() < (y() + DIR_HEIGHT)) 
           window()->cursor(fltk3::CURSOR_DEFAULT);
 	else 
           window()->cursor(fltk3::CURSOR_INSERT);
@@ -209,7 +209,7 @@ Fl_File_Input::handle(int event) 		// I - Event
       return 1;
 
     case fltk3::PUSH :
-      inButtonBar = (Fl::event_y() < (y() + DIR_HEIGHT));
+      inButtonBar = (fltk3::event_y() < (y() + DIR_HEIGHT));
     case fltk3::RELEASE :
     case fltk3::DRAG :
       if (inButtonBar) 
@@ -251,7 +251,7 @@ Fl_File_Input::handle_button(int event)		// I - Event
   {
     X += buttons_[i];
 
-    if (X > xscroll() && Fl::event_x() < (x() + X - xscroll())) break;
+    if (X > xscroll() && fltk3::event_x() < (x() + X - xscroll())) break;
   }
 
 //  printf("handle_button(event = %d), button = %d\n", event, i);

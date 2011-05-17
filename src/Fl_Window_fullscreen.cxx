@@ -68,11 +68,11 @@ void fltk3::Window::fullscreen() {
 #endif
 #if defined(__APPLE__) || defined(WIN32) || defined(USE_X11)
   int sx, sy, sw, sh;
-  Fl::screen_xywh(sx, sy, sw, sh, x(), y(), w(), h());
+  fltk3::screen_xywh(sx, sy, sw, sh, x(), y(), w(), h());
   // if we are on the main screen, we will leave the system menu bar unobstructed
-  if (Fl::x()>=sx && Fl::y()>=sy && Fl::x()+Fl::w()<=sx+sw && Fl::y()+Fl::h()<=sy+sh) {
-    sx = Fl::x(); sy = Fl::y(); 
-    sw = Fl::w(); sh = Fl::h();
+  if (fltk3::x()>=sx && fltk3::y()>=sy && fltk3::x()+fltk3::w()<=sx+sw && fltk3::y()+fltk3::h()<=sy+sh) {
+    sx = fltk3::x(); sy = fltk3::y(); 
+    sw = fltk3::w(); sh = fltk3::h();
   }
   if (x()==sx) x(sx+1); // make sure that we actually execute the resize
 #if defined(USE_X11)
@@ -81,7 +81,7 @@ void fltk3::Window::fullscreen() {
   resize(sx, sy, sw, sh);
 #else
   if (!x()) x(1); // make sure that we actually execute the resize
-  resize(0,0,Fl::w(),Fl::h());
+  resize(0,0,fltk3::w(),fltk3::h());
 #endif
 }
 

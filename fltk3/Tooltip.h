@@ -55,9 +55,9 @@ public:
   */
   static void hoverdelay(float f) { hoverdelay_ = f; }
   /**    Returns non-zero if tooltips are enabled.  */
-  static int enabled() { return Fl::option(Fl::OPTION_SHOW_TOOLTIPS); }
+  static int enabled() { return fltk3::option(fltk3::OPTION_SHOW_TOOLTIPS); }
   /**    Enables tooltips on all widgets (or disables if <i>b</i> is false).  */
-  static void enable(int b = 1) { Fl::option(Fl::OPTION_SHOW_TOOLTIPS, (b!=0));}
+  static void enable(int b = 1) { fltk3::option(fltk3::OPTION_SHOW_TOOLTIPS, (b!=0));}
   /**    Same as enable(0), disables tooltips on all widgets.  */
   static void disable() { enable(0); }
   static void (*enter)(fltk3::Widget* w);

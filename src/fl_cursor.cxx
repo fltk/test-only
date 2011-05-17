@@ -44,7 +44,7 @@
   The cursors are defined in the <fltk3/enumerations.h> header file. 
   */
 void fl_cursor(fltk3::Cursor c, fltk3::Color fg, fltk3::Color bg) {
-  if (Fl::first_window()) Fl::first_window()->cursor(c,fg,bg);
+  if (fltk3::first_window()) fltk3::first_window()->cursor(c,fg,bg);
 }
 /** 
     Sets the default window cursor as well as its color.
@@ -315,10 +315,10 @@ void fltk3::Window::cursor(fltk3::Cursor c, fltk3::Color fg, fltk3::Color bg) {
     }
     XColor fgc;
     uchar r,g,b;
-    Fl::get_color(fg,r,g,b);
+    fltk3::get_color(fg,r,g,b);
     fgc.red = r<<8; fgc.green = g<<8; fgc.blue = b<<8;
     XColor bgc;
-    Fl::get_color(bg,r,g,b);
+    fltk3::get_color(bg,r,g,b);
     bgc.red = r<<8; bgc.green = g<<8; bgc.blue = b<<8;
     XRecolorCursor(fl_display, xc, &fgc, &bgc);
   }

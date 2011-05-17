@@ -61,7 +61,7 @@ static int draw_it_active = 1;
   Determines if the current draw box is active or inactive. 
   If inactive, the box color is changed by the inactive color.
 */
-int Fl::draw_box_active() { return draw_it_active; }
+int fltk3::draw_box_active() { return draw_it_active; }
 
 namespace fltk3 {
   uchar *gray_ramp() {return (draw_it_active?active_ramp:inactive_ramp)-'A';}
@@ -251,7 +251,7 @@ void fl_border_frame(int x, int y, int w, int h, fltk3::Color c) {
 ////////////////////////////////////////////////////////////////
 
 static struct {
-  Fl_Box_Draw_F *f;
+  fltk3::BoxDrawF *f;
   uchar dx, dy, dw, dh;
   int set;
 } fl_box_table[256] = {
@@ -318,7 +318,7 @@ static struct {
   Returns the X offset for the given boxtype.
   \see box_dy()
 */
-int Fl::box_dx(fltk3::Boxtype t) {return fl_box_table[t].dx;}
+int fltk3::box_dx(fltk3::Boxtype t) {return fl_box_table[t].dx;}
 
 /**
     Returns the Y offset for the given boxtype.
@@ -334,35 +334,35 @@ int Fl::box_dx(fltk3::Boxtype t) {return fl_box_table[t].dx;}
 
     An example to compute the area inside a widget's box():
     \code
-         int X = yourwidget->x() + Fl::box_dx(yourwidget->box());
-         int Y = yourwidget->y() + Fl::box_dy(yourwidget->box());
-         int W = yourwidget->w() - Fl::box_dw(yourwidget->box());
-         int H = yourwidget->h() - Fl::box_dh(yourwidget->box());
+         int X = yourwidget->x() + fltk3::box_dx(yourwidget->box());
+         int Y = yourwidget->y() + fltk3::box_dy(yourwidget->box());
+         int W = yourwidget->w() - fltk3::box_dw(yourwidget->box());
+         int H = yourwidget->h() - fltk3::box_dh(yourwidget->box());
     \endcode
     These functions are mainly useful in the draw() code 
     for deriving custom widgets, where one wants to avoid drawing 
     over the widget's own border box().
 */
-int Fl::box_dy(fltk3::Boxtype t) {return fl_box_table[t].dy;}
+int fltk3::box_dy(fltk3::Boxtype t) {return fl_box_table[t].dy;}
 
 /**
   Returns the width offset for the given boxtype.
   \see box_dy().
 */
-int Fl::box_dw(fltk3::Boxtype t) {return fl_box_table[t].dw;}
+int fltk3::box_dw(fltk3::Boxtype t) {return fl_box_table[t].dw;}
 
 /**
   Returns the height offset for the given boxtype.
   \see box_dy().
 */
-int Fl::box_dh(fltk3::Boxtype t) {return fl_box_table[t].dh;}
+int fltk3::box_dh(fltk3::Boxtype t) {return fl_box_table[t].dh;}
 
 /**
   Sets the drawing function for a given box type.
   \param[in] t box type
   \param[in] f box drawing function
 */
-void fl_internal_boxtype(fltk3::Boxtype t, Fl_Box_Draw_F* f) {
+void fl_internal_boxtype(fltk3::Boxtype t, fltk3::BoxDrawF* f) {
   if (!fl_box_table[t].set) {
     fl_box_table[t].f   = f;
     fl_box_table[t].set = 1;
@@ -370,11 +370,11 @@ void fl_internal_boxtype(fltk3::Boxtype t, Fl_Box_Draw_F* f) {
 }
 
 /** Gets the current box drawing function for the specified box type. */
-Fl_Box_Draw_F *Fl::get_boxtype(fltk3::Boxtype t) {
+fltk3::BoxDrawF *fltk3::get_boxtype(fltk3::Boxtype t) {
   return fl_box_table[t].f;
 }
 /** Sets the function to call to draw a specific boxtype. */
-void Fl::set_boxtype(fltk3::Boxtype t, Fl_Box_Draw_F* f,
+void fltk3::set_boxtype(fltk3::Boxtype t, fltk3::BoxDrawF* f,
 		      uchar a, uchar b, uchar c, uchar d) {
   fl_box_table[t].f   = f;
   fl_box_table[t].set = 1;
@@ -384,7 +384,7 @@ void Fl::set_boxtype(fltk3::Boxtype t, Fl_Box_Draw_F* f,
   fl_box_table[t].dh  = d;
 }
 /** Copies the from boxtype. */
-void Fl::set_boxtype(fltk3::Boxtype to, fltk3::Boxtype from) {
+void fltk3::set_boxtype(fltk3::Boxtype to, fltk3::Boxtype from) {
   fl_box_table[to] = fl_box_table[from];
 }
 

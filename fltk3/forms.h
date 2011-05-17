@@ -170,17 +170,17 @@ inline void fl_finish() {}
 
 typedef void (*FL_IO_CALLBACK) (int, void*);
 inline void fl_add_io_callback(int fd, short w, FL_IO_CALLBACK cb, void* v) {
-  Fl::add_fd(fd,w,cb,v);}
+  fltk3::add_fd(fd,w,cb,v);}
 inline void fl_remove_io_callback(int fd, short, FL_IO_CALLBACK) {
-  Fl::remove_fd(fd);} // removes all the callbacks!
+  fltk3::remove_fd(fd);} // removes all the callbacks!
 
 // type of callback is different and no "id" number is returned:
 inline void fl_add_timeout(long msec, void (*cb)(void*), void* v) {
-  Fl::add_timeout(msec*.001, cb, v);}
+  fltk3::add_timeout(msec*.001, cb, v);}
 inline void fl_remove_timeout(int) {}
 
 // type of callback is different!
-inline void fl_set_idle_callback(void (*cb)()) {Fl::set_idle(cb);}
+inline void fl_set_idle_callback(void (*cb)()) {fltk3::set_idle(cb, 0L);}
 
 FL_EXPORT fltk3::Widget* fl_do_forms(void);
 FL_EXPORT fltk3::Widget* fl_check_forms();
@@ -195,8 +195,8 @@ inline void fl_unfreeze_form(fltk3::Window*) {}
 inline void fl_freeze_all_forms() {}
 inline void fl_unfreeze_all_forms() {}
 
-inline void fl_set_focus_object(fltk3::Window*, fltk3::Widget* o) {Fl::focus(o);}
-inline void fl_reset_focus_object(fltk3::Widget* o) {Fl::focus(o);}
+inline void fl_set_focus_object(fltk3::Window*, fltk3::Widget* o) {fltk3::focus(o);}
+inline void fl_reset_focus_object(fltk3::Widget* o) {fltk3::focus(o);}
 #define fl_set_object_focus fl_set_focus_object
 
 // void fl_set_form_atclose(fltk3::Window*w,int (*cb)(fltk3::Window*,void*),void* v)
@@ -338,7 +338,7 @@ FL_EXPORT void fl_set_graphics_mode(int,int);
 
 inline int fl_form_is_visible(fltk3::Window* f) {return f->visible();}
 
-inline int fl_mouse_button() {return Fl::event_button();}
+inline int fl_mouse_button() {return fltk3::event_button();}
 #define fl_mousebutton fl_mouse_button
 
 #define fl_free       free
@@ -371,9 +371,9 @@ inline void fl_drw_text_beside(fltk3::Align align, int x, int y, int w, int h,
   fl_draw(s,x,y,w,h,align);
 }
 
-inline void fl_set_font_name(fltk3::Font n,const char* s) {Fl::set_font(n,s);}
+inline void fl_set_font_name(fltk3::Font n,const char* s) {fltk3::set_font(n,s);}
 
-inline void fl_mapcolor(fltk3::Color c, uchar r, uchar g, uchar b) {Fl::set_color(c,r,g,b);}
+inline void fl_mapcolor(fltk3::Color c, uchar r, uchar g, uchar b) {fltk3::set_color(c,r,g,b);}
 
 #define fl_set_clipping(x,y,w,h) fl_push_clip(x,y,w,h)
 #define fl_unset_clipping() fl_pop_clip()
@@ -485,7 +485,7 @@ inline int fl_isdisplayed_browser_line(fltk3::Widget* o, int n) {
 FL_EXPORT Fl_Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
 inline int fl_get_button(fltk3::Widget* b) {return ((Fl_Button*)b)->value();}
 inline void fl_set_button(fltk3::Widget* b, int v) {((Fl_Button*)b)->value(v);}
-inline int fl_get_button_numb(fltk3::Widget*) {return Fl::event_button();}
+inline int fl_get_button_numb(fltk3::Widget*) {return fltk3::event_button();}
 inline void fl_set_button_shortcut(fltk3::Widget* b, const char* s,int=0) {
     ((Fl_Button*)b)->shortcut(s);}
 //#define fl_set_object_shortcut(b,s) fl_set_button_shortcut(b,s)
@@ -835,8 +835,8 @@ void fl_gettime(long* sec, long* usec);
 
 // stuff from DDForms:
 
-inline int fl_double_click() {return Fl::event_clicks();}
-inline void fl_draw() {Fl::flush();}
+inline int fl_double_click() {return fltk3::event_clicks();}
+inline void fl_draw() {fltk3::flush();}
 
 #endif	/* define __FORMS_H__ */
 

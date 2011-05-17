@@ -53,8 +53,8 @@ inline fltk3::Color shade_color(uchar gc, fltk3::Color bc) {
 #ifdef USE_OLD_PLASTIC_COLOR
   return fltk3::color_average((fltk3::Color)gc, bc, 0.75f);
 #else
-  unsigned	grgb = Fl::get_color((fltk3::Color)gc),
-		brgb = Fl::get_color(bc);
+  unsigned	grgb = fltk3::get_color((fltk3::Color)gc),
+		brgb = fltk3::get_color(bc);
   int		red, green, blue, gray;
 
 
@@ -74,7 +74,7 @@ inline fltk3::Color shade_color(uchar gc, fltk3::Color bc) {
   if (blue > 255)
     blue = 255;
 
-  if (Fl::draw_box_active())
+  if (fltk3::draw_box_active())
     return fltk3::rgb_color(red, green, blue);
   else
     return fltk3::color_average(fltk3::GRAY, fltk3::rgb_color(red, green, blue), 0.75f);

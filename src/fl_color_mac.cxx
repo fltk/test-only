@@ -81,7 +81,7 @@ void Fl_Quartz_Graphics_Driver::color(uchar r, uchar g, uchar b) {
   CGContextSetRGBStrokeColor(fl_gc, fr, fg, fb, 1.0f);
 }
 
-void Fl::set_color(fltk3::Color i, unsigned c) {
+void fltk3::set_color(fltk3::Color i, unsigned c) {
   if (fl_cmap[i] != c) {
     fl_cmap[i] = c;
   }

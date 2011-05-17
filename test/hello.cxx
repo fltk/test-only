@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
   box->labeltype(SHADOW_LABEL);
   window->end();
   window->show(argc, argv);
-  return Fl::run();
+  return run();
 }
 
 //

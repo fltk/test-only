@@ -131,10 +131,10 @@ void Fl_Paged_Device::print_window_part(fltk3::Window *win, int x, int y, int w,
 {
   Fl_Surface_Device *current = Fl_Surface_Device::surface();
   Fl_Display_Device::display_device()->set_current();
-  fltk3::Window *save_front = Fl::first_window();
+  fltk3::Window *save_front = fltk3::first_window();
   win->show();
   fl_gc = NULL;
-  Fl::check();
+  fltk3::check();
   win->make_current();
   uchar *image_data;
   image_data = fl_read_image(NULL, x, y, w, h);

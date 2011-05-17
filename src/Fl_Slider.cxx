@@ -167,7 +167,7 @@ void Fl_Slider::draw(int X, int Y, int W, int H) {
     if (wsl>0 && hsl>0) draw_box(box1, xsl, ysl, wsl, hsl, selection_color());
 
     if (type()!=FL_HOR_FILL_SLIDER && type() != FL_VERT_FILL_SLIDER &&
-        Fl::scheme_ && !strcmp(Fl::scheme_, "gtk+")) {
+        fltk3::scheme_ && !strcmp(fltk3::scheme_, "gtk+")) {
       if (W>H && wsl>(hsl+8)) {
         // Draw horizontal grippers
 	int yy, hh;
@@ -207,7 +207,7 @@ void Fl_Slider::draw(int X, int Y, int W, int H) {
   }
 
   draw_label(xsl, ysl, wsl, hsl);
-  if (Fl::focus() == this) {
+  if (fltk3::focus() == this) {
     if (type() == FL_HOR_FILL_SLIDER || type() == FL_VERT_FILL_SLIDER) draw_focus();
     else draw_focus(box1, xsl, ysl, wsl, hsl);
   }
@@ -215,10 +215,10 @@ void Fl_Slider::draw(int X, int Y, int W, int H) {
 
 void Fl_Slider::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
-  draw(x()+Fl::box_dx(box()),
-       y()+Fl::box_dy(box()),
-       w()-Fl::box_dw(box()),
-       h()-Fl::box_dh(box()));
+  draw(x()+fltk3::box_dx(box()),
+       y()+fltk3::box_dy(box()),
+       w()-fltk3::box_dw(box()),
+       h()-fltk3::box_dh(box()));
 }
 
 int Fl_Slider::handle(int event, int X, int Y, int W, int H) {
@@ -226,7 +226,7 @@ int Fl_Slider::handle(int event, int X, int Y, int W, int H) {
   switch (event) {
   case fltk3::PUSH: {
     fltk3::WidgetTracker wp(this);
-    if (!Fl::event_inside(X, Y, W, H)) return 0;
+    if (!fltk3::event_inside(X, Y, W, H)) return 0;
     handle_push();
     if (wp.deleted()) return 1; }
     // fall through ...
@@ -242,7 +242,7 @@ int Fl_Slider::handle(int event, int X, int Y, int W, int H) {
     }
 
     int ww = (horizontal() ? W : H);
-    int mx = (horizontal() ? Fl::event_x()-X : Fl::event_y()-Y);
+    int mx = (horizontal() ? fltk3::event_x()-X : fltk3::event_y()-Y);
     int S;
     static int offcenter;
 
@@ -299,7 +299,7 @@ int Fl_Slider::handle(int event, int X, int Y, int W, int H) {
     return 1;
   case fltk3::KEYBOARD:
     { fltk3::WidgetTracker wp(this);
-      switch (Fl::event_key()) {
+      switch (fltk3::event_key()) {
 	case fltk3::UpKey:
 	  if (horizontal()) return 0;
 	  handle_push();
@@ -339,7 +339,7 @@ int Fl_Slider::handle(int event, int X, int Y, int W, int H) {
     // break not required because of switch...
   case fltk3::FOCUS :
   case fltk3::UNFOCUS :
-    if (Fl::visible_focus()) {
+    if (fltk3::visible_focus()) {
       redraw();
       return 1;
     } else return 0;
@@ -352,16 +352,16 @@ int Fl_Slider::handle(int event, int X, int Y, int W, int H) {
 }
 
 int Fl_Slider::handle(int event) {
-  if (event == fltk3::PUSH && Fl::visible_focus()) {
-    Fl::focus(this);
+  if (event == fltk3::PUSH && fltk3::visible_focus()) {
+    fltk3::focus(this);
     redraw();
   }
 
   return handle(event,
-		x()+Fl::box_dx(box()),
-		y()+Fl::box_dy(box()),
-		w()-Fl::box_dw(box()),
-		h()-Fl::box_dh(box()));
+		x()+fltk3::box_dx(box()),
+		y()+fltk3::box_dy(box()),
+		w()-fltk3::box_dw(box()),
+		h()-fltk3::box_dh(box()));
 }
 
 //

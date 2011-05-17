@@ -649,7 +649,7 @@ FL_EXPORT void fl_draw_box(fltk3::Boxtype, int x, int y, int w, int h, fltk3::Co
   first <tt>show()</tt> of \e any window in your program to get rid of
   the dithering if possible:
   \code
-  Fl::visual(fltk3::RGB);
+  fltk3::visual(fltk3::RGB);
   \endcode
 
   Gray scale (1-channel) images may be drawn. This is done if

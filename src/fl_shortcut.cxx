@@ -36,7 +36,7 @@
 // Only fltk3::META, fltk3::ALT, fltk3::SHIFT, and fltk3::CTRL must be "off".  A
 // zero in the other shift flags indicates "don't care".
 //
-// It also checks against the first character of Fl::event_text(),
+// It also checks against the first character of fltk3::event_text(),
 // and zero for fltk3::SHIFT means "don't care".
 // This allows punctuation shortcuts like "#" to work (rather than
 // calling it "shift+3" on a US keyboard)
@@ -59,7 +59,7 @@
 
   \return non-zero if there is a match.
 */
-int Fl::test_shortcut(unsigned int shortcut) {
+int fltk3::test_shortcut(unsigned int shortcut) {
   if (!shortcut) return 0;
 
   unsigned int v = shortcut & fltk3::KEY_MASK;
@@ -67,7 +67,7 @@ int Fl::test_shortcut(unsigned int shortcut) {
     shortcut |= fltk3::SHIFT;
   }
 
-  int shift = Fl::event_state();
+  int shift = fltk3::event_state();
   // see if any required shift flags are off:
   if ((shortcut&shift) != (shortcut&0x7fff0000)) return 0;
   // record shift flags that are wrong:
@@ -78,10 +78,10 @@ int Fl::test_shortcut(unsigned int shortcut) {
   unsigned int key = shortcut & fltk3::KEY_MASK;
 
   // if shift is also correct, check for exactly equal keysyms:
-  if (!(mismatch&(fltk3::SHIFT)) && key == (unsigned)Fl::event_key()) return 1;
+  if (!(mismatch&(fltk3::SHIFT)) && key == (unsigned)fltk3::event_key()) return 1;
 
   // try matching utf8, ignore shift:
-  unsigned int firstChar = fl_utf8decode(Fl::event_text(), Fl::event_text()+Fl::event_length(), 0);
+  unsigned int firstChar = fl_utf8decode(fltk3::event_text(), fltk3::event_text()+fltk3::event_length(), 0);
   if ( ! (fltk3::CAPS_LOCK&shift) && key==firstChar) return 1;
 
   // kludge so that Ctrl+'_' works (as opposed to Ctrl+'^_'):
@@ -326,8 +326,8 @@ unsigned int fltk3::Widget::label_shortcut(const char *t) {
   \p t (usually a widget's label or menu text) is searched for a '&x'
   shortcut, and if found, this is compared with the entered key value.
 
-  Fl::event_text() is used to get the entered key value.
-  Fl::event_state() is used to get the Alt modifier, if \p require_alt
+  fltk3::event_text() is used to get the entered key value.
+  fltk3::event_state() is used to get the Alt modifier, if \p require_alt
   is true.
 
   \param t text or label to search for '&x' shortcut.
@@ -341,13 +341,13 @@ unsigned int fltk3::Widget::label_shortcut(const char *t) {
 int fltk3::Widget::test_shortcut(const char *t, const bool require_alt) {
   if (!t) return 0;
   // for menubars etc. shortcuts must work only if the Alt modifier is pressed
-  if (require_alt && Fl::event_state(fltk3::ALT)==0) return 0;
-  unsigned int c = fl_utf8decode(Fl::event_text(), Fl::event_text()+Fl::event_length(), 0);
+  if (require_alt && fltk3::event_state(fltk3::ALT)==0) return 0;
+  unsigned int c = fl_utf8decode(fltk3::event_text(), fltk3::event_text()+fltk3::event_length(), 0);
 #ifdef __APPLE__
   // this line makes underline shortcuts work the same way they do on MSWindow
   // and Linux. 
-  if (c && Fl::event_state(fltk3::ALT)) 
-    c = Fl::event_key();
+  if (c && fltk3::event_state(fltk3::ALT)) 
+    c = fltk3::event_key();
 #endif
   if (!c) return 0;
   unsigned int ls = label_shortcut(t);
@@ -355,7 +355,7 @@ int fltk3::Widget::test_shortcut(const char *t, const bool require_alt) {
     return 1;
 #ifdef __APPLE__
   // On OS X, we need to simulate the upper case keystroke as well
-  if (Fl::event_state(fltk3::ALT) && c<128 && isalpha(c) && (unsigned)toupper(c)==ls)
+  if (fltk3::event_state(fltk3::ALT) && c<128 && isalpha(c) && (unsigned)toupper(c)==ls)
     return 1;
 #endif
   return 0;
@@ -368,7 +368,7 @@ int fltk3::Widget::test_shortcut(const char *t, const bool require_alt) {
   The widget's label is searched for a '&x'
   shortcut, and if found, this is compared with the entered key value.
 
-  Fl::event_text() is used to get the entered key value.
+  fltk3::event_text() is used to get the entered key value.
 
   \return true, if the entered text matches the widget's'&x' shortcut,
 	  false (0) otherwise.

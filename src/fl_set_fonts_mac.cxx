@@ -41,7 +41,7 @@
 #define ENDOFBUFFER 127 // sizeof(fltk3::Font.fontname)-1
 
 // turn a stored font name into a pretty name:
-const char* Fl::get_font_name(fltk3::Font fnum, int* ap) {
+const char* fltk3::get_font_name(fltk3::Font fnum, int* ap) {
   Fl_Fontdesc *f = fl_fonts + fnum;
   if (!f->fontname[0]) {
     const char* p = f->name;
@@ -65,7 +65,7 @@ static int name_compare(const void *a, const void *b)
 
 static int fl_free_font = fltk3::FREE_FONT;
 
-fltk3::Font Fl::set_fonts(const char* xstarname) {
+fltk3::Font fltk3::set_fonts(const char* xstarname) {
 #pragma unused ( xstarname )
 if (fl_free_font > fltk3::FREE_FONT) return (fltk3::Font)fl_free_font; // if already called
 
@@ -96,7 +96,7 @@ if(fl_mac_os_version >= 100500) {
   CFRelease(arrayref);
   qsort(tabfontnames, count, sizeof(char*), name_compare);
   for (i = 0; i < count; i++) {
-    Fl::set_font((fltk3::Font)(fl_free_font++), tabfontnames[i]);
+    fltk3::set_font((fltk3::Font)(fl_free_font++), tabfontnames[i]);
     }
   delete[] tabfontnames;
   return (fltk3::Font)fl_free_font;
@@ -133,7 +133,7 @@ else {
       oName[511] = 0;
     else
       oName[actualLength] = 0;
-	Fl::set_font((fltk3::Font)(fl_free_font++), strdup(oName));
+	fltk3::set_font((fltk3::Font)(fl_free_font++), strdup(oName));
 //	free(oName);
   }
   free(oFontIDs);
@@ -146,7 +146,7 @@ else {
 }
 
 static int array[128];
-int Fl::get_font_sizes(fltk3::Font fnum, int*& sizep) {
+int fltk3::get_font_sizes(fltk3::Font fnum, int*& sizep) {
   Fl_Fontdesc *s = fl_fonts+fnum;
   if (!s->name) s = fl_fonts; // empty slot in table, use entry 0
   int cnt = 0;

@@ -692,7 +692,7 @@ void Fl_Text_Buffer::remove_modify_callback(Fl_Text_Modify_Cb bufModifiedCB,
     }
   }
   if (toRemove == -1) {
-    Fl::error
+    fltk3::error
     ("Fl_Text_Buffer::remove_modify_callback(): Can't find modify CB to remove");
     return;
   }
@@ -767,7 +767,7 @@ void Fl_Text_Buffer::remove_predelete_callback(Fl_Text_Predelete_Cb bufPreDelete
     }
   }
   if (toRemove == -1) {
-    Fl::error
+    fltk3::error
     ("Fl_Text_Buffer::remove_predelete_callback(): Can't find pre-delete CB to remove");
     return;
   }

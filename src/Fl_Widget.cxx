@@ -68,7 +68,7 @@ void fltk3::Widget::default_callback(fltk3::Widget *o, void * /*v*/) {
     default callback that puts a pointer to the widget in this queue,
     and this method reads the oldest widget out of this queue.
 */
-fltk3::Widget *Fl::readqueue() {
+fltk3::Widget *fltk3::readqueue() {
   if (obj_tail==obj_head) return 0;
   fltk3::Widget *o = obj_queue[obj_tail++];
   if (obj_tail >= QUEUE_SIZE) obj_tail = 0;
@@ -76,10 +76,10 @@ fltk3::Widget *Fl::readqueue() {
 }
 /*
     This static internal function removes all pending callbacks for a
-    specific widget from the default callback queue (Fl::readqueue()).
+    specific widget from the default callback queue (fltk3::readqueue()).
     It is only called from fltk3::Widget's destructor if the widget
     doesn't have an own callback.
-    Note: There's no need to have this in the Fl:: namespace.
+    Note: There's no need to have this in the fltk3:: namespace.
 */
 static void cleanup_readqueue(fltk3::Widget *w) {
 
@@ -154,8 +154,8 @@ int fltk3::Widget::take_focus() {
   if (!takesevents()) return 0;
   if (!visible_focus()) return 0;
   if (!handle(fltk3::FOCUS)) return 0; // see if it wants it
-  if (contains(Fl::focus())) return 1; // it called Fl::focus for us
-  Fl::focus(this);
+  if (contains(fltk3::focus())) return 1; // it called fltk3::focus for us
+  fltk3::focus(this);
   return 1;
 }
 
@@ -167,7 +167,7 @@ extern void fl_throw_focus(fltk3::Widget*); // in Fl_x.cxx
    destroyed destroy all their children. This is convenient and fast.
 */
 fltk3::Widget::~Widget() {
-  Fl::clear_widget_pointer(this);
+  fltk3::clear_widget_pointer(this);
   if (flags() & COPIED_LABEL) free((void *)(label_.value));
   if (flags() & COPIED_TOOLTIP) free((void *)(tooltip_));
   // remove from parent group
@@ -179,14 +179,14 @@ fltk3::Widget::~Widget() {
 #endif // DEBUG_DELETE
   parent_ = 0; // Don't throw focus to a parent widget.
   fl_throw_focus(this);
-  // remove stale entries from default callback queue (Fl::readqueue())
+  // remove stale entries from default callback queue (fltk3::readqueue())
   if (callback_ == default_callback) cleanup_readqueue(this);
 }
 
 /** Draws a focus box for the widget at the given position and size */
 void
 fltk3::Widget::draw_focus(fltk3::Boxtype B, int X, int Y, int W, int H) const {
-  if (!Fl::visible_focus()) return;
+  if (!fltk3::visible_focus()) return;
   switch (B) {
     case fltk3::DOWN_BOX:
     case fltk3::DOWN_FRAME:
@@ -202,8 +202,8 @@ fltk3::Widget::draw_focus(fltk3::Boxtype B, int X, int Y, int W, int H) const {
 
 #if defined(USE_X11) || defined(__APPLE_QUARTZ__)
   fl_line_style(FL_DOT);
-  fl_rect(X + Fl::box_dx(B), Y + Fl::box_dy(B),
-          W - Fl::box_dw(B) - 1, H - Fl::box_dh(B) - 1);
+  fl_rect(X + fltk3::box_dx(B), Y + fltk3::box_dy(B),
+          W - fltk3::box_dw(B) - 1, H - fltk3::box_dh(B) - 1);
   fl_line_style(FL_SOLID);
 #elif defined(WIN32) 
   // Windows 95/98/ME do not implement the dotted line style, so draw
@@ -214,10 +214,10 @@ fltk3::Widget::draw_focus(fltk3::Boxtype B, int X, int Y, int W, int H) const {
   // on odd-numbered rows...
   int i, xx, yy;
 
-  X += Fl::box_dx(B);
-  Y += Fl::box_dy(B);
-  W -= Fl::box_dw(B) + 2;
-  H -= Fl::box_dh(B) + 2;
+  X += fltk3::box_dx(B);
+  Y += fltk3::box_dy(B);
+  W -= fltk3::box_dw(B) + 2;
+  H -= fltk3::box_dh(B) + 2;
 
   for (xx = 0, i = 1; xx < W; xx ++, i ++) if (i & 1) fl_point(X + xx, Y);
   for (yy = 0; yy < H; yy ++, i ++) if (i & 1) fl_point(X + W, Y + yy);
@@ -236,7 +236,7 @@ void fltk3::Widget::activate() {
       redraw();
       redraw_label();
       handle(fltk3::ACTIVATE);
-      if (inside(Fl::focus())) Fl::focus()->take_focus();
+      if (inside(fltk3::focus())) fltk3::focus()->take_focus();
     }
   }
 }
@@ -266,7 +266,7 @@ void fltk3::Widget::show() {
       redraw();
       redraw_label();
       handle(fltk3::SHOW);
-      if (inside(Fl::focus())) Fl::focus()->take_focus();
+      if (inside(fltk3::focus())) fltk3::focus()->take_focus();
     }
   }
 }

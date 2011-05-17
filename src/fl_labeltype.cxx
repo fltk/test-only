@@ -58,7 +58,7 @@ fl_normal_measure(const Fl_Label* o, int& W, int& H) {
 
 #define MAX_LABELTYPE 16
 
-static Fl_Label_Draw_F* table[MAX_LABELTYPE] = {
+static fltk3::LabelDrawF* table[MAX_LABELTYPE] = {
   fl_normal_label,
   fl_no_label,
   fl_normal_label,	// _FL_SHADOW_LABEL,
@@ -72,10 +72,10 @@ static Fl_Label_Draw_F* table[MAX_LABELTYPE] = {
   fl_no_label, fl_no_label, fl_no_label
 };
 
-static Fl_Label_Measure_F* measure[MAX_LABELTYPE];
+static fltk3::LabelMeasureF* measure[MAX_LABELTYPE];
 
 /** Sets the functions to call to draw and measure a specific labeltype. */
-void Fl::set_labeltype(fltk3::Labeltype t,Fl_Label_Draw_F* f,Fl_Label_Measure_F*m) 
+void fltk3::set_labeltype(fltk3::Labeltype t,fltk3::LabelDrawF* f,fltk3::LabelMeasureF*m) 
 {
   table[t] = f; measure[t] = m;
 }
@@ -98,7 +98,7 @@ void Fl_Label::measure(int& W, int& H) const {
     return;
   }
 
-  Fl_Label_Measure_F* f = ::measure[type]; if (!f) f = fl_normal_measure;
+  fltk3::LabelMeasureF* f = ::measure[type]; if (!f) f = fl_normal_measure;
   f(this, W, H);
 }
 
@@ -106,10 +106,10 @@ void Fl_Label::measure(int& W, int& H) const {
     This is the normal call for a widget's draw() method.
  */
 void fltk3::Widget::draw_label() const {
-  int X = x_+Fl::box_dx(box());
-  int W = w_-Fl::box_dw(box());
+  int X = x_+fltk3::box_dx(box());
+  int W = w_-fltk3::box_dw(box());
   if (W > 11 && align()&(fltk3::ALIGN_LEFT|fltk3::ALIGN_RIGHT)) {X += 3; W -= 6;}
-  draw_label(X, y_+Fl::box_dy(box()), W, h_-Fl::box_dh(box()));
+  draw_label(X, y_+fltk3::box_dy(box()), W, h_-fltk3::box_dh(box()));
 }
 
 /** Draws the label in an arbitrary bounding box.

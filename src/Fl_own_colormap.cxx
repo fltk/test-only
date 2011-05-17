@@ -37,7 +37,7 @@
 #include <fltk3/run.h>
 #include <fltk3/x.h>
 
-/** \fn Fl::own_colormap()
+/** \fn fltk3::own_colormap()
     Makes FLTK use its own colormap.  This may make FLTK display better
     and will reduce conflicts with other programs that want lots of colors.
     However the colors may flash as you move the cursor between windows.
@@ -48,16 +48,16 @@
 // There is probably something relevant to do on MSWindows 8-bit displays
 // but I don't know what it is
 
-void Fl::own_colormap() {}
+void fltk3::own_colormap() {}
 
 #elif defined(__APPLE__)
 // MacOS X always provides a TrueColor interface...
 
-void Fl::own_colormap() {}
+void fltk3::own_colormap() {}
 #else
 // X version
 
-void Fl::own_colormap() {
+void fltk3::own_colormap() {
   fl_open_display();
 #if USE_COLORMAP
   switch (fl_visual->c_class) {

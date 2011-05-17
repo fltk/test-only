@@ -187,7 +187,7 @@ int Fl_Native_File_Chooser::show() {
 
   // BLOCK WHILE BROWSER SHOWN
   while ( _file_chooser->shown() ) {
-    Fl::wait();
+    fltk3::wait();
   }
 
   if ( _file_chooser->value() && _file_chooser->value()[0] ) {

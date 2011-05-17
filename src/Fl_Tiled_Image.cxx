@@ -41,8 +41,8 @@ Fl_Tiled_Image::Fl_Tiled_Image(Fl_Image *i,	// I - Image to tile
   image_       = i;
   alloc_image_ = 0;
 
-  if (W == 0) w(Fl::w());
-  if (H == 0) h(Fl::h());
+  if (W == 0) w(fltk3::w());
+  if (H == 0) h(fltk3::h());
 }
 /**
   The destructor frees all memory and server resources that are used by
@@ -108,8 +108,8 @@ Fl_Tiled_Image::draw(int X,	// I - Starting X position
 		     int cx,	// I - "Source" X position
 		     int cy) {	// I - "Source" Y position
   if (!image_->w() || !image_->h()) return;
-  if (W == 0) W = Fl::w();
-  if (H == 0) H = Fl::h();
+  if (W == 0) W = fltk3::w();
+  if (H == 0) H = fltk3::h();
 
   fl_push_clip(X, Y, W, H);
 
