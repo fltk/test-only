@@ -490,6 +490,137 @@
 		C734B46832FFC64A9397F6AE /* Fl_PNG_Image.cxx in Sources */ = {isa = PBXBuildFile; fileRef = CE1157541DFCB8DC69A00345 /* Fl_PNG_Image.cxx */; };
 		C814931FE2E8127B4DD729FD /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C8D2445DE4DB272D6140EB4D /* ps_image.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1C75365D167645656C3A6752 /* ps_image.cxx */; };
+		C915E2CB1382D16E00C5FD27 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
+		C915E2CD1382D16E00C5FD27 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
+		C915E2D91382D8A100C5FD27 /* hello.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C915E2D71382D83A00C5FD27 /* hello.cxx */; };
+		C915E2DA1382D8ED00C5FD27 /* Enumerations.H in Headers */ = {isa = PBXBuildFile; fileRef = 84CE79448708855561FEE498 /* Enumerations.H */; };
+		C915E2DB1382D8ED00C5FD27 /* Fl.H in Headers */ = {isa = PBXBuildFile; fileRef = C359E5D5187606DD69C7938B /* Fl.H */; };
+		C915E2DC1382D8ED00C5FD27 /* Fl_Adjuster.H in Headers */ = {isa = PBXBuildFile; fileRef = 5CDA214AEABC15E3EF1BB172 /* Fl_Adjuster.H */; };
+		C915E2DD1382D8ED00C5FD27 /* Fl_Bitmap.H in Headers */ = {isa = PBXBuildFile; fileRef = FE90AA3BB40510FA45E0C27B /* Fl_Bitmap.H */; };
+		C915E2DE1382D8ED00C5FD27 /* Fl_Box.H in Headers */ = {isa = PBXBuildFile; fileRef = 390863A4D5D1B4C7C9B58679 /* Fl_Box.H */; };
+		C915E2DF1382D8ED00C5FD27 /* Fl_Browser.H in Headers */ = {isa = PBXBuildFile; fileRef = D90A34CD50A6825298459CCE /* Fl_Browser.H */; };
+		C915E2E01382D8ED00C5FD27 /* Fl_Browser_.H in Headers */ = {isa = PBXBuildFile; fileRef = 149DEBE486F3554738429684 /* Fl_Browser_.H */; };
+		C915E2E11382D8ED00C5FD27 /* Fl_Button.H in Headers */ = {isa = PBXBuildFile; fileRef = E21339D33557BB5501B08AB1 /* Fl_Button.H */; };
+		C915E2E21382D8ED00C5FD27 /* Fl_Cairo.H in Headers */ = {isa = PBXBuildFile; fileRef = 87F89271469726AE756E4D93 /* Fl_Cairo.H */; };
+		C915E2E31382D8ED00C5FD27 /* Fl_Cairo_Window.H in Headers */ = {isa = PBXBuildFile; fileRef = 8B02E11D61E46AD79DE7EFE7 /* Fl_Cairo_Window.H */; };
+		C915E2E41382D8ED00C5FD27 /* Fl_Chart.H in Headers */ = {isa = PBXBuildFile; fileRef = 0CAFE7CA950A492FE35F2163 /* Fl_Chart.H */; };
+		C915E2E51382D8ED00C5FD27 /* Fl_Check_Browser.H in Headers */ = {isa = PBXBuildFile; fileRef = A2B930ADD957B492869191EB /* Fl_Check_Browser.H */; };
+		C915E2E61382D8ED00C5FD27 /* Fl_Check_Button.H in Headers */ = {isa = PBXBuildFile; fileRef = 4B1195741A8CCE772D17856C /* Fl_Check_Button.H */; };
+		C915E2E71382D8ED00C5FD27 /* Fl_Choice.H in Headers */ = {isa = PBXBuildFile; fileRef = C8AE10A8DDF53B8B27E3215A /* Fl_Choice.H */; };
+		C915E2E81382D8ED00C5FD27 /* Fl_Clock.H in Headers */ = {isa = PBXBuildFile; fileRef = 9BCF393F94482AE7C7421397 /* Fl_Clock.H */; };
+		C915E2E91382D8ED00C5FD27 /* Fl_Color_Chooser.H in Headers */ = {isa = PBXBuildFile; fileRef = 2CD1EF8B4BFD0820E9A42641 /* Fl_Color_Chooser.H */; };
+		C915E2EA1382D8ED00C5FD27 /* Fl_Counter.H in Headers */ = {isa = PBXBuildFile; fileRef = CE97D58B5B0F1A2A7DB2A3FF /* Fl_Counter.H */; };
+		C915E2EB1382D8ED00C5FD27 /* Fl_Device.H in Headers */ = {isa = PBXBuildFile; fileRef = 82863AEFE086C3469C386C22 /* Fl_Device.H */; };
+		C915E2EC1382D8ED00C5FD27 /* Fl_Dial.H in Headers */ = {isa = PBXBuildFile; fileRef = 02C21BB31E7DDFE9E76F4997 /* Fl_Dial.H */; };
+		C915E2ED1382D8ED00C5FD27 /* Fl_Double_Window.H in Headers */ = {isa = PBXBuildFile; fileRef = 80D32CF90973629228CAA7F0 /* Fl_Double_Window.H */; };
+		C915E2EE1382D8ED00C5FD27 /* Fl_Export.H in Headers */ = {isa = PBXBuildFile; fileRef = 53930BEE4CBAAF4C82825F9B /* Fl_Export.H */; };
+		C915E2EF1382D8ED00C5FD27 /* Fl_File_Browser.H in Headers */ = {isa = PBXBuildFile; fileRef = DE2F47C61B9083A6E7811620 /* Fl_File_Browser.H */; };
+		C915E2F01382D8ED00C5FD27 /* Fl_File_Chooser.H in Headers */ = {isa = PBXBuildFile; fileRef = 729751A4A3DAAAF169C80ACC /* Fl_File_Chooser.H */; };
+		C915E2F11382D8ED00C5FD27 /* Fl_File_Icon.H in Headers */ = {isa = PBXBuildFile; fileRef = 18A8E88697605A73C46C0DDF /* Fl_File_Icon.H */; };
+		C915E2F21382D8ED00C5FD27 /* Fl_File_Input.H in Headers */ = {isa = PBXBuildFile; fileRef = 0512326568039B9A0C5BD3DB /* Fl_File_Input.H */; };
+		C915E2F31382D8ED00C5FD27 /* Fl_Fill_Dial.H in Headers */ = {isa = PBXBuildFile; fileRef = CEC9BC26680806AD2B47C07F /* Fl_Fill_Dial.H */; };
+		C915E2F41382D8ED00C5FD27 /* Fl_Fill_Slider.H in Headers */ = {isa = PBXBuildFile; fileRef = BDEA9C0CFFA25A943140F7FC /* Fl_Fill_Slider.H */; };
+		C915E2F51382D8ED00C5FD27 /* Fl_Float_Input.H in Headers */ = {isa = PBXBuildFile; fileRef = 00CAAA52DC3193E1133AE26C /* Fl_Float_Input.H */; };
+		C915E2F61382D8ED00C5FD27 /* Fl_FormsBitmap.H in Headers */ = {isa = PBXBuildFile; fileRef = E82DD2B5676CF315E945AF23 /* Fl_FormsBitmap.H */; };
+		C915E2F71382D8ED00C5FD27 /* Fl_FormsPixmap.H in Headers */ = {isa = PBXBuildFile; fileRef = B145D961F04ADDCF78EFDFD1 /* Fl_FormsPixmap.H */; };
+		C915E2F81382D8ED00C5FD27 /* Fl_Free.H in Headers */ = {isa = PBXBuildFile; fileRef = 9D938B561E268ECE660B88D2 /* Fl_Free.H */; };
+		C915E2F91382D8ED00C5FD27 /* Fl_Group.H in Headers */ = {isa = PBXBuildFile; fileRef = BF88B604F8342EF96DFF5AEA /* Fl_Group.H */; };
+		C915E2FA1382D8ED00C5FD27 /* Fl_Hold_Browser.H in Headers */ = {isa = PBXBuildFile; fileRef = A36535CFF8B14BA8B087A880 /* Fl_Hold_Browser.H */; };
+		C915E2FB1382D8ED00C5FD27 /* Fl_Hor_Fill_Slider.H in Headers */ = {isa = PBXBuildFile; fileRef = EE6507EFCDDA13ACF9373E3E /* Fl_Hor_Fill_Slider.H */; };
+		C915E2FC1382D8ED00C5FD27 /* Fl_Hor_Nice_Slider.H in Headers */ = {isa = PBXBuildFile; fileRef = 21094B942E7FBFBCF1679259 /* Fl_Hor_Nice_Slider.H */; };
+		C915E2FD1382D8ED00C5FD27 /* Fl_Hor_Slider.H in Headers */ = {isa = PBXBuildFile; fileRef = AE1717E43F50EBA343960B1E /* Fl_Hor_Slider.H */; };
+		C915E2FE1382D8ED00C5FD27 /* Fl_Hor_Value_Slider.H in Headers */ = {isa = PBXBuildFile; fileRef = 5B8BFBDF9C48A998F0781C9E /* Fl_Hor_Value_Slider.H */; };
+		C915E2FF1382D8ED00C5FD27 /* Fl_Image.H in Headers */ = {isa = PBXBuildFile; fileRef = 332598626430923370C48554 /* Fl_Image.H */; };
+		C915E3001382D8ED00C5FD27 /* Fl_Input.H in Headers */ = {isa = PBXBuildFile; fileRef = EFEEE679374D7E4191873447 /* Fl_Input.H */; };
+		C915E3011382D8ED00C5FD27 /* Fl_Input_.H in Headers */ = {isa = PBXBuildFile; fileRef = A5166C3C9311628F6E450095 /* Fl_Input_.H */; };
+		C915E3021382D8ED00C5FD27 /* Fl_Input_Choice.H in Headers */ = {isa = PBXBuildFile; fileRef = 648E9C3B61328280244FCCA5 /* Fl_Input_Choice.H */; };
+		C915E3031382D8ED00C5FD27 /* Fl_Int_Input.H in Headers */ = {isa = PBXBuildFile; fileRef = 1CFFC165E8EE6C1AD9CFD33C /* Fl_Int_Input.H */; };
+		C915E3041382D8ED00C5FD27 /* Fl_Light_Button.H in Headers */ = {isa = PBXBuildFile; fileRef = B6A59F303E6D6C2EE4481D78 /* Fl_Light_Button.H */; };
+		C915E3051382D8ED00C5FD27 /* Fl_Line_Dial.H in Headers */ = {isa = PBXBuildFile; fileRef = 790078FB2B75406B2E250E59 /* Fl_Line_Dial.H */; };
+		C915E3061382D8ED00C5FD27 /* Fl_Menu.H in Headers */ = {isa = PBXBuildFile; fileRef = 75DEA03FA1E1CA10E4AF212A /* Fl_Menu.H */; };
+		C915E3071382D8ED00C5FD27 /* Fl_Menu_.H in Headers */ = {isa = PBXBuildFile; fileRef = 8985E851BEC6BB2BC613E5AD /* Fl_Menu_.H */; };
+		C915E3081382D8ED00C5FD27 /* Fl_Menu_Bar.H in Headers */ = {isa = PBXBuildFile; fileRef = 1DBDBB6B583C028BD8D1D2F4 /* Fl_Menu_Bar.H */; };
+		C915E3091382D8ED00C5FD27 /* Fl_Menu_Button.H in Headers */ = {isa = PBXBuildFile; fileRef = 97A233FBA4B73A1CA45A1388 /* Fl_Menu_Button.H */; };
+		C915E30A1382D8ED00C5FD27 /* Fl_Menu_Item.H in Headers */ = {isa = PBXBuildFile; fileRef = A0224B94F206123F3583F2A3 /* Fl_Menu_Item.H */; };
+		C915E30B1382D8ED00C5FD27 /* Fl_Menu_Window.H in Headers */ = {isa = PBXBuildFile; fileRef = 8DFB9E7E8DB3AEC762613348 /* Fl_Menu_Window.H */; };
+		C915E30C1382D8ED00C5FD27 /* Fl_Multi_Browser.H in Headers */ = {isa = PBXBuildFile; fileRef = B707DB501C8702446FA24146 /* Fl_Multi_Browser.H */; };
+		C915E30D1382D8ED00C5FD27 /* Fl_Multi_Label.H in Headers */ = {isa = PBXBuildFile; fileRef = D513CAE8AAED897D6B3B72F7 /* Fl_Multi_Label.H */; };
+		C915E30E1382D8ED00C5FD27 /* Fl_Multiline_Input.H in Headers */ = {isa = PBXBuildFile; fileRef = 8A322CF28E7EAA76A260345A /* Fl_Multiline_Input.H */; };
+		C915E30F1382D8ED00C5FD27 /* Fl_Multiline_Output.H in Headers */ = {isa = PBXBuildFile; fileRef = AC5B933E5C802F33BC495FF8 /* Fl_Multiline_Output.H */; };
+		C915E3101382D8ED00C5FD27 /* Fl_Native_File_Chooser.H in Headers */ = {isa = PBXBuildFile; fileRef = F91DEF40DC3592BE52CAB001 /* Fl_Native_File_Chooser.H */; };
+		C915E3111382D8ED00C5FD27 /* Fl_Nice_Slider.H in Headers */ = {isa = PBXBuildFile; fileRef = F8990CDEFF54C483BD6BF716 /* Fl_Nice_Slider.H */; };
+		C915E3121382D8ED00C5FD27 /* Fl_Object.H in Headers */ = {isa = PBXBuildFile; fileRef = EE2FB1F7B99BE408E1B4DFB7 /* Fl_Object.H */; };
+		C915E3131382D8ED00C5FD27 /* Fl_Output.H in Headers */ = {isa = PBXBuildFile; fileRef = D585CB55BDA143D343033352 /* Fl_Output.H */; };
+		C915E3141382D8ED00C5FD27 /* Fl_Overlay_Window.H in Headers */ = {isa = PBXBuildFile; fileRef = 1FCDDD4E00F7CAA8193CAE04 /* Fl_Overlay_Window.H */; };
+		C915E3151382D8ED00C5FD27 /* Fl_Pack.H in Headers */ = {isa = PBXBuildFile; fileRef = 52C3B1D0A473BDC01D497917 /* Fl_Pack.H */; };
+		C915E3161382D8ED00C5FD27 /* Fl_Pixmap.H in Headers */ = {isa = PBXBuildFile; fileRef = B8455C1BD96FF6FB3C197C34 /* Fl_Pixmap.H */; };
+		C915E3171382D8ED00C5FD27 /* Fl_Plugin.H in Headers */ = {isa = PBXBuildFile; fileRef = A8F89055CABBCFECCC4CC940 /* Fl_Plugin.H */; };
+		C915E3181382D8ED00C5FD27 /* Fl_Positioner.H in Headers */ = {isa = PBXBuildFile; fileRef = 20A898FCF6349F72BABDC497 /* Fl_Positioner.H */; };
+		C915E3191382D8ED00C5FD27 /* Fl_PostScript.H in Headers */ = {isa = PBXBuildFile; fileRef = C9EDD5B11274C4FA00ADB21C /* Fl_PostScript.H */; };
+		C915E31A1382D8ED00C5FD27 /* Fl_Preferences.H in Headers */ = {isa = PBXBuildFile; fileRef = 91173358E60D137409651286 /* Fl_Preferences.H */; };
+		C915E31B1382D8ED00C5FD27 /* Fl_Printer.H in Headers */ = {isa = PBXBuildFile; fileRef = A694A1F3298E15E532C3F784 /* Fl_Printer.H */; };
+		C915E31C1382D8ED00C5FD27 /* Fl_Progress.H in Headers */ = {isa = PBXBuildFile; fileRef = 4CD4094D8712818EACF5C7C5 /* Fl_Progress.H */; };
+		C915E31D1382D8ED00C5FD27 /* Fl_RGB_Image.H in Headers */ = {isa = PBXBuildFile; fileRef = 1072C2A463FBCF2C5E278649 /* Fl_RGB_Image.H */; };
+		C915E31E1382D8ED00C5FD27 /* Fl_Radio_Button.H in Headers */ = {isa = PBXBuildFile; fileRef = 59EAC37D26FEC2AB49D79C08 /* Fl_Radio_Button.H */; };
+		C915E31F1382D8ED00C5FD27 /* Fl_Radio_Light_Button.H in Headers */ = {isa = PBXBuildFile; fileRef = 03D5B076E8097600496915F7 /* Fl_Radio_Light_Button.H */; };
+		C915E3201382D8ED00C5FD27 /* Fl_Radio_Round_Button.H in Headers */ = {isa = PBXBuildFile; fileRef = FD1BB104911A6726B02EEE37 /* Fl_Radio_Round_Button.H */; };
+		C915E3211382D8ED00C5FD27 /* Fl_Repeat_Button.H in Headers */ = {isa = PBXBuildFile; fileRef = 4F64CD29833871B09CCB278E /* Fl_Repeat_Button.H */; };
+		C915E3221382D8ED00C5FD27 /* Fl_Return_Button.H in Headers */ = {isa = PBXBuildFile; fileRef = CFE13249EA12A63C478888A8 /* Fl_Return_Button.H */; };
+		C915E3231382D8ED00C5FD27 /* Fl_Roller.H in Headers */ = {isa = PBXBuildFile; fileRef = 9961D74307F5B7D0FE016FC7 /* Fl_Roller.H */; };
+		C915E3241382D8ED00C5FD27 /* Fl_Round_Button.H in Headers */ = {isa = PBXBuildFile; fileRef = 270962DA6A7684128875ADDE /* Fl_Round_Button.H */; };
+		C915E3251382D8ED00C5FD27 /* Fl_Round_Clock.H in Headers */ = {isa = PBXBuildFile; fileRef = 461BBD068DF8C58F4FFB131B /* Fl_Round_Clock.H */; };
+		C915E3261382D8ED00C5FD27 /* Fl_Scroll.H in Headers */ = {isa = PBXBuildFile; fileRef = EC2BAEE540612218DC9EEC75 /* Fl_Scroll.H */; };
+		C915E3271382D8ED00C5FD27 /* Fl_Scrollbar.H in Headers */ = {isa = PBXBuildFile; fileRef = 28F3E4EBB6E5F8420624A5DA /* Fl_Scrollbar.H */; };
+		C915E3281382D8ED00C5FD27 /* Fl_Secret_Input.H in Headers */ = {isa = PBXBuildFile; fileRef = 42FEA3A2967D04217C27FA61 /* Fl_Secret_Input.H */; };
+		C915E3291382D8ED00C5FD27 /* Fl_Select_Browser.H in Headers */ = {isa = PBXBuildFile; fileRef = 9DA766AE10DC532F3D0401A2 /* Fl_Select_Browser.H */; };
+		C915E32A1382D8ED00C5FD27 /* Fl_Shared_Image.H in Headers */ = {isa = PBXBuildFile; fileRef = A46A39199806D09CE0ABEE59 /* Fl_Shared_Image.H */; };
+		C915E32B1382D8ED00C5FD27 /* Fl_Simple_Counter.H in Headers */ = {isa = PBXBuildFile; fileRef = 9B57B581401BD8575BFAF2F1 /* Fl_Simple_Counter.H */; };
+		C915E32C1382D8ED00C5FD27 /* Fl_Single_Window.H in Headers */ = {isa = PBXBuildFile; fileRef = 0EC11A5CAD4E3607A72BEF84 /* Fl_Single_Window.H */; };
+		C915E32D1382D8ED00C5FD27 /* Fl_Slider.H in Headers */ = {isa = PBXBuildFile; fileRef = F2E5612A81A6E8D53ED91CAE /* Fl_Slider.H */; };
+		C915E32E1382D8ED00C5FD27 /* Fl_Spinner.H in Headers */ = {isa = PBXBuildFile; fileRef = 76DD2676B757CB7F19B6EF94 /* Fl_Spinner.H */; };
+		C915E32F1382D8ED00C5FD27 /* Fl_Sys_Menu_Bar.H in Headers */ = {isa = PBXBuildFile; fileRef = A71FBABB9EC90A680225B485 /* Fl_Sys_Menu_Bar.H */; };
+		C915E3301382D8ED00C5FD27 /* Fl_Table.H in Headers */ = {isa = PBXBuildFile; fileRef = 70CEC1A84E24275F0861403F /* Fl_Table.H */; };
+		C915E3311382D8ED00C5FD27 /* Fl_Table_Row.H in Headers */ = {isa = PBXBuildFile; fileRef = 0CFB24E7079EC601366BCECF /* Fl_Table_Row.H */; };
+		C915E3321382D8ED00C5FD27 /* Fl_Tabs.H in Headers */ = {isa = PBXBuildFile; fileRef = B8166E088FC996C9A89D2D37 /* Fl_Tabs.H */; };
+		C915E3331382D8ED00C5FD27 /* Fl_Text_Buffer.H in Headers */ = {isa = PBXBuildFile; fileRef = 50E8E04A4389A8A2DAB7C53B /* Fl_Text_Buffer.H */; };
+		C915E3341382D8ED00C5FD27 /* Fl_Text_Display.H in Headers */ = {isa = PBXBuildFile; fileRef = 64C9C1F20285A471398A7818 /* Fl_Text_Display.H */; };
+		C915E3351382D8ED00C5FD27 /* Fl_Text_Editor.H in Headers */ = {isa = PBXBuildFile; fileRef = 3E092095198BF5104BE09D78 /* Fl_Text_Editor.H */; };
+		C915E3361382D8ED00C5FD27 /* Fl_Tile.H in Headers */ = {isa = PBXBuildFile; fileRef = FAA6BA6E4DC1AF28F5FC8466 /* Fl_Tile.H */; };
+		C915E3371382D8ED00C5FD27 /* Fl_Tiled_Image.H in Headers */ = {isa = PBXBuildFile; fileRef = 72C56BE76B2ECF1908249803 /* Fl_Tiled_Image.H */; };
+		C915E3381382D8ED00C5FD27 /* Fl_Timer.H in Headers */ = {isa = PBXBuildFile; fileRef = DCEE2710A7119519AEF640AD /* Fl_Timer.H */; };
+		C915E3391382D8ED00C5FD27 /* Fl_Toggle_Button.H in Headers */ = {isa = PBXBuildFile; fileRef = B7E85200DC5E9EBB605EE1CB /* Fl_Toggle_Button.H */; };
+		C915E33A1382D8ED00C5FD27 /* Fl_Toggle_Light_Button.H in Headers */ = {isa = PBXBuildFile; fileRef = 79EE61E7DCB96EF56E71DD19 /* Fl_Toggle_Light_Button.H */; };
+		C915E33B1382D8ED00C5FD27 /* Fl_Toggle_Round_Button.H in Headers */ = {isa = PBXBuildFile; fileRef = A2C688326DDAF4AA29EA9120 /* Fl_Toggle_Round_Button.H */; };
+		C915E33C1382D8ED00C5FD27 /* Fl_Tooltip.H in Headers */ = {isa = PBXBuildFile; fileRef = 8C5CB5680264401FDA1C693C /* Fl_Tooltip.H */; };
+		C915E33D1382D8ED00C5FD27 /* Fl_Tree.H in Headers */ = {isa = PBXBuildFile; fileRef = 5E0EC227A972D2E4F34A2CEB /* Fl_Tree.H */; };
+		C915E33E1382D8ED00C5FD27 /* Fl_Tree_Item.H in Headers */ = {isa = PBXBuildFile; fileRef = 0BD550D5F4A9E53E93B19234 /* Fl_Tree_Item.H */; };
+		C915E33F1382D8ED00C5FD27 /* Fl_Tree_Item_Array.H in Headers */ = {isa = PBXBuildFile; fileRef = CCDF80CC7D27689DDC83FBA1 /* Fl_Tree_Item_Array.H */; };
+		C915E3401382D8ED00C5FD27 /* Fl_Tree_Prefs.H in Headers */ = {isa = PBXBuildFile; fileRef = 7E51DAB7D0F93ACFB736EE9A /* Fl_Tree_Prefs.H */; };
+		C915E3411382D8ED00C5FD27 /* Fl_Valuator.H in Headers */ = {isa = PBXBuildFile; fileRef = F8BAA8B283D4CF4D904B6486 /* Fl_Valuator.H */; };
+		C915E3421382D8ED00C5FD27 /* Fl_Value_Input.H in Headers */ = {isa = PBXBuildFile; fileRef = FF88A1DACCAFA2D143A7F234 /* Fl_Value_Input.H */; };
+		C915E3431382D8ED00C5FD27 /* Fl_Value_Output.H in Headers */ = {isa = PBXBuildFile; fileRef = 71034AFDF079B24D53146252 /* Fl_Value_Output.H */; };
+		C915E3441382D8ED00C5FD27 /* Fl_Value_Slider.H in Headers */ = {isa = PBXBuildFile; fileRef = 80D58C2358E8BBA86A8ADB7C /* Fl_Value_Slider.H */; };
+		C915E3451382D8ED00C5FD27 /* Fl_Widget.H in Headers */ = {isa = PBXBuildFile; fileRef = 5426FC8371108CE8BCAB85B2 /* Fl_Widget.H */; };
+		C915E3461382D8ED00C5FD27 /* Fl_Window.H in Headers */ = {isa = PBXBuildFile; fileRef = F98FE04C081FB5B1161C546C /* Fl_Window.H */; };
+		C915E3471382D8ED00C5FD27 /* Fl_Wizard.H in Headers */ = {isa = PBXBuildFile; fileRef = A57A8421086F1F0F9906B692 /* Fl_Wizard.H */; };
+		C915E3481382D8ED00C5FD27 /* Fl_XBM_Image.H in Headers */ = {isa = PBXBuildFile; fileRef = D2DE1079C826533A91053A9C /* Fl_XBM_Image.H */; };
+		C915E3491382D8ED00C5FD27 /* Fl_XPM_Image.H in Headers */ = {isa = PBXBuildFile; fileRef = 1433F1B8C4085D5D5E1BA0E1 /* Fl_XPM_Image.H */; };
+		C915E34A1382D8ED00C5FD27 /* Xutf8.h in Headers */ = {isa = PBXBuildFile; fileRef = 91A43F37963443EA5E91BF1F /* Xutf8.h */; };
+		C915E34B1382D8ED00C5FD27 /* dirent.h in Headers */ = {isa = PBXBuildFile; fileRef = E448719A354B3D80FD2E1992 /* dirent.h */; };
+		C915E34C1382D8ED00C5FD27 /* filename.H in Headers */ = {isa = PBXBuildFile; fileRef = AF65626F49A71525D24ED1B0 /* filename.H */; };
+		C915E34D1382D8ED00C5FD27 /* fl_ask.H in Headers */ = {isa = PBXBuildFile; fileRef = 87259ACF8723616344D9AEB2 /* fl_ask.H */; };
+		C915E34E1382D8ED00C5FD27 /* fl_draw.H in Headers */ = {isa = PBXBuildFile; fileRef = 2621527FD926C67B778C41F3 /* fl_draw.H */; };
+		C915E34F1382D8ED00C5FD27 /* fl_message.H in Headers */ = {isa = PBXBuildFile; fileRef = A8B7D1DA9AAC707EBD991D57 /* fl_message.H */; };
+		C915E3501382D8ED00C5FD27 /* fl_show_colormap.H in Headers */ = {isa = PBXBuildFile; fileRef = 7574410DEB61AC3D68A6C137 /* fl_show_colormap.H */; };
+		C915E3511382D8ED00C5FD27 /* fl_show_input.H in Headers */ = {isa = PBXBuildFile; fileRef = EFAE92A1C7CA90BC56E5A70A /* fl_show_input.H */; };
+		C915E3521382D8ED00C5FD27 /* fl_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B719FC0289E54CA915BC0B94 /* fl_types.h */; };
+		C915E3531382D8ED00C5FD27 /* fl_utf8.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F46F93E8F77640543107453 /* fl_utf8.h */; };
+		C915E3541382D8ED00C5FD27 /* mac.H in Headers */ = {isa = PBXBuildFile; fileRef = AC13C8877FA6231BEBF524FD /* mac.H */; };
+		C915E3551382D8ED00C5FD27 /* math.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D499CE6ECA4995EEA46EAD7 /* math.h */; };
+		C915E3561382D8ED00C5FD27 /* names.h in Headers */ = {isa = PBXBuildFile; fileRef = D5CE28437ABB8513BE08AC77 /* names.h */; };
+		C915E3571382D8ED00C5FD27 /* win32.H in Headers */ = {isa = PBXBuildFile; fileRef = 62281FC096BA407C4F1E6824 /* win32.H */; };
+		C915E3581382D8ED00C5FD27 /* x.H in Headers */ = {isa = PBXBuildFile; fileRef = 83CED42A779FA76E98D37CA8 /* x.H */; };
+		C915E3591382D8ED00C5FD27 /* Fl_Paged_Device.H in Headers */ = {isa = PBXBuildFile; fileRef = 4CABCBB89F9DD5CF57BB9779 /* Fl_Paged_Device.H */; };
 		C9165EA81291A304003FF4F0 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C9165EAA1291A304003FF4F0 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C9165ED41291A376003FF4F0 /* unittests.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C9165ED31291A376003FF4F0 /* unittests.cxx */; };
@@ -1477,6 +1608,18 @@
 			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
 		};
 		C7AD5A2EA43D3ED3CB9D65A3 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		C915E2CE1382D16E00C5FD27 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.fl";
@@ -2776,6 +2919,13 @@
 			remoteGlobalIDString = 9EA6FF727BC736133B0B85A1;
 			remoteInfo = pixmap;
 		};
+		C915E2C61382D16E00C5FD27 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4BF1A7FFEACF5F31B4127482 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk;
+		};
 		C9165EA31291A304003FF4F0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4BF1A7FFEACF5F31B4127482 /* Project object */;
@@ -3665,6 +3815,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C915E2CC1382D16E00C5FD27 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C915E2CD1382D16E00C5FD27 /* fltk.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C9165EA91291A304003FF4F0 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4377,6 +4537,8 @@
 		C7C5A11DD7448F61DFC69398 /* glpuzzle.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glpuzzle.cxx; path = ../../test/glpuzzle.cxx; sourceTree = SOURCE_ROOT; };
 		C84F99F5AC8C6517F45055B0 /* jdmerge.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jdmerge.c; path = ../../jpeg/jdmerge.c; sourceTree = SOURCE_ROOT; };
 		C8AE10A8DDF53B8B27E3215A /* Fl_Choice.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Choice.H; path = ../../FL/Fl_Choice.H; sourceTree = SOURCE_ROOT; };
+		C915E2D21382D16E00C5FD27 /* hello1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C915E2D71382D83A00C5FD27 /* hello.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hello.cxx; path = ../../test1/hello.cxx; sourceTree = "<group>"; };
 		C9165EAF1291A304003FF4F0 /* utf8.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = utf8.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9165ED31291A376003FF4F0 /* unittests.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = unittests.cxx; path = ../../test/unittests.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		C9568B8A1380730100CDA5BF /* Adjuster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Adjuster.h; path = ../../fltk3/Adjuster.h; sourceTree = "<group>"; };
@@ -5227,6 +5389,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C915E2CA1382D16E00C5FD27 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C915E2CB1382D16E00C5FD27 /* fltk.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C9165EA71291A304003FF4F0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -5374,6 +5544,7 @@
 		015D2BD894993395B263D6C0 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				C915E2D61382D1C600C5FD27 /* Test1 */,
 				1745FD7A82A025A97E1FFD22 /* Demo */,
 				00A184CFEE690C4BD856C12B /* adjuster */,
 				D4A58B6D0BEEB58E9CB0E31F /* arc */,
@@ -6395,6 +6566,22 @@
 			name = checkers;
 			sourceTree = "<group>";
 		};
+		C915E2D51382D1AC00C5FD27 /* hello1 */ = {
+			isa = PBXGroup;
+			children = (
+				C915E2D71382D83A00C5FD27 /* hello.cxx */,
+			);
+			name = hello1;
+			sourceTree = "<group>";
+		};
+		C915E2D61382D1C600C5FD27 /* Test1 */ = {
+			isa = PBXGroup;
+			children = (
+				C915E2D51382D1AC00C5FD27 /* hello1 */,
+			);
+			name = Test1;
+			sourceTree = "<group>";
+		};
 		C9165ED21291A327003FF4F0 /* unittests */ = {
 			isa = PBXGroup;
 			children = (
@@ -6782,6 +6969,7 @@
 				C05E4BE052F69E6F1FD92730 /* utf8.app */,
 				5191489A6263E11B65A57B4D /* valuators.app */,
 				C9165EAF1291A304003FF4F0 /* utf8.app */,
+				C915E2D21382D16E00C5FD27 /* hello1.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -7062,6 +7250,134 @@
 				C9568CA31380730900CDA5BF /* XBMImage.h in Headers */,
 				C9568CA41380730900CDA5BF /* XPMImage.h in Headers */,
 				C9568CA51380730900CDA5BF /* Xutf8.h in Headers */,
+				C915E2DA1382D8ED00C5FD27 /* Enumerations.H in Headers */,
+				C915E2DB1382D8ED00C5FD27 /* Fl.H in Headers */,
+				C915E2DC1382D8ED00C5FD27 /* Fl_Adjuster.H in Headers */,
+				C915E2DD1382D8ED00C5FD27 /* Fl_Bitmap.H in Headers */,
+				C915E2DE1382D8ED00C5FD27 /* Fl_Box.H in Headers */,
+				C915E2DF1382D8ED00C5FD27 /* Fl_Browser.H in Headers */,
+				C915E2E01382D8ED00C5FD27 /* Fl_Browser_.H in Headers */,
+				C915E2E11382D8ED00C5FD27 /* Fl_Button.H in Headers */,
+				C915E2E21382D8ED00C5FD27 /* Fl_Cairo.H in Headers */,
+				C915E2E31382D8ED00C5FD27 /* Fl_Cairo_Window.H in Headers */,
+				C915E2E41382D8ED00C5FD27 /* Fl_Chart.H in Headers */,
+				C915E2E51382D8ED00C5FD27 /* Fl_Check_Browser.H in Headers */,
+				C915E2E61382D8ED00C5FD27 /* Fl_Check_Button.H in Headers */,
+				C915E2E71382D8ED00C5FD27 /* Fl_Choice.H in Headers */,
+				C915E2E81382D8ED00C5FD27 /* Fl_Clock.H in Headers */,
+				C915E2E91382D8ED00C5FD27 /* Fl_Color_Chooser.H in Headers */,
+				C915E2EA1382D8ED00C5FD27 /* Fl_Counter.H in Headers */,
+				C915E2EB1382D8ED00C5FD27 /* Fl_Device.H in Headers */,
+				C915E2EC1382D8ED00C5FD27 /* Fl_Dial.H in Headers */,
+				C915E2ED1382D8ED00C5FD27 /* Fl_Double_Window.H in Headers */,
+				C915E2EE1382D8ED00C5FD27 /* Fl_Export.H in Headers */,
+				C915E2EF1382D8ED00C5FD27 /* Fl_File_Browser.H in Headers */,
+				C915E2F01382D8ED00C5FD27 /* Fl_File_Chooser.H in Headers */,
+				C915E2F11382D8ED00C5FD27 /* Fl_File_Icon.H in Headers */,
+				C915E2F21382D8ED00C5FD27 /* Fl_File_Input.H in Headers */,
+				C915E2F31382D8ED00C5FD27 /* Fl_Fill_Dial.H in Headers */,
+				C915E2F41382D8ED00C5FD27 /* Fl_Fill_Slider.H in Headers */,
+				C915E2F51382D8ED00C5FD27 /* Fl_Float_Input.H in Headers */,
+				C915E2F61382D8ED00C5FD27 /* Fl_FormsBitmap.H in Headers */,
+				C915E2F71382D8ED00C5FD27 /* Fl_FormsPixmap.H in Headers */,
+				C915E2F81382D8ED00C5FD27 /* Fl_Free.H in Headers */,
+				C915E2F91382D8ED00C5FD27 /* Fl_Group.H in Headers */,
+				C915E2FA1382D8ED00C5FD27 /* Fl_Hold_Browser.H in Headers */,
+				C915E2FB1382D8ED00C5FD27 /* Fl_Hor_Fill_Slider.H in Headers */,
+				C915E2FC1382D8ED00C5FD27 /* Fl_Hor_Nice_Slider.H in Headers */,
+				C915E2FD1382D8ED00C5FD27 /* Fl_Hor_Slider.H in Headers */,
+				C915E2FE1382D8ED00C5FD27 /* Fl_Hor_Value_Slider.H in Headers */,
+				C915E2FF1382D8ED00C5FD27 /* Fl_Image.H in Headers */,
+				C915E3001382D8ED00C5FD27 /* Fl_Input.H in Headers */,
+				C915E3011382D8ED00C5FD27 /* Fl_Input_.H in Headers */,
+				C915E3021382D8ED00C5FD27 /* Fl_Input_Choice.H in Headers */,
+				C915E3031382D8ED00C5FD27 /* Fl_Int_Input.H in Headers */,
+				C915E3041382D8ED00C5FD27 /* Fl_Light_Button.H in Headers */,
+				C915E3051382D8ED00C5FD27 /* Fl_Line_Dial.H in Headers */,
+				C915E3061382D8ED00C5FD27 /* Fl_Menu.H in Headers */,
+				C915E3071382D8ED00C5FD27 /* Fl_Menu_.H in Headers */,
+				C915E3081382D8ED00C5FD27 /* Fl_Menu_Bar.H in Headers */,
+				C915E3091382D8ED00C5FD27 /* Fl_Menu_Button.H in Headers */,
+				C915E30A1382D8ED00C5FD27 /* Fl_Menu_Item.H in Headers */,
+				C915E30B1382D8ED00C5FD27 /* Fl_Menu_Window.H in Headers */,
+				C915E30C1382D8ED00C5FD27 /* Fl_Multi_Browser.H in Headers */,
+				C915E30D1382D8ED00C5FD27 /* Fl_Multi_Label.H in Headers */,
+				C915E30E1382D8ED00C5FD27 /* Fl_Multiline_Input.H in Headers */,
+				C915E30F1382D8ED00C5FD27 /* Fl_Multiline_Output.H in Headers */,
+				C915E3101382D8ED00C5FD27 /* Fl_Native_File_Chooser.H in Headers */,
+				C915E3111382D8ED00C5FD27 /* Fl_Nice_Slider.H in Headers */,
+				C915E3121382D8ED00C5FD27 /* Fl_Object.H in Headers */,
+				C915E3131382D8ED00C5FD27 /* Fl_Output.H in Headers */,
+				C915E3141382D8ED00C5FD27 /* Fl_Overlay_Window.H in Headers */,
+				C915E3151382D8ED00C5FD27 /* Fl_Pack.H in Headers */,
+				C915E3161382D8ED00C5FD27 /* Fl_Pixmap.H in Headers */,
+				C915E3171382D8ED00C5FD27 /* Fl_Plugin.H in Headers */,
+				C915E3181382D8ED00C5FD27 /* Fl_Positioner.H in Headers */,
+				C915E3191382D8ED00C5FD27 /* Fl_PostScript.H in Headers */,
+				C915E31A1382D8ED00C5FD27 /* Fl_Preferences.H in Headers */,
+				C915E31B1382D8ED00C5FD27 /* Fl_Printer.H in Headers */,
+				C915E31C1382D8ED00C5FD27 /* Fl_Progress.H in Headers */,
+				C915E31D1382D8ED00C5FD27 /* Fl_RGB_Image.H in Headers */,
+				C915E31E1382D8ED00C5FD27 /* Fl_Radio_Button.H in Headers */,
+				C915E31F1382D8ED00C5FD27 /* Fl_Radio_Light_Button.H in Headers */,
+				C915E3201382D8ED00C5FD27 /* Fl_Radio_Round_Button.H in Headers */,
+				C915E3211382D8ED00C5FD27 /* Fl_Repeat_Button.H in Headers */,
+				C915E3221382D8ED00C5FD27 /* Fl_Return_Button.H in Headers */,
+				C915E3231382D8ED00C5FD27 /* Fl_Roller.H in Headers */,
+				C915E3241382D8ED00C5FD27 /* Fl_Round_Button.H in Headers */,
+				C915E3251382D8ED00C5FD27 /* Fl_Round_Clock.H in Headers */,
+				C915E3261382D8ED00C5FD27 /* Fl_Scroll.H in Headers */,
+				C915E3271382D8ED00C5FD27 /* Fl_Scrollbar.H in Headers */,
+				C915E3281382D8ED00C5FD27 /* Fl_Secret_Input.H in Headers */,
+				C915E3291382D8ED00C5FD27 /* Fl_Select_Browser.H in Headers */,
+				C915E32A1382D8ED00C5FD27 /* Fl_Shared_Image.H in Headers */,
+				C915E32B1382D8ED00C5FD27 /* Fl_Simple_Counter.H in Headers */,
+				C915E32C1382D8ED00C5FD27 /* Fl_Single_Window.H in Headers */,
+				C915E32D1382D8ED00C5FD27 /* Fl_Slider.H in Headers */,
+				C915E32E1382D8ED00C5FD27 /* Fl_Spinner.H in Headers */,
+				C915E32F1382D8ED00C5FD27 /* Fl_Sys_Menu_Bar.H in Headers */,
+				C915E3301382D8ED00C5FD27 /* Fl_Table.H in Headers */,
+				C915E3311382D8ED00C5FD27 /* Fl_Table_Row.H in Headers */,
+				C915E3321382D8ED00C5FD27 /* Fl_Tabs.H in Headers */,
+				C915E3331382D8ED00C5FD27 /* Fl_Text_Buffer.H in Headers */,
+				C915E3341382D8ED00C5FD27 /* Fl_Text_Display.H in Headers */,
+				C915E3351382D8ED00C5FD27 /* Fl_Text_Editor.H in Headers */,
+				C915E3361382D8ED00C5FD27 /* Fl_Tile.H in Headers */,
+				C915E3371382D8ED00C5FD27 /* Fl_Tiled_Image.H in Headers */,
+				C915E3381382D8ED00C5FD27 /* Fl_Timer.H in Headers */,
+				C915E3391382D8ED00C5FD27 /* Fl_Toggle_Button.H in Headers */,
+				C915E33A1382D8ED00C5FD27 /* Fl_Toggle_Light_Button.H in Headers */,
+				C915E33B1382D8ED00C5FD27 /* Fl_Toggle_Round_Button.H in Headers */,
+				C915E33C1382D8ED00C5FD27 /* Fl_Tooltip.H in Headers */,
+				C915E33D1382D8ED00C5FD27 /* Fl_Tree.H in Headers */,
+				C915E33E1382D8ED00C5FD27 /* Fl_Tree_Item.H in Headers */,
+				C915E33F1382D8ED00C5FD27 /* Fl_Tree_Item_Array.H in Headers */,
+				C915E3401382D8ED00C5FD27 /* Fl_Tree_Prefs.H in Headers */,
+				C915E3411382D8ED00C5FD27 /* Fl_Valuator.H in Headers */,
+				C915E3421382D8ED00C5FD27 /* Fl_Value_Input.H in Headers */,
+				C915E3431382D8ED00C5FD27 /* Fl_Value_Output.H in Headers */,
+				C915E3441382D8ED00C5FD27 /* Fl_Value_Slider.H in Headers */,
+				C915E3451382D8ED00C5FD27 /* Fl_Widget.H in Headers */,
+				C915E3461382D8ED00C5FD27 /* Fl_Window.H in Headers */,
+				C915E3471382D8ED00C5FD27 /* Fl_Wizard.H in Headers */,
+				C915E3481382D8ED00C5FD27 /* Fl_XBM_Image.H in Headers */,
+				C915E3491382D8ED00C5FD27 /* Fl_XPM_Image.H in Headers */,
+				C915E34A1382D8ED00C5FD27 /* Xutf8.h in Headers */,
+				C915E34B1382D8ED00C5FD27 /* dirent.h in Headers */,
+				C915E34C1382D8ED00C5FD27 /* filename.H in Headers */,
+				C915E34D1382D8ED00C5FD27 /* fl_ask.H in Headers */,
+				C915E34E1382D8ED00C5FD27 /* fl_draw.H in Headers */,
+				C915E34F1382D8ED00C5FD27 /* fl_message.H in Headers */,
+				C915E3501382D8ED00C5FD27 /* fl_show_colormap.H in Headers */,
+				C915E3511382D8ED00C5FD27 /* fl_show_input.H in Headers */,
+				C915E3521382D8ED00C5FD27 /* fl_types.h in Headers */,
+				C915E3531382D8ED00C5FD27 /* fl_utf8.h in Headers */,
+				C915E3541382D8ED00C5FD27 /* mac.H in Headers */,
+				C915E3551382D8ED00C5FD27 /* math.h in Headers */,
+				C915E3561382D8ED00C5FD27 /* names.h in Headers */,
+				C915E3571382D8ED00C5FD27 /* win32.H in Headers */,
+				C915E3581382D8ED00C5FD27 /* x.H in Headers */,
+				C915E3591382D8ED00C5FD27 /* Fl_Paged_Device.H in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8445,6 +8761,26 @@
 			productReference = 6F994D2DFFEA5301950F21B3 /* rotated_text.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C915E2C41382D16E00C5FD27 /* hello1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C915E2CF1382D16E00C5FD27 /* Build configuration list for PBXNativeTarget "hello1" */;
+			buildPhases = (
+				C915E2C71382D16E00C5FD27 /* Resources */,
+				C915E2C81382D16E00C5FD27 /* Sources */,
+				C915E2CA1382D16E00C5FD27 /* Frameworks */,
+				C915E2CC1382D16E00C5FD27 /* CopyFiles */,
+			);
+			buildRules = (
+				C915E2CE1382D16E00C5FD27 /* PBXBuildRule */,
+			);
+			dependencies = (
+				C915E2C51382D16E00C5FD27 /* PBXTargetDependency */,
+			);
+			name = hello1;
+			productName = hello;
+			productReference = C915E2D21382D16E00C5FD27 /* hello1.app */;
+			productType = "com.apple.product-type.application";
+		};
 		C9165EA11291A304003FF4F0 /* unittests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C9165EAC1291A304003FF4F0 /* Build configuration list for PBXNativeTarget "unittests" */;
@@ -8810,6 +9146,7 @@
 				234377F13A1D2CBBCF9E5043 /* gl_overlay */,
 				D7D4B168DE66A92F9F8747C0 /* glpuzzle */,
 				7483E011046F1E2FC84A989B /* hello */,
+				C915E2C41382D16E00C5FD27 /* hello1 */,
 				B37F5F8EB169ABA76EA02FB9 /* help */,
 				CA05747C492074A51F2F35BC /* iconize */,
 				36F787DB6844466ACF848593 /* image */,
@@ -9306,6 +9643,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C82F55B77BDFE26B6897FE76 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C915E2C71382D16E00C5FD27 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -10169,6 +10513,14 @@
 				438CCCA43724B2E59680EF6B /* template_panel.cxx in Sources */,
 				27B4C89E8CBF260313ACA42E /* undo.cxx in Sources */,
 				B7D0770AC83AA04E8E12B76E /* widget_panel.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C915E2C81382D16E00C5FD27 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C915E2D91382D8A100C5FD27 /* hello.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11073,6 +11425,11 @@
 			isa = PBXTargetDependency;
 			target = C13484C4A9262C58D8FA7242 /* fltk_gl */;
 			targetProxy = E815B04FEBE5E16EBC1829AC /* PBXContainerItemProxy */;
+		};
+		C915E2C51382D16E00C5FD27 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk */;
+			targetProxy = C915E2C61382D16E00C5FD27 /* PBXContainerItemProxy */;
 		};
 		C9165EA21291A304003FF4F0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -15329,6 +15686,69 @@
 			};
 			name = Debug;
 		};
+		C915E2D01382D16E00C5FD27 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "USING_XCODE=1";
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode3/,
+					../../,
+					../../png,
+					../../jpeg,
+				);
+				INFOPLIST_FILE = "plists/hello-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_NAME = hello1;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		C915E2D11382D16E00C5FD27 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "USING_XCODE=1";
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode3/,
+					../../,
+					../../png,
+					../../jpeg,
+				);
+				INFOPLIST_FILE = "plists/hello-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_NAME = hello1;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Release;
+		};
 		C9165EAD1291A304003FF4F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -16769,6 +17189,15 @@
 			buildConfigurations = (
 				1373D54F13CA9B830F63E0A6 /* Debug */,
 				BC600252A4D09B60D0F85504 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C915E2CF1382D16E00C5FD27 /* Build configuration list for PBXNativeTarget "hello1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C915E2D01382D16E00C5FD27 /* Debug */,
+				C915E2D11382D16E00C5FD27 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

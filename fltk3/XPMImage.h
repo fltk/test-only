@@ -29,15 +29,15 @@
   
    Fl_XPM_Image class . */
 
-#ifndef Fl_XPM_Image_H
-#define Fl_XPM_Image_H
+#ifndef Fltk3_XPM_Image_H
+#define Fltk3_XPM_Image_H
 #  include "Pixmap.h"
 
 /**
   The Fl_XPM_Image class supports loading, caching,
   and drawing of X Pixmap (XPM) images, including transparency.
 */
-class FL_EXPORT Fl_XPM_Image : public Fl_Pixmap {
+class FLTK3_EXPORT Fl_XPM_Image : public Fl_Pixmap {
 
   public:
 

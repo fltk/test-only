@@ -28,8 +28,8 @@
 /* \file
    Fl_Return_Button widget . */
 
-#ifndef Fl_Return_Button_H
-#define Fl_Return_Button_H
+#ifndef Fltk3_Return_Button_H
+#define Fltk3_Return_Button_H
 #include "Button.h"
 
 /**
@@ -39,7 +39,7 @@
   <P ALIGN=CENTER>\image html Fl_Return_Button.png 
   \image latex Fl_Return_Button.png "Fl_Return_Button" width=4cm
 */
-class FL_EXPORT Fl_Return_Button : public fltk3::Button {
+class FLTK3_EXPORT Fl_Return_Button : public fltk3::Button {
 protected:
   void draw();
 public:

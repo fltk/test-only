@@ -30,8 +30,8 @@
 
 // A numerical value with up/down step buttons.  From Forms.
 
-#ifndef Fl_Counter_H
-#define Fl_Counter_H
+#ifndef Fltk3_Counter_H
+#define Fltk3_Counter_H
 
 #ifndef Fl_Valuator_H
 #include "Valuator.h"
@@ -54,7 +54,7 @@
   \li \c FL_NORMAL_COUNTER: Displays a counter with 4 arrow buttons.
   \li \c FL_SIMPLE_COUNTER: Displays a counter with only 2 arrow buttons.
 */
-class FL_EXPORT Fl_Counter : public Fl_Valuator {
+class FLTK3_EXPORT Fl_Counter : public Fl_Valuator {
 
   fltk3::Font textfont_;
   fltk3::Fontsize textsize_;

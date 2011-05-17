@@ -32,8 +32,8 @@
 // is just a window containing a single color chooser and some boxes
 // to indicate the current and cancelled color.
 
-#ifndef Fl_Color_Chooser_H
-#define Fl_Color_Chooser_H
+#ifndef Fltk3_Color_Chooser_H
+#define Fltk3_Color_Chooser_H
 
 #include <fltk3/Group.h>
 #include <fltk3/Box.h>
@@ -44,7 +44,7 @@
 #ifndef FL_DOXYGEN
 
 /** For internal use only */
-class FL_EXPORT Flcc_HueBox : public fltk3::Widget {
+class FLTK3_EXPORT Flcc_HueBox : public fltk3::Widget {
   int px, py;
 protected:
   void draw();
@@ -56,7 +56,7 @@ public:
 };
 
 /** For internal use only */
-class FL_EXPORT Flcc_ValueBox : public fltk3::Widget {
+class FLTK3_EXPORT Flcc_ValueBox : public fltk3::Widget {
   int py;
 protected:
   void draw();
@@ -68,7 +68,7 @@ public:
 };
 
 /** For internal use only */
-class FL_EXPORT Flcc_Value_Input : public Fl_Value_Input {
+class FLTK3_EXPORT Flcc_Value_Input : public Fl_Value_Input {
 public:
   int format(char*);
   Flcc_Value_Input(int X, int Y, int W, int H) : Fl_Value_Input(X,Y,W,H) {}
@@ -113,7 +113,7 @@ public:
   color using dithering.
  */
 /** @} */
-class FL_EXPORT Fl_Color_Chooser : public fltk3::Group {
+class FLTK3_EXPORT Fl_Color_Chooser : public fltk3::Group {
   Flcc_HueBox huebox;
   Flcc_ValueBox valuebox;
   Fl_Choice choice;
@@ -189,8 +189,8 @@ public:
   Fl_Color_Chooser(int X, int Y, int W, int H, const char *L = 0);
 };
 
-FL_EXPORT int fl_color_chooser(const char* name, double& r, double& g, double& b, int m=-1);
-FL_EXPORT int fl_color_chooser(const char* name, uchar& r, uchar& g, uchar& b, int m=-1);
+FLTK3_EXPORT int fl_color_chooser(const char* name, double& r, double& g, double& b, int m=-1);
+FLTK3_EXPORT int fl_color_chooser(const char* name, uchar& r, uchar& g, uchar& b, int m=-1);
 
 #endif
 

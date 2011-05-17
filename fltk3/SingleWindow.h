@@ -28,8 +28,8 @@
 /* \file
    Fl_Single_Window class . */
 
-#ifndef Fl_Single_Window_H
-#define Fl_Single_Window_H
+#ifndef Fltk3_Single_Window_H
+#define Fltk3_Single_Window_H
 
 #include "Window.h"
 
@@ -40,7 +40,7 @@
   useful for modifying existing programs that use incremental update, or
   for some types of image data, such as a movie flipbook.
 */
-class FL_EXPORT Fl_Single_Window : public fltk3::Window {
+class FLTK3_EXPORT Fl_Single_Window : public fltk3::Window {
 public:
   void show();
   void show(int a, char **b) {fltk3::Window::show(a,b);}

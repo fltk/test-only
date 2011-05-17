@@ -28,8 +28,8 @@
 /* \file
    Fl_Clock, Fl_Clock_Output widgets . */
 
-#ifndef Fl_Clock_H
-#define Fl_Clock_H
+#ifndef Fltk3_Clock_H
+#define Fltk3_Clock_H
 
 #ifndef Fl_Widget_H
 #include "Widget.h"
@@ -60,7 +60,7 @@
   \image latex clock.png "FL_SQUARE_CLOCK type" width=4cm
   \image latex round_clock.png "FL_ROUND_CLOCK type" width=4cm
  */
-class FL_EXPORT Fl_Clock_Output : public fltk3::Widget {
+class FLTK3_EXPORT Fl_Clock_Output : public fltk3::Widget {
   int hour_, minute_, second_;
   ulong value_;
   void drawhands(fltk3::Color,fltk3::Color); // part of draw
@@ -119,7 +119,7 @@ public:
   \image latex clock.png "FL_SQUARE_CLOCK type" width=4cm  
   \image latex round_clock.png "FL_ROUND_CLOCK type" width=4cm
  */
-class FL_EXPORT Fl_Clock : public Fl_Clock_Output {
+class FLTK3_EXPORT Fl_Clock : public Fl_Clock_Output {
 public:
   int handle(int);
 

@@ -31,6 +31,8 @@
 #ifndef FLTK3_Wrapper_H
 #define FLTK3_Wrapper_H
 
+/*
+ 
 #define FLTK3_WRAPPER_VCALLS_OBJECT(proto, call, flag) \
   virtual void proto { \
     if ( pVCalls & pVCallWidget##flag ) { \
@@ -77,7 +79,11 @@
     pWrapper->pVCalls &= ~Wrapper::pVCallWidgetResize; \
   }
 
+ */
+
 namespace fltk3 {
+  
+  class Object;
   
   /**
    * \brief a base class for any kind of langage wrapper around FLTK3.
@@ -105,6 +111,7 @@ namespace fltk3 {
   class WidgetWrapper : public Wrapper {
   public:
     virtual ~WidgetWrapper() {}
+    /*
     FLTK3_WRAPPER_VCALLS_OBJECT(draw(),
                                 draw(),
                                 Draw)
@@ -120,6 +127,7 @@ namespace fltk3 {
     FLTK3_WRAPPER_VCALLS_OBJECT(hide(),
                                 hide(),
                                 Hide)
+     */
   };
   
   

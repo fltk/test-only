@@ -28,8 +28,8 @@
 /* \file
    Fl_Secret_Input widget . */
 
-#ifndef Fl_Secret_Input_H
-#define Fl_Secret_Input_H
+#ifndef Fltk3_Secret_Input_H
+#define Fltk3_Secret_Input_H
 
 #include "Input.h"
 
@@ -38,7 +38,7 @@
   that displays its input as a string of asterisks.  This subclass is
   usually used to receive passwords and other "secret" information.
 */
-class FL_EXPORT Fl_Secret_Input : public Fl_Input {
+class FLTK3_EXPORT Fl_Secret_Input : public Fl_Input {
 public:
   /**
     Creates a new Fl_Secret_Input widget using the given

@@ -28,8 +28,8 @@
 /* \file
    Fl_Multi_Browser widget . */
 
-#ifndef Fl_Multi_Browser_H
-#define Fl_Multi_Browser_H
+#ifndef Fltk3_Multi_Browser_H
+#define Fltk3_Multi_Browser_H
 
 #include "Browser.h"
 
@@ -43,7 +43,7 @@
   mouse, but you can change this with when().
   <P>See Fl_Browser for methods to add and remove lines from the browser.
 */
-class FL_EXPORT Fl_Multi_Browser : public Fl_Browser {
+class FLTK3_EXPORT Fl_Multi_Browser : public Fl_Browser {
 public:
   /**
       Creates a new Fl_Multi_Browser widget using the given

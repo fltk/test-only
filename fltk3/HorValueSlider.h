@@ -28,12 +28,12 @@
 /* \file
    Fl_Hor_Value_Slider widget . */
 
-#ifndef Fl_Hor_Value_Slider_H
-#define Fl_Hor_Value_Slider_H
+#ifndef Fltk3_Hor_Value_Slider_H
+#define Fltk3_Hor_Value_Slider_H
 
 #include "ValueSlider.h"
 
-class FL_EXPORT Fl_Hor_Value_Slider : public Fl_Value_Slider {
+class FLTK3_EXPORT Fl_Hor_Value_Slider : public Fl_Value_Slider {
 public:
     Fl_Hor_Value_Slider(int X,int Y,int W,int H,const char *l=0)
 	: Fl_Value_Slider(X,Y,W,H,l) {type(FL_HOR_SLIDER);}

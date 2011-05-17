@@ -29,8 +29,8 @@
  *  This file contains simple "C"-style type definitions.
  */
 
-#ifndef FL_TYPES_H
-#define FL_TYPES_H
+#ifndef FLTK3_TYPES_H
+#define FLTK3_TYPES_H
 
 /** \name	Miscellaneous */
 /*@{*/	/* group: Miscellaneous */

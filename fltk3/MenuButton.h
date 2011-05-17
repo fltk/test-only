@@ -28,8 +28,8 @@
 /* \file
    Fl_Menu_Button widget . */
 
-#ifndef Fl_Menu_Button_H
-#define Fl_Menu_Button_H
+#ifndef Fltk3_Menu_Button_H
+#define Fltk3_Menu_Button_H
 
 #include "Menu_.h"
 
@@ -56,7 +56,7 @@
   item does not have a callback the menu_button's callback is done
   instead.
 */
-class FL_EXPORT Fl_Menu_Button : public Fl_Menu_ {
+class FLTK3_EXPORT Fl_Menu_Button : public Fl_Menu_ {
 protected:
   void draw();
 public:

@@ -28,8 +28,8 @@
 /* \file
    Fl_Free widget . */
 
-#ifndef Fl_Free_H
-#define Fl_Free_H
+#ifndef Fltk3_Free_H
+#define Fltk3_Free_H
 
 #ifndef Fl_Widget_H
 #include "Widget.h"
@@ -63,7 +63,7 @@ typedef int (*FL_HANDLEPTR)(fltk3::Widget *, int , float, float, char);
   \li \c FL_ALL_FREE         same as FL_INPUT_FREE and FL_CONTINUOUS_FREE.
  
 */
-class FL_EXPORT Fl_Free : public fltk3::Widget {
+class FLTK3_EXPORT Fl_Free : public fltk3::Widget {
     FL_HANDLEPTR hfunc;
     static void step(void *);
 protected:

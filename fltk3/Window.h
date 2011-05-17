@@ -57,7 +57,7 @@ namespace fltk3 {
    using the window manager and fltk3::modal() is zero or equal to the
    window. fltk3::Window has a default callback that calls fltk3::Window::hide().
    */
-  class FL_EXPORT Window : public Group {
+  class FLTK3_EXPORT Window : public Group {
     
     static char *default_xclass_;
     

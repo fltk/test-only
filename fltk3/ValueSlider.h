@@ -28,8 +28,8 @@
 /* \file
    Fl_Value_Slider widget . */
 
-#ifndef Fl_Value_Slider_H
-#define Fl_Value_Slider_H
+#ifndef Fltk3_Value_Slider_H
+#define Fltk3_Value_Slider_H
 
 #include "Slider.h"
 
@@ -39,7 +39,7 @@
   <P ALIGN=CENTER>\image html value_slider.png 
   \image latex  value_slider.png "Fl_Value_Slider" width=4cm
 */
-class FL_EXPORT Fl_Value_Slider : public Fl_Slider {
+class FLTK3_EXPORT Fl_Value_Slider : public Fl_Slider {
     fltk3::Font textfont_;
     fltk3::Fontsize textsize_;
     fltk3::Color textcolor_;

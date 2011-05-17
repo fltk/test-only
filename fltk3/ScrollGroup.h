@@ -28,8 +28,8 @@
 /* \file
    Fl_Scroll widget . */
 
-#ifndef Fl_Scroll_H
-#define Fl_Scroll_H
+#ifndef Fltk3_Scroll_H
+#define Fltk3_Scroll_H
 
 #include "Group.h"
 #include "Scrollbar.h"
@@ -93,7 +93,7 @@
   clipping is not conveyed to it when drawn, and it will draw over the
   scrollbars and neighboring objects.</I>
 */
-class FL_EXPORT Fl_Scroll : public fltk3::Group {
+class FLTK3_EXPORT Fl_Scroll : public fltk3::Group {
 
   int xposition_, yposition_;
   int oldx, oldy;

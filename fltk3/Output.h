@@ -28,8 +28,8 @@
 /* \file
    Fl_Output widget . */
 
-#ifndef Fl_Output_H
-#define Fl_Output_H
+#ifndef Fltk3_Output_H
+#define Fltk3_Output_H
 
 #include "Input.h"
 /**
@@ -50,7 +50,7 @@
   assumes the font can draw any characters in the ISO-Latin1 character
   set.
 */
-class Fl_Output : public Fl_Input { // don't use FL_EXPORT here !
+class Fl_Output : public Fl_Input { // don't use FLTK3_EXPORT here !
 public:
   /**
     Creates a new Fl_Output widget using the given position,

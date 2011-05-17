@@ -2,8 +2,8 @@
 // "$Id: TreeItem.h 8340 2011-01-30 20:22:06Z greg.ercolano $"
 //
 
-#ifndef FL_TREE_ITEM_H
-#define FL_TREE_ITEM_H
+#ifndef FLtk3_TREE_ITEM_H
+#define FLtk3_TREE_ITEM_H
 
 #include <fltk3/run.h>
 #include <fltk3/Widget.h>
@@ -56,7 +56,7 @@
 /// When you make changes to items, you'll need to tell the tree to redraw()
 /// for the changes to show up.
 ///
-class FL_EXPORT Fl_Tree_Item {
+class FLTK3_EXPORT Fl_Tree_Item {
   const char             *_label;		// label (memory managed)
   fltk3::Font                 _labelfont;		// label's font face
   fltk3::Fontsize             _labelsize;		// label's font size

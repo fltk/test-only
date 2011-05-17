@@ -28,15 +28,15 @@
 /* \file
    Fl_XBM_Image class . */
 
-#ifndef Fl_XBM_Image_H
-#define Fl_XBM_Image_H
+#ifndef Fltk3_XBM_Image_H
+#define Fltk3_XBM_Image_H
 #  include "Bitmap.h"
 
 /**
   The Fl_XBM_Image class supports loading, caching,
   and drawing of X Bitmap (XBM) bitmap files.
 */
-class FL_EXPORT Fl_XBM_Image : public Fl_Bitmap {
+class FLTK3_EXPORT Fl_XBM_Image : public Fl_Bitmap {
 
   public:
 

@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 /* "$Id$"
  *
  * Author: Jean-Marc Lienher ( http://oksid.ch )
@@ -36,6 +35,8 @@
 
 #ifndef _HAVE_FL_UTF8_HDR_
 #define _HAVE_FL_UTF8_HDR_
+
+#if 0 // FIXME: 123
 
 #include "Fl_Export.H"
 #include "fl_types.h"
@@ -256,6 +257,7 @@ FL_EXPORT char fl_make_path( const char *path );
 }
 #endif /* __cplusplus */
 
+#endif
 
 #endif /* _HAVE_FL_UTF8_HDR_ */
 

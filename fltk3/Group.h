@@ -42,7 +42,7 @@ namespace fltk3 {
    is fltk3::Window, however groups can also be used to control radio buttons 
    or to enforce resize behavior.
    */
-  class FL_EXPORT Group : public Widget {
+  class FLTK3_EXPORT Group : public Widget {
     
     fltk3::Widget** array_;
     fltk3::Widget* savedfocus_;
@@ -217,7 +217,7 @@ namespace fltk3 {
    {} 
    \endcode
    */
-  class FL_EXPORT Fl_End {
+  class FLTK3_EXPORT Fl_End {
   public:
     /** All it does is calling fltk3::Group::current()->end() */
     Fl_End() {Group::current()->end();}

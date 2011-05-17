@@ -30,8 +30,8 @@
    to provide the popup window and color selection mechanism.
 */
 
-#ifndef fl_show_colormap_H
-#define fl_show_colormap_H
+#ifndef fltk3_show_colormap_H
+#define fltk3_show_colormap_H
 
 /* doxygen comment here to avoid exposing ColorMenu in fl_show_colormap.cxx
 */
@@ -47,7 +47,7 @@
   \retval fltk3::Color value of the chosen colormap entry.
   \see Fl_Color_Chooser
 */
-FL_EXPORT fltk3::Color fl_show_colormap(fltk3::Color oldcol);
+FLTK3_EXPORT fltk3::Color fl_show_colormap(fltk3::Color oldcol);
 
 /** @} */
 

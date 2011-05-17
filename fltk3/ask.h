@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#ifndef fl_ask_H
-#  define fl_ask_H
+#ifndef fltk3_ask_H
+#  define fltk3_ask_H
 
 #  include "enumerations.h"
 
@@ -47,35 +47,35 @@ enum {
 #    define __fl_attr(x)
 #  endif // __GNUC__
 
-FL_EXPORT void fl_beep(int type = FL_BEEP_DEFAULT);
-FL_EXPORT void fl_message(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
-FL_EXPORT void fl_alert(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
+FLTK3_EXPORT void fl_beep(int type = FL_BEEP_DEFAULT);
+FLTK3_EXPORT void fl_message(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
+FLTK3_EXPORT void fl_alert(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
 // fl_ask() is deprecated since it uses "Yes" and "No" for the buttons,
 // which does not conform to the current FLTK Human Interface Guidelines.
 // Use fl_choice() instead with the appropriate verbs instead.
-FL_EXPORT int fl_ask(const char *,...) __fl_attr((__format__ (__printf__, 1, 2), __deprecated__));
-FL_EXPORT int fl_choice(const char *q,const char *b0,const char *b1,const char *b2,...) __fl_attr((__format__ (__printf__, 1, 5)));
-FL_EXPORT const char *fl_input(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
-FL_EXPORT const char *fl_password(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
+FLTK3_EXPORT int fl_ask(const char *,...) __fl_attr((__format__ (__printf__, 1, 2), __deprecated__));
+FLTK3_EXPORT int fl_choice(const char *q,const char *b0,const char *b1,const char *b2,...) __fl_attr((__format__ (__printf__, 1, 5)));
+FLTK3_EXPORT const char *fl_input(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
+FLTK3_EXPORT const char *fl_password(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
 
-FL_EXPORT fltk3::Widget *fl_message_icon();
-extern FL_EXPORT fltk3::Font fl_message_font_;
-extern FL_EXPORT fltk3::Fontsize fl_message_size_;
+FLTK3_EXPORT fltk3::Widget *fl_message_icon();
+extern FLTK3_EXPORT fltk3::Font fl_message_font_;
+extern FLTK3_EXPORT fltk3::Fontsize fl_message_size_;
 inline void fl_message_font(fltk3::Font f, fltk3::Fontsize s) {
   fl_message_font_ = f; fl_message_size_ = s;}
 
-FL_EXPORT void fl_message_hotspot(int enable);
-FL_EXPORT int fl_message_hotspot(void);
+FLTK3_EXPORT void fl_message_hotspot(int enable);
+FLTK3_EXPORT int fl_message_hotspot(void);
 
-FL_EXPORT void fl_message_title(const char *title);
-FL_EXPORT void fl_message_title_default(const char *title);
+FLTK3_EXPORT void fl_message_title(const char *title);
+FLTK3_EXPORT void fl_message_title_default(const char *title);
 
 // pointers you can use to change FLTK to a foreign language:
-extern FL_EXPORT const char* fl_no;
-extern FL_EXPORT const char* fl_yes;
-extern FL_EXPORT const char* fl_ok;
-extern FL_EXPORT const char* fl_cancel;
-extern FL_EXPORT const char* fl_close;
+extern FLTK3_EXPORT const char* fl_no;
+extern FLTK3_EXPORT const char* fl_yes;
+extern FLTK3_EXPORT const char* fl_ok;
+extern FLTK3_EXPORT const char* fl_cancel;
+extern FLTK3_EXPORT const char* fl_close;
 #endif // !fl_ask_H
 
 //

@@ -29,8 +29,8 @@
     Handling transparently platform dependent cairo include files 
 */
 
-#ifndef FL_CAIRO_H
-# define FL_CAIRO_H
+#ifndef FLtk3_CAIRO_H
+# define FLtk3_CAIRO_H
 # ifdef FLTK_HAVE_CAIRO
 
 // Cairo is currently supported for the following platforms:
@@ -60,7 +60,7 @@
    For internal use only.
    \note Only available when configure has the --enable-cairo option
 */
-class FL_EXPORT Fl_Cairo_State {
+class FLTK3_EXPORT Fl_Cairo_State {
 public:
   Fl_Cairo_State() : cc_(0), own_cc_(false), autolink_(false), window_(0), gc_(0) {}
 

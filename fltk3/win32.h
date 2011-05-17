@@ -71,7 +71,7 @@ inline void XClipBox(Fl_Region r,XRectangle* rect) {
 
 // this object contains all win32-specific stuff about a window:
 // Warning: this object is highly subject to change!
-class FL_EXPORT Fl_X {
+class FLTK3_EXPORT Fl_X {
 public:
   // member variables - add new variables only at the end of this block
   Window xid;
@@ -94,41 +94,41 @@ public:
   void mapraise();
   static Fl_X* make(fltk3::Window*);
 };
-extern FL_EXPORT HCURSOR fl_default_cursor;
-extern FL_EXPORT UINT fl_wake_msg;
-extern FL_EXPORT char fl_override_redirect; // hack into fltk3::Window::make_xid()
-extern FL_EXPORT int fl_background_pixel;  // hack into fltk3::Window::make_xid()
-extern FL_EXPORT HPALETTE fl_palette; // non-zero only on 8-bit displays!
-extern FL_EXPORT void fl_release_dc(HWND w, HDC dc);
-extern FL_EXPORT void fl_save_dc( HWND w, HDC dc);
+extern FLTK3_EXPORT HCURSOR fl_default_cursor;
+extern FLTK3_EXPORT UINT fl_wake_msg;
+extern FLTK3_EXPORT char fl_override_redirect; // hack into fltk3::Window::make_xid()
+extern FLTK3_EXPORT int fl_background_pixel;  // hack into fltk3::Window::make_xid()
+extern FLTK3_EXPORT HPALETTE fl_palette; // non-zero only on 8-bit displays!
+extern FLTK3_EXPORT void fl_release_dc(HWND w, HDC dc);
+extern FLTK3_EXPORT void fl_save_dc( HWND w, HDC dc);
 
 inline Window fl_xid(const fltk3::Window* w) { Fl_X *temp = Fl_X::i(w); return temp ? temp->xid : 0; }
 
 #else
-FL_EXPORT Window fl_xid_(const fltk3::Window* w);
+FLTK3_EXPORT Window fl_xid_(const fltk3::Window* w);
 #define fl_xid(w) fl_xid_(w)
 #endif // FL_LIBRARY || FL_INTERNALS
 
-FL_EXPORT fltk3::Window* fl_find(Window xid);
-FL_EXPORT void fl_clip_region(Fl_Region);
+FLTK3_EXPORT fltk3::Window* fl_find(Window xid);
+FLTK3_EXPORT void fl_clip_region(Fl_Region);
 
 // most recent fl_color() or fl_rgbcolor() points at one of these:
-extern FL_EXPORT struct Fl_XMap {
+extern FLTK3_EXPORT struct Fl_XMap {
   COLORREF rgb;	// this should be the type the RGB() macro returns
   HPEN pen;	// pen, 0 if none created yet
   int brush;	// ref to solid brush, 0 if none created yet
 } *fl_current_xmap;
 inline COLORREF fl_RGB() {return fl_current_xmap->rgb;}
 inline HPEN fl_pen() {return fl_current_xmap->pen;}
-FL_EXPORT HBRUSH fl_brush(); // allocates a brush if necessary
-FL_EXPORT HBRUSH fl_brush_action(int); // now does the real work
+FLTK3_EXPORT HBRUSH fl_brush(); // allocates a brush if necessary
+FLTK3_EXPORT HBRUSH fl_brush_action(int); // now does the real work
 
-extern FL_EXPORT HINSTANCE fl_display;
-extern FL_EXPORT Window fl_window;
-extern FL_EXPORT HDC fl_gc;
-extern FL_EXPORT MSG fl_msg;
-extern FL_EXPORT HDC fl_GetDC(Window);
-extern FL_EXPORT HDC fl_makeDC(HBITMAP);
+extern FLTK3_EXPORT HINSTANCE fl_display;
+extern FLTK3_EXPORT Window fl_window;
+extern FLTK3_EXPORT HDC fl_gc;
+extern FLTK3_EXPORT MSG fl_msg;
+extern FLTK3_EXPORT HDC fl_GetDC(Window);
+extern FLTK3_EXPORT HDC fl_makeDC(HBITMAP);
 
 // off-screen pixmaps: create, destroy, draw into, copy to window
 typedef HBITMAP Fl_Offscreen;
@@ -144,21 +144,21 @@ typedef HBITMAP Fl_Offscreen;
    fl_pop_clip(); RestoreDC(fl_gc, _savedc); DeleteDC(fl_gc); _ss->set_current(); fl_window=_sw; fl_gc = _sgc
 
 
-FL_EXPORT void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy);
-FL_EXPORT void fl_copy_offscreen_with_alpha(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy);
+FLTK3_EXPORT void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy);
+FLTK3_EXPORT void fl_copy_offscreen_with_alpha(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy);
 #define fl_delete_offscreen(bitmap) DeleteObject(bitmap)
 
 // Bitmap masks
 typedef HBITMAP Fl_Bitmask;
 
-extern FL_EXPORT Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data);
-extern FL_EXPORT Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);
-extern FL_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
+extern FLTK3_EXPORT Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data);
+extern FLTK3_EXPORT Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);
+extern FLTK3_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
 
 // Dummy function to register a function for opening files via the window manager...
 inline void fl_open_callback(void (*)(const char *)) {}
 
-extern FL_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b);
+extern FLTK3_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b);
 #endif // FL_DOXYGEN
 //
 // End of "$Id: win32.h 8375 2011-02-05 16:55:04Z AlbrechtS $".

@@ -2,8 +2,8 @@
 // "$Id: TreePrefs.h 8340 2011-01-30 20:22:06Z greg.ercolano $"
 //
 
-#ifndef FL_TREE_PREFS_H
-#define FL_TREE_PREFS_H
+#ifndef FLtk3_TREE_PREFS_H
+#define FLtk3_TREE_PREFS_H
 
 //////////////////////
 // FL/TreePrefs.h
@@ -82,7 +82,7 @@ enum Fl_Tree_Select {
 /// You should probably be using the methods in Fl_Tree
 /// instead of trying to accessing tree's preferences settings directly.
 ///
-class FL_EXPORT Fl_Tree_Prefs {
+class FLTK3_EXPORT Fl_Tree_Prefs {
   fltk3::Font _labelfont;			// label's font face
   fltk3::Fontsize _labelsize;		// label's font size
   int _margintop;			// -- 

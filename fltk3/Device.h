@@ -30,8 +30,8 @@
  Fl_Display_Device, Fl_Device_Plugin.
 */
 
-#ifndef Fl_Device_H
-#define Fl_Device_H
+#ifndef Fltk3_Device_H
+#define Fltk3_Device_H
 
 #include <fltk3/x.h>
 #include <fltk3/Plugin.h>
@@ -43,7 +43,7 @@
 class Fl_Graphics_Driver;
 class Fl_Font_Descriptor;
 /** \brief Points to the driver that currently receives all graphics requests */
-FL_EXPORT extern Fl_Graphics_Driver *fl_graphics_driver;
+FLTK3_EXPORT extern Fl_Graphics_Driver *fl_graphics_driver;
 
 /**
  signature of image generation callback function.
@@ -72,7 +72,7 @@ typedef short COORD_T;
 /**
  \brief All graphical output devices and all graphics systems.
  */
-class FL_EXPORT Fl_Device {
+class FLTK3_EXPORT Fl_Device {
 public:
   /** A string that identifies each subclass of Fl_Device.
      Function class_name() applied to a device of this class returns this string.
@@ -105,7 +105,7 @@ public:
  <br> The public API for drawing operations is functionally presented in \ref drawing and as function lists
  in the \ref fl_drawings and \ref fl_attributes modules. 
   */
-class FL_EXPORT Fl_Graphics_Driver : public Fl_Device {
+class FLTK3_EXPORT Fl_Graphics_Driver : public Fl_Device {
 public:
   /** A 2D coordinate transformation matrix
    */
@@ -211,8 +211,8 @@ protected:
   friend void fl_draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L);
   friend void fl_draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D, int L);
   friend void fl_draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D);
-  friend FL_EXPORT void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D);
-  friend FL_EXPORT void gl_start();
+  friend FLTK3_EXPORT void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D);
+  friend FLTK3_EXPORT void gl_start();
 
   matrix *fl_matrix; /**< Points to the current coordinate transformation matrix */
 
@@ -403,7 +403,7 @@ public:
  *
  This class is implemented only on the Mac OS X platform.
  */
-class FL_EXPORT Fl_Quartz_Graphics_Driver : public Fl_Graphics_Driver {
+class FLTK3_EXPORT Fl_Quartz_Graphics_Driver : public Fl_Graphics_Driver {
 public:
   static const char *class_id;
   const char *class_name() {return class_id;};
@@ -436,7 +436,7 @@ public:
  *
  This class is implemented only on the MSWindows platform.
  */
-class FL_EXPORT Fl_GDI_Graphics_Driver : public Fl_Graphics_Driver {
+class FLTK3_EXPORT Fl_GDI_Graphics_Driver : public Fl_Graphics_Driver {
 public:
   static const char *class_id;
   const char *class_name() {return class_id;};
@@ -494,7 +494,7 @@ public:
 /**
  \brief A surface that's susceptible to receive graphical output.
  */
-class FL_EXPORT Fl_Surface_Device : public Fl_Device {
+class FLTK3_EXPORT Fl_Surface_Device : public Fl_Device {
   /** \brief The graphics driver in use by this surface. */
   Fl_Graphics_Driver *_driver;
   static Fl_Surface_Device *_surface; // the surface that currently receives graphics output
@@ -518,7 +518,7 @@ public:
 /**
  \brief A display to which the computer can draw.
  */
-class FL_EXPORT Fl_Display_Device : public Fl_Surface_Device {
+class FLTK3_EXPORT Fl_Display_Device : public Fl_Surface_Device {
   static Fl_Display_Device *_display; // the platform display device
 public:
   static const char *class_id;
@@ -534,7 +534,7 @@ public:
  window or screen types. It is currently used to provide an automated printing
  service for OpenGL windows, if linked with fltk_gl.
  */
-class FL_EXPORT Fl_Device_Plugin : public Fl_Plugin {
+class FLTK3_EXPORT Fl_Device_Plugin : public Fl_Plugin {
 public:
   /** \brief The constructor */
   Fl_Device_Plugin(const char *name)

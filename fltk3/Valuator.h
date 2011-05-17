@@ -28,8 +28,8 @@
 /* \file
    Fl_Valuator widget . */
 
-#ifndef Fl_Valuator_H
-#define Fl_Valuator_H
+#ifndef Fltk3_Valuator_H
+#define Fltk3_Valuator_H
 
 #ifndef Fl_Widget_H
 #include "Widget.h"
@@ -52,7 +52,7 @@
   The ones labelled "0" are the default versions with a type(0).  
   For consistency the symbol FL_VERTICAL is defined as zero.
 */
-class FL_EXPORT Fl_Valuator : public fltk3::Widget {
+class FLTK3_EXPORT Fl_Valuator : public fltk3::Widget {
 
   double value_;
   double previous_value_;

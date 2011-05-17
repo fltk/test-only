@@ -30,8 +30,8 @@
   \brief utility header to pull drawing functions together
 */
 
-#ifndef fl_draw_H
-#define fl_draw_H
+#ifndef fltk3_draw_H
+#define fltk3_draw_H
 
 #include <fltk3/x.h>	      // for Fl_Region
 #include <fltk3/enumerations.h>  // for the color names
@@ -42,7 +42,7 @@
 class Fl_Image;
 
 // Label flags...
-FL_EXPORT extern char fl_draw_shortcut;
+FLTK3_EXPORT extern char fl_draw_shortcut;
 
 /** \addtogroup fl_attributes
     @{
@@ -223,7 +223,7 @@ inline void fl_rectf(int x, int y, int w, int h, fltk3::Color c) {fl_color(c); f
   shade is produced.
   */
 /* note: doxygen comment here to avoid triplication in os-speciic files */
-FL_EXPORT void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b);
+FLTK3_EXPORT void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b);
 
 // line segments:
 /**
@@ -325,7 +325,7 @@ inline void fl_arc(int x, int y, int w, int h, double a1, double a2) {fl_graphic
  */
 inline void fl_pie(int x, int y, int w, int h, double a1, double a2) {fl_graphics_driver->pie(x,y,w,h,a1,a2); }
 /** fl_chord declaration is a place holder - the function does not yet exist */
-FL_EXPORT void fl_chord(int x, int y, int w, int h, double a1, double a2); // nyi
+FLTK3_EXPORT void fl_chord(int x, int y, int w, int h, double a1, double a2); // nyi
 
 // scalable drawing code (code in fl_vertex.C and fl_arc.C):
 /**
@@ -516,14 +516,14 @@ inline fltk3::Fontsize fl_size() {return fl_graphics_driver->size();}
   You can also use the value of \p size passed to fl_font()
 */
 inline int fl_height() {return fl_graphics_driver->height();}
-FL_EXPORT int fl_height(int font, int size);
+FLTK3_EXPORT int fl_height(int font, int size);
 /**
   Returns the recommended distance above the bottom of a fl_height() tall box to
   draw the text at so it looks centered vertically in that box.
 */
 inline int  fl_descent() {return fl_graphics_driver->descent();}
 /** Returns the typographical width of a nul-terminated string */
-FL_EXPORT double fl_width(const char* txt);
+FLTK3_EXPORT double fl_width(const char* txt);
 /** Returns the typographical width of a sequence of \p n characters */
 inline double fl_width(const char* txt, int n) {return fl_graphics_driver->width(txt, n);}
 /** Returns the typographical width of a single character.
@@ -538,7 +538,7 @@ inline double fl_width(unsigned int c)  {return fl_graphics_driver->width(c);}
   fl_rect(x+dx, y+dy, wo, ho). Note the dx, dy values hold the offset of the first
   "colored in" pixel of the string, from the draw origin.
 */
-FL_EXPORT void fl_text_extents(const char*, int& dx, int& dy, int& w, int& h); // NO fltk symbol expansion will be performed
+FLTK3_EXPORT void fl_text_extents(const char*, int& dx, int& dy, int& w, int& h); // NO fltk symbol expansion will be performed
 /** Determines the minimum pixel dimensions of a sequence of \p n characters.
 \see fl_text_extents(const char*, int& dx, int& dy, int& w, int& h)
 */
@@ -553,28 +553,28 @@ inline void fl_text_extents(const char *t, int n, int& dx, int& dy, int& w, int&
   \param[in] n optional number of characters to convert (default is all)
   \returns pointer to internal buffer containing converted characters
   */
-FL_EXPORT const char *fl_latin1_to_local(const char *t, int n=-1);
+FLTK3_EXPORT const char *fl_latin1_to_local(const char *t, int n=-1);
 /**
   Converts text from local encoding to Windowx/X11 latin1 character set.
   \param[in] t character string (local encoding)
   \param[in] n optional number of characters to convert (default is all)
   \returns pointer to internal buffer containing converted characters
   */
-FL_EXPORT const char *fl_local_to_latin1(const char *t, int n=-1);
+FLTK3_EXPORT const char *fl_local_to_latin1(const char *t, int n=-1);
 /**
   Converts text from Mac Roman character set to local encoding.
   \param[in] t character string (Mac Roman encoding)
   \param[in] n optional number of characters to convert (default is all)
   \returns pointer to internal buffer containing converted characters
   */
-FL_EXPORT const char *fl_mac_roman_to_local(const char *t, int n=-1);
+FLTK3_EXPORT const char *fl_mac_roman_to_local(const char *t, int n=-1);
 /**
   Converts text from local encoding to Mac Roman character set.
   \param[in] t character string (local encoding)
   \param[in] n optional number of characters to convert (default is all)
   \returns pointer to internal buffer containing converted characters
   */
-FL_EXPORT const char *fl_local_to_mac_roman(const char *t, int n=-1);
+FLTK3_EXPORT const char *fl_local_to_mac_roman(const char *t, int n=-1);
 /** @} */
 
 /** \addtogroup  fl_drawings
@@ -589,7 +589,7 @@ FL_EXPORT const char *fl_local_to_mac_roman(const char *t, int n=-1);
   function of the underlying OS. It does not apply any special handling
   to control characters.
 */
-FL_EXPORT void fl_draw(const char* str, int x, int y);
+FLTK3_EXPORT void fl_draw(const char* str, int x, int y);
 /**
   Draws a nul-terminated string starting at the given location and 
   rotating \p angle degrees counter-clockwise.
@@ -597,7 +597,7 @@ FL_EXPORT void fl_draw(const char* str, int x, int y);
   function of the underlying OS and is supported by Xft, Win32 and MacOS
   fltk subsets.
 */
-FL_EXPORT void fl_draw(int angle, const char* str, int x, int y);
+FLTK3_EXPORT void fl_draw(int angle, const char* str, int x, int y);
 /**
   Draws an array of \p n characters starting at the given location.
 */
@@ -611,22 +611,22 @@ inline void fl_draw(int angle,const char* str, int n, int x, int y) {fl_graphics
   Draws an array of \p n characters right to left starting at given location.
 */
 inline void fl_rtl_draw(const char* str, int n, int x, int y) {fl_graphics_driver->rtl_draw(str,n,x,y); }
-FL_EXPORT void fl_measure(const char* str, int& x, int& y,
+FLTK3_EXPORT void fl_measure(const char* str, int& x, int& y,
                           int draw_symbols = 1);
-FL_EXPORT void fl_draw(const char* str, int x, int y, int w, int h,
+FLTK3_EXPORT void fl_draw(const char* str, int x, int y, int w, int h,
                        fltk3::Align align,
                        Fl_Image* img=0, int draw_symbols = 1);
-FL_EXPORT void fl_draw(const char* str, int x, int y, int w, int h,
+FLTK3_EXPORT void fl_draw(const char* str, int x, int y, int w, int h,
                        fltk3::Align align,
                        void (*callthis)(const char *,int,int,int),
                        Fl_Image* img=0, int draw_symbols = 1);
 
 // boxtypes:
 namespace fltk3 {
-FL_EXPORT void frame(const char* s, int x, int y, int w, int h);
+FLTK3_EXPORT void frame(const char* s, int x, int y, int w, int h);
 }
-FL_EXPORT void fl_frame2(const char* s, int x, int y, int w, int h);
-FL_EXPORT void fl_draw_box(fltk3::Boxtype, int x, int y, int w, int h, fltk3::Color);
+FLTK3_EXPORT void fl_frame2(const char* s, int x, int y, int w, int h);
+FLTK3_EXPORT void fl_draw_box(fltk3::Boxtype, int x, int y, int w, int h, fltk3::Color);
 
 // images:
 
@@ -715,7 +715,7 @@ inline void fl_draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int
   Draws a gray-scale image using a callback function to generate image data.
   \see fl_draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D)
   */
-FL_EXPORT void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1);
+FLTK3_EXPORT void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1);
 
 /**
   Checks whether platform supports true alpha blending for RGBA images.
@@ -723,7 +723,7 @@ FL_EXPORT void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,i
   \returns 0 not supported so FLTK will use screen door transparency
   */
 /* note: doxygen comment here to avoid triplication in os-speciic files */
-FL_EXPORT char fl_can_do_alpha_blending();
+FLTK3_EXPORT char fl_can_do_alpha_blending();
 
 /**
   Reads an RGB(A) image from the current window or off-screen buffer.
@@ -743,40 +743,40 @@ FL_EXPORT char fl_can_do_alpha_blending();
   channel is generated.
   */
 /* note: doxygen comment here to avoid triplication in os-speciic files */
-FL_EXPORT uchar *fl_read_image(uchar *p,int X,int Y,int W,int H,int alpha=0);
+FLTK3_EXPORT uchar *fl_read_image(uchar *p,int X,int Y,int W,int H,int alpha=0);
 
 // pixmaps:
-FL_EXPORT int fl_draw_pixmap(/*const*/ char* const* data, int x,int y,fltk3::Color=fltk3::GRAY);
-FL_EXPORT int fl_draw_pixmap(const char* const* cdata, int x,int y,fltk3::Color=fltk3::GRAY);
-FL_EXPORT int fl_measure_pixmap(/*const*/ char* const* data, int &w, int &h);
-FL_EXPORT int fl_measure_pixmap(const char* const* cdata, int &w, int &h);
+FLTK3_EXPORT int fl_draw_pixmap(/*const*/ char* const* data, int x,int y,fltk3::Color=fltk3::GRAY);
+FLTK3_EXPORT int fl_draw_pixmap(const char* const* cdata, int x,int y,fltk3::Color=fltk3::GRAY);
+FLTK3_EXPORT int fl_measure_pixmap(/*const*/ char* const* data, int &w, int &h);
+FLTK3_EXPORT int fl_measure_pixmap(const char* const* cdata, int &w, int &h);
 
 // other:
-FL_EXPORT void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
+FLTK3_EXPORT void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
                          void (*draw_area)(void*, int,int,int,int), void* data);
-FL_EXPORT const char* fl_shortcut_label(unsigned int shortcut);
-FL_EXPORT const char* fl_shortcut_label(unsigned int shortcut, const char **eom);
-FL_EXPORT unsigned int fl_old_shortcut(const char* s);
-FL_EXPORT void fl_overlay_rect(int x,int y,int w,int h);
-FL_EXPORT void fl_overlay_clear();
-FL_EXPORT void fl_cursor(fltk3::Cursor, fltk3::Color fg=fltk3::BLACK, fltk3::Color bg=fltk3::WHITE);
-FL_EXPORT const char* fl_expand_text(const char* from, char* buf, int maxbuf,
+FLTK3_EXPORT const char* fl_shortcut_label(unsigned int shortcut);
+FLTK3_EXPORT const char* fl_shortcut_label(unsigned int shortcut, const char **eom);
+FLTK3_EXPORT unsigned int fl_old_shortcut(const char* s);
+FLTK3_EXPORT void fl_overlay_rect(int x,int y,int w,int h);
+FLTK3_EXPORT void fl_overlay_clear();
+FLTK3_EXPORT void fl_cursor(fltk3::Cursor, fltk3::Color fg=fltk3::BLACK, fltk3::Color bg=fltk3::WHITE);
+FLTK3_EXPORT const char* fl_expand_text(const char* from, char* buf, int maxbuf,
                                      double maxw, int& n, double &width,
                                      int wrap, int draw_symbols = 0);
 
 // XIM:
 /** \todo provide user documentation for fl_set_status function */
-FL_EXPORT void fl_set_status(int X, int Y, int W, int H);
+FLTK3_EXPORT void fl_set_status(int X, int Y, int W, int H);
 /** \todo provide user documentation for fl_set_spot function */
-FL_EXPORT void fl_set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *win=0);
+FLTK3_EXPORT void fl_set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *win=0);
 /** \todo provide user documentation for fl_reset_spot function*/
-FL_EXPORT void fl_reset_spot(void);
+FLTK3_EXPORT void fl_reset_spot(void);
 
 
 
 // XForms symbols:
-FL_EXPORT int fl_draw_symbol(const char* label,int x,int y,int w,int h, fltk3::Color);
-FL_EXPORT int fl_add_symbol(const char* name, void (*drawit)(fltk3::Color), int scalable);
+FLTK3_EXPORT int fl_draw_symbol(const char* label,int x,int y,int w,int h, fltk3::Color);
+FLTK3_EXPORT int fl_add_symbol(const char* name, void (*drawit)(fltk3::Color), int scalable);
 /** @} */
 
 #endif

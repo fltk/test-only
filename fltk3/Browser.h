@@ -32,8 +32,8 @@
 // lists of textual data.  Notice that the line numbers
 // start from 1, and 0 means "no line".
 
-#ifndef Fl_Browser_H
-#define Fl_Browser_H
+#ifndef Fltk3_Browser_H
+#define Fltk3_Browser_H
 
 #include "Browser_.h"
 #include "Image.h"
@@ -86,7 +86,7 @@ struct FL_BLINE;
   Fl_Browser internally uses linked lists to manage the browser's items.
   For more info, see find_item(int).
 */
-class FL_EXPORT Fl_Browser : public Fl_Browser_ {
+class FLTK3_EXPORT Fl_Browser : public Fl_Browser_ {
 
   FL_BLINE *first;		// the array of lines
   FL_BLINE *last;

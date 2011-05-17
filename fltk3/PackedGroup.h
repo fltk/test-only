@@ -28,8 +28,8 @@
 /* \file
    Fl_Pack widget . */
 
-#ifndef Fl_Pack_H
-#define Fl_Pack_H
+#ifndef Fltk3_Pack_H
+#define Fltk3_Pack_H
 
 #include <fltk3/Group.h>
 
@@ -49,7 +49,7 @@
   <P>The resizable for Fl_Pack is set to NULL by default.</p>
   <P>See also: fltk3::Group::resizable()
 */
-class FL_EXPORT Fl_Pack : public fltk3::Group {
+class FLTK3_EXPORT Fl_Pack : public fltk3::Group {
   int spacing_;
 
 public:

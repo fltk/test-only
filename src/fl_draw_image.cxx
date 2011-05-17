@@ -98,7 +98,7 @@ static void color8_converter(const uchar *from, uchar *to, int w, int delta) {
     r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
     g += from[1]; if (g < 0) g = 0; else if (g>255) g = 255;
     b += from[2]; if (b < 0) b = 0; else if (b>255) b = 255;
-    fltk3::Color i = fltk3::colorCube(r*fltk3::NUM_RED/256,g*fltk3::NUM_GREEN/256,b*fltk3::NUM_BLUE/256);
+    fltk3::Color i = fltk3::color_cube(r*fltk3::NUM_RED/256,g*fltk3::NUM_GREEN/256,b*fltk3::NUM_BLUE/256);
     Fl_XColor& xmap = fl_xmap[0][i];
     if (!xmap.mapped) {if (!fl_redmask) fl_xpixel(r,g,b); else fl_xpixel(i);}
     r -= xmap.r;
@@ -127,7 +127,7 @@ static void mono8_converter(const uchar *from, uchar *to, int w, int delta) {
     r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
     g += from[0]; if (g < 0) g = 0; else if (g>255) g = 255;
     b += from[0]; if (b < 0) b = 0; else if (b>255) b = 255;
-    fltk3::Color i = fltk3::colorCube(r*fltk3::NUM_RED/256,g*fltk3::NUM_GREEN/256,b*fltk3::NUM_BLUE/256);
+    fltk3::Color i = fltk3::color_cube(r*fltk3::NUM_RED/256,g*fltk3::NUM_GREEN/256,b*fltk3::NUM_BLUE/256);
     Fl_XColor& xmap = fl_xmap[0][i];
     if (!xmap.mapped) {if (!fl_redmask) fl_xpixel(r,g,b); else fl_xpixel(i);}
     r -= xmap.r;

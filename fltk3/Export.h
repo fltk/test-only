@@ -25,8 +25,8 @@
  *     http://www.fltk.org/str.php
  */
 
-#ifndef Fl_Export_H
-#  define Fl_Export_H
+#ifndef FLTK3_EXPORT_H
+#  define FLTK3_EXPORT_H
 
 /*
  * The following is only used when building DLLs under WIN32...
@@ -34,12 +34,12 @@
 
 #  if defined(FL_DLL)
 #    ifdef FL_LIBRARY
-#      define FL_EXPORT	__declspec(dllexport)
+#      define FLTK3_EXPORT	__declspec(dllexport)
 #    else
-#      define FL_EXPORT	__declspec(dllimport)
+#      define FLTK3_EXPORT	__declspec(dllimport)
 #    endif /* FL_LIBRARY */
 #  else
-#    define FL_EXPORT
+#    define FLTK3_EXPORT
 #  endif /* FL_DLL */
 
 #endif /* !Fl_Export_H */

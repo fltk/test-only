@@ -28,8 +28,8 @@
 /* \file
    Fl_Pixmap widget . */
 
-#ifndef Fl_Pixmap_H
-#define Fl_Pixmap_H
+#ifndef Fltk3_Pixmap_H
+#define Fltk3_Pixmap_H
 #  include "Image.h"
 
 namespace fltk3 { class Widget; }
@@ -44,7 +44,7 @@ struct Fl_Menu_Item;
   The Fl_Pixmap class supports caching and drawing of colormap
   (pixmap) images, including transparency.
 */
-class FL_EXPORT Fl_Pixmap : public Fl_Image {
+class FLTK3_EXPORT Fl_Pixmap : public Fl_Image {
   friend class Fl_Quartz_Graphics_Driver;
   friend class Fl_GDI_Graphics_Driver;
   friend class Fl_Xlib_Graphics_Driver;

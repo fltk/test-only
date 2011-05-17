@@ -29,8 +29,8 @@
    Fl_Multiline_Input widget . */
 
 
-#ifndef Fl_Multiline_Input_H
-#define Fl_Multiline_Input_H
+#ifndef Fltk3_Multiline_Input_H
+#define Fltk3_Multiline_Input_H
 
 #include "Input.h"
 
@@ -52,7 +52,7 @@
   behavior, set Fl_Input_::tab_nav() to 0. Newer programs should consider using
   Fl_Text_Editor.
 */
-class FL_EXPORT Fl_Multiline_Input : public Fl_Input {
+class FLTK3_EXPORT Fl_Multiline_Input : public Fl_Input {
 public:
   /**
     Creates a new Fl_Multiline_Input widget using the given

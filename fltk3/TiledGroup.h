@@ -28,8 +28,8 @@
 /* \file
    Fl_Tile widget . */
 
-#ifndef Fl_Tile_H
-#define Fl_Tile_H
+#ifndef Fltk3_Tile_H
+#define Fltk3_Tile_H
 
 #include "Group.h"
 
@@ -76,7 +76,7 @@
   resized by dragging any borders. See also void fltk3::Group::resizable(fltk3::Widget &w)
 
 */
-class FL_EXPORT Fl_Tile : public fltk3::Group {
+class FLTK3_EXPORT Fl_Tile : public fltk3::Group {
 public:
   int handle(int);
   /**

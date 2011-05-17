@@ -28,8 +28,8 @@
 /* \file
    Fl_Choice widget . */
 
-#ifndef Fl_Choice_H
-#define Fl_Choice_H
+#ifndef Fltk3_Choice_H
+#define Fltk3_Choice_H
 
 #include "Menu_.h"
 
@@ -82,7 +82,7 @@
   \li <tt>void Fl_Choice::down_box(fltk3::Boxtype b)</tt>
       Sets the current down box type to \p b.
  */
-class FL_EXPORT Fl_Choice : public Fl_Menu_ {
+class FLTK3_EXPORT Fl_Choice : public Fl_Menu_ {
 protected:
   void draw();
 public:

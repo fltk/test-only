@@ -160,26 +160,26 @@ extern struct Fl_XMap {
   RGBColor rgb;
   ulong pen;
 } *fl_current_xmap;
-extern FL_EXPORT Window fl_window;
+extern FLTK3_EXPORT Window fl_window;
 
 #endif // FL_LIBRARY || FL_INTERNALS
 
-extern FL_EXPORT Fl_CGContextRef fl_gc;
-extern FL_EXPORT class Fl_Sys_Menu_Bar *fl_sys_menu_bar;
+extern FLTK3_EXPORT Fl_CGContextRef fl_gc;
+extern FLTK3_EXPORT class Fl_Sys_Menu_Bar *fl_sys_menu_bar;
 
 extern Window fl_xid(const fltk3::Window*);
 void fl_clip_region(Fl_Region);
 
-extern FL_EXPORT Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data);
-extern FL_EXPORT Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);
-extern FL_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
+extern FLTK3_EXPORT Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data);
+extern FLTK3_EXPORT Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);
+extern FLTK3_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
 extern Fl_Offscreen fl_create_offscreen(int w, int h);
 extern void fl_copy_offscreen(int x,int y,int w,int h, Fl_Offscreen gWorld, int srcx,int srcy);
 extern void fl_delete_offscreen(Fl_Offscreen gWorld);
 extern void fl_begin_offscreen(Fl_Offscreen gWorld);
 extern void fl_end_offscreen();
 
-extern FL_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b);
+extern FLTK3_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b);
 extern void fl_open_display();
 
 #endif // FL_DOXYGEN

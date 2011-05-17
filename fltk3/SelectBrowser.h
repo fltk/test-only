@@ -28,8 +28,8 @@
 /* \file
    Fl_Select_Browser widget . */
 
-#ifndef Fl_Select_Browser_H
-#define Fl_Select_Browser_H
+#ifndef Fltk3_Select_Browser_H
+#define Fltk3_Select_Browser_H
 
 #include "Browser.h"
 
@@ -41,7 +41,7 @@
   user presses the mouse, but you can change this with when().
   <P>See Fl_Browser for  methods to add and remove lines from the browser.
 */
-class FL_EXPORT Fl_Select_Browser : public Fl_Browser {
+class FLTK3_EXPORT Fl_Select_Browser : public Fl_Browser {
 public:
   /** 
     Creates a new Fl_Select_Browser widget using the given

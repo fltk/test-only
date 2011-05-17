@@ -28,8 +28,8 @@
 /* \file
    Fl_Chart widget . */
 
-#ifndef Fl_Chart_H
-#define Fl_Chart_H
+#ifndef Fltk3_Chart_H
+#define Fltk3_Chart_H
 
 #ifndef Fl_Widget_H
 #include "Widget.h"
@@ -78,7 +78,7 @@ struct FL_CHART_ENTRY {
          separated from the pie.
   \li \c FL_SPIKE_CHART: Each sample value is drawn as a vertical line.
  */
-class FL_EXPORT Fl_Chart : public fltk3::Widget {
+class FLTK3_EXPORT Fl_Chart : public fltk3::Widget {
     int numb;
     int maxnumb;
     int sizenumb;

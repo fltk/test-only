@@ -162,7 +162,7 @@ ulong fl_xpixel(uchar r,uchar g,uchar b) {
   if (!fl_redmask) {
     // find closest entry in the colormap:
     fltk3::Color i =
-      fltk3::colorCube(r*fltk3::NUM_RED/256,g*fltk3::NUM_GREEN/256,b*fltk3::NUM_BLUE/256);
+      fltk3::color_cube(r*fltk3::NUM_RED/256,g*fltk3::NUM_GREEN/256,b*fltk3::NUM_BLUE/256);
     Fl_XColor &xmap = fl_xmap[fl_overlay][i];
     if (xmap.mapped) return xmap.pixel;
     // if not black or white, change the entry to be an exact match:

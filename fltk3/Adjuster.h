@@ -30,12 +30,10 @@
 
 // 3-button "slider", made for Nuke
 
-#ifndef Fl_Adjuster_H
-#define Fl_Adjuster_H
+#ifndef FLTK3_Adjuster_H
+#define FLTK3_Adjuster_H
 
-#ifndef Fl_Valuator_H
 #include "Valuator.h"
-#endif
 
 /**
   The Fl_Adjuster widget was stolen from Prisms, and has proven
@@ -49,7 +47,7 @@
   increments by 10 times the  amount dragging by a pixel does. Shift +
   click decrements by 10 times  the amount.
 */
-class FL_EXPORT Fl_Adjuster : public Fl_Valuator {
+class FLTK3_EXPORT Fl_Adjuster : public Fl_Valuator {
   int drag;
   int ix;
   int soft_;

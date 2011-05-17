@@ -28,8 +28,8 @@
 /* \file
    Fl_Menu_Bar widget . */
 
-#ifndef Fl_Menu_Bar_H
-#define Fl_Menu_Bar_H
+#ifndef Fltk3_Menu_Bar_H
+#define Fltk3_Menu_Bar_H
 
 #include "Menu_.h"
 
@@ -59,7 +59,7 @@
   <P>Typing the shortcut() of any of the menu items will cause
   callbacks exactly the same as when you pick the item with the mouse.
 */
-class FL_EXPORT Fl_Menu_Bar : public Fl_Menu_ {
+class FLTK3_EXPORT Fl_Menu_Bar : public Fl_Menu_ {
 protected:
     void draw();
 public:

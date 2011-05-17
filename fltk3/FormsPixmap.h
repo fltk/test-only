@@ -28,8 +28,8 @@
 /* \file
    Fl_FormsPixmap widget . */
 
-#ifndef Fl_FormsPixmap_H
-#define Fl_FormsPixmap_H
+#ifndef Fltk3_FormsPixmap_H
+#define Fltk3_FormsPixmap_H
 
 #include "Pixmap.h"
 
@@ -37,7 +37,7 @@
   \class Fl_FormsPixmap
   \brief Forms pixmap drawing routines
 */
-class FL_EXPORT Fl_FormsPixmap : public fltk3::Widget {
+class FLTK3_EXPORT Fl_FormsPixmap : public fltk3::Widget {
     Fl_Pixmap *b;
 protected:
     void draw();

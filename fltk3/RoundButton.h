@@ -28,8 +28,8 @@
 /* \file
    Fl_Round_Button widget . */
 
-#ifndef Fl_Round_Button_H
-#define Fl_Round_Button_H
+#ifndef Fltk3_Round_Button_H
+#define Fltk3_Round_Button_H
 
 #include "LightButton.h"
 
@@ -45,7 +45,7 @@
   when on is controlled with selection_color(), which defaults to
   fltk3::RED.
 */
-class FL_EXPORT Fl_Round_Button : public Fl_Light_Button {
+class FLTK3_EXPORT Fl_Round_Button : public Fl_Light_Button {
 public:
   Fl_Round_Button(int x,int y,int w,int h,const char *l = 0);
 };

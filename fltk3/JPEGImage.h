@@ -28,8 +28,8 @@
 /* \file
    Fl_JPEG_Image class . */
 
-#ifndef Fl_JPEG_Image_H
-#define Fl_JPEG_Image_H
+#ifndef Fltk3_JPEG_Image_H
+#define Fltk3_JPEG_Image_H
 #  include "Image.h"
 
 /**
@@ -38,7 +38,7 @@
   Interchange Format (JFIF) images. The class supports grayscale
   and color (RGB) JPEG image files.
 */
-class FL_EXPORT Fl_JPEG_Image : public Fl_RGB_Image {
+class FLTK3_EXPORT Fl_JPEG_Image : public Fl_RGB_Image {
 
 public:
 

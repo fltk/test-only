@@ -65,31 +65,31 @@
 // Mirror X definition of Region to Fl_Region, for portability...
 typedef Region Fl_Region;
 
-FL_EXPORT void fl_open_display();
-FL_EXPORT void fl_open_display(Display*);
-FL_EXPORT void fl_close_display();
+FLTK3_EXPORT void fl_open_display();
+FLTK3_EXPORT void fl_open_display(Display*);
+FLTK3_EXPORT void fl_close_display();
 
 // constant info about the X server connection:
-extern FL_EXPORT Display *fl_display;
-extern FL_EXPORT int fl_screen;
-extern FL_EXPORT XVisualInfo *fl_visual;
-extern FL_EXPORT Colormap fl_colormap;
+extern FLTK3_EXPORT Display *fl_display;
+extern FLTK3_EXPORT int fl_screen;
+extern FLTK3_EXPORT XVisualInfo *fl_visual;
+extern FLTK3_EXPORT Colormap fl_colormap;
 
 
 // drawing functions:
-extern FL_EXPORT GC fl_gc;
-extern FL_EXPORT Window fl_window;
-FL_EXPORT ulong fl_xpixel(fltk3::Color i);
-FL_EXPORT ulong fl_xpixel(uchar r, uchar g, uchar b);
-FL_EXPORT void fl_clip_region(Fl_Region);
-FL_EXPORT Fl_Region fl_clip_region();
+extern FLTK3_EXPORT GC fl_gc;
+extern FLTK3_EXPORT Window fl_window;
+FLTK3_EXPORT ulong fl_xpixel(fltk3::Color i);
+FLTK3_EXPORT ulong fl_xpixel(uchar r, uchar g, uchar b);
+FLTK3_EXPORT void fl_clip_region(Fl_Region);
+FLTK3_EXPORT Fl_Region fl_clip_region();
 
 // feed events into fltk:
-FL_EXPORT int fl_handle(const XEvent&);
+FLTK3_EXPORT int fl_handle(const XEvent&);
 
 // you can use these in fltk3::add_handler() to look at events:
-extern FL_EXPORT const XEvent* fl_xevent;
-extern FL_EXPORT ulong fl_event_time;
+extern FLTK3_EXPORT const XEvent* fl_xevent;
+extern FLTK3_EXPORT ulong fl_event_time;
 
 // off-screen pixmaps: create, destroy, draw into, copy to window:
 typedef ulong Fl_Offscreen;
@@ -112,14 +112,14 @@ extern void fl_copy_offscreen(int x, int y, int w, int h, Fl_Offscreen pixmap, i
 // Bitmap masks
 typedef ulong Fl_Bitmask;
 
-extern FL_EXPORT Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data);
-extern FL_EXPORT Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);
-extern FL_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
+extern FLTK3_EXPORT Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data);
+extern FLTK3_EXPORT Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);
+extern FLTK3_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
 
 #if defined(FL_LIBRARY) || defined(FL_INTERNALS)
-extern FL_EXPORT Window fl_message_window;
-extern FL_EXPORT void *fl_xftfont;
-FL_EXPORT Fl_Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.cxx
+extern FLTK3_EXPORT Window fl_message_window;
+extern FLTK3_EXPORT void *fl_xftfont;
+FLTK3_EXPORT Fl_Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.cxx
 
 // access to core fonts:
 // This class provides a "smart pointer" that returns a pointer to an XFontStruct.
@@ -145,12 +145,12 @@ public:
 private:
   XFontStruct *ptr;
 };
-extern FL_EXPORT Fl_XFont_On_Demand fl_xfont;
+extern FLTK3_EXPORT Fl_XFont_On_Demand fl_xfont;
 
 // this object contains all X-specific stuff about a window:
 // Warning: this object is highly subject to change!  
 // FL_LIBRARY or FL_INTERNALS must be defined to access this class.
-class FL_EXPORT Fl_X {
+class FLTK3_EXPORT Fl_X {
 public:
   Window xid;
   Window other_xid;
@@ -171,8 +171,8 @@ public:
   static void y(fltk3::Window* wi, int Y) {wi->y(Y);}
 };
 
-extern FL_EXPORT char fl_override_redirect; // hack into Fl_X::make_xid()
-extern FL_EXPORT int fl_background_pixel;  // hack into Fl_X::make_xid()
+extern FLTK3_EXPORT char fl_override_redirect; // hack into Fl_X::make_xid()
+extern FLTK3_EXPORT int fl_background_pixel;  // hack into Fl_X::make_xid()
 
 inline Window fl_xid(const fltk3::Window* w) { return Fl_X::i(w)->xid; }
 
@@ -183,13 +183,13 @@ extern Window fl_xid_(const fltk3::Window* w);
 
 #endif // FL_LIBRARY || FL_INTERNALS
 
-FL_EXPORT fltk3::Window* fl_find(Window xid);
+FLTK3_EXPORT fltk3::Window* fl_find(Window xid);
 
 
 // Dummy function to register a function for opening files via the window manager...
 inline void fl_open_callback(void (*)(const char *)) {}
 
-extern FL_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b);
+extern FLTK3_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b);
 
 #  endif
 #endif

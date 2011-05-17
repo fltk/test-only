@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#ifndef Fl_RGB_Image_H
-# define Fl_RGB_Image_H
+#ifndef Fltk3_RGB_Image_H
+# define Fltk3_RGB_Image_H
 # include "Image.h"
 #endif // !Fl_RGB_Image_H
 

@@ -28,8 +28,8 @@
 /** \file
    Fl_Shared_Image class. */
 
-#ifndef Fl_Shared_Image_H
-#  define Fl_Shared_Image_H
+#ifndef Fltk3_Shared_Image_H
+#  define Fltk3_Shared_Image_H
 
 #  include "Image.h"
 
@@ -46,7 +46,7 @@ typedef Fl_Image *(*Fl_Shared_Handler)(const char *name, uchar *header,
   fl_register_images()
   function to support standard image formats such as BMP, GIF, JPEG, and PNG.
 */
-class FL_EXPORT Fl_Shared_Image : public Fl_Image {
+class FLTK3_EXPORT Fl_Shared_Image : public Fl_Image {
   
   friend class Fl_JPEG_Image;
   friend class Fl_PNG_Image;
@@ -105,7 +105,7 @@ protected:
 // of the core FLTK library...
 //
 
-FL_EXPORT extern void fl_register_images();
+FLTK3_EXPORT extern void fl_register_images();
 
 #endif // !Fl_Shared_Image_H
 

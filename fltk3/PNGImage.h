@@ -28,8 +28,8 @@
 /* \file
    Fl_PNG_Image class . */
 
-#ifndef Fl_PNG_Image_H
-#define Fl_PNG_Image_H
+#ifndef Fltk3_PNG_Image_H
+#define Fltk3_PNG_Image_H
 #  include "Image.h"
 
 /**
@@ -38,7 +38,7 @@
   class loads colormapped and full-color images and handles color-
   and alpha-based transparency.
 */
-class FL_EXPORT Fl_PNG_Image : public Fl_RGB_Image {
+class FLTK3_EXPORT Fl_PNG_Image : public Fl_RGB_Image {
 
 public:
 

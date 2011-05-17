@@ -657,7 +657,7 @@ namespace fltk3 {
    */
   typedef int Fontsize;
   
-  extern FL_EXPORT Fontsize NORMAL_SIZE;	///< normal font size
+  extern FLTK3_EXPORT Fontsize NORMAL_SIZE;	///< normal font size
   
   
   /** \name Colors 
@@ -734,11 +734,11 @@ namespace fltk3 {
   const unsigned int NUM_GREEN      = 8;
   const unsigned int NUM_BLUE       = 5;
   
-  FL_EXPORT Color inactive(Color c);
+  FLTK3_EXPORT Color inactive(Color c);
   
-  FL_EXPORT Color contrast(Color fg, Color bg);
+  FLTK3_EXPORT Color contrast(Color fg, Color bg);
   
-  FL_EXPORT Color color_average(Color c1, Color c2, float weight);
+  FLTK3_EXPORT Color color_average(Color c1, Color c2, float weight);
   
   /** Returns a lighter version of the specified color. */
   inline Color lighter(Color c) { return color_average(c, WHITE, .67f); }
@@ -777,12 +777,12 @@ namespace fltk3 {
    To get the closest color to a 8-bit set of R,G,B values use:
    
    \code
-   fltk3::colorCube(R * (fltk3::NUM_RED - 1) / 255,
+   fltk3::color_cube(R * (fltk3::NUM_RED - 1) / 255,
    G * (fltk3::NUM_GREEN - 1) / 255,
    B * (fltk3::NUM_BLUE - 1) / 255);
    \endcode
    */
-  inline Color colorCube(int r, int g, int b) {
+  inline Color color_cube(int r, int g, int b) {
     return (Color)((b*NUM_RED + r) * NUM_GREEN + g + COLOR_CUBE);}
   
   /*@}*/		// group: Colors  

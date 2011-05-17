@@ -29,8 +29,8 @@
 /* \file
    Fl_File_Input widget . */
 
-#ifndef Fl_File_Input_H
-#  define Fl_File_Input_H
+#ifndef Fltk3_File_Input_H
+#  define Fltk3_File_Input_H
 
 #  include <fltk3/Input.h>
 
@@ -51,7 +51,7 @@
   One resulting side effect is that you should call clear_changed() early in your callback
   to avoid reentrant calls if you plan to show another window or dialog box in the callback.
 */
-class FL_EXPORT Fl_File_Input : public Fl_Input {
+class FLTK3_EXPORT Fl_File_Input : public Fl_Input {
   
   fltk3::Color	errorcolor_;
   char		ok_entry_;

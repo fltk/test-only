@@ -28,8 +28,8 @@
 /* \file
    Fl_Tooltip widget . */
 
-#ifndef Fl_Tooltip_H
-#define Fl_Tooltip_H
+#ifndef Fltk3_Tooltip_H
+#define Fltk3_Tooltip_H
 
 #include <fltk3/run.h>
 #include <fltk3/Widget.h>
@@ -38,7 +38,7 @@
   The Fl_Tooltip class provides tooltip support for
   all FLTK widgets. It contains only static methods.
 */
-class FL_EXPORT Fl_Tooltip {
+class FLTK3_EXPORT Fl_Tooltip {
 public:
   /**    Gets the tooltip delay. The default delay is 1.0 seconds.  */
   static float delay() { return delay_; }

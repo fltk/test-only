@@ -30,8 +30,8 @@
 /* \file
  Fl_Text_Buffer, Fl_Text_Selection widget . */
 
-#ifndef FL_TEXT_BUFFER_H
-#define FL_TEXT_BUFFER_H
+#ifndef FLtk3_TEXT_BUFFER_H
+#define FLtk3_TEXT_BUFFER_H
 
 
 #undef ASSERT_UTF8
@@ -77,7 +77,7 @@
  This class works correctly with utf-8 strings assuming that the parameters
  for all calls are on character boundaries.
  */
-class FL_EXPORT Fl_Text_Selection {
+class FLTK3_EXPORT Fl_Text_Selection {
   friend class Fl_Text_Buffer;
   
 public:
@@ -165,7 +165,7 @@ typedef void (*Fl_Text_Predelete_Cb)(int pos, int nDeleted, void* cbArg);
  and Fl_Text_Editor to manage complex text data and is based upon the
  excellent NEdit text editor engine - see http://www.nedit.org/.
  */
-class FL_EXPORT Fl_Text_Buffer {
+class FLTK3_EXPORT Fl_Text_Buffer {
 public:
 
   /**

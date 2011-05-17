@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -32,9 +31,7 @@
 #ifndef Fl_Group_H
 #define Fl_Group_H
 
-#ifndef Fl_Widget_H
 #include "Fl_Widget.H"
-#endif
 
 /**
   The Fl_Group class is the FLTK container widget. It maintains
@@ -44,33 +41,34 @@
   or to enforce resize behavior.
 */
 class FL_EXPORT Fl_Group : public Fl_Widget {
-
-  Fl_Widget** array_;
-  Fl_Widget* savedfocus_;
-  Fl_Widget* resizable_;
-  int children_;
-  int *sizes_; // remembered initial sizes of children
-
+#if 0 // FIXME: 123
   int navigation(int);
-  static Fl_Group *current_;
- 
-  // unimplemented copy ctor and assignment operator
   Fl_Group(const Fl_Group&);
   Fl_Group& operator=(const Fl_Group&);
+#endif
+  
+protected:  
+  Fl_Group() {}
 
-protected:
+#if 0 // FIXME: 123
   void draw();
   void draw_child(Fl_Widget& widget) const;
   void draw_children();
   void draw_outside_label(const Fl_Widget& widget) const ;
   void update_child(Fl_Widget& widget) const;
   int  *sizes();
-
+#endif
+  
 public:
+  Fl_Group(int,int,int,int, const char * = 0);
 
+  void end() {
+    ((fltk3::Group*)_p)->end();
+  }
+  
+#if 0 // FIXME: 123
   int handle(int);
   void begin();
-  void end();
   static Fl_Group *current();
   static void current(Fl_Group *g);
 
@@ -94,7 +92,6 @@ public:
     Creates a new Fl_Group widget using the given position, size,
     and label string. The default boxtype is FL_NO_BOX.
   */
-  Fl_Group(int,int,int,int, const char * = 0);
   virtual ~Fl_Group();
   void add(Fl_Widget&);
   /**
@@ -195,6 +192,8 @@ public:
 
   /** This is for forms compatibility only */
   void forms_end();
+#endif
+  
 };
 
 // dummy class used to end child groups in constructors for complex
@@ -219,9 +218,11 @@ public:
   \endcode
 */
 class FL_EXPORT Fl_End {
+#if 0 // FIXME: 123
 public:
   /** All it does is calling Fl_Group::current()->end() */
   Fl_End() {Fl_Group::current()->end();}
+#endif
 };
 
 #endif

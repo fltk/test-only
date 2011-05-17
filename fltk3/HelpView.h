@@ -29,8 +29,8 @@
 /* \file
    Fl_Help_View widget . */
 
-#ifndef Fl_Help_View_H
-#  define Fl_Help_View_H
+#ifndef Fltk3_Help_View_H
+#  define Fltk3_Help_View_H
 
 //
 // Include necessary header files...
@@ -87,7 +87,7 @@ struct Fl_Help_Link {
  */
 
 /** Fl_Help_View font stack element definition. */
-struct FL_EXPORT Fl_Help_Font_Style {
+struct FLTK3_EXPORT Fl_Help_Font_Style {
   fltk3::Font      f;  ///< Font
   fltk3::Fontsize  s;  ///< Font Size
   fltk3::Color     c;  ///< Font Color
@@ -100,7 +100,7 @@ struct FL_EXPORT Fl_Help_Font_Style {
 /** Fl_Help_View font stack definition. */
 const size_t MAX_FL_HELP_FS_ELTS = 100;
 
-struct FL_EXPORT Fl_Help_Font_Stack {
+struct FLTK3_EXPORT Fl_Help_Font_Stack {
   /** font stack construction, initialize attributes. */
   Fl_Help_Font_Stack() {
     nfonts_ = 0;
@@ -206,7 +206,7 @@ struct Fl_Help_Target {
      - yen Yuml yuml
 
 */
-class FL_EXPORT Fl_Help_View : public fltk3::Group {	// Help viewer widget
+class FLTK3_EXPORT Fl_Help_View : public fltk3::Group {	// Help viewer widget
   
   enum { RIGHT = -1, CENTER, LEFT };	///< Alignments
 

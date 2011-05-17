@@ -28,8 +28,8 @@
 /** \file
  fltk3::Widget, fltk3::Label classes . */
 
-#ifndef Fl_Widget_H
-#define Fl_Widget_H
+#ifndef Fltk3_Widget_H
+#define Fltk3_Widget_H
 
 #include "enumerations.h"
 #include "Object.h"
@@ -74,7 +74,7 @@ namespace fltk3 {
    a similar fashion to widgets containing text. We also provide an easy
    interface for very complex labels, containing html or vector graphics.
    */
-  struct FL_EXPORT Label {
+  struct FLTK3_EXPORT Label {
     /** label text */
     const char* value;
     /** optional image for an active label */
@@ -110,7 +110,7 @@ namespace fltk3 {
    functions, even if they change the widget's appearance. It is up to the 
    user code to call redraw() after these.
    */
-  class FL_EXPORT Widget : public Object {
+  class FLTK3_EXPORT Widget : public Object {
     friend class Group;
     
     fltk3::Group* parent_;
@@ -134,18 +134,6 @@ namespace fltk3 {
     Widget& operator=(const Widget &);
     
   protected:
-    
-    /** Creates a widget at the given position and size.
-     
-     The fltk3::Widget is a protected constructor, but all derived widgets have a 
-     matching public constructor. It takes a value for x(), y(), w(), h(), and 
-     an optional value for label().
-     
-     \param[in] x, y the position of the widget relative to the enclosing window
-     \param[in] w, h size of the widget in pixels
-     \param[in] label optional text for the widget label
-     */
-    Widget(int x, int y, int w, int h, const char *label=0L);
     
     /** Internal use only. Use position(int,int), size(int,int) or resize(int,int,int,int) instead. */
     void x(int v) {x_ = v;}
@@ -200,6 +188,18 @@ namespace fltk3 {
     
   public:
     
+    /** Creates a widget at the given position and size.
+     
+     The fltk3::Widget is a protected constructor, but all derived widgets have a 
+     matching public constructor. It takes a value for x(), y(), w(), h(), and 
+     an optional value for label().
+     
+     \param[in] x, y the position of the widget relative to the enclosing window
+     \param[in] w, h size of the widget in pixels
+     \param[in] label optional text for the widget label
+     */
+    Widget(int x, int y, int w, int h, const char *label=0L);
+    
     /** Destroys the widget.
      Destroying single widgets is not very common. You almost always want to 
      destroy the parent group instead, which will destroy all of the child widgets 
@@ -226,7 +226,7 @@ namespace fltk3 {
      s->draw();			// calls Fl_Scrollbar::draw()
      \endcode
      */
-    virtual void draw() = 0;
+    virtual void draw() { }
     
     /** Handles the specified event. 
      You normally don't call this method directly, but instead let FLTK do 

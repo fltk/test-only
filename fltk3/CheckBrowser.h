@@ -28,8 +28,8 @@
 /* \file
    Fl_Check_Browser widget . */
 
-#ifndef Fl_Check_Browser_H
-#define Fl_Check_Browser_H
+#ifndef Fltk3_Check_Browser_H
+#define Fltk3_Check_Browser_H
 
 #include "run.h"
 #include "Browser_.h"
@@ -38,7 +38,7 @@
   The Fl_Check_Browser widget displays a scrolling list of text
   lines that may be selected and/or checked by the user.
 */
-class FL_EXPORT Fl_Check_Browser : public Fl_Browser_ {
+class FLTK3_EXPORT Fl_Check_Browser : public Fl_Browser_ {
   /* required routines for Fl_Browser_ subclass: */
 
   void *item_first() const;

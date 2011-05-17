@@ -42,7 +42,7 @@ buttons in the same group with <tt>type() == FL_RADIO_BUTTON</tt>
 are set to zero.*/
 #define FL_HIDDEN_BUTTON	3   ///< for Forms compatibility
 
-extern FL_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
+extern FLTK3_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
 
 namespace fltk3 {
   
@@ -81,7 +81,7 @@ namespace fltk3 {
    (when the user pushes and releases the button, and as the mouse is
    dragged around in and out of the button).
    */
-  class FL_EXPORT Button : public fltk3::Widget {
+  class FLTK3_EXPORT Button : public fltk3::Widget {
     
     int shortcut_;
     char value_;

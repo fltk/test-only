@@ -28,8 +28,8 @@
 /* \file
    Fl_Progress widget . */
 
-#ifndef _Fl_Progress_H_
-#  define _Fl_Progress_H_
+#ifndef _Fltk3_Progress_H_
+#  define _Fltk3_Progress_H_
 
 //
 // Include necessary headers.
@@ -44,7 +44,7 @@
 /**
     Displays a progress bar for the user.
 */
-class FL_EXPORT Fl_Progress : public fltk3::Widget {
+class FLTK3_EXPORT Fl_Progress : public fltk3::Widget {
   
   float	value_,
 	minimum_,

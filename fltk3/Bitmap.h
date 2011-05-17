@@ -28,8 +28,8 @@
 /* \file
    Fl_Bitmap widget . */
 
-#ifndef Fl_Bitmap_H
-#define Fl_Bitmap_H
+#ifndef Fltk3_Bitmap_H
+#define Fltk3_Bitmap_H
 #  include "Image.h"
 
 namespace fltk3 { class Widget; }
@@ -39,7 +39,7 @@ struct Fl_Menu_Item;
   The Fl_Bitmap class supports caching and drawing of mono-color
   (bitmap) images. Images are drawn using the current color.
 */
-class FL_EXPORT Fl_Bitmap : public Fl_Image {
+class FLTK3_EXPORT Fl_Bitmap : public Fl_Image {
   friend class Fl_Quartz_Graphics_Driver;
   friend class Fl_GDI_Graphics_Driver;
   friend class Fl_Xlib_Graphics_Driver;

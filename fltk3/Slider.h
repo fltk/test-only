@@ -28,8 +28,8 @@
 /* \file
    Fl_Slider widget . */
 
-#ifndef Fl_Slider_H
-#define Fl_Slider_H
+#ifndef Fltk3_Slider_H
+#define Fltk3_Slider_H
 
 #ifndef Fl_Valuator_H
 #include "Valuator.h"
@@ -67,7 +67,7 @@
   \image html  slider.png 
   \image latex slider.png "Fl_Slider" width=4cm
 */
-class FL_EXPORT Fl_Slider : public Fl_Valuator {
+class FLTK3_EXPORT Fl_Slider : public Fl_Valuator {
 
   float slider_size_;
   uchar slider_;

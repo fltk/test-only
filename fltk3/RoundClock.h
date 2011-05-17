@@ -28,13 +28,13 @@
 /* \file
    Fl_Round_Clock widget . */
 
-#ifndef Fl_Round_Clock_H
-#define Fl_Round_Clock_H
+#ifndef Fltk3_Round_Clock_H
+#define Fltk3_Round_Clock_H
 
 #include "Clock.h"
 
 /** A clock widget of type fltk3::ROUND_CLOCK. Has no box. */
-class FL_EXPORT Fl_Round_Clock : public Fl_Clock {
+class FLTK3_EXPORT Fl_Round_Clock : public Fl_Clock {
 public:
     /** Creates the clock widget, setting his type and box. */
     Fl_Round_Clock(int x,int y,int w,int h, const char *l = 0)

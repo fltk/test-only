@@ -30,8 +30,8 @@
 
 // Yes, I know this should be a template...
 
-#ifndef Fl_Browser__H
-#define Fl_Browser__H
+#ifndef Fltk3_Browser__H
+#define Fltk3_Browser__H
 
 #ifndef Fl_Group_H
 #include "Group.h"
@@ -64,7 +64,7 @@
   accessing image data or doing stat() on a file or doing some
   other slow operation.
 */
-class FL_EXPORT Fl_Browser_ : public fltk3::Group {
+class FLTK3_EXPORT Fl_Browser_ : public fltk3::Group {
   int position_;	// where user wants it scrolled to
   int real_position_;	// the current vertical scrolling position
   int hposition_;	// where user wants it panned to

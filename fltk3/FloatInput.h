@@ -29,8 +29,8 @@
    Fl_Float_Input widget . */
 
 
-#ifndef Fl_Float_Input_H
-#define Fl_Float_Input_H
+#ifndef Fltk3_Float_Input_H
+#define Fltk3_Float_Input_H
 
 #include "Input.h"
 
@@ -39,7 +39,7 @@
   that only allows the user to type floating point numbers (sign,
   digits, decimal point, more digits, 'E' or 'e', sign, digits).
 */
-class Fl_Float_Input : public Fl_Input { // don't use FL_EXPORT here !
+class Fl_Float_Input : public Fl_Input { // don't use FLTK3_EXPORT here !
 public:
   /**
       Creates a new Fl_Float_Input widget using the given position,

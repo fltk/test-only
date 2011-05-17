@@ -28,8 +28,8 @@
 /* \file
    Fl_Menu_ widget . */
 
-#ifndef Fl_Menu__H
-#define Fl_Menu__H
+#ifndef Fltk3_Menu__H
+#define Fltk3_Menu__H
 
 #ifndef Fl_Widget_H
 #include "Widget.h"
@@ -45,7 +45,7 @@
   array may either be supplied directly by the user program, or it may
   be "private": a dynamically allocated array managed by the Fl_Menu_.
 */
-class FL_EXPORT Fl_Menu_ : public fltk3::Widget {
+class FLTK3_EXPORT Fl_Menu_ : public fltk3::Widget {
 
   Fl_Menu_Item *menu_;
   const Fl_Menu_Item *value_;

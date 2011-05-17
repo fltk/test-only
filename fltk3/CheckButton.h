@@ -28,8 +28,8 @@
 /* \file
    Fl_Check_Button widget . */
 
-#ifndef Fl_Check_Button_H
-#define Fl_Check_Button_H
+#ifndef Fltk3_Check_Button_H
+#define Fltk3_Check_Button_H
 
 #include "LightButton.h"
 
@@ -48,7 +48,7 @@
   \todo Refactor Fl_Check_Button doxygen comments (add color() info etc?)
   \todo Generate Fl_Check_Button.gif with visible checkmark.
  */
-class FL_EXPORT Fl_Check_Button : public Fl_Light_Button {
+class FLTK3_EXPORT Fl_Check_Button : public Fl_Light_Button {
 public:
   Fl_Check_Button(int X, int Y, int W, int H, const char *L = 0);
 };

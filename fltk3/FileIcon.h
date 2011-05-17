@@ -32,8 +32,8 @@
 // Include necessary header files...
 //
 
-#ifndef _Fl_Fl_File_Icon_H_
-#  define _Fl_Fl_File_Icon_H_
+#ifndef _Fltk3_File_Icon_H_
+#  define _Fltk3_File_Icon_H_
 
 #  include "run.h"
 
@@ -53,7 +53,7 @@
   The Fl_File_Icon class manages icon images that can be used 
   as labels in other widgets and as icons in the FileBrowser widget.
 */
-class FL_EXPORT Fl_File_Icon {			//// Icon data
+class FLTK3_EXPORT Fl_File_Icon {			//// Icon data
 
   static Fl_File_Icon *first_;	// Pointer to first icon/filetype
   Fl_File_Icon	*next_;		// Pointer to next icon/filetype

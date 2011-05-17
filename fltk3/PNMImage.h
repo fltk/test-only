@@ -28,8 +28,8 @@
 /* \file
    Fl_PNM_Image class . */
 
-#ifndef Fl_PNM_Image_H
-#define Fl_PNM_Image_H
+#ifndef Fltk3_PNM_Image_H
+#define Fltk3_PNM_Image_H
 #  include "Image.h"
 
 /**
@@ -38,7 +38,7 @@
   loads bitmap, grayscale, and full-color images in both ASCII and
   binary formats.
 */
-class FL_EXPORT Fl_PNM_Image : public Fl_RGB_Image {
+class FLTK3_EXPORT Fl_PNM_Image : public Fl_RGB_Image {
 
   public:
 

@@ -28,8 +28,8 @@
 /* \file
    Fl_Image, Fl_RGB_Image classes . */
 
-#ifndef Fl_Image_H
-#  define Fl_Image_H
+#ifndef Fltk3_Image_H
+#  define Fltk3_Image_H
 
 #  include "enumerations.h"
 
@@ -50,7 +50,7 @@ struct Fl_Menu_Item;
   drawing by itself, calling the draw() method results in
   a box with an X in it being drawn instead.
 */
-class FL_EXPORT Fl_Image {
+class FLTK3_EXPORT Fl_Image {
   int w_, h_, d_, ld_, count_;
   const char * const *data_;
 
@@ -174,7 +174,7 @@ class FL_EXPORT Fl_Image {
   &lt;FL/Image.h&gt;, however for compatibility reasons
   &lt;FL/RGBImage.h&gt; should be included.
 */
-class FL_EXPORT Fl_RGB_Image : public Fl_Image {
+class FLTK3_EXPORT Fl_RGB_Image : public Fl_Image {
   friend class Fl_Quartz_Graphics_Driver;
   friend class Fl_GDI_Graphics_Driver;
   friend class Fl_Xlib_Graphics_Driver;

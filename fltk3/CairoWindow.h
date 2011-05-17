@@ -29,8 +29,8 @@
     Fl_Cairo_Window Handling transparently a fltk window incorporte a cairo draw callback.
 */
 
-#ifndef FL_CAIRO_WINDOW_H
-# define FL_CAIRO_WINDOW_H
+#ifndef FLtk3_CAIRO_WINDOW_H
+# define FLtk3_CAIRO_WINDOW_H
 # ifdef FLTK_HAVE_CAIRO
 
 // Cairo is currently supported for the following platforms:
@@ -54,7 +54,7 @@
    to attach a context to your window. You should do it only when your window is 
    the current window. \see fltk3::Window::current()
 */
-class FL_EXPORT Fl_Cairo_Window : public Fl_Double_Window {
+class FLTK3_EXPORT Fl_Cairo_Window : public Fl_Double_Window {
 
 public:
   Fl_Cairo_Window(int w, int h) : Fl_Double_Window(w,h),draw_cb_(0) {}

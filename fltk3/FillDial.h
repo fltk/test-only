@@ -28,13 +28,13 @@
 /* \file
    Fl_Fill_Dial widget . */
 
-#ifndef Fl_Fill_Dial_H
-#define Fl_Fill_Dial_H
+#ifndef Fltk3_Fill_Dial_H
+#define Fltk3_Fill_Dial_H
 
 #include "Dial.h"
 
 /** Draws a dial with a filled arc */
-class FL_EXPORT Fl_Fill_Dial : public Fl_Dial {
+class FLTK3_EXPORT Fl_Fill_Dial : public Fl_Dial {
 public:
     /** Creates a filled dial, also setting its type to FL_FILL_DIAL. */
     Fl_Fill_Dial(int x,int y,int w,int h, const char *l = 0)

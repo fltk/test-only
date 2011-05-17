@@ -28,8 +28,8 @@
 /* \file
    Fl_Toggle_Button widget . */
 
-#ifndef Fl_Toggle_Button_H
-#define Fl_Toggle_Button_H
+#ifndef Fltk3_Toggle_Button_H
+#define Fltk3_Toggle_Button_H
 
 #include "Button.h"
 
@@ -42,7 +42,7 @@
   control exactly when and how by changing the values for type()
   and when().
 */
-class FL_EXPORT Fl_Toggle_Button : public fltk3::Button {
+class FLTK3_EXPORT Fl_Toggle_Button : public fltk3::Button {
 public:
   /**
     Creates a new Fl_Toggle_Button widget using the given

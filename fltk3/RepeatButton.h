@@ -28,8 +28,8 @@
 /* \file
    Fl_Repeat_Button widget . */
 
-#ifndef Fl_Repeat_Button_H
-#define Fl_Repeat_Button_H
+#ifndef Fltk3_Repeat_Button_H
+#define Fltk3_Repeat_Button_H
 #include "run.h"
 #include "Button.h"
 
@@ -39,7 +39,7 @@
   callbacks as long as it is held down.  The speed of the repeat is fixed
   and depends on the implementation.
 */
-class FL_EXPORT Fl_Repeat_Button : public fltk3::Button {
+class FLTK3_EXPORT Fl_Repeat_Button : public fltk3::Button {
   static void repeat_callback(void *);
 public:
   int handle(int);

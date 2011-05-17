@@ -27,8 +27,8 @@
 
 // Thanks to Greg Ercolano for this addition.
 
-#ifndef FL_NAMES_H
-#define FL_NAMES_H
+#ifndef FLtk3_NAMES_H
+#define FLtk3_NAMES_H
 
 /** \defgroup fl_events Events handling functions
     @{

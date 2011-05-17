@@ -28,8 +28,8 @@
 /* \file
    Fl_Overlay_Window class . */
 
-#ifndef Fl_Overlay_Window_H
-#define Fl_Overlay_Window_H
+#ifndef Fltk3_Overlay_Window_H
+#define Fltk3_Overlay_Window_H
 
 #include "DoubleWindow.h"
 
@@ -44,7 +44,7 @@
   "erased" by copying the backbuffer over it again.  This means the
   overlay will blink if you change the image in the window.
 */
-class FL_EXPORT Fl_Overlay_Window : public Fl_Double_Window {
+class FLTK3_EXPORT Fl_Overlay_Window : public Fl_Double_Window {
   friend class _Fl_Overlay;
   virtual void draw_overlay() = 0;
   fltk3::Window *overlay_;

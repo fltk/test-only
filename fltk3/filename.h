@@ -32,8 +32,8 @@
 #  include "/usr/include/dirent.h"
 #endif
 
-#ifndef FL_FILENAME_H
-#  define FL_FILENAME_H
+#ifndef FLtk3_FILENAME_H
+#  define FLtk3_FILENAME_H
 
 #  include "Export.h"
 
@@ -57,14 +57,14 @@
     \endcode
     \return a pointer to the char after the last slash, or to \p filename if there is none.
  */
-FL_EXPORT const char *fl_filename_name(const char * filename);
-FL_EXPORT const char *fl_filename_ext(const char *buf);
-FL_EXPORT char *fl_filename_setext(char *to, int tolen, const char *ext);
-FL_EXPORT int fl_filename_expand(char *to, int tolen, const char *from);
-FL_EXPORT int fl_filename_absolute(char *to, int tolen, const char *from);
-FL_EXPORT int fl_filename_relative(char *to, int tolen, const char *from);
-FL_EXPORT int fl_filename_match(const char *name, const char *pattern);
-FL_EXPORT int fl_filename_isdir(const char *name);
+FLTK3_EXPORT const char *fl_filename_name(const char * filename);
+FLTK3_EXPORT const char *fl_filename_ext(const char *buf);
+FLTK3_EXPORT char *fl_filename_setext(char *to, int tolen, const char *ext);
+FLTK3_EXPORT int fl_filename_expand(char *to, int tolen, const char *from);
+FLTK3_EXPORT int fl_filename_absolute(char *to, int tolen, const char *from);
+FLTK3_EXPORT int fl_filename_relative(char *to, int tolen, const char *from);
+FLTK3_EXPORT int fl_filename_match(const char *name, const char *pattern);
+FLTK3_EXPORT int fl_filename_isdir(const char *name);
 
 #  if defined(__cplusplus) && !defined(FL_DOXYGEN)
 /*
@@ -74,7 +74,7 @@ FL_EXPORT int fl_filename_isdir(const char *name);
 inline char *fl_filename_setext(char *to, const char *ext) { return fl_filename_setext(to, FL_PATH_MAX, ext); }
 inline int fl_filename_expand(char *to, const char *from) { return fl_filename_expand(to, FL_PATH_MAX, from); }
 inline int fl_filename_absolute(char *to, const char *from) { return fl_filename_absolute(to, FL_PATH_MAX, from); }
-FL_EXPORT int fl_filename_relative(char *to, int tolen, const char *from, const char *cwd);
+FLTK3_EXPORT int fl_filename_relative(char *to, int tolen, const char *from, const char *cwd);
 inline int fl_filename_relative(char *to, const char *from) { return fl_filename_relative(to, FL_PATH_MAX, from); }
 #  endif /* __cplusplus */
 
@@ -113,10 +113,10 @@ extern "C" {
 #  endif /* __cplusplus */
 
 #  if !defined(FL_DOXYGEN)
-FL_EXPORT int fl_alphasort(struct dirent **, struct dirent **);
-FL_EXPORT int fl_casealphasort(struct dirent **, struct dirent **);
-FL_EXPORT int fl_casenumericsort(struct dirent **, struct dirent **);
-FL_EXPORT int fl_numericsort(struct dirent **, struct dirent **);
+FLTK3_EXPORT int fl_alphasort(struct dirent **, struct dirent **);
+FLTK3_EXPORT int fl_casealphasort(struct dirent **, struct dirent **);
+FLTK3_EXPORT int fl_casenumericsort(struct dirent **, struct dirent **);
+FLTK3_EXPORT int fl_numericsort(struct dirent **, struct dirent **);
 #  endif
 
   typedef int (Fl_File_Sort_F)(struct dirent **, struct dirent **); /**< File sorting function. \see fl_filename_list() */
@@ -128,16 +128,16 @@ FL_EXPORT int fl_numericsort(struct dirent **, struct dirent **);
  * Portable "scandir" function.  Ugly but necessary...
  */
 
-FL_EXPORT int fl_filename_list(const char *d, struct dirent ***l,
+FLTK3_EXPORT int fl_filename_list(const char *d, struct dirent ***l,
                                Fl_File_Sort_F *s = fl_numericsort);
-FL_EXPORT void fl_filename_free_list(struct dirent ***l, int n);
+FLTK3_EXPORT void fl_filename_free_list(struct dirent ***l, int n);
 
 /*
  * Generic function to open a Uniform Resource Identifier (URI) using a
  * system-defined program (added in FLTK 1.1.8)
  */
 
-FL_EXPORT int	fl_open_uri(const char *uri, char *msg = (char *)0,
+FLTK3_EXPORT int	fl_open_uri(const char *uri, char *msg = (char *)0,
 		            int msglen = 0);
 
 #    ifndef FL_DOXYGEN

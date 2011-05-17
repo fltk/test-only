@@ -28,15 +28,15 @@
 /* \file
    Fl_FormsBitmap widget . */
 
-#ifndef Fl_FormsBitmap_H
-#define Fl_FormsBitmap_H
+#ifndef Fltk3_FormsBitmap_H
+#define Fltk3_FormsBitmap_H
 
 #include "Bitmap.h"
 
 /** 
     Forms compatibility Bitmap Image Widget
 */
-class FL_EXPORT Fl_FormsBitmap : public fltk3::Widget {
+class FLTK3_EXPORT Fl_FormsBitmap : public fltk3::Widget {
     Fl_Bitmap *b;
 protected:
     void draw();

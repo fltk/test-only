@@ -42,7 +42,7 @@ namespace fltk3 {
    before some other widgets and making it big enough to surround them
    will let you draw a frame around them.
    */
-  class FL_EXPORT Box : public fltk3::Widget {
+  class FLTK3_EXPORT Box : public fltk3::Widget {
   protected:
     void draw();
   public:

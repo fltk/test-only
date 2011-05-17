@@ -28,8 +28,8 @@
 /* \file
    Fl_Light_Button widget . */
 
-#ifndef Fl_Light_Button_H
-#define Fl_Light_Button_H
+#ifndef Fltk3_Light_Button_H
+#define Fltk3_Light_Button_H
 
 #include "Button.h"
 
@@ -44,7 +44,7 @@
   <P ALIGN=CENTER>\image html Fl_Light_Button.png</P> 
   \image latex Fl_Light_Button.png "Fl_Light_Button" width=4cm
 */
-class FL_EXPORT Fl_Light_Button : public fltk3::Button {
+class FLTK3_EXPORT Fl_Light_Button : public fltk3::Button {
 protected:
     virtual void draw();
 public:

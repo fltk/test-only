@@ -58,9 +58,9 @@ public:
   int *width[64];
   TEXTMETRIC metr;
   int angle;
-  FL_EXPORT Fl_Font_Descriptor(const char* fontname, fltk3::Fontsize size);
+  FLTK3_EXPORT Fl_Font_Descriptor(const char* fontname, fltk3::Fontsize size);
 #  elif defined(__APPLE_QUARTZ__)
-  FL_EXPORT Fl_Font_Descriptor(const char* fontname, fltk3::Fontsize size);
+  FLTK3_EXPORT Fl_Font_Descriptor(const char* fontname, fltk3::Fontsize size);
   ATSUTextLayout layout;
 #     if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
   CTFontRef fontref;
@@ -74,10 +74,10 @@ public:
   XftFont* font;
   //const char* encoding;
   int angle;
-  FL_EXPORT Fl_Font_Descriptor(const char* xfontname, fltk3::Fontsize size, int angle);
+  FLTK3_EXPORT Fl_Font_Descriptor(const char* xfontname, fltk3::Fontsize size, int angle);
 #  else
   XUtf8FontStruct* font;	// X UTF-8 font information
-  FL_EXPORT Fl_Font_Descriptor(const char* xfontname);
+  FLTK3_EXPORT Fl_Font_Descriptor(const char* xfontname);
 #  endif
 #  if HAVE_GL
   unsigned int listbase;// base of display list, 0 = none
@@ -86,12 +86,12 @@ public:
 #endif // __APPLE_QUARTZ__
 #  endif // HAVE_GL
 
-  FL_EXPORT ~Fl_Font_Descriptor();
+  FLTK3_EXPORT ~Fl_Font_Descriptor();
 
 #endif // FL_DOXYGEN
 };
 
-//extern FL_EXPORT Fl_Font_Descriptor *fl_fontsize; // the currently selected one
+//extern FLTK3_EXPORT Fl_Font_Descriptor *fl_fontsize; // the currently selected one
 
 struct Fl_Fontdesc {
   const char *name;
@@ -103,12 +103,12 @@ struct Fl_Fontdesc {
 #  endif
 };
 
-extern FL_EXPORT Fl_Fontdesc *fl_fonts; // the table
+extern FLTK3_EXPORT Fl_Fontdesc *fl_fonts; // the table
 
 #  ifndef WIN32
 // functions for parsing X font names:
-FL_EXPORT const char* fl_font_word(const char *p, int n);
-FL_EXPORT char *fl_find_fontsize(char *name);
+FLTK3_EXPORT const char* fl_font_word(const char *p, int n);
+FLTK3_EXPORT char *fl_find_fontsize(char *name);
 #  endif
 
 #endif

@@ -28,8 +28,8 @@
 /* \file
    Fl_Input_ widget . */
 
-#ifndef Fl_Input__H
-#define Fl_Input__H
+#ifndef Fltk3_Input__H
+#define Fltk3_Input__H
 
 #ifndef Fl_Widget_H
 #include "Widget.h"
@@ -99,7 +99,7 @@
   None of these issues should be disastrous. Nevertheless, we should
   discuss how FLTK should handle false UTF-8 sequences and pointers.
 */
-class FL_EXPORT Fl_Input_ : public fltk3::Widget {
+class FLTK3_EXPORT Fl_Input_ : public fltk3::Widget {
 
   /** \internal Storage for the text field. */
   const char* value_;

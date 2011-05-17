@@ -28,15 +28,15 @@
 /* \file
    Fl_BMP_Image widget . */
 
-#ifndef Fl_BMP_Image_H
-#define Fl_BMP_Image_H
+#ifndef Fltk3_BMP_Image_H
+#define Fltk3_BMP_Image_H
 #  include "Image.h"
 
 /**
   The Fl_BMP_Image class supports loading, caching,
   and drawing of Windows Bitmap (BMP) image files.
 */
-class FL_EXPORT Fl_BMP_Image : public Fl_RGB_Image {
+class FLTK3_EXPORT Fl_BMP_Image : public Fl_RGB_Image {
 
   public:
 

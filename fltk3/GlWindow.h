@@ -28,8 +28,8 @@
 /* \file
    Fl_Gl_Window widget . */
 
-#ifndef Fl_Gl_Window_H
-#define Fl_Gl_Window_H
+#ifndef Fltk3_Gl_Window_H
+#define Fltk3_Gl_Window_H
 
 #include "Window.h"
 
@@ -62,7 +62,7 @@ class Fl_Gl_Choice; // structure to hold result of glXChooseVisual
   it is not useful to add other FLTK Widgets as children,
   unless those widgets are modified to draw using OpenGL calls.
 */
-class FL_EXPORT Fl_Gl_Window : public fltk3::Window {
+class FLTK3_EXPORT Fl_Gl_Window : public fltk3::Window {
 
   int mode_;
   const int *alist;

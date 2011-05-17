@@ -48,8 +48,8 @@
  *  is being used)
  */
 
-#ifndef FL_gl_H
-#  define FL_gl_H
+#ifndef FLtk3_gl_H
+#  define FLtk3_gl_H
 
 #  include "enumerations.h" // for color names
 #  ifdef WIN32
@@ -69,41 +69,41 @@
 #    include <GL/gl.h>
 #  endif
 
-FL_EXPORT void gl_start();
-FL_EXPORT void gl_finish();
+FLTK3_EXPORT void gl_start();
+FLTK3_EXPORT void gl_finish();
 
-FL_EXPORT void gl_color(fltk3::Color i);
+FLTK3_EXPORT void gl_color(fltk3::Color i);
 /** back compatibility */
 inline void gl_color(int c) {gl_color((fltk3::Color)c);}
 
-FL_EXPORT void gl_rect(int x,int y,int w,int h);
+FLTK3_EXPORT void gl_rect(int x,int y,int w,int h);
 /**
   Fills the given rectangle with the current color.
   \see gl_rect(int x, int y, int w, int h)
   */
 inline void gl_rectf(int x,int y,int w,int h) {glRecti(x,y,x+w,y+h);}
 
-FL_EXPORT void gl_font(int fontid, int size);
-FL_EXPORT int  gl_height();
-FL_EXPORT int  gl_descent();
-FL_EXPORT double gl_width(const char *);
-FL_EXPORT double gl_width(const char *, int n);
-FL_EXPORT double gl_width(uchar);
+FLTK3_EXPORT void gl_font(int fontid, int size);
+FLTK3_EXPORT int  gl_height();
+FLTK3_EXPORT int  gl_descent();
+FLTK3_EXPORT double gl_width(const char *);
+FLTK3_EXPORT double gl_width(const char *, int n);
+FLTK3_EXPORT double gl_width(uchar);
 
-FL_EXPORT void gl_draw(const char*);
-FL_EXPORT void gl_draw(const char*, int n);
-FL_EXPORT void gl_draw(const char*, int x, int y);
-FL_EXPORT void gl_draw(const char*, float x, float y);
-FL_EXPORT void gl_draw(const char*, int n, int x, int y);
-FL_EXPORT void gl_draw(const char*, int n, float x, float y);
-FL_EXPORT void gl_draw(const char*, int x, int y, int w, int h, fltk3::Align);
-FL_EXPORT void gl_measure(const char*, int& x, int& y);
+FLTK3_EXPORT void gl_draw(const char*);
+FLTK3_EXPORT void gl_draw(const char*, int n);
+FLTK3_EXPORT void gl_draw(const char*, int x, int y);
+FLTK3_EXPORT void gl_draw(const char*, float x, float y);
+FLTK3_EXPORT void gl_draw(const char*, int n, int x, int y);
+FLTK3_EXPORT void gl_draw(const char*, int n, float x, float y);
+FLTK3_EXPORT void gl_draw(const char*, int x, int y, int w, int h, fltk3::Align);
+FLTK3_EXPORT void gl_measure(const char*, int& x, int& y);
 #ifdef __APPLE__
-extern FL_EXPORT void gl_texture_pile_height(int max);
-extern FL_EXPORT int gl_texture_pile_height();
+extern FLTK3_EXPORT void gl_texture_pile_height(int max);
+extern FLTK3_EXPORT int gl_texture_pile_height();
 #endif
 
-FL_EXPORT void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
+FLTK3_EXPORT void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
 
 #endif // !FL_gl_H
 

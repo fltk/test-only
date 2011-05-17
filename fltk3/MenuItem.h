@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#ifndef Fl_Menu_Item_H
-#define Fl_Menu_Item_H
+#ifndef Fltk3_Menu_Item_H
+#define Fltk3_Menu_Item_H
 
 #  include "Widget.h"
 #  include "Image.h"
@@ -47,7 +47,7 @@ enum { // values for flags:
   FL_MENU_HORIZONTAL = 0x100	///< ??? -- reserved
 };
 
-extern FL_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
+extern FLTK3_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
 
 class Fl_Menu_;
 
@@ -115,7 +115,7 @@ class Fl_Menu_;
   not access them directly to avoid compatibility problems with future
   releases of FLTK.
 */
-struct FL_EXPORT Fl_Menu_Item {
+struct FLTK3_EXPORT Fl_Menu_Item {
   const char *text;	    ///< menu item text, returned by label()
   int shortcut_;	    ///< menu item shortcut
   fltk3::Callback *callback_;   ///< menu item callback

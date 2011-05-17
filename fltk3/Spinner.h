@@ -28,8 +28,8 @@
 /* \file
    Fl_Spinner widget . */
 
-#ifndef Fl_Spinner_H
-#  define Fl_Spinner_H
+#ifndef Fltk3_Spinner_H
+#  define Fltk3_Spinner_H
 
 //
 // Include necessary headers...
@@ -48,7 +48,7 @@
   widget and repeat buttons. The user can either type into the
   input area or use the buttons to change the value.
 */
-class FL_EXPORT Fl_Spinner : public fltk3::Group {
+class FLTK3_EXPORT Fl_Spinner : public fltk3::Group {
   
   double	value_;			// Current value
   double	minimum_;		// Minimum value

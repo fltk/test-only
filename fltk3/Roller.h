@@ -28,8 +28,8 @@
 /* \file
    Fl_Roller widget . */
 
-#ifndef Fl_Roller_H
-#define Fl_Roller_H
+#ifndef Fltk3_Roller_H
+#define Fltk3_Roller_H
 
 #ifndef Fl_Valuator_H
 #include "Valuator.h"
@@ -41,7 +41,7 @@
   <P ALIGN=CENTER>\image html Fl_Roller.png 
   \image latex Fl_Roller.png "Fl_Roller" width=4cm
 */
-class FL_EXPORT Fl_Roller : public Fl_Valuator {
+class FLTK3_EXPORT Fl_Roller : public Fl_Valuator {
 protected:
   void draw();
 public:

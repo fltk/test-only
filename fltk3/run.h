@@ -1123,7 +1123,7 @@ namespace fltk3 {
    \endcode
    
    */
-  class FL_EXPORT WidgetTracker {
+  class FLTK3_EXPORT WidgetTracker {
     
     fltk3::Widget* wp_;
     

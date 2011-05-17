@@ -32,8 +32,8 @@
 // Include necessary header files...
 //
 
-#ifndef _Fl_Wizard_H_
-#  define _Fl_Wizard_H_
+#ifndef _Fltk3_Wizard_H_
+#  define _Fltk3_Wizard_H_
 
 #  include <fltk3/Group.h>
 
@@ -47,7 +47,7 @@
     <P>As with Fl_Tabs, wizard panes are composed of child (usually
     fltk3::Group) widgets. Navigation buttons must be added separately.
 */
-class FL_EXPORT Fl_Wizard : public fltk3::Group {
+class FLTK3_EXPORT Fl_Wizard : public fltk3::Group {
 
   fltk3::Widget *value_;
 

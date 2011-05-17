@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -32,6 +31,9 @@
 #ifndef Fl_Window_H
 #define Fl_Window_H
 
+#include <fltk3/Wrapper.h>
+#include <fltk3/Window.h>
+
 #include "Fl_Group.H"
 
 #define FL_WINDOW 0xF0		///< window type id all subclasses have type() >= this
@@ -58,6 +60,7 @@ class Fl_X;
 */
 class FL_EXPORT Fl_Window : public Fl_Group {
 
+#if 0 // FIXME: 123
   static char *default_xclass_;
 
   friend class Fl_X;
@@ -109,38 +112,15 @@ protected:
     \see force_position(int)
   */
   int force_position() const { return ((flags() & FORCE_POSITION)?1:0); }
-
+#endif
+  
 public:
-
-  /**
-    Creates a window from the given size and title. 
-    If Fl_Group::current() is not NULL, the window is created as a 
-    subwindow of the parent window.
-    
-    The (w,h) form of the constructor creates a top-level window
-    and asks the window manager to position the window. The (x,y,w,h)
-    form of the constructor either creates a subwindow or a
-    top-level window at the specified location (x,y) , subject to window
-    manager configuration. If you do not specify the position of the
-    window, the window manager will pick a place to show the window
-    or allow the user to pick a location. Use position(x,y)
-    or hotspot() before calling show() to request a
-    position on the screen. See Fl_Window::resize() 
-    for some more details on positioning windows.
-    
-    Top-level windows initially have visible() set to 0
-    and parent() set to NULL. Subwindows initially
-    have visible() set to 1 and parent() set to
-    the parent window pointer.
-    
-    Fl_Widget::box() defaults to FL_FLAT_BOX. If you plan to
-    completely fill the window with children widgets you should
-    change this to FL_NO_BOX. If you turn the window border off
-    you may want to change this to FL_UP_BOX.
-
-    \see Fl_Window(int x, int y, int w, int h, const char* title)
-  */
-    Fl_Window(int w, int h, const char* title= 0);
+  Fl_Window(int w, int h, const char* label = 0) {
+    _p = new fltk3::Window(w, h, label);
+    _p->wrapper(this);
+  }
+  
+#if 0 // FIXME: 123
   /** Creates a window from the given position, size and title.
 
     \see Fl_Window(int w, int h, const char *title)
@@ -381,7 +361,13 @@ public:
 
     \see virtual void Fl_Window::show()
   */
-  void show(int argc, char **argv);
+#endif
+  
+  void show(int argc, char **argv) {
+    ((fltk3::Window*)_p)->show(argc, argv);
+  }
+  
+#if 0 // FIXME: 123
   /**
     Makes the window completely fill the screen, without any window
     manager border visible.  You must use fullscreen_off() to undo
@@ -456,6 +442,7 @@ public:
    Same as h() if applied to a subwindow.
    */
   int decorated_h();
+#endif
 
 };
 

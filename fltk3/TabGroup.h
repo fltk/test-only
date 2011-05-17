@@ -28,8 +28,8 @@
 /* \file
    Fl_Tabs widget . */
 
-#ifndef Fl_Tabs_H
-#define Fl_Tabs_H
+#ifndef Fltk3_Tabs_H
+#define Fltk3_Tabs_H
 
 #include "Group.h"
 
@@ -59,7 +59,7 @@
   fluid browser to select each child group and resize them until
   the tabs look the way you want them to.
 */
-class FL_EXPORT Fl_Tabs : public fltk3::Group {
+class FLTK3_EXPORT Fl_Tabs : public fltk3::Group {
   fltk3::Widget *value_;
   fltk3::Widget *push_;
   int *tab_pos;		// array of x-offsets of tabs per child + 1

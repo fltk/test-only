@@ -28,8 +28,8 @@
 /* \file
    Fl_Menu_Window widget . */
 
-#ifndef Fl_Menu_Window_H
-#define Fl_Menu_Window_H
+#ifndef Fltk3_Menu_Window_H
+#define Fltk3_Menu_Window_H
 
 #include "SingleWindow.h"
 
@@ -39,7 +39,7 @@
   available so that the menu don't force the rest of the window to
   redraw.
 */
-class FL_EXPORT Fl_Menu_Window : public Fl_Single_Window {
+class FLTK3_EXPORT Fl_Menu_Window : public Fl_Single_Window {
 public:
   void show();
   void erase();

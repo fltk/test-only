@@ -2,8 +2,8 @@
 // "$Id: TableRow.h 8301 2011-01-22 22:40:11Z AlbrechtS $"
 //
 
-#ifndef _FL_TABLE_ROW_H
-#define _FL_TABLE_ROW_H
+#ifndef _FLtk3_TABLE_ROW_H
+#define _FLtk3_TABLE_ROW_H
 
 //
 // Fl_Table_Row -- A row oriented table widget
@@ -51,7 +51,7 @@
  clicked by the user.  You control when events are generated based on
  the values you supply for Fl_Table::when().
  */
-class FL_EXPORT Fl_Table_Row : public Fl_Table {
+class FLTK3_EXPORT Fl_Table_Row : public Fl_Table {
 public:
   enum TableRowSelectMode {
     SELECT_NONE,		// no selection allowed
@@ -60,7 +60,7 @@ public:
   }; 
 private:
   // An STL-ish vector without templates
-  class FL_EXPORT CharVector {
+  class FLTK3_EXPORT CharVector {
     char *arr;
     int _size;
     void init() {

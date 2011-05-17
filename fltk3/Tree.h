@@ -2,8 +2,8 @@
 // "$Id: Tree.h 8632 2011-05-04 02:59:50Z greg.ercolano $"
 //
 
-#ifndef FL_TREE_H
-#define FL_TREE_H
+#ifndef FLtk3_TREE_H
+#define FLtk3_TREE_H
 
 #include <fltk3/run.h>
 #include <fltk3/Group.h>
@@ -196,7 +196,7 @@ enum Fl_Tree_Reason {
 };
 
 
-class FL_EXPORT Fl_Tree : public fltk3::Group {
+class FLTK3_EXPORT Fl_Tree : public fltk3::Group {
   Fl_Tree_Item  *_root;				// can be null!
   Fl_Tree_Item  *_item_focus;			// item that has focus box
   Fl_Tree_Item  *_callback_item;		// item invoked during callback (can be NULL)

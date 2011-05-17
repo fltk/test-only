@@ -177,7 +177,7 @@ int fl_draw_pixmap(/*const*/ char* const* data, int x,int y,fltk3::Color bg) {
 
 #ifdef WIN32
 // to compute an unused color to be used for the pixmap background
-FL_EXPORT UINT win_pixmap_bg_color; // the RGB() of the pixmap background color
+FLTK3_EXPORT UINT win_pixmap_bg_color; // the RGB() of the pixmap background color
 static int color_count; // # of non-transparent colors used in pixmap
 static uchar *used_colors; // used_colors[3*i+j] j=0,1,2 are the RGB values of the ith used color
 

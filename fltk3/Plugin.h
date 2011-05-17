@@ -28,8 +28,8 @@
 /* \file
    Fl_Plugin class . */
 
-#ifndef Fl_Plugin_H
-#  define Fl_Plugin_H
+#ifndef Fltk3_Plugin_H
+#  define Fltk3_Plugin_H
 
 #  include "Preferences.h"
 
@@ -67,7 +67,7 @@
  }
  \endcode
  */
-class FL_EXPORT Fl_Plugin  {
+class FLTK3_EXPORT Fl_Plugin  {
   Fl_Preferences::ID id;
 public:
   Fl_Plugin(const char *klass, const char *name);
@@ -79,7 +79,7 @@ public:
  \brief Fl_Plugin_Manager manages link-time and run-time plugin binaries.
  \see Fl_Plugin
  */
-class FL_EXPORT Fl_Plugin_Manager : public Fl_Preferences {
+class FLTK3_EXPORT Fl_Plugin_Manager : public Fl_Preferences {
 public:
   Fl_Plugin_Manager(const char *klass);
   ~Fl_Plugin_Manager();

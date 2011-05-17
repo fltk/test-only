@@ -94,7 +94,7 @@
 
 static Fl_GDI_Graphics_Driver fl_gdi_driver;
 static Fl_Display_Device fl_gdi_display(&fl_gdi_driver);
-FL_EXPORT Fl_Graphics_Driver *fl_graphics_driver = (Fl_Graphics_Driver*)&fl_gdi_driver; // the current target driver of graphics operations
+FLTK3_EXPORT Fl_Graphics_Driver *fl_graphics_driver = (Fl_Graphics_Driver*)&fl_gdi_driver; // the current target driver of graphics operations
 Fl_Surface_Device* Fl_Surface_Device::_surface = (Fl_Surface_Device*)&fl_gdi_display; // the current target surface of graphics operations
 Fl_Display_Device *Fl_Display_Device::_display = &fl_gdi_display; // the platform display
 
@@ -1728,7 +1728,7 @@ void Fl_X::set_minmax(LPMINMAXINFO minmax)
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk3/filename.h> // need so FL_EXPORT fl_filename_name works
+#include <fltk3/filename.h> // need so FLTK3_EXPORT fl_filename_name works
 
 // returns pointer to the filename, or null if name ends with '/'
 const char *fl_filename_name(const char *name) {

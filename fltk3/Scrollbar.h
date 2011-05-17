@@ -28,8 +28,8 @@
 /* \file
    Fl_Scrollbar widget . */
 
-#ifndef Fl_Scrollbar_H
-#define Fl_Scrollbar_H
+#ifndef Fltk3_Scrollbar_H
+#define Fltk3_Scrollbar_H
 
 #include "Slider.h"
 
@@ -49,7 +49,7 @@
   \image html  scrollbar.png 
   \image latex scrollbar.png "Fl_Scrollbar" width=4cm
 */
-class FL_EXPORT Fl_Scrollbar : public Fl_Slider {
+class FLTK3_EXPORT Fl_Scrollbar : public Fl_Slider {
 
   int linesize_;
   int pushed_;

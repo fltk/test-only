@@ -23,8 +23,8 @@
  *     http://www.fltk.org/str.php
  */
 
-#ifndef _Xutf8_h
-#define _Xutf8_h
+#ifndef _FLTK3_Xutf8_h
+#define _FLTK3_Xutf8_h
 
 #  ifdef __cplusplus
 extern "C" {

@@ -28,8 +28,8 @@
 /* \file
    Fl_Int_Input widget . */
 
-#ifndef Fl_Int_Input_H
-#define Fl_Int_Input_H
+#ifndef Fltk3_Int_Input_H
+#define Fltk3_Int_Input_H
 
 #include "Input.h"
 
@@ -37,7 +37,7 @@
   The Fl_Int_Input class is a subclass of Fl_Input
   that only allows the user to type decimal digits (or hex numbers of the form 0xaef).
 */
-class FL_EXPORT Fl_Int_Input : public Fl_Input {
+class FLTK3_EXPORT Fl_Int_Input : public Fl_Input {
 public:
   /**
     Creates a new Fl_Int_Input widget using the given position,

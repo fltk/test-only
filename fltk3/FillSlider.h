@@ -28,12 +28,12 @@
 /* \file
    Fl_Fill_Slider widget . */
 
-#ifndef Fl_Fill_Slider_H
-#define Fl_Fill_Slider_H
+#ifndef Fltk3_Fill_Slider_H
+#define Fltk3_Fill_Slider_H
 
 #include "Slider.h"
 /** Widget that draws a filled horizontal  slider,  useful as a progress or value meter*/
-class FL_EXPORT Fl_Fill_Slider : public Fl_Slider {
+class FLTK3_EXPORT Fl_Fill_Slider : public Fl_Slider {
 public:
     /** Creates the slider from its position,size and optional title. */
     Fl_Fill_Slider(int x,int y,int w,int h,const char *l=0)

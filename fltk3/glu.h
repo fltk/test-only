@@ -32,8 +32,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#ifndef FL_glu_H
-#  define FL_glu_H
+#ifndef FLtk3_glu_H
+#  define FLtk3_glu_H
 
 #  include "enumerations.h" // for color names
 #  ifdef WIN32

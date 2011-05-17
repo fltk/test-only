@@ -28,8 +28,8 @@
 /* \file
    Fl_Double_Window widget . */
 
-#ifndef Fl_Double_Window_H
-#define Fl_Double_Window_H
+#ifndef Fltk3_Double_Window_H
+#define Fltk3_Double_Window_H
 
 #include "Window.h"
 
@@ -46,7 +46,7 @@
   This makes sure you can use Xdbe on servers where double buffering
   does not exist for every visual.
 */
-class FL_EXPORT Fl_Double_Window : public fltk3::Window {
+class FLTK3_EXPORT Fl_Double_Window : public fltk3::Window {
 protected:
   void flush(int eraseoverlay);
   /**

@@ -28,8 +28,8 @@
 /* \file
    Fl_Dial widget . */
 
-#ifndef Fl_Dial_H
-#define Fl_Dial_H
+#ifndef Fltk3_Dial_H
+#define Fltk3_Dial_H
 
 #ifndef Fl_Valuator_H
 #include "Valuator.h"
@@ -53,7 +53,7 @@
   </UL>
 
 */
-class FL_EXPORT Fl_Dial : public Fl_Valuator {
+class FLTK3_EXPORT Fl_Dial : public Fl_Valuator {
 
   short a1,a2;
 

@@ -28,8 +28,8 @@
 /* \file
    Fl_Tiled_Image widget . */
 
-#ifndef Fl_Tiled_Image_H
-#  define Fl_Tiled_Image_H
+#ifndef Fltk3_Tiled_Image_H
+#  define Fltk3_Tiled_Image_H
 
 #  include "Image.h"
 
@@ -42,7 +42,7 @@
   or inactive()
   methods.
 */
-class FL_EXPORT Fl_Tiled_Image : public Fl_Image {
+class FLTK3_EXPORT Fl_Tiled_Image : public Fl_Image {
   protected:
 
   Fl_Image	*image_;		// The image that is shared

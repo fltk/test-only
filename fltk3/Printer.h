@@ -28,8 +28,8 @@
  \brief declaration of classes Fl_Printer, Fl_System_Printer and Fl_PostScript_Printer.
  */
 
-#ifndef Fl_Printer_H
-#define Fl_Printer_H
+#ifndef Fltk3_Printer_H
+#define Fltk3_Printer_H
 
 #include <fltk3/x.h>
 #include <fltk3/PagedDevice.h>

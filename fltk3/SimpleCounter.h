@@ -28,8 +28,8 @@
 /* \file
    Fl_Simple_Counter widget . */
 
-#ifndef Fl_Simple_Counter_H
-#define Fl_Simple_Counter_H
+#ifndef Fltk3_Simple_Counter_H
+#define Fltk3_Simple_Counter_H
 
 #include "Counter.h"
 /** 
@@ -37,7 +37,7 @@
   <P align=center>\image html counter.png</P> 
   \image latex  counter.png "Fl_Simple_Counter" width=4cm
 */
-class FL_EXPORT Fl_Simple_Counter : public Fl_Counter {
+class FLTK3_EXPORT Fl_Simple_Counter : public Fl_Counter {
 public:
     Fl_Simple_Counter(int x,int y,int w,int h, const char *l = 0)
 	: Fl_Counter(x,y,w,h,l) {type(FL_SIMPLE_COUNTER);}

@@ -32,8 +32,8 @@
 // Include necessary header files...
 //
 
-#ifndef _Fl_File_Browser_H_
-#  define _Fl_File_Browser_H_
+#ifndef _Fltk3_File_Browser_H_
+#  define _Fltk3_File_Browser_H_
 
 #  include "Browser.h"
 #  include "FileIcon.h"
@@ -45,7 +45,7 @@
 //
 
 /** The Fl_File_Browser widget displays a list of filenames, optionally with file-specific icons. */
-class FL_EXPORT Fl_File_Browser : public Fl_Browser {
+class FLTK3_EXPORT Fl_File_Browser : public Fl_Browser {
   
   int		filetype_;
   const char	*directory_;

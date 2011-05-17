@@ -30,8 +30,8 @@
 /* \file
  Fl_Text_Display widget . */
 
-#ifndef FL_TEXT_DISPLAY_H
-#define FL_TEXT_DISPLAY_H
+#ifndef FLtk3_TEXT_DISPLAY_H
+#define FLtk3_TEXT_DISPLAY_H
 
 #include "draw.h"
 #include "Group.h"
@@ -47,7 +47,7 @@
  in the widget is managed by the Fl_Text_Buffer class. A single Text Buffer
  can be displayed by multiple Text Displays.
  */
-class FL_EXPORT Fl_Text_Display: public fltk3::Group {
+class FLTK3_EXPORT Fl_Text_Display: public fltk3::Group {
 
 public:
   

@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#ifndef Fl_Sys_Menu_Bar_H
-#define Fl_Sys_Menu_Bar_H
+#ifndef Fltk3_Sys_Menu_Bar_H
+#define Fltk3_Sys_Menu_Bar_H
 
 #include "MenuBar.h"
 #include "x.h"
@@ -38,7 +38,7 @@
  *
  * On other than Mac OS X platforms, Fl_Sys_Menu_Bar is a synonym of class Fl_Menu_Bar.
  */
-class FL_EXPORT Fl_Sys_Menu_Bar : public Fl_Menu_Bar {
+class FLTK3_EXPORT Fl_Sys_Menu_Bar : public Fl_Menu_Bar {
 protected:
   void draw();
 public:

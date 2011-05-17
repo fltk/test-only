@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -29,17 +28,27 @@
 #ifndef Fl_Box_H
 #define Fl_Box_H
 
+#include <fltk3/Box.h>
 #include "Fl_Widget.H"
 
 class FL_EXPORT Fl_Box : public Fl_Widget {
+
+#if 0 // FIXME: 123
 protected:
   void draw();
+#endif
+
 public:
-  Fl_Box(int X, int Y, int W, int H, const char *l=0)
-  : Fl_Widget(X,Y,W,H,l) {}
+  Fl_Box(int x, int y, int w, int h, const char *label=0) {
+    _p = new fltk3::Box(x, y, w, h, label);
+    _p->wrapper(this);
+  }
+  
+#if 0 // FIXME: 123
   Fl_Box(Fl_Boxtype b, int X, int Y, int W, int H, const char *l)
   : Fl_Widget(X,Y,W,H,l) {box(b);}
   virtual int handle(int);
+#endif
 };
 
 #endif

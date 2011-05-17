@@ -31,8 +31,8 @@
    Fl_Text_Editor widget . */
 
 
-#ifndef FL_TEXT_EDITOR_H
-#define FL_TEXT_EDITOR_H
+#ifndef FLtk3_TEXT_EDITOR_H
+#define FLtk3_TEXT_EDITOR_H
 
 #include "TextDisplay.h"
 
@@ -46,7 +46,7 @@
   by the Fl_Text_Buffer
   class.
 */
-class FL_EXPORT Fl_Text_Editor : public Fl_Text_Display {
+class FLTK3_EXPORT Fl_Text_Editor : public Fl_Text_Display {
   public:
     /** Key function binding callback type */
     typedef int (*Key_Func)(int key, Fl_Text_Editor* editor);

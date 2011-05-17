@@ -28,8 +28,8 @@
 /* \file
    Fl_Multiline_Output widget . */
 
-#ifndef Fl_Multiline_Output_H
-#define Fl_Multiline_Output_H
+#ifndef Fltk3_Multiline_Output_H
+#define Fltk3_Multiline_Output_H
 
 #include "Output.h"
 
@@ -46,7 +46,7 @@
   then use Fl_Text_Display. If you want to display HTML text,
   use Fl_Help_View.
 */
-class FL_EXPORT Fl_Multiline_Output : public Fl_Output {
+class FLTK3_EXPORT Fl_Multiline_Output : public Fl_Output {
 public:
   /**
     Creates a new Fl_Multiline_Output widget using the given

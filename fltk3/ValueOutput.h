@@ -28,8 +28,8 @@
 /* \file
    Fl_Value_Output widget . */
 
-#ifndef Fl_Value_Output_H
-#define Fl_Value_Output_H
+#ifndef Fltk3_Value_Output_H
+#define Fltk3_Value_Output_H
 
 #ifndef Fl_Valuator_H
 #include "Valuator.h"
@@ -47,7 +47,7 @@
   <P ALIGN=CENTER>\image html Fl_Value_Output.png 
   \image latex  Fl_Value_Output.png "Fl_Value_Output" width=4cm
 */
-class FL_EXPORT Fl_Value_Output : public Fl_Valuator {
+class FLTK3_EXPORT Fl_Value_Output : public Fl_Valuator {
   fltk3::Font textfont_;
   fltk3::Fontsize textsize_;
   uchar soft_;

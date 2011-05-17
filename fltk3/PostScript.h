@@ -29,8 +29,8 @@
  */
 
 
-#ifndef Fl_PostScript_H
-#define Fl_PostScript_H
+#ifndef Fltk3_PostScript_H
+#define Fltk3_PostScript_H
 
 #include <fltk3/PagedDevice.h>
 #include <fltk3/draw.h>

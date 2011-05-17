@@ -28,8 +28,8 @@
 /* \file
    Fl_Hor_Slider widget . */
 
-#ifndef Fl_Hor_Slider_H
-#define Fl_Hor_Slider_H
+#ifndef Fltk3_Hor_Slider_H
+#define Fltk3_Hor_Slider_H
 
 #include "Slider.h"
 

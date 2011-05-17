@@ -28,8 +28,8 @@
 /* \file
    Fl_Preferences class . */
 
-#ifndef Fl_Preferences_H
-#  define Fl_Preferences_H
+#ifndef Fltk3_Preferences_H
+#  define Fltk3_Preferences_H
 
 #  include <stdio.h>
 #  include "Export.h" 
@@ -66,7 +66,7 @@
    current chracter set or code page which renders them incompatible
    for text entries using international characters.
  */
-class FL_EXPORT Fl_Preferences {
+class FLTK3_EXPORT Fl_Preferences {
 
 public: 
   /**
@@ -164,7 +164,7 @@ public:
      into const char* and gets automatically destroyed after the enclosing call
      ends.
    */
-  class FL_EXPORT Name {
+  class FLTK3_EXPORT Name {
 
     char *data_;
 
@@ -195,7 +195,7 @@ private:
 
   class RootNode;
   
-  class FL_EXPORT Node {	// a node contains a list to all its entries 
+  class FLTK3_EXPORT Node {	// a node contains a list to all its entries 
             			// and all means to manage the tree structure
     Node *child_, *next_;
     union { 			// these two are mutually exclusive
@@ -249,7 +249,7 @@ private:
   };
   friend class Node;
 
-  class FL_EXPORT RootNode {		// the root node manages file paths and basic reading and writing
+  class FLTK3_EXPORT RootNode {		// the root node manages file paths and basic reading and writing
     Fl_Preferences *prefs_;
     char *filename_;
     char *vendor_, *application_;

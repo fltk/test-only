@@ -34,7 +34,7 @@
 
 float		Fl_Tooltip::delay_ = 1.0f;
 float		Fl_Tooltip::hoverdelay_ = 0.2f;
-fltk3::Color	Fl_Tooltip::color_ = fltk3::colorCube(fltk3::NUM_RED - 1,
+fltk3::Color	Fl_Tooltip::color_ = fltk3::color_cube(fltk3::NUM_RED - 1,
 		                                   fltk3::NUM_GREEN - 1,
 						   fltk3::NUM_BLUE - 2);
 fltk3::Color	Fl_Tooltip::textcolor_ = fltk3::BLACK;

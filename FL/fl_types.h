@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 /*
  * "$Id$"
  *
@@ -33,6 +32,8 @@
 #ifndef FL_TYPES_H
 #define FL_TYPES_H
 
+#if 0 // FIXME: 123
+
 /** \name	Miscellaneous */
 /*@{*/	/* group: Miscellaneous */
 
@@ -59,6 +60,8 @@ typedef unsigned int Fl_Shortcut;
 typedef unsigned int Fl_Char;
  
 /*@}*/	/* group: Miscellaneous */
+
+#endif
 
 #endif
 

@@ -28,8 +28,8 @@
 /* \file
    Fl_Hold_Browser widget . */
 
-#ifndef Fl_Hold_Browser_H
-#define Fl_Hold_Browser_H
+#ifndef Fltk3_Hold_Browser_H
+#define Fltk3_Hold_Browser_H
 
 #include "Browser.h"
 
@@ -42,7 +42,7 @@
   user releases the mouse, but you can change this with when().
   <P>See Fl_Browser for methods to add and remove lines from the browser.
 */
-class FL_EXPORT Fl_Hold_Browser : public Fl_Browser {
+class FLTK3_EXPORT Fl_Hold_Browser : public Fl_Browser {
 public:
   /**
     Creates a new Fl_Hold_Browser widget using the given

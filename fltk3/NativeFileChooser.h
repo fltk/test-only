@@ -80,8 +80,8 @@
   \image latex Fl_Native_File_Chooser.png "The Fl_Native_File_Chooser on different platforms" width=14cm
 
 */
-#ifndef FL_NATIVE_FILE_CHOOSER_H
-#define FL_NATIVE_FILE_CHOOSER_H
+#ifndef FLtk3_NATIVE_FILE_CHOOSER_H
+#define FLtk3_NATIVE_FILE_CHOOSER_H
 
 /* \file
  Fl_Native_File_Chooser widget. */
@@ -155,7 +155,7 @@
  \image latex Fl_Native_File_Chooser.png "The Fl_Native_File_Chooser on different platforms" width=14cm
  
  */
-class FL_EXPORT Fl_Native_File_Chooser {
+class FLTK3_EXPORT Fl_Native_File_Chooser {
 public:
   enum Type {
     BROWSE_FILE = 0,			///< browse files (lets user choose one file)

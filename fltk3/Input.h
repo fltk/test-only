@@ -28,8 +28,8 @@
 /* \file
    Fl_Input widget . */
 
-#ifndef Fl_Input_H
-#define Fl_Input_H
+#ifndef Fltk3_Input_H
+#define Fltk3_Input_H
 
 #include "Input_.h"
 
@@ -227,7 +227,7 @@
 
   </TD></TR></TABLE>
   */
-class FL_EXPORT Fl_Input : public Fl_Input_ {
+class FLTK3_EXPORT Fl_Input : public Fl_Input_ {
   int handle_key();
   int shift_position(int p);
   int shift_up_down_position(int p);

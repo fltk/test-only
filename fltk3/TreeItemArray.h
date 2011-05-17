@@ -2,12 +2,12 @@
 // "$Id: TreeItemArray.h 7903 2010-11-28 21:06:39Z matt $"
 //
 
-#ifndef _FL_TREE_ITEM_ARRAY_H
-#define _FL_TREE_ITEM_ARRAY_H
+#ifndef _FLtk3_TREE_ITEM_ARRAY_H
+#define _FLtk3_TREE_ITEM_ARRAY_H
 
 #include "Export.h"
 
-class FL_EXPORT Fl_Tree_Item;	// forward decl must *precede* first doxygen comment block
+class FLTK3_EXPORT Fl_Tree_Item;	// forward decl must *precede* first doxygen comment block
 				// or doxygen will not document our class..
 
 //////////////////////////
@@ -48,7 +48,7 @@ class FL_EXPORT Fl_Tree_Item;	// forward decl must *precede* first doxygen comme
 /// (unless otherwise noted).
 ///
 
-class FL_EXPORT Fl_Tree_Item_Array {
+class FLTK3_EXPORT Fl_Tree_Item_Array {
   Fl_Tree_Item **_items;	// items array
   int _total;			// #items in array
   int _size;			// #items *allocated* for array

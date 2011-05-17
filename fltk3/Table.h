@@ -28,8 +28,8 @@
 //    o Keyboard navigation (up/down/left/right arrow)
 //
 
-#ifndef _FL_TABLE_H
-#define _FL_TABLE_H
+#ifndef _FLtk3_TABLE_H
+#define _FLtk3_TABLE_H
 
 #include <sys/types.h>
 #include <string.h>		// memcpy
@@ -178,7 +178,7 @@
  
  
  */
-class FL_EXPORT Fl_Table : public fltk3::Group {
+class FLTK3_EXPORT Fl_Table : public fltk3::Group {
 public:
   /**
    The context bit flags for Fl_Table related callbacks (eg. draw_cell(), callback(), etc)
@@ -220,7 +220,7 @@ private:
   int _selecting;
   
   // An STL-ish vector without templates
-  class FL_EXPORT IntVector {
+  class FLTK3_EXPORT IntVector {
     int *arr;
     unsigned int _size;
     void init() {

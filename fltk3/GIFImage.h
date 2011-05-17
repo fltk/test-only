@@ -28,8 +28,8 @@
 /* \file
    Fl_GIF_Image widget . */
 
-#ifndef Fl_GIF_Image_H
-#define Fl_GIF_Image_H
+#ifndef Fltk3_GIF_Image_H
+#define Fltk3_GIF_Image_H
 #  include "Pixmap.h"
 
 /**
@@ -37,7 +37,7 @@
   and drawing of Compuserve GIF<SUP>SM</SUP> images. The class
   loads the first image and supports transparency.
 */
-class FL_EXPORT Fl_GIF_Image : public Fl_Pixmap {
+class FLTK3_EXPORT Fl_GIF_Image : public Fl_Pixmap {
 
   public:
 

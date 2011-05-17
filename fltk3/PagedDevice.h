@@ -29,8 +29,8 @@
  \brief declaration of class Fl_Paged_Device.
  */
 
-#ifndef Fl_Paged_Device_H
-#define Fl_Paged_Device_H
+#ifndef Fltk3_Paged_Device_H
+#define Fltk3_Paged_Device_H
 
 #include <fltk3/Device.h>
 #include <fltk3/Window.h>

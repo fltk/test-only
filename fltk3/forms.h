@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#ifndef __FORMS_H__
-#define __FORMS_H__
+#ifndef _FLTK3_FORMS_H_
+#define _FLTK3_FORMS_H_
 
 #include "run.h"
 #include "Group.h"
@@ -165,7 +165,7 @@ typedef int FL_COLOR;
 // fltk interaction:
 
 #define FL_CMD_OPT void
-extern FL_EXPORT void fl_initialize(int*, char*[], const char*, FL_CMD_OPT*, int);
+extern FLTK3_EXPORT void fl_initialize(int*, char*[], const char*, FL_CMD_OPT*, int);
 inline void fl_finish() {}
 
 typedef void (*FL_IO_CALLBACK) (int, void*);
@@ -182,8 +182,8 @@ inline void fl_remove_timeout(int) {}
 // type of callback is different!
 inline void fl_set_idle_callback(void (*cb)()) {fltk3::set_idle(cb, 0L);}
 
-FL_EXPORT fltk3::Widget* fl_do_forms(void);
-FL_EXPORT fltk3::Widget* fl_check_forms();
+FLTK3_EXPORT fltk3::Widget* fl_do_forms(void);
+FLTK3_EXPORT fltk3::Widget* fl_check_forms();
 inline fltk3::Widget* fl_do_only_forms(void) {return fl_do_forms();}
 inline fltk3::Widget* fl_check_only_forms(void) {return fl_check_forms();}
 
@@ -268,7 +268,7 @@ inline fltk3::Window* fl_bgn_form(fltk3::Boxtype b,int w,int h) {
   g->box(b);
   return g;
 }
-FL_EXPORT void fl_end_form();
+FLTK3_EXPORT void fl_end_form();
 inline void fl_addto_form(fltk3::Window* f) {f->begin();}
 inline fltk3::Group* fl_bgn_group() {return new fltk3::Group(0,0,0,0,0);}
 inline void fl_end_group() {fltk3::Group::current()->forms_end();}
@@ -284,7 +284,7 @@ inline void fl_set_form_geometry(fltk3::Window* f,int x,int y,int w,int h) {
 #define fl_set_initial_placement fl_set_form_geometry
 inline void fl_adjust_form_size(fltk3::Window*) {}
 
-FL_EXPORT void fl_show_form(fltk3::Window* f,int p,int b,const char* n);
+FLTK3_EXPORT void fl_show_form(fltk3::Window* f,int p,int b,const char* n);
 enum {	// "p" argument values:
   FL_PLACE_FREE = 0,	// make resizable
   FL_PLACE_MOUSE = 1,	// mouse centered on form
@@ -309,7 +309,7 @@ enum {	// "b" arguement values:
 };
 inline void fl_set_form_hotspot(fltk3::Window* w,int x,int y) {w->hotspot(x,y);}
 inline void fl_set_form_hotobject(fltk3::Window* w, fltk3::Widget* o) {w->hotspot(o);}
-extern FL_EXPORT char fl_flip;	// in forms.C
+extern FLTK3_EXPORT char fl_flip;	// in forms.C
 inline void fl_flip_yorigin() {fl_flip = 1;}
 
 #define fl_prepare_form_window fl_show_form
@@ -320,7 +320,7 @@ inline void fl_raise_form(fltk3::Window* f) {f->show();}
 inline void fl_hide_form(fltk3::Window* f) {f->hide();}
 inline void fl_pop_form(fltk3::Window* f) {f->show();}
 
-extern FL_EXPORT char fl_modal_next; // in forms.C
+extern FLTK3_EXPORT char fl_modal_next; // in forms.C
 inline void fl_activate_all_forms() {}
 inline void fl_deactivate_all_forms() {fl_modal_next = 1;}
 inline void fl_deactivate_form(fltk3::Window*w) {w->deactivate();}
@@ -334,7 +334,7 @@ inline void fl_set_form_callback(fltk3::Window* f,Forms_FormCB c) {f->callback(c
 #define fl_set_form_call_back fl_set_form_callback
 
 inline void fl_init() {}
-FL_EXPORT void fl_set_graphics_mode(int,int);
+FLTK3_EXPORT void fl_set_graphics_mode(int,int);
 
 inline int fl_form_is_visible(fltk3::Window* f) {return f->visible();}
 
@@ -482,7 +482,7 @@ inline int fl_isdisplayed_browser_line(fltk3::Widget* o, int n) {
 #define FL_PUSH_BUTTON		FL_TOGGLE_BUTTON
 #define FL_MENU_BUTTON		9
 
-FL_EXPORT fltk3::Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
+FLTK3_EXPORT fltk3::Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
 inline int fl_get_button(fltk3::Widget* b) {return ((fltk3::Button*)b)->value();}
 inline void fl_set_button(fltk3::Widget* b, int v) {((fltk3::Button*)b)->value(v);}
 inline int fl_get_button_numb(fltk3::Widget*) {return fltk3::event_button();}
@@ -649,12 +649,12 @@ fl_add_free(int t,double x,double y,double w,double h,const char* l,
 #include "showColormap.h"
 
 inline int fl_show_question(const char* c, int = 0) {return fl_choice("%s",fl_no,fl_yes,0L,c);}
-FL_EXPORT void fl_show_message(const char *,const char *,const char *);
-FL_EXPORT void fl_show_alert(const char *,const char *,const char *,int=0);
-FL_EXPORT int fl_show_question(const char *,const char *,const char *);
+FLTK3_EXPORT void fl_show_message(const char *,const char *,const char *);
+FLTK3_EXPORT void fl_show_alert(const char *,const char *,const char *,int=0);
+FLTK3_EXPORT int fl_show_question(const char *,const char *,const char *);
 inline const char *fl_show_input(const char *l,const char*d=0) {return fl_input("%s",d,l);}
-FL_EXPORT /*const*/ char *fl_show_simple_input(const char *label, const char *deflt = 0);
-FL_EXPORT int fl_show_choice(
+FLTK3_EXPORT /*const*/ char *fl_show_simple_input(const char *label, const char *deflt = 0);
+FLTK3_EXPORT int fl_show_choice(
     const char *m1,
     const char *m2,
     const char *m3,
@@ -675,11 +675,11 @@ inline int fl_show_choices(const char* c,int n,const char* b1,const char* b2,
 inline int do_matching(char* a, const char* b) {return fl_filename_match(a,b);}
 
 // Forms-compatible file chooser (implementation in fselect.C):
-FL_EXPORT char* fl_show_file_selector(const char* message,const char* dir,
+FLTK3_EXPORT char* fl_show_file_selector(const char* message,const char* dir,
 			    const char* pat,const char* fname);
-FL_EXPORT char*	fl_get_directory();
-FL_EXPORT char*	fl_get_pattern();
-FL_EXPORT char*	fl_get_filename();
+FLTK3_EXPORT char*	fl_get_directory();
+FLTK3_EXPORT char*	fl_get_pattern();
+FLTK3_EXPORT char*	fl_get_filename();
 
 #include "Input.h"
 forms_constructor(Fl_Input, fl_add_input)
@@ -811,7 +811,7 @@ inline void fl_set_slider_precision(fltk3::Widget* o, int i) {
 
 // The forms text object was the same as an fltk3::Box except it inverted the
 // meaning of fltk3::ALIGN_INSIDE.  Implementation in forms.cxx
-class FL_EXPORT Fl_FormsText : public fltk3::Widget {
+class FLTK3_EXPORT Fl_FormsText : public fltk3::Widget {
 protected:
     void draw();
 public:

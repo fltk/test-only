@@ -149,7 +149,7 @@ static Fl_Gl_Device_Plugin Gl_Device_Plugin;
 
 // The purpose of this variable, used in Fl_Gl_Window.cxx, is only to force this file to be loaded
 // whenever Fl_Gl_Window.cxx is loaded, that is, whenever fltk_gl is.
-FL_EXPORT int fl_gl_load_plugin = 0;
+FLTK3_EXPORT int fl_gl_load_plugin = 0;
 
 //
 // End of "$Id$".

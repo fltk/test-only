@@ -35,8 +35,8 @@
 
 
 
-#ifndef Fl_Input_Choice_H
-#define Fl_Input_Choice_H
+#ifndef Fltk3_Input_Choice_H
+#define Fltk3_Input_Choice_H
 
 #include <fltk3/run.h>
 #include <fltk3/Group.h>
@@ -56,7 +56,7 @@
   widgets directly, using the menubutton()
   and input() accessor methods.
 */
-class FL_EXPORT Fl_Input_Choice : public fltk3::Group {
+class FLTK3_EXPORT Fl_Input_Choice : public fltk3::Group {
   // Private class to handle slightly 'special' behavior of menu button
   class InputMenuButton : public Fl_Menu_Button {
     void draw() {

@@ -27,7 +27,7 @@
 
 #include "gl.h"
 
-extern FL_EXPORT void gl_remove_displaylist_fonts();
+extern FLTK3_EXPORT void gl_remove_displaylist_fonts();
 
 
 //

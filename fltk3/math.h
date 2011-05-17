@@ -31,8 +31,8 @@
 #  include "/usr/include/math.h"
 #endif
 
-#ifndef fl_math_h
-#  define fl_math_h
+#ifndef fltk3_math_h
+#  define fltk3_math_h
 
 #  define fl_math_h_cyclic_include 
 #  include <math.h>
