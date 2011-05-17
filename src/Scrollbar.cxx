@@ -284,7 +284,7 @@ void Scrollbar::draw() {
     ir.move_x(r.h()); ir.move_r(-r.h());
   }
   setcolor(color());
-  //fillrect(ir);
+  fillrect(ir);
   Slider::draw(ir, f5, false);
 }
 
