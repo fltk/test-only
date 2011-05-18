@@ -47,12 +47,12 @@
   if (pWrapper) { \
     if ( pWrapper->pVCalls & Wrapper::pVCallWidget##flag ) { \
     } else { \
-      pWrapper->pVCalls |= Wrapper::pVCallWidgetResize; \
+      pWrapper->pVCalls |= Wrapper::pVCallWidget##flag; \
       ((WidgetWrapper*)pWrapper)->call; \
       if ( !(pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) \
         return; \
     } \
-    pWrapper->pVCalls &= ~Wrapper::pVCallWidgetResize; \
+    pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
   }
 
 #define FLTK3_WRAPPER_VCALLS_OBJECT_INT(proto, call, flag) \
@@ -71,12 +71,12 @@
   if (pWrapper) { \
     if ( pWrapper->pVCalls & Wrapper::pVCallWidget##flag ) { \
     } else { \
-      pWrapper->pVCalls |= Wrapper::pVCallWidgetResize; \
+      pWrapper->pVCalls |= Wrapper::pVCallWidget##flag; \
       int ret = ((WidgetWrapper*)pWrapper)->call; \
       if ( !(pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) \
         return ret; \
     } \
-    pWrapper->pVCalls &= ~Wrapper::pVCallWidgetResize; \
+    pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
   }
 
  */

@@ -341,6 +341,13 @@ fltk3::Widget::do_callback(fltk3::Widget* o,void* arg) {
     clear_changed();
 }
 
+/** Draw a box.
+ */
+void fltk3::Widget::draw() {
+  draw_box();
+  draw_label();
+}
+
 
 // ========================= Wrapper Support ===================================
 

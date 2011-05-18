@@ -44,9 +44,12 @@ public:
     _p->wrapper(this);
   }
   
+  Fl_Box(Fl_Boxtype b, int x, int y, int w, int h, const char *label) {
+    _p = new fltk3::Box(fltk3::_1to3_boxtype(b), x, y, w, h, label);
+    _p->wrapper(this);
+  }
+  
 #if 0 // FIXME: 123
-  Fl_Box(Fl_Boxtype b, int X, int Y, int W, int H, const char *l)
-  : Fl_Widget(X,Y,W,H,l) {box(b);}
   virtual int handle(int);
 #endif
 };

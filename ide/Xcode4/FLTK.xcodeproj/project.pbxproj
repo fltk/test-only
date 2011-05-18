@@ -492,7 +492,6 @@
 		C8D2445DE4DB272D6140EB4D /* ps_image.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1C75365D167645656C3A6752 /* ps_image.cxx */; };
 		C915E2CB1382D16E00C5FD27 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C915E2CD1382D16E00C5FD27 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
-		C915E2D91382D8A100C5FD27 /* hello.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C915E2D71382D83A00C5FD27 /* hello.cxx */; };
 		C915E2DA1382D8ED00C5FD27 /* Enumerations.H in Headers */ = {isa = PBXBuildFile; fileRef = 84CE79448708855561FEE498 /* Enumerations.H */; };
 		C915E2DB1382D8ED00C5FD27 /* Fl.H in Headers */ = {isa = PBXBuildFile; fileRef = C359E5D5187606DD69C7938B /* Fl.H */; };
 		C915E2DC1382D8ED00C5FD27 /* Fl_Adjuster.H in Headers */ = {isa = PBXBuildFile; fileRef = 5CDA214AEABC15E3EF1BB172 /* Fl_Adjuster.H */; };
@@ -621,6 +620,11 @@
 		C915E3571382D8ED00C5FD27 /* win32.H in Headers */ = {isa = PBXBuildFile; fileRef = 62281FC096BA407C4F1E6824 /* win32.H */; };
 		C915E3581382D8ED00C5FD27 /* x.H in Headers */ = {isa = PBXBuildFile; fileRef = 83CED42A779FA76E98D37CA8 /* x.H */; };
 		C915E3591382D8ED00C5FD27 /* Fl_Paged_Device.H in Headers */ = {isa = PBXBuildFile; fileRef = 4CABCBB89F9DD5CF57BB9779 /* Fl_Paged_Device.H */; };
+		C915E3631383FA8800C5FD27 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
+		C915E3651383FA8800C5FD27 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
+		C915E36F1383FB0600C5FD27 /* hello.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C915E2D71382D83A00C5FD27 /* hello.cxx */; };
+		C915E3701383FB0B00C5FD27 /* hello.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C915E36C1383FAF900C5FD27 /* hello.cxx */; };
+		C915E3F31383FD6500C5FD27 /* string.h.in in Resources */ = {isa = PBXBuildFile; fileRef = C915E3F21383FD6500C5FD27 /* string.h.in */; };
 		C9165EA81291A304003FF4F0 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C9165EAA1291A304003FF4F0 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C9165ED41291A376003FF4F0 /* unittests.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C9165ED31291A376003FF4F0 /* unittests.cxx */; };
@@ -1620,6 +1624,18 @@
 			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
 		};
 		C915E2CE1382D16E00C5FD27 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		C915E3661383FA8800C5FD27 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.fl";
@@ -2926,6 +2942,13 @@
 			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
 			remoteInfo = fltk;
 		};
+		C915E35E1383FA8800C5FD27 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4BF1A7FFEACF5F31B4127482 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk;
+		};
 		C9165EA31291A304003FF4F0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4BF1A7FFEACF5F31B4127482 /* Project object */;
@@ -3825,6 +3848,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C915E3641383FA8800C5FD27 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C915E3651383FA8800C5FD27 /* fltk.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C9165EA91291A304003FF4F0 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4539,6 +4572,137 @@
 		C8AE10A8DDF53B8B27E3215A /* Fl_Choice.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Choice.H; path = ../../FL/Fl_Choice.H; sourceTree = SOURCE_ROOT; };
 		C915E2D21382D16E00C5FD27 /* hello1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C915E2D71382D83A00C5FD27 /* hello.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hello.cxx; path = ../../test1/hello.cxx; sourceTree = "<group>"; };
+		C915E36A1383FA8800C5FD27 /* hello2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C915E36C1383FAF900C5FD27 /* hello.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hello.cxx; path = ../../test2/hello.cxx; sourceTree = "<group>"; };
+		C915E3721383FD5A00C5FD27 /* Adjuster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Adjuster.h; path = ../../fltk/Adjuster.h; sourceTree = "<group>"; };
+		C915E3731383FD5A00C5FD27 /* AlignGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AlignGroup.h; path = ../../fltk/AlignGroup.h; sourceTree = "<group>"; };
+		C915E3741383FD5A00C5FD27 /* AnsiWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnsiWidget.h; path = ../../fltk/AnsiWidget.h; sourceTree = "<group>"; };
+		C915E3751383FD5A00C5FD27 /* ask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ask.h; path = ../../fltk/ask.h; sourceTree = "<group>"; };
+		C915E3761383FD5B00C5FD27 /* BarGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BarGroup.h; path = ../../fltk/BarGroup.h; sourceTree = "<group>"; };
+		C915E3771383FD5B00C5FD27 /* Box.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Box.h; path = ../../fltk/Box.h; sourceTree = "<group>"; };
+		C915E3781383FD5B00C5FD27 /* Browser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Browser.h; path = ../../fltk/Browser.h; sourceTree = "<group>"; };
+		C915E3791383FD5B00C5FD27 /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Button.h; path = ../../fltk/Button.h; sourceTree = "<group>"; };
+		C915E37A1383FD5B00C5FD27 /* CheckButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CheckButton.h; path = ../../fltk/CheckButton.h; sourceTree = "<group>"; };
+		C915E37B1383FD5B00C5FD27 /* Choice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Choice.h; path = ../../fltk/Choice.h; sourceTree = "<group>"; };
+		C915E37C1383FD5B00C5FD27 /* Clock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Clock.h; path = ../../fltk/Clock.h; sourceTree = "<group>"; };
+		C915E37D1383FD5B00C5FD27 /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Color.h; path = ../../fltk/Color.h; sourceTree = "<group>"; };
+		C915E37E1383FD5B00C5FD27 /* ColorChooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ColorChooser.h; path = ../../fltk/ColorChooser.h; sourceTree = "<group>"; };
+		C915E37F1383FD5B00C5FD27 /* ComboBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ComboBox.h; path = ../../fltk/ComboBox.h; sourceTree = "<group>"; };
+		C915E3801383FD5B00C5FD27 /* Cursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cursor.h; path = ../../fltk/Cursor.h; sourceTree = "<group>"; };
+		C915E3811383FD5B00C5FD27 /* CycleButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CycleButton.h; path = ../../fltk/CycleButton.h; sourceTree = "<group>"; };
+		C915E3821383FD5B00C5FD27 /* damage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = damage.h; path = ../../fltk/damage.h; sourceTree = "<group>"; };
+		C915E3831383FD5B00C5FD27 /* Dial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Dial.h; path = ../../fltk/Dial.h; sourceTree = "<group>"; };
+		C915E3841383FD5B00C5FD27 /* dirent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dirent.h; path = ../../fltk/dirent.h; sourceTree = "<group>"; };
+		C915E3851383FD5B00C5FD27 /* Divider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Divider.h; path = ../../fltk/Divider.h; sourceTree = "<group>"; };
+		C915E3861383FD5C00C5FD27 /* DoubleBufferWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DoubleBufferWindow.h; path = ../../fltk/DoubleBufferWindow.h; sourceTree = "<group>"; };
+		C915E3871383FD5C00C5FD27 /* draw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = draw.h; path = ../../fltk/draw.h; sourceTree = "<group>"; };
+		C915E3881383FD5C00C5FD27 /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = error.h; path = ../../fltk/error.h; sourceTree = "<group>"; };
+		C915E3891383FD5C00C5FD27 /* events.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = events.h; path = ../../fltk/events.h; sourceTree = "<group>"; };
+		C915E38A1383FD5C00C5FD27 /* file_chooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = file_chooser.h; path = ../../fltk/file_chooser.h; sourceTree = "<group>"; };
+		C915E38B1383FD5C00C5FD27 /* FileBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileBrowser.h; path = ../../fltk/FileBrowser.h; sourceTree = "<group>"; };
+		C915E38C1383FD5C00C5FD27 /* FileChooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileChooser.h; path = ../../fltk/FileChooser.h; sourceTree = "<group>"; };
+		C915E38D1383FD5C00C5FD27 /* FileIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileIcon.h; path = ../../fltk/FileIcon.h; sourceTree = "<group>"; };
+		C915E38E1383FD5C00C5FD27 /* FileInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FileInput.h; path = ../../fltk/FileInput.h; sourceTree = "<group>"; };
+		C915E38F1383FD5C00C5FD27 /* filename.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = filename.h; path = ../../fltk/filename.h; sourceTree = "<group>"; };
+		C915E3901383FD5C00C5FD27 /* FillDial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FillDial.h; path = ../../fltk/FillDial.h; sourceTree = "<group>"; };
+		C915E3911383FD5C00C5FD27 /* FillSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FillSlider.h; path = ../../fltk/FillSlider.h; sourceTree = "<group>"; };
+		C915E3921383FD5C00C5FD27 /* FL_API.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FL_API.h; path = ../../fltk/FL_API.h; sourceTree = "<group>"; };
+		C915E3931383FD5C00C5FD27 /* FL_VERSION.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FL_VERSION.h; path = ../../fltk/FL_VERSION.h; sourceTree = "<group>"; };
+		C915E3941383FD5D00C5FD27 /* Flags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Flags.h; path = ../../fltk/Flags.h; sourceTree = "<group>"; };
+		C915E3951383FD5D00C5FD27 /* FloatInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FloatInput.h; path = ../../fltk/FloatInput.h; sourceTree = "<group>"; };
+		C915E3961383FD5D00C5FD27 /* fltk_cairo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fltk_cairo.h; path = ../../fltk/fltk_cairo.h; sourceTree = "<group>"; };
+		C915E3971383FD5D00C5FD27 /* Font.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Font.h; path = ../../fltk/Font.h; sourceTree = "<group>"; };
+		C915E3981383FD5D00C5FD27 /* forms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = forms.h; path = ../../fltk/forms.h; sourceTree = "<group>"; };
+		C915E3991383FD5D00C5FD27 /* gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gl.h; path = ../../fltk/gl.h; sourceTree = "<group>"; };
+		C915E39A1383FD5D00C5FD27 /* gl2opengl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gl2opengl.h; path = ../../fltk/gl2opengl.h; sourceTree = "<group>"; };
+		C915E39B1383FD5D00C5FD27 /* glut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glut.h; path = ../../fltk/glut.h; sourceTree = "<group>"; };
+		C915E39C1383FD5D00C5FD27 /* GlWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GlWindow.h; path = ../../fltk/GlWindow.h; sourceTree = "<group>"; };
+		C915E39D1383FD5D00C5FD27 /* Group.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Group.h; path = ../../fltk/Group.h; sourceTree = "<group>"; };
+		C915E39E1383FD5D00C5FD27 /* HelpDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HelpDialog.h; path = ../../fltk/HelpDialog.h; sourceTree = "<group>"; };
+		C915E39F1383FD5D00C5FD27 /* HelpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HelpView.h; path = ../../fltk/HelpView.h; sourceTree = "<group>"; };
+		C915E3A01383FD5D00C5FD27 /* HighlightButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HighlightButton.h; path = ../../fltk/HighlightButton.h; sourceTree = "<group>"; };
+		C915E3A11383FD5E00C5FD27 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = ../../fltk/Image.h; sourceTree = "<group>"; };
+		C915E3A21383FD5E00C5FD27 /* Input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Input.h; path = ../../fltk/Input.h; sourceTree = "<group>"; };
+		C915E3A31383FD5E00C5FD27 /* InputBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InputBrowser.h; path = ../../fltk/InputBrowser.h; sourceTree = "<group>"; };
+		C915E3A41383FD5E00C5FD27 /* IntInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IntInput.h; path = ../../fltk/IntInput.h; sourceTree = "<group>"; };
+		C915E3A51383FD5E00C5FD27 /* InvisibleBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InvisibleBox.h; path = ../../fltk/InvisibleBox.h; sourceTree = "<group>"; };
+		C915E3A61383FD5E00C5FD27 /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Item.h; path = ../../fltk/Item.h; sourceTree = "<group>"; };
+		C915E3A71383FD5E00C5FD27 /* ItemGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ItemGroup.h; path = ../../fltk/ItemGroup.h; sourceTree = "<group>"; };
+		C915E3A81383FD5E00C5FD27 /* LabelType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LabelType.h; path = ../../fltk/LabelType.h; sourceTree = "<group>"; };
+		C915E3A91383FD5E00C5FD27 /* layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = layout.h; path = ../../fltk/layout.h; sourceTree = "<group>"; };
+		C915E3AA1383FD5E00C5FD27 /* LightButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LightButton.h; path = ../../fltk/LightButton.h; sourceTree = "<group>"; };
+		C915E3AB1383FD5E00C5FD27 /* LineDial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LineDial.h; path = ../../fltk/LineDial.h; sourceTree = "<group>"; };
+		C915E3AC1383FD5E00C5FD27 /* load_plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = load_plugin.h; path = ../../fltk/load_plugin.h; sourceTree = "<group>"; };
+		C915E3AD1383FD5E00C5FD27 /* math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = math.h; path = ../../fltk/math.h; sourceTree = "<group>"; };
+		C915E3AE1383FD5E00C5FD27 /* Menu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Menu.h; path = ../../fltk/Menu.h; sourceTree = "<group>"; };
+		C915E3AF1383FD5F00C5FD27 /* MenuBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuBar.h; path = ../../fltk/MenuBar.h; sourceTree = "<group>"; };
+		C915E3B01383FD5F00C5FD27 /* MenuBuild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuBuild.h; path = ../../fltk/MenuBuild.h; sourceTree = "<group>"; };
+		C915E3B11383FD5F00C5FD27 /* MenuWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MenuWindow.h; path = ../../fltk/MenuWindow.h; sourceTree = "<group>"; };
+		C915E3B21383FD5F00C5FD27 /* Monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Monitor.h; path = ../../fltk/Monitor.h; sourceTree = "<group>"; };
+		C915E3B31383FD5F00C5FD27 /* MultiBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultiBrowser.h; path = ../../fltk/MultiBrowser.h; sourceTree = "<group>"; };
+		C915E3B41383FD5F00C5FD27 /* MultiImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultiImage.h; path = ../../fltk/MultiImage.h; sourceTree = "<group>"; };
+		C915E3B51383FD5F00C5FD27 /* MultiLineInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultiLineInput.h; path = ../../fltk/MultiLineInput.h; sourceTree = "<group>"; };
+		C915E3B61383FD5F00C5FD27 /* MultiLineOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MultiLineOutput.h; path = ../../fltk/MultiLineOutput.h; sourceTree = "<group>"; };
+		C915E3B71383FD5F00C5FD27 /* NumericInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NumericInput.h; path = ../../fltk/NumericInput.h; sourceTree = "<group>"; };
+		C915E3B81383FD5F00C5FD27 /* osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osx.h; path = ../../fltk/osx.h; sourceTree = "<group>"; };
+		C915E3B91383FD5F00C5FD27 /* Output.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Output.h; path = ../../fltk/Output.h; sourceTree = "<group>"; };
+		C915E3BA1383FD5F00C5FD27 /* PackedGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PackedGroup.h; path = ../../fltk/PackedGroup.h; sourceTree = "<group>"; };
+		C915E3BB1383FD6000C5FD27 /* PixelType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PixelType.h; path = ../../fltk/PixelType.h; sourceTree = "<group>"; };
+		C915E3BC1383FD6000C5FD27 /* pnmImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pnmImage.h; path = ../../fltk/pnmImage.h; sourceTree = "<group>"; };
+		C915E3BD1383FD6000C5FD27 /* PopupMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PopupMenu.h; path = ../../fltk/PopupMenu.h; sourceTree = "<group>"; };
+		C915E3BE1383FD6000C5FD27 /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Preferences.h; path = ../../fltk/Preferences.h; sourceTree = "<group>"; };
+		C915E3BF1383FD6000C5FD27 /* ProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProgressBar.h; path = ../../fltk/ProgressBar.h; sourceTree = "<group>"; };
+		C915E3C01383FD6000C5FD27 /* RadioButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RadioButton.h; path = ../../fltk/RadioButton.h; sourceTree = "<group>"; };
+		C915E3C11383FD6000C5FD27 /* RadioItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RadioItem.h; path = ../../fltk/RadioItem.h; sourceTree = "<group>"; };
+		C915E3C21383FD6000C5FD27 /* RadioLightButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RadioLightButton.h; path = ../../fltk/RadioLightButton.h; sourceTree = "<group>"; };
+		C915E3C31383FD6000C5FD27 /* Rectangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rectangle.h; path = ../../fltk/Rectangle.h; sourceTree = "<group>"; };
+		C915E3C41383FD6000C5FD27 /* RepeatButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RepeatButton.h; path = ../../fltk/RepeatButton.h; sourceTree = "<group>"; };
+		C915E3C51383FD6000C5FD27 /* ReturnButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReturnButton.h; path = ../../fltk/ReturnButton.h; sourceTree = "<group>"; };
+		C915E3C61383FD6000C5FD27 /* rgbImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rgbImage.h; path = ../../fltk/rgbImage.h; sourceTree = "<group>"; };
+		C915E3C71383FD6000C5FD27 /* run.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = run.h; path = ../../fltk/run.h; sourceTree = "<group>"; };
+		C915E3C81383FD6000C5FD27 /* Scrollbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Scrollbar.h; path = ../../fltk/Scrollbar.h; sourceTree = "<group>"; };
+		C915E3C91383FD6100C5FD27 /* ScrollGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScrollGroup.h; path = ../../fltk/ScrollGroup.h; sourceTree = "<group>"; };
+		C915E3CA1383FD6100C5FD27 /* SecretInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SecretInput.h; path = ../../fltk/SecretInput.h; sourceTree = "<group>"; };
+		C915E3CB1383FD6100C5FD27 /* ShapedWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ShapedWindow.h; path = ../../fltk/ShapedWindow.h; sourceTree = "<group>"; };
+		C915E3CC1383FD6100C5FD27 /* SharedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SharedImage.h; path = ../../fltk/SharedImage.h; sourceTree = "<group>"; };
+		C915E3CD1383FD6100C5FD27 /* show_colormap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = show_colormap.h; path = ../../fltk/show_colormap.h; sourceTree = "<group>"; };
+		C915E3CE1383FD6100C5FD27 /* Slider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Slider.h; path = ../../fltk/Slider.h; sourceTree = "<group>"; };
+		C915E3CF1383FD6100C5FD27 /* StatusBarGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StatusBarGroup.h; path = ../../fltk/StatusBarGroup.h; sourceTree = "<group>"; };
+		C915E3D01383FD6100C5FD27 /* string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = string.h; path = ../../fltk/string.h; sourceTree = "<group>"; };
+		C915E3D11383FD6100C5FD27 /* StringList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StringList.h; path = ../../fltk/StringList.h; sourceTree = "<group>"; };
+		C915E3D21383FD6200C5FD27 /* Style.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Style.h; path = ../../fltk/Style.h; sourceTree = "<group>"; };
+		C915E3D31383FD6200C5FD27 /* StyleSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StyleSet.h; path = ../../fltk/StyleSet.h; sourceTree = "<group>"; };
+		C915E3D41383FD6200C5FD27 /* Symbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Symbol.h; path = ../../fltk/Symbol.h; sourceTree = "<group>"; };
+		C915E3D51383FD6200C5FD27 /* SystemMenuBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SystemMenuBar.h; path = ../../fltk/SystemMenuBar.h; sourceTree = "<group>"; };
+		C915E3D61383FD6200C5FD27 /* TabGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TabGroup.h; path = ../../fltk/TabGroup.h; sourceTree = "<group>"; };
+		C915E3D71383FD6200C5FD27 /* TextBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextBuffer.h; path = ../../fltk/TextBuffer.h; sourceTree = "<group>"; };
+		C915E3D81383FD6200C5FD27 /* TextDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextDisplay.h; path = ../../fltk/TextDisplay.h; sourceTree = "<group>"; };
+		C915E3D91383FD6200C5FD27 /* TextEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextEditor.h; path = ../../fltk/TextEditor.h; sourceTree = "<group>"; };
+		C915E3DA1383FD6200C5FD27 /* Threads.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Threads.h; path = ../../fltk/Threads.h; sourceTree = "<group>"; };
+		C915E3DB1383FD6200C5FD27 /* ThumbWheel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThumbWheel.h; path = ../../fltk/ThumbWheel.h; sourceTree = "<group>"; };
+		C915E3DC1383FD6300C5FD27 /* TiledGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiledGroup.h; path = ../../fltk/TiledGroup.h; sourceTree = "<group>"; };
+		C915E3DD1383FD6300C5FD27 /* TiledImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TiledImage.h; path = ../../fltk/TiledImage.h; sourceTree = "<group>"; };
+		C915E3DE1383FD6300C5FD27 /* ToggleButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToggleButton.h; path = ../../fltk/ToggleButton.h; sourceTree = "<group>"; };
+		C915E3DF1383FD6300C5FD27 /* ToggleItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ToggleItem.h; path = ../../fltk/ToggleItem.h; sourceTree = "<group>"; };
+		C915E3E01383FD6300C5FD27 /* Tooltip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Tooltip.h; path = ../../fltk/Tooltip.h; sourceTree = "<group>"; };
+		C915E3E11383FD6300C5FD27 /* utf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = utf.h; path = ../../fltk/utf.h; sourceTree = "<group>"; };
+		C915E3E21383FD6300C5FD27 /* Valuator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Valuator.h; path = ../../fltk/Valuator.h; sourceTree = "<group>"; };
+		C915E3E31383FD6300C5FD27 /* ValueInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ValueInput.h; path = ../../fltk/ValueInput.h; sourceTree = "<group>"; };
+		C915E3E41383FD6300C5FD27 /* ValueOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ValueOutput.h; path = ../../fltk/ValueOutput.h; sourceTree = "<group>"; };
+		C915E3E51383FD6300C5FD27 /* ValueSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ValueSlider.h; path = ../../fltk/ValueSlider.h; sourceTree = "<group>"; };
+		C915E3E61383FD6300C5FD27 /* visual.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = visual.h; path = ../../fltk/visual.h; sourceTree = "<group>"; };
+		C915E3E71383FD6300C5FD27 /* Widget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Widget.h; path = ../../fltk/Widget.h; sourceTree = "<group>"; };
+		C915E3E81383FD6400C5FD27 /* WidgetAssociation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WidgetAssociation.h; path = ../../fltk/WidgetAssociation.h; sourceTree = "<group>"; };
+		C915E3E91383FD6400C5FD27 /* win32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = win32.h; path = ../../fltk/win32.h; sourceTree = "<group>"; };
+		C915E3EA1383FD6400C5FD27 /* Window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Window.h; path = ../../fltk/Window.h; sourceTree = "<group>"; };
+		C915E3EB1383FD6400C5FD27 /* WizardGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WizardGroup.h; path = ../../fltk/WizardGroup.h; sourceTree = "<group>"; };
+		C915E3EC1383FD6400C5FD27 /* WordwrapInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WordwrapInput.h; path = ../../fltk/WordwrapInput.h; sourceTree = "<group>"; };
+		C915E3ED1383FD6400C5FD27 /* WordwrapOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WordwrapOutput.h; path = ../../fltk/WordwrapOutput.h; sourceTree = "<group>"; };
+		C915E3EE1383FD6400C5FD27 /* x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = x.h; path = ../../fltk/x.h; sourceTree = "<group>"; };
+		C915E3EF1383FD6400C5FD27 /* x11.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = x11.h; path = ../../fltk/x11.h; sourceTree = "<group>"; };
+		C915E3F01383FD6400C5FD27 /* xbmImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xbmImage.h; path = ../../fltk/xbmImage.h; sourceTree = "<group>"; };
+		C915E3F11383FD6400C5FD27 /* xpmImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xpmImage.h; path = ../../fltk/xpmImage.h; sourceTree = "<group>"; };
+		C915E3F21383FD6500C5FD27 /* string.h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = string.h.in; path = ../../fltk/string.h.in; sourceTree = "<group>"; };
 		C9165EAF1291A304003FF4F0 /* utf8.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = utf8.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9165ED31291A376003FF4F0 /* unittests.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = unittests.cxx; path = ../../test/unittests.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		C9568B8A1380730100CDA5BF /* Adjuster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Adjuster.h; path = ../../fltk3/Adjuster.h; sourceTree = "<group>"; };
@@ -5397,6 +5561,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C915E3621383FA8800C5FD27 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C915E3631383FA8800C5FD27 /* fltk.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C9165EA71291A304003FF4F0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -5545,6 +5717,7 @@
 			isa = PBXGroup;
 			children = (
 				C915E2D61382D1C600C5FD27 /* Test1 */,
+				C915E35A1383FA4C00C5FD27 /* Test2 */,
 				1745FD7A82A025A97E1FFD22 /* Demo */,
 				00A184CFEE690C4BD856C12B /* adjuster */,
 				D4A58B6D0BEEB58E9CB0E31F /* arc */,
@@ -5623,7 +5796,8 @@
 			isa = PBXGroup;
 			children = (
 				C9568B88138072AE00CDA5BF /* Headers */,
-				B04F6E032ADAF0A16A860A2E /* FLTK1Headers */,
+				B04F6E032ADAF0A16A860A2E /* Headers1 */,
+				C915E3711383FBB900C5FD27 /* Headers2 */,
 				7F66B1D612BB924C00C67B59 /* Fl_cocoa.mm */,
 				7F66B1D712BB924C00C67B59 /* Fl_Native_File_Chooser_MAC.mm */,
 				7F66B1D812BB924C00C67B59 /* Fl_Quartz_Printer.mm */,
@@ -6382,7 +6556,7 @@
 			name = fltk_images;
 			sourceTree = "<group>";
 		};
-		B04F6E032ADAF0A16A860A2E /* FLTK1Headers */ = {
+		B04F6E032ADAF0A16A860A2E /* Headers1 */ = {
 			isa = PBXGroup;
 			children = (
 				84CE79448708855561FEE498 /* Enumerations.H */,
@@ -6514,7 +6688,7 @@
 				83CED42A779FA76E98D37CA8 /* x.H */,
 				4CABCBB89F9DD5CF57BB9779 /* Fl_Paged_Device.H */,
 			);
-			name = FLTK1Headers;
+			name = Headers1;
 			sourceTree = "<group>";
 		};
 		B41ED46FB39CBC4D7E97E288 /* pack */ = {
@@ -6580,6 +6754,158 @@
 				C915E2D51382D1AC00C5FD27 /* hello1 */,
 			);
 			name = Test1;
+			sourceTree = "<group>";
+		};
+		C915E35A1383FA4C00C5FD27 /* Test2 */ = {
+			isa = PBXGroup;
+			children = (
+				C915E35B1383FA5D00C5FD27 /* hello2 */,
+			);
+			name = Test2;
+			sourceTree = "<group>";
+		};
+		C915E35B1383FA5D00C5FD27 /* hello2 */ = {
+			isa = PBXGroup;
+			children = (
+				C915E36C1383FAF900C5FD27 /* hello.cxx */,
+			);
+			name = hello2;
+			sourceTree = "<group>";
+		};
+		C915E3711383FBB900C5FD27 /* Headers2 */ = {
+			isa = PBXGroup;
+			children = (
+				C915E3721383FD5A00C5FD27 /* Adjuster.h */,
+				C915E3731383FD5A00C5FD27 /* AlignGroup.h */,
+				C915E3741383FD5A00C5FD27 /* AnsiWidget.h */,
+				C915E3751383FD5A00C5FD27 /* ask.h */,
+				C915E3761383FD5B00C5FD27 /* BarGroup.h */,
+				C915E3771383FD5B00C5FD27 /* Box.h */,
+				C915E3781383FD5B00C5FD27 /* Browser.h */,
+				C915E3791383FD5B00C5FD27 /* Button.h */,
+				C915E37A1383FD5B00C5FD27 /* CheckButton.h */,
+				C915E37B1383FD5B00C5FD27 /* Choice.h */,
+				C915E37C1383FD5B00C5FD27 /* Clock.h */,
+				C915E37D1383FD5B00C5FD27 /* Color.h */,
+				C915E37E1383FD5B00C5FD27 /* ColorChooser.h */,
+				C915E37F1383FD5B00C5FD27 /* ComboBox.h */,
+				C915E3801383FD5B00C5FD27 /* Cursor.h */,
+				C915E3811383FD5B00C5FD27 /* CycleButton.h */,
+				C915E3821383FD5B00C5FD27 /* damage.h */,
+				C915E3831383FD5B00C5FD27 /* Dial.h */,
+				C915E3841383FD5B00C5FD27 /* dirent.h */,
+				C915E3851383FD5B00C5FD27 /* Divider.h */,
+				C915E3861383FD5C00C5FD27 /* DoubleBufferWindow.h */,
+				C915E3871383FD5C00C5FD27 /* draw.h */,
+				C915E3881383FD5C00C5FD27 /* error.h */,
+				C915E3891383FD5C00C5FD27 /* events.h */,
+				C915E38A1383FD5C00C5FD27 /* file_chooser.h */,
+				C915E38B1383FD5C00C5FD27 /* FileBrowser.h */,
+				C915E38C1383FD5C00C5FD27 /* FileChooser.h */,
+				C915E38D1383FD5C00C5FD27 /* FileIcon.h */,
+				C915E38E1383FD5C00C5FD27 /* FileInput.h */,
+				C915E38F1383FD5C00C5FD27 /* filename.h */,
+				C915E3901383FD5C00C5FD27 /* FillDial.h */,
+				C915E3911383FD5C00C5FD27 /* FillSlider.h */,
+				C915E3921383FD5C00C5FD27 /* FL_API.h */,
+				C915E3931383FD5C00C5FD27 /* FL_VERSION.h */,
+				C915E3941383FD5D00C5FD27 /* Flags.h */,
+				C915E3951383FD5D00C5FD27 /* FloatInput.h */,
+				C915E3961383FD5D00C5FD27 /* fltk_cairo.h */,
+				C915E3971383FD5D00C5FD27 /* Font.h */,
+				C915E3981383FD5D00C5FD27 /* forms.h */,
+				C915E3991383FD5D00C5FD27 /* gl.h */,
+				C915E39A1383FD5D00C5FD27 /* gl2opengl.h */,
+				C915E39B1383FD5D00C5FD27 /* glut.h */,
+				C915E39C1383FD5D00C5FD27 /* GlWindow.h */,
+				C915E39D1383FD5D00C5FD27 /* Group.h */,
+				C915E39E1383FD5D00C5FD27 /* HelpDialog.h */,
+				C915E39F1383FD5D00C5FD27 /* HelpView.h */,
+				C915E3A01383FD5D00C5FD27 /* HighlightButton.h */,
+				C915E3A11383FD5E00C5FD27 /* Image.h */,
+				C915E3A21383FD5E00C5FD27 /* Input.h */,
+				C915E3A31383FD5E00C5FD27 /* InputBrowser.h */,
+				C915E3A41383FD5E00C5FD27 /* IntInput.h */,
+				C915E3A51383FD5E00C5FD27 /* InvisibleBox.h */,
+				C915E3A61383FD5E00C5FD27 /* Item.h */,
+				C915E3A71383FD5E00C5FD27 /* ItemGroup.h */,
+				C915E3A81383FD5E00C5FD27 /* LabelType.h */,
+				C915E3A91383FD5E00C5FD27 /* layout.h */,
+				C915E3AA1383FD5E00C5FD27 /* LightButton.h */,
+				C915E3AB1383FD5E00C5FD27 /* LineDial.h */,
+				C915E3AC1383FD5E00C5FD27 /* load_plugin.h */,
+				C915E3AD1383FD5E00C5FD27 /* math.h */,
+				C915E3AE1383FD5E00C5FD27 /* Menu.h */,
+				C915E3AF1383FD5F00C5FD27 /* MenuBar.h */,
+				C915E3B01383FD5F00C5FD27 /* MenuBuild.h */,
+				C915E3B11383FD5F00C5FD27 /* MenuWindow.h */,
+				C915E3B21383FD5F00C5FD27 /* Monitor.h */,
+				C915E3B31383FD5F00C5FD27 /* MultiBrowser.h */,
+				C915E3B41383FD5F00C5FD27 /* MultiImage.h */,
+				C915E3B51383FD5F00C5FD27 /* MultiLineInput.h */,
+				C915E3B61383FD5F00C5FD27 /* MultiLineOutput.h */,
+				C915E3B71383FD5F00C5FD27 /* NumericInput.h */,
+				C915E3B81383FD5F00C5FD27 /* osx.h */,
+				C915E3B91383FD5F00C5FD27 /* Output.h */,
+				C915E3BA1383FD5F00C5FD27 /* PackedGroup.h */,
+				C915E3BB1383FD6000C5FD27 /* PixelType.h */,
+				C915E3BC1383FD6000C5FD27 /* pnmImage.h */,
+				C915E3BD1383FD6000C5FD27 /* PopupMenu.h */,
+				C915E3BE1383FD6000C5FD27 /* Preferences.h */,
+				C915E3BF1383FD6000C5FD27 /* ProgressBar.h */,
+				C915E3C01383FD6000C5FD27 /* RadioButton.h */,
+				C915E3C11383FD6000C5FD27 /* RadioItem.h */,
+				C915E3C21383FD6000C5FD27 /* RadioLightButton.h */,
+				C915E3C31383FD6000C5FD27 /* Rectangle.h */,
+				C915E3C41383FD6000C5FD27 /* RepeatButton.h */,
+				C915E3C51383FD6000C5FD27 /* ReturnButton.h */,
+				C915E3C61383FD6000C5FD27 /* rgbImage.h */,
+				C915E3C71383FD6000C5FD27 /* run.h */,
+				C915E3C81383FD6000C5FD27 /* Scrollbar.h */,
+				C915E3C91383FD6100C5FD27 /* ScrollGroup.h */,
+				C915E3CA1383FD6100C5FD27 /* SecretInput.h */,
+				C915E3CB1383FD6100C5FD27 /* ShapedWindow.h */,
+				C915E3CC1383FD6100C5FD27 /* SharedImage.h */,
+				C915E3CD1383FD6100C5FD27 /* show_colormap.h */,
+				C915E3CE1383FD6100C5FD27 /* Slider.h */,
+				C915E3CF1383FD6100C5FD27 /* StatusBarGroup.h */,
+				C915E3D01383FD6100C5FD27 /* string.h */,
+				C915E3D11383FD6100C5FD27 /* StringList.h */,
+				C915E3D21383FD6200C5FD27 /* Style.h */,
+				C915E3D31383FD6200C5FD27 /* StyleSet.h */,
+				C915E3D41383FD6200C5FD27 /* Symbol.h */,
+				C915E3D51383FD6200C5FD27 /* SystemMenuBar.h */,
+				C915E3D61383FD6200C5FD27 /* TabGroup.h */,
+				C915E3D71383FD6200C5FD27 /* TextBuffer.h */,
+				C915E3D81383FD6200C5FD27 /* TextDisplay.h */,
+				C915E3D91383FD6200C5FD27 /* TextEditor.h */,
+				C915E3DA1383FD6200C5FD27 /* Threads.h */,
+				C915E3DB1383FD6200C5FD27 /* ThumbWheel.h */,
+				C915E3DC1383FD6300C5FD27 /* TiledGroup.h */,
+				C915E3DD1383FD6300C5FD27 /* TiledImage.h */,
+				C915E3DE1383FD6300C5FD27 /* ToggleButton.h */,
+				C915E3DF1383FD6300C5FD27 /* ToggleItem.h */,
+				C915E3E01383FD6300C5FD27 /* Tooltip.h */,
+				C915E3E11383FD6300C5FD27 /* utf.h */,
+				C915E3E21383FD6300C5FD27 /* Valuator.h */,
+				C915E3E31383FD6300C5FD27 /* ValueInput.h */,
+				C915E3E41383FD6300C5FD27 /* ValueOutput.h */,
+				C915E3E51383FD6300C5FD27 /* ValueSlider.h */,
+				C915E3E61383FD6300C5FD27 /* visual.h */,
+				C915E3E71383FD6300C5FD27 /* Widget.h */,
+				C915E3E81383FD6400C5FD27 /* WidgetAssociation.h */,
+				C915E3E91383FD6400C5FD27 /* win32.h */,
+				C915E3EA1383FD6400C5FD27 /* Window.h */,
+				C915E3EB1383FD6400C5FD27 /* WizardGroup.h */,
+				C915E3EC1383FD6400C5FD27 /* WordwrapInput.h */,
+				C915E3ED1383FD6400C5FD27 /* WordwrapOutput.h */,
+				C915E3EE1383FD6400C5FD27 /* x.h */,
+				C915E3EF1383FD6400C5FD27 /* x11.h */,
+				C915E3F01383FD6400C5FD27 /* xbmImage.h */,
+				C915E3F11383FD6400C5FD27 /* xpmImage.h */,
+				C915E3F21383FD6500C5FD27 /* string.h.in */,
+			);
+			name = Headers2;
 			sourceTree = "<group>";
 		};
 		C9165ED21291A327003FF4F0 /* unittests */ = {
@@ -6970,6 +7296,7 @@
 				5191489A6263E11B65A57B4D /* valuators.app */,
 				C9165EAF1291A304003FF4F0 /* utf8.app */,
 				C915E2D21382D16E00C5FD27 /* hello1.app */,
+				C915E36A1383FA8800C5FD27 /* hello2.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -8781,6 +9108,26 @@
 			productReference = C915E2D21382D16E00C5FD27 /* hello1.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C915E35C1383FA8800C5FD27 /* hello2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C915E3671383FA8800C5FD27 /* Build configuration list for PBXNativeTarget "hello2" */;
+			buildPhases = (
+				C915E35F1383FA8800C5FD27 /* Resources */,
+				C915E3601383FA8800C5FD27 /* Sources */,
+				C915E3621383FA8800C5FD27 /* Frameworks */,
+				C915E3641383FA8800C5FD27 /* CopyFiles */,
+			);
+			buildRules = (
+				C915E3661383FA8800C5FD27 /* PBXBuildRule */,
+			);
+			dependencies = (
+				C915E35D1383FA8800C5FD27 /* PBXTargetDependency */,
+			);
+			name = hello2;
+			productName = hello;
+			productReference = C915E36A1383FA8800C5FD27 /* hello2.app */;
+			productType = "com.apple.product-type.application";
+		};
 		C9165EA11291A304003FF4F0 /* unittests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C9165EAC1291A304003FF4F0 /* Build configuration list for PBXNativeTarget "unittests" */;
@@ -9146,7 +9493,6 @@
 				234377F13A1D2CBBCF9E5043 /* gl_overlay */,
 				D7D4B168DE66A92F9F8747C0 /* glpuzzle */,
 				7483E011046F1E2FC84A989B /* hello */,
-				C915E2C41382D16E00C5FD27 /* hello1 */,
 				B37F5F8EB169ABA76EA02FB9 /* help */,
 				CA05747C492074A51F2F35BC /* iconize */,
 				36F787DB6844466ACF848593 /* image */,
@@ -9187,6 +9533,8 @@
 				C9165EA11291A304003FF4F0 /* unittests */,
 				2BFE084E4D6FAB77DCAF0A83 /* utf8 */,
 				E167C0E81B125EBADAC8ED73 /* valuators */,
+				C915E2C41382D16E00C5FD27 /* hello1 */,
+				C915E35C1383FA8800C5FD27 /* hello2 */,
 			);
 		};
 /* End PBXProject section */
@@ -9576,6 +9924,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				27C588BBFC1BE5D0F8202036 /* fluid.icns in Resources */,
+				C915E3F31383FD6500C5FD27 /* string.h.in in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9650,6 +9999,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C915E2C71382D16E00C5FD27 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C915E35F1383FA8800C5FD27 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -10520,7 +10876,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C915E2D91382D8A100C5FD27 /* hello.cxx in Sources */,
+				C915E36F1383FB0600C5FD27 /* hello.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C915E3601383FA8800C5FD27 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C915E3701383FB0B00C5FD27 /* hello.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11430,6 +11794,11 @@
 			isa = PBXTargetDependency;
 			target = A57FDE871C99A52BEEDEE68C /* fltk */;
 			targetProxy = C915E2C61382D16E00C5FD27 /* PBXContainerItemProxy */;
+		};
+		C915E35D1383FA8800C5FD27 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk */;
+			targetProxy = C915E35E1383FA8800C5FD27 /* PBXContainerItemProxy */;
 		};
 		C9165EA21291A304003FF4F0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -15749,6 +16118,69 @@
 			};
 			name = Release;
 		};
+		C915E3681383FA8800C5FD27 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "USING_XCODE=1";
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode3/,
+					../../,
+					../../png,
+					../../jpeg,
+				);
+				INFOPLIST_FILE = "plists/hello-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_NAME = hello2;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		C915E3691383FA8800C5FD27 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "USING_XCODE=1";
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode3/,
+					../../,
+					../../png,
+					../../jpeg,
+				);
+				INFOPLIST_FILE = "plists/hello-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_NAME = hello2;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Release;
+		};
 		C9165EAD1291A304003FF4F0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -17198,6 +17630,15 @@
 			buildConfigurations = (
 				C915E2D01382D16E00C5FD27 /* Debug */,
 				C915E2D11382D16E00C5FD27 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C915E3671383FA8800C5FD27 /* Build configuration list for PBXNativeTarget "hello2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C915E3681383FA8800C5FD27 /* Debug */,
+				C915E3691383FA8800C5FD27 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

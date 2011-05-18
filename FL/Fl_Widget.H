@@ -152,13 +152,25 @@ public:
     ((fltk3::Widget*)_p)->box( fltk3::_1to3_boxtype(new_box) );
   }
   
-#if 0 // FIXME: 123
-  Fl_Color color() const {return color_;}
-  void color(Fl_Color bg) {color_ = bg;}
-  Fl_Color selection_color() const {return color2_;}
-  void selection_color(Fl_Color a) {color2_ = a;}
-  void color(Fl_Color bg, Fl_Color sel) {color_=bg; color2_=sel;}
-#endif
+  Fl_Color color() const {
+    return fltk3::_3to1_color( ((fltk3::Widget*)_p)->color() );
+  }
+
+  void color(Fl_Color bg) {
+    ((fltk3::Widget*)_p)->color( fltk3::_1to3_color(bg) );
+  }
+  
+  Fl_Color selection_color() const {
+    return fltk3::_3to1_color( ((fltk3::Widget*)_p)->selection_color() );
+  }
+    
+  void selection_color(Fl_Color a) {
+    ((fltk3::Widget*)_p)->selection_color( fltk3::_1to3_color(a) );
+  }
+  
+  void color(Fl_Color bg, Fl_Color sel) {
+    ((fltk3::Widget*)_p)->color( fltk3::_1to3_color(bg), fltk3::_1to3_color(sel) );
+  }
   
   const char* label() const {
     return ((fltk3::Widget*)_p)->label();
@@ -168,12 +180,21 @@ public:
     ((fltk3::Widget*)_p)->label(text);
   }
   
-#if 0 // FIXME: 123
-  void copy_label(const char *new_label);
-  void label(Fl_Labeltype a, const char* b) {label_.type = a; label_.value = b;}
-  Fl_Color labelcolor() const {return label_.color;}
-  void labelcolor(Fl_Color c) {label_.color=c;}
-#endif
+  void copy_label(const char *new_label) {
+    ((fltk3::Widget*)_p)->label(new_label);
+  }
+    
+  void label(Fl_Labeltype a, const char* b) {
+    ((fltk3::Widget*)_p)->label( fltk3::_1to3_labeltype(a), b );
+  }
+  
+  Fl_Color labelcolor() const {
+    return fltk3::_3to1_color( ((fltk3::Widget*)_p)->labelcolor() );
+  }
+  
+  void labelcolor(Fl_Color c) {
+    ((fltk3::Widget*)_p)->labelcolor( fltk3::_1to3_color(c) );
+  }
 
   Fl_Labeltype labeltype() const {
     return fltk3::_3to1_labeltype( ((fltk3::Widget*)_p)->labeltype() );

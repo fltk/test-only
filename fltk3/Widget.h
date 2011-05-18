@@ -226,7 +226,7 @@ namespace fltk3 {
      s->draw();			// calls Fl_Scrollbar::draw()
      \endcode
      */
-    virtual void draw() { }
+    virtual void draw();
     
     /** Handles the specified event. 
      You normally don't call this method directly, but instead let FLTK do 
