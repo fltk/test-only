@@ -69,7 +69,7 @@ Fl_PostScript_Graphics_Driver::~Fl_PostScript_Graphics_Driver() {
 Fl_PostScript_File_Device::Fl_PostScript_File_Device(void)
 {
 #ifdef __APPLE__
-  gc = fl_gc; // the display context is used by fl_text_extents()
+  gc = fl_gc; // the display context is used by fltk3::text_extents()
 #endif
   Fl_Surface_Device::driver( new Fl_PostScript_Graphics_Driver() );
 }
@@ -604,7 +604,7 @@ void Fl_PostScript_Graphics_Driver::reset(){
   cr_=cg_=cb_=0;
   Fl_Graphics_Driver::font(fltk3::HELVETICA, 12);
   linewidth_=0;
-  linestyle_=FL_SOLID;
+  linestyle_=fltk3::SOLID;
   strcpy(linedash_,"");
   Clip *c=clip_;   ////just not to have memory leaks for badly writen code (forgotten clip popping)
   
@@ -874,7 +874,7 @@ void Fl_PostScript_Graphics_Driver::line_style(int style, int width, char* dashe
   fprintf(output, "%i setlinewidth\n", width);
   
   if(!style && (!dashes || !(*dashes)) && width0) //system lines
-    style = FL_CAP_SQUARE;
+    style = fltk3::CAP_SQUARE;
   
   int cap = (style &0xf00) >> 8;
   if(cap) cap--;
@@ -1054,22 +1054,22 @@ static void transformed_draw_extra(const char* str, int n, double x, double y, i
   fltk3::Color bg_color = fltk3::contrast(fltk3::WHITE, text_color);
   Fl_Offscreen off = fl_create_offscreen(w_scaled, (int)(h+3*scale) );
   fl_begin_offscreen(off);
-  fl_color(bg_color);
+  fltk3::color(bg_color);
   // color offscreen background with a shade contrasting with the text color
-  fl_rectf(0, 0, w_scaled, (int)(h+3*scale) );
-  fl_color(text_color);
+  fltk3::rectf(0, 0, w_scaled, (int)(h+3*scale) );
+  fltk3::color(text_color);
 #if defined(USE_X11) && !USE_XFT
   // force seeing this font as new so it's applied to the offscreen graphics context
   fl_graphics_driver->font_descriptor(NULL);
-  fl_font(fontnum, 0);
+  fltk3::font(fontnum, 0);
 #endif
-  fl_font(fontnum, (fltk3::Fontsize)(scale * old_size) );
-  int w2 = (int)fl_width(str, n);
+  fltk3::font(fontnum, (fltk3::Fontsize)(scale * old_size) );
+  int w2 = (int)fltk3::width(str, n);
   // draw string in offscreen
-  if (rtl) fl_rtl_draw(str, n, w2, (int)(h * 0.8) );
-  else fl_draw(str, n, 1, (int)(h * 0.8) );
+  if (rtl) fltk3::rtl_draw(str, n, w2, (int)(h * 0.8) );
+  else fltk3::draw(str, n, 1, (int)(h * 0.8) );
   // read (most of) the offscreen image
-  uchar *img = fl_read_image(NULL, 1, 1, w2, h, 0);
+  uchar *img = fltk3::read_image(NULL, 1, 1, w2, h, 0);
   fl_end_offscreen();
   driver->font(fontnum, old_size);
   fl_delete_offscreen(off);

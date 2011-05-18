@@ -28,11 +28,11 @@
 #include <config.h>
 
 //
-// 'fl_read_image()' - Read an image from the current window or off-screen buffer.
+// 'fltk3::read_image()' - Read an image from the current window or off-screen buffer.
 //
 
 uchar *				// O - Pixel buffer or NULL if failed
-fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
+fltk3::read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
               int   x,		// I - Left position
 	      int   y,		// I - Top position
 	      int   w,		// I - Width of area to read

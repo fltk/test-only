@@ -127,8 +127,8 @@ Fl_File_Browser::item_height(void *p) const	// I - List item data
 
 
   // Figure out the standard text height...
-  fl_font(textfont(), textsize());
-  textheight = fl_height();
+  fltk3::font(textfont(), textsize());
+  textheight = fltk3::height();
 
   // We always have at least 1 line...
   height = textheight;
@@ -177,15 +177,15 @@ Fl_File_Browser::item_width(void *p) const	// I - List item data
 
   // Set the font and size...
   if (line->txt[strlen(line->txt) - 1] == '/')
-    fl_font(textfont() | fltk3::BOLD, textsize());
+    fltk3::font(textfont() | fltk3::BOLD, textsize());
   else
-    fl_font(textfont(), textsize());
+    fltk3::font(textfont(), textsize());
 
   if (strchr(line->txt, '\n') == NULL &&
       strchr(line->txt, column_char()) == NULL)
   {
     // Do a fast width calculation...
-    width = (int)fl_width(line->txt);
+    width = (int)fltk3::width(line->txt);
   }
   else
   {
@@ -200,7 +200,7 @@ Fl_File_Browser::item_width(void *p) const	// I - List item data
         // Newline - nul terminate this fragment and get the width...
         *ptr = '\0';
 
-	tempwidth += (int)fl_width(fragment);
+	tempwidth += (int)fltk3::width(fragment);
 
         // Update the max width as needed...
 	if (tempwidth > width)
@@ -221,7 +221,7 @@ Fl_File_Browser::item_width(void *p) const	// I - List item data
 	    tempwidth += columns[i];
 	}
 	else
-          tempwidth = column * (int)(fl_height() * 0.6 * 8.0);
+          tempwidth = column * (int)(fltk3::height() * 0.6 * 8.0);
 
         if (tempwidth > width)
 	  width = tempwidth;
@@ -236,7 +236,7 @@ Fl_File_Browser::item_width(void *p) const	// I - List item data
       // Nul terminate this fragment and get the width...
       *ptr = '\0';
 
-      tempwidth += (int)fl_width(fragment);
+      tempwidth += (int)fltk3::width(fragment);
 
       // Update the max width as needed...
       if (tempwidth > width)
@@ -283,9 +283,9 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
   line = (FL_BLINE *)p;
 
   if (line->txt[strlen(line->txt) - 1] == '/')
-    fl_font(textfont() | fltk3::BOLD, textsize());
+    fltk3::font(textfont() | fltk3::BOLD, textsize());
   else
-    fl_font(textfont(), textsize());
+    fltk3::font(textfont(), textsize());
 
   if (line->flags & SELECTED)
     c = fltk3::contrast(textcolor(), selection_color());
@@ -312,11 +312,11 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
     W -= iconsize_ - 10;
 
     // Center the text vertically...
-    height = fl_height();
+    height = fltk3::height();
 
     for (t = line->txt; *t != '\0'; t ++)
       if (*t == '\n')
-	height += fl_height();
+	height += fltk3::height();
 
     if (height < iconsize_)
       Y += (iconsize_ - height) / 2;
@@ -329,9 +329,9 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
   column  = 0;
 
   if (active_r())
-    fl_color(c);
+    fltk3::color(c);
   else
-    fl_color(fltk3::inactive(c));
+    fltk3::color(fltk3::inactive(c));
 
   for (t = line->txt, ptr = fragment; *t != '\0'; t ++)
     if (*t == '\n')
@@ -339,13 +339,13 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
       // Newline - nul terminate this fragment and draw it...
       *ptr = '\0';
 
-      fl_draw(fragment, X + width, Y, W - width, fl_height(),
+      fltk3::draw(fragment, X + width, Y, W - width, fltk3::height(),
               (fltk3::Align)(fltk3::ALIGN_LEFT | fltk3::ALIGN_CLIP), 0, 0);
 
       // Point back to the start of the fragment...
       ptr    = fragment;
       width  = 0;
-      Y      += fl_height();
+      Y      += fltk3::height();
       column = 0;
     }
     else if (*t == column_char())
@@ -364,7 +364,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
           cW = columns[i];
       }
 
-      fl_draw(fragment, X + width, Y, cW, fl_height(),
+      fltk3::draw(fragment, X + width, Y, cW, fltk3::height(),
               (fltk3::Align)(fltk3::ALIGN_LEFT | fltk3::ALIGN_CLIP), 0, 0);
 
       // Advance to the next column...
@@ -375,7 +375,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
 	  width += columns[i];
       }
       else
-        width = column * (int)(fl_height() * 0.6 * 8.0);
+        width = column * (int)(fltk3::height() * 0.6 * 8.0);
 
       ptr = fragment;
     }
@@ -387,7 +387,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
     // Nul terminate this fragment and draw it...
     *ptr = '\0';
 
-    fl_draw(fragment, X + width, Y, W - width, fl_height(),
+    fltk3::draw(fragment, X + width, Y, W - width, fltk3::height(),
             (fltk3::Align)(fltk3::ALIGN_LEFT | fltk3::ALIGN_CLIP), 0, 0);
   }
 }

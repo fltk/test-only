@@ -634,7 +634,7 @@ void Fl_Table::cols(int val) {
 // Change mouse cursor to different type
 void Fl_Table::change_cursor(fltk3::Cursor newcursor) {
   if ( newcursor != _last_cursor ) {
-    fl_cursor(newcursor, fltk3::BLACK, fltk3::WHITE);
+    fltk3::cursor(newcursor, fltk3::BLACK, fltk3::WHITE);
     _last_cursor = newcursor;
   }
 }
@@ -1192,25 +1192,25 @@ void Fl_Table::draw() {
       fltk3::pop_clip(); 
       // Draw little rectangle in corner of headers
       if ( row_header() && col_header() ) {
-        fl_rectf(wix, wiy, row_header_width(), col_header_height(), color());
+        fltk3::rectf(wix, wiy, row_header_width(), col_header_height(), color());
       }
       
       // Table has a boxtype? Close those few dead pixels
       if ( table->box() ) {
         if ( col_header() ) {
-          fl_rectf(tox, wiy, fltk3::box_dx(table->box()), col_header_height(), color());
+          fltk3::rectf(tox, wiy, fltk3::box_dx(table->box()), col_header_height(), color());
         }
         if ( row_header() ) {
-          fl_rectf(wix, toy, row_header_width(), fltk3::box_dx(table->box()), color());
+          fltk3::rectf(wix, toy, row_header_width(), fltk3::box_dx(table->box()), color());
         }
       }
       
       // Table width smaller than window? Fill remainder with rectangle
       if ( table_w < tiw ) {
-        fl_rectf(tix + table_w, tiy, tiw - table_w, tih, color()); 
+        fltk3::rectf(tix + table_w, tiy, tiw - table_w, tih, color()); 
         // Col header? fill that too
         if ( col_header() ) {
-          fl_rectf(tix + table_w, 
+          fltk3::rectf(tix + table_w, 
                    wiy, 
                    // get that corner just right..
                    (tiw - table_w + fltk3::box_dw(table->box()) - 
@@ -1221,14 +1221,14 @@ void Fl_Table::draw() {
       } 
       // Table height smaller than window? Fill remainder with rectangle
       if ( table_h < tih ) {
-        fl_rectf(tix, tiy + table_h, tiw, tih - table_h, color()); 
+        fltk3::rectf(tix, tiy + table_h, tiw, tih - table_h, color()); 
         if ( row_header() ) {
           // NOTE:
           //     Careful with that lower corner; don't use tih; when eg. 
           //     table->box(fltk3::THIN_UPFRAME) and hscrollbar hidden, 
           //     leaves a row of dead pixels.
           //
-          fl_rectf(wix, tiy + table_h, row_header_width(), 
+          fltk3::rectf(wix, tiy + table_h, row_header_width(), 
                    (wiy+wih) - (tiy+table_h) - 
                    ( hscrollbar->visible() ? SCROLLBAR_SIZE : 0),
                    color());
@@ -1237,7 +1237,7 @@ void Fl_Table::draw() {
     } 
     // Both scrollbars? Draw little box in lower right
     if ( vscrollbar->visible() && hscrollbar->visible() ) {
-      fl_rectf(vscrollbar->x(), hscrollbar->y(), 
+      fltk3::rectf(vscrollbar->x(), hscrollbar->y(), 
                vscrollbar->w(), hscrollbar->h(), color());
     } 
     draw_cell(CONTEXT_ENDPAGE, 0, 0,		// let user's drawing

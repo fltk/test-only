@@ -221,20 +221,20 @@ void Fl_Scrollbar::draw() {
       draw_box((pushed_==2) ? fltk3::down(slider()) : slider(),
 	       X+W-H, Y, H, H, selection_color());
       if (active_r())
-        fl_color(labelcolor());
+        fltk3::color(labelcolor());
       else
-        fl_color(fltk3::inactive(labelcolor()));
+        fltk3::color(fltk3::inactive(labelcolor()));
       int w1 = (H-4)/3; if (w1 < 1) w1 = 1;
       int x1 = X+(H-w1-1)/2;
       int yy1 = Y+(H-2*w1-1)/2;
       if (fltk3::scheme_ && !strcmp(fltk3::scheme_, "gtk+")) {
-	fl_polygon(x1, yy1+w1, x1+w1, yy1+2*w1, x1+w1-1, yy1+w1, x1+w1, yy1);
+	fltk3::polygon(x1, yy1+w1, x1+w1, yy1+2*w1, x1+w1-1, yy1+w1, x1+w1, yy1);
 	x1 += (W-H);
-	fl_polygon(x1, yy1, x1+1, yy1+w1, x1, yy1+2*w1, x1+w1, yy1+w1);
+	fltk3::polygon(x1, yy1, x1+1, yy1+w1, x1, yy1+2*w1, x1+w1, yy1+w1);
       } else {
-	fl_polygon(x1, yy1+w1, x1+w1, yy1+2*w1, x1+w1, yy1);
+	fltk3::polygon(x1, yy1+w1, x1+w1, yy1+2*w1, x1+w1, yy1);
 	x1 += (W-H);
-	fl_polygon(x1, yy1, x1, yy1+2*w1, x1+w1, yy1+w1);
+	fltk3::polygon(x1, yy1, x1, yy1+2*w1, x1+w1, yy1+w1);
       }
     }
   } else { // vertical
@@ -246,21 +246,21 @@ void Fl_Scrollbar::draw() {
       draw_box((pushed_==2) ? fltk3::down(slider()) : slider(),
 	       X, Y+H-W, W, W, selection_color());
       if (active_r())
-        fl_color(labelcolor());
+        fltk3::color(labelcolor());
       else
-        fl_color(fltk3::inactive(labelcolor()));
+        fltk3::color(fltk3::inactive(labelcolor()));
       int w1 = (W-4)/3; if (w1 < 1) w1 = 1;
       int x1 = X+(W-2*w1-1)/2;
       int yy1 = Y+(W-w1-1)/2;
       if (fltk3::scheme_ && !strcmp(fltk3::scheme_, "gtk+")) {
-	fl_polygon(x1, yy1+w1, x1+w1, yy1+w1-1, x1+2*w1, yy1+w1, x1+w1, yy1);
+	fltk3::polygon(x1, yy1+w1, x1+w1, yy1+w1-1, x1+2*w1, yy1+w1, x1+w1, yy1);
 	yy1 += H-W;
-	fl_polygon(x1, yy1, x1+w1, yy1+1, x1+w1, yy1+w1);
-	fl_polygon(x1+w1, yy1+1, x1+2*w1, yy1, x1+w1, yy1+w1);
+	fltk3::polygon(x1, yy1, x1+w1, yy1+1, x1+w1, yy1+w1);
+	fltk3::polygon(x1+w1, yy1+1, x1+2*w1, yy1, x1+w1, yy1+w1);
       } else {
-	fl_polygon(x1, yy1+w1, x1+2*w1, yy1+w1, x1+w1, yy1);
+	fltk3::polygon(x1, yy1+w1, x1+2*w1, yy1+w1, x1+w1, yy1);
 	yy1 += H-W;
-	fl_polygon(x1, yy1, x1+w1, yy1+w1, x1+2*w1, yy1);
+	fltk3::polygon(x1, yy1, x1+w1, yy1+w1, x1+2*w1, yy1);
       }
     }
   }

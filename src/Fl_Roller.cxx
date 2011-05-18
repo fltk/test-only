@@ -99,12 +99,12 @@ void Fl_Roller::draw() {
   if (horizontal()) { // horizontal one
     // draw shaded ends of wheel:
     int h1 = W/4+1; // distance from end that shading starts
-    fl_color(color()); fl_rectf(X+h1,Y,W-2*h1,H);
+    fltk3::color(color()); fltk3::rectf(X+h1,Y,W-2*h1,H);
     for (int i=0; h1; i++) {
-      fl_color((fltk3::Color)(fltk3::GRAY-i-1));
+      fltk3::color((fltk3::Color)(fltk3::GRAY-i-1));
       int h2 = fltk3::GRAY-i-1 > fltk3::DARK3 ? 2*h1/3+1 : 0;
-      fl_rectf(X+h2,Y,h1-h2,H);
-      fl_rectf(X+W-h1,Y,h1-h2,H);
+      fltk3::rectf(X+h2,Y,h1-h2,H);
+      fltk3::rectf(X+W-h1,Y,h1-h2,H);
       h1 = h2;
     }
     if (active_r()) {
@@ -114,31 +114,31 @@ void Fl_Roller::draw() {
 	   yy += delta) {
 	int yy1 = int((sin(yy)/sin(ARC)+1)*W/2);
 	if (yy1 <= 0) continue; else if (yy1 >= W-1) break;
-	fl_color(fltk3::DARK3); fl_yxline(X+yy1,Y+1,Y+H-1);
+	fltk3::color(fltk3::DARK3); fltk3::yxline(X+yy1,Y+1,Y+H-1);
 	if (yy < 0) yy1--; else yy1++;
-	fl_color(fltk3::LIGHT1);fl_yxline(X+yy1,Y+1,Y+H-1);
+	fltk3::color(fltk3::LIGHT1);fltk3::yxline(X+yy1,Y+1,Y+H-1);
       }
       // draw edges:
       h1 = W/8+1; // distance from end the color inverts
-      fl_color(fltk3::DARK2);
-      fl_xyline(X+h1,Y+H-1,X+W-h1);
-      fl_color(fltk3::DARK3);
-      fl_yxline(X,Y+H,Y,X+h1);
-      fl_xyline(X+W-h1,Y,X+W);
-      fl_color(fltk3::LIGHT2);
-      fl_xyline(X+h1,Y-1,X+W-h1);
-      fl_yxline(X+W,Y,Y+H,X+W-h1);
-      fl_xyline(X+h1,Y+H,X);
+      fltk3::color(fltk3::DARK2);
+      fltk3::xyline(X+h1,Y+H-1,X+W-h1);
+      fltk3::color(fltk3::DARK3);
+      fltk3::yxline(X,Y+H,Y,X+h1);
+      fltk3::xyline(X+W-h1,Y,X+W);
+      fltk3::color(fltk3::LIGHT2);
+      fltk3::xyline(X+h1,Y-1,X+W-h1);
+      fltk3::yxline(X+W,Y,Y+H,X+W-h1);
+      fltk3::xyline(X+h1,Y+H,X);
     }
   } else { // vertical one
     // draw shaded ends of wheel:
     int h1 = H/4+1; // distance from end that shading starts
-    fl_color(color()); fl_rectf(X,Y+h1,W,H-2*h1);
+    fltk3::color(color()); fltk3::rectf(X,Y+h1,W,H-2*h1);
     for (int i=0; h1; i++) {
-      fl_color((fltk3::Color)(fltk3::GRAY-i-1));
+      fltk3::color((fltk3::Color)(fltk3::GRAY-i-1));
       int h2 = fltk3::GRAY-i-1 > fltk3::DARK3 ? 2*h1/3+1 : 0;
-      fl_rectf(X,Y+h2,W,h1-h2);
-      fl_rectf(X,Y+H-h1,W,h1-h2);
+      fltk3::rectf(X,Y+h2,W,h1-h2);
+      fltk3::rectf(X,Y+H-h1,W,h1-h2);
       h1 = h2;
     }
     if (active_r()) {
@@ -148,21 +148,21 @@ void Fl_Roller::draw() {
 	   ; yy += delta) {
 	int yy1 = int((sin(yy)/sin(ARC)+1)*H/2);
 	if (yy1 <= 0) continue; else if (yy1 >= H-1) break;
-	fl_color(fltk3::DARK3); fl_xyline(X+1,Y+yy1,X+W-1);
+	fltk3::color(fltk3::DARK3); fltk3::xyline(X+1,Y+yy1,X+W-1);
 	if (yy < 0) yy1--; else yy1++;
-	fl_color(fltk3::LIGHT1);fl_xyline(X+1,Y+yy1,X+W-1);
+	fltk3::color(fltk3::LIGHT1);fltk3::xyline(X+1,Y+yy1,X+W-1);
       }
       // draw edges:
       h1 = H/8+1; // distance from end the color inverts
-      fl_color(fltk3::DARK2);
-      fl_yxline(X+W-1,Y+h1,Y+H-h1);
-      fl_color(fltk3::DARK3);
-      fl_xyline(X+W,Y,X,Y+h1);
-      fl_yxline(X,Y+H-h1,Y+H);
-      fl_color(fltk3::LIGHT2);
-      fl_yxline(X,Y+h1,Y+H-h1);
-      fl_xyline(X,Y+H,X+W,Y+H-h1);
-      fl_yxline(X+W,Y+h1,Y);
+      fltk3::color(fltk3::DARK2);
+      fltk3::yxline(X+W-1,Y+h1,Y+H-h1);
+      fltk3::color(fltk3::DARK3);
+      fltk3::xyline(X+W,Y,X,Y+h1);
+      fltk3::yxline(X,Y+H-h1,Y+H);
+      fltk3::color(fltk3::LIGHT2);
+      fltk3::yxline(X,Y+h1,Y+H-h1);
+      fltk3::xyline(X,Y+H,X+W,Y+H-h1);
+      fltk3::yxline(X+W,Y+h1,Y);
     }
   }
 

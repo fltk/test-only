@@ -159,9 +159,9 @@ class Fluid_Table : public Fl_Table {
   //
   void DrawHeader(const char *s, int X, int Y, int W, int H) {
     fltk3::push_clip(X,Y,W,H);
-    fl_draw_box(fltk3::THIN_UP_BOX, X,Y,W,H, row_header_color());
-    fl_color(fltk3::BLACK);
-    fl_draw(s, X,Y,W,H, fltk3::ALIGN_CENTER);
+    fltk3::draw_box(fltk3::THIN_UP_BOX, X,Y,W,H, row_header_color());
+    fltk3::color(fltk3::BLACK);
+    fltk3::draw(s, X,Y,W,H, fltk3::ALIGN_CENTER);
     fltk3::pop_clip();
   } 
   // Draw the cell data
@@ -170,11 +170,11 @@ class Fluid_Table : public Fl_Table {
   void DrawData(const char *s, int X, int Y, int W, int H) {
     fltk3::push_clip(X,Y,W,H);
     // Draw cell bg
-    fl_color(fltk3::WHITE); fl_rectf(X,Y,W,H);
+    fltk3::color(fltk3::WHITE); fltk3::rectf(X,Y,W,H);
     // Draw cell data
-    fl_color(fltk3::GRAY0); fl_draw(s, X,Y,W,H, fltk3::ALIGN_CENTER);
+    fltk3::color(fltk3::GRAY0); fltk3::draw(s, X,Y,W,H, fltk3::ALIGN_CENTER);
     // Draw box border
-    fl_color(color()); fl_rect(X,Y,W,H);
+    fltk3::color(color()); fltk3::rect(X,Y,W,H);
     fltk3::pop_clip();
   } 
   // Handle drawing table's cells
@@ -185,7 +185,7 @@ class Fluid_Table : public Fl_Table {
     static char s[40];
     switch ( context ) {
       case CONTEXT_STARTPAGE:                   // before page is drawn..
-        fl_font(fltk3::HELVETICA, 16);              // set the font for our drawing operations
+        fltk3::font(fltk3::HELVETICA, 16);              // set the font for our drawing operations
         return; 
       case CONTEXT_COL_HEADER:                  // Draw column headers
         sprintf(s,"%c",'A'+COL);                // "A", "B", "C", etc.

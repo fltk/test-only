@@ -73,7 +73,7 @@ if (fl_mac_os_version >= 100500) {//unfortunately, CTFontCreateWithName != NULL 
     float zero = 0.;
     zero_ref = CFNumberCreate(NULL, kCFNumberFloat32Type, &zero);
     // deactivate kerning for all fonts, so that string width = sum of character widths
-    // which allows fast fl_width() implementation.
+    // which allows fast fltk3::width() implementation.
     attributes = CFDictionaryCreateMutable(kCFAllocatorDefault,
 					   3,
 					   &kCFTypeDictionaryKeyCallBacks,
@@ -143,7 +143,7 @@ else {
   Fixed bBefore, bAfter, bAscent, bDescent;
   err = ATSUGetUnjustifiedBounds(layout, kATSUFromTextBeginning, 1, &bBefore, &bAfter, &bAscent, &bDescent);
     // Requesting a certain height font on Mac does not guarantee that ascent+descent
-    // equal the requested height. fl_height will reflect the actual height that we got.
+    // equal the requested height. fltk3::height will reflect the actual height that we got.
     // The font "Apple Chancery" is a pretty extreme example of overlapping letters.
   float fa = -FixedToFloat(bAscent), fd = -FixedToFloat(bDescent);
   if (fa>0.0f && fd>0.0f) {
@@ -232,11 +232,11 @@ static UniChar *mac_Utf8_to_Utf16(const char *txt, int len, int *new_len)
   return utfWbuf;
 } // mac_Utf8_to_Utf16
 
-Fl_Fontdesc* fl_fonts = built_in_table;
+Fl_Fontdesc* fltk3::fonts = built_in_table;
 
 static Fl_Font_Descriptor* find(fltk3::Font fnum, fltk3::Fontsize size) {
-  Fl_Fontdesc* s = fl_fonts+fnum;
-  if (!s->name) s = fl_fonts; // use 0 if fnum undefined
+  Fl_Fontdesc* s = fltk3::fonts+fnum;
+  if (!s->name) s = fltk3::fonts; // use 0 if fnum undefined
   Fl_Font_Descriptor* f;
   for (f = s->first; f; f = f->next)
     if (f->size == size) return f;
@@ -260,21 +260,21 @@ void Fl_Quartz_Graphics_Driver::font(fltk3::Font fnum, fltk3::Fontsize size) {
 
 int Fl_Quartz_Graphics_Driver::height() {
   if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
-  Fl_Font_Descriptor *fl_fontsize = font_descriptor();
-  return fl_fontsize->ascent + fl_fontsize->descent;
+  Fl_Font_Descriptor *fontsize = font_descriptor();
+  return fontsize->ascent + fontsize->descent;
 }
 
 int Fl_Quartz_Graphics_Driver::descent() {
   if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
-  Fl_Font_Descriptor *fl_fontsize = font_descriptor();
-  return fl_fontsize->descent+1;
+  Fl_Font_Descriptor *fontsize = font_descriptor();
+  return fontsize->descent+1;
 }
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
 // returns width of a pair of UniChar's in the surrogate range
-static CGFloat surrogate_width(const UniChar *txt, Fl_Font_Descriptor *fl_fontsize)
+static CGFloat surrogate_width(const UniChar *txt, Fl_Font_Descriptor *fontsize)
 {
-  CTFontRef font2 = fl_fontsize->fontref;
+  CTFontRef font2 = fontsize->fontref;
   bool must_release = false;
   CGGlyph glyphs[2];
   bool b = CTFontGetGlyphsForCharacters(font2, txt, glyphs, 2);
@@ -288,13 +288,13 @@ static CGFloat surrogate_width(const UniChar *txt, Fl_Font_Descriptor *fl_fontsi
     b = CTFontGetGlyphsForCharacters(font2, txt, glyphs, 2);
   }
   if (b) CTFontGetAdvancesForGlyphs(font2, kCTFontHorizontalOrientation, glyphs, &a, 1);
-  else a.width = fl_fontsize->q_width;
+  else a.width = fontsize->q_width;
   if(must_release) CFRelease(font2);
   return a.width;
 }
 #endif
 
-static double fl_mac_width(const UniChar* txt, int n, Fl_Font_Descriptor *fl_fontsize) {
+static double fl_mac_width(const UniChar* txt, int n, Fl_Font_Descriptor *fontsize) {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
 if (fl_mac_os_version >= 100500) {
   double retval = 0;
@@ -303,22 +303,22 @@ if (fl_mac_os_version >= 100500) {
   for (i = 0; i < n; i++) { // loop over txt
     uni = txt[i];
     if (uni >= 0xD800 && uni <= 0xDBFF) { // handles the surrogate range
-      retval += surrogate_width(&txt[i], fl_fontsize);
+      retval += surrogate_width(&txt[i], fontsize);
       i++; // because a pair of UniChar's represent a single character
       continue;
     }
-    const int block = 0x10000 / (sizeof(fl_fontsize->width)/sizeof(float*)); // block size
+    const int block = 0x10000 / (sizeof(fontsize->width)/sizeof(float*)); // block size
     // r: index of the character block containing uni
     unsigned int r = uni >> 7; // change 7 if sizeof(width) is changed
-    if (!fl_fontsize->width[r]) { // this character block has not been hit yet
-//fprintf(stderr,"r=%d size=%d name=%s\n",r,fl_fontsize->size, fl_fontsize->q_name);
+    if (!fontsize->width[r]) { // this character block has not been hit yet
+//fprintf(stderr,"r=%d size=%d name=%s\n",r,fltk3::fontsize->size, fltk3::fontsize->q_name);
       // allocate memory to hold width of each character in the block
-      fl_fontsize->width[r] = (float*) malloc(sizeof(float) * block);
+      fontsize->width[r] = (float*) malloc(sizeof(float) * block);
       UniChar ii = r * block;
       CGSize advance_size;
       CGGlyph glyph;
       for (int j = 0; j < block; j++) { // loop over the block
-	CTFontRef font2 = fl_fontsize->fontref;
+	CTFontRef font2 = fontsize->fontref;
 	bool must_release = false;
 	// ii spans all characters of this block
 	bool b = CTFontGetGlyphsForCharacters(font2, &ii, &glyph, 1);
@@ -333,13 +333,13 @@ if (fl_mac_os_version >= 100500) {
 	if (b) CTFontGetAdvancesForGlyphs(font2, kCTFontHorizontalOrientation, &glyph, &advance_size, 1);
 	else advance_size.width = 0.;
 	// the width of one character of this block of characters
-	fl_fontsize->width[r][j] = advance_size.width;
+	fontsize->width[r][j] = advance_size.width;
 	if (must_release) CFRelease(font2);
 	ii++;
       }
     }
     // sum the widths of all characters of txt
-    retval += fl_fontsize->width[r][uni & (block-1)];
+    retval += fontsize->width[r][uni & (block-1)];
   }
   return retval;
 } else {
@@ -354,7 +354,7 @@ if (fl_mac_os_version >= 100500) {
 
   // Here's my ATSU text measuring attempt... This seems to do the Right Thing
   // now collect our ATSU resources and measure our text string
-  layout = fl_fontsize->layout;
+  layout = fltk3::fontsize->layout;
   // activate the current GC
   iSize = sizeof(CGContextRef);
   iTag = kATSUCGContextTag;
@@ -400,12 +400,12 @@ double Fl_Quartz_Graphics_Driver::width(unsigned int wc) {
 // text extent calculation
 void Fl_Quartz_Graphics_Driver::text_extents(const char *str8, int n, int &dx, int &dy, int &w, int &h) {
   if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
-  Fl_Font_Descriptor *fl_fontsize = font_descriptor();
+  Fl_Font_Descriptor *fontsize = font_descriptor();
   UniChar *txt = mac_Utf8_to_Utf16(str8, n, &n);
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
 if (fl_mac_os_version >= 100500) {
   CFStringRef str16 = CFStringCreateWithCharactersNoCopy(NULL, txt, n,  kCFAllocatorNull);
-  CFDictionarySetValue (attributes, kCTFontAttributeName, fl_fontsize->fontref);
+  CFDictionarySetValue (attributes, kCTFontAttributeName, fontsize->fontref);
   CFAttributedStringRef mastr = CFAttributedStringCreate(kCFAllocatorDefault, str16, attributes);
   CFRelease(str16);
   CTLineRef ctline = CTLineCreateWithAttributedString(mastr);
@@ -431,7 +431,7 @@ else {
 
 // Here's my ATSU text measuring attempt... This seems to do the Right Thing
   // now collect our ATSU resources and measure our text string
-  layout = fl_fontsize->layout;
+  layout = fltk3::fontsize->layout;
         // activate the current GC
   iSize = sizeof(CGContextRef);
   iTag = kATSUCGContextTag;
@@ -451,7 +451,7 @@ else {
   }
 #endif
   return;
-} // fl_text_extents
+} // fltk3::text_extents
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
 static CGColorRef flcolortocgcolor(fltk3::Color i)

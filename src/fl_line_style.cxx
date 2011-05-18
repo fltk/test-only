@@ -26,7 +26,7 @@
 //
 
 /**
-  \file fl_line_style.cxx
+  \file fltk3::line_style.cxx
   \brief Line style drawing utility hiding different platforms.
 */
 
@@ -38,7 +38,7 @@
 #include <stdio.h>
 
 // We save the current line width (absolute value) here.
-// This is currently used only for X11 clipping, see src/fl_rect.cxx.
+// This is currently used only for X11 clipping, see src/fltk3::rect.cxx.
 // FIXME: this would probably better be in class fltk3::
 int fl_line_width_ = 0;
 
@@ -80,10 +80,10 @@ void Fl_Graphics_Driver::line_style(int style, int width, char* dashes) {
     }
     char* p = dashes = buf;
     switch (style & 0xff) {
-    case FL_DASH:	*p++ = dash; *p++ = gap; break;
-    case FL_DOT:	*p++ = dot; *p++ = gap; break;
-    case FL_DASHDOT:	*p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; break;
-    case FL_DASHDOTDOT: *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; *p++ = dot; *p++ = gap; break;
+    case fltk3::DASH:	*p++ = dash; *p++ = gap; break;
+    case fltk3::DOT:	*p++ = dot; *p++ = gap; break;
+    case fltk3::DASHDOT:	*p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; break;
+    case fltk3::DASHDOTDOT: *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; *p++ = dot; *p++ = gap; break;
     }
     ndashes = p-buf;
   }
@@ -111,7 +111,7 @@ void Fl_Graphics_Driver::line_style(int style, int width, char* dashes) {
   LOGBRUSH penbrush = {BS_SOLID,fl_RGB(),0}; // can this be fl_brush()?
   HPEN newpen = ExtCreatePen(s1, width, &penbrush, n, n ? a : 0);
   if (!newpen) {
-    fltk3::error("fl_line_style(): Could not create GDI pen object.");
+    fltk3::error("fltk3::line_style(): Could not create GDI pen object.");
     return;
   }
   HPEN oldpen = (HPEN)SelectObject(fl_gc, newpen);
@@ -127,7 +127,7 @@ void Fl_Graphics_Driver::line_style(int style, int width, char* dashes) {
   fl_quartz_line_width_ = (float)width; 
   fl_quartz_line_cap_ = Cap[(style>>8)&3];
   // when printing kCGLineCapSquare seems better for solid lines
-  if ( Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id && style == FL_SOLID && dashes == NULL ) {
+  if ( Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id && style == fltk3::SOLID && dashes == NULL ) {
     fl_quartz_line_cap_ = kCGLineCapSquare;
     }
   fl_quartz_line_join_ = Join[(style>>12)&3];
@@ -151,10 +151,10 @@ void Fl_Graphics_Driver::line_style(int style, int width, char* dashes) {
     }
 	CGFloat *p = pattern;
     switch (style & 0xff) {
-    case FL_DASH:       *p++ = dash; *p++ = gap; break;
-    case FL_DOT:        *p++ = dot; *p++ = gap; break;
-    case FL_DASHDOT:    *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; break;
-    case FL_DASHDOTDOT: *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; *p++ = dot; *p++ = gap; break;
+    case fltk3::DASH:       *p++ = dash; *p++ = gap; break;
+    case fltk3::DOT:        *p++ = dot; *p++ = gap; break;
+    case fltk3::DASHDOT:    *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; break;
+    case fltk3::DASHDOTDOT: *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; *p++ = dot; *p++ = gap; break;
     }
     fl_quartz_line_pattern_size = p-pattern;
     fl_quartz_line_pattern = pattern;

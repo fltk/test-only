@@ -60,9 +60,9 @@ void Fl_Light_Button::draw() {
         draw_box(down_box(), x()+dx, y()+dy, W, W, fltk3::BACKGROUND2_COLOR);
 	if (value()) {
 	  if (fltk3::scheme() && !strcmp(fltk3::scheme(), "gtk+")) {
-	    fl_color(fltk3::SELECTION_COLOR);
+	    fltk3::color(fltk3::SELECTION_COLOR);
 	  } else {
-	    fl_color(col);
+	    fltk3::color(col);
 	  }
 	  int tx = x() + dx + 3;
 	  int tw = W - 6;
@@ -70,8 +70,8 @@ void Fl_Light_Button::draw() {
 	  int d2 = tw-d1;
 	  int ty = y() + dy + (W+d2)/2-d1-2;
 	  for (int n = 0; n < 3; n++, ty++) {
-	    fl_line(tx, ty, tx+d1, ty+d1);
-	    fl_line(tx+d1, ty+d1, tx+tw-1, ty+d1-d2+1);
+	    fltk3::line(tx, ty, tx+d1, ty+d1);
+	    fltk3::line(tx+d1, ty+d1, tx+tw-1, ty+d1-d2+1);
 	  }
 	}
         break;
@@ -86,42 +86,42 @@ void Fl_Light_Button::draw() {
 	  int tdy = dy + (W - tW) / 2;
 
 	  if (fltk3::scheme() && !strcmp(fltk3::scheme(), "gtk+")) {
-	    fl_color(fltk3::SELECTION_COLOR);
+	    fltk3::color(fltk3::SELECTION_COLOR);
 	    tW --;
-	    fl_pie(x() + tdx - 1, y() + tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
-	    fl_arc(x() + tdx - 1, y() + tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
-	    fl_color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.2f));
-	  } else fl_color(col);
+	    fltk3::pie(x() + tdx - 1, y() + tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
+	    fltk3::arc(x() + tdx - 1, y() + tdy - 1, tW + 3, tW + 3, 0.0, 360.0);
+	    fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.2f));
+	  } else fltk3::color(col);
 
 	  switch (tW) {
 	    // Larger circles draw fine...
 	    default :
-              fl_pie(x() + tdx, y() + tdy, tW, tW, 0.0, 360.0);
+              fltk3::pie(x() + tdx, y() + tdy, tW, tW, 0.0, 360.0);
 	      break;
 
             // Small circles don't draw well on many systems...
 	    case 6 :
-	      fl_rectf(x() + tdx + 2, y() + tdy, tW - 4, tW);
-	      fl_rectf(x() + tdx + 1, y() + tdy + 1, tW - 2, tW - 2);
-	      fl_rectf(x() + tdx, y() + tdy + 2, tW, tW - 4);
+	      fltk3::rectf(x() + tdx + 2, y() + tdy, tW - 4, tW);
+	      fltk3::rectf(x() + tdx + 1, y() + tdy + 1, tW - 2, tW - 2);
+	      fltk3::rectf(x() + tdx, y() + tdy + 2, tW, tW - 4);
 	      break;
 
 	    case 5 :
 	    case 4 :
 	    case 3 :
-	      fl_rectf(x() + tdx + 1, y() + tdy, tW - 2, tW);
-	      fl_rectf(x() + tdx, y() + tdy + 1, tW, tW - 2);
+	      fltk3::rectf(x() + tdx + 1, y() + tdy, tW - 2, tW);
+	      fltk3::rectf(x() + tdx, y() + tdy + 1, tW, tW - 2);
 	      break;
 
 	    case 2 :
 	    case 1 :
-	      fl_rectf(x() + tdx, y() + tdy, tW, tW);
+	      fltk3::rectf(x() + tdx, y() + tdy, tW, tW);
 	      break;
 	  }
 
 	  if (fltk3::scheme() && !strcmp(fltk3::scheme(), "gtk+")) {
-	    fl_color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
-	    fl_arc(x() + tdx, y() + tdy, tW + 1, tW + 1, 60.0, 180.0);
+	    fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
+	    fltk3::arc(x() + tdx, y() + tdy, tW + 1, tW + 1, 60.0, 180.0);
 	  }
 	}
         break;
@@ -137,8 +137,8 @@ void Fl_Light_Button::draw() {
     if (w()<ww+2*xx) xx = (w()-ww)/2;
     if (fltk3::scheme() && !strcmp(fltk3::scheme(), "plastic")) {
       col = active_r() ? selection_color() : fltk3::inactive(selection_color());
-      fl_color(value() ? col : fltk3::color_average(col, fltk3::BLACK, 0.5f));
-      fl_pie(x()+xx, y()+dy+1, ww, hh, 0, 360);
+      fltk3::color(value() ? col : fltk3::color_average(col, fltk3::BLACK, 0.5f));
+      fltk3::pie(x()+xx, y()+dy+1, ww, hh, 0, 360);
     } else {
       draw_box(fltk3::THIN_DOWN_BOX, x()+xx, y()+dy+1, ww, hh, col);
     }

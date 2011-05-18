@@ -44,13 +44,13 @@ const float  sechand[4][2] = {{-0.1f, 0}, {0, 2.0f}, {0.1f, 0}, {0, -11.5f}};
 
 static void drawhand(double ang,const float v[][2],fltk3::Color fill,fltk3::Color line)
 {
-  fl_push_matrix();
-  fl_rotate(ang);
-  fl_color(fill); fl_begin_polygon();
-  int i; for (i=0; i<4; i++) fl_vertex(v[i][0],v[i][1]); fl_end_polygon();
-  fl_color(line); fl_begin_loop();
-  for (i=0; i<4; i++) fl_vertex(v[i][0],v[i][1]); fl_end_loop();
-  fl_pop_matrix();
+  fltk3::push_matrix();
+  fltk3::rotate(ang);
+  fltk3::color(fill); fltk3::begin_polygon();
+  int i; for (i=0; i<4; i++) fltk3::vertex(v[i][0],v[i][1]); fltk3::end_polygon();
+  fltk3::color(line); fltk3::begin_loop();
+  for (i=0; i<4; i++) fltk3::vertex(v[i][0],v[i][1]); fltk3::end_loop();
+  fltk3::pop_matrix();
 }
 
 void Fl_Clock_Output::drawhands(fltk3::Color fill, fltk3::Color line) {
@@ -66,12 +66,12 @@ void Fl_Clock_Output::drawhands(fltk3::Color fill, fltk3::Color line) {
 static void rect(double x, double y, double w, double h) {
   double r = x+w;
   double t = y+h;
-  fl_begin_polygon();
-  fl_vertex(x, y);
-  fl_vertex(r, y);
-  fl_vertex(r, t);
-  fl_vertex(x, t);
-  fl_end_polygon();
+  fltk3::begin_polygon();
+  fltk3::vertex(x, y);
+  fltk3::vertex(r, y);
+  fltk3::vertex(r, t);
+  fltk3::vertex(x, t);
+  fltk3::end_polygon();
 }
 
 /**
@@ -82,33 +82,33 @@ void Fl_Clock_Output::draw(int X, int Y, int W, int H) {
   fltk3::Color box_color = type()==FL_ROUND_CLOCK ? fltk3::GRAY : color();
   fltk3::Color shadow_color = fltk3::color_average(box_color, fltk3::BLACK, 0.5);
   draw_box(box(), X, Y, W, H, box_color);
-  fl_push_matrix();
-  fl_translate(X+W/2.0-.5, Y+H/2.0-.5);
-  fl_scale((W-1)/28.0, (H-1)/28.0);
+  fltk3::push_matrix();
+  fltk3::translate(X+W/2.0-.5, Y+H/2.0-.5);
+  fltk3::scale((W-1)/28.0, (H-1)/28.0);
   if (type() == FL_ROUND_CLOCK) {
-    fl_color(active_r() ? color() : fltk3::inactive(color()));
-    fl_begin_polygon(); fl_circle(0,0,14); fl_end_polygon();
-    fl_color(active_r() ? fltk3::FOREGROUND_COLOR : fltk3::inactive(fltk3::FOREGROUND_COLOR));
-    fl_begin_loop(); fl_circle(0,0,14); fl_end_loop();
+    fltk3::color(active_r() ? color() : fltk3::inactive(color()));
+    fltk3::begin_polygon(); fltk3::circle(0,0,14); fltk3::end_polygon();
+    fltk3::color(active_r() ? fltk3::FOREGROUND_COLOR : fltk3::inactive(fltk3::FOREGROUND_COLOR));
+    fltk3::begin_loop(); fltk3::circle(0,0,14); fltk3::end_loop();
   }
   // draw the shadows:
-  fl_push_matrix();
-  fl_translate(0.60, 0.60);
+  fltk3::push_matrix();
+  fltk3::translate(0.60, 0.60);
   drawhands(shadow_color, shadow_color);
-  fl_pop_matrix();
+  fltk3::pop_matrix();
   // draw the tick marks:
-  fl_push_matrix();
-  fl_color(active_r() ? fltk3::FOREGROUND_COLOR : fltk3::inactive(fltk3::FOREGROUND_COLOR));
+  fltk3::push_matrix();
+  fltk3::color(active_r() ? fltk3::FOREGROUND_COLOR : fltk3::inactive(fltk3::FOREGROUND_COLOR));
   for (int i=0; i<12; i++) {
     if (i==6) rect(-0.5, 9, 1, 2);
     else if (i==3 || i==0 || i== 9) rect(-0.5, 9.5, 1, 1);
     else rect(-0.25, 9.5, .5, 1);
-    fl_rotate(-30);
+    fltk3::rotate(-30);
   }
-  fl_pop_matrix();
+  fltk3::pop_matrix();
   // draw the hands:
   drawhands(selection_color(), fltk3::FOREGROUND_COLOR); // color was 54
-  fl_pop_matrix();
+  fltk3::pop_matrix();
 }
 
 /**

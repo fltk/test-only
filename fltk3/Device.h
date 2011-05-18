@@ -69,11 +69,6 @@ typedef short COORD_T;
 #  define XPOINT XPoint
 #endif
 
-namespace fltk3 {
-  void push_clip(int x, int y, int w, int h);
-  void pop_clip();
-}
-
 /**
  \brief All graphical output devices and all graphics systems.
  */
@@ -140,218 +135,141 @@ private:
   void transformed_vertex0(COORD_T x, COORD_T y);
   void fixloop();
   
-protected:
-/*  ** \brief red color for background and/or mixing if device does not support masking or alpha *
-  uchar bg_r_; 
-  ** \brief green color for background and/or mixing if device does not support masking or alpha *
-  uchar bg_g_; 
-  ** \brief blue color for background and/or mixing if device does not support masking or alpha *
-  uchar bg_b_; */
-  friend class Fl_Pixmap;
-  friend class Fl_Bitmap;
-  friend class Fl_RGB_Image;
-  friend void fl_rect(int x, int y, int w, int h);
-  friend void fl_rectf(int x, int y, int w, int h);
-  friend void fl_line_style(int style, int width, char* dashes);
-  friend void fl_xyline(int x, int y, int x1);
-  friend void fl_xyline(int x, int y, int x1, int y2);
-  friend void fl_xyline(int x, int y, int x1, int y2, int x3);
-  friend void fl_yxline(int x, int y, int y1);
-  friend void fl_yxline(int x, int y, int y1, int x2);
-  friend void fl_yxline(int x, int y, int y1, int x2, int y3);
-  friend void fl_line(int x, int y, int x1, int y1);
-  friend void fl_line(int x, int y, int x1, int y1, int x2, int y2);
-  friend void fl_draw(const char *str, int n, int x, int y);
-#ifdef __APPLE__
-  friend void fl_draw(const char *str, int n, float x, float y);
-#endif
-  friend void fl_draw(int angle, const char *str, int n, int x, int y);
-  friend void fl_rtl_draw(const char *str, int n, int x, int y);
-  friend void fl_font(fltk3::Font face, fltk3::Fontsize size);
-  friend void fl_color(fltk3::Color c);
-  friend void fl_color(uchar r, uchar g, uchar b);
-  friend void fl_point(int x, int y);
-  friend void fl_loop(int x0, int y0, int x1, int y1, int x2, int y2);
-  friend void fl_loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
-  friend void fl_polygon(int x0, int y0, int x1, int y1, int x2, int y2);
-  friend void fl_polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
-  friend void fl_begin_points();
-  friend void fl_begin_line();
-  friend void fl_begin_loop();
-  friend void fl_begin_polygon();
-  friend void fl_vertex(double x, double y);
-  friend void fl_curve(double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3);
-  friend void fl_circle(double x, double y, double r);
-  friend void fl_arc(double x, double y, double r, double start, double end);
-  friend void fl_arc(int x, int y, int w, int h, double a1, double a2);
-  friend void fl_pie(int x, int y, int w, int h, double a1, double a2);
-  friend void fl_end_points();
-  friend void fl_end_line();
-  friend void fl_end_loop();
-  friend void fl_end_polygon();
-  friend void fl_transformed_vertex(double xf, double yf);
-  friend void fltk3::push_clip(int x, int y, int w, int h);
-  friend int fl_clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
-  friend int fl_not_clipped(int x, int y, int w, int h);
-  friend void fl_push_no_clip();
-  friend void fltk3::pop_clip();
-  friend void fl_begin_complex_polygon();
-  friend void fl_gap();
-  friend void fl_end_complex_polygon();
-  friend void fl_push_matrix();
-  friend void fl_pop_matrix();
-  friend void fl_mult_matrix(double a, double b, double c, double d, double x, double y);
-  friend void fl_scale(double x, double y);
-  friend void fl_scale(double x);
-  friend void fl_translate(double x, double y);
-  friend void fl_rotate(double d);
-  friend double fl_transform_x(double x, double y);
-  friend double fl_transform_y(double x, double y);
-  friend double fl_transform_dx(double x, double y);
-  friend double fl_transform_dy(double x, double y);
-  friend Fl_Region fl_clip_region();
-  friend void fl_clip_region(Fl_Region r);
-  friend void fl_restore_clip();
-  
-  friend void fl_draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L);
-  friend void fl_draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D, int L);
-  friend void fl_draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D);
-  friend FLTK3_EXPORT void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D);
-  friend FLTK3_EXPORT void gl_start();
+public:
 
   matrix *fl_matrix; /**< Points to the current coordinate transformation matrix */
 
   /** \brief The constructor. */
   Fl_Graphics_Driver();
-  /** \brief see fl_rect(int x, int y, int w, int h). */
+  /** \brief see fltk3::rect(int x, int y, int w, int h). */
   virtual void rect(int x, int y, int w, int h);
-  /** \brief see fl_rectf(int x, int y, int w, int h). */
+  /** \brief see fltk3::rectf(int x, int y, int w, int h). */
   virtual void rectf(int x, int y, int w, int h);
-  /** \brief see fl_line_style(int style, int width, char* dashes). */
+  /** \brief see fltk3::line_style(int style, int width, char* dashes). */
   virtual void line_style(int style, int width=0, char* dashes=0);
-  /** \brief see fl_xyline(int x, int y, int x1). */
+  /** \brief see fltk3::xyline(int x, int y, int x1). */
   virtual void xyline(int x, int y, int x1);
-  /** \brief see fl_xyline(int x, int y, int x1, int y2). */
+  /** \brief see fltk3::xyline(int x, int y, int x1, int y2). */
   virtual void xyline(int x, int y, int x1, int y2);
-  /** \brief see fl_xyline(int x, int y, int x1, int y2, int x3). */
+  /** \brief see fltk3::xyline(int x, int y, int x1, int y2, int x3). */
   virtual void xyline(int x, int y, int x1, int y2, int x3);
-  /** \brief see fl_yxline(int x, int y, int y1). */
+  /** \brief see fltk3::yxline(int x, int y, int y1). */
   virtual void yxline(int x, int y, int y1);
-  /** \brief see fl_yxline(int x, int y, int y1, int x2). */
+  /** \brief see fltk3::yxline(int x, int y, int y1, int x2). */
   virtual void yxline(int x, int y, int y1, int x2);
-  /** \brief see fl_yxline(int x, int y, int y1, int x2, int y3). */
+  /** \brief see fltk3::yxline(int x, int y, int y1, int x2, int y3). */
   virtual void yxline(int x, int y, int y1, int x2, int y3);
-  /** \brief see fl_line(int x, int y, int x1, int y1). */
+  /** \brief see fltk3::line(int x, int y, int x1, int y1). */
   virtual void line(int x, int y, int x1, int y1);
-  /** \brief see fl_line(int x, int y, int x1, int y1, int x2, int y2). */
+  /** \brief see fltk3::line(int x, int y, int x1, int y1, int x2, int y2). */
   virtual void line(int x, int y, int x1, int y1, int x2, int y2);
-  /** \brief see fl_draw(const char *str, int n, int x, int y). */
+  /** \brief see fltk3::draw(const char *str, int n, int x, int y). */
   virtual void draw(const char *str, int n, int x, int y) = 0;
 #ifdef __APPLE__
   virtual void draw(const char *str, int n, float x, float y) = 0;
 #endif
-  /** \brief see fl_draw(int angle, const char *str, int n, int x, int y). */
+  /** \brief see fltk3::draw(int angle, const char *str, int n, int x, int y). */
   virtual void draw(int angle, const char *str, int n, int x, int y) = 0;
-  /** \brief see fl_rtl_draw(const char *str, int n, int x, int y). */
+  /** \brief see fltk3::rtl_draw(const char *str, int n, int x, int y). */
   virtual void rtl_draw(const char *str, int n, int x, int y) = 0;
-  /** \brief see fl_color(fltk3::Color c). */
+  /** \brief see fltk3::color(fltk3::Color c). */
   virtual void color(fltk3::Color c) {color_ = c;}
-  /** \brief see fl_color(uchar r, uchar g, uchar b). */
+  /** \brief see fltk3::color(uchar r, uchar g, uchar b). */
   virtual void color(uchar r, uchar g, uchar b) = 0;
-  /** \brief see fl_point(int x, int y). */
+  /** \brief see fltk3::point(int x, int y). */
   virtual void point(int x, int y);
-  /** \brief see fl_loop(int x0, int y0, int x1, int y1, int x2, int y2). */
+  /** \brief see fltk3::loop(int x0, int y0, int x1, int y1, int x2, int y2). */
   virtual void loop(int x0, int y0, int x1, int y1, int x2, int y2);
-  /** \brief see fl_loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3). */
+  /** \brief see fltk3::loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3). */
   virtual void loop(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
-  /** \brief see fl_polygon(int x0, int y0, int x1, int y1, int x2, int y2). */
+  /** \brief see fltk3::polygon(int x0, int y0, int x1, int y1, int x2, int y2). */
   virtual void polygon(int x0, int y0, int x1, int y1, int x2, int y2);
-  /** \brief see fl_polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3). */
+  /** \brief see fltk3::polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3). */
   virtual void polygon(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3);
-  /** \brief see fl_begin_points(). */
+  /** \brief see fltk3::begin_points(). */
   virtual void begin_points();
-  /** \brief see fl_begin_line(). */
+  /** \brief see fltk3::begin_line(). */
   virtual void begin_line();
-  /** \brief see fl_begin_loop(). */
+  /** \brief see fltk3::begin_loop(). */
   virtual void begin_loop();
-  /** \brief see fl_begin_polygon(). */
+  /** \brief see fltk3::begin_polygon(). */
   virtual void begin_polygon();
-  /** \brief see fl_vertex(double x, double y). */
+  /** \brief see fltk3::vertex(double x, double y). */
   virtual void vertex(double x, double y);
-  /** \brief see fl_curve(double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3). */
+  /** \brief see fltk3::curve(double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3). */
   virtual void curve(double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3);
-  /** \brief see fl_circle(double x, double y, double r). */
+  /** \brief see fltk3::circle(double x, double y, double r). */
   virtual void circle(double x, double y, double r);
-  /** \brief see fl_arc(double x, double y, double r, double start, double end). */
+  /** \brief see fltk3::arc(double x, double y, double r, double start, double end). */
   virtual void arc(double x, double y, double r, double start, double end);
-  /** \brief see fl_arc(int x, int y, int w, int h, double a1, double a2). */
+  /** \brief see fltk3::arc(int x, int y, int w, int h, double a1, double a2). */
   virtual void arc(int x, int y, int w, int h, double a1, double a2);
-  /** \brief see fl_pie(int x, int y, int w, int h, double a1, double a2). */
+  /** \brief see fltk3::pie(int x, int y, int w, int h, double a1, double a2). */
   virtual void pie(int x, int y, int w, int h, double a1, double a2);
-  /** \brief see fl_end_points(). */
+  /** \brief see fltk3::end_points(). */
   virtual void end_points();
-  /** \brief see fl_end_line(). */
+  /** \brief see fltk3::end_line(). */
   virtual void end_line();
-  /** \brief see fl_end_loop(). */
+  /** \brief see fltk3::end_loop(). */
   virtual void end_loop();
-  /** \brief see fl_end_polygon(). */
+  /** \brief see fltk3::end_polygon(). */
   virtual void end_polygon();
-  /** \brief see fl_begin_complex_polygon(). */
+  /** \brief see fltk3::begin_complex_polygon(). */
   virtual void begin_complex_polygon();
-  /** \brief see fl_gap(). */
+  /** \brief see fltk3::gap(). */
   virtual void gap();
-  /** \brief see fl_end_complex_polygon(). */
+  /** \brief see fltk3::end_complex_polygon(). */
   virtual void end_complex_polygon();
-  /** \brief see fl_transformed_vertex(double xf, double yf). */
+  /** \brief see fltk3::transformed_vertex(double xf, double yf). */
   virtual void transformed_vertex(double xf, double yf);
   /** \brief see fltk3::push_clip(int x, int y, int w, int h). */
   virtual void push_clip(int x, int y, int w, int h);
-  /** \brief see fl_clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H). */
+  /** \brief see fltk3::clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H). */
   virtual int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
-  /** \brief see fl_not_clipped(int x, int y, int w, int h). */
+  /** \brief see fltk3::not_clipped(int x, int y, int w, int h). */
   virtual int not_clipped(int x, int y, int w, int h);
-  /** \brief see fl_push_no_clip(). */
+  /** \brief see fltk3::push_no_clip(). */
   virtual void push_no_clip();
   /** \brief see fltk3::pop_clip(). */
   virtual void pop_clip();
     
-  /** \brief see fl_push_matrix(). */
+  /** \brief see fltk3::push_matrix(). */
   void push_matrix();
-  /** \brief see fl_pop_matrix(). */
+  /** \brief see fltk3::pop_matrix(). */
   void pop_matrix();
-  /** \brief see fl_mult_matrix(double a, double b, double c, double d, double x, double y). */
+  /** \brief see fltk3::mult_matrix(double a, double b, double c, double d, double x, double y). */
   void mult_matrix(double a, double b, double c, double d, double x, double y);
-  /** \brief see fl_scale(double x, double y). */
+  /** \brief see fltk3::scale(double x, double y). */
   inline void scale(double x, double y) { mult_matrix(x,0,0,y,0,0); }
-  /** \brief see fl_scale(double x). */
+  /** \brief see fltk3::scale(double x). */
   inline void scale(double x) { mult_matrix(x,0,0,x,0,0); }
-  /** \brief see fl_translate(double x, double y). */
+  /** \brief see fltk3::translate(double x, double y). */
   inline void translate(double x,double y) { mult_matrix(1,0,0,1,x,y); }
-  /** \brief see fl_rotate(double d). */
+  /** \brief see fltk3::rotate(double d). */
   void rotate(double d);
-  /** \brief see fl_transform_x(double x, double y). */
+  /** \brief see fltk3::transform_x(double x, double y). */
   double transform_x(double x, double y);
-  /** \brief see fl_transform_y(double x, double y). */
+  /** \brief see fltk3::transform_y(double x, double y). */
   double transform_y(double x, double y);
-  /** \brief see fl_transform_dx(double x, double y). */
+  /** \brief see fltk3::transform_dx(double x, double y). */
   double transform_dx(double x, double y);
-  /** \brief see fl_transform_dy(double x, double y). */
+  /** \brief see fltk3::transform_dy(double x, double y). */
   double transform_dy(double x, double y);
-  /** \brief see fl_clip_region(). */
+  /** \brief see fltk3::clip_region(). */
   Fl_Region clip_region();
-  /** \brief see fl_clip_region(Fl_Region r). */
+  /** \brief see fltk3::clip_region(Fl_Region r). */
   void clip_region(Fl_Region r);
-  /** \brief see fl_restore_clip(). */
+  /** \brief see fltk3::restore_clip(). */
   void restore_clip();
   
   // Images
-  /** \brief see fl_draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L). */
+  /** \brief see fltk3::draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L). */
   virtual   void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0) = 0;
-  /** \brief see fl_draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D, int L). */
+  /** \brief see fltk3::draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D, int L). */
   virtual   void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0) = 0;
-  /** \brief see fl_draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D). */
+  /** \brief see fltk3::draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D). */
   virtual   void draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3) = 0;
-  /** \brief see fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D). */
+  /** \brief see fltk3::draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D). */
   virtual   void draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1) = 0;
   // Image classes
   /** \brief Draws an Fl_RGB_Image object to the device. 
@@ -376,23 +294,23 @@ protected:
 public:
   static const char *class_id;
   virtual const char *class_name() {return class_id;};
-  /** \brief see fl_font(fltk3::Font face, fltk3::Fontsize size). */
+  /** \brief see fltk3::font(fltk3::Font face, fltk3::Fontsize size). */
   virtual void font(fltk3::Font face, fltk3::Fontsize size) {font_ = face; size_ = size;}
-  /** \brief see fl_font(void). */
+  /** \brief see fltk3::font(void). */
   fltk3::Font font() {return font_; }
-  /** \brief see fl_size(). */
+  /** \brief see fltk3::size(). */
   fltk3::Fontsize size() {return size_; }
-  /** \brief see fl_width(const char *str, int n). */
+  /** \brief see fltk3::width(const char *str, int n). */
   virtual double width(const char *str, int n) = 0;
-  /** \brief see fl_width(unsigned int n). */
+  /** \brief see fltk3::width(unsigned int n). */
   virtual inline double width(unsigned int c) { char ch = (char)c; return width(&ch, 1); }
-  /** \brief see fl_text_extents(const char*, int n, int& dx, int& dy, int& w, int& h). */
+  /** \brief see fltk3::text_extents(const char*, int n, int& dx, int& dy, int& w, int& h). */
   virtual void text_extents(const char*, int n, int& dx, int& dy, int& w, int& h);
-  /** \brief see fl_height(). */
+  /** \brief see fltk3::height(). */
   virtual int height() = 0;
-  /** \brief see fl_descent(). */
+  /** \brief see fltk3::descent(). */
   virtual int descent() = 0;
-  /** \brief see fl_color(void). */
+  /** \brief see fltk3::color(void). */
   fltk3::Color color() {return color_;}
   /** Returns a pointer to the current Fl_Font_Descriptor for the graphics driver */
   inline Fl_Font_Descriptor *font_descriptor() { return font_descriptor_;}

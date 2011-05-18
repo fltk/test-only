@@ -81,8 +81,8 @@ extern FLTK3_EXPORT GC fl_gc;
 extern FLTK3_EXPORT Window fl_window;
 FLTK3_EXPORT ulong fl_xpixel(fltk3::Color i);
 FLTK3_EXPORT ulong fl_xpixel(uchar r, uchar g, uchar b);
-FLTK3_EXPORT void fl_clip_region(Fl_Region);
-FLTK3_EXPORT Fl_Region fl_clip_region();
+FLTK3_EXPORT void fltk3::clip_region(Fl_Region);
+FLTK3_EXPORT Fl_Region fltk3::clip_region();
 
 // feed events into fltk:
 FLTK3_EXPORT int fl_handle(const XEvent&);
@@ -102,7 +102,7 @@ typedef ulong Fl_Offscreen;
 #    define fl_begin_offscreen(pixmap) \
   Window _sw=fl_window; fl_window=pixmap; \
   Fl_Surface_Device *_ss = Fl_Surface_Device::surface(); Fl_Display_Device::display_device()->set_current(); \
-  fl_push_no_clip()
+  fltk3::push_no_clip()
 #    define fl_end_offscreen() \
   fltk3::pop_clip(); fl_window = _sw; _ss->set_current()
 
@@ -119,7 +119,7 @@ extern FLTK3_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
 #if defined(FL_LIBRARY) || defined(FL_INTERNALS)
 extern FLTK3_EXPORT Window fl_message_window;
 extern FLTK3_EXPORT void *fl_xftfont;
-FLTK3_EXPORT Fl_Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.cxx
+FLTK3_EXPORT Fl_Region XRectangleRegion(int x, int y, int w, int h); // in fltk3::rect.cxx
 
 // access to core fonts:
 // This class provides a "smart pointer" that returns a pointer to an XFontStruct.

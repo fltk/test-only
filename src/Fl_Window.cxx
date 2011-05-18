@@ -130,8 +130,8 @@ void fltk3::Window::draw() {
     };
     int i;
     for (i=dx; i<12; i++) {
-      fl_color(c[i&3]);
-      fl_line(x1--, y1, x2, y2--);
+      fltk3::color(c[i&3]);
+      fltk3::line(x1--, y1, x2, y2--);
     }
   }
 #endif

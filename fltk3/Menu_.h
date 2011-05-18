@@ -95,11 +95,11 @@ public:
   int  add(const char*, int shortcut, fltk3::Callback*, void* = 0, int = 0);
   /** See int Fl_Menu_::add(const char* label, int shortcut, fltk3::Callback*, void *user_data=0, int flags=0) */
   int  add(const char* a, const char* b, fltk3::Callback* c, void* d = 0, int e = 0) {
-      return add(a,fl_old_shortcut(b),c,d,e);
+      return add(a,fltk3::old_shortcut(b),c,d,e);
   }
   /** See int Fl_Menu_::insert(const char* label, int shortcut, fltk3::Callback*, void *user_data=0, int flags=0) */
   int insert(int index, const char* a, const char* b, fltk3::Callback* c, void* d = 0, int e = 0) {
-      return insert(index,a,fl_old_shortcut(b),c,d,e);
+      return insert(index,a,fltk3::old_shortcut(b),c,d,e);
   }
   int  add(const char *);
   int  size() const ;

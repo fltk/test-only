@@ -27,7 +27,7 @@
 
 // Two internal fltk data structures:
 //
-// Fl_Fontdesc: an entry into the fl_font() table.  There is one of these
+// Fl_Fontdesc: an entry into the fltk3::font() table.  There is one of these
 // for each fltk font number.
 //
 #ifndef FL_FONT_
@@ -91,7 +91,7 @@ public:
 #endif // FL_DOXYGEN
 };
 
-//extern FLTK3_EXPORT Fl_Font_Descriptor *fl_fontsize; // the currently selected one
+//extern FLTK3_EXPORT Fl_Font_Descriptor *fltk3::fontsize; // the currently selected one
 
 struct Fl_Fontdesc {
   const char *name;
@@ -103,11 +103,15 @@ struct Fl_Fontdesc {
 #  endif
 };
 
-extern FLTK3_EXPORT Fl_Fontdesc *fl_fonts; // the table
+namespace fltk3 {
+  extern FLTK3_EXPORT Fl_Fontdesc *fonts; // the table
+}
 
 #  ifndef WIN32
 // functions for parsing X font names:
-FLTK3_EXPORT const char* fl_font_word(const char *p, int n);
+namespace fltk3 {
+  FLTK3_EXPORT const char* font_word(const char *p, int n);
+}
 FLTK3_EXPORT char *fl_find_fontsize(char *name);
 #  endif
 

@@ -88,9 +88,9 @@ void Fl_Timer::draw() {
       tt = (int) ((d+0.05) / 60.0);
       sprintf(str, "%d:%04.1f", tt, d - 60.0 * tt);
     }
-    fl_font(labelfont(), labelsize());
-    fl_color(labelcolor());
-    fl_draw(str, x(), y(), w(), h(), fltk3::ALIGN_CENTER);
+    fltk3::font(labelfont(), labelsize());
+    fltk3::color(labelcolor());
+    fltk3::draw(str, x(), y(), w(), h(), fltk3::ALIGN_CENTER);
   } else
     draw_label();
 }

@@ -276,10 +276,10 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
   // Setup the transform matrix as needed...
   scale = w < h ? w : h;
 
-  fl_push_matrix();
-  fl_translate((float)x + 0.5 * ((float)w - scale),
+  fltk3::push_matrix();
+  fltk3::translate((float)x + 0.5 * ((float)w - scale),
                (float)y + 0.5 * ((float)h + scale));
-  fl_scale(scale, -scale);
+  fltk3::scale(scale, -scale);
 
   // Loop through the array until we see an unmatched END...
   d    = data_;
@@ -288,9 +288,9 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
   c    = ic;
 
   if (active)
-    fl_color(c);
+    fltk3::color(c);
   else
-    fl_color(fltk3::inactive(c));
+    fltk3::color(fltk3::inactive(c));
 
   while (d < dend)
     switch (*d)
@@ -300,48 +300,48 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
             switch (*prim)
 	    {
 	      case LINE :
-		  fl_end_line();
+		  fltk3::end_line();
 		  break;
 
 	      case CLOSEDLINE :
-		  fl_end_loop();
+		  fltk3::end_loop();
 		  break;
 
 	      case POLYGON :
-		  fl_end_complex_polygon();
+		  fltk3::end_complex_polygon();
 		  break;
 
 	      case OUTLINEPOLYGON :
-		  fl_end_complex_polygon();
+		  fltk3::end_complex_polygon();
 
         	  oc = (fltk3::Color)((((unsigned short *)prim)[1] << 16) | 
 	                	  ((unsigned short *)prim)[2]);
                   if (active)
 		  {
                     if (oc == FL_ICON_COLOR)
-		      fl_color(ic);
+		      fltk3::color(ic);
 		    else
-		      fl_color(oc);
+		      fltk3::color(oc);
 		  }
 		  else
 		  {
                     if (oc == FL_ICON_COLOR)
-		      fl_color(fltk3::inactive(ic));
+		      fltk3::color(fltk3::inactive(ic));
 		    else
-		      fl_color(fltk3::inactive(oc));
+		      fltk3::color(fltk3::inactive(oc));
 		  }
 
-		  fl_begin_loop();
+		  fltk3::begin_loop();
 
 		  prim += 3;
 		  while (*prim == VERTEX)
 		  {
-		    fl_vertex(prim[1] * 0.0001, prim[2] * 0.0001);
+		    fltk3::vertex(prim[1] * 0.0001, prim[2] * 0.0001);
 		    prim += 3;
 		  }
 
-        	  fl_end_loop();
-		  fl_color(c);
+        	  fltk3::end_loop();
+		  fltk3::color(c);
 		  break;
 	    }
 
@@ -359,37 +359,37 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
           if (!active)
 	    c = fltk3::inactive(c);
 
-          fl_color(c);
+          fltk3::color(c);
 	  d += 3;
 	  break;
 
       case LINE :
           prim = d;
 	  d ++;
-	  fl_begin_line();
+	  fltk3::begin_line();
 	  break;
 
       case CLOSEDLINE :
           prim = d;
 	  d ++;
-	  fl_begin_loop();
+	  fltk3::begin_loop();
 	  break;
 
       case POLYGON :
           prim = d;
 	  d ++;
-	  fl_begin_complex_polygon();
+	  fltk3::begin_complex_polygon();
 	  break;
 
       case OUTLINEPOLYGON :
           prim = d;
 	  d += 3;
-	  fl_begin_complex_polygon();
+	  fltk3::begin_complex_polygon();
 	  break;
 
       case VERTEX :
           if (prim)
-	    fl_vertex(d[1] * 0.0001, d[2] * 0.0001);
+	    fltk3::vertex(d[1] * 0.0001, d[2] * 0.0001);
 	  d += 3;
 	  break;
 
@@ -402,53 +402,53 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
     switch (*prim)
     {
       case LINE :
-	  fl_end_line();
+	  fltk3::end_line();
 	  break;
 
       case CLOSEDLINE :
-	  fl_end_loop();
+	  fltk3::end_loop();
 	  break;
 
       case POLYGON :
-	  fl_end_polygon();
+	  fltk3::end_polygon();
 	  break;
 
       case OUTLINEPOLYGON :
-	  fl_end_polygon();
+	  fltk3::end_polygon();
 
           oc = (fltk3::Color)((((unsigned short *)prim)[1] << 16) | 
 	                  ((unsigned short *)prim)[2]);
           if (active)
 	  {
             if (oc == FL_ICON_COLOR)
-	      fl_color(ic);
+	      fltk3::color(ic);
 	    else
-	      fl_color(oc);
+	      fltk3::color(oc);
 	  }
 	  else
 	  {
             if (oc == FL_ICON_COLOR)
-	      fl_color(fltk3::inactive(ic));
+	      fltk3::color(fltk3::inactive(ic));
 	    else
-	      fl_color(fltk3::inactive(oc));
+	      fltk3::color(fltk3::inactive(oc));
 	  }
 
-	  fl_begin_loop();
+	  fltk3::begin_loop();
 
 	  prim += 3;
 	  while (*prim == VERTEX)
 	  {
-	    fl_vertex(prim[1] * 0.0001, prim[2] * 0.0001);
+	    fltk3::vertex(prim[1] * 0.0001, prim[2] * 0.0001);
 	    prim += 3;
 	  }
 
-          fl_end_loop();
-	  fl_color(c);
+          fltk3::end_loop();
+	  fltk3::color(c);
 	  break;
     }
 
   // Restore the transform matrix
-  fl_pop_matrix();
+  fltk3::pop_matrix();
 }
 
 /**

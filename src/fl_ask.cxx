@@ -134,9 +134,9 @@ void resizeform() {
   int	x, w, h, max_w, max_h;
 	const int icon_size = 50;
 
-  fl_font(message->labelfont(), message->labelsize());
+  fltk3::font(message->labelfont(), message->labelsize());
   message_w = message_h = 0;
-  fl_measure(message->label(), message_w, message_h);
+  fltk3::measure(message->label(), message_w, message_h);
 
   message_w += 10;
   message_h += 10;
@@ -145,7 +145,7 @@ void resizeform() {
   if (message_h < 30)
     message_h = 30;
 
-  fl_font(button[0]->labelfont(), button[0]->labelsize());
+  fltk3::font(button[0]->labelfont(), button[0]->labelsize());
 
   memset(button_w, 0, sizeof(button_w));
   memset(button_h, 0, sizeof(button_h));
@@ -153,7 +153,7 @@ void resizeform() {
   for (max_h = 25, i = 0; i < 3; i ++)
     if (button[i]->visible())
     {
-      fl_measure(button[i]->label(), button_w[i], button_h[i]);
+      fltk3::measure(button[i]->label(), button_w[i], button_h[i]);
 
       if (i == 1)
         button_w[1] += 20;

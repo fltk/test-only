@@ -58,9 +58,9 @@ void Fl_Value_Slider::draw() {
   draw_box(box(),bxx,byy,bww,bhh,color());
   char buf[128];
   format(buf);
-  fl_font(textfont(), textsize());
-  fl_color(active_r() ? textcolor() : fltk3::inactive(textcolor()));
-  fl_draw(buf, bxx, byy, bww, bhh, fltk3::ALIGN_CLIP);
+  fltk3::font(textfont(), textsize());
+  fltk3::color(active_r() ? textcolor() : fltk3::inactive(textcolor()));
+  fltk3::draw(buf, bxx, byy, bww, bhh, fltk3::ALIGN_CLIP);
 }
 
 int Fl_Value_Slider::handle(int event) {

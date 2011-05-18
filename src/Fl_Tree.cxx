@@ -284,7 +284,7 @@ void Fl_Tree::draw() {
   int Ysave = Y;
   fltk3::push_clip(cx,cy,cw,ch);
   {
-    fl_font(_prefs.labelfont(), _prefs.labelsize());
+    fltk3::font(_prefs.labelfont(), _prefs.labelsize());
     _root->draw(X, Y, W, this,
                 (fltk3::focus()==this)?_item_focus:0,	// show focus item ONLY if Fl_Tree has focus
 		_prefs);

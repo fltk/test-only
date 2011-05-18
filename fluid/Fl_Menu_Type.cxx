@@ -577,13 +577,13 @@ Fl_Menu_Bar_Type Fl_Menu_Bar_type;
 void Shortcut_Button::draw() {
   if (value()) draw_box(fltk3::DOWN_BOX, (fltk3::Color)9);
   else draw_box(fltk3::UP_BOX, fltk3::WHITE);
-  fl_font(fltk3::HELVETICA,14); fl_color(fltk3::FOREGROUND_COLOR);
+  fltk3::font(fltk3::HELVETICA,14); fltk3::color(fltk3::FOREGROUND_COLOR);
 	if (use_FL_COMMAND && (svalue & (fltk3::CTRL|fltk3::META))) {
 		char buf[1024];
-		fl_snprintf(buf, 1023, "Command+%s", fl_shortcut_label(svalue&~(fltk3::CTRL|fltk3::META)));
-		fl_draw(buf,x()+6,y(),w(),h(),fltk3::ALIGN_LEFT);
+		fl_snprintf(buf, 1023, "Command+%s", fltk3::shortcut_label(svalue&~(fltk3::CTRL|fltk3::META)));
+		fltk3::draw(buf,x()+6,y(),w(),h(),fltk3::ALIGN_LEFT);
 	} else {
-		fl_draw(fl_shortcut_label(svalue),x()+6,y(),w(),h(),fltk3::ALIGN_LEFT);
+		fltk3::draw(fltk3::shortcut_label(svalue),x()+6,y(),w(),h(),fltk3::ALIGN_LEFT);
 	}
 }
 

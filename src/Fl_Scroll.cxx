@@ -85,8 +85,8 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
         }
 
     default :
-	fl_color(s->color());
-	fl_rectf(X,Y,W,H);
+	fltk3::color(s->color());
+	fltk3::rectf(X,Y,W,H);
 	break;
   }
   fltk3::Widget*const* a = s->array();
@@ -255,7 +255,7 @@ void Fl_Scroll::draw() {
   } else {
     if (d & fltk3::DAMAGE_SCROLL) {
       // scroll the contents:
-      fl_scroll(X, Y, W, H, oldx-xposition_, oldy-yposition_, draw_clip, this);
+      fltk3::scroll(X, Y, W, H, oldx-xposition_, oldy-yposition_, draw_clip, this);
 
       // Erase the background as needed...
       fltk3::Widget*const* a = array();
@@ -327,8 +327,8 @@ void Fl_Scroll::draw() {
     draw_child(hscrollbar);
     if (scrollbar.visible() && hscrollbar.visible()) {
       // fill in the little box in the corner
-      fl_color(color());
-      fl_rectf(scrollbar.x(), hscrollbar.y(), scrollbar.w(), hscrollbar.h());
+      fltk3::color(color());
+      fltk3::rectf(scrollbar.x(), hscrollbar.y(), scrollbar.w(), hscrollbar.h());
     }
   } else {
     update_child(scrollbar);

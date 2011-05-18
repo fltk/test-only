@@ -175,8 +175,8 @@ static Keyname table[] = {
   \param [in] shortcut the integer value containing the ascii character or extended keystroke plus modifiers
   \return a pointer to a static buffer containing human readable text for the shortcut
   */
-const char* fl_shortcut_label(unsigned int shortcut) {
-  return fl_shortcut_label(shortcut, 0L);
+const char* fltk3::shortcut_label(unsigned int shortcut) {
+  return fltk3::shortcut_label(shortcut, 0L);
 }
 
 /** 
@@ -185,9 +185,9 @@ const char* fl_shortcut_label(unsigned int shortcut) {
   \param [in] shortcut the integer value containing the ascii character or extended keystroke plus modifiers
   \param [in] eom if this pointer is set, it will receive a pointer to the end of the modifier text
   \return a pointer to a static buffer containing human readable text for the shortcut
-  \see fl_shortcut_label(unsigned int shortcut)
+  \see fltk3::shortcut_label(unsigned int shortcut)
   */
-const char* fl_shortcut_label(unsigned int shortcut, const char **eom) {
+const char* fltk3::shortcut_label(unsigned int shortcut, const char **eom) {
   static char buf[20];
   char *p = buf;
   if (eom) *eom = p;
@@ -281,7 +281,7 @@ const char* fl_shortcut_label(unsigned int shortcut, const char **eom) {
    ^ - Control
   \endverbatim
 */
-unsigned int fl_old_shortcut(const char* s) {
+unsigned int fltk3::old_shortcut(const char* s) {
   if (!s || !*s) return 0;
   unsigned int n = 0;
   if (*s == '#') {n |= fltk3::ALT; s++;}

@@ -38,26 +38,26 @@ const char* name[6] = {"X", "Y", "R", "start", "end", "rotate"};
 class Drawing : public Widget {
   void draw() {
     push_clip(x(),y(),w(),h());
-    fl_color(DARK3);
-    fl_rectf(x(),y(),w(),h());
-    fl_push_matrix();
+    fltk3::color(DARK3);
+    rectf(x(),y(),w(),h());
+    push_matrix();
     if (val[5]) {
-      fl_translate(x()+w()/2.0, y()+h()/2.0);
-      fl_rotate(val[5]);
-      fl_translate(-(x()+w()/2.0), -(y()+h()/2.0));
+      translate(x()+w()/2.0, y()+h()/2.0);
+      rotate(val[5]);
+      translate(-(x()+w()/2.0), -(y()+h()/2.0));
     }
-    fl_color(WHITE);
-    fl_translate(x(),y());
-    fl_begin_complex_polygon();
-    fl_arc(val[0],val[1],val[2],val[3],val[4]);
-    fl_gap();
-    fl_arc(140,140,20,0,-360);
-    fl_end_complex_polygon();
-    fl_color(RED);
-    fl_begin_line();
-    fl_arc(val[0],val[1],val[2],val[3],val[4]);
-    fl_end_line();
-    fl_pop_matrix();
+    fltk3::color(WHITE);
+    translate(x(),y());
+    begin_complex_polygon();
+    arc(val[0],val[1],val[2],val[3],val[4]);
+    gap();
+    arc(140,140,20,0,-360);
+    end_complex_polygon();
+    fltk3::color(RED);
+    begin_line();
+    arc(val[0],val[1],val[2],val[3],val[4]);
+    end_line();
+    pop_matrix();
     pop_clip();
   }
 public:

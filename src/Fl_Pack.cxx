@@ -104,11 +104,11 @@ void Fl_Pack::draw() {
       }
       if (spacing_ && current_position>maximum_position && box() &&
         (X != o->x() || Y != o->y() || d&fltk3::DAMAGE_ALL)) {
-        fl_color(color());
+        fltk3::color(color());
         if (horizontal())
-          fl_rectf(maximum_position, ty, spacing_, th);
+          fltk3::rectf(maximum_position, ty, spacing_, th);
         else
-          fl_rectf(tx, maximum_position, tw, spacing_);
+          fltk3::rectf(tx, maximum_position, tw, spacing_);
       }
       if (X != o->x() || Y != o->y() || W != o->w() || H != o->h()) {
         o->resize(X,Y,W,H);
@@ -128,14 +128,14 @@ void Fl_Pack::draw() {
   
   if (horizontal()) {
     if (maximum_position < tx+tw && box()) {
-      fl_color(color());
-      fl_rectf(maximum_position, ty, tx+tw-maximum_position, th);
+      fltk3::color(color());
+      fltk3::rectf(maximum_position, ty, tx+tw-maximum_position, th);
     }
     tw = maximum_position-tx;
   } else {
     if (maximum_position < ty+th && box()) {
-      fl_color(color());
-      fl_rectf(tx, maximum_position, tw, ty+th-maximum_position);
+      fltk3::color(color());
+      fltk3::rectf(tx, maximum_position, tw, ty+th-maximum_position);
     }
     th = maximum_position-ty;
   }

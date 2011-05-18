@@ -317,7 +317,7 @@ void Flcc_HueBox::draw() {
   int w1 = w()-fltk3::box_dw(box());
   int h1 = h()-fltk3::box_dh(box());
   if (damage() == fltk3::DAMAGE_EXPOSE) fltk3::push_clip(x1+px,yy1+py,6,6);
-  fl_draw_image(generate_image, this, x1, yy1, w1, h1);
+  fltk3::draw_image(generate_image, this, x1, yy1, w1, h1);
   if (damage() == fltk3::DAMAGE_EXPOSE) fltk3::pop_clip();
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
 #ifdef CIRCLE
@@ -329,7 +329,7 @@ void Flcc_HueBox::draw() {
 #endif
   if (X < 0) X = 0; else if (X > w1-6) X = w1-6;
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
-  //  fl_color(c->value()>.75 ? fltk3::BLACK : fltk3::WHITE);
+  //  fltk3::color(c->value()>.75 ? fltk3::BLACK : fltk3::WHITE);
   draw_box(fltk3::UP_BOX,x1+X,yy1+Y,6,6,fltk3::focus() == this ? fltk3::FOREGROUND_COLOR : fltk3::GRAY);
   px = X; py = Y;
 }
@@ -391,7 +391,7 @@ void Flcc_ValueBox::draw() {
   int w1 = w()-fltk3::box_dw(box());
   int h1 = h()-fltk3::box_dh(box());
   if (damage() == fltk3::DAMAGE_EXPOSE) fltk3::push_clip(x1,yy1+py,w1,6);
-  fl_draw_image(generate_vimage, this, x1, yy1, w1, h1);
+  fltk3::draw_image(generate_vimage, this, x1, yy1, w1, h1);
   if (damage() == fltk3::DAMAGE_EXPOSE) fltk3::pop_clip();
   int Y = int((1-c->value()) * (h1-6));
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
@@ -517,7 +517,7 @@ public:
 
 void ColorChip::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
-  fl_rectf(x()+fltk3::box_dx(box()),
+  fltk3::rectf(x()+fltk3::box_dx(box()),
 	   y()+fltk3::box_dy(box()),
 	   w()-fltk3::box_dw(box()),
 	   h()-fltk3::box_dh(box()),r,g,b);

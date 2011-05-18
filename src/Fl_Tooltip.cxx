@@ -76,10 +76,10 @@ fltk3::Window *Fl_Tooltip::current_window(void)
 #endif
 
 void Fl_TooltipBox::layout() {
-  fl_font(Fl_Tooltip::font(), Fl_Tooltip::size());
+  fltk3::font(Fl_Tooltip::font(), Fl_Tooltip::size());
   int ww, hh;
   ww = MAX_WIDTH;
-  fl_measure(tip, ww, hh, fltk3::ALIGN_LEFT|fltk3::ALIGN_WRAP|fltk3::ALIGN_INSIDE);
+  fltk3::measure(tip, ww, hh, fltk3::ALIGN_LEFT|fltk3::ALIGN_WRAP|fltk3::ALIGN_INSIDE);
   ww += 6; hh += 6;
 
   // find position on the screen of the widget:
@@ -105,9 +105,9 @@ void Fl_TooltipBox::layout() {
 
 void Fl_TooltipBox::draw() {
   draw_box(fltk3::BORDER_BOX, 0, 0, w(), h(), Fl_Tooltip::color());
-  fl_color(Fl_Tooltip::textcolor());
-  fl_font(Fl_Tooltip::font(), Fl_Tooltip::size());
-  fl_draw(tip, 3, 3, w()-6, h()-6, fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_WRAP));
+  fltk3::color(Fl_Tooltip::textcolor());
+  fltk3::font(Fl_Tooltip::font(), Fl_Tooltip::size());
+  fltk3::draw(tip, 3, 3, w()-6, h()-6, fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_WRAP));
 }
 
 static char recent_tooltip;

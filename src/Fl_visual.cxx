@@ -43,7 +43,7 @@
     <UL>
     <LI>fltk3::visual(fltk3::RGB)
     <BR>Full/true color (if there are several depths FLTK chooses  the
-    largest).  Do this if you use fl_draw_image
+    largest).  Do this if you use fltk3::draw_image
     for much better (non-dithered)  output.
     <BR>&nbsp; </LI>
     <LI>fltk3::visual(fltk3::RGB8)

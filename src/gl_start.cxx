@@ -58,7 +58,7 @@ static Fl_Gl_Choice* gl_choice;
 static Fl_Gl_Choice* gl_choice;
 #endif
 
-Fl_Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.cxx
+Fl_Region XRectangleRegion(int x, int y, int w, int h); // in fltk3::rect.cxx
 
 /** Creates an OpenGL context */
 void gl_start() {
@@ -90,9 +90,9 @@ void gl_start() {
   if (clip_state_number != fl_graphics_driver->fl_clip_state_number) {
     clip_state_number = fl_graphics_driver->fl_clip_state_number;
     int x, y, w, h;
-    if (fl_clip_box(0, 0, fltk3::Window::current()->w(), fltk3::Window::current()->h(),
+    if (fltk3::clip_box(0, 0, fltk3::Window::current()->w(), fltk3::Window::current()->h(),
 		    x, y, w, h)) {
-      fl_clip_region(XRectangleRegion(x,y,w,h));
+      fltk3::clip_region(XRectangleRegion(x,y,w,h));
       glScissor(x, fltk3::Window::current()->h()-(y+h), w, h);
       glEnable(GL_SCISSOR_TEST);
     } else {

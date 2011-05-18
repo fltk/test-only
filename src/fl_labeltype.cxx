@@ -41,15 +41,15 @@ fl_no_label(const fltk3::Label*,int,int,int,int,fltk3::Align) {}
 void
 fl_normal_label(const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
-  fl_font(o->font, o->size);
-  fl_color((fltk3::Color)o->color);
-  fl_draw(o->value, X, Y, W, H, align, o->image);
+  fltk3::font(o->font, o->size);
+  fltk3::color((fltk3::Color)o->color);
+  fltk3::draw(o->value, X, Y, W, H, align, o->image);
 }
 
 void
 fl_normal_measure(const fltk3::Label* o, int& W, int& H) {
-  fl_font(o->font, o->size);
-  fl_measure(o->value, W, H);
+  fltk3::font(o->font, o->size);
+  fltk3::measure(o->value, W, H);
   if (o->image) {
     if (o->image->w() > W) W = o->image->w();
     H += o->image->h();
@@ -77,7 +77,7 @@ static fltk3::LabelMeasureF* measure[MAX_LABELTYPE];
 /** Sets the functions to call to draw and measure a specific labeltype. */
 void fltk3::set_labeltype(fltk3::Labeltype t,fltk3::LabelDrawF* f,fltk3::LabelMeasureF*m) 
 {
-  table[t] = f; measure[t] = m;
+  table[t] = f; ::measure[t] = m;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -125,14 +125,14 @@ void fltk3::Widget::draw_label(int X, int Y, int W, int H) const {
     Anybody can call this to force the label to draw anywhere.
  */
 void fltk3::Widget::draw_label(int X, int Y, int W, int H, fltk3::Align a) const {
-  if (flags()&SHORTCUT_LABEL) fl_draw_shortcut = 1;
+  if (flags()&SHORTCUT_LABEL) fltk3::draw_shortcut = 1;
   fltk3::Label l1 = label_;
   if (!active_r()) {
     l1.color = fltk3::inactive((fltk3::Color)l1.color);
     if (l1.deimage) l1.image = l1.deimage;
   }
   l1.draw(X,Y,W,H,a);
-  fl_draw_shortcut = 0;
+  fltk3::draw_shortcut = 0;
 }
 
 // include these vars here so they can be referenced without including

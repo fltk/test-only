@@ -88,13 +88,13 @@ const char * const fl_eventnames[] =
   int MyClass::my_callback(fltk3::Widget *w, void*) {
       int fnum = w->labelfont();
       // Resulting output might be e.g. "Label's font is fltk3::HELVETICA (0)"
-      printf("Label's font is %s (%d)\n", fl_fontnames[fnum], fnum);
+      printf("Label's font is %s (%d)\n", fltk3::fontnames[fnum], fnum);
       // ..resulting output might be e.g. "Label's font is fltk3::HELVETICA (0)"..
       [..]
   }
   \endcode
  */
-const char * const fl_fontnames[] =
+const char * const fltk3::fontnames[] =
 {
   "fltk3::HELVETICA",
   "fltk3::HELVETICA_BOLD",

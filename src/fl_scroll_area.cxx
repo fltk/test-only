@@ -46,7 +46,7 @@
   and \p dy pixels. The \p draw_area callback is then called for
   every newly exposed rectangular area.
   */
-void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
+void fltk3::scroll(int X, int Y, int W, int H, int dx, int dy,
                void (*draw_area)(void*, int,int,int,int), void* data)
 {
   if (!dx && !dy) return;
@@ -116,7 +116,7 @@ void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
   // newly exposed area. If it is not, we go the safe route and 
   // re-render the full area instead.
   // Note 1: we could go and find the areas that are actually
-  // obscured and recursively call fl_scroll for the newly found
+  // obscured and recursively call fltk3::scroll for the newly found
   // rectangles. However, this practice would rely on the 
   // elements of the undocumented Rgn structure.
   // Note 2: although this method should take care of most 

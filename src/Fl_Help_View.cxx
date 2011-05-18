@@ -212,12 +212,12 @@ struct fl_margins {
 The following functions are also used to draw stuff and should be replaced with
 local copies that are much faster when merely counting:
 
-fl_color(fltk3::Color);
-fl_rectf(int, int, int, int);
+fltk3::color(fltk3::Color);
+fltk3::rectf(int, int, int, int);
 fltk3::push_clip(int, int, int, int);
-fl_xyline(int, int, int);
-fl_rect()
-fl_line()
+fltk3::xyline(int, int, int);
+fltk3::rect()
+fltk3::line()
 img->draw()
 */
 
@@ -247,22 +247,22 @@ fltk3::Color Fl_Help_View::hv_selection_text_color;
 void Fl_Help_View::hv_draw(const char *t, int x, int y)
 {
   if (selected && current_view==this && current_pos<selection_last && current_pos>=selection_first) {
-    fltk3::Color c = fl_color();
-    fl_color(hv_selection_color);
-    int w = (int)fl_width(t);
+    fltk3::Color c = fltk3::color();
+    fltk3::color(hv_selection_color);
+    int w = (int)fltk3::width(t);
     if (current_pos+(int)strlen(t)<selection_last) 
-      w += (int)fl_width(' ');
-    fl_rectf(x, y+fl_descent()-fl_height(), w, fl_height());
-    fl_color(hv_selection_text_color);
-    fl_draw(t, x, y);
-    fl_color(c);
+      w += (int)fltk3::width(' ');
+    fltk3::rectf(x, y+fltk3::descent()-fltk3::height(), w, fltk3::height());
+    fltk3::color(hv_selection_text_color);
+    fltk3::draw(t, x, y);
+    fltk3::color(c);
   } else {
-    fl_draw(t, x, y);
+    fltk3::draw(t, x, y);
   }
   if (draw_mode) {
-    int w = (int)fl_width(t);
+    int w = (int)fltk3::width(t);
     if (mouse_x>=x && mouse_x<x+w) {
-      if (mouse_y>=y-fl_height()+fl_descent()&&mouse_y<=y+fl_descent()) {
+      if (mouse_y>=y-fltk3::height()+fltk3::descent()&&mouse_y<=y+fltk3::descent()) {
         int f = current_pos;
         int l = f+strlen(t); // use 'quote_char' to calculate the true length of the HTML string
         if (draw_mode==1) {
@@ -488,8 +488,8 @@ Fl_Help_View::draw()
     }
     if ( hor_vis && ver_vis ) {
       // Both scrollbars visible? Draw little gray box in corner
-      fl_color(fltk3::GRAY);
-      fl_rectf(scorn_x, scorn_y, scrollsize, scrollsize);
+      fltk3::color(fltk3::GRAY);
+      fltk3::rectf(scorn_x, scorn_y, scrollsize, scrollsize);
     }
   }
 
@@ -505,7 +505,7 @@ Fl_Help_View::draw()
   // Clip the drawing to the inside of the box...
   fltk3::push_clip(x() + fltk3::box_dx(b), y() + fltk3::box_dy(b),
                ww - fltk3::box_dw(b), hh - fltk3::box_dh(b));
-  fl_color(textcolor_);
+  fltk3::color(textcolor_);
 
   // Draw all visible blocks...
   for (i = 0, block = blocks_; i < nblocks_; i ++, block ++)
@@ -531,10 +531,10 @@ Fl_Help_View::draw()
             // Check width...
             *s = '\0';
             s  = buf;
-            ww = (int)fl_width(buf);
+            ww = (int)fltk3::width(buf);
 
             if (needspace && xx > block->x)
-	      xx += (int)fl_width(' ');
+	      xx += (int)fltk3::width(' ');
 
             if ((xx + ww) > block->w)
 	    {
@@ -547,8 +547,8 @@ Fl_Help_View::draw()
 
             hv_draw(buf, xx + x() - leftline_, yy + y());
 	    if (underline) {
-              xtra_ww = isspace((*ptr)&255)?(int)fl_width(' '):0;
-              fl_xyline(xx + x() - leftline_, yy + y() + 1,
+              xtra_ww = isspace((*ptr)&255)?(int)fltk3::width(' '):0;
+              fltk3::xyline(xx + x() - leftline_, yy + y() + 1,
 	                xx + x() - leftline_ + ww + xtra_ww);
             }
             current_pos = ptr-value_;
@@ -569,9 +569,9 @@ Fl_Help_View::draw()
                 s = buf;
 
                 hv_draw(buf, xx + x() - leftline_, yy + y());
-		if (underline) fl_xyline(xx + x() - leftline_, yy + y() + 1,
+		if (underline) fltk3::xyline(xx + x() - leftline_, yy + y() + 1,
 	                        	 xx + x() - leftline_ +
-					     (int)fl_width(buf));
+					     (int)fltk3::width(buf));
 
                 current_pos = ptr-value_;
 		if (line < 31)
@@ -601,8 +601,8 @@ Fl_Help_View::draw()
 	      s = buf;
 
               hv_draw(buf, xx + x() - leftline_, yy + y());
-	      ww = (int)fl_width(buf);
-	      if (underline) fl_xyline(xx + x() - leftline_, yy + y() + 1,
+	      ww = (int)fltk3::width(buf);
+	      if (underline) fltk3::xyline(xx + x() - leftline_, yy + y() + 1,
 	                               xx + x() - leftline_ + ww);
               xx += ww;
               current_pos = ptr-value_;
@@ -667,7 +667,7 @@ Fl_Help_View::draw()
 	  }
 	  else if (strcasecmp(buf, "HR") == 0)
 	  {
-	    fl_line(block->x + x(), yy + y(), block->w + x(),
+	    fltk3::line(block->x + x(), yy + y(), block->w + x(),
 	            yy + y());
 
 	    if (line < 31)
@@ -711,7 +711,7 @@ Fl_Help_View::draw()
 
             if (strcasecmp(buf, "LI") == 0)
 	    {
-//            fl_font(fltk3::SYMBOL, fsize); // The default SYMBOL font on my XP box is not Unicode...
+//            fltk3::font(fltk3::SYMBOL, fsize); // The default SYMBOL font on my XP box is not Unicode...
               char buf[8];
               wchar_t b[] = {0x2022, 0x0};
 //            buf[fl_unicode2utf(b, 1, buf)] = 0;
@@ -725,12 +725,12 @@ Fl_Help_View::draw()
 	  else if (strcasecmp(buf, "A") == 0 &&
 	           get_attr(attrs, "HREF", attr, sizeof(attr)) != NULL)
 	  {
-	    fl_color(linkcolor_);
+	    fltk3::color(linkcolor_);
 	    underline = 1;
 	  }
 	  else if (strcasecmp(buf, "/A") == 0)
 	  {
-	    fl_color(textcolor_);
+	    fltk3::color(textcolor_);
 	    underline = 0;
 	  }
 	  else if (strcasecmp(buf, "FONT") == 0)
@@ -804,13 +804,13 @@ Fl_Help_View::draw()
 
             if (block->bgcolor != bgcolor_)
 	    {
-	      fl_color(block->bgcolor);
-              fl_rectf(tx, ty, tw, th);
-              fl_color(textcolor_);
+	      fltk3::color(block->bgcolor);
+              fltk3::rectf(tx, ty, tw, th);
+              fltk3::color(textcolor_);
 	    }
 
             if (block->border)
-              fl_rect(tx, ty, tw, th);
+              fltk3::rect(tx, ty, tw, th);
 	  }
 	  else if (strcasecmp(buf, "I") == 0 ||
                    strcasecmp(buf, "EM") == 0)
@@ -871,7 +871,7 @@ Fl_Help_View::draw()
 	    ww = width;
 
 	    if (needspace && xx > block->x)
-	      xx += (int)fl_width(' ');
+	      xx += (int)fltk3::width(' ');
 
 	    if ((xx + ww) > block->w)
 	    {
@@ -885,7 +885,7 @@ Fl_Help_View::draw()
 
 	    if (img) {
 	      img->draw(xx + x() - leftline_,
-	                yy + y() - fl_height() + fl_descent() + 2);
+	                yy + y() - fltk3::height() + fltk3::descent() + 2);
 	    }
 
 	    xx += ww;
@@ -962,10 +962,10 @@ Fl_Help_View::draw()
 
       if (s > buf && !pre && !head)
       {
-	ww = (int)fl_width(buf);
+	ww = (int)fltk3::width(buf);
 
         if (needspace && xx > block->x)
-	  xx += (int)fl_width(' ');
+	  xx += (int)fltk3::width(' ');
 
 	if ((xx + ww) > block->w)
 	{
@@ -980,7 +980,7 @@ Fl_Help_View::draw()
       if (s > buf && !head)
       {
         hv_draw(buf, xx + x() - leftline_, yy + y());
-	if (underline) fl_xyline(xx + x() - leftline_, yy + y() + 1,
+	if (underline) fltk3::xyline(xx + x() - leftline_, yy + y() + 1,
 	                         xx + x() - leftline_ + ww);
         current_pos = ptr-value_;
       }
@@ -1146,7 +1146,7 @@ void Fl_Help_View::format() {
       {
         // Get width of word parsed so far...
         *s = '\0';
-        ww = (int)fl_width(buf);
+        ww = (int)fltk3::width(buf);
 
 	if (!head && !pre)
 	{
@@ -1158,7 +1158,7 @@ void Fl_Help_View::format() {
 	  }
 
           if (needspace && xx > block->x)
-	    ww += (int)fl_width(' ');
+	    ww += (int)fltk3::width(' ');
 
   //        printf("line = %d, xx = %d, ww = %d, block->x = %d, block->w = %d\n",
   //	       line, xx, ww, block->x, block->w);
@@ -1205,7 +1205,7 @@ void Fl_Help_View::format() {
 	      hh       = fsize + 2;
 	    }
 	    else
-              xx += (int)fl_width(' ');
+              xx += (int)fltk3::width(' ');
 
             if ((fsize + 2) > hh)
 	      hh = fsize + 2;
@@ -1701,7 +1701,7 @@ void Fl_Help_View::format() {
 	  }
 
 	  if (needspace && xx > block->x)
-	    ww += (int)fl_width(' ');
+	    ww += (int)fltk3::width(' ');
 
 	  if ((xx + ww) > block->w)
 	  {
@@ -1744,7 +1744,7 @@ void Fl_Help_View::format() {
       {
 	needspace = 1;
 	if ( pre ) {
-	  xx += (int)fl_width(' ');
+	  xx += (int)fltk3::width(' ');
         }
 	ptr ++;
       }
@@ -1783,7 +1783,7 @@ void Fl_Help_View::format() {
     if (s > buf && !head)
     {
       *s = '\0';
-      ww = (int)fl_width(buf);
+      ww = (int)fltk3::width(buf);
 
   //    printf("line = %d, xx = %d, ww = %d, block->x = %d, block->w = %d\n",
   //	   line, xx, ww, block->x, block->w);
@@ -1795,7 +1795,7 @@ void Fl_Help_View::format() {
       }
 
       if (needspace && xx > block->x)
-	ww += (int)fl_width(' ');
+	ww += (int)fltk3::width(' ');
 
       if ((xx + ww) > block->w)
       {
@@ -1929,7 +1929,7 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
       }
 
       *s         = '\0';
-      temp_width = (int)fl_width(buf);
+      temp_width = (int)fltk3::width(buf);
       s          = buf;
 
       if (temp_width > minwidths[column])
@@ -2170,7 +2170,7 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
 
         width += iwidth;
 	if (needspace)
-	  width += (int)fl_width(' ');
+	  width += (int)fltk3::width(' ');
 
 	if (width > max_width)
           max_width = width;
@@ -2964,47 +2964,47 @@ Fl_Help_View::handle(int event)	// I - Event to handle
       fltk3::Group::handle(event);
       return 1;
     case fltk3::LEAVE :
-      fl_cursor(fltk3::CURSOR_DEFAULT);
+      fltk3::cursor(fltk3::CURSOR_DEFAULT);
       break;
     case fltk3::MOVE:
-      if (find_link(xx, yy)) fl_cursor(fltk3::CURSOR_HAND);
-      else fl_cursor(fltk3::CURSOR_DEFAULT);
+      if (find_link(xx, yy)) fltk3::cursor(fltk3::CURSOR_HAND);
+      else fltk3::cursor(fltk3::CURSOR_DEFAULT);
       return 1;
     case fltk3::PUSH:
       if (fltk3::Group::handle(event)) return 1;
       linkp = find_link(xx, yy);
       if (linkp) {
-        fl_cursor(fltk3::CURSOR_HAND);
+        fltk3::cursor(fltk3::CURSOR_HAND);
         return 1;
       }
       if (begin_selection()) {
-        fl_cursor(fltk3::CURSOR_INSERT);
+        fltk3::cursor(fltk3::CURSOR_INSERT);
         return 1;
       }
-      fl_cursor(fltk3::CURSOR_DEFAULT);
+      fltk3::cursor(fltk3::CURSOR_DEFAULT);
       return 1;
     case fltk3::DRAG:
       if (linkp) {
         if (fltk3::event_is_click()) {
-          fl_cursor(fltk3::CURSOR_HAND);
+          fltk3::cursor(fltk3::CURSOR_HAND);
         } else {
-          fl_cursor(fltk3::CURSOR_DEFAULT); // should be "fltk3::CURSOR_CANCEL" if we had it
+          fltk3::cursor(fltk3::CURSOR_DEFAULT); // should be "fltk3::CURSOR_CANCEL" if we had it
         }
         return 1;
       }
       if (current_view==this && selection_push_last) {
         if (extend_selection()) redraw();
-        fl_cursor(fltk3::CURSOR_INSERT);
+        fltk3::cursor(fltk3::CURSOR_INSERT);
         return 1;
       }
-      fl_cursor(fltk3::CURSOR_DEFAULT);
+      fltk3::cursor(fltk3::CURSOR_DEFAULT);
       return 1;
     case fltk3::RELEASE:
       if (linkp) {
         if (fltk3::event_is_click()) {
           follow_link(linkp);
         }
-        fl_cursor(fltk3::CURSOR_DEFAULT);
+        fltk3::cursor(fltk3::CURSOR_DEFAULT);
         linkp = 0;
         return 1;
       }

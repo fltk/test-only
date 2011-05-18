@@ -45,7 +45,7 @@ extern XVisualInfo *fl_overlay_visual;
 extern Colormap fl_overlay_colormap;
 extern unsigned long fl_transparent_pixel;
 static GC gc;	// the GC used by all X windows
-extern uchar fl_overlay; // changes how fl_color(x) works
+extern uchar fl_overlay; // changes how fltk3::color(x) works
 #endif
 
 #include <stdio.h>
@@ -75,7 +75,7 @@ void Fl_Menu_Window::flush() {
   }
   fl_gc = gc;
   fl_overlay = 1;
-  fl_clip_region(myi->region); myi->region = 0; current_ = this;
+  fltk3::clip_region(myi->region); myi->region = 0; current_ = this;
   draw();
   fl_overlay = 0;
 #else

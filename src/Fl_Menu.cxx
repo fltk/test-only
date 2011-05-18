@@ -129,7 +129,7 @@ public:
 
 #define LEADING 4 // extra vertical leading
 
-extern char fl_draw_shortcut;
+extern char fltk3::draw_shortcut;
 
 /** 
   Measures width of label, including effect of & characters. 
@@ -144,10 +144,10 @@ int Fl_Menu_Item::measure(int* hp, const Fl_Menu_* m) const {
   l.font    = labelsize_ || labelfont_ ? labelfont_ : (m ? m->textfont() : fltk3::HELVETICA);
   l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : fltk3::NORMAL_SIZE;
   l.color   = fltk3::FOREGROUND_COLOR; // this makes no difference?
-  fl_draw_shortcut = 1;
+  fltk3::draw_shortcut = 1;
   int w = 0; int h = 0;
   l.measure(w, hp ? *hp : h);
-  fl_draw_shortcut = 0;
+  fltk3::draw_shortcut = 0;
   if (flags & (FL_MENU_TOGGLE|FL_MENU_RADIO)) w += 14;
   return w;
 }
@@ -180,11 +180,11 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
       l.color = fltk3::contrast((fltk3::Color)labelcolor_, r);
     }
     if (selected == 2) { // menu title
-      fl_draw_box(b, x, y, w, h, r);
+      fltk3::draw_box(b, x, y, w, h, r);
       x += 3;
       w -= 8;
     } else {
-      fl_draw_box(b, x+1, y-(LEADING-2)/2, w-2, h+(LEADING-2), r);
+      fltk3::draw_box(b, x+1, y-(LEADING-2)/2, w-2, h+(LEADING-2), r);
     }
   }
 
@@ -193,7 +193,7 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
     int W = h - 2 * d;
 
     if (flags & FL_MENU_RADIO) {
-      fl_draw_box(fltk3::ROUND_DOWN_BOX, x+2, y+d, W, W, fltk3::BACKGROUND2_COLOR);
+      fltk3::draw_box(fltk3::ROUND_DOWN_BOX, x+2, y+d, W, W, fltk3::BACKGROUND2_COLOR);
       if (value()) {
 	int tW = (W - fltk3::box_dw(fltk3::ROUND_DOWN_BOX)) / 2 + 1;
 	if ((W - tW) & 1) tW++;	// Make sure difference is even to center
@@ -203,52 +203,52 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
 	  td ++;
 
 	  if (!strcmp(fltk3::scheme(), "gtk+")) {
-	    fl_color(fltk3::SELECTION_COLOR);
+	    fltk3::color(fltk3::SELECTION_COLOR);
 	    tW --;
-	    fl_pie(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
-	    fl_arc(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
-	    fl_color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.2f));
-	  } else fl_color(labelcolor_);
-	} else fl_color(labelcolor_);
+	    fltk3::pie(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
+	    fltk3::arc(x + td + 1, y + d + td - 1, tW + 3, tW + 3, 0.0, 360.0);
+	    fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.2f));
+	  } else fltk3::color(labelcolor_);
+	} else fltk3::color(labelcolor_);
 
 	switch (tW) {
 	  // Larger circles draw fine...
 	  default :
-            fl_pie(x + td + 2, y + d + td, tW, tW, 0.0, 360.0);
+            fltk3::pie(x + td + 2, y + d + td, tW, tW, 0.0, 360.0);
 	    break;
 
           // Small circles don't draw well on many systems...
 	  case 6 :
-	    fl_rectf(x + td + 4, y + d + td, tW - 4, tW);
-	    fl_rectf(x + td + 3, y + d + td + 1, tW - 2, tW - 2);
-	    fl_rectf(x + td + 2, y + d + td + 2, tW, tW - 4);
+	    fltk3::rectf(x + td + 4, y + d + td, tW - 4, tW);
+	    fltk3::rectf(x + td + 3, y + d + td + 1, tW - 2, tW - 2);
+	    fltk3::rectf(x + td + 2, y + d + td + 2, tW, tW - 4);
 	    break;
 
 	  case 5 :
 	  case 4 :
 	  case 3 :
-	    fl_rectf(x + td + 3, y + d + td, tW - 2, tW);
-	    fl_rectf(x + td + 2, y + d + td + 1, tW, tW - 2);
+	    fltk3::rectf(x + td + 3, y + d + td, tW - 2, tW);
+	    fltk3::rectf(x + td + 2, y + d + td + 1, tW, tW - 2);
 	    break;
 
 	  case 2 :
 	  case 1 :
-	    fl_rectf(x + td + 2, y + d + td, tW, tW);
+	    fltk3::rectf(x + td + 2, y + d + td, tW, tW);
 	    break;
 	}
 
 	if (fltk3::scheme() && !strcmp(fltk3::scheme(), "gtk+")) {
-	  fl_color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
-	  fl_arc(x + td + 2, y + d + td, tW + 1, tW + 1, 60.0, 180.0);
+	  fltk3::color(fltk3::color_average(fltk3::WHITE, fltk3::SELECTION_COLOR, 0.5));
+	  fltk3::arc(x + td + 2, y + d + td, tW + 1, tW + 1, 60.0, 180.0);
 	}
       }
     } else {
-      fl_draw_box(fltk3::DOWN_BOX, x+2, y+d, W, W, fltk3::BACKGROUND2_COLOR);
+      fltk3::draw_box(fltk3::DOWN_BOX, x+2, y+d, W, W, fltk3::BACKGROUND2_COLOR);
       if (value()) {
 	if (fltk3::scheme() && !strcmp(fltk3::scheme(), "gtk+")) {
-	  fl_color(fltk3::SELECTION_COLOR);
+	  fltk3::color(fltk3::SELECTION_COLOR);
 	} else {
-	  fl_color(labelcolor_);
+	  fltk3::color(labelcolor_);
 	}
 	int tx = x + 5;
 	int tw = W - 6;
@@ -256,8 +256,8 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
 	int d2 = tw-d1;
 	int ty = y + d + (W+d2)/2-d1-2;
 	for (int n = 0; n < 3; n++, ty++) {
-	  fl_line(tx, ty, tx+d1, ty+d1);
-	  fl_line(tx+d1, ty+d1, tx+tw-1, ty+d1-d2+1);
+	  fltk3::line(tx, ty, tx+d1, ty+d1);
+	  fltk3::line(tx+d1, ty+d1, tx+tw-1, ty+d1-d2+1);
 	}
       }
     }
@@ -265,9 +265,9 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
     w -= W + 3;
   }
 
-  if (!fl_draw_shortcut) fl_draw_shortcut = 1;
+  if (!fltk3::draw_shortcut) fltk3::draw_shortcut = 1;
   l.draw(x+3, y, w>6 ? w-6 : 0, h, fltk3::ALIGN_LEFT);
-  fl_draw_shortcut = 0;
+  fltk3::draw_shortcut = 0;
 }
 
 menutitle::menutitle(int X, int Y, int W, int H, const Fl_Menu_Item* L) :
@@ -341,16 +341,16 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
     if (m->shortcut_) {
       // s is a pointerto the utf8 string for the entire shortcut
       // k points only to the key part (minus the modifier keys)
-      const char *k, *s = fl_shortcut_label(m->shortcut_, &k);
+      const char *k, *s = fltk3::shortcut_label(m->shortcut_, &k);
       if (fl_utf_nb_char((const unsigned char*)k, strlen(k))<=4) {
         // a regular shortcut has a right-justified modifier followed by a left-justified key
-        w1 = int(fl_width(s, k-s));
+        w1 = int(fltk3::width(s, k-s));
         if (w1 > hotModsw) hotModsw = w1;
-        w1 = int(fl_width(k))+4;
+        w1 = int(fltk3::width(k))+4;
         if (w1 > hotKeysw) hotKeysw = w1;
       } else {
         // a shortcut with a long modifier is right-justified to the menu
-        w1 = int(fl_width(s))+4;
+        w1 = int(fltk3::width(s))+4;
         if (w1 > (hotModsw+hotKeysw)) {
           hotModsw = w1-hotKeysw;
         }
@@ -453,34 +453,34 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int n, int eraseit) {
 
   m->draw(xx, yy, ww, hh, button, n==selected);
 
-  // the shortcuts and arrows assume fl_color() was left set by draw():
+  // the shortcuts and arrows assume fltk3::color() was left set by draw():
   if (m->submenu()) {
     int sz = (hh-7)&-2;
     int y1 = yy+(hh-sz)/2;
     int x1 = xx+ww-sz-3;
-    fl_polygon(x1+2, y1, x1+2, y1+sz, x1+sz/2+2, y1+sz/2);
+    fltk3::polygon(x1+2, y1, x1+2, y1+sz, x1+sz/2+2, y1+sz/2);
   } else if (m->shortcut_) {
     fltk3::Font f = m->labelsize_ || m->labelfont_ ? (fltk3::Font)m->labelfont_ :
                     button ? button->textfont() : fltk3::HELVETICA;
-    fl_font(f, m->labelsize_ ? m->labelsize_ :
+    fltk3::font(f, m->labelsize_ ? m->labelsize_ :
                    button ? button->textsize() : fltk3::NORMAL_SIZE);
-    const char *k, *s = fl_shortcut_label(m->shortcut_, &k);
+    const char *k, *s = fltk3::shortcut_label(m->shortcut_, &k);
     if (fl_utf_nb_char((const unsigned char*)k, strlen(k))<=4) {
       // righ-align the modifiers and left-align the key
       char buf[32]; strcpy(buf, s); buf[k-s] = 0;
-      fl_draw(buf, xx, yy, ww-shortcutWidth, hh, fltk3::ALIGN_RIGHT);
-      fl_draw(  k, xx+ww-shortcutWidth, yy, shortcutWidth, hh, fltk3::ALIGN_LEFT);
+      fltk3::draw(buf, xx, yy, ww-shortcutWidth, hh, fltk3::ALIGN_RIGHT);
+      fltk3::draw(  k, xx+ww-shortcutWidth, yy, shortcutWidth, hh, fltk3::ALIGN_LEFT);
     } else {
       // right-align to the menu
-      fl_draw(s, xx, yy, ww-4, hh, fltk3::ALIGN_RIGHT);
+      fltk3::draw(s, xx, yy, ww-4, hh, fltk3::ALIGN_RIGHT);
     }
   }
 
   if (m->flags & FL_MENU_DIVIDER) {
-    fl_color(fltk3::DARK3);
-    fl_xyline(BW-1, yy+hh+(LEADING-2)/2, W-2*BW+2);
-    fl_color(fltk3::LIGHT3);
-    fl_xyline(BW-1, yy+hh+((LEADING-2)/2+1), W-2*BW+2);
+    fltk3::color(fltk3::DARK3);
+    fltk3::xyline(BW-1, yy+hh+(LEADING-2)/2, W-2*BW+2);
+    fltk3::color(fltk3::LIGHT3);
+    fltk3::xyline(BW-1, yy+hh+((LEADING-2)/2+1), W-2*BW+2);
   }
 }
 
@@ -490,7 +490,7 @@ void menutitle::draw() {
 
 void menuwindow::draw() {
   if (damage() != fltk3::DAMAGE_CHILD) {	// complete redraw
-    fl_draw_box(box(), 0, 0, w(), h(), button ? button->color() : color());
+    fltk3::draw_box(box(), 0, 0, w(), h(), button ? button->color() : color());
     if (menu) {
       const Fl_Menu_Item* m; int j;
       for (m=menu->first(), j=0; m->text; j++, m = m->next()) drawentry(m, j, 0);

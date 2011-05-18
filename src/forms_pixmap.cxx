@@ -54,7 +54,7 @@ void Fl_FormsPixmap::set(char*const* bits) {
 
 void Fl_FormsPixmap::draw() {
   draw_box(box(), selection_color());
-  if (b) {fl_color(color()); b->draw(x(), y(), w(), h());}
+  if (b) {fltk3::color(color()); b->draw(x(), y(), w(), h());}
   draw_label();
 }
 

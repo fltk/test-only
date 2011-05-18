@@ -230,6 +230,11 @@ rename fl_lighter lighter
 rename fl_darker darker
 rename fl_rgb_color rgb_color
 rename fl_gray_ramp gray_ramp
+rename fl_push_clip push_clip
+rename fl_push_no_clip push_no_clip
+rename fl_pop_clip pop_clip
+rename fl_color color
+
 
 renameClass Fl_Widget Widget
 renameClass Fl_Group Group

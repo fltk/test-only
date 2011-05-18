@@ -175,16 +175,16 @@ void Fl_Slider::draw(int X, int Y, int W, int H) {
 	xx = xsl+(wsl-hsl-4)/2;
 	yy = ysl+3;
 
-	fl_color(fltk3::darker(selection_color()));
-	fl_line(xx, yy+hh, xx+hh, yy);
-	fl_line(xx+6, yy+hh, xx+hh+6, yy);
-	fl_line(xx+12, yy+hh, xx+hh+12, yy);
+	fltk3::color(fltk3::darker(selection_color()));
+	fltk3::line(xx, yy+hh, xx+hh, yy);
+	fltk3::line(xx+6, yy+hh, xx+hh+6, yy);
+	fltk3::line(xx+12, yy+hh, xx+hh+12, yy);
 
         xx++;
-	fl_color(fltk3::lighter(selection_color()));
-	fl_line(xx, yy+hh, xx+hh, yy);
-	fl_line(xx+6, yy+hh, xx+hh+6, yy);
-	fl_line(xx+12, yy+hh, xx+hh+12, yy);
+	fltk3::color(fltk3::lighter(selection_color()));
+	fltk3::line(xx, yy+hh, xx+hh, yy);
+	fltk3::line(xx+6, yy+hh, xx+hh+6, yy);
+	fltk3::line(xx+12, yy+hh, xx+hh+12, yy);
       } else if (H>W && hsl>(wsl+8)) {
         // Draw vertical grippers
 	int yy;
@@ -192,16 +192,16 @@ void Fl_Slider::draw(int X, int Y, int W, int H) {
 	ww = wsl-8;
 	yy = ysl+(hsl-wsl-4)/2;
 
-	fl_color(fltk3::darker(selection_color()));
-	fl_line(xx, yy+ww, xx+ww, yy);
-	fl_line(xx, yy+ww+6, xx+ww, yy+6);
-	fl_line(xx, yy+ww+12, xx+ww, yy+12);
+	fltk3::color(fltk3::darker(selection_color()));
+	fltk3::line(xx, yy+ww, xx+ww, yy);
+	fltk3::line(xx, yy+ww+6, xx+ww, yy+6);
+	fltk3::line(xx, yy+ww+12, xx+ww, yy+12);
 
         yy++;
-	fl_color(fltk3::lighter(selection_color()));
-	fl_line(xx, yy+ww, xx+ww, yy);
-	fl_line(xx, yy+ww+6, xx+ww, yy+6);
-	fl_line(xx, yy+ww+12, xx+ww, yy+12);
+	fltk3::color(fltk3::lighter(selection_color()));
+	fltk3::line(xx, yy+ww, xx+ww, yy);
+	fltk3::line(xx, yy+ww+6, xx+ww, yy+6);
+	fltk3::line(xx, yy+ww+12, xx+ww, yy+12);
       }
     }
   }

@@ -113,8 +113,8 @@ int Fl_Check_Browser::item_height(void *) const {
 #define CHECK_SIZE (textsize()-2)
 
 int Fl_Check_Browser::item_width(void *v) const {
-	fl_font(textfont(), textsize());
-	return int(fl_width(((cb_item *)v)->text)) + CHECK_SIZE + 8;
+	fltk3::font(textfont(), textsize());
+	return int(fltk3::width(((cb_item *)v)->text)) + CHECK_SIZE + 8;
 }
 
 void Fl_Check_Browser::item_draw(void *v, int X, int Y, int, int) const {
@@ -125,8 +125,8 @@ void Fl_Check_Browser::item_draw(void *v, int X, int Y, int, int) const {
 	int cy = Y + (tsize + 1 - CHECK_SIZE) / 2;
 	X += 2;
 
-	fl_color(active_r() ? fltk3::FOREGROUND_COLOR : fltk3::inactive(fltk3::FOREGROUND_COLOR));
-	fl_loop(X, cy, X, cy + CHECK_SIZE,
+	fltk3::color(active_r() ? fltk3::FOREGROUND_COLOR : fltk3::inactive(fltk3::FOREGROUND_COLOR));
+	fltk3::loop(X, cy, X, cy + CHECK_SIZE,
 	        X + CHECK_SIZE, cy + CHECK_SIZE, X + CHECK_SIZE, cy);
 	if (i->checked) {
 	  int tx = X + 3;
@@ -135,16 +135,16 @@ void Fl_Check_Browser::item_draw(void *v, int X, int Y, int, int) const {
 	  int d2 = tw-d1;
 	  int ty = cy + (CHECK_SIZE+d2)/2-d1-2;
 	  for (int n = 0; n < 3; n++, ty++) {
-	    fl_line(tx, ty, tx+d1, ty+d1);
-	    fl_line(tx+d1, ty+d1, tx+tw-1, ty+d1-d2+1);
+	    fltk3::line(tx, ty, tx+d1, ty+d1);
+	    fltk3::line(tx+d1, ty+d1, tx+tw-1, ty+d1-d2+1);
 	  }
 	}
-	fl_font(textfont(), tsize);
+	fltk3::font(textfont(), tsize);
 	if (i->selected) {
 		col = fltk3::contrast(col, selection_color());
 	}
-	fl_color(col);
-	fl_draw(s, X + CHECK_SIZE + 8, Y + tsize - 1);
+	fltk3::color(col);
+	fltk3::draw(s, X + CHECK_SIZE + 8, Y + tsize - 1);
 }
 
 void Fl_Check_Browser::item_select(void *v, int state) {

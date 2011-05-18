@@ -42,34 +42,34 @@ static void rbox(int fill, int x, int y, int w, int h) {
   if (rs > RS) rs = RS;
   rsx = rs; rsy = rs;
 
-  if (fill) fl_begin_polygon(); else fl_begin_loop();
+  if (fill) fltk3::begin_polygon(); else fltk3::begin_loop();
   for (i=0; i<RN; i++)
-    fl_vertex(x + offset[RN-i-1]*rsx, y + offset[i] * rsy);
+    fltk3::vertex(x + offset[RN-i-1]*rsx, y + offset[i] * rsy);
   for (i=0; i<RN; i++)
-    fl_vertex(x + offset[i]*rsx, y + h-1 - offset[RN-i-1] * rsy);
+    fltk3::vertex(x + offset[i]*rsx, y + h-1 - offset[RN-i-1] * rsy);
   for (i=0; i<RN; i++)
-    fl_vertex(x + w-1 - offset[RN-i-1]*rsx, y + h-1 - offset[i] * rsy);
+    fltk3::vertex(x + w-1 - offset[RN-i-1]*rsx, y + h-1 - offset[i] * rsy);
   for (i=0; i<RN; i++)
-    fl_vertex(x + w-1 - offset[i]*rsx, y + offset[RN-i-1] * rsy);
-  if (fill) fl_end_polygon(); else fl_end_loop();
+    fltk3::vertex(x + w-1 - offset[i]*rsx, y + offset[RN-i-1] * rsy);
+  if (fill) fltk3::end_polygon(); else fltk3::end_loop();
 }
 
 static void fl_rflat_box(int x, int y, int w, int h, fltk3::Color c) {
-  fl_color(c); rbox(1, x, y, w, h); rbox(0, x, y, w, h);
+  fltk3::color(c); rbox(1, x, y, w, h); rbox(0, x, y, w, h);
 }
 
 static void fl_rounded_frame(int x, int y, int w, int h, fltk3::Color c) {
-  fl_color(c); rbox(0, x, y, w, h);
+  fltk3::color(c); rbox(0, x, y, w, h);
 }
 
 static void fl_rounded_box(int x, int y, int w, int h, fltk3::Color c) {
-  fl_color(c); rbox(1, x, y, w, h);
-  fl_color(fltk3::BLACK); rbox(0, x, y, w, h);
+  fltk3::color(c); rbox(1, x, y, w, h);
+  fltk3::color(fltk3::BLACK); rbox(0, x, y, w, h);
 }
 
 static void fl_rshadow_box(int x, int y, int w, int h, fltk3::Color c) {
   // draw shadow:
-  fl_color(fltk3::DARK3);
+  fltk3::color(fltk3::DARK3);
   rbox(1, x+BW, y+BW, w, h);
   rbox(0, x+BW, y+BW, w, h);
   // draw the box:

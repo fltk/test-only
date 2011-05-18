@@ -398,16 +398,16 @@ protected:
        sprintf(s, "%d/%d", R, C);              // text for each cell
        switch ( context ) {
 	   case CONTEXT_STARTPAGE:             // Fl_Table telling us its starting to draw page
-	       fl_font(fltk3::HELVETICA, 16);
+	       fltk3::font(fltk3::HELVETICA, 16);
 	       return;
        
 	   case CONTEXT_ROW_HEADER:            // Fl_Table telling us it's draw row/col headers
 	   case CONTEXT_COL_HEADER:
 	       fltk3::push_clip(X, Y, W, H);
 	       {
-		   fl_draw_box(fltk3::THIN_UP_BOX, X, Y, W, H, color());
-		   fl_color(fltk3::BLACK);
-		   fl_draw(s, X, Y, W, H, fltk3::ALIGN_CENTER);
+		   fltk3::draw_box(fltk3::THIN_UP_BOX, X, Y, W, H, color());
+		   fltk3::color(fltk3::BLACK);
+		   fltk3::draw(s, X, Y, W, H, fltk3::ALIGN_CENTER);
 	       }
 	       fltk3::pop_clip();
 	       return;
@@ -416,16 +416,16 @@ protected:
 	       fltk3::push_clip(X, Y, W, H);
 	       {
 		   // BG COLOR
-		   fl_color( row_selected(R) ? selection_color() : fltk3::WHITE);
-		   fl_rectf(X, Y, W, H);
+		   fltk3::color( row_selected(R) ? selection_color() : fltk3::WHITE);
+		   fltk3::rectf(X, Y, W, H);
 		   
 		   // TEXT
-		   fl_color(fltk3::BLACK);
-		   fl_draw(s, X, Y, W, H, fltk3::ALIGN_CENTER);
+		   fltk3::color(fltk3::BLACK);
+		   fltk3::draw(s, X, Y, W, H, fltk3::ALIGN_CENTER);
 		   
 		   // BORDER
-		   fl_color(fltk3::LIGHT2);
-		   fl_rect(X, Y, W, H);
+		   fltk3::color(fltk3::LIGHT2);
+		   fltk3::rect(X, Y, W, H);
 	       }
 	       fltk3::pop_clip();
 	       return;

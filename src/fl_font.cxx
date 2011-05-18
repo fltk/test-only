@@ -58,36 +58,40 @@
 #  include "fl_font_x.cxx"
 #endif // WIN32
 
-
-double fl_width(const char* c) {
-  if (c) return fl_width(c, strlen(c));
-  else return 0.0f;
-}
-
-void fl_draw(const char* str, int x, int y) {
-  fl_draw(str, strlen(str), x, y);
-}
-
-void fl_draw(int angle, const char* str, int x, int y) {
-  fl_draw(angle, str, strlen(str), x, y);//must be fixed!
-}
-
-void fl_text_extents(const char *c, int &dx, int &dy, int &w, int &h) {
-  if (c)  fl_text_extents(c, strlen(c), dx, dy, w, h);
-  else {
-    w = 0; h = 0;
-    dx = 0; dy = 0;
+namespace fltk3 {
+  
+  double width(const char* c) {
+    if (c) return width(c, strlen(c));
+    else return 0.0f;
   }
-} // fl_text_extents
-
-
-void fl_draw(const char* str, int l, float x, float y) {
+  
+  void draw(const char* str, int x, int y) {
+    draw(str, strlen(str), x, y);
+  }
+  
+  void draw(int angle, const char* str, int x, int y) {
+    draw(angle, str, strlen(str), x, y);//must be fixed!
+  }
+  
+  void text_extents(const char *c, int &dx, int &dy, int &w, int &h) {
+    if (c)  fltk3::text_extents(c, strlen(c), dx, dy, w, h);
+    else {
+      w = 0; h = 0;
+      dx = 0; dy = 0;
+    }
+  } // fltk3::text_extents
+  
+  
+  void draw(const char* str, int l, float x, float y) {
 #ifdef __APPLE__
-  fl_graphics_driver->draw(str, l, x, y);
+    fl_graphics_driver->draw(str, l, x, y);
 #else
-  fl_draw(str, l, (int)x, (int)y);
+    fltk3::draw(str, l, (int)x, (int)y);
 #endif
+  }
+  
 }
+
 //
 // End of "$Id$".
 //

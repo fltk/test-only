@@ -351,7 +351,7 @@ mono32_converter(const uchar *from,uchar *to,int w, int delta) {
 
 static void figure_out_visual() {
 
-  fl_xpixel(fltk3::BLACK); // setup fl_redmask, etc, in fl_color.cxx
+  fl_xpixel(fltk3::BLACK); // setup fl_redmask, etc, in fltk3::color.cxx
   fl_xpixel(fltk3::WHITE); // also make sure white is allocated
 
   static XPixmapFormatValues *pfvlist;
@@ -463,7 +463,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   if (!linedelta) linedelta = W*delta;
 
   int dx, dy, w, h;
-  fl_clip_box(X,Y,W,H,dx,dy,w,h);
+  fltk3::clip_box(X,Y,W,H,dx,dy,w,h);
   if (w<=0 || h<=0) return;
   dx -= X;
   dy -= Y;
@@ -558,10 +558,10 @@ void Fl_Xlib_Graphics_Driver::draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
   innards(0,x,y,w,h,d,0,1,cb,data);
 }
 
-void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
+void fltk3::rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
   if (fl_visual->depth > 16) {
-    fl_color(r,g,b);
-    fl_rectf(x,y,w,h);
+    fltk3::color(r,g,b);
+    fltk3::rectf(x,y,w,h);
   } else {
     uchar c[3];
     c[0] = r; c[1] = g; c[2] = b;

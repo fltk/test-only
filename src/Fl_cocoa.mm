@@ -128,15 +128,15 @@ enum { FLTKTimerEvent = 1, FLTKDataReadyEvent };
 
 
 /* fltk-utf8 placekeepers */
-void fl_reset_spot()
+void fltk3::reset_spot()
 {
 }
 
-void fl_set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *win)
+void fltk3::set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *win)
 {
 }
 
-void fl_set_status(int x, int y, int w, int h)
+void fltk3::set_status(int x, int y, int w, int h)
 {
 }
 
@@ -2359,7 +2359,7 @@ void fltk3::Window::make_current()
 #if defined(FLTK_USE_CAIRO)
   if (fltk3::cairo_autolink_context()) fltk3::cairo_make_current(this); // capture gc changes automatically to update the cairo context adequately
 #endif
-  fl_clip_region( 0 );
+  fltk3::clip_region( 0 );
   
 #if defined(FLTK_USE_CAIRO)
   // update the cairo_t context
@@ -2379,7 +2379,7 @@ void Fl_X::q_fill_context() {
     CGContextTranslateCTM(fl_gc, 0.5, hgt-0.5f);
     CGContextScaleCTM(fl_gc, 1.0f, -1.0f); // now 0,0 is top-left point of the context
     }
-  fl_color(fl_graphics_driver->color());
+  fltk3::color(fl_graphics_driver->color());
   fl_quartz_restore_line_style_();
 }
 
@@ -3210,38 +3210,38 @@ static NSImage *imageFromText(const char *text, int *pwidth, int *pheight)
 {
   const char *p, *q;
   int width = 0, height, w2, ltext = strlen(text);
-  fl_font(fltk3::HELVETICA, 10);
+  fltk3::font(fltk3::HELVETICA, 10);
   p = text;
   int nl = 0;
   while((q=strchr(p, '\n')) != NULL) { 
     nl++; 
-    w2 = int(fl_width(p, q - p));
+    w2 = int(fltk3::width(p, q - p));
     if (w2 > width) width = w2;
     p = q + 1; 
   }
   if (text[ ltext - 1] != '\n') {
     nl++;
-    w2 = int(fl_width(p));
+    w2 = int(fltk3::width(p));
     if (w2 > width) width = w2;
   }
-  height = nl * fl_height() + 3;
+  height = nl * fltk3::height() + 3;
   width += 6;
   Fl_Offscreen off = fl_create_offscreen_with_alpha(width, height);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
-  fl_rectf(0,0,width,height);
-  fl_color(fltk3::BLACK);
+  fltk3::rectf(0,0,width,height);
+  fltk3::color(fltk3::BLACK);
   p = text;
-  int y = fl_height();
+  int y = fltk3::height();
   while(TRUE) {
     q = strchr(p, '\n');
     if (q) {
-      fl_draw(p, q - p, 3, y);
+      fltk3::draw(p, q - p, 3, y);
     } else {
-      fl_draw(p, 3, y);
+      fltk3::draw(p, 3, y);
       break;
     }
-    y += fl_height();
+    y += fltk3::height();
     p = q + 1;
   }
   fl_end_offscreen();
@@ -3258,10 +3258,10 @@ static NSImage *defaultDragImage(int *pwidth, int *pheight)
   Fl_Offscreen off = fl_create_offscreen_with_alpha(width, height);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
-  fl_rectf(0,0,width,height);
+  fltk3::rectf(0,0,width,height);
   CGContextSetRGBStrokeColor( (CGContextRef)off, 0,0,0,0.6);
-  fl_rect(0,0,width,height);
-  fl_rect(2,2,width-4,height-4);
+  fltk3::rect(0,0,width,height);
+  fltk3::rect(2,2,width-4,height-4);
   fl_end_offscreen();
   NSImage* image = CGBitmapContextToNSImage( (CGContextRef)off );
   fl_delete_offscreen( off );

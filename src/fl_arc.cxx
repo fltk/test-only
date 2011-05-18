@@ -26,12 +26,12 @@
 //
 
 /**
-  \file fl_arc.cxx
+  \file fltk3::arc.cxx
   \brief Utility functions for drawing arcs and circles.
 */
 
 // Utility for drawing arcs and circles.  They are added to
-// the current fl_begin/fl_vertex/fl_end path.
+// the current fl_begin/fltk3::vertex/fl_end path.
 // Incremental math implementation:
 
 #include <fltk3/draw.h>
@@ -50,15 +50,15 @@ void Fl_Graphics_Driver::arc(double x, double y, double r, double start, double 
   double A = start*(M_PI/180);		// Initial angle (radians)
   double X =  r*cos(A);			// Initial displacement, (X,Y)
   double Y = -r*sin(A);			//   from center to initial point
-  fl_vertex(x+X,y+Y);			// Insert initial point
+  fltk3::vertex(x+X,y+Y);			// Insert initial point
 
   // Maximum arc length to approximate with chord with error <= 0.125
   
   double epsilon; {
-    double r1 = _fl_hypot(fl_transform_dx(r,0), // Horizontal "radius"
-		          fl_transform_dy(r,0));
-    double r2 = _fl_hypot(fl_transform_dx(0,r), // Vertical "radius"
-		          fl_transform_dy(0,r));
+    double r1 = _fl_hypot(fltk3::transform_dx(r,0), // Horizontal "radius"
+		          fltk3::transform_dy(r,0));
+    double r2 = _fl_hypot(fltk3::transform_dx(0,r), // Vertical "radius"
+		          fltk3::transform_dy(0,r));
 		      
     if (r1 > r2) r1 = r2;		// r1 = minimum "radius"
     if (r1 < 2.) r1 = 2.;		// radius for circa 9 chords/circle
@@ -75,13 +75,13 @@ void Fl_Graphics_Driver::arc(double x, double y, double r, double start, double 
     do {
       double Xnew =  cos_e*X + sin_e*Y;
 		Y = -sin_e*X + cos_e*Y;
-      fl_vertex(x + (X=Xnew), y + Y);
+      fltk3::vertex(x + (X=Xnew), y + Y);
     } while (--i);
   }
 }
 
-#if 0 // portable version.  X-specific one in fl_vertex.cxx
-void fl_circle(double x,double y,double r) {
+#if 0 // portable version.  X-specific one in fltk3::vertex.cxx
+void fltk3::circle(double x,double y,double r) {
   _fl_arc(x, y, r, r, 0, 360);
 }
 #endif

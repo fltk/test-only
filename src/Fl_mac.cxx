@@ -125,15 +125,15 @@ enum { kEventClassFLTK = 'fltk' };
 enum { kEventFLTKBreakLoop = 1, kEventFLTKDataReady };
 
 /* fltk-utf8 placekeepers */
-void fl_reset_spot()
+void fltk3::reset_spot()
 {
 }
 
-void fl_set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *win)
+void fltk3::set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *win)
 {
 }
 
-void fl_set_status(int x, int y, int w, int h)
+void fltk3::set_status(int x, int y, int w, int h)
 {
 }
 
@@ -1999,9 +1999,9 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     fltk3::e_y = py - target->y();
     fl_dnd_target_window = target;
     if ( fltk3::handle( fltk3::DND_ENTER, target ) )
-      fl_cursor( fltk3::CURSOR_HAND ); //ShowDragHilite( ); // modify the mouse cursor?!
+      fltk3::cursor( fltk3::CURSOR_HAND ); //ShowDragHilite( ); // modify the mouse cursor?!
     else
-      fl_cursor( fltk3::CURSOR_DEFAULT ); //HideDragHilite( dragRef );
+      fltk3::cursor( fltk3::CURSOR_DEFAULT ); //HideDragHilite( dragRef );
     breakMacEventLoop();
     return noErr;
   case kDragTrackingInWindow:
@@ -2014,15 +2014,15 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     fltk3::e_y = py - target->y();
     fl_dnd_target_window = target;
     if ( fltk3::handle( fltk3::DND_DRAG, target ) )
-      fl_cursor( fltk3::CURSOR_HAND ); //ShowDragHilite( ); // modify the mouse cursor?!
+      fltk3::cursor( fltk3::CURSOR_HAND ); //ShowDragHilite( ); // modify the mouse cursor?!
     else
-      fl_cursor( fltk3::CURSOR_DEFAULT ); //HideDragHilite( dragRef );
+      fltk3::cursor( fltk3::CURSOR_DEFAULT ); //HideDragHilite( dragRef );
     breakMacEventLoop();
     return noErr;
     break;
   case kDragTrackingLeaveWindow:
     // HideDragHilite()
-    fl_cursor( fltk3::CURSOR_DEFAULT ); //HideDragHilite( dragRef );
+    fltk3::cursor( fltk3::CURSOR_DEFAULT ); //HideDragHilite( dragRef );
     if ( fl_dnd_target_window )
     {
       fltk3::handle( fltk3::DND_LEAVE, fl_dnd_target_window );
@@ -2487,7 +2487,7 @@ void fltk3::Window::make_current()
    if (fltk3::cairo_autolink_context()) fltk3::cairo_make_current(this); // capture gc changes automatically to update the cairo context adequately
 #endif
 
-  fl_clip_region( 0 );
+  fltk3::clip_region( 0 );
   SetPortClipRegion( GetWindowPort(i->xid), fl_window_region );
 
 #if defined(USE_CAIRO)
@@ -2498,8 +2498,8 @@ void fltk3::Window::make_current()
 
 // helper function to manage the current CGContext fl_gc
 extern fltk3::Color fl_color_;
-extern class Fl_Font_Descriptor *fl_fontsize;
-extern void fl_font(class Fl_Font_Descriptor*);
+extern class Fl_Font_Descriptor *fltk3::fontsize;
+extern void fltk3::font(class Fl_Font_Descriptor*);
 extern void fl_quartz_restore_line_style_();
 
 // FLTK has only one global graphics state. This function copies the FLTK state into the
@@ -2516,8 +2516,8 @@ void Fl_X::q_fill_context() {
   }
   CGContextTranslateCTM(fl_gc, 0.5, hgt-0.5f);
   CGContextScaleCTM(fl_gc, 1.0f, -1.0f);
-  fl_font(fl_fontsize);
-  fl_color(fl_color_);
+  fltk3::font(fltk3::fontsize);
+  fltk3::color(fl_color_);
   fl_quartz_restore_line_style_();
 }
 

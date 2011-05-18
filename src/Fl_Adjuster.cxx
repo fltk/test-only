@@ -53,9 +53,9 @@ void fltk3::Adjuster::draw() {
   draw_box(drag==2?fltk3::DOWN_BOX:box(), x()+dx, y()+dy, W, H, color());
   draw_box(drag==3?fltk3::DOWN_BOX:box(), x()+2*dx,  y(), W, H, color());
   if (active_r())
-    fl_color(selection_color());
+    fltk3::color(selection_color());
   else
-    fl_color(fltk3::inactive(selection_color()));
+    fltk3::color(fltk3::inactive(selection_color()));
   fastarrow.draw(x()+(W-fastarrow_width)/2,
 		 y()+2*dy+(H-fastarrow_height)/2, W, H);
   mediumarrow.draw(x()+dx+(W-mediumarrow_width)/2,

@@ -305,9 +305,9 @@ void Overlay_Window::draw() {
     // if so, draw checkerboard so user can see what areas are clear:
     for (int Y = 0; Y < h(); Y += CHECKSIZE) 
       for (int X = 0; X < w(); X += CHECKSIZE) {
-	fl_color(((Y/(2*CHECKSIZE))&1) != ((X/(2*CHECKSIZE))&1) ?
+	fltk3::color(((Y/(2*CHECKSIZE))&1) != ((X/(2*CHECKSIZE))&1) ?
 		 fltk3::WHITE : fltk3::BLACK);
-	fl_rectf(X,Y,CHECKSIZE,CHECKSIZE);
+	fltk3::rectf(X,Y,CHECKSIZE,CHECKSIZE);
       }
   }
   Fl_Overlay_Window::draw();
@@ -336,7 +336,7 @@ uchar *Overlay_Window::read_image(int &ww, int &hh) {
   draw();
 
   // Read the screen image...
-  pixels = fl_read_image(0, 0, 0, ww, hh);
+  pixels = fltk3::read_image(0, 0, 0, ww, hh);
 
   fl_end_offscreen();
 
@@ -621,52 +621,52 @@ void Fl_Window_Type::newposition(Fl_Widget_Type *myo,int &X,int &Y,int &R,int &T
 // draw a vertical arrow pointing toward y2
 static void draw_v_arrow(int x, int y1, int y2) {
   int dy = (y1>y2) ? -1 : 1 ;
-  fl_yxline(x, y1, y2);
-  fl_xyline(x-4, y2, x+4);
-  fl_line(x-2, y2-dy*5, x, y2-dy);
-  fl_line(x+2, y2-dy*5, x, y2-dy);
+  fltk3::yxline(x, y1, y2);
+  fltk3::xyline(x-4, y2, x+4);
+  fltk3::line(x-2, y2-dy*5, x, y2-dy);
+  fltk3::line(x+2, y2-dy*5, x, y2-dy);
 }
 
 static void draw_h_arrow(int x1, int y, int x2) {
   int dx = (x1>x2) ? -1 : 1 ;
-  fl_xyline(x1, y, x2);
-  fl_yxline(x2, y-4, y+4);
-  fl_line(x2-dx*5, y-2, x2-dx, y);
-  fl_line(x2-dx*5, y+2, x2-dx, y);
+  fltk3::xyline(x1, y, x2);
+  fltk3::yxline(x2, y-4, y+4);
+  fltk3::line(x2-dx*5, y-2, x2-dx, y);
+  fltk3::line(x2-dx*5, y+2, x2-dx, y);
 }
 
 static void draw_top_brace(const fltk3::Widget *w) {
-  fl_yxline(w->x(), w->y()-2, w->y()+6);
-  fl_yxline(w->x()+w->w()-1, w->y()-2, w->y()+6);
-  fl_xyline(w->x()-2, w->y(), w->x()+w->w()+1);
+  fltk3::yxline(w->x(), w->y()-2, w->y()+6);
+  fltk3::yxline(w->x()+w->w()-1, w->y()-2, w->y()+6);
+  fltk3::xyline(w->x()-2, w->y(), w->x()+w->w()+1);
 }
 
 static void draw_left_brace(const fltk3::Widget *w) {
-  fl_xyline(w->x()-2, w->y(), w->x()+6);
-  fl_xyline(w->x()-2, w->y()+w->h()-1, w->x()+6);
-  fl_yxline(w->x(), w->y()-2, w->y()+w->h()+1);
+  fltk3::xyline(w->x()-2, w->y(), w->x()+6);
+  fltk3::xyline(w->x()-2, w->y()+w->h()-1, w->x()+6);
+  fltk3::yxline(w->x(), w->y()-2, w->y()+w->h()+1);
 }
 
 static void draw_right_brace(const fltk3::Widget *w) {
   int xx = w->x() + w->w() - 1;
-  fl_xyline(xx-6, w->y(), xx+2);
-  fl_xyline(xx-6, w->y()+w->h()-1, xx+2);
-  fl_yxline(xx, w->y()-2, w->y()+w->h()+1);
+  fltk3::xyline(xx-6, w->y(), xx+2);
+  fltk3::xyline(xx-6, w->y()+w->h()-1, xx+2);
+  fltk3::yxline(xx, w->y()-2, w->y()+w->h()+1);
 }
 
 static void draw_bottom_brace(const fltk3::Widget *w) {
   int yy = w->y() + w->h() - 1;
-  fl_yxline(w->x(), yy-6, yy+2);
-  fl_yxline(w->x()+w->w()-1, yy-6, yy+2);
-  fl_xyline(w->x()-2, yy, w->x()+w->w()+1);
+  fltk3::yxline(w->x(), yy-6, yy+2);
+  fltk3::yxline(w->x()+w->w()-1, yy-6, yy+2);
+  fltk3::xyline(w->x()-2, yy, w->x()+w->w()+1);
 }
 
 static void draw_height(int x, int y, int b, fltk3::Align a) {
   char buf[16];
   int h = b - y;
   sprintf(buf, "%d", h);
-  fl_font(fltk3::HELVETICA, 9);
-  int lw = (int)fl_width(buf);
+  fltk3::font(fltk3::HELVETICA, 9);
+  int lw = (int)fltk3::width(buf);
   int lx;
 
   b --;
@@ -675,33 +675,33 @@ static void draw_height(int x, int y, int b, fltk3::Align a) {
     if (a == fltk3::ALIGN_LEFT) lx = x - lw - 2;
     else lx = x + 2;
 
-    fl_yxline(x, y, b);
+    fltk3::yxline(x, y, b);
   } else {
     // Put height inside the arrows...
     lx = x - lw / 2;
 
-    fl_yxline(x, y, y + (h - 11) / 2);
-    fl_yxline(x, y + (h + 11) / 2, b);
+    fltk3::yxline(x, y, y + (h - 11) / 2);
+    fltk3::yxline(x, y + (h + 11) / 2, b);
   }
 
   // Draw the height...
-  fl_draw(buf, lx, y + (h + 9) / 2);
+  fltk3::draw(buf, lx, y + (h + 9) / 2);
 
   // Draw the arrowheads...
-  fl_line(x-2, y+5, x, y+1, x+2, y+5);
-  fl_line(x-2, b-5, x, b-1, x+2, b-5);
+  fltk3::line(x-2, y+5, x, y+1, x+2, y+5);
+  fltk3::line(x-2, b-5, x, b-1, x+2, b-5);
 
   // Draw the end lines...
-  fl_xyline(x - 4, y, x + 4);
-  fl_xyline(x - 4, b, x + 4);
+  fltk3::xyline(x - 4, y, x + 4);
+  fltk3::xyline(x - 4, b, x + 4);
 }
 
 static void draw_width(int x, int y, int r, fltk3::Align a) {
   char buf[16];
   int w = r-x;
   sprintf(buf, "%d", w);
-  fl_font(fltk3::HELVETICA, 9);
-  int lw = (int)fl_width(buf);
+  fltk3::font(fltk3::HELVETICA, 9);
+  int lw = (int)fltk3::width(buf);
   int ly = y + 4;
 
   r --;
@@ -711,23 +711,23 @@ static void draw_width(int x, int y, int r, fltk3::Align a) {
     if (a == fltk3::ALIGN_TOP) ly -= 10;
     else ly += 10;
 
-    fl_xyline(x, y, r);
+    fltk3::xyline(x, y, r);
   } else {
     // Put width inside the arrows...
-    fl_xyline(x, y, x + (w - lw - 2) / 2);
-    fl_xyline(x + (w + lw + 2) / 2, y, r);
+    fltk3::xyline(x, y, x + (w - lw - 2) / 2);
+    fltk3::xyline(x + (w + lw + 2) / 2, y, r);
   }
 
   // Draw the width...
-  fl_draw(buf, x + (w - lw) / 2, ly);
+  fltk3::draw(buf, x + (w - lw) / 2, ly);
 
   // Draw the arrowheads...
-  fl_line(x+5, y-2, x+1, y, x+5, y+2);
-  fl_line(r-5, y-2, r-1, y, r-5, y+2);
+  fltk3::line(x+5, y-2, x+1, y, x+5, y+2);
+  fltk3::line(r-5, y-2, r-1, y, r-5, y+2);
 
   // Draw the end lines...
-  fl_yxline(x, y - 4, y + 4);
-  fl_yxline(r, y - 4, y + 4);
+  fltk3::yxline(x, y - 4, y + 4);
+  fltk3::yxline(r, y - 4, y + 4);
 }
 
 void Fl_Window_Type::draw_overlay() {
@@ -746,14 +746,14 @@ void Fl_Window_Type::draw_overlay() {
     recalc = 0;
     sx = bx; sy = by; sr = br; st = bt;
   }
-  fl_color(fltk3::RED);
+  fltk3::color(fltk3::RED);
   if (drag==BOX && (x1 != mx || y1 != my)) {
     int x = x1; int r = mx; if (x > r) {x = mx; r = x1;}
     int y = y1; int b = my; if (y > b) {y = my; b = y1;}
-    fl_rect(x,y,r-x,b-y);
+    fltk3::rect(x,y,r-x,b-y);
   }
   if (overlays_invisible && !drag) return;
-  if (selected) fl_rect(0,0,o->w(),o->h());
+  if (selected) fltk3::rect(0,0,o->w(),o->h());
   if (!numselected) return;
   int mybx,myby,mybr,mybt;
   int mysx,mysy,mysr,myst;
@@ -765,7 +765,7 @@ void Fl_Window_Type::draw_overlay() {
       Fl_Widget_Type* myo = (Fl_Widget_Type*)q;
       int x,y,r,t;
       newposition(myo,x,y,r,t);
-      if (!show_guides || !drag || numselected != 1) fl_rect(x,y,r-x,t-y);
+      if (!show_guides || !drag || numselected != 1) fltk3::rect(x,y,r-x,t-y);
       if (x < mysx) mysx = x;
       if (y < mysy) mysy = y;
       if (r > mysr) mysr = r;
@@ -1080,15 +1080,15 @@ void Fl_Window_Type::draw_overlay() {
 
   // Draw selection box + resize handles...
   // draw box including all labels
-  fl_line_style(FL_DOT);
-  fl_rect(mybx,myby,mybr-mybx,mybt-myby);
-  fl_line_style(FL_SOLID);
+  fltk3::line_style(fltk3::DOT);
+  fltk3::rect(mybx,myby,mybr-mybx,mybt-myby);
+  fltk3::line_style(fltk3::SOLID);
   // draw box excluding labels
-  fl_rect(mysx,mysy,mysr-mysx,myst-mysy);
-  fl_rectf(mysx,mysy,5,5);
-  fl_rectf(mysr-5,mysy,5,5);
-  fl_rectf(mysr-5,myst-5,5,5);
-  fl_rectf(mysx,myst-5,5,5);
+  fltk3::rect(mysx,mysy,mysr-mysx,myst-mysy);
+  fltk3::rectf(mysx,mysy,5,5);
+  fltk3::rectf(mysr-5,mysy,5,5);
+  fltk3::rectf(mysr-5,myst-5,5,5);
+  fltk3::rectf(mysx,myst-5,5,5);
 }
 
 extern Fl_Menu_Item Main_Menu[];

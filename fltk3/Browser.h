@@ -221,9 +221,9 @@ public:
     \li <tt>'\@c'</tt> Center the line horizontally
     \li <tt>'\@r'</tt> Right-justify the text
     \li <tt>'\@B0', '\@B1', ... '\@B255'</tt> Fill the backgound with
-    fl_color(n)
-    \li <tt>'\@C0', '\@C1', ... '\@C255'</tt> Use fl_color(n) to draw the text
-    \li <tt>'\@F0', '\@F1', ...</tt> Use fl_font(n) to draw the text
+    fltk3::color(n)
+    \li <tt>'\@C0', '\@C1', ... '\@C255'</tt> Use fltk3::color(n) to draw the text
+    \li <tt>'\@F0', '\@F1', ...</tt> Use fltk3::font(n) to draw the text
     \li <tt>'\@S1', '\@S2', ...</tt> Use point size n to draw the text
     \li <tt>'\@u' or '\@_'</tt> Underline the text.
     \li <tt>'\@-'</tt> draw an engraved line through the middle.

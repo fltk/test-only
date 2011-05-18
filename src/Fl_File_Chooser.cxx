@@ -404,9 +404,9 @@ void Fl_File_Chooser::show() {
   window->hotspot(fileList);
 window->show();
 fltk3::flush();
-fl_cursor(fltk3::CURSOR_WAIT);
+fltk3::cursor(fltk3::CURSOR_WAIT);
 rescan_keep_filename();
-fl_cursor(fltk3::CURSOR_DEFAULT);
+fltk3::cursor(fltk3::CURSOR_DEFAULT);
 fileName->take_focus();
 }
 

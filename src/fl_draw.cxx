@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-// Implementation of fl_draw(const char*,int,int,int,int,fltk3::Align)
+// Implementation of fltk3::draw(const char*,int,int,int,int,fltk3::Align)
 // Used to draw all the labels and text, this routine:
 // Word wraps the labels to fit into their bounding box.
 // Breaks them into lines at the newlines.
@@ -43,7 +43,7 @@
 
 #define MAXBUF 1024
 
-char fl_draw_shortcut;	// set by fl_labeltypes.cxx
+char fltk3::draw_shortcut;	// set by fl_labeltypes.cxx
 
 static char* underline_at;
 
@@ -110,7 +110,7 @@ static bool handle_utf8_seq(const char * &s,char * &d) {
  Sets width to the width of the string in the current font.
 */
 const char*
-fl_expand_text(const char* from, char* buf, int maxbuf, double maxw, int& n, 
+fltk3::expand_text(const char* from, char* buf, int maxbuf, double maxw, int& n, 
 	double &width, int wrap, int draw_symbols) {
   char* o = buf;
   char* e = buf+(maxbuf-4);
@@ -127,7 +127,7 @@ fl_expand_text(const char* from, char* buf, int maxbuf, double maxw, int& n,
     if (!c || c == ' ' || c == '\n') {
       // test for word-wrap:
       if (word_start < p && wrap) {
-	double newwidth = w + fl_width(word_end, o-word_end);
+	double newwidth = w + fltk3::width(word_end, o-word_end);
 	if (word_end > buf && newwidth > maxw) { // break before this word
 	  o = word_end;
 	  p = word_start;
@@ -146,9 +146,9 @@ fl_expand_text(const char* from, char* buf, int maxbuf, double maxw, int& n,
     if (c == '\t') {
       for (c = fl_utf_nb_char((uchar*)buf, o-buf)%8; c<8 && o<e; c++) 
            *o++ = ' ';
-    } else if (c == '&' && fl_draw_shortcut && *(p+1)) {
+    } else if (c == '&' && fltk3::draw_shortcut && *(p+1)) {
       if (*(p+1) == '&') {p++; *o++ = '&';}
-      else if (fl_draw_shortcut != 2) underline_at = o;
+      else if (fltk3::draw_shortcut != 2) underline_at = o;
     } else if (c < ' ' || c == 127) { // ^X
       *o++ = '^';
       *o++ = c ^ 0x40;
@@ -169,18 +169,18 @@ fl_expand_text(const char* from, char* buf, int maxbuf, double maxw, int& n,
     }
   }
 
-  width = w + fl_width(word_end, o-word_end);
+  width = w + fltk3::width(word_end, o-word_end);
   *o = 0;
   n = o-buf;
   return p;
 }
 
 /**
-  The same as fl_draw(const char*,int,int,int,int,fltk3::Align,Fl_Image*,int) with
+  The same as fltk3::draw(const char*,int,int,int,int,fltk3::Align,Fl_Image*,int) with
   the addition of the \p callthis parameter, which is a pointer to a text drawing
-  function such as fl_draw(const char*, int, int, int) to do the real work
+  function such as fltk3::draw(const char*, int, int, int) to do the real work
 */
-void fl_draw(
+void fltk3::draw(
     const char* str,	// the (multi-line) string
     int x, int y, int w, int h,	// bounding box
     fltk3::Align align,
@@ -232,7 +232,7 @@ void fl_draw(
 
   if (str) {
     for (p = str, lines=0; p;) {
-      e = fl_expand_text(p, buf, MAXBUF, w - symtotal - imgtotal, buflen, width, 
+      e = fltk3::expand_text(p, buf, MAXBUF, w - symtotal - imgtotal, buflen, width, 
                          align&fltk3::ALIGN_WRAP, draw_symbols);
       if (strw<width) strw = (int)width;
       lines++;
@@ -242,17 +242,17 @@ void fl_draw(
   } else lines = 0;
   
   if ((symwidth[0] || symwidth[1]) && lines) {
-    if (symwidth[0]) symwidth[0] = lines * fl_height();
-    if (symwidth[1]) symwidth[1] = lines * fl_height();
+    if (symwidth[0]) symwidth[0] = lines * fltk3::height();
+    if (symwidth[1]) symwidth[1] = lines * fltk3::height();
   }
 
   symtotal = symwidth[0] + symwidth[1];
-  strh = lines * fl_height();
+  strh = lines * fltk3::height();
   
   // figure out vertical position of the first line:
   int xpos;
   int ypos;
-  int height = fl_height();
+  int height = fltk3::height();
   int imgvert = ((align&fltk3::ALIGN_IMAGE_NEXT_TO_TEXT)==0);
   int imgh = img && imgvert ? img->h() : 0;
   int imgw[2] = {0, 0};
@@ -297,9 +297,9 @@ void fl_draw(
   
   // now draw all the lines:
   if (str) {
-    int desc = fl_descent();
+    int desc = fltk3::descent();
     for (p=str; ; ypos += height) {
-      if (lines>1) e = fl_expand_text(p, buf, MAXBUF, w - symtotal - imgtotal, buflen, 
+      if (lines>1) e = fltk3::expand_text(p, buf, MAXBUF, w - symtotal - imgtotal, buflen, 
 				width, align&fltk3::ALIGN_WRAP, draw_symbols);
       else e = "";
 
@@ -312,7 +312,7 @@ void fl_draw(
       callthis(buf,buflen,xpos,ypos-desc);
 
       if (underline_at && underline_at >= buf && underline_at < (buf + buflen))
-	callthis("_",1,xpos+int(fl_width(buf,underline_at-buf)),ypos-desc);
+	callthis("_",1,xpos+int(fltk3::width(buf,underline_at-buf)),ypos-desc);
 
       if (!*e || (*e == '@' && e[1] != '@')) break;
       p = e;
@@ -341,7 +341,7 @@ void fl_draw(
     else if (align & fltk3::ALIGN_TOP) ypos = y;
     else ypos = y + (h - symwidth[0]) / 2;
 
-    fl_draw_symbol(symbol[0], xpos, ypos, symwidth[0], symwidth[0], fl_color());
+    fltk3::draw_symbol(symbol[0], xpos, ypos, symwidth[0], symwidth[0], fltk3::color());
   }
 
   if (symwidth[1]) {
@@ -354,7 +354,7 @@ void fl_draw(
     else if (align & fltk3::ALIGN_TOP) ypos = y;
     else ypos = y + (h - symwidth[1]) / 2;
 
-    fl_draw_symbol(symbol[1], xpos, ypos, symwidth[1], symwidth[1], fl_color());
+    fltk3::draw_symbol(symbol[1], xpos, ypos, symwidth[1], symwidth[1], fltk3::color());
   }
 }
 
@@ -372,7 +372,7 @@ void fl_draw(
   names starting with the '\@' character'
   The text length is limited to 1024 characters per line.
 */
-void fl_draw(
+void fltk3::draw(
   const char* str,
   int x, int y, int w, int h,
   fltk3::Align align,
@@ -380,25 +380,25 @@ void fl_draw(
   int draw_symbols)
 {
   if ((!str || !*str) && !img) return;
-  if (w && h && !fl_not_clipped(x, y, w, h) && (align & fltk3::ALIGN_INSIDE)) return;
+  if (w && h && !fltk3::not_clipped(x, y, w, h) && (align & fltk3::ALIGN_INSIDE)) return;
   if (align & fltk3::ALIGN_CLIP) 
     fltk3::push_clip(x, y, w, h);
-  fl_draw(str, x, y, w, h, align, fl_draw, img, draw_symbols);
+  fltk3::draw(str, x, y, w, h, align, fltk3::draw, img, draw_symbols);
   if (align & fltk3::ALIGN_CLIP) 
     fltk3::pop_clip();
 }
 
 /**
   Measure how wide and tall the string will be when printed by the
-  fl_draw() function with \p align parameter. If the incoming \p w
+  fltk3::draw() function with \p align parameter. If the incoming \p w
   is non-zero it will wrap to that width.
   \param[in] str nul-terminated string
   \param[out] w,h width and height of string in current font
   \param[in] draw_symbols non-zero to enable @@symbol handling [default=1]
 */
-void fl_measure(const char* str, int& w, int& h, int draw_symbols) {
+void fltk3::measure(const char* str, int& w, int& h, int draw_symbols) {
   if (!str || !*str) {w = 0; h = 0; return;}
-  h = fl_height();
+  h = fltk3::height();
   const char* p;
   const char* e;
   char buf[MAXBUF];
@@ -437,7 +437,7 @@ void fl_measure(const char* str, int& w, int& h, int draw_symbols) {
   
   for (p = str, lines=0; p;) {
 //    e = expand(p, buf, w - symtotal, buflen, width, w != 0, draw_symbols);
-    e = fl_expand_text(p, buf, MAXBUF, w - symtotal, buflen, width, 
+    e = fltk3::expand_text(p, buf, MAXBUF, w - symtotal, buflen, width, 
 			w != 0, draw_symbols);
     if ((int)ceil(width) > W) W = (int)ceil(width);
     lines++;
@@ -446,8 +446,8 @@ void fl_measure(const char* str, int& w, int& h, int draw_symbols) {
   }
 
   if ((symwidth[0] || symwidth[1]) && lines) {
-    if (symwidth[0]) symwidth[0] = lines * fl_height();
-    if (symwidth[1]) symwidth[1] = lines * fl_height();
+    if (symwidth[0]) symwidth[0] = lines * fltk3::height();
+    if (symwidth[1]) symwidth[1] = lines * fltk3::height();
   }
 
   symtotal = symwidth[0] + symwidth[1];
@@ -472,12 +472,12 @@ void fl_measure(const char* str, int& w, int& h, int draw_symbols) {
   \todo  In the future, when the XFT issues are resolved, this function
          should simply return the 'size' value.
 */
-int fl_height(int font, int size) {
-    if ( font == fl_font() && size == fl_size() ) return(fl_height());
-    int tf = fl_font(), ts = fl_size();   // save
-    fl_font(font,size);
-    int height = fl_height();
-    fl_font(tf,ts);                       // restore
+int fltk3::height(int font, int size) {
+    if ( font == fltk3::font() && size == fltk3::size() ) return(fltk3::height());
+    int tf = fltk3::font(), ts = fltk3::size();   // save
+    fltk3::font(font,size);
+    int height = fltk3::height();
+    fltk3::font(tf,ts);                       // restore
     return(height);
 }
 

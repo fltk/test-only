@@ -464,13 +464,13 @@ void Fl_PostScript_Graphics_Driver::draw_image_mono(Fl_Draw_Image_Cb call, void 
 void Fl_PostScript_Graphics_Driver::draw(Fl_Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy){
   const char * const * di =pxm->data();
   int w,h;
-  if (!fl_measure_pixmap(di, w, h)) return;
+  if (!fltk3::measure_pixmap(di, w, h)) return;
   mask=0;
   fl_mask_bitmap=&mask;
   mx = WP;
   my = HP;
   push_clip(XP, YP, WP, HP);
-  fl_draw_pixmap(di,XP -cx, YP -cy, fltk3::BLACK );
+  fltk3::draw_pixmap(di,XP -cx, YP -cy, fltk3::BLACK );
   pop_clip();
   delete[] mask;
   mask=0;

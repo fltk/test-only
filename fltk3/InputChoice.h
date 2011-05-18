@@ -61,9 +61,9 @@ class FLTK3_EXPORT Fl_Input_Choice : public fltk3::Group {
   class InputMenuButton : public Fl_Menu_Button {
     void draw() {
       draw_box(fltk3::UP_BOX, color());
-      fl_color(active_r() ? labelcolor() : fltk3::inactive(labelcolor()));
+      fltk3::color(active_r() ? labelcolor() : fltk3::inactive(labelcolor()));
       int xc = x()+w()/2, yc=y()+h()/2;
-      fl_polygon(xc-5,yc-3,xc+5,yc-3,xc,yc+3);
+      fltk3::polygon(xc-5,yc-3,xc+5,yc-3,xc,yc+3);
       if (fltk3::focus() == this) draw_focus();
     }
   public:

@@ -109,7 +109,7 @@ public:
 
   If you use the color chooser on an 8-bit screen, it will allocate all the
   available colors, leaving you no space to exactly represent the color the
-  user picks! You can however use fl_rectf() to fill a region with a simulated
+  user picks! You can however use fltk3::rectf() to fill a region with a simulated
   color using dithering.
  */
 /** @} */

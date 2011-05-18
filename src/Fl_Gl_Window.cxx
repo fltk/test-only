@@ -264,7 +264,7 @@ void Fl_Gl_Window::swap_buffers() {
 }
 
 #if HAVE_GL_OVERLAY && defined(WIN32)
-uchar fl_overlay; // changes how fl_color() works
+uchar fl_overlay; // changes how fltk3::color() works
 int fl_overlay_depth = 0;
 #endif
 

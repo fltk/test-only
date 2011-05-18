@@ -1685,7 +1685,7 @@ void fltk3::Widget::damage(uchar fl, int X, int Y, int W, int H) {
 void fltk3::Window::flush() {
   make_current();
 //if (damage() == fltk3::DAMAGE_EXPOSE && can_boxcheat(box())) fl_boxcheat = this;
-  fl_clip_region(i->region); i->region = 0;
+  fltk3::clip_region(i->region); i->region = 0;
   draw();
 }
 

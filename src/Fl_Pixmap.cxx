@@ -37,9 +37,9 @@
 // Draws X pixmap data, keeping it stashed in a server pixmap so it
 // redraws fast.
 
-// See fl_draw_pixmap.cxx for code used to get the actual data into pixmap.
+// See fltk3::draw_pixmap.cxx for code used to get the actual data into pixmap.
 // Implemented without using the xpm library (which I can't use because
-// it interferes with the color cube used by fl_draw_image).
+// it interferes with the color cube used by fltk3::draw_image).
 
 #include <fltk3/run.h>
 #include <fltk3/draw.h>
@@ -61,15 +61,15 @@ extern void fl_release_dc(HWND, HDC);      // located in Fl_win32.cxx
 extern Fl_Offscreen fl_create_offscreen_with_alpha(int w, int h);
 #endif
 
-extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.cxx to store mask
-void fl_restore_clip(); // in fl_rect.cxx
+extern uchar **fl_mask_bitmap; // used by fltk3::draw_pixmap.cxx to store mask
+void fltk3::restore_clip(); // in fltk3::rect.cxx
 
 void Fl_Pixmap::measure() {
   int W, H;
 
   // ignore empty or bad pixmap data:
   if (w()<0 && data()) {
-    fl_measure_pixmap(data(), W, H);
+    fltk3::measure_pixmap(data(), W, H);
     w(W); h(H);
   }
 }
@@ -93,7 +93,7 @@ static int start(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int w, int h, i
     return 2;
   }
   // account for current clip region (faster on Irix):
-  fl_clip_box(XP,YP,WP,HP,X,Y,W,H);
+  fltk3::clip_box(XP,YP,WP,HP,X,Y,W,H);
   cx += X-XP; cy += Y-YP;
   // clip the box down to the size of image, quit if empty:
   if (cx < 0) {W += cx; X -= cx; cx = 0;}
@@ -117,7 +117,7 @@ void Fl_Quartz_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int
   if (!pxm->id_) {
     pxm->id_ = fl_create_offscreen_with_alpha(pxm->w(), pxm->h());
     fl_begin_offscreen((Fl_Offscreen)pxm->id_);
-    fl_draw_pixmap(pxm->data(), 0, 0, fltk3::GREEN);
+    fltk3::draw_pixmap(pxm->data(), 0, 0, fltk3::GREEN);
     fl_end_offscreen();
     }
   fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)pxm->id_, cx, cy);
@@ -137,7 +137,7 @@ void Fl_GDI_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP
     fl_begin_offscreen((Fl_Offscreen)pxm->id_);
     uchar *bitmap = 0;
     fl_mask_bitmap = &bitmap;
-    fl_draw_pixmap(pxm->data(), 0, 0, fltk3::BLACK);
+    fltk3::draw_pixmap(pxm->data(), 0, 0, fltk3::BLACK);
     fl_mask_bitmap = 0;
     if (bitmap) {
       pxm->mask_ = fl_create_bitmask(pxm->w(), pxm->h(), bitmap);
@@ -159,13 +159,13 @@ void Fl_GDI_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP
       uchar *bitmap = 0;
       fl_mask_bitmap = &bitmap;
       // draw pixmap to offscreen
-      fl_draw_pixmap(pxm->data(), 0, 0); 
+      fltk3::draw_pixmap(pxm->data(), 0, 0); 
       fl_end_offscreen();
       HDC new_gc = CreateCompatibleDC(fl_gc);
       int save = SaveDC(new_gc);
       SelectObject(new_gc, (void*)tmp_id);
       // print all of offscreen but its parts in background color
-      extern UINT win_pixmap_bg_color; // computed by fl_draw_pixmap()
+      extern UINT win_pixmap_bg_color; // computed by fltk3::draw_pixmap()
       fl_TransparentBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, pxm->w(), pxm->h(), win_pixmap_bg_color );
       RestoreDC(new_gc,save);
       DeleteDC(new_gc);
@@ -203,7 +203,7 @@ void Fl_Xlib_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int H
     fl_begin_offscreen((Fl_Offscreen)pxm->id_);
     uchar *bitmap = 0;
     fl_mask_bitmap = &bitmap;
-    fl_draw_pixmap(pxm->data(), 0, 0, fltk3::BLACK);
+    fltk3::draw_pixmap(pxm->data(), 0, 0, fltk3::BLACK);
     fl_mask_bitmap = 0;
     if (bitmap) {
       pxm->mask_ = fl_create_bitmask(pxm->w(), pxm->h(), bitmap);
@@ -214,7 +214,7 @@ void Fl_Xlib_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int H
   if (pxm->mask_) {
     // I can't figure out how to combine a mask with existing region,
     // so cut the image down to a clipped rectangle:
-    int nx, ny; fl_clip_box(X,Y,W,H,nx,ny,W,H);
+    int nx, ny; fltk3::clip_box(X,Y,W,H,nx,ny,W,H);
     cx += nx-X; X = nx;
     cy += ny-Y; Y = ny;
     // make X use the bitmap as a mask:
@@ -227,7 +227,7 @@ void Fl_Xlib_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int H
   if (pxm->mask_) {
     // put the old clip region back
     XSetClipOrigin(fl_display, fl_gc, 0, 0);
-    fl_restore_clip();
+    fltk3::restore_clip();
   }
 }
 

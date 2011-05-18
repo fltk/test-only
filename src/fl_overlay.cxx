@@ -55,13 +55,13 @@ static void draw_current_rect() {
   XSetFunction(fl_display, fl_gc, GXcopy);
 # elif defined(WIN32)
   int old = SetROP2(fl_gc, R2_NOT);
-  fl_rect(px, py, pw, ph);
+  fltk3::rect(px, py, pw, ph);
   SetROP2(fl_gc, old);
 # elif defined(__APPLE_QUARTZ__)
   // warning: Quartz does not support xor drawing
   // Use the Fl_Overlay_Window instead.
-  fl_color(fltk3::WHITE);
-  fl_rect(px, py, pw, ph);
+  fltk3::color(fltk3::WHITE);
+  fltk3::rect(px, py, pw, ph);
 # else
 #  error unsupported platform
 # endif
@@ -71,49 +71,49 @@ static void draw_current_rect() {
   if (bgE) { free(bgE); bgE = 0L; }
   if (bgW) { free(bgW); bgW = 0L; }
   if (pw>0 && ph>0) {
-    bgE = fl_read_image(0L, px+pw-1, py, 1, ph);
-    bgW = fl_read_image(0L, px, py, 1, ph);
-    bgS = fl_read_image(0L, px, py+ph-1, pw, 1);
-    bgN = fl_read_image(0L, px, py, pw, 1);
+    bgE = fltk3::read_image(0L, px+pw-1, py, 1, ph);
+    bgW = fltk3::read_image(0L, px, py, 1, ph);
+    bgS = fltk3::read_image(0L, px, py+ph-1, pw, 1);
+    bgN = fltk3::read_image(0L, px, py, pw, 1);
     bgx = px; bgy = py;
     bgw = pw; bgh = ph;
   }
-  fl_color(fltk3::WHITE);
-  fl_line_style(FL_SOLID);
-  fl_rect(px, py, pw, ph);
-  fl_color(fltk3::BLACK);
-  fl_line_style(FL_DOT);
-  fl_rect(px, py, pw, ph);
-  fl_line_style(FL_SOLID);
+  fltk3::color(fltk3::WHITE);
+  fltk3::line_style(fltk3::SOLID);
+  fltk3::rect(px, py, pw, ph);
+  fltk3::color(fltk3::BLACK);
+  fltk3::line_style(fltk3::DOT);
+  fltk3::rect(px, py, pw, ph);
+  fltk3::line_style(fltk3::SOLID);
 #endif
 }
 
 static void erase_current_rect() {
 #ifdef USE_XOR
 # ifdef __APPLE_QUARTZ__
-  fl_rect(px, py, pw, ph);
+  fltk3::rect(px, py, pw, ph);
 # else
   draw_current_rect();
 # endif
 #else
-  if (bgN) fl_draw_image(bgN, bgx, bgy, bgw, 1);
-  if (bgS) fl_draw_image(bgS, bgx, bgy+bgh-1, bgw, 1);
-  if (bgW) fl_draw_image(bgW, bgx, bgy, 1, bgh);
-  if (bgE) fl_draw_image(bgE, bgx+bgw-1, bgy, 1, bgh);
+  if (bgN) fltk3::draw_image(bgN, bgx, bgy, bgw, 1);
+  if (bgS) fltk3::draw_image(bgS, bgx, bgy+bgh-1, bgw, 1);
+  if (bgW) fltk3::draw_image(bgW, bgx, bgy, 1, bgh);
+  if (bgE) fltk3::draw_image(bgE, bgx+bgw-1, bgy, 1, bgh);
 #endif
 }
 
 /**
   Erase a selection rectangle without drawing a new one
   */
-void fl_overlay_clear() {
+void fltk3::overlay_clear() {
   if (pw > 0) {erase_current_rect(); pw = 0;}
 }
 
 /**
   Draws a selection rectangle, erasing a previous one by XOR'ing it first.
   */
-void fl_overlay_rect(int x, int y, int w, int h) {
+void fltk3::overlay_rect(int x, int y, int w, int h) {
   if (w < 0) {x += w; w = -w;} else if (!w) w = 1;
   if (h < 0) {y += h; h = -h;} else if (!h) h = 1;
   if (pw > 0) {

@@ -36,14 +36,14 @@ int fl_return_arrow(int x, int y, int w, int h) {
   int x0 = x+(w-2*d-2*t-1)/2;
   int x1 = x0+d;
   int y0 = y+h/2;
-  fl_color(fltk3::LIGHT3);
-  fl_line(x0, y0, x1, y0+d);
-  fl_yxline(x1, y0+d, y0+t, x1+d+2*t, y0-d);
-  fl_yxline(x1, y0-t, y0-d);
-  fl_color(fltk3::gray_ramp(0));
-  fl_line(x0, y0, x1, y0-d);
-  fl_color(fltk3::DARK3);
-  fl_xyline(x1+1, y0-t, x1+d, y0-d, x1+d+2*t);
+  fltk3::color(fltk3::LIGHT3);
+  fltk3::line(x0, y0, x1, y0+d);
+  fltk3::yxline(x1, y0+d, y0+t, x1+d+2*t, y0-d);
+  fltk3::yxline(x1, y0-t, y0-d);
+  fltk3::color(fltk3::gray_ramp(0));
+  fltk3::line(x0, y0, x1, y0-d);
+  fltk3::color(fltk3::DARK3);
+  fltk3::xyline(x1+1, y0-t, x1+d, y0-d, x1+d+2*t);
   return 1;
 }
 

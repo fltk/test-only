@@ -26,7 +26,7 @@
 //
 
 /**
-  \file fl_rect.cxx
+  \file fltk3::rect.cxx
   \brief Drawing and clipping routines for rectangles.
 */
 
@@ -44,7 +44,7 @@
 
 // fl_line_width_ must contain the absolute value of the current
 // line width to be used for X11 clipping (see below).
-// This is defined in src/fl_line_style.cxx
+// This is defined in src/fltk3::line_style.cxx
 extern int fl_line_width_;
 
 #ifdef __APPLE_QUARTZ__
@@ -77,8 +77,8 @@ extern float fl_quartz_line_width_;
   window corner, but with a line width so that a part of the line should
   be visible (in this case 2 of 5 pixels):
 
-    fl_line_style (FL_SOLID,5);	// line width = 5
-    fl_rect (-1,-1,100,100);	// top/left: 2 pixels visible
+    fltk3::line_style (fltk3::SOLID,5);	// line width = 5
+    fltk3::rect (-1,-1,100,100);	// top/left: 2 pixels visible
   
   In this example case, no clipping would be done, because X can
   handle it and clip unneeded pixels.
@@ -118,8 +118,8 @@ extern float fl_quartz_line_width_;
   clipping. x, y, w, and h may have been adjusted to fit into the
   X coordinate space.
 
-  Use this for clipping rectangles, as used in fl_rect() and
-  fl_rectf().
+  Use this for clipping rectangles, as used in fltk3::rect() and
+  fltk3::rectf().
 */
 
 static int clip_to_short(int &x, int &y, int &w, int &h) {
@@ -145,7 +145,7 @@ static int clip_to_short(int &x, int &y, int &w, int &h) {
   space (see above). This can be used to draw horizontal and vertical
   lines that can be handled by X11. Each single coordinate value can
   be clipped individually, and the result can be used directly, e.g.
-  in fl_xyline() and fl_yxline(). Note that this can't be used for
+  in fltk3::xyline() and fltk3::yxline(). Note that this can't be used for
   arbitrary lines (not horizontal or vertical).
 */
 static int clip_x (int x) {
@@ -558,7 +558,7 @@ void Fl_Graphics_Driver::clip_region(Fl_Region r) {
   Fl_Region oldr = rstack[rstackptr];
   if (oldr) XDestroyRegion(oldr);
   rstack[rstackptr] = r;
-  fl_restore_clip();
+  fltk3::restore_clip();
 }
 
 Fl_Region Fl_Graphics_Driver::clip_region() {
@@ -598,14 +598,14 @@ void Fl_Graphics_Driver::push_clip(int x, int y, int w, int h) {
   }
   if (rstackptr < region_stack_max) rstack[++rstackptr] = r;
   else fltk3::warning("fltk3::push_clip: clip stack overflow!\n");
-  fl_restore_clip();
+  fltk3::restore_clip();
 }
 
 // make there be no clip (used by fl_begin_offscreen() only!)
 void Fl_Graphics_Driver::push_no_clip() {
   if (rstackptr < region_stack_max) rstack[++rstackptr] = 0;
-  else fltk3::warning("fl_push_no_clip: clip stack overflow!\n");
-  fl_restore_clip();
+  else fltk3::warning("fltk3::push_no_clip: clip stack overflow!\n");
+  fltk3::restore_clip();
 }
 
 // pop back to previous clip:
@@ -614,7 +614,7 @@ void Fl_Graphics_Driver::pop_clip() {
     Fl_Region oldr = rstack[rstackptr--];
     if (oldr) XDestroyRegion(oldr);
   } else fltk3::warning("fltk3::pop_clip: clip stack underflow!\n");
-  fl_restore_clip();
+  fltk3::restore_clip();
 }
 
 int Fl_Graphics_Driver::not_clipped(int x, int y, int w, int h) {

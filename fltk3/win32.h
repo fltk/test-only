@@ -110,9 +110,9 @@ FLTK3_EXPORT Window fl_xid_(const fltk3::Window* w);
 #endif // FL_LIBRARY || FL_INTERNALS
 
 FLTK3_EXPORT fltk3::Window* fl_find(Window xid);
-FLTK3_EXPORT void fl_clip_region(Fl_Region);
+FLTK3_EXPORT void fltk3::clip_region(Fl_Region);
 
-// most recent fl_color() or fl_rgbcolor() points at one of these:
+// most recent fltk3::color() or fl_rgbcolor() points at one of these:
 extern FLTK3_EXPORT struct Fl_XMap {
   COLORREF rgb;	// this should be the type the RGB() macro returns
   HPEN pen;	// pen, 0 if none created yet
@@ -138,7 +138,7 @@ typedef HBITMAP Fl_Offscreen;
 # define fl_begin_offscreen(b) \
    HDC _sgc=fl_gc; Window _sw=fl_window; \
    Fl_Surface_Device *_ss = Fl_Surface_Device::surface(); Fl_Display_Device::display_device()->set_current(); \
-   fl_gc=fl_makeDC(b); int _savedc = SaveDC(fl_gc); fl_window=(HWND)b; fl_push_no_clip()
+   fl_gc=fl_makeDC(b); int _savedc = SaveDC(fl_gc); fl_window=(HWND)b; fltk3::push_no_clip()
 
 # define fl_end_offscreen() \
    fltk3::pop_clip(); RestoreDC(fl_gc, _savedc); DeleteDC(fl_gc); _ss->set_current(); fl_window=_sw; fl_gc = _sgc

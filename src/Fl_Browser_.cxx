@@ -408,8 +408,8 @@ J1:
     if (hh <= 0) continue;
     if ((damage()&(fltk3::DAMAGE_SCROLL|fltk3::DAMAGE_ALL)) || l == redraw1 || l == redraw2) {
       if (item_selected(l)) {
-	fl_color(active_r() ? selection_color() : fltk3::inactive(selection_color()));
-	fl_rectf(X, yy+Y, W, hh);
+	fltk3::color(active_r() ? selection_color() : fltk3::inactive(selection_color()));
+	fltk3::rectf(X, yy+Y, W, hh);
       } else if (!(damage()&fltk3::DAMAGE_ALL)) {
 	fltk3::push_clip(X, yy+Y, W, hh);
 	draw_box(box() ? box() : fltk3::DOWN_BOX, x(), y(), w(), h(), color());
@@ -478,8 +478,8 @@ J1:
   
   // draw that little square between the scrollbars:
   if (drawsquare && scrollbar.visible() && hscrollbar.visible()) {
-    fl_color(parent()->color());
-    fl_rectf(scrollbar.x(), hscrollbar.y(), scrollsize, scrollsize);
+    fltk3::color(parent()->color());
+    fltk3::rectf(scrollbar.x(), hscrollbar.y(), scrollsize, scrollsize);
   }
   
   real_hposition_ = hposition_;

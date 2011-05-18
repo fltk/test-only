@@ -85,9 +85,9 @@ void fl_copy_offscreen(int x, int y, int w, int h, Fl_Offscreen pixmap, int srcx
   }
   else { // when copy is not to the display
     fl_begin_offscreen(pixmap);
-    uchar *img = fl_read_image(NULL, srcx, srcy, w, h, 0);
+    uchar *img = fltk3::read_image(NULL, srcx, srcy, w, h, 0);
     fl_end_offscreen();
-    fl_draw_image(img, x, y, w, h, 3, 0);
+    fltk3::draw_image(img, x, y, w, h, 3, 0);
     delete[] img;
   }
 }
@@ -101,7 +101,7 @@ static void fl_copy_offscreen_to_display(int x, int y, int w, int h, Fl_Offscree
 
 
 // maybe someone feels inclined to implement alpha blending on X11?
-char fl_can_do_alpha_blending() {
+char fltk3::can_do_alpha_blending() {
   return 0;
 }
 #elif defined(WIN32)
@@ -120,7 +120,7 @@ static FL_BLENDFUNCTION blendfunc = { 0, 0, 255, 1};
  * curently run on supports alpha blending for bitmap transfers
  * and finds the required function if so.
  */
-char fl_can_do_alpha_blending() {
+char fltk3::can_do_alpha_blending() {
   static char been_here = 0;
   static char can_do = 0;
   // do this test only once
@@ -184,7 +184,7 @@ void fl_copy_offscreen_with_alpha(int x,int y,int w,int h,HBITMAP bitmap,int src
   // first try to alpha blend
   // if to printer, always try alpha_blend
   int to_display = Fl_Surface_Device::surface()->class_name() == Fl_Display_Device::class_id; // true iff display output
-  if ( (to_display && fl_can_do_alpha_blending()) || Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id) {
+  if ( (to_display && fltk3::can_do_alpha_blending()) || Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id) {
     alpha_ok = fl_alpha_blend(fl_gc, x, y, w, h, new_gc, srcx, srcy, w, h, blendfunc);
   }
   // if that failed (it shouldn't), still copy the bitmap over, but now alpha is 1
@@ -195,11 +195,11 @@ void fl_copy_offscreen_with_alpha(int x,int y,int w,int h,HBITMAP bitmap,int src
   DeleteDC(new_gc);
 }
 
-extern void fl_restore_clip();
+extern void fltk3::restore_clip();
 
 #elif defined(__APPLE_QUARTZ__) || defined(FL_DOXYGEN)
 
-char fl_can_do_alpha_blending() {
+char fltk3::can_do_alpha_blending() {
   return 1;
 }
 
@@ -292,7 +292,7 @@ void fl_begin_offscreen(Fl_Offscreen ctx) {
   fl_gc = (CGContextRef)ctx;
   fl_window = 0;
   CGContextSaveGState(fl_gc);
-  fl_push_no_clip();
+  fltk3::push_no_clip();
 }
 
 /** Quit sending drawing commands to the current offscreen buffer.
@@ -313,7 +313,7 @@ void fl_end_offscreen() {
 
 /** @} */
 
-extern void fl_restore_clip();
+extern void fltk3::restore_clip();
 
 #else
 # error unsupported platform
@@ -365,7 +365,7 @@ void fltk3::DoubleWindow::flush(int eraseoverlay) {
 
     // Redraw as needed...
     if (damage()) {
-      fl_clip_region(myi->region); myi->region = 0;
+      fltk3::clip_region(myi->region); myi->region = 0;
       fl_window = myi->other_xid;
       draw();
       fl_window = myi->xid;
@@ -380,12 +380,12 @@ void fltk3::DoubleWindow::flush(int eraseoverlay) {
   } else
 #endif
     if (damage() & ~fltk3::DAMAGE_EXPOSE) {
-    fl_clip_region(myi->region); myi->region = 0;
+    fltk3::clip_region(myi->region); myi->region = 0;
 #ifdef WIN32
     HDC _sgc = fl_gc;
     fl_gc = fl_makeDC(myi->other_xid);
     int save = SaveDC(fl_gc);
-    fl_restore_clip(); // duplicate region into new gc
+    fltk3::restore_clip(); // duplicate region into new gc
     draw();
     RestoreDC(fl_gc, save);
     DeleteDC(fl_gc);
@@ -396,7 +396,7 @@ void fltk3::DoubleWindow::flush(int eraseoverlay) {
 #elif defined(__APPLE__)
     if ( myi->other_xid ) {
       fl_begin_offscreen( myi->other_xid );
-      fl_clip_region( 0 );   
+      fltk3::clip_region( 0 );   
       draw();
       fl_end_offscreen();
     } else {
@@ -408,10 +408,10 @@ void fltk3::DoubleWindow::flush(int eraseoverlay) {
     fl_window = myi->xid;
 #endif
   }
-  if (eraseoverlay) fl_clip_region(0);
+  if (eraseoverlay) fltk3::clip_region(0);
   // on Irix (at least) it is faster to reduce the area copied to
   // the current clip region:
-  int X,Y,W,H; fl_clip_box(0,0,w(),h(),X,Y,W,H);
+  int X,Y,W,H; fltk3::clip_box(0,0,w(),h(),X,Y,W,H);
   if (myi->other_xid) fl_copy_offscreen(X, Y, W, H, myi->other_xid, X, Y);
 }
 

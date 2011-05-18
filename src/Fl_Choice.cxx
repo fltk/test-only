@@ -48,23 +48,23 @@ void Fl_Choice::draw() {
   if (fltk3::scheme()) {
     draw_box(fltk3::UP_BOX, color());
 
-    fl_color(active_r() ? labelcolor() : fltk3::inactive(labelcolor()));
+    fltk3::color(active_r() ? labelcolor() : fltk3::inactive(labelcolor()));
     if (!strcmp(fltk3::scheme(), "plastic")) {
       // Show larger up/down arrows...
-      fl_polygon(x1, y1 + 3, x1 + w1, y1 + w1 + 3, x1 + 2 * w1, y1 + 3);
-      fl_polygon(x1, y1 + 1, x1 + w1, y1 - w1 + 1, x1 + 2 * w1, y1 + 1);
+      fltk3::polygon(x1, y1 + 3, x1 + w1, y1 + w1 + 3, x1 + 2 * w1, y1 + 3);
+      fltk3::polygon(x1, y1 + 1, x1 + w1, y1 - w1 + 1, x1 + 2 * w1, y1 + 1);
     } else {
       // Show smaller up/down arrows with a divider...
       x1 = x() + w() - 13 - dx;
       y1 = y() + h() / 2;
-      fl_polygon(x1, y1 - 2, x1 + 3, y1 - 5, x1 + 6, y1 - 2);
-      fl_polygon(x1, y1 + 2, x1 + 3, y1 + 5, x1 + 6, y1 + 2);
+      fltk3::polygon(x1, y1 - 2, x1 + 3, y1 - 5, x1 + 6, y1 - 2);
+      fltk3::polygon(x1, y1 + 2, x1 + 3, y1 + 5, x1 + 6, y1 + 2);
 
-      fl_color(fltk3::darker(color()));
-      fl_yxline(x1 - 7, y1 - 8, y1 + 8);
+      fltk3::color(fltk3::darker(color()));
+      fltk3::yxline(x1 - 7, y1 - 8, y1 + 8);
 
-      fl_color(fltk3::lighter(color()));
-      fl_yxline(x1 - 6, y1 - 8, y1 + 8);
+      fltk3::color(fltk3::lighter(color()));
+      fltk3::yxline(x1 - 6, y1 - 8, y1 + 8);
     }
   } else {
     if (fltk3::contrast(textcolor(), fltk3::BACKGROUND2_COLOR) == textcolor()) {
@@ -74,8 +74,8 @@ void Fl_Choice::draw() {
     }
     draw_box(fltk3::UP_BOX,X,Y,W,H,color());
 
-    fl_color(active_r() ? labelcolor() : fltk3::inactive(labelcolor()));
-    fl_polygon(x1, y1, x1 + w1, y1 + w1, x1 + 2 * w1, y1);
+    fltk3::color(active_r() ? labelcolor() : fltk3::inactive(labelcolor()));
+    fltk3::polygon(x1, y1, x1 + w1, y1 + w1, x1 + 2 * w1, y1);
   }
 
   W += 2 * dx;
@@ -99,15 +99,15 @@ void Fl_Choice::draw() {
       l.size = m.labelsize_ ? m.labelsize_ : textsize();
       l.color= m.labelcolor_ ? m.labelcolor_ : textcolor();
       if (!m.active()) l.color = fltk3::inactive((fltk3::Color)l.color);
-      fl_draw_shortcut = 2; // hack value to make '&' disappear
+      fltk3::draw_shortcut = 2; // hack value to make '&' disappear
       l.draw(xx+3, yy, ww>6 ? ww-6 : 0, hh, fltk3::ALIGN_LEFT);
-      fl_draw_shortcut = 0;
+      fltk3::draw_shortcut = 0;
       if ( fltk3::focus() == this ) draw_focus(box(), xx, yy, ww, hh);
     }
     else {
-      fl_draw_shortcut = 2; // hack value to make '&' disappear
+      fltk3::draw_shortcut = 2; // hack value to make '&' disappear
       m.draw(xx, yy, ww, hh, this, fltk3::focus() == this);
-      fl_draw_shortcut = 0;
+      fltk3::draw_shortcut = 0;
     }
 
     fltk3::pop_clip();

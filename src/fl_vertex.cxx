@@ -26,13 +26,13 @@
 //
 
 /**
-  \file fl_vertex.cxx
+  \file fltk3::vertex.cxx
   \brief  Portable drawing code for drawing arbitrary shapes with
           simple 2D transformations.
 */
 
 // Portable drawing code for drawing arbitrary shapes with
-// simple 2D transformations.  See also fl_arc.cxx
+// simple 2D transformations.  See also fltk3::arc.cxx
 
 // matt: the Quartz implementation purposely doesn't use the Quartz matrix
 //       operations for reasons of compatibility and maintainability
@@ -46,14 +46,14 @@
 
 void Fl_Graphics_Driver::push_matrix() {
   if (sptr==matrix_stack_size)
-    fltk3::error("fl_push_matrix(): matrix stack overflow.");
+    fltk3::error("fltk3::push_matrix(): matrix stack overflow.");
   else
     stack[sptr++] = m;
 }
 
 void Fl_Graphics_Driver::pop_matrix() {
   if (sptr==0)
-    fltk3::error("fl_pop_matrix(): matrix stack underflow.");
+    fltk3::error("fltk3::pop_matrix(): matrix stack underflow.");
   else 
     m = stack[--sptr];
 }
@@ -141,7 +141,7 @@ void Fl_Graphics_Driver::end_points() {
 
 void Fl_Graphics_Driver::end_line() {
   if (n < 2) {
-    fl_end_points();
+    fltk3::end_points();
     return;
   }
 #if defined(USE_X11)
@@ -167,14 +167,14 @@ void Fl_Graphics_Driver::fixloop() {  // remove equal points from closed path
 
 void Fl_Graphics_Driver::end_loop() {
   fixloop();
-  if (n>2) fl_transformed_vertex((COORD_T)p[0].x, (COORD_T)p[0].y);
-  fl_end_line();
+  if (n>2) fltk3::transformed_vertex((COORD_T)p[0].x, (COORD_T)p[0].y);
+  fltk3::end_line();
 }
 
 void Fl_Graphics_Driver::end_polygon() {
   fixloop();
   if (n < 3) {
-    fl_end_line();
+    fltk3::end_line();
     return;
   }
 #if defined(USE_X11)
@@ -199,7 +199,7 @@ void Fl_Graphics_Driver::end_polygon() {
 }
 
 void Fl_Graphics_Driver::begin_complex_polygon() {
-  fl_begin_polygon();
+  fltk3::begin_polygon();
   gap_ = 0;
 #if defined(WIN32)
   numcount = 0;
@@ -209,7 +209,7 @@ void Fl_Graphics_Driver::begin_complex_polygon() {
 void Fl_Graphics_Driver::gap() {
   while (n>gap_+2 && p[n-1].x == p[gap_].x && p[n-1].y == p[gap_].y) n--;
   if (n > gap_+2) {
-    fl_transformed_vertex((COORD_T)p[gap_].x, (COORD_T)p[gap_].y);
+    fltk3::transformed_vertex((COORD_T)p[gap_].x, (COORD_T)p[gap_].y);
 #if defined(WIN32)
     counts[numcount++] = n-gap_;
 #endif
@@ -220,9 +220,9 @@ void Fl_Graphics_Driver::gap() {
 }
 
 void Fl_Graphics_Driver::end_complex_polygon() {
-  fl_gap();
+  fltk3::gap();
   if (n < 3) {
-    fl_end_line();
+    fltk3::end_line();
     return;
   }
 #if defined(USE_X11)
@@ -248,11 +248,11 @@ void Fl_Graphics_Driver::end_complex_polygon() {
 
 // shortcut the closed circles so they use XDrawArc:
 // warning: these do not draw rotated ellipses correctly!
-// See fl_arc.c for portable version.
+// See fltk3::arc.c for portable version.
 
 void Fl_Graphics_Driver::circle(double x, double y,double r) {
-  double xt = fl_transform_x(x,y);
-  double yt = fl_transform_y(x,y);
+  double xt = fltk3::transform_x(x,y);
+  double yt = fltk3::transform_y(x,y);
   double rx = r * (m.c ? sqrt(m.a*m.a+m.c*m.c) : fabs(m.a));
   double ry = r * (m.b ? sqrt(m.b*m.b+m.d*m.d) : fabs(m.d));
   int llx = (int)rint(xt-rx);

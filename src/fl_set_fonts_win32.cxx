@@ -42,7 +42,7 @@
 
 // turn a stored font name into a pretty name:
 const char* fltk3::get_font_name(fltk3::Font fnum, int* ap) {
-  Fl_Fontdesc *f = fl_fonts + fnum;
+  Fl_Fontdesc *f = fltk3::fonts + fnum;
   if (!f->fontname[0]) {
     const char* p = f->name;
     if (!p || !*p) {if (ap) *ap = 0; return "";}
@@ -144,8 +144,8 @@ EnumSizeCbW(CONST LOGFONTW    * /*lpelf*/,
 int
 fltk3::get_font_sizes(fltk3::Font fnum, int*& sizep) {
   nbSize = 0;
-  Fl_Fontdesc *s = fl_fonts+fnum;
-  if (!s->name) s = fl_fonts; // empty slot in table, use entry 0
+  Fl_Fontdesc *s = fltk3::fonts+fnum;
+  if (!s->name) s = fltk3::fonts; // empty slot in table, use entry 0
 
   if (!fl_gc) fl_GetDC(0);
   cyPerInch = GetDeviceCaps(fl_gc, LOGPIXELSY);

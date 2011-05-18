@@ -116,7 +116,7 @@ void Fl_File_Input::update_buttons() {
 //  puts("update_buttons()");
 
   // Set the current font & size...
-  fl_font(textfont(), textsize());
+  fltk3::font(textfont(), textsize());
 
   // Loop through the value string, setting widths...
   for (i = 0, start = value();
@@ -131,7 +131,7 @@ void Fl_File_Input::update_buttons() {
 
     end ++;
 
-    buttons_[i] = (short)fl_width(start, end - start);
+    buttons_[i] = (short)fltk3::width(start, end - start);
     if (!i) buttons_[i] += fltk3::box_dx(box()) + 6;
   }
 

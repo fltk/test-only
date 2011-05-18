@@ -259,11 +259,11 @@ static struct FD {
 
 extern unsigned int fl_codepage;
 
-void fl_reset_spot()
+void fltk3::reset_spot()
 {
 }
 
-void fl_set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *win)
+void fltk3::set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *win)
 {
   if (!win) return;
   fltk3::Window* tw = win;
@@ -283,7 +283,7 @@ void fl_set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *
   }
 }
 
-void fl_set_status(int x, int y, int w, int h)
+void fltk3::set_status(int x, int y, int w, int h)
 {
 }
 
@@ -1833,7 +1833,7 @@ void fltk3::Window::make_current() {
 #endif // USE_COLORMAP
 
   current_ = this;
-  fl_clip_region(0);
+  fltk3::clip_region(0);
 
 
 }
@@ -1849,7 +1849,7 @@ void fl_free_fonts(void)
   Fl_Font_Descriptor * f;
   Fl_Font_Descriptor * ff;
   for (i=0; i<fltk3::FREE_FONT; i++) {
-    s = fl_fonts + i;
+    s = fltk3::fonts + i;
     for (f=s->first; f; f=ff) {
       ff = f->next;
       delete f;
@@ -1980,17 +1980,17 @@ void Fl_Paged_Device::print_window(fltk3::Window *win, int x_offset, int y_offse
   fl_gc = GetDC(NULL); // get the screen device context
   // capture the 4 window sides from screen
   RECT r; GetWindowRect(fl_window, &r);
-  uchar *top_image = fl_read_image(NULL, r.left, r.top, ww, bt + by);
-  uchar *left_image = fl_read_image(NULL, r.left, r.top, bx, wh);
-  uchar *right_image = fl_read_image(NULL, r.right - bx, r.top, bx, wh);
-  uchar *bottom_image = fl_read_image(NULL, r.left, r.bottom-by, ww, by);
+  uchar *top_image = fltk3::read_image(NULL, r.left, r.top, ww, bt + by);
+  uchar *left_image = fltk3::read_image(NULL, r.left, r.top, bx, wh);
+  uchar *right_image = fltk3::read_image(NULL, r.right - bx, r.top, bx, wh);
+  uchar *bottom_image = fltk3::read_image(NULL, r.left, r.bottom-by, ww, by);
   ReleaseDC(NULL, fl_gc); fl_gc = save_gc;
   this->set_current();
   // print the 4 window sides
-  fl_draw_image(top_image, x_offset, y_offset, ww, bt + by, 3);
-  fl_draw_image(left_image, x_offset, y_offset, bx, wh, 3);
-  fl_draw_image(right_image, x_offset + win->w() + bx, y_offset, bx, wh, 3);
-  fl_draw_image(bottom_image, x_offset, y_offset + win->h() + bt + by, ww, by, 3);
+  fltk3::draw_image(top_image, x_offset, y_offset, ww, bt + by, 3);
+  fltk3::draw_image(left_image, x_offset, y_offset, bx, wh, 3);
+  fltk3::draw_image(right_image, x_offset + win->w() + bx, y_offset, bx, wh, 3);
+  fltk3::draw_image(bottom_image, x_offset, y_offset + win->h() + bt + by, ww, by, 3);
   delete[] top_image;
   delete[] left_image;
   delete[] right_image;

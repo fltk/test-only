@@ -47,7 +47,9 @@ enum { // values for flags:
   FL_MENU_HORIZONTAL = 0x100	///< ??? -- reserved
 };
 
-extern FLTK3_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
+namespace fltk3 {
+  extern FLTK3_EXPORT Fl_Shortcut old_shortcut(const char*);
+}
 
 class Fl_Menu_;
 
@@ -416,7 +418,7 @@ struct FLTK3_EXPORT Fl_Menu_Item {
   /** See int add(const char*, int shortcut, fltk3::Callback*, void*, int) */
   int add(const char*a, const char* b, fltk3::Callback* c,
 	  void* d = 0, int e = 0) {
-    return add(a,fl_old_shortcut(b),c,d,e);}
+    return add(a,fltk3::old_shortcut(b),c,d,e);}
 
   int size() const ;
 };

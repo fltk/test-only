@@ -370,8 +370,8 @@ int Fl_Browser::item_height(void *item) const {
 
   if (!l->txt[0]) {
     // For blank lines set the height to exactly 1 line!
-    fl_font(textfont(), textsize());
-    int hh = fl_height();
+    fltk3::font(textfont(), textsize());
+    int hh = fltk3::height();
     if (hh > hmax) hmax = hh;
   } else {
     const int* i = column_widths();
@@ -402,7 +402,7 @@ int Fl_Browser::item_height(void *item) const {
       if (ptr && *i++) str = strchr(str, column_char());
       else str = NULL;
       if((!str && *ptr) || (str && ptr < str)) {
-	fl_font(font, tsize); int hh = fl_height();
+	fltk3::font(font, tsize); int hh = fltk3::height();
 	if (hh > hmax) hmax = hh;
       }
       if (!str || !*str) break;
@@ -473,8 +473,8 @@ int Fl_Browser::item_width(void *item) const {
 
   if (ww==0 && l->icon) ww = l->icon->w();
 
-  fl_font(font, tsize);
-  return ww + int(fl_width(str)) + 6;
+  fltk3::font(font, tsize);
+  return ww + int(fltk3::width(str)) + 6;
 }
 
 /**
@@ -550,8 +550,8 @@ void Fl_Browser::item_draw(void* item, int X, int Y, int W, int H) const {
       case 'r': talign = fltk3::ALIGN_RIGHT; break;
       case 'B': 
 	if (!(l->flags & SELECTED)) {
-	  fl_color((fltk3::Color)strtol(str, &str, 10));
-	  fl_rectf(X, Y, w1, H);
+	  fltk3::color((fltk3::Color)strtol(str, &str, 10));
+	  fltk3::rectf(X, Y, w1, H);
 	} else dummy = strtol(str, &str, 10);
         break;
       case 'C':
@@ -567,15 +567,15 @@ void Fl_Browser::item_draw(void* item, int X, int Y, int W, int H) const {
 	tsize = strtol(str, &str, 10);
 	break;
       case '-':
-	fl_color(fltk3::DARK3);
-	fl_line(X+3, Y+H/2, X+w1-3, Y+H/2);
-	fl_color(fltk3::LIGHT3);
-	fl_line(X+3, Y+H/2+1, X+w1-3, Y+H/2+1);
+	fltk3::color(fltk3::DARK3);
+	fltk3::line(X+3, Y+H/2, X+w1-3, Y+H/2);
+	fltk3::color(fltk3::LIGHT3);
+	fltk3::line(X+3, Y+H/2+1, X+w1-3, Y+H/2+1);
 	break;
       case 'u':
       case '_':
-	fl_color(lcol);
-	fl_line(X+3, Y+H-1, X+w1-3, Y+H-1);
+	fltk3::color(lcol);
+	fltk3::line(X+3, Y+H-1, X+w1-3, Y+H-1);
 	break;
       case '.':
 	goto BREAK;
@@ -584,12 +584,12 @@ void Fl_Browser::item_draw(void* item, int X, int Y, int W, int H) const {
       }
     }
   BREAK:
-    fl_font(font, tsize);
+    fltk3::font(font, tsize);
     if (l->flags & SELECTED)
       lcol = fltk3::contrast(lcol, selection_color());
     if (!active_r()) lcol = fltk3::inactive(lcol);
-    fl_color(lcol);
-    fl_draw(str, X+3, Y, w1-6, H, e ? fltk3::Align(talign|fltk3::ALIGN_CLIP) : talign, 0, 0);
+    fltk3::color(lcol);
+    fltk3::draw(str, X+3, Y, w1-6, H, e ? fltk3::Align(talign|fltk3::ALIGN_CLIP) : talign, 0, 0);
     if (!e) break; // no more fields...
     *e = column_char(); // put the separator back
     X += w1;

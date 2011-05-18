@@ -268,14 +268,14 @@ inline fltk3::Window* fl_bgn_form(fltk3::Boxtype b,int w,int h) {
   g->box(b);
   return g;
 }
-FLTK3_EXPORT void fl_end_form();
+FLTK3_EXPORT void fltk3::end_form();
 inline void fl_addto_form(fltk3::Window* f) {f->begin();}
 inline fltk3::Group* fl_bgn_group() {return new fltk3::Group(0,0,0,0,0);}
-inline void fl_end_group() {fltk3::Group::current()->forms_end();}
+inline void fltk3::end_group() {fltk3::Group::current()->forms_end();}
 inline void fl_addto_group(fltk3::Widget* o) {((fltk3::Group* )o)->begin();}
 #define resizebox _ddfdesign_kludge()
 
-inline void fl_scale_form(fltk3::Window* f, double x, double y) {
+inline void fltk3::scale_form(fltk3::Window* f, double x, double y) {
   f->resizable(f); f->size(int(f->w()*x),int(f->h()*y));}
 inline void fl_set_form_position(fltk3::Window* f,int x,int y) {f->position(x,y);}
 inline void fl_set_form_size(fltk3::Window* f, int w, int h) {f->size(w,h);}
@@ -350,25 +350,25 @@ inline int fl_mouse_button() {return fltk3::event_button();}
 // Drawing functions.  Only usable inside an Fl_Free object?
 
 inline void fl_drw_box(fltk3::Boxtype b,int x,int y,int w,int h,fltk3::Color bgc,int=3) {
-    fl_draw_box(b,x,y,w,h,bgc);}
+    fltk3::draw_box(b,x,y,w,h,bgc);}
 inline void fl_drw_frame(fltk3::Boxtype b,int x,int y,int w,int h,fltk3::Color bgc,int=3) {
-    fl_draw_box(b,x,y,w,h,bgc);}
+    fltk3::draw_box(b,x,y,w,h,bgc);}
 
 inline void fl_drw_text(fltk3::Align align, int x, int y, int w, int h,
 		  fltk3::Color fgcolor, int size, fltk3::Font style,
 		  const char* s) {
-  fl_font(style,size);
-  fl_color(fgcolor);
-  fl_draw(s,x,y,w,h,align);
+  fltk3::font(style,size);
+  fltk3::color(fgcolor);
+  fltk3::draw(s,x,y,w,h,align);
 }
 
 // this does not work except for CENTER...
 inline void fl_drw_text_beside(fltk3::Align align, int x, int y, int w, int h,
 		  fltk3::Color fgcolor, int size, fltk3::Font style,
 		  const char* s) {
-  fl_font(style,size);
-  fl_color(fgcolor);
-  fl_draw(s,x,y,w,h,align);
+  fltk3::font(style,size);
+  fltk3::color(fgcolor);
+  fltk3::draw(s,x,y,w,h,align);
 }
 
 inline void fl_set_font_name(fltk3::Font n,const char* s) {fltk3::set_font(n,s);}
@@ -730,7 +730,7 @@ inline void fl_replace_menu_item(fltk3::Widget* o, int i, const char* s) {
 inline void fl_delete_menu_item(fltk3::Widget* o, int i) {
     ((Fl_Menu_Button*)o)->remove(i-1);}
 inline void fl_set_menu_item_shortcut(fltk3::Widget* o, int i, const char* s) {
-    ((Fl_Menu_Button*)o)->shortcut(i-1,fl_old_shortcut(s));}
+    ((Fl_Menu_Button*)o)->shortcut(i-1,fltk3::old_shortcut(s));}
 inline void fl_set_menu_item_mode(fltk3::Widget* o, int i, long x) {
     ((Fl_Menu_Button*)o)->mode(i-1,x);}
 inline void fl_show_menu_symbol(fltk3::Widget*, int ) {
@@ -836,7 +836,7 @@ void fl_gettime(long* sec, long* usec);
 // stuff from DDForms:
 
 inline int fl_double_click() {return fltk3::event_clicks();}
-inline void fl_draw() {fltk3::flush();}
+inline void fltk3::draw() {fltk3::flush();}
 
 #endif	/* define __FORMS_H__ */
 

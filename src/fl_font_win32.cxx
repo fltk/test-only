@@ -113,11 +113,11 @@ static Fl_Fontdesc built_in_table[] = {
 {" Wingdings"},
 };
 
-Fl_Fontdesc* fl_fonts = built_in_table;
+Fl_Fontdesc* fltk3::fonts = built_in_table;
 
 static Fl_Font_Descriptor* find(fltk3::Font fnum, fltk3::Fontsize size, int angle) {
-  Fl_Fontdesc* s = fl_fonts+fnum;
-  if (!s->name) s = fl_fonts; // use 0 if fnum undefined
+  Fl_Fontdesc* s = fltk3::fonts+fnum;
+  if (!s->name) s = fltk3::fonts; // use 0 if fnum undefined
   Fl_Font_Descriptor* f;
   for (f = s->first; f; f = f->next)
     if (f->size == size && f->angle == angle) return f;
@@ -130,7 +130,7 @@ static Fl_Font_Descriptor* find(fltk3::Font fnum, fltk3::Fontsize size, int angl
 ////////////////////////////////////////////////////////////////
 // Public interface:
 
-static void fl_font(Fl_Graphics_Driver *driver, fltk3::Font fnum, fltk3::Fontsize size, int angle) {
+static void fltk3::font(Fl_Graphics_Driver *driver, fltk3::Font fnum, fltk3::Fontsize size, int angle) {
   if (fnum==-1) { // just make sure that we will load a new font next time
     fl_angle_ = 0;
     driver->Fl_Graphics_Driver::font(0, 0);
@@ -143,18 +143,18 @@ static void fl_font(Fl_Graphics_Driver *driver, fltk3::Font fnum, fltk3::Fontsiz
 }
 
 void Fl_GDI_Graphics_Driver::font(fltk3::Font fnum, fltk3::Fontsize size) {
-  fl_font(this, fnum, size, 0);
+  fltk3::font(this, fnum, size, 0);
 }
 
 int Fl_GDI_Graphics_Driver::height() {
-  Fl_Font_Descriptor *fl_fontsize = font_descriptor();
-  if (fl_fontsize) return (fl_fontsize->metr.tmAscent + fl_fontsize->metr.tmDescent);
+  Fl_Font_Descriptor *fltk3::fontsize = font_descriptor();
+  if (fltk3::fontsize) return (fltk3::fontsize->metr.tmAscent + fltk3::fontsize->metr.tmDescent);
   else return -1;
 }
 
 int Fl_GDI_Graphics_Driver::descent() {
-  Fl_Font_Descriptor *fl_fontsize = font_descriptor();
-  if (fl_fontsize) return fl_fontsize->metr.tmDescent;
+  Fl_Font_Descriptor *fltk3::fontsize = font_descriptor();
+  if (fltk3::fontsize) return fltk3::fontsize->metr.tmDescent;
   else return -1;
 }
 
@@ -182,7 +182,7 @@ double Fl_GDI_Graphics_Driver::width(const char* c, int n) {
 }
 
 double Fl_GDI_Graphics_Driver::width(unsigned int c) {
-  Fl_Font_Descriptor *fl_fontsize = font_descriptor();
+  Fl_Font_Descriptor *fltk3::fontsize = font_descriptor();
   unsigned int r;
   SIZE s;
   // Special Case Handling of Unicode points over U+FFFF.
@@ -202,7 +202,7 @@ double Fl_GDI_Graphics_Driver::width(unsigned int c) {
     // Creates a UTF16 string from a UCS code point.
     cc = fl_ucs_to_Utf16(c, u16, 4);
     // Make sure the current font is selected before we make the measurement
-    SelectObject(fl_gc, fl_fontsize->fid);
+    SelectObject(fl_gc, fltk3::fontsize->fid);
     // measure the glyph width
     GetTextExtentPoint32W(fl_gc, (WCHAR*)u16, cc, &s);
     return (double)s.cx;
@@ -210,11 +210,11 @@ double Fl_GDI_Graphics_Driver::width(unsigned int c) {
   // else - this falls through to the lookup-table for glyph widths
   // in the basic multilingual plane
   r = (c & 0xFC00) >> 10;
-  if (!fl_fontsize->width[r]) {
-    fl_fontsize->width[r] = (int*) malloc(sizeof(int) * 0x0400);
+  if (!fltk3::fontsize->width[r]) {
+    fltk3::fontsize->width[r] = (int*) malloc(sizeof(int) * 0x0400);
     unsigned short i = 0, ii = r * 0x400;
     // The following code makes a best effort attempt to obtain a valid fl_gc.
-    // If no fl_gc is available at the time we call fl_width(), then we first
+    // If no fl_gc is available at the time we call fltk3::width(), then we first
     // try to obtain a gc from the first fltk window.
     // If that is null then we attempt to obtain the gc from the current screen
     // using (GetDC(NULL)).
@@ -227,16 +227,16 @@ double Fl_GDI_Graphics_Driver::width(unsigned int c) {
       gc = GetDC(hWnd);
     }
     if (!gc)
-	fltk3::fatal("Invalid graphic context: fl_width() failed because no valid HDC was found!");
-    SelectObject(gc, fl_fontsize->fid);
+	fltk3::fatal("Invalid graphic context: fltk3::width() failed because no valid HDC was found!");
+    SelectObject(gc, fltk3::fontsize->fid);
     for (; i < 0x400; i++) {
       GetTextExtentPoint32W(gc, (WCHAR*)&ii, 1, &s);
-      fl_fontsize->width[r][i] = s.cx;
+      fltk3::fontsize->width[r][i] = s.cx;
       ii++;
     }
     if (gc && gc!=fl_gc) ReleaseDC(hWnd, gc);
   }
-  return (double) fl_fontsize->width[r][c & 0x03FF];
+  return (double) fltk3::fontsize->width[r][c & 0x03FF];
 }
 
 /* Add function pointer to allow us to access GetGlyphIndicesW on systems that have it,
@@ -277,8 +277,8 @@ static void on_printer_extents_update(int &dx, int &dy, int &w, int &h)
 // Function to determine the extent of the "inked" area of the glyphs in a string
 void Fl_GDI_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &dy, int &w, int &h) {
 
-  Fl_Font_Descriptor *fl_fontsize = font_descriptor();
-  if (!fl_fontsize) { // no valid font, nothing to measure
+  Fl_Font_Descriptor *fltk3::fontsize = font_descriptor();
+  if (!fltk3::fontsize) { // no valid font, nothing to measure
     w = 0; h = 0;
     dx = dy = 0;
     return;
@@ -304,7 +304,7 @@ void Fl_GDI_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &dy
   if(!fl_GetGlyphIndices) goto exit_error; // No GetGlyphIndices function, use fallback mechanism instead
 
   // The following code makes a best effort attempt to obtain a valid fl_gc.
-  // See description in fl_width() above for an explanation.
+  // See description in fltk3::width() above for an explanation.
   if (!gc) { // We have no valid gc, try and obtain one
     // Use our first fltk window, or fallback to using the screen via GetDC(NULL)
     hWnd = fltk3::first_window() ? fl_xid(fltk3::first_window()) : NULL;
@@ -322,7 +322,7 @@ void Fl_GDI_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &dy
     w_buff = new WORD[wc_len];
     len = fl_utf8toUtf16(c, n, ext_buff, wc_len);
   }
-  SelectObject(gc, fl_fontsize->fid);
+  SelectObject(gc, fltk3::fontsize->fid);
 
   // Are there surrogate-pairs in this string? If so GetGlyphIndicesW will fail
   // since it can only handle the BMP range.
@@ -351,7 +351,7 @@ void Fl_GDI_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &dy
     } else goto exit_error;
   } else {
     if (fl_GetGlyphIndices(gc, (WCHAR*)ext_buff, len, w_buff, GGI_MARK_NONEXISTING_GLYPHS) == GDI_ERROR) {
-      // some error occured here - just return fl_measure values
+      // some error occured here - just return fltk3::measure values
       goto exit_error;
     }
   }
@@ -378,14 +378,14 @@ void Fl_GDI_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &dy
   return; // normal exit
 
 exit_error:
-  // some error here - just return fl_measure values
+  // some error here - just return fltk3::measure values
   w = (int)width(c, n);
   h = height();
   dx = 0;
   dy = descent() - h;
   EXTENTS_UPDATE(dx, dy, w, h);
   return;
-} // fl_text_extents
+} // fltk3::text_extents
 
 void Fl_GDI_Graphics_Driver::draw(const char* str, int n, int x, int y) {
   COLORREF oldColor = SetTextColor(fl_gc, fl_RGB());
@@ -401,7 +401,7 @@ void Fl_GDI_Graphics_Driver::draw(const char* str, int n, int x, int y) {
 }
 
 void Fl_GDI_Graphics_Driver::draw(int angle, const char* str, int n, int x, int y) {
-  fl_font(this, Fl_Graphics_Driver::font(), size(), angle);
+  fltk3::font(this, Fl_Graphics_Driver::font(), size(), angle);
   int wn = 0; // count of UTF16 cells to render full string
   COLORREF oldColor = SetTextColor(fl_gc, fl_RGB());
   SelectObject(fl_gc, font_descriptor()->fid);
@@ -413,7 +413,7 @@ void Fl_GDI_Graphics_Driver::draw(int angle, const char* str, int n, int x, int 
   }
   TextOutW(fl_gc, x, y, (WCHAR*)wstr, wn);
   SetTextColor(fl_gc, oldColor);
-  fl_font(this, Fl_Graphics_Driver::font(), size(), 0);
+  fltk3::font(this, Fl_Graphics_Driver::font(), size(), 0);
 }
 
 void Fl_GDI_Graphics_Driver::rtl_draw(const char* c, int n, int x, int y) {
@@ -430,7 +430,7 @@ void Fl_GDI_Graphics_Driver::rtl_draw(const char* c, int n, int x, int y) {
 #ifdef RTL_CHAR_BY_CHAR
   int i = 0;
   int lx = 0;
-  while (i < wn) { // output char by char is very bad for Arabic but coherent with fl_width()
+  while (i < wn) { // output char by char is very bad for Arabic but coherent with fltk3::width()
     lx = (int) width(wstr[i]);
     x -= lx;
     TextOutW(fl_gc, x, y, (WCHAR*)wstr + i, 1);

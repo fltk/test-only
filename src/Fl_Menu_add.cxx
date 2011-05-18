@@ -292,7 +292,7 @@ int Fl_Menu_Item::insert(
   \endverbatim
   \par
   Internally, the text shortcuts are converted to integer values using
-  fl_old_shortcut(const char*).
+  fltk3::old_shortcut(const char*).
 
   \par callback
   The callback to invoke when this menu item is selected. 
@@ -435,7 +435,7 @@ int Fl_Menu_::add(const char *str) {
     int sc = 0;
     char *c;
     for (c = buf; c < (buf + sizeof(buf) - 2) && *str && *str != '|'; str++) {
-      if (*str == '\t') {*c++ = 0; sc = fl_old_shortcut(str);}
+      if (*str == '\t') {*c++ = 0; sc = fltk3::old_shortcut(str);}
       else *c++ = *str;
     }
     *c = 0;

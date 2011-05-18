@@ -26,11 +26,11 @@
 //
 
 /**
-  \file fl_color.cxx
+  \file fltk3::color.cxx
   \brief Color handling
 */
 
-// Implementation of fl_color(i), fl_color(r,g,b).
+// Implementation of fltk3::color(i), fltk3::color(r,g,b).
 
 #ifdef WIN32
 #  include "fl_color_win32.cxx"
@@ -127,7 +127,7 @@ Fl_XColor fl_xmap[1][256];
 void Fl_Xlib_Graphics_Driver::color(fltk3::Color i) {
   if (i & 0xffffff00) {
     unsigned rgb = (unsigned)i;
-    fl_color((uchar)(rgb >> 24), (uchar)(rgb >> 16), (uchar)(rgb >> 8));
+    fltk3::color((uchar)(rgb >> 24), (uchar)(rgb >> 16), (uchar)(rgb >> 8));
   } else {
     Fl_Graphics_Driver::color(i);
     if(!fl_gc) return; // don't get a default gc if current window is not yet created/valid
@@ -152,7 +152,7 @@ void Fl_Xlib_Graphics_Driver::color(uchar r,uchar g,uchar b) {
 
 /**
   Returns the X pixel number used to draw the given rgb color.
-  This is the X pixel that fl_color() would use.
+  This is the X pixel that fltk3::color() would use.
   \param[in] r,g,b color components
   \return X pixel number
 */
@@ -187,7 +187,7 @@ ulong fl_xpixel(uchar r,uchar g,uchar b) {
 // calculate what color is actually on the screen for a mask:
 static inline uchar realcolor(uchar color, uchar mask) {
 #  if 0
-  // accurate version if the display has linear gamma, but fl_draw_image
+  // accurate version if the display has linear gamma, but fltk3::draw_image
   // works better with the simpler version on most screens...
   uchar m = mask;
   uchar result = color&m;
@@ -205,7 +205,7 @@ static inline uchar realcolor(uchar color, uchar mask) {
 
 /**
   Returns the X pixel number used to draw the given FLTK color index.
-  This is the X pixel that fl_color() would use.
+  This is the X pixel that fltk3::color() would use.
   \param[in] i color index
   \return X pixel number
 */
@@ -370,8 +370,8 @@ unsigned fltk3::get_color(fltk3::Color i) {
   else return fl_cmap[i];
 }
 /**
-    Sets an entry in the fl_color index table.  You can set it to
-    any 8-bit RGB color.  The color is not allocated until fl_color(i)
+    Sets an entry in the fltk3::color index table.  You can set it to
+    any 8-bit RGB color.  The color is not allocated until fltk3::color(i)
     is used.
 */
 void fltk3::set_color(fltk3::Color i, uchar red, uchar green, uchar blue) {

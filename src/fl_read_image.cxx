@@ -46,7 +46,7 @@
 #    include <stdlib.h>
 #  endif // __sgi
 
-// Defined in fl_color.cxx
+// Defined in fltk3::color.cxx
 extern uchar fl_redmask, fl_greenmask, fl_bluemask;
 extern int fl_redshift, fl_greenshift, fl_blueshift, fl_extrashift;
 
@@ -84,11 +84,11 @@ static int xgetimageerrhandler(Display *display, XErrorEvent *error) {
 }
 
 //
-// 'fl_read_image()' - Read an image from the current window.
+// 'fltk3::read_image()' - Read an image from the current window.
 //
 
 uchar *				// O - Pixel buffer or NULL if failed
-fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
+fltk3::read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
               int   X,		// I - Left position
 	      int   Y,		// I - Top position
 	      int   w,		// I - Width of area to read

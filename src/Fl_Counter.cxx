@@ -60,10 +60,10 @@ void Fl_Counter::draw() {
   }
 
   draw_box(boxtype[0], xx[0], y(), ww[0], h(), fltk3::BACKGROUND2_COLOR);
-  fl_font(textfont(), textsize());
-  fl_color(active_r() ? textcolor() : fltk3::inactive(textcolor()));
+  fltk3::font(textfont(), textsize());
+  fltk3::color(active_r() ? textcolor() : fltk3::inactive(textcolor()));
   char str[128]; format(str);
-  fl_draw(str, xx[0], y(), ww[0], h(), fltk3::ALIGN_CENTER);
+  fltk3::draw(str, xx[0], y(), ww[0], h(), fltk3::ALIGN_CENTER);
   if (fltk3::focus() == this) draw_focus(boxtype[0], xx[0], y(), ww[0], h());
   if (!(damage()&fltk3::DAMAGE_ALL)) return; // only need to redraw text
 
@@ -74,15 +74,15 @@ void Fl_Counter::draw() {
 
   if (type() == FL_NORMAL_COUNTER) {
     draw_box(boxtype[1], xx[1], y(), ww[1], h(), color());
-    fl_draw_symbol("@-4<<", xx[1], y(), ww[1], h(), selcolor);
+    fltk3::draw_symbol("@-4<<", xx[1], y(), ww[1], h(), selcolor);
   }
   draw_box(boxtype[2], xx[2], y(), ww[2], h(), color());
-  fl_draw_symbol("@-4<",  xx[2], y(), ww[2], h(), selcolor);
+  fltk3::draw_symbol("@-4<",  xx[2], y(), ww[2], h(), selcolor);
   draw_box(boxtype[3], xx[3], y(), ww[3], h(), color());
-  fl_draw_symbol("@-4>",  xx[3], y(), ww[3], h(), selcolor);
+  fltk3::draw_symbol("@-4>",  xx[3], y(), ww[3], h(), selcolor);
   if (type() == FL_NORMAL_COUNTER) {
     draw_box(boxtype[4], xx[4], y(), ww[4], h(), color());
-    fl_draw_symbol("@-4>>", xx[4], y(), ww[4], h(), selcolor);
+    fltk3::draw_symbol("@-4>>", xx[4], y(), ww[4], h(), selcolor);
   }
 }
 

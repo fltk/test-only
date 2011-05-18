@@ -220,12 +220,12 @@ class Fl_Browser_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Browser *myo = (Fl_Browser *)o;
-    fl_font(myo->textfont(), myo->textsize());
+    fltk3::font(myo->textfont(), myo->textsize());
     h -= fltk3::box_dh(o->box());
     w -= fltk3::box_dw(o->box());
-    int ww = (int)fl_width('m');
+    int ww = (int)fltk3::width('m');
     w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
-    h = ((h + fl_height() - 1) / fl_height()) * fl_height() +
+    h = ((h + fltk3::height() - 1) / fltk3::height()) * fltk3::height() +
         fltk3::box_dh(o->box());
     if (h < 30) h = 30;
     if (w < 50) w = 50;
@@ -234,7 +234,7 @@ public:
   virtual const char *alt_type_name() {return "fltk::Browser";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     Fl_Browser* b = new Fl_Browser(x,y,w,h);
-    // Fl_Browser::add calls fl_height(), which requires the X display open.
+    // Fl_Browser::add calls fltk3::height(), which requires the X display open.
     // Avoid this when compiling so it works w/o a display:
     if (!compile_only) {
       char buffer[20];
@@ -268,12 +268,12 @@ class Fl_Check_Browser_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Check_Browser *myo = (Fl_Check_Browser *)o;
-    fl_font(myo->textfont(), myo->textsize());
+    fltk3::font(myo->textfont(), myo->textsize());
     h -= fltk3::box_dh(o->box());
-    w -= fltk3::box_dw(o->box()) - fl_height();
-    int ww = (int)fl_width('m');
+    w -= fltk3::box_dw(o->box()) - fltk3::height();
+    int ww = (int)fltk3::width('m');
     w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
-    h = ((h + fl_height() - 1) / fl_height()) * fl_height() +
+    h = ((h + fltk3::height() - 1) / fltk3::height()) * fltk3::height() +
         fltk3::box_dh(o->box());
     if (h < 30) h = 30;
     if (w < 50) w = 50;
@@ -282,7 +282,7 @@ public:
   virtual const char *alt_type_name() {return "fltk::CheckBrowser";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     Fl_Check_Browser* b = new Fl_Check_Browser(x,y,w,h);
-    // Fl_Check_Browser::add calls fl_height(), which requires the X display open.
+    // Fl_Check_Browser::add calls fltk3::height(), which requires the X display open.
     // Avoid this when compiling so it works w/o a display:
     if (!compile_only) {
       char buffer[20];
@@ -343,12 +343,12 @@ class Fl_File_Browser_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_File_Browser *myo = (Fl_File_Browser *)o;
-    fl_font(myo->textfont(), myo->textsize());
+    fltk3::font(myo->textfont(), myo->textsize());
     h -= fltk3::box_dh(o->box());
-    w -= fltk3::box_dw(o->box()) + fl_height();
-    int ww = (int)fl_width('m');
+    w -= fltk3::box_dw(o->box()) + fltk3::height();
+    int ww = (int)fltk3::width('m');
     w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
-    h = ((h + fl_height() - 1) / fl_height()) * fl_height() +
+    h = ((h + fltk3::height() - 1) / fltk3::height()) * fltk3::height() +
         fltk3::box_dh(o->box());
     if (h < 30) h = 30;
     if (w < 50) w = 50;
@@ -357,7 +357,7 @@ public:
   virtual const char *alt_type_name() {return "fltk::FileBrowser";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     Fl_File_Browser* b = new Fl_File_Browser(x,y,w,h);
-    // Fl_File_Browser::add calls fl_height(), which requires the X display open.
+    // Fl_File_Browser::add calls fltk3::height(), which requires the X display open.
     // Avoid this when compiling so it works w/o a display:
     if (!compile_only) {
       b->load(".");
@@ -428,11 +428,11 @@ class Fl_Spinner_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Spinner *myo = (Fl_Spinner *)o;
-    fl_font(myo->textfont(), myo->textsize());
-    h = fl_height() + myo->textsize() - 6;
+    fltk3::font(myo->textfont(), myo->textsize());
+    h = fltk3::height() + myo->textsize() - 6;
     if (h < 15) h = 15;
     w -= fltk3::box_dw(o->box());
-    int ww = (int)fl_width('m');
+    int ww = (int)fltk3::width('m');
     w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box()) + h / 2;
     if (w < 40) w = 40	;
   }
@@ -473,10 +473,10 @@ class Fl_Input_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Input *myo = (Fl_Input *)o;
-    fl_font(myo->textfont(), myo->textsize());
-    h = fl_height() + myo->textsize() - 6;
+    fltk3::font(myo->textfont(), myo->textsize());
+    h = fltk3::height() + myo->textsize() - 6;
     w -= fltk3::box_dw(o->box());
-    int ww = (int)fl_width('m');
+    int ww = (int)fltk3::width('m');
     w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     if (h < 15) h = 15;
     if (w < 15) w = 15;
@@ -523,10 +523,10 @@ class Fl_File_Input_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_File_Input *myo = (Fl_File_Input *)o;
-    fl_font(myo->textfont(), myo->textsize());
-    h = fl_height() + myo->textsize() + 4;
+    fltk3::font(myo->textfont(), myo->textsize());
+    h = fltk3::height() + myo->textsize() + 4;
     w -= fltk3::box_dw(o->box());
-    int ww = (int)fl_width('m');
+    int ww = (int)fltk3::width('m');
     w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     if (h < 20) h = 20;
     if (w < 50) w = 50;
@@ -564,12 +564,12 @@ class Fl_Text_Display_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Text_Display *myo = (Fl_Text_Display *)o;
-    fl_font(myo->textfont(), myo->textsize());
+    fltk3::font(myo->textfont(), myo->textsize());
     h -= fltk3::box_dh(o->box());
     w -= fltk3::box_dw(o->box());
-    int ww = (int)fl_width('m');
+    int ww = (int)fltk3::width('m');
     w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
-    h = ((h + fl_height() - 1) / fl_height()) * fl_height() +
+    h = ((h + fltk3::height() - 1) / fltk3::height()) * fltk3::height() +
         fltk3::box_dh(o->box());
     if (h < 30) h = 30;
     if (w < 50) w = 50;
@@ -606,12 +606,12 @@ class Fl_Text_Editor_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Text_Editor *myo = (Fl_Text_Editor *)o;
-    fl_font(myo->textfont(), myo->textsize());
+    fltk3::font(myo->textfont(), myo->textsize());
     h -= fltk3::box_dh(o->box());
     w -= fltk3::box_dw(o->box());
-    int ww = (int)fl_width('m');
+    int ww = (int)fltk3::width('m');
     w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
-    h = ((h + fl_height() - 1) / fl_height()) * fl_height() +
+    h = ((h + fltk3::height() - 1) / fltk3::height()) * fltk3::height() +
         fltk3::box_dh(o->box());
     if (h < 30) h = 30;
     if (w < 50) w = 50;
@@ -661,12 +661,12 @@ class Fl_Help_View_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Help_View *myo = (Fl_Help_View *)o;
-    fl_font(myo->textfont(), myo->textsize());
+    fltk3::font(myo->textfont(), myo->textsize());
     h -= fltk3::box_dh(o->box());
     w -= fltk3::box_dw(o->box());
-    int ww = (int)fl_width('m');
+    int ww = (int)fltk3::width('m');
     w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
-    h = ((h + fl_height() - 1) / fl_height()) * fl_height() +
+    h = ((h + fltk3::height() - 1) / fltk3::height()) * fltk3::height() +
         fltk3::box_dh(o->box());
     if (h < 30) h = 30;
     if (w < 50) w = 50;
@@ -810,10 +810,10 @@ class Fl_Output_Type : public Fl_Input_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Output *myo = (Fl_Output *)o;
-    fl_font(myo->textfont(), myo->textsize());
-    h = fl_height() + myo->textsize() - 6;
+    fltk3::font(myo->textfont(), myo->textsize());
+    h = fltk3::height() + myo->textsize() - 6;
     w -= fltk3::box_dw(o->box());
-    int ww = (int)fl_width('m');
+    int ww = (int)fltk3::width('m');
     w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     if (h < 15) h = 15;
     if (w < 15) w = 15;
@@ -837,10 +837,10 @@ class Fl_Value_Input_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Value_Input *myo = (Fl_Value_Input *)o;
-    fl_font(myo->textfont(), myo->textsize());
-    h = fl_height() + myo->textsize() - 6;
+    fltk3::font(myo->textfont(), myo->textsize());
+    h = fltk3::height() + myo->textsize() - 6;
     w -= fltk3::box_dw(o->box());
-    int ww = (int)fl_width('m');
+    int ww = (int)fltk3::width('m');
     w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     if (h < 15) h = 15;
     if (w < 15) w = 15;
@@ -878,10 +878,10 @@ class Fl_Value_Output_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Value_Output *myo = (Fl_Value_Output *)o;
-    fl_font(myo->textfont(), myo->textsize());
-    h = fl_height() + myo->textsize() - 6;
+    fltk3::font(myo->textfont(), myo->textsize());
+    h = fltk3::height() + myo->textsize() - 6;
     w = o->w() - fltk3::box_dw(o->box());
-    int ww = (int)fl_width('m');
+    int ww = (int)fltk3::width('m');
     w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box());
     if (h < 15) h = 15;
     if (w < 15) w = 15;

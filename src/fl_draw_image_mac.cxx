@@ -119,9 +119,9 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
       for ( int j=0; j<W; j++ )
       {
         if ( mono )
-          { fl_color( src[0], src[0], src[0] ); }
+          { fltk3::color( src[0], src[0], src[0] ); }
         else
-          { fl_color( src[0], src[1], src[2] ); }
+          { fltk3::color( src[0], src[1], src[2] ); }
         CGContextMoveToPoint(fl_gc, X+j, Y+i);
         CGContextAddLineToPoint(fl_gc, X+j, Y+i);
         CGContextStrokePath(fl_gc);
@@ -138,9 +138,9 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
       for ( int j=0; j<W; j++ )
       {
         if ( mono )
-          fl_color( src[0], src[0], src[0] );
+          fltk3::color( src[0], src[0], src[0] );
         else
-          fl_color( src[0], src[1], src[2] );
+          fltk3::color( src[0], src[1], src[2] );
         CGContextMoveToPoint(fl_gc, X+j, Y+i);
         CGContextAddLineToPoint(fl_gc, X+j, Y+i);
         CGContextStrokePath(fl_gc);
@@ -166,9 +166,9 @@ void Fl_Quartz_Graphics_Driver::draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
   innards(0,x,y,w,h,d,0,1,cb,data);
 }
 
-void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
-  fl_color(r,g,b);
-  fl_rectf(x,y,w,h);
+void fltk3::rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
+  fltk3::color(r,g,b);
+  fltk3::rectf(x,y,w,h);
 }
 
 //

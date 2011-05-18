@@ -38,10 +38,10 @@ namespace fltk3 {
 
 
 // A compiler from a certain very large software company will not compile
-// the function pointer assignment due to the name conflict with fl_arc.
+// the function pointer assignment due to the name conflict with fltk3::arc.
 // This function is to fix that:
-static void fl_arc_i(int x,int y,int w,int h,double a1,double a2) {
-  fl_arc(x,y,w,h,a1,a2);
+static void arc_i(int x,int y,int w,int h,double a1,double a2) {
+  fltk3::arc(x,y,w,h,a1,a2);
 }
 
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
@@ -56,10 +56,10 @@ static void draw(int which, int x,int y,int w,int h, int inset, fltk3::Color col
   h -= 2*inset;
   int d = w <= h ? w : h;
   if (d <= 1) return;
-  fl_color(color);
-  fl_line_style(0,1);
+  fltk3::color(color);
+  fltk3::line_style(0,1);
   void (*f)(int,int,int,int,double,double);
-  f = (which==FILL) ? fl_pie : fl_arc_i;
+  f = (which==FILL) ? fltk3::pie : arc_i;
   if (which >= CLOSED) {
     f(x+w-d, y, d, d, w<=h ? 0 : -90, w<=h ? 180 : 90);
     f(x, y+h-d, d, d, w<=h ? 180 : 90, w<=h ? 360 : 270);
@@ -72,19 +72,19 @@ static void draw(int which, int x,int y,int w,int h, int inset, fltk3::Color col
   }
   if (which == FILL) {
     if (w < h)
-      fl_rectf(x, y+d/2, w, h-(d&-2));
+      fltk3::rectf(x, y+d/2, w, h-(d&-2));
     else if (w > h)
-      fl_rectf(x+d/2, y, w-(d&-2), h);
+      fltk3::rectf(x+d/2, y, w-(d&-2), h);
   } else {
     if (w < h) {
-      if (which != UPPER_LEFT) fl_yxline(x+w-1, y+d/2-1, y+h-d/2+1);
-      if (which != LOWER_RIGHT) fl_yxline(x, y+d/2-1, y+h-d/2+1);
+      if (which != UPPER_LEFT) fltk3::yxline(x+w-1, y+d/2-1, y+h-d/2+1);
+      if (which != LOWER_RIGHT) fltk3::yxline(x, y+d/2-1, y+h-d/2+1);
     } else if (w > h) {
-      if (which != UPPER_LEFT) fl_xyline(x+d/2-1, y+h-1, x+w-d/2+1);
-      if (which != LOWER_RIGHT) fl_xyline(x+d/2-1, y, x+w-d/2+1);
+      if (which != UPPER_LEFT) fltk3::xyline(x+d/2-1, y+h-1, x+w-d/2+1);
+      if (which != LOWER_RIGHT) fltk3::xyline(x+d/2-1, y, x+w-d/2+1);
     }
   }
-  fl_line_style(0);
+  fltk3::line_style(0);
 }
 
 void fl_round_down_box(int x, int y, int w, int h, fltk3::Color bgcolor) {

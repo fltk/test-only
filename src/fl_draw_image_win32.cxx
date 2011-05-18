@@ -123,13 +123,13 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #endif
 
   if (depth==0) depth = 3;
-  if (indexed || !fl_can_do_alpha_blending()) 
+  if (indexed || !fltk3::can_do_alpha_blending()) 
     depth = (depth-1)|1;
 
   if (!linedelta) linedelta = W*delta;
 
   int x, y, w, h;
-  fl_clip_box(X,Y,W,H,x,y,w,h);
+  fltk3::clip_box(X,Y,W,H,x,y,w,h);
   if (w<=0 || h<=0) return;
   if (buf) buf += (x-X)*delta + (y-Y)*linedelta;
 
@@ -326,7 +326,7 @@ void Fl_GDI_Graphics_Driver::draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
   }
 }
 
-void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
+void fltk3::rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
 #if USE_COLORMAP
   // use the error diffusion dithering code to produce a much nicer block:
   if (fl_palette) {
@@ -336,8 +336,8 @@ void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
     return;
   }
 #endif
-  fl_color(r,g,b);
-  fl_rectf(x,y,w,h);
+  fltk3::color(r,g,b);
+  fltk3::rectf(x,y,w,h);
 }
 
 //

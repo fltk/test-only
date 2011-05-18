@@ -109,22 +109,22 @@ struct FLTK3_EXPORT Fl_Help_Font_Stack {
   void init(fltk3::Font f, fltk3::Fontsize s, fltk3::Color c) { 
     nfonts_ = 0;
     elts_[nfonts_].set(f, s, c);
-    fl_font(f, s); 
-    fl_color(c);
+    fltk3::font(f, s); 
+    fltk3::color(c);
   }
   /** Gets the top (current) element on the stack. */
   void top(fltk3::Font &f, fltk3::Fontsize &s, fltk3::Color &c) { elts_[nfonts_].get(f, s, c); }
-  /** Pushes the font style triplet on the stack, also calls fl_font() & fl_color() adequately */
+  /** Pushes the font style triplet on the stack, also calls fltk3::font() & fltk3::color() adequately */
   void push(fltk3::Font f, fltk3::Fontsize s, fltk3::Color c) { 
     if (nfonts_ <  MAX_FL_HELP_FS_ELTS-1) nfonts_ ++;
     elts_[nfonts_].set(f, s, c);
-    fl_font(f, s); fl_color(c); 
+    fltk3::font(f, s); fltk3::color(c); 
   }
-  /** Pops from the stack the font style triplet and calls fl_font() & fl_color() adequately */
+  /** Pops from the stack the font style triplet and calls fltk3::font() & fltk3::color() adequately */
   void pop(fltk3::Font &f, fltk3::Fontsize &s, fltk3::Color &c) { 
     if (nfonts_ > 0) nfonts_ --;
     top(f, s, c);
-    fl_font(f, s); fl_color(c);
+    fltk3::font(f, s); fltk3::color(c);
   }
   /** Gets the current count of font style elements in the stack. */
   size_t count() const {return nfonts_;} // Gets the current number of fonts in the stack

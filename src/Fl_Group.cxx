@@ -756,7 +756,7 @@ void fltk3::Group::draw() {
 */
 void fltk3::Group::update_child(fltk3::Widget& widget) const {
   if (widget.damage() && widget.visible() && widget.type() < FL_WINDOW &&
-      fl_not_clipped(widget.x(), widget.y(), widget.w(), widget.h())) {
+      fltk3::not_clipped(widget.x(), widget.y(), widget.w(), widget.h())) {
     widget.draw();	
     widget.clear_damage();
   }
@@ -770,14 +770,14 @@ void fltk3::Group::update_child(fltk3::Widget& widget) const {
 */
 void fltk3::Group::draw_child(fltk3::Widget& widget) const {
   if (widget.visible() && widget.type() < FL_WINDOW &&
-      fl_not_clipped(widget.x(), widget.y(), widget.w(), widget.h())) {
+      fltk3::not_clipped(widget.x(), widget.y(), widget.w(), widget.h())) {
     widget.clear_damage(fltk3::DAMAGE_ALL);
     widget.draw();
     widget.clear_damage();
   }
 }
 
-extern char fl_draw_shortcut;
+extern char fltk3::draw_shortcut;
 
 /** Parents normally call this to draw outside labels of child widgets. */
 void fltk3::Group::draw_outside_label(const fltk3::Widget& widget) const {

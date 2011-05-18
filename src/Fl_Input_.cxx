@@ -44,7 +44,9 @@ const int secret_char = 0x2022; // bullet to hide secret input
 #endif
 static int l_secret;
 
-extern void fl_draw(const char*, int, float, float);
+namespace fltk3 {
+  extern void draw(const char*, int, float, float);
+}
 
 ////////////////////////////////////////////////////////////////
 
@@ -83,7 +85,7 @@ const char* Fl_Input_::expand(const char* p, char* buf) const {
   } else while (o<e) {
     if (wrap() && (p >= value_+size_ || isspace(*p & 255))) {
       word_wrap = w() - fltk3::box_dw(box()) - 2;
-      width_to_lastspace += (int)fl_width(lastspace_out, o-lastspace_out);
+      width_to_lastspace += (int)fltk3::width(lastspace_out, o-lastspace_out);
       if (p > lastspace+1) {
 	if (word_count && width_to_lastspace > word_wrap) {
 	  p = lastspace; o = lastspace_out; break;
@@ -154,7 +156,7 @@ double Fl_Input_::expandpos(
     p++;
   }
   if (returnn) *returnn = n;
-  return fl_width(buf, n);
+  return fltk3::width(buf, n);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -211,7 +213,7 @@ int Fl_Input_::was_up_down = 0;
   Sets the current font and font size.
 */
 void Fl_Input_::setfont() const {
-  fl_font(textfont(), textsize());
+  fltk3::font(textfont(), textsize());
 }
 
 /**
@@ -249,7 +251,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
 
   // count how many lines and put the last one into the buffer:
   // And figure out where the cursor is:
-  int height = fl_height();
+  int height = fltk3::height();
   int threshold = height/2;
   int lines;
   int curx, cury;
@@ -297,7 +299,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
 
   p = value();
   // visit each line and draw it:
-  int desc = height-fl_descent();
+  int desc = height-fltk3::descent();
   float xpos = (float)(X - xscroll_ + 1);
   int ypos = -yscroll_;
   for (; ypos < H;) {
@@ -339,27 +341,27 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
       float x1 = xpos;
       int offset1 = 0;
       if (pp > p) {
-	fl_color(tc);
+	fltk3::color(tc);
 	x1 += (float)expandpos(p, pp, buf, &offset1);
-	fl_draw(buf, offset1, xpos, (float)(Y+ypos+desc));
+	fltk3::draw(buf, offset1, xpos, (float)(Y+ypos+desc));
       }
       pp = value()+selend;
       float x2 = (float)(X+W);
       int offset2;
       if (pp <= e) x2 = xpos + (float)expandpos(p, pp, buf, &offset2);
       else offset2 = strlen(buf);
-      fl_color(selection_color());
-      fl_rectf((int)(x1+0.5), Y+ypos, (int)(x2-x1+0.5), height);
-      fl_color(fltk3::contrast(textcolor(), selection_color()));
-      fl_draw(buf+offset1, offset2-offset1, x1, (float)(Y+ypos+desc));
+      fltk3::color(selection_color());
+      fltk3::rectf((int)(x1+0.5), Y+ypos, (int)(x2-x1+0.5), height);
+      fltk3::color(fltk3::contrast(textcolor(), selection_color()));
+      fltk3::draw(buf+offset1, offset2-offset1, x1, (float)(Y+ypos+desc));
       if (pp < e) {
-	fl_color(tc);
-	fl_draw(buf+offset2, strlen(buf+offset2), x2, (float)(Y+ypos+desc));
+	fltk3::color(tc);
+	fltk3::draw(buf+offset2, strlen(buf+offset2), x2, (float)(Y+ypos+desc));
       }
     } else {
       // draw unselected text
-      fl_color(tc);
-      fl_draw(buf, strlen(buf), xpos, (float)(Y+ypos+desc));
+      fltk3::color(tc);
+      fltk3::draw(buf, strlen(buf), xpos, (float)(Y+ypos+desc));
     }
 
     if (do_mu) fltk3::pop_clip();
@@ -368,15 +370,15 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
     // draw the cursor:
     if (fltk3::focus() == this && selstart == selend &&
 	position() >= p-value() && position() <= e-value()) {
-      fl_color(cursor_color());
+      fltk3::color(cursor_color());
       // cursor position may need to be recomputed (see STR #2486)
       curx = int(expandpos(p, value()+position(), buf, 0)+.5);
       if (readonly()) {
-        fl_line((int)(xpos+curx-2.5f), Y+ypos+height-1,
+        fltk3::line((int)(xpos+curx-2.5f), Y+ypos+height-1,
 	        (int)(xpos+curx+0.5f), Y+ypos+height-4,
 	        (int)(xpos+curx+3.5f), Y+ypos+height-1);
       } else {
-        fl_rectf((int)(xpos+curx+0.5), Y+ypos, 2, height);
+        fltk3::rectf((int)(xpos+curx+0.5), Y+ypos, 2, height);
       }
     }
 
@@ -399,8 +401,8 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
 
   fltk3::pop_clip();
   if (fltk3::focus() == this) {
-       fl_set_spot(textfont(), textsize(),
-               (int)xpos+curx, Y+ypos-fl_descent(), W, H, window());
+       fltk3::set_spot(textfont(), textsize(),
+               (int)xpos+curx, Y+ypos-fltk3::descent(), W, H, window());
   }
 }
 
@@ -517,7 +519,7 @@ void Fl_Input_::handle_mouse(int X, int Y, int /*W*/, int /*H*/, int drag) {
   char buf[MAXBUF];
 
   int theline = (input_type()==FL_MULTILINE_INPUT) ?
-    (fltk3::event_y()-Y+yscroll_)/fl_height() : 0;
+    (fltk3::event_y()-Y+yscroll_)/fltk3::height() : 0;
 
   int newpos = 0;
   for (p=value();; ) {
@@ -940,7 +942,7 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
     return 1;
 
   case fltk3::FOCUS:
-    fl_set_spot(textfont(), textsize(), x(), y(), w(), h(), window());
+    fltk3::set_spot(textfont(), textsize(), x(), y(), w(), h(), window());
     if (mark_ == position_) {
       minimal_update(size()+1);
     } else //if (fltk3::selection_owner() != this)
@@ -954,7 +956,7 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
     } else //if (fltk3::selection_owner() != this)
       minimal_update(mark_, position_);
   case fltk3::HIDE:
-    fl_reset_spot();
+    fltk3::reset_spot();
     if (!readonly() && (when() & fltk3::WHEN_RELEASE))
       maybe_do_callback();
     return 1;
@@ -1245,8 +1247,8 @@ Fl_Input_::~Fl_Input_() {
 int Fl_Input_::linesPerPage() {
   int n = 1;
   if (input_type() == FL_MULTILINE_INPUT) {
-    fl_font(textfont(),textsize()); //ensure current font is set to ours
-    n = h()/fl_height(); // number of lines to scroll
+    fltk3::font(textfont(),textsize()); //ensure current font is set to ours
+    n = h()/fltk3::height(); // number of lines to scroll
     if (n<=0) n = 1;
   }
   return n;

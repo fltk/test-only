@@ -270,9 +270,9 @@ int Fl_System_Printer::start_page (void)
   CGContextSetShouldAntialias(fl_gc, false);
   CGContextSaveGState(fl_gc);
   CGContextSaveGState(fl_gc);
-  fl_line_style(FL_SOLID);
+  fltk3::line_style(fltk3::SOLID);
   fl_window = (void *)1; // TODO: something better
-  fl_clip_region(0);
+  fltk3::clip_region(0);
   if( status == noErr) gc = fl_gc;
   return status != noErr;
 }

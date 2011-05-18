@@ -49,15 +49,15 @@
 #endif // USE_XFT
 
 /** Returns the current font's height */
-int   gl_height() {return fl_height();}
+int   gl_height() {return fltk3::height();}
 /** Returns the current font's descent */
-int   gl_descent() {return fl_descent();}
+int   gl_descent() {return fltk3::descent();}
 /** Returns the width of the string in the current fnt */
-double gl_width(const char* s) {return fl_width(s);}
+double gl_width(const char* s) {return fltk3::width(s);}
 /** Returns the width of n characters of the string in the current font */
-double gl_width(const char* s, int n) {return fl_width(s,n);}
+double gl_width(const char* s, int n) {return fltk3::width(s,n);}
 /** Returns the width of the character in the current font */
-double gl_width(uchar c) {return fl_width(c);}
+double gl_width(uchar c) {return fltk3::width(c);}
 
 static Fl_Font_Descriptor *gl_fontsize;
 
@@ -73,16 +73,16 @@ static Fl_Font_Descriptor *gl_fontsize;
 #endif
 
 /**
-  Sets the current OpenGL font to the same font as calling fl_font()
+  Sets the current OpenGL font to the same font as calling fltk3::font()
   */
 void  gl_font(int fontid, int size) {
-  fl_font(fontid, size);
-  Fl_Font_Descriptor *fl_fontsize = fl_graphics_driver->font_descriptor();
+  fltk3::font(fontid, size);
+  Fl_Font_Descriptor *fltk3::fontsize = fl_graphics_driver->font_descriptor();
 #if !GL_DRAW_USES_TEXTURES
-  if (!fl_fontsize->listbase) {
+  if (!fltk3::fontsize->listbase) {
 
 #ifdef  USE_OksiD_style_GL_font_selection
-    fl_fontsize->listbase = glGenLists(0x10000);
+    fltk3::fontsize->listbase = glGenLists(0x10000);
 #else // Fltk-1.1.8 style GL font selection
 
 #if defined (USE_X11) // X-windows options follow, either XFT or "plain" X
@@ -95,38 +95,38 @@ void  gl_font(int fontid, int size) {
     XFontStruct *font = fl_xfont;
     int base = font->min_char_or_byte2;
     int count = font->max_char_or_byte2-base+1;
-    fl_fontsize->listbase = glGenLists(256);
-    glXUseXFont(font->fid, base, count, fl_fontsize->listbase+base);
+    fltk3::fontsize->listbase = glGenLists(256);
+    glXUseXFont(font->fid, base, count, fltk3::fontsize->listbase+base);
 # elif defined(WIN32)
     // this is unused because USE_OksiD_style_GL_font_selection == 1
-    int base = fl_fontsize->metr.tmFirstChar;
-    int count = fl_fontsize->metr.tmLastChar-base+1;
-    HFONT oldFid = (HFONT)SelectObject(fl_gc, fl_fontsize->fid);
-    fl_fontsize->listbase = glGenLists(256);
-    wglUseFontBitmaps(fl_gc, base, count, fl_fontsize->listbase+base);
+    int base = fltk3::fontsize->metr.tmFirstChar;
+    int count = fltk3::fontsize->metr.tmLastChar-base+1;
+    HFONT oldFid = (HFONT)SelectObject(fl_gc, fltk3::fontsize->fid);
+    fltk3::fontsize->listbase = glGenLists(256);
+    wglUseFontBitmaps(fl_gc, base, count, fltk3::fontsize->listbase+base);
     SelectObject(fl_gc, oldFid);
 # elif defined(__APPLE_QUARTZ__)
 //AGL is not supported for use in 64-bit applications:
 //http://developer.apple.com/mac/library/documentation/Carbon/Conceptual/Carbon64BitGuide/OtherAPIChanges/OtherAPIChanges.html
     short font, face, size;
     uchar fn[256];
-    fn[0]=strlen(fl_fontsize->q_name);
-    strcpy((char*)(fn+1), fl_fontsize->q_name);
+    fn[0]=strlen(fltk3::fontsize->q_name);
+    strcpy((char*)(fn+1), fltk3::fontsize->q_name);
     GetFNum(fn, &font);
     face = 0;
-    size = fl_fontsize->size;
-    fl_fontsize->listbase = glGenLists(256);
+    size = fltk3::fontsize->size;
+    fltk3::fontsize->listbase = glGenLists(256);
 	aglUseFont(aglGetCurrentContext(), font, face,
-               size, 0, 256, fl_fontsize->listbase);
+               size, 0, 256, fltk3::fontsize->listbase);
 # else 
 #   error unsupported platform
 # endif
 
 #endif // USE_OksiD_style_GL_font_selection
   }
-  glListBase(fl_fontsize->listbase);
+  glListBase(fltk3::fontsize->listbase);
 #endif // !GL_DRAW_USES_TEXTURES
-  gl_fontsize = fl_fontsize;
+  gl_fontsize = fltk3::fontsize;
 }
 
 #ifndef __APPLE__
@@ -162,13 +162,13 @@ void gl_remove_displaylist_fonts()
 {
 # if HAVE_GL
 
-  // clear variables used mostly in fl_font
+  // clear variables used mostly in fltk3::font
   fl_graphics_driver->font(0, 0);
 
   for (int j = 0 ; j < fltk3::FREE_FONT ; ++j)
   {
     Fl_Font_Descriptor* past = 0;
-    Fl_Fontdesc* s    = fl_fonts + j ;
+    Fl_Fontdesc* s    = fltk3::fonts + j ;
     Fl_Font_Descriptor* f    = s->first;
     while (f != 0) {
       if(f->listbase) {
@@ -285,17 +285,17 @@ static void gl_draw_invert(const char* str, int n, int x, int y) {
 /**
   Draws a string formatted into a box, with newlines and tabs expanded,
   other control characters changed to ^X. and aligned with the edges or
-  center. Exactly the same output as fl_draw().
+  center. Exactly the same output as fltk3::draw().
   */
 void gl_draw(
   const char* str, 	// the (multi-line) string
   int x, int y, int w, int h, 	// bounding box
   fltk3::Align align) {
-  fl_draw(str, x, -y-h, w, h, align, gl_draw_invert);
+  fltk3::draw(str, x, -y-h, w, h, align, gl_draw_invert);
 }
 
 /** Measure how wide and tall the string will be when drawn by the gl_draw() function */
-void gl_measure(const char* str, int& x, int& y) {fl_measure(str,x,y);}
+void gl_measure(const char* str, int& x, int& y) {fltk3::measure(str,x,y);}
 
 /**
   Outlines the given rectangle with the current color.
@@ -422,7 +422,7 @@ void gl_texture_fifo::display_texture(int rank)
   //write the texture on screen
   GLfloat pos[4];
   glGetFloatv(GL_CURRENT_RASTER_POSITION, pos);
-  CGRect bounds = CGRectMake (pos[0], pos[1] - fl_descent(), fifo[rank].width, fifo[rank].height);
+  CGRect bounds = CGRectMake (pos[0], pos[1] - fltk3::descent(), fifo[rank].width, fifo[rank].height);
   
   // GL_COLOR_BUFFER_BIT for glBlendFunc, GL_ENABLE_BIT for glEnable / glDisable
   glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT | GL_COLOR_BUFFER_BIT); 
@@ -477,7 +477,7 @@ int gl_texture_fifo::compute_texture(const char* str, int n)
   memcpy(fifo[current].utf8, str, n);
   fifo[current].utf8[n] = 0;
   fifo[current].width = 0, fifo[current].height = 0;
-  fl_measure(fifo[current].utf8, fifo[current].width, fifo[current].height, 0);
+  fltk3::measure(fifo[current].utf8, fifo[current].width, fifo[current].height, 0);
   CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
   void *base = calloc(4*fifo[current].width, fifo[current].height);
   if (base == NULL) return -1;
@@ -486,8 +486,8 @@ int gl_texture_fifo::compute_texture(const char* str, int n)
   fl_graphics_driver->font_descriptor(gl_fontsize);
   GLfloat colors[4];
   glGetFloatv(GL_CURRENT_COLOR, colors);
-  fl_color((uchar)(colors[0]*255), (uchar)(colors[1]*255), (uchar)(colors[2]*255));
-  fl_draw(str, n, 0, fifo[current].height - fl_descent());
+  fltk3::color((uchar)(colors[0]*255), (uchar)(colors[1]*255), (uchar)(colors[2]*255));
+  fltk3::draw(str, n, 0, fifo[current].height - fltk3::descent());
   //put this bitmap in a texture  
   glPushAttrib(GL_TEXTURE_BIT);
   glBindTexture (GL_TEXTURE_RECTANGLE_EXT, fifo[current].texName);

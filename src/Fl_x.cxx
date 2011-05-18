@@ -453,14 +453,14 @@ static XRectangle    spot;
 static int spotf = -1;
 static int spots = -1;
 
-void fl_reset_spot(void)
+void fltk3::reset_spot(void)
 {
   spot.x = -1;
   spot.y = -1;
   //if (fl_xim_ic) XUnsetICFocus(fl_xim_ic);
 }
 
-void fl_set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *win)
+void fltk3::set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *win)
 {
   int change = 0;
   XVaNestedList preedit_attr;
@@ -522,7 +522,7 @@ void fl_set_spot(int font, int size, int X, int Y, int W, int H, fltk3::Window *
   XFree(preedit_attr);
 }
 
-void fl_set_status(int x, int y, int w, int h)
+void fltk3::set_status(int x, int y, int w, int h)
 {
   XVaNestedList status_attr;
   status_area.x = x;
@@ -897,7 +897,7 @@ int fl_handle(const XEvent& thisevent)
                                 XNClientWindow, xid,
                                 NULL);
         }
-        fl_set_spot(spotf, spots, spot.x, spot.y, spot.width, spot.height);
+        fltk3::set_spot(spotf, spots, spot.x, spot.y, spot.width, spot.height);
 #else
     if (fltk3::first_window() && fltk3::first_window()->modal()) {
       Window x  = fl_xid(fltk3::first_window());
@@ -907,7 +907,7 @@ int fl_handle(const XEvent& thisevent)
                         XNFocusWindow, xim_win,
                         XNClientWindow, xim_win,
                         NULL);
-        fl_set_spot(spotf, spots, spot.x, spot.y, spot.width, spot.height);
+        fltk3::set_spot(spotf, spots, spot.x, spot.y, spot.width, spot.height);
       }
     } else if (xim_win != xid && xid) {
       xim_win = xid;
@@ -917,7 +917,7 @@ int fl_handle(const XEvent& thisevent)
                         //XNFocusWindow, xim_win,
                         //XNClientWindow, xim_win,
                         NULL);
-      fl_set_spot(spotf, spots, spot.x, spot.y, spot.width, spot.height);
+      fltk3::set_spot(spotf, spots, spot.x, spot.y, spot.width, spot.height);
     }
 #endif
   }
@@ -1894,7 +1894,7 @@ void fltk3::Window::make_current() {
   fl_window = i->xid;
   fl_gc = gc;
   current_ = this;
-  fl_clip_region(0);
+  fltk3::clip_region(0);
 
 #ifdef FLTK_USE_CAIRO
   // update the cairo_t context
@@ -1948,20 +1948,20 @@ void Fl_Paged_Device::print_window(fltk3::Window *win, int x_offset, int y_offse
   XTranslateCoordinates(fl_display, fl_window, parent, 0, 0, &bx, &bt, &child_win);
   fl_window = parent;
   uchar *top_image = 0, *left_image = 0, *right_image = 0, *bottom_image = 0;
-  top_image = fl_read_image(NULL, 0, 0, - (win->w() + 2 * bx), bt);
+  top_image = fltk3::read_image(NULL, 0, 0, - (win->w() + 2 * bx), bt);
   if (bx) {
-    left_image = fl_read_image(NULL, 0, bt, -bx, win->h() + bx);
-    right_image = fl_read_image(NULL, win->w() + bx, bt, -bx, win->h() + bx);
-    bottom_image = fl_read_image(NULL, 0, bt + win->h(), -(win->w() + 2*bx), bx);
+    left_image = fltk3::read_image(NULL, 0, bt, -bx, win->h() + bx);
+    right_image = fltk3::read_image(NULL, win->w() + bx, bt, -bx, win->h() + bx);
+    bottom_image = fltk3::read_image(NULL, 0, bt + win->h(), -(win->w() + 2*bx), bx);
   }
   fl_window = from;
   this->set_current();
-  fl_draw_image(top_image, x_offset, y_offset, win->w() + 2 * bx, bt, 3);
+  fltk3::draw_image(top_image, x_offset, y_offset, win->w() + 2 * bx, bt, 3);
   delete[] top_image;
   if (bx) {
-    if (left_image) fl_draw_image(left_image, x_offset, y_offset + bt, bx, win->h() + bx, 3);
-    if (right_image) fl_draw_image(right_image, x_offset + win->w() + bx, y_offset + bt, bx, win->h() + bx, 3);
-    if (bottom_image) fl_draw_image(bottom_image, x_offset, y_offset + bt + win->h(), win->w() + 2*bx, bx, 3);
+    if (left_image) fltk3::draw_image(left_image, x_offset, y_offset + bt, bx, win->h() + bx, 3);
+    if (right_image) fltk3::draw_image(right_image, x_offset + win->w() + bx, y_offset + bt, bx, win->h() + bx, 3);
+    if (bottom_image) fltk3::draw_image(bottom_image, x_offset, y_offset + bt + win->h(), win->w() + 2*bx, bx, 3);
     if (left_image) delete[] left_image;
     if (right_image) delete[] right_image;
     if (bottom_image) delete[] bottom_image;

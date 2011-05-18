@@ -64,8 +64,8 @@ int Fl_Tabs::tab_positions() {
   int selected = 0;
   fltk3::Widget*const* a = array();
   int i;
-  char prev_draw_shortcut = fl_draw_shortcut;
-  fl_draw_shortcut = 1;
+  char prev_draw_shortcut = fltk3::draw_shortcut;
+  fltk3::draw_shortcut = 1;
 
   tab_pos[0] = fltk3::box_dx(box());
   for (i=0; i<nc; i++) {
@@ -78,7 +78,7 @@ int Fl_Tabs::tab_positions() {
     tab_width[i] = wt + EXTRASPACE;
     tab_pos[i+1] = tab_pos[i] + tab_width[i] + BORDER;
   }
-  fl_draw_shortcut = prev_draw_shortcut;
+  fltk3::draw_shortcut = prev_draw_shortcut;
 
   int r = w();
   if (tab_pos[i] <= r) return selected;
@@ -359,8 +359,8 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
   int sel = (what == SELECTED);
   int dh = fltk3::box_dh(box());
   int dy = fltk3::box_dy(box());
-  char prev_draw_shortcut = fl_draw_shortcut;
-  fl_draw_shortcut = 1;
+  char prev_draw_shortcut = fltk3::draw_shortcut;
+  fltk3::draw_shortcut = 1;
 
   fltk3::Boxtype bt = (o==push_ &&!sel) ? fltk3::down(box()) : box();
 
@@ -420,7 +420,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
 
     fltk3::pop_clip();
   }
-  fl_draw_shortcut = prev_draw_shortcut;
+  fltk3::draw_shortcut = prev_draw_shortcut;
 }
 
 /**
@@ -493,7 +493,7 @@ void Fl_Tabs::client_area(int &rx, int &ry, int &rw, int &rh, int tabh) {
   } else {				// calculate values
 
     int y_offset;
-    int label_height = fl_height(labelfont(), labelsize()) + BORDER*2;
+    int label_height = fltk3::height(labelfont(), labelsize()) + BORDER*2;
 
     if (tabh == 0)			// use default (at top)
       y_offset = label_height;

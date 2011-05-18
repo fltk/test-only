@@ -47,9 +47,9 @@ void Fl_Positioner::draw(int X, int Y, int W, int H) {
   int xx = int(flinear(xvalue(), xmin, xmax, x1, x1+w1-1)+.5);
   int yy = int(flinear(yvalue(), ymin, ymax, y1, y1+h1-1)+.5);
   draw_box(box(), X, Y, W, H, color());
-  fl_color(selection_color());
-  fl_xyline(x1, yy, x1+w1);
-  fl_yxline(xx, y1, y1+h1);
+  fltk3::color(selection_color());
+  fltk3::xyline(x1, yy, x1+w1);
+  fltk3::yxline(xx, y1, y1+h1);
 }
 
 void Fl_Positioner::draw() {

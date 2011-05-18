@@ -41,10 +41,10 @@ void Fl_Menu_Button::draw() {
   int H = (labelsize()-3)&-2;
   int X = x()+w()-H*2;
   int Y = y()+(h()-H)/2;
-  fl_color(active_r() ? fltk3::DARK3 : fltk3::inactive(fltk3::DARK3));
-  fl_line(X+H/2, Y+H, X, Y, X+H, Y);
-  fl_color(active_r() ? fltk3::LIGHT3 : fltk3::inactive(fltk3::LIGHT3));
-  fl_line(X+H, Y, X+H/2, Y+H);
+  fltk3::color(active_r() ? fltk3::DARK3 : fltk3::inactive(fltk3::DARK3));
+  fltk3::line(X+H/2, Y+H, X, Y, X+H, Y);
+  fltk3::color(active_r() ? fltk3::LIGHT3 : fltk3::inactive(fltk3::LIGHT3));
+  fltk3::line(X+H, Y, X+H/2, Y+H);
 }
 
 /**

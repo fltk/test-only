@@ -193,7 +193,7 @@ int Fl_System_Printer::start_page (void)
     }
     printable_rect(&w, &h);
     origin(0, 0);
-    fl_clip_region(0);
+    fltk3::clip_region(0);
     gc = (void *)fl_gc;
   }
   return rsult;

@@ -82,12 +82,12 @@ static Fl_Fontdesc built_in_table[] = {
 {"-*-*zapf dingbats-*"}
 };
 
-Fl_Fontdesc* fl_fonts = built_in_table;
+Fl_Fontdesc* fltk3::fonts = built_in_table;
 
 #define MAXSIZE 32767
 
 // return dash number N, or pointer to ending null if none:
-const char* fl_font_word(const char* p, int n) {
+const char* fltk3::font_word(const char* p, int n) {
   while (*p) {if (*p=='-') {if (!--n) break;} p++;}
   return p;
 }
@@ -97,7 +97,7 @@ char* fl_find_fontsize(char* name) {
   char* c = name;
   // for standard x font names, try after 7th dash:
   if (*c == '-') {
-    c = (char*)fl_font_word(c,7);
+    c = (char*)fltk3::font_word(c,7);
     if (*c++ && isdigit(*c)) return c;
     return 0; // malformed x font name?
   }
@@ -114,7 +114,7 @@ const char* fl_encoding = "iso10646-1";
 // return true if this matches fl_encoding:
 int fl_correct_encoding(const char* name) {
   if (*name != '-') return 0;
-  const char* c = fl_font_word(name,13);
+  const char* c = fltk3::font_word(name,13);
   return (*c++ && !strcmp(c,fl_encoding));
 }
 
@@ -228,8 +228,8 @@ static char *put_font_size(const char *n, int size)
 
 
 char *fl_get_font_xfld(int fnum, int size) {
-  Fl_Fontdesc* s = fl_fonts+fnum;
-  if (!s->name) s = fl_fonts; // use font 0 if still undefined
+  Fl_Fontdesc* s = fltk3::fonts+fnum;
+  if (!s->name) s = fltk3::fonts; // use font 0 if still undefined
   fl_open_display();
   return put_font_size(s->name, size);
 }
@@ -237,8 +237,8 @@ char *fl_get_font_xfld(int fnum, int size) {
 // locate or create an Fl_Font_Descriptor for a given Fl_Fontdesc and size:
 static Fl_Font_Descriptor* find(int fnum, int size) {
   char *name;
-  Fl_Fontdesc* s = fl_fonts+fnum;
-  if (!s->name) s = fl_fonts; // use font 0 if still undefined
+  Fl_Fontdesc* s = fltk3::fonts+fnum;
+  if (!s->name) s = fltk3::fonts; // use font 0 if still undefined
   Fl_Font_Descriptor* f;
   for (f = s->first; f; f = f->next)
     if (f->size == size) return f;
@@ -312,9 +312,9 @@ void Fl_Xlib_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &d
   W = ww; H = hh; dx = xx; dy = yy;
 // This is the safe but mostly wrong thing we used to do...
 //  W = 0; H = 0;
-//  fl_measure(c, W, H, 0);
+//  fltk3::measure(c, W, H, 0);
 //  dx = 0;
-//  dy = fl_descent() - H;
+//  dy = fltk3::descent() - H;
 }
 
 void Fl_Xlib_Graphics_Driver::draw(const char* c, int n, int x, int y) {

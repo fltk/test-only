@@ -42,14 +42,14 @@ void Fl_Value_Output::draw() {
   if (damage()&~fltk3::DAMAGE_CHILD)
     draw_box(b, color());
   else {
-    fl_color(color());
-    fl_rectf(X, Y, W, H);
+    fltk3::color(color());
+    fltk3::rectf(X, Y, W, H);
   }
   char buf[128];
   format(buf);
-  fl_color(active_r() ? textcolor() : fltk3::inactive(textcolor()));
-  fl_font(textfont(), textsize());
-  fl_draw(buf,X,Y,W,H,fltk3::ALIGN_LEFT);
+  fltk3::color(active_r() ? textcolor() : fltk3::inactive(textcolor()));
+  fltk3::font(textfont(), textsize());
+  fltk3::draw(buf,X,Y,W,H,fltk3::ALIGN_LEFT);
 }
 
 int Fl_Value_Output::handle(int event) {

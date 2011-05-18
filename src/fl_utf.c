@@ -961,7 +961,7 @@ int fl_utf8test(const char* src, unsigned srclen) {
     \b WARNING: this function returns widths for "raw" Unicode characters.
     It does not even try to map C1 control characters (0x80 to 0x9F) to
     CP1252, and C0/C1 control characters and DEL will return -1.
-    You are advised to use fl_width(const char* src) instead.
+    You are advised to use fltk3::width(const char* src) instead.
  */
 int fl_wcwidth_(unsigned int ucs) {
   return mk_wcwidth(ucs);

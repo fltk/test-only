@@ -37,7 +37,7 @@
 void fl_release_dc(HWND, HDC); // from Fl_win32.cxx
 #endif
 
-void fl_restore_clip(); // from fl_rect.cxx
+void fltk3::restore_clip(); // from fltk3::rect.cxx
 
 //
 // Base image class...
@@ -69,10 +69,10 @@ void Fl_Image::draw(int XP, int YP, int, int, int, int) {
 */
 void Fl_Image::draw_empty(int X, int Y) {
   if (w() > 0 && h() > 0) {
-    fl_color(fltk3::FOREGROUND_COLOR);
-    fl_rect(X, Y, w(), h());
-    fl_line(X, Y, X + w() - 1, Y + h() - 1);
-    fl_line(X, Y + h() - 1, X + w() - 1, Y);
+    fltk3::color(fltk3::FOREGROUND_COLOR);
+    fltk3::rect(X, Y, w(), h());
+    fltk3::line(X, Y, X + w() - 1, Y + h() - 1);
+    fltk3::line(X, Y + h() - 1, X + w() - 1, Y);
   }
 }
 
@@ -151,7 +151,7 @@ Fl_Image::labeltype(const fltk3::Label *lo,		// I - Label
   else if (la & fltk3::ALIGN_BOTTOM) cy = img->h() - lh;
   else cy = (img->h() - lh) / 2;
 
-  fl_color((fltk3::Color)lo->color);
+  fltk3::color((fltk3::Color)lo->color);
 
   img->draw(lx, ly, lw, lh, cx, cy);
 }
@@ -387,7 +387,7 @@ static void alpha_blend(Fl_RGB_Image *img, int X, int Y, int W, int H, int cx, i
   uchar *dst = new uchar[W * H * 3];
   uchar *dstptr = dst;
 
-  fl_read_image(dst, X, Y, W, H, 0);
+  fltk3::read_image(dst, X, Y, W, H, 0);
 
   uchar srcr, srcg, srcb, srca;
   uchar dstr, dstg, dstb, dsta;
@@ -428,7 +428,7 @@ static void alpha_blend(Fl_RGB_Image *img, int X, int Y, int W, int H, int cx, i
       }
   }
 
-  fl_draw_image(dst, X, Y, W, H, 3, 0);
+  fltk3::draw_image(dst, X, Y, W, H, 3, 0);
 
   delete[] dst;
 }
@@ -442,7 +442,7 @@ static int start(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int w, int h
 		 int &X, int &Y, int &W, int &H)
 {
   // account for current clip region (faster on Irix):
-  fl_clip_box(XP,YP,WP,HP,X,Y,W,H);
+  fltk3::clip_box(XP,YP,WP,HP,X,Y,W,H);
   cx += X-XP; cy += Y-YP;
   // clip the box down to the size of image, quit if empty:
   if (cx < 0) {W += cx; X -= cx; cx = 0;}
@@ -499,13 +499,13 @@ void Fl_GDI_Graphics_Driver::draw(Fl_RGB_Image *img, int XP, int YP, int WP, int
   }
   if (!img->id_) {
     img->id_ = fl_create_offscreen(img->w(), img->h());
-    if ((img->d() == 2 || img->d() == 4) && fl_can_do_alpha_blending()) {
+    if ((img->d() == 2 || img->d() == 4) && fltk3::can_do_alpha_blending()) {
       fl_begin_offscreen((Fl_Offscreen)img->id_);
-      fl_draw_image(img->array, 0, 0, img->w(), img->h(), img->d()|FL_IMAGE_WITH_ALPHA, img->ld());
+      fltk3::draw_image(img->array, 0, 0, img->w(), img->h(), img->d()|FL_IMAGE_WITH_ALPHA, img->ld());
       fl_end_offscreen();
     } else {
       fl_begin_offscreen((Fl_Offscreen)img->id_);
-      fl_draw_image(img->array, 0, 0, img->w(), img->h(), img->d(), img->ld());
+      fltk3::draw_image(img->array, 0, 0, img->w(), img->h(), img->d(), img->ld());
       fl_end_offscreen();
       if (img->d() == 2 || img->d() == 4) {
         img->mask_ = fl_create_alphamask(img->w(), img->h(), img->d(), img->ld(), img->array);
@@ -543,7 +543,7 @@ void Fl_Xlib_Graphics_Driver::draw(Fl_RGB_Image *img, int XP, int YP, int WP, in
     if (img->d() == 1 || img->d() == 3) {
       img->id_ = fl_create_offscreen(img->w(), img->h());
       fl_begin_offscreen((Fl_Offscreen)img->id_);
-      fl_draw_image(img->array, 0, 0, img->w(), img->h(), img->d(), img->ld());
+      fltk3::draw_image(img->array, 0, 0, img->w(), img->h(), img->d(), img->ld());
       fl_end_offscreen();
     }
   }
@@ -551,7 +551,7 @@ void Fl_Xlib_Graphics_Driver::draw(Fl_RGB_Image *img, int XP, int YP, int WP, in
     if (img->mask_) {
       // I can't figure out how to combine a mask with existing region,
       // so cut the image down to a clipped rectangle:
-      int nx, ny; fl_clip_box(X,Y,W,H,nx,ny,W,H);
+      int nx, ny; fltk3::clip_box(X,Y,W,H,nx,ny,W,H);
       cx += nx-X; X = nx;
       cy += ny-Y; Y = ny;
       // make X use the bitmap as a mask:
@@ -566,7 +566,7 @@ void Fl_Xlib_Graphics_Driver::draw(Fl_RGB_Image *img, int XP, int YP, int WP, in
     if (img->mask_) {
       // put the old clip region back
       XSetClipOrigin(fl_display, fl_gc, 0, 0);
-      fl_restore_clip();
+      fltk3::restore_clip();
     }
   } else {
     // Composite image with alpha manually each time...

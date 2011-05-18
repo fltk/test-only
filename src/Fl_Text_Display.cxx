@@ -307,8 +307,8 @@ void Fl_Text_Display::resize(int X, int Y, int W, int H) {
   int i;
   
   /* Find the new maximum font height for this text display */
-  for (i = 0, mMaxsize = fl_height(textfont(), textsize()); i < mNStyles; i++)
-    mMaxsize = max(mMaxsize, fl_height(mStyleTable[i].font, mStyleTable[i].size));
+  for (i = 0, mMaxsize = fltk3::height(textfont(), textsize()); i < mNStyles; i++)
+    mMaxsize = max(mMaxsize, fltk3::height(mStyleTable[i].font, mStyleTable[i].size));
   
   // did we have scrollbars initially?
   unsigned int hscrollbarvisible = mHScrollBar->visible();
@@ -1961,17 +1961,17 @@ void Fl_Text_Display::draw_string(int style,
   }
   
   if (!(style & TEXT_ONLY_MASK)) {
-    fl_color( background );
-    fl_rectf( X, Y, toX - X, mMaxsize );
+    fltk3::color( background );
+    fltk3::rectf( X, Y, toX - X, mMaxsize );
   }
   if (!(style & BG_ONLY_MASK)) {
-    fl_color( foreground );
-    fl_font( font, fsize );
+    fltk3::color( foreground );
+    fltk3::font( font, fsize );
 #if !(defined(__APPLE__) || defined(WIN32)) && USE_XFT
     // makes sure antialiased ÄÖÜ do not leak on line above
     fltk3::push_clip(X, Y, toX - X, mMaxsize);
 #endif
-    fl_draw( string, nChars, X, Y + mMaxsize - fl_descent());
+    fltk3::draw( string, nChars, X, Y + mMaxsize - fltk3::descent());
 #if !(defined(__APPLE__) || defined(WIN32)) && USE_XFT
     fltk3::pop_clip();
 #endif
@@ -2014,20 +2014,20 @@ void Fl_Text_Display::clear_rect(int style,
   
   if (style & PRIMARY_MASK) {
     if (fltk3::focus()==(fltk3::Widget*)this) {
-      fl_color(selection_color());
+      fltk3::color(selection_color());
     } else {
-      fl_color(fltk3::color_average(color(), selection_color(), 0.4f));
+      fltk3::color(fltk3::color_average(color(), selection_color(), 0.4f));
     }
   } else if (style & HIGHLIGHT_MASK) {
     if (fltk3::focus()==(fltk3::Widget*)this) {
-      fl_color(fltk3::color_average(color(), selection_color(), 0.5f));
+      fltk3::color(fltk3::color_average(color(), selection_color(), 0.5f));
     } else {
-      fl_color(fltk3::color_average(color(), selection_color(), 0.6f));
+      fltk3::color(fltk3::color_average(color(), selection_color(), 0.6f));
     }
   } else {
-    fl_color( color() );
+    fltk3::color( color() );
   }
-  fl_rectf( X, Y, width, height );
+  fltk3::rectf( X, Y, width, height );
 }
 
 
@@ -2096,10 +2096,10 @@ void Fl_Text_Display::draw_cursor( int X, int Y ) {
     segs[ 3 ].x1 = X; segs[ 3 ].y1 = bot; segs[ 3 ].x2 = X; segs[ 3 ].y2 = Y;
     nSegs = 4;
   }
-  fl_color( mCursor_color );
+  fltk3::color( mCursor_color );
   
   for ( int k = 0; k < nSegs; k++ ) {
-    fl_line( segs[ k ].x1, segs[ k ].y1, segs[ k ].x2, segs[ k ].y2 );
+    fltk3::line( segs[ k ].x1, segs[ k ].y1, segs[ k ].x2, segs[ k ].y2 );
   }
 }
 
@@ -2186,8 +2186,8 @@ double Fl_Text_Display::string_width( const char *string, int length, int style 
     font  = textfont();
     fsize = textsize();
   }
-  fl_font( font, fsize );
-  return fl_width( string, length );
+  fltk3::font( font, fsize );
+  return fltk3::width( string, length );
 }
 
 
@@ -3363,7 +3363,7 @@ void Fl_Text_Display::draw(void) {
     //    printf("drawing all (box = %d)\n", box());
     if (Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id) {
       // if to printer, draw the background
-      fl_rectf(text_area.x, text_area.y, text_area.w, text_area.h, color() );
+      fltk3::rectf(text_area.x, text_area.y, text_area.w, text_area.h, color() );
     }
     // draw the box()
     int W = w(), H = h();
@@ -3375,26 +3375,26 @@ void Fl_Text_Display::draw(void) {
       H -= scrollbar_width();
     
     // left margin
-    fl_rectf(text_area.x-LEFT_MARGIN, text_area.y-TOP_MARGIN,
+    fltk3::rectf(text_area.x-LEFT_MARGIN, text_area.y-TOP_MARGIN,
              LEFT_MARGIN, text_area.h+TOP_MARGIN+BOTTOM_MARGIN,
              color());
     
     // right margin
-    fl_rectf(text_area.x+text_area.w, text_area.y-TOP_MARGIN,
+    fltk3::rectf(text_area.x+text_area.w, text_area.y-TOP_MARGIN,
              RIGHT_MARGIN, text_area.h+TOP_MARGIN+BOTTOM_MARGIN,
              color());
     
     // top margin
-    fl_rectf(text_area.x, text_area.y-TOP_MARGIN,
+    fltk3::rectf(text_area.x, text_area.y-TOP_MARGIN,
              text_area.w, TOP_MARGIN, color());
     
     // bottom margin
-    fl_rectf(text_area.x, text_area.y+text_area.h,
+    fltk3::rectf(text_area.x, text_area.y+text_area.h,
              text_area.w, BOTTOM_MARGIN, color());
     
     // draw that little box in the corner of the scrollbars
     if (mVScrollBar->visible() && mHScrollBar->visible())
-      fl_rectf(mVScrollBar->x(), mHScrollBar->y(),
+      fltk3::rectf(mVScrollBar->x(), mHScrollBar->y(),
                mVScrollBar->w(), mHScrollBar->h(),
                fltk3::GRAY);
     
@@ -3407,9 +3407,9 @@ void Fl_Text_Display::draw(void) {
                  text_area.y,
                  text_area.w+LEFT_MARGIN+RIGHT_MARGIN,
                  text_area.h);
-    fl_rectf(text_area.x-LEFT_MARGIN, mCursorOldY,
+    fltk3::rectf(text_area.x-LEFT_MARGIN, mCursorOldY,
              LEFT_MARGIN, mMaxsize, color());
-    fl_rectf(text_area.x+text_area.w, mCursorOldY,
+    fltk3::rectf(text_area.x+text_area.w, mCursorOldY,
              RIGHT_MARGIN, mMaxsize, color());
     fltk3::pop_clip();
   }
@@ -3426,7 +3426,7 @@ void Fl_Text_Display::draw(void) {
   if (damage() & (fltk3::DAMAGE_ALL | fltk3::DAMAGE_EXPOSE)) {
     //printf("drawing all text\n");
     int X, Y, W, H;
-    if (fl_clip_box(text_area.x, text_area.y, text_area.w, text_area.h,
+    if (fltk3::clip_box(text_area.x, text_area.y, text_area.w, text_area.h,
                     X, Y, W, H)) {
       // Draw text using the intersected clipping box...
       // (this sets the clipping internally)

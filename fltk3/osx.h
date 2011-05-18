@@ -168,7 +168,10 @@ extern FLTK3_EXPORT Fl_CGContextRef fl_gc;
 extern FLTK3_EXPORT class Fl_Sys_Menu_Bar *fl_sys_menu_bar;
 
 extern Window fl_xid(const fltk3::Window*);
-void fl_clip_region(Fl_Region);
+
+namespace fltk3 {
+  void clip_region(Fl_Region);
+}
 
 extern FLTK3_EXPORT Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data);
 extern FLTK3_EXPORT Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);

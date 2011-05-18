@@ -43,7 +43,7 @@
   Sets the cursor for the current window to the specified shape and colors.
   The cursors are defined in the <fltk3/enumerations.h> header file. 
   */
-void fl_cursor(fltk3::Cursor c, fltk3::Color fg, fltk3::Color bg) {
+void fltk3::cursor(fltk3::Cursor c, fltk3::Color fg, fltk3::Color bg) {
   if (fltk3::first_window()) fltk3::first_window()->cursor(c,fg,bg);
 }
 /** 
@@ -143,10 +143,10 @@ CGContextRef Fl_X::help_cursor_image(void)
   Fl_Offscreen off = fl_create_offscreen_with_alpha(w, h);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
-  fl_rectf(0,0,w,h);
-  fl_color(fltk3::BLACK);
-  fl_font(fltk3::COURIER_BOLD, 20);
-  fl_draw("?", 1, h-1);
+  fltk3::rectf(0,0,w,h);
+  fltk3::color(fltk3::BLACK);
+  fltk3::font(fltk3::COURIER_BOLD, 20);
+  fltk3::draw("?", 1, h-1);
   fl_end_offscreen();
   return (CGContextRef)off;
 }
@@ -157,7 +157,7 @@ CGContextRef Fl_X::none_cursor_image(void)
   Fl_Offscreen off = fl_create_offscreen_with_alpha(w, h);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
-  fl_rectf(0,0,w,h);
+  fltk3::rectf(0,0,w,h);
   fl_end_offscreen();
   return (CGContextRef)off;
 }
@@ -170,19 +170,19 @@ CGContextRef Fl_X::watch_cursor_image(void)
   Fl_Offscreen off = fl_create_offscreen_with_alpha(w, h);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
-  fl_rectf(0,0,w,h);
+  fltk3::rectf(0,0,w,h);
   CGContextTranslateCTM( (CGContextRef)off, w/2, h/2);
-  fl_color(fltk3::WHITE);
-  fl_circle(0, 0, r+1);
-  fl_color(fltk3::BLACK);
-  fl_rectf(int(-r*0.7), int(-r*1.7), int(1.4*r), int(3.4*r));
-  fl_rectf(r-1, -1, 3, 3);
-  fl_color(fltk3::WHITE);
-  fl_pie(-r, -r, 2*r, 2*r, 0, 360);
-  fl_color(fltk3::BLACK);
-  fl_circle(0,0,r);
-  fl_xyline(0, 0, int(-r*.7));
-  fl_xyline(0, 0, 0, int(-r*.7));
+  fltk3::color(fltk3::WHITE);
+  fltk3::circle(0, 0, r+1);
+  fltk3::color(fltk3::BLACK);
+  fltk3::rectf(int(-r*0.7), int(-r*1.7), int(1.4*r), int(3.4*r));
+  fltk3::rectf(r-1, -1, 3, 3);
+  fltk3::color(fltk3::WHITE);
+  fltk3::pie(-r, -r, 2*r, 2*r, 0, 360);
+  fltk3::color(fltk3::BLACK);
+  fltk3::circle(0,0,r);
+  fltk3::xyline(0, 0, int(-r*.7));
+  fltk3::xyline(0, 0, 0, int(-r*.7));
   fl_end_offscreen();
   return (CGContextRef)off;
 }
@@ -194,15 +194,15 @@ CGContextRef Fl_X::nesw_cursor_image(void)
   Fl_Offscreen off = fl_create_offscreen_with_alpha(w, h);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
-  fl_rectf(0,0,w,h);
+  fltk3::rectf(0,0,w,h);
   CGContextTranslateCTM( (CGContextRef)off, 0, h);
   CGContextScaleCTM( (CGContextRef)off, 1, -1);
-  fl_color(fltk3::BLACK);
-  fl_polygon(0, 0, c, 0, 0, c);
-  fl_polygon(r, r, r, r-c, r-c, r);
-  fl_line_style(FL_SOLID, 2, 0);
-  fl_line(0,1, r,r+1);
-  fl_line_style(FL_SOLID, 0, 0);
+  fltk3::color(fltk3::BLACK);
+  fltk3::polygon(0, 0, c, 0, 0, c);
+  fltk3::polygon(r, r, r, r-c, r-c, r);
+  fltk3::line_style(fltk3::SOLID, 2, 0);
+  fltk3::line(0,1, r,r+1);
+  fltk3::line_style(fltk3::SOLID, 0, 0);
   fl_end_offscreen();
   return (CGContextRef)off;
 }
@@ -214,15 +214,15 @@ CGContextRef Fl_X::nwse_cursor_image(void)
   Fl_Offscreen off = fl_create_offscreen_with_alpha(w, h);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
-  fl_rectf(0,0,w,h);
+  fltk3::rectf(0,0,w,h);
   CGContextTranslateCTM( (CGContextRef)off, 0, h);
   CGContextScaleCTM( (CGContextRef)off, 1, -1);
-  fl_color(fltk3::BLACK);
-  fl_polygon(r-1, 0, r-1, c, r-1-c, 0);
-  fl_polygon(-1, r, c-1, r, -1, r-c);
-  fl_line_style(FL_SOLID, 2, 0);
-  fl_line(r-1,1, -1,r+1);
-  fl_line_style(FL_SOLID, 0, 0);
+  fltk3::color(fltk3::BLACK);
+  fltk3::polygon(r-1, 0, r-1, c, r-1-c, 0);
+  fltk3::polygon(-1, r, c-1, r, -1, r-c);
+  fltk3::line_style(fltk3::SOLID, 2, 0);
+  fltk3::line(r-1,1, -1,r+1);
+  fltk3::line_style(fltk3::SOLID, 0, 0);
   fl_end_offscreen();
   return (CGContextRef)off;
 }

@@ -48,7 +48,7 @@ static void draw_barchart(int x,int y,int w,int h,
 {
   double incr;
   int zeroh;
-  double lh = fl_height();
+  double lh = fltk3::height();
   if (max == min) incr = h;
   else incr = h/(max-min);
   if ( (-min*incr) < lh) {
@@ -59,8 +59,8 @@ static void draw_barchart(int x,int y,int w,int h,
   }
   int bwidth = (int)rint(w/double(autosize?numb:maxnumb));
   /* Draw base line */
-  fl_color(textcolor);
-  fl_line(x, zeroh, x+w, zeroh);
+  fltk3::color(textcolor);
+  fltk3::line(x, zeroh, x+w, zeroh);
   if (min == 0.0 && max == 0.0) return; /* Nothing else to draw */
   int i;
   /* Draw the bars */
@@ -72,9 +72,9 @@ static void draw_barchart(int x,int y,int w,int h,
 	fl_rectbound(x+i*bwidth,zeroh-hh,bwidth+1,hh+1,(fltk3::Color)entries[i].col);
   }
   /* Draw the labels */
-  fl_color(textcolor);
+  fltk3::color(textcolor);
   for (i=0; i<numb; i++)
-      fl_draw(entries[i].str,
+      fltk3::draw(entries[i].str,
 	      x+i*bwidth+bwidth/2,zeroh,0,0,
 	      fltk3::ALIGN_TOP);
 }
@@ -90,7 +90,7 @@ static void draw_horbarchart(int x,int y,int w,int h,
   double lw = 0.0;		/* Maximal label width */
   /* Compute maximal label width */
   for (i=0; i<numb; i++) {
-      double w1 = fl_width(entries[i].str);
+      double w1 = fltk3::width(entries[i].str);
       if (w1 > lw) lw = w1;
   }
   if (lw > 0.0) lw += 4.0;
@@ -106,8 +106,8 @@ static void draw_horbarchart(int x,int y,int w,int h,
   }
   int bwidth = (int)rint(h/double(autosize?numb:maxnumb));
   /* Draw base line */
-  fl_color(textcolor);
-  fl_line(zeroh, y, zeroh, y+h);
+  fltk3::color(textcolor);
+  fltk3::line(zeroh, y, zeroh, y+h);
   if (min == 0.0 && max == 0.0) return; /* Nothing else to draw */
   /* Draw the bars */
   for (i=0; i<numb; i++) {
@@ -118,9 +118,9 @@ static void draw_horbarchart(int x,int y,int w,int h,
 	fl_rectbound(zeroh+ww,y+i*bwidth,-ww+1,bwidth+1,(fltk3::Color)entries[i].col);
   }
   /* Draw the labels */
-  fl_color(textcolor);
+  fltk3::color(textcolor);
   for (i=0; i<numb; i++)
-      fl_draw(entries[i].str,
+      fltk3::draw(entries[i].str,
 	      zeroh-2,y+i*bwidth+bwidth/2,0,0,
 	      fltk3::ALIGN_RIGHT);
 }
@@ -133,7 +133,7 @@ static void draw_linechart(int type, int x,int y,int w,int h,
    numb entries and min and max the boundaries. */
 {
   int i;
-  double lh = fl_height();
+  double lh = fltk3::height();
   double incr;
   if (max == min) incr = h-2.0*lh;
   else incr = (h-2.0*lh)/ (max-min);
@@ -146,31 +146,31 @@ static void draw_linechart(int type, int x,int y,int w,int h,
       int yy0 = i ? zeroh - (int)rint(entries[i-1].val*incr) : 0;
       int yy1 = zeroh - (int)rint(entries[i].val*incr);
       if (type == FL_SPIKE_CHART) {
-	  fl_color((fltk3::Color)entries[i].col);
-	  fl_line(x1, zeroh, x1, yy1);
+	  fltk3::color((fltk3::Color)entries[i].col);
+	  fltk3::line(x1, zeroh, x1, yy1);
       } else if (type == FL_LINE_CHART && i != 0) {
-	  fl_color((fltk3::Color)entries[i-1].col);
-	  fl_line(x0,yy0,x1,yy1);
+	  fltk3::color((fltk3::Color)entries[i-1].col);
+	  fltk3::line(x0,yy0,x1,yy1);
       } else if (type == FL_FILLED_CHART && i != 0) {
-	  fl_color((fltk3::Color)entries[i-1].col);
+	  fltk3::color((fltk3::Color)entries[i-1].col);
 	  if ((entries[i-1].val>0.0)!=(entries[i].val>0.0)) {
 	      double ttt = entries[i-1].val/(entries[i-1].val-entries[i].val);
 	      int xt = x + (int)rint((i-.5+ttt)*bwidth);
-	      fl_polygon(x0,zeroh, x0,yy0, xt,zeroh);
-	      fl_polygon(xt,zeroh, x1,yy1, x1,zeroh);
+	      fltk3::polygon(x0,zeroh, x0,yy0, xt,zeroh);
+	      fltk3::polygon(xt,zeroh, x1,yy1, x1,zeroh);
 	  } else {
-	      fl_polygon(x0,zeroh, x0,yy0, x1,yy1, x1,zeroh);
+	      fltk3::polygon(x0,zeroh, x0,yy0, x1,yy1, x1,zeroh);
 	  }
-	  fl_color(textcolor);
-	  fl_line(x0,yy0,x1,yy1);
+	  fltk3::color(textcolor);
+	  fltk3::line(x0,yy0,x1,yy1);
       }
   }
   /* Draw base line */
-  fl_color(textcolor);
-  fl_line(x,zeroh,x+w,zeroh);
+  fltk3::color(textcolor);
+  fltk3::line(x,zeroh,x+w,zeroh);
   /* Draw the labels */
   for (i=0; i<numb; i++)
-      fl_draw(entries[i].str,
+      fltk3::draw(entries[i].str,
 	      x+(int)rint((i+.5)*bwidth), zeroh - (int)rint(entries[i].val*incr),0,0,
 	      entries[i].val>=0 ? fltk3::ALIGN_BOTTOM : fltk3::ALIGN_TOP);
 }
@@ -187,7 +187,7 @@ static void draw_piechart(int x,int y,int w,int h,
   double incr;		/* increment in angle */
   double curang;		/* current angle we are drawing */
   double txc,tyc;	/* temporary center */
-  double lh = fl_height();
+  double lh = fltk3::height();
   /* compute center and radius */
   double h_denom = (special ? 2.3 : 2.0);
   rad = (h - 2*lh)/h_denom/1.1;
@@ -210,18 +210,18 @@ static void draw_piechart(int x,int y,int w,int h,
         txc += 0.3*rad*cos(ARCINC*(curang+0.5*incr*entries[i].val));
         tyc -= 0.3*rad*sin(ARCINC*(curang+0.5*incr*entries[i].val));
       }
-      fl_color((fltk3::Color)entries[i].col);
-      fl_begin_polygon(); fl_vertex(txc,tyc);
-      fl_arc(txc,tyc,rad,curang, curang+incr*entries[i].val);
-      fl_end_polygon();
-      fl_color(textcolor);
-      fl_begin_loop(); fl_vertex(txc,tyc);
-      fl_arc(txc,tyc,rad,curang, curang+incr*entries[i].val);
-      fl_end_loop();
+      fltk3::color((fltk3::Color)entries[i].col);
+      fltk3::begin_polygon(); fltk3::vertex(txc,tyc);
+      fltk3::arc(txc,tyc,rad,curang, curang+incr*entries[i].val);
+      fltk3::end_polygon();
+      fltk3::color(textcolor);
+      fltk3::begin_loop(); fltk3::vertex(txc,tyc);
+      fltk3::arc(txc,tyc,rad,curang, curang+incr*entries[i].val);
+      fltk3::end_loop();
       curang += 0.5 * incr * entries[i].val;
       /* draw the label */
       double xl = txc + 1.1*rad*cos(ARCINC*curang);
-      fl_draw(entries[i].str,
+      fltk3::draw(entries[i].str,
 	      (int)rint(xl),
 	      (int)rint(tyc - 1.1*rad*sin(ARCINC*curang)),
 	      0, 0,
@@ -250,7 +250,7 @@ void Fl_Chart::draw() {
 	}
     }
 
-    fl_font(textfont(),textsize());
+    fltk3::font(textfont(),textsize());
 
     switch (type()) {
     case FL_BAR_CHART:

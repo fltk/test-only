@@ -46,12 +46,12 @@
 
 #ifdef __APPLE__
 
-const char *fl_mac_roman_to_local(const char *t, int)
+const char *fltk3::mac_roman_to_local(const char *t, int)
 {
   return t;
 }
 
-const char *fl_local_to_mac_roman(const char *t, int)
+const char *fltk3::local_to_mac_roman(const char *t, int)
 {
   return t;
 }
@@ -85,7 +85,7 @@ static uchar roman2latin[128] = {
 static char *buf = 0;
 static int n_buf = 0;
 
-const char *fl_local_to_mac_roman(const char *t, int n)  
+const char *fltk3::local_to_mac_roman(const char *t, int n)  
 {
   if (n==-1) n = strlen(t);
   if (n<=n_buf) {
@@ -106,7 +106,7 @@ const char *fl_local_to_mac_roman(const char *t, int n)
   return buf;
 }
 
-const char *fl_mac_roman_to_local(const char *t, int n)
+const char *fltk3::mac_roman_to_local(const char *t, int n)
 {
   if (n==-1) n = strlen(t);
   if (n<=n_buf) {

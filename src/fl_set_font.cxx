@@ -47,22 +47,22 @@ void fltk3::set_font(fltk3::Font fnum, const char* name) {
       table_size = 2*fltk3::FREE_FONT;
       i = fltk3::FREE_FONT;
       Fl_Fontdesc* t = (Fl_Fontdesc*)malloc(table_size*sizeof(Fl_Fontdesc));
-      memcpy(t, fl_fonts, fltk3::FREE_FONT*sizeof(Fl_Fontdesc));
-      fl_fonts = t;
+      memcpy(t, fltk3::fonts, fltk3::FREE_FONT*sizeof(Fl_Fontdesc));
+      fltk3::fonts = t;
     } else {
       table_size = 2*table_size;
-      fl_fonts=(Fl_Fontdesc*)realloc(fl_fonts, table_size*sizeof(Fl_Fontdesc));
+      fltk3::fonts=(Fl_Fontdesc*)realloc(fltk3::fonts, table_size*sizeof(Fl_Fontdesc));
     }
     for (; i < table_size; i++) {
-      fl_fonts[i].fontname[0] = 0;
-      fl_fonts[i].name = 0;
+      fltk3::fonts[i].fontname[0] = 0;
+      fltk3::fonts[i].name = 0;
 #if !defined(WIN32) && !defined(__APPLE__)
-      fl_fonts[i].xlist = 0;
-      fl_fonts[i].n = 0;
+      fltk3::fonts[i].xlist = 0;
+      fltk3::fonts[i].n = 0;
 #endif // !WIN32 && !__APPLE__
     }
   }
-  Fl_Fontdesc* s = fl_fonts+fnum;
+  Fl_Fontdesc* s = fltk3::fonts+fnum;
   if (s->name) {
     if (!strcmp(s->name, name)) {s->name = name; return;}
 #if !defined(WIN32) && !defined(__APPLE__)
@@ -79,7 +79,7 @@ void fltk3::set_font(fltk3::Font fnum, const char* name) {
   s->xlist = 0;
 #endif
   s->first = 0;
-  fl_font(-1, 0);
+  fltk3::font(-1, 0);
 }
 /** Copies one face to another. */
 void fltk3::set_font(fltk3::Font fnum, fltk3::Font from) {
@@ -90,7 +90,7 @@ void fltk3::set_font(fltk3::Font fnum, fltk3::Font from) {
     face. Under X this value is passed to XListFonts to get all the sizes
     of this face.
 */
-const char* fltk3::get_font(fltk3::Font fnum) {return fl_fonts[fnum].name;}
+const char* fltk3::get_font(fltk3::Font fnum) {return fltk3::fonts[fnum].name;}
 
 //
 // End of "$Id$".

@@ -84,7 +84,7 @@ static void fl_init_symbols(void);
   \param[in] scalable set to 1 if \p drawit uses scalable vector drawing
   \returns 1 on success, 0 on failure
   */
-int fl_add_symbol(const char *name, void (*drawit)(fltk3::Color), int scalable)
+int fltk3::add_symbol(const char *name, void (*drawit)(fltk3::Color), int scalable)
 {
   fl_init_symbols();
   int pos;
@@ -109,7 +109,7 @@ int fl_return_arrow(int x,int y,int w,int h);
   \returns 1 on success, 0 on failure
   */
 // provided for back compatibility:
-int fl_draw_symbol(const char *label,int x,int y,int w,int h,fltk3::Color col) {  
+int fltk3::draw_symbol(const char *label,int x,int y,int w,int h,fltk3::Color col) {  
   const char *p = label;
   if (*p++ != '@') return 0;
   fl_init_symbols();
@@ -159,17 +159,17 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,fltk3::Color col) {
     fl_return_arrow(x,y,w,h);
     return 1;
   }
-  fl_push_matrix();
-  fl_translate(x+w/2,y+h/2);
+  fltk3::push_matrix();
+  fltk3::translate(x+w/2,y+h/2);
   if (symbols[pos].scalable) {
     if (equalscale) {if (w<h) h = w; else w = h;}
-    fl_scale(0.5*w, 0.5*h);
-    fl_rotate(rotangle/10.0);
-    if (flip_x) fl_scale(-1.0, 1.0);
-    if (flip_y) fl_scale(1.0, -1.0);
+    fltk3::scale(0.5*w, 0.5*h);
+    fltk3::rotate(rotangle/10.0);
+    if (flip_x) fltk3::scale(-1.0, 1.0);
+    if (flip_y) fltk3::scale(1.0, -1.0);
   }
   (symbols[pos].drawit)(col);
-  fl_pop_matrix();
+  fltk3::pop_matrix();
   return 1;
 }
 
@@ -177,23 +177,23 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,fltk3::Color col) {
 
 /* Some help stuff */
 
-#define BP fl_begin_polygon()
-#define EP fl_end_polygon()
-#define BCP fl_begin_complex_polygon()
-#define ECP fl_end_complex_polygon()
-#define BL fl_begin_line()
-#define EL fl_end_line()
-#define BC fl_begin_loop()
-#define EC fl_end_loop()
-#define vv(x,y) fl_vertex(x,y)
+#define BP fltk3::begin_polygon()
+#define EP fltk3::end_polygon()
+#define BCP fltk3::begin_complex_polygon()
+#define ECP fltk3::end_complex_polygon()
+#define BL fltk3::begin_line()
+#define EL fltk3::end_line()
+#define BC fltk3::begin_loop()
+#define EC fltk3::end_loop()
+#define vv(x,y) fltk3::vertex(x,y)
 
 //for the outline color
 static void set_outline_color(fltk3::Color c) {
-  fl_color(fltk3::darker(c));
+  fltk3::color(fltk3::darker(c));
 }
 
 static void rectangle(double x,double y,double x2,double y2,fltk3::Color col) {
-  fl_color(col);
+  fltk3::color(col);
   BP; vv(x,y); vv(x2,y); vv(x2,y2); vv(x,y2); EP;
   set_outline_color(col);
   BC; vv(x,y); vv(x2,y); vv(x2,y2); vv(x,y2); EC;
@@ -203,7 +203,7 @@ static void rectangle(double x,double y,double x2,double y2,fltk3::Color col) {
 
 static void draw_fltk(fltk3::Color col) 
 {
-  fl_color(col);
+  fltk3::color(col);
   // F fill
   BCP; vv(-2.0, -0.5); vv(-1.0, -0.5); vv(-1.0, -0.3); vv(-1.8, -0.3);
   vv(-1.8, -0.1); vv(-1.2, -0.1); vv(-1.2, 0.1); vv(-1.8, 0.1);
@@ -237,18 +237,18 @@ static void draw_fltk(fltk3::Color col)
 
 static void draw_search(fltk3::Color col) 
 {
-  fl_color(col);
+  fltk3::color(col);
   BP; vv(-.4, .13); vv(-1.0, .73); vv(-.73, 1.0); vv(-.13, .4); EP;
   set_outline_color(col);
-  fl_line_style(FL_SOLID, 3, 0);
-  BC; fl_circle(.2, -.2, .6); EC;
-  fl_line_style(FL_SOLID, 1, 0);
+  fltk3::line_style(fltk3::SOLID, 3, 0);
+  BC; fltk3::circle(.2, -.2, .6); EC;
+  fltk3::line_style(fltk3::SOLID, 1, 0);
   BC; vv(-.4, .13); vv(-1.0, .73); vv(-.73, 1.0); vv(-.13, .4); EC;
 }
 
 static void draw_arrow1(fltk3::Color col)
 {
-  fl_color(col);
+  fltk3::color(col);
   BP; vv(-0.8,-0.4); vv(-0.8,0.4); vv(0.0,0.4); vv(0.0,-0.4); EP;
   BP; vv(0.0,0.8); vv(0.8,0.0); vv(0.0,-0.8); vv(0.0,-0.4); vv(0.0,0.4); EP;
   set_outline_color(col);
@@ -264,7 +264,7 @@ static void draw_arrow1bar(fltk3::Color col)
 
 static void draw_arrow2(fltk3::Color col)
 {
-  fl_color(col);
+  fltk3::color(col);
   BP; vv(-0.3,0.8); vv(0.50,0.0); vv(-0.3,-0.8); EP;
   set_outline_color(col);
   BC; vv(-0.3,0.8); vv(0.50,0.0); vv(-0.3,-0.8); EC;
@@ -272,7 +272,7 @@ static void draw_arrow2(fltk3::Color col)
 
 static void draw_arrow3(fltk3::Color col)
 {
-  fl_color(col);
+  fltk3::color(col);
   BP; vv(0.1,0.8); vv(0.9,0.0); vv(0.1,-0.8); EP;
   BP; vv(-0.7,0.8); vv(0.1,0.0); vv(-0.7,-0.8); EP;
   set_outline_color(col);
@@ -282,7 +282,7 @@ static void draw_arrow3(fltk3::Color col)
 
 static void draw_arrowbar(fltk3::Color col)
 {
-  fl_color(col);
+  fltk3::color(col);
   BP; vv(0.2,0.8); vv(0.6,0.8); vv(0.6,-0.8); vv(0.2,-0.8); EP;
   BP; vv(-0.6,0.8); vv(0.2,0.0); vv(-0.6,-0.8); EP;
   set_outline_color(col);
@@ -292,7 +292,7 @@ static void draw_arrowbar(fltk3::Color col)
 
 static void draw_arrowbox(fltk3::Color col)
 {
-  fl_color(col);
+  fltk3::color(col);
   BP; vv(-0.6,0.8); vv(0.2,0.0); vv(-0.6,-0.8); EP;
   BC; vv(0.2,0.8); vv(0.6,0.8); vv(0.6,-0.8); vv(0.2,-0.8); EC;
   set_outline_color(col);
@@ -302,7 +302,7 @@ static void draw_arrowbox(fltk3::Color col)
 
 static void draw_bararrow(fltk3::Color col)
 {
-  fl_color(col);
+  fltk3::color(col);
   BP; vv(0.1,0.8); vv(0.9,0.0); vv(0.1,-0.8); EP;
   BP; vv(-0.5,0.8); vv(-0.1,0.8); vv(-0.1,-0.8); vv(-0.5,-0.8); EP;
   set_outline_color(col);
@@ -316,26 +316,26 @@ static void draw_doublebar(fltk3::Color col) {
 }
 
 static void draw_arrow01(fltk3::Color col)
-  { fl_rotate(180); draw_arrow1(col); }
+  { fltk3::rotate(180); draw_arrow1(col); }
 
 static void draw_arrow02(fltk3::Color col)
-  { fl_rotate(180); draw_arrow2(col); }
+  { fltk3::rotate(180); draw_arrow2(col); }
 
 static void draw_arrow03(fltk3::Color col)
-  { fl_rotate(180); draw_arrow3(col); }
+  { fltk3::rotate(180); draw_arrow3(col); }
 
 static void draw_0arrowbar(fltk3::Color col)
-  { fl_rotate(180); draw_arrowbar(col); }
+  { fltk3::rotate(180); draw_arrowbar(col); }
 
 static void draw_0arrowbox(fltk3::Color col)
-  { fl_rotate(180); draw_arrowbox(col); }
+  { fltk3::rotate(180); draw_arrowbox(col); }
 
 static void draw_0bararrow(fltk3::Color col)
-  { fl_rotate(180); draw_bararrow(col); }
+  { fltk3::rotate(180); draw_bararrow(col); }
 
 static void draw_doublearrow(fltk3::Color col)
 {
-  fl_color(col);
+  fltk3::color(col);
   BP; vv(-0.35,-0.4); vv(-0.35,0.4); vv(0.35,0.4); vv(0.35,-0.4); EP;
   BP; vv(0.15,0.8); vv(0.95,0.0); vv(0.15,-0.8); EP;
   BP; vv(-0.15,0.8); vv(-0.95,0.0); vv(-0.15,-0.8); EP;
@@ -347,7 +347,7 @@ static void draw_doublearrow(fltk3::Color col)
 
 static void draw_arrow(fltk3::Color col)
 {
-  fl_color(col);
+  fltk3::color(col);
   BP; vv(0.65,0.1); vv(1.0,0.0); vv(0.65,-0.1); EP;
   BL; vv(-1.0,0.0); vv(0.65,0.0); EL;
   set_outline_color(col);
@@ -359,17 +359,17 @@ static void draw_square(fltk3::Color col)
   { rectangle(-1,-1,1,1,col); }
 
 static void draw_circle(fltk3::Color col) {
-  fl_color(col); BP; fl_circle(0,0,1); EP;
+  fltk3::color(col); BP; fltk3::circle(0,0,1); EP;
   set_outline_color(col);
-  BC; fl_circle(0,0,1); EC;
+  BC; fltk3::circle(0,0,1); EC;
 }
 
 static void draw_line(fltk3::Color col)
-  { fl_color(col); BL; vv(-1.0,0.0); vv(1.0,0.0); EL; }
+  { fltk3::color(col); BL; vv(-1.0,0.0); vv(1.0,0.0); EL; }
 
 static void draw_plus(fltk3::Color col)
 {
-  fl_color(col);
+  fltk3::color(col);
   BP; vv(-0.9,-0.15); vv(-0.9,0.15); vv(0.9,0.15); vv(0.9,-0.15); EP;
   BP; vv(-0.15,-0.9); vv(-0.15,0.9); vv(0.15,0.9); vv(0.15,-0.9); EP;
   set_outline_color(col);
@@ -381,16 +381,16 @@ static void draw_plus(fltk3::Color col)
 }
 
 static void draw_uparrow(fltk3::Color) {
-  fl_color(fltk3::LIGHT3);
+  fltk3::color(fltk3::LIGHT3);
   BL; vv(-.8,.8); vv(-.8,-.8); vv(.8,0); EL;
-  fl_color(fltk3::DARK3);
+  fltk3::color(fltk3::DARK3);
   BL; vv(-.8,.8); vv(.8, 0); EL;
 }
 
 static void draw_downarrow(fltk3::Color) {
-  fl_color(fltk3::DARK3);
+  fltk3::color(fltk3::DARK3);
   BL; vv(-.8,.8); vv(-.8,-.8); vv(.8,0); EL;
-  fl_color(fltk3::LIGHT3);
+  fltk3::color(fltk3::LIGHT3);
   BL; vv(-.8,.8); vv(.8, 0); EL;
 }
 
@@ -402,7 +402,7 @@ static void draw_menu(fltk3::Color col)
 
 // Standard UI icons...
 static void draw_filenew(fltk3::Color c) {
-  fl_color(c);
+  fltk3::color(c);
   BCP;
     vv(-0.7, -1.0);
     vv(0.1, -1.0);
@@ -412,14 +412,14 @@ static void draw_filenew(fltk3::Color c) {
     vv(-0.7, 1.0);
   ECP;
 
-  fl_color(fltk3::lighter(c));
+  fltk3::color(fltk3::lighter(c));
   BP;
     vv(0.1, -1.0);
     vv(0.1, -0.4);
     vv(0.7, -0.4);
   EP;
 
-  fl_color(fltk3::darker(c));
+  fltk3::color(fltk3::darker(c));
   BC;
     vv(-0.7, -1.0);
     vv(0.1, -1.0);
@@ -436,7 +436,7 @@ static void draw_filenew(fltk3::Color c) {
 }
 
 static void draw_fileopen(fltk3::Color c) {
-  fl_color(c);
+  fltk3::color(c);
   BP;
     vv(-1.0, -0.7);
     vv(-0.9, -0.8);
@@ -447,7 +447,7 @@ static void draw_fileopen(fltk3::Color c) {
     vv(-1.0, 0.7);
   EP;
 
-  fl_color(fltk3::darker(c));
+  fltk3::color(fltk3::darker(c));
   BC;
     vv(-1.0, -0.7);
     vv(-0.9, -0.8);
@@ -458,7 +458,7 @@ static void draw_fileopen(fltk3::Color c) {
     vv(-1.0, 0.7);
   EC;
 
-  fl_color(fltk3::lighter(c));
+  fltk3::color(fltk3::lighter(c));
   BP;
     vv(-1.0, 0.7);
     vv(-0.6, -0.3);
@@ -466,7 +466,7 @@ static void draw_fileopen(fltk3::Color c) {
     vv(0.6, 0.7);
   EP;
 
-  fl_color(fltk3::darker(c));
+  fltk3::color(fltk3::darker(c));
   BC;
     vv(-1.0, 0.7);
     vv(-0.6, -0.3);
@@ -476,7 +476,7 @@ static void draw_fileopen(fltk3::Color c) {
 }
 
 static void draw_filesave(fltk3::Color c) {
-  fl_color(c);
+  fltk3::color(c);
   BP;
     vv(-0.9, -1.0);
     vv(0.9, -1.0);
@@ -488,7 +488,7 @@ static void draw_filesave(fltk3::Color c) {
     vv(-1.0, -0.9);
   EP;
 
-  fl_color(fltk3::lighter(c));
+  fltk3::color(fltk3::lighter(c));
   BP;
     vv(-0.7, -1.0);
     vv(0.7, -1.0);
@@ -503,7 +503,7 @@ static void draw_filesave(fltk3::Color c) {
     vv(-0.7, 1.0);
   EP;
 
-  fl_color(c);
+  fltk3::color(c);
   BP;
     vv(-0.5, -0.9);
     vv(-0.3, -0.9);
@@ -511,7 +511,7 @@ static void draw_filesave(fltk3::Color c) {
     vv(-0.5, -0.5);
   EP;
 
-  fl_color(fltk3::darker(c));
+  fltk3::color(fltk3::darker(c));
   BC;
     vv(-0.9, -1.0);
     vv(0.9, -1.0);
@@ -527,7 +527,7 @@ static void draw_filesave(fltk3::Color c) {
 static void draw_filesaveas(fltk3::Color c) {
   draw_filesave(c);
 
-  fl_color(fltk3::color_average(c, fltk3::WHITE, 0.25f));
+  fltk3::color(fltk3::color_average(c, fltk3::WHITE, 0.25f));
   BP;
     vv(0.6, -0.8);
     vv(1.0, -0.4);
@@ -536,7 +536,7 @@ static void draw_filesaveas(fltk3::Color c) {
     vv(-0.4, 0.2);
   EP;
 
-  fl_color(fltk3::darker(c));
+  fltk3::color(fltk3::darker(c));
   BC;
     vv(0.6, -0.8);
     vv(1.0, -0.4);
@@ -553,7 +553,7 @@ static void draw_filesaveas(fltk3::Color c) {
 }
 
 static void draw_fileprint(fltk3::Color c) {
-  fl_color(c);
+  fltk3::color(c);
   BP;
     vv(-0.8, 0.0);
     vv(0.8, 0.0);
@@ -563,7 +563,7 @@ static void draw_fileprint(fltk3::Color c) {
     vv(-1.0, 0.2);
   EP;
 
-  fl_color(fltk3::color_average(c, fltk3::WHITE, 0.25f));
+  fltk3::color(fltk3::color_average(c, fltk3::WHITE, 0.25f));
   BP;
     vv(-0.6, 0.0);
     vv(-0.6, -1.0);
@@ -571,7 +571,7 @@ static void draw_fileprint(fltk3::Color c) {
     vv(0.6, 0.0);
   EP;
 
-  fl_color(fltk3::lighter(c));
+  fltk3::color(fltk3::lighter(c));
   BP;
     vv(-0.6, 0.6);
     vv(0.6, 0.6);
@@ -579,7 +579,7 @@ static void draw_fileprint(fltk3::Color c) {
     vv(-0.6, 1.0);
   EP;
 
-  fl_color(fltk3::darker(c));
+  fltk3::color(fltk3::darker(c));
   BC;
     vv(-0.8, 0.0);
     vv(-0.6, 0.0);
@@ -606,11 +606,11 @@ static void draw_round_arrow(fltk3::Color c, float da=5.0) {
   int i, j;
   for (j=0; j<2; j++) {
     if (j&1) {
-      fl_color(c);
+      fltk3::color(c);
       set_outline_color(c);
       BC;
     } else {
-      fl_color(c);
+      fltk3::color(c);
       BCP;
     }
     vv(-0.1, 0.0);
@@ -634,29 +634,29 @@ static void draw_round_arrow(fltk3::Color c, float da=5.0) {
 
 static void draw_refresh(fltk3::Color c) {
   draw_round_arrow(c);
-  fl_rotate(180.0);
+  fltk3::rotate(180.0);
   draw_round_arrow(c);
-  fl_rotate(-180.0);
+  fltk3::rotate(-180.0);
 }
 
 static void draw_reload(fltk3::Color c) {
-  fl_rotate(-135.0);
+  fltk3::rotate(-135.0);
   draw_round_arrow(c, 10);
-  fl_rotate(135.0);
+  fltk3::rotate(135.0);
 }
 
 static void draw_undo(fltk3::Color c) {
-  fl_translate(0.0, 0.2);
-  fl_scale(1.0, -1.0);
+  fltk3::translate(0.0, 0.2);
+  fltk3::scale(1.0, -1.0);
   draw_round_arrow(c, 6);
-  fl_scale(1.0, -1.0);
-  fl_translate(0.0, -0.2);
+  fltk3::scale(1.0, -1.0);
+  fltk3::translate(0.0, -0.2);
 }
 
 static void draw_redo(fltk3::Color c) {
-  fl_scale(-1.0, 1.0);
+  fltk3::scale(-1.0, 1.0);
   draw_undo(c);
-  fl_scale(-1.0, 1.0);
+  fltk3::scale(-1.0, 1.0);
 }
 
 static void fl_init_symbols(void) {
@@ -665,48 +665,48 @@ static void fl_init_symbols(void) {
   beenhere = 1;
   symbnumb = 0;
 
-  fl_add_symbol("",		draw_arrow1,		1);
-  fl_add_symbol("->",		draw_arrow1,		1);
-  fl_add_symbol(">",		draw_arrow2,		1);
-  fl_add_symbol(">>",		draw_arrow3,		1);
-  fl_add_symbol(">|",		draw_arrowbar,		1);
-  fl_add_symbol(">[]",		draw_arrowbox,		1);
-  fl_add_symbol("|>",		draw_bararrow,		1);
-  fl_add_symbol("<-",		draw_arrow01,		1);
-  fl_add_symbol("<",		draw_arrow02,		1);
-  fl_add_symbol("<<",		draw_arrow03,		1);
-  fl_add_symbol("|<",		draw_0arrowbar,		1);
-  fl_add_symbol("[]<",		draw_0arrowbox,		1);
-  fl_add_symbol("<|",		draw_0bararrow,		1);
-  fl_add_symbol("<->",		draw_doublearrow,	1);
-  fl_add_symbol("-->",		draw_arrow,		1);
-  fl_add_symbol("+",		draw_plus,		1);
-  fl_add_symbol("->|",		draw_arrow1bar,		1);
-  fl_add_symbol("arrow",	draw_arrow,		1);
-  fl_add_symbol("returnarrow",	0,			3);
-  fl_add_symbol("square",	draw_square,		1);
-  fl_add_symbol("circle",	draw_circle,		1);
-  fl_add_symbol("line",		draw_line,		1);
-  fl_add_symbol("plus",		draw_plus,		1);
-  fl_add_symbol("menu",		draw_menu,		1);
-  fl_add_symbol("UpArrow",	draw_uparrow,		1);
-  fl_add_symbol("DnArrow",	draw_downarrow,		1);
-  fl_add_symbol("||",		draw_doublebar,		1);
-  fl_add_symbol("search",       draw_search,            1);
-  fl_add_symbol("FLTK",         draw_fltk,              1);
+  fltk3::add_symbol("",		draw_arrow1,		1);
+  fltk3::add_symbol("->",		draw_arrow1,		1);
+  fltk3::add_symbol(">",		draw_arrow2,		1);
+  fltk3::add_symbol(">>",		draw_arrow3,		1);
+  fltk3::add_symbol(">|",		draw_arrowbar,		1);
+  fltk3::add_symbol(">[]",		draw_arrowbox,		1);
+  fltk3::add_symbol("|>",		draw_bararrow,		1);
+  fltk3::add_symbol("<-",		draw_arrow01,		1);
+  fltk3::add_symbol("<",		draw_arrow02,		1);
+  fltk3::add_symbol("<<",		draw_arrow03,		1);
+  fltk3::add_symbol("|<",		draw_0arrowbar,		1);
+  fltk3::add_symbol("[]<",		draw_0arrowbox,		1);
+  fltk3::add_symbol("<|",		draw_0bararrow,		1);
+  fltk3::add_symbol("<->",		draw_doublearrow,	1);
+  fltk3::add_symbol("-->",		draw_arrow,		1);
+  fltk3::add_symbol("+",		draw_plus,		1);
+  fltk3::add_symbol("->|",		draw_arrow1bar,		1);
+  fltk3::add_symbol("arrow",	draw_arrow,		1);
+  fltk3::add_symbol("returnarrow",	0,			3);
+  fltk3::add_symbol("square",	draw_square,		1);
+  fltk3::add_symbol("circle",	draw_circle,		1);
+  fltk3::add_symbol("line",		draw_line,		1);
+  fltk3::add_symbol("plus",		draw_plus,		1);
+  fltk3::add_symbol("menu",		draw_menu,		1);
+  fltk3::add_symbol("UpArrow",	draw_uparrow,		1);
+  fltk3::add_symbol("DnArrow",	draw_downarrow,		1);
+  fltk3::add_symbol("||",		draw_doublebar,		1);
+  fltk3::add_symbol("search",       draw_search,            1);
+  fltk3::add_symbol("FLTK",         draw_fltk,              1);
 
-  fl_add_symbol("filenew",      draw_filenew,           1);
-  fl_add_symbol("fileopen",     draw_fileopen,          1);
-  fl_add_symbol("filesave",     draw_filesave,          1);
-  fl_add_symbol("filesaveas",   draw_filesaveas,        1);
-  fl_add_symbol("fileprint",    draw_fileprint,         1);
+  fltk3::add_symbol("filenew",      draw_filenew,           1);
+  fltk3::add_symbol("fileopen",     draw_fileopen,          1);
+  fltk3::add_symbol("filesave",     draw_filesave,          1);
+  fltk3::add_symbol("filesaveas",   draw_filesaveas,        1);
+  fltk3::add_symbol("fileprint",    draw_fileprint,         1);
 
-  fl_add_symbol("refresh",      draw_refresh,           1);
-  fl_add_symbol("reload",       draw_reload,            1);
-  fl_add_symbol("undo",         draw_undo,              1);
-  fl_add_symbol("redo",         draw_redo,              1);
+  fltk3::add_symbol("refresh",      draw_refresh,           1);
+  fltk3::add_symbol("reload",       draw_reload,            1);
+  fltk3::add_symbol("undo",         draw_undo,              1);
+  fltk3::add_symbol("redo",         draw_redo,              1);
 
-//  fl_add_symbol("file",      draw_file,           1);
+//  fltk3::add_symbol("file",      draw_file,           1);
 }
 
 //

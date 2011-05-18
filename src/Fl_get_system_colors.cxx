@@ -48,7 +48,7 @@ static char	fl_bg2_set = 0;
 static char	fl_fg_set = 0;
 
 /**
-    Changes fl_color(fltk3::BACKGROUND_COLOR) to the given color, 
+    Changes fltk3::color(fltk3::BACKGROUND_COLOR) to the given color, 
     and changes the gray ramp from 32 to 56 to black to white.  These are 
     the colors used as backgrounds by almost all widgets and used to draw 
     the edges of all the boxtypes.
@@ -71,7 +71,7 @@ void fltk3::background(uchar r, uchar g, uchar b) {
 		  uchar(pow(gray,powb)*255+.5));
   }
 }
-/** Changes fl_color(fltk3::FOREGROUND_COLOR). */
+/** Changes fltk3::color(fltk3::FOREGROUND_COLOR). */
 void fltk3::foreground(uchar r, uchar g, uchar b) {
   fl_fg_set = 1;
 
@@ -81,7 +81,7 @@ void fltk3::foreground(uchar r, uchar g, uchar b) {
 /**
     Changes the alternative background color. This color is used as a 
     background by Fl_Input and other text widgets.
-    <P>This call may change fl_color(fltk3::FOREGROUND_COLOR) if it 
+    <P>This call may change fltk3::color(fltk3::FOREGROUND_COLOR) if it 
     does not provide sufficient contrast to fltk3::BACKGROUND2_COLOR.
 */
 void fltk3::background2(uchar r, uchar g, uchar b) {

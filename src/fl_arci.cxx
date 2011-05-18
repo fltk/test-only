@@ -26,7 +26,7 @@
 //
 
 /**
-  \file fl_arci.cxx
+  \file fltk3::arci.cxx
   \brief Utility functions for drawing circles using integers
 */
 
@@ -36,7 +36,7 @@
 // hand-drawn bitmaps of small circles!) and may be implemented by
 // hardware and thus are fast.
 
-// Probably should add fl_chord.
+// Probably should add fltk3::chord.
 
 // 3/10/98: created
 

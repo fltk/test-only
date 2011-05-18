@@ -802,8 +802,8 @@ namespace fltk3 {
   // color map:
   void	set_color(fltk3::Color, uchar, uchar, uchar);
   /**
-   Sets an entry in the fl_color index table. You can set it to any
-   8-bit RGB color. The color is not allocated until fl_color(i) is used.
+   Sets an entry in the fltk3::color index table. You can set it to any
+   8-bit RGB color. The color is not allocated until fltk3::color(i) is used.
    */
   void	set_color(fltk3::Color i, unsigned c); // platform dependent
   unsigned get_color(fltk3::Color i);
@@ -833,8 +833,8 @@ namespace fltk3 {
   /**
    Return an array of sizes in \p sizep.  The return value is the
    length of this array.  The sizes are sorted from smallest to largest
-   and indicate what sizes can be given to fl_font() that will
-   be matched exactly (fl_font() will pick the closest size for
+   and indicate what sizes can be given to fltk3::font() that will
+   be matched exactly (fltk3::font() will pick the closest size for
    other sizes).  A zero in the first location of the array indicates a
    scalable font, where any size works, although the array may list sizes
    that work "better" than others.  Warning: the returned array

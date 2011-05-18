@@ -33,13 +33,13 @@
 #include <fltk3/draw.h>
 
 static void fl_oval_flat_box(int x, int y, int w, int h, fltk3::Color c) {
-  fl_color(c);
-  fl_pie(x, y, w, h, 0, 360);
+  fltk3::color(c);
+  fltk3::pie(x, y, w, h, 0, 360);
 }
 
 static void fl_oval_frame(int x, int y, int w, int h, fltk3::Color c) {
-  fl_color(c);
-  fl_arc(x, y, w, h, 0, 360);
+  fltk3::color(c);
+  fltk3::arc(x, y, w, h, 0, 360);
 }
 
 static void fl_oval_box(int x, int y, int w, int h, fltk3::Color c) {

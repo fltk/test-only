@@ -103,7 +103,7 @@ extern XVisualInfo *fl_overlay_visual;
 extern Colormap fl_overlay_colormap;
 extern unsigned long fl_transparent_pixel;
 static GC gc;	// the GC used by all X windows
-extern uchar fl_overlay; // changes how fl_color(x) works
+extern uchar fl_overlay; // changes how fltk3::color(x) works
 
 class _Fl_Overlay : public fltk3::Window {
   friend class Fl_Overlay_Window;
@@ -142,7 +142,7 @@ void _Fl_Overlay::flush() {
   Fl_Overlay_Window *w = (Fl_Overlay_Window *)parent();
   Fl_X *myi = Fl_X::i(this);
   if (damage() != fltk3::DAMAGE_EXPOSE) XClearWindow(fl_display, fl_xid(this));
-  fl_clip_region(myi->region); myi->region = 0;
+  fltk3::clip_region(myi->region); myi->region = 0;
   w->draw_overlay();
   fl_overlay = 0;
 }

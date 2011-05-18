@@ -406,17 +406,17 @@ int Fl_Tree_Item::swap_children(Fl_Tree_Item *a, Fl_Tree_Item *b) {
 
 /// Internal: Horizontal connector line based on preference settings.
 void Fl_Tree_Item::draw_horizontal_connector(int x1, int x2, int y, const Fl_Tree_Prefs &prefs) {
-  fl_color(prefs.connectorcolor());
+  fltk3::color(prefs.connectorcolor());
   switch ( prefs.connectorstyle() ) {
     case FL_TREE_CONNECTOR_SOLID:
       y |= 1;				// force alignment w/dot pattern
-      fl_line(x1,y,x2,y);
+      fltk3::line(x1,y,x2,y);
       return;
     case FL_TREE_CONNECTOR_DOTTED: 
         {
             y |= 1;				// force alignment w/dot pattern
             for ( int xx=x1; xx<=x2; xx++ ) {
-                if ( !(xx & 1) ) fl_point(xx, y);
+                if ( !(xx & 1) ) fltk3::point(xx, y);
             }
         }
       return;
@@ -427,19 +427,19 @@ void Fl_Tree_Item::draw_horizontal_connector(int x1, int x2, int y, const Fl_Tre
 
 /// Internal: Vertical connector line based on preference settings.
 void Fl_Tree_Item::draw_vertical_connector(int x, int y1, int y2, const Fl_Tree_Prefs &prefs) {
-  fl_color(prefs.connectorcolor());
+  fltk3::color(prefs.connectorcolor());
   switch ( prefs.connectorstyle() ) {
     case FL_TREE_CONNECTOR_SOLID:
       y1 |= 1;				// force alignment w/dot pattern
       y2 |= 1;				// force alignment w/dot pattern
-      fl_line(x,y1,x,y2);
+      fltk3::line(x,y1,x,y2);
       return;
     case FL_TREE_CONNECTOR_DOTTED:
         {
             y1 |= 1;				// force alignment w/dot pattern
             y2 |= 1;				// force alignment w/dot pattern
             for ( int yy=y1; yy<=y2; yy++ ) {
-                if ( yy & 1 ) fl_point(x, yy);
+                if ( yy & 1 ) fltk3::point(x, yy);
             }
         }
         return;
@@ -519,19 +519,19 @@ static void draw_item_focus(fltk3::Boxtype B, fltk3::Color C, int X, int Y, int 
     default:
       break;
   }
-  fl_color(fltk3::contrast(fltk3::BLACK, C));
+  fltk3::color(fltk3::contrast(fltk3::BLACK, C));
 
 #if defined(USE_X11) || defined(__APPLE_QUARTZ__)
-  fl_line_style(FL_DOT);
-  fl_rect(X + fltk3::box_dx(B), Y + fltk3::box_dy(B),
+  fltk3::line_style(fltk3::DOT);
+  fltk3::rect(X + fltk3::box_dx(B), Y + fltk3::box_dy(B),
           W - fltk3::box_dw(B) - 1, H - fltk3::box_dh(B) - 1);
-  fl_line_style(FL_SOLID);
+  fltk3::line_style(fltk3::SOLID);
 #else
   // Some platforms don't implement dotted line style, so draw
   // every other pixel around the focus area...
   //
   // Also, QuickDraw (MacOS) does not support line styles specifically,
-  // and the hack we use in fl_line_style() will not draw horizontal lines
+  // and the hack we use in fltk3::line_style() will not draw horizontal lines
   // on odd-numbered rows...
   int i, xx, yy;
 
@@ -540,10 +540,10 @@ static void draw_item_focus(fltk3::Boxtype B, fltk3::Color C, int X, int Y, int 
   W -= fltk3::box_dw(B) + 2;
   H -= fltk3::box_dh(B) + 2;
 
-  for (xx = 0, i = 1; xx < W; xx ++, i ++) if (i & 1) fl_point(X + xx, Y);
-  for (yy = 0; yy < H; yy ++, i ++) if (i & 1) fl_point(X + W, Y + yy);
-  for (xx = W; xx > 0; xx --, i ++) if (i & 1) fl_point(X + xx, Y + H);
-  for (yy = H; yy > 0; yy --, i ++) if (i & 1) fl_point(X, Y + yy);
+  for (xx = 0, i = 1; xx < W; xx ++, i ++) if (i & 1) fltk3::point(X + xx, Y);
+  for (yy = 0; yy < H; yy ++, i ++) if (i & 1) fltk3::point(X + W, Y + yy);
+  for (xx = W; xx > 0; xx --, i ++) if (i & 1) fltk3::point(X + xx, Y + H);
+  for (yy = H; yy > 0; yy --, i ++) if (i & 1) fltk3::point(X, Y + yy);
 #endif
 }
 
@@ -552,10 +552,10 @@ void Fl_Tree_Item::draw(int X, int &Y, int W, fltk3::Widget *tree,
 			Fl_Tree_Item *itemfocus,
                         const Fl_Tree_Prefs &prefs, int lastchild) {
   if ( ! _visible ) return; 
-  fl_font(_labelfont, _labelsize);
+  fltk3::font(_labelfont, _labelsize);
   int H = _labelsize;
   if(usericon() && H < usericon()->h()) H = usericon()->h(); 
-  H += prefs.linespacing() + fl_descent();
+  H += prefs.linespacing() + fltk3::descent();
   // adjust horizontally if we draw no connecting lines
   if ( is_root() && prefs.connectorstyle() == FL_TREE_CONNECTOR_NONE ) {
     X -= prefs.openicon()->w();
@@ -575,7 +575,7 @@ void Fl_Tree_Item::draw(int X, int &Y, int W, fltk3::Widget *tree,
   _xywh[3] = H;
   // Text size
   int textw=0, texth=0;
-  fl_measure(_label, textw, texth, 0);
+  fltk3::measure(_label, textw, texth, 0);
   int textycenter = Y+(H/2);
   int &icon_w = _collapse_xywh[2] = prefs.openicon()->w();
   int &icon_x = _collapse_xywh[0] = X + (icon_w + prefs.connectorwidth())/2 - 3;
@@ -632,11 +632,11 @@ void Fl_Tree_Item::draw(int X, int &Y, int W, fltk3::Widget *tree,
     if ( bg != tree->color() || is_selected() ) {
       if ( is_selected() ) {
         // Selected? Use selectbox() style
-        fl_draw_box(prefs.selectbox(), bx, by, bw, bh, bg);
+        fltk3::draw_box(prefs.selectbox(), bx, by, bw, bh, bg);
       } else {
         // Not Selected? use plain filled rectangle
-        fl_color(bg);
-        fl_rectf(bx, by, bw, bh);
+        fltk3::color(bg);
+        fltk3::rectf(bx, by, bw, bh);
       }
     }
     // Draw user icon (if any)
@@ -669,8 +669,8 @@ void Fl_Tree_Item::draw(int X, int &Y, int W, fltk3::Widget *tree,
     } else {
       // No label widget? Draw text label
       if ( _label ) {
-        fl_color(fg);
-        fl_draw(_label, X+useroff, Y+H-fl_descent()-1);
+        fltk3::color(fg);
+        fltk3::draw(_label, X+useroff, Y+H-fltk3::descent()-1);
       }
     }
     if ( this == itemfocus && fltk3::visible_focus() && fltk3::focus() == tree) {

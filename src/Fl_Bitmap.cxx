@@ -256,7 +256,7 @@ static int start(Fl_Bitmap *bm, int XP, int YP, int WP, int HP, int w, int h, in
 		 int &X, int &Y, int &W, int &H)
 {
   // account for current clip region (faster on Irix):
-  fl_clip_box(XP,YP,WP,HP,X,Y,W,H);
+  fltk3::clip_box(XP,YP,WP,HP,X,Y,W,H);
   cx += X-XP; cy += Y-YP;
   // clip the box down to the size of image, quit if empty:
   if (cx < 0) {W += cx; X -= cx; cx = 0;}
@@ -315,16 +315,16 @@ void Fl_GDI_Graphics_Driver::draw(Fl_Bitmap *bm, int XP, int YP, int WP, int HP,
   if (use_print_algo) { // algorithm for bitmap output to Fl_GDI_Printer
     Fl_Offscreen tmp_id = fl_create_offscreen(W, H);
     fl_begin_offscreen(tmp_id);
-    fltk3::Color save_c = fl_color(); // save bitmap's desired color
+    fltk3::Color save_c = fltk3::color(); // save bitmap's desired color
     uchar r, g, b;
     fltk3::get_color(save_c, r, g, b);
     r = 255-r;
     g = 255-g;
     b = 255-b;
     fltk3::Color background = fltk3::rgb_color(r, g, b); // a color very different from the bitmap's
-    fl_color(background);
-    fl_rectf(0,0,W,H); // use this color as offscreen background
-    fl_color(save_c); // back to bitmap's color
+    fltk3::color(background);
+    fltk3::rectf(0,0,W,H); // use this color as offscreen background
+    fltk3::color(save_c); // back to bitmap's color
     tempdc = CreateCompatibleDC(fl_gc);
     save = SaveDC(tempdc);
     SelectObject(tempdc, (HGDIOBJ)bm->id_);

@@ -26,9 +26,9 @@
 //
 
 /**
-  \file fl_curve.cxx
+  \file fltk3::curve.cxx
   \brief Utility for drawing Bezier curves, adding the points to the
-         current fl_begin/fl_vertex/fl_end path.
+         current fl_begin/fltk3::vertex/fl_end path.
 
   Incremental math implementation:
   I very much doubt this is optimal!  From Foley/vanDam page 511.
@@ -43,18 +43,18 @@ void Fl_Graphics_Driver::curve(double X0, double Y0,
 	      double X2, double Y2,
 	      double X3, double Y3) {
 
-  double x = fl_transform_x(X0,Y0);
-  double y = fl_transform_y(X0,Y0);
+  double x = fltk3::transform_x(X0,Y0);
+  double y = fltk3::transform_y(X0,Y0);
 
   // draw point 0:
-  fl_transformed_vertex(x,y);
+  fltk3::transformed_vertex(x,y);
 
-  double x1 = fl_transform_x(X1,Y1);
-  double yy1 = fl_transform_y(X1,Y1);
-  double x2 = fl_transform_x(X2,Y2);
-  double y2 = fl_transform_y(X2,Y2);
-  double x3 = fl_transform_x(X3,Y3);
-  double y3 = fl_transform_y(X3,Y3);
+  double x1 = fltk3::transform_x(X1,Y1);
+  double yy1 = fltk3::transform_y(X1,Y1);
+  double x2 = fltk3::transform_x(X2,Y2);
+  double y2 = fltk3::transform_y(X2,Y2);
+  double x3 = fltk3::transform_x(X3,Y3);
+  double y3 = fltk3::transform_y(X3,Y3);
 
   // find the area:
   double a = fabs((x-x2)*(y3-yy1)-(y-y2)*(x3-x1));
@@ -94,15 +94,15 @@ void Fl_Graphics_Driver::curve(double X0, double Y0,
       y += dy1;
       dy1 += dy2;
       dy2 += dy3;
-      fl_transformed_vertex(x,y);
+      fltk3::transformed_vertex(x,y);
     }
 
     // draw point n-1:
-    fl_transformed_vertex(x+dx1, y+dy1);
+    fltk3::transformed_vertex(x+dx1, y+dy1);
   }
 
   // draw point n:
-  fl_transformed_vertex(x3,y3);
+  fltk3::transformed_vertex(x3,y3);
 }
 
 //

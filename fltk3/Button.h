@@ -42,7 +42,9 @@ buttons in the same group with <tt>type() == FL_RADIO_BUTTON</tt>
 are set to zero.*/
 #define FL_HIDDEN_BUTTON	3   ///< for Forms compatibility
 
-extern FLTK3_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
+namespace fltk3 {
+  extern FLTK3_EXPORT Fl_Shortcut old_shortcut(const char*);
+}
 
 namespace fltk3 {
   
@@ -164,7 +166,7 @@ namespace fltk3 {
     void down_box(fltk3::Boxtype b) {down_box_ = b;}
     
     /// (for backwards compatibility)
-    void shortcut(const char *s) {shortcut(fl_old_shortcut(s));}
+    void shortcut(const char *s) {shortcut(fltk3::old_shortcut(s));}
     
     /// (for backwards compatibility)
     Color down_color() const {return selection_color();}

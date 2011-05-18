@@ -124,7 +124,7 @@ static void print_gl_window(Fl_Gl_Window *glw, int x, int y, int height)
   CGColorSpaceRelease(cSpace);
   CGDataProviderRelease(provider);  
 #else
-  fl_draw_image(baseAddress + (glw->h() - 1) * mByteWidth, x, y , glw->w(), glw->h(), bytesperpixel, - mByteWidth);
+  fltk3::draw_image(baseAddress + (glw->h() - 1) * mByteWidth, x, y , glw->w(), glw->h(), bytesperpixel, - mByteWidth);
   free(baseAddress);
 #endif // __APPLE__
 }

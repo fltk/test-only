@@ -934,16 +934,16 @@ void manual_cb(fltk3::Widget *, void *) {
 #if defined(WIN32) && !defined(__CYGWIN__)
 // Draw a shaded box...
 static void win_box(int x, int y, int w, int h) {
-  fl_color(0xc0, 0xc0, 0xc0);
-  fl_rectf(x, y, w, h);
-  fl_color(0, 0, 0);
-  fl_rect(x, y, w, h);
-  fl_color(0xf0, 0xf0, 0xf0);
-  fl_rectf(x + 1, y + 1, 4, h - 2);
-  fl_rectf(x + 1, y + 1, w - 2, 4);
-  fl_color(0x90, 0x90, 0x90);
-  fl_rectf(x + w - 5, y + 1, 4, h - 2);
-  fl_rectf(x + 1, y + h - 5, w - 2, 4);
+  fltk3::color(0xc0, 0xc0, 0xc0);
+  fltk3::rectf(x, y, w, h);
+  fltk3::color(0, 0, 0);
+  fltk3::rect(x, y, w, h);
+  fltk3::color(0xf0, 0xf0, 0xf0);
+  fltk3::rectf(x + 1, y + 1, 4, h - 2);
+  fltk3::rectf(x + 1, y + 1, w - 2, 4);
+  fltk3::color(0x90, 0x90, 0x90);
+  fltk3::rectf(x + w - 5, y + 1, 4, h - 2);
+  fltk3::rectf(x + 1, y + h - 5, w - 2, 4);
 }
 
 // Load and show the print dialog...
@@ -1042,7 +1042,7 @@ void print_menu_cb(fltk3::Widget *, void *) {
 
   fl_gc = dialog.hDC;
   fl_window = (HWND)dialog.hDC;
-  fl_push_no_clip();
+  fltk3::push_no_clip();
 
   // Get the time and date...
   time_t curtime = time(NULL);
@@ -1056,15 +1056,15 @@ void print_menu_cb(fltk3::Widget *, void *) {
     // Draw header...
     StartPage(dialog.hDC);
 
-    fl_font(fltk3::HELVETICA_BOLD, fontsize);
-    fl_color(0, 0, 0);
+    fltk3::font(fltk3::HELVETICA_BOLD, fontsize);
+    fltk3::color(0, 0, 0);
 
-    fl_draw(basename, 0, fontsize);
+    fltk3::draw(basename, 0, fontsize);
 
-    fl_draw(date, (width - (int)fl_width(date)) / 2, fontsize);
+    fltk3::draw(date, (width - (int)fltk3::width(date)) / 2, fontsize);
 
     sprintf(buffer, "%d/%d", winpage + 1, num_windows);
-    fl_draw(buffer, width - (int)fl_width(buffer), fontsize);
+    fltk3::draw(buffer, width - (int)fltk3::width(buffer), fontsize);
 
     // Get window image...
     uchar	*pixels;		// Window image data
@@ -1114,35 +1114,35 @@ void print_menu_cb(fltk3::Widget *, void *) {
     win_box(ulx - xborder, uly - 5 * yborder,
             ww + 2 * xborder, hh + 6 * yborder);
 
-    fl_color(0, 0, 255);
-    fl_rectf(ulx, uly - 4 * yborder, ww, 4 * yborder);
+    fltk3::color(0, 0, 255);
+    fltk3::rectf(ulx, uly - 4 * yborder, ww, 4 * yborder);
 
-    fl_font(fltk3::HELVETICA_BOLD, 2 * yborder);
-    fl_color(255, 255, 255);
-    fl_draw(win->label() ? win->label() : "Window",
+    fltk3::font(fltk3::HELVETICA_BOLD, 2 * yborder);
+    fltk3::color(255, 255, 255);
+    fltk3::draw(win->label() ? win->label() : "Window",
             ulx + xborder, uly - 3 * yborder);
 
     int x = ulx + ww - 4 * xborder;
 
     win_box(x, uly - 4 * yborder, 4 * xborder, 4 * yborder);
-    fl_color(0, 0, 0);
-    fl_line(x + xborder, uly - yborder,
+    fltk3::color(0, 0, 0);
+    fltk3::line(x + xborder, uly - yborder,
             x + 3 * xborder, uly - 3 * yborder);
-    fl_line(x + xborder, uly - 3 * yborder,
+    fltk3::line(x + xborder, uly - 3 * yborder,
             x + 3 * xborder, uly - yborder);
     x -= 4 * xborder;
 
     if (win->resizable()) {
       win_box(x, uly - 4 * yborder, 4 * xborder, 4 * yborder);
-      fl_color(0, 0, 0);
-      fl_rect(x + xborder, uly - 3 * yborder, 2 * xborder, 2 * yborder);
+      fltk3::color(0, 0, 0);
+      fltk3::rect(x + xborder, uly - 3 * yborder, 2 * xborder, 2 * yborder);
       x -= 4 * xborder;
     }
 
     if (!win->modal()) {
       win_box(x, uly - 4 * yborder, 4 * xborder, 4 * yborder);
-      fl_color(0, 0, 0);
-      fl_line(x + xborder, uly - yborder, x + 3 * xborder, uly - yborder);
+      fltk3::color(0, 0, 0);
+      fltk3::line(x + xborder, uly - yborder, x + 3 * xborder, uly - yborder);
       x -= 4 * xborder;
     }
 

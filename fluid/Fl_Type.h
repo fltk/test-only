@@ -486,8 +486,8 @@ class Fl_Tabs_Type : public Fl_Group_Type {
 public:
   virtual void ideal_spacing(int &x, int &y) {
      x = 10;
-     fl_font(o->labelfont(), o->labelsize());
-     y = fl_height() + o->labelsize() - 6;
+     fltk3::font(o->labelfont(), o->labelsize());
+     y = fltk3::height() + o->labelsize() - 6;
   }
   virtual const char *type_name() {return tabs_type_name;}
   virtual const char *alt_type_name() {return "fltk::TabGroup";}
@@ -757,10 +757,10 @@ class Fl_Input_Choice_Type : public Fl_Menu_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Input_Choice *myo = (Fl_Input_Choice *)o;
-    fl_font(myo->textfont(), myo->textsize());
-    h = fl_height() + myo->textsize() - 6;
+    fltk3::font(myo->textfont(), myo->textsize());
+    h = fltk3::height() + myo->textsize() - 6;
     w = o->w() - 20 - fltk3::box_dw(o->box());
-    int ww = (int)fl_width('m');
+    int ww = (int)fltk3::width('m');
     w = ((w + ww - 1) / ww) * ww + 20 + fltk3::box_dw(o->box());
     if (h < 15) h = 15;
     if (w < (15 + h)) w = 15 + h;

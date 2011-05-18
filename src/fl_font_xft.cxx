@@ -38,7 +38,7 @@
 // these is about as good as the FLTK ones (I hope to fix it so it is
 // exactly as good...), plus it can cache its results and share them
 // between programs, so using this should be a win in all cases. Also
-// it should be obvious by comparing this file and fl_font_x.cxx that
+// it should be obvious by comparing this file and fltk3::font_x.cxx that
 // it is a lot easier to program with Xft than with Xlib.
 //
 // Also, Xft supports UTF-8 text rendering directly, which will allow
@@ -106,7 +106,7 @@ static Fl_Fontdesc built_in_table[] = {
 #endif
 };
 
-Fl_Fontdesc* fl_fonts = built_in_table;
+Fl_Fontdesc* fltk3::fonts = built_in_table;
 
 Fl_XFont_On_Demand fl_xfont;
 void *fl_xftfont = 0;
@@ -122,7 +122,7 @@ static void fl_xft_font(Fl_Xlib_Graphics_Driver *driver, fltk3::Font fnum, fltk3
   if (fnum == driver->Fl_Graphics_Driver::font() && size == driver->size() && f && f->angle == angle)
     return;
   driver->Fl_Graphics_Driver::font(fnum, size);
-  Fl_Fontdesc *font = fl_fonts + fnum;
+  Fl_Fontdesc *font = fltk3::fonts + fnum;
   // search the fontsizes we have generated already
   for (f = font->first; f; f = f->next) {
     if (f->size == size && f->angle == angle)// && !strcasecmp(f->encoding, fl_encoding_))
@@ -399,7 +399,7 @@ double Fl_Xlib_Graphics_Driver::width(const char* str, int n) {
   return i.xOff;
 }
 
-/*double fl_width(uchar c) {
+/*double fltk3::width(uchar c) {
   return fl_graphics_driver->width((const char *)(&c), 1);
 }*/
 
@@ -427,7 +427,7 @@ void Fl_Xlib_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &d
   h = gi.height;
   dx = -gi.x;
   dy = -gi.y;
-} // fl_text_extents
+} // fltk3::text_extents
 
 
 /* This code is used (mainly by opengl) to get a bitmapped font. The
@@ -460,7 +460,7 @@ static XFontStruct* load_xfont_for_xft2(Fl_Graphics_Driver *driver) {
   const char *weight = wt_med; // no specifc weight requested - accept any
   char slant = 'r';   // regular non-italic by default
   char xlfd[128];     // we will put our synthetic XLFD in here
-  char *pc = strdup(fl_fonts[fnum].name); // what font were we asked for?
+  char *pc = strdup(fltk3::fonts[fnum].name); // what font were we asked for?
   const char *name = pc;    // keep a handle to the original name for freeing later
   // Parse the "fltk-name" of the font
   switch (*name++) {
@@ -509,7 +509,7 @@ static XFontStruct* load_xfont_for_xft2(Fl_Graphics_Driver *driver) {
     snprintf(xlfd, 128, "-*-courier-medium-%c-*--*-%d-*-*-*-*-*-*", slant, (size*10));
     xgl_font = XLoadQueryFont(fl_display, xlfd);
   }
-//printf("glf: %d\n%s\n%s\n", size, xlfd, fl_fonts[fl_font_].name);
+//printf("glf: %d\n%s\n%s\n", size, xlfd, fltk3::fonts[fltk3::font_].name);
 //if(xgl_font) puts("ok");
 
   // Last chance fallback - this usually loads something...
@@ -541,7 +541,7 @@ static XFontStruct* fl_xxfont(Fl_Graphics_Driver *driver) {
     }
   static XftFont* xftfont;
   if (xftfont) XftFontClose (fl_display, xftfont);
-  xftfont = fontopen(fl_fonts[driver->font()].name, driver->size(), true, 0); // else request XFT to load a suitable "core" font instead.
+  xftfont = fontopen(fltk3::fonts[driver->font()].name, driver->size(), true, 0); // else request XFT to load a suitable "core" font instead.
   return xftfont->u.core.font;
 #  endif // XFT_MAJOR > 1
 }
@@ -599,7 +599,7 @@ void Fl_Xlib_Graphics_Driver::draw(const char *str, int n, int x, int y) {
   else //if (draw_window != fl_window)
     XftDrawChange(draw_, draw_window = fl_window);
 
-  Region region = fl_clip_region();
+  Region region = fltk3::clip_region();
   if (region && XEmptyRegion(region)) return;
   XftDrawSetClip(draw_, region);
 
@@ -644,7 +644,7 @@ static void fl_drawUCS4(Fl_Graphics_Driver *driver, const FcChar32 *str, int n, 
   else //if (draw_window != fl_window)
     XftDrawChange(draw_, draw_window = fl_window);
 
-  Region region = fl_clip_region();
+  Region region = fltk3::clip_region();
   if (region && XEmptyRegion(region)) return;
   XftDrawSetClip(draw_, region);
 

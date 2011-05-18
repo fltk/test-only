@@ -26,7 +26,7 @@
 //
 
 // Return an overlay visual, if any.  Also allocate a colormap and
-// record the depth for fl_color() to use.
+// record the depth for fltk3::color() to use.
 // Another disgusting X interface, based on code extracted and
 // purified with great difficulty from XLayerUtil.cxx:
 

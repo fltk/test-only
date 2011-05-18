@@ -89,7 +89,7 @@ static int use_registry(const char *p) {
 
 // turn a stored (with *'s) X font name into a pretty name:
 const char* fltk3::get_font_name(fltk3::Font fnum, int* ap) {
-  Fl_Fontdesc *f = fl_fonts + fnum;
+  Fl_Fontdesc *f = fltk3::fonts + fnum;
   if (!f->fontname[0]) {
     int type = 0;
     const char* p = f->name;
@@ -115,12 +115,12 @@ const char* fltk3::get_font_name(fltk3::Font fnum, int* ap) {
     } else { // standard dash-separated font:
 
       // get the family:
-      const char *x = fl_font_word(p,2); if (*x) x++; if (*x=='*') x++;
+      const char *x = fltk3::font_word(p,2); if (*x) x++; if (*x=='*') x++;
       if (!*x) {
 	if (ap) *ap = 0;
 	return p;
       }
-      const char *e = fl_font_word(x,1);
+      const char *e = fltk3::font_word(x,1);
       if ((e - x) < (int)(ENDOFBUFFER - 1)) {
 	// MRS: we want strncpy here, not strlcpy...
 	strncpy(o,x,e-x);
@@ -133,7 +133,7 @@ const char* fltk3::get_font_name(fltk3::Font fnum, int* ap) {
       // collect all the attribute words:
       for (int n = 3; n <= 6; n++) {
 	// get the next word:
-	if (*e) e++; x = e; e = fl_font_word(x,1);
+	if (*e) e++; x = e; e = fltk3::font_word(x,1);
 	int t = attribute(n,x);
 	if (t < 0) {
 	  if (o < (f->fontname + ENDOFBUFFER - 1)) *o++ = ' ';
@@ -149,7 +149,7 @@ const char* fltk3::get_font_name(fltk3::Font fnum, int* ap) {
       }
 
       // skip over the '*' for the size and get the registry-encoding:
-      x = fl_font_word(e,2);
+      x = fltk3::font_word(e,2);
       if (*x) {x++; *o++ = '('; while (*x) *o++ = *x++; *o++ = ')';}
 
       *o = 0;
@@ -206,8 +206,8 @@ static int ultrasort(const void *aa, const void *bb) {
       for (;;) {if (*a!=*b) return *a-*b; b++; if (!*a || *a++=='-') break;}
     } else {
       if (bt < 0) return -1;
-      a = fl_font_word(a,1); if (*a) a++;
-      b = fl_font_word(b,1); if (*b) b++;
+      a = fltk3::font_word(a,1); if (*a) a++;
+      b = fltk3::font_word(b,1); if (*b) b++;
       atype |= at; btype |= bt;
     }
   }
@@ -217,8 +217,8 @@ static int ultrasort(const void *aa, const void *bb) {
   int bsize = atoi(b);
 
   // compare the registry/encoding:
-  a = fl_font_word(a,6); if (*a) a++;
-  b = fl_font_word(b,6); if (*b) b++;
+  a = fltk3::font_word(a,6); if (*a) a++;
+  b = fltk3::font_word(b,6); if (*b) b++;
   if (use_registry(a)) {
     if (!use_registry(b)) return 1;
     int r = strcmp(a,b); if (r) return r;
@@ -245,7 +245,7 @@ static int to_canonical(char *to, const char *from, size_t tolen) {
     *to++ = '-'; *to++ = '*';
     for (from++; *from && *from != '-'; from++);
     // skip to the registry-encoding:
-    endptr = (char*)fl_font_word(endptr,6);
+    endptr = (char*)fltk3::font_word(endptr,6);
     if (*endptr && !use_registry(endptr+1)) endptr = "";
   }
   int n = c-from;
@@ -294,7 +294,7 @@ fltk3::Font fltk3::set_fonts(const char* xstarname) {
       /*if (j < fltk3::FREE_FONT) {
 	// see if it is one of our built-in fonts:
 	// if so, set the list of x fonts, since we have it anyway
-	if (fl_fonts[j].name && !strcmp(fl_fonts[j].name, p)) break;
+	if (fltk3::fonts[j].name && !strcmp(fltk3::fonts[j].name, p)) break;
       } else */{
 	j = fl_free_font++;
 	if (p == canon) p = strdup(p); else used_xlist = 1;
@@ -302,9 +302,9 @@ fltk3::Font fltk3::set_fonts(const char* xstarname) {
 	break;
       }
     }
-    if (!fl_fonts[j].xlist) {
-      fl_fonts[j].xlist = xlist+first_xlist;
-      fl_fonts[j].n = -(i-first_xlist);
+    if (!fltk3::fonts[j].xlist) {
+      fltk3::fonts[j].xlist = xlist+first_xlist;
+      fltk3::fonts[j].n = -(i-first_xlist);
       used_xlist = 1;
     }
   }
@@ -313,8 +313,8 @@ fltk3::Font fltk3::set_fonts(const char* xstarname) {
 }
 
 int fltk3::get_font_sizes(fltk3::Font fnum, int*& sizep) {
-  Fl_Fontdesc *s = fl_fonts+fnum;
-  if (!s->name) s = fl_fonts; // empty slot in table, use entry 0
+  Fl_Fontdesc *s = fltk3::fonts+fnum;
+  if (!s->name) s = fltk3::fonts; // empty slot in table, use entry 0
   if (!s->xlist) {
     fl_open_display();
     s->xlist = XListFonts(fl_display, s->name, 100, &(s->n));

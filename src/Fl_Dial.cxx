@@ -47,52 +47,52 @@ void Fl_Dial::draw(int X, int Y, int W, int H) {
     // foo: draw this nicely in certain round box types
     int foo = (box() > fltk3::ROUND_UP_BOX && fltk3::box_dx(box()));
     if (foo) {X--; Y--; W+=2; H+=2;}
-    if (active_r()) fl_color(color());
-    else fl_color(fltk3::inactive(color()));
-    fl_pie(X, Y, W, H, 270-a1, angle > a1 ? 360+270-angle : 270-360-angle);
-    if (active_r()) fl_color(selection_color());
-    else fl_color(fltk3::inactive(selection_color()));
-    fl_pie(X, Y, W, H, 270-angle, 270-a1);
+    if (active_r()) fltk3::color(color());
+    else fltk3::color(fltk3::inactive(color()));
+    fltk3::pie(X, Y, W, H, 270-a1, angle > a1 ? 360+270-angle : 270-360-angle);
+    if (active_r()) fltk3::color(selection_color());
+    else fltk3::color(fltk3::inactive(selection_color()));
+    fltk3::pie(X, Y, W, H, 270-angle, 270-a1);
     if (foo) {
-      if (active_r()) fl_color(fltk3::FOREGROUND_COLOR);
-      else fl_color(fltk3::inactive(fltk3::FOREGROUND_COLOR));
-      fl_arc(X, Y, W, H, 0, 360);
+      if (active_r()) fltk3::color(fltk3::FOREGROUND_COLOR);
+      else fltk3::color(fltk3::inactive(fltk3::FOREGROUND_COLOR));
+      fltk3::arc(X, Y, W, H, 0, 360);
     }
     return;
   }
   if (!(damage()&fltk3::DAMAGE_ALL)) {
-    if (active_r()) fl_color(color());
-    else fl_color(fltk3::inactive(color()));
-    fl_pie(X+1, Y+1, W-2, H-2, 0, 360);
+    if (active_r()) fltk3::color(color());
+    else fltk3::color(fltk3::inactive(color()));
+    fltk3::pie(X+1, Y+1, W-2, H-2, 0, 360);
   }
-  fl_push_matrix();
-  fl_translate(X+W/2-.5, Y+H/2-.5);
-  fl_scale(W-1, H-1);
-  fl_rotate(45-angle);
-  if (active_r()) fl_color(selection_color());
-  else fl_color(fltk3::inactive(selection_color()));
+  fltk3::push_matrix();
+  fltk3::translate(X+W/2-.5, Y+H/2-.5);
+  fltk3::scale(W-1, H-1);
+  fltk3::rotate(45-angle);
+  if (active_r()) fltk3::color(selection_color());
+  else fltk3::color(fltk3::inactive(selection_color()));
   if (type()) { // FL_LINE_DIAL
-    fl_begin_polygon();
-    fl_vertex(0.0,   0.0);
-    fl_vertex(-0.04, 0.0);
-    fl_vertex(-0.25, 0.25);
-    fl_vertex(0.0,   0.04);
-    fl_end_polygon();
-    if (active_r()) fl_color(fltk3::FOREGROUND_COLOR);
-    else fl_color(fltk3::inactive(fltk3::FOREGROUND_COLOR));
-    fl_begin_loop();
-    fl_vertex(0.0,   0.0);
-    fl_vertex(-0.04, 0.0);
-    fl_vertex(-0.25, 0.25);
-    fl_vertex(0.0,   0.04);
-    fl_end_loop();
+    fltk3::begin_polygon();
+    fltk3::vertex(0.0,   0.0);
+    fltk3::vertex(-0.04, 0.0);
+    fltk3::vertex(-0.25, 0.25);
+    fltk3::vertex(0.0,   0.04);
+    fltk3::end_polygon();
+    if (active_r()) fltk3::color(fltk3::FOREGROUND_COLOR);
+    else fltk3::color(fltk3::inactive(fltk3::FOREGROUND_COLOR));
+    fltk3::begin_loop();
+    fltk3::vertex(0.0,   0.0);
+    fltk3::vertex(-0.04, 0.0);
+    fltk3::vertex(-0.25, 0.25);
+    fltk3::vertex(0.0,   0.04);
+    fltk3::end_loop();
   } else {
-    fl_begin_polygon(); fl_circle(-0.20, 0.20, 0.07); fl_end_polygon();
-    if (active_r()) fl_color(fltk3::FOREGROUND_COLOR);
-    else fl_color(fltk3::inactive(fltk3::FOREGROUND_COLOR));
-    fl_begin_loop(); fl_circle(-0.20, 0.20, 0.07); fl_end_loop();
+    fltk3::begin_polygon(); fltk3::circle(-0.20, 0.20, 0.07); fltk3::end_polygon();
+    if (active_r()) fltk3::color(fltk3::FOREGROUND_COLOR);
+    else fltk3::color(fltk3::inactive(fltk3::FOREGROUND_COLOR));
+    fltk3::begin_loop(); fltk3::circle(-0.20, 0.20, 0.07); fltk3::end_loop();
   }
-  fl_pop_matrix();
+  fltk3::pop_matrix();
 }
 
 /**
