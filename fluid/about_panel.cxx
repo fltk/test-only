@@ -266,7 +266,7 @@ static void cb_View(fltk3::Button*, void*) {
   show_help("license.html");
 }
 
-static void cb_Close(Fl_Return_Button* o, void*) {
+static void cb_Close(fltk3::ReturnButton* o, void*) {
   ((fltk3::Window*)(o->parent()))->hide();
 }
 
@@ -292,9 +292,9 @@ fltk3::DoubleWindow* make_about_panel() {
       o->labelcolor(fltk3::DARK_BLUE);
       o->callback((fltk3::Callback*)cb_View);
     } // fltk3::Button* o
-    { Fl_Return_Button* o = new Fl_Return_Button(250, 145, 83, 25, "Close");
+    { fltk3::ReturnButton* o = new fltk3::ReturnButton(250, 145, 83, 25, "Close");
       o->callback((fltk3::Callback*)cb_Close);
-    } // Fl_Return_Button* o
+    } // fltk3::ReturnButton* o
     about_panel->set_non_modal();
     about_panel->end();
   } // fltk3::DoubleWindow* about_panel

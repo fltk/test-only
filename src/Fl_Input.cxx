@@ -138,13 +138,13 @@ int Fl_Input::kf_page_down() {
 
 // Toggle insert mode
 int Fl_Input::kf_insert_toggle() {
-  if (readonly()) { fl_beep(); return 1; }
+  if (readonly()) { fltk3::beep(); return 1; }
   return 1;				// \todo: needs insert mode
 }
 
 // Delete word right
 int Fl_Input::kf_delete_word_right() {
-  if (readonly()) { fl_beep(); return 1; }
+  if (readonly()) { fltk3::beep(); return 1; }
   if (mark() != position()) return cut();
   cut(position(), word_end(position()));
   return 1;
@@ -152,7 +152,7 @@ int Fl_Input::kf_delete_word_right() {
 
 // Delete word left
 int Fl_Input::kf_delete_word_left() {
-  if (readonly()) { fl_beep(); return 1; }
+  if (readonly()) { fltk3::beep(); return 1; }
   if (mark() != position()) return cut();
   cut(word_start(position()), position());
   return 1;
@@ -160,7 +160,7 @@ int Fl_Input::kf_delete_word_left() {
 
 // Delete to start of line
 int Fl_Input::kf_delete_sol() {
-  if (readonly()) { fl_beep(); return 1; }
+  if (readonly()) { fltk3::beep(); return 1; }
   if (mark() != position()) return cut();
   cut(line_start(position()), position());
   return 1;
@@ -168,20 +168,20 @@ int Fl_Input::kf_delete_sol() {
 
 // Delete to end of line
 int Fl_Input::kf_delete_eol() {
-  if (readonly()) { fl_beep(); return 1; }
+  if (readonly()) { fltk3::beep(); return 1; }
   if (mark() != position()) return cut();
   cut(position(), line_end(position()));
   return 1;
 }
 
 int Fl_Input::kf_delete_char_right() {
-  if (readonly()) { fl_beep(); return 1; }
+  if (readonly()) { fltk3::beep(); return 1; }
   if (mark() != position()) return cut();
   else return cut(1);
 }
 
 int Fl_Input::kf_delete_char_left() {
-  if (readonly()) { fl_beep(); return 1; }
+  if (readonly()) { fltk3::beep(); return 1; }
   if (mark() != position()) cut();
   else cut(-1);
   return 1;
@@ -199,7 +199,7 @@ int Fl_Input::kf_move_eol() {
 
 // Clear to end of line
 int Fl_Input::kf_clear_eol() {
-  if (readonly()) { fl_beep(); return 1; }
+  if (readonly()) { fltk3::beep(); return 1; }
   if (position()>=size()) return 0;
   int i = line_end(position());
   if (i == position() && i < size()) i++;
@@ -271,13 +271,13 @@ int Fl_Input::kf_select_all() {
 
 // Undo.
 int Fl_Input::kf_undo() {
-  if (readonly()) { fl_beep(); return 1; }
+  if (readonly()) { fltk3::beep(); return 1; }
   return undo();
 }
 
 // Redo. (currently unimplemented.. toggles undo() instead)
 int Fl_Input::kf_redo() {
-  if (readonly()) { fl_beep(); return 1; }
+  if (readonly()) { fltk3::beep(); return 1; }
   return kf_undo();			// currently we don't support multilevel undo
 }
 
@@ -288,14 +288,14 @@ int Fl_Input::kf_copy() {
 
 // Do a paste operation
 int Fl_Input::kf_paste() {
-  if (readonly()) { fl_beep(); return 1; }
+  if (readonly()) { fltk3::beep(); return 1; }
   fltk3::paste(*this, 1);
   return 1;
 }
 
 // Do a cut with copy
 int Fl_Input::kf_copy_cut() {
-  if (readonly()) { fl_beep(); return 1; }
+  if (readonly()) { fltk3::beep(); return 1; }
   copy(1);
   return cut();
 }
@@ -349,14 +349,14 @@ int Fl_Input::handle_key() {
               && ((ascii>='A'&& ascii<='F') || (ascii>='a'&& ascii<='f'))) 
           || (input_type()==FL_FLOAT_INPUT && ascii && strchr(legal_fp_chars, ascii))) 
       {
-	if (readonly()) fl_beep();
+	if (readonly()) fltk3::beep();
 	else replace(position(), mark(), &ascii, 1);
       }
       return 1;
     }
     
     if (del || fltk3::event_length()) {
-      if (readonly()) fl_beep();
+      if (readonly()) fltk3::beep();
       else replace(position(), del ? position()-del : mark(),
 	           fltk3::event_text(), fltk3::event_length());
     }
@@ -573,7 +573,7 @@ int Fl_Input::handle_key() {
     case ctrl('J'):						// Ctrl-J (literal Line Feed/Enter) (Standard)
     case ctrl('L'):						// Ctrl-L (literal Form Feed)       (Standard)
     case ctrl('M'):						// Ctrl-M (literal Cr)              (Standard)
-      if (readonly()) { fl_beep(); return 1; }
+      if (readonly()) { fltk3::beep(); return 1; }
       // insert a few selected control characters literally:
       if (input_type() != FL_FLOAT_INPUT && input_type() != FL_INT_INPUT)
         return replace(position(), mark(), &ascii, 1);

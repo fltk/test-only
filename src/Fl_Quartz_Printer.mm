@@ -293,7 +293,7 @@ void Fl_System_Printer::end_job (void)
   
   status = PMSessionError(printSession);
   if (status != noErr) {
-    fl_alert ("PM Session error %d", (int)status);
+    fltk3::alert ("PM Session error %d", (int)status);
   }
   PMSessionEndDocumentNoDialog(printSession);
   Fl_Display_Device::display_device()->set_current();

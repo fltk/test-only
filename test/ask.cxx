@@ -34,43 +34,43 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Return_Button.H>
+#include <fltk3/run.h>
+#include <fltk3/DoubleWindow.h>
+#include <fltk3/Input.h>
+#include <fltk3/Button.h>
+#include <fltk3/ReturnButton.h>
 
-#include <FL/fl_ask.H>
+#include <fltk3/ask.h>
 #include <stdlib.h>
 
-void update_input_text(Fl_Widget* o, const char *input) {
+void update_input_text(fltk3::Widget* o, const char *input) {
   if (input) {
     o->copy_label(input);
     o->redraw();
   }
 }
 
-void rename_me(Fl_Widget*o) {
-  const char *input = fl_input("Input:", o->label());
+void rename_me(fltk3::Widget*o) {
+  const char *input = fltk3::input("Input:", o->label());
   update_input_text(o, input);
 }
 
-void rename_me_pwd(Fl_Widget*o) {
-  const char *input = fl_password("Input PWD:", o->label());
+void rename_me_pwd(fltk3::Widget*o) {
+  const char *input = fltk3::password("Input PWD:", o->label());
   update_input_text(o, input);
 }
 
-void window_callback(Fl_Widget*, void*) {
-  int hotspot = fl_message_hotspot();
-  fl_message_hotspot(0);
-  fl_message_title("note: no hotspot set for this dialog");
-  int rep = fl_choice("Are you sure you want to quit?", 
+void window_callback(fltk3::Widget*, void*) {
+  int hotspot = fltk3::message_hotspot();
+  fltk3::message_hotspot(0);
+  fltk3::message_title("note: no hotspot set for this dialog");
+  int rep = fltk3::choice("Are you sure you want to quit?", 
 		      "Cancel", "Quit", "Dunno");
-  fl_message_hotspot(hotspot);
+  fltk3::message_hotspot(hotspot);
   if (rep==1) 
     exit(0);
   else if (rep==2)
-    fl_message("Well, maybe you should know before we quit.");
+    fltk3::message("Well, maybe you should know before we quit.");
 }
 
 int main(int argc, char **argv) {
@@ -79,11 +79,11 @@ int main(int argc, char **argv) {
 
 // this is a test to make sure automatic destructors work.  Pop up
 // the question dialog several times and make sure it doesn't crash.
-// fc: added more fl_ask common dialogs for test cases purposes.
+// fc: added more fltk3::ask common dialogs for test cases purposes.
 
-  Fl_Double_Window window(200, 105);
-  Fl_Return_Button b(20, 10, 160, 35, buffer); b.callback(rename_me);
-  Fl_Button b2(20, 50, 160, 35, buffer2); b2.callback(rename_me_pwd);
+  fltk3::DoubleWindow window(200, 105);
+  fltk3::ReturnButton b(20, 10, 160, 35, buffer); b.callback(rename_me);
+  fltk3::Button b2(20, 50, 160, 35, buffer2); b2.callback(rename_me_pwd);
   window.end();
   window.resizable(&b);
   window.show(argc, argv);
@@ -92,9 +92,9 @@ int main(int argc, char **argv) {
   window.callback(window_callback);
 
 // set default message window title
-  // fl_message_title_default("Default Window Title");
+  // fltk3::message_title_default("Default Window Title");
 
-  return Fl::run();
+  return fltk3::run();
 }
     
 //

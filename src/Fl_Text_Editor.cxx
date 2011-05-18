@@ -581,7 +581,7 @@ int Fl_Text_Editor::handle(int event) {
 
     case fltk3::PASTE:
       if (!fltk3::event_text()) {
-        fl_beep();
+        fltk3::beep();
 	return 1;
       }
       buffer()->remove_selection();

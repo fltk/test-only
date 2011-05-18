@@ -1505,7 +1505,7 @@ void Fl_PostScript_File_Device::end_job (void)
   ps->reset();
   fflush(ps->output);
   if(ferror(ps->output)) {
-    fl_alert ("Error during PostScript data output.");
+    fltk3::alert ("Error during PostScript data output.");
     }
   if (ps->close_cmd_) {
     (*ps->close_cmd_)(ps->output);
@@ -1580,7 +1580,7 @@ int Fl_PostScript_Printer::start_job(int pages, int *firstpage, int *lastpage) {
   Fl_PostScript_Graphics_Driver *ps = driver();
   ps->output = popen(command, "w");
   if (!ps->output) {
-    fl_alert("could not run command: %s\n",command);
+    fltk3::alert("could not run command: %s\n",command);
     return 1;
   }
   ps->close_command(pclose);

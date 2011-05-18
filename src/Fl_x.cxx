@@ -294,7 +294,7 @@ static void convert_crlf(unsigned char *string, long& len) {
 ////////////////////////////////////////////////////////////////
 
 Display *fl_display;
-Window fl_message_window = 0;
+Window fltk3::message_window = 0;
 int fl_screen;
 XVisualInfo *fl_visual;
 Colormap fl_colormap;
@@ -633,7 +633,7 @@ void fl_open_display(Display* d) {
 
   fl_screen = DefaultScreen(d);
 
-  fl_message_window =
+  fltk3::message_window =
     XCreateSimpleWindow(d, RootWindow(d,fl_screen), 0,0,1,1,0, 0, 0);
 
 // construct an XVisualInfo that matches the default Visual:
@@ -783,7 +783,7 @@ void fltk3::copy(const char *stuff, int len, int clipboard) {
   fl_selection_length[clipboard] = len;
   fl_i_own_selection[clipboard] = 1;
   Atom property = clipboard ? CLIPBOARD : XA_PRIMARY;
-  XSetSelectionOwner(fl_display, property, fl_message_window, fl_event_time);
+  XSetSelectionOwner(fl_display, property, fltk3::message_window, fl_event_time);
 }
 
 ////////////////////////////////////////////////////////////////

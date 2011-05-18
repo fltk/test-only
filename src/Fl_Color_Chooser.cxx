@@ -532,8 +532,10 @@ static void chooser_cb(fltk3::Widget* o, void* vv) {
   v->damage(fltk3::DAMAGE_EXPOSE);
 }
 
-extern const char* fl_ok;
-extern const char* fl_cancel;
+namespace fltk3 {
+  extern const char* ok;
+  extern const char* cancel;
+}
 
 // fl_color_chooser's callback for ok_button (below)
 //  [in] o is a pointer to okay_button (below) 
@@ -576,13 +578,13 @@ int fl_color_chooser(const char* name, double& r, double& g, double& b, int cmod
   window.callback(cc_cancel_cb,&ret);
   Fl_Color_Chooser chooser(10, 10, 195, 115);
   ColorChip ok_color(10, 130, 95, 25);
-  Fl_Return_Button ok_button(10, 165, 95, 25, fl_ok);
+  fltk3::ReturnButton ok_button(10, 165, 95, 25, fltk3::ok);
   ok_button.callback(cc_ok_cb,&ret);
   ColorChip cancel_color(110, 130, 95, 25);
   cancel_color.r = uchar(255*r+.5); ok_color.r = cancel_color.r;
   ok_color.g = cancel_color.g = uchar(255*g+.5);
   ok_color.b = cancel_color.b = uchar(255*b+.5);
-  fltk3::Button cancel_button(110, 165, 95, 25, fl_cancel);
+  fltk3::Button cancel_button(110, 165, 95, 25, fltk3::cancel);
   cancel_button.callback(cc_cancel_cb,&ret);
   window.resizable(chooser);
   chooser.rgb(r,g,b);

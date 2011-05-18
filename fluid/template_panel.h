@@ -43,7 +43,7 @@ extern Fl_Input *template_instance;
 #include <fltk3/Button.h>
 extern fltk3::Button *template_delete;
 #include <fltk3/ReturnButton.h>
-extern Fl_Return_Button *template_submit;
+extern fltk3::ReturnButton *template_submit;
 fltk3::DoubleWindow* make_template_panel();
 void template_clear();
 void template_delete_cb(fltk3::Button *, void *);

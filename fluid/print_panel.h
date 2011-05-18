@@ -53,7 +53,7 @@ extern Fl_Spinner *print_copies;
 extern Fl_Check_Button *print_collate_button;
 extern fltk3::Group *print_collate_group[2];
 #include <fltk3/ReturnButton.h>
-extern void print_cb(Fl_Return_Button*, void*);
+extern void print_cb(fltk3::ReturnButton*, void*);
 #include <fltk3/Progress.h>
 extern Fl_Progress *print_progress;
 extern fltk3::DoubleWindow *print_properties_panel;
@@ -61,7 +61,7 @@ extern Fl_Choice *print_page_size;
 extern fltk3::Button *print_output_mode[4];
 fltk3::DoubleWindow* make_print_panel();
 extern Fl_Menu_Item menu_print_page_size[];
-extern void print_cb(Fl_Return_Button *, void *); 
+extern void print_cb(fltk3::ReturnButton *, void *); 
 void print_load();
 void print_update_status();
 #endif

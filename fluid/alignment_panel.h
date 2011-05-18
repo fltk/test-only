@@ -90,11 +90,11 @@ extern Fl_Check_Button *shell_writecode_button;
 extern Fl_Check_Button *shell_writemsgs_button;
 extern Fl_Check_Button *shell_savefl_button;
 #include <fltk3/ReturnButton.h>
-extern void do_shell_command(Fl_Return_Button*, void*);
+extern void do_shell_command(fltk3::ReturnButton*, void*);
 extern fltk3::DoubleWindow *shell_run_window;
 #include <fltk3/TextDisplay.h>
 extern Fl_Text_Display *shell_run_display;
-extern Fl_Return_Button *shell_run_button;
+extern fltk3::ReturnButton *shell_run_button;
 fltk3::DoubleWindow* make_shell_window();
 extern fltk3::DoubleWindow *grid_window;
 extern void grid_cb(Fl_Int_Input*, long);

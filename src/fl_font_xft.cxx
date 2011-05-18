@@ -572,10 +572,10 @@ static Window draw_overlay_window;
 
 void fl_destroy_xft_draw(Window id) {
   if (id == draw_window)
-    XftDrawChange(draw_, draw_window = fl_message_window);
+    XftDrawChange(draw_, draw_window = fltk3::message_window);
 #if USE_OVERLAY
   if (id == draw_overlay_window)
-    XftDrawChange(draw_overlay, draw_overlay_window = fl_message_window);
+    XftDrawChange(draw_overlay, draw_overlay_window = fltk3::message_window);
 #endif
 }
 

@@ -318,9 +318,9 @@ fltk3::DoubleWindow *shell_run_window=(fltk3::DoubleWindow *)0;
 
 Fl_Text_Display *shell_run_display=(Fl_Text_Display *)0;
 
-Fl_Return_Button *shell_run_button=(Fl_Return_Button *)0;
+fltk3::ReturnButton *shell_run_button=(fltk3::ReturnButton *)0;
 
-static void cb_shell_run_button(Fl_Return_Button*, void*) {
+static void cb_shell_run_button(fltk3::ReturnButton*, void*) {
   shell_run_window->hide();
 }
 
@@ -355,9 +355,9 @@ fltk3::DoubleWindow* make_shell_window() {
       fluid_prefs.get("shell_savefl", b, 1);
       shell_savefl_button->value(b);
     } // Fl_Check_Button* shell_savefl_button
-    { Fl_Return_Button* o = new Fl_Return_Button(132, 90, 143, 25, "Run Command");
+    { fltk3::ReturnButton* o = new fltk3::ReturnButton(132, 90, 143, 25, "Run Command");
       o->callback((fltk3::Callback*)do_shell_command);
-    } // Fl_Return_Button* o
+    } // fltk3::ReturnButton* o
     { fltk3::Button* o = new fltk3::Button(285, 90, 72, 25, "Cancel");
       o->callback((fltk3::Callback*)cb_Cancel);
     } // fltk3::Button* o
@@ -371,9 +371,9 @@ fltk3::DoubleWindow* make_shell_window() {
       shell_run_buffer = new Fl_Text_Buffer();
       shell_run_display->buffer(shell_run_buffer);
     } // Fl_Text_Display* shell_run_display
-    { shell_run_button = new Fl_Return_Button(468, 395, 77, 25, "Close");
+    { shell_run_button = new fltk3::ReturnButton(468, 395, 77, 25, "Close");
       shell_run_button->callback((fltk3::Callback*)cb_shell_run_button);
-    } // Fl_Return_Button* shell_run_button
+    } // fltk3::ReturnButton* shell_run_button
     shell_run_window->end();
   } // fltk3::DoubleWindow* shell_run_window
   return shell_run_window;
@@ -575,7 +575,7 @@ void show_global_settings_window() {
     make_global_settings_window();
   readPrefs();
   refreshUI();
-  fl_message(
+  fltk3::message(
   	"WARNING!\n\n"
   	"The following dialog changes the user interface behavior\n"
   	"of ALL FLTK applications, for the current user, or for \n"

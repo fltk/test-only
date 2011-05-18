@@ -110,7 +110,7 @@ extern void when_button_cb(Fl_Light_Button*, void*);
 extern void overlay_cb(fltk3::Button*, void*);
 extern void revert_cb(fltk3::Button*, void*);
 #include <fltk3/ReturnButton.h>
-extern void ok_cb(Fl_Return_Button*, void*);
+extern void ok_cb(fltk3::ReturnButton*, void*);
 extern void cancel_cb(fltk3::Button*, void*);
 extern void live_mode_cb(fltk3::Button*, void*);
 extern fltk3::Button *wLiveMode;

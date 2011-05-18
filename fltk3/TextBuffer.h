@@ -662,7 +662,7 @@ public:
    */
   int input_file_was_transcoded;
 
-  /** This message may be displayed using the fl_alert() function when a file
+  /** This message may be displayed using the fltk3::alert() function when a file
    which was not UTF-8 encoded is input.
    */
   static const char* file_encoding_warning_message;
@@ -671,7 +671,7 @@ public:
    \brief Pointer to a function called after reading a non UTF-8 encoded file.
    
    This function is called after reading a file if the file content
-   was transcoded to UTF-8. Its default implementation calls fl_alert()
+   was transcoded to UTF-8. Its default implementation calls fltk3::alert()
    with the text of \ref file_encoding_warning_message. No warning message is
    displayed if this pointer is set to NULL. Use \ref input_file_was_transcoded
    to be informed if file input required transcoding to UTF-8.

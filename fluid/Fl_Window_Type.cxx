@@ -365,7 +365,7 @@ Fl_Type *Fl_Window_Type::make() {
   Fl_Type *p = Fl_Type::current;
   while (p && !p->is_code_block()) p = p->parent;
   if (!p) {
-    fl_message("Please select a function");
+    fltk3::message("Please select a function");
     return 0;
   }
   Fl_Window_Type *myo = new Fl_Window_Type();

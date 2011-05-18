@@ -85,12 +85,12 @@ int Fl_System_Printer::start_job (int pagecount, int *frompage, int *topage)
       prerr = StartDoc (hPr, &di);
       if (prerr < 1) {
 	abortPrint = TRUE;
-	//fl_alert ("StartDoc error %d", prerr);
+	//fltk3::alert ("StartDoc error %d", prerr);
 	err = 1;
       }
     } else {
       commdlgerr = CommDlgExtendedError ();
-      fl_alert ("Unable to create print context, error %lu",
+      fltk3::alert ("Unable to create print context, error %lu",
 		(unsigned long) commdlgerr);
       err = 1;
     }
@@ -122,7 +122,7 @@ void Fl_System_Printer::end_job (void)
     if (! abortPrint) {
       prerr = EndDoc (hPr);
       if (prerr < 0) {
-	fl_alert ("EndDoc error %d", prerr);
+	fltk3::alert ("EndDoc error %d", prerr);
       }
     }
     DeleteDC (hPr);
@@ -188,7 +188,7 @@ int Fl_System_Printer::start_page (void)
     WIN_SetupPrinterDeviceContext (hPr);
     prerr = StartPage (hPr);
     if (prerr < 0) {
-      fl_alert ("StartPage error %d", prerr);
+      fltk3::alert ("StartPage error %d", prerr);
       rsult = 1;
     }
     printable_rect(&w, &h);
@@ -237,7 +237,7 @@ int Fl_System_Printer::end_page (void)
     prerr = EndPage (hPr);
     if (prerr < 0) {
       abortPrint = TRUE;
-      fl_alert ("EndPage error %d", prerr);
+      fltk3::alert ("EndPage error %d", prerr);
       rsult = 1;
     }
   }

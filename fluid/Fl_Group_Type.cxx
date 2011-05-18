@@ -74,7 +74,7 @@ void group_cb(fltk3::Widget *, void *) {
   Fl_Type *qq = Fl_Type::current;
   while (qq && (!qq->is_widget() || qq->is_menu_item())) qq = qq->parent;
   if (!qq || qq->level < 1 || (qq->level == 1 && !strcmp(qq->type_name(), "widget_class"))) {
-    fl_message("Please select widgets to group");
+    fltk3::message("Please select widgets to group");
     return;
   }
   Fl_Widget_Type* q = (Fl_Widget_Type*)qq;
@@ -98,13 +98,13 @@ void ungroup_cb(fltk3::Widget *, void *) {
   while (q && (!q->is_widget() || q->is_menu_item())) q = q->parent;
   if (q) q = q->parent;
   if (!q || q->level < 1 || (q->level == 1 && !strcmp(q->type_name(), "widget_class"))) {
-    fl_message("Please select widgets in a group");
+    fltk3::message("Please select widgets in a group");
     return;
   }
   Fl_Type* n;
   for (n = q->next; n && n->level > q->level; n = n->next) {
     if (n->level == q->level+1 && !n->selected) {
-      fl_message("Please select all widgets in group");
+      fltk3::message("Please select all widgets in group");
       return;
     }
   }
@@ -291,7 +291,7 @@ void Fl_Table_Type::add_child(Fl_Type* cc, Fl_Type* before) {
   Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
   fltk3::Widget* b = before ? ((Fl_Widget_Type*)before)->o : 0;
   if (((Fl_Table*)o)->children()==1) { // the FLuid_Table has one extra child
-    fl_message("Inserting child widgets into an Fl_Table is not recommended.\n"
+    fltk3::message("Inserting child widgets into an Fl_Table is not recommended.\n"
                "Please refer to the documentation on Fl_Table.");
   }
   ((Fl_Table*)o)->insert(*(c->o), b);

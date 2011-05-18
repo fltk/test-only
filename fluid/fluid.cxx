@@ -214,7 +214,7 @@ void save_cb(fltk3::Widget *, void *v) {
       else
         basename = c;
 
-      if (fl_choice("The file \"%s\" already exists.\n"
+      if (fltk3::choice("The file \"%s\" already exists.\n"
                     "Do you want to replace it?", "Cancel",
 		    "Replace", NULL, basename) == 0) return;
     }
@@ -222,7 +222,7 @@ void save_cb(fltk3::Widget *, void *v) {
     if (v != (void *)2) set_filename(c);
   }
   if (!write_file(c)) {
-    fl_alert("Error writing %s: %s", c, strerror(errno));
+    fltk3::alert("Error writing %s: %s", c, strerror(errno));
     return;
   }
 
@@ -284,7 +284,7 @@ void save_template_cb(fltk3::Widget *, void *) {
 
   char *ext = filename + strlen(filename);
   if (ext >= (filename + sizeof(filename) - 5)) {
-    fl_alert("The template name \"%s\" is too long!", c);
+    fltk3::alert("The template name \"%s\" is too long!", c);
     return;
   }
 
@@ -292,13 +292,13 @@ void save_template_cb(fltk3::Widget *, void *) {
   strcpy(ext, ".fl");
 
   if (!access(filename, 0)) {
-    if (fl_choice("The template \"%s\" already exists.\n"
+    if (fltk3::choice("The template \"%s\" already exists.\n"
                   "Do you want to replace it?", "Cancel",
 		  "Replace", NULL, c) == 0) return;
   }
 
   if (!write_file(filename)) {
-    fl_alert("Error writing %s: %s", filename, strerror(errno));
+    fltk3::alert("Error writing %s: %s", filename, strerror(errno));
     return;
   }
 
@@ -327,7 +327,7 @@ void save_template_cb(fltk3::Widget *, void *) {
 
   if ((fp = fl_fopen(filename, "wb")) == NULL) {
     delete[] pixels;
-    fl_alert("Error writing %s: %s", filename, strerror(errno));
+    fltk3::alert("Error writing %s: %s", filename, strerror(errno));
     return;
   }
 
@@ -365,13 +365,13 @@ void save_template_cb(fltk3::Widget *, void *) {
 
 void revert_cb(fltk3::Widget *,void *) {
   if (modflag) {
-    if (!fl_choice("This user interface has been changed. Really revert?",
+    if (!fltk3::choice("This user interface has been changed. Really revert?",
                    "Cancel", "Revert", NULL)) return;
   }
   undo_suspend();
   if (!read_file(filename, 0)) {
     undo_resume();
-    fl_message("Can't read %s: %s", filename, strerror(errno));
+    fltk3::message("Can't read %s: %s", filename, strerror(errno));
     return;
   }
   undo_resume();
@@ -381,7 +381,7 @@ void revert_cb(fltk3::Widget *,void *) {
 
 void exit_cb(fltk3::Widget *,void *) {
   if (modflag)
-    switch (fl_choice("Do you want to save changes to this user\n"
+    switch (fltk3::choice("Do you want to save changes to this user\n"
                       "interface before exiting?", "Cancel",
                       "Save", "Don't Save"))
     {
@@ -422,7 +422,7 @@ void exit_cb(fltk3::Widget *,void *) {
 void
 apple_open_cb(const char *c) {
   if (modflag) {
-    switch (fl_choice("Do you want to save changes to this user\n"
+    switch (fltk3::choice("Do you want to save changes to this user\n"
                       "interface before opening another one?", "Don't Save",
                       "Save", "Cancel"))
     {
@@ -440,7 +440,7 @@ apple_open_cb(const char *c) {
   undo_suspend();
   if (!read_file(c, 0)) {
     undo_resume();
-    fl_message("Can't read %s: %s", c, strerror(errno));
+    fltk3::message("Can't read %s: %s", c, strerror(errno));
     free((void *)filename);
     filename = oldfilename;
     if (main_window) main_window->label(filename);
@@ -457,7 +457,7 @@ apple_open_cb(const char *c) {
 
 void open_cb(fltk3::Widget *, void *v) {
   if (!v && modflag) {
-    switch (fl_choice("Do you want to save changes to this user\n"
+    switch (fltk3::choice("Do you want to save changes to this user\n"
                       "interface before opening another one?", "Cancel",
                       "Save", "Don't Save"))
     {
@@ -481,7 +481,7 @@ void open_cb(fltk3::Widget *, void *v) {
   undo_suspend();
   if (!read_file(c, v!=0)) {
     undo_resume();
-    fl_message("Can't read %s: %s", c, strerror(errno));
+    fltk3::message("Can't read %s: %s", c, strerror(errno));
     free((void *)filename);
     filename = oldfilename;
     if (main_window) set_modflag(modflag);
@@ -503,7 +503,7 @@ void open_cb(fltk3::Widget *, void *v) {
 
 void open_history_cb(fltk3::Widget *, void *v) {
   if (modflag) {
-    switch (fl_choice("Do you want to save changes to this user\n"
+    switch (fltk3::choice("Do you want to save changes to this user\n"
                       "interface before opening another one?", "Cancel",
                       "Save", "Don't Save"))
     {
@@ -521,7 +521,7 @@ void open_history_cb(fltk3::Widget *, void *v) {
   if (!read_file(filename, 0)) {
     undo_resume();
     undo_clear();
-    fl_message("Can't read %s: %s", filename, strerror(errno));
+    fltk3::message("Can't read %s: %s", filename, strerror(errno));
     free((void *)filename);
     filename = oldfilename;
     if (main_window) main_window->label(filename);
@@ -537,7 +537,7 @@ void new_cb(fltk3::Widget *, void *v) {
   // Check if the current file has been modified...
   if (!v && modflag) {
     // Yes, ask the user what to do...
-    switch (fl_choice("Do you want to save changes to this user\n"
+    switch (fltk3::choice("Do you want to save changes to this user\n"
                       "interface before creating a new one?", "Cancel",
                       "Save", "Don't Save"))
     {
@@ -595,7 +595,7 @@ void new_cb(fltk3::Widget *, void *v) {
       FILE *infile, *outfile;
 
       if ((infile = fl_fopen(tname, "r")) == NULL) {
-	fl_alert("Error reading template file \"%s\":\n%s", tname,
+	fltk3::alert("Error reading template file \"%s\":\n%s", tname,
         	 strerror(errno));
 	set_modflag(0);
 	undo_clear();
@@ -603,7 +603,7 @@ void new_cb(fltk3::Widget *, void *v) {
       }
 
       if ((outfile = fl_fopen(cutfname(1), "w")) == NULL) {
-	fl_alert("Error writing buffer file \"%s\":\n%s", cutfname(1),
+	fltk3::alert("Error writing buffer file \"%s\":\n%s", cutfname(1),
         	 strerror(errno));
 	fclose(infile);
 	set_modflag(0);
@@ -684,9 +684,9 @@ void write_cb(fltk3::Widget *, void *) {
     if (!x) {fprintf(stderr,"%s : %s\n",cname,strerror(errno)); exit(1);}
   } else {
     if (!x) {
-      fl_message("Can't write %s: %s", cname, strerror(errno));
+      fltk3::message("Can't write %s: %s", cname, strerror(errno));
     } else if (completion_button->value()) {
-      fl_message("Wrote %s", cname);
+      fltk3::message("Wrote %s", cname);
     }
   }
 }
@@ -707,16 +707,16 @@ void write_strings_cb(fltk3::Widget *, void *) {
     if (x) {fprintf(stderr,"%s : %s\n",sname,strerror(errno)); exit(1);}
   } else {
     if (x) {
-      fl_message("Can't write %s: %s", sname, strerror(errno));
+      fltk3::message("Can't write %s: %s", sname, strerror(errno));
     } else if (completion_button->value()) {
-      fl_message("Wrote %s", sname);
+      fltk3::message("Wrote %s", sname);
     }
   }
 }
 
 void openwidget_cb(fltk3::Widget *, void *) {
   if (!Fl_Type::current) {
-    fl_message("Please select a widget");
+    fltk3::message("Please select a widget");
     return;
   }
   Fl_Type::current->open();
@@ -736,12 +736,12 @@ static int ipasteoffset;
 
 void copy_cb(fltk3::Widget*, void*) {
   if (!Fl_Type::current) {
-    fl_beep();
+    fltk3::beep();
     return;
   }
   ipasteoffset = 10;
   if (!write_file(cutfname(),1)) {
-    fl_message("Can't write %s: %s", cutfname(), strerror(errno));
+    fltk3::message("Can't write %s: %s", cutfname(), strerror(errno));
     return;
   }
 }
@@ -749,11 +749,11 @@ void copy_cb(fltk3::Widget*, void*) {
 extern void select_only(Fl_Type *);
 void cut_cb(fltk3::Widget *, void *) {
   if (!Fl_Type::current) {
-    fl_beep();
+    fltk3::beep();
     return;
   }
   if (!write_file(cutfname(),1)) {
-    fl_message("Can't write %s: %s", cutfname(), strerror(errno));
+    fltk3::message("Can't write %s: %s", cutfname(), strerror(errno));
     return;
   }
   undo_checkpoint();
@@ -767,7 +767,7 @@ void cut_cb(fltk3::Widget *, void *) {
 
 void delete_cb(fltk3::Widget *, void *) {
   if (!Fl_Type::current) {
-    fl_beep();
+    fltk3::beep();
     return;
   }
   undo_checkpoint();
@@ -789,7 +789,7 @@ void paste_cb(fltk3::Widget*, void*) {
   undo_checkpoint();
   undo_suspend();
   if (!read_file(cutfname(), 1)) {
-    fl_message("Can't read %s: %s", cutfname(), strerror(errno));
+    fltk3::message("Can't read %s: %s", cutfname(), strerror(errno));
   }
   undo_resume();
   pasteoffset = 0;
@@ -800,12 +800,12 @@ void paste_cb(fltk3::Widget*, void*) {
 // Duplicate the selected widgets...
 void duplicate_cb(fltk3::Widget*, void*) {
   if (!Fl_Type::current) {
-    fl_beep();
+    fltk3::beep();
     return;
   }
 
   if (!write_file(cutfname(1),1)) {
-    fl_message("Can't write %s: %s", cutfname(1), strerror(errno));
+    fltk3::message("Can't write %s: %s", cutfname(1), strerror(errno));
     return;
   }
 
@@ -815,7 +815,7 @@ void duplicate_cb(fltk3::Widget*, void*) {
   undo_checkpoint();
   undo_suspend();
   if (!read_file(cutfname(1), 1)) {
-    fl_message("Can't read %s: %s", cutfname(1), strerror(errno));
+    fltk3::message("Can't read %s: %s", cutfname(1), strerror(errno));
   }
   unlink(cutfname(1));
   undo_resume();
@@ -1033,7 +1033,7 @@ void print_menu_cb(fltk3::Widget *, void *) {
   xdpi   = GetDeviceCaps(dialog.hDC, LOGPIXELSX);
   ydpi   = GetDeviceCaps(dialog.hDC, LOGPIXELSY);
 
-//  fl_message("width=%d, length=%d, xdpi=%d, ydpi=%d, num_windows=%d\n",
+//  fltk3::message("width=%d, length=%d, xdpi=%d, ydpi=%d, num_windows=%d\n",
 //             width, length, xdpi, ydpi, num_windows);
 
   HDC	save_dc = fl_gc;
@@ -1104,7 +1104,7 @@ void print_menu_cb(fltk3::Widget *, void *) {
     ulx = (width - ww) / 2;
     uly = (length - hh) / 2;
 
-//    fl_message("winpage=%d, ulx=%d, uly=%d, ww=%d, hh=%d",
+//    fltk3::message("winpage=%d, ulx=%d, uly=%d, ww=%d, hh=%d",
 //               winpage, ulx, uly, ww, hh);
 
     // Draw a simulated window border...
@@ -1219,7 +1219,7 @@ static const char *ps_string(const char *s) {
 }
 
 // Actually print...
-void print_cb(Fl_Return_Button *, void *) {
+void print_cb(fltk3::ReturnButton *, void *) {
   FILE		*outfile;		// Output file or pipe to print command
   char		command[1024];		// Print command
   int		copies;			// Collated copies
@@ -1296,7 +1296,7 @@ void print_cb(Fl_Return_Button *, void *) {
     fl_file_chooser_ok_label(NULL);
 
     if (outname && !access(outname, 0)) {
-      if (fl_choice("The file \"%s\" already exists.\n"
+      if (fltk3::choice("The file \"%s\" already exists.\n"
                     "Do you want to replace it?", "Cancel",
 		    "Replace", NULL, outname) == 0) outname = NULL;
     }
@@ -1619,7 +1619,7 @@ void print_cb(Fl_Return_Button *, void *) {
     else fclose(outfile);
   } else {
     // Unable to print...
-    fl_alert("Error printing: %s", strerror(errno));
+    fltk3::alert("Error printing: %s", strerror(errno));
   }
 
   // Hide progress, activate controls, hide print panel...
@@ -2045,11 +2045,11 @@ static Fl_Process s_proc;
 static bool prepare_shell_command(const char * &command)  { // common pre-shell command code all platforms
   shell_window->hide();
   if (s_proc.desc()) {
-    fl_alert("Previous shell command still running!");
+    fltk3::alert("Previous shell command still running!");
     return false;
   }
   if ((command = shell_command_input->value()) == NULL || !*command) {
-    fl_alert("No shell command entered!");
+    fltk3::alert("No shell command entered!");
     return false;
   }
   if (shell_savefl_button->value()) {
@@ -2089,7 +2089,7 @@ shell_pipe_cb(int, void*) {
 }
 
 void
-do_shell_command(Fl_Return_Button*, void*) {
+do_shell_command(fltk3::ReturnButton*, void*) {
   const char	*command=NULL;	// Command to run
 
   if (!prepare_shell_command(command)) return;
@@ -2101,7 +2101,7 @@ do_shell_command(Fl_Return_Button*, void*) {
   shell_run_window->label("Shell Command Running...");
 
   if (s_proc.popen((char *)command) == NULL) {
-    fl_alert("Unable to run shell command: %s", strerror(errno));
+    fltk3::alert("Unable to run shell command: %s", strerror(errno));
     return;
   }
 
@@ -2115,23 +2115,23 @@ do_shell_command(Fl_Return_Button*, void*) {
 
   shell_run_button->activate();
   shell_run_window->label("Shell Command Complete");
-  fl_beep();
+  fltk3::beep();
 
   while (shell_run_window->shown()) fltk3::wait();
 }
 #else
 // Just do basic shell command stuff, no status window...
 void
-do_shell_command(Fl_Return_Button*, void*) {
+do_shell_command(fltk3::ReturnButton*, void*) {
   const char	*command;	// Command to run
   int		status;		// Status from command...
 
   if (!prepare_shell_command(command)) return;
 
   if ((status = system(command)) != 0) {
-    fl_alert("Shell command returned status %d!", status);
+    fltk3::alert("Shell command returned status %d!", status);
   } else if (completion_button->value()) {
-    fl_message("Shell command completed successfully!");
+    fltk3::message("Shell command completed successfully!");
   }
 }
 #endif // !__MWERKS__
@@ -2369,7 +2369,7 @@ int main(int argc,char **argv) {
     }
     strcat(buf, fltk3::help);
 #ifdef _MSC_VER
-    fl_message("%s\n", buf);
+    fltk3::message("%s\n", buf);
 #else
     fprintf(stderr, "%s\n", buf);
 #endif
@@ -2409,7 +2409,7 @@ int main(int argc,char **argv) {
       fprintf(stderr,"%s : %s\n", c, strerror(errno));
       exit(1);
     }
-    fl_message("Can't read %s: %s", c, strerror(errno));
+    fltk3::message("Can't read %s: %s", c, strerror(errno));
   }
   undo_resume();
   if (compile_only) {

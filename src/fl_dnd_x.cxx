@@ -94,7 +94,7 @@ int fltk3::dnd() {
   Window target_window = 0;
   fltk3::Window* local_window = 0;
   int dndversion = 4; int dest_x, dest_y;
-  XSetSelectionOwner(fl_display, fl_XdndSelection, fl_message_window, fl_event_time);
+  XSetSelectionOwner(fl_display, fl_XdndSelection, fltk3::message_window, fl_event_time);
 
   while (fltk3::pushed()) {
 

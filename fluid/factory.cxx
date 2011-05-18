@@ -123,10 +123,10 @@ public:
     if (o->w()/3 < W) W = o->w()/3;
     w += W + 8 - o->labelsize();
   }
-  virtual const char *type_name() {return "Fl_Return_Button";}
+  virtual const char *type_name() {return "fltk3::ReturnButton";}
   virtual const char *alt_type_name() {return "fltk::ReturnButton";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Return_Button(x,y,w,h,"button");}
+    return new fltk3::ReturnButton(x,y,w,h,"button");}
   Fl_Widget_Type *_make() {return new Fl_Return_Button_Type();}
   int pixmapID() { return 23; }
 };

@@ -117,7 +117,7 @@ extern FLTK3_EXPORT Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, 
 extern FLTK3_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
 
 #if defined(FL_LIBRARY) || defined(FL_INTERNALS)
-extern FLTK3_EXPORT Window fl_message_window;
+extern FLTK3_EXPORT Window fltk3::message_window;
 extern FLTK3_EXPORT void *fl_xftfont;
 FLTK3_EXPORT Fl_Region XRectangleRegion(int x, int y, int w, int h); // in fltk3::rect.cxx
 

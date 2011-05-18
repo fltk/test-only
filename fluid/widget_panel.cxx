@@ -806,10 +806,10 @@ access the Widget pointer and \'v\' to access the user value.");
         o->callback((fltk3::Callback*)revert_cb);
         o->hide();
       } // fltk3::Button* o
-      { Fl_Return_Button* o = new Fl_Return_Button(344, 330, 64, 20, "Close");
+      { fltk3::ReturnButton* o = new fltk3::ReturnButton(344, 330, 64, 20, "Close");
         o->labelsize(11);
         o->callback((fltk3::Callback*)ok_cb);
-      } // Fl_Return_Button* o
+      } // fltk3::ReturnButton* o
       { fltk3::Button* o = new fltk3::Button(339, 330, 70, 20, "Cancel");
         o->labelsize(11);
         o->callback((fltk3::Callback*)cancel_cb);

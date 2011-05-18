@@ -454,7 +454,7 @@ const char* Fl_Native_File_Chooser::preset_file() const {
 
 
 int Fl_Native_File_Chooser::exist_dialog() {
-  return(fl_choice("%s", fl_cancel, fl_ok, NULL, file_exists_message));
+  return(fltk3::choice("%s", fltk3::cancel, fltk3::ok, NULL, file_exists_message));
 }
 
 //

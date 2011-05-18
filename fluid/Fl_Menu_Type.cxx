@@ -116,7 +116,7 @@ Fl_Type *Fl_Menu_Item_Type::make() {
   }
   force_parent = 0;
   if (!p || !(p->is_menu_button() || (p->is_menu_item() && p->is_parent()))) {
-    fl_message("Please select a menu to add to");
+    fltk3::message("Please select a menu to add to");
     return 0;
   }
   if (!o) {

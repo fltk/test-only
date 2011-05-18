@@ -45,7 +45,7 @@
 #include <fltk3/ReturnButton.h>
 #include <fltk3/Progress.h>
 static fltk3::DoubleWindow* make_print_panel();
-static void print_cb(Fl_Return_Button *, void *); 
+static void print_cb(fltk3::ReturnButton *, void *); 
 static void print_load();
 static void print_update_status();
 #endif

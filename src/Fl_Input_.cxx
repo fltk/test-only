@@ -983,7 +983,7 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
   case fltk3::PASTE: {
     // Don't allow pastes into readonly widgets...
     if (readonly()) {
-      fl_beep(FL_BEEP_ERROR);
+      fltk3::beep(FL_BEEP_ERROR);
       return 1;
     }
 
@@ -1006,7 +1006,7 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
         while (isdigit(*p & 255) && p < e) p ++;
       }
       if (p < e) {
-        fl_beep(FL_BEEP_ERROR);
+        fltk3::beep(FL_BEEP_ERROR);
         return 1;
       } else return replace(0, size(), t, e - t);
     } else if (input_type() == FL_FLOAT_INPUT) {
@@ -1024,7 +1024,7 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
 	}
       }
       if (p < e) {
-        fl_beep(FL_BEEP_ERROR);
+        fltk3::beep(FL_BEEP_ERROR);
         return 1;
       } else return replace(0, size(), t, e - t);
     }

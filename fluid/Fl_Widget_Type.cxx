@@ -105,7 +105,7 @@ Fl_Type *Fl_Widget_Type::make() {
   Fl_Type *qq = Fl_Type::current;
   while (qq && (!qq->is_widget() || qq->is_menu_item())) qq = qq->parent;
   if (!qq) {
-    fl_message("Please select a widget");
+    fltk3::message("Please select a widget");
     return 0;
   }
   Fl_Widget_Type* q = (Fl_Widget_Type*)qq;
@@ -1253,7 +1253,7 @@ void callback_cb(CodeEditor* i, void *v) {
     char *c = i->buffer()->text();
     const char *d = c_check(c);
     if (d) {
-      fl_message("Error in callback: %s",d);
+      fltk3::message("Error in callback: %s",d);
       if (i->window()) i->window()->make_current();
       haderror = 1;
     }
@@ -1275,7 +1275,7 @@ void user_data_cb(Fl_Input *i, void *v) {
     int mod = 0;
     const char *c = i->value();
     const char *d = c_check(c);
-    if (d) {fl_message("Error in user_data: %s",d); haderror = 1; return;}
+    if (d) {fltk3::message("Error in user_data: %s",d); haderror = 1; return;}
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected) {
         o->user_data(c);
@@ -1302,7 +1302,7 @@ void user_data_type_cb(Fl_Input *i, void *v) {
       if (c && *c && c[strlen(c)-1] != '*' && strcmp(c,"long"))
 	d = "must be pointer or long";
     }
-    if (d) {fl_message("Error in type: %s",d); haderror = 1; return;}
+    if (d) {fltk3::message("Error in type: %s",d); haderror = 1; return;}
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected) {
         o->user_data_type(c);
@@ -1323,7 +1323,7 @@ void v_input_cb(Fl_Input* i, void* v) {
     int mod = 0;
     const char *c = i->value();
     const char *d = c_check(c&&c[0]=='#' ? c+1 : c);
-    if (d) {fl_message("Error in %s: %s",i->label(),d); haderror = 1; return;}
+    if (d) {fltk3::message("Error in %s: %s",i->label(),d); haderror = 1; return;}
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_widget()) {
 	Fl_Widget_Type *t = (Fl_Widget_Type*)o;
@@ -1763,7 +1763,7 @@ void set_cb(fltk3::Button*, void*) {
   }
 }
 
-void ok_cb(Fl_Return_Button* o, void* v) {
+void ok_cb(fltk3::ReturnButton* o, void* v) {
   set_cb(o,v);
   if (!haderror) the_panel->hide();
 }

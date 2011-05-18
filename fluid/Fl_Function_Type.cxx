@@ -188,7 +188,7 @@ void Fl_Function_Type::open() {
   function_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert("%s", message);
+    if (message) fltk3::alert("%s", message);
     for (;;) {
       fltk3::Widget* w = fltk3::readqueue();
       if (w == f_panel_cancel) goto BREAK2;
@@ -432,7 +432,7 @@ Fl_Type *Fl_Code_Type::make() {
   Fl_Type *p = Fl_Type::current;
   while (p && !p->is_code_block()) p = p->parent;
   if (!p) {
-    fl_message("Please select a function");
+    fltk3::message("Please select a function");
     return 0;
   }
   Fl_Code_Type *o = new Fl_Code_Type();
@@ -449,7 +449,7 @@ void Fl_Code_Type::open() {
   code_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert("%s", message);
+    if (message) fltk3::alert("%s", message);
     for (;;) {
       fltk3::Widget* w = fltk3::readqueue();
       if (w == code_panel_cancel) goto BREAK2;
@@ -490,7 +490,7 @@ Fl_Type *Fl_CodeBlock_Type::make() {
   Fl_Type *p = Fl_Type::current;
   while (p && !p->is_code_block()) p = p->parent;
   if (!p) {
-    fl_message("Please select a function");
+    fltk3::message("Please select a function");
     return 0;
   }
   Fl_CodeBlock_Type *o = new Fl_CodeBlock_Type();
@@ -524,7 +524,7 @@ void Fl_CodeBlock_Type::open() {
   codeblock_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert("%s", message);
+    if (message) fltk3::alert("%s", message);
     for (;;) {
       fltk3::Widget* w = fltk3::readqueue();
       if (w == codeblock_panel_cancel) goto BREAK2;
@@ -628,7 +628,7 @@ void Fl_Decl_Type::open() {
   decl_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert("%s", message);
+    if (message) fltk3::alert("%s", message);
     for (;;) {
       fltk3::Widget* w = fltk3::readqueue();
       if (w == decl_panel_cancel) goto BREAK2;
@@ -786,7 +786,7 @@ void Fl_Data_Type::open() {
   data_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert("%s", message);
+    if (message) fltk3::alert("%s", message);
     for (;;) {
       fltk3::Widget* w = fltk3::readqueue();
       if (w == data_panel_cancel) goto BREAK2;
@@ -934,7 +934,7 @@ void Fl_Data_Type::write_code1() {
     if (compile_only)
       fprintf(stderr, "FLUID ERROR: %s %s\n", message, fn);
     else
-      fl_alert("%s\n%s\n", message, fn);
+      fltk3::alert("%s\n%s\n", message, fn);
   }
   if (data) free(data);
 }
@@ -987,7 +987,7 @@ void Fl_DeclBlock_Type::open() {
   declblock_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert("%s", message);
+    if (message) fltk3::alert("%s", message);
     for (;;) {
       fltk3::Widget* w = fltk3::readqueue();
       if (w == declblock_panel_cancel) goto BREAK2;
@@ -1110,7 +1110,7 @@ void Fl_Comment_Type::open() {
   char itempath[FL_PATH_MAX]; itempath[0] = 0;
   int last_selected_item = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert("%s", message);
+    if (message) fltk3::alert("%s", message);
     for (;;) {
       fltk3::Widget* w = fltk3::readqueue();
       if (w == comment_panel_cancel) goto BREAK2;
@@ -1118,7 +1118,7 @@ void Fl_Comment_Type::open() {
       else if (w == comment_predefined) {
         if (comment_predefined->value()==1) {
           // add the current comment to the database
-          const char *xname = fl_input(
+          const char *xname = fltk3::input(
                                        "Please enter a name to reference the current\ncomment in your database.\n\n"
                                        "Use forward slashes '/' to create submenus.", 
                                        "My Comment");
@@ -1138,8 +1138,8 @@ void Fl_Comment_Type::open() {
         } else if (comment_predefined->value()==2) {
           // remove the last selected comment from the database
           if (itempath[0]==0 || last_selected_item==0) {
-            fl_message("Please select an entry form this menu first.");
-          } else if (fl_choice("Are you sure that you want to delete the entry\n"
+            fltk3::message("Please select an entry form this menu first.");
+          } else if (fltk3::choice("Are you sure that you want to delete the entry\n"
 	                       "\"%s\"\nfrom the database?", "Cancel", "Delete",
 			       NULL, itempath)) {
             Fl_Preferences db(Fl_Preferences::USER, "fltk.org", "fluid_comments");
@@ -1176,7 +1176,7 @@ void Fl_Comment_Type::open() {
 	fl_file_chooser_ok_label(NULL);
         if (fname) {
           if (comment_input->buffer()->loadfile(fname)) {
-            fl_alert("Error loading file\n%s", fname);
+            fltk3::alert("Error loading file\n%s", fname);
           }
         }
       }
@@ -1366,7 +1366,7 @@ void Fl_Class_Type::open() {
   char *na=0,*pr=0,*p=0; // name and prefix substrings
   
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert("%s", message);
+    if (message) fltk3::alert("%s", message);
     for (;;) {
       fltk3::Widget* w = fltk3::readqueue();
       if (w == c_panel_cancel) goto BREAK2;

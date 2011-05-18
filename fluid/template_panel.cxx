@@ -131,9 +131,9 @@ template_instance->value("");
 template_panel->hide();
 }
 
-Fl_Return_Button *template_submit=(Fl_Return_Button *)0;
+fltk3::ReturnButton *template_submit=(fltk3::ReturnButton *)0;
 
-static void cb_template_submit(Fl_Return_Button*, void*) {
+static void cb_template_submit(fltk3::ReturnButton*, void*) {
   Fl_Shared_Image *img = (Fl_Shared_Image *)template_preview->image();
 if (img) img->release();
 template_preview->image(0);
@@ -177,9 +177,9 @@ fltk3::DoubleWindow* make_template_panel() {
       { fltk3::Button* o = new fltk3::Button(289, 323, 72, 25, "Cancel");
         o->callback((fltk3::Callback*)cb_Cancel);
       } // fltk3::Button* o
-      { template_submit = new Fl_Return_Button(371, 323, 79, 25, "Save");
+      { template_submit = new fltk3::ReturnButton(371, 323, 79, 25, "Save");
         template_submit->callback((fltk3::Callback*)cb_template_submit);
-      } // Fl_Return_Button* template_submit
+      } // fltk3::ReturnButton* template_submit
       o->end();
     } // fltk3::Group* o
     template_panel->set_modal();
@@ -208,11 +208,11 @@ void template_delete_cb(fltk3::Button *, void *) {
   const char *flfile = (const char *)template_browser->data(item);
   if (!flfile) return;
   
-  if (!fl_choice("Are you sure you want to delete the template \"%s\"?",
+  if (!fltk3::choice("Are you sure you want to delete the template \"%s\"?",
                  "Cancel", "Delete", 0, name)) return;
   
   if (unlink(flfile)) {
-    fl_alert("Unable to delete template \"%s\":\n%s", name, strerror(errno));
+    fltk3::alert("Unable to delete template \"%s\":\n%s", name, strerror(errno));
     return;
   }
   
