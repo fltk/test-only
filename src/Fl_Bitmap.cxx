@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-/** \fn Fl_Bitmap::Fl_Bitmap(const char *array, int W, int H)
+/** \fn fltk3::Bitmap::fltk3::Bitmap(const char *array, int W, int H)
   The constructors create a new bitmap from the specified bitmap data.*/
 
-/** \fn Fl_Bitmap::Fl_Bitmap(const unsigned char *array, int W, int H)
+/** \fn fltk3::Bitmap::fltk3::Bitmap(const unsigned char *array, int W, int H)
   The constructors create a new bitmap from the specified bitmap data.*/
 
 #include <fltk3/run.h>
@@ -248,11 +248,11 @@ Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *array) 
   return (bm);
 }
 
-void Fl_Bitmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
+void fltk3::Bitmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
   fl_graphics_driver->draw(this, XP, YP, WP, HP, cx, cy);
 }
 
-static int start(Fl_Bitmap *bm, int XP, int YP, int WP, int HP, int w, int h, int &cx, int &cy, 
+static int start(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int w, int h, int &cx, int &cy, 
 		 int &X, int &Y, int &W, int &H)
 {
   // account for current clip region (faster on Irix):
@@ -269,7 +269,7 @@ static int start(Fl_Bitmap *bm, int XP, int YP, int WP, int HP, int w, int h, in
 }
 
 #ifdef __APPLE__
-void Fl_Quartz_Graphics_Driver::draw(Fl_Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {
+void Fl_Quartz_Graphics_Driver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   if (!bm->array) {
     bm->draw_empty(XP, YP);
@@ -288,7 +288,7 @@ void Fl_Quartz_Graphics_Driver::draw(Fl_Bitmap *bm, int XP, int YP, int WP, int 
 }
 
 #elif defined(WIN32)
-void Fl_GDI_Graphics_Driver::draw(Fl_Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {
+void Fl_GDI_Graphics_Driver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   if (!bm->array) {
     bm->draw_empty(XP, YP);
@@ -349,7 +349,7 @@ void Fl_GDI_Graphics_Driver::draw(Fl_Bitmap *bm, int XP, int YP, int WP, int HP,
 }  
 
 #else // Xlib
-void Fl_Xlib_Graphics_Driver::draw(Fl_Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {
+void Fl_Xlib_Graphics_Driver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   if (!bm->array) {
     bm->draw_empty(XP, YP);
@@ -374,12 +374,12 @@ void Fl_Xlib_Graphics_Driver::draw(Fl_Bitmap *bm, int XP, int YP, int WP, int HP
   The destructor free all memory and server resources that are used by
   the bitmap.
 */
-Fl_Bitmap::~Fl_Bitmap() {
+fltk3::Bitmap::~Bitmap() {
   uncache();
   if (alloc_array) delete[] (uchar *)array;
 }
 
-void Fl_Bitmap::uncache() {
+void fltk3::Bitmap::uncache() {
   if (id_) {
 #ifdef __APPLE_QUARTZ__
     fl_delete_bitmask((Fl_Bitmask)id_);
@@ -390,17 +390,17 @@ void Fl_Bitmap::uncache() {
   }
 }
 
-void Fl_Bitmap::label(fltk3::Widget* widget) {
+void fltk3::Bitmap::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 
-void Fl_Bitmap::label(Fl_Menu_Item* m) {
+void fltk3::Bitmap::label(Fl_Menu_Item* m) {
   fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
   m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }
 
-Fl_Image *Fl_Bitmap::copy(int W, int H) {
-  Fl_Bitmap	*new_image;	// New RGB image
+Fl_Image *fltk3::Bitmap::copy(int W, int H) {
+  fltk3::Bitmap	*new_image;	// New RGB image
   uchar		*new_array;	// New array for image data
 
   // Optimize the simple copy where the width and height are the same...
@@ -408,7 +408,7 @@ Fl_Image *Fl_Bitmap::copy(int W, int H) {
     new_array = new uchar [H * ((W + 7) / 8)];
     memcpy(new_array, array, H * ((W + 7) / 8));
 
-    new_image = new Fl_Bitmap(new_array, W, H);
+    new_image = new fltk3::Bitmap(new_array, W, H);
     new_image->alloc_array = 1;
 
     return new_image;
@@ -435,7 +435,7 @@ Fl_Image *Fl_Bitmap::copy(int W, int H) {
 
   // Allocate memory for the new image...
   new_array = new uchar [H * ((W + 7) / 8)];
-  new_image = new Fl_Bitmap(new_array, W, H);
+  new_image = new fltk3::Bitmap(new_array, W, H);
   new_image->alloc_array = 1;
 
   memset(new_array, 0, H * ((W + 7) / 8));

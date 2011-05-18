@@ -31,11 +31,11 @@
 #include <fltk3/draw.h>
 
 #include "fastarrow.h"
-static Fl_Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
+static fltk3::Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
 #include "mediumarrow.h"
-static Fl_Bitmap mediumarrow(mediumarrow_bits, mediumarrow_width, mediumarrow_height);
+static fltk3::Bitmap mediumarrow(mediumarrow_bits, mediumarrow_width, mediumarrow_height);
 #include "slowarrow.h"
-static Fl_Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
+static fltk3::Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
 
 // changing the value does not change the appearance:
 void fltk3::Adjuster::value_damage() {}

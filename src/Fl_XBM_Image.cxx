@@ -49,7 +49,7 @@
   <P>The destructor free all memory and server resources that are used by 
   the image.
 */
-Fl_XBM_Image::Fl_XBM_Image(const char *name) : Fl_Bitmap((const char *)0,0,0) {
+Fl_XBM_Image::Fl_XBM_Image(const char *name) : fltk3::Bitmap((const char *)0,0,0) {
   FILE	*f;
   uchar	*ptr;
 

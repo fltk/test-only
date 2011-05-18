@@ -491,7 +491,7 @@ void Fl_PostScript_Graphics_Driver::draw(Fl_RGB_Image * rgb,int XP, int YP, int 
   mask=0;
 }
 
-void Fl_PostScript_Graphics_Driver::draw(Fl_Bitmap * bitmap,int XP, int YP, int WP, int HP, int cx, int cy){
+void Fl_PostScript_Graphics_Driver::draw(fltk3::Bitmap * bitmap,int XP, int YP, int WP, int HP, int cx, int cy){
   const uchar  * di = bitmap->array;
   int w,h;
   int LD=(bitmap->w()+7)/8;

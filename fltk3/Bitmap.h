@@ -26,57 +26,66 @@
 //
 
 /* \file
-   Fl_Bitmap widget . */
+ fltk3::Bitmap widget . */
 
 #ifndef Fltk3_Bitmap_H
 #define Fltk3_Bitmap_H
-#  include "Image.h"
+
+#include "Image.h"
 
 namespace fltk3 { class Widget; }
 struct Fl_Menu_Item;
+class Fl_Image;
+class Fl_Quartz_Graphics_Driver;
+class Fl_GDI_Graphics_Driver;
+class Fl_Xlib_Graphics_Driver;
 
-/**
-  The Fl_Bitmap class supports caching and drawing of mono-color
-  (bitmap) images. Images are drawn using the current color.
-*/
-class FLTK3_EXPORT Fl_Bitmap : public Fl_Image {
-  friend class Fl_Quartz_Graphics_Driver;
-  friend class Fl_GDI_Graphics_Driver;
-  friend class Fl_Xlib_Graphics_Driver;
-public:
-
-  /** pointer to raw bitmap data */
-  const uchar *array;
-  /** Non-zero if array points to bitmap data allocated internally */
-  int alloc_array;
+namespace fltk3 {
   
-  private:
-
-#if defined(__APPLE__) || defined(WIN32)
-  /** for internal use */
-  void *id_;
-#else
-  /** for internal use */
-  unsigned id_;
-#endif // __APPLE__ || WIN32
-
+  /**
+   The fltk3::Bitmap class supports caching and drawing of mono-color
+   (bitmap) images. Images are drawn using the current color.
+   */
+  class FLTK3_EXPORT Bitmap : public Fl_Image {
+    friend class ::Fl_Quartz_Graphics_Driver;
+    friend class ::Fl_GDI_Graphics_Driver;
+    friend class ::Fl_Xlib_Graphics_Driver;
   public:
-
-  /** The constructors create a new bitmap from the specified bitmap data */
-  Fl_Bitmap(const uchar *bits, int W, int H) :
+    
+    /** pointer to raw bitmap data */
+    const uchar *array;
+    /** Non-zero if array points to bitmap data allocated internally */
+    int alloc_array;
+    
+  private:
+    
+#if defined(__APPLE__) || defined(WIN32)
+    /** for internal use */
+    void *id_;
+#else
+    /** for internal use */
+    unsigned id_;
+#endif // __APPLE__ || WIN32
+    
+  public:
+    
+    /** The constructors create a new bitmap from the specified bitmap data */
+    Bitmap(const uchar *bits, int W, int H) :
     Fl_Image(W,H,0), array(bits), alloc_array(0), id_(0) {data((const char **)&array, 1);}
-  /** The constructors create a new bitmap from the specified bitmap data */
-  Fl_Bitmap(const char *bits, int W, int H) :
+    /** The constructors create a new bitmap from the specified bitmap data */
+    Bitmap(const char *bits, int W, int H) :
     Fl_Image(W,H,0), array((const uchar *)bits), alloc_array(0), id_(0) {data((const char **)&array, 1);}
-  virtual ~Fl_Bitmap();
-  virtual Fl_Image *copy(int W, int H);
-  Fl_Image *copy() { return copy(w(), h()); }
-  virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
-  void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
-  virtual void label(fltk3::Widget*w);
-  virtual void label(Fl_Menu_Item*m);
-  virtual void uncache();
-};
+    virtual ~Bitmap();
+    virtual Fl_Image *copy(int W, int H);
+    Fl_Image *copy() { return copy(w(), h()); }
+    virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
+    void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
+    virtual void label(fltk3::Widget*w);
+    virtual void label(Fl_Menu_Item*m);
+    virtual void uncache();
+  };
+  
+}
 
 #endif
 

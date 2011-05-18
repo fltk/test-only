@@ -205,7 +205,7 @@ class Clip {
   int height();
   int descent();
   void draw(Fl_Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy);
-  void draw(Fl_Bitmap * bitmap,int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(fltk3::Bitmap * bitmap,int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(Fl_RGB_Image * rgb,int XP, int YP, int WP, int HP, int cx, int cy);
   ~Fl_PostScript_Graphics_Driver();
 };

@@ -91,7 +91,7 @@ static Fl_Box_Type Fl_Box_type;
 #include <fltk3/Button.h>
 static Fl_Menu_Item buttontype_menu[] = {
   {"Normal",0,0,(void*)0},
-  {"Toggle",0,0,(void*)FL_TOGGLE_BUTTON},
+  {"Toggle",0,0,(void*)fltk3::TOGGLE_BUTTON},
   {"Radio",0,0,(void*)FL_RADIO_BUTTON},
   {0}};
 class Fl_Button_Type : public Fl_Widget_Type {
@@ -1246,7 +1246,7 @@ static symbol table[] = {
   {"RETURN_CHANGED",	 1},
   {"RETURN_END",		 2},
   {"RETURN_ALWAYS",	 3},
-  {"PUSH_BUTTON",	FL_TOGGLE_BUTTON},
+  {"PUSH_BUTTON",	fltk3::TOGGLE_BUTTON},
   {"RADIO_BUTTON",	FL_RADIO_BUTTON},
   {"HIDDEN_BUTTON",	FL_HIDDEN_BUTTON},
   {"SELECT_BROWSER",	FL_SELECT_BROWSER},

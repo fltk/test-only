@@ -33,10 +33,12 @@
 
 #include "Widget.h"
 
+namespace fltk3 {
 // values for type()
-#define FL_NORMAL_BUTTON	0   /**< value() will be set to 1 during the press of the button and 
+  const uchar NORMAL_BUTTON = 0;   /**< value() will be set to 1 during the press of the button and 
 reverts back to 0 when the button is released */
-#define FL_TOGGLE_BUTTON	1   ///< value() toggles between 0 and 1 at every click of the button
+  const uchar TOGGLE_BUTTON = 1;   ///< value() toggles between 0 and 1 at every click of the button
+}
 #define FL_RADIO_BUTTON		(FL_RESERVED_TYPE+2) /**< is set to 1 at button press, and all other
 buttons in the same group with <tt>type() == FL_RADIO_BUTTON</tt>
 are set to zero.*/
@@ -66,8 +68,8 @@ namespace fltk3 {
    \todo Refactor the doxygen comments for fltk3::Button type() documentation.
    
    For an fltk3::Button object, the type() call returns one of:
-   \li \c FL_NORMAL_BUTTON (0): value() remains unchanged after button press.
-   \li \c FL_TOGGLE_BUTTON: value() is inverted after button press.
+   \li \c fltk3::NORMAL_BUTTON (0): value() remains unchanged after button press.
+   \li \c fltk3::TOGGLE_BUTTON: value() is inverted after button press.
    \li \c FL_RADIO_BUTTON: value() is set to 1 after button press, and all other
    buttons in the current group with <tt>type() == FL_RADIO_BUTTON</tt>
    are set to zero.

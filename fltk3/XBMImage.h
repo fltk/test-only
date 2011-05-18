@@ -36,7 +36,7 @@
   The Fl_XBM_Image class supports loading, caching,
   and drawing of X Bitmap (XBM) bitmap files.
 */
-class FLTK3_EXPORT Fl_XBM_Image : public Fl_Bitmap {
+class FLTK3_EXPORT Fl_XBM_Image : public fltk3::Bitmap {
 
   public:
 

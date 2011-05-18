@@ -65,7 +65,7 @@ void Fl_File_Chooser::cb_newButton(fltk3::Button* o, void* v) {
 static unsigned char idata_new[] =
 {0,0,120,0,132,0,2,1,1,254,1,128,49,128,49,128,253,128,253,128,49,128,49,
 128,1,128,1,128,255,255,0,0};
-static Fl_Bitmap image_new(idata_new, 16, 16);
+static fltk3::Bitmap image_new(idata_new, 16, 16);
 
 void Fl_File_Chooser::cb__i(Fl_Tile*, void*) {
   update_preview();

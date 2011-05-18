@@ -474,12 +474,12 @@ inline int fl_isdisplayed_browser_line(fltk3::Widget* o, int n) {
 
 #include "Button.h"
 
-#define FL_NORMAL_BUTTON	0
+#define fltk3::NORMAL_BUTTON	0
 #define FL_TOUCH_BUTTON		4
 #define FL_INOUT_BUTTON		5
 #define FL_RETURN_BUTTON	6
 #define FL_HIDDEN_RET_BUTTON	7
-#define FL_PUSH_BUTTON		FL_TOGGLE_BUTTON
+#define FL_PUSH_BUTTON		fltk3::TOGGLE_BUTTON
 #define FL_MENU_BUTTON		9
 
 FLTK3_EXPORT fltk3::Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
@@ -502,7 +502,7 @@ forms_constructor(Fl_Check_Button, fl_add_checkbutton)
 
 inline fltk3::Widget* fl_add_bitmapbutton(int t,int x,int y,int w,int h,const char* l) {fltk3::Widget* o = fl_add_button(t,x,y,w,h,l); return o;}
 inline void fl_set_bitmapbutton_data(fltk3::Widget* o,int a,int b,uchar* c) {
-  (new Fl_Bitmap(c,a,b))->label(o);}  // does not delete old Fl_Bitmap!
+  (new fltk3::Bitmap(c,a,b))->label(o);}  // does not delete old fltk3::Bitmap!
 
 inline fltk3::Widget* fl_add_pixmapbutton(int t,int x,int y,int w,int h,const char* l) {fltk3::Widget* o = fl_add_button(t,x,y,w,h,l); return o;}
 inline void fl_set_pixmapbutton_data(fltk3::Widget* o, const char*const* c) {

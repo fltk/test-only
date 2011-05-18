@@ -588,7 +588,7 @@ void Shortcut_Button::draw() {
 }
 
 int Shortcut_Button::handle(int e) {
-  when(0); type(FL_TOGGLE_BUTTON);
+  when(0); type(fltk3::TOGGLE_BUTTON);
   if (e == fltk3::KEYBOARD) {
     if (!value()) return 0;
     int v = fltk3::event_text()[0];

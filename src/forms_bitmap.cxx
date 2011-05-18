@@ -38,7 +38,7 @@ Fl_FormsBitmap::Fl_FormsBitmap(
 /** Sets a new bitmap bits with size W,H. Deletes the previous one.*/
 void Fl_FormsBitmap::set(int W, int H, const uchar *bits) {
   delete b;
-  bitmap(new Fl_Bitmap(bits, W, H));
+  bitmap(new fltk3::Bitmap(bits, W, H));
 }
 
 /** Draws the bitmap and its associated box. */

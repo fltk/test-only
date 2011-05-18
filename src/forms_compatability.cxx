@@ -165,7 +165,7 @@ fltk3::Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
     b = new fltk3::Button(x,y,w,h,l);
   }
   switch (t) {
-  case FL_TOGGLE_BUTTON:
+  case fltk3::TOGGLE_BUTTON:
   case FL_RADIO_BUTTON:
     b->type(t);
     break;

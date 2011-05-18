@@ -278,17 +278,17 @@ const char* fltk3::close= "Close";   ///< string pointer used in common dialogs,
 void fltk3::beep(int type) {
 #ifdef WIN32
   switch (type) {
-    case FL_BEEP_QUESTION :
-    case FL_BEEP_PASSWORD :
+    case fltk3::BEEP_QUESTION :
+    case fltk3::BEEP_PASSWORD :
       MessageBeep(MB_ICONQUESTION);
       break;
-    case FL_BEEP_MESSAGE :
+    case fltk3::BEEP_MESSAGE :
       MessageBeep(MB_ICONASTERISK);
       break;
-    case FL_BEEP_NOTIFICATION :
+    case fltk3::BEEP_NOTIFICATION :
       MessageBeep(MB_ICONASTERISK);
       break;
-    case FL_BEEP_ERROR :
+    case fltk3::BEEP_ERROR :
       MessageBeep(MB_ICONERROR);
       break;
     default :
@@ -297,8 +297,8 @@ void fltk3::beep(int type) {
   }
 #elif defined(__APPLE__)
   switch (type) {
-    case FL_BEEP_DEFAULT :
-    case FL_BEEP_ERROR :
+    case fltk3::BEEP_DEFAULT :
+    case fltk3::BEEP_ERROR :
       NSBeep();
       break;
     default :
@@ -306,8 +306,8 @@ void fltk3::beep(int type) {
   }
 #else
   switch (type) {
-    case FL_BEEP_DEFAULT :
-    case FL_BEEP_ERROR :
+    case fltk3::BEEP_DEFAULT :
+    case fltk3::BEEP_ERROR :
       if (!fl_display) fl_open_display();
 
       XBell(fl_display, 100);
@@ -336,7 +336,7 @@ void fltk3::message(const char *fmt, ...) {
 
   va_list ap;
 
-  fltk3::beep(FL_BEEP_MESSAGE);
+  fltk3::beep(fltk3::BEEP_MESSAGE);
 
   va_start(ap, fmt);
   iconlabel = "i";
@@ -359,7 +359,7 @@ void fltk3::alert(const char *fmt, ...) {
 
   va_list ap;
 
-  fltk3::beep(FL_BEEP_ERROR);
+  fltk3::beep(fltk3::BEEP_ERROR);
 
   va_start(ap, fmt);
   iconlabel = "!";
@@ -384,7 +384,7 @@ int fltk3::ask(const char *fmt, ...) {
 
   va_list ap;
 
-  fltk3::beep(FL_BEEP_QUESTION);
+  fltk3::beep(fltk3::BEEP_QUESTION);
 
   va_start(ap, fmt);
   int r = innards(fmt, ap, fltk3::no, fltk3::yes, 0);
@@ -414,7 +414,7 @@ int fltk3::choice(const char*fmt,const char *b0,const char *b1,const char *b2,..
 
   va_list ap;
 
-  fltk3::beep(FL_BEEP_QUESTION);
+  fltk3::beep(fltk3::BEEP_QUESTION);
 
   va_start(ap, b2);
   int r = innards(fmt, ap, b0, b1, b2);
@@ -457,7 +457,7 @@ const char* fltk3::input(const char *fmt, const char *defstr, ...) {
 
   if (avoidRecursion) return 0;
 
-  fltk3::beep(FL_BEEP_QUESTION);
+  fltk3::beep(fltk3::BEEP_QUESTION);
 
   va_list ap;
   va_start(ap, defstr);
@@ -483,7 +483,7 @@ const char *fltk3::password(const char *fmt, const char *defstr, ...) {
 
   if (avoidRecursion) return 0;
 
-  fltk3::beep(FL_BEEP_PASSWORD);
+  fltk3::beep(fltk3::BEEP_PASSWORD);
 
   va_list ap;
   va_start(ap, defstr);

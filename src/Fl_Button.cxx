@@ -118,7 +118,7 @@ int fltk3::Button::handle(int event) {
     }
     set_changed();
     if (type() == FL_RADIO_BUTTON) setonly();
-    else if (type() == FL_TOGGLE_BUTTON) oldval = value_;
+    else if (type() == fltk3::TOGGLE_BUTTON) oldval = value_;
     else {
       value(oldval);
       set_changed();
@@ -157,7 +157,7 @@ int fltk3::Button::handle(int event) {
       if (type() == FL_RADIO_BUTTON && !value_) {
 	setonly();
 	if (when() & fltk3::WHEN_CHANGED) do_callback();
-      } else if (type() == FL_TOGGLE_BUTTON) {
+      } else if (type() == fltk3::TOGGLE_BUTTON) {
 	value(!value());
 	if (when() & fltk3::WHEN_CHANGED) do_callback();
       } else {

@@ -37,16 +37,16 @@
     Forms compatibility Bitmap Image Widget
 */
 class FLTK3_EXPORT Fl_FormsBitmap : public fltk3::Widget {
-    Fl_Bitmap *b;
+    fltk3::Bitmap *b;
 protected:
     void draw();
 public:
     Fl_FormsBitmap(fltk3::Boxtype, int, int, int, int, const char * = 0);
     void set(int W, int H, const uchar *bits);
     /** Sets a new bitmap. */
-    void bitmap(Fl_Bitmap *B) {b = B;}
-    /** Gets a the current associated Fl_Bitmap objects. */
-    Fl_Bitmap *bitmap() const {return b;}
+    void bitmap(fltk3::Bitmap *B) {b = B;}
+    /** Gets a the current associated fltk3::Bitmap objects. */
+    fltk3::Bitmap *bitmap() const {return b;}
 };
 
 #endif

@@ -30,25 +30,27 @@
 
 #  include "enumerations.h"
 
-namespace fltk3 { class Widget; }
-/** Different system beeps available. \relatesalso fltk3::beep(int) */
-enum {
-  FL_BEEP_DEFAULT = 0,
-  FL_BEEP_MESSAGE,
-  FL_BEEP_ERROR,
-  FL_BEEP_QUESTION,
-  FL_BEEP_PASSWORD,
-  FL_BEEP_NOTIFICATION
-};
-
 #  ifdef __GNUC__
 #    define __fl_attr(x) __attribute__ (x)
 #  else
 #    define __fl_attr(x)
 #  endif // __GNUC__
 
-namespace fltk3 {
-  FLTK3_EXPORT void beep(int type = FL_BEEP_DEFAULT);
+
+namespace fltk3 { 
+  class Widget;
+  
+  /** Different system beeps available. \relatesalso fltk3::beep(int) */
+  enum {
+    BEEP_DEFAULT = 0,
+    BEEP_MESSAGE,
+    BEEP_ERROR,
+    BEEP_QUESTION,
+    BEEP_PASSWORD,
+    BEEP_NOTIFICATION
+  };
+  
+  FLTK3_EXPORT void beep(int type = fltk3::BEEP_DEFAULT);
   FLTK3_EXPORT void message(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
   FLTK3_EXPORT void alert(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
   // fltk3::ask() is deprecated since it uses "Yes" and "No" for the buttons,
