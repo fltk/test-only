@@ -191,7 +191,7 @@ void fltk3::get_system_colors()
 #if 0 
   // this would be the correct code, but it does not run on all versions
   // of OS X. Also, setting a bright selection color would require 
-  // some updates in Fl_Adjuster and Fl_Help_Browser
+  // some updates in fltk3::Adjuster and Fl_Help_Browser
   OSStatus err;
   RGBColor c;
   err = GetThemeBrushAsColor(kThemeBrushPrimaryHighlightColor, 24, true, &c);

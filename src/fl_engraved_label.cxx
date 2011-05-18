@@ -39,13 +39,13 @@ static void innards(
 {
   fltk3::Align a1 = align;
   if (a1 & fltk3::ALIGN_CLIP) {
-    fl_push_clip(X, Y, W, H); a1 = (fltk3::Align)(a1&~fltk3::ALIGN_CLIP);}
+    fltk3::push_clip(X, Y, W, H); a1 = (fltk3::Align)(a1&~fltk3::ALIGN_CLIP);}
   fl_font((fltk3::Font)o->font, o->size);
   for (int i = 0; i < n; i++) {
     fl_color((fltk3::Color)(i < n-1 ? data[i][2] : o->color));
     fl_draw(o->value, X+data[i][0], Y+data[i][1], W, H, a1);
   }
-  if (align & fltk3::ALIGN_CLIP) fl_pop_clip();
+  if (align & fltk3::ALIGN_CLIP) fltk3::pop_clip();
 }
 
 static void fl_shadow_label(

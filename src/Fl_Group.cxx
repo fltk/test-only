@@ -719,7 +719,7 @@ void fltk3::Group::draw_children() {
   fltk3::Widget*const* a = array();
 
   if (clip_children()) {
-    fl_push_clip(x() + fltk3::box_dx(box()),
+    fltk3::push_clip(x() + fltk3::box_dx(box()),
                  y() + fltk3::box_dy(box()),
 		 w() - fltk3::box_dw(box()),
 		 h() - fltk3::box_dh(box()));
@@ -735,7 +735,7 @@ void fltk3::Group::draw_children() {
     for (int i=children_; i--;) update_child(**a++);
   }
 
-  if (clip_children()) fl_pop_clip();
+  if (clip_children()) fltk3::pop_clip();
 }
 
 void fltk3::Group::draw() {

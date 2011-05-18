@@ -22,34 +22,27 @@
 //
 //    http://www.fltk.org/str.php
 
-#ifndef fltk_Rectangle_h
-#define fltk_Rectangle_h
+#ifndef FLTK3_RECTANGLE_H
+#define FLTK3_RECTANGLE_H
 
-#include <fltk3/Wrapper.h>
-#include <fltk3/Rectangle.h>
-
-#include "FL_API.h"
+#include "Export.h"
+#include "Object.h"
 
 // rectangle macros that help keeping rectangle predicates as strict as possible 
 // even when not using rectangles in some situations (as when only using w h scalars)  
 // so that there is only one strict defintion for common predicates, 
 // if one change the following, it will be repercuted in all the core lib
-#define FLTK_RECT_EMPTY(w,h)        (w <= 0 || h <= 0)
+#define FLTK3_RECT_EMPTY(w,h)        (w <= 0 || h <= 0)
 // we should always use the same evaluation for center_x, center_y  in all corelib code:
 //#define FLTK_CENTER_X(coord, length)  (coord + (length>>1))
 //#define FLTK_CENTER_Y(coord, length)  (coord + (length>>1))
 
-namespace fltk {
+namespace fltk3 {
   
-
-  class FL_API Rectangle : public fltk3::WidgetWrapper {
-  protected:
-    // FIXME: 123 - this should be public, but then it must initialize _p, which 
-    // in turn means that we must create a different constructor that is called 
-    // for a derived class (Widget).
-    Rectangle() {}
+  class FLTK3_EXPORT Rectangle : public Object {
     
-#if 0 // FIXME: 123
+  protected:
+  int x_, y_, w_, h_;
 
  public:
 
@@ -98,9 +91,9 @@ namespace fltk {
   /*! Move entire rectangle by given distance in x and y. */
   void move(int dx, int dy) {x_ += dx; y_ += dy;}
   /*! True if w() or h() are less or equal to zero. */
-  bool empty() const {return FLTK_RECT_EMPTY(w_, h_);}
+  bool empty() const {return FLTK3_RECT_EMPTY(w_, h_);}
   /*! Same as !empty(), true if w() and h() are both greater than zero. */
-  bool not_empty() const {return  !FLTK_RECT_EMPTY(w_, h_);}
+  bool not_empty() const {return  !FLTK3_RECT_EMPTY(w_, h_);}
   /*! Integer center position. Rounded to the left if w() is odd. */
   int center_x() const {return x_+(w_>>1);}
   /*! Integer center position. Rounded to lower y if h() is odd. */
@@ -127,9 +120,8 @@ namespace fltk {
 
   void merge(const Rectangle& r);
   void intersect(const Rectangle& r);
-#endif
-};
 
+};
   
 }
 

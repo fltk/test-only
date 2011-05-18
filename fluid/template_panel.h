@@ -31,7 +31,7 @@
 #define template_panel_h
 #include <fltk3/run.h>
 #include <fltk3/DoubleWindow.h>
-extern Fl_Double_Window *template_panel;
+extern fltk3::DoubleWindow *template_panel;
 #include <fltk3/Browser.h>
 extern Fl_Browser *template_browser;
 #include <fltk3/Box.h>
@@ -44,7 +44,7 @@ extern Fl_Input *template_instance;
 extern fltk3::Button *template_delete;
 #include <fltk3/ReturnButton.h>
 extern Fl_Return_Button *template_submit;
-Fl_Double_Window* make_template_panel();
+fltk3::DoubleWindow* make_template_panel();
 void template_clear();
 void template_delete_cb(fltk3::Button *, void *);
 void template_load();

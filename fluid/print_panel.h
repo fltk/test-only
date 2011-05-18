@@ -31,7 +31,7 @@
 #define print_panel_h
 #include <fltk3/run.h>
 #include <fltk3/DoubleWindow.h>
-extern Fl_Double_Window *print_panel;
+extern fltk3::DoubleWindow *print_panel;
 #include <fltk3/Group.h>
 extern fltk3::Group *print_panel_controls;
 #include <fltk3/Choice.h>
@@ -56,10 +56,10 @@ extern fltk3::Group *print_collate_group[2];
 extern void print_cb(Fl_Return_Button*, void*);
 #include <fltk3/Progress.h>
 extern Fl_Progress *print_progress;
-extern Fl_Double_Window *print_properties_panel;
+extern fltk3::DoubleWindow *print_properties_panel;
 extern Fl_Choice *print_page_size;
 extern fltk3::Button *print_output_mode[4];
-Fl_Double_Window* make_print_panel();
+fltk3::DoubleWindow* make_print_panel();
 extern Fl_Menu_Item menu_print_page_size[];
 extern void print_cb(Fl_Return_Button *, void *); 
 void print_load();

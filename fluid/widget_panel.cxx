@@ -87,9 +87,9 @@ Fl_Input *v_input[4]={(Fl_Input *)0};
 
 fltk3::Button *wLiveMode=(fltk3::Button *)0;
 
-Fl_Double_Window* make_widget_panel() {
-  Fl_Double_Window* w;
-  { Fl_Double_Window* o = new Fl_Double_Window(420, 360);
+fltk3::DoubleWindow* make_widget_panel() {
+  fltk3::DoubleWindow* w;
+  { fltk3::DoubleWindow* o = new fltk3::DoubleWindow(420, 360);
     w = o;
     o->labelsize(11);
     o->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
@@ -826,7 +826,7 @@ avior.");
     } // fltk3::Group* o
     o->size_range(o->w(), o->h());
     o->end();
-  } // Fl_Double_Window* o
+  } // fltk3::DoubleWindow* o
   return w;
 }
 

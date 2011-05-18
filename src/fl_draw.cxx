@@ -382,10 +382,10 @@ void fl_draw(
   if ((!str || !*str) && !img) return;
   if (w && h && !fl_not_clipped(x, y, w, h) && (align & fltk3::ALIGN_INSIDE)) return;
   if (align & fltk3::ALIGN_CLIP) 
-    fl_push_clip(x, y, w, h);
+    fltk3::push_clip(x, y, w, h);
   fl_draw(str, x, y, w, h, align, fl_draw, img, draw_symbols);
   if (align & fltk3::ALIGN_CLIP) 
-    fl_pop_clip();
+    fltk3::pop_clip();
 }
 
 /**

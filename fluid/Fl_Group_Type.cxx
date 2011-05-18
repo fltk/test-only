@@ -158,24 +158,24 @@ class Fluid_Table : public Fl_Table {
   //    Make this a dark thin upbox with the text inside.
   //
   void DrawHeader(const char *s, int X, int Y, int W, int H) {
-    fl_push_clip(X,Y,W,H);
+    fltk3::push_clip(X,Y,W,H);
     fl_draw_box(fltk3::THIN_UP_BOX, X,Y,W,H, row_header_color());
     fl_color(fltk3::BLACK);
     fl_draw(s, X,Y,W,H, fltk3::ALIGN_CENTER);
-    fl_pop_clip();
+    fltk3::pop_clip();
   } 
   // Draw the cell data
   //    Dark gray text on white background with subtle border
   //
   void DrawData(const char *s, int X, int Y, int W, int H) {
-    fl_push_clip(X,Y,W,H);
+    fltk3::push_clip(X,Y,W,H);
     // Draw cell bg
     fl_color(fltk3::WHITE); fl_rectf(X,Y,W,H);
     // Draw cell data
     fl_color(fltk3::GRAY0); fl_draw(s, X,Y,W,H, fltk3::ALIGN_CENTER);
     // Draw box border
     fl_color(color()); fl_rect(X,Y,W,H);
-    fl_pop_clip();
+    fltk3::pop_clip();
   } 
   // Handle drawing table's cells
   //     Fl_Table calls this function to draw each visible cell in the table.

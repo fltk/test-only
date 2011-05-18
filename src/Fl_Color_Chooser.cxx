@@ -316,9 +316,9 @@ void Flcc_HueBox::draw() {
   int yy1 = y()+fltk3::box_dy(box());
   int w1 = w()-fltk3::box_dw(box());
   int h1 = h()-fltk3::box_dh(box());
-  if (damage() == fltk3::DAMAGE_EXPOSE) fl_push_clip(x1+px,yy1+py,6,6);
+  if (damage() == fltk3::DAMAGE_EXPOSE) fltk3::push_clip(x1+px,yy1+py,6,6);
   fl_draw_image(generate_image, this, x1, yy1, w1, h1);
-  if (damage() == fltk3::DAMAGE_EXPOSE) fl_pop_clip();
+  if (damage() == fltk3::DAMAGE_EXPOSE) fltk3::pop_clip();
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
 #ifdef CIRCLE
   int X = int(.5*(cos(c->hue()*(M_PI/3.0))*c->saturation()+1) * (w1-6));
@@ -390,9 +390,9 @@ void Flcc_ValueBox::draw() {
   int yy1 = y()+fltk3::box_dy(box());
   int w1 = w()-fltk3::box_dw(box());
   int h1 = h()-fltk3::box_dh(box());
-  if (damage() == fltk3::DAMAGE_EXPOSE) fl_push_clip(x1,yy1+py,w1,6);
+  if (damage() == fltk3::DAMAGE_EXPOSE) fltk3::push_clip(x1,yy1+py,w1,6);
   fl_draw_image(generate_vimage, this, x1, yy1, w1, h1);
-  if (damage() == fltk3::DAMAGE_EXPOSE) fl_pop_clip();
+  if (damage() == fltk3::DAMAGE_EXPOSE) fltk3::pop_clip();
   int Y = int((1-c->value()) * (h1-6));
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
   draw_box(fltk3::UP_BOX,x1,yy1+Y,w1,6,fltk3::focus() == this ? fltk3::FOREGROUND_COLOR : fltk3::GRAY);

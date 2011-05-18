@@ -111,7 +111,7 @@ Fl_Tiled_Image::draw(int X,	// I - Starting X position
   if (W == 0) W = fltk3::w();
   if (H == 0) H = fltk3::h();
 
-  fl_push_clip(X, Y, W, H);
+  fltk3::push_clip(X, Y, W, H);
 
   X += cx;
   Y += cy;
@@ -126,7 +126,7 @@ Fl_Tiled_Image::draw(int X,	// I - Starting X position
     for (int xx = X; xx < W; xx += image_->w())
       image_->draw(xx, yy);
 
-  fl_pop_clip();
+  fltk3::pop_clip();
 }
 
 

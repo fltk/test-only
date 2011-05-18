@@ -38,9 +38,9 @@ static Fl_Bitmap mediumarrow(mediumarrow_bits, mediumarrow_width, mediumarrow_he
 static Fl_Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
 
 // changing the value does not change the appearance:
-void Fl_Adjuster::value_damage() {}
+void fltk3::Adjuster::value_damage() {}
 
-void Fl_Adjuster::draw() {
+void fltk3::Adjuster::draw() {
   int dx, dy, W, H;
   if (w()>=h()) {
     dx = W = w()/3;
@@ -65,7 +65,7 @@ void Fl_Adjuster::draw() {
   if (fltk3::focus() == this) draw_focus();
 }
 
-int Fl_Adjuster::handle(int event) {
+int fltk3::Adjuster::handle(int event) {
   double v;
   int delta;
   int mx = fltk3::event_x();
@@ -163,12 +163,12 @@ int Fl_Adjuster::handle(int event) {
 }
 
 /**
-  Creates a new Fl_Adjuster widget using the given position,
+  Creates a new fltk3::Adjuster widget using the given position,
   size, and label string. It looks best if one of the dimensions is 3
   times the other.
   <P> Inherited destructor destroys the Valuator.
 */
-Fl_Adjuster::Fl_Adjuster(int X, int Y, int W, int H, const char* l)
+fltk3::Adjuster::Adjuster(int X, int Y, int W, int H, const char* l)
   : Fl_Valuator(X, Y, W, H, l) {
   box(fltk3::UP_BOX);
   step(1, 10000);

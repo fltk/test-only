@@ -70,9 +70,9 @@ private:
 public:
   Fl_File_Chooser(const char *d, const char *p, int t, const char *title);
 private:
-  Fl_Double_Window *window;
-  void cb_window_i(Fl_Double_Window*, void*);
-  static void cb_window(Fl_Double_Window*, void*);
+  fltk3::DoubleWindow *window;
+  void cb_window_i(fltk3::DoubleWindow*, void*);
+  static void cb_window(fltk3::DoubleWindow*, void*);
   Fl_Choice *showChoice;
   void cb_showChoice_i(Fl_Choice*, void*);
   static void cb_showChoice(Fl_Choice*, void*);
@@ -104,7 +104,7 @@ private:
   fltk3::Button *cancelButton;
   void cb_cancelButton_i(fltk3::Button*, void*);
   static void cb_cancelButton(fltk3::Button*, void*);
-  Fl_Double_Window *favWindow;
+  fltk3::DoubleWindow *favWindow;
   Fl_File_Browser *favList;
   void cb_favList_i(Fl_File_Browser*, void*);
   static void cb_favList(Fl_File_Browser*, void*);

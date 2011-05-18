@@ -48,7 +48,7 @@
   However, if the child widgets are a sparse arrangement you must
   set box() to a real _BOX type. This can result in some
   blinking during redrawing, but that can be solved by using a 
-  Fl_Double_Window.
+  fltk3::DoubleWindow.
 
   By default you can scroll in both directions, and the scrollbars
   disappear if the data will fit in the area of the scroll. 
@@ -77,7 +77,7 @@
   draw() method that draws the contents.  The scrolling is done by
   changing the x() and y() of the widget, so this child
   must use the x() and y() to position its drawing.
-  To speed up drawing it should test fl_push_clip().
+  To speed up drawing it should test fltk3::push_clip().
 
   Another very useful child is a single Fl_Pack, which is itself a group
   that packs its children together and changes size to surround them.

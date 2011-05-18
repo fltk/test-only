@@ -31,8 +31,8 @@
 #ifndef FLTK3_Wrapper_H
 #define FLTK3_Wrapper_H
 
-/*
- 
+#include <fltk3/Widget.h>
+
 #define FLTK3_WRAPPER_VCALLS_OBJECT(proto, call, flag) \
   virtual void proto { \
     if ( pVCalls & pVCallWidget##flag ) { \
@@ -79,7 +79,6 @@
     pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
   }
 
- */
 
 namespace fltk3 {
   
@@ -103,15 +102,12 @@ namespace fltk3 {
     static const unsigned int pVCallWidgetResize  = 1<<3;
     static const unsigned int pVCallWidgetShow    = 1<<4;
     static const unsigned int pVCallWidgetHide    = 1<<5;
-    
-    virtual void draw() { /* call _p->draw() with a flag set */ }
   };
   
   
   class WidgetWrapper : public Wrapper {
   public:
     virtual ~WidgetWrapper() {}
-    /*
     FLTK3_WRAPPER_VCALLS_OBJECT(draw(),
                                 draw(),
                                 Draw)
@@ -127,7 +123,6 @@ namespace fltk3 {
     FLTK3_WRAPPER_VCALLS_OBJECT(hide(),
                                 hide(),
                                 Hide)
-     */
   };
   
   

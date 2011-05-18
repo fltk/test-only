@@ -32,7 +32,7 @@
 #define Fltk3_Widget_H
 
 #include "enumerations.h"
-#include "Object.h"
+#include "Rectangle.h"
 
 /**
  \todo	typedef's fl_intptr_t and fl_uintptr_t should be documented.
@@ -110,13 +110,12 @@ namespace fltk3 {
    functions, even if they change the widget's appearance. It is up to the 
    user code to call redraw() after these.
    */
-  class FLTK3_EXPORT Widget : public Object {
+  class FLTK3_EXPORT Widget : public Rectangle {
     friend class Group;
     
     fltk3::Group* parent_;
     fltk3::Callback* callback_;
     void* user_data_;
-    int x_,y_,w_,h_;
     Label label_;
     unsigned int flags_;
     Color color_;
@@ -135,14 +134,6 @@ namespace fltk3 {
     
   protected:
     
-    /** Internal use only. Use position(int,int), size(int,int) or resize(int,int,int,int) instead. */
-    void x(int v) {x_ = v;}
-    /** Internal use only. Use position(int,int), size(int,int) or resize(int,int,int,int) instead. */
-    void y(int v) {y_ = v;}
-    /** Internal use only. Use position(int,int), size(int,int) or resize(int,int,int,int) instead. */
-    void w(int v) {w_ = v;}
-    /** Internal use only. Use position(int,int), size(int,int) or resize(int,int,int,int) instead. */
-    void h(int v) {h_ = v;}
     /** Gets the widget flags mask */
     unsigned int flags() const {return flags_;}
     /** Sets a flag in the flags mask */
@@ -277,26 +268,6 @@ namespace fltk3 {
      This is used for Forms compatibility.
      */
     void type(uchar t) {type_ = t;}
-    
-    /** Gets the widget position in its window.
-     \return the x position relative to the window
-     */
-    int x() const {return x_;}
-    
-    /** Gets the widget position in its window.
-     \return the y position relative to the window
-     */
-    int y() const {return y_;}
-    
-    /** Gets the widget width.
-     \return the width of the widget in pixels.
-     */
-    int w() const {return w_;}
-    
-    /** Gets the widget height.
-     \return the height of the widget in pixels.
-     */
-    int h() const {return h_;}
     
     /** Changes the size or position of the widget.
      

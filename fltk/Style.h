@@ -42,7 +42,7 @@ class FL_API Widget;
 class FL_API Rectangle;
 #endif
   
-class FL_API Symbol;
+class Symbol;
 typedef Symbol Box;
   
 static FL_API Box* const UP_BOX = 0L;
@@ -73,6 +73,8 @@ extern FL_API Box* const BORDER_FRAME;
 extern FL_API Box* const PLASTIC_UP_BOX;
 extern FL_API Box* const PLASTIC_DOWN_BOX;
 #endif
+  
+  
     
 #if 0 // FIXME: 123
 struct Font;
@@ -218,7 +220,10 @@ FL_API bool reset_theme();
 extern "C" FL_API bool fltk_theme();
 
 namespace fltk3 {
+  inline int _2to3_fontsize(float b) { return (int)b; }
+  inline float _3to2_fontsize(int b) { return (float)b; }
   inline Boxtype _2to3_boxtype(fltk::Box *b) { return UP_BOX; }
+  inline fltk::Box* _3to2_boxtype(Boxtype b) { return 0L; }
 }
 
 

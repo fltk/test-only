@@ -26,9 +26,9 @@
 //
 
 /**
-  \file draw.h
-  \brief utility header to pull drawing functions together
-*/
+ \file draw.h
+ \brief utility header to pull drawing functions together
+ */
 
 #ifndef fltk3_draw_H
 #define fltk3_draw_H
@@ -45,8 +45,8 @@ class Fl_Image;
 FLTK3_EXPORT extern char fl_draw_shortcut;
 
 /** \addtogroup fl_attributes
-    @{
-*/
+ @{
+ */
 
 // Colors:
 /**
@@ -73,43 +73,44 @@ inline void fl_color(int c) {fl_color((fltk3::Color)c);}
  */
 inline void	fl_color(uchar r, uchar g, uchar b) {fl_graphics_driver->color(r,g,b); } // select actual color
 /**
-  Returns the last fl_color() that was set.
-  This can be used for state save/restore.
-*/
+ Returns the last fl_color() that was set.
+ This can be used for state save/restore.
+ */
 inline fltk3::Color fl_color() {return fl_graphics_driver->color();}
 /** @} */
 
 /** \addtogroup fl_drawings
-    @{
-*/
+ @{
+ */
 // clip:
-/**
- Intersects the current clip region with a rectangle and pushes this
- new region onto the stack.
- \param[in] x,y,w,h position and size
- */
-inline void fl_push_clip(int x, int y, int w, int h) {fl_graphics_driver->push_clip(x,y,w,h); }
-/**
- Intersects the current clip region with a rectangle and pushes this
- new region onto the stack (deprecated).
- \param[in] x,y,w,h position and size
- \deprecated
-   fl_clip(int, int, int, int) is deprecated and will be removed from future releases.
-   Please use fl_push_clip(int x, int y, int w, int h) instead.
- */
-#define fl_clip fl_push_clip
-/**
- Pushes an empty clip region onto the stack so nothing will be clipped.
- */
-inline void fl_push_no_clip() {fl_graphics_driver->push_no_clip(); }
-/**
- Restores the previous clip region.
- 
- You must call fl_pop_clip() once for every time you call fl_push_clip().
- Unpredictable results may occur if the clip stack is not empty when
- you return to FLTK.
- */
-inline void fl_pop_clip() {fl_graphics_driver->pop_clip(); }
+
+namespace fltk3 {
+  
+  /**
+   Intersects the current clip region with a rectangle and pushes this
+   new region onto the stack.
+   \param[in] x,y,w,h position and size
+   */
+  inline void push_clip(int x, int y, int w, int h) {
+    fl_graphics_driver->push_clip(x,y,w,h); 
+  }
+  
+  /**
+   Pushes an empty clip region onto the stack so nothing will be clipped.
+   */
+  inline void push_no_clip() {fl_graphics_driver->push_no_clip(); }
+
+  /**
+   Restores the previous clip region.
+   
+   You must call fltk3::pop_clip() once for every time you call fltk3::push_clip().
+   Unpredictable results may occur if the clip stack is not empty when
+   you return to FLTK.
+   */
+  inline void pop_clip() {fl_graphics_driver->pop_clip(); }
+  
+}
+
 /**
  Does the rectangle intersect the current clip region?
  \param[in] x,y,w,h position and size of rectangle
@@ -133,7 +134,7 @@ inline int fl_not_clipped(int x, int y, int w, int h) {return fl_graphics_driver
  \returns Non-zero if the resulting rectangle is different to the original.
  */
 inline int fl_clip_box(int x , int y, int w, int h, int& X, int& Y, int& W, int& H) 
-  {return fl_graphics_driver->clip_box(x,y,w,h,X,Y,W,H); }
+{return fl_graphics_driver->clip_box(x,y,w,h,X,Y,W,H); }
 /** Undoes any clobbering of clip done by your program */
 inline void fl_restore_clip() { fl_graphics_driver->restore_clip(); };
 /**
@@ -190,11 +191,11 @@ enum {
   FL_DOT	= 2,		///< line style: <tt>. . . . . .</tt>
   FL_DASHDOT	= 3,		///< line style: <tt>_ . _ . _ .</tt>
   FL_DASHDOTDOT	= 4,		///< line style: <tt>_ . . _ . .</tt>
-
+  
   FL_CAP_FLAT	= 0x100,	///< cap style: end is flat
   FL_CAP_ROUND	= 0x200,	///< cap style: end is round
   FL_CAP_SQUARE	= 0x300,	///< cap style: end wraps end point
-
+  
   FL_JOIN_MITER	= 0x1000,	///< join style: line join extends to a point
   FL_JOIN_ROUND	= 0x2000,	///< join style: line join is rounded
   FL_JOIN_BEVEL	= 0x3000	///< join style: line join is tidied
@@ -217,11 +218,11 @@ inline void fl_rectf(int x, int y, int w, int h) { fl_graphics_driver->rectf(x,y
 inline void fl_rectf(int x, int y, int w, int h, fltk3::Color c) {fl_color(c); fl_rectf(x,y,w,h);}
 
 /**
-  Colors a rectangle with "exactly" the passed <tt>r,g,b</tt> color.
-  On screens with less than 24 bits of color this is done by drawing a
-  solid-colored block using fl_draw_image() so that the correct color
-  shade is produced.
-  */
+ Colors a rectangle with "exactly" the passed <tt>r,g,b</tt> color.
+ On screens with less than 24 bits of color this is done by drawing a
+ solid-colored block using fl_draw_image() so that the correct color
+ shade is produced.
+ */
 /* note: doxygen comment here to avoid triplication in os-speciic files */
 FLTK3_EXPORT void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b);
 
@@ -244,7 +245,7 @@ inline void fl_loop(int x, int y, int x1, int y1, int x2, int y2) {fl_graphics_d
  Outlines a 4-sided polygon with lines
  */
 inline void fl_loop(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) 
-  {fl_graphics_driver->loop(x,y,x1,y1,x2,y2,x3,y3); }
+{fl_graphics_driver->loop(x,y,x1,y1,x2,y2,x3,y3); }
 
 // filled polygons
 /**
@@ -255,7 +256,7 @@ inline void fl_polygon(int x, int y, int x1, int y1, int x2, int y2) {fl_graphic
  Fills a 4-sided polygon. The polygon must be convex.
  */
 inline void fl_polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) 
-  { fl_graphics_driver->polygon(x,y,x1,y1,x2,y2,x3,y3); }
+{ fl_graphics_driver->polygon(x,y,x1,y1,x2,y2,x3,y3); }
 
 // draw rectilinear lines, horizontal segment first:
 /**
@@ -364,7 +365,7 @@ inline void fl_rotate(double d) { fl_graphics_driver->rotate(d); };
  <tt> X' = aX + cY + x </tt> and <tt> Y' = bX +dY + y </tt>
  */
 inline void fl_mult_matrix(double a, double b, double c, double d, double x,double y) 
-	{ fl_graphics_driver->mult_matrix(a, b, c, d, x, y); };
+{ fl_graphics_driver->mult_matrix(a, b, c, d, x, y); };
 /**
  Starts drawing a list of points. Points are added to the list with fl_vertex()
  */
@@ -395,7 +396,7 @@ inline void fl_vertex(double x, double y) {fl_graphics_driver->vertex(x,y); }
  \param[in] X3,Y3 curve end point
  */
 inline void fl_curve(double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3)
-  {fl_graphics_driver->curve(X0,Y0,X1,Y1,X2,Y2,X3,Y3); }
+{fl_graphics_driver->curve(X0,Y0,X1,Y1,X2,Y2,X3,Y3); }
 /**
  Adds a series of points to the current path on the arc of a circle.
  You can get elliptical paths by using scale and rotate before calling fl_arc().
@@ -484,146 +485,146 @@ inline void fl_transformed_vertex(double xf, double yf) {fl_graphics_driver->tra
 /** @} */
 
 /** \addtogroup  fl_attributes
-    @{ */
+ @{ */
 /* NOTE: doxygen comments here to avoid triplication in os-specific sources */
 
 // Fonts:
 /**
-  Sets the current font, which is then used in various drawing routines.
-  You may call this outside a draw context if necessary to call fl_width(),
-  but on X this will open the display.
-
-  The font is identified by a \p face and a \p size.
-  The size of the font is measured in pixels and not "points".
-  Lines should be spaced \p size pixels apart or more.
-*/
+ Sets the current font, which is then used in various drawing routines.
+ You may call this outside a draw context if necessary to call fl_width(),
+ but on X this will open the display.
+ 
+ The font is identified by a \p face and a \p size.
+ The size of the font is measured in pixels and not "points".
+ Lines should be spaced \p size pixels apart or more.
+ */
 inline void fl_font(fltk3::Font face, fltk3::Fontsize size) { fl_graphics_driver->font(face,size); }
 
 /**
-  Returns the \p face set by the most recent call to fl_font().
-  This can be used to save/restore the font.
-*/
+ Returns the \p face set by the most recent call to fl_font().
+ This can be used to save/restore the font.
+ */
 inline fltk3::Font fl_font() {return fl_graphics_driver->font();}
 /**
-  Returns the \p size set by the most recent call to fl_font().
-  This can be used to save/restore the font.
-*/
+ Returns the \p size set by the most recent call to fl_font().
+ This can be used to save/restore the font.
+ */
 inline fltk3::Fontsize fl_size() {return fl_graphics_driver->size();}
 
 // information you can get about the current font:
 /**
-  Returns the recommended minimum line spacing for the current font.
-  You can also use the value of \p size passed to fl_font()
-*/
+ Returns the recommended minimum line spacing for the current font.
+ You can also use the value of \p size passed to fl_font()
+ */
 inline int fl_height() {return fl_graphics_driver->height();}
 FLTK3_EXPORT int fl_height(int font, int size);
 /**
-  Returns the recommended distance above the bottom of a fl_height() tall box to
-  draw the text at so it looks centered vertically in that box.
-*/
+ Returns the recommended distance above the bottom of a fl_height() tall box to
+ draw the text at so it looks centered vertically in that box.
+ */
 inline int  fl_descent() {return fl_graphics_driver->descent();}
 /** Returns the typographical width of a nul-terminated string */
 FLTK3_EXPORT double fl_width(const char* txt);
 /** Returns the typographical width of a sequence of \p n characters */
 inline double fl_width(const char* txt, int n) {return fl_graphics_driver->width(txt, n);}
 /** Returns the typographical width of a single character.
-    \note if a valid fl_gc is NOT found then it uses the first window gc,
-    or the screen gc if no fltk window is available when called. */
+ \note if a valid fl_gc is NOT found then it uses the first window gc,
+ or the screen gc if no fltk window is available when called. */
 inline double fl_width(unsigned int c)  {return fl_graphics_driver->width(c);}
 /** Determines the minimum pixel dimensions of a nul-terminated string.
-
-  Usage: given a string "txt" drawn using fl_draw(txt, x, y) you would determine
-  its pixel extents on the display using fl_text_extents(txt, dx, dy, wo, ho)
-  such that a bounding box that exactly fits around the text could be drawn with
-  fl_rect(x+dx, y+dy, wo, ho). Note the dx, dy values hold the offset of the first
-  "colored in" pixel of the string, from the draw origin.
-*/
+ 
+ Usage: given a string "txt" drawn using fl_draw(txt, x, y) you would determine
+ its pixel extents on the display using fl_text_extents(txt, dx, dy, wo, ho)
+ such that a bounding box that exactly fits around the text could be drawn with
+ fl_rect(x+dx, y+dy, wo, ho). Note the dx, dy values hold the offset of the first
+ "colored in" pixel of the string, from the draw origin.
+ */
 FLTK3_EXPORT void fl_text_extents(const char*, int& dx, int& dy, int& w, int& h); // NO fltk symbol expansion will be performed
 /** Determines the minimum pixel dimensions of a sequence of \p n characters.
-\see fl_text_extents(const char*, int& dx, int& dy, int& w, int& h)
-*/
+ \see fl_text_extents(const char*, int& dx, int& dy, int& w, int& h)
+ */
 inline void fl_text_extents(const char *t, int n, int& dx, int& dy, int& w, int& h)
-  {fl_graphics_driver->text_extents(t, n, dx, dy, w, h);}
+{fl_graphics_driver->text_extents(t, n, dx, dy, w, h);}
 
 // font encoding:
 // Note: doxygen comments here to avoid duplication for os-sepecific cases
 /**
-  Converts text from Windows/X11 latin1 character set to local encoding.
-  \param[in] t character string (latin1 encoding)
-  \param[in] n optional number of characters to convert (default is all)
-  \returns pointer to internal buffer containing converted characters
-  */
+ Converts text from Windows/X11 latin1 character set to local encoding.
+ \param[in] t character string (latin1 encoding)
+ \param[in] n optional number of characters to convert (default is all)
+ \returns pointer to internal buffer containing converted characters
+ */
 FLTK3_EXPORT const char *fl_latin1_to_local(const char *t, int n=-1);
 /**
-  Converts text from local encoding to Windowx/X11 latin1 character set.
-  \param[in] t character string (local encoding)
-  \param[in] n optional number of characters to convert (default is all)
-  \returns pointer to internal buffer containing converted characters
-  */
+ Converts text from local encoding to Windowx/X11 latin1 character set.
+ \param[in] t character string (local encoding)
+ \param[in] n optional number of characters to convert (default is all)
+ \returns pointer to internal buffer containing converted characters
+ */
 FLTK3_EXPORT const char *fl_local_to_latin1(const char *t, int n=-1);
 /**
-  Converts text from Mac Roman character set to local encoding.
-  \param[in] t character string (Mac Roman encoding)
-  \param[in] n optional number of characters to convert (default is all)
-  \returns pointer to internal buffer containing converted characters
-  */
+ Converts text from Mac Roman character set to local encoding.
+ \param[in] t character string (Mac Roman encoding)
+ \param[in] n optional number of characters to convert (default is all)
+ \returns pointer to internal buffer containing converted characters
+ */
 FLTK3_EXPORT const char *fl_mac_roman_to_local(const char *t, int n=-1);
 /**
-  Converts text from local encoding to Mac Roman character set.
-  \param[in] t character string (local encoding)
-  \param[in] n optional number of characters to convert (default is all)
-  \returns pointer to internal buffer containing converted characters
-  */
+ Converts text from local encoding to Mac Roman character set.
+ \param[in] t character string (local encoding)
+ \param[in] n optional number of characters to convert (default is all)
+ \returns pointer to internal buffer containing converted characters
+ */
 FLTK3_EXPORT const char *fl_local_to_mac_roman(const char *t, int n=-1);
 /** @} */
 
 /** \addtogroup  fl_drawings
-    @{ */
+ @{ */
 /**
-  Draws a nul-terminated string starting at the given location.
-
-  Text is aligned to the left and to the baseline of the font.
-  To align to the bottom, subtract fl_descent() from \p y.
-  To align to the top, subtract fl_descent() and add fl_height().
-  This version of fl_draw provides direct access to the text drawing
-  function of the underlying OS. It does not apply any special handling
-  to control characters.
-*/
+ Draws a nul-terminated string starting at the given location.
+ 
+ Text is aligned to the left and to the baseline of the font.
+ To align to the bottom, subtract fl_descent() from \p y.
+ To align to the top, subtract fl_descent() and add fl_height().
+ This version of fl_draw provides direct access to the text drawing
+ function of the underlying OS. It does not apply any special handling
+ to control characters.
+ */
 FLTK3_EXPORT void fl_draw(const char* str, int x, int y);
 /**
-  Draws a nul-terminated string starting at the given location and 
-  rotating \p angle degrees counter-clockwise.
-  This version of fl_draw provides direct access to the text drawing
-  function of the underlying OS and is supported by Xft, Win32 and MacOS
-  fltk subsets.
-*/
+ Draws a nul-terminated string starting at the given location and 
+ rotating \p angle degrees counter-clockwise.
+ This version of fl_draw provides direct access to the text drawing
+ function of the underlying OS and is supported by Xft, Win32 and MacOS
+ fltk subsets.
+ */
 FLTK3_EXPORT void fl_draw(int angle, const char* str, int x, int y);
 /**
-  Draws an array of \p n characters starting at the given location.
-*/
+ Draws an array of \p n characters starting at the given location.
+ */
 inline void fl_draw(const char* str, int n, int x, int y) {fl_graphics_driver->draw(str,n,x,y); }
 /**
-  Draws an array of \p n characters starting at the given location,
-  rotating \p angle degrees counter-clockwise.
-*/
+ Draws an array of \p n characters starting at the given location,
+ rotating \p angle degrees counter-clockwise.
+ */
 inline void fl_draw(int angle,const char* str, int n, int x, int y) {fl_graphics_driver->draw(angle,str,n,x,y); }
 /**
-  Draws an array of \p n characters right to left starting at given location.
-*/
+ Draws an array of \p n characters right to left starting at given location.
+ */
 inline void fl_rtl_draw(const char* str, int n, int x, int y) {fl_graphics_driver->rtl_draw(str,n,x,y); }
 FLTK3_EXPORT void fl_measure(const char* str, int& x, int& y,
-                          int draw_symbols = 1);
+                             int draw_symbols = 1);
 FLTK3_EXPORT void fl_draw(const char* str, int x, int y, int w, int h,
-                       fltk3::Align align,
-                       Fl_Image* img=0, int draw_symbols = 1);
+                          fltk3::Align align,
+                          Fl_Image* img=0, int draw_symbols = 1);
 FLTK3_EXPORT void fl_draw(const char* str, int x, int y, int w, int h,
-                       fltk3::Align align,
-                       void (*callthis)(const char *,int,int,int),
-                       Fl_Image* img=0, int draw_symbols = 1);
+                          fltk3::Align align,
+                          void (*callthis)(const char *,int,int,int),
+                          Fl_Image* img=0, int draw_symbols = 1);
 
 // boxtypes:
 namespace fltk3 {
-FLTK3_EXPORT void frame(const char* s, int x, int y, int w, int h);
+  FLTK3_EXPORT void frame(const char* s, int x, int y, int w, int h);
 }
 FLTK3_EXPORT void fl_frame2(const char* s, int x, int y, int w, int h);
 FLTK3_EXPORT void fl_draw_box(fltk3::Boxtype, int x, int y, int w, int h, fltk3::Color);
@@ -631,117 +632,117 @@ FLTK3_EXPORT void fl_draw_box(fltk3::Boxtype, int x, int y, int w, int h, fltk3:
 // images:
 
 /**
-  Draws an 8-bit per color RGB or luminance image.
-  \param[in] buf points at the "r" data of the top-left pixel.
-                 Color data must be in <tt>r,g,b</tt> order.
-		 Luminance data is only one <tt>gray</tt> byte.
-  \param[in] X,Y position where to put top-left corner of image
-  \param[in] W,H size of the image
-  \param[in] D   delta to add to the pointer between pixels. It may be
-                 any value greater than or equal to 1, or it can be
-		 negative to flip the image horizontally
-  \param[in] L   delta to add to the pointer between lines (if 0 is
-                 passed it uses \p W * \p D), and may be larger than
-		 \p W * \p D to crop data, or negative to flip the
-		 image vertically
-
-  It is highly recommended that you put the following code before the
-  first <tt>show()</tt> of \e any window in your program to get rid of
-  the dithering if possible:
-  \code
-  fltk3::visual(fltk3::RGB);
-  \endcode
-
-  Gray scale (1-channel) images may be drawn. This is done if
-  <tt>abs(D)</tt> is less than 3, or by calling fl_draw_image_mono().
-  Only one 8-bit sample is used for each pixel, and on screens with
-  different numbers of bits for red, green, and blue only gray colors
-  are used. Setting \p D greater than 1 will let you display one channel
-  of a color image.
-
-  \par Note:
-  The X version does not support all possible visuals. If FLTK cannot
-  draw the image in the current visual it will abort. FLTK supports
-  any visual of 8 bits or less, and all common TrueColor visuals up
-  to 32 bits.
-  */
+ Draws an 8-bit per color RGB or luminance image.
+ \param[in] buf points at the "r" data of the top-left pixel.
+ Color data must be in <tt>r,g,b</tt> order.
+ Luminance data is only one <tt>gray</tt> byte.
+ \param[in] X,Y position where to put top-left corner of image
+ \param[in] W,H size of the image
+ \param[in] D   delta to add to the pointer between pixels. It may be
+ any value greater than or equal to 1, or it can be
+ negative to flip the image horizontally
+ \param[in] L   delta to add to the pointer between lines (if 0 is
+ passed it uses \p W * \p D), and may be larger than
+ \p W * \p D to crop data, or negative to flip the
+ image vertically
+ 
+ It is highly recommended that you put the following code before the
+ first <tt>show()</tt> of \e any window in your program to get rid of
+ the dithering if possible:
+ \code
+ fltk3::visual(fltk3::RGB);
+ \endcode
+ 
+ Gray scale (1-channel) images may be drawn. This is done if
+ <tt>abs(D)</tt> is less than 3, or by calling fl_draw_image_mono().
+ Only one 8-bit sample is used for each pixel, and on screens with
+ different numbers of bits for red, green, and blue only gray colors
+ are used. Setting \p D greater than 1 will let you display one channel
+ of a color image.
+ 
+ \par Note:
+ The X version does not support all possible visuals. If FLTK cannot
+ draw the image in the current visual it will abort. FLTK supports
+ any visual of 8 bits or less, and all common TrueColor visuals up
+ to 32 bits.
+ */
 inline void fl_draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0)
-  { fl_graphics_driver->draw_image(buf, X, Y, W, H, D, L); }
+{ fl_graphics_driver->draw_image(buf, X, Y, W, H, D, L); }
 
 /**
-  Draws a gray-scale (1 channel) image.
-  \see fl_draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L)
-  */
+ Draws a gray-scale (1 channel) image.
+ \see fl_draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L)
+ */
 inline void fl_draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0)
-  { fl_graphics_driver->draw_image_mono(buf, X, Y, W, H, D, L); }
+{ fl_graphics_driver->draw_image_mono(buf, X, Y, W, H, D, L); }
 
 /**
-  Draws an image using a callback function to generate image data.
-
-  You can generate the image as it is being drawn, or do arbitrary
-  decompression of stored data, provided it can be decompressed to
-  individual scan lines easily.
-  \param[in] cb   callback function to generate scan line data
-  \param[in] data user data passed to callback function
-  \param[in] X,Y  screen position of top left pixel
-  \param[in] W,H  image width and height
-  \param[in] D    data size in bytes (must be greater than 0)
-  \see fl_draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L)
-
-  The callback function \p cb is called with the <tt>void*</tt> \p data
-  user data pointer to allow access to a structure of information about
-  the image, and the \p x, \p y, and \p w of the scan line desired from
-  the image. 0,0 is the upper-left corner of the image, not \p x, \p y.
-  A pointer to a buffer to put the data into is passed. You must copy
-  \p w pixels from scanline \p y, starting at pixel \p x, to this buffer.
-
-  Due to cropping, less than the whole image may be requested. So \p x
-  may be greater than zero, the first \p y may be greater than zero,
-  and \p w may be less than \p W. The buffer is long enough to store
-  the entire \p W * \p D pixels, this is for convenience with some
-  decompression schemes where you must decompress the entire line at
-  once: decompress it into the buffer, and then if \p x is not zero,
-  copy the data over so the \p x'th pixel is at the start of the buffer.
-
-  You can assume the \p y's will be consecutive, except the first one
-  may be greater than zero.
-
-  If \p D is 4 or more, you must fill in the unused bytes with zero.
-  */
+ Draws an image using a callback function to generate image data.
+ 
+ You can generate the image as it is being drawn, or do arbitrary
+ decompression of stored data, provided it can be decompressed to
+ individual scan lines easily.
+ \param[in] cb   callback function to generate scan line data
+ \param[in] data user data passed to callback function
+ \param[in] X,Y  screen position of top left pixel
+ \param[in] W,H  image width and height
+ \param[in] D    data size in bytes (must be greater than 0)
+ \see fl_draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L)
+ 
+ The callback function \p cb is called with the <tt>void*</tt> \p data
+ user data pointer to allow access to a structure of information about
+ the image, and the \p x, \p y, and \p w of the scan line desired from
+ the image. 0,0 is the upper-left corner of the image, not \p x, \p y.
+ A pointer to a buffer to put the data into is passed. You must copy
+ \p w pixels from scanline \p y, starting at pixel \p x, to this buffer.
+ 
+ Due to cropping, less than the whole image may be requested. So \p x
+ may be greater than zero, the first \p y may be greater than zero,
+ and \p w may be less than \p W. The buffer is long enough to store
+ the entire \p W * \p D pixels, this is for convenience with some
+ decompression schemes where you must decompress the entire line at
+ once: decompress it into the buffer, and then if \p x is not zero,
+ copy the data over so the \p x'th pixel is at the start of the buffer.
+ 
+ You can assume the \p y's will be consecutive, except the first one
+ may be greater than zero.
+ 
+ If \p D is 4 or more, you must fill in the unused bytes with zero.
+ */
 inline void fl_draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3)
-  { fl_graphics_driver->draw_image(cb, data, X, Y, W, H, D); }
+{ fl_graphics_driver->draw_image(cb, data, X, Y, W, H, D); }
 
 /**
-  Draws a gray-scale image using a callback function to generate image data.
-  \see fl_draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D)
-  */
+ Draws a gray-scale image using a callback function to generate image data.
+ \see fl_draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D)
+ */
 FLTK3_EXPORT void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1);
 
 /**
-  Checks whether platform supports true alpha blending for RGBA images.
-  \returns 1 if true alpha blending supported by platform
-  \returns 0 not supported so FLTK will use screen door transparency
-  */
+ Checks whether platform supports true alpha blending for RGBA images.
+ \returns 1 if true alpha blending supported by platform
+ \returns 0 not supported so FLTK will use screen door transparency
+ */
 /* note: doxygen comment here to avoid triplication in os-speciic files */
 FLTK3_EXPORT char fl_can_do_alpha_blending();
 
 /**
-  Reads an RGB(A) image from the current window or off-screen buffer.
-  \param[in] p     pixel buffer, or NULL to allocate one
-  \param[in] X,Y   position of top-left of image to read
-  \param[in] W,H   width and height of image to read
-  \param[in] alpha alpha value for image (0 for none)
-  \returns pointer to pixel buffer, or NULL if allocation failed.
-
-  The \p p argument points to a buffer that can hold the image and must
-  be at least \p W*H*3 bytes when reading RGB images, or \p W*H*4 bytes
-  when reading RGBA images. If NULL, fl_read_image() will create an
-  array of the proper size which can be freed using <tt>delete[]</tt>.
-
-  The \p alpha parameter controls whether an alpha channel is created
-  and the value that is placed in the alpha channel. If 0, no alpha
-  channel is generated.
-  */
+ Reads an RGB(A) image from the current window or off-screen buffer.
+ \param[in] p     pixel buffer, or NULL to allocate one
+ \param[in] X,Y   position of top-left of image to read
+ \param[in] W,H   width and height of image to read
+ \param[in] alpha alpha value for image (0 for none)
+ \returns pointer to pixel buffer, or NULL if allocation failed.
+ 
+ The \p p argument points to a buffer that can hold the image and must
+ be at least \p W*H*3 bytes when reading RGB images, or \p W*H*4 bytes
+ when reading RGBA images. If NULL, fl_read_image() will create an
+ array of the proper size which can be freed using <tt>delete[]</tt>.
+ 
+ The \p alpha parameter controls whether an alpha channel is created
+ and the value that is placed in the alpha channel. If 0, no alpha
+ channel is generated.
+ */
 /* note: doxygen comment here to avoid triplication in os-speciic files */
 FLTK3_EXPORT uchar *fl_read_image(uchar *p,int X,int Y,int W,int H,int alpha=0);
 
@@ -753,7 +754,7 @@ FLTK3_EXPORT int fl_measure_pixmap(const char* const* cdata, int &w, int &h);
 
 // other:
 FLTK3_EXPORT void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
-                         void (*draw_area)(void*, int,int,int,int), void* data);
+                            void (*draw_area)(void*, int,int,int,int), void* data);
 FLTK3_EXPORT const char* fl_shortcut_label(unsigned int shortcut);
 FLTK3_EXPORT const char* fl_shortcut_label(unsigned int shortcut, const char **eom);
 FLTK3_EXPORT unsigned int fl_old_shortcut(const char* s);
@@ -761,8 +762,8 @@ FLTK3_EXPORT void fl_overlay_rect(int x,int y,int w,int h);
 FLTK3_EXPORT void fl_overlay_clear();
 FLTK3_EXPORT void fl_cursor(fltk3::Cursor, fltk3::Color fg=fltk3::BLACK, fltk3::Color bg=fltk3::WHITE);
 FLTK3_EXPORT const char* fl_expand_text(const char* from, char* buf, int maxbuf,
-                                     double maxw, int& n, double &width,
-                                     int wrap, int draw_symbols = 0);
+                                        double maxw, int& n, double &width,
+                                        int wrap, int draw_symbols = 0);
 
 // XIM:
 /** \todo provide user documentation for fl_set_status function */

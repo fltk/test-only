@@ -4703,6 +4703,7 @@
 		C915E3F01383FD6400C5FD27 /* xbmImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xbmImage.h; path = ../../fltk/xbmImage.h; sourceTree = "<group>"; };
 		C915E3F11383FD6400C5FD27 /* xpmImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = xpmImage.h; path = ../../fltk/xpmImage.h; sourceTree = "<group>"; };
 		C915E3F21383FD6500C5FD27 /* string.h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = string.h.in; path = ../../fltk/string.h.in; sourceTree = "<group>"; };
+		C915E3F413842F3F00C5FD27 /* Rectangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rectangle.h; path = ../../fltk3/Rectangle.h; sourceTree = "<group>"; };
 		C9165EAF1291A304003FF4F0 /* utf8.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = utf8.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9165ED31291A376003FF4F0 /* unittests.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = unittests.cxx; path = ../../test/unittests.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		C9568B8A1380730100CDA5BF /* Adjuster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Adjuster.h; path = ../../fltk3/Adjuster.h; sourceTree = "<group>"; };
@@ -7011,6 +7012,7 @@
 				C9568BE31380730600CDA5BF /* RadioButton.h */,
 				C9568BE41380730600CDA5BF /* RadioLightButton.h */,
 				C9568BE51380730600CDA5BF /* RadioRoundButton.h */,
+				C915E3F413842F3F00C5FD27 /* Rectangle.h */,
 				C9568BE61380730600CDA5BF /* RepeatButton.h */,
 				C9568BE71380730600CDA5BF /* ReturnButton.h */,
 				C9568BE81380730600CDA5BF /* RGBImage.h */,

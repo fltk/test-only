@@ -403,17 +403,17 @@ protected:
        
 	   case CONTEXT_ROW_HEADER:            // Fl_Table telling us it's draw row/col headers
 	   case CONTEXT_COL_HEADER:
-	       fl_push_clip(X, Y, W, H);
+	       fltk3::push_clip(X, Y, W, H);
 	       {
 		   fl_draw_box(fltk3::THIN_UP_BOX, X, Y, W, H, color());
 		   fl_color(fltk3::BLACK);
 		   fl_draw(s, X, Y, W, H, fltk3::ALIGN_CENTER);
 	       }
-	       fl_pop_clip();
+	       fltk3::pop_clip();
 	       return;
 	   
 	   case CONTEXT_CELL:                  // Fl_Table telling us to draw cells
-	       fl_push_clip(X, Y, W, H);
+	       fltk3::push_clip(X, Y, W, H);
 	       {
 		   // BG COLOR
 		   fl_color( row_selected(R) ? selection_color() : fltk3::WHITE);
@@ -427,7 +427,7 @@ protected:
 		   fl_color(fltk3::LIGHT2);
 		   fl_rect(X, Y, W, H);
 	       }
-	       fl_pop_clip();
+	       fltk3::pop_clip();
 	       return;
 	   
        default:

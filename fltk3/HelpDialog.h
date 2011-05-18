@@ -49,7 +49,7 @@ class FLTK3_EXPORT Fl_Help_Dialog {
 public:
   Fl_Help_Dialog();
 private:
-  Fl_Double_Window *window_;
+  fltk3::DoubleWindow *window_;
   fltk3::Button *back_;
   void cb_back__i(fltk3::Button*, void*);
   static void cb_back_(fltk3::Button*, void*);

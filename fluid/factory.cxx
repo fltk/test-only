@@ -707,10 +707,10 @@ static Fl_Progress_Type Fl_Progress_type;
 class Fl_Adjuster_Type : public Fl_Widget_Type {
   int is_valuator() const {return 1;}
 public:
-  virtual const char *type_name() {return "Fl_Adjuster";}
+  virtual const char *type_name() {return "fltk3::Adjuster";}
   virtual const char *alt_type_name() {return "fltk::Adjuster";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Adjuster(x,y,w,h);}
+    return new fltk3::Adjuster(x,y,w,h);}
   Fl_Widget_Type *_make() {return new Fl_Adjuster_Type();}
   int pixmapID() { return 40; }
 };

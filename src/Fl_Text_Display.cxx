@@ -463,7 +463,7 @@ void Fl_Text_Display::draw_text( int left, int top, int width, int height ) {
   firstLine = ( top - text_area.y - fontHeight + 1 ) / fontHeight;
   lastLine = ( top + height - text_area.y ) / fontHeight + 1;
   
-  fl_push_clip( left, top, width, height );
+  fltk3::push_clip( left, top, width, height );
   
   /* draw the lines */
   for ( line = firstLine; line <= lastLine; line++ )
@@ -473,7 +473,7 @@ void Fl_Text_Display::draw_text( int left, int top, int width, int height ) {
   if (mLineNumWidth != 0 && left <= mLineNumLeft + mLineNumWidth)
     draw_line_numbers(false);
   
-  fl_pop_clip();
+  fltk3::pop_clip();
 }
 
 
@@ -1969,11 +1969,11 @@ void Fl_Text_Display::draw_string(int style,
     fl_font( font, fsize );
 #if !(defined(__APPLE__) || defined(WIN32)) && USE_XFT
     // makes sure antialiased ÄÖÜ do not leak on line above
-    fl_push_clip(X, Y, toX - X, mMaxsize);
+    fltk3::push_clip(X, Y, toX - X, mMaxsize);
 #endif
     fl_draw( string, nChars, X, Y + mMaxsize - fl_descent());
 #if !(defined(__APPLE__) || defined(WIN32)) && USE_XFT
-    fl_pop_clip();
+    fltk3::pop_clip();
 #endif
   }
   
@@ -3356,7 +3356,7 @@ void Fl_Text_Display::draw(void) {
   // don't even try if there is no associated text buffer!
   if (!buffer()) { draw_box(); return; }
   
-  fl_push_clip(x(),y(),w(),h());	// prevent drawing outside widget area
+  fltk3::push_clip(x(),y(),w(),h());	// prevent drawing outside widget area
   
   // draw the non-text, non-scrollbar areas.
   if (damage() & fltk3::DAMAGE_ALL) {
@@ -3403,7 +3403,7 @@ void Fl_Text_Display::draw(void) {
   else if (damage() & (fltk3::DAMAGE_SCROLL | fltk3::DAMAGE_EXPOSE)) {
     //    printf("blanking previous cursor extrusions at Y: %d\n", mCursorOldY);
     // CET - FIXME - save old cursor position instead and just draw side needed?
-    fl_push_clip(text_area.x-LEFT_MARGIN,
+    fltk3::push_clip(text_area.x-LEFT_MARGIN,
                  text_area.y,
                  text_area.w+LEFT_MARGIN+RIGHT_MARGIN,
                  text_area.h);
@@ -3411,7 +3411,7 @@ void Fl_Text_Display::draw(void) {
              LEFT_MARGIN, mMaxsize, color());
     fl_rectf(text_area.x+text_area.w, mCursorOldY,
              RIGHT_MARGIN, mMaxsize, color());
-    fl_pop_clip();
+    fltk3::pop_clip();
   }
   
   // draw the scrollbars
@@ -3438,7 +3438,7 @@ void Fl_Text_Display::draw(void) {
   }
   else if (damage() & fltk3::DAMAGE_SCROLL) {
     // draw some lines of text
-    fl_push_clip(text_area.x, text_area.y,
+    fltk3::push_clip(text_area.x, text_area.y,
                  text_area.w, text_area.h);
     //printf("drawing text from %d to %d\n", damage_range1_start, damage_range1_end);
     draw_range(damage_range1_start, damage_range1_end);
@@ -3448,14 +3448,14 @@ void Fl_Text_Display::draw(void) {
     }
     damage_range1_start = damage_range1_end = -1;
     damage_range2_start = damage_range2_end = -1;
-    fl_pop_clip();
+    fltk3::pop_clip();
   }
   
   // draw the text cursor
   if (damage() & (fltk3::DAMAGE_ALL | fltk3::DAMAGE_SCROLL | fltk3::DAMAGE_EXPOSE)
       && !buffer()->primary_selection()->selected() &&
       mCursorOn && fltk3::focus() == (fltk3::Widget*)this ) {
-    fl_push_clip(text_area.x-LEFT_MARGIN,
+    fltk3::push_clip(text_area.x-LEFT_MARGIN,
                  text_area.y,
                  text_area.w+LEFT_MARGIN+RIGHT_MARGIN,
                  text_area.h);
@@ -3465,9 +3465,9 @@ void Fl_Text_Display::draw(void) {
     //    else puts("position_to_xy() failed - unable to draw cursor!");
     //printf("drew cursor at pos: %d (%d,%d)\n", mCursorPos, X, Y);
     mCursorOldY = Y;
-    fl_pop_clip();
+    fltk3::pop_clip();
   }
-  fl_pop_clip();
+  fltk3::pop_clip();
 }
 
 

@@ -31,7 +31,7 @@
 #define function_panel_h
 #include <fltk3/run.h>
 #include <fltk3/DoubleWindow.h>
-extern Fl_Double_Window *function_panel;
+extern fltk3::DoubleWindow *function_panel;
 #include <fltk3/Group.h>
 #include <fltk3/Choice.h>
 extern Fl_Choice *f_public_member_choice;
@@ -48,41 +48,41 @@ extern Fl_Return_Button *f_panel_ok;
 extern fltk3::Button *f_panel_cancel;
 #include <fltk3/TextEditor.h>
 extern Fl_Text_Editor *f_comment_input;
-Fl_Double_Window* make_function_panel();
+fltk3::DoubleWindow* make_function_panel();
 extern Fl_Menu_Item menu_f_public_member_choice[];
 extern Fl_Menu_Item menu_f_public_choice[];
-extern Fl_Double_Window *code_panel;
+extern fltk3::DoubleWindow *code_panel;
 #include "CodeEditor.h"
 extern CodeEditor *code_input;
 extern Fl_Return_Button *code_panel_ok;
 extern fltk3::Button *code_panel_cancel;
-Fl_Double_Window* make_code_panel();
-extern Fl_Double_Window *codeblock_panel;
+fltk3::DoubleWindow* make_code_panel();
+extern fltk3::DoubleWindow *codeblock_panel;
 extern Fl_Input *code_before_input;
 extern Fl_Input *code_after_input;
 extern Fl_Return_Button *codeblock_panel_ok;
 extern fltk3::Button *codeblock_panel_cancel;
-Fl_Double_Window* make_codeblock_panel();
-extern Fl_Double_Window *declblock_panel;
+fltk3::DoubleWindow* make_codeblock_panel();
+extern fltk3::DoubleWindow *declblock_panel;
 extern Fl_Choice *declblock_public_choice;
 extern Fl_Light_Button *declblock_public_button_x;
 extern Fl_Input *decl_before_input;
 extern Fl_Input *decl_after_input;
 extern Fl_Return_Button *declblock_panel_ok;
 extern fltk3::Button *declblock_panel_cancel;
-Fl_Double_Window* make_declblock_panel();
+fltk3::DoubleWindow* make_declblock_panel();
 extern Fl_Menu_Item menu_declblock_public_choice[];
-extern Fl_Double_Window *decl_panel;
+extern fltk3::DoubleWindow *decl_panel;
 extern Fl_Choice *decl_choice;
 extern Fl_Choice *decl_class_choice;
 extern Fl_Input *decl_input;
 extern Fl_Return_Button *decl_panel_ok;
 extern fltk3::Button *decl_panel_cancel;
 extern Fl_Text_Editor *decl_comment_input;
-Fl_Double_Window* make_decl_panel();
+fltk3::DoubleWindow* make_decl_panel();
 extern Fl_Menu_Item menu_decl_choice[];
 extern Fl_Menu_Item menu_decl_class_choice[];
-extern Fl_Double_Window *data_panel;
+extern fltk3::DoubleWindow *data_panel;
 extern Fl_Choice *data_choice;
 extern Fl_Choice *data_class_choice;
 extern Fl_Input *data_input;
@@ -91,18 +91,18 @@ extern fltk3::Button *data_filebrowser;
 extern Fl_Return_Button *data_panel_ok;
 extern fltk3::Button *data_panel_cancel;
 extern Fl_Text_Editor *data_comment_input;
-Fl_Double_Window* make_data_panel();
+fltk3::DoubleWindow* make_data_panel();
 extern Fl_Menu_Item menu_data_choice[];
 extern Fl_Menu_Item menu_data_class_choice[];
-extern Fl_Double_Window *class_panel;
+extern fltk3::DoubleWindow *class_panel;
 extern Fl_Light_Button *c_public_button;
 extern Fl_Input *c_name_input;
 extern Fl_Input *c_subclass_input;
 extern Fl_Text_Editor *c_comment_input;
 extern Fl_Return_Button *c_panel_ok;
 extern fltk3::Button *c_panel_cancel;
-Fl_Double_Window* make_class_panel();
-extern Fl_Double_Window *comment_panel;
+fltk3::DoubleWindow* make_class_panel();
+extern fltk3::DoubleWindow *comment_panel;
 extern CodeEditor *comment_input;
 extern Fl_Return_Button *comment_panel_ok;
 extern fltk3::Button *comment_panel_cancel;
@@ -111,13 +111,13 @@ extern Fl_Light_Button *comment_in_header;
 #include <fltk3/MenuButton.h>
 extern Fl_Menu_Button *comment_predefined;
 extern fltk3::Button *comment_load;
-Fl_Double_Window* make_comment_panel();
+fltk3::DoubleWindow* make_comment_panel();
 void type_make_cb(fltk3::Widget*,void*d);
 #include <fltk3/Window.h>
 extern fltk3::Window *widgetbin_panel;
 fltk3::Window* make_widgetbin();
-extern void toggle_sourceview_cb(Fl_Double_Window*, void*);
-extern Fl_Double_Window *sourceview_panel;
+extern void toggle_sourceview_cb(fltk3::DoubleWindow*, void*);
+extern fltk3::DoubleWindow *sourceview_panel;
 #include <fltk3/TabGroup.h>
 extern void update_sourceview_position_cb(Fl_Tabs*, void*);
 extern Fl_Tabs *sv_tab;
@@ -127,7 +127,7 @@ extern void update_sourceview_cb(fltk3::Button*, void*);
 extern Fl_Light_Button *sv_autorefresh;
 extern Fl_Light_Button *sv_autoposition;
 extern void toggle_sourceview_b_cb(fltk3::Button*, void*);
-Fl_Double_Window* make_sourceview();
+fltk3::DoubleWindow* make_sourceview();
 #endif
 
 //

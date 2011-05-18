@@ -30,7 +30,7 @@
 #include "about_panel.h"
 void show_help(const char *name); 
 
-Fl_Double_Window *about_panel=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *about_panel=(fltk3::DoubleWindow *)0;
 
 #include <fltk3/Pixmap.h>
 static const char *idata_fluid[] = {
@@ -270,8 +270,8 @@ static void cb_Close(Fl_Return_Button* o, void*) {
   ((fltk3::Window*)(o->parent()))->hide();
 }
 
-Fl_Double_Window* make_about_panel() {
-  { about_panel = new Fl_Double_Window(345, 180, "About FLUID");
+fltk3::DoubleWindow* make_about_panel() {
+  { about_panel = new fltk3::DoubleWindow(345, 180, "About FLUID");
     about_panel->color(fltk3::LIGHT1);
     about_panel->selection_color(fltk3::DARK1);
     about_panel->hotspot(about_panel);
@@ -297,7 +297,7 @@ Fl_Double_Window* make_about_panel() {
     } // Fl_Return_Button* o
     about_panel->set_non_modal();
     about_panel->end();
-  } // Fl_Double_Window* about_panel
+  } // fltk3::DoubleWindow* about_panel
   return about_panel;
 }
 /**

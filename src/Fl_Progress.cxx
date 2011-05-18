@@ -78,18 +78,18 @@ void Fl_Progress::draw()
     fltk3::Color c = labelcolor();
     labelcolor(fltk3::contrast(labelcolor(), selection_color()));
 
-    fl_push_clip(x(), y(), progress + bx, h());
+    fltk3::push_clip(x(), y(), progress + bx, h());
       draw_box(box(), x(), y(), w(), h(), active_r() ? selection_color() : fltk3::inactive(selection_color()));
       draw_label(tx, y() + by, tw, h() - bh);
-    fl_pop_clip();
+    fltk3::pop_clip();
 
     labelcolor(c);
 
     if (progress<w()) {
-      fl_push_clip(tx + progress, y(), w() - progress, h());
+      fltk3::push_clip(tx + progress, y(), w() - progress, h());
         draw_box(box(), x(), y(), w(), h(), active_r() ? color() : fltk3::inactive(color()));
         draw_label(tx, y() + by, tw, h() - bh);
-      fl_pop_clip();
+      fltk3::pop_clip();
     }
   } else {
     draw_box(box(), x(), y(), w(), h(), active_r() ? color() : fltk3::inactive(color()));

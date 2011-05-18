@@ -237,6 +237,8 @@ renameClass Fl_Window Window
 renameClass Fl_Button Button
 renameClass Fl_Label Label
 renameClass Fl_Widget_Tracker WidgetTracker
+renameClass Fl_Double_Window DoubleWindow
+renameClass Fl_Adjuster Adjuster
 
 renameType Fl_Label_Draw_F LabelDrawF
 renameType Fl_Label_Measure_F LabelMeasureF

@@ -1125,11 +1125,11 @@ void Fl_Table::draw() {
   // Use window 'inner' clip to prevent drawing into table border.
   // (unfortunately this clips FLTK's border, so we must draw it explicity below)
   //
-  fl_push_clip(wix, wiy, wiw, wih);
+  fltk3::push_clip(wix, wiy, wiw, wih);
   {
     fltk3::Group::draw();
   }
-  fl_pop_clip();
+  fltk3::pop_clip();
   
   // Explicitly draw border around widget, if any
   draw_box(box(), x(), y(), w(), h(), color());
@@ -1144,37 +1144,37 @@ void Fl_Table::draw() {
     }
   } 
   // Clip all further drawing to the inner widget dimensions
-  fl_push_clip(wix, wiy, wiw, wih);
+  fltk3::push_clip(wix, wiy, wiw, wih);
   {
     // Only redraw a few cells?
     if ( ! ( damage() & fltk3::DAMAGE_ALL ) && _redraw_leftcol != -1 ) {
-      fl_push_clip(tix, tiy, tiw, tih);
+      fltk3::push_clip(tix, tiy, tiw, tih);
       for ( int c = _redraw_leftcol; c <= _redraw_rightcol; c++ ) {
         for ( int r = _redraw_toprow; r <= _redraw_botrow; r++ ) { 
           _redraw_cell(CONTEXT_CELL, r, c);
         }
       }
-      fl_pop_clip();
+      fltk3::pop_clip();
     }
     if ( damage() & fltk3::DAMAGE_ALL ) {
       int X,Y,W,H;
       // Draw row headers, if any
       if ( row_header() ) {
         get_bounds(CONTEXT_ROW_HEADER, X, Y, W, H);
-        fl_push_clip(X,Y,W,H);
+        fltk3::push_clip(X,Y,W,H);
         for ( int r = toprow; r <= botrow; r++ ) {
           _redraw_cell(CONTEXT_ROW_HEADER, r, 0);
         }
-        fl_pop_clip();
+        fltk3::pop_clip();
       }
       // Draw column headers, if any
       if ( col_header() ) {
         get_bounds(CONTEXT_COL_HEADER, X, Y, W, H);
-        fl_push_clip(X,Y,W,H);
+        fltk3::push_clip(X,Y,W,H);
         for ( int c = leftcol; c <= rightcol; c++ ) {
           _redraw_cell(CONTEXT_COL_HEADER, 0, c);
         }
-        fl_pop_clip();
+        fltk3::pop_clip();
       } 
       // Draw all cells.
       //    This includes cells partially obscured off edges of table.
@@ -1182,14 +1182,14 @@ void Fl_Table::draw() {
       //    to draw over dead zones, but on redraws it flickers. Avoid
       //    drawing over deadzones; prevent deadzones by sizing columns.
       //
-      fl_push_clip(tix, tiy, tiw, tih); {
+      fltk3::push_clip(tix, tiy, tiw, tih); {
         for ( int r = toprow; r <= botrow; r++ ) {
           for ( int c = leftcol; c <= rightcol; c++ ) {
             _redraw_cell(CONTEXT_CELL, r, c); 
           }
         }
       }
-      fl_pop_clip(); 
+      fltk3::pop_clip(); 
       // Draw little rectangle in corner of headers
       if ( row_header() && col_header() ) {
         fl_rectf(wix, wiy, row_header_width(), col_header_height(), color());
@@ -1245,7 +1245,7 @@ void Fl_Table::draw() {
     
     _redraw_leftcol = _redraw_rightcol = _redraw_toprow = _redraw_botrow = -1;
   }
-  fl_pop_clip();
+  fltk3::pop_clip();
 }
 
 //

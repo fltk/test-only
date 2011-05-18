@@ -292,7 +292,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
     yscroll_ = -(H-height)/2;
   }
 
-  fl_push_clip(X, Y, W, H);
+  fltk3::push_clip(X, Y, W, H);
   fltk3::Color tc = active_r() ? textcolor() : fltk3::inactive(textcolor());
 
   p = value();
@@ -325,7 +325,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
 	else if (readonly()) xx -= 3;
       }
       // clip to and erase it:
-      fl_push_clip((int)xx-1-height/8, Y+ypos, (int)(r-xx+2+height/4), height);
+      fltk3::push_clip((int)xx-1-height/8, Y+ypos, (int)(r-xx+2+height/4), height);
       draw_box(box(), X-fltk3::box_dx(box()), Y-fltk3::box_dy(box()),
                W+fltk3::box_dw(box()), H+fltk3::box_dh(box()), color());
       // it now draws entire line over it
@@ -362,7 +362,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
       fl_draw(buf, strlen(buf), xpos, (float)(Y+ypos+desc));
     }
 
-    if (do_mu) fl_pop_clip();
+    if (do_mu) fltk3::pop_clip();
 
   CONTINUE2:
     // draw the cursor:
@@ -391,13 +391,13 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
   if (input_type()==FL_MULTILINE_INPUT && do_mu && ypos<H
       && (!erase_cursor_only || p <= value()+mu_p)) {
     if (ypos < 0) ypos = 0;
-    fl_push_clip(X, Y+ypos, W, H-ypos);
+    fltk3::push_clip(X, Y+ypos, W, H-ypos);
     draw_box(box(), X-fltk3::box_dx(box()), Y-fltk3::box_dy(box()),
              W+fltk3::box_dw(box()), H+fltk3::box_dh(box()), color());
-    fl_pop_clip();
+    fltk3::pop_clip();
   }
 
-  fl_pop_clip();
+  fltk3::pop_clip();
   if (fltk3::focus() == this) {
        fl_set_spot(textfont(), textsize(),
                (int)xpos+curx, Y+ypos-fl_descent(), W, H, window());

@@ -238,7 +238,7 @@ void Fl_Chart::draw() {
     int yy = y()+fltk3::box_dy(b);
     int ww = w()-fltk3::box_dw(b);
     int hh = h()-fltk3::box_dh(b);
-    fl_push_clip(xx, yy, ww, hh);
+    fltk3::push_clip(xx, yy, ww, hh);
 
     ww--; hh--; // adjust for line thickness
 
@@ -275,7 +275,7 @@ void Fl_Chart::draw() {
 	break;
     }
     draw_label();
-    fl_pop_clip();
+    fltk3::pop_clip();
 }
 
 /*------------------------------*/

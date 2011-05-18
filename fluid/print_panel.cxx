@@ -34,7 +34,7 @@
 #include <fltk3/Preferences.h>
 extern Fl_Preferences fluid_prefs;
 
-Fl_Double_Window *print_panel=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *print_panel=(fltk3::DoubleWindow *)0;
 
 fltk3::Group *print_panel_controls=(fltk3::Group *)0;
 
@@ -107,9 +107,9 @@ static void cb_Cancel(fltk3::Button*, void*) {
 
 Fl_Progress *print_progress=(Fl_Progress *)0;
 
-Fl_Double_Window *print_properties_panel=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *print_properties_panel=(fltk3::DoubleWindow *)0;
 
-static void cb_print_properties_panel(Fl_Double_Window*, void*) {
+static void cb_print_properties_panel(fltk3::DoubleWindow*, void*) {
   print_properties_panel->hide();
 print_update_status();
 }
@@ -243,8 +243,8 @@ static void cb_Use(fltk3::Button*, void*) {
   print_properties_panel->hide();
 }
 
-Fl_Double_Window* make_print_panel() {
-  { print_panel = new Fl_Double_Window(465, 235, "Print");
+fltk3::DoubleWindow* make_print_panel() {
+  { print_panel = new fltk3::DoubleWindow(465, 235, "Print");
     { print_panel_controls = new fltk3::Group(10, 10, 447, 216);
       { print_choice = new Fl_Choice(113, 10, 181, 25, "Printer:");
         print_choice->down_box(fltk3::BORDER_BOX);
@@ -446,8 +446,8 @@ Fl_Double_Window* make_print_panel() {
     } // Fl_Progress* print_progress
     print_panel->set_modal();
     print_panel->end();
-  } // Fl_Double_Window* print_panel
-  { print_properties_panel = new Fl_Double_Window(290, 130, "Printer Properties");
+  } // fltk3::DoubleWindow* print_panel
+  { print_properties_panel = new fltk3::DoubleWindow(290, 130, "Printer Properties");
     print_properties_panel->callback((fltk3::Callback*)cb_print_properties_panel);
     { print_page_size = new Fl_Choice(110, 10, 80, 25, "Page Size:");
       print_page_size->down_box(fltk3::BORDER_BOX);
@@ -503,7 +503,7 @@ Fl_Double_Window* make_print_panel() {
     } // fltk3::Button* o
     print_properties_panel->set_modal();
     print_properties_panel->end();
-  } // Fl_Double_Window* print_properties_panel
+  } // fltk3::DoubleWindow* print_properties_panel
   return print_properties_panel;
 }
 void print_cb(Fl_Return_Button *, void *); 

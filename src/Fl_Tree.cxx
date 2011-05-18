@@ -282,14 +282,14 @@ void Fl_Tree::draw() {
   int Y = cy + _prefs.margintop() - (_vscroll->visible() ? _vscroll->value() : 0);
   int W = cw - _prefs.marginleft();			// - _prefs.marginright();
   int Ysave = Y;
-  fl_push_clip(cx,cy,cw,ch);
+  fltk3::push_clip(cx,cy,cw,ch);
   {
     fl_font(_prefs.labelfont(), _prefs.labelsize());
     _root->draw(X, Y, W, this,
                 (fltk3::focus()==this)?_item_focus:0,	// show focus item ONLY if Fl_Tree has focus
 		_prefs);
   }
-  fl_pop_clip();
+  fltk3::pop_clip();
   
   // Show vertical scrollbar?
   int ydiff = (Y+_prefs.margintop())-Ysave;		// ydiff=size of tree
@@ -315,9 +315,9 @@ void Fl_Tree::draw() {
     _vscroll->Fl_Slider::value(0);
     _vscroll->hide();
   }
-  fl_push_clip(cx,cy,cw,ch);
+  fltk3::push_clip(cx,cy,cw,ch);
   fltk3::Group::draw_children();	// draws any FLTK children set via Fl_Tree::widget()
-  fl_pop_clip();
+  fltk3::pop_clip();
 }
 
 /// Returns next visible item above (dir==Fl_Up) or below (dir==Fl_Down) the specified \p item.

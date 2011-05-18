@@ -39,7 +39,7 @@
  *  to select the default visual before doing show() on any windows. Mesa
  *  will crash if yoy try to use a visual not returned by glxChooseVidual.
  *
- *  This does not work with Fl_Double_Window's!  It will try to draw
+ *  This does not work with fltk3::DoubleWindow's!  It will try to draw
  *  into the front buffer.  Depending on the system this will either
  *  crash or do nothing (when pixmaps are being used as back buffer
  *  and GL is being done by hardware), work correctly (when GL is done

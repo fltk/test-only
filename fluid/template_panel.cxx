@@ -43,9 +43,9 @@
 #endif // WIN32 && !__CYGWIN__
 extern Fl_Preferences fluid_prefs;
 
-Fl_Double_Window *template_panel=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *template_panel=(fltk3::DoubleWindow *)0;
 
-static void cb_template_panel(Fl_Double_Window*, void*) {
+static void cb_template_panel(fltk3::DoubleWindow*, void*) {
   Fl_Shared_Image *img = (Fl_Shared_Image *)template_preview->image();
 if (img) img->release();
 template_preview->image(0);
@@ -141,8 +141,8 @@ template_preview->image(0);
 template_panel->hide();
 }
 
-Fl_Double_Window* make_template_panel() {
-  { template_panel = new Fl_Double_Window(460, 355, "New/Save Template");
+fltk3::DoubleWindow* make_template_panel() {
+  { template_panel = new fltk3::DoubleWindow(460, 355, "New/Save Template");
     template_panel->callback((fltk3::Callback*)cb_template_panel);
     { template_browser = new Fl_Browser(10, 28, 180, 250, "Available Templates:");
       template_browser->type(2);
@@ -184,7 +184,7 @@ Fl_Double_Window* make_template_panel() {
     } // fltk3::Group* o
     template_panel->set_modal();
     template_panel->end();
-  } // Fl_Double_Window* template_panel
+  } // fltk3::DoubleWindow* template_panel
   return template_panel;
 }
 

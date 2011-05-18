@@ -328,9 +328,9 @@ void Fl_Tabs::draw() {
       // Draw the top or bottom SELECTION_BORDER lines of the tab pane in the
       // selection color so that the user knows which tab is selected...
       int clip_y = (H >= 0) ? y() + H : y() + h() + H - SELECTION_BORDER;
-      fl_push_clip(x(), clip_y, w(), SELECTION_BORDER);
+      fltk3::push_clip(x(), clip_y, w(), SELECTION_BORDER);
       draw_box(box(), x(), clip_y, w(), SELECTION_BORDER, selection_color());
-      fl_pop_clip();
+      fltk3::pop_clip();
     }
     if (v) draw_child(*v);
   } else { // redraw the child
@@ -370,8 +370,8 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
   if ((x2 < x1+W) && what == RIGHT) x1 = x2 - W;
 
   if (H >= 0) {
-    if (sel) fl_push_clip(x1, y(), x2 - x1, H + dh - dy);
-    else fl_push_clip(x1, y(), x2 - x1, H);
+    if (sel) fltk3::push_clip(x1, y(), x2 - x1, H + dh - dy);
+    else fltk3::push_clip(x1, y(), x2 - x1, H);
 
     H += dh;
 
@@ -392,12 +392,12 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
     if (fltk3::focus() == this && o->visible())
       draw_focus(box(), x1, y(), W, H);
 
-    fl_pop_clip();
+    fltk3::pop_clip();
   } else {
     H = -H;
 
-    if (sel) fl_push_clip(x1, y() + h() - H - dy, x2 - x1, H + dy);
-    else fl_push_clip(x1, y() + h() - H, x2 - x1, H);
+    if (sel) fltk3::push_clip(x1, y() + h() - H - dy, x2 - x1, H + dy);
+    else fltk3::push_clip(x1, y() + h() - H, x2 - x1, H);
 
     H += dh;
 
@@ -418,7 +418,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
     if (fltk3::focus() == this && o->visible())
       draw_focus(box(), x1, y() + h() - H, W, H);
 
-    fl_pop_clip();
+    fltk3::pop_clip();
   }
   fl_draw_shortcut = prev_draw_shortcut;
 }

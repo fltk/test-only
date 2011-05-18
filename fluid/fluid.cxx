@@ -1171,7 +1171,7 @@ void print_menu_cb(fltk3::Widget *, void *) {
 
   fl_gc = save_dc;
   fl_window = save_win;
-  fl_pop_clip();
+  fltk3::pop_clip();
 
   // Free the print DC and return...
   DeleteDC(dialog.hDC);
@@ -1634,7 +1634,7 @@ void print_cb(Fl_Return_Button *, void *) {
 extern Fl_Menu_Item New_Menu[];
 
 void toggle_widgetbin_cb(fltk3::Widget *, void *);
-void toggle_sourceview_cb(Fl_Double_Window *, void *);
+void toggle_sourceview_cb(fltk3::DoubleWindow *, void *);
 
 Fl_Menu_Item Main_Menu[] = {
 {"&File",0,0,0,FL_SUBMENU},
@@ -1774,7 +1774,7 @@ void toggle_widgetbin_cb(fltk3::Widget *, void *) {
 }
 
 
-void toggle_sourceview_cb(Fl_Double_Window *, void *) {
+void toggle_sourceview_cb(fltk3::DoubleWindow *, void *) {
   if (!sourceview_panel) {
     make_sourceview();
     sourceview_panel->callback((fltk3::Callback*)toggle_sourceview_cb);
@@ -1819,7 +1819,7 @@ void make_main_window() {
 
   if (!main_window) {
     fltk3::Widget *o;
-    main_window = new Fl_Double_Window(WINWIDTH,WINHEIGHT,"fluid");
+    main_window = new fltk3::DoubleWindow(WINWIDTH,WINHEIGHT,"fluid");
     main_window->box(fltk3::NO_BOX);
     o = make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
     o->box(fltk3::FLAT_BOX);

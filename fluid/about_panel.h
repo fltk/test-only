@@ -32,11 +32,11 @@
 #include <fltk3/run.h>
 extern void show_help(const char *name); 
 #include <fltk3/DoubleWindow.h>
-extern Fl_Double_Window *about_panel;
+extern fltk3::DoubleWindow *about_panel;
 #include <fltk3/Box.h>
 #include <fltk3/Button.h>
 #include <fltk3/ReturnButton.h>
-Fl_Double_Window* make_about_panel();
+fltk3::DoubleWindow* make_about_panel();
 extern unsigned char fluid_org_png[12690];
 #endif
 

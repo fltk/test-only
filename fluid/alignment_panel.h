@@ -43,7 +43,7 @@ extern Fl_Text_Buffer *shell_run_buffer;
 #include <fltk3/DoubleWindow.h>
 #include <fltk3/Preferences.h>
 #include <fltk3/Tooltip.h>
-extern Fl_Double_Window *project_window;
+extern fltk3::DoubleWindow *project_window;
 #include <fltk3/Button.h>
 #include <fltk3/TabGroup.h>
 #include <fltk3/Group.h>
@@ -68,11 +68,11 @@ extern Fl_Input *i18n_file_input;
 extern void i18n_int_cb(Fl_Int_Input*, void*);
 extern Fl_Int_Input *i18n_set_input;
 extern Fl_Input *i18n_function_input;
-Fl_Double_Window* make_project_window();
+fltk3::DoubleWindow* make_project_window();
 extern Fl_Menu_Item menu_i18n_type_chooser[];
 extern void i18n_cb(Fl_Choice *,void *);
 extern void scheme_cb(Fl_Choice *, void *); 
-extern Fl_Double_Window *settings_window;
+extern fltk3::DoubleWindow *settings_window;
 extern void scheme_cb(Fl_Choice*, void*);
 extern Fl_Choice *scheme_choice;
 extern Fl_Check_Button *tooltips_button;
@@ -82,21 +82,21 @@ extern Fl_Check_Button *prevpos_button;
 extern Fl_Check_Button *show_comments_button;
 #include <fltk3/Spinner.h>
 extern Fl_Spinner *recent_spinner;
-Fl_Double_Window* make_settings_window();
+fltk3::DoubleWindow* make_settings_window();
 extern Fl_Menu_Item menu_scheme_choice[];
-extern Fl_Double_Window *shell_window;
+extern fltk3::DoubleWindow *shell_window;
 extern Fl_Input *shell_command_input;
 extern Fl_Check_Button *shell_writecode_button;
 extern Fl_Check_Button *shell_writemsgs_button;
 extern Fl_Check_Button *shell_savefl_button;
 #include <fltk3/ReturnButton.h>
 extern void do_shell_command(Fl_Return_Button*, void*);
-extern Fl_Double_Window *shell_run_window;
+extern fltk3::DoubleWindow *shell_run_window;
 #include <fltk3/TextDisplay.h>
 extern Fl_Text_Display *shell_run_display;
 extern Fl_Return_Button *shell_run_button;
-Fl_Double_Window* make_shell_window();
-extern Fl_Double_Window *grid_window;
+fltk3::DoubleWindow* make_shell_window();
+extern fltk3::DoubleWindow *grid_window;
 extern void grid_cb(Fl_Int_Input*, long);
 extern Fl_Int_Input *horizontal_input;
 extern Fl_Int_Input *vertical_input;
@@ -106,15 +106,15 @@ extern Fl_Check_Button *guides_toggle;
 #include <fltk3/RoundButton.h>
 extern void default_widget_size_cb(Fl_Round_Button*, long);
 extern Fl_Round_Button *def_widget_size[6];
-Fl_Double_Window* make_layout_window();
+fltk3::DoubleWindow* make_layout_window();
 void show_global_settings_window();
-extern Fl_Double_Window *global_settings_window;
+extern fltk3::DoubleWindow *global_settings_window;
 extern Fl_Choice *wVisibleFocus;
 extern Fl_Choice *wArrowFocus;
 extern Fl_Choice *wShowTooltips;
 extern Fl_Choice *wDNDText;
 extern Fl_Choice *wUserOrSystem;
-Fl_Double_Window* make_global_settings_window();
+fltk3::DoubleWindow* make_global_settings_window();
 extern Fl_Menu_Item menu_wVisibleFocus[];
 extern Fl_Menu_Item menu_wArrowFocus[];
 extern Fl_Menu_Item menu_wShowTooltips[];

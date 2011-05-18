@@ -69,6 +69,11 @@ typedef short COORD_T;
 #  define XPOINT XPoint
 #endif
 
+namespace fltk3 {
+  void push_clip(int x, int y, int w, int h);
+  void pop_clip();
+}
+
 /**
  \brief All graphical output devices and all graphics systems.
  */
@@ -185,11 +190,11 @@ protected:
   friend void fl_end_loop();
   friend void fl_end_polygon();
   friend void fl_transformed_vertex(double xf, double yf);
-  friend void fl_push_clip(int x, int y, int w, int h);
+  friend void fltk3::push_clip(int x, int y, int w, int h);
   friend int fl_clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
   friend int fl_not_clipped(int x, int y, int w, int h);
   friend void fl_push_no_clip();
-  friend void fl_pop_clip();
+  friend void fltk3::pop_clip();
   friend void fl_begin_complex_polygon();
   friend void fl_gap();
   friend void fl_end_complex_polygon();
@@ -299,7 +304,7 @@ protected:
   virtual void end_complex_polygon();
   /** \brief see fl_transformed_vertex(double xf, double yf). */
   virtual void transformed_vertex(double xf, double yf);
-  /** \brief see fl_push_clip(int x, int y, int w, int h). */
+  /** \brief see fltk3::push_clip(int x, int y, int w, int h). */
   virtual void push_clip(int x, int y, int w, int h);
   /** \brief see fl_clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H). */
   virtual int clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H);
@@ -307,7 +312,7 @@ protected:
   virtual int not_clipped(int x, int y, int w, int h);
   /** \brief see fl_push_no_clip(). */
   virtual void push_no_clip();
-  /** \brief see fl_pop_clip(). */
+  /** \brief see fltk3::pop_clip(). */
   virtual void pop_clip();
     
   /** \brief see fl_push_matrix(). */

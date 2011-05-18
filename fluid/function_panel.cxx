@@ -37,7 +37,7 @@ extern void select_only(Fl_Type*);
 extern void exit_cb(fltk3::Widget*, void*);
 extern void toggle_widgetbin_cb(fltk3::Widget*, void*);
 
-Fl_Double_Window *function_panel=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *function_panel=(fltk3::DoubleWindow *)0;
 
 Fl_Choice *f_public_member_choice=(Fl_Choice *)0;
 
@@ -68,8 +68,8 @@ fltk3::Button *f_panel_cancel=(fltk3::Button *)0;
 
 Fl_Text_Editor *f_comment_input=(Fl_Text_Editor *)0;
 
-Fl_Double_Window* make_function_panel() {
-  { function_panel = new Fl_Double_Window(343, 232, "Function/Method Properties");
+fltk3::DoubleWindow* make_function_panel() {
+  { function_panel = new fltk3::DoubleWindow(343, 232, "Function/Method Properties");
     { fltk3::Group* o = new fltk3::Group(10, 10, 270, 20);
       { f_public_member_choice = new Fl_Choice(10, 10, 75, 20);
         f_public_member_choice->tooltip("Change member access attribute.");
@@ -143,11 +143,11 @@ Fl_Double_Window* make_function_panel() {
     } // Fl_Text_Editor* f_comment_input
     function_panel->set_modal();
     function_panel->end();
-  } // Fl_Double_Window* function_panel
+  } // fltk3::DoubleWindow* function_panel
   return function_panel;
 }
 
-Fl_Double_Window *code_panel=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *code_panel=(fltk3::DoubleWindow *)0;
 
 CodeEditor *code_input=(CodeEditor *)0;
 
@@ -155,8 +155,8 @@ Fl_Return_Button *code_panel_ok=(Fl_Return_Button *)0;
 
 fltk3::Button *code_panel_cancel=(fltk3::Button *)0;
 
-Fl_Double_Window* make_code_panel() {
-  { Fl_Double_Window* o = code_panel = new Fl_Double_Window(540, 180, "Code Properties");
+fltk3::DoubleWindow* make_code_panel() {
+  { fltk3::DoubleWindow* o = code_panel = new fltk3::DoubleWindow(540, 180, "Code Properties");
     code_panel->labelsize(11);
     { CodeEditor* o = code_input = new CodeEditor(10, 10, 520, 130);
       code_input->box(fltk3::DOWN_BOX);
@@ -192,11 +192,11 @@ Fl_Double_Window* make_code_panel() {
     o->size_range(200, 150);
     code_panel->set_modal();
     code_panel->end();
-  } // Fl_Double_Window* code_panel
+  } // fltk3::DoubleWindow* code_panel
   return code_panel;
 }
 
-Fl_Double_Window *codeblock_panel=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *codeblock_panel=(fltk3::DoubleWindow *)0;
 
 Fl_Input *code_before_input=(Fl_Input *)0;
 
@@ -206,8 +206,8 @@ Fl_Return_Button *codeblock_panel_ok=(Fl_Return_Button *)0;
 
 fltk3::Button *codeblock_panel_cancel=(fltk3::Button *)0;
 
-Fl_Double_Window* make_codeblock_panel() {
-  { Fl_Double_Window* o = codeblock_panel = new Fl_Double_Window(300, 115, "Code Block Properties");
+fltk3::DoubleWindow* make_codeblock_panel() {
+  { fltk3::DoubleWindow* o = codeblock_panel = new fltk3::DoubleWindow(300, 115, "Code Block Properties");
     codeblock_panel->labelsize(11);
     { code_before_input = new Fl_Input(10, 15, 280, 20, "Conditional code block");
       code_before_input->tooltip("#ifdef or similar conditional code block.");
@@ -243,11 +243,11 @@ Fl_Double_Window* make_codeblock_panel() {
     o->size_range(o->w(), o->h(), fltk3::w(), o->h());
     codeblock_panel->set_modal();
     codeblock_panel->end();
-  } // Fl_Double_Window* codeblock_panel
+  } // fltk3::DoubleWindow* codeblock_panel
   return codeblock_panel;
 }
 
-Fl_Double_Window *declblock_panel=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *declblock_panel=(fltk3::DoubleWindow *)0;
 
 Fl_Choice *declblock_public_choice=(Fl_Choice *)0;
 
@@ -267,8 +267,8 @@ Fl_Return_Button *declblock_panel_ok=(Fl_Return_Button *)0;
 
 fltk3::Button *declblock_panel_cancel=(fltk3::Button *)0;
 
-Fl_Double_Window* make_declblock_panel() {
-  { Fl_Double_Window* o = declblock_panel = new Fl_Double_Window(300, 135, "Declaration Block Properties");
+fltk3::DoubleWindow* make_declblock_panel() {
+  { fltk3::DoubleWindow* o = declblock_panel = new fltk3::DoubleWindow(300, 135, "Declaration Block Properties");
     declblock_panel->labelsize(11);
     { fltk3::Group* o = new fltk3::Group(10, 10, 280, 20);
       { declblock_public_choice = new Fl_Choice(10, 10, 140, 20);
@@ -324,11 +324,11 @@ Fl_Double_Window* make_declblock_panel() {
     o->size_range(o->w(), o->h(), fltk3::w(), o->h());
     declblock_panel->set_modal();
     declblock_panel->end();
-  } // Fl_Double_Window* declblock_panel
+  } // fltk3::DoubleWindow* declblock_panel
   return declblock_panel;
 }
 
-Fl_Double_Window *decl_panel=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *decl_panel=(fltk3::DoubleWindow *)0;
 
 Fl_Choice *decl_choice=(Fl_Choice *)0;
 
@@ -357,8 +357,8 @@ fltk3::Button *decl_panel_cancel=(fltk3::Button *)0;
 
 Fl_Text_Editor *decl_comment_input=(Fl_Text_Editor *)0;
 
-Fl_Double_Window* make_decl_panel() {
-  { decl_panel = new Fl_Double_Window(343, 237, "Declaration Properties");
+fltk3::DoubleWindow* make_decl_panel() {
+  { decl_panel = new fltk3::DoubleWindow(343, 237, "Declaration Properties");
     decl_panel->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
     { fltk3::Group* o = new fltk3::Group(10, 10, 270, 20);
       { fltk3::Box* o = new fltk3::Box(200, 10, 80, 20);
@@ -416,11 +416,11 @@ n int foo();\", a #directive like \"#include <foo.h>\", a comment like \"//foo\
     } // Fl_Text_Editor* decl_comment_input
     decl_panel->size_range(343, 237);
     decl_panel->end();
-  } // Fl_Double_Window* decl_panel
+  } // fltk3::DoubleWindow* decl_panel
   return decl_panel;
 }
 
-Fl_Double_Window *data_panel=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *data_panel=(fltk3::DoubleWindow *)0;
 
 Fl_Choice *data_choice=(Fl_Choice *)0;
 
@@ -453,8 +453,8 @@ fltk3::Button *data_panel_cancel=(fltk3::Button *)0;
 
 Fl_Text_Editor *data_comment_input=(Fl_Text_Editor *)0;
 
-Fl_Double_Window* make_data_panel() {
-  { data_panel = new Fl_Double_Window(343, 237, "Binary Data Properties");
+fltk3::DoubleWindow* make_data_panel() {
+  { data_panel = new fltk3::DoubleWindow(343, 237, "Binary Data Properties");
     data_panel->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
     { fltk3::Group* o = new fltk3::Group(10, 10, 270, 20);
       { fltk3::Box* o = new fltk3::Box(200, 10, 80, 20);
@@ -522,11 +522,11 @@ Fl_Double_Window* make_data_panel() {
     } // Fl_Text_Editor* data_comment_input
     data_panel->size_range(343, 237);
     data_panel->end();
-  } // Fl_Double_Window* data_panel
+  } // fltk3::DoubleWindow* data_panel
   return data_panel;
 }
 
-Fl_Double_Window *class_panel=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *class_panel=(fltk3::DoubleWindow *)0;
 
 Fl_Light_Button *c_public_button=(Fl_Light_Button *)0;
 
@@ -540,8 +540,8 @@ Fl_Return_Button *c_panel_ok=(Fl_Return_Button *)0;
 
 fltk3::Button *c_panel_cancel=(fltk3::Button *)0;
 
-Fl_Double_Window* make_class_panel() {
-  { class_panel = new Fl_Double_Window(342, 196, "Class Properties");
+fltk3::DoubleWindow* make_class_panel() {
+  { class_panel = new fltk3::DoubleWindow(342, 196, "Class Properties");
     class_panel->labelsize(11);
     { fltk3::Group* o = new fltk3::Group(10, 10, 280, 20);
       o->hide();
@@ -602,11 +602,11 @@ Fl_Double_Window* make_class_panel() {
     class_panel->set_modal();
     class_panel->size_range(343, 188);
     class_panel->end();
-  } // Fl_Double_Window* class_panel
+  } // fltk3::DoubleWindow* class_panel
   return class_panel;
 }
 
-Fl_Double_Window *comment_panel=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *comment_panel=(fltk3::DoubleWindow *)0;
 
 CodeEditor *comment_input=(CodeEditor *)0;
 
@@ -622,8 +622,8 @@ Fl_Menu_Button *comment_predefined=(Fl_Menu_Button *)0;
 
 fltk3::Button *comment_load=(fltk3::Button *)0;
 
-Fl_Double_Window* make_comment_panel() {
-  { Fl_Double_Window* o = comment_panel = new Fl_Double_Window(550, 280, "Comment Properties");
+fltk3::DoubleWindow* make_comment_panel() {
+  { fltk3::DoubleWindow* o = comment_panel = new fltk3::DoubleWindow(550, 280, "Comment Properties");
     comment_panel->labelsize(11);
     { CodeEditor* o = comment_input = new CodeEditor(110, 10, 430, 230);
       comment_input->box(fltk3::DOWN_BOX);
@@ -684,7 +684,7 @@ Fl_Double_Window* make_comment_panel() {
     o->size_range(320, 180);
     comment_panel->set_modal();
     comment_panel->end();
-  } // Fl_Double_Window* comment_panel
+  } // fltk3::DoubleWindow* comment_panel
   return comment_panel;
 }
 
@@ -889,7 +889,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(232, 30, 24, 24);
         o->tooltip("Adjuster");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Adjuster"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Adjuster"));
         o->image(pixmap[40]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(257, 30, 24, 24);
@@ -1056,7 +1056,7 @@ fltk3::Window* make_widgetbin() {
   return widgetbin_panel;
 }
 
-Fl_Double_Window *sourceview_panel=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *sourceview_panel=(fltk3::DoubleWindow *)0;
 
 Fl_Tabs *sv_tab=(Fl_Tabs *)0;
 
@@ -1068,8 +1068,8 @@ Fl_Light_Button *sv_autorefresh=(Fl_Light_Button *)0;
 
 Fl_Light_Button *sv_autoposition=(Fl_Light_Button *)0;
 
-Fl_Double_Window* make_sourceview() {
-  { sourceview_panel = new Fl_Double_Window(520, 490, "Code View");
+fltk3::DoubleWindow* make_sourceview() {
+  { sourceview_panel = new fltk3::DoubleWindow(520, 490, "Code View");
     sourceview_panel->callback((fltk3::Callback*)toggle_sourceview_cb);
     sourceview_panel->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
     { sv_tab = new Fl_Tabs(10, 10, 500, 440);
@@ -1140,7 +1140,7 @@ Fl_Double_Window* make_sourceview() {
     } // fltk3::Group* o
     sourceview_panel->size_range(384, 120);
     sourceview_panel->end();
-  } // Fl_Double_Window* sourceview_panel
+  } // fltk3::DoubleWindow* sourceview_panel
   return sourceview_panel;
 }
 

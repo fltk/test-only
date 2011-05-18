@@ -446,9 +446,9 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int n, int eraseit) {
   int hh = itemheight - LEADING;
 
   if (eraseit && n != selected) {
-    fl_push_clip(xx+1, yy-(LEADING-2)/2, ww-2, hh+(LEADING-2));
+    fltk3::push_clip(xx+1, yy-(LEADING-2)/2, ww-2, hh+(LEADING-2));
     draw_box(box(), 0, 0, w(), h(), button ? button->color() : color());
-    fl_pop_clip();
+    fltk3::pop_clip();
   }
 
   m->draw(xx, yy, ww, hh, button, n==selected);

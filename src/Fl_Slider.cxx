@@ -102,9 +102,9 @@ int Fl_Slider::scrollvalue(int pos, int size, int first, int total) {
 // actually it ranges from 0 to 1/(1-size).
 
 void Fl_Slider::draw_bg(int X, int Y, int W, int H) {
-  fl_push_clip(X, Y, W, H);
+  fltk3::push_clip(X, Y, W, H);
   draw_box();
-  fl_pop_clip();
+  fltk3::pop_clip();
 
   fltk3::Color black = active_r() ? fltk3::FOREGROUND_COLOR : fltk3::INACTIVE_COLOR;
   if (type() == FL_VERT_NICE_SLIDER) {

@@ -87,7 +87,7 @@ void Fl_Choice::draw() {
     // ERCO
     int xx = x() + dx, yy = y() + dy + 1, ww = w() - W, hh = H - 2;
 
-    fl_push_clip(xx, yy, ww, hh);
+    fltk3::push_clip(xx, yy, ww, hh);
 
     if ( fltk3::scheme()) {
       fltk3::Label l;
@@ -110,7 +110,7 @@ void Fl_Choice::draw() {
       fl_draw_shortcut = 0;
     }
 
-    fl_pop_clip();
+    fltk3::pop_clip();
   }
 
   draw_label();

@@ -54,15 +54,15 @@
    to attach a context to your window. You should do it only when your window is 
    the current window. \see fltk3::Window::current()
 */
-class FLTK3_EXPORT Fl_Cairo_Window : public Fl_Double_Window {
+class FLTK3_EXPORT Fl_Cairo_Window : public fltk3::DoubleWindow {
 
 public:
-  Fl_Cairo_Window(int w, int h) : Fl_Double_Window(w,h),draw_cb_(0) {}
+  Fl_Cairo_Window(int w, int h) : fltk3::DoubleWindow(w,h),draw_cb_(0) {}
 
 protected:
   /** Overloaded to provide cairo callback support */
   void draw() {
-    Fl_Double_Window::draw();
+    fltk3::DoubleWindow::draw();
     // manual method ? if yes explicitly get a cairo_context here
     if (!fltk3::cairo_autolink_context()) 
       fltk3::cairo_make_current(this); 

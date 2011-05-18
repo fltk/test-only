@@ -49,7 +49,7 @@
 #include <fltk3/IntInput.h>
 
 static Fl_Preferences print_prefs(Fl_Preferences::USER, "fltk.org", "printers");
-static Fl_Double_Window *print_panel=(Fl_Double_Window *)0;
+static fltk3::DoubleWindow *print_panel=(fltk3::DoubleWindow *)0;
 static fltk3::Group *print_panel_controls=(fltk3::Group *)0;
 static Fl_Choice *print_choice=(Fl_Choice *)0;
 static fltk3::Button *print_properties=(fltk3::Button *)0;
@@ -60,7 +60,7 @@ static Fl_Round_Button *print_selection=(Fl_Round_Button *)0;
 static Fl_Check_Button *print_collate_button=(Fl_Check_Button *)0;
 static fltk3::Group *print_collate_group[2]={(fltk3::Group *)0};
 static Fl_Progress *print_progress=(Fl_Progress *)0;
-static Fl_Double_Window *print_properties_panel=(Fl_Double_Window *)0;
+static fltk3::DoubleWindow *print_properties_panel=(fltk3::DoubleWindow *)0;
 static Fl_Choice *print_page_size=(Fl_Choice *)0;
 static Fl_Int_Input *print_from=(Fl_Int_Input *)0;
 static Fl_Int_Input *print_to=(Fl_Int_Input *)0;
@@ -114,7 +114,7 @@ static void cb_Cancel(fltk3::Button*, void*) {
   print_panel->hide();
 }
 
-static void cb_print_properties_panel(Fl_Double_Window*, void*) {
+static void cb_print_properties_panel(fltk3::DoubleWindow*, void*) {
   print_properties_panel->hide();
   print_update_status();
 }
@@ -246,8 +246,8 @@ static void cb_Use(fltk3::Button*, void*) {
   print_properties_panel->hide();
 }
 
-Fl_Double_Window* make_print_panel() {
-  { print_panel = new Fl_Double_Window(465, 235, Fl_Printer::dialog_title);
+fltk3::DoubleWindow* make_print_panel() {
+  { print_panel = new fltk3::DoubleWindow(465, 235, Fl_Printer::dialog_title);
     { print_panel_controls = new fltk3::Group(10, 10, 447, 216);
       { print_choice = new Fl_Choice(133, 10, 181, 25, Fl_Printer::dialog_printer);
         print_choice->down_box(fltk3::BORDER_BOX);
@@ -449,8 +449,8 @@ Fl_Double_Window* make_print_panel() {
     } // Fl_Progress* print_progress
     print_panel->set_modal();
     print_panel->end();
-  } // Fl_Double_Window* print_panel
-  { print_properties_panel = new Fl_Double_Window(290, 130, Fl_Printer::property_title);
+  } // fltk3::DoubleWindow* print_panel
+  { print_properties_panel = new fltk3::DoubleWindow(290, 130, Fl_Printer::property_title);
     print_properties_panel->callback((fltk3::Callback*)cb_print_properties_panel);
     { print_page_size = new Fl_Choice(150, 10, 80, 25, Fl_Printer::property_pagesize);
       print_page_size->down_box(fltk3::BORDER_BOX);
@@ -506,7 +506,7 @@ Fl_Double_Window* make_print_panel() {
     } // fltk3::Button* o
     print_properties_panel->set_modal();
     print_properties_panel->end();
-  } // Fl_Double_Window* print_properties_panel
+  } // fltk3::DoubleWindow* print_properties_panel
   return print_properties_panel;
 }
 

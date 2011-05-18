@@ -64,7 +64,7 @@ static int can_xdbe() {
 }
 #endif
 
-void Fl_Double_Window::show() {
+void fltk3::DoubleWindow::show() {
   fltk3::Window::show();
 }
 
@@ -249,7 +249,7 @@ static void fl_copy_offscreen_to_display(int x,int y,int w,int h,Fl_Offscreen os
   CGDataProviderRef src_bytes = CGDataProviderCreateWithData( src, data, sw*sh*4, bmProviderRelease);
   CGImageRef img = CGImageCreate( sw, sh, 8, 4*8, 4*sw, lut, alpha,
     src_bytes, 0L, false, kCGRenderingIntentDefault);
-  // fl_push_clip();
+  // fltk3::push_clip();
   CGRect rect = { { x, y }, { w, h } };
   Fl_X::q_begin_image(rect, srcx, srcy, sw, sh);
   CGContextDrawImage(fl_gc, rect, img);
@@ -299,7 +299,7 @@ void fl_begin_offscreen(Fl_Offscreen ctx) {
  */
 void fl_end_offscreen() {
   Fl_X::q_release_context();
-  fl_pop_clip();
+  fltk3::pop_clip();
   if (stack_ix>0)
     stack_ix--;
   else
@@ -322,7 +322,7 @@ extern void fl_restore_clip();
 /**
   Forces the window to be redrawn.
 */
-void Fl_Double_Window::flush() {flush(0);}
+void fltk3::DoubleWindow::flush() {flush(0);}
 
 /**
   Forces the window to be redrawn.
@@ -332,7 +332,7 @@ void Fl_Double_Window::flush() {flush(0);}
   front everywhere, even if damage() == 0, thus erasing the overlay,
   and leaving the clip region set to the entire window.
 */
-void Fl_Double_Window::flush(int eraseoverlay) {
+void fltk3::DoubleWindow::flush(int eraseoverlay) {
   make_current(); // make sure fl_gc is non-zero
   Fl_X *myi = Fl_X::i(this);
   if (!myi->other_xid) {
@@ -415,7 +415,7 @@ void Fl_Double_Window::flush(int eraseoverlay) {
   if (myi->other_xid) fl_copy_offscreen(X, Y, W, H, myi->other_xid, X, Y);
 }
 
-void Fl_Double_Window::resize(int X,int Y,int W,int H) {
+void fltk3::DoubleWindow::resize(int X,int Y,int W,int H) {
   int ow = w();
   int oh = h();
   fltk3::Window::resize(X,Y,W,H);
@@ -437,7 +437,7 @@ void Fl_Double_Window::resize(int X,int Y,int W,int H) {
   }
 }
 
-void Fl_Double_Window::hide() {
+void fltk3::DoubleWindow::hide() {
   Fl_X* myi = Fl_X::i(this);
   if (myi && myi->other_xid) {
 #if USE_XDBE
@@ -453,7 +453,7 @@ void Fl_Double_Window::hide() {
   whole tree to be deleted at once, without having to keep a pointer to
   all the children in the user code.
 */
-Fl_Double_Window::~Fl_Double_Window() {
+fltk3::DoubleWindow::~DoubleWindow() {
   hide();
 }
 

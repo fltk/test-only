@@ -147,7 +147,7 @@ void Fl_Help_Dialog::cb_view_(Fl_Help_View* o, void* v) {
 }
 
 Fl_Help_Dialog::Fl_Help_Dialog() {
-  { window_ = new Fl_Double_Window(530, 385, "Help Dialog");
+  { window_ = new fltk3::DoubleWindow(530, 385, "Help Dialog");
     window_->user_data((void*)(this));
     { fltk3::Group* o = new fltk3::Group(10, 10, 511, 25);
       { back_ = new fltk3::Button(10, 10, 25, 25, "@<-");
@@ -199,7 +199,7 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
     } // Fl_Help_View* view_
     window_->size_range(260, 150);
     window_->end();
-  } // Fl_Double_Window* window_
+  } // fltk3::DoubleWindow* window_
   back_->deactivate();
 forward_->deactivate();
 

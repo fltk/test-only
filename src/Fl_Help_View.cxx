@@ -214,7 +214,7 @@ local copies that are much faster when merely counting:
 
 fl_color(fltk3::Color);
 fl_rectf(int, int, int, int);
-fl_push_clip(int, int, int, int);
+fltk3::push_clip(int, int, int, int);
 fl_xyline(int, int, int);
 fl_rect()
 fl_line()
@@ -503,7 +503,7 @@ Fl_Help_View::draw()
   current_pos = 0;
 
   // Clip the drawing to the inside of the box...
-  fl_push_clip(x() + fltk3::box_dx(b), y() + fltk3::box_dy(b),
+  fltk3::push_clip(x() + fltk3::box_dx(b), y() + fltk3::box_dy(b),
                ww - fltk3::box_dw(b), hh - fltk3::box_dh(b));
   fl_color(textcolor_);
 
@@ -986,7 +986,7 @@ Fl_Help_View::draw()
       }
     }
 
-  fl_pop_clip();
+  fltk3::pop_clip();
 }
 
 

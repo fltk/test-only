@@ -59,7 +59,7 @@ void Fl_Scroll::fix_scrollbar_order() {
 //    So widget can just redraw damaged parts.
 //
 void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
-  fl_push_clip(X,Y,W,H);
+  fltk3::push_clip(X,Y,W,H);
   Fl_Scroll* s = (Fl_Scroll*)v;
   // erase background as needed...
   switch (s->box()) {
@@ -95,7 +95,7 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
     s->draw_child(o);
     s->draw_outside_label(o);
   }
-  fl_pop_clip();
+  fltk3::pop_clip();
 }
 
 /**
@@ -276,10 +276,10 @@ void Fl_Scroll::draw() {
       if (B < (Y + H)) draw_clip(this, X, B, W, Y + H - B);
     }
     if (d & fltk3::DAMAGE_CHILD) { // draw damaged children
-      fl_push_clip(X, Y, W, H);
+      fltk3::push_clip(X, Y, W, H);
       fltk3::Widget*const* a = array();
       for (int i=children()-2; i--;) update_child(**a++);
-      fl_pop_clip();
+      fltk3::pop_clip();
     }
   }
 

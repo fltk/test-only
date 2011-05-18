@@ -114,7 +114,7 @@ extern void ok_cb(Fl_Return_Button*, void*);
 extern void cancel_cb(fltk3::Button*, void*);
 extern void live_mode_cb(fltk3::Button*, void*);
 extern fltk3::Button *wLiveMode;
-Fl_Double_Window* make_widget_panel();
+fltk3::DoubleWindow* make_widget_panel();
 extern Fl_Menu_Item menu_[];
 extern Fl_Menu_Item menu_1[];
 extern Fl_Menu_Item menu_2[];

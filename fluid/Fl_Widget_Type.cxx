@@ -67,7 +67,7 @@ const char* subclassname(Fl_Type* l) {
     const char* c = p->subclass();
     if (c) return c;
     if (l->is_class()) return "fltk3::Group";
-    if (p->o->type() == FL_WINDOW+1) return "Fl_Double_Window";
+    if (p->o->type() == FL_WINDOW+1) return "fltk3::DoubleWindow";
     if (strcmp(p->type_name(), "Fl_Input") == 0) {
       if (p->o->type() == FL_FLOAT_INPUT) return "Fl_Float_Input";
       if (p->o->type() == FL_INT_INPUT) return "Fl_Int_Input";
@@ -1807,7 +1807,7 @@ void live_mode_cb(fltk3::Button*o,void *) {
         fltk3::Group::current(0);
         int w = live_widget->w();
         int h = live_widget->h();
-        live_window = new Fl_Double_Window(w+20, h+55, "Fluid Live Mode Widget");
+        live_window = new fltk3::DoubleWindow(w+20, h+55, "Fluid Live Mode Widget");
         live_window->box(fltk3::FLAT_BOX);
         live_window->color(fltk3::GREEN);
         fltk3::Group *rsz = new fltk3::Group(0, h+20, 130, 35);

@@ -32,7 +32,7 @@
 #include <fltk3/ask.h>
 Fl_Text_Buffer *shell_run_buffer; 
 
-Fl_Double_Window *project_window=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *project_window=(fltk3::DoubleWindow *)0;
 
 static void cb_Close(fltk3::Button*, void*) {
   project_window->hide();
@@ -63,8 +63,8 @@ Fl_Int_Input *i18n_set_input=(Fl_Int_Input *)0;
 
 Fl_Input *i18n_function_input=(Fl_Input *)0;
 
-Fl_Double_Window* make_project_window() {
-  { project_window = new Fl_Double_Window(399, 252, "Project Settings");
+fltk3::DoubleWindow* make_project_window() {
+  { project_window = new fltk3::DoubleWindow(399, 252, "Project Settings");
     { fltk3::Button* o = new fltk3::Button(328, 216, 60, 25, "Close");
       o->tooltip("Close this dialog.");
       o->callback((fltk3::Callback*)cb_Close);
@@ -148,12 +148,12 @@ Fl_Double_Window* make_project_window() {
     } // Fl_Tabs* o
     project_window->set_modal();
     project_window->end();
-  } // Fl_Double_Window* project_window
+  } // fltk3::DoubleWindow* project_window
   return project_window;
 }
 void scheme_cb(Fl_Choice *, void *); 
 
-Fl_Double_Window *settings_window=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *settings_window=(fltk3::DoubleWindow *)0;
 
 Fl_Choice *scheme_choice=(Fl_Choice *)0;
 
@@ -209,8 +209,8 @@ static void cb_Close1(fltk3::Button*, void*) {
   settings_window->hide();
 }
 
-Fl_Double_Window* make_settings_window() {
-  { settings_window = new Fl_Double_Window(339, 241, "GUI Settings");
+fltk3::DoubleWindow* make_settings_window() {
+  { settings_window = new fltk3::DoubleWindow(339, 241, "GUI Settings");
     { scheme_choice = new Fl_Choice(116, 10, 115, 25, "Scheme: ");
       scheme_choice->down_box(fltk3::BORDER_BOX);
       scheme_choice->labelfont(1);
@@ -280,11 +280,11 @@ Fl_Double_Window* make_settings_window() {
     } // fltk3::Button* o
     settings_window->set_non_modal();
     settings_window->end();
-  } // Fl_Double_Window* settings_window
+  } // fltk3::DoubleWindow* settings_window
   return settings_window;
 }
 
-Fl_Double_Window *shell_window=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *shell_window=(fltk3::DoubleWindow *)0;
 
 Fl_Input *shell_command_input=(Fl_Input *)0;
 
@@ -314,7 +314,7 @@ static void cb_Cancel(fltk3::Button*, void*) {
   shell_window->hide();
 }
 
-Fl_Double_Window *shell_run_window=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *shell_run_window=(fltk3::DoubleWindow *)0;
 
 Fl_Text_Display *shell_run_display=(Fl_Text_Display *)0;
 
@@ -324,8 +324,8 @@ static void cb_shell_run_button(Fl_Return_Button*, void*) {
   shell_run_window->hide();
 }
 
-Fl_Double_Window* make_shell_window() {
-  { shell_window = new Fl_Double_Window(365, 125, "Shell Command");
+fltk3::DoubleWindow* make_shell_window() {
+  { shell_window = new fltk3::DoubleWindow(365, 125, "Shell Command");
     { shell_command_input = new Fl_Input(10, 27, 347, 25, "Command:");
       shell_command_input->labelfont(1);
       shell_command_input->callback((fltk3::Callback*)cb_shell_command_input);
@@ -362,8 +362,8 @@ Fl_Double_Window* make_shell_window() {
       o->callback((fltk3::Callback*)cb_Cancel);
     } // fltk3::Button* o
     shell_window->end();
-  } // Fl_Double_Window* shell_window
-  { shell_run_window = new Fl_Double_Window(555, 430, "Shell Command Output");
+  } // fltk3::DoubleWindow* shell_window
+  { shell_run_window = new fltk3::DoubleWindow(555, 430, "Shell Command Output");
     { shell_run_display = new Fl_Text_Display(10, 10, 535, 375);
       shell_run_display->box(fltk3::DOWN_BOX);
       shell_run_display->textfont(4);
@@ -375,11 +375,11 @@ Fl_Double_Window* make_shell_window() {
       shell_run_button->callback((fltk3::Callback*)cb_shell_run_button);
     } // Fl_Return_Button* shell_run_button
     shell_run_window->end();
-  } // Fl_Double_Window* shell_run_window
+  } // fltk3::DoubleWindow* shell_run_window
   return shell_run_window;
 }
 
-Fl_Double_Window *grid_window=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *grid_window=(fltk3::DoubleWindow *)0;
 
 Fl_Int_Input *horizontal_input=(Fl_Int_Input *)0;
 
@@ -395,8 +395,8 @@ static void cb_Close2(fltk3::Button*, void*) {
 
 Fl_Round_Button *def_widget_size[6]={(Fl_Round_Button *)0};
 
-Fl_Double_Window* make_layout_window() {
-  { grid_window = new Fl_Double_Window(285, 245, "Layout Settings");
+fltk3::DoubleWindow* make_layout_window() {
+  { grid_window = new fltk3::DoubleWindow(285, 245, "Layout Settings");
     { Fl_Int_Input* o = horizontal_input = new Fl_Int_Input(106, 10, 50, 25, "x");
       horizontal_input->tooltip("Horizontal grid spacing.");
       horizontal_input->type(2);
@@ -496,7 +496,7 @@ Fl_Double_Window* make_layout_window() {
     } // fltk3::Group* o
     grid_window->set_non_modal();
     grid_window->end();
-  } // Fl_Double_Window* grid_window
+  } // fltk3::DoubleWindow* grid_window
   return grid_window;
 }
 /**
@@ -585,7 +585,7 @@ void show_global_settings_window() {
   global_settings_window->show();
 }
 
-Fl_Double_Window *global_settings_window=(Fl_Double_Window *)0;
+fltk3::DoubleWindow *global_settings_window=(fltk3::DoubleWindow *)0;
 
 Fl_Choice *wVisibleFocus=(Fl_Choice *)0;
 
@@ -664,8 +664,8 @@ static void cb_OK(fltk3::Button*, void*) {
 global_settings_window->hide();
 }
 
-Fl_Double_Window* make_global_settings_window() {
-  { global_settings_window = new Fl_Double_Window(403, 317, "FLTK Preferences");
+fltk3::DoubleWindow* make_global_settings_window() {
+  { global_settings_window = new fltk3::DoubleWindow(403, 317, "FLTK Preferences");
     global_settings_window->color(fltk3::LIGHT1);
     { fltk3::Group* o = new fltk3::Group(10, 10, 380, 100, "Keyboard Focus Options");
       o->box(fltk3::GTK_DOWN_BOX);
@@ -735,7 +735,7 @@ ions to specific values (not \'default\').");
       o->callback((fltk3::Callback*)cb_OK);
     } // fltk3::Button* o
     global_settings_window->end();
-  } // Fl_Double_Window* global_settings_window
+  } // fltk3::DoubleWindow* global_settings_window
   readPrefs();
     fltk3::option(fltk3::OPTION_SHOW_TOOLTIPS,1); // make sure tooltips are on !
   return global_settings_window;

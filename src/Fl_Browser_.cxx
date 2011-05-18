@@ -398,7 +398,7 @@ J1:
   
   bbox(X, Y, W, H);
   
-  fl_push_clip(X, Y, W, H);
+  fltk3::push_clip(X, Y, W, H);
   // for each line, draw it if full redraw or scrolled.  Erase background
   // if not a full redraw or if it is selected:
   void* l = top();
@@ -411,9 +411,9 @@ J1:
 	fl_color(active_r() ? selection_color() : fltk3::inactive(selection_color()));
 	fl_rectf(X, yy+Y, W, hh);
       } else if (!(damage()&fltk3::DAMAGE_ALL)) {
-	fl_push_clip(X, yy+Y, W, hh);
+	fltk3::push_clip(X, yy+Y, W, hh);
 	draw_box(box() ? box() : fltk3::DOWN_BOX, x(), y(), w(), h(), color());
-	fl_pop_clip();
+	fltk3::pop_clip();
       }
       item_draw(l, X-hposition_, yy+Y, W+hposition_, hh);
       if (l == selection_ && fltk3::focus() == this) {
@@ -427,11 +427,11 @@ J1:
   }
   // erase the area below last line:
   if (!(damage()&fltk3::DAMAGE_ALL) && yy < H) {
-    fl_push_clip(X, yy+Y, W, H-yy);
+    fltk3::push_clip(X, yy+Y, W, H-yy);
     draw_box(box() ? box() : fltk3::DOWN_BOX, x(), y(), w(), h(), color());
-    fl_pop_clip();
+    fltk3::pop_clip();
   }
-  fl_pop_clip();
+  fltk3::pop_clip();
   redraw1 = redraw2 = 0;
   
   if (!dont_repeat) {
