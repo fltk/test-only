@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id: Group.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
 //
@@ -30,24 +29,42 @@
 #ifndef fltk_Group_h
 #define fltk_Group_h
 
-#ifndef fltk_Widget_h
-# include "Widget.h"
-#endif
+#include <fltk3/Group.h>
+#include "Widget.h"
 
 namespace fltk {
 
 class FL_API Group : public Widget {
+protected:
+  Group() { }
 public:
+  Group(int x, int y, int w, int h, const char *label = 0, bool begin=false) {
+    fltk3::Group *g = fltk3::Group::current();
+    _p = new fltk3::Group(x, y, w, h, label);
+    _p->wrapper(this);
+    if (!begin)
+      fltk3::Group::current(g);
+  }
 
+
+#if 0 // FIXME: 123
   int children() const {return children_;}
   Widget* child(int n) const {return array_[n];}
 
   void draw();
   void layout();
   int handle(int);
-
-  void begin() {current_ = this;}
-  void end() {current_ = (Group*)parent();}
+#endif
+  
+  void begin() {
+    ((fltk3::Group*)_p)->begin();
+  }
+  
+  void end() {
+    ((fltk3::Group*)_p)->end();
+  }
+  
+#if 0 // FIXME: 123
   static Group *current() {return current_;}
   static void current(Group *g) {current_ = g;}
 
@@ -106,7 +123,8 @@ private:
   int *sizes_; // remembered initial sizes of children
 
   static Group *current_;
-
+#endif
+  
 };
 
 }

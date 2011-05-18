@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id: Flags.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
 //
@@ -39,6 +38,8 @@
 #define fltk_Flags_h
 
 namespace fltk {
+  
+#if 0 // FIXME: 123
 
 /// \name fltk/Flags.h
 //@{
@@ -106,6 +107,8 @@ enum {
 
 //@}
 
+#endif
+  
 }
 
 #endif

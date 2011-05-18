@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id: Style.h 8636 2011-05-06 08:01:12Z bgbnbigben $"
 //
@@ -29,19 +28,25 @@
 #ifndef fltk_Style_h
 #define fltk_Style_h
 
+#include <fltk3/enumerations.h>
 #include "Color.h"
 
 namespace fltk {
+  
+#if 0 // FIXME: 123
 
 /// \name fltk/Style.h
 //@{
 
 class FL_API Widget;
 class FL_API Rectangle;
+#endif
+  
 class FL_API Symbol;
 typedef Symbol Box;
-
-extern FL_API Box* const UP_BOX;
+  
+static FL_API Box* const UP_BOX = 0L;
+#if 0 // FIXME: 123
 extern FL_API Box* const DOWN_BOX;
 extern FL_API Box* const DEFAULT_FOCUS_BOX;
 extern FL_API Box* const THIN_UP_BOX;
@@ -67,7 +72,9 @@ extern FL_API Box* const OFLAT_BOX;
 extern FL_API Box* const BORDER_FRAME;
 extern FL_API Box* const PLASTIC_UP_BOX;
 extern FL_API Box* const PLASTIC_DOWN_BOX;
-
+#endif
+    
+#if 0 // FIXME: 123
 struct Font;
 extern FL_API Font* const HELVETICA;
 extern FL_API Font* const HELVETICA_BOLD;
@@ -204,9 +211,16 @@ FL_API void load_theme();
 FL_API void reload_theme();
 FL_API bool reset_theme();
 
+#endif
+  
 }
 
 extern "C" FL_API bool fltk_theme();
+
+namespace fltk3 {
+  inline Boxtype _2to3_boxtype(fltk::Box *b) { return UP_BOX; }
+}
+
 
 //@}
 

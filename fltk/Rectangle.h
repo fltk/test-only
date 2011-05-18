@@ -1,4 +1,4 @@
-#error header has not been ported to 3.0 yet
+//
 // "$Id: Rectangle.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
@@ -37,6 +37,8 @@
 //#define FLTK_CENTER_Y(coord, length)  (coord + (length>>1))
 
 namespace fltk {
+  
+#if 0 // FIXME: 123
 
 class FL_API Rectangle {
   int x_, y_, w_, h_;
@@ -120,6 +122,8 @@ class FL_API Rectangle {
 
 };
 
+#endif
+  
 }
 
 #endif

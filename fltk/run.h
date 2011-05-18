@@ -1,4 +1,4 @@
-#error header has not been ported to 3.0 yet
+//
 // "$Id: run.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
 //
 // The basic fltk runtime. Every program needs to call this somewhere.
@@ -26,6 +26,8 @@
 #ifndef fltk_run_h
 #define fltk_run_h
 
+#include <fltk3/run.h>
+
 #include "FL_API.h"
 #include <stdio.h>
 #ifdef check
@@ -34,6 +36,8 @@
 
 namespace fltk {
 
+#if 0 // FIXME: 123
+  
 /// \name fltk/run.h
 //@{
 
@@ -48,8 +52,14 @@ FL_API int wait();
 FL_API int wait(float time);
 FL_API int check();
 FL_API int ready();
-FL_API int run();
-FL_API void flush();
+#endif
+  
+  int run() {
+    return fltk3::run();
+  }
+
+#if 0 // FIXME: 123
+ FL_API void flush();
 FL_API void redraw();
 extern FL_API int damage_;
 inline void damage(int d) {damage_ = d;}
@@ -93,6 +103,8 @@ FL_API bool in_main_thread();
 
 //@}
 
+#endif
+  
 }
 
 #endif

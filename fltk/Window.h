@@ -1,4 +1,4 @@
-#error header has not been ported to 3.0 yet
+//
 // "$Id: Window.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
 //
 // Window widget. This must be the outermost group. You can also put
@@ -28,23 +28,37 @@
 #ifndef fltk_Window_h
 #define fltk_Window_h
 
+#include <fltk3/Window.h>
 #include "Group.h"
 
 namespace fltk {
 
-// value for x,y to indicate window system places window
-const int USEDEFAULT = ((int)0x80000000); // same as Win32 value
+#if 0 // FIXME: 123
+  
+const int USEDEFAULT = ((int)0x80000000);
 
 class CreatedWindow;
 class Monitor;
 
-// implementations of methods of Window are in different files in src/
+#endif
 
-class FL_API Window : public Group {
+class Window : public Group {
 public:
 
-  Window(int,int,int,int, const char* = 0, bool begin = false);
-  Window(int,int, const char* = 0);
+  Window(int x, int y, int w, int h, const char *label = 0, bool begin = false) {
+    fltk3::Group *g = fltk3::Group::current();
+    _p = new fltk3::Window(x, y, w, h, label);
+    _p->wrapper(this);
+    if (!begin)
+      fltk3::Group::current(g);
+  }
+  
+  Window(int w, int h, const char *label = 0) {
+    _p = new fltk3::Window(w, h, label);
+    _p->wrapper(this);
+  }
+  
+#if 0 // FIXME: 123
   static NamedStyle* default_style;
   virtual ~Window();
 
@@ -88,7 +102,13 @@ public:
 
   bool shown() const {return i != 0;}
   void show();
-  void show(int, char**);
+#endif
+  
+  void show(int argc, char **argv) {
+    ((fltk3::Window*)_p)->show(argc, argv);
+  }
+  
+#if 0 // FIXME: 123
   void show(const Window* parent);
   bool exec(const Window* parent = 0, bool grab = false);
   void make_exec_return(bool);
@@ -150,6 +170,7 @@ private:
   };
   static const char* xclass_;
   void _Window(); // constructor innards
+#endif
 };
 
 }

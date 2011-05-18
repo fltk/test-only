@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 // "$Id: FL_API.h 8500 2011-03-03 09:20:46Z bgbnbigben $"
 //
 // This file is included by all FLTK header files. Originally it was to
@@ -28,49 +27,11 @@
 //    http://www.fltk.org/str.php
 #ifndef FL_API
 
-#if _MSC_VER > 1000
-# pragma once
-// suppress vc2005 warnings: 
-// C4312 because we have no problem to cast a smaller type to a greater (potentially 64bit) one
-// and C4996 (deprecated C-lib calls like strcpy that should be _strcpy, etc ...)
-# pragma warning(disable:4312 4996)
-#endif
-
-#if !defined(DOXYGEN) && defined(_WIN32) && defined(FL_SHARED)
-#  ifdef FL_LIBRARY
-#    define FL_API	__declspec(dllexport)
-#  else
-#    define FL_API	__declspec(dllimport)
-#  endif
-#  ifdef FL_IMAGES_LIBRARY
-#    define FL_IMAGES_API	__declspec(dllexport)
-#  else
-#    define FL_IMAGES_API	__declspec(dllimport)
-#  endif
-#  ifdef FL_GLUT_LIBRARY
-#    define FL_GLUT_API		__declspec(dllexport)
-#  else
-#    define FL_GLUT_API		__declspec(dllimport)
-#  endif
-#  ifdef FL_FORMS_LIBRARY
-#    define FL_FORMS_API	__declspec(dllexport)
-#  else
-#    define FL_FORMS_API	__declspec(dllimport)
-#  endif
-#  ifdef FL_GL_LIBRARY
-#    define FL_GL_API		__declspec(dllexport)
-#  else
-#    define FL_GL_API		__declspec(dllimport)
-#  endif
-#else
 #  define FL_API
 #  define FL_IMAGES_API
 #  define FL_GLUT_API
 #  define FL_FORMS_API
 #  define FL_GL_API
-#endif
-
-typedef unsigned char uchar;
 
 #endif
 

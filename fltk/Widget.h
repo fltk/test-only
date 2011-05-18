@@ -1,4 +1,4 @@
-#error header has not been ported to 3.0 yet
+//
 // "$Id: Widget.h 8636 2011-05-06 08:01:12Z bgbnbigben $"
 //
 // Copyright 1998-2006 by Bill Spitzak and others.
@@ -25,6 +25,9 @@
 #ifndef fltk_Widget_h
 #define fltk_Widget_h
 
+#include <fltk3/Wrapper.h>
+#include <fltk3/Widget.h>
+
 #include "Style.h"
 #include "Rectangle.h"
 
@@ -47,14 +50,25 @@ typedef void (Callback1)(Widget*, long);
 FL_API Font* font(int);
 #endif
 
-class FL_API Widget : public Rectangle {
+  class FL_API Widget : public fltk3::WidgetWrapper {
+  //  FIXME: 123 - this was derived from "public Rectangle"
+
+#if 0 // FIXME: 123
   // disable the copy assignment/constructors:
   Widget & operator=(const Widget &);
   Widget(const Widget &);
-
+#endif
+  
+protected:
+  Widget() {}
+  
 public:
-
-  Widget(int,int,int,int,const char* =0);
+  Widget(int x, int y, int w, int h, const char *label=0) {
+    _p = new fltk3::Widget(x, y, w, h, label);
+    _p->wrapper(this);
+  }
+  
+#if 0 // FIXME: 123
   virtual ~Widget();
 
   virtual void draw();
@@ -238,8 +252,13 @@ public:
   float leading()		const;
   unsigned char scrollbar_align() const;
   unsigned char scrollbar_width() const;
-
-  void box(Box*)		;
+#endif
+    
+    void box(Box *b) {
+      ((fltk3::Widget*)_p)->box(fltk3::_2to3_boxtype(b));
+    }
+    
+#if 0 // FIXME: 123
   void buttonbox(Box*)		;
   void focusbox(Box*)		;
   void glyph(Symbol*)		;
@@ -313,7 +332,7 @@ private:
   uchar			damage_;
   uchar			layout_damage_;
   uchar			when_;
-
+#endif
 };
 
 enum { // Widget::when() values

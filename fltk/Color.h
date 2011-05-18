@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id: Color.h 6233 2008-09-14 07:54:06Z spitzak $"
 //
@@ -36,6 +35,8 @@
 
 namespace fltk {
 
+#if 0 // FIXME: 123
+  
 /// \name fltk/Color.h
 //@{
 
@@ -121,6 +122,8 @@ FL_API Color get_color_index(Color index);
 FL_API void set_background(Color);
 FL_API Color nearest_index(Color);
 
+#endif
+  
 }
 
 //@}
