@@ -100,9 +100,9 @@ void fltk3::ClockOutput::draw(int X, int Y, int W, int H) {
   fltk3::push_matrix();
   fltk3::color(active_r() ? fltk3::FOREGROUND_COLOR : fltk3::inactive(fltk3::FOREGROUND_COLOR));
   for (int i=0; i<12; i++) {
-    if (i==6) rect(-0.5, 9, 1, 2);
-    else if (i==3 || i==0 || i== 9) rect(-0.5, 9.5, 1, 1);
-    else rect(-0.25, 9.5, .5, 1);
+    if (i==6) ::rect(-0.5, 9, 1, 2);
+    else if (i==3 || i==0 || i== 9) ::rect(-0.5, 9.5, 1, 1);
+    else ::rect(-0.25, 9.5, .5, 1);
     fltk3::rotate(-30);
   }
   fltk3::pop_matrix();

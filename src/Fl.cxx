@@ -1618,7 +1618,7 @@ void fltk3::Widget::damage(uchar fl) {
     Fl_X* i = Fl_X::i((fltk3::Window*)this);
     if (!i) return; // window not mapped, so ignore it
     if (i->region) {XDestroyRegion(i->region); i->region = 0;}
-    fltk3::damage_ |= fl;
+    damage_ |= fl;
     fltk3::damage(fltk3::DAMAGE_CHILD);
   }
 }
