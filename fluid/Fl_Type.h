@@ -459,7 +459,7 @@ class Fl_Pack_Type : public Fl_Group_Type {
   fltk3::MenuItem *subtypes() {return pack_type_menu;}
 public:
   virtual const char *type_name() {return pack_type_name;}
-  virtual const char *alt_type_name() {return "fltk::PackedGroup";}
+  virtual const char *alt_type_name() {return "fltk3::PackedGroup";}
   Fl_Widget_Type *_make() {return new Fl_Pack_Type();}
   int pixmapID() { return 22; }
   void copy_properties();

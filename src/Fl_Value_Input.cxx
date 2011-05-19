@@ -26,7 +26,7 @@
 //
 
 // FLTK widget for drag-adjusting a floating point value.
-// Warning: this works by making a child Fl_Input object, even
+// Warning: this works by making a child fltk3::Input object, even
 // though this object is *not* an fltk3::Group.  May be a kludge?
 
 #include <fltk3/run.h>
@@ -57,7 +57,7 @@ void Fl_Value_Input::draw() {
 }
 
 void Fl_Value_Input::resize(int X, int Y, int W, int H) {
-  Fl_Valuator::resize(X, Y, W, H);
+  fltk3::Valuator::resize(X, Y, W, H);
   input.resize(X, Y, W, H);
 }
 
@@ -123,7 +123,7 @@ int Fl_Value_Input::handle(int event) {
   fltk3::DOWN_BOX.
 */
 Fl_Value_Input::Fl_Value_Input(int X, int Y, int W, int H, const char* l)
-: Fl_Valuator(X, Y, W, H, l), input(X, Y, W, H, 0) {
+: fltk3::Valuator(X, Y, W, H, l), input(X, Y, W, H, 0) {
   soft_ = 0;
   if (input.parent())  // defeat automatic-add
     input.parent()->remove(input);

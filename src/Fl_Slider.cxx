@@ -41,7 +41,7 @@ void fltk3::Slider::_Slider() {
   size, and label string. The default boxtype is fltk3::DOWN_BOX.
 */
 fltk3::Slider::Slider(int X, int Y, int W, int H, const char* L)
-: Fl_Valuator(X, Y, W, H, L) {
+: fltk3::Valuator(X, Y, W, H, L) {
   box(fltk3::DOWN_BOX);
   _Slider();
 }
@@ -51,7 +51,7 @@ fltk3::Slider::Slider(int X, int Y, int W, int H, const char* L)
   size, and label string.
 */
 fltk3::Slider::Slider(uchar t, int X, int Y, int W, int H, const char* L)
-  : Fl_Valuator(X, Y, W, H, L) {
+  : fltk3::Valuator(X, Y, W, H, L) {
   type(t);
   box(t==fltk3::HOR_NICE_SLIDER || t==fltk3::VERT_NICE_SLIDER ?
       fltk3::FLAT_BOX : fltk3::DOWN_BOX);
@@ -73,7 +73,7 @@ void fltk3::Slider::slider_size(double v) {
 */
 void fltk3::Slider::bounds(double a, double b) {
   if (minimum() != a || maximum() != b) {
-    Fl_Valuator::bounds(a, b); 
+    fltk3::Valuator::bounds(a, b); 
     damage(fltk3::DAMAGE_EXPOSE);
   }
 }
@@ -84,7 +84,7 @@ void fltk3::Slider::bounds(double a, double b) {
   \param[in] size size of window in lines
   \param[in] first number of first line
   \param[in] total total number of lines
-  Returns Fl_Valuator::value(p)
+  Returns fltk3::Valuator::value(p)
  */
 int fltk3::Slider::scrollvalue(int pos, int size, int first, int total) {
   step(1, 1);

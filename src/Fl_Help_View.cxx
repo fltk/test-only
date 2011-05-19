@@ -3083,7 +3083,7 @@ Fl_Help_View::Fl_Help_View(int        xx,	// I - Left position
   hscrollbar_.step(8.0);
   hscrollbar_.show();
   hscrollbar_.callback(hscrollbar_callback);
-  hscrollbar_.type(FL_HORIZONTAL);
+  hscrollbar_.type(fltk3::HORIZONTAL);
   end();
 
   resize(xx, yy, ww, hh);

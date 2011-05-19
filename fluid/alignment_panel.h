@@ -49,10 +49,10 @@ extern fltk3::DoubleWindow *project_window;
 #include <fltk3/Group.h>
 #include <fltk3/Box.h>
 #include <fltk3/Input.h>
-extern void header_input_cb(Fl_Input*, void*);
-extern Fl_Input *header_file_input;
-extern void code_input_cb(Fl_Input*, void*);
-extern Fl_Input *code_file_input;
+extern void header_input_cb(fltk3::Input*, void*);
+extern fltk3::Input *header_file_input;
+extern void code_input_cb(fltk3::Input*, void*);
+extern fltk3::Input *code_file_input;
 #include <fltk3/CheckButton.h>
 extern void include_H_from_C_button_cb(fltk3::CheckButton*, void*);
 extern fltk3::CheckButton *include_H_from_C_button;
@@ -61,13 +61,13 @@ extern fltk3::CheckButton *use_FL_COMMAND_button;
 #include <fltk3/Choice.h>
 extern void i18n_type_cb(fltk3::Choice*, void*);
 extern fltk3::Choice *i18n_type_chooser;
-extern void i18n_text_cb(Fl_Input*, void*);
-extern Fl_Input *i18n_include_input;
-extern Fl_Input *i18n_file_input;
+extern void i18n_text_cb(fltk3::Input*, void*);
+extern fltk3::Input *i18n_include_input;
+extern fltk3::Input *i18n_file_input;
 #include <fltk3/IntInput.h>
-extern void i18n_int_cb(Fl_Int_Input*, void*);
-extern Fl_Int_Input *i18n_set_input;
-extern Fl_Input *i18n_function_input;
+extern void i18n_int_cb(fltk3::IntInput*, void*);
+extern fltk3::IntInput *i18n_set_input;
+extern fltk3::Input *i18n_function_input;
 fltk3::DoubleWindow* make_project_window();
 extern fltk3::MenuItem menu_i18n_type_chooser[];
 extern void i18n_cb(fltk3::Choice *,void *);
@@ -85,7 +85,7 @@ extern Fl_Spinner *recent_spinner;
 fltk3::DoubleWindow* make_settings_window();
 extern fltk3::MenuItem menu_scheme_choice[];
 extern fltk3::DoubleWindow *shell_window;
-extern Fl_Input *shell_command_input;
+extern fltk3::Input *shell_command_input;
 extern fltk3::CheckButton *shell_writecode_button;
 extern fltk3::CheckButton *shell_writemsgs_button;
 extern fltk3::CheckButton *shell_savefl_button;
@@ -97,10 +97,10 @@ extern Fl_Text_Display *shell_run_display;
 extern fltk3::ReturnButton *shell_run_button;
 fltk3::DoubleWindow* make_shell_window();
 extern fltk3::DoubleWindow *grid_window;
-extern void grid_cb(Fl_Int_Input*, long);
-extern Fl_Int_Input *horizontal_input;
-extern Fl_Int_Input *vertical_input;
-extern Fl_Int_Input *snap_input;
+extern void grid_cb(fltk3::IntInput*, long);
+extern fltk3::IntInput *horizontal_input;
+extern fltk3::IntInput *vertical_input;
+extern fltk3::IntInput *snap_input;
 extern void guides_cb(fltk3::CheckButton*, long);
 extern fltk3::CheckButton *guides_toggle;
 #include <fltk3/RoundButton.h>

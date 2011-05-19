@@ -35,14 +35,14 @@
 #include <fltk3/Group.h>
 extern void propagate_load(fltk3::Group*, void*);
 #include <fltk3/Input.h>
-extern void label_cb(Fl_Input*, void*);
+extern void label_cb(fltk3::Input*, void*);
 #include <fltk3/Choice.h>
 extern fltk3::MenuItem labeltypemenu[];
 extern void labeltype_cb(fltk3::Choice*, void*);
-extern void image_cb(Fl_Input*, void*);
+extern void image_cb(fltk3::Input*, void*);
 #include <fltk3/Button.h>
 extern void image_browse_cb(fltk3::Button*, void*);
-extern void inactive_cb(Fl_Input*, void*);
+extern void inactive_cb(fltk3::Input*, void*);
 extern void inactive_browse_cb(fltk3::Button*, void*);
 extern void align_cb(fltk3::Button*, void*);
 extern void align_text_image_cb(fltk3::Choice*, void*);
@@ -72,7 +72,7 @@ extern void max_h_cb(Fl_Value_Input*, void*);
 extern void set_max_size_cb(fltk3::Button*, void*);
 #include "Shortcut_Button.h"
 extern void shortcut_in_cb(Shortcut_Button*, void*);
-extern void xclass_cb(Fl_Input*, void*);
+extern void xclass_cb(fltk3::Input*, void*);
 extern void border_cb(fltk3::LightButton*, void*);
 extern void modal_cb(fltk3::LightButton*, void*);
 extern void non_modal_cb(fltk3::LightButton*, void*);
@@ -80,7 +80,7 @@ extern void visible_cb(fltk3::LightButton*, void*);
 extern void active_cb(fltk3::LightButton*, void*);
 extern void resizable_cb(fltk3::LightButton*, void*);
 extern void hotspot_cb(fltk3::LightButton*, void*);
-extern void tooltip_cb(Fl_Input*, void*);
+extern void tooltip_cb(fltk3::Input*, void*);
 extern fltk3::MenuItem fontmenu[];
 extern void labelfont_cb(fltk3::Choice*, void*);
 extern void labelsize_cb(Fl_Value_Input*, void*);
@@ -93,19 +93,19 @@ extern void color2_cb(fltk3::Button*, void*);
 extern void textfont_cb(fltk3::Choice*, void*);
 extern void textsize_cb(Fl_Value_Input*, void*);
 extern void textcolor_cb(fltk3::Button*, void*);
-extern void subclass_cb(Fl_Input*, void*);
+extern void subclass_cb(fltk3::Input*, void*);
 extern void subtype_cb(fltk3::Choice*, void*);
-extern void name_cb(Fl_Input*, void*);
+extern void name_cb(fltk3::Input*, void*);
 extern void name_public_member_cb(fltk3::Choice*, void*);
 extern void name_public_cb(fltk3::Choice*, void*);
-extern void v_input_cb(Fl_Input*, void*);
-extern Fl_Input *v_input[4];
+extern void v_input_cb(fltk3::Input*, void*);
+extern fltk3::Input *v_input[4];
 #include "CodeEditor.h"
 extern void callback_cb(CodeEditor*, void*);
-extern void user_data_cb(Fl_Input*, void*);
+extern void user_data_cb(fltk3::Input*, void*);
 extern fltk3::MenuItem whenmenu[];
 extern void when_cb(fltk3::Choice*, void*);
-extern void user_data_type_cb(Fl_Input*, void*);
+extern void user_data_type_cb(fltk3::Input*, void*);
 extern void when_button_cb(fltk3::LightButton*, void*);
 extern void overlay_cb(fltk3::Button*, void*);
 extern void revert_cb(fltk3::Button*, void*);

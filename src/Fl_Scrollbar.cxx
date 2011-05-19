@@ -268,7 +268,7 @@ void Fl_Scrollbar::draw() {
 
 /**
   Creates a new Fl_Scrollbar widget with given position, size, and label.
-  You need to do type(FL_HORIZONTAL) if you want a horizontal scrollbar.
+  You need to do type(fltk3::HORIZONTAL) if you want a horizontal scrollbar.
 */
 Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
   : fltk3::Slider(X, Y, W, H, L) {

@@ -40,7 +40,7 @@
 Fl_Toggle_Button *imageb, *imageovertextb, *imagenexttotextb, *imagebackdropb;
 Fl_Toggle_Button *leftb,*rightb,*topb,*bottomb,*insideb,*clipb,*wrapb;
 Fl_Box *text;
-Fl_Input *input;
+fltk3::Input *input;
 fltk3::HorValueSlider *fonts;
 fltk3::HorValueSlider *sizes;
 Fl_Double_Window *window;
@@ -127,7 +127,7 @@ int main(int argc, char **argv) {
   
   window = new Fl_Double_Window(400,400);
 
-  input = new Fl_Input(50,375,350,25);
+  input = new fltk3::Input(50,375,350,25);
   input->static_value("The quick brown fox jumped over the lazy dog.");
   input->when(FL_WHEN_CHANGED);
   input->callback(input_cb);

@@ -157,16 +157,16 @@ int main(int argc, char **argv) {
     new testwindow(FL_UP_BOX,400,400,"outer");
   new Fl_Toggle_Button(310,310,80,80,"&outer");
   new EnterExit(10,310,80,80,"enterexit");
-  new Fl_Input(160,310,140,25,"input1:");
-  new Fl_Input(160,340,140,25,"input2:");
+  new fltk3::Input(160,310,140,25,"input1:");
+  new fltk3::Input(160,340,140,25,"input2:");
   (new Fl_Menu_Button(5,150,80,25,"menu&1"))->add(bigmess);
   testwindow *subwindow =
     new testwindow(FL_DOWN_BOX,100,100,200,200,"inner");
   new Fl_Toggle_Button(110,110,80,80,"&inner");
   new EnterExit(10,110,80,80,"enterexit");
   (new Fl_Menu_Button(50,20,80,25,"menu&2"))->add(bigmess);
-  new Fl_Input(55,50,140,25,"input1:");
-  new Fl_Input(55,80,140,25,"input2:");
+  new fltk3::Input(55,50,140,25,"input1:");
+  new fltk3::Input(55,80,140,25,"input2:");
   subwindow->resizable(subwindow);
   window->resizable(subwindow);
   subwindow->end();

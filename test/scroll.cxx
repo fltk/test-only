@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_Scroll test program for the Fast Light Tool Kit (FLTK).
+// fltk3::ScrollGroup test program for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
 //
@@ -63,7 +63,7 @@ void Drawing::draw() {
   fl_pop_matrix();
 }
 
-Fl_Scroll* thescroll;
+fltk3::ScrollGroup* thescroll;
 
 void box_cb(Fl_Widget* o, void*) {
   thescroll->box(((Fl_Button*)o)->value() ? FL_DOWN_FRAME : FL_NO_BOX);
@@ -77,12 +77,12 @@ void type_cb(Fl_Widget*, void* v) {
 
 fltk3::MenuItem choices[] = {
   {"0", 0, type_cb, (void*)0},
-  {"HORIZONTAL", 0, type_cb, (void*)Fl_Scroll::HORIZONTAL},
-  {"VERTICAL", 0, type_cb, (void*)Fl_Scroll::VERTICAL},
-  {"BOTH", 0, type_cb, (void*)Fl_Scroll::BOTH},
-  {"HORIZONTAL_ALWAYS", 0, type_cb, (void*)Fl_Scroll::HORIZONTAL_ALWAYS},
-  {"VERTICAL_ALWAYS", 0, type_cb, (void*)Fl_Scroll::VERTICAL_ALWAYS},
-  {"BOTH_ALWAYS", 0, type_cb, (void*)Fl_Scroll::BOTH_ALWAYS},
+  {"HORIZONTAL", 0, type_cb, (void*)fltk3::ScrollGroup::HORIZONTAL},
+  {"VERTICAL", 0, type_cb, (void*)fltk3::ScrollGroup::VERTICAL},
+  {"BOTH", 0, type_cb, (void*)fltk3::ScrollGroup::BOTH},
+  {"HORIZONTAL_ALWAYS", 0, type_cb, (void*)fltk3::ScrollGroup::HORIZONTAL_ALWAYS},
+  {"VERTICAL_ALWAYS", 0, type_cb, (void*)fltk3::ScrollGroup::VERTICAL_ALWAYS},
+  {"BOTH_ALWAYS", 0, type_cb, (void*)fltk3::ScrollGroup::BOTH_ALWAYS},
   {0}
 };
 
@@ -102,7 +102,7 @@ fltk3::MenuItem align_choices[] = {
 int main(int argc, char** argv) {
   Fl_Window window(5*75,400);
   window.box(FL_NO_BOX);
-  Fl_Scroll scroll(0,0,5*75,300);
+  fltk3::ScrollGroup scroll(0,0,5*75,300);
 
   int n = 0;
   for (int y=0; y<16; y++) for (int x=0; x<5; x++) {
@@ -133,7 +133,7 @@ int main(int argc, char** argv) {
   thescroll = &scroll;
 
   //scroll.box(FL_DOWN_BOX);
-  //scroll.type(Fl_Scroll::VERTICAL);
+  //scroll.type(fltk3::ScrollGroup::VERTICAL);
   window.end();
   window.show(argc,argv);
   return fltk3::run();

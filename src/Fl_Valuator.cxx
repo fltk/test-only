@@ -34,9 +34,9 @@
 #include <stdio.h>
 #include "flstring.h"
 
-Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
+fltk3::Valuator::Valuator(int X, int Y, int W, int H, const char* L)
 /**
-  Creates a new Fl_Valuator widget using the given position,
+  Creates a new fltk3::Valuator widget using the given position,
   size, and label string. The default boxtype is fltk3::NO_BOX.
 */
 : fltk3::Widget(X,Y,W,H,L) {
@@ -52,8 +52,8 @@ Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
 
 const double epsilon = 4.66e-10;
 
-/**  See double Fl_Valuator::step() const */
-void Fl_Valuator::step(double s) {
+/**  See double fltk3::Valuator::step() const */
+void fltk3::Valuator::step(double s) {
   if (s < 0) s = -s;
   A = rint(s);
   B = 1;
@@ -61,12 +61,12 @@ void Fl_Valuator::step(double s) {
 }
 
 /**  Sets the step value to 1/10<SUP>digits</SUP>.*/
-void Fl_Valuator::precision(int p) {
+void fltk3::Valuator::precision(int p) {
   A = 1.0;
   for (B = 1; p--;) B *= 10;
 }
 /** Asks for partial redraw */
-void Fl_Valuator::value_damage() {damage(fltk3::DAMAGE_EXPOSE);} // by default do partial-redraw
+void fltk3::Valuator::value_damage() {damage(fltk3::DAMAGE_EXPOSE);} // by default do partial-redraw
 
 /**
     Sets the current value. The new value is <I>not</I>
@@ -78,7 +78,7 @@ void Fl_Valuator::value_damage() {damage(fltk3::DAMAGE_EXPOSE);} // by default d
     but it will be turned off by value(x) and just before doing a callback
     (the callback can turn it back on if desired).
 */
-int Fl_Valuator::value(double v) {
+int fltk3::Valuator::value(double v) {
   clear_changed();
   if (v == value_) return 0;
   value_ = v;
@@ -86,7 +86,7 @@ int Fl_Valuator::value(double v) {
   return 1;
 }
 /** Clamps the value, but accepts v if the previous value is not already out of range */
-double Fl_Valuator::softclamp(double v) {
+double fltk3::Valuator::softclamp(double v) {
   int which = (min<=max);
   double p = previous_value_;
   if ((v<min)==which && p!=min && (p<min)!=which) return min;
@@ -94,9 +94,9 @@ double Fl_Valuator::softclamp(double v) {
   else return v;
 }
 
-// inline void Fl_Valuator::handle_push() {previous_value_ = value_;}
+// inline void fltk3::Valuator::handle_push() {previous_value_ = value_;}
 /** Called during a drag operation, after an fltk3::WHEN_CHANGED event is received and before the callback. */
-void Fl_Valuator::handle_drag(double v) {
+void fltk3::Valuator::handle_drag(double v) {
   if (v != value_) {
     value_ = v;
     value_damage();
@@ -105,7 +105,7 @@ void Fl_Valuator::handle_drag(double v) {
   }
 }
 /** Called after an fltk3::WHEN_RELEASE event is received and before the callback. */
-void Fl_Valuator::handle_release() {
+void fltk3::Valuator::handle_release() {
   if (when()&fltk3::WHEN_RELEASE) {
     // insure changed() is off even if no callback is done.  It may have
     // been turned on by the drag, and then the slider returned to it's
@@ -122,13 +122,13 @@ void Fl_Valuator::handle_release() {
   Round the passed value to the nearest step increment.  Does
   nothing if step is zero.
 */
-double Fl_Valuator::round(double v) {
+double fltk3::Valuator::round(double v) {
   if (A) return rint(v*B/A)*A/B;
   else return v;
 }
 
 /**  Clamps the passed value to the valuator range.*/
-double Fl_Valuator::clamp(double v) {
+double fltk3::Valuator::clamp(double v) {
   if ((v<min)==(min<=max)) return min;
   else if ((v>max)==(min<=max)) return max;
   else return v;
@@ -139,7 +139,7 @@ double Fl_Valuator::clamp(double v) {
   step was set to zero it uses fabs(maximum() - minimum()) /
   100.
 */
-double Fl_Valuator::increment(double v, int n) {
+double fltk3::Valuator::increment(double v, int n) {
   if (!A) return v+n*(max-min)/100;
   if (min > max) n = -n;
   return (rint(v*B/A)+n)*A/B;
@@ -165,7 +165,7 @@ double Fl_Valuator::increment(double v, int n) {
   
   <P>You may override this function to create your own text formatting.
 */
-int Fl_Valuator::format(char* buffer) {
+int fltk3::Valuator::format(char* buffer) {
   double v = value();
   // MRS: THIS IS A HACK - RECOMMEND ADDING BUFFER SIZE ARGUMENT
   if (!A || !B) return snprintf(buffer, 128, "%g", v);

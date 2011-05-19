@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
     }
     // skip if intersection:
     if (n < window.children()) continue;
-    window.insert(*(new Fl_Input(x,y,w,h)),j);
+    window.insert(*(new fltk3::Input(x,y,w,h)),j);
   }
   window.show(argc, argv);
   return fltk3::run();

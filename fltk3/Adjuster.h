@@ -49,7 +49,7 @@ namespace fltk3 {
    increments by 10 times the  amount dragging by a pixel does. Shift +
    click decrements by 10 times  the amount.
    */
-  class FLTK3_EXPORT Adjuster : public Fl_Valuator {
+  class FLTK3_EXPORT Adjuster : public fltk3::Valuator {
     int drag;
     int ix;
     int soft_;

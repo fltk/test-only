@@ -53,7 +53,7 @@
   </UL>
 
 */
-class FLTK3_EXPORT Fl_Dial : public Fl_Valuator {
+class FLTK3_EXPORT Fl_Dial : public fltk3::Valuator {
 
   short a1,a2;
 

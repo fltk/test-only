@@ -47,7 +47,7 @@
   <P ALIGN=CENTER>\image html Fl_Value_Output.png 
   \image latex  Fl_Value_Output.png "Fl_Value_Output" width=4cm
 */
-class FLTK3_EXPORT Fl_Value_Output : public Fl_Valuator {
+class FLTK3_EXPORT Fl_Value_Output : public fltk3::Valuator {
   fltk3::Font textfont_;
   fltk3::Fontsize textsize_;
   uchar soft_;

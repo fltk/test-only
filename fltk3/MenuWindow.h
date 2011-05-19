@@ -39,7 +39,7 @@
   available so that the menu don't force the rest of the window to
   redraw.
 */
-class FLTK3_EXPORT Fl_Menu_Window : public Fl_Single_Window {
+class FLTK3_EXPORT Fl_Menu_Window : public fltk3::SingleWindow {
 public:
   void show();
   void erase();
@@ -55,10 +55,10 @@ public:
   ~Fl_Menu_Window();
   /** Creates a new Fl_Menu_Window widget using the given size, and label string. */
   Fl_Menu_Window(int W, int H, const char *l = 0)
-    : Fl_Single_Window(W,H,l) { image(0); }
+    : fltk3::SingleWindow(W,H,l) { image(0); }
   /** Creates a new Fl_Menu_Window widget using the given position, size, and label string. */
   Fl_Menu_Window(int X, int Y, int W, int H, const char *l = 0)
-    : Fl_Single_Window(X,Y,W,H,l) { image(0); }
+    : fltk3::SingleWindow(X,Y,W,H,l) { image(0); }
 };
 
 #endif

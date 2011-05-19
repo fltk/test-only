@@ -38,9 +38,9 @@ static void cb_Close(fltk3::Button*, void*) {
   project_window->hide();
 }
 
-Fl_Input *header_file_input=(Fl_Input *)0;
+fltk3::Input *header_file_input=(fltk3::Input *)0;
 
-Fl_Input *code_file_input=(Fl_Input *)0;
+fltk3::Input *code_file_input=(fltk3::Input *)0;
 
 fltk3::CheckButton *include_H_from_C_button=(fltk3::CheckButton *)0;
 
@@ -55,13 +55,13 @@ fltk3::MenuItem menu_i18n_type_chooser[] = {
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Input *i18n_include_input=(Fl_Input *)0;
+fltk3::Input *i18n_include_input=(fltk3::Input *)0;
 
-Fl_Input *i18n_file_input=(Fl_Input *)0;
+fltk3::Input *i18n_file_input=(fltk3::Input *)0;
 
-Fl_Int_Input *i18n_set_input=(Fl_Int_Input *)0;
+fltk3::IntInput *i18n_set_input=(fltk3::IntInput *)0;
 
-Fl_Input *i18n_function_input=(Fl_Input *)0;
+fltk3::Input *i18n_function_input=(fltk3::Input *)0;
 
 fltk3::DoubleWindow* make_project_window() {
   { project_window = new fltk3::DoubleWindow(399, 252, "Project Settings");
@@ -76,22 +76,22 @@ fltk3::DoubleWindow* make_project_window() {
         { fltk3::Box* o = new fltk3::Box(100, 49, 236, 49, "Use \"name.ext\" to set a file name or just \".ext\" to set extension.");
           o->align(fltk3::Align(fltk3::ALIGN_WRAP|fltk3::ALIGN_INSIDE));
         } // fltk3::Box* o
-        { header_file_input = new Fl_Input(99, 103, 272, 20, "Header File:");
+        { header_file_input = new fltk3::Input(99, 103, 272, 20, "Header File:");
           header_file_input->tooltip("The name of the generated header file.");
           header_file_input->box(fltk3::THIN_DOWN_BOX);
           header_file_input->labelfont(1);
           header_file_input->textfont(4);
           header_file_input->callback((fltk3::Callback*)header_input_cb, (void*)(1));
           header_file_input->when(fltk3::WHEN_CHANGED);
-        } // Fl_Input* header_file_input
-        { code_file_input = new Fl_Input(100, 128, 272, 20, "Code File:");
+        } // fltk3::Input* header_file_input
+        { code_file_input = new fltk3::Input(100, 128, 272, 20, "Code File:");
           code_file_input->tooltip("The name of the generated code file.");
           code_file_input->box(fltk3::THIN_DOWN_BOX);
           code_file_input->labelfont(1);
           code_file_input->textfont(4);
           code_file_input->callback((fltk3::Callback*)code_input_cb, (void*)(1));
           code_file_input->when(fltk3::WHEN_CHANGED);
-        } // Fl_Input* code_file_input
+        } // fltk3::Input* code_file_input
         { include_H_from_C_button = new fltk3::CheckButton(100, 153, 272, 20, "Include Header from Code");
           include_H_from_C_button->tooltip("Include the header file from the code file.");
           include_H_from_C_button->down_box(fltk3::DOWN_BOX);
@@ -113,35 +113,35 @@ fltk3::DoubleWindow* make_project_window() {
           i18n_type_chooser->callback((fltk3::Callback*)i18n_type_cb);
           i18n_type_chooser->menu(menu_i18n_type_chooser);
         } // fltk3::Choice* i18n_type_chooser
-        { i18n_include_input = new Fl_Input(100, 78, 272, 20, "#include:");
+        { i18n_include_input = new fltk3::Input(100, 78, 272, 20, "#include:");
           i18n_include_input->tooltip("The include file for internationalization.");
           i18n_include_input->box(fltk3::THIN_DOWN_BOX);
           i18n_include_input->labelfont(1);
           i18n_include_input->textfont(4);
           i18n_include_input->callback((fltk3::Callback*)i18n_text_cb);
-        } // Fl_Input* i18n_include_input
-        { i18n_file_input = new Fl_Input(100, 104, 272, 20, "File:");
+        } // fltk3::Input* i18n_include_input
+        { i18n_file_input = new fltk3::Input(100, 104, 272, 20, "File:");
           i18n_file_input->tooltip("The name of the message catalog.");
           i18n_file_input->box(fltk3::THIN_DOWN_BOX);
           i18n_file_input->labelfont(1);
           i18n_file_input->textfont(4);
           i18n_file_input->callback((fltk3::Callback*)i18n_text_cb);
-        } // Fl_Input* i18n_file_input
-        { i18n_set_input = new Fl_Int_Input(100, 128, 272, 20, "Set:");
+        } // fltk3::Input* i18n_file_input
+        { i18n_set_input = new fltk3::IntInput(100, 128, 272, 20, "Set:");
           i18n_set_input->tooltip("The message set number.");
           i18n_set_input->type(2);
           i18n_set_input->box(fltk3::THIN_DOWN_BOX);
           i18n_set_input->labelfont(1);
           i18n_set_input->textfont(4);
           i18n_set_input->callback((fltk3::Callback*)i18n_int_cb);
-        } // Fl_Int_Input* i18n_set_input
-        { i18n_function_input = new Fl_Input(100, 103, 272, 20, "Function:");
+        } // fltk3::IntInput* i18n_set_input
+        { i18n_function_input = new fltk3::Input(100, 103, 272, 20, "Function:");
           i18n_function_input->tooltip("The function to call to internationalize the labels and tooltips.");
           i18n_function_input->box(fltk3::THIN_DOWN_BOX);
           i18n_function_input->labelfont(1);
           i18n_function_input->textfont(4);
           i18n_function_input->callback((fltk3::Callback*)i18n_text_cb);
-        } // Fl_Input* i18n_function_input
+        } // fltk3::Input* i18n_function_input
         o->end();
       } // fltk3::Group* o
       o->end();
@@ -286,9 +286,9 @@ fltk3::DoubleWindow* make_settings_window() {
 
 fltk3::DoubleWindow *shell_window=(fltk3::DoubleWindow *)0;
 
-Fl_Input *shell_command_input=(Fl_Input *)0;
+fltk3::Input *shell_command_input=(fltk3::Input *)0;
 
-static void cb_shell_command_input(Fl_Input*, void*) {
+static void cb_shell_command_input(fltk3::Input*, void*) {
   fluid_prefs.set("shell_command", shell_command_input->value());
 }
 
@@ -326,14 +326,14 @@ static void cb_shell_run_button(fltk3::ReturnButton*, void*) {
 
 fltk3::DoubleWindow* make_shell_window() {
   { shell_window = new fltk3::DoubleWindow(365, 125, "Shell Command");
-    { shell_command_input = new Fl_Input(10, 27, 347, 25, "Command:");
+    { shell_command_input = new fltk3::Input(10, 27, 347, 25, "Command:");
       shell_command_input->labelfont(1);
       shell_command_input->callback((fltk3::Callback*)cb_shell_command_input);
       shell_command_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       char buf[1024];
       fluid_prefs.get("shell_command", buf, "", sizeof(buf));
       shell_command_input->value(buf);
-    } // Fl_Input* shell_command_input
+    } // fltk3::Input* shell_command_input
     { shell_writecode_button = new fltk3::CheckButton(128, 61, 93, 19, "Write Code");
       shell_writecode_button->down_box(fltk3::DOWN_BOX);
       shell_writecode_button->callback((fltk3::Callback*)cb_shell_writecode_button);
@@ -381,11 +381,11 @@ fltk3::DoubleWindow* make_shell_window() {
 
 fltk3::DoubleWindow *grid_window=(fltk3::DoubleWindow *)0;
 
-Fl_Int_Input *horizontal_input=(Fl_Int_Input *)0;
+fltk3::IntInput *horizontal_input=(fltk3::IntInput *)0;
 
-Fl_Int_Input *vertical_input=(Fl_Int_Input *)0;
+fltk3::IntInput *vertical_input=(fltk3::IntInput *)0;
 
-Fl_Int_Input *snap_input=(Fl_Int_Input *)0;
+fltk3::IntInput *snap_input=(fltk3::IntInput *)0;
 
 fltk3::CheckButton *guides_toggle=(fltk3::CheckButton *)0;
 
@@ -397,30 +397,30 @@ fltk3::RoundButton *def_widget_size[6]={(fltk3::RoundButton *)0};
 
 fltk3::DoubleWindow* make_layout_window() {
   { grid_window = new fltk3::DoubleWindow(285, 245, "Layout Settings");
-    { Fl_Int_Input* o = horizontal_input = new Fl_Int_Input(106, 10, 50, 25, "x");
+    { fltk3::IntInput* o = horizontal_input = new fltk3::IntInput(106, 10, 50, 25, "x");
       horizontal_input->tooltip("Horizontal grid spacing.");
       horizontal_input->type(2);
       horizontal_input->box(fltk3::THIN_DOWN_BOX);
       horizontal_input->callback((fltk3::Callback*)grid_cb, (void*)(1));
       horizontal_input->align(fltk3::Align(fltk3::ALIGN_RIGHT));
       o->when(fltk3::WHEN_RELEASE|fltk3::WHEN_ENTER_KEY);
-    } // Fl_Int_Input* horizontal_input
-    { Fl_Int_Input* o = vertical_input = new Fl_Int_Input(166, 10, 50, 25, "pixels");
+    } // fltk3::IntInput* horizontal_input
+    { fltk3::IntInput* o = vertical_input = new fltk3::IntInput(166, 10, 50, 25, "pixels");
       vertical_input->tooltip("Vertical grid spacing.");
       vertical_input->type(2);
       vertical_input->box(fltk3::THIN_DOWN_BOX);
       vertical_input->callback((fltk3::Callback*)grid_cb, (void*)(2));
       vertical_input->align(fltk3::Align(fltk3::ALIGN_RIGHT));
       o->when(fltk3::WHEN_RELEASE|fltk3::WHEN_ENTER_KEY);
-    } // Fl_Int_Input* vertical_input
-    { Fl_Int_Input* o = snap_input = new Fl_Int_Input(106, 45, 50, 25, "pixel snap");
+    } // fltk3::IntInput* vertical_input
+    { fltk3::IntInput* o = snap_input = new fltk3::IntInput(106, 45, 50, 25, "pixel snap");
       snap_input->tooltip("Snap to grid within this many pixels.");
       snap_input->type(2);
       snap_input->box(fltk3::THIN_DOWN_BOX);
       snap_input->callback((fltk3::Callback*)grid_cb, (void*)(3));
       snap_input->align(fltk3::Align(fltk3::ALIGN_RIGHT));
       o->when(fltk3::WHEN_RELEASE|fltk3::WHEN_ENTER_KEY);
-    } // Fl_Int_Input* snap_input
+    } // fltk3::IntInput* snap_input
     { guides_toggle = new fltk3::CheckButton(106, 80, 110, 25, "Show Guides");
       guides_toggle->tooltip("Show distance and alignment guides in overlay");
       guides_toggle->down_box(fltk3::DOWN_BOX);

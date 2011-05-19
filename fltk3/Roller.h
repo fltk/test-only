@@ -41,7 +41,7 @@
   <P ALIGN=CENTER>\image html Fl_Roller.png 
   \image latex Fl_Roller.png "Fl_Roller" width=4cm
 */
-class FLTK3_EXPORT Fl_Roller : public Fl_Valuator {
+class FLTK3_EXPORT Fl_Roller : public fltk3::Valuator {
 protected:
   void draw();
 public:

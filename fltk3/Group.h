@@ -138,7 +138,7 @@ namespace fltk3 {
      
      The resizable may be set to the group itself, in which case all the
      contents are resized. This is the default value for fltk3::Group,
-     although NULL is the default for fltk3::Window and Fl_Pack.
+     although NULL is the default for fltk3::Window and fltk3::PackedGroup.
      
      If the resizable is NULL then all widgets remain a fixed size
      and distance from the top-left corner.

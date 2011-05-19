@@ -38,7 +38,7 @@
 
 Fl_Output *text;
 Fl_Multiline_Output *text2;
-Fl_Input *input;
+fltk3::Input *input;
 Fl_Value_Slider *fonts;
 Fl_Value_Slider *sizes;
 Fl_Double_Window *window;
@@ -65,7 +65,7 @@ void input_cb(Fl_Widget *,void *) {
 int main(int argc, char **argv) {
   window = new Fl_Double_Window(400,400);
 
-  input = new Fl_Input(50,375,350,25);
+  input = new fltk3::Input(50,375,350,25);
   input->static_value("The quick brown fox\njumped over\nthe lazy dog.");
   input->when(FL_WHEN_CHANGED);
   input->callback(input_cb);

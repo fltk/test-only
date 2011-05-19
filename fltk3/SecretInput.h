@@ -26,28 +26,32 @@
 //
 
 /* \file
-   Fl_Secret_Input widget . */
+ Fl_Secret_Input widget . */
 
 #ifndef Fltk3_Secret_Input_H
 #define Fltk3_Secret_Input_H
 
 #include "Input.h"
 
-/**
-  The Fl_Secret_Input class is a subclass of Fl_Input
-  that displays its input as a string of asterisks.  This subclass is
-  usually used to receive passwords and other "secret" information.
-*/
-class FLTK3_EXPORT Fl_Secret_Input : public Fl_Input {
-public:
+namespace fltk3 {
+  
   /**
-    Creates a new Fl_Secret_Input widget using the given
-    position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
-    <P>Inherited destructor destroys the widget and any value associated with it.
-  */
-  Fl_Secret_Input(int X,int Y,int W,int H,const char *l = 0)
-    : Fl_Input(X,Y,W,H,l) {type(FL_SECRET_INPUT);}
-};
+   The Fl_Secret_Input class is a subclass of fltk3::Input
+   that displays its input as a string of asterisks.  This subclass is
+   usually used to receive passwords and other "secret" information.
+   */
+  class FLTK3_EXPORT SecretInput : public fltk3::Input {
+  public:
+    /**
+     Creates a new Fl_Secret_Input widget using the given
+     position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
+     <P>Inherited destructor destroys the widget and any value associated with it.
+     */
+    SecretInput(int X,int Y,int W,int H,const char *l = 0)
+    : fltk3::Input(X,Y,W,H,l) {type(FL_SECRET_INPUT);}
+  };
+  
+}
 
 #endif
 

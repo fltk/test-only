@@ -71,7 +71,7 @@ class FLTK3_EXPORT Fl_Input_Choice : public fltk3::Group {
 	Fl_Menu_Button(x,y,w,h,l) { box(fltk3::UP_BOX); }
   };
 
-  Fl_Input *inp_;
+  fltk3::Input *inp_;
   InputMenuButton *menu_;
 
   static void menu_cb(fltk3::Widget*, void *data) { 
@@ -141,8 +141,8 @@ public:
   */
   Fl_Input_Choice (int x,int y,int w,int h,const char*l=0) : fltk3::Group(x,y,w,h,l) {
     fltk3::Group::box(fltk3::DOWN_BOX);
-    align(fltk3::ALIGN_LEFT);				// default like Fl_Input
-    inp_ = new Fl_Input(inp_x(), inp_y(),
+    align(fltk3::ALIGN_LEFT);				// default like fltk3::Input
+    inp_ = new fltk3::Input(inp_x(), inp_y(),
 			inp_w(), inp_h());
     inp_->callback(inp_cb, (void*)this);
     inp_->box(fltk3::FLAT_BOX);		// cosmetic
@@ -210,9 +210,9 @@ public:
   /**    Returns a reference to the internal Fl_Menu_Button widget.  */
   Fl_Menu_Button *menubutton() { return menu_; }
   /**
-    Returns a reference to the internal Fl_Input widget.</p>
+    Returns a reference to the internal fltk3::Input widget.</p>
   */
-  Fl_Input *input() { return inp_; }
+  fltk3::Input *input() { return inp_; }
 };
 
 #endif // !Fl_Input_Choice_H

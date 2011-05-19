@@ -140,17 +140,17 @@ Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : fltk3::Group(X,Y
   
   vscrollbar = new Fl_Scrollbar(x()+w()-SCROLLBAR_SIZE, y(),
                                 SCROLLBAR_SIZE, h()-SCROLLBAR_SIZE);
-  vscrollbar->type(FL_VERTICAL);
+  vscrollbar->type(fltk3::VERTICAL);
   vscrollbar->callback(scroll_cb, (void*)this);
   
   hscrollbar = new Fl_Scrollbar(x(), y()+h()-SCROLLBAR_SIZE,
                                 w(), SCROLLBAR_SIZE);
-  hscrollbar->type(FL_HORIZONTAL);
+  hscrollbar->type(fltk3::HORIZONTAL);
   hscrollbar->callback(scroll_cb, (void*)this);
   
-  table = new Fl_Scroll(x(), y(), w(), h());
+  table = new fltk3::ScrollGroup(x(), y(), w(), h());
   table->box(fltk3::NO_BOX);
-  table->type(0);		// don't show Fl_Scroll's scrollbars -- use our own
+  table->type(0);		// don't show fltk3::ScrollGroup's scrollbars -- use our own
   table->hide();		// hide unless children are present
   table->end();
   
@@ -565,7 +565,7 @@ void Fl_Table::table_resized() {
     vscrollbar->resize(wix+wiw-SCROLLBAR_SIZE, wiy,
                        SCROLLBAR_SIZE, 
                        wih - ((hscrollbar->visible())?SCROLLBAR_SIZE:0));
-    vscrollbar->Fl_Valuator::value(vscrollbar->clamp(vscrollbar->value()));	
+    vscrollbar->fltk3::Valuator::value(vscrollbar->clamp(vscrollbar->value()));	
     // Horizontal scrollbar
     hscrollbar->bounds(0, table_w-tiw);
     hscrollbar->precision(10);
@@ -573,7 +573,7 @@ void Fl_Table::table_resized() {
     hscrollbar->resize(wix, wiy+wih-SCROLLBAR_SIZE,
                        wiw - ((vscrollbar->visible())?SCROLLBAR_SIZE:0), 
                        SCROLLBAR_SIZE);
-    hscrollbar->Fl_Valuator::value(hscrollbar->clamp(hscrollbar->value()));
+    hscrollbar->fltk3::Valuator::value(hscrollbar->clamp(hscrollbar->value()));
   }
   
   // Tell FLTK child widgets were resized
@@ -1134,7 +1134,7 @@ void Fl_Table::draw() {
   // Explicitly draw border around widget, if any
   draw_box(box(), x(), y(), w(), h(), color());
   
-  // If Fl_Scroll 'table' is hidden, draw its box
+  // If fltk3::ScrollGroup 'table' is hidden, draw its box
   //    Do this after fltk3::Group::draw() so we draw over scrollbars
   //    that leak around the border.
   //

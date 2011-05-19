@@ -133,7 +133,7 @@ public:
         tree_c = maketree(X+240,treey,100,treeh,"Tree C");
         Fl_Value_Slider *slide_glob = new Fl_Value_Slider(X+100,Y,100,18,"Global Scroll Size");
         slide_glob->value(16);
-        slide_glob->type(FL_HORIZONTAL);
+        slide_glob->type(fltk3::HORIZONTAL);
         slide_glob->align(FL_ALIGN_LEFT);
         slide_glob->range(0.0, 30.0);
         slide_glob->step(1.0);
@@ -141,7 +141,7 @@ public:
         slide_glob->labelsize(12);
         Fl_Value_Slider *slide_browa = new Fl_Value_Slider(X+350,Y,100,18,"A: Scroll Size");
         slide_browa->value(16);
-        slide_browa->type(FL_HORIZONTAL);
+        slide_browa->type(fltk3::HORIZONTAL);
         slide_browa->align(FL_ALIGN_LEFT);
         slide_browa->range(0.0, 30.0);
         slide_browa->step(1.0);

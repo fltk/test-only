@@ -26,18 +26,22 @@
 //
 
 /* \file
-   Fl_Hor_Slider widget . */
+ fltk3::HorSlider widget . */
 
 #ifndef Fltk3_Hor_Slider_H
 #define Fltk3_Hor_Slider_H
 
 #include "Slider.h"
 
-class Fl_Hor_Slider : public fltk3::Slider {
-public:
-    Fl_Hor_Slider(int X,int Y,int W,int H,const char *l=0)
-	: fltk3::Slider(X,Y,W,H,l) {type(fltk3::HOR_SLIDER);}
-};
+namespace fltk3 {
+  
+  class HorSlider : public fltk3::Slider {
+  public:
+    HorSlider(int X,int Y,int W,int H,const char *l=0)
+    : fltk3::Slider(X,Y,W,H,l) {type(fltk3::HOR_SLIDER);}
+  };
+  
+}
 
 #endif
 

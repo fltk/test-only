@@ -59,12 +59,12 @@ void Fl_Menu_Window::show() {
     fl_background_pixel = -1;
   } else
 #endif
-    Fl_Single_Window::show();
+    fltk3::SingleWindow::show();
 }
 
 void Fl_Menu_Window::flush() {
 #if HAVE_OVERLAY
-  if (!fl_overlay_visual || !overlay()) {Fl_Single_Window::flush(); return;}
+  if (!fl_overlay_visual || !overlay()) {fltk3::SingleWindow::flush(); return;}
   Fl_X *myi = Fl_X::i(this);
   fl_window = myi->xid;
   if (!gc) {
@@ -79,7 +79,7 @@ void Fl_Menu_Window::flush() {
   draw();
   fl_overlay = 0;
 #else
-  Fl_Single_Window::flush();
+  fltk3::SingleWindow::flush();
 #endif
 }
 
@@ -97,7 +97,7 @@ void Fl_Menu_Window::erase() {
 // menu before unmapping it:
 void Fl_Menu_Window::hide() {
   erase();
-  Fl_Single_Window::hide();
+  fltk3::SingleWindow::hide();
 }
 
 /**  Destroys the window and all of its children.*/

@@ -94,7 +94,7 @@ int Fl_Value_Output::handle(int event) {
   <P> Inherited destructor destroys the Valuator.
 */
 Fl_Value_Output::Fl_Value_Output(int X, int Y, int W, int H,const char *l)
-: Fl_Valuator(X,Y,W,H,l) {
+: fltk3::Valuator(X,Y,W,H,l) {
   box(fltk3::NO_BOX);
   align(fltk3::ALIGN_LEFT);
   textfont_ = fltk3::HELVETICA;

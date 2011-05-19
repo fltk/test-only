@@ -35,23 +35,23 @@
 #include <fltk3/draw.h>
 
 /**
-  Creates a new Fl_Pack widget using the given position, size,
+  Creates a new fltk3::PackedGroup widget using the given position, size,
   and label string. The default boxtype is fltk3::NO_BOX.
   <P>The destructor <I>also deletes all the children</I>. This allows a
   whole tree to be deleted at once, without having to keep a pointer to
   all the children in the user code. A kludge has been done so the 
-  Fl_Pack and all of it's children can be automatic (local)
-  variables, but you must declare the Fl_Pack<I>first</I>, so
+  fltk3::PackedGroup and all of it's children can be automatic (local)
+  variables, but you must declare the fltk3::PackedGroup<I>first</I>, so
   that it is destroyed last.
 */
-Fl_Pack::Fl_Pack(int X, int Y, int W, int H,const char *l)
+fltk3::PackedGroup::PackedGroup(int X, int Y, int W, int H,const char *l)
 : fltk3::Group(X, Y, W, H, l) {
   resizable(0);
   spacing_ = 0;
   // type(VERTICAL); // already set like this
 }
 
-void Fl_Pack::draw() {
+void fltk3::PackedGroup::draw() {
   int tx = x()+fltk3::box_dx(box());
   int ty = y()+fltk3::box_dy(box());
   int tw = w()-fltk3::box_dw(box());

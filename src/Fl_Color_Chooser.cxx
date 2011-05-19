@@ -31,12 +31,12 @@
 #include <fltk3/math.h>
 #include <stdio.h>
 
-// Besides being a useful object on it's own, the Fl_Color_Chooser was
+// Besides being a useful object on it's own, the fltk3::ColorChooser was
 // an attempt to make a complex composite object that could be easily
 // imbedded into a user interface.  If you wish to make complex objects
 // of your own, be sure to read this code.
 
-// The function fl_color_chooser() creates a window containing a color
+// The function fltk3::color_chooser() creates a window containing a color
 // chooser and a few buttons and current-color indicators.  It is an
 // easier interface for simple programs that just need a color.
 
@@ -52,7 +52,7 @@
   \param[in] H, S, V color components
   \param[out] R, G, B color components
  */
-void Fl_Color_Chooser::hsv2rgb(
+void fltk3::ColorChooser::hsv2rgb(
 	double H, double S, double V, double& R, double& G, double& B) {
   if (S < 5.0e-6) {
     R = G = B = V;
@@ -78,7 +78,7 @@ void Fl_Color_Chooser::hsv2rgb(
   \param[in] R, G, B color components
   \param[out] H, S, V color components
  */
-void Fl_Color_Chooser::rgb2hsv(
+void fltk3::ColorChooser::rgb2hsv(
 	double R, double G, double B, double& H, double& S, double& V) {
   double maxv = R > G ? R : G; if (B > maxv) maxv = B;
   V = maxv;
@@ -93,12 +93,12 @@ void Fl_Color_Chooser::rgb2hsv(
   }
 }
 
-/** Fl_Color_Chooser modes */
+/** fltk3::ColorChooser modes */
 enum {
-  M_RGB,	/**< mode() of Fl_Color_Chooser showing RGB values */
-  M_BYTE,	/**< mode() of Fl_Color_Chooser showing byte values */
-  M_HEX,	/**< mode() of Fl_Color_Chooser showing hex values */
-  M_HSV		/**< mode() of Fl_Color_Chooser showing HSV values */
+  M_RGB,	/**< mode() of fltk3::ColorChooser showing RGB values */
+  M_BYTE,	/**< mode() of fltk3::ColorChooser showing byte values */
+  M_HEX,	/**< mode() of fltk3::ColorChooser showing hex values */
+  M_HSV		/**< mode() of fltk3::ColorChooser showing HSV values */
 };
 static fltk3::MenuItem mode_menu[] = {
   {"rgb"},
@@ -109,14 +109,14 @@ static fltk3::MenuItem mode_menu[] = {
 };
 
 #ifndef FL_DOXYGEN
-int Flcc_Value_Input::format(char* buf) {
-  Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
+int fltk3::cc_Value_Input::format(char* buf) {
+  fltk3::ColorChooser* c = (fltk3::ColorChooser*)parent();
   if (c->mode() == M_HEX) return sprintf(buf,"0x%02X", int(value()));
-  else return Fl_Valuator::format(buf);
+  else return fltk3::Valuator::format(buf);
 }
 #endif // !FL_DOXYGEN
 
-void Fl_Color_Chooser::set_valuators() {
+void fltk3::ColorChooser::set_valuators() {
   switch (mode()) {
   case M_RGB:
     rvalue.range(0,1); rvalue.step(1,1000); rvalue.value(r_);
@@ -144,7 +144,7 @@ void Fl_Color_Chooser::set_valuators() {
   \param[in] R, G, B color components.
   \return 1 if a new rgb value was set, 0 if the rgb value was the previous one.
  */
-int Fl_Color_Chooser::rgb(double R, double G, double B) {
+int fltk3::ColorChooser::rgb(double R, double G, double B) {
   if (R == r_ && G == g_ && B == b_) return 0;
   r_ = R; g_ = G; b_ = B;
   double ph = hue_;
@@ -172,7 +172,7 @@ int Fl_Color_Chooser::rgb(double R, double G, double B) {
   \param[in] H, S, V color components.
   \return 1 if a new hsv value was set, 0 if the hsv value was the previous one.
 */
-int Fl_Color_Chooser::hsv(double H, double S, double V) {
+int fltk3::ColorChooser::hsv(double H, double S, double V) {
   H = fmod(H,6.0); if (H < 0.0) H += 6.0;
   if (S < 0.0) S = 0.0; else if (S > 1.0) S = 1.0;
   if (V < 0.0) V = 0.0; else if (V > 1.0) V = 1.0;
@@ -212,9 +212,9 @@ static void tohs(double x, double y, double& h, double& s) {
 }
 
 #ifndef FL_DOXYGEN
-int Flcc_HueBox::handle(int e) {
+int fltk3::cc_HueBox::handle(int e) {
   static double ih, is;
-  Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
+  fltk3::ColorChooser* c = (fltk3::ColorChooser*)parent();
   switch (e) {
   case fltk3::PUSH:
     if (fltk3::visible_focus()) {
@@ -249,11 +249,11 @@ int Flcc_HueBox::handle(int e) {
 #endif // !FL_DOXYGEN
 
 static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
-  Flcc_HueBox* v = (Flcc_HueBox*)vv;
+  fltk3::cc_HueBox* v = (fltk3::cc_HueBox*)vv;
   int iw = v->w()-fltk3::box_dw(v->box());
   double Yf = double(Y)/(v->h()-fltk3::box_dh(v->box()));
 #ifdef UPDATE_HUE_BOX
-  const double V = ((Fl_Color_Chooser*)(v->parent()))->value();
+  const double V = ((fltk3::ColorChooser*)(v->parent()))->value();
 #else
   const double V = 1.0;
 #endif
@@ -261,7 +261,7 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
     double Xf = double(x)/iw;
     double H,S; tohs(Xf,Yf,H,S);
     double r,g,b;
-    Fl_Color_Chooser::hsv2rgb(H,S,V,r,g,b);
+    fltk3::ColorChooser::hsv2rgb(H,S,V,r,g,b);
     *buf++ = uchar(255*r+.5);
     *buf++ = uchar(255*g+.5);
     *buf++ = uchar(255*b+.5);
@@ -269,10 +269,10 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
 }
 
 #ifndef FL_DOXYGEN
-int Flcc_HueBox::handle_key(int key) {
+int fltk3::cc_HueBox::handle_key(int key) {
   int w1 = w()-fltk3::box_dw(box())-6;
   int h1 = h()-fltk3::box_dh(box())-6;
-  Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
+  fltk3::ColorChooser* c = (fltk3::ColorChooser*)parent();
 
 #ifdef CIRCLE
   int X = int(.5*(cos(c->hue()*(M_PI/3.0))*c->saturation()+1) * w1);
@@ -310,7 +310,7 @@ int Flcc_HueBox::handle_key(int key) {
 #endif // !FL_DOXYGEN
 
 #ifndef FL_DOXYGEN
-void Flcc_HueBox::draw() {
+void fltk3::cc_HueBox::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
   int x1 = x()+fltk3::box_dx(box());
   int yy1 = y()+fltk3::box_dy(box());
@@ -319,7 +319,7 @@ void Flcc_HueBox::draw() {
   if (damage() == fltk3::DAMAGE_EXPOSE) fltk3::push_clip(x1+px,yy1+py,6,6);
   fltk3::draw_image(generate_image, this, x1, yy1, w1, h1);
   if (damage() == fltk3::DAMAGE_EXPOSE) fltk3::pop_clip();
-  Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
+  fltk3::ColorChooser* c = (fltk3::ColorChooser*)parent();
 #ifdef CIRCLE
   int X = int(.5*(cos(c->hue()*(M_PI/3.0))*c->saturation()+1) * (w1-6));
   int Y = int(.5*(1-sin(c->hue()*(M_PI/3.0))*c->saturation()) * (h1-6));
@@ -338,9 +338,9 @@ void Flcc_HueBox::draw() {
 ////////////////////////////////////////////////////////////////
 
 #ifndef FL_DOXYGEN
-int Flcc_ValueBox::handle(int e) {
+int fltk3::cc_ValueBox::handle(int e) {
   static double iv;
-  Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
+  fltk3::ColorChooser* c = (fltk3::ColorChooser*)parent();
   switch (e) {
   case fltk3::PUSH:
     if (fltk3::visible_focus()) {
@@ -371,7 +371,7 @@ int Flcc_ValueBox::handle(int e) {
 
 static double tr, tg, tb;
 static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
-  Flcc_ValueBox* v = (Flcc_ValueBox*)vv;
+  fltk3::cc_ValueBox* v = (fltk3::cc_ValueBox*)vv;
   double Yf = 255*(1.0-double(Y)/(v->h()-fltk3::box_dh(v->box())));
   uchar r = uchar(tr*Yf+.5);
   uchar g = uchar(tg*Yf+.5);
@@ -382,9 +382,9 @@ static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
 }
 
 #ifndef FL_DOXYGEN
-void Flcc_ValueBox::draw() {
+void fltk3::cc_ValueBox::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
-  Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
+  fltk3::ColorChooser* c = (fltk3::ColorChooser*)parent();
   c->hsv2rgb(c->hue(),c->saturation(),1.0,tr,tg,tb);
   int x1 = x()+fltk3::box_dx(box());
   int yy1 = y()+fltk3::box_dy(box());
@@ -401,9 +401,9 @@ void Flcc_ValueBox::draw() {
 #endif // !FL_DOXYGEN
 
 #ifndef FL_DOXYGEN
-int Flcc_ValueBox::handle_key(int key) {
+int fltk3::cc_ValueBox::handle_key(int key) {
   int h1 = h()-fltk3::box_dh(box())-6;
-  Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
+  fltk3::ColorChooser* c = (fltk3::ColorChooser*)parent();
 
   int Y = int((1-c->value()) * h1);
   if (Y < 0) Y = 0; else if (Y > h1) Y = h1;
@@ -429,8 +429,8 @@ int Flcc_ValueBox::handle_key(int key) {
 
 ////////////////////////////////////////////////////////////////
 
-void Fl_Color_Chooser::rgb_cb(fltk3::Widget* o, void*) {
-  Fl_Color_Chooser* c = (Fl_Color_Chooser*)(o->parent());
+void fltk3::ColorChooser::rgb_cb(fltk3::Widget* o, void*) {
+  fltk3::ColorChooser* c = (fltk3::ColorChooser*)(o->parent());
   double R = c->rvalue.value();
   double G = c->gvalue.value();
   double B = c->bvalue.value();
@@ -446,8 +446,8 @@ void Fl_Color_Chooser::rgb_cb(fltk3::Widget* o, void*) {
   if (c->rgb(R,G,B)) c->do_callback();
 }
 
-void Fl_Color_Chooser::mode_cb(fltk3::Widget* o, void*) {
-  Fl_Color_Chooser* c = (Fl_Color_Chooser*)(o->parent());
+void fltk3::ColorChooser::mode_cb(fltk3::Widget* o, void*) {
+  fltk3::ColorChooser* c = (fltk3::ColorChooser*)(o->parent());
   // force them to redraw even if value is the same:
   c->rvalue.value(-1);
   c->gvalue.value(-1);
@@ -455,7 +455,7 @@ void Fl_Color_Chooser::mode_cb(fltk3::Widget* o, void*) {
   c->set_valuators();
 }
 
-void Fl_Color_Chooser::mode(int newMode)
+void fltk3::ColorChooser::mode(int newMode)
 {
   choice.value(newMode);
   choice.do_callback();
@@ -465,13 +465,13 @@ void Fl_Color_Chooser::mode(int newMode)
 ////////////////////////////////////////////////////////////////
 
 /**
-  Creates a new Fl_Color_Chooser widget using the given position, size, and
+  Creates a new fltk3::ColorChooser widget using the given position, size, and
   label string.
   The recommended dimensions are 200x95. The color is initialized to black.
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
-Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
+fltk3::ColorChooser::ColorChooser(int X, int Y, int W, int H, const char* L)
   : fltk3::Group(0,0,195,115,L),
     huebox(0,0,115,115),
     valuebox(115,0,20,115),
@@ -501,7 +501,7 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
 }
 
 ////////////////////////////////////////////////////////////////
-// fl_color_chooser():
+// fltk3::color_chooser():
 
 #include <fltk3/Window.h>
 #include <fltk3/Box.h>
@@ -524,7 +524,7 @@ void ColorChip::draw() {
 }
 
 static void chooser_cb(fltk3::Widget* o, void* vv) {
-  Fl_Color_Chooser* c = (Fl_Color_Chooser*)o;
+  fltk3::ColorChooser* c = (fltk3::ColorChooser*)o;
   ColorChip* v = (ColorChip*)vv;
   v->r = uchar(255*c->r()+.5);
   v->g = uchar(255*c->g()+.5);
@@ -537,19 +537,19 @@ namespace fltk3 {
   extern const char* cancel;
 }
 
-// fl_color_chooser's callback for ok_button (below)
+// fltk3::color_chooser's callback for ok_button (below)
 //  [in] o is a pointer to okay_button (below) 
 //  [in] p is a pointer to an int to receive the return value (1)
-// closes the fl_color_chooser window
+// closes the fltk3::color_chooser window
 static void cc_ok_cb (fltk3::Widget *o, void *p) {
   *((int *)p) = 1; // set return value
   o->window()->hide();
 }
 
-// fl_color_chooser's callback for cancel_button and window close
+// fltk3::color_chooser's callback for cancel_button and window close
 //  [in] o is a pointer to cancel_button (below) _or_ the dialog window
 //  [in] p is a pointer to an int to receive the return value (0)
-// closes the fl_color_chooser window
+// closes the fltk3::color_chooser window
 static void cc_cancel_cb (fltk3::Widget *o, void *p) {
   *((int *)p) = 0; // set return value
   if (o->window()) // cancel button
@@ -563,20 +563,20 @@ static void cc_cancel_cb (fltk3::Widget *o, void *p) {
 /**
   \brief Pops up a window to let the user pick an arbitrary RGB color.
   \note \#include <fltk3/ColorChooser.h>
-  \image html fl_color_chooser.jpg 
-  \image latex  fl_color_chooser.jpg "fl_color_chooser" width=8cm
+  \image html fltk3::color_chooser.jpg 
+  \image latex  fltk3::color_chooser.jpg "fltk3::color_chooser" width=8cm
   \param[in] name Title label for the window
   \param[in,out] r, g, b Color components in the range 0.0 to 1.0.
   \param[in] cmode Optional mode for color chooser. See mode(int). Default -1 if none (rgb mode).
   \retval 1 if user confirms the selection 
   \retval 0 if user cancels the dialog
-  \relates Fl_Color_Chooser
+  \relates fltk3::ColorChooser
  */
-int fl_color_chooser(const char* name, double& r, double& g, double& b, int cmode) {
+int fltk3::color_chooser(const char* name, double& r, double& g, double& b, int cmode) {
   int ret = 0;
   fltk3::Window window(215,200,name);
   window.callback(cc_cancel_cb,&ret);
-  Fl_Color_Chooser chooser(10, 10, 195, 115);
+  fltk3::ColorChooser chooser(10, 10, 195, 115);
   ColorChip ok_color(10, 130, 95, 25);
   fltk3::ReturnButton ok_button(10, 165, 95, 25, fltk3::ok);
   ok_button.callback(cc_ok_cb,&ret);
@@ -606,20 +606,20 @@ int fl_color_chooser(const char* name, double& r, double& g, double& b, int cmod
 /**
   \brief Pops up a window to let the user pick an arbitrary RGB color.
   \note \#include <fltk3/ColorChooser.h>
-  \image html fl_color_chooser.jpg 
-  \image latex  fl_color_chooser.jpg "fl_color_chooser" width=8cm
+  \image html fltk3::color_chooser.jpg 
+  \image latex  fltk3::color_chooser.jpg "fltk3::color_chooser" width=8cm
   \param[in] name Title label for the window
   \param[in,out] r, g, b Color components in the range 0 to 255.
   \param[in] cmode Optional mode for color chooser. See mode(int). Default -1 if none (rgb mode).
   \retval 1 if user confirms the selection 
   \retval 0 if user cancels the dialog
-  \relates Fl_Color_Chooser
+  \relates fltk3::ColorChooser
  */
-int fl_color_chooser(const char* name, uchar& r, uchar& g, uchar& b, int cmode) {
+int fltk3::color_chooser(const char* name, uchar& r, uchar& g, uchar& b, int cmode) {
   double dr = r/255.0;
   double dg = g/255.0;
   double db = b/255.0;
-  if (fl_color_chooser(name,dr,dg,db,cmode)) {
+  if (fltk3::color_chooser(name,dr,dg,db,cmode)) {
     r = uchar(255*dr+.5);
     g = uchar(255*dg+.5);
     b = uchar(255*db+.5);

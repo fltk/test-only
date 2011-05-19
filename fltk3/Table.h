@@ -118,7 +118,7 @@
  OTHER CONTRIBUTORS
  
  - Inspired by the Feb 2000 version of FLVW's Flvw_Table widget. Mucho thanks to those folks.
- - Mister Satan : 04/07/2003 - MinGW porting mods, and singleinput.cxx; a cool Fl_Input oriented spreadsheet example
+ - Mister Satan : 04/07/2003 - MinGW porting mods, and singleinput.cxx; a cool fltk3::Input oriented spreadsheet example
  - Marek Paliwoda : 01/08/2003 - Porting mods for Borland
  - Ori Berger : 03/16/2006 - Optimizations for >500k rows/cols
  
@@ -306,7 +306,7 @@ protected:
   int tox, toy, tow, toh;			// data table outer dimension xywh
   int wix, wiy, wiw, wih;			// widget inner dimension xywh
   
-  Fl_Scroll *table;				// container for child fltk widgets (if any)
+  fltk3::ScrollGroup *table;				// container for child fltk widgets (if any)
   Fl_Scrollbar *vscrollbar; 			// vertical scrollbar
   Fl_Scrollbar *hscrollbar;			// horizontal scrollbar
   
@@ -875,7 +875,7 @@ public:
   }
   void end() {
     table->end();
-    // HACK: Avoid showing Fl_Scroll; seems to erase screen
+    // HACK: Avoid showing fltk3::ScrollGroup; seems to erase screen
     //       causing unnecessary flicker, even if its box() is fltk3::NO_BOX.
     //
     if ( table->children() > 2 ) {
@@ -916,7 +916,7 @@ public:
    \see child(int)
    */
   int children() const {
-    return(table->children()-2);    // -2: skip Fl_Scroll's h/v scrollbar widgets
+    return(table->children()-2);    // -2: skip fltk3::ScrollGroup's h/v scrollbar widgets
   }
   int find(const fltk3::Widget *w) const {
     return(table->find(w));

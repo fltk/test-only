@@ -58,7 +58,7 @@ namespace fltk3 {
   \param[in] L widget label, default is no label
 */
 Fl_File_Input::Fl_File_Input(int X, int Y, int W, int H, const char *L)
-  : Fl_Input(X, Y, W, H, L) {
+  : fltk3::Input(X, Y, W, H, L) {
   buttons_[0] = 0;
   errorcolor_ = fltk3::RED;
   ok_entry_   = 1;
@@ -151,7 +151,7 @@ int						// O - TRUE on success
 Fl_File_Input::value(const char *str,		// I - New string value
                      int        len) {		// I - Length of value
   damage(fltk3::DAMAGE_BAR);
-  return Fl_Input::value(str,len);
+  return fltk3::Input::value(str,len);
 }
 
 
@@ -163,7 +163,7 @@ Fl_File_Input::value(const char *str,		// I - New string value
 int						// O - TRUE on success
 Fl_File_Input::value(const char *str) {		// I - New string value
   damage(fltk3::DAMAGE_BAR);
-  return Fl_Input::value(str);
+  return fltk3::Input::value(str);
 }
 
 
@@ -215,11 +215,11 @@ Fl_File_Input::handle(int event) 		// I - Event
       if (inButtonBar) 
         return handle_button(event);
       else
-        return Fl_Input::handle(event);
+        return fltk3::Input::handle(event);
 
     default :
       { fltk3::WidgetTracker wp(this);
-	if (Fl_Input::handle(event)) {
+	if (fltk3::Input::handle(event)) {
 	  if (wp.exists())
 	    damage(fltk3::DAMAGE_BAR);
 	  return 1;

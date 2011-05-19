@@ -128,7 +128,7 @@ fltk3::version() {
   Gets the default scrollbar size used by 
   fltk3::Browser_,
   Fl_Help_View,
-  Fl_Scroll, and
+  fltk3::ScrollGroup, and
   Fl_Text_Display widgets.
   \returns The default size for widget scrollbars, in pixels.
 */
@@ -140,7 +140,7 @@ int fltk3::scrollbar_size() {
   Sets the default scrollbar size that is used by the
   fltk3::Browser_,
   Fl_Help_View,
-  Fl_Scroll, and
+  fltk3::ScrollGroup, and
   Fl_Text_Display widgets.
   \param[in] W The new default size for widget scrollbars, in pixels.
 */

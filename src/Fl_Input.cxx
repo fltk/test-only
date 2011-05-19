@@ -45,7 +45,7 @@
 #endif
 
 
-void Fl_Input::draw() {
+void fltk3::Input::draw() {
   if (input_type() == FL_HIDDEN_INPUT) return;
   fltk3::Boxtype b = box();
   if (damage() & fltk3::DAMAGE_ALL) draw_box(b, color());
@@ -54,11 +54,11 @@ void Fl_Input::draw() {
 }
 
 // kludge so shift causes selection to extend:
-int Fl_Input::shift_position(int p) {
+int fltk3::Input::shift_position(int p) {
   return position(p, fltk3::event_state(fltk3::SHIFT) ? mark() : p);
 }
 
-int Fl_Input::shift_up_down_position(int p) {
+int fltk3::Input::shift_up_down_position(int p) {
   return up_down_position(p, fltk3::event_state(fltk3::SHIFT));
 }
 
@@ -93,7 +93,7 @@ static const char *legal_fp_chars = ".eE+-";
 // Move cursor up specified #lines
 //    If OPTION_ARROW_FOCUS is disabled, return 1 to prevent focus navigation.
 //
-int Fl_Input::kf_lines_up(int repeat_num) {
+int fltk3::Input::kf_lines_up(int repeat_num) {
   int i = position();
   if (!line_start(i)) {
     //UNNEEDED if (input_type()==FL_MULTILINE_INPUT && !fltk3::option(fltk3::OPTION_ARROW_FOCUS)) return 1;
@@ -111,7 +111,7 @@ int Fl_Input::kf_lines_up(int repeat_num) {
 // Move cursor down specified #lines
 //    If OPTION_ARROW_FOCUS is disabled, return 1 to prevent focus navigation.
 //
-int Fl_Input::kf_lines_down(int repeat_num) {
+int fltk3::Input::kf_lines_down(int repeat_num) {
   int i = position();
   if (line_end(i) >= size()) {
     //UNNEEDED if (input_type()==FL_MULTILINE_INPUT && !fltk3::option(fltk3::OPTION_ARROW_FOCUS)) return 1;
@@ -127,23 +127,23 @@ int Fl_Input::kf_lines_down(int repeat_num) {
 }
 
 // Move up a page
-int Fl_Input::kf_page_up() {
+int fltk3::Input::kf_page_up() {
   return kf_lines_up(linesPerPage());
 }
 
 // Move down a page
-int Fl_Input::kf_page_down() {
+int fltk3::Input::kf_page_down() {
   return kf_lines_down(linesPerPage());
 }
 
 // Toggle insert mode
-int Fl_Input::kf_insert_toggle() {
+int fltk3::Input::kf_insert_toggle() {
   if (readonly()) { fltk3::beep(); return 1; }
   return 1;				// \todo: needs insert mode
 }
 
 // Delete word right
-int Fl_Input::kf_delete_word_right() {
+int fltk3::Input::kf_delete_word_right() {
   if (readonly()) { fltk3::beep(); return 1; }
   if (mark() != position()) return cut();
   cut(position(), word_end(position()));
@@ -151,7 +151,7 @@ int Fl_Input::kf_delete_word_right() {
 }
 
 // Delete word left
-int Fl_Input::kf_delete_word_left() {
+int fltk3::Input::kf_delete_word_left() {
   if (readonly()) { fltk3::beep(); return 1; }
   if (mark() != position()) return cut();
   cut(word_start(position()), position());
@@ -159,7 +159,7 @@ int Fl_Input::kf_delete_word_left() {
 }
 
 // Delete to start of line
-int Fl_Input::kf_delete_sol() {
+int fltk3::Input::kf_delete_sol() {
   if (readonly()) { fltk3::beep(); return 1; }
   if (mark() != position()) return cut();
   cut(line_start(position()), position());
@@ -167,20 +167,20 @@ int Fl_Input::kf_delete_sol() {
 }
 
 // Delete to end of line
-int Fl_Input::kf_delete_eol() {
+int fltk3::Input::kf_delete_eol() {
   if (readonly()) { fltk3::beep(); return 1; }
   if (mark() != position()) return cut();
   cut(position(), line_end(position()));
   return 1;
 }
 
-int Fl_Input::kf_delete_char_right() {
+int fltk3::Input::kf_delete_char_right() {
   if (readonly()) { fltk3::beep(); return 1; }
   if (mark() != position()) return cut();
   else return cut(1);
 }
 
-int Fl_Input::kf_delete_char_left() {
+int fltk3::Input::kf_delete_char_left() {
   if (readonly()) { fltk3::beep(); return 1; }
   if (mark() != position()) cut();
   else cut(-1);
@@ -188,17 +188,17 @@ int Fl_Input::kf_delete_char_left() {
 }
 
 // Move cursor to start of line
-int Fl_Input::kf_move_sol() {
+int fltk3::Input::kf_move_sol() {
   return shift_position(line_start(position())) + NORMAL_INPUT_MOVE;
 }
 
 // Move cursor to end of line
-int Fl_Input::kf_move_eol() {
+int fltk3::Input::kf_move_eol() {
   return shift_position(line_end(position())) + NORMAL_INPUT_MOVE;
 }
 
 // Clear to end of line
-int Fl_Input::kf_clear_eol() {
+int fltk3::Input::kf_clear_eol() {
   if (readonly()) { fltk3::beep(); return 1; }
   if (position()>=size()) return 0;
   int i = line_end(position());
@@ -210,7 +210,7 @@ int Fl_Input::kf_clear_eol() {
 // Move cursor one character to the left
 //    If OPTION_ARROW_FOCUS is disabled, return 1 to prevent focus navigation.
 //
-int Fl_Input::kf_move_char_left() {
+int fltk3::Input::kf_move_char_left() {
   int i = shift_position(position()-1) + NORMAL_INPUT_MOVE;
   return fltk3::option(fltk3::OPTION_ARROW_FOCUS) ? i : 1;
 }
@@ -218,25 +218,25 @@ int Fl_Input::kf_move_char_left() {
 // Move cursor one character to the right
 //    If OPTION_ARROW_FOCUS is disabled, return 1 to prevent focus navigation.
 //
-int Fl_Input::kf_move_char_right() {
+int fltk3::Input::kf_move_char_right() {
   int i = shift_position(position()+1) + NORMAL_INPUT_MOVE;
   return fltk3::option(fltk3::OPTION_ARROW_FOCUS) ? i : 1;
 }
 
 // Move cursor word-left
-int Fl_Input::kf_move_word_left() {
+int fltk3::Input::kf_move_word_left() {
   shift_position(word_start(position()));
   return 1; 
 }
 
 // Move cursor word-right
-int Fl_Input::kf_move_word_right() {
+int fltk3::Input::kf_move_word_right() {
   shift_position(word_end(position()));
   return 1;
 }
 
 // Move cursor up one line and to the start of line (paragraph up)
-int Fl_Input::kf_move_up_and_sol() {
+int fltk3::Input::kf_move_up_and_sol() {
   if (line_start(position())==position() && position()>0)
     return shift_position(line_start(position()-1)) + NORMAL_INPUT_MOVE;
   else
@@ -244,7 +244,7 @@ int Fl_Input::kf_move_up_and_sol() {
 }
 
 // Move cursor down one line and to the end of line (paragraph down)
-int Fl_Input::kf_move_down_and_eol() {
+int fltk3::Input::kf_move_down_and_eol() {
   if (line_end(position())==position() && position()<size())
     return shift_position(line_end(position()+1)) + NORMAL_INPUT_MOVE;
   else
@@ -252,49 +252,49 @@ int Fl_Input::kf_move_down_and_eol() {
 }
 
 // Move to top of document
-int Fl_Input::kf_top() {
+int fltk3::Input::kf_top() {
   shift_position(0);
   return 1;
 }
 
 // Move to bottom of document
-int Fl_Input::kf_bottom() {
+int fltk3::Input::kf_bottom() {
   shift_position(size());
   return 1; 
 }
 
 // Select all text in the widget
-int Fl_Input::kf_select_all() {
+int fltk3::Input::kf_select_all() {
   position(0,size());
   return 1;
 }
 
 // Undo.
-int Fl_Input::kf_undo() {
+int fltk3::Input::kf_undo() {
   if (readonly()) { fltk3::beep(); return 1; }
   return undo();
 }
 
 // Redo. (currently unimplemented.. toggles undo() instead)
-int Fl_Input::kf_redo() {
+int fltk3::Input::kf_redo() {
   if (readonly()) { fltk3::beep(); return 1; }
   return kf_undo();			// currently we don't support multilevel undo
 }
 
 // Do a copy operation
-int Fl_Input::kf_copy() {
+int fltk3::Input::kf_copy() {
   return copy(1);
 }
 
 // Do a paste operation
-int Fl_Input::kf_paste() {
+int fltk3::Input::kf_paste() {
   if (readonly()) { fltk3::beep(); return 1; }
   fltk3::paste(*this, 1);
   return 1;
 }
 
 // Do a cut with copy
-int Fl_Input::kf_copy_cut() {
+int fltk3::Input::kf_copy_cut() {
   if (readonly()) { fltk3::beep(); return 1; }
   copy(1);
   return cut();
@@ -303,7 +303,7 @@ int Fl_Input::kf_copy_cut() {
 // Handle a keystroke.
 //     Returns 1 if handled by us, 0 if not.
 //
-int Fl_Input::handle_key() {
+int fltk3::Input::handle_key() {
   
   char ascii = fltk3::event_text()[0];
   
@@ -462,7 +462,7 @@ int Fl_Input::handle_key() {
 #endif
 
     case fltk3::PageUpKey:
-      // Fl_Input has no scroll control, so instead we move the cursor by one page
+      // fltk3::Input has no scroll control, so instead we move the cursor by one page
       // OSX-HIG recommends Alt increase one semantic unit, Meta next higher..
 #ifdef __APPLE__
       if (mods==0)          return kf_page_up();		// PgUp           (OSX-HIG)
@@ -478,7 +478,7 @@ int Fl_Input::handle_key() {
 
     case fltk3::PageDownKey:
 #ifdef __APPLE__
-      // Fl_Input has no scroll control, so instead we move the cursor by one page
+      // fltk3::Input has no scroll control, so instead we move the cursor by one page
       // OSX-HIG recommends Alt increase one semantic unit, Meta next higher..
       if (mods==0)          return kf_page_down();		// PgDn           (OSX-HIG)
       if (mods==fltk3::ALT)     return kf_page_down();		// Alt-PageDn     (OSX-HIG)
@@ -583,7 +583,7 @@ int Fl_Input::handle_key() {
   return 0;		// ignored
 }
 
-int Fl_Input::handle(int event) {
+int fltk3::Input::handle(int event) {
   static int dnd_save_position, dnd_save_mark, drag_start = -1, newpos;
   static fltk3::Widget *dnd_save_focus;
   switch (event) {
@@ -756,10 +756,10 @@ int Fl_Input::handle(int event) {
 }
 
 /**
- Creates a new Fl_Input widget using the given position, size,
+ Creates a new fltk3::Input widget using the given position, size,
  and label string. The default boxtype is fltk3::DOWN_BOX.
  */
-Fl_Input::Fl_Input(int X, int Y, int W, int H, const char *l)
+fltk3::Input::Input(int X, int Y, int W, int H, const char *l)
 : Fl_Input_(X, Y, W, H, l) {
 }
 

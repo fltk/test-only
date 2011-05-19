@@ -83,7 +83,7 @@ fltk3::MenuItem menu_3[] = {
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Input *v_input[4]={(Fl_Input *)0};
+fltk3::Input *v_input[4]={(fltk3::Input *)0};
 
 fltk3::Button *wLiveMode=(fltk3::Button *)0;
 
@@ -109,7 +109,7 @@ fltk3::DoubleWindow* make_widget_panel() {
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { Fl_Input* o = new Fl_Input(95, 40, 190, 20);
+          { fltk3::Input* o = new fltk3::Input(95, 40, 190, 20);
             o->tooltip("The label text for the widget.\nUse Ctrl-J for newlines.");
             o->labelfont(1);
             o->labelsize(11);
@@ -117,7 +117,7 @@ fltk3::DoubleWindow* make_widget_panel() {
             o->callback((fltk3::Callback*)label_cb);
             o->when(fltk3::WHEN_CHANGED);
             fltk3::Group::current()->resizable(o);
-          } // Fl_Input* o
+          } // fltk3::Input* o
           { fltk3::Choice* o = new fltk3::Choice(284, 40, 120, 20);
             o->tooltip("The label style for the widget.");
             o->box(fltk3::THIN_UP_BOX);
@@ -135,14 +135,14 @@ fltk3::DoubleWindow* make_widget_panel() {
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { Fl_Input* o = new Fl_Input(95, 65, 240, 20);
+          { fltk3::Input* o = new fltk3::Input(95, 65, 240, 20);
             o->tooltip("The active image for the widget.");
             o->labelfont(1);
             o->labelsize(11);
             o->textsize(11);
             o->callback((fltk3::Callback*)image_cb);
             fltk3::Group::current()->resizable(o);
-          } // Fl_Input* o
+          } // fltk3::Input* o
           { fltk3::Button* o = new fltk3::Button(334, 65, 70, 20, "Browse...");
             o->tooltip("Click to choose the active image.");
             o->labelsize(11);
@@ -155,14 +155,14 @@ fltk3::DoubleWindow* make_widget_panel() {
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { Fl_Input* o = new Fl_Input(95, 90, 240, 20);
+          { fltk3::Input* o = new fltk3::Input(95, 90, 240, 20);
             o->tooltip("The inactive image for the widget.");
             o->labelfont(1);
             o->labelsize(11);
             o->textsize(11);
             o->callback((fltk3::Callback*)inactive_cb);
             fltk3::Group::current()->resizable(o);
-          } // Fl_Input* o
+          } // fltk3::Input* o
           { fltk3::Button* o = new fltk3::Button(334, 90, 70, 20, "Browse...");
             o->tooltip("Click to choose the inactive image.");
             o->labelsize(11);
@@ -426,14 +426,14 @@ ive to the origin at construction time");
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { Fl_Input* o = new Fl_Input(95, 235, 95, 20, ":");
+          { fltk3::Input* o = new fltk3::Input(95, 235, 95, 20, ":");
             o->tooltip("The X resource class.");
             o->labelfont(1);
             o->labelsize(11);
             o->textsize(11);
             o->callback((fltk3::Callback*)xclass_cb);
             fltk3::Group::current()->resizable(o);
-          } // Fl_Input* o
+          } // fltk3::Input* o
           { fltk3::LightButton* o = new fltk3::LightButton(195, 235, 60, 20, "Border");
             o->tooltip("Add a border around the window.");
             o->selection_color((fltk3::Color)1);
@@ -492,13 +492,13 @@ ive to the origin at construction time");
           } // fltk3::Box* o
           o->end();
         } // fltk3::Group* o
-        { Fl_Input* o = new Fl_Input(95, 285, 310, 20, "Tooltip:");
+        { fltk3::Input* o = new fltk3::Input(95, 285, 310, 20, "Tooltip:");
           o->tooltip("The tooltip text for the widget.\nUse Ctrl-J for newlines.");
           o->labelfont(1);
           o->labelsize(11);
           o->textsize(11);
           o->callback((fltk3::Callback*)tooltip_cb);
-        } // Fl_Input* o
+        } // fltk3::Input* o
         { fltk3::Box* o = new fltk3::Box(95, 305, 300, 5);
           o->labelsize(11);
           fltk3::Group::current()->resizable(o);
@@ -637,7 +637,7 @@ ive to the origin at construction time");
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { Fl_Input* o = new Fl_Input(95, 40, 172, 20);
+          { fltk3::Input* o = new fltk3::Input(95, 40, 172, 20);
             o->tooltip("The widget subclass.");
             o->labelfont(1);
             o->labelsize(11);
@@ -645,7 +645,7 @@ ive to the origin at construction time");
             o->textsize(11);
             o->callback((fltk3::Callback*)subclass_cb, (void*)(4));
             fltk3::Group::current()->resizable(o);
-          } // Fl_Input* o
+          } // fltk3::Input* o
           { fltk3::Choice* o = new fltk3::Choice(265, 40, 140, 20);
             o->tooltip("The widget subtype.");
             o->box(fltk3::THIN_UP_BOX);
@@ -661,14 +661,14 @@ ive to the origin at construction time");
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { Fl_Input* o = new Fl_Input(95, 65, 235, 20);
+          { fltk3::Input* o = new fltk3::Input(95, 65, 235, 20);
             o->tooltip("The name of the widget.");
             o->labelfont(1);
             o->labelsize(11);
             o->textsize(11);
             o->callback((fltk3::Callback*)name_cb);
             fltk3::Group::current()->resizable(o);
-          } // Fl_Input* o
+          } // fltk3::Input* o
           { fltk3::Choice* o = new fltk3::Choice(330, 65, 75, 20);
             o->tooltip("Change member access attribute.");
             o->down_box(fltk3::BORDER_BOX);
@@ -689,35 +689,35 @@ ive to the origin at construction time");
           } // fltk3::Choice* o
           o->end();
         } // fltk3::Group* o
-        { v_input[0] = new Fl_Input(95, 90, 310, 20, "Extra Code:");
+        { v_input[0] = new fltk3::Input(95, 90, 310, 20, "Extra Code:");
           v_input[0]->tooltip("Extra initialization code for the widget.");
           v_input[0]->labelfont(1);
           v_input[0]->labelsize(11);
           v_input[0]->textfont(4);
           v_input[0]->textsize(11);
           v_input[0]->callback((fltk3::Callback*)v_input_cb, (void*)(0));
-        } // Fl_Input* v_input[0]
-        { v_input[1] = new Fl_Input(95, 110, 310, 20);
+        } // fltk3::Input* v_input[0]
+        { v_input[1] = new fltk3::Input(95, 110, 310, 20);
           v_input[1]->tooltip("Extra initialization code for the widget.");
           v_input[1]->labelsize(11);
           v_input[1]->textfont(4);
           v_input[1]->textsize(11);
           v_input[1]->callback((fltk3::Callback*)v_input_cb, (void*)(1));
-        } // Fl_Input* v_input[1]
-        { v_input[2] = new Fl_Input(95, 130, 310, 20);
+        } // fltk3::Input* v_input[1]
+        { v_input[2] = new fltk3::Input(95, 130, 310, 20);
           v_input[2]->tooltip("Extra initialization code for the widget.");
           v_input[2]->labelsize(11);
           v_input[2]->textfont(4);
           v_input[2]->textsize(11);
           v_input[2]->callback((fltk3::Callback*)v_input_cb, (void*)(2));
-        } // Fl_Input* v_input[2]
-        { v_input[3] = new Fl_Input(95, 150, 310, 20);
+        } // fltk3::Input* v_input[2]
+        { v_input[3] = new fltk3::Input(95, 150, 310, 20);
           v_input[3]->tooltip("Extra initialization code for the widget.");
           v_input[3]->labelsize(11);
           v_input[3]->textfont(4);
           v_input[3]->textsize(11);
           v_input[3]->callback((fltk3::Callback*)v_input_cb, (void*)(3));
-        } // Fl_Input* v_input[3]
+        } // fltk3::Input* v_input[3]
         { CodeEditor* o = new CodeEditor(95, 175, 310, 90, "Callback:");
           o->tooltip("The callback function or code for the widget. Use the variable name \'o\' to \
 access the Widget pointer and \'v\' to access the user value.");
@@ -740,7 +740,7 @@ access the Widget pointer and \'v\' to access the user value.");
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { Fl_Input* o = new Fl_Input(95, 270, 158, 20);
+          { fltk3::Input* o = new fltk3::Input(95, 270, 158, 20);
             o->tooltip("The user data to pass into the callback code.");
             o->labelfont(1);
             o->labelsize(11);
@@ -748,7 +748,7 @@ access the Widget pointer and \'v\' to access the user value.");
             o->textsize(11);
             o->callback((fltk3::Callback*)user_data_cb);
             fltk3::Group::current()->resizable(o);
-          } // Fl_Input* o
+          } // fltk3::Input* o
           { fltk3::Choice* o = new fltk3::Choice(300, 270, 105, 20, "When:");
             o->tooltip("When to call the callback function.");
             o->box(fltk3::THIN_UP_BOX);
@@ -767,7 +767,7 @@ access the Widget pointer and \'v\' to access the user value.");
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { Fl_Input* o = new Fl_Input(95, 295, 158, 20);
+          { fltk3::Input* o = new fltk3::Input(95, 295, 158, 20);
             o->tooltip("The type of the user data.");
             o->labelfont(1);
             o->labelsize(11);
@@ -775,7 +775,7 @@ access the Widget pointer and \'v\' to access the user value.");
             o->textsize(11);
             o->callback((fltk3::Callback*)user_data_type_cb);
             fltk3::Group::current()->resizable(o);
-          } // Fl_Input* o
+          } // fltk3::Input* o
           { fltk3::LightButton* o = new fltk3::LightButton(300, 295, 105, 20, "No Change");
             o->tooltip("Call the callback even if the value has not changed.");
             o->selection_color((fltk3::Color)1);

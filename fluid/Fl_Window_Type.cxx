@@ -84,7 +84,7 @@ void guides_cb(fltk3::CheckButton *i, long) {
   }
 }
 
-void grid_cb(Fl_Int_Input *i, long v) {
+void grid_cb(fltk3::IntInput *i, long v) {
   int n = atoi(i->value());
   if (n < 0) n = 0;
   switch (v) {
@@ -163,7 +163,7 @@ void i18n_type_cb(fltk3::Choice *c, void *) {
   set_modflag(1);
 }
 
-void i18n_text_cb(Fl_Input *i, void *) {
+void i18n_text_cb(fltk3::Input *i, void *) {
   undo_checkpoint();
   
   if (i == i18n_function_input)
@@ -176,7 +176,7 @@ void i18n_text_cb(Fl_Input *i, void *) {
   set_modflag(1);
 }
 
-void i18n_int_cb(Fl_Int_Input *i, void *) {
+void i18n_int_cb(fltk3::IntInput *i, void *) {
   undo_checkpoint();
   
   if (i == i18n_set_input)
@@ -250,12 +250,12 @@ void show_global_settings_cb(fltk3::Widget *, void *) {
   show_global_settings_window();
 }
 
-void header_input_cb(Fl_Input* i, void*) {
+void header_input_cb(fltk3::Input* i, void*) {
   if (header_file_name && strcmp(header_file_name, i->value()))
     set_modflag(1);
   header_file_name = i->value();
 }
-void code_input_cb(Fl_Input* i, void*) {
+void code_input_cb(fltk3::Input* i, void*) {
   if (code_file_name && strcmp(code_file_name, i->value()))
     set_modflag(1);
   code_file_name = i->value();
@@ -476,7 +476,7 @@ void border_cb(fltk3::LightButton* i, void* v) {
   }
 }
 
-void xclass_cb(Fl_Input* i, void* v) {
+void xclass_cb(fltk3::Input* i, void* v) {
   if (v == LOAD) {
     if (!current_widget->is_window()) {
       i->hide(); 

@@ -45,8 +45,8 @@ extern fltk3::RoundButton *print_all;
 extern fltk3::RoundButton *print_pages;
 extern fltk3::RoundButton *print_selection;
 #include <fltk3/IntInput.h>
-extern Fl_Int_Input *print_from;
-extern Fl_Int_Input *print_to;
+extern fltk3::IntInput *print_from;
+extern fltk3::IntInput *print_to;
 #include <fltk3/Spinner.h>
 extern Fl_Spinner *print_copies;
 #include <fltk3/CheckButton.h>

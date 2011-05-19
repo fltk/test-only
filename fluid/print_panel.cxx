@@ -73,9 +73,9 @@ static void cb_print_selection(fltk3::RoundButton*, void*) {
 print_to->deactivate();
 }
 
-Fl_Int_Input *print_from=(Fl_Int_Input *)0;
+fltk3::IntInput *print_from=(fltk3::IntInput *)0;
 
-Fl_Int_Input *print_to=(Fl_Int_Input *)0;
+fltk3::IntInput *print_to=(fltk3::IntInput *)0;
 
 Fl_Spinner *print_copies=(Fl_Spinner *)0;
 
@@ -278,16 +278,16 @@ fltk3::DoubleWindow* make_print_panel() {
           print_selection->down_box(fltk3::ROUND_DOWN_BOX);
           print_selection->callback((fltk3::Callback*)cb_print_selection);
         } // fltk3::RoundButton* print_selection
-        { print_from = new Fl_Int_Input(136, 126, 28, 25, "From:");
+        { print_from = new fltk3::IntInput(136, 126, 28, 25, "From:");
           print_from->type(2);
           print_from->textfont(4);
           print_from->deactivate();
-        } // Fl_Int_Input* print_from
-        { print_to = new Fl_Int_Input(199, 126, 28, 25, "To:");
+        } // fltk3::IntInput* print_from
+        { print_to = new fltk3::IntInput(199, 126, 28, 25, "To:");
           print_to->type(2);
           print_to->textfont(4);
           print_to->deactivate();
-        } // Fl_Int_Input* print_to
+        } // fltk3::IntInput* print_to
         o->end();
       } // fltk3::Group* o
       { fltk3::Group* o = new fltk3::Group(247, 86, 210, 105, "Copies");

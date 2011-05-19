@@ -79,7 +79,7 @@ Fl_Button	*top,
 		*visible,
 		*swap,
 		*sort;
-Fl_Int_Input	*field;
+fltk3::IntInput	*field;
 
 void b_cb(Fl_Widget* o, void*) {
   printf("callback, selection = %d, event_clicks = %d\n",
@@ -164,7 +164,7 @@ int main(int argc, char **argv) {
   }
   browser->position(0);
 
-  field = new Fl_Int_Input(50, 350, 430, 25, "Line #:");
+  field = new fltk3::IntInput(50, 350, 430, 25, "Line #:");
   field->callback(show_cb);
 
   top = new Fl_Button(0, 375, 80, 25, "Top");

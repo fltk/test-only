@@ -46,12 +46,12 @@
   is the same that the current one.
   <P align=CENTER> \image html Fl_File_Input.png </P> 
   \image latex Fl_File_Input.png "Fl_File_Input"  width=6cm
-  \note As all Fl_Input derived objects, Fl_File_Input may call its callback
+  \note As all fltk3::Input derived objects, Fl_File_Input may call its callback
   when loosing focus (see fltk3::UNFOCUS) to update its state like its cursor shape.
   One resulting side effect is that you should call clear_changed() early in your callback
   to avoid reentrant calls if you plan to show another window or dialog box in the callback.
 */
-class FLTK3_EXPORT Fl_File_Input : public Fl_Input {
+class FLTK3_EXPORT Fl_File_Input : public fltk3::Input {
   
   fltk3::Color	errorcolor_;
   char		ok_entry_;

@@ -123,14 +123,14 @@ int main(int argc, char **argv) {
 //sw.mode(FL_RGB);
   window.resizable(&sw);
 
-  Fl_Hor_Slider slider(60, 5, window.w()-70, 30, "Sides:");
+  fltk3::HorSlider slider(60, 5, window.w()-70, 30, "Sides:");
   slider.align(FL_ALIGN_LEFT);
   slider.callback(sides_cb,&sw);
   slider.value(sw.sides);
   slider.step(1);
   slider.bounds(3,40);
 
-  Fl_Hor_Slider oslider(60, 40, window.w()-70, 30, "Overlay:");
+  fltk3::HorSlider oslider(60, 40, window.w()-70, 30, "Overlay:");
   oslider.align(FL_ALIGN_LEFT);
 #if HAVE_GL
   oslider.callback(overlay_sides_cb,&sw);

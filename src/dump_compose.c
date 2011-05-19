@@ -1,6 +1,6 @@
 /* write out the documentation for the compose key */
 
-/* copy the string from Fl_Input.C */
+/* copy the string from fltk3::Input.C */
 static const char* const compose_pairs =
 "  ! @ # $ y=| & : c a <<~ - r _ * +-2 3 ' u p . , 1 o >>141234? "
 "A`A'A^A~A:A*AEC,E`E'E^E:I`I'I^I:D-N~O`O'O^O~O:x O/U`U'U^U:Y'DDss"

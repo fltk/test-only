@@ -432,8 +432,8 @@ class EditorWindow : public Fl_Double_Window {
     ~EditorWindow();
 
     Fl_Window          *replace_dlg;
-    Fl_Input           *replace_find;
-    Fl_Input           *replace_with;
+    fltk3::Input           *replace_find;
+    fltk3::Input           *replace_with;
     Fl_Button          *replace_all;
     Fl_Return_Button   *replace_next;
     Fl_Button          *replace_cancel;
@@ -444,10 +444,10 @@ class EditorWindow : public Fl_Double_Window {
 
 EditorWindow::EditorWindow(int w, int h, const char* t) : Fl_Double_Window(w, h, t) {
   replace_dlg = new Fl_Window(300, 105, "Replace");
-    replace_find = new Fl_Input(80, 10, 210, 25, "Find:");
+    replace_find = new fltk3::Input(80, 10, 210, 25, "Find:");
     replace_find->align(FL_ALIGN_LEFT);
 
-    replace_with = new Fl_Input(80, 40, 210, 25, "Replace:");
+    replace_with = new fltk3::Input(80, 40, 210, 25, "Replace:");
     replace_with->align(FL_ALIGN_LEFT);
 
     replace_all = new Fl_Button(10, 70, 90, 25, "Replace All");

@@ -26,27 +26,31 @@
 //
 
 /* \file
-   Fl_Int_Input widget . */
+ fltk3::IntInput widget . */
 
 #ifndef Fltk3_Int_Input_H
 #define Fltk3_Int_Input_H
 
 #include "Input.h"
 
-/**
-  The Fl_Int_Input class is a subclass of Fl_Input
-  that only allows the user to type decimal digits (or hex numbers of the form 0xaef).
-*/
-class FLTK3_EXPORT Fl_Int_Input : public Fl_Input {
-public:
+namespace fltk3 {
+  
   /**
-    Creates a new Fl_Int_Input widget using the given position,
-    size, and label string. The default boxtype is fltk3::DOWN_BOX.
-    <P>Inherited destructor Destroys the widget and any value associated with it.
-  */
-  Fl_Int_Input(int X,int Y,int W,int H,const char *l = 0)
-      : Fl_Input(X,Y,W,H,l) {type(FL_INT_INPUT);}
-};
+   The fltk3::IntInput class is a subclass of fltk3::Input
+   that only allows the user to type decimal digits (or hex numbers of the form 0xaef).
+   */
+  class FLTK3_EXPORT IntInput : public fltk3::Input {
+  public:
+    /**
+     Creates a new fltk3::IntInput widget using the given position,
+     size, and label string. The default boxtype is fltk3::DOWN_BOX.
+     <P>Inherited destructor Destroys the widget and any value associated with it.
+     */
+    IntInput(int X,int Y,int W,int H,const char *l = 0)
+    : fltk3::Input(X,Y,W,H,l) {type(FL_INT_INPUT);}
+  };
+  
+}
 
 #endif
 

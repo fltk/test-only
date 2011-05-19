@@ -26,7 +26,7 @@
 //
 
 /* \file
-   Fl_Multiline_Input widget . */
+ Fl_Multiline_Input widget . */
 
 
 #ifndef Fltk3_Multiline_Input_H
@@ -34,34 +34,38 @@
 
 #include "Input.h"
 
-/**
-  This input field displays '\n' characters as new lines rather than ^J,
-  and accepts the Return, Tab, and up and down arrow keys.  This is for
-  editing multiline text.
-
-  This is far from the nirvana of text editors, and is probably only
-  good for small bits of text, 10 lines at most. Note that this widget
-  does not support scrollbars or per-character color control.
-
-  If you are presenting large amounts of text and need scrollbars
-  or full color control of characters, you probably want Fl_Text_Editor
-  instead.
-
-  In FLTK 1.3.x, the default behavior of the 'Tab' key was changed
-  to support consistent focus navigation. To get the older FLTK 1.1.x
-  behavior, set Fl_Input_::tab_nav() to 0. Newer programs should consider using
-  Fl_Text_Editor.
-*/
-class FLTK3_EXPORT Fl_Multiline_Input : public Fl_Input {
-public:
+namespace fltk3 {
+  
   /**
-    Creates a new Fl_Multiline_Input widget using the given
-    position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
-    <P>Inherited destructor destroys the widget and any value associated with it.
-  */
-  Fl_Multiline_Input(int X,int Y,int W,int H,const char *l = 0)
-    : Fl_Input(X,Y,W,H,l) {type(FL_MULTILINE_INPUT);}
-};
+   This input field displays '\n' characters as new lines rather than ^J,
+   and accepts the Return, Tab, and up and down arrow keys.  This is for
+   editing multiline text.
+   
+   This is far from the nirvana of text editors, and is probably only
+   good for small bits of text, 10 lines at most. Note that this widget
+   does not support scrollbars or per-character color control.
+   
+   If you are presenting large amounts of text and need scrollbars
+   or full color control of characters, you probably want Fl_Text_Editor
+   instead.
+   
+   In FLTK 1.3.x, the default behavior of the 'Tab' key was changed
+   to support consistent focus navigation. To get the older FLTK 1.1.x
+   behavior, set Fl_Input_::tab_nav() to 0. Newer programs should consider using
+   Fl_Text_Editor.
+   */
+  class FLTK3_EXPORT MultilineInput : public fltk3::Input {
+  public:
+    /**
+     Creates a new Fl_Multiline_Input widget using the given
+     position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
+     <P>Inherited destructor destroys the widget and any value associated with it.
+     */
+    MultilineInput(int X,int Y,int W,int H,const char *l = 0)
+    : fltk3::Input(X,Y,W,H,l) {type(FL_MULTILINE_INPUT);}
+  };
+  
+}
 
 #endif
 

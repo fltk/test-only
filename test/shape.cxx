@@ -99,7 +99,7 @@ int main(int argc, char **argv) {
   window.resizable(&sw);
   //  window.size_range(300,330,0,0,1,1,1);
 // add a knob to control it:
-  Fl_Hor_Slider slider(50, 295, window.w()-60, 30, "Sides:");
+  fltk3::HorSlider slider(50, 295, window.w()-60, 30, "Sides:");
   slider.align(FL_ALIGN_LEFT);
   slider.callback(sides_cb,&sw);
   slider.value(sw.sides);

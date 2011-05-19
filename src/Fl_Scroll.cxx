@@ -31,10 +31,10 @@
 #include <fltk3/draw.h>
 
 /** Clear all but the scrollbars... */
-void Fl_Scroll::clear() {
+void fltk3::ScrollGroup::clear() {
   // Note: the scrollbars are removed from the group before calling
   // fltk3::Group::clear() to take advantage of the optimized widget removal
-  // and deletion. Finally they are added to Fl_Scroll's group again. This
+  // and deletion. Finally they are added to fltk3::ScrollGroup's group again. This
   // is MUCH faster than removing the widgets one by one (STR #2409).
 
   remove(scrollbar);
@@ -45,7 +45,7 @@ void Fl_Scroll::clear() {
 }
 
 /** Insure the scrollbars are the last children */
-void Fl_Scroll::fix_scrollbar_order() {
+void fltk3::ScrollGroup::fix_scrollbar_order() {
   fltk3::Widget** a = (fltk3::Widget**)array();
   if (a[children()-1] != &scrollbar) {
     int i,j; for (i = j = 0; j < children(); j++)
@@ -58,9 +58,9 @@ void Fl_Scroll::fix_scrollbar_order() {
 // Draw widget's background and children within a specific clip region
 //    So widget can just redraw damaged parts.
 //
-void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
+void fltk3::ScrollGroup::draw_clip(void* v,int X, int Y, int W, int H) {
   fltk3::push_clip(X,Y,W,H);
-  Fl_Scroll* s = (Fl_Scroll*)v;
+  fltk3::ScrollGroup* s = (fltk3::ScrollGroup*)v;
   // erase background as needed...
   switch (s->box()) {
     case fltk3::NO_BOX :
@@ -106,7 +106,7 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
    \param[in] si -- ScrollInfo structure
    \returns Structure containing the calculated info.
 */
-void Fl_Scroll::recalc_scrollbars(ScrollInfo &si) {
+void fltk3::ScrollGroup::recalc_scrollbars(ScrollInfo &si) {
 
   // inner box of widget (excluding scrollbars)
   si.innerbox_x = x()+fltk3::box_dx(box());
@@ -223,12 +223,12 @@ void Fl_Scroll::recalc_scrollbars(ScrollInfo &si) {
   the scrollbars.
   
   Currently this is only reliable after draw(), and before any resizing of
-  the Fl_Scroll or any child widgets occur.
+  the fltk3::ScrollGroup or any child widgets occur.
   
   \todo The visibility of the scrollbars ought to be checked/calculated
   outside of the draw() method (STR #1895).
 */
-void Fl_Scroll::bbox(int& X, int& Y, int& W, int& H) {
+void fltk3::ScrollGroup::bbox(int& X, int& Y, int& W, int& H) {
   X = x()+fltk3::box_dx(box());
   Y = y()+fltk3::box_dy(box());
   W = w()-fltk3::box_dw(box());
@@ -243,7 +243,7 @@ void Fl_Scroll::bbox(int& X, int& Y, int& W, int& H) {
   }
 }
 
-void Fl_Scroll::draw() {
+void fltk3::ScrollGroup::draw() {
   fix_scrollbar_order();
   int X,Y,W,H; bbox(X,Y,W,H);
 
@@ -336,7 +336,7 @@ void Fl_Scroll::draw() {
   }
 }
 
-void Fl_Scroll::resize(int X, int Y, int W, int H) {
+void fltk3::ScrollGroup::resize(int X, int Y, int W, int H) {
   int dx = X-x(), dy = Y-y();
   int dw = W-w(), dh = H-h();
   fltk3::Widget::resize(X,Y,W,H); // resize _before_ moving children around
@@ -360,7 +360,7 @@ void Fl_Scroll::resize(int X, int Y, int W, int H) {
 }
 
 /**  Moves the contents of the scroll group to a new position.*/
-void Fl_Scroll::scroll_to(int X, int Y) {
+void fltk3::ScrollGroup::scroll_to(int X, int Y) {
   int dx = xposition_-X;
   int dy = yposition_-Y;
   if (!dx && !dy) return;
@@ -376,26 +376,26 @@ void Fl_Scroll::scroll_to(int X, int Y) {
   else damage(fltk3::DAMAGE_SCROLL);
 }
 
-void Fl_Scroll::hscrollbar_cb(fltk3::Widget* o, void*) {
-  Fl_Scroll* s = (Fl_Scroll*)(o->parent());
+void fltk3::ScrollGroup::hscrollbar_cb(fltk3::Widget* o, void*) {
+  fltk3::ScrollGroup* s = (fltk3::ScrollGroup*)(o->parent());
   s->scroll_to(int(((Fl_Scrollbar*)o)->value()), s->yposition());
 }
 
-void Fl_Scroll::scrollbar_cb(fltk3::Widget* o, void*) {
-  Fl_Scroll* s = (Fl_Scroll*)(o->parent());
+void fltk3::ScrollGroup::scrollbar_cb(fltk3::Widget* o, void*) {
+  fltk3::ScrollGroup* s = (fltk3::ScrollGroup*)(o->parent());
   s->scroll_to(s->xposition(), int(((Fl_Scrollbar*)o)->value()));
 }
 /**
-  Creates a new Fl_Scroll widget using the given position,
+  Creates a new fltk3::ScrollGroup widget using the given position,
   size, and label string. The default boxtype is fltk3::NO_BOX.
   <P>The destructor <I>also deletes all the children</I>. This allows a
   whole tree to be deleted at once, without having to keep a pointer to
   all the children in the user code. A kludge has been done so the 
-  Fl_Scroll and all of its children can be automatic (local)
-  variables, but you must declare the Fl_Scroll<I>first</I>, so
+  fltk3::ScrollGroup and all of its children can be automatic (local)
+  variables, but you must declare the fltk3::ScrollGroup<I>first</I>, so
   that it is destroyed last.
 */
-Fl_Scroll::Fl_Scroll(int X,int Y,int W,int H,const char* L)
+fltk3::ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L)
   : fltk3::Group(X,Y,W,H,L), 
     scrollbar(X+W-fltk3::scrollbar_size(),Y,
               fltk3::scrollbar_size(),H-fltk3::scrollbar_size()),
@@ -405,12 +405,12 @@ Fl_Scroll::Fl_Scroll(int X,int Y,int W,int H,const char* L)
   xposition_ = oldx = 0;
   yposition_ = oldy = 0;
   scrollbar_size_ = 0;
-  hscrollbar.type(FL_HORIZONTAL);
+  hscrollbar.type(fltk3::HORIZONTAL);
   hscrollbar.callback(hscrollbar_cb);
   scrollbar.callback(scrollbar_cb);
 }
 
-int Fl_Scroll::handle(int event) {
+int fltk3::ScrollGroup::handle(int event) {
   fix_scrollbar_order();
   return fltk3::Group::handle(event);
 }

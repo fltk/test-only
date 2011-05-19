@@ -50,7 +50,7 @@
   assumes the font can draw any characters in the ISO-Latin1 character
   set.
 */
-class Fl_Output : public Fl_Input { // don't use FLTK3_EXPORT here !
+class Fl_Output : public fltk3::Input { // don't use FLTK3_EXPORT here !
 public:
   /**
     Creates a new Fl_Output widget using the given position,
@@ -58,7 +58,7 @@ public:
     <P>Inherited destrucor destroys the widget and any value associated with it.
   */
     Fl_Output(int X,int Y,int W,int H, const char *l = 0)
-    : Fl_Input(X, Y, W, H, l) {type(FL_NORMAL_OUTPUT);}
+    : fltk3::Input(X, Y, W, H, l) {type(FL_NORMAL_OUTPUT);}
 };
 
 #endif 

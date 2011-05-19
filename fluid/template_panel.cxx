@@ -107,16 +107,16 @@ if (img) {
 
 fltk3::Box *template_preview=(fltk3::Box *)0;
 
-Fl_Input *template_name=(Fl_Input *)0;
+fltk3::Input *template_name=(fltk3::Input *)0;
 
-static void cb_template_name(Fl_Input*, void*) {
+static void cb_template_name(fltk3::Input*, void*) {
   if (strlen(template_name->value())) {
   template_submit->activate();
   if (fltk3::event_key() == fltk3::EnterKey) template_panel->hide();
 } else template_submit->deactivate();
 }
 
-Fl_Input *template_instance=(Fl_Input *)0;
+fltk3::Input *template_instance=(fltk3::Input *)0;
 
 fltk3::Button *template_delete=(fltk3::Button *)0;
 
@@ -156,17 +156,17 @@ fltk3::DoubleWindow* make_template_panel() {
       template_preview->align(fltk3::Align(69|fltk3::ALIGN_INSIDE));
       fltk3::Group::current()->resizable(template_preview);
     } // fltk3::Box* template_preview
-    { template_name = new Fl_Input(124, 288, 326, 25, "Template Name:");
+    { template_name = new fltk3::Input(124, 288, 326, 25, "Template Name:");
       template_name->labelfont(1);
       template_name->textfont(4);
       template_name->callback((fltk3::Callback*)cb_template_name);
       template_name->when(3);
-    } // Fl_Input* template_name
-    { template_instance = new Fl_Input(124, 288, 326, 25, "Instance Name:");
+    } // fltk3::Input* template_name
+    { template_instance = new fltk3::Input(124, 288, 326, 25, "Instance Name:");
       template_instance->labelfont(1);
       template_instance->textfont(4);
       template_instance->hide();
-    } // Fl_Input* template_instance
+    } // fltk3::Input* template_instance
     { fltk3::Group* o = new fltk3::Group(10, 323, 440, 25);
       { template_delete = new fltk3::Button(10, 323, 133, 25, "Delete Template");
         template_delete->callback((fltk3::Callback*)template_delete_cb);

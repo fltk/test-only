@@ -54,8 +54,8 @@ namespace fltk3 {
    Use void fltk3::Widget::type(int) to set how the slider is drawn, 
    which can be one of the following:
    
-   \li FL_VERTICAL - Draws a vertical slider (this is the default).
-   \li FL_HORIZONTAL - Draws a horizontal slider.
+   \li fltk3::VERTICAL - Draws a vertical slider (this is the default).
+   \li fltk3::HORIZONTAL - Draws a horizontal slider.
    \li fltk3::VERT_FILL_SLIDER - Draws a filled vertical slider,
    useful as a progress or value meter.
    \li fltk3::HOR_FILL_SLIDER - Draws a filled horizontal  slider,
@@ -68,7 +68,7 @@ namespace fltk3 {
    \image html  slider.png 
    \image latex slider.png "fltk3::Slider" width=4cm
    */
-  class FLTK3_EXPORT Slider : public Fl_Valuator {
+  class FLTK3_EXPORT Slider : public fltk3::Valuator {
     
     float slider_size_;
     uchar slider_;

@@ -134,7 +134,7 @@ bt("@redo");
   orientation = new Fl_Value_Slider(
     (int)(window->w()*.05+.5), window->h()-40,
     (int)(window->w()*.42+.5), 16, "Orientation");
-  orientation->type(FL_HORIZONTAL);
+  orientation->type(fltk3::HORIZONTAL);
   orientation->range(0.0, 9.0);
   orientation->value(0.0);
   orientation->step(1);
@@ -143,7 +143,7 @@ bt("@redo");
   size = new Fl_Value_Slider(
     (int)(window->w()*.53+.5), window->h()-40,
     (int)(window->w()*.42+.5), 16, "Size");
-  size->type(FL_HORIZONTAL);
+  size->type(fltk3::HORIZONTAL);
   size->range(-3.0, 9.0);
   size->value(0.0);
   size->step(1);

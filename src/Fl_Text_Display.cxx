@@ -117,7 +117,7 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H, const char* l)
   mVScrollBar->callback((fltk3::Callback*)v_scrollbar_cb, this);
   mHScrollBar = new Fl_Scrollbar(0,0,1,1);
   mHScrollBar->callback((fltk3::Callback*)h_scrollbar_cb, this);
-  mHScrollBar->type(FL_HORIZONTAL);
+  mHScrollBar->type(fltk3::HORIZONTAL);
   
   end();
   

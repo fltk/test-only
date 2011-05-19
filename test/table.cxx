@@ -131,7 +131,7 @@ static DemoTable *G_table = 0;
 
 void setrows_cb(Fl_Widget*, void *data)
 {
-    Fl_Input *in = (Fl_Input*)data;
+    fltk3::Input *in = (fltk3::Input*)data;
     int rows = atoi(in->value());
     if ( rows < 0 ) rows = 0;
     G_table->rows(rows);
@@ -139,7 +139,7 @@ void setrows_cb(Fl_Widget*, void *data)
 
 void setcols_cb(Fl_Widget*, void *data)
 {
-    Fl_Input *in = (Fl_Input*)data;
+    fltk3::Input *in = (fltk3::Input*)data;
     int cols = atoi(in->value());
     if ( cols < 0 ) cols = 0;
     G_table->cols(cols);
@@ -171,7 +171,7 @@ void setcolresize_cb(Fl_Widget*, void *data)
 
 void setpositionrow_cb(Fl_Widget *w, void *data)
 {
-    Fl_Input *in = (Fl_Input*)data;
+    fltk3::Input *in = (fltk3::Input*)data;
     int toprow = atoi(in->value());
     if ( toprow < 0 || toprow >= G_table->rows() ) 
         { fl_alert("Must be in range 0 thru #rows"); }
@@ -181,7 +181,7 @@ void setpositionrow_cb(Fl_Widget *w, void *data)
 
 void setpositioncol_cb(Fl_Widget *w, void *data)
 {
-    Fl_Input *in = (Fl_Input*)data;
+    fltk3::Input *in = (fltk3::Input*)data;
     int leftcol = atoi(in->value());
     if ( leftcol < 0 || leftcol >= G_table->cols() ) 
         { fl_alert("Must be in range 0 thru #cols"); }
@@ -191,7 +191,7 @@ void setpositioncol_cb(Fl_Widget *w, void *data)
 
 void setrowheaderwidth_cb(Fl_Widget *w, void *data)
 {
-    Fl_Input *in = (Fl_Input*)data;
+    fltk3::Input *in = (fltk3::Input*)data;
     int val = atoi(in->value());
     if ( val < 1 ) { val = 1; in->value("1"); }
     G_table->row_header_width(val);
@@ -199,7 +199,7 @@ void setrowheaderwidth_cb(Fl_Widget *w, void *data)
 
 void setcolheaderheight_cb(Fl_Widget *w, void *data)
 {
-    Fl_Input *in = (Fl_Input*)data;
+    fltk3::Input *in = (fltk3::Input*)data;
     int val = atoi(in->value());
     if ( val < 1 ) { val = 1; in->value("1"); }
     G_table->col_header_height(val);
@@ -207,7 +207,7 @@ void setcolheaderheight_cb(Fl_Widget *w, void *data)
 
 void setrowheadercolor_cb(Fl_Widget *w, void *data)
 {
-    Fl_Input *in = (Fl_Input*)data;
+    fltk3::Input *in = (fltk3::Input*)data;
     int val = atoi(in->value());
     if ( val < 0 ) { fl_alert("Must be a color >0"); }
     else { G_table->row_header_color(Fl_Color(val)); }
@@ -215,7 +215,7 @@ void setrowheadercolor_cb(Fl_Widget *w, void *data)
 
 void setcolheadercolor_cb(Fl_Widget *w, void *data)
 {
-    Fl_Input *in = (Fl_Input*)data;
+    fltk3::Input *in = (fltk3::Input*)data;
     int val = atoi(in->value());
     if ( val < 0 ) { fl_alert("Must be a color >0"); }
     else { G_table->col_header_color(Fl_Color(val)); }
@@ -223,7 +223,7 @@ void setcolheadercolor_cb(Fl_Widget *w, void *data)
 
 void setrowheightall_cb(Fl_Widget *w, void *data)
 {
-    Fl_Input *in = (Fl_Input*)data;
+    fltk3::Input *in = (fltk3::Input*)data;
     int val = atoi(in->value());
     if ( val < 0 ) { val = 0; in->value("0"); }
     G_table->row_height_all(val);
@@ -231,7 +231,7 @@ void setrowheightall_cb(Fl_Widget *w, void *data)
 
 void setcolwidthall_cb(Fl_Widget *w, void *data)
 {
-    Fl_Input *in = (Fl_Input*)data;
+    fltk3::Input *in = (fltk3::Input*)data;
     int val = atoi(in->value());
     if ( val < 0 ) { val = 0; in->value("0"); }
     G_table->col_width_all(val);
@@ -239,7 +239,7 @@ void setcolwidthall_cb(Fl_Widget *w, void *data)
 
 void settablecolor_cb(Fl_Widget *w, void *data)
 {
-    Fl_Input *in = (Fl_Input*)data;
+    fltk3::Input *in = (fltk3::Input*)data;
     int val = atoi(in->value());
     if ( val < 0 ) { fl_alert("Must be a color >0"); }
     else { G_table->color(Fl_Color(val)); }
@@ -248,7 +248,7 @@ void settablecolor_cb(Fl_Widget *w, void *data)
 
 void setcellfgcolor_cb(Fl_Widget *w, void *data)
 {
-    Fl_Input *in = (Fl_Input*)data;
+    fltk3::Input *in = (fltk3::Input*)data;
     int val = atoi(in->value());
     if ( val < 0 ) { fl_alert("Must be a color >0"); }
     else { G_table->SetCellFGColor(Fl_Color(val)); }
@@ -257,7 +257,7 @@ void setcellfgcolor_cb(Fl_Widget *w, void *data)
 
 void setcellbgcolor_cb(Fl_Widget *w, void *data)
 {
-    Fl_Input *in = (Fl_Input*)data;
+    fltk3::Input *in = (fltk3::Input*)data;
     int val = atoi(in->value());
     if ( val < 0 ) { fl_alert("Must be a color >0"); }
     else { G_table->SetCellBGColor(Fl_Color(val)); }
@@ -366,51 +366,51 @@ int main(int argc, char **argv)
     win.begin();
 
     // ROW
-    Fl_Input setrows(150, 500, 120, 25, "Rows");
+    fltk3::Input setrows(150, 500, 120, 25, "Rows");
     setrows.labelsize(12);
     setrows.value(itoa(G_table->rows()));
     setrows.callback(setrows_cb, (void*)&setrows);
     setrows.when(FL_WHEN_RELEASE);
 
-    Fl_Input rowheightall(400, 500, 120, 25, "Row Height");
+    fltk3::Input rowheightall(400, 500, 120, 25, "Row Height");
     rowheightall.labelsize(12);
     rowheightall.value(itoa(G_table->row_height(0)));
     rowheightall.callback(setrowheightall_cb, (void*)&rowheightall);
     rowheightall.when(FL_WHEN_RELEASE);
 
-    Fl_Input positionrow(650, 500, 120, 25, "Row Position");
+    fltk3::Input positionrow(650, 500, 120, 25, "Row Position");
     positionrow.labelsize(12);
     positionrow.value("1");
     positionrow.callback(setpositionrow_cb, (void*)&positionrow);
     positionrow.when(FL_WHEN_RELEASE);
 
     // COL
-    Fl_Input setcols(150, 530, 120, 25, "Cols");
+    fltk3::Input setcols(150, 530, 120, 25, "Cols");
     setcols.labelsize(12);
     setcols.value(itoa(G_table->cols()));
     setcols.callback(setcols_cb, (void*)&setcols);
     setcols.when(FL_WHEN_RELEASE);
 
-    Fl_Input colwidthall(400, 530, 120, 25, "Col Width");
+    fltk3::Input colwidthall(400, 530, 120, 25, "Col Width");
     colwidthall.labelsize(12);
     colwidthall.value(itoa(G_table->col_width(0)));
     colwidthall.callback(setcolwidthall_cb, (void*)&colwidthall);
     colwidthall.when(FL_WHEN_RELEASE);
 
-    Fl_Input positioncol(650, 530, 120, 25, "Col Position");
+    fltk3::Input positioncol(650, 530, 120, 25, "Col Position");
     positioncol.labelsize(12);
     positioncol.value("1");
     positioncol.callback(setpositioncol_cb, (void*)&positioncol);
     positioncol.when(FL_WHEN_RELEASE);
 
     // ROW HEADER
-    Fl_Input rowheaderwidth(150, 570, 120, 25, "Row Header Width");
+    fltk3::Input rowheaderwidth(150, 570, 120, 25, "Row Header Width");
     rowheaderwidth.labelsize(12);
     rowheaderwidth.value(itoa(G_table->row_header_width()));
     rowheaderwidth.callback(setrowheaderwidth_cb, (void*)&rowheaderwidth);
     rowheaderwidth.when(FL_WHEN_RELEASE);
 
-    Fl_Input rowheadercolor(400, 570, 120, 25, "Row Header Color");
+    fltk3::Input rowheadercolor(400, 570, 120, 25, "Row Header Color");
     rowheadercolor.labelsize(12);
     rowheadercolor.value(itoa((int)G_table->row_header_color()));
     rowheadercolor.callback(setrowheadercolor_cb, (void*)&rowheadercolor);
@@ -427,13 +427,13 @@ int main(int argc, char **argv)
     rowresize.value(G_table->row_resize() ? 1 : 0);
 
     // COL HEADER
-    Fl_Input colheaderheight(150, 600, 120, 25, "Col Header Height");
+    fltk3::Input colheaderheight(150, 600, 120, 25, "Col Header Height");
     colheaderheight.labelsize(12);
     colheaderheight.value(itoa(G_table->col_header_height()));
     colheaderheight.callback(setcolheaderheight_cb, (void*)&colheaderheight);
     colheaderheight.when(FL_WHEN_RELEASE);
 
-    Fl_Input colheadercolor(400, 600, 120, 25, "Col Header Color");
+    fltk3::Input colheadercolor(400, 600, 120, 25, "Col Header Color");
     colheadercolor.labelsize(12);
     colheadercolor.value(itoa((int)G_table->col_header_color()));
     colheadercolor.callback(setcolheadercolor_cb, (void*)&colheadercolor);
@@ -461,19 +461,19 @@ int main(int argc, char **argv)
     widgetbox.menu(widgetbox_choices);
     widgetbox.value(2);		// down frame
 
-    Fl_Input tablecolor(400, 640, 120, 25, "Table Color");
+    fltk3::Input tablecolor(400, 640, 120, 25, "Table Color");
     tablecolor.labelsize(12);
     tablecolor.value(itoa((int)G_table->color()));
     tablecolor.callback(settablecolor_cb, (void*)&tablecolor);
     tablecolor.when(FL_WHEN_RELEASE);
 
-    Fl_Input cellbgcolor(400, 670, 120, 25, "Cell BG Color");
+    fltk3::Input cellbgcolor(400, 670, 120, 25, "Cell BG Color");
     cellbgcolor.labelsize(12);
     cellbgcolor.value(itoa((int)G_table->GetCellBGColor()));
     cellbgcolor.callback(setcellbgcolor_cb, (void*)&cellbgcolor);
     cellbgcolor.when(FL_WHEN_RELEASE);
 
-    Fl_Input cellfgcolor(400, 700, 120, 25, "Cell FG Color");
+    fltk3::Input cellfgcolor(400, 700, 120, 25, "Cell FG Color");
     cellfgcolor.labelsize(12);
     cellfgcolor.value(itoa((int)G_table->GetCellFGColor()));
     cellfgcolor.callback(setcellfgcolor_cb, (void*)&cellfgcolor);

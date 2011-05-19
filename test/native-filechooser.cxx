@@ -35,7 +35,7 @@
 #include <fltk3/Native_File_Chooser.h>
 
 // GLOBALS
-Fl_Input *G_filename = NULL;
+fltk3::Input *G_filename = NULL;
 
 void Butt_CB(Fl_Widget*, void*) {
   // Create native chooser
@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
   win->begin();
   {
     int y = 10;
-    G_filename = new Fl_Input(80, y, win->w()-80-10, 25, "Filename");
+    G_filename = new fltk3::Input(80, y, win->w()-80-10, 25, "Filename");
     G_filename->value(argc <= argn ? "." : argv[argn]);
     G_filename->tooltip("Default filename");
     y += G_filename->h() + 5;

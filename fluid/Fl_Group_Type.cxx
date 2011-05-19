@@ -136,11 +136,11 @@ void Fl_Group_Type::write_code2() {
 
 ////////////////////////////////////////////////////////////////
 
-const char pack_type_name[] = "Fl_Pack";
+const char pack_type_name[] = "fltk3::PackedGroup";
 
 fltk3::MenuItem pack_type_menu[] = {
-  {"HORIZONTAL", 0, 0, (void*)Fl_Pack::HORIZONTAL},
-  {"VERTICAL", 0, 0, (void*)Fl_Pack::VERTICAL},
+  {"HORIZONTAL", 0, 0, (void*)fltk3::PackedGroup::HORIZONTAL},
+  {"VERTICAL", 0, 0, (void*)fltk3::PackedGroup::VERTICAL},
   {0}};
 
 Fl_Pack_Type Fl_Pack_type;	// the "factory"
@@ -398,10 +398,10 @@ void Fl_Group_Type::copy_properties() {
 
 #include <fltk3/ScrollGroup.h>
 
-const char scroll_type_name[] = "Fl_Scroll";
+const char scroll_type_name[] = "fltk3::ScrollGroup";
 
 fltk3::Widget *Fl_Scroll_Type::enter_live_mode(int) {
-  fltk3::Group *grp = new Fl_Scroll(o->x(), o->y(), o->w(), o->h());
+  fltk3::Group *grp = new fltk3::ScrollGroup(o->x(), o->y(), o->w(), o->h());
   grp->show();
   live_widget = grp;
   if (live_widget) {
@@ -417,19 +417,19 @@ fltk3::Widget *Fl_Scroll_Type::enter_live_mode(int) {
 }
 
 fltk3::MenuItem scroll_type_menu[] = {
-  {"BOTH", 0, 0, 0/*(void*)Fl_Scroll::BOTH*/},
-  {"HORIZONTAL", 0, 0, (void*)Fl_Scroll::HORIZONTAL},
-  {"VERTICAL", 0, 0, (void*)Fl_Scroll::VERTICAL},
-  {"HORIZONTAL_ALWAYS", 0, 0, (void*)Fl_Scroll::HORIZONTAL_ALWAYS},
-  {"VERTICAL_ALWAYS", 0, 0, (void*)Fl_Scroll::VERTICAL_ALWAYS},
-  {"BOTH_ALWAYS", 0, 0, (void*)Fl_Scroll::BOTH_ALWAYS},
+  {"BOTH", 0, 0, 0/*(void*)fltk3::ScrollGroup::BOTH*/},
+  {"HORIZONTAL", 0, 0, (void*)fltk3::ScrollGroup::HORIZONTAL},
+  {"VERTICAL", 0, 0, (void*)fltk3::ScrollGroup::VERTICAL},
+  {"HORIZONTAL_ALWAYS", 0, 0, (void*)fltk3::ScrollGroup::HORIZONTAL_ALWAYS},
+  {"VERTICAL_ALWAYS", 0, 0, (void*)fltk3::ScrollGroup::VERTICAL_ALWAYS},
+  {"BOTH_ALWAYS", 0, 0, (void*)fltk3::ScrollGroup::BOTH_ALWAYS},
   {0}};
 
 Fl_Scroll_Type Fl_Scroll_type;	// the "factory"
 
 void Fl_Scroll_Type::copy_properties() {
   Fl_Group_Type::copy_properties();
-  Fl_Scroll *s = (Fl_Scroll*)o, *d = (Fl_Scroll*)live_widget;
+  fltk3::ScrollGroup *s = (fltk3::ScrollGroup*)o, *d = (fltk3::ScrollGroup*)live_widget;
   d->position(s->xposition(), s->yposition());
   d->type(s->type()); // TODO: get this flag from Fl_Scroll_Type!
   d->scrollbar.align(s->scrollbar.align());

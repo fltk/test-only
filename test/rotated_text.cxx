@@ -41,7 +41,7 @@
 
 Fl_Toggle_Button *leftb,*rightb,*clipb;
 //Fl_Box *text;
-Fl_Input *input;
+fltk3::Input *input;
 fltk3::HorValueSlider *fonts;
 fltk3::HorValueSlider *sizes;
 fltk3::HorValueSlider *angles;
@@ -182,7 +182,7 @@ int main(int argc, char **argv) {
   angles->value(0);
   angles->callback(angle_cb);
 
-  input = new Fl_Input(50,375,350,25);
+  input = new fltk3::Input(50,375,350,25);
   input->static_value("Rotate Me!!!");
   input->when(FL_WHEN_CHANGED);
   input->callback(input_cb);

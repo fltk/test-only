@@ -62,8 +62,8 @@ static fltk3::Group *print_collate_group[2]={(fltk3::Group *)0};
 static Fl_Progress *print_progress=(Fl_Progress *)0;
 static fltk3::DoubleWindow *print_properties_panel=(fltk3::DoubleWindow *)0;
 static fltk3::Choice *print_page_size=(fltk3::Choice *)0;
-static Fl_Int_Input *print_from=(Fl_Int_Input *)0;
-static Fl_Int_Input *print_to=(Fl_Int_Input *)0;
+static fltk3::IntInput *print_from=(fltk3::IntInput *)0;
+static fltk3::IntInput *print_to=(fltk3::IntInput *)0;
 static Fl_Spinner *print_copies=(Fl_Spinner *)0;
 
 static int print_start = 0;	// 1 if print_okay has been clicked
@@ -281,16 +281,16 @@ fltk3::DoubleWindow* make_print_panel() {
           print_selection->down_box(fltk3::ROUND_DOWN_BOX);
           print_selection->callback((fltk3::Callback*)cb_print_selection);
         } // fltk3::RoundButton* print_selection
-        { print_from = new Fl_Int_Input(136, 126, 28, 25, Fl_Printer::dialog_from);
+        { print_from = new fltk3::IntInput(136, 126, 28, 25, Fl_Printer::dialog_from);
           print_from->type(2);
           print_from->textfont(4);
           print_from->deactivate();
-        } // Fl_Int_Input* print_from
-        { print_to = new Fl_Int_Input(199, 126, 28, 25, Fl_Printer::dialog_to);
+        } // fltk3::IntInput* print_from
+        { print_to = new fltk3::IntInput(199, 126, 28, 25, Fl_Printer::dialog_to);
           print_to->type(2);
           print_to->textfont(4);
           print_to->deactivate();
-        } // Fl_Int_Input* print_to
+        } // fltk3::IntInput* print_to
         o->end();
       } // fltk3::Group* o
       { fltk3::Group* o = new fltk3::Group(247, 86, 210, 105, Fl_Printer::dialog_copies);

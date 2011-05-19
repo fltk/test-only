@@ -69,7 +69,7 @@ static int  pickedsize = DEF_SIZE;
 static char label[1000];
 
 static Fl_Double_Window *main_win;
-static Fl_Scroll *thescroll;
+static fltk3::ScrollGroup *thescroll;
 static Fl_Font extra_font;
 
 static int font_count = 0;
@@ -487,10 +487,10 @@ void box_cb(Fl_Widget* o, void*) {
 }
 
 
-class right_left_input : public Fl_Input
+class right_left_input : public fltk3::Input
 {
 public:
-  right_left_input (int x, int y, int w, int h) : Fl_Input(x, y, w, h) {};
+  right_left_input (int x, int y, int w, int h) : fltk3::Input(x, y, w, h) {};
   void draw() {
     if (type() == FL_HIDDEN_INPUT) return;
     Fl_Boxtype b = box();
@@ -511,8 +511,8 @@ void i7_cb(Fl_Widget *w, void *d)
 {
   int i = 0;
   char nb[] = "01234567";
-  Fl_Input *i7 = (Fl_Input*)w;
-  Fl_Input *i8 = (Fl_Input*)d;
+  fltk3::Input *i7 = (fltk3::Input*)w;
+  fltk3::Input *i8 = (fltk3::Input*)d;
   static char buf[1024];
   const char *ptr = i7->value();
   while (ptr && *ptr) {
@@ -601,10 +601,10 @@ int main(int argc, char** argv)
   main_win = new Fl_Double_Window (200 + 5*75, 400, "Unicode Display Test");
   main_win->begin();
   
-  Fl_Input i1(5, 5, 190, 25);
+  fltk3::Input i1(5, 5, 190, 25);
   utf8[l] = '\0';
   i1.value(utf8);
-  Fl_Scroll scroll(200,0,5 * 75,400);
+  fltk3::ScrollGroup scroll(200,0,5 * 75,400);
   
   int off = 2;
   int end_list = 0x10000 / 16;
@@ -629,10 +629,10 @@ int main(int argc, char** argv)
     }
     buf[o] = '\0';
     sprintf(bu, "0x%06lX", y * 16);
-    Fl_Input *b = new Fl_Input(200,(y-off)*25,80,25);
+    fltk3::Input *b = new fltk3::Input(200,(y-off)*25,80,25);
     b->textfont(FL_COURIER);
     b->value(strdup(bu));
-    b = new Fl_Input(280,(y-off)*25,380,25);
+    b = new fltk3::Input(280,(y-off)*25,380,25);
     b->textfont(extra_font);
     b->value(strdup(buf));
   }
@@ -642,19 +642,19 @@ int main(int argc, char** argv)
   thescroll = &scroll;
   
   char *utf8l = (char*) malloc(strlen(utf8) * 3 + 1);
-  Fl_Input i2(5, 35, 190, 25);
+  fltk3::Input i2(5, 35, 190, 25);
   l = fl_utf_tolower((const unsigned char*)utf8, l, utf8l);
   utf8l[l] = '\0';
   i2.value(utf8l);
   
   char *utf8u = (char*) malloc(strlen(utf8l) * 3 + 1);
-  Fl_Input i3(5, 65, 190, 25);
+  fltk3::Input i3(5, 65, 190, 25);
   l = fl_utf_toupper((const unsigned char*)utf8l, l, utf8u);
   utf8u[l] = '\0';
   i3.value(utf8u);
   
   const char *ltr_txt = "\\->e\xCC\x82=\xC3\xAA";
-  Fl_Input i4(5, 90, 190, 25);
+  fltk3::Input i4(5, 90, 190, 25);
   i4.value(ltr_txt);
   i4.textfont(extra_font);
   
@@ -671,8 +671,8 @@ int main(int argc, char** argv)
   i5.textsize(30);
   i5.value(abuf);
   
-  Fl_Input i7(5, 230, 190, 25);
-  Fl_Input i8(5, 260, 190, 25);
+  fltk3::Input i7(5, 230, 190, 25);
+  fltk3::Input i8(5, 260, 190, 25);
   i7.callback(i7_cb, &i8);
   i7.textsize(20);
   i7.value(abuf);

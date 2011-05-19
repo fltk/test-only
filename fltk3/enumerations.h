@@ -458,6 +458,7 @@ namespace fltk3 {
     THIN_UP_FRAME,		///< see figure 1
     THIN_DOWN_FRAME,		///< see figure 1
     ENGRAVED_BOX,		///< see figure 1
+    FRAME_BOX = ENGRAVED_BOX,
     EMBOSSED_BOX,		///< see figure 1
     ENGRAVED_FRAME,		///< see figure 1
     EMBOSSED_FRAME,		///< see figure 1
@@ -858,7 +859,7 @@ namespace fltk3 {
   enum Damage {
     DAMAGE_CHILD    = 0x01, /**< A child needs to be redrawn. */
     DAMAGE_EXPOSE   = 0x02, /**< The window was exposed. */
-    DAMAGE_SCROLL   = 0x04, /**< The Fl_Scroll widget was scrolled. */
+    DAMAGE_SCROLL   = 0x04, /**< The fltk3::ScrollGroup widget was scrolled. */
     DAMAGE_OVERLAY  = 0x08, /**< The overlay planes need to be redrawn. */
     DAMAGE_USER1    = 0x10, /**< First user-defined damage bit. */
     DAMAGE_USER2    = 0x20, /**< Second user-defined damage bit. */

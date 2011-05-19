@@ -37,8 +37,8 @@ extern fltk3::Browser *template_browser;
 #include <fltk3/Box.h>
 extern fltk3::Box *template_preview;
 #include <fltk3/Input.h>
-extern Fl_Input *template_name;
-extern Fl_Input *template_instance;
+extern fltk3::Input *template_name;
+extern fltk3::Input *template_instance;
 #include <fltk3/Group.h>
 #include <fltk3/Button.h>
 extern fltk3::Button *template_delete;

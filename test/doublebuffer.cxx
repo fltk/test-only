@@ -36,80 +36,80 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/Single_Window.h>
-#include <fltk3/Double_Window.h>
+#include <fltk3/SingleWindow.h>
+#include <fltk3/DoubleWindow.h>
 #include <fltk3/Box.h>
 #include <fltk3/draw.h>
-#include <fltk3/Hor_Slider.h>
+#include <fltk3/HorSlider.h>
 #include <stdlib.h>
-#include <FL/math.h>
+#include <fltk3/math.h>
 #include <stdio.h>
 
 // this purposely draws each line 10 times to be slow:
 void star(int w, int h, int n) {
-  fl_push_matrix();
-  fl_translate(w/2, h/2);
-  fl_scale(w/2, h/2);
+  fltk3::push_matrix();
+  fltk3::translate(w/2, h/2);
+  fltk3::scale(w/2, h/2);
   for (int i = 0; i < n; i++) {
     for (int j = i+1; j < n; j++)/* for (int k=0; k<10; k++)*/ {
-      fl_begin_line();
-      fl_vertex(cos(2*M_PI*i/n+.1), sin(2*M_PI*i/n+.1));
-      fl_vertex(cos(2*M_PI*j/n+.1), sin(2*M_PI*j/n+.1));
-      fl_end_line();
+      fltk3::begin_line();
+      fltk3::vertex(cos(2*M_PI*i/n+.1), sin(2*M_PI*i/n+.1));
+      fltk3::vertex(cos(2*M_PI*j/n+.1), sin(2*M_PI*j/n+.1));
+      fltk3::end_line();
     }
   }
-  fl_pop_matrix();
+  fltk3::pop_matrix();
 }
 
 int sides[2] = {20,20};
 
-void slider_cb(Fl_Widget* o, long v) {
+void slider_cb(fltk3::Widget* o, long v) {
   sides[v] = int(((fltk3::Slider*)o)->value());
   o->parent()->redraw();
 }
 
 void bad_draw(int w,int h,int which) {
 //   for (int i=0; i<10; i++) {
-//     fl_color(7); fl_rectf(0,0,w,h); fl_color(0); star(w,h);
-//     fl_color(0); fl_rectf(0,0,w,h); fl_color(7); star(w,h);
+//     fltk3::color(7); fltk3::rectf(0,0,w,h); fltk3::color(0); star(w,h);
+//     fltk3::color(0); fltk3::rectf(0,0,w,h); fltk3::color(7); star(w,h);
 //   }
-  fl_color(FL_BLACK); fl_rectf(0,0,w,h);
-  fl_color(FL_WHITE); star(w,h,sides[which]);
+  fltk3::color(fltk3::BLACK); fltk3::rectf(0,0,w,h);
+  fltk3::color(fltk3::WHITE); star(w,h,sides[which]);
   //  for (int x=0; x<sides[which]; x++) for (int y=0; y<sides[which]; y++)
-  //fl_draw_box(FL_UP_BOX, 10*x, 10*y, 25,25, FL_GRAY);
+  //fltk3::draw_box(fltk3::UP_BOX, 10*x, 10*y, 25,25, fltk3::GRAY);
 }
 
-class single_blink_window : public Fl_Single_Window {
+class single_blink_window : public fltk3::SingleWindow {
   void draw() {bad_draw(w(),h(),0); draw_child(*child(0));}
 public:
   single_blink_window(int x, int y,int w,int h,const char *l)
-    : Fl_Single_Window(x,y,w,h,l) {resizable(this);}
+    : fltk3::SingleWindow(x,y,w,h,l) {resizable(this);}
 };
 
-class double_blink_window : public Fl_Double_Window {
+class double_blink_window : public fltk3::DoubleWindow {
   void draw() {bad_draw(w(),h(),1); draw_child(*child(0));}
 public:
   double_blink_window(int x, int y, int w,int h,const char *l)
-    : Fl_Double_Window(x,y,w,h,l) {resizable(this);}
+    : fltk3::DoubleWindow(x,y,w,h,l) {resizable(this);}
 };
 
 int main(int argc, char **argv) {
-  if (!Fl::visual(FL_DOUBLE))
+  if (!fltk3::visual(fltk3::DOUBLE))
     printf("Xdbe not supported, faking double buffer with pixmaps.\n");
-  Fl_Window w01(420,420,"Fl_Single_Window"); w01.box(FL_FLAT_BOX);
-  single_blink_window w1(10,10,400,400,"Fl_Single_Window");
-  w1.box(FL_FLAT_BOX); w1.color(FL_BLACK); //w1.position(100,200);
-  Fl_Hor_Slider slider0(20,370,360,25);
+  fltk3::Window w01(420,420,"fltk3::Single_Window"); w01.box(fltk3::FLAT_BOX);
+  single_blink_window w1(10,10,400,400,"fltk3::Single_Window");
+  w1.box(fltk3::FLAT_BOX); w1.color(fltk3::BLACK); //w1.position(100,200);
+  fltk3::HorSlider slider0(20,370,360,25);
   slider0.range(2,30);
   slider0.step(1);
   slider0.value(sides[0]);
   slider0.callback(slider_cb, 0);
   w1.end();
   w01.end();
-  Fl_Window w02(420,420,"Fl_Double_Window"); w02.box(FL_FLAT_BOX);
-  double_blink_window w2(10,10,400,400,"Fl_Double_Window");
-  w2.box(FL_FLAT_BOX); w2.color(FL_BLACK); //w2.position(600,200);
-  Fl_Hor_Slider slider1(20,370,360,25);
+  fltk3::Window w02(420,420,"fltk3::Double_Window"); w02.box(fltk3::FLAT_BOX);
+  double_blink_window w2(10,10,400,400,"fltk3::Double_Window");
+  w2.box(fltk3::FLAT_BOX); w2.color(fltk3::BLACK); //w2.position(600,200);
+  fltk3::HorSlider slider1(20,370,360,25);
   slider1.range(2,30);
   slider1.step(1);
   slider1.value(sides[0]);

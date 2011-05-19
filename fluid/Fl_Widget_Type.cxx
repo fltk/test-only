@@ -68,9 +68,9 @@ const char* subclassname(Fl_Type* l) {
     if (c) return c;
     if (l->is_class()) return "fltk3::Group";
     if (p->o->type() == FL_WINDOW+1) return "fltk3::DoubleWindow";
-    if (strcmp(p->type_name(), "Fl_Input") == 0) {
-      if (p->o->type() == FL_FLOAT_INPUT) return "Fl_Float_Input";
-      if (p->o->type() == FL_INT_INPUT) return "Fl_Int_Input";
+    if (strcmp(p->type_name(), "fltk3::Input") == 0) {
+      if (p->o->type() == FL_FLOAT_INPUT) return "fltk3::FloatInput";
+      if (p->o->type() == FL_INT_INPUT) return "fltk3::IntInput";
     }
   }
   return l->type_name();
@@ -308,7 +308,7 @@ void* const LOAD = (void *)"LOAD"; // "magic" pointer to indicate that we need t
 static int numselected; // number selected
 static int haderror;
 
-void name_cb(Fl_Input* o, void *v) {
+void name_cb(fltk3::Input* o, void *v) {
   if (v == LOAD) {
     static char buf[1024];
     if (numselected != 1) {
@@ -379,7 +379,7 @@ void name_public_cb(fltk3::Choice* i, void* v) {
 static char* oldlabel;
 static unsigned oldlabellen;
 
-void label_cb(Fl_Input* i, void *v) {
+void label_cb(fltk3::Input* i, void *v) {
   if (v == LOAD) {
     i->static_value(current_widget->label());
     if (strlen(i->value()) >= oldlabellen) {
@@ -399,9 +399,9 @@ void label_cb(Fl_Input* i, void *v) {
   }
 }
 
-static Fl_Input *image_input;
+static fltk3::Input *image_input;
 
-void image_cb(Fl_Input* i, void *v) {
+void image_cb(fltk3::Input* i, void *v) {
   if (v == LOAD) {
     image_input = i;
     if (current_widget->is_widget() && !current_widget->is_window()) {
@@ -441,9 +441,9 @@ void image_browse_cb(fltk3::Button* b, void *v) {
   }
 }
 
-static Fl_Input *inactive_input;
+static fltk3::Input *inactive_input;
 
-void inactive_cb(Fl_Input* i, void *v) {
+void inactive_cb(fltk3::Input* i, void *v) {
   if (v == LOAD) {
     inactive_input = i;
     if (current_widget->is_widget() && !current_widget->is_window()) {
@@ -483,7 +483,7 @@ void inactive_browse_cb(fltk3::Button* b, void *v) {
   }
 }
 
-void tooltip_cb(Fl_Input* i, void *v) {
+void tooltip_cb(fltk3::Input* i, void *v) {
   if (v == LOAD) {
     if (current_widget->is_widget()) {
       i->activate();
@@ -671,7 +671,7 @@ fltk3::MenuItem boxmenu[] = {
 {"SHADOW_BOX",0,0,(void *)fltk3::SHADOW_BOX},
 {"ROUNDED_BOX",0,0,(void *)fltk3::ROUNDED_BOX},
 {"RSHADOW_BOX",0,0,(void *)fltk3::RSHADOW_BOX},
-{"RFLAT_BOX",0,0,(void *)FL_RFLAT_BOX},
+  {"RFLAT_BOX",0,0,(void *)fltk3::RFLAT_BOX},
 {"OVAL_BOX",0,0,(void *)fltk3::OVAL_BOX},
 {"OSHADOW_BOX",0,0,(void *)fltk3::OSHADOW_BOX},
 {"OFLAT_BOX",0,0,(void *)fltk3::OFLAT_BOX},
@@ -812,7 +812,7 @@ static fltk3::MenuItem whensymbolmenu[] = {
 void when_cb(fltk3::Choice* i, void *v) {
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
-    int n = current_widget->o->when() & (~FL_WHEN_NOT_CHANGED);
+    int n = current_widget->o->when() & (~fltk3::WHEN_NOT_CHANGED);
     if (!n) n = ZERO_ENTRY;
     for (int j = 0; j < int(sizeof(whenmenu)/sizeof(*whenmenu)); j++)
       if (whenmenu[j].argument() == n) {i->value(j); break;}
@@ -843,7 +843,7 @@ void when_button_cb(fltk3::LightButton* i, void *v) {
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_widget()) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
-	q->o->when(n|(q->o->when()&~FL_WHEN_NOT_CHANGED));
+	q->o->when(n|(q->o->when()&~fltk3::WHEN_NOT_CHANGED));
 	mod = 1;
       }
     }
@@ -1201,7 +1201,7 @@ void align_position_cb(fltk3::Choice *i, void *v) {
       if (o->selected && o->is_widget()) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
 	fltk3::Align x = q->o->align();
-	fltk3::Align y = (x & ~FL_ALIGN_POSITION_MASK) | b;
+	fltk3::Align y = (x & ~fltk3::ALIGN_POSITION_MASK) | b;
 	if (x != y) {
           q->o->align(y);
 	  q->redraw();
@@ -1230,7 +1230,7 @@ void align_text_image_cb(fltk3::Choice *i, void *v) {
       if (o->selected && o->is_widget()) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
 	fltk3::Align x = q->o->align();
-	fltk3::Align y = (x & ~FL_ALIGN_IMAGE_MASK) | b;
+	fltk3::Align y = (x & ~fltk3::ALIGN_IMAGE_MASK) | b;
 	if (x != y) {
           q->o->align(y);
 	  q->redraw();
@@ -1268,7 +1268,7 @@ void callback_cb(CodeEditor* i, void *v) {
   }
 }
 
-void user_data_cb(Fl_Input *i, void *v) {
+void user_data_cb(fltk3::Input *i, void *v) {
   if (v == LOAD) {
     i->static_value(current_widget->user_data());
   } else {
@@ -1286,7 +1286,7 @@ void user_data_cb(Fl_Input *i, void *v) {
   }
 }
 
-void user_data_type_cb(Fl_Input *i, void *v) {
+void user_data_type_cb(fltk3::Input *i, void *v) {
   static const char *dflt = "void*";
   if (v == LOAD) {
     const char *c = current_widget->user_data_type();
@@ -1315,7 +1315,7 @@ void user_data_type_cb(Fl_Input *i, void *v) {
 
 // "v_attributes" let user type in random code for attribute settings:
 
-void v_input_cb(Fl_Input* i, void* v) {
+void v_input_cb(fltk3::Input* i, void* v) {
   int n = fl_intptr_t(i->user_data());
   if (v == LOAD) {
     i->static_value(current_widget->extra_code(n));
@@ -1335,7 +1335,7 @@ void v_input_cb(Fl_Input* i, void* v) {
   }
 }
 
-void subclass_cb(Fl_Input* i, void* v) {
+void subclass_cb(fltk3::Input* i, void* v) {
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
     i->static_value(current_widget->subclass());
@@ -1563,7 +1563,7 @@ void min_cb(Fl_Value_Input* i, void* v) {
   if (v == LOAD) {
     if (current_widget->is_valuator()) {
       i->activate();
-      i->value(((Fl_Valuator*)(current_widget->o))->minimum());
+      i->value(((fltk3::Valuator*)(current_widget->o))->minimum());
     } else if (current_widget->is_spinner()) {
       i->activate();
       i->value(((Fl_Spinner*)(current_widget->o))->minimum());
@@ -1578,7 +1578,7 @@ void min_cb(Fl_Value_Input* i, void* v) {
       if (o->selected && o->is_widget()) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
 	if (q->is_valuator()) {
-	  ((Fl_Valuator*)(q->o))->minimum(n);
+	  ((fltk3::Valuator*)(q->o))->minimum(n);
 	  q->o->redraw();
 	  mod = 1;
 	} else if (q->is_spinner()) {
@@ -1596,7 +1596,7 @@ void max_cb(Fl_Value_Input* i, void* v) {
   if (v == LOAD) {
     if (current_widget->is_valuator()) {
       i->activate();
-      i->value(((Fl_Valuator*)(current_widget->o))->maximum());
+      i->value(((fltk3::Valuator*)(current_widget->o))->maximum());
     } else if (current_widget->is_spinner()) {
       i->activate();
       i->value(((Fl_Spinner*)(current_widget->o))->maximum());
@@ -1611,7 +1611,7 @@ void max_cb(Fl_Value_Input* i, void* v) {
       if (o->selected && o->is_widget()) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
 	if (q->is_valuator()) {
-	  ((Fl_Valuator*)(q->o))->maximum(n);
+	  ((fltk3::Valuator*)(q->o))->maximum(n);
 	  q->o->redraw();
 	  mod = 1;
         } else if (q->is_spinner()) {
@@ -1629,7 +1629,7 @@ void step_cb(Fl_Value_Input* i, void* v) {
   if (v == LOAD) {
     if (current_widget->is_valuator()) {
       i->activate();
-      i->value(((Fl_Valuator*)(current_widget->o))->step());
+      i->value(((fltk3::Valuator*)(current_widget->o))->step());
     } else if (current_widget->is_spinner()) {
       i->activate();
       i->value(((Fl_Spinner*)(current_widget->o))->step());
@@ -1644,7 +1644,7 @@ void step_cb(Fl_Value_Input* i, void* v) {
       if (o->selected && o->is_widget()) {
         Fl_Widget_Type* q = (Fl_Widget_Type*)o;
         if (q->is_valuator()) {
-          ((Fl_Valuator*)(q->o))->step(n);
+          ((fltk3::Valuator*)(q->o))->step(n);
           q->o->redraw();
           mod = 1;
         } else if (q->is_spinner()) {
@@ -1662,7 +1662,7 @@ void value_cb(Fl_Value_Input* i, void* v) {
   if (v == LOAD) {
     if (current_widget->is_valuator()) {
       i->activate();
-      i->value(((Fl_Valuator*)(current_widget->o))->value());
+      i->value(((fltk3::Valuator*)(current_widget->o))->value());
     } else if (current_widget->is_button()) {
       i->activate();
       i->value(((fltk3::Button*)(current_widget->o))->value());
@@ -1678,7 +1678,7 @@ void value_cb(Fl_Value_Input* i, void* v) {
       if (o->selected && o->is_widget()) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
 	if (q->is_valuator()) {
-	  ((Fl_Valuator*)(q->o))->value(n);
+	  ((fltk3::Valuator*)(q->o))->value(n);
 	  mod = 1;
 	} else if (q->is_button()) {
 	  ((fltk3::Button*)(q->o))->value(n != 0);
@@ -2283,8 +2283,8 @@ void Fl_Widget_Type::write_widget_code() {
   if (o->labelcolor() != tplate->labelcolor() || subclass())
     write_color("labelcolor", o->labelcolor());
   if (is_valuator()) {
-    Fl_Valuator* v = (Fl_Valuator*)o;
-    Fl_Valuator* f = (Fl_Valuator*)(tplate);
+    fltk3::Valuator* v = (fltk3::Valuator*)o;
+    fltk3::Valuator* f = (fltk3::Valuator*)(tplate);
     if (v->minimum()!=f->minimum())
       write_c("%s%s->minimum(%g);\n", indent(), var, v->minimum());
     if (v->maximum()!=f->maximum())
@@ -2337,7 +2337,7 @@ void Fl_Widget_Type::write_widget_code() {
   if (o->align() != tplate->align() || subclass()) {
     int i = o->align();
     write_c("%s%s->align(fltk3::Align(%s", indent(), var,
-	    item_name(alignmenu, i & ~FL_ALIGN_INSIDE));
+	    item_name(alignmenu, i & ~fltk3::ALIGN_INSIDE));
     if (i & fltk3::ALIGN_INSIDE) write_c("|fltk3::ALIGN_INSIDE");
     write_c("));\n");
   }
@@ -2462,8 +2462,8 @@ void Fl_Widget_Type::write_properties() {
   if (o->when() != tplate->when())
     write_string("when %d", o->when());
   if (is_valuator()) {
-    Fl_Valuator* v = (Fl_Valuator*)o;
-    Fl_Valuator* f = (Fl_Valuator*)(tplate);
+    fltk3::Valuator* v = (fltk3::Valuator*)o;
+    fltk3::Valuator* f = (fltk3::Valuator*)(tplate);
     if (v->minimum()!=f->minimum()) write_string("minimum %g",v->minimum());
     if (v->maximum()!=f->maximum()) write_string("maximum %g",v->maximum());
     if (v->step()!=f->step()) write_string("step %g",v->step());
@@ -2599,16 +2599,16 @@ void Fl_Widget_Type::read_property(const char *c) {
   } else if (!strcmp(c,"when")) {
     if (sscanf(read_word(),"%d",&x) == 1) o->when(x);
   } else if (!strcmp(c,"minimum")) {
-    if (is_valuator()) ((Fl_Valuator*)o)->minimum(strtod(read_word(),0));
+    if (is_valuator()) ((fltk3::Valuator*)o)->minimum(strtod(read_word(),0));
     if (is_spinner()) ((Fl_Spinner*)o)->minimum(strtod(read_word(),0));
   } else if (!strcmp(c,"maximum")) {
-    if (is_valuator()) ((Fl_Valuator*)o)->maximum(strtod(read_word(),0));
+    if (is_valuator()) ((fltk3::Valuator*)o)->maximum(strtod(read_word(),0));
     if (is_spinner()) ((Fl_Spinner*)o)->maximum(strtod(read_word(),0));
   } else if (!strcmp(c,"step")) {
-    if (is_valuator()) ((Fl_Valuator*)o)->step(strtod(read_word(),0));
+    if (is_valuator()) ((fltk3::Valuator*)o)->step(strtod(read_word(),0));
     if (is_spinner()) ((Fl_Spinner*)o)->step(strtod(read_word(),0));
   } else if (!strcmp(c,"value")) {
-    if (is_valuator()) ((Fl_Valuator*)o)->value(strtod(read_word(),0));
+    if (is_valuator()) ((fltk3::Valuator*)o)->value(strtod(read_word(),0));
     if (is_spinner()) ((Fl_Spinner*)o)->value(strtod(read_word(),0));
   } else if ((!strcmp(c,"slider_size")||!strcmp(c,"size"))&&is_valuator()==2) {
     ((fltk3::Slider*)o)->slider_size(strtod(read_word(),0));
@@ -2652,19 +2652,19 @@ void Fl_Widget_Type::read_property(const char *c) {
 fltk3::MenuItem boxmenu1[] = {
   // these extra ones are for looking up fdesign saved strings:
   {"NO_FRAME",		0,0,(void *)fltk3::NO_BOX},
-  {"ROUNDED3D_UPBOX",	0,0,(void *)_FL_ROUND_UP_BOX},
-  {"ROUNDED3D_DOWNBOX",	0,0,(void *)_FL_ROUND_DOWN_BOX},
-  {"OVAL3D_UPBOX",	0,0,(void *)_FL_ROUND_UP_BOX},
-  {"OVAL3D_DOWNBOX",	0,0,(void *)_FL_ROUND_DOWN_BOX},
+  {"ROUNDED3D_UPBOX",	0,0,(void *)fltk3::ROUND_UP_BOX},
+  {"ROUNDED3D_DOWNBOX",	0,0,(void *)fltk3::ROUND_DOWN_BOX},
+  {"OVAL3D_UPBOX",	0,0,(void *)fltk3::ROUND_UP_BOX},
+  {"OVAL3D_DOWNBOX",	0,0,(void *)fltk3::ROUND_DOWN_BOX},
   {"0",			0,0,(void *)ZERO_ENTRY},
   {"1",			0,0,(void *)fltk3::UP_BOX},
   {"2",			0,0,(void *)fltk3::DOWN_BOX},
   {"3",			0,0,(void *)fltk3::FLAT_BOX},
   {"4",			0,0,(void *)fltk3::BORDER_BOX},
   {"5",			0,0,(void *)fltk3::SHADOW_BOX},
-  {"6",			0,0,(void *)FL_FRAME_BOX},
+  {"6",			0,0,(void *)fltk3::FRAME_BOX},
   {"7",			0,0,(void *)fltk3::ROUNDED_BOX},
-  {"8",			0,0,(void *)FL_RFLAT_BOX},
+  {"8",			0,0,(void *)fltk3::RFLAT_BOX},
   {"9",			0,0,(void *)fltk3::RSHADOW_BOX},
   {"10",		0,0,(void *)fltk3::UP_FRAME},
   {"11",		0,0,(void *)fltk3::DOWN_FRAME},
@@ -2825,9 +2825,9 @@ void Fl_Widget_Type::copy_properties() {
     d->shortcut(s->shortcut());
   }
 
-  // copy all attributes specific to Fl_Valuator and derived classes
+  // copy all attributes specific to fltk3::Valuator and derived classes
   if (is_valuator()) {
-    Fl_Valuator* d = (Fl_Valuator*)live_widget, *s = (Fl_Valuator*)o;
+    fltk3::Valuator* d = (fltk3::Valuator*)live_widget, *s = (fltk3::Valuator*)o;
     d->minimum(s->minimum());
     d->maximum(s->maximum());
     d->step(s->step());
@@ -2866,7 +2866,7 @@ void Fl_Widget_Type::copy_properties() {
 void Fl_Pack_Type::copy_properties()
 {
   Fl_Group_Type::copy_properties();
-  Fl_Pack *d = (Fl_Pack*)live_widget, *s =(Fl_Pack*)o;
+  fltk3::PackedGroup *d = (fltk3::PackedGroup*)live_widget, *s =(fltk3::PackedGroup*)o;
   d->spacing(s->spacing());
 }
 

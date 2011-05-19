@@ -472,7 +472,7 @@ class Fl_Input_Type : public Fl_Widget_Type {
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
-    Fl_Input *myo = (Fl_Input *)o;
+    fltk3::Input *myo = (fltk3::Input *)o;
     fltk3::font(myo->textfont(), myo->textsize());
     h = fltk3::height() + myo->textsize() - 6;
     w -= fltk3::box_dw(o->box());
@@ -481,11 +481,11 @@ public:
     if (h < 15) h = 15;
     if (w < 15) w = 15;
   }
-  virtual const char *type_name() {return "Fl_Input";}
+  virtual const char *type_name() {return "fltk3::Input";}
   virtual const char *alt_type_name() {return "fltk::Input";}
   int is_input() const {return 1;}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    Fl_Input *myo = new Fl_Input(x,y,w,h,"input:");
+    fltk3::Input *myo = new fltk3::Input(x,y,w,h,"input:");
     myo->value("Text Input");
     return myo;
   }
@@ -742,7 +742,7 @@ static Fl_Dial_Type Fl_Dial_type;
 #include <fltk3/Roller.h>
 static fltk3::MenuItem roller_type_menu[] = {
   {"Vertical",0,0,(void*)0},
-  {"Horizontal",0,0,(void*)FL_HORIZONTAL},
+  {"Horizontal",0,0,(void*)fltk3::HORIZONTAL},
   {0}};
 class Fl_Roller_Type : public Fl_Widget_Type {
   fltk3::MenuItem *subtypes() {return roller_type_menu;}

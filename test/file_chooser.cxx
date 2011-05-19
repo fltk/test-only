@@ -56,7 +56,7 @@
 // Globals...
 //
 
-Fl_Input		*filter;
+fltk3::Input		*filter;
 Fl_File_Browser		*files;
 Fl_File_Chooser		*fc;
 Fl_Shared_Image		*image = 0;
@@ -111,7 +111,7 @@ main(int  argc,		// I - Number of command-line arguments
   // Make the main window...
   window = new Fl_Double_Window(400, 215, "File Chooser Test");
 
-  filter = new Fl_Input(50, 10, 315, 25, "Filter:");
+  filter = new fltk3::Input(50, 10, 315, 25, "Filter:");
   int argn = 1;
 #ifdef __APPLE__
   // OS X may add the process number as the first argument - ignore

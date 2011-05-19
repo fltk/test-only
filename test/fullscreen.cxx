@@ -193,7 +193,7 @@ int main(int argc, char **argv) {
   if (Fl::args(argc,argv,i,arg) < argc)
     Fl::fatal("Options are:\n -2 = 2 windows\n -f = startup fullscreen\n%s",Fl::help);
 
-  Fl_Single_Window window(300,300+30*NUMB); window.end();
+  fltk3::SingleWindow window(300,300+30*NUMB); window.end();
 
   shape_window sw(10,10,window.w()-20,window.h()-30*NUMB-20);
 #if HAVE_GL
@@ -216,7 +216,7 @@ int main(int argc, char **argv) {
   window.begin();
 
   int y = window.h()-30*NUMB-5;
-  Fl_Hor_Slider slider(50,y,window.w()-60,30,"Sides:");
+  fltk3::HorSlider slider(50,y,window.w()-60,30,"Sides:");
   slider.align(FL_ALIGN_LEFT);
   slider.callback(sides_cb,&sw);
   slider.value(sw.sides);

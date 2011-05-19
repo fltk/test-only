@@ -58,9 +58,9 @@ fltk3::MenuItem menu_f_public_choice[] = {
 
 fltk3::LightButton *f_c_button=(fltk3::LightButton *)0;
 
-Fl_Input *f_name_input=(Fl_Input *)0;
+fltk3::Input *f_name_input=(fltk3::Input *)0;
 
-Fl_Input *f_return_type_input=(Fl_Input *)0;
+fltk3::Input *f_return_type_input=(fltk3::Input *)0;
 
 fltk3::ReturnButton *f_panel_ok=(fltk3::ReturnButton *)0;
 
@@ -96,7 +96,7 @@ fltk3::DoubleWindow* make_function_panel() {
       } // fltk3::Box* o
       o->end();
     } // fltk3::Group* o
-    { f_name_input = new Fl_Input(10, 50, 320, 20, "Name(args): (blank for main())");
+    { f_name_input = new fltk3::Input(10, 50, 320, 20, "Name(args): (blank for main())");
       f_name_input->tooltip("The name of the function or method.");
       f_name_input->labelfont(1);
       f_name_input->labelsize(11);
@@ -104,8 +104,8 @@ fltk3::DoubleWindow* make_function_panel() {
       f_name_input->textsize(11);
       f_name_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       f_name_input->when(fltk3::WHEN_NEVER);
-    } // Fl_Input* f_name_input
-    { f_return_type_input = new Fl_Input(10, 90, 320, 20, "Return Type: (blank to return outermost widget)");
+    } // fltk3::Input* f_name_input
+    { f_return_type_input = new fltk3::Input(10, 90, 320, 20, "Return Type: (blank to return outermost widget)");
       f_return_type_input->tooltip("The return type of the function or method.");
       f_return_type_input->labelfont(1);
       f_return_type_input->labelsize(11);
@@ -113,7 +113,7 @@ fltk3::DoubleWindow* make_function_panel() {
       f_return_type_input->textsize(11);
       f_return_type_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       f_return_type_input->when(fltk3::WHEN_NEVER);
-    } // Fl_Input* f_return_type_input
+    } // fltk3::Input* f_return_type_input
     { fltk3::Group* o = new fltk3::Group(10, 200, 320, 20);
       { f_panel_ok = new fltk3::ReturnButton(220, 200, 50, 20, "OK");
         f_panel_ok->tooltip("Apply the changes.");
@@ -198,9 +198,9 @@ fltk3::DoubleWindow* make_code_panel() {
 
 fltk3::DoubleWindow *codeblock_panel=(fltk3::DoubleWindow *)0;
 
-Fl_Input *code_before_input=(Fl_Input *)0;
+fltk3::Input *code_before_input=(fltk3::Input *)0;
 
-Fl_Input *code_after_input=(Fl_Input *)0;
+fltk3::Input *code_after_input=(fltk3::Input *)0;
 
 fltk3::ReturnButton *codeblock_panel_ok=(fltk3::ReturnButton *)0;
 
@@ -209,15 +209,15 @@ fltk3::Button *codeblock_panel_cancel=(fltk3::Button *)0;
 fltk3::DoubleWindow* make_codeblock_panel() {
   { fltk3::DoubleWindow* o = codeblock_panel = new fltk3::DoubleWindow(300, 115, "Code Block Properties");
     codeblock_panel->labelsize(11);
-    { code_before_input = new Fl_Input(10, 15, 280, 20, "Conditional code block");
+    { code_before_input = new fltk3::Input(10, 15, 280, 20, "Conditional code block");
       code_before_input->tooltip("#ifdef or similar conditional code block.");
       code_before_input->labelsize(11);
       code_before_input->textfont(4);
       code_before_input->textsize(11);
       code_before_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       code_before_input->when(fltk3::WHEN_NEVER);
-    } // Fl_Input* code_before_input
-    { code_after_input = new Fl_Input(10, 55, 280, 20, "\"{...child code...}\" is inserted here");
+    } // fltk3::Input* code_before_input
+    { code_after_input = new fltk3::Input(10, 55, 280, 20, "\"{...child code...}\" is inserted here");
       code_after_input->tooltip("#endif or similar conditional code block.");
       code_after_input->labelsize(11);
       code_after_input->textfont(4);
@@ -225,7 +225,7 @@ fltk3::DoubleWindow* make_codeblock_panel() {
       code_after_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       code_after_input->when(fltk3::WHEN_NEVER);
       fltk3::Group::current()->resizable(code_after_input);
-    } // Fl_Input* code_after_input
+    } // fltk3::Input* code_after_input
     { fltk3::Group* o = new fltk3::Group(10, 85, 280, 20);
       { codeblock_panel_ok = new fltk3::ReturnButton(160, 85, 60, 20, "OK");
         codeblock_panel_ok->labelsize(11);
@@ -259,9 +259,9 @@ fltk3::MenuItem menu_declblock_public_choice[] = {
 
 fltk3::LightButton *declblock_public_button_x=(fltk3::LightButton *)0;
 
-Fl_Input *decl_before_input=(Fl_Input *)0;
+fltk3::Input *decl_before_input=(fltk3::Input *)0;
 
-Fl_Input *decl_after_input=(Fl_Input *)0;
+fltk3::Input *decl_after_input=(fltk3::Input *)0;
 
 fltk3::ReturnButton *declblock_panel_ok=(fltk3::ReturnButton *)0;
 
@@ -290,7 +290,7 @@ fltk3::DoubleWindow* make_declblock_panel() {
       } // fltk3::Box* o
       o->end();
     } // fltk3::Group* o
-    { decl_before_input = new Fl_Input(10, 40, 280, 20);
+    { decl_before_input = new fltk3::Input(10, 40, 280, 20);
       decl_before_input->tooltip("#ifdef or similar conditional declaration block.");
       decl_before_input->labelsize(11);
       decl_before_input->textfont(4);
@@ -298,15 +298,15 @@ fltk3::DoubleWindow* make_declblock_panel() {
       decl_before_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       decl_before_input->when(fltk3::WHEN_NEVER);
       fltk3::Group::current()->resizable(decl_before_input);
-    } // Fl_Input* decl_before_input
-    { decl_after_input = new Fl_Input(10, 75, 280, 20, "\"\\n...child code...\\n\" is inserted here");
+    } // fltk3::Input* decl_before_input
+    { decl_after_input = new fltk3::Input(10, 75, 280, 20, "\"\\n...child code...\\n\" is inserted here");
       decl_after_input->tooltip("#endif or similar declaration code block.");
       decl_after_input->labelsize(11);
       decl_after_input->textfont(4);
       decl_after_input->textsize(11);
       decl_after_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       decl_after_input->when(fltk3::WHEN_NEVER);
-    } // Fl_Input* decl_after_input
+    } // fltk3::Input* decl_after_input
     { fltk3::Group* o = new fltk3::Group(10, 105, 280, 20);
       { declblock_panel_ok = new fltk3::ReturnButton(160, 105, 60, 20, "OK");
         declblock_panel_ok->labelsize(11);
@@ -349,7 +349,7 @@ fltk3::MenuItem menu_decl_class_choice[] = {
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Input *decl_input=(Fl_Input *)0;
+fltk3::Input *decl_input=(fltk3::Input *)0;
 
 fltk3::ReturnButton *decl_panel_ok=(fltk3::ReturnButton *)0;
 
@@ -378,7 +378,7 @@ fltk3::DoubleWindow* make_decl_panel() {
       } // fltk3::Choice* decl_class_choice
       o->end();
     } // fltk3::Group* o
-    { decl_input = new Fl_Input(10, 40, 320, 20, "This can be any declaration, like \"int x;\", an external symbol like \"exter\
+    { decl_input = new fltk3::Input(10, 40, 320, 20, "This can be any declaration, like \"int x;\", an external symbol like \"exter\
 n int foo();\", a #directive like \"#include <foo.h>\", a comment like \"//foo\
 \" or \"/*foo*/\", or typedef like \"typedef char byte;\" or \"using std::list\
 ;\".");
@@ -388,7 +388,7 @@ n int foo();\", a #directive like \"#include <foo.h>\", a comment like \"//foo\
       decl_input->textsize(11);
       decl_input->align(fltk3::Align(134));
       decl_input->when(fltk3::WHEN_NEVER);
-    } // Fl_Input* decl_input
+    } // fltk3::Input* decl_input
     { fltk3::Group* o = new fltk3::Group(10, 205, 320, 20);
       { decl_panel_ok = new fltk3::ReturnButton(200, 205, 60, 20, "OK");
         decl_panel_ok->labelsize(11);
@@ -441,9 +441,9 @@ fltk3::MenuItem menu_data_class_choice[] = {
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Input *data_input=(Fl_Input *)0;
+fltk3::Input *data_input=(fltk3::Input *)0;
 
-Fl_Input *data_filename=(Fl_Input *)0;
+fltk3::Input *data_filename=(fltk3::Input *)0;
 
 fltk3::Button *data_filebrowser=(fltk3::Button *)0;
 
@@ -474,7 +474,7 @@ fltk3::DoubleWindow* make_data_panel() {
       } // fltk3::Choice* data_class_choice
       o->end();
     } // fltk3::Group* o
-    { data_input = new Fl_Input(10, 52, 320, 20, "Variable Name:");
+    { data_input = new fltk3::Input(10, 52, 320, 20, "Variable Name:");
       data_input->tooltip("Binary Data variables are declared \"const unsigned char []\".");
       data_input->labelfont(1);
       data_input->labelsize(11);
@@ -482,8 +482,8 @@ fltk3::DoubleWindow* make_data_panel() {
       data_input->textsize(11);
       data_input->align(fltk3::Align(133));
       data_input->when(fltk3::WHEN_NEVER);
-    } // Fl_Input* data_input
-    { data_filename = new Fl_Input(10, 90, 280, 20, "Filename:");
+    } // fltk3::Input* data_input
+    { data_filename = new fltk3::Input(10, 90, 280, 20, "Filename:");
       data_filename->tooltip("Name and path of binary file that will be included.");
       data_filename->labelfont(1);
       data_filename->labelsize(11);
@@ -491,7 +491,7 @@ fltk3::DoubleWindow* make_data_panel() {
       data_filename->textsize(11);
       data_filename->align(fltk3::Align(133));
       data_filename->when(fltk3::WHEN_NEVER);
-    } // Fl_Input* data_filename
+    } // fltk3::Input* data_filename
     { data_filebrowser = new fltk3::Button(290, 90, 40, 20, "@fileopen");
       data_filebrowser->labelcolor((fltk3::Color)134);
     } // fltk3::Button* data_filebrowser
@@ -530,9 +530,9 @@ fltk3::DoubleWindow *class_panel=(fltk3::DoubleWindow *)0;
 
 fltk3::LightButton *c_public_button=(fltk3::LightButton *)0;
 
-Fl_Input *c_name_input=(Fl_Input *)0;
+fltk3::Input *c_name_input=(fltk3::Input *)0;
 
-Fl_Input *c_subclass_input=(Fl_Input *)0;
+fltk3::Input *c_subclass_input=(fltk3::Input *)0;
 
 Fl_Text_Editor *c_comment_input=(Fl_Text_Editor *)0;
 
@@ -556,7 +556,7 @@ fltk3::DoubleWindow* make_class_panel() {
       } // fltk3::Box* o
       o->end();
     } // fltk3::Group* o
-    { c_name_input = new Fl_Input(10, 20, 320, 20, "Name:");
+    { c_name_input = new fltk3::Input(10, 20, 320, 20, "Name:");
       c_name_input->tooltip("Name of class.");
       c_name_input->labelfont(1);
       c_name_input->labelsize(11);
@@ -564,8 +564,8 @@ fltk3::DoubleWindow* make_class_panel() {
       c_name_input->textsize(11);
       c_name_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       c_name_input->when(fltk3::WHEN_NEVER);
-    } // Fl_Input* c_name_input
-    { c_subclass_input = new Fl_Input(10, 55, 320, 20, "Subclass of (text between : and {)");
+    } // fltk3::Input* c_name_input
+    { c_subclass_input = new fltk3::Input(10, 55, 320, 20, "Subclass of (text between : and {)");
       c_subclass_input->tooltip("Name of subclass.");
       c_subclass_input->labelfont(1);
       c_subclass_input->labelsize(11);
@@ -573,7 +573,7 @@ fltk3::DoubleWindow* make_class_panel() {
       c_subclass_input->textsize(11);
       c_subclass_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       c_subclass_input->when(fltk3::WHEN_NEVER);
-    } // Fl_Input* c_subclass_input
+    } // fltk3::Input* c_subclass_input
     { c_comment_input = new Fl_Text_Editor(10, 90, 320, 65, "Comment:");
       c_comment_input->tooltip("Class comment in Doxygen format");
       c_comment_input->box(fltk3::DOWN_BOX);
@@ -787,7 +787,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(139, 5, 24, 24);
         o->tooltip("Pack");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Pack"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::PackedGroup"));
         o->image(pixmap[22]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(89, 30, 24, 24);
@@ -799,7 +799,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(114, 30, 24, 24);
         o->tooltip("Scroll");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Scroll"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::ScrollGroup"));
         o->image(pixmap[19]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(139, 30, 24, 24);
@@ -928,7 +928,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(341, 5, 24, 24);
         o->tooltip("Input");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Input"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Input"));
         o->image(pixmap[14]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(366, 5, 24, 24);

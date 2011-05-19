@@ -154,7 +154,7 @@ Fl_Dial::Fl_Dial(int X, int Y, int W, int H, const char* l)
   Creates a new Fl_Dial widget using the given position, size,
   and label string. The default type is FL_NORMAL_DIAL.
 */
-: Fl_Valuator(X, Y, W, H, l) {
+: fltk3::Valuator(X, Y, W, H, l) {
   box(fltk3::OVAL_BOX);
   selection_color(fltk3::INACTIVE_COLOR); // was 37
   a1 = 45;

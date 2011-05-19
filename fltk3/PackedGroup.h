@@ -26,56 +26,60 @@
 //
 
 /* \file
-   Fl_Pack widget . */
+ fltk3::PackedGroup widget . */
 
 #ifndef Fltk3_Pack_H
 #define Fltk3_Pack_H
 
 #include <fltk3/Group.h>
 
-/**
-  This widget was designed to add the functionality of compressing and
-  aligning widgets.
-  <P>If type() is Fl_Pack::HORIZONTAL all the children are
-  resized to the height of the Fl_Pack, and are moved next to
-  each other horizontally. If type() is not Fl_Pack::HORIZONTAL
-  then the children are resized to the width and are stacked below each
-  other.  Then the Fl_Pack resizes itself to surround the child
-  widgets.
-  <P>This widget is needed for the Fl_Tabs.
-  In addition you may want to put the Fl_Pack inside an 
-  Fl_Scroll.
-
-  <P>The resizable for Fl_Pack is set to NULL by default.</p>
-  <P>See also: fltk3::Group::resizable()
-*/
-class FLTK3_EXPORT Fl_Pack : public fltk3::Group {
-  int spacing_;
-
-public:
-  enum { // values for type(int)
-    VERTICAL = 0,
-    HORIZONTAL = 1
+namespace fltk3 {
+  
+  /**
+   This widget was designed to add the functionality of compressing and
+   aligning widgets.
+   <P>If type() is fltk3::PackedGroup::HORIZONTAL all the children are
+   resized to the height of the fltk3::PackedGroup, and are moved next to
+   each other horizontally. If type() is not fltk3::PackedGroup::HORIZONTAL
+   then the children are resized to the width and are stacked below each
+   other.  Then the fltk3::PackedGroup resizes itself to surround the child
+   widgets.
+   <P>This widget is needed for the Fl_Tabs.
+   In addition you may want to put the fltk3::PackedGroup inside an 
+   fltk3::ScrollGroup.
+   
+   <P>The resizable for fltk3::PackedGroup is set to NULL by default.</p>
+   <P>See also: fltk3::Group::resizable()
+   */
+  class FLTK3_EXPORT PackedGroup : public fltk3::Group {
+    int spacing_;
+    
+  public:
+    enum { // values for type(int)
+      VERTICAL = 0,
+      HORIZONTAL = 1
+    };
+    
+  protected:
+    void draw();
+    
+  public:
+    PackedGroup(int x,int y,int w ,int h,const char *l = 0);
+    /**
+     Gets the number of extra pixels of blank space that are added
+     between the children.
+     */
+    int spacing() const {return spacing_;}
+    /**
+     Sets the number of extra pixels of blank space that are added
+     between the children.
+     */
+    void spacing(int i) {spacing_ = i;}
+    /** Same as fltk3::Group::type() */
+    uchar horizontal() const {return type();}
   };
-
-protected:
-  void draw();
-
-public:
-  Fl_Pack(int x,int y,int w ,int h,const char *l = 0);
-  /**
-    Gets the number of extra pixels of blank space that are added
-    between the children.
-  */
-  int spacing() const {return spacing_;}
-  /**
-    Sets the number of extra pixels of blank space that are added
-    between the children.
-  */
-  void spacing(int i) {spacing_ = i;}
-  /** Same as fltk3::Group::type() */
-  uchar horizontal() const {return type();}
-};
+  
+}
 
 #endif
 
