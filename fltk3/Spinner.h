@@ -57,7 +57,7 @@ class FLTK3_EXPORT Fl_Spinner : public fltk3::Group {
   const char	*format_;		// Format string
 
   Fl_Input	input_;			// Input field for the value
-  Fl_Repeat_Button
+  fltk3::RepeatButton
 		up_button_,		// Up button
 		down_button_;		// Down button
 

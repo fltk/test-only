@@ -48,7 +48,7 @@ int fl_return_arrow(int x, int y, int w, int h) {
 }
 
 void fltk3::ReturnButton::draw() {
-  if (type() == FL_HIDDEN_BUTTON) return;
+  if (type() == fltk3::HIDDEN_BUTTON) return;
   draw_box(value() ? (down_box()?down_box():fltk3::down(box())) : box(),
 	   value() ? selection_color() : color());
   int W = h();

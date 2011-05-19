@@ -34,21 +34,16 @@
 #include "Widget.h"
 
 namespace fltk3 {
-// values for type()
+  // values for type()
   const uchar NORMAL_BUTTON = 0;   /**< value() will be set to 1 during the press of the button and 
-reverts back to 0 when the button is released */
+                                    reverts back to 0 when the button is released */
   const uchar TOGGLE_BUTTON = 1;   ///< value() toggles between 0 and 1 at every click of the button
-}
-#define FL_RADIO_BUTTON		(FL_RESERVED_TYPE+2) /**< is set to 1 at button press, and all other
-buttons in the same group with <tt>type() == FL_RADIO_BUTTON</tt>
-are set to zero.*/
-#define FL_HIDDEN_BUTTON	3   ///< for Forms compatibility
-
-namespace fltk3 {
+  const uchar RADIO_BUTTON = RESERVED_TYPE+2; /**< is set to 1 at button press, and all other
+                                               buttons in the same group with <tt>type() == fltk3::RADIO_BUTTON</tt>
+                                               are set to zero.*/
+  const uchar HIDDEN_BUTTON = 3;   ///< for Forms compatibility
+  
   extern FLTK3_EXPORT Fl_Shortcut old_shortcut(const char*);
-}
-
-namespace fltk3 {
   
   class WidgetTracker;
   
@@ -70,8 +65,8 @@ namespace fltk3 {
    For an fltk3::Button object, the type() call returns one of:
    \li \c fltk3::NORMAL_BUTTON (0): value() remains unchanged after button press.
    \li \c fltk3::TOGGLE_BUTTON: value() is inverted after button press.
-   \li \c FL_RADIO_BUTTON: value() is set to 1 after button press, and all other
-   buttons in the current group with <tt>type() == FL_RADIO_BUTTON</tt>
+   \li \c fltk3::RADIO_BUTTON: value() is set to 1 after button press, and all other
+   buttons in the current group with <tt>type() == fltk3::RADIO_BUTTON</tt>
    are set to zero.
    
    \todo Refactor the doxygen comments for fltk3::Button when() documentation.
@@ -85,7 +80,7 @@ namespace fltk3 {
    (when the user pushes and releases the button, and as the mouse is
    dragged around in and out of the button).
    */
-  class FLTK3_EXPORT Button : public fltk3::Widget {
+  class FLTK3_EXPORT Button : public Widget {
     
     int shortcut_;
     char value_;
@@ -125,7 +120,7 @@ namespace fltk3 {
      */
     int clear() {return value(0);}
     
-    void setonly(); // this should only be called on FL_RADIO_BUTTONs
+    void setonly(); // this should only be called on fltk3::RADIO_BUTTONs
     
     /**
      Returns the current shortcut key for the button.

@@ -81,10 +81,10 @@ void Fl_File_Chooser::cb_fileList(Fl_File_Browser* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->user_data()))->cb_fileList_i(o,v);
 }
 
-void Fl_File_Chooser::cb_previewButton_i(Fl_Check_Button*, void*) {
+void Fl_File_Chooser::cb_previewButton_i(fltk3::CheckButton*, void*) {
   preview(previewButton->value());
 }
-void Fl_File_Chooser::cb_previewButton(Fl_Check_Button* o, void* v) {
+void Fl_File_Chooser::cb_previewButton(fltk3::CheckButton* o, void* v) {
   ((Fl_File_Chooser*)(o->parent()->parent()->parent()->user_data()))->cb_previewButton_i(o,v);
 }
 #ifndef WIN32
@@ -98,7 +98,7 @@ void Fl_File_Chooser::remove_hidden_files()
   fileList->topline(1);
 }
 
-void Fl_File_Chooser::show_hidden_cb(Fl_Check_Button* o, void* data) {
+void Fl_File_Chooser::show_hidden_cb(fltk3::CheckButton* o, void* data) {
   Fl_File_Chooser *mychooser = (Fl_File_Chooser *)data;
   if (o->value()) {
     mychooser->browser()->load(mychooser->directory());
@@ -221,21 +221,21 @@ Fl_File_Chooser::Fl_File_Chooser(const char *d, const char *p, int t, const char
     } // Fl_Tile* o
     { fltk3::Group* o = new fltk3::Group(10, 275, 470, 95);
       { fltk3::Group* o = new fltk3::Group(10, 275, 470, 20);
-        { previewButton = new Fl_Check_Button(10, 275, 73, 20, "Preview");
+        { previewButton = new fltk3::CheckButton(10, 275, 73, 20, "Preview");
           previewButton->shortcut(0x80070);
           previewButton->down_box(fltk3::DOWN_BOX);
           previewButton->value(1);
           previewButton->callback((fltk3::Callback*)cb_previewButton);
           previewButton->label(preview_label);
-        } // Fl_Check_Button* previewButton
+        } // fltk3::CheckButton* previewButton
 #ifndef WIN32	
-        { show_hidden = new Fl_Check_Button(
+        { show_hidden = new fltk3::CheckButton(
 	    previewButton->x() + previewButton->w() + 30, 275, 140, 20, "Show hidden files");
           show_hidden->down_box(fltk3::DOWN_BOX);
           show_hidden->value(0);
           show_hidden->callback((fltk3::Callback*)show_hidden_cb, this);
           show_hidden->label(hidden_label);
-        } // Fl_Check_Button* show_hidden
+        } // fltk3::CheckButton* show_hidden
 #endif	
         { fltk3::Box* o = new fltk3::Box(115, 275, 365, 20);
           fltk3::Group::current()->resizable(o);

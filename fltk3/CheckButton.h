@@ -26,32 +26,36 @@
 //
 
 /* \file
-   Fl_Check_Button widget . */
+ fltk3::CheckButton widget . */
 
 #ifndef Fltk3_Check_Button_H
 #define Fltk3_Check_Button_H
 
 #include "LightButton.h"
 
-/**
-  \class Fl_Check_Button
-  \brief A button with an "checkmark" to show its status.
-
-  \image html Fl_Check_Button.png
-  \image latex Fl_Check_Button.png  "Fl_Check_Button" width=4cm
-  Buttons generate callbacks when they are clicked by the user. You control
-  exactly when and how by changing the values for type() and when().
-
-  The Fl_Check_Button subclass displays its "ON" state by showing a "checkmark"
-  rather than drawing itself pushed in.
+namespace fltk3 {
   
-  \todo Refactor Fl_Check_Button doxygen comments (add color() info etc?)
-  \todo Generate Fl_Check_Button.gif with visible checkmark.
- */
-class FLTK3_EXPORT Fl_Check_Button : public Fl_Light_Button {
-public:
-  Fl_Check_Button(int X, int Y, int W, int H, const char *L = 0);
-};
+  /**
+   \class fltk3::CheckButton
+   \brief A button with an "checkmark" to show its status.
+   
+   \image html fltk3::CheckButton.png
+   \image latex fltk3::CheckButton.png  "fltk3::CheckButton" width=4cm
+   Buttons generate callbacks when they are clicked by the user. You control
+   exactly when and how by changing the values for type() and when().
+   
+   The fltk3::CheckButton subclass displays its "ON" state by showing a "checkmark"
+   rather than drawing itself pushed in.
+   
+   \todo Refactor fltk3::CheckButton doxygen comments (add color() info etc?)
+   \todo Generate fltk3::CheckButton.gif with visible checkmark.
+   */
+  class FLTK3_EXPORT CheckButton : public fltk3::LightButton {
+  public:
+    CheckButton(int X, int Y, int W, int H, const char *L = 0);
+  };
+  
+}
 
 #endif
 

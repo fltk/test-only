@@ -37,7 +37,7 @@ extern fltk3::DoubleWindow *function_panel;
 extern Fl_Choice *f_public_member_choice;
 extern Fl_Choice *f_public_choice;
 #include <fltk3/LightButton.h>
-extern Fl_Light_Button *f_c_button;
+extern fltk3::LightButton *f_c_button;
 #include <fltk3/Box.h>
 #include <fltk3/Input.h>
 extern Fl_Input *f_name_input;
@@ -65,7 +65,7 @@ extern fltk3::Button *codeblock_panel_cancel;
 fltk3::DoubleWindow* make_codeblock_panel();
 extern fltk3::DoubleWindow *declblock_panel;
 extern Fl_Choice *declblock_public_choice;
-extern Fl_Light_Button *declblock_public_button_x;
+extern fltk3::LightButton *declblock_public_button_x;
 extern Fl_Input *decl_before_input;
 extern Fl_Input *decl_after_input;
 extern fltk3::ReturnButton *declblock_panel_ok;
@@ -95,7 +95,7 @@ fltk3::DoubleWindow* make_data_panel();
 extern Fl_Menu_Item menu_data_choice[];
 extern Fl_Menu_Item menu_data_class_choice[];
 extern fltk3::DoubleWindow *class_panel;
-extern Fl_Light_Button *c_public_button;
+extern fltk3::LightButton *c_public_button;
 extern Fl_Input *c_name_input;
 extern Fl_Input *c_subclass_input;
 extern Fl_Text_Editor *c_comment_input;
@@ -106,8 +106,8 @@ extern fltk3::DoubleWindow *comment_panel;
 extern CodeEditor *comment_input;
 extern fltk3::ReturnButton *comment_panel_ok;
 extern fltk3::Button *comment_panel_cancel;
-extern Fl_Light_Button *comment_in_source;
-extern Fl_Light_Button *comment_in_header;
+extern fltk3::LightButton *comment_in_source;
+extern fltk3::LightButton *comment_in_header;
 #include <fltk3/MenuButton.h>
 extern Fl_Menu_Button *comment_predefined;
 extern fltk3::Button *comment_load;
@@ -124,8 +124,8 @@ extern Fl_Tabs *sv_tab;
 extern CodeViewer *sv_source;
 extern CodeViewer *sv_header;
 extern void update_sourceview_cb(fltk3::Button*, void*);
-extern Fl_Light_Button *sv_autorefresh;
-extern Fl_Light_Button *sv_autoposition;
+extern fltk3::LightButton *sv_autorefresh;
+extern fltk3::LightButton *sv_autoposition;
 extern void toggle_sourceview_b_cb(fltk3::Button*, void*);
 fltk3::DoubleWindow* make_sourceview();
 #endif

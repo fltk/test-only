@@ -29,7 +29,7 @@
 
 #ifndef Fl_Toggle_Light_Button
 #include "LightButton.h"
-#define Fl_Toggle_Light_Button Fl_Light_Button
+#define Fl_Toggle_Light_Button fltk3::LightButton
 #endif
 
 //

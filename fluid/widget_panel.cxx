@@ -295,12 +295,12 @@ fltk3::DoubleWindow* make_widget_panel() {
             widget_h_input->callback((fltk3::Callback*)h_cb);
             widget_h_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
           } // Fl_Value_Input* widget_h_input
-          { Fl_Light_Button* o = new Fl_Light_Button(335, 150, 55, 20, "Relative");
+          { fltk3::LightButton* o = new fltk3::LightButton(335, 150, 55, 20, "Relative");
             o->tooltip("If set, widgets inside a widget class of type fltk3::Group are repositioned relat\
 ive to the origin at construction time");
             o->labelsize(11);
             o->callback((fltk3::Callback*)wc_relative_cb);
-          } // Fl_Light_Button* o
+          } // fltk3::LightButton* o
           { fltk3::Box* o = new fltk3::Box(394, 150, 1, 20);
             fltk3::Group::current()->resizable(o);
           } // fltk3::Box* o
@@ -434,25 +434,25 @@ ive to the origin at construction time");
             o->callback((fltk3::Callback*)xclass_cb);
             fltk3::Group::current()->resizable(o);
           } // Fl_Input* o
-          { Fl_Light_Button* o = new Fl_Light_Button(195, 235, 60, 20, "Border");
+          { fltk3::LightButton* o = new fltk3::LightButton(195, 235, 60, 20, "Border");
             o->tooltip("Add a border around the window.");
             o->selection_color((fltk3::Color)1);
             o->labelsize(11);
             o->callback((fltk3::Callback*)border_cb);
-          } // Fl_Light_Button* o
-          { Fl_Light_Button* o = new Fl_Light_Button(260, 235, 55, 20, "Modal");
+          } // fltk3::LightButton* o
+          { fltk3::LightButton* o = new fltk3::LightButton(260, 235, 55, 20, "Modal");
             o->tooltip("Make the window modal.");
             o->selection_color((fltk3::Color)1);
             o->labelsize(11);
             o->callback((fltk3::Callback*)modal_cb);
-          } // Fl_Light_Button* o
-          { Fl_Light_Button* o = new Fl_Light_Button(320, 235, 75, 20, "Nonmodal");
+          } // fltk3::LightButton* o
+          { fltk3::LightButton* o = new fltk3::LightButton(320, 235, 75, 20, "Nonmodal");
             o->tooltip("Make the window non-modal.");
             o->selection_color((fltk3::Color)1);
             o->labelsize(11);
             o->callback((fltk3::Callback*)non_modal_cb);
             o->align(fltk3::Align(132|fltk3::ALIGN_INSIDE));
-          } // Fl_Light_Button* o
+          } // fltk3::LightButton* o
           o->end();
         } // fltk3::Group* o
         { fltk3::Group* o = new fltk3::Group(95, 260, 305, 20, "Attributes:");
@@ -460,32 +460,32 @@ ive to the origin at construction time");
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { Fl_Light_Button* o = new Fl_Light_Button(95, 260, 60, 20, "Visible");
+          { fltk3::LightButton* o = new fltk3::LightButton(95, 260, 60, 20, "Visible");
             o->tooltip("Show the widget.");
             o->selection_color((fltk3::Color)1);
             o->labelsize(11);
             o->callback((fltk3::Callback*)visible_cb);
-          } // Fl_Light_Button* o
-          { Fl_Light_Button* o = new Fl_Light_Button(160, 260, 60, 20, "Active");
+          } // fltk3::LightButton* o
+          { fltk3::LightButton* o = new fltk3::LightButton(160, 260, 60, 20, "Active");
             o->tooltip("Activate the widget.");
             o->selection_color((fltk3::Color)1);
             o->labelsize(11);
             o->callback((fltk3::Callback*)active_cb);
-          } // Fl_Light_Button* o
-          { Fl_Light_Button* o = new Fl_Light_Button(225, 260, 75, 20, "Resizable");
+          } // fltk3::LightButton* o
+          { fltk3::LightButton* o = new fltk3::LightButton(225, 260, 75, 20, "Resizable");
             o->tooltip("Make the widget resizable.");
             o->selection_color((fltk3::Color)1);
             o->labelsize(11);
             o->callback((fltk3::Callback*)resizable_cb);
             o->when(fltk3::WHEN_CHANGED);
-          } // Fl_Light_Button* o
-          { Fl_Light_Button* o = new Fl_Light_Button(305, 260, 70, 20, "Hotspot");
+          } // fltk3::LightButton* o
+          { fltk3::LightButton* o = new fltk3::LightButton(305, 260, 70, 20, "Hotspot");
             o->tooltip("Center the window under this widget.");
             o->selection_color((fltk3::Color)1);
             o->labelsize(11);
             o->callback((fltk3::Callback*)hotspot_cb);
             o->when(fltk3::WHEN_CHANGED);
-          } // Fl_Light_Button* o
+          } // fltk3::LightButton* o
           { fltk3::Box* o = new fltk3::Box(395, 260, 0, 20);
             o->labelsize(11);
             fltk3::Group::current()->resizable(o);
@@ -776,12 +776,12 @@ access the Widget pointer and \'v\' to access the user value.");
             o->callback((fltk3::Callback*)user_data_type_cb);
             fltk3::Group::current()->resizable(o);
           } // Fl_Input* o
-          { Fl_Light_Button* o = new Fl_Light_Button(300, 295, 105, 20, "No Change");
+          { fltk3::LightButton* o = new fltk3::LightButton(300, 295, 105, 20, "No Change");
             o->tooltip("Call the callback even if the value has not changed.");
             o->selection_color((fltk3::Color)1);
             o->labelsize(11);
             o->callback((fltk3::Callback*)when_button_cb);
-          } // Fl_Light_Button* o
+          } // fltk3::LightButton* o
           o->end();
         } // fltk3::Group* o
         o->end();

@@ -91,10 +91,10 @@ private:
   static void cb_fileList(Fl_File_Browser*, void*);
   fltk3::Box *previewBox;
 public:
-  Fl_Check_Button *previewButton;
+  fltk3::CheckButton *previewButton;
 private:
-  void cb_previewButton_i(Fl_Check_Button*, void*);
-  static void cb_previewButton(Fl_Check_Button*, void*);
+  void cb_previewButton_i(fltk3::CheckButton*, void*);
+  static void cb_previewButton(fltk3::CheckButton*, void*);
   Fl_File_Input *fileName;
   void cb_fileName_i(Fl_File_Input*, void*);
   static void cb_fileName(Fl_File_Input*, void*);
@@ -124,8 +124,8 @@ private:
   void cb_favOkButton_i(fltk3::ReturnButton*, void*);
   static void cb_favOkButton(fltk3::ReturnButton*, void*);
 #ifndef WIN32
-  Fl_Check_Button *show_hidden;
-  static void show_hidden_cb(Fl_Check_Button*, void*);
+  fltk3::CheckButton *show_hidden;
+  static void show_hidden_cb(fltk3::CheckButton*, void*);
   void remove_hidden_files();
 #endif
 public:

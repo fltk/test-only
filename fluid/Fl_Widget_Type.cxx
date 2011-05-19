@@ -603,7 +603,7 @@ void h_cb(Fl_Value_Input *i, void *v) {
   }
 }
 
-void wc_relative_cb(Fl_Light_Button *i, void *v) {
+void wc_relative_cb(fltk3::LightButton *i, void *v) {
   if (v == LOAD) {
     if (!strcmp(current_widget->type_name(), "widget_class")) {
       i->show();
@@ -833,7 +833,7 @@ void when_cb(Fl_Choice* i, void *v) {
   }
 }
 
-void when_button_cb(Fl_Light_Button* i, void *v) {
+void when_button_cb(fltk3::LightButton* i, void *v) {
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
     i->value(current_widget->o->when()&fltk3::WHEN_NOT_CHANGED);
@@ -877,7 +877,7 @@ void Fl_Widget_Type::resizable(uchar v) {
   }
 }
 
-void resizable_cb(Fl_Light_Button* i,void* v) {
+void resizable_cb(fltk3::LightButton* i,void* v) {
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;}
     if (numselected > 1) {i->deactivate(); return;}
@@ -889,7 +889,7 @@ void resizable_cb(Fl_Light_Button* i,void* v) {
   }
 }
 
-void hotspot_cb(Fl_Light_Button* i,void* v) {
+void hotspot_cb(fltk3::LightButton* i,void* v) {
   if (v == LOAD) {
     if (numselected > 1) {i->deactivate(); return;}
     if (current_widget->is_menu_item()) i->label("divider");
@@ -912,7 +912,7 @@ void hotspot_cb(Fl_Light_Button* i,void* v) {
   }
 }
 
-void visible_cb(Fl_Light_Button* i, void* v) {
+void visible_cb(fltk3::LightButton* i, void* v) {
   if (v == LOAD) {
     i->value(current_widget->o->visible());
     if (current_widget->is_window()) i->deactivate();
@@ -939,7 +939,7 @@ void visible_cb(Fl_Light_Button* i, void* v) {
   }
 }
 
-void active_cb(Fl_Light_Button* i, void* v) {
+void active_cb(fltk3::LightButton* i, void* v) {
   if (v == LOAD) {
     i->value(current_widget->o->active());
     if (current_widget->is_window()) i->deactivate();

@@ -58,7 +58,7 @@ extern Fl_Value_Input *widget_w_input;
 extern void h_cb(Fl_Value_Input*, void*);
 extern Fl_Value_Input *widget_h_input;
 #include <fltk3/LightButton.h>
-extern void wc_relative_cb(Fl_Light_Button*, void*);
+extern void wc_relative_cb(fltk3::LightButton*, void*);
 extern void slider_size_cb(Fl_Value_Input*, void*);
 extern void min_cb(Fl_Value_Input*, void*);
 extern void max_cb(Fl_Value_Input*, void*);
@@ -73,13 +73,13 @@ extern void set_max_size_cb(fltk3::Button*, void*);
 #include "Shortcut_Button.h"
 extern void shortcut_in_cb(Shortcut_Button*, void*);
 extern void xclass_cb(Fl_Input*, void*);
-extern void border_cb(Fl_Light_Button*, void*);
-extern void modal_cb(Fl_Light_Button*, void*);
-extern void non_modal_cb(Fl_Light_Button*, void*);
-extern void visible_cb(Fl_Light_Button*, void*);
-extern void active_cb(Fl_Light_Button*, void*);
-extern void resizable_cb(Fl_Light_Button*, void*);
-extern void hotspot_cb(Fl_Light_Button*, void*);
+extern void border_cb(fltk3::LightButton*, void*);
+extern void modal_cb(fltk3::LightButton*, void*);
+extern void non_modal_cb(fltk3::LightButton*, void*);
+extern void visible_cb(fltk3::LightButton*, void*);
+extern void active_cb(fltk3::LightButton*, void*);
+extern void resizable_cb(fltk3::LightButton*, void*);
+extern void hotspot_cb(fltk3::LightButton*, void*);
 extern void tooltip_cb(Fl_Input*, void*);
 extern Fl_Menu_Item fontmenu[];
 extern void labelfont_cb(Fl_Choice*, void*);
@@ -106,7 +106,7 @@ extern void user_data_cb(Fl_Input*, void*);
 extern Fl_Menu_Item whenmenu[];
 extern void when_cb(Fl_Choice*, void*);
 extern void user_data_type_cb(Fl_Input*, void*);
-extern void when_button_cb(Fl_Light_Button*, void*);
+extern void when_button_cb(fltk3::LightButton*, void*);
 extern void overlay_cb(fltk3::Button*, void*);
 extern void revert_cb(fltk3::Button*, void*);
 #include <fltk3/ReturnButton.h>

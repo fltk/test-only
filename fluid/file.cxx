@@ -560,10 +560,10 @@ int fdesign_magic;
 #include <fltk3/Group.h>
 
 static const char *class_matcher[] = {
-"FL_CHECKBUTTON", "Fl_Check_Button",
-"FL_ROUNDBUTTON", "Fl_Round_Button",
-"FL_ROUND3DBUTTON", "Fl_Round_Button",
-"fltk3::LIGHTBUTTON", "Fl_Light_Button",
+"FL_CHECKBUTTON", "fltk3::CheckButton",
+"FL_ROUNDBUTTON", "fltk3::RoundButton",
+"FL_ROUND3DBUTTON", "fltk3::RoundButton",
+"fltk3::LIGHTBUTTON", "fltk3::LightButton",
 "FL_FRAME", "fltk3::Box",
 "FL_LABELFRAME", "fltk3::Box",
 "FL_TEXT", "fltk3::Box",
@@ -580,10 +580,10 @@ static const char *class_matcher[] = {
 "22","FL_DIAL",
 "101","FL_FREE",
 "31","FL_INPUT",
-"12","Fl_Light_Button",
+"12","fltk3::LightButton",
 "41","FL_MENU",
 "23","FL_POSITIONER",
-"13","Fl_Round_Button",
+"13","fltk3::RoundButton",
 "21","FL_SLIDER",
 "2", "FL_BOX", // was FL_TEXT
 "62","FL_TIMER",

@@ -42,9 +42,9 @@ Fl_Input *header_file_input=(Fl_Input *)0;
 
 Fl_Input *code_file_input=(Fl_Input *)0;
 
-Fl_Check_Button *include_H_from_C_button=(Fl_Check_Button *)0;
+fltk3::CheckButton *include_H_from_C_button=(fltk3::CheckButton *)0;
 
-Fl_Check_Button *use_FL_COMMAND_button=(Fl_Check_Button *)0;
+fltk3::CheckButton *use_FL_COMMAND_button=(fltk3::CheckButton *)0;
 
 Fl_Choice *i18n_type_chooser=(Fl_Choice *)0;
 
@@ -92,16 +92,16 @@ fltk3::DoubleWindow* make_project_window() {
           code_file_input->callback((fltk3::Callback*)code_input_cb, (void*)(1));
           code_file_input->when(fltk3::WHEN_CHANGED);
         } // Fl_Input* code_file_input
-        { include_H_from_C_button = new Fl_Check_Button(100, 153, 272, 20, "Include Header from Code");
+        { include_H_from_C_button = new fltk3::CheckButton(100, 153, 272, 20, "Include Header from Code");
           include_H_from_C_button->tooltip("Include the header file from the code file.");
           include_H_from_C_button->down_box(fltk3::DOWN_BOX);
           include_H_from_C_button->callback((fltk3::Callback*)include_H_from_C_button_cb);
-        } // Fl_Check_Button* include_H_from_C_button
-        { use_FL_COMMAND_button = new Fl_Check_Button(100, 176, 272, 20, "Menu shortcuts use fltk3::COMMAND");
+        } // fltk3::CheckButton* include_H_from_C_button
+        { use_FL_COMMAND_button = new fltk3::CheckButton(100, 176, 272, 20, "Menu shortcuts use fltk3::COMMAND");
           use_FL_COMMAND_button->tooltip("Replace fltk3::CTRL with fltk3::COMMAND when generating menu shortcut code.");
           use_FL_COMMAND_button->down_box(fltk3::DOWN_BOX);
           use_FL_COMMAND_button->callback((fltk3::Callback*)use_FL_COMMAND_button_cb);
-        } // Fl_Check_Button* use_FL_COMMAND_button
+        } // fltk3::CheckButton* use_FL_COMMAND_button
         o->end();
       } // fltk3::Group* o
       { fltk3::Group* o = new fltk3::Group(10, 36, 378, 169, "Internationalization");
@@ -165,34 +165,34 @@ Fl_Menu_Item menu_scheme_choice[] = {
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Check_Button *tooltips_button=(Fl_Check_Button *)0;
+fltk3::CheckButton *tooltips_button=(fltk3::CheckButton *)0;
 
-static void cb_tooltips_button(Fl_Check_Button*, void*) {
+static void cb_tooltips_button(fltk3::CheckButton*, void*) {
   Fl_Tooltip::enable(tooltips_button->value());
 fluid_prefs.set("show_tooltips", tooltips_button->value());
 }
 
-Fl_Check_Button *completion_button=(Fl_Check_Button *)0;
+fltk3::CheckButton *completion_button=(fltk3::CheckButton *)0;
 
-static void cb_completion_button(Fl_Check_Button*, void*) {
+static void cb_completion_button(fltk3::CheckButton*, void*) {
   fluid_prefs.set("show_completion_dialogs", completion_button->value());
 }
 
-Fl_Check_Button *openlast_button=(Fl_Check_Button *)0;
+fltk3::CheckButton *openlast_button=(fltk3::CheckButton *)0;
 
-static void cb_openlast_button(Fl_Check_Button*, void*) {
+static void cb_openlast_button(fltk3::CheckButton*, void*) {
   fluid_prefs.set("open_previous_file", openlast_button->value());
 }
 
-Fl_Check_Button *prevpos_button=(Fl_Check_Button *)0;
+fltk3::CheckButton *prevpos_button=(fltk3::CheckButton *)0;
 
-static void cb_prevpos_button(Fl_Check_Button*, void*) {
+static void cb_prevpos_button(fltk3::CheckButton*, void*) {
   fluid_prefs.set("prev_window_pos", prevpos_button->value());
 }
 
-Fl_Check_Button *show_comments_button=(Fl_Check_Button *)0;
+fltk3::CheckButton *show_comments_button=(fltk3::CheckButton *)0;
 
-static void cb_show_comments_button(Fl_Check_Button*, void*) {
+static void cb_show_comments_button(fltk3::CheckButton*, void*) {
   show_comments = show_comments_button->value();
 fluid_prefs.set("show_comments", show_comments);
 redraw_browser();
@@ -228,41 +228,41 @@ fltk3::DoubleWindow* make_settings_window() {
         o->labelfont(1);
         o->align(fltk3::Align(fltk3::ALIGN_LEFT));
       } // fltk3::Box* o
-      { tooltips_button = new Fl_Check_Button(116, 43, 113, 25, "Show Tooltips");
+      { tooltips_button = new fltk3::CheckButton(116, 43, 113, 25, "Show Tooltips");
         tooltips_button->down_box(fltk3::DOWN_BOX);
         tooltips_button->callback((fltk3::Callback*)cb_tooltips_button);
         int b;
         fluid_prefs.get("show_tooltips", b, 1);
         tooltips_button->value(b);
         Fl_Tooltip::enable(b);
-      } // Fl_Check_Button* tooltips_button
-      { completion_button = new Fl_Check_Button(116, 68, 186, 25, "Show Completion Dialogs");
+      } // fltk3::CheckButton* tooltips_button
+      { completion_button = new fltk3::CheckButton(116, 68, 186, 25, "Show Completion Dialogs");
         completion_button->down_box(fltk3::DOWN_BOX);
         completion_button->callback((fltk3::Callback*)cb_completion_button);
         int b;
         fluid_prefs.get("show_completion_dialogs", b, 1);
         completion_button->value(b);
-      } // Fl_Check_Button* completion_button
-      { openlast_button = new Fl_Check_Button(116, 93, 214, 25, "Open Previous File on Startup");
+      } // fltk3::CheckButton* completion_button
+      { openlast_button = new fltk3::CheckButton(116, 93, 214, 25, "Open Previous File on Startup");
         openlast_button->down_box(fltk3::DOWN_BOX);
         openlast_button->callback((fltk3::Callback*)cb_openlast_button);
         int b;
         fluid_prefs.get("open_previous_file", b, 0);
         openlast_button->value(b);
-      } // Fl_Check_Button* openlast_button
-      { prevpos_button = new Fl_Check_Button(116, 118, 209, 25, "Remember Window Positions");
+      } // fltk3::CheckButton* openlast_button
+      { prevpos_button = new fltk3::CheckButton(116, 118, 209, 25, "Remember Window Positions");
         prevpos_button->down_box(fltk3::DOWN_BOX);
         prevpos_button->callback((fltk3::Callback*)cb_prevpos_button);
         int b;
         fluid_prefs.get("prev_window_pos", b, 1);
         prevpos_button->value(b);
-      } // Fl_Check_Button* prevpos_button
-      { show_comments_button = new Fl_Check_Button(116, 143, 209, 25, "Show Comments in Browser");
+      } // fltk3::CheckButton* prevpos_button
+      { show_comments_button = new fltk3::CheckButton(116, 143, 209, 25, "Show Comments in Browser");
         show_comments_button->down_box(fltk3::DOWN_BOX);
         show_comments_button->callback((fltk3::Callback*)cb_show_comments_button);
         fluid_prefs.get("show_comments", show_comments, 1);
         show_comments_button->value(show_comments);
-      } // Fl_Check_Button* show_comments_button
+      } // fltk3::CheckButton* show_comments_button
       o->end();
     } // fltk3::Group* o
     { recent_spinner = new Fl_Spinner(115, 173, 40, 25, "# Recent Files: ");
@@ -292,21 +292,21 @@ static void cb_shell_command_input(Fl_Input*, void*) {
   fluid_prefs.set("shell_command", shell_command_input->value());
 }
 
-Fl_Check_Button *shell_writecode_button=(Fl_Check_Button *)0;
+fltk3::CheckButton *shell_writecode_button=(fltk3::CheckButton *)0;
 
-static void cb_shell_writecode_button(Fl_Check_Button*, void*) {
+static void cb_shell_writecode_button(fltk3::CheckButton*, void*) {
   fluid_prefs.set("shell_writecode", shell_writecode_button->value());
 }
 
-Fl_Check_Button *shell_writemsgs_button=(Fl_Check_Button *)0;
+fltk3::CheckButton *shell_writemsgs_button=(fltk3::CheckButton *)0;
 
-static void cb_shell_writemsgs_button(Fl_Check_Button*, void*) {
+static void cb_shell_writemsgs_button(fltk3::CheckButton*, void*) {
   fluid_prefs.set("shell_writemsgs", shell_writemsgs_button->value());
 }
 
-Fl_Check_Button *shell_savefl_button=(Fl_Check_Button *)0;
+fltk3::CheckButton *shell_savefl_button=(fltk3::CheckButton *)0;
 
-static void cb_shell_savefl_button(Fl_Check_Button*, void*) {
+static void cb_shell_savefl_button(fltk3::CheckButton*, void*) {
   fluid_prefs.set("shell_savefl", shell_savefl_button->value());
 }
 
@@ -334,27 +334,27 @@ fltk3::DoubleWindow* make_shell_window() {
       fluid_prefs.get("shell_command", buf, "", sizeof(buf));
       shell_command_input->value(buf);
     } // Fl_Input* shell_command_input
-    { shell_writecode_button = new Fl_Check_Button(128, 61, 93, 19, "Write Code");
+    { shell_writecode_button = new fltk3::CheckButton(128, 61, 93, 19, "Write Code");
       shell_writecode_button->down_box(fltk3::DOWN_BOX);
       shell_writecode_button->callback((fltk3::Callback*)cb_shell_writecode_button);
       int b;
       fluid_prefs.get("shell_writecode", b, 1);
       shell_writecode_button->value(b);
-    } // Fl_Check_Button* shell_writecode_button
-    { shell_writemsgs_button = new Fl_Check_Button(231, 61, 126, 19, "Write Messages");
+    } // fltk3::CheckButton* shell_writecode_button
+    { shell_writemsgs_button = new fltk3::CheckButton(231, 61, 126, 19, "Write Messages");
       shell_writemsgs_button->down_box(fltk3::DOWN_BOX);
       shell_writemsgs_button->callback((fltk3::Callback*)cb_shell_writemsgs_button);
       int b;
       fluid_prefs.get("shell_writemsgs", b, 0);
       shell_writemsgs_button->value(b);
-    } // Fl_Check_Button* shell_writemsgs_button
-    { shell_savefl_button = new Fl_Check_Button(10, 62, 108, 19, "Save .FL File");
+    } // fltk3::CheckButton* shell_writemsgs_button
+    { shell_savefl_button = new fltk3::CheckButton(10, 62, 108, 19, "Save .FL File");
       shell_savefl_button->down_box(fltk3::DOWN_BOX);
       shell_savefl_button->callback((fltk3::Callback*)cb_shell_savefl_button);
       int b;
       fluid_prefs.get("shell_savefl", b, 1);
       shell_savefl_button->value(b);
-    } // Fl_Check_Button* shell_savefl_button
+    } // fltk3::CheckButton* shell_savefl_button
     { fltk3::ReturnButton* o = new fltk3::ReturnButton(132, 90, 143, 25, "Run Command");
       o->callback((fltk3::Callback*)do_shell_command);
     } // fltk3::ReturnButton* o
@@ -387,13 +387,13 @@ Fl_Int_Input *vertical_input=(Fl_Int_Input *)0;
 
 Fl_Int_Input *snap_input=(Fl_Int_Input *)0;
 
-Fl_Check_Button *guides_toggle=(Fl_Check_Button *)0;
+fltk3::CheckButton *guides_toggle=(fltk3::CheckButton *)0;
 
 static void cb_Close2(fltk3::Button*, void*) {
   grid_window->hide();
 }
 
-Fl_Round_Button *def_widget_size[6]={(Fl_Round_Button *)0};
+fltk3::RoundButton *def_widget_size[6]={(fltk3::RoundButton *)0};
 
 fltk3::DoubleWindow* make_layout_window() {
   { grid_window = new fltk3::DoubleWindow(285, 245, "Layout Settings");
@@ -421,11 +421,11 @@ fltk3::DoubleWindow* make_layout_window() {
       snap_input->align(fltk3::Align(fltk3::ALIGN_RIGHT));
       o->when(fltk3::WHEN_RELEASE|fltk3::WHEN_ENTER_KEY);
     } // Fl_Int_Input* snap_input
-    { guides_toggle = new Fl_Check_Button(106, 80, 110, 25, "Show Guides");
+    { guides_toggle = new fltk3::CheckButton(106, 80, 110, 25, "Show Guides");
       guides_toggle->tooltip("Show distance and alignment guides in overlay");
       guides_toggle->down_box(fltk3::DOWN_BOX);
       guides_toggle->callback((fltk3::Callback*)guides_cb, (void*)(4));
-    } // Fl_Check_Button* guides_toggle
+    } // fltk3::CheckButton* guides_toggle
     { fltk3::Button* o = new fltk3::Button(215, 210, 60, 25, "Close");
       o->tooltip("Close this dialog.");
       o->callback((fltk3::Callback*)cb_Close2);
@@ -439,55 +439,55 @@ fltk3::DoubleWindow* make_layout_window() {
       o->align(fltk3::Align(fltk3::ALIGN_RIGHT|fltk3::ALIGN_INSIDE));
     } // fltk3::Box* o
     { fltk3::Group* o = new fltk3::Group(105, 115, 170, 75);
-      { def_widget_size[0] = new Fl_Round_Button(105, 115, 70, 25);
+      { def_widget_size[0] = new fltk3::RoundButton(105, 115, 70, 25);
         def_widget_size[0]->type(102);
         def_widget_size[0]->down_box(fltk3::ROUND_DOWN_BOX);
         def_widget_size[0]->callback((fltk3::Callback*)default_widget_size_cb, (void*)(8));
-      } // Fl_Round_Button* def_widget_size[0]
+      } // fltk3::RoundButton* def_widget_size[0]
       { fltk3::Box* o = new fltk3::Box(120, 115, 50, 25, "tiny");
         o->labelsize(8);
         o->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
       } // fltk3::Box* o
-      { def_widget_size[1] = new Fl_Round_Button(180, 115, 70, 25);
+      { def_widget_size[1] = new fltk3::RoundButton(180, 115, 70, 25);
         def_widget_size[1]->type(102);
         def_widget_size[1]->down_box(fltk3::ROUND_DOWN_BOX);
         def_widget_size[1]->callback((fltk3::Callback*)default_widget_size_cb, (void*)(11));
-      } // Fl_Round_Button* def_widget_size[1]
+      } // fltk3::RoundButton* def_widget_size[1]
       { fltk3::Box* o = new fltk3::Box(195, 115, 50, 25, "small");
         o->labelsize(11);
         o->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
       } // fltk3::Box* o
-      { def_widget_size[2] = new Fl_Round_Button(105, 140, 70, 25);
+      { def_widget_size[2] = new fltk3::RoundButton(105, 140, 70, 25);
         def_widget_size[2]->type(102);
         def_widget_size[2]->down_box(fltk3::ROUND_DOWN_BOX);
         def_widget_size[2]->callback((fltk3::Callback*)default_widget_size_cb, (void*)(14));
-      } // Fl_Round_Button* def_widget_size[2]
+      } // fltk3::RoundButton* def_widget_size[2]
       { fltk3::Box* o = new fltk3::Box(120, 140, 50, 25, "normal");
         o->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
       } // fltk3::Box* o
-      { def_widget_size[3] = new Fl_Round_Button(180, 140, 90, 25);
+      { def_widget_size[3] = new fltk3::RoundButton(180, 140, 90, 25);
         def_widget_size[3]->type(102);
         def_widget_size[3]->down_box(fltk3::ROUND_DOWN_BOX);
         def_widget_size[3]->callback((fltk3::Callback*)default_widget_size_cb, (void*)(18));
-      } // Fl_Round_Button* def_widget_size[3]
+      } // fltk3::RoundButton* def_widget_size[3]
       { fltk3::Box* o = new fltk3::Box(195, 140, 68, 25, "medium");
         o->labelsize(18);
         o->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
       } // fltk3::Box* o
-      { def_widget_size[4] = new Fl_Round_Button(105, 165, 75, 25);
+      { def_widget_size[4] = new fltk3::RoundButton(105, 165, 75, 25);
         def_widget_size[4]->type(102);
         def_widget_size[4]->down_box(fltk3::ROUND_DOWN_BOX);
         def_widget_size[4]->callback((fltk3::Callback*)default_widget_size_cb, (void*)(24));
-      } // Fl_Round_Button* def_widget_size[4]
+      } // fltk3::RoundButton* def_widget_size[4]
       { fltk3::Box* o = new fltk3::Box(120, 165, 64, 25, "large");
         o->labelsize(24);
         o->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));
       } // fltk3::Box* o
-      { def_widget_size[5] = new Fl_Round_Button(180, 165, 95, 25);
+      { def_widget_size[5] = new fltk3::RoundButton(180, 165, 95, 25);
         def_widget_size[5]->type(102);
         def_widget_size[5]->down_box(fltk3::ROUND_DOWN_BOX);
         def_widget_size[5]->callback((fltk3::Callback*)default_widget_size_cb, (void*)(32));
-      } // Fl_Round_Button* def_widget_size[5]
+      } // fltk3::RoundButton* def_widget_size[5]
       { fltk3::Box* o = new fltk3::Box(195, 165, 76, 25, "huge");
         o->labelsize(32);
         o->align(fltk3::Align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE));

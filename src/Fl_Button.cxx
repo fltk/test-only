@@ -68,12 +68,12 @@ void fltk3::Button::setonly() { // set this radio button on, turn others off
   fltk3::Widget*const* a = g->array();
   for (int i = g->children(); i--;) {
     fltk3::Widget* o = *a++;
-    if (o != this && o->type()==FL_RADIO_BUTTON) ((fltk3::Button*)o)->value(0);
+    if (o != this && o->type()==fltk3::RADIO_BUTTON) ((fltk3::Button*)o)->value(0);
   }
 }
 
 void fltk3::Button::draw() {
-  if (type() == FL_HIDDEN_BUTTON) return;
+  if (type() == fltk3::HIDDEN_BUTTON) return;
   fltk3::Color col = value() ? selection_color() : color();
   draw_box(value() ? (down_box()?down_box():fltk3::down(box())) : box(), col);
   draw_backdrop();
@@ -97,7 +97,7 @@ int fltk3::Button::handle(int event) {
     if (fltk3::visible_focus() && handle(fltk3::FOCUS)) fltk3::focus(this);
   case fltk3::DRAG:
     if (fltk3::event_inside(this)) {
-      if (type() == FL_RADIO_BUTTON) newval = 1;
+      if (type() == fltk3::RADIO_BUTTON) newval = 1;
       else newval = !oldval;
     } else
     {
@@ -117,7 +117,7 @@ int fltk3::Button::handle(int event) {
       return 1;
     }
     set_changed();
-    if (type() == FL_RADIO_BUTTON) setonly();
+    if (type() == fltk3::RADIO_BUTTON) setonly();
     else if (type() == fltk3::TOGGLE_BUTTON) oldval = value_;
     else {
       value(oldval);
@@ -154,7 +154,7 @@ int fltk3::Button::handle(int event) {
       set_changed();
     triggered_by_keyboard:
       fltk3::WidgetTracker wp(this);
-      if (type() == FL_RADIO_BUTTON && !value_) {
+      if (type() == fltk3::RADIO_BUTTON && !value_) {
 	setonly();
 	if (when() & fltk3::WHEN_CHANGED) do_callback();
       } else if (type() == fltk3::TOGGLE_BUTTON) {

@@ -967,14 +967,14 @@ namespace fltk3 {
     void color2(unsigned a) {color2_ = a;}
   };
   
+  
+  /**
+   Reserved type numbers (necessary for my cheapo RTTI) start here.
+   Grep the header files for "RESERVED_TYPE" to find the next available
+   number.
+   */
+  const uchar RESERVED_TYPE = 100;
 }
-
-/**
- Reserved type numbers (necessary for my cheapo RTTI) start here.
- Grep the header files for "RESERVED_TYPE" to find the next available
- number.
- */
-#define FL_RESERVED_TYPE 100
 
 #endif
 

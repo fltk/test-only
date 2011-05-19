@@ -37,7 +37,7 @@
 #include <fltk3/draw.h>
 #include "flstring.h"
 
-void Fl_Light_Button::draw() {
+void fltk3::LightButton::draw() {
   if (box()) draw_box(this==fltk3::pushed() ? fltk3::down(box()) : box(), color());
   fltk3::Color col = value() ? (active_r() ? selection_color() :
                             fltk3::inactive(selection_color())) : color();
@@ -148,7 +148,7 @@ void Fl_Light_Button::draw() {
   if (fltk3::focus() == this) draw_focus();
 }
 
-int Fl_Light_Button::handle(int event) {
+int fltk3::LightButton::handle(int event) {
   switch (event) {
   case fltk3::RELEASE:
     if (box()) redraw();
@@ -158,11 +158,11 @@ int Fl_Light_Button::handle(int event) {
 }
 
 /**
-  Creates a new Fl_Light_Button widget using the given
+  Creates a new fltk3::LightButton widget using the given
   position, size, and label string.
   <P>The destructor deletes the check button.
 */
-Fl_Light_Button::Fl_Light_Button(int X, int Y, int W, int H, const char* l)
+fltk3::LightButton::LightButton(int X, int Y, int W, int H, const char* l)
 : fltk3::Button(X, Y, W, H, l) {
   type(fltk3::TOGGLE_BUTTON);
   selection_color(fltk3::YELLOW);

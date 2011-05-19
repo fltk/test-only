@@ -92,7 +92,7 @@ static Fl_Box_Type Fl_Box_type;
 static Fl_Menu_Item buttontype_menu[] = {
   {"Normal",0,0,(void*)0},
   {"Toggle",0,0,(void*)fltk3::TOGGLE_BUTTON},
-  {"Radio",0,0,(void*)FL_RADIO_BUTTON},
+  {"Radio",0,0,(void*)fltk3::RADIO_BUTTON},
   {0}};
 class Fl_Button_Type : public Fl_Widget_Type {
   Fl_Menu_Item *subtypes() {return buttontype_menu;}
@@ -135,70 +135,70 @@ static Fl_Return_Button_Type Fl_Return_Button_type;
 ////////////////////////////////////////////////////////////////
 
 #include <fltk3/RepeatButton.h>
-class Fl_Repeat_Button_Type : public Fl_Widget_Type {
+class fltk3::RepeatButton_Type : public Fl_Widget_Type {
 public:
-  virtual const char *type_name() {return "Fl_Repeat_Button";}
+  virtual const char *type_name() {return "fltk3::RepeatButton";}
   virtual const char *alt_type_name() {return "fltk::RepeatButton";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Repeat_Button(x,y,w,h,"button");}
-  Fl_Widget_Type *_make() {return new Fl_Repeat_Button_Type();}
+    return new fltk3::RepeatButton(x,y,w,h,"button");}
+  Fl_Widget_Type *_make() {return new fltk3::RepeatButton_Type();}
   int pixmapID() { return 25; }
 };
-static Fl_Repeat_Button_Type Fl_Repeat_Button_type;
+static fltk3::RepeatButton_Type fltk3::RepeatButton_type;
 
 ////////////////////////////////////////////////////////////////
 
 #include <fltk3/LightButton.h>
-class Fl_Light_Button_Type : public Fl_Button_Type {
+class fltk3::LightButton_Type : public Fl_Button_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Button_Type::ideal_size(w, h);
     w += 4;
   }
-  virtual const char *type_name() {return "Fl_Light_Button";}
+  virtual const char *type_name() {return "fltk3::LightButton";}
   virtual const char *alt_type_name() {return "fltk::LightButton";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Light_Button(x,y,w,h,"button");}
-  Fl_Widget_Type *_make() {return new Fl_Light_Button_Type();}
+    return new fltk3::LightButton(x,y,w,h,"button");}
+  Fl_Widget_Type *_make() {return new fltk3::LightButton_Type();}
   int pixmapID() { return 24; }
 };
-static Fl_Light_Button_Type Fl_Light_Button_type;
+static fltk3::LightButton_Type fltk3::LightButton_type;
 
 ////////////////////////////////////////////////////////////////
 
 #include <fltk3/CheckButton.h>
-class Fl_Check_Button_Type : public Fl_Button_Type {
+class fltk3::CheckButton_Type : public Fl_Button_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Button_Type::ideal_size(w, h);
     w += 4;
   }
-  virtual const char *type_name() {return "Fl_Check_Button";}
+  virtual const char *type_name() {return "fltk3::CheckButton";}
   virtual const char *alt_type_name() {return "fltk::CheckButton";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Check_Button(x,y,w,h,"button");}
-  Fl_Widget_Type *_make() {return new Fl_Check_Button_Type();}
+    return new fltk3::CheckButton(x,y,w,h,"button");}
+  Fl_Widget_Type *_make() {return new fltk3::CheckButton_Type();}
   int pixmapID() { return 3; }
 };
-static Fl_Check_Button_Type Fl_Check_Button_type;
+static fltk3::CheckButton_Type fltk3::CheckButton_type;
 
 ////////////////////////////////////////////////////////////////
 
 #include <fltk3/RoundButton.h>
-class Fl_Round_Button_Type : public Fl_Button_Type {
+class fltk3::RoundButton_Type : public Fl_Button_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Button_Type::ideal_size(w, h);
     w += 4;
   }
-  virtual const char *type_name() {return "Fl_Round_Button";}
+  virtual const char *type_name() {return "fltk3::RoundButton";}
   virtual const char *alt_type_name() {return "fltk::RadioButton";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Round_Button(x,y,w,h,"button");}
-  Fl_Widget_Type *_make() {return new Fl_Round_Button_Type();}
+    return new fltk3::RoundButton(x,y,w,h,"button");}
+  Fl_Widget_Type *_make() {return new fltk3::RoundButton_Type();}
   int pixmapID() { return 4; }
 };
-static Fl_Round_Button_Type Fl_Round_Button_type;
+static fltk3::RoundButton_Type fltk3::RoundButton_type;
 
 ////////////////////////////////////////////////////////////////
 
@@ -1033,10 +1033,10 @@ Fl_Menu_Item New_Menu[] = {
 {"Buttons",0,0,0,FL_SUBMENU},
   {0,0,cb,(void*)&Fl_Button_type},
   {0,0,cb,(void*)&Fl_Return_Button_type},
-  {0,0,cb,(void*)&Fl_Light_Button_type},
-  {0,0,cb,(void*)&Fl_Check_Button_type},
-  {0,0,cb,(void*)&Fl_Repeat_Button_type},
-  {0,0,cb,(void*)&Fl_Round_Button_type},
+  {0,0,cb,(void*)&fltk3::LightButton_type},
+  {0,0,cb,(void*)&fltk3::CheckButton_type},
+  {0,0,cb,(void*)&fltk3::RepeatButton_type},
+  {0,0,cb,(void*)&fltk3::RoundButton_type},
 {0},
 {"Valuators",0,0,0,FL_SUBMENU},
   {0,0,cb,(void*)&Fl_Slider_type},
@@ -1247,8 +1247,8 @@ static symbol table[] = {
   {"RETURN_END",		 2},
   {"RETURN_ALWAYS",	 3},
   {"PUSH_BUTTON",	fltk3::TOGGLE_BUTTON},
-  {"RADIO_BUTTON",	FL_RADIO_BUTTON},
-  {"HIDDEN_BUTTON",	FL_HIDDEN_BUTTON},
+  {"RADIO_BUTTON",	fltk3::RADIO_BUTTON},
+  {"HIDDEN_BUTTON",	fltk3::HIDDEN_BUTTON},
   {"SELECT_BROWSER",	FL_SELECT_BROWSER},
   {"HOLD_BROWSER",	FL_HOLD_BROWSER},
   {"MULTI_BROWSER",	FL_MULTI_BROWSER},

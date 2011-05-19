@@ -28,19 +28,19 @@
 #include <fltk3/run.h>
 #include <fltk3/CheckButton.h>
 
-// TODO Correct incorrect Fl_Check_Button comments.
+// TODO Correct incorrect fltk3::CheckButton comments.
 // A subclass of fltk3::Button that always draws as a diamond box.  This
 // diamond is smaller than the widget size and can be surchecked by
 // another box type, for compatibility with Forms.
 
 /**
-  Creates a new Fl_Check_Button widget using the given position, size and
+  Creates a new fltk3::CheckButton widget using the given position, size and
   label string.
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
-Fl_Check_Button::Fl_Check_Button(int X, int Y, int W, int H, const char *L)
-: Fl_Light_Button(X, Y, W, H, L) {
+fltk3::CheckButton::CheckButton(int X, int Y, int W, int H, const char *L)
+: fltk3::LightButton(X, Y, W, H, L) {
   box(fltk3::NO_BOX);
   down_box(fltk3::DOWN_BOX);
   selection_color(fltk3::FOREGROUND_COLOR);

@@ -72,7 +72,7 @@ static void update_xywh() {
   }
 }
 
-void guides_cb(Fl_Check_Button *i, long) {
+void guides_cb(fltk3::CheckButton *i, long) {
   show_guides = i->value();
   fluid_prefs.set("show_guides", show_guides);
 
@@ -118,7 +118,7 @@ void grid_cb(Fl_Int_Input *i, long v) {
 }
 
 // Set default widget sizes...
-void default_widget_size_cb(Fl_Round_Button *b, long size) {
+void default_widget_size_cb(fltk3::RoundButton *b, long size) {
   // Update the "normal" text size of new widgets...
   b->setonly();
   Fl_Widget_Type::default_size = size;
@@ -261,14 +261,14 @@ void code_input_cb(Fl_Input* i, void*) {
   code_file_name = i->value();
 }
 
-void include_H_from_C_button_cb(Fl_Check_Button* b, void*) {
+void include_H_from_C_button_cb(fltk3::CheckButton* b, void*) {
   if (include_H_from_C != b->value()) {
     set_modflag(1);
     include_H_from_C = b->value();
   }
 }
 
-void use_FL_COMMAND_button_cb(Fl_Check_Button* b, void*) {
+void use_FL_COMMAND_button_cb(fltk3::CheckButton* b, void*) {
   if (use_FL_COMMAND != b->value()) {
     set_modflag(1);
     use_FL_COMMAND = b->value();
@@ -443,7 +443,7 @@ uchar *Fl_Window_Type::read_image(int &ww, int &hh) {
 
 // control panel items:
 
-void modal_cb(Fl_Light_Button* i, void* v) {
+void modal_cb(fltk3::LightButton* i, void* v) {
   if (v == LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
@@ -454,7 +454,7 @@ void modal_cb(Fl_Light_Button* i, void* v) {
   }
 }
 
-void non_modal_cb(Fl_Light_Button* i, void* v) {
+void non_modal_cb(fltk3::LightButton* i, void* v) {
   if (v == LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
@@ -465,7 +465,7 @@ void non_modal_cb(Fl_Light_Button* i, void* v) {
   }
 }
 
-void border_cb(Fl_Light_Button* i, void* v) {
+void border_cb(fltk3::LightButton* i, void* v) {
   if (v == LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
