@@ -28,14 +28,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fltk3/run.h>
-#include <fltk3/Window.H>
-#include <fltk3/Button.H>
-#include <fltk3/ReturnButton.H>
-#include <fltk3/RepeatButton.H>
-#include <fltk3/CheckButton.H>
-#include <fltk3/LightButton.H>
-#include <fltk3/RoundButton.H>
-#include <fltk3/Tooltip.H>
+#include <fltk3/Window.h>
+#include <fltk3/Button.h>
+#include <fltk3/ReturnButton.h>
+#include <fltk3/RepeatButton.h>
+#include <fltk3/CheckButton.h>
+#include <fltk3/LightButton.h>
+#include <fltk3/RoundButton.h>
+#include <fltk3/Tooltip.h>
 
 int main(int argc, char ** argv) {
   fltk3::Window *window = new fltk3::Window(320,130);

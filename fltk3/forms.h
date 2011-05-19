@@ -567,11 +567,11 @@ inline void fl_set_choice_fontstyle(fltk3::Widget* o, fltk3::Font x) {
 // inline void fl_set_choice_item_shortcut(fltk3::Widget*, int, const char*);
 
 #include "Clock.h"
-forms_constructort(Fl_Clock, fl_add_clock)
+forms_constructort(fltk3::Clock, fl_add_clock)
 inline void fl_get_clock(fltk3::Widget* o, int* h, int* m, int* s) {
-    *h = ((Fl_Clock*)o)->hour();
-    *m = ((Fl_Clock*)o)->minute();
-    *s = ((Fl_Clock*)o)->second();
+    *h = ((fltk3::Clock*)o)->hour();
+    *m = ((fltk3::Clock*)o)->minute();
+    *s = ((fltk3::Clock*)o)->second();
 }
 
 #include "Counter.h"

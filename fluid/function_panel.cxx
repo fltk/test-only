@@ -1033,7 +1033,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(542, 5, 24, 24);
         o->tooltip("Clock");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Clock"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Clock"));
         o->image(pixmap[34]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(517, 30, 24, 24);

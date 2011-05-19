@@ -26,20 +26,24 @@
 //
 
 /* \file
-   Fl_Round_Clock widget . */
+ Fl_Round_Clock widget . */
 
 #ifndef Fltk3_Round_Clock_H
 #define Fltk3_Round_Clock_H
 
 #include "Clock.h"
 
-/** A clock widget of type fltk3::ROUND_CLOCK. Has no box. */
-class FLTK3_EXPORT Fl_Round_Clock : public Fl_Clock {
-public:
+namespace fltk3 {
+  
+  /** A clock widget of type fltk3::ROUND_CLOCK. Has no box. */
+  class FLTK3_EXPORT RoundClock : public Clock {
+  public:
     /** Creates the clock widget, setting his type and box. */
-    Fl_Round_Clock(int x,int y,int w,int h, const char *l = 0)
-	: Fl_Clock(x,y,w,h,l) {type(fltk3::ROUND_CLOCK); box(fltk3::NO_BOX);}
-};
+    RoundClock(int x,int y,int w,int h, const char *l = 0)
+    : Clock(x,y,w,h,l) {type(fltk3::ROUND_CLOCK); box(fltk3::NO_BOX);}
+  };
+  
+}
 
 #endif
 
