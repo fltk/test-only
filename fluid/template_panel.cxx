@@ -56,9 +56,9 @@ template_instance->value("");
 template_panel->hide();
 }
 
-Fl_Browser *template_browser=(Fl_Browser *)0;
+fltk3::Browser *template_browser=(fltk3::Browser *)0;
 
-static void cb_template_browser(Fl_Browser*, void*) {
+static void cb_template_browser(fltk3::Browser*, void*) {
   if (fltk3::event_clicks()) {
   template_panel->hide();
   return;
@@ -144,13 +144,13 @@ template_panel->hide();
 fltk3::DoubleWindow* make_template_panel() {
   { template_panel = new fltk3::DoubleWindow(460, 355, "New/Save Template");
     template_panel->callback((fltk3::Callback*)cb_template_panel);
-    { template_browser = new Fl_Browser(10, 28, 180, 250, "Available Templates:");
+    { template_browser = new fltk3::Browser(10, 28, 180, 250, "Available Templates:");
       template_browser->type(2);
       template_browser->labelfont(1);
       template_browser->callback((fltk3::Callback*)cb_template_browser);
       template_browser->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       template_browser->when(3);
-    } // Fl_Browser* template_browser
+    } // fltk3::Browser* template_browser
     { template_preview = new fltk3::Box(200, 28, 250, 250);
       template_preview->box(fltk3::THIN_DOWN_BOX);
       template_preview->align(fltk3::Align(69|fltk3::ALIGN_INSIDE));

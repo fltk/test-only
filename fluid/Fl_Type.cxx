@@ -175,10 +175,10 @@ extern int show_comments;
 
 ////////////////////////////////////////////////////////////////
 
-class Widget_Browser : public Fl_Browser_ {
+class Widget_Browser : public fltk3::Browser_ {
   friend class Fl_Type;
 
-  // required routines for Fl_Browser_ subclass:
+  // required routines for fltk3::Browser_ subclass:
   void *item_first() const ;
   void *item_next(void *) const ;
   void *item_prev(void *) const ;
@@ -223,7 +223,7 @@ static void Widget_Browser_callback(fltk3::Widget *o,void *) {
 }
 
 Widget_Browser::Widget_Browser(int X,int Y,int W,int H,const char*l)
-: Fl_Browser_(X,Y,W,H,l) {
+: fltk3::Browser_(X,Y,W,H,l) {
   type(FL_MULTI_BROWSER);
   fltk3::Widget::callback(Widget_Browser_callback);
   when(fltk3::WHEN_RELEASE);
@@ -460,7 +460,7 @@ int Widget_Browser::handle(int e) {
     }
     return 1;
   }
-  return Fl_Browser_::handle(e);
+  return fltk3::Browser_::handle(e);
 }
 
 Fl_Type::Fl_Type() {

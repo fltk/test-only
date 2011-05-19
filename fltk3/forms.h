@@ -88,14 +88,14 @@ typedef fltk3::Window FL_FORM;
 #define FL_TOMATO	((fltk3::Color)(131))
 #define FL_INDIANRED	((fltk3::Color)(164))
 #define FL_SLATEBLUE	((fltk3::Color)(195))
-#define fltk3::DARKGOLD	((fltk3::Color)(84))
+#define Fl_DARKGOLD	((fltk3::Color)(84))
 #define FL_PALEGREEN	((fltk3::Color)(157))
 #define FL_ORCHID	((fltk3::Color)(203))
-#define fltk3::DARKCYAN	((fltk3::Color)(189))
-#define fltk3::DARKTOMATO	((fltk3::Color)(113))
+#define FL_DARKCYAN	((fltk3::Color)(189))
+#define FL_DARKTOMATO	((fltk3::Color)(113))
 #define FL_WHEAT	((fltk3::Color)(174))
 
-#define fltk3::ALIGN_BESIDE	fltk3::ALIGN_INSIDE
+#define FL_ALIGN_BESIDE	fltk3::ALIGN_INSIDE
 
 #define FL_PUP_TOGGLE	2 // FL_MENU_TOGGLE
 #define FL_PUP_INACTIVE 1 // FL_MENU_INACTIVE
@@ -116,27 +116,27 @@ typedef fltk3::Window FL_FORM;
 
 #define FL_INVALID_STYLE 255
 #define FL_NORMAL_STYLE	fltk3::HELVETICA
-#define fltk3::BOLD_STYLE	fltk3::HELVETICA_BOLD
-#define fltk3::ITALIC_STYLE	fltk3::HELVETICA_ITALIC
-#define fltk3::BOLDITALIC_STYLE fltk3::HELVETICA_BOLD_ITALIC
+#define FL_BOLD_STYLE	fltk3::HELVETICA_BOLD
+#define FL_ITALIC_STYLE	fltk3::HELVETICA_ITALIC
+#define FL_BOLDITALIC_STYLE fltk3::HELVETICA_BOLD_ITALIC
 #define FL_FIXED_STYLE	fltk3::COURIER
 #define FL_FIXEDBOLD_STYLE fltk3::COURIER_BOLD
 #define FL_FIXEDITALIC_STYLE fltk3::COURIER_ITALIC
 #define FL_FIXEDBOLDITALIC_STYLE fltk3::COURIER_BOLD_ITALIC
-#define fltk3::TIMES_STYLE	fltk3::TIMES
-#define fltk3::TIMESBOLD_STYLE fltk3::TIMES_BOLD
-#define fltk3::TIMESITALIC_STYLE fltk3::TIMES_ITALIC
-#define fltk3::TIMESBOLDITALIC_STYLE fltk3::TIMES_BOLD_ITALIC
+#define FL_TIMES_STYLE	fltk3::TIMES
+#define FL_TIMESBOLD_STYLE fltk3::TIMES_BOLD
+#define FL_TIMESITALIC_STYLE fltk3::TIMES_ITALIC
+#define FL_TIMESBOLDITALIC_STYLE fltk3::TIMES_BOLD_ITALIC
 
 // hacks to change the labeltype() when passed to fl_set_object_lstyle():
-#define fltk3::SHADOW_STYLE		(fltk3::SHADOW_LABEL<<8)
+#define FL_SHADOW_STYLE		(fltk3::SHADOW_LABEL<<8)
 #define FL_ENGRAVED_STYLE	(fltk3::ENGRAVED_LABEL<<8)
 #define FL_EMBOSSED_STYLE	(fltk3::EMBOSSED_LABEL<<0)
 
 // size values are different from XForms, match older Forms:
 #define FL_TINY_SIZE	8
 #define FL_SMALL_SIZE	11 // 10
-//#define fltk3::NORMAL_SIZE	14 // 12
+//#define FL_NORMAL_SIZE	14 // 12
 #define FL_MEDIUM_SIZE	18 // 14
 #define FL_LARGE_SIZE	24 // 18
 #define FL_HUGE_SIZE	32 // 24
@@ -180,7 +180,7 @@ inline void fl_add_timeout(long msec, void (*cb)(void*), void* v) {
 inline void fl_remove_timeout(int) {}
 
 // type of callback is different!
-inline void fl_set_idle_callback(void (*cb)()) {fltk3::set_idle(cb, 0L);}
+inline void fl_set_idle_callback(void (*cb)()) {fltk3::set_idle(cb);}
 
 FLTK3_EXPORT fltk3::Widget* fl_do_forms(void);
 FLTK3_EXPORT fltk3::Widget* fl_check_forms();
@@ -268,14 +268,14 @@ inline fltk3::Window* fl_bgn_form(fltk3::Boxtype b,int w,int h) {
   g->box(b);
   return g;
 }
-FLTK3_EXPORT void fltk3::end_form();
+FLTK3_EXPORT void fl_end_form();
 inline void fl_addto_form(fltk3::Window* f) {f->begin();}
 inline fltk3::Group* fl_bgn_group() {return new fltk3::Group(0,0,0,0,0);}
-inline void fltk3::end_group() {fltk3::Group::current()->forms_end();}
+inline void fl_end_group() {fltk3::Group::current()->forms_end();}
 inline void fl_addto_group(fltk3::Widget* o) {((fltk3::Group* )o)->begin();}
 #define resizebox _ddfdesign_kludge()
 
-inline void fltk3::scale_form(fltk3::Window* f, double x, double y) {
+inline void fl_scale_form(fltk3::Window* f, double x, double y) {
   f->resizable(f); f->size(int(f->w()*x),int(f->h()*y));}
 inline void fl_set_form_position(fltk3::Window* f,int x,int y) {f->position(x,y);}
 inline void fl_set_form_size(fltk3::Window* f, int w, int h) {f->size(w,h);}
@@ -415,49 +415,49 @@ inline void fl_set_pixmap_align(fltk3::Widget* o,fltk3::Align a,int,int) {o->ali
 forms_constructorb(fltk3::Box, fl_add_box)
 
 #include "Browser.h"
-forms_constructor(Fl_Browser, fl_add_browser)
+forms_constructor(fltk3::Browser, fl_add_browser)
 
 inline void fl_clear_browser(fltk3::Widget* o) {
-    ((Fl_Browser*)o)->clear();}
+    ((fltk3::Browser*)o)->clear();}
 inline void fl_add_browser_line(fltk3::Widget* o, const char* s) {
-    ((Fl_Browser*)o)->add(s);}
+    ((fltk3::Browser*)o)->add(s);}
 inline void fl_addto_browser(fltk3::Widget* o, const char* s) {
-    ((Fl_Browser*)o)->add(s);} /* should also scroll to bottom */
+    ((fltk3::Browser*)o)->add(s);} /* should also scroll to bottom */
 //inline void fl_addto_browser_chars(fltk3::Widget*, const char*)
 //#define fl_append_browser fl_addto_browser_chars
 inline void fl_insert_browser_line(fltk3::Widget* o, int n, const char* s) {
-    ((Fl_Browser*)o)->insert(n,s);}
+    ((fltk3::Browser*)o)->insert(n,s);}
 inline void fl_delete_browser_line(fltk3::Widget* o, int n) {
-    ((Fl_Browser*)o)->remove(n);}
+    ((fltk3::Browser*)o)->remove(n);}
 inline void fl_replace_browser_line(fltk3::Widget* o, int n, const char* s) {
-    ((Fl_Browser*)o)->replace(n,s);}
+    ((fltk3::Browser*)o)->replace(n,s);}
 inline char* fl_get_browser_line(fltk3::Widget* o, int n) {
-    return (char*)(((Fl_Browser*)o)->text(n));}
+    return (char*)(((fltk3::Browser*)o)->text(n));}
 inline int fl_load_browser(fltk3::Widget* o, const char* f) {
-    return ((Fl_Browser*)o)->load(f);}
+    return ((fltk3::Browser*)o)->load(f);}
 inline void fl_select_browser_line(fltk3::Widget* o, int n) {
-    ((Fl_Browser*)o)->select(n,1);}
+    ((fltk3::Browser*)o)->select(n,1);}
 inline void fl_deselect_browser_line(fltk3::Widget* o, int n) {
-    ((Fl_Browser*)o)->select(n,0);}
+    ((fltk3::Browser*)o)->select(n,0);}
 inline void fl_deselect_browser(fltk3::Widget* o) {
-    ((Fl_Browser*)o)->deselect();}
+    ((fltk3::Browser*)o)->deselect();}
 inline int fl_isselected_browser_line(fltk3::Widget* o, int n) {
-    return ((Fl_Browser*)o)->selected(n);}
+    return ((fltk3::Browser*)o)->selected(n);}
 inline int fl_get_browser_topline(fltk3::Widget* o) {
-    return ((Fl_Browser*)o)->topline();}
+    return ((fltk3::Browser*)o)->topline();}
 inline int fl_get_browser(fltk3::Widget* o) {
-    return ((Fl_Browser*)o)->value();}
+    return ((fltk3::Browser*)o)->value();}
 inline int fl_get_browser_maxline(fltk3::Widget* o) {
-    return ((Fl_Browser*)o)->size();}
+    return ((fltk3::Browser*)o)->size();}
 //linline int fl_get_browser_screenlines(fltk3::Widget*);
 inline void fl_set_browser_topline(fltk3::Widget* o, int n) {
-    ((Fl_Browser*)o)->topline(n);}
+    ((fltk3::Browser*)o)->topline(n);}
 inline void fl_set_browser_fontsize(fltk3::Widget* o, int s) {
-    ((Fl_Browser*)o)->textsize(s);}
+    ((fltk3::Browser*)o)->textsize(s);}
 inline void fl_set_browser_fontstyle(fltk3::Widget* o, fltk3::Font s) {
-    ((Fl_Browser*)o)->textfont(s);}
+    ((fltk3::Browser*)o)->textfont(s);}
 inline void fl_set_browser_specialkey(fltk3::Widget* o, char c) {
-    ((Fl_Browser*)o)->format_char(c);}
+    ((fltk3::Browser*)o)->format_char(c);}
 //inline void fl_set_browser_vscrollbar(fltk3::Widget*, int);
 //inline void fl_set_browser_hscrollbar(fltk3::Widget*, int);
 //inline void fl_set_browser_leftslider(fltk3::Widget*, int);
@@ -468,13 +468,13 @@ inline void fl_set_browser_specialkey(fltk3::Widget* o, char c) {
 //inline void fl_set_browser_xoffset(fltk3::Widget*, FL_Coord);
 //inline void fl_set_browser_scrollbarsize(fltk3::Widget*, int, int);
 inline void fl_setdisplayed_browser_line(fltk3::Widget* o, int n, int i) {
-    ((Fl_Browser*)o)->display(n,i);}
+    ((fltk3::Browser*)o)->display(n,i);}
 inline int fl_isdisplayed_browser_line(fltk3::Widget* o, int n) {
-    return ((Fl_Browser*)o)->displayed(n);}
+    return ((fltk3::Browser*)o)->displayed(n);}
 
 #include "Button.h"
 
-#define fltk3::NORMAL_BUTTON	0
+#define FL_NORMAL_BUTTON	0
 #define FL_TOUCH_BUTTON		4
 #define FL_INOUT_BUTTON		5
 #define FL_RETURN_BUTTON	6
@@ -779,8 +779,8 @@ inline void fl_set_positioner_return(fltk3::Widget* o, int v) {
 
 #include "Slider.h"
 
-#define FL_HOR_BROWSER_SLIDER FL_HOR_SLIDER
-#define FL_VERT_BROWSER_SLIDER FL_VERT_SLIDER
+#define FL_HOR_BROWSER_SLIDER fltk3::HOR_SLIDER
+#define FL_VERT_BROWSER_SLIDER fltk3::VERT_SLIDER
 
 forms_constructort(Fl_Slider, fl_add_slider)
 #define FL_SLIDER_COL1 fltk3::GRAY
@@ -803,10 +803,10 @@ inline void fl_set_slider_size(fltk3::Widget* o, double v) {
     ((Fl_Slider*)o)->slider_size(v);}
 
 #include "ValueSlider.h"
-forms_constructor(Fl_Value_Slider, fl_add_valslider)
+forms_constructor(fltk3::ValueSlider, fl_add_valslider)
 
 inline void fl_set_slider_precision(fltk3::Widget* o, int i) {
-    ((Fl_Value_Slider*)o)->precision(i);}
+    ((fltk3::ValueSlider*)o)->precision(i);}
 // filter function!
 
 // The forms text object was the same as an fltk3::Box except it inverted the
@@ -836,7 +836,7 @@ void fl_gettime(long* sec, long* usec);
 // stuff from DDForms:
 
 inline int fl_double_click() {return fltk3::event_clicks();}
-inline void fltk3::draw() {fltk3::flush();}
+inline void fl_draw() {fltk3::flush();}
 
 #endif	/* define __FORMS_H__ */
 

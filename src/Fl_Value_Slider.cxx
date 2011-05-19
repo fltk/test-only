@@ -31,10 +31,10 @@
 #include <math.h>
 
 /**
-  Creates a new Fl_Value_Slider widget using the given
+  Creates a new fltk3::ValueSlider widget using the given
   position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
 */
-Fl_Value_Slider::Fl_Value_Slider(int X, int Y, int W, int H, const char*l)
+fltk3::ValueSlider::ValueSlider(int X, int Y, int W, int H, const char*l)
 : Fl_Slider(X,Y,W,H,l) {
   step(1,100);
   textfont_ = fltk3::HELVETICA;
@@ -42,7 +42,7 @@ Fl_Value_Slider::Fl_Value_Slider(int X, int Y, int W, int H, const char*l)
   textcolor_ = fltk3::FOREGROUND_COLOR;
 }
 
-void Fl_Value_Slider::draw() {
+void fltk3::ValueSlider::draw() {
   int sxx = x(), syy = y(), sww = w(), shh = h();
   int bxx = x(), byy = y(), bww = w(), bhh = h();
   if (horizontal()) {
@@ -63,7 +63,7 @@ void Fl_Value_Slider::draw() {
   fltk3::draw(buf, bxx, byy, bww, bhh, fltk3::ALIGN_CLIP);
 }
 
-int Fl_Value_Slider::handle(int event) {
+int fltk3::ValueSlider::handle(int event) {
   if (event == fltk3::PUSH && fltk3::visible_focus()) {
     fltk3::focus(this);
     redraw();

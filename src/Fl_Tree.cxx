@@ -500,7 +500,7 @@ Fl_Tree_Item *Fl_Tree::next_selected_item(Fl_Tree_Item *item) {
 /// Standard FLTK event handler for this widget.
 int Fl_Tree::handle(int e) {
   int ret = 0;
-  // Developer note: Fl_Browser_::handle() used for reference here..
+  // Developer note: fltk3::Browser_::handle() used for reference here..
   // #include <fltk3/names.h>	// for event debugging
   // fprintf(stderr, "DEBUG: %s (%d)\n", fl_eventnames[e], e);
   if (e == fltk3::ENTER || e == fltk3::LEAVE) return(1);

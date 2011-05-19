@@ -36,7 +36,7 @@
 class Fl_Hor_Slider : public Fl_Slider {
 public:
     Fl_Hor_Slider(int X,int Y,int W,int H,const char *l=0)
-	: Fl_Slider(X,Y,W,H,l) {type(FL_HOR_SLIDER);}
+	: Fl_Slider(X,Y,W,H,l) {type(fltk3::HOR_SLIDER);}
 };
 
 #endif

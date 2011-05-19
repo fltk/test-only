@@ -567,7 +567,7 @@ static const char *class_matcher[] = {
 "FL_FRAME", "fltk3::Box",
 "FL_LABELFRAME", "fltk3::Box",
 "FL_TEXT", "fltk3::Box",
-"FL_VALSLIDER", "Fl_Value_Slider",
+"FL_VALSLIDER", "fltk3::ValueSlider",
 "FL_MENU", "Fl_Menu_Button",
 "3", "FL_BITMAP",
 "1", "FL_BOX",
@@ -587,7 +587,7 @@ static const char *class_matcher[] = {
 "21","FL_SLIDER",
 "2", "FL_BOX", // was FL_TEXT
 "62","FL_TIMER",
-"24","Fl_Value_Slider",
+"24","fltk3::ValueSlider",
 0};
 
 void read_fdesign() {

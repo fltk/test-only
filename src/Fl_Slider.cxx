@@ -53,7 +53,7 @@ Fl_Slider::Fl_Slider(int X, int Y, int W, int H, const char* L)
 Fl_Slider::Fl_Slider(uchar t, int X, int Y, int W, int H, const char* L)
   : Fl_Valuator(X, Y, W, H, L) {
   type(t);
-  box(t==FL_HOR_NICE_SLIDER || t==FL_VERT_NICE_SLIDER ?
+  box(t==fltk3::HOR_NICE_SLIDER || t==fltk3::VERT_NICE_SLIDER ?
       fltk3::FLAT_BOX : fltk3::DOWN_BOX);
   _Fl_Slider();
 }
@@ -107,9 +107,9 @@ void Fl_Slider::draw_bg(int X, int Y, int W, int H) {
   fltk3::pop_clip();
 
   fltk3::Color black = active_r() ? fltk3::FOREGROUND_COLOR : fltk3::INACTIVE_COLOR;
-  if (type() == FL_VERT_NICE_SLIDER) {
+  if (type() == fltk3::VERT_NICE_SLIDER) {
     draw_box(fltk3::THIN_DOWN_BOX, X+W/2-2, Y, 4, H, black);
-  } else if (type() == FL_HOR_NICE_SLIDER) {
+  } else if (type() == fltk3::HOR_NICE_SLIDER) {
     draw_box(fltk3::THIN_DOWN_BOX, X, Y+H/2-2, W, 4, black);
   }
 }
@@ -127,14 +127,14 @@ void Fl_Slider::draw(int X, int Y, int W, int H) {
 
   int ww = (horizontal() ? W : H);
   int xx, S;
-  if (type()==FL_HOR_FILL_SLIDER || type() == FL_VERT_FILL_SLIDER) {
+  if (type()==fltk3::HOR_FILL_SLIDER || type() == fltk3::VERT_FILL_SLIDER) {
     S = int(val*ww+.5);
     if (minimum()>maximum()) {S = ww-S; xx = ww-S;}
     else xx = 0;
   } else {
     S = int(slider_size_*ww+.5);
     int T = (horizontal() ? H : W)/2+1;
-    if (type()==FL_VERT_NICE_SLIDER || type()==FL_HOR_NICE_SLIDER) T += 4;
+    if (type()==fltk3::VERT_NICE_SLIDER || type()==fltk3::HOR_NICE_SLIDER) T += 4;
     if (S < T) S = T;
     xx = int(val*(ww-S)+.5);
   }
@@ -155,18 +155,18 @@ void Fl_Slider::draw(int X, int Y, int W, int H) {
 
   fltk3::Boxtype box1 = slider();
   if (!box1) {box1 = (fltk3::Boxtype)(box()&-2); if (!box1) box1 = fltk3::UP_BOX;}
-  if (type() == FL_VERT_NICE_SLIDER) {
+  if (type() == fltk3::VERT_NICE_SLIDER) {
     draw_box(box1, xsl, ysl, wsl, hsl, fltk3::GRAY);
     int d = (hsl-4)/2;
     draw_box(fltk3::THIN_DOWN_BOX, xsl+2, ysl+d, wsl-4, hsl-2*d,selection_color());
-  } else if (type() == FL_HOR_NICE_SLIDER) {
+  } else if (type() == fltk3::HOR_NICE_SLIDER) {
     draw_box(box1, xsl, ysl, wsl, hsl, fltk3::GRAY);
     int d = (wsl-4)/2;
     draw_box(fltk3::THIN_DOWN_BOX, xsl+d, ysl+2, wsl-2*d, hsl-4,selection_color());
   } else {
     if (wsl>0 && hsl>0) draw_box(box1, xsl, ysl, wsl, hsl, selection_color());
 
-    if (type()!=FL_HOR_FILL_SLIDER && type() != FL_VERT_FILL_SLIDER &&
+    if (type()!=fltk3::HOR_FILL_SLIDER && type() != fltk3::VERT_FILL_SLIDER &&
         fltk3::scheme_ && !strcmp(fltk3::scheme_, "gtk+")) {
       if (W>H && wsl>(hsl+8)) {
         // Draw horizontal grippers
@@ -208,7 +208,7 @@ void Fl_Slider::draw(int X, int Y, int W, int H) {
 
   draw_label(xsl, ysl, wsl, hsl);
   if (fltk3::focus() == this) {
-    if (type() == FL_HOR_FILL_SLIDER || type() == FL_VERT_FILL_SLIDER) draw_focus();
+    if (type() == fltk3::HOR_FILL_SLIDER || type() == fltk3::VERT_FILL_SLIDER) draw_focus();
     else draw_focus(box1, xsl, ysl, wsl, hsl);
   }
 }
@@ -246,7 +246,7 @@ int Fl_Slider::handle(int event, int X, int Y, int W, int H) {
     int S;
     static int offcenter;
 
-    if (type() == FL_HOR_FILL_SLIDER || type() == FL_VERT_FILL_SLIDER) {
+    if (type() == fltk3::HOR_FILL_SLIDER || type() == fltk3::VERT_FILL_SLIDER) {
 
       S = 0;
       if (event == fltk3::PUSH) {
@@ -260,7 +260,7 @@ int Fl_Slider::handle(int event, int X, int Y, int W, int H) {
 
       S = int(slider_size_*ww+.5); if (S >= ww) return 0;
       int T = (horizontal() ? H : W)/2+1;
-      if (type()==FL_VERT_NICE_SLIDER || type()==FL_HOR_NICE_SLIDER) T += 4;
+      if (type()==fltk3::VERT_NICE_SLIDER || type()==fltk3::HOR_NICE_SLIDER) T += 4;
       if (S < T) S = T;
       if (event == fltk3::PUSH) {
 	int xx = int(val*(ww-S)+.5);

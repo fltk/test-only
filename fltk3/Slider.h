@@ -35,13 +35,17 @@
 #include "Valuator.h"
 #endif
 
+namespace fltk3 {
+
 // values for type(), lowest bit indicate horizontal:
-#define FL_VERT_SLIDER		0
-#define FL_HOR_SLIDER		1
-#define FL_VERT_FILL_SLIDER	2
-#define FL_HOR_FILL_SLIDER	3
-#define FL_VERT_NICE_SLIDER	4
-#define FL_HOR_NICE_SLIDER	5
+  const uchar VERT_SLIDER		= 0;
+  const uchar HOR_SLIDER		= 1;
+  const uchar VERT_FILL_SLIDER	= 2;
+  const uchar HOR_FILL_SLIDER	= 3;
+  const uchar VERT_NICE_SLIDER	= 4;
+  const uchar HOR_NICE_SLIDER	= 5;
+  
+}
 
 /**
   The Fl_Slider widget contains a sliding knob inside a box. It if
@@ -55,13 +59,13 @@
   
   \li FL_VERTICAL - Draws a vertical slider (this is the default).
   \li FL_HORIZONTAL - Draws a horizontal slider.
-  \li FL_VERT_FILL_SLIDER - Draws a filled vertical slider,
+  \li fltk3::VERT_FILL_SLIDER - Draws a filled vertical slider,
       useful as a progress or value meter.
-  \li FL_HOR_FILL_SLIDER - Draws a filled horizontal  slider,
+  \li fltk3::HOR_FILL_SLIDER - Draws a filled horizontal  slider,
       useful as a progress or value meter.
-  \li FL_VERT_NICE_SLIDER - Draws a vertical slider with  a nice
+  \li fltk3::VERT_NICE_SLIDER - Draws a vertical slider with  a nice
       looking control knob.
-  \li FL_HOR_NICE_SLIDER - Draws a horizontal slider with  a
+  \li fltk3::HOR_NICE_SLIDER - Draws a horizontal slider with  a
       nice looking control knob.
 
   \image html  slider.png 

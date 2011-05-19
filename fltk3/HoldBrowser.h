@@ -26,33 +26,37 @@
 //
 
 /* \file
-   Fl_Hold_Browser widget . */
+ fltk3::HoldBrowser widget . */
 
 #ifndef Fltk3_Hold_Browser_H
 #define Fltk3_Hold_Browser_H
 
 #include "Browser.h"
 
-/**
-  The Fl_Hold_Browser is a subclass of Fl_Browser
-  which lets the user select a single item, or no items by clicking on
-  the empty space.  As long as the mouse button is held down the item
-  pointed to by it is highlighted, and this highlighting remains on when
-  the mouse button is released. Normally the callback is done when the
-  user releases the mouse, but you can change this with when().
-  <P>See Fl_Browser for methods to add and remove lines from the browser.
-*/
-class FLTK3_EXPORT Fl_Hold_Browser : public Fl_Browser {
-public:
+namespace fltk3 {
+  
   /**
-    Creates a new Fl_Hold_Browser widget using the given
-    position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
-    The constructor specializes Fl_Browser() by setting the type to FL_HOLD_BROWSER.
-    The destructor destroys the widget and frees all memory that has been allocated.
- */
-  Fl_Hold_Browser(int X,int Y,int W,int H,const char *l=0)
-	: Fl_Browser(X,Y,W,H,l) {type(FL_HOLD_BROWSER);}
-};
+   The fltk3::HoldBrowser is a subclass of fltk3::Browser
+   which lets the user select a single item, or no items by clicking on
+   the empty space.  As long as the mouse button is held down the item
+   pointed to by it is highlighted, and this highlighting remains on when
+   the mouse button is released. Normally the callback is done when the
+   user releases the mouse, but you can change this with when().
+   <P>See fltk3::Browser for methods to add and remove lines from the browser.
+   */
+  class FLTK3_EXPORT HoldBrowser : public fltk3::Browser {
+  public:
+    /**
+     Creates a new fltk3::HoldBrowser widget using the given
+     position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
+     The constructor specializes fltk3::Browser() by setting the type to FL_HOLD_BROWSER.
+     The destructor destroys the widget and frees all memory that has been allocated.
+     */
+    HoldBrowser(int X,int Y,int W,int H,const char *l=0)
+    : fltk3::Browser(X,Y,W,H,l) {type(FL_HOLD_BROWSER);}
+  };
+  
+}
 
 #endif
 

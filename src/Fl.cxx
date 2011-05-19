@@ -126,7 +126,7 @@ fltk3::version() {
 
 /**
   Gets the default scrollbar size used by 
-  Fl_Browser_,
+  fltk3::Browser_,
   Fl_Help_View,
   Fl_Scroll, and
   Fl_Text_Display widgets.
@@ -138,7 +138,7 @@ int fltk3::scrollbar_size() {
 
 /**
   Sets the default scrollbar size that is used by the
-  Fl_Browser_,
+  fltk3::Browser_,
   Fl_Help_View,
   Fl_Scroll, and
   Fl_Text_Display widgets.

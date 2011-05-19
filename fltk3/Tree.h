@@ -57,7 +57,7 @@
 ///                  |--- Fl_Tree_Sort (enum)           // Sort behavior
 /// \endcode
 ///
-///     Similar to Fl_Browser, Fl_Tree is a browser of Fl_Tree_Item's, which is arranged
+///     Similar to fltk3::Browser, Fl_Tree is a browser of Fl_Tree_Item's, which is arranged
 ///     in a parented hierarchy, or 'tree'. Subtrees can be expanded or closed. Items can be
 ///     added, deleted, inserted, sorted and re-ordered.
 ///

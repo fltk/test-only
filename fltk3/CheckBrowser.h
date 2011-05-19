@@ -38,8 +38,8 @@
   The Fl_Check_Browser widget displays a scrolling list of text
   lines that may be selected and/or checked by the user.
 */
-class FLTK3_EXPORT Fl_Check_Browser : public Fl_Browser_ {
-  /* required routines for Fl_Browser_ subclass: */
+class FLTK3_EXPORT Fl_Check_Browser : public fltk3::Browser_ {
+  /* required routines for fltk3::Browser_ subclass: */
 
   void *item_first() const;
   void *item_next(void *) const;

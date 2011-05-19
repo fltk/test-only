@@ -34,25 +34,25 @@
 #include "Browser.h"
 
 /**
-  The Fl_Multi_Browser class is a subclass of Fl_Browser
+  The Fl_Multi_Browser class is a subclass of fltk3::Browser
   which lets the user select any set of the lines.  The user interface
   is Macintosh style: clicking an item turns off all the others and
   selects that one, dragging selects all the items the mouse moves over,
   and shift + click toggles the items. This is different then how forms
   did it.  Normally the callback is done when the user releases the
   mouse, but you can change this with when().
-  <P>See Fl_Browser for methods to add and remove lines from the browser.
+  <P>See fltk3::Browser for methods to add and remove lines from the browser.
 */
-class FLTK3_EXPORT Fl_Multi_Browser : public Fl_Browser {
+class FLTK3_EXPORT Fl_Multi_Browser : public fltk3::Browser {
 public:
   /**
       Creates a new Fl_Multi_Browser widget using the given
     position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
-    The constructor specializes Fl_Browser() by setting the type to FL_MULTI_BROWSER.
+    The constructor specializes fltk3::Browser() by setting the type to FL_MULTI_BROWSER.
     The destructor destroys the widget and frees all memory that has been allocated.
   */
     Fl_Multi_Browser(int X,int Y,int W,int H,const char *L=0)
-	: Fl_Browser(X,Y,W,H,L) {type(FL_MULTI_BROWSER);}
+	: fltk3::Browser(X,Y,W,H,L) {type(FL_MULTI_BROWSER);}
 };
 
 #endif

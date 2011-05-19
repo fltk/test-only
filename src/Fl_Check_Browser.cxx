@@ -86,7 +86,7 @@ int Fl_Check_Browser::lineno(cb_item *p0) const {
 
 Fl_Check_Browser::Fl_Check_Browser(int X, int Y, int W, int H, const char *l)
 /**  The constructor makes an empty browser.*/
-: Fl_Browser_(X, Y, W, H, l) {
+: fltk3::Browser_(X, Y, W, H, l) {
 	type(FL_SELECT_BROWSER);
 	when(fltk3::WHEN_NEVER);
 	first = last = 0;
@@ -321,7 +321,7 @@ void Fl_Check_Browser::check_none() {
 int Fl_Check_Browser::handle(int event) {
   if (event==fltk3::PUSH)
     deselect();
-  return Fl_Browser_::handle(event);
+  return fltk3::Browser_::handle(event);
 }
 
 //

@@ -72,7 +72,7 @@
 #endif // __APPLE__
 
 //
-// FL_BLINE definition from "Fl_Browser.cxx"...
+// FL_BLINE definition from "fltk3::Browser.cxx"...
 //
 
 #define SELECTED 1
@@ -80,8 +80,8 @@
 
 // TODO -- Warning: The definition of FL_BLINE here is a hack.
 //    Fl_File_Browser should not do this. PLEASE FIX.
-//    FL_BLINE should be private to Fl_Browser, and not re-defined here.
-//    For now, make sure this struct is precisely consistent with Fl_Browser.cxx.
+//    FL_BLINE should be private to fltk3::Browser, and not re-defined here.
+//    For now, make sure this struct is precisely consistent with fltk3::Browser.cxx.
 //
 struct FL_BLINE			// data is in a linked list of these
 {
@@ -402,7 +402,7 @@ Fl_File_Browser::Fl_File_Browser(int        X,  // I - Upper-lefthand X coordina
 				 int        W,  // I - Width in pixels
 				 int        H,  // I - Height in pixels
 				 const char *l)	// I - Label text
-    : Fl_Browser(X, Y, W, H, l)
+    : fltk3::Browser(X, Y, W, H, l)
 {
   // Initialize the filter pattern, current directory, and icon size...
   pattern_   = "*";

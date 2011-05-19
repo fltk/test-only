@@ -33,10 +33,10 @@
 
 #include "ValueSlider.h"
 
-class FLTK3_EXPORT Fl_Hor_Value_Slider : public Fl_Value_Slider {
+class FLTK3_EXPORT Fl_Hor_Value_Slider : public fltk3::ValueSlider {
 public:
     Fl_Hor_Value_Slider(int X,int Y,int W,int H,const char *l=0)
-	: Fl_Value_Slider(X,Y,W,H,l) {type(FL_HOR_SLIDER);}
+	: fltk3::ValueSlider(X,Y,W,H,l) {type(fltk3::HOR_SLIDER);}
 };
 
 #endif

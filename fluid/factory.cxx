@@ -214,12 +214,12 @@ static Fl_Menu_Item browser_type_menu[] = {
   {"Hold",0,0,(void*)FL_HOLD_BROWSER},
   {"Multi",0,0,(void*)FL_MULTI_BROWSER},
   {0}};
-class Fl_Browser_Type : public Fl_Widget_Type {
+class fltk3::Browser_Type : public Fl_Widget_Type {
   Fl_Menu_Item *subtypes() {return browser_type_menu;}
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
-    Fl_Browser *myo = (Fl_Browser *)o;
+    fltk3::Browser *myo = (fltk3::Browser *)o;
     fltk3::font(myo->textfont(), myo->textsize());
     h -= fltk3::box_dh(o->box());
     w -= fltk3::box_dw(o->box());
@@ -230,11 +230,11 @@ public:
     if (h < 30) h = 30;
     if (w < 50) w = 50;
   }
-  virtual const char *type_name() {return "Fl_Browser";}
+  virtual const char *type_name() {return "fltk3::Browser";}
   virtual const char *alt_type_name() {return "fltk::Browser";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    Fl_Browser* b = new Fl_Browser(x,y,w,h);
-    // Fl_Browser::add calls fltk3::height(), which requires the X display open.
+    fltk3::Browser* b = new fltk3::Browser(x,y,w,h);
+    // fltk3::Browser::add calls fltk3::height(), which requires the X display open.
     // Avoid this when compiling so it works w/o a display:
     if (!compile_only) {
       char buffer[20];
@@ -245,13 +245,13 @@ public:
     }
     return b;
   }
-  Fl_Widget_Type *_make() {return new Fl_Browser_Type();}
+  Fl_Widget_Type *_make() {return new fltk3::Browser_Type();}
   int pixmapID() { return 31; }
 };
-static Fl_Browser_Type Fl_Browser_type;
+static fltk3::Browser_Type fltk3::Browser_type;
 
-int Fl_Browser_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
-  Fl_Browser *myo = (Fl_Browser*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
+int fltk3::Browser_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
+  fltk3::Browser *myo = (fltk3::Browser*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
     case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
@@ -761,12 +761,12 @@ static Fl_Roller_Type Fl_Roller_type;
 
 #include <fltk3/Scrollbar.h>
 static Fl_Menu_Item slider_type_menu[] = {
-  {"Vertical",0,0,(void*)FL_VERT_SLIDER},
-  {"Horizontal",0,0,(void*)FL_HOR_SLIDER},
-  {"Vert Fill",0,0,(void*)FL_VERT_FILL_SLIDER},
-  {"Horz Fill",0,0,(void*)FL_HOR_FILL_SLIDER},
-  {"Vert Knob",0,0,(void*)FL_VERT_NICE_SLIDER},
-  {"Horz Knob",0,0,(void*)FL_HOR_NICE_SLIDER},
+  {"Vertical",0,0,(void*)fltk3::VERT_SLIDER},
+  {"Horizontal",0,0,(void*)fltk3::HOR_SLIDER},
+  {"Vert Fill",0,0,(void*)fltk3::VERT_FILL_SLIDER},
+  {"Horz Fill",0,0,(void*)fltk3::HOR_FILL_SLIDER},
+  {"Vert Knob",0,0,(void*)fltk3::VERT_NICE_SLIDER},
+  {"Horz Knob",0,0,(void*)fltk3::HOR_NICE_SLIDER},
   {0}};
 class Fl_Slider_Type : public Fl_Widget_Type {
   Fl_Menu_Item *subtypes() {return slider_type_menu;}
@@ -782,8 +782,8 @@ public:
 static Fl_Slider_Type Fl_Slider_type;
 
 static Fl_Menu_Item scrollbar_type_menu[] = {
-  {"Vertical",0,0,(void*)FL_VERT_SLIDER},
-  {"Horizontal",0,0,(void*)FL_HOR_SLIDER},
+  {"Vertical",0,0,(void*)fltk3::VERT_SLIDER},
+  {"Horizontal",0,0,(void*)fltk3::HOR_SLIDER},
   {0}};
 class Fl_Scrollbar_Type : public Fl_Slider_Type {
   Fl_Menu_Item *subtypes() {return scrollbar_type_menu;}
@@ -914,20 +914,20 @@ int Fl_Value_Output_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color&
 ////////////////////////////////////////////////////////////////
 
 #include <fltk3/ValueSlider.h>
-class Fl_Value_Slider_Type : public Fl_Slider_Type {
+class fltk3::ValueSlider_Type : public Fl_Slider_Type {
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
-  virtual const char *type_name() {return "Fl_Value_Slider";}
+  virtual const char *type_name() {return "fltk3::ValueSlider";}
   virtual const char *alt_type_name() {return "fltk::ValueSlider";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Value_Slider(x,y,w,h,"slider:");}
-  Fl_Widget_Type *_make() {return new Fl_Value_Slider_Type();}
+    return new fltk3::ValueSlider(x,y,w,h,"slider:");}
+  Fl_Widget_Type *_make() {return new fltk3::ValueSlider_Type();}
   int pixmapID() { return 39; }
 };
-static Fl_Value_Slider_Type Fl_Value_Slider_type;
+static fltk3::ValueSlider_Type fltk3::ValueSlider_type;
 
-int Fl_Value_Slider_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
-  Fl_Value_Slider *myo = (Fl_Value_Slider*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
+int fltk3::ValueSlider_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
+  fltk3::ValueSlider *myo = (fltk3::ValueSlider*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
     case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
@@ -1041,7 +1041,7 @@ Fl_Menu_Item New_Menu[] = {
 {"Valuators",0,0,0,FL_SUBMENU},
   {0,0,cb,(void*)&Fl_Slider_type},
   {0,0,cb,(void*)&Fl_Scrollbar_type},
-  {0,0,cb,(void*)&Fl_Value_Slider_type},
+  {0,0,cb,(void*)&fltk3::ValueSlider_type},
   {0,0,cb,(void*)&Fl_Adjuster_type},
   {0,0,cb,(void*)&Fl_Counter_type},
   {0,0,cb,(void*)&Fl_Spinner_type},
@@ -1066,7 +1066,7 @@ Fl_Menu_Item New_Menu[] = {
   {0,0,cb, (void*)&Fl_Menu_Item_type},
 {0},
 {"Browsers",0,0,0,FL_SUBMENU},
-  {0,0,cb,(void*)&Fl_Browser_type},
+  {0,0,cb,(void*)&fltk3::Browser_type},
   {0,0,cb,(void*)&Fl_Check_Browser_type},
   {0,0,cb,(void*)&Fl_File_Browser_type},
   {0,0,cb,(void*)&Fl_Tree_type},
@@ -1255,12 +1255,12 @@ static symbol table[] = {
   {"SIMPLE_COUNTER",	FL_SIMPLE_COUNTER},
   {"LINE_DIAL",		FL_LINE_DIAL},
   {"FILL_DIAL",		FL_FILL_DIAL},
-  {"VERT_SLIDER",	FL_VERT_SLIDER},
-  {"HOR_SLIDER",	FL_HOR_SLIDER},
-  {"VERT_FILL_SLIDER",	FL_VERT_FILL_SLIDER},
-  {"HOR_FILL_SLIDER",	FL_HOR_FILL_SLIDER},
-  {"VERT_NICE_SLIDER",	FL_VERT_NICE_SLIDER},
-  {"HOR_NICE_SLIDER",	FL_HOR_NICE_SLIDER},
+  {"VERT_SLIDER",	fltk3::VERT_SLIDER},
+  {"HOR_SLIDER",	fltk3::HOR_SLIDER},
+  {"VERT_FILL_SLIDER",	fltk3::VERT_FILL_SLIDER},
+  {"HOR_FILL_SLIDER",	fltk3::HOR_FILL_SLIDER},
+  {"VERT_NICE_SLIDER",	fltk3::VERT_NICE_SLIDER},
+  {"HOR_NICE_SLIDER",	fltk3::HOR_NICE_SLIDER},
 };
 
 #include <stdlib.h>

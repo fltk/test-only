@@ -32,7 +32,7 @@
 #include <stdlib.h>
 
 char fl_flip = 2;
-void fltk3::end_form() {
+void fl_end_form() {
   while (fltk3::Group::current()) fltk3::Group::current()->forms_end();
 }
 void fltk3::Group::forms_end() {

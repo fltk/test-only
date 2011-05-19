@@ -33,7 +33,7 @@
 #include <fltk3/DoubleWindow.h>
 extern fltk3::DoubleWindow *template_panel;
 #include <fltk3/Browser.h>
-extern Fl_Browser *template_browser;
+extern fltk3::Browser *template_browser;
 #include <fltk3/Box.h>
 extern fltk3::Box *template_preview;
 #include <fltk3/Input.h>

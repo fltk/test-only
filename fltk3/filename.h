@@ -40,8 +40,12 @@
 /** \addtogroup filenames File names and URI utility functions
  File names and URI functions defined in <fltk3/filename.h>
     @{ */
+#ifdef _MAX_PATH
+const unsigned int FL_PATH_MAX = _MAX_PATH;
+#else
+const unsigned int FL_PATH_MAX = 2048; /**< all path buffers should use this length */
+#endif
 
-#  define FL_PATH_MAX 2048 /**< all path buffers should use this length */
 /** Gets the file name from a path.
     Similar to basename(3), exceptions shown below.
     \code

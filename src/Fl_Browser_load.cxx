@@ -41,7 +41,7 @@
   \returns 1 if OK, 0 on error (errno has reason)
   \see add()
 */
-int Fl_Browser::load(const char *filename) {
+int fltk3::Browser::load(const char *filename) {
 #define MAXFL_BLINE 1024
     char newtext[MAXFL_BLINE];
     int c;

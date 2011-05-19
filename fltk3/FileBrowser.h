@@ -45,7 +45,7 @@
 //
 
 /** The Fl_File_Browser widget displays a list of filenames, optionally with file-specific icons. */
-class FLTK3_EXPORT Fl_File_Browser : public Fl_Browser {
+class FLTK3_EXPORT Fl_File_Browser : public fltk3::Browser {
   
   int		filetype_;
   const char	*directory_;
@@ -94,8 +94,8 @@ public:
   */
   int		load(const char *directory, Fl_File_Sort_F *sort = fl_numericsort);
 
-  fltk3::Fontsize  textsize() const { return Fl_Browser::textsize(); };
-  void		textsize(fltk3::Fontsize s) { Fl_Browser::textsize(s); iconsize_ = (uchar)(3 * s / 2); };
+  fltk3::Fontsize  textsize() const { return fltk3::Browser::textsize(); };
+  void		textsize(fltk3::Fontsize s) { fltk3::Browser::textsize(s); iconsize_ = (uchar)(3 * s / 2); };
 
   /**
     Sets or gets the file browser type, FILES or

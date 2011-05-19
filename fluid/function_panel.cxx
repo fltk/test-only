@@ -877,7 +877,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(282, 5, 24, 24);
         o->tooltip("Value Slider");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Value_Slider"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::ValueSlider"));
         o->image(pixmap[39]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(307, 5, 24, 24);
@@ -1000,7 +1000,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(459, 5, 24, 24);
         o->tooltip("Browser");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Browser"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Browser"));
         o->image(pixmap[31]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(484, 5, 24, 24);

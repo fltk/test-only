@@ -26,28 +26,30 @@
 //
 
 /* \file
-   Fl_Value_Slider widget . */
+ fltk3::ValueSlider widget . */
 
 #ifndef Fltk3_Value_Slider_H
 #define Fltk3_Value_Slider_H
 
 #include "Slider.h"
 
-/**
-  The Fl_Value_Slider widget is a Fl_Slider widget
-  with a box displaying the current value.
-  <P ALIGN=CENTER>\image html value_slider.png 
-  \image latex  value_slider.png "Fl_Value_Slider" width=4cm
-*/
-class FLTK3_EXPORT Fl_Value_Slider : public Fl_Slider {
+namespace fltk3 {
+  
+  /**
+   The fltk3::ValueSlider widget is a Fl_Slider widget
+   with a box displaying the current value.
+   <P ALIGN=CENTER>\image html value_slider.png 
+   \image latex  value_slider.png "fltk3::ValueSlider" width=4cm
+   */
+  class FLTK3_EXPORT ValueSlider : public Fl_Slider {
     fltk3::Font textfont_;
     fltk3::Fontsize textsize_;
     fltk3::Color textcolor_;
-protected:
+  protected:
     void draw();
-public:
+  public:
     int handle(int);
-    Fl_Value_Slider(int x,int y,int w,int h, const char *l = 0);
+    ValueSlider(int x,int y,int w,int h, const char *l = 0);
     /**    Gets the typeface of the text in the value box.  */
     fltk3::Font textfont() const {return textfont_;}
     /**    Sets the typeface of the text in the value box.  */
@@ -60,7 +62,9 @@ public:
     fltk3::Color textcolor() const {return textcolor_;}
     /**    Sets the color of the text in the value box.  */
     void textcolor(fltk3::Color s) {textcolor_ = s;}
-};
+  };
+  
+}
 
 #endif
 

@@ -38,7 +38,7 @@
  A table with row selection capabilities.
  
  This class implements a simple table with the ability to select
- rows.  This widget is similar to an Fl_Browser with columns.  Most
+ rows.  This widget is similar to an fltk3::Browser with columns.  Most
  methods of importance will be found in the Fl_Table widget, such
  as Fl_Table::rows() and Fl_Table::cols().
  
