@@ -17,24 +17,24 @@
 
 
 #include <math.h>
-#include <FL/Fl.H>
+#include <fltk3/run.h>
 
-#include <FL/Fl_Overlay_Window.H>
-#include <FL/Fl_Light_Button.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Clock.H>
+#include <fltk3/Overlay_Window.h>
+#include <fltk3/Light_Button.h>
+#include <fltk3/draw.h>
+#include <fltk3/Clock.h>
 #include "pixmaps/porsche.xpm"
-#include <FL/Fl_Pixmap.H>
-#include <FL/Fl_Bitmap.H>
-#include <FL/Fl_Round_Button.H>
+#include <fltk3/Pixmap.h>
+#include <fltk3/Bitmap.h>
+#include <fltk3/Round_Button.h>
 
 
-#include <FL/Fl_Printer.H>
+#include <fltk3/Printer.h>
 
 //#include "fl_printer_chooser.H"
 
-#include <FL/Fl_File_Chooser.H>
-#include <FL/fl_draw.H>
+#include <fltk3/File_Chooser.h>
+#include <fltk3/draw.h>
 
 
 #define sorceress_width 75
@@ -727,6 +727,6 @@ b_bitmap.labelcolor(FL_GREEN);
   w2->show(argc, argv);
    
 
-	Fl::run();
+	fltk3::run();
 	return 0;
 }

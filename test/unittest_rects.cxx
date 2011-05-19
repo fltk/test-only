@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl_Box.H>
-#include <FL/fl_draw.H>		// fl_text_extents()
+#include <fltk3/Box.h>
+#include <fltk3/draw.h>		// fl_text_extents()
 
 //
 //------- test the rectangle drawing capabilities of this implementation ----------

@@ -36,12 +36,12 @@
 namespace fltk3 {
   
   /**
-   The fltk3::ValueSlider widget is a Fl_Slider widget
+   The fltk3::ValueSlider widget is a fltk3::Slider widget
    with a box displaying the current value.
    <P ALIGN=CENTER>\image html value_slider.png 
    \image latex  value_slider.png "fltk3::ValueSlider" width=4cm
    */
-  class FLTK3_EXPORT ValueSlider : public Fl_Slider {
+  class FLTK3_EXPORT ValueSlider : public fltk3::Slider {
     fltk3::Font textfont_;
     fltk3::Fontsize textsize_;
     fltk3::Color textcolor_;

@@ -43,7 +43,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Fl_Menu_Item menu_item_type_menu[] = {
+fltk3::MenuItem menu_item_type_menu[] = {
   {"Normal",0,0,(void*)0},
   {"Toggle",0,0,(void*)FL_MENU_BOX},
   {"Radio",0,0,(void*)FL_MENU_RADIO},
@@ -61,7 +61,7 @@ static char submenuflag;
 
 void Fl_Input_Choice_Type::build_menu() {
   Fl_Input_Choice* w = (Fl_Input_Choice*)o;
-  // count how many Fl_Menu_Item structures needed:
+  // count how many fltk3::MenuItem structures needed:
   int n = 0;
   Fl_Type* q;
   for (q = next; q && q->level > level; q = q->next) {
@@ -69,18 +69,18 @@ void Fl_Input_Choice_Type::build_menu() {
     n++;
   }
   if (!n) {
-    if (menusize) delete[] (Fl_Menu_Item*)(w->menu());
+    if (menusize) delete[] (fltk3::MenuItem*)(w->menu());
     w->menu(0);
     menusize = 0;
   } else {
     n++; // space for null at end of menu
     if (menusize<n) {
-      if (menusize) delete[] (Fl_Menu_Item*)(w->menu());
+      if (menusize) delete[] (fltk3::MenuItem*)(w->menu());
       menusize = n+10;
-      w->menu(new Fl_Menu_Item[menusize]);
+      w->menu(new fltk3::MenuItem[menusize]);
     }
     // fill them all in:
-    Fl_Menu_Item* m = (Fl_Menu_Item*)(w->menu());
+    fltk3::MenuItem* m = (fltk3::MenuItem*)(w->menu());
     int lvl = level+1;
     for (q = next; q && q->level > level; q = q->next) {
       Fl_Menu_Item_Type* i = (Fl_Menu_Item_Type*)q;
@@ -261,11 +261,11 @@ void Fl_Menu_Item_Type::write_static() {
           // assign a menu item address directly to a variable
           int i; 
           const char* n = ((Fl_Menu_Item_Type *)q)->menu_name(i);
-          write_c("Fl_Menu_Item* %s::%s = %s::%s + %d;\n", k, c, k, n, i);
+          write_c("fltk3::MenuItem* %s::%s = %s::%s + %d;\n", k, c, k, n, i);
         } else {
           // if the name is an array, only define the array. 
           // The actual assignment is in write_code1()
-          write_c("Fl_Menu_Item* %s::%s;\n", k, c);
+          write_c("fltk3::MenuItem* %s::%s;\n", k, c);
         }
       }
     }
@@ -334,10 +334,10 @@ void Fl_Menu_Item_Type::write_code1() {
     // for first menu item, declare the array
     if (class_name(1)) {
       if (i18n_type) write_h("  static unsigned char %s_i18n_done;\n", mname);
-      write_h("  static Fl_Menu_Item %s[];\n", mname);
+      write_h("  static fltk3::MenuItem %s[];\n", mname);
     } else {
       if (i18n_type) write_h("extern unsigned char %s_i18n_done;\n", mname);
-      write_h("extern Fl_Menu_Item %s[];\n", mname);
+      write_h("extern fltk3::MenuItem %s[];\n", mname);
     }
   }
 
@@ -345,12 +345,12 @@ void Fl_Menu_Item_Type::write_code1() {
   if (c) {
     if (class_name(1)) {
       write_public(public_);
-      write_h("  static Fl_Menu_Item *%s;\n", c);
+      write_h("  static fltk3::MenuItem *%s;\n", c);
     } else {
       if (c==name())
         write_h("#define %s (%s+%d)\n", c, mname, i);
       else
-        write_h("extern Fl_Menu_Item *%s;\n", c);
+        write_h("extern fltk3::MenuItem *%s;\n", c);
     }
   }
 
@@ -372,7 +372,7 @@ void Fl_Menu_Item_Type::write_code1() {
   if (image) {
     if (!init) {
       init = 1;
-      write_c("%s{ Fl_Menu_Item* o = &%s[%d];\n", indent(), mname, i);
+      write_c("%s{ fltk3::MenuItem* o = &%s[%d];\n", indent(), mname, i);
     }
     image->write_code("o");
   }
@@ -380,7 +380,7 @@ void Fl_Menu_Item_Type::write_code1() {
     if (extra_code(n) && !isdeclare(extra_code(n))) {
       if (!init) {
 	init = 1;
-	write_c("%s{ Fl_Menu_Item* o = &%s[%d];\n", indent(), mname, i);
+	write_c("%s{ fltk3::MenuItem* o = &%s[%d];\n", indent(), mname, i);
       }
       write_c("%s  %s\n", indent(), extra_code(n));
     }
@@ -398,7 +398,7 @@ void Fl_Menu_Item_Type::write_code2() {}
 
 void Fl_Menu_Type::build_menu() {
   Fl_Menu_* w = (Fl_Menu_*)o;
-  // count how many Fl_Menu_Item structures needed:
+  // count how many fltk3::MenuItem structures needed:
   int n = 0;
   Fl_Type* q;
   for (q = next; q && q->level > level; q = q->next) {
@@ -406,18 +406,18 @@ void Fl_Menu_Type::build_menu() {
     n++;
   }
   if (!n) {
-    if (menusize) delete[] (Fl_Menu_Item*)(w->menu());
+    if (menusize) delete[] (fltk3::MenuItem*)(w->menu());
     w->menu(0);
     menusize = 0;
   } else {
     n++; // space for null at end of menu
     if (menusize<n) {
-      if (menusize) delete[] (Fl_Menu_Item*)(w->menu());
+      if (menusize) delete[] (fltk3::MenuItem*)(w->menu());
       menusize = n+10;
-      w->menu(new Fl_Menu_Item[menusize]);
+      w->menu(new fltk3::MenuItem[menusize]);
     }
     // fill them all in:
-    Fl_Menu_Item* m = (Fl_Menu_Item*)(w->menu());
+    fltk3::MenuItem* m = (fltk3::MenuItem*)(w->menu());
     int lvl = level+1;
     for (q = next; q && q->level > level; q = q->next) {
       Fl_Menu_Item_Type* i = (Fl_Menu_Item_Type*)q;
@@ -447,11 +447,11 @@ Fl_Type* Fl_Menu_Type::click_test(int, int) {
   if (selected) return 0; // let user move the widget
   Fl_Menu_* w = (Fl_Menu_*)o;
   if (!menusize) return 0;
-  const Fl_Menu_Item* save = w->mvalue();
-  w->value((Fl_Menu_Item*)0);
+  const fltk3::MenuItem* save = w->mvalue();
+  w->value((fltk3::MenuItem*)0);
   fltk3::pushed(w);
   w->handle(fltk3::PUSH);
-  const Fl_Menu_Item* m = w->mvalue();
+  const fltk3::MenuItem* m = w->mvalue();
   if (m) {
     // restore the settings of toggles & radio items:
     if (m->flags & (FL_MENU_RADIO | FL_MENU_TOGGLE)) build_menu();
@@ -514,7 +514,7 @@ void Fl_Menu_Type::copy_properties() {
 ////////////////////////////////////////////////////////////////
 
 #include <fltk3/MenuButton.h>
-Fl_Menu_Item button_type_menu[] = {
+fltk3::MenuItem button_type_menu[] = {
   {"normal",0,0,(void*)0},
   {"popup1",0,0,(void*)Fl_Menu_Button::POPUP1},
   {"popup2",0,0,(void*)Fl_Menu_Button::POPUP2},
@@ -529,7 +529,7 @@ Fl_Menu_Button_Type Fl_Menu_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-Fl_Menu_Item dummymenu[] = {{"CHOICE"},{0}};
+fltk3::MenuItem dummymenu[] = {{"CHOICE"},{0}};
 
 Fl_Choice_Type Fl_Choice_type;
 
@@ -549,11 +549,11 @@ Fl_Type* Fl_Input_Choice_Type::click_test(int, int) {
   if (selected) return 0; // let user move the widget
   Fl_Menu_* w = ((Fl_Input_Choice*)o)->menubutton();
   if (!menusize) return 0;
-  const Fl_Menu_Item* save = w->mvalue();
-  w->value((Fl_Menu_Item*)0);
+  const fltk3::MenuItem* save = w->mvalue();
+  w->value((fltk3::MenuItem*)0);
   fltk3::pushed(w);
   w->handle(fltk3::PUSH);
-  const Fl_Menu_Item* m = w->mvalue();
+  const fltk3::MenuItem* m = w->mvalue();
   if (m) {
     // restore the settings of toggles & radio items:
     if (m->flags & (FL_MENU_RADIO | FL_MENU_TOGGLE)) build_menu();

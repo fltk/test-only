@@ -394,7 +394,7 @@ void fltk3::Bitmap::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 
-void fltk3::Bitmap::label(Fl_Menu_Item* m) {
+void fltk3::Bitmap::label(fltk3::MenuItem* m) {
   fltk3::set_labeltype(fltk3::IMAGE_LABEL, labeltype, measure);
   m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }

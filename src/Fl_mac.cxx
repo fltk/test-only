@@ -496,14 +496,14 @@ OSStatus HandleMenu( HICommand *cmd )
   //printf( "%d, %08x, %08x, %d, %d, %8x\n", rrc, cmd->attributes, cmd->commandID, cmd->menu.menuRef, cmd->menu.menuItemIndex, rrc );
   if ( rrc==noErr && ref )
   {
-    Fl_Menu_Item *m = (Fl_Menu_Item*)ref;
+    fltk3::MenuItem *m = (fltk3::MenuItem*)ref;
     //printf( "Menu: %s\n", m->label() );
     fl_sys_menu_bar->picked( m );
     if ( m->flags & FL_MENU_TOGGLE ) // update the menu toggle symbol
       SetItemMark( cmd->menu.menuRef, cmd->menu.menuItemIndex, (m->flags & FL_MENU_VALUE ) ? 0x12 : 0 );
     if ( m->flags & FL_MENU_RADIO ) // update all radio buttons in this menu
     {
-      Fl_Menu_Item *j = m;
+      fltk3::MenuItem *j = m;
       int i = cmd->menu.menuItemIndex;
       for (;;)
       {

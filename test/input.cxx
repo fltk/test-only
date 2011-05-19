@@ -26,17 +26,17 @@
 //
 
 #include <stdio.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Float_Input.H>
-#include <FL/Fl_Int_Input.H>
-#include <FL/Fl_Secret_Input.H>
-#include <FL/Fl_Multiline_Input.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Toggle_Button.H>
-#include <FL/Fl_Light_Button.H>
-#include <FL/Fl_Color_Chooser.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/Input.h>
+#include <fltk3/Float_Input.h>
+#include <fltk3/Int_Input.h>
+#include <fltk3/Secret_Input.h>
+#include <fltk3/Multiline_Input.h>
+#include <fltk3/Button.h>
+#include <fltk3/Toggle_Button.h>
+#include <fltk3/Light_Button.h>
+#include <fltk3/Color_Chooser.h>
 
 void cb(Fl_Widget *ob) {
   printf("Callback for %s '%s'\n",ob->label(),((Fl_Input*)ob)->value());
@@ -163,7 +163,7 @@ int main(int argc, char **argv) {
 
   window->end();
   window->show(argc,argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

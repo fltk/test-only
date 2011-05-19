@@ -26,13 +26,13 @@
 //     http://www.fltk.org/str.php
 //
 #include <stdio.h>
-#include <FL/Fl.H>
-#include <FL/fl_ask.H>		// fl_beep()
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Native_File_Chooser.H>
+#include <fltk3/run.h>
+#include <fltk3/ask.h>		// fl_beep()
+#include <fltk3/Window.h>
+#include <fltk3/Button.h>
+#include <fltk3/Input.h>
+#include <fltk3/Box.h>
+#include <fltk3/Native_File_Chooser.h>
 
 // GLOBALS
 Fl_Input *G_filename = NULL;
@@ -95,7 +95,7 @@ int main(int argc, char **argv) {
   }
   win->end();
   win->show(argc, argv);
-  return(Fl::run());
+  return(fltk3::run());
 }
 
 //

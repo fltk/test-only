@@ -15,7 +15,7 @@
 #include <config.h>
 
 #if HAVE_GL && HAVE_GL_GLU_H
-#  include <FL/glut.H>
+#  include <FL/glut.h>
 #  include <FL/glu.h>
 
 #  include <stdio.h>

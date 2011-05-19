@@ -34,8 +34,8 @@
 extern fltk3::DoubleWindow *function_panel;
 #include <fltk3/Group.h>
 #include <fltk3/Choice.h>
-extern Fl_Choice *f_public_member_choice;
-extern Fl_Choice *f_public_choice;
+extern fltk3::Choice *f_public_member_choice;
+extern fltk3::Choice *f_public_choice;
 #include <fltk3/LightButton.h>
 extern fltk3::LightButton *f_c_button;
 #include <fltk3/Box.h>
@@ -49,8 +49,8 @@ extern fltk3::Button *f_panel_cancel;
 #include <fltk3/TextEditor.h>
 extern Fl_Text_Editor *f_comment_input;
 fltk3::DoubleWindow* make_function_panel();
-extern Fl_Menu_Item menu_f_public_member_choice[];
-extern Fl_Menu_Item menu_f_public_choice[];
+extern fltk3::MenuItem menu_f_public_member_choice[];
+extern fltk3::MenuItem menu_f_public_choice[];
 extern fltk3::DoubleWindow *code_panel;
 #include "CodeEditor.h"
 extern CodeEditor *code_input;
@@ -64,27 +64,27 @@ extern fltk3::ReturnButton *codeblock_panel_ok;
 extern fltk3::Button *codeblock_panel_cancel;
 fltk3::DoubleWindow* make_codeblock_panel();
 extern fltk3::DoubleWindow *declblock_panel;
-extern Fl_Choice *declblock_public_choice;
+extern fltk3::Choice *declblock_public_choice;
 extern fltk3::LightButton *declblock_public_button_x;
 extern Fl_Input *decl_before_input;
 extern Fl_Input *decl_after_input;
 extern fltk3::ReturnButton *declblock_panel_ok;
 extern fltk3::Button *declblock_panel_cancel;
 fltk3::DoubleWindow* make_declblock_panel();
-extern Fl_Menu_Item menu_declblock_public_choice[];
+extern fltk3::MenuItem menu_declblock_public_choice[];
 extern fltk3::DoubleWindow *decl_panel;
-extern Fl_Choice *decl_choice;
-extern Fl_Choice *decl_class_choice;
+extern fltk3::Choice *decl_choice;
+extern fltk3::Choice *decl_class_choice;
 extern Fl_Input *decl_input;
 extern fltk3::ReturnButton *decl_panel_ok;
 extern fltk3::Button *decl_panel_cancel;
 extern Fl_Text_Editor *decl_comment_input;
 fltk3::DoubleWindow* make_decl_panel();
-extern Fl_Menu_Item menu_decl_choice[];
-extern Fl_Menu_Item menu_decl_class_choice[];
+extern fltk3::MenuItem menu_decl_choice[];
+extern fltk3::MenuItem menu_decl_class_choice[];
 extern fltk3::DoubleWindow *data_panel;
-extern Fl_Choice *data_choice;
-extern Fl_Choice *data_class_choice;
+extern fltk3::Choice *data_choice;
+extern fltk3::Choice *data_class_choice;
 extern Fl_Input *data_input;
 extern Fl_Input *data_filename;
 extern fltk3::Button *data_filebrowser;
@@ -92,8 +92,8 @@ extern fltk3::ReturnButton *data_panel_ok;
 extern fltk3::Button *data_panel_cancel;
 extern Fl_Text_Editor *data_comment_input;
 fltk3::DoubleWindow* make_data_panel();
-extern Fl_Menu_Item menu_data_choice[];
-extern Fl_Menu_Item menu_data_class_choice[];
+extern fltk3::MenuItem menu_data_choice[];
+extern fltk3::MenuItem menu_data_class_choice[];
 extern fltk3::DoubleWindow *class_panel;
 extern fltk3::LightButton *c_public_button;
 extern Fl_Input *c_name_input;

@@ -32,7 +32,7 @@
 void Fl_Menu_Bar::draw() {
   draw_box();
   if (!menu() || !menu()->text) return;
-  const Fl_Menu_Item* m;
+  const fltk3::MenuItem* m;
   int X = x()+6;
   for (m=menu()->first(); m->text; m = m->next()) {
     int W = m->measure(0,this) + 16;
@@ -52,7 +52,7 @@ void Fl_Menu_Bar::draw() {
 }
 
 int Fl_Menu_Bar::handle(int event) {
-  const Fl_Menu_Item* v;
+  const fltk3::MenuItem* v;
   if (menu() && menu()->text) switch (event) {
   case fltk3::ENTER:
   case fltk3::LEAVE:

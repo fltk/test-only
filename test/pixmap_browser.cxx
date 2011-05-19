@@ -25,15 +25,15 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Shared_Image.H>
+#include <fltk3/run.h>
+#include <fltk3/Box.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Button.h>
+#include <fltk3/Shared_Image.h>
 #include <string.h>
 #include <errno.h>
-#include <FL/Fl_File_Chooser.H>
-#include <FL/fl_message.H>
+#include <fltk3/File_Chooser.h>
+#include <fltk3/message.h>
 
 Fl_Box *b;
 Fl_Double_Window *w;
@@ -116,7 +116,7 @@ int main(int argc, char **argv) {
   if (argv[1]) load_file(argv[1]);
   window.resizable(window);
   window.show(argc,argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

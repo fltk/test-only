@@ -116,7 +116,7 @@ public:
 class FLTK3_EXPORT Fl_Color_Chooser : public fltk3::Group {
   Flcc_HueBox huebox;
   Flcc_ValueBox valuebox;
-  Fl_Choice choice;
+  fltk3::Choice choice;
   Flcc_Value_Input rvalue;
   Flcc_Value_Input gvalue;
   Flcc_Value_Input bvalue;

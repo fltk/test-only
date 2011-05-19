@@ -25,15 +25,15 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Preferences.H>
-#include <FL/Fl_XPM_Image.H>
-#include <FL/Fl_XBM_Image.H>
-#include <FL/Fl_Tiled_Image.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Button.h>
+#include <fltk3/Preferences.h>
+#include <fltk3/XPM_Image.h>
+#include <fltk3/XBM_Image.h>
+#include <fltk3/Tiled_Image.h>
+#include <fltk3/draw.h>
+#include <FL/x.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -505,7 +505,7 @@ main(int argc, char *argv[]) {
 
   bw->show(argc, argv);
 
-  return (Fl::run());
+  return (fltk3::run());
 }
 
 

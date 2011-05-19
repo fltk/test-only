@@ -25,20 +25,20 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Scroll.H>
-#include <FL/Fl_Choice.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Tile.H>
-#include <FL/Fl_Hold_Browser.H>
-#include <FL/Fl_Value_Output.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Output.H>
-#include <FL/fl_draw.H>
-#include <FL/fl_utf8.h>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Scroll.h>
+#include <fltk3/Choice.h>
+#include <fltk3/Input.h>
+#include <fltk3/Box.h>
+#include <fltk3/Tile.h>
+#include <fltk3/Hold_Browser.h>
+#include <fltk3/Value_Output.h>
+#include <fltk3/Button.h>
+#include <fltk3/Check_Button.h>
+#include <fltk3/Output.h>
+#include <fltk3/draw.h>
+#include <fltk3/utf8.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -714,7 +714,7 @@ int main(int argc, char** argv)
 
   fnt_chooser_win->show();
 
-  int ret = Fl::run();
+  int ret = fltk3::run();
 
   // Free up the sizes arrays we allocated
   if(numsizes) {delete [] numsizes;}

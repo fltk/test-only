@@ -45,20 +45,20 @@
 #else
 #  include <unistd.h>
 #endif
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Choice.H>
-#include <FL/filename.H>
-#include <FL/x.H>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Box.h>
+#include <fltk3/Button.h>
+#include <fltk3/Choice.h>
+#include <FL/filename.h>
+#include <FL/x.h>
 
 /* The form description */
 
 void doexit(Fl_Widget *, void *);
 void doback(Fl_Widget *, void *);
 void dobut(Fl_Widget *, long);
-void doscheme(Fl_Choice *c, void *) {
+void doscheme(fltk3::Choice *c, void *) {
   Fl::scheme(c->text(c->value()));
 }
 
@@ -77,7 +77,7 @@ void create_the_forms() {
   obj->color(FL_GRAY-8);
   obj = new Fl_Button(280,405,60,25,"Exit");
   obj->callback(doexit);
-  Fl_Choice *choice = new Fl_Choice(75, 405, 100, 25, "Scheme:");
+  fltk3::Choice *choice = new fltk3::Choice(75, 405, 100, 25, "Scheme:");
   choice->labelfont(FL_HELVETICA_BOLD);
   choice->add("none");
   choice->add("gtk+");
@@ -423,7 +423,7 @@ int main(int argc, char **argv) {
   }
   push_menu("@main");
   form->show(argc,argv);
-  Fl::run();
+  fltk3::run();
   return 0;
 }
 

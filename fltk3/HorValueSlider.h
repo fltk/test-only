@@ -26,18 +26,22 @@
 //
 
 /* \file
-   Fl_Hor_Value_Slider widget . */
+ fltk3::HorValueSlider widget . */
 
 #ifndef Fltk3_Hor_Value_Slider_H
 #define Fltk3_Hor_Value_Slider_H
 
 #include "ValueSlider.h"
 
-class FLTK3_EXPORT Fl_Hor_Value_Slider : public fltk3::ValueSlider {
-public:
-    Fl_Hor_Value_Slider(int X,int Y,int W,int H,const char *l=0)
-	: fltk3::ValueSlider(X,Y,W,H,l) {type(fltk3::HOR_SLIDER);}
-};
+namespace fltk3 {
+  
+  class FLTK3_EXPORT HorValueSlider : public fltk3::ValueSlider {
+  public:
+    HorValueSlider(int X,int Y,int W,int H,const char *l=0)
+    : fltk3::ValueSlider(X,Y,W,H,l) {type(fltk3::HOR_SLIDER);}
+  };
+  
+}
 
 #endif
 

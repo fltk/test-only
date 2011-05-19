@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Tile.H>
-#include <FL/Fl_Box.H>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Tile.h>
+#include <fltk3/Box.h>
 
 //#define TEST_INACTIVE
 
@@ -89,7 +89,7 @@ int main(int argc, char** argv) {
 #endif
   w1.show();
   window.show(argc,argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

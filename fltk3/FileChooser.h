@@ -73,9 +73,9 @@ private:
   fltk3::DoubleWindow *window;
   void cb_window_i(fltk3::DoubleWindow*, void*);
   static void cb_window(fltk3::DoubleWindow*, void*);
-  Fl_Choice *showChoice;
-  void cb_showChoice_i(Fl_Choice*, void*);
-  static void cb_showChoice(Fl_Choice*, void*);
+  fltk3::Choice *showChoice;
+  void cb_showChoice_i(fltk3::Choice*, void*);
+  static void cb_showChoice(fltk3::Choice*, void*);
   Fl_Menu_Button *favoritesButton;
   void cb_favoritesButton_i(Fl_Menu_Button*, void*);
   static void cb_favoritesButton(Fl_Menu_Button*, void*);

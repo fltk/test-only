@@ -29,12 +29,12 @@
 #define B 0
 #define W3 (5*W1+6*B)
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Radio_Button.H>
-#include <FL/fl_draw.H>
-#include <FL/fl_message.H>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Box.h>
+#include <fltk3/Radio_Button.h>
+#include <fltk3/draw.h>
+#include <fltk3/message.h>
 
 Fl_Double_Window *window;
 Fl_Box *box;
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
 
   window->size_range(W3,W3);
   window->show(argc,argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

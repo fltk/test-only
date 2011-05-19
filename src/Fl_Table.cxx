@@ -27,7 +27,7 @@
 #include <fltk3/Table.h>
 
 #if defined(USE_UTF8) && ( defined(MICROSOFT) || defined(LINUX) )
-#include <fltk3/fl_utf8.H>	// currently only Windows and Linux
+#include <fltk3/fl_utf8.h>	// currently only Windows and Linux
 #endif
 
 #define SCROLLBAR_SIZE	16
@@ -42,7 +42,7 @@ void Fl_Table::row_position(int row) {
   if ( newtop > vscrollbar->maximum() ) {
     newtop = vscrollbar->maximum();
   }
-  vscrollbar->Fl_Slider::value(newtop);
+  vscrollbar->fltk3::Slider::value(newtop);
   table_scrolled();
   redraw();
   _row_position = row;	// HACK: override what table_scrolled() came up with
@@ -58,7 +58,7 @@ void Fl_Table::col_position(int col) {
   if ( newleft > hscrollbar->maximum() ) {
     newleft = hscrollbar->maximum();
   }
-  hscrollbar->Fl_Slider::value(newleft);
+  hscrollbar->fltk3::Slider::value(newleft);
   table_scrolled();
   redraw();
   _col_position = col;	// HACK: override what table_scrolled() came up with
@@ -424,14 +424,14 @@ void Fl_Table::_auto_drag_cb() {
   if (lx > x() + w() - 20) {
     fltk3::e_x = x() + w() - 20;
     if (hscrollbar->visible())
-      ((Fl_Slider*)hscrollbar)->value(hscrollbar->clamp(hscrollbar->value() + 30));
+      ((fltk3::Slider*)hscrollbar)->value(hscrollbar->clamp(hscrollbar->value() + 30));
     hscrollbar->do_callback();
     _dragging_x = fltk3::e_x - 30;
   }
   else if (lx < (x() + row_header_width())) {
     fltk3::e_x = x() + row_header_width() + 1;
     if (hscrollbar->visible()) {
-      ((Fl_Slider*)hscrollbar)->value(hscrollbar->clamp(hscrollbar->value() - 30));
+      ((fltk3::Slider*)hscrollbar)->value(hscrollbar->clamp(hscrollbar->value() - 30));
     }
     hscrollbar->do_callback();
     _dragging_x = fltk3::e_x + 30;
@@ -439,7 +439,7 @@ void Fl_Table::_auto_drag_cb() {
   if (ly > y() + h() - 20) {
     fltk3::e_y = y() + h() - 20;
     if (vscrollbar->visible()) {
-      ((Fl_Slider*)vscrollbar)->value(vscrollbar->clamp(vscrollbar->value() + 30));
+      ((fltk3::Slider*)vscrollbar)->value(vscrollbar->clamp(vscrollbar->value() + 30));
     }
     vscrollbar->do_callback();
     _dragging_y = fltk3::e_y - 30;
@@ -447,7 +447,7 @@ void Fl_Table::_auto_drag_cb() {
   else if (ly < (y() + col_header_height())) {
     fltk3::e_y = y() + col_header_height() + 1;
     if (vscrollbar->visible()) {
-      ((Fl_Slider*)vscrollbar)->value(vscrollbar->clamp(vscrollbar->value() - 30));
+      ((fltk3::Slider*)vscrollbar)->value(vscrollbar->clamp(vscrollbar->value() - 30));
     }
     vscrollbar->do_callback();
     _dragging_y = fltk3::e_y + 30;

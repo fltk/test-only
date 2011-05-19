@@ -54,10 +54,10 @@ namespace fltk3 {
 class Fl_Menu_;
 
 /**
-  The Fl_Menu_Item structure defines a single menu item that
+  The fltk3::MenuItem structure defines a single menu item that
   is used by the Fl_Menu_ class.  
   \code
-  struct Fl_Menu_Item {
+  struct fltk3::MenuItem {
    const char*		text;     // label()
    ulong		shortcut_;
    fltk3::Callback*		callback_;
@@ -83,7 +83,7 @@ class Fl_Menu_;
   \endcode
   Typically menu items are statically defined; for example:
   \code
-  Fl_Menu_Item popup[] = {
+  fltk3::MenuItem popup[] = {
    {"&alpha",   fltk3::ALT+'a', the_cb, (void*)1},
    {"&beta",    fltk3::ALT+'b', the_cb, (void*)2},
    {"gamma",    fltk3::ALT+'c', the_cb, (void*)3, FL_MENU_DIVIDER},
@@ -117,7 +117,7 @@ class Fl_Menu_;
   not access them directly to avoid compatibility problems with future
   releases of FLTK.
 */
-struct FLTK3_EXPORT Fl_Menu_Item {
+struct FLTK3_EXPORT fltk3::MenuItem {
   const char *text;	    ///< menu item text, returned by label()
   int shortcut_;	    ///< menu item shortcut
   fltk3::Callback *callback_;   ///< menu item callback
@@ -129,21 +129,21 @@ struct FLTK3_EXPORT Fl_Menu_Item {
   fltk3::Color labelcolor_;	    ///< menu item text color
 
   // advance N items, skipping submenus:
-  const Fl_Menu_Item *next(int=1) const;
+  const fltk3::MenuItem *next(int=1) const;
 
   /**
     Advances a pointer by n items through a menu array, skipping
     the contents of submenus and invisible items. There are two calls so
     that you can advance through const and non-const data.
   */
-  Fl_Menu_Item *next(int i=1) {
-    return (Fl_Menu_Item*)(((const Fl_Menu_Item*)this)->next(i));}
+  fltk3::MenuItem *next(int i=1) {
+    return (fltk3::MenuItem*)(((const fltk3::MenuItem*)this)->next(i));}
 
   /** Returns the first menu item, same as next(0). */
-  const Fl_Menu_Item *first() const { return next(0); }
+  const fltk3::MenuItem *first() const { return next(0); }
 
   /** Returns the first menu item, same as next(0). */
-  Fl_Menu_Item *first() { return next(0); }
+  fltk3::MenuItem *first() { return next(0); }
 
   // methods on menu items:
   /**
@@ -155,10 +155,10 @@ struct FLTK3_EXPORT Fl_Menu_Item {
   */
   const char* label() const {return text;}
 
-  /**    See const char* Fl_Menu_Item::label() const   */
+  /**    See const char* fltk3::MenuItem::label() const   */
   void label(const char* a) {text=a;}
 
-  /**    See const char* Fl_Menu_Item::label() const   */
+  /**    See const char* fltk3::MenuItem::label() const   */
   void label(fltk3::Labeltype a,const char* b) {labeltype_ = a; text = b;}
 
   /**
@@ -190,7 +190,7 @@ struct FLTK3_EXPORT Fl_Menu_Item {
 
   /**
     Sets the menu item's label color.
-    \see fltk3::Color Fl_Menu_Item::labelcolor() const
+    \see fltk3::Color fltk3::MenuItem::labelcolor() const
   */
   void labelcolor(fltk3::Color a) {labelcolor_ = a;}
   /**
@@ -218,7 +218,7 @@ struct FLTK3_EXPORT Fl_Menu_Item {
   /**
     Returns the callback function that is set for the menu item.
     Each item has space for a callback function and an argument for that
-    function. Due to back compatibility, the Fl_Menu_Item itself
+    function. Due to back compatibility, the fltk3::MenuItem itself
     is not passed to the callback, instead you have to get it by calling
     ((Fl_Menu_*)w)->mvalue() where w is the widget argument.
   */
@@ -364,36 +364,36 @@ struct FLTK3_EXPORT Fl_Menu_Item {
   void draw(int x, int y, int w, int h, const Fl_Menu_*, int t=0) const;
 
   // popup menus without using an Fl_Menu_ widget:
-  const Fl_Menu_Item* popup(
+  const fltk3::MenuItem* popup(
     int X, int Y,
     const char *title = 0,
-    const Fl_Menu_Item* picked=0,
+    const fltk3::MenuItem* picked=0,
     const Fl_Menu_* = 0) const;
-  const Fl_Menu_Item* pulldown(
+  const fltk3::MenuItem* pulldown(
     int X, int Y, int W, int H,
-    const Fl_Menu_Item* picked = 0,
+    const fltk3::MenuItem* picked = 0,
     const Fl_Menu_* = 0,
-    const Fl_Menu_Item* title = 0,
+    const fltk3::MenuItem* title = 0,
     int menubar=0) const;
-  const Fl_Menu_Item* test_shortcut() const;
-  const Fl_Menu_Item* find_shortcut(int *ip=0, const bool require_alt = false) const;
+  const fltk3::MenuItem* test_shortcut() const;
+  const fltk3::MenuItem* find_shortcut(int *ip=0, const bool require_alt = false) const;
 
   /**
-    Calls the Fl_Menu_Item item's callback, and provides the fltk3::Widget argument.
+    Calls the fltk3::MenuItem item's callback, and provides the fltk3::Widget argument.
     The callback is called with the stored user_data() as its second argument.
     You must first check that callback() is non-zero before calling this.
   */
   void do_callback(fltk3::Widget* o) const {callback_(o, user_data_);}
 
   /**
-    Calls the Fl_Menu_Item item's callback, and provides the fltk3::Widget argument.
+    Calls the fltk3::MenuItem item's callback, and provides the fltk3::Widget argument.
     This call overrides the callback's second argument with the given value \p arg.
     You must first check that callback() is non-zero before calling this.
   */
   void do_callback(fltk3::Widget* o,void* arg) const {callback_(o, arg);}
 
   /**
-    Calls the Fl_Menu_Item item's callback, and provides the fltk3::Widget argument.
+    Calls the fltk3::MenuItem item's callback, and provides the fltk3::Widget argument.
     This call overrides the callback's second argument with the
     given value \p arg. long \p arg is cast to void* when calling
     the callback.
@@ -423,7 +423,7 @@ struct FLTK3_EXPORT Fl_Menu_Item {
   int size() const ;
 };
 
-typedef Fl_Menu_Item Fl_Menu; // back compatibility
+typedef fltk3::MenuItem Fl_Menu; // back compatibility
 
 enum {	// back-compatibility enum:
   FL_PUP_NONE	= 0,

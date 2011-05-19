@@ -41,18 +41,18 @@
 # define FL_DLL
 #endif
 
-#include <FL/Fl.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/fl_ask.H>
-#include <FL/Fl_Native_File_Chooser.H>
-#include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Return_Button.H>
-#include <FL/Fl_Text_Buffer.H>
-#include <FL/Fl_Text_Editor.H>
-#include <FL/filename.H>
+#include <fltk3/run.h>
+#include <fltk3/Group.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/ask.h>
+#include <fltk3/Native_File_Chooser.h>
+#include <fltk3/Menu_Bar.h>
+#include <fltk3/Input.h>
+#include <fltk3/Button.h>
+#include <fltk3/Return_Button.h>
+#include <fltk3/Text_Buffer.h>
+#include <fltk3/Text_Editor.h>
+#include <FL/filename.h>
 
 int                changed = 0;
 char               filename[FL_PATH_MAX] = "";
@@ -739,7 +739,7 @@ void view_cb(Fl_Widget*, void*) {
   w->show();
 }
 
-Fl_Menu_Item menuitems[] = {
+fltk3::MenuItem menuitems[] = {
   { "&File",              0, 0, 0, FL_SUBMENU },
     { "&New File",        0, (Fl_Callback *)new_cb },
     { "&Open File...",    FL_COMMAND + 'o', (Fl_Callback *)open_cb },
@@ -809,7 +809,7 @@ int main(int argc, char **argv) {
 
   if (argc > 1) load_file(argv[1], -1);
 
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

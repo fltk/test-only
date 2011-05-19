@@ -35,9 +35,9 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Toggle_Button.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/Toggle_Button.h>
 
 int running;	// actually the pid
 Fl_Toggle_Button *Button;
@@ -69,7 +69,7 @@ int main(int argc, char ** argv) {
    button.color(1,2);
    button.callback(cb,0);
    window.show(argc,argv);
-   return Fl::run();
+   return fltk3::run();
 }
 
 //

@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 // This is a base class for all items that have a menu:
-//	Fl_Menu_Bar, Fl_Menu_Button, Fl_Choice
+//	Fl_Menu_Bar, Fl_Menu_Button, fltk3::Choice
 // This provides storage for a menu item, functions to add/modify/delete
 // items, and a call for when the user picks a menu item.
 
@@ -70,12 +70,12 @@
 	-  -2 : 'name' not large enough (name="")
     \see find_item()
 */
-int Fl_Menu_::item_pathname(char *name, int namelen, const Fl_Menu_Item *finditem) const {
+int Fl_Menu_::item_pathname(char *name, int namelen, const fltk3::MenuItem *finditem) const {
     int len = 0;
     finditem = finditem ? finditem : mvalue();    
     name[0] = '\0';
     for ( int t=0; t<size(); t++ ) {
-        const Fl_Menu_Item *m = &(menu()[t]);
+        const fltk3::MenuItem *m = &(menu()[t]);
 	if ( m->submenu() ) {				// submenu? descend
 	    if (*name) SAFE_STRCAT("/");
 	    if (m->label()) SAFE_STRCAT(m->label());
@@ -114,11 +114,11 @@ int Fl_Menu_::item_pathname(char *name, int namelen, const Fl_Menu_Item *findite
     menubar->add("File/&Save");
     menubar->add("Edit/&Copy");
     // [..]
-    Fl_Menu_Item *item;
-    if ( ( item = (Fl_Menu_Item*)menubar->find_item("File/&Open") ) != NULL ) {
+    fltk3::MenuItem *item;
+    if ( ( item = (fltk3::MenuItem*)menubar->find_item("File/&Open") ) != NULL ) {
 	item->labelcolor(fltk3::RED);
     }
-    if ( ( item = (Fl_Menu_Item*)menubar->find_item("Edit/&Copy") ) != NULL ) {
+    if ( ( item = (fltk3::MenuItem*)menubar->find_item("Edit/&Copy") ) != NULL ) {
 	item->labelcolor(fltk3::GREEN);
     }
   \endcode
@@ -127,9 +127,9 @@ int Fl_Menu_::item_pathname(char *name, int namelen, const Fl_Menu_Item *findite
   \returns The item found, or NULL if not found
   \see find_index(const char*), find_item(fltk3::Callback*), item_pathname() 
 */
-const Fl_Menu_Item * Fl_Menu_::find_item(const char *pathname) {
+const fltk3::MenuItem * Fl_Menu_::find_item(const char *pathname) {
   int i = find_index(pathname);
-  return( (i==-1) ? 0 : (const Fl_Menu_Item*)(menu_+i));
+  return( (i==-1) ? 0 : (const fltk3::MenuItem*)(menu_+i));
 }
 
 /**
@@ -142,7 +142,7 @@ const Fl_Menu_Item * Fl_Menu_::find_item(const char *pathname) {
  \code
    // Convert an index-to-item
    int index = 12;
-   const Fl_Menu_Item *item = mymenu->menu() + index;
+   const fltk3::MenuItem *item = mymenu->menu() + index;
 
    // Convert an item-to-index
    int index = mymenu->find_index(item);
@@ -153,8 +153,8 @@ const Fl_Menu_Item * Fl_Menu_::find_item(const char *pathname) {
  \returns    The index of the item, or -1 if not found.
  \see        menu()
 */
-int Fl_Menu_::find_index(const Fl_Menu_Item *item) const {
-  Fl_Menu_Item *max = menu_+size();
+int Fl_Menu_::find_index(const fltk3::MenuItem *item) const {
+  fltk3::MenuItem *max = menu_+size();
   if (item<menu_ || item>=max) return(-1);
   return(item-menu_);
 }
@@ -193,7 +193,7 @@ int Fl_Menu_::find_index(fltk3::Callback *cb) const {
 int Fl_Menu_::find_index(const char *pathname) const {
   char menupath[1024] = "";	// File/Export
   for ( int t=0; t < size(); t++ ) {
-    Fl_Menu_Item *m = menu_ + t;
+    fltk3::MenuItem *m = menu_ + t;
     if (m->flags&FL_SUBMENU) {
       // IT'S A SUBMENU
       // we do not support searches through FL_SUBMENU_POINTER links
@@ -231,14 +231,14 @@ int Fl_Menu_::find_index(const char *pathname) const {
  \returns The item found, or NULL if not found
  \see find_item(const char*)
  */
-const Fl_Menu_Item * Fl_Menu_::find_item(fltk3::Callback *cb) {
+const fltk3::MenuItem * Fl_Menu_::find_item(fltk3::Callback *cb) {
   for ( int t=0; t < size(); t++ ) {
-    const Fl_Menu_Item *m = menu_ + t;
+    const fltk3::MenuItem *m = menu_ + t;
     if (m->callback_==cb) {
       return m;
     }
   }
-  return (const Fl_Menu_Item *)0;
+  return (const fltk3::MenuItem *)0;
 }
 
 /**
@@ -247,7 +247,7 @@ const Fl_Menu_Item * Fl_Menu_::find_item(fltk3::Callback *cb) {
   it with a pointer to a menu item.  The set routines return non-zero if
   the new value is different than the old one.
 */
-int Fl_Menu_::value(const Fl_Menu_Item* m) {
+int Fl_Menu_::value(const fltk3::MenuItem* m) {
   clear_changed();
   if (value_ != m) {value_ = m; return 1;}
   return 0;
@@ -258,17 +258,17 @@ int Fl_Menu_::value(const Fl_Menu_Item* m) {
  Unfortunately this also casts away const for the checkboxes, but this
  was necessary so non-checkbox menus can really be declared const...
 */
-const Fl_Menu_Item* Fl_Menu_::picked(const Fl_Menu_Item* v) {
+const fltk3::MenuItem* Fl_Menu_::picked(const fltk3::MenuItem* v) {
   if (v) {
     if (v->radio()) {
       if (!v->value()) { // they are turning on a radio item
 	set_changed();
-	((Fl_Menu_Item*)v)->setonly();
+	((fltk3::MenuItem*)v)->setonly();
       }
       redraw();
     } else if (v->flags & FL_MENU_TOGGLE) {
       set_changed();
-      ((Fl_Menu_Item*)v)->flags ^= FL_MENU_VALUE;
+      ((fltk3::MenuItem*)v)->flags ^= FL_MENU_VALUE;
       redraw();
     } else if (v != value_) { // normal item
       set_changed();
@@ -285,9 +285,9 @@ const Fl_Menu_Item* Fl_Menu_::picked(const Fl_Menu_Item* v) {
 }
 
 /** Turns the radio item "on" for the menu item and turns off adjacent radio items set. */
-void Fl_Menu_Item::setonly() {
+void fltk3::MenuItem::setonly() {
   flags |= FL_MENU_RADIO | FL_MENU_VALUE;
-  Fl_Menu_Item* j;
+  fltk3::MenuItem* j;
   for (j = this; ; ) {	// go down
     if (j->flags & FL_MENU_DIVIDER) break; // stop on divider lines
     j++;
@@ -319,10 +319,10 @@ Fl_Menu_::Fl_Menu_(int X,int Y,int W,int H,const char* l)
 }
 
 /**
-  This returns the number of Fl_Menu_Item structures that make up the
+  This returns the number of fltk3::MenuItem structures that make up the
   menu, correctly counting submenus.  This includes the "terminator"
   item at the end.  To copy a menu array you need to copy
-  size()*sizeof(Fl_Menu_Item) bytes.  If the menu is
+  size()*sizeof(fltk3::MenuItem) bytes.  If the menu is
   NULL this returns zero (an empty menu will return 1).
 */
 int Fl_Menu_::size() const {
@@ -336,9 +336,9 @@ int Fl_Menu_::size() const {
     menu.  If you try to modify the array (with add(), replace(), or
     remove()) a private copy is automatically done.
 */
-void Fl_Menu_::menu(const Fl_Menu_Item* m) {
+void Fl_Menu_::menu(const fltk3::MenuItem* m) {
   clear();
-  value_ = menu_ = (Fl_Menu_Item*)m;
+  value_ = menu_ = (fltk3::MenuItem*)m;
 }
 
 // this version is ok with new Fl_Menu_add code with fl_menu_array_owner:
@@ -346,12 +346,12 @@ void Fl_Menu_::menu(const Fl_Menu_Item* m) {
 /** 
   Sets the menu array pointer with a copy of m that will be automatically deleted. 
   If userdata \p ud is not NULL, then all user data pointers are changed in the menus as well.
-  See void Fl_Menu_::menu(const Fl_Menu_Item* m). 
+  See void Fl_Menu_::menu(const fltk3::MenuItem* m). 
 */
-void Fl_Menu_::copy(const Fl_Menu_Item* m, void* ud) {
+void Fl_Menu_::copy(const fltk3::MenuItem* m, void* ud) {
   int n = m->size();
-  Fl_Menu_Item* newMenu = new Fl_Menu_Item[n];
-  memcpy(newMenu, m, n*sizeof(Fl_Menu_Item));
+  fltk3::MenuItem* newMenu = new fltk3::MenuItem[n];
+  memcpy(newMenu, m, n*sizeof(fltk3::MenuItem));
   menu(newMenu);
   alloc = 1; // make destructor free array, but not strings
   // for convenience, provide way to change all the user data pointers:

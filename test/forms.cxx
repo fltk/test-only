@@ -31,7 +31,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/forms.H> // changed for fltk
+#include <FL/forms.h> // changed for fltk
 
 static int border = 1; // changed from FL_TRANSIENT for fltk
 // (this is so the close box and Esc work to close the window)

@@ -43,12 +43,12 @@
 //
 
 #include <stdio.h>
-#include <FL/Fl_File_Chooser.H>
-#include <FL/Fl_File_Icon.H>
-#include <FL/Fl_Shared_Image.H>
-#include <FL/Fl_PNM_Image.H>
-#include <FL/Fl_Light_Button.H>
-#include <FL/Fl_Double_Window.H>
+#include <fltk3/File_Chooser.h>
+#include <fltk3/File_Icon.h>
+#include <fltk3/Shared_Image.h>
+#include <fltk3/PNM_Image.h>
+#include <fltk3/Light_Button.h>
+#include <fltk3/Double_Window.h>
 #include <string.h>
 
 
@@ -62,10 +62,10 @@ Fl_File_Chooser		*fc;
 Fl_Shared_Image		*image = 0;
 
 // for choosing extra groups
-Fl_Choice *ch_extra;
+fltk3::Choice *ch_extra;
 // first extra group
 Fl_Group *encodings = (Fl_Group*)0;
-Fl_Choice *ch_enc;
+fltk3::Choice *ch_enc;
 // second extra widget
 Fl_Check_Button *version = (Fl_Check_Button*)0;
 
@@ -82,7 +82,7 @@ Fl_Image	*pdf_check(const char *, uchar *, int);
 Fl_Image	*ps_check(const char *, uchar *, int);
 void		show_callback(void);
 
-void		extra_callback(Fl_Choice*,void*);
+void		extra_callback(fltk3::Choice*,void*);
 
 //
 // 'main()' - Create a file chooser and wait for a selection to be made.
@@ -143,7 +143,7 @@ main(int  argc,		// I - Number of command-line arguments
   button->callback((Fl_Callback *)dir_callback);
 
   //
-  ch_extra = new Fl_Choice(150, 75, 150, 25, "Extra Group:");
+  ch_extra = new fltk3::Choice(150, 75, 150, 25, "Extra Group:");
   ch_extra->add("none|encodings group|check button");
   ch_extra->value(0);
   ch_extra->callback((Fl_Callback *)extra_callback);
@@ -158,21 +158,21 @@ main(int  argc,		// I - Number of command-line arguments
   window->end();
   window->show(1, argv);
 
-  Fl::run();
+  fltk3::run();
 
   return (0);
 }
 
 
 void
-extra_callback(Fl_Choice*w,void*)
+extra_callback(fltk3::Choice*w,void*)
 {
   int val=w->value();
   if (0 == val) fc->add_extra(NULL);
   else if (1 == val) {
     if(!encodings){
       encodings=new Fl_Group(0,0,254,30);
-      ch_enc=new Fl_Choice(152,2,100,25,"Choose Encoding:");
+      ch_enc=new fltk3::Choice(152,2,100,25,"Choose Encoding:");
       ch_enc->add("ASCII|Koi8-r|win1251|Utf-8");
       encodings->end();
     }

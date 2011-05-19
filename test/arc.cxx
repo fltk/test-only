@@ -67,7 +67,7 @@ public:
 Drawing *d;
 
 void slider_cb(Widget* o, void* v) {
-  Fl_Slider* s = (Fl_Slider*)o;
+  fltk3::Slider* s = (fltk3::Slider*)o;
   val[fl_intptr_t(v)] = s->value();
   d->redraw();
 }
@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
 
   int y = 300;
   for (int n = 0; n<6; n++) {
-    Fl_Slider* s = new Fl_Hor_Value_Slider(50,y,240,25,name[n]); y += 25;
+    fltk3::Slider* s = new fltk3::HorValueSlider(50,y,240,25,name[n]); y += 25;
     if (n<3) {s->minimum(0); s->maximum(300);}
     else if (n==5) {s->minimum(0); s->maximum(360);}
     else {s->minimum(-360); s->maximum(360);}

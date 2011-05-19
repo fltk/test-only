@@ -126,7 +126,7 @@ void default_widget_size_cb(fltk3::RoundButton *b, long size) {
 }
 
 
-void i18n_type_cb(Fl_Choice *c, void *) {
+void i18n_type_cb(fltk3::Choice *c, void *) {
   undo_checkpoint();
 
   switch (i18n_type = c->value()) {
@@ -277,7 +277,7 @@ void use_FL_COMMAND_button_cb(fltk3::CheckButton* b, void*) {
 
 ////////////////////////////////////////////////////////////////
 
-Fl_Menu_Item window_type_menu[] = {
+fltk3::MenuItem window_type_menu[] = {
   {"Single",0,0,(void*)FL_WINDOW},
   {"Double",0,0,(void*)(FL_WINDOW+1)},
   {0}};
@@ -1091,7 +1091,7 @@ void Fl_Window_Type::draw_overlay() {
   fltk3::rectf(mysx,myst-5,5,5);
 }
 
-extern Fl_Menu_Item Main_Menu[];
+extern fltk3::MenuItem Main_Menu[];
 
 // Calculate new bounding box of selected widgets:
 void Fl_Window_Type::fix_overlay() {
@@ -1142,8 +1142,8 @@ extern void deselect();
 extern Fl_Type* in_this_only;
 extern void fix_group_size(Fl_Type *t);
 
-extern Fl_Menu_Item Main_Menu[];
-extern Fl_Menu_Item New_Menu[];
+extern fltk3::MenuItem Main_Menu[];
+extern fltk3::MenuItem New_Menu[];
 
 // move the selected children according to current dx,dy,drag state:
 void Fl_Window_Type::moveallchildren()
@@ -1191,8 +1191,8 @@ int Fl_Window_Type::handle(int event) {
     // test for popup menu:
     if (fltk3::event_button() >= 3) {
       in_this_only = this; // modifies how some menu items work.
-      static const Fl_Menu_Item* myprev;
-      const Fl_Menu_Item* m = New_Menu->popup(mx,my,"New",myprev);
+      static const fltk3::MenuItem* myprev;
+      const fltk3::MenuItem* m = New_Menu->popup(mx,my,"New",myprev);
       if (m && m->callback()) {myprev = m; m->do_callback(this->o);}
       in_this_only = 0;
       return 1;
@@ -1338,7 +1338,7 @@ int Fl_Window_Type::handle(int event) {
 
   case fltk3::SHORTCUT: {
     in_this_only = this; // modifies how some menu items work.
-    const Fl_Menu_Item* m = Main_Menu->test_shortcut();
+    const fltk3::MenuItem* m = Main_Menu->test_shortcut();
     if (m && m->callback()) m->do_callback(this->o);
     in_this_only = 0;
     return (m != 0);}

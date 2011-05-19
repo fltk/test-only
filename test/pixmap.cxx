@@ -25,15 +25,15 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Pixmap.H>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Button.h>
+#include <fltk3/Pixmap.h>
 #include <stdio.h>
 
 #include "pixmaps/porsche.xpm"
 
-#include <FL/Fl_Toggle_Button.H>
+#include <fltk3/Toggle_Button.h>
 
 Fl_Toggle_Button *leftb,*rightb,*topb,*bottomb,*insideb,*overb,*inactb;
 Fl_Button *b;
@@ -59,7 +59,7 @@ int arg(int, char **argv, int &i) {
   return 0;
 }
 
-#include <FL/Fl_Multi_Label.H>
+#include <fltk3/Multi_Label.h>
 
 int main(int argc, char **argv) {
   int i = 1;
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
   window.resizable(window);
   window.end();
   window.show(argc,argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

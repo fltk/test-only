@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl_Box.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Box.h>
+#include <fltk3/draw.h>
 
 //
 //------- test viewport clipping ----------

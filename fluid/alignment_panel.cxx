@@ -46,9 +46,9 @@ fltk3::CheckButton *include_H_from_C_button=(fltk3::CheckButton *)0;
 
 fltk3::CheckButton *use_FL_COMMAND_button=(fltk3::CheckButton *)0;
 
-Fl_Choice *i18n_type_chooser=(Fl_Choice *)0;
+fltk3::Choice *i18n_type_chooser=(fltk3::Choice *)0;
 
-Fl_Menu_Item menu_i18n_type_chooser[] = {
+fltk3::MenuItem menu_i18n_type_chooser[] = {
  {"None", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"GNU gettext", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"POSIX catgets", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
@@ -105,14 +105,14 @@ fltk3::DoubleWindow* make_project_window() {
         o->end();
       } // fltk3::Group* o
       { fltk3::Group* o = new fltk3::Group(10, 36, 378, 169, "Internationalization");
-        { i18n_type_chooser = new Fl_Choice(100, 48, 136, 25, "Use:");
+        { i18n_type_chooser = new fltk3::Choice(100, 48, 136, 25, "Use:");
           i18n_type_chooser->tooltip("Type of internationalization to use.");
           i18n_type_chooser->box(fltk3::THIN_UP_BOX);
           i18n_type_chooser->down_box(fltk3::BORDER_BOX);
           i18n_type_chooser->labelfont(1);
           i18n_type_chooser->callback((fltk3::Callback*)i18n_type_cb);
           i18n_type_chooser->menu(menu_i18n_type_chooser);
-        } // Fl_Choice* i18n_type_chooser
+        } // fltk3::Choice* i18n_type_chooser
         { i18n_include_input = new Fl_Input(100, 78, 272, 20, "#include:");
           i18n_include_input->tooltip("The include file for internationalization.");
           i18n_include_input->box(fltk3::THIN_DOWN_BOX);
@@ -151,13 +151,13 @@ fltk3::DoubleWindow* make_project_window() {
   } // fltk3::DoubleWindow* project_window
   return project_window;
 }
-void scheme_cb(Fl_Choice *, void *); 
+void scheme_cb(fltk3::Choice *, void *); 
 
 fltk3::DoubleWindow *settings_window=(fltk3::DoubleWindow *)0;
 
-Fl_Choice *scheme_choice=(Fl_Choice *)0;
+fltk3::Choice *scheme_choice=(fltk3::Choice *)0;
 
-Fl_Menu_Item menu_scheme_choice[] = {
+fltk3::MenuItem menu_scheme_choice[] = {
  {"Default", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"None", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"Plastic", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
@@ -211,7 +211,7 @@ static void cb_Close1(fltk3::Button*, void*) {
 
 fltk3::DoubleWindow* make_settings_window() {
   { settings_window = new fltk3::DoubleWindow(339, 241, "GUI Settings");
-    { scheme_choice = new Fl_Choice(116, 10, 115, 25, "Scheme: ");
+    { scheme_choice = new fltk3::Choice(116, 10, 115, 25, "Scheme: ");
       scheme_choice->down_box(fltk3::BORDER_BOX);
       scheme_choice->labelfont(1);
       scheme_choice->callback((fltk3::Callback*)scheme_cb);
@@ -220,7 +220,7 @@ fltk3::DoubleWindow* make_settings_window() {
       fluid_prefs.get("scheme", s, 0);
       scheme_choice->value(s);
       scheme_cb(0, 0);
-    } // Fl_Choice* scheme_choice
+    } // fltk3::Choice* scheme_choice
     { fltk3::Group* o = new fltk3::Group(116, 43, 220, 126);
       o->labelfont(1);
       o->align(fltk3::Align(fltk3::ALIGN_CENTER));
@@ -587,69 +587,69 @@ void show_global_settings_window() {
 
 fltk3::DoubleWindow *global_settings_window=(fltk3::DoubleWindow *)0;
 
-Fl_Choice *wVisibleFocus=(Fl_Choice *)0;
+fltk3::Choice *wVisibleFocus=(fltk3::Choice *)0;
 
-static void cb_wVisibleFocus(Fl_Choice*, void*) {
+static void cb_wVisibleFocus(fltk3::Choice*, void*) {
   int mode = wUserOrSystem->value();
 opt[fltk3::OPTION_VISIBLE_FOCUS][mode] = wVisibleFocus->value();
 }
 
-Fl_Menu_Item menu_wVisibleFocus[] = {
+fltk3::MenuItem menu_wVisibleFocus[] = {
  {"off", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"on", 0,  0, (void*)(1), 128, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"default", 0,  0, (void*)(2), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Choice *wArrowFocus=(Fl_Choice *)0;
+fltk3::Choice *wArrowFocus=(fltk3::Choice *)0;
 
-static void cb_wArrowFocus(Fl_Choice*, void*) {
+static void cb_wArrowFocus(fltk3::Choice*, void*) {
   int mode = wUserOrSystem->value();
 opt[fltk3::OPTION_ARROW_FOCUS][mode] = wArrowFocus->value();
 }
 
-Fl_Menu_Item menu_wArrowFocus[] = {
+fltk3::MenuItem menu_wArrowFocus[] = {
  {"off", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"on", 0,  0, (void*)(1), 128, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"default", 0,  0, (void*)(2), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Choice *wShowTooltips=(Fl_Choice *)0;
+fltk3::Choice *wShowTooltips=(fltk3::Choice *)0;
 
-static void cb_wShowTooltips(Fl_Choice*, void*) {
+static void cb_wShowTooltips(fltk3::Choice*, void*) {
   int mode = wUserOrSystem->value();
 opt[fltk3::OPTION_SHOW_TOOLTIPS][mode] = wShowTooltips->value();
 }
 
-Fl_Menu_Item menu_wShowTooltips[] = {
+fltk3::MenuItem menu_wShowTooltips[] = {
  {"off", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"on", 0,  0, (void*)(1), 128, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"default", 0,  0, (void*)(2), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Choice *wDNDText=(Fl_Choice *)0;
+fltk3::Choice *wDNDText=(fltk3::Choice *)0;
 
-static void cb_wDNDText(Fl_Choice*, void*) {
+static void cb_wDNDText(fltk3::Choice*, void*) {
   int mode = wUserOrSystem->value();
 opt[fltk3::OPTION_DND_TEXT][mode] = wDNDText->value();
 }
 
-Fl_Menu_Item menu_wDNDText[] = {
+fltk3::MenuItem menu_wDNDText[] = {
  {"off", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"on", 0,  0, (void*)(1), 128, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"default", 0,  0, (void*)(2), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Choice *wUserOrSystem=(Fl_Choice *)0;
+fltk3::Choice *wUserOrSystem=(fltk3::Choice *)0;
 
-static void cb_wUserOrSystem(Fl_Choice*, void*) {
+static void cb_wUserOrSystem(fltk3::Choice*, void*) {
   refreshUI();
 }
 
-Fl_Menu_Item menu_wUserOrSystem[] = {
+fltk3::MenuItem menu_wUserOrSystem[] = {
  {"User Settings", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"System Settings", 0,  0, (void*)(1), 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
@@ -671,7 +671,7 @@ fltk3::DoubleWindow* make_global_settings_window() {
       o->box(fltk3::GTK_DOWN_BOX);
       o->labelfont(2);
       o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE));
-      { wVisibleFocus = new Fl_Choice(245, 40, 100, 25, "Visible Keyboard Focus:");
+      { wVisibleFocus = new fltk3::Choice(245, 40, 100, 25, "Visible Keyboard Focus:");
         wVisibleFocus->tooltip("OPTION_VISIBLE_FOCUS\n\nIf visible focus is switched on, FLTK will draw a dot\
 ted rectangle inside the widget that will receive the next keystroke. If switc\
 hed off, no such indicator will be drawn and keyboard navigation is disabled.\
@@ -679,8 +679,8 @@ hed off, no such indicator will be drawn and keyboard navigation is disabled.\
         wVisibleFocus->down_box(fltk3::BORDER_BOX);
         wVisibleFocus->callback((fltk3::Callback*)cb_wVisibleFocus);
         wVisibleFocus->menu(menu_wVisibleFocus);
-      } // Fl_Choice* wVisibleFocus
-      { wArrowFocus = new Fl_Choice(245, 75, 100, 25, "Arrow Keys move Focus:");
+      } // fltk3::Choice* wVisibleFocus
+      { wArrowFocus = new fltk3::Choice(245, 75, 100, 25, "Arrow Keys move Focus:");
         wArrowFocus->tooltip("OPTION_ARROW_FOCUS\n\nWhen switched on, moving the text cursor beyond the sta\
 rt or end of the text in a text widget will change focus to the next widget. W\
 hen switched off, the cursor will stop at the end of the text. Pressing Tab or\
@@ -689,45 +689,45 @@ hen switched off, the cursor will stop at the end of the text. Pressing Tab or\
         wArrowFocus->down_box(fltk3::BORDER_BOX);
         wArrowFocus->callback((fltk3::Callback*)cb_wArrowFocus);
         wArrowFocus->menu(menu_wArrowFocus);
-      } // Fl_Choice* wArrowFocus
+      } // fltk3::Choice* wArrowFocus
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(10, 120, 380, 65, "Tooltip Options");
       o->box(fltk3::GTK_DOWN_BOX);
       o->labelfont(2);
       o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE));
-      { wShowTooltips = new Fl_Choice(245, 150, 100, 25, "Show Tooltips:");
+      { wShowTooltips = new fltk3::Choice(245, 150, 100, 25, "Show Tooltips:");
         wShowTooltips->tooltip("OPTION_SHOW_TOOLTIPS\n\nIf tooltips are enabled, hovering the mouse over a wi\
 dget with a tooltip text will open a little tooltip window until the mouse lea\
 ves the widget. If disabled, no tooltip is shown.\n\nDefault is on.");
         wShowTooltips->down_box(fltk3::BORDER_BOX);
         wShowTooltips->callback((fltk3::Callback*)cb_wShowTooltips);
         wShowTooltips->menu(menu_wShowTooltips);
-      } // Fl_Choice* wShowTooltips
+      } // fltk3::Choice* wShowTooltips
       o->end();
     } // fltk3::Group* o
     { fltk3::Group* o = new fltk3::Group(10, 194, 380, 66, "Drag And Drop Options");
       o->box(fltk3::GTK_DOWN_BOX);
       o->labelfont(2);
       o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT|fltk3::ALIGN_INSIDE));
-      { wDNDText = new Fl_Choice(245, 225, 100, 25, "Allow dragging Text:");
+      { wDNDText = new fltk3::Choice(245, 225, 100, 25, "Allow dragging Text:");
         wDNDText->tooltip("OPTION_DND_TEXT\n\nIf text drag-and-drop is enabled, the user can select and \
 drag text from any text widget. If disabled, no dragging is possible, however \
 dropping text from other applications still works.\n\nDefault is on.");
         wDNDText->down_box(fltk3::BORDER_BOX);
         wDNDText->callback((fltk3::Callback*)cb_wDNDText);
         wDNDText->menu(menu_wDNDText);
-      } // Fl_Choice* wDNDText
+      } // fltk3::Choice* wDNDText
       o->end();
     } // fltk3::Group* o
-    { wUserOrSystem = new Fl_Choice(14, 275, 141, 25);
+    { wUserOrSystem = new fltk3::Choice(14, 275, 141, 25);
       wUserOrSystem->tooltip("Change settings for the current user, or default values for all users of this\
  computer. Individual users can override system options, if they set their opt\
 ions to specific values (not \'default\').");
       wUserOrSystem->down_box(fltk3::BORDER_BOX);
       wUserOrSystem->callback((fltk3::Callback*)cb_wUserOrSystem);
       wUserOrSystem->menu(menu_wUserOrSystem);
-    } // Fl_Choice* wUserOrSystem
+    } // fltk3::Choice* wUserOrSystem
     { fltk3::Button* o = new fltk3::Button(230, 275, 75, 25, "Cancel");
       o->callback((fltk3::Callback*)cb_Cancel1);
     } // fltk3::Button* o

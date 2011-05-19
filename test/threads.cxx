@@ -28,11 +28,11 @@
 #include <config.h>
 
 #if HAVE_PTHREAD || defined(WIN32)
-#  include <FL/Fl.H>
-#  include <FL/Fl_Double_Window.H>
-#  include <FL/Fl_Browser.H>
-#  include <FL/Fl_Value_Output.H>
-#  include <FL/fl_ask.H>
+#  include <fltk3/run.h>
+#  include <fltk3/Double_Window.h>
+#  include <fltk3/Browser.h>
+#  include <fltk3/Value_Output.h>
+#  include <fltk3/ask.h>
 #  include "threads.h"
 #  include <stdio.h>
 #  include <math.h>
@@ -137,7 +137,7 @@ int main(int argc, char **argv)
   browser2->add("Prime numbers:");
 
   // Enable multi-thread support by locking from the main
-  // thread.  Fl::wait() and Fl::run() call Fl::unlock() and
+  // thread.  Fl::wait() and fltk3::run() call Fl::unlock() and
   // Fl::lock() as needed to release control to the child threads
   // when it is safe to do so...
   Fl::lock();
@@ -155,12 +155,12 @@ int main(int argc, char **argv)
   fl_create_thread(prime_thread, prime_func, browser2);
   fl_create_thread(prime_thread, prime_func, browser2);
 
-  Fl::run();
+  fltk3::run();
 
   return 0;
 }
 #else
-#  include <FL/fl_ask.H>
+#  include <fltk3/ask.h>
 
 int main() {
   fl_alert("Sorry, threading not supported on this platform!");

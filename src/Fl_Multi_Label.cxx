@@ -70,7 +70,7 @@ void Fl_Multi_Label::label(fltk3::Widget* o) {
   o->label(fltk3::MULTI_LABEL, (const char*)this);
 }
 
-void Fl_Multi_Label::label(Fl_Menu_Item* o) {
+void Fl_Multi_Label::label(fltk3::MenuItem* o) {
   fltk3::set_labeltype(fltk3::MULTI_LABEL, multi_labeltype, multi_measure);
   o->label(fltk3::MULTI_LABEL, (const char*)this);
 }

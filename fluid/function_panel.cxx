@@ -39,18 +39,18 @@ extern void toggle_widgetbin_cb(fltk3::Widget*, void*);
 
 fltk3::DoubleWindow *function_panel=(fltk3::DoubleWindow *)0;
 
-Fl_Choice *f_public_member_choice=(Fl_Choice *)0;
+fltk3::Choice *f_public_member_choice=(fltk3::Choice *)0;
 
-Fl_Menu_Item menu_f_public_member_choice[] = {
+fltk3::MenuItem menu_f_public_member_choice[] = {
  {"private", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"public", 0,  0, (void*)(1), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"protected", 0,  0, (void*)(2), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Choice *f_public_choice=(Fl_Choice *)0;
+fltk3::Choice *f_public_choice=(fltk3::Choice *)0;
 
-Fl_Menu_Item menu_f_public_choice[] = {
+fltk3::MenuItem menu_f_public_choice[] = {
  {"local", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"global", 0,  0, (void*)(1), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
@@ -71,22 +71,22 @@ Fl_Text_Editor *f_comment_input=(Fl_Text_Editor *)0;
 fltk3::DoubleWindow* make_function_panel() {
   { function_panel = new fltk3::DoubleWindow(343, 232, "Function/Method Properties");
     { fltk3::Group* o = new fltk3::Group(10, 10, 270, 20);
-      { f_public_member_choice = new Fl_Choice(10, 10, 75, 20);
+      { f_public_member_choice = new fltk3::Choice(10, 10, 75, 20);
         f_public_member_choice->tooltip("Change member access attribute.");
         f_public_member_choice->down_box(fltk3::BORDER_BOX);
         f_public_member_choice->labelsize(11);
         f_public_member_choice->textsize(11);
         f_public_member_choice->when(fltk3::WHEN_CHANGED);
         f_public_member_choice->menu(menu_f_public_member_choice);
-      } // Fl_Choice* f_public_member_choice
-      { f_public_choice = new Fl_Choice(10, 10, 75, 20);
+      } // fltk3::Choice* f_public_member_choice
+      { f_public_choice = new fltk3::Choice(10, 10, 75, 20);
         f_public_choice->tooltip("Change widget accessibility.");
         f_public_choice->down_box(fltk3::BORDER_BOX);
         f_public_choice->labelsize(11);
         f_public_choice->textsize(11);
         f_public_choice->when(fltk3::WHEN_CHANGED);
         f_public_choice->menu(menu_f_public_choice);
-      } // Fl_Choice* f_public_choice
+      } // fltk3::Choice* f_public_choice
       { f_c_button = new fltk3::LightButton(95, 10, 80, 20, "C declaration");
         f_c_button->tooltip("Declare with a C interface instead of C++.");
         f_c_button->labelsize(11);
@@ -249,9 +249,9 @@ fltk3::DoubleWindow* make_codeblock_panel() {
 
 fltk3::DoubleWindow *declblock_panel=(fltk3::DoubleWindow *)0;
 
-Fl_Choice *declblock_public_choice=(Fl_Choice *)0;
+fltk3::Choice *declblock_public_choice=(fltk3::Choice *)0;
 
-Fl_Menu_Item menu_declblock_public_choice[] = {
+fltk3::MenuItem menu_declblock_public_choice[] = {
  {"in source code only", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"in header and source", 0,  0, (void*)(1), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
@@ -271,14 +271,14 @@ fltk3::DoubleWindow* make_declblock_panel() {
   { fltk3::DoubleWindow* o = declblock_panel = new fltk3::DoubleWindow(300, 135, "Declaration Block Properties");
     declblock_panel->labelsize(11);
     { fltk3::Group* o = new fltk3::Group(10, 10, 280, 20);
-      { declblock_public_choice = new Fl_Choice(10, 10, 140, 20);
+      { declblock_public_choice = new fltk3::Choice(10, 10, 140, 20);
         declblock_public_choice->tooltip("Change widget accessibility.");
         declblock_public_choice->down_box(fltk3::BORDER_BOX);
         declblock_public_choice->labelsize(11);
         declblock_public_choice->textsize(11);
         declblock_public_choice->when(fltk3::WHEN_NEVER);
         declblock_public_choice->menu(menu_declblock_public_choice);
-      } // Fl_Choice* declblock_public_choice
+      } // fltk3::Choice* declblock_public_choice
       { declblock_public_button_x = new fltk3::LightButton(10, 10, 60, 20, "public");
         declblock_public_button_x->tooltip("Make the declaration publicly accessible.");
         declblock_public_button_x->labelsize(11);
@@ -330,9 +330,9 @@ fltk3::DoubleWindow* make_declblock_panel() {
 
 fltk3::DoubleWindow *decl_panel=(fltk3::DoubleWindow *)0;
 
-Fl_Choice *decl_choice=(Fl_Choice *)0;
+fltk3::Choice *decl_choice=(fltk3::Choice *)0;
 
-Fl_Menu_Item menu_decl_choice[] = {
+fltk3::MenuItem menu_decl_choice[] = {
  {"in source file only", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"in header file only", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"\"static\" in source file", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
@@ -340,9 +340,9 @@ Fl_Menu_Item menu_decl_choice[] = {
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Choice *decl_class_choice=(Fl_Choice *)0;
+fltk3::Choice *decl_class_choice=(fltk3::Choice *)0;
 
-Fl_Menu_Item menu_decl_class_choice[] = {
+fltk3::MenuItem menu_decl_class_choice[] = {
  {"private", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"public", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"protected", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
@@ -364,18 +364,18 @@ fltk3::DoubleWindow* make_decl_panel() {
       { fltk3::Box* o = new fltk3::Box(200, 10, 80, 20);
         fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
-      { decl_choice = new Fl_Choice(10, 10, 185, 20);
+      { decl_choice = new fltk3::Choice(10, 10, 185, 20);
         decl_choice->down_box(fltk3::BORDER_BOX);
         decl_choice->labelsize(11);
         decl_choice->textsize(11);
         decl_choice->menu(menu_decl_choice);
-      } // Fl_Choice* decl_choice
-      { decl_class_choice = new Fl_Choice(10, 10, 75, 20);
+      } // fltk3::Choice* decl_choice
+      { decl_class_choice = new fltk3::Choice(10, 10, 75, 20);
         decl_class_choice->down_box(fltk3::BORDER_BOX);
         decl_class_choice->labelsize(11);
         decl_class_choice->textsize(11);
         decl_class_choice->menu(menu_decl_class_choice);
-      } // Fl_Choice* decl_class_choice
+      } // fltk3::Choice* decl_class_choice
       o->end();
     } // fltk3::Group* o
     { decl_input = new Fl_Input(10, 40, 320, 20, "This can be any declaration, like \"int x;\", an external symbol like \"exter\
@@ -422,9 +422,9 @@ n int foo();\", a #directive like \"#include <foo.h>\", a comment like \"//foo\
 
 fltk3::DoubleWindow *data_panel=(fltk3::DoubleWindow *)0;
 
-Fl_Choice *data_choice=(Fl_Choice *)0;
+fltk3::Choice *data_choice=(fltk3::Choice *)0;
 
-Fl_Menu_Item menu_data_choice[] = {
+fltk3::MenuItem menu_data_choice[] = {
  {"in source file only", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"in header file only", 0,  0, 0, 16, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"\"static\" in source file", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
@@ -432,9 +432,9 @@ Fl_Menu_Item menu_data_choice[] = {
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Choice *data_class_choice=(Fl_Choice *)0;
+fltk3::Choice *data_class_choice=(fltk3::Choice *)0;
 
-Fl_Menu_Item menu_data_class_choice[] = {
+fltk3::MenuItem menu_data_class_choice[] = {
  {"private", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"public", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"protected", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 11, 0},
@@ -460,18 +460,18 @@ fltk3::DoubleWindow* make_data_panel() {
       { fltk3::Box* o = new fltk3::Box(200, 10, 80, 20);
         fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
-      { data_choice = new Fl_Choice(10, 10, 185, 20);
+      { data_choice = new fltk3::Choice(10, 10, 185, 20);
         data_choice->down_box(fltk3::BORDER_BOX);
         data_choice->labelsize(11);
         data_choice->textsize(11);
         data_choice->menu(menu_data_choice);
-      } // Fl_Choice* data_choice
-      { data_class_choice = new Fl_Choice(10, 10, 75, 20);
+      } // fltk3::Choice* data_choice
+      { data_class_choice = new fltk3::Choice(10, 10, 75, 20);
         data_class_choice->down_box(fltk3::BORDER_BOX);
         data_class_choice->labelsize(11);
         data_class_choice->textsize(11);
         data_class_choice->menu(menu_data_class_choice);
-      } // Fl_Choice* data_class_choice
+      } // fltk3::Choice* data_class_choice
       o->end();
     } // fltk3::Group* o
     { data_input = new Fl_Input(10, 52, 320, 20, "Variable Name:");
@@ -865,7 +865,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(232, 5, 24, 24);
         o->tooltip("Slider");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Slider"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Slider"));
         o->image(pixmap[37]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(257, 5, 24, 24);
@@ -985,7 +985,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(400, 55, 24, 24);
         o->tooltip("Choice");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Choice"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Choice"));
         o->image(pixmap[15]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(425, 55, 24, 24);

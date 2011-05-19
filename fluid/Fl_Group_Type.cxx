@@ -138,7 +138,7 @@ void Fl_Group_Type::write_code2() {
 
 const char pack_type_name[] = "Fl_Pack";
 
-Fl_Menu_Item pack_type_menu[] = {
+fltk3::MenuItem pack_type_menu[] = {
   {"HORIZONTAL", 0, 0, (void*)Fl_Pack::HORIZONTAL},
   {"VERTICAL", 0, 0, (void*)Fl_Pack::VERTICAL},
   {0}};
@@ -416,7 +416,7 @@ fltk3::Widget *Fl_Scroll_Type::enter_live_mode(int) {
   return live_widget;
 }
 
-Fl_Menu_Item scroll_type_menu[] = {
+fltk3::MenuItem scroll_type_menu[] = {
   {"BOTH", 0, 0, 0/*(void*)Fl_Scroll::BOTH*/},
   {"HORIZONTAL", 0, 0, (void*)Fl_Scroll::HORIZONTAL},
   {"VERTICAL", 0, 0, (void*)Fl_Scroll::VERTICAL},

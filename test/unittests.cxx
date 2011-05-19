@@ -31,13 +31,13 @@
 // v1.0 - Submit for svn
 // v1.1 - Matthias seperated all tests into multiple source files for hopefully easier handling
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Hold_Browser.H>
-#include <FL/Fl_Help_View.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Box.H>
-#include <FL/fl_draw.H>		// fl_text_extents()
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Hold_Browser.h>
+#include <fltk3/Help_View.h>
+#include <fltk3/Group.h>
+#include <fltk3/Box.h>
+#include <fltk3/draw.h>		// fl_text_extents()
 
 // WINDOW/WIDGET SIZES
 #define MAINWIN_W	700				// main window w()
@@ -200,7 +200,7 @@ int main(int argc, char **argv) {
   // Select first test in browser, and show that test.
   browser->select(1);
   Browser_CB(browser,0);
-  return(Fl::run());
+  return(fltk3::run());
 }
 
 //

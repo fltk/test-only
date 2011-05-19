@@ -43,11 +43,11 @@
 //
 
 #include <stdlib.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Slider.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Return_Button.H>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <FL/fltk3::Slider.h>
+#include <fltk3/Box.h>
+#include <fltk3/Return_Button.h>
 
 int main(int argc, char **argv) {
   Fl_Double_Window *window = new Fl_Double_Window(400,320,argv[0]);
@@ -64,15 +64,15 @@ int main(int argc, char **argv) {
 "or changing the button that\n"
 "intesects them.")));
 
-  Fl_Slider *s;
-  s = new Fl_Slider(320,10,20,300,"Too_Big_Label");
+  fltk3::Slider *s;
+  s = new fltk3::Slider(320,10,20,300,"Too_Big_Label");
   s->align(0);
 
   new Fl_Button(20,270,100,30,"Button");
   new Fl_Return_Button(200,270,100,30,"Button");
 
   window->show(argc, argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

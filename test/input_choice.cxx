@@ -22,9 +22,9 @@
 //
 
 #include <stdio.h>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Input_Choice.H>
+#include <fltk3/Button.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Input_Choice.h>
 
 void buttcb(Fl_Widget*,void*data) {
     Fl_Input_Choice *in=(Fl_Input_Choice *)data;
@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
     win.end();
     win.resizable(win);
     win.show(argc, argv);
-    return Fl::run();
+    return fltk3::run();
 }
 
 

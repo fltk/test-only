@@ -33,7 +33,7 @@ static void cb_(Fl_Tabs* o, void* v) {
   propagate_load((fltk3::Group *)o,v);
 }
 
-Fl_Menu_Item menu_[] = {
+fltk3::MenuItem menu_[] = {
  {"   Image Alignment   ", 0,  0, (void*)(0xFFFFFFFF), 1, fltk3::NORMAL_LABEL, 2, 11, 0},
  {"image over text", 0,  0, (void*)(fltk3::ALIGN_IMAGE_OVER_TEXT), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"text over image", 0,  0, (void*)(fltk3::ALIGN_TEXT_OVER_IMAGE), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
@@ -43,7 +43,7 @@ Fl_Menu_Item menu_[] = {
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Menu_Item menu_1[] = {
+fltk3::MenuItem menu_1[] = {
  {"   Inside && Outside   ", 0,  0, (void*)(0xFFFFFFFF), 1, fltk3::NORMAL_LABEL, 2, 11, 0},
  {"top left", 0,  0, (void*)(fltk3::ALIGN_TOP_LEFT), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"top", 0,  0, (void*)(fltk3::ALIGN_TOP), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
@@ -70,14 +70,14 @@ Fl_Value_Input *widget_w_input=(Fl_Value_Input *)0;
 
 Fl_Value_Input *widget_h_input=(Fl_Value_Input *)0;
 
-Fl_Menu_Item menu_2[] = {
+fltk3::MenuItem menu_2[] = {
  {"private", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"public", 0,  0, (void*)(1), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"protected", 0,  0, (void*)(2), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Menu_Item menu_3[] = {
+fltk3::MenuItem menu_3[] = {
  {"local", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {"global", 0,  0, (void*)(1), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
  {0,0,0,0,0,0,0,0,0}
@@ -118,7 +118,7 @@ fltk3::DoubleWindow* make_widget_panel() {
             o->when(fltk3::WHEN_CHANGED);
             fltk3::Group::current()->resizable(o);
           } // Fl_Input* o
-          { Fl_Choice* o = new Fl_Choice(284, 40, 120, 20);
+          { fltk3::Choice* o = new fltk3::Choice(284, 40, 120, 20);
             o->tooltip("The label style for the widget.");
             o->box(fltk3::THIN_UP_BOX);
             o->down_box(fltk3::BORDER_BOX);
@@ -127,7 +127,7 @@ fltk3::DoubleWindow* make_widget_panel() {
             o->textsize(11);
             o->callback((fltk3::Callback*)labeltype_cb);
             o->menu(labeltypemenu);
-          } // Fl_Choice* o
+          } // fltk3::Choice* o
           o->end();
         } // fltk3::Group* o
         { fltk3::Group* o = new fltk3::Group(95, 65, 309, 20, "Image:");
@@ -226,20 +226,20 @@ fltk3::DoubleWindow* make_widget_panel() {
             o->callback((fltk3::Callback*)align_cb, (void*)(fltk3::ALIGN_BOTTOM));
             o->hide();
           } // fltk3::Button* o
-          { Fl_Choice* o = new Fl_Choice(165, 115, 110, 20);
+          { fltk3::Choice* o = new fltk3::Choice(165, 115, 110, 20);
             o->down_box(fltk3::BORDER_BOX);
             o->labelsize(11);
             o->textsize(11);
             o->callback((fltk3::Callback*)align_text_image_cb);
             o->menu(menu_);
-          } // Fl_Choice* o
-          { Fl_Choice* o = new Fl_Choice(280, 115, 85, 20);
+          } // fltk3::Choice* o
+          { fltk3::Choice* o = new fltk3::Choice(280, 115, 85, 20);
             o->down_box(fltk3::BORDER_BOX);
             o->labelsize(11);
             o->textsize(11);
             o->callback((fltk3::Callback*)align_position_cb);
             o->menu(menu_1);
-          } // Fl_Choice* o
+          } // fltk3::Choice* o
           { fltk3::Button* o = new fltk3::Button(370, 115, 20, 20, "@-3square");
             o->tooltip("Show the label inside the widget.");
             o->type(1);
@@ -516,7 +516,7 @@ ive to the origin at construction time");
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { Fl_Choice* o = new Fl_Choice(95, 40, 170, 20);
+          { fltk3::Choice* o = new fltk3::Choice(95, 40, 170, 20);
             o->tooltip("The style of the label text.");
             o->box(fltk3::THIN_UP_BOX);
             o->down_box(fltk3::BORDER_BOX);
@@ -526,7 +526,7 @@ ive to the origin at construction time");
             o->callback((fltk3::Callback*)labelfont_cb);
             fltk3::Group::current()->resizable(o);
             o->menu(fontmenu);
-          } // Fl_Choice* o
+          } // fltk3::Choice* o
           { Fl_Value_Input* o = new Fl_Value_Input(264, 40, 50, 20);
             o->tooltip("The size of the label text.");
             o->labelsize(11);
@@ -548,7 +548,7 @@ ive to the origin at construction time");
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { Fl_Choice* o = new Fl_Choice(95, 65, 219, 20);
+          { fltk3::Choice* o = new fltk3::Choice(95, 65, 219, 20);
             o->tooltip("The \"up\" box of the widget.");
             o->box(fltk3::THIN_UP_BOX);
             o->down_box(fltk3::BORDER_BOX);
@@ -558,7 +558,7 @@ ive to the origin at construction time");
             o->callback((fltk3::Callback*)box_cb);
             fltk3::Group::current()->resizable(o);
             o->menu(boxmenu);
-          } // Fl_Choice* o
+          } // fltk3::Choice* o
           { fltk3::Button* o = new fltk3::Button(314, 65, 90, 20, "Color");
             o->tooltip("The background color of the widget.");
             o->labelsize(11);
@@ -571,7 +571,7 @@ ive to the origin at construction time");
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { Fl_Choice* o = new Fl_Choice(95, 90, 219, 20);
+          { fltk3::Choice* o = new fltk3::Choice(95, 90, 219, 20);
             o->tooltip("The \"down\" box of the widget.");
             o->box(fltk3::THIN_UP_BOX);
             o->down_box(fltk3::BORDER_BOX);
@@ -581,7 +581,7 @@ ive to the origin at construction time");
             o->callback((fltk3::Callback*)down_box_cb);
             fltk3::Group::current()->resizable(o);
             o->menu(boxmenu);
-          } // Fl_Choice* o
+          } // fltk3::Choice* o
           { fltk3::Button* o = new fltk3::Button(314, 90, 90, 20, "Select Color");
             o->tooltip("The selection color of the widget.");
             o->labelsize(11);
@@ -594,7 +594,7 @@ ive to the origin at construction time");
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { Fl_Choice* o = new Fl_Choice(95, 115, 170, 20);
+          { fltk3::Choice* o = new fltk3::Choice(95, 115, 170, 20);
             o->tooltip("The value text style.");
             o->box(fltk3::DOWN_BOX);
             o->down_box(fltk3::BORDER_BOX);
@@ -604,7 +604,7 @@ ive to the origin at construction time");
             o->callback((fltk3::Callback*)textfont_cb);
             fltk3::Group::current()->resizable(o);
             o->menu(fontmenu);
-          } // Fl_Choice* o
+          } // fltk3::Choice* o
           { Fl_Value_Input* o = new Fl_Value_Input(264, 115, 50, 20);
             o->tooltip("The value text size.");
             o->labelsize(11);
@@ -646,14 +646,14 @@ ive to the origin at construction time");
             o->callback((fltk3::Callback*)subclass_cb, (void*)(4));
             fltk3::Group::current()->resizable(o);
           } // Fl_Input* o
-          { Fl_Choice* o = new Fl_Choice(265, 40, 140, 20);
+          { fltk3::Choice* o = new fltk3::Choice(265, 40, 140, 20);
             o->tooltip("The widget subtype.");
             o->box(fltk3::THIN_UP_BOX);
             o->down_box(fltk3::BORDER_BOX);
             o->labelsize(11);
             o->textsize(11);
             o->callback((fltk3::Callback*)subtype_cb);
-          } // Fl_Choice* o
+          } // fltk3::Choice* o
           o->end();
         } // fltk3::Group* o
         { fltk3::Group* o = new fltk3::Group(95, 65, 310, 20, "Name:");
@@ -669,7 +669,7 @@ ive to the origin at construction time");
             o->callback((fltk3::Callback*)name_cb);
             fltk3::Group::current()->resizable(o);
           } // Fl_Input* o
-          { Fl_Choice* o = new Fl_Choice(330, 65, 75, 20);
+          { fltk3::Choice* o = new fltk3::Choice(330, 65, 75, 20);
             o->tooltip("Change member access attribute.");
             o->down_box(fltk3::BORDER_BOX);
             o->labelsize(11);
@@ -677,8 +677,8 @@ ive to the origin at construction time");
             o->callback((fltk3::Callback*)name_public_member_cb);
             o->when(fltk3::WHEN_CHANGED);
             o->menu(menu_2);
-          } // Fl_Choice* o
-          { Fl_Choice* o = new Fl_Choice(330, 65, 75, 20);
+          } // fltk3::Choice* o
+          { fltk3::Choice* o = new fltk3::Choice(330, 65, 75, 20);
             o->tooltip("Change widget accessibility.");
             o->down_box(fltk3::BORDER_BOX);
             o->labelsize(11);
@@ -686,7 +686,7 @@ ive to the origin at construction time");
             o->callback((fltk3::Callback*)name_public_cb);
             o->when(fltk3::WHEN_CHANGED);
             o->menu(menu_3);
-          } // Fl_Choice* o
+          } // fltk3::Choice* o
           o->end();
         } // fltk3::Group* o
         { v_input[0] = new Fl_Input(95, 90, 310, 20, "Extra Code:");
@@ -749,7 +749,7 @@ access the Widget pointer and \'v\' to access the user value.");
             o->callback((fltk3::Callback*)user_data_cb);
             fltk3::Group::current()->resizable(o);
           } // Fl_Input* o
-          { Fl_Choice* o = new Fl_Choice(300, 270, 105, 20, "When:");
+          { fltk3::Choice* o = new fltk3::Choice(300, 270, 105, 20, "When:");
             o->tooltip("When to call the callback function.");
             o->box(fltk3::THIN_UP_BOX);
             o->down_box(fltk3::BORDER_BOX);
@@ -759,7 +759,7 @@ access the Widget pointer and \'v\' to access the user value.");
             o->callback((fltk3::Callback*)when_cb);
             o->when(fltk3::WHEN_CHANGED);
             o->menu(whenmenu);
-          } // Fl_Choice* o
+          } // fltk3::Choice* o
           o->end();
         } // fltk3::Group* o
         { fltk3::Group* o = new fltk3::Group(95, 295, 310, 20, "Type:");

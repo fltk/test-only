@@ -27,7 +27,7 @@
 
 // Warning: this menu code is quite a mess!
 
-// This file contains code for implementing Fl_Menu_Item, and for
+// This file contains code for implementing fltk3::MenuItem, and for
 // methods for bringing up popup menu hierarchies without using the
 // Fl_Menu_ widget.
 
@@ -39,8 +39,8 @@
 #include "flstring.h"
 
 /** Size of the menu starting from this menu item */
-int Fl_Menu_Item::size() const {
-  const Fl_Menu_Item* m = this;
+int fltk3::MenuItem::size() const {
+  const fltk3::MenuItem* m = this;
   int nest = 0;
   for (;;) {
     if (!m->text) {
@@ -55,7 +55,7 @@ int Fl_Menu_Item::size() const {
 
 // Advance a pointer to next visible or invisible item of a menu array, 
 // skipping the contents of submenus.
-static const Fl_Menu_Item* next_visible_or_not(const Fl_Menu_Item* m) {
+static const fltk3::MenuItem* next_visible_or_not(const fltk3::MenuItem* m) {
   int nest = 0;
   do {
     if (!m->text) {
@@ -75,9 +75,9 @@ static const Fl_Menu_Item* next_visible_or_not(const Fl_Menu_Item* m) {
   the contents of submenus and invisible items.  There are two calls so
   that you can advance through const and non-const data.
 */
-const Fl_Menu_Item* Fl_Menu_Item::next(int n) const {
+const fltk3::MenuItem* fltk3::MenuItem::next(int n) const {
   if (n < 0) return 0; // this is so selected==-1 returns NULL
-  const Fl_Menu_Item* m = this;
+  const fltk3::MenuItem* m = this;
   if (!m->visible()) n++;
   while (n) {
     m = next_visible_or_not(m);
@@ -95,14 +95,14 @@ static const Fl_Menu_* button=0;
 class menutitle : public Fl_Menu_Window {
   void draw();
 public:
-  const Fl_Menu_Item* menu;
-  menutitle(int X, int Y, int W, int H, const Fl_Menu_Item*);
+  const fltk3::MenuItem* menu;
+  menutitle(int X, int Y, int W, int H, const fltk3::MenuItem*);
 };
 
 // each vertical menu has one of these:
 class menuwindow : public Fl_Menu_Window {
   void draw();
-  void drawentry(const Fl_Menu_Item*, int i, int erase);
+  void drawentry(const fltk3::MenuItem*, int i, int erase);
 public:
   menutitle* title;
   int handle(int);
@@ -114,9 +114,9 @@ public:
   int selected;
   int drawn_selected;	// last redraw has this selected
   int shortcutWidth;
-  const Fl_Menu_Item* menu;
-  menuwindow(const Fl_Menu_Item* m, int X, int Y, int W, int H,
-	     const Fl_Menu_Item* picked, const Fl_Menu_Item* title,
+  const fltk3::MenuItem* menu;
+  menuwindow(const fltk3::MenuItem* m, int X, int Y, int W, int H,
+	     const fltk3::MenuItem* picked, const fltk3::MenuItem* title,
 	     int menubar = 0, int menubar_title = 0, int right_edge = 0);
   ~menuwindow();
   void set_selected(int);
@@ -135,7 +135,7 @@ extern char fltk3::draw_shortcut;
   Measures width of label, including effect of & characters. 
   Optionally, can get height if hp is not NULL. 
 */
-int Fl_Menu_Item::measure(int* hp, const Fl_Menu_* m) const {
+int fltk3::MenuItem::measure(int* hp, const Fl_Menu_* m) const {
   fltk3::Label l;
   l.value   = text;
   l.image   = 0;
@@ -153,7 +153,7 @@ int Fl_Menu_Item::measure(int* hp, const Fl_Menu_* m) const {
 }
 
 /** Draws the menu item in bounding box x,y,w,h, optionally selects the item. */
-void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
+void fltk3::MenuItem::draw(int x, int y, int w, int h, const Fl_Menu_* m,
 			int selected) const {
   fltk3::Label l;
   l.value   = text;
@@ -270,7 +270,7 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
   fltk3::draw_shortcut = 0;
 }
 
-menutitle::menutitle(int X, int Y, int W, int H, const Fl_Menu_Item* L) :
+menutitle::menutitle(int X, int Y, int W, int H, const fltk3::MenuItem* L) :
   Fl_Menu_Window(X, Y, W, H, 0) {
   end();
   set_modal();
@@ -280,8 +280,8 @@ menutitle::menutitle(int X, int Y, int W, int H, const Fl_Menu_Item* L) :
   if (L->labelcolor_ || fltk3::scheme() || L->labeltype_ > fltk3::NO_LABEL) clear_overlay();
 }
 
-menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
-		       const Fl_Menu_Item* picked, const Fl_Menu_Item* t, 
+menuwindow::menuwindow(const fltk3::MenuItem* m, int X, int Y, int Wp, int Hp,
+		       const fltk3::MenuItem* picked, const fltk3::MenuItem* t, 
 		       int menubar, int menubar_title, int right_edge)
   : Fl_Menu_Window(X, Y, Wp, Hp, 0)
 {
@@ -308,7 +308,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   selected = -1;
   {
     int j = 0;
-    if (m) for (const Fl_Menu_Item* m1=m; ; m1 = m1->next(), j++) {
+    if (m) for (const fltk3::MenuItem* m1=m; ; m1 = m1->next(), j++) {
       if (picked) {
         if (m1 == picked) {selected = j; picked = 0;}
         else if (m1 > picked) {selected = j-1; picked = 0; Wp = Hp = 0;}
@@ -435,7 +435,7 @@ void menuwindow::autoscroll(int n) {
 
 ////////////////////////////////////////////////////////////////
 
-void menuwindow::drawentry(const Fl_Menu_Item* m, int n, int eraseit) {
+void menuwindow::drawentry(const fltk3::MenuItem* m, int n, int eraseit) {
   if (!m) return; // this happens if -1 is selected item and redrawn
 
   int BW = fltk3::box_dx(box());
@@ -492,7 +492,7 @@ void menuwindow::draw() {
   if (damage() != fltk3::DAMAGE_CHILD) {	// complete redraw
     fltk3::draw_box(box(), 0, 0, w(), h(), button ? button->color() : color());
     if (menu) {
-      const Fl_Menu_Item* m; int j;
+      const fltk3::MenuItem* m; int j;
       for (m=menu->first(), j=0; m->text; j++, m = m->next()) drawentry(m, j, 0);
     }
   } else {
@@ -517,7 +517,7 @@ int menuwindow::find_selected(int mx, int my) {
   if (my < 0 || my >= h()) return -1;
   if (!itemheight) { // menubar
     int xx = 3; int n = 0;
-    const Fl_Menu_Item* m = menu ? menu->first() : 0;
+    const fltk3::MenuItem* m = menu ? menu->first() : 0;
     for (; ; m = m->next(), n++) {
       if (!m->text) return -1;
       xx += m->measure(0, button) + 16;
@@ -533,7 +533,7 @@ int menuwindow::find_selected(int mx, int my) {
 
 // return horizontal position for item n in a menubar:
 int menuwindow::titlex(int n) {
-  const Fl_Menu_Item* m;
+  const fltk3::MenuItem* m;
   int xx = 3;
   for (m=menu->first(); n--; m = m->next()) xx += m->measure(0, button) + 16;
   return xx;
@@ -553,7 +553,7 @@ int menuwindow::is_inside(int mx, int my) {
 }
 
 ////////////////////////////////////////////////////////////////
-// Fl_Menu_Item::popup(...)
+// fltk3::MenuItem::popup(...)
 
 // Because fltk3::grab() is done, all events go to one of the menu windows.
 // But the handle method needs to look at all of them to find out
@@ -575,7 +575,7 @@ int menuwindow::is_inside(int mx, int my) {
 #define MENU_PUSH_STATE 3 // mouse has been pushed on a menu title
 
 struct menustate {
-  const Fl_Menu_Item* current_item; // what mouse is pointing at
+  const fltk3::MenuItem* current_item; // what mouse is pointing at
   int menu_number; // which menu it is in
   int item_number; // which item in that menu, -1 if none
   menuwindow* p[20]; // pointers to menus
@@ -597,7 +597,7 @@ int menustate::is_inside(int mx, int my) {
   return 0;
 }
 
-static inline void setitem(const Fl_Menu_Item* i, int m, int n) {
+static inline void setitem(const fltk3::MenuItem* i, int m, int n) {
   p->current_item = i;
   p->menu_number = m;
   p->item_number = n;
@@ -618,7 +618,7 @@ static int forward(int menu) { // go to next item in menu menu if possible
   menuwindow &m = *(pp.p[menu]);
   int item = (menu == pp.menu_number) ? pp.item_number : m.selected;
   while (++item < m.numitems) {
-    const Fl_Menu_Item* m1 = m.menu->next(item);
+    const fltk3::MenuItem* m1 = m.menu->next(item);
     if (m1->activevisible()) {setitem(m1, menu, item); return 1;}
   }
   return 0;
@@ -630,7 +630,7 @@ static int backward(int menu) { // previous item in menu menu if possible
   int item = (menu == pp.menu_number) ? pp.item_number : m.selected;
   if (item < 0) item = m.numitems;
   while (--item >= 0) {
-    const Fl_Menu_Item* m1 = m.menu->next(item);
+    const fltk3::MenuItem* m1 = m.menu->next(item);
     if (m1->activevisible()) {setitem(m1, menu, item); return 1;}
   }
   return 0;
@@ -720,7 +720,7 @@ int menuwindow::early_hide_handle(int e) {
     {
       for (int mymenu = pp.nummenus; mymenu--;) {
 	menuwindow &mw = *(pp.p[mymenu]);
-	int item; const Fl_Menu_Item* m = mw.menu->find_shortcut(&item);
+	int item; const fltk3::MenuItem* m = mw.menu->find_shortcut(&item);
 	if (m) {
 	  setitem(m, mymenu, item);
 	  if (!m->submenu()) pp.state = DONE_STATE;
@@ -790,7 +790,7 @@ int menuwindow::early_hide_handle(int e) {
         || (pp.menubar && pp.current_item && !pp.current_item->submenu()) // button
 	) {
 #if 0 // makes the check/radio items leave the menu up
-      const Fl_Menu_Item* m = pp.current_item;
+      const fltk3::MenuItem* m = pp.current_item;
       if (m && button && (m->flags & (FL_MENU_TOGGLE|FL_MENU_RADIO))) {
 	((Fl_Menu_*)button)->picked(m);
 	pp.p[pp.menu_number]->redraw();
@@ -809,17 +809,17 @@ int menuwindow::early_hide_handle(int e) {
   Pulldown() is similar to popup(), but a rectangle is
   provided to position the menu.  The menu is made at least W
   wide, and the picked item is centered over the rectangle
-  (like Fl_Choice uses).  If picked is zero or not
+  (like fltk3::Choice uses).  If picked is zero or not
   found, the menu is aligned just below the rectangle (like a pulldown
   menu).
   <P>The title and menubar arguments are used
   internally by the Fl_Menu_Bar widget.
 */
-const Fl_Menu_Item* Fl_Menu_Item::pulldown(
+const fltk3::MenuItem* fltk3::MenuItem::pulldown(
     int X, int Y, int W, int H,
-    const Fl_Menu_Item* initial_item,
+    const fltk3::MenuItem* initial_item,
     const Fl_Menu_* pbutton,
-    const Fl_Menu_Item* t,
+    const fltk3::MenuItem* t,
     int menubar) const {
   fltk3::Group::current(0); // fix possible user error...
 
@@ -874,7 +874,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
 
     // get events:
     {
-      const Fl_Menu_Item* oldi = pp.current_item;
+      const fltk3::MenuItem* oldi = pp.current_item;
       fltk3::wait();
       if (pp.state == DONE_STATE) break; // done.
       if (pp.current_item == oldi) continue;
@@ -895,7 +895,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
 
   STARTUP:
     menuwindow& cw = *pp.p[pp.menu_number];
-    const Fl_Menu_Item* m = pp.current_item;
+    const fltk3::MenuItem* m = pp.current_item;
     if (!m->activevisible()) { // pointing at inactive item
       cw.set_selected(-1);
       initial_item = 0; // turn off startup code
@@ -905,10 +905,10 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
 
     if (m==initial_item) initial_item=0; // stop the startup code if item found
     if (m->submenu()) {
-      const Fl_Menu_Item* title = m;
-      const Fl_Menu_Item* menutable;
+      const fltk3::MenuItem* title = m;
+      const fltk3::MenuItem* menutable;
       if (m->flags&FL_SUBMENU) menutable = m+1;
-      else menutable = (Fl_Menu_Item*)(m)->user_data_;
+      else menutable = (fltk3::MenuItem*)(m)->user_data_;
       // figure out where new menu goes:
       int nX, nY;
       if (!pp.menu_number && pp.menubar) {	// menu off a menubar:
@@ -959,7 +959,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
       }
     }
   }
-  const Fl_Menu_Item* m = pp.current_item;
+  const fltk3::MenuItem* m = pp.current_item;
   delete pp.fakemenu;
   while (pp.nummenus>1) delete pp.p[--pp.nummenus];
   mw.hide();
@@ -989,13 +989,13 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
   \p button is a pointer to an Fl_Menu_ from which the color and
   boxtypes for the menu are pulled.  If NULL then defaults are used.
 */
-const Fl_Menu_Item* Fl_Menu_Item::popup(
+const fltk3::MenuItem* fltk3::MenuItem::popup(
   int X, int Y,
   const char* title,
-  const Fl_Menu_Item* picked,
+  const fltk3::MenuItem* picked,
   const Fl_Menu_* button
   ) const {
-  static Fl_Menu_Item dummy; // static so it is all zeros
+  static fltk3::MenuItem dummy; // static so it is all zeros
   dummy.text = title;
   return pulldown(X, Y, 0, 0, picked, button, title ? &dummy : 0);
 }
@@ -1010,10 +1010,10 @@ const Fl_Menu_Item* Fl_Menu_Item::popup(
   \param ip returns the index of the item, if \p ip is not NULL.
   \param require_alt if true: match only if Alt key is pressed.
 
-  \return found Fl_Menu_Item or NULL
+  \return found fltk3::MenuItem or NULL
 */
-const Fl_Menu_Item* Fl_Menu_Item::find_shortcut(int* ip, const bool require_alt) const {
-  const Fl_Menu_Item* m = this;
+const fltk3::MenuItem* fltk3::MenuItem::find_shortcut(int* ip, const bool require_alt) const {
+  const fltk3::MenuItem* m = this;
   if (m) for (int ii = 0; m->text; m = next_visible_or_not(m), ii++) {
     if (m->active()) {
       if (fltk3::test_shortcut(m->shortcut_)
@@ -1036,9 +1036,9 @@ const Fl_Menu_Item* Fl_Menu_Item::find_shortcut(int* ip, const bool require_alt)
   matches the shortcut() fields, not the letters in the title
   preceeded by '
 */
-const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
-  const Fl_Menu_Item* m = this;
-  const Fl_Menu_Item* ret = 0;
+const fltk3::MenuItem* fltk3::MenuItem::test_shortcut() const {
+  const fltk3::MenuItem* m = this;
+  const fltk3::MenuItem* ret = 0;
   if (m) for (; m->text; m = next_visible_or_not(m)) {
     if (m->active()) {
       // return immediately any match of an item in top level menu:
@@ -1046,8 +1046,8 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
       // if (fltk3::Widget::test_shortcut(m->text)) return m;
       // only return matches from lower menu if nothing found in top menu:
       if (!ret && m->submenu()) {
-	const Fl_Menu_Item* s =
-	  (m->flags&FL_SUBMENU) ? m+1:(const Fl_Menu_Item*)m->user_data_;
+	const fltk3::MenuItem* s =
+	  (m->flags&FL_SUBMENU) ? m+1:(const fltk3::MenuItem*)m->user_data_;
 	ret = s->test_shortcut();
       }
     }

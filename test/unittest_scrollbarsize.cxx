@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Browser.H>
-#include <FL/Fl_Tree.H>
-#include <FL/Fl_Value_Slider.H>
+#include <fltk3/Group.h>
+#include <fltk3/Browser.h>
+#include <fltk3/Tree.h>
+#include <fltk3/Value_Slider.h>
 
 //
 // Test new 1.3.x global vs. local scrollbar sizing

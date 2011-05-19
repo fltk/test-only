@@ -51,7 +51,7 @@
 static Fl_Preferences print_prefs(Fl_Preferences::USER, "fltk.org", "printers");
 static fltk3::DoubleWindow *print_panel=(fltk3::DoubleWindow *)0;
 static fltk3::Group *print_panel_controls=(fltk3::Group *)0;
-static Fl_Choice *print_choice=(Fl_Choice *)0;
+static fltk3::Choice *print_choice=(fltk3::Choice *)0;
 static fltk3::Button *print_properties=(fltk3::Button *)0;
 static fltk3::Box *print_status=(fltk3::Box *)0;
 static fltk3::RoundButton *print_all=(fltk3::RoundButton *)0;
@@ -61,14 +61,14 @@ static fltk3::CheckButton *print_collate_button=(fltk3::CheckButton *)0;
 static fltk3::Group *print_collate_group[2]={(fltk3::Group *)0};
 static Fl_Progress *print_progress=(Fl_Progress *)0;
 static fltk3::DoubleWindow *print_properties_panel=(fltk3::DoubleWindow *)0;
-static Fl_Choice *print_page_size=(Fl_Choice *)0;
+static fltk3::Choice *print_page_size=(fltk3::Choice *)0;
 static Fl_Int_Input *print_from=(Fl_Int_Input *)0;
 static Fl_Int_Input *print_to=(Fl_Int_Input *)0;
 static Fl_Spinner *print_copies=(Fl_Spinner *)0;
 
 static int print_start = 0;	// 1 if print_okay has been clicked
 
-static void cb_print_choice(Fl_Choice*, void*) {
+static void cb_print_choice(fltk3::Choice*, void*) {
   print_update_status();
 }
 
@@ -119,7 +119,7 @@ static void cb_print_properties_panel(fltk3::DoubleWindow*, void*) {
   print_update_status();
 }
 
-static Fl_Menu_Item menu_print_page_size[] = {
+static fltk3::MenuItem menu_print_page_size[] = {
  {"Letter", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"A4", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
@@ -249,12 +249,12 @@ static void cb_Use(fltk3::Button*, void*) {
 fltk3::DoubleWindow* make_print_panel() {
   { print_panel = new fltk3::DoubleWindow(465, 235, Fl_Printer::dialog_title);
     { print_panel_controls = new fltk3::Group(10, 10, 447, 216);
-      { print_choice = new Fl_Choice(133, 10, 181, 25, Fl_Printer::dialog_printer);
+      { print_choice = new fltk3::Choice(133, 10, 181, 25, Fl_Printer::dialog_printer);
         print_choice->down_box(fltk3::BORDER_BOX);
         print_choice->labelfont(1);
         print_choice->callback((fltk3::Callback*)cb_print_choice);
         print_choice->when(fltk3::WHEN_CHANGED);
-      } // Fl_Choice* print_choice
+      } // fltk3::Choice* print_choice
       { print_properties = new fltk3::Button(314, 10, 115, 25, Fl_Printer::dialog_properties);
         print_properties->callback((fltk3::Callback*)cb_print_properties);
       } // fltk3::Button* print_properties
@@ -452,11 +452,11 @@ fltk3::DoubleWindow* make_print_panel() {
   } // fltk3::DoubleWindow* print_panel
   { print_properties_panel = new fltk3::DoubleWindow(290, 130, Fl_Printer::property_title);
     print_properties_panel->callback((fltk3::Callback*)cb_print_properties_panel);
-    { print_page_size = new Fl_Choice(150, 10, 80, 25, Fl_Printer::property_pagesize);
+    { print_page_size = new fltk3::Choice(150, 10, 80, 25, Fl_Printer::property_pagesize);
       print_page_size->down_box(fltk3::BORDER_BOX);
       print_page_size->labelfont(fltk3::HELVETICA);
       print_page_size->menu(menu_print_page_size);
-    } // Fl_Choice* print_page_size
+    } // fltk3::Choice* print_page_size
     { fltk3::Group* o = new fltk3::Group(110, 45, 170, 40, Fl_Printer::property_mode);
       o->labelfont(fltk3::HELVETICA);
       o->align(fltk3::Align(fltk3::ALIGN_LEFT));

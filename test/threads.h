@@ -34,7 +34,7 @@
 // programs themselves.
 //
 // FLTK has no multithreaded support unless the main thread calls Fl::lock().
-// This main thread is the only thread allowed to call Fl::run() or Fl::wait().
+// This main thread is the only thread allowed to call fltk3::run() or Fl::wait().
 // From then on FLTK will be locked except when the main thread is actually
 // waiting for events from the user. Other threads must call Fl::lock() and
 // Fl::unlock() to surround calls to FLTK (such as to change widgets or

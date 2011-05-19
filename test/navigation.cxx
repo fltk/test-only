@@ -30,10 +30,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Light_Button.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/Input.h>
+#include <fltk3/Light_Button.h>
 
 #define WIDTH 600
 #define HEIGHT 300
@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
     window.insert(*(new Fl_Input(x,y,w,h)),j);
   }
   window.show(argc, argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

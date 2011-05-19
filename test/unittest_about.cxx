@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl_Help_View.H>
+#include <fltk3/Help_View.h>
 
 //
 //------- Introduction to FLTK drawing test -------

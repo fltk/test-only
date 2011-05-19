@@ -25,17 +25,17 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Enumerations.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Group.H>
-#include <FL/fl_ask.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Help_Dialog.H>
-#include <FL/Fl_Preferences.H>
-#include <FL/Fl_Sys_Menu_Bar.H>
-#include <FL/x.H>
+#include <fltk3/run.h>
+#include <FL/Enumerations.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Button.h>
+#include <fltk3/Group.h>
+#include <fltk3/ask.h>
+#include <fltk3/draw.h>
+#include <fltk3/Help_Dialog.h>
+#include <fltk3/Preferences.h>
+#include <fltk3/Sys_Menu_Bar.h>
+#include <FL/x.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -643,7 +643,7 @@ Sudoku::Sudoku()
   int j, k;
   Fl_Group *g;
   SudokuCell *cell;
-  static Fl_Menu_Item	items[] = {
+  static fltk3::MenuItem	items[] = {
     { "&Game", 0, 0, 0, FL_SUBMENU },
     { "&New Game", FL_COMMAND | 'n', new_cb, 0, FL_MENU_DIVIDER },
     { "&Check Game", FL_COMMAND | 'c', check_cb, 0, 0 },
@@ -1337,7 +1337,7 @@ main(int argc, char *argv[]) {
   s.load_game();
 
   // Run until the user quits...
-  return (Fl::run());
+  return (fltk3::run());
 }
 
 

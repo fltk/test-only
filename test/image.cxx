@@ -29,10 +29,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Image.H>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Button.h>
+#include <fltk3/Image.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -61,7 +61,7 @@ void make_image() {
   }
 }
 
-#include <FL/Fl_Toggle_Button.H>
+#include <fltk3/Toggle_Button.h>
 
 Fl_Toggle_Button *leftb,*rightb,*topb,*bottomb,*insideb,*overb,*inactb;
 Fl_Button *b;
@@ -81,7 +81,7 @@ void button_cb(Fl_Widget *,void *) {
   w->redraw();
 }
 
-#include <FL/x.H>
+#include <FL/x.h>
 #if !defined(WIN32) && !defined(__APPLE__)
 #include "list_visuals.cxx"
 #endif
@@ -153,7 +153,7 @@ int main(int argc, char **argv) {
   window.resizable(window);
   window.end();
   window.show(argc, argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

@@ -2987,8 +2987,8 @@ static void createAppleMenu(void)
 - (void) doCallback:(id)unused
 {
   int flRank = [self tag];
-  const Fl_Menu_Item *items = fl_sys_menu_bar->Fl_Menu_::menu();
-  const Fl_Menu_Item *item = items + flRank;
+  const fltk3::MenuItem *items = fl_sys_menu_bar->Fl_Menu_::menu();
+  const fltk3::MenuItem *item = items + flRank;
   if (item) {
     fl_sys_menu_bar->picked(item);
     if ( item->flags & FL_MENU_TOGGLE ) {	// update the menu toggle symbol
@@ -3017,7 +3017,7 @@ static void createAppleMenu(void)
 }
 - (void) directCallback:(id)unused
 {
-  Fl_Menu_Item *item = (Fl_Menu_Item *)[(NSData*)[self representedObject] bytes];
+  fltk3::MenuItem *item = (fltk3::MenuItem *)[(NSData*)[self representedObject] bytes];
   if ( item && item->callback() ) item->do_callback(NULL);
 }
 @end
@@ -3025,8 +3025,8 @@ static void createAppleMenu(void)
 void fl_mac_set_about( fltk3::Callback *cb, void *user_data, int shortcut) 
 {
   fl_open_display();
-  Fl_Menu_Item aboutItem;
-  memset(&aboutItem, 0, sizeof(Fl_Menu_Item));
+  fltk3::MenuItem aboutItem;
+  memset(&aboutItem, 0, sizeof(fltk3::MenuItem));
   aboutItem.callback(cb);
   aboutItem.user_data(user_data);
   aboutItem.shortcut(shortcut);
@@ -3040,7 +3040,7 @@ void fl_mac_set_about( fltk3::Callback *cb, void *user_data, int shortcut)
     Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setKeyEquivalent, item, aboutItem.shortcut() & 0xff);
     Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setKeyEquivalentModifierMask, item, aboutItem.shortcut() );
   }
-  NSData *pointer = [NSData dataWithBytes:&aboutItem length:sizeof(Fl_Menu_Item)];
+  NSData *pointer = [NSData dataWithBytes:&aboutItem length:sizeof(fltk3::MenuItem)];
   [item setRepresentedObject:pointer];
   [appleMenu insertItem:item atIndex:0];
   CFRelease(cfname);

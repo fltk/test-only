@@ -332,7 +332,7 @@ void name_cb(Fl_Input* o, void *v) {
   }
 }
 
-void name_public_member_cb(Fl_Choice* i, void* v) {
+void name_public_member_cb(fltk3::Choice* i, void* v) {
   if (v == LOAD) {
     i->value(current_widget->public_);
     if (current_widget->is_in_class()) i->show(); else i->hide();
@@ -357,7 +357,7 @@ void name_public_member_cb(Fl_Choice* i, void* v) {
   }
 }    
 
-void name_public_cb(Fl_Choice* i, void* v) {
+void name_public_cb(fltk3::Choice* i, void* v) {
   if (v == LOAD) {
     i->value(current_widget->public_>0);
     if (current_widget->is_in_class()) i->hide(); else i->show();
@@ -629,7 +629,7 @@ void wc_relative_cb(fltk3::LightButton *i, void *v) {
 // turn number to string or string to number for saving to file:
 // does not work for hierarchial menus!
 
-const char *item_name(Fl_Menu_Item* m, int i) {
+const char *item_name(fltk3::MenuItem* m, int i) {
   if (m) {
     while (m->label()) {
       if (m->argument() == i) return m->label();
@@ -640,7 +640,7 @@ const char *item_name(Fl_Menu_Item* m, int i) {
   sprintf(buffer, "%d", i);
   return buffer;
 }
-int item_number(Fl_Menu_Item* m, const char* i) {
+int item_number(fltk3::MenuItem* m, const char* i) {
   if (m && i) {
     if (i[0]=='F' && i[1]=='L' && i[2]=='_') i += 3;
     while (m->label()) {
@@ -653,7 +653,7 @@ int item_number(Fl_Menu_Item* m, const char* i) {
 
 #define ZERO_ENTRY 1000
 
-Fl_Menu_Item boxmenu[] = {
+fltk3::MenuItem boxmenu[] = {
 {"NO_BOX",0,0,(void *)ZERO_ENTRY},
 {"boxes",0,0,0,FL_SUBMENU},
 {"UP_BOX",0,0,(void *)fltk3::UP_BOX},
@@ -724,7 +724,7 @@ int boxnumber(const char *i) {
   return 0;
 }
 
-void box_cb(Fl_Choice* i, void *v) {
+void box_cb(fltk3::Choice* i, void *v) {
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
     int n = current_widget->o->box(); if (!n) n = ZERO_ENTRY;
@@ -748,7 +748,7 @@ void box_cb(Fl_Choice* i, void *v) {
   }
 }
 
-void down_box_cb(Fl_Choice* i, void *v) {
+void down_box_cb(fltk3::Choice* i, void *v) {
   if (v == LOAD) {
     int n;
     if (current_widget->is_button() && !current_widget->is_menu_item())
@@ -792,7 +792,7 @@ void down_box_cb(Fl_Choice* i, void *v) {
 
 ////////////////////////////////////////////////////////////////
 
-Fl_Menu_Item whenmenu[] = {
+fltk3::MenuItem whenmenu[] = {
   {"Never",0,0,(void*)ZERO_ENTRY},
   {"Release",0,0,(void*)fltk3::WHEN_RELEASE},
   {"Changed",0,0,(void*)fltk3::WHEN_CHANGED},
@@ -800,7 +800,7 @@ Fl_Menu_Item whenmenu[] = {
   //{"Release or Enter",0,0,(void*)(fltk3::WHEN_ENTER_KEY|fltk3::WHEN_RELEASE)},
   {0}};
 
-static Fl_Menu_Item whensymbolmenu[] = {
+static fltk3::MenuItem whensymbolmenu[] = {
   {"fltk3::WHEN_NEVER",0,0,(void*)(fltk3::WHEN_NEVER)},
   {"fltk3::WHEN_CHANGED",0,0,(void*)(fltk3::WHEN_CHANGED)},
   {"fltk3::WHEN_RELEASE",0,0,(void*)(fltk3::WHEN_RELEASE)},
@@ -809,7 +809,7 @@ static Fl_Menu_Item whensymbolmenu[] = {
   {"fltk3::WHEN_ENTER_KEY_ALWAYS",0,0,(void*)(fltk3::WHEN_ENTER_KEY_ALWAYS)},
   {0}};
 
-void when_cb(Fl_Choice* i, void *v) {
+void when_cb(fltk3::Choice* i, void *v) {
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
     int n = current_widget->o->when() & (~FL_WHEN_NOT_CHANGED);
@@ -961,7 +961,7 @@ void active_cb(fltk3::LightButton* i, void* v) {
 
 ////////////////////////////////////////////////////////////////
 
-Fl_Menu_Item fontmenu[] = {
+fltk3::MenuItem fontmenu[] = {
 {"Helvetica"},
 {"Helvetica bold"},
 {"Helvetica italic"},
@@ -980,7 +980,7 @@ Fl_Menu_Item fontmenu[] = {
 {"Zapf Dingbats"},
 {0}};
 
-void labelfont_cb(Fl_Choice* i, void *v) {
+void labelfont_cb(fltk3::Choice* i, void *v) {
   if (v == LOAD) {
     int n = current_widget->o->labelfont();
     if (n > 15) n = 0;
@@ -1023,7 +1023,7 @@ void labelsize_cb(Fl_Value_Input* i, void *v) {
 
 extern const char *ui_find_image_name;
 
-Fl_Menu_Item labeltypemenu[] = {
+fltk3::MenuItem labeltypemenu[] = {
   {"NORMAL_LABEL",0,0,(void*)0},
   {"SHADOW_LABEL",0,0,(void*)fltk3::SHADOW_LABEL},
   {"ENGRAVED_LABEL",0,0,(void*)fltk3::ENGRAVED_LABEL},
@@ -1031,7 +1031,7 @@ Fl_Menu_Item labeltypemenu[] = {
   {"NO_LABEL",0,0,(void*)(fltk3::NO_LABEL)},
 {0}};
 
-void labeltype_cb(Fl_Choice* i, void *v) {
+void labeltype_cb(fltk3::Choice* i, void *v) {
   if (v == LOAD) {
     int n;
     n = current_widget->o->labeltype();
@@ -1126,7 +1126,7 @@ static fltk3::Button* relative(fltk3::Widget* o, int i) {
   return (fltk3::Button*)(g->child(g->find(*o)+i));
 }
 
-static Fl_Menu_Item alignmenu[] = {
+static fltk3::MenuItem alignmenu[] = {
   {"fltk3::ALIGN_CENTER",0,0,(void*)(fltk3::ALIGN_CENTER)},
   {"fltk3::ALIGN_TOP",0,0,(void*)(fltk3::ALIGN_TOP)},
   {"fltk3::ALIGN_BOTTOM",0,0,(void*)(fltk3::ALIGN_BOTTOM)},
@@ -1184,17 +1184,17 @@ void align_cb(fltk3::Button* i, void *v) {
   }
 }
 
-void align_position_cb(Fl_Choice *i, void *v) {
+void align_position_cb(fltk3::Choice *i, void *v) {
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
-    Fl_Menu_Item *mi = (Fl_Menu_Item*)i->menu();
+    fltk3::MenuItem *mi = (fltk3::MenuItem*)i->menu();
     fltk3::Align b = current_widget->o->align() & fltk3::ALIGN_POSITION_MASK;
     for (;mi->text;mi++) {
       if ((fltk3::Align)(mi->argument())==b)
         i->value(mi);
     }
   } else {
-    const Fl_Menu_Item *mi = i->menu() + i->value();
+    const fltk3::MenuItem *mi = i->menu() + i->value();
     fltk3::Align b = fltk3::Align(fl_uintptr_t(mi->user_data()));
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
@@ -1213,17 +1213,17 @@ void align_position_cb(Fl_Choice *i, void *v) {
   }
 }
 
-void align_text_image_cb(Fl_Choice *i, void *v) {
+void align_text_image_cb(fltk3::Choice *i, void *v) {
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
-    Fl_Menu_Item *mi = (Fl_Menu_Item*)i->menu();
+    fltk3::MenuItem *mi = (fltk3::MenuItem*)i->menu();
     fltk3::Align b = current_widget->o->align() & fltk3::ALIGN_IMAGE_MASK;
     for (;mi->text;mi++) {
       if ((fltk3::Align)(mi->argument())==b)
         i->value(mi);
     }
   } else {
-    const Fl_Menu_Item *mi = i->menu() + i->value();
+    const fltk3::MenuItem *mi = i->menu() + i->value();
     fltk3::Align b = fltk3::Align(fl_uintptr_t(mi->user_data()));
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
@@ -1360,7 +1360,7 @@ void subclass_cb(Fl_Input* i, void* v) {
 // default widget returns 0 to indicate not-implemented:
 int Fl_Widget_Type::textstuff(int, fltk3::Font&, int&, fltk3::Color&) {return 0;}
 
-void textfont_cb(Fl_Choice* i, void* v) {
+void textfont_cb(fltk3::Choice* i, void* v) {
   fltk3::Font n; int s; fltk3::Color c;
   if (v == LOAD) {
     if (!current_widget->textstuff(0,n,s,c)) {i->deactivate(); return;}
@@ -1541,7 +1541,7 @@ void slider_size_cb(Fl_Value_Input* i, void* v) {
       i->parent()->show();
     if (current_widget->is_valuator()<2) {i->deactivate(); return;}
     i->activate();
-    i->value(((Fl_Slider*)(current_widget->o))->slider_size());
+    i->value(((fltk3::Slider*)(current_widget->o))->slider_size());
   } else {
     int mod = 0;
     double n = i->value();
@@ -1549,7 +1549,7 @@ void slider_size_cb(Fl_Value_Input* i, void* v) {
       if (o->selected && o->is_widget()) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
 	if (q->is_valuator()>=2) {
-	  ((Fl_Slider*)(q->o))->slider_size(n);
+	  ((fltk3::Slider*)(q->o))->slider_size(n);
 	  q->o->redraw();
 	  mod = 1;
 	}
@@ -1698,11 +1698,11 @@ void value_cb(Fl_Value_Input* i, void* v) {
 
 // subtypes:
 
-Fl_Menu_Item *Fl_Widget_Type::subtypes() {return 0;}
+fltk3::MenuItem *Fl_Widget_Type::subtypes() {return 0;}
 
-void subtype_cb(Fl_Choice* i, void* v) {
+void subtype_cb(fltk3::Choice* i, void* v) {
   if (v == LOAD) {
-    Fl_Menu_Item* m = current_widget->subtypes();
+    fltk3::MenuItem* m = current_widget->subtypes();
     if (!m) {i->deactivate(); return;}
     i->menu(m);
     int j;
@@ -1720,7 +1720,7 @@ void subtype_cb(Fl_Choice* i, void* v) {
   } else {
     int mod = 0;
     int n = int(i->mvalue()->argument());
-    Fl_Menu_Item* m = current_widget->subtypes();
+    fltk3::MenuItem* m = current_widget->subtypes();
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_widget()) {
         Fl_Widget_Type* q = (Fl_Widget_Type*)o;
@@ -1976,7 +1976,7 @@ int isdeclare(const char *c) {
 void Fl_Widget_Type::write_static() {
   const char* t = subclassname(this);
   if (!subclass() || (is_class() && !strncmp(t, "Fl_", 3))) {
-    write_declare("#include <fltk3/%s.H>", t);
+    write_declare("#include <fltk3/%s.h>", t);
   }
   for (int n=0; n < NUM_EXTRA_CODE; n++) {
     if (extra_code(n) && isdeclare(extra_code(n)))
@@ -2293,14 +2293,14 @@ void Fl_Widget_Type::write_widget_code() {
       write_c("%s%s->step(%g);\n", indent(), var, v->step());
     if (v->value()) {
       if (is_valuator()==3) { // Fl_Scrollbar::value(double) is nott available
-        write_c("%s%s->Fl_Slider::value(%g);\n", indent(), var, v->value());
+        write_c("%s%s->fltk3::Slider::value(%g);\n", indent(), var, v->value());
       } else {
         write_c("%s%s->value(%g);\n", indent(), var, v->value());
       }
     }
     if (is_valuator()>=2) {
-      double x = ((Fl_Slider*)v)->slider_size();
-      double y = ((Fl_Slider*)f)->slider_size();
+      double x = ((fltk3::Slider*)v)->slider_size();
+      double y = ((fltk3::Slider*)f)->slider_size();
       if (x != y) write_c("%s%s->slider_size(%g);\n", indent(), var, x);
     }
   }
@@ -2469,8 +2469,8 @@ void Fl_Widget_Type::write_properties() {
     if (v->step()!=f->step()) write_string("step %g",v->step());
     if (v->value()!=0.0) write_string("value %g",v->value());
     if (is_valuator()>=2) {
-      double x = ((Fl_Slider*)v)->slider_size();
-      double y = ((Fl_Slider*)f)->slider_size();
+      double x = ((fltk3::Slider*)v)->slider_size();
+      double y = ((fltk3::Slider*)f)->slider_size();
       if (x != y) write_string("slider_size %g", x);
     }
   }
@@ -2611,7 +2611,7 @@ void Fl_Widget_Type::read_property(const char *c) {
     if (is_valuator()) ((Fl_Valuator*)o)->value(strtod(read_word(),0));
     if (is_spinner()) ((Fl_Spinner*)o)->value(strtod(read_word(),0));
   } else if ((!strcmp(c,"slider_size")||!strcmp(c,"size"))&&is_valuator()==2) {
-    ((Fl_Slider*)o)->slider_size(strtod(read_word(),0));
+    ((fltk3::Slider*)o)->slider_size(strtod(read_word(),0));
   } else if (!strcmp(c,"textfont")) {
     if (sscanf(read_word(),"%d",&x) == 1) {f=(fltk3::Font)x; textstuff(1,f,s,cc);}
   } else if (!strcmp(c,"textsize")) {
@@ -2649,7 +2649,7 @@ void Fl_Widget_Type::read_property(const char *c) {
   }
 }
 
-Fl_Menu_Item boxmenu1[] = {
+fltk3::MenuItem boxmenu1[] = {
   // these extra ones are for looking up fdesign saved strings:
   {"NO_FRAME",		0,0,(void *)fltk3::NO_BOX},
   {"ROUNDED3D_UPBOX",	0,0,(void *)_FL_ROUND_UP_BOX},
@@ -2833,7 +2833,7 @@ void Fl_Widget_Type::copy_properties() {
     d->step(s->step());
     d->value(s->value());
     if (is_valuator()>=2) {
-      Fl_Slider *d = (Fl_Slider*)live_widget, *s = (Fl_Slider*)o;
+      fltk3::Slider *d = (fltk3::Slider*)live_widget, *s = (fltk3::Slider*)o;
       d->slider_size(s->slider_size());
     }
   }

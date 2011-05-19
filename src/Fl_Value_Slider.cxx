@@ -35,7 +35,7 @@
   position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
 */
 fltk3::ValueSlider::ValueSlider(int X, int Y, int W, int H, const char*l)
-: Fl_Slider(X,Y,W,H,l) {
+: fltk3::Slider(X,Y,W,H,l) {
   step(1,100);
   textfont_ = fltk3::HELVETICA;
   textsize_ = 10;
@@ -51,7 +51,7 @@ void fltk3::ValueSlider::draw() {
     syy += 25; bhh = 25; shh -= 25;
   }
   if (damage()&fltk3::DAMAGE_ALL) draw_box(box(),sxx,syy,sww,shh,color());
-  Fl_Slider::draw(sxx+fltk3::box_dx(box()),
+  fltk3::Slider::draw(sxx+fltk3::box_dx(box()),
 		  syy+fltk3::box_dy(box()),
 		  sww-fltk3::box_dw(box()),
 		  shh-fltk3::box_dh(box()));
@@ -74,7 +74,7 @@ int fltk3::ValueSlider::handle(int event) {
   } else {
     syy += 25; shh -= 25;
   }
-  return Fl_Slider::handle(event,
+  return fltk3::Slider::handle(event,
 			   sxx+fltk3::box_dx(box()),
 			   syy+fltk3::box_dy(box()),
 			   sww-fltk3::box_dw(box()),

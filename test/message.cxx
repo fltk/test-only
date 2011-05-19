@@ -25,9 +25,9 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/fl_ask.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/ask.h>
 #include <stdio.h>
 
 int main(int argc, char **argv) {

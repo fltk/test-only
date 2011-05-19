@@ -25,15 +25,15 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Hor_Value_Slider.H>
-#include <FL/Fl_Toggle_Button.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Choice.H>
-#include <FL/Fl_Pixmap.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Box.h>
+#include <FL/fltk3::HorValueSlider.h>
+#include <fltk3/Toggle_Button.h>
+#include <fltk3/Input.h>
+#include <fltk3/Choice.h>
+#include <fltk3/Pixmap.h>
+#include <fltk3/draw.h>
 
 #include "pixmaps/blast.xpm"
 
@@ -41,8 +41,8 @@ Fl_Toggle_Button *imageb, *imageovertextb, *imagenexttotextb, *imagebackdropb;
 Fl_Toggle_Button *leftb,*rightb,*topb,*bottomb,*insideb,*clipb,*wrapb;
 Fl_Box *text;
 Fl_Input *input;
-Fl_Hor_Value_Slider *fonts;
-Fl_Hor_Value_Slider *sizes;
+fltk3::HorValueSlider *fonts;
+fltk3::HorValueSlider *sizes;
 Fl_Double_Window *window;
 Fl_Pixmap *img;
 
@@ -114,7 +114,7 @@ void engraved_cb(Fl_Widget *,void *) {
   window->redraw();
 }
 
-Fl_Menu_Item choices[] = {
+fltk3::MenuItem choices[] = {
   {"FL_NORMAL_LABEL",0,normal_cb},
   {"FL_SYMBOL_LABEL",0,symbol_cb},
   {"FL_SHADOW_LABEL",0,shadow_cb},
@@ -132,14 +132,14 @@ int main(int argc, char **argv) {
   input->when(FL_WHEN_CHANGED);
   input->callback(input_cb);
 
-  sizes= new Fl_Hor_Value_Slider(50,350,350,25,"Size:");
+  sizes= new fltk3::HorValueSlider(50,350,350,25,"Size:");
   sizes->align(FL_ALIGN_LEFT);
   sizes->bounds(1,64);
   sizes->step(1);
   sizes->value(14);
   sizes->callback(size_cb);
 
-  fonts=new Fl_Hor_Value_Slider(50,325,350,25,"Font:");
+  fonts=new fltk3::HorValueSlider(50,325,350,25,"Font:");
   fonts->align(FL_ALIGN_LEFT);
   fonts->bounds(0,15);
   fonts->step(1);
@@ -172,7 +172,7 @@ int main(int argc, char **argv) {
   g->resizable(insideb);
   g->end();
 
-  Fl_Choice *c = new Fl_Choice(50,250,200,25);
+  fltk3::Choice *c = new fltk3::Choice(50,250,200,25);
   c->menu(choices);
 
   text= new Fl_Box(FL_FRAME_BOX,100,75,200,100,input->value());
@@ -180,7 +180,7 @@ int main(int argc, char **argv) {
   window->resizable(text);
   window->end();
   window->show(argc,argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

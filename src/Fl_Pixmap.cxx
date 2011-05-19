@@ -258,7 +258,7 @@ void Fl_Pixmap::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 
-void Fl_Pixmap::label(Fl_Menu_Item* m) {
+void Fl_Pixmap::label(fltk3::MenuItem* m) {
   m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }
 

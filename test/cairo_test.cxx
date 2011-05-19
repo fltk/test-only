@@ -29,10 +29,10 @@
 
 #ifdef FLTK_HAVE_CAIRO
 
-#include <FL/Fl_Cairo_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
+#include <fltk3/Cairo_Window.h>
+#include <fltk3/Box.h>
+#include <FL/x.h>
+#include <fltk3/draw.h>
 #include <FL/math.h>
 #define DEF_WIDTH 0.03
 
@@ -154,10 +154,10 @@ int main(int argc, char** argv) {
     window.set_draw_cb(my_cairo_draw_cb);
     window.show(argc,argv);
 
-    return Fl::run();
+    return fltk3::run();
 }
 #else
-#include <FL/fl_ask.H>
+#include <fltk3/ask.h>
 
 int main(int argc, char** argv) {
   fl_message("please configure fltk with CAIRO enabled (--enable-cairo or --enable-cairoext)"); 

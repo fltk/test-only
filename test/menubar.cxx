@@ -25,17 +25,17 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_Toggle_Button.H>
-#include <FL/Fl_Menu_Button.H>
-#include <FL/Fl_Choice.H>
+#include <fltk3/run.h>
+#include <fltk3/Box.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Menu_Bar.h>
+#include <fltk3/Toggle_Button.h>
+#include <fltk3/Menu_Button.h>
+#include <fltk3/Choice.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "../src/flstring.h"
-#include <FL/fl_draw.H>
+#include <fltk3/draw.h>
 
 void window_cb(Fl_Widget* w, void*) {
   puts("window callback called");
@@ -44,7 +44,7 @@ void window_cb(Fl_Widget* w, void*) {
 
 void test_cb(Fl_Widget* w, void*) {
   Fl_Menu_* mw = (Fl_Menu_*)w;
-  const Fl_Menu_Item* m = mw->mvalue();
+  const fltk3::MenuItem* m = mw->mvalue();
   if (!m)
     printf("NULL\n");
   else if (m->shortcut())
@@ -55,9 +55,9 @@ void test_cb(Fl_Widget* w, void*) {
 
 void quit_cb(Fl_Widget*, void*) {exit(0);}
 
-Fl_Menu_Item hugemenu[100];
+fltk3::MenuItem hugemenu[100];
 
-Fl_Menu_Item menutable[] = {
+fltk3::MenuItem menutable[] = {
   {"foo",0,0,0,FL_MENU_INACTIVE},
   {"&File",0,0,0,FL_SUBMENU},
     {"&Open",	FL_ALT+'o', 0, 0, FL_MENU_INACTIVE},
@@ -168,7 +168,7 @@ Fl_Menu_Item menutable[] = {
   {0}
 };
 
-Fl_Menu_Item pulldown[] = {
+fltk3::MenuItem pulldown[] = {
   {"Red",	FL_ALT+'r'},
   {"Green",	FL_ALT+'g'},
   {"Blue",	FL_ALT+'b'},
@@ -199,7 +199,7 @@ int main(int argc, char **argv) {
   mb1.tooltip("this is a menu button");
   mb1.callback(test_cb);
   menus[1] = &mb1;
-  Fl_Choice ch(300,100,80,25,"&choice:"); ch.menu(pulldown);
+  fltk3::Choice ch(300,100,80,25,"&choice:"); ch.menu(pulldown);
   ch.tooltip("this is a choice menu");
   ch.callback(test_cb);
   menus[2] = &ch;
@@ -215,7 +215,7 @@ int main(int argc, char **argv) {
   window.size_range(300,400,0,400);
   window.end();
   window.show(argc, argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

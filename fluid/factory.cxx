@@ -89,13 +89,13 @@ static Fl_Box_Type Fl_Box_type;
 ////////////////////////////////////////////////////////////////
 
 #include <fltk3/Button.h>
-static Fl_Menu_Item buttontype_menu[] = {
+static fltk3::MenuItem buttontype_menu[] = {
   {"Normal",0,0,(void*)0},
   {"Toggle",0,0,(void*)fltk3::TOGGLE_BUTTON},
   {"Radio",0,0,(void*)fltk3::RADIO_BUTTON},
   {0}};
 class Fl_Button_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return buttontype_menu;}
+  fltk3::MenuItem *subtypes() {return buttontype_menu;}
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Widget_Type::ideal_size(w, h);
@@ -208,14 +208,14 @@ extern int compile_only;
 #include <fltk3/CheckBrowser.h>
 #include <fltk3/FileBrowser.h>
 
-static Fl_Menu_Item browser_type_menu[] = {
+static fltk3::MenuItem browser_type_menu[] = {
   {"No Select",0,0,(void*)FL_NORMAL_BROWSER},
   {"Select",0,0,(void*)FL_SELECT_BROWSER},
   {"Hold",0,0,(void*)FL_HOLD_BROWSER},
   {"Multi",0,0,(void*)FL_MULTI_BROWSER},
   {0}};
 class fltk3::Browser_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return browser_type_menu;}
+  fltk3::MenuItem *subtypes() {return browser_type_menu;}
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
@@ -263,7 +263,7 @@ int fltk3::Browser_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& 
 }
 
 class Fl_Check_Browser_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return browser_type_menu;}
+  fltk3::MenuItem *subtypes() {return browser_type_menu;}
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
@@ -338,7 +338,7 @@ public:
 static Fl_Tree_Type Fl_Tree_type;
 
 class Fl_File_Browser_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return browser_type_menu;}
+  fltk3::MenuItem *subtypes() {return browser_type_menu;}
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
@@ -384,12 +384,12 @@ int Fl_File_Browser_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color&
 ////////////////////////////////////////////////////////////////
 
 #include <fltk3/Counter.h>
-static Fl_Menu_Item counter_type_menu[] = {
+static fltk3::MenuItem counter_type_menu[] = {
   {"Normal",0,0,(void*)FL_NORMAL_COUNTER},
   {"Simple",0,0,(void*)FL_SIMPLE_COUNTER},
   {0}};
 class Fl_Counter_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return counter_type_menu;}
+  fltk3::MenuItem *subtypes() {return counter_type_menu;}
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
   int is_valuator() const {return 1;}
   int pixmapID() { return 41; }
@@ -417,12 +417,12 @@ int Fl_Counter_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
 ////////////////////////////////////////////////////////////////
 
 #include <fltk3/Spinner.h>
-static Fl_Menu_Item spinner_type_menu[] = {
+static fltk3::MenuItem spinner_type_menu[] = {
   {"Integer",0,0,(void*)FL_INT_INPUT},
   {"Float",  0,0,(void*)FL_FLOAT_INPUT},
   {0}};
 class Fl_Spinner_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return spinner_type_menu;}
+  fltk3::MenuItem *subtypes() {return spinner_type_menu;}
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
   int pixmapID() { return 47; }
 public:
@@ -460,7 +460,7 @@ int Fl_Spinner_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
 ////////////////////////////////////////////////////////////////
 
 #include <fltk3/Input.h>
-static Fl_Menu_Item input_type_menu[] = {
+static fltk3::MenuItem input_type_menu[] = {
   {"Normal",0,0,(void*)FL_NORMAL_INPUT},
   {"Multiline",0,0,(void*)FL_MULTILINE_INPUT},
   {"Secret",0,0,(void*)FL_SECRET_INPUT},
@@ -468,7 +468,7 @@ static Fl_Menu_Item input_type_menu[] = {
   {"Float",0,0,(void*)FL_FLOAT_INPUT},
   {0}};
 class Fl_Input_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return input_type_menu;}
+  fltk3::MenuItem *subtypes() {return input_type_menu;}
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
@@ -518,7 +518,7 @@ int Fl_Input_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
 
 #include <fltk3/FileInput.h>
 class Fl_File_Input_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return 0;}
+  fltk3::MenuItem *subtypes() {return 0;}
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
@@ -719,13 +719,13 @@ static Fl_Adjuster_Type Fl_Adjuster_type;
 ////////////////////////////////////////////////////////////////
 
 #include <fltk3/Dial.h>
-static Fl_Menu_Item dial_type_menu[] = {
+static fltk3::MenuItem dial_type_menu[] = {
   {"Dot",0,0,(void*)0},
   {"Line",0,0,(void*)FL_LINE_DIAL},
   {"Fill",0,0,(void*)FL_FILL_DIAL},
   {0}};
 class Fl_Dial_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return dial_type_menu;}
+  fltk3::MenuItem *subtypes() {return dial_type_menu;}
   int is_valuator() const {return 1;}
 public:
   virtual const char *type_name() {return "Fl_Dial";}
@@ -740,12 +740,12 @@ static Fl_Dial_Type Fl_Dial_type;
 ////////////////////////////////////////////////////////////////
 
 #include <fltk3/Roller.h>
-static Fl_Menu_Item roller_type_menu[] = {
+static fltk3::MenuItem roller_type_menu[] = {
   {"Vertical",0,0,(void*)0},
   {"Horizontal",0,0,(void*)FL_HORIZONTAL},
   {0}};
 class Fl_Roller_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return roller_type_menu;}
+  fltk3::MenuItem *subtypes() {return roller_type_menu;}
   int is_valuator() const {return 1;}
 public:
   virtual const char *type_name() {return "Fl_Roller";}
@@ -760,7 +760,7 @@ static Fl_Roller_Type Fl_Roller_type;
 ////////////////////////////////////////////////////////////////
 
 #include <fltk3/Scrollbar.h>
-static Fl_Menu_Item slider_type_menu[] = {
+static fltk3::MenuItem slider_type_menu[] = {
   {"Vertical",0,0,(void*)fltk3::VERT_SLIDER},
   {"Horizontal",0,0,(void*)fltk3::HOR_SLIDER},
   {"Vert Fill",0,0,(void*)fltk3::VERT_FILL_SLIDER},
@@ -769,24 +769,24 @@ static Fl_Menu_Item slider_type_menu[] = {
   {"Horz Knob",0,0,(void*)fltk3::HOR_NICE_SLIDER},
   {0}};
 class Fl_Slider_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return slider_type_menu;}
+  fltk3::MenuItem *subtypes() {return slider_type_menu;}
   int is_valuator() const {return 2;}
 public:
-  virtual const char *type_name() {return "Fl_Slider";}
+  virtual const char *type_name() {return "fltk3::Slider";}
   virtual const char *alt_type_name() {return "fltk::Slider";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Slider(x,y,w,h,"slider:");}
+    return new fltk3::Slider(x,y,w,h,"slider:");}
   Fl_Widget_Type *_make() {return new Fl_Slider_Type();}
   int pixmapID() { return 37; }
 };
 static Fl_Slider_Type Fl_Slider_type;
 
-static Fl_Menu_Item scrollbar_type_menu[] = {
+static fltk3::MenuItem scrollbar_type_menu[] = {
   {"Vertical",0,0,(void*)fltk3::VERT_SLIDER},
   {"Horizontal",0,0,(void*)fltk3::HOR_SLIDER},
   {0}};
 class Fl_Scrollbar_Type : public Fl_Slider_Type {
-  Fl_Menu_Item *subtypes() {return scrollbar_type_menu;}
+  fltk3::MenuItem *subtypes() {return scrollbar_type_menu;}
   int is_valuator() const {return 3;}
 public:
   virtual const char *type_name() {return "Fl_Scrollbar";}
@@ -801,12 +801,12 @@ static Fl_Scrollbar_Type Fl_Scrollbar_type;
 ////////////////////////////////////////////////////////////////
 
 #include <fltk3/Output.h>
-static Fl_Menu_Item output_type_menu[] = {
+static fltk3::MenuItem output_type_menu[] = {
   {"Normal",0,0,(void*)FL_NORMAL_OUTPUT},
   {"Multiline",0,0,(void*)FL_MULTILINE_OUTPUT},
   {0}};
 class Fl_Output_Type : public Fl_Input_Type {
-  Fl_Menu_Item *subtypes() {return output_type_menu;}
+  fltk3::MenuItem *subtypes() {return output_type_menu;}
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Output *myo = (Fl_Output *)o;
@@ -1008,7 +1008,7 @@ static void cb(fltk3::Widget *, void *v) {
   undo_resume();
 }
 
-Fl_Menu_Item New_Menu[] = {
+fltk3::MenuItem New_Menu[] = {
 {"Code",0,0,0,FL_SUBMENU},
   {"Function/Method",0,cb,(void*)&Fl_Function_type},
   {"Code",0,cb,(void*)&Fl_Code_type},
@@ -1082,7 +1082,7 @@ Fl_Menu_Item New_Menu[] = {
 #include <fltk3/MultiLabel.h>
 
 // modify a menuitem to display an icon in front of the label
-static void make_iconlabel( Fl_Menu_Item *mi, Fl_Image *ic, const char *txt )
+static void make_iconlabel( fltk3::MenuItem *mi, Fl_Image *ic, const char *txt )
 {
   if (ic) {
     char *t1 = new char[strlen(txt)+6];
@@ -1103,7 +1103,7 @@ static void make_iconlabel( Fl_Menu_Item *mi, Fl_Image *ic, const char *txt )
 
 void fill_in_New_Menu() {
   for (unsigned i = 0; i < sizeof(New_Menu)/sizeof(*New_Menu); i++) {
-    Fl_Menu_Item *m = New_Menu+i;
+    fltk3::MenuItem *m = New_Menu+i;
     if (m->user_data()) {
       Fl_Type *t = (Fl_Type*)m->user_data();
       if (m->text) {
@@ -1124,7 +1124,7 @@ Fl_Type *Fl_Type_make(const char *tn) {
   reading_file = 1; // makes labels be null
   Fl_Type *r = 0;
   for (unsigned i = 0; i < sizeof(New_Menu)/sizeof(*New_Menu); i++) {
-    Fl_Menu_Item *m = New_Menu+i;
+    fltk3::MenuItem *m = New_Menu+i;
     if (!m->user_data()) continue;
     Fl_Type *t = (Fl_Type*)(m->user_data());
     if (!strcasecmp(tn,t->type_name())) {r = t->make(); break;}

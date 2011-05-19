@@ -385,7 +385,7 @@ public:
   void resizable(uchar v);
 
   virtual int textstuff(int what, fltk3::Font &, int &, fltk3::Color &);
-  virtual Fl_Menu_Item *subtypes();
+  virtual fltk3::MenuItem *subtypes();
 
   virtual int is_widget() const;
   virtual int is_public() const;
@@ -453,10 +453,10 @@ public:
 };
 
 extern const char pack_type_name[];
-extern Fl_Menu_Item pack_type_menu[];
+extern fltk3::MenuItem pack_type_menu[];
 
 class Fl_Pack_Type : public Fl_Group_Type {
-  Fl_Menu_Item *subtypes() {return pack_type_menu;}
+  fltk3::MenuItem *subtypes() {return pack_type_menu;}
 public:
   virtual const char *type_name() {return pack_type_name;}
   virtual const char *alt_type_name() {return "fltk::PackedGroup";}
@@ -502,10 +502,10 @@ public:
 };
 
 extern const char scroll_type_name[];
-extern Fl_Menu_Item scroll_type_menu[];
+extern fltk3::MenuItem scroll_type_menu[];
 
 class Fl_Scroll_Type : public Fl_Group_Type {
-  Fl_Menu_Item *subtypes() {return scroll_type_menu;}
+  fltk3::MenuItem *subtypes() {return scroll_type_menu;}
 public:
   virtual const char *type_name() {return scroll_type_name;}
   virtual const char *alt_type_name() {return "fltk::ScrollGroup";}
@@ -538,12 +538,12 @@ public:
   int pixmapID() { return 21; }
 };
 
-extern Fl_Menu_Item window_type_menu[];
+extern fltk3::MenuItem window_type_menu[];
 
 class Fl_Window_Type : public Fl_Widget_Type {
 protected:
 
-  Fl_Menu_Item* subtypes() {return window_type_menu;}
+  fltk3::MenuItem* subtypes() {return window_type_menu;}
 
   friend class Overlay_Window;
   int mx,my;		// mouse position during dragging
@@ -625,11 +625,11 @@ public:
 };
 
 
-extern Fl_Menu_Item menu_item_type_menu[];
+extern fltk3::MenuItem menu_item_type_menu[];
 
 class Fl_Menu_Item_Type : public Fl_Widget_Type {
 public:
-  Fl_Menu_Item* subtypes() {return menu_item_type_menu;}
+  fltk3::MenuItem* subtypes() {return menu_item_type_menu;}
   const char* type_name() {return "MenuItem";}
   const char* alt_type_name() {return "fltk::Item";}
   Fl_Type* make();
@@ -648,7 +648,7 @@ public:
 
 class Fl_Submenu_Type : public Fl_Menu_Item_Type {
 public:
-  Fl_Menu_Item* subtypes() {return 0;}
+  fltk3::MenuItem* subtypes() {return 0;}
   const char* type_name() {return "Submenu";}
   const char* alt_type_name() {return "fltk::ItemGroup";}
   int is_parent() const {return 1;}
@@ -683,7 +683,7 @@ public:
   virtual void build_menu();
   Fl_Menu_Type() : Fl_Widget_Type() {menusize = 0;}
   ~Fl_Menu_Type() {
-    if (menusize) delete[] (Fl_Menu_Item*)(((Fl_Menu_*)o)->menu());
+    if (menusize) delete[] (fltk3::MenuItem*)(((Fl_Menu_*)o)->menu());
   }
   void add_child(Fl_Type*, Fl_Type*) {build_menu();}
   void move_child(Fl_Type*, Fl_Type*) {build_menu();}
@@ -693,11 +693,11 @@ public:
   void copy_properties();
 };
 
-extern Fl_Menu_Item button_type_menu[];
+extern fltk3::MenuItem button_type_menu[];
 
 #include <fltk3/MenuButton.h>
 class Fl_Menu_Button_Type : public Fl_Menu_Type {
-  Fl_Menu_Item *subtypes() {return button_type_menu;}
+  fltk3::MenuItem *subtypes() {return button_type_menu;}
 public:
   virtual void ideal_size(int &w, int &h) {
     Fl_Widget_Type::ideal_size(w, h);
@@ -714,7 +714,7 @@ public:
   int pixmapID() { return 26; }
 };
 
-extern Fl_Menu_Item dummymenu[];
+extern fltk3::MenuItem dummymenu[];
 
 #include <fltk3/Choice.h>
 class Fl_Choice_Type : public Fl_Menu_Type {
@@ -730,10 +730,10 @@ public:
     if (h < 15) h = 15;
     if (w < (15 + h)) w = 15 + h;
   }
-  virtual const char *type_name() {return "Fl_Choice";}
+  virtual const char *type_name() {return "fltk3::Choice";}
   virtual const char *alt_type_name() {return "fltk::Choice";}
   fltk3::Widget *widget(int X,int Y,int W,int H) {
-    Fl_Choice *myo = new Fl_Choice(X,Y,W,H,"choice:");
+    fltk3::Choice *myo = new fltk3::Choice(X,Y,W,H,"choice:");
     myo->menu(dummymenu);
     return myo;
   }

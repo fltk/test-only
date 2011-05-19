@@ -34,8 +34,8 @@
 //
 
 #if defined(WIN32) || defined(__APPLE__)
-#include <FL/Fl.H>
-#include <FL/fl_message.H>
+#include <fltk3/run.h>
+#include <fltk3/message.h>
 
 int main(int, char**) {
   fl_alert("Currently, this program works only under X.");

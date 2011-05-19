@@ -42,8 +42,8 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/draw.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -56,7 +56,7 @@ uchar *ibuffer;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Window.H>
+#include <fltk3/Window.h>
 int mono;
 
 class image_window : public Fl_Window {
@@ -74,7 +74,7 @@ void image_window::draw() {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/x.H>
+#include <FL/x.h>
 #include "list_visuals.cxx"
 
 ////////////////////////////////////////////////////////////////
@@ -124,7 +124,7 @@ int main(int argc, char ** argv) {
   }
 
   window->show(argc,argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 ////////////////////////////////////////////////////////////////

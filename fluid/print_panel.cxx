@@ -38,9 +38,9 @@ fltk3::DoubleWindow *print_panel=(fltk3::DoubleWindow *)0;
 
 fltk3::Group *print_panel_controls=(fltk3::Group *)0;
 
-Fl_Choice *print_choice=(Fl_Choice *)0;
+fltk3::Choice *print_choice=(fltk3::Choice *)0;
 
-static void cb_print_choice(Fl_Choice*, void*) {
+static void cb_print_choice(fltk3::Choice*, void*) {
   print_update_status();
 }
 
@@ -114,9 +114,9 @@ static void cb_print_properties_panel(fltk3::DoubleWindow*, void*) {
 print_update_status();
 }
 
-Fl_Choice *print_page_size=(Fl_Choice *)0;
+fltk3::Choice *print_page_size=(fltk3::Choice *)0;
 
-Fl_Menu_Item menu_print_page_size[] = {
+fltk3::MenuItem menu_print_page_size[] = {
  {"Letter", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {"A4", 0,  0, 0, 0, fltk3::NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0}
@@ -246,12 +246,12 @@ static void cb_Use(fltk3::Button*, void*) {
 fltk3::DoubleWindow* make_print_panel() {
   { print_panel = new fltk3::DoubleWindow(465, 235, "Print");
     { print_panel_controls = new fltk3::Group(10, 10, 447, 216);
-      { print_choice = new Fl_Choice(113, 10, 181, 25, "Printer:");
+      { print_choice = new fltk3::Choice(113, 10, 181, 25, "Printer:");
         print_choice->down_box(fltk3::BORDER_BOX);
         print_choice->labelfont(1);
         print_choice->callback((fltk3::Callback*)cb_print_choice);
         print_choice->when(fltk3::WHEN_CHANGED);
-      } // Fl_Choice* print_choice
+      } // fltk3::Choice* print_choice
       { print_properties = new fltk3::Button(294, 10, 105, 25, "Properties...");
         print_properties->callback((fltk3::Callback*)cb_print_properties);
       } // fltk3::Button* print_properties
@@ -449,11 +449,11 @@ fltk3::DoubleWindow* make_print_panel() {
   } // fltk3::DoubleWindow* print_panel
   { print_properties_panel = new fltk3::DoubleWindow(290, 130, "Printer Properties");
     print_properties_panel->callback((fltk3::Callback*)cb_print_properties_panel);
-    { print_page_size = new Fl_Choice(110, 10, 80, 25, "Page Size:");
+    { print_page_size = new fltk3::Choice(110, 10, 80, 25, "Page Size:");
       print_page_size->down_box(fltk3::BORDER_BOX);
       print_page_size->labelfont(1);
       print_page_size->menu(menu_print_page_size);
-    } // Fl_Choice* print_page_size
+    } // fltk3::Choice* print_page_size
     { fltk3::Group* o = new fltk3::Group(110, 45, 170, 40, "Output Mode:");
       o->labelfont(1);
       o->align(fltk3::Align(fltk3::ALIGN_LEFT));

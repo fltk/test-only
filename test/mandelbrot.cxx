@@ -26,9 +26,9 @@
 //
 
 #include "mandelbrot_ui.h"
-#include <FL/fl_draw.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Printer.H>
+#include <fltk3/draw.h>
+#include <fltk3/Button.h>
+#include <fltk3/Printer.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
   Fl::visual(FL_RGB);
   mbrot.window->callback(window_callback);
   mbrot.window->show(argc,argv);
-  Fl::run();
+  fltk3::run();
   return 0;
 }
 

@@ -26,7 +26,7 @@
 //
 
 #include <config.h>
-#include <FL/Fl.H>
+#include <fltk3/run.h>
 #include "CubeViewUI.h"
 
 int
@@ -40,7 +40,7 @@ main(int argc, char **argv) {
 
     cvui->show(argc, argv);
     
-    return Fl::run();
+    return fltk3::run();
 }
 
 

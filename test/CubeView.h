@@ -28,12 +28,12 @@
 #ifndef CUBEVIEW_H
 #define CUBEVIEW_H 1
 #include <config.h>
-#include <FL/Fl.H>
+#include <fltk3/run.h>
 #if HAVE_GL
-#  include <FL/Fl_Gl_Window.H>
+#  include <fltk3/Gl_Window.h>
 #  include <FL/gl.h>
 #else
-#  include <FL/Fl_Box.H>
+#  include <fltk3/Box.h>
 #endif /* HAVE_GL */
 
 #include <stdlib.h>

@@ -77,7 +77,7 @@ class FLTK3_EXPORT Fl_Input_Choice : public fltk3::Group {
   static void menu_cb(fltk3::Widget*, void *data) { 
     Fl_Input_Choice *o=(Fl_Input_Choice *)data;
     fltk3::WidgetTracker wp(o);
-    const Fl_Menu_Item *item = o->menubutton()->mvalue();
+    const fltk3::MenuItem *item = o->menubutton()->mvalue();
     if (item && item->flags & (FL_SUBMENU|FL_SUBMENU_POINTER)) return;	// ignore submenus
     if (!strcmp(o->inp_->value(), o->menu_->text()))
     {
@@ -171,10 +171,10 @@ public:
   fltk3::Boxtype down_box() const { return (menu_->down_box()); }
   /** Sets the box type of the menu button */
   void down_box(fltk3::Boxtype b) { menu_->down_box(b); }
-  /** Gets the Fl_Menu_Item array used for the menu. */
-  const Fl_Menu_Item *menu() { return (menu_->menu()); }
-  /** Sets the Fl_Menu_Item array used for the menu. */
-  void menu(const Fl_Menu_Item *m) { menu_->menu(m); }
+  /** Gets the fltk3::MenuItem array used for the menu. */
+  const fltk3::MenuItem *menu() { return (menu_->menu()); }
+  /** Sets the fltk3::MenuItem array used for the menu. */
+  void menu(const fltk3::MenuItem *m) { menu_->menu(m); }
   void resize(int X, int Y, int W, int H) {
     fltk3::Group::resize(X,Y,W,H);
     inp_->resize(inp_x(), inp_y(), inp_w(), inp_h());

@@ -29,13 +29,13 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Light_Button.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Scroll.H>
-#include <FL/Fl_Value_Slider.H>
-#include <FL/Fl_Pack.H>
+#include <fltk3/run.h>
+#include <fltk3/Button.h>
+#include <fltk3/Light_Button.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Scroll.h>
+#include <fltk3/Value_Slider.h>
+#include <fltk3/Pack.h>
 
 Fl_Pack *pack;
 Fl_Scroll *scroll;
@@ -112,7 +112,7 @@ int main(int argc, char **argv) {
  w->end();
  }
  w->show(argc, argv);
- return Fl::run();
+ return fltk3::run();
 }
 
 //

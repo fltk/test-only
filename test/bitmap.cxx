@@ -26,10 +26,10 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/DoubleWindow.H>
-#include <fltk3/Button.H>
-#include <fltk3/ToggleButton.H>
-#include <fltk3/Bitmap.H>
+#include <fltk3/DoubleWindow.h>
+#include <fltk3/Button.h>
+#include <fltk3/ToggleButton.h>
+#include <fltk3/Bitmap.h>
 #include <stdio.h>
 
 #define sorceress_width 75

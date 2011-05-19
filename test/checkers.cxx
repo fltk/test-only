@@ -864,12 +864,12 @@ int VT100main() {
 // fltk interface:
 #ifdef FLTK
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Bitmap.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Menu_Item.H>
-#include <FL/fl_ask.H>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Bitmap.h>
+#include <fltk3/draw.h>
+#include <fltk3/Menu_Item.h>
+#include <fltk3/ask.h>
 
 //----------------------------------------------------------------
 // old 4-level NeXT images have been seperated into bitmaps so they
@@ -1092,12 +1092,12 @@ void Board::computer_move(int help) {
   if (!autoplay) cursor(FL_CURSOR_DEFAULT);
 }
 
-extern Fl_Menu_Item menu[];
-extern Fl_Menu_Item busymenu[];
+extern fltk3::MenuItem menu[];
+extern fltk3::MenuItem busymenu[];
 
 int Board::handle(int e) {
   if (busy) {
-    const Fl_Menu_Item* m;
+    const fltk3::MenuItem* m;
     switch(e) {
     case FL_PUSH:
       m = busymenu->popup(Fl::event_x(), Fl::event_y(), 0, 0, 0);
@@ -1114,7 +1114,7 @@ int Board::handle(int e) {
   node *t, *n;
   static int deltax, deltay;
   int dist;
-  const Fl_Menu_Item* m;
+  const fltk3::MenuItem* m;
   switch (e) {
   case FL_PUSH:
     if (Fl::event_button() > 1) {
@@ -1173,7 +1173,7 @@ int FLTKmain(int argc, char** argv) {
   b.color(FL_BACKGROUND_COLOR);
   b.callback(quit_cb);
   b.show(argc,argv);
-  return Fl::run();
+  return fltk3::run();
 } 
 
 void autoplay_cb(Fl_Widget*bp, void*) {
@@ -1184,7 +1184,7 @@ void autoplay_cb(Fl_Widget*bp, void*) {
   while (autoplay) {b->computer_move(0); b->computer_move(0);}
 }
 
-#include <FL/Fl_Box.H>
+#include <fltk3/Box.h>
 Fl_Window *copyright_window;
 void copyright_cb(Fl_Widget*, void*) {
   if (!copyright_window) {
@@ -1202,13 +1202,13 @@ void copyright_cb(Fl_Widget*, void*) {
 
 void debug_cb(Fl_Widget*, void*v) {
   debug = !debug;
-  ((Fl_Menu_Item*)v)->flags =
+  ((fltk3::MenuItem*)v)->flags =
     debug ? FL_MENU_TOGGLE|FL_MENU_VALUE : FL_MENU_TOGGLE;
 }
 
 void forced_cb(Fl_Widget*b, void*v) {
   forcejumps = !forcejumps;
-  ((Fl_Menu_Item*)v)->flags =
+  ((fltk3::MenuItem*)v)->flags =
     forcejumps ? FL_MENU_TOGGLE|FL_MENU_VALUE : FL_MENU_TOGGLE;
   killnode(root->son); root->son = 0;
   if (showlegal) {expandnode(root); b->redraw();}
@@ -1252,14 +1252,14 @@ void undo_cb(Fl_Widget*pb, void*) {
 
 //--------------------------
 
-#include <FL/Fl_Slider.H>
-#include <FL/Fl_Value_Output.H>
+#include <FL/fltk3::Slider.h>
+#include <fltk3/Value_Output.h>
 
 Fl_Window *intel_window;
 Fl_Value_Output *intel_output;
 
 void intel_slider_cb(Fl_Widget*w, void*) {
-  double v = ((Fl_Slider*)w)->value();
+  double v = ((fltk3::Slider*)w)->value();
   int n = int(v*v);
   intel_output->value(n);
   maxevaluate = maxnodes = n;
@@ -1268,7 +1268,7 @@ void intel_slider_cb(Fl_Widget*w, void*) {
 void intel_cb(Fl_Widget*, void*) {
   if (!intel_window) {
     intel_window = new Fl_Window(200,25,"Checkers Intelligence");
-    Fl_Slider* s = new Fl_Slider(60,0,140,25);
+    fltk3::Slider* s = new fltk3::Slider(60,0,140,25);
     s->type(FL_HOR_NICE_SLIDER);
     s->minimum(1); s->maximum(500); s->value(50);
     s->callback(intel_slider_cb);
@@ -1287,7 +1287,7 @@ void stop_cb(Fl_Widget*, void*) {abortflag = 1;}
 
 void continue_cb(Fl_Widget*, void*) {}
 
-Fl_Menu_Item menu[] = {
+fltk3::MenuItem menu[] = {
   {"Autoplay", 'a', autoplay_cb},
   {"Legal moves", 'l', legal_cb},
   {"Move for me", 'm', move_cb},
@@ -1302,7 +1302,7 @@ Fl_Menu_Item menu[] = {
   {"Quit", 'q', quit_cb},
   {0}};
 
-Fl_Menu_Item busymenu[] = {
+fltk3::MenuItem busymenu[] = {
   {"Stop", '.', stop_cb},
   {"Autoplay", 'a', autoplay_cb},
   {"Continue", 0, continue_cb},

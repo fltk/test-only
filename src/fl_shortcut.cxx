@@ -166,7 +166,7 @@ static Keyname table[] = {
 /**
   Get a human-readable string from a shortcut value.
 
-  Unparse a shortcut value as used by fltk3::Button or Fl_Menu_Item into
+  Unparse a shortcut value as used by fltk3::Button or fltk3::MenuItem into
   a human-readable string like "Alt+N". This only works if the shortcut
   is a character key or a numbered function key. If the shortcut is
   zero then an empty string is returned. The return value points at

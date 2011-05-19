@@ -549,7 +549,7 @@ Fl_File_Chooser::favoritesButtonCB()
     favoritesButton->add(menuname);
 
     if (favoritesButton->size() > 104) {
-      ((Fl_Menu_Item *)favoritesButton->menu())[0].deactivate();
+      ((fltk3::MenuItem *)favoritesButton->menu())[0].deactivate();
     }
   } else if (v == 1) {
     // Manage favorites...
@@ -1285,7 +1285,7 @@ Fl_File_Chooser::update_favorites()
     else favoritesButton->add(menuname);
   }
 
-  if (i == 100) ((Fl_Menu_Item *)favoritesButton->menu())[0].deactivate();
+  if (i == 100) ((fltk3::MenuItem *)favoritesButton->menu())[0].deactivate();
 }
 
 

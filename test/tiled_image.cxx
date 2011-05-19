@@ -25,11 +25,11 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Pixmap.H>
-#include <FL/Fl_Tiled_Image.H>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Button.h>
+#include <fltk3/Pixmap.h>
+#include <fltk3/Tiled_Image.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -43,7 +43,7 @@ void button_cb(Fl_Widget *,void *) {
   w->hide();
 }
 
-#include <FL/x.H>
+#include <FL/x.h>
 #if !defined(WIN32) && !defined(__APPLE__)
 #include "list_visuals.cxx"
 #endif
@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
   window.end();
   window.show(argc, argv);
 
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

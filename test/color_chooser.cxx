@@ -25,15 +25,15 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Button.H>
-#include <FL/fl_show_colormap.H>
-#include <FL/Fl_Color_Chooser.H>
-#include <FL/Fl_Image.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/Box.h>
+#include <fltk3/Button.h>
+#include <fltk3/show_colormap.h>
+#include <fltk3/Color_Chooser.h>
+#include <fltk3/Image.h>
+#include <FL/x.h>
+#include <fltk3/draw.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -146,7 +146,7 @@ int main(int argc, char ** argv) {
     }
   }
   window.show(argc,argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

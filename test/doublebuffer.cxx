@@ -35,12 +35,12 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Single_Window.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Hor_Slider.H>
+#include <fltk3/run.h>
+#include <fltk3/Single_Window.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Box.h>
+#include <fltk3/draw.h>
+#include <fltk3/Hor_Slider.h>
 #include <stdlib.h>
 #include <FL/math.h>
 #include <stdio.h>
@@ -64,7 +64,7 @@ void star(int w, int h, int n) {
 int sides[2] = {20,20};
 
 void slider_cb(Fl_Widget* o, long v) {
-  sides[v] = int(((Fl_Slider*)o)->value());
+  sides[v] = int(((fltk3::Slider*)o)->value());
   o->parent()->redraw();
 }
 
@@ -120,7 +120,7 @@ int main(int argc, char **argv) {
   w1.show();
   w02.show();
   w2.show();
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

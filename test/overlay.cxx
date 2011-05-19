@@ -27,11 +27,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Overlay_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/Overlay_Window.h>
+#include <fltk3/Button.h>
+#include <fltk3/draw.h>
 
 int width=10,height=10;
 
@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
   ovl->end();
   ovl->show(argc,argv);
   ovl->redraw_overlay();
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

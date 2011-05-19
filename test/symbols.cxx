@@ -29,11 +29,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Value_Slider.H>
-#include <FL/fl_draw.H>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Box.h>
+#include <fltk3/Value_Slider.h>
+#include <fltk3/draw.h>
 
 int N = 0;
 #define W 70
@@ -151,7 +151,7 @@ bt("@redo");
 
   window->resizable(window);
   window->show(argc,argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

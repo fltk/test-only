@@ -25,10 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Box.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/Button.h>
+#include <fltk3/Box.h>
 #include <stdlib.h>
 
 void iconize_cb(Fl_Widget *, void *v) {
@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
   control.end();
   control.show();
   control.callback(window_cb);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

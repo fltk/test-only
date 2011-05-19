@@ -25,12 +25,12 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Tile.H>
-#include <FL/Fl_Hold_Browser.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Box.H>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Tile.h>
+#include <fltk3/Hold_Browser.h>
+#include <fltk3/draw.h>
+#include <fltk3/Box.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -156,7 +156,7 @@ void create_the_forms() {
   form->end();
 }
 
-#include <FL/fl_ask.H>
+#include <fltk3/ask.h>
 
 int main(int argc, char **argv) {
   Fl::scheme(NULL);
@@ -200,7 +200,7 @@ int main(int argc, char **argv) {
   fontobj->value(1);
   font_cb(fontobj,0);
   form->show(argc,argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

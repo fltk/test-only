@@ -28,12 +28,12 @@
 //
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Radio_Light_Button.H>
-#include <FL/Fl_Slider.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/Box.h>
+#include <fltk3/Button.h>
+#include <fltk3/Radio_Light_Button.h>
+#include <FL/fltk3::Slider.h>
 #include <stdlib.h>
 
 #if !HAVE_GL
@@ -49,7 +49,7 @@ public:
   }
 };
 #else
-#include <FL/Fl_Gl_Window.H>
+#include <fltk3/Gl_Window.h>
 #include <FL/gl.h>
 
 class cube_box : public Fl_Gl_Window {
@@ -135,7 +135,7 @@ int cube_box::handle(int e) {
 #endif
 
 Fl_Window *form;
-Fl_Slider *speed, *size;
+fltk3::Slider *speed, *size;
 Fl_Button *button, *wire, *flat;
 cube_box *cube, *cube2;
 
@@ -143,8 +143,8 @@ void makeform(const char *name) {
   form = new Fl_Window(510+390,390,name);
   new Fl_Box(FL_DOWN_FRAME,20,20,350,350,"");
   new Fl_Box(FL_DOWN_FRAME,510,20,350,350,"");
-  speed = new Fl_Slider(FL_VERT_SLIDER,390,90,40,220,"Speed");
-  size = new Fl_Slider(FL_VERT_SLIDER,450,90,40,220,"Size");
+  speed = new fltk3::Slider(FL_VERT_SLIDER,390,90,40,220,"Speed");
+  size = new fltk3::Slider(FL_VERT_SLIDER,450,90,40,220,"Size");
   wire = new Fl_Radio_Light_Button(390,20,100,30,"Wire");
   flat = new Fl_Radio_Light_Button(390,50,100,30,"Flat");
   button = new Fl_Button(390,340,100,30,"Exit");
@@ -158,8 +158,8 @@ void makeform(const char *name) {
 }
 
 // added to demo printing
-#include <FL/Fl_Sys_Menu_Bar.H>
-#include <FL/Fl_Printer.H>
+#include <fltk3/Sys_Menu_Bar.h>
+#include <fltk3/Printer.h>
 
 void print_cb(Fl_Widget *w, void *data)
 {
@@ -179,7 +179,7 @@ int main(int argc, char **argv) {
   makeform(argv[0]);
   // added to demo printing
   form->begin();
-  static Fl_Menu_Item	items[] = {
+  static fltk3::MenuItem	items[] = {
     { "Print", 0, 0, 0, FL_SUBMENU },
     { "Print window", 0, print_cb, 0, 0 },
     { 0 },

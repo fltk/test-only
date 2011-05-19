@@ -33,8 +33,11 @@
 
 #include "Image.h"
 
-namespace fltk3 { class Widget; }
-struct Fl_Menu_Item;
+namespace fltk3 {
+  class Widget; 
+  struct MenuItem;
+}
+
 class Fl_Image;
 class Fl_Quartz_Graphics_Driver;
 class Fl_GDI_Graphics_Driver;
@@ -81,7 +84,7 @@ namespace fltk3 {
     virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
     void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
     virtual void label(fltk3::Widget*w);
-    virtual void label(Fl_Menu_Item*m);
+    virtual void label(fltk3::MenuItem*m);
     virtual void uncache();
   };
   

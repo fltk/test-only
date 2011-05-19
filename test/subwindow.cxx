@@ -32,12 +32,12 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Toggle_Button.H>
-#include <FL/Fl_Menu_Button.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Input.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/Toggle_Button.h>
+#include <fltk3/Menu_Button.h>
+#include <fltk3/Box.h>
+#include <fltk3/Input.h>
 
 #ifdef DEBUG
 #include <FL/names.h>
@@ -51,7 +51,7 @@
 // depends on this define.
 
 #ifdef DEBUG_POS
-#include <FL/fl_draw.H>
+#include <fltk3/draw.h>
 #endif
 
 class EnterExit : public Fl_Box {
@@ -183,7 +183,7 @@ int main(int argc, char **argv) {
   popup->add("This|is|a popup|menu");
   popup->add(bigmess);
   window->show(argc, argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

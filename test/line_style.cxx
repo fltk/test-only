@@ -25,17 +25,17 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Value_Slider.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Choice.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Box.H>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Value_Slider.h>
+#include <fltk3/draw.h>
+#include <fltk3/Choice.h>
+#include <fltk3/Check_Button.h>
+#include <fltk3/Box.h>
 
 Fl_Double_Window *form;
-Fl_Slider *sliders[9];
-Fl_Choice *choice[3];
+fltk3::Slider *sliders[9];
+fltk3::Choice *choice[3];
 Fl_Check_Button *draw_line;
 
 class test_box: public Fl_Double_Window {
@@ -83,7 +83,7 @@ void test_box::draw() {
   }
 }
 
-Fl_Menu_Item style_menu[] = {
+fltk3::MenuItem style_menu[] = {
   {"FL_SOLID",	0, 0, (void*)FL_SOLID},
   {"FL_DASH",	0, 0, (void*)FL_DASH},
   {"FL_DOT",	0, 0, (void*)FL_DOT},
@@ -92,7 +92,7 @@ Fl_Menu_Item style_menu[] = {
   {0}
 };
 
-Fl_Menu_Item cap_menu[] = {
+fltk3::MenuItem cap_menu[] = {
   {"default",		0, 0, 0},
   {"FL_CAP_FLAT",	0, 0, (void*)FL_CAP_FLAT},
   {"FL_CAP_ROUND",	0, 0, (void*)FL_CAP_ROUND},
@@ -100,7 +100,7 @@ Fl_Menu_Item cap_menu[] = {
   {0}
 };
 
-Fl_Menu_Item join_menu[] = {
+fltk3::MenuItem join_menu[] = {
   {"default",		0, 0, 0},
   {"FL_JOIN_MITER",	0, 0, (void*)FL_JOIN_MITER},
   {"FL_JOIN_ROUND",	0, 0, (void*)FL_JOIN_ROUND},
@@ -121,11 +121,11 @@ void makeform(const char *) {
   sliders[1]->bounds(0,255);
   sliders[2]= new Fl_Value_Slider(280,50,180,20,"B");
   sliders[2]->bounds(0,255);
-  choice[0]= new Fl_Choice(280,70,180,20,"Style");
+  choice[0]= new fltk3::Choice(280,70,180,20,"Style");
   choice[0]->menu(style_menu);
-  choice[1]= new Fl_Choice(280,90,180,20,"Cap");
+  choice[1]= new fltk3::Choice(280,90,180,20,"Cap");
   choice[1]->menu(cap_menu);
-  choice[2]= new Fl_Choice(280,110,180,20,"Join");
+  choice[2]= new fltk3::Choice(280,110,180,20,"Join");
   choice[2]->menu(join_menu);
   sliders[3]= new Fl_Value_Slider(280,130,180,20,"Width");
   sliders[3]->bounds(0,20);
@@ -134,14 +134,14 @@ void makeform(const char *) {
   draw_line = new Fl_Check_Button(280,170,20,20,"&Line");
   draw_line->align(FL_ALIGN_LEFT);
   new Fl_Box (305,170,160,20,"add a 1-pixel black line");
-  sliders[5] = new Fl_Slider(200,210,70,20,"Dash");
+  sliders[5] = new fltk3::Slider(200,210,70,20,"Dash");
   sliders[5]->align(FL_ALIGN_TOP_LEFT);
   sliders[5]->bounds(0,40);
-  sliders[6] = new Fl_Slider(270,210,70,20);
+  sliders[6] = new fltk3::Slider(270,210,70,20);
   sliders[6]->bounds(0,40);
-  sliders[7] = new Fl_Slider(340,210,70,20);
+  sliders[7] = new fltk3::Slider(340,210,70,20);
   sliders[7]->bounds(0,40);
-  sliders[8] = new Fl_Slider(410,210,70,20);
+  sliders[8] = new fltk3::Slider(410,210,70,20);
   sliders[8]->bounds(0,40);
   int i;
   for (i=0;i<9;i++) {
@@ -169,7 +169,7 @@ void makeform(const char *) {
 int main(int argc, char **argv) {
   makeform(argv[0]);
   form->show(argc,argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

@@ -541,28 +541,28 @@ inline void fl_set_chart_lcolor(fltk3::Widget* o, fltk3::Color v) {
 #define FL_NORMAL_CHOICE2	0
 #define FL_DROPLIST_CHOICE	0
 
-forms_constructor(Fl_Choice, fl_add_choice)
+forms_constructor(fltk3::Choice, fl_add_choice)
 inline void fl_clear_choice(fltk3::Widget* o) {
-    ((Fl_Choice*)o)->clear();}
+    ((fltk3::Choice*)o)->clear();}
 inline void fl_addto_choice(fltk3::Widget* o, const char* s) {
-    ((Fl_Choice*)o)->add(s);}
+    ((fltk3::Choice*)o)->add(s);}
 inline void fl_replace_choice(fltk3::Widget* o, int i, const char* s) {
-    ((Fl_Choice*)o)->replace(i-1,s);}
+    ((fltk3::Choice*)o)->replace(i-1,s);}
 inline void fl_delete_choice(fltk3::Widget* o, int i) {
-    ((Fl_Choice*)o)->remove(i-1);}
+    ((fltk3::Choice*)o)->remove(i-1);}
 inline void fl_set_choice(fltk3::Widget* o, int i) {
-    ((Fl_Choice*)o)->value(i-1);}
+    ((fltk3::Choice*)o)->value(i-1);}
 // inline void fl_set_choice_text(fltk3::Widget*, const char*);
 inline int fl_get_choice(fltk3::Widget* o) {
-    return ((Fl_Choice*)o)->value()+1;}
+    return ((fltk3::Choice*)o)->value()+1;}
 // inline const char* fl_get_choice_item_text(fltk3::Widget*, int);
 // inline int fl_get_choice_maxitems(fltk3::Widget*);
 inline const char* fl_get_choice_text(fltk3::Widget* o) {
-    return ((Fl_Choice*)o)->text();}
+    return ((fltk3::Choice*)o)->text();}
 inline void fl_set_choice_fontsize(fltk3::Widget* o, int x) {
-    ((Fl_Choice*)o)->textsize(x);}
+    ((fltk3::Choice*)o)->textsize(x);}
 inline void fl_set_choice_fontstyle(fltk3::Widget* o, fltk3::Font x) {
-    ((Fl_Choice*)o)->textfont(x);}
+    ((fltk3::Choice*)o)->textfont(x);}
 // inline void fl_set_choice_item_mode(fltk3::Widget*, int, unsigned);
 // inline void fl_set_choice_item_shortcut(fltk3::Widget*, int, const char*);
 
@@ -782,25 +782,25 @@ inline void fl_set_positioner_return(fltk3::Widget* o, int v) {
 #define FL_HOR_BROWSER_SLIDER fltk3::HOR_SLIDER
 #define FL_VERT_BROWSER_SLIDER fltk3::VERT_SLIDER
 
-forms_constructort(Fl_Slider, fl_add_slider)
+forms_constructort(fltk3::Slider, fl_add_slider)
 #define FL_SLIDER_COL1 fltk3::GRAY
 inline void fl_set_slider_value(fltk3::Widget* o, double v) {
-    ((Fl_Slider*)o)->value(v);}
+    ((fltk3::Slider*)o)->value(v);}
 inline double fl_get_slider_value(fltk3::Widget* o) {
-    return ((Fl_Slider*)o)->value();}
+    return ((fltk3::Slider*)o)->value();}
 inline void fl_set_slider_bounds(fltk3::Widget* o, double a, double b) {
-    ((Fl_Slider*)o)->bounds(a, b);}
+    ((fltk3::Slider*)o)->bounds(a, b);}
 inline void fl_get_slider_bounds(fltk3::Widget* o, float* a, float* b) {
-  *a = float(((Fl_Slider*)o)->minimum());
-  *b = float(((Fl_Slider*)o)->maximum());
+  *a = float(((fltk3::Slider*)o)->minimum());
+  *b = float(((fltk3::Slider*)o)->maximum());
 }
 inline void fl_set_slider_return(fltk3::Widget* o, int i) {
-    ((Fl_Slider*)o)->when((fltk3::When)(i|fltk3::WHEN_RELEASE));}
+    ((fltk3::Slider*)o)->when((fltk3::When)(i|fltk3::WHEN_RELEASE));}
 inline void fl_set_slider_step(fltk3::Widget* o, double v) {
-    ((Fl_Slider*)o)->step(v);}
+    ((fltk3::Slider*)o)->step(v);}
 // inline void fl_set_slider_increment(fltk3::Widget* o, double v, double);
 inline void fl_set_slider_size(fltk3::Widget* o, double v) {
-    ((Fl_Slider*)o)->slider_size(v);}
+    ((fltk3::Slider*)o)->slider_size(v);}
 
 #include "ValueSlider.h"
 forms_constructor(fltk3::ValueSlider, fl_add_valslider)

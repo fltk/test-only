@@ -25,16 +25,16 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Value_Input.H> // necessary for bug in mingw32?
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Hor_Value_Slider.H>
-#include <FL/Fl_Toggle_Button.H>
-#include <FL/Fl_Input.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Output.H>
-#include <FL/Fl_Multiline_Output.H>
+#include <fltk3/run.h>
+#include <fltk3/Value_Input.h> // necessary for bug in mingw32?
+#include <fltk3/Double_Window.h>
+#include <fltk3/Box.h>
+#include <FL/fltk3::HorValueSlider.h>
+#include <fltk3/Toggle_Button.h>
+#include <fltk3/Input.h>
+#include <fltk3/draw.h>
+#include <fltk3/Output.h>
+#include <fltk3/Multiline_Output.h>
 
 Fl_Output *text;
 Fl_Multiline_Output *text2;
@@ -70,14 +70,14 @@ int main(int argc, char **argv) {
   input->when(FL_WHEN_CHANGED);
   input->callback(input_cb);
 
-  sizes = new Fl_Hor_Value_Slider(50,350,350,25,"Size");
+  sizes = new fltk3::HorValueSlider(50,350,350,25,"Size");
   sizes->align(FL_ALIGN_LEFT);
   sizes->bounds(1,64);
   sizes->step(1);
   sizes->value(14);
   sizes->callback(size_cb);
 
-  fonts = new Fl_Hor_Value_Slider(50,325,350,25,"Font");
+  fonts = new fltk3::HorValueSlider(50,325,350,25,"Font");
   fonts->align(FL_ALIGN_LEFT);
   fonts->bounds(0,15);
   fonts->step(1);
@@ -97,7 +97,7 @@ int main(int argc, char **argv) {
 
   window->end();
   window->show(argc,argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

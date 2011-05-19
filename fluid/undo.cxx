@@ -46,7 +46,7 @@
 
 
 extern Fl_Preferences	fluid_prefs;	// FLUID preferences
-extern Fl_Menu_Item	Main_Menu[];	// Main menu
+extern fltk3::MenuItem	Main_Menu[];	// Main menu
 
 #define UNDO_ITEM	25		// Undo menu item index
 #define REDO_ITEM	26		// Redo menu item index

@@ -27,9 +27,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Box.H>
+#include <fltk3/run.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Box.h>
 
 int N = 0;
 #define W 200
@@ -120,7 +120,7 @@ int main(int argc, char ** argv) {
   window->resizable(window);
   window->end();
   window->show();
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

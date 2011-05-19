@@ -8,14 +8,14 @@
 #include <stdlib.h>	// atoi
 #endif /*WIN32*/
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Choice.H>
-#include <FL/fl_draw.H>
-#include <FL/fl_ask.H>
-#include <FL/Fl_Table_Row.H>
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/Input.h>
+#include <fltk3/Check_Button.h>
+#include <fltk3/Choice.h>
+#include <fltk3/draw.h>
+#include <fltk3/ask.h>
+#include <fltk3/Table_Row.h>
 
 // Simple demonstration class to derive from Fl_Table_Row
 class DemoTable : public Fl_Table_Row
@@ -288,7 +288,7 @@ void type_choice_cb(Fl_Widget *w, void *data)
     G_table->type((Fl_Table_Row::TableRowSelectMode)(fl_intptr_t)data);
 }
 
-Fl_Menu_Item tablebox_choices[] = {
+fltk3::MenuItem tablebox_choices[] = {
   {"No Box",         0, tablebox_choice_cb, (void*)FL_NO_BOX },
   {"Flat Box",       0, tablebox_choice_cb, (void*)FL_FLAT_BOX },
   {"Up Box",         0, tablebox_choice_cb, (void*)FL_UP_BOX },
@@ -309,7 +309,7 @@ Fl_Menu_Item tablebox_choices[] = {
   {0}
 };
 
-Fl_Menu_Item widgetbox_choices[] = {
+fltk3::MenuItem widgetbox_choices[] = {
   {"No Box",         0, widgetbox_choice_cb, (void*)FL_NO_BOX },
 //{"Flat Box",       0, widgetbox_choice_cb, (void*)FL_FLAT_BOX },
 //{"Up Box",         0, widgetbox_choice_cb, (void*)FL_UP_BOX },
@@ -330,7 +330,7 @@ Fl_Menu_Item widgetbox_choices[] = {
   {0}
 };
 
-Fl_Menu_Item type_choices[] = {
+fltk3::MenuItem type_choices[] = {
   {"SelectNone",         0, type_choice_cb, (void*)Fl_Table_Row::SELECT_NONE },
   {"SelectSingle",       0, type_choice_cb, (void*)Fl_Table_Row::SELECT_SINGLE },
   {"SelectMulti",        0, type_choice_cb, (void*)Fl_Table_Row::SELECT_MULTI },
@@ -449,13 +449,13 @@ int main(int argc, char **argv)
     colresize.callback(setcolresize_cb, (void*)&colresize);
     colresize.value(G_table->col_resize() ? 1 : 0);
 
-    Fl_Choice tablebox(150, 640, 120, 25, "Table Box");
+    fltk3::Choice tablebox(150, 640, 120, 25, "Table Box");
     tablebox.labelsize(12);
     tablebox.textsize(12);
     tablebox.menu(tablebox_choices);
     tablebox.value(0);
 
-    Fl_Choice widgetbox(150, 670, 120, 25, "Widget Box");
+    fltk3::Choice widgetbox(150, 670, 120, 25, "Widget Box");
     widgetbox.labelsize(12);
     widgetbox.textsize(12);
     widgetbox.menu(widgetbox_choices);
@@ -479,7 +479,7 @@ int main(int argc, char **argv)
     cellfgcolor.callback(setcellfgcolor_cb, (void*)&cellfgcolor);
     cellfgcolor.when(FL_WHEN_RELEASE);
 
-    Fl_Choice type(650, 640, 120, 25, "Type");
+    fltk3::Choice type(650, 640, 120, 25, "Type");
     type.labelsize(12);
     type.textsize(12);
     type.menu(type_choices);
@@ -489,5 +489,5 @@ int main(int argc, char **argv)
     win.resizable(*G_table);
     win.show(argc, argv);
 
-    return(Fl::run());
+    return(fltk3::run());
 }

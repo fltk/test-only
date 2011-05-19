@@ -61,12 +61,12 @@ That was a blank line above this.
 	Fl_Multi_Browser
 */
 
-#include <FL/Fl.H>
-#include <FL/Fl_Select_Browser.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Int_Input.H>
-#include <FL/fl_ask.H>
+#include <fltk3/run.h>
+#include <fltk3/Select_Browser.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Button.h>
+#include <fltk3/Int_Input.h>
+#include <fltk3/ask.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -188,7 +188,7 @@ int main(int argc, char **argv) {
 
   window.resizable(browser);
   window.show(argc,argv);
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

@@ -33,7 +33,7 @@
 // Include necessary headers...
 //
 
-#include <FL/Fl_Help_Dialog.H>
+#include <fltk3/Help_Dialog.h>
 
 
 #ifdef USING_XCODE
@@ -92,7 +92,7 @@ main(int  argc,			// I - Number of command-line arguments
   
   help->show(1, argv);
 
-  Fl::run();
+  fltk3::run();
 
   delete help;
 

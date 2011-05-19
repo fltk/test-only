@@ -31,34 +31,34 @@
 #include <math.h>
 #include "flstring.h"
 
-void Fl_Slider::_Fl_Slider() {
+void fltk3::Slider::_Slider() {
   slider_size_ = 0;
   slider_ = 0; // fltk3::UP_BOX;
 }
 
 /**
-  Creates a new Fl_Slider widget using the given position,
+  Creates a new fltk3::Slider widget using the given position,
   size, and label string. The default boxtype is fltk3::DOWN_BOX.
 */
-Fl_Slider::Fl_Slider(int X, int Y, int W, int H, const char* L)
+fltk3::Slider::Slider(int X, int Y, int W, int H, const char* L)
 : Fl_Valuator(X, Y, W, H, L) {
   box(fltk3::DOWN_BOX);
-  _Fl_Slider();
+  _Slider();
 }
 
 /**
-  Creates a new Fl_Slider widget using the given box type, position,
+  Creates a new fltk3::Slider widget using the given box type, position,
   size, and label string.
 */
-Fl_Slider::Fl_Slider(uchar t, int X, int Y, int W, int H, const char* L)
+fltk3::Slider::Slider(uchar t, int X, int Y, int W, int H, const char* L)
   : Fl_Valuator(X, Y, W, H, L) {
   type(t);
   box(t==fltk3::HOR_NICE_SLIDER || t==fltk3::VERT_NICE_SLIDER ?
       fltk3::FLAT_BOX : fltk3::DOWN_BOX);
-  _Fl_Slider();
+  _Slider();
 }
 
-void Fl_Slider::slider_size(double v) {
+void fltk3::Slider::slider_size(double v) {
   if (v <  0) v = 0;
   if (v > 1) v = 1;
   if (slider_size_ != float(v)) {
@@ -71,7 +71,7 @@ void Fl_Slider::slider_size(double v) {
   Sets the minimum (a) and maximum (b) values for the valuator widget. 
   if at least one of the values is changed, a partial redraw is asked.
 */
-void Fl_Slider::bounds(double a, double b) {
+void fltk3::Slider::bounds(double a, double b) {
   if (minimum() != a || maximum() != b) {
     Fl_Valuator::bounds(a, b); 
     damage(fltk3::DAMAGE_EXPOSE);
@@ -86,7 +86,7 @@ void Fl_Slider::bounds(double a, double b) {
   \param[in] total total number of lines
   Returns Fl_Valuator::value(p)
  */
-int Fl_Slider::scrollvalue(int pos, int size, int first, int total) {
+int fltk3::Slider::scrollvalue(int pos, int size, int first, int total) {
   step(1, 1);
   if (pos+size > first+total) total = pos+size-first;
   slider_size(size >= total ? 1.0 : double(size)/double(total));
@@ -101,7 +101,7 @@ int Fl_Slider::scrollvalue(int pos, int size, int first, int total) {
 // position on the widget itself covers a wider range than 0-1,
 // actually it ranges from 0 to 1/(1-size).
 
-void Fl_Slider::draw_bg(int X, int Y, int W, int H) {
+void fltk3::Slider::draw_bg(int X, int Y, int W, int H) {
   fltk3::push_clip(X, Y, W, H);
   draw_box();
   fltk3::pop_clip();
@@ -114,7 +114,7 @@ void Fl_Slider::draw_bg(int X, int Y, int W, int H) {
   }
 }
 
-void Fl_Slider::draw(int X, int Y, int W, int H) {
+void fltk3::Slider::draw(int X, int Y, int W, int H) {
 
   double val;
   if (minimum() == maximum())
@@ -213,7 +213,7 @@ void Fl_Slider::draw(int X, int Y, int W, int H) {
   }
 }
 
-void Fl_Slider::draw() {
+void fltk3::Slider::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
   draw(x()+fltk3::box_dx(box()),
        y()+fltk3::box_dy(box()),
@@ -221,7 +221,7 @@ void Fl_Slider::draw() {
        h()-fltk3::box_dh(box()));
 }
 
-int Fl_Slider::handle(int event, int X, int Y, int W, int H) {
+int fltk3::Slider::handle(int event, int X, int Y, int W, int H) {
   // fltk3::WidgetTracker wp(this);
   switch (event) {
   case fltk3::PUSH: {
@@ -351,7 +351,7 @@ int Fl_Slider::handle(int event, int X, int Y, int W, int H) {
   }
 }
 
-int Fl_Slider::handle(int event) {
+int fltk3::Slider::handle(int event) {
   if (event == fltk3::PUSH && fltk3::visible_focus()) {
     fltk3::focus(this);
     redraw();

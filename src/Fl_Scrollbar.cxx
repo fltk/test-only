@@ -135,10 +135,10 @@ int Fl_Scrollbar::handle(int event) {
       damage(fltk3::DAMAGE_ALL);
       return 1;
     }
-    return Fl_Slider::handle(event, X,Y,W,H);
+    return fltk3::Slider::handle(event, X,Y,W,H);
   case fltk3::DRAG:
     if (pushed_) return 1;
-    return Fl_Slider::handle(event, X,Y,W,H);
+    return fltk3::Slider::handle(event, X,Y,W,H);
   case fltk3::MOUSEWHEEL :
     if (horizontal()) {
       if (fltk3::e_dx==0) return 0;
@@ -196,7 +196,7 @@ int Fl_Scrollbar::handle(int event) {
     }
     v = int(clamp(v));
     if (v != value()) {
-      Fl_Slider::value(v);
+      fltk3::Slider::value(v);
       value_damage();
       set_changed();
       do_callback();
@@ -213,8 +213,8 @@ void Fl_Scrollbar::draw() {
   int W = w()-fltk3::box_dw(box());
   int H = h()-fltk3::box_dh(box());
   if (horizontal()) {
-    if (W < 3*H) {Fl_Slider::draw(X,Y,W,H); return;}
-    Fl_Slider::draw(X+H,Y,W-2*H,H);
+    if (W < 3*H) {fltk3::Slider::draw(X,Y,W,H); return;}
+    fltk3::Slider::draw(X+H,Y,W-2*H,H);
     if (damage()&fltk3::DAMAGE_ALL) {
       draw_box((pushed_==1) ? fltk3::down(slider()) : slider(),
 	       X, Y, H, H, selection_color());
@@ -238,8 +238,8 @@ void Fl_Scrollbar::draw() {
       }
     }
   } else { // vertical
-    if (H < 3*W) {Fl_Slider::draw(X,Y,W,H); return;}
-    Fl_Slider::draw(X,Y+W,W,H-2*W);
+    if (H < 3*W) {fltk3::Slider::draw(X,Y,W,H); return;}
+    fltk3::Slider::draw(X,Y+W,W,H-2*W);
     if (damage()&fltk3::DAMAGE_ALL) {
       draw_box((pushed_==1) ? fltk3::down(slider()) : slider(),
 	       X, Y, W, W, selection_color());
@@ -271,7 +271,7 @@ void Fl_Scrollbar::draw() {
   You need to do type(FL_HORIZONTAL) if you want a horizontal scrollbar.
 */
 Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
-  : Fl_Slider(X, Y, W, H, L) {
+  : fltk3::Slider(X, Y, W, H, L) {
   box(fltk3::FLAT_BOX);
   color(fltk3::DARK2);
   slider(fltk3::UP_BOX);

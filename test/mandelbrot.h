@@ -25,11 +25,11 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Slider.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Input.H>
+#include <fltk3/run.h>
+#include <fltk3/Box.h>
+#include <FL/fltk3::Slider.h>
+#include <fltk3/Double_Window.h>
+#include <fltk3/Input.h>
 
 class Drawing_Area : public Fl_Box {
   void draw();

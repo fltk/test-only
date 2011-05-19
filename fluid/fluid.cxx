@@ -113,10 +113,10 @@ void	update_history(const char *);
 // Shell command support...
 void	show_shell_window();
 
-Fl_Menu_Item *save_item = 0L;
-Fl_Menu_Item *history_item = 0L;
-Fl_Menu_Item *widgetbin_item = 0L;
-Fl_Menu_Item *sourceview_item = 0L;
+fltk3::MenuItem *save_item = 0L;
+fltk3::MenuItem *history_item = 0L;
+fltk3::MenuItem *widgetbin_item = 0L;
+fltk3::MenuItem *sourceview_item = 0L;
 
 ////////////////////////////////////////////////////////////////
 
@@ -1631,12 +1631,12 @@ void print_cb(fltk3::ReturnButton *, void *) {
 
 ////////////////////////////////////////////////////////////////
 
-extern Fl_Menu_Item New_Menu[];
+extern fltk3::MenuItem New_Menu[];
 
 void toggle_widgetbin_cb(fltk3::Widget *, void *);
 void toggle_sourceview_cb(fltk3::DoubleWindow *, void *);
 
-Fl_Menu_Item Main_Menu[] = {
+fltk3::MenuItem Main_Menu[] = {
 {"&File",0,0,0,FL_SUBMENU},
   {"&New...", fltk3::COMMAND+'n', new_cb, 0},
   {"&Open...", fltk3::COMMAND+'o', open_cb, 0},
@@ -1736,7 +1736,7 @@ Fl_Menu_Item Main_Menu[] = {
 
 extern void fill_in_New_Menu();
 
-void scheme_cb(Fl_Choice *, void *) {
+void scheme_cb(fltk3::Choice *, void *) {
   if (compile_only)
     return;
 
@@ -1828,10 +1828,10 @@ void make_main_window() {
     main_menubar = new Fl_Menu_Bar(0,0,BROWSERWIDTH,MENUHEIGHT);
     main_menubar->menu(Main_Menu);
     // quick access to all dynamic menu items
-    save_item = (Fl_Menu_Item*)main_menubar->find_item(save_cb);
-    history_item = (Fl_Menu_Item*)main_menubar->find_item(open_history_cb);
-    widgetbin_item = (Fl_Menu_Item*)main_menubar->find_item(toggle_widgetbin_cb);
-    sourceview_item = (Fl_Menu_Item*)main_menubar->find_item((fltk3::Callback*)toggle_sourceview_cb);
+    save_item = (fltk3::MenuItem*)main_menubar->find_item(save_cb);
+    history_item = (fltk3::MenuItem*)main_menubar->find_item(open_history_cb);
+    widgetbin_item = (fltk3::MenuItem*)main_menubar->find_item(toggle_widgetbin_cb);
+    sourceview_item = (fltk3::MenuItem*)main_menubar->find_item((fltk3::Callback*)toggle_sourceview_cb);
     main_menubar->global();
     fill_in_New_Menu();
     main_window->end();

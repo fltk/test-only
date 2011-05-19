@@ -57,16 +57,16 @@
 //
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Single_Window.H>
-#include <FL/Fl_Hor_Slider.H>
-#include <FL/Fl_Toggle_Light_Button.H>
+#include <fltk3/run.h>
+#include <fltk3/Single_Window.h>
+#include <fltk3/Hor_Slider.h>
+#include <fltk3/Toggle_Light_Button.h>
 #include <FL/math.h>
 #include <stdio.h>
 
 #if HAVE_GL
 #include <FL/gl.h>
-#include <FL/Fl_Gl_Window.H>
+#include <fltk3/Gl_Window.h>
 
 class shape_window : public Fl_Gl_Window {
   void draw();
@@ -100,7 +100,7 @@ void shape_window::draw() {
 
 #else
 
-#include <FL/fl_draw.H>
+#include <fltk3/draw.h>
 
 class shape_window : public Fl_Window {
   void draw();
@@ -126,7 +126,7 @@ void shape_window::draw() {
 
 void sides_cb(Fl_Widget *o, void *p) {
   shape_window *sw = (shape_window *)p;
-  sw->sides = int(((Fl_Slider *)o)->value());
+  sw->sides = int(((fltk3::Slider *)o)->value());
   sw->redraw();
 }
 
@@ -247,7 +247,7 @@ int main(int argc, char **argv) {
   window.end();
   window.show(argc,argv);
 
-  return Fl::run();
+  return fltk3::run();
 }
 
 //

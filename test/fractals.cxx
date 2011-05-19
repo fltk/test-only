@@ -31,8 +31,8 @@
 
 #include <config.h>
 #if !HAVE_GL || !HAVE_GL_GLU_H
-#include <FL/Fl.H>
-#include <FL/fl_message.H>
+#include <fltk3/run.h>
+#include <fltk3/message.h>
 int main(int, char**) {
   fl_alert("This demo does not work without GL and GLU (%d)");
   return 1;
@@ -63,7 +63,7 @@ int main(int, char**) {
  *
  */
 
-#include <FL/glut.H>
+#include <FL/glut.h>
 #include <FL/glu.h>
 
 #include <stdio.h>
@@ -771,9 +771,9 @@ void choosefract(Fl_Widget*, void *value) {choosefract(fl_intptr_t(value));}
 
 void handlemenu(Fl_Widget*, void *value) {handlemenu(fl_intptr_t(value));}
 
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Window.H>
+#include <fltk3/Button.h>
+#include <fltk3/Group.h>
+#include <fltk3/Window.h>
 
 int main(int argc, char** argv)
 {
@@ -828,7 +828,7 @@ int main(int argc, char** argv)
   myGLInit(); 
   MenuInit();
 
-  glutMainLoop(); // you could use Fl::run() instead
+  glutMainLoop(); // you could use fltk3::run() instead
 
   return 0;
 }
