@@ -618,7 +618,7 @@ fltk3::LightButton *comment_in_source=(fltk3::LightButton *)0;
 
 fltk3::LightButton *comment_in_header=(fltk3::LightButton *)0;
 
-Fl_Menu_Button *comment_predefined=(Fl_Menu_Button *)0;
+fltk3::MenuButton *comment_predefined=(fltk3::MenuButton *)0;
 
 fltk3::Button *comment_load=(fltk3::Button *)0;
 
@@ -668,10 +668,10 @@ fltk3::DoubleWindow* make_comment_panel() {
         comment_in_header->labelsize(11);
         comment_in_header->when(fltk3::WHEN_NEVER);
       } // fltk3::LightButton* comment_in_header
-      { comment_predefined = new Fl_Menu_Button(10, 70, 90, 20, "Predefined");
+      { comment_predefined = new fltk3::MenuButton(10, 70, 90, 20, "Predefined");
         comment_predefined->labelsize(11);
         comment_predefined->textsize(11);
-      } // Fl_Menu_Button* comment_predefined
+      } // fltk3::MenuButton* comment_predefined
       { comment_load = new fltk3::Button(10, 100, 90, 20, "Import...");
         comment_load->labelsize(11);
       } // fltk3::Button* comment_load
@@ -811,7 +811,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(89, 55, 24, 24);
         o->tooltip("Tile");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Tile"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::TiledGroup"));
         o->image(pixmap[20]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(114, 55, 24, 24);
@@ -961,7 +961,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(400, 5, 24, 24);
         o->tooltip("Menu Bar");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Menu_Bar"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::MenuBar"));
         o->image(pixmap[17]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(425, 5, 24, 24);
@@ -973,7 +973,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(400, 30, 24, 24);
         o->tooltip("Menu Button");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Menu_Button"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::MenuButton"));
         o->image(pixmap[26]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(425, 30, 24, 24);

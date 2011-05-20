@@ -666,7 +666,7 @@ public:
 #include <fltk3/Menu_.h>
 class Fl_Menu_Type : public Fl_Widget_Type {
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
-    Fl_Menu_ *myo = (Fl_Menu_*)(w==4 ? ((Fl_Widget_Type*)this->factory)->o : this->o);
+    fltk3::Menu_ *myo = (fltk3::Menu_*)(w==4 ? ((Fl_Widget_Type*)this->factory)->o : this->o);
     switch (w) {
     case 4:
     case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
@@ -683,7 +683,7 @@ public:
   virtual void build_menu();
   Fl_Menu_Type() : Fl_Widget_Type() {menusize = 0;}
   ~Fl_Menu_Type() {
-    if (menusize) delete[] (fltk3::MenuItem*)(((Fl_Menu_*)o)->menu());
+    if (menusize) delete[] (fltk3::MenuItem*)(((fltk3::Menu_*)o)->menu());
   }
   void add_child(Fl_Type*, Fl_Type*) {build_menu();}
   void move_child(Fl_Type*, Fl_Type*) {build_menu();}
@@ -706,10 +706,10 @@ public:
     if (h < 15) h = 15;
     if (w < (15 + h)) w = 15 + h;
   }
-  virtual const char *type_name() {return "Fl_Menu_Button";}
+  virtual const char *type_name() {return "fltk3::MenuButton";}
   virtual const char *alt_type_name() {return "fltk::MenuButton";}
   fltk3::Widget *widget(int X,int Y,int W,int H) {
-    return new Fl_Menu_Button(X,Y,W,H,"menu");}
+    return new fltk3::MenuButton(X,Y,W,H,"menu");}
   Fl_Widget_Type *_make() {return new Fl_Menu_Button_Type();}
   int pixmapID() { return 26; }
 };
@@ -789,9 +789,9 @@ public:
     h = ((o->labelsize() + fltk3::box_dh(o->box()) + 4) / 5) * 5;
     if (h < 15) h = 15;
   }
-  virtual const char *type_name() {return "Fl_Menu_Bar";}
+  virtual const char *type_name() {return "fltk3::MenuBar";}
   virtual const char *alt_type_name() {return "fltk::MenuBar";}
-  fltk3::Widget *widget(int X,int Y,int W,int H) {return new Fl_Menu_Bar(X,Y,W,H);}
+  fltk3::Widget *widget(int X,int Y,int W,int H) {return new fltk3::MenuBar(X,Y,W,H);}
   Fl_Widget_Type *_make() {return new Fl_Menu_Bar_Type();}
   int pixmapID() { return 17; }
 };

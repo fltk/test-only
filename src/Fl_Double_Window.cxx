@@ -328,7 +328,7 @@ void fltk3::DoubleWindow::flush() {flush(0);}
   Forces the window to be redrawn.
   \param[in] eraseoverlay non-zero to erase overlay, zero to ignore
 
-  Fl_Overlay_Window relies on flush(1) copying the back buffer to the
+  fltk3::OverlayWindow relies on flush(1) copying the back buffer to the
   front everywhere, even if damage() == 0, thus erasing the overlay,
   and leaving the clip region set to the entire window.
 */

@@ -178,7 +178,7 @@ void save_position(fltk3::Window *w, const char *prefsName) {
 }
 
 fltk3::Window *main_window;
-Fl_Menu_Bar *main_menubar;
+fltk3::MenuBar *main_menubar;
 
 static char* cutfname(int which = 0) {
   static char name[2][FL_PATH_MAX];
@@ -1637,18 +1637,18 @@ void toggle_widgetbin_cb(fltk3::Widget *, void *);
 void toggle_sourceview_cb(fltk3::DoubleWindow *, void *);
 
 fltk3::MenuItem Main_Menu[] = {
-{"&File",0,0,0,FL_SUBMENU},
+{"&File",0,0,0,fltk3::SUBMENU},
   {"&New...", fltk3::COMMAND+'n', new_cb, 0},
   {"&Open...", fltk3::COMMAND+'o', open_cb, 0},
-  {"&Insert...", fltk3::COMMAND+'i', open_cb, (void*)1, FL_MENU_DIVIDER},
+  {"&Insert...", fltk3::COMMAND+'i', open_cb, (void*)1, fltk3::MENU_DIVIDER},
   {"&Save", fltk3::COMMAND+'s', save_cb, 0},
   {"Save &As...", fltk3::COMMAND+fltk3::SHIFT+'s', save_cb, (void*)1},
   {"Sa&ve A Copy...", 0, save_cb, (void*)2},
   {"Save &Template...", 0, save_template_cb},
-  {"&Revert...", 0, revert_cb, 0, FL_MENU_DIVIDER},
+  {"&Revert...", 0, revert_cb, 0, fltk3::MENU_DIVIDER},
   {"&Print...", fltk3::COMMAND+'p', print_menu_cb},
   {"Write &Code...", fltk3::COMMAND+fltk3::SHIFT+'c', write_cb, 0},
-  {"&Write Strings...", fltk3::COMMAND+fltk3::SHIFT+'w', write_strings_cb, 0, FL_MENU_DIVIDER},
+  {"&Write Strings...", fltk3::COMMAND+fltk3::SHIFT+'w', write_strings_cb, 0, fltk3::MENU_DIVIDER},
   {relative_history[0], fltk3::COMMAND+'0', open_history_cb, absolute_history[0]},
   {relative_history[1], fltk3::COMMAND+'1', open_history_cb, absolute_history[1]},
   {relative_history[2], fltk3::COMMAND+'2', open_history_cb, absolute_history[2]},
@@ -1658,35 +1658,35 @@ fltk3::MenuItem Main_Menu[] = {
   {relative_history[6], fltk3::COMMAND+'6', open_history_cb, absolute_history[6]},
   {relative_history[7], fltk3::COMMAND+'7', open_history_cb, absolute_history[7]},
   {relative_history[8], fltk3::COMMAND+'8', open_history_cb, absolute_history[8]},
-  {relative_history[9], fltk3::COMMAND+'9', open_history_cb, absolute_history[9], FL_MENU_DIVIDER},
+  {relative_history[9], fltk3::COMMAND+'9', open_history_cb, absolute_history[9], fltk3::MENU_DIVIDER},
   {"&Quit", fltk3::COMMAND+'q', exit_cb},
   {0},
-{"&Edit",0,0,0,FL_SUBMENU},
+{"&Edit",0,0,0,fltk3::SUBMENU},
   {"&Undo", fltk3::COMMAND+'z', undo_cb},
-  {"&Redo", fltk3::COMMAND+fltk3::SHIFT+'z', redo_cb, 0, FL_MENU_DIVIDER},
+  {"&Redo", fltk3::COMMAND+fltk3::SHIFT+'z', redo_cb, 0, fltk3::MENU_DIVIDER},
   {"C&ut", fltk3::COMMAND+'x', cut_cb},
   {"&Copy", fltk3::COMMAND+'c', copy_cb},
   {"&Paste", fltk3::COMMAND+'v', paste_cb},
   {"Dup&licate", fltk3::COMMAND+'u', duplicate_cb},
-  {"&Delete", fltk3::DeleteKey, delete_cb, 0, FL_MENU_DIVIDER},
+  {"&Delete", fltk3::DeleteKey, delete_cb, 0, fltk3::MENU_DIVIDER},
   {"Select &All", fltk3::COMMAND+'a', select_all_cb},
-  {"Select &None", fltk3::COMMAND+fltk3::SHIFT+'a', select_none_cb, 0, FL_MENU_DIVIDER},
+  {"Select &None", fltk3::COMMAND+fltk3::SHIFT+'a', select_none_cb, 0, fltk3::MENU_DIVIDER},
   {"Pr&operties...", fltk3::FKey+1, openwidget_cb},
   {"&Sort",0,sort_cb},
   {"&Earlier", fltk3::FKey+2, earlier_cb},
   {"&Later", fltk3::FKey+3, later_cb},
   {"&Group", fltk3::FKey+7, group_cb},
-  {"Ung&roup", fltk3::FKey+8, ungroup_cb,0, FL_MENU_DIVIDER},
+  {"Ung&roup", fltk3::FKey+8, ungroup_cb,0, fltk3::MENU_DIVIDER},
   {"Hide O&verlays",fltk3::COMMAND+fltk3::SHIFT+'o',toggle_overlays},
   {"Show Widget &Bin...",fltk3::ALT+'b',toggle_widgetbin_cb},
-  {"Show Source Code...",fltk3::ALT+fltk3::SHIFT+'s', (fltk3::Callback*)toggle_sourceview_cb, 0, FL_MENU_DIVIDER},
+  {"Show Source Code...",fltk3::ALT+fltk3::SHIFT+'s', (fltk3::Callback*)toggle_sourceview_cb, 0, fltk3::MENU_DIVIDER},
   {"Pro&ject Settings...",fltk3::ALT+'p',show_project_cb},
-  {"GU&I Settings...",fltk3::ALT+fltk3::SHIFT+'p',show_settings_cb,0,FL_MENU_DIVIDER},
+  {"GU&I Settings...",fltk3::ALT+fltk3::SHIFT+'p',show_settings_cb,0,fltk3::MENU_DIVIDER},
   {"Global &FLTK Settings...",fltk3::ALT+fltk3::SHIFT+'g',show_global_settings_cb},
   {0},
-{"&New", 0, 0, (void *)New_Menu, FL_SUBMENU_POINTER},
-{"&Layout",0,0,0,FL_SUBMENU},
-  {"&Align",0,0,0,FL_SUBMENU},
+{"&New", 0, 0, (void *)New_Menu, fltk3::SUBMENU_POINTER},
+{"&Layout",0,0,0,fltk3::SUBMENU},
+  {"&Align",0,0,0,fltk3::SUBMENU},
     {"&Left",0,(fltk3::Callback *)align_widget_cb,(void*)10},
     {"&Center",0,(fltk3::Callback *)align_widget_cb,(void*)11},
     {"&Right",0,(fltk3::Callback *)align_widget_cb,(void*)12},
@@ -1694,20 +1694,20 @@ fltk3::MenuItem Main_Menu[] = {
     {"&Middle",0,(fltk3::Callback *)align_widget_cb,(void*)14},
     {"&Bottom",0,(fltk3::Callback *)align_widget_cb,(void*)15},
     {0},
-  {"&Space Evenly",0,0,0,FL_SUBMENU},
+  {"&Space Evenly",0,0,0,fltk3::SUBMENU},
     {"&Across",0,(fltk3::Callback *)align_widget_cb,(void*)20},
     {"&Down",0,(fltk3::Callback *)align_widget_cb,(void*)21},
     {0},
-  {"&Make Same Size",0,0,0,FL_SUBMENU},
+  {"&Make Same Size",0,0,0,fltk3::SUBMENU},
     {"&Width",0,(fltk3::Callback *)align_widget_cb,(void*)30},
     {"&Height",0,(fltk3::Callback *)align_widget_cb,(void*)31},
     {"&Both",0,(fltk3::Callback *)align_widget_cb,(void*)32},
     {0},
-  {"&Center In Group",0,0,0,FL_SUBMENU},
+  {"&Center In Group",0,0,0,fltk3::SUBMENU},
     {"&Horizontal",0,(fltk3::Callback *)align_widget_cb,(void*)40},
     {"&Vertical",0,(fltk3::Callback *)align_widget_cb,(void*)41},
     {0},
-  {"Set &Widget Size",0,0,0,FL_SUBMENU|FL_MENU_DIVIDER},
+  {"Set &Widget Size",0,0,0,fltk3::SUBMENU|fltk3::MENU_DIVIDER},
     {"&Tiny",fltk3::ALT+'1',(fltk3::Callback *)widget_size_cb,(void*)8,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,8},
     {"&Small",fltk3::ALT+'2',(fltk3::Callback *)widget_size_cb,(void*)11,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,11},
     {"&Normal",fltk3::ALT+'3',(fltk3::Callback *)widget_size_cb,(void*)14,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,14},
@@ -1717,13 +1717,13 @@ fltk3::MenuItem Main_Menu[] = {
     {0},
   {"&Grid and Size Settings...",fltk3::COMMAND+'g',show_grid_cb},
   {0},
-{"&Shell",0,0,0,FL_SUBMENU},
+{"&Shell",0,0,0,fltk3::SUBMENU},
   {"Execute &Command...",fltk3::ALT+'x',(fltk3::Callback *)show_shell_window},
   {"Execute &Again...",fltk3::ALT+'g',(fltk3::Callback *)do_shell_command},
   {0},
-{"&Help",0,0,0,FL_SUBMENU},
+{"&Help",0,0,0,fltk3::SUBMENU},
   {"&Rapid development with FLUID...",0,help_cb},
-  {"&FLTK Programmers Manual...",0,manual_cb, 0, FL_MENU_DIVIDER},
+  {"&FLTK Programmers Manual...",0,manual_cb, 0, fltk3::MENU_DIVIDER},
   {"&About FLUID...",0,about_cb},
   {0},
 {0}};
@@ -1825,7 +1825,7 @@ void make_main_window() {
     o->box(fltk3::FLAT_BOX);
     o->tooltip("Double-click to view or change an item.");
     main_window->resizable(o);
-    main_menubar = new Fl_Menu_Bar(0,0,BROWSERWIDTH,MENUHEIGHT);
+    main_menubar = new fltk3::MenuBar(0,0,BROWSERWIDTH,MENUHEIGHT);
     main_menubar->menu(Main_Menu);
     // quick access to all dynamic menu items
     save_item = (fltk3::MenuItem*)main_menubar->find_item(save_cb);
@@ -1860,13 +1860,13 @@ void load_history() {
       fl_filename_relative(relative_history[i], sizeof(relative_history[i]),
                            absolute_history[i]);
 
-      if (i == 9) history_item[i].flags = FL_MENU_DIVIDER;
+      if (i == 9) history_item[i].flags = fltk3::MENU_DIVIDER;
       else history_item[i].flags = 0;
     } else break;
   }
 
   for (; i < 10; i ++) {
-    if (i) history_item[i-1].flags |= FL_MENU_DIVIDER;
+    if (i) history_item[i-1].flags |= fltk3::MENU_DIVIDER;
     history_item[i].hide();
   }
 }
@@ -1910,14 +1910,14 @@ void update_history(const char *flname) {
   for (i = 0; i < max_files; i ++) {
     fluid_prefs.set( Fl_Preferences::Name("file%d", i), absolute_history[i]);
     if (absolute_history[i][0]) {
-      if (i == 9) history_item[i].flags = FL_MENU_DIVIDER;
+      if (i == 9) history_item[i].flags = fltk3::MENU_DIVIDER;
       else history_item[i].flags = 0;
     } else break;
   }
 
   for (; i < 10; i ++) {
     fluid_prefs.set( Fl_Preferences::Name("file%d", i), "");
-    if (i) history_item[i-1].flags |= FL_MENU_DIVIDER;
+    if (i) history_item[i-1].flags |= fltk3::MENU_DIVIDER;
     history_item[i].hide();
   }
 }

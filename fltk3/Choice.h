@@ -43,11 +43,11 @@ namespace fltk3 {
    defined by an array of fltk3::MenuItem objects.
    Motif calls this an OptionButton.
    
-   The only difference between this and a Fl_Menu_Button is that the name of
+   The only difference between this and a fltk3::MenuButton is that the name of
    the most recent chosen menu item is displayed inside the box, while the
    label is displayed outside the box. However, since the use of this is most
    often to control a single variable rather than do individual callbacks,
-   some of the Fl_Menu_Button methods are redescribed here in those terms.
+   some of the fltk3::MenuButton methods are redescribed here in those terms.
    
    When the user picks an item off the menu the value() is set to that item
    and then the item's callback is done with the menu_button as the
@@ -84,7 +84,7 @@ namespace fltk3 {
    \li <tt>void fltk3::Choice::down_box(fltk3::Boxtype b)</tt>
    Sets the current down box type to \p b.
    */
-  class FLTK3_EXPORT Choice : public Fl_Menu_ {
+  class FLTK3_EXPORT Choice : public fltk3::Menu_ {
   protected:
     void draw();
   public:
@@ -96,7 +96,7 @@ namespace fltk3 {
      Gets the index of the last item chosen by the user.
      The index is zero initially.
      */
-    int value() const {return Fl_Menu_::value();}
+    int value() const {return fltk3::Menu_::value();}
     
     int value(int v);
     

@@ -1203,13 +1203,13 @@ void copyright_cb(Fl_Widget*, void*) {
 void debug_cb(Fl_Widget*, void*v) {
   debug = !debug;
   ((fltk3::MenuItem*)v)->flags =
-    debug ? FL_MENU_TOGGLE|FL_MENU_VALUE : FL_MENU_TOGGLE;
+    debug ? fltk3::MENU_TOGGLE|fltk3::MENU_VALUE : fltk3::MENU_TOGGLE;
 }
 
 void forced_cb(Fl_Widget*b, void*v) {
   forcejumps = !forcejumps;
   ((fltk3::MenuItem*)v)->flags =
-    forcejumps ? FL_MENU_TOGGLE|FL_MENU_VALUE : FL_MENU_TOGGLE;
+    forcejumps ? fltk3::MENU_TOGGLE|fltk3::MENU_VALUE : fltk3::MENU_TOGGLE;
   killnode(root->son); root->son = 0;
   if (showlegal) {expandnode(root); b->redraw();}
 }
@@ -1294,10 +1294,10 @@ fltk3::MenuItem menu[] = {
   {"New game", 'n', newgame_cb},
   {"Predict", 'p', predict_cb},
   {"Switch sides", 's', switch_cb},
-  {"Undo", 'u', undo_cb, 0, FL_MENU_DIVIDER},
-  {"Forced jumps rule", 'f', forced_cb, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
-  {"Debug", 'd', debug_cb, (void *)"d", FL_MENU_TOGGLE},
-  {"Intelligence...", 'i', intel_cb, 0, FL_MENU_DIVIDER},
+  {"Undo", 'u', undo_cb, 0, fltk3::MENU_DIVIDER},
+  {"Forced jumps rule", 'f', forced_cb, 0, fltk3::MENU_TOGGLE|fltk3::MENU_VALUE},
+  {"Debug", 'd', debug_cb, (void *)"d", fltk3::MENU_TOGGLE},
+  {"Intelligence...", 'i', intel_cb, 0, fltk3::MENU_DIVIDER},
   {"Copyright", 'c', copyright_cb},
   {"Quit", 'q', quit_cb},
   {0}};
@@ -1306,7 +1306,7 @@ fltk3::MenuItem busymenu[] = {
   {"Stop", '.', stop_cb},
   {"Autoplay", 'a', autoplay_cb},
   {"Continue", 0, continue_cb},
-  {"Debug", 'd', debug_cb, (void *)"d", FL_MENU_TOGGLE},
+  {"Debug", 'd', debug_cb, (void *)"d", fltk3::MENU_TOGGLE},
   {"Intelligence...", 'i', intel_cb},
   {"Copyright", 'c', copyright_cb},
   {"Quit", 'q', quit_cb},

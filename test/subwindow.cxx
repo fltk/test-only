@@ -112,7 +112,7 @@ int testwindow::handle(int e) {
   return 0;
 }
 
-Fl_Menu_Button* popup;
+fltk3::MenuButton* popup;
 
 const char* bigmess =
 #if 1
@@ -159,12 +159,12 @@ int main(int argc, char **argv) {
   new EnterExit(10,310,80,80,"enterexit");
   new fltk3::Input(160,310,140,25,"input1:");
   new fltk3::Input(160,340,140,25,"input2:");
-  (new Fl_Menu_Button(5,150,80,25,"menu&1"))->add(bigmess);
+  (new fltk3::MenuButton(5,150,80,25,"menu&1"))->add(bigmess);
   testwindow *subwindow =
     new testwindow(FL_DOWN_BOX,100,100,200,200,"inner");
   new Fl_Toggle_Button(110,110,80,80,"&inner");
   new EnterExit(10,110,80,80,"enterexit");
-  (new Fl_Menu_Button(50,20,80,25,"menu&2"))->add(bigmess);
+  (new fltk3::MenuButton(50,20,80,25,"menu&2"))->add(bigmess);
   new fltk3::Input(55,50,140,25,"input1:");
   new fltk3::Input(55,80,140,25,"input2:");
   subwindow->resizable(subwindow);
@@ -178,8 +178,8 @@ int main(int argc, char **argv) {
 	     "origins being different between drawing and events, "
 	     "which I hope I have solved."
 	     )) -> align(FL_ALIGN_WRAP);
-  popup = new Fl_Menu_Button(0,0,400,400);
-  popup->type(Fl_Menu_Button::POPUP3);
+  popup = new fltk3::MenuButton(0,0,400,400);
+  popup->type(fltk3::MenuButton::POPUP3);
   popup->add("This|is|a popup|menu");
   popup->add(bigmess);
   window->show(argc, argv);

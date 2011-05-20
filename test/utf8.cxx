@@ -347,7 +347,7 @@ static void create_font_widget()
   // Create the window layout
   fnt_chooser_win = new Fl_Double_Window(380, 420, "Font Selector");
   {
-    Fl_Tile *tile = new Fl_Tile(0, 0, 380, 420);
+    fltk3::TiledGroup *tile = new fltk3::TiledGroup(0, 0, 380, 420);
     {
       Fl_Group *textgroup = new Fl_Group(0, 0, 380, 105);
       {

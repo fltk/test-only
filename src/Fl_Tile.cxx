@@ -41,7 +41,7 @@
   Drag the intersection at from_x,from_y to to_x,to_y.
   This redraws all the necessary children.
 */
-void Fl_Tile::position(int oix, int oiy, int newx, int newy) {
+void fltk3::TiledGroup::position(int oix, int oiy, int newx, int newy) {
   fltk3::Widget*const* a = array();
   int *p = sizes();
   p += 8; // skip group & resizable's saved size
@@ -69,7 +69,7 @@ void Fl_Tile::position(int oix, int oiy, int newx, int newy) {
 }
 
 // move the lower-right corner (sort of):
-void Fl_Tile::resize(int X,int Y,int W,int H) {
+void fltk3::TiledGroup::resize(int X,int Y,int W,int H) {
   //fltk3::Group::resize(X, Y, W, H);
   //return;
   // remember how much to move the child widgets:
@@ -104,7 +104,7 @@ void Fl_Tile::resize(int X,int Y,int W,int H) {
   }
 }
 
-static void set_cursor(Fl_Tile*t, fltk3::Cursor c) {
+static void set_cursor(fltk3::TiledGroup*t, fltk3::Cursor c) {
   static fltk3::Cursor cursor;
   if (cursor == c || !t->window()) return;
   cursor = c;
@@ -121,7 +121,7 @@ static fltk3::Cursor cursors[4] = {
   fltk3::CURSOR_NS,
   fltk3::CURSOR_MOVE};
 
-int Fl_Tile::handle(int event) {
+int fltk3::TiledGroup::handle(int event) {
   static int sdrag;
   static int sdx, sdy;
   static int sx, sy;

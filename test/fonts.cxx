@@ -36,7 +36,7 @@
 #include <string.h>
 
 Fl_Double_Window *form;
-Fl_Tile *tile;
+fltk3::TiledGroup *tile;
 
 class FontDisplay : public Fl_Widget {
   void draw();
@@ -127,7 +127,7 @@ void create_the_forms() {
   // create the basic layout
   form = new Fl_Double_Window(550,370);
 
-  tile = new Fl_Tile(0, 0, 550, 370);
+  tile = new fltk3::TiledGroup(0, 0, 550, 370);
 
   Fl_Group *textgroup = new Fl_Group(0, 0, 550, 185);
   textgroup->box(FL_FLAT_BOX);

@@ -79,7 +79,7 @@ void guides_cb(fltk3::CheckButton *i, long) {
   for (Fl_Type *p = Fl_Type::first; p; p = p->next) {
     if (p->is_window()) {
       Fl_Window_Type *w = (Fl_Window_Type *)p;
-      ((Fl_Overlay_Window *)(w->o))->redraw_overlay();
+      ((fltk3::OverlayWindow *)(w->o))->redraw_overlay();
     }
   }
 }
@@ -287,13 +287,13 @@ static int overlays_invisible;
 // The following fltk3::Widget is used to simulate the windows.  It has
 // an overlay for the fluid ui, and special-cases the fltk3::NO_BOX.
 
-class Overlay_Window : public Fl_Overlay_Window {
+class Overlay_Window : public fltk3::OverlayWindow {
   void draw();
   void draw_overlay();
 public:
   Fl_Window_Type *window;
   int handle(int);
-  Overlay_Window(int W,int H) : Fl_Overlay_Window(W,H) {fltk3::Group::current(0);}
+  Overlay_Window(int W,int H) : fltk3::OverlayWindow(W,H) {fltk3::Group::current(0);}
   void resize(int,int,int,int);
   uchar *read_image(int &ww, int &hh);
 };
@@ -310,7 +310,7 @@ void Overlay_Window::draw() {
 	fltk3::rectf(X,Y,CHECKSIZE,CHECKSIZE);
       }
   }
-  Fl_Overlay_Window::draw();
+  fltk3::OverlayWindow::draw();
 }
 
 extern fltk3::Window *main_window;
@@ -355,7 +355,7 @@ int Overlay_Window::handle(int e) {
     switch (e) {
       case fltk3::SHOW:
       case fltk3::HIDE:
-        ret = Fl_Overlay_Window::handle(e);
+        ret = fltk3::OverlayWindow::handle(e);
     }
   }
   return ret;
@@ -521,7 +521,7 @@ void Overlay_Window::resize(int X,int Y,int W,int H) {
   if (W!=w() || H!=h())
     set_modflag(1);
 
-  Fl_Overlay_Window::resize(X,Y,W,H);
+  fltk3::OverlayWindow::resize(X,Y,W,H);
   resizable(t);
   update_xywh();
 }

@@ -644,22 +644,22 @@ Sudoku::Sudoku()
   Fl_Group *g;
   SudokuCell *cell;
   static fltk3::MenuItem	items[] = {
-    { "&Game", 0, 0, 0, FL_SUBMENU },
-    { "&New Game", FL_COMMAND | 'n', new_cb, 0, FL_MENU_DIVIDER },
+    { "&Game", 0, 0, 0, fltk3::SUBMENU },
+    { "&New Game", FL_COMMAND | 'n', new_cb, 0, fltk3::MENU_DIVIDER },
     { "&Check Game", FL_COMMAND | 'c', check_cb, 0, 0 },
     { "&Restart Game", FL_COMMAND | 'r', restart_cb, 0, 0 },
-    { "&Solve Game", FL_COMMAND | 's', solve_cb, 0, FL_MENU_DIVIDER },
+    { "&Solve Game", FL_COMMAND | 's', solve_cb, 0, fltk3::MENU_DIVIDER },
     { "&Update Helpers", 0, update_helpers_cb, 0, 0 },
-    { "&Mute Sound", FL_COMMAND | 'm', mute_cb, 0, FL_MENU_TOGGLE | FL_MENU_DIVIDER },
+    { "&Mute Sound", FL_COMMAND | 'm', mute_cb, 0, fltk3::MENU_TOGGLE | fltk3::MENU_DIVIDER },
     { "&Quit", FL_COMMAND | 'q', close_cb, 0, 0 },
     { 0 },
-    { "&Difficulty", 0, 0, 0, FL_SUBMENU },
-    { "&Easy", 0, diff_cb, (void *)"0", FL_MENU_RADIO },
-    { "&Medium", 0, diff_cb, (void *)"1", FL_MENU_RADIO },
-    { "&Hard", 0, diff_cb, (void *)"2", FL_MENU_RADIO },
-    { "&Impossible", 0, diff_cb, (void *)"3", FL_MENU_RADIO },
+    { "&Difficulty", 0, 0, 0, fltk3::SUBMENU },
+    { "&Easy", 0, diff_cb, (void *)"0", fltk3::MENU_RADIO },
+    { "&Medium", 0, diff_cb, (void *)"1", fltk3::MENU_RADIO },
+    { "&Hard", 0, diff_cb, (void *)"2", fltk3::MENU_RADIO },
+    { "&Impossible", 0, diff_cb, (void *)"3", fltk3::MENU_RADIO },
     { 0 },
-    { "&Help", 0, 0, 0, FL_SUBMENU },
+    { "&Help", 0, 0, 0, fltk3::SUBMENU },
     { "&About Sudoku", FL_F + 1, help_cb, 0, 0 },
     { 0 },
     { 0 }
@@ -671,14 +671,14 @@ Sudoku::Sudoku()
   if (j) {
     // Mute sound?
     sound_ = NULL;
-    items[6].flags |= FL_MENU_VALUE;
+    items[6].flags |= fltk3::MENU_VALUE;
   } else sound_ = new SudokuSound();
 
   // Menubar...
   prefs_.get("difficulty", difficulty_, 0);
   if (difficulty_ < 0 || difficulty_ > 3) difficulty_ = 0;
 
-  items[10 + difficulty_].flags |= FL_MENU_VALUE;
+  items[10 + difficulty_].flags |= fltk3::MENU_VALUE;
 
   menubar_ = new Fl_Sys_Menu_Bar(0, 0, 3 * GROUP_SIZE, 25);
   menubar_->menu(items);

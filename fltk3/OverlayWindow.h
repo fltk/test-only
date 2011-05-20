@@ -26,51 +26,55 @@
 //
 
 /* \file
-   Fl_Overlay_Window class . */
+ fltk3::OverlayWindow class . */
 
 #ifndef Fltk3_Overlay_Window_H
 #define Fltk3_Overlay_Window_H
 
 #include "DoubleWindow.h"
 
-/**
-  This window provides double buffering and also the ability to draw the
-  "overlay" which is another picture placed on top of the main image. The
-  overlay is designed to be a rapidly-changing but simple graphic such as
-  a mouse selection box. Fl_Overlay_Window uses the overlay
-  planes provided by your graphics hardware if they are available.
-  <P>If no hardware support is found the overlay is simulated by drawing
-  directly into the on-screen copy of the double-buffered window, and
-  "erased" by copying the backbuffer over it again.  This means the
-  overlay will blink if you change the image in the window.
-*/
-class FLTK3_EXPORT Fl_Overlay_Window : public fltk3::DoubleWindow {
-  friend class _Fl_Overlay;
-  virtual void draw_overlay() = 0;
-  fltk3::Window *overlay_;
-public:
-  void show();
-  void flush();
-  void hide();
-  void resize(int,int,int,int);
-  ~Fl_Overlay_Window();
-  int can_do_overlay();
-  void redraw_overlay();
+namespace fltk3 {
+  
   /**
-    Creates a new Fl_Overlay_Window widget using the given
-    position, size, and label (title) string. If the 
-    positions (x,y) are not given, then the window manager
-    will choose them.
-  */
-  Fl_Overlay_Window(int W, int H, const char *l=0)
+   This window provides double buffering and also the ability to draw the
+   "overlay" which is another picture placed on top of the main image. The
+   overlay is designed to be a rapidly-changing but simple graphic such as
+   a mouse selection box. fltk3::OverlayWindow uses the overlay
+   planes provided by your graphics hardware if they are available.
+   <P>If no hardware support is found the overlay is simulated by drawing
+   directly into the on-screen copy of the double-buffered window, and
+   "erased" by copying the backbuffer over it again.  This means the
+   overlay will blink if you change the image in the window.
+   */
+  class FLTK3_EXPORT OverlayWindow : public fltk3::DoubleWindow {
+    friend class _Fl_Overlay;
+    virtual void draw_overlay() = 0;
+    fltk3::Window *overlay_;
+  public:
+    void show();
+    void flush();
+    void hide();
+    void resize(int,int,int,int);
+    ~OverlayWindow();
+    int can_do_overlay();
+    void redraw_overlay();
+    /**
+     Creates a new fltk3::OverlayWindow widget using the given
+     position, size, and label (title) string. If the 
+     positions (x,y) are not given, then the window manager
+     will choose them.
+     */
+    OverlayWindow(int W, int H, const char *l=0)
     : fltk3::DoubleWindow(W,H,l) {overlay_ = 0; force_doublebuffering_=1; image(0); }
-   /**
-    See Fl_Overlay_Window::Fl_Overlay_Window(int W, int H, const char *l=0)
-  */
- Fl_Overlay_Window(int X, int Y, int W, int H, const char *l=0)
+    /**
+     See fltk3::OverlayWindow::OverlayWindow(int W, int H, const char *l=0)
+     */
+    OverlayWindow(int X, int Y, int W, int H, const char *l=0)
     : fltk3::DoubleWindow(X,Y,W,H,l) {overlay_ = 0; force_doublebuffering_=1; image(0); }
-  void show(int a, char **b) {fltk3::DoubleWindow::show(a,b);}
-};
+    void show(int a, char **b) {fltk3::DoubleWindow::show(a,b);}
+  };
+  
+}
 
 #endif
 

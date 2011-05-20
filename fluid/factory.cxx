@@ -990,7 +990,7 @@ static void cb(fltk3::Widget *, void *v) {
       int w = 0, h = 0;
       wt->ideal_size(w, h);
 
-      if (!strcmp(wt->type_name(), "Fl_Menu_Bar")) {
+      if (!strcmp(wt->type_name(), "fltk3::MenuBar")) {
         // Move and resize the menubar across the top of the window...
         wt->o->resize(0, 0, w, h);
       } else {
@@ -1009,7 +1009,7 @@ static void cb(fltk3::Widget *, void *v) {
 }
 
 fltk3::MenuItem New_Menu[] = {
-{"Code",0,0,0,FL_SUBMENU},
+{"Code",0,0,0,fltk3::SUBMENU},
   {"Function/Method",0,cb,(void*)&Fl_Function_type},
   {"Code",0,cb,(void*)&Fl_Code_type},
   {"Code Block",0,cb,(void*)&Fl_CodeBlock_type},
@@ -1020,7 +1020,7 @@ fltk3::MenuItem New_Menu[] = {
   {"Comment",0,cb,(void*)&Fl_Comment_type},
   {"Binary Data",0,cb,(void*)&Fl_Data_type},
 {0},
-{"Group",0,0,0,FL_SUBMENU},
+{"Group",0,0,0,fltk3::SUBMENU},
   {0,0,cb,(void*)&Fl_Window_type},
   {0,0,cb,(void*)&Fl_Group_type},
   {0,0,cb,(void*)&Fl_Pack_type},
@@ -1030,7 +1030,7 @@ fltk3::MenuItem New_Menu[] = {
   {0,0,cb,(void*)&Fl_Tile_type},
   {0,0,cb,(void*)&Fl_Wizard_type},
 {0},
-{"Buttons",0,0,0,FL_SUBMENU},
+{"Buttons",0,0,0,fltk3::SUBMENU},
   {0,0,cb,(void*)&Fl_Button_type},
   {0,0,cb,(void*)&Fl_Return_Button_type},
   {0,0,cb,(void*)&fltk3::LightButton_type},
@@ -1038,7 +1038,7 @@ fltk3::MenuItem New_Menu[] = {
   {0,0,cb,(void*)&fltk3::RepeatButton_type},
   {0,0,cb,(void*)&fltk3::RoundButton_type},
 {0},
-{"Valuators",0,0,0,FL_SUBMENU},
+{"Valuators",0,0,0,fltk3::SUBMENU},
   {0,0,cb,(void*)&Fl_Slider_type},
   {0,0,cb,(void*)&Fl_Scrollbar_type},
   {0,0,cb,(void*)&fltk3::ValueSlider_type},
@@ -1050,14 +1050,14 @@ fltk3::MenuItem New_Menu[] = {
   {0,0,cb,(void*)&Fl_Value_Input_type},
   {0,0,cb,(void*)&Fl_Value_Output_type},
 {0},
-{"Text",0,0,0,FL_SUBMENU},
+{"Text",0,0,0,fltk3::SUBMENU},
   {0,0,cb,(void*)&Fl_File_Input_type},
   {0,0,cb,(void*)&Fl_Input_type},
   {0,0,cb,(void*)&Fl_Output_type},
   {0,0,cb,(void*)&Fl_Text_Display_type},
   {0,0,cb,(void*)&Fl_Text_Editor_type},
 {0},
-{"Menus",0,0,0,FL_SUBMENU},
+{"Menus",0,0,0,fltk3::SUBMENU},
   {0,0,cb,(void*)&Fl_Menu_Bar_type},
   {0,0,cb,(void*)&Fl_Menu_Button_type},
   {0,0,cb,(void*)&Fl_Choice_type},
@@ -1065,13 +1065,13 @@ fltk3::MenuItem New_Menu[] = {
   {0,0,cb, (void*)&Fl_Submenu_type},
   {0,0,cb, (void*)&Fl_Menu_Item_type},
 {0},
-{"Browsers",0,0,0,FL_SUBMENU},
+{"Browsers",0,0,0,fltk3::SUBMENU},
   {0,0,cb,(void*)&fltk3::Browser_type},
   {0,0,cb,(void*)&Fl_Check_Browser_type},
   {0,0,cb,(void*)&Fl_File_Browser_type},
   {0,0,cb,(void*)&Fl_Tree_type},
 {0},
-{"Other",0,0,0,FL_SUBMENU},
+{"Other",0,0,0,fltk3::SUBMENU},
   {0,0,cb,(void*)&Fl_Box_type},
   {0,0,cb,(void*)&fltk3::Clock_type},
   {0,0,cb,(void*)&Fl_Help_View_type},

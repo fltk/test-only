@@ -568,7 +568,7 @@ static const char *class_matcher[] = {
 "FL_LABELFRAME", "fltk3::Box",
 "FL_TEXT", "fltk3::Box",
 "FL_VALSLIDER", "fltk3::ValueSlider",
-"FL_MENU", "Fl_Menu_Button",
+"FL_MENU", "fltk3::MenuButton",
 "3", "FL_BITMAP",
 "1", "FL_BOX",
 "71","FL_BROWSER",

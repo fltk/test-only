@@ -438,7 +438,7 @@ void Fl_Scroll_Type::copy_properties() {
 
 ////////////////////////////////////////////////////////////////
 
-const char tile_type_name[] = "Fl_Tile";
+const char tile_type_name[] = "fltk3::TiledGroup";
 
 Fl_Tile_Type Fl_Tile_type;	// the "factory"
 

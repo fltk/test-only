@@ -499,29 +499,29 @@ OSStatus HandleMenu( HICommand *cmd )
     fltk3::MenuItem *m = (fltk3::MenuItem*)ref;
     //printf( "Menu: %s\n", m->label() );
     fl_sys_menu_bar->picked( m );
-    if ( m->flags & FL_MENU_TOGGLE ) // update the menu toggle symbol
-      SetItemMark( cmd->menu.menuRef, cmd->menu.menuItemIndex, (m->flags & FL_MENU_VALUE ) ? 0x12 : 0 );
-    if ( m->flags & FL_MENU_RADIO ) // update all radio buttons in this menu
+    if ( m->flags & fltk3::MENU_TOGGLE ) // update the menu toggle symbol
+      SetItemMark( cmd->menu.menuRef, cmd->menu.menuItemIndex, (m->flags & fltk3::MENU_VALUE ) ? 0x12 : 0 );
+    if ( m->flags & fltk3::MENU_RADIO ) // update all radio buttons in this menu
     {
       fltk3::MenuItem *j = m;
       int i = cmd->menu.menuItemIndex;
       for (;;)
       {
-        if ( j->flags & FL_MENU_DIVIDER )
+        if ( j->flags & fltk3::MENU_DIVIDER )
           break;
         j++; i++;
         if ( !j->text || !j->radio() )
           break;
-        SetItemMark( cmd->menu.menuRef, i, ( j->flags & FL_MENU_VALUE ) ? 0x13 : 0 );
+        SetItemMark( cmd->menu.menuRef, i, ( j->flags & fltk3::MENU_VALUE ) ? 0x13 : 0 );
       }
       j = m-1; i = cmd->menu.menuItemIndex-1;
       for ( ; i>0; j--, i-- )
       {
-        if ( !j->text || j->flags&FL_MENU_DIVIDER || !j->radio() )
+        if ( !j->text || j->flags&fltk3::MENU_DIVIDER || !j->radio() )
           break;
-        SetItemMark( cmd->menu.menuRef, i, ( j->flags & FL_MENU_VALUE ) ? 0x13 : 0 );
+        SetItemMark( cmd->menu.menuRef, i, ( j->flags & fltk3::MENU_VALUE ) ? 0x13 : 0 );
       }
-      SetItemMark( cmd->menu.menuRef, cmd->menu.menuItemIndex, ( m->flags & FL_MENU_VALUE ) ? 0x13 : 0 );
+      SetItemMark( cmd->menu.menuRef, cmd->menu.menuItemIndex, ( m->flags & fltk3::MENU_VALUE ) ? 0x13 : 0 );
     }
     ret = noErr; // done handling this event
   }

@@ -1266,7 +1266,7 @@ Fl_File_Chooser::update_favorites()
   favoritesButton->add("bla");
   favoritesButton->clear();
   favoritesButton->add(add_favorites_label, fltk3::ALT + 'a', 0);
-  favoritesButton->add(manage_favorites_label, fltk3::ALT + 'm', 0, 0, FL_MENU_DIVIDER);
+  favoritesButton->add(manage_favorites_label, fltk3::ALT + 'm', 0, 0, fltk3::MENU_DIVIDER);
   favoritesButton->add(filesystems_label, fltk3::ALT + 'f', 0);
     
   if ((home = getenv("HOME")) != NULL) {

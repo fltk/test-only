@@ -655,7 +655,7 @@ int item_number(fltk3::MenuItem* m, const char* i) {
 
 fltk3::MenuItem boxmenu[] = {
 {"NO_BOX",0,0,(void *)ZERO_ENTRY},
-{"boxes",0,0,0,FL_SUBMENU},
+{"boxes",0,0,0,fltk3::SUBMENU},
 {"UP_BOX",0,0,(void *)fltk3::UP_BOX},
 {"DOWN_BOX",0,0,(void *)fltk3::DOWN_BOX},
 {"FLAT_BOX",0,0,(void *)fltk3::FLAT_BOX},
@@ -688,7 +688,7 @@ fltk3::MenuItem boxmenu[] = {
 {"GTK_ROUND_UP_BOX",0,0,(void *)fltk3::GTK_ROUND_UP_BOX},
 {"GTK_ROUND_DOWN_BOX",0,0,(void *)fltk3::GTK_ROUND_DOWN_BOX},
 {0},
-{"frames",0,0,0,FL_SUBMENU},
+{"frames",0,0,0,fltk3::SUBMENU},
 {"UP_FRAME",0,0,(void *)fltk3::UP_FRAME},
 {"DOWN_FRAME",0,0,(void *)fltk3::DOWN_FRAME},
 {"THIN_UP_FRAME",0,0,(void *)fltk3::THIN_UP_FRAME},
@@ -756,7 +756,7 @@ void down_box_cb(fltk3::Choice* i, void *v) {
     else if (!strcmp(current_widget->type_name(), "Fl_Input_Choice"))
       n = ((Fl_Input_Choice*)(current_widget->o))->down_box();
     else if (current_widget->is_menu_button())
-      n = ((Fl_Menu_*)(current_widget->o))->down_box();
+      n = ((fltk3::Menu_*)(current_widget->o))->down_box();
     else {
       i->deactivate(); return;
     }
@@ -781,7 +781,7 @@ void down_box_cb(fltk3::Choice* i, void *v) {
 	  ((Fl_Input_Choice*)(q->o))->down_box((fltk3::Boxtype)n);
 	} else if (o->is_menu_button()) {
 	  Fl_Widget_Type* q = (Fl_Widget_Type*)o;
-          ((Fl_Menu_*)(q->o))->down_box((fltk3::Boxtype)n);
+          ((fltk3::Menu_*)(q->o))->down_box((fltk3::Boxtype)n);
 	}
 	mod = 1;
       }
@@ -2263,7 +2263,7 @@ void Fl_Widget_Type::write_widget_code() {
     if (b->down_box()) write_c("%s%s->down_box(FL_%s);\n", indent(), var,
 			       boxname(b->down_box()));
   } else if (is_menu_button()) {
-    Fl_Menu_* b = (Fl_Menu_*)o;
+    fltk3::Menu_* b = (fltk3::Menu_*)o;
     if (b->down_box()) write_c("%s%s->down_box(FL_%s);\n", indent(), var,
 			       boxname(b->down_box()));
   }
@@ -2439,7 +2439,7 @@ void Fl_Widget_Type::write_properties() {
     if (b->down_box()) {
       write_string("down_box"); write_word(boxname(b->down_box()));}
   } else if (is_menu_button()) {
-    Fl_Menu_* b = (Fl_Menu_*)o;
+    fltk3::Menu_* b = (fltk3::Menu_*)o;
     if (b->down_box()) {
       write_string("down_box"); write_word(boxname(b->down_box()));}
   }
@@ -2556,7 +2556,7 @@ void Fl_Widget_Type::read_property(const char *c) {
     const char* value = read_word();
     if ((x = boxnumber(value))) {
       if (x == ZERO_ENTRY) x = 0;
-      ((Fl_Menu_*)o)->down_box((fltk3::Boxtype)x);
+      ((fltk3::Menu_*)o)->down_box((fltk3::Boxtype)x);
     }
   } else if (is_button() && !strcmp(c,"value")) {
     const char* value = read_word();

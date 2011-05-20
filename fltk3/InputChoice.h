@@ -58,7 +58,7 @@
 */
 class FLTK3_EXPORT Fl_Input_Choice : public fltk3::Group {
   // Private class to handle slightly 'special' behavior of menu button
-  class InputMenuButton : public Fl_Menu_Button {
+  class InputMenuButton : public fltk3::MenuButton {
     void draw() {
       draw_box(fltk3::UP_BOX, color());
       fltk3::color(active_r() ? labelcolor() : fltk3::inactive(labelcolor()));
@@ -68,7 +68,7 @@ class FLTK3_EXPORT Fl_Input_Choice : public fltk3::Group {
     }
   public:
     InputMenuButton(int x,int y,int w,int h,const char*l=0) : 
-	Fl_Menu_Button(x,y,w,h,l) { box(fltk3::UP_BOX); }
+	fltk3::MenuButton(x,y,w,h,l) { box(fltk3::UP_BOX); }
   };
 
   fltk3::Input *inp_;
@@ -78,7 +78,7 @@ class FLTK3_EXPORT Fl_Input_Choice : public fltk3::Group {
     Fl_Input_Choice *o=(Fl_Input_Choice *)data;
     fltk3::WidgetTracker wp(o);
     const fltk3::MenuItem *item = o->menubutton()->mvalue();
-    if (item && item->flags & (FL_SUBMENU|FL_SUBMENU_POINTER)) return;	// ignore submenus
+    if (item && item->flags & (fltk3::SUBMENU|fltk3::SUBMENU_POINTER)) return;	// ignore submenus
     if (!strcmp(o->inp_->value(), o->menu_->text()))
     {
       o->fltk3::Widget::clear_changed();
@@ -207,8 +207,8 @@ public:
     menu_->value(val);
     inp_->value(menu_->text(val));
   }
-  /**    Returns a reference to the internal Fl_Menu_Button widget.  */
-  Fl_Menu_Button *menubutton() { return menu_; }
+  /**    Returns a reference to the internal fltk3::MenuButton widget.  */
+  fltk3::MenuButton *menubutton() { return menu_; }
   /**
     Returns a reference to the internal fltk3::Input widget.</p>
   */

@@ -59,7 +59,7 @@ static void draw_current_rect() {
   SetROP2(fl_gc, old);
 # elif defined(__APPLE_QUARTZ__)
   // warning: Quartz does not support xor drawing
-  // Use the Fl_Overlay_Window instead.
+  // Use the fltk3::OverlayWindow instead.
   fltk3::color(fltk3::WHITE);
   fltk3::rect(px, py, pw, ph);
 # else

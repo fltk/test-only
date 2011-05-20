@@ -30,9 +30,9 @@
 #include <fltk3/draw.h>
 
 
-static Fl_Menu_Button	*pressed_menu_button_ = 0;
+static fltk3::MenuButton	*pressed_menu_button_ = 0;
 
-void Fl_Menu_Button::draw() {
+void fltk3::MenuButton::draw() {
   if (!box() || type()) return;
   draw_box(pressed_menu_button_ == this ? fltk3::down(box()) : box(), color());
   draw_label();
@@ -54,7 +54,7 @@ void Fl_Menu_Button::draw() {
   sets changed() as described above.  The menu item is returned
   or NULL if the user dismisses the menu.
 */
-const fltk3::MenuItem* Fl_Menu_Button::popup() {
+const fltk3::MenuItem* fltk3::MenuButton::popup() {
   const fltk3::MenuItem* m;
   pressed_menu_button_ = this;
   redraw();
@@ -70,7 +70,7 @@ const fltk3::MenuItem* Fl_Menu_Button::popup() {
   return m;
 }
 
-int Fl_Menu_Button::handle(int e) {
+int fltk3::MenuButton::handle(int e) {
   if (!menu() || !menu()->text) return 0;
   switch (e) {
   case fltk3::ENTER: /* FALLTHROUGH */
@@ -107,13 +107,13 @@ int Fl_Menu_Button::handle(int e) {
 }
 
 /**
-  Creates a new Fl_Menu_Button widget using the given position,
+  Creates a new fltk3::MenuButton widget using the given position,
   size, and label string. The default boxtype is fltk3::UP_BOX.
   <P>The constructor sets menu() to NULL.  See 
-  Fl_Menu_ for the methods to set or change the menu.
+  fltk3::Menu_ for the methods to set or change the menu.
 */
-Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
-: Fl_Menu_(X,Y,W,H,l) {
+fltk3::MenuButton::MenuButton(int X,int Y,int W,int H,const char *l)
+: fltk3::Menu_(X,Y,W,H,l) {
   down_box(fltk3::NO_BOX);
 }
 

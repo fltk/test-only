@@ -26,12 +26,14 @@
 //
 
 /* \file
-   Fl_Menu_Bar widget . */
+   fltk3::MenuBar widget . */
 
 #ifndef Fltk3_Menu_Bar_H
 #define Fltk3_Menu_Bar_H
 
 #include "Menu_.h"
+
+namespace fltk3 {
 
 /**
   This widget provides a standard menubar interface.  Usually you will
@@ -59,28 +61,30 @@
   <P>Typing the shortcut() of any of the menu items will cause
   callbacks exactly the same as when you pick the item with the mouse.
 */
-class FLTK3_EXPORT Fl_Menu_Bar : public Fl_Menu_ {
+class FLTK3_EXPORT MenuBar : public fltk3::Menu_ {
 protected:
     void draw();
 public:
     int handle(int);
   /**
-      Creates a new Fl_Menu_Bar widget using the given position,
+      Creates a new fltk3::MenuBar widget using the given position,
     size, and label string. The default boxtype is fltk3::UP_BOX.
     <P>The constructor sets menu() to NULL.  See 
-    Fl_Menu_ for the methods to set or change the menu. </P>
+    fltk3::Menu_ for the methods to set or change the menu. </P>
     <P>labelsize(), labelfont(), and labelcolor()
     are used to control how the menubar items are drawn.  They are
     initialized from the Fl_Menu static variables, but you can
     change them if desired. </P>
     <P>label() is ignored unless you change align() to
     put it outside the menubar.
-    <P>The destructor removes the Fl_Menu_Bar widget and all of its
+    <P>The destructor removes the fltk3::MenuBar widget and all of its
     menu items.
   */
-    Fl_Menu_Bar(int X, int Y, int W, int H,const char *l=0)
-      : Fl_Menu_(X,Y,W,H,l) {}
+    MenuBar(int X, int Y, int W, int H,const char *l=0)
+      : fltk3::Menu_(X,Y,W,H,l) {}
 };
+
+}
 
 #endif
 

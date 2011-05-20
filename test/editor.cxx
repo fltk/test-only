@@ -740,29 +740,29 @@ void view_cb(Fl_Widget*, void*) {
 }
 
 fltk3::MenuItem menuitems[] = {
-  { "&File",              0, 0, 0, FL_SUBMENU },
+  { "&File",              0, 0, 0, fltk3::SUBMENU },
     { "&New File",        0, (Fl_Callback *)new_cb },
     { "&Open File...",    FL_COMMAND + 'o', (Fl_Callback *)open_cb },
-    { "&Insert File...",  FL_COMMAND + 'i', (Fl_Callback *)insert_cb, 0, FL_MENU_DIVIDER },
+    { "&Insert File...",  FL_COMMAND + 'i', (Fl_Callback *)insert_cb, 0, fltk3::MENU_DIVIDER },
     { "&Save File",       FL_COMMAND + 's', (Fl_Callback *)save_cb },
-    { "Save File &As...", FL_COMMAND + FL_SHIFT + 's', (Fl_Callback *)saveas_cb, 0, FL_MENU_DIVIDER },
+    { "Save File &As...", FL_COMMAND + FL_SHIFT + 's', (Fl_Callback *)saveas_cb, 0, fltk3::MENU_DIVIDER },
     { "New &View",        FL_ALT
 #ifdef __APPLE__
       + FL_COMMAND
 #endif
       + 'v', (Fl_Callback *)view_cb, 0 },
-    { "&Close View",      FL_COMMAND + 'w', (Fl_Callback *)close_cb, 0, FL_MENU_DIVIDER },
+    { "&Close View",      FL_COMMAND + 'w', (Fl_Callback *)close_cb, 0, fltk3::MENU_DIVIDER },
     { "E&xit",            FL_COMMAND + 'q', (Fl_Callback *)quit_cb, 0 },
     { 0 },
 
-  { "&Edit", 0, 0, 0, FL_SUBMENU },
+  { "&Edit", 0, 0, 0, fltk3::SUBMENU },
     { "Cu&t",             FL_COMMAND + 'x', (Fl_Callback *)cut_cb },
     { "&Copy",            FL_COMMAND + 'c', (Fl_Callback *)copy_cb },
     { "&Paste",           FL_COMMAND + 'v', (Fl_Callback *)paste_cb },
     { "&Delete",          0, (Fl_Callback *)delete_cb },
     { 0 },
 
-  { "&Search", 0, 0, 0, FL_SUBMENU },
+  { "&Search", 0, 0, 0, fltk3::SUBMENU },
     { "&Find...",         FL_COMMAND + 'f', (Fl_Callback *)find_cb },
     { "F&ind Again",      FL_COMMAND + 'g', find2_cb },
     { "&Replace...",      FL_COMMAND + 'r', replace_cb },
@@ -775,7 +775,7 @@ fltk3::MenuItem menuitems[] = {
 Fl_Window* new_view() {
   EditorWindow* w = new EditorWindow(660, 400, title);
     w->begin();
-    Fl_Menu_Bar* m = new Fl_Menu_Bar(0, 0, 660, 30);
+    fltk3::MenuBar* m = new fltk3::MenuBar(0, 0, 660, 30);
     m->copy(menuitems, w);
     w->editor = new Fl_Text_Editor(0, 30, 660, 370);
     w->editor->textfont(FL_COURIER);

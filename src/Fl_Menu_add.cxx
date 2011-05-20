@@ -24,7 +24,7 @@
 //
 //     http://www.fltk.org/str.php
 //
-// Methods to alter the menu in an Fl_Menu_ widget.
+// Methods to alter the menu in an fltk3::Menu_ widget.
 
 // These are for Forms emulation and for dynamically changing the
 // menus.  They are in this source file so they are not linked in if
@@ -43,12 +43,15 @@
 static fltk3::MenuItem* local_array = 0;
 static int local_array_alloc = 0; // number allocated
 static int local_array_size = 0; // == size(local_array)
-extern Fl_Menu_* fl_menu_array_owner; // in Fl_Menu_.cxx
+
+namespace fltk3 {
+  extern fltk3::Menu_* menu_array_owner; // in fltk3::Menu_.cxx
+}
 
 // For historical reasons there are matching methods that work on a
 // user-allocated array of fltk3::MenuItem.  These methods are quite
 // depreciated and should not be used.  These old methods use the
-// above pointers to detect if the array belongs to an Fl_Menu_
+// above pointers to detect if the array belongs to an fltk3::Menu_
 // widget, and if so it reallocates as necessary.
 
 
@@ -163,7 +166,7 @@ int fltk3::MenuItem::insert(
     if (*mytext == '/') {item = mytext; break;}
 
     // leading underscore causes divider line:
-    if (*mytext == '_') {mytext++; flags1 = FL_MENU_DIVIDER;}
+    if (*mytext == '_') {mytext++; flags1 = fltk3::MENU_DIVIDER;}
 
     // copy to buf, changing \x to x:
     q = buf;
@@ -177,11 +180,11 @@ int fltk3::MenuItem::insert(
 
     /* find a matching menu title: */
     for (; m->text; m = m->next())
-      if (m->flags&FL_SUBMENU && !compare(item, m->text)) break;
+      if (m->flags&fltk3::SUBMENU && !compare(item, m->text)) break;
 
     if (!m->text) { /* create a new menu */
       int n = (index==-1) ? m-array : index;
-      array = array_insert(array, msize, n, item, FL_SUBMENU|flags1);
+      array = array_insert(array, msize, n, item, fltk3::SUBMENU|flags1);
       msize++;
       array = array_insert(array, msize, n+1, 0, 0);
       msize++;
@@ -193,13 +196,13 @@ int fltk3::MenuItem::insert(
 
   /* find a matching menu item: */
   for (; m->text; m = m->next())
-    if (!(m->flags&FL_SUBMENU) && !compare(m->text,item)) break;
+    if (!(m->flags&fltk3::SUBMENU) && !compare(m->text,item)) break;
 
   if (!m->text) {	/* add a new menu item */
     int n = (index==-1) ? m-array : index;
     array = array_insert(array, msize, n, item, myflags|flags1);
     msize++;
-    if (myflags & FL_SUBMENU) { // add submenu delimiter
+    if (myflags & fltk3::SUBMENU) { // add submenu delimiter
       array = array_insert(array, msize, n+1, 0, 0);
       msize++;
     }
@@ -311,20 +314,20 @@ int fltk3::MenuItem::insert(
   \par 
   These flags can be 'OR'ed together:
   \code
-      FL_MENU_INACTIVE     // Deactivate menu item (gray out)
-      FL_MENU_TOGGLE       // Item is a checkbox toggle (shows checkbox for on/off state)
-      FL_MENU_VALUE        // The on/off state for checkbox/radio buttons (if set, state is 'on')
-      FL_MENU_RADIO        // Item is a radio button (one checkbox of many can be on)
-      FL_MENU_INVISIBLE    // Item will not show up (shortcut will work)
-      FL_SUBMENU_POINTER   // Indicates user_data() is a pointer to another menu array
-      FL_SUBMENU           // This item is a submenu to other items
-      FL_MENU_DIVIDER      // Creates divider line below this item. Also ends a group of radio buttons.
+      fltk3::MENU_INACTIVE     // Deactivate menu item (gray out)
+      fltk3::MENU_TOGGLE       // Item is a checkbox toggle (shows checkbox for on/off state)
+      fltk3::MENU_VALUE        // The on/off state for checkbox/radio buttons (if set, state is 'on')
+      fltk3::MENU_RADIO        // Item is a radio button (one checkbox of many can be on)
+      fltk3::MENU_INVISIBLE    // Item will not show up (shortcut will work)
+      fltk3::SUBMENU_POINTER   // Indicates user_data() is a pointer to another menu array
+      fltk3::SUBMENU           // This item is a submenu to other items
+      fltk3::MENU_DIVIDER      // Creates divider line below this item. Also ends a group of radio buttons.
   \endcode
 
   \todo Raw integer shortcut needs examples. 
         Dependent on responses to http://fltk.org/newsgroups.php?gfltk.development+v:10086 and results of STR#2344
  */
-int Fl_Menu_::add(const char *label,int shortcut,fltk3::Callback *callback,void *userdata,int flags) {
+int fltk3::Menu_::add(const char *label,int shortcut,fltk3::Callback *callback,void *userdata,int flags) {
   return(insert(-1,label,shortcut,callback,userdata,flags));	// -1: append
 }
 
@@ -361,7 +364,7 @@ int Fl_Menu_::add(const char *label,int shortcut,fltk3::Callback *callback,void 
   \see                add()
 
  */
-int Fl_Menu_::insert(
+int fltk3::Menu_::insert(
   int index,
   const char *label,
   int shortcut,
@@ -370,9 +373,9 @@ int Fl_Menu_::insert(
   int flags
 ) {
   // make this widget own the local array:
-  if (this != fl_menu_array_owner) {
-    if (fl_menu_array_owner) {
-      Fl_Menu_* o = fl_menu_array_owner;
+  if (this != fltk3::menu_array_owner) {
+    if (fltk3::menu_array_owner) {
+      fltk3::Menu_* o = fltk3::menu_array_owner;
       // the previous owner get's its own correctly-sized array:
       int value_offset = o->value_-local_array;
       int n = local_array_size;
@@ -400,7 +403,7 @@ int Fl_Menu_::insert(
       memset(menu_, 0, sizeof(fltk3::MenuItem));
       local_array_size = 1;
     }
-    fl_menu_array_owner = this;
+    fltk3::menu_array_owner = this;
   }
   int r = menu_->insert(index,label,shortcut,callback,userdata,flags);
   // if it rellocated array we must fix the pointer:
@@ -428,7 +431,7 @@ int Fl_Menu_::insert(
   \param str string containing multiple menu labels as described above
   \returns the index into the menu() array, where the entry was added
 */
-int Fl_Menu_::add(const char *str) {
+int fltk3::Menu_::add(const char *str) {
   char buf[1024];
   int r = 0;
   while (*str) {
@@ -455,7 +458,7 @@ int Fl_Menu_::add(const char *str) {
   \param i index into menu array
   \param str new label for menu item at index i
 */
-void Fl_Menu_::replace(int i, const char *str) {
+void fltk3::Menu_::replace(int i, const char *str) {
   if (i<0 || i>=size()) return;
   if (!alloc) copy(menu_);
   if (alloc > 1) {
@@ -475,7 +478,7 @@ void Fl_Menu_::replace(int i, const char *str) {
  
   \param i index into menu array
 */
-void Fl_Menu_::remove(int i) {
+void fltk3::Menu_::remove(int i) {
   int n = size();
   if (i<0 || i>=n) return;
   if (!alloc) copy(menu_);

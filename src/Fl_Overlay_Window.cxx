@@ -25,8 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
-/** \fn virtual void Fl_Overlay_Window::draw_overlay() = 0
-  You must subclass Fl_Overlay_Window and provide this method.
+/** \fn virtual void fltk3::OverlayWindow::draw_overlay() = 0
+  You must subclass fltk3::OverlayWindow and provide this method.
   It is just like a draw() method, except it draws the overlay.
   The overlay will have already been "cleared" when this is called.  You
   can use any of the routines described in &lt;FL/draw.h&gt;.
@@ -42,16 +42,16 @@
 #include <fltk3/draw.h>
 #include <fltk3/x.h>
 
-void Fl_Overlay_Window::show() {
+void fltk3::OverlayWindow::show() {
   fltk3::DoubleWindow::show();
   if (overlay_ && overlay_ != this) overlay_->show();
 }
 
-void Fl_Overlay_Window::hide() {
+void fltk3::OverlayWindow::hide() {
   fltk3::DoubleWindow::hide();
 }
 
-void Fl_Overlay_Window::flush() {
+void fltk3::OverlayWindow::flush() {
 #ifdef BOXX_BUGS
   if (overlay_ && overlay_ != this && overlay_->shown()) {
     // all drawing to windows hidden by overlay windows is ignored, fix this
@@ -67,7 +67,7 @@ void Fl_Overlay_Window::flush() {
   if (overlay_ == this) draw_overlay();
 }
 
-void Fl_Overlay_Window::resize(int X, int Y, int W, int H) {
+void fltk3::OverlayWindow::resize(int X, int Y, int W, int H) {
   fltk3::DoubleWindow::resize(X,Y,W,H);
   if (overlay_ && overlay_!=this) overlay_->resize(0,0,w(),h());
 }
@@ -75,14 +75,14 @@ void Fl_Overlay_Window::resize(int X, int Y, int W, int H) {
 /**
   Destroys the window and all child widgets.
 */
-Fl_Overlay_Window::~Fl_Overlay_Window() {
+fltk3::OverlayWindow::~OverlayWindow() {
   hide();
 //  delete overlay; this is done by ~Fl_Group
 }
 
 #if !HAVE_OVERLAY
 
-int Fl_Overlay_Window::can_do_overlay() {return 0;}
+int fltk3::OverlayWindow::can_do_overlay() {return 0;}
 
 /**
   Call this to indicate that the overlay data has changed and needs to
@@ -90,7 +90,7 @@ int Fl_Overlay_Window::can_do_overlay() {return 0;}
   called, so if you want an initial display you must call this after
   calling show().
 */
-void Fl_Overlay_Window::redraw_overlay() {
+void fltk3::OverlayWindow::redraw_overlay() {
   overlay_ = this;
   clear_damage((uchar)(damage()|fltk3::DAMAGE_OVERLAY));
   fltk3::damage(fltk3::DAMAGE_CHILD);
@@ -106,7 +106,7 @@ static GC gc;	// the GC used by all X windows
 extern uchar fl_overlay; // changes how fltk3::color(x) works
 
 class _Fl_Overlay : public fltk3::Window {
-  friend class Fl_Overlay_Window;
+  friend class fltk3::OverlayWindow;
   void flush();
   void show();
 public:
@@ -114,7 +114,7 @@ public:
     fltk3::Window(x,y,w,h) {set_flag(INACTIVE);}
 };
 
-int Fl_Overlay_Window::can_do_overlay() {
+int fltk3::OverlayWindow::can_do_overlay() {
   return fl_find_overlay_visual() != 0;
 }
 
@@ -139,7 +139,7 @@ void _Fl_Overlay::flush() {
       if (fltk3::cairo_autolink_context()) fltk3::cairo_make_current(this); // capture gc changes automatically to update the cairo context adequately
 #endif
   fl_overlay = 1;
-  Fl_Overlay_Window *w = (Fl_Overlay_Window *)parent();
+  fltk3::OverlayWindow *w = (fltk3::OverlayWindow *)parent();
   Fl_X *myi = Fl_X::i(this);
   if (damage() != fltk3::DAMAGE_EXPOSE) XClearWindow(fl_display, fl_xid(this));
   fltk3::clip_region(myi->region); myi->region = 0;
@@ -147,7 +147,7 @@ void _Fl_Overlay::flush() {
   fl_overlay = 0;
 }
 
-void Fl_Overlay_Window::redraw_overlay() {
+void fltk3::OverlayWindow::redraw_overlay() {
   if (!fl_display) return; // this prevents fluid -c from opening display
   if (!overlay_) {
     if (can_do_overlay()) {

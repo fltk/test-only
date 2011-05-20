@@ -553,7 +553,7 @@ void fltk3::Group::remove(fltk3::Widget &o) {
 // left,right,top,bottom quads.  The first quad is the group, the
 // second is the resizable (clipped to the group), and the
 // rest are the children.  This is a convenient order for the
-// algorithm.  If you change this be sure to fix Fl_Tile which
+// algorithm.  If you change this be sure to fix fltk3::TiledGroup which
 // also uses this array!
 
 /**
@@ -583,7 +583,7 @@ void fltk3::Group::init_sizes() {
   with the current widget sizes and positions.
 
   \note You should never need to use this method directly, unless you have
-  special needs to rearrange the children of a fltk3::Group. Fl_Tile uses
+  special needs to rearrange the children of a fltk3::Group. fltk3::TiledGroup uses
   this to rearrange its widget positions.
   
   \sa init_sizes()

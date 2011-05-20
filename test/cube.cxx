@@ -180,7 +180,7 @@ int main(int argc, char **argv) {
   // added to demo printing
   form->begin();
   static fltk3::MenuItem	items[] = {
-    { "Print", 0, 0, 0, FL_SUBMENU },
+    { "Print", 0, 0, 0, fltk3::SUBMENU },
     { "Print window", 0, print_cb, 0, 0 },
     { 0 },
     { 0 }

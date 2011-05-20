@@ -29,7 +29,7 @@
 
 // This file contains code for implementing fltk3::MenuItem, and for
 // methods for bringing up popup menu hierarchies without using the
-// Fl_Menu_ widget.
+// fltk3::Menu_ widget.
 
 #include <fltk3/run.h>
 #include <fltk3/MenuWindow.h>
@@ -46,7 +46,7 @@ int fltk3::MenuItem::size() const {
     if (!m->text) {
       if (!nest) return (m-this+1);
       nest--;
-    } else if (m->flags & FL_SUBMENU) {
+    } else if (m->flags & fltk3::SUBMENU) {
       nest++;
     }
     m++;
@@ -61,7 +61,7 @@ static const fltk3::MenuItem* next_visible_or_not(const fltk3::MenuItem* m) {
     if (!m->text) {
       if (!nest) return m;
       nest--;
-    } else if (m->flags&FL_SUBMENU) {
+    } else if (m->flags&fltk3::SUBMENU) {
       nest++;
     }
     m++;
@@ -87,7 +87,7 @@ const fltk3::MenuItem* fltk3::MenuItem::next(int n) const {
 }
 
 // appearance of current menus are pulled from this parent widget:
-static const Fl_Menu_* button=0;
+static const fltk3::Menu_* button=0;
 
 ////////////////////////////////////////////////////////////////
 
@@ -135,7 +135,7 @@ extern char fltk3::draw_shortcut;
   Measures width of label, including effect of & characters. 
   Optionally, can get height if hp is not NULL. 
 */
-int fltk3::MenuItem::measure(int* hp, const Fl_Menu_* m) const {
+int fltk3::MenuItem::measure(int* hp, const fltk3::Menu_* m) const {
   fltk3::Label l;
   l.value   = text;
   l.image   = 0;
@@ -148,12 +148,12 @@ int fltk3::MenuItem::measure(int* hp, const Fl_Menu_* m) const {
   int w = 0; int h = 0;
   l.measure(w, hp ? *hp : h);
   fltk3::draw_shortcut = 0;
-  if (flags & (FL_MENU_TOGGLE|FL_MENU_RADIO)) w += 14;
+  if (flags & (fltk3::MENU_TOGGLE|fltk3::MENU_RADIO)) w += 14;
   return w;
 }
 
 /** Draws the menu item in bounding box x,y,w,h, optionally selects the item. */
-void fltk3::MenuItem::draw(int x, int y, int w, int h, const Fl_Menu_* m,
+void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
 			int selected) const {
   fltk3::Label l;
   l.value   = text;
@@ -188,11 +188,11 @@ void fltk3::MenuItem::draw(int x, int y, int w, int h, const Fl_Menu_* m,
     }
   }
 
-  if (flags & (FL_MENU_TOGGLE|FL_MENU_RADIO)) {
+  if (flags & (fltk3::MENU_TOGGLE|fltk3::MENU_RADIO)) {
     int d = (h - fltk3::NORMAL_SIZE + 1) / 2;
     int W = h - 2 * d;
 
-    if (flags & FL_MENU_RADIO) {
+    if (flags & fltk3::MENU_RADIO) {
       fltk3::draw_box(fltk3::ROUND_DOWN_BOX, x+2, y+d, W, W, fltk3::BACKGROUND2_COLOR);
       if (value()) {
 	int tW = (W - fltk3::box_dw(fltk3::ROUND_DOWN_BOX)) / 2 + 1;
@@ -335,7 +335,7 @@ menuwindow::menuwindow(const fltk3::MenuItem* m, int X, int Y, int Wp, int Hp,
     int hh; 
     int w1 = m->measure(&hh, button);
     if (hh+LEADING>itemheight) itemheight = hh+LEADING;
-    if (m->flags&(FL_SUBMENU|FL_SUBMENU_POINTER)) w1 += 14;
+    if (m->flags&(fltk3::SUBMENU|fltk3::SUBMENU_POINTER)) w1 += 14;
     if (w1 > W) W = w1;
     // calculate the maximum width of all shortcuts
     if (m->shortcut_) {
@@ -377,7 +377,7 @@ menuwindow::menuwindow(const fltk3::MenuItem* m, int X, int Y, int Wp, int Hp,
     // that has a selected item.
     if (Y+h()>scr_y+scr_h && Y-h()>=scr_y) {
       if (Hp>1) {
-        // if we know the height of the Fl_Menu_, use it
+        // if we know the height of the fltk3::Menu_, use it
         Y = Y-Hp-h();
       } else if (t) {
         // assume that the menubar item height relates to the first
@@ -476,7 +476,7 @@ void menuwindow::drawentry(const fltk3::MenuItem* m, int n, int eraseit) {
     }
   }
 
-  if (m->flags & FL_MENU_DIVIDER) {
+  if (m->flags & fltk3::MENU_DIVIDER) {
     fltk3::color(fltk3::DARK3);
     fltk3::xyline(BW-1, yy+hh+(LEADING-2)/2, W-2*BW+2);
     fltk3::color(fltk3::LIGHT3);
@@ -612,7 +612,7 @@ static void setitem(int m, int n) {
 
 static int forward(int menu) { // go to next item in menu menu if possible
   menustate &pp = *p;
-  // Fl_Menu_Button can generate menu=-1. This line fixes it and selectes the first item.
+  // fltk3::MenuButton can generate menu=-1. This line fixes it and selectes the first item.
   if (menu==-1) 
     menu = 0;
   menuwindow &m = *(pp.p[menu]);
@@ -791,8 +791,8 @@ int menuwindow::early_hide_handle(int e) {
 	) {
 #if 0 // makes the check/radio items leave the menu up
       const fltk3::MenuItem* m = pp.current_item;
-      if (m && button && (m->flags & (FL_MENU_TOGGLE|FL_MENU_RADIO))) {
-	((Fl_Menu_*)button)->picked(m);
+      if (m && button && (m->flags & (fltk3::MENU_TOGGLE|fltk3::MENU_RADIO))) {
+	((fltk3::Menu_*)button)->picked(m);
 	pp.p[pp.menu_number]->redraw();
       } else
 #endif
@@ -813,12 +813,12 @@ int menuwindow::early_hide_handle(int e) {
   found, the menu is aligned just below the rectangle (like a pulldown
   menu).
   <P>The title and menubar arguments are used
-  internally by the Fl_Menu_Bar widget.
+  internally by the fltk3::MenuBar widget.
 */
 const fltk3::MenuItem* fltk3::MenuItem::pulldown(
     int X, int Y, int W, int H,
     const fltk3::MenuItem* initial_item,
-    const Fl_Menu_* pbutton,
+    const fltk3::Menu_* pbutton,
     const fltk3::MenuItem* t,
     int menubar) const {
   fltk3::Group::current(0); // fix possible user error...
@@ -907,7 +907,7 @@ const fltk3::MenuItem* fltk3::MenuItem::pulldown(
     if (m->submenu()) {
       const fltk3::MenuItem* title = m;
       const fltk3::MenuItem* menutable;
-      if (m->flags&FL_SUBMENU) menutable = m+1;
+      if (m->flags&fltk3::SUBMENU) menutable = m+1;
       else menutable = (fltk3::MenuItem*)(m)->user_data_;
       // figure out where new menu goes:
       int nX, nY;
@@ -986,14 +986,14 @@ const fltk3::MenuItem* fltk3::MenuItem::pulldown(
   If \p picked is zero or not in the menu item table the menu is
   positioned with the cursor in the top-left corner.
 
-  \p button is a pointer to an Fl_Menu_ from which the color and
+  \p button is a pointer to an fltk3::Menu_ from which the color and
   boxtypes for the menu are pulled.  If NULL then defaults are used.
 */
 const fltk3::MenuItem* fltk3::MenuItem::popup(
   int X, int Y,
   const char* title,
   const fltk3::MenuItem* picked,
-  const Fl_Menu_* button
+  const fltk3::Menu_* button
   ) const {
   static fltk3::MenuItem dummy; // static so it is all zeros
   dummy.text = title;
@@ -1047,7 +1047,7 @@ const fltk3::MenuItem* fltk3::MenuItem::test_shortcut() const {
       // only return matches from lower menu if nothing found in top menu:
       if (!ret && m->submenu()) {
 	const fltk3::MenuItem* s =
-	  (m->flags&FL_SUBMENU) ? m+1:(const fltk3::MenuItem*)m->user_data_;
+	  (m->flags&fltk3::SUBMENU) ? m+1:(const fltk3::MenuItem*)m->user_data_;
 	ret = s->test_shortcut();
       }
     }

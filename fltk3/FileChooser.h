@@ -76,16 +76,16 @@ private:
   fltk3::Choice *showChoice;
   void cb_showChoice_i(fltk3::Choice*, void*);
   static void cb_showChoice(fltk3::Choice*, void*);
-  Fl_Menu_Button *favoritesButton;
-  void cb_favoritesButton_i(Fl_Menu_Button*, void*);
-  static void cb_favoritesButton(Fl_Menu_Button*, void*);
+  fltk3::MenuButton *favoritesButton;
+  void cb_favoritesButton_i(fltk3::MenuButton*, void*);
+  static void cb_favoritesButton(fltk3::MenuButton*, void*);
 public:
   fltk3::Button *newButton;
 private:
   void cb_newButton_i(fltk3::Button*, void*);
   static void cb_newButton(fltk3::Button*, void*);
-  void cb__i(Fl_Tile*, void*);
-  static void cb_(Fl_Tile*, void*);
+  void cb__i(fltk3::TiledGroup*, void*);
+  static void cb_(fltk3::TiledGroup*, void*);
   Fl_File_Browser *fileList;
   void cb_fileList_i(Fl_File_Browser*, void*);
   static void cb_fileList(Fl_File_Browser*, void*);

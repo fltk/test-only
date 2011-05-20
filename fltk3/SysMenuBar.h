@@ -36,19 +36,19 @@
 /**
  @brief A class to create, modify and delete menus that appear on Mac OS X in the menu bar at the top of the screen.
  *
- * On other than Mac OS X platforms, Fl_Sys_Menu_Bar is a synonym of class Fl_Menu_Bar.
+ * On other than Mac OS X platforms, Fl_Sys_Menu_Bar is a synonym of class fltk3::MenuBar.
  */
-class FLTK3_EXPORT Fl_Sys_Menu_Bar : public Fl_Menu_Bar {
+class FLTK3_EXPORT Fl_Sys_Menu_Bar : public fltk3::MenuBar {
 protected:
   void draw();
 public:
   /**
    @brief The constructor.
    *
-   * On Mac OS X, all arguments are unused. On other platforms they are used as by Fl_Menu_Bar::Fl_Menu_Bar().
+   * On Mac OS X, all arguments are unused. On other platforms they are used as by fltk3::MenuBar::fltk3::MenuBar().
    */
   Fl_Sys_Menu_Bar(int x,int y,int w,int h,const char *l=0)
-      : Fl_Menu_Bar(x,y,w,h,l) {
+      : fltk3::MenuBar(x,y,w,h,l) {
     deactivate();			// don't let the old area take events
     fl_sys_menu_bar = this;
   }
@@ -69,7 +69,7 @@ public:
 
 #else
 
-typedef Fl_Menu_Bar Fl_Sys_Menu_Bar;
+typedef fltk3::MenuBar Fl_Sys_Menu_Bar;
 
 #endif // defined(__APPLE__) || defined(FL_DOXYGEN)
 

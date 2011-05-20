@@ -31,14 +31,14 @@
 #include <stdio.h>
 
 int main(int argc, char **argv) {
-  Fl::scheme(NULL);
-  Fl::args(argc, argv);
-  Fl::get_system_colors();
+  fltk3::scheme(NULL);
+  fltk3::args(argc, argv);
+  fltk3::get_system_colors();
 
-  fl_message("Spelling check sucessful, %d errors found with %g%% confidence",
+  fltk3::message("Spelling check sucessful, %d errors found with %g%% confidence",
 	     1002, 100*(15/77.0));
 
-  fl_alert(
+  fltk3::alert(
 		"Quantum fluctuations in the space-time continuum detected,\n"
 	  "you have %g seconds to comply.\n\n"
 		"\"In physics, spacetime is any mathematical model that combines\n"
@@ -48,19 +48,19 @@ int main(int argc, char **argv) {
 		"fourth dimension.\" - Wikipedia",
 		10.0);
 
-  printf("fl_choice returned %d\n",
-    fl_choice("Do you really want to %s?", "No", "Yes", 0L, "continue"));
+  printf("fltk3::choice returned %d\n",
+    fltk3::choice("Do you really want to %s?", "No", "Yes", 0L, "continue"));
 
-  printf("fl_choice returned %d\n",
-    fl_choice("Choose one of the following:","choice0","choice1","choice2"));
+  printf("fltk3::choice returned %d\n",
+    fltk3::choice("Choose one of the following:","choice0","choice1","choice2"));
   const char *r;
 
-  r = fl_input("Please enter a string for '%s':", "this is the default value",
+  r = fltk3::input("Please enter a string for '%s':", "this is the default value",
 	       "testing");
-  printf("fl_input returned \"%s\"\n", r ? r : "NULL");
+  printf("fltk3::input returned \"%s\"\n", r ? r : "NULL");
 
-  r = fl_password("Enter %s's password:", 0, "somebody");
-  printf("fl_password returned \"%s\"\n", r ? r : "NULL");
+  r = fltk3::password("Enter %s's password:", 0, "somebody");
+  printf("fltk3::password returned \"%s\"\n", r ? r : "NULL");
 
   return 0;
 }

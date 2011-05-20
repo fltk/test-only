@@ -97,8 +97,8 @@ typedef fltk3::Window FL_FORM;
 
 #define FL_ALIGN_BESIDE	fltk3::ALIGN_INSIDE
 
-#define FL_PUP_TOGGLE	2 // FL_MENU_TOGGLE
-#define FL_PUP_INACTIVE 1 // FL_MENU_INACTIVE
+#define FL_PUP_TOGGLE	2 // fltk3::MENU_TOGGLE
+#define FL_PUP_INACTIVE 1 // fltk3::MENU_INACTIVE
 #define FL_NO_FRAME	fltk3::NO_BOX
 #define FL_ROUNDED3D_UPBOX 	fltk3::ROUND_UP_BOX
 #define FL_ROUNDED3D_DOWNBOX	fltk3::ROUND_DOWN_BOX
@@ -480,7 +480,7 @@ inline int fl_isdisplayed_browser_line(fltk3::Widget* o, int n) {
 #define FL_RETURN_BUTTON	6
 #define FL_HIDDEN_RET_BUTTON	7
 #define FL_PUSH_BUTTON		fltk3::TOGGLE_BUTTON
-#define FL_MENU_BUTTON		9
+#define fltk3::MENU_BUTTON		9
 
 FLTK3_EXPORT fltk3::Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
 inline int fl_get_button(fltk3::Widget* b) {return ((fltk3::Button*)b)->value();}
@@ -717,35 +717,35 @@ inline const char* fl_get_input(fltk3::Widget* o) {return ((fltk3::Input*)o)->va
 #define FL_TOUCH_MENU		0
 #define FL_PUSH_MENU		1
 #define FL_PULLDOWN_MENU	2
-forms_constructor(Fl_Menu_Button, fl_add_menu)
+forms_constructor(fltk3::MenuButton, fl_add_menu)
 
 inline void fl_clear_menu(fltk3::Widget* o) {
-    ((Fl_Menu_Button*)o)->clear();}
+    ((fltk3::MenuButton*)o)->clear();}
 inline void fl_set_menu(fltk3::Widget* o, const char* s) {
-    ((Fl_Menu_Button*)o)->clear(); ((Fl_Menu_Button*)o)->add(s);}
+    ((fltk3::MenuButton*)o)->clear(); ((fltk3::MenuButton*)o)->add(s);}
 inline void fl_addto_menu(fltk3::Widget* o, const char* s) {
-    ((Fl_Menu_Button*)o)->add(s);}
+    ((fltk3::MenuButton*)o)->add(s);}
 inline void fl_replace_menu_item(fltk3::Widget* o, int i, const char* s) {
-    ((Fl_Menu_Button*)o)->replace(i-1,s);}
+    ((fltk3::MenuButton*)o)->replace(i-1,s);}
 inline void fl_delete_menu_item(fltk3::Widget* o, int i) {
-    ((Fl_Menu_Button*)o)->remove(i-1);}
+    ((fltk3::MenuButton*)o)->remove(i-1);}
 inline void fl_set_menu_item_shortcut(fltk3::Widget* o, int i, const char* s) {
-    ((Fl_Menu_Button*)o)->shortcut(i-1,fltk3::old_shortcut(s));}
+    ((fltk3::MenuButton*)o)->shortcut(i-1,fltk3::old_shortcut(s));}
 inline void fl_set_menu_item_mode(fltk3::Widget* o, int i, long x) {
-    ((Fl_Menu_Button*)o)->mode(i-1,x);}
+    ((fltk3::MenuButton*)o)->mode(i-1,x);}
 inline void fl_show_menu_symbol(fltk3::Widget*, int ) {
-/*    ((Fl_Menu_Button*)o)->show_menu_symbol(i); */}
+/*    ((fltk3::MenuButton*)o)->show_menu_symbol(i); */}
 // inline void fl_set_menu_popup(fltk3::Widget*, int);
 inline int fl_get_menu(fltk3::Widget* o) {
-    return ((Fl_Menu_Button*)o)->value()+1;}
+    return ((fltk3::MenuButton*)o)->value()+1;}
 inline const char* fl_get_menu_item_text(fltk3::Widget* o, int i) {
-    return ((Fl_Menu_Button*)o)->text(i);}
+    return ((fltk3::MenuButton*)o)->text(i);}
 inline int fl_get_menu_maxitems(fltk3::Widget* o) {
-    return ((Fl_Menu_Button*)o)->size();}
+    return ((fltk3::MenuButton*)o)->size();}
 inline int fl_get_menu_item_mode(fltk3::Widget* o, int i) {
-    return ((Fl_Menu_Button*)o)->mode(i);}
+    return ((fltk3::MenuButton*)o)->mode(i);}
 inline const char* fl_get_menu_text(fltk3::Widget* o) {
-    return ((Fl_Menu_Button*)o)->text();}
+    return ((fltk3::MenuButton*)o)->text();}
 
 #include "Positioner.h"
 #define FL_NORMAL_POSITIONER	0

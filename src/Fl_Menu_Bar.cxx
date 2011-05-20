@@ -29,7 +29,7 @@
 #include <fltk3/MenuBar.h>
 #include <fltk3/draw.h>
 
-void Fl_Menu_Bar::draw() {
+void fltk3::MenuBar::draw() {
   draw_box();
   if (!menu() || !menu()->text) return;
   const fltk3::MenuItem* m;
@@ -38,7 +38,7 @@ void Fl_Menu_Bar::draw() {
     int W = m->measure(0,this) + 16;
     m->draw(X, y(), W, h(), this);
     X += W;
-    if (m->flags & FL_MENU_DIVIDER) {
+    if (m->flags & fltk3::MENU_DIVIDER) {
       int y1 = y() + fltk3::box_dy(box());
       int y2 = y1 + h() - fltk3::box_dh(box()) - 1;
 
@@ -51,7 +51,7 @@ void Fl_Menu_Bar::draw() {
   }
 }
 
-int Fl_Menu_Bar::handle(int event) {
+int fltk3::MenuBar::handle(int event) {
   const fltk3::MenuItem* v;
   if (menu() && menu()->text) switch (event) {
   case fltk3::ENTER:

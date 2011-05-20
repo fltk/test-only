@@ -109,7 +109,7 @@ extern fltk3::Button *comment_panel_cancel;
 extern fltk3::LightButton *comment_in_source;
 extern fltk3::LightButton *comment_in_header;
 #include <fltk3/MenuButton.h>
-extern Fl_Menu_Button *comment_predefined;
+extern fltk3::MenuButton *comment_predefined;
 extern fltk3::Button *comment_load;
 fltk3::DoubleWindow* make_comment_panel();
 void type_make_cb(fltk3::Widget*,void*d);

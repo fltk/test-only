@@ -520,7 +520,7 @@ void print_load() {
   }
   
   print_choice->clear();
-  print_choice->add("Print To File", 0, 0, 0, FL_MENU_DIVIDER);
+  print_choice->add("Print To File", 0, 0, 0, fltk3::MENU_DIVIDER);
   print_choice->value(0);
   
   defname[0] = '\0';
