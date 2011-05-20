@@ -34,7 +34,7 @@
 #include <fltk3/run.h>
 #include <fltk3/message.h>
 int main(int, char**) {
-  fl_alert("This demo does not work without GL and GLU");
+  fltk3::alert("This demo does not work without GL and GLU");
   return 1;
 }
 #else
@@ -46,8 +46,8 @@ int main(int, char**) {
 #include <sys/types.h>
 #include <time.h>
 #include <math.h>
-#include <FL/glut.h>	// changed for fltk
-#include <FL/glu.h>     // added for fltk
+#include <fltk3/glut.h>	// changed for fltk
+#include <fltk3/glu.h>     // added for fltk
 #include "trackball.c"	// changed from trackball.h for fltk
 
 #define WIDTH 4

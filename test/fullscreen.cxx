@@ -61,7 +61,7 @@
 #include <fltk3/SingleWindow.h>
 #include <fltk3/HorSlider.h>
 #include <fltk3/LightButton.h>
-#include <FL/math.h>
+#include <fltk3/math.h>
 #include <stdio.h>
 
 #if HAVE_GL

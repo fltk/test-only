@@ -28,23 +28,23 @@
 #include <config.h>
 #include <fltk3/run.h>
 #include <fltk3/Window.h>
-#include <fltk3/Hor_Slider.h>
+#include <fltk3/HorSlider.h>
 #include <fltk3/ToggleButton.h>
-#include <FL/math.h>
+#include <fltk3/math.h>
 
 #if !HAVE_GL
 #include <fltk3/Box.h>
-class shape_window : public Fl_Box {
+class shape_window : public fltk3::Box {
 public:	
   int sides;
   shape_window(int x,int y,int w,int h,const char *l=0)
-    :Fl_Box(FL_DOWN_BOX,x,y,w,h,l){
+    :fltk3::Box(fltk3::DOWN_BOX,x,y,w,h,l){
       label("This demo does\nnot work without GL");
   }
 };
 #else
-#include <FL/gl.h>
-#include <fltk3/Gl_Window.h>
+#include <fltk3/gl.h>
+#include <fltk3/GlWindow.h>
 
 class shape_window : public fltk3::GlWindow {
   void draw();
@@ -90,7 +90,7 @@ void shape_window::draw_overlay() {
     glViewport(0,0,w(),h());
   }
 // draw an amazing graphic:
-  gl_color(FL_RED);
+  gl_color(fltk3::RED);
   glBegin(GL_LINE_LOOP);
   for (int j=0; j<overlay_sides; j++) {
     double ang = j*2*M_PI/overlay_sides;
@@ -101,14 +101,14 @@ void shape_window::draw_overlay() {
 #endif
 
 // when you change the data, as in this callback, you must call redraw():
-void sides_cb(Fl_Widget *o, void *p) {
+void sides_cb(fltk3::Widget *o, void *p) {
   shape_window *sw = (shape_window *)p;
   sw->sides = int(((fltk3::Slider *)o)->value());
   sw->redraw();
 }
 
 #if HAVE_GL
-void overlay_sides_cb(Fl_Widget *o, void *p) {
+void overlay_sides_cb(fltk3::Widget *o, void *p) {
   shape_window *sw = (shape_window *)p;
   sw->overlay_sides = int(((fltk3::Slider *)o)->value());
   sw->redraw_overlay();
@@ -117,21 +117,21 @@ void overlay_sides_cb(Fl_Widget *o, void *p) {
 #include <stdio.h>
 int main(int argc, char **argv) {
 
-  Fl_Window window(300, 370);
+  fltk3::Window window(300, 370);
 
   shape_window sw(10, 75, window.w()-20, window.h()-90);
-//sw.mode(FL_RGB);
+//sw.mode(fltk3::RGB);
   window.resizable(&sw);
 
   fltk3::HorSlider slider(60, 5, window.w()-70, 30, "Sides:");
-  slider.align(FL_ALIGN_LEFT);
+  slider.align(fltk3::ALIGN_LEFT);
   slider.callback(sides_cb,&sw);
   slider.value(sw.sides);
   slider.step(1);
   slider.bounds(3,40);
 
   fltk3::HorSlider oslider(60, 40, window.w()-70, 30, "Overlay:");
-  oslider.align(FL_ALIGN_LEFT);
+  oslider.align(fltk3::ALIGN_LEFT);
 #if HAVE_GL
   oslider.callback(overlay_sides_cb,&sw);
   oslider.value(sw.overlay_sides);
