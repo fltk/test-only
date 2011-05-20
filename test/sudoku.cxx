@@ -26,21 +26,21 @@
 //
 
 #include <fltk3/run.h>
-#include <FL/Enumerations.h>
-#include <fltk3/Double_Window.h>
+#include <fltk3/enumerations.h>
+#include <fltk3/DoubleWindow.h>
 #include <fltk3/Button.h>
 #include <fltk3/Group.h>
 #include <fltk3/ask.h>
 #include <fltk3/draw.h>
-#include <fltk3/Help_Dialog.h>
+#include <fltk3/HelpDialog.h>
 #include <fltk3/Preferences.h>
-#include <fltk3/Sys_Menu_Bar.h>
-#include <FL/x.h>
+#include <fltk3/SysMenuBar.h>
+#include <fltk3/x.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <FL/math.h>
+#include <fltk3/math.h>
 
 #ifdef WIN32
 #  include "sudokurc.h"
@@ -141,7 +141,7 @@ class SudokuSound {
 
 
 // Sudoku cell class...
-class SudokuCell : public Fl_Widget {
+class SudokuCell : public fltk3::Widget {
   bool		readonly_;
   int		value_;
   int		test_value_[9];
@@ -166,29 +166,29 @@ class SudokuCell : public Fl_Widget {
 
 // Sudoku window class...
 class Sudoku : public fltk3::DoubleWindow {
-  Fl_Sys_Menu_Bar *menubar_;
-  Fl_Group	*grid_;
+  fltk3::SysMenuBar *menubar_;
+  fltk3::Group	*grid_;
   time_t	seed_;
   char		grid_values_[9][9];
   SudokuCell	*grid_cells_[9][9];
-  Fl_Group	*grid_groups_[3][3];
+  fltk3::Group	*grid_groups_[3][3];
   int		difficulty_;
   SudokuSound	*sound_;
 
-  static void	check_cb(Fl_Widget *widget, void *);
-  static void	close_cb(Fl_Widget *widget, void *);
-  static void	diff_cb(Fl_Widget *widget, void *d);
-  static void	update_helpers_cb(Fl_Widget *, void *);
-  static void	help_cb(Fl_Widget *, void *);
-  static void	mute_cb(Fl_Widget *widget, void *);
-  static void	new_cb(Fl_Widget *widget, void *);
-  static void	reset_cb(Fl_Widget *widget, void *);
-  static void	restart_cb(Fl_Widget *widget, void *);
+  static void	check_cb(fltk3::Widget *widget, void *);
+  static void	close_cb(fltk3::Widget *widget, void *);
+  static void	diff_cb(fltk3::Widget *widget, void *d);
+  static void	update_helpers_cb(fltk3::Widget *, void *);
+  static void	help_cb(fltk3::Widget *, void *);
+  static void	mute_cb(fltk3::Widget *widget, void *);
+  static void	new_cb(fltk3::Widget *widget, void *);
+  static void	reset_cb(fltk3::Widget *widget, void *);
+  static void	restart_cb(fltk3::Widget *widget, void *);
   void		set_title();
-  static void	solve_cb(Fl_Widget *widget, void *);
+  static void	solve_cb(fltk3::Widget *widget, void *);
 
   static fltk3::HelpDialog *help_dialog_;
-  static Fl_Preferences	prefs_;
+  static fltk3::Preferences	prefs_;
   public:
 
 	      	Sudoku();
@@ -427,7 +427,7 @@ SudokuSound::audio_cb(AudioDeviceID device,
 
 // Play a note for 250ms...
 void SudokuSound::play(char note) {
-  Fl::check();
+  fltk3::check();
 
 #ifdef __APPLE__
   // Point to the next note...
@@ -464,25 +464,25 @@ void SudokuSound::play(char note) {
   XKeyboardControl	control;
 
   // Get original pitch and duration...
-  XGetKeyboardControl(fl_display, &state);
+  XGetKeyboardControl(fltk3::display, &state);
 
   // Sound a tone for the given note...
   control.bell_percent  = 100;
   control.bell_pitch    = frequencies[note - 'A'];
   control.bell_duration = 50;
 
-  XChangeKeyboardControl(fl_display,
+  XChangeKeyboardControl(fltk3::display,
                          KBBellPercent | KBBellPitch | KBBellDuration,
 			 &control);
-  XBell(fl_display, 100);
-  XFlush(fl_display);
+  XBell(fltk3::display, 100);
+  XFlush(fltk3::display);
 
   // Restore original pitch and duration...
   control.bell_percent  = state.bell_percent;
   control.bell_pitch    = state.bell_pitch;
   control.bell_duration = state.bell_duration;
 
-  XChangeKeyboardControl(fl_display,
+  XChangeKeyboardControl(fltk3::display,
                          KBBellPercent | KBBellPitch | KBBellDuration,
 			 &control);
 #endif // __APPLE__
@@ -491,7 +491,7 @@ void SudokuSound::play(char note) {
 
 // Create a cell widget
 SudokuCell::SudokuCell(int X, int Y, int W, int H)
-  : Fl_Widget(X, Y, W, H, 0) {
+  : fltk3::Widget(X, Y, W, H, 0) {
   value(0);
 }
 
@@ -499,29 +499,29 @@ SudokuCell::SudokuCell(int X, int Y, int W, int H)
 // Draw cell
 void
 SudokuCell::draw() {
-  static Fl_Align align[8] = {
-    FL_ALIGN_TOP_LEFT,
-    FL_ALIGN_TOP,
-    FL_ALIGN_TOP_RIGHT,
-    FL_ALIGN_RIGHT,
-    FL_ALIGN_BOTTOM_RIGHT,
-    FL_ALIGN_BOTTOM,
-    FL_ALIGN_BOTTOM_LEFT,
-    FL_ALIGN_LEFT
+  static fltk3::Align align[8] = {
+    fltk3::ALIGN_TOP_LEFT,
+    fltk3::ALIGN_TOP,
+    fltk3::ALIGN_TOP_RIGHT,
+    fltk3::ALIGN_RIGHT,
+    fltk3::ALIGN_BOTTOM_RIGHT,
+    fltk3::ALIGN_BOTTOM,
+    fltk3::ALIGN_BOTTOM_LEFT,
+    fltk3::ALIGN_LEFT
   };
 
 
   // Draw the cell box...
-  if (readonly()) fl_draw_box(FL_UP_BOX, x(), y(), w(), h(), color());
-  else fl_draw_box(FL_DOWN_BOX, x(), y(), w(), h(), color());
+  if (readonly()) fltk3::draw_box(fltk3::UP_BOX, x(), y(), w(), h(), color());
+  else fltk3::draw_box(fltk3::DOWN_BOX, x(), y(), w(), h(), color());
 
   // Draw the cell background...
-  if (Fl::focus() == this) {
-    Fl_Color c = fl_color_average(FL_SELECTION_COLOR, color(), 0.5f);
-    fl_color(c);
-    fl_rectf(x() + 4, y() + 4, w() - 8, h() - 8);
-    fl_color(fl_contrast(labelcolor(), c));
-  } else fl_color(labelcolor());
+  if (fltk3::focus() == this) {
+    fltk3::Color c = fltk3::color_average(fltk3::SELECTION_COLOR, color(), 0.5f);
+    fltk3::color(c);
+    fltk3::rectf(x() + 4, y() + 4, w() - 8, h() - 8);
+    fltk3::color(fltk3::contrast(labelcolor(), c));
+  } else fltk3::color(labelcolor());
 
   // Draw the cell value...
   char s[2];
@@ -531,16 +531,16 @@ SudokuCell::draw() {
   if (value_) {
     s[0] = value_ + '0';
 
-    fl_font(FL_HELVETICA_BOLD, h() - 10);
-    fl_draw(s, x(), y(), w(), h(), FL_ALIGN_CENTER);
+    fltk3::font(fltk3::HELVETICA_BOLD, h() - 10);
+    fltk3::draw(s, x(), y(), w(), h(), fltk3::ALIGN_CENTER);
   }
 
-  fl_font(FL_HELVETICA_BOLD, h() / 5);
+  fltk3::font(fltk3::HELVETICA_BOLD, h() / 5);
 
   for (int i = 0; i < 8; i ++) {
     if (test_value_[i]) {
       s[0] = test_value_[i] + '0';
-      fl_draw(s, x() + 5, y() + 5, w() - 10, h() - 10, align[i]);
+      fltk3::draw(s, x() + 5, y() + 5, w() - 10, h() - 10, align[i]);
     }
   }
 }
@@ -550,18 +550,18 @@ SudokuCell::draw() {
 int
 SudokuCell::handle(int event) {
   switch (event) {
-    case FL_FOCUS :
-      Fl::focus(this);
+    case fltk3::FOCUS :
+      fltk3::focus(this);
       redraw();
       return 1;
 
-    case FL_UNFOCUS :
+    case fltk3::UNFOCUS :
       redraw();
       return 1;
 
-    case FL_PUSH :
-      if (!readonly() && Fl::event_inside(this)) {
-        if (Fl::event_clicks()) {
+    case fltk3::PUSH :
+      if (!readonly() && fltk3::event_inside(this)) {
+        if (fltk3::event_clicks()) {
 	  // 2+ clicks increments/sets value
 	  if (value()) {
 	    if (value() < 9) value(value() + 1);
@@ -569,23 +569,23 @@ SudokuCell::handle(int event) {
 	  } else value(((Sudoku *)window())->next_value(this));
 	}
 
-        Fl::focus(this);
+        fltk3::focus(this);
 	redraw();
 	return 1;
       }
       break;
 
-    case FL_KEYDOWN :
-      if (Fl::event_state() & FL_CTRL) break;
-      int key = Fl::event_key() - '0';
-      if (key < 0 || key > 9) key = Fl::event_key() - FL_KP - '0';
+    case fltk3::KEYDOWN :
+      if (fltk3::event_state() & fltk3::CTRL) break;
+      int key = fltk3::event_key() - '0';
+      if (key < 0 || key > 9) key = fltk3::event_key() - fltk3::KPKey - '0';
       if (key > 0 && key <= 9) {
         if (readonly()) {
-          fl_beep(FL_BEEP_ERROR);
+          fltk3::beep(fltk3::BEEP_ERROR);
           return 1;
         }
 
-        if (Fl::event_state() & (FL_SHIFT | FL_CAPS_LOCK)) {
+        if (fltk3::event_state() & (fltk3::SHIFT | fltk3::CAPS_LOCK)) {
 	  int i;
 
 	  for (i = 0; i < 8; i ++)
@@ -613,10 +613,10 @@ SudokuCell::handle(int event) {
 	  do_callback();
 	}
 	return 1;
-      } else if (key == 0 || Fl::event_key() == FL_BackSpace ||
-                 Fl::event_key() == FL_Delete) {
+      } else if (key == 0 || fltk3::event_key() == fltk3::BackSpaceKey ||
+                 fltk3::event_key() == fltk3::DeleteKey) {
         if (readonly()) {
-          fl_beep(FL_BEEP_ERROR);
+          fltk3::beep(fltk3::BEEP_ERROR);
           return 1;
         }
 
@@ -627,13 +627,13 @@ SudokuCell::handle(int event) {
       break;
   }
 
-  return Fl_Widget::handle(event);
+  return fltk3::Widget::handle(event);
 }
 
 
 // Sudoku class globals...
 fltk3::HelpDialog	*Sudoku::help_dialog_ = (fltk3::HelpDialog *)0;
-Fl_Preferences	Sudoku::prefs_(Fl_Preferences::USER, "fltk.org", "sudoku");
+fltk3::Preferences	Sudoku::prefs_(fltk3::Preferences::USER, "fltk.org", "sudoku");
 
 
 // Create a Sudoku game window...
@@ -641,17 +641,17 @@ Sudoku::Sudoku()
   : fltk3::DoubleWindow(GROUP_SIZE * 3, GROUP_SIZE * 3 + MENU_OFFSET, "Sudoku")
 {
   int j, k;
-  Fl_Group *g;
+  fltk3::Group *g;
   SudokuCell *cell;
   static fltk3::MenuItem	items[] = {
     { "&Game", 0, 0, 0, fltk3::SUBMENU },
-    { "&New Game", FL_COMMAND | 'n', new_cb, 0, fltk3::MENU_DIVIDER },
-    { "&Check Game", FL_COMMAND | 'c', check_cb, 0, 0 },
-    { "&Restart Game", FL_COMMAND | 'r', restart_cb, 0, 0 },
-    { "&Solve Game", FL_COMMAND | 's', solve_cb, 0, fltk3::MENU_DIVIDER },
+    { "&New Game", fltk3::COMMAND | 'n', new_cb, 0, fltk3::MENU_DIVIDER },
+    { "&Check Game", fltk3::COMMAND | 'c', check_cb, 0, 0 },
+    { "&Restart Game", fltk3::COMMAND | 'r', restart_cb, 0, 0 },
+    { "&Solve Game", fltk3::COMMAND | 's', solve_cb, 0, fltk3::MENU_DIVIDER },
     { "&Update Helpers", 0, update_helpers_cb, 0, 0 },
-    { "&Mute Sound", FL_COMMAND | 'm', mute_cb, 0, fltk3::MENU_TOGGLE | fltk3::MENU_DIVIDER },
-    { "&Quit", FL_COMMAND | 'q', close_cb, 0, 0 },
+    { "&Mute Sound", fltk3::COMMAND | 'm', mute_cb, 0, fltk3::MENU_TOGGLE | fltk3::MENU_DIVIDER },
+    { "&Quit", fltk3::COMMAND | 'q', close_cb, 0, 0 },
     { 0 },
     { "&Difficulty", 0, 0, 0, fltk3::SUBMENU },
     { "&Easy", 0, diff_cb, (void *)"0", fltk3::MENU_RADIO },
@@ -660,7 +660,7 @@ Sudoku::Sudoku()
     { "&Impossible", 0, diff_cb, (void *)"3", fltk3::MENU_RADIO },
     { 0 },
     { "&Help", 0, 0, 0, fltk3::SUBMENU },
-    { "&About Sudoku", FL_F + 1, help_cb, 0, 0 },
+    { "&About Sudoku", fltk3::FKey + 1, help_cb, 0, 0 },
     { 0 },
     { 0 }
   };
@@ -680,19 +680,19 @@ Sudoku::Sudoku()
 
   items[10 + difficulty_].flags |= fltk3::MENU_VALUE;
 
-  menubar_ = new Fl_Sys_Menu_Bar(0, 0, 3 * GROUP_SIZE, 25);
+  menubar_ = new fltk3::SysMenuBar(0, 0, 3 * GROUP_SIZE, 25);
   menubar_->menu(items);
 
   // Create the grids...
-  grid_ = new Fl_Group(0, MENU_OFFSET, 3 * GROUP_SIZE, 3 * GROUP_SIZE);
+  grid_ = new fltk3::Group(0, MENU_OFFSET, 3 * GROUP_SIZE, 3 * GROUP_SIZE);
 
   for (j = 0; j < 3; j ++)
     for (k = 0; k < 3; k ++) {
-      g = new Fl_Group(k * GROUP_SIZE, j * GROUP_SIZE + MENU_OFFSET,
+      g = new fltk3::Group(k * GROUP_SIZE, j * GROUP_SIZE + MENU_OFFSET,
 		       GROUP_SIZE, GROUP_SIZE);
-      g->box(FL_BORDER_BOX);
-      if ((int)(j == 1) ^ (int)(k == 1)) g->color(FL_DARK3);
-      else g->color(FL_DARK2);
+      g->box(fltk3::BORDER_BOX);
+      if ((int)(j == 1) ^ (int)(k == 1)) g->color(fltk3::DARK3);
+      else g->color(fltk3::DARK2);
       g->end();
 
       grid_groups_[j][k] = g;
@@ -711,10 +711,10 @@ Sudoku::Sudoku()
 
   // Set icon for window (MacOS uses app bundle for icon...)
 #ifdef WIN32
-  icon((char *)LoadIcon(fl_display, MAKEINTRESOURCE(IDI_ICON)));
+  icon((char *)LoadIcon(fltk3::display, MAKEINTRESOURCE(IDI_ICON)));
 #elif !defined(__APPLE__)
-  fl_open_display();
-  icon((char *)XCreateBitmapFromData(fl_display, DefaultRootWindow(fl_display),
+  fltk3::open_display();
+  icon((char *)XCreateBitmapFromData(fltk3::display, DefaultRootWindow(fltk3::display),
                                      (char *)sudoku_bits, sudoku_width,
 				     sudoku_height));
 #endif // WIN32
@@ -749,7 +749,7 @@ Sudoku::~Sudoku() {
 
 // Check for a solution to the game...
 void
-Sudoku::check_cb(Fl_Widget *widget, void *) {
+Sudoku::check_cb(fltk3::Widget *widget, void *) {
   ((Sudoku *)(widget->window()))->check_game();
 }
 
@@ -777,13 +777,13 @@ Sudoku::check_game(bool highlight) {
 
         if (m < 9) {
           if (highlight) {
-	    cell->color(FL_YELLOW);
+	    cell->color(fltk3::YELLOW);
 	    cell->redraw();
 	  }
 
 	  correct = false;
 	} else if (highlight) {
-	  cell->color(FL_LIGHT3);
+	  cell->color(fltk3::LIGHT3);
 	  cell->redraw();
 	}
       }
@@ -813,7 +813,7 @@ Sudoku::check_game(bool highlight) {
 
           if (jjj < 3) {
             if (highlight) {
-	      cell->color(FL_YELLOW);
+	      cell->color(fltk3::YELLOW);
 	      cell->redraw();
 	    }
 
@@ -826,7 +826,7 @@ Sudoku::check_game(bool highlight) {
     for (j = 0; j < 9; j ++) {
       for (k = 0; k < 9; k ++) {
 	SudokuCell *cell = grid_cells_[j][k];
-	cell->color(FL_GREEN);
+	cell->color(fltk3::GREEN);
 	cell->readonly(1);
       }
 
@@ -838,7 +838,7 @@ Sudoku::check_game(bool highlight) {
 
 // Close the window, saving the game first...
 void
-Sudoku::close_cb(Fl_Widget *widget, void *) {
+Sudoku::close_cb(fltk3::Widget *widget, void *) {
   Sudoku *s = (Sudoku *)(widget->window() ? widget->window() : widget);
 
   s->save_game();
@@ -850,7 +850,7 @@ Sudoku::close_cb(Fl_Widget *widget, void *) {
 
 // Set the level of difficulty...
 void
-Sudoku::diff_cb(Fl_Widget *widget, void *d) {
+Sudoku::diff_cb(fltk3::Widget *widget, void *d) {
   Sudoku *s = (Sudoku *)(widget->window() ? widget->window() : widget);
   int diff = atoi((char *)d);
 
@@ -870,7 +870,7 @@ Sudoku::diff_cb(Fl_Widget *widget, void *d) {
       if (!val)
       {
         prefs_.set("difficulty_warning", 1);
-	fl_alert("Note: 'Hard' and 'Impossible' puzzles may have more than "
+	fltk3::alert("Note: 'Hard' and 'Impossible' puzzles may have more than "
 	         "one possible solution.\n"
 		 "This is not an error or bug.");
       }
@@ -882,7 +882,7 @@ Sudoku::diff_cb(Fl_Widget *widget, void *d) {
 
 // Update the little marker numbers in all cells
 void
-Sudoku::update_helpers_cb(Fl_Widget *widget, void *) {
+Sudoku::update_helpers_cb(fltk3::Widget *widget, void *) {
   Sudoku *s = (Sudoku *)(widget->window() ? widget->window() : widget);
   s->update_helpers();
 }
@@ -942,7 +942,7 @@ Sudoku::update_helpers() {
 
 // Show the on-line help...
 void
-Sudoku::help_cb(Fl_Widget *, void *) {
+Sudoku::help_cb(fltk3::Widget *, void *) {
   if (!help_dialog_) {
     help_dialog_ = new fltk3::HelpDialog();
 
@@ -1030,9 +1030,9 @@ Sudoku::load_game() {
       prefs_.get(name, val, 0);
       cell->readonly(val);
 
-      if (val) cell->color(FL_GRAY);
+      if (val) cell->color(fltk3::GRAY);
       else {
-        cell->color(FL_LIGHT3);
+        cell->color(fltk3::LIGHT3);
 	solved = false;
       }
 
@@ -1052,7 +1052,7 @@ Sudoku::load_game() {
 
 // Mute/unmute sound...
 void
-Sudoku::mute_cb(Fl_Widget *widget, void *) {
+Sudoku::mute_cb(fltk3::Widget *widget, void *) {
   Sudoku *s = (Sudoku *)(widget->window() ? widget->window() : widget);
 
   if (s->sound_) {
@@ -1068,11 +1068,11 @@ Sudoku::mute_cb(Fl_Widget *widget, void *) {
 
 // Create a new game...
 void
-Sudoku::new_cb(Fl_Widget *widget, void *) {
+Sudoku::new_cb(fltk3::Widget *widget, void *) {
   Sudoku *s = (Sudoku *)(widget->window() ? widget->window() : widget);
 
-  if (s->grid_cells_[0][0]->color() != FL_GREEN) {
-    if (!fl_choice("Are you sure you want to change the difficulty level and "
+  if (s->grid_cells_[0][0]->color() != fltk3::GREEN) {
+    if (!fltk3::choice("Are you sure you want to change the difficulty level and "
                    "discard the current game?", "Keep Current Game", "Start New Game",
                    NULL)) return;
   }
@@ -1138,7 +1138,7 @@ Sudoku::new_game(time_t seed) {
 
       cell->value(0);
       cell->readonly(0);
-      cell->color(FL_LIGHT3);
+      cell->color(fltk3::LIGHT3);
     }
 
   // Show N cells...
@@ -1166,7 +1166,7 @@ Sudoku::new_game(time_t seed) {
         if (grid_values_[j][k] == t && !cell->readonly()) {
 	  cell->value(grid_values_[j][k]);
 	  cell->readonly(1);
-	  cell->color(FL_GRAY);
+	  cell->color(fltk3::GRAY);
 
 	  count --;
 	  break;
@@ -1214,8 +1214,8 @@ Sudoku::next_value(SudokuCell *c) {
 
 // Reset widget color to gray...
 void
-Sudoku::reset_cb(Fl_Widget *widget, void *) {
-  widget->color(FL_LIGHT3);
+Sudoku::reset_cb(fltk3::Widget *widget, void *) {
+  widget->color(fltk3::LIGHT3);
   widget->redraw();
   
   ((Sudoku *)(widget->window()))->check_game(false);
@@ -1238,7 +1238,7 @@ Sudoku::resize(int X, int Y, int W, int H) {
 
 // Restart game from beginning...
 void
-Sudoku::restart_cb(Fl_Widget *widget, void *) {
+Sudoku::restart_cb(fltk3::Widget *widget, void *) {
   Sudoku *s = (Sudoku *)(widget->window());
   bool solved = true;
 
@@ -1250,7 +1250,7 @@ Sudoku::restart_cb(Fl_Widget *widget, void *) {
         solved = false;
         int v = cell->value();
 	cell->value(0);
-	cell->color(FL_LIGHT3);
+	cell->color(fltk3::LIGHT3);
 	if (v && s->sound_) s->sound_->play('A' + v - 1);
       }
     }
@@ -1301,7 +1301,7 @@ Sudoku::set_title() {
 
 // Solve the puzzle...
 void
-Sudoku::solve_cb(Fl_Widget *widget, void *) {
+Sudoku::solve_cb(fltk3::Widget *widget, void *) {
   ((Sudoku *)(widget->window()))->solve_game();
 }
 
@@ -1317,7 +1317,7 @@ Sudoku::solve_game() {
 
       cell->value(grid_values_[j][k]);
       cell->readonly(1);
-      cell->color(FL_GRAY);
+      cell->color(fltk3::GRAY);
     }
 
     if (sound_) sound_->play('A' + grid_cells_[j][8]->value() - 1);

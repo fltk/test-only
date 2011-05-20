@@ -28,7 +28,7 @@
 #include <fltk3/Box.h>
 #include <fltk3/draw.h>
 
-// Note: currently (March 2010) fl_draw_image() supports transparency with
+// Note: currently (March 2010) fltk3::draw_image() supports transparency with
 //	 alpha channel only on Apple (Mac OS X), but fltk3::RGBImage->draw()
 //	 supports transparency on all platforms !
 
@@ -45,15 +45,15 @@
 		// +1: ld() = (w() + DX) * d()
 		// -1 to flip image vertically: ld() = - ((w() + DX) * d())
 #define IMG (1)	// 1 to use fltk3::RGBImage for drawing images,
-		// 0 to use fl_draw_image() instead.
+		// 0 to use fltk3::draw_image() instead.
 		// Note: as of April 2011, only 1 (fltk3::RGBImage) works correctly with alpha
-		// channel, 0 (fl_draw_image()) ignores the alpha channel (FLTK 1.3.0).
-		// There are plans to support alpha in fl_draw_image() in FLTK 1.3.x,
+		// channel, 0 (fltk3::draw_image()) ignores the alpha channel (FLTK 1.3.0).
+		// There are plans to support alpha in fltk3::draw_image() in FLTK 1.3.x,
 		// but not in FLTK 1.1.x .
 
-class ImageTest : public Fl_Box {
+class ImageTest : public fltk3::Box {
 public: 
-  static Fl_Widget *create() {
+  static fltk3::Widget *create() {
     int x, y;
     uchar *dg, *dga, *drgb, *drgba;
     dg    = img_gray   = (uchar*)malloc((128+DX)*128*1);
@@ -94,70 +94,70 @@ public:
   static fltk3::RGBImage *i_ga;
   static fltk3::RGBImage *i_rgb;
   static fltk3::RGBImage *i_rgba;
-  ImageTest(int x, int y, int w, int h) : Fl_Box(x, y, w, h) {
+  ImageTest(int x, int y, int w, int h) : fltk3::Box(x, y, w, h) {
     label("Testing Image Drawing\n\n"
 	"This test renders four images, two of them with a checker board\n"
 	"visible through the graphics. Color and gray gradients should be\n"
 	"visible. This does not test any image formats such as JPEG.");
-    align(FL_ALIGN_INSIDE|FL_ALIGN_BOTTOM|FL_ALIGN_LEFT|FL_ALIGN_WRAP);
-    box(FL_BORDER_BOX);
+    align(fltk3::ALIGN_INSIDE|fltk3::ALIGN_BOTTOM|fltk3::ALIGN_LEFT|fltk3::ALIGN_WRAP);
+    box(fltk3::BORDER_BOX);
   }
   void draw() {
-    Fl_Box::draw();
+    fltk3::Box::draw();
 
     // top left: RGB
 
     int xx = x()+10, yy = y()+10;
-    fl_color(FL_BLACK); fl_rect(xx, yy, 130, 130);
+    fltk3::color(fltk3::BLACK); fltk3::rect(xx, yy, 130, 130);
 #if IMG
     i_rgb->draw(xx+1,yy+1);
 #else
-    fl_draw_image(img_rgb, xx+1, yy+1, 128, 128, 3, LX*((128+DX)*3));
+    fltk3::draw_image(img_rgb, xx+1, yy+1, 128, 128, 3, LX*((128+DX)*3));
 #endif
-    fl_draw("RGB", xx+134, yy+64);
+    fltk3::draw("RGB", xx+134, yy+64);
 
     // bottom left: RGBA
 
     xx = x()+10; yy = y()+10+134;
-    fl_color(FL_BLACK); fl_rect(xx, yy, 130, 130);	// black frame
-    fl_color(FL_WHITE); fl_rectf(xx+1, yy+1, 128, 128);	// white background
+    fltk3::color(fltk3::BLACK); fltk3::rect(xx, yy, 130, 130);	// black frame
+    fltk3::color(fltk3::WHITE); fltk3::rectf(xx+1, yy+1, 128, 128);	// white background
 #if CB							// checker board
-    fl_color(FL_BLACK); fl_rectf(xx+65, yy+1, 64, 64);
-    fl_color(FL_BLACK); fl_rectf(xx+1, yy+65, 64, 64);
+    fltk3::color(fltk3::BLACK); fltk3::rectf(xx+65, yy+1, 64, 64);
+    fltk3::color(fltk3::BLACK); fltk3::rectf(xx+1, yy+65, 64, 64);
 #endif
 #if IMG
     i_rgba->draw(xx+1,yy+1);
 #else
-    fl_draw_image(img_rgba, xx+1, yy+1, 128, 128, 4, LX*((128+DX)*4));
+    fltk3::draw_image(img_rgba, xx+1, yy+1, 128, 128, 4, LX*((128+DX)*4));
 #endif
-    fl_color(FL_BLACK); fl_draw("RGBA", xx+134, yy+64);
+    fltk3::color(fltk3::BLACK); fltk3::draw("RGBA", xx+134, yy+64);
 
     // top right: Gray
 
     xx = x()+10+200; yy = y()+10;
-    fl_color(FL_BLACK); fl_rect(xx, yy, 130, 130);
+    fltk3::color(fltk3::BLACK); fltk3::rect(xx, yy, 130, 130);
 #if IMG
     i_g->draw(xx+1,yy+1);
 #else
-    fl_draw_image(img_gray, xx+1, yy+1, 128, 128, 1, LX*((128+DX)*1));
+    fltk3::draw_image(img_gray, xx+1, yy+1, 128, 128, 1, LX*((128+DX)*1));
 #endif
-    fl_draw("Gray", xx+134, yy+64);
+    fltk3::draw("Gray", xx+134, yy+64);
 
     // bottom right: Gray+Alpha
 
     xx = x()+10+200; yy = y()+10+134;
-    fl_color(FL_BLACK); fl_rect(xx, yy, 130, 130);	// black frame
-    fl_color(FL_WHITE); fl_rectf(xx+1, yy+1, 128, 128);	// white background
+    fltk3::color(fltk3::BLACK); fltk3::rect(xx, yy, 130, 130);	// black frame
+    fltk3::color(fltk3::WHITE); fltk3::rectf(xx+1, yy+1, 128, 128);	// white background
 #if CB							// checker board
-    fl_color(FL_BLACK); fl_rectf(xx+65, yy+1, 64, 64);
-    fl_color(FL_BLACK); fl_rectf(xx+1, yy+65, 64, 64);
+    fltk3::color(fltk3::BLACK); fltk3::rectf(xx+65, yy+1, 64, 64);
+    fltk3::color(fltk3::BLACK); fltk3::rectf(xx+1, yy+65, 64, 64);
 #endif
 #if IMG
     i_ga->draw(xx+1,yy+1);
 #else
-    fl_draw_image(img_gray_a, xx+1, yy+1, 128, 128, 2, LX*((128+DX)*2));
+    fltk3::draw_image(img_gray_a, xx+1, yy+1, 128, 128, 2, LX*((128+DX)*2));
 #endif
-    fl_color(FL_BLACK); fl_draw("Gray+Alpha", xx+134, yy+64);
+    fltk3::color(fltk3::BLACK); fltk3::draw("Gray+Alpha", xx+134, yy+64);
   }
 };
 

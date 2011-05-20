@@ -34,7 +34,7 @@
   The constructors create a new tiled image containing the specified image.
   Use a width and height of 0 to tile the whole window/widget.
 */
-Fl_Tiled_Image::Fl_Tiled_Image(fltk3::Image *i,	// I - Image to tile
+fltk3::TiledImage::TiledImage(fltk3::Image *i,	// I - Image to tile
                                int      W,	// I - Width of tiled area
 			       int      H) :	// I - Height of tiled area
   fltk3::Image(W,H,0) {
@@ -48,29 +48,29 @@ Fl_Tiled_Image::Fl_Tiled_Image(fltk3::Image *i,	// I - Image to tile
   The destructor frees all memory and server resources that are used by
   the tiled image.
 */
-  Fl_Tiled_Image::~Fl_Tiled_Image() {
+  fltk3::TiledImage::~TiledImage() {
   if (alloc_image_) delete image_;
 }
 
 
 //
-// 'Fl_Tiled_Image::copy()' - Copy and resize a tiled image...
+// 'fltk3::TiledImage::copy()' - Copy and resize a tiled image...
 //
 
 fltk3::Image *			// O - New image
-Fl_Tiled_Image::copy(int W,	// I - New width
+fltk3::TiledImage::copy(int W,	// I - New width
                      int H) {	// I - New height
   if (W == w() && H == h()) return this;
-  else return new Fl_Tiled_Image(image_, W, H);
+  else return new fltk3::TiledImage(image_, W, H);
 }
 
 
 //
-// 'Fl_Tiled_Image::color_average()' - Blend colors...
+// 'fltk3::TiledImage::color_average()' - Blend colors...
 //
 
 void
-Fl_Tiled_Image::color_average(fltk3::Color c,	// I - Color to blend with
+fltk3::TiledImage::color_average(fltk3::Color c,	// I - Color to blend with
                               float    i) {	// I - Blend fraction
   if (!alloc_image_) {
     image_       = image_->copy();
@@ -82,11 +82,11 @@ Fl_Tiled_Image::color_average(fltk3::Color c,	// I - Color to blend with
 
 
 //
-// 'Fl_Tiled_Image::desaturate()' - Convert the image to grayscale...
+// 'fltk3::TiledImage::desaturate()' - Convert the image to grayscale...
 //
 
 void
-Fl_Tiled_Image::desaturate() {
+fltk3::TiledImage::desaturate() {
   if (!alloc_image_) {
     image_       = image_->copy();
     alloc_image_ = 1;
@@ -97,11 +97,11 @@ Fl_Tiled_Image::desaturate() {
 
 
 //
-// 'Fl_Tiled_Image::draw()' - Draw a shared image...
+// 'fltk3::TiledImage::draw()' - Draw a shared image...
 //
 
 void
-Fl_Tiled_Image::draw(int X,	// I - Starting X position
+fltk3::TiledImage::draw(int X,	// I - Starting X position
                      int Y,	// I - Starting Y position
 		     int W,	// I - Width of area to be filled
 		     int H,	// I - Height of area to be filled

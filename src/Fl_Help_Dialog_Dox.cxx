@@ -29,7 +29,7 @@
 
 /** \class fltk3::HelpDialog
   The fltk3::HelpDialog widget displays a standard help dialog window
-  using the Fl_Help_View widget.
+  using the fltk3::HelpView widget.
   
   <P ALIGN=CENTER> \image html fltk3::HelpDialog.png </P> 
   \image latex  fltk3::HelpDialog.png "fltk3::HelpDialog" width=8cm
@@ -47,7 +47,7 @@
   Hides the fltk3::HelpDialog window.*/
 
 /** \fn void fltk3::HelpDialog::load(const char *f)
-  Loads the specified HTML file into the Fl_Help_View widget.
+  Loads the specified HTML file into the fltk3::HelpView widget.
   The filename can also contain a target name ("filename.html#target").
 */
 
@@ -67,12 +67,12 @@
   Sets or gets the default text size for the help view.*/
 
 /** \fn void fltk3::HelpDialog::topline(const char *n)
-  Sets the top line in the Fl_Help_View widget to the named or
+  Sets the top line in the fltk3::HelpView widget to the named or
   numbered line.
 */
 
 /** \fn void fltk3::HelpDialog::topline(int n)
-  Sets the top line in the Fl_Help_View widget to the named or
+  Sets the top line in the fltk3::HelpView widget to the named or
   numbered line.
 */
 
@@ -112,8 +112,8 @@
   Delegates call to encapsulated window_ void fltk3::Window::show(int argc, char **argv) instance method */
 
 /** \fn void fltk3::HelpDialog::textsize(fltk3::Fontsize s)
-  Sets the internal Fl_Help_View instance text size.
-  Delegates call to encapsulated view_ void Fl_Help_View::textsize(fltk3::Fontsize s) instance method */
+  Sets the internal fltk3::HelpView instance text size.
+  Delegates call to encapsulated view_ void fltk3::HelpView::textsize(fltk3::Fontsize s) instance method */
 
 //
 // End of "$Id$".

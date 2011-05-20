@@ -31,34 +31,34 @@
 //
 //------- test the point drawing capabilities of this implementation ----------
 //
-class PointTest : public Fl_Box {
+class PointTest : public fltk3::Box {
 public:
-  static Fl_Widget *create() {
+  static fltk3::Widget *create() {
     return new PointTest(TESTAREA_X, TESTAREA_Y, TESTAREA_W, TESTAREA_H);
   }
-  PointTest(int x, int y, int w, int h) : Fl_Box(x, y, w, h) {
-    label("testing the fl_point call\n"
+  PointTest(int x, int y, int w, int h) : fltk3::Box(x, y, w, h) {
+    label("testing the fltk3::point call\n"
 	  "You should see four pixels each in black, red, green and blue. "
 	  "Make sure that pixels are not anti-aliased (blurred across multiple pixels)!");
-    align(FL_ALIGN_INSIDE|FL_ALIGN_BOTTOM|FL_ALIGN_LEFT|FL_ALIGN_WRAP);
-    box(FL_BORDER_BOX);
+    align(fltk3::ALIGN_INSIDE|fltk3::ALIGN_BOTTOM|fltk3::ALIGN_LEFT|fltk3::ALIGN_WRAP);
+    box(fltk3::BORDER_BOX);
   }
   void draw() {
-    Fl_Box::draw();
+    fltk3::Box::draw();
     int a = x()+10, b = y()+10; 
-    fl_color(FL_WHITE); fl_rectf(a, b, 90, 90);
-    fl_color(FL_BLACK); fl_rect(a, b, 90, 90);
-    fl_point(a+10, b+10); fl_point(a+20, b+20);
-    fl_point(a+10, b+20); fl_point(a+20, b+10);
-    fl_color(FL_RED); a = x()+70;
-    fl_point(a+10, b+10); fl_point(a+20, b+20);
-    fl_point(a+10, b+20); fl_point(a+20, b+10);
-    fl_color(FL_GREEN); a = x()+10; b = y()+70;
-    fl_point(a+10, b+10); fl_point(a+20, b+20);
-    fl_point(a+10, b+20); fl_point(a+20, b+10);
-    fl_color(FL_BLUE); a = x()+70;
-    fl_point(a+10, b+10); fl_point(a+20, b+20);
-    fl_point(a+10, b+20); fl_point(a+20, b+10);
+    fltk3::color(fltk3::WHITE); fltk3::rectf(a, b, 90, 90);
+    fltk3::color(fltk3::BLACK); fltk3::rect(a, b, 90, 90);
+    fltk3::point(a+10, b+10); fltk3::point(a+20, b+20);
+    fltk3::point(a+10, b+20); fltk3::point(a+20, b+10);
+    fltk3::color(fltk3::RED); a = x()+70;
+    fltk3::point(a+10, b+10); fltk3::point(a+20, b+20);
+    fltk3::point(a+10, b+20); fltk3::point(a+20, b+10);
+    fltk3::color(fltk3::GREEN); a = x()+10; b = y()+70;
+    fltk3::point(a+10, b+10); fltk3::point(a+20, b+20);
+    fltk3::point(a+10, b+20); fltk3::point(a+20, b+10);
+    fltk3::color(fltk3::BLUE); a = x()+70;
+    fltk3::point(a+10, b+10); fltk3::point(a+20, b+20);
+    fltk3::point(a+10, b+20); fltk3::point(a+20, b+10);
   }
 };
 

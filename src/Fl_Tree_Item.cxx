@@ -10,10 +10,10 @@
 #include <fltk3/TreePrefs.h>
 
 //////////////////////
-// Fl_Tree_Item.cxx
+// fltk3::TreeItem.cxx
 //////////////////////
 //
-// Fl_Tree -- This file is part of the Fl_Tree widget for FLTK
+// fltk3::Tree -- This file is part of the fltk3::Tree widget for FLTK
 // Copyright (C) 2009-2010 by Greg Ercolano.
 //
 // This library is free software; you can redistribute it and/or
@@ -38,9 +38,9 @@ static int event_inside(const int xywh[4]) {
 }
 
 /// Constructor.
-///     Makes a new instance of Fl_Tree_Item using defaults from 'prefs'.
+///     Makes a new instance of fltk3::TreeItem using defaults from 'prefs'.
 ///
-Fl_Tree_Item::Fl_Tree_Item(const Fl_Tree_Prefs &prefs) {
+fltk3::TreeItem::TreeItem(const fltk3::TreePrefs &prefs) {
   _label        = 0;
   _labelfont    = prefs.labelfont();
   _labelsize    = prefs.labelsize();
@@ -69,7 +69,7 @@ Fl_Tree_Item::Fl_Tree_Item(const Fl_Tree_Prefs &prefs) {
 }
 
 // DTOR
-Fl_Tree_Item::~Fl_Tree_Item() {
+fltk3::TreeItem::~TreeItem() {
   if ( _label ) { 
     free((void*)_label);
     _label = 0;
@@ -80,7 +80,7 @@ Fl_Tree_Item::~Fl_Tree_Item() {
 }
 
 /// Copy constructor.
-Fl_Tree_Item::Fl_Tree_Item(const Fl_Tree_Item *o) {
+fltk3::TreeItem::TreeItem(const fltk3::TreeItem *o) {
   _label        = o->label() ? strdup(o->label()) : 0;
   _labelfont    = o->labelfont();
   _labelsize    = o->labelsize();
@@ -111,7 +111,7 @@ Fl_Tree_Item::Fl_Tree_Item(const Fl_Tree_Item *o) {
 /// Print the tree as 'ascii art' to stdout.
 /// Used mainly for debugging.
 ///
-void Fl_Tree_Item::show_self(const char *indent) const {
+void fltk3::TreeItem::show_self(const char *indent) const {
   if ( label() ) {
     printf("%s-%s (%d children, this=%p, parent=%p depth=%d)\n",
            indent,label(),children(),(void*)this, (void*)_parent, depth());
@@ -128,23 +128,23 @@ void Fl_Tree_Item::show_self(const char *indent) const {
 }
 
 /// Set the label. Makes a copy of the name.
-void Fl_Tree_Item::label(const char *name) {
+void fltk3::TreeItem::label(const char *name) {
   if ( _label ) { free((void*)_label); _label = 0; }
   _label = name ? strdup(name) : 0;
 }
 
 /// Return the label.
-const char *Fl_Tree_Item::label() const {
+const char *fltk3::TreeItem::label() const {
   return(_label);
 }
 
 /// Return child item for the specified 'index'.
-const Fl_Tree_Item *Fl_Tree_Item::child(int index) const {
+const fltk3::TreeItem *fltk3::TreeItem::child(int index) const {
   return(_children[index]);
 }
 
 /// Clear all the children for this item.
-void Fl_Tree_Item::clear_children() {
+void fltk3::TreeItem::clear_children() {
   _children.clear();
 }
 
@@ -152,7 +152,7 @@ void Fl_Tree_Item::clear_children() {
 ///
 /// \returns index of found item, or -1 if not found.
 ///
-int Fl_Tree_Item::find_child(const char *name) {
+int fltk3::TreeItem::find_child(const char *name) {
   if ( name ) {
     for ( int t=0; t<children(); t++ ) {
       if ( child(t)->label() ) {
@@ -166,11 +166,11 @@ int Fl_Tree_Item::find_child(const char *name) {
 }
 
 /// Find child item by descending array of names. Does not include self in search.
-/// Only Fl_Tree should need this method.
+/// Only fltk3::Tree should need this method.
 ///
 /// \returns item, or 0 if not found
 ///
-const Fl_Tree_Item *Fl_Tree_Item::find_child_item(char **arr) const {
+const fltk3::TreeItem *fltk3::TreeItem::find_child_item(char **arr) const {
   for ( int t=0; t<children(); t++ ) {
     if ( child(t)->label() ) {
       if ( strcmp(child(t)->label(), *arr) == 0 ) {	// match?
@@ -186,11 +186,11 @@ const Fl_Tree_Item *Fl_Tree_Item::find_child_item(char **arr) const {
 }
 
 /// Find child item by descending array of names. Does not include self in search.
-/// Only Fl_Tree should need this method. Use Fl_Tree::find_item() instead.
+/// Only fltk3::Tree should need this method. Use fltk3::Tree::find_item() instead.
 ///
 /// \returns item, or 0 if not found
 ///
-Fl_Tree_Item *Fl_Tree_Item::find_child_item(char **arr) {
+fltk3::TreeItem *fltk3::TreeItem::find_child_item(char **arr) {
   for ( int t=0; t<children(); t++ ) {
     if ( child(t)->label() ) {
       if ( strcmp(child(t)->label(), *arr) == 0 ) {	// match?
@@ -206,11 +206,11 @@ Fl_Tree_Item *Fl_Tree_Item::find_child_item(char **arr) {
 }
 
 /// Find item by descending array of \p names. Includes self in search.
-/// Only Fl_Tree should need this method. Use Fl_Tree::find_item() instead.
+/// Only fltk3::Tree should need this method. Use fltk3::Tree::find_item() instead.
 ///
 /// \returns item, or 0 if not found
 ///
-const Fl_Tree_Item *Fl_Tree_Item::find_item(char **names) const {
+const fltk3::TreeItem *fltk3::TreeItem::find_item(char **names) const {
   if ( label() && strcmp(label(), *names) == 0 ) {	// match self?
     if ( *(names+1) == 0 ) {				// end of names,
       return(this);					// found ourself.
@@ -223,11 +223,11 @@ const Fl_Tree_Item *Fl_Tree_Item::find_item(char **names) const {
 }
 
 /// Find item by descending array of \p names. Includes self in search.
-/// Only Fl_Tree should need this method.
+/// Only fltk3::Tree should need this method.
 ///
 /// \returns item, or 0 if not found
 ///
-Fl_Tree_Item *Fl_Tree_Item::find_item(char **names) {
+fltk3::TreeItem *fltk3::TreeItem::find_item(char **names) {
   if ( label() && strcmp(label(), *names) == 0 ) {	// match self?
     if ( *(names+1) == 0 ) {				// end of names,
       return(this);					// found ourself.
@@ -244,7 +244,7 @@ Fl_Tree_Item *Fl_Tree_Item::find_item(char **names) {
 ///
 /// \returns the index, or -1 if not found.
 ///
-int Fl_Tree_Item::find_child(Fl_Tree_Item *item) {
+int fltk3::TreeItem::find_child(fltk3::TreeItem *item) {
   for ( int t=0; t<children(); t++ ) {
     if ( item == child(t) ) {
       return(t);
@@ -257,18 +257,18 @@ int Fl_Tree_Item::find_child(Fl_Tree_Item *item) {
 /// An internally managed copy is made of the label string.
 /// Adds the item based on the value of prefs.sortorder().
 ///
-Fl_Tree_Item *Fl_Tree_Item::add(const Fl_Tree_Prefs &prefs, const char *new_label) {
-  Fl_Tree_Item *item = new Fl_Tree_Item(prefs);
+fltk3::TreeItem *fltk3::TreeItem::add(const fltk3::TreePrefs &prefs, const char *new_label) {
+  fltk3::TreeItem *item = new fltk3::TreeItem(prefs);
   item->label(new_label);
   item->_parent = this;
   switch ( prefs.sortorder() ) {
-    case FL_TREE_SORT_NONE: {
+    case fltk3::TREE_SORT_NONE: {
       _children.add(item);
       return(item);
     }
-    case FL_TREE_SORT_ASCENDING: {
+    case fltk3::TREE_SORT_ASCENDING: {
       for ( int t=0; t<_children.total(); t++ ) {
-        Fl_Tree_Item *c = _children[t];
+        fltk3::TreeItem *c = _children[t];
         if ( c->label() && strcmp(c->label(), new_label) > 0 ) {
           _children.insert(t, item);
           return(item);
@@ -277,9 +277,9 @@ Fl_Tree_Item *Fl_Tree_Item::add(const Fl_Tree_Prefs &prefs, const char *new_labe
       _children.add(item);
       return(item);
     }
-    case FL_TREE_SORT_DESCENDING: {
+    case fltk3::TREE_SORT_DESCENDING: {
       for ( int t=0; t<_children.total(); t++ ) {
-        Fl_Tree_Item *c = _children[t];
+        fltk3::TreeItem *c = _children[t];
         if ( c->label() && strcmp(c->label(), new_label) < 0 ) {
           _children.insert(t, item);
           return(item);
@@ -293,17 +293,17 @@ Fl_Tree_Item *Fl_Tree_Item::add(const Fl_Tree_Prefs &prefs, const char *new_labe
 }
 
 /// Descend into the path specified by \p arr, and add a new child there.
-/// Should be used only by Fl_Tree's internals.
+/// Should be used only by fltk3::Tree's internals.
 /// Adds the item based on the value of prefs.sortorder().
 /// \returns the item added.
 ///
-Fl_Tree_Item *Fl_Tree_Item::add(const Fl_Tree_Prefs &prefs, char **arr) {
+fltk3::TreeItem *fltk3::TreeItem::add(const fltk3::TreePrefs &prefs, char **arr) {
   int t = find_child(*arr);
-  Fl_Tree_Item *item = 0;
+  fltk3::TreeItem *item = 0;
   if ( t == -1 ) {
-    item = (Fl_Tree_Item*)add(prefs, *arr);
+    item = (fltk3::TreeItem*)add(prefs, *arr);
   } else {
-    item = (Fl_Tree_Item*)child(t);
+    item = (fltk3::TreeItem*)child(t);
   }
   if ( *(arr+1) ) {		// descend?
     return(item->add(prefs, arr+1));
@@ -315,8 +315,8 @@ Fl_Tree_Item *Fl_Tree_Item::add(const Fl_Tree_Prefs &prefs, char **arr) {
 /// Insert a new item into current item's children at a specified position.
 /// \returns the new item inserted.
 ///
-Fl_Tree_Item *Fl_Tree_Item::insert(const Fl_Tree_Prefs &prefs, const char *new_label, int pos) {
-  Fl_Tree_Item *item = new Fl_Tree_Item(prefs);
+fltk3::TreeItem *fltk3::TreeItem::insert(const fltk3::TreePrefs &prefs, const char *new_label, int pos) {
+  fltk3::TreeItem *item = new fltk3::TreeItem(prefs);
   item->label(new_label);
   item->_parent = this;
   _children.insert(pos, item);
@@ -326,12 +326,12 @@ Fl_Tree_Item *Fl_Tree_Item::insert(const Fl_Tree_Prefs &prefs, const char *new_l
 /// Insert a new item above this item.
 /// \returns the new item inserted, or 0 if an error occurred.
 ///
-Fl_Tree_Item *Fl_Tree_Item::insert_above(const Fl_Tree_Prefs &prefs, const char *new_label) {
-  Fl_Tree_Item *p = _parent;
+fltk3::TreeItem *fltk3::TreeItem::insert_above(const fltk3::TreePrefs &prefs, const char *new_label) {
+  fltk3::TreeItem *p = _parent;
   if ( ! p ) return(0);
   // Walk our parent's children to find ourself
   for ( int t=0; t<p->children(); t++ ) {
-    Fl_Tree_Item *c = p->child(t);
+    fltk3::TreeItem *c = p->child(t);
     if ( this == c ) {
       return(p->insert(prefs, new_label, t));
     }
@@ -342,7 +342,7 @@ Fl_Tree_Item *Fl_Tree_Item::insert_above(const Fl_Tree_Prefs &prefs, const char 
 /// Remove child by item.
 ///    \returns 0 if removed, -1 if item not an immediate child.
 ///
-int Fl_Tree_Item::remove_child(Fl_Tree_Item *item) {
+int fltk3::TreeItem::remove_child(fltk3::TreeItem *item) {
   for ( int t=0; t<children(); t++ ) {
     if ( child(t) == item ) {
       item->clear_children();
@@ -356,7 +356,7 @@ int Fl_Tree_Item::remove_child(Fl_Tree_Item *item) {
 /// Remove immediate child (and its children) by its label 'name'.
 /// \returns 0 if removed, -1 if not found.
 ///
-int Fl_Tree_Item::remove_child(const char *name) {
+int fltk3::TreeItem::remove_child(const char *name) {
   for ( int t=0; t<children(); t++ ) {
     if ( child(t)->label() ) {
       if ( strcmp(child(t)->label(), name) == 0 ) {
@@ -379,7 +379,7 @@ int Fl_Tree_Item::remove_child(const char *name) {
 ///    -    0 : OK
 ///    -   -1 : failed: 'a' or 'b' is not our immediate child
 ///
-void Fl_Tree_Item::swap_children(int ax, int bx) {
+void fltk3::TreeItem::swap_children(int ax, int bx) {
   _children.swap(ax, bx);
 }
 
@@ -393,7 +393,7 @@ void Fl_Tree_Item::swap_children(int ax, int bx) {
 ///    -    0 : OK
 ///    -   -1 : failed: 'a' or 'b' is not our immediate child
 ///
-int Fl_Tree_Item::swap_children(Fl_Tree_Item *a, Fl_Tree_Item *b) {
+int fltk3::TreeItem::swap_children(fltk3::TreeItem *a, fltk3::TreeItem *b) {
   int ax = -1, bx = -1;
   for ( int t=0; t<children(); t++ ) {	// find index for a and b
     if ( _children[t] == a ) { ax = t; if ( bx != -1 ) break; else continue; }
@@ -405,14 +405,14 @@ int Fl_Tree_Item::swap_children(Fl_Tree_Item *a, Fl_Tree_Item *b) {
 }
 
 /// Internal: Horizontal connector line based on preference settings.
-void Fl_Tree_Item::draw_horizontal_connector(int x1, int x2, int y, const Fl_Tree_Prefs &prefs) {
+void fltk3::TreeItem::draw_horizontal_connector(int x1, int x2, int y, const fltk3::TreePrefs &prefs) {
   fltk3::color(prefs.connectorcolor());
   switch ( prefs.connectorstyle() ) {
-    case FL_TREE_CONNECTOR_SOLID:
+    case fltk3::TREE_CONNECTOR_SOLID:
       y |= 1;				// force alignment w/dot pattern
       fltk3::line(x1,y,x2,y);
       return;
-    case FL_TREE_CONNECTOR_DOTTED: 
+    case fltk3::TREE_CONNECTOR_DOTTED: 
         {
             y |= 1;				// force alignment w/dot pattern
             for ( int xx=x1; xx<=x2; xx++ ) {
@@ -420,21 +420,21 @@ void Fl_Tree_Item::draw_horizontal_connector(int x1, int x2, int y, const Fl_Tre
             }
         }
       return;
-    case FL_TREE_CONNECTOR_NONE:
+    case fltk3::TREE_CONNECTOR_NONE:
       return;
   }
 }
 
 /// Internal: Vertical connector line based on preference settings.
-void Fl_Tree_Item::draw_vertical_connector(int x, int y1, int y2, const Fl_Tree_Prefs &prefs) {
+void fltk3::TreeItem::draw_vertical_connector(int x, int y1, int y2, const fltk3::TreePrefs &prefs) {
   fltk3::color(prefs.connectorcolor());
   switch ( prefs.connectorstyle() ) {
-    case FL_TREE_CONNECTOR_SOLID:
+    case fltk3::TREE_CONNECTOR_SOLID:
       y1 |= 1;				// force alignment w/dot pattern
       y2 |= 1;				// force alignment w/dot pattern
       fltk3::line(x,y1,x,y2);
       return;
-    case FL_TREE_CONNECTOR_DOTTED:
+    case fltk3::TREE_CONNECTOR_DOTTED:
         {
             y1 |= 1;				// force alignment w/dot pattern
             y2 |= 1;				// force alignment w/dot pattern
@@ -443,7 +443,7 @@ void Fl_Tree_Item::draw_vertical_connector(int x, int y1, int y2, const Fl_Tree_
             }
         }
         return;
-    case FL_TREE_CONNECTOR_NONE:
+    case fltk3::TREE_CONNECTOR_NONE:
       return;
   }
 }
@@ -456,19 +456,19 @@ void Fl_Tree_Item::draw_vertical_connector(int x, int y1, int y2, const Fl_Tree_
 ///
 ///    \returns const visible item under the event if found, or 0 if none.
 ///
-const Fl_Tree_Item *Fl_Tree_Item::find_clicked(const Fl_Tree_Prefs &prefs) const {
+const fltk3::TreeItem *fltk3::TreeItem::find_clicked(const fltk3::TreePrefs &prefs) const {
   if ( ! _visible ) return(0);
   if ( is_root() && !prefs.showroot() ) {
     // skip event check if we're root but root not being shown
   } else {
     // See if event is over us
-    if ( event_inside(_xywh) ) {		// event within this item?
+    if ( ::event_inside(_xywh) ) {		// event within this item?
       return(this);				// found
     }
   }
   if ( is_open() ) {				// open? check children of this item
     for ( int t=0; t<children(); t++ ) {
-      const Fl_Tree_Item *item;
+      const fltk3::TreeItem *item;
       if ( ( item = _children[t]->find_clicked(prefs) ) != NULL) {	// check child and its descendents
         return(item);							// found?
       }
@@ -486,19 +486,19 @@ const Fl_Tree_Item *Fl_Tree_Item::find_clicked(const Fl_Tree_Prefs &prefs) const
 ///
 ///    \returns the visible item under the event if found, or 0 if none.
 ///
-Fl_Tree_Item *Fl_Tree_Item::find_clicked(const Fl_Tree_Prefs &prefs) {
+fltk3::TreeItem *fltk3::TreeItem::find_clicked(const fltk3::TreePrefs &prefs) {
   if ( ! _visible ) return(0);
   if ( is_root() && !prefs.showroot() ) {
     // skip event check if we're root but root not being shown
   } else {
     // See if event is over us
-    if ( event_inside(_xywh) ) {		// event within this item?
+    if ( ::event_inside(_xywh) ) {		// event within this item?
       return(this);				// found
     }
   }
   if ( is_open() ) {				// open? check children of this item
     for ( int t=0; t<children(); t++ ) {
-      Fl_Tree_Item *item;
+      fltk3::TreeItem *item;
       if ( ( item = _children[t]->find_clicked(prefs) ) != NULL ) {	// check child and its descendents
         return(item);							// found?
       }
@@ -548,16 +548,16 @@ static void draw_item_focus(fltk3::Boxtype B, fltk3::Color C, int X, int Y, int 
 }
 
 /// Draw this item and its children.
-void Fl_Tree_Item::draw(int X, int &Y, int W, fltk3::Widget *tree,
-			Fl_Tree_Item *itemfocus,
-                        const Fl_Tree_Prefs &prefs, int lastchild) {
+void fltk3::TreeItem::draw(int X, int &Y, int W, fltk3::Widget *tree,
+			fltk3::TreeItem *itemfocus,
+                        const fltk3::TreePrefs &prefs, int lastchild) {
   if ( ! _visible ) return; 
   fltk3::font(_labelfont, _labelsize);
   int H = _labelsize;
   if(usericon() && H < usericon()->h()) H = usericon()->h(); 
   H += prefs.linespacing() + fltk3::descent();
   // adjust horizontally if we draw no connecting lines
-  if ( is_root() && prefs.connectorstyle() == FL_TREE_CONNECTOR_NONE ) {
+  if ( is_root() && prefs.connectorstyle() == fltk3::TREE_CONNECTOR_NONE ) {
     X -= prefs.openicon()->w();
     W += prefs.openicon()->w();
   }
@@ -592,7 +592,7 @@ void Fl_Tree_Item::draw(int X, int &Y, int W, fltk3::Widget *tree,
   char drawthis = ( is_root() && prefs.showroot() == 0 ) ? 0 : 1;
   if ( drawthis ) {
     // Draw connectors
-    if ( prefs.connectorstyle() != FL_TREE_CONNECTOR_NONE ) {
+    if ( prefs.connectorstyle() != fltk3::TREE_CONNECTOR_NONE ) {
       // Horiz connector between center of icon and text
       // if this is root, the connector should not dangle in thin air on the left
       if (is_root())
@@ -700,9 +700,9 @@ void Fl_Tree_Item::draw(int X, int &Y, int W, fltk3::Widget *tree,
 
 /// Was the event on the 'collapse' button?
 ///
-int Fl_Tree_Item::event_on_collapse_icon(const Fl_Tree_Prefs &prefs) const {
+int fltk3::TreeItem::event_on_collapse_icon(const fltk3::TreePrefs &prefs) const {
   if ( _visible && _active && has_children() && prefs.showcollapse() ) {
-    return(event_inside(_collapse_xywh) ? 1 : 0);
+    return(::event_inside(_collapse_xywh) ? 1 : 0);
   } else {
     return(0);
   }
@@ -710,9 +710,9 @@ int Fl_Tree_Item::event_on_collapse_icon(const Fl_Tree_Prefs &prefs) const {
 
 /// Was event on the label()?
 ///
-int Fl_Tree_Item::event_on_label(const Fl_Tree_Prefs &prefs) const {
+int fltk3::TreeItem::event_on_label(const fltk3::TreePrefs &prefs) const {
   if ( _visible && _active ) {
-    return(event_inside(_label_xywh) ? 1 : 0);
+    return(::event_inside(_label_xywh) ? 1 : 0);
   } else {
     return(0);
   }
@@ -721,7 +721,7 @@ int Fl_Tree_Item::event_on_label(const Fl_Tree_Prefs &prefs) const {
 /// Internal: Show the FLTK widget() for this item and all children.
 /// Used by open() to re-show widgets that were hidden by a previous close()
 ///
-void Fl_Tree_Item::show_widgets() {
+void fltk3::TreeItem::show_widgets() {
   if ( _widget ) _widget->show();
   if ( is_open() ) {
     for ( int t=0; t<_children.total(); t++ ) {
@@ -733,7 +733,7 @@ void Fl_Tree_Item::show_widgets() {
 /// Internal: Hide the FLTK widget() for this item and all children.
 /// Used by close() to hide widgets.
 ///
-void Fl_Tree_Item::hide_widgets() {
+void fltk3::TreeItem::hide_widgets() {
   if ( _widget ) _widget->hide();
   for ( int t=0; t<_children.total(); t++ ) {
     _children[t]->hide_widgets();
@@ -741,7 +741,7 @@ void Fl_Tree_Item::hide_widgets() {
 }
 
 /// Open this item and all its children.
-void Fl_Tree_Item::open() {
+void fltk3::TreeItem::open() {
   _open = 1;
   // Tell children to show() their widgets
   for ( int t=0; t<_children.total(); t++ ) {
@@ -750,7 +750,7 @@ void Fl_Tree_Item::open() {
 }
 
 /// Close this item and all its children.
-void Fl_Tree_Item::close() {
+void fltk3::TreeItem::close() {
   _open = 0;
   // Tell children to hide() their widgets
   for ( int t=0; t<_children.total(); t++ ) {
@@ -763,9 +763,9 @@ void Fl_Tree_Item::close() {
 /// For instance; root has a depth of zero, and its immediate children
 /// would have a depth of 1, and so on.
 ///
-int Fl_Tree_Item::depth() const {
+int fltk3::TreeItem::depth() const {
   int count = 0;
-  const Fl_Tree_Item *item = parent();
+  const fltk3::TreeItem *item = parent();
   while ( item ) {
     ++count;
     item = item->parent();
@@ -776,12 +776,12 @@ int Fl_Tree_Item::depth() const {
 /// Return the next item in the tree.
 ///
 /// This method can be used to walk the tree forward.
-/// For an example of how to use this method, see Fl_Tree::first().
+/// For an example of how to use this method, see fltk3::Tree::first().
 /// 
 /// \returns the next item in the tree, or 0 if there's no more items.
 ///
-Fl_Tree_Item *Fl_Tree_Item::next() {
-  Fl_Tree_Item *p, *c = this;
+fltk3::TreeItem *fltk3::TreeItem::next() {
+  fltk3::TreeItem *p, *c = this;
   if ( c->has_children() ) {
     return(c->child(0));
   }
@@ -797,12 +797,12 @@ Fl_Tree_Item *Fl_Tree_Item::next() {
 /// Return the previous item in the tree.
 ///
 /// This method can be used to walk the tree backwards.
-/// For an example of how to use this method, see Fl_Tree::last().
+/// For an example of how to use this method, see fltk3::Tree::last().
 /// 
 /// \returns the previous item in the tree, or 0 if there's no item above this one (hit the root).
 ///
-Fl_Tree_Item *Fl_Tree_Item::prev() {
-  Fl_Tree_Item *p=parent();		// start with parent
+fltk3::TreeItem *fltk3::TreeItem::prev() {
+  fltk3::TreeItem *p=parent();		// start with parent
   if ( ! p ) return(0);			// hit root? done
   int t = p->find_child(this);		// find our position in parent's children[] array
   if ( --t == -1 ) {	 		// are we first child?
@@ -823,7 +823,7 @@ Fl_Tree_Item *Fl_Tree_Item::prev() {
 /// 
 /// \returns item's next sibling, or 0 if none.
 ///
-Fl_Tree_Item *Fl_Tree_Item::next_sibling() {
+fltk3::TreeItem *fltk3::TreeItem::next_sibling() {
   if ( !parent() ) return(0);			// No parent (root)? We have no siblings
   int index = parent()->find_child(this);	// find our position in parent's child() array
   if ( index == -1 ) return(0);			// parent doesn't know us? weird
@@ -839,7 +839,7 @@ Fl_Tree_Item *Fl_Tree_Item::next_sibling() {
 /// 
 /// \returns This item's previous sibling, or 0 if none.
 ///
-Fl_Tree_Item *Fl_Tree_Item::prev_sibling() {
+fltk3::TreeItem *fltk3::TreeItem::prev_sibling() {
   if ( !parent() ) return(0);				// No parent (root)? We have no siblings
   int index = parent()->find_child(this);		// find next position up in parent's child() array
   if ( index == -1 ) return(0);				// parent doesn't know us? weird
@@ -854,8 +854,8 @@ Fl_Tree_Item *Fl_Tree_Item::prev_sibling() {
 /// 
 /// \returns the next visible item below us, or 0 if there's no more items.
 ///
-Fl_Tree_Item *Fl_Tree_Item::next_displayed(Fl_Tree_Prefs &prefs) {
-  Fl_Tree_Item *c = this;
+fltk3::TreeItem *fltk3::TreeItem::next_displayed(fltk3::TreePrefs &prefs) {
+  fltk3::TreeItem *c = this;
   while ( c ) {
     if ( c->is_root() && !prefs.showroot() ) {		// on root and can't show it?
       c = c->next();					// skip ahead, try again
@@ -864,7 +864,7 @@ Fl_Tree_Item *Fl_Tree_Item::next_displayed(Fl_Tree_Prefs &prefs) {
     if ( c->has_children() && c->is_close() ) {		// item has children and: invisible or closed?
       // Skip children, take next sibling. If none, try parent's sibling, repeat
       while ( c ) {
-	Fl_Tree_Item *sib = c->next_sibling();		// get sibling
+	fltk3::TreeItem *sib = c->next_sibling();		// get sibling
 	if ( sib ) { c = sib; break; }			// Found? let outer loop test it
 	c = c->parent();				// No sibling? move up tree, try parent's sibling
       }
@@ -874,7 +874,7 @@ Fl_Tree_Item *Fl_Tree_Item::next_displayed(Fl_Tree_Prefs &prefs) {
     if ( !c ) return(0);				// no more? done
     // Check all parents to be sure none are closed.
     // If closed, move up to that level and repeat until sure none are closed.
-    Fl_Tree_Item *p = c->parent();
+    fltk3::TreeItem *p = c->parent();
     while (1) {
       if ( !p || p->is_root() ) return(c);		// hit top? then we're displayed, return c
       if ( p->is_close() ) c = p;			// found closed parent? make it current
@@ -892,8 +892,8 @@ Fl_Tree_Item *Fl_Tree_Item::next_displayed(Fl_Tree_Prefs &prefs) {
 /// 
 /// \returns the previous visible item above us, or 0 if there's no more items.
 ///
-Fl_Tree_Item *Fl_Tree_Item::prev_displayed(Fl_Tree_Prefs &prefs) {
-  Fl_Tree_Item *c = this;
+fltk3::TreeItem *fltk3::TreeItem::prev_displayed(fltk3::TreePrefs &prefs) {
+  fltk3::TreeItem *c = this;
   while ( c ) {
     c = c->prev();					// previous item
     if ( !c ) break;					// no more items? done
@@ -902,7 +902,7 @@ Fl_Tree_Item *Fl_Tree_Item::prev_displayed(Fl_Tree_Prefs &prefs) {
     if ( !c->visible() ) continue;			// item not visible? skip
     // Check all parents to be sure none are closed.
     // If closed, move up to that level and repeat until sure none are closed.
-    Fl_Tree_Item *p = c->parent();
+    fltk3::TreeItem *p = c->parent();
     while (1) {
       if ( !p || p->is_root() ) return(c);		// hit top? then we're displayed, return c
       if ( p->is_close() ) c = p;			// found closed parent? make it current
@@ -918,8 +918,8 @@ Fl_Tree_Item *Fl_Tree_Item::prev_displayed(Fl_Tree_Prefs &prefs) {
 ///    1 -- item and its parents are visible/open()
 ///    0 -- item (or parents) invisible or close()ed.
 ///
-int Fl_Tree_Item::visible_r() const {
-  for (const Fl_Tree_Item *p=this; p; p=p->parent())	// move up through parents
+int fltk3::TreeItem::visible_r() const {
+  for (const fltk3::TreeItem *p=this; p; p=p->parent())	// move up through parents
     if (!p->visible() || p->is_close()) return(0);	// any parent not visible or closed?
   return(1);
 }

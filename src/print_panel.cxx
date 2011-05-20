@@ -48,7 +48,7 @@
 #include <fltk3/Preferences.h>
 #include <fltk3/IntInput.h>
 
-static Fl_Preferences print_prefs(Fl_Preferences::USER, "fltk.org", "printers");
+static fltk3::Preferences print_prefs(fltk3::Preferences::USER, "fltk.org", "printers");
 static fltk3::DoubleWindow *print_panel=(fltk3::DoubleWindow *)0;
 static fltk3::Group *print_panel_controls=(fltk3::Group *)0;
 static fltk3::Choice *print_choice=(fltk3::Choice *)0;

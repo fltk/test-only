@@ -56,7 +56,7 @@ extern const char* i18n_function;
 extern const char* i18n_file;
 extern const char* i18n_set;
 
-extern Fl_Preferences	fluid_prefs;
+extern fltk3::Preferences	fluid_prefs;
 
 inline int fl_min(int a, int b) { return (a < b ? a : b); } 
 

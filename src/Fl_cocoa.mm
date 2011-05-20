@@ -106,7 +106,7 @@ Fl_Display_Device *Fl_Display_Device::_display = &fl_quartz_display; // the plat
 int fl_screen;
 CGContextRef fl_gc = 0;
 void *fl_system_menu;                   // this is really a NSMenu*
-Fl_Sys_Menu_Bar *fl_sys_menu_bar = 0;
+fltk3::SysMenuBar *fltk3::sys_menu_bar = 0;
 void *fl_default_cursor;		// this is really a NSCursor*
 void *fl_capture = 0;			// (NSWindow*) we need this to compensate for a missing(?) mouse capture
 bool fl_show_iconic;                    // true if called from iconize() - shows the next created window in collapsed state
@@ -2987,10 +2987,10 @@ static void createAppleMenu(void)
 - (void) doCallback:(id)unused
 {
   int flRank = [self tag];
-  const fltk3::MenuItem *items = fl_sys_menu_bar->fltk3::Menu_::menu();
+  const fltk3::MenuItem *items = fltk3::sys_menu_bar->fltk3::Menu_::menu();
   const fltk3::MenuItem *item = items + flRank;
   if (item) {
-    fl_sys_menu_bar->picked(item);
+    fltk3::sys_menu_bar->picked(item);
     if ( item->flags & fltk3::MENU_TOGGLE ) {	// update the menu toggle symbol
       [self setState:(item->value() ? NSOnState : NSOffState)];
     }
@@ -3037,8 +3037,8 @@ void fl_mac_set_about( fltk3::Callback *cb, void *user_data, int shortcut)
 						 action:@selector(directCallback:) 
 					  keyEquivalent:@""] autorelease];
   if (aboutItem.shortcut()) {
-    Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setKeyEquivalent, item, aboutItem.shortcut() & 0xff);
-    Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setKeyEquivalentModifierMask, item, aboutItem.shortcut() );
+    fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setKeyEquivalent, item, aboutItem.shortcut() & 0xff);
+    fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setKeyEquivalentModifierMask, item, aboutItem.shortcut() );
   }
   NSData *pointer = [NSData dataWithBytes:&aboutItem length:sizeof(fltk3::MenuItem)];
   [item setRepresentedObject:pointer];
@@ -3067,7 +3067,7 @@ static char *remove_ampersand(const char *s)
   return ret;
 }
 
-void *Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::menuOrItemOperation operation, ...)
+void *fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::menuOrItemOperation operation, ...)
 /* these operations apply to menus, submenus, or menu items
  */
 {
@@ -3081,12 +3081,12 @@ void *Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::menuOrItemOperatio
   va_list ap;
   va_start(ap, operation);
   
-  if (operation == Fl_Sys_Menu_Bar::itemAtIndex) {	// arguments: NSMenu*, int. Returns the item
+  if (operation == fltk3::SysMenuBar::itemAtIndex) {	// arguments: NSMenu*, int. Returns the item
     menu = va_arg(ap, NSMenu*);
     value = va_arg(ap, int);
     retval = (void *)[menu itemAtIndex:value];
   }
-  else if (operation == Fl_Sys_Menu_Bar::setKeyEquivalent) {	// arguments: NSMenuItem*, int
+  else if (operation == fltk3::SysMenuBar::setKeyEquivalent) {	// arguments: NSMenuItem*, int
     item = va_arg(ap, NSMenuItem*);
     value = va_arg(ap, int);
     char key = value;
@@ -3094,7 +3094,7 @@ void *Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::menuOrItemOperatio
     [item setKeyEquivalent:equiv];
     [equiv release];
   }
-  else if (operation == Fl_Sys_Menu_Bar::setKeyEquivalentModifierMask) {		// arguments: NSMenuItem*, int
+  else if (operation == fltk3::SysMenuBar::setKeyEquivalentModifierMask) {		// arguments: NSMenuItem*, int
     item = va_arg(ap, NSMenuItem*);
     value = va_arg(ap, int);
     NSUInteger macMod = 0;
@@ -3104,12 +3104,12 @@ void *Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::menuOrItemOperatio
     if ( value & fltk3::CTRL ) macMod |= NSControlKeyMask;
     [item setKeyEquivalentModifierMask:macMod];
   }
-  else if (operation == Fl_Sys_Menu_Bar::setState) {	// arguments: NSMenuItem*, int
+  else if (operation == fltk3::SysMenuBar::setState) {	// arguments: NSMenuItem*, int
     item = va_arg(ap, NSMenuItem*);
     value = va_arg(ap, int);
     [item setState:(value ? NSOnState : NSOffState)];
   }
-  else if (operation == Fl_Sys_Menu_Bar::initWithTitle) {	// arguments: const char*title. Returns the newly created menu
+  else if (operation == fltk3::SysMenuBar::initWithTitle) {	// arguments: const char*title. Returns the newly created menu
                                                                 // creates a new (sub)menu
     char *ts = remove_ampersand(va_arg(ap, char *));
     CFStringRef title = CFStringCreateWithCString(NULL, ts, kCFStringEncodingUTF8);
@@ -3119,29 +3119,29 @@ void *Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::menuOrItemOperatio
     [menu setAutoenablesItems:NO];
     retval = (void *)menu;
   }
-  else if (operation == Fl_Sys_Menu_Bar::numberOfItems) {	// arguments: NSMenu *menu, int *pcount
+  else if (operation == fltk3::SysMenuBar::numberOfItems) {	// arguments: NSMenu *menu, int *pcount
                                                                 // upon return, *pcount is set to menu's item count
     menu = va_arg(ap, NSMenu*);
     pter = va_arg(ap, void *);
     *(int*)pter = [menu numberOfItems];
   }
-  else if (operation == Fl_Sys_Menu_Bar::setSubmenu) {		// arguments: NSMenuItem *item, NSMenu *menu
+  else if (operation == fltk3::SysMenuBar::setSubmenu) {		// arguments: NSMenuItem *item, NSMenu *menu
                                                         	// sets 'menu' as submenu attached to 'item'
     item = va_arg(ap, NSMenuItem*);
     menu = va_arg(ap, NSMenu*);
     [item setSubmenu:menu];
     [menu release];
   }
-  else if (operation == Fl_Sys_Menu_Bar::setEnabled) {		// arguments: NSMenuItem*, int
+  else if (operation == fltk3::SysMenuBar::setEnabled) {		// arguments: NSMenuItem*, int
     item = va_arg(ap, NSMenuItem*);
     value = va_arg(ap, int);
     [item setEnabled:(value ? YES : NO)];
   }
-  else if (operation == Fl_Sys_Menu_Bar::addSeparatorItem) {	// arguments: NSMenu*
+  else if (operation == fltk3::SysMenuBar::addSeparatorItem) {	// arguments: NSMenu*
     menu = va_arg(ap, NSMenu*);
     [menu addItem:[NSMenuItem separatorItem]];
   }
-  else if (operation == Fl_Sys_Menu_Bar::setTitle) {		// arguments: NSMenuItem*, const char *
+  else if (operation == fltk3::SysMenuBar::setTitle) {		// arguments: NSMenuItem*, const char *
     item = va_arg(ap, NSMenuItem*);
     char *ts = remove_ampersand(va_arg(ap, char *));
     CFStringRef title = CFStringCreateWithCString(NULL, ts, kCFStringEncodingUTF8);
@@ -3149,18 +3149,18 @@ void *Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::menuOrItemOperatio
     [item setTitle:(NSString*)title];
     CFRelease(title);
   }
-  else if (operation == Fl_Sys_Menu_Bar::removeItem) {		// arguments: NSMenu*, int
+  else if (operation == fltk3::SysMenuBar::removeItem) {		// arguments: NSMenu*, int
     menu = va_arg(ap, NSMenu*);
     value = va_arg(ap, int);
     [menu removeItem:[menu itemAtIndex:value]];
   }
-  else if (operation == Fl_Sys_Menu_Bar::addNewItem) {		// arguments: NSMenu *menu, int flrank, int *prank
+  else if (operation == fltk3::SysMenuBar::addNewItem) {		// arguments: NSMenu *menu, int flrank, int *prank
     // creates a new menu item at the end of 'menu'
-    // attaches the item of rank flrank (counted in fltk3::Menu_) of fl_sys_menu_bar to it
+    // attaches the item of rank flrank (counted in fltk3::Menu_) of fltk3::sys_menu_bar to it
     // upon return, puts the rank (counted in NSMenu) of the new item in *prank unless prank is NULL
     menu = va_arg(ap, NSMenu*);
     int flRank = va_arg(ap, int);
-    char *name = remove_ampersand( (fl_sys_menu_bar->fltk3::Menu_::menu() + flRank)->label());
+    char *name = remove_ampersand( (fltk3::sys_menu_bar->fltk3::Menu_::menu() + flRank)->label());
     int *prank = va_arg(ap, int*);
     CFStringRef cfname = CFStringCreateWithCString(NULL, name, kCFStringEncodingUTF8);
     free(name);
@@ -3174,8 +3174,8 @@ void *Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::menuOrItemOperatio
     if (prank != NULL) *prank = [menu indexOfItem:item];
     [item release];
   }
-  else if (operation == Fl_Sys_Menu_Bar::renameItem) {		// arguments: int rank, const char *newname
-    // renames the system menu item numbered rank in fl_sys_menu_bar->menu()
+  else if (operation == fltk3::SysMenuBar::renameItem) {		// arguments: int rank, const char *newname
+    // renames the system menu item numbered rank in fltk3::sys_menu_bar->menu()
     int rank = va_arg(ap, int);
     char *newname = remove_ampersand( va_arg(ap, const char *) );
     int countmenus = [[NSApp mainMenu] numberOfItems];

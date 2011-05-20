@@ -32,12 +32,12 @@
 // v1.1 - Matthias seperated all tests into multiple source files for hopefully easier handling
 
 #include <fltk3/run.h>
-#include <fltk3/Double_Window.h>
-#include <fltk3/Hold_Browser.h>
-#include <fltk3/Help_View.h>
+#include <fltk3/DoubleWindow.h>
+#include <fltk3/HoldBrowser.h>
+#include <fltk3/HelpView.h>
 #include <fltk3/Group.h>
 #include <fltk3/Box.h>
-#include <fltk3/draw.h>		// fl_text_extents()
+#include <fltk3/draw.h>		// fltk3::text_extents()
 
 // WINDOW/WIDGET SIZES
 #define MAINWIN_W	700				// main window w()
@@ -51,16 +51,16 @@
 #define TESTAREA_W	(MAINWIN_W - BROWSER_W - 30)	// test area w()
 #define TESTAREA_H	BROWSER_H			// test area h()
 
-typedef void (*UnitTestCallback)(const char*,Fl_Group*);
+typedef void (*UnitTestCallback)(const char*,fltk3::Group*);
 
 class MainWindow *mainwin = 0;
-Fl_Hold_Browser *browser = 0;
+fltk3::HoldBrowser *browser = 0;
 
 // This class helps to automagically register a new test with the unittest app.
 // Please see the examples on how this is used. 
 class UnitTest {
 public:
-  UnitTest(const char *label, Fl_Widget* (*create)()) :
+  UnitTest(const char *label, fltk3::Widget* (*create)()) :
     fWidget(0L)
   {
     fLabel = strdup(label);
@@ -88,8 +88,8 @@ public:
   static UnitTest *test(int i) { return fTest[i]; }
 private:
   char *fLabel;
-  Fl_Widget *(*fCreate)();
-  Fl_Widget *fWidget;
+  fltk3::Widget *(*fCreate)();
+  fltk3::Widget *fWidget;
 
   static void add(UnitTest *t) {
     fTest[nTest] = t;
@@ -115,25 +115,25 @@ public:
   void drawAlignmentIndicators() {
     const int sze = 16;
     // top left corner
-    fl_color(FL_GREEN); fl_yxline(0, sze, 0, sze);
-    fl_color(FL_RED);   fl_yxline(-1, sze, -1, sze);
-    fl_color(FL_WHITE); fl_rectf(3, 3, sze-2, sze-2);
-    fl_color(FL_BLACK); fl_rect(3, 3, sze-2, sze-2);
+    fltk3::color(fltk3::GREEN); fltk3::yxline(0, sze, 0, sze);
+    fltk3::color(fltk3::RED);   fltk3::yxline(-1, sze, -1, sze);
+    fltk3::color(fltk3::WHITE); fltk3::rectf(3, 3, sze-2, sze-2);
+    fltk3::color(fltk3::BLACK); fltk3::rect(3, 3, sze-2, sze-2);
     // bottom left corner
-    fl_color(FL_GREEN); fl_yxline(0, h()-sze-1, h()-1, sze);
-    fl_color(FL_RED);   fl_yxline(-1, h()-sze-1, h(), sze);
-    fl_color(FL_WHITE); fl_rectf(3, h()-sze-1, sze-2, sze-2);
-    fl_color(FL_BLACK); fl_rect(3, h()-sze-1, sze-2, sze-2);
+    fltk3::color(fltk3::GREEN); fltk3::yxline(0, h()-sze-1, h()-1, sze);
+    fltk3::color(fltk3::RED);   fltk3::yxline(-1, h()-sze-1, h(), sze);
+    fltk3::color(fltk3::WHITE); fltk3::rectf(3, h()-sze-1, sze-2, sze-2);
+    fltk3::color(fltk3::BLACK); fltk3::rect(3, h()-sze-1, sze-2, sze-2);
     // bottom right corner
-    fl_color(FL_GREEN); fl_yxline(w()-1, h()-sze-1, h()-1, w()-sze-1);
-    fl_color(FL_RED);   fl_yxline(w(), h()-sze-1, h(), w()-sze-1);
-    fl_color(FL_WHITE); fl_rectf(w()-sze-1, h()-sze-1, sze-2, sze-2);
-    fl_color(FL_BLACK); fl_rect(w()-sze-1, h()-sze-1, sze-2, sze-2);
+    fltk3::color(fltk3::GREEN); fltk3::yxline(w()-1, h()-sze-1, h()-1, w()-sze-1);
+    fltk3::color(fltk3::RED);   fltk3::yxline(w(), h()-sze-1, h(), w()-sze-1);
+    fltk3::color(fltk3::WHITE); fltk3::rectf(w()-sze-1, h()-sze-1, sze-2, sze-2);
+    fltk3::color(fltk3::BLACK); fltk3::rect(w()-sze-1, h()-sze-1, sze-2, sze-2);
     // top right corner
-    fl_color(FL_GREEN); fl_yxline(w()-1, sze, 0, w()-sze-1);
-    fl_color(FL_RED);   fl_yxline(w(), sze, -1, w()-sze-1);
-    fl_color(FL_WHITE); fl_rectf(w()-sze-1, 3, sze-2, sze-2);
-    fl_color(FL_BLACK); fl_rect(w()-sze-1, 3, sze-2, sze-2);
+    fltk3::color(fltk3::GREEN); fltk3::yxline(w()-1, sze, 0, w()-sze-1);
+    fltk3::color(fltk3::RED);   fltk3::yxline(w(), sze, -1, w()-sze-1);
+    fltk3::color(fltk3::WHITE); fltk3::rectf(w()-sze-1, 3, sze-2, sze-2);
+    fltk3::color(fltk3::BLACK); fltk3::rect(w()-sze-1, 3, sze-2, sze-2);
   }
   void draw() {
     fltk3::DoubleWindow::draw();
@@ -162,7 +162,7 @@ public:
 
 
 // callback whenever the browser value changes
-void Browser_CB(Fl_Widget*, void*) {
+void Browser_CB(fltk3::Widget*, void*) {
   for ( int t=1; t<=browser->size(); t++ ) {
     UnitTest *ti = (UnitTest*)browser->data(t);
     if ( browser->selected(t) ) {
@@ -177,12 +177,12 @@ void Browser_CB(Fl_Widget*, void*) {
 // this is the main call. It creates the window and adds all previously
 // registered tests to the browser widget.
 int main(int argc, char **argv) {
-  Fl::args(argc,argv);
-  Fl::visual(FL_RGB);
+  fltk3::args(argc,argv);
+  fltk3::visual(fltk3::RGB);
   mainwin = new MainWindow(MAINWIN_W, MAINWIN_H, "Fltk Unit Tests");
-  browser = new Fl_Hold_Browser(BROWSER_X, BROWSER_Y, BROWSER_W, BROWSER_H, "Unit Tests");
-  browser->align(FL_ALIGN_TOP|FL_ALIGN_LEFT);
-  browser->when(FL_WHEN_CHANGED);
+  browser = new fltk3::HoldBrowser(BROWSER_X, BROWSER_Y, BROWSER_W, BROWSER_H, "Unit Tests");
+  browser->align(fltk3::ALIGN_TOP|fltk3::ALIGN_LEFT);
+  browser->when(fltk3::WHEN_CHANGED);
   browser->callback(Browser_CB);
 
   int i, n = UnitTest::numTest();

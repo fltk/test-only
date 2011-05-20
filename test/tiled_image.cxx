@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_Tiled_Image test program for the Fast Light Tool Kit (FLTK).
+// fltk3::Tiled_Image test program for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
 //
@@ -26,24 +26,24 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/Double_Window.h>
+#include <fltk3/DoubleWindow.h>
 #include <fltk3/Button.h>
 #include <fltk3/Pixmap.h>
-#include <fltk3/Tiled_Image.h>
+#include <fltk3/TiledImage.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
 #include "pixmaps/tile.xpm"
 
-Fl_Button *b;
+fltk3::Button *b;
 fltk3::DoubleWindow *w;
 
-void button_cb(Fl_Widget *,void *) {
+void button_cb(fltk3::Widget *,void *) {
   w->hide();
 }
 
-#include <FL/x.h>
+#include <fltk3/x.h>
 #if !defined(WIN32) && !defined(__APPLE__)
 #include "list_visuals.cxx"
 #endif
@@ -63,32 +63,32 @@ int main(int argc, char **argv) {
 #if !defined(WIN32) && !defined(__APPLE__)
   int i = 1;
 
-  Fl::args(argc,argv,i,arg);
+  fltk3::args(argc,argv,i,arg);
 
   if (visid >= 0) {
-    fl_open_display();
+    fltk3::open_display();
     XVisualInfo templt; int num;
     templt.visualid = visid;
-    fl_visual = XGetVisualInfo(fl_display, VisualIDMask, &templt, &num);
-    if (!fl_visual) {
+    fltk3::visual = XGetVisualInfo(fltk3::display, VisualIDMask, &templt, &num);
+    if (!fltk3::visual) {
       fprintf(stderr, "No visual with id %d, use one of:\n",visid);
       list_visuals();
       exit(1);
     }
-    fl_colormap = XCreateColormap(fl_display, RootWindow(fl_display,fl_screen),
-				fl_visual->visual, AllocNone);
-    fl_xpixel(FL_BLACK); // make sure black is allocated in overlay visuals
+    fltk3::colormap = XCreateColormap(fltk3::display, RootWindow(fltk3::display,fltk3::screen),
+				fltk3::visual->visual, AllocNone);
+    fltk3::xpixel(fltk3::BLACK); // make sure black is allocated in overlay visuals
   } else {
-    Fl::visual(FL_RGB);
+    fltk3::visual(fltk3::RGB);
   }
 #endif
 
   fltk3::DoubleWindow window(400,400); ::w = &window;
-  Fl_Group group(0,0,400,400);
-  group.image(new Fl_Tiled_Image(new fltk3::Pixmap((const char * const *)tile_xpm)));
-  group.align(FL_ALIGN_INSIDE);
+  fltk3::Group group(0,0,400,400);
+  group.image(new fltk3::TiledImage(new fltk3::Pixmap((const char * const *)tile_xpm)));
+  group.align(fltk3::ALIGN_INSIDE);
 
-  Fl_Button b(340,365,50,25,"Close"); ::b = &b;
+  fltk3::Button b(340,365,50,25,"Close"); ::b = &b;
   b.callback(button_cb);
 
   group.end();

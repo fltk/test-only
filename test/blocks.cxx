@@ -26,14 +26,14 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/Double_Window.h>
+#include <fltk3/DoubleWindow.h>
 #include <fltk3/Button.h>
 #include <fltk3/Preferences.h>
-#include <fltk3/XPM_Image.h>
-#include <fltk3/XBM_Image.h>
-#include <fltk3/Tiled_Image.h>
+#include <fltk3/XPMImage.h>
+#include <fltk3/XBMImage.h>
+#include <fltk3/TiledImage.h>
 #include <fltk3/draw.h>
-#include <FL/x.h>
+#include <fltk3/x.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -125,8 +125,8 @@ fltk3::Pixmap *bomb_pixmaps[] = {
 const unsigned char screen_bits[] = {
   0xff, 0x55, 0xff, 0xaa, 0xff, 0x55, 0xff, 0xaa
 };
-Fl_Bitmap screen_bitmap(screen_bits, 8, 8);
-Fl_Tiled_Image screen_tile(&screen_bitmap);
+fltk3::Bitmap screen_bitmap(screen_bits, 8, 8);
+fltk3::TiledImage screen_tile(&screen_bitmap);
 
 
 // Sound class...
@@ -389,7 +389,7 @@ BlockSound::audio_cb(AudioDeviceID device,
 // Play a note for the given amount of time...
 void
 BlockSound::play_explosion(float duration) {
-  Fl::check();
+  fltk3::check();
 
   if (duration <= 0.0)
     return;
@@ -450,7 +450,7 @@ class BlockWindow : public fltk3::DoubleWindow
 
   private:
 
-  Fl_Button	*help_button_,
+  fltk3::Button	*help_button_,
 		*play_button_;
 
   int		num_columns_;
@@ -463,7 +463,7 @@ class BlockWindow : public fltk3::DoubleWindow
   int		num_colors_;
   int		opened_columns_;
   bool		paused_;
-  static Fl_Preferences	prefs_;
+  static fltk3::Preferences	prefs_;
   int		score_;
   BlockSound	*sound_;
   char		title_[255];
@@ -472,9 +472,9 @@ class BlockWindow : public fltk3::DoubleWindow
   void		_BlockWindow();
   int		bomb(int color);
   int		click(int col, int row);
-  static void	help_cb(Fl_Widget *wi, BlockWindow *bw);
+  static void	help_cb(fltk3::Widget *wi, BlockWindow *bw);
   void		init();
-  static void	play_cb(Fl_Widget *wi, BlockWindow *bw);
+  static void	play_cb(fltk3::Widget *wi, BlockWindow *bw);
   static void	timeout_cb(BlockWindow *bw);
 
   public:
@@ -491,13 +491,13 @@ class BlockWindow : public fltk3::DoubleWindow
 };
 
 
-Fl_Preferences	BlockWindow::prefs_(Fl_Preferences::USER, "fltk.org", "blocks");
+fltk3::Preferences	BlockWindow::prefs_(fltk3::Preferences::USER, "fltk.org", "blocks");
 
 
 int
 main(int argc, char *argv[]) {
-  Fl::scheme("plastic");
-  Fl::visible_focus(0);
+  fltk3::scheme("plastic");
+  fltk3::visible_focus(0);
 
   BlockWindow	*bw = new BlockWindow(BLOCK_COLS * BLOCK_SIZE,
                                       BLOCK_ROWS * BLOCK_SIZE + 20,
@@ -525,7 +525,7 @@ BlockWindow::BlockWindow(int W, int H, const char *L)
 
 // Delete a block window
 BlockWindow::~BlockWindow() {
-  Fl::remove_timeout((Fl_Timeout_Handler)timeout_cb, (void *)this);
+  fltk3::remove_timeout((fltk3::TimeoutHandler)timeout_cb, (void *)this);
 }
 
 
@@ -534,12 +534,12 @@ void
 BlockWindow::_BlockWindow() {
   init();
 
-  help_button_ = new Fl_Button(0, 0, 20, 20, "?");
-  help_button_->callback((Fl_Callback *)help_cb, this);
+  help_button_ = new fltk3::Button(0, 0, 20, 20, "?");
+  help_button_->callback((fltk3::Callback *)help_cb, this);
   help_button_->shortcut('?');
 
-  play_button_ = new Fl_Button(80, (h() - 80) / 2, 80, 80, "@>");
-  play_button_->callback((Fl_Callback *)play_cb, this);
+  play_button_ = new fltk3::Button(80, (h() - 80) / 2, 80, 80, "@>");
+  play_button_->callback((fltk3::Callback *)play_cb, this);
   play_button_->labelsize(44);
   play_button_->shortcut(' ');
 
@@ -547,7 +547,7 @@ BlockWindow::_BlockWindow() {
 
   prefs_.get("high_score", high_score_, 0);
 
-  Fl::add_timeout(0.1, (Fl_Timeout_Handler)timeout_cb, (void *)this);
+  fltk3::add_timeout(0.1, (fltk3::TimeoutHandler)timeout_cb, (void *)this);
 }
 
 
@@ -627,8 +627,8 @@ BlockWindow::draw() {
 
 
   // Draw the blocks...
-  fl_color(FL_BLACK);
-  fl_rectf(0, 0, w(), h());
+  fltk3::color(fltk3::BLACK);
+  fltk3::rectf(0, 0, w(), h());
 
   // Draw the blocks...
   for (j = num_columns_, c = columns_; j > 0; j --, c ++)
@@ -649,7 +649,7 @@ BlockWindow::draw() {
     }
 
   if (interval_ < 0.0 || paused_) {
-    fl_color(FL_BLACK);
+    fltk3::color(fltk3::BLACK);
     screen_tile.draw(0, 0, w(), h(), 0, 0);
   }
 
@@ -666,14 +666,14 @@ BlockWindow::draw() {
       s = "Click on adjacent blocks of the same color. Clear all blocks "
           "before they reach the left side.";
 
-      fl_font(FL_HELVETICA_BOLD, 24);
-      fl_color(FL_BLACK);
-      fl_draw(s, 171, 3, w() - 250, h() - 6,
-              (Fl_Align)(FL_ALIGN_WRAP | FL_ALIGN_LEFT));
+      fltk3::font(fltk3::HELVETICA_BOLD, 24);
+      fltk3::color(fltk3::BLACK);
+      fltk3::draw(s, 171, 3, w() - 250, h() - 6,
+              (fltk3::Align)(fltk3::ALIGN_WRAP | fltk3::ALIGN_LEFT));
 
-      fl_color(FL_YELLOW);
-      fl_draw(s, 168, 0, w() - 250, h(),
-              (Fl_Align)(FL_ALIGN_WRAP | FL_ALIGN_LEFT));
+      fltk3::color(fltk3::YELLOW);
+      fltk3::draw(s, 168, 0, w() - 250, h(),
+              (fltk3::Align)(fltk3::ALIGN_WRAP | fltk3::ALIGN_LEFT));
     } else {
       if (interval_ < 0.0) {
 #ifdef DEBUG
@@ -682,14 +682,14 @@ BlockWindow::draw() {
 
 	for (i = 0; i < 2; i ++)
 	{
-	  fl_color(FL_RED + i);
-	  fl_begin_line();
+	  fltk3::color(fltk3::RED + i);
+	  fltk3::begin_line();
 	  for (j = 0, sample_ptr = sound_->sample_data + i;
                j < sound_->sample_size;
 	       j ++, sample_ptr += 2)
-	    fl_vertex(j * w() / sound_->sample_size,
+	    fltk3::vertex(j * w() / sound_->sample_size,
 	              *sample_ptr * h() / 4 / 65534 + h() / 2);
-	  fl_end_line();
+	  fltk3::end_line();
 	}
 #endif // DEBUG
 
@@ -697,12 +697,12 @@ BlockWindow::draw() {
 	else s = "Block Attack!\nby Michael R Sweet";
       } else s = "Paused";
 
-      fl_font(FL_HELVETICA_BOLD, 32);
-      fl_color(FL_BLACK);
-      fl_draw(s, 6, 6, w() - 6, h() - 6, FL_ALIGN_CENTER);
+      fltk3::font(fltk3::HELVETICA_BOLD, 32);
+      fltk3::color(fltk3::BLACK);
+      fltk3::draw(s, 6, 6, w() - 6, h() - 6, fltk3::ALIGN_CENTER);
 
-      fl_color(FL_YELLOW);
-      fl_draw(s, 0, 0, w(), h(), FL_ALIGN_CENTER);
+      fltk3::color(fltk3::YELLOW);
+      fltk3::draw(s, 0, 0, w(), h(), fltk3::ALIGN_CENTER);
     }
   }
 
@@ -710,26 +710,26 @@ BlockWindow::draw() {
   char s[255];
 
   sprintf(s, " Score: %d", score_);
-  fl_color(FL_WHITE);
-  fl_font(FL_HELVETICA, 14);
-  fl_draw(s, 40, 0, w() - 40, 20, FL_ALIGN_LEFT);
+  fltk3::color(fltk3::WHITE);
+  fltk3::font(fltk3::HELVETICA, 14);
+  fltk3::draw(s, 40, 0, w() - 40, 20, fltk3::ALIGN_LEFT);
 
   sprintf(s, "High Score: %d ", high_score_);
-  fl_draw(s, 0, 0, w(), 20, FL_ALIGN_RIGHT);
+  fltk3::draw(s, 0, 0, w(), 20, fltk3::ALIGN_RIGHT);
 
   if (level_ > 1 || title_y_ <= 0)
   {
     sprintf(s, "Level: %d ", level_);
-    fl_draw(s, 0, 0, w(), 20, FL_ALIGN_CENTER);
+    fltk3::draw(s, 0, 0, w(), 20, fltk3::ALIGN_CENTER);
   }
 
   if (title_y_ > 0 && interval_ > 0.0)
   {
     int sz = 14 + title_y_ * 86 / h();
 
-    fl_font(FL_HELVETICA_BOLD, sz);
-    fl_color(FL_YELLOW);
-    fl_draw(title_, 0, title_y_, w(), sz, FL_ALIGN_CENTER);
+    fltk3::font(fltk3::HELVETICA_BOLD, sz);
+    fltk3::color(fltk3::YELLOW);
+    fltk3::draw(title_, 0, title_y_, w(), sz, fltk3::ALIGN_CENTER);
   }
 }
 
@@ -746,15 +746,15 @@ BlockWindow::handle(int event) {
   else if (interval_ < 0.0 || paused_) return (0);
 
   switch (event) {
-    case FL_KEYBOARD:
-        if (Fl::event_text()) {
-          if (strcmp(Fl::event_text(), "+") == 0)
+    case fltk3::KEYBOARD:
+        if (fltk3::event_text()) {
+          if (strcmp(fltk3::event_text(), "+") == 0)
             up_level();
         }
         break;
-    case FL_PUSH :
-	mx    = w() - Fl::event_x() + BLOCK_SIZE;
-	my    = h() - Fl::event_y();
+    case fltk3::PUSH :
+	mx    = w() - fltk3::event_x() + BLOCK_SIZE;
+	my    = h() - fltk3::event_y();
 	count = 0;
 	b     = 0;
 
@@ -805,7 +805,7 @@ BlockWindow::handle(int event) {
 
 // Toggle the on-line help...
 void
-BlockWindow::help_cb(Fl_Widget *, BlockWindow *bw) {
+BlockWindow::help_cb(fltk3::Widget *, BlockWindow *bw) {
   bw->paused_ = bw->help_ = !bw->help_;
   bw->play_button_->label("@>");
   bw->redraw();
@@ -848,7 +848,7 @@ BlockWindow::new_game() {
 
 // Play/pause...
 void
-BlockWindow::play_cb(Fl_Widget *wi, BlockWindow *bw) {
+BlockWindow::play_cb(fltk3::Widget *wi, BlockWindow *bw) {
   if (bw->interval_ < 0) bw->new_game();
   else bw->paused_ = !bw->paused_;
 
@@ -866,7 +866,7 @@ void BlockWindow::up_level() {
   level_ ++;
   sprintf(title_, "Level: %d", level_);
   title_y_ = h();
-  Fl::repeat_timeout(interval_, (Fl_Timeout_Handler)timeout_cb, (void *)this);
+  fltk3::repeat_timeout(interval_, (fltk3::TimeoutHandler)timeout_cb, (void *)this);
 }
 
 // Animate the game...
@@ -1016,10 +1016,10 @@ BlockWindow::timeout_cb(BlockWindow *bw) {
   }
 
   if (bw->interval_ > 0.0) {
-    Fl::repeat_timeout(bw->interval_, (Fl_Timeout_Handler)timeout_cb,
+    fltk3::repeat_timeout(bw->interval_, (fltk3::TimeoutHandler)timeout_cb,
                        (void *)bw);
   } else {
-    Fl::repeat_timeout(0.1, (Fl_Timeout_Handler)timeout_cb,
+    fltk3::repeat_timeout(0.1, (fltk3::TimeoutHandler)timeout_cb,
                        (void *)bw);
   }
 }

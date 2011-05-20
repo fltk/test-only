@@ -10,10 +10,10 @@
 #include <fltk3/Preferences.h>
 
 //////////////////////
-// Fl_Tree.cxx
+// fltk3::Tree.cxx
 //////////////////////
 //
-// Fl_Tree -- This file is part of the Fl_Tree widget for FLTK
+// fltk3::Tree -- This file is part of the fltk3::Tree widget for FLTK
 // Copyright (C) 2009-2010 by Greg Ercolano.
 //
 // This library is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@
 
 // INTERNAL: scroller callback
 static void scroll_cb(fltk3::Widget*,void *data) {
-  ((Fl_Tree*)data)->redraw();
+  ((fltk3::Tree*)data)->redraw();
 }
 
 // INTERNAL: Parse elements from path into an array of null terminated strings
@@ -86,7 +86,7 @@ static void free_path(char **arr) {
 }
 
 // INTERNAL: Recursively descend tree hierarchy, accumulating total child count
-static int find_total_children(Fl_Tree_Item *item, int count=0) {
+static int find_total_children(fltk3::TreeItem *item, int count=0) {
   count++;
   for ( int t=0; t<item->children(); t++ ) {
     count = find_total_children(item->child(t), count);
@@ -95,13 +95,13 @@ static int find_total_children(Fl_Tree_Item *item, int count=0) {
 }
 
 /// Constructor.
-Fl_Tree::Fl_Tree(int X, int Y, int W, int H, const char *L) : fltk3::Group(X,Y,W,H,L) { 
-  _root = new Fl_Tree_Item(_prefs);
+fltk3::Tree::Tree(int X, int Y, int W, int H, const char *L) : fltk3::Group(X,Y,W,H,L) { 
+  _root = new fltk3::TreeItem(_prefs);
   _root->parent(0);				// we are root of tree
   _root->label("ROOT");
   _item_focus      = 0;
   _callback_item   = 0;
-  _callback_reason = FL_TREE_REASON_NONE;
+  _callback_reason = fltk3::TREE_REASON_NONE;
   _scrollbar_size  = 0;				// 0: uses fltk3::scrollbar_size()
   box(fltk3::DOWN_BOX);
   color(fltk3::BACKGROUND2_COLOR, fltk3::SELECTION_COLOR);
@@ -115,7 +115,7 @@ Fl_Tree::Fl_Tree(int X, int Y, int W, int H, const char *L) : fltk3::Group(X,Y,W
 }
 
 /// Destructor.
-Fl_Tree::~Fl_Tree() {
+fltk3::Tree::~Tree() {
   if ( _root ) { delete _root; _root = 0; }
 }
 
@@ -133,24 +133,24 @@ Fl_Tree::~Fl_Tree() {
 ///
 /// \returns the child item created, or 0 on error.
 ///
-Fl_Tree_Item* Fl_Tree::add(const char *path) {
+fltk3::TreeItem* fltk3::Tree::add(const char *path) {
   if ( ! _root ) {					// Create root if none
-    _root = new Fl_Tree_Item(_prefs);
+    _root = new fltk3::TreeItem(_prefs);
     _root->parent(0);
     _root->label("ROOT");
   }
   char **arr = parse_path(path);
-  Fl_Tree_Item *item = _root->add(_prefs, arr);
+  fltk3::TreeItem *item = _root->add(_prefs, arr);
   free_path(arr);
   return(item);
 }
 
-/// Inserts a new item above the specified Fl_Tree_Item, with the label set to 'name'.
+/// Inserts a new item above the specified fltk3::TreeItem, with the label set to 'name'.
 /// \param[in] above -- the item above which to insert the new item. Must not be NULL.
 /// \param[in] name -- the name of the new item
 /// \returns the item that was added, or 0 if 'above' could not be found.
 /// 
-Fl_Tree_Item* Fl_Tree::insert_above(Fl_Tree_Item *above, const char *name) {
+fltk3::TreeItem* fltk3::Tree::insert_above(fltk3::TreeItem *above, const char *name) {
   return(above->insert_above(_prefs, name));
 }
 
@@ -161,7 +161,7 @@ Fl_Tree_Item* Fl_Tree::insert_above(Fl_Tree_Item *above, const char *name) {
 /// \param[in] pos The position of the new item in the child list
 /// \returns the item that was added.
 ///
-Fl_Tree_Item* Fl_Tree::insert(Fl_Tree_Item *item, const char *name, int pos) {
+fltk3::TreeItem* fltk3::Tree::insert(fltk3::TreeItem *item, const char *name, int pos) {
   return(item->insert(_prefs, name, pos));
 }
 
@@ -171,7 +171,7 @@ Fl_Tree_Item* Fl_Tree::insert(Fl_Tree_Item *item, const char *name, int pos) {
 /// \param[in] name The label for the new item
 /// \returns the item that was added.
 ///
-Fl_Tree_Item* Fl_Tree::add(Fl_Tree_Item *item, const char *name) {
+fltk3::TreeItem* fltk3::Tree::add(fltk3::TreeItem *item, const char *name) {
   return(item->add(_prefs, name));
 }
 
@@ -193,19 +193,19 @@ Fl_Tree_Item* Fl_Tree::add(Fl_Tree_Item *item, const char *name) {
 ///
 /// \see item_pathname()
 ///
-Fl_Tree_Item *Fl_Tree::find_item(const char *path) {
+fltk3::TreeItem *fltk3::Tree::find_item(const char *path) {
   if ( ! _root ) return(NULL);
   char **arr = parse_path(path);
-  Fl_Tree_Item *item = _root->find_item(arr);
+  fltk3::TreeItem *item = _root->find_item(arr);
   free_path(arr);
   return(item);
 }
 
-/// A const version of Fl_Tree::find_item(const char *path)
-const Fl_Tree_Item *Fl_Tree::find_item(const char *path) const {
+/// A const version of fltk3::Tree::find_item(const char *path)
+const fltk3::TreeItem *fltk3::Tree::find_item(const char *path) const {
   if ( ! _root ) return(NULL);
   char **arr = parse_path(path);
-  const Fl_Tree_Item *item = _root->find_item(arr);
+  const fltk3::TreeItem *item = _root->find_item(arr);
   free_path(arr);
   return(item);
 }
@@ -234,7 +234,7 @@ slen += 1; if ( slen >= pathnamelen ) { pathname[0] = '\0'; return(-2); } \
 ///	-  -2 : pathname not large enough (pathname="")
 /// \see find_item()
 ///
-int Fl_Tree::item_pathname(char *pathname, int pathnamelen, const Fl_Tree_Item *item) const {
+int fltk3::Tree::item_pathname(char *pathname, int pathnamelen, const fltk3::TreeItem *item) const {
   pathname[0] = '\0';
   item = item ? item : _root;
   if ( !item ) return(-1);
@@ -263,7 +263,7 @@ int Fl_Tree::item_pathname(char *pathname, int pathnamelen, const Fl_Tree_Item *
 }
 
 /// Standard FLTK draw() method, handles draws the tree widget.
-void Fl_Tree::draw() {
+void fltk3::Tree::draw() {
   // Let group draw box+label but *NOT* children.
   // We handle drawing children ourselves by calling each item's draw()
   //
@@ -286,7 +286,7 @@ void Fl_Tree::draw() {
   {
     fltk3::font(_prefs.labelfont(), _prefs.labelsize());
     _root->draw(X, Y, W, this,
-                (fltk3::focus()==this)?_item_focus:0,	// show focus item ONLY if Fl_Tree has focus
+                (fltk3::focus()==this)?_item_focus:0,	// show focus item ONLY if fltk3::Tree has focus
 		_prefs);
   }
   fltk3::pop_clip();
@@ -316,7 +316,7 @@ void Fl_Tree::draw() {
     _vscroll->hide();
   }
   fltk3::push_clip(cx,cy,cw,ch);
-  fltk3::Group::draw_children();	// draws any FLTK children set via Fl_Tree::widget()
+  fltk3::Group::draw_children();	// draws any FLTK children set via fltk3::Tree::widget()
   fltk3::pop_clip();
 }
 
@@ -327,7 +327,7 @@ void Fl_Tree::draw() {
 /// \param[in] dir The direction to search. Can be fltk3::UpKey or fltk3::DownKey.
 /// \returns The item found, or 0 if there's no visible items above/below the specified \p item.
 ///
-Fl_Tree_Item *Fl_Tree::next_visible_item(Fl_Tree_Item *item, int dir) {
+fltk3::TreeItem *fltk3::Tree::next_visible_item(fltk3::TreeItem *item, int dir) {
   if ( ! item ) {				// no start item?
     item = ( dir == fltk3::UpKey ) ? last() : first();	// start at top or bottom
     if ( ! item ) return(0);
@@ -345,7 +345,7 @@ Fl_Tree_Item *Fl_Tree::next_visible_item(Fl_Tree_Item *item, int dir) {
 ///
 /// \param[in] item The item that should take focus. If NULL, none will have focus.
 ///
-void Fl_Tree::set_item_focus(Fl_Tree_Item *item) {
+void fltk3::Tree::set_item_focus(fltk3::TreeItem *item) {
   if ( _item_focus != item ) {		// changed?
     _item_focus = item;			// update
     if ( visible_focus() ) redraw();	// redraw to update focus box
@@ -359,23 +359,23 @@ void Fl_Tree::set_item_focus(Fl_Tree_Item *item) {
 /// This method walks the entire tree looking for the first item that is
 /// under the mouse (ie. at fltk3::event_x()/Fl:event_y().
 ///
-/// Use this method /only/ if you've subclassed Fl_Tree, and are receiving
-/// events before Fl_Tree has been able to process and update callback_item().
+/// Use this method /only/ if you've subclassed fltk3::Tree, and are receiving
+/// events before fltk3::Tree has been able to process and update callback_item().
 /// 
 /// \returns the item clicked, or 0 if no item was under the current event.
 ///
-const Fl_Tree_Item* Fl_Tree::find_clicked() const {
+const fltk3::TreeItem* fltk3::Tree::find_clicked() const {
   if ( ! _root ) return(NULL);
   return(_root->find_clicked(_prefs));
 }
 
 /// Set the item that was last clicked.
 /// Should only be used by subclasses needing to change this value.
-/// Normally Fl_Tree manages this value.
+/// Normally fltk3::Tree manages this value.
 ///
 /// Deprecated: use callback_item() instead.
 ///
-void Fl_Tree::item_clicked(Fl_Tree_Item* val) {
+void fltk3::Tree::item_clicked(fltk3::TreeItem* val) {
   _callback_item = val;
 }
 
@@ -383,7 +383,7 @@ void Fl_Tree::item_clicked(Fl_Tree_Item* val) {
 ///
 /// Use this to walk the tree in the forward direction, eg:
 /// \code
-/// for ( Fl_Tree_Item *item = tree->first(); item; item = tree->next(item) ) {
+/// for ( fltk3::TreeItem *item = tree->first(); item; item = tree->next(item) ) {
 ///     printf("Item: %s\n", item->label());
 /// }
 /// \endcode
@@ -391,7 +391,7 @@ void Fl_Tree::item_clicked(Fl_Tree_Item* val) {
 /// \returns first item in tree, or 0 if none (tree empty).
 /// \see first(),next(),last(),prev()
 ///
-Fl_Tree_Item* Fl_Tree::first() {
+fltk3::TreeItem* fltk3::Tree::first() {
   return(_root);					// first item always root
 }
 
@@ -399,7 +399,7 @@ Fl_Tree_Item* Fl_Tree::first() {
 ///
 /// Use this code to walk the entire tree:
 /// \code
-/// for ( Fl_Tree_Item *item = tree->first(); item; item = tree->next(item) ) {
+/// for ( fltk3::TreeItem *item = tree->first(); item; item = tree->next(item) ) {
 ///     printf("Item: %s\n", item->label());
 /// }
 /// \endcode
@@ -409,7 +409,7 @@ Fl_Tree_Item* Fl_Tree::first() {
 ///
 /// \see first(),next(),last(),prev()
 ///
-Fl_Tree_Item *Fl_Tree::next(Fl_Tree_Item *item) {
+fltk3::TreeItem *fltk3::Tree::next(fltk3::TreeItem *item) {
   if ( ! item ) return(0);
   return(item->next());
 }
@@ -419,7 +419,7 @@ Fl_Tree_Item *Fl_Tree::next(Fl_Tree_Item *item) {
 /// This can be used to walk the tree in reverse, eg:
 ///
 /// \code
-/// for ( Fl_Tree_Item *item = tree->first(); item; item = tree->prev(item) ) {
+/// for ( fltk3::TreeItem *item = tree->first(); item; item = tree->prev(item) ) {
 ///     printf("Item: %s\n", item->label());
 /// }
 /// \endcode
@@ -429,7 +429,7 @@ Fl_Tree_Item *Fl_Tree::next(Fl_Tree_Item *item) {
 ///
 /// \see first(),next(),last(),prev()
 ///
-Fl_Tree_Item *Fl_Tree::prev(Fl_Tree_Item *item) {
+fltk3::TreeItem *fltk3::Tree::prev(fltk3::TreeItem *item) {
   if ( ! item ) return(0);
   return(item->prev());
 }
@@ -439,7 +439,7 @@ Fl_Tree_Item *Fl_Tree::prev(Fl_Tree_Item *item) {
 /// This can be used to walk the tree in reverse, eg:
 ///
 /// \code
-/// for ( Fl_Tree_Item *item = tree->last(); item; item = tree->prev() ) {
+/// for ( fltk3::TreeItem *item = tree->last(); item; item = tree->prev() ) {
 ///     printf("Item: %s\n", item->label());
 /// }
 /// \endcode
@@ -448,9 +448,9 @@ Fl_Tree_Item *Fl_Tree::prev(Fl_Tree_Item *item) {
 ///
 /// \see first(),next(),last(),prev()
 ///
-Fl_Tree_Item* Fl_Tree::last() {
+fltk3::TreeItem* fltk3::Tree::last() {
   if ( ! _root ) return(0);
-  Fl_Tree_Item *item = _root;
+  fltk3::TreeItem *item = _root;
   while ( item->has_children() ) {
     item = item->child(item->children()-1);
   }
@@ -462,14 +462,14 @@ Fl_Tree_Item* Fl_Tree::last() {
 /// Use this to walk the tree looking for all the selected items, eg:
 ///
 /// \code
-/// for ( Fl_Tree_Item *item = tree->first_selected_item(); item; item = tree->next_selected_item(item) ) {
+/// for ( fltk3::TreeItem *item = tree->first_selected_item(); item; item = tree->next_selected_item(item) ) {
 ///     printf("Item: %s\n", item->label());
 /// }
 /// \endcode
 ///
 /// \returns The next selected item, or 0 if there are no more selected items.
 ///     
-Fl_Tree_Item *Fl_Tree::first_selected_item() {
+fltk3::TreeItem *fltk3::Tree::first_selected_item() {
   return(next_selected_item(0));
 }
 
@@ -478,7 +478,7 @@ Fl_Tree_Item *Fl_Tree::first_selected_item() {
 ///
 /// Use this to walk the tree looking for all the selected items, eg:
 /// \code
-/// for ( Fl_Tree_Item *item = tree->first_selected_item(); item; item = tree->next_selected_item(item) ) {
+/// for ( fltk3::TreeItem *item = tree->first_selected_item(); item; item = tree->next_selected_item(item) ) {
 ///     printf("Item: %s\n", item->label());
 /// }
 /// \endcode
@@ -486,7 +486,7 @@ Fl_Tree_Item *Fl_Tree::first_selected_item() {
 /// \param[in] item The item to use to find the next selected item. If NULL, first() is used.
 /// \returns The next selected item, or 0 if there are no more selected items.
 ///     
-Fl_Tree_Item *Fl_Tree::next_selected_item(Fl_Tree_Item *item) {
+fltk3::TreeItem *fltk3::Tree::next_selected_item(fltk3::TreeItem *item) {
   if ( ! item ) {
     if ( ! (item = first()) ) return(0);
     if ( item->is_selected() ) return(item);
@@ -498,7 +498,7 @@ Fl_Tree_Item *Fl_Tree::next_selected_item(Fl_Tree_Item *item) {
 }
 
 /// Standard FLTK event handler for this widget.
-int Fl_Tree::handle(int e) {
+int fltk3::Tree::handle(int e) {
   int ret = 0;
   // Developer note: fltk3::Browser_::handle() used for reference here..
   // #include <fltk3/names.h>	// for event debugging
@@ -542,7 +542,7 @@ int Fl_Tree::handle(int e) {
     }
     case fltk3::KEYBOARD: {		// keyboard shortcut
                                         // Do shortcuts first or scrollbar will get them...
-      if (_prefs.selectmode() > FL_TREE_SELECT_NONE ) {
+      if (_prefs.selectmode() > fltk3::TREE_SELECT_NONE ) {
 	if ( !_item_focus ) {
 	  set_item_focus(first());
 	}
@@ -559,15 +559,15 @@ int Fl_Tree::handle(int e) {
 	      break;
 	    case ' ':		// toggle selection state
 	      switch ( _prefs.selectmode() ) {
-		case FL_TREE_SELECT_NONE:
+		case fltk3::TREE_SELECT_NONE:
 		  break;
-		case FL_TREE_SELECT_SINGLE:
+		case fltk3::TREE_SELECT_SINGLE:
 		  if ( ! _item_focus->is_selected() )		// not selected?
 		    select_only(_item_focus);			// select only this
 		  else
 		    deselect_all();				// select nothing
 		  break;
-		case FL_TREE_SELECT_MULTI:
+		case fltk3::TREE_SELECT_MULTI:
 		  select_toggle(_item_focus);
 		  break;
 	      }
@@ -600,7 +600,7 @@ int Fl_Tree::handle(int e) {
 		if ( itemtop < y() ) { show_item_top(_item_focus); }
 		if ( itembot > y()+h() ) { show_item_bottom(_item_focus); }
 		// Extend selection
-		if ( _prefs.selectmode() == FL_TREE_SELECT_MULTI &&	// multiselect on?
+		if ( _prefs.selectmode() == fltk3::TREE_SELECT_MULTI &&	// multiselect on?
                     (fltk3::event_state() & fltk3::SHIFT) &&			// shift key?
                     ! _item_focus->is_selected() ) {			// not already selected?
                   select(_item_focus);				// extend selection..
@@ -623,8 +623,8 @@ int Fl_Tree::handle(int e) {
   
   // Handle events the child FLTK widgets didn't need
   
-  static Fl_Tree_Item *lastselect = 0;
-  // fprintf(stderr, "ERCODEBUG: Fl_Tree::handle(): Event was %s (%d)\n", fl_eventnames[e], e); // DEBUGGING
+  static fltk3::TreeItem *lastselect = 0;
+  // fprintf(stderr, "ERCODEBUG: fltk3::Tree::handle(): Event was %s (%d)\n", fl_eventnames[e], e); // DEBUGGING
   if ( ! _root ) return(ret);
   switch ( e ) {
     case fltk3::PUSH: {					// clicked on a tree item?
@@ -632,7 +632,7 @@ int Fl_Tree::handle(int e) {
         fltk3::focus(this);
       }
       lastselect = 0;
-      Fl_Tree_Item *o = _root->find_clicked(_prefs);
+      fltk3::TreeItem *o = _root->find_clicked(_prefs);
       if ( ! o ) break;
       set_item_focus(o);				// becomes new focus widget
       redraw();
@@ -644,12 +644,12 @@ int Fl_Tree::handle(int e) {
                    (!o->widget() || !fltk3::event_inside(o->widget())) &&		// not inside widget
                    (!_vscroll->visible() || !fltk3::event_inside(_vscroll)) ) {	// not on scroller
 	  switch ( _prefs.selectmode() ) {
-	    case FL_TREE_SELECT_NONE:
+	    case fltk3::TREE_SELECT_NONE:
 	      break;
-	    case FL_TREE_SELECT_SINGLE:
+	    case fltk3::TREE_SELECT_SINGLE:
 	      select_only(o);
 	      break;
-	    case FL_TREE_SELECT_MULTI: {
+	    case fltk3::TREE_SELECT_MULTI: {
 	      if ( fltk3::event_state() & fltk3::SHIFT ) {		// SHIFT+PUSH?
 	        select(o);					// add to selection
 	      } else if ( fltk3::event_state() & fltk3::CTRL ) {	// CTRL+PUSH?
@@ -678,7 +678,7 @@ int Fl_Tree::handle(int e) {
         vposition(p);
       }
       if ( fltk3::event_button() != fltk3::LEFT_MOUSE ) break;
-      Fl_Tree_Item *o = _root->find_clicked(_prefs);
+      fltk3::TreeItem *o = _root->find_clicked(_prefs);
       if ( ! o ) break;
       set_item_focus(o);			// becomes new focus widget
       redraw();
@@ -689,11 +689,11 @@ int Fl_Tree::handle(int e) {
           (!_vscroll->visible() || !fltk3::event_inside(_vscroll)) ) {
 	// Handle selection behavior
 	switch ( _prefs.selectmode() ) {
-	  case FL_TREE_SELECT_NONE: break;	// no selection changes
-	  case FL_TREE_SELECT_SINGLE:
+	  case fltk3::TREE_SELECT_NONE: break;	// no selection changes
+	  case fltk3::TREE_SELECT_SINGLE:
 	    select_only(o);
 	    break;
-	  case FL_TREE_SELECT_MULTI:
+	  case fltk3::TREE_SELECT_MULTI:
 	    if ( fltk3::event_state() & fltk3::CTRL &&	// CTRL-DRAG: toggle?
                 lastselect != o ) {		// not already toggled from last microdrag?
 	      select_toggle(o);			// toggle selection
@@ -723,11 +723,11 @@ int Fl_Tree::handle(int e) {
 /// \param[in] docallback -- A flag that determines if the callback() is invoked or not:
 ///     -   0 - the callback() is not invoked
 ///     -   1 - the callback() is invoked for each item that changed state,
-///             callback_reason() will be FL_TREE_REASON_DESELECTED
+///             callback_reason() will be fltk3::TREE_REASON_DESELECTED
 ///
 /// \returns count of how many items were actually changed to the deselected state.
 ///
-int Fl_Tree::deselect_all(Fl_Tree_Item *item, int docallback) {
+int fltk3::Tree::deselect_all(fltk3::TreeItem *item, int docallback) {
   item = item ? item : first();			// NULL? use first()
   if ( ! item ) return(0);
   int count = 0;
@@ -755,10 +755,10 @@ int Fl_Tree::deselect_all(Fl_Tree_Item *item, int docallback) {
 /// \param[in] docallback -- A flag that determines if the callback() is invoked or not:
 ///     -   0 - the callback() is not invoked
 ///     -   1 - the callback() is invoked for each item that changed state,
-///             callback_reason() will be FL_TREE_REASON_SELECTED
+///             callback_reason() will be fltk3::TREE_REASON_SELECTED
 /// \returns count of how many items were actually changed to the selected state.
 ///
-int Fl_Tree::select_all(Fl_Tree_Item *item, int docallback) {
+int fltk3::Tree::select_all(fltk3::TreeItem *item, int docallback) {
   item = item ? item : first();			// NULL? use first()
   if ( ! item ) return(0);
   int count = 0;
@@ -785,15 +785,15 @@ int Fl_Tree::select_all(Fl_Tree_Item *item, int docallback) {
 /// \param[in] docallback -- A flag that determines if the callback() is invoked or not:
 ///     -   0 - the callback() is not invoked
 ///     -   1 - the callback() is invoked for each item that changed state, 
-///             callback_reason() will be either FL_TREE_REASON_SELECTED or 
-///             FL_TREE_REASON_DESELECTED
+///             callback_reason() will be either fltk3::TREE_REASON_SELECTED or 
+///             fltk3::TREE_REASON_DESELECTED
 /// \returns the number of items whose selection states were changed, if any.
 ///
-int Fl_Tree::select_only(Fl_Tree_Item *selitem, int docallback) {
+int fltk3::Tree::select_only(fltk3::TreeItem *selitem, int docallback) {
   selitem = selitem ? selitem : first();	// NULL? use first()
   if ( ! selitem ) return(0);
   int changed = 0;
-  for ( Fl_Tree_Item *item = first(); item; item = item->next() ) {
+  for ( fltk3::TreeItem *item = first(); item; item = item->next() ) {
     if ( item == selitem ) {
       if ( item->is_selected() ) continue;	// don't count if already selected
       select(item, docallback);
@@ -809,7 +809,7 @@ int Fl_Tree::select_only(Fl_Tree_Item *selitem, int docallback) {
 }
 
 /// Adjust the vertical scroll bar so that \p item is visible
-/// \p yoff pixels from the top of the Fl_Tree widget's display.
+/// \p yoff pixels from the top of the fltk3::Tree widget's display.
 ///
 /// For instance, yoff=0 will position the item at the top.
 ///
@@ -822,7 +822,7 @@ int Fl_Tree::select_only(Fl_Tree_Item *selitem, int docallback) {
 ///
 /// \see show_item_top(), show_item_middle(), show_item_bottom()
 ///
-void Fl_Tree::show_item(Fl_Tree_Item *item, int yoff) {
+void fltk3::Tree::show_item(fltk3::TreeItem *item, int yoff) {
   item = item ? item : first();
   if (!item) return;
   int newval = item->y() - y() - yoff + (int)_vscroll->value();
@@ -841,7 +841,7 @@ void Fl_Tree::show_item(Fl_Tree_Item *item, int yoff) {
 /// \param[in] item The item to be checked. If NULL, first() is used.
 /// \returns 1 if displayed, 0 if scrolled off screen or no items are in tree.
 ///
-int Fl_Tree::displayed(Fl_Tree_Item *item) {
+int fltk3::Tree::displayed(fltk3::TreeItem *item) {
   item = item ? item : first();
   if (!item) return(0);
   return( (item->y() >= y()) && (item->y() <= (y()+h()-item->h())) ? 1 : 0);
@@ -855,7 +855,7 @@ int Fl_Tree::displayed(Fl_Tree_Item *item) {
 ///
 /// \see show_item_top(), show_item_middle(), show_item_bottom()
 ///
-void Fl_Tree::show_item(Fl_Tree_Item *item) {
+void fltk3::Tree::show_item(fltk3::TreeItem *item) {
   item = item ? item : first();
   if (!item) return;
   if ( displayed(item) ) return;
@@ -866,7 +866,7 @@ void Fl_Tree::show_item(Fl_Tree_Item *item) {
 ///
 /// \param[in] item The item to be shown. If NULL, first() is used.
 ///
-void Fl_Tree::show_item_top(Fl_Tree_Item *item) {
+void fltk3::Tree::show_item_top(fltk3::TreeItem *item) {
   item = item ? item : first();
   if (item) show_item(item, 0);
 }
@@ -875,7 +875,7 @@ void Fl_Tree::show_item_top(Fl_Tree_Item *item) {
 ///
 /// \param[in] item The item to be shown. If NULL, first() is used.
 ///
-void Fl_Tree::show_item_middle(Fl_Tree_Item *item) {
+void fltk3::Tree::show_item_middle(fltk3::TreeItem *item) {
   item = item ? item : first();
   if (item) show_item(item, (h()/2)-(item->h()/2));
 }
@@ -884,7 +884,7 @@ void Fl_Tree::show_item_middle(Fl_Tree_Item *item) {
 ///
 /// \param[in] item The item to be shown. If NULL, first() is used.
 ///
-void Fl_Tree::show_item_bottom(Fl_Tree_Item *item) {
+void fltk3::Tree::show_item_bottom(fltk3::TreeItem *item) {
   item = item ? item : first();
   if (item) show_item(item, h()-item->h());
 }
@@ -895,7 +895,7 @@ void Fl_Tree::show_item_bottom(Fl_Tree_Item *item) {
 /// the tree are scrolled off the top edge of the screen.
 /// \see vposition(), hposition()
 ///
-int Fl_Tree::vposition() const {
+int fltk3::Tree::vposition() const {
   return((int)_vscroll->value());
 }
 
@@ -905,7 +905,7 @@ int Fl_Tree::vposition() const {
 ///  the tree off the top edge of the screen.
 ///  \param[in] pos The vertical position (in pixels) to scroll the browser to.
 ///
-void Fl_Tree::vposition(int pos) {
+void fltk3::Tree::vposition(int pos) {
   if (pos < 0) pos = 0;
   if (pos > _vscroll->maximum()) pos = (int)_vscroll->maximum();
   if (pos == _vscroll->value()) return;
@@ -916,7 +916,7 @@ void Fl_Tree::vposition(int pos) {
 /// Displays \p item, scrolling the tree as necessary.
 /// \param[in] item The item to be displayed. If NULL, first() is used.
 ///
-void Fl_Tree::display(Fl_Tree_Item *item) {
+void fltk3::Tree::display(fltk3::TreeItem *item) {
   item = item ? item : first();
   if (item) show_item_middle(item);
 }
@@ -925,9 +925,9 @@ void Fl_Tree::display(Fl_Tree_Item *item) {
  * Read a preferences database into the tree widget.
  * A preferences database is a hierarchical collection of data which can be
  * directly loaded into the tree view for inspection.
- * \param[in] prefs the Fl_Preferences database
+ * \param[in] prefs the fltk3::Preferences database
  */
-void Fl_Tree::load(Fl_Preferences &prefs) 
+void fltk3::Tree::load(fltk3::Preferences &prefs) 
 {
   int i, j, n, pn = strlen(prefs.path());
   char *p;
@@ -938,7 +938,7 @@ void Fl_Tree::load(Fl_Preferences &prefs)
     path += 2; // child path starts with "./"
   n = prefs.groups();
   for (i=0; i<n; i++) {
-    Fl_Preferences prefsChild(prefs, i);
+    fltk3::Preferences prefsChild(prefs, i);
     add(prefsChild.path()+2); // children always start with "./"
     load(prefsChild);
   }

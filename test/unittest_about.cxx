@@ -25,17 +25,17 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <fltk3/Help_View.h>
+#include <fltk3/HelpView.h>
 
 //
 //------- Introduction to FLTK drawing test -------
 //
-class About : public Fl_Help_View {
+class About : public fltk3::HelpView {
 public:
-  static Fl_Widget *create() {
+  static fltk3::Widget *create() {
     return new About(TESTAREA_X, TESTAREA_Y, TESTAREA_W, TESTAREA_H);
   }
-  About(int x, int y, int w, int h) : Fl_Help_View(x, y, w, h) {
+  About(int x, int y, int w, int h) : fltk3::HelpView(x, y, w, h) {
     value(
 "<htmL><body><h2>About Unit Testing...</h2>\n"
 "The Unit Testing application can be used to verify correct graphics rendering "

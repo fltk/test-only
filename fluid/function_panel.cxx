@@ -1006,7 +1006,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(484, 5, 24, 24);
         o->tooltip("Tree");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Tree"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Tree"));
         o->image(pixmap[50]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(459, 30, 24, 24);
@@ -1039,7 +1039,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(517, 30, 24, 24);
         o->tooltip("Help Browser");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Help_View"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::HelpView"));
         o->image(pixmap[35]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(517, 55, 24, 24);

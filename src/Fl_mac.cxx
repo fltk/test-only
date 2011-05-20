@@ -96,7 +96,7 @@ static void convert_crlf(char * string, size_t len);
 int fl_screen;
 CGContextRef fl_gc = 0;
 Handle fl_system_menu;
-Fl_Sys_Menu_Bar *fl_sys_menu_bar = 0;
+fltk3::SysMenuBar *fltk3::sys_menu_bar = 0;
 CursHandle fl_default_cursor;
 WindowRef fl_capture = 0;            // we need this to compensate for a missing(?) mouse capture
 ulong fl_event_time;                 // the last timestamp from an x event
@@ -484,7 +484,7 @@ int fl_ready()
 }
 
 /**
- * handle Apple Menu items (can be created using the Fl_Sys_Menu_Bar
+ * handle Apple Menu items (can be created using the fltk3::SysMenuBar
  * returns eventNotHandledErr if the menu item could not be handled
  */
 OSStatus HandleMenu( HICommand *cmd )
@@ -498,7 +498,7 @@ OSStatus HandleMenu( HICommand *cmd )
   {
     fltk3::MenuItem *m = (fltk3::MenuItem*)ref;
     //printf( "Menu: %s\n", m->label() );
-    fl_sys_menu_bar->picked( m );
+    fltk3::sys_menu_bar->picked( m );
     if ( m->flags & fltk3::MENU_TOGGLE ) // update the menu toggle symbol
       SetItemMark( cmd->menu.menuRef, cmd->menu.menuItemIndex, (m->flags & fltk3::MENU_VALUE ) ? 0x12 : 0 );
     if ( m->flags & fltk3::MENU_RADIO ) // update all radio buttons in this menu

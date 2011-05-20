@@ -521,16 +521,16 @@ static void refreshUI() {
 static void readPrefs() {
   // read all preferences and refresh the GUI
   {
-    Fl_Preferences prefs(Fl_Preferences::SYSTEM, "fltk.org", "fltk");
-    Fl_Preferences opt_prefs(prefs, "options");
+    fltk3::Preferences prefs(fltk3::Preferences::SYSTEM, "fltk.org", "fltk");
+    fltk3::Preferences opt_prefs(prefs, "options");
     opt_prefs.get("ArrowFocus", opt[fltk3::OPTION_ARROW_FOCUS][1], 2);
     opt_prefs.get("VisibleFocus", opt[fltk3::OPTION_VISIBLE_FOCUS][1], 2);
     opt_prefs.get("DNDText", opt[fltk3::OPTION_DND_TEXT][1], 2);
     opt_prefs.get("ShowTooltips", opt[fltk3::OPTION_SHOW_TOOLTIPS][1], 2);
   }
   {
-    Fl_Preferences prefs(Fl_Preferences::USER, "fltk.org", "fltk");
-    Fl_Preferences opt_prefs(prefs, "options");
+    fltk3::Preferences prefs(fltk3::Preferences::USER, "fltk.org", "fltk");
+    fltk3::Preferences opt_prefs(prefs, "options");
     opt_prefs.get("ArrowFocus", opt[fltk3::OPTION_ARROW_FOCUS][0], 2);
     opt_prefs.get("VisibleFocus", opt[fltk3::OPTION_VISIBLE_FOCUS][0], 2);
     opt_prefs.get("DNDText", opt[fltk3::OPTION_DND_TEXT][0], 2);
@@ -545,8 +545,8 @@ static void readPrefs() {
 static void writePrefs() {
   // write all preferences using the array
   {
-    Fl_Preferences prefs(Fl_Preferences::SYSTEM, "fltk.org", "fltk");
-    Fl_Preferences opt_prefs(prefs, "options");
+    fltk3::Preferences prefs(fltk3::Preferences::SYSTEM, "fltk.org", "fltk");
+    fltk3::Preferences opt_prefs(prefs, "options");
     if (opt[fltk3::OPTION_ARROW_FOCUS][1]==2) opt_prefs.deleteEntry("ArrowFocus");
     else opt_prefs.set("ArrowFocus", opt[fltk3::OPTION_ARROW_FOCUS][1]);
     if (opt[fltk3::OPTION_VISIBLE_FOCUS][1]==2) opt_prefs.deleteEntry("VisibleFocus");
@@ -557,8 +557,8 @@ static void writePrefs() {
     else opt_prefs.set("ShowTooltips", opt[fltk3::OPTION_SHOW_TOOLTIPS][1]);
   }
   {
-    Fl_Preferences prefs(Fl_Preferences::USER, "fltk.org", "fltk");
-    Fl_Preferences opt_prefs(prefs, "options");
+    fltk3::Preferences prefs(fltk3::Preferences::USER, "fltk.org", "fltk");
+    fltk3::Preferences opt_prefs(prefs, "options");
     if (opt[fltk3::OPTION_ARROW_FOCUS][0]==2) opt_prefs.deleteEntry("ArrowFocus");
     else opt_prefs.set("ArrowFocus", opt[fltk3::OPTION_ARROW_FOCUS][0]);
     if (opt[fltk3::OPTION_VISIBLE_FOCUS][0]==2) opt_prefs.deleteEntry("VisibleFocus");

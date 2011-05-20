@@ -95,7 +95,7 @@ extern "C"
 
 static fltk3::HelpDialog *help_dialog = 0;
 
-Fl_Preferences	fluid_prefs(Fl_Preferences::USER, "fltk.org", "fluid");
+fltk3::Preferences	fluid_prefs(fltk3::Preferences::USER, "fltk.org", "fluid");
 int gridx = 5;
 int gridy = 5;
 int snap = 1;
@@ -152,7 +152,7 @@ void leave_source_dir() {
 }
 
 char position_window(fltk3::Window *w, const char *prefsName, int Visible, int X, int Y, int W=0, int H=0 ) {
-  Fl_Preferences pos(fluid_prefs, prefsName);
+  fltk3::Preferences pos(fluid_prefs, prefsName);
   if (prevpos_button->value()) {
     pos.get("x", X, X);
     pos.get("y", Y, Y);
@@ -169,7 +169,7 @@ char position_window(fltk3::Window *w, const char *prefsName, int Visible, int X
 }
 
 void save_position(fltk3::Window *w, const char *prefsName) {
-  Fl_Preferences pos(fluid_prefs, prefsName);
+  fltk3::Preferences pos(fluid_prefs, prefsName);
   pos.set("x", w->x());
   pos.set("y", w->y());
   pos.set("w", w->w());
@@ -399,7 +399,7 @@ void exit_cb(fltk3::Widget *,void *) {
     delete widgetbin_panel;
   }
   if (sourceview_panel) {
-    Fl_Preferences svp(fluid_prefs, "sourceview");
+    fltk3::Preferences svp(fluid_prefs, "sourceview");
     svp.set("autorefresh", sv_autorefresh->value());
     svp.set("autoposition", sv_autoposition->value());
     svp.set("tab", sv_tab->find(sv_tab->value()));
@@ -1778,7 +1778,7 @@ void toggle_sourceview_cb(fltk3::DoubleWindow *, void *) {
   if (!sourceview_panel) {
     make_sourceview();
     sourceview_panel->callback((fltk3::Callback*)toggle_sourceview_cb);
-    Fl_Preferences svp(fluid_prefs, "sourceview");
+    fltk3::Preferences svp(fluid_prefs, "sourceview");
     int autorefresh;
     svp.get("autorefresh", autorefresh, 1);
     sv_autorefresh->value(autorefresh);
@@ -1854,7 +1854,7 @@ void load_history() {
   if (max_files > 10) max_files = 10;
 
   for (i = 0; i < max_files; i ++) {
-    fluid_prefs.get( Fl_Preferences::Name("file%d", i), absolute_history[i], "", sizeof(absolute_history[i]));
+    fluid_prefs.get( fltk3::Preferences::Name("file%d", i), absolute_history[i], "", sizeof(absolute_history[i]));
     if (absolute_history[i][0]) {
       // Make a relative version of the filename for the menu...
       fl_filename_relative(relative_history[i], sizeof(relative_history[i]),
@@ -1908,7 +1908,7 @@ void update_history(const char *flname) {
 
   // Update the menu items as needed...
   for (i = 0; i < max_files; i ++) {
-    fluid_prefs.set( Fl_Preferences::Name("file%d", i), absolute_history[i]);
+    fluid_prefs.set( fltk3::Preferences::Name("file%d", i), absolute_history[i]);
     if (absolute_history[i][0]) {
       if (i == 9) history_item[i].flags = fltk3::MENU_DIVIDER;
       else history_item[i].flags = 0;
@@ -1916,7 +1916,7 @@ void update_history(const char *flname) {
   }
 
   for (; i < 10; i ++) {
-    fluid_prefs.set( Fl_Preferences::Name("file%d", i), "");
+    fluid_prefs.set( fltk3::Preferences::Name("file%d", i), "");
     if (i) history_item[i-1].flags |= fltk3::MENU_DIVIDER;
     history_item[i].hide();
   }

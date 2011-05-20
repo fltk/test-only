@@ -53,7 +53,7 @@ namespace fltk3 {
   public:
     enum { SINGLE = 0, MULTI = 1, CREATE = 2, DIRECTORY = 4 }; 
   private:
-    static Fl_Preferences prefs_; 
+    static fltk3::Preferences prefs_; 
     void (*callback_)(fltk3::FileChooser*, void *); 
     void *data_; 
     char directory_[FL_PATH_MAX]; 

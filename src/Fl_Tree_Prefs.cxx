@@ -8,10 +8,10 @@
 #include <string.h>
 
 //////////////////////
-// Fl_Tree_Prefs.cxx
+// fltk3::TreePrefs.cxx
 //////////////////////
 //
-// Fl_Tree -- This file is part of the Fl_Tree widget for FLTK
+// fltk3::Tree -- This file is part of the fltk3::Tree widget for FLTK
 // Copyright (C) 2009-2010 by Greg Ercolano.
 //
 // This library is free software; you can redistribute it and/or
@@ -111,7 +111,7 @@ static fltk3::Pixmap L_closepixmap(L_close_xpm);
 ///
 /// \param[in] val -- The new image, or zero to use the default [+] icon.
 ///
-void Fl_Tree_Prefs::openicon(fltk3::Image *val) {
+void fltk3::TreePrefs::openicon(fltk3::Image *val) {
   _openimage = val ? val : &L_openpixmap;
 }
 
@@ -120,12 +120,12 @@ void Fl_Tree_Prefs::openicon(fltk3::Image *val) {
 ///
 /// \param[in] val -- The new image, or zero to use the default [-] icon.
 ///
-void Fl_Tree_Prefs::closeicon(fltk3::Image *val) {
+void fltk3::TreePrefs::closeicon(fltk3::Image *val) {
   _closeimage = val ? val : &L_closepixmap;
 }
 
-/// Fl_Tree_Prefs constructor
-Fl_Tree_Prefs::Fl_Tree_Prefs() {
+/// fltk3::TreePrefs constructor
+fltk3::TreePrefs::TreePrefs() {
   _labelfont              = fltk3::HELVETICA;
   _labelsize              = fltk3::NORMAL_SIZE;
   _marginleft             = 6;
@@ -140,9 +140,9 @@ Fl_Tree_Prefs::Fl_Tree_Prefs() {
   _labelbgcolor           = fltk3::WHITE;
   _connectorcolor         = fltk3::Color(43);
 #ifdef __APPLE__
-  _connectorstyle         = FL_TREE_CONNECTOR_NONE;
+  _connectorstyle         = fltk3::TREE_CONNECTOR_NONE;
 #else
-  _connectorstyle         = FL_TREE_CONNECTOR_DOTTED;
+  _connectorstyle         = fltk3::TREE_CONNECTOR_DOTTED;
 #endif
   _openimage              = &L_openpixmap;
   _closeimage             = &L_closepixmap;
@@ -150,9 +150,9 @@ Fl_Tree_Prefs::Fl_Tree_Prefs() {
   _showcollapse           = 1;
   _showroot               = 1;
   _connectorwidth         = 17;
-  _sortorder              = FL_TREE_SORT_NONE;
+  _sortorder              = fltk3::TREE_SORT_NONE;
   _selectbox              = fltk3::FLAT_BOX;
-  _selectmode             = FL_TREE_SELECT_SINGLE;
+  _selectmode             = fltk3::TREE_SELECT_SINGLE;
   // Let fltk's current 'scheme' affect defaults
   if ( fltk3::scheme() ) {
     if ( strcmp(fltk3::scheme(), "gtk+") == 0 ) {

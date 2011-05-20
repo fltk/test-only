@@ -127,7 +127,7 @@ fltk3::version() {
 /**
   Gets the default scrollbar size used by 
   fltk3::Browser_,
-  Fl_Help_View,
+  fltk3::HelpView,
   fltk3::ScrollGroup, and
   fltk3::TextDisplay widgets.
   \returns The default size for widget scrollbars, in pixels.
@@ -139,7 +139,7 @@ int fltk3::scrollbar_size() {
 /**
   Sets the default scrollbar size that is used by the
   fltk3::Browser_,
-  Fl_Help_View,
+  fltk3::HelpView,
   fltk3::ScrollGroup, and
   fltk3::TextDisplay widgets.
   \param[in] W The new default size for widget scrollbars, in pixels.
@@ -1919,8 +1919,8 @@ bool fltk3::option(Fl_Option opt)
   if (!options_read_) {
     int tmp;
     { // first, read the system wide preferences
-      Fl_Preferences prefs(Fl_Preferences::SYSTEM, "fltk.org", "fltk");
-      Fl_Preferences opt_prefs(prefs, "options");
+      fltk3::Preferences prefs(fltk3::Preferences::SYSTEM, "fltk.org", "fltk");
+      fltk3::Preferences opt_prefs(prefs, "options");
       opt_prefs.get("ArrowFocus", tmp, 0);                      // default: off
       options_[OPTION_ARROW_FOCUS] = tmp;
       //opt_prefs.get("NativeFilechooser", tmp, 1);             // default: on
@@ -1936,8 +1936,8 @@ bool fltk3::option(Fl_Option opt)
     }
     { // next, check the user preferences
       // override system options only, if the option is set ( >= 0 )
-      Fl_Preferences prefs(Fl_Preferences::USER, "fltk.org", "fltk");
-      Fl_Preferences opt_prefs(prefs, "options");
+      fltk3::Preferences prefs(fltk3::Preferences::USER, "fltk.org", "fltk");
+      fltk3::Preferences opt_prefs(prefs, "options");
       opt_prefs.get("ArrowFocus", tmp, -1); 
       if (tmp >= 0) options_[OPTION_ARROW_FOCUS] = tmp;
       //opt_prefs.get("NativeFilechooser", tmp, -1); 

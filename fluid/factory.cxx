@@ -316,10 +316,10 @@ public:
     if (h < 60) h = 60;
     if (w < 80) w = 80;
   }
-  virtual const char *type_name() {return "Fl_Tree";}
+  virtual const char *type_name() {return "fltk3::Tree";}
   virtual const char *alt_type_name() {return "fltk::TreeBrowser";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    Fl_Tree* b = new Fl_Tree(x,y,w,h);
+    fltk3::Tree* b = new fltk3::Tree(x,y,w,h);
     if (!compile_only) {
       b->add("/A1/B1/C1");
       b->add("/A1/B1/C2");
@@ -660,7 +660,7 @@ static fltk3::Clock_Type fltk3::Clock_type;
 class Fl_Help_View_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
-    Fl_Help_View *myo = (Fl_Help_View *)o;
+    fltk3::HelpView *myo = (fltk3::HelpView *)o;
     fltk3::font(myo->textfont(), myo->textsize());
     h -= fltk3::box_dh(o->box());
     w -= fltk3::box_dw(o->box());
@@ -671,13 +671,13 @@ public:
     if (h < 30) h = 30;
     if (w < 50) w = 50;
   }
-  virtual const char *type_name() {return "Fl_Help_View";}
+  virtual const char *type_name() {return "fltk3::HelpView";}
   virtual const char *alt_type_name() {return "fltk::HelpView";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    Fl_Help_View *myo = new Fl_Help_View(x,y,w,h);
+    fltk3::HelpView *myo = new fltk3::HelpView(x,y,w,h);
     if (!compile_only) {
-      myo->value("<HTML><BODY><H1>Fl_Help_View Widget</H1>"
-                 "<P>This is a Fl_Help_View widget.</P></BODY></HTML>");
+      myo->value("<HTML><BODY><H1>fltk3::HelpView Widget</H1>"
+                 "<P>This is a fltk3::HelpView widget.</P></BODY></HTML>");
     }
     return myo;}
   Fl_Widget_Type *_make() {return new Fl_Help_View_Type();}

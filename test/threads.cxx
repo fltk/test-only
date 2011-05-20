@@ -29,30 +29,30 @@
 
 #if HAVE_PTHREAD || defined(WIN32)
 #  include <fltk3/run.h>
-#  include <fltk3/Double_Window.h>
+#  include <fltk3/DoubleWindow.h>
 #  include <fltk3/Browser.h>
-#  include <fltk3/Value_Output.h>
+#  include <fltk3/ValueOutput.h>
 #  include <fltk3/ask.h>
 #  include "threads.h"
 #  include <stdio.h>
 #  include <math.h>
 
-Fl_Thread prime_thread;
+fltk3::Thread prime_thread;
 
-Fl_Browser *browser1, *browser2;
+fltk3::Browser *browser1, *browser2;
 fltk3::ValueOutput *value1, *value2;
 int start2 = 3;
 
 void magic_number_cb(void *p)
 {
   fltk3::ValueOutput *w = (fltk3::ValueOutput*)p;
-  w->labelcolor(FL_RED);
+  w->labelcolor(fltk3::RED);
   w->redraw_label();
 }
 
 void* prime_func(void* p)
 {
-  Fl_Browser* browser = (Fl_Browser*) p;
+  fltk3::Browser* browser = (fltk3::Browser*) p;
   fltk3::ValueOutput *value;
   int n;
   int step;
@@ -87,7 +87,7 @@ void* prime_func(void* p)
       sprintf(s, "%d", n);
 
       // Obtain a lock before we access the browser widget...
-      Fl::lock();
+      fltk3::lock();
 
       browser->add(s);
       browser->bottomline(browser->size());
@@ -95,24 +95,24 @@ void* prime_func(void* p)
       n += step;
 
       // Release the lock...
-      Fl::unlock();
+      fltk3::unlock();
 
       // Send a message to the main thread, at which point it will
       // process any pending redraws for our browser widget.  The
       // message we pass here isn't used for anything, so we could also
       // just pass NULL.
-      Fl::awake(p);
+      fltk3::awake(p);
       if (n>10000 && !proud) {
         proud = 1;
-        Fl::awake(magic_number_cb, value);
+        fltk3::awake(magic_number_cb, value);
       }
     } else {
       // This should not be necessary since "n" and "step" are local variables,
       // however it appears that at least MacOS X has some threading issues
       // that cause semi-random corruption of the (stack) variables.
-      Fl::lock();
+      fltk3::lock();
       n += step;
-      Fl::unlock();
+      fltk3::unlock();
     }
   }
   return 0L;
@@ -121,13 +121,13 @@ void* prime_func(void* p)
 int main(int argc, char **argv)
 {
   fltk3::DoubleWindow* w = new fltk3::DoubleWindow(200, 200, "Single Thread");
-  browser1 = new Fl_Browser(0, 0, 200, 175);
+  browser1 = new fltk3::Browser(0, 0, 200, 175);
   w->resizable(browser1);
   value1 = new fltk3::ValueOutput(100, 175, 200, 25, "Max Prime:");
   w->end();
   w->show(argc, argv);
   w = new fltk3::DoubleWindow(200, 200, "Six Threads");
-  browser2 = new Fl_Browser(0, 0, 200, 175);
+  browser2 = new fltk3::Browser(0, 0, 200, 175);
   w->resizable(browser2);
   value2 = new fltk3::ValueOutput(100, 175, 200, 25, "Max Prime:");
   w->end();
@@ -137,23 +137,23 @@ int main(int argc, char **argv)
   browser2->add("Prime numbers:");
 
   // Enable multi-thread support by locking from the main
-  // thread.  Fl::wait() and fltk3::run() call Fl::unlock() and
-  // Fl::lock() as needed to release control to the child threads
+  // thread.  fltk3::wait() and fltk3::run() call fltk3::unlock() and
+  // fltk3::lock() as needed to release control to the child threads
   // when it is safe to do so...
-  Fl::lock();
+  fltk3::lock();
 
   // Start threads...
 
   // One thread displaying in one browser
-  fl_create_thread(prime_thread, prime_func, browser1);
+  fltk3::create_thread(prime_thread, prime_func, browser1);
 
   // Several threads displaying in another browser
-  fl_create_thread(prime_thread, prime_func, browser2);
-  fl_create_thread(prime_thread, prime_func, browser2);
-  fl_create_thread(prime_thread, prime_func, browser2);
-  fl_create_thread(prime_thread, prime_func, browser2);
-  fl_create_thread(prime_thread, prime_func, browser2);
-  fl_create_thread(prime_thread, prime_func, browser2);
+  fltk3::create_thread(prime_thread, prime_func, browser2);
+  fltk3::create_thread(prime_thread, prime_func, browser2);
+  fltk3::create_thread(prime_thread, prime_func, browser2);
+  fltk3::create_thread(prime_thread, prime_func, browser2);
+  fltk3::create_thread(prime_thread, prime_func, browser2);
+  fltk3::create_thread(prime_thread, prime_func, browser2);
 
   fltk3::run();
 
@@ -163,7 +163,7 @@ int main(int argc, char **argv)
 #  include <fltk3/ask.h>
 
 int main() {
-  fl_alert("Sorry, threading not supported on this platform!");
+  fltk3::alert("Sorry, threading not supported on this platform!");
 }
 #endif // HAVE_PTHREAD || WIN32
 

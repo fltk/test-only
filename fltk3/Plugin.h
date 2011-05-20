@@ -1,7 +1,7 @@
 //
 // "$Id: Plugin.h 6995 2010-01-12 08:48:55Z matt $"
 //
-// A Plugin system for FLTK, implemented in Fl_Preferences.cxx.
+// A Plugin system for FLTK, implemented in fltk3::Preferences.cxx.
 //
 // Copyright 2002-2010 by Matthias Melcher.
 //
@@ -68,7 +68,7 @@
  \endcode
  */
 class FLTK3_EXPORT Fl_Plugin  {
-  Fl_Preferences::ID id;
+  fltk3::Preferences::ID id;
 public:
   Fl_Plugin(const char *klass, const char *name);
   virtual ~Fl_Plugin();
@@ -79,7 +79,7 @@ public:
  \brief Fl_Plugin_Manager manages link-time and run-time plugin binaries.
  \see Fl_Plugin
  */
-class FLTK3_EXPORT Fl_Plugin_Manager : public Fl_Preferences {
+class FLTK3_EXPORT Fl_Plugin_Manager : public fltk3::Preferences {
 public:
   Fl_Plugin_Manager(const char *klass);
   ~Fl_Plugin_Manager();
@@ -89,9 +89,9 @@ public:
   int plugins() { return groups(); }
   Fl_Plugin *plugin(int index);
   Fl_Plugin *plugin(const char *name);
-  Fl_Preferences::ID addPlugin(const char *name, Fl_Plugin *plugin);
+  fltk3::Preferences::ID addPlugin(const char *name, Fl_Plugin *plugin);
   
-  static void removePlugin(Fl_Preferences::ID id);
+  static void removePlugin(fltk3::Preferences::ID id);
   static int load(const char *filename);
   static int loadAll(const char *filepath, const char *pattern=0);
 };

@@ -31,7 +31,7 @@
  * basic functionality. 
  * 
  * To use the System Menu Bar, simply replace the main fltk3::MenuBar
- * in an application with Fl_Sys_Menu_Bar.
+ * in an application with fltk3::SysMenuBar.
  *
  * FLTK features not supported by the Mac System menu
  *
@@ -83,9 +83,9 @@ static void setMenuShortcut( MenuHandle mh, int miCnt, const fltk3::MenuItem *m 
   if ( !isalnum( key ) )
     return;
   
-  void *menuItem = Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::itemAtIndex, mh, miCnt);
-  Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setKeyEquivalent, menuItem, m->shortcut_ & 0xff );
-  Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setKeyEquivalentModifierMask, menuItem, m->shortcut_ );
+  void *menuItem = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::itemAtIndex, mh, miCnt);
+  fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setKeyEquivalent, menuItem, m->shortcut_ & 0xff );
+  fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setKeyEquivalentModifierMask, menuItem, m->shortcut_ );
 }
 
 
@@ -96,12 +96,12 @@ static void setMenuFlags( MenuHandle mh, int miCnt, const fltk3::MenuItem *m )
 {
   if ( m->flags & fltk3::MENU_TOGGLE )
   {
-	void *menuItem = Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::itemAtIndex, mh, miCnt);
-	Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setState, menuItem, m->flags & fltk3::MENU_VALUE );
+	void *menuItem = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::itemAtIndex, mh, miCnt);
+	fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setState, menuItem, m->flags & fltk3::MENU_VALUE );
   }
   else if ( m->flags & fltk3::MENU_RADIO ) {
-    void *menuItem = Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::itemAtIndex, mh, miCnt);
-    Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setState, menuItem, m->flags & fltk3::MENU_VALUE );
+    void *menuItem = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::itemAtIndex, mh, miCnt);
+    fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setState, menuItem, m->flags & fltk3::MENU_VALUE );
   }
 }
 
@@ -115,26 +115,26 @@ static void createSubMenu( void * mh, pFl_Menu_Item &mm )
   int miCnt, flags;
   
   void *menuItem;
-  submenu = Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::initWithTitle, mm->text);
+  submenu = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::initWithTitle, mm->text);
   int cnt;
-  Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::numberOfItems, mh, &cnt);
+  fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::numberOfItems, mh, &cnt);
   cnt--;
-  menuItem = Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::itemAtIndex, mh, cnt);
-  Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setSubmenu, menuItem, submenu);
+  menuItem = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::itemAtIndex, mh, cnt);
+  fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setSubmenu, menuItem, submenu);
   if ( mm->flags & fltk3::MENU_INACTIVE ) {
-    Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setEnabled, menuItem, 0);
+    fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setEnabled, menuItem, 0);
   }
   mm++;
   
   while ( mm->text )
   {
-    int flRank = mm - fl_sys_menu_bar->fltk3::Menu_::menu();
-    Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::addNewItem, submenu, flRank, &miCnt);
+    int flRank = mm - fltk3::sys_menu_bar->fltk3::Menu_::menu();
+    fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::addNewItem, submenu, flRank, &miCnt);
     setMenuFlags( submenu, miCnt, mm );
     setMenuShortcut( submenu, miCnt, mm );
     if ( mm->flags & fltk3::MENU_INACTIVE ) {
-      void *item = Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::itemAtIndex, submenu, miCnt);
-      Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::setEnabled, item, 0);
+      void *item = fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::itemAtIndex, submenu, miCnt);
+      fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::setEnabled, item, 0);
     }
     flags = mm->flags;
     if ( mm->flags & fltk3::SUBMENU )
@@ -147,7 +147,7 @@ static void createSubMenu( void * mh, pFl_Menu_Item &mm )
       createSubMenu( submenu, smm );
     }
     if ( flags & fltk3::MENU_DIVIDER ) {
-      Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::addSeparatorItem, submenu);
+      fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::addSeparatorItem, submenu);
       }
     mm++;
   }
@@ -161,9 +161,9 @@ static void createSubMenu( void * mh, pFl_Menu_Item &mm )
 static void convertToMenuBar(const fltk3::MenuItem *mm)
 {
   int count;//first, delete all existing system menus
-  Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::numberOfItems, fl_system_menu, &count);
+  fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::numberOfItems, fl_system_menu, &count);
   for(int i = count - 1; i > 0; i--) {
-	  Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::removeItem, fl_system_menu, i);
+	  fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::removeItem, fl_system_menu, i);
   }
   //now convert FLTK stuff into MacOS menus
   for (;;)
@@ -171,8 +171,8 @@ static void convertToMenuBar(const fltk3::MenuItem *mm)
     if ( !mm || !mm->text )
       break;
     char visible = mm->visible() ? 1 : 0;
-    int flRank = mm - fl_sys_menu_bar->fltk3::Menu_::menu();
-    Fl_Sys_Menu_Bar::doMenuOrItemOperation(Fl_Sys_Menu_Bar::addNewItem, fl_system_menu, flRank, NULL);
+    int flRank = mm - fltk3::sys_menu_bar->fltk3::Menu_::menu();
+    fltk3::SysMenuBar::doMenuOrItemOperation(fltk3::SysMenuBar::addNewItem, fl_system_menu, flRank, NULL);
 		
     if ( mm->flags & fltk3::SUBMENU )
       createSubMenu( fl_system_menu, mm );
@@ -195,7 +195,7 @@ static void convertToMenuBar(const fltk3::MenuItem *mm)
  *
  * @param m list of fltk3::MenuItem
  */
-void Fl_Sys_Menu_Bar::menu(const fltk3::MenuItem *m) 
+void fltk3::SysMenuBar::menu(const fltk3::MenuItem *m) 
 {
   fl_open_display();
   fltk3::MenuBar::menu( m );
@@ -211,7 +211,7 @@ void Fl_Sys_Menu_Bar::menu(const fltk3::MenuItem *m)
  *
  * @see fltk3::Menu_::add(const char* label, int shortcut, fltk3::Callback *cb, void *user_data, int flags) 
  */
-int Fl_Sys_Menu_Bar::add(const char* label, int shortcut, fltk3::Callback *cb, void *user_data, int flags)
+int fltk3::SysMenuBar::add(const char* label, int shortcut, fltk3::Callback *cb, void *user_data, int flags)
 {
   fl_open_display();
   int rank = fltk3::Menu_::add(label, shortcut, cb, user_data, flags);
@@ -227,7 +227,7 @@ int Fl_Sys_Menu_Bar::add(const char* label, int shortcut, fltk3::Callback *cb, v
  *
  * @see fltk3::Menu_::insert(int index, const char* label, int shortcut, fltk3::Callback *cb, void *user_data, int flags) 
  */
-int Fl_Sys_Menu_Bar::insert(int index, const char* label, int shortcut, fltk3::Callback *cb, void *user_data, int flags)
+int fltk3::SysMenuBar::insert(int index, const char* label, int shortcut, fltk3::Callback *cb, void *user_data, int flags)
 {
   fl_open_display();
   int rank = fltk3::Menu_::insert(index, label, shortcut, cb, user_data, flags);
@@ -235,13 +235,13 @@ int Fl_Sys_Menu_Bar::insert(int index, const char* label, int shortcut, fltk3::C
   return rank;
 }
 
-void Fl_Sys_Menu_Bar::clear()
+void fltk3::SysMenuBar::clear()
 {
   fltk3::Menu_::clear();
   convertToMenuBar(NULL);
 }
 
-int Fl_Sys_Menu_Bar::clear_submenu(int index)
+int fltk3::SysMenuBar::clear_submenu(int index)
 {
   int retval = fltk3::Menu_::clear_submenu(index);
   if (retval != -1) convertToMenuBar(fltk3::Menu_::menu());
@@ -253,7 +253,7 @@ int Fl_Sys_Menu_Bar::clear_submenu(int index)
  *
  * @param rank		the rank of the item to remove
  */
-void Fl_Sys_Menu_Bar::remove(int rank)
+void fltk3::SysMenuBar::remove(int rank)
 {
   fltk3::Menu_::remove(rank);
   convertToMenuBar(fltk3::Menu_::menu());
@@ -266,10 +266,10 @@ void Fl_Sys_Menu_Bar::remove(int rank)
  * @param rank		the rank of the item to rename
  * @param name		the new item name as a UTF8 string
  */
-void Fl_Sys_Menu_Bar::replace(int rank, const char *name)
+void fltk3::SysMenuBar::replace(int rank, const char *name)
 {
   doMenuOrItemOperation(renameItem, rank, name);
-  fl_sys_menu_bar->fltk3::Menu_::replace(rank, name);
+  fltk3::sys_menu_bar->fltk3::Menu_::replace(rank, name);
 }
 
 
@@ -277,7 +277,7 @@ void Fl_Sys_Menu_Bar::replace(int rank, const char *name)
  * Draw the menu bar. 
  * Nothing here because the OS does this for us.
  */
-void Fl_Sys_Menu_Bar::draw() {
+void fltk3::SysMenuBar::draw() {
 }
 
 

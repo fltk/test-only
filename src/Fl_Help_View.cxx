@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_Help_View widget routines.
+// fltk3::HelpView widget routines.
 //
 // Copyright 1997-2010 by Easy Software Products.
 // Image support by Matthias Melcher, Copyright 2000-2009.
@@ -27,27 +27,27 @@
 //
 // Contents:
 //
-//   Fl_Help_View::add_block()       - Add a text block to the list.
-//   Fl_Help_View::add_link()        - Add a new link to the list.
-//   Fl_Help_View::add_target()      - Add a new target to the list.
-//   Fl_Help_View::compare_targets() - Compare two targets.
-//   Fl_Help_View::do_align()        - Compute the alignment for a line in
+//   fltk3::HelpView::add_block()       - Add a text block to the list.
+//   fltk3::HelpView::add_link()        - Add a new link to the list.
+//   fltk3::HelpView::add_target()      - Add a new target to the list.
+//   fltk3::HelpView::compare_targets() - Compare two targets.
+//   fltk3::HelpView::do_align()        - Compute the alignment for a line in
 //                                     a block.
-//   Fl_Help_View::draw()            - Draw the Fl_Help_View widget.
-//   Fl_Help_View::format()          - Format the help text.
-//   Fl_Help_View::format_table()    - Format a table...
-//   Fl_Help_View::free_data()       - Free memory used for the document.
-//   Fl_Help_View::get_align()       - Get an alignment attribute.
-//   Fl_Help_View::get_attr()        - Get an attribute value from the string.
-//   Fl_Help_View::get_color()       - Get an alignment attribute.
-//   Fl_Help_View::handle()          - Handle events in the widget.
-//   Fl_Help_View::Fl_Help_View()    - Build a Fl_Help_View widget.
-//   Fl_Help_View::~Fl_Help_View()   - Destroy a Fl_Help_View widget.
-//   Fl_Help_View::load()            - Load the specified file.
-//   Fl_Help_View::resize()          - Resize the help widget.
-//   Fl_Help_View::topline()         - Set the top line to the named target.
-//   Fl_Help_View::topline()         - Set the top line by number.
-//   Fl_Help_View::value()           - Set the help text directly.
+//   fltk3::HelpView::draw()            - Draw the fltk3::HelpView widget.
+//   fltk3::HelpView::format()          - Format the help text.
+//   fltk3::HelpView::format_table()    - Format a table...
+//   fltk3::HelpView::free_data()       - Free memory used for the document.
+//   fltk3::HelpView::get_align()       - Get an alignment attribute.
+//   fltk3::HelpView::get_attr()        - Get an attribute value from the string.
+//   fltk3::HelpView::get_color()       - Get an alignment attribute.
+//   fltk3::HelpView::handle()          - Handle events in the widget.
+//   fltk3::HelpView::fltk3::HelpView()    - Build a fltk3::HelpView widget.
+//   fltk3::HelpView::~Fl_Help_View()   - Destroy a fltk3::HelpView widget.
+//   fltk3::HelpView::load()            - Load the specified file.
+//   fltk3::HelpView::resize()          - Resize the help widget.
+//   fltk3::HelpView::topline()         - Set the top line to the named target.
+//   fltk3::HelpView::topline()         - Set the top line by number.
+//   fltk3::HelpView::value()           - Set the help text directly.
 //   scrollbar_callback()            - A callback for the scrollbar.
 //
 
@@ -144,7 +144,7 @@ static const char *broken_xpm[] =
 static fltk3::Pixmap broken_image(broken_xpm);
 
 //
-// Simple margin stack for Fl_Help_View::format()...
+// Simple margin stack for fltk3::HelpView::format()...
 //
 
 struct fl_margins {
@@ -190,13 +190,13 @@ struct fl_margins {
 };
 
 //
-// All the stuff needed to implement text selection in Fl_Help_View
+// All the stuff needed to implement text selection in fltk3::HelpView
 //
 
 /* matt:
  * We are trying to keep binary compatibility with previous versions
  * of FLTK. This means that we are limited to adding static variables
- * only to not enlarge the Fl_Help_View class. Lucky for us, only one
+ * only to not enlarge the fltk3::HelpView class. Lucky for us, only one
  * text can be selected system wide, so we can remember the selection
  * in a single set of variables.
  *
@@ -224,27 +224,27 @@ img->draw()
 // We don't put the offscreen buffer in the help view class because
 // we'd need to include x.h in the header...
 static Fl_Offscreen fl_help_view_buffer;
-int Fl_Help_View::selection_first = 0;
-int Fl_Help_View::selection_last = 0;
-int Fl_Help_View::selection_push_first = 0;
-int Fl_Help_View::selection_push_last = 0;
-int Fl_Help_View::selection_drag_first = 0;
-int Fl_Help_View::selection_drag_last = 0;
-int Fl_Help_View::selected = 0;
-int Fl_Help_View::draw_mode = 0;
-int Fl_Help_View::mouse_x = 0;
-int Fl_Help_View::mouse_y = 0;
-int Fl_Help_View::current_pos = 0;
-Fl_Help_View *Fl_Help_View::current_view = 0L;
-fltk3::Color Fl_Help_View::hv_selection_color;
-fltk3::Color Fl_Help_View::hv_selection_text_color;
+int fltk3::HelpView::selection_first = 0;
+int fltk3::HelpView::selection_last = 0;
+int fltk3::HelpView::selection_push_first = 0;
+int fltk3::HelpView::selection_push_last = 0;
+int fltk3::HelpView::selection_drag_first = 0;
+int fltk3::HelpView::selection_drag_last = 0;
+int fltk3::HelpView::selected = 0;
+int fltk3::HelpView::draw_mode = 0;
+int fltk3::HelpView::mouse_x = 0;
+int fltk3::HelpView::mouse_y = 0;
+int fltk3::HelpView::current_pos = 0;
+fltk3::HelpView *fltk3::HelpView::current_view = 0L;
+fltk3::Color fltk3::HelpView::hv_selection_color;
+fltk3::Color fltk3::HelpView::hv_selection_text_color;
 
 /*
  * Limitation: if a word contains &code; notations, we will calculate a wrong length.
  *
  * This function must be optimized for speed!
  */
-void Fl_Help_View::hv_draw(const char *t, int x, int y)
+void fltk3::HelpView::hv_draw(const char *t, int x, int y)
 {
   if (selected && current_view==this && current_pos<selection_last && current_pos>=selection_first) {
     fltk3::Color c = fltk3::color();
@@ -279,15 +279,15 @@ void Fl_Help_View::hv_draw(const char *t, int x, int y)
 
 
 /** Adds a text block to the list. */
-Fl_Help_Block *					// O - Pointer to new block
-Fl_Help_View::add_block(const char   *s,	// I - Pointer to start of block text
+fltk3::HelpBlock *					// O - Pointer to new block
+fltk3::HelpView::add_block(const char   *s,	// I - Pointer to start of block text
                 	int           xx,	// I - X position of block
 			int           yy,	// I - Y position of block
 			int           ww,	// I - Right margin of block
 			int           hh,	// I - Height of block
 			unsigned char border)	// I - Draw border?
 {
-  Fl_Help_Block	*temp;				// New block
+  fltk3::HelpBlock	*temp;				// New block
 
 
 //  printf("add_block(s = %p, xx = %d, yy = %d, ww = %d, hh = %d, border = %d)\n",
@@ -298,13 +298,13 @@ Fl_Help_View::add_block(const char   *s,	// I - Pointer to start of block text
     ablocks_ += 16;
 
     if (ablocks_ == 16)
-      blocks_ = (Fl_Help_Block *)malloc(sizeof(Fl_Help_Block) * ablocks_);
+      blocks_ = (fltk3::HelpBlock *)malloc(sizeof(fltk3::HelpBlock) * ablocks_);
     else
-      blocks_ = (Fl_Help_Block *)realloc(blocks_, sizeof(Fl_Help_Block) * ablocks_);
+      blocks_ = (fltk3::HelpBlock *)realloc(blocks_, sizeof(fltk3::HelpBlock) * ablocks_);
   }
 
   temp = blocks_ + nblocks_;
-  memset(temp, 0, sizeof(Fl_Help_Block));
+  memset(temp, 0, sizeof(fltk3::HelpBlock));
   temp->start   = s;
   temp->end     = s;
   temp->x       = xx;
@@ -320,13 +320,13 @@ Fl_Help_View::add_block(const char   *s,	// I - Pointer to start of block text
 
 
 /** Adds a new link to the list. */
-void Fl_Help_View::add_link(const char *n,	// I - Name of link
+void fltk3::HelpView::add_link(const char *n,	// I - Name of link
                       int        xx,	// I - X position of link
 		      int        yy,	// I - Y position of link
 		      int        ww,	// I - Width of link text
 		      int        hh)	// I - Height of link text
 {
-  Fl_Help_Link	*temp;			// New link
+  fltk3::HelpLink	*temp;			// New link
   char		*target;		// Pointer to target name
 
 
@@ -335,9 +335,9 @@ void Fl_Help_View::add_link(const char *n,	// I - Name of link
     alinks_ += 16;
 
     if (alinks_ == 16)
-      links_ = (Fl_Help_Link *)malloc(sizeof(Fl_Help_Link) * alinks_);
+      links_ = (fltk3::HelpLink *)malloc(sizeof(fltk3::HelpLink) * alinks_);
     else
-      links_ = (Fl_Help_Link *)realloc(links_, sizeof(Fl_Help_Link) * alinks_);
+      links_ = (fltk3::HelpLink *)realloc(links_, sizeof(fltk3::HelpLink) * alinks_);
   }
 
   temp = links_ + nlinks_;
@@ -362,10 +362,10 @@ void Fl_Help_View::add_link(const char *n,	// I - Name of link
 
 
 /** Adds a new target to the list. */
-void Fl_Help_View::add_target(const char *n,	// I - Name of target
+void fltk3::HelpView::add_target(const char *n,	// I - Name of target
 			      int        yy)	// I - Y position of target
 {
-  Fl_Help_Target	*temp;			// New target
+  fltk3::HelpTarget	*temp;			// New target
 
 
   if (ntargets_ >= atargets_)
@@ -373,9 +373,9 @@ void Fl_Help_View::add_target(const char *n,	// I - Name of target
     atargets_ += 16;
 
     if (atargets_ == 16)
-      targets_ = (Fl_Help_Target *)malloc(sizeof(Fl_Help_Target) * atargets_);
+      targets_ = (fltk3::HelpTarget *)malloc(sizeof(fltk3::HelpTarget) * atargets_);
     else
-      targets_ = (Fl_Help_Target *)realloc(targets_, sizeof(Fl_Help_Target) * atargets_);
+      targets_ = (fltk3::HelpTarget *)realloc(targets_, sizeof(fltk3::HelpTarget) * atargets_);
   }
 
   temp = targets_ + ntargets_;
@@ -388,15 +388,15 @@ void Fl_Help_View::add_target(const char *n,	// I - Name of target
 
 /** Compares two targets.*/
 int							// O - Result of comparison
-Fl_Help_View::compare_targets(const Fl_Help_Target *t0,	// I - First target
-                             const Fl_Help_Target *t1)	// I - Second target
+fltk3::HelpView::compare_targets(const fltk3::HelpTarget *t0,	// I - First target
+                             const fltk3::HelpTarget *t1)	// I - Second target
 {
   return (strcasecmp(t0->name, t1->name));
 }
 
 /** Computes the alignment for a line in a block.*/
 int						// O - New line
-Fl_Help_View::do_align(Fl_Help_Block *block,	// I - Block to add to
+fltk3::HelpView::do_align(fltk3::HelpBlock *block,	// I - Block to add to
                       int          line,	// I - Current line
 		      int          xx,		// I - Current X position
 		      int          a,		// I - Current alignment
@@ -433,12 +433,12 @@ Fl_Help_View::do_align(Fl_Help_Block *block,	// I - Block to add to
   return (line);
 }
 
-/** Draws the Fl_Help_View widget. */
+/** Draws the fltk3::HelpView widget. */
 void
-Fl_Help_View::draw()
+fltk3::HelpView::draw()
 {
   int			i;		// Looping var
-  const Fl_Help_Block	*block;		// Pointer to current block
+  const fltk3::HelpBlock	*block;		// Pointer to current block
   const char		*ptr,		// Pointer to text in block
 			*attrs;		// Pointer to start of element attributes
   char			*s,		// Pointer into buffer
@@ -996,12 +996,12 @@ Fl_Help_View::draw()
     \return the matching position or -1 if not found
 */
 int						// O - Matching position or -1 if not found
-Fl_Help_View::find(const char *s,		// I - String to find
+fltk3::HelpView::find(const char *s,		// I - String to find
                    int        p)		// I - Starting position
 {
   int		i,				// Looping var
 		c;				// Current character
-  Fl_Help_Block	*b;				// Current block
+  fltk3::HelpBlock	*b;				// Current block
   const char	*bp,				// Block matching pointer
 		*bs,				// Start of current comparison
 		*sp;				// Search string pointer
@@ -1053,10 +1053,10 @@ Fl_Help_View::find(const char *s,		// I - String to find
 }
 
 /** Formats the help text. */
-void Fl_Help_View::format() {
+void fltk3::HelpView::format() {
   int		i;		// Looping var
   int		done;		// Are we done yet?
-  Fl_Help_Block	*block,		// Current block
+  fltk3::HelpBlock	*block,		// Current block
 		*cell;		// Current table cell
   int		cells[MAX_COLUMNS],
 				// Cells in the current row...
@@ -1821,7 +1821,7 @@ void Fl_Help_View::format() {
 //  printf("margins.depth_=%d\n", margins.depth_);
 
   if (ntargets_ > 1)
-    qsort(targets_, ntargets_, sizeof(Fl_Help_Target),
+    qsort(targets_, ntargets_, sizeof(fltk3::HelpTarget),
           (compare_func_t)compare_targets);
 
   int dx = fltk3::box_dw(b) - fltk3::box_dx(b);
@@ -1875,7 +1875,7 @@ void Fl_Help_View::format() {
 
 /** Formats a table */
 void
-Fl_Help_View::format_table(int        *table_width,	// O - Total table width
+fltk3::HelpView::format_table(int        *table_width,	// O - Total table width
                            int        *columns,		// O - Column widths
 	                   const char *table)		// I - Pointer to start of table
 {
@@ -2309,7 +2309,7 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
 
 /** Frees memory used for the document. */
 void
-Fl_Help_View::free_data() {
+fltk3::HelpView::free_data() {
   // Release all images...
   if (value_) {
     const char	*ptr,		// Pointer into block
@@ -2412,7 +2412,7 @@ Fl_Help_View::free_data() {
 
 /** Gets an alignment attribute. */
 int					// O - Alignment
-Fl_Help_View::get_align(const char *p,	// I - Pointer to start of attrs
+fltk3::HelpView::get_align(const char *p,	// I - Pointer to start of attrs
                         int        a)	// I - Default alignment
 {
   char	buf[255];			// Alignment value
@@ -2432,7 +2432,7 @@ Fl_Help_View::get_align(const char *p,	// I - Pointer to start of attrs
 
 /** Gets an attribute value from the string. */
 const char *					// O - Pointer to buf or NULL
-Fl_Help_View::get_attr(const char *p,		// I - Pointer to start of attributes
+fltk3::HelpView::get_attr(const char *p,		// I - Pointer to start of attributes
                       const char *n,		// I - Name of attribute
 		      char       *buf,		// O - Buffer for attribute value
 		      int        bufsize)	// I - Size of buffer
@@ -2504,7 +2504,7 @@ Fl_Help_View::get_attr(const char *p,		// I - Pointer to start of attributes
 
 /** Gets a color attribute. */
 fltk3::Color				// O - Color value
-Fl_Help_View::get_color(const char *n,	// I - Color name
+fltk3::HelpView::get_color(const char *n,	// I - Color name
                         fltk3::Color   c)	// I - Default color value
 {
   int	i;				// Looping var
@@ -2569,19 +2569,19 @@ Fl_Help_View::get_color(const char *n,	// I - Color name
   \return a pointer to a cached fltk3::SharedImage, if the image can be loaded,
   	  otherwise a pointer to an internal fltk3::Pixmap (broken_image).
 
-  \todo Fl_Help_View::get_image() returns a pointer to the internal
+  \todo fltk3::HelpView::get_image() returns a pointer to the internal
   fltk3::Pixmap broken_image, but this is _not_ compatible with the
   return type fltk3::SharedImage (release() must not be called).
 */
 
 /* Implementation note: (A.S. Apr 05, 2009)
 
-  Fl_Help_View::get_image() uses a static global flag (initial_load)
+  fltk3::HelpView::get_image() uses a static global flag (initial_load)
   to determine, if it is called from the initial loading of a document
   (load() or value()), or from resize() or draw().
 
   A better solution would be to manage all loaded images in an own
-  structure like Fl_Help_Target (Fl_Help_Image ?) to avoid using this
+  structure like fltk3::HelpTarget (Fl_Help_Image ?) to avoid using this
   global flag, but this would break the ABI !
 
   This should be fixed in FLTK 1.3 !
@@ -2604,7 +2604,7 @@ Fl_Help_View::get_color(const char *n,	// I - Color name
 */
 
 fltk3::SharedImage *
-Fl_Help_View::get_image(const char *name, int W, int H) {
+fltk3::HelpView::get_image(const char *name, int W, int H) {
   const char	*localname;		// Local filename
   char		dir[FL_PATH_MAX];	// Current directory
   char		temp[FL_PATH_MAX],	// Temporary filename
@@ -2661,7 +2661,7 @@ Fl_Help_View::get_image(const char *name, int W, int H) {
 
 /** Gets a length value, either absolute or %. */
 int
-Fl_Help_View::get_length(const char *l) {	// I - Value
+fltk3::HelpView::get_length(const char *l) {	// I - Value
   int	val;					// Integer value
 
   if (!l[0]) return 0;
@@ -2679,10 +2679,10 @@ Fl_Help_View::get_length(const char *l) {	// I - Value
 }
 
 
-Fl_Help_Link *Fl_Help_View::find_link(int xx, int yy)
+fltk3::HelpLink *fltk3::HelpView::find_link(int xx, int yy)
 {
   int		i;
-  Fl_Help_Link	*linkp;
+  fltk3::HelpLink	*linkp;
   for (i = nlinks_, linkp = links_; i > 0; i --, linkp ++) {
     if (xx >= linkp->x && xx < linkp->w &&
         yy >= linkp->y && yy < linkp->h)
@@ -2691,7 +2691,7 @@ Fl_Help_Link *Fl_Help_View::find_link(int xx, int yy)
   return i ? linkp : 0L;
 }
 
-void Fl_Help_View::follow_link(Fl_Help_Link *linkp)
+void fltk3::HelpView::follow_link(fltk3::HelpLink *linkp)
 {
   char		target[32];	// Current target
 
@@ -2750,13 +2750,13 @@ void Fl_Help_View::follow_link(Fl_Help_Link *linkp)
 }
 
 /** Removes the current text selection. */
-void Fl_Help_View::clear_selection()
+void fltk3::HelpView::clear_selection()
 {
   if (current_view==this)
     clear_global_selection();
 }
 /** Selects all the text in the view. */
-void Fl_Help_View::select_all()
+void fltk3::HelpView::select_all()
 {
   clear_global_selection();
   if (!value_) return;
@@ -2765,7 +2765,7 @@ void Fl_Help_View::select_all()
   selected = 1;
 }
 
-void Fl_Help_View::clear_global_selection()
+void fltk3::HelpView::clear_global_selection()
 {
   if (selected) redraw();
   selection_push_first = selection_push_last = 0;
@@ -2774,7 +2774,7 @@ void Fl_Help_View::clear_global_selection()
   selected = 0;
 }
 
-char Fl_Help_View::begin_selection()
+char fltk3::HelpView::begin_selection()
 {
   clear_global_selection();
 
@@ -2795,7 +2795,7 @@ char Fl_Help_View::begin_selection()
   else return 0;
 }
 
-char Fl_Help_View::extend_selection()
+char fltk3::HelpView::extend_selection()
 {
   if (fltk3::event_is_click())
     return 0;
@@ -2860,7 +2860,7 @@ static unsigned int command(const char *cmd)
 
 #define CMD(a, b, c, d) ((a<<24)|(b<<16)|(c<<8)|d)
 
-void Fl_Help_View::end_selection(int clipboard) 
+void fltk3::HelpView::end_selection(int clipboard) 
 {
   if (!selected || current_view!=this) 
     return;
@@ -2944,9 +2944,9 @@ void Fl_Help_View::end_selection(int clipboard)
 
 /** Handles events in the widget. */
 int				// O - 1 if we handled it, 0 otherwise
-Fl_Help_View::handle(int event)	// I - Event to handle
+fltk3::HelpView::handle(int event)	// I - Event to handle
 {
-  static Fl_Help_Link *linkp;   // currently clicked link
+  static fltk3::HelpLink *linkp;   // currently clicked link
 
   int xx = fltk3::event_x() - x() + leftline_;
   int yy = fltk3::event_y() - y() + topline_;
@@ -3026,10 +3026,10 @@ Fl_Help_View::handle(int event)	// I - Event to handle
 }
 
 /** 
-  The constructor creates the Fl_Help_View widget at the specified
+  The constructor creates the fltk3::HelpView widget at the specified
   position and size.
 */
-Fl_Help_View::Fl_Help_View(int        xx,	// I - Left position
+fltk3::HelpView::HelpView(int        xx,	// I - Left position
                 	   int        yy,	// I - Top position
 			   int        ww,	// I - Width in pixels
 			   int        hh,	// I - Height in pixels
@@ -3053,17 +3053,17 @@ Fl_Help_View::Fl_Help_View(int        xx,	// I - Left position
 
   ablocks_      = 0;
   nblocks_      = 0;
-  blocks_       = (Fl_Help_Block *)0;
+  blocks_       = (fltk3::HelpBlock *)0;
 
-  link_         = (Fl_Help_Func *)0;
+  link_         = (fltk3::HelpFunc *)0;
 
   alinks_       = 0;
   nlinks_       = 0;
-  links_        = (Fl_Help_Link *)0;
+  links_        = (fltk3::HelpLink *)0;
 
   atargets_     = 0;
   ntargets_     = 0;
-  targets_      = (Fl_Help_Target *)0;
+  targets_      = (fltk3::HelpTarget *)0;
 
   directory_[0] = '\0';
   filename_[0]  = '\0';
@@ -3090,12 +3090,12 @@ Fl_Help_View::Fl_Help_View(int        xx,	// I - Left position
 }
 
 
-/** Destroys the Fl_Help_View widget.
+/** Destroys the fltk3::HelpView widget.
 
   The destructor destroys the widget and frees all memory that has been
   allocated for the current document.
 */
-Fl_Help_View::~Fl_Help_View()
+fltk3::HelpView::~HelpView()
 {
   clear_selection();
   free_data();
@@ -3107,7 +3107,7 @@ Fl_Help_View::~Fl_Help_View()
   This method loads the specified file or URL.
 */
 int				// O - 0 on success, -1 on error
-Fl_Help_View::load(const char *f)// I - Filename to load (may also have target)
+fltk3::HelpView::load(const char *f)// I - Filename to load (may also have target)
 {
   FILE		*fp;		// File to read from
   long		len;		// Length of file
@@ -3231,7 +3231,7 @@ Fl_Help_View::load(const char *f)// I - Filename to load (may also have target)
 /** Resizes the help widget. */
 
 void
-Fl_Help_View::resize(int xx,	// I - New left position
+fltk3::HelpView::resize(int xx,	// I - New left position
                      int yy,	// I - New top position
 		     int ww,	// I - New width
 		     int hh)	// I - New height
@@ -3258,9 +3258,9 @@ Fl_Help_View::resize(int xx,	// I - New left position
   \param[in] n target name
 */
 void
-Fl_Help_View::topline(const char *n)	// I - Target name
+fltk3::HelpView::topline(const char *n)	// I - Target name
 {
-  Fl_Help_Target key,			// Target name key
+  fltk3::HelpTarget key,			// Target name key
 		*target;		// Pointer to matching target
 
 
@@ -3269,7 +3269,7 @@ Fl_Help_View::topline(const char *n)	// I - Target name
 
   strlcpy(key.name, n, sizeof(key.name));
 
-  target = (Fl_Help_Target *)bsearch(&key, targets_, ntargets_, sizeof(Fl_Help_Target),
+  target = (fltk3::HelpTarget *)bsearch(&key, targets_, ntargets_, sizeof(fltk3::HelpTarget),
                                  (compare_func_t)compare_targets);
 
   if (target != NULL)
@@ -3285,7 +3285,7 @@ Fl_Help_View::topline(const char *n)	// I - Target name
   \param[in] top top line number in pixels (0 = start of document)
 */
 void
-Fl_Help_View::topline(int top)	// I - Top line number
+fltk3::HelpView::topline(int top)	// I - Top line number
 {
   if (!value_)
     return;
@@ -3314,7 +3314,7 @@ Fl_Help_View::topline(int top)	// I - Top line number
   \param[in] left left column number in pixels (0 = left side)
 */
 void
-Fl_Help_View::leftline(int left)	// I - Left position
+fltk3::HelpView::leftline(int left)	// I - Left position
 {
   if (!value_)
     return;
@@ -3341,7 +3341,7 @@ Fl_Help_View::leftline(int left)	// I - Left position
   If \p val is NULL, then the widget is cleared.
 */
 void
-Fl_Help_View::value(const char *val)	// I - Text to view
+fltk3::HelpView::value(const char *val)	// I - Text to view
 {
   clear_selection();
   free_data();
@@ -3502,7 +3502,7 @@ quote_char(const char *p) {	// I - Quoted string
 static void
 scrollbar_callback(fltk3::Widget *s, void *)
 {
-  ((Fl_Help_View *)(s->parent()))->topline(int(((Fl_Scrollbar*)s)->value()));
+  ((fltk3::HelpView *)(s->parent()))->topline(int(((Fl_Scrollbar*)s)->value()));
 }
 
 
@@ -3510,7 +3510,7 @@ scrollbar_callback(fltk3::Widget *s, void *)
 static void
 hscrollbar_callback(fltk3::Widget *s, void *)
 {
-  ((Fl_Help_View *)(s->parent()))->leftline(int(((Fl_Scrollbar*)s)->value()));
+  ((fltk3::HelpView *)(s->parent()))->leftline(int(((Fl_Scrollbar*)s)->value()));
 }
 
 

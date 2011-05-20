@@ -26,16 +26,16 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/Double_Window.h>
-#include <fltk3/Scroll.h>
+#include <fltk3/DoubleWindow.h>
+#include <fltk3/ScrollGroup.h>
 #include <fltk3/Choice.h>
 #include <fltk3/Input.h>
 #include <fltk3/Box.h>
-#include <fltk3/Tile.h>
-#include <fltk3/Hold_Browser.h>
-#include <fltk3/Value_Output.h>
+#include <fltk3/TiledGroup.h>
+#include <fltk3/HoldBrowser.h>
+#include <fltk3/ValueOutput.h>
 #include <fltk3/Button.h>
-#include <fltk3/Check_Button.h>
+#include <fltk3/CheckButton.h>
 #include <fltk3/Output.h>
 #include <fltk3/draw.h>
 #include <fltk3/utf8.h>
@@ -54,14 +54,14 @@
 
 
 static fltk3::DoubleWindow *fnt_chooser_win;
-static Fl_Hold_Browser *fontobj;
-static Fl_Hold_Browser *sizeobj;
+static fltk3::HoldBrowser *fontobj;
+static fltk3::HoldBrowser *sizeobj;
 
 static fltk3::ValueOutput *fnt_cnt;
-static Fl_Button *refresh_btn;
-static Fl_Button *choose_btn;
+static fltk3::Button *refresh_btn;
+static fltk3::Button *choose_btn;
 static fltk3::Output *fix_prop;
-static Fl_Check_Button *own_face;
+static fltk3::CheckButton *own_face;
 
 static int  **sizes = NULL;
 static int  *numsizes = NULL;
@@ -70,12 +70,12 @@ static char label[1000];
 
 static fltk3::DoubleWindow *main_win;
 static fltk3::ScrollGroup *thescroll;
-static Fl_Font extra_font;
+static fltk3::Font extra_font;
 
 static int font_count = 0;
 static int first_free = 0;
 
-static void cb_exit(Fl_Button*, void*) {
+static void cb_exit(fltk3::Button*, void*) {
   if(fnt_chooser_win) fnt_chooser_win->hide();
   if(main_win) main_win->hide();
 } /* cb_exit */
@@ -83,7 +83,7 @@ static void cb_exit(Fl_Button*, void*) {
 /*
  Class for displaying sample fonts.
  */
-class FontDisplay : public Fl_Widget
+class FontDisplay : public fltk3::Widget
 {
   void draw(void);
   
@@ -92,8 +92,8 @@ public:
   
   int test_fixed_pitch(void);
   
-  FontDisplay(Fl_Boxtype B, int X, int Y, int W, int H, const char *L = 0) 
-  : Fl_Widget(X, Y, W, H, L)
+  FontDisplay(fltk3::Boxtype B, int X, int Y, int W, int H, const char *L = 0) 
+  : fltk3::Widget(X, Y, W, H, L)
   {
     box(B);
     font = 0;
@@ -108,9 +108,9 @@ public:
 void FontDisplay::draw(void)
 {
   draw_box();
-  fl_font((Fl_Font)font, size);
-  fl_color(FL_BLACK);
-  fl_draw(label(), x() + 3, y() + 3, w() - 6, h() - 6, align());
+  fltk3::font((fltk3::Font)font, size);
+  fltk3::color(fltk3::BLACK);
+  fltk3::draw(label(), x() + 3, y() + 3, w() - 6, h() - 6, align());
 }
 
 
@@ -122,10 +122,10 @@ int FontDisplay::test_fixed_pitch(void)
   w1 = w2 = 0;
   h1 = h2 = 0;
   
-  fl_font((Fl_Font)font, size);
+  fltk3::font((fltk3::Font)font, size);
   
-  fl_measure("MHMHWWMHMHMHM###WWX__--HUW", w1, h1, 0);
-  fl_measure("iiiiiiiiiiiiiiiiiiiiiiiiii", w2, h2, 0);
+  fltk3::measure("MHMHWWMHMHMHM###WWX__--HUW", w1, h1, 0);
+  fltk3::measure("iiiiiiiiiiiiiiiiiiiiiiiiii", w2, h2, 0);
   
   if (w1 == w2) return 1; // exact match - fixed pitch
   
@@ -142,7 +142,7 @@ int FontDisplay::test_fixed_pitch(void)
 static FontDisplay *textobj;
 
 
-static void size_cb(Fl_Widget *, long)
+static void size_cb(fltk3::Widget *, long)
 {
   int size_idx = sizeobj->value();
   
@@ -159,7 +159,7 @@ static void size_cb(Fl_Widget *, long)
 }
 
 
-static void font_cb(Fl_Widget *, long)
+static void font_cb(fltk3::Widget *, long)
 {
   int font_idx = fontobj->value() + first_free;
   
@@ -226,7 +226,7 @@ static void font_cb(Fl_Widget *, long)
 }
 
 
-static void choose_cb(Fl_Widget *, long)
+static void choose_cb(fltk3::Widget *, long)
 {
   int font_idx = fontobj->value() + first_free;
   if (!font_idx)
@@ -237,12 +237,12 @@ static void choose_cb(Fl_Widget *, long)
   {
     int font_type;
     font_idx -= 1;
-    const char *name = Fl::get_font_name((Fl_Font)font_idx, &font_type);
+    const char *name = fltk3::get_font_name((fltk3::Font)font_idx, &font_type);
     printf("idx %d\nUser name :%s:\n", font_idx, name);
-    printf("FLTK name :%s:\n", Fl::get_font((Fl_Font)font_idx));
+    printf("FLTK name :%s:\n", fltk3::get_font((fltk3::Font)font_idx));
     
-    Fl::set_font(extra_font, (Fl_Font)font_idx);
-    //		Fl::set_font(extra_font, Fl::get_font((Fl_Font)font_idx));
+    fltk3::set_font(extra_font, (fltk3::Font)font_idx);
+    //		fltk3::set_font(extra_font, fltk3::get_font((fltk3::Font)font_idx));
   }
   
   int size_idx = sizeobj->value();
@@ -264,13 +264,13 @@ static void choose_cb(Fl_Widget *, long)
 }
 
 
-static void refresh_cb(Fl_Widget *, long)
+static void refresh_cb(fltk3::Widget *, long)
 {
   main_win->redraw();
 }
 
 
-static void own_face_cb(Fl_Widget *, void *)
+static void own_face_cb(fltk3::Widget *, void *)
 {
   int font_idx;
   int cursor_restore = 0;
@@ -283,7 +283,7 @@ static void own_face_cb(Fl_Widget *, void *)
     fontobj->clear();
     // Populating the font widget can be slower than an old dog with three legs 
     // on a bad day, show a wait cursor
-    fnt_chooser_win->cursor(FL_CURSOR_WAIT);
+    fnt_chooser_win->cursor(fltk3::CURSOR_WAIT);
     cursor_restore = 1;
   }
   
@@ -292,17 +292,17 @@ static void own_face_cb(Fl_Widget *, void *)
   for (font_idx = first_free; font_idx < font_count; font_idx++)
   {
     int font_type;
-    const char *name = Fl::get_font_name((Fl_Font)font_idx, &font_type);
+    const char *name = fltk3::get_font_name((fltk3::Font)font_idx, &font_type);
     char buffer[128];
     
     if(own_face->value() == 0) {
       char *p = buffer;
       // if the font is BOLD, set the bold attribute in the list
-      if (font_type & FL_BOLD) { 
+      if (font_type & fltk3::BOLD) { 
         *p++ = '@';
         *p++ = 'b';
       }
-      if (font_type & FL_ITALIC) { //  ditto for italic fonts
+      if (font_type & fltk3::ITALIC) { //  ditto for italic fonts
         *p++ = '@';
         *p++ = 'i';
       }
@@ -321,7 +321,7 @@ static void own_face_cb(Fl_Widget *, void *)
   // now put the browser position back the way it was... more or less
   fontobj->topline(i_was);
   // restore the cursor
-  if(cursor_restore) fnt_chooser_win->cursor(FL_CURSOR_DEFAULT);
+  if(cursor_restore) fnt_chooser_win->cursor(fltk3::CURSOR_DEFAULT);
 }
 
 
@@ -349,56 +349,56 @@ static void create_font_widget()
   {
     fltk3::TiledGroup *tile = new fltk3::TiledGroup(0, 0, 380, 420);
     {
-      Fl_Group *textgroup = new Fl_Group(0, 0, 380, 105);
+      fltk3::Group *textgroup = new fltk3::Group(0, 0, 380, 105);
       {
         
-        textobj = new FontDisplay(FL_FRAME_BOX, 10, 10, 360, 90, label);
-        textobj->align(FL_ALIGN_TOP|FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
+        textobj = new FontDisplay(fltk3::FRAME_BOX, 10, 10, 360, 90, label);
+        textobj->align(fltk3::ALIGN_TOP|fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE|fltk3::ALIGN_CLIP);
         textobj->color(53, 3);
         
-        textgroup->box(FL_FLAT_BOX);
+        textgroup->box(fltk3::FLAT_BOX);
         textgroup->resizable(textobj);
         textgroup->end();
       }  
-      Fl_Group *fontgroup = new Fl_Group(0, 105, 380, 315);
+      fltk3::Group *fontgroup = new fltk3::Group(0, 105, 380, 315);
       {        
-        fontobj = new Fl_Hold_Browser(10, 110, 290, 270);
-        fontobj->box(FL_FRAME_BOX);
+        fontobj = new fltk3::HoldBrowser(10, 110, 290, 270);
+        fontobj->box(fltk3::FRAME_BOX);
         fontobj->color(53, 3);
         fontobj->callback(font_cb);
         fnt_chooser_win->resizable(fontobj);
         
-        sizeobj = new Fl_Hold_Browser(310, 110, 60, 270);
-        sizeobj->box(FL_FRAME_BOX);
+        sizeobj = new fltk3::HoldBrowser(310, 110, 60, 270);
+        sizeobj->box(fltk3::FRAME_BOX);
         sizeobj->color(53, 3);
         sizeobj->callback(size_cb);
         
         // Create the status bar
-        Fl_Group *stat_bar = new Fl_Group (10, 385, 380, 30);
+        fltk3::Group *stat_bar = new fltk3::Group (10, 385, 380, 30);
         {        
           fnt_cnt = new fltk3::ValueOutput(10, 390, 40, 20);
           fnt_cnt->label("fonts");
-          fnt_cnt->align(FL_ALIGN_RIGHT);
+          fnt_cnt->align(fltk3::ALIGN_RIGHT);
         
           fix_prop = new fltk3::Output(100, 390, 40, 20);
-          fix_prop->color(FL_BACKGROUND_COLOR);
+          fix_prop->color(fltk3::BACKGROUND_COLOR);
           fix_prop->value("prop");
           fix_prop->clear_visible_focus();
         
-          own_face = new Fl_Check_Button(150, 390, 40, 20, "Self");
+          own_face = new fltk3::CheckButton(150, 390, 40, 20, "Self");
           own_face->value(0);
-          own_face->type(FL_TOGGLE_BUTTON);
+          own_face->type(fltk3::TOGGLE_BUTTON);
           own_face->clear_visible_focus();
           own_face->callback(own_face_cb);
           own_face->tooltip("Display font names in their own face");
         
-          Fl_Box * dummy = new Fl_Box(220, 390, 1, 1);
+          fltk3::Box * dummy = new fltk3::Box(220, 390, 1, 1);
         
-          choose_btn = new Fl_Button(240, 385, 60, 30);
+          choose_btn = new fltk3::Button(240, 385, 60, 30);
           choose_btn->label("Select");
           choose_btn->callback(choose_cb);
         
-          refresh_btn = new Fl_Button(310, 385, 60, 30);
+          refresh_btn = new fltk3::Button(310, 385, 60, 30);
           refresh_btn->label("Refresh");
           refresh_btn->callback(refresh_cb);
         
@@ -406,7 +406,7 @@ static void create_font_widget()
           stat_bar->end();
         }
         
-        fontgroup->box(FL_FLAT_BOX);
+        fontgroup->box(fltk3::FLAT_BOX);
         fontgroup->resizable(fontobj);
         fontgroup->end();
       }
@@ -414,7 +414,7 @@ static void create_font_widget()
     }
     fnt_chooser_win->resizable(tile);
     fnt_chooser_win->end();
-	fnt_chooser_win->callback((Fl_Callback*)cb_exit);
+	fnt_chooser_win->callback((fltk3::Callback*)cb_exit);
   }
 }
 
@@ -427,15 +427,15 @@ int make_font_chooser(void)
   create_font_widget();
   
   // Load the systems available fonts - ask for everything
-  //	font_count = Fl::set_fonts("*");
+  //	font_count = fltk3::set_fonts("*");
 #ifdef WIN32
-  font_count = Fl::set_fonts("*");
+  font_count = fltk3::set_fonts("*");
 #elif __APPLE__
-  font_count = Fl::set_fonts("*");
+  font_count = fltk3::set_fonts("*");
 #else
   // Load the systems available fonts - ask for everything that claims to be 
   // iso10646 compatible
-  font_count = Fl::set_fonts("-*-*-*-*-*-*-*-*-*-*-*-*-iso10646-1");
+  font_count = fltk3::set_fonts("-*-*-*-*-*-*-*-*-*-*-*-*-iso10646-1");
 #endif
   
   // allocate space for the sizes and numsizes array, now we know how many 
@@ -444,12 +444,12 @@ int make_font_chooser(void)
   numsizes = new int[font_count];
   
   // Populate the font list with the names of the fonts found
-  first_free = FL_FREE_FONT;
+  first_free = fltk3::FREE_FONT;
   for (font_idx = first_free; font_idx < font_count; font_idx++)
   {
     // Find out how many sizes are supported for each font face
     int *size_array;
-    int size_count = Fl::get_font_sizes((Fl_Font)font_idx, size_array);
+    int size_count = fltk3::get_font_sizes((fltk3::Font)font_idx, size_array);
     numsizes[font_idx-first_free] = size_count;
     // if the font has multiple sizes, populate the 2-D sizes array
     if (size_count)
@@ -481,8 +481,8 @@ int make_font_chooser(void)
 
 /* Unicode Font display widget */
 
-void box_cb(Fl_Widget* o, void*) {
-  thescroll->box(((Fl_Button*)o)->value() ? FL_DOWN_FRAME : FL_NO_BOX);
+void box_cb(fltk3::Widget* o, void*) {
+  thescroll->box(((fltk3::Button*)o)->value() ? fltk3::DOWN_FRAME : fltk3::NO_BOX);
   thescroll->redraw();
 }
 
@@ -492,22 +492,22 @@ class right_left_input : public fltk3::Input
 public:
   right_left_input (int x, int y, int w, int h) : fltk3::Input(x, y, w, h) {};
   void draw() {
-    if (type() == FL_HIDDEN_INPUT) return;
-    Fl_Boxtype b = box();
-    if (damage() & FL_DAMAGE_ALL) draw_box(b, color());
-    drawtext(x()+Fl::box_dx(b)+3, y()+Fl::box_dy(b),
-             w()-Fl::box_dw(b)-6, h()-Fl::box_dh(b));
+    if (type() == fltk3::HIDDEN_INPUT) return;
+    fltk3::Boxtype b = box();
+    if (damage() & fltk3::DAMAGE_ALL) draw_box(b, color());
+    drawtext(x()+fltk3::box_dx(b)+3, y()+fltk3::box_dy(b),
+             w()-fltk3::box_dw(b)-6, h()-fltk3::box_dh(b));
   }
   void drawtext(int X, int Y, int W, int H) {
-    fl_color(textcolor());
-    fl_font(textfont(), textsize());
-    fl_rtl_draw(value(), strlen(value()),
-                X + W, Y + fl_height() -fl_descent());
+    fltk3::color(textcolor());
+    fltk3::font(textfont(), textsize());
+    fltk3::rtl_draw(value(), strlen(value()),
+                X + W, Y + fltk3::height() -fltk3::descent());
   }
 };
 
 
-void i7_cb(Fl_Widget *w, void *d)
+void i7_cb(fltk3::Widget *w, void *d)
 {
   int i = 0;
   char nb[] = "01234567";
@@ -538,15 +538,15 @@ public:
   fltk3::Output(x, y, w, h, label) { }
   int handle(int event) {
     switch (event) {
-      case FL_DND_ENTER: return 1;
-      case FL_DND_DRAG: return 1;
-      case FL_DND_RELEASE: return 1;
-      case FL_PASTE:
+      case fltk3::DND_ENTER: return 1;
+      case fltk3::DND_DRAG: return 1;
+      case fltk3::DND_RELEASE: return 1;
+      case fltk3::PASTE:
       {
         static const char lut[] = "0123456789abcdef";
-        const char *t = Fl::event_text();
+        const char *t = fltk3::event_text();
         int i, n;
-        unsigned int ucode = fl_utf8decode(t, t+Fl::event_length(), &n);
+        unsigned int ucode = fl_utf8decode(t, t+fltk3::event_length(), &n);
         if (n==0) {
           value("");
           return 1;
@@ -581,14 +581,14 @@ int main(int argc, char** argv)
   "\x41\x42\x43\x61\x62\x63\xe0\xe8\xe9\xef\xe2\xee\xf6\xfc\xe3\x31\x32\x33";
   char *utf8 = (char*) malloc(strlen(latin1) * 5 + 1);
   l = 0;
-  //	l = fl_latin12utf((const unsigned char*)latin1, strlen(latin1), utf8);
+  //	l = fltk3::latin12utf((const unsigned char*)latin1, strlen(latin1), utf8);
   l = fl_utf8froma(utf8, (strlen(latin1) * 5 + 1), latin1, strlen(latin1));
   
   make_font_chooser();
-  extra_font = FL_TIMES_BOLD_ITALIC;
+  extra_font = fltk3::TIMES_BOLD_ITALIC;
   
   /* setup the extra font */
-  Fl::set_font(extra_font,
+  fltk3::set_font(extra_font,
 #ifdef WIN32
                " Arial Unicode MS"
 #elif __APPLE__
@@ -630,7 +630,7 @@ int main(int argc, char** argv)
     buf[o] = '\0';
     sprintf(bu, "0x%06lX", y * 16);
     fltk3::Input *b = new fltk3::Input(200,(y-off)*25,80,25);
-    b->textfont(FL_COURIER);
+    b->textfont(fltk3::COURIER);
     b->value(strdup(bu));
     b = new fltk3::Input(280,(y-off)*25,380,25);
     b->textfont(extra_font);
@@ -662,7 +662,7 @@ int main(int argc, char** argv)
     1610, 1608, 1606, 1604, 1603, 1608, 1583, 0};
   
   char abuf[40];
-  //  l = fl_unicode2utf(r_to_l_txt, 8, abuf);
+  //  l = fltk3::unicode2utf(r_to_l_txt, 8, abuf);
   l = fl_utf8fromwc(abuf, 40, r_to_l_txt, 8);
   abuf[l] = 0;
   
@@ -676,13 +676,13 @@ int main(int argc, char** argv)
   i7.callback(i7_cb, &i8);
   i7.textsize(20);
   i7.value(abuf);
-  i7.when(FL_WHEN_CHANGED);
+  i7.when(fltk3::WHEN_CHANGED);
   
   wchar_t r_to_l_txt1[] = { /*8238,*/ 
     1610, 0x20, 1608, 0x20, 1606, 0x20,  
     1604, 0x20, 1603, 0x20, 1608, 0x20, 1583, 0};
   
-  //  l = fl_unicode2utf(r_to_l_txt1, 14, abuf);
+  //  l = fltk3::unicode2utf(r_to_l_txt1, 14, abuf);
   l = fl_utf8fromwc(abuf, 40, r_to_l_txt1, 14);
   abuf[l] = 0;
   right_left_input i6(5, 175, 190, 50);
@@ -706,9 +706,9 @@ int main(int argc, char** argv)
   o9.value(utfstr);
   
   main_win->end();
-  main_win->callback((Fl_Callback*)cb_exit);
+  main_win->callback((fltk3::Callback*)cb_exit);
 
-  fl_set_status(0, 370, 100, 30);
+  fltk3::set_status(0, 370, 100, 30);
   
   main_win->show(argc,argv);
 

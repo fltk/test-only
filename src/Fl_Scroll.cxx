@@ -77,10 +77,10 @@ void fltk3::ScrollGroup::draw_clip(void* v,int X, int Y, int W, int H) {
     case fltk3::PLASTIC_UP_FRAME :
     case fltk3::PLASTIC_DOWN_FRAME :
         if (s->parent() == (fltk3::Group *)s->window() && fltk3::scheme_bg_) {
-	  fltk3::scheme_bg_->draw(X-(X%((Fl_Tiled_Image *)fltk3::scheme_bg_)->image()->w()),
-	                       Y-(Y%((Fl_Tiled_Image *)fltk3::scheme_bg_)->image()->h()),
-	                       W+((Fl_Tiled_Image *)fltk3::scheme_bg_)->image()->w(),
-			       H+((Fl_Tiled_Image *)fltk3::scheme_bg_)->image()->h());
+	  fltk3::scheme_bg_->draw(X-(X%((fltk3::TiledImage *)fltk3::scheme_bg_)->image()->w()),
+	                       Y-(Y%((fltk3::TiledImage *)fltk3::scheme_bg_)->image()->h()),
+	                       W+((fltk3::TiledImage *)fltk3::scheme_bg_)->image()->w(),
+			       H+((fltk3::TiledImage *)fltk3::scheme_bg_)->image()->h());
 	  break;
         }
 

@@ -38,7 +38,7 @@ extern void redraw_browser();
 extern int show_comments;
 extern int show_coredevmenus;
 extern struct fltk3::MenuItem *dbmanager_item;
-extern Fl_Preferences fluid_prefs;
+extern fltk3::Preferences fluid_prefs;
 extern fltk3::TextBuffer *shell_run_buffer; 
 #include <fltk3/DoubleWindow.h>
 #include <fltk3/Preferences.h>

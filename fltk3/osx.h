@@ -165,7 +165,10 @@ extern FLTK3_EXPORT Window fl_window;
 #endif // FL_LIBRARY || FL_INTERNALS
 
 extern FLTK3_EXPORT Fl_CGContextRef fl_gc;
-extern FLTK3_EXPORT class Fl_Sys_Menu_Bar *fl_sys_menu_bar;
+
+namespace fltk3 {
+  extern FLTK3_EXPORT class SysMenuBar *sys_menu_bar;
+}
 
 extern Window fl_xid(const fltk3::Window*);
 

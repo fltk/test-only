@@ -185,8 +185,8 @@ int main(int argc, char **argv) {
     { 0 },
     { 0 }
   };
-  Fl_Sys_Menu_Bar *menubar_;
-  menubar_ = new Fl_Sys_Menu_Bar(0, 0, 60, 20);
+  fltk3::SysMenuBar *menubar_;
+  menubar_ = new fltk3::SysMenuBar(0, 0, 60, 20);
   menubar_->box(FL_FLAT_BOX);
   menubar_->menu(items);
   form->end();

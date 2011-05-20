@@ -102,7 +102,7 @@ void fltk3::HelpDialog::cb_find_(fltk3::Input* o, void* v) {
   ((fltk3::HelpDialog*)(o->parent()->parent()->parent()->user_data()))->cb_find__i(o,v);
 }
 
-void fltk3::HelpDialog::cb_view__i(Fl_Help_View*, void*) {
+void fltk3::HelpDialog::cb_view__i(fltk3::HelpView*, void*) {
   if (view_->filename())
 {
   if (view_->changed())
@@ -142,7 +142,7 @@ void fltk3::HelpDialog::cb_view__i(Fl_Help_View*, void*) {
   forward_->deactivate();
 };
 }
-void fltk3::HelpDialog::cb_view_(Fl_Help_View* o, void* v) {
+void fltk3::HelpDialog::cb_view_(fltk3::HelpView* o, void* v) {
   ((fltk3::HelpDialog*)(o->parent()->user_data()))->cb_view__i(o,v);
 }
 
@@ -192,11 +192,11 @@ fltk3::HelpDialog::HelpDialog() {
       } // fltk3::Box* o
       o->end();
     } // fltk3::Group* o
-    { view_ = new Fl_Help_View(10, 45, 510, 330);
+    { view_ = new fltk3::HelpView(10, 45, 510, 330);
       view_->box(fltk3::DOWN_BOX);
       view_->callback((fltk3::Callback*)cb_view_);
       fltk3::Group::current()->resizable(view_);
-    } // Fl_Help_View* view_
+    } // fltk3::HelpView* view_
     window_->size_range(260, 150);
     window_->end();
   } // fltk3::DoubleWindow* window_

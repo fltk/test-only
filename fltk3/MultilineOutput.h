@@ -46,7 +46,7 @@ namespace fltk3 {
    If you are presenting large amounts of read-only text 
    and need scrollbars, or full color control of characters,
    then use fltk3::TextDisplay. If you want to display HTML text,
-   use Fl_Help_View.
+   use fltk3::HelpView.
    */
   class FLTK3_EXPORT MultilineOutput : public fltk3::Output {
   public:

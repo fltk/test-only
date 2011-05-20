@@ -377,7 +377,7 @@
 // File chooser label strings and sort function...
 //
 
-Fl_Preferences	fltk3::FileChooser::prefs_(Fl_Preferences::USER, "fltk.org", "filechooser");
+fltk3::Preferences	fltk3::FileChooser::prefs_(fltk3::Preferences::USER, "fltk.org", "filechooser");
 
 const char	*fltk3::FileChooser::add_favorites_label = "Add to Favorites";
 const char	*fltk3::FileChooser::all_files_label = "All Files (*)";

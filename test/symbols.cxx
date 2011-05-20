@@ -30,9 +30,9 @@
 #include <string.h>
 #include <ctype.h>
 #include <fltk3/run.h>
-#include <fltk3/Double_Window.h>
+#include <fltk3/DoubleWindow.h>
 #include <fltk3/Box.h>
-#include <fltk3/Value_Slider.h>
+#include <fltk3/ValueSlider.h>
 #include <fltk3/draw.h>
 
 int N = 0;
@@ -42,19 +42,19 @@ int N = 0;
 #define COLS 6
 
 fltk3::DoubleWindow *window;
-Fl_Value_Slider *orientation;
-Fl_Value_Slider *size;
+fltk3::ValueSlider *orientation;
+fltk3::ValueSlider *size;
 
-void slider_cb(Fl_Widget *, void *) {
+void slider_cb(fltk3::Widget *, void *) {
   static char buf[80];
   int val = (int)orientation->value();
   int sze = (int)size->value();
   for (int i = window->children(); i--; ) {          // all window children
-    Fl_Widget *wc = window->child(i);
+    fltk3::Widget *wc = window->child(i);
     const char *l = (const char *)(wc->user_data());
     if ( l && *l == '@' ) {                       // all children with '@'
       l ++;
-      if ( wc->box() == FL_NO_BOX ) {             // ascii legend?
+      if ( wc->box() == fltk3::NO_BOX ) {             // ascii legend?
         if (val&&sze) sprintf(buf, "@@%+d%d%s", sze, val, l);
         else if (val) sprintf(buf, "@@%d%s", val, l);
         else if (sze) sprintf(buf, "@@%+d%s", sze, l);
@@ -79,16 +79,16 @@ void bt(const char *name) {
   x = x*W+10;
   y = y*H+10;
   sprintf(buf, "@%s", name);
-  Fl_Box *a = new Fl_Box(x,y,W-20,H-20);
-  a->box(FL_NO_BOX);
+  fltk3::Box *a = new fltk3::Box(x,y,W-20,H-20);
+  a->box(fltk3::NO_BOX);
   a->copy_label(buf);
-  a->align(FL_ALIGN_BOTTOM);
+  a->align(fltk3::ALIGN_BOTTOM);
   a->labelsize(11);
   a->user_data((void *)name);
-  Fl_Box *b = new Fl_Box(x,y,W-20,H-20);
-  b->box(FL_UP_BOX);
+  fltk3::Box *b = new fltk3::Box(x,y,W-20,H-20);
+  b->box(fltk3::UP_BOX);
   b->copy_label(name);
-  b->labelcolor(FL_DARK3);
+  b->labelcolor(fltk3::DARK3);
   b->user_data((void *)name);
 }
 
@@ -131,7 +131,7 @@ bt("@reload");
 bt("@undo");
 bt("@redo");
 
-  orientation = new Fl_Value_Slider(
+  orientation = new fltk3::ValueSlider(
     (int)(window->w()*.05+.5), window->h()-40,
     (int)(window->w()*.42+.5), 16, "Orientation");
   orientation->type(fltk3::HORIZONTAL);
@@ -140,7 +140,7 @@ bt("@redo");
   orientation->step(1);
   orientation->callback(slider_cb, 0);
 
-  size = new Fl_Value_Slider(
+  size = new fltk3::ValueSlider(
     (int)(window->w()*.53+.5), window->h()-40,
     (int)(window->w()*.42+.5), 16, "Size");
   size->type(fltk3::HORIZONTAL);

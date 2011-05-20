@@ -112,7 +112,7 @@
  
  CORE DEVELOPERS
  
- - Greg Ercolano : 12/16/2002 - initial implementation 12/16/02. Fl_Table, Fl_Table_Row, docs.
+ - Greg Ercolano : 12/16/2002 - initial implementation 12/16/02. Fl_Table, fltk3::TableRow, docs.
  - Jean-Marc Lienher : 02/22/2004 - added keyboard nav + mouse selection, and ported Fl_Table into fltk-utf8-1.1.4
  
  OTHER CONTRIBUTORS
@@ -125,7 +125,7 @@
  LICENSE
  
  Greg added the following license to the original distribution of Fl_Table. He 
- kindly gave his permission to integrate Fl_Table and Fl_Table_Row into FLTK,
+ kindly gave his permission to integrate Fl_Table and fltk3::TableRow into FLTK,
  allowing FLTK license to apply while his widgets are part of the library.
  
  If used on its own, this is the license that applies:

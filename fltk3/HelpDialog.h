@@ -67,9 +67,9 @@ private:
   fltk3::Input *find_;
   void cb_find__i(fltk3::Input*, void*);
   static void cb_find_(fltk3::Input*, void*);
-  Fl_Help_View *view_;
-  void cb_view__i(Fl_Help_View*, void*);
-  static void cb_view_(Fl_Help_View*, void*);
+  fltk3::HelpView *view_;
+  void cb_view__i(fltk3::HelpView*, void*);
+  static void cb_view_(fltk3::HelpView*, void*);
 public:
   ~HelpDialog();
   int h();

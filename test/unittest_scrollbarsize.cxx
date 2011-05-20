@@ -28,19 +28,19 @@
 #include <fltk3/Group.h>
 #include <fltk3/Browser.h>
 #include <fltk3/Tree.h>
-#include <fltk3/Value_Slider.h>
+#include <fltk3/ValueSlider.h>
 
 //
 // Test new 1.3.x global vs. local scrollbar sizing
 //
-class ScrollBarSizeTest : public Fl_Group {
-    Fl_Browser *brow_a, *brow_b, *brow_c;
-    Fl_Tree    *tree_a, *tree_b, *tree_c;
+class ScrollBarSizeTest : public fltk3::Group {
+    fltk3::Browser *brow_a, *brow_b, *brow_c;
+    fltk3::Tree    *tree_a, *tree_b, *tree_c;
 
-    Fl_Browser *makebrowser(int X,int Y,int W,int H,const char*L=0) {
-	Fl_Browser *b = new Fl_Browser(X,Y,W,H,L);
+    fltk3::Browser *makebrowser(int X,int Y,int W,int H,const char*L=0) {
+	fltk3::Browser *b = new fltk3::Browser(X,Y,W,H,L);
 	b->type(fltk3::MULTI_BROWSER);
-	b->align(FL_ALIGN_TOP);
+	b->align(fltk3::ALIGN_TOP);
 	b->add("Papa");     b->add("Delta"); b->add("Hotel");
         b->add("Long entry will show h-bar");
 	b->add("Charlie");  b->add("Echo");  b->add("Foxtrot");
@@ -62,10 +62,10 @@ class ScrollBarSizeTest : public Fl_Group {
 	b->add("Whisky");   b->add("Zulu");
 	return(b);
     }
-    Fl_Tree *maketree(int X,int Y,int W,int H,const char*L=0) {
-	Fl_Tree *b = new Fl_Tree(X,Y,W,H,L);
-	b->type(FL_TREE_SELECT_MULTI);
-	b->align(FL_ALIGN_TOP);
+    fltk3::Tree *maketree(int X,int Y,int W,int H,const char*L=0) {
+	fltk3::Tree *b = new fltk3::Tree(X,Y,W,H,L);
+	b->type(fltk3::TREE_SELECT_MULTI);
+	b->align(fltk3::ALIGN_TOP);
 	b->add("Papa");     b->add("Delta"); b->add("Hotel");
         b->add("Long entry will show h-bar");
 	b->add("Charlie");  b->add("Echo");  b->add("Foxtrot");
@@ -78,7 +78,7 @@ class ScrollBarSizeTest : public Fl_Group {
 	b->add("Whisky");   b->add("Zulu");
 	return(b);
     }
-    void slide_cb2(Fl_Value_Slider *in) {
+    void slide_cb2(fltk3::ValueSlider *in) {
 	const char *label = in->label();
 	int val = int(in->value());
 	//fprintf(stderr, "VAL='%d'\n",val);
@@ -86,21 +86,21 @@ class ScrollBarSizeTest : public Fl_Group {
 	    brow_a->scrollbar_size(val);
 	    tree_a->scrollbar_size(val);
 	} else {
-	    Fl::scrollbar_size(val);
+	    fltk3::scrollbar_size(val);
 	}
 	in->window()->redraw();
     }
-    static void slide_cb(Fl_Widget *w, void *data) {
+    static void slide_cb(fltk3::Widget *w, void *data) {
         ScrollBarSizeTest *o = (ScrollBarSizeTest*)data;
-	o->slide_cb2((Fl_Value_Slider*)w);
+	o->slide_cb2((fltk3::ValueSlider*)w);
     }
 public: 
-    static Fl_Widget *create() {
+    static fltk3::Widget *create() {
       return(new ScrollBarSizeTest(TESTAREA_X, TESTAREA_Y, TESTAREA_W, TESTAREA_H));
     }
 
     // CTOR
-    ScrollBarSizeTest(int X, int Y, int W, int H) : Fl_Group(X,Y,W,H) {
+    ScrollBarSizeTest(int X, int Y, int W, int H) : fltk3::Group(X,Y,W,H) {
       begin();
         //      _____________    _______________
         //     |_____________|  |_______________|
@@ -131,18 +131,18 @@ public:
         tree_a = maketree(X+ 10,treey,100,treeh,"Tree A");
         tree_b = maketree(X+120,treey,100,treeh,"Tree B");
         tree_c = maketree(X+240,treey,100,treeh,"Tree C");
-        Fl_Value_Slider *slide_glob = new Fl_Value_Slider(X+100,Y,100,18,"Global Scroll Size");
+        fltk3::ValueSlider *slide_glob = new fltk3::ValueSlider(X+100,Y,100,18,"Global Scroll Size");
         slide_glob->value(16);
         slide_glob->type(fltk3::HORIZONTAL);
-        slide_glob->align(FL_ALIGN_LEFT);
+        slide_glob->align(fltk3::ALIGN_LEFT);
         slide_glob->range(0.0, 30.0);
         slide_glob->step(1.0);
         slide_glob->callback(slide_cb, (void*)this);
         slide_glob->labelsize(12);
-        Fl_Value_Slider *slide_browa = new Fl_Value_Slider(X+350,Y,100,18,"A: Scroll Size");
+        fltk3::ValueSlider *slide_browa = new fltk3::ValueSlider(X+350,Y,100,18,"A: Scroll Size");
         slide_browa->value(16);
         slide_browa->type(fltk3::HORIZONTAL);
-        slide_browa->align(FL_ALIGN_LEFT);
+        slide_browa->align(fltk3::ALIGN_LEFT);
         slide_browa->range(0.0, 30.0);
         slide_browa->step(1.0);
         slide_browa->callback(slide_cb, (void*)this);
@@ -154,7 +154,7 @@ public:
 	    "the 'A: Scroll Size' slider is changed, in which case its value will take precedence\n"
 	    "for 'Browser A', and the global size will only affect Browser B and C.");
       labelsize(12);
-      align(FL_ALIGN_INSIDE|FL_ALIGN_BOTTOM|FL_ALIGN_LEFT|FL_ALIGN_WRAP);
+      align(fltk3::ALIGN_INSIDE|fltk3::ALIGN_BOTTOM|fltk3::ALIGN_LEFT|fltk3::ALIGN_WRAP);
     }
 };
 

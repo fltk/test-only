@@ -26,42 +26,45 @@
 //
 
 /* \file
-   Fl_Tiled_Image widget . */
+ fltk3::TiledImage widget . */
 
 #ifndef Fltk3_Tiled_Image_H
 #  define Fltk3_Tiled_Image_H
 
 #  include "Image.h"
 
-
-/**
-  This class supports tiling of images
-  over a specified area. The source (tile) image is <B>not</B>
-  copied unless you call the color_average(),
-  desaturate(),
-  or inactive()
-  methods.
-*/
-class FLTK3_EXPORT Fl_Tiled_Image : public fltk3::Image {
+namespace fltk3 {
+  
+  /**
+   This class supports tiling of images
+   over a specified area. The source (tile) image is <B>not</B>
+   copied unless you call the color_average(),
+   desaturate(),
+   or inactive()
+   methods.
+   */
+  class FLTK3_EXPORT TiledImage : public fltk3::Image {
   protected:
-
-  fltk3::Image	*image_;		// The image that is shared
-  int		alloc_image_;		// Did we allocate this image?
-
+    
+    fltk3::Image	*image_;		// The image that is shared
+    int		alloc_image_;		// Did we allocate this image?
+    
   public:
-
-  Fl_Tiled_Image(fltk3::Image *i, int W = 0, int H = 0);
-  virtual ~Fl_Tiled_Image();
-
-  virtual fltk3::Image *copy(int W, int H);
-  fltk3::Image *copy() { return copy(w(), h()); }
-  virtual void color_average(fltk3::Color c, float i);
-  virtual void desaturate();
-  virtual void draw(int X, int Y, int W, int H, int cx, int cy);
-  void draw(int X, int Y) { draw(X, Y, w(), h(), 0, 0); }
-  /** Gets The image that is shared */ 
-  fltk3::Image *image() { return image_; }
-};
+    
+    TiledImage(fltk3::Image *i, int W = 0, int H = 0);
+    virtual ~TiledImage();
+    
+    virtual fltk3::Image *copy(int W, int H);
+    fltk3::Image *copy() { return copy(w(), h()); }
+    virtual void color_average(fltk3::Color c, float i);
+    virtual void desaturate();
+    virtual void draw(int X, int Y, int W, int H, int cx, int cy);
+    void draw(int X, int Y) { draw(X, Y, w(), h(), 0, 0); }
+    /** Gets The image that is shared */ 
+    fltk3::Image *image() { return image_; }
+  };
+  
+}
 
 #endif // !Fl_Tiled_Image_H
 

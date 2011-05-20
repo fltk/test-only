@@ -10,10 +10,10 @@
 #include <fltk3/TreeItem.h>
 
 //////////////////////
-// Fl_Tree_Item_Array.cxx
+// fltk3::TreeItemArray.cxx
 //////////////////////
 //
-// Fl_Tree -- This file is part of the Fl_Tree widget for FLTK
+// fltk3::Tree -- This file is part of the fltk3::Tree widget for FLTK
 // Copyright (C) 2009-2010 by Greg Ercolano.
 //
 // This library is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@
 ///     The optional 'chunksize' can be specified to optimize
 ///     memory allocation for potentially large arrays. Default chunksize is 10.
 /// 
-Fl_Tree_Item_Array::Fl_Tree_Item_Array(int new_chunksize) {
+fltk3::TreeItemArray::TreeItemArray(int new_chunksize) {
   _items     = 0;
   _total     = 0;
   _size      = 0;
@@ -45,18 +45,18 @@ Fl_Tree_Item_Array::Fl_Tree_Item_Array(int new_chunksize) {
 }
 
 /// Destructor. Calls each item's destructor, destroys internal _items array.
-Fl_Tree_Item_Array::~Fl_Tree_Item_Array() {
+fltk3::TreeItemArray::~TreeItemArray() {
   clear();
 }
 
 /// Copy constructor. Makes new copy of array, with new instances of each item.
-Fl_Tree_Item_Array::Fl_Tree_Item_Array(const Fl_Tree_Item_Array* o) {
-  _items = (Fl_Tree_Item**)malloc(o->_size * sizeof(Fl_Tree_Item*));
+fltk3::TreeItemArray::TreeItemArray(const fltk3::TreeItemArray* o) {
+  _items = (fltk3::TreeItem**)malloc(o->_size * sizeof(fltk3::TreeItem*));
   _total     = o->_total;
   _size      = o->_size;
   _chunksize = o->_chunksize;
   for ( int t=0; t<o->_total; t++ ) {
-    _items[t] = new Fl_Tree_Item(o->_items[t]);
+    _items[t] = new fltk3::TreeItem(o->_items[t]);
   }
 }
 
@@ -65,7 +65,7 @@ Fl_Tree_Item_Array::Fl_Tree_Item_Array(const Fl_Tree_Item_Array* o) {
 ///     Each item will be deleted (destructors will be called),
 ///     and the array will be cleared. total() will return 0.
 ///
-void Fl_Tree_Item_Array::clear() {
+void fltk3::TreeItemArray::clear() {
   if ( _items ) {
     for ( int t=0; t<_total; t++ ) {
       delete _items[t];
@@ -81,15 +81,15 @@ void Fl_Tree_Item_Array::clear() {
 //    Adjusts size/items memory allocation as needed.
 //    Does NOT change total.
 //
-void Fl_Tree_Item_Array::enlarge(int count) {
+void fltk3::TreeItemArray::enlarge(int count) {
   int newtotal = _total + count;	// new total
   if ( newtotal >= _size ) {		// more than we have allocated?
     // Increase size of array
     int newsize = _size + _chunksize;
-    Fl_Tree_Item **newitems = (Fl_Tree_Item**)malloc(newsize * sizeof(Fl_Tree_Item*));
+    fltk3::TreeItem **newitems = (fltk3::TreeItem**)malloc(newsize * sizeof(fltk3::TreeItem*));
     if ( _items ) { 
       // Copy old array -> new, delete old
-      memmove(newitems, _items, _size * sizeof(Fl_Tree_Item*));
+      memmove(newitems, _items, _size * sizeof(fltk3::TreeItem*));
       free((void*)_items); _items = 0;
     }
     // Adjust items/sizeitems
@@ -103,12 +103,12 @@ void Fl_Tree_Item_Array::enlarge(int count) {
 ///     Handles enlarging array if needed, total increased by 1.
 ///     If \p pos == total(), an empty item is appended to the array.
 ///
-void Fl_Tree_Item_Array::insert(int pos, Fl_Tree_Item *new_item) {
+void fltk3::TreeItemArray::insert(int pos, fltk3::TreeItem *new_item) {
   enlarge(1);
   // printf("*** POS=%d TOTAL-1=%d NITEMS=%d\n", pos, _total-1, (_total-pos));
   if ( pos <= (_total - 1) ) {	// need to move memory around?
     int nitems = _total - pos;
-    memmove(&_items[pos+1], &_items[pos], sizeof(Fl_Tree_Item*) * nitems);
+    memmove(&_items[pos+1], &_items[pos], sizeof(fltk3::TreeItem*) * nitems);
   } 
   _items[pos] = new_item;
   _total++;
@@ -117,10 +117,10 @@ void Fl_Tree_Item_Array::insert(int pos, Fl_Tree_Item *new_item) {
 /// Add an item* to the end of the array.
 ///
 ///     Assumes the item was created with 'new', and will remain
-///     allocated.. Fl_Tree_Item_Array will handle calling the
+///     allocated.. fltk3::TreeItemArray will handle calling the
 ///     item's destructor when the array is cleared or the item remove()'ed.
 ///
-void Fl_Tree_Item_Array::add(Fl_Tree_Item *val) {
+void fltk3::TreeItemArray::add(fltk3::TreeItem *val) {
   insert(_total, val);
 }
 
@@ -128,7 +128,7 @@ void Fl_Tree_Item_Array::add(Fl_Tree_Item *val) {
 ///
 ///     The item will be delete'd (if non-NULL), so its destructor will be called.
 ///
-void Fl_Tree_Item_Array::remove(int index) {
+void fltk3::TreeItemArray::remove(int index) {
   if ( _items[index] ) {		// delete if non-zero
     delete _items[index];
   }
@@ -142,7 +142,7 @@ void Fl_Tree_Item_Array::remove(int index) {
 ///
 ///     \returns 0 if removed, or -1 if the item was not in the array.
 ///
-int Fl_Tree_Item_Array::remove(Fl_Tree_Item *item) {
+int fltk3::TreeItemArray::remove(fltk3::TreeItem *item) {
   for ( int t=0; t<_total; t++ ) {
     if ( item == _items[t] ) {
       remove(t);

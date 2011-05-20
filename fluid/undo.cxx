@@ -45,7 +45,7 @@
 #endif // WIN32 && !__CYGWIN__
 
 
-extern Fl_Preferences	fluid_prefs;	// FLUID preferences
+extern fltk3::Preferences	fluid_prefs;	// FLUID preferences
 extern fltk3::MenuItem	Main_Menu[];	// Main menu
 
 #define UNDO_ITEM	25		// Undo menu item index

@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_Table_Row -- A row oriented table widget
+// fltk3::TableRow -- A row oriented table widget
 //
 //    A class specializing in a table of rows.
 //    Handles row-specific selection behavior.
@@ -36,13 +36,13 @@
 #include <fltk3/TableRow.h>
 
 // Is row selected?
-int Fl_Table_Row::row_selected(int row) {
+int fltk3::TableRow::row_selected(int row) {
   if ( row < 0 || row >= rows() ) return(-1);
   return(_rowselect[row]);
 }
 
 // Change row selection type
-void Fl_Table_Row::type(TableRowSelectMode val) {
+void fltk3::TableRow::type(TableRowSelectMode val) {
   _selectmode = val;
   switch ( _selectmode ) {
     case SELECT_NONE: {
@@ -81,7 +81,7 @@ void Fl_Table_Row::type(TableRowSelectMode val) {
 //        1 - selection state changed
 //       -1 - row out of range or incorrect selection mode
 //
-int Fl_Table_Row::select_row(int row, int flag) {
+int fltk3::TableRow::select_row(int row, int flag) {
   int ret = 0;
   if ( row < 0 || row >= rows() ) { return(-1); }
   switch ( _selectmode ) {
@@ -125,7 +125,7 @@ int Fl_Table_Row::select_row(int row, int flag) {
 }
 
 // Select all rows to a known state
-void Fl_Table_Row::select_all_rows(int flag) {
+void fltk3::TableRow::select_all_rows(int flag) {
   switch ( _selectmode ) {
     case SELECT_NONE:
       return;
@@ -155,7 +155,7 @@ void Fl_Table_Row::select_all_rows(int flag) {
 }
 
 // Set number of rows
-void Fl_Table_Row::rows(int val) {
+void fltk3::TableRow::rows(int val) {
   Fl_Table::rows(val);
   while ( val > (int)_rowselect.size() ) { _rowselect.push_back(0); }	// enlarge
   while ( val < (int)_rowselect.size() ) { _rowselect.pop_back(); }	// shrink
@@ -165,7 +165,7 @@ void Fl_Table_Row::rows(int val) {
 // #include <stdio.h>
 
 // Handle events
-int Fl_Table_Row::handle(int event) {
+int fltk3::TableRow::handle(int event) {
   
   //  fprintf(stderr, "** EVENT: %s: EVENT XY=%d,%d\n", 
   //      eventnames[event], fltk3::event_x(), fltk3::event_y());	// debugging

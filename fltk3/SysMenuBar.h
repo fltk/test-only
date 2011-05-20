@@ -31,47 +31,51 @@
 #include "MenuBar.h"
 #include "x.h"
 
+namespace fltk3 {
+  
 #if defined(__APPLE__) || defined(FL_DOXYGEN)
-
-/**
- @brief A class to create, modify and delete menus that appear on Mac OS X in the menu bar at the top of the screen.
- *
- * On other than Mac OS X platforms, Fl_Sys_Menu_Bar is a synonym of class fltk3::MenuBar.
- */
-class FLTK3_EXPORT Fl_Sys_Menu_Bar : public fltk3::MenuBar {
-protected:
-  void draw();
-public:
+  
   /**
-   @brief The constructor.
+   @brief A class to create, modify and delete menus that appear on Mac OS X in the menu bar at the top of the screen.
    *
-   * On Mac OS X, all arguments are unused. On other platforms they are used as by fltk3::MenuBar::fltk3::MenuBar().
+   * On other than Mac OS X platforms, fltk3::SysMenuBar is a synonym of class fltk3::MenuBar.
    */
-  Fl_Sys_Menu_Bar(int x,int y,int w,int h,const char *l=0)
-      : fltk3::MenuBar(x,y,w,h,l) {
-    deactivate();			// don't let the old area take events
-    fl_sys_menu_bar = this;
-  }
-  void menu(const fltk3::MenuItem *m);
-  int add(const char* label, int shortcut, fltk3::Callback*, void *user_data=0, int flags=0);
-  int insert(int index, const char* label, int shortcut, fltk3::Callback *cb, void *user_data=0, int flags=0);
-  void remove(int n);
-  void replace(int rank, const char *name);
-  void clear();
-  int clear_submenu(int index);
+  class FLTK3_EXPORT SysMenuBar : public fltk3::MenuBar {
+  protected:
+    void draw();
+  public:
+    /**
+     @brief The constructor.
+     *
+     * On Mac OS X, all arguments are unused. On other platforms they are used as by fltk3::MenuBar::fltk3::MenuBar().
+     */
+    SysMenuBar(int x,int y,int w,int h,const char *l=0)
+    : fltk3::MenuBar(x,y,w,h,l) {
+      deactivate();			// don't let the old area take events
+      fltk3::sys_menu_bar = this;
+    }
+    void menu(const fltk3::MenuItem *m);
+    int add(const char* label, int shortcut, fltk3::Callback*, void *user_data=0, int flags=0);
+    int insert(int index, const char* label, int shortcut, fltk3::Callback *cb, void *user_data=0, int flags=0);
+    void remove(int n);
+    void replace(int rank, const char *name);
+    void clear();
+    int clear_submenu(int index);
 #if ! defined(FL_DOXYGEN)
-  enum menuOrItemOperation { itemAtIndex, setKeyEquivalent, setKeyEquivalentModifierMask, setState, initWithTitle,
-    numberOfItems, setSubmenu, setEnabled, addSeparatorItem, setTitle, removeItem, addNewItem, renameItem };
-  // function doMenuOrItemOperation is in file Fl_cocoa.mm because it contains objective-c code
-  static void *doMenuOrItemOperation( menuOrItemOperation operation, ...);
+    enum menuOrItemOperation { itemAtIndex, setKeyEquivalent, setKeyEquivalentModifierMask, setState, initWithTitle,
+      numberOfItems, setSubmenu, setEnabled, addSeparatorItem, setTitle, removeItem, addNewItem, renameItem };
+    // function doMenuOrItemOperation is in file Fl_cocoa.mm because it contains objective-c code
+    static void *doMenuOrItemOperation( menuOrItemOperation operation, ...);
 #endif
-};
-
+  };
+  
 #else
-
-typedef fltk3::MenuBar Fl_Sys_Menu_Bar;
-
+  
+  typedef MenuBar SysMenuBar;
+  
 #endif // defined(__APPLE__) || defined(FL_DOXYGEN)
+  
+}
 
 #endif // Fl_Sys_Menu_Bar_H
 

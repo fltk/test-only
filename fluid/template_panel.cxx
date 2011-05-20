@@ -41,7 +41,7 @@
 #else
 #include <unistd.h>
 #endif // WIN32 && !__CYGWIN__
-extern Fl_Preferences fluid_prefs;
+extern fltk3::Preferences fluid_prefs;
 
 fltk3::DoubleWindow *template_panel=(fltk3::DoubleWindow *)0;
 

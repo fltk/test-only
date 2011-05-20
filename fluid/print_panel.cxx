@@ -32,7 +32,7 @@
 #include <stdlib.h>
 #include "../src/flstring.h"
 #include <fltk3/Preferences.h>
-extern Fl_Preferences fluid_prefs;
+extern fltk3::Preferences fluid_prefs;
 
 fltk3::DoubleWindow *print_panel=(fltk3::DoubleWindow *)0;
 
