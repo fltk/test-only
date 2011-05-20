@@ -63,8 +63,8 @@ int main(int, char**) {
  *
  */
 
-#include <FL/glut.h>
-#include <FL/glu.h>
+#include <fltk3/glut.h>
+#include <fltk3/glu.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -765,11 +765,11 @@ void MenuInit(void)
 /***************************************************************/
 
 // FLTK-style callbacks to Glut menu callback translators:
-void setlevel(fltk3::Widget*, void *value) {setlevel(fltk3::intptr_t(value));}
+void setlevel(fltk3::Widget*, void *value) {setlevel(fl_intptr_t(value));}
 
-void choosefract(fltk3::Widget*, void *value) {choosefract(fltk3::intptr_t(value));}
+void choosefract(fltk3::Widget*, void *value) {choosefract(fl_intptr_t(value));}
 
-void handlemenu(fltk3::Widget*, void *value) {handlemenu(fltk3::intptr_t(value));}
+void handlemenu(fltk3::Widget*, void *value) {handlemenu(fl_intptr_t(value));}
 
 #include <fltk3/Button.h>
 #include <fltk3/Group.h>
