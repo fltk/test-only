@@ -967,7 +967,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(425, 5, 24, 24);
         o->tooltip("Input Choice");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Input_Choice"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::InputChoice"));
         o->image(pixmap[15]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(400, 30, 24, 24);

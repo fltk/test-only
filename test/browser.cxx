@@ -55,25 +55,25 @@ That was a blank line above this.
 @C4Blue
 
 	You should try different browser types:
-	Fl_Browser
-	Fl_Select_Browser
-	Fl_Hold_Browser
-	Fl_Multi_Browser
+	fltk3::Browser
+	fltk3::Select_Browser
+	fltk3::Hold_Browser
+	fltk3::Multi_Browser
 */
 
 #include <fltk3/run.h>
-#include <fltk3/Select_Browser.h>
-#include <fltk3/Double_Window.h>
+#include <fltk3/SelectBrowser.h>
+#include <fltk3/DoubleWindow.h>
 #include <fltk3/Button.h>
-#include <fltk3/Int_Input.h>
+#include <fltk3/IntInput.h>
 #include <fltk3/ask.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
 
-Fl_Select_Browser *browser;
-Fl_Button	*top,
+fltk3::SelectBrowser *browser;
+fltk3::Button	*top,
 		*bottom,
 		*middle,
 		*visible,
@@ -81,16 +81,16 @@ Fl_Button	*top,
 		*sort;
 fltk3::IntInput	*field;
 
-void b_cb(Fl_Widget* o, void*) {
+void b_cb(fltk3::Widget* o, void*) {
   printf("callback, selection = %d, event_clicks = %d\n",
-	 ((Fl_Browser*)o)->value(), Fl::event_clicks());
+	 ((fltk3::Browser*)o)->value(), fltk3::event_clicks());
 }
 
-void show_cb(Fl_Widget *o, void *) {
+void show_cb(fltk3::Widget *o, void *) {
   int line = atoi(field->value());
 
   if (!line) {
-    fl_alert("Please enter a number in the text field\n"
+    fltk3::alert("Please enter a number in the text field\n"
              "before clicking on the buttons.");
     return;
   }
@@ -105,7 +105,7 @@ void show_cb(Fl_Widget *o, void *) {
     browser->make_visible(line);
 }
 
-void swap_cb(Fl_Widget *, void *) {
+void swap_cb(fltk3::Widget *, void *) {
   int a = -1, b = -1;
   for ( int t=0; t<browser->size(); t++ ) {	// find two selected items
     if ( browser->selected(t) ) {
@@ -118,22 +118,22 @@ void swap_cb(Fl_Widget *, void *) {
   browser->swap(a, b);				// swap them
 }
 
-void sort_cb(Fl_Widget *, void *) {
-  browser->sort(FL_SORT_ASCENDING);
+void sort_cb(fltk3::Widget *, void *) {
+  browser->sort(fltk3::SORT_ASCENDING);
 }
 
 int main(int argc, char **argv) {
   int i;
-  if (!Fl::args(argc,argv,i)) Fl::fatal(Fl::help);
+  if (!fltk3::args(argc,argv,i)) fltk3::fatal(fltk3::help);
   const char* fname = (i < argc) ? argv[i] : "browser.cxx";
-  Fl_Double_Window window(480,400,fname);
-  browser = new Fl_Select_Browser(0,0,480,350,0);
-  browser->type(FL_MULTI_BROWSER);
-  //browser->type(FL_HOLD_BROWSER);
+  fltk3::DoubleWindow window(480,400,fname);
+  browser = new fltk3::SelectBrowser(0,0,480,350,0);
+  browser->type(fltk3::MULTI_BROWSER);
+  //browser->type(fltk3::HOLD_BROWSER);
   //browser->color(42);
   browser->callback(b_cb);
   // browser->scrollbar_right();
-  //browser->has_scrollbar(Fl_Browser::BOTH_ALWAYS);
+  //browser->has_scrollbar(fltk3::Browser::BOTH_ALWAYS);
   if (!browser->load(fname)) {
     int done = 0;
 #ifdef _MSC_VER
@@ -158,7 +158,7 @@ int main(int argc, char **argv) {
 #endif
     if ( !done )
     {
-      fl_message("Can't load %s, %s\n", fname, strerror(errno));
+      fltk3::message("Can't load %s, %s\n", fname, strerror(errno));
       exit(1);
     }
   }
@@ -167,23 +167,23 @@ int main(int argc, char **argv) {
   field = new fltk3::IntInput(50, 350, 430, 25, "Line #:");
   field->callback(show_cb);
 
-  top = new Fl_Button(0, 375, 80, 25, "Top");
+  top = new fltk3::Button(0, 375, 80, 25, "Top");
   top->callback(show_cb);
 
-  bottom = new Fl_Button(80, 375, 80, 25, "Bottom");
+  bottom = new fltk3::Button(80, 375, 80, 25, "Bottom");
   bottom->callback(show_cb);
 
-  middle = new Fl_Button(160, 375, 80, 25, "Middle");
+  middle = new fltk3::Button(160, 375, 80, 25, "Middle");
   middle->callback(show_cb);
 
-  visible = new Fl_Button(240, 375, 80, 25, "Make Vis.");
+  visible = new fltk3::Button(240, 375, 80, 25, "Make Vis.");
   visible->callback(show_cb);
 
-  swap = new Fl_Button(320, 375, 80, 25, "Swap");
+  swap = new fltk3::Button(320, 375, 80, 25, "Swap");
   swap->callback(swap_cb);
   swap->tooltip("Swaps two selected lines\n(Use CTRL-click to select two lines)");
 
-  sort = new Fl_Button(400, 375, 80, 25, "Sort");
+  sort = new fltk3::Button(400, 375, 80, 25, "Sort");
   sort->callback(sort_cb);
 
   window.resizable(browser);

@@ -39,7 +39,7 @@ class ScrollBarSizeTest : public Fl_Group {
 
     Fl_Browser *makebrowser(int X,int Y,int W,int H,const char*L=0) {
 	Fl_Browser *b = new Fl_Browser(X,Y,W,H,L);
-	b->type(FL_MULTI_BROWSER);
+	b->type(fltk3::MULTI_BROWSER);
 	b->align(FL_ALIGN_TOP);
 	b->add("Papa");     b->add("Delta"); b->add("Hotel");
         b->add("Long entry will show h-bar");

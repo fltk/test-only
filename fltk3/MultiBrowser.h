@@ -48,11 +48,11 @@ public:
   /**
       Creates a new Fl_Multi_Browser widget using the given
     position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
-    The constructor specializes fltk3::Browser() by setting the type to FL_MULTI_BROWSER.
+    The constructor specializes fltk3::Browser() by setting the type to fltk3::MULTI_BROWSER.
     The destructor destroys the widget and frees all memory that has been allocated.
   */
     Fl_Multi_Browser(int X,int Y,int W,int H,const char *L=0)
-	: fltk3::Browser(X,Y,W,H,L) {type(FL_MULTI_BROWSER);}
+	: fltk3::Browser(X,Y,W,H,L) {type(fltk3::MULTI_BROWSER);}
 };
 
 #endif

@@ -87,7 +87,7 @@ int Fl_Check_Browser::lineno(cb_item *p0) const {
 Fl_Check_Browser::Fl_Check_Browser(int X, int Y, int W, int H, const char *l)
 /**  The constructor makes an empty browser.*/
 : fltk3::Browser_(X, Y, W, H, l) {
-	type(FL_SELECT_BROWSER);
+	type(fltk3::SELECT_BROWSER);
 	when(fltk3::WHEN_NEVER);
 	first = last = 0;
 	nitems_ = nchecked_ = 0;

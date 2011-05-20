@@ -49,11 +49,11 @@ namespace fltk3 {
     /**
      Creates a new fltk3::HoldBrowser widget using the given
      position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
-     The constructor specializes fltk3::Browser() by setting the type to FL_HOLD_BROWSER.
+     The constructor specializes fltk3::Browser() by setting the type to fltk3::HOLD_BROWSER.
      The destructor destroys the widget and frees all memory that has been allocated.
      */
     HoldBrowser(int X,int Y,int W,int H,const char *l=0)
-    : fltk3::Browser(X,Y,W,H,l) {type(FL_HOLD_BROWSER);}
+    : fltk3::Browser(X,Y,W,H,l) {type(fltk3::HOLD_BROWSER);}
   };
   
 }

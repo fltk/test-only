@@ -26,32 +26,36 @@
 //
 
 /* \file
-   Fl_Select_Browser widget . */
+ fltk3::SelectBrowser widget . */
 
 #ifndef Fltk3_Select_Browser_H
 #define Fltk3_Select_Browser_H
 
 #include "Browser.h"
 
-/**
-  The class is a subclass of fltk3::Browser
-  which lets the user select a single item, or no items by clicking on
-  the empty space.  As long as the mouse button is held down on an 
-  unselected item it is highlighted. Normally the callback is done when the
-  user presses the mouse, but you can change this with when().
-  <P>See fltk3::Browser for  methods to add and remove lines from the browser.
-*/
-class FLTK3_EXPORT Fl_Select_Browser : public fltk3::Browser {
-public:
-  /** 
-    Creates a new Fl_Select_Browser widget using the given
-    position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
-    The constructor specializes fltk3::Browser() by setting the type to FL_SELECT_BROWSER.
-    The destructor destroys the widget and frees all memory that has been allocated.
-  */
-  Fl_Select_Browser(int X,int Y,int W,int H,const char *l=0)
-	: fltk3::Browser(X,Y,W,H,l) {type(FL_SELECT_BROWSER);}
-};
+namespace fltk3 {
+  
+  /**
+   The class is a subclass of fltk3::Browser
+   which lets the user select a single item, or no items by clicking on
+   the empty space.  As long as the mouse button is held down on an 
+   unselected item it is highlighted. Normally the callback is done when the
+   user presses the mouse, but you can change this with when().
+   <P>See fltk3::Browser for  methods to add and remove lines from the browser.
+   */
+  class FLTK3_EXPORT SelectBrowser : public fltk3::Browser {
+  public:
+    /** 
+     Creates a new fltk3::SelectBrowser widget using the given
+     position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
+     The constructor specializes fltk3::Browser() by setting the type to fltk3::SELECT_BROWSER.
+     The destructor destroys the widget and frees all memory that has been allocated.
+     */
+    SelectBrowser(int X,int Y,int W,int H,const char *l=0)
+    : fltk3::Browser(X,Y,W,H,l) {type(fltk3::SELECT_BROWSER);}
+  };
+  
+}
 
 #endif
 

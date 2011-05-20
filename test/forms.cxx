@@ -153,7 +153,7 @@ create_form_form (void)
   tobj[15]=obj=fl_add_choice (FL_NORMAL_CHOICE, 580, 250, 110, 30, "Choice");
   tobj[16]=obj=fl_add_timer (FL_VALUE_TIMER, 580, 210, 110, 30, "Timer");
 //fl_set_object_dblbuffer(tobj[16], 1); // removed for fltk
-  tobj[17]=obj=fl_add_browser (FL_NORMAL_BROWSER,450,300,240, 180, "Browser");
+  tobj[17]=obj=fl_add_browser (fltk3::NORMAL_BROWSER,450,300,240, 180, "Browser");
   exitob=obj= fl_add_button (FL_NORMAL_BUTTON, 590, 30, 100, 30, "Exit");
   btypeob=obj= fl_add_choice (FL_NORMAL_CHOICE,110,30, 130, 30, "Boxtype");
   fl_set_object_callback (obj, boxtype_cb, 0);

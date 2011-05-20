@@ -224,7 +224,7 @@ static void Widget_Browser_callback(fltk3::Widget *o,void *) {
 
 Widget_Browser::Widget_Browser(int X,int Y,int W,int H,const char*l)
 : fltk3::Browser_(X,Y,W,H,l) {
-  type(FL_MULTI_BROWSER);
+  type(fltk3::MULTI_BROWSER);
   fltk3::Widget::callback(Widget_Browser_callback);
   when(fltk3::WHEN_RELEASE);
 }

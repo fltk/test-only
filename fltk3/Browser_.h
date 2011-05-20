@@ -39,16 +39,16 @@
 #include "Scrollbar.h"
 #include <fltk3/run.h>		// fltk3::scrollbar_size()
 
-#define FL_NORMAL_BROWSER	0	/**< type() of fltk3::Browser */
-#define FL_SELECT_BROWSER	1	/**< type() of FL_Select_Browser */
-#define FL_HOLD_BROWSER		2	/**< type() of fltk3::HoldBrowser */
-#define FL_MULTI_BROWSER	3	/**< type() of Fl_Multi_Browser */
-
-#define FL_SORT_ASCENDING	0	/**< sort browser items in ascending alphabetic order. */
-#define FL_SORT_DESCENDING	1	/**< sort in descending order */
-
 namespace fltk3 {
   
+  const uchar NORMAL_BROWSER	= 0;	/**< type() of fltk3::Browser */
+  const uchar SELECT_BROWSER	= 1;	/**< type() of FL_Select_Browser */
+  const uchar HOLD_BROWSER	= 2;	/**< type() of fltk3::HoldBrowser */
+  const uchar MULTI_BROWSER	= 3;	/**< type() of Fl_Multi_Browser */
+
+  const uchar SORT_ASCENDING	= 0;	/**< sort browser items in ascending alphabetic order. */
+  const uchar SORT_DESCENDING	= 1;	/**< sort in descending order */
+
   /**
    This is the base class for browsers.  To be useful it must be
    subclassed and several virtual functions defined.  The Forms-compatible
@@ -78,7 +78,7 @@ namespace fltk3 {
     fltk3::Fontsize textsize_;
     fltk3::Color textcolor_;
     void* top_;		// which item scrolling position is in
-    void* selection_;	// which is selected (except for FL_MULTI_BROWSER)
+    void* selection_;	// which is selected (except for fltk3::MULTI_BROWSER)
     void *redraw1,*redraw2; // minimal update pointers
     void* max_width_item;	// which item has max_width_
     int scrollbar_size_;	// size of scrollbar trough

@@ -209,10 +209,10 @@ extern int compile_only;
 #include <fltk3/FileBrowser.h>
 
 static fltk3::MenuItem browser_type_menu[] = {
-  {"No Select",0,0,(void*)FL_NORMAL_BROWSER},
-  {"Select",0,0,(void*)FL_SELECT_BROWSER},
-  {"Hold",0,0,(void*)FL_HOLD_BROWSER},
-  {"Multi",0,0,(void*)FL_MULTI_BROWSER},
+  {"No Select",0,0,(void*)fltk3::NORMAL_BROWSER},
+  {"Select",0,0,(void*)fltk3::SELECT_BROWSER},
+  {"Hold",0,0,(void*)fltk3::HOLD_BROWSER},
+  {"Multi",0,0,(void*)fltk3::MULTI_BROWSER},
   {0}};
 class fltk3::Browser_Type : public Fl_Widget_Type {
   fltk3::MenuItem *subtypes() {return browser_type_menu;}
@@ -1249,9 +1249,9 @@ static symbol table[] = {
   {"PUSH_BUTTON",	fltk3::TOGGLE_BUTTON},
   {"RADIO_BUTTON",	fltk3::RADIO_BUTTON},
   {"HIDDEN_BUTTON",	fltk3::HIDDEN_BUTTON},
-  {"SELECT_BROWSER",	FL_SELECT_BROWSER},
-  {"HOLD_BROWSER",	FL_HOLD_BROWSER},
-  {"MULTI_BROWSER",	FL_MULTI_BROWSER},
+  {"SELECT_BROWSER",	fltk3::SELECT_BROWSER},
+  {"HOLD_BROWSER",	fltk3::HOLD_BROWSER},
+  {"MULTI_BROWSER",	fltk3::MULTI_BROWSER},
   {"SIMPLE_COUNTER",	FL_SIMPLE_COUNTER},
   {"LINE_DIAL",		FL_LINE_DIAL},
   {"FILL_DIAL",		FL_FILL_DIAL},

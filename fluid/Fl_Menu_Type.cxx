@@ -60,7 +60,7 @@ extern const char* i18n_set;
 static char submenuflag;
 
 void Fl_Input_Choice_Type::build_menu() {
-  Fl_Input_Choice* w = (Fl_Input_Choice*)o;
+  fltk3::InputChoice* w = (fltk3::InputChoice*)o;
   // count how many fltk3::MenuItem structures needed:
   int n = 0;
   Fl_Type* q;
@@ -537,7 +537,7 @@ Fl_Input_Choice_Type Fl_Input_Choice_type;
 
 void Fl_Input_Choice_Type::copy_properties() {
   Fl_Widget_Type::copy_properties();
-  Fl_Input_Choice *s = (Fl_Input_Choice*)o, *d = (Fl_Input_Choice*)live_widget;
+  fltk3::InputChoice *s = (fltk3::InputChoice*)o, *d = (fltk3::InputChoice*)live_widget;
   d->menu(s->menu());
   d->down_box(s->down_box());
   d->textcolor(s->textcolor());
@@ -547,7 +547,7 @@ void Fl_Input_Choice_Type::copy_properties() {
 
 Fl_Type* Fl_Input_Choice_Type::click_test(int, int) {
   if (selected) return 0; // let user move the widget
-  fltk3::Menu_* w = ((Fl_Input_Choice*)o)->menubutton();
+  fltk3::Menu_* w = ((fltk3::InputChoice*)o)->menubutton();
   if (!menusize) return 0;
   const fltk3::MenuItem* save = w->mvalue();
   w->value((fltk3::MenuItem*)0);

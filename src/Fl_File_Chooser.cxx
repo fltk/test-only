@@ -441,9 +441,9 @@ fltk3::Fontsize Fl_File_Chooser::textsize() {
 void Fl_File_Chooser::type(int t) {
   type_ = t;
 if (t & MULTI)
-  fileList->type(FL_MULTI_BROWSER);
+  fileList->type(fltk3::MULTI_BROWSER);
 else
-  fileList->type(FL_HOLD_BROWSER);
+  fileList->type(fltk3::HOLD_BROWSER);
 if (t & CREATE)
   newButton->activate();
 else

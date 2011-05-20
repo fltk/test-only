@@ -753,8 +753,8 @@ void down_box_cb(fltk3::Choice* i, void *v) {
     int n;
     if (current_widget->is_button() && !current_widget->is_menu_item())
       n = ((fltk3::Button*)(current_widget->o))->down_box();
-    else if (!strcmp(current_widget->type_name(), "Fl_Input_Choice"))
-      n = ((Fl_Input_Choice*)(current_widget->o))->down_box();
+    else if (!strcmp(current_widget->type_name(), "fltk3::InputChoice"))
+      n = ((fltk3::InputChoice*)(current_widget->o))->down_box();
     else if (current_widget->is_menu_button())
       n = ((fltk3::Menu_*)(current_widget->o))->down_box();
     else {
@@ -776,9 +776,9 @@ void down_box_cb(fltk3::Choice* i, void *v) {
 	  Fl_Widget_Type* q = (Fl_Widget_Type*)o;
           ((fltk3::Button*)(q->o))->down_box((fltk3::Boxtype)n);
           if (((fltk3::Button*)(q->o))->value()) q->redraw();
-	} else if (!strcmp(o->type_name(), "Fl_Input_Choice")) {
+	} else if (!strcmp(o->type_name(), "fltk3::InputChoice")) {
 	  Fl_Widget_Type* q = (Fl_Widget_Type*)o;
-	  ((Fl_Input_Choice*)(q->o))->down_box((fltk3::Boxtype)n);
+	  ((fltk3::InputChoice*)(q->o))->down_box((fltk3::Boxtype)n);
 	} else if (o->is_menu_button()) {
 	  Fl_Widget_Type* q = (Fl_Widget_Type*)o;
           ((fltk3::Menu_*)(q->o))->down_box((fltk3::Boxtype)n);
@@ -2258,8 +2258,8 @@ void Fl_Widget_Type::write_widget_code() {
     if (b->down_box()) write_c("%s%s->down_box(FL_%s);\n", indent(), var,
 			       boxname(b->down_box()));
     if (b->value()) write_c("%s%s->value(1);\n", indent(), var);
-  } else if (!strcmp(type_name(), "Fl_Input_Choice")) {
-    Fl_Input_Choice* b = (Fl_Input_Choice*)o;
+  } else if (!strcmp(type_name(), "fltk3::InputChoice")) {
+    fltk3::InputChoice* b = (fltk3::InputChoice*)o;
     if (b->down_box()) write_c("%s%s->down_box(FL_%s);\n", indent(), var,
 			       boxname(b->down_box()));
   } else if (is_menu_button()) {
@@ -2434,8 +2434,8 @@ void Fl_Widget_Type::write_properties() {
       write_string("down_box"); write_word(boxname(b->down_box()));}
     if (b->shortcut()) write_string("shortcut 0x%x", b->shortcut());
     if (b->value()) write_string("value 1");
-  } else if (!strcmp(type_name(), "Fl_Input_Choice")) {
-    Fl_Input_Choice* b = (Fl_Input_Choice*)o;
+  } else if (!strcmp(type_name(), "fltk3::InputChoice")) {
+    fltk3::InputChoice* b = (fltk3::InputChoice*)o;
     if (b->down_box()) {
       write_string("down_box"); write_word(boxname(b->down_box()));}
   } else if (is_menu_button()) {
@@ -2546,11 +2546,11 @@ void Fl_Widget_Type::read_property(const char *c) {
       if (x == ZERO_ENTRY) x = 0;
       ((fltk3::Button*)o)->down_box((fltk3::Boxtype)x);
     }
-  } else if (!strcmp(type_name(), "Fl_Input_Choice") && !strcmp(c,"down_box")) {
+  } else if (!strcmp(type_name(), "fltk3::InputChoice") && !strcmp(c,"down_box")) {
     const char* value = read_word();
     if ((x = boxnumber(value))) {
       if (x == ZERO_ENTRY) x = 0;
-      ((Fl_Input_Choice*)o)->down_box((fltk3::Boxtype)x);
+      ((fltk3::InputChoice*)o)->down_box((fltk3::Boxtype)x);
     }
   } else if (is_menu_button() && !strcmp(c,"down_box")) {
     const char* value = read_word();

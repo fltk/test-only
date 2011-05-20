@@ -744,7 +744,7 @@ public:
 #include <fltk3/InputChoice.h>
 class Fl_Input_Choice_Type : public Fl_Menu_Type {
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
-    Fl_Input_Choice *myo = (Fl_Input_Choice*)(w==4 ? ((Fl_Widget_Type*)this->factory)->o : this->o);
+    fltk3::InputChoice *myo = (fltk3::InputChoice*)(w==4 ? ((Fl_Widget_Type*)this->factory)->o : this->o);
     switch (w) {
     case 4:
     case 0: f = (fltk3::Font)myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
@@ -756,7 +756,7 @@ class Fl_Input_Choice_Type : public Fl_Menu_Type {
   }
 public:
   virtual void ideal_size(int &w, int &h) {
-    Fl_Input_Choice *myo = (Fl_Input_Choice *)o;
+    fltk3::InputChoice *myo = (fltk3::InputChoice *)o;
     fltk3::font(myo->textfont(), myo->textsize());
     h = fltk3::height() + myo->textsize() - 6;
     w = o->w() - 20 - fltk3::box_dw(o->box());
@@ -765,11 +765,11 @@ public:
     if (h < 15) h = 15;
     if (w < (15 + h)) w = 15 + h;
   }
-  virtual const char *type_name() {return "Fl_Input_Choice";}
+  virtual const char *type_name() {return "fltk3::InputChoice";}
   virtual const char *alt_type_name() {return "fltk::ComboBox";}
   virtual Fl_Type* click_test(int,int);
   fltk3::Widget *widget(int X,int Y,int W,int H) {
-    Fl_Input_Choice *myo = new Fl_Input_Choice(X,Y,W,H,"input choice:");
+    fltk3::InputChoice *myo = new fltk3::InputChoice(X,Y,W,H,"input choice:");
     myo->menu(dummymenu);
     myo->value("input");
     return myo;

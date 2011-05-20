@@ -31,7 +31,7 @@
 //
 
 /* \file
-   Fl_Input_Choice widget . */
+ fltk3::InputChoice widget . */
 
 
 
@@ -45,175 +45,180 @@
 #include <fltk3/draw.h>
 #include <string.h>
 
-/**
-  A combination of the input widget and a menu button.
-  The user can either type into the input area, or use the
-  menu button chooser on the right, which loads the input area
-  with predefined text.  Normally it is drawn with an inset box 
-  and a white background. 
-  <P>
-  The application can directly access both the input and menu
-  widgets directly, using the menubutton()
-  and input() accessor methods.
-*/
-class FLTK3_EXPORT Fl_Input_Choice : public fltk3::Group {
-  // Private class to handle slightly 'special' behavior of menu button
-  class InputMenuButton : public fltk3::MenuButton {
-    void draw() {
-      draw_box(fltk3::UP_BOX, color());
-      fltk3::color(active_r() ? labelcolor() : fltk3::inactive(labelcolor()));
-      int xc = x()+w()/2, yc=y()+h()/2;
-      fltk3::polygon(xc-5,yc-3,xc+5,yc-3,xc,yc+3);
-      if (fltk3::focus() == this) draw_focus();
-    }
-  public:
-    InputMenuButton(int x,int y,int w,int h,const char*l=0) : 
-	fltk3::MenuButton(x,y,w,h,l) { box(fltk3::UP_BOX); }
-  };
 
-  fltk3::Input *inp_;
-  InputMenuButton *menu_;
-
-  static void menu_cb(fltk3::Widget*, void *data) { 
-    Fl_Input_Choice *o=(Fl_Input_Choice *)data;
-    fltk3::WidgetTracker wp(o);
-    const fltk3::MenuItem *item = o->menubutton()->mvalue();
-    if (item && item->flags & (fltk3::SUBMENU|fltk3::SUBMENU_POINTER)) return;	// ignore submenus
-    if (!strcmp(o->inp_->value(), o->menu_->text()))
-    {
-      o->fltk3::Widget::clear_changed();
-      if (o->when() & fltk3::WHEN_NOT_CHANGED)
-	o->do_callback();
-    }
-    else
-    {
-      o->inp_->value(o->menu_->text());
-      o->inp_->set_changed();
-      o->fltk3::Widget::set_changed();
-      if (o->when() & (fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE))
-	o->do_callback();
-    }
-    
-    if (wp.deleted()) return;
-
-    if (o->callback() != default_callback)
-    {
-      o->fltk3::Widget::clear_changed();
-      o->inp_->clear_changed();
-    }
-  }
-
-  static void inp_cb(fltk3::Widget*, void *data) { 
-    Fl_Input_Choice *o=(Fl_Input_Choice *)data;
-    fltk3::WidgetTracker wp(o);
-    if (o->inp_->changed()) {
-      o->fltk3::Widget::set_changed();
-      if (o->when() & (fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE))
-	o->do_callback();
-    } else {
-      o->fltk3::Widget::clear_changed();
-      if (o->when() & fltk3::WHEN_NOT_CHANGED)
-	o->do_callback();
-    }
-    
-    if (wp.deleted()) return;
-
-    if (o->callback() != default_callback)
-      o->fltk3::Widget::clear_changed();
-  }
-
-  // Custom resize behavior -- input stretches, menu button doesn't
-  inline int inp_x() { return(x() + fltk3::box_dx(box())); }
-  inline int inp_y() { return(y() + fltk3::box_dy(box())); }
-  inline int inp_w() { return(w() - fltk3::box_dw(box()) - 20); }
-  inline int inp_h() { return(h() - fltk3::box_dh(box())); }
-
-  inline int menu_x() { return(x() + w() - 20 - fltk3::box_dx(box())); }
-  inline int menu_y() { return(y() + fltk3::box_dy(box())); }
-  inline int menu_w() { return(20); }
-  inline int menu_h() { return(h() - fltk3::box_dh(box())); }
-
-public:
-  /**
-    Creates a new Fl_Input_Choice widget using the given position, size,
-    and label string.
-  <P> Inherited destructor Destroys the widget and any value associated with it.
-  */
-  Fl_Input_Choice (int x,int y,int w,int h,const char*l=0) : fltk3::Group(x,y,w,h,l) {
-    fltk3::Group::box(fltk3::DOWN_BOX);
-    align(fltk3::ALIGN_LEFT);				// default like fltk3::Input
-    inp_ = new fltk3::Input(inp_x(), inp_y(),
-			inp_w(), inp_h());
-    inp_->callback(inp_cb, (void*)this);
-    inp_->box(fltk3::FLAT_BOX);		// cosmetic
-    inp_->when(fltk3::WHEN_CHANGED|fltk3::WHEN_NOT_CHANGED);
-    menu_ = new InputMenuButton(menu_x(), menu_y(),
-				menu_w(), menu_h());
-    menu_->callback(menu_cb, (void*)this);
-    menu_->box(fltk3::FLAT_BOX);				// cosmetic
-    end();
-  }
+namespace fltk3 {
   
-  /** Adds an item to the menu.*/
-  void add(const char *s) { menu_->add(s);  }
-  int changed() const { return inp_->changed() | fltk3::Widget::changed();}
-  void clear_changed() { 
-    inp_->clear_changed();
-    fltk3::Widget::clear_changed();
-  }
-  void set_changed() { 
-    inp_->set_changed();
-    // no need to call fltk3::Widget::set_changed()
-  }
-  /** Removes all items from the menu. */
-  void clear() { menu_->clear(); }
-  /** Gets the box type of the menu button */
-  fltk3::Boxtype down_box() const { return (menu_->down_box()); }
-  /** Sets the box type of the menu button */
-  void down_box(fltk3::Boxtype b) { menu_->down_box(b); }
-  /** Gets the fltk3::MenuItem array used for the menu. */
-  const fltk3::MenuItem *menu() { return (menu_->menu()); }
-  /** Sets the fltk3::MenuItem array used for the menu. */
-  void menu(const fltk3::MenuItem *m) { menu_->menu(m); }
-  void resize(int X, int Y, int W, int H) {
-    fltk3::Group::resize(X,Y,W,H);
-    inp_->resize(inp_x(), inp_y(), inp_w(), inp_h());
-    menu_->resize(menu_x(), menu_y(), menu_w(), menu_h());
-  }
-  /** Gets the encapsulated input text color attributes */
-  fltk3::Color textcolor() const { return (inp_->textcolor());}
-  /** Sets the encapsulated input text color attributes */
-  void textcolor(fltk3::Color c) { inp_->textcolor(c);}
-  /** Gets the encapsulated input text font  attributes */
-  fltk3::Font textfont() const { return (inp_->textfont());}
-  /** Sets the encapsulated input text font attributes */
-  void textfont(fltk3::Font f) { inp_->textfont(f);}
-  /** Gets the encapsulated input size attributes */
-  fltk3::Fontsize textsize() const { return (inp_->textsize()); }
-  /** Sets the encapsulated input size attributes */
-  void textsize(fltk3::Fontsize s) { inp_->textsize(s); }
-  /** See void Fl_Input_Choice::value(const char *s)  */
-  const char* value() const { return (inp_->value()); }
   /**
-    Sets or returns the input widget's current contents. The
-    second form sets the contents using the index into the menu
-    which you can set as an integer.  Setting the value effectively
-    'chooses' this menu item, and sets it as the new input text,
-    deleting the previous text.
-  */
-  void value(const char *val) { inp_->value(val); }
-  /**    See void Fl_Input_Choice::value(const char *s)  */
-  void value(int val) {
-    menu_->value(val);
-    inp_->value(menu_->text(val));
-  }
-  /**    Returns a reference to the internal fltk3::MenuButton widget.  */
-  fltk3::MenuButton *menubutton() { return menu_; }
-  /**
-    Returns a reference to the internal fltk3::Input widget.</p>
-  */
-  fltk3::Input *input() { return inp_; }
-};
+   A combination of the input widget and a menu button.
+   The user can either type into the input area, or use the
+   menu button chooser on the right, which loads the input area
+   with predefined text.  Normally it is drawn with an inset box 
+   and a white background. 
+   <P>
+   The application can directly access both the input and menu
+   widgets directly, using the menubutton()
+   and input() accessor methods.
+   */
+  class FLTK3_EXPORT InputChoice : public fltk3::Group {
+    // Private class to handle slightly 'special' behavior of menu button
+    class InputMenuButton : public fltk3::MenuButton {
+      void draw() {
+        draw_box(fltk3::UP_BOX, color());
+        fltk3::color(active_r() ? labelcolor() : fltk3::inactive(labelcolor()));
+        int xc = x()+w()/2, yc=y()+h()/2;
+        fltk3::polygon(xc-5,yc-3,xc+5,yc-3,xc,yc+3);
+        if (fltk3::focus() == this) draw_focus();
+      }
+    public:
+      InputMenuButton(int x,int y,int w,int h,const char*l=0) : 
+      fltk3::MenuButton(x,y,w,h,l) { box(fltk3::UP_BOX); }
+    };
+    
+    fltk3::Input *inp_;
+    InputMenuButton *menu_;
+    
+    static void menu_cb(fltk3::Widget*, void *data) { 
+      fltk3::InputChoice *o=(fltk3::InputChoice *)data;
+      fltk3::WidgetTracker wp(o);
+      const fltk3::MenuItem *item = o->menubutton()->mvalue();
+      if (item && item->flags & (fltk3::SUBMENU|fltk3::SUBMENU_POINTER)) return;	// ignore submenus
+      if (!strcmp(o->inp_->value(), o->menu_->text()))
+      {
+        o->fltk3::Widget::clear_changed();
+        if (o->when() & fltk3::WHEN_NOT_CHANGED)
+          o->do_callback();
+      }
+      else
+      {
+        o->inp_->value(o->menu_->text());
+        o->inp_->set_changed();
+        o->fltk3::Widget::set_changed();
+        if (o->when() & (fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE))
+          o->do_callback();
+      }
+      
+      if (wp.deleted()) return;
+      
+      if (o->callback() != default_callback)
+      {
+        o->fltk3::Widget::clear_changed();
+        o->inp_->clear_changed();
+      }
+    }
+    
+    static void inp_cb(fltk3::Widget*, void *data) { 
+      fltk3::InputChoice *o=(fltk3::InputChoice *)data;
+      fltk3::WidgetTracker wp(o);
+      if (o->inp_->changed()) {
+        o->fltk3::Widget::set_changed();
+        if (o->when() & (fltk3::WHEN_CHANGED|fltk3::WHEN_RELEASE))
+          o->do_callback();
+      } else {
+        o->fltk3::Widget::clear_changed();
+        if (o->when() & fltk3::WHEN_NOT_CHANGED)
+          o->do_callback();
+      }
+      
+      if (wp.deleted()) return;
+      
+      if (o->callback() != default_callback)
+        o->fltk3::Widget::clear_changed();
+    }
+    
+    // Custom resize behavior -- input stretches, menu button doesn't
+    inline int inp_x() { return(x() + fltk3::box_dx(box())); }
+    inline int inp_y() { return(y() + fltk3::box_dy(box())); }
+    inline int inp_w() { return(w() - fltk3::box_dw(box()) - 20); }
+    inline int inp_h() { return(h() - fltk3::box_dh(box())); }
+    
+    inline int menu_x() { return(x() + w() - 20 - fltk3::box_dx(box())); }
+    inline int menu_y() { return(y() + fltk3::box_dy(box())); }
+    inline int menu_w() { return(20); }
+    inline int menu_h() { return(h() - fltk3::box_dh(box())); }
+    
+  public:
+    /**
+     Creates a new fltk3::InputChoice widget using the given position, size,
+     and label string.
+     <P> Inherited destructor Destroys the widget and any value associated with it.
+     */
+    InputChoice (int x,int y,int w,int h,const char*l=0) : fltk3::Group(x,y,w,h,l) {
+      fltk3::Group::box(fltk3::DOWN_BOX);
+      align(fltk3::ALIGN_LEFT);				// default like fltk3::Input
+      inp_ = new fltk3::Input(inp_x(), inp_y(),
+                              inp_w(), inp_h());
+      inp_->callback(inp_cb, (void*)this);
+      inp_->box(fltk3::FLAT_BOX);		// cosmetic
+      inp_->when(fltk3::WHEN_CHANGED|fltk3::WHEN_NOT_CHANGED);
+      menu_ = new InputMenuButton(menu_x(), menu_y(),
+                                  menu_w(), menu_h());
+      menu_->callback(menu_cb, (void*)this);
+      menu_->box(fltk3::FLAT_BOX);				// cosmetic
+      end();
+    }
+    
+    /** Adds an item to the menu.*/
+    void add(const char *s) { menu_->add(s);  }
+    int changed() const { return inp_->changed() | fltk3::Widget::changed();}
+    void clear_changed() { 
+      inp_->clear_changed();
+      fltk3::Widget::clear_changed();
+    }
+    void set_changed() { 
+      inp_->set_changed();
+      // no need to call fltk3::Widget::set_changed()
+    }
+    /** Removes all items from the menu. */
+    void clear() { menu_->clear(); }
+    /** Gets the box type of the menu button */
+    fltk3::Boxtype down_box() const { return (menu_->down_box()); }
+    /** Sets the box type of the menu button */
+    void down_box(fltk3::Boxtype b) { menu_->down_box(b); }
+    /** Gets the fltk3::MenuItem array used for the menu. */
+    const fltk3::MenuItem *menu() { return (menu_->menu()); }
+    /** Sets the fltk3::MenuItem array used for the menu. */
+    void menu(const fltk3::MenuItem *m) { menu_->menu(m); }
+    void resize(int X, int Y, int W, int H) {
+      fltk3::Group::resize(X,Y,W,H);
+      inp_->resize(inp_x(), inp_y(), inp_w(), inp_h());
+      menu_->resize(menu_x(), menu_y(), menu_w(), menu_h());
+    }
+    /** Gets the encapsulated input text color attributes */
+    fltk3::Color textcolor() const { return (inp_->textcolor());}
+    /** Sets the encapsulated input text color attributes */
+    void textcolor(fltk3::Color c) { inp_->textcolor(c);}
+    /** Gets the encapsulated input text font  attributes */
+    fltk3::Font textfont() const { return (inp_->textfont());}
+    /** Sets the encapsulated input text font attributes */
+    void textfont(fltk3::Font f) { inp_->textfont(f);}
+    /** Gets the encapsulated input size attributes */
+    fltk3::Fontsize textsize() const { return (inp_->textsize()); }
+    /** Sets the encapsulated input size attributes */
+    void textsize(fltk3::Fontsize s) { inp_->textsize(s); }
+    /** See void fltk3::InputChoice::value(const char *s)  */
+    const char* value() const { return (inp_->value()); }
+    /**
+     Sets or returns the input widget's current contents. The
+     second form sets the contents using the index into the menu
+     which you can set as an integer.  Setting the value effectively
+     'chooses' this menu item, and sets it as the new input text,
+     deleting the previous text.
+     */
+    void value(const char *val) { inp_->value(val); }
+    /**    See void fltk3::InputChoice::value(const char *s)  */
+    void value(int val) {
+      menu_->value(val);
+      inp_->value(menu_->text(val));
+    }
+    /**    Returns a reference to the internal fltk3::MenuButton widget.  */
+    fltk3::MenuButton *menubutton() { return menu_; }
+    /**
+     Returns a reference to the internal fltk3::Input widget.</p>
+     */
+    fltk3::Input *input() { return inp_; }
+  };
+  
+}
 
 #endif // !Fl_Input_Choice_H
 

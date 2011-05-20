@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fltk3/run.h>
-#include <fltk3/Double_Window.h>
+#include <fltk3/DoubleWindow.h>
 #include <fltk3/Box.h>
 
 int N = 0;
@@ -36,87 +36,87 @@ int N = 0;
 #define H 50
 #define ROWS 14
 
-Fl_Double_Window *window;
+fltk3::DoubleWindow *window;
 
-void bt(const char *name, Fl_Boxtype type, int square=0) {
+void bt(const char *name, fltk3::Boxtype type, int square=0) {
   int x = N%4;
   int y = N/4;
   N++;
   x = x*W+10;
   y = y*H+10;
-  Fl_Box *b = new Fl_Box(type,x,y,square ? H-20 : W-20,H-20,name);
+  fltk3::Box *b = new fltk3::Box(type,x,y,square ? H-20 : W-20,H-20,name);
   b->labelsize(11);
-  if (square) b->align(FL_ALIGN_RIGHT);
+  if (square) b->align(fltk3::ALIGN_RIGHT);
 }
 
 int main(int argc, char ** argv) {
-  window = new Fl_Double_Window(4*W,ROWS*H);
-  window->box(FL_FLAT_BOX);
+  window = new fltk3::DoubleWindow(4*W,ROWS*H);
+  window->box(fltk3::FLAT_BOX);
 #if 0 // this code uses the command line arguments to set arbitrary color schemes
-  Fl::args(argc, argv);
-  Fl::get_system_colors();
+  fltk3::args(argc, argv);
+  fltk3::get_system_colors();
 #elif 0 // this code uses a single color to define a scheme
-  Fl::args(argc, argv);
-  Fl::get_system_colors();
-  Fl::background(113,113,198);
+  fltk3::args(argc, argv);
+  fltk3::get_system_colors();
+  fltk3::background(113,113,198);
 #else // this code uses the nice bright blue background to show box vs. frame types
-  Fl::args(argc, argv);
-  Fl::get_system_colors();
+  fltk3::args(argc, argv);
+  fltk3::get_system_colors();
   window->color(12);// light blue
 #endif
-  bt("FL_NO_BOX",FL_NO_BOX);
-  bt("FL_FLAT_BOX",FL_FLAT_BOX);
+  bt("fltk3::NO_BOX",fltk3::NO_BOX);
+  bt("fltk3::FLAT_BOX",fltk3::FLAT_BOX);
   N += 2; // go to start of next row to line up boxes & frames
-  bt("FL_UP_BOX",FL_UP_BOX);
-  bt("FL_DOWN_BOX",FL_DOWN_BOX);
-  bt("FL_UP_FRAME",FL_UP_FRAME);
-  bt("FL_DOWN_FRAME",FL_DOWN_FRAME);
-  bt("FL_THIN_UP_BOX",FL_THIN_UP_BOX);
-  bt("FL_THIN_DOWN_BOX",FL_THIN_DOWN_BOX);
-  bt("FL_THIN_UP_FRAME",FL_THIN_UP_FRAME);
-  bt("FL_THIN_DOWN_FRAME",FL_THIN_DOWN_FRAME);
-  bt("FL_ENGRAVED_BOX",FL_ENGRAVED_BOX);
-  bt("FL_EMBOSSED_BOX",FL_EMBOSSED_BOX);
-  bt("FL_ENGRAVED_FRAME",FL_ENGRAVED_FRAME);
-  bt("FL_EMBOSSED_FRAME",FL_EMBOSSED_FRAME);
-  bt("FL_BORDER_BOX",FL_BORDER_BOX);
-  bt("FL_SHADOW_BOX",FL_SHADOW_BOX);
-  bt("FL_BORDER_FRAME",FL_BORDER_FRAME);
-  bt("FL_SHADOW_FRAME",FL_SHADOW_FRAME);
-  bt("FL_ROUNDED_BOX",FL_ROUNDED_BOX);
-  bt("FL_RSHADOW_BOX",FL_RSHADOW_BOX);
-  bt("FL_ROUNDED_FRAME",FL_ROUNDED_FRAME);
-  bt("FL_RFLAT_BOX",FL_RFLAT_BOX);
-  bt("FL_OVAL_BOX",FL_OVAL_BOX);
-  bt("FL_OSHADOW_BOX",FL_OSHADOW_BOX);
-  bt("FL_OVAL_FRAME",FL_OVAL_FRAME);
-  bt("FL_OFLAT_BOX",FL_OFLAT_BOX);
-  bt("FL_ROUND_UP_BOX",FL_ROUND_UP_BOX);
-  bt("FL_ROUND_DOWN_BOX",FL_ROUND_DOWN_BOX);
-  bt("FL_DIAMOND_UP_BOX",FL_DIAMOND_UP_BOX);
-  bt("FL_DIAMOND_DOWN_BOX",FL_DIAMOND_DOWN_BOX);
+  bt("fltk3::UP_BOX",fltk3::UP_BOX);
+  bt("fltk3::DOWN_BOX",fltk3::DOWN_BOX);
+  bt("fltk3::UP_FRAME",fltk3::UP_FRAME);
+  bt("fltk3::DOWN_FRAME",fltk3::DOWN_FRAME);
+  bt("fltk3::THIN_UP_BOX",fltk3::THIN_UP_BOX);
+  bt("fltk3::THIN_DOWN_BOX",fltk3::THIN_DOWN_BOX);
+  bt("fltk3::THIN_UP_FRAME",fltk3::THIN_UP_FRAME);
+  bt("fltk3::THIN_DOWN_FRAME",fltk3::THIN_DOWN_FRAME);
+  bt("fltk3::ENGRAVED_BOX",fltk3::ENGRAVED_BOX);
+  bt("fltk3::EMBOSSED_BOX",fltk3::EMBOSSED_BOX);
+  bt("fltk3::ENGRAVED_FRAME",fltk3::ENGRAVED_FRAME);
+  bt("fltk3::EMBOSSED_FRAME",fltk3::EMBOSSED_FRAME);
+  bt("fltk3::BORDER_BOX",fltk3::BORDER_BOX);
+  bt("fltk3::SHADOW_BOX",fltk3::SHADOW_BOX);
+  bt("fltk3::BORDER_FRAME",fltk3::BORDER_FRAME);
+  bt("fltk3::SHADOW_FRAME",fltk3::SHADOW_FRAME);
+  bt("fltk3::ROUNDED_BOX",fltk3::ROUNDED_BOX);
+  bt("fltk3::RSHADOW_BOX",fltk3::RSHADOW_BOX);
+  bt("fltk3::ROUNDED_FRAME",fltk3::ROUNDED_FRAME);
+  bt("fltk3::RFLAT_BOX",fltk3::RFLAT_BOX);
+  bt("fltk3::OVAL_BOX",fltk3::OVAL_BOX);
+  bt("fltk3::OSHADOW_BOX",fltk3::OSHADOW_BOX);
+  bt("fltk3::OVAL_FRAME",fltk3::OVAL_FRAME);
+  bt("fltk3::OFLAT_BOX",fltk3::OFLAT_BOX);
+  bt("fltk3::ROUND_UP_BOX",fltk3::ROUND_UP_BOX);
+  bt("fltk3::ROUND_DOWN_BOX",fltk3::ROUND_DOWN_BOX);
+  bt("fltk3::DIAMOND_UP_BOX",fltk3::DIAMOND_UP_BOX);
+  bt("fltk3::DIAMOND_DOWN_BOX",fltk3::DIAMOND_DOWN_BOX);
 
-  bt("FL_PLASTIC_UP_BOX",FL_PLASTIC_UP_BOX);
-  bt("FL_PLASTIC_DOWN_BOX",FL_PLASTIC_DOWN_BOX);
-  bt("FL_PLASTIC_UP_FRAME",FL_PLASTIC_UP_FRAME);
-  bt("FL_PLASTIC_DOWN_FRAME",FL_PLASTIC_DOWN_FRAME);
-  bt("FL_PLASTIC_THIN_UP_BOX",FL_PLASTIC_THIN_UP_BOX);
-  bt("FL_PLASTIC_THIN_DOWN_BOX",FL_PLASTIC_THIN_DOWN_BOX);
+  bt("fltk3::PLASTIC_UP_BOX",fltk3::PLASTIC_UP_BOX);
+  bt("fltk3::PLASTIC_DOWN_BOX",fltk3::PLASTIC_DOWN_BOX);
+  bt("fltk3::PLASTIC_UP_FRAME",fltk3::PLASTIC_UP_FRAME);
+  bt("fltk3::PLASTIC_DOWN_FRAME",fltk3::PLASTIC_DOWN_FRAME);
+  bt("fltk3::PLASTIC_THIN_UP_BOX",fltk3::PLASTIC_THIN_UP_BOX);
+  bt("fltk3::PLASTIC_THIN_DOWN_BOX",fltk3::PLASTIC_THIN_DOWN_BOX);
   N += 2;
-  bt("FL_PLASTIC_ROUND_UP_BOX",FL_PLASTIC_ROUND_UP_BOX);
-  bt("FL_PLASTIC_ROUND_DOWN_BOX",FL_PLASTIC_ROUND_DOWN_BOX);
+  bt("fltk3::PLASTIC_ROUND_UP_BOX",fltk3::PLASTIC_ROUND_UP_BOX);
+  bt("fltk3::PLASTIC_ROUND_DOWN_BOX",fltk3::PLASTIC_ROUND_DOWN_BOX);
   N += 2;
 
-  bt("FL_GTK_UP_BOX",FL_GTK_UP_BOX);
-  bt("FL_GTK_DOWN_BOX",FL_GTK_DOWN_BOX);
-  bt("FL_GTK_UP_FRAME",FL_GTK_UP_FRAME);
-  bt("FL_GTK_DOWN_FRAME",FL_GTK_DOWN_FRAME);
-  bt("FL_GTK_THIN_UP_BOX",FL_GTK_THIN_UP_BOX);
-  bt("FL_GTK_THIN_DOWN_BOX",FL_GTK_THIN_DOWN_BOX);
-  bt("FL_GTK_THIN_UP_FRAME",FL_GTK_THIN_UP_FRAME);
-  bt("FL_GTK_THIN_DOWN_FRAME",FL_GTK_THIN_DOWN_FRAME);
-  bt("FL_GTK_ROUND_UP_BOX",FL_GTK_ROUND_UP_BOX);
-  bt("FL_GTK_ROUND_DOWN_BOX",FL_GTK_ROUND_DOWN_BOX);
+  bt("fltk3::GTK_UP_BOX",fltk3::GTK_UP_BOX);
+  bt("fltk3::GTK_DOWN_BOX",fltk3::GTK_DOWN_BOX);
+  bt("fltk3::GTK_UP_FRAME",fltk3::GTK_UP_FRAME);
+  bt("fltk3::GTK_DOWN_FRAME",fltk3::GTK_DOWN_FRAME);
+  bt("fltk3::GTK_THIN_UP_BOX",fltk3::GTK_THIN_UP_BOX);
+  bt("fltk3::GTK_THIN_DOWN_BOX",fltk3::GTK_THIN_DOWN_BOX);
+  bt("fltk3::GTK_THIN_UP_FRAME",fltk3::GTK_THIN_UP_FRAME);
+  bt("fltk3::GTK_THIN_DOWN_FRAME",fltk3::GTK_THIN_DOWN_FRAME);
+  bt("fltk3::GTK_ROUND_UP_BOX",fltk3::GTK_ROUND_UP_BOX);
+  bt("fltk3::GTK_ROUND_DOWN_BOX",fltk3::GTK_ROUND_DOWN_BOX);
   window->resizable(window);
   window->end();
   window->show();

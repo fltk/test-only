@@ -612,7 +612,7 @@ void* fltk3::Browser_::find_item(int ypos) {
  \returns 1 if state was changed, 0 if not.
  */
 int fltk3::Browser_::select(void* item, int val, int docallbacks) {
-  if (type() == FL_MULTI_BROWSER) {
+  if (type() == fltk3::MULTI_BROWSER) {
     if (selection_ != item) {
       if (selection_) redraw_line(selection_);
       selection_ = item;
@@ -654,7 +654,7 @@ int fltk3::Browser_::select(void* item, int val, int docallbacks) {
  If 0, doesn't do callback (default).
  */
 int fltk3::Browser_::deselect(int docallbacks) {
-  if (type() == FL_MULTI_BROWSER) {
+  if (type() == fltk3::MULTI_BROWSER) {
     int change = 0;
     for (void* p = item_first(); p; p = item_next(p))
       change |= select(p, 0, docallbacks);
@@ -679,7 +679,7 @@ int fltk3::Browser_::select_only(void* item, int docallbacks) {
   if (!item) return deselect(docallbacks);
   int change = 0;
   fltk3::WidgetTracker wp(this);
-  if (type() == FL_MULTI_BROWSER) {
+  if (type() == fltk3::MULTI_BROWSER) {
     for (void* p = item_first(); p; p = item_next(p)) {
       if (p != item) change |= select(p, 0, docallbacks);
       if (wp.deleted()) return change;
@@ -713,11 +713,11 @@ int fltk3::Browser_::handle(int event) {
   
   // must do shortcuts first or the scrollbar will get them...
   if (event == fltk3::ENTER || event == fltk3::LEAVE) return 1;
-  if (event == fltk3::KEYBOARD && type() >= FL_HOLD_BROWSER) {
+  if (event == fltk3::KEYBOARD && type() >= fltk3::HOLD_BROWSER) {
     void* l1 = selection_;
     void* l = l1; if (!l) l = top_; if (!l) l = item_first();
     if (l) {
-      if (type()==FL_HOLD_BROWSER) {
+      if (type()==fltk3::HOLD_BROWSER) {
         switch (fltk3::event_key()) {
           case fltk3::DownKey:
             while ((l = item_next(l)))
@@ -807,9 +807,9 @@ int fltk3::Browser_::handle(int event) {
       }
       my = py = fltk3::event_y();
       change = 0;
-      if (type() == FL_NORMAL_BROWSER || !top_)
+      if (type() == fltk3::NORMAL_BROWSER || !top_)
         ;
-      else if (type() != FL_MULTI_BROWSER) {
+      else if (type() != fltk3::MULTI_BROWSER) {
         change = select_only(find_item(my), 0);
         if (wp.deleted()) return 1;
         if (change && (when() & fltk3::WHEN_CHANGED)) {
@@ -885,9 +885,9 @@ int fltk3::Browser_::handle(int event) {
         if (p<0) p = 0;
         position(p);
       }
-      if (type() == FL_NORMAL_BROWSER || !top_)
+      if (type() == fltk3::NORMAL_BROWSER || !top_)
         ;
-      else if (type() == FL_MULTI_BROWSER) {
+      else if (type() == fltk3::MULTI_BROWSER) {
         void* l = find_item(my);
         void* t; void* b; // this will be the range to change
         if (my > py) { // go down
@@ -921,7 +921,7 @@ int fltk3::Browser_::handle(int event) {
       py = my;
       return 1;
     case fltk3::RELEASE:
-      if (type() == FL_SELECT_BROWSER) {
+      if (type() == fltk3::SELECT_BROWSER) {
         void* t = selection_;
         deselect();
         if (wp.deleted()) return 1;
@@ -943,7 +943,7 @@ int fltk3::Browser_::handle(int event) {
       return 1;
     case fltk3::FOCUS:
     case fltk3::UNFOCUS:
-      if (type() >= FL_HOLD_BROWSER && fltk3::visible_focus()) {
+      if (type() >= fltk3::HOLD_BROWSER && fltk3::visible_focus()) {
         redraw();
         return 1;
       } else return 0;
@@ -989,8 +989,8 @@ hscrollbar(0, 0, 0, 0, 0)
 /**
  Sort the items in the browser based on \p flags.
  item_swap(void*, void*) and item_text(void*) must be implemented for this call.
- \param[in] flags FL_SORT_ASCENDING -- sort in ascending order\n
- FL_SORT_DESCENDING -- sort in descending order\n
+ \param[in] flags fltk3::SORT_ASCENDING -- sort in ascending order\n
+ fltk3::SORT_DESCENDING -- sort in descending order\n
  Values other than the above will cause undefined behavior\n
  Other flags may appear in the future.
  \todo Add a flag to ignore case
@@ -999,7 +999,7 @@ void fltk3::Browser_::sort(int flags) {
   //
   // Simple bubble sort - pure lazyness on my side.
   //
-  int i, j, n = -1, desc = ((flags&FL_SORT_DESCENDING)==FL_SORT_DESCENDING);
+  int i, j, n = -1, desc = ((flags&fltk3::SORT_DESCENDING)==fltk3::SORT_DESCENDING);
   void *a =item_first(), *b, *c;
   if (!a) return;
   while (a) {
