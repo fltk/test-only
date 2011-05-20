@@ -77,12 +77,12 @@ static Fl_Font_Descriptor *gl_fontsize;
   */
 void  gl_font(int fontid, int size) {
   fltk3::font(fontid, size);
-  Fl_Font_Descriptor *fltk3::fontsize = fl_graphics_driver->font_descriptor();
+  Fl_Font_Descriptor *fontsize = fl_graphics_driver->font_descriptor();
 #if !GL_DRAW_USES_TEXTURES
-  if (!fltk3::fontsize->listbase) {
+  if (!fontsize->listbase) {
 
 #ifdef  USE_OksiD_style_GL_font_selection
-    fltk3::fontsize->listbase = glGenLists(0x10000);
+    fontsize->listbase = glGenLists(0x10000);
 #else // Fltk-1.1.8 style GL font selection
 
 #if defined (USE_X11) // X-windows options follow, either XFT or "plain" X
@@ -95,38 +95,38 @@ void  gl_font(int fontid, int size) {
     XFontStruct *font = fl_xfont;
     int base = font->min_char_or_byte2;
     int count = font->max_char_or_byte2-base+1;
-    fltk3::fontsize->listbase = glGenLists(256);
-    glXUseXFont(font->fid, base, count, fltk3::fontsize->listbase+base);
+    fontsize->listbase = glGenLists(256);
+    glXUseXFont(font->fid, base, count, fontsize->listbase+base);
 # elif defined(WIN32)
     // this is unused because USE_OksiD_style_GL_font_selection == 1
-    int base = fltk3::fontsize->metr.tmFirstChar;
-    int count = fltk3::fontsize->metr.tmLastChar-base+1;
-    HFONT oldFid = (HFONT)SelectObject(fl_gc, fltk3::fontsize->fid);
-    fltk3::fontsize->listbase = glGenLists(256);
-    wglUseFontBitmaps(fl_gc, base, count, fltk3::fontsize->listbase+base);
+    int base = fontsize->metr.tmFirstChar;
+    int count = fontsize->metr.tmLastChar-base+1;
+    HFONT oldFid = (HFONT)SelectObject(fl_gc, fontsize->fid);
+    fontsize->listbase = glGenLists(256);
+    wglUseFontBitmaps(fl_gc, base, count, fontsize->listbase+base);
     SelectObject(fl_gc, oldFid);
 # elif defined(__APPLE_QUARTZ__)
 //AGL is not supported for use in 64-bit applications:
 //http://developer.apple.com/mac/library/documentation/Carbon/Conceptual/Carbon64BitGuide/OtherAPIChanges/OtherAPIChanges.html
     short font, face, size;
     uchar fn[256];
-    fn[0]=strlen(fltk3::fontsize->q_name);
-    strcpy((char*)(fn+1), fltk3::fontsize->q_name);
+    fn[0]=strlen(fontsize->q_name);
+    strcpy((char*)(fn+1), fontsize->q_name);
     GetFNum(fn, &font);
     face = 0;
-    size = fltk3::fontsize->size;
-    fltk3::fontsize->listbase = glGenLists(256);
+    size = fontsize->size;
+    fontsize->listbase = glGenLists(256);
 	aglUseFont(aglGetCurrentContext(), font, face,
-               size, 0, 256, fltk3::fontsize->listbase);
+               size, 0, 256, fontsize->listbase);
 # else 
 #   error unsupported platform
 # endif
 
 #endif // USE_OksiD_style_GL_font_selection
   }
-  glListBase(fltk3::fontsize->listbase);
+  glListBase(fontsize->listbase);
 #endif // !GL_DRAW_USES_TEXTURES
-  gl_fontsize = fltk3::fontsize;
+  gl_fontsize = fontsize;
 }
 
 #ifndef __APPLE__
