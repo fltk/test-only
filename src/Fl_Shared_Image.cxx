@@ -92,7 +92,7 @@ Fl_Shared_Image::compare(Fl_Shared_Image **i0,		// I - First image
   <P>The constructors are protected and cannot be used directly
   from a program. Use the get() method instead.
 */
-Fl_Shared_Image::Fl_Shared_Image() : Fl_Image(0,0,0) {
+Fl_Shared_Image::Fl_Shared_Image() : fltk3::Image(0,0,0) {
   name_        = 0;
   refcount_    = 1;
   original_    = 0;
@@ -102,15 +102,15 @@ Fl_Shared_Image::Fl_Shared_Image() : Fl_Image(0,0,0) {
 
 
 /** 
-  Creates a shared image from its filename and its corresponding Fl_Image* img.
+  Creates a shared image from its filename and its corresponding fltk3::Image* img.
   The constructors create a new shared image record in the image cache.
   
   <P>The constructors are protected and cannot be used directly
   from a program. Use the get() method instead.
 */
 Fl_Shared_Image::Fl_Shared_Image(const char *n,		// I - Filename
-                                 Fl_Image   *img)	// I - Image
-  : Fl_Image(0,0,0) {
+                                 fltk3::Image   *img)	// I - Image
+  : fltk3::Image(0,0,0) {
   name_ = new char[strlen(n) + 1];
   strcpy((char *)name_, n);
 
@@ -223,7 +223,7 @@ void Fl_Shared_Image::reload() {
   int		i;		// Looping var
   FILE		*fp;		// File pointer
   uchar		header[64];	// Buffer for auto-detecting files
-  Fl_Image	*img;		// New image
+  fltk3::Image	*img;		// New image
 
   if (!name_) return;
 
@@ -255,7 +255,7 @@ void Fl_Shared_Image::reload() {
 
     if ((img->w() != w() && w()) || (img->h() != h() && h())) {
       // Make sure the reloaded image is the same size as the existing one.
-      Fl_Image *temp = img->copy(w(), h());
+      fltk3::Image *temp = img->copy(w(), h());
       delete img;
       image_ = temp;
     } else {
@@ -271,9 +271,9 @@ void Fl_Shared_Image::reload() {
 // 'Fl_Shared_Image::copy()' - Copy and resize a shared image...
 //
 
-Fl_Image *
+fltk3::Image *
 Fl_Shared_Image::copy(int W, int H) {
-  Fl_Image		*temp_image;	// New image file
+  fltk3::Image		*temp_image;	// New image file
   Fl_Shared_Image	*temp_shared;	// New shared image
 
   // Make a copy of the image we're sharing...
@@ -330,7 +330,7 @@ Fl_Shared_Image::desaturate() {
 void
 Fl_Shared_Image::draw(int X, int Y, int W, int H, int cx, int cy) {
   if (image_) image_->draw(X, Y, W, H, cx, cy);
-  else Fl_Image::draw(X, Y, W, H, cx, cy);
+  else fltk3::Image::draw(X, Y, W, H, cx, cy);
 }
 
 

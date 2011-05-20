@@ -38,7 +38,7 @@
   Interchange Format (JFIF) images. The class supports grayscale
   and color (RGB) JPEG image files.
 */
-class FLTK3_EXPORT Fl_JPEG_Image : public Fl_RGB_Image {
+class FLTK3_EXPORT Fl_JPEG_Image : public fltk3::RGBImage {
 
 public:
 

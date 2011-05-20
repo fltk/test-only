@@ -88,7 +88,7 @@ struct FL_BLINE			// data is in a linked list of these
   FL_BLINE	*prev;		// Previous item in list
   FL_BLINE	*next;		// Next item in list
   void		*data;		// Pointer to data (function)
-  Fl_Image      *icon;		// Pointer to optional icon
+  fltk3::Image      *icon;		// Pointer to optional icon
   short		length;		// sizeof(txt)-1, may be longer than string
   char		flags;		// selected, displayed
   char		txt[1];		// start of allocated array

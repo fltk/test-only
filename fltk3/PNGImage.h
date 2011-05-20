@@ -38,7 +38,7 @@
   class loads colormapped and full-color images and handles color-
   and alpha-based transparency.
 */
-class FLTK3_EXPORT Fl_PNG_Image : public Fl_RGB_Image {
+class FLTK3_EXPORT Fl_PNG_Image : public fltk3::RGBImage {
 
 public:
 

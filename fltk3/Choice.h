@@ -103,7 +103,7 @@ namespace fltk3 {
     int value(const fltk3::MenuItem* v);
   };
   
-}
+} // namespace
 
 #endif
 

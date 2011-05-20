@@ -96,7 +96,7 @@ namespace fltk3 {
    valid until the next event is read from the window system, so it 
    is ok to look at it outside of the handle() method.
    
-   \sa fltk3::event_text(), fltk3::event_key(), class fltk3::
+   \sa fltk3::event_text(), fltk3::event_key(), class Fl
    */
   enum Event {	// events
     /** No event. */

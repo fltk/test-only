@@ -76,10 +76,10 @@ namespace fltk3 {
     : fltk3::Window(X,Y,W,H,l), force_doublebuffering_(0) { type(FL_DOUBLE_WINDOW); }
   };
   
-}
+} // namespace
 
 #endif
-  
-  //
-  // End of "$Id: DoubleWindow.h 7903 2010-11-28 21:06:39Z matt $".
-  //
+
+//
+// End of "$Id: DoubleWindow.h 7903 2010-11-28 21:06:39Z matt $".
+//

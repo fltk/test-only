@@ -78,8 +78,8 @@ void		create_callback(void);
 void		dir_callback(void);
 void		fc_callback(Fl_File_Chooser *, void *);
 void		multi_callback(void);
-Fl_Image	*pdf_check(const char *, uchar *, int);
-Fl_Image	*ps_check(const char *, uchar *, int);
+fltk3::Image	*pdf_check(const char *, uchar *, int);
+fltk3::Image	*ps_check(const char *, uchar *, int);
 void		show_callback(void);
 
 void		extra_callback(fltk3::Choice*,void*);
@@ -253,7 +253,7 @@ multi_callback(void)
 // 'pdf_check()' - Check for and load the first page of a PDF file.
 //
 
-Fl_Image *			// O - Page image or NULL
+fltk3::Image *			// O - Page image or NULL
 pdf_check(const char *name,	// I - Name of file
           uchar      *header,	// I - Header data
 	  int)			// I - Length of header data (unused)
@@ -284,7 +284,7 @@ pdf_check(const char *name,	// I - Name of file
 // 'ps_check()' - Check for and load the first page of a PostScript file.
 //
 
-Fl_Image *			// O - Page image or NULL
+fltk3::Image *			// O - Page image or NULL
 ps_check(const char *name,	// I - Name of file
          uchar      *header,	// I - Header data
 	 int)			// I - Length of header data (unused)

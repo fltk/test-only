@@ -1,5 +1,5 @@
 //
-// "$Id: showColormap.h 8621 2011-04-23 15:46:30Z AlbrechtS $"
+// "$Id$"
 //
 // Colormap picker header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,33 +26,37 @@
 //
 
 /** \file
-   The fl_show_colormap() function hides the implementation classes used
-   to provide the popup window and color selection mechanism.
-*/
+ The fltk3::show_colormap() function hides the implementation classes used
+ to provide the popup window and color selection mechanism.
+ */
 
 #ifndef fltk3_show_colormap_H
 #define fltk3_show_colormap_H
 
-/* doxygen comment here to avoid exposing ColorMenu in fl_show_colormap.cxx
-*/
-
-/** \addtogroup  fl_attributes
-    @{ */
-
-/**
-  \brief Pops up a window to let the user pick a colormap entry.
-  \image html fl_show_colormap.png
-  \image latex fl_show_colormap.png "fl_show_colormap" height=10cm
-  \param[in] oldcol color to be highlighted when grid is shown.
-  \retval fltk3::Color value of the chosen colormap entry.
-  \see fltk3::ColorChooser
-*/
-FLTK3_EXPORT fltk3::Color fl_show_colormap(fltk3::Color oldcol);
-
-/** @} */
+namespace fltk3 {
+  
+  /* doxygen comment here to avoid exposing ColorMenu in fltk3::show_colormap.cxx
+   */
+  
+  /** \addtogroup  fl_attributes
+   @{ */
+  
+  /**
+   \brief Pops up a window to let the user pick a colormap entry.
+   \image html fltk3::show_colormap.png
+   \image latex fltk3::show_colormap.png "fltk3::show_colormap" height=10cm
+   \param[in] oldcol color to be highlighted when grid is shown.
+   \retval Fl_Color value of the chosen colormap entry.
+   \see Fl_Color_Chooser
+   */
+  FLTK3_EXPORT fltk3::Color show_colormap(fltk3::Color oldcol);
+  
+  /** @} */
+  
+}
 
 #endif
 
 //
-// End of "$Id: showColormap.h 8621 2011-04-23 15:46:30Z AlbrechtS $".
+// End of "$Id$".
 //

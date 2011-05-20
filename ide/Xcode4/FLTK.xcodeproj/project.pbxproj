@@ -732,7 +732,6 @@
 		C9568C7D1380730900CDA5BF /* SecretInput.h in Headers */ = {isa = PBXBuildFile; fileRef = C9568BEF1380730600CDA5BF /* SecretInput.h */; };
 		C9568C7E1380730900CDA5BF /* SelectBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = C9568BF01380730700CDA5BF /* SelectBrowser.h */; };
 		C9568C7F1380730900CDA5BF /* SharedImage.h in Headers */ = {isa = PBXBuildFile; fileRef = C9568BF11380730700CDA5BF /* SharedImage.h */; };
-		C9568C801380730900CDA5BF /* showColormap.h in Headers */ = {isa = PBXBuildFile; fileRef = C9568BF21380730700CDA5BF /* showColormap.h */; };
 		C9568C811380730900CDA5BF /* showInput.h in Headers */ = {isa = PBXBuildFile; fileRef = C9568BF31380730700CDA5BF /* showInput.h */; };
 		C9568C821380730900CDA5BF /* SimpleCounter.h in Headers */ = {isa = PBXBuildFile; fileRef = C9568BF41380730700CDA5BF /* SimpleCounter.h */; };
 		C9568C831380730900CDA5BF /* SingleWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = C9568BF51380730700CDA5BF /* SingleWindow.h */; };
@@ -774,6 +773,7 @@
 		C96290E21274D0EF007D3CFE /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C96290E11274D0EF007D3CFE /* AGL.framework */; };
 		C96290E61274D100007D3CFE /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C96290E51274D100007D3CFE /* OpenGL.framework */; };
 		C96291151274D1FD007D3CFE /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9628FFD1274D0B3007D3CFE /* Cocoa.framework */; };
+		C965812A1386B8EF00DF7523 /* show_colormap.h in Headers */ = {isa = PBXBuildFile; fileRef = C96581291386B8EF00DF7523 /* show_colormap.h */; };
 		C984AFA812D02A1800D66DAD /* demo.menu in Resources */ = {isa = PBXBuildFile; fileRef = C984AFA712D02A1800D66DAD /* demo.menu */; };
 		C99FD8E212D2A2AD002FC776 /* browser.cxx in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6D999C03407EAEE9C4D3477A /* browser.cxx */; };
 		C9A374AB3AD29E141C659819 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
@@ -4810,7 +4810,6 @@
 		C9568BEF1380730600CDA5BF /* SecretInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SecretInput.h; path = ../../fltk3/SecretInput.h; sourceTree = "<group>"; };
 		C9568BF01380730700CDA5BF /* SelectBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SelectBrowser.h; path = ../../fltk3/SelectBrowser.h; sourceTree = "<group>"; };
 		C9568BF11380730700CDA5BF /* SharedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SharedImage.h; path = ../../fltk3/SharedImage.h; sourceTree = "<group>"; };
-		C9568BF21380730700CDA5BF /* showColormap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = showColormap.h; path = ../../fltk3/showColormap.h; sourceTree = "<group>"; };
 		C9568BF31380730700CDA5BF /* showInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = showInput.h; path = ../../fltk3/showInput.h; sourceTree = "<group>"; };
 		C9568BF41380730700CDA5BF /* SimpleCounter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimpleCounter.h; path = ../../fltk3/SimpleCounter.h; sourceTree = "<group>"; };
 		C9568BF51380730700CDA5BF /* SingleWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SingleWindow.h; path = ../../fltk3/SingleWindow.h; sourceTree = "<group>"; };
@@ -4852,6 +4851,7 @@
 		C9628FFD1274D0B3007D3CFE /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		C96290E11274D0EF007D3CFE /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = System/Library/Frameworks/AGL.framework; sourceTree = SDKROOT; };
 		C96290E51274D100007D3CFE /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		C96581291386B8EF00DF7523 /* show_colormap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = show_colormap.h; path = ../../fltk3/show_colormap.h; sourceTree = "<group>"; };
 		C96FA1A4138275F800FF34AA /* Wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wrapper.h; path = ../../fltk3/Wrapper.h; sourceTree = "<group>"; };
 		C984AFA712D02A1800D66DAD /* demo.menu */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = demo.menu; path = ../../test/demo.menu; sourceTree = SOURCE_ROOT; };
 		C9EDD143127338F600ADB21C /* README.OSX.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.OSX.txt; path = ../../README.OSX.txt; sourceTree = SOURCE_ROOT; };
@@ -7025,7 +7025,7 @@
 				C9568BEF1380730600CDA5BF /* SecretInput.h */,
 				C9568BF01380730700CDA5BF /* SelectBrowser.h */,
 				C9568BF11380730700CDA5BF /* SharedImage.h */,
-				C9568BF21380730700CDA5BF /* showColormap.h */,
+				C96581291386B8EF00DF7523 /* show_colormap.h */,
 				C9568BF31380730700CDA5BF /* showInput.h */,
 				C9568BF41380730700CDA5BF /* SimpleCounter.h */,
 				C9568BF51380730700CDA5BF /* SingleWindow.h */,
@@ -7541,7 +7541,6 @@
 				C9568C7D1380730900CDA5BF /* SecretInput.h in Headers */,
 				C9568C7E1380730900CDA5BF /* SelectBrowser.h in Headers */,
 				C9568C7F1380730900CDA5BF /* SharedImage.h in Headers */,
-				C9568C801380730900CDA5BF /* showColormap.h in Headers */,
 				C9568C811380730900CDA5BF /* showInput.h in Headers */,
 				C9568C821380730900CDA5BF /* SimpleCounter.h in Headers */,
 				C9568C831380730900CDA5BF /* SingleWindow.h in Headers */,
@@ -7707,6 +7706,7 @@
 				C915E3571382D8ED00C5FD27 /* win32.H in Headers */,
 				C915E3581382D8ED00C5FD27 /* x.H in Headers */,
 				C915E3591382D8ED00C5FD27 /* Fl_Paged_Device.H in Headers */,
+				C965812A1386B8EF00DF7523 /* show_colormap.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

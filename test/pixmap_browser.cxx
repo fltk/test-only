@@ -65,7 +65,7 @@ void load_file(const char *n) {
     return;
   }
   if (img->w() > b->w() || img->h() > b->h()) {
-    Fl_Image *temp;
+    fltk3::Image *temp;
     if (img->w() > img->h()) temp = img->copy(b->w(), b->h() * img->h() / img->w());
     else temp = img->copy(b->w() * img->w() / img->h(), b->h());
 

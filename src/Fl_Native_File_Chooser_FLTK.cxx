@@ -42,7 +42,7 @@
   Optional \p val presets the type of browser this will be, 
   which can also be changed with type().
 */
-Fl_Native_File_Chooser::Fl_Native_File_Chooser(int val) {
+fltk3::NativeFileChooser::fltk3::NativeFileChooser(int val) {
   //// CANT USE THIS -- MESSES UP LINKING/CREATES DEPENDENCY ON fltk_images.
   //// Have app call this from main() instead.
   ////
@@ -70,7 +70,7 @@ Fl_Native_File_Chooser::Fl_Native_File_Chooser(int val) {
   Destructor. 
   Deallocates any resources allocated to this widget.
 */
-Fl_Native_File_Chooser::~Fl_Native_File_Chooser() {
+fltk3::NativeFileChooser::~Fl_Native_File_Chooser() {
   delete _file_chooser;
   _filter      = strfree(_filter);
   _parsedfilt  = strfree(_parsedfilt);
@@ -81,13 +81,13 @@ Fl_Native_File_Chooser::~Fl_Native_File_Chooser() {
 }
 
 // PRIVATE: SET ERROR MESSAGE
-void Fl_Native_File_Chooser::errmsg(const char *msg) {
+void fltk3::NativeFileChooser::errmsg(const char *msg) {
   _errmsg = strfree(_errmsg);
   _errmsg = strnew(msg);
 }
 
 // PRIVATE: translate Native types to Fl_File_Chooser types
-int Fl_Native_File_Chooser::type_fl_file(int val) {
+int fltk3::NativeFileChooser::type_fl_file(int val) {
   switch (val) {
     case BROWSE_FILE:
       return(FLTK_CHOOSER_SINGLE);
@@ -107,23 +107,23 @@ int Fl_Native_File_Chooser::type_fl_file(int val) {
 }
 
 /**
-  Sets the current Fl_Native_File_Chooser::Type of browser.
+  Sets the current fltk3::NativeFileChooser::Type of browser.
  */
-void Fl_Native_File_Chooser::type(int val) {
+void fltk3::NativeFileChooser::type(int val) {
   _btype = val;
   _file_chooser->type(type_fl_file(val));
 }
 
 /**
-  Gets the current Fl_Native_File_Chooser::Type of browser.
+  Gets the current fltk3::NativeFileChooser::Type of browser.
  */
-int Fl_Native_File_Chooser::type() const {
+int fltk3::NativeFileChooser::type() const {
   return(_btype);
 }
 
 /**
   Sets the platform specific chooser options to \p val.
-  \p val is expected to be one or more Fl_Native_File_Chooser::Option flags ORed together.
+  \p val is expected to be one or more fltk3::NativeFileChooser::Option flags ORed together.
   Some platforms have OS-specific functions that can be enabled/disabled via this method.
   <P>
   \code
@@ -134,14 +134,14 @@ int Fl_Native_File_Chooser::type() const {
   SAVEAS_CONFIRM    Confirm dialog if BROWSE_SAVE_FILE file exists.   Ignored   Used      Used
   \endcode
 */
-void Fl_Native_File_Chooser::options(int val) {
+void fltk3::NativeFileChooser::options(int val) {
   _options = val;
 }
 
 /**
-  Gets the platform specific Fl_Native_File_Chooser::Option flags.
+  Gets the platform specific fltk3::NativeFileChooser::Option flags.
 */
-int Fl_Native_File_Chooser::options() const {
+int fltk3::NativeFileChooser::options() const {
   return(_options);
 }
 
@@ -152,7 +152,7 @@ int Fl_Native_File_Chooser::options() const {
      - 1  -- user cancelled
      - -1 -- failed; errmsg() has reason
 */
-int Fl_Native_File_Chooser::show() {
+int fltk3::NativeFileChooser::show() {
   // FILTER
   if ( _parsedfilt ) {
     _file_chooser->filter(_parsedfilt);
@@ -217,7 +217,7 @@ int Fl_Native_File_Chooser::show() {
   This message should at least be flagged to the user in a dialog box, or to some kind of error log. 
   Contents will be valid only for methods that document errmsg() will have info on failures.
  */
-const char *Fl_Native_File_Chooser::errmsg() const {
+const char *fltk3::NativeFileChooser::errmsg() const {
   return(_errmsg ? _errmsg : "No error");
 }
 
@@ -227,7 +227,7 @@ const char *Fl_Native_File_Chooser::errmsg() const {
   If more than one filename is expected, use filename(int) instead.
   Return value may be "" if no filename was chosen (eg. user cancelled).
  */
-const char* Fl_Native_File_Chooser::filename() const {
+const char* fltk3::NativeFileChooser::filename() const {
   if ( _file_chooser->count() > 0 ) return(_file_chooser->value());
   return("");
 }
@@ -246,7 +246,7 @@ const char* Fl_Native_File_Chooser::filename() const {
   }
   \endcode
  */
-const char* Fl_Native_File_Chooser::filename(int i) const {
+const char* fltk3::NativeFileChooser::filename(int i) const {
   if ( i < _file_chooser->count() )
     return(_file_chooser->value(i+1));	// convert fltk 1 based to our 0 based
   return("");
@@ -257,7 +257,7 @@ const char* Fl_Native_File_Chooser::filename(int i) const {
   Can be NULL if no title desired.
   The default title varies according to the platform, so you are advised to set the title explicitly.
 */
-void Fl_Native_File_Chooser::title(const char *val) {
+void fltk3::NativeFileChooser::title(const char *val) {
   _file_chooser->label(val);
 }
 
@@ -265,7 +265,7 @@ void Fl_Native_File_Chooser::title(const char *val) {
   Get the title of the file chooser's dialog window.
   Return value may be NULL if no title was set.
 */
-const char *Fl_Native_File_Chooser::title() const {
+const char *fltk3::NativeFileChooser::title() const {
   return(_file_chooser->label());
 }
 
@@ -287,7 +287,7 @@ const char *Fl_Native_File_Chooser::title() const {
   On most platforms, each filter is available to the user via a pulldown menu 
   in the file chooser. The 'All Files' option is always available to the user. 
 */
-void Fl_Native_File_Chooser::filter(const char *val) {
+void fltk3::NativeFileChooser::filter(const char *val) {
   _filter = strfree(_filter);
   _filter = strnew(val);
   parse_filter();
@@ -297,14 +297,14 @@ void Fl_Native_File_Chooser::filter(const char *val) {
   Returns the filter string last set.
   Can be NULL if no filter was set.
  */
-const char *Fl_Native_File_Chooser::filter() const {
+const char *fltk3::NativeFileChooser::filter() const {
   return(_filter);
 }
 
 /**
 Gets how many filters were available, not including "All Files" 
 */
-int Fl_Native_File_Chooser::filters() const {
+int fltk3::NativeFileChooser::filters() const {
   return(_nfilters);
 }
 
@@ -315,7 +315,7 @@ int Fl_Native_File_Chooser::filters() const {
   If filter_value()==filters(), then "All Files" was chosen. 
   If filter_value() > filters(), then a custom filter was set.
  */
-void Fl_Native_File_Chooser::filter_value(int val) {
+void fltk3::NativeFileChooser::filter_value(int val) {
   _filtvalue = val;
 }
 
@@ -323,7 +323,7 @@ void Fl_Native_File_Chooser::filter_value(int val) {
   Returns which filter value was last selected by the user.
   This is only valid if the chooser returns success.
  */
-int Fl_Native_File_Chooser::filter_value() const {
+int fltk3::NativeFileChooser::filter_value() const {
   return(_filtvalue);
 }
 
@@ -340,7 +340,7 @@ int Fl_Native_File_Chooser::filter_value() const {
   }
   \endcode
 */
-int Fl_Native_File_Chooser::count() const {
+int fltk3::NativeFileChooser::count() const {
   return(_file_chooser->count());
 }
 
@@ -349,7 +349,7 @@ int Fl_Native_File_Chooser::count() const {
   If \p val is NULL, or no directory is specified, the chooser will attempt
   to use the last non-cancelled folder.
 */
-void Fl_Native_File_Chooser::directory(const char *val) {
+void fltk3::NativeFileChooser::directory(const char *val) {
   _directory = strfree(_directory);
   _directory = strnew(val);
 }
@@ -357,7 +357,7 @@ void Fl_Native_File_Chooser::directory(const char *val) {
 /**
   Returns the current preset directory() value.
 */
-const char *Fl_Native_File_Chooser::directory() const {
+const char *fltk3::NativeFileChooser::directory() const {
   return(_directory);
 }
 
@@ -371,7 +371,7 @@ const char *Fl_Native_File_Chooser::directory() const {
 //     Returns a modified version of the filter that the caller is responsible
 //     for freeing with strfree().
 //
-void Fl_Native_File_Chooser::parse_filter() {
+void fltk3::NativeFileChooser::parse_filter() {
   _parsedfilt = strfree(_parsedfilt);	// clear previous parsed filter (if any)
   _nfilters = 0;
   char *in = _filter;
@@ -440,7 +440,7 @@ void Fl_Native_File_Chooser::parse_filter() {
   Mainly used to preset the filename for save dialogs, 
   and on most platforms can be used for opening files as well. 
  */
-void Fl_Native_File_Chooser::preset_file(const char* val) {
+void fltk3::NativeFileChooser::preset_file(const char* val) {
   _preset_file = strfree(_preset_file);
   _preset_file = strnew(val);
 }
@@ -448,12 +448,12 @@ void Fl_Native_File_Chooser::preset_file(const char* val) {
 /**
   Get the preset filename.
   */
-const char* Fl_Native_File_Chooser::preset_file() const {
+const char* fltk3::NativeFileChooser::preset_file() const {
   return(_preset_file);
 }
 
 
-int Fl_Native_File_Chooser::exist_dialog() {
+int fltk3::NativeFileChooser::exist_dialog() {
   return(fltk3::choice("%s", fltk3::cancel, fltk3::ok, NULL, file_exists_message));
 }
 

@@ -43,7 +43,7 @@
 #include <fltk3/filename.h>
 
 // FREE PATHNAMES ARRAY, IF IT HAS ANY CONTENTS
-void Fl_Native_File_Chooser::clear_pathnames() {
+void fltk3::NativeFileChooser::clear_pathnames() {
   if ( _pathnames ) {
     while ( --_tpathnames >= 0 ) {
       _pathnames[_tpathnames] = strfree(_pathnames[_tpathnames]);
@@ -55,7 +55,7 @@ void Fl_Native_File_Chooser::clear_pathnames() {
 }
 
 // SET A SINGLE PATHNAME
-void Fl_Native_File_Chooser::set_single_pathname(const char *s) {
+void fltk3::NativeFileChooser::set_single_pathname(const char *s) {
   clear_pathnames();
   _pathnames = new char*[1];
   _pathnames[0] = strnew(s);
@@ -63,7 +63,7 @@ void Fl_Native_File_Chooser::set_single_pathname(const char *s) {
 }
 
 // CONSTRUCTOR
-Fl_Native_File_Chooser::Fl_Native_File_Chooser(int val) {
+fltk3::NativeFileChooser::NativeFileChooser(int val) {
   _btype          = val;
   _panel = NULL;
   _options        = NO_OPTIONS;
@@ -81,7 +81,7 @@ Fl_Native_File_Chooser::Fl_Native_File_Chooser(int val) {
 }
 
 // DESTRUCTOR
-Fl_Native_File_Chooser::~Fl_Native_File_Chooser() {
+fltk3::NativeFileChooser::~NativeFileChooser() {
   // _opts		// nothing to manage
   // _options		// nothing to manage
   // _keepstate		// nothing to manage
@@ -100,17 +100,17 @@ Fl_Native_File_Chooser::~Fl_Native_File_Chooser() {
 }
 
 // GET TYPE OF BROWSER
-int Fl_Native_File_Chooser::type() const {
+int fltk3::NativeFileChooser::type() const {
   return(_btype);
 }
 
 // SET OPTIONS
-void Fl_Native_File_Chooser::options(int val) {
+void fltk3::NativeFileChooser::options(int val) {
   _options = val;
 }
 
 // GET OPTIONS
-int Fl_Native_File_Chooser::options() const {
+int fltk3::NativeFileChooser::options() const {
   return(_options);
 }
 
@@ -120,7 +120,7 @@ int Fl_Native_File_Chooser::options() const {
 //         1 - user cancelled
 //        -1 - failed; errmsg() has reason
 //
-int Fl_Native_File_Chooser::show() {
+int fltk3::NativeFileChooser::show() {
 
   // Make sure fltk interface updates before posting our dialog
   fltk3::flush();
@@ -136,37 +136,37 @@ int Fl_Native_File_Chooser::show() {
 // SET ERROR MESSAGE
 //     Internal use only.
 //
-void Fl_Native_File_Chooser::errmsg(const char *msg) {
+void fltk3::NativeFileChooser::errmsg(const char *msg) {
   _errmsg = strfree(_errmsg);
   _errmsg = strnew(msg);
 }
 
 // RETURN ERROR MESSAGE
-const char *Fl_Native_File_Chooser::errmsg() const {
+const char *fltk3::NativeFileChooser::errmsg() const {
   return(_errmsg ? _errmsg : "No error");
 }
 
 // GET FILENAME
-const char* Fl_Native_File_Chooser::filename() const {
+const char* fltk3::NativeFileChooser::filename() const {
   if ( _pathnames && _tpathnames > 0 ) return(_pathnames[0]);
   return("");
 }
 
 // GET FILENAME FROM LIST OF FILENAMES
-const char* Fl_Native_File_Chooser::filename(int i) const {
+const char* fltk3::NativeFileChooser::filename(int i) const {
   if ( _pathnames && i < _tpathnames ) return(_pathnames[i]);
   return("");
 }
 
 // GET TOTAL FILENAMES CHOSEN
-int Fl_Native_File_Chooser::count() const {
+int fltk3::NativeFileChooser::count() const {
   return(_tpathnames);
 }
 
 // PRESET PATHNAME
 //     Value can be NULL for none.
 //
-void Fl_Native_File_Chooser::directory(const char *val) {
+void fltk3::NativeFileChooser::directory(const char *val) {
   _directory = strfree(_directory);
   _directory = strnew(val);
 }
@@ -174,14 +174,14 @@ void Fl_Native_File_Chooser::directory(const char *val) {
 // GET PRESET PATHNAME
 //     Returned value can be NULL if none set.
 //
-const char* Fl_Native_File_Chooser::directory() const {
+const char* fltk3::NativeFileChooser::directory() const {
   return(_directory);
 }
 
 // SET TITLE
 //     Value can be NULL if no title desired.
 //
-void Fl_Native_File_Chooser::title(const char *val) {
+void fltk3::NativeFileChooser::title(const char *val) {
   _title = strfree(_title);
   _title = strnew(val);
 }
@@ -189,14 +189,14 @@ void Fl_Native_File_Chooser::title(const char *val) {
 // GET TITLE
 //     Returned value can be NULL if none set.
 //
-const char *Fl_Native_File_Chooser::title() const {
+const char *fltk3::NativeFileChooser::title() const {
   return(_title);
 }
 
 // SET FILTER
 //     Can be NULL if no filter needed
 //
-void Fl_Native_File_Chooser::filter(const char *val) {
+void fltk3::NativeFileChooser::filter(const char *val) {
   _filter = strfree(_filter);
   _filter = strnew(val);
 
@@ -213,14 +213,14 @@ void Fl_Native_File_Chooser::filter(const char *val) {
 // GET FILTER
 //     Returned value can be NULL if none set.
 //
-const char *Fl_Native_File_Chooser::filter() const {
+const char *fltk3::NativeFileChooser::filter() const {
   return(_filter);
 }
 
 // CLEAR ALL FILTERS
 //    Internal use only.
 //
-void Fl_Native_File_Chooser::clear_filters() {
+void fltk3::NativeFileChooser::clear_filters() {
   _filt_names = strfree(_filt_names);
   for (int i=0; i<_filt_total; i++) {
     _filt_patt[i] = strfree(_filt_patt[i]);
@@ -248,7 +248,7 @@ void Fl_Native_File_Chooser::clear_filters() {
 //             \_____/  \_______/
 //              Name     Wildcard
 //
-void Fl_Native_File_Chooser::parse_filter(const char *in) {
+void fltk3::NativeFileChooser::parse_filter(const char *in) {
   clear_filters();
   if ( ! in ) return;
   int has_name = strchr(in, '\t') ? 1 : 0;
@@ -324,7 +324,7 @@ void Fl_Native_File_Chooser::parse_filter(const char *in) {
 // SET PRESET FILE
 //     Value can be NULL for none.
 //
-void Fl_Native_File_Chooser::preset_file(const char* val) {
+void fltk3::NativeFileChooser::preset_file(const char* val) {
   _preset_file = strfree(_preset_file);
   _preset_file = strnew(val);
 }
@@ -332,19 +332,19 @@ void Fl_Native_File_Chooser::preset_file(const char* val) {
 // PRESET FILE
 //     Returned value can be NULL if none set.
 //
-const char* Fl_Native_File_Chooser::preset_file() const {
+const char* fltk3::NativeFileChooser::preset_file() const {
   return(_preset_file);
 }
 
-void Fl_Native_File_Chooser::filter_value(int val) {
+void fltk3::NativeFileChooser::filter_value(int val) {
   _filt_value = val;
 }
 
-int Fl_Native_File_Chooser::filter_value() const {
+int fltk3::NativeFileChooser::filter_value() const {
   return(_filt_value);
 }
 
-int Fl_Native_File_Chooser::filters() const {
+int fltk3::NativeFileChooser::filters() const {
   return(_filt_total);
 }
 
@@ -354,7 +354,7 @@ int Fl_Native_File_Chooser::filters() const {
 #define MAC_OS_X_VERSION_10_6 1060
 #endif
 
-int Fl_Native_File_Chooser::get_saveas_basename(void) {
+int fltk3::NativeFileChooser::get_saveas_basename(void) {
   char *q = strdup( [[(NSSavePanel*)_panel filename] fileSystemRepresentation] );
   id delegate = [(NSSavePanel*)_panel delegate];
   if (delegate != nil) {
@@ -370,7 +370,7 @@ int Fl_Native_File_Chooser::get_saveas_basename(void) {
 }
 
 // SET THE TYPE OF BROWSER
-void Fl_Native_File_Chooser::type(int val) {
+void fltk3::NativeFileChooser::type(int val) {
   _btype = val;
   switch (_btype) {
     case BROWSE_FILE:
@@ -474,7 +474,7 @@ static NSPopUpButton *createPopupAccessory(NSSavePanel *panel, const char *filte
 //         1 - user cancelled
 //        -1 - failed; errmsg() has reason
 //     
-int Fl_Native_File_Chooser::post() {
+int fltk3::NativeFileChooser::post() {
   // INITIALIZE BROWSER
   if ( _filt_total == 0 ) {	// Make sure they match
     _filt_value = 0;		// TBD: move to someplace more logical?

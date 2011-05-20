@@ -40,7 +40,7 @@
 #include "Fl_Native_File_Chooser_FLTK.cxx"
 #endif
 
-const char *Fl_Native_File_Chooser::file_exists_message = "File exists. Are you sure you want to overwrite?";
+const char *fltk3::NativeFileChooser::file_exists_message = "File exists. Are you sure you want to overwrite?";
 
 //
 // End of "$Id$".

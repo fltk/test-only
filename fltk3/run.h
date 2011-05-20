@@ -51,8 +51,8 @@ namespace fltk3 {
   class Widget;
   class Window;
   struct Label;
+  class Image;
 }
-class Fl_Image;
 
 
 namespace fltk3 {
@@ -223,7 +223,7 @@ namespace fltk3 {
   extern int awake_ring_head_;
   extern int awake_ring_tail_;
   extern const char* scheme_;
-  extern Fl_Image* scheme_bg_;
+  extern fltk3::Image* scheme_bg_;
   
   extern int e_original_keysym; // late addition
   extern int scrollbar_size_;

@@ -57,7 +57,7 @@ static Fl_Double_Window *fnt_chooser_win;
 static Fl_Hold_Browser *fontobj;
 static Fl_Hold_Browser *sizeobj;
 
-static Fl_Value_Output *fnt_cnt;
+static fltk3::ValueOutput *fnt_cnt;
 static Fl_Button *refresh_btn;
 static Fl_Button *choose_btn;
 static Fl_Output *fix_prop;
@@ -376,7 +376,7 @@ static void create_font_widget()
         // Create the status bar
         Fl_Group *stat_bar = new Fl_Group (10, 385, 380, 30);
         {        
-          fnt_cnt = new Fl_Value_Output(10, 390, 40, 20);
+          fnt_cnt = new fltk3::ValueOutput(10, 390, 40, 20);
           fnt_cnt->label("fonts");
           fnt_cnt->align(FL_ALIGN_RIGHT);
         

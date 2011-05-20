@@ -40,12 +40,12 @@
 Fl_Thread prime_thread;
 
 Fl_Browser *browser1, *browser2;
-Fl_Value_Output *value1, *value2;
+fltk3::ValueOutput *value1, *value2;
 int start2 = 3;
 
 void magic_number_cb(void *p)
 {
-  Fl_Value_Output *w = (Fl_Value_Output*)p;
+  fltk3::ValueOutput *w = (fltk3::ValueOutput*)p;
   w->labelcolor(FL_RED);
   w->redraw_label();
 }
@@ -53,7 +53,7 @@ void magic_number_cb(void *p)
 void* prime_func(void* p)
 {
   Fl_Browser* browser = (Fl_Browser*) p;
-  Fl_Value_Output *value;
+  fltk3::ValueOutput *value;
   int n;
   int step;
   char proud = 0;
@@ -123,13 +123,13 @@ int main(int argc, char **argv)
   Fl_Double_Window* w = new Fl_Double_Window(200, 200, "Single Thread");
   browser1 = new Fl_Browser(0, 0, 200, 175);
   w->resizable(browser1);
-  value1 = new Fl_Value_Output(100, 175, 200, 25, "Max Prime:");
+  value1 = new fltk3::ValueOutput(100, 175, 200, 25, "Max Prime:");
   w->end();
   w->show(argc, argv);
   w = new Fl_Double_Window(200, 200, "Six Threads");
   browser2 = new Fl_Browser(0, 0, 200, 175);
   w->resizable(browser2);
-  value2 = new Fl_Value_Output(100, 175, 200, 25, "Max Prime:");
+  value2 = new fltk3::ValueOutput(100, 175, 200, 25, "Max Prime:");
   w->end();
   w->show();
   

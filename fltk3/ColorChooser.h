@@ -194,7 +194,7 @@ namespace fltk3 {
   FLTK3_EXPORT int color_chooser(const char* name, double& r, double& g, double& b, int m=-1);
   FLTK3_EXPORT int color_chooser(const char* name, uchar& r, uchar& g, uchar& b, int m=-1);
   
-}
+} // namespace
 
 #endif
 

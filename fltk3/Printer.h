@@ -135,7 +135,7 @@ public:
  <p><b>Platform specifics</b>
  <ul>
  <li>Unix/Linux platforms:
- Class Fl_RGB_Image prints but loses its transparency if it has one.
+ Class fltk3::RGBImage prints but loses its transparency if it has one.
  See class Fl_PostScript_Graphics_Driver for a description of how UTF-8 strings appear in print.
  Use the static public attributes of this class to set the print dialog to other languages 
  than English. For example, the "Printer:" dialog item Fl_Printer::dialog_printer can be set to French with:
@@ -145,8 +145,8 @@ public:
  before creation of the Fl_Printer object.
  Use Fl_PostScript_File_Device::file_chooser_title to customize the title of the file chooser dialog that opens
  when using the "Print To File" option of the print dialog. 
- <li>MSWindows platform: Transparent Fl_RGB_Image 's don't print with exact transparency on most printers.
- Fl_RGB_Image 's don't rotate() well.
+ <li>MSWindows platform: Transparent fltk3::RGBImage 's don't print with exact transparency on most printers.
+ fltk3::RGBImage 's don't rotate() well.
  A workaround is to use the print_window_part() call. 
  <li>Mac OS X platform: all graphics requests print as on display.
  </ul>

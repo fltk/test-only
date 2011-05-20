@@ -86,7 +86,7 @@
   character or the beginning of a UTF-8 character sequence. Behavior for false
   UTF-8 sequences and pointers into the middle of a sequence are undefined.
 
-  \see Fl_Text_Display, Fl_Text_Editor for more powerful text handling widgets
+  \see fltk3::TextDisplay, fltk3::TextEditor for more powerful text handling widgets
 
   \internal
   When porting this widget from ASCII to UTF-8, previously legal pointers into
@@ -467,7 +467,7 @@ public:
     History: This flag was provided for backwards support of FLTK's old 1.1.x
     behavior where Tab inserts a tab character instead of navigating 
     focus to the next widget. This behavior was unique to Fl_Multiline_Input. 
-    With the advent of Fl_Text_Editor, this old behavior has been deprecated.
+    With the advent of fltk3::TextEditor, this old behavior has been deprecated.
 
     \param [in] val If \p val is 1, Tab advances focus (default).<BR>
                     If \p val is 0, Tab inserts a tab character (old FLTK behavior).

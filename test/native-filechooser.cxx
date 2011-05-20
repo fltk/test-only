@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Simple test of the Fl_Native_File_Chooser.
+// Simple test of the fltk3::NativeFileChooser.
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
 // Copyright 2004 Greg Ercolano.
@@ -39,9 +39,9 @@ fltk3::Input *G_filename = NULL;
 
 void Butt_CB(Fl_Widget*, void*) {
   // Create native chooser
-  Fl_Native_File_Chooser native;
+  fltk3::NativeFileChooser native;
   native.title("Pick a file");
-  native.type(Fl_Native_File_Chooser::BROWSE_FILE);
+  native.type(fltk3::NativeFileChooser::BROWSE_FILE);
   native.filter("Text\t*.txt\n"
                 "C Files\t*.{cxx,h,c}\n"
                 "Apps\t*.{app}\n");		// TODO: need to add kNavSupportPackages to non-cocoa <FNFC>_MAC.cxx

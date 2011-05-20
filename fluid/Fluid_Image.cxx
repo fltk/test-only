@@ -143,7 +143,7 @@ void Fluid_Image::write_static() {
 	    unique_id(this, "idata", fl_filename_name(name()), 0));
     write_cdata(img->data()[0], (img->w() * img->d() + img->ld()) * img->h());
     write_c(";\n");
-    write_c("static Fl_RGB_Image %s(%s, %d, %d, %d, %d);\n",
+    write_c("static fltk3::RGBImage %s(%s, %d, %d, %d, %d);\n",
 	    unique_id(this, "image", fl_filename_name(name()), 0),
 	    unique_id(this, "idata", fl_filename_name(name()), 0),
 	    img->w(), img->h(), img->d(), img->ld());

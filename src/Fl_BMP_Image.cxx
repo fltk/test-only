@@ -68,7 +68,7 @@ static unsigned int	read_dword(FILE *fp);
   the image
 */
 Fl_BMP_Image::Fl_BMP_Image(const char *bmp) // I - File to read
-  : Fl_RGB_Image(0,0,0) {
+  : fltk3::RGBImage(0,0,0) {
   FILE		*fp;		// File pointer
   int		info_size,	// Size of info header
 		depth,		// Depth of image (bits)

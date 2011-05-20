@@ -30,7 +30,7 @@
 #include "alignment_panel.h"
 #include <fltk3/Preferences.h>
 #include <fltk3/ask.h>
-Fl_Text_Buffer *shell_run_buffer; 
+fltk3::TextBuffer *shell_run_buffer; 
 
 fltk3::DoubleWindow *project_window=(fltk3::DoubleWindow *)0;
 
@@ -316,7 +316,7 @@ static void cb_Cancel(fltk3::Button*, void*) {
 
 fltk3::DoubleWindow *shell_run_window=(fltk3::DoubleWindow *)0;
 
-Fl_Text_Display *shell_run_display=(Fl_Text_Display *)0;
+fltk3::TextDisplay *shell_run_display=(fltk3::TextDisplay *)0;
 
 fltk3::ReturnButton *shell_run_button=(fltk3::ReturnButton *)0;
 
@@ -364,13 +364,13 @@ fltk3::DoubleWindow* make_shell_window() {
     shell_window->end();
   } // fltk3::DoubleWindow* shell_window
   { shell_run_window = new fltk3::DoubleWindow(555, 430, "Shell Command Output");
-    { shell_run_display = new Fl_Text_Display(10, 10, 535, 375);
+    { shell_run_display = new fltk3::TextDisplay(10, 10, 535, 375);
       shell_run_display->box(fltk3::DOWN_BOX);
       shell_run_display->textfont(4);
       fltk3::Group::current()->resizable(shell_run_display);
-      shell_run_buffer = new Fl_Text_Buffer();
+      shell_run_buffer = new fltk3::TextBuffer();
       shell_run_display->buffer(shell_run_buffer);
-    } // Fl_Text_Display* shell_run_display
+    } // fltk3::TextDisplay* shell_run_display
     { shell_run_button = new fltk3::ReturnButton(468, 395, 77, 25, "Close");
       shell_run_button->callback((fltk3::Callback*)cb_shell_run_button);
     } // fltk3::ReturnButton* shell_run_button

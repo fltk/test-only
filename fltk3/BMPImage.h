@@ -36,7 +36,7 @@
   The Fl_BMP_Image class supports loading, caching,
   and drawing of Windows Bitmap (BMP) image files.
 */
-class FLTK3_EXPORT Fl_BMP_Image : public Fl_RGB_Image {
+class FLTK3_EXPORT Fl_BMP_Image : public fltk3::RGBImage {
 
   public:
 

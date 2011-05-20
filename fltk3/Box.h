@@ -33,10 +33,10 @@
 
 #include "Widget.h"
 
-namespace fltk3 { class Widget; }
-
-namespace fltk3 {
+namespace fltk3 { 
   
+  class Widget;
+
   /**
    This widget simply draws its box, and possibly it's label.  Putting it
    before some other widgets and making it big enough to surround them

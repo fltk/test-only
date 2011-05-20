@@ -563,7 +563,7 @@ class Fl_Text_Display_Type : public Fl_Widget_Type {
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
-    Fl_Text_Display *myo = (Fl_Text_Display *)o;
+    fltk3::TextDisplay *myo = (fltk3::TextDisplay *)o;
     fltk3::font(myo->textfont(), myo->textsize());
     h -= fltk3::box_dh(o->box());
     w -= fltk3::box_dw(o->box());
@@ -574,11 +574,11 @@ public:
     if (h < 30) h = 30;
     if (w < 50) w = 50;
   }
-  virtual const char *type_name() {return "Fl_Text_Display";}
+  virtual const char *type_name() {return "fltk3::TextDisplay";}
   virtual const char *alt_type_name() {return "fltk::TextDisplay";}
   int is_text_display() const {return 1;}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    Fl_Text_Display *myo = new Fl_Text_Display(x,y,w,h);
+    fltk3::TextDisplay *myo = new fltk3::TextDisplay(x,y,w,h);
     return myo;
   }
   Fl_Widget_Type *_make() {return new Fl_Text_Display_Type();}
@@ -587,7 +587,7 @@ public:
 static Fl_Text_Display_Type Fl_Text_Display_type;
 
 int Fl_Text_Display_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
-  Fl_Text_Display *myo = (Fl_Text_Display*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
+  fltk3::TextDisplay *myo = (fltk3::TextDisplay*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
     case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
@@ -605,7 +605,7 @@ class Fl_Text_Editor_Type : public Fl_Widget_Type {
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
-    Fl_Text_Editor *myo = (Fl_Text_Editor *)o;
+    fltk3::TextEditor *myo = (fltk3::TextEditor *)o;
     fltk3::font(myo->textfont(), myo->textsize());
     h -= fltk3::box_dh(o->box());
     w -= fltk3::box_dw(o->box());
@@ -616,11 +616,11 @@ public:
     if (h < 30) h = 30;
     if (w < 50) w = 50;
   }
-  virtual const char *type_name() {return "Fl_Text_Editor";}
+  virtual const char *type_name() {return "fltk3::TextEditor";}
   virtual const char *alt_type_name() {return "fltk::TextEditor";}
   int is_text_display() const {return 1;}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    Fl_Text_Editor *myo = new Fl_Text_Editor(x,y,w,h);
+    fltk3::TextEditor *myo = new fltk3::TextEditor(x,y,w,h);
     return myo;
   }
   Fl_Widget_Type *_make() {return new Fl_Text_Editor_Type();}
@@ -629,7 +629,7 @@ public:
 static Fl_Text_Editor_Type Fl_Text_Editor_type;
 
 int Fl_Text_Editor_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
-  Fl_Text_Editor *myo = (Fl_Text_Editor*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
+  fltk3::TextEditor *myo = (fltk3::TextEditor*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
     case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
@@ -877,7 +877,7 @@ int Fl_Value_Input_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& 
 class Fl_Value_Output_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
-    Fl_Value_Output *myo = (Fl_Value_Output *)o;
+    fltk3::ValueOutput *myo = (fltk3::ValueOutput *)o;
     fltk3::font(myo->textfont(), myo->textsize());
     h = fltk3::height() + myo->textsize() - 6;
     w = o->w() - fltk3::box_dw(o->box());
@@ -886,12 +886,12 @@ public:
     if (h < 15) h = 15;
     if (w < 15) w = 15;
   }
-  virtual const char *type_name() {return "Fl_Value_Output";}
+  virtual const char *type_name() {return "fltk3::ValueOutput";}
   virtual const char *alt_type_name() {return "fltk::ValueOutput";}
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
   int is_valuator() const {return 1;}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    Fl_Value_Output *myo = new Fl_Value_Output(x,y,w,h,"value:");
+    fltk3::ValueOutput *myo = new fltk3::ValueOutput(x,y,w,h,"value:");
     return myo;
   }
   Fl_Widget_Type *_make() {return new Fl_Value_Output_Type();}
@@ -900,7 +900,7 @@ public:
 static Fl_Value_Output_Type Fl_Value_Output_type;
 
 int Fl_Value_Output_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
-  Fl_Value_Output *myo = (Fl_Value_Output*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
+  fltk3::ValueOutput *myo = (fltk3::ValueOutput*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
     case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
@@ -1082,7 +1082,7 @@ fltk3::MenuItem New_Menu[] = {
 #include <fltk3/MultiLabel.h>
 
 // modify a menuitem to display an icon in front of the label
-static void make_iconlabel( fltk3::MenuItem *mi, Fl_Image *ic, const char *txt )
+static void make_iconlabel( fltk3::MenuItem *mi, fltk3::Image *ic, const char *txt )
 {
   if (ic) {
     char *t1 = new char[strlen(txt)+6];

@@ -79,7 +79,7 @@ static int min(int i1, int i2)
 
 static char *undobuffer;
 static int undobufferlength;
-static Fl_Text_Buffer *undowidget;
+static fltk3::TextBuffer *undowidget;
 static int undoat;		// points after insertion
 static int undocut;		// number of characters deleted there
 static int undoinsert;		// number of characters inserted
@@ -103,7 +103,7 @@ static void undobuffersize(int n)
   }
 }
 
-static void def_transcoding_warning_action(Fl_Text_Buffer *text)
+static void def_transcoding_warning_action(fltk3::TextBuffer *text)
 {
   fltk3::alert("%s", text->file_encoding_warning_message);
 }
@@ -111,7 +111,7 @@ static void def_transcoding_warning_action(Fl_Text_Buffer *text)
 /*
  Initialize all variables.
  */
-Fl_Text_Buffer::Fl_Text_Buffer(int requestedSize, int preferredGapSize)
+fltk3::TextBuffer::TextBuffer(int requestedSize, int preferredGapSize)
 {
   mLength = 0;
   mPreferredGapSize = preferredGapSize;
@@ -141,7 +141,7 @@ Fl_Text_Buffer::Fl_Text_Buffer(int requestedSize, int preferredGapSize)
 /*
  Free all resources.
  */
-Fl_Text_Buffer::~Fl_Text_Buffer()
+fltk3::TextBuffer::~TextBuffer()
 {
   free(mBuf);
   if (mNModifyProcs != 0) {
@@ -159,7 +159,7 @@ Fl_Text_Buffer::~Fl_Text_Buffer()
  This function copies verbose whatever is in front and after the gap into a
  single buffer.
  */
-char *Fl_Text_Buffer::text() const {
+char *fltk3::TextBuffer::text() const {
   char *t = (char *) malloc(mLength + 1);
   memcpy(t, mBuf, mGapStart);
   memcpy(t+mGapStart, mBuf+mGapEnd, mLength - mGapStart);
@@ -171,7 +171,7 @@ char *Fl_Text_Buffer::text() const {
 /*
  Set the text buffer to a new string.
  */
-void Fl_Text_Buffer::text(const char *t)
+void fltk3::TextBuffer::text(const char *t)
 {
   IS_UTF8_ALIGNED(t)
   
@@ -202,7 +202,7 @@ void Fl_Text_Buffer::text(const char *t)
 /*
  Creates a range of text to a new buffer and copies verbose from around the gap.
  */
-char *Fl_Text_Buffer::text_range(int start, int end) const {
+char *fltk3::TextBuffer::text_range(int start, int end) const {
   IS_UTF8_ALIGNED2(this, (start))
   IS_UTF8_ALIGNED2(this, (end))
   
@@ -244,7 +244,7 @@ char *Fl_Text_Buffer::text_range(int start, int end) const {
  Return a UCS-4 character at the given index.
  Pos must be at a character boundary.
  */
-unsigned int Fl_Text_Buffer::char_at(int pos) const {  
+unsigned int fltk3::TextBuffer::char_at(int pos) const {  
   if (pos < 0 || pos >= mLength)
     return '\0';
   
@@ -259,7 +259,7 @@ unsigned int Fl_Text_Buffer::char_at(int pos) const {
  Return the raw byte at the given index.
  This function ignores all unicode encoding.
  */
-char Fl_Text_Buffer::byte_at(int pos) const {
+char fltk3::TextBuffer::byte_at(int pos) const {
   if (pos < 0 || pos >= mLength)
     return '\0';
   const char *src = address(pos);
@@ -271,7 +271,7 @@ char Fl_Text_Buffer::byte_at(int pos) const {
  Insert some text at the given index.
  Pos must be at a character boundary.
 */
-void Fl_Text_Buffer::insert(int pos, const char *text)
+void fltk3::TextBuffer::insert(int pos, const char *text)
 {
   IS_UTF8_ALIGNED2(this, (pos))
   IS_UTF8_ALIGNED(text)
@@ -301,7 +301,7 @@ void Fl_Text_Buffer::insert(int pos, const char *text)
  Replace a range of text with new text.
  Start and end must be at a character boundary.
 */
-void Fl_Text_Buffer::replace(int start, int end, const char *text)
+void fltk3::TextBuffer::replace(int start, int end, const char *text)
 {
   // Range check...
   if (!text)
@@ -329,7 +329,7 @@ void Fl_Text_Buffer::replace(int start, int end, const char *text)
  Remove a range of text.
  Start and End must be at a character boundary.
 */
-void Fl_Text_Buffer::remove(int start, int end)
+void fltk3::TextBuffer::remove(int start, int end)
 {
   /* Make sure the arguments make sense */
   if (start > end) {
@@ -366,7 +366,7 @@ void Fl_Text_Buffer::remove(int start, int end)
  Copy a range of text from another text buffer.
  fromStart, fromEnd, and toPos must be at a character boundary.
  */
-void Fl_Text_Buffer::copy(Fl_Text_Buffer * fromBuf, int fromStart,
+void fltk3::TextBuffer::copy(fltk3::TextBuffer * fromBuf, int fromStart,
 			  int fromEnd, int toPos)
 {
   IS_UTF8_ALIGNED2(fromBuf, fromStart)
@@ -409,7 +409,7 @@ void Fl_Text_Buffer::copy(Fl_Text_Buffer * fromBuf, int fromStart,
  cursor position in cursorPos. Returns 1 if the undo was applied.
  CursorPos will be at a character boundary.
  */ 
-int Fl_Text_Buffer::undo(int *cursorPos)
+int fltk3::TextBuffer::undo(int *cursorPos)
 {
   if (undowidget != this || (!undocut && !undoinsert && !mCanUndo))
     return 0;
@@ -450,7 +450,7 @@ int Fl_Text_Buffer::undo(int *cursorPos)
 /*
  Set a flag if undo function will work.
  */
-void Fl_Text_Buffer::canUndo(char flag)
+void fltk3::TextBuffer::canUndo(char flag)
 {
   mCanUndo = flag;
   // disabling undo also clears the last undo operation!
@@ -466,7 +466,7 @@ void Fl_Text_Buffer::canUndo(char flag)
  tabs are only a graphical hint, not changing any text at all, but I leave
  this in here for back compatibility. 
  */
-void Fl_Text_Buffer::tab_distance(int tabDist)
+void fltk3::TextBuffer::tab_distance(int tabDist)
 {
   /* First call the pre-delete callbacks with the previous tab setting 
    still active. */
@@ -487,12 +487,12 @@ void Fl_Text_Buffer::tab_distance(int tabDist)
  Select a range of text.
  Start and End must be at a character boundary.
  */
-void Fl_Text_Buffer::select(int start, int end)
+void fltk3::TextBuffer::select(int start, int end)
 {
   IS_UTF8_ALIGNED2(this, (start))
   IS_UTF8_ALIGNED2(this, (end))  
   
-  Fl_Text_Selection oldSelection = mPrimary;
+  fltk3::TextSelection oldSelection = mPrimary;
   
   mPrimary.set(start, end);
   redisplay_selection(&oldSelection, &mPrimary);
@@ -502,9 +502,9 @@ void Fl_Text_Buffer::select(int start, int end)
 /*
  Clear the primary selection.
  */
-void Fl_Text_Buffer::unselect()
+void fltk3::TextBuffer::unselect()
 {
-  Fl_Text_Selection oldSelection = mPrimary;
+  fltk3::TextSelection oldSelection = mPrimary;
   
   mPrimary.mSelected = 0;
   redisplay_selection(&oldSelection, &mPrimary);
@@ -514,7 +514,7 @@ void Fl_Text_Buffer::unselect()
 /*
  Return the primary selection range.
  */
-int Fl_Text_Buffer::selection_position(int *start, int *end)
+int fltk3::TextBuffer::selection_position(int *start, int *end)
 {
   return mPrimary.position(start, end);
 }
@@ -523,7 +523,7 @@ int Fl_Text_Buffer::selection_position(int *start, int *end)
 /*
  Return a copy of the selected text.
  */
-char *Fl_Text_Buffer::selection_text()
+char *fltk3::TextBuffer::selection_text()
 {
   return selection_text_(&mPrimary);
 }
@@ -532,7 +532,7 @@ char *Fl_Text_Buffer::selection_text()
 /*
  Remove the selected text.
  */
-void Fl_Text_Buffer::remove_selection()
+void fltk3::TextBuffer::remove_selection()
 {
   remove_selection_(&mPrimary);
 }
@@ -541,7 +541,7 @@ void Fl_Text_Buffer::remove_selection()
 /*
  Replace the selected text.
  */
-void Fl_Text_Buffer::replace_selection(const char *text)
+void fltk3::TextBuffer::replace_selection(const char *text)
 {
   replace_selection_(&mPrimary, text);
 }
@@ -551,9 +551,9 @@ void Fl_Text_Buffer::replace_selection(const char *text)
  Select text.
  Start and End must be at a character boundary.
  */
-void Fl_Text_Buffer::secondary_select(int start, int end)
+void fltk3::TextBuffer::secondary_select(int start, int end)
 {
-  Fl_Text_Selection oldSelection = mSecondary;
+  fltk3::TextSelection oldSelection = mSecondary;
   
   mSecondary.set(start, end);
   redisplay_selection(&oldSelection, &mSecondary);
@@ -563,9 +563,9 @@ void Fl_Text_Buffer::secondary_select(int start, int end)
 /*
  Deselect text.
  */
-void Fl_Text_Buffer::secondary_unselect()
+void fltk3::TextBuffer::secondary_unselect()
 {
-  Fl_Text_Selection oldSelection = mSecondary;
+  fltk3::TextSelection oldSelection = mSecondary;
   
   mSecondary.mSelected = 0;
   redisplay_selection(&oldSelection, &mSecondary);
@@ -575,7 +575,7 @@ void Fl_Text_Buffer::secondary_unselect()
 /*
  Return the selected range.
  */
-int Fl_Text_Buffer::secondary_selection_position(int *start, int *end)
+int fltk3::TextBuffer::secondary_selection_position(int *start, int *end)
 {
   return mSecondary.position(start, end);
 }
@@ -584,7 +584,7 @@ int Fl_Text_Buffer::secondary_selection_position(int *start, int *end)
 /*
  Return a copy of the text in this selection.
  */
-char *Fl_Text_Buffer::secondary_selection_text()
+char *fltk3::TextBuffer::secondary_selection_text()
 {
   return selection_text_(&mSecondary);
 }
@@ -593,7 +593,7 @@ char *Fl_Text_Buffer::secondary_selection_text()
 /*
  Remove the selected text.
  */
-void Fl_Text_Buffer::remove_secondary_selection()
+void fltk3::TextBuffer::remove_secondary_selection()
 {
   remove_selection_(&mSecondary);
 }
@@ -602,7 +602,7 @@ void Fl_Text_Buffer::remove_secondary_selection()
 /*
  Replace selected text.
  */
-void Fl_Text_Buffer::replace_secondary_selection(const char *text)
+void fltk3::TextBuffer::replace_secondary_selection(const char *text)
 {
   replace_selection_(&mSecondary, text);
 }
@@ -612,9 +612,9 @@ void Fl_Text_Buffer::replace_secondary_selection(const char *text)
  Highlight a range of text.
  Start and End must be at a character boundary.
  */
-void Fl_Text_Buffer::highlight(int start, int end)
+void fltk3::TextBuffer::highlight(int start, int end)
 {
-  Fl_Text_Selection oldSelection = mHighlight;
+  fltk3::TextSelection oldSelection = mHighlight;
   
   mHighlight.set(start, end);
   redisplay_selection(&oldSelection, &mHighlight);
@@ -624,9 +624,9 @@ void Fl_Text_Buffer::highlight(int start, int end)
 /*
  Remove text highlighting.
  */
-void Fl_Text_Buffer::unhighlight()
+void fltk3::TextBuffer::unhighlight()
 {
-  Fl_Text_Selection oldSelection = mHighlight;
+  fltk3::TextSelection oldSelection = mHighlight;
   
   mHighlight.mSelected = 0;
   redisplay_selection(&oldSelection, &mHighlight);
@@ -636,7 +636,7 @@ void Fl_Text_Buffer::unhighlight()
 /*
  Return position of highlight.
  */
-int Fl_Text_Buffer::highlight_position(int *start, int *end)
+int fltk3::TextBuffer::highlight_position(int *start, int *end)
 {
   return mHighlight.position(start, end);
 }
@@ -645,7 +645,7 @@ int Fl_Text_Buffer::highlight_position(int *start, int *end)
 /*
  Return a copy of highlighted text.
  */
-char *Fl_Text_Buffer::highlight_text()
+char *fltk3::TextBuffer::highlight_text()
 {
   return selection_text_(&mHighlight);
 }
@@ -654,11 +654,11 @@ char *Fl_Text_Buffer::highlight_text()
 /*
  Add a callback that is called whenever text is modified.
  */
-void Fl_Text_Buffer::add_modify_callback(Fl_Text_Modify_Cb bufModifiedCB,
+void fltk3::TextBuffer::add_modify_callback(fltk3::TextModifyCb bufModifiedCB,
 					 void *cbArg)
 {
-  Fl_Text_Modify_Cb *newModifyProcs =
-  new Fl_Text_Modify_Cb[mNModifyProcs + 1];
+  fltk3::TextModifyCb *newModifyProcs =
+  new fltk3::TextModifyCb[mNModifyProcs + 1];
   void **newCBArgs = new void *[mNModifyProcs + 1];
   for (int i = 0; i < mNModifyProcs; i++) {
     newModifyProcs[i + 1] = mModifyProcs[i];
@@ -679,7 +679,7 @@ void Fl_Text_Buffer::add_modify_callback(Fl_Text_Modify_Cb bufModifiedCB,
 /*
  Remove a callback.
  */
-void Fl_Text_Buffer::remove_modify_callback(Fl_Text_Modify_Cb bufModifiedCB, 
+void fltk3::TextBuffer::remove_modify_callback(fltk3::TextModifyCb bufModifiedCB, 
                                             void *cbArg)
 {
   int i, toRemove = -1;
@@ -693,7 +693,7 @@ void Fl_Text_Buffer::remove_modify_callback(Fl_Text_Modify_Cb bufModifiedCB,
   }
   if (toRemove == -1) {
     fltk3::error
-    ("Fl_Text_Buffer::remove_modify_callback(): Can't find modify CB to remove");
+    ("fltk3::TextBuffer::remove_modify_callback(): Can't find modify CB to remove");
     return;
   }
   
@@ -708,7 +708,7 @@ void Fl_Text_Buffer::remove_modify_callback(Fl_Text_Modify_Cb bufModifiedCB,
     mCbArgs = NULL;
     return;
   }
-  Fl_Text_Modify_Cb *newModifyProcs = new Fl_Text_Modify_Cb[mNModifyProcs];
+  fltk3::TextModifyCb *newModifyProcs = new fltk3::TextModifyCb[mNModifyProcs];
   void **newCBArgs = new void *[mNModifyProcs];
   
   /* copy out the remaining members and free the old lists */
@@ -730,11 +730,11 @@ void Fl_Text_Buffer::remove_modify_callback(Fl_Text_Modify_Cb bufModifiedCB,
 /*
  Add a callback that is called before deleting text.
  */
-void Fl_Text_Buffer::add_predelete_callback(Fl_Text_Predelete_Cb bufPreDeleteCB, 
+void fltk3::TextBuffer::add_predelete_callback(fltk3::TextPredeleteCb bufPreDeleteCB, 
                                             void *cbArg)
 {
-  Fl_Text_Predelete_Cb *newPreDeleteProcs =
-  new Fl_Text_Predelete_Cb[mNPredeleteProcs + 1];
+  fltk3::TextPredeleteCb *newPreDeleteProcs =
+  new fltk3::TextPredeleteCb[mNPredeleteProcs + 1];
   void **newCBArgs = new void *[mNPredeleteProcs + 1];
   for (int i = 0; i < mNPredeleteProcs; i++) {
     newPreDeleteProcs[i + 1] = mPredeleteProcs[i];
@@ -755,7 +755,7 @@ void Fl_Text_Buffer::add_predelete_callback(Fl_Text_Predelete_Cb bufPreDeleteCB,
 /*
  Remove a callback.
  */
-void Fl_Text_Buffer::remove_predelete_callback(Fl_Text_Predelete_Cb bufPreDeleteCB, void *cbArg)
+void fltk3::TextBuffer::remove_predelete_callback(fltk3::TextPredeleteCb bufPreDeleteCB, void *cbArg)
 {
   int i, toRemove = -1;
   /* find the matching callback to remove */
@@ -768,7 +768,7 @@ void Fl_Text_Buffer::remove_predelete_callback(Fl_Text_Predelete_Cb bufPreDelete
   }
   if (toRemove == -1) {
     fltk3::error
-    ("Fl_Text_Buffer::remove_predelete_callback(): Can't find pre-delete CB to remove");
+    ("fltk3::TextBuffer::remove_predelete_callback(): Can't find pre-delete CB to remove");
     return;
   }
   
@@ -783,8 +783,8 @@ void Fl_Text_Buffer::remove_predelete_callback(Fl_Text_Predelete_Cb bufPreDelete
     mPredeleteCbArgs = NULL;
     return;
   }
-  Fl_Text_Predelete_Cb *newPreDeleteProcs =
-  new Fl_Text_Predelete_Cb[mNPredeleteProcs];
+  fltk3::TextPredeleteCb *newPreDeleteProcs =
+  new fltk3::TextPredeleteCb[mNPredeleteProcs];
   void **newCBArgs = new void *[mNPredeleteProcs];
   
   /* copy out the remaining members and free the old lists */
@@ -807,7 +807,7 @@ void Fl_Text_Buffer::remove_predelete_callback(Fl_Text_Predelete_Cb bufPreDelete
  Return a copy of the line that contains a given index.
  Pos must be at a character boundary.
  */
-char *Fl_Text_Buffer::line_text(int pos) const {
+char *fltk3::TextBuffer::line_text(int pos) const {
   return text_range(line_start(pos), line_end(pos));
 } 
 
@@ -815,7 +815,7 @@ char *Fl_Text_Buffer::line_text(int pos) const {
 /*
  Find the beginning of the line.
  */
-int Fl_Text_Buffer::line_start(int pos) const 
+int fltk3::TextBuffer::line_start(int pos) const 
 {
   if (!findchar_backward(pos, '\n', &pos))
     return 0;
@@ -826,7 +826,7 @@ int Fl_Text_Buffer::line_start(int pos) const
 /*
  Find the end of the line.
  */
-int Fl_Text_Buffer::line_end(int pos) const {
+int fltk3::TextBuffer::line_end(int pos) const {
   if (!findchar_forward(pos, '\n', &pos))
     pos = mLength;
   return pos;
@@ -837,7 +837,7 @@ int Fl_Text_Buffer::line_end(int pos) const {
  Find the beginning of a word.
  NOT UNICODE SAFE.
  */
-int Fl_Text_Buffer::word_start(int pos) const {
+int fltk3::TextBuffer::word_start(int pos) const {
   // FIXME: character is ucs-4
   while (pos>0 && (isalnum(char_at(pos)) || char_at(pos) == '_')) {
     pos = prev_char(pos);
@@ -853,7 +853,7 @@ int Fl_Text_Buffer::word_start(int pos) const {
  Find the end of a word.
  NOT UNICODE SAFE.
  */
-int Fl_Text_Buffer::word_end(int pos) const {
+int fltk3::TextBuffer::word_end(int pos) const {
   // FIXME: character is ucs-4
   while (pos < length() && (isalnum(char_at(pos)) || char_at(pos) == '_'))
   {
@@ -866,7 +866,7 @@ int Fl_Text_Buffer::word_end(int pos) const {
 /*
  Count the number of characters between two positions.
  */
-int Fl_Text_Buffer::count_displayed_characters(int lineStartPos,
+int fltk3::TextBuffer::count_displayed_characters(int lineStartPos,
 					       int targetPos) const
 {
   IS_UTF8_ALIGNED2(this, (lineStartPos))
@@ -887,7 +887,7 @@ int Fl_Text_Buffer::count_displayed_characters(int lineStartPos,
  Skip ahead a number of characters from a given index.
  This function breaks early if it encounters a newline character.
  */
-int Fl_Text_Buffer::skip_displayed_characters(int lineStartPos, int nChars)
+int fltk3::TextBuffer::skip_displayed_characters(int lineStartPos, int nChars)
 {
   IS_UTF8_ALIGNED2(this, (lineStartPos))
 
@@ -908,7 +908,7 @@ int Fl_Text_Buffer::skip_displayed_characters(int lineStartPos, int nChars)
  startPos and endPos must be at a character boundary.
  This function is optimized for speed by not using UTF-8 calls.
  */
-int Fl_Text_Buffer::count_lines(int startPos, int endPos) const {
+int fltk3::TextBuffer::count_lines(int startPos, int endPos) const {
   IS_UTF8_ALIGNED2(this, (startPos))
   IS_UTF8_ALIGNED2(this, (endPos))
   
@@ -938,7 +938,7 @@ int Fl_Text_Buffer::count_lines(int startPos, int endPos) const {
  StartPos must be at a character boundary.
  This function is optimized for speed by not using UTF-8 calls.
  */
-int Fl_Text_Buffer::skip_lines(int startPos, int nLines)
+int fltk3::TextBuffer::skip_lines(int startPos, int nLines)
 {
   IS_UTF8_ALIGNED2(this, (startPos))
   
@@ -976,7 +976,7 @@ int Fl_Text_Buffer::skip_lines(int startPos, int nLines)
  StartPos must be at a character boundary.
  This function is optimized for speed by not using UTF-8 calls.
  */
-int Fl_Text_Buffer::rewind_lines(int startPos, int nLines)
+int fltk3::TextBuffer::rewind_lines(int startPos, int nLines)
 {
   IS_UTF8_ALIGNED2(this, (startPos))
   
@@ -1011,7 +1011,7 @@ int Fl_Text_Buffer::rewind_lines(int startPos, int nLines)
 /*
  Find a matching string in the buffer.
  */
-int Fl_Text_Buffer::search_forward(int startPos, const char *searchString,
+int fltk3::TextBuffer::search_forward(int startPos, const char *searchString,
 				   int *foundPos, int matchCase) const 
 {
   IS_UTF8_ALIGNED2(this, (startPos))
@@ -1063,7 +1063,7 @@ int Fl_Text_Buffer::search_forward(int startPos, const char *searchString,
   return 0;
 }
 
-int Fl_Text_Buffer::search_backward(int startPos, const char *searchString,
+int fltk3::TextBuffer::search_backward(int startPos, const char *searchString,
 				    int *foundPos, int matchCase) const 
 {
   IS_UTF8_ALIGNED2(this, (startPos))
@@ -1121,7 +1121,7 @@ int Fl_Text_Buffer::search_backward(int startPos, const char *searchString,
  Insert a string into the buffer.
  Pos must be at a character boundary. Text must be a correct UTF-8 string.
  */
-int Fl_Text_Buffer::insert_(int pos, const char *text)
+int fltk3::TextBuffer::insert_(int pos, const char *text)
 {
   if (!text || !*text)
     return 0;
@@ -1164,7 +1164,7 @@ int Fl_Text_Buffer::insert_(int pos, const char *text)
  Remove a string from the buffer.
  Unicode safe. Start and end must be at a character boundary.
  */
-void Fl_Text_Buffer::remove_(int start, int end)
+void fltk3::TextBuffer::remove_(int start, int end)
 {
   /* if the gap is not contiguous to the area to remove, move it there */
   
@@ -1216,7 +1216,7 @@ void Fl_Text_Buffer::remove_(int start, int end)
  simple setter.
  Unicode safe. Start and end must be at a character boundary.
  */
-void Fl_Text_Selection::set(int startpos, int endpos)
+void fltk3::TextSelection::set(int startpos, int endpos)
 {
   mSelected = startpos != endpos;
   mStart = min(startpos, endpos);
@@ -1228,7 +1228,7 @@ void Fl_Text_Selection::set(int startpos, int endpos)
  simple getter.
  Unicode safe. Start and end will be at a character boundary.
  */
-int Fl_Text_Selection::position(int *startpos, int *endpos) const {
+int fltk3::TextSelection::position(int *startpos, int *endpos) const {
   if (!mSelected)
     return 0;
   *startpos = mStart;
@@ -1242,7 +1242,7 @@ int Fl_Text_Selection::position(int *startpos, int *endpos) const {
  Return if a position is inside the selected area.
  Unicode safe. Pos must be at a character boundary.
  */
-int Fl_Text_Selection::includes(int pos) const {
+int fltk3::TextSelection::includes(int pos) const {
   return (selected() && pos >= start() && pos < end() );
 }
 
@@ -1251,7 +1251,7 @@ int Fl_Text_Selection::includes(int pos) const {
  Return a duplicate of the selected text, or an empty string.
  Unicode safe.
  */
-char *Fl_Text_Buffer::selection_text_(Fl_Text_Selection * sel) const {
+char *fltk3::TextBuffer::selection_text_(fltk3::TextSelection * sel) const {
   int start, end;
   
   /* If there's no selection, return an allocated empty string */
@@ -1271,7 +1271,7 @@ char *Fl_Text_Buffer::selection_text_(Fl_Text_Selection * sel) const {
  Remove the selected text.
  Unicode safe.
  */
-void Fl_Text_Buffer::remove_selection_(Fl_Text_Selection * sel)
+void fltk3::TextBuffer::remove_selection_(fltk3::TextSelection * sel)
 {
   int start, end;
   
@@ -1286,10 +1286,10 @@ void Fl_Text_Buffer::remove_selection_(Fl_Text_Selection * sel)
  Replace selection with text.
  Unicode safe.
  */
-void Fl_Text_Buffer::replace_selection_(Fl_Text_Selection * sel,
+void fltk3::TextBuffer::replace_selection_(fltk3::TextSelection * sel,
 					const char *text)
 {
-  Fl_Text_Selection oldSelection = *sel;
+  fltk3::TextSelection oldSelection = *sel;
   
   /* If there's no selection, return */
   int start, end;
@@ -1310,7 +1310,7 @@ void Fl_Text_Buffer::replace_selection_(Fl_Text_Selection * sel,
  Call all callbacks.
  Unicode safe.
  */
-void Fl_Text_Buffer::call_modify_callbacks(int pos, int nDeleted,
+void fltk3::TextBuffer::call_modify_callbacks(int pos, int nDeleted,
 					   int nInserted, int nRestyled,
 					   const char *deletedText) const {
   IS_UTF8_ALIGNED2(this, pos)
@@ -1324,7 +1324,7 @@ void Fl_Text_Buffer::call_modify_callbacks(int pos, int nDeleted,
  Call all callbacks.
  Unicode safe.
  */
-void Fl_Text_Buffer::call_predelete_callbacks(int pos, int nDeleted) const {
+void fltk3::TextBuffer::call_predelete_callbacks(int pos, int nDeleted) const {
   for (int i = 0; i < mNPredeleteProcs; i++)
     (*mPredeleteProcs[i]) (pos, nDeleted, mPredeleteCbArgs[i]);
 } 
@@ -1334,9 +1334,9 @@ void Fl_Text_Buffer::call_predelete_callbacks(int pos, int nDeleted) const {
  Redisplay a new selected area.
  Unicode safe.
  */
-void Fl_Text_Buffer::redisplay_selection(Fl_Text_Selection *
+void fltk3::TextBuffer::redisplay_selection(fltk3::TextSelection *
 					   oldSelection,
-					   Fl_Text_Selection *
+					   fltk3::TextSelection *
 					   newSelection) const
 {
   int oldStart, oldEnd, newStart, newEnd, ch1Start, ch1End, ch2Start,
@@ -1390,7 +1390,7 @@ void Fl_Text_Buffer::redisplay_selection(Fl_Text_Selection *
  Move the gap around without changing buffer content.
  Unicode safe. Pos must be at a character boundary.
  */
-void Fl_Text_Buffer::move_gap(int pos)
+void fltk3::TextBuffer::move_gap(int pos)
 {
   int gapLen = mGapEnd - mGapStart;
   
@@ -1407,7 +1407,7 @@ void Fl_Text_Buffer::move_gap(int pos)
  Create a larger gap.
  Unicode safe. Start must be at a character boundary.
  */
-void Fl_Text_Buffer::reallocate_with_gap(int newGapStart, int newGapLen)
+void fltk3::TextBuffer::reallocate_with_gap(int newGapStart, int newGapLen)
 {
   char *newBuf = (char *) malloc(mLength + newGapLen);
   int newGapEnd = newGapStart + newGapLen;
@@ -1436,7 +1436,7 @@ void Fl_Text_Buffer::reallocate_with_gap(int newGapStart, int newGapLen)
  Update selection range if characters were inserted.
  Unicode safe. Pos must be at a character boundary.
  */
-void Fl_Text_Buffer::update_selections(int pos, int nDeleted,
+void fltk3::TextBuffer::update_selections(int pos, int nDeleted,
 				       int nInserted)
 {
   mPrimary.update(pos, nDeleted, nInserted);
@@ -1446,7 +1446,7 @@ void Fl_Text_Buffer::update_selections(int pos, int nDeleted,
 
 
 // unicode safe, assuming the arguments are on character boundaries
-void Fl_Text_Selection::update(int pos, int nDeleted, int nInserted)
+void fltk3::TextSelection::update(int pos, int nDeleted, int nInserted)
 {
   if (!mSelected || pos > mEnd)
     return;
@@ -1472,7 +1472,7 @@ void Fl_Text_Selection::update(int pos, int nDeleted, int nInserted)
  Find a UCS-4 character.
  StartPos must be at a character boundary, searchChar is UCS-4 encoded.
  */
-int Fl_Text_Buffer::findchar_forward(int startPos, unsigned searchChar,
+int fltk3::TextBuffer::findchar_forward(int startPos, unsigned searchChar,
 				     int *foundPos) const 
 {
   if (startPos >= mLength) {
@@ -1499,7 +1499,7 @@ int Fl_Text_Buffer::findchar_forward(int startPos, unsigned searchChar,
  Find a UCS-4 character.
  StartPos must be at a character boundary, searchChar is UCS-4 encoded.
  */
-int Fl_Text_Buffer::findchar_backward(int startPos, unsigned int searchChar,
+int fltk3::TextBuffer::findchar_backward(int startPos, unsigned int searchChar,
 				      int *foundPos) const {
   if (startPos <= 0) {
     *foundPos = 0;
@@ -1644,7 +1644,7 @@ static int utf8_input_filter(char *buffer, int buflen, char *line, int sline, ch
   return q - buffer;
 }
 
-const char *Fl_Text_Buffer::file_encoding_warning_message = 
+const char *fltk3::TextBuffer::file_encoding_warning_message = 
 "Displayed text contains the UTF-8 transcoding\n"
 "of the input file which was not UTF-8 encoded.\n"
 "Some changes may have occurred.";
@@ -1655,7 +1655,7 @@ const char *Fl_Text_Buffer::file_encoding_warning_message =
  utf8_input_filter accepts UTF-8 or CP1252 as input encoding.
  Output is always UTF-8.
  */
- int Fl_Text_Buffer::insertfile(const char *file, int pos, int buflen)
+ int fltk3::TextBuffer::insertfile(const char *file, int pos, int buflen)
 {
   FILE *fp;
   if (!(fp = fl_fopen(file, "r")))
@@ -1696,7 +1696,7 @@ const char *Fl_Text_Buffer::file_encoding_warning_message =
  Write text to file.
  Unicode safe.
  */
-int Fl_Text_Buffer::outputfile(const char *file,
+int fltk3::TextBuffer::outputfile(const char *file,
 			       int start, int end,
 			       int buflen) {
   FILE *fp;
@@ -1720,7 +1720,7 @@ int Fl_Text_Buffer::outputfile(const char *file,
  Return the previous character position.
  Unicode safe.
  */
-int Fl_Text_Buffer::prev_char_clipped(int pos) const
+int fltk3::TextBuffer::prev_char_clipped(int pos) const
 {
   if (pos<=0)
     return 0;
@@ -1744,7 +1744,7 @@ int Fl_Text_Buffer::prev_char_clipped(int pos) const
  Return the previous character position.
  Returns -1 if the beginning of the buffer is reached.
  */
-int Fl_Text_Buffer::prev_char(int pos) const
+int fltk3::TextBuffer::prev_char(int pos) const
 {
   if (pos==0) return -1;
   return prev_char_clipped(pos);
@@ -1755,7 +1755,7 @@ int Fl_Text_Buffer::prev_char(int pos) const
  Return the next character position.
  Returns length() if the end of the buffer is reached.
  */
-int Fl_Text_Buffer::next_char(int pos) const
+int fltk3::TextBuffer::next_char(int pos) const
 {
   IS_UTF8_ALIGNED2(this, (pos))  
   int n = fl_utf8len1(byte_at(pos));
@@ -1771,7 +1771,7 @@ int Fl_Text_Buffer::next_char(int pos) const
  Return the next character position.
  If the end of the buffer is reached, it returns the current position.
  */
-int Fl_Text_Buffer::next_char_clipped(int pos) const
+int fltk3::TextBuffer::next_char_clipped(int pos) const
 {
   return next_char(pos);
 }
@@ -1779,7 +1779,7 @@ int Fl_Text_Buffer::next_char_clipped(int pos) const
 /*
  Align an index to the current UTF-8 boundary.
  */
-int Fl_Text_Buffer::utf8_align(int pos) const 
+int fltk3::TextBuffer::utf8_align(int pos) const 
 {
   char c = byte_at(pos);
   while ( (c&0xc0) == 0x80) {

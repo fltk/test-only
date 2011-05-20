@@ -37,7 +37,8 @@
 #  endif // __GNUC__
 
 
-namespace fltk3 { 
+namespace fltk3 {
+  
   class Widget;
   
   /** Different system beeps available. \relatesalso fltk3::beep(int) */
@@ -81,7 +82,7 @@ namespace fltk3 {
   extern FLTK3_EXPORT const char* cancel;
   extern FLTK3_EXPORT const char* close;
   
-}
+} // namespace
 
 #endif // !fltk3::ask_H
 

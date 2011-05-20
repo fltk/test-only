@@ -39,7 +39,7 @@ extern int show_comments;
 extern int show_coredevmenus;
 extern struct fltk3::MenuItem *dbmanager_item;
 extern Fl_Preferences fluid_prefs;
-extern Fl_Text_Buffer *shell_run_buffer; 
+extern fltk3::TextBuffer *shell_run_buffer; 
 #include <fltk3/DoubleWindow.h>
 #include <fltk3/Preferences.h>
 #include <fltk3/Tooltip.h>
@@ -93,7 +93,7 @@ extern fltk3::CheckButton *shell_savefl_button;
 extern void do_shell_command(fltk3::ReturnButton*, void*);
 extern fltk3::DoubleWindow *shell_run_window;
 #include <fltk3/TextDisplay.h>
-extern Fl_Text_Display *shell_run_display;
+extern fltk3::TextDisplay *shell_run_display;
 extern fltk3::ReturnButton *shell_run_button;
 fltk3::DoubleWindow* make_shell_window();
 extern fltk3::DoubleWindow *grid_window;

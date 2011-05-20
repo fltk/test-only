@@ -46,7 +46,7 @@ namespace fltk3 {
   The Fl_Pixmap class supports caching and drawing of colormap
   (pixmap) images, including transparency.
 */
-class FLTK3_EXPORT Fl_Pixmap : public Fl_Image {
+class FLTK3_EXPORT Fl_Pixmap : public fltk3::Image {
   friend class Fl_Quartz_Graphics_Driver;
   friend class Fl_GDI_Graphics_Driver;
   friend class Fl_Xlib_Graphics_Driver;
@@ -75,16 +75,16 @@ class FLTK3_EXPORT Fl_Pixmap : public Fl_Image {
   public:
 
   /**    The constructors create a new pixmap from the specified XPM data.  */
-  explicit Fl_Pixmap(char * const * D) : Fl_Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
+  explicit Fl_Pixmap(char * const * D) : fltk3::Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
   /**    The constructors create a new pixmap from the specified XPM data.  */
-  explicit Fl_Pixmap(uchar* const * D) : Fl_Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
+  explicit Fl_Pixmap(uchar* const * D) : fltk3::Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
   /**    The constructors create a new pixmap from the specified XPM data.  */
-  explicit Fl_Pixmap(const char * const * D) : Fl_Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
+  explicit Fl_Pixmap(const char * const * D) : fltk3::Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
   /**    The constructors create a new pixmap from the specified XPM data.  */
-  explicit Fl_Pixmap(const uchar* const * D) : Fl_Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
+  explicit Fl_Pixmap(const uchar* const * D) : fltk3::Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
   virtual ~Fl_Pixmap();
-  virtual Fl_Image *copy(int W, int H);
-  Fl_Image *copy() { return copy(w(), h()); }
+  virtual fltk3::Image *copy(int W, int H);
+  fltk3::Image *copy() { return copy(w(), h()); }
   virtual void color_average(fltk3::Color c, float i);
   virtual void desaturate();
   virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);

@@ -778,14 +778,14 @@ public:
     _prefs.connectorwidth(val);
     redraw();
   }
-  /// Returns the Fl_Image being used as the default user icon for all
+  /// Returns the fltk3::Image being used as the default user icon for all
   /// newly created items.
   /// Returns zero if no icon has been set, which is the default.
   ///
-  Fl_Image *usericon() const {
+  fltk3::Image *usericon() const {
     return(_prefs.usericon());
   }
-  /// Sets the Fl_Image to be used as the default user icon for all
+  /// Sets the fltk3::Image to be used as the default user icon for all
   /// newly created items.
   ///
   /// If you want to specify user icons on a per-item basis,
@@ -794,7 +794,7 @@ public:
   /// \param[in] val -- The new image to be used, or
   ///                   zero to disable user icons.
   ///
-  void usericon(Fl_Image *val) {
+  void usericon(fltk3::Image *val) {
     _prefs.usericon(val);
     redraw();
   }
@@ -802,7 +802,7 @@ public:
   /// If none was set, the internal default is returned,
   /// a simple '[+]' icon.
   ///
-  Fl_Image *openicon() const {
+  fltk3::Image *openicon() const {
     return(_prefs.openicon());
   }
   /// Sets the icon to be used as the 'open' icon.
@@ -810,7 +810,7 @@ public:
   ///
   /// \param[in] val -- The new image, or zero to use the default [+] icon.
   ///
-  void openicon(Fl_Image *val) {
+  void openicon(fltk3::Image *val) {
     _prefs.openicon(val);
     redraw();
   }
@@ -818,7 +818,7 @@ public:
   /// If none was set, the internal default is returned,
   /// a simple '[-]' icon.
   ///
-  Fl_Image *closeicon() const {
+  fltk3::Image *closeicon() const {
     return(_prefs.closeicon());
   }
   /// Sets the icon to be used as the 'close' icon.
@@ -826,7 +826,7 @@ public:
   ///
   /// \param[in] val -- The new image, or zero to use the default [-] icon.
   ///
-  void closeicon(Fl_Image *val) {
+  void closeicon(fltk3::Image *val) {
     _prefs.closeicon(val);
     redraw();
   }

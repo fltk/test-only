@@ -89,7 +89,7 @@ static int scroll_x = 0;
  \param X, Y, W, H position and size of widget
  \param l label text, defaults to none
  */
-Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H, const char* l)
+fltk3::TextDisplay::TextDisplay(int X, int Y, int W, int H, const char* l)
 : fltk3::Group(X, Y, W, H, l) {
   int i;
   
@@ -171,7 +171,7 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H, const char* l)
  Note, the text BUFFER that the text display displays is a separate
  entity and is not freed, nor are the style buffer or style table.
  */
-Fl_Text_Display::~Fl_Text_Display() {
+fltk3::TextDisplay::~TextDisplay() {
   if (scroll_direction) {
     fltk3::remove_timeout(scroll_timer_cb, this);
     scroll_direction = 0;
@@ -189,7 +189,7 @@ Fl_Text_Display::~Fl_Text_Display() {
  Attach a text buffer to display, replacing the current buffer (if any)
  \param buf attach this text buffer
  */
-void Fl_Text_Display::buffer( Fl_Text_Buffer *buf ) {
+void fltk3::TextDisplay::buffer( fltk3::TextBuffer *buf ) {
   /* If the text display is already displaying a buffer, clear it off
    of the display and remove our callback from it */
   if ( buf == mBuffer) return;
@@ -229,7 +229,7 @@ void Fl_Text_Display::buffer( Fl_Text_Buffer *buf ) {
  character - 'A') into fonts and colors; and a callback mechanism for
  as-needed highlighting, triggered by a style buffer entry of
  "unfinishedStyle".  Style buffer can trigger additional redisplay during
- a normal buffer modification if the buffer contains a primary Fl_Text_Selection
+ a normal buffer modification if the buffer contains a primary fltk3::TextSelection
  (see extendRangeForStyleMods for more information on this protocol).
  
  Style buffers, tables and their associated memory are managed by the caller.
@@ -247,8 +247,8 @@ void Fl_Text_Display::buffer( Fl_Text_Buffer *buf ) {
  \param cbArg and optional argument for the callback above, usually a pointer
    to the Text Display.
  */
-void Fl_Text_Display::highlight_data(Fl_Text_Buffer *styleBuffer,
-                                     const Style_Table_Entry *styleTable,
+void fltk3::TextDisplay::highlight_data(fltk3::TextBuffer *styleBuffer,
+                                     const StyleTableEntry *styleTable,
                                      int nStyles, char unfinishedStyle,
                                      Unfinished_Style_Cb unfinishedHighlightCB,
                                      void *cbArg ) {
@@ -270,7 +270,7 @@ void Fl_Text_Display::highlight_data(Fl_Text_Buffer *styleBuffer,
  \brief Find the longest line of all visible lines.
  \return the width of the longest visible line in pixels
  */
-int Fl_Text_Display::longest_vline() const {
+int fltk3::TextDisplay::longest_vline() const {
   int longest = 0;
   for (int i = 0; i < mNVisibleLines; i++)
     longest = max(longest, measure_vline(i));
@@ -285,9 +285,9 @@ int Fl_Text_Display::longest_vline() const {
  of all scrollbar sizes.
  \param X, Y, W, H new position and size of this widget
  */
-void Fl_Text_Display::resize(int X, int Y, int W, int H) {
+void fltk3::TextDisplay::resize(int X, int Y, int W, int H) {
 #ifdef DEBUG
-  printf("Fl_Text_Display::resize(X=%d, Y=%d, W=%d, H=%d)\n", X, Y, W, H);
+  printf("fltk3::TextDisplay::resize(X=%d, Y=%d, W=%d, H=%d)\n", X, Y, W, H);
 #endif // DEBUG
   const int oldWidth = w();
 #ifdef DEBUG
@@ -455,7 +455,7 @@ void Fl_Text_Display::resize(int X, int Y, int W, int H) {
  \param left, top are in coordinates of the text drawing window.
  \param width, height size in pixels 
  */
-void Fl_Text_Display::draw_text( int left, int top, int width, int height ) {
+void fltk3::TextDisplay::draw_text( int left, int top, int width, int height ) {
   int fontHeight, firstLine, lastLine, line;
   
   /* find the line number range of the display */
@@ -485,7 +485,7 @@ void Fl_Text_Display::draw_text( int left, int top, int width, int height ) {
  \param startpos index of first character needing redraw
  \param endpos index after last character needing redraw
  */
-void Fl_Text_Display::redisplay_range(int startpos, int endpos) {
+void fltk3::TextDisplay::redisplay_range(int startpos, int endpos) {
   IS_UTF8_ALIGNED2(buffer(), startpos)
   IS_UTF8_ALIGNED2(buffer(), endpos)
   
@@ -521,7 +521,7 @@ void Fl_Text_Display::redisplay_range(int startpos, int endpos) {
  \param startpos index of first character to draw
  \param endpos index after last character to draw
  */
-void Fl_Text_Display::draw_range(int startpos, int endpos) {
+void fltk3::TextDisplay::draw_range(int startpos, int endpos) {
   startpos = buffer()->utf8_align(startpos);
   endpos = buffer()->utf8_align(endpos);
   
@@ -586,7 +586,7 @@ void Fl_Text_Display::draw_range(int startpos, int endpos) {
  This function may trigger a redraw.
  \param newPos new caret position
  */
-void Fl_Text_Display::insert_position( int newPos ) {
+void fltk3::TextDisplay::insert_position( int newPos ) {
   IS_UTF8_ALIGNED2(buffer(), newPos)
   
   /* make sure new position is ok, do nothing if it hasn't changed */
@@ -613,7 +613,7 @@ void Fl_Text_Display::insert_position( int newPos ) {
  This function may trigger a redraw.
  \param b show(1) or hide(0) the text cursor (caret).
  */
-void Fl_Text_Display::show_cursor(int b) {
+void fltk3::TextDisplay::show_cursor(int b) {
   mCursorOn = b;
   redisplay_range(buffer()->prev_char_clipped(mCursorPos), buffer()->next_char(mCursorPos));
 }
@@ -624,18 +624,18 @@ void Fl_Text_Display::show_cursor(int b) {
  \brief Sets the text cursor style.
  Sets the text cursor style to one of the following:
  
- \li Fl_Text_Display::NORMAL_CURSOR - Shows an I beam.
- \li Fl_Text_Display::CARET_CURSOR - Shows a caret under the text.
- \li Fl_Text_Display::DIM_CURSOR - Shows a dimmed I beam.
- \li Fl_Text_Display::BLOCK_CURSOR - Shows an unfilled box around the current
+ \li fltk3::TextDisplay::NORMAL_CURSOR - Shows an I beam.
+ \li fltk3::TextDisplay::CARET_CURSOR - Shows a caret under the text.
+ \li fltk3::TextDisplay::DIM_CURSOR - Shows a dimmed I beam.
+ \li fltk3::TextDisplay::BLOCK_CURSOR - Shows an unfilled box around the current
       character.
- \li Fl_Text_Display::HEAVY_CURSOR - Shows a thick I beam.
+ \li fltk3::TextDisplay::HEAVY_CURSOR - Shows a thick I beam.
  
  This call also switches the cursor on and may trigger a redraw.
  
  \param style new cursor style
  */
-void Fl_Text_Display::cursor_style(int style) {
+void fltk3::TextDisplay::cursor_style(int style) {
   mCursorStyle = style;
   if (mCursorOn) show_cursor();
 }
@@ -662,7 +662,7 @@ void Fl_Text_Display::cursor_style(int style) {
  \todo we need new wrap modes to wrap at the window edge and based on pixel width
    or average character width.
  */
-void Fl_Text_Display::wrap_mode(int wrap, int wrapMargin) {
+void fltk3::TextDisplay::wrap_mode(int wrap, int wrapMargin) {
   switch (wrap) {
     case WRAP_NONE: 
       mWrapMarginPix = 0;
@@ -720,7 +720,7 @@ void Fl_Text_Display::wrap_mode(int wrap, int wrapMargin) {
  
  \param text new text in UTF-8 encoding.
  */
-void Fl_Text_Display::insert(const char* text) {
+void fltk3::TextDisplay::insert(const char* text) {
   IS_UTF8_ALIGNED2(buffer(), mCursorPos)
   IS_UTF8_ALIGNED(text)
   
@@ -739,12 +739,12 @@ void Fl_Text_Display::insert(const char* text) {
  
  \todo Unicode? Find out exactly what we do here and simplify.
  */
-void Fl_Text_Display::overstrike(const char* text) {
+void fltk3::TextDisplay::overstrike(const char* text) {
   IS_UTF8_ALIGNED2(buffer(), mCursorPos)
   IS_UTF8_ALIGNED(text)
   
   int startPos = mCursorPos;
-  Fl_Text_Buffer *buf = mBuffer;
+  fltk3::TextBuffer *buf = mBuffer;
   int lineStart = buf->line_start( startPos );
   int textLen = strlen( text );
   int i, p, endPos, indent, startIndent, endIndent;
@@ -808,7 +808,7 @@ void Fl_Text_Display::overstrike(const char* text) {
  \param[out] X, Y pixel position of character on screen
  \return 0 if character vertically out of view, X position otherwise
  */
-int Fl_Text_Display::position_to_xy( int pos, int* X, int* Y ) const {
+int fltk3::TextDisplay::position_to_xy( int pos, int* X, int* Y ) const {
   IS_UTF8_ALIGNED2(buffer(), pos)
 
   int lineStartPos, fontHeight, lineLen;
@@ -862,7 +862,7 @@ int Fl_Text_Display::position_to_xy( int pos, int* X, int* Y ) const {
     environment. We will have to further define what exactly we want to return. 
     Please check the functions that call this particular function.
  */
-int Fl_Text_Display::position_to_linecol( int pos, int* lineNum, int* column ) const {
+int fltk3::TextDisplay::position_to_linecol( int pos, int* lineNum, int* column ) const {
   IS_UTF8_ALIGNED2(buffer(), pos)
   
   int retVal;
@@ -891,12 +891,12 @@ int Fl_Text_Display::position_to_linecol( int pos, int* lineNum, int* column ) c
 /**
  \brief Check if a pixel position is within the primary selection.
  \param X, Y pixel position to test
- \return 1 if position (X, Y) is inside of the primary Fl_Text_Selection
+ \return 1 if position (X, Y) is inside of the primary fltk3::TextSelection
  */
-int Fl_Text_Display::in_selection( int X, int Y ) const {
+int fltk3::TextDisplay::in_selection( int X, int Y ) const {
   int pos = xy_to_position( X, Y, CHARACTER_POS );
   IS_UTF8_ALIGNED2(buffer(), pos)
-  Fl_Text_Buffer *buf = mBuffer;
+  fltk3::TextBuffer *buf = mBuffer;
   return buf->primary_selection()->includes(pos);
 }
 
@@ -922,7 +922,7 @@ int Fl_Text_Display::in_selection( int X, int Y ) const {
  
  \todo Unicode?
  */
-int Fl_Text_Display::wrapped_column(int row, int column) const {
+int fltk3::TextDisplay::wrapped_column(int row, int column) const {
   int lineStart, dispLineStart;
   
   if (!mContinuousWrap || row < 0 || row > mNVisibleLines)
@@ -950,7 +950,7 @@ int Fl_Text_Display::wrapped_column(int row, int column) const {
  \todo What does this do and how is it useful? Column numbers mean little in 
  this context. Which functions depend on this one?
  */
-int Fl_Text_Display::wrapped_row(int row) const {
+int fltk3::TextDisplay::wrapped_row(int row) const {
   if (!mContinuousWrap || row < 0 || row > mNVisibleLines)
     return row;
   return buffer()->count_lines(mFirstChar, mLineStarts[row]);
@@ -968,7 +968,7 @@ int Fl_Text_Display::wrapped_row(int row) const {
  
  \todo Unicode?
  */
-void Fl_Text_Display::display_insert() {
+void fltk3::TextDisplay::display_insert() {
   int hOffset, topLine, X, Y;
   hOffset = mHorizOffset;
   topLine = mTopLineNum;
@@ -1009,9 +1009,9 @@ void Fl_Text_Display::display_insert() {
 /**  
  \brief Scrolls the text buffer to show the current insert position.
  This function triggers a complete recalculation, ending in a call to 
- Fl_Text_Display::display_insert()
+ fltk3::TextDisplay::display_insert()
  */
-void Fl_Text_Display::show_insert_position() {
+void fltk3::TextDisplay::show_insert_position() {
   display_insert_position_hint = 1;
   resize(x(), y(), w(), h());
 }
@@ -1025,7 +1025,7 @@ void Fl_Text_Display::show_insert_position() {
  \brief Moves the current insert position right one character.
  \return 1 if the cursor moved, 0 if the end of the text was reached
  */
-int Fl_Text_Display::move_right() {
+int fltk3::TextDisplay::move_right() {
   if ( mCursorPos >= mBuffer->length() )
     return 0;
   int p = insert_position();
@@ -1040,7 +1040,7 @@ int Fl_Text_Display::move_right() {
  \brief Moves the current insert position left one character.
  \return 1 if the cursor moved, 0 if the beginning of the text was reached
  */
-int Fl_Text_Display::move_left() {
+int fltk3::TextDisplay::move_left() {
   if ( mCursorPos <= 0 )
     return 0;
   int p = insert_position();
@@ -1055,7 +1055,7 @@ int Fl_Text_Display::move_left() {
  \brief Moves the current insert position up one line.
  \return 1 if the cursor moved, 0 if the beginning of the text was reached
  */
-int Fl_Text_Display::move_up() {
+int fltk3::TextDisplay::move_up() {
   int lineStartPos, xPos, prevLineStartPos, newPos, visLineNum;
   
   /* Find the position of the start of the line.  Use the line starts array
@@ -1100,7 +1100,7 @@ int Fl_Text_Display::move_up() {
  \brief Moves the current insert position down one line.
  \return 1 if the cursor moved, 0 if the beginning of the text was reached
  */
-int Fl_Text_Display::move_down() {
+int fltk3::TextDisplay::move_down() {
   int lineStartPos, xPos, newPos, visLineNum;
   
   if ( mCursorPos == mBuffer->length() )
@@ -1144,7 +1144,7 @@ int Fl_Text_Display::move_down() {
  \param startPosIsLineStart avoid scanning back to the line start
  \return number of lines
  */
-int Fl_Text_Display::count_lines(int startPos, int endPos,
+int fltk3::TextDisplay::count_lines(int startPos, int endPos,
                                  bool startPosIsLineStart) const {
   IS_UTF8_ALIGNED2(buffer(), startPos)
   IS_UTF8_ALIGNED2(buffer(), endPos)
@@ -1152,7 +1152,7 @@ int Fl_Text_Display::count_lines(int startPos, int endPos,
   int retLines, retPos, retLineStart, retLineEnd;
   
 #ifdef DEBUG
-  printf("Fl_Text_Display::count_lines(startPos=%d, endPos=%d, startPosIsLineStart=%d\n",
+  printf("fltk3::TextDisplay::count_lines(startPos=%d, endPos=%d, startPosIsLineStart=%d\n",
          startPos, endPos, startPosIsLineStart);
 #endif // DEBUG
   
@@ -1187,7 +1187,7 @@ int Fl_Text_Display::count_lines(int startPos, int endPos,
  \param startPosIsLineStart avoid scanning back to the line start
  \return new position as index
  */
-int Fl_Text_Display::skip_lines(int startPos, int nLines,
+int fltk3::TextDisplay::skip_lines(int startPos, int nLines,
                                 bool startPosIsLineStart) {
   IS_UTF8_ALIGNED2(buffer(), startPos)
 
@@ -1233,7 +1233,7 @@ int Fl_Text_Display::skip_lines(int startPos, int nLines,
  \param startPosIsLineStart avoid scanning back to the line start
  \return new position as index
  */
-int Fl_Text_Display::line_end(int startPos, bool startPosIsLineStart) const {
+int fltk3::TextDisplay::line_end(int startPos, bool startPosIsLineStart) const {
   IS_UTF8_ALIGNED2(buffer(), startPos)
 
   int retLines, retPos, retLineStart, retLineEnd;
@@ -1264,7 +1264,7 @@ int Fl_Text_Display::line_end(int startPos, bool startPosIsLineStart) const {
  \param pos index to starting character
  \return new position as index
  */
-int Fl_Text_Display::line_start(int pos) const {
+int fltk3::TextDisplay::line_start(int pos) const {
   IS_UTF8_ALIGNED2(buffer(), pos)
 
   int retLines, retPos, retLineStart, retLineEnd;
@@ -1292,10 +1292,10 @@ int Fl_Text_Display::line_start(int pos) const {
  \param nLines number of lines to skip back
  \return new position as index
  */
-int Fl_Text_Display::rewind_lines(int startPos, int nLines) {
+int fltk3::TextDisplay::rewind_lines(int startPos, int nLines) {
   IS_UTF8_ALIGNED2(buffer(), startPos)
 
-  Fl_Text_Buffer *buf = buffer();
+  fltk3::TextBuffer *buf = buffer();
   int pos, lineStart, retLines, retPos, retLineStart, retLineEnd;
   
   /* If we're not wrapping, use the more efficient BufCountBackwardNLines */
@@ -1329,7 +1329,7 @@ static inline int fl_isseparator(unsigned int c) {
 /**   
  \brief Moves the current insert position right one word.
  */
-void Fl_Text_Display::next_word() {
+void fltk3::TextDisplay::next_word() {
   int pos = insert_position();
 
   while (pos < buffer()->length() && !fl_isseparator(buffer()->char_at(pos))) {
@@ -1348,7 +1348,7 @@ void Fl_Text_Display::next_word() {
 /**  
  \brief Moves the current insert position left one word.
  */
-void Fl_Text_Display::previous_word() {
+void fltk3::TextDisplay::previous_word() {
   int pos = insert_position();
   if (pos==0) return;
   pos = buffer()->prev_char(pos);
@@ -1380,8 +1380,8 @@ void Fl_Text_Display::previous_word() {
  \param nDeleted number of bytes we will delete (must be UTF-8 aligned!)
  \param cbArg "this" pointer for static callback function
  */
-void Fl_Text_Display::buffer_predelete_cb(int pos, int nDeleted, void *cbArg) {
-  Fl_Text_Display *textD = (Fl_Text_Display *)cbArg;
+void fltk3::TextDisplay::buffer_predelete_cb(int pos, int nDeleted, void *cbArg) {
+  fltk3::TextDisplay *textD = (fltk3::TextDisplay *)cbArg;
   if (textD->mContinuousWrap) {
   /* Note: we must perform this measurement, even if there is not a
    single character deleted; the number of "deleted" lines is the
@@ -1412,11 +1412,11 @@ void Fl_Text_Display::buffer_predelete_cb(int pos, int nDeleted, void *cbArg) {
  \param deletedText this is what was removed, must not be NULL if nDeleted is set
  \param cbArg "this" pointer for static callback function
  */
-void Fl_Text_Display::buffer_modified_cb( int pos, int nInserted, int nDeleted,
+void fltk3::TextDisplay::buffer_modified_cb( int pos, int nInserted, int nDeleted,
                                          int nRestyled, const char *deletedText, void *cbArg ) {
   int linesInserted, linesDeleted, startDispPos, endDispPos;
-  Fl_Text_Display *textD = ( Fl_Text_Display * ) cbArg;
-  Fl_Text_Buffer *buf = textD->mBuffer;
+  fltk3::TextDisplay *textD = ( fltk3::TextDisplay * ) cbArg;
+  fltk3::TextBuffer *buf = textD->mBuffer;
   int oldFirstChar = textD->mFirstChar;
   int scrolled, origCursorPos = textD->mCursorPos;
   int wrapModStart = 0, wrapModEnd = 0;
@@ -1556,7 +1556,7 @@ void Fl_Text_Display::buffer_modified_cb( int pos, int nInserted, int nDeleted,
  More specifically, this allows the line number reported in the statistics
  line to be calibrated in absolute lines, rather than post-wrapped lines.
  */
-void Fl_Text_Display::maintain_absolute_top_line_number(int state) {
+void fltk3::TextDisplay::maintain_absolute_top_line_number(int state) {
   mNeedAbsTopLineNum = state;
   reset_absolute_top_line_number();
 }
@@ -1569,7 +1569,7 @@ void Fl_Text_Display::maintain_absolute_top_line_number(int state) {
  Returns the absolute (non-wrapped) line number of the first line displayed.
  Returns 0 if the absolute top line number is not being maintained.
  */
-int Fl_Text_Display::get_absolute_top_line_number() const {
+int fltk3::TextDisplay::get_absolute_top_line_number() const {
   if (!mContinuousWrap)
     return mTopLineNum;
   if (maintaining_absolute_top_line_number())
@@ -1584,7 +1584,7 @@ int Fl_Text_Display::get_absolute_top_line_number() const {
  
  Re-calculate absolute top line number for a change in scroll position.
  */
-void Fl_Text_Display::absolute_top_line_number(int oldFirstChar) {
+void fltk3::TextDisplay::absolute_top_line_number(int oldFirstChar) {
   if (maintaining_absolute_top_line_number()) {
     if (mFirstChar < oldFirstChar)
       mAbsTopLineNum -= buffer()->count_lines(mFirstChar, oldFirstChar);
@@ -1601,7 +1601,7 @@ void Fl_Text_Display::absolute_top_line_number(int oldFirstChar) {
  Return true if a separate absolute top line number is being maintained
  (for displaying line numbers or showing in the statistics line).
  */
-int Fl_Text_Display::maintaining_absolute_top_line_number() const {
+int fltk3::TextDisplay::maintaining_absolute_top_line_number() const {
   return mContinuousWrap &&
   (mLineNumWidth != 0 || mNeedAbsTopLineNum);
 }
@@ -1615,7 +1615,7 @@ int Fl_Text_Display::maintaining_absolute_top_line_number() const {
  absolute (non-wrapped) top line number.  If mode is not continuous wrap,
  or the number is not being maintained, does nothing.
  */
-void Fl_Text_Display::reset_absolute_top_line_number() {
+void fltk3::TextDisplay::reset_absolute_top_line_number() {
   mAbsTopLineNum = 1;
   absolute_top_line_number(0);
 }
@@ -1633,7 +1633,7 @@ void Fl_Text_Display::reset_absolute_top_line_number() {
  \return ??
  \todo What does this do?
  */
-int Fl_Text_Display::position_to_line( int pos, int *lineNum ) const {
+int fltk3::TextDisplay::position_to_line( int pos, int *lineNum ) const {
   IS_UTF8_ALIGNED2(buffer(), pos)
 
   int i;
@@ -1644,7 +1644,7 @@ int Fl_Text_Display::position_to_line( int pos, int *lineNum ) const {
     if ( empty_vlines() ) {
       if ( mLastChar < mBuffer->length() ) {
         if ( !position_to_line( mLastChar, lineNum ) ) {
-          fltk3::error("Fl_Text_Display::position_to_line(): Consistency check ptvl failed");
+          fltk3::error("fltk3::TextDisplay::position_to_line(): Consistency check ptvl failed");
           return 0;
         }
         return ++( *lineNum ) <= mNVisibleLines - 1;
@@ -1689,7 +1689,7 @@ int Fl_Text_Display::position_to_line( int pos, int *lineNum ) const {
  \todo we handle all styles and selections 
  \todo we must provide code to get pixel positions of the middle of a character as well
  */
-int Fl_Text_Display::handle_vline(
+int fltk3::TextDisplay::handle_vline(
                                   int mode, 
                                   int lineStartPos, int lineLen, int leftChar, int rightChar,
                                   int Y, int bottomClip,
@@ -1825,7 +1825,7 @@ int Fl_Text_Display::handle_vline(
  \param x position in pixels
  \return index into buffer
  */
-int Fl_Text_Display::find_x(const char *s, int len, int style, int x) const {
+int fltk3::TextDisplay::find_x(const char *s, int len, int style, int x) const {
   IS_UTF8_ALIGNED(s)
 
   // TODO: use binary search which may be quicker.
@@ -1855,7 +1855,7 @@ int Fl_Text_Display::find_x(const char *s, int len, int style, int x) const {
  \param leftClip, rightClip pixel position of clipped area
  \param leftCharIndex, rightCharIndex index into line of segment that we want to draw
  */
-void Fl_Text_Display::draw_vline(int visLineNum, int leftClip, int rightClip,
+void fltk3::TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
                                  int leftCharIndex, int rightCharIndex) {
   int Y, lineStartPos, lineLen, fontHeight;
   
@@ -1907,12 +1907,12 @@ void Fl_Text_Display::draw_vline(int visLineNum, int leftClip, int rightClip,
  \param string text if this is a drawing operation
  \param nChars number of characters to draw
  */
-void Fl_Text_Display::draw_string(int style, 
+void fltk3::TextDisplay::draw_string(int style, 
                                   int X, int Y, int toX,
                                   const char *string, int nChars) const {
   IS_UTF8_ALIGNED(string)
 
-  const Style_Table_Entry * styleRec;
+  const StyleTableEntry * styleRec;
   
   /* Draw blank area rather than text, if that was the request */
   if ( style & FILL_MASK ) {
@@ -1921,7 +1921,7 @@ void Fl_Text_Display::draw_string(int style,
     return;
   }
   /* Set font, color, and gc depending on style.  For normal text, GCs
-   for normal drawing, or drawing within a Fl_Text_Selection or highlight are
+   for normal drawing, or drawing within a fltk3::TextSelection or highlight are
    pre-allocated and pre-configured.  For syntax highlighting, GCs are
    configured here, on the fly. */
   
@@ -1988,7 +1988,7 @@ void Fl_Text_Display::draw_string(int style,
    clear_rect( style, X, Y + mAscent + fs->descent, toX - x,
    mDescent - fs->descent);
    */
-  /* Underline if style is secondary Fl_Text_Selection */
+  /* Underline if style is secondary fltk3::TextSelection */
   
   /*
    if (style & SECONDARY_MASK)
@@ -2005,7 +2005,7 @@ void Fl_Text_Display::draw_string(int style,
  \param style index into style table
  \param X, Y, width, height size and position of background area
  */
-void Fl_Text_Display::clear_rect(int style, 
+void fltk3::TextDisplay::clear_rect(int style, 
                                  int X, int Y,
                                  int width, int height) const {
   /* A width of zero means "clear to end of window" to XClearArea */
@@ -2037,7 +2037,7 @@ void Fl_Text_Display::clear_rect(int style,
  
  \param X, Y cursor position in pixels
  */
-void Fl_Text_Display::draw_cursor( int X, int Y ) {
+void fltk3::TextDisplay::draw_cursor( int X, int Y ) {
 
   typedef struct {
     int x1, y1, x2, y2;
@@ -2116,7 +2116,7 @@ void Fl_Text_Display::draw_cursor( int X, int Y ) {
 
  Why not just: position_style(pos)?  Because style applies to blank areas
  of the window beyond the text boundaries, and because this routine must also
- decide whether a position is inside of a rectangular Fl_Text_Selection, and do
+ decide whether a position is inside of a rectangular fltk3::TextSelection, and do
  so efficiently, without re-counting character positions from the start of the
  line.
 
@@ -2128,12 +2128,12 @@ void Fl_Text_Display::draw_cursor( int X, int Y ) {
  \param lineIndex position of character within line
  \return style for the given character
  */
-int Fl_Text_Display::position_style( int lineStartPos, int lineLen, int lineIndex) const 
+int fltk3::TextDisplay::position_style( int lineStartPos, int lineLen, int lineIndex) const 
 {
   IS_UTF8_ALIGNED2(buffer(), lineStartPos)
 
-  Fl_Text_Buffer * buf = mBuffer;
-  Fl_Text_Buffer *styleBuf = mStyleBuffer;
+  fltk3::TextBuffer * buf = mBuffer;
+  fltk3::TextBuffer *styleBuf = mStyleBuffer;
   int pos, style = 0;
   
   if ( lineStartPos == -1 || buf == NULL )
@@ -2169,7 +2169,7 @@ int Fl_Text_Display::position_style( int lineStartPos, int lineLen, int lineInde
  \param style index into style table
  \return width of text segment in pixels
  */
-double Fl_Text_Display::string_width( const char *string, int length, int style ) const {
+double fltk3::TextDisplay::string_width( const char *string, int length, int style ) const {
   IS_UTF8_ALIGNED(string)
 
   fltk3::Font font;
@@ -2205,7 +2205,7 @@ double Fl_Text_Display::string_width( const char *string, int length, int style 
  \param posType CURSOR_POS or CHARACTER_POS
  \return index into text buffer
  */
-int Fl_Text_Display::xy_to_position( int X, int Y, int posType ) const {
+int fltk3::TextDisplay::xy_to_position( int X, int Y, int posType ) const {
   int lineStart, lineLen, fontHeight;
   int visLineNum;
   
@@ -2249,7 +2249,7 @@ int Fl_Text_Display::xy_to_position( int X, int Y, int posType ) const {
  \param[out] row, column neares row and column
  \param posType CURSOR_POS or CHARACTER_POS
  */
-void Fl_Text_Display::xy_to_rowcol( int X, int Y, int *row,
+void fltk3::TextDisplay::xy_to_rowcol( int X, int Y, int *row,
                                    int *column, int posType ) const {
   int fontHeight = mMaxsize;
   int fontWidth = TMPFONTWIDTH;   //mFontStruct->max_bounds.width;
@@ -2277,14 +2277,14 @@ void Fl_Text_Display::xy_to_rowcol( int X, int Y, int *row,
  
  \param newTopLineNum index into buffer
  */
-void Fl_Text_Display::offset_line_starts( int newTopLineNum ) {
+void fltk3::TextDisplay::offset_line_starts( int newTopLineNum ) {
   int oldTopLineNum = mTopLineNum;
   int oldFirstChar = mFirstChar;
   int lineDelta = newTopLineNum - oldTopLineNum;
   int nVisLines = mNVisibleLines;
   int *lineStarts = mLineStarts;
   int i, lastLineNum;
-  Fl_Text_Buffer *buf = mBuffer;
+  fltk3::TextBuffer *buf = mBuffer;
   
   /* If there was no offset, nothing needs to be changed */
   if ( lineDelta == 0 )
@@ -2345,7 +2345,7 @@ void Fl_Text_Display::offset_line_starts( int newTopLineNum ) {
  \param linesDeleted number of lines
  \param[out] scrolled set to 1 if the text display needs to be scrolled
  */
-void Fl_Text_Display::update_line_starts(int pos, int charsInserted,
+void fltk3::TextDisplay::update_line_starts(int pos, int charsInserted,
                                          int charsDeleted, int linesInserted, 
                                          int linesDeleted, int *scrolled ) {
   IS_UTF8_ALIGNED2(buffer(), pos)
@@ -2451,7 +2451,7 @@ void Fl_Text_Display::update_line_starts(int pos, int charsInserted,
  
  \param startLine, endLine range of lines to scan as line numbers
  */
-void Fl_Text_Display::calc_line_starts( int startLine, int endLine ) {
+void fltk3::TextDisplay::calc_line_starts( int startLine, int endLine ) {
   int startPos, bufLen = mBuffer->length();
   int line, lineEnd, nextLineStart, nVis = mNVisibleLines;
   int *lineStarts = mLineStarts;
@@ -2509,10 +2509,10 @@ void Fl_Text_Display::calc_line_starts( int startLine, int endLine ) {
 /**
  \brief Update last display character index.
  
- Given a Fl_Text_Display with a complete, up-to-date lineStarts array, update
+ Given a fltk3::TextDisplay with a complete, up-to-date lineStarts array, update
  the lastChar entry to point to the last buffer position displayed.
  */
-void Fl_Text_Display::calc_last_char() {
+void fltk3::TextDisplay::calc_last_char() {
   int i;
   for (i = mNVisibleLines - 1; i >= 0 && mLineStarts[i] == -1; i--) ;
   mLastChar = i < 0 ? 0 : line_end(mLineStarts[i], true);
@@ -2526,7 +2526,7 @@ void Fl_Text_Display::calc_last_char() {
  \param horizOffset column number
  \todo Column numbers make little sense here.
  */
-void Fl_Text_Display::scroll(int topLineNum, int horizOffset) {
+void fltk3::TextDisplay::scroll(int topLineNum, int horizOffset) {
   mTopLineNumHint = topLineNum;
   mHorizOffsetHint = horizOffset;
   resize(x(), y(), w(), h());
@@ -2540,7 +2540,7 @@ void Fl_Text_Display::scroll(int topLineNum, int horizOffset) {
  \param horizOffset in pixels
  \return 0 if nothing changed, 1 if we scrolled
  */
-int Fl_Text_Display::scroll_(int topLineNum, int horizOffset) {
+int fltk3::TextDisplay::scroll_(int topLineNum, int horizOffset) {
   /* Limit the requested scroll position to allowable values */
   if (topLineNum > mNBufferLines + 3 - mNVisibleLines)
     topLineNum = mNBufferLines + 3 - mNVisibleLines;
@@ -2575,13 +2575,13 @@ int Fl_Text_Display::scroll_(int topLineNum, int horizOffset) {
  Update the minimum, maximum, slider size, page increment, and value
  for vertical scrollbar.
  */
-void Fl_Text_Display::update_v_scrollbar() {
+void fltk3::TextDisplay::update_v_scrollbar() {
   /* The vertical scrollbar value and slider size directly represent the top
    line number, and the number of visible lines respectively.  The scroll
    bar maximum value is chosen to generally represent the size of the whole
    buffer, with minor adjustments to keep the scrollbar widget happy */
 #ifdef DEBUG
-  printf("Fl_Text_Display::update_v_scrollbar():\n"
+  printf("fltk3::TextDisplay::update_v_scrollbar():\n"
          "    mTopLineNum=%d, mNVisibleLines=%d, mNBufferLines=%d\n",
 	 mTopLineNum, mNVisibleLines, mNBufferLines);
 #endif // DEBUG
@@ -2597,7 +2597,7 @@ void Fl_Text_Display::update_v_scrollbar() {
  Update the minimum, maximum, slider size, page increment, and value
  for the horizontal scrollbar.
  */
-void Fl_Text_Display::update_h_scrollbar() {
+void fltk3::TextDisplay::update_h_scrollbar() {
   int sliderMax = max(longest_vline(), text_area.w + mHorizOffset);
   mHScrollBar->value( mHorizOffset, text_area.w, 0, sliderMax );
 }
@@ -2607,7 +2607,7 @@ void Fl_Text_Display::update_h_scrollbar() {
 /**
  \brief Callbacks for drag or valueChanged on scrollbars.
  */
-void Fl_Text_Display::v_scrollbar_cb(Fl_Scrollbar* b, Fl_Text_Display* textD) {
+void fltk3::TextDisplay::v_scrollbar_cb(Fl_Scrollbar* b, fltk3::TextDisplay* textD) {
   if (b->value() == textD->mTopLineNum) return;
   textD->scroll(b->value(), textD->mHorizOffset);
 }
@@ -2617,7 +2617,7 @@ void Fl_Text_Display::v_scrollbar_cb(Fl_Scrollbar* b, Fl_Text_Display* textD) {
 /**
  \brief Callbacks for drag or valueChanged on scrollbars.
  */
-void Fl_Text_Display::h_scrollbar_cb(Fl_Scrollbar* b, Fl_Text_Display* textD) {
+void fltk3::TextDisplay::h_scrollbar_cb(Fl_Scrollbar* b, fltk3::TextDisplay* textD) {
   if (b->value() == textD->mHorizOffset) return;
   textD->scroll(textD->mTopLineNum, b->value());
 }
@@ -2633,7 +2633,7 @@ void Fl_Text_Display::h_scrollbar_cb(Fl_Scrollbar* b, Fl_Text_Display* textD) {
  
  This function is not used.
  */
-void Fl_Text_Display::draw_line_numbers(bool /*clearAll*/) {
+void fltk3::TextDisplay::draw_line_numbers(bool /*clearAll*/) {
 #if 0
   int y, line, visLine, nCols, lineStart;
   char lineNumString[12];
@@ -2719,7 +2719,7 @@ static int countlines( const char *string ) {
  \param visLineNum index into visible lines array
  \return width of line in pixels
  */
-int Fl_Text_Display::measure_vline( int visLineNum ) const {
+int fltk3::TextDisplay::measure_vline( int visLineNum ) const {
   int lineLen = vline_length( visLineNum );
   int lineStartPos = mLineStarts[ visLineNum ];
   if (lineStartPos < 0 || lineLen == 0) return 0;
@@ -2732,7 +2732,7 @@ int Fl_Text_Display::measure_vline( int visLineNum ) const {
  \brief Return true if there are lines visible with no corresponding buffer text.
  \return 1 if there are empty lines
  */
-int Fl_Text_Display::empty_vlines() const {
+int fltk3::TextDisplay::empty_vlines() const {
   return (mNVisibleLines > 0) && (mLineStarts[ mNVisibleLines - 1 ] == -1);
 }
 
@@ -2747,7 +2747,7 @@ int Fl_Text_Display::empty_vlines() const {
  \param visLineNum index of line in visible line array
  \return number of bytes in this line
  */
-int Fl_Text_Display::vline_length( int visLineNum ) const {
+int fltk3::TextDisplay::vline_length( int visLineNum ) const {
   int nextLineStart, lineStartPos;
   
   if (visLineNum < 0 || visLineNum >= mNVisibleLines)
@@ -2794,7 +2794,7 @@ int Fl_Text_Display::vline_length( int visLineNum ) const {
  \param linesInserted
  \param linesDeleted
  */
-void Fl_Text_Display::find_wrap_range(const char *deletedText, int pos,
+void fltk3::TextDisplay::find_wrap_range(const char *deletedText, int pos,
                                       int nInserted, int nDeleted, 
                                       int *modRangeStart, int *modRangeEnd,
                                       int *linesInserted, int *linesDeleted) {
@@ -2802,7 +2802,7 @@ void Fl_Text_Display::find_wrap_range(const char *deletedText, int pos,
   IS_UTF8_ALIGNED2(buffer(), pos)
 
   int length, retPos, retLines, retLineStart, retLineEnd;
-  Fl_Text_Buffer *deletedTextBuf, *buf = buffer();
+  fltk3::TextBuffer *deletedTextBuf, *buf = buffer();
   int nVisLines = mNVisibleLines;
   int *lineStarts = mLineStarts;
   int countFrom, countTo, lineStart, adjLineStart, i;
@@ -2929,7 +2929,7 @@ void Fl_Text_Display::find_wrap_range(const char *deletedText, int pos,
   }
   
   length = (pos-countFrom) + nDeleted +(countTo-(pos+nInserted));
-  deletedTextBuf = new Fl_Text_Buffer(length);
+  deletedTextBuf = new fltk3::TextBuffer(length);
   deletedTextBuf->copy(buffer(), countFrom, pos, 0);
   if (nDeleted != 0)
     deletedTextBuf->insert(pos-countFrom, deletedText);
@@ -2962,11 +2962,11 @@ void Fl_Text_Display::find_wrap_range(const char *deletedText, int pos,
  \param pos
  \param nDeleted
  */
-void Fl_Text_Display::measure_deleted_lines(int pos, int nDeleted) {
+void fltk3::TextDisplay::measure_deleted_lines(int pos, int nDeleted) {
   IS_UTF8_ALIGNED2(buffer(), pos)
 
   int retPos, retLines, retLineStart, retLineEnd;
-  Fl_Text_Buffer *buf = buffer();
+  fltk3::TextBuffer *buf = buffer();
   int nVisLines = mNVisibleLines;
   int *lineStarts = mLineStarts;
   int countFrom, lineStart;
@@ -3054,7 +3054,7 @@ void Fl_Text_Display::measure_deleted_lines(int pos, int nDeleted) {
  \param[out] retLineEnd End position of the last line traversed
  \param[out] countLastLineMissingNewLine
  */
-void Fl_Text_Display::wrapped_line_counter(Fl_Text_Buffer *buf, int startPos,
+void fltk3::TextDisplay::wrapped_line_counter(fltk3::TextBuffer *buf, int startPos,
                                            int maxPos, int maxLines, bool startPosIsLineStart, int styleBufOffset,
                                            int *retPos, int *retLines, int *retLineStart, int *retLineEnd,
                                            bool countLastLineMissingNewLine) const {
@@ -3198,7 +3198,7 @@ void Fl_Text_Display::wrapped_line_counter(Fl_Text_Buffer *buf, int startPos,
  \param pos offset within string
  \return width of character in pixels
  */
-double Fl_Text_Display::measure_proportional_character(const char *s, int xPix, int pos) const {
+double fltk3::TextDisplay::measure_proportional_character(const char *s, int xPix, int pos) const {
   IS_UTF8_ALIGNED(s)
   
   if (*s=='\t') {
@@ -3232,7 +3232,7 @@ double Fl_Text_Display::measure_proportional_character(const char *s, int xPix, 
  \param[out] lineEnd
  \param[out] nextLineStart
  */
-void Fl_Text_Display::find_line_end(int startPos, bool startPosIsLineStart,
+void fltk3::TextDisplay::find_line_end(int startPos, bool startPosIsLineStart,
                                     int *lineEnd, int *nextLineStart) const {
   IS_UTF8_ALIGNED2(buffer(), startPos)
 
@@ -3276,7 +3276,7 @@ void Fl_Text_Display::find_line_end(int startPos, bool startPosIsLineStart,
  \param lineEndPos index of character where the line wraps
  \return 1 if a \\n character causes the line wrap
  */ 
-int Fl_Text_Display::wrap_uses_character(int lineEndPos) const {
+int fltk3::TextDisplay::wrap_uses_character(int lineEndPos) const {
   IS_UTF8_ALIGNED2(buffer(), lineEndPos)
 
   unsigned int c;
@@ -3303,19 +3303,19 @@ int Fl_Text_Display::wrap_uses_character(int lineEndPos) const {
  
  \todo Unicode?
  */
-void Fl_Text_Display::extend_range_for_styles( int *startpos, int *endpos ) {
+void fltk3::TextDisplay::extend_range_for_styles( int *startpos, int *endpos ) {
   IS_UTF8_ALIGNED2(buffer(), (*startpos))  
   IS_UTF8_ALIGNED2(buffer(), (*endpos))  
   
-  Fl_Text_Selection * sel = mStyleBuffer->primary_selection();
+  fltk3::TextSelection * sel = mStyleBuffer->primary_selection();
   int extended = 0;
   
   /* The peculiar protocol used here is that modifications to the style
-   buffer are marked by selecting them with the buffer's primary Fl_Text_Selection.
+   buffer are marked by selecting them with the buffer's primary fltk3::TextSelection.
    The style buffer is usually modified in response to a modify callback on
-   the text buffer BEFORE Fl_Text_Display.c's modify callback, so that it can keep
+   the text buffer BEFORE fltk3::TextDisplay.c's modify callback, so that it can keep
    the style buffer in step with the text buffer.  The style-update
-   callback can't just call for a redraw, because Fl_Text_Display hasn't processed
+   callback can't just call for a redraw, because fltk3::TextDisplay hasn't processed
    the original text changes yet.  Anyhow, to minimize redrawing and to
    avoid the complexity of scheduling redraws later, this simple protocol
    tells the text display's buffer modify callback to extend its redraw
@@ -3336,7 +3336,7 @@ void Fl_Text_Display::extend_range_for_styles( int *startpos, int *endpos ) {
     }
   }
   
-  /* If the Fl_Text_Selection was extended due to a style change, and some of the
+  /* If the fltk3::TextSelection was extended due to a style change, and some of the
    fonts don't match in spacing, extend redraw area to end of line to
    redraw characters exposed by possible font size changes */
   if ( extended )
@@ -3352,7 +3352,7 @@ void Fl_Text_Display::extend_range_for_styles( int *startpos, int *endpos ) {
  
  This function tries to limit drawing to smaller areas if possible.
  */
-void Fl_Text_Display::draw(void) {
+void fltk3::TextDisplay::draw(void) {
   // don't even try if there is no associated text buffer!
   if (!buffer()) { draw_box(); return; }
   
@@ -3471,19 +3471,19 @@ void Fl_Text_Display::draw(void) {
 }
 
 
-
-// this processes drag events due to mouse for Fl_Text_Display and
+namespace fltk3 {
+// this processes drag events due to mouse for fltk3::TextDisplay and
 // also drags due to cursor movement with shift held down for
-// Fl_Text_Editor
-void fl_text_drag_me(int pos, Fl_Text_Display* d) {
-  if (d->dragType == Fl_Text_Display::DRAG_CHAR) {
+// fltk3::TextEditor
+void text_drag_me(int pos, fltk3::TextDisplay* d) {
+  if (d->dragType == fltk3::TextDisplay::DRAG_CHAR) {
     if (pos >= d->dragPos) {
       d->buffer()->select(d->dragPos, pos);
     } else {
       d->buffer()->select(pos, d->dragPos);
     }
     d->insert_position(pos);
-  } else if (d->dragType == Fl_Text_Display::DRAG_WORD) {
+  } else if (d->dragType == fltk3::TextDisplay::DRAG_WORD) {
     if (pos >= d->dragPos) {
       d->insert_position(d->word_end(pos));
       d->buffer()->select(d->word_start(d->dragPos), d->word_end(pos));
@@ -3491,7 +3491,7 @@ void fl_text_drag_me(int pos, Fl_Text_Display* d) {
       d->insert_position(d->word_start(pos));
       d->buffer()->select(d->word_start(pos), d->word_end(d->dragPos));
     }
-  } else if (d->dragType == Fl_Text_Display::DRAG_LINE) {
+  } else if (d->dragType == fltk3::TextDisplay::DRAG_LINE) {
     if (pos >= d->dragPos) {
       d->insert_position(d->buffer()->line_end(pos)+1);
       d->buffer()->select(d->buffer()->line_start(d->dragPos),
@@ -3504,6 +3504,7 @@ void fl_text_drag_me(int pos, Fl_Text_Display* d) {
   }
 }
 
+}
 
 
 /**
@@ -3513,8 +3514,8 @@ void fl_text_drag_me(int pos, Fl_Text_Display* d) {
  how far the mouse pointer has left the text area. This 
  allows for smooth scrolling without "wiggeling" the mouse.
  */
-void Fl_Text_Display::scroll_timer_cb(void *user_data) {
-  Fl_Text_Display *w = (Fl_Text_Display*)user_data;
+void fltk3::TextDisplay::scroll_timer_cb(void *user_data) {
+  fltk3::TextDisplay *w = (fltk3::TextDisplay*)user_data;
   int pos;
   switch (scroll_direction) {
     case 1: // mouse is to the right, scroll left
@@ -3536,7 +3537,7 @@ void Fl_Text_Display::scroll_timer_cb(void *user_data) {
     default:
       return;
   }
-  fl_text_drag_me(pos, w);
+  fltk3::text_drag_me(pos, w);
   fltk3::repeat_timeout(.1, scroll_timer_cb, user_data);
 }
 
@@ -3545,7 +3546,7 @@ void Fl_Text_Display::scroll_timer_cb(void *user_data) {
 /**
  \brief Event handling.
  */
-int Fl_Text_Display::handle(int event) {
+int fltk3::TextDisplay::handle(int event) {
   if (!buffer()) return 0;
   // This isn't very elegant!
   if (!fltk3::event_inside(text_area.x, text_area.y, text_area.w, text_area.h) &&
@@ -3665,7 +3666,7 @@ int Fl_Text_Display::handle(int event) {
         pos = xy_to_position(X, Y, CURSOR_POS);
         pos = buffer()->next_char(pos);
       }
-      fl_text_drag_me(pos, this);
+      fltk3::text_drag_me(pos, this);
       return 1;
     }
       
@@ -3766,7 +3767,7 @@ int Fl_Text_Display::handle(int event) {
 /*
  Convert an x pixel position into a column number.
  */
-double Fl_Text_Display::x_to_col(double y) const
+double fltk3::TextDisplay::x_to_col(double y) const
 {
   if (!mColumnScale) {
     mColumnScale = string_width("Mitg", 4, 'A') / 4.0;
@@ -3778,7 +3779,7 @@ double Fl_Text_Display::x_to_col(double y) const
 /**
  Convert a column number into an x pixel position.
  */
-double Fl_Text_Display::col_to_x(double col) const
+double fltk3::TextDisplay::col_to_x(double col) const
 {
   if (!mColumnScale) {
     // recalculate column scale value

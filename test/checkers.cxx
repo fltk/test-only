@@ -83,7 +83,7 @@ char forcejumps = 1;		// is forced jumps rule in effect?
 const int spiece = 800;		// value of a piece
 const int sking = 1200;		// value of a king
 const int sadvan = 160;		// value of mypieces/theirpieces-1
-// const int smobil = ?		// moves *enemy* can make w/o being jumped
+                                // const int smobil = ?		// moves *enemy* can make w/o being jumped
 const int sallpin = 80;		// mobil == 0
 const int sdeny = 10;		// moves enemy can make that will be jumped
 const int spin = 32;		// enemy pieces that have no move except jumped
@@ -131,30 +131,30 @@ struct node {
 int nodes;		// count of nodes
 
 /*	Board positions:	Border positions:
-
-	      WHITE		  00  01  02  03  04
-	  05  06  07  08	04  XX  XX  XX  XX
-	09  10  11  12		  XX  XX  XX  XX  13
-	  14  15  16  17	13  XX  XX  XX  XX
-	18  19  20  21		  XX  XX  XX  XX  22
-	  23  24  25  26	22  XX  XX  XX  XX
-	27  28  29  30		  XX  XX  XX  XX  31
-	  32  33  34  36	31  XX  XX  XX  XX
-	36  37  38  39		  XX  XX  XX  XX  40
-	      BLACK		40  41  42  43  44
-
-*/
+ 
+ WHITE		  00  01  02  03  04
+ 05  06  07  08	04  XX  XX  XX  XX
+ 09  10  11  12		  XX  XX  XX  XX  13
+ 14  15  16  17	13  XX  XX  XX  XX
+ 18  19  20  21		  XX  XX  XX  XX  22
+ 23  24  25  26	22  XX  XX  XX  XX
+ 27  28  29  30		  XX  XX  XX  XX  31
+ 32  33  34  36	31  XX  XX  XX  XX
+ 36  37  38  39		  XX  XX  XX  XX  40
+ BLACK		40  41  42  43  44
+ 
+ */
 
 typedef char piece;
 
 // Piece values so that BLACK and WHITE are bit flags:
-#define EMPTY 0
-#define BLACK 1
-#define WHITE 2
-#define KING 4
-#define BLACKKING 5
-#define WHITEKING 6
-#define BLUE 8
+const char EMPTY = 0;
+const char BLACK = 1;
+const char WHITE = 2;
+const char KING = 4;
+const char BLACKKING = 5;
+const char WHITEKING = 6;
+const char BLUE = 8;
 
 const piece flip[9] = {
   EMPTY, WHITE, BLACK, 0, 0, WHITEKING, BLACKKING, 0, BLUE};
@@ -195,14 +195,14 @@ char check(int target,int direction) {
   piece aa = tb[target]; piece bb = tb[src];
   tb[target] = EMPTY; tb[src] = EMPTY;
   int safe =
-    (   (tb[src-4]&FRIEND && tb[src-8]&ENEMY)
-     || (tb[src-5]&FRIEND && tb[src-10]&ENEMY)
-     || (tb[dst-4]&ENEMY && !tb[dst+4])
-     || (tb[dst-5]&ENEMY && !tb[dst+5])
-     || (tb[src+4]&FRIEND && tb[src+8]==ENEMYKING)
-     || (tb[src+5]&FRIEND && tb[src+10]==ENEMYKING)
-     || (tb[dst+4]==ENEMYKING && !tb[dst-4])
-     || (tb[dst+5]==ENEMYKING && !tb[dst-5]));
+  (   (tb[src-4]&FRIEND && tb[src-8]&ENEMY)
+   || (tb[src-5]&FRIEND && tb[src-10]&ENEMY)
+   || (tb[dst-4]&ENEMY && !tb[dst+4])
+   || (tb[dst-5]&ENEMY && !tb[dst+5])
+   || (tb[src+4]&FRIEND && tb[src+8]==ENEMYKING)
+   || (tb[src+5]&FRIEND && tb[src+10]==ENEMYKING)
+   || (tb[dst+4]==ENEMYKING && !tb[dst-4])
+   || (tb[dst+5]==ENEMYKING && !tb[dst-5]));
   tb[target] = aa; tb[src] = bb;
   return(safe);
 }
@@ -226,13 +226,13 @@ void analyzemove(int direction,int src) {
 }
 
 void evaluateboard(node *n,int print) {
-
+  
   if (!n->who) tb = b;	// move was black's
   else {
     for (int i=0; i<45; i++) flipboard[44-i] = flip[(int)b[i]];
     tb = flipboard;
   }
-
+  
   memset(is_protected,0,sizeof(is_protected));
   int friendpieces = 0;
   int enemypieces = 0;
@@ -243,47 +243,47 @@ void evaluateboard(node *n,int print) {
   int enemykcent = 0;
   int enemycent = 0;
   n->mobil = n->deny = n->pin = n->threat = 0;
-
+  
   int i;
   for (i=5; i<40; i++) switch(tb[i]) {
-  case ENEMYKING:
-    enemykings++;
-    enemykcent += centralsquares[i];
-    deniedmoves = 0;
-    undeniedmoves = 0;
-    if (i>8) {
-      analyzemove(-4,i);
-      analyzemove(-5,i);
-    }
-    goto J1;
-  case ENEMY:
-    deniedmoves = 0;
-    undeniedmoves = 0;
-  J1:	enemypieces++;
-    enemycent += centralsquares[i];
-    if (i<36) {
-      analyzemove(4,i);
-      analyzemove(5,i);
-    }
-    if (deniedmoves && !undeniedmoves) n->pin++;
-    n->deny += deniedmoves;
-    n->mobil += undeniedmoves;
-    break;
-  case FRIENDKING:
-    friendkings++;
-    friendkcent += centralsquares[i];
-    if (tb[i+4]&ENEMY && !tb[i+8] && !(tb[i+4]==ENEMYKING && !tb[i-4]))
-      n->threat++;
-    if (tb[i+5]&ENEMY && !tb[i+10] && !(tb[i+5]==ENEMYKING && !tb[i-5]))
-      n->threat++;
-  case FRIEND:
-    friendpieces++;
-    friendcent += centralsquares[i];
-    if (tb[i-4]&ENEMY && !tb[i-8] && tb[i+4]) n->threat++;
-    if (tb[i-5]&ENEMY && !tb[i-10] && tb[i+5]) n->threat++;
-    break;
+    case ENEMYKING:
+      enemykings++;
+      enemykcent += centralsquares[i];
+      deniedmoves = 0;
+      undeniedmoves = 0;
+      if (i>8) {
+        analyzemove(-4,i);
+        analyzemove(-5,i);
+      }
+      goto J1;
+    case ENEMY:
+      deniedmoves = 0;
+      undeniedmoves = 0;
+    J1:	enemypieces++;
+      enemycent += centralsquares[i];
+      if (i<36) {
+        analyzemove(4,i);
+        analyzemove(5,i);
+      }
+      if (deniedmoves && !undeniedmoves) n->pin++;
+      n->deny += deniedmoves;
+      n->mobil += undeniedmoves;
+      break;
+    case FRIENDKING:
+      friendkings++;
+      friendkcent += centralsquares[i];
+      if (tb[i+4]&ENEMY && !tb[i+8] && !(tb[i+4]==ENEMYKING && !tb[i-4]))
+        n->threat++;
+      if (tb[i+5]&ENEMY && !tb[i+10] && !(tb[i+5]==ENEMYKING && !tb[i-5]))
+        n->threat++;
+    case FRIEND:
+      friendpieces++;
+      friendcent += centralsquares[i];
+      if (tb[i-4]&ENEMY && !tb[i-8] && tb[i+4]) n->threat++;
+      if (tb[i-5]&ENEMY && !tb[i-10] && tb[i+5]) n->threat++;
+      break;
   }
-
+  
   int gradient[40];
   for (i=4; i<9; i++) gradient[i] = tb[i] ? 0 : 32;
   int total = 0;
@@ -293,42 +293,42 @@ void evaluateboard(node *n,int print) {
     gradient[i] = (tb[i]&FRIEND || (!tb[i] && !is_protected[i])) ? x : 0;
   }
   n->gradient = total;
-
+  
   n->back = tb[39]==FRIEND && tb[37]==FRIEND && !enemykings;
-
+  
   node* f = n->father;
-
+  
   n->moc2 = f->mobil>n->mobil && friendcent>enemycent;
   n->moc3 = f->mobil<=n->mobil && friendcent<enemycent;
   n->moc4 = f->mobil>n->mobil && friendcent<enemycent;
   n->mode2 = f->mobil<=n->mobil && n->deny<f->deny;
   n->mode3 = f->mobil>n->mobil && n->deny>f->deny;
   n->demmo = n->deny>f->deny && f->deny+f->mobil>n->deny+n->mobil;
-
+  
   total =
-    spiece	* (friendpieces - enemypieces) +
-    (sking-spiece) * (friendkings	- enemykings) +
-    //	mobil?
-    sdeny	* (n->deny	- f->deny) +
-    spin	* (n->pin	- f->pin) +
-    sthreat	* (n->threat	- f->threat) +
-    sgrad	* (n->gradient	- f->gradient) +
-    sback	* (n->back	- f->back) +
-    smoc2	* (n->moc2	- f->moc2) +
-    smoc3	* (n->moc3	- f->moc3) +
-    smoc4	* (n->moc4	- f->moc4) +
-    smode2	* (n->mode2	- f->mode2) +
-    smode3	* (n->mode3	- f->mode3) +
-    sdemmo	* (n->demmo	- f->demmo) +
-    scent	* (friendcent	- enemycent) +
-    (skcent-scent) * (friendkcent	- enemykcent);
+  spiece	* (friendpieces - enemypieces) +
+  (sking-spiece) * (friendkings	- enemykings) +
+  //	mobil?
+  sdeny	* (n->deny	- f->deny) +
+  spin	* (n->pin	- f->pin) +
+  sthreat	* (n->threat	- f->threat) +
+  sgrad	* (n->gradient	- f->gradient) +
+  sback	* (n->back	- f->back) +
+  smoc2	* (n->moc2	- f->moc2) +
+  smoc3	* (n->moc3	- f->moc3) +
+  smoc4	* (n->moc4	- f->moc4) +
+  smode2	* (n->mode2	- f->mode2) +
+  smode3	* (n->mode3	- f->mode3) +
+  sdemmo	* (n->demmo	- f->demmo) +
+  scent	* (friendcent	- enemycent) +
+  (skcent-scent) * (friendkcent	- enemykcent);
   if (!n->mobil) total += sallpin;
-
+  
   if (!enemypieces) total = 30000;
   else if (friendpieces > enemypieces)
     total += (sadvan*friendpieces)/enemypieces-sadvan;
   else total -= (sadvan*enemypieces)/friendpieces-sadvan;
-
+  
   if (print) {
     printf("\tParent\tNew\tScore\n");
     printf("pieces\t%d\t%d\t%d\n",enemypieces,friendpieces,
@@ -419,7 +419,7 @@ void insert(node *n) {
 
 void movepiece(node* f, int i, node* jnode) {
   static char jumphappened;
-
+  
   for (int k=0; k<4; k++) {
     int direction = offset[(int)b[i]][k];
     if (!direction) break;
@@ -572,7 +572,7 @@ char playing;
 char autoplay;
 
 void newgame(void) {
-
+  
   int n;
   for (n=0; n<5; n++) b[n] = BLUE;
   for (n=5; n<18; n++) b[n] = WHITE;
@@ -580,17 +580,17 @@ void newgame(void) {
   for (n=27; n<40; n++) b[n] = BLACK;
   for (n=40; n<45; n++) b[n] = BLUE;
   b[13] = b[22] = b[31] = BLUE;
-
+  
   centralsquares[15] = centralsquares[16] =
-    centralsquares[19] = centralsquares[20] =
-    centralsquares[24] = centralsquares[25] =
-    centralsquares[28] = centralsquares[29] = 1;
-
+  centralsquares[19] = centralsquares[20] =
+  centralsquares[24] = centralsquares[25] =
+  centralsquares[28] = centralsquares[29] = 1;
+  
   // set up initial search tree:
   nextjump = 0;
   killnode(undoroot);
   undoroot = root = newnode();
-
+  
   // make it white's move, so first move is black:
   root->who = 1;
   user = 0;
@@ -730,7 +730,7 @@ node *getusermove(void) {
   int i,j;
   node *t;
   char line[100],*m1,*m2;
-
+  
   if (playing)
     printf("\033[1m%s's move?\033[0m ",root->who ? "Black" : "White");
   else
@@ -755,74 +755,74 @@ node *getusermove(void) {
     m1[0] = 'L';
   }
   switch(toupper(m1[0])) {
-  case 0: return(0);
-  case 'A':
-    if (playing) autoplay = 1;
-    return(root);
-  case 'C':
-    puts(copyright);
-    break;
-  case 'D':
-    debug = !debug;
-    printf("Debug is now %s.", debug ? "on" : "off");
-    break;
-  case 'F':
-    forcejumps = !forcejumps;
-    printf("Forced jumps rule is now %s.",forcejumps ? "on" : "off");
-    killnode(root->son); root->son = 0;
-    return(0);
-  case 'L':
-    expandnode(root);
-    if (playing) for (t = root->son; t; t = t->brother) dumpnode(t,1);
-    break;
-  case 'M':
-    return(playing ? root : 0);
-  case 'N':
-    newgame();
-    VT100board();
-    return(0);
-  case 'P':
-    printf("I expect the following moves:\n");
-    for (t = root->son; t; t = t->son) dumpnode(t,0);
-    break;
-  case 'Q':
-    fixexit(0);
-  case 'R':
-    VT100board();
-    break;
-  case 'S':
-    user = !user;
-    return(root);
-  case 'U':
-    VT100move(undomove(),1);
-    VT100move(undomove(),1);
-    return(0);
-  case '+':
-    maxevaluate = maxnodes = 2*maxevaluate;
-    goto J2;
-  case '-':
-    if (maxevaluate > 1)
-      maxevaluate = maxnodes = maxevaluate/2;
-  J2: printf("Moves evaluated set to %d.",maxevaluate);
-    break;
-  default:
-    puts(
-	 "A(utoplay)\n"
-	 "C(opyright)\n"
-	 "D(ebug on/off)\n"
-	 "F(orce jumps rule on/off)\n"
-	 "L(ist legal moves)\n"
-	 "M(ake a move for me)\n"
-	 "N(ew game)\n"
-	 "P(redict next few moves)\n"
-	 "Q(uit)\n"
-	 "R(edraw screen)\n"
-	 "S(witch sides)\n"
-	 "U(ndo)\n"
-	 "+	- smarter\n"
-	 "-	- stupider");
-    expandnode(root);
-    for (t = root->son; t; t = t->brother) dumpnode(t,1);
+    case 0: return(0);
+    case 'A':
+      if (playing) autoplay = 1;
+      return(root);
+    case 'C':
+      puts(copyright);
+      break;
+    case 'D':
+      debug = !debug;
+      printf("Debug is now %s.", debug ? "on" : "off");
+      break;
+    case 'F':
+      forcejumps = !forcejumps;
+      printf("Forced jumps rule is now %s.",forcejumps ? "on" : "off");
+      killnode(root->son); root->son = 0;
+      return(0);
+    case 'L':
+      expandnode(root);
+      if (playing) for (t = root->son; t; t = t->brother) dumpnode(t,1);
+      break;
+    case 'M':
+      return(playing ? root : 0);
+    case 'N':
+      newgame();
+      VT100board();
+      return(0);
+    case 'P':
+      printf("I expect the following moves:\n");
+      for (t = root->son; t; t = t->son) dumpnode(t,0);
+      break;
+    case 'Q':
+      fixexit(0);
+    case 'R':
+      VT100board();
+      break;
+    case 'S':
+      user = !user;
+      return(root);
+    case 'U':
+      VT100move(undomove(),1);
+      VT100move(undomove(),1);
+      return(0);
+    case '+':
+      maxevaluate = maxnodes = 2*maxevaluate;
+      goto J2;
+    case '-':
+      if (maxevaluate > 1)
+        maxevaluate = maxnodes = maxevaluate/2;
+    J2: printf("Moves evaluated set to %d.",maxevaluate);
+      break;
+    default:
+      puts(
+           "A(utoplay)\n"
+           "C(opyright)\n"
+           "D(ebug on/off)\n"
+           "F(orce jumps rule on/off)\n"
+           "L(ist legal moves)\n"
+           "M(ake a move for me)\n"
+           "N(ew game)\n"
+           "P(redict next few moves)\n"
+           "Q(uit)\n"
+           "R(edraw screen)\n"
+           "S(witch sides)\n"
+           "U(ndo)\n"
+           "+	- smarter\n"
+           "-	- stupider");
+      expandnode(root);
+      for (t = root->son; t; t = t->brother) dumpnode(t,1);
   }
   return(0);
 }
@@ -865,10 +865,10 @@ int VT100main() {
 #ifdef FLTK
 
 #include <fltk3/run.h>
-#include <fltk3/Double_Window.h>
+#include <fltk3/DoubleWindow.h>
 #include <fltk3/Bitmap.h>
 #include <fltk3/draw.h>
-#include <fltk3/Menu_Item.h>
+#include <fltk3/MenuItem.h>
 #include <fltk3/ask.h>
 
 //----------------------------------------------------------------
@@ -894,48 +894,48 @@ int VT100main() {
 #include "pixmaps/whiteking_3.xbm"
 #include "pixmaps/whiteking_4.xbm"
 
-Fl_Bitmap *bm[4][4];
+fltk3::Bitmap *bm[4][4];
 
 void make_bitmaps() {
   if (bm[0][0]) return;
-  bm[0][0] = new Fl_Bitmap(black_1_bits, black_1_width, black_1_height);
-  bm[0][1] = new Fl_Bitmap(black_2_bits, black_1_width, black_1_height);
-  bm[0][2] = new Fl_Bitmap(black_3_bits, black_1_width, black_1_height);
-  bm[0][3] = new Fl_Bitmap(black_4_bits, black_1_width, black_1_height);
-  bm[1][0] = new Fl_Bitmap(white_1_bits, black_1_width, black_1_height);
-  bm[1][1] = new Fl_Bitmap(white_2_bits, black_1_width, black_1_height);
-  bm[1][2] = new Fl_Bitmap(white_3_bits, black_1_width, black_1_height);
-  bm[1][3] = new Fl_Bitmap(white_4_bits, black_1_width, black_1_height);
-  bm[2][0] = new Fl_Bitmap(blackking_1_bits, black_1_width, black_1_height);
-  bm[2][1] = new Fl_Bitmap(blackking_2_bits, black_1_width, black_1_height);
-  bm[2][2] = new Fl_Bitmap(blackking_3_bits, black_1_width, black_1_height);
-  bm[2][3] = new Fl_Bitmap(blackking_4_bits, black_1_width, black_1_height);
-  bm[3][0] = new Fl_Bitmap(whiteking_1_bits, black_1_width, black_1_height);
-  bm[3][1] = new Fl_Bitmap(whiteking_2_bits, black_1_width, black_1_height);
-  bm[3][2] = new Fl_Bitmap(whiteking_3_bits, black_1_width, black_1_height);
-  bm[3][3] = new Fl_Bitmap(whiteking_4_bits, black_1_width, black_1_height);
+  bm[0][0] = new fltk3::Bitmap(black_1_bits, black_1_width, black_1_height);
+  bm[0][1] = new fltk3::Bitmap(black_2_bits, black_1_width, black_1_height);
+  bm[0][2] = new fltk3::Bitmap(black_3_bits, black_1_width, black_1_height);
+  bm[0][3] = new fltk3::Bitmap(black_4_bits, black_1_width, black_1_height);
+  bm[1][0] = new fltk3::Bitmap(white_1_bits, black_1_width, black_1_height);
+  bm[1][1] = new fltk3::Bitmap(white_2_bits, black_1_width, black_1_height);
+  bm[1][2] = new fltk3::Bitmap(white_3_bits, black_1_width, black_1_height);
+  bm[1][3] = new fltk3::Bitmap(white_4_bits, black_1_width, black_1_height);
+  bm[2][0] = new fltk3::Bitmap(blackking_1_bits, black_1_width, black_1_height);
+  bm[2][1] = new fltk3::Bitmap(blackking_2_bits, black_1_width, black_1_height);
+  bm[2][2] = new fltk3::Bitmap(blackking_3_bits, black_1_width, black_1_height);
+  bm[2][3] = new fltk3::Bitmap(blackking_4_bits, black_1_width, black_1_height);
+  bm[3][0] = new fltk3::Bitmap(whiteking_1_bits, black_1_width, black_1_height);
+  bm[3][1] = new fltk3::Bitmap(whiteking_2_bits, black_1_width, black_1_height);
+  bm[3][2] = new fltk3::Bitmap(whiteking_3_bits, black_1_width, black_1_height);
+  bm[3][3] = new fltk3::Bitmap(whiteking_4_bits, black_1_width, black_1_height);
 }
 
 #define ISIZE black_1_width
 
 void draw_piece(int which, int x, int y) {
-  if (!fl_not_clipped(x,y,ISIZE,ISIZE)) return;
+  if (!fltk3::not_clipped(x,y,ISIZE,ISIZE)) return;
   switch (which) {
-  case BLACK: which = 0; break;
-  case WHITE: which = 1; break;
-  case BLACKKING: which = 2; break;
-  case WHITEKING: which = 3; break;
-  default: return;
+    case BLACK: which = 0; break;
+    case WHITE: which = 1; break;
+    case BLACKKING: which = 2; break;
+    case WHITEKING: which = 3; break;
+    default: return;
   }
-  fl_color(FL_BLACK); bm[which][0]->draw(x, y);
-  fl_color(FL_INACTIVE_COLOR); bm[which][1]->draw(x, y);
-  fl_color(FL_SELECTION_COLOR); bm[which][2]->draw(x, y);
-  fl_color(FL_WHITE); bm[which][3]->draw(x, y);
+  fltk3::color(fltk3::BLACK); bm[which][0]->draw(x, y);
+  fltk3::color(fltk3::INACTIVE_COLOR); bm[which][1]->draw(x, y);
+  fltk3::color(fltk3::SELECTION_COLOR); bm[which][2]->draw(x, y);
+  fltk3::color(fltk3::WHITE); bm[which][3]->draw(x, y);
 }
 
 //----------------------------------------------------------------
 
-class Board : public Fl_Double_Window {
+class Board : public fltk3::DoubleWindow {
   void draw();
   int handle(int);
 public:
@@ -943,7 +943,7 @@ public:
   void drop_piece(int);
   void animate(node* move, int backwards);
   void computer_move(int);
-  Board(int w, int h) : Fl_Double_Window(w,h) {color(15);}
+  Board(int w, int h) : fltk3::DoubleWindow(w,h) {color(15);}
 };
 
 #define BOXSIZE 52
@@ -963,50 +963,50 @@ int squarey(int i) {return (usermoves(i,2)-'1')*BOXSIZE+BMOFFSET;}
 void Board::draw() {
   make_bitmaps();
   // -- draw the board itself
-  fl_draw_box(box(),0,0,w(),h(),color());
+  fltk3::draw_box(box(),0,0,w(),h(),color());
   // -- draw all dark tiles
-  fl_color((Fl_Color)10 /*107*/);
+  fltk3::color((fltk3::Color)10 /*107*/);
   int x; for (x=0; x<8; x++) for (int y=0; y<8; y++) {
-    if (!((x^y)&1)) fl_rectf(BORDER+x*BOXSIZE, BORDER+y*BOXSIZE,
+    if (!((x^y)&1)) fltk3::rectf(BORDER+x*BOXSIZE, BORDER+y*BOXSIZE,
 			     BOXSIZE-BORDER, BOXSIZE-BORDER);
   }
   // -- draw outlines around the fileds
-  fl_color(FL_DARK3);
+  fltk3::color(fltk3::DARK3);
   for (x=0; x<9; x++) {
-    fl_rectf(x*BOXSIZE,0,BORDER,h());
-    fl_rectf(0,x*BOXSIZE,w(),BORDER);
+    fltk3::rectf(x*BOXSIZE,0,BORDER,h());
+    fltk3::rectf(0,x*BOXSIZE,w(),BORDER);
   }
   for (int j = 5; j < 40; j++) if (j != erase_this) {
-    draw_piece(b[j], squarex(j), squarey(j));
+    draw_piece(::b[j], squarex(j), squarey(j));
   }
   if (showlegal) {
-    fl_color(FL_WHITE);
+    fltk3::color(fltk3::WHITE);
     node* n;
     for (n = root->son; n; n = showlegal==2 ? n->son : n->brother) {
       int x1 = squarex(n->from)+BOXSIZE/2-5;
       int y1 = squarey(n->from)+BOXSIZE/2-5;
       int x2 = squarex(n->to)+BOXSIZE/2-5;
       int y2 = squarey(n->to)+BOXSIZE/2-5;
-      fl_line(x1,y1,x2,y2);
-      fl_push_matrix();
-      fl_mult_matrix(x2-x1,y2-y1,y1-y2,x2-x1,x2,y2);
-      fl_begin_polygon();
-      fl_vertex(0,0);
-      fl_vertex(-.3, .1);
-      fl_vertex(-.3, -.1);
-      fl_end_polygon();
-      fl_pop_matrix();
+      fltk3::line(x1,y1,x2,y2);
+      fltk3::push_matrix();
+      fltk3::mult_matrix(x2-x1,y2-y1,y1-y2,x2-x1,x2,y2);
+      fltk3::begin_polygon();
+      fltk3::vertex(0,0);
+      fltk3::vertex(-.3, .1);
+      fltk3::vertex(-.3, -.1);
+      fltk3::end_polygon();
+      fltk3::pop_matrix();
     }
     int num = 1;
-    fl_color(FL_BLACK);
-    fl_font(FL_BOLD,10);
+    fltk3::color(fltk3::BLACK);
+    fltk3::font(fltk3::BOLD,10);
     for (n = root->son; n; n = showlegal==2 ? n->son : n->brother) {
       int x1 = squarex(n->from)+BOXSIZE/2-5;
       int y1 = squarey(n->from)+BOXSIZE/2-5;
       int x2 = squarex(n->to)+BOXSIZE/2-5;
       int y2 = squarey(n->to)+BOXSIZE/2-5;
       char buf[20]; sprintf(buf,"%d",num);
-      fl_draw(buf, x1+int((x2-x1)*.85)-3, y1+int((y2-y1)*.85)+5);
+      fltk3::draw(buf, x1+int((x2-x1)*.85)-3, y1+int((y2-y1)*.85)+5);
       num++;
     }
   }
@@ -1020,11 +1020,11 @@ void Board::drag_piece(int j, int dx, int dy) {
   if (!erase_this) { // pick up old piece
     dragx = squarex(j); dragy = squarey(j);
     erase_this = j;
-    dragging = b[j];
+    dragging = ::b[j];
   }
   if (dx != dragx || dy != dragy) {
-    damage(FL_DAMAGE_ALL, dragx, dragy, ISIZE, ISIZE);
-    damage(FL_DAMAGE_ALL, dx, dy, ISIZE, ISIZE);
+    damage(fltk3::DAMAGE_ALL, dragx, dragy, ISIZE, ISIZE);
+    damage(fltk3::DAMAGE_ALL, dx, dy, ISIZE, ISIZE);
   }
   dragx = dx;
   dragy = dy;
@@ -1059,7 +1059,7 @@ void Board::animate(node* move, int backwards) {
     int x = x1+(x2-x1)*j/STEPS;
     int y = y1+(y2-y1)*j/STEPS;
     drag_piece(move->from,x,y);
-    Fl::flush();
+    fltk3::flush();
   }
   drop_piece(t);
   if (move->jump) redraw();
@@ -1069,16 +1069,16 @@ int busy; // causes pop-up abort menu
 
 void Board::computer_move(int help) {
   if (!playing) return;
-  cursor(FL_CURSOR_WAIT);
-  Fl::flush();
+  cursor(fltk3::CURSOR_WAIT);
+  fltk3::flush();
   busy = 1; abortflag = 0;
   node* move = calcmove(root);
   busy = 0;
   if (move) {
     if (!help && move->value <= -30000) {
-      fl_message("%s resigns", move->who ? "White" : "Black");
+      fltk3::message("%s resigns", move->who ? "White" : "Black");
       playing = autoplay = 0;
-      cursor(FL_CURSOR_DEFAULT);
+      cursor(fltk3::CURSOR_DEFAULT);
       return;
     }
     animate(move,0);
@@ -1086,10 +1086,10 @@ void Board::computer_move(int help) {
   }
   expandnode(root);
   if (!root->son) {
-    fl_message("%s has no move", root->who ? "Black" : "White");
+    fltk3::message("%s has no move", root->who ? "Black" : "White");
     playing = autoplay = 0;
   }
-  if (!autoplay) cursor(FL_CURSOR_DEFAULT);
+  if (!autoplay) cursor(fltk3::CURSOR_DEFAULT);
 }
 
 extern fltk3::MenuItem menu[];
@@ -1099,16 +1099,16 @@ int Board::handle(int e) {
   if (busy) {
     const fltk3::MenuItem* m;
     switch(e) {
-    case FL_PUSH:
-      m = busymenu->popup(Fl::event_x(), Fl::event_y(), 0, 0, 0);
-      if (m) m->do_callback(this, (void*)m);
-      return 1;
-    case FL_SHORTCUT:
-      m = busymenu->test_shortcut();
-      if (m) {m->do_callback(this, (void*)m); return 1;}
-      return 0;
-    default:
-      return 0;
+      case fltk3::PUSH:
+        m = busymenu->popup(fltk3::event_x(), fltk3::event_y(), 0, 0, 0);
+        if (m) m->do_callback(this, (void*)m);
+        return 1;
+      case fltk3::SHORTCUT:
+        m = busymenu->test_shortcut();
+        if (m) {m->do_callback(this, (void*)m); return 1;}
+        return 0;
+      default:
+        return 0;
     }
   }
   node *t, *n;
@@ -1116,67 +1116,67 @@ int Board::handle(int e) {
   int dist;
   const fltk3::MenuItem* m;
   switch (e) {
-  case FL_PUSH:
-    if (Fl::event_button() > 1) {
-      m = menu->popup(Fl::event_x(), Fl::event_y(), 0, 0, 0);
-      if (m) m->do_callback(this, (void*)m);
-      return 1;
-    }
-    if (playing) {
-      expandnode(root);
-      for (t = root->son; t; t = t->brother) {
-	int x = squarex(t->from);
-	int y = squarey(t->from);
-	if (Fl::event_inside(x,y,BOXSIZE,BOXSIZE)) {
-	  deltax = Fl::event_x()-x;
-	  deltay = Fl::event_y()-y;
-	  drag_piece(t->from,x,y);
-	  return 1;
-	}
+    case fltk3::PUSH:
+      if (fltk3::event_button() > 1) {
+        m = menu->popup(fltk3::event_x(), fltk3::event_y(), 0, 0, 0);
+        if (m) m->do_callback(this, (void*)m);
+        return 1;
       }
-    }
-    return 0;
-  case FL_SHORTCUT:
-    m = menu->test_shortcut();
-    if (m) {m->do_callback(this, (void*)m); return 1;}
-    return 0;
-  case FL_DRAG:
-    drag_piece(erase_this, Fl::event_x()-deltax, Fl::event_y()-deltay);
-    return 1;
-  case FL_RELEASE:
-    // find the closest legal move he dropped it on:
-    dist = 50*50; n = 0;
-    for (t = root->son; t; t = t->brother) if (t->from==erase_this) {
-      int d1 = Fl::event_x()-deltax-squarex(t->to);
-      int d = d1*d1;
-      d1 = Fl::event_y()-deltay-squarey(t->to);
-      d += d1*d1;
-      if (d < dist) {dist = d; n = t;}
-    }
-    if (!n) {drop_piece(erase_this); return 1;} // none found
-    drop_piece(n->to);
-    domove(n);
-    if (showlegal) {showlegal = 0; redraw();}
-    if (n->jump) redraw();
-    computer_move(0);
-    return 1;
-  default:
-    return 0;
+      if (playing) {
+        expandnode(root);
+        for (t = root->son; t; t = t->brother) {
+          int x = squarex(t->from);
+          int y = squarey(t->from);
+          if (fltk3::event_inside(x,y,BOXSIZE,BOXSIZE)) {
+            deltax = fltk3::event_x()-x;
+            deltay = fltk3::event_y()-y;
+            drag_piece(t->from,x,y);
+            return 1;
+          }
+        }
+      }
+      return 0;
+    case fltk3::SHORTCUT:
+      m = menu->test_shortcut();
+      if (m) {m->do_callback(this, (void*)m); return 1;}
+      return 0;
+    case fltk3::DRAG:
+      drag_piece(erase_this, fltk3::event_x()-deltax, fltk3::event_y()-deltay);
+      return 1;
+    case fltk3::RELEASE:
+      // find the closest legal move he dropped it on:
+      dist = 50*50; n = 0;
+      for (t = root->son; t; t = t->brother) if (t->from==erase_this) {
+        int d1 = fltk3::event_x()-deltax-squarex(t->to);
+        int d = d1*d1;
+        d1 = fltk3::event_y()-deltay-squarey(t->to);
+        d += d1*d1;
+        if (d < dist) {dist = d; n = t;}
+      }
+      if (!n) {drop_piece(erase_this); return 1;} // none found
+      drop_piece(n->to);
+      domove(n);
+      if (showlegal) {showlegal = 0; redraw();}
+      if (n->jump) redraw();
+      computer_move(0);
+      return 1;
+    default:
+      return 0;
   }
 }
 
-void quit_cb(Fl_Widget*, void*) {exit(0);}
+void quit_cb(fltk3::Widget*, void*) {exit(0);}
 
 int FLTKmain(int argc, char** argv) {
-  Fl::visual(FL_DOUBLE|FL_INDEX);
+  fltk3::visual(fltk3::DOUBLE|fltk3::INDEX);
   Board b(BOARDSIZE,BOARDSIZE);
-  b.color(FL_BACKGROUND_COLOR);
+  b.color(fltk3::BACKGROUND_COLOR);
   b.callback(quit_cb);
   b.show(argc,argv);
   return fltk3::run();
 } 
 
-void autoplay_cb(Fl_Widget*bp, void*) {
+void autoplay_cb(fltk3::Widget*bp, void*) {
   if (autoplay) {autoplay = 0; return;}
   if (!playing) return;
   Board* b = (Board*)bp;
@@ -1185,14 +1185,14 @@ void autoplay_cb(Fl_Widget*bp, void*) {
 }
 
 #include <fltk3/Box.h>
-Fl_Window *copyright_window;
-void copyright_cb(Fl_Widget*, void*) {
+fltk3::Window *copyright_window;
+void copyright_cb(fltk3::Widget*, void*) {
   if (!copyright_window) {
-    copyright_window = new Fl_Window(400,270,"Copyright");
-    copyright_window->color(FL_WHITE);
-    Fl_Box *b = new Fl_Box(20,0,380,270,copyright);
+    copyright_window = new fltk3::Window(400,270,"Copyright");
+    copyright_window->color(fltk3::WHITE);
+    fltk3::Box *b = new fltk3::Box(20,0,380,270,copyright);
     b->labelsize(10);
-    b->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
+    b->align(fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE|fltk3::ALIGN_WRAP);
     copyright_window->end();
   }
   copyright_window->hotspot(copyright_window);
@@ -1200,51 +1200,51 @@ void copyright_cb(Fl_Widget*, void*) {
   copyright_window->show();
 }
 
-void debug_cb(Fl_Widget*, void*v) {
+void debug_cb(fltk3::Widget*, void*v) {
   debug = !debug;
   ((fltk3::MenuItem*)v)->flags =
-    debug ? fltk3::MENU_TOGGLE|fltk3::MENU_VALUE : fltk3::MENU_TOGGLE;
+  debug ? fltk3::MENU_TOGGLE|fltk3::MENU_VALUE : fltk3::MENU_TOGGLE;
 }
 
-void forced_cb(Fl_Widget*b, void*v) {
+void forced_cb(fltk3::Widget*b, void*v) {
   forcejumps = !forcejumps;
   ((fltk3::MenuItem*)v)->flags =
-    forcejumps ? fltk3::MENU_TOGGLE|fltk3::MENU_VALUE : fltk3::MENU_TOGGLE;
+  forcejumps ? fltk3::MENU_TOGGLE|fltk3::MENU_VALUE : fltk3::MENU_TOGGLE;
   killnode(root->son); root->son = 0;
   if (showlegal) {expandnode(root); b->redraw();}
 }
 
-void move_cb(Fl_Widget*pb, void*) {
+void move_cb(fltk3::Widget*pb, void*) {
   Board* b = (Board*)pb;
   if (playing) b->computer_move(1);
   if (playing) b->computer_move(0);
 }
 
-void newgame_cb(Fl_Widget*b, void*) {
+void newgame_cb(fltk3::Widget*b, void*) {
   showlegal = 0;
   newgame();
   b->redraw();
 }
 
-void legal_cb(Fl_Widget*pb, void*) {
+void legal_cb(fltk3::Widget*pb, void*) {
   if (showlegal == 1) {showlegal = 0; ((Board*)pb)->redraw(); return;}
   if (!playing) return;
   expandnode(root);
   showlegal = 1; ((Board*)pb)->redraw();
 }
 
-void predict_cb(Fl_Widget*pb, void*) {
+void predict_cb(fltk3::Widget*pb, void*) {
   if (showlegal == 2) {showlegal = 0; ((Board*)pb)->redraw(); return;}
   if (playing) expandnode(root);
   showlegal = 2; ((Board*)pb)->redraw();
 }
 
-void switch_cb(Fl_Widget*pb, void*) {
+void switch_cb(fltk3::Widget*pb, void*) {
   user = !user;
   ((Board*)pb)->computer_move(0);
 }
 
-void undo_cb(Fl_Widget*pb, void*) {
+void undo_cb(fltk3::Widget*pb, void*) {
   Board* b = (Board*)pb;
   b->animate(undomove(),1);
   b->animate(undomove(),1);
@@ -1252,27 +1252,27 @@ void undo_cb(Fl_Widget*pb, void*) {
 
 //--------------------------
 
-#include <FL/fltk3::Slider.h>
-#include <fltk3/Value_Output.h>
+#include <fltk3/Slider.h>
+#include <fltk3/ValueOutput.h>
 
-Fl_Window *intel_window;
-Fl_Value_Output *intel_output;
+fltk3::Window *intel_window;
+fltk3::ValueOutput *intel_output;
 
-void intel_slider_cb(Fl_Widget*w, void*) {
+void intel_slider_cb(fltk3::Widget*w, void*) {
   double v = ((fltk3::Slider*)w)->value();
   int n = int(v*v);
   intel_output->value(n);
   maxevaluate = maxnodes = n;
 }
 
-void intel_cb(Fl_Widget*, void*) {
+void intel_cb(fltk3::Widget*, void*) {
   if (!intel_window) {
-    intel_window = new Fl_Window(200,25,"Checkers Intelligence");
+    intel_window = new fltk3::Window(200,25,"Checkers Intelligence");
     fltk3::Slider* s = new fltk3::Slider(60,0,140,25);
-    s->type(FL_HOR_NICE_SLIDER);
+    s->type(fltk3::HOR_NICE_SLIDER);
     s->minimum(1); s->maximum(500); s->value(50);
     s->callback(intel_slider_cb);
-    intel_output = new Fl_Value_Output(0,0,60,25);
+    intel_output = new fltk3::ValueOutput(0,0,60,25);
     intel_output->value(maxevaluate);
     intel_window->resizable(s);
   }
@@ -1283,9 +1283,9 @@ void intel_cb(Fl_Widget*, void*) {
 
 //---------------------------
 
-void stop_cb(Fl_Widget*, void*) {abortflag = 1;}
+void stop_cb(fltk3::Widget*, void*) {abortflag = 1;}
 
-void continue_cb(Fl_Widget*, void*) {}
+void continue_cb(fltk3::Widget*, void*) {}
 
 fltk3::MenuItem menu[] = {
   {"Autoplay", 'a', autoplay_cb},
@@ -1336,7 +1336,7 @@ int didabort(void) {
 #ifdef BOTH
   if (!terminal)
 #endif
-    Fl::check();
+    fltk3::check();
 #endif
   if (abortflag) {
     autoplay = 0;
@@ -1351,8 +1351,8 @@ int main(int argc, char **argv) {
   newgame();
 #ifdef BOTH
   int i = 1;
-  if (Fl::args(argc, argv, i, arg) < argc) {
-    fprintf(stderr," -t : use VT100 display\n", Fl::help);
+  if (fltk3::args(argc, argv, i, arg) < argc) {
+    fprintf(stderr," -t : use VT100 display\n", fltk3::help);
     exit(1);
   }
   if (!getenv("DISPLAY")) terminal = 1;

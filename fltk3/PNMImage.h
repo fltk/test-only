@@ -38,7 +38,7 @@
   loads bitmap, grayscale, and full-color images in both ASCII and
   binary formats.
 */
-class FLTK3_EXPORT Fl_PNM_Image : public Fl_RGB_Image {
+class FLTK3_EXPORT Fl_PNM_Image : public fltk3::RGBImage {
 
   public:
 

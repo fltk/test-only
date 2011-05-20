@@ -38,40 +38,40 @@
 #include <errno.h>
 
 #ifdef __MWERKS__
-# define FL_DLL
+# define fltk3::DLL
 #endif
 
 #include <fltk3/run.h>
 #include <fltk3/Group.h>
-#include <fltk3/Double_Window.h>
+#include <fltk3/DoubleWindow.h>
 #include <fltk3/ask.h>
-#include <fltk3/Native_File_Chooser.h>
-#include <fltk3/Menu_Bar.h>
+#include <fltk3/NativeFileChooser.h>
+#include <fltk3/MenuBar.h>
 #include <fltk3/Input.h>
 #include <fltk3/Button.h>
-#include <fltk3/Return_Button.h>
-#include <fltk3/Text_Buffer.h>
-#include <fltk3/Text_Editor.h>
-#include <FL/filename.h>
+#include <fltk3/ReturnButton.h>
+#include <fltk3/TextBuffer.h>
+#include <fltk3/TextEditor.h>
+#include <fltk3/filename.h>
 
 int                changed = 0;
 char               filename[FL_PATH_MAX] = "";
 char               title[FL_PATH_MAX];
-Fl_Text_Buffer     *textbuf = 0;
+fltk3::TextBuffer     *textbuf = 0;
 
 
 // Syntax highlighting stuff...
 #define TS 14 // default editor textsize
-Fl_Text_Buffer     *stylebuf = 0;
-Fl_Text_Display::Style_Table_Entry
+fltk3::TextBuffer     *stylebuf = 0;
+fltk3::TextDisplay::StyleTableEntry
                    styletable[] = {	// Style table
-		     { FL_BLACK,      FL_COURIER,           TS }, // A - Plain
-		     { FL_DARK_GREEN, FL_HELVETICA_ITALIC,  TS }, // B - Line comments
-		     { FL_DARK_GREEN, FL_HELVETICA_ITALIC,  TS }, // C - Block comments
-		     { FL_BLUE,       FL_COURIER,           TS }, // D - Strings
-		     { FL_DARK_RED,   FL_COURIER,           TS }, // E - Directives
-		     { FL_DARK_RED,   FL_COURIER_BOLD,      TS }, // F - Types
-		     { FL_BLUE,       FL_COURIER_BOLD,      TS }, // G - Keywords
+		     { fltk3::BLACK,      fltk3::COURIER,           TS }, // A - Plain
+		     { fltk3::DARK_GREEN, fltk3::HELVETICA_ITALIC,  TS }, // B - Line comments
+		     { fltk3::DARK_GREEN, fltk3::HELVETICA_ITALIC,  TS }, // C - Block comments
+		     { fltk3::BLUE,       fltk3::COURIER,           TS }, // D - Strings
+		     { fltk3::DARK_RED,   fltk3::COURIER,           TS }, // E - Directives
+		     { fltk3::DARK_RED,   fltk3::COURIER_BOLD,      TS }, // F - Types
+		     { fltk3::BLUE,       fltk3::COURIER_BOLD,      TS }, // G - Keywords
 		   };
 const char         *code_keywords[] = {	// List of known C/C++ keywords...
 		     "and",
@@ -308,7 +308,7 @@ style_init(void) {
   memset(style, 'A', textbuf->length());
   style[textbuf->length()] = '\0';
 
-  if (!stylebuf) stylebuf = new Fl_Text_Buffer(textbuf->length());
+  if (!stylebuf) stylebuf = new fltk3::TextBuffer(textbuf->length());
 
   style_parse(text, style, textbuf->length());
 
@@ -393,7 +393,7 @@ style_update(int        pos,		// I - Position of update
 //         style, style[end - start - 1]);
 
   stylebuf->replace(start, end, style);
-  ((Fl_Text_Editor *)cbArg)->redisplay_range(start, end);
+  ((fltk3::TextEditor *)cbArg)->redisplay_range(start, end);
 
   if (start==end || last != style[end - start - 1]) {
 //    printf("Recalculate the rest of the buffer style\n");
@@ -410,7 +410,7 @@ style_update(int        pos,		// I - Position of update
     style_parse(text, style, end - start);
 
     stylebuf->replace(start, end, style);
-    ((Fl_Text_Editor *)cbArg)->redisplay_range(start, end);
+    ((fltk3::TextEditor *)cbArg)->redisplay_range(start, end);
   }
 
   free(text);
@@ -421,43 +421,43 @@ style_update(int        pos,		// I - Position of update
 // Editor window functions and class...
 void save_cb();
 void saveas_cb();
-void find2_cb(Fl_Widget*, void*);
-void replall_cb(Fl_Widget*, void*);
-void replace2_cb(Fl_Widget*, void*);
-void replcan_cb(Fl_Widget*, void*);
+void find2_cb(fltk3::Widget*, void*);
+void replall_cb(fltk3::Widget*, void*);
+void replace2_cb(fltk3::Widget*, void*);
+void replcan_cb(fltk3::Widget*, void*);
 
-class EditorWindow : public Fl_Double_Window {
+class EditorWindow : public fltk3::DoubleWindow {
   public:
     EditorWindow(int w, int h, const char* t);
     ~EditorWindow();
 
-    Fl_Window          *replace_dlg;
+    fltk3::Window          *replace_dlg;
     fltk3::Input           *replace_find;
     fltk3::Input           *replace_with;
-    Fl_Button          *replace_all;
-    Fl_Return_Button   *replace_next;
-    Fl_Button          *replace_cancel;
+    fltk3::Button          *replace_all;
+    fltk3::ReturnButton   *replace_next;
+    fltk3::Button          *replace_cancel;
 
-    Fl_Text_Editor     *editor;
+    fltk3::TextEditor     *editor;
     char               search[256];
 };
 
-EditorWindow::EditorWindow(int w, int h, const char* t) : Fl_Double_Window(w, h, t) {
-  replace_dlg = new Fl_Window(300, 105, "Replace");
+EditorWindow::EditorWindow(int w, int h, const char* t) : fltk3::DoubleWindow(w, h, t) {
+  replace_dlg = new fltk3::Window(300, 105, "Replace");
     replace_find = new fltk3::Input(80, 10, 210, 25, "Find:");
-    replace_find->align(FL_ALIGN_LEFT);
+    replace_find->align(fltk3::ALIGN_LEFT);
 
     replace_with = new fltk3::Input(80, 40, 210, 25, "Replace:");
-    replace_with->align(FL_ALIGN_LEFT);
+    replace_with->align(fltk3::ALIGN_LEFT);
 
-    replace_all = new Fl_Button(10, 70, 90, 25, "Replace All");
-    replace_all->callback((Fl_Callback *)replall_cb, this);
+    replace_all = new fltk3::Button(10, 70, 90, 25, "Replace All");
+    replace_all->callback((fltk3::Callback *)replall_cb, this);
 
-    replace_next = new Fl_Return_Button(105, 70, 120, 25, "Replace Next");
-    replace_next->callback((Fl_Callback *)replace2_cb, this);
+    replace_next = new fltk3::ReturnButton(105, 70, 120, 25, "Replace Next");
+    replace_next->callback((fltk3::Callback *)replace2_cb, this);
 
-    replace_cancel = new Fl_Button(230, 70, 60, 25, "Cancel");
-    replace_cancel->callback((Fl_Callback *)replcan_cb, this);
+    replace_cancel = new fltk3::Button(230, 70, 60, 25, "Cancel");
+    replace_cancel->callback((fltk3::Callback *)replcan_cb, this);
   replace_dlg->end();
   replace_dlg->set_non_modal();
   editor = 0;
@@ -471,7 +471,7 @@ EditorWindow::~EditorWindow() {
 int check_save(void) {
   if (!changed) return 1;
 
-  int r = fl_choice("The current file has not been saved.\n"
+  int r = fltk3::choice("The current file has not been saved.\n"
                     "Would you like to save it now?",
                     "Cancel", "Save", "Don't Save");
 
@@ -494,7 +494,7 @@ void load_file(const char *newfile, int ipos) {
   else r = textbuf->insertfile(newfile, ipos);
   changed = changed || textbuf->input_file_was_transcoded;
   if (r)
-    fl_alert("Error reading from file \'%s\':\n%s.", newfile, strerror(errno));
+    fltk3::alert("Error reading from file \'%s\':\n%s.", newfile, strerror(errno));
   else
     if (!insert) strcpy(filename, newfile);
   loading = 0;
@@ -503,32 +503,32 @@ void load_file(const char *newfile, int ipos) {
 
 void save_file(const char *newfile) {
   if (textbuf->savefile(newfile))
-    fl_alert("Error writing to file \'%s\':\n%s.", newfile, strerror(errno));
+    fltk3::alert("Error writing to file \'%s\':\n%s.", newfile, strerror(errno));
   else
     strcpy(filename, newfile);
   changed = 0;
   textbuf->call_modify_callbacks();
 }
 
-void copy_cb(Fl_Widget*, void* v) {
+void copy_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  Fl_Text_Editor::kf_copy(0, e->editor);
+  fltk3::TextEditor::kf_copy(0, e->editor);
 }
 
-void cut_cb(Fl_Widget*, void* v) {
+void cut_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  Fl_Text_Editor::kf_cut(0, e->editor);
+  fltk3::TextEditor::kf_cut(0, e->editor);
 }
 
-void delete_cb(Fl_Widget*, void*) {
+void delete_cb(fltk3::Widget*, void*) {
   textbuf->remove_selection();
 }
 
-void find_cb(Fl_Widget* w, void* v) {
+void find_cb(fltk3::Widget* w, void* v) {
   EditorWindow* e = (EditorWindow*)v;
   const char *val;
 
-  val = fl_input("Search String:", e->search);
+  val = fltk3::input("Search String:", e->search);
   if (val != NULL) {
     // User entered a string - go find it!
     strcpy(e->search, val);
@@ -536,7 +536,7 @@ void find_cb(Fl_Widget* w, void* v) {
   }
 }
 
-void find2_cb(Fl_Widget* w, void* v) {
+void find2_cb(fltk3::Widget* w, void* v) {
   EditorWindow* e = (EditorWindow*)v;
   if (e->search[0] == '\0') {
     // Search string is blank; get a new one...
@@ -552,10 +552,10 @@ void find2_cb(Fl_Widget* w, void* v) {
     e->editor->insert_position(pos+strlen(e->search));
     e->editor->show_insert_position();
   }
-  else fl_alert("No occurrences of \'%s\' found!", e->search);
+  else fltk3::alert("No occurrences of \'%s\' found!", e->search);
 }
 
-void set_title(Fl_Window* w) {
+void set_title(fltk3::Window* w) {
   if (filename[0] == '\0') strcpy(title, "Untitled");
   else {
     char *slash;
@@ -579,7 +579,7 @@ void changed_cb(int, int nInserted, int nDeleted,int, const char*, void* v) {
   if (loading) w->editor->show_insert_position();
 }
 
-void new_cb(Fl_Widget*, void*) {
+void new_cb(fltk3::Widget*, void*) {
   if (!check_save()) return;
 
   filename[0] = '\0';
@@ -589,33 +589,33 @@ void new_cb(Fl_Widget*, void*) {
   textbuf->call_modify_callbacks();
 }
 
-void open_cb(Fl_Widget*, void*) {
+void open_cb(fltk3::Widget*, void*) {
   if (!check_save()) return;
-  Fl_Native_File_Chooser fnfc;
+  fltk3::NativeFileChooser fnfc;
   fnfc.title("Open file");
-  fnfc.type(Fl_Native_File_Chooser::BROWSE_FILE);
+  fnfc.type(fltk3::NativeFileChooser::BROWSE_FILE);
   if ( fnfc.show() ) return;
   load_file(fnfc.filename(), -1);
 
 }
 
-void insert_cb(Fl_Widget*, void *v) {
-  Fl_Native_File_Chooser fnfc;
+void insert_cb(fltk3::Widget*, void *v) {
+  fltk3::NativeFileChooser fnfc;
   fnfc.title("Insert file");
-  fnfc.type(Fl_Native_File_Chooser::BROWSE_FILE);
+  fnfc.type(fltk3::NativeFileChooser::BROWSE_FILE);
   if ( fnfc.show() ) return;
   EditorWindow *w = (EditorWindow *)v;
   load_file(fnfc.filename(), w->editor->insert_position());
 }
 
-void paste_cb(Fl_Widget*, void* v) {
+void paste_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  Fl_Text_Editor::kf_paste(0, e->editor);
+  fltk3::TextEditor::kf_paste(0, e->editor);
 }
 
 int num_windows = 0;
 
-void close_cb(Fl_Widget*, void* v) {
+void close_cb(fltk3::Widget*, void* v) {
   EditorWindow* w = (EditorWindow*)v;
 
   if (num_windows == 1) {
@@ -627,25 +627,25 @@ void close_cb(Fl_Widget*, void* v) {
   w->editor->buffer(0);
   textbuf->remove_modify_callback(style_update, w->editor);
   textbuf->remove_modify_callback(changed_cb, w);
-  Fl::delete_widget(w);
+  fltk3::delete_widget(w);
 
   num_windows--;
   if (!num_windows) exit(0);
 }
 
-void quit_cb(Fl_Widget*, void*) {
+void quit_cb(fltk3::Widget*, void*) {
   if (changed && !check_save())
     return;
 
   exit(0);
 }
 
-void replace_cb(Fl_Widget*, void* v) {
+void replace_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
   e->replace_dlg->show();
 }
 
-void replace2_cb(Fl_Widget*, void* v) {
+void replace2_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
   const char *find = e->replace_find->value();
   const char *replace = e->replace_with->value();
@@ -670,10 +670,10 @@ void replace2_cb(Fl_Widget*, void* v) {
     e->editor->insert_position(pos+strlen(replace));
     e->editor->show_insert_position();
   }
-  else fl_alert("No occurrences of \'%s\' found!", find);
+  else fltk3::alert("No occurrences of \'%s\' found!", find);
 }
 
-void replall_cb(Fl_Widget*, void* v) {
+void replall_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
   const char *find = e->replace_find->value();
   const char *replace = e->replace_with->value();
@@ -706,11 +706,11 @@ void replall_cb(Fl_Widget*, void* v) {
     }
   }
 
-  if (times) fl_message("Replaced %d occurrences.", times);
-  else fl_alert("No occurrences of \'%s\' found!", find);
+  if (times) fltk3::message("Replaced %d occurrences.", times);
+  else fltk3::alert("No occurrences of \'%s\' found!", find);
 }
 
-void replcan_cb(Fl_Widget*, void* v) {
+void replcan_cb(fltk3::Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
   e->replace_dlg->hide();
 }
@@ -725,62 +725,62 @@ void save_cb() {
 }
 
 void saveas_cb() {
-  Fl_Native_File_Chooser fnfc;
+  fltk3::NativeFileChooser fnfc;
   fnfc.title("Save File As?");
-  fnfc.type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+  fnfc.type(fltk3::NativeFileChooser::BROWSE_SAVE_FILE);
   if ( fnfc.show() ) return;
   save_file(fnfc.filename());
 }
 
-Fl_Window* new_view();
+fltk3::Window* new_view();
 
-void view_cb(Fl_Widget*, void*) {
-  Fl_Window* w = new_view();
+void view_cb(fltk3::Widget*, void*) {
+  fltk3::Window* w = new_view();
   w->show();
 }
 
 fltk3::MenuItem menuitems[] = {
   { "&File",              0, 0, 0, fltk3::SUBMENU },
-    { "&New File",        0, (Fl_Callback *)new_cb },
-    { "&Open File...",    FL_COMMAND + 'o', (Fl_Callback *)open_cb },
-    { "&Insert File...",  FL_COMMAND + 'i', (Fl_Callback *)insert_cb, 0, fltk3::MENU_DIVIDER },
-    { "&Save File",       FL_COMMAND + 's', (Fl_Callback *)save_cb },
-    { "Save File &As...", FL_COMMAND + FL_SHIFT + 's', (Fl_Callback *)saveas_cb, 0, fltk3::MENU_DIVIDER },
-    { "New &View",        FL_ALT
+    { "&New File",        0, (fltk3::Callback *)new_cb },
+    { "&Open File...",    fltk3::COMMAND + 'o', (fltk3::Callback *)open_cb },
+    { "&Insert File...",  fltk3::COMMAND + 'i', (fltk3::Callback *)insert_cb, 0, fltk3::MENU_DIVIDER },
+    { "&Save File",       fltk3::COMMAND + 's', (fltk3::Callback *)save_cb },
+    { "Save File &As...", fltk3::COMMAND + fltk3::SHIFT + 's', (fltk3::Callback *)saveas_cb, 0, fltk3::MENU_DIVIDER },
+    { "New &View",        fltk3::ALT
 #ifdef __APPLE__
-      + FL_COMMAND
+      + fltk3::COMMAND
 #endif
-      + 'v', (Fl_Callback *)view_cb, 0 },
-    { "&Close View",      FL_COMMAND + 'w', (Fl_Callback *)close_cb, 0, fltk3::MENU_DIVIDER },
-    { "E&xit",            FL_COMMAND + 'q', (Fl_Callback *)quit_cb, 0 },
+      + 'v', (fltk3::Callback *)view_cb, 0 },
+    { "&Close View",      fltk3::COMMAND + 'w', (fltk3::Callback *)close_cb, 0, fltk3::MENU_DIVIDER },
+    { "E&xit",            fltk3::COMMAND + 'q', (fltk3::Callback *)quit_cb, 0 },
     { 0 },
 
   { "&Edit", 0, 0, 0, fltk3::SUBMENU },
-    { "Cu&t",             FL_COMMAND + 'x', (Fl_Callback *)cut_cb },
-    { "&Copy",            FL_COMMAND + 'c', (Fl_Callback *)copy_cb },
-    { "&Paste",           FL_COMMAND + 'v', (Fl_Callback *)paste_cb },
-    { "&Delete",          0, (Fl_Callback *)delete_cb },
+    { "Cu&t",             fltk3::COMMAND + 'x', (fltk3::Callback *)cut_cb },
+    { "&Copy",            fltk3::COMMAND + 'c', (fltk3::Callback *)copy_cb },
+    { "&Paste",           fltk3::COMMAND + 'v', (fltk3::Callback *)paste_cb },
+    { "&Delete",          0, (fltk3::Callback *)delete_cb },
     { 0 },
 
   { "&Search", 0, 0, 0, fltk3::SUBMENU },
-    { "&Find...",         FL_COMMAND + 'f', (Fl_Callback *)find_cb },
-    { "F&ind Again",      FL_COMMAND + 'g', find2_cb },
-    { "&Replace...",      FL_COMMAND + 'r', replace_cb },
-    { "Re&place Again",   FL_COMMAND + 't', replace2_cb },
+    { "&Find...",         fltk3::COMMAND + 'f', (fltk3::Callback *)find_cb },
+    { "F&ind Again",      fltk3::COMMAND + 'g', find2_cb },
+    { "&Replace...",      fltk3::COMMAND + 'r', replace_cb },
+    { "Re&place Again",   fltk3::COMMAND + 't', replace2_cb },
     { 0 },
 
   { 0 }
 };
 
-Fl_Window* new_view() {
+fltk3::Window* new_view() {
   EditorWindow* w = new EditorWindow(660, 400, title);
     w->begin();
     fltk3::MenuBar* m = new fltk3::MenuBar(0, 0, 660, 30);
     m->copy(menuitems, w);
-    w->editor = new Fl_Text_Editor(0, 30, 660, 370);
-    w->editor->textfont(FL_COURIER);
+    w->editor = new fltk3::TextEditor(0, 30, 660, 370);
+    w->editor->textfont(fltk3::COURIER);
     w->editor->textsize(TS);
-  //w->editor->wrap_mode(Fl_Text_Editor::WRAP_AT_BOUNDS, 250);
+  //w->editor->wrap_mode(fltk3::Text_Editor::WRAP_AT_BOUNDS, 250);
     w->editor->buffer(textbuf);
     w->editor->highlight_data(stylebuf, styletable,
                               sizeof(styletable) / sizeof(styletable[0]),
@@ -789,7 +789,7 @@ Fl_Window* new_view() {
   style_init();
   w->end();
   w->resizable(w->editor);
-  w->callback((Fl_Callback *)close_cb, w);
+  w->callback((fltk3::Callback *)close_cb, w);
 
   textbuf->add_modify_callback(style_update, w->editor);
   textbuf->add_modify_callback(changed_cb, w);
@@ -799,11 +799,11 @@ Fl_Window* new_view() {
 }
 
 int main(int argc, char **argv) {
-  textbuf = new Fl_Text_Buffer;
+  textbuf = new fltk3::TextBuffer;
 //textbuf->transcoding_warning_action = NULL;
   style_init();
 
-  Fl_Window* window = new_view();
+  fltk3::Window* window = new_view();
 
   window->show(1, argv);
 

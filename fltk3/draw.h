@@ -39,10 +39,11 @@
 #include <fltk3/Device.h>     // for fl_graphics_driver
 
 // Image class...
-class Fl_Image;
 
 namespace fltk3 {
-  
+
+  class Image;
+
   // Label flags...
   FLTK3_EXPORT extern char draw_shortcut;
   
@@ -619,11 +620,11 @@ namespace fltk3 {
                             int draw_symbols = 1);
   FLTK3_EXPORT void draw(const char* str, int x, int y, int w, int h,
                          fltk3::Align align,
-                         Fl_Image* img=0, int draw_symbols = 1);
+                         fltk3::Image* img=0, int draw_symbols = 1);
   FLTK3_EXPORT void draw(const char* str, int x, int y, int w, int h,
                          fltk3::Align align,
                          void (*callthis)(const char *,int,int,int),
-                         Fl_Image* img=0, int draw_symbols = 1);
+                         fltk3::Image* img=0, int draw_symbols = 1);
   
   // boxtypes:
   FLTK3_EXPORT void frame(const char* s, int x, int y, int w, int h);
@@ -781,7 +782,7 @@ namespace fltk3 {
   FLTK3_EXPORT int add_symbol(const char* name, void (*drawit)(fltk3::Color), int scalable);
   /** @} */
   
-}
+} // namespace
 
 #endif
 

@@ -26,7 +26,7 @@
 //
 
 /* \file
-   Fl_Dial widget . */
+ Fl_Dial widget . */
 
 #ifndef Fltk3_Dial_H
 #define Fltk3_Dial_H
@@ -41,43 +41,43 @@
 #define FL_FILL_DIAL	2	/**< type() for dial variant with filled arc */
 
 /**
-  The Fl_Dial widget provides a circular dial to control a
-  single floating point value.
-  <P ALIGN=CENTER>\image html dial.png 
-  \image latex dial.png "Fl_Dial" width=4cm
-  Use type() to set the type of the dial to:
-  <UL>
-  <LI>FL_NORMAL_DIAL - Draws a normal dial with a knob. </LI>
-  <LI>FL_LINE_DIAL - Draws a dial with a line. </LI>
-  <LI>FL_FILL_DIAL - Draws a dial with a filled arc. </LI>
-  </UL>
-
-*/
+ The Fl_Dial widget provides a circular dial to control a
+ single floating point value.
+ <P ALIGN=CENTER>\image html dial.png 
+ \image latex dial.png "Fl_Dial" width=4cm
+ Use type() to set the type of the dial to:
+ <UL>
+ <LI>FL_NORMAL_DIAL - Draws a normal dial with a knob. </LI>
+ <LI>FL_LINE_DIAL - Draws a dial with a line. </LI>
+ <LI>FL_FILL_DIAL - Draws a dial with a filled arc. </LI>
+ </UL>
+ 
+ */
 class FLTK3_EXPORT Fl_Dial : public fltk3::Valuator {
-
+  
   short a1,a2;
-
+  
 protected:
-
+  
   // these allow subclasses to put the dial in a smaller area:
   void draw(int X, int Y, int W, int H);
   int handle(int event, int X, int Y, int W, int H);
   void draw();
-
+  
 public:
-
+  
   int handle(int);
   /**
-    Creates a new Fl_Dial widget using the given position, size,
-    and label string. The default type is FL_NORMAL_DIAL.
-  */
+   Creates a new Fl_Dial widget using the given position, size,
+   and label string. The default type is FL_NORMAL_DIAL.
+   */
   Fl_Dial(int x,int y,int w,int h, const char *l = 0);
   /** 
-     Sets Or gets the angles used for the minimum and maximum values.  The default
-     values are 45 and 315 (0 degrees is straight down and the angles
-     progress clockwise).  Normally angle1 is less than angle2, but if you
-     reverse them the dial moves counter-clockwise.
-  */
+   Sets Or gets the angles used for the minimum and maximum values.  The default
+   values are 45 and 315 (0 degrees is straight down and the angles
+   progress clockwise).  Normally angle1 is less than angle2, but if you
+   reverse them the dial moves counter-clockwise.
+   */
   short angle1() const {return a1;}
   /** See short angle1() const */
   void angle1(short a) {a1 = a;}
@@ -87,7 +87,7 @@ public:
   void angle2(short a) {a2 = a;}
   /** See short angle1() const */
   void angles(short a, short b) {a1 = a; a2 = b;}
-
+  
 };
 
 #endif

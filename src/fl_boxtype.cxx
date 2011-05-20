@@ -407,12 +407,12 @@ void fltk3::Widget::draw_box() const {
 /** If fltk3::ALIGN_IMAGE_BACKDROP is set, the image or deimage will be drawn */
 void fltk3::Widget::draw_backdrop() const {
   if (align() & fltk3::ALIGN_IMAGE_BACKDROP) {
-    const Fl_Image *img = image();
+    const fltk3::Image *img = image();
     // if there is no image, we will not draw the deimage either
     if (img && deimage() && !active_r())
       img = deimage();
     if (img) 
-      ((Fl_Image*)img)->draw(x_+(w_-img->w())/2, y_+(h_-img->h())/2);
+      ((fltk3::Image*)img)->draw(x_+(w_-img->w())/2, y_+(h_-img->h())/2);
   }
 }
 /** Draws a box of type t, of color c at the widget's position and size. */

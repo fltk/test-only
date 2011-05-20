@@ -26,8 +26,8 @@
 //
 
 /* \file
-    Fl_Cairo_Window Handling transparently a fltk window incorporte a cairo draw callback.
-*/
+ Fl_Cairo_Window Handling transparently a fltk window incorporte a cairo draw callback.
+ */
 
 #ifndef FLtk3_CAIRO_WINDOW_H
 # define FLtk3_CAIRO_WINDOW_H
@@ -39,26 +39,26 @@
 #  include <fltk3/DoubleWindow.h>
 
 /** 
-   \addtogroup group_cairo
-   @{
-*/
+ \addtogroup group_cairo
+ @{
+ */
 
 /**
-   This defines a pre-configured cairo fltk window.
-   This class overloads the virtual draw() method for you,
-   so that the only thing you have to do is to provide your cairo code.
-   All cairo context handling is achieved transparently.
-   \note You can alternatively define your custom cairo fltk window,
-   and thus at least override the draw() method to provide custom cairo
-   support. In this case you will probably use fltk3::cairo_make_current(fltk3::Window*)
-   to attach a context to your window. You should do it only when your window is 
-   the current window. \see fltk3::Window::current()
-*/
+ This defines a pre-configured cairo fltk window.
+ This class overloads the virtual draw() method for you,
+ so that the only thing you have to do is to provide your cairo code.
+ All cairo context handling is achieved transparently.
+ \note You can alternatively define your custom cairo fltk window,
+ and thus at least override the draw() method to provide custom cairo
+ support. In this case you will probably use fltk3::cairo_make_current(fltk3::Window*)
+ to attach a context to your window. You should do it only when your window is 
+ the current window. \see fltk3::Window::current()
+ */
 class FLTK3_EXPORT Fl_Cairo_Window : public fltk3::DoubleWindow {
-
+  
 public:
   Fl_Cairo_Window(int w, int h) : fltk3::DoubleWindow(w,h),draw_cb_(0) {}
-
+  
 protected:
   /** Overloaded to provide cairo callback support */
   void draw() {
@@ -68,17 +68,17 @@ protected:
       fltk3::cairo_make_current(this); 
     if (draw_cb_) draw_cb_(this, fltk3::cairo_cc());
   }
-
+  
 public:
   /** This defines the cairo draw callback prototype that you must further */
   typedef void (*cairo_draw_cb) (Fl_Cairo_Window* self, cairo_t* def);
   /** 
-    You must provide a draw callback which will implement your cairo rendering.
-    This method will permit you to set your cairo callback to \p cb.
-  */
+   You must provide a draw callback which will implement your cairo rendering.
+   This method will permit you to set your cairo callback to \p cb.
+   */
   void set_draw_cb(cairo_draw_cb  cb){draw_cb_=cb;}
 private:
-    cairo_draw_cb draw_cb_;
+  cairo_draw_cb draw_cb_;
 };
 
 

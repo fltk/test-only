@@ -111,7 +111,7 @@ static Fl_Pixmap L_closepixmap(L_close_xpm);
 ///
 /// \param[in] val -- The new image, or zero to use the default [+] icon.
 ///
-void Fl_Tree_Prefs::openicon(Fl_Image *val) {
+void Fl_Tree_Prefs::openicon(fltk3::Image *val) {
   _openimage = val ? val : &L_openpixmap;
 }
 
@@ -120,7 +120,7 @@ void Fl_Tree_Prefs::openicon(Fl_Image *val) {
 ///
 /// \param[in] val -- The new image, or zero to use the default [-] icon.
 ///
-void Fl_Tree_Prefs::closeicon(Fl_Image *val) {
+void Fl_Tree_Prefs::closeicon(fltk3::Image *val) {
   _closeimage = val ? val : &L_closepixmap;
 }
 

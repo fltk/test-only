@@ -26,7 +26,7 @@
 //
 
 /* \file
-   Fl_Check_Browser widget . */
+ Fl_Check_Browser widget . */
 
 #ifndef Fltk3_Check_Browser_H
 #define Fltk3_Check_Browser_H
@@ -35,12 +35,12 @@
 #include "Browser_.h"
 
 /**
-  The Fl_Check_Browser widget displays a scrolling list of text
-  lines that may be selected and/or checked by the user.
-*/
+ The Fl_Check_Browser widget displays a scrolling list of text
+ lines that may be selected and/or checked by the user.
+ */
 class FLTK3_EXPORT Fl_Check_Browser : public fltk3::Browser_ {
   /* required routines for fltk3::Browser_ subclass: */
-
+  
   void *item_first() const;
   void *item_next(void *) const;
   void *item_prev(void *) const;
@@ -49,24 +49,24 @@ class FLTK3_EXPORT Fl_Check_Browser : public fltk3::Browser_ {
   void item_draw(void *, int, int, int, int) const;
   void item_select(void *, int);
   int item_selected(void *) const;
-
+  
   /* private data */
-
-  public: // IRIX 5.3 C++ compiler doesn't support private structures...
-
+  
+public: // IRIX 5.3 C++ compiler doesn't support private structures...
+  
 #ifndef FL_DOXYGEN
   /** For internal use only. */
   struct cb_item {
-	  cb_item *next;	/**< For internal use only. */
-	  cb_item *prev;	/**< For internal use only. */
-	  char checked;		/**< For internal use only. */
-	  char selected;	/**< For internal use only. */
-	  char *text;		/**< For internal use only. */
+    cb_item *next;	/**< For internal use only. */
+    cb_item *prev;	/**< For internal use only. */
+    char checked;		/**< For internal use only. */
+    char selected;	/**< For internal use only. */
+    char *text;		/**< For internal use only. */
   };
 #endif // !FL_DOXYGEN
-
-  private:
-
+  
+private:
+  
   cb_item *first;
   cb_item *last;
   cb_item *cache;
@@ -75,28 +75,28 @@ class FLTK3_EXPORT Fl_Check_Browser : public fltk3::Browser_ {
   int nchecked_;
   cb_item *find_item(int) const;
   int lineno(cb_item *) const;
-
-  public:
-
+  
+public:
+  
   Fl_Check_Browser(int x, int y, int w, int h, const char *l = 0);
-   /** The destructor deletes all list items and destroys the browser. */
+  /** The destructor deletes all list items and destroys the browser. */
   ~Fl_Check_Browser() { clear(); }
   int add(char *s);               // add an (unchecked) item
   int add(char *s, int b);        // add an item and set checked
 				  // both return the new nitems()
   int remove(int item);           // delete an item. Returns nitems()
-
+  
   // inline const char * methods to avoid breaking binary compatibility...
-   /** See int Fl_Check_Browser::add(char *s) */
+  /** See int Fl_Check_Browser::add(char *s) */
   int add(const char *s) { return add((char *)s); }
   /** See int Fl_Check_Browser::add(char *s) */
   int add(const char *s, int b) { return add((char *)s, b); }
-
+  
   void clear();                   // delete all items
   /**
-    Returns how many lines are in the browser.  The last line number is equal to
-    this.
-  */
+   Returns how many lines are in the browser.  The last line number is equal to
+   this.
+   */
   int nitems() const { return nitems_; }
   /**    Returns how many items are currently checked.  */
   int nchecked() const { return nchecked_; }
@@ -108,9 +108,9 @@ class FLTK3_EXPORT Fl_Check_Browser : public fltk3::Browser_ {
   void check_none();
   int value() const;              // currently selected item
   char *text(int item) const;     // returns pointer to internal buffer
-
-  protected:
-
+  
+protected:
+  
   int handle(int);
 };
 

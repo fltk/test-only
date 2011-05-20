@@ -310,8 +310,8 @@ namespace fltk3 {
     }
     
     // icon support
-    void icon(int line, Fl_Image* icon);
-    Fl_Image* icon(int line) const;
+    void icon(int line, fltk3::Image* icon);
+    fltk3::Image* icon(int line) const;
     void remove_icon(int line);
     
     /** For back compatibility only. */
@@ -319,7 +319,7 @@ namespace fltk3 {
     void display(int line, int val=1);
   };
   
-}
+} // namespace
 
 #endif
 

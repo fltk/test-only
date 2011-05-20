@@ -660,7 +660,7 @@ int main(int argc, char ** argv) {
   new MyWidget5(140,270);
 
   make_image();
-  Fl_RGB_Image *rgb = new Fl_RGB_Image(image, width, height, 4);
+  fltk3::RGBImage *rgb = new fltk3::RGBImage(image, width, height, 4);
   My_Button b_rgb(10,245,100,100,"RGB with alpha");
   b_rgb.image(rgb);
 

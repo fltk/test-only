@@ -66,7 +66,7 @@ fltk3::ReturnButton *f_panel_ok=(fltk3::ReturnButton *)0;
 
 fltk3::Button *f_panel_cancel=(fltk3::Button *)0;
 
-Fl_Text_Editor *f_comment_input=(Fl_Text_Editor *)0;
+fltk3::TextEditor *f_comment_input=(fltk3::TextEditor *)0;
 
 fltk3::DoubleWindow* make_function_panel() {
   { function_panel = new fltk3::DoubleWindow(343, 232, "Function/Method Properties");
@@ -130,7 +130,7 @@ fltk3::DoubleWindow* make_function_panel() {
       } // fltk3::Box* o
       o->end();
     } // fltk3::Group* o
-    { f_comment_input = new Fl_Text_Editor(10, 125, 320, 65, "Comment:");
+    { f_comment_input = new fltk3::TextEditor(10, 125, 320, 65, "Comment:");
       f_comment_input->tooltip("Function comment in Doxygen format");
       f_comment_input->box(fltk3::DOWN_BOX);
       f_comment_input->labelfont(1);
@@ -139,8 +139,8 @@ fltk3::DoubleWindow* make_function_panel() {
       f_comment_input->textsize(11);
       f_comment_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       fltk3::Group::current()->resizable(f_comment_input);
-      f_comment_input->buffer(new Fl_Text_Buffer());
-    } // Fl_Text_Editor* f_comment_input
+      f_comment_input->buffer(new fltk3::TextBuffer());
+    } // fltk3::TextEditor* f_comment_input
     function_panel->set_modal();
     function_panel->end();
   } // fltk3::DoubleWindow* function_panel
@@ -355,7 +355,7 @@ fltk3::ReturnButton *decl_panel_ok=(fltk3::ReturnButton *)0;
 
 fltk3::Button *decl_panel_cancel=(fltk3::Button *)0;
 
-Fl_Text_Editor *decl_comment_input=(Fl_Text_Editor *)0;
+fltk3::TextEditor *decl_comment_input=(fltk3::TextEditor *)0;
 
 fltk3::DoubleWindow* make_decl_panel() {
   { decl_panel = new fltk3::DoubleWindow(343, 237, "Declaration Properties");
@@ -403,7 +403,7 @@ n int foo();\", a #directive like \"#include <foo.h>\", a comment like \"//foo\
       } // fltk3::Box* o
       o->end();
     } // fltk3::Group* o
-    { decl_comment_input = new Fl_Text_Editor(10, 130, 320, 65, "Comment:");
+    { decl_comment_input = new fltk3::TextEditor(10, 130, 320, 65, "Comment:");
       decl_comment_input->tooltip("Declaration comment in Doxygen format");
       decl_comment_input->box(fltk3::DOWN_BOX);
       decl_comment_input->labelfont(1);
@@ -412,8 +412,8 @@ n int foo();\", a #directive like \"#include <foo.h>\", a comment like \"//foo\
       decl_comment_input->textsize(11);
       decl_comment_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       fltk3::Group::current()->resizable(decl_comment_input);
-      decl_comment_input->buffer(new Fl_Text_Buffer());
-    } // Fl_Text_Editor* decl_comment_input
+      decl_comment_input->buffer(new fltk3::TextBuffer());
+    } // fltk3::TextEditor* decl_comment_input
     decl_panel->size_range(343, 237);
     decl_panel->end();
   } // fltk3::DoubleWindow* decl_panel
@@ -451,7 +451,7 @@ fltk3::ReturnButton *data_panel_ok=(fltk3::ReturnButton *)0;
 
 fltk3::Button *data_panel_cancel=(fltk3::Button *)0;
 
-Fl_Text_Editor *data_comment_input=(Fl_Text_Editor *)0;
+fltk3::TextEditor *data_comment_input=(fltk3::TextEditor *)0;
 
 fltk3::DoubleWindow* make_data_panel() {
   { data_panel = new fltk3::DoubleWindow(343, 237, "Binary Data Properties");
@@ -509,7 +509,7 @@ fltk3::DoubleWindow* make_data_panel() {
       } // fltk3::Box* o
       o->end();
     } // fltk3::Group* o
-    { data_comment_input = new Fl_Text_Editor(10, 130, 320, 65, "Comment:");
+    { data_comment_input = new fltk3::TextEditor(10, 130, 320, 65, "Comment:");
       data_comment_input->tooltip("Declaration comment in Doxygen format");
       data_comment_input->box(fltk3::DOWN_BOX);
       data_comment_input->labelfont(1);
@@ -518,8 +518,8 @@ fltk3::DoubleWindow* make_data_panel() {
       data_comment_input->textsize(11);
       data_comment_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       fltk3::Group::current()->resizable(data_comment_input);
-      data_comment_input->buffer(new Fl_Text_Buffer());
-    } // Fl_Text_Editor* data_comment_input
+      data_comment_input->buffer(new fltk3::TextBuffer());
+    } // fltk3::TextEditor* data_comment_input
     data_panel->size_range(343, 237);
     data_panel->end();
   } // fltk3::DoubleWindow* data_panel
@@ -534,7 +534,7 @@ fltk3::Input *c_name_input=(fltk3::Input *)0;
 
 fltk3::Input *c_subclass_input=(fltk3::Input *)0;
 
-Fl_Text_Editor *c_comment_input=(Fl_Text_Editor *)0;
+fltk3::TextEditor *c_comment_input=(fltk3::TextEditor *)0;
 
 fltk3::ReturnButton *c_panel_ok=(fltk3::ReturnButton *)0;
 
@@ -574,7 +574,7 @@ fltk3::DoubleWindow* make_class_panel() {
       c_subclass_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       c_subclass_input->when(fltk3::WHEN_NEVER);
     } // fltk3::Input* c_subclass_input
-    { c_comment_input = new Fl_Text_Editor(10, 90, 320, 65, "Comment:");
+    { c_comment_input = new fltk3::TextEditor(10, 90, 320, 65, "Comment:");
       c_comment_input->tooltip("Class comment in Doxygen format");
       c_comment_input->box(fltk3::DOWN_BOX);
       c_comment_input->labelfont(1);
@@ -583,8 +583,8 @@ fltk3::DoubleWindow* make_class_panel() {
       c_comment_input->textsize(11);
       c_comment_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
       fltk3::Group::current()->resizable(c_comment_input);
-      c_comment_input->buffer(new Fl_Text_Buffer());
-    } // Fl_Text_Editor* c_comment_input
+      c_comment_input->buffer(new fltk3::TextBuffer());
+    } // fltk3::TextEditor* c_comment_input
     { fltk3::Group* o = new fltk3::Group(10, 165, 320, 20);
       { c_panel_ok = new fltk3::ReturnButton(200, 165, 60, 20, "OK");
         c_panel_ok->labelsize(11);
@@ -883,7 +883,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(307, 5, 24, 24);
         o->tooltip("Value Output");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Value_Output"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::ValueOutput"));
         o->image(pixmap[45]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(232, 30, 24, 24);
@@ -940,13 +940,13 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(341, 30, 24, 24);
         o->tooltip("Text Edit");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Text_Editor"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::TextEditor"));
         o->image(pixmap[29]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(366, 30, 24, 24);
         o->tooltip("Text Display");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Text_Display"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::TextDisplay"));
         o->image(pixmap[28]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(341, 55, 24, 24);

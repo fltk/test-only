@@ -41,8 +41,8 @@
 #  include <fltk3/TextEditor.h>
 
 
-class CodeEditor : public Fl_Text_Editor {
-  static Fl_Text_Display::Style_Table_Entry styletable[];
+class CodeEditor : public fltk3::TextEditor {
+  static fltk3::TextDisplay::StyleTableEntry styletable[];
   static const char * const code_keywords[];
   static const char * const code_types[];
 
@@ -78,7 +78,7 @@ class CodeViewer : public CodeEditor {
   
   protected:
 
-  int handle(int ev) { return Fl_Text_Display::handle(ev); }
+  int handle(int ev) { return fltk3::TextDisplay::handle(ev); }
 };
 
 #endif // !CodeEditor_h

@@ -45,10 +45,10 @@ namespace fltk3 {
   const uchar SELECT_BROWSER	= 1;	/**< type() of FL_Select_Browser */
   const uchar HOLD_BROWSER	= 2;	/**< type() of fltk3::HoldBrowser */
   const uchar MULTI_BROWSER	= 3;	/**< type() of Fl_Multi_Browser */
-
+  
   const uchar SORT_ASCENDING	= 0;	/**< sort browser items in ascending alphabetic order. */
   const uchar SORT_DESCENDING	= 1;	/**< sort in descending order */
-
+  
   /**
    This is the base class for browsers.  To be useful it must be
    subclassed and several virtual functions defined.  The Forms-compatible

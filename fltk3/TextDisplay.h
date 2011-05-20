@@ -1,7 +1,7 @@
 //
 // "$Id: TextDisplay.h 8306 2011-01-24 17:04:22Z matt $"
 //
-// Header file for Fl_Text_Display class.
+// Header file for fltk3::TextDisplay class.
 //
 // Copyright 2001-2010 by Bill Spitzak and others.
 // Original code Copyright Mark Edel.  Permission to distribute under
@@ -28,7 +28,7 @@
 //
 
 /* \file
- Fl_Text_Display widget . */
+ fltk3::TextDisplay widget . */
 
 #ifndef FLtk3_TEXT_DISPLAY_H
 #define FLtk3_TEXT_DISPLAY_H
@@ -39,15 +39,18 @@
 #include "Scrollbar.h"
 #include "TextBuffer.h"
 
+
+namespace fltk3 {
+  
 /**
  \brief Rich text display widget.
  
  This is the FLTK text display widget. It allows the user to view multiple lines
  of text and supports highlighting and scrolling. The buffer that is displayed 
- in the widget is managed by the Fl_Text_Buffer class. A single Text Buffer
+ in the widget is managed by the fltk3::TextBuffer class. A single Text Buffer
  can be displayed by multiple Text Displays.
  */
-class FLTK3_EXPORT Fl_Text_Display: public fltk3::Group {
+class FLTK3_EXPORT TextDisplay: public fltk3::Group {
 
 public:
   
@@ -95,7 +98,7 @@ public:
     WRAP_AT_BOUNDS  /**< wrap text so that it fits into the widget width */
   };    
   
-  friend void fl_text_drag_me(int pos, Fl_Text_Display* d);
+  friend void text_drag_me(int pos, fltk3::TextDisplay* d);
   
   typedef void (*Unfinished_Style_Cb)(int, void *);
   
@@ -103,33 +106,33 @@ public:
    This structure associates the color, font, andsize of a string to draw
    with an attribute mask matching attr
    */
-  struct Style_Table_Entry {
+  struct StyleTableEntry {
     fltk3::Color    color;
     fltk3::Font     font;
     fltk3::Fontsize size;
     unsigned    attr;
   };
   
-  Fl_Text_Display(int X, int Y, int W, int H, const char *l = 0);
-  ~Fl_Text_Display();
+  TextDisplay(int X, int Y, int W, int H, const char *l = 0);
+  ~TextDisplay();
   
   virtual int handle(int e);
   
-  void buffer(Fl_Text_Buffer* buf);
+  void buffer(fltk3::TextBuffer* buf);
   
   /**
    Sets the current text buffer associated with the text widget.
    Multiple text widgets can be associated with the same text buffer.
    \param buf new text buffer
    */
-  void buffer(Fl_Text_Buffer& buf) { buffer(&buf); }
+  void buffer(fltk3::TextBuffer& buf) { buffer(&buf); }
   
   /**
    Gets the current text buffer associated with the text widget.
    Multiple text widgets can be associated with the same text buffer.
    \return current text buffer
    */
-  Fl_Text_Buffer* buffer() const { return mBuffer; }
+  fltk3::TextBuffer* buffer() const { return mBuffer; }
   
   void redisplay_range(int start, int end);
   void scroll(int topLineNum, int horizOffset);
@@ -219,8 +222,8 @@ public:
   int word_end(int pos) const { return buffer()->word_end(pos); }
   
   
-  void highlight_data(Fl_Text_Buffer *styleBuffer,
-                      const Style_Table_Entry *styleTable,
+  void highlight_data(fltk3::TextBuffer *styleBuffer,
+                      const StyleTableEntry *styleTable,
                       int nStyles, char unfinishedStyle,
                       Unfinished_Style_Cb unfinishedHighlightCB,
                       void *cbArg);
@@ -353,8 +356,8 @@ protected:
                                  int nRestyled, const char* deletedText,
                                  void* cbArg);
   
-  static void h_scrollbar_cb(Fl_Scrollbar* w, Fl_Text_Display* d);
-  static void v_scrollbar_cb( Fl_Scrollbar* w, Fl_Text_Display* d);
+  static void h_scrollbar_cb(Fl_Scrollbar* w, fltk3::TextDisplay* d);
+  static void v_scrollbar_cb( Fl_Scrollbar* w, fltk3::TextDisplay* d);
   void update_v_scrollbar();
   void update_h_scrollbar();
   int measure_vline(int visLineNum) const;
@@ -379,7 +382,7 @@ protected:
                        int nDeleted, int *modRangeStart, int *modRangeEnd,
                        int *linesInserted, int *linesDeleted);
   void measure_deleted_lines(int pos, int nDeleted);
-  void wrapped_line_counter(Fl_Text_Buffer *buf, int startPos, int maxPos,
+  void wrapped_line_counter(fltk3::TextBuffer *buf, int startPos, int maxPos,
                             int maxLines, bool startPosIsLineStart,
                             int styleBufOffset, int *retPos, int *retLines,
                             int *retLineStart, int *retLineEnd,
@@ -401,8 +404,8 @@ protected:
   int mCursorPreferredXPos;     /* Pixel position for vert. cursor movement */
   int mNVisibleLines;           /* # of visible (displayed) lines */
   int mNBufferLines;            /* # of newlines in the buffer */
-  Fl_Text_Buffer* mBuffer;      /* Contains text to be displayed */
-  Fl_Text_Buffer* mStyleBuffer; /* Optional parallel buffer containing
+  fltk3::TextBuffer* mBuffer;      /* Contains text to be displayed */
+  fltk3::TextBuffer* mStyleBuffer; /* Optional parallel buffer containing
                                  color and font information */
   int mFirstChar, mLastChar;    /* Buffer positions of first and last
                                  displayed character (lastChar points
@@ -426,7 +429,7 @@ protected:
                                  of file (first line of file is 1) */
   int mHorizOffsetHint;         /* Horizontal scroll pos. in pixels */
   int mNStyles;                 /* Number of entries in styleTable */
-  const Style_Table_Entry *mStyleTable; /* Table of fonts and colors for
+  const StyleTableEntry *mStyleTable; /* Table of fonts and colors for
                                          coloring/syntax-highlighting */
   char mUnfinishedStyle;        /* Style buffer entry which triggers
                                  on-the-fly reparsing of region */
@@ -466,12 +469,14 @@ protected:
   fltk3::Color textcolor_;
   
   // The following are not presently used from the original NEdit code,
-  // but are being put here so that future versions of Fl_Text_Display
+  // but are being put here so that future versions of fltk3::TextDisplay
   // can implement line numbers without breaking binary compatibility.
   
   /* Line number margin and width */
   int mLineNumLeft, mLineNumWidth;
 };
+
+} // namespace
 
 #endif
 

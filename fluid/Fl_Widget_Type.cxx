@@ -1063,7 +1063,7 @@ void color_cb(fltk3::Button* i, void *v) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
   } else {
     int mod = 0;
-    fltk3::Color d = fl_show_colormap(c);
+    fltk3::Color d = fltk3::show_colormap(c);
     if (d == c) return;
     c = d;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
@@ -1087,7 +1087,7 @@ void color2_cb(fltk3::Button* i, void *v) {
     if (current_widget->is_menu_item()) {i->deactivate(); return;} else i->activate();
   } else {
     int mod = 0;
-    fltk3::Color d = fl_show_colormap(c);
+    fltk3::Color d = fltk3::show_colormap(c);
     if (d == c) return;
     c = d;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
@@ -1106,7 +1106,7 @@ void labelcolor_cb(fltk3::Button* i, void *v) {
   fltk3::Color c = current_widget->o->labelcolor();
   if (v != LOAD) {
     int mod = 0;
-    fltk3::Color d = fl_show_colormap(c);
+    fltk3::Color d = fltk3::show_colormap(c);
     if (d == c) return;
     c = d;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
@@ -1412,7 +1412,7 @@ void textcolor_cb(fltk3::Button* i, void* v) {
   } else {
     int mod = 0;
     c = i->color();
-    fltk3::Color d = fl_show_colormap(c);
+    fltk3::Color d = fltk3::show_colormap(c);
     if (d == c) return;
     c = d;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
@@ -2244,7 +2244,7 @@ void Fl_Widget_Type::write_widget_code() {
   if (is_button()) shortcut = ((fltk3::Button*)o)->shortcut();
   else if (is_input()) shortcut = ((Fl_Input_*)o)->shortcut();
   else if (is_value_input()) shortcut = ((Fl_Value_Input*)o)->shortcut();
-  else if (is_text_display()) shortcut = ((Fl_Text_Display*)o)->shortcut();
+  else if (is_text_display()) shortcut = ((fltk3::TextDisplay*)o)->shortcut();
   if (shortcut) {
     if (use_FL_COMMAND && (shortcut & (fltk3::CTRL|fltk3::META))) {
       write_c("%s%s->shortcut(fltk3::COMMAND|0x%x);\n", indent(), var, shortcut & ~(fltk3::CTRL|fltk3::META));
@@ -2425,7 +2425,7 @@ void Fl_Widget_Type::write_properties() {
     if (b->shortcut()) write_string("shortcut 0x%x", b->shortcut());
   }
   if (is_text_display()) {
-    Fl_Text_Display* b = (Fl_Text_Display*)o;
+    fltk3::TextDisplay* b = (fltk3::TextDisplay*)o;
     if (b->shortcut()) write_string("shortcut 0x%x", b->shortcut());
   }
   if (is_button()) {
@@ -2633,7 +2633,7 @@ void Fl_Widget_Type::read_property(const char *c) {
     if (is_button()) ((fltk3::Button*)o)->shortcut(shortcut);
     else if (is_input()) ((Fl_Input_*)o)->shortcut(shortcut);
     else if (is_value_input()) ((Fl_Value_Input*)o)->shortcut(shortcut);
-    else if (is_text_display()) ((Fl_Text_Display*)o)->shortcut(shortcut);
+    else if (is_text_display()) ((fltk3::TextDisplay*)o)->shortcut(shortcut);
   } else {
     if (!strncmp(c,"code",4)) {
       int n = atoi(c+4);
@@ -2819,9 +2819,9 @@ void Fl_Widget_Type::copy_properties() {
     d->shortcut(s->shortcut());
   }
 
-  // copy all attributes specific to widgets derived from Fl_Text_Display
+  // copy all attributes specific to widgets derived from fltk3::TextDisplay
   if (is_text_display()) {
-    Fl_Text_Display* d = (Fl_Text_Display*)live_widget, *s = (Fl_Text_Display*)o;
+    fltk3::TextDisplay* d = (fltk3::TextDisplay*)live_widget, *s = (fltk3::TextDisplay*)o;
     d->shortcut(s->shortcut());
   }
 

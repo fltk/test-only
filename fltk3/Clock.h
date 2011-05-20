@@ -130,7 +130,7 @@ namespace fltk3 {
     ~Clock();
   };
   
-}
+} // namespace
 
 #endif
 

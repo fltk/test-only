@@ -355,10 +355,10 @@ namespace fltk3 {
     // compatibility for FLUID so it can set the image of a menu item...
     
     /** compatibility api for FLUID, same as a->label(this) */
-    void image(Fl_Image* a) {a->label(this);}
+    void image(fltk3::Image* a) {a->label(this);}
     
     /** compatibility api for FLUID, same as a.label(this) */
-    void image(Fl_Image& a) {a.label(this);}
+    void image(fltk3::Image& a) {a.label(this);}
     
     // used by menubar:
     int measure(int* h, const fltk3::Menu_*) const;

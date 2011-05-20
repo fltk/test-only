@@ -53,7 +53,7 @@ struct FL_BLINE {	// data is in a linked list of these
   FL_BLINE* prev;
   FL_BLINE* next;
   void* data;
-  Fl_Image* icon;
+  fltk3::Image* icon;
   short length;		// sizeof(txt)-1, may be longer than string
   char flags;		// selected, displayed
   char txt[1];		// start of allocated array
@@ -870,7 +870,7 @@ void fltk3::Browser::swap(int a, int b) {
   \param[in] icon The image icon to be assigned to the \p line.
                   If NULL, any previous icon is removed.
 */
-void fltk3::Browser::icon(int line, Fl_Image* icon) {
+void fltk3::Browser::icon(int line, fltk3::Image* icon) {
 
   if (line<1 || line > lines) return;
 
@@ -900,7 +900,7 @@ void fltk3::Browser::icon(int line, Fl_Image* icon) {
   \param[in] line The line whose icon is returned.
   \returns The icon defined, or NULL if none.
 */
-Fl_Image* fltk3::Browser::icon(int line) const {
+fltk3::Image* fltk3::Browser::icon(int line) const {
   FL_BLINE* l = find_line(line);
   return(l ? l->icon : NULL);
 }

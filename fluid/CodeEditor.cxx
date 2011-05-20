@@ -36,7 +36,7 @@
 #include "CodeEditor.h"
 
 
-Fl_Text_Display::Style_Table_Entry CodeEditor::
+fltk3::TextDisplay::StyleTableEntry CodeEditor::
 		styletable[] = {	// Style table
 		  { fltk3::FOREGROUND_COLOR, fltk3::COURIER,        11 }, // A - Plain
 		  { fltk3::DARK_GREEN,       fltk3::COURIER_ITALIC, 11 }, // B - Line comments
@@ -370,8 +370,8 @@ int CodeEditor::auto_indent(int, CodeEditor* e) {
 
 // Create a CodeEditor widget...
 CodeEditor::CodeEditor(int X, int Y, int W, int H, const char *L) :
-  Fl_Text_Editor(X, Y, W, H, L) {
-  buffer(new Fl_Text_Buffer);
+  fltk3::TextEditor(X, Y, W, H, L) {
+  buffer(new fltk3::TextBuffer);
 
   char *style = new char[mBuffer->length() + 1];
   char *text = mBuffer->text();
@@ -379,7 +379,7 @@ CodeEditor::CodeEditor(int X, int Y, int W, int H, const char *L) :
   memset(style, 'A', mBuffer->length());
   style[mBuffer->length()] = '\0';
 
-  highlight_data(new Fl_Text_Buffer(mBuffer->length()), styletable,
+  highlight_data(new fltk3::TextBuffer(mBuffer->length()), styletable,
                  sizeof(styletable) / sizeof(styletable[0]),
 		 'A', style_unfinished_cb, this);
 
@@ -390,13 +390,13 @@ CodeEditor::CodeEditor(int X, int Y, int W, int H, const char *L) :
   free(text);
 
   mBuffer->add_modify_callback(style_update, this);
-  add_key_binding(fltk3::EnterKey, FL_TEXT_EDITOR_ANY_STATE,
-                  (Fl_Text_Editor::Key_Func)auto_indent);
+  add_key_binding(fltk3::EnterKey, fltk3::TEXT_EDITOR_ANY_STATE,
+                  (fltk3::TextEditor::Key_Func)auto_indent);
 }
 
 // Destroy a CodeEditor widget...
 CodeEditor::~CodeEditor() {
-  Fl_Text_Buffer *buf = mStyleBuffer;
+  fltk3::TextBuffer *buf = mStyleBuffer;
   mStyleBuffer = 0;
   delete buf;
 

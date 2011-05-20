@@ -29,7 +29,7 @@
 #include <fltk3/draw.h>
 
 // Note: currently (March 2010) fl_draw_image() supports transparency with
-//	 alpha channel only on Apple (Mac OS X), but Fl_RGB_Image->draw()
+//	 alpha channel only on Apple (Mac OS X), but fltk3::RGBImage->draw()
 //	 supports transparency on all platforms !
 
 //
@@ -44,9 +44,9 @@
 #define LX (0)	// 0 for default: ld() = 0, i.e. ld() defaults (internally) to w()*d()
 		// +1: ld() = (w() + DX) * d()
 		// -1 to flip image vertically: ld() = - ((w() + DX) * d())
-#define IMG (1)	// 1 to use Fl_RGB_Image for drawing images,
+#define IMG (1)	// 1 to use fltk3::RGBImage for drawing images,
 		// 0 to use fl_draw_image() instead.
-		// Note: as of April 2011, only 1 (Fl_RGB_Image) works correctly with alpha
+		// Note: as of April 2011, only 1 (fltk3::RGBImage) works correctly with alpha
 		// channel, 0 (fl_draw_image()) ignores the alpha channel (FLTK 1.3.0).
 		// There are plans to support alpha in fl_draw_image() in FLTK 1.3.x,
 		// but not in FLTK 1.1.x .
@@ -80,20 +80,20 @@ public:
       img_rgb    += 127*(128+DX)*3;
       img_rgba   += 127*(128+DX)*4;
     }
-    i_g    = new Fl_RGB_Image (img_gray  ,128,128,1,LX*(128+DX));
-    i_ga   = new Fl_RGB_Image (img_gray_a,128,128,2,LX*(128+DX)*2);
-    i_rgb  = new Fl_RGB_Image (img_rgb,   128,128,3,LX*(128+DX)*3);
-    i_rgba = new Fl_RGB_Image (img_rgba,  128,128,4,LX*(128+DX)*4);
+    i_g    = new fltk3::RGBImage (img_gray  ,128,128,1,LX*(128+DX));
+    i_ga   = new fltk3::RGBImage (img_gray_a,128,128,2,LX*(128+DX)*2);
+    i_rgb  = new fltk3::RGBImage (img_rgb,   128,128,3,LX*(128+DX)*3);
+    i_rgba = new fltk3::RGBImage (img_rgba,  128,128,4,LX*(128+DX)*4);
     return new ImageTest(TESTAREA_X, TESTAREA_Y, TESTAREA_W, TESTAREA_H);
   }
   static uchar *img_gray;
   static uchar *img_gray_a;
   static uchar *img_rgb;
   static uchar *img_rgba;
-  static Fl_RGB_Image *i_g;
-  static Fl_RGB_Image *i_ga;
-  static Fl_RGB_Image *i_rgb;
-  static Fl_RGB_Image *i_rgba;
+  static fltk3::RGBImage *i_g;
+  static fltk3::RGBImage *i_ga;
+  static fltk3::RGBImage *i_rgb;
+  static fltk3::RGBImage *i_rgba;
   ImageTest(int x, int y, int w, int h) : Fl_Box(x, y, w, h) {
     label("Testing Image Drawing\n\n"
 	"This test renders four images, two of them with a checker board\n"
@@ -165,10 +165,10 @@ uchar *ImageTest::img_gray = 0;
 uchar *ImageTest::img_gray_a = 0;
 uchar *ImageTest::img_rgb = 0;
 uchar *ImageTest::img_rgba = 0;
-Fl_RGB_Image *ImageTest::i_g = 0;
-Fl_RGB_Image *ImageTest::i_ga = 0;
-Fl_RGB_Image *ImageTest::i_rgb = 0;
-Fl_RGB_Image *ImageTest::i_rgba = 0;
+fltk3::RGBImage *ImageTest::i_g = 0;
+fltk3::RGBImage *ImageTest::i_ga = 0;
+fltk3::RGBImage *ImageTest::i_rgb = 0;
+fltk3::RGBImage *ImageTest::i_rgba = 0;
 
 UnitTest images("drawing images", ImageTest::create);
 

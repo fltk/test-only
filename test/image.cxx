@@ -1,9 +1,9 @@
 //
 // "$Id$"
 //
-// Fl_Image test program for the Fast Light Tool Kit (FLTK).
+// fltk3::Image test program for the Fast Light Tool Kit (FLTK).
 //
-// Notice that Fl_Image is for a static, multiple-reuse image, such
+// Notice that fltk3::Image is for a static, multiple-reuse image, such
 // as an icon or postage stamp.  Use fl_draw_image to go directly
 // from an buffered image that changes often.
 //
@@ -125,11 +125,11 @@ int main(int argc, char **argv) {
   window.color(FL_WHITE);
   Fl_Button b(140,160,120,120,"Image w/Alpha"); ::b = &b;
 
-  Fl_RGB_Image *rgb;
-  Fl_Image *dergb;
+  fltk3::RGBImage *rgb;
+  fltk3::Image *dergb;
 
   make_image();
-  rgb = new Fl_RGB_Image(image, width, height,4);
+  rgb = new fltk3::RGBImage(image, width, height,4);
   dergb = rgb->copy();
   dergb->inactive();
 

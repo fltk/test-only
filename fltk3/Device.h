@@ -28,7 +28,7 @@
 /** \file Device.h 
  \brief declaration of classes Fl_Device, Fl_Graphics_Driver, Fl_Surface_Device, 
  Fl_Display_Device, Fl_Device_Plugin.
-*/
+ */
 
 #ifndef Fltk3_Device_H
 #define Fltk3_Device_H
@@ -75,7 +75,7 @@ typedef short COORD_T;
 class FLTK3_EXPORT Fl_Device {
 public:
   /** A string that identifies each subclass of Fl_Device.
-     Function class_name() applied to a device of this class returns this string.
+   Function class_name() applied to a device of this class returns this string.
    */
   static const char *class_id;
   /** 
@@ -104,7 +104,7 @@ public:
  support all of FLTK drawing functions.
  <br> The public API for drawing operations is functionally presented in \ref drawing and as function lists
  in the \ref fl_drawings and \ref fl_attributes modules. 
-  */
+ */
 class FLTK3_EXPORT Fl_Graphics_Driver : public Fl_Device {
 public:
   /** A 2D coordinate transformation matrix
@@ -136,9 +136,9 @@ private:
   void fixloop();
   
 public:
-
+  
   matrix *fl_matrix; /**< Points to the current coordinate transformation matrix */
-
+  
   /** \brief The constructor. */
   Fl_Graphics_Driver();
   /** \brief see fltk3::rect(int x, int y, int w, int h). */
@@ -232,7 +232,7 @@ public:
   virtual void push_no_clip();
   /** \brief see fltk3::pop_clip(). */
   virtual void pop_clip();
-    
+  
   /** \brief see fltk3::push_matrix(). */
   void push_matrix();
   /** \brief see fltk3::pop_matrix(). */
@@ -272,12 +272,12 @@ public:
   /** \brief see fltk3::draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D). */
   virtual   void draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1) = 0;
   // Image classes
-  /** \brief Draws an Fl_RGB_Image object to the device. 
+  /** \brief Draws an fltk3::RGBImage object to the device. 
    *
    Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
    the image offset by the cx and cy arguments.
    */
-  virtual   void draw(Fl_RGB_Image * rgb,int XP, int YP, int WP, int HP, int cx, int cy) = 0;
+  virtual   void draw(fltk3::RGBImage * rgb,int XP, int YP, int WP, int HP, int cx, int cy) = 0;
   /** \brief Draws an Fl_Pixmap object to the device. 
    *
    Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
@@ -290,7 +290,7 @@ public:
    the image offset by the cx and cy arguments.
    */
   virtual void draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) = 0;
-    
+  
 public:
   static const char *class_id;
   virtual const char *class_name() {return class_id;};
@@ -341,7 +341,7 @@ public:
   void font(fltk3::Font face, fltk3::Fontsize size);
   void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(fltk3::Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
-  void draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0);
   void draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3);
   void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0);
@@ -371,7 +371,7 @@ public:
   void font(fltk3::Font face, fltk3::Fontsize size);
   void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(fltk3::Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
-  void draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0);
   void draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3);
   void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0);
@@ -401,7 +401,7 @@ public:
   void font(fltk3::Font face, fltk3::Fontsize size);
   void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(fltk3::Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
-  void draw(Fl_RGB_Image *img, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0);
   void draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3);
   void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0);

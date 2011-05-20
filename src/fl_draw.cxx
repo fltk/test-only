@@ -176,7 +176,7 @@ fltk3::expand_text(const char* from, char* buf, int maxbuf, double maxw, int& n,
 }
 
 /**
-  The same as fltk3::draw(const char*,int,int,int,int,fltk3::Align,Fl_Image*,int) with
+  The same as fltk3::draw(const char*,int,int,int,int,fltk3::Align,fltk3::Image*,int) with
   the addition of the \p callthis parameter, which is a pointer to a text drawing
   function such as fltk3::draw(const char*, int, int, int) to do the real work
 */
@@ -185,7 +185,7 @@ void fltk3::draw(
     int x, int y, int w, int h,	// bounding box
     fltk3::Align align,
     void (*callthis)(const char*,int,int,int),
-    Fl_Image* img, int draw_symbols) 
+    fltk3::Image* img, int draw_symbols) 
 {
   const char* p;
   const char* e;
@@ -376,7 +376,7 @@ void fltk3::draw(
   const char* str,
   int x, int y, int w, int h,
   fltk3::Align align,
-  Fl_Image* img,
+  fltk3::Image* img,
   int draw_symbols)
 {
   if ((!str || !*str) && !img) return;
@@ -464,7 +464,7 @@ void fltk3::measure(const char* str, int& w, int& h, int draw_symbols) {
   font height is. (See STR#2115)
   
   This function was originally undocumented in 1.1.x, and was used
-  only by Fl_Text_Display. We're now documenting it in 1.3.x so that
+  only by fltk3::TextDisplay. We're now documenting it in 1.3.x so that
   apps that need precise height info can get it with this function.
 
   \returns the height of the font in pixels.

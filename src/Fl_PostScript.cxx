@@ -95,10 +95,10 @@ Fl_PostScript_Graphics_Driver *Fl_PostScript_File_Device::driver()
 int Fl_PostScript_File_Device::start_job (int pagecount, enum Fl_Paged_Device::Page_Format format, 
 					  enum Fl_Paged_Device::Page_Layout layout)
 {
-  Fl_Native_File_Chooser fnfc;
+  fltk3::NativeFileChooser fnfc;
   fnfc.title(Fl_PostScript_File_Device::file_chooser_title);
-  fnfc.type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
-  fnfc.options(Fl_Native_File_Chooser::SAVEAS_CONFIRM);
+  fnfc.type(fltk3::NativeFileChooser::BROWSE_SAVE_FILE);
+  fnfc.options(fltk3::NativeFileChooser::SAVEAS_CONFIRM);
   fnfc.filter("PostScript\t*.ps\n");
   // Show native chooser
   if ( fnfc.show() ) return 1;

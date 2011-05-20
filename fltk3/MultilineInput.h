@@ -46,13 +46,13 @@ namespace fltk3 {
    does not support scrollbars or per-character color control.
    
    If you are presenting large amounts of text and need scrollbars
-   or full color control of characters, you probably want Fl_Text_Editor
+   or full color control of characters, you probably want fltk3::TextEditor
    instead.
    
    In FLTK 1.3.x, the default behavior of the 'Tab' key was changed
    to support consistent focus navigation. To get the older FLTK 1.1.x
    behavior, set Fl_Input_::tab_nav() to 0. Newer programs should consider using
-   Fl_Text_Editor.
+   fltk3::TextEditor.
    */
   class FLTK3_EXPORT MultilineInput : public fltk3::Input {
   public:

@@ -311,7 +311,7 @@ void Fl_Pixmap::copy_data() {
   alloc_data = 1;  
 }
 
-Fl_Image *Fl_Pixmap::copy(int W, int H) {
+fltk3::Image *Fl_Pixmap::copy(int W, int H) {
   Fl_Pixmap	*new_image;	// New pixmap
 
   // Optimize the simple copy where the width and height are the same...

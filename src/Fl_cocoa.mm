@@ -1088,7 +1088,7 @@ extern "C" {
 }
 - (void)anywindowwillclosenotif:(NSNotification *)notif
 {
-  // necessary so that after closing a non-FLTK window (e.g., Fl_Native_File_Chooser)
+  // necessary so that after closing a non-FLTK window (e.g., fltk3::NativeFileChooser)
   // the front window turns key again
   NSWindow *closing = (NSWindow*)[notif object];
   if ([closing isMemberOfClass:[FLWindow class]]) return;
@@ -1949,9 +1949,9 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
   while (wfocus->window()) wfocus = wfocus->window();
   glyphRect.size.width = 0;
   
-  if (dynamic_cast<Fl_Text_Display*>(focus) != NULL) {
+  if (dynamic_cast<fltk3::TextDisplay*>(focus) != NULL) {
     int x, y;
-    Fl_Text_Display *current = (Fl_Text_Display*)focus;
+    fltk3::TextDisplay *current = (fltk3::TextDisplay*)focus;
     current->position_to_xy( current->insert_position(), &x, &y );
     glyphRect.origin.x = (CGFloat)x;
     glyphRect.origin.y = (CGFloat)y + current->textsize();
@@ -3292,7 +3292,7 @@ int fltk3::dnd(void)
   
   int width, height;
   NSImage *image;
-  if ( dynamic_cast<Fl_Input_*>(w) != NULL ||  dynamic_cast<Fl_Text_Display*>(w) != NULL) {
+  if ( dynamic_cast<Fl_Input_*>(w) != NULL ||  dynamic_cast<fltk3::TextDisplay*>(w) != NULL) {
     fl_selection_buffer[0][ fl_selection_length[0] ] = 0;
     image = imageFromText(fl_selection_buffer[0], &width, &height);
   } else {
