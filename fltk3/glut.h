@@ -50,7 +50,7 @@
   GLUT is emulated using this window class and these static variables
   (plus several more static variables hidden in glut_compatability.cxx):
 */
-class FLTK3_EXPORT Fl_Glut_Window : public Fl_Gl_Window {
+class FLTK3_EXPORT Fl_Glut_Window : public fltk3::GlWindow {
   void _init();
   int mouse_down;
 protected:

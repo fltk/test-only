@@ -26,18 +26,22 @@
 //
 
 /* \file
-   Fl_Radio_Light_Button widget . */
+ fltk3::RadioLightButton widget . */
 
 #ifndef Fltk3_Radio_Light_Button_H
 #define Fltk3_Radio_Light_Button_H
 
 #include "LightButton.h"
 
-class FLTK3_EXPORT Fl_Radio_Light_Button : public fltk3::LightButton {
-public:
-    Fl_Radio_Light_Button(int X,int Y,int W,int H,const char *l=0)
-	: fltk3::LightButton(X,Y,W,H,l) {type(fltk3::RADIO_BUTTON);}
-};
+namespace fltk3 {
+  
+  class FLTK3_EXPORT RadioLightButton : public fltk3::LightButton {
+  public:
+    RadioLightButton(int X,int Y,int W,int H,const char *l=0)
+    : fltk3::LightButton(X,Y,W,H,l) {type(fltk3::RADIO_BUTTON);}
+  };
+  
+}
 
 #endif
 

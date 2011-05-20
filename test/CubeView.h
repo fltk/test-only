@@ -39,7 +39,7 @@
 #include <stdlib.h>
 
 #if HAVE_GL
-class CubeView : public Fl_Gl_Window {
+class CubeView : public fltk3::GlWindow {
 #else
 class CubeView : public Fl_Box {
 #endif /* HAVE_GL */

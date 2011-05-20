@@ -41,7 +41,7 @@ static void imgProviderReleaseData (void *info, const void *data, size_t size)
 }
 #endif
 
-static void print_gl_window(Fl_Gl_Window *glw, int x, int y, int height)
+static void print_gl_window(fltk3::GlWindow *glw, int x, int y, int height)
 {
 #ifdef WIN32
   HDC save_gc = fl_gc;
@@ -138,7 +138,7 @@ public:
   Fl_Gl_Device_Plugin() : Fl_Device_Plugin(name()) { }
   virtual const char *name() { return "opengl.device.fltk.org"; }
   virtual int print(fltk3::Widget *w, int x, int y, int height) {
-    Fl_Gl_Window *glw = w->as_gl_window();
+    fltk3::GlWindow *glw = w->as_gl_window();
     if (!glw) return 0;
     print_gl_window(glw, x, y, height);
     return 1; 
@@ -147,8 +147,8 @@ public:
 
 static Fl_Gl_Device_Plugin Gl_Device_Plugin;
 
-// The purpose of this variable, used in Fl_Gl_Window.cxx, is only to force this file to be loaded
-// whenever Fl_Gl_Window.cxx is loaded, that is, whenever fltk_gl is.
+// The purpose of this variable, used in fltk3::GlWindow.cxx, is only to force this file to be loaded
+// whenever fltk3::GlWindow.cxx is loaded, that is, whenever fltk_gl is.
 FLTK3_EXPORT int fl_gl_load_plugin = 0;
 
 //

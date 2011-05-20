@@ -55,9 +55,8 @@ namespace fltk3 {
   class Group;
   class Window;
   class Image;
-}
+  class GlWindow;
 
-namespace fltk3 { 
   /** Default callback type definition for all fltk widgets (by far the most used) */
   typedef void (Callback)(Widget*, void*);
   /** Default callback type pointer definition for all fltk widgets */
@@ -944,17 +943,17 @@ namespace fltk3 {
      */
     virtual fltk3::Window* as_window() {return 0;}
     
-    /** Returns an Fl_Gl_Window pointer if this widget is an Fl_Gl_Window.
+    /** Returns an fltk3::GlWindow pointer if this widget is an fltk3::GlWindow.
      
      Use this method if you have a widget (pointer) and need to
-     know whether this widget is derived from Fl_Gl_Window. If it returns
-     non-NULL, then the widget in question is derived from Fl_Gl_Window.
+     know whether this widget is derived from fltk3::GlWindow. If it returns
+     non-NULL, then the widget in question is derived from fltk3::GlWindow.
      
-     \retval NULL if this widget is not derived from Fl_Gl_Window.
+     \retval NULL if this widget is not derived from fltk3::GlWindow.
      \note This method is provided to avoid dynamic_cast.
      \see fltk3::Widget::as_group(), fltk3::Widget::as_window()
      */
-    virtual class Fl_Gl_Window* as_gl_window() {return 0;}
+    virtual class fltk3::GlWindow* as_gl_window() {return 0;}
     
     /** For back compatibility only.
      \deprecated Use selection_color() instead.

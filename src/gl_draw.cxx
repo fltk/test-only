@@ -26,7 +26,7 @@
 //
 
 // Functions from <fltk3/gl.h>
-// See also Fl_Gl_Window and gl_start.cxx
+// See also fltk3::GlWindow and gl_start.cxx
 
 #include "flstring.h"
 #if HAVE_GL || defined(FL_DOXYGEN)
@@ -299,7 +299,7 @@ void gl_measure(const char* str, int& x, int& y) {fltk3::measure(str,x,y);}
 
 /**
   Outlines the given rectangle with the current color.
-  If Fl_Gl_Window::ortho() has been called, then the rectangle will
+  If fltk3::GlWindow::ortho() has been called, then the rectangle will
   exactly fill the given pixel rectangle.
   */
 void gl_rect(int x, int y, int w, int h) {

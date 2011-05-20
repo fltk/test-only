@@ -32,27 +32,27 @@
 #include <fltk3/Window.h>
 #include <fltk3/Box.h>
 #include <fltk3/Button.h>
-#include <fltk3/Radio_Light_Button.h>
-#include <FL/fltk3::Slider.h>
+#include <fltk3/RadioLightButton.h>
+#include <fltk3/Slider.h>
 #include <stdlib.h>
 
 #if !HAVE_GL
-class cube_box : public Fl_Box {
+class cube_box : public fltk3::Box {
 public:
   double lasttime;
   int wire;
   double size;
   double speed;
   cube_box(int x,int y,int w,int h,const char *l=0)
-    :Fl_Box(FL_DOWN_BOX,x,y,w,h,l){
+    :fltk3::Box(fltk3::DOWN_BOX,x,y,w,h,l){
       label("This demo does\nnot work without GL");
   }
 };
 #else
-#include <fltk3/Gl_Window.h>
-#include <FL/gl.h>
+#include <fltk3/GlWindow.h>
+#include <fltk3/gl.h>
 
-class cube_box : public Fl_Gl_Window {
+class cube_box : public fltk3::GlWindow {
   void draw();
   int handle(int);
 public:
@@ -61,7 +61,7 @@ public:
   double size;
   double speed;
   cube_box(int x,int y,int w,int h,const char *l=0)
-    : Fl_Gl_Window(x,y,w,h,l) {lasttime = 0.0;}
+    : fltk3::GlWindow(x,y,w,h,l) {lasttime = 0.0;}
 };
 
 /* The cube definition */
@@ -107,7 +107,7 @@ void cube_box::draw() {
     glEnable(GL_DEPTH_TEST);
     glFrustum(-1,1,-1,1,2,10000);
     glTranslatef(0,0,-10);
-    gl_font(FL_HELVETICA_BOLD, 16 );
+    gl_font(fltk3::HELVETICA_BOLD, 16 );
   }
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glPushMatrix();
@@ -118,7 +118,7 @@ void cube_box::draw() {
   glScalef(float(size),float(size),float(size));
   drawcube(wire);
   glPopMatrix();
-  gl_color(FL_GRAY);
+  gl_color(fltk3::GRAY);
   glDisable(GL_DEPTH_TEST);
   gl_draw(wire ? "Cube: wire" : "Cube: flat", -4.5f, -4.5f );
   glEnable(GL_DEPTH_TEST);
@@ -126,31 +126,31 @@ void cube_box::draw() {
 
 int cube_box::handle(int e) {
   switch (e) {
-  case FL_ENTER: cursor(FL_CURSOR_CROSS); break;
-  case FL_LEAVE: cursor(FL_CURSOR_DEFAULT); break;
+  case fltk3::ENTER: cursor(fltk3::CURSOR_CROSS); break;
+  case fltk3::LEAVE: cursor(fltk3::CURSOR_DEFAULT); break;
   }
-  return Fl_Gl_Window::handle(e);
+  return fltk3::GlWindow::handle(e);
 }
 
 #endif
 
-Fl_Window *form;
+fltk3::Window *form;
 fltk3::Slider *speed, *size;
-Fl_Button *button, *wire, *flat;
+fltk3::Button *button, *wire, *flat;
 cube_box *cube, *cube2;
 
 void makeform(const char *name) {
-  form = new Fl_Window(510+390,390,name);
-  new Fl_Box(FL_DOWN_FRAME,20,20,350,350,"");
-  new Fl_Box(FL_DOWN_FRAME,510,20,350,350,"");
-  speed = new fltk3::Slider(FL_VERT_SLIDER,390,90,40,220,"Speed");
-  size = new fltk3::Slider(FL_VERT_SLIDER,450,90,40,220,"Size");
-  wire = new Fl_Radio_Light_Button(390,20,100,30,"Wire");
-  flat = new Fl_Radio_Light_Button(390,50,100,30,"Flat");
-  button = new Fl_Button(390,340,100,30,"Exit");
+  form = new fltk3::Window(510+390,390,name);
+  new fltk3::Box(fltk3::DOWN_FRAME,20,20,350,350,"");
+  new fltk3::Box(fltk3::DOWN_FRAME,510,20,350,350,"");
+  speed = new fltk3::Slider(fltk3::VERT_SLIDER,390,90,40,220,"Speed");
+  size = new fltk3::Slider(fltk3::VERT_SLIDER,450,90,40,220,"Size");
+  wire = new fltk3::RadioLightButton(390,20,100,30,"Wire");
+  flat = new fltk3::RadioLightButton(390,50,100,30,"Flat");
+  button = new fltk3::Button(390,340,100,30,"Exit");
   cube = new cube_box(23,23,344,344, 0);
   cube2 = new cube_box(513,23,344,344, 0);
-  Fl_Box *b = new Fl_Box(FL_NO_BOX,cube->x(),size->y(),
+  fltk3::Box *b = new fltk3::Box(fltk3::NO_BOX,cube->x(),size->y(),
 			 cube->w(),size->h(),0);
   form->resizable(b);
   b->hide();
@@ -158,13 +158,13 @@ void makeform(const char *name) {
 }
 
 // added to demo printing
-#include <fltk3/Sys_Menu_Bar.h>
+#include <fltk3/SysMenuBar.h>
 #include <fltk3/Printer.h>
 
-void print_cb(Fl_Widget *w, void *data)
+void print_cb(fltk3::Widget *w, void *data)
 {
-  Fl_Printer printer;
-  Fl_Window *win = Fl::first_window();
+  Fl_Printer printer; // FIXME: 123
+  fltk3::Window *win = fltk3::first_window();
   if(!win) return;
   if( printer.start_job(1) ) return;
   if( printer.start_page() ) return;
@@ -187,7 +187,7 @@ int main(int argc, char **argv) {
   };
   fltk3::SysMenuBar *menubar_;
   menubar_ = new fltk3::SysMenuBar(0, 0, 60, 20);
-  menubar_->box(FL_FLAT_BOX);
+  menubar_->box(fltk3::FLAT_BOX);
   menubar_->menu(items);
   form->end();
   // end of printing demo
@@ -212,16 +212,16 @@ int main(int argc, char **argv) {
 #endif
   for (;;) {
     if (form->visible() && speed->value())
-      {if (!Fl::check()) break;}	// returns immediately
+      {if (!fltk3::check()) break;}	// returns immediately
     else
-      {if (!Fl::wait()) break;}	// waits until something happens
+      {if (!fltk3::wait()) break;}	// waits until something happens
     cube->wire = wire->value();
     cube2->wire = !wire->value();
     cube->size = cube2->size = size->value();
     cube->speed = cube2->speed = speed->value();
     cube->redraw();
     cube2->redraw();
-    if (Fl::readqueue() == button) break;
+    if (fltk3::readqueue() == button) break;
   }
   return 0;
 }

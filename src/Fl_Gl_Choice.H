@@ -49,7 +49,7 @@
 //
 // fl_delete_gl_context destroys the context.
 //
-// This code is used by Fl_Gl_Window, gl_start(), and gl_visual()
+// This code is used by fltk3::GlWindow, gl_start(), and gl_visual()
 
 #ifndef Fl_Gl_Choice_H
 #define Fl_Gl_Choice_H

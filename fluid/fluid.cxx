@@ -2391,7 +2391,7 @@ int main(int argc,char **argv) {
 #ifdef __APPLE__
     fl_open_callback(apple_open_cb);
 #endif // __APPLE__
-    fltk3::visual((Fl_Mode)(fltk3::DOUBLE|fltk3::INDEX));
+    fltk3::visual((fltk3::Mode)(fltk3::DOUBLE|fltk3::INDEX));
     fltk3::FileIcon::load_system_icons();
     main_window->callback(exit_cb);
     position_window(main_window,"main_window_pos", 1, 10, 30, WINWIDTH, WINHEIGHT );

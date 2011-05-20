@@ -61,7 +61,7 @@ static void default_display() {}
 
 void Fl_Glut_Window::make_current() {
   glut_window = this;
-  if (shown()) Fl_Gl_Window::make_current();
+  if (shown()) fltk3::GlWindow::make_current();
 }
 
 static int indraw;
@@ -164,7 +164,7 @@ int Fl_Glut_Window::handle(int event) {
     break;
   }
 
-  return Fl_Gl_Window::handle(event);
+  return fltk3::GlWindow::handle(event);
 }
 
 static int glut_mode = GLUT_RGB | GLUT_SINGLE | GLUT_DEPTH;
@@ -189,11 +189,11 @@ void Fl_Glut_Window::_init() {
 
 /** Creates a glut window, registers to the glut windows list.*/
 Fl_Glut_Window::Fl_Glut_Window(int W, int H, const char *t) :
-  Fl_Gl_Window(W,H,t) {_init();}
+  fltk3::GlWindow(W,H,t) {_init();}
 
 /** Creates a glut window, registers to the glut windows list.*/
 Fl_Glut_Window::Fl_Glut_Window(int X,int Y,int W,int H, const char *t) :
-  Fl_Gl_Window(X,Y,W,H,t) {_init();}
+  fltk3::GlWindow(X,Y,W,H,t) {_init();}
 
 static int initargc;
 static char **initargv;
@@ -351,7 +351,7 @@ void glutAddSubMenu(char *label, int submenu) {
   i->text = label;
   i->callback_ = 0;
   i->user_data_ = (void *)(menus[submenu].m);
-  i->flags = FL_PUP_SUBMENU;
+  i->flags = fltk3::SUBMENU;
 }
 
 void glutChangeToMenuEntry(int item, char *label, int value) {
@@ -369,7 +369,7 @@ void glutChangeToSubMenu(int item, char *label, int submenu) {
   i->text = label;
   i->callback_ = 0;
   i->user_data_ = (void *)(menus[submenu].m);
-  i->flags = FL_PUP_SUBMENU;
+  i->flags = fltk3::SUBMENU;
 }
 
 void glutRemoveMenuItem(int item) {
@@ -400,7 +400,7 @@ int glutGet(GLenum type) {
 //case GLUT_SCREEN_WIDTH_MM:
 //case GLUT_SCREEN_HEIGHT_MM:
   case GLUT_MENU_NUM_ITEMS: return menus[glut_menu].size;
-  case GLUT_DISPLAY_MODE_POSSIBLE: return Fl_Gl_Window::can_do(glut_mode);
+  case GLUT_DISPLAY_MODE_POSSIBLE: return fltk3::GlWindow::can_do(glut_mode);
   case GLUT_INIT_WINDOW_X: return initx;
   case GLUT_INIT_WINDOW_Y: return inity;
   case GLUT_INIT_WINDOW_WIDTH: return initw;

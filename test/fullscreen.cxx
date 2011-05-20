@@ -31,7 +31,7 @@
 //
 // If it is a seperate window, turning double buffering on and off
 // will cause the window to raise, deiconize, and possibly move.  You
-// can avoid this by making the Fl_Gl_Window a child of a normal
+// can avoid this by making the fltk3::GlWindow a child of a normal
 // window.
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
@@ -58,17 +58,17 @@
 
 #include <config.h>
 #include <fltk3/run.h>
-#include <fltk3/Single_Window.h>
-#include <fltk3/Hor_Slider.h>
-#include <fltk3/Toggle_Light_Button.h>
+#include <fltk3/SingleWindow.h>
+#include <fltk3/HorSlider.h>
+#include <fltk3/LightButton.h>
 #include <FL/math.h>
 #include <stdio.h>
 
 #if HAVE_GL
-#include <FL/gl.h>
-#include <fltk3/Gl_Window.h>
+#include <fltk3/gl.h>
+#include <fltk3/GlWindow.h>
 
-class shape_window : public Fl_Gl_Window {
+class shape_window : public fltk3::GlWindow {
   void draw();
 public:
   int sides;
@@ -76,7 +76,7 @@ public:
 };
 
 shape_window::shape_window(int x,int y,int w,int h,const char *l) :
-Fl_Gl_Window(x,y,w,h,l) {
+fltk3::GlWindow(x,y,w,h,l) {
   sides = 3;
 }
 
@@ -102,7 +102,7 @@ void shape_window::draw() {
 
 #include <fltk3/draw.h>
 
-class shape_window : public Fl_Window {
+class shape_window : public fltk3::Window {
   void draw();
 public:
   int sides;
@@ -110,39 +110,39 @@ public:
 };
 
 shape_window::shape_window(int x,int y,int w,int h,const char *l) :
-Fl_Window(x,y,w,h,l) {
+fltk3::Window(x,y,w,h,l) {
   sides = 3;
 }
 
 void shape_window::draw() {
-  fl_color(0);
-  fl_rectf(0,0,w(),h());
-  fl_font(0,20);
-  fl_color(7);
-  fl_draw("This requires GL",0,0,w(),h(),FL_ALIGN_CENTER);
+  fltk3::color(0);
+  fltk3::rectf(0,0,w(),h());
+  fltk3::font(0,20);
+  fltk3::color(7);
+  fltk3::draw("This requires GL",0,0,w(),h(),fltk3::ALIGN_CENTER);
 }
 
 #endif
 
-void sides_cb(Fl_Widget *o, void *p) {
+void sides_cb(fltk3::Widget *o, void *p) {
   shape_window *sw = (shape_window *)p;
   sw->sides = int(((fltk3::Slider *)o)->value());
   sw->redraw();
 }
 
 #if HAVE_GL
-void double_cb(Fl_Widget *o, void *p) {
+void double_cb(fltk3::Widget *o, void *p) {
   shape_window *sw = (shape_window *)p;
-  int d = ((Fl_Button *)o)->value();
-  sw->mode(d ? Fl_Mode(FL_DOUBLE|FL_RGB) : FL_RGB);
+  int d = ((fltk3::Button *)o)->value();
+  sw->mode(d ? fltk3::Mode(fltk3::DOUBLE|fltk3::RGB) : fltk3::RGB);
 }
 #else
-void double_cb(Fl_Widget *, void *) {}
+void double_cb(fltk3::Widget *, void *) {}
 #endif
 
-void border_cb(Fl_Widget *o, void *p) {
-  Fl_Window *w = (Fl_Window *)p;
-  int d = ((Fl_Button *)o)->value();
+void border_cb(fltk3::Widget *o, void *p) {
+  fltk3::Window *w = (fltk3::Window *)p;
+  int d = ((fltk3::Button *)o)->value();
   w->border(d);
 #if defined(WIN32) || defined(__APPLE__)
   int wx = w->x(), wy = w->y();
@@ -152,10 +152,10 @@ void border_cb(Fl_Widget *o, void *p) {
 }
 
 int px,py,pw,ph;
-Fl_Button *border_button;
-void fullscreen_cb(Fl_Widget *o, void *p) {
-  Fl_Window *w = (Fl_Window *)p;
-  int d = ((Fl_Button *)o)->value();
+fltk3::Button *border_button;
+void fullscreen_cb(fltk3::Widget *o, void *p) {
+  fltk3::Window *w = (fltk3::Window *)p;
+  int d = ((fltk3::Button *)o)->value();
   if (d) {
     px = w->x();
     py = w->y();
@@ -173,7 +173,7 @@ void fullscreen_cb(Fl_Widget *o, void *p) {
 
 #include <stdlib.h>
 
-void exit_cb(Fl_Widget *, void *) {
+void exit_cb(fltk3::Widget *, void *) {
   exit(0);
 }
 
@@ -190,17 +190,17 @@ int arg(int, char **argv, int &i) {
 int main(int argc, char **argv) {
 
   int i=0;
-  if (Fl::args(argc,argv,i,arg) < argc)
-    Fl::fatal("Options are:\n -2 = 2 windows\n -f = startup fullscreen\n%s",Fl::help);
+  if (fltk3::args(argc,argv,i,arg) < argc)
+    fltk3::fatal("Options are:\n -2 = 2 windows\n -f = startup fullscreen\n%s",fltk3::help);
 
   fltk3::SingleWindow window(300,300+30*NUMB); window.end();
 
   shape_window sw(10,10,window.w()-20,window.h()-30*NUMB-20);
 #if HAVE_GL
-  sw.mode(FL_RGB);
+  sw.mode(fltk3::RGB);
 #endif
 
-  Fl_Window *w;
+  fltk3::Window *w;
   if (twowindow) {	// make it's own window
     sw.resizable(&sw);
     w = &sw;
@@ -217,28 +217,28 @@ int main(int argc, char **argv) {
 
   int y = window.h()-30*NUMB-5;
   fltk3::HorSlider slider(50,y,window.w()-60,30,"Sides:");
-  slider.align(FL_ALIGN_LEFT);
+  slider.align(fltk3::ALIGN_LEFT);
   slider.callback(sides_cb,&sw);
   slider.value(sw.sides);
   slider.step(1);
   slider.bounds(3,40);
   y+=30;
 
-  Fl_Toggle_Light_Button b1(50,y,window.w()-60,30,"Double Buffered");
+  fltk3::LightButton b1(50,y,window.w()-60,30,"Double Buffered");
   b1.callback(double_cb,&sw);
   y+=30;
 
-  Fl_Toggle_Light_Button b2(50,y,window.w()-60,30,"Border");
+  fltk3::LightButton b2(50,y,window.w()-60,30,"Border");
   b2.callback(border_cb,w);
   b2.set();
   border_button = &b2;
   y+=30;
 
-  Fl_Toggle_Light_Button b3(50,y,window.w()-60,30,"FullScreen");
+  fltk3::LightButton b3(50,y,window.w()-60,30,"FullScreen");
   b3.callback(fullscreen_cb,w);
   y+=30;
 
-  Fl_Button eb(50,y,window.w()-60,30,"Exit");
+  fltk3::Button eb(50,y,window.w()-60,30,"Exit");
   eb.callback(exit_cb);
   y+=30;
 

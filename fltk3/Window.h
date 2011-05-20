@@ -425,7 +425,7 @@ namespace fltk3 {
      if it draws a slow graphic. <B>Danger: incremental update is very hard to
      debug and maintain!</B>
      
-     This method only works for the fltk3::Window and Fl_Gl_Window derived classes.
+     This method only works for the fltk3::Window and fltk3::GlWindow derived classes.
      */
     void make_current();
     
