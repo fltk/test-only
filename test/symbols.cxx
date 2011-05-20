@@ -41,7 +41,7 @@ int N = 0;
 #define ROWS 6
 #define COLS 6
 
-Fl_Double_Window *window;
+fltk3::DoubleWindow *window;
 Fl_Value_Slider *orientation;
 Fl_Value_Slider *size;
 
@@ -93,7 +93,7 @@ void bt(const char *name) {
 }
 
 int main(int argc, char ** argv) {
-  window = new Fl_Double_Window(COLS*W,ROWS*H+60);
+  window = new fltk3::DoubleWindow(COLS*W,ROWS*H+60);
 bt("@->");
 bt("@>");
 bt("@>>");

@@ -276,7 +276,7 @@ class FLTK3_EXPORT Fl_Help_View : public fltk3::Group {	// Help viewer widget
   int		get_align(const char *p, int a);
   const char	*get_attr(const char *p, const char *n, char *buf, int bufsize);
   fltk3::Color	get_color(const char *n, fltk3::Color c);
-  Fl_Shared_Image *get_image(const char *name, int W, int H);
+  fltk3::SharedImage *get_image(const char *name, int W, int H);
   int		get_length(const char *l);
   int		handle(int);
 

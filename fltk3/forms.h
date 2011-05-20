@@ -506,7 +506,7 @@ inline void fl_set_bitmapbutton_data(fltk3::Widget* o,int a,int b,uchar* c) {
 
 inline fltk3::Widget* fl_add_pixmapbutton(int t,int x,int y,int w,int h,const char* l) {fltk3::Widget* o = fl_add_button(t,x,y,w,h,l); return o;}
 inline void fl_set_pixmapbutton_data(fltk3::Widget* o, const char*const* c) {
-  (new Fl_Pixmap(c))->label(o);}  // does not delete old Fl_Pixmap!
+  (new fltk3::Pixmap(c))->label(o);}  // does not delete old fltk3::Pixmap!
 
 // Fl_Canvas object not yet implemented!
 
@@ -646,7 +646,7 @@ fl_add_free(int t,double x,double y,double w,double h,const char* l,
 }
 
 #include "ask.h"
-#include "showColormap.h"
+#include "show_colormap.h"
 
 inline int fl_show_question(const char* c, int = 0) {return fltk3::choice("%s",fltk3::no,fltk3::yes,0L,c);}
 FLTK3_EXPORT void fl_show_message(const char *,const char *,const char *);

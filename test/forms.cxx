@@ -31,7 +31,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <FL/forms.h> // changed for fltk
+#include <fltk3/forms.h> // changed for fltk
 
 static int border = 1; // changed from FL_TRANSIENT for fltk
 // (this is so the close box and Esc work to close the window)
@@ -148,7 +148,7 @@ create_form_form (void)
   tobj[10]=obj=fl_add_dial (FL_LINE_DIAL, 280, 250, 100, 100, "Dial");
   tobj[11]=obj=fl_add_positioner(FL_NORMAL_POSITIONER,280,380,150,100, "Positioner");
   tobj[12]=obj=fl_add_counter (FL_NORMAL_COUNTER,480,110,210,30, "Counter");
-  tobj[13]=obj=fl_add_input (FL_NORMAL_INPUT, 520,170,170,30, "Input");
+  tobj[13]=obj=fl_add_input (fltk3::NORMAL_INPUT, 520,170,170,30, "Input");
   tobj[14]=obj=fl_add_menu (FL_PUSH_MENU, 400, 240, 100, 30, "Menu");
   tobj[15]=obj=fl_add_choice (FL_NORMAL_CHOICE, 580, 250, 110, 30, "Choice");
   tobj[16]=obj=fl_add_timer (FL_VALUE_TIMER, 580, 210, 110, 30, "Timer");

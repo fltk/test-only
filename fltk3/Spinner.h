@@ -140,7 +140,7 @@ class FLTK3_EXPORT Fl_Spinner : public fltk3::Group {
 		  align(fltk3::ALIGN_LEFT);
 
 		  input_.value("1");
-		  input_.type(FL_INT_INPUT);
+		  input_.type(fltk3::INT_INPUT);
 		  input_.when(fltk3::WHEN_ENTER_KEY | fltk3::WHEN_RELEASE);
 		  input_.callback((fltk3::Callback *)sb_cb, this);
 
@@ -205,8 +205,8 @@ class FLTK3_EXPORT Fl_Spinner : public fltk3::Group {
   /** See double Fl_Spinner::step() const */
   void		step(double s) {
 		  step_ = s;
-		  if (step_ != (int)step_) input_.type(FL_FLOAT_INPUT);
-		  else input_.type(FL_INT_INPUT);
+		  if (step_ != (int)step_) input_.type(fltk3::FLOAT_INPUT);
+		  else input_.type(fltk3::INT_INPUT);
 		  update();
 		}
   /** Gets the color of the text in the input field. */
@@ -238,13 +238,13 @@ class FLTK3_EXPORT Fl_Spinner : public fltk3::Group {
   */
   uchar		type() const { return (input_.type()); }
   /** Sets the numeric representation in the input field.
-   Valid values are FL_INT_INPUT and FL_FLOAT_INPUT.
+   Valid values are fltk3::INT_INPUT and fltk3::FLOAT_INPUT.
    Also changes the format() template.
    Setting a new spinner type via a superclass pointer will not work.
    \note  type is not a virtual function. 
    */
   void		type(uchar v) { 
-                  if (v==FL_FLOAT_INPUT) {
+                  if (v==fltk3::FLOAT_INPUT) {
                     format("%.*f");
                   } else {
                     format("%.0f");

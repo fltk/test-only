@@ -26,36 +26,40 @@
 //
 
 /* \file
-   Fl_Multiline_Output widget . */
+ fltk3::MultilineOutput widget . */
 
 #ifndef Fltk3_Multiline_Output_H
 #define Fltk3_Multiline_Output_H
 
 #include "Output.h"
 
-/**
-  This widget is a subclass of Fl_Output that displays multiple
-  lines of text. It also displays tab characters as whitespace to the
-  next column.
-
-  Note that this widget does not support scrollbars, or per-character
-  color control.
-
-  If you are presenting large amounts of read-only text 
-  and need scrollbars, or full color control of characters,
-  then use fltk3::TextDisplay. If you want to display HTML text,
-  use Fl_Help_View.
-*/
-class FLTK3_EXPORT Fl_Multiline_Output : public Fl_Output {
-public:
+namespace fltk3 {
+  
   /**
-    Creates a new Fl_Multiline_Output widget using the given
-    position, size, and label string. The default boxtype is fltk3::DOWN_BOX
-    <P> Inherited destructor destroys the widget and any value associated with it.
-  */
-  Fl_Multiline_Output(int X,int Y,int W,int H,const char *l = 0)
-    : Fl_Output(X,Y,W,H,l) {type(FL_MULTILINE_OUTPUT);}
-};
+   This widget is a subclass of fltk3::Output that displays multiple
+   lines of text. It also displays tab characters as whitespace to the
+   next column.
+   
+   Note that this widget does not support scrollbars, or per-character
+   color control.
+   
+   If you are presenting large amounts of read-only text 
+   and need scrollbars, or full color control of characters,
+   then use fltk3::TextDisplay. If you want to display HTML text,
+   use Fl_Help_View.
+   */
+  class FLTK3_EXPORT MultilineOutput : public fltk3::Output {
+  public:
+    /**
+     Creates a new fltk3::MultilineOutput widget using the given
+     position, size, and label string. The default boxtype is fltk3::DOWN_BOX
+     <P> Inherited destructor destroys the widget and any value associated with it.
+     */
+    MultilineOutput(int X,int Y,int W,int H,const char *l = 0)
+    : fltk3::Output(X,Y,W,H,l) {type(fltk3::MULTILINE_OUTPUT);}
+  };
+  
+}
 
 #endif
 

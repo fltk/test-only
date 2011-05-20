@@ -665,7 +665,7 @@ int main(int argc, char ** argv) {
   b_rgb.image(rgb);
 
   My_Button b_pixmap(10,345,100,100,"Pixmap");
-  Fl_Pixmap *pixmap = new Fl_Pixmap(porsche_xpm);
+  fltk3::Pixmap *pixmap = new fltk3::Pixmap(porsche_xpm);
   b_pixmap.image(pixmap);
 
   My_Button b_bitmap(10,445,100,100,"Bitmap");

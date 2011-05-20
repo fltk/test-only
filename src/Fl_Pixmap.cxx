@@ -25,13 +25,13 @@
 //     http://www.fltk.org/str.php
 //
 
-/** \fn Fl_Pixmap::Fl_Pixmap(const char **data)
+/** \fn fltk3::Pixmap::fltk3::Pixmap(const char **data)
   The constructors create a new pixmap from the specified XPM data.*/
 
-/** \fn Fl_Pixmap::Fl_Pixmap(const unsigned char * const *data)
+/** \fn fltk3::Pixmap::fltk3::Pixmap(const unsigned char * const *data)
   The constructors create a new pixmap from the specified XPM data.*/
 
-/** \fn Fl_Pixmap::Fl_Pixmap(const unsigned char **data)
+/** \fn fltk3::Pixmap::fltk3::Pixmap(const unsigned char **data)
   The constructors create a new pixmap from the specified XPM data.*/
 
 // Draws X pixmap data, keeping it stashed in a server pixmap so it
@@ -62,9 +62,12 @@ extern Fl_Offscreen fl_create_offscreen_with_alpha(int w, int h);
 #endif
 
 extern uchar **fl_mask_bitmap; // used by fltk3::draw_pixmap.cxx to store mask
-void fltk3::restore_clip(); // in fltk3::rect.cxx
 
-void Fl_Pixmap::measure() {
+namespace fltk3 {
+  void restore_clip(); // in fltk3::rect.cxx
+}
+
+void fltk3::Pixmap::measure() {
   int W, H;
 
   // ignore empty or bad pixmap data:
@@ -74,11 +77,11 @@ void Fl_Pixmap::measure() {
   }
 }
 
-void Fl_Pixmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
+void fltk3::Pixmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
   fl_graphics_driver->draw(this, XP, YP, WP, HP, cx, cy);
 }
 
-static int start(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int w, int h, int &cx, int &cy, 
+static int start(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int w, int h, int &cx, int &cy, 
 		 int &X, int &Y, int &W, int &H)
 {
   // ignore empty or bad pixmap data:
@@ -106,7 +109,7 @@ static int start(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int w, int h, i
 }
 
 #ifdef __APPLE__
-void Fl_Quartz_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
+void Fl_Quartz_Graphics_Driver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   if (pxm->w() < 0) pxm->measure();
   int code = start(pxm, XP, YP, WP, HP, pxm->w(), pxm->h(), cx, cy, X, Y, W, H);
@@ -124,7 +127,7 @@ void Fl_Quartz_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int
 }
 
 #elif defined(WIN32)
-void Fl_GDI_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
+void Fl_GDI_Graphics_Driver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   if (pxm->w() < 0) pxm->measure();
   int code = start(pxm, XP, YP, WP, HP, pxm->w(), pxm->h(), cx, cy, X, Y, W, H);
@@ -190,7 +193,7 @@ void Fl_GDI_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP
 }
 
 #else // Xlib
-void Fl_Xlib_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
+void Fl_Xlib_Graphics_Driver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   if (pxm->w() < 0) pxm->measure();
   int code = start(pxm, XP, YP, WP, HP, pxm->w(), pxm->h(), cx, cy, X, Y, W, H);
@@ -237,12 +240,12 @@ void Fl_Xlib_Graphics_Driver::draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int H
   The destructor free all memory and server resources that are used by
   the pixmap.
 */
-Fl_Pixmap::~Fl_Pixmap() {
+fltk3::Pixmap::~Pixmap() {
   uncache();
   delete_data();
 }
 
-void Fl_Pixmap::uncache() {
+void fltk3::Pixmap::uncache() {
   if (id_) {
     fl_delete_offscreen((Fl_Offscreen)id_);
     id_ = 0;
@@ -254,15 +257,15 @@ void Fl_Pixmap::uncache() {
   }
 }
 
-void Fl_Pixmap::label(fltk3::Widget* widget) {
+void fltk3::Pixmap::label(fltk3::Widget* widget) {
   widget->image(this);
 }
 
-void Fl_Pixmap::label(fltk3::MenuItem* m) {
+void fltk3::Pixmap::label(fltk3::MenuItem* m) {
   m->label(fltk3::IMAGE_LABEL, (const char*)this);
 }
 
-void Fl_Pixmap::copy_data() {
+void fltk3::Pixmap::copy_data() {
   if (alloc_data) return;
 
   char		**new_data,	// New data array
@@ -311,13 +314,13 @@ void Fl_Pixmap::copy_data() {
   alloc_data = 1;  
 }
 
-fltk3::Image *Fl_Pixmap::copy(int W, int H) {
-  Fl_Pixmap	*new_image;	// New pixmap
+fltk3::Image *fltk3::Pixmap::copy(int W, int H) {
+  fltk3::Pixmap	*new_image;	// New pixmap
 
   // Optimize the simple copy where the width and height are the same...
   if (W == w() && H == h()) {
     // Make an exact copy of the image and return it...
-    new_image = new Fl_Pixmap(data());
+    new_image = new fltk3::Pixmap(data());
     new_image->copy_data();
     return new_image;
   }
@@ -403,13 +406,13 @@ fltk3::Image *Fl_Pixmap::copy(int W, int H) {
     }
   }
 
-  new_image = new Fl_Pixmap((char*const*)new_data);
+  new_image = new fltk3::Pixmap((char*const*)new_data);
   new_image->alloc_data = 1;
 
   return new_image;
 }
 
-void Fl_Pixmap::color_average(fltk3::Color c, float i) {
+void fltk3::Pixmap::color_average(fltk3::Color c, float i) {
   // Delete any existing pixmap/mask objects...
   uncache();
 
@@ -482,14 +485,14 @@ void Fl_Pixmap::color_average(fltk3::Color c, float i) {
   }
 }
 
-void Fl_Pixmap::delete_data() {
+void fltk3::Pixmap::delete_data() {
   if (alloc_data) {
     for (int i = 0; i < count(); i ++) delete[] (char *)data()[i];
     delete[] (char **)data();
   }
 }
 
-void Fl_Pixmap::set_data(const char * const * p) {
+void fltk3::Pixmap::set_data(const char * const * p) {
   int	height,		// Number of lines in image
 	ncolors;	// Number of colors in image
 
@@ -501,7 +504,7 @@ void Fl_Pixmap::set_data(const char * const * p) {
 }
 
 
-void Fl_Pixmap::desaturate() {
+void fltk3::Pixmap::desaturate() {
   // Delete any existing pixmap/mask objects...
   uncache();
 

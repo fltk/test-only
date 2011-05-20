@@ -38,7 +38,7 @@
 class Fluid_Image {
   const char *name_;
   int refcount;
-  Fl_Shared_Image *img;
+  fltk3::SharedImage *img;
 protected:
   Fluid_Image(const char *name); // no public constructor
   ~Fluid_Image(); // no public destructor

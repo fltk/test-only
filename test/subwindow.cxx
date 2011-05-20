@@ -34,13 +34,13 @@
 #include <stdio.h>
 #include <fltk3/run.h>
 #include <fltk3/Window.h>
-#include <fltk3/Toggle_Button.h>
-#include <fltk3/Menu_Button.h>
+#include <fltk3/ToggleButton.h>
+#include <fltk3/MenuButton.h>
 #include <fltk3/Box.h>
 #include <fltk3/Input.h>
 
 #ifdef DEBUG
-#include <FL/names.h>
+#include <fltk3/names.h>
 #endif
 
 // Define DEBUG_POS for a subwindow positioning test. This will draw
@@ -54,58 +54,58 @@
 #include <fltk3/draw.h>
 #endif
 
-class EnterExit : public Fl_Box {
+class EnterExit : public fltk3::Box {
   int handle(int);
 public:
-  EnterExit(int x, int y, int w, int h, const char *l) : Fl_Box(FL_BORDER_BOX,x,y,w,h,l) {}
+  EnterExit(int x, int y, int w, int h, const char *l) : fltk3::Box(fltk3::BORDER_BOX,x,y,w,h,l) {}
 };
 
 int EnterExit::handle(int e) {
-  if (e == FL_ENTER) {color(FL_RED); redraw(); return 1;}
-  else if (e == FL_LEAVE) {color(FL_GRAY); redraw(); return 1;}
+  if (e == fltk3::ENTER) {color(fltk3::RED); redraw(); return 1;}
+  else if (e == fltk3::LEAVE) {color(fltk3::GRAY); redraw(); return 1;}
   else return 0;
 }
 
-class testwindow : public Fl_Window {
+class testwindow : public fltk3::Window {
   int handle(int);
   void draw();
   int cx, cy; char key;
-  Fl_Cursor crsr;
+  fltk3::Cursor crsr;
 public:
-  testwindow(Fl_Boxtype b,int x,int y,const char *l)
-    : Fl_Window(x,y,l), crsr(FL_CURSOR_DEFAULT) {box(b); key = 0;}
-  testwindow(Fl_Boxtype b,int x,int y,int w,int h,const char *l)
-    : Fl_Window(x,y,w,h,l) {box(b); key = 0;}
-  void use_cursor(Fl_Cursor c) { crsr = c; }
+  testwindow(fltk3::Boxtype b,int x,int y,const char *l)
+    : fltk3::Window(x,y,l), crsr(fltk3::CURSOR_DEFAULT) {box(b); key = 0;}
+  testwindow(fltk3::Boxtype b,int x,int y,int w,int h,const char *l)
+    : fltk3::Window(x,y,w,h,l) {box(b); key = 0;}
+  void use_cursor(fltk3::Cursor c) { crsr = c; }
 };
 
 void testwindow::draw() {
 #ifdef DEBUG
   printf("%s : draw\n",label());
 #endif
-  Fl_Window::draw();
+  fltk3::Window::draw();
 #ifdef DEBUG_POS
-  if (key) fl_draw(&key, 1, cx, cy);
+  if (key) fltk3::draw(&key, 1, cx, cy);
 #endif
 }
 
 int testwindow::handle(int e) {
 #ifdef DEBUG
-  if (e != FL_MOVE) printf("%s : %s\n",label(),fl_eventnames[e]);
+  if (e != fltk3::MOVE) printf("%s : %s\n",label(),fltk3::eventnames[e]);
 #endif
-  if (crsr!=FL_CURSOR_DEFAULT) {
-    if (e == FL_ENTER) 
+  if (crsr!=fltk3::CURSOR_DEFAULT) {
+    if (e == fltk3::ENTER) 
       cursor(crsr);
-    if (e == FL_LEAVE) 
-      cursor(FL_CURSOR_DEFAULT);
+    if (e == fltk3::LEAVE) 
+      cursor(fltk3::CURSOR_DEFAULT);
   }
-  if (Fl_Window::handle(e)) return 1;
-  if (e == FL_FOCUS) return 1;
-  if (e == FL_PUSH) {Fl::focus(this); return 1;}
-  if (e == FL_KEYBOARD && Fl::event_text()[0]) {
-    key = Fl::event_text()[0];
-    cx = Fl::event_x();
-    cy = Fl::event_y();
+  if (fltk3::Window::handle(e)) return 1;
+  if (e == fltk3::FOCUS) return 1;
+  if (e == fltk3::PUSH) {fltk3::focus(this); return 1;}
+  if (e == fltk3::KEYBOARD && fltk3::event_text()[0]) {
+    key = fltk3::event_text()[0];
+    cx = fltk3::event_x();
+    cy = fltk3::event_y();
     redraw();
     return 1;
   }
@@ -154,15 +154,15 @@ const char* bigmess =
 
 int main(int argc, char **argv) {
   testwindow *window =
-    new testwindow(FL_UP_BOX,400,400,"outer");
-  new Fl_Toggle_Button(310,310,80,80,"&outer");
+    new testwindow(fltk3::UP_BOX,400,400,"outer");
+  new fltk3::ToggleButton(310,310,80,80,"&outer");
   new EnterExit(10,310,80,80,"enterexit");
   new fltk3::Input(160,310,140,25,"input1:");
   new fltk3::Input(160,340,140,25,"input2:");
   (new fltk3::MenuButton(5,150,80,25,"menu&1"))->add(bigmess);
   testwindow *subwindow =
-    new testwindow(FL_DOWN_BOX,100,100,200,200,"inner");
-  new Fl_Toggle_Button(110,110,80,80,"&inner");
+    new testwindow(fltk3::DOWN_BOX,100,100,200,200,"inner");
+  new fltk3::ToggleButton(110,110,80,80,"&inner");
   new EnterExit(10,110,80,80,"enterexit");
   (new fltk3::MenuButton(50,20,80,25,"menu&2"))->add(bigmess);
   new fltk3::Input(55,50,140,25,"input1:");
@@ -170,14 +170,14 @@ int main(int argc, char **argv) {
   subwindow->resizable(subwindow);
   window->resizable(subwindow);
   subwindow->end();
-  subwindow->use_cursor(FL_CURSOR_HAND);
-  (new Fl_Box(FL_NO_BOX,0,0,400,100,
-	     "A child Fl_Window with children of its own may "
+  subwindow->use_cursor(fltk3::CURSOR_HAND);
+  (new fltk3::Box(fltk3::NO_BOX,0,0,400,100,
+	     "A child fltk3::Window with children of its own may "
 	     "be useful for imbedding controls into a GL or display "
 	     "that needs a different visual.  There are bugs with the "
 	     "origins being different between drawing and events, "
 	     "which I hope I have solved."
-	     )) -> align(FL_ALIGN_WRAP);
+	     )) -> align(fltk3::ALIGN_WRAP);
   popup = new fltk3::MenuButton(0,0,400,400);
   popup->type(fltk3::MenuButton::POPUP3);
   popup->add("This|is|a popup|menu");

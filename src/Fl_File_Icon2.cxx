@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_File_Icon system icon routines.
+// fltk3::FileIcon system icon routines.
 //
 // KDE icon code donated by Maarten De Boer.
 //
@@ -28,10 +28,10 @@
 //
 // Contents:
 //
-//   Fl_File_Icon::load()              - Load an icon file...
-//   Fl_File_Icon::load_fti()          - Load an SGI-format FTI file...
-//   Fl_File_Icon::load_image()        - Load an image icon file...
-//   Fl_File_Icon::load_system_icons() - Load the standard system icons/filetypes.
+//   fltk3::FileIcon::load()              - Load an icon file...
+//   fltk3::FileIcon::load_fti()          - Load an SGI-format FTI file...
+//   fltk3::FileIcon::load_image()        - Load an image icon file...
+//   fltk3::FileIcon::load_system_icons() - Load the standard system icons/filetypes.
 //   load_kde_icons()                  - Load KDE icon files.
 //   load_kde_mimelnk()                - Load a KDE "mimelnk" file.
 //   kde_to_fltk_pattern()             - Convert a KDE pattern to a FLTK pattern.
@@ -103,7 +103,7 @@ static const char *kdedir = NULL;
   \param[in] f filename
 */
 void
-Fl_File_Icon::load(const char *f)	// I - File to read from
+fltk3::FileIcon::load(const char *f)	// I - File to read from
 {
   int		i;			// Load status...
   const char	*ext;			// File extension
@@ -118,7 +118,7 @@ Fl_File_Icon::load(const char *f)	// I - File to read from
 
   if (i)
   {
-    fltk3::warning("Fl_File_Icon::load(): Unable to load icon file \"%s\".", f);
+    fltk3::warning("fltk3::FileIcon::load(): Unable to load icon file \"%s\".", f);
     return;
   }
 }
@@ -130,7 +130,7 @@ Fl_File_Icon::load(const char *f)	// I - File to read from
   \return 0 on success, non-zero on error
 */
 int					// O - 0 on success, non-zero on error
-Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
+fltk3::FileIcon::load_fti(const char *fti)	// I - File to read from
 {
   FILE	*fp;			// File pointer
   int	ch;			// Current character
@@ -143,7 +143,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
   // Try to open the file...
   if ((fp = fl_fopen(fti, "rb")) == NULL)
   {
-    fltk3::error("Fl_File_Icon::load_fti(): Unable to open \"%s\" - %s",
+    fltk3::error("fltk3::FileIcon::load_fti(): Unable to open \"%s\" - %s",
               fti, strerror(errno));
     return -1;
   }
@@ -173,7 +173,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
     // OK, this character better be a letter...
     if (!isalpha(ch))
     {
-      fltk3::error("Fl_File_Icon::load_fti(): Expected a letter at file position %ld (saw '%c')",
+      fltk3::error("fltk3::FileIcon::load_fti(): Expected a letter at file position %ld (saw '%c')",
                 ftell(fp) - 1, ch);
       break;
     }
@@ -195,7 +195,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
     // Make sure we stopped on a parenthesis...
     if (ch != '(')
     {
-      fltk3::error("Fl_File_Icon::load_fti(): Expected a ( at file position %ld (saw '%c')",
+      fltk3::error("fltk3::FileIcon::load_fti(): Expected a ( at file position %ld (saw '%c')",
                 ftell(fp) - 1, ch);
       break;
     }
@@ -216,7 +216,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
     // Make sure we stopped on a parenthesis...
     if (ch != ')')
     {
-      fltk3::error("Fl_File_Icon::load_fti(): Expected a ) at file position %ld (saw '%c')",
+      fltk3::error("fltk3::FileIcon::load_fti(): Expected a ) at file position %ld (saw '%c')",
                 ftell(fp) - 1, ch);
       break;
     }
@@ -224,7 +224,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
     // Make sure the next character is a semicolon...
     if ((ch = getc(fp)) != ';')
     {
-      fltk3::error("Fl_File_Icon::load_fti(): Expected a ; at file position %ld (saw '%c')",
+      fltk3::error("fltk3::FileIcon::load_fti(): Expected a ; at file position %ld (saw '%c')",
                 ftell(fp) - 1, ch);
       break;
     }
@@ -238,12 +238,12 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
       //
       //     name           FLTK color
       //     -------------  ----------
-      //     iconcolor      FL_ICON_COLOR; mapped to the icon color in
-      //                    Fl_File_Icon::draw()
+      //     iconcolor      fltk3::ICON_COLOR; mapped to the icon color in
+      //                    fltk3::FileIcon::draw()
       //     shadowcolor    fltk3::DARK3
       //     outlinecolor   fltk3::BLACK
       if (strcmp(params, "iconcolor") == 0)
-        add_color(FL_ICON_COLOR);
+        add_color(fltk3::ICON_COLOR);
       else if (strcmp(params, "shadowcolor") == 0)
         add_color(fltk3::DARK3);
       else if (strcmp(params, "outlinecolor") == 0)
@@ -282,7 +282,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
 
       // Set the outline color; see above for valid values...
       if (strcmp(params, "iconcolor") == 0)
-        cval = FL_ICON_COLOR;
+        cval = fltk3::ICON_COLOR;
       else if (strcmp(params, "shadowcolor") == 0)
         cval = fltk3::DARK3;
       else if (strcmp(params, "outlinecolor") == 0)
@@ -323,7 +323,7 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
     }
     else
     {
-      fltk3::error("Fl_File_Icon::load_fti(): Unknown command \"%s\" at file position %ld.",
+      fltk3::error("fltk3::FileIcon::load_fti(): Unknown command \"%s\" at file position %ld.",
                 command, ftell(fp) - 1);
       break;
     }
@@ -347,12 +347,12 @@ Fl_File_Icon::load_fti(const char *fti)	// I - File to read from
   \param[in] ifile image filename
   \return 0 on success, non-zero on error
 */
-int Fl_File_Icon::load_image(const char *ifile)	// I - File to read from
+int fltk3::FileIcon::load_image(const char *ifile)	// I - File to read from
 {
-  Fl_Shared_Image	*img;		// Image file
+  fltk3::SharedImage	*img;		// Image file
 
 
-  img = Fl_Shared_Image::get(ifile);
+  img = fltk3::SharedImage::get(ifile);
   if (!img || !img->count() || !img->w() || !img->h()) return -1;
 
   if (img->count() == 1) {
@@ -593,13 +593,13 @@ int Fl_File_Icon::load_image(const char *ifile)	// I - File to read from
   FileChooser widget and should be used when the application starts:
   
   \code
-  Fl_File_Icon::load_system_icons();
+  fltk3::FileIcon::load_system_icons();
   \endcode
 */
 void
-Fl_File_Icon::load_system_icons(void) {
+fltk3::FileIcon::load_system_icons(void) {
   int		i;		// Looping var
-  Fl_File_Icon	*icon;		// New icons
+  fltk3::FileIcon	*icon;		// New icons
   char		filename[FL_PATH_MAX];	// Filename
   char		icondir[FL_PATH_MAX];	// Icon directory
   static int	init = 0;	// Have the icons been initialized?
@@ -676,7 +676,7 @@ Fl_File_Icon::load_system_icons(void) {
   // Add symbols if they haven't been added already...
   if (!init) {
     // This method requires the images library...
-    fl_register_images();
+    fltk3::register_images();
 
     if (!kdedir) {
       // Figure out where KDE is installed...
@@ -691,7 +691,7 @@ Fl_File_Icon::load_system_icons(void) {
 
     if (!access(filename, F_OK)) {
       // Load KDE icons...
-      icon = new Fl_File_Icon("*", Fl_File_Icon::PLAIN);
+      icon = new fltk3::FileIcon("*", fltk3::FileIcon::PLAIN);
 
       for (i = 0; icondirs[i]; i ++) {
 	snprintf(icondir, sizeof(icondir), "%s/share/icons/%s", kdedir,
@@ -710,7 +710,7 @@ Fl_File_Icon::load_system_icons(void) {
 
       if (!access(filename, F_OK)) icon->load_image(filename);
 
-      icon = new Fl_File_Icon("*", Fl_File_Icon::LINK);
+      icon = new fltk3::FileIcon("*", fltk3::FileIcon::LINK);
 
       snprintf(filename, sizeof(filename), "%s/16x16/filesystems/link.png",
                icondir);
@@ -721,71 +721,71 @@ Fl_File_Icon::load_system_icons(void) {
       load_kde_icons(filename, icondir);
     } else if (!access("/usr/share/icons/folder.xpm", F_OK)) {
       // Load GNOME icons...
-      icon = new Fl_File_Icon("*", Fl_File_Icon::PLAIN);
+      icon = new fltk3::FileIcon("*", fltk3::FileIcon::PLAIN);
       icon->load_image("/usr/share/icons/page.xpm");
 
-      icon = new Fl_File_Icon("*", Fl_File_Icon::DIRECTORY);
+      icon = new fltk3::FileIcon("*", fltk3::FileIcon::DIRECTORY);
       icon->load_image("/usr/share/icons/folder.xpm");
     } else if (!access("/usr/dt/appconfig/icons", F_OK)) {
       // Load CDE icons...
-      icon = new Fl_File_Icon("*", Fl_File_Icon::PLAIN);
+      icon = new fltk3::FileIcon("*", fltk3::FileIcon::PLAIN);
       icon->load_image("/usr/dt/appconfig/icons/C/Dtdata.m.pm");
 
-      icon = new Fl_File_Icon("*", Fl_File_Icon::DIRECTORY);
+      icon = new fltk3::FileIcon("*", fltk3::FileIcon::DIRECTORY);
       icon->load_image("/usr/dt/appconfig/icons/C/DtdirB.m.pm");
 
-      icon = new Fl_File_Icon("core", Fl_File_Icon::PLAIN);
+      icon = new fltk3::FileIcon("core", fltk3::FileIcon::PLAIN);
       icon->load_image("/usr/dt/appconfig/icons/C/Dtcore.m.pm");
 
-      icon = new Fl_File_Icon("*.{bmp|bw|gif|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", Fl_File_Icon::PLAIN);
+      icon = new fltk3::FileIcon("*.{bmp|bw|gif|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", fltk3::FileIcon::PLAIN);
       icon->load_image("/usr/dt/appconfig/icons/C/Dtimage.m.pm");
 
-      icon = new Fl_File_Icon("*.{eps|pdf|ps}", Fl_File_Icon::PLAIN);
+      icon = new fltk3::FileIcon("*.{eps|pdf|ps}", fltk3::FileIcon::PLAIN);
       icon->load_image("/usr/dt/appconfig/icons/C/Dtps.m.pm");
 
-      icon = new Fl_File_Icon("*.ppd", Fl_File_Icon::PLAIN);
+      icon = new fltk3::FileIcon("*.ppd", fltk3::FileIcon::PLAIN);
       icon->load_image("/usr/dt/appconfig/icons/C/DtPrtpr.m.pm");
     } else if (!access("/usr/lib/filetype", F_OK)) {
       // Load SGI icons...
-      icon = new Fl_File_Icon("*", Fl_File_Icon::PLAIN);
+      icon = new fltk3::FileIcon("*", fltk3::FileIcon::PLAIN);
       icon->load_fti("/usr/lib/filetype/iconlib/generic.doc.fti");
 
-      icon = new Fl_File_Icon("*", Fl_File_Icon::DIRECTORY);
+      icon = new fltk3::FileIcon("*", fltk3::FileIcon::DIRECTORY);
       icon->load_fti("/usr/lib/filetype/iconlib/generic.folder.closed.fti");
 
-      icon = new Fl_File_Icon("core", Fl_File_Icon::PLAIN);
+      icon = new fltk3::FileIcon("core", fltk3::FileIcon::PLAIN);
       icon->load_fti("/usr/lib/filetype/default/iconlib/CoreFile.fti");
 
-      icon = new Fl_File_Icon("*.{bmp|bw|gif|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", Fl_File_Icon::PLAIN);
+      icon = new fltk3::FileIcon("*.{bmp|bw|gif|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", fltk3::FileIcon::PLAIN);
       icon->load_fti("/usr/lib/filetype/system/iconlib/ImageFile.fti");
 
       if (!access("/usr/lib/filetype/install/iconlib/acroread.doc.fti", F_OK)) {
-	icon = new Fl_File_Icon("*.{eps|ps}", Fl_File_Icon::PLAIN);
+	icon = new fltk3::FileIcon("*.{eps|ps}", fltk3::FileIcon::PLAIN);
 	icon->load_fti("/usr/lib/filetype/system/iconlib/PostScriptFile.closed.fti");
 
-	icon = new Fl_File_Icon("*.pdf", Fl_File_Icon::PLAIN);
+	icon = new fltk3::FileIcon("*.pdf", fltk3::FileIcon::PLAIN);
 	icon->load_fti("/usr/lib/filetype/install/iconlib/acroread.doc.fti");
       } else {
-	icon = new Fl_File_Icon("*.{eps|pdf|ps}", Fl_File_Icon::PLAIN);
+	icon = new fltk3::FileIcon("*.{eps|pdf|ps}", fltk3::FileIcon::PLAIN);
 	icon->load_fti("/usr/lib/filetype/system/iconlib/PostScriptFile.closed.fti");
       }
 
       if (!access("/usr/lib/filetype/install/iconlib/html.fti", F_OK)) {
-	icon = new Fl_File_Icon("*.{htm|html|shtml}", Fl_File_Icon::PLAIN);
+	icon = new fltk3::FileIcon("*.{htm|html|shtml}", fltk3::FileIcon::PLAIN);
         icon->load_fti("/usr/lib/filetype/iconlib/generic.doc.fti");
 	icon->load_fti("/usr/lib/filetype/install/iconlib/html.fti");
       }
 
       if (!access("/usr/lib/filetype/install/iconlib/color.ps.idle.fti", F_OK)) {
-	icon = new Fl_File_Icon("*.ppd", Fl_File_Icon::PLAIN);
+	icon = new fltk3::FileIcon("*.ppd", fltk3::FileIcon::PLAIN);
 	icon->load_fti("/usr/lib/filetype/install/iconlib/color.ps.idle.fti");
       }
     } else {
       // Create the default icons...
-      new Fl_File_Icon("*", Fl_File_Icon::PLAIN, sizeof(plain) / sizeof(plain[0]), plain);
-      new Fl_File_Icon("*.{bm|bmp|bw|gif|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", Fl_File_Icon::PLAIN,
+      new fltk3::FileIcon("*", fltk3::FileIcon::PLAIN, sizeof(plain) / sizeof(plain[0]), plain);
+      new fltk3::FileIcon("*.{bm|bmp|bw|gif|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", fltk3::FileIcon::PLAIN,
                    sizeof(image) / sizeof(image[0]), image);
-      new Fl_File_Icon("*", Fl_File_Icon::DIRECTORY, sizeof(dir) / sizeof(dir[0]), dir);
+      new fltk3::FileIcon("*", fltk3::FileIcon::DIRECTORY, sizeof(dir) / sizeof(dir[0]), dir);
     }
 
     // Mark things as initialized...
@@ -793,9 +793,9 @@ Fl_File_Icon::load_system_icons(void) {
 
 #ifdef DEBUG
     int count;
-    Fl_File_Icon *temp;
+    fltk3::FileIcon *temp;
     for (count = 0, temp = first_; temp; temp = temp->next_, count ++);
-    printf("count of Fl_File_Icon's is %d...\n", count);
+    printf("count of fltk3::FileIcon's is %d...\n", count);
 #endif // DEBUG
   }
 }
@@ -846,7 +846,7 @@ load_kde_mimelnk(const char *filename,	// I - mimelnk filename
   char		mimetype[1024];
   char		*val;
   char		full_iconfilename[FL_PATH_MAX];
-  Fl_File_Icon	*icon;
+  fltk3::FileIcon	*icon;
 
 
   mimetype[0]     = '\0';
@@ -952,15 +952,15 @@ load_kde_mimelnk(const char *filename,	// I - mimelnk filename
 
       if (strncmp(mimetype, "inode/", 6) == 0) {
 	if (!strcmp(mimetype + 6, "directory"))
-	  icon = new Fl_File_Icon("*", Fl_File_Icon::DIRECTORY);
+	  icon = new fltk3::FileIcon("*", fltk3::FileIcon::DIRECTORY);
 	else if (!strcmp(mimetype + 6, "blockdevice"))
-	  icon = new Fl_File_Icon("*", Fl_File_Icon::DEVICE);
+	  icon = new fltk3::FileIcon("*", fltk3::FileIcon::DEVICE);
 	else if (!strcmp(mimetype + 6, "fifo"))
-	  icon = new Fl_File_Icon("*", Fl_File_Icon::FIFO);
+	  icon = new fltk3::FileIcon("*", fltk3::FileIcon::FIFO);
 	else return;
       } else {
-        icon = new Fl_File_Icon(kde_to_fltk_pattern(pattern),
-                                Fl_File_Icon::PLAIN);
+        icon = new fltk3::FileIcon(kde_to_fltk_pattern(pattern),
+                                fltk3::FileIcon::PLAIN);
       }
 
       icon->load(full_iconfilename);

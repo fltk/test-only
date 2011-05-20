@@ -3292,7 +3292,7 @@ int fltk3::dnd(void)
   
   int width, height;
   NSImage *image;
-  if ( dynamic_cast<Fl_Input_*>(w) != NULL ||  dynamic_cast<fltk3::TextDisplay*>(w) != NULL) {
+  if ( dynamic_cast<fltk3::Input_*>(w) != NULL ||  dynamic_cast<fltk3::TextDisplay*>(w) != NULL) {
     fl_selection_buffer[0][ fl_selection_length[0] ] = 0;
     image = imageFromText(fl_selection_buffer[0], &width, &height);
   } else {

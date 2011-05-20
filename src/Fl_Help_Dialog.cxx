@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_Help_Dialog dialog for the Fast Light Tool Kit (FLTK).
+// fltk3::HelpDialog dialog for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
 //
@@ -31,7 +31,7 @@
 #include "flstring.h"
 #include <fltk3/ask.h>
 
-void Fl_Help_Dialog::cb_back__i(fltk3::Button*, void*) {
+void fltk3::HelpDialog::cb_back__i(fltk3::Button*, void*) {
   if (index_ > 0)
   index_ --;
 
@@ -47,11 +47,11 @@ if (strcmp(view_->filename(), file_[index_]) != 0)
 
 view_->topline(l);
 }
-void Fl_Help_Dialog::cb_back_(fltk3::Button* o, void* v) {
-  ((Fl_Help_Dialog*)(o->parent()->parent()->user_data()))->cb_back__i(o,v);
+void fltk3::HelpDialog::cb_back_(fltk3::Button* o, void* v) {
+  ((fltk3::HelpDialog*)(o->parent()->parent()->user_data()))->cb_back__i(o,v);
 }
 
-void Fl_Help_Dialog::cb_forward__i(fltk3::Button*, void*) {
+void fltk3::HelpDialog::cb_forward__i(fltk3::Button*, void*) {
   if (index_ < max_)
   index_ ++;
 
@@ -67,11 +67,11 @@ if (strcmp(view_->filename(), file_[index_]) != 0)
 
 view_->topline(l);
 }
-void Fl_Help_Dialog::cb_forward_(fltk3::Button* o, void* v) {
-  ((Fl_Help_Dialog*)(o->parent()->parent()->user_data()))->cb_forward__i(o,v);
+void fltk3::HelpDialog::cb_forward_(fltk3::Button* o, void* v) {
+  ((fltk3::HelpDialog*)(o->parent()->parent()->user_data()))->cb_forward__i(o,v);
 }
 
-void Fl_Help_Dialog::cb_smaller__i(fltk3::Button*, void*) {
+void fltk3::HelpDialog::cb_smaller__i(fltk3::Button*, void*) {
   if (view_->textsize() > 8)
   view_->textsize(view_->textsize() - 2);
 
@@ -79,11 +79,11 @@ if (view_->textsize() <= 8)
   smaller_->deactivate();
 larger_->activate();
 }
-void Fl_Help_Dialog::cb_smaller_(fltk3::Button* o, void* v) {
-  ((Fl_Help_Dialog*)(o->parent()->parent()->user_data()))->cb_smaller__i(o,v);
+void fltk3::HelpDialog::cb_smaller_(fltk3::Button* o, void* v) {
+  ((fltk3::HelpDialog*)(o->parent()->parent()->user_data()))->cb_smaller__i(o,v);
 }
 
-void Fl_Help_Dialog::cb_larger__i(fltk3::Button*, void*) {
+void fltk3::HelpDialog::cb_larger__i(fltk3::Button*, void*) {
   if (view_->textsize() < 18)
   view_->textsize(view_->textsize() + 2);
 
@@ -91,18 +91,18 @@ if (view_->textsize() >= 18)
   larger_->deactivate();
 smaller_->activate();
 }
-void Fl_Help_Dialog::cb_larger_(fltk3::Button* o, void* v) {
-  ((Fl_Help_Dialog*)(o->parent()->parent()->user_data()))->cb_larger__i(o,v);
+void fltk3::HelpDialog::cb_larger_(fltk3::Button* o, void* v) {
+  ((fltk3::HelpDialog*)(o->parent()->parent()->user_data()))->cb_larger__i(o,v);
 }
 
-void Fl_Help_Dialog::cb_find__i(fltk3::Input*, void*) {
+void fltk3::HelpDialog::cb_find__i(fltk3::Input*, void*) {
   find_pos_ = view_->find(find_->value(), find_pos_);
 }
-void Fl_Help_Dialog::cb_find_(fltk3::Input* o, void* v) {
-  ((Fl_Help_Dialog*)(o->parent()->parent()->parent()->user_data()))->cb_find__i(o,v);
+void fltk3::HelpDialog::cb_find_(fltk3::Input* o, void* v) {
+  ((fltk3::HelpDialog*)(o->parent()->parent()->parent()->user_data()))->cb_find__i(o,v);
 }
 
-void Fl_Help_Dialog::cb_view__i(Fl_Help_View*, void*) {
+void fltk3::HelpDialog::cb_view__i(Fl_Help_View*, void*) {
   if (view_->filename())
 {
   if (view_->changed())
@@ -142,11 +142,11 @@ void Fl_Help_Dialog::cb_view__i(Fl_Help_View*, void*) {
   forward_->deactivate();
 };
 }
-void Fl_Help_Dialog::cb_view_(Fl_Help_View* o, void* v) {
-  ((Fl_Help_Dialog*)(o->parent()->user_data()))->cb_view__i(o,v);
+void fltk3::HelpDialog::cb_view_(Fl_Help_View* o, void* v) {
+  ((fltk3::HelpDialog*)(o->parent()->user_data()))->cb_view__i(o,v);
 }
 
-Fl_Help_Dialog::Fl_Help_Dialog() {
+fltk3::HelpDialog::HelpDialog() {
   { window_ = new fltk3::DoubleWindow(530, 385, "Help Dialog");
     window_->user_data((void*)(this));
     { fltk3::Group* o = new fltk3::Group(10, 10, 511, 25);
@@ -207,44 +207,44 @@ index_    = -1;
 max_      = 0;
 find_pos_ = 0;
 
-fl_register_images();
+fltk3::register_images();
 }
 
-Fl_Help_Dialog::~Fl_Help_Dialog() {
+fltk3::HelpDialog::~HelpDialog() {
   delete window_;
 }
 
-int Fl_Help_Dialog::h() {
+int fltk3::HelpDialog::h() {
   return (window_->h());
 }
 
-void Fl_Help_Dialog::hide() {
+void fltk3::HelpDialog::hide() {
   window_->hide();
 }
 
-void Fl_Help_Dialog::load(const char *f) {
+void fltk3::HelpDialog::load(const char *f) {
   view_->set_changed();
 view_->load(f);
 window_->label(view_->title());
 }
 
-void Fl_Help_Dialog::position(int xx, int yy) {
+void fltk3::HelpDialog::position(int xx, int yy) {
   window_->position(xx, yy);
 }
 
-void Fl_Help_Dialog::resize(int xx, int yy, int ww, int hh) {
+void fltk3::HelpDialog::resize(int xx, int yy, int ww, int hh) {
   window_->resize(xx, yy, ww, hh);
 }
 
-void Fl_Help_Dialog::show() {
+void fltk3::HelpDialog::show() {
   window_->show();
 }
 
-void Fl_Help_Dialog::show(int argc, char **argv) {
+void fltk3::HelpDialog::show(int argc, char **argv) {
   window_->show(argc, argv);
 }
 
-void Fl_Help_Dialog::textsize(fltk3::Fontsize s) {
+void fltk3::HelpDialog::textsize(fltk3::Fontsize s) {
   view_->textsize(s);
 
 if (s <= 8)
@@ -258,41 +258,41 @@ else
   larger_->activate();
 }
 
-fltk3::Fontsize Fl_Help_Dialog::textsize() {
+fltk3::Fontsize fltk3::HelpDialog::textsize() {
   return (view_->textsize());
 }
 
-void Fl_Help_Dialog::topline(const char *n) {
+void fltk3::HelpDialog::topline(const char *n) {
   view_->topline(n);
 }
 
-void Fl_Help_Dialog::topline(int n) {
+void fltk3::HelpDialog::topline(int n) {
   view_->topline(n);
 }
 
-void Fl_Help_Dialog::value(const char *f) {
+void fltk3::HelpDialog::value(const char *f) {
   view_->set_changed();
 view_->value(f);
 window_->label(view_->title());
 }
 
-const char * Fl_Help_Dialog::value() const {
+const char * fltk3::HelpDialog::value() const {
   return view_->value();
 }
 
-int Fl_Help_Dialog::visible() {
+int fltk3::HelpDialog::visible() {
   return (window_->visible());
 }
 
-int Fl_Help_Dialog::w() {
+int fltk3::HelpDialog::w() {
   return (window_->w());
 }
 
-int Fl_Help_Dialog::x() {
+int fltk3::HelpDialog::x() {
   return (window_->x());
 }
 
-int Fl_Help_Dialog::y() {
+int fltk3::HelpDialog::y() {
   return (window_->y());
 }
 

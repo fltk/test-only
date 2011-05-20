@@ -31,7 +31,7 @@
 #include <fltk3/Pixmap.h>
 #include "Fl_Type.h"
 #include "undo.h"
-extern class Fl_Pixmap *pixmap[];
+extern class fltk3::Pixmap *pixmap[];
 extern class Fl_Type *Fl_Type_make(const char*);
 extern void select_only(Fl_Type*);
 extern void exit_cb(fltk3::Widget*, void*);
@@ -934,7 +934,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(366, 5, 24, 24);
         o->tooltip("Output");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Output"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Output"));
         o->image(pixmap[27]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(341, 30, 24, 24);
@@ -1018,7 +1018,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(459, 55, 24, 24);
         o->tooltip("File Browser");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_File_Browser"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::FileBrowser"));
         o->image(pixmap[33]);
       } // fltk3::Button* o
       o->end();

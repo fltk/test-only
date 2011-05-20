@@ -278,12 +278,12 @@ public:
    the image offset by the cx and cy arguments.
    */
   virtual   void draw(fltk3::RGBImage * rgb,int XP, int YP, int WP, int HP, int cx, int cy) = 0;
-  /** \brief Draws an Fl_Pixmap object to the device. 
+  /** \brief Draws an fltk3::Pixmap object to the device. 
    *
    Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
    the image offset by the cx and cy arguments.
    */
-  virtual   void draw(Fl_Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy) = 0;
+  virtual   void draw(fltk3::Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy) = 0;
   /** \brief Draws an fltk3::Bitmap object to the device. 
    *
    Specifies a bounding box for the image, with the origin (upper left-hand corner) of 
@@ -339,7 +339,7 @@ public:
   void draw(int angle, const char *str, int n, int x, int y);
   void rtl_draw(const char* str, int n, int x, int y);
   void font(fltk3::Font face, fltk3::Fontsize size);
-  void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(fltk3::Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0);
@@ -369,7 +369,7 @@ public:
   void draw(int angle, const char *str, int n, int x, int y);
   void rtl_draw(const char* str, int n, int x, int y);
   void font(fltk3::Font face, fltk3::Fontsize size);
-  void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(fltk3::Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0);
@@ -399,7 +399,7 @@ public:
   void draw(int angle, const char *str, int n, int x, int y);
   void rtl_draw(const char* str, int n, int x, int y);
   void font(fltk3::Font face, fltk3::Fontsize size);
-  void draw(Fl_Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(fltk3::Bitmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int cx, int cy);
   void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0);

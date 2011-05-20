@@ -93,7 +93,7 @@ extern "C"
 #endif // HAVE_LIBPNG && HAVE_LIBZ
 }
 
-static Fl_Help_Dialog *help_dialog = 0;
+static fltk3::HelpDialog *help_dialog = 0;
 
 Fl_Preferences	fluid_prefs(Fl_Preferences::USER, "fltk.org", "fluid");
 int gridx = 5;
@@ -198,9 +198,9 @@ static char* cutfname(int which = 0) {
 void save_cb(fltk3::Widget *, void *v) {
   const char *c = filename;
   if (v || !c || !*c) {
-    fl_file_chooser_ok_label("Save");
-    c=fl_file_chooser("Save To:", "FLUID Files (*.f[ld])", c);
-    fl_file_chooser_ok_label(NULL);
+    fltk3::file_chooser_ok_label("Save");
+    c=fltk3::file_chooser("Save To:", "FLUID Files (*.f[ld])", c);
+    fltk3::file_chooser_ok_label(NULL);
     if (!c) return;
 
     if (!access(c, 0)) {
@@ -470,9 +470,9 @@ void open_cb(fltk3::Widget *, void *v) {
   }
   const char *c;
   const char *oldfilename;
-  fl_file_chooser_ok_label("Open");
-  c = fl_file_chooser("Open:", "FLUID Files (*.f[ld])", filename);
-  fl_file_chooser_ok_label(NULL);
+  fltk3::file_chooser_ok_label("Open");
+  c = fltk3::file_chooser("Open:", "FLUID Files (*.f[ld])", filename);
+  fltk3::file_chooser_ok_label(NULL);
   if (!c) return;
   oldfilename = filename;
   filename    = NULL;
@@ -850,7 +850,7 @@ void show_help(const char *name) {
   const char	*docdir;
   char		helpname[FL_PATH_MAX];
 
-  if (!help_dialog) help_dialog = new Fl_Help_Dialog();
+  if (!help_dialog) help_dialog = new fltk3::HelpDialog();
 
   if ((docdir = getenv("FLTK_DOCDIR")) == NULL) {
 #ifdef __EMX__
@@ -876,7 +876,7 @@ void show_help(const char *name) {
     // if we can not read the file, we display the canned version instead
     // or ask the native browser to open the page on www.fltk.org
     if (strcmp(name, "fluid.html")==0) {
-      if (!Fl_Shared_Image::find("embedded:/fluid-org.png"))
+      if (!fltk3::SharedImage::find("embedded:/fluid-org.png"))
         new Fl_PNG_Image("embedded:/fluid-org.png", fluid_org_png, sizeof(fluid_org_png));
       help_dialog->value
       (
@@ -1291,9 +1291,9 @@ void print_cb(fltk3::ReturnButton *, void *) {
     outfile = popen(command, "w");
   } else {
     // Print to file...
-    fl_file_chooser_ok_label("Print");
-    const char *outname = fl_file_chooser("Print To", "PostScript (*.ps)", NULL, 1);
-    fl_file_chooser_ok_label(NULL);
+    fltk3::file_chooser_ok_label("Print");
+    const char *outname = fltk3::file_chooser("Print To", "PostScript (*.ps)", NULL, 1);
+    fltk3::file_chooser_ok_label(NULL);
 
     if (outname && !access(outname, 0)) {
       if (fltk3::choice("The file \"%s\" already exists.\n"
@@ -2381,7 +2381,7 @@ int main(int argc,char **argv) {
   
   const char *c = argv[i];
 
-  fl_register_images();
+  fltk3::register_images();
 
   make_main_window();
 
@@ -2392,7 +2392,7 @@ int main(int argc,char **argv) {
     fl_open_callback(apple_open_cb);
 #endif // __APPLE__
     fltk3::visual((Fl_Mode)(fltk3::DOUBLE|fltk3::INDEX));
-    Fl_File_Icon::load_system_icons();
+    fltk3::FileIcon::load_system_icons();
     main_window->callback(exit_cb);
     position_window(main_window,"main_window_pos", 1, 10, 30, WINWIDTH, WINHEIGHT );
     main_window->show(argc,argv);

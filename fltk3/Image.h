@@ -138,7 +138,7 @@ namespace fltk3 {
      The copy() method creates a copy of the specified
      image. If the width and height are provided, the image is
      resized to the specified size. The image should be deleted (or in
-     the case of Fl_Shared_Image, released) when you are done
+     the case of fltk3::SharedImage, released) when you are done
      with it.
      */
     fltk3::Image *copy() { return copy(w(), h()); }

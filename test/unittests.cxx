@@ -105,10 +105,10 @@ UnitTest *UnitTest::fTest[];
 
 // The main window needs an additional drawing feature in order to support 
 // the viewport alignment test.
-class MainWindow : public Fl_Double_Window {
+class MainWindow : public fltk3::DoubleWindow {
 public:
   MainWindow(int w, int h, const char *l=0L) :
-    Fl_Double_Window(w, h, l),
+    fltk3::DoubleWindow(w, h, l),
     fTestAlignment(0)
   { }
   // this code is used by the viewport alignment test
@@ -136,7 +136,7 @@ public:
     fl_color(FL_BLACK); fl_rect(w()-sze-1, 3, sze-2, sze-2);
   }
   void draw() {
-    Fl_Double_Window::draw();
+    fltk3::DoubleWindow::draw();
     if (fTestAlignment) {
       drawAlignmentIndicators();
     }

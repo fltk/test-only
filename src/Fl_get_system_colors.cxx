@@ -264,7 +264,7 @@ const char	*fltk3::scheme_ = (const char *)0;	    // current scheme
 fltk3::Image	*fltk3::scheme_bg_ = (fltk3::Image *)0;    // current background image for the scheme
 #endif
 
-static Fl_Pixmap	tile(tile_xpm);
+static fltk3::Pixmap	tile(tile_xpm);
 
 /**
     Gets or sets the current widget scheme. NULL will use

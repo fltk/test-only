@@ -31,13 +31,13 @@
 #include <fltk3/ask.h>
 
 
-static Fl_File_Chooser	*fc = (Fl_File_Chooser *)0;
+static fltk3::FileChooser	*fc = (fltk3::FileChooser *)0;
 static void		(*current_callback)(const char*) = 0;
 static const char	*current_label = fltk3::ok;
 
 
 // Do a file chooser callback...
-static void callback(Fl_File_Chooser *, void*) {
+static void callback(fltk3::FileChooser *, void*) {
   if (current_callback && fc->value())
     (*current_callback)(fc->value());
 }
@@ -48,9 +48,9 @@ static void callback(Fl_File_Chooser *, void*) {
 /** 
     Set the file chooser callback
     \note \#include <fltk3/FileChooser.h>
-    \relates Fl_File_Chooser
+    \relates fltk3::FileChooser
 */
-void fl_file_chooser_callback(void (*cb)(const char*)) {
+void fltk3::file_chooser_callback(void (*cb)(const char*)) {
   current_callback = cb;
 }
 
@@ -58,9 +58,9 @@ void fl_file_chooser_callback(void (*cb)(const char*)) {
 /** 
     Set the "OK" button label
     \note \#include <fltk3/FileChooser.h>
-    \relates Fl_File_Chooser
+    \relates fltk3::FileChooser
 */
-void fl_file_chooser_ok_label(const char *l) {
+void fltk3::file_chooser_ok_label(const char *l) {
   if (l) current_label = l;
   else current_label = fltk3::ok;
 }
@@ -68,18 +68,18 @@ void fl_file_chooser_ok_label(const char *l) {
 /** 
     Shows a file chooser dialog and gets a filename. 
     \note \#include <fltk3/FileChooser.h>
-    \image html Fl_File_Chooser.jpg 
-    \image latex  Fl_File_Chooser.jpg "Fl_File_Chooser" width=12cm
+    \image html fltk3::FileChooser.jpg 
+    \image latex  fltk3::FileChooser.jpg "fltk3::FileChooser" width=12cm
     \param[in] message text in title bar
     \param[in] pat filename pattern filter
     \param[in] fname initial/default filename selection
     \param[in] relative 0 for absolute path name, relative path name otherwise
     \return the user selected filename, in absolute or relative format 
             or NULL if user cancels
-    \relates Fl_File_Chooser
+    \relates fltk3::FileChooser
 */
 char *					// O - Filename or NULL
-fl_file_chooser(const char *message,	// I - Message in titlebar
+fltk3::file_chooser(const char *message,	// I - Message in titlebar
                 const char *pat,	// I - Filename pattern
 		const char *fname,	// I - Initial filename selection
 		int        relative) {	// I - 0 for absolute path
@@ -88,10 +88,10 @@ fl_file_chooser(const char *message,	// I - Message in titlebar
   if (!fc) {
     if (!fname || !*fname) fname = ".";
 
-    fc = new Fl_File_Chooser(fname, pat, Fl_File_Chooser::CREATE, message);
+    fc = new fltk3::FileChooser(fname, pat, fltk3::FileChooser::CREATE, message);
     fc->callback(callback, 0);
   } else {
-    fc->type(Fl_File_Chooser::CREATE);
+    fc->type(fltk3::FileChooser::CREATE);
     // see, if we use the same pattern between calls
     char same_pattern = 0;
     const char *fcf = fc->filter();
@@ -158,10 +158,10 @@ fl_file_chooser(const char *message,	// I - Message in titlebar
     \param[in] fname initial/default directory name
     \param[in] relative 0 for absolute path return, relative otherwise
     \return the directory path string chosen by the user or NULL if user cancels
-    \relates Fl_File_Chooser
+    \relates fltk3::FileChooser
 */
 char *					// O - Directory or NULL
-fl_dir_chooser(const char *message,	// I - Message for titlebar
+fltk3::dir_chooser(const char *message,	// I - Message for titlebar
                const char *fname,	// I - Initial directory name
 	       int        relative)	// I - 0 for absolute
 {
@@ -170,11 +170,11 @@ fl_dir_chooser(const char *message,	// I - Message for titlebar
   if (!fc) {
     if (!fname || !*fname) fname = ".";
 
-    fc = new Fl_File_Chooser(fname, "*", Fl_File_Chooser::CREATE |
-                                         Fl_File_Chooser::DIRECTORY, message);
+    fc = new fltk3::FileChooser(fname, "*", fltk3::FileChooser::CREATE |
+                                         fltk3::FileChooser::DIRECTORY, message);
     fc->callback(callback, 0);
   } else {
-    fc->type(Fl_File_Chooser::CREATE | Fl_File_Chooser::DIRECTORY);
+    fc->type(fltk3::FileChooser::CREATE | fltk3::FileChooser::DIRECTORY);
     fc->filter("*");
     if (fname && *fname) fc->value(fname);
     fc->label(message);

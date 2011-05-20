@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-// Used by fl_file_chooser
+// Used by fltk3::file_chooser
 
 #include "flstring.h"
 #include <sys/types.h>

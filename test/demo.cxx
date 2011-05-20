@@ -46,7 +46,7 @@
 #  include <unistd.h>
 #endif
 #include <fltk3/run.h>
-#include <fltk3/Double_Window.h>
+#include <fltk3/DoubleWindow.h>
 #include <fltk3/Box.h>
 #include <fltk3/Button.h>
 #include <fltk3/Choice.h>
@@ -62,12 +62,12 @@ void doscheme(fltk3::Choice *c, void *) {
   Fl::scheme(c->text(c->value()));
 }
 
-Fl_Double_Window *form;
+fltk3::DoubleWindow *form;
 Fl_Button *but[9];
 
 void create_the_forms() {
   Fl_Widget *obj;
-  form = new Fl_Double_Window(350, 440);
+  form = new fltk3::DoubleWindow(350, 440);
   obj = new Fl_Box(FL_FRAME_BOX,10,15,330,40,"FLTK Demonstration");
   obj->color(FL_GRAY-4);
   obj->labelsize(24);

@@ -141,7 +141,7 @@ static const char *broken_xpm[] =
 		  NULL
 		};
 
-static Fl_Pixmap broken_image(broken_xpm);
+static fltk3::Pixmap broken_image(broken_xpm);
 
 //
 // Simple margin stack for Fl_Help_View::format()...
@@ -846,7 +846,7 @@ Fl_Help_View::draw()
 	  }
 	  else if (strcasecmp(buf, "IMG") == 0)
 	  {
-	    Fl_Shared_Image *img = 0;
+	    fltk3::SharedImage *img = 0;
 	    int		width, height;
 	    char	wattr[8], hattr[8];
 
@@ -1676,7 +1676,7 @@ void Fl_Help_View::format() {
 	  popfont(font, fsize, fcolor);
 	else if (strcasecmp(buf, "IMG") == 0)
 	{
-	  Fl_Shared_Image	*img = 0;
+	  fltk3::SharedImage	*img = 0;
 	  int		width;
 	  int		height;
 
@@ -2150,7 +2150,7 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
 	popfont(font, fsize, fcolor);
       else if (strcasecmp(buf, "IMG") == 0 && incell)
       {
-	Fl_Shared_Image	*img = 0;
+	fltk3::SharedImage	*img = 0;
 	int		iwidth, iheight;
 
 
@@ -2358,7 +2358,7 @@ Fl_Help_View::free_data() {
 
 	if (strcasecmp(buf, "IMG") == 0)
 	{
-	  Fl_Shared_Image	*img;
+	  fltk3::SharedImage	*img;
 	  int		width;
 	  int		height;
 
@@ -2566,12 +2566,12 @@ Fl_Help_View::get_color(const char *n,	// I - Color name
   The image reference count is maintained accordingly, such that
   the image can be released exactly once when the document is closed.
 
-  \return a pointer to a cached Fl_Shared_Image, if the image can be loaded,
-  	  otherwise a pointer to an internal Fl_Pixmap (broken_image).
+  \return a pointer to a cached fltk3::SharedImage, if the image can be loaded,
+  	  otherwise a pointer to an internal fltk3::Pixmap (broken_image).
 
   \todo Fl_Help_View::get_image() returns a pointer to the internal
-  Fl_Pixmap broken_image, but this is _not_ compatible with the
-  return type Fl_Shared_Image (release() must not be called).
+  fltk3::Pixmap broken_image, but this is _not_ compatible with the
+  return type fltk3::SharedImage (release() must not be called).
 */
 
 /* Implementation note: (A.S. Apr 05, 2009)
@@ -2587,29 +2587,29 @@ Fl_Help_View::get_color(const char *n,	// I - Color name
   This should be fixed in FLTK 1.3 !
 
 
-  If initial_load is true, then Fl_Shared_Image::get() is called to
+  If initial_load is true, then fltk3::SharedImage::get() is called to
   load the image, and the reference count of the shared image is
   increased by one.
 
-  If initial_load is false, then Fl_Shared_Image::find() is called to
+  If initial_load is false, then fltk3::SharedImage::find() is called to
   load the image, and the image is released immediately. This avoids
   increasing the reference count when calling get_image() from draw()
   or resize().
 
-  Calling Fl_Shared_Image::find() instead of Fl_Shared_Image::get() avoids
+  Calling fltk3::SharedImage::find() instead of fltk3::SharedImage::get() avoids
   doing unnecessary i/o for "broken images" within each resize/redraw.
 
   Each image must be released exactly once in the destructor or before
   a new document is loaded: see free_data().
 */
 
-Fl_Shared_Image *
+fltk3::SharedImage *
 Fl_Help_View::get_image(const char *name, int W, int H) {
   const char	*localname;		// Local filename
   char		dir[FL_PATH_MAX];	// Current directory
   char		temp[FL_PATH_MAX],	// Temporary filename
 		*tempptr;		// Pointer into temporary name
-  Fl_Shared_Image *ip;			// Image pointer...
+  fltk3::SharedImage *ip;			// Image pointer...
 
   // See if the image can be found...
   if (strchr(directory_, ':') != NULL && strchr(name, ':') == NULL) {
@@ -2644,12 +2644,12 @@ Fl_Help_View::get_image(const char *name, int W, int H) {
   if (strncmp(localname, "file:", 5) == 0) localname += 5;
 
   if (initial_load) {
-    if ((ip = Fl_Shared_Image::get(localname, W, H)) == NULL) {
-      ip = (Fl_Shared_Image *)&broken_image;
+    if ((ip = fltk3::SharedImage::get(localname, W, H)) == NULL) {
+      ip = (fltk3::SharedImage *)&broken_image;
     }
   } else { // draw or resize
-    if ((ip = Fl_Shared_Image::find(localname, W, H)) == NULL) {
-      ip = (Fl_Shared_Image *)&broken_image;
+    if ((ip = fltk3::SharedImage::find(localname, W, H)) == NULL) {
+      ip = (fltk3::SharedImage *)&broken_image;
     } else {
       ip->release();
     }

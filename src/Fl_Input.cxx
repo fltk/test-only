@@ -26,7 +26,7 @@
 //
 
 // This is the "user interface", it decodes user actions into what to
-// do to the text.  See also Fl_Input_.cxx, where the text is actually
+// do to the text.  See also fltk3::Input_.cxx, where the text is actually
 // manipulated (and some ui, in particular the mouse, is done...).
 // In theory you can replace this code with another subclass to change
 // the keybindings.
@@ -46,10 +46,10 @@
 
 
 void fltk3::Input::draw() {
-  if (input_type() == FL_HIDDEN_INPUT) return;
+  if (input_type() == fltk3::HIDDEN_INPUT) return;
   fltk3::Boxtype b = box();
   if (damage() & fltk3::DAMAGE_ALL) draw_box(b, color());
-  Fl_Input_::drawtext(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
+  fltk3::Input_::drawtext(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
 		      w()-fltk3::box_dw(b), h()-fltk3::box_dh(b));
 }
 
@@ -96,7 +96,7 @@ static const char *legal_fp_chars = ".eE+-";
 int fltk3::Input::kf_lines_up(int repeat_num) {
   int i = position();
   if (!line_start(i)) {
-    //UNNEEDED if (input_type()==FL_MULTILINE_INPUT && !fltk3::option(fltk3::OPTION_ARROW_FOCUS)) return 1;
+    //UNNEEDED if (input_type()==fltk3::MULTILINE_INPUT && !fltk3::option(fltk3::OPTION_ARROW_FOCUS)) return 1;
     return NORMAL_INPUT_MOVE;
   }
   while(repeat_num--) {
@@ -114,7 +114,7 @@ int fltk3::Input::kf_lines_up(int repeat_num) {
 int fltk3::Input::kf_lines_down(int repeat_num) {
   int i = position();
   if (line_end(i) >= size()) {
-    //UNNEEDED if (input_type()==FL_MULTILINE_INPUT && !fltk3::option(fltk3::OPTION_ARROW_FOCUS)) return 1;
+    //UNNEEDED if (input_type()==fltk3::MULTILINE_INPUT && !fltk3::option(fltk3::OPTION_ARROW_FOCUS)) return 1;
     return NORMAL_INPUT_MOVE;
   }
   while (repeat_num--) {  
@@ -311,7 +311,7 @@ int fltk3::Input::handle_key() {
   if (fltk3::compose(del)) {
     
     // Insert characters into numeric fields after checking for legality:
-    if (input_type() == FL_FLOAT_INPUT || input_type() == FL_INT_INPUT) {
+    if (input_type() == fltk3::FLOAT_INPUT || input_type() == fltk3::INT_INPUT) {
       fltk3::compose_reset(); // ignore any foreign letters...
       
       // initialize the list of legal characters inside a floating point number
@@ -347,7 +347,7 @@ int fltk3::Input::handle_key() {
           || (ip==1 && index(0)=='0' && (ascii=='x' || ascii == 'X')) 
           || (ip>1 && index(0)=='0' && (index(1)=='x'||index(1)=='X') 
               && ((ascii>='A'&& ascii<='F') || (ascii>='a'&& ascii<='f'))) 
-          || (input_type()==FL_FLOAT_INPUT && ascii && strchr(legal_fp_chars, ascii))) 
+          || (input_type()==fltk3::FLOAT_INPUT && ascii && strchr(legal_fp_chars, ascii))) 
       {
 	if (readonly()) fltk3::beep();
 	else replace(position(), mark(), &ascii, 1);
@@ -365,7 +365,7 @@ int fltk3::Input::handle_key() {
   
   unsigned int mods = fltk3::event_state() & (fltk3::META|fltk3::CTRL|fltk3::ALT);
   unsigned int shift = fltk3::event_state() & fltk3::SHIFT;
-  unsigned int multiline = (input_type() == FL_MULTILINE_INPUT) ? 1 : 0;
+  unsigned int multiline = (input_type() == fltk3::MULTILINE_INPUT) ? 1 : 0;
   //
   // The following lists apps that support these keypresses.
   // Prefixes: '!' indicates NOT supported, '?' indicates un-verified.
@@ -575,7 +575,7 @@ int fltk3::Input::handle_key() {
     case ctrl('M'):						// Ctrl-M (literal Cr)              (Standard)
       if (readonly()) { fltk3::beep(); return 1; }
       // insert a few selected control characters literally:
-      if (input_type() != FL_FLOAT_INPUT && input_type() != FL_INT_INPUT)
+      if (input_type() != fltk3::FLOAT_INPUT && input_type() != fltk3::INT_INPUT)
         return replace(position(), mark(), &ascii, 1);
       break;
   }
@@ -618,7 +618,7 @@ int fltk3::Input::handle(int event) {
       if (fltk3::event_key() == fltk3::TabKey 			// Tab key?
           && !fltk3::event_state(fltk3::SHIFT)			// no shift?
           && !tab_nav()					// with tab navigation disabled?
-	  && input_type() == FL_MULTILINE_INPUT		// with a multiline input?
+	  && input_type() == fltk3::MULTILINE_INPUT		// with a multiline input?
           && (mark()==0 && position()==size())) {	// while entire field selected?
         // Set cursor to the end of the selection...
         if (mark() > position())
@@ -637,11 +637,11 @@ int fltk3::Input::handle(int event) {
       if (fltk3::dnd_text_ops()) {
         int oldpos = position(), oldmark = mark();
         fltk3::Boxtype b = box();
-        Fl_Input_::handle_mouse(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
+        fltk3::Input_::handle_mouse(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
                                 w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
         newpos = position(); 
         position( oldpos, oldmark );
-        if (fltk3::focus()==this && !fltk3::event_state(fltk3::SHIFT) && input_type()!=FL_SECRET_INPUT &&
+        if (fltk3::focus()==this && !fltk3::event_state(fltk3::SHIFT) && input_type()!=fltk3::SECRET_INPUT &&
            ( (newpos >= mark() && newpos < position()) || 
              (newpos >= position() && newpos < mark()) ) ) {
           // user clicked in the selection, may be trying to drag
@@ -714,7 +714,7 @@ int fltk3::Input::handle(int event) {
 #endif
       {
         fltk3::Boxtype b = box();
-        Fl_Input_::handle_mouse(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
+        fltk3::Input_::handle_mouse(x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
                                 w()-fltk3::box_dw(b), h()-fltk3::box_dh(b), 0);
       }
       return 1;
@@ -750,7 +750,7 @@ int fltk3::Input::handle(int event) {
        */
   }
   fltk3::Boxtype b = box();
-  return Fl_Input_::handletext(event,
+  return fltk3::Input_::handletext(event,
                                x()+fltk3::box_dx(b), y()+fltk3::box_dy(b),
                                w()-fltk3::box_dw(b), h()-fltk3::box_dh(b));
 }
@@ -760,7 +760,7 @@ int fltk3::Input::handle(int event) {
  and label string. The default boxtype is fltk3::DOWN_BOX.
  */
 fltk3::Input::Input(int X, int Y, int W, int H, const char *l)
-: Fl_Input_(X, Y, W, H, l) {
+: fltk3::Input_(X, Y, W, H, l) {
 }
 
 //

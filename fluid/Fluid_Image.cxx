@@ -83,7 +83,7 @@ void Fluid_Image::write_static() {
       write_cstring(img->data()[i], img->w() * chars_per_color);
     }
     write_c("\n};\n");
-    write_c("static Fl_Pixmap %s(%s);\n",
+    write_c("static fltk3::Pixmap %s(%s);\n",
 	    unique_id(this, "image", fl_filename_name(name()), 0),
 	    unique_id(this, "idata", fl_filename_name(name()), 0));
   } else if (img->d() == 0) {
@@ -215,7 +215,7 @@ Fluid_Image::Fluid_Image(const char *iname) {
   name_ = strdup(iname);
   written = 0;
   refcount = 0;
-  img = Fl_Shared_Image::get(iname);
+  img = fltk3::SharedImage::get(iname);
 }
 
 void Fluid_Image::increment() {
@@ -246,9 +246,9 @@ Fluid_Image::~Fluid_Image() {
 const char *ui_find_image_name;
 Fluid_Image *ui_find_image(const char *oldname) {
   goto_source_dir();
-  fl_file_chooser_ok_label("Use Image");
-  const char *name = fl_file_chooser("Image?","Image Files (*.{bm,bmp,gif,jpg,pbm,pgm,png,ppm,xbm,xpm})",oldname,1);
-  fl_file_chooser_ok_label(NULL);
+  fltk3::file_chooser_ok_label("Use Image");
+  const char *name = fltk3::file_chooser("Image?","Image Files (*.{bm,bmp,gif,jpg,pbm,pgm,png,ppm,xbm,xpm})",oldname,1);
+  fltk3::file_chooser_ok_label(NULL);
   ui_find_image_name = name;
   Fluid_Image *ret = (name && *name) ? Fluid_Image::find(name) : 0;
   leave_source_dir();

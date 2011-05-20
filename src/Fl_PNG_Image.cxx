@@ -96,7 +96,7 @@ Fl_PNG_Image::Fl_PNG_Image (const char *filename): fltk3::RGBImage(0,0,0)
  Construct an image from a block of memory inside the application. Fluid offers
  "binary Data" chunks as a great way to add image data into the C++ source code.
  name_png can be NULL. If a name is given, the image is added to the list of 
- shared images (see: Fl_Shared_Image) and will be available by that name.
+ shared images (see: fltk3::SharedImage) and will be available by that name.
  
  \param name_png  A name given to this image or NULL
  \param buffer	  Pointer to the start of the PNG image in memory
@@ -218,7 +218,7 @@ void Fl_PNG_Image::load_png_(const char *name_png, const unsigned char *buffer_p
 
   if (from_memory) {
     if (w() && h() && name_png) {
-      Fl_Shared_Image *si = new Fl_Shared_Image(name_png, this);
+      fltk3::SharedImage *si = new fltk3::SharedImage(name_png, this);
       si->add();
     }
   } else {

@@ -120,13 +120,13 @@ void* prime_func(void* p)
 
 int main(int argc, char **argv)
 {
-  Fl_Double_Window* w = new Fl_Double_Window(200, 200, "Single Thread");
+  fltk3::DoubleWindow* w = new fltk3::DoubleWindow(200, 200, "Single Thread");
   browser1 = new Fl_Browser(0, 0, 200, 175);
   w->resizable(browser1);
   value1 = new fltk3::ValueOutput(100, 175, 200, 25, "Max Prime:");
   w->end();
   w->show(argc, argv);
-  w = new Fl_Double_Window(200, 200, "Six Threads");
+  w = new fltk3::DoubleWindow(200, 200, "Six Threads");
   browser2 = new Fl_Browser(0, 0, 200, 175);
   w->resizable(browser2);
   value2 = new fltk3::ValueOutput(100, 175, 200, 25, "Max Prime:");

@@ -204,7 +204,7 @@ class Clip {
   void text_extents(const char *c, int n, int &dx, int &dy, int &w, int &h);
   int height();
   int descent();
-  void draw(Fl_Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy);
+  void draw(fltk3::Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(fltk3::Bitmap * bitmap,int XP, int YP, int WP, int HP, int cx, int cy);
   void draw(fltk3::RGBImage * rgb,int XP, int YP, int WP, int HP, int cx, int cy);
   ~Fl_PostScript_Graphics_Driver();

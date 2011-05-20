@@ -26,24 +26,28 @@
 //
 
 /* \file
-   Fl_PNM_Image class . */
+ fltk3::PNMImage class . */
 
 #ifndef Fltk3_PNM_Image_H
 #define Fltk3_PNM_Image_H
 #  include "Image.h"
 
-/**
-  The Fl_PNM_Image class supports loading, caching,
-  and drawing of Portable Anymap (PNM, PBM, PGM, PPM) image files. The class
-  loads bitmap, grayscale, and full-color images in both ASCII and
-  binary formats.
-*/
-class FLTK3_EXPORT Fl_PNM_Image : public fltk3::RGBImage {
-
+namespace fltk3 {
+  
+  /**
+   The fltk3::PNMImage class supports loading, caching,
+   and drawing of Portable Anymap (PNM, PBM, PGM, PPM) image files. The class
+   loads bitmap, grayscale, and full-color images in both ASCII and
+   binary formats.
+   */
+  class FLTK3_EXPORT PNMImage : public fltk3::RGBImage {
+    
   public:
-
-  Fl_PNM_Image(const char* filename);
-};
+    
+    PNMImage(const char* filename);
+  };
+  
+}
 
 #endif
 

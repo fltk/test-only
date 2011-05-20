@@ -49,7 +49,7 @@ namespace fltk3 {
      <P> Inherited destructor destroys the widget and any value associated with it
      */
     FloatInput(int X,int Y,int W,int H,const char *l = 0)
-    : fltk3::Input(X,Y,W,H,l) {type(FL_FLOAT_INPUT);}
+    : fltk3::Input(X,Y,W,H,l) {type(fltk3::FLOAT_INPUT);}
   };
   
 }

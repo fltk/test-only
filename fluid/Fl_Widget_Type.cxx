@@ -69,8 +69,8 @@ const char* subclassname(Fl_Type* l) {
     if (l->is_class()) return "fltk3::Group";
     if (p->o->type() == FL_WINDOW+1) return "fltk3::DoubleWindow";
     if (strcmp(p->type_name(), "fltk3::Input") == 0) {
-      if (p->o->type() == FL_FLOAT_INPUT) return "fltk3::FloatInput";
-      if (p->o->type() == FL_INT_INPUT) return "fltk3::IntInput";
+      if (p->o->type() == fltk3::FLOAT_INPUT) return "fltk3::FloatInput";
+      if (p->o->type() == fltk3::INT_INPUT) return "fltk3::IntInput";
     }
   }
   return l->type_name();
@@ -292,7 +292,7 @@ Fl_Type *sort(Fl_Type *parent) {
 // The control panels!
 
 #include "widget_panel.h"
-#include <fltk3/showColormap.h>
+#include <fltk3/show_colormap.h>
 
 static fltk3::Window *the_panel;
 
@@ -2242,7 +2242,7 @@ void Fl_Widget_Type::write_widget_code() {
   // write shortcut command if needed
   int shortcut = 0;
   if (is_button()) shortcut = ((fltk3::Button*)o)->shortcut();
-  else if (is_input()) shortcut = ((Fl_Input_*)o)->shortcut();
+  else if (is_input()) shortcut = ((fltk3::Input_*)o)->shortcut();
   else if (is_value_input()) shortcut = ((Fl_Value_Input*)o)->shortcut();
   else if (is_text_display()) shortcut = ((fltk3::TextDisplay*)o)->shortcut();
   if (shortcut) {
@@ -2417,7 +2417,7 @@ void Fl_Widget_Type::write_properties() {
   if (o->box() != tplate->box()) {
     write_string("box"); write_word(boxname(o->box()));}
   if (is_input()) {
-    Fl_Input_* b = (Fl_Input_*)o;
+    fltk3::Input_* b = (fltk3::Input_*)o;
     if (b->shortcut()) write_string("shortcut 0x%x", b->shortcut());
   }
   if (is_value_input()) {
@@ -2631,7 +2631,7 @@ void Fl_Widget_Type::read_property(const char *c) {
   } else if (!strcmp(c,"shortcut")) {
     int shortcut = strtol(read_word(),0,0);
     if (is_button()) ((fltk3::Button*)o)->shortcut(shortcut);
-    else if (is_input()) ((Fl_Input_*)o)->shortcut(shortcut);
+    else if (is_input()) ((fltk3::Input_*)o)->shortcut(shortcut);
     else if (is_value_input()) ((Fl_Value_Input*)o)->shortcut(shortcut);
     else if (is_text_display()) ((fltk3::TextDisplay*)o)->shortcut(shortcut);
   } else {
@@ -2807,9 +2807,9 @@ void Fl_Widget_Type::copy_properties() {
     d->value(s->value());
   }
 
-  // copy all attributes specific to widgets derived from Fl_Input_
+  // copy all attributes specific to widgets derived from fltk3::Input_
   if (is_input()) {
-    Fl_Input_* d = (Fl_Input_*)live_widget, *s = (Fl_Input_*)o;
+    fltk3::Input_* d = (fltk3::Input_*)live_widget, *s = (fltk3::Input_*)o;
     d->shortcut(s->shortcut());
   }
 

@@ -44,14 +44,14 @@
 
 #include <stdlib.h>
 #include <fltk3/run.h>
-#include <fltk3/Double_Window.h>
-#include <FL/fltk3::Slider.h>
+#include <fltk3/DoubleWindow.h>
+#include <fltk3/Slider.h>
 #include <fltk3/Box.h>
-#include <fltk3/Return_Button.h>
+#include <fltk3/ReturnButton.h>
 
 int main(int argc, char **argv) {
-  Fl_Double_Window *window = new Fl_Double_Window(400,320,argv[0]);
-  window->resizable(*(new Fl_Box(FL_ENGRAVED_FRAME,10,10,300,300,
+  fltk3::DoubleWindow *window = new fltk3::DoubleWindow(400,320,argv[0]);
+  window->resizable(*(new fltk3::Box(fltk3::ENGRAVED_FRAME,10,10,300,300,
 "MINIMUM UPDATE TEST\n"
 "\n"
 "The slider on the right purposely\n"
@@ -68,8 +68,8 @@ int main(int argc, char **argv) {
   s = new fltk3::Slider(320,10,20,300,"Too_Big_Label");
   s->align(0);
 
-  new Fl_Button(20,270,100,30,"Button");
-  new Fl_Return_Button(200,270,100,30,"Button");
+  new fltk3::Button(20,270,100,30,"Button");
+  new fltk3::ReturnButton(200,270,100,30,"Button");
 
   window->show(argc, argv);
   return fltk3::run();

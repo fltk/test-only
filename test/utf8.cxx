@@ -53,14 +53,14 @@
 #define DEF_SIZE 16 // default value for the font size picker
 
 
-static Fl_Double_Window *fnt_chooser_win;
+static fltk3::DoubleWindow *fnt_chooser_win;
 static Fl_Hold_Browser *fontobj;
 static Fl_Hold_Browser *sizeobj;
 
 static fltk3::ValueOutput *fnt_cnt;
 static Fl_Button *refresh_btn;
 static Fl_Button *choose_btn;
-static Fl_Output *fix_prop;
+static fltk3::Output *fix_prop;
 static Fl_Check_Button *own_face;
 
 static int  **sizes = NULL;
@@ -68,7 +68,7 @@ static int  *numsizes = NULL;
 static int  pickedsize = DEF_SIZE;
 static char label[1000];
 
-static Fl_Double_Window *main_win;
+static fltk3::DoubleWindow *main_win;
 static fltk3::ScrollGroup *thescroll;
 static Fl_Font extra_font;
 
@@ -345,7 +345,7 @@ static void create_font_widget()
   label[i] = 0;
   
   // Create the window layout
-  fnt_chooser_win = new Fl_Double_Window(380, 420, "Font Selector");
+  fnt_chooser_win = new fltk3::DoubleWindow(380, 420, "Font Selector");
   {
     fltk3::TiledGroup *tile = new fltk3::TiledGroup(0, 0, 380, 420);
     {
@@ -380,7 +380,7 @@ static void create_font_widget()
           fnt_cnt->label("fonts");
           fnt_cnt->align(FL_ALIGN_RIGHT);
         
-          fix_prop = new Fl_Output(100, 390, 40, 20);
+          fix_prop = new fltk3::Output(100, 390, 40, 20);
           fix_prop->color(FL_BACKGROUND_COLOR);
           fix_prop->value("prop");
           fix_prop->clear_visible_focus();
@@ -532,10 +532,10 @@ void i7_cb(Fl_Widget *w, void *d)
 }
 
 
-class UCharDropBox : public Fl_Output {
+class UCharDropBox : public fltk3::Output {
 public:
   UCharDropBox(int x, int y, int w, int h, const char *label=0) :
-  Fl_Output(x, y, w, h, label) { }
+  fltk3::Output(x, y, w, h, label) { }
   int handle(int event) {
     switch (event) {
       case FL_DND_ENTER: return 1;
@@ -569,7 +569,7 @@ public:
       }
         return 1;
     }
-    return Fl_Output::handle(event);
+    return fltk3::Output::handle(event);
   }
 };
 
@@ -598,7 +598,7 @@ int main(int argc, char** argv)
 #endif
                );
   
-  main_win = new Fl_Double_Window (200 + 5*75, 400, "Unicode Display Test");
+  main_win = new fltk3::DoubleWindow (200 + 5*75, 400, "Unicode Display Test");
   main_win->begin();
   
   fltk3::Input i1(5, 5, 190, 25);
@@ -700,7 +700,7 @@ int main(int argc, char** argv)
   db.textsize(16);
   db.value("unichar drop box");
   
-  Fl_Output o9(5, 330, 190, 45);
+  fltk3::Output o9(5, 330, 190, 45);
   o9.textfont(extra_font);
   o9.textsize(30);
   o9.value(utfstr);

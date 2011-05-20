@@ -66,44 +66,44 @@
 #define BLOCK_BLAST	100
 
 #include "pixmaps/blast.xpm"
-Fl_Pixmap blast_pixmap(blast_xpm);
+fltk3::Pixmap blast_pixmap(blast_xpm);
 
 #include "pixmaps/red.xpm"
-Fl_Pixmap red_pixmap(red_xpm);
+fltk3::Pixmap red_pixmap(red_xpm);
 #include "pixmaps/red_bomb.xpm"
-Fl_Pixmap red_bomb_pixmap(red_bomb_xpm);
+fltk3::Pixmap red_bomb_pixmap(red_bomb_xpm);
 
 #include "pixmaps/green.xpm"
-Fl_Pixmap green_pixmap(green_xpm);
+fltk3::Pixmap green_pixmap(green_xpm);
 #include "pixmaps/green_bomb.xpm"
-Fl_Pixmap green_bomb_pixmap(green_bomb_xpm);
+fltk3::Pixmap green_bomb_pixmap(green_bomb_xpm);
 
 #include "pixmaps/blue.xpm"
-Fl_Pixmap blue_pixmap(blue_xpm);
+fltk3::Pixmap blue_pixmap(blue_xpm);
 #include "pixmaps/blue_bomb.xpm"
-Fl_Pixmap blue_bomb_pixmap(blue_bomb_xpm);
+fltk3::Pixmap blue_bomb_pixmap(blue_bomb_xpm);
 
 #include "pixmaps/yellow.xpm"
-Fl_Pixmap yellow_pixmap(yellow_xpm);
+fltk3::Pixmap yellow_pixmap(yellow_xpm);
 #include "pixmaps/yellow_bomb.xpm"
-Fl_Pixmap yellow_bomb_pixmap(yellow_bomb_xpm);
+fltk3::Pixmap yellow_bomb_pixmap(yellow_bomb_xpm);
 
 #include "pixmaps/cyan.xpm"
-Fl_Pixmap cyan_pixmap(cyan_xpm);
+fltk3::Pixmap cyan_pixmap(cyan_xpm);
 #include "pixmaps/cyan_bomb.xpm"
-Fl_Pixmap cyan_bomb_pixmap(cyan_bomb_xpm);
+fltk3::Pixmap cyan_bomb_pixmap(cyan_bomb_xpm);
 
 #include "pixmaps/magenta.xpm"
-Fl_Pixmap magenta_pixmap(magenta_xpm);
+fltk3::Pixmap magenta_pixmap(magenta_xpm);
 #include "pixmaps/magenta_bomb.xpm"
-Fl_Pixmap magenta_bomb_pixmap(magenta_bomb_xpm);
+fltk3::Pixmap magenta_bomb_pixmap(magenta_bomb_xpm);
 
 #include "pixmaps/gray.xpm"
-Fl_Pixmap gray_pixmap(gray_xpm);
+fltk3::Pixmap gray_pixmap(gray_xpm);
 #include "pixmaps/gray_bomb.xpm"
-Fl_Pixmap gray_bomb_pixmap(gray_bomb_xpm);
+fltk3::Pixmap gray_bomb_pixmap(gray_bomb_xpm);
 
-Fl_Pixmap *normal_pixmaps[] = {
+fltk3::Pixmap *normal_pixmaps[] = {
   &red_pixmap,
   &green_pixmap,
   &blue_pixmap,
@@ -112,7 +112,7 @@ Fl_Pixmap *normal_pixmaps[] = {
   &magenta_pixmap,
   &gray_pixmap
 };
-Fl_Pixmap *bomb_pixmaps[] = {
+fltk3::Pixmap *bomb_pixmaps[] = {
   &red_bomb_pixmap,
   &green_bomb_pixmap,
   &blue_bomb_pixmap,
@@ -430,7 +430,7 @@ BlockSound::play_explosion(float duration) {
 }
 
 
-class BlockWindow : public Fl_Double_Window
+class BlockWindow : public fltk3::DoubleWindow
 {
   public:
 
@@ -511,14 +511,14 @@ main(int argc, char *argv[]) {
 
 // Create a block window at the specified position
 BlockWindow::BlockWindow(int X, int Y, int W, int H, const char *L)
-    : Fl_Double_Window(X, Y, W, H, L) {
+    : fltk3::DoubleWindow(X, Y, W, H, L) {
   _BlockWindow();
 }
 
 
 // Create a block window
 BlockWindow::BlockWindow(int W, int H, const char *L)
-    : Fl_Double_Window(W, H, L) {
+    : fltk3::DoubleWindow(W, H, L) {
   _BlockWindow();
 }
 
@@ -742,7 +742,7 @@ BlockWindow::handle(int event) {
   Column	*c;
 
 
-  if (Fl_Double_Window::handle(event)) return (1);
+  if (fltk3::DoubleWindow::handle(event)) return (1);
   else if (interval_ < 0.0 || paused_) return (0);
 
   switch (event) {

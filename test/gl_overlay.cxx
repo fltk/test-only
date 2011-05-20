@@ -29,7 +29,7 @@
 #include <fltk3/run.h>
 #include <fltk3/Window.h>
 #include <fltk3/Hor_Slider.h>
-#include <fltk3/Toggle_Button.h>
+#include <fltk3/ToggleButton.h>
 #include <FL/math.h>
 
 #if !HAVE_GL

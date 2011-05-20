@@ -260,7 +260,7 @@ static const char *idata_fluid[] = {
 "     ........................................................................\
 ..............     "
 };
-static Fl_Pixmap image_fluid(idata_fluid);
+static fltk3::Pixmap image_fluid(idata_fluid);
 
 static void cb_View(fltk3::Button*, void*) {
   show_help("license.html");

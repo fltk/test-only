@@ -112,7 +112,7 @@ int Fl_Value_Input::handle(int event) {
     return input.handle(event);
   default:
   DEFAULT:
-    input.type(((step() - floor(step()))>0.0 || step() == 0.0) ? FL_FLOAT_INPUT : FL_INT_INPUT);
+    input.type(((step() - floor(step()))>0.0 || step() == 0.0) ? fltk3::FLOAT_INPUT : fltk3::INT_INPUT);
     return input.handle(event);
   }
 }

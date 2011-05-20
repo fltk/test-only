@@ -40,13 +40,13 @@
 // Global class vars...
 //
 
-Fl_Shared_Image **Fl_Shared_Image::images_ = 0;	// Shared images
-int	Fl_Shared_Image::num_images_ = 0;	// Number of shared images
-int	Fl_Shared_Image::alloc_images_ = 0;	// Allocated shared images
+fltk3::SharedImage **fltk3::SharedImage::images_ = 0;	// Shared images
+int	fltk3::SharedImage::num_images_ = 0;	// Number of shared images
+int	fltk3::SharedImage::alloc_images_ = 0;	// Allocated shared images
 
-Fl_Shared_Handler *Fl_Shared_Image::handlers_ = 0;// Additional format handlers
-int	Fl_Shared_Image::num_handlers_ = 0;	// Number of format handlers
-int	Fl_Shared_Image::alloc_handlers_ = 0;	// Allocated format handlers
+fltk3::SharedHandler *fltk3::SharedImage::handlers_ = 0;// Additional format handlers
+int	fltk3::SharedImage::num_handlers_ = 0;	// Number of format handlers
+int	fltk3::SharedImage::alloc_handlers_ = 0;	// Allocated format handlers
 
 
 //
@@ -58,23 +58,23 @@ extern "C" {
 }
 
 
-/** Returns the Fl_Shared_Image* array */
-Fl_Shared_Image **Fl_Shared_Image::images() {
+/** Returns the fltk3::SharedImage* array */
+fltk3::SharedImage **fltk3::SharedImage::images() {
   return images_;
 }
 /** Returns the total number of shared images in the array. */
-int Fl_Shared_Image::num_images() {
+int fltk3::SharedImage::num_images() {
   return num_images_;
 }
 
 
 //
-// 'Fl_Shared_Image::compare()' - Compare two shared images...
+// 'fltk3::SharedImage::compare()' - Compare two shared images...
 //
 
 int
-Fl_Shared_Image::compare(Fl_Shared_Image **i0,		// I - First image
-                         Fl_Shared_Image **i1) {	// I - Second image
+fltk3::SharedImage::compare(fltk3::SharedImage **i0,		// I - First image
+                         fltk3::SharedImage **i1) {	// I - Second image
   int i = strcmp((*i0)->name(), (*i1)->name());
 
   if (i) return i;
@@ -92,7 +92,7 @@ Fl_Shared_Image::compare(Fl_Shared_Image **i0,		// I - First image
   <P>The constructors are protected and cannot be used directly
   from a program. Use the get() method instead.
 */
-Fl_Shared_Image::Fl_Shared_Image() : fltk3::Image(0,0,0) {
+fltk3::SharedImage::SharedImage() : fltk3::Image(0,0,0) {
   name_        = 0;
   refcount_    = 1;
   original_    = 0;
@@ -108,7 +108,7 @@ Fl_Shared_Image::Fl_Shared_Image() : fltk3::Image(0,0,0) {
   <P>The constructors are protected and cannot be used directly
   from a program. Use the get() method instead.
 */
-Fl_Shared_Image::Fl_Shared_Image(const char *n,		// I - Filename
+fltk3::SharedImage::SharedImage(const char *n,		// I - Filename
                                  fltk3::Image   *img)	// I - Image
   : fltk3::Image(0,0,0) {
   name_ = new char[strlen(n) + 1];
@@ -125,19 +125,19 @@ Fl_Shared_Image::Fl_Shared_Image(const char *n,		// I - Filename
 
 
 //
-// 'Fl_Shared_Image::add()' - Add a shared image to the array.
+// 'fltk3::SharedImage::add()' - Add a shared image to the array.
 //
 
 void
-Fl_Shared_Image::add() {
-  Fl_Shared_Image	**temp;		// New image pointer array...
+fltk3::SharedImage::add() {
+  fltk3::SharedImage	**temp;		// New image pointer array...
 
   if (num_images_ >= alloc_images_) {
     // Allocate more memory...
-    temp = new Fl_Shared_Image *[alloc_images_ + 32];
+    temp = new fltk3::SharedImage *[alloc_images_ + 32];
 
     if (alloc_images_) {
-      memcpy(temp, images_, alloc_images_ * sizeof(Fl_Shared_Image *));
+      memcpy(temp, images_, alloc_images_ * sizeof(fltk3::SharedImage *));
 
       delete[] images_;
     }
@@ -150,18 +150,18 @@ Fl_Shared_Image::add() {
   num_images_ ++;
 
   if (num_images_ > 1) {
-    qsort(images_, num_images_, sizeof(Fl_Shared_Image *),
+    qsort(images_, num_images_, sizeof(fltk3::SharedImage *),
           (compare_func_t)compare);
   }
 }
 
 
 //
-// 'Fl_Shared_Image::update()' - Update the dimensions of the shared images.
+// 'fltk3::SharedImage::update()' - Update the dimensions of the shared images.
 //
 
 void
-Fl_Shared_Image::update() {
+fltk3::SharedImage::update() {
   if (image_) {
     w(image_->w());
     h(image_->h());
@@ -173,10 +173,10 @@ Fl_Shared_Image::update() {
 /**
   The destructor free all memory and server resources that are
   used by the image. The destructor is protected and cannot be
-  used directly from a program. Use the Fl_Shared_Image::release() method
+  used directly from a program. Use the fltk3::SharedImage::release() method
   instead.
 */
-Fl_Shared_Image::~Fl_Shared_Image() {
+fltk3::SharedImage::~SharedImage() {
   if (name_) delete[] (char *)name_;
   if (alloc_image_) delete image_;
 }
@@ -187,7 +187,7 @@ Fl_Shared_Image::~Fl_Shared_Image() {
   Releases and possibly destroys (if refcount <=0) a shared image. 
   In the latter case, it will reorganize the shared image array so that no hole will occur.
 */
-void Fl_Shared_Image::release() {
+void fltk3::SharedImage::release() {
   int	i;	// Looping var...
 
   refcount_ --;
@@ -199,7 +199,7 @@ void Fl_Shared_Image::release() {
 
       if (i < num_images_) {
         memmove(images_ + i, images_ + i + 1,
-               (num_images_ - i) * sizeof(Fl_Shared_Image *));
+               (num_images_ - i) * sizeof(fltk3::SharedImage *));
       }
 
       break;
@@ -218,7 +218,7 @@ void Fl_Shared_Image::release() {
 
 //
 /** Reloads the shared image from disk */
-void Fl_Shared_Image::reload() {
+void fltk3::SharedImage::reload() {
   // Load image from disk...
   int		i;		// Looping var
   FILE		*fp;		// File pointer
@@ -268,20 +268,20 @@ void Fl_Shared_Image::reload() {
 
 
 //
-// 'Fl_Shared_Image::copy()' - Copy and resize a shared image...
+// 'fltk3::SharedImage::copy()' - Copy and resize a shared image...
 //
 
 fltk3::Image *
-Fl_Shared_Image::copy(int W, int H) {
+fltk3::SharedImage::copy(int W, int H) {
   fltk3::Image		*temp_image;	// New image file
-  Fl_Shared_Image	*temp_shared;	// New shared image
+  fltk3::SharedImage	*temp_shared;	// New shared image
 
   // Make a copy of the image we're sharing...
   if (!image_) temp_image = 0;
   else temp_image = image_->copy(W, H);
 
   // Then make a new shared image...
-  temp_shared = new Fl_Shared_Image();
+  temp_shared = new fltk3::SharedImage();
 
   temp_shared->name_ = new char[strlen(name_) + 1];
   strcpy((char *)temp_shared->name_, name_);
@@ -297,11 +297,11 @@ Fl_Shared_Image::copy(int W, int H) {
 
 
 //
-// 'Fl_Shared_Image::color_average()' - Blend colors...
+// 'fltk3::SharedImage::color_average()' - Blend colors...
 //
 
 void
-Fl_Shared_Image::color_average(fltk3::Color c,	// I - Color to blend with
+fltk3::SharedImage::color_average(fltk3::Color c,	// I - Color to blend with
                                float    i) {	// I - Blend fraction
   if (!image_) return;
 
@@ -311,11 +311,11 @@ Fl_Shared_Image::color_average(fltk3::Color c,	// I - Color to blend with
 
 
 //
-// 'Fl_Shared_Image::desaturate()' - Convert the image to grayscale...
+// 'fltk3::SharedImage::desaturate()' - Convert the image to grayscale...
 //
 
 void
-Fl_Shared_Image::desaturate() {
+fltk3::SharedImage::desaturate() {
   if (!image_) return;
 
   image_->desaturate();
@@ -324,21 +324,21 @@ Fl_Shared_Image::desaturate() {
 
 
 //
-// 'Fl_Shared_Image::draw()' - Draw a shared image...
+// 'fltk3::SharedImage::draw()' - Draw a shared image...
 //
 
 void
-Fl_Shared_Image::draw(int X, int Y, int W, int H, int cx, int cy) {
+fltk3::SharedImage::draw(int X, int Y, int W, int H, int cx, int cy) {
   if (image_) image_->draw(X, Y, W, H, cx, cy);
   else fltk3::Image::draw(X, Y, W, H, cx, cy);
 }
 
 
 //
-// 'Fl_Shared_Image::uncache()' - Uncache the shared image...
+// 'fltk3::SharedImage::uncache()' - Uncache the shared image...
 //
 
-void Fl_Shared_Image::uncache()
+void fltk3::SharedImage::uncache()
 {
   if (image_) image_->uncache();
 }
@@ -346,19 +346,19 @@ void Fl_Shared_Image::uncache()
 
 
 /** Finds a shared image from its named and size specifications */
-Fl_Shared_Image* Fl_Shared_Image::find(const char *n, int W, int H) {
-  Fl_Shared_Image	*key,		// Image key
+fltk3::SharedImage* fltk3::SharedImage::find(const char *n, int W, int H) {
+  fltk3::SharedImage	*key,		// Image key
 			**match;	// Matching image
 
   if (num_images_) {
-    key = new Fl_Shared_Image();
+    key = new fltk3::SharedImage();
     key->name_ = new char[strlen(n) + 1];
     strcpy((char *)key->name_, n);
     key->w(W);
     key->h(H);
 
-    match = (Fl_Shared_Image **)bsearch(&key, images_, num_images_,
-                                        sizeof(Fl_Shared_Image *),
+    match = (fltk3::SharedImage **)bsearch(&key, images_, num_images_,
+                                        sizeof(fltk3::SharedImage *),
                                         (compare_func_t)compare);
 
     delete key;
@@ -388,18 +388,18 @@ Fl_Shared_Image* Fl_Shared_Image::find(const char *n, int W, int H) {
  \param n name of the image
  \param W, H desired size
  
- \see Fl_Shared_Image::find(const char *n, int W, int H)
- \see Fl_Shared_Image::release() 
+ \see fltk3::SharedImage::find(const char *n, int W, int H)
+ \see fltk3::SharedImage::release() 
  \see Fl_JPEG_Image::Fl_JPEG_Image(const char *name, const unsigned char *data)
  \see Fl_PNG_Image::Fl_PNG_Image (const char *name_png, const unsigned char *buffer, int maxsize)
 */
-Fl_Shared_Image* Fl_Shared_Image::get(const char *n, int W, int H) {
-  Fl_Shared_Image	*temp;		// Image
+fltk3::SharedImage* fltk3::SharedImage::get(const char *n, int W, int H) {
+  fltk3::SharedImage	*temp;		// Image
 
   if ((temp = find(n, W, H)) != NULL) return temp;
 
   if ((temp = find(n)) == NULL) {
-    temp = new Fl_Shared_Image(n);
+    temp = new fltk3::SharedImage(n);
 
     if (!temp->image_) {
       delete temp;
@@ -410,7 +410,7 @@ Fl_Shared_Image* Fl_Shared_Image::get(const char *n, int W, int H) {
   }
 
   if ((temp->w() != W || temp->h() != H) && W && H) {
-    temp = (Fl_Shared_Image *)temp->copy(W, H);
+    temp = (fltk3::SharedImage *)temp->copy(W, H);
     temp->add();
   }
 
@@ -420,9 +420,9 @@ Fl_Shared_Image* Fl_Shared_Image::get(const char *n, int W, int H) {
 
 
 /** Adds a shared image handler, which is basically a test function for adding new formats */
-void Fl_Shared_Image::add_handler(Fl_Shared_Handler f) {
+void fltk3::SharedImage::add_handler(fltk3::SharedHandler f) {
   int			i;		// Looping var...
-  Fl_Shared_Handler	*temp;		// New image handler array...
+  fltk3::SharedHandler	*temp;		// New image handler array...
 
   // First see if we have already added the handler...
   for (i = 0; i < num_handlers_; i ++) {
@@ -431,10 +431,10 @@ void Fl_Shared_Image::add_handler(Fl_Shared_Handler f) {
 
   if (num_handlers_ >= alloc_handlers_) {
     // Allocate more memory...
-    temp = new Fl_Shared_Handler [alloc_handlers_ + 32];
+    temp = new fltk3::SharedHandler [alloc_handlers_ + 32];
 
     if (alloc_handlers_) {
-      memcpy(temp, handlers_, alloc_handlers_ * sizeof(Fl_Shared_Handler));
+      memcpy(temp, handlers_, alloc_handlers_ * sizeof(fltk3::SharedHandler));
 
       delete[] handlers_;
     }
@@ -450,7 +450,7 @@ void Fl_Shared_Image::add_handler(Fl_Shared_Handler f) {
 
 
 /** Removes a shared image handler */
-void Fl_Shared_Image::remove_handler(Fl_Shared_Handler f) {
+void fltk3::SharedImage::remove_handler(fltk3::SharedHandler f) {
   int	i;				// Looping var...
 
   // First see if the handler has been added...
@@ -466,7 +466,7 @@ void Fl_Shared_Image::remove_handler(Fl_Shared_Handler f) {
   if (i < num_handlers_) {
     // Shift later handlers down 1...
     memmove(handlers_ + i, handlers_ + i + 1,
-           (num_handlers_ - i) * sizeof(Fl_Shared_Handler ));
+           (num_handlers_ - i) * sizeof(fltk3::SharedHandler ));
   }
 }
 

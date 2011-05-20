@@ -148,8 +148,8 @@ FLTK3_EXPORT int	fl_open_uri(const char *uri, char *msg = (char *)0,
 /*
  * _fl_filename_isdir_quick() is a private function that checks for a
  * trailing slash and assumes that the passed name is a directory if
- * it finds one.  This function is used by Fl_File_Browser and
- * Fl_File_Chooser to avoid extra stat() calls, but is not supported
+ * it finds one.  This function is used by fltk3::FileBrowser and
+ * fltk3::FileChooser to avoid extra stat() calls, but is not supported
  * outside of FLTK...
  */
 int _fl_filename_isdir_quick(const char *name);

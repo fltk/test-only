@@ -170,7 +170,7 @@ static const char *idata_print_color[] = {
 "   %%%%%%%%\'\'********   ",
 "     %%%%%%  ******     "
 };
-static Fl_Pixmap image_print_color(idata_print_color);
+static fltk3::Pixmap image_print_color(idata_print_color);
 
 static const char *idata_print_gray[] = {
 "24 24 17 1",
@@ -216,7 +216,7 @@ static const char *idata_print_gray[] = {
 "   %%%%%%%%\'\'********   ",
 "     %%%%%%  ******     "
 };
-static Fl_Pixmap image_print_gray(idata_print_gray);
+static fltk3::Pixmap image_print_gray(idata_print_gray);
 
 static fltk3::Button *print_output_mode[4]={(fltk3::Button *)0};
 

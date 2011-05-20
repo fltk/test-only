@@ -375,7 +375,7 @@ int fltk3::draw_pixmap(const char*const* cdata, int x, int y, fltk3::Color bg) {
   else {
 #endif // __APPLE_QUARTZ__
 
-  // build the mask bitmap used by Fl_Pixmap:
+  // build the mask bitmap used by fltk3::Pixmap:
   if (fl_mask_bitmap && transparent_index >= 0) {
     int W = (d.w+7)/8;
     uchar* bitmap = new uchar[W * d.h];

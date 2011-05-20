@@ -38,7 +38,7 @@
   The Fl_Value_Input widget displays a numeric value.
   The user can click in the text field and edit it - there is in
   fact a hidden fltk3::Input widget with
-  type(FL_FLOAT_INPUT) or type(FL_INT_INPUT) in
+  type(fltk3::FLOAT_INPUT) or type(fltk3::INT_INPUT) in
   there - and when they hit return or tab the value updates to
   what they typed and the callback is done.
   
@@ -46,7 +46,7 @@
   is limited to integers instead of floating point numbers. As
   well as displaying the value as an integer, typed input is also
   limited to integer values, even if the hidden fltk3::Input widget
-  is of type(FL_FLOAT_INPUT).</P>
+  is of type(fltk3::FLOAT_INPUT).</P>
   
   <P>If step() is non-zero, the user can also drag the
   mouse across the object and thus slide the value. The left

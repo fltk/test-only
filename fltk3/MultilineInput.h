@@ -51,7 +51,7 @@ namespace fltk3 {
    
    In FLTK 1.3.x, the default behavior of the 'Tab' key was changed
    to support consistent focus navigation. To get the older FLTK 1.1.x
-   behavior, set Fl_Input_::tab_nav() to 0. Newer programs should consider using
+   behavior, set fltk3::Input_::tab_nav() to 0. Newer programs should consider using
    fltk3::TextEditor.
    */
   class FLTK3_EXPORT MultilineInput : public fltk3::Input {
@@ -62,7 +62,7 @@ namespace fltk3 {
      <P>Inherited destructor destroys the widget and any value associated with it.
      */
     MultilineInput(int X,int Y,int W,int H,const char *l = 0)
-    : fltk3::Input(X,Y,W,H,l) {type(FL_MULTILINE_INPUT);}
+    : fltk3::Input(X,Y,W,H,l) {type(fltk3::MULTILINE_INPUT);}
   };
   
 }

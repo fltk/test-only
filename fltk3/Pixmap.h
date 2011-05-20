@@ -26,73 +26,78 @@
 //
 
 /* \file
-   Fl_Pixmap widget . */
+ fltk3::Pixmap widget . */
 
 #ifndef Fltk3_Pixmap_H
 #define Fltk3_Pixmap_H
 #  include "Image.h"
 
+class Fl_Quartz_Graphics_Driver;
+class Fl_GDI_Graphics_Driver;
+class Fl_Xlib_Graphics_Driver;
+
 namespace fltk3 { 
   class Widget; 
   struct MenuItem;
-}
-
-// Older C++ compilers don't support the explicit keyword... :(
+  
+  // Older C++ compilers don't support the explicit keyword... :(
 #  if defined(__sgi) && !defined(_COMPILER_VERSION)
 #    define explicit
 #  endif // __sgi && !_COMPILER_VERSION
-
-/**
-  The Fl_Pixmap class supports caching and drawing of colormap
-  (pixmap) images, including transparency.
-*/
-class FLTK3_EXPORT Fl_Pixmap : public fltk3::Image {
-  friend class Fl_Quartz_Graphics_Driver;
-  friend class Fl_GDI_Graphics_Driver;
-  friend class Fl_Xlib_Graphics_Driver;
-  void copy_data();
-  void delete_data();
-  void set_data(const char * const *p);
-
+  
+  /**
+   The fltk3::Pixmap class supports caching and drawing of colormap
+   (pixmap) images, including transparency.
+   */
+  class FLTK3_EXPORT Pixmap : public fltk3::Image {
+    friend class ::Fl_Quartz_Graphics_Driver;
+    friend class ::Fl_GDI_Graphics_Driver;
+    friend class ::Fl_Xlib_Graphics_Driver;
+    void copy_data();
+    void delete_data();
+    void set_data(const char * const *p);
+    
   protected:
-
-  void measure();
-
+    
+    void measure();
+    
   public:
-
-  int alloc_data; // Non-zero if data was allocated
-  
+    
+    int alloc_data; // Non-zero if data was allocated
+    
   private:
-
+    
 #if defined(__APPLE__) || defined(WIN32)
-  void *id_; // for internal use
-  void *mask_; // for internal use (mask bitmap)
+    void *id_; // for internal use
+    void *mask_; // for internal use (mask bitmap)
 #else
-  unsigned id_; // for internal use
-  unsigned mask_; // for internal use (mask bitmap)
+    unsigned id_; // for internal use
+    unsigned mask_; // for internal use (mask bitmap)
 #endif // __APPLE__ || WIN32
-  
+    
   public:
-
-  /**    The constructors create a new pixmap from the specified XPM data.  */
-  explicit Fl_Pixmap(char * const * D) : fltk3::Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
-  /**    The constructors create a new pixmap from the specified XPM data.  */
-  explicit Fl_Pixmap(uchar* const * D) : fltk3::Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
-  /**    The constructors create a new pixmap from the specified XPM data.  */
-  explicit Fl_Pixmap(const char * const * D) : fltk3::Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
-  /**    The constructors create a new pixmap from the specified XPM data.  */
-  explicit Fl_Pixmap(const uchar* const * D) : fltk3::Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
-  virtual ~Fl_Pixmap();
-  virtual fltk3::Image *copy(int W, int H);
-  fltk3::Image *copy() { return copy(w(), h()); }
-  virtual void color_average(fltk3::Color c, float i);
-  virtual void desaturate();
-  virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
-  void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
-  virtual void label(fltk3::Widget*w);
-  virtual void label(fltk3::MenuItem*m);
-  virtual void uncache();
-};
+    
+    /**    The constructors create a new pixmap from the specified XPM data.  */
+    explicit Pixmap(char * const * D) : fltk3::Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
+    /**    The constructors create a new pixmap from the specified XPM data.  */
+    explicit Pixmap(uchar* const * D) : fltk3::Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
+    /**    The constructors create a new pixmap from the specified XPM data.  */
+    explicit Pixmap(const char * const * D) : fltk3::Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
+    /**    The constructors create a new pixmap from the specified XPM data.  */
+    explicit Pixmap(const uchar* const * D) : fltk3::Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
+    virtual ~Pixmap();
+    virtual fltk3::Image *copy(int W, int H);
+    fltk3::Image *copy() { return copy(w(), h()); }
+    virtual void color_average(fltk3::Color c, float i);
+    virtual void desaturate();
+    virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
+    void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
+    virtual void label(fltk3::Widget*w);
+    virtual void label(fltk3::MenuItem*m);
+    virtual void uncache();
+  };
+  
+}
 
 #endif
 

@@ -26,7 +26,7 @@
 //
 // Contents:
 //
-//   fl_register_images() - Register the image formats.
+//   fltk3::register_images() - Register the image formats.
 //   fl_check_images()    - Check for a supported image format.
 //
 
@@ -60,8 +60,8 @@ static fltk3::Image	*fl_check_images(const char *name, uchar *header, int header
  registers all of the "extra" image file formats that are not part
  of the core FLTK library.
 */
-void fl_register_images() {
-  Fl_Shared_Image::add_handler(fl_check_images);
+void fltk3::register_images() {
+  fltk3::SharedImage::add_handler(fl_check_images);
 }
 
 
@@ -82,7 +82,7 @@ fl_check_images(const char *name,		// I - Filename
 
   if (header[0] == 'P' && header[1] >= '1' && header[1] <= '7')
 					// Portable anymap
-    return new Fl_PNM_Image(name);
+    return new fltk3::PNMImage(name);
 
 #ifdef HAVE_LIBPNG
   if (memcmp(header, "\211PNG", 4) == 0)// PNG file

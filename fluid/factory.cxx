@@ -44,7 +44,7 @@
 
 #include "Fl_Widget_Type.h"
 
-extern Fl_Pixmap *pixmap[];
+extern fltk3::Pixmap *pixmap[];
 
 #if !HAVE_STRCASECMP
 //
@@ -342,7 +342,7 @@ class Fl_File_Browser_Type : public Fl_Widget_Type {
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
-    Fl_File_Browser *myo = (Fl_File_Browser *)o;
+    fltk3::FileBrowser *myo = (fltk3::FileBrowser *)o;
     fltk3::font(myo->textfont(), myo->textsize());
     h -= fltk3::box_dh(o->box());
     w -= fltk3::box_dw(o->box()) + fltk3::height();
@@ -353,11 +353,11 @@ public:
     if (h < 30) h = 30;
     if (w < 50) w = 50;
   }
-  virtual const char *type_name() {return "Fl_File_Browser";}
+  virtual const char *type_name() {return "fltk3::FileBrowser";}
   virtual const char *alt_type_name() {return "fltk::FileBrowser";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    Fl_File_Browser* b = new Fl_File_Browser(x,y,w,h);
-    // Fl_File_Browser::add calls fltk3::height(), which requires the X display open.
+    fltk3::FileBrowser* b = new fltk3::FileBrowser(x,y,w,h);
+    // fltk3::FileBrowser::add calls fltk3::height(), which requires the X display open.
     // Avoid this when compiling so it works w/o a display:
     if (!compile_only) {
       b->load(".");
@@ -370,7 +370,7 @@ public:
 static Fl_File_Browser_Type Fl_File_Browser_type;
 
 int Fl_File_Browser_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
-  Fl_File_Browser *myo = (Fl_File_Browser*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
+  fltk3::FileBrowser *myo = (fltk3::FileBrowser*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
     case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
@@ -418,8 +418,8 @@ int Fl_Counter_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
 
 #include <fltk3/Spinner.h>
 static fltk3::MenuItem spinner_type_menu[] = {
-  {"Integer",0,0,(void*)FL_INT_INPUT},
-  {"Float",  0,0,(void*)FL_FLOAT_INPUT},
+  {"Integer",0,0,(void*)fltk3::INT_INPUT},
+  {"Float",  0,0,(void*)fltk3::FLOAT_INPUT},
   {0}};
 class Fl_Spinner_Type : public Fl_Widget_Type {
   fltk3::MenuItem *subtypes() {return spinner_type_menu;}
@@ -461,11 +461,11 @@ int Fl_Spinner_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
 
 #include <fltk3/Input.h>
 static fltk3::MenuItem input_type_menu[] = {
-  {"Normal",0,0,(void*)FL_NORMAL_INPUT},
-  {"Multiline",0,0,(void*)FL_MULTILINE_INPUT},
-  {"Secret",0,0,(void*)FL_SECRET_INPUT},
-  {"Int",0,0,(void*)FL_INT_INPUT},
-  {"Float",0,0,(void*)FL_FLOAT_INPUT},
+  {"Normal",0,0,(void*)fltk3::NORMAL_INPUT},
+  {"Multiline",0,0,(void*)fltk3::MULTILINE_INPUT},
+  {"Secret",0,0,(void*)fltk3::SECRET_INPUT},
+  {"Int",0,0,(void*)fltk3::INT_INPUT},
+  {"Float",0,0,(void*)fltk3::FLOAT_INPUT},
   {0}};
 class Fl_Input_Type : public Fl_Widget_Type {
   fltk3::MenuItem *subtypes() {return input_type_menu;}
@@ -493,7 +493,7 @@ public:
   int pixmapID() { return 14; }
   virtual void copy_properties() {
     Fl_Widget_Type::copy_properties();
-    Fl_Input_ *d = (Fl_Input_*)live_widget, *s = (Fl_Input_*)o;
+    fltk3::Input_ *d = (fltk3::Input_*)live_widget, *s = (fltk3::Input_*)o;
     d->textfont(s->textfont());
     d->textsize(s->textsize());
     d->textcolor(s->textcolor());
@@ -503,7 +503,7 @@ public:
 static Fl_Input_Type Fl_Input_type;
 
 int Fl_Input_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
-  Fl_Input_ *myo = (Fl_Input_*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
+  fltk3::Input_ *myo = (fltk3::Input_*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
     case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
@@ -802,14 +802,14 @@ static Fl_Scrollbar_Type Fl_Scrollbar_type;
 
 #include <fltk3/Output.h>
 static fltk3::MenuItem output_type_menu[] = {
-  {"Normal",0,0,(void*)FL_NORMAL_OUTPUT},
-  {"Multiline",0,0,(void*)FL_MULTILINE_OUTPUT},
+  {"Normal",0,0,(void*)fltk3::NORMAL_OUTPUT},
+  {"Multiline",0,0,(void*)fltk3::MULTILINE_OUTPUT},
   {0}};
 class Fl_Output_Type : public Fl_Input_Type {
   fltk3::MenuItem *subtypes() {return output_type_menu;}
 public:
   virtual void ideal_size(int &w, int &h) {
-    Fl_Output *myo = (Fl_Output *)o;
+    fltk3::Output *myo = (fltk3::Output *)o;
     fltk3::font(myo->textfont(), myo->textsize());
     h = fltk3::height() + myo->textsize() - 6;
     w -= fltk3::box_dw(o->box());
@@ -818,10 +818,10 @@ public:
     if (h < 15) h = 15;
     if (w < 15) w = 15;
   }
-  virtual const char *type_name() {return "Fl_Output";}
+  virtual const char *type_name() {return "fltk3::Output";}
   virtual const char *alt_type_name() {return "fltk::Output";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    Fl_Output *myo = new Fl_Output(x,y,w,h,"output:");
+    fltk3::Output *myo = new fltk3::Output(x,y,w,h,"output:");
     myo->value("Text Output");
     return myo;
   }

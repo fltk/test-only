@@ -84,7 +84,7 @@ typedef unsigned char uchar;
   <P>The inherited destructor free all memory and server resources that are used by
   the image.
 */
-Fl_GIF_Image::Fl_GIF_Image(const char *infname) : Fl_Pixmap((char *const*)0) {
+Fl_GIF_Image::Fl_GIF_Image(const char *infname) : fltk3::Pixmap((char *const*)0) {
   FILE *GifFile;	// File to read
   char **new_data;	// Data array
 

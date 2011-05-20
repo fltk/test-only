@@ -26,41 +26,41 @@
 //
 
 #include <fltk3/run.h>
-#include <fltk3/Double_Window.h>
-#include <fltk3/Tile.h>
-#include <fltk3/Hold_Browser.h>
+#include <fltk3/DoubleWindow.h>
+#include <fltk3/TiledGroup.h>
+#include <fltk3/HoldBrowser.h>
 #include <fltk3/draw.h>
 #include <fltk3/Box.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-Fl_Double_Window *form;
+fltk3::DoubleWindow *form;
 fltk3::TiledGroup *tile;
 
-class FontDisplay : public Fl_Widget {
+class FontDisplay : public fltk3::Widget {
   void draw();
 public:
   int font, size;
-  FontDisplay(Fl_Boxtype B, int X, int Y, int W, int H, const char* L = 0) :
-    Fl_Widget(X,Y,W,H,L) {box(B); font = 0; size = 14;}
+  FontDisplay(fltk3::Boxtype B, int X, int Y, int W, int H, const char* L = 0) :
+    fltk3::Widget(X,Y,W,H,L) {box(B); font = 0; size = 14;}
 };
 void FontDisplay::draw() {
   draw_box();
-  fl_font((Fl_Font)font, size);
-  fl_color(FL_BLACK);
-  fl_draw(label(), x()+3, y()+3, w()-6, h()-6, align());
+  fltk3::font((fltk3::Font)font, size);
+  fltk3::color(fltk3::BLACK);
+  fltk3::draw(label(), x()+3, y()+3, w()-6, h()-6, align());
 }
 
 FontDisplay *textobj;
 
-Fl_Hold_Browser *fontobj, *sizeobj;
+fltk3::HoldBrowser *fontobj, *sizeobj;
 
 int **sizes;
 int *numsizes;
 int pickedsize = 14;
 
-void font_cb(Fl_Widget *, long) {
+void font_cb(fltk3::Widget *, long) {
   int fn = fontobj->value();
   if (!fn) return;
   fn--;
@@ -94,7 +94,7 @@ void font_cb(Fl_Widget *, long) {
   textobj->redraw();
 }
 
-void size_cb(Fl_Widget *, long) {
+void size_cb(fltk3::Widget *, long) {
   int i = sizeobj->value();
   if (!i) return;
   const char *c = sizeobj->text(i);
@@ -125,26 +125,26 @@ void create_the_forms() {
   label[i] = 0;
 
   // create the basic layout
-  form = new Fl_Double_Window(550,370);
+  form = new fltk3::DoubleWindow(550,370);
 
   tile = new fltk3::TiledGroup(0, 0, 550, 370);
 
-  Fl_Group *textgroup = new Fl_Group(0, 0, 550, 185);
-  textgroup->box(FL_FLAT_BOX);
-  textobj = new FontDisplay(FL_FRAME_BOX,10,10,530,170,label);
-  textobj->align(FL_ALIGN_TOP|FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
+  fltk3::Group *textgroup = new fltk3::Group(0, 0, 550, 185);
+  textgroup->box(fltk3::FLAT_BOX);
+  textobj = new FontDisplay(fltk3::FRAME_BOX,10,10,530,170,label);
+  textobj->align(fltk3::ALIGN_TOP|fltk3::ALIGN_LEFT|fltk3::ALIGN_INSIDE|fltk3::ALIGN_CLIP);
   textobj->color(9,47);
   textgroup->resizable(textobj);
   textgroup->end();
 
-  Fl_Group *fontgroup = new Fl_Group(0, 185, 550, 185);
-  fontgroup->box(FL_FLAT_BOX);
-  fontobj = new Fl_Hold_Browser(10, 190, 390, 170);
-  fontobj->box(FL_FRAME_BOX);
+  fltk3::Group *fontgroup = new fltk3::Group(0, 185, 550, 185);
+  fontgroup->box(fltk3::FLAT_BOX);
+  fontobj = new fltk3::HoldBrowser(10, 190, 390, 170);
+  fontobj->box(fltk3::FRAME_BOX);
   fontobj->color(53,3);
   fontobj->callback(font_cb);
-  sizeobj = new Fl_Hold_Browser(410, 190, 130, 170);
-  sizeobj->box(FL_FRAME_BOX);
+  sizeobj = new fltk3::HoldBrowser(410, 190, 130, 170);
+  sizeobj->box(fltk3::FRAME_BOX);
   sizeobj->color(53,3);
   sizeobj->callback(size_cb);
   fontgroup->resizable(fontobj);
@@ -159,28 +159,28 @@ void create_the_forms() {
 #include <fltk3/ask.h>
 
 int main(int argc, char **argv) {
-  Fl::scheme(NULL);
-  Fl::args(argc, argv);
-  Fl::get_system_colors();
+  fltk3::scheme(NULL);
+  fltk3::args(argc, argv);
+  fltk3::get_system_colors();
   create_the_forms();
 
 // For the Unicode test, get all fonts...
 //#ifdef __APPLE__
   int i = 0;
 //#else
-//  int i = fl_choice("Which fonts:","-*","iso8859","All");
+//  int i = fltk3::choice("Which fonts:","-*","iso8859","All");
 //#endif
-  int k = Fl::set_fonts(i ? (i>1 ? "*" : 0) : "-*");
+  int k = fltk3::set_fonts(i ? (i>1 ? "*" : 0) : "-*");
   sizes = new int*[k];
   numsizes = new int[k];
   for (i = 0; i < k; i++) {
-    int t; const char *name = Fl::get_font_name((Fl_Font)i,&t);
+    int t; const char *name = fltk3::get_font_name((fltk3::Font)i,&t);
     char buffer[128];
 #if 1
     if (t) {
       char *p = buffer;
-      if (t & FL_BOLD) {*p++ = '@'; *p++ = 'b';}
-      if (t & FL_ITALIC) {*p++ = '@'; *p++ = 'i';}
+      if (t & fltk3::BOLD) {*p++ = '@'; *p++ = 'b';}
+      if (t & fltk3::ITALIC) {*p++ = '@'; *p++ = 'i';}
 	  *p++ = '@'; *p++ = '.'; // Suppress subsequent formatting - some MS fonts have '@' in their name
       strcpy(p,name);
       name = buffer;
@@ -190,7 +190,7 @@ int main(int argc, char **argv) {
     name = buffer;
 #endif
     fontobj->add(name);
-    int *s; int n = Fl::get_font_sizes((Fl_Font)i, s);
+    int *s; int n = fltk3::get_font_sizes((fltk3::Font)i, s);
     numsizes[i] = n;
     if (n) {
       sizes[i] = new int[n];

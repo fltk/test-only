@@ -58,7 +58,7 @@ static int hexdigit(int x) {	// I - Hex digit...
   <P>The destructor free all memory and server resources that are used by
   the image.
 */
-Fl_XPM_Image::Fl_XPM_Image(const char *name) : Fl_Pixmap((char *const*)0) {
+Fl_XPM_Image::Fl_XPM_Image(const char *name) : fltk3::Pixmap((char *const*)0) {
   FILE *f;
 
   if ((f = fl_fopen(name, "rb")) == NULL) return;

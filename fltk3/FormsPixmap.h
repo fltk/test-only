@@ -38,7 +38,7 @@
   \brief Forms pixmap drawing routines
 */
 class FLTK3_EXPORT Fl_FormsPixmap : public fltk3::Widget {
-    Fl_Pixmap *b;
+    fltk3::Pixmap *b;
 protected:
     void draw();
 public:
@@ -50,10 +50,10 @@ public:
       Set the internal pixmap pointer to an existing pixmap.
       \param[in] B existing pixmap
     */
-    void Pixmap(Fl_Pixmap *B) {b = B;}
+    void Pixmap(fltk3::Pixmap *B) {b = B;}
 
     /** Get the internal pixmap pointer. */
-    Fl_Pixmap *Pixmap() const {return b;}
+    fltk3::Pixmap *Pixmap() const {return b;}
 };
 
 #endif

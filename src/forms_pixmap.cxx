@@ -49,7 +49,7 @@ Fl_FormsPixmap::Fl_FormsPixmap(
 */
 void Fl_FormsPixmap::set(char*const* bits) {
   delete b;
-  b = new Fl_Pixmap(bits);
+  b = new fltk3::Pixmap(bits);
 }
 
 void Fl_FormsPixmap::draw() {

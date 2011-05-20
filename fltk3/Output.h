@@ -26,40 +26,45 @@
 //
 
 /* \file
-   Fl_Output widget . */
+ fltk3::Output widget . */
 
 #ifndef Fltk3_Output_H
 #define Fltk3_Output_H
 
 #include "Input.h"
-/**
-  This widget displays a piece of text.  When you set the value()
-  , Fl_Output does a strcpy() to it's own storage,
-  which is useful for program-generated values.  The user may select
-  portions of the text using the mouse and paste the contents into other
-  fields or programs.
-  <P align=CENTER>\image html text.png</P> 
-  \image latex text.png "Fl_Output" width=8cm
-  <P>There is a single subclass, 
-  Fl_Multiline_Output, which allows you to display multiple lines of
-  text. Fl_Multiline_Output does not provide scroll bars. If a more 
-  complete text editing widget is needed, use fltk3::TextDisplay instead.</P>
-  <P>The text may contain any characters except \\0, and will correctly
-  display anything, using ^X notation for unprintable control characters
-  and \\nnn notation for unprintable characters with the high bit set. It
-  assumes the font can draw any characters in the ISO-Latin1 character
-  set.
-*/
-class Fl_Output : public fltk3::Input { // don't use FLTK3_EXPORT here !
-public:
+
+namespace fltk3 {
+  
   /**
-    Creates a new Fl_Output widget using the given position,
-    size, and label string. The default boxtype is fltk3::DOWN_BOX.
-    <P>Inherited destrucor destroys the widget and any value associated with it.
-  */
-    Fl_Output(int X,int Y,int W,int H, const char *l = 0)
-    : fltk3::Input(X, Y, W, H, l) {type(FL_NORMAL_OUTPUT);}
-};
+   This widget displays a piece of text.  When you set the value()
+   , fltk3::Output does a strcpy() to it's own storage,
+   which is useful for program-generated values.  The user may select
+   portions of the text using the mouse and paste the contents into other
+   fields or programs.
+   <P align=CENTER>\image html text.png</P> 
+   \image latex text.png "fltk3::Output" width=8cm
+   <P>There is a single subclass, 
+   fltk3::MultilineOutput, which allows you to display multiple lines of
+   text. fltk3::MultilineOutput does not provide scroll bars. If a more 
+   complete text editing widget is needed, use fltk3::TextDisplay instead.</P>
+   <P>The text may contain any characters except \\0, and will correctly
+   display anything, using ^X notation for unprintable control characters
+   and \\nnn notation for unprintable characters with the high bit set. It
+   assumes the font can draw any characters in the ISO-Latin1 character
+   set.
+   */
+  class Output : public fltk3::Input { // don't use FLTK3_EXPORT here !
+  public:
+    /**
+     Creates a new fltk3::Output widget using the given position,
+     size, and label string. The default boxtype is fltk3::DOWN_BOX.
+     <P>Inherited destrucor destroys the widget and any value associated with it.
+     */
+    Output(int X,int Y,int W,int H, const char *l = 0)
+    : fltk3::Input(X, Y, W, H, l) {type(fltk3::NORMAL_OUTPUT);}
+  };
+  
+}
 
 #endif 
 

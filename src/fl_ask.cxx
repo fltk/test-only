@@ -461,7 +461,7 @@ const char* fltk3::input(const char *fmt, const char *defstr, ...) {
 
   va_list ap;
   va_start(ap, defstr);
-  const char* r = input_innards(fmt, ap, defstr, FL_NORMAL_INPUT);
+  const char* r = input_innards(fmt, ap, defstr, fltk3::NORMAL_INPUT);
   va_end(ap);
   return r;
 }
@@ -487,7 +487,7 @@ const char *fltk3::password(const char *fmt, const char *defstr, ...) {
 
   va_list ap;
   va_start(ap, defstr);
-  const char* r = input_innards(fmt, ap, defstr, FL_SECRET_INPUT);
+  const char* r = input_innards(fmt, ap, defstr, fltk3::SECRET_INPUT);
   va_end(ap);
   return r;
 }

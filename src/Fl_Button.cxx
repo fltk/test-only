@@ -36,7 +36,7 @@ fltk3::WidgetTracker *fltk3::Button::key_release_tracker = 0;
 
 // There are a lot of subclasses, named Fl_*_Button.  Some of
 // them are implemented by setting the type() value and testing it
-// here.  This includes fltk3::RadioButton and Fl_Toggle_Button
+// here.  This includes fltk3::RadioButton and fltk3::ToggleButton
 
 /**
   Sets the current value of the button.

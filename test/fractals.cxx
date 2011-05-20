@@ -34,7 +34,7 @@
 #include <fltk3/run.h>
 #include <fltk3/message.h>
 int main(int, char**) {
-  fl_alert("This demo does not work without GL and GLU (%d)");
+  fltk3::alert("This demo does not work without GL and GLU (%d)");
   return 1;
 }
 #else
@@ -650,7 +650,7 @@ void display(void)
 
   sprintf(buf, "FPS=%d", fps);
   glColor3f(1.0f, 1.0f, 1.0f);
-  gl_font(FL_HELVETICA, 12);
+  gl_font(fltk3::HELVETICA, 12);
   gl_draw(buf, 10, 10);
 
   //
@@ -765,11 +765,11 @@ void MenuInit(void)
 /***************************************************************/
 
 // FLTK-style callbacks to Glut menu callback translators:
-void setlevel(Fl_Widget*, void *value) {setlevel(fl_intptr_t(value));}
+void setlevel(fltk3::Widget*, void *value) {setlevel(fltk3::intptr_t(value));}
 
-void choosefract(Fl_Widget*, void *value) {choosefract(fl_intptr_t(value));}
+void choosefract(fltk3::Widget*, void *value) {choosefract(fltk3::intptr_t(value));}
 
-void handlemenu(Fl_Widget*, void *value) {handlemenu(fl_intptr_t(value));}
+void handlemenu(fltk3::Widget*, void *value) {handlemenu(fltk3::intptr_t(value));}
 
 #include <fltk3/Button.h>
 #include <fltk3/Group.h>
@@ -780,31 +780,31 @@ int main(int argc, char** argv)
 //  glutInit(&argc, argv); // this line removed for FLTK
 
   // create FLTK window:
-  Fl_Window window(512+20, 512+100);
+  fltk3::Window window(512+20, 512+100);
   window.resizable(window);
 
   // create a bunch of buttons:
-  Fl_Group *g = new Fl_Group(110,50,400-110,30,"Level:");
-  g->align(FL_ALIGN_LEFT);
+  fltk3::Group *g = new fltk3::Group(110,50,400-110,30,"Level:");
+  g->align(fltk3::ALIGN_LEFT);
   g->begin();
-  Fl_Button *b;
-  b = new Fl_Button(110,50,30,30,"0"); b->callback(setlevel,(void*)0);
-  b = new Fl_Button(140,50,30,30,"1"); b->callback(setlevel,(void*)1);
-  b = new Fl_Button(170,50,30,30,"2"); b->callback(setlevel,(void*)2);
-  b = new Fl_Button(200,50,30,30,"3"); b->callback(setlevel,(void*)3);
-  b = new Fl_Button(230,50,30,30,"4"); b->callback(setlevel,(void*)4);
-  b = new Fl_Button(260,50,30,30,"5"); b->callback(setlevel,(void*)5);
-  b = new Fl_Button(290,50,30,30,"6"); b->callback(setlevel,(void*)6);
-  b = new Fl_Button(320,50,30,30,"7"); b->callback(setlevel,(void*)7);
-  b = new Fl_Button(350,50,30,30,"8"); b->callback(setlevel,(void*)8);
+  fltk3::Button *b;
+  b = new fltk3::Button(110,50,30,30,"0"); b->callback(setlevel,(void*)0);
+  b = new fltk3::Button(140,50,30,30,"1"); b->callback(setlevel,(void*)1);
+  b = new fltk3::Button(170,50,30,30,"2"); b->callback(setlevel,(void*)2);
+  b = new fltk3::Button(200,50,30,30,"3"); b->callback(setlevel,(void*)3);
+  b = new fltk3::Button(230,50,30,30,"4"); b->callback(setlevel,(void*)4);
+  b = new fltk3::Button(260,50,30,30,"5"); b->callback(setlevel,(void*)5);
+  b = new fltk3::Button(290,50,30,30,"6"); b->callback(setlevel,(void*)6);
+  b = new fltk3::Button(320,50,30,30,"7"); b->callback(setlevel,(void*)7);
+  b = new fltk3::Button(350,50,30,30,"8"); b->callback(setlevel,(void*)8);
   g->end();
 
-  b = new Fl_Button(400,50,100,30,"New Fractal"); b->callback(handlemenu,(void*)MENU_RAND);
+  b = new fltk3::Button(400,50,100,30,"New Fractal"); b->callback(handlemenu,(void*)MENU_RAND);
   
-  b = new Fl_Button( 10,10,100,30,"Mountain"); b->callback(choosefract,(void*)MOUNTAIN);
-  b = new Fl_Button(110,10,100,30,"Tree"); b->callback(choosefract,(void*)TREE);
-  b = new Fl_Button(210,10,100,30,"Island"); b->callback(choosefract,(void*)ISLAND);
-  b = new Fl_Button(400,10,100,30,"Quit"); b->callback(handlemenu,(void*)MENU_QUIT);
+  b = new fltk3::Button( 10,10,100,30,"Mountain"); b->callback(choosefract,(void*)MOUNTAIN);
+  b = new fltk3::Button(110,10,100,30,"Tree"); b->callback(choosefract,(void*)TREE);
+  b = new fltk3::Button(210,10,100,30,"Island"); b->callback(choosefract,(void*)ISLAND);
+  b = new fltk3::Button(400,10,100,30,"Quit"); b->callback(handlemenu,(void*)MENU_QUIT);
 
 
   window.show(argc,argv); // glut will die unless parent window visible

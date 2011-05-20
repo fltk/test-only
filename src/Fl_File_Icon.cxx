@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_File_Icon routines.
+// fltk3::FileIcon routines.
 //
 // KDE icon code donated by Maarten De Boer.
 //
@@ -28,13 +28,13 @@
 //
 // Contents:
 //
-//   Fl_File_Icon::Fl_File_Icon()       - Create a new file icon.
-//   Fl_File_Icon::~Fl_File_Icon()      - Remove a file icon.
-//   Fl_File_Icon::add()               - Add data to an icon.
-//   Fl_File_Icon::find()              - Find an icon based upon a given file.
-//   Fl_File_Icon::draw()              - Draw an icon.
-//   Fl_File_Icon::label()             - Set the widgets label to an icon.
-//   Fl_File_Icon::labeltype()         - Draw the icon label.
+//   fltk3::FileIcon::fltk3::FileIcon()       - Create a new file icon.
+//   fltk3::FileIcon::~Fl_File_Icon()      - Remove a file icon.
+//   fltk3::FileIcon::add()               - Add data to an icon.
+//   fltk3::FileIcon::find()              - Find an icon based upon a given file.
+//   fltk3::FileIcon::draw()              - Draw an icon.
+//   fltk3::FileIcon::label()             - Set the widgets label to an icon.
+//   fltk3::FileIcon::labeltype()         - Draw the icon label.
 //
 
 //
@@ -78,17 +78,17 @@
 // Icon cache...
 //
 
-Fl_File_Icon	*Fl_File_Icon::first_ = (Fl_File_Icon *)0;
+fltk3::FileIcon	*fltk3::FileIcon::first_ = (fltk3::FileIcon *)0;
 
 
 /**
-  Creates a new Fl_File_Icon with the specified information.
+  Creates a new fltk3::FileIcon with the specified information.
   \param[in] p filename pattern
   \param[in] t file type
   \param[in] nd number of data values
   \param[in] d data values
 */
-Fl_File_Icon::Fl_File_Icon(const char *p,	/* I - Filename pattern */
+fltk3::FileIcon::FileIcon(const char *p,	/* I - Filename pattern */
                 	   int        t,	/* I - File type */
 			   int        nd,	/* I - Number of data values */
 			   short      *d)	/* I - Data values */
@@ -121,14 +121,14 @@ Fl_File_Icon::Fl_File_Icon(const char *p,	/* I - Filename pattern */
   The destructor destroys the icon and frees all memory that has been
   allocated for it.
 */
-Fl_File_Icon::~Fl_File_Icon() {
-  Fl_File_Icon	*current,	// Current icon in list
+fltk3::FileIcon::~FileIcon() {
+  fltk3::FileIcon	*current,	// Current icon in list
 		*prev;		// Previous icon in list
 
 
   // Find the icon in the list...
-  for (current = first_, prev = (Fl_File_Icon *)0;
-       current != this && current != (Fl_File_Icon *)0;
+  for (current = first_, prev = (fltk3::FileIcon *)0;
+       current != this && current != (fltk3::FileIcon *)0;
        prev = current, current = current->next_);
 
   // Remove the icon from the list as needed...
@@ -151,7 +151,7 @@ Fl_File_Icon::~Fl_File_Icon() {
   \param[in] d data value
 */
 short *				// O - Pointer to new data value
-Fl_File_Icon::add(short d)	// I - Data to add
+fltk3::FileIcon::add(short d)	// I - Data to add
 {
   short	*dptr;			// Pointer to new data value
 
@@ -186,11 +186,11 @@ Fl_File_Icon::add(short d)	// I - Data to add
   \param[in] filetype enumerated file type
   \return matching file icon or NULL
 */
-Fl_File_Icon *				// O - Matching file icon or NULL
-Fl_File_Icon::find(const char *filename,// I - Name of file */
+fltk3::FileIcon *				// O - Matching file icon or NULL
+fltk3::FileIcon::find(const char *filename,// I - Name of file */
                    int        filetype)	// I - Enumerated file type
 {
-  Fl_File_Icon	*current;		// Current file in list
+  fltk3::FileIcon	*current;		// Current file in list
 #ifndef WIN32
   struct stat	fileinfo;		// Information on file
 #endif // !WIN32
@@ -237,7 +237,7 @@ Fl_File_Icon::find(const char *filename,// I - Name of file */
 
   // Loop through the available file types and return any match that
   // is found...
-  for (current = first_; current != (Fl_File_Icon *)0; current = current->next_)
+  for (current = first_; current != (fltk3::FileIcon *)0; current = current->next_)
     if ((current->type_ == filetype || current->type_ == ANY) &&
         (fl_filename_match(filename, current->pattern_) ||
 	 fl_filename_match(name, current->pattern_)))
@@ -254,7 +254,7 @@ Fl_File_Icon::find(const char *filename,// I - Name of file */
   \param[in] active status, default is active [non-zero]
 */
 void
-Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
+fltk3::FileIcon::draw(int      x,		// I - Upper-lefthand X
         	   int      y,		// I - Upper-lefthand Y
 		   int      w,		// I - Width of bounding box
 		   int      h,		// I - Height of bounding box
@@ -318,14 +318,14 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
 	                	  ((unsigned short *)prim)[2]);
                   if (active)
 		  {
-                    if (oc == FL_ICON_COLOR)
+                    if (oc == fltk3::ICON_COLOR)
 		      fltk3::color(ic);
 		    else
 		      fltk3::color(oc);
 		  }
 		  else
 		  {
-                    if (oc == FL_ICON_COLOR)
+                    if (oc == fltk3::ICON_COLOR)
 		      fltk3::color(fltk3::inactive(ic));
 		    else
 		      fltk3::color(fltk3::inactive(oc));
@@ -353,7 +353,7 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
           c = (fltk3::Color)((((unsigned short *)d)[1] << 16) | 
 	                   ((unsigned short *)d)[2]);
 
-          if (c == FL_ICON_COLOR)
+          if (c == fltk3::ICON_COLOR)
 	    c = ic;
 
           if (!active)
@@ -420,14 +420,14 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
 	                  ((unsigned short *)prim)[2]);
           if (active)
 	  {
-            if (oc == FL_ICON_COLOR)
+            if (oc == fltk3::ICON_COLOR)
 	      fltk3::color(ic);
 	    else
 	      fltk3::color(oc);
 	  }
 	  else
 	  {
-            if (oc == FL_ICON_COLOR)
+            if (oc == fltk3::ICON_COLOR)
 	      fltk3::color(fltk3::inactive(ic));
 	    else
 	      fltk3::color(fltk3::inactive(oc));
@@ -452,11 +452,11 @@ Fl_File_Icon::draw(int      x,		// I - Upper-lefthand X
 }
 
 /**
-  Applies the icon to the widget, registering the Fl_File_Icon
+  Applies the icon to the widget, registering the fltk3::FileIcon
   label type as needed.
   \param[in] w widget for which this icon will become the label
 */
-void Fl_File_Icon::label(fltk3::Widget *w)	// I - Widget to label
+void fltk3::FileIcon::label(fltk3::Widget *w)	// I - Widget to label
 {
   w->label(fltk3::ICON_LABEL, (const char*)this);
 }
@@ -469,19 +469,19 @@ void Fl_File_Icon::label(fltk3::Widget *w)	// I - Widget to label
   \param[in] a label alignment [not used]
 */
 void
-Fl_File_Icon::labeltype(const fltk3::Label *o,	// I - Label data
+fltk3::FileIcon::labeltype(const fltk3::Label *o,	// I - Label data
                 	int            x,	// I - X position of label
 			int            y,	// I - Y position of label
 			int            w,	// I - Width of label
 			int            h,	// I - Height of label
 			fltk3::Align       a)	// I - Label alignment (not used)
 {
-  Fl_File_Icon *icon;			// Pointer to icon data
+  fltk3::FileIcon *icon;			// Pointer to icon data
 
 
   (void)a;
 
-  icon = (Fl_File_Icon *)(o->value);
+  icon = (fltk3::FileIcon *)(o->value);
   if (icon) icon->draw(x, y, w, h, (fltk3::Color)(o->color));
 }
 

@@ -461,7 +461,7 @@ void Fl_PostScript_Graphics_Driver::draw_image_mono(Fl_Draw_Image_Cb call, void 
 ////////////////////////////// Image classes //////////////////////
 
 
-void Fl_PostScript_Graphics_Driver::draw(Fl_Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy){
+void Fl_PostScript_Graphics_Driver::draw(fltk3::Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy){
   const char * const * di =pxm->data();
   int w,h;
   if (!fltk3::measure_pixmap(di, w, h)) return;

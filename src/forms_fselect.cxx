@@ -46,7 +46,7 @@ char* fl_show_file_selector(const char *message,const char *dir,
 #endif
       ) *p++ = '/';
   strlcpy(p,fl_filename,sizeof(fl_directory) - (p - fl_directory));
-  const char *q = fl_file_chooser(message,fl_pattern,fl_directory);
+  const char *q = fltk3::file_chooser(message,fl_pattern,fl_directory);
   if (!q) return 0;
   strlcpy(fl_directory, q, sizeof(fl_directory));
   p = (char *)fl_filename_name(fl_directory);

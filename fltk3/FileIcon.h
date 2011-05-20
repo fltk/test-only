@@ -1,7 +1,7 @@
 //
 // "$Id: FileIcon.h 8306 2011-01-24 17:04:22Z matt $"
 //
-// Fl_File_Icon definitions.
+// fltk3::FileIcon definitions.
 //
 // Copyright 1999-2010 by Michael Sweet.
 //
@@ -26,7 +26,7 @@
 //
 
 /* \file
- Fl_File_Icon widget . */
+ fltk3::FileIcon widget . */
 
 //
 // Include necessary header files...
@@ -38,128 +38,131 @@
 #  include "run.h"
 
 
-//
-// Special color value for the icon color.
-//
-
-#  define FL_ICON_COLOR (fltk3::Color)0xffffffff	/**< icon color [background?]*/
-
-
-//
-// Fl_File_Icon class...
-//
-
-/** 
- The Fl_File_Icon class manages icon images that can be used 
- as labels in other widgets and as icons in the FileBrowser widget.
- */
-class FLTK3_EXPORT Fl_File_Icon {			//// Icon data
+namespace fltk3 {
+  //
+  // Special color value for the icon color.
+  //
   
-  static Fl_File_Icon *first_;	// Pointer to first icon/filetype
-  Fl_File_Icon	*next_;		// Pointer to next icon/filetype
-  const char	*pattern_;	// Pattern string
-  int		type_;		// Match only if directory or file?
-  int		num_data_;	// Number of data elements
-  int		alloc_data_;	// Number of allocated elements
-  short		*data_;		// Icon data
+  const Color ICON_COLOR = 0xffffffff;	/**< icon color [background?]*/
   
-public:
   
-  enum				// File types
-  {
-    ANY,			// Any kind of file
-    PLAIN,			// Only plain files
-    FIFO,			// Only named pipes
-    DEVICE,			// Only character and block devices
-    LINK,			// Only symbolic links
-    DIRECTORY			// Only directories
+  //
+  // fltk3::FileIcon class...
+  //
+  
+  /** 
+   The fltk3::FileIcon class manages icon images that can be used 
+   as labels in other widgets and as icons in the FileBrowser widget.
+   */
+  class FLTK3_EXPORT FileIcon {			//// Icon data
+    
+    static fltk3::FileIcon *first_;	// Pointer to first icon/filetype
+    fltk3::FileIcon	*next_;		// Pointer to next icon/filetype
+    const char	*pattern_;	// Pattern string
+    int		type_;		// Match only if directory or file?
+    int		num_data_;	// Number of data elements
+    int		alloc_data_;	// Number of allocated elements
+    short		*data_;		// Icon data
+    
+  public:
+    
+    enum				// File types
+    {
+      ANY,			// Any kind of file
+      PLAIN,			// Only plain files
+      FIFO,			// Only named pipes
+      DEVICE,			// Only character and block devices
+      LINK,			// Only symbolic links
+      DIRECTORY			// Only directories
+    };
+    
+    enum				// Data opcodes
+    {
+      END,			// End of primitive/icon
+      COLOR,			// Followed by color value (2 shorts)
+      LINE,			// Start of line
+      CLOSEDLINE,			// Start of closed line
+      POLYGON,			// Start of polygon
+      OUTLINEPOLYGON,		// Followed by outline color (2 shorts)
+      VERTEX			// Followed by scaled X,Y
+    };
+    
+    FileIcon(const char *p, int t, int nd = 0, short *d = 0);
+    ~FileIcon();
+    
+    short		*add(short d);
+    
+    /**
+     Adds a color value to the icon array, returning a pointer to it.
+     \param[in] c color value
+     */
+    short		*add_color(fltk3::Color c)
+    { short *d = add((short)COLOR); add((short)(c >> 16)); add((short)c); return (d); }
+    
+    /**
+     Adds a vertex value to the icon array, returning a pointer to it.
+     The integer version accepts coordinates from 0 to 10000.
+     The origin (0.0) is in the lower-lefthand corner of the icon.
+     \param[in] x, y vertex coordinates
+     */
+    short		*add_vertex(int x, int y)
+    { short *d = add((short)VERTEX); add((short)x); add((short)y); return (d); }
+    
+    /**
+     Adds a vertex value to the icon array, returning a pointer to it.
+     The floating point version goes from 0.0 to 1.0.
+     The origin (0.0) is in the lower-lefthand corner of the icon.
+     \param[in] x, y vertex coordinates
+     */
+    short		*add_vertex(float x, float y)
+    { short *d = add((short)VERTEX); add((short)(x * 10000.0));
+      add((short)(y * 10000.0)); return (d); }
+    
+    /** Clears all icon data from the icon.*/
+    void		clear() { num_data_ = 0; }
+    
+    void		draw(int x, int y, int w, int h, fltk3::Color ic, int active = 1);
+    
+    void		label(fltk3::Widget *w);
+    
+    static void	labeltype(const fltk3::Label *o, int x, int y, int w, int h, fltk3::Align a);
+    void		load(const char *f);
+    int		load_fti(const char *fti);
+    int		load_image(const char *i);
+    
+    /** Returns next file icon object. See fltk3::FileIcon::first() */
+    fltk3::FileIcon	*next() { return (next_); }
+    
+    /** Returns the filename matching pattern for the icon.*/
+    const char	*pattern() { return (pattern_); }
+    
+    /**  Returns the number of words of data used by the icon.*/
+    int		size() { return (num_data_); }
+    
+    /**
+     Returns the filetype associated with the icon, which can be one of the
+     following:
+     
+     \li fltk3::FileIcon::ANY, any kind of file.
+     \li fltk3::FileIcon::PLAIN, plain files.
+     \li fltk3::FileIcon::FIFO, named pipes.
+     \li fltk3::FileIcon::DEVICE, character and block devices.
+     \li fltk3::FileIcon::LINK, symbolic links.
+     \li fltk3::FileIcon::DIRECTORY, directories.
+     */
+    int		type() { return (type_); }
+    
+    /**  Returns the data array for the icon.*/
+    short		*value() { return (data_); }
+    
+    static fltk3::FileIcon *find(const char *filename, int filetype = ANY);
+    
+    /** Returns a pointer to the first icon in the list.*/
+    static fltk3::FileIcon *first() { return (first_); }
+    static void	load_system_icons(void);
   };
   
-  enum				// Data opcodes
-  {
-    END,			// End of primitive/icon
-    COLOR,			// Followed by color value (2 shorts)
-    LINE,			// Start of line
-    CLOSEDLINE,			// Start of closed line
-    POLYGON,			// Start of polygon
-    OUTLINEPOLYGON,		// Followed by outline color (2 shorts)
-    VERTEX			// Followed by scaled X,Y
-  };
-  
-  Fl_File_Icon(const char *p, int t, int nd = 0, short *d = 0);
-  ~Fl_File_Icon();
-  
-  short		*add(short d);
-  
-  /**
-   Adds a color value to the icon array, returning a pointer to it.
-   \param[in] c color value
-   */
-  short		*add_color(fltk3::Color c)
-  { short *d = add((short)COLOR); add((short)(c >> 16)); add((short)c); return (d); }
-  
-  /**
-   Adds a vertex value to the icon array, returning a pointer to it.
-   The integer version accepts coordinates from 0 to 10000.
-   The origin (0.0) is in the lower-lefthand corner of the icon.
-   \param[in] x, y vertex coordinates
-   */
-  short		*add_vertex(int x, int y)
-  { short *d = add((short)VERTEX); add((short)x); add((short)y); return (d); }
-  
-  /**
-   Adds a vertex value to the icon array, returning a pointer to it.
-   The floating point version goes from 0.0 to 1.0.
-   The origin (0.0) is in the lower-lefthand corner of the icon.
-   \param[in] x, y vertex coordinates
-   */
-  short		*add_vertex(float x, float y)
-  { short *d = add((short)VERTEX); add((short)(x * 10000.0));
-    add((short)(y * 10000.0)); return (d); }
-  
-  /** Clears all icon data from the icon.*/
-  void		clear() { num_data_ = 0; }
-  
-  void		draw(int x, int y, int w, int h, fltk3::Color ic, int active = 1);
-  
-  void		label(fltk3::Widget *w);
-  
-  static void	labeltype(const fltk3::Label *o, int x, int y, int w, int h, fltk3::Align a);
-  void		load(const char *f);
-  int		load_fti(const char *fti);
-  int		load_image(const char *i);
-  
-  /** Returns next file icon object. See Fl_File_Icon::first() */
-  Fl_File_Icon	*next() { return (next_); }
-  
-  /** Returns the filename matching pattern for the icon.*/
-  const char	*pattern() { return (pattern_); }
-  
-  /**  Returns the number of words of data used by the icon.*/
-  int		size() { return (num_data_); }
-  
-  /**
-   Returns the filetype associated with the icon, which can be one of the
-   following:
-   
-   \li Fl_File_Icon::ANY, any kind of file.
-   \li Fl_File_Icon::PLAIN, plain files.
-   \li Fl_File_Icon::FIFO, named pipes.
-   \li Fl_File_Icon::DEVICE, character and block devices.
-   \li Fl_File_Icon::LINK, symbolic links.
-   \li Fl_File_Icon::DIRECTORY, directories.
-   */
-  int		type() { return (type_); }
-  
-  /**  Returns the data array for the icon.*/
-  short		*value() { return (data_); }
-  
-  static Fl_File_Icon *find(const char *filename, int filetype = ANY);
-  
-  /** Returns a pointer to the first icon in the list.*/
-  static Fl_File_Icon *first() { return (first_); }
-  static void	load_system_icons(void);
-};
+}
 
 #endif // !_Fl_Fl_File_Icon_H_
 

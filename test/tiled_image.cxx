@@ -37,7 +37,7 @@
 #include "pixmaps/tile.xpm"
 
 Fl_Button *b;
-Fl_Double_Window *w;
+fltk3::DoubleWindow *w;
 
 void button_cb(Fl_Widget *,void *) {
   w->hide();
@@ -83,9 +83,9 @@ int main(int argc, char **argv) {
   }
 #endif
 
-  Fl_Double_Window window(400,400); ::w = &window;
+  fltk3::DoubleWindow window(400,400); ::w = &window;
   Fl_Group group(0,0,400,400);
-  group.image(new Fl_Tiled_Image(new Fl_Pixmap((const char * const *)tile_xpm)));
+  group.image(new Fl_Tiled_Image(new fltk3::Pixmap((const char * const *)tile_xpm)));
   group.align(FL_ALIGN_INSIDE);
 
   Fl_Button b(340,365,50,25,"Close"); ::b = &b;

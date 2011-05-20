@@ -26,7 +26,7 @@
 //
 
 /* \file
- Fl_Toggle_Button widget . */
+ fltk3::ToggleButton widget . */
 
 #ifndef Fltk3_Toggle_Button_H
 #define Fltk3_Toggle_Button_H
@@ -37,7 +37,7 @@ namespace fltk3 {
   /**
    The toggle button is a push button that needs to be clicked once 
    to toggle on, and one more time to toggle off.
-   The Fl_Toggle_Button subclass displays the "on" state by
+   The fltk3::ToggleButton subclass displays the "on" state by
    drawing a pushed-in button.</P>
    <P>Buttons generate callbacks when they are clicked by the user.  You
    control exactly when and how by changing the values for type()
@@ -46,7 +46,7 @@ namespace fltk3 {
   class FLTK3_EXPORT ToggleButton : public Button {
   public:
     /**
-     Creates a new Fl_Toggle_Button widget using the given
+     Creates a new fltk3::ToggleButton widget using the given
      position, size, and label string.
      <P>The inherited destructor deletes the toggle button.
      */

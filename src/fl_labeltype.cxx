@@ -136,7 +136,7 @@ void fltk3::Widget::draw_label(int X, int Y, int W, int H, fltk3::Align a) const
 }
 
 // include these vars here so they can be referenced without including
-// Fl_Input_ code:
+// fltk3::Input_ code:
 #include <fltk3/Input_.h>
 
 //

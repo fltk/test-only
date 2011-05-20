@@ -67,7 +67,7 @@ static const char *L_open_xpm[] = {
   "###########"
 #endif
 };
-static Fl_Pixmap L_openpixmap(L_open_xpm);
+static fltk3::Pixmap L_openpixmap(L_open_xpm);
 
 static const char *L_close_xpm[] = {
 #ifdef __APPLE__
@@ -103,7 +103,7 @@ static const char *L_close_xpm[] = {
   "###########"
 #endif
 };
-static Fl_Pixmap L_closepixmap(L_close_xpm);
+static fltk3::Pixmap L_closepixmap(L_close_xpm);
 
 /// Sets the default icon to be used as the 'open' icon
 /// when items are add()ed to the tree.

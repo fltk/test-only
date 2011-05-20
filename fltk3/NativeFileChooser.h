@@ -69,9 +69,9 @@
  
  <B>Platform Specific Caveats</B>
  
- - Under X windows, it's best if you call Fl_File_Icon::load_system_icons()
+ - Under X windows, it's best if you call fltk3::FileIcon::load_system_icons()
  at the start of main(), to enable the nicer looking file browser widgets.
- Use the static public attributes of class Fl_File_Chooser to localize
+ Use the static public attributes of class fltk3::FileChooser to localize
  the browser.
  - Some operating systems support certain OS specific options; see 
  fltk3::NativeFileChooser::options() for a list.
@@ -146,9 +146,9 @@ namespace fltk3 {
    
    <B>Platform Specific Caveats</B>
    
-   - Under X windows, it's best if you call Fl_File_Icon::load_system_icons()
+   - Under X windows, it's best if you call fltk3::FileIcon::load_system_icons()
    at the start of main(), to enable the nicer looking file browser widgets.
-   Use the static public attributes of class Fl_File_Chooser to localize
+   Use the static public attributes of class fltk3::FileChooser to localize
    the browser.
    - Some operating systems support certain OS specific options; see 
    fltk3::NativeFileChooser::options() for a list.
@@ -288,7 +288,7 @@ namespace fltk3 {
     char *_prevvalue;		// Returned filename
     char *_directory;
     char *_errmsg;		// error message
-    Fl_File_Chooser *_file_chooser;
+    fltk3::FileChooser *_file_chooser;
     
     // Private methods
     void errmsg(const char *msg);

@@ -45,9 +45,9 @@
 #define NOTDISPLAYED 2
 
 // WARNING:
-//       Fl_File_Chooser.cxx also has a definition of this structure (FL_BLINE).
-//       Changes to FL_BLINE *must* be reflected in Fl_File_Chooser.cxx as well.
-//       This hack in Fl_File_Chooser should be solved.
+//       fltk3::FileChooser.cxx also has a definition of this structure (FL_BLINE).
+//       Changes to FL_BLINE *must* be reflected in fltk3::FileChooser.cxx as well.
+//       This hack in fltk3::FileChooser should be solved.
 //
 struct FL_BLINE {	// data is in a linked list of these
   FL_BLINE* prev;

@@ -37,10 +37,10 @@
 
 #include <fltk3/run.h>
 #include <fltk3/Window.h>
-#include <fltk3/Toggle_Button.h>
+#include <fltk3/ToggleButton.h>
 
 int running;	// actually the pid
-Fl_Toggle_Button *Button;
+fltk3::ToggleButton *Button;
 
 void sigchld(int) {
   waitpid(running, 0, 0);
@@ -49,7 +49,7 @@ void sigchld(int) {
 }
 
 void cb(Fl_Widget *o, void *) {
-  if (((Fl_Toggle_Button*)o)->value()) {
+  if (((fltk3::ToggleButton*)o)->value()) {
     if (running) return;
     running = fork();
     if (!running) execl("/usr/sbin/pppd","pppd","-detach",0);
@@ -64,7 +64,7 @@ void cb(Fl_Widget *o, void *) {
 
 int main(int argc, char ** argv) {
    Fl_Window window(100,50);
-   Fl_Toggle_Button button(0,0,100,50,"Connect");
+   fltk3::ToggleButton button(0,0,100,50,"Connect");
    Button = &button;
    button.color(1,2);
    button.callback(cb,0);

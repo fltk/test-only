@@ -621,7 +621,7 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
     if (current_widget->is_button())
       i->svalue = ((fltk3::Button*)(current_widget->o))->shortcut();
     else if (current_widget->is_input())
-      i->svalue = ((Fl_Input_*)(current_widget->o))->shortcut();
+      i->svalue = ((fltk3::Input_*)(current_widget->o))->shortcut();
     else if (current_widget->is_value_input())
       i->svalue = ((Fl_Value_Input*)(current_widget->o))->shortcut();
     else if (current_widget->is_text_display())
@@ -641,7 +641,7 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
 	b->shortcut(i->svalue);
 	if (o->is_menu_item()) ((Fl_Widget_Type*)o)->redraw();
       } else if (o->selected && o->is_input()) {
-	Fl_Input_* b = (Fl_Input_*)(((Fl_Widget_Type*)o)->o);
+	fltk3::Input_* b = (fltk3::Input_*)(((Fl_Widget_Type*)o)->o);
         if (b->shortcut()!=i->svalue) mod = 1;
 	b->shortcut(i->svalue);
       } else if (o->selected && o->is_value_input()) {

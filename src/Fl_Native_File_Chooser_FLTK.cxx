@@ -28,10 +28,10 @@
 
 #include <fltk3/NativeFileChooser.h>
 #include <fltk3/FileIcon.h>
-#define FLTK_CHOOSER_SINGLE    Fl_File_Chooser::SINGLE
-#define FLTK_CHOOSER_DIRECTORY Fl_File_Chooser::DIRECTORY
-#define FLTK_CHOOSER_MULTI     Fl_File_Chooser::MULTI
-#define FLTK_CHOOSER_CREATE    Fl_File_Chooser::CREATE
+#define FLTK_CHOOSER_SINGLE    fltk3::FileChooser::SINGLE
+#define FLTK_CHOOSER_DIRECTORY fltk3::FileChooser::DIRECTORY
+#define FLTK_CHOOSER_MULTI     fltk3::FileChooser::MULTI
+#define FLTK_CHOOSER_CREATE    fltk3::FileChooser::CREATE
 
 #include "Fl_Native_File_Chooser_common.cxx"
 #include <sys/stat.h>
@@ -49,7 +49,7 @@ fltk3::NativeFileChooser::fltk3::NativeFileChooser(int val) {
   ////  static int init = 0;		// 'first time' initialize flag
   ////  if ( init == 0 ) {
   ////    // Initialize when instanced for first time
-  ////    Fl_File_Icon::load_system_icons();
+  ////    fltk3::FileIcon::load_system_icons();
   ////    init = 1;
   ////  }
   _btype       = val;
@@ -61,7 +61,7 @@ fltk3::NativeFileChooser::fltk3::NativeFileChooser(int val) {
   _prevvalue   = NULL;
   _directory   = NULL;
   _errmsg      = NULL;
-  _file_chooser = new Fl_File_Chooser(NULL, NULL, 0, NULL);
+  _file_chooser = new fltk3::FileChooser(NULL, NULL, 0, NULL);
   type(val);			// do this after _file_chooser created
   _nfilters    = 0;
 } 
@@ -86,7 +86,7 @@ void fltk3::NativeFileChooser::errmsg(const char *msg) {
   _errmsg = strnew(msg);
 }
 
-// PRIVATE: translate Native types to Fl_File_Chooser types
+// PRIVATE: translate Native types to fltk3::FileChooser types
 int fltk3::NativeFileChooser::type_fl_file(int val) {
   switch (val) {
     case BROWSE_FILE:

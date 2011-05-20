@@ -229,7 +229,7 @@ namespace fltk3 {
    
    </TD></TR></TABLE>
    */
-  class FLTK3_EXPORT Input : public Fl_Input_ {
+  class FLTK3_EXPORT Input : public fltk3::Input_ {
     int handle_key();
     int shift_position(int p);
     int shift_up_down_position(int p);

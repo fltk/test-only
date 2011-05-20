@@ -793,7 +793,7 @@ void Fl_Data_Type::open() {
       else if (w == data_panel_ok) break;
       else if (w == data_filebrowser) {
         goto_source_dir();
-        const char *fn = fl_file_chooser("Load Binary Data", 0L, data_filename->value(), 1);
+        const char *fn = fltk3::file_chooser("Load Binary Data", 0L, data_filename->value(), 1);
         leave_source_dir();
         if (fn) {
           if (strcmp(fn, data_filename->value()))
@@ -1171,9 +1171,9 @@ void Fl_Comment_Type::open() {
       }
       else if (w == comment_load) {
         // load a comment from disk
-	fl_file_chooser_ok_label("Use File");
-        const char *fname = fl_file_chooser("Pick a comment", 0L, 0L);
-	fl_file_chooser_ok_label(NULL);
+	fltk3::file_chooser_ok_label("Use File");
+        const char *fname = fltk3::file_chooser("Pick a comment", 0L, 0L);
+	fltk3::file_chooser_ok_label(NULL);
         if (fname) {
           if (comment_input->buffer()->loadfile(fname)) {
             fltk3::alert("Error loading file\n%s", fname);

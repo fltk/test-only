@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_Help_Dialog test program.
+// fltk3::HelpDialog test program.
 //
 // Copyright 1999-2010 by Easy Software Products.
 //
@@ -33,7 +33,7 @@
 // Include necessary headers...
 //
 
-#include <fltk3/Help_Dialog.h>
+#include <fltk3/HelpDialog.h>
 
 
 #ifdef USING_XCODE
@@ -63,10 +63,10 @@ int				// O - Exit status
 main(int  argc,			// I - Number of command-line arguments
      char *argv[])		// I - Command-line arguments
 {
-  Fl_Help_Dialog	*help;		// Help dialog
+  fltk3::HelpDialog	*help;		// Help dialog
 
 
-  help = new Fl_Help_Dialog;
+  help = new fltk3::HelpDialog;
 
   int argn = 1;
   

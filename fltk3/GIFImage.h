@@ -37,7 +37,7 @@
   and drawing of Compuserve GIF<SUP>SM</SUP> images. The class
   loads the first image and supports transparency.
 */
-class FLTK3_EXPORT Fl_GIF_Image : public Fl_Pixmap {
+class FLTK3_EXPORT Fl_GIF_Image : public fltk3::Pixmap {
 
   public:
 

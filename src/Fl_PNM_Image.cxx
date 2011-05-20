@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_PNM_Image routines.
+// fltk3::PNMImage routines.
 //
 // Copyright 1997-2010 by Easy Software Products.
 //
@@ -27,7 +27,7 @@
 // Contents:
 
 //
-//   Fl_PNM_Image::Fl_PNM_Image() - Load a PNM image...
+//   fltk3::PNMImage::fltk3::PNMImage() - Load a PNM image...
 //
 
 //
@@ -43,7 +43,7 @@
 
 
 //
-// 'Fl_PNM_Image::Fl_PNM_Image()' - Load a PNM image...
+// 'fltk3::PNMImage::fltk3::PNMImage()' - Load a PNM image...
 //
 
 /** 
@@ -51,7 +51,7 @@
   <P>The inherited destructor free all memory and server resources that are used by the image.
 */
 
-Fl_PNM_Image::Fl_PNM_Image(const char *name)	// I - File to read
+fltk3::PNMImage::PNMImage(const char *name)	// I - File to read
   : fltk3::RGBImage(0,0,0) {
   FILE		*fp;		// File pointer
   int		x, y;		// Looping vars

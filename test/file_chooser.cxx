@@ -43,12 +43,12 @@
 //
 
 #include <stdio.h>
-#include <fltk3/File_Chooser.h>
-#include <fltk3/File_Icon.h>
-#include <fltk3/Shared_Image.h>
-#include <fltk3/PNM_Image.h>
-#include <fltk3/Light_Button.h>
-#include <fltk3/Double_Window.h>
+#include <fltk3/FileChooser.h>
+#include <fltk3/FileIcon.h>
+#include <fltk3/SharedImage.h>
+#include <fltk3/PNMImage.h>
+#include <fltk3/LightButton.h>
+#include <fltk3/DoubleWindow.h>
 #include <string.h>
 
 
@@ -57,17 +57,17 @@
 //
 
 fltk3::Input		*filter;
-Fl_File_Browser		*files;
-Fl_File_Chooser		*fc;
-Fl_Shared_Image		*image = 0;
+fltk3::FileBrowser		*files;
+fltk3::FileChooser		*fc;
+fltk3::SharedImage		*image = 0;
 
 // for choosing extra groups
 fltk3::Choice *ch_extra;
 // first extra group
-Fl_Group *encodings = (Fl_Group*)0;
+fltk3::Group *encodings = (fltk3::Group*)0;
 fltk3::Choice *ch_enc;
 // second extra widget
-Fl_Check_Button *version = (Fl_Check_Button*)0;
+fltk3::CheckButton *version = (fltk3::CheckButton*)0;
 
 //
 // Functions...
@@ -76,7 +76,7 @@ Fl_Check_Button *version = (Fl_Check_Button*)0;
 void		close_callback(void);
 void		create_callback(void);
 void		dir_callback(void);
-void		fc_callback(Fl_File_Chooser *, void *);
+void		fc_callback(fltk3::FileChooser *, void *);
 void		multi_callback(void);
 fltk3::Image	*pdf_check(const char *, uchar *, int);
 fltk3::Image	*ps_check(const char *, uchar *, int);
@@ -92,24 +92,24 @@ int			// O - Exit status
 main(int  argc,		// I - Number of command-line arguments
      char *argv[])	// I - Command-line arguments
 {
-  Fl_Double_Window	*window;// Main window
-  Fl_Button		*button;// Buttons
-  Fl_File_Icon		*icon;	// New file icon
+  fltk3::DoubleWindow	*window;// Main window
+  fltk3::Button		*button;// Buttons
+  fltk3::FileIcon		*icon;	// New file icon
 
 
   // Make the file chooser...
-  Fl::scheme(NULL);
-  Fl_File_Icon::load_system_icons();
+  fltk3::scheme(NULL);
+  fltk3::FileIcon::load_system_icons();
 
-  fc = new Fl_File_Chooser(".", "*", Fl_File_Chooser::SINGLE, "Fl_File_Chooser Test");
+  fc = new fltk3::FileChooser(".", "*", fltk3::FileChooser::SINGLE, "fltk3::FileChooser Test");
   fc->callback(fc_callback);
 
   // Register the PS and PDF image types...
-  Fl_Shared_Image::add_handler(pdf_check);
-  Fl_Shared_Image::add_handler(ps_check);
+  fltk3::SharedImage::add_handler(pdf_check);
+  fltk3::SharedImage::add_handler(ps_check);
 
   // Make the main window...
-  window = new Fl_Double_Window(400, 215, "File Chooser Test");
+  window = new fltk3::DoubleWindow(400, 215, "File Chooser Test");
 
   filter = new fltk3::Input(50, 10, 315, 25, "Filter:");
   int argn = 1;
@@ -126,33 +126,33 @@ main(int  argc,		// I - Number of command-line arguments
 		  "Image Files (*.{bmp,gif,jpg,png})\t"
 		  "C/C++ Source Files (*.{c,C,cc,cpp,cxx})");
 
-  button = new Fl_Button(365, 10, 25, 25);
-  button->labelcolor(FL_YELLOW);
-  button->callback((Fl_Callback *)show_callback);
+  button = new fltk3::Button(365, 10, 25, 25);
+  button->labelcolor(fltk3::YELLOW);
+  button->callback((fltk3::Callback *)show_callback);
 
-  icon   = Fl_File_Icon::find(".", Fl_File_Icon::DIRECTORY);
+  icon   = fltk3::FileIcon::find(".", fltk3::FileIcon::DIRECTORY);
   icon->label(button);
 
-  button = new Fl_Light_Button(50, 45, 80, 25, "MULTI");
-  button->callback((Fl_Callback *)multi_callback);
+  button = new fltk3::LightButton(50, 45, 80, 25, "MULTI");
+  button->callback((fltk3::Callback *)multi_callback);
 
-  button = new Fl_Light_Button(140, 45, 90, 25, "CREATE");
-  button->callback((Fl_Callback *)create_callback);
+  button = new fltk3::LightButton(140, 45, 90, 25, "CREATE");
+  button->callback((fltk3::Callback *)create_callback);
 
-  button = new Fl_Light_Button(240, 45, 115, 25, "DIRECTORY");
-  button->callback((Fl_Callback *)dir_callback);
+  button = new fltk3::LightButton(240, 45, 115, 25, "DIRECTORY");
+  button->callback((fltk3::Callback *)dir_callback);
 
   //
   ch_extra = new fltk3::Choice(150, 75, 150, 25, "Extra Group:");
   ch_extra->add("none|encodings group|check button");
   ch_extra->value(0);
-  ch_extra->callback((Fl_Callback *)extra_callback);
+  ch_extra->callback((fltk3::Callback *)extra_callback);
   //
-  files = new Fl_File_Browser(50, 105, 340, 75, "Files:");
-  files->align(FL_ALIGN_LEFT);
+  files = new fltk3::FileBrowser(50, 105, 340, 75, "Files:");
+  files->align(fltk3::ALIGN_LEFT);
 
-  button = new Fl_Button(340, 185, 50, 25, "Close");
-  button->callback((Fl_Callback *)close_callback);
+  button = new fltk3::Button(340, 185, 50, 25, "Close");
+  button->callback((fltk3::Callback *)close_callback);
 
   window->resizable(files);
   window->end();
@@ -171,7 +171,7 @@ extra_callback(fltk3::Choice*w,void*)
   if (0 == val) fc->add_extra(NULL);
   else if (1 == val) {
     if(!encodings){
-      encodings=new Fl_Group(0,0,254,30);
+      encodings=new fltk3::Group(0,0,254,30);
       ch_enc=new fltk3::Choice(152,2,100,25,"Choose Encoding:");
       ch_enc->add("ASCII|Koi8-r|win1251|Utf-8");
       encodings->end();
@@ -179,7 +179,7 @@ extra_callback(fltk3::Choice*w,void*)
     fc->add_extra(encodings);
   } else {
     if (!version) {
-      version = new Fl_Check_Button(5,0,200,25,"Save binary 1.0 version");
+      version = new fltk3::CheckButton(5,0,200,25,"Save binary 1.0 version");
     }
     fc->add_extra(version);
   }
@@ -204,7 +204,7 @@ close_callback(void)
 void
 create_callback(void)
 {
-  fc->type(fc->type() ^ Fl_File_Chooser::CREATE);
+  fc->type(fc->type() ^ fltk3::FileChooser::CREATE);
 }
 
 
@@ -215,7 +215,7 @@ create_callback(void)
 void
 dir_callback(void)
 {
-  fc->type(fc->type() ^ Fl_File_Chooser::DIRECTORY);
+  fc->type(fc->type() ^ fltk3::FileChooser::DIRECTORY);
 }
 
 
@@ -224,7 +224,7 @@ dir_callback(void)
 //
 
 void
-fc_callback(Fl_File_Chooser *fc,	// I - File chooser
+fc_callback(fltk3::FileChooser *fc,	// I - File chooser
             void            *data)	// I - Data
 {
   const char		*filename;	// Current filename
@@ -245,7 +245,7 @@ fc_callback(Fl_File_Chooser *fc,	// I - File chooser
 void
 multi_callback(void)
 {
-  fc->type(fc->type() ^ Fl_File_Chooser::MULTI);
+  fc->type(fc->type() ^ fltk3::FileChooser::MULTI);
 }
 
 
@@ -276,7 +276,7 @@ pdf_check(const char *name,	// I - Name of file
 
   if (system(command)) return 0;
 
-  return new Fl_PNM_Image(preview);
+  return new fltk3::PNMImage(preview);
 }
 
 
@@ -339,7 +339,7 @@ ps_check(const char *name,	// I - Name of file
 
   if (system(command)) return 0;
 
-  return new Fl_PNM_Image(preview);
+  return new fltk3::PNMImage(preview);
 }
 
 
@@ -361,7 +361,7 @@ show_callback(void)
   fc->show();
 
   while (fc->visible()) {
-    Fl::wait();
+    fltk3::wait();
   }
 
   count = fc->count();
@@ -377,7 +377,7 @@ show_callback(void)
       fl_filename_relative(relative, sizeof(relative), fc->value(i));
 
       files->add(relative,
-                 Fl_File_Icon::find(fc->value(i), Fl_File_Icon::PLAIN));
+                 fltk3::FileIcon::find(fc->value(i), fltk3::FileIcon::PLAIN));
     }
 
     files->redraw();

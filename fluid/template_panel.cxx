@@ -46,7 +46,7 @@ extern Fl_Preferences fluid_prefs;
 fltk3::DoubleWindow *template_panel=(fltk3::DoubleWindow *)0;
 
 static void cb_template_panel(fltk3::DoubleWindow*, void*) {
-  Fl_Shared_Image *img = (Fl_Shared_Image *)template_preview->image();
+  fltk3::SharedImage *img = (fltk3::SharedImage *)template_preview->image();
 if (img) img->release();
 template_preview->image(0);
 
@@ -63,7 +63,7 @@ static void cb_template_browser(fltk3::Browser*, void*) {
   template_panel->hide();
   return;
 }
-Fl_Shared_Image *img = (Fl_Shared_Image *)template_preview->image();
+fltk3::SharedImage *img = (fltk3::SharedImage *)template_preview->image();
 if (img) img->release();
 template_preview->image(0);
 template_preview->redraw();
@@ -97,7 +97,7 @@ strlcpy(pngfile, flfile, sizeof(pngfile));
 if ((ext = strrchr(pngfile, '.')) == NULL) return;
 strcpy(ext, ".png");
 
-img = Fl_Shared_Image::get(pngfile);
+img = fltk3::SharedImage::get(pngfile);
 
 if (img) {
   template_preview->image(img);
@@ -121,7 +121,7 @@ fltk3::Input *template_instance=(fltk3::Input *)0;
 fltk3::Button *template_delete=(fltk3::Button *)0;
 
 static void cb_Cancel(fltk3::Button*, void*) {
-  Fl_Shared_Image *img = (Fl_Shared_Image *)template_preview->image();
+  fltk3::SharedImage *img = (fltk3::SharedImage *)template_preview->image();
 if (img) img->release();
 template_preview->image(0);
 
@@ -134,7 +134,7 @@ template_panel->hide();
 fltk3::ReturnButton *template_submit=(fltk3::ReturnButton *)0;
 
 static void cb_template_submit(fltk3::ReturnButton*, void*) {
-  Fl_Shared_Image *img = (Fl_Shared_Image *)template_preview->image();
+  fltk3::SharedImage *img = (fltk3::SharedImage *)template_preview->image();
 if (img) img->release();
 template_preview->image(0);
 

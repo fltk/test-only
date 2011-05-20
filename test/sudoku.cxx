@@ -165,7 +165,7 @@ class SudokuCell : public Fl_Widget {
 
 
 // Sudoku window class...
-class Sudoku : public Fl_Double_Window {
+class Sudoku : public fltk3::DoubleWindow {
   Fl_Sys_Menu_Bar *menubar_;
   Fl_Group	*grid_;
   time_t	seed_;
@@ -187,7 +187,7 @@ class Sudoku : public Fl_Double_Window {
   void		set_title();
   static void	solve_cb(Fl_Widget *widget, void *);
 
-  static Fl_Help_Dialog *help_dialog_;
+  static fltk3::HelpDialog *help_dialog_;
   static Fl_Preferences	prefs_;
   public:
 
@@ -632,13 +632,13 @@ SudokuCell::handle(int event) {
 
 
 // Sudoku class globals...
-Fl_Help_Dialog	*Sudoku::help_dialog_ = (Fl_Help_Dialog *)0;
+fltk3::HelpDialog	*Sudoku::help_dialog_ = (fltk3::HelpDialog *)0;
 Fl_Preferences	Sudoku::prefs_(Fl_Preferences::USER, "fltk.org", "sudoku");
 
 
 // Create a Sudoku game window...
 Sudoku::Sudoku()
-  : Fl_Double_Window(GROUP_SIZE * 3, GROUP_SIZE * 3 + MENU_OFFSET, "Sudoku")
+  : fltk3::DoubleWindow(GROUP_SIZE * 3, GROUP_SIZE * 3 + MENU_OFFSET, "Sudoku")
 {
   int j, k;
   Fl_Group *g;
@@ -944,7 +944,7 @@ Sudoku::update_helpers() {
 void
 Sudoku::help_cb(Fl_Widget *, void *) {
   if (!help_dialog_) {
-    help_dialog_ = new Fl_Help_Dialog();
+    help_dialog_ = new fltk3::HelpDialog();
 
     help_dialog_->value(
 	"<HTML>\n"
@@ -1226,7 +1226,7 @@ Sudoku::reset_cb(Fl_Widget *widget, void *) {
 void
 Sudoku::resize(int X, int Y, int W, int H) {
   // Resize the window...
-  Fl_Double_Window::resize(X, Y, W, H);
+  fltk3::DoubleWindow::resize(X, Y, W, H);
 
   // Save the new window geometry...
   prefs_.set("x", X);

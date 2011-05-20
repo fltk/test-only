@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_File_Browser routines.
+// fltk3::FileBrowser routines.
 //
 // Copyright 1999-2010 by Michael Sweet.
 //
@@ -26,13 +26,13 @@
 //
 // Contents:
 //
-//   Fl_File_Browser::full_height()     - Return the height of the list.
-//   Fl_File_Browser::item_height()     - Return the height of a list item.
-//   Fl_File_Browser::item_width()      - Return the width of a list item.
-//   Fl_File_Browser::item_draw()       - Draw a list item.
-//   Fl_File_Browser::Fl_File_Browser() - Create a Fl_File_Browser widget.
-//   Fl_File_Browser::load()            - Load a directory into the browser.
-//   Fl_File_Browser::filter()          - Set the filename filter.
+//   fltk3::FileBrowser::full_height()     - Return the height of the list.
+//   fltk3::FileBrowser::item_height()     - Return the height of a list item.
+//   fltk3::FileBrowser::item_width()      - Return the width of a list item.
+//   fltk3::FileBrowser::item_draw()       - Draw a list item.
+//   fltk3::FileBrowser::fltk3::FileBrowser() - Create a fltk3::FileBrowser widget.
+//   fltk3::FileBrowser::load()            - Load a directory into the browser.
+//   fltk3::FileBrowser::filter()          - Set the filename filter.
 //
 
 //
@@ -53,7 +53,7 @@
 #  include <windows.h>
 #  include <direct.h>
 // Apparently Borland C++ defines DIRECTORY in <direct.h>, which
-// interfers with the Fl_File_Icon enumeration of the same name.
+// interfers with the fltk3::FileIcon enumeration of the same name.
 #  ifdef DIRECTORY
 #    undef DIRECTORY
 #  endif // DIRECTORY
@@ -79,7 +79,7 @@
 #define NOTDISPLAYED 2
 
 // TODO -- Warning: The definition of FL_BLINE here is a hack.
-//    Fl_File_Browser should not do this. PLEASE FIX.
+//    fltk3::FileBrowser should not do this. PLEASE FIX.
 //    FL_BLINE should be private to fltk3::Browser, and not re-defined here.
 //    For now, make sure this struct is precisely consistent with fltk3::Browser.cxx.
 //
@@ -96,11 +96,11 @@ struct FL_BLINE			// data is in a linked list of these
 
 
 //
-// 'Fl_File_Browser::full_height()' - Return the height of the list.
+// 'fltk3::FileBrowser::full_height()' - Return the height of the list.
 //
 
 int					// O - Height in pixels
-Fl_File_Browser::full_height() const
+fltk3::FileBrowser::full_height() const
 {
   int	i,				// Looping var
 	th;				// Total height of list.
@@ -114,11 +114,11 @@ Fl_File_Browser::full_height() const
 
 
 //
-// 'Fl_File_Browser::item_height()' - Return the height of a list item.
+// 'fltk3::FileBrowser::item_height()' - Return the height of a list item.
 //
 
 int					// O - Height in pixels
-Fl_File_Browser::item_height(void *p) const	// I - List item data
+fltk3::FileBrowser::item_height(void *p) const	// I - List item data
 {
   FL_BLINE	*line;			// Pointer to line
   char		*t;			// Pointer into text
@@ -142,7 +142,7 @@ Fl_File_Browser::item_height(void *p) const	// I - List item data
 	height += textheight;
 
   // If we have enabled icons then add space for them...
-  if (Fl_File_Icon::first() != NULL && height < iconsize_)
+  if (fltk3::FileIcon::first() != NULL && height < iconsize_)
     height = iconsize_;
 
   // Add space for the selection border..
@@ -154,11 +154,11 @@ Fl_File_Browser::item_height(void *p) const	// I - List item data
 
 
 //
-// 'Fl_File_Browser::item_width()' - Return the width of a list item.
+// 'fltk3::FileBrowser::item_width()' - Return the width of a list item.
 //
 
 int					// O - Width in pixels
-Fl_File_Browser::item_width(void *p) const	// I - List item data
+fltk3::FileBrowser::item_width(void *p) const	// I - List item data
 {
   int		i;			// Looping var
   FL_BLINE	*line;			// Pointer to line
@@ -245,7 +245,7 @@ Fl_File_Browser::item_width(void *p) const	// I - List item data
   }
 
   // If we have enabled icons then add space for them...
-  if (Fl_File_Icon::first() != NULL)
+  if (fltk3::FileIcon::first() != NULL)
     width += iconsize_ + 8;
 
   // Add space for the selection border..
@@ -257,11 +257,11 @@ Fl_File_Browser::item_width(void *p) const	// I - List item data
 
 
 //
-// 'Fl_File_Browser::item_draw()' - Draw a list item.
+// 'fltk3::FileBrowser::item_draw()' - Draw a list item.
 //
 
 void
-Fl_File_Browser::item_draw(void *p,	// I - List item data
+fltk3::FileBrowser::item_draw(void *p,	// I - List item data
                  	   int  X,	// I - Upper-lefthand X coordinate
 		 	   int  Y,	// I - Upper-lefthand Y coordinate
 		 	   int  W,	// I - Width of item
@@ -292,7 +292,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
   else
     c = textcolor();
 
-  if (Fl_File_Icon::first() == NULL)
+  if (fltk3::FileIcon::first() == NULL)
   {
     // No icons, just draw the text...
     X ++;
@@ -302,7 +302,7 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
   {
     // Draw the icon if it is set...
     if (line->data)
-      ((Fl_File_Icon *)line->data)->draw(X, Y, iconsize_, iconsize_,
+      ((fltk3::FileIcon *)line->data)->draw(X, Y, iconsize_, iconsize_,
                                 	(line->flags & SELECTED) ? fltk3::YELLOW :
 				                                   fltk3::LIGHT2,
 					active_r());
@@ -394,10 +394,10 @@ Fl_File_Browser::item_draw(void *p,	// I - List item data
 
 
 //
-// 'Fl_File_Browser::Fl_File_Browser()' - Create a Fl_File_Browser widget.
+// 'fltk3::FileBrowser::fltk3::FileBrowser()' - Create a fltk3::FileBrowser widget.
 //
 
-Fl_File_Browser::Fl_File_Browser(int        X,  // I - Upper-lefthand X coordinate
+fltk3::FileBrowser::FileBrowser(int        X,  // I - Upper-lefthand X coordinate
                         	 int        Y,  // I - Upper-lefthand Y coordinate
 				 int        W,  // I - Width in pixels
 				 int        H,  // I - Height in pixels
@@ -413,21 +413,21 @@ Fl_File_Browser::Fl_File_Browser(int        X,  // I - Upper-lefthand X coordina
 
 
 //
-// 'Fl_File_Browser::load()' - Load a directory into the browser.
+// 'fltk3::FileBrowser::load()' - Load a directory into the browser.
 //
 
 int						// O - Number of files loaded
-Fl_File_Browser::load(const char     *directory,// I - Directory to load
+fltk3::FileBrowser::load(const char     *directory,// I - Directory to load
                       Fl_File_Sort_F *sort)	// I - Sort function to use
 {
   int		i;				// Looping var
   int		num_files;			// Number of files in directory
   int		num_dirs;			// Number of directories in list
   char		filename[4096];			// Current file
-  Fl_File_Icon	*icon;				// Icon to use
+  fltk3::FileIcon	*icon;				// Icon to use
 
 
-//  printf("Fl_File_Browser::load(\"%s\")\n", directory);
+//  printf("fltk3::FileBrowser::load(\"%s\")\n", directory);
 
   clear();
 
@@ -444,8 +444,8 @@ Fl_File_Browser::load(const char     *directory,// I - Directory to load
     //
 
     num_files = 0;
-    if ((icon = Fl_File_Icon::find("any", Fl_File_Icon::DEVICE)) == NULL)
-      icon = Fl_File_Icon::find("any", Fl_File_Icon::DIRECTORY);
+    if ((icon = fltk3::FileIcon::find("any", fltk3::FileIcon::DEVICE)) == NULL)
+      icon = fltk3::FileIcon::find("any", fltk3::FileIcon::DIRECTORY);
 
 #ifdef WIN32
 #  ifdef __CYGWIN__
@@ -561,7 +561,7 @@ Fl_File_Browser::load(const char     *directory,// I - Directory to load
 
         strlcat(filename, "/", sizeof(filename));
 
-//        printf("Fl_File_Browser::load() - adding \"%s\" to list...\n", filename);
+//        printf("fltk3::FileBrowser::load() - adding \"%s\" to list...\n", filename);
         add(filename, icon);
 	num_files ++;
       }
@@ -602,8 +602,8 @@ Fl_File_Browser::load(const char     *directory,// I - Directory to load
 	snprintf(filename, sizeof(filename), "%s/%s", directory_,
 	         files[i]->d_name);
 
-        icon = Fl_File_Icon::find(filename);
-	if ((icon && icon->type() == Fl_File_Icon::DIRECTORY) ||
+        icon = fltk3::FileIcon::find(filename);
+	if ((icon && icon->type() == fltk3::FileIcon::DIRECTORY) ||
 	     _fl_filename_isdir_quick(filename)) {
           num_dirs ++;
           insert(num_dirs, files[i]->d_name, icon);
@@ -624,11 +624,11 @@ Fl_File_Browser::load(const char     *directory,// I - Directory to load
 
 
 //
-// 'Fl_File_Browser::filter()' - Set the filename filter.
+// 'fltk3::FileBrowser::filter()' - Set the filename filter.
 //
 
 void
-Fl_File_Browser::filter(const char *pattern)	// I - Pattern string
+fltk3::FileBrowser::filter(const char *pattern)	// I - Pattern string
 {
   // If pattern is NULL set the pattern to "*"...
   if (pattern)

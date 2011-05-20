@@ -27,17 +27,17 @@
 //
 #include <stdio.h>
 #include <fltk3/run.h>
-#include <fltk3/ask.h>		// fl_beep()
+#include <fltk3/ask.h>		// fltk3::beep()
 #include <fltk3/Window.h>
 #include <fltk3/Button.h>
 #include <fltk3/Input.h>
 #include <fltk3/Box.h>
-#include <fltk3/Native_File_Chooser.h>
+#include <fltk3/NativeFileChooser.h>
 
 // GLOBALS
 fltk3::Input *G_filename = NULL;
 
-void Butt_CB(Fl_Widget*, void*) {
+void Butt_CB(fltk3::Widget*, void*) {
   // Create native chooser
   fltk3::NativeFileChooser native;
   native.title("Pick a file");
@@ -49,7 +49,7 @@ void Butt_CB(Fl_Widget*, void*) {
   // Show native chooser
   switch ( native.show() ) {
     case -1: fprintf(stderr, "ERROR: %s\n", native.errmsg()); break;	// ERROR
-    case  1: fprintf(stderr, "*** CANCEL\n"); fl_beep(); break;		// CANCEL
+    case  1: fprintf(stderr, "*** CANCEL\n"); fltk3::beep(); break;		// CANCEL
     default: 								// PICKED FILE
       if ( native.filename() ) {
         G_filename->value(native.filename());
@@ -61,14 +61,14 @@ void Butt_CB(Fl_Widget*, void*) {
 }
 
 int main(int argc, char **argv) {
-  //// For a nicer looking browser under linux, call Fl_File_Icon::load_system_icons();
+  //// For a nicer looking browser under linux, call fltk3::FileIcon::load_system_icons();
   //// (If you do this, you'll need to link with fltk_images)
   //// NOTE: If you do not load the system icons, the file chooser will still work, but
   ////       no icons will be shown. However, this means you do not need to link in the
   ////       fltk_images library, potentially reducing the size of your executable.
   //// Loading the system icons is not required by the OSX or Windows native file choosers.
 #if !defined(WIN32) && !defined(__APPLE__)
-  Fl_File_Icon::load_system_icons();
+  fltk3::FileIcon::load_system_icons();
 #endif
 
   int argn = 1;
@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
     argn++;
 #endif
   
-  Fl_Window *win = new Fl_Window(600, 100, "Native File Chooser Test");
+  fltk3::Window *win = new fltk3::Window(600, 100, "Native File Chooser Test");
   win->size_range(300, 100, 0, 100);
   win->begin();
   {
@@ -87,9 +87,9 @@ int main(int argc, char **argv) {
     G_filename->value(argc <= argn ? "." : argv[argn]);
     G_filename->tooltip("Default filename");
     y += G_filename->h() + 5;
-    Fl_Button *but = new Fl_Button(win->w()-80-10, win->h()-25-10, 80, 25, "Pick File");
+    fltk3::Button *but = new fltk3::Button(win->w()-80-10, win->h()-25-10, 80, 25, "Pick File");
     but->callback(Butt_CB);
-    Fl_Box *dummy = new Fl_Box(80, 0, 430, 100);
+    fltk3::Box *dummy = new fltk3::Box(80, 0, 430, 100);
     dummy->hide();
     win->resizable(dummy);
   }
