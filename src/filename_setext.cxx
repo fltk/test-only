@@ -40,7 +40,7 @@
    \code
    #include <fltk3/filename.h>
    [..]
-   char buf[FL_PATH_MAX] = "/path/myfile.cxx";
+   char buf[FLTK3_PATH_MAX] = "/path/myfile.cxx";
    fl_filename_setext(buf, sizeof(buf), ".txt");      // buf[] becomes "/path/myfile.txt"
    \endcode
 

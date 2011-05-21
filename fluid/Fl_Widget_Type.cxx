@@ -67,7 +67,7 @@ const char* subclassname(Fl_Type* l) {
     const char* c = p->subclass();
     if (c) return c;
     if (l->is_class()) return "fltk3::Group";
-    if (p->o->type() == FL_WINDOW+1) return "fltk3::DoubleWindow";
+    if (p->o->type() == fltk3::WINDOW+1) return "fltk3::DoubleWindow";
     if (strcmp(p->type_name(), "fltk3::Input") == 0) {
       if (p->o->type() == fltk3::FLOAT_INPUT) return "fltk3::FloatInput";
       if (p->o->type() == fltk3::INT_INPUT) return "fltk3::IntInput";

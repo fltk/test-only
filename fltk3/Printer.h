@@ -47,7 +47,7 @@
 namespace fltk3 {
   class Printer;
   
-#if defined(__APPLE__) || defined(WIN32) || defined(FL_DOXYGEN)
+#if defined(__APPLE__) || defined(WIN32) || defined(FLTK3_DOXYGEN)
   /**
    Print support under MSWindows and Mac OS.
    
@@ -213,7 +213,7 @@ namespace fltk3 {
   
 } // namespace
 
-#endif // Fl_Printer_H
+#endif // Fltk3_Printer_H
 
 //
 // End of "$Id: Printer.h 8565 2011-04-06 13:43:09Z manolo $"

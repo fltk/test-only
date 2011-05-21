@@ -29,7 +29,7 @@
 
 static int fl_angle_ = 0;
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 Fl_Font_Descriptor::Fl_Font_Descriptor(const char* name, fltk3::Fontsize fsize) {
   int weight = FW_NORMAL;
   int italic = 0;

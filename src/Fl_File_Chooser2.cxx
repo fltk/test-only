@@ -465,7 +465,7 @@ fltk3::FileChooser::directory(const char *d)// I - Directory to change to
 #ifdef WIN32
   // See if the filename contains backslashes...
   char	*slash;				// Pointer to slashes
-  char	fixpath[FL_PATH_MAX];			// Path with slashes converted
+  char	fixpath[FLTK3_PATH_MAX];			// Path with slashes converted
   if (strchr(d, '\\')) {
     // Convert backslashes to slashes...
     strlcpy(fixpath, d, sizeof(fixpath));
@@ -529,8 +529,8 @@ void
 fltk3::FileChooser::favoritesButtonCB()
 {
   int		v;			// Current selection
-  char		pathname[FL_PATH_MAX],		// Pathname
-		menuname[FL_PATH_MAX];		// Menu name
+  char		pathname[FLTK3_PATH_MAX],		// Pathname
+		menuname[FLTK3_PATH_MAX];		// Menu name
 
 
   v = favoritesButton->value();
@@ -696,7 +696,7 @@ void
 fltk3::FileChooser::fileListCB()
 {
   char	*filename,			// New filename
-	pathname[FL_PATH_MAX];			// Full pathname to file
+	pathname[FLTK3_PATH_MAX];			// Full pathname to file
 
 
   filename = (char *)fileList->text(fileList->value());
@@ -797,8 +797,8 @@ fltk3::FileChooser::fileNameCB()
 {
   char		*filename,	// New filename
 		*slash,		// Pointer to trailing slash
-		pathname[FL_PATH_MAX],	// Full pathname to file
-		matchname[FL_PATH_MAX];	// Matching filename
+		pathname[FLTK3_PATH_MAX],	// Full pathname to file
+		matchname[FLTK3_PATH_MAX];	// Matching filename
   int		i,		// Looping var
 		min_match,	// Minimum number of matching chars
 		max_match,	// Maximum number of matching chars
@@ -895,7 +895,7 @@ fltk3::FileChooser::fileNameCB()
       directory(pathname);
 
       if (filename[0]) {
-	char tempname[FL_PATH_MAX];
+	char tempname[FLTK3_PATH_MAX];
 
 	snprintf(tempname, sizeof(tempname), "%s/%s", directory_, filename);
 	fileName->value(tempname);
@@ -1006,7 +1006,7 @@ fltk3::FileChooser::filter(const char *p)		// I - Pattern(s)
 		*start,				// Start of pattern
 		*end;				// End of pattern
   int		allfiles;			// Do we have a "*" pattern?
-  char		temp[FL_PATH_MAX];			// Temporary pattern string
+  char		temp[FLTK3_PATH_MAX];			// Temporary pattern string
 
 
   // Make sure we have a pattern...
@@ -1051,7 +1051,7 @@ void
 fltk3::FileChooser::newdir()
 {
   const char	*dir;		// New directory name
-  char		pathname[FL_PATH_MAX];	// Full path of directory
+  char		pathname[FLTK3_PATH_MAX];	// Full path of directory
 
 
   // Get a directory name from the user
@@ -1132,7 +1132,7 @@ fltk3::FileChooser::previewCB(fltk3::FileChooser *fc) {	// I - File chooser
 void
 fltk3::FileChooser::rescan()
 {
-  char	pathname[FL_PATH_MAX];		// New pathname for filename field
+  char	pathname[FLTK3_PATH_MAX];		// New pathname for filename field
 
 
   // Clear the current filename
@@ -1172,7 +1172,7 @@ void fltk3::FileChooser::rescan_keep_filename()
   }
 
   int   i;
-  char	pathname[FL_PATH_MAX];		// New pathname for filename field
+  char	pathname[FLTK3_PATH_MAX];		// New pathname for filename field
   strlcpy(pathname, fn, sizeof(pathname));
 
   // Build the file list...
@@ -1220,7 +1220,7 @@ fltk3::FileChooser::showChoiceCB()
   const char	*item,			// Selected item
 		*patstart;		// Start of pattern
   char		*patend;		// End of pattern
-  char		temp[FL_PATH_MAX];		// Temporary string for pattern
+  char		temp[FLTK3_PATH_MAX];		// Temporary string for pattern
 
 
   item = showChoice->text(showChoice->value());
@@ -1257,7 +1257,7 @@ void
 fltk3::FileChooser::update_favorites()
 {
   int		i;			// Looping var
-  char		pathname[FL_PATH_MAX],		// Pathname
+  char		pathname[FLTK3_PATH_MAX],		// Pathname
 		menuname[2048];		// Menu name
   const char	*home;			// Home directory
 
@@ -1462,7 +1462,7 @@ fltk3::FileChooser::value(int f)	// I - File number
   int		i;		// Looping var
   int		fcount;		// Number of selected files
   const char	*name;		// Current filename
-  static char	pathname[FL_PATH_MAX];	// Filename + directory
+  static char	pathname[FLTK3_PATH_MAX];	// Filename + directory
 
 
   name = fileName->value();
@@ -1509,7 +1509,7 @@ fltk3::FileChooser::value(const char *filename)
   int	i,				// Looping var
   	fcount;				// Number of items in list
   char	*slash;				// Directory separator
-  char	pathname[FL_PATH_MAX];		// Local copy of filename
+  char	pathname[FLTK3_PATH_MAX];		// Local copy of filename
 
 
 //  printf("fltk3::FileChooser::value(\"%s\")\n", filename == NULL ? "(null)" : filename);
@@ -1525,7 +1525,7 @@ fltk3::FileChooser::value(const char *filename)
 
 #ifdef WIN32
   // See if the filename contains backslashes...
-  char	fixpath[FL_PATH_MAX];			// Path with slashes converted
+  char	fixpath[FLTK3_PATH_MAX];			// Path with slashes converted
   if (strchr(filename, '\\')) {
     // Convert backslashes to slashes...
     strlcpy(fixpath, filename, sizeof(fixpath));

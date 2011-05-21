@@ -61,7 +61,7 @@
 // itself. You should edit the ~/.xftconfig file to "fix" things, there
 // are several web pages of information on how to do this.
 //
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 
 #include <X11/Xft/Xft.h>
 

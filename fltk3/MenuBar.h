@@ -73,7 +73,7 @@ namespace fltk3 {
      fltk3::Menu_ for the methods to set or change the menu. </P>
      <P>labelsize(), labelfont(), and labelcolor()
      are used to control how the menubar items are drawn.  They are
-     initialized from the Fl_Menu static variables, but you can
+     initialized from the fltk3::Menu static variables, but you can
      change them if desired. </P>
      <P>label() is ignored unless you change align() to
      put it outside the menubar.

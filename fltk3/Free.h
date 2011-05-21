@@ -31,54 +31,7 @@
 #ifndef Fltk3_Free_H
 #define Fltk3_Free_H
 
-#include "Widget.h"
-
-#define FL_NORMAL_FREE		1 /**< normal event handling */
-#define FL_SLEEPING_FREE	2 /**< deactivate event handling */
-#define FL_INPUT_FREE		3 /**< accepts fltk3::FOCUS events */
-#define FL_CONTINUOUS_FREE	4 /**< repeated timeout handling */
-#define FL_ALL_FREE		5 /**< FL_INPUT_FREE and FL_CONTINOUS_FREE */
-
-/** appropriate signature for handle function */
-typedef int (*FL_HANDLEPTR)(fltk3::Widget *, int , float, float, char);
-
-/**
-  Emulation of the Forms "free" widget.
-  
-  This emulation allows the free demo to run, and appears to be useful for
-  porting programs written in Forms which use the free widget or make
-  subclasses of the Forms widgets.
-
-  There are five types of free, which determine when the handle function
-  is called:
-  
-  \li \c FL_NORMAL_FREE      normal event handling.
-  \li \c FL_SLEEPING_FREE    deactivates event handling (widget is inactive).
-  \li \c FL_INPUT_FREE       accepts fltk3::FOCUS events.
-  \li \c FL_CONTINUOUS_FREE  sets a timeout callback 100 times a second and
-                             provides an FL_STEP event. This has obvious
-			     detrimental effects on machine performance.
-  \li \c FL_ALL_FREE         same as FL_INPUT_FREE and FL_CONTINUOUS_FREE.
- 
-*/
-class FLTK3_EXPORT Fl_Free : public fltk3::Widget {
-    FL_HANDLEPTR hfunc;
-    static void step(void *);
-protected:
-    void draw();
-public:
-    int handle(int e);
-  Fl_Free(uchar t,int X,int Y,int W,int H,const char *L,FL_HANDLEPTR hdl);
-  ~Fl_Free();
-};
-
-// old event names for compatibility:
-#define FL_MOUSE	fltk3::DRAG /**< for backward compatibility */
-#define FL_DRAW		100     /**< for backward compatibility [UNUSED]*/
-#define FL_STEP		101     /**< for backward compatibility */
-#define FL_FREEMEM	102     /**< for backward compatibility [UNUSED]*/
-#define FL_FREEZE	103     /**< for backward compatibility [UNUSED]*/
-#define FL_THAW		104     /**< for backward compatibility [UNUSED]*/
+#error "fltk3::Free" widget no longer supported.
 
 #endif
 

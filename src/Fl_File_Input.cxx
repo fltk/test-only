@@ -243,7 +243,7 @@ fltk3::FileInput::handle_button(int event)		// I - Event
 		X;				// Current X position
   char		*start,				// Start of path component
 		*end;				// End of path component
-  char		newvalue[FL_PATH_MAX];		// New value
+  char		newvalue[FLTK3_PATH_MAX];		// New value
 
 
   // Figure out which button is being pressed...

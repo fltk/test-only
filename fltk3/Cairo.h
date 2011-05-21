@@ -90,7 +90,7 @@ private:
 /** @} */
 
 # endif // FLTK_HAVE_CAIRO
-#endif // FL_CAIRO_H
+#endif // FLtk3_CAIRO_H
 
 //
 // End of "$Id: Cairo.h 8198 2011-01-06 10:24:58Z manolo $" .

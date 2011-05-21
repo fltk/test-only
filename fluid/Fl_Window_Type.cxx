@@ -278,8 +278,8 @@ void use_FL_COMMAND_button_cb(fltk3::CheckButton* b, void*) {
 ////////////////////////////////////////////////////////////////
 
 fltk3::MenuItem window_type_menu[] = {
-  {"Single",0,0,(void*)FL_WINDOW},
-  {"Double",0,0,(void*)(FL_WINDOW+1)},
+  {"Single",0,0,(void*)fltk3::WINDOW},
+  {"Double",0,0,(void*)(fltk3::WINDOW+1)},
   {0}};
 
 static int overlays_invisible;

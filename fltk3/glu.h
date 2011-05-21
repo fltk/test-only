@@ -53,7 +53,7 @@
 #    include <GL/glu.h>
 #  endif
 
-#endif // !FL_glu_H
+#endif // !FLtk3_glu_H
 
 //
 // End of "$Id: glu.h 7903 2010-11-28 21:06:39Z matt $".

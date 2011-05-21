@@ -111,7 +111,7 @@ namespace fltk3 {
    A submenu title is identified by the bit fltk3::SUBMENU in the 
    flags field, and ends with a label() that is NULL.
    You can nest menus to any depth.  A pointer to the first item in the
-   submenu can be treated as an Fl_Menu array itself.  It is also
+   submenu can be treated as an fltk3::Menu array itself.  It is also
    possible to make separate submenu arrays with fltk3::SUBMENU_POINTER flags.
    
    You should use the method functions to access structure members and
@@ -227,21 +227,21 @@ namespace fltk3 {
     
     /**
      Sets the menu item's callback function and userdata() argument.
-     \see fltk3::CallbackPtr Fl_MenuItem::callback() const
+     \see fltk3::CallbackPtr fltk3::MenuItem::callback() const
      */
     void callback(fltk3::Callback* c, void* p) {callback_=c; user_data_=p;}
     
     /**
      Sets the menu item's callback function.
      This method does not set the userdata() argument.
-     \see fltk3::CallbackPtr Fl_MenuItem::callback() const
+     \see fltk3::CallbackPtr fltk3::MenuItem::callback() const
      */
     void callback(fltk3::Callback* c) {callback_=c;}
     
     /**
      Sets the menu item's callback function.
      This method does not set the userdata() argument.
-     \see fltk3::CallbackPtr Fl_MenuItem::callback() const
+     \see fltk3::CallbackPtr fltk3::MenuItem::callback() const
      */
     void callback(fltk3::Callback0*c) {callback_=(fltk3::Callback*)c;}
     
@@ -250,7 +250,7 @@ namespace fltk3 {
      This method does not set the userdata() argument.
      The argument \p is cast to void* and stored as the userdata()
      for the menu item's callback function.
-     \see fltk3::CallbackPtr Fl_MenuItem::callback() const
+     \see fltk3::CallbackPtr fltk3::MenuItem::callback() const
      */
     void callback(fltk3::Callback1*c, long p=0) {callback_=(fltk3::Callback*)c; user_data_=(void*)p;}
     
@@ -349,7 +349,7 @@ namespace fltk3 {
      the menu item to appear grayed-out.
      */
     void deactivate() {flags |= MENU_INACTIVE;}
-    /** Returns non 0 if FL_INACTIVE and FL_INVISIBLE are cleared, 0 otherwise. */
+    /** Returns non 0 if fltk3::INACTIVE and fltk3::INVISIBLE are cleared, 0 otherwise. */
     int activevisible() const {return !(flags & (MENU_INACTIVE|MENU_INVISIBLE));}
     
     // compatibility for FLUID so it can set the image of a menu item...

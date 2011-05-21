@@ -18,7 +18,7 @@
 // be archived as graphics/jpeg/jpegsrc.v6a.tar.gz.
 //
 // The makefile assummes you decompressed and build these in a directory
-// called "jpeg-6a" in the same location as the "FL" directory.
+// called "jpeg-6a" in the same location as the "fltk3" directory.
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
 //
@@ -74,7 +74,7 @@ void image_window::draw() {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/x.h>
+#include <fltk3/x.h>
 #include "list_visuals.cxx"
 
 ////////////////////////////////////////////////////////////////

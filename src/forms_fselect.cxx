@@ -30,9 +30,9 @@
 #include <fltk3/forms.h>
 #include "flstring.h"
 
-static char fl_directory[FL_PATH_MAX];
+static char fl_directory[FLTK3_PATH_MAX];
 static const char *fl_pattern;  // assumed passed value is static
-static char fl_filename[FL_PATH_MAX];
+static char fl_filename[FLTK3_PATH_MAX];
 
 char* fl_show_file_selector(const char *message,const char *dir,
 			    const char *pat,const char *fname) {

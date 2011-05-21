@@ -324,7 +324,7 @@ namespace fltk3 {
     virtual ~GraphicsDriver() {};
   };
   
-#if defined(__APPLE__) || defined(FL_DOXYGEN)
+#if defined(__APPLE__) || defined(FLTK3_DOXYGEN)
   /**
    \brief The Mac OS X-specific graphics class.
    *
@@ -358,7 +358,7 @@ namespace fltk3 {
   };
 #endif
   
-#if defined(WIN32) || defined(FL_DOXYGEN)
+#if defined(WIN32) || defined(FLTK3_DOXYGEN)
   /**
    \brief The MSWindows-specific graphics class.
    *
@@ -482,7 +482,7 @@ namespace fltk3 {
   
 }
 
-#endif // Fl_Device_H
+#endif // Fltk3_Device_H
 
 //
 // End of "$Id: Device.h 8529 2011-03-23 12:49:30Z AlbrechtS $".

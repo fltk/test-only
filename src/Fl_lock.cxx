@@ -67,7 +67,7 @@
    returns the most recent value!
 */
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 fltk3::AwakeHandler *fltk3::awake_ring_;
 void **fltk3::awake_data_;
 int fltk3::awake_ring_size_;

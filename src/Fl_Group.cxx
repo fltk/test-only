@@ -100,7 +100,7 @@ extern fltk3::Widget* fl_oldfocus; // set by fltk3::focus
 // windows so they are relative to that window.
 
 static int send(fltk3::Widget* o, int event) {
-  if (o->type() < FL_WINDOW) return o->handle(event);
+  if (o->type() < fltk3::WINDOW) return o->handle(event);
   switch ( event )
   {
   case fltk3::DND_ENTER: /* FALLTHROUGH */
@@ -594,7 +594,7 @@ int* fltk3::Group::sizes() {
   if (!sizes_) {
     int* p = sizes_ = new int[4*(children_+2)];
     // first thing in sizes array is the group's size:
-    if (type() < FL_WINDOW) {p[0] = x(); p[2] = y();} else {p[0] = p[2] = 0;}
+    if (type() < fltk3::WINDOW) {p[0] = x(); p[2] = y();} else {p[0] = p[2] = 0;}
     p[1] = p[0]+w(); p[3] = p[2]+h();
     // next is the resizable's size:
     p[4] = p[0]; // init to the group's size
@@ -647,7 +647,7 @@ void fltk3::Group::resize(int X, int Y, int W, int H) {
 
   if (!resizable() || (dw==0 && dh==0) ) {
 
-    if (type() < FL_WINDOW) {
+    if (type() < fltk3::WINDOW) {
       fltk3::Widget*const* a = array();
       for (int i=children_; i--;) {
 	fltk3::Widget* o = *a++;
@@ -662,7 +662,7 @@ void fltk3::Group::resize(int X, int Y, int W, int H) {
     dw = W - (p[1]-p[0]);
     dy = Y - p[2];
     dh = H - (p[3]-p[2]);
-    if (type() >= FL_WINDOW) dx = dy = 0;
+    if (type() >= fltk3::WINDOW) dx = dy = 0;
     p += 4;
 
     // get initial size of resizable():
@@ -755,7 +755,7 @@ void fltk3::Group::draw() {
   \sa fltk3::Group::draw_child(fltk3::Widget& widget) const
 */
 void fltk3::Group::update_child(fltk3::Widget& widget) const {
-  if (widget.damage() && widget.visible() && widget.type() < FL_WINDOW &&
+  if (widget.damage() && widget.visible() && widget.type() < fltk3::WINDOW &&
       fltk3::not_clipped(widget.x(), widget.y(), widget.w(), widget.h())) {
     widget.draw();	
     widget.clear_damage();
@@ -769,7 +769,7 @@ void fltk3::Group::update_child(fltk3::Widget& widget) const {
   The damage bits are cleared after drawing.
 */
 void fltk3::Group::draw_child(fltk3::Widget& widget) const {
-  if (widget.visible() && widget.type() < FL_WINDOW &&
+  if (widget.visible() && widget.type() < fltk3::WINDOW &&
       fltk3::not_clipped(widget.x(), widget.y(), widget.w(), widget.h())) {
     widget.clear_damage(fltk3::DAMAGE_ALL);
     widget.draw();

@@ -24,7 +24,7 @@
 //
 //     http://www.fltk.org/str.php
 //
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 
 Fl_Font_Descriptor::Fl_Font_Descriptor(const char* name) {
   font = XCreateUtf8FontStruct(fl_display, name);
@@ -338,7 +338,7 @@ void Fl_Xlib_Graphics_Driver::rtl_draw(const char* c, int n, int x, int y) {
   }
   if (fl_gc) XUtf8DrawRtlString(fl_display, fl_window, font_descriptor()->font, fl_gc, x, y, c, n);
 }
-#endif // FL_DOXYGEN
+#endif // FLTK3_DOXYGEN
 //
 // End of "$Id$".
 //

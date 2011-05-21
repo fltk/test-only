@@ -94,7 +94,7 @@ extern FLTK3_EXPORT void (*glut_menustatus_function)(int,int,int);
 FLTK3_EXPORT void glutInit(int *argcp, char **argv); // creates first window
 
 FLTK3_EXPORT void glutInitDisplayMode(unsigned int mode);
-// the FL_ symbols have the same value as the GLUT ones:
+// the fltk3 symbols have the same value as the GLUT ones:
 #  define GLUT_RGB	fltk3::RGB
 #  define GLUT_RGBA	fltk3::RGB
 #  define GLUT_INDEX	fltk3::INDEX

@@ -453,7 +453,7 @@ namespace fltk3 {
     
     /**
      Sets whether the Tab key does focus navigation, 
-     or inserts tab characters into Fl_Multiline_Input.
+     or inserts tab characters into fltk3::MultilineInput.
      
      By default this flag is enabled to provide the 'normal' behavior 
      most users expect; Tab navigates focus to the next widget. 
@@ -466,7 +466,7 @@ namespace fltk3 {
      
      History: This flag was provided for backwards support of FLTK's old 1.1.x
      behavior where Tab inserts a tab character instead of navigating 
-     focus to the next widget. This behavior was unique to Fl_Multiline_Input. 
+     focus to the next widget. This behavior was unique to fltk3::MultilineInput. 
      With the advent of fltk3::TextEditor, this old behavior has been deprecated.
      
      \param [in] val If \p val is 1, Tab advances focus (default).<BR>

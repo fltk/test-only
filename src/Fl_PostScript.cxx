@@ -146,7 +146,7 @@ fltk3::PostScriptFileDevice::~PostScriptFileDevice() {
   if (ps) delete ps;
 }
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 
 #if ! (defined(__APPLE__) || defined(WIN32) )
   #include "print_panel.cxx"
@@ -1590,7 +1590,7 @@ int fltk3::PostScriptPrinter::start_job(int pages, int *firstpage, int *lastpage
 
 #endif // ! (defined(__APPLE__) || defined(WIN32) )
 
-#endif // FL_DOXYGEN
+#endif // FLTK3_DOXYGEN
 
 //
 // End of "$Id$".

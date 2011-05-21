@@ -33,13 +33,14 @@
 
 #include "Group.h"
 
-#define FL_WINDOW 0xF0		///< window type id all subclasses have type() >= this
-#define FL_DOUBLE_WINDOW 0xF1   ///< double window type id
 
 class Fl_X;
 
 namespace fltk3 {
-  
+
+  const uchar WINDOW = 0xF0;		///< window type id all subclasses have type() >= this
+  const uchar DOUBLE_WINDOW = 0xF1;   ///< double window type id
+
   /**
    This widget produces an actual window.  This can either be a main
    window, with a border and title and all the window management controls,
@@ -247,7 +248,7 @@ namespace fltk3 {
      This must be called before the window is shown and cannot be changed
      later.
      
-     \note Since Fl_Tooltip_Window is derived from fltk3::MenuWindow, this
+     \note Since fltk3::TooltipWindow is derived from fltk3::MenuWindow, this
      also \b clears the menu_window() state.
      */
     void set_tooltip_window() { 

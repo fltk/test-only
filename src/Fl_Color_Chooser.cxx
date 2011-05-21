@@ -108,13 +108,13 @@ static fltk3::MenuItem mode_menu[] = {
   {0}
 };
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 int fltk3::cc_Value_Input::format(char* buf) {
   fltk3::ColorChooser* c = (fltk3::ColorChooser*)parent();
   if (c->mode() == M_HEX) return sprintf(buf,"0x%02X", int(value()));
   else return fltk3::Valuator::format(buf);
 }
-#endif // !FL_DOXYGEN
+#endif // !FLTK3_DOXYGEN
 
 void fltk3::ColorChooser::set_valuators() {
   switch (mode()) {
@@ -211,7 +211,7 @@ static void tohs(double x, double y, double& h, double& s) {
 #endif
 }
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 int fltk3::cc_HueBox::handle(int e) {
   static double ih, is;
   fltk3::ColorChooser* c = (fltk3::ColorChooser*)parent();
@@ -246,7 +246,7 @@ int fltk3::cc_HueBox::handle(int e) {
     return 0;
   }
 }
-#endif // !FL_DOXYGEN
+#endif // !FLTK3_DOXYGEN
 
 static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
   fltk3::cc_HueBox* v = (fltk3::cc_HueBox*)vv;
@@ -268,7 +268,7 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
   }
 }
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 int fltk3::cc_HueBox::handle_key(int key) {
   int w1 = w()-fltk3::box_dw(box())-6;
   int h1 = h()-fltk3::box_dh(box())-6;
@@ -307,9 +307,9 @@ int fltk3::cc_HueBox::handle_key(int key) {
 
   return 1;
 }
-#endif // !FL_DOXYGEN
+#endif // !FLTK3_DOXYGEN
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 void fltk3::cc_HueBox::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
   int x1 = x()+fltk3::box_dx(box());
@@ -333,11 +333,11 @@ void fltk3::cc_HueBox::draw() {
   draw_box(fltk3::UP_BOX,x1+X,yy1+Y,6,6,fltk3::focus() == this ? fltk3::FOREGROUND_COLOR : fltk3::GRAY);
   px = X; py = Y;
 }
-#endif // !FL_DOXYGEN
+#endif // !FLTK3_DOXYGEN
 
 ////////////////////////////////////////////////////////////////
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 int fltk3::cc_ValueBox::handle(int e) {
   static double iv;
   fltk3::ColorChooser* c = (fltk3::ColorChooser*)parent();
@@ -367,7 +367,7 @@ int fltk3::cc_ValueBox::handle(int e) {
     return 0;
   }
 }
-#endif // !FL_DOXYGEN
+#endif // !FLTK3_DOXYGEN
 
 static double tr, tg, tb;
 static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
@@ -381,7 +381,7 @@ static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
   }
 }
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 void fltk3::cc_ValueBox::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
   fltk3::ColorChooser* c = (fltk3::ColorChooser*)parent();
@@ -398,9 +398,9 @@ void fltk3::cc_ValueBox::draw() {
   draw_box(fltk3::UP_BOX,x1,yy1+Y,w1,6,fltk3::focus() == this ? fltk3::FOREGROUND_COLOR : fltk3::GRAY);
   py = Y;
 }
-#endif // !FL_DOXYGEN
+#endif // !FLTK3_DOXYGEN
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 int fltk3::cc_ValueBox::handle_key(int key) {
   int h1 = h()-fltk3::box_dh(box())-6;
   fltk3::ColorChooser* c = (fltk3::ColorChooser*)parent();
@@ -425,7 +425,7 @@ int fltk3::cc_ValueBox::handle_key(int key) {
 
   return 1;
 }
-#endif // !FL_DOXYGEN
+#endif // !FLTK3_DOXYGEN
 
 ////////////////////////////////////////////////////////////////
 

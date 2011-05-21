@@ -259,7 +259,7 @@ extern void	fl_down_frame(int, int, int, int, fltk3::Color);
 extern void	fl_thin_up_frame(int, int, int, int, fltk3::Color);
 extern void	fl_thin_down_frame(int, int, int, int, fltk3::Color);
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 const char	*fltk3::scheme_ = (const char *)0;	    // current scheme 
 fltk3::Image	*fltk3::scheme_bg_ = (fltk3::Image *)0;    // current background image for the scheme
 #endif

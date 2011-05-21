@@ -149,7 +149,7 @@ namespace fltk3 {
   
 }
 
-#endif // Fl_Paged_Device_H
+#endif // Fltk3_Paged_Device_H
 
 //
 // End of "$Id: PagedDevice.h 8593 2011-04-15 21:38:05Z manolo $"

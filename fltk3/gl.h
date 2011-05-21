@@ -105,7 +105,7 @@ extern FLTK3_EXPORT int gl_texture_pile_height();
 
 FLTK3_EXPORT void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
 
-#endif // !FL_gl_H
+#endif // !FLtk3_gl_H
 
 //
 // End of "$Id: gl.h 8623 2011-04-24 17:09:41Z AlbrechtS $".

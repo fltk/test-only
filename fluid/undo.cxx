@@ -69,7 +69,7 @@ static int undo_paused = 0;		// Undo checkpointing paused?
 
 // Return the undo filename
 static char *undo_filename(int level, char *buf, int bufsize) {
-  static char	undo_path[FL_PATH_MAX] = "";	// Undo path
+  static char	undo_path[FLTK3_PATH_MAX] = "";	// Undo path
 
 
   if (!undo_path[0]) fluid_prefs.getUserdataPath(undo_path, sizeof(undo_path));
@@ -81,7 +81,7 @@ static char *undo_filename(int level, char *buf, int bufsize) {
 
 // Redo menu callback
 void redo_cb(fltk3::Widget *, void *) {
-  char	filename[FL_PATH_MAX];			// Undo checkpoint file
+  char	filename[FLTK3_PATH_MAX];			// Undo checkpoint file
 
   if (undo_current >= undo_last) return;
 
@@ -104,7 +104,7 @@ void redo_cb(fltk3::Widget *, void *) {
 
 // Undo menu callback
 void undo_cb(fltk3::Widget *, void *) {
-  char	filename[FL_PATH_MAX];			// Undo checkpoint file
+  char	filename[FLTK3_PATH_MAX];			// Undo checkpoint file
 
   if (undo_current <= 0) return;
 
@@ -132,7 +132,7 @@ void undo_cb(fltk3::Widget *, void *) {
 
 // Save current file to undo buffer
 void undo_checkpoint() {
-  char	filename[FL_PATH_MAX];			// Undo checkpoint filename
+  char	filename[FLTK3_PATH_MAX];			// Undo checkpoint filename
 
 //  printf("undo_checkpoint(): undo_current=%d, undo_paused=%d, modflag=%d\n",
 //         undo_current, undo_paused, modflag);
@@ -163,7 +163,7 @@ void undo_checkpoint() {
 
 // Clear undo buffer
 void undo_clear() {
-  char	filename[FL_PATH_MAX];			// Undo checkpoint filename
+  char	filename[FLTK3_PATH_MAX];			// Undo checkpoint filename
 
 
   // Remove old checkpoint files...

@@ -26,7 +26,7 @@
 //
 
 /* \file
- Fl_Round_Clock widget . */
+ fltk3::RoundClock widget . */
 
 #ifndef Fltk3_Round_Clock_H
 #define Fltk3_Round_Clock_H

@@ -26,28 +26,12 @@
 //
 
 /* \file
-   Fl_FormsBitmap widget . */
+   Fltk3_FormsBitmap widget . */
 
 #ifndef Fltk3_FormsBitmap_H
 #define Fltk3_FormsBitmap_H
 
-#include "Bitmap.h"
-
-/** 
-    Forms compatibility Bitmap Image Widget
-*/
-class FLTK3_EXPORT Fl_FormsBitmap : public fltk3::Widget {
-    fltk3::Bitmap *b;
-protected:
-    void draw();
-public:
-    Fl_FormsBitmap(fltk3::Boxtype, int, int, int, int, const char * = 0);
-    void set(int W, int H, const uchar *bits);
-    /** Sets a new bitmap. */
-    void bitmap(fltk3::Bitmap *B) {b = B;}
-    /** Gets a the current associated fltk3::Bitmap objects. */
-    fltk3::Bitmap *bitmap() const {return b;}
-};
+#error "Forms" emulation is no longer supported in FLTK 3. Please sue 1.3.0
 
 #endif
 

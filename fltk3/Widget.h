@@ -232,7 +232,7 @@ namespace fltk3 {
      \param[in] event the kind of event received
      \retval 0 if the event was not used or understood
      \retval 1 if the event was used and can be deleted
-     \see Fl_Event
+     \see fltk3::Event
      */
     virtual int handle(int event);
     
@@ -258,7 +258,7 @@ namespace fltk3 {
      and to simulate RTTI.
      
      \todo Explain "simulate RTTI" (currently only used to decide if a widget
-     is a window, i.e. type()>=FL_WINDOW ?). Is type() really used in a way
+     is a window, i.e. type()>=fltk3::WINDOW ?). Is type() really used in a way
      that ensures "Forms compatibility" ?
      */
     uchar type() const {return type_;}
@@ -607,7 +607,7 @@ namespace fltk3 {
      \li fltk3::WHEN_ENTER_KEY: If the user types the Enter key, the entire 
      text is selected, and the callback is done if the text has changed. 
      Normally the Enter key will navigate to the next field (or insert 
-     a newline for a Fl_Multiline_Input) - this changes the behavior.
+     a newline for a fltk3::MultilineInput) - this changes the behavior.
      \li fltk3::WHEN_ENTER_KEY|fltk3::WHEN_NOT_CHANGED: The Enter key will do the
      callback even if the text has not changed. Useful for command fields.
      fltk3::Widget::when() is a set of bitflags used by subclasses of 

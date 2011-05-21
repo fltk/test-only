@@ -41,7 +41,7 @@
  \endverbatim
 */
 
-#if !defined(Fl_X_H) && !defined(FL_DOXYGEN) 
+#if !defined(Fl_X_H) && !defined(FLTK3_DOXYGEN) 
 #  define Fl_X_H
 
 #  include "enumerations.h"
@@ -116,7 +116,7 @@ extern FLTK3_EXPORT Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data
 extern FLTK3_EXPORT Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);
 extern FLTK3_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
 
-#if defined(FL_LIBRARY) || defined(FL_INTERNALS)
+#if defined(FL_LIBRARY) || defined(FLTK3_INTERNALS)
 extern FLTK3_EXPORT Window fltk3::message_window;
 extern FLTK3_EXPORT void *fl_xftfont;
 FLTK3_EXPORT Fl_Region XRectangleRegion(int x, int y, int w, int h); // in fltk3::rect.cxx
@@ -149,7 +149,7 @@ extern FLTK3_EXPORT Fl_XFont_On_Demand fl_xfont;
 
 // this object contains all X-specific stuff about a window:
 // Warning: this object is highly subject to change!  
-// FL_LIBRARY or FL_INTERNALS must be defined to access this class.
+// FL_LIBRARY or FLTK3_INTERNALS must be defined to access this class.
 class FLTK3_EXPORT Fl_X {
 public:
   Window xid;
@@ -181,7 +181,7 @@ inline Window fl_xid(const fltk3::Window* w) { return Fl_X::i(w)->xid; }
 extern Window fl_xid_(const fltk3::Window* w);
 #define fl_xid(w) fl_xid_(w)
 
-#endif // FL_LIBRARY || FL_INTERNALS
+#endif // FL_LIBRARY || FLTK3_INTERNALS
 
 FLTK3_EXPORT fltk3::Window* fl_find(Window xid);
 

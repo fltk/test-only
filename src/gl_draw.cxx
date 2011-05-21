@@ -29,7 +29,7 @@
 // See also fltk3::GlWindow and gl_start.cxx
 
 #include "flstring.h"
-#if HAVE_GL || defined(FL_DOXYGEN)
+#if HAVE_GL || defined(FLTK3_DOXYGEN)
 
 #include <fltk3/run.h>
 #include <fltk3/gl.h>
@@ -357,7 +357,7 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
   glDrawPixels(w,h,d<4?GL_RGB:GL_RGBA,GL_UNSIGNED_BYTE,(const ulong*)b);
 }
 
-#if GL_DRAW_USES_TEXTURES || defined(FL_DOXYGEN)
+#if GL_DRAW_USES_TEXTURES || defined(FLTK3_DOXYGEN)
 
 #include <fltk3/glu.h>
 

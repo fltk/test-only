@@ -55,8 +55,8 @@
 #include <fltk3/filename.h>
 
 int                changed = 0;
-char               filename[FL_PATH_MAX] = "";
-char               title[FL_PATH_MAX];
+char               filename[FLTK3_PATH_MAX] = "";
+char               title[FLTK3_PATH_MAX];
 fltk3::TextBuffer     *textbuf = 0;
 
 

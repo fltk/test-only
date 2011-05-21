@@ -104,8 +104,8 @@ int show_comments = 1;
 int show_coredevmenus = 1;
 
 // File history info...
-char	absolute_history[10][FL_PATH_MAX];
-char	relative_history[10][FL_PATH_MAX];
+char	absolute_history[10][FLTK3_PATH_MAX];
+char	relative_history[10][FLTK3_PATH_MAX];
 
 void	load_history();
 void	update_history(const char *);
@@ -132,11 +132,11 @@ void goto_source_dir() {
   if (!filename || !*filename) return;
   const char *p = fl_filename_name(filename);
   if (p <= filename) return; // it is in the current directory
-  char buffer[FL_PATH_MAX];
+  char buffer[FLTK3_PATH_MAX];
   strlcpy(buffer, filename, sizeof(buffer));
   int n = p-filename; if (n>1) n--; buffer[n] = 0;
   if (!pwd) {
-    pwd = getcwd(0,FL_PATH_MAX);
+    pwd = getcwd(0,FLTK3_PATH_MAX);
     if (!pwd) {fprintf(stderr,"getwd : %s\n",strerror(errno)); return;}
   }
   if (chdir(buffer)<0) {fprintf(stderr, "Can't chdir to %s : %s\n",
@@ -181,7 +181,7 @@ fltk3::Window *main_window;
 fltk3::MenuBar *main_menubar;
 
 static char* cutfname(int which = 0) {
-  static char name[2][FL_PATH_MAX];
+  static char name[2][FLTK3_PATH_MAX];
   static char beenhere = 0;
 
   if (!beenhere) {
@@ -262,14 +262,14 @@ void save_template_cb(fltk3::Widget *, void *) {
   if (!c || !*c) return;
 
   // Convert template name to filename_with_underscores
-  char safename[FL_PATH_MAX], *safeptr;
+  char safename[FLTK3_PATH_MAX], *safeptr;
   strlcpy(safename, c, sizeof(safename));
   for (safeptr = safename; *safeptr; safeptr ++) {
     if (isspace(*safeptr)) *safeptr = '_';
   }
 
   // Find the templates directory...
-  char filename[FL_PATH_MAX];
+  char filename[FLTK3_PATH_MAX];
   fluid_prefs.getUserdataPath(filename, sizeof(filename));
 
   strlcat(filename, "templates", sizeof(filename));
@@ -652,15 +652,15 @@ const char* i18n_include = "";
 const char* i18n_function = "";
 const char* i18n_file = "";
 const char* i18n_set = "";
-char i18n_program[FL_PATH_MAX] = "";
+char i18n_program[FLTK3_PATH_MAX] = "";
 
 void write_cb(fltk3::Widget *, void *) {
   if (!filename) {
     save_cb(0,0);
     if (!filename) return;
   }
-  char cname[FL_PATH_MAX];
-  char hname[FL_PATH_MAX];
+  char cname[FLTK3_PATH_MAX];
+  char hname[FLTK3_PATH_MAX];
   strlcpy(i18n_program, fl_filename_name(filename), sizeof(i18n_program));
   fl_filename_setext(i18n_program, sizeof(i18n_program), "");
   if (*code_file_name == '.' && strchr(code_file_name, '/') == NULL) {
@@ -697,7 +697,7 @@ void write_strings_cb(fltk3::Widget *, void *) {
     save_cb(0,0);
     if (!filename) return;
   }
-  char sname[FL_PATH_MAX];
+  char sname[FLTK3_PATH_MAX];
   strlcpy(sname, fl_filename_name(filename), sizeof(sname));
   fl_filename_setext(sname, sizeof(sname), exts[i18n_type]);
   if (!compile_only) goto_source_dir();
@@ -848,14 +848,14 @@ void about_cb(fltk3::Widget *, void *) {
 
 void show_help(const char *name) {
   const char	*docdir;
-  char		helpname[FL_PATH_MAX];
+  char		helpname[FLTK3_PATH_MAX];
 
   if (!help_dialog) help_dialog = new fltk3::HelpDialog();
 
   if ((docdir = getenv("FLTK_DOCDIR")) == NULL) {
 #ifdef __EMX__
     // Doesn't make sense to have a hardcoded fallback
-    static char fltk_docdir[FL_PATH_MAX];
+    static char fltk_docdir[FLTK3_PATH_MAX];
 
     strlcpy(fltk_docdir, __XOS2RedirRoot("/XFree86/lib/X11/fltk/doc"),
             sizeof(fltk_docdir));
@@ -1201,7 +1201,7 @@ void print_menu_cb(fltk3::Widget *, void *) {
 // Quote a string for PostScript printing
 static const char *ps_string(const char *s) {
   char *bufptr;
-  static char buffer[FL_PATH_MAX];
+  static char buffer[FLTK3_PATH_MAX];
 
 
   if (!s) {
@@ -1874,7 +1874,7 @@ void load_history() {
 // Update file history from preferences...
 void update_history(const char *flname) {
   int	i;		// Looping var
-  char	absolute[FL_PATH_MAX];
+  char	absolute[FLTK3_PATH_MAX];
   int	max_files;
 
 
@@ -2215,14 +2215,14 @@ void update_sourceview_cb(fltk3::Button*, void*)
     return;
   // generate space for the source and header file filenames
   if (!sv_source_filename) {
-    sv_source_filename = (char*)malloc(FL_PATH_MAX);
-    fluid_prefs.getUserdataPath(sv_source_filename, FL_PATH_MAX);
-    strlcat(sv_source_filename, "source_view_tmp.cxx", FL_PATH_MAX);
+    sv_source_filename = (char*)malloc(FLTK3_PATH_MAX);
+    fluid_prefs.getUserdataPath(sv_source_filename, FLTK3_PATH_MAX);
+    strlcat(sv_source_filename, "source_view_tmp.cxx", FLTK3_PATH_MAX);
   }
   if (!sv_header_filename) {
-    sv_header_filename = (char*)malloc(FL_PATH_MAX);
-    fluid_prefs.getUserdataPath(sv_header_filename, FL_PATH_MAX);
-    strlcat(sv_header_filename, "source_view_tmp.h", FL_PATH_MAX);
+    sv_header_filename = (char*)malloc(FLTK3_PATH_MAX);
+    fluid_prefs.getUserdataPath(sv_header_filename, FLTK3_PATH_MAX);
+    strlcat(sv_header_filename, "source_view_tmp.h", FLTK3_PATH_MAX);
   }
 
   strlcpy(i18n_program, fl_filename_name(sv_source_filename), sizeof(i18n_program));
@@ -2262,7 +2262,7 @@ void update_sourceview_timer(void*)
 // Set the "modified" flag and update the title of the main window...
 void set_modflag(int mf) {
   const char	*basename;
-  static char	title[FL_PATH_MAX];
+  static char	title[FLTK3_PATH_MAX];
 
   modflag = mf;
 

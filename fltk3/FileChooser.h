@@ -56,8 +56,8 @@ namespace fltk3 {
     static fltk3::Preferences prefs_; 
     void (*callback_)(fltk3::FileChooser*, void *); 
     void *data_; 
-    char directory_[FL_PATH_MAX]; 
-    char pattern_[FL_PATH_MAX]; 
+    char directory_[FLTK3_PATH_MAX]; 
+    char pattern_[FLTK3_PATH_MAX]; 
     char preview_text_[2048]; 
     int type_; 
     void favoritesButtonCB(); 

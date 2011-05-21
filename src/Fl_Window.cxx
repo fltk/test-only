@@ -43,7 +43,7 @@
 char *fltk3::Window::default_xclass_ = 0L;
 
 void fltk3::Window::_Fl_Window() {
-  type(FL_WINDOW);
+  type(fltk3::WINDOW);
   box(fltk3::FLAT_BOX);
   if (fltk3::scheme_bg_) {
     labeltype(fltk3::NORMAL_LABEL);
@@ -85,7 +85,7 @@ fltk3::Window::Window(int W, int H, const char *l)
 
 fltk3::Window *fltk3::Widget::window() const {
   for (fltk3::Widget *o = parent(); o; o = o->parent())
-    if (o->type() >= FL_WINDOW) return (fltk3::Window*)o;
+    if (o->type() >= fltk3::WINDOW) return (fltk3::Window*)o;
   return 0;
 }
 /** Gets the x position of the window on the screen */

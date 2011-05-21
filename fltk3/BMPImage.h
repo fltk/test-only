@@ -26,22 +26,27 @@
 //
 
 /* \file
-   Fl_BMP_Image widget . */
+ fltk3::BMPImage widget . */
 
 #ifndef Fltk3_BMP_Image_H
 #define Fltk3_BMP_Image_H
-#  include "Image.h"
 
-/**
-  The Fl_BMP_Image class supports loading, caching,
-  and drawing of Windows Bitmap (BMP) image files.
-*/
-class FLTK3_EXPORT Fl_BMP_Image : public fltk3::RGBImage {
+#include "Image.h"
 
+namespace fltk3 {
+  
+  /**
+   The fltk3::BMPImage class supports loading, caching,
+   and drawing of Windows Bitmap (BMP) image files.
+   */
+  class FLTK3_EXPORT BMPImage : public fltk3::RGBImage {
+    
   public:
-
-  Fl_BMP_Image(const char* filename);
-};
+    
+    BMPImage(const char* filename);
+  };
+  
+}
 
 #endif
 

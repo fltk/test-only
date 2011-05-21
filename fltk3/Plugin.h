@@ -99,7 +99,7 @@ namespace fltk3 {
   
 }
 
-#endif // !Fl_Preferences_H
+#endif // !Fltk3_Preferences_H
 
 //
 // End of "$Id: Preferences.h 6995 2010-01-12 08:48:55Z matt $".

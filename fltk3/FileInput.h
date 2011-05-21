@@ -100,7 +100,7 @@ namespace fltk3 {
   
 }
 
-#endif // !Fl_File_Input_H
+#endif // !Fltk3_File_Input_H
 
 
 //

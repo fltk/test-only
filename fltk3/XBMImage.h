@@ -47,7 +47,7 @@ namespace fltk3 {
   
 }
 
-#endif // !Fl_XBM_Image_H
+#endif // !Fltk3_XBM_Image_H
 
 //
 // End of "$Id: XBMImage.h 7903 2010-11-28 21:06:39Z matt $".

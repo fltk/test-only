@@ -25,7 +25,7 @@
 //     http://www.fltk.org/str.php
 //
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 
 #include <stdio.h>
 #include <math.h>
@@ -528,7 +528,7 @@ void fltk3::PostScriptGraphicsDriver::draw(fltk3::Bitmap * bitmap,int XP, int YP
   pop_clip();
 }
 
-#endif // FL_DOXYGEN
+#endif // FLTK3_DOXYGEN
 
 //
 // End of "$Id: image.cxx 4324 2005-05-09 21:47:22Z rokan $"

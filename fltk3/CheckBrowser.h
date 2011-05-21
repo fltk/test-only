@@ -56,7 +56,7 @@ namespace fltk3 {
     
   public: // IRIX 5.3 C++ compiler doesn't support private structures...
     
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
     /** For internal use only. */
     struct cb_item {
       cb_item *next;	/**< For internal use only. */
@@ -65,7 +65,7 @@ namespace fltk3 {
       char selected;	/**< For internal use only. */
       char *text;		/**< For internal use only. */
     };
-#endif // !FL_DOXYGEN
+#endif // !FLTK3_DOXYGEN
     
   private:
     
@@ -118,7 +118,7 @@ namespace fltk3 {
   
 }
 
-#endif // Fl_Check_Browser_H
+#endif // Fltk3_Check_Browser_H
 
 //
 // End of "$Id: CheckBrowser.h 7903 2010-11-28 21:06:39Z matt $".

@@ -58,7 +58,7 @@ void fltk3::Group::forms_end() {
   }
   // flip all the children's coordinate systems:
   if (fl_flip) {
-    fltk3::Widget* o = (type()>=FL_WINDOW) ? this : window();
+    fltk3::Widget* o = (type()>=fltk3::WINDOW) ? this : window();
     int Y = o->h();
     fltk3::Widget*const* a = array();
     for (int i=children(); i--;) {
@@ -138,7 +138,7 @@ fltk3::Widget *fl_check_forms() {
 
 void fl_set_graphics_mode(int /*r*/,int /*d*/) {}
 
-#ifndef FL_DOXYGEN // FIXME: suppress doxygen warning
+#ifndef FLTK3_DOXYGEN // FIXME: suppress doxygen warning
 void Fl_FormsText::draw() {
   draw_box();
   align(align()|fltk3::ALIGN_INSIDE); // questionable method of compatibility

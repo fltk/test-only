@@ -220,7 +220,7 @@ namespace fltk3 {
   
 }
 
-#endif // !Fl_Input_Choice_H
+#endif // !Fltk3_Input_Choice_H
 
 //
 // End of "$Id: InputChoice.h 8022 2010-12-12 23:21:03Z AlbrechtS $".

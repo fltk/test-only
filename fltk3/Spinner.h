@@ -260,7 +260,7 @@ class FLTK3_EXPORT Spinner : public fltk3::Group {
   void		value(double v) { value_ = v; update(); }
 };
 
-#endif // !Fl_Spinner_H
+#endif // !Fltk3_Spinner_H
 
 //
 // End of "$Id: Spinner.h 8339 2011-01-30 12:50:19Z ianmacarthur $".

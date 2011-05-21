@@ -63,11 +63,6 @@
  - Matthias
  */
 
-
-/* Maximum length in characters of a tab or control character expansion
- of a single buffer character */
-#define FL_TEXT_MAX_EXP_CHAR_LEN 20
-
 #include "Export.h"
 
 namespace fltk3 {
@@ -157,7 +152,7 @@ namespace fltk3 {
   /**
    \brief This class manages unicode displayed in one or more fltk3::TextDisplay widgets.
    
-   All text in Fl_Text_Buffermust be encoded in UTF-8. All indices used in the 
+   All text in fltk3::TextBuffer must be encoded in UTF-8. All indices used in the 
    function calls must be aligned to the start of a UTF-8 sequence. All indices 
    and pointers returned will be aligned. All functions that return a single 
    character will return that in an unsiged int in UCS-4 encoding.

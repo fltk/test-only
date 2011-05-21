@@ -775,7 +775,7 @@ void fltk3::TextDisplay::overstrike(const char* text) {
     } else if ( indent > endIndent ) {
       if ( ch != '\t' ) {
         p++;
-        paddedText = new char [ textLen + FL_TEXT_MAX_EXP_CHAR_LEN + 1 ];
+        paddedText = new char [ textLen + 20 + 1 ];
         strcpy( paddedText, text );
         for ( i = 0; i < indent - endIndent; i++ )
           paddedText[ textLen + i ] = ' ';

@@ -85,7 +85,7 @@ private:
 /** @} */
 
 # endif // FLTK_HAVE_CAIRO
-#endif // FL_CAIRO_WINDOW_H
+#endif // FLtk3_CAIRO_WINDOW_H
 
 //
 // End of "$Id: CairoWindow.h 8198 2011-01-06 10:24:58Z manolo $" .

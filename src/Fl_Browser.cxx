@@ -44,20 +44,24 @@
 #define SELECTED 1
 #define NOTDISPLAYED 2
 
-// WARNING:
-//       fltk3::FileChooser.cxx also has a definition of this structure (FL_BLINE).
-//       Changes to FL_BLINE *must* be reflected in fltk3::FileChooser.cxx as well.
-//       This hack in fltk3::FileChooser should be solved.
-//
-struct FL_BLINE {	// data is in a linked list of these
-  FL_BLINE* prev;
-  FL_BLINE* next;
-  void* data;
-  fltk3::Image* icon;
-  short length;		// sizeof(txt)-1, may be longer than string
-  char flags;		// selected, displayed
-  char txt[1];		// start of allocated array
-};
+namespace fltk3 {
+  
+  // WARNING:
+  //       fltk3::FileChooser.cxx also has a definition of this structure (fltk3::BrowserLine_).
+  //       Changes to fltk3::BrowserLine_ *must* be reflected in fltk3::FileChooser.cxx as well.
+  //       This hack in fltk3::FileChooser should be solved.
+  //
+  struct BrowserLine_ {	// data is in a linked list of these
+    fltk3::BrowserLine_* prev;
+    fltk3::BrowserLine_* next;
+    void* data;
+    fltk3::Image* icon;
+    short length;		// sizeof(txt)-1, may be longer than string
+    char flags;		// selected, displayed
+    char txt[1];		// start of allocated array
+  };
+  
+}
 
 /**
   Returns the very first item in the list.
@@ -79,7 +83,7 @@ void* fltk3::Browser::item_first() const {return first;}
   \returns The next item after \p item, or NULL if there are none after this one.
   \see item_first(), item_last(), item_next(), item_prev()
 */
-void* fltk3::Browser::item_next(void* item) const {return ((FL_BLINE*)item)->next;}
+void* fltk3::Browser::item_next(void* item) const {return ((fltk3::BrowserLine_*)item)->next;}
 
 /**
   Returns the previous item before \p item.
@@ -87,7 +91,7 @@ void* fltk3::Browser::item_next(void* item) const {return ((FL_BLINE*)item)->nex
   \returns The previous item before \p item, or NULL if there none before this one.
   \see item_first(), item_last(), item_next(), item_prev()
 */
-void* fltk3::Browser::item_prev(void* item) const {return ((FL_BLINE*)item)->prev;}
+void* fltk3::Browser::item_prev(void* item) const {return ((fltk3::BrowserLine_*)item)->prev;}
 
 /**
   Returns the very last item in the list.
@@ -110,7 +114,7 @@ void* fltk3::Browser::item_last() const {return last;}
   \see select(), selected(), value(), item_select(), item_selected()
 */
 int fltk3::Browser::item_selected(void* item) const {
-  return ((FL_BLINE*)item)->flags&SELECTED;
+  return ((fltk3::BrowserLine_*)item)->flags&SELECTED;
 }
 /**
   Change the selection state of \p item to the value \p val.
@@ -119,8 +123,8 @@ int fltk3::Browser::item_selected(void* item) const {
   \see select(), selected(), value(), item_select(), item_selected()
 */
 void fltk3::Browser::item_select(void *item, int val) {
-  if (val) ((FL_BLINE*)item)->flags |= SELECTED;
-  else     ((FL_BLINE*)item)->flags &= ~SELECTED;
+  if (val) ((fltk3::BrowserLine_*)item)->flags |= SELECTED;
+  else     ((fltk3::BrowserLine_*)item)->flags &= ~SELECTED;
 }
 
 /**
@@ -129,7 +133,7 @@ void fltk3::Browser::item_select(void *item, int val) {
   \returns The item's text string. (Can be NULL)
 */
 const char *fltk3::Browser::item_text(void *item) const { 
-  return ((FL_BLINE*)item)->txt;
+  return ((fltk3::BrowserLine_*)item)->txt;
 }
 
 /**
@@ -148,8 +152,8 @@ const char *fltk3::Browser::item_text(void *item) const {
   \retval NULL if line is out of range.
   \see item_at(), find_line(), lineno()
 */
-FL_BLINE* fltk3::Browser::find_line(int line) const {
-  int n; FL_BLINE* l;
+fltk3::BrowserLine_* fltk3::Browser::find_line(int line) const {
+  int n; fltk3::BrowserLine_* l;
   if (line == cacheline) return cache;
   if (cacheline && line > (cacheline/2) && line < ((cacheline+lines)/2)) {
     n = cacheline; l = cache;
@@ -173,7 +177,7 @@ FL_BLINE* fltk3::Browser::find_line(int line) const {
   \see item_at(), find_line(), lineno()
 */
 int fltk3::Browser::lineno(void *item) const {
-  FL_BLINE* l = (FL_BLINE*)item;
+  fltk3::BrowserLine_* l = (fltk3::BrowserLine_*)item;
   if (!l) return 0;
   if (l == cache) return cacheline;
   if (l == first) return 1;
@@ -183,9 +187,9 @@ int fltk3::Browser::lineno(void *item) const {
     ((fltk3::Browser*)this)->cacheline = 1;
   }
   // assume it is near cache, search both directions:
-  FL_BLINE* b = cache->prev;
+  fltk3::BrowserLine_* b = cache->prev;
   int bnum = cacheline-1;
-  FL_BLINE* f = cache->next;
+  fltk3::BrowserLine_* f = cache->next;
   int fnum = cacheline+1;
   int n = 0;
   for (;;) {
@@ -207,8 +211,8 @@ int fltk3::Browser::lineno(void *item) const {
   \returns Pointer to browser item that was removed (and is no longer valid).
   \see add(), insert(), remove(), swap(int,int), clear()
 */
-FL_BLINE* fltk3::Browser::_remove(int line) {
-  FL_BLINE* ttt = find_line(line);
+fltk3::BrowserLine_* fltk3::Browser::_remove(int line) {
+  fltk3::BrowserLine_* ttt = find_line(line);
   deleting(ttt);
 
   cacheline = line-1;
@@ -244,7 +248,7 @@ void fltk3::Browser::remove(int line) {
   \param[in] line  The new line will be inserted above this line (1 based).
   \param[in] item  The item to be added.
 */
-void fltk3::Browser::insert(int line, FL_BLINE* item) {
+void fltk3::Browser::insert(int line, fltk3::BrowserLine_* item) {
   if (!first) {
     item->prev = item->next = 0;
     first = last = item;
@@ -260,7 +264,7 @@ void fltk3::Browser::insert(int line, FL_BLINE* item) {
     item->next = 0;
     last = item;
   } else {
-    FL_BLINE* n = find_line(line);
+    fltk3::BrowserLine_* n = find_line(line);
     inserting(n, item);
     item->next = n;
     item->prev = n->prev;
@@ -289,7 +293,7 @@ void fltk3::Browser::insert(int line, FL_BLINE* item) {
 */
 void fltk3::Browser::insert(int line, const char* newtext, void* d) {
   int l = strlen(newtext);
-  FL_BLINE* t = (FL_BLINE*)malloc(sizeof(FL_BLINE)+l);
+  fltk3::BrowserLine_* t = (fltk3::BrowserLine_*)malloc(sizeof(fltk3::BrowserLine_)+l);
   t->length = (short)l;
   t->flags = 0;
   strcpy(t->txt, newtext);
@@ -322,10 +326,10 @@ void fltk3::Browser::move(int to, int from) {
 */
 void fltk3::Browser::text(int line, const char* newtext) {
   if (line < 1 || line > lines) return;
-  FL_BLINE* t = find_line(line);
+  fltk3::BrowserLine_* t = find_line(line);
   int l = strlen(newtext);
   if (l > t->length) {
-    FL_BLINE* n = (FL_BLINE*)malloc(sizeof(FL_BLINE)+l);
+    fltk3::BrowserLine_* n = (fltk3::BrowserLine_*)malloc(sizeof(fltk3::BrowserLine_)+l);
     replacing(t, n);
     cache = n;
     n->data = t->data;
@@ -363,7 +367,7 @@ void fltk3::Browser::data(int line, void* d) {
        incr_height(), full_height()
 */
 int fltk3::Browser::item_height(void *item) const {
-  FL_BLINE* l = (FL_BLINE*)item;
+  fltk3::BrowserLine_* l = (fltk3::BrowserLine_*)item;
   if (l->flags & NOTDISPLAYED) return 0;
 
   int hmax = 2; // use 2 to insure we don't return a zero!
@@ -424,7 +428,7 @@ int fltk3::Browser::item_height(void *item) const {
        incr_height(), full_height()
 */
 int fltk3::Browser::item_width(void *item) const {
-  FL_BLINE* l=(FL_BLINE*)item;
+  fltk3::BrowserLine_* l=(fltk3::BrowserLine_*)item;
   char* str = l->txt;
   const int* i = column_widths();
   int ww = 0;
@@ -508,7 +512,7 @@ int fltk3::Browser::incr_height() const {
   \param[in] X,Y,W,H position and size.
 */
 void fltk3::Browser::item_draw(void* item, int X, int Y, int W, int H) const {
-  FL_BLINE* l = (FL_BLINE*)item;
+  fltk3::BrowserLine_* l = (fltk3::BrowserLine_*)item;
   char* str = l->txt;
   const int* i = column_widths();
 
@@ -622,12 +626,12 @@ fltk3::Browser::Browser(int X, int Y, int W, int H, const char *L)
   \param[in] pos position.
   \see topline(), middleline(), bottomline()
 */
-void fltk3::Browser::lineposition(int line, Fl_Line_Position pos) {
+void fltk3::Browser::lineposition(int line, LinePosition pos) {
   if (line<1) line = 1;
   if (line>lines) line = lines;
   int p = 0;
 
-  FL_BLINE* l;
+  fltk3::BrowserLine_* l;
   for (l=first; l && line>1; l = l->next) {
     line--; p += item_height(l);
   }
@@ -660,8 +664,8 @@ int fltk3::Browser::topline() const {
   \see add(), insert(), remove(), swap(int,int), clear()
 */
 void fltk3::Browser::clear() {
-  for (FL_BLINE* l = first; l;) {
-    FL_BLINE* n = l->next;
+  for (fltk3::BrowserLine_* l = first; l;) {
+    fltk3::BrowserLine_* n = l->next;
     free(l);
     l = n;
   }
@@ -747,7 +751,7 @@ int fltk3::Browser::selected(int line) const {
   \see show(int), hide(int), display(), visible(), make_visible()
 */
 void fltk3::Browser::show(int line) {
-  FL_BLINE* t = find_line(line);
+  fltk3::BrowserLine_* t = find_line(line);
   if (t->flags & NOTDISPLAYED) {
     t->flags &= ~NOTDISPLAYED;
     full_height_ += item_height(t);
@@ -765,7 +769,7 @@ void fltk3::Browser::show(int line) {
   \see show(int), hide(int), display(), visible(), make_visible()
 */
 void fltk3::Browser::hide(int line) {
-  FL_BLINE* t = find_line(line);
+  fltk3::BrowserLine_* t = find_line(line);
   if (!(t->flags & NOTDISPLAYED)) {
     full_height_ -= item_height(t);
     t->flags |= NOTDISPLAYED;
@@ -810,14 +814,14 @@ int fltk3::Browser::value() const {
   \param[in] a,b The two items to be swapped.
   \see swap(int,int), item_swap()
 */
-void fltk3::Browser::swap(FL_BLINE *a, FL_BLINE *b) {
+void fltk3::Browser::swap(fltk3::BrowserLine_ *a, fltk3::BrowserLine_ *b) {
 
   if ( a == b || !a || !b) return;          // nothing to do
   swapping(a, b);
-  FL_BLINE *aprev  = a->prev;
-  FL_BLINE *anext  = a->next;
-  FL_BLINE *bprev  = b->prev;
-  FL_BLINE *bnext  = b->next;
+  fltk3::BrowserLine_ *aprev  = a->prev;
+  fltk3::BrowserLine_ *anext  = a->next;
+  fltk3::BrowserLine_ *bprev  = b->prev;
+  fltk3::BrowserLine_ *bnext  = b->next;
   if ( b->prev == a ) { 		// A ADJACENT TO B
      if ( aprev ) aprev->next = b; else first = b;
      b->next = a;
@@ -857,8 +861,8 @@ void fltk3::Browser::swap(FL_BLINE *a, FL_BLINE *b) {
 */
 void fltk3::Browser::swap(int a, int b) {
   if (a < 1 || a > lines || b < 1 || b > lines) return;
-  FL_BLINE* ai = find_line(a);
-  FL_BLINE* bi = find_line(b);
+  fltk3::BrowserLine_* ai = find_line(a);
+  fltk3::BrowserLine_* bi = find_line(b);
   swap(ai,bi);
 }
 
@@ -874,7 +878,7 @@ void fltk3::Browser::icon(int line, fltk3::Image* icon) {
 
   if (line<1 || line > lines) return;
 
-  FL_BLINE* bl = find_line(line);
+  fltk3::BrowserLine_* bl = find_line(line);
 
   int old_h = bl->icon ? bl->icon->h()+2 : 0;	// init with *old* icon height
   bl->icon = 0;					// remove icon, if any
@@ -901,7 +905,7 @@ void fltk3::Browser::icon(int line, fltk3::Image* icon) {
   \returns The icon defined, or NULL if none.
 */
 fltk3::Image* fltk3::Browser::icon(int line) const {
-  FL_BLINE* l = find_line(line);
+  fltk3::BrowserLine_* l = find_line(line);
   return(l ? l->icon : NULL);
 }
 

@@ -31,9 +31,7 @@
 #ifndef Fltk3_Valuator_H
 #define Fltk3_Valuator_H
 
-#ifndef Fl_Widget_H
 #include "Widget.h"
-#endif
 
 namespace fltk3 {
   
@@ -47,7 +45,7 @@ namespace fltk3 {
    and insures that callbacks are done the same for every object.
    <P>There are probably more of these classes in FLTK than any others:
    <P ALIGN=CENTER>\image html  valuators.png</P> 
-   \image latex   valuators.png "Valuators derived from Fl_Valuators" width=10cm
+   \image latex   valuators.png "Valuators derived from fltk3::Valuators" width=10cm
    <P>In the above diagram each box surrounds an actual subclass.  These
    are further differentiated by setting the type() of the widget t
    o the symbolic value labeling the widget.  

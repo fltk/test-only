@@ -27,7 +27,7 @@
 
 #include <fltk3/run.h>
 #include <fltk3/Box.h>
-#include <FL/fltk3::Slider.h>
+#include <fltk3/fltk3::Slider.h>
 #include <fltk3/Double_Window.h>
 #include <fltk3/Input.h>
 

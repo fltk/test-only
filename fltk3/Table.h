@@ -962,7 +962,7 @@ namespace fltk3 {
       fltk3::Widget::do_callback();
     }
     
-#if FL_DOXYGEN
+#if FLTK3_DOXYGEN
     /**
      The fltk3::Widget::when() function is used to set a group of flags, determining
      when the widget callback is called:
@@ -994,7 +994,7 @@ namespace fltk3 {
     void when(fltk3::When flags);
 #endif
     
-#if FL_DOXYGEN
+#if FLTK3_DOXYGEN
     /**
      Callbacks will be called depending on the setting of fltk3::Widget::when().
      

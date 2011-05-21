@@ -38,9 +38,6 @@
 
 #  include "utf8.h"
 #  include "enumerations.h"
-#  ifndef Fl_Object
-#    define Fl_Object fltk3::Widget	/**< for back compatibility - use fltk3::Widget! */
-#  endif
 
 #  ifdef check
 #    undef check
@@ -117,7 +114,7 @@ namespace fltk3 {
    */
   
   //public: // should be private!
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
   extern int e_number;
   extern int e_x;
   extern int e_y;
@@ -150,8 +147,8 @@ namespace fltk3 {
   /** Enumerator for global FLTK options.
    These options can be set system wide, per user, or for the running
    application only.
-   \see fltk3::option(Fl_Option, bool)
-   \see fltk3::option(Fl_Option)
+   \see fltk3::option(fltk3::Option, bool)
+   \see fltk3::option(fltk3::Option)
    */
   typedef enum {
     /// When switched on, moving the text cursor beyond the start or end of
@@ -185,7 +182,7 @@ namespace fltk3 {
     // don't change this, leave it always as the last element
     /// For internal use only.
     OPTION_LAST
-  } Fl_Option;
+  } Option;
   
   //private:  
   extern unsigned char options_[OPTION_LAST];
@@ -196,12 +193,12 @@ namespace fltk3 {
    Return a global setting for all FLTK applications, possibly overridden
    by a setting specifically for this application.
    */
-  bool option(Fl_Option opt);
+  bool option(Option opt);
   
   /*
    Override an option while the application is running.
    */
-  void option(Fl_Option opt, bool val);
+  void option(Option opt, bool val);
   
   /**
    The currently executing idle callback function: DO NOT USE THIS DIRECTLY!
@@ -212,7 +209,7 @@ namespace fltk3 {
    */
   extern void (*idle)();
   
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
   extern fltk3::AwakeHandler *awake_ring_;
   extern void **awake_data_;
   extern int awake_ring_size_;
@@ -1045,7 +1042,7 @@ namespace fltk3 {
    to add cairo support to all fltk supported windows.
    When you wish to associate a cairo context in this mode,
    you need to call explicitly in your draw() overridden method,
-   FL::cairo_make_current(fltk3::Window*). This will create a cairo context
+   fltk3::cairo_make_current(fltk3::Window*). This will create a cairo context
    but only for this Window. 
    Still in custom cairo application it is possible to handle 
    completely this process automatically by setting \p alink to true.
@@ -1166,7 +1163,7 @@ namespace fltk3 {
  @{ */
 /** @} */
 
-#endif // !Fl_H
+#endif // !Fltk3_H
 
 //
 // End of "$Id: run.h 8548 2011-03-30 12:07:52Z AlbrechtS $".

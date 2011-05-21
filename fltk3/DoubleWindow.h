@@ -68,12 +68,12 @@ namespace fltk3 {
      position, size, and label (title) string.
      */
     DoubleWindow(int W, int H, const char *l = 0) 
-    : fltk3::Window(W,H,l), force_doublebuffering_(0) { type(FL_DOUBLE_WINDOW); }
+    : fltk3::Window(W,H,l), force_doublebuffering_(0) { type(DOUBLE_WINDOW); }
     /**
      See  fltk3::DoubleWindow::DoubleWindow(int w, int h, const char *label = 0)
      */
     DoubleWindow(int X, int Y, int W, int H, const char *l = 0)
-    : fltk3::Window(X,Y,W,H,l), force_doublebuffering_(0) { type(FL_DOUBLE_WINDOW); }
+    : fltk3::Window(X,Y,W,H,l), force_doublebuffering_(0) { type(DOUBLE_WINDOW); }
   };
   
 } // namespace

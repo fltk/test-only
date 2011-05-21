@@ -13,7 +13,7 @@ namespace fltk3 {
 				// or doxygen will not document our class..
   
   //////////////////////////
-  // FL/TreeItemArray.h
+  // fltk3/TreeItemArray.h
   //////////////////////////
   //
   // fltk3::Tree -- This file is part of the fltk3::Tree widget for FLTK

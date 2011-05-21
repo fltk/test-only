@@ -116,7 +116,7 @@ const char * const fltk3::fontnames[] =
 
 /** @} */
 
-#endif /* FL_NAMES_H */
+#endif /* FLtk3_NAMES_H */
 
 //
 // End of "$Id: names.h 7903 2010-11-28 21:06:39Z matt $".

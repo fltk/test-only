@@ -78,7 +78,7 @@ fl_check_images(const char *name,		// I - Filename
     return new fltk3::GIFImage(name);
 
   if (memcmp(header, "BM", 2) == 0)	// BMP file
-    return new Fl_BMP_Image(name);
+    return new fltk3::BMPImage(name);
 
   if (header[0] == 'P' && header[1] >= '1' && header[1] <= '7')
 					// Portable anymap

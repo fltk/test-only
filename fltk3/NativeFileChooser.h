@@ -44,9 +44,6 @@
  \code
  #include <fltk3/NativeFileChooser.h>
  \endcode
- Do not include the other Fl_Native_File_Choser_XXX.H files in your code;
- those are platform specific files that will be included automatically
- depending on your build platform.
  
  The following example shows how to pick a single file:
  \code
@@ -301,7 +298,7 @@ namespace fltk3 {
   
 }
 
-#endif /*FL_NATIVE_FILE_CHOOSER_H*/
+#endif /*FLtk3_NATIVE_FILE_CHOOSER_H*/
 
 //
 // End of "$Id: NativeFileChooser.h 8380 2011-02-06 10:07:28Z manolo $".

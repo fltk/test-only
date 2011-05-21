@@ -33,17 +33,21 @@
 #endif
 
 #ifndef FLtk3_FILENAME_H
-#  define FLtk3_FILENAME_H
+#define FLtk3_FILENAME_H
 
-#  include "Export.h"
+#if !defined (__cplusplus)
+#error the file "filename.h" is now written in "C++" can no longer be included from "C"
+#endif
+
+#include "Export.h"
 
 /** \addtogroup filenames File names and URI utility functions
  File names and URI functions defined in <fltk3/filename.h>
     @{ */
 #ifdef _MAX_PATH
-const unsigned int FL_PATH_MAX = _MAX_PATH;
+const unsigned int FLTK3_PATH_MAX = _MAX_PATH;
 #else
-const unsigned int FL_PATH_MAX = 2048; /**< all path buffers should use this length */
+const unsigned int FLTK3_PATH_MAX = 2048; /**< all path buffers should use this length */
 #endif
 
 /** Gets the file name from a path.
@@ -70,16 +74,16 @@ FLTK3_EXPORT int fl_filename_relative(char *to, int tolen, const char *from);
 FLTK3_EXPORT int fl_filename_match(const char *name, const char *pattern);
 FLTK3_EXPORT int fl_filename_isdir(const char *name);
 
-#  if defined(__cplusplus) && !defined(FL_DOXYGEN)
+#  if defined(__cplusplus) && !defined(FLTK3_DOXYGEN)
 /*
  * Under WIN32, we include filename.h from numericsort.c; this should probably change...
  */
 
-inline char *fl_filename_setext(char *to, const char *ext) { return fl_filename_setext(to, FL_PATH_MAX, ext); }
-inline int fl_filename_expand(char *to, const char *from) { return fl_filename_expand(to, FL_PATH_MAX, from); }
-inline int fl_filename_absolute(char *to, const char *from) { return fl_filename_absolute(to, FL_PATH_MAX, from); }
+inline char *fl_filename_setext(char *to, const char *ext) { return fl_filename_setext(to, FLTK3_PATH_MAX, ext); }
+inline int fl_filename_expand(char *to, const char *from) { return fl_filename_expand(to, FLTK3_PATH_MAX, from); }
+inline int fl_filename_absolute(char *to, const char *from) { return fl_filename_absolute(to, FLTK3_PATH_MAX, from); }
 FLTK3_EXPORT int fl_filename_relative(char *to, int tolen, const char *from, const char *cwd);
-inline int fl_filename_relative(char *to, const char *from) { return fl_filename_relative(to, FL_PATH_MAX, from); }
+inline int fl_filename_relative(char *to, const char *from) { return fl_filename_relative(to, FLTK3_PATH_MAX, from); }
 #  endif /* __cplusplus */
 
 
@@ -116,7 +120,7 @@ struct dirent {char d_name[1];};
 extern "C" {
 #  endif /* __cplusplus */
 
-#  if !defined(FL_DOXYGEN)
+#  if !defined(FLTK3_DOXYGEN)
 FLTK3_EXPORT int fl_alphasort(struct dirent **, struct dirent **);
 FLTK3_EXPORT int fl_casealphasort(struct dirent **, struct dirent **);
 FLTK3_EXPORT int fl_casenumericsort(struct dirent **, struct dirent **);
@@ -133,7 +137,7 @@ FLTK3_EXPORT int fl_numericsort(struct dirent **, struct dirent **);
  */
 
 FLTK3_EXPORT int fl_filename_list(const char *d, struct dirent ***l,
-                               Fl_File_Sort_F *s = fl_numericsort);
+                                  Fl_File_Sort_F *s = fl_numericsort);
 FLTK3_EXPORT void fl_filename_free_list(struct dirent ***l, int n);
 
 /*
@@ -144,7 +148,7 @@ FLTK3_EXPORT void fl_filename_free_list(struct dirent ***l, int n);
 FLTK3_EXPORT int	fl_open_uri(const char *uri, char *msg = (char *)0,
 		            int msglen = 0);
 
-#    ifndef FL_DOXYGEN
+#    ifndef FLTK3_DOXYGEN
 /*
  * _fl_filename_isdir_quick() is a private function that checks for a
  * trailing slash and assumes that the passed name is a directory if
@@ -157,25 +161,7 @@ int _fl_filename_isdir_quick(const char *name);
 
 #  endif /* __cplusplus */
 
-/*
- * FLTK 1.0.x compatibility definitions...
- */
-
-#  ifdef FLTK_1_0_COMPAT
-#    define filename_absolute	fl_filename_absolute
-#    define filename_expand	fl_filename_expand
-#    define filename_ext	fl_filename_ext
-#    define filename_isdir	fl_filename_isdir
-#    define filename_list	fl_filename_list
-#    define filename_match	fl_filename_match
-#    define filename_name	fl_filename_name
-#    define filename_relative	fl_filename_relative
-#    define filename_setext	fl_filename_setext
-#    define numericsort		fl_numericsort
-#  endif /* FLTK_1_0_COMPAT */
-
-
-#endif /* FL_FILENAME_H */
+#endif /* FLtk3_FILENAME_H */
 
 /** @} */
 

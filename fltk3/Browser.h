@@ -38,10 +38,10 @@
 #include "Browser_.h"
 #include "Image.h"
 
-struct FL_BLINE;
-
 namespace fltk3 {
-  
+
+  struct BrowserLine_;
+
   /**
    The fltk3::Browser widget displays a scrolling list of text
    lines, and manages all the storage for the text.  This is not a text
@@ -90,9 +90,9 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT Browser : public fltk3::Browser_ {
     
-    FL_BLINE *first;		// the array of lines
-    FL_BLINE *last;
-    FL_BLINE *cache;
+    fltk3::BrowserLine_ *first;		// the array of lines
+    fltk3::BrowserLine_ *last;
+    fltk3::BrowserLine_ *cache;
     int cacheline;		// line number of cache
     int lines;                	// Number of lines
     int full_height_;
@@ -120,7 +120,7 @@ namespace fltk3 {
      \param[in] a,b the items to be swapped.
      \see swap(int,int), item_swap()
      */
-    void item_swap(void *a, void *b) { swap((FL_BLINE*)a, (FL_BLINE*)b); }
+    void item_swap(void *a, void *b) { swap((fltk3::BrowserLine_*)a, (fltk3::BrowserLine_*)b); }
     /** Return the item at specified \p line.
      \param[in] line The line of the item to return. (1 based)
      \returns The item, or NULL if line out of range.
@@ -128,11 +128,11 @@ namespace fltk3 {
      */
     void *item_at(int line) const { return (void*)find_line(line); }
     
-    FL_BLINE* find_line(int line) const ;
-    FL_BLINE* _remove(int line) ;
-    void insert(int line, FL_BLINE* item);
+    fltk3::BrowserLine_* find_line(int line) const ;
+    fltk3::BrowserLine_* _remove(int line) ;
+    void insert(int line, fltk3::BrowserLine_* item);
     int lineno(void *item) const ;
-    void swap(FL_BLINE *a, FL_BLINE *b);
+    void swap(fltk3::BrowserLine_ *a, fltk3::BrowserLine_ *b);
     
   public:
     
@@ -154,8 +154,8 @@ namespace fltk3 {
     
     int topline() const ;
     /** For internal use only? */
-    enum Fl_Line_Position { TOP, BOTTOM, MIDDLE };
-    void lineposition(int line, Fl_Line_Position pos);
+    enum LinePosition { TOP, BOTTOM, MIDDLE };
+    void lineposition(int line, LinePosition pos);
     /**
      Scrolls the browser so the top item in the browser
      is showing the specified \p line.

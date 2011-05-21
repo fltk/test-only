@@ -871,7 +871,7 @@ int fltk3::Preferences::size( const char *key ) {
  Exmaple:
  \code
  fltk3::Preferences prefs( USER, "matthiasm.com", "test" );
- char path[FL_PATH_MAX];
+ char path[FLTK3_PATH_MAX];
  prefs.getUserdataPath( path );
  \endcode
  creates the preferences database in (MS Windows):
@@ -884,7 +884,7 @@ int fltk3::Preferences::size( const char *key ) {
  \endcode
 
  \param[out] path buffer for user data path
- \param[in] pathlen size of path buffer (should be at least \c FL_PATH_MAX)
+ \param[in] pathlen size of path buffer (should be at least \c FLTK3_PATH_MAX)
  \return 0 if path was not created or pathname can't fit into buffer
  */
 char fltk3::Preferences::getUserdataPath( char *path, int pathlen ) {
@@ -1002,7 +1002,7 @@ fltk3::Preferences::RootNode::RootNode( fltk3::Preferences *prefs, Root root, co
   vendor_(0L),
   application_(0L) {
 
-  char filename[ FL_PATH_MAX ]; filename[0] = 0;
+  char filename[ FLTK3_PATH_MAX ]; filename[0] = 0;
 #ifdef WIN32
 #  define FLPREFS_RESOURCE	"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"
 #  define FLPREFS_RESOURCEW	L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"
@@ -1015,7 +1015,7 @@ fltk3::Preferences::RootNode::RootNode( fltk3::Preferences *prefs, Root root, co
     case SYSTEM:
       err = RegOpenKeyW( HKEY_LOCAL_MACHINE, FLPREFS_RESOURCEW, &key );
       if (err == ERROR_SUCCESS) {
-        nn = FL_PATH_MAX - appDataLen; 
+        nn = FLTK3_PATH_MAX - appDataLen; 
         err = RegQueryValueExW( key, L"Common AppData", 0L, &type,
                                 (BYTE*)filename, &nn ); 
         if ( ( err != ERROR_SUCCESS ) && ( type == REG_SZ ) ) {
@@ -1028,7 +1028,7 @@ fltk3::Preferences::RootNode::RootNode( fltk3::Preferences *prefs, Root root, co
     case USER:
       err = RegOpenKeyW( HKEY_CURRENT_USER, FLPREFS_RESOURCEW, &key );
       if (err == ERROR_SUCCESS) {
-        nn = FL_PATH_MAX - appDataLen;
+        nn = FLTK3_PATH_MAX - appDataLen;
         err = RegQueryValueExW( key, L"AppData", 0L, &type,
                                 (BYTE*)filename, &nn ); 
         if ( ( err != ERROR_SUCCESS ) && ( type == REG_SZ ) ) {
@@ -1052,7 +1052,7 @@ fltk3::Preferences::RootNode::RootNode( fltk3::Preferences *prefs, Root root, co
     wcscpy(b, (xchar *) filename);
 #endif
     //  filename[fl_unicode2utf(b, wcslen((xchar*)b), filename)] = 0;
-    unsigned len = fl_utf8fromwc(filename, (FL_PATH_MAX-1), b, wcslen(b));
+    unsigned len = fl_utf8fromwc(filename, (FLTK3_PATH_MAX-1), b, wcslen(b));
     filename[len] = 0;
     free(b);
   }
@@ -1114,7 +1114,7 @@ fltk3::Preferences::RootNode::RootNode( fltk3::Preferences *prefs, const char *p
     application = "unknown";
     filename_ = strdup(path);
   } else {
-    char filename[ FL_PATH_MAX ]; filename[0] = 0;
+    char filename[ FLTK3_PATH_MAX ]; filename[0] = 0;
     snprintf(filename, sizeof(filename), "%s/%s.prefs", path, application);
     filename_  = strdup(filename);
   }

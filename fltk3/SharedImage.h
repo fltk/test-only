@@ -114,7 +114,7 @@ namespace fltk3 {
   
 }
 
-#endif // !Fl_Shared_Image_H
+#endif // !Fltk3_Shared_Image_H
 
 //
 // End of "$Id: SharedImage.h 8306 2011-01-24 17:04:22Z matt $"

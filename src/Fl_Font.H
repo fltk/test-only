@@ -52,7 +52,7 @@ public:
   /** linked list for this Fl_Fontdesc */
   Fl_Font_Descriptor *next;	
   fltk3::Fontsize size; /**< font size */
-#ifndef FL_DOXYGEN // don't bother with platorm dependant details in the doc. 
+#ifndef FLTK3_DOXYGEN // don't bother with platorm dependant details in the doc. 
 #  ifdef WIN32
   HFONT fid;
   int *width[64];
@@ -88,7 +88,7 @@ public:
 
   FLTK3_EXPORT ~Fl_Font_Descriptor();
 
-#endif // FL_DOXYGEN
+#endif // FLTK3_DOXYGEN
 };
 
 //extern FLTK3_EXPORT Fl_Font_Descriptor *fltk3::fontsize; // the currently selected one

@@ -175,8 +175,8 @@ namespace fltk3 {
    contents of the screen.</P>
    
    <P>fltk3::RGBImage is defined in
-   &lt;FL/Image.h&gt;, however for compatibility reasons
-   &lt;FL/RGBImage.h&gt; should be included.
+   &lt;fltk3/Image.h&gt;, however for compatibility reasons
+   &lt;fltk3/RGBImage.h&gt; should be included.
    */
   class FLTK3_EXPORT RGBImage : public Image {
     friend class QuartzGraphicsDriver;
@@ -216,7 +216,7 @@ namespace fltk3 {
   
 } // namespace
 
-#endif // !Fl_Image_H
+#endif // !Fltk3_Image_H
 
 //
 // End of "$Id: Image.h 8338 2011-01-30 09:24:40Z manolo $".

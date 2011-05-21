@@ -168,7 +168,7 @@ namespace fltk3 {
     UNFOCUS		= 7,
     
     /** A key was pressed (fltk3::KEYDOWN) or released (fltk3::KEYUP). 
-     Fl_KEYBOARD is a synonym for fltk3::KEYDOWN.
+     fltk3::KEYBOARD is a synonym for fltk3::KEYDOWN.
      The key can be found in fltk3::event_key().
      The text that the key should insert can be found with fltk3::event_text() 
      and its length is in fltk3::event_length(). If you use the key handle()
@@ -250,7 +250,7 @@ namespace fltk3 {
     
     /** This widget is visible again, due to fltk3::Widget::show() being called on 
      it or one of its parents, or due to a parent window being restored. 
-     Child Fl_Windows respond to this by actually creating the window if not 
+     Child fltk3::Windows respond to this by actually creating the window if not 
      done already, so if you subclass a window, be sure to pass fltk3::SHOW 
      to the base class fltk3::Widget::handle() method!
      */
@@ -324,7 +324,7 @@ namespace fltk3 {
    This and the following constants define the non-ASCII keys on the
    keyboard for fltk3::KEYBOARD and fltk3::SHORTCUT events.
    
-   \todo	fltk3::MouseButton and FL_key... constants could be structured better
+   \todo	fltk3::MouseButton and fltk3::key... constants could be structured better
    (use an enum or some doxygen grouping ?)
    
    \sa	fltk3::event_key() and fltk3::get_key(int) (use ascii letters for all other keys):
@@ -355,7 +355,7 @@ namespace fltk3 {
   const unsigned int HelpKey	= 0xff68;	///< The 'help' key on Mac keyboards
   const unsigned int NumLockKey	= 0xff7f;	///< The num lock key.
   const unsigned int KPKey		= 0xff80;	///< One of the keypad numbers; use fltk3::KPKey + n for number n.
-  const unsigned int KPEnterKey	= 0xff8d;	///< The enter key on the keypad, same as Fl_KP+'\\r'.
+  const unsigned int KPEnterKey	= 0xff8d;	///< The enter key on the keypad, same as fltk3::KPKey+'\\r'.
   const unsigned int KPLastKey	= 0xffbd;	///< The last keypad key; use to range-check keypad.
   const unsigned int FKey		= 0xffbd;	///< One of the function keys; use fltk3::FKey + n for function key n.
   const unsigned int FLastKey	= 0xffe0;	///< The last function key; use to range-check function keys.
@@ -434,7 +434,7 @@ namespace fltk3 {
    This enum defines the standard box types included with FLTK.
    
    fltk3::NO_BOX means nothing is drawn at all, so whatever is already 
-   on the screen remains. The FL_..._FRAME types only draw their edges, 
+   on the screen remains. The fltk3::..._FRAME types only draw their edges, 
    leaving the interior unchanged. The blue color in Figure 1 
    is the area that is not drawn by the frame types.
    
@@ -442,7 +442,7 @@ namespace fltk3 {
    \image latex boxtypes.png "FLTK standard box types" width=10cm
    \todo	Description of boxtypes is incomplete.
    See below for the defined enum Boxtype.
-   \see src/Fl_get_system_colors.cxx
+   \see src/get_system_colors.cxx
    */
   /*@{*/
   enum Boxtype { // boxtypes (if you change these you must fix fl_boxtype.C):

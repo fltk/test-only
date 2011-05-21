@@ -30,7 +30,7 @@
 //     http://www.codeproject.com/dialog/selectfolder.asp
 //
 
-#ifndef FL_DOXYGEN		// PREVENT DOXYGEN'S USE OF THIS FILE
+#ifndef FLTK3_DOXYGEN		// PREVENT DOXYGEN'S USE OF THIS FILE
 
 #include <stdio.h>		// debugging
 #include <wchar.h>		//MG
@@ -853,7 +853,7 @@ LPCWSTR utf8towchar(const char *in)
   return wout;
 }
 
-#endif /*!FL_DOXYGEN*/
+#endif /*!FLTK3_DOXYGEN*/
 
 //
 // End of "$Id$".

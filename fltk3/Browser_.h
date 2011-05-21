@@ -33,16 +33,14 @@
 #ifndef Fltk3_Browser__H
 #define Fltk3_Browser__H
 
-#ifndef Fl_Group_H
 #include "Group.h"
-#endif
 #include "Scrollbar.h"
 #include <fltk3/run.h>		// fltk3::scrollbar_size()
 
 namespace fltk3 {
   
   const uchar NORMAL_BROWSER	= 0;	/**< type() of fltk3::Browser */
-  const uchar SELECT_BROWSER	= 1;	/**< type() of FL_Select_Browser */
+  const uchar SELECT_BROWSER	= 1;	/**< type() of fltk3::SelectBrowser */
   const uchar HOLD_BROWSER	= 2;	/**< type() of fltk3::HoldBrowser */
   const uchar MULTI_BROWSER	= 3;	/**< type() of fltk3::MultiBrowser */
   

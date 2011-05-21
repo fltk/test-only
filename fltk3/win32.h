@@ -29,7 +29,7 @@
 // include this file if WIN32 is defined.  This is to encourage
 // portability of even the system-specific code...
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 #ifndef Fl_X_H
 #  error "Never use <fltk3/win32.h> directly; include <fltk3/x.h> instead."
 #endif // !Fl_X_H
@@ -42,7 +42,7 @@ typedef POINT XPoint;
 #include <fltk3/Window.h>
 
 // this part is included only when compiling the FLTK library or if requested explicitly
-#if defined(FL_LIBRARY) || defined(FL_INTERNALS) 
+#if defined(FL_LIBRARY) || defined(FLTK3_INTERNALS) 
 
 // In some of the distributions, the gcc header files are missing some stuff:
 #ifndef LPMINMAXINFO
@@ -107,7 +107,7 @@ inline Window fl_xid(const fltk3::Window* w) { Fl_X *temp = Fl_X::i(w); return t
 #else
 FLTK3_EXPORT Window fl_xid_(const fltk3::Window* w);
 #define fl_xid(w) fl_xid_(w)
-#endif // FL_LIBRARY || FL_INTERNALS
+#endif // FL_LIBRARY || FLTK3_INTERNALS
 
 FLTK3_EXPORT fltk3::Window* fl_find(Window xid);
 FLTK3_EXPORT void fltk3::clip_region(Fl_Region);
@@ -159,7 +159,7 @@ extern FLTK3_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
 inline void fl_open_callback(void (*)(const char *)) {}
 
 extern FLTK3_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b);
-#endif // FL_DOXYGEN
+#endif // FLTK3_DOXYGEN
 //
 // End of "$Id: win32.h 8375 2011-02-05 16:55:04Z AlbrechtS $".
 //

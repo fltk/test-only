@@ -33,10 +33,10 @@ const char *fltk3::Device::class_id = "fltk3::Device";
 const char *fltk3::SurfaceDevice::class_id = "fltk3::SurfaceDevice";
 const char *fltk3::DisplayDevice::class_id = "fltk3::DisplayDevice";
 const char *fltk3::GraphicsDriver::class_id = "fltk3::GraphicsDriver";
-#if defined(__APPLE__) || defined(FL_DOXYGEN)
+#if defined(__APPLE__) || defined(FLTK3_DOXYGEN)
 const char *fltk3::QuartzGraphicsDriver::class_id = "fltk3::QuartzGraphicsDriver";
 #endif
-#if defined(WIN32) || defined(FL_DOXYGEN)
+#if defined(WIN32) || defined(FLTK3_DOXYGEN)
 const char *Fl_GDI_Graphics_Driver::class_id = "Fl_GDI_Graphics_Driver";
 #endif
 #if !(defined(__APPLE__) || defined(WIN32))

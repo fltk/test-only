@@ -66,7 +66,7 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT ValueInput : public fltk3::Valuator {
   public:
-    /* This is the encapsulated Fl_input attribute to which 
+    /* This is the encapsulated fltk3::Input attribute to which 
      this class delegates the value font, color and shortcut */
     fltk3::Input input;
   private:

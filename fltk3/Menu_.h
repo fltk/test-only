@@ -31,9 +31,7 @@
 #ifndef Fltk3_Menu__H
 #define Fltk3_Menu__H
 
-#ifndef Fl_Widget_H
 #include "Widget.h"
-#endif
 #include "MenuItem.h"
 
 
@@ -89,7 +87,7 @@ namespace fltk3 {
     void global();
     
     /**
-     Returns a pointer to the array of Fl_Menu_Items.  This will either be
+     Returns a pointer to the array of fltk3::MenuItems.  This will either be
      the value passed to menu(value) or the private copy.
      */  
     const fltk3::MenuItem *menu() const {return menu_;}

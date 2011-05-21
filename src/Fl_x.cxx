@@ -29,7 +29,7 @@
 //#  include "Fl_win32.cxx"
 #elif defined(__APPLE__)
 //#  include "Fl_mac.cxx"
-#elif !defined(FL_DOXYGEN)
+#elif !defined(FLTK3_DOXYGEN)
 
 #  define CONSOLIDATE_MOTION 1
 /**** Define this if your keyboard lacks a backspace key... ****/
@@ -1870,7 +1870,7 @@ void fltk3::Window::show() {
   if (!shown()) {
     fl_open_display();
     // Don't set background pixel for double-buffered windows...
-    if (type() == FL_WINDOW && can_boxcheat(box())) {
+    if (type() == fltk3::WINDOW && can_boxcheat(box())) {
       fl_background_pixel = int(fl_xpixel(color()));
     }
     Fl_X::make_xid(this);

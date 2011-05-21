@@ -137,7 +137,7 @@ create_form_form (void)
   tobj[1] = obj = fl_add_text(FL_NORMAL_TEXT, 30, 240, 110, 30, "Text");
   tobj[2] = obj = fl_add_bitmap(FL_NORMAL_BITMAP, 40, 280, 90, 80, "Bitmap");
   fl_set_object_lcol(obj, FL_BLUE);
-  tobj[3] = obj = fl_add_chart(FL_BAR_CHART, 160, 110, 160, 110, "Chart");
+  tobj[3] = obj = fl_add_chart(fltk3::BAR_CHART, 160, 110, 160, 110, "Chart");
   tobj[4] = obj = fl_add_clock(FL_ANALOG_CLOCK, 40, 390, 90, 90, "Clock");
 //fl_set_object_dblbuffer(tobj[4],1); // removed for fltk
   tobj[5]=obj=fl_add_button(FL_NORMAL_BUTTON, 340, 110, 120, 30, "Button");

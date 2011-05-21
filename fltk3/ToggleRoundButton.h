@@ -27,7 +27,7 @@
 
 // provided for back-compatibility only
 
-#ifndef Fl_Toggle_Round_Button
+#ifndef Fltk3_Toggle_Round_Button
 #include "RoundButton.h"
 
 namespace fltk3 {

@@ -8,7 +8,7 @@
 namespace fltk3 {
   
   //////////////////////
-  // FL/TreePrefs.h
+  // fltk3/TreePrefs.h
   //////////////////////
   //
   // fltk3::Tree -- This file is part of the fltk3::Tree widget for FLTK

@@ -234,8 +234,8 @@ namespace fltk3 {
     atargets_;		///< Allocated targets
     fltk3::HelpTarget *targets_;		///< Targets
     
-    char		directory_[FL_PATH_MAX];///< Directory for current file
-    char		filename_[FL_PATH_MAX];	///< Current filename
+    char		directory_[FLTK3_PATH_MAX];///< Directory for current file
+    char		filename_[FLTK3_PATH_MAX];	///< Current filename
     int		topline_,		///< Top line in document
     leftline_,		///< Lefthand position
     size_,			///< Total document length
@@ -392,7 +392,7 @@ namespace fltk3 {
   
 }
 
-#endif // !Fl_Help_View_H
+#endif // !Fltk3_Help_View_H
 
 //
 // End of "$Id: HelpView.h 8306 2011-01-24 17:04:22Z matt $".

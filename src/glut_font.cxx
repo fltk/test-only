@@ -30,7 +30,7 @@
 //     Copyright (c) 1999-2000 Pawel W. Olszta. All Rights Reserved.
 //
 
-// (sort of) emulation of Glut's bitmap drawing functions, using FL's
+// (sort of) emulation of Glut's bitmap drawing functions, using fltk3's
 // font stuff.  Not all the fonts match!
 
 #include <config.h>

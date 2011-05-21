@@ -129,7 +129,7 @@ int fl_filename_list(const char *d, dirent ***list,
   // convert every filename to utf-8, and append a '/' to all
   // filenames that are directories
   int i;
-  char *fullname = (char*)malloc(dirlen+FL_PATH_MAX+3); // Add enough extra for two /'s and a nul
+  char *fullname = (char*)malloc(dirlen+FLTK3_PATH_MAX+3); // Add enough extra for two /'s and a nul
   // Use memcpy for speed since we already know the length of the string...
   memcpy(fullname, d, dirlen+1);
 
@@ -158,7 +158,7 @@ int fl_filename_list(const char *d, dirent ***list,
 
     // Check if dir (checks done on "old" name as we need to interact with
     // the underlying OS)
-    if (de->d_name[len-1]!='/' && len<=FL_PATH_MAX) {
+    if (de->d_name[len-1]!='/' && len<=FLTK3_PATH_MAX) {
       // Use memcpy for speed since we already know the length of the string...
       memcpy(name, de->d_name, len+1);
       if (fl_filename_isdir(fullname)) {

@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_BMP_Image routines.
+// fltk3::BMPImage routines.
 //
 // Copyright 1997-2010 by Easy Software Products.
 // Image support by Matthias Melcher, Copyright 2000-2009.
@@ -27,7 +27,7 @@
 //
 // Contents:
 //
-//   Fl_BMP_Image::Fl_BMP_Image() - Load a BMP image file.
+//   fltk3::BMPImage::fltk3::BMPImage() - Load a BMP image file.
 //
 
 //
@@ -67,7 +67,7 @@ static unsigned int	read_dword(FILE *fp);
   <P>The destructor free all memory and server resources that are used by
   the image
 */
-Fl_BMP_Image::Fl_BMP_Image(const char *bmp) // I - File to read
+fltk3::BMPImage::BMPImage(const char *bmp) // I - File to read
   : fltk3::RGBImage(0,0,0) {
   FILE		*fp;		// File pointer
   int		info_size,	// Size of info header

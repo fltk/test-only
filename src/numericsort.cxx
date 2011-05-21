@@ -94,7 +94,7 @@ static int numericsort(struct dirent **A, struct dirent **B, int cs) {
  * 'fl_casenumericsort()' - Compare directory entries with case-sensitivity.
  */
 
-int fl_casenumericsort(struct dirent **A, struct dirent **B) {
+extern "C" int fl_casenumericsort(struct dirent **A, struct dirent **B) {
   return numericsort(A, B, 0);
 }
 
@@ -102,7 +102,7 @@ int fl_casenumericsort(struct dirent **A, struct dirent **B) {
  * 'fl_numericsort()' - Compare directory entries with case-sensitivity.
  */
 
-int fl_numericsort(struct dirent **A, struct dirent **B) {
+extern "C" int fl_numericsort(struct dirent **A, struct dirent **B) {
   return numericsort(A, B, 1);
 }
 

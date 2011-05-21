@@ -28,7 +28,7 @@
 // Do not directly include this file, instead use <fltk3/x.h>.  It will
 // include this file if "__APPLE__" is defined.  This is to encourage
 // portability of even the system-specific code...
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 
 #if !defined(Fl_X_H)
 #  error "Never use <fltk3/osx.h> directly; include <fltk3/x.h> instead."
@@ -53,7 +53,7 @@ typedef void* Fl_Bitmask;   // this is really a CGImageRef
 #define MAC_OS_X_VERSION_10_6 1060
 #endif
 
-#if !(defined(FL_LIBRARY) || defined(FL_INTERNALS)) // this part is used when compiling an application program
+#if !(defined(FL_LIBRARY) || defined(FLTK3_INTERNALS)) // this part is used when compiling an application program
 
 typedef void* Fl_Region;
 typedef void* Fl_CGContextRef;
@@ -162,7 +162,7 @@ extern struct Fl_XMap {
 } *fl_current_xmap;
 extern FLTK3_EXPORT Window fl_window;
 
-#endif // FL_LIBRARY || FL_INTERNALS
+#endif // FL_LIBRARY || FLTK3_INTERNALS
 
 extern FLTK3_EXPORT Fl_CGContextRef fl_gc;
 
@@ -188,7 +188,7 @@ extern void fl_end_offscreen();
 extern FLTK3_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b);
 extern void fl_open_display();
 
-#endif // FL_DOXYGEN
+#endif // FLTK3_DOXYGEN
 
 /** \defgroup group_macosx Mac OS X-specific symbols
  Mac OS X-specific symbols declared in <fltk3/x.h> or <fltk3/gl.h>

@@ -66,7 +66,7 @@ namespace fltk3 {
   
 }
 
-#endif // !Fl_Tiled_Image_H
+#endif // !Fltk3_Tiled_Image_H
 
 //
 // End of "$Id: TiledImage.h 7903 2010-11-28 21:06:39Z matt $"

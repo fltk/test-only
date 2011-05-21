@@ -26,7 +26,7 @@
 //
 
 /* \file
- Fl_Multiline_Input widget . */
+ fltk3::MultilineInput widget . */
 
 
 #ifndef Fltk3_Multiline_Input_H
@@ -57,7 +57,7 @@ namespace fltk3 {
   class FLTK3_EXPORT MultilineInput : public fltk3::Input {
   public:
     /**
-     Creates a new Fl_Multiline_Input widget using the given
+     Creates a new fltk3::MultilineInput widget using the given
      position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
      <P>Inherited destructor destroys the widget and any value associated with it.
      */

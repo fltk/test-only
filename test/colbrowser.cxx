@@ -57,7 +57,7 @@ static fltk3::Button *dbobj;
 static fltk3::HoldBrowser *colbr;
 static fltk3::ValueSlider *rs, *gs, *bs;
 
-static char dbname[FL_PATH_MAX];
+static char dbname[FLTK3_PATH_MAX];
 
 static void create_form_cl(void);
 static int load_browser(char *);

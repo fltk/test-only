@@ -27,7 +27,7 @@
 
 // provided for back-compatibility only
 
-#ifndef Fl_Toggle_Light_Button
+#ifndef Fltk3_Toggle_Light_Button
 #include "LightButton.h"
 
 namespace fltk3 {

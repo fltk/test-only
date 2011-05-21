@@ -26,7 +26,7 @@
 //
 
 /* \file
- Fl_Simple_Counter widget . */
+ fltk3::SimpleCounter widget . */
 
 #ifndef Fltk3_Simple_Counter_H
 #define Fltk3_Simple_Counter_H
@@ -38,7 +38,7 @@ namespace fltk3 {
   /** 
    This widget creates a counter with only 2 arrow buttons 
    <P align=center>\image html counter.png</P> 
-   \image latex  counter.png "Fl_Simple_Counter" width=4cm
+   \image latex  counter.png "fltk3::SimpleCounter" width=4cm
    */
   class FLTK3_EXPORT SimpleCounter : public fltk3::Counter {
   public:

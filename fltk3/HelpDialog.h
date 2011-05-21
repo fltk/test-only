@@ -46,7 +46,7 @@ namespace fltk3 {
     int index_; 
     int max_; 
     int line_[100];                 // FIXME: we must remove those static numbers
-    char file_[100][FL_PATH_MAX];   // FIXME: we must remove those static numbers
+    char file_[100][FLTK3_PATH_MAX];   // FIXME: we must remove those static numbers
     int find_pos_; 
   public:
     HelpDialog();

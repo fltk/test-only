@@ -106,7 +106,7 @@ void printvert(float v[3])
   fprintf(stderr, "(%f, %f, %f)\n", v[0], v[1], v[2]);
 }
 
-#if 0	// removed for FL, it is in fracviewer.c
+#if 0	// removed for fltk3, it is in fracviewer.c
   /* normalizes v */
 void normalize(GLfloat v[3])
 {

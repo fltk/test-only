@@ -29,11 +29,11 @@
 #include <fltk3/run.h>
 #include <fltk3/Window.h>
 #include <fltk3/Hor_Slider.h>
-#include <FL/math.h>
+#include <fltk3/math.h>
 
 #if HAVE_GL
 
-#include <FL/gl.h>
+#include <fltk3/gl.h>
 #include <fltk3/Gl_Window.h>
 
 class shape_window : public fltk3::GlWindow {

@@ -31,9 +31,9 @@
 
 #include <fltk3/Cairo_Window.h>
 #include <fltk3/Box.h>
-#include <FL/x.h>
+#include <fltk3/x.h>
 #include <fltk3/draw.h>
-#include <FL/math.h>
+#include <fltk3/math.h>
 #define DEF_WIDTH 0.03
 
 // uncomment the following line to enable cairo context autolink feature:

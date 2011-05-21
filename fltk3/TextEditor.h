@@ -127,7 +127,7 @@ namespace fltk3 {
     int handle_key();
     void maybe_do_callback();
     
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
     int insert_mode_;
     Key_Binding* key_bindings;
     static Key_Binding* global_key_bindings;

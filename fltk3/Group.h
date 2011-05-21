@@ -205,7 +205,7 @@ namespace fltk3 {
    class MyClass {
    fltk3::Group group;
    fltk3::Button button_in_group;
-   Fl_End end;
+   fltk3::End end;
    fltk3::Button button_outside_group;
    MyClass();
    };
@@ -217,10 +217,10 @@ namespace fltk3 {
    {} 
    \endcode
    */
-  class FLTK3_EXPORT Fl_End {
+  class FLTK3_EXPORT End {
   public:
     /** All it does is calling fltk3::Group::current()->end() */
-    Fl_End() {Group::current()->end();}
+    End() {Group::current()->end();}
   };
   
 }

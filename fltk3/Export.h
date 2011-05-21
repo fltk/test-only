@@ -42,7 +42,7 @@
 #    define FLTK3_EXPORT
 #  endif /* FL_DLL */
 
-#endif /* !Fl_Export_H */
+#endif /* !Fltk3_Export_H */
 
 /*
  * End of "$Id: Export.h 7903 2010-11-28 21:06:39Z matt $".

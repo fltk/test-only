@@ -16,7 +16,7 @@
 namespace fltk3 {
   
   //////////////////////
-  // FL/Tree.h
+  // fltk3/Tree.h
   //////////////////////
   //
   // fltk3::Tree -- This file is part of the fltk3::Tree widget for FLTK

@@ -26,35 +26,12 @@
 //
 
 /* \file
-   Fl_FormsPixmap widget . */
+   Fltk3_FormsPixmap widget . */
 
 #ifndef Fltk3_FormsPixmap_H
 #define Fltk3_FormsPixmap_H
 
-#include "Pixmap.h"
-
-/**
-  \class Fl_FormsPixmap
-  \brief Forms pixmap drawing routines
-*/
-class FLTK3_EXPORT Fl_FormsPixmap : public fltk3::Widget {
-    fltk3::Pixmap *b;
-protected:
-    void draw();
-public:
-    Fl_FormsPixmap(fltk3::Boxtype t, int X, int Y, int W, int H, const char *L= 0);
-
-    void set(/*const*/char * const * bits);
-
-    /**
-      Set the internal pixmap pointer to an existing pixmap.
-      \param[in] B existing pixmap
-    */
-    void Pixmap(fltk3::Pixmap *B) {b = B;}
-
-    /** Get the internal pixmap pointer. */
-    fltk3::Pixmap *Pixmap() const {return b;}
-};
+#error "Forms" emulation is no longer supported in FLTK 3. Please sue 1.3.0
 
 #endif
 

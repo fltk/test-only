@@ -90,7 +90,7 @@ fltk3::TextEditor::TextEditor(int X, int Y, int W, int H,  const char* l)
   default_key_function(kf_default);
 }
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 fltk3::TextEditor::Key_Binding* fltk3::TextEditor::global_key_bindings = 0;
 #endif
 

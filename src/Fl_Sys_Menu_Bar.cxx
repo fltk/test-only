@@ -52,7 +52,7 @@
  * a bundle for the System Menu Bar (and maybe other features) to work!
  */
 
-#if defined(__APPLE__) || defined(FL_DOXYGEN)
+#if defined(__APPLE__) || defined(FLTK3_DOXYGEN)
 
 #include <fltk3/x.h>
 #include <fltk3/run.h>

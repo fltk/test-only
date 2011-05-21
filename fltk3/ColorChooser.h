@@ -43,7 +43,7 @@
 
 namespace fltk3 {
   
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
   
   /** For internal use only */
   class FLTK3_EXPORT cc_HueBox : public fltk3::Widget {
@@ -76,7 +76,7 @@ namespace fltk3 {
     cc_Value_Input(int X, int Y, int W, int H) : fltk3::ValueInput(X,Y,W,H) {}
   };
   
-#endif // !FL_DOXYGEN
+#endif // !FLTK3_DOXYGEN
   
   /** \addtogroup group_comdlg 
    @{ */

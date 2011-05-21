@@ -68,7 +68,7 @@ namespace fltk3 {
     static const char *class_id;
     const char *class_name() {return class_id;};
     PostScriptGraphicsDriver();
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
     enum SHAPE{NONE=0, LINE, LOOP, POLYGON, POINTS};
     
     class Clip {
@@ -137,7 +137,7 @@ namespace fltk3 {
     
     void page(double pw, double ph, int media = 0);
     void page(int format);
-#endif // FL_DOXYGEN
+#endif // FLTK3_DOXYGEN
     
     // implementation of drawing methods
     void color(fltk3::Color c);
@@ -250,7 +250,7 @@ namespace fltk3 {
   
 }
 
-#endif // Fl_PostScript_H
+#endif // Fltk3_PostScript_H
 
 //
 // End of "$Id: PostScript.h 8528 2011-03-22 17:41:23Z manolo $"

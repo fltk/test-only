@@ -28,7 +28,7 @@
 #ifndef Fltk3_RGB_Image_H
 # define Fltk3_RGB_Image_H
 # include "Image.h"
-#endif // !Fl_RGB_Image_H
+#endif // !Fltk_RGB_Image_H
 
 //
 // End of "$Id: RGBImage.h 7903 2010-11-28 21:06:39Z matt $".

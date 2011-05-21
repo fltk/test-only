@@ -46,8 +46,8 @@ namespace fltk3 {
    \image html fltk3::show_colormap.png
    \image latex fltk3::show_colormap.png "fltk3::show_colormap" height=10cm
    \param[in] oldcol color to be highlighted when grid is shown.
-   \retval Fl_Color value of the chosen colormap entry.
-   \see Fl_Color_Chooser
+   \retval fltk3::Color value of the chosen colormap entry.
+   \see fltk3::ColorChooser
    */
   FLTK3_EXPORT fltk3::Color show_colormap(fltk3::Color oldcol);
   

@@ -31,7 +31,7 @@
 
 // This file must be #include'd in Fl.cxx and not compiled separately.
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 #include <fltk3/run.h>
 #include <fltk3/utf8.h>
 #include <fltk3/Window.h>
@@ -884,7 +884,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     } else {
       i->region = R;
     }
-    if (window->type() == FL_DOUBLE_WINDOW) ValidateRgn(hWnd,0);
+    if (window->type() == fltk3::DOUBLE_WINDOW) ValidateRgn(hWnd,0);
     else ValidateRgn(hWnd,i->region);
 
     window->clear_damage((uchar)(window->damage()|fltk3::DAMAGE_EXPOSE));
@@ -2055,7 +2055,7 @@ void preparePrintFront(void)
 }
 #endif // USE_PRINT_BUTTON
 
-#endif // FL_DOXYGEN
+#endif // FLTK3_DOXYGEN
 
 //
 // End of "$Id$".

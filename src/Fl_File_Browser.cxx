@@ -72,21 +72,21 @@
 #endif // __APPLE__
 
 //
-// FL_BLINE definition from "fltk3::Browser.cxx"...
+// fltk3::BrowserLine_ definition from "fltk3::Browser.cxx"...
 //
 
 #define SELECTED 1
 #define NOTDISPLAYED 2
 
-// TODO -- Warning: The definition of FL_BLINE here is a hack.
+// TODO -- Warning: The definition of fltk3::BrowserLine_ here is a hack.
 //    fltk3::FileBrowser should not do this. PLEASE FIX.
-//    FL_BLINE should be private to fltk3::Browser, and not re-defined here.
+//    fltk3::BrowserLine_ should be private to fltk3::Browser, and not re-defined here.
 //    For now, make sure this struct is precisely consistent with fltk3::Browser.cxx.
 //
-struct FL_BLINE			// data is in a linked list of these
+struct fltk3::BrowserLine_			// data is in a linked list of these
 {
-  FL_BLINE	*prev;		// Previous item in list
-  FL_BLINE	*next;		// Next item in list
+  fltk3::BrowserLine_	*prev;		// Previous item in list
+  fltk3::BrowserLine_	*next;		// Next item in list
   void		*data;		// Pointer to data (function)
   fltk3::Image      *icon;		// Pointer to optional icon
   short		length;		// sizeof(txt)-1, may be longer than string
@@ -120,7 +120,7 @@ fltk3::FileBrowser::full_height() const
 int					// O - Height in pixels
 fltk3::FileBrowser::item_height(void *p) const	// I - List item data
 {
-  FL_BLINE	*line;			// Pointer to line
+  fltk3::BrowserLine_	*line;			// Pointer to line
   char		*t;			// Pointer into text
   int		height;			// Width of line
   int		textheight;		// Height of text
@@ -134,7 +134,7 @@ fltk3::FileBrowser::item_height(void *p) const	// I - List item data
   height = textheight;
 
   // Scan for newlines...
-  line = (FL_BLINE *)p;
+  line = (fltk3::BrowserLine_ *)p;
 
   if (line != NULL)
     for (t = line->txt; *t != '\0'; t ++)
@@ -161,7 +161,7 @@ int					// O - Width in pixels
 fltk3::FileBrowser::item_width(void *p) const	// I - List item data
 {
   int		i;			// Looping var
-  FL_BLINE	*line;			// Pointer to line
+  fltk3::BrowserLine_	*line;			// Pointer to line
   char		*t,			// Pointer into text
 		*ptr,			// Pointer into fragment
 		fragment[10240];	// Fragment of text
@@ -172,7 +172,7 @@ fltk3::FileBrowser::item_width(void *p) const	// I - List item data
 
 
   // Scan for newlines...
-  line    = (FL_BLINE *)p;
+  line    = (fltk3::BrowserLine_ *)p;
   columns = column_widths();
 
   // Set the font and size...
@@ -268,7 +268,7 @@ fltk3::FileBrowser::item_draw(void *p,	// I - List item data
 			   int) const	// I - Height of item
 {
   int		i;			// Looping var
-  FL_BLINE	*line;			// Pointer to line
+  fltk3::BrowserLine_	*line;			// Pointer to line
   fltk3::Color	c;			// Text color
   char		*t,			// Pointer into text
 		*ptr,			// Pointer into fragment
@@ -280,7 +280,7 @@ fltk3::FileBrowser::item_draw(void *p,	// I - List item data
 
 
   // Draw the list item text...
-  line = (FL_BLINE *)p;
+  line = (fltk3::BrowserLine_ *)p;
 
   if (line->txt[strlen(line->txt) - 1] == '/')
     fltk3::font(textfont() | fltk3::BOLD, textsize());
@@ -323,7 +323,7 @@ fltk3::FileBrowser::item_draw(void *p,	// I - List item data
   }
 
   // Draw the text...
-  line    = (FL_BLINE *)p;
+  line    = (fltk3::BrowserLine_ *)p;
   columns = column_widths();
   width   = 0;
   column  = 0;
@@ -536,7 +536,7 @@ fltk3::FileBrowser::load(const char     *directory,// I - Directory to load
     // UNIX code uses /etc/fstab or similar...
     //
     FILE	*mtab;		// /etc/mtab or /etc/mnttab file
-    char	line[FL_PATH_MAX];	// Input line
+    char	line[FLTK3_PATH_MAX];	// Input line
 
     //
     // Open the file that contains a list of mounted filesystems...

@@ -36,7 +36,7 @@
 #include <fltk3/Tooltip.h>
 
 // recent versions of MinGW warn: "Please include winsock2.h before windows.h",
-// hence we must include winsock2.h before FL/x.h (A.S. Dec. 2010)
+// hence we must include winsock2.h before fltk3/x.h (A.S. Dec. 2010)
 #if defined(WIN32) && !defined(__CYGWIN__)
 #  include <winsock2.h>
 #endif
@@ -66,7 +66,7 @@ extern double fl_mac_flush_and_wait(double time_to_wait, char in_idle);
 //
 // Globals...
 //
-#if defined(__APPLE__) || defined(FL_DOXYGEN)
+#if defined(__APPLE__) || defined(FLTK3_DOXYGEN)
 const char *Fl_Mac_App_Menu::about = "About ";
 const char *Fl_Mac_App_Menu::print = "Print Front Window";
 const char *Fl_Mac_App_Menu::services = "Services";
@@ -75,7 +75,7 @@ const char *Fl_Mac_App_Menu::hide_others = "Hide Others";
 const char *Fl_Mac_App_Menu::show = "Show All";
 const char *Fl_Mac_App_Menu::quit = "Quit ";
 #endif // __APPLE__
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 fltk3::Widget	*fltk3::belowmouse_,
 		*fltk3::pushed_,
 		*fltk3::focus_,
@@ -109,7 +109,7 @@ fltk3::Window *fl_xmousewin;// which window X thinks has fltk3::ENTER
 fltk3::Window *fltk3::grab_;	// most recent fltk3::grab()
 fltk3::Window *fltk3::modal_;	// topmost modal() window
 
-#endif // FL_DOXYGEN
+#endif // FLTK3_DOXYGEN
 
 //
 // 'fltk3::version()' - Return the API version number...
@@ -646,7 +646,7 @@ int fltk3::ready() {
 ////////////////////////////////////////////////////////////////
 // Window list management:
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 Fl_X* Fl_X::first;
 #endif
 
@@ -1019,7 +1019,7 @@ static int send(int event, fltk3::Widget* to, fltk3::Window* window) {
     dx = dy = 0;
   }
   for (const fltk3::Widget* w = to; w; w = w->parent())
-    if (w->type()>=FL_WINDOW) {dx -= w->x(); dy -= w->y();}
+    if (w->type()>=fltk3::WINDOW) {dx -= w->x(); dy -= w->y();}
   int save_x = fltk3::e_x; fltk3::e_x += dx;
   int save_y = fltk3::e_y; fltk3::e_y += dy;
   int ret = to->handle(fltk3::e_number = event);
@@ -1488,7 +1488,7 @@ int fltk3::Window::handle(int ev)
 	// want to reappear.
 	if (visible()) {
 	 fltk3::Widget* p = parent(); for (;p->visible();p = p->parent()) {}
-	 if (p->type() >= FL_WINDOW) break; // don't do the unmap
+	 if (p->type() >= fltk3::WINDOW) break; // don't do the unmap
 	}
 #if defined(USE_X11) || defined(WIN32)
 	XUnmapWindow(fl_display, fl_xid(this));
@@ -1610,7 +1610,7 @@ void fltk3::Widget::redraw_label() {
 }
 
 void fltk3::Widget::damage(uchar fl) {
-  if (type() < FL_WINDOW) {
+  if (type() < fltk3::WINDOW) {
     // damage only the rectangle covered by a child widget:
     damage(fl, x(), y(), w(), h());
   } else {
@@ -1626,7 +1626,7 @@ void fltk3::Widget::damage(uchar fl) {
 void fltk3::Widget::damage(uchar fl, int X, int Y, int W, int H) {
   fltk3::Widget* wi = this;
   // mark all parent widgets between this and window with fltk3::DAMAGE_CHILD:
-  while (wi->type() < FL_WINDOW) {
+  while (wi->type() < fltk3::WINDOW) {
     wi->damage_ |= fl;
     wi = wi->parent();
     if (!wi) return;
@@ -1909,12 +1909,12 @@ void fltk3::clear_widget_pointer(fltk3::Widget const *w)
 
  \param opt which option
  \return true or false
- \see enum fltk3::Fl_Option
- \see fltk3::option(Fl_Option, bool)
+ \see enum fltk3::fltk3::Option
+ \see fltk3::option(fltk3::Option, bool)
 
  \since FLTK 1.3.0
  */ 
-bool fltk3::option(Fl_Option opt)
+bool fltk3::option(fltk3::Option opt)
 {
   if (!options_read_) {
     int tmp;
@@ -1967,10 +1967,10 @@ bool fltk3::option(Fl_Option opt)
  
  \param opt which option
  \param val set to true or false
- \see enum fltk3::Fl_Option
- \see bool fltk3::option(Fl_Option)
+ \see enum fltk3::fltk3::Option
+ \see bool fltk3::option(fltk3::Option)
  */
-void fltk3::option(Fl_Option opt, bool val)
+void fltk3::option(fltk3::Option opt, bool val)
 {
   if (opt<0 || opt>=OPTION_LAST) 
     return;

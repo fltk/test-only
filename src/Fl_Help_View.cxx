@@ -2606,8 +2606,8 @@ fltk3::HelpView::get_color(const char *n,	// I - Color name
 fltk3::SharedImage *
 fltk3::HelpView::get_image(const char *name, int W, int H) {
   const char	*localname;		// Local filename
-  char		dir[FL_PATH_MAX];	// Current directory
-  char		temp[FL_PATH_MAX],	// Temporary filename
+  char		dir[FLTK3_PATH_MAX];	// Current directory
+  char		temp[FLTK3_PATH_MAX],	// Temporary filename
 		*tempptr;		// Pointer into temporary name
   fltk3::SharedImage *ip;			// Image pointer...
 
@@ -2703,8 +2703,8 @@ void fltk3::HelpView::follow_link(fltk3::HelpLink *linkp)
 
   if (strcmp(linkp->filename, filename_) != 0 && linkp->filename[0])
   {
-    char	dir[FL_PATH_MAX];	// Current directory
-    char	temp[FL_PATH_MAX],	// Temporary filename
+    char	dir[FLTK3_PATH_MAX];	// Current directory
+    char	temp[FLTK3_PATH_MAX],	// Temporary filename
 	      *tempptr;	// Pointer into temporary filename
 
 
@@ -3115,7 +3115,7 @@ fltk3::HelpView::load(const char *f)// I - Filename to load (may also have targe
   char		*slash;		// Directory separator
   const char	*localname;	// Local filename
   char		error[1024];	// Error buffer
-  char		newname[FL_PATH_MAX];	// New filename buffer
+  char		newname[FLTK3_PATH_MAX];	// New filename buffer
 
   // printf("load(%s)\n",f); fflush(stdout);
 
@@ -3125,7 +3125,7 @@ fltk3::HelpView::load(const char *f)// I - Filename to load (may also have targe
       strncmp(f, "ipp:", 4) == 0 ||
       strncmp(f, "mailto:", 7) == 0 ||
       strncmp(f, "news:", 5) == 0) {
-    char urimsg[FL_PATH_MAX];
+    char urimsg[FLTK3_PATH_MAX];
     if ( fl_open_uri(f, urimsg, sizeof(urimsg)) == 0 ) {
       clear_selection();
 

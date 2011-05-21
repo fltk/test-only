@@ -40,7 +40,7 @@ void fl_rectbound(int x,int y,int w,int h, fltk3::Color color);
 /* Widget specific information */
 
 static void draw_barchart(int x,int y,int w,int h,
-			  int numb, FL_CHART_ENTRY entries[],
+			  int numb, fltk3::CHART_ENTRY entries[],
 			  double min, double max, int autosize, int maxnumb,
 			  fltk3::Color textcolor)
 /* Draws a bar chart. x,y,w,h is the bounding box, entries the array of
@@ -80,7 +80,7 @@ static void draw_barchart(int x,int y,int w,int h,
 }
 
 static void draw_horbarchart(int x,int y,int w,int h,
-			     int numb, FL_CHART_ENTRY entries[],
+			     int numb, fltk3::CHART_ENTRY entries[],
 			     double min, double max, int autosize, int maxnumb,
 			     fltk3::Color textcolor)
 /* Draws a horizontal bar chart. x,y,w,h is the bounding box, entries the
@@ -126,7 +126,7 @@ static void draw_horbarchart(int x,int y,int w,int h,
 }
 
 static void draw_linechart(int type, int x,int y,int w,int h,
-			   int numb, FL_CHART_ENTRY entries[],
+			   int numb, fltk3::CHART_ENTRY entries[],
 			   double min, double max, int autosize, int maxnumb,
 			   fltk3::Color textcolor)
 /* Draws a line chart. x,y,w,h is the bounding box, entries the array of
@@ -145,13 +145,13 @@ static void draw_linechart(int type, int x,int y,int w,int h,
       int x1 = x + (int)rint((i+.5)*bwidth);
       int yy0 = i ? zeroh - (int)rint(entries[i-1].val*incr) : 0;
       int yy1 = zeroh - (int)rint(entries[i].val*incr);
-      if (type == FL_SPIKE_CHART) {
+      if (type == fltk3::SPIKE_CHART) {
 	  fltk3::color((fltk3::Color)entries[i].col);
 	  fltk3::line(x1, zeroh, x1, yy1);
-      } else if (type == FL_LINE_CHART && i != 0) {
+      } else if (type == fltk3::LINE_CHART && i != 0) {
 	  fltk3::color((fltk3::Color)entries[i-1].col);
 	  fltk3::line(x0,yy0,x1,yy1);
-      } else if (type == FL_FILLED_CHART && i != 0) {
+      } else if (type == fltk3::FILLED_CHART && i != 0) {
 	  fltk3::color((fltk3::Color)entries[i-1].col);
 	  if ((entries[i-1].val>0.0)!=(entries[i].val>0.0)) {
 	      double ttt = entries[i-1].val/(entries[i-1].val-entries[i].val);
@@ -176,7 +176,7 @@ static void draw_linechart(int type, int x,int y,int w,int h,
 }
 
 static void draw_piechart(int x,int y,int w,int h,
-			  int numb, FL_CHART_ENTRY entries[], int special,
+			  int numb, fltk3::CHART_ENTRY entries[], int special,
 			  fltk3::Color textcolor)
 /* Draws a pie chart. x,y,w,h is the bounding box, entries the array of
    numb entries */
@@ -230,7 +230,7 @@ static void draw_piechart(int x,int y,int w,int h,
     }
 }
 
-void Fl_Chart::draw() {
+void fltk3::Chart::draw() {
 
     draw_box();
     fltk3::Boxtype b = box();
@@ -253,20 +253,20 @@ void Fl_Chart::draw() {
     fltk3::font(textfont(),textsize());
 
     switch (type()) {
-    case FL_BAR_CHART:
+    case fltk3::BAR_CHART:
 	ww++; // makes the bars fill box correctly
 	draw_barchart(xx,yy,ww,hh, numb, entries, min, max,
 			autosize(), maxnumb, textcolor());
 	break;
-    case FL_HORBAR_CHART:
+    case fltk3::HORBAR_CHART:
 	hh++; // makes the bars fill box correctly
 	draw_horbarchart(xx,yy,ww,hh, numb, entries, min, max,
 			autosize(), maxnumb, textcolor());
 	break;
-    case FL_PIE_CHART:
+    case fltk3::PIE_CHART:
 	draw_piechart(xx,yy,ww,hh,numb,entries,0, textcolor());
 	break;
-    case FL_SPECIALPIE_CHART:
+    case fltk3::SPECIALPIE_CHART:
 	draw_piechart(xx,yy,ww,hh,numb,entries,1,textcolor());
 	break;
     default:
@@ -286,37 +286,37 @@ void Fl_Chart::draw() {
 #define FL_CHART_ALIGN		fltk3::ALIGN_BOTTOM
 
 /**
-  Create a new Fl_Chart widget using the given position, size and label string.
+  Create a new fltk3::Chart widget using the given position, size and label string.
   The default boxstyle is \c fltk3::NO_BOX.
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
-Fl_Chart::Fl_Chart(int X, int Y, int W, int H,const char *L) :
+fltk3::Chart::Chart(int X, int Y, int W, int H,const char *L) :
 fltk3::Widget(X,Y,W,H,L) {
   box(fltk3::BORDER_BOX);
   align(fltk3::ALIGN_BOTTOM);
   numb       = 0;
   maxnumb    = 0;
-  sizenumb   = FL_CHART_MAX;
+  sizenumb   = fltk3::CHART_MAX;
   autosize_  = 1;
   min = max  = 0;
   textfont_  = fltk3::HELVETICA;
   textsize_  = 10;
   textcolor_ = fltk3::FOREGROUND_COLOR;
-  entries    = (FL_CHART_ENTRY *)calloc(sizeof(FL_CHART_ENTRY), FL_CHART_MAX + 1);
+  entries    = (fltk3::CHART_ENTRY *)calloc(sizeof(fltk3::CHART_ENTRY), fltk3::CHART_MAX + 1);
 }
 
 /**
-  Destroys the Fl_Chart widget and all of its data.
+  Destroys the fltk3::Chart widget and all of its data.
  */
-Fl_Chart::~Fl_Chart() {
+fltk3::Chart::~Chart() {
   free(entries);
 }
 
 /**
   Removes all values from the chart.
  */
-void Fl_Chart::clear() {
+void fltk3::Chart::clear() {
   numb = 0;
   min = max = 0;
   redraw();
@@ -329,21 +329,21 @@ void Fl_Chart::clear() {
   \param[in] str optional data label
   \param[in] col optional data color
  */
-void Fl_Chart::add(double val, const char *str, unsigned col) {
+void fltk3::Chart::add(double val, const char *str, unsigned col) {
   /* Allocate more entries if required */
   if (numb >= sizenumb) {
-    sizenumb += FL_CHART_MAX;
-    entries = (FL_CHART_ENTRY *)realloc(entries, sizeof(FL_CHART_ENTRY) * (sizenumb + 1));
+    sizenumb += fltk3::CHART_MAX;
+    entries = (fltk3::CHART_ENTRY *)realloc(entries, sizeof(fltk3::CHART_ENTRY) * (sizenumb + 1));
   }
   // Shift entries as needed
   if (numb >= maxnumb && maxnumb > 0) {
-    memmove(entries, entries + 1, sizeof(FL_CHART_ENTRY) * (numb - 1));
+    memmove(entries, entries + 1, sizeof(fltk3::CHART_ENTRY) * (numb - 1));
     numb --;
   }
   entries[numb].val = float(val);
   entries[numb].col = col;
     if (str) {
-	strlcpy(entries[numb].str,str,FL_CHART_LABEL_MAX + 1);
+	strlcpy(entries[numb].str,str,fltk3::CHART_LABEL_MAX + 1);
     } else {
 	entries[numb].str[0] = 0;
     }
@@ -359,13 +359,13 @@ void Fl_Chart::add(double val, const char *str, unsigned col) {
   \param[in] str optional data label
   \param[in] col optional data color
  */
-void Fl_Chart::insert(int ind, double val, const char *str, unsigned col) {
+void fltk3::Chart::insert(int ind, double val, const char *str, unsigned col) {
   int i;
   if (ind < 1 || ind > numb+1) return;
   /* Allocate more entries if required */
   if (numb >= sizenumb) {
-    sizenumb += FL_CHART_MAX;
-    entries = (FL_CHART_ENTRY *)realloc(entries, sizeof(FL_CHART_ENTRY) * (sizenumb + 1));
+    sizenumb += fltk3::CHART_MAX;
+    entries = (fltk3::CHART_ENTRY *)realloc(entries, sizeof(fltk3::CHART_ENTRY) * (sizenumb + 1));
   }
   // Shift entries as needed
   for (i=numb; i >= ind; i--) entries[i] = entries[i-1];
@@ -374,7 +374,7 @@ void Fl_Chart::insert(int ind, double val, const char *str, unsigned col) {
   entries[ind-1].val = float(val);
   entries[ind-1].col = col;
   if (str) {
-      strlcpy(entries[ind-1].str,str,FL_CHART_LABEL_MAX+1);
+      strlcpy(entries[ind-1].str,str,fltk3::CHART_LABEL_MAX+1);
   } else {
       entries[ind-1].str[0] = 0;
   }
@@ -389,12 +389,12 @@ void Fl_Chart::insert(int ind, double val, const char *str, unsigned col) {
   \param[in] str optional data label
   \param[in] col optional data color
  */
-void Fl_Chart::replace(int ind,double val, const char *str, unsigned col) {
+void fltk3::Chart::replace(int ind,double val, const char *str, unsigned col) {
   if (ind < 1 || ind > numb) return;
   entries[ind-1].val = float(val);
   entries[ind-1].col = col;
   if (str) {
-      strlcpy(entries[ind-1].str,str,FL_CHART_LABEL_MAX+1);
+      strlcpy(entries[ind-1].str,str,fltk3::CHART_LABEL_MAX+1);
   } else {
       entries[ind-1].str[0] = 0;
   }
@@ -405,7 +405,7 @@ void Fl_Chart::replace(int ind,double val, const char *str, unsigned col) {
   Sets the lower and upper bounds of the chart values.
   \param[in] a, b are used to set lower, upper
  */
-void Fl_Chart::bounds(double a, double b) {
+void fltk3::Chart::bounds(double a, double b) {
   this->min = a;
   this->max = b;
   redraw();
@@ -417,7 +417,7 @@ void Fl_Chart::bounds(double a, double b) {
   to any size depending on available memory.
   \param[in] m maximum number of data values allowed.
  */
-void Fl_Chart::maxsize(int m) {
+void fltk3::Chart::maxsize(int m) {
   int i;
   /* Fill in the new number */
   if (m < 0) return;

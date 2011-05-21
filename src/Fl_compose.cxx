@@ -28,7 +28,7 @@
 #include <fltk3/run.h>
 #include <fltk3/x.h>
 
-#ifndef FL_DOXYGEN
+#ifndef FLTK3_DOXYGEN
 int fltk3::compose_state = 0;
 #endif
 

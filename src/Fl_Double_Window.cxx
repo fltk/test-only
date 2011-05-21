@@ -198,7 +198,7 @@ void fl_copy_offscreen_with_alpha(int x,int y,int w,int h,HBITMAP bitmap,int src
 
 extern void fltk3::restore_clip();
 
-#elif defined(__APPLE_QUARTZ__) || defined(FL_DOXYGEN)
+#elif defined(__APPLE_QUARTZ__) || defined(FLTK3_DOXYGEN)
 
 char fltk3::can_do_alpha_blending() {
   return 1;
