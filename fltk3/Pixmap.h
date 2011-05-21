@@ -32,11 +32,11 @@
 #define Fltk3_Pixmap_H
 #  include "Image.h"
 
-class Fl_Quartz_Graphics_Driver;
-class Fl_GDI_Graphics_Driver;
-class Fl_Xlib_Graphics_Driver;
-
 namespace fltk3 { 
+  
+  class QuartzGraphicsDriver;
+  class GDIGraphicsDriver;
+  class XlibGraphicsDriver;
   class Widget; 
   struct MenuItem;
   
@@ -50,9 +50,9 @@ namespace fltk3 {
    (pixmap) images, including transparency.
    */
   class FLTK3_EXPORT Pixmap : public fltk3::Image {
-    friend class ::Fl_Quartz_Graphics_Driver;
-    friend class ::Fl_GDI_Graphics_Driver;
-    friend class ::Fl_Xlib_Graphics_Driver;
+    friend class QuartzGraphicsDriver;
+    friend class GDIGraphicsDriver;
+    friend class XlibGraphicsDriver;
     void copy_data();
     void delete_data();
     void set_data(const char * const *p);

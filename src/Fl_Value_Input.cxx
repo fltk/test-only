@@ -36,8 +36,8 @@
 #include <fltk3/math.h>
 
 
-void Fl_Value_Input::input_cb(fltk3::Widget*, void* v) {
-  Fl_Value_Input& t = *(Fl_Value_Input*)v;
+void fltk3::ValueInput::input_cb(fltk3::Widget*, void* v) {
+  fltk3::ValueInput& t = *(fltk3::ValueInput*)v;
   double nv;
   if ((t.step() - floor(t.step()))>0.0 || t.step() == 0.0) nv = strtod(t.input.value(), 0);
   else nv = strtol(t.input.value(), 0, 0);
@@ -48,7 +48,7 @@ void Fl_Value_Input::input_cb(fltk3::Widget*, void* v) {
   }
 }
 
-void Fl_Value_Input::draw() {
+void fltk3::ValueInput::draw() {
   if (damage()&~fltk3::DAMAGE_CHILD) input.clear_damage(fltk3::DAMAGE_ALL);
   input.box(box());
   input.color(color(), selection_color());
@@ -56,19 +56,19 @@ void Fl_Value_Input::draw() {
   input.clear_damage();
 }
 
-void Fl_Value_Input::resize(int X, int Y, int W, int H) {
+void fltk3::ValueInput::resize(int X, int Y, int W, int H) {
   fltk3::Valuator::resize(X, Y, W, H);
   input.resize(X, Y, W, H);
 }
 
-void Fl_Value_Input::value_damage() {
+void fltk3::ValueInput::value_damage() {
   char buf[128];
   format(buf);
   input.value(buf);
   input.mark(input.position()); // turn off selection highlight
 }
 
-int Fl_Value_Input::handle(int event) {
+int fltk3::ValueInput::handle(int event) {
   double v;
   int delta;
   int mx = fltk3::event_x_root();
@@ -118,11 +118,11 @@ int Fl_Value_Input::handle(int event) {
 }
 
 /**
-  Creates a new Fl_Value_Input widget using the given
+  Creates a new fltk3::ValueInput widget using the given
   position, size, and label string. The default boxtype is
   fltk3::DOWN_BOX.
 */
-Fl_Value_Input::Fl_Value_Input(int X, int Y, int W, int H, const char* l)
+fltk3::ValueInput::ValueInput(int X, int Y, int W, int H, const char* l)
 : fltk3::Valuator(X, Y, W, H, l), input(X, Y, W, H, 0) {
   soft_ = 0;
   if (input.parent())  // defeat automatic-add
@@ -138,7 +138,7 @@ Fl_Value_Input::Fl_Value_Input(int X, int Y, int W, int H, const char* l)
   set_flag(SHORTCUT_LABEL);
 }
 
-Fl_Value_Input::~Fl_Value_Input() {
+fltk3::ValueInput::~ValueInput() {
 
   if (input.parent() == (fltk3::Group *)this)
     input.parent(0);   // *revert* ctor kludge!

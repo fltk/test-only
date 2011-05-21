@@ -108,10 +108,10 @@ void fltk3::FileChooser::show_hidden_cb(fltk3::CheckButton* o, void* data) {
   }
 }
 #endif
-void fltk3::FileChooser::cb_fileName_i(Fl_File_Input*, void*) {
+void fltk3::FileChooser::cb_fileName_i(fltk3::FileInput*, void*) {
   fileNameCB();
 }
-void fltk3::FileChooser::cb_fileName(Fl_File_Input* o, void* v) {
+void fltk3::FileChooser::cb_fileName(fltk3::FileInput* o, void* v) {
   ((fltk3::FileChooser*)(o->parent()->parent()->user_data()))->cb_fileName_i(o,v);
 }
 
@@ -242,13 +242,13 @@ fltk3::FileChooser::FileChooser(const char *d, const char *p, int t, const char 
         } // fltk3::Box* o
         o->end();
       } // fltk3::Group* o
-      { fileName = new Fl_File_Input(115, 300, 365, 35);
+      { fileName = new fltk3::FileInput(115, 300, 365, 35);
         fileName->labelfont(1);
         fileName->callback((fltk3::Callback*)cb_fileName);
         fileName->when(fltk3::WHEN_ENTER_KEY);
         fltk3::Group::current()->resizable(fileName);
         fileName->when(fltk3::WHEN_CHANGED | fltk3::WHEN_ENTER_KEY);
-      } // Fl_File_Input* fileName
+      } // fltk3::FileInput* fileName
       { fltk3::Box* o = new fltk3::Box(10, 310, 105, 25, "Filename:");
         o->labelfont(1);
         o->align(fltk3::Align(fltk3::ALIGN_RIGHT|fltk3::ALIGN_INSIDE));

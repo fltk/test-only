@@ -77,7 +77,7 @@ static Fl_Font_Descriptor *gl_fontsize;
   */
 void  gl_font(int fontid, int size) {
   fltk3::font(fontid, size);
-  Fl_Font_Descriptor *fontsize = fl_graphics_driver->font_descriptor();
+  Fl_Font_Descriptor *fontsize = fltk3::graphics_driver->font_descriptor();
 #if !GL_DRAW_USES_TEXTURES
   if (!fontsize->listbase) {
 
@@ -163,7 +163,7 @@ void gl_remove_displaylist_fonts()
 # if HAVE_GL
 
   // clear variables used mostly in fltk3::font
-  fl_graphics_driver->font(0, 0);
+  fltk3::graphics_driver->font(0, 0);
 
   for (int j = 0 ; j < fltk3::FREE_FONT ; ++j)
   {
@@ -483,7 +483,7 @@ int gl_texture_fifo::compute_texture(const char* str, int n)
   if (base == NULL) return -1;
   fl_gc = CGBitmapContextCreate(base, fifo[current].width, fifo[current].height, 8, fifo[current].width*4, lut, kCGImageAlphaPremultipliedLast);
   CGColorSpaceRelease(lut);
-  fl_graphics_driver->font_descriptor(gl_fontsize);
+  fltk3::graphics_driver->font_descriptor(gl_fontsize);
   GLfloat colors[4];
   glGetFloatv(GL_CURRENT_COLOR, colors);
   fltk3::color((uchar)(colors[0]*255), (uchar)(colors[1]*255), (uchar)(colors[2]*255));

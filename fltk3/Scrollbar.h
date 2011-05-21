@@ -26,92 +26,96 @@
 //
 
 /* \file
-   Fl_Scrollbar widget . */
+ fltk3::Scrollbar widget . */
 
 #ifndef Fltk3_Scrollbar_H
 #define Fltk3_Scrollbar_H
 
 #include "Slider.h"
 
-/**
-  The Fl_Scrollbar widget displays a slider with arrow buttons at
-  the ends of the scrollbar. Clicking on the arrows move up/left and
-  down/right by linesize(). Scrollbars also accept fltk3::SHORTCUT events:
-  the arrows move by linesize(), and vertical scrollbars take Page
-  Up/Down (they move by the page size minus linesize()) and Home/End
-  (they jump to the top or bottom).
-
-  Scrollbars have step(1) preset (they always return integers). If
-  desired you can set the step() to non-integer values. You will then
-  have to use casts to get at the floating-point versions of value()
-  from fltk3::Slider.
-
-  \image html  scrollbar.png 
-  \image latex scrollbar.png "Fl_Scrollbar" width=4cm
-*/
-class FLTK3_EXPORT Fl_Scrollbar : public fltk3::Slider {
-
-  int linesize_;
-  int pushed_;
-  static void timeout_cb(void*);
-  void increment_cb();
-protected:
-  void draw();
-
-public:
-
-  Fl_Scrollbar(int X,int Y,int W,int H, const char *L = 0);
-  ~Fl_Scrollbar();
-  int handle(int);
-
+namespace fltk3 {
+  
   /**
-    Gets the integer value (position) of the slider in the scrollbar.
-    You can get the floating point value with fltk3::Slider::value().
-
-    \see Fl_Scrollbar::value(int p)
-    \see Fl_Scrollbar::value(int pos, int size, int first, int total)
-  */
-  int value() const {return int(fltk3::Slider::value());}
-
-  /**
-    Sets the value (position) of the slider in the scrollbar.
-
-    \see Fl_Scrollbar::value()
-    \see Fl_Scrollbar::value(int pos, int size, int first, int total)
-  */
-  int value(int p) {return int(fltk3::Slider::value((double)p));}
-
-  /**
-    Sets the position, size and range of the slider in the scrollbar.
-    \param[in] pos   position, first line displayed
-    \param[in] size  window size, number of lines displayed
-    \param[in] first number of first line
-    \param[in] total total number of lines
-
-    You should call this every time your window changes size, your data
-    changes size, or your scroll position changes (even if in response
-    to a callback from this scrollbar).
-    All necessary calls to redraw() are done.
-
-    Calls fltk3::Slider::scrollvalue(int pos, int size, int first, int total).
-  */
-  int value(int pos, int size, int first, int total) {
-    return scrollvalue(pos, size, first, total);
-  }
-
-  /**
-    Get the size of step, in lines, that the arror keys move.
-  */
-  int linesize() const {return linesize_;}
-
-  /**
-    This number controls how big the steps are that the arrow keys do.
-    In addition page up/down move by the size last sent to value()
-    minus one linesize().  The default is 16.
-  */
-  void linesize(int i) {linesize_ = i;}
-
-};
+   The fltk3::Scrollbar widget displays a slider with arrow buttons at
+   the ends of the scrollbar. Clicking on the arrows move up/left and
+   down/right by linesize(). Scrollbars also accept fltk3::SHORTCUT events:
+   the arrows move by linesize(), and vertical scrollbars take Page
+   Up/Down (they move by the page size minus linesize()) and Home/End
+   (they jump to the top or bottom).
+   
+   Scrollbars have step(1) preset (they always return integers). If
+   desired you can set the step() to non-integer values. You will then
+   have to use casts to get at the floating-point versions of value()
+   from fltk3::Slider.
+   
+   \image html  scrollbar.png 
+   \image latex scrollbar.png "fltk3::Scrollbar" width=4cm
+   */
+  class FLTK3_EXPORT Scrollbar : public fltk3::Slider {
+    
+    int linesize_;
+    int pushed_;
+    static void timeout_cb(void*);
+    void increment_cb();
+  protected:
+    void draw();
+    
+  public:
+    
+    Scrollbar(int X,int Y,int W,int H, const char *L = 0);
+    ~Scrollbar();
+    int handle(int);
+    
+    /**
+     Gets the integer value (position) of the slider in the scrollbar.
+     You can get the floating point value with fltk3::Slider::value().
+     
+     \see fltk3::Scrollbar::value(int p)
+     \see fltk3::Scrollbar::value(int pos, int size, int first, int total)
+     */
+    int value() const {return int(fltk3::Slider::value());}
+    
+    /**
+     Sets the value (position) of the slider in the scrollbar.
+     
+     \see fltk3::Scrollbar::value()
+     \see fltk3::Scrollbar::value(int pos, int size, int first, int total)
+     */
+    int value(int p) {return int(fltk3::Slider::value((double)p));}
+    
+    /**
+     Sets the position, size and range of the slider in the scrollbar.
+     \param[in] pos   position, first line displayed
+     \param[in] size  window size, number of lines displayed
+     \param[in] first number of first line
+     \param[in] total total number of lines
+     
+     You should call this every time your window changes size, your data
+     changes size, or your scroll position changes (even if in response
+     to a callback from this scrollbar).
+     All necessary calls to redraw() are done.
+     
+     Calls fltk3::Slider::scrollvalue(int pos, int size, int first, int total).
+     */
+    int value(int pos, int size, int first, int total) {
+      return scrollvalue(pos, size, first, total);
+    }
+    
+    /**
+     Get the size of step, in lines, that the arror keys move.
+     */
+    int linesize() const {return linesize_;}
+    
+    /**
+     This number controls how big the steps are that the arrow keys do.
+     In addition page up/down move by the size last sent to value()
+     minus one linesize().  The default is 16.
+     */
+    void linesize(int i) {linesize_ = i;}
+    
+  };
+  
+}
 
 #endif
 

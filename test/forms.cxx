@@ -145,13 +145,13 @@ create_form_form (void)
   tobj[7]=obj=fl_add_roundbutton(FL_PUSH_BUTTON,340,190,120,30,"Roundbutton");
   tobj[8]=obj=fl_add_slider(FL_VERT_SLIDER, 160, 250, 40, 230, "Slider");
   tobj[9]=obj=fl_add_valslider(FL_VERT_SLIDER, 220, 250, 40, 230, "Valslider");
-  tobj[10]=obj=fl_add_dial (FL_LINE_DIAL, 280, 250, 100, 100, "Dial");
+  tobj[10]=obj=fl_add_dial (fltk3::LINE_DIAL, 280, 250, 100, 100, "Dial");
   tobj[11]=obj=fl_add_positioner(FL_NORMAL_POSITIONER,280,380,150,100, "Positioner");
-  tobj[12]=obj=fl_add_counter (FL_NORMAL_COUNTER,480,110,210,30, "Counter");
+  tobj[12]=obj=fl_add_counter (fltk3::NORMAL_COUNTER,480,110,210,30, "Counter");
   tobj[13]=obj=fl_add_input (fltk3::NORMAL_INPUT, 520,170,170,30, "Input");
   tobj[14]=obj=fl_add_menu (FL_PUSH_MENU, 400, 240, 100, 30, "Menu");
   tobj[15]=obj=fl_add_choice (FL_NORMAL_CHOICE, 580, 250, 110, 30, "Choice");
-  tobj[16]=obj=fl_add_timer (FL_VALUE_TIMER, 580, 210, 110, 30, "Timer");
+  tobj[16]=obj=fl_add_timer (fltk3::VALUE_TIMER, 580, 210, 110, 30, "Timer");
 //fl_set_object_dblbuffer(tobj[16], 1); // removed for fltk
   tobj[17]=obj=fl_add_browser (fltk3::NORMAL_BROWSER,450,300,240, 180, "Browser");
   exitob=obj= fl_add_button (FL_NORMAL_BUTTON, 590, 30, 100, 30, "Exit");

@@ -26,18 +26,22 @@
 //
 
 /* \file
-   Fl_Line_Dial widget . */
+ fltk3::LineDial widget . */
 
 #ifndef Fltk3_Line_Dial_H
 #define Fltk3_Line_Dial_H
 
 #include "Dial.h"
 
-class FLTK3_EXPORT Fl_Line_Dial : public Fl_Dial {
-public:
-    Fl_Line_Dial(int x,int y,int w,int h, const char *l = 0)
-	: Fl_Dial(x,y,w,h,l) {type(FL_LINE_DIAL);}
-};
+namespace fltk3 {
+  
+  class FLTK3_EXPORT LineDial : public fltk3::Dial {
+  public:
+    LineDial(int x,int y,int w,int h, const char *l = 0)
+    : fltk3::Dial(x,y,w,h,l) {type(fltk3::LINE_DIAL);}
+  };
+  
+}
 
 #endif
 

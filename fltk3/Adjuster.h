@@ -25,6 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
+// FLTK 123 complete
+
 /* \file
  fltk3::Adjuster widget . */
 
@@ -49,7 +51,7 @@ namespace fltk3 {
    increments by 10 times the  amount dragging by a pixel does. Shift +
    click decrements by 10 times  the amount.
    */
-  class FLTK3_EXPORT Adjuster : public fltk3::Valuator {
+  class FLTK3_EXPORT Adjuster : public Valuator {
     int drag;
     int ix;
     int soft_;

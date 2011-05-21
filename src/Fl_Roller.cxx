@@ -32,7 +32,7 @@
 #include <fltk3/draw.h>
 #include <math.h>
 
-int Fl_Roller::handle(int event) {
+int fltk3::Roller::handle(int event) {
   static int ipos;
   int newpos = horizontal() ? fltk3::event_x() : fltk3::event_y();
   switch (event) {
@@ -86,7 +86,7 @@ int Fl_Roller::handle(int event) {
   }
 }
 
-void Fl_Roller::draw() {
+void fltk3::Roller::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
   int X = x()+fltk3::box_dx(box());
   int Y = y()+fltk3::box_dy(box());
@@ -170,11 +170,11 @@ void Fl_Roller::draw() {
 }
 
 /**
-  Creates a new Fl_Roller widget using the given position,
+  Creates a new fltk3::Roller widget using the given position,
   size, and label string. The default boxtype is fltk3::NO_BOX.
   <P>Inherited destructor destroys the valuator.
 */
-Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L)
+fltk3::Roller::Roller(int X,int Y,int W,int H,const char* L)
   : fltk3::Valuator(X,Y,W,H,L) {
   box(fltk3::UP_BOX);
   step(1,1000);

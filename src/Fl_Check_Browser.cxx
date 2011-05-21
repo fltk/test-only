@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_Check_Browser header file for the Fast Light Tool Kit (FLTK).
+// fltk3::CheckBrowser header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
 //
@@ -34,7 +34,7 @@
 /* This uses a cache for faster access when you're scanning the list
 either forwards or backwards. */
 
-Fl_Check_Browser::cb_item *Fl_Check_Browser::find_item(int n) const {
+fltk3::CheckBrowser::cb_item *fltk3::CheckBrowser::find_item(int n) const {
 	int i = n;
 	cb_item *p = first;
 
@@ -59,13 +59,13 @@ Fl_Check_Browser::cb_item *Fl_Check_Browser::find_item(int n) const {
 
 	/* Cast to not const and cache it. */
 
-	((Fl_Check_Browser *)this)->cache = p;
-	((Fl_Check_Browser *)this)->cached_item = i;
+	((fltk3::CheckBrowser *)this)->cache = p;
+	((fltk3::CheckBrowser *)this)->cached_item = i;
 
 	return p;
 }
 
-int Fl_Check_Browser::lineno(cb_item *p0) const {
+int fltk3::CheckBrowser::lineno(cb_item *p0) const {
 	cb_item *p = first;
 
 	if (p == 0) {
@@ -84,7 +84,7 @@ int Fl_Check_Browser::lineno(cb_item *p0) const {
 	return 0;
 }
 
-Fl_Check_Browser::Fl_Check_Browser(int X, int Y, int W, int H, const char *l)
+fltk3::CheckBrowser::CheckBrowser(int X, int Y, int W, int H, const char *l)
 /**  The constructor makes an empty browser.*/
 : fltk3::Browser_(X, Y, W, H, l) {
 	type(fltk3::SELECT_BROWSER);
@@ -94,30 +94,30 @@ Fl_Check_Browser::Fl_Check_Browser(int X, int Y, int W, int H, const char *l)
 	cached_item = -1;
 }
 
-void *Fl_Check_Browser::item_first() const {
+void *fltk3::CheckBrowser::item_first() const {
 	return first;
 }
 
-void *Fl_Check_Browser::item_next(void *l) const {
+void *fltk3::CheckBrowser::item_next(void *l) const {
 	return ((cb_item *)l)->next;
 }
 
-void *Fl_Check_Browser::item_prev(void *l) const {
+void *fltk3::CheckBrowser::item_prev(void *l) const {
 	return ((cb_item *)l)->prev;
 }
 
-int Fl_Check_Browser::item_height(void *) const {
+int fltk3::CheckBrowser::item_height(void *) const {
 	return textsize() + 2;
 }
 
 #define CHECK_SIZE (textsize()-2)
 
-int Fl_Check_Browser::item_width(void *v) const {
+int fltk3::CheckBrowser::item_width(void *v) const {
 	fltk3::font(textfont(), textsize());
 	return int(fltk3::width(((cb_item *)v)->text)) + CHECK_SIZE + 8;
 }
 
-void Fl_Check_Browser::item_draw(void *v, int X, int Y, int, int) const {
+void fltk3::CheckBrowser::item_draw(void *v, int X, int Y, int, int) const {
 	cb_item *i = (cb_item *)v;
 	char *s = i->text;
 	int tsize = textsize();
@@ -147,7 +147,7 @@ void Fl_Check_Browser::item_draw(void *v, int X, int Y, int, int) const {
 	fltk3::draw(s, X + CHECK_SIZE + 8, Y + tsize - 1);
 }
 
-void Fl_Check_Browser::item_select(void *v, int state) {
+void fltk3::CheckBrowser::item_select(void *v, int state) {
 	cb_item *i = (cb_item *)v;
 
 	if (state) {
@@ -161,7 +161,7 @@ void Fl_Check_Browser::item_select(void *v, int state) {
 	}
 }
 
-int Fl_Check_Browser::item_selected(void *v) const {
+int fltk3::CheckBrowser::item_selected(void *v) const {
 	cb_item *i = (cb_item *)v;
 	return i->selected;
 }
@@ -169,7 +169,7 @@ int Fl_Check_Browser::item_selected(void *v) const {
  Add a new unchecked line to the end of the browser.  
  \see add(char *s, int b)
 */
-int Fl_Check_Browser::add(char *s) {
+int fltk3::CheckBrowser::add(char *s) {
 	return (add(s, 0));
 }
 
@@ -178,7 +178,7 @@ int Fl_Check_Browser::add(char *s) {
  using the strdup() function.  It may also be NULL to make
  a blank line.  It can set the item checked if \p b is not 0.
  */
-int Fl_Check_Browser::add(char *s, int b) {
+int fltk3::CheckBrowser::add(char *s, int b) {
 	cb_item *p = (cb_item *)malloc(sizeof(cb_item));
 	p->next = 0;
 	p->prev = 0;
@@ -206,7 +206,7 @@ int Fl_Check_Browser::add(char *s, int b) {
   Remove line n and make the browser one line shorter. Returns the 
   number of lines left in the browser.
 */
-int Fl_Check_Browser::remove(int item) {
+int fltk3::CheckBrowser::remove(int item) {
   cb_item *p = find_item(item);
   
   // line at item exists
@@ -239,7 +239,7 @@ int Fl_Check_Browser::remove(int item) {
 }
 
 /**  Remove every item from the browser.*/
-void Fl_Check_Browser::clear() {
+void fltk3::CheckBrowser::clear() {
 	cb_item *p = first;
 	cb_item *next;
 
@@ -261,7 +261,7 @@ void Fl_Check_Browser::clear() {
 }
 
 /** Gets the current status of item item. */
-int Fl_Check_Browser::checked(int i) const {
+int fltk3::CheckBrowser::checked(int i) const {
 	cb_item *p = find_item(i);
 
 	if (p) return p->checked;
@@ -269,7 +269,7 @@ int Fl_Check_Browser::checked(int i) const {
 }
 
 /** Sets the check status of item item to b. */
-void Fl_Check_Browser::checked(int i, int b) {
+void fltk3::CheckBrowser::checked(int i, int b) {
 	cb_item *p = find_item(i);
 
 	if (p && (p->checked ^ b)) {
@@ -284,12 +284,12 @@ void Fl_Check_Browser::checked(int i, int b) {
 }
 
 /**  Returns the index of the currently selected item.*/
-int Fl_Check_Browser::value() const {
+int fltk3::CheckBrowser::value() const {
 	return lineno((cb_item *)selection());
 }
 
 /**  Return a pointer to an internal buffer holding item item's text.*/
-char *Fl_Check_Browser::text(int i) const {
+char *fltk3::CheckBrowser::text(int i) const {
 	cb_item *p = find_item(i);
 
 	if (p) return p->text;
@@ -297,7 +297,7 @@ char *Fl_Check_Browser::text(int i) const {
 }
 
 /**  Sets all the items checked.*/
-void Fl_Check_Browser::check_all() {
+void fltk3::CheckBrowser::check_all() {
 	cb_item *p;
 
 	nchecked_ = nitems_;
@@ -308,7 +308,7 @@ void Fl_Check_Browser::check_all() {
 }
 
 /**  Sets all the items unchecked.*/
-void Fl_Check_Browser::check_none() {
+void fltk3::CheckBrowser::check_none() {
 	cb_item *p;
 
 	nchecked_ = 0;
@@ -318,7 +318,7 @@ void Fl_Check_Browser::check_none() {
 	redraw();
 }
 
-int Fl_Check_Browser::handle(int event) {
+int fltk3::CheckBrowser::handle(int event) {
   if (event==fltk3::PUSH)
     deselect();
   return fltk3::Browser_::handle(event);

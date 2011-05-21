@@ -26,20 +26,24 @@
 //
 
 /* \file
-   Fl_Fill_Dial widget . */
+ fltk3::FillDial widget . */
 
 #ifndef Fltk3_Fill_Dial_H
 #define Fltk3_Fill_Dial_H
 
 #include "Dial.h"
 
-/** Draws a dial with a filled arc */
-class FLTK3_EXPORT Fl_Fill_Dial : public Fl_Dial {
-public:
-    /** Creates a filled dial, also setting its type to FL_FILL_DIAL. */
-    Fl_Fill_Dial(int x,int y,int w,int h, const char *l = 0)
-	: Fl_Dial(x,y,w,h,l) {type(FL_FILL_DIAL);}
-};
+namespace fltk3 {
+  
+  /** Draws a dial with a filled arc */
+  class FLTK3_EXPORT FillDial : public fltk3::Dial {
+  public:
+    /** Creates a filled dial, also setting its type to fltk3::FILL_DIAL. */
+    FillDial(int x,int y,int w,int h, const char *l = 0)
+    : fltk3::Dial(x,y,w,h,l) {type(fltk3::FILL_DIAL);}
+  };
+  
+}
 
 #endif
 

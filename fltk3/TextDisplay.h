@@ -356,8 +356,8 @@ protected:
                                  int nRestyled, const char* deletedText,
                                  void* cbArg);
   
-  static void h_scrollbar_cb(Fl_Scrollbar* w, fltk3::TextDisplay* d);
-  static void v_scrollbar_cb( Fl_Scrollbar* w, fltk3::TextDisplay* d);
+  static void h_scrollbar_cb(fltk3::Scrollbar* w, fltk3::TextDisplay* d);
+  static void v_scrollbar_cb( fltk3::Scrollbar* w, fltk3::TextDisplay* d);
   void update_v_scrollbar();
   void update_h_scrollbar();
   int measure_vline(int visLineNum) const;
@@ -454,8 +454,8 @@ protected:
   
   fltk3::Color mCursor_color;
   
-  Fl_Scrollbar* mHScrollBar;
-  Fl_Scrollbar* mVScrollBar;
+  fltk3::Scrollbar* mHScrollBar;
+  fltk3::Scrollbar* mVScrollBar;
   int scrollbar_width_;
   fltk3::Align scrollbar_align_;
   int dragPos, dragType, dragging;

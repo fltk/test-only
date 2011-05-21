@@ -52,10 +52,6 @@ namespace fltk3 {
   class Window;
   struct Label;
   class Image;
-}
-
-
-namespace fltk3 {
   
   /** \defgroup  callback_functions Callback function typedefs
    \brief Typedefs defined in <fltk3/run.h> for callback or handler functions passed as function parameters.
@@ -666,9 +662,9 @@ namespace fltk3 {
   int get_key(int key); // platform dependent
   /** 
    Returns the text associated with the current event, including fltk3::PASTE or fltk3::DND_RELEASE events.
-   This can be used in response to fltk3::KEYUP, FL_KEYDOWN, fltk3::PASTE, fltk3::DND_RELEASE.
+   This can be used in response to fltk3::KEYUP, fltk3::KEYDOWN, fltk3::PASTE, fltk3::DND_RELEASE.
    
-   When responding to fltk3::KEYUP/FL_KEYDOWN, use this function instead of fltk3::event_key()
+   When responding to fltk3::KEYUP/fltk3::KEYDOWN, use this function instead of fltk3::event_key()
    to get the text equivalent of keystrokes suitable for inserting into strings 
    and text widgets.
    

@@ -4,7 +4,7 @@
 // fltk3::Group object code for the Fast Light Tool Kit (FLTK).
 //
 // Object describing an fltk3::Group and links to Fl_Window_Type.C and
-// the Fl_Tabs widget, with special stuff to select tab items and
+// the fltk3::TabGroup widget, with special stuff to select tab items and
 // insure that only one is visible.
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
@@ -151,7 +151,7 @@ static const int MAX_ROWS = 14;
 static const int MAX_COLS = 7;
 
 // this is a minimal table widget used as an example when adding tables in Fluid
-class Fluid_Table : public Fl_Table {
+class Fluid_Table : public fltk3::Table {
   int data[MAX_ROWS][MAX_COLS];         // data array for cells
   
   // Draw the row/col headings
@@ -178,7 +178,7 @@ class Fluid_Table : public Fl_Table {
     fltk3::pop_clip();
   } 
   // Handle drawing table's cells
-  //     Fl_Table calls this function to draw each visible cell in the table.
+  //     fltk3::Table calls this function to draw each visible cell in the table.
   //     It's up to us to use FLTK's drawing functions to draw the cells the way we want.
   //
   void draw_cell(TableContext context, int ROW=0, int COL=0, int X=0, int Y=0, int W=0, int H=0) {
@@ -205,7 +205,7 @@ class Fluid_Table : public Fl_Table {
   }
 public:
   Fluid_Table(int x, int y, int w, int h, const char *l=0L)
-  : Fl_Table(x, y, w, h, l) {
+  : fltk3::Table(x, y, w, h, l) {
     for ( int r=0; r<MAX_ROWS; r++ )
       for ( int c=0; c<MAX_COLS; c++ )
         data[r][c] = 1000+(r*1000)+c;
@@ -221,7 +221,7 @@ public:
   }
 };
 
-const char table_type_name[] = "Fl_Table";
+const char table_type_name[] = "fltk3::Table";
 
 Fl_Table_Type Fl_Table_type;	// the "factory"
 
@@ -232,7 +232,7 @@ fltk3::Widget *Fl_Table_Type::widget(int X,int Y,int W,int H) {
 
 ////////////////////////////////////////////////////////////////
 
-const char tabs_type_name[] = "Fl_Tabs";
+const char tabs_type_name[] = "fltk3::TabGroup";
 
 // Override group's resize behavior to do nothing to children:
 void itabs::resize(int X, int Y, int W, int H) {
@@ -247,7 +247,7 @@ Fl_Tabs_Type Fl_Tabs_type;	// the "factory"
 // If none, return o unchanged:
 
 Fl_Type* Fl_Tabs_Type::click_test(int x, int y) {
-  Fl_Tabs *t = (Fl_Tabs*)o;
+  fltk3::TabGroup *t = (fltk3::TabGroup*)o;
   fltk3::Widget *a = t->which(x,y);
   if (!a) return 0; // didn't click on tab
   // changing the visible tab has an impact on the generated
@@ -263,7 +263,7 @@ Fl_Type* Fl_Tabs_Type::click_test(int x, int y) {
 
 ////////////////////////////////////////////////////////////////
 
-const char wizard_type_name[] = "Fl_Wizard";
+const char wizard_type_name[] = "fltk3::WizardGroup";
 
 // Override group's resize behavior to do nothing to children:
 void iwizard::resize(int X, int Y, int W, int H) {
@@ -290,11 +290,11 @@ void Fl_Tabs_Type::add_child(Fl_Type* c, Fl_Type* before) {
 void Fl_Table_Type::add_child(Fl_Type* cc, Fl_Type* before) {
   Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
   fltk3::Widget* b = before ? ((Fl_Widget_Type*)before)->o : 0;
-  if (((Fl_Table*)o)->children()==1) { // the FLuid_Table has one extra child
-    fltk3::message("Inserting child widgets into an Fl_Table is not recommended.\n"
-               "Please refer to the documentation on Fl_Table.");
+  if (((fltk3::Table*)o)->children()==1) { // the FLuid_Table has one extra child
+    fltk3::message("Inserting child widgets into an fltk3::Table is not recommended.\n"
+               "Please refer to the documentation on fltk3::Table.");
   }
-  ((Fl_Table*)o)->insert(*(c->o), b);
+  ((fltk3::Table*)o)->insert(*(c->o), b);
   o->redraw();
 }
 
@@ -310,14 +310,14 @@ void Fl_Group_Type::remove_child(Fl_Type* cc) {
 
 void Fl_Tabs_Type::remove_child(Fl_Type* cc) {
   Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
-  Fl_Tabs *t = (Fl_Tabs*)o;
+  fltk3::TabGroup *t = (fltk3::TabGroup*)o;
   if (t->value() == c->o) t->value(0);
   Fl_Group_Type::remove_child(c);
 }
 
 void Fl_Table_Type::remove_child(Fl_Type* cc) {
   Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
-  ((Fl_Table*)o)->remove(*(c->o));
+  ((fltk3::Table*)o)->remove(*(c->o));
   o->redraw();
 }
 
@@ -334,8 +334,8 @@ void Fl_Group_Type::move_child(Fl_Type* cc, Fl_Type* before) {
 void Fl_Table_Type::move_child(Fl_Type* cc, Fl_Type* before) {
   Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
   fltk3::Widget* b = before ? ((Fl_Widget_Type*)before)->o : 0;
-  ((Fl_Table*)o)->remove(*(c->o));
-  ((Fl_Table*)o)->insert(*(c->o), b);
+  ((fltk3::Table*)o)->remove(*(c->o));
+  ((fltk3::Table*)o)->insert(*(c->o), b);
   o->redraw();
 }
 
@@ -358,7 +358,7 @@ fltk3::Widget *Fl_Group_Type::enter_live_mode(int) {
 }
 
 fltk3::Widget *Fl_Tabs_Type::enter_live_mode(int) {
-  Fl_Tabs *grp = new Fl_Tabs(o->x(), o->y(), o->w(), o->h());
+  fltk3::TabGroup *grp = new fltk3::TabGroup(o->x(), o->y(), o->w(), o->h());
   live_widget = grp;
   if (live_widget) {
     copy_properties();
@@ -369,7 +369,7 @@ fltk3::Widget *Fl_Tabs_Type::enter_live_mode(int) {
     }
     grp->end();
   }
-  grp->value(((Fl_Tabs*)o)->value());
+  grp->value(((fltk3::TabGroup*)o)->value());
   return live_widget;
 }
 

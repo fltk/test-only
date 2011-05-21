@@ -31,9 +31,7 @@
 #ifndef Fltk3_Free_H
 #define Fltk3_Free_H
 
-#ifndef Fl_Widget_H
 #include "Widget.h"
-#endif
 
 #define FL_NORMAL_FREE		1 /**< normal event handling */
 #define FL_SLEEPING_FREE	2 /**< deactivate event handling */

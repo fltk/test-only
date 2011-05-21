@@ -78,7 +78,7 @@ strcasecmp(const char *s, const char *t) {
 class Fl_Box_Type : public Fl_Widget_Type {
 public:
   virtual const char *type_name() {return "fltk3::Box";}
-  virtual const char *alt_type_name() {return "fltk::Widget";}
+  virtual const char *alt_type_name() {return "fltk3::Widget";}
   fltk3::Widget *widget(int x,int y,int w, int h) {
     return new fltk3::Box(x,y,w,h,"label");}
   Fl_Widget_Type *_make() {return new Fl_Box_Type();}
@@ -103,7 +103,7 @@ public:
     h = (h / 5) * 5;
   }
   virtual const char *type_name() {return "fltk3::Button";}
-  virtual const char *alt_type_name() {return "fltk::Button";}
+  virtual const char *alt_type_name() {return "fltk3::Button";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     return new fltk3::Button(x,y,w,h,"button");}
   Fl_Widget_Type *_make() {return new Fl_Button_Type();}
@@ -124,7 +124,7 @@ public:
     w += W + 8 - o->labelsize();
   }
   virtual const char *type_name() {return "fltk3::ReturnButton";}
-  virtual const char *alt_type_name() {return "fltk::ReturnButton";}
+  virtual const char *alt_type_name() {return "fltk3::ReturnButton";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     return new fltk3::ReturnButton(x,y,w,h,"button");}
   Fl_Widget_Type *_make() {return new Fl_Return_Button_Type();}
@@ -138,7 +138,7 @@ static Fl_Return_Button_Type Fl_Return_Button_type;
 class fltk3::RepeatButton_Type : public Fl_Widget_Type {
 public:
   virtual const char *type_name() {return "fltk3::RepeatButton";}
-  virtual const char *alt_type_name() {return "fltk::RepeatButton";}
+  virtual const char *alt_type_name() {return "fltk3::RepeatButton";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     return new fltk3::RepeatButton(x,y,w,h,"button");}
   Fl_Widget_Type *_make() {return new fltk3::RepeatButton_Type();}
@@ -156,7 +156,7 @@ public:
     w += 4;
   }
   virtual const char *type_name() {return "fltk3::LightButton";}
-  virtual const char *alt_type_name() {return "fltk::LightButton";}
+  virtual const char *alt_type_name() {return "fltk3::LightButton";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     return new fltk3::LightButton(x,y,w,h,"button");}
   Fl_Widget_Type *_make() {return new fltk3::LightButton_Type();}
@@ -174,7 +174,7 @@ public:
     w += 4;
   }
   virtual const char *type_name() {return "fltk3::CheckButton";}
-  virtual const char *alt_type_name() {return "fltk::CheckButton";}
+  virtual const char *alt_type_name() {return "fltk3::CheckButton";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     return new fltk3::CheckButton(x,y,w,h,"button");}
   Fl_Widget_Type *_make() {return new fltk3::CheckButton_Type();}
@@ -192,7 +192,7 @@ public:
     w += 4;
   }
   virtual const char *type_name() {return "fltk3::RoundButton";}
-  virtual const char *alt_type_name() {return "fltk::RadioButton";}
+  virtual const char *alt_type_name() {return "fltk3::RadioButton";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     return new fltk3::RoundButton(x,y,w,h,"button");}
   Fl_Widget_Type *_make() {return new fltk3::RoundButton_Type();}
@@ -231,7 +231,7 @@ public:
     if (w < 50) w = 50;
   }
   virtual const char *type_name() {return "fltk3::Browser";}
-  virtual const char *alt_type_name() {return "fltk::Browser";}
+  virtual const char *alt_type_name() {return "fltk3::Browser";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     fltk3::Browser* b = new fltk3::Browser(x,y,w,h);
     // fltk3::Browser::add calls fltk3::height(), which requires the X display open.
@@ -267,7 +267,7 @@ class Fl_Check_Browser_Type : public Fl_Widget_Type {
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
-    Fl_Check_Browser *myo = (Fl_Check_Browser *)o;
+    fltk3::CheckBrowser *myo = (fltk3::CheckBrowser *)o;
     fltk3::font(myo->textfont(), myo->textsize());
     h -= fltk3::box_dh(o->box());
     w -= fltk3::box_dw(o->box()) - fltk3::height();
@@ -278,11 +278,11 @@ public:
     if (h < 30) h = 30;
     if (w < 50) w = 50;
   }
-  virtual const char *type_name() {return "Fl_Check_Browser";}
-  virtual const char *alt_type_name() {return "fltk::CheckBrowser";}
+  virtual const char *type_name() {return "fltk3::CheckBrowser";}
+  virtual const char *alt_type_name() {return "fltk3::CheckBrowser";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    Fl_Check_Browser* b = new Fl_Check_Browser(x,y,w,h);
-    // Fl_Check_Browser::add calls fltk3::height(), which requires the X display open.
+    fltk3::CheckBrowser* b = new fltk3::CheckBrowser(x,y,w,h);
+    // fltk3::CheckBrowser::add calls fltk3::height(), which requires the X display open.
     // Avoid this when compiling so it works w/o a display:
     if (!compile_only) {
       char buffer[20];
@@ -299,7 +299,7 @@ public:
 static Fl_Check_Browser_Type Fl_Check_Browser_type;
 
 int Fl_Check_Browser_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
-  Fl_Check_Browser *myo = (Fl_Check_Browser*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
+  fltk3::CheckBrowser *myo = (fltk3::CheckBrowser*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
     case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
@@ -317,7 +317,7 @@ public:
     if (w < 80) w = 80;
   }
   virtual const char *type_name() {return "fltk3::Tree";}
-  virtual const char *alt_type_name() {return "fltk::TreeBrowser";}
+  virtual const char *alt_type_name() {return "fltk3::TreeBrowser";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     fltk3::Tree* b = new fltk3::Tree(x,y,w,h);
     if (!compile_only) {
@@ -354,7 +354,7 @@ public:
     if (w < 50) w = 50;
   }
   virtual const char *type_name() {return "fltk3::FileBrowser";}
-  virtual const char *alt_type_name() {return "fltk::FileBrowser";}
+  virtual const char *alt_type_name() {return "fltk3::FileBrowser";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     fltk3::FileBrowser* b = new fltk3::FileBrowser(x,y,w,h);
     // fltk3::FileBrowser::add calls fltk3::height(), which requires the X display open.
@@ -385,8 +385,8 @@ int Fl_File_Browser_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color&
 
 #include <fltk3/Counter.h>
 static fltk3::MenuItem counter_type_menu[] = {
-  {"Normal",0,0,(void*)FL_NORMAL_COUNTER},
-  {"Simple",0,0,(void*)FL_SIMPLE_COUNTER},
+  {"Normal",0,0,(void*)fltk3::NORMAL_COUNTER},
+  {"Simple",0,0,(void*)fltk3::SIMPLE_COUNTER},
   {0}};
 class Fl_Counter_Type : public Fl_Widget_Type {
   fltk3::MenuItem *subtypes() {return counter_type_menu;}
@@ -394,16 +394,16 @@ class Fl_Counter_Type : public Fl_Widget_Type {
   int is_valuator() const {return 1;}
   int pixmapID() { return 41; }
 public:
-  virtual const char *type_name() {return "Fl_Counter";}
-  virtual const char *alt_type_name() {return "fltk::Counter";}
+  virtual const char *type_name() {return "fltk3::Counter";}
+  virtual const char *alt_type_name() {return "fltk3::Counter";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Counter(x,y,w,h,"counter:");}
+    return new fltk3::Counter(x,y,w,h,"counter:");}
   Fl_Widget_Type *_make() {return new Fl_Counter_Type();}
 };
 static Fl_Counter_Type Fl_Counter_type;
 
 int Fl_Counter_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
-  Fl_Counter *myo = (Fl_Counter*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
+  fltk3::Counter *myo = (fltk3::Counter*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
     case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
@@ -427,7 +427,7 @@ class Fl_Spinner_Type : public Fl_Widget_Type {
   int pixmapID() { return 47; }
 public:
   virtual void ideal_size(int &w, int &h) {
-    Fl_Spinner *myo = (Fl_Spinner *)o;
+    fltk3::Spinner *myo = (fltk3::Spinner *)o;
     fltk3::font(myo->textfont(), myo->textsize());
     h = fltk3::height() + myo->textsize() - 6;
     if (h < 15) h = 15;
@@ -436,17 +436,17 @@ public:
     w = ((w + ww - 1) / ww) * ww + fltk3::box_dw(o->box()) + h / 2;
     if (w < 40) w = 40	;
   }
-  virtual const char *type_name() {return "Fl_Spinner";}
-  virtual const char *alt_type_name() {return "fltk::Spinner";}
+  virtual const char *type_name() {return "fltk3::Spinner";}
+  virtual const char *alt_type_name() {return "fltk3::Spinner";}
   int is_spinner() const { return 1; }
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Spinner(x,y,w,h,"spinner:");}
+    return new fltk3::Spinner(x,y,w,h,"spinner:");}
   Fl_Widget_Type *_make() {return new Fl_Spinner_Type();}
 };
 static Fl_Spinner_Type Fl_Spinner_type;
 
 int Fl_Spinner_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
-  Fl_Spinner *myo = (Fl_Spinner*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
+  fltk3::Spinner *myo = (fltk3::Spinner*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
     case 0: f = (fltk3::Font)myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
@@ -482,7 +482,7 @@ public:
     if (w < 15) w = 15;
   }
   virtual const char *type_name() {return "fltk3::Input";}
-  virtual const char *alt_type_name() {return "fltk::Input";}
+  virtual const char *alt_type_name() {return "fltk3::Input";}
   int is_input() const {return 1;}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     fltk3::Input *myo = new fltk3::Input(x,y,w,h,"input:");
@@ -522,7 +522,7 @@ class Fl_File_Input_Type : public Fl_Widget_Type {
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual void ideal_size(int &w, int &h) {
-    Fl_File_Input *myo = (Fl_File_Input *)o;
+    fltk3::FileInput *myo = (fltk3::FileInput *)o;
     fltk3::font(myo->textfont(), myo->textsize());
     h = fltk3::height() + myo->textsize() + 4;
     w -= fltk3::box_dw(o->box());
@@ -531,11 +531,11 @@ public:
     if (h < 20) h = 20;
     if (w < 50) w = 50;
   }
-  virtual const char *type_name() {return "Fl_File_Input";}
-  virtual const char *alt_type_name() {return "fltk::FileInput";}
+  virtual const char *type_name() {return "fltk3::FileInput";}
+  virtual const char *alt_type_name() {return "fltk3::FileInput";}
   int is_input() const {return 1;}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    Fl_File_Input *myo = new Fl_File_Input(x,y,w,h,"file:");
+    fltk3::FileInput *myo = new fltk3::FileInput(x,y,w,h,"file:");
     myo->value("/now/is/the/time/for/a/filename.ext");
     return myo;
   }
@@ -545,7 +545,7 @@ public:
 static Fl_File_Input_Type Fl_File_Input_type;
 
 int Fl_File_Input_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
-  Fl_File_Input *myo = (Fl_File_Input*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
+  fltk3::FileInput *myo = (fltk3::FileInput*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
     case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
@@ -575,7 +575,7 @@ public:
     if (w < 50) w = 50;
   }
   virtual const char *type_name() {return "fltk3::TextDisplay";}
-  virtual const char *alt_type_name() {return "fltk::TextDisplay";}
+  virtual const char *alt_type_name() {return "fltk3::TextDisplay";}
   int is_text_display() const {return 1;}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     fltk3::TextDisplay *myo = new fltk3::TextDisplay(x,y,w,h);
@@ -617,7 +617,7 @@ public:
     if (w < 50) w = 50;
   }
   virtual const char *type_name() {return "fltk3::TextEditor";}
-  virtual const char *alt_type_name() {return "fltk::TextEditor";}
+  virtual const char *alt_type_name() {return "fltk3::TextEditor";}
   int is_text_display() const {return 1;}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     fltk3::TextEditor *myo = new fltk3::TextEditor(x,y,w,h);
@@ -646,7 +646,7 @@ int Fl_Text_Editor_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& 
 class fltk3::Clock_Type : public Fl_Widget_Type {
 public:
   virtual const char *type_name() {return "fltk3::Clock";}
-  virtual const char *alt_type_name() {return "fltk::Clock";}
+  virtual const char *alt_type_name() {return "fltk3::Clock";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     return new fltk3::Clock(x,y,w,h);}
   Fl_Widget_Type *_make() {return new fltk3::Clock_Type();}
@@ -672,7 +672,7 @@ public:
     if (w < 50) w = 50;
   }
   virtual const char *type_name() {return "fltk3::HelpView";}
-  virtual const char *alt_type_name() {return "fltk::HelpView";}
+  virtual const char *alt_type_name() {return "fltk3::HelpView";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     fltk3::HelpView *myo = new fltk3::HelpView(x,y,w,h);
     if (!compile_only) {
@@ -690,10 +690,10 @@ static Fl_Help_View_Type Fl_Help_View_type;
 #include <fltk3/Progress.h>
 class Fl_Progress_Type : public Fl_Widget_Type {
 public:
-  virtual const char *type_name() {return "Fl_Progress";}
-  virtual const char *alt_type_name() {return "fltk::ProgressBar";}
+  virtual const char *type_name() {return "fltk3::Progress";}
+  virtual const char *alt_type_name() {return "fltk3::ProgressBar";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    Fl_Progress *myo = new Fl_Progress(x,y,w,h,"label");
+    fltk3::Progress *myo = new fltk3::Progress(x,y,w,h,"label");
     myo->value(50);
     return myo;}
   Fl_Widget_Type *_make() {return new Fl_Progress_Type();}
@@ -708,7 +708,7 @@ class Fl_Adjuster_Type : public Fl_Widget_Type {
   int is_valuator() const {return 1;}
 public:
   virtual const char *type_name() {return "fltk3::Adjuster";}
-  virtual const char *alt_type_name() {return "fltk::Adjuster";}
+  virtual const char *alt_type_name() {return "fltk3::Adjuster";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     return new fltk3::Adjuster(x,y,w,h);}
   Fl_Widget_Type *_make() {return new Fl_Adjuster_Type();}
@@ -721,17 +721,17 @@ static Fl_Adjuster_Type Fl_Adjuster_type;
 #include <fltk3/Dial.h>
 static fltk3::MenuItem dial_type_menu[] = {
   {"Dot",0,0,(void*)0},
-  {"Line",0,0,(void*)FL_LINE_DIAL},
-  {"Fill",0,0,(void*)FL_FILL_DIAL},
+  {"Line",0,0,(void*)fltk3::LINE_DIAL},
+  {"Fill",0,0,(void*)fltk3::FILL_DIAL},
   {0}};
 class Fl_Dial_Type : public Fl_Widget_Type {
   fltk3::MenuItem *subtypes() {return dial_type_menu;}
   int is_valuator() const {return 1;}
 public:
-  virtual const char *type_name() {return "Fl_Dial";}
-  virtual const char *alt_type_name() {return "fltk::Dial";}
+  virtual const char *type_name() {return "fltk3::Dial";}
+  virtual const char *alt_type_name() {return "fltkfltk3::Dial";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Dial(x,y,w,h);}
+    return new fltk3::Dial(x,y,w,h);}
   Fl_Widget_Type *_make() {return new Fl_Dial_Type();}
   int pixmapID() { return 42; }
 };
@@ -748,10 +748,10 @@ class Fl_Roller_Type : public Fl_Widget_Type {
   fltk3::MenuItem *subtypes() {return roller_type_menu;}
   int is_valuator() const {return 1;}
 public:
-  virtual const char *type_name() {return "Fl_Roller";}
-  virtual const char *alt_type_name() {return "fltk::Roller";}
+  virtual const char *type_name() {return "fltk3::Roller";}
+  virtual const char *alt_type_name() {return "fltk3::Roller";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Roller(x,y,w,h);}
+    return new fltk3::Roller(x,y,w,h);}
   Fl_Widget_Type *_make() {return new Fl_Roller_Type();}
   int pixmapID() { return 43; }
 };
@@ -773,7 +773,7 @@ class Fl_Slider_Type : public Fl_Widget_Type {
   int is_valuator() const {return 2;}
 public:
   virtual const char *type_name() {return "fltk3::Slider";}
-  virtual const char *alt_type_name() {return "fltk::Slider";}
+  virtual const char *alt_type_name() {return "fltk3::Slider";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     return new fltk3::Slider(x,y,w,h,"slider:");}
   Fl_Widget_Type *_make() {return new Fl_Slider_Type();}
@@ -789,10 +789,10 @@ class Fl_Scrollbar_Type : public Fl_Slider_Type {
   fltk3::MenuItem *subtypes() {return scrollbar_type_menu;}
   int is_valuator() const {return 3;}
 public:
-  virtual const char *type_name() {return "Fl_Scrollbar";}
-  virtual const char *alt_type_name() {return "fltk::Scrollbar";}
+  virtual const char *type_name() {return "fltk3::Scrollbar";}
+  virtual const char *alt_type_name() {return "fltk3::Scrollbar";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Scrollbar(x,y,w,h);}
+    return new fltk3::Scrollbar(x,y,w,h);}
   Fl_Widget_Type *_make() {return new Fl_Scrollbar_Type();}
   int pixmapID() { return 38; }
 };
@@ -819,7 +819,7 @@ public:
     if (w < 15) w = 15;
   }
   virtual const char *type_name() {return "fltk3::Output";}
-  virtual const char *alt_type_name() {return "fltk::Output";}
+  virtual const char *alt_type_name() {return "fltk3::Output";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     fltk3::Output *myo = new fltk3::Output(x,y,w,h,"output:");
     myo->value("Text Output");
@@ -836,7 +836,7 @@ static Fl_Output_Type Fl_Output_type;
 class Fl_Value_Input_Type : public Fl_Widget_Type {
 public:
   virtual void ideal_size(int &w, int &h) {
-    Fl_Value_Input *myo = (Fl_Value_Input *)o;
+    fltk3::ValueInput *myo = (fltk3::ValueInput *)o;
     fltk3::font(myo->textfont(), myo->textsize());
     h = fltk3::height() + myo->textsize() - 6;
     w -= fltk3::box_dw(o->box());
@@ -845,13 +845,13 @@ public:
     if (h < 15) h = 15;
     if (w < 15) w = 15;
   }
-  virtual const char *type_name() {return "Fl_Value_Input";}
-  virtual const char *alt_type_name() {return "fltk::ValueInput";}
+  virtual const char *type_name() {return "fltk3::ValueInput";}
+  virtual const char *alt_type_name() {return "fltk3::ValueInput";}
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
   int is_valuator() const {return 1;}
   int is_value_input() const {return 1;}
   fltk3::Widget *widget(int x,int y,int w,int h) {
-    Fl_Value_Input *myo = new Fl_Value_Input(x,y,w,h,"value:");
+    fltk3::ValueInput *myo = new fltk3::ValueInput(x,y,w,h,"value:");
     return myo;
   }
   Fl_Widget_Type *_make() {return new Fl_Value_Input_Type();}
@@ -860,7 +860,7 @@ public:
 static Fl_Value_Input_Type Fl_Value_Input_type;
 
 int Fl_Value_Input_Type::textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c) {
-  Fl_Value_Input *myo = (Fl_Value_Input*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
+  fltk3::ValueInput *myo = (fltk3::ValueInput*)(w==4 ? ((Fl_Widget_Type*)factory)->o : o);
   switch (w) {
     case 4:
     case 0: f = myo->textfont(); s = myo->textsize(); c = myo->textcolor(); break;
@@ -887,7 +887,7 @@ public:
     if (w < 15) w = 15;
   }
   virtual const char *type_name() {return "fltk3::ValueOutput";}
-  virtual const char *alt_type_name() {return "fltk::ValueOutput";}
+  virtual const char *alt_type_name() {return "fltk3::ValueOutput";}
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
   int is_valuator() const {return 1;}
   fltk3::Widget *widget(int x,int y,int w,int h) {
@@ -918,7 +918,7 @@ class fltk3::ValueSlider_Type : public Fl_Slider_Type {
   int textstuff(int w, fltk3::Font& f, int& s, fltk3::Color& c);
 public:
   virtual const char *type_name() {return "fltk3::ValueSlider";}
-  virtual const char *alt_type_name() {return "fltk::ValueSlider";}
+  virtual const char *alt_type_name() {return "fltk3::ValueSlider";}
   fltk3::Widget *widget(int x,int y,int w,int h) {
     return new fltk3::ValueSlider(x,y,w,h,"slider:");}
   Fl_Widget_Type *_make() {return new fltk3::ValueSlider_Type();}
@@ -1090,7 +1090,7 @@ static void make_iconlabel( fltk3::MenuItem *mi, fltk3::Image *ic, const char *t
     strcat(t1, txt);
     strcat(t1, "...");
     mi->image( ic );
-    Fl_Multi_Label *ml = new Fl_Multi_Label;
+    fltk3::MultiLabel *ml = new fltk3::MultiLabel;
     ml->labela = (char*)ic;
     ml->labelb = t1;
     ml->typea = _FL_IMAGE_LABEL;
@@ -1111,7 +1111,7 @@ void fill_in_New_Menu() {
       } else {
         const char *n = t->type_name();
         if (!strncmp(n,"Fl_",3)) n += 3;
-        if (!strncmp(n,"fltk::",6)) n += 6;
+        if (!strncmp(n,"fltk3::",6)) n += 6;
         make_iconlabel( m, pixmap[t->pixmapID()], n );
       }
     }
@@ -1252,9 +1252,9 @@ static symbol table[] = {
   {"SELECT_BROWSER",	fltk3::SELECT_BROWSER},
   {"HOLD_BROWSER",	fltk3::HOLD_BROWSER},
   {"MULTI_BROWSER",	fltk3::MULTI_BROWSER},
-  {"SIMPLE_COUNTER",	FL_SIMPLE_COUNTER},
-  {"LINE_DIAL",		FL_LINE_DIAL},
-  {"FILL_DIAL",		FL_FILL_DIAL},
+  {"SIMPLE_COUNTER",	fltk3::SIMPLE_COUNTER},
+  {"LINE_DIAL",		fltk3::LINE_DIAL},
+  {"FILL_DIAL",		fltk3::FILL_DIAL},
   {"VERT_SLIDER",	fltk3::VERT_SLIDER},
   {"HOR_SLIDER",	fltk3::HOR_SLIDER},
   {"VERT_FILL_SLIDER",	fltk3::VERT_FILL_SLIDER},

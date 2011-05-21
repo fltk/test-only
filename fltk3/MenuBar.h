@@ -26,7 +26,7 @@
 //
 
 /* \file
-   fltk3::MenuBar widget . */
+ fltk3::MenuBar widget . */
 
 #ifndef Fltk3_Menu_Bar_H
 #define Fltk3_Menu_Bar_H
@@ -34,56 +34,56 @@
 #include "Menu_.h"
 
 namespace fltk3 {
-
-/**
-  This widget provides a standard menubar interface.  Usually you will
-  put this widget along the top edge of your window.  The height of the
-  widget should be 30 for the menu titles to draw correctly with the
-  default font.
-  <P>The items on the bar and the menus they bring up are defined by a
-  single fltk3::MenuItem
-  array.  Because a fltk3::MenuItem array defines a hierarchy, the
-  top level menu defines the items in the menubar, while the submenus
-  define the pull-down menus. Sub-sub menus and lower pop up to the right
-  of the submenus. </P>
-  <P ALIGN=CENTER>\image html  menubar.png</P>
-  \image latex  menubar.png " menubar" width=12cm
-  <P>If there is an item in the top menu that is not a title of a
-  submenu, then it acts like a "button" in the menubar.  Clicking on it
-  will pick it. </P>
-  <P>When the user picks an item off the menu, the item's callback is
-  done with the menubar as the fltk3::Widget* argument.  If the item
-  does not have a callback the menubar's callback is done instead. </P>
-  <P>Submenus will also pop up in response to shortcuts indicated by
-  putting a '&' character in the name field of the menu item. If you put a
-  '&' character in a top-level "button" then the shortcut picks it.  The
-  '&' character in submenus is ignored until the menu is popped up. </P>
-  <P>Typing the shortcut() of any of the menu items will cause
-  callbacks exactly the same as when you pick the item with the mouse.
-*/
-class FLTK3_EXPORT MenuBar : public fltk3::Menu_ {
-protected:
-    void draw();
-public:
-    int handle(int);
+  
   /**
-      Creates a new fltk3::MenuBar widget using the given position,
-    size, and label string. The default boxtype is fltk3::UP_BOX.
-    <P>The constructor sets menu() to NULL.  See 
-    fltk3::Menu_ for the methods to set or change the menu. </P>
-    <P>labelsize(), labelfont(), and labelcolor()
-    are used to control how the menubar items are drawn.  They are
-    initialized from the Fl_Menu static variables, but you can
-    change them if desired. </P>
-    <P>label() is ignored unless you change align() to
-    put it outside the menubar.
-    <P>The destructor removes the fltk3::MenuBar widget and all of its
-    menu items.
-  */
+   This widget provides a standard menubar interface.  Usually you will
+   put this widget along the top edge of your window.  The height of the
+   widget should be 30 for the menu titles to draw correctly with the
+   default font.
+   <P>The items on the bar and the menus they bring up are defined by a
+   single fltk3::MenuItem
+   array.  Because a fltk3::MenuItem array defines a hierarchy, the
+   top level menu defines the items in the menubar, while the submenus
+   define the pull-down menus. Sub-sub menus and lower pop up to the right
+   of the submenus. </P>
+   <P ALIGN=CENTER>\image html  menubar.png</P>
+   \image latex  menubar.png " menubar" width=12cm
+   <P>If there is an item in the top menu that is not a title of a
+   submenu, then it acts like a "button" in the menubar.  Clicking on it
+   will pick it. </P>
+   <P>When the user picks an item off the menu, the item's callback is
+   done with the menubar as the fltk3::Widget* argument.  If the item
+   does not have a callback the menubar's callback is done instead. </P>
+   <P>Submenus will also pop up in response to shortcuts indicated by
+   putting a '&' character in the name field of the menu item. If you put a
+   '&' character in a top-level "button" then the shortcut picks it.  The
+   '&' character in submenus is ignored until the menu is popped up. </P>
+   <P>Typing the shortcut() of any of the menu items will cause
+   callbacks exactly the same as when you pick the item with the mouse.
+   */
+  class FLTK3_EXPORT MenuBar : public fltk3::Menu_ {
+  protected:
+    void draw();
+  public:
+    int handle(int);
+    /**
+     Creates a new fltk3::MenuBar widget using the given position,
+     size, and label string. The default boxtype is fltk3::UP_BOX.
+     <P>The constructor sets menu() to NULL.  See 
+     fltk3::Menu_ for the methods to set or change the menu. </P>
+     <P>labelsize(), labelfont(), and labelcolor()
+     are used to control how the menubar items are drawn.  They are
+     initialized from the Fl_Menu static variables, but you can
+     change them if desired. </P>
+     <P>label() is ignored unless you change align() to
+     put it outside the menubar.
+     <P>The destructor removes the fltk3::MenuBar widget and all of its
+     menu items.
+     */
     MenuBar(int X, int Y, int W, int H,const char *l=0)
-      : fltk3::Menu_(X,Y,W,H,l) {}
-};
-
+    : fltk3::Menu_(X,Y,W,H,l) {}
+  };
+  
 }
 
 #endif

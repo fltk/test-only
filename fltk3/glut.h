@@ -38,45 +38,48 @@
 // Commented out lines indicate parts of GLUT that are not emulated.
 
 #ifndef Fltk3_glut_H
-#  define Fltk3_glut_H
+#define Fltk3_glut_H
 
-#  include "gl.h"
+#include "gl.h"
 
+#include "run.h"
+#include "GlWindow.h"
 
-#  include "run.h"
-#  include "GlWindow.h"
+namespace fltk3 {
+  
+  /** 
+   GLUT is emulated using this window class and these static variables
+   (plus several more static variables hidden in glut_compatability.cxx):
+   */
+  class FLTK3_EXPORT GlutWindow : public GlWindow {
+    void _init();
+    int mouse_down;
+  protected:
+    void draw();
+    void draw_overlay();
+    int handle(int);
+  public: // so the inline functions work
+    int number;
+    int menu[3];
+    void make_current();
+    void (*display)();
+    void (*overlaydisplay)();
+    void (*reshape)(int w, int h);
+    void (*keyboard)(uchar, int x, int y);
+    void (*mouse)(int b, int state, int x, int y);
+    void (*motion)(int x, int y);
+    void (*passivemotion)(int x, int y);
+    void (*entry)(int);
+    void (*visibility)(int);
+    void (*special)(int, int x, int y);
+    GlutWindow(int w, int h, const char *);
+    GlutWindow(int x, int y, int w, int h, const char *);
+    ~GlutWindow();
+  };
+  
+}
 
-/** 
-  GLUT is emulated using this window class and these static variables
-  (plus several more static variables hidden in glut_compatability.cxx):
-*/
-class FLTK3_EXPORT Fl_Glut_Window : public fltk3::GlWindow {
-  void _init();
-  int mouse_down;
-protected:
-  void draw();
-  void draw_overlay();
-  int handle(int);
-public: // so the inline functions work
-  int number;
-  int menu[3];
-  void make_current();
-  void (*display)();
-  void (*overlaydisplay)();
-  void (*reshape)(int w, int h);
-  void (*keyboard)(uchar, int x, int y);
-  void (*mouse)(int b, int state, int x, int y);
-  void (*motion)(int x, int y);
-  void (*passivemotion)(int x, int y);
-  void (*entry)(int);
-  void (*visibility)(int);
-  void (*special)(int, int x, int y);
-  Fl_Glut_Window(int w, int h, const char *);
-  Fl_Glut_Window(int x, int y, int w, int h, const char *);
-  ~Fl_Glut_Window();
-};
-
-extern FLTK3_EXPORT Fl_Glut_Window *glut_window;	// the current window
+extern FLTK3_EXPORT fltk3::GlutWindow *glut_window;	// the current window
 extern FLTK3_EXPORT int glut_menu;			// the current menu
 
 // function pointers that are not per-window:
@@ -328,11 +331,11 @@ enum {
   GLUT_INIT_DISPLAY_MODE,
   GLUT_WINDOW_BUFFER_SIZE,
   GLUT_VERSION
-//GLUT_WINDOW_NUM_CHILDREN,
-//GLUT_WINDOW_CURSOR,
-//GLUT_SCREEN_WIDTH_MM,
-//GLUT_SCREEN_HEIGHT_MM,
-//GLUT_ELAPSED_TIME,
+  //GLUT_WINDOW_NUM_CHILDREN,
+  //GLUT_WINDOW_CURSOR,
+  //GLUT_SCREEN_WIDTH_MM,
+  //GLUT_SCREEN_HEIGHT_MM,
+  //GLUT_ELAPSED_TIME,
 };
 
 #  define GLUT_WINDOW_STENCIL_SIZE	GL_STENCIL_BITS
@@ -382,7 +385,7 @@ FLTK3_EXPORT int glutLayerGet(GLenum);
 #  define GLUT_OVERLAY_DAMAGED		805
 
 extern "C" {
-typedef void (*GLUTproc)();
+  typedef void (*GLUTproc)();
 }
 
 FLTK3_EXPORT GLUTproc glutGetProcAddress(const char *procName);
@@ -412,9 +415,9 @@ FLTK3_EXPORT GLUTproc glutGetProcAddress(const char *procName);
 struct Fl_Glut_Bitmap_Font {fltk3::Font font; fltk3::Fontsize size;};
 
 extern FLTK3_EXPORT struct Fl_Glut_Bitmap_Font
-  glutBitmap9By15, glutBitmap8By13, glutBitmapTimesRoman10,
-  glutBitmapTimesRoman24, glutBitmapHelvetica10, glutBitmapHelvetica12,
-  glutBitmapHelvetica18;
+glutBitmap9By15, glutBitmap8By13, glutBitmapTimesRoman10,
+glutBitmapTimesRoman24, glutBitmapHelvetica10, glutBitmapHelvetica12,
+glutBitmapHelvetica18;
 #  define GLUT_BITMAP_9_BY_15             (&glutBitmap9By15)
 #  define GLUT_BITMAP_8_BY_13             (&glutBitmap8By13)
 #  define GLUT_BITMAP_TIMES_ROMAN_10      (&glutBitmapTimesRoman10)

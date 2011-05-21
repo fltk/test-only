@@ -97,9 +97,9 @@ namespace fltk3 {
   private:
     void cb_previewButton_i(fltk3::CheckButton*, void*);
     static void cb_previewButton(fltk3::CheckButton*, void*);
-    Fl_File_Input *fileName;
-    void cb_fileName_i(Fl_File_Input*, void*);
-    static void cb_fileName(Fl_File_Input*, void*);
+    fltk3::FileInput *fileName;
+    void cb_fileName_i(fltk3::FileInput*, void*);
+    static void cb_fileName(fltk3::FileInput*, void*);
     fltk3::ReturnButton *okButton;
     void cb_okButton_i(fltk3::ReturnButton*, void*);
     static void cb_okButton(fltk3::ReturnButton*, void*);

@@ -458,7 +458,7 @@ static void figure_out_visual() {
 
 static void innards(const uchar *buf, int X, int Y, int W, int H,
 		    int delta, int linedelta, int mono,
-		    Fl_Draw_Image_Cb cb, void* userdata)
+		    fltk3::DrawImageCb cb, void* userdata)
 {
   if (!linedelta) linedelta = W*delta;
 
@@ -546,14 +546,14 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 void Fl_Xlib_Graphics_Driver::draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
   innards(buf,x,y,w,h,d,l,(d<3&&d>-3),0,0);
 }
-void Fl_Xlib_Graphics_Driver::draw_image(Fl_Draw_Image_Cb cb, void* data,
+void Fl_Xlib_Graphics_Driver::draw_image(fltk3::DrawImageCb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   innards(0,x,y,w,h,d,0,(d<3&&d>-3),cb,data);
 }
 void Fl_Xlib_Graphics_Driver::draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
   innards(buf,x,y,w,h,d,l,1,0,0);
 }
-void Fl_Xlib_Graphics_Driver::draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
+void Fl_Xlib_Graphics_Driver::draw_image_mono(fltk3::DrawImageCb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   innards(0,x,y,w,h,d,0,1,cb,data);
 }

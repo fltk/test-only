@@ -26,22 +26,27 @@
 //
 
 /* \file
-   Fl_Simple_Counter widget . */
+ Fl_Simple_Counter widget . */
 
 #ifndef Fltk3_Simple_Counter_H
 #define Fltk3_Simple_Counter_H
 
 #include "Counter.h"
-/** 
-  This widget creates a counter with only 2 arrow buttons 
-  <P align=center>\image html counter.png</P> 
-  \image latex  counter.png "Fl_Simple_Counter" width=4cm
-*/
-class FLTK3_EXPORT Fl_Simple_Counter : public Fl_Counter {
-public:
-    Fl_Simple_Counter(int x,int y,int w,int h, const char *l = 0)
-	: Fl_Counter(x,y,w,h,l) {type(FL_SIMPLE_COUNTER);}
-};
+
+namespace fltk3 {
+  
+  /** 
+   This widget creates a counter with only 2 arrow buttons 
+   <P align=center>\image html counter.png</P> 
+   \image latex  counter.png "Fl_Simple_Counter" width=4cm
+   */
+  class FLTK3_EXPORT SimpleCounter : public fltk3::Counter {
+  public:
+    SimpleCounter(int x,int y,int w,int h, const char *l = 0)
+    : fltk3::Counter(x,y,w,h,l) {type(fltk3::SIMPLE_COUNTER);}
+  };
+  
+}
 
 #endif
 

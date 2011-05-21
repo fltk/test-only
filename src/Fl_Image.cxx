@@ -437,7 +437,7 @@ static void alpha_blend(fltk3::RGBImage *img, int X, int Y, int W, int H, int cx
 #endif // !WIN32 && !__APPLE_QUARTZ__
 
 void fltk3::RGBImage::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
-  fl_graphics_driver->draw(this, XP, YP, WP, HP, cx, cy);
+  fltk3::graphics_driver->draw(this, XP, YP, WP, HP, cx, cy);
 }
 
 static int start(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int w, int h, int &cx, int &cy, 
@@ -457,7 +457,7 @@ static int start(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int w, in
 }
 
 #ifdef __APPLE__
-void Fl_Quartz_Graphics_Driver::draw(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int cx, int cy) {
+void fltk3::QuartzGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   // Don't draw an empty image...
   if (!img->d() || !img->array) {

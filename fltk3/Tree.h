@@ -208,7 +208,7 @@ namespace fltk3 {
     
   protected:
     /// Vertical scrollbar
-    Fl_Scrollbar *_vscroll;
+    fltk3::Scrollbar *_vscroll;
     
   protected:
     void item_clicked(fltk3::TreeItem* val);

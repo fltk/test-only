@@ -96,11 +96,11 @@ static void createAppleMenu(void);
 static Fl_Region MacRegionMinusRect(Fl_Region r, int x,int y,int w,int h);
 static void cocoaMouseHandler(NSEvent *theEvent);
 
-static Fl_Quartz_Graphics_Driver fl_quartz_driver;
-static Fl_Display_Device fl_quartz_display(&fl_quartz_driver);
-FLTK3_EXPORT Fl_Graphics_Driver *fl_graphics_driver = (Fl_Graphics_Driver*)&fl_quartz_driver; // the current target device of graphics operations
-Fl_Surface_Device* Fl_Surface_Device::_surface = (Fl_Surface_Device*)&fl_quartz_display; // the current target surface of graphics operations
-Fl_Display_Device *Fl_Display_Device::_display = &fl_quartz_display; // the platform display
+static fltk3::QuartzGraphicsDriver fl_quartz_driver;
+static fltk3::DisplayDevice fl_quartz_display(&fl_quartz_driver);
+FLTK3_EXPORT fltk3::GraphicsDriver *fltk3::graphics_driver = (fltk3::GraphicsDriver*)&fl_quartz_driver; // the current target device of graphics operations
+fltk3::SurfaceDevice* fltk3::SurfaceDevice::_surface = (fltk3::SurfaceDevice*)&fl_quartz_display; // the current target surface of graphics operations
+fltk3::DisplayDevice *fltk3::DisplayDevice::_display = &fl_quartz_display; // the platform display
 
 // public variables
 int fl_screen;
@@ -2146,7 +2146,7 @@ void Fl_X::make(fltk3::Window* w)
     if (w->size_range_set) w->size_range_();
     
     if ( w->border() || (!w->modal() && !w->tooltip_window()) ) {
-      Fl_Tooltip::enter(0);
+      fltk3::Tooltip::enter(0);
     }
     w->set_visible();
     if ( w->border() || (!w->modal() && !w->tooltip_window()) ) fltk3::handle(fltk3::FOCUS, w);
@@ -2237,7 +2237,7 @@ void fltk3::Window::show() {
   } else {
     labeltype(fltk3::NO_LABEL);
   }
-  Fl_Tooltip::exit(this);
+  fltk3::Tooltip::exit(this);
   if (!shown() || !i) {
     Fl_X::make(this);
   } else {
@@ -2379,7 +2379,7 @@ void Fl_X::q_fill_context() {
     CGContextTranslateCTM(fl_gc, 0.5, hgt-0.5f);
     CGContextScaleCTM(fl_gc, 1.0f, -1.0f); // now 0,0 is top-left point of the context
     }
-  fltk3::color(fl_graphics_driver->color());
+  fltk3::color(fltk3::graphics_driver->color());
   fl_quartz_restore_line_style_();
 }
 
@@ -2871,8 +2871,8 @@ void Fl_X::set_cursor(fltk3::Cursor c)
 //#include <fltk3/PostScript.h>
 - (void)printPanel
 {
-  Fl_Printer printer;
-  //Fl_PostScript_File_Device printer;
+  fltk3::Printer printer;
+  //fltk3::PostScriptFileDevice printer;
   int w, h, ww, wh;
   fltk3::Window *win = fltk3::first_window();
   if(!win) return;
@@ -3380,7 +3380,7 @@ WindowRef Fl_X::window_ref()
 
 // so a CGRect matches exactly what is denoted x,y,w,h for clipping purposes
 CGRect fl_cgrectmake_cocoa(int x, int y, int w, int h) {
-  if (Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id) return CGRectMake(x-0.5, y-0.5, w, h); 
+  if (fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) return CGRectMake(x-0.5, y-0.5, w, h); 
   return CGRectMake(x, y, w > 0 ? w - 0.9 : 0, h > 0 ? h - 0.9 : 0);
 }
 
@@ -3405,7 +3405,7 @@ int fltk3::Window::decorated_h()
   return h() + bt + by;
 }
 
-void Fl_Paged_Device::print_window(fltk3::Window *win, int x_offset, int y_offset)
+void fltk3::PagedDevice::print_window(fltk3::Window *win, int x_offset, int y_offset)
 {
   if (!win->shown() || win->parent() || !win->border()) {
     this->print_widget(win, x_offset, y_offset);
@@ -3413,14 +3413,14 @@ void Fl_Paged_Device::print_window(fltk3::Window *win, int x_offset, int y_offse
   }
   int bx, by, bt;
   get_window_frame_sizes(bx, by, bt);
-  Fl_Display_Device::display_device()->set_current(); // send win to front and make it current
+  fltk3::DisplayDevice::display_device()->set_current(); // send win to front and make it current
   win->show();
   fl_gc = NULL;
   fltk3::check();
   win->make_current();
   // capture the window title bar from screen
   CGImageRef img = Fl_X::CGImage_from_window_rect(win, 0, -bt, win->w(), bt);
-  this->set_current(); // back to the Fl_Paged_Device
+  this->set_current(); // back to the fltk3::PagedDevice
   CGRect rect = { { 0, 0 }, { win->w(), bt } }; // print the title bar
   Fl_X::q_begin_image(rect, 0, 0, win->w(), bt);
   CGContextDrawImage(fl_gc, rect, img);
@@ -3434,8 +3434,8 @@ void Fl_Paged_Device::print_window(fltk3::Window *win, int x_offset, int y_offse
 /* Returns the address of a Carbon function after dynamically loading the Carbon library if needed.
  Supports old Mac OS X versions that may use a couple of Carbon calls:
  GetKeys used by OS X 10.3 or before (in fltk3::get_key())
- PMSessionPageSetupDialog and PMSessionPrintDialog used by 10.4 or before (in Fl_Printer::start_job())
- GetWindowPort used by 10.4 or before (in Fl_Gl_Choice.cxx)
+ PMSessionPageSetupDialog and PMSessionPrintDialog used by 10.4 or before (in fltk3::Printer::start_job())
+ GetWindowPort used by 10.4 or before (in fltk3::GlChoice.cxx)
  */
 void *Fl_X::get_carbon_function(const char *function_name) {
   static void *carbon = NULL;

@@ -877,7 +877,7 @@ void show_help(const char *name) {
     // or ask the native browser to open the page on www.fltk.org
     if (strcmp(name, "fluid.html")==0) {
       if (!fltk3::SharedImage::find("embedded:/fluid-org.png"))
-        new Fl_PNG_Image("embedded:/fluid-org.png", fluid_org_png, sizeof(fluid_org_png));
+        new fltk3::PNGImage("embedded:/fluid-org.png", fluid_org_png, sizeof(fluid_org_png));
       help_dialog->value
       (
        "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n"
@@ -2197,7 +2197,7 @@ void update_sourceview_position()
   }
 }
 
-void update_sourceview_position_cb(Fl_Tabs*, void*)
+void update_sourceview_position_cb(fltk3::TabGroup*, void*)
 {
   update_sourceview_position();
 }
@@ -2311,7 +2311,7 @@ static int arg(int argc, char** argv, int& i) {
     i += 2;
     return 2;
   }
-  Fl_Plugin_Manager pm("commandline");
+  fltk3::PluginManager pm("commandline");
   int j, n = pm.plugins();
   for (j=0; j<n; j++) {
     Fl_Commandline_Plugin *pi = (Fl_Commandline_Plugin*)pm.plugin(j);
@@ -2355,7 +2355,7 @@ int main(int argc,char **argv) {
       " -o <name> : .cxx output filename, or extension if <name> starts with '.'\n"
       " -h <name> : .h output filename, or extension if <name> starts with '.'\n";
     int len = strlen(msg) + strlen(argv[0]) + strlen(fltk3::help);
-    Fl_Plugin_Manager pm("commandline");
+    fltk3::PluginManager pm("commandline");
     int i, n = pm.plugins();
     for (i=0; i<n; i++) {
       Fl_Commandline_Plugin *pi = (Fl_Commandline_Plugin*)pm.plugin(i);

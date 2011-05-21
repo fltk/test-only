@@ -26,23 +26,27 @@
 //
 
 /* \file
-   Fl_GIF_Image widget . */
+ fltk3::GIFImage widget . */
 
 #ifndef Fltk3_GIF_Image_H
 #define Fltk3_GIF_Image_H
-#  include "Pixmap.h"
+#include "Pixmap.h"
 
-/**
-  The Fl_GIF_Image class supports loading, caching,
-  and drawing of Compuserve GIF<SUP>SM</SUP> images. The class
-  loads the first image and supports transparency.
-*/
-class FLTK3_EXPORT Fl_GIF_Image : public fltk3::Pixmap {
-
+namespace fltk3 {
+  
+  /**
+   The fltk3::GIFImage class supports loading, caching,
+   and drawing of Compuserve GIF<SUP>SM</SUP> images. The class
+   loads the first image and supports transparency.
+   */
+  class FLTK3_EXPORT GIFImage : public fltk3::Pixmap {
+    
   public:
-
-  Fl_GIF_Image(const char* filename);
-};
+    
+    GIFImage(const char* filename);
+  };
+  
+}
 
 #endif
 

@@ -84,7 +84,7 @@ Fl_Font_Descriptor::~Fl_Font_Descriptor() {
 //  glDeleteLists(listbase+base,size);
 // }
 #endif
-  if (this == fl_graphics_driver->font_descriptor()) fl_graphics_driver->font_descriptor(NULL);
+  if (this == fltk3::graphics_driver->font_descriptor()) fltk3::graphics_driver->font_descriptor(NULL);
   DeleteObject(fid);
   int i;
   for (i = 0; i < 64; i++) free(width[i]);
@@ -130,15 +130,15 @@ static Fl_Font_Descriptor* find(fltk3::Font fnum, fltk3::Fontsize size, int angl
 ////////////////////////////////////////////////////////////////
 // Public interface:
 
-static void fltk3::font(Fl_Graphics_Driver *driver, fltk3::Font fnum, fltk3::Fontsize size, int angle) {
+static void fltk3::font(fltk3::GraphicsDriver *driver, fltk3::Font fnum, fltk3::Fontsize size, int angle) {
   if (fnum==-1) { // just make sure that we will load a new font next time
     fl_angle_ = 0;
-    driver->Fl_Graphics_Driver::font(0, 0);
+    driver->fltk3::GraphicsDriver::font(0, 0);
     return;
   }
-  if (fnum == driver->Fl_Graphics_Driver::font() && size == driver->size() && angle == fl_angle_) return;
+  if (fnum == driver->fltk3::GraphicsDriver::font() && size == driver->size() && angle == fl_angle_) return;
   fl_angle_ = angle;
-  driver->Fl_Graphics_Driver::font(fnum, size);
+  driver->fltk3::GraphicsDriver::font(fnum, size);
   driver->font_descriptor( find(fnum, size, angle) );
 }
 
@@ -272,7 +272,7 @@ static void on_printer_extents_update(int &dx, int &dy, int &w, int &h)
 
 // if printer context, extents shd be converted to logical coords
 #define EXTENTS_UPDATE(x,y,w,h) \
-  if (Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id) { on_printer_extents_update(x,y,w,h); }
+  if (fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) { on_printer_extents_update(x,y,w,h); }
 
 // Function to determine the extent of the "inked" area of the glyphs in a string
 void Fl_GDI_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &dy, int &w, int &h) {
@@ -401,7 +401,7 @@ void Fl_GDI_Graphics_Driver::draw(const char* str, int n, int x, int y) {
 }
 
 void Fl_GDI_Graphics_Driver::draw(int angle, const char* str, int n, int x, int y) {
-  fltk3::font(this, Fl_Graphics_Driver::font(), size(), angle);
+  fltk3::font(this, fltk3::GraphicsDriver::font(), size(), angle);
   int wn = 0; // count of UTF16 cells to render full string
   COLORREF oldColor = SetTextColor(fl_gc, fl_RGB());
   SelectObject(fl_gc, font_descriptor()->fid);
@@ -413,7 +413,7 @@ void Fl_GDI_Graphics_Driver::draw(int angle, const char* str, int n, int x, int 
   }
   TextOutW(fl_gc, x, y, (WCHAR*)wstr, wn);
   SetTextColor(fl_gc, oldColor);
-  fltk3::font(this, Fl_Graphics_Driver::font(), size(), 0);
+  fltk3::font(this, fltk3::GraphicsDriver::font(), size(), 0);
 }
 
 void Fl_GDI_Graphics_Driver::rtl_draw(const char* c, int n, int x, int y) {

@@ -50,7 +50,7 @@
 // tab_width[], resp.. If needed, these arrays are (re)allocated.
 // Return value is the index of the selected item.
 
-int Fl_Tabs::tab_positions() {
+int fltk3::TabGroup::tab_positions() {
   int nc = children();
   if (nc != tab_count) {
     clear_tab_positions();
@@ -108,7 +108,7 @@ int Fl_Tabs::tab_positions() {
 
 // Returns space (height) in pixels needed for tabs. Negative to put them on the bottom.
 // Returns full height, if children() = 0.
-int Fl_Tabs::tab_height() {
+int fltk3::TabGroup::tab_height() {
   if (children() == 0) return h();
   int H = h();
   int H2 = y();
@@ -125,7 +125,7 @@ int Fl_Tabs::tab_height() {
 
 // This is used for event handling (clicks) and by fluid to pick tabs.
 // Returns 0, if children() = 0, or if the event is outside of the tabs area.
-fltk3::Widget *Fl_Tabs::which(int event_x, int event_y) {
+fltk3::Widget *fltk3::TabGroup::which(int event_x, int event_y) {
   if (children() == 0) return 0;
   int H = tab_height();
   if (H < 0) {
@@ -146,7 +146,7 @@ fltk3::Widget *Fl_Tabs::which(int event_x, int event_y) {
   return ret;
 }
 
-void Fl_Tabs::redraw_tabs()
+void fltk3::TabGroup::redraw_tabs()
 {
   int H = tab_height();
   if (H >= 0) {
@@ -158,7 +158,7 @@ void Fl_Tabs::redraw_tabs()
   }
 }
 
-int Fl_Tabs::handle(int event) {
+int fltk3::TabGroup::handle(int event) {
 
   fltk3::Widget *o;
   int i;
@@ -188,14 +188,14 @@ int Fl_Tabs::handle(int event) {
 	do_callback();
 	if (wp.deleted()) return 1;
       }
-      Fl_Tooltip::current(o);
+      fltk3::Tooltip::current(o);
     } else {
       push(o);
     }
     return 1;
   case fltk3::MOVE: {
     int ret = fltk3::Group::handle(event);
-    fltk3::Widget *o = Fl_Tooltip::current(), *n = o;
+    fltk3::Widget *o = fltk3::Tooltip::current(), *n = o;
     int H = tab_height();
     if ( (H>=0) && (fltk3::event_y()>y()+H) )
       return ret;
@@ -206,7 +206,7 @@ int Fl_Tabs::handle(int event) {
       if (!n) n = this;
     }
     if (n!=o)
-      Fl_Tooltip::enter(n);
+      fltk3::Tooltip::enter(n);
     return ret; }
   case fltk3::FOCUS:
   case fltk3::UNFOCUS:
@@ -266,7 +266,7 @@ int Fl_Tabs::handle(int event) {
   }
 }
 
-int Fl_Tabs::push(fltk3::Widget *o) {
+int fltk3::TabGroup::push(fltk3::Widget *o) {
   if (push_ == o) return 0;
   if ( (push_ && !push_->visible()) || (o && !o->visible()) )
     redraw_tabs();
@@ -281,7 +281,7 @@ int Fl_Tabs::push(fltk3::Widget *o) {
    This allows the tabs to be deleted, moved to other groups, and
    show()/hide() called without it screwing up.
 */
-fltk3::Widget* Fl_Tabs::value() {
+fltk3::Widget* fltk3::TabGroup::value() {
   fltk3::Widget* v = 0;
   fltk3::Widget*const* a = array();
   for (int i=children(); i--;) {
@@ -298,7 +298,7 @@ fltk3::Widget* Fl_Tabs::value() {
   Setting the value hides all other children, and makes this one
   visible, if it is really a child.
 */
-int Fl_Tabs::value(fltk3::Widget *newvalue) {
+int fltk3::TabGroup::value(fltk3::Widget *newvalue) {
   fltk3::Widget*const* a = array();
   int ret = 0;
   for (int i=children(); i--;) {
@@ -315,7 +315,7 @@ int Fl_Tabs::value(fltk3::Widget *newvalue) {
 
 enum {LEFT, RIGHT, SELECTED};
 
-void Fl_Tabs::draw() {
+void fltk3::TabGroup::draw() {
   fltk3::Widget *v = value();
   int H = tab_height();
 
@@ -355,7 +355,7 @@ void Fl_Tabs::draw() {
   }
 }
 
-void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what) {
+void fltk3::TabGroup::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what) {
   int sel = (what == SELECTED);
   int dh = fltk3::box_dh(box());
   int dy = fltk3::box_dy(box());
@@ -424,27 +424,27 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int what)
 }
 
 /**
-    Creates a new Fl_Tabs widget using the given position, size,
+    Creates a new fltk3::TabGroup widget using the given position, size,
     and label string. The default boxtype is fltk3::THIN_UP_BOX.
 
     Use add(fltk3::Widget*) to add each child, which are usually
     fltk3::Group widgets. The children should be sized to stay
-    away from the top or bottom edge of the Fl_Tabs widget,
+    away from the top or bottom edge of the fltk3::TabGroup widget,
     which is where the tabs will be drawn.
 
-    All children of Fl_Tabs should have the same size and exactly fit on top of 
+    All children of fltk3::TabGroup should have the same size and exactly fit on top of 
     each other. They should only leave space above or below where that tabs will 
-    go, but not on the sides. If the first child of Fl_Tabs is set to 
+    go, but not on the sides. If the first child of fltk3::TabGroup is set to 
     "resizable()", the riders will not resize when the tabs are resized.
 
     The destructor <I>also deletes all the children</I>. This
     allows a whole tree to be deleted at once, without having to
     keep a pointer to all the children in the user code. A kludge
-    has been done so the Fl_Tabs and all of its children
+    has been done so the fltk3::TabGroup and all of its children
     can be automatic (local) variables, but you must declare the
-    Fl_Tabs widget <I>first</I> so that it is destroyed last.
+    fltk3::TabGroup widget <I>first</I> so that it is destroyed last.
 */
-Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l) :
+fltk3::TabGroup::TabGroup(int X,int Y,int W, int H, const char *l) :
   fltk3::Group(X,Y,W,H,l)
 {
   box(fltk3::THIN_UP_BOX);
@@ -454,7 +454,7 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l) :
   tab_count = 0;
 }
 
-Fl_Tabs::~Fl_Tabs() {
+fltk3::TabGroup::~TabGroup() {
   clear_tab_positions();
 }
 
@@ -463,7 +463,7 @@ Fl_Tabs::~Fl_Tabs() {
 
     If there isn't any child yet the \p tabh parameter will be used to
     calculate the return values. This assumes that the children's labelsize
-    is the same as the Fl_Tabs' labelsize and adds a small border.
+    is the same as the fltk3::TabGroup' labelsize and adds a small border.
 
     If there are already children, the values of child(0) are returned, and
     \p tabh is ignored.
@@ -481,7 +481,7 @@ Fl_Tabs::~Fl_Tabs() {
 
     \since	FLTK 1.3.0
 */
-void Fl_Tabs::client_area(int &rx, int &ry, int &rw, int &rh, int tabh) {
+void fltk3::TabGroup::client_area(int &rx, int &ry, int &rw, int &rh, int tabh) {
 
   if (children()) {			// use existing values
 
@@ -515,7 +515,7 @@ void Fl_Tabs::client_area(int &rx, int &ry, int &rw, int &rh, int tabh) {
   }
 }
 
-void Fl_Tabs::clear_tab_positions() {
+void fltk3::TabGroup::clear_tab_positions() {
   if (tab_pos) {
     free(tab_pos);
     tab_pos = 0;

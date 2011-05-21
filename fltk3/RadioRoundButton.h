@@ -26,18 +26,22 @@
 //
 
 /* \file
-   Fl_Radio_Round_Button widget . */
+ RadioRoundButton widget . */
 
 #ifndef Fltk3_Radio_Round_Button_H
 #define Fltk3_Radio_Round_Button_H
 
 #include "RoundButton.h"
 
-class FLTK3_EXPORT Fl_Radio_Round_Button : public fltk3::RoundButton {
-public:
-    Fl_Radio_Round_Button(int x,int y,int w,int h,const char *l=0)
-	: fltk3::RoundButton(x,y,w,h,l) {type(fltk3::RADIO_BUTTON);}
-};
+namespace fltk3 {
+  
+  class FLTK3_EXPORT RadioRoundButton : public fltk3::RoundButton {
+  public:
+    RadioRoundButton(int x,int y,int w,int h,const char *l=0)
+    : fltk3::RoundButton(x,y,w,h,l) {type(fltk3::RADIO_BUTTON);}
+  };
+  
+}
 
 #endif
 

@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_JPEG_Image routines.
+// fltk3::JPEGImage routines.
 //
 // Copyright 1997-2011 by Easy Software Products.
 // Image support by Matthias Melcher, Copyright 2000-2009.
@@ -27,7 +27,7 @@
 //
 // Contents:
 //
-//   Fl_JPEG_Image::Fl_JPEG_Image() - Load a JPEG image file.
+//   fltk3::JPEGImage::fltk3::JPEGImage() - Load a JPEG image file.
 //
 
 //
@@ -101,7 +101,7 @@ extern "C" {
  
  \param[in] filename a full path and name pointing to a valid jpeg file.
  */
-Fl_JPEG_Image::Fl_JPEG_Image(const char *filename)	// I - File to load
+fltk3::JPEGImage::JPEGImage(const char *filename)	// I - File to load
 : fltk3::RGBImage(0,0,0) {
 #ifdef HAVE_LIBJPEG
   FILE				*fp;	// File pointer
@@ -283,7 +283,7 @@ static void jpeg_mem_src(j_decompress_ptr cinfo, const unsigned char *data)
  \param name A unique name or NULL
  \param data A pointer to the memory location of the JPEG image
  */
-Fl_JPEG_Image::Fl_JPEG_Image(const char *name, const unsigned char *data)
+fltk3::JPEGImage::JPEGImage(const char *name, const unsigned char *data)
 : fltk3::RGBImage(0,0,0) {
 #ifdef HAVE_LIBJPEG
   jpeg_decompress_struct	dinfo;	// Decompressor info

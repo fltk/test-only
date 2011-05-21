@@ -26,18 +26,22 @@
 //
 
 /* \file
-   Fl_Hor_Nice_Slider widget . */
+ Fl_Hor_Nice_Slider widget . */
 
 #ifndef Fltk3_Hor_Nice_Slider_H
 #define Fltk3_Hor_Nice_Slider_H
 
 #include "Slider.h"
 
-class FLTK3_EXPORT Fl_Hor_Nice_Slider : public fltk3::Slider {
-public:
+namespace fltk3 {
+  
+  class FLTK3_EXPORT HorNiceSlider : public fltk3::Slider {
+  public:
     Fl_Hor_Nice_Slider(int x,int y,int w,int h,const char *l=0)
-	: fltk3::Slider(x,y,w,h,l) {type(fltk3::HOR_NICE_SLIDER); box(fltk3::FLAT_BOX);}
-};
+    : fltk3::Slider(x,y,w,h,l) {type(fltk3::HOR_NICE_SLIDER); box(fltk3::FLAT_BOX);}
+  };
+  
+}
 
 #endif
 

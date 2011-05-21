@@ -29,7 +29,7 @@
 
 #include "widget_panel.h"
 
-static void cb_(Fl_Tabs* o, void* v) {
+static void cb_(fltk3::TabGroup* o, void* v) {
   propagate_load((fltk3::Group *)o,v);
 }
 
@@ -62,13 +62,13 @@ fltk3::MenuItem menu_1[] = {
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Value_Input *widget_x_input=(Fl_Value_Input *)0;
+fltk3::ValueInput *widget_x_input=(fltk3::ValueInput *)0;
 
-Fl_Value_Input *widget_y_input=(Fl_Value_Input *)0;
+fltk3::ValueInput *widget_y_input=(fltk3::ValueInput *)0;
 
-Fl_Value_Input *widget_w_input=(Fl_Value_Input *)0;
+fltk3::ValueInput *widget_w_input=(fltk3::ValueInput *)0;
 
-Fl_Value_Input *widget_h_input=(Fl_Value_Input *)0;
+fltk3::ValueInput *widget_h_input=(fltk3::ValueInput *)0;
 
 fltk3::MenuItem menu_2[] = {
  {"private", 0,  0, (void*)(0), 0, fltk3::NORMAL_LABEL, 0, 11, 0},
@@ -94,7 +94,7 @@ fltk3::DoubleWindow* make_widget_panel() {
     o->labelsize(11);
     o->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
     o->hotspot(o);
-    { Fl_Tabs* o = new Fl_Tabs(10, 10, 400, 310);
+    { fltk3::TabGroup* o = new fltk3::TabGroup(10, 10, 400, 310);
       o->selection_color((fltk3::Color)12);
       o->labelsize(11);
       o->labelcolor(fltk3::BACKGROUND2_COLOR);
@@ -259,7 +259,7 @@ fltk3::DoubleWindow* make_widget_panel() {
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { widget_x_input = new Fl_Value_Input(95, 150, 55, 20, "X:");
+          { widget_x_input = new fltk3::ValueInput(95, 150, 55, 20, "X:");
             widget_x_input->tooltip("The X position of the widget.");
             widget_x_input->labelsize(11);
             widget_x_input->maximum(2048);
@@ -267,8 +267,8 @@ fltk3::DoubleWindow* make_widget_panel() {
             widget_x_input->textsize(11);
             widget_x_input->callback((fltk3::Callback*)x_cb);
             widget_x_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-          } // Fl_Value_Input* widget_x_input
-          { widget_y_input = new Fl_Value_Input(155, 150, 55, 20, "Y:");
+          } // fltk3::ValueInput* widget_x_input
+          { widget_y_input = new fltk3::ValueInput(155, 150, 55, 20, "Y:");
             widget_y_input->tooltip("The Y position of the widget.");
             widget_y_input->labelsize(11);
             widget_y_input->maximum(2048);
@@ -276,8 +276,8 @@ fltk3::DoubleWindow* make_widget_panel() {
             widget_y_input->textsize(11);
             widget_y_input->callback((fltk3::Callback*)y_cb);
             widget_y_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-          } // Fl_Value_Input* widget_y_input
-          { widget_w_input = new Fl_Value_Input(215, 150, 55, 20, "Width:");
+          } // fltk3::ValueInput* widget_y_input
+          { widget_w_input = new fltk3::ValueInput(215, 150, 55, 20, "Width:");
             widget_w_input->tooltip("The width of the widget.");
             widget_w_input->labelsize(11);
             widget_w_input->maximum(2048);
@@ -285,8 +285,8 @@ fltk3::DoubleWindow* make_widget_panel() {
             widget_w_input->textsize(11);
             widget_w_input->callback((fltk3::Callback*)w_cb);
             widget_w_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-          } // Fl_Value_Input* widget_w_input
-          { widget_h_input = new Fl_Value_Input(275, 150, 55, 20, "Height:");
+          } // fltk3::ValueInput* widget_w_input
+          { widget_h_input = new fltk3::ValueInput(275, 150, 55, 20, "Height:");
             widget_h_input->tooltip("The height of the widget.");
             widget_h_input->labelsize(11);
             widget_h_input->maximum(2048);
@@ -294,7 +294,7 @@ fltk3::DoubleWindow* make_widget_panel() {
             widget_h_input->textsize(11);
             widget_h_input->callback((fltk3::Callback*)h_cb);
             widget_h_input->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-          } // Fl_Value_Input* widget_h_input
+          } // fltk3::ValueInput* widget_h_input
           { fltk3::LightButton* o = new fltk3::LightButton(335, 150, 55, 20, "Relative");
             o->tooltip("If set, widgets inside a widget class of type fltk3::Group are repositioned relat\
 ive to the origin at construction time");
@@ -311,43 +311,43 @@ ive to the origin at construction time");
           o->labelsize(11);
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
-          { Fl_Value_Input* o = new Fl_Value_Input(95, 185, 55, 20, "Size:");
+          { fltk3::ValueInput* o = new fltk3::ValueInput(95, 185, 55, 20, "Size:");
             o->tooltip("The size of the slider.");
             o->labelsize(11);
             o->step(0.010101);
             o->textsize(11);
             o->callback((fltk3::Callback*)slider_size_cb);
             o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-          } // Fl_Value_Input* o
-          { Fl_Value_Input* o = new Fl_Value_Input(155, 185, 55, 20, "Minimum:");
+          } // fltk3::ValueInput* o
+          { fltk3::ValueInput* o = new fltk3::ValueInput(155, 185, 55, 20, "Minimum:");
             o->tooltip("The minimum value of the widget.");
             o->labelsize(11);
             o->textsize(11);
             o->callback((fltk3::Callback*)min_cb);
             o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-          } // Fl_Value_Input* o
-          { Fl_Value_Input* o = new Fl_Value_Input(215, 185, 55, 20, "Maximum:");
+          } // fltk3::ValueInput* o
+          { fltk3::ValueInput* o = new fltk3::ValueInput(215, 185, 55, 20, "Maximum:");
             o->tooltip("The maximum value of the widget.");
             o->labelsize(11);
             o->value(1);
             o->textsize(11);
             o->callback((fltk3::Callback*)max_cb);
             o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-          } // Fl_Value_Input* o
-          { Fl_Value_Input* o = new Fl_Value_Input(275, 185, 55, 20, "Step:");
+          } // fltk3::ValueInput* o
+          { fltk3::ValueInput* o = new fltk3::ValueInput(275, 185, 55, 20, "Step:");
             o->tooltip("The resolution of the widget value.");
             o->labelsize(11);
             o->textsize(11);
             o->callback((fltk3::Callback*)step_cb);
             o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-          } // Fl_Value_Input* o
-          { Fl_Value_Input* o = new Fl_Value_Input(335, 185, 55, 20, "Value:");
+          } // fltk3::ValueInput* o
+          { fltk3::ValueInput* o = new fltk3::ValueInput(335, 185, 55, 20, "Value:");
             o->tooltip("The current widget value.");
             o->labelsize(11);
             o->textsize(11);
             o->callback((fltk3::Callback*)value_cb);
             o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-          } // Fl_Value_Input* o
+          } // fltk3::ValueInput* o
           { fltk3::Box* o = new fltk3::Box(395, 185, 0, 20);
             fltk3::Group::current()->resizable(o);
           } // fltk3::Box* o
@@ -359,7 +359,7 @@ ive to the origin at construction time");
           o->callback((fltk3::Callback*)propagate_load);
           o->align(fltk3::Align(fltk3::ALIGN_LEFT));
           o->hide();
-          { Fl_Value_Input* o = new Fl_Value_Input(95, 185, 55, 20, "Minimum Size:");
+          { fltk3::ValueInput* o = new fltk3::ValueInput(95, 185, 55, 20, "Minimum Size:");
             o->tooltip("The size of the slider.");
             o->labelsize(11);
             o->maximum(2048);
@@ -367,8 +367,8 @@ ive to the origin at construction time");
             o->textsize(11);
             o->callback((fltk3::Callback*)min_w_cb);
             o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-          } // Fl_Value_Input* o
-          { Fl_Value_Input* o = new Fl_Value_Input(155, 185, 55, 20);
+          } // fltk3::ValueInput* o
+          { fltk3::ValueInput* o = new fltk3::ValueInput(155, 185, 55, 20);
             o->tooltip("The minimum value of the widget.");
             o->labelsize(11);
             o->maximum(2048);
@@ -376,12 +376,12 @@ ive to the origin at construction time");
             o->textsize(11);
             o->callback((fltk3::Callback*)min_h_cb);
             o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-          } // Fl_Value_Input* o
+          } // fltk3::ValueInput* o
           { fltk3::Button* o = new fltk3::Button(215, 185, 25, 20, "set");
             o->labelsize(11);
             o->callback((fltk3::Callback*)set_min_size_cb);
           } // fltk3::Button* o
-          { Fl_Value_Input* o = new Fl_Value_Input(245, 185, 55, 20, "Maximum Size:");
+          { fltk3::ValueInput* o = new fltk3::ValueInput(245, 185, 55, 20, "Maximum Size:");
             o->tooltip("The maximum value of the widget.");
             o->labelsize(11);
             o->maximum(2048);
@@ -389,8 +389,8 @@ ive to the origin at construction time");
             o->textsize(11);
             o->callback((fltk3::Callback*)max_w_cb);
             o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-          } // Fl_Value_Input* o
-          { Fl_Value_Input* o = new Fl_Value_Input(305, 185, 55, 20);
+          } // fltk3::ValueInput* o
+          { fltk3::ValueInput* o = new fltk3::ValueInput(305, 185, 55, 20);
             o->tooltip("The resolution of the widget value.");
             o->labelsize(11);
             o->maximum(2048);
@@ -398,7 +398,7 @@ ive to the origin at construction time");
             o->textsize(11);
             o->callback((fltk3::Callback*)max_h_cb);
             o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-          } // Fl_Value_Input* o
+          } // fltk3::ValueInput* o
           { fltk3::Button* o = new fltk3::Button(365, 185, 25, 20, "set");
             o->labelsize(11);
             o->callback((fltk3::Callback*)set_max_size_cb);
@@ -527,7 +527,7 @@ ive to the origin at construction time");
             fltk3::Group::current()->resizable(o);
             o->menu(fontmenu);
           } // fltk3::Choice* o
-          { Fl_Value_Input* o = new Fl_Value_Input(264, 40, 50, 20);
+          { fltk3::ValueInput* o = new fltk3::ValueInput(264, 40, 50, 20);
             o->tooltip("The size of the label text.");
             o->labelsize(11);
             o->maximum(100);
@@ -535,7 +535,7 @@ ive to the origin at construction time");
             o->value(14);
             o->textsize(11);
             o->callback((fltk3::Callback*)labelsize_cb);
-          } // Fl_Value_Input* o
+          } // fltk3::ValueInput* o
           { fltk3::Button* o = new fltk3::Button(314, 40, 90, 20, "Label Color");
             o->tooltip("The color of the label text.");
             o->labelsize(11);
@@ -605,7 +605,7 @@ ive to the origin at construction time");
             fltk3::Group::current()->resizable(o);
             o->menu(fontmenu);
           } // fltk3::Choice* o
-          { Fl_Value_Input* o = new Fl_Value_Input(264, 115, 50, 20);
+          { fltk3::ValueInput* o = new fltk3::ValueInput(264, 115, 50, 20);
             o->tooltip("The value text size.");
             o->labelsize(11);
             o->maximum(100);
@@ -613,7 +613,7 @@ ive to the origin at construction time");
             o->value(14);
             o->textsize(11);
             o->callback((fltk3::Callback*)textsize_cb);
-          } // Fl_Value_Input* o
+          } // fltk3::ValueInput* o
           { fltk3::Button* o = new fltk3::Button(314, 115, 90, 20, "Text Color");
             o->tooltip("The value text color.");
             o->labelsize(11);
@@ -788,7 +788,7 @@ access the Widget pointer and \'v\' to access the user value.");
       } // fltk3::Group* o
       o->end();
       fltk3::Group::current()->resizable(o);
-    } // Fl_Tabs* o
+    } // fltk3::TabGroup* o
     { fltk3::Group* o = new fltk3::Group(9, 330, 400, 20);
       o->labelsize(11);
       { fltk3::Box* o = new fltk3::Box(9, 330, 20, 20);

@@ -34,12 +34,12 @@
 
 extern HWND fl_window;
 
-Fl_System_Printer::Fl_System_Printer(void) : Fl_Paged_Device() {
+fltk3::SystemPrinter::fltk3::SystemPrinter(void) : fltk3::PagedDevice() {
   hPr = NULL;
-  driver(Fl_Display_Device::display_device()->driver());
+  driver(fltk3::DisplayDevice::display_device()->driver());
 }
 
-Fl_System_Printer::~Fl_System_Printer(void) {
+fltk3::SystemPrinter::~Fl_System_Printer(void) {
   if (hPr) end_job();
 }
 
@@ -60,7 +60,7 @@ static void WIN_SetupPrinterDeviceContext(HDC prHDC)
 }
 
 
-int Fl_System_Printer::start_job (int pagecount, int *frompage, int *topage)
+int fltk3::SystemPrinter::start_job (int pagecount, int *frompage, int *topage)
 // returns 0 iff OK
 {
   DWORD       commdlgerr;
@@ -115,9 +115,9 @@ int Fl_System_Printer::start_job (int pagecount, int *frompage, int *topage)
   return err;
 }
 
-void Fl_System_Printer::end_job (void)
+void fltk3::SystemPrinter::end_job (void)
 {
-  Fl_Display_Device::display_device()->set_current();
+  fltk3::DisplayDevice::display_device()->set_current();
   if (hPr != NULL) {
     if (! abortPrint) {
       prerr = EndDoc (hPr);
@@ -136,7 +136,7 @@ void Fl_System_Printer::end_job (void)
   hPr = NULL;
 }
 
-void Fl_System_Printer::absolute_printable_rect(int *x, int *y, int *w, int *h)
+void fltk3::SystemPrinter::absolute_printable_rect(int *x, int *y, int *w, int *h)
 {
   POINT         physPageSize;
   POINT         pixelsPerInch;
@@ -162,7 +162,7 @@ void Fl_System_Printer::absolute_printable_rect(int *x, int *y, int *w, int *h)
   origin(x_offset, y_offset);
 }
 
-void Fl_System_Printer::margins(int *left, int *top, int *right, int *bottom)
+void fltk3::SystemPrinter::margins(int *left, int *top, int *right, int *bottom)
 {
   int x, y, w, h;
   absolute_printable_rect(&x, &y, &w, &h);
@@ -172,14 +172,14 @@ void Fl_System_Printer::margins(int *left, int *top, int *right, int *bottom)
   if (bottom) *bottom = y;
 }
 
-int Fl_System_Printer::printable_rect(int *w, int *h)
+int fltk3::SystemPrinter::printable_rect(int *w, int *h)
 {
   int x, y;
   absolute_printable_rect(&x, &y, w, h);
   return 0;
 }
 
-int Fl_System_Printer::start_page (void)
+int fltk3::SystemPrinter::start_page (void)
 {
   int  rsult, w, h;
   
@@ -199,14 +199,14 @@ int Fl_System_Printer::start_page (void)
   return rsult;
 }
 
-void Fl_System_Printer::origin (int deltax, int deltay)
+void fltk3::SystemPrinter::origin (int deltax, int deltay)
 {
   SetWindowOrgEx(fl_gc, - left_margin - deltax, - top_margin - deltay, NULL);
   x_offset = deltax;
   y_offset = deltay;
 }
 
-void Fl_System_Printer::scale (float scalex, float scaley)
+void fltk3::SystemPrinter::scale (float scalex, float scaley)
 {
   if (scaley == 0.) scaley = scalex;
   int w, h;
@@ -215,7 +215,7 @@ void Fl_System_Printer::scale (float scalex, float scaley)
   origin(0, 0);
 }
 
-void Fl_System_Printer::rotate (float rot_angle)
+void fltk3::SystemPrinter::rotate (float rot_angle)
 {
   XFORM mat;
   float angle;
@@ -228,7 +228,7 @@ void Fl_System_Printer::rotate (float rot_angle)
   SetWorldTransform(fl_gc, &mat);
 }
 
-int Fl_System_Printer::end_page (void)
+int fltk3::SystemPrinter::end_page (void)
 {
   int  rsult;
   
@@ -260,7 +260,7 @@ static void do_translate(int x, int y)
   ModifyWorldTransform(fl_gc, &tr, MWT_LEFTMULTIPLY);
 }
 
-void Fl_System_Printer::translate (int x, int y)
+void fltk3::SystemPrinter::translate (int x, int y)
 {
   do_translate(x, y);
   if (translate_stack_depth < translate_stack_max) {
@@ -270,7 +270,7 @@ void Fl_System_Printer::translate (int x, int y)
     }
 }
 
-void Fl_System_Printer::untranslate (void)
+void fltk3::SystemPrinter::untranslate (void)
 {
   if (translate_stack_depth > 0) {
     translate_stack_depth--;

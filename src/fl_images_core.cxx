@@ -75,7 +75,7 @@ fl_check_images(const char *name,		// I - Filename
 		int) {				// I - Amount of data (not used)
   if (memcmp(header, "GIF87a", 6) == 0 ||
       memcmp(header, "GIF89a", 6) == 0)	// GIF file
-    return new Fl_GIF_Image(name);
+    return new fltk3::GIFImage(name);
 
   if (memcmp(header, "BM", 2) == 0)	// BMP file
     return new Fl_BMP_Image(name);
@@ -86,7 +86,7 @@ fl_check_images(const char *name,		// I - Filename
 
 #ifdef HAVE_LIBPNG
   if (memcmp(header, "\211PNG", 4) == 0)// PNG file
-    return new Fl_PNG_Image(name);
+    return new fltk3::PNGImage(name);
 #endif // HAVE_LIBPNG
 
 #ifdef HAVE_LIBJPEG
@@ -94,7 +94,7 @@ fl_check_images(const char *name,		// I - Filename
 					// Start-of-Image
       header[3] >= 0xc0 && header[3] <= 0xef)
 	   				// APPn for JPEG file
-    return new Fl_JPEG_Image(name);
+    return new fltk3::JPEGImage(name);
 #endif // HAVE_LIBJPEG
 
   return 0;

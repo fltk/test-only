@@ -378,12 +378,12 @@ void fltk3::ScrollGroup::scroll_to(int X, int Y) {
 
 void fltk3::ScrollGroup::hscrollbar_cb(fltk3::Widget* o, void*) {
   fltk3::ScrollGroup* s = (fltk3::ScrollGroup*)(o->parent());
-  s->scroll_to(int(((Fl_Scrollbar*)o)->value()), s->yposition());
+  s->scroll_to(int(((fltk3::Scrollbar*)o)->value()), s->yposition());
 }
 
 void fltk3::ScrollGroup::scrollbar_cb(fltk3::Widget* o, void*) {
   fltk3::ScrollGroup* s = (fltk3::ScrollGroup*)(o->parent());
-  s->scroll_to(s->xposition(), int(((Fl_Scrollbar*)o)->value()));
+  s->scroll_to(s->xposition(), int(((fltk3::Scrollbar*)o)->value()));
 }
 /**
   Creates a new fltk3::ScrollGroup widget using the given position,

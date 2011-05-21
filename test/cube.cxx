@@ -163,7 +163,7 @@ void makeform(const char *name) {
 
 void print_cb(fltk3::Widget *w, void *data)
 {
-  Fl_Printer printer; // FIXME: 123
+  fltk3::Printer printer; // FIXME: 123
   fltk3::Window *win = fltk3::first_window();
   if(!win) return;
   if( printer.start_job(1) ) return;

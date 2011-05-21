@@ -29,7 +29,7 @@
 #include <fltk3/Counter.h>
 #include <fltk3/draw.h>
 
-void Fl_Counter::draw() {
+void fltk3::Counter::draw() {
   int i; fltk3::Boxtype boxtype[5];
   fltk3::Color selcolor;
 
@@ -43,7 +43,7 @@ void Fl_Counter::draw() {
       boxtype[i] = box();
 
   int xx[5], ww[5];
-  if (type() == FL_NORMAL_COUNTER) {
+  if (type() == fltk3::NORMAL_COUNTER) {
     int W = w()*15/100;
     xx[1] = x();	 ww[1] = W;
     xx[2] = x()+1*W;     ww[2] = W;
@@ -72,7 +72,7 @@ void Fl_Counter::draw() {
   else
     selcolor = fltk3::inactive(labelcolor());
 
-  if (type() == FL_NORMAL_COUNTER) {
+  if (type() == fltk3::NORMAL_COUNTER) {
     draw_box(boxtype[1], xx[1], y(), ww[1], h(), color());
     fltk3::draw_symbol("@-4<<", xx[1], y(), ww[1], h(), selcolor);
   }
@@ -80,13 +80,13 @@ void Fl_Counter::draw() {
   fltk3::draw_symbol("@-4<",  xx[2], y(), ww[2], h(), selcolor);
   draw_box(boxtype[3], xx[3], y(), ww[3], h(), color());
   fltk3::draw_symbol("@-4>",  xx[3], y(), ww[3], h(), selcolor);
-  if (type() == FL_NORMAL_COUNTER) {
+  if (type() == fltk3::NORMAL_COUNTER) {
     draw_box(boxtype[4], xx[4], y(), ww[4], h(), color());
     fltk3::draw_symbol("@-4>>", xx[4], y(), ww[4], h(), selcolor);
   }
 }
 
-void Fl_Counter::increment_cb() {
+void fltk3::Counter::increment_cb() {
   if (!mouseobj) return;
   double v = value();
   switch (mouseobj) {
@@ -101,16 +101,16 @@ void Fl_Counter::increment_cb() {
 #define INITIALREPEAT .5
 #define REPEAT .1
 
-void Fl_Counter::repeat_callback(void* v) {
-  Fl_Counter* b = (Fl_Counter*)v;
+void fltk3::Counter::repeat_callback(void* v) {
+  fltk3::Counter* b = (fltk3::Counter*)v;
   if (b->mouseobj) {
     fltk3::add_timeout(REPEAT, repeat_callback, b);
     b->increment_cb();
   }
 }
 
-int Fl_Counter::calc_mouseobj() {
-  if (type() == FL_NORMAL_COUNTER) {
+int fltk3::Counter::calc_mouseobj() {
+  if (type() == fltk3::NORMAL_COUNTER) {
     int W = w()*15/100;
     if (fltk3::event_inside(x(), y(), W, h())) return 1;
     if (fltk3::event_inside(x()+W, y(), W, h())) return 2;
@@ -124,7 +124,7 @@ int Fl_Counter::calc_mouseobj() {
   return -1;
 }
 
-int Fl_Counter::handle(int event) {
+int fltk3::Counter::handle(int event) {
   int i;
   switch (event) {
   case fltk3::RELEASE:
@@ -182,17 +182,17 @@ int Fl_Counter::handle(int event) {
 /**
   Destroys the valuator.
  */
-Fl_Counter::~Fl_Counter() {
+fltk3::Counter::~Counter() {
   fltk3::remove_timeout(repeat_callback, this);
 }
 
 /**
-  Creates a new Fl_Counter widget using the given position, size, and label
-  string. The default type is FL_NORMAL_COUNTER.
+  Creates a new fltk3::Counter widget using the given position, size, and label
+  string. The default type is fltk3::NORMAL_COUNTER.
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
  */
-Fl_Counter::Fl_Counter(int X, int Y, int W, int H, const char* L)
+fltk3::Counter::Counter(int X, int Y, int W, int H, const char* L)
   : fltk3::Valuator(X, Y, W, H, L) {
   box(fltk3::UP_BOX);
   selection_color(fltk3::INACTIVE_COLOR); // was fltk3::BLUE

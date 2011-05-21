@@ -183,7 +183,7 @@ Fl_Font_Descriptor::~Fl_Font_Descriptor() {
 // }
 #endif
   */
-  if (this == fl_graphics_driver->font_descriptor()) fl_graphics_driver->font_descriptor(NULL);
+  if (this == fltk3::graphics_driver->font_descriptor()) fltk3::graphics_driver->font_descriptor(NULL);
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
   if (fl_mac_os_version >= 100500)  {
     CFRelease(fontref);
@@ -249,22 +249,22 @@ static Fl_Font_Descriptor* find(fltk3::Font fnum, fltk3::Fontsize size) {
 ////////////////////////////////////////////////////////////////
 // Public interface:
 
-void Fl_Quartz_Graphics_Driver::font(fltk3::Font fnum, fltk3::Fontsize size) {
+void fltk3::QuartzGraphicsDriver::font(fltk3::Font fnum, fltk3::Fontsize size) {
   if (fnum==-1) {
-    Fl_Graphics_Driver::font(0, 0);
+    fltk3::GraphicsDriver::font(0, 0);
     return;
   }
-  Fl_Graphics_Driver::font(fnum, size);
+  fltk3::GraphicsDriver::font(fnum, size);
   this->font_descriptor( find(fnum, size) );
 }
 
-int Fl_Quartz_Graphics_Driver::height() {
+int fltk3::QuartzGraphicsDriver::height() {
   if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
   Fl_Font_Descriptor *fontsize = font_descriptor();
   return fontsize->ascent + fontsize->descent;
 }
 
-int Fl_Quartz_Graphics_Driver::descent() {
+int fltk3::QuartzGraphicsDriver::descent() {
   if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
   Fl_Font_Descriptor *fontsize = font_descriptor();
   return fontsize->descent+1;
@@ -373,14 +373,14 @@ if (fl_mac_os_version >= 100500) {
   return 0;
 }
 
-double Fl_Quartz_Graphics_Driver::width(const char* txt, int n) {
+double fltk3::QuartzGraphicsDriver::width(const char* txt, int n) {
   int wc_len = n;
   UniChar *uniStr = mac_Utf8_to_Utf16(txt, n, &wc_len);
   if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
   return fl_mac_width(uniStr, wc_len, font_descriptor());
 }
 
-double Fl_Quartz_Graphics_Driver::width(unsigned int wc) {
+double fltk3::QuartzGraphicsDriver::width(unsigned int wc) {
   if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
 
   UniChar utf16[3];
@@ -398,7 +398,7 @@ double Fl_Quartz_Graphics_Driver::width(unsigned int wc) {
 }
 
 // text extent calculation
-void Fl_Quartz_Graphics_Driver::text_extents(const char *str8, int n, int &dx, int &dy, int &w, int &h) {
+void fltk3::QuartzGraphicsDriver::text_extents(const char *str8, int n, int &dx, int &dy, int &w, int &h) {
   if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
   Fl_Font_Descriptor *fontsize = font_descriptor();
   UniChar *txt = mac_Utf8_to_Utf16(str8, n, &n);
@@ -467,7 +467,7 @@ static CGColorRef flcolortocgcolor(fltk3::Color i)
 }
 #endif
 
-static void fl_mac_draw(const char *str, int n, float x, float y, Fl_Graphics_Driver *driver) {
+static void fl_mac_draw(const char *str, int n, float x, float y, fltk3::GraphicsDriver *driver) {
   // convert to UTF-16 first
   UniChar *uniStr = mac_Utf8_to_Utf16(str, n, &n);
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
@@ -510,19 +510,19 @@ static void fl_mac_draw(const char *str, int n, float x, float y, Fl_Graphics_Dr
 #endif
 }
 
-void Fl_Quartz_Graphics_Driver::draw(const char *str, int n, float x, float y) {
+void fltk3::QuartzGraphicsDriver::draw(const char *str, int n, float x, float y) {
   // avoid a crash if no font has been selected by user yet !
   if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
   fl_mac_draw(str, n, x, y, this);
 }
 
-void Fl_Quartz_Graphics_Driver::draw(const char* str, int n, int x, int y) {
+void fltk3::QuartzGraphicsDriver::draw(const char* str, int n, int x, int y) {
   // avoid a crash if no font has been selected by user yet !
   if (!font_descriptor()) font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
   fl_mac_draw(str, n, (float)x-0.0f, (float)y+0.5f, this);
 }
 
-void Fl_Quartz_Graphics_Driver::draw(int angle, const char *str, int n, int x, int y) {
+void fltk3::QuartzGraphicsDriver::draw(int angle, const char *str, int n, int x, int y) {
   CGContextSaveGState(fl_gc);
   CGContextTranslateCTM(fl_gc, x, y);
   CGContextRotateCTM(fl_gc, - angle*(M_PI/180) );
@@ -530,7 +530,7 @@ void Fl_Quartz_Graphics_Driver::draw(int angle, const char *str, int n, int x, i
   CGContextRestoreGState(fl_gc);
 }
 
-void Fl_Quartz_Graphics_Driver::rtl_draw(const char* c, int n, int x, int y) {
+void fltk3::QuartzGraphicsDriver::rtl_draw(const char* c, int n, int x, int y) {
   int dx, dy, w, h;
   text_extents(c, n, dx, dy, w, h);
   draw(c, n, x - w - dx, y);

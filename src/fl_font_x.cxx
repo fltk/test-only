@@ -52,8 +52,8 @@ Fl_Font_Descriptor::~Fl_Font_Descriptor() {
 //  glDeleteLists(listbase+base,size);
 // }
 #  endif
-  if (this == fl_graphics_driver->font_descriptor()) {
-    fl_graphics_driver->font_descriptor(NULL);
+  if (this == fltk3::graphics_driver->font_descriptor()) {
+    fltk3::graphics_driver->font_descriptor(NULL);
     fl_xfont = 0;
   }
   XFreeUtf8FontStruct(fl_display, font);
@@ -266,11 +266,11 @@ XFontStruct* Fl_XFont_On_Demand::value() {
 
 void Fl_Xlib_Graphics_Driver::font(fltk3::Font fnum, fltk3::Fontsize size) {
   if (fnum==-1) {
-    Fl_Graphics_Driver::font(0, 0);
+    fltk3::GraphicsDriver::font(0, 0);
     return;
   }
-  if (fnum == Fl_Graphics_Driver::font() && size == Fl_Graphics_Driver::size()) return;
-  Fl_Graphics_Driver::font(fnum, size);
+  if (fnum == fltk3::GraphicsDriver::font() && size == fltk3::GraphicsDriver::size()) return;
+  fltk3::GraphicsDriver::font(fnum, size);
   Fl_Font_Descriptor* f = find(fnum, size);
   if (f != this->font_descriptor()) {
     this->font_descriptor(f);

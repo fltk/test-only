@@ -32,6 +32,7 @@
 #include <fltk3/x.h>
 #include <fltk3/draw.h>
 
+
 // On systems that support double buffering "naturally" the base
 // fltk3::Window class will probably do double-buffer and this subclass
 // does nothing.
@@ -80,7 +81,7 @@ static void fl_copy_offscreen_to_display(int x, int y, int w, int h, Fl_Offscree
  \param srcx,srcy origin in offscreen buffer of rectangle to copy
  */
 void fl_copy_offscreen(int x, int y, int w, int h, Fl_Offscreen pixmap, int srcx, int srcy) {
-  if (fl_graphics_driver == Fl_Display_Device::display_device()->driver()) {
+  if (fltk3::graphics_driver == fltk3::DisplayDevice::display_device()->driver()) {
     fl_copy_offscreen_to_display(x, y, w, h, pixmap, srcx, srcy);
   }
   else { // when copy is not to the display
@@ -183,8 +184,8 @@ void fl_copy_offscreen_with_alpha(int x,int y,int w,int h,HBITMAP bitmap,int src
   BOOL alpha_ok = 0;
   // first try to alpha blend
   // if to printer, always try alpha_blend
-  int to_display = Fl_Surface_Device::surface()->class_name() == Fl_Display_Device::class_id; // true iff display output
-  if ( (to_display && fltk3::can_do_alpha_blending()) || Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id) {
+  int to_display = fltk3::SurfaceDevice::surface()->class_name() == fltk3::DisplayDevice::class_id; // true iff display output
+  if ( (to_display && fltk3::can_do_alpha_blending()) || fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) {
     alpha_ok = fl_alpha_blend(fl_gc, x, y, w, h, new_gc, srcx, srcy, w, h, blendfunc);
   }
   // if that failed (it shouldn't), still copy the bitmap over, but now alpha is 1
@@ -274,14 +275,14 @@ const int stack_max = 16;
 static int stack_ix = 0;
 static CGContextRef stack_gc[stack_max];
 static Window stack_window[stack_max];
-static Fl_Surface_Device *_ss;
+static fltk3::SurfaceDevice *_ss;
 
 /**  Send all subsequent drawing commands to this offscreen buffer.
  \param ctx     the offscreen buffer.
  */
 void fl_begin_offscreen(Fl_Offscreen ctx) {
-  _ss = Fl_Surface_Device::surface(); 
-  Fl_Display_Device::display_device()->set_current();
+  _ss = fltk3::SurfaceDevice::surface(); 
+  fltk3::DisplayDevice::display_device()->set_current();
   if (stack_ix<stack_max) {
     stack_gc[stack_ix] = fl_gc;
     stack_window[stack_ix] = fl_window;
@@ -313,7 +314,9 @@ void fl_end_offscreen() {
 
 /** @} */
 
-extern void fltk3::restore_clip();
+namespace fltk3 {
+  extern void restore_clip();
+}
 
 #else
 # error unsupported platform

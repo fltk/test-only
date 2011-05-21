@@ -84,7 +84,7 @@ namespace fltk3 {
   
   void draw(const char* str, int l, float x, float y) {
 #ifdef __APPLE__
-    fl_graphics_driver->draw(str, l, x, y);
+    fltk3::graphics_driver->draw(str, l, x, y);
 #else
     fltk3::draw(str, l, (int)x, (int)y);
 #endif

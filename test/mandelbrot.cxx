@@ -47,7 +47,7 @@ static void window_callback(Fl_Widget*, void*) {exit(0);}
 
 static void print(Fl_Widget *o, void *data)
 {
-  Fl_Printer printer;
+  fltk3::Printer printer;
   Fl_Window *win = o->window();
   if(!win->visible()) return;
   win->make_current();

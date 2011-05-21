@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_Wizard widget routines.
+// fltk3::WizardGroup widget routines.
 //
 // Copyright 1997-2010 by Easy Software Products.
 //
@@ -27,12 +27,12 @@
 // Contents:
 
 //
-//   Fl_Wizard::Fl_Wizard() - Create an Fl_Wizard widget.
-//   Fl_Wizard::draw()      - Draw the wizard border and visible child.
-//   Fl_Wizard::next()      - Show the next child.
-//   Fl_Wizard::prev()      - Show the previous child.
-//   Fl_Wizard::value()     - Return the current visible child.
-//   Fl_Wizard::value()     - Set the visible child.
+//   fltk3::WizardGroup::fltk3::WizardGroup() - Create an fltk3::WizardGroup widget.
+//   fltk3::WizardGroup::draw()      - Draw the wizard border and visible child.
+//   fltk3::WizardGroup::next()      - Show the next child.
+//   fltk3::WizardGroup::prev()      - Show the previous child.
+//   fltk3::WizardGroup::value()     - Return the current visible child.
+//   fltk3::WizardGroup::value()     - Set the visible child.
 //
 
 //
@@ -45,15 +45,15 @@
 
 
 //
-// 'Fl_Wizard::Fl_Wizard()' - Create an Fl_Wizard widget.
+// 'fltk3::WizardGroup::fltk3::WizardGroup()' - Create an fltk3::WizardGroup widget.
 //
 
 /**
-  The constructor creates the Fl_Wizard widget at the specified
+  The constructor creates the fltk3::WizardGroup widget at the specified
   position and size.
   <P>The inherited destructor destroys the widget and its children.
 */
-Fl_Wizard::Fl_Wizard(int        xx,	// I - Lefthand position
+fltk3::WizardGroup::WizardGroup(int        xx,	// I - Lefthand position
                      int        yy,	// I - Upper position
 		     int        ww,	// I - Width
 		     int        hh,	// I - Height
@@ -68,7 +68,7 @@ Fl_Wizard::Fl_Wizard(int        xx,	// I - Lefthand position
 
 //
 /** Draws the wizard border and visible child. */
-void Fl_Wizard::draw() {
+void fltk3::WizardGroup::draw() {
   fltk3::Widget	*kid;	// Visible child
 
 
@@ -95,7 +95,7 @@ void Fl_Wizard::draw() {
   This method shows the next child of the wizard. If the last child
   is already visible, this function does nothing.
 */
-void Fl_Wizard::next() {
+void fltk3::WizardGroup::next() {
   int			num_kids;
   fltk3::Widget	* const *kids;
 
@@ -112,7 +112,7 @@ void Fl_Wizard::next() {
 }
 
 /** Shows the previous child.*/
-void Fl_Wizard::prev()
+void fltk3::WizardGroup::prev()
 {
   int			num_kids;
   fltk3::Widget	* const *kids;
@@ -130,7 +130,7 @@ void Fl_Wizard::prev()
 }
 
 /**  Gets the current visible child widget. */
-fltk3::Widget* Fl_Wizard::value()
+fltk3::Widget* fltk3::WizardGroup::value()
 {
   int			num_kids;
   fltk3::Widget	* const *kids;
@@ -162,7 +162,7 @@ fltk3::Widget* Fl_Wizard::value()
 }
 
 /**  Sets the child widget that is visible.*/
-void Fl_Wizard::value(fltk3::Widget *kid)
+void fltk3::WizardGroup::value(fltk3::Widget *kid)
 {
   int			num_kids;
   fltk3::Widget	* const *kids;

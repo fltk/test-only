@@ -47,11 +47,11 @@
 #    include <dlfcn.h>
 #  endif // HAVE_DLFCN_H
 #  define MAXWINDOWS 32
-static Fl_Glut_Window *windows[MAXWINDOWS+1];
+static fltk3::GlutWindow *windows[MAXWINDOWS+1];
 
 static void (*glut_idle_func)() = 0; // global glut idle function
 
-Fl_Glut_Window *glut_window;
+fltk3::GlutWindow *glut_window;
 int glut_menu;
 void (*glut_menustate_function)(int);
 void (*glut_menustatus_function)(int,int,int);
@@ -59,13 +59,13 @@ void (*glut_menustatus_function)(int,int,int);
 static void default_reshape(int w, int h) {glViewport(0,0,w,h);}
 static void default_display() {}
 
-void Fl_Glut_Window::make_current() {
+void fltk3::GlutWindow::make_current() {
   glut_window = this;
   if (shown()) fltk3::GlWindow::make_current();
 }
 
 static int indraw;
-void Fl_Glut_Window::draw() {
+void fltk3::GlutWindow::draw() {
   glut_window = this;
   indraw = 1;
   if (!valid()) {reshape(w(),h()); valid(1);}
@@ -77,7 +77,7 @@ void glutSwapBuffers() {
   if (!indraw) glut_window->swap_buffers();
 }
 
-void Fl_Glut_Window::draw_overlay() {
+void fltk3::GlutWindow::draw_overlay() {
   glut_window = this;
   if (!valid()) {reshape(w(),h()); valid(1);}
   overlaydisplay();
@@ -85,7 +85,7 @@ void Fl_Glut_Window::draw_overlay() {
 
 static void domenu(int, int, int);
 
-int Fl_Glut_Window::handle(int event) {
+int fltk3::GlutWindow::handle(int event) {
   make_current();
   int ex = fltk3::event_x();
   int ey = fltk3::event_y();
@@ -169,7 +169,7 @@ int Fl_Glut_Window::handle(int event) {
 
 static int glut_mode = GLUT_RGB | GLUT_SINGLE | GLUT_DEPTH;
 
-void Fl_Glut_Window::_init() {
+void fltk3::GlutWindow::_init() {
   for (number=1; number<MAXWINDOWS; number++) if (!windows[number]) break;
   windows[number] = this;
   menu[0] = menu[1] = menu[2] = 0;
@@ -188,11 +188,11 @@ void Fl_Glut_Window::_init() {
 }
 
 /** Creates a glut window, registers to the glut windows list.*/
-Fl_Glut_Window::Fl_Glut_Window(int W, int H, const char *t) :
+fltk3::GlutWindow::GlutWindow(int W, int H, const char *t) :
   fltk3::GlWindow(W,H,t) {_init();}
 
 /** Creates a glut window, registers to the glut windows list.*/
-Fl_Glut_Window::Fl_Glut_Window(int X,int Y,int W,int H, const char *t) :
+fltk3::GlutWindow::GlutWindow(int X,int Y,int W,int H, const char *t) :
   fltk3::GlWindow(X,Y,W,H,t) {_init();}
 
 static int initargc;
@@ -234,12 +234,12 @@ int glutCreateWindow(char *title) {
 }
 
 int glutCreateWindow(const char *title) {
-  Fl_Glut_Window *W;
+  fltk3::GlutWindow *W;
   if (initpos) {
-    W = new Fl_Glut_Window(initx,inity,initw,inith,title);
+    W = new fltk3::GlutWindow(initx,inity,initw,inith,title);
     initpos = 0;
   } else {
-    W = new Fl_Glut_Window(initw,inith,title);
+    W = new fltk3::GlutWindow(initw,inith,title);
   }
   W->resizable(W);
   if (initargc) {
@@ -255,14 +255,14 @@ int glutCreateWindow(const char *title) {
 }
 
 int glutCreateSubWindow(int win, int x, int y, int w, int h) {
-  Fl_Glut_Window *W = new Fl_Glut_Window(x,y,w,h,0);
+  fltk3::GlutWindow *W = new fltk3::GlutWindow(x,y,w,h,0);
   windows[win]->add(W);
   if (windows[win]->shown()) W->show();
   W->make_current();
   return W->number;
 }
 /** Destroys the glut window, first unregister it from the glut windows list */
-Fl_Glut_Window::~Fl_Glut_Window() {
+fltk3::GlutWindow::~GlutWindow() {
   if (glut_window == this) glut_window = 0;
   windows[number] = 0;
 }
@@ -390,7 +390,7 @@ int glutGet(GLenum type) {
   case GLUT_WINDOW_HEIGHT: return glut_window->h();
   case GLUT_WINDOW_PARENT:
     if (glut_window->parent())
-      return ((Fl_Glut_Window *)(glut_window->parent()))->number;
+      return ((fltk3::GlutWindow *)(glut_window->parent()))->number;
     else
       return 0;
 //case GLUT_WINDOW_NUM_CHILDREN:

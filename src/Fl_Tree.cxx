@@ -106,7 +106,7 @@ fltk3::Tree::Tree(int X, int Y, int W, int H, const char *L) : fltk3::Group(X,Y,
   box(fltk3::DOWN_BOX);
   color(fltk3::BACKGROUND2_COLOR, fltk3::SELECTION_COLOR);
   when(fltk3::WHEN_CHANGED);
-  _vscroll = new Fl_Scrollbar(0,0,0,0);		// will be resized by draw()
+  _vscroll = new fltk3::Scrollbar(0,0,0,0);		// will be resized by draw()
   _vscroll->hide();
   _vscroll->type(fltk3::VERTICAL);
   _vscroll->step(1);

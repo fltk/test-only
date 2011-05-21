@@ -44,18 +44,18 @@
 #include <fltk3/Window.h>
 #include <fltk3/x.h>
 #include <fltk3/draw.h>
-#include "Fl_Gl_Choice.H"
+#include "fltk3::GlChoice.H"
 
 static GLContext context;
 static int clip_state_number=-1;
 static int pw, ph;
 
 #ifdef WIN32
-static Fl_Gl_Choice* gl_choice;
+static fltk3::GlChoice* gl_choice;
 #endif
 
 #ifdef __APPLE__
-static Fl_Gl_Choice* gl_choice;
+static fltk3::GlChoice* gl_choice;
 #endif
 
 Fl_Region XRectangleRegion(int x, int y, int w, int h); // in fltk3::rect.cxx
@@ -87,8 +87,8 @@ void gl_start() {
     glOrtho(0, pw, 0, ph, -1, 1);
     glDrawBuffer(GL_FRONT);
   }
-  if (clip_state_number != fl_graphics_driver->fl_clip_state_number) {
-    clip_state_number = fl_graphics_driver->fl_clip_state_number;
+  if (clip_state_number != fltk3::graphics_driver->fl_clip_state_number) {
+    clip_state_number = fltk3::graphics_driver->fl_clip_state_number;
     int x, y, w, h;
     if (fltk3::clip_box(0, 0, fltk3::Window::current()->w(), fltk3::Window::current()->h(),
 		    x, y, w, h)) {
@@ -110,7 +110,7 @@ void gl_finish() {
 }
 
 int fltk3::gl_visual(int mode, int *alist) {
-  Fl_Gl_Choice *c = Fl_Gl_Choice::find(mode,alist);
+  fltk3::GlChoice *c = fltk3::GlChoice::find(mode,alist);
   if (!c) return 0;
 #if defined(USE_X11)
   fl_visual = c->vis;

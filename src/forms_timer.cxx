@@ -69,7 +69,7 @@ void fl_gettime(long* sec, long* usec) {
 #endif
 }
 
-void Fl_Timer::draw() {
+void fltk3::Timer::draw() {
   int tt;
   fltk3::Color col;
   char str[32];
@@ -80,7 +80,7 @@ void Fl_Timer::draw() {
   else
     col = selection_color();
   draw_box(box(), col);
-  if (type() == FL_VALUE_TIMER && delay>0.0) {
+  if (type() == fltk3::VALUE_TIMER && delay>0.0) {
     double d = direction_ ? total-delay : delay;
     if (d < 60.0)
       sprintf(str, "%.1f", d);
@@ -95,18 +95,18 @@ void Fl_Timer::draw() {
     draw_label();
 }
 
-void Fl_Timer::stepcb(void* v) {
-  ((Fl_Timer*)v)->step();
+void fltk3::Timer::stepcb(void* v) {
+  ((fltk3::Timer*)v)->step();
 }
 
-void Fl_Timer::step() {
+void fltk3::Timer::step() {
   if (!on) return;
   double lastdelay = delay;
   long sec, usec; fl_gettime(&sec, &usec);
   delay -= (double) (sec - lastsec) + (double) (usec - lastusec) / 1000000.0;
   lastsec = sec; lastusec = usec;
   if (lastdelay > 0.0 && delay <= 0.0) {
-    if (type() == FL_HIDDEN_TIMER) {
+    if (type() == fltk3::HIDDEN_TIMER) {
       on = 0;
       delay = 0;
     } else {
@@ -116,12 +116,12 @@ void Fl_Timer::step() {
     set_changed();
     do_callback();
   } else {
-    if (type() == FL_VALUE_TIMER) redraw();
+    if (type() == fltk3::VALUE_TIMER) redraw();
     fltk3::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
   }
 }
 
-int Fl_Timer::handle(int event) {
+int fltk3::Timer::handle(int event) {
   if (event == fltk3::RELEASE && delay <= 0) value(0.0);
   return 0;
 }
@@ -129,23 +129,23 @@ int Fl_Timer::handle(int event) {
 /**
  Destroys the timer and removes the timeout.
 */
-Fl_Timer::~Fl_Timer() {
+fltk3::Timer::~Timer() {
   fltk3::remove_timeout(stepcb, this);
 }
 
 /**
-  Creates a new Fl_Timer widget using the given type, position,
+  Creates a new fltk3::Timer widget using the given type, position,
   size, and label string. The type parameter can be any of the
   following symbolic constants:
 
-  \li	FL_NORMAL_TIMER - The timer just does the callback and
+  \li	fltk3::NORMAL_TIMER - The timer just does the callback and
 	displays the string "Timer" in the widget.
-  \li	FL_VALUE_TIMER - The timer does the callback and displays
+  \li	fltk3::VALUE_TIMER - The timer does the callback and displays
 	the current timer value in the widget.
-  \li	FL_HIDDEN_TIMER - The timer just does the callback and
+  \li	fltk3::HIDDEN_TIMER - The timer just does the callback and
 	does not display anything.
 */
-Fl_Timer::Fl_Timer(uchar t, int X, int Y, int W, int H, const char* l)
+fltk3::Timer::Timer(uchar t, int X, int Y, int W, int H, const char* l)
 
 : fltk3::Widget(X, Y, W, H, l) {
   box(fltk3::DOWN_BOX);
@@ -154,21 +154,21 @@ Fl_Timer::Fl_Timer(uchar t, int X, int Y, int W, int H, const char* l)
   on = 0;
   direction_ = 0;
   type(t);
-  if (t == FL_HIDDEN_TIMER) clear_visible();
-  if (t == FL_VALUE_TIMER) align(fltk3::ALIGN_LEFT);
+  if (t == fltk3::HIDDEN_TIMER) clear_visible();
+  if (t == fltk3::VALUE_TIMER) align(fltk3::ALIGN_LEFT);
 }
 /** Sets the current timer value */
-void Fl_Timer::value(double d) {
+void fltk3::Timer::value(double d) {
   delay = total = d;
   on = (d > 0.0);
   fl_gettime(&(lastsec), &(lastusec));
-  if (type() != FL_HIDDEN_TIMER) redraw();
+  if (type() != fltk3::HIDDEN_TIMER) redraw();
   fltk3::remove_timeout(stepcb, this);
   if (on) fltk3::add_timeout(FL_TIMER_BLINKRATE, stepcb, this);
 }
 
 /** Gets or sets whether the timer is suspended.*/
-void Fl_Timer::suspended(char d) {
+void fltk3::Timer::suspended(char d) {
   if (!d) {
     if (on) return;
     on = (delay > 0.0);

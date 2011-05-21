@@ -247,7 +247,7 @@ namespace fltk3 {
      This must be called before the window is shown and cannot be changed
      later.
      
-     \note Since Fl_Tooltip_Window is derived from Fl_Menu_Window, this
+     \note Since Fl_Tooltip_Window is derived from fltk3::MenuWindow, this
      also \b clears the menu_window() state.
      */
     void set_tooltip_window() { 

@@ -56,7 +56,7 @@ void fl_quartz_restore_line_style_() {
 }
 #endif
 
-void Fl_Graphics_Driver::line_style(int style, int width, char* dashes) {
+void fltk3::GraphicsDriver::line_style(int style, int width, char* dashes) {
 
   // save line width in global variable for X11 clipping
   if (width == 0) fl_line_width_ = 1;
@@ -127,7 +127,7 @@ void Fl_Graphics_Driver::line_style(int style, int width, char* dashes) {
   fl_quartz_line_width_ = (float)width; 
   fl_quartz_line_cap_ = Cap[(style>>8)&3];
   // when printing kCGLineCapSquare seems better for solid lines
-  if ( Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id && style == fltk3::SOLID && dashes == NULL ) {
+  if ( fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id && style == fltk3::SOLID && dashes == NULL ) {
     fl_quartz_line_cap_ = kCGLineCapSquare;
     }
   fl_quartz_line_join_ = Join[(style>>12)&3];

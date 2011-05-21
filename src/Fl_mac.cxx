@@ -1010,13 +1010,13 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
       if ( part == inGrow ) {
         fl_unlock_function();
         suppressed = 1;
-        Fl_Tooltip::current(0L);
+        fltk3::Tooltip::current(0L);
         return CallNextEventHandler( nextHandler, event ); // let the OS handle this for us
       }
       if ( part != inContent ) {
         fl_unlock_function();
         suppressed = 1;
-        Fl_Tooltip::current(0L);
+        fltk3::Tooltip::current(0L);
         // anything else to here?
         return CallNextEventHandler( nextHandler, event ); // let the OS handle this for us
       }
@@ -2295,7 +2295,7 @@ void Fl_X::make(fltk3::Window* w)
     if (w->size_range_set) w->size_range_();
     
     if (winclass != kHelpWindowClass) {
-      Fl_Tooltip::enter(0);
+      fltk3::Tooltip::enter(0);
     }
     if (w->size_range_set) w->size_range_();
     ShowWindow(x->xid);
@@ -2379,7 +2379,7 @@ void fltk3::Window::show() {
   } else {
     labeltype(fltk3::NO_LABEL);
   }
-  Fl_Tooltip::exit(this);
+  fltk3::Tooltip::exit(this);
   if (!shown() || !i) {
     Fl_X::make(this);
   } else {

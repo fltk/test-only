@@ -416,24 +416,24 @@ public:
   igroup(int X,int Y,int W,int H) : fltk3::Group(X,Y,W,H) {fltk3::Group::current(0);}
 };
 
-class itabs : public Fl_Tabs {
+class itabs : public fltk3::TabGroup {
 public:
   void resize(int,int,int,int);
   void full_resize(int X, int Y, int W, int H) { fltk3::Group::resize(X, Y, W, H); }
-  itabs(int X,int Y,int W,int H) : Fl_Tabs(X,Y,W,H) {}
+  itabs(int X,int Y,int W,int H) : fltk3::TabGroup(X,Y,W,H) {}
 };
 
-class iwizard : public Fl_Wizard {
+class iwizard : public fltk3::WizardGroup {
 public:
   void resize(int,int,int,int);
   void full_resize(int X, int Y, int W, int H) { fltk3::Group::resize(X, Y, W, H); }
-  iwizard(int X,int Y,int W,int H) : Fl_Wizard(X,Y,W,H) {}
+  iwizard(int X,int Y,int W,int H) : fltk3::WizardGroup(X,Y,W,H) {}
 };
 
 class Fl_Group_Type : public Fl_Widget_Type {
 public:
   virtual const char *type_name() {return "fltk3::Group";}
-  virtual const char *alt_type_name() {return "fltk::Group";}
+  virtual const char *alt_type_name() {return "fltk3::Group";}
   fltk3::Widget *widget(int X,int Y,int W,int H) {
     igroup *g = new igroup(X,Y,W,H); fltk3::Group::current(0); return g;}
   Fl_Widget_Type *_make() {return new Fl_Group_Type();}
@@ -470,7 +470,7 @@ extern const char table_type_name[];
 class Fl_Table_Type : public Fl_Group_Type {
 public:
   virtual const char *type_name() {return table_type_name;}
-  virtual const char *alt_type_name() {return "fltk::TableGroup";}
+  virtual const char *alt_type_name() {return "fltk3::TableGroup";}
   Fl_Widget_Type *_make() {return new Fl_Table_Type();}
   fltk3::Widget *widget(int X,int Y,int W,int H);
   int pixmapID() { return 51; }
@@ -490,7 +490,7 @@ public:
      y = fltk3::height() + o->labelsize() - 6;
   }
   virtual const char *type_name() {return tabs_type_name;}
-  virtual const char *alt_type_name() {return "fltk::TabGroup";}
+  virtual const char *alt_type_name() {return "fltk3::TabGroup";}
   fltk3::Widget *widget(int X,int Y,int W,int H) {
     itabs *g = new itabs(X,Y,W,H); fltk3::Group::current(0); return g;}
   Fl_Widget_Type *_make() {return new Fl_Tabs_Type();}
@@ -508,7 +508,7 @@ class Fl_Scroll_Type : public Fl_Group_Type {
   fltk3::MenuItem *subtypes() {return scroll_type_menu;}
 public:
   virtual const char *type_name() {return scroll_type_name;}
-  virtual const char *alt_type_name() {return "fltk::ScrollGroup";}
+  virtual const char *alt_type_name() {return "fltk3::ScrollGroup";}
   Fl_Widget_Type *_make() {return new Fl_Scroll_Type();}
   int pixmapID() { return 19; }
   fltk3::Widget *enter_live_mode(int top=0);
@@ -520,7 +520,7 @@ extern const char tile_type_name[];
 class Fl_Tile_Type : public Fl_Group_Type {
 public:
   virtual const char *type_name() {return tile_type_name;}
-  virtual const char *alt_type_name() {return "fltk::TileGroup";}
+  virtual const char *alt_type_name() {return "fltk3::TileGroup";}
   Fl_Widget_Type *_make() {return new Fl_Tile_Type();}
   int pixmapID() { return 20; }
   void copy_properties();
@@ -531,7 +531,7 @@ extern const char wizard_type_name[];
 class Fl_Wizard_Type : public Fl_Group_Type {
 public:
   virtual const char *type_name() {return wizard_type_name;}
-  virtual const char *alt_type_name() {return "fltk::WizardGroup";}
+  virtual const char *alt_type_name() {return "fltk3::WizardGroup";}
   fltk3::Widget *widget(int X,int Y,int W,int H) {
     iwizard *g = new iwizard(X,Y,W,H); fltk3::Group::current(0); return g;}
   Fl_Widget_Type *_make() {return new Fl_Wizard_Type();}
@@ -631,7 +631,7 @@ class Fl_Menu_Item_Type : public Fl_Widget_Type {
 public:
   fltk3::MenuItem* subtypes() {return menu_item_type_menu;}
   const char* type_name() {return "MenuItem";}
-  const char* alt_type_name() {return "fltk::Item";}
+  const char* alt_type_name() {return "fltk3::Item";}
   Fl_Type* make();
   int is_menu_item() const {return 1;}
   int is_button() const {return 1;} // this gets shortcut to work
@@ -650,7 +650,7 @@ class Fl_Submenu_Type : public Fl_Menu_Item_Type {
 public:
   fltk3::MenuItem* subtypes() {return 0;}
   const char* type_name() {return "Submenu";}
-  const char* alt_type_name() {return "fltk::ItemGroup";}
+  const char* alt_type_name() {return "fltk3::ItemGroup";}
   int is_parent() const {return 1;}
   int is_button() const {return 0;} // disable shortcut
   Fl_Type* make();
@@ -707,7 +707,7 @@ public:
     if (w < (15 + h)) w = 15 + h;
   }
   virtual const char *type_name() {return "fltk3::MenuButton";}
-  virtual const char *alt_type_name() {return "fltk::MenuButton";}
+  virtual const char *alt_type_name() {return "fltk3::MenuButton";}
   fltk3::Widget *widget(int X,int Y,int W,int H) {
     return new fltk3::MenuButton(X,Y,W,H,"menu");}
   Fl_Widget_Type *_make() {return new Fl_Menu_Button_Type();}
@@ -731,7 +731,7 @@ public:
     if (w < (15 + h)) w = 15 + h;
   }
   virtual const char *type_name() {return "fltk3::Choice";}
-  virtual const char *alt_type_name() {return "fltk::Choice";}
+  virtual const char *alt_type_name() {return "fltk3::Choice";}
   fltk3::Widget *widget(int X,int Y,int W,int H) {
     fltk3::Choice *myo = new fltk3::Choice(X,Y,W,H,"choice:");
     myo->menu(dummymenu);
@@ -766,7 +766,7 @@ public:
     if (w < (15 + h)) w = 15 + h;
   }
   virtual const char *type_name() {return "fltk3::InputChoice";}
-  virtual const char *alt_type_name() {return "fltk::ComboBox";}
+  virtual const char *alt_type_name() {return "fltk3::ComboBox";}
   virtual Fl_Type* click_test(int,int);
   fltk3::Widget *widget(int X,int Y,int W,int H) {
     fltk3::InputChoice *myo = new fltk3::InputChoice(X,Y,W,H,"input choice:");
@@ -790,7 +790,7 @@ public:
     if (h < 15) h = 15;
   }
   virtual const char *type_name() {return "fltk3::MenuBar";}
-  virtual const char *alt_type_name() {return "fltk::MenuBar";}
+  virtual const char *alt_type_name() {return "fltk3::MenuBar";}
   fltk3::Widget *widget(int X,int Y,int W,int H) {return new fltk3::MenuBar(X,Y,W,H);}
   Fl_Widget_Type *_make() {return new Fl_Menu_Bar_Type();}
   int pixmapID() { return 17; }
@@ -849,10 +849,10 @@ extern int use_FL_COMMAND;
 /*
  * This class is needed for additional command line plugins.
  */
-class Fl_Commandline_Plugin : public Fl_Plugin {
+class Fl_Commandline_Plugin : public fltk3::Plugin {
 public:
   Fl_Commandline_Plugin(const char *name)
-  : Fl_Plugin(klass(), name) { }
+  : fltk3::Plugin(klass(), name) { }
   virtual const char *klass() { return "commandline"; }
   // return a unique name for this plugin
   virtual const char *name() = 0;

@@ -793,7 +793,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(89, 30, 24, 24);
         o->tooltip("Tabs");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Tabs"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::TabGroup"));
         o->image(pixmap[13]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(114, 30, 24, 24);
@@ -805,7 +805,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(139, 30, 24, 24);
         o->tooltip("Table");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Table"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Table"));
         o->image(pixmap[51]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(89, 55, 24, 24);
@@ -817,7 +817,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(114, 55, 24, 24);
         o->tooltip("Wizard");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Wizard"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::WizardGroup"));
         o->image(pixmap[21]);
       } // fltk3::Button* o
       o->end();
@@ -871,7 +871,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(257, 5, 24, 24);
         o->tooltip("Scroll Bar");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Scrollbar"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Scrollbar"));
         o->image(pixmap[38]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(282, 5, 24, 24);
@@ -895,31 +895,31 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(257, 30, 24, 24);
         o->tooltip("Counter");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Counter"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Counter"));
         o->image(pixmap[41]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(282, 30, 24, 24);
         o->tooltip("Dial");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Dial"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Dial"));
         o->image(pixmap[42]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(232, 55, 24, 24);
         o->tooltip("Roller");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Roller"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Roller"));
         o->image(pixmap[43]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(257, 55, 24, 24);
         o->tooltip("Spinner");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Spinner"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Spinner"));
         o->image(pixmap[47]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(282, 55, 24, 24);
         o->tooltip("Value Input");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Value_Input"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::ValueInput"));
         o->image(pixmap[44]);
       } // fltk3::Button* o
       o->end();
@@ -952,7 +952,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(341, 55, 24, 24);
         o->tooltip("File Input");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_File_Input"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::FileInput"));
         o->image(pixmap[30]);
       } // fltk3::Button* o
       o->end();
@@ -1012,7 +1012,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(459, 30, 24, 24);
         o->tooltip("Check Browser");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Check_Browser"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::CheckBrowser"));
         o->image(pixmap[32]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(459, 55, 24, 24);
@@ -1045,7 +1045,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(517, 55, 24, 24);
         o->tooltip("Progress");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Progress"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::Progress"));
         o->image(pixmap[36]);
       } // fltk3::Button* o
       o->end();
@@ -1058,7 +1058,7 @@ fltk3::Window* make_widgetbin() {
 
 fltk3::DoubleWindow *sourceview_panel=(fltk3::DoubleWindow *)0;
 
-Fl_Tabs *sv_tab=(Fl_Tabs *)0;
+fltk3::TabGroup *sv_tab=(fltk3::TabGroup *)0;
 
 CodeViewer *sv_source=(CodeViewer *)0;
 
@@ -1072,7 +1072,7 @@ fltk3::DoubleWindow* make_sourceview() {
   { sourceview_panel = new fltk3::DoubleWindow(520, 490, "Code View");
     sourceview_panel->callback((fltk3::Callback*)toggle_sourceview_cb);
     sourceview_panel->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
-    { sv_tab = new Fl_Tabs(10, 10, 500, 440);
+    { sv_tab = new fltk3::TabGroup(10, 10, 500, 440);
       sv_tab->selection_color((fltk3::Color)4);
       sv_tab->labelcolor(fltk3::BACKGROUND2_COLOR);
       sv_tab->callback((fltk3::Callback*)update_sourceview_position_cb);
@@ -1116,7 +1116,7 @@ fltk3::DoubleWindow* make_sourceview() {
       } // fltk3::Group* o
       sv_tab->end();
       fltk3::Group::current()->resizable(sv_tab);
-    } // Fl_Tabs* sv_tab
+    } // fltk3::TabGroup* sv_tab
     { fltk3::Group* o = new fltk3::Group(10, 460, 500, 20);
       { fltk3::Button* o = new fltk3::Button(10, 460, 61, 20, "Refresh");
         o->labelsize(11);

@@ -153,7 +153,6 @@
 		390AA30E68FA34A4A6F57F9C /* Fl_Clock.cxx in Sources */ = {isa = PBXBuildFile; fileRef = F5CAE7DC565B8398F02ED7BA /* Fl_Clock.cxx */; };
 		3954B0A5D14C94760C0FE875 /* fltk_png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98A16A4EC098BA7DB21E13DC /* fltk_png.framework */; };
 		39755B7CD55E28BE048D5743 /* jcprepct.c in Sources */ = {isa = PBXBuildFile; fileRef = 14AA766D5DA5A8BCFF60B626 /* jcprepct.c */; };
-		39C3350334171A972F7E074D /* fltk_forms.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 097D0B476E396B9AAC6FA1E0 /* fltk_forms.framework */; };
 		3A12846E0559EA8896E0108E /* colbrowser.cxx in Sources */ = {isa = PBXBuildFile; fileRef = EC5862E1FC79542DC55D8462 /* colbrowser.cxx */; };
 		3A83BE134FEB6C0E893FC0AA /* forms_bitmap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 34A2B3EFA6146F599E7CA80A /* forms_bitmap.cxx */; };
 		3AE331C8B0FBF5C668831552 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
@@ -180,7 +179,6 @@
 		447C7E45BD97CAF001C928CF /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05376DC900B2C885B847EA36 /* OpenGL.framework */; };
 		449DC0C1FDA01F16CB184F66 /* deflate.c in Sources */ = {isa = PBXBuildFile; fileRef = 65E5BAE2A9732DA6B4A53098 /* deflate.c */; };
 		44EF64739BF54210820845FC /* fl_line_style.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 0B5987E1A293E67A6290612A /* fl_line_style.cxx */; };
-		4516B8BD99F86A028BF540F5 /* fltk_forms.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 097D0B476E396B9AAC6FA1E0 /* fltk_forms.framework */; };
 		4536387C357FBA58B3C5258B /* Fl_Text_Display.cxx in Sources */ = {isa = PBXBuildFile; fileRef = A0C1440AC6EE3239EEC7D81B /* Fl_Text_Display.cxx */; };
 		454B5789047F9D7F2AF0EC04 /* fltk_zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8880CD3FEF32388A24C1B94 /* fltk_zlib.framework */; };
 		459365165767B5C89B86DB0A /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
@@ -2236,13 +2234,6 @@
 			remoteGlobalIDString = 287CEC5F63A8B5FCDA246BEC;
 			remoteInfo = checkers;
 		};
-		4667258284C31599AAB8D07C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4BF1A7FFEACF5F31B4127482 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3C13C653905795060D6D4F0A;
-			remoteInfo = fltk_forms;
-		};
 		478AA233260257CFF0058BDC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4BF1A7FFEACF5F31B4127482 /* Project object */;
@@ -3279,7 +3270,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				6D607F654C1C216920498A3F /* fltk.framework in CopyFiles */,
-				39C3350334171A972F7E074D /* fltk_forms.framework in CopyFiles */,
 				2029258BA996D13B50EAFCA9 /* fltk_images.framework in CopyFiles */,
 				CC54A24FCE15AB4AF1A78C78 /* fltk_jpeg.framework in CopyFiles */,
 				6D1D23AC12075C7023D6272E /* fltk_png.framework in CopyFiles */,
@@ -5227,7 +5217,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4C07E1FB6BF75ACD25CB627E /* fltk.framework in Frameworks */,
-				4516B8BD99F86A028BF540F5 /* fltk_forms.framework in Frameworks */,
 				384166BA6D314002CC87AB28 /* fltk_images.framework in Frameworks */,
 				0476C2ACE5C995D19992D48F /* fltk_jpeg.framework in Frameworks */,
 				B7CE0C040B4901954F4DE4D0 /* fltk_png.framework in Frameworks */,
@@ -8813,7 +8802,6 @@
 			);
 			dependencies = (
 				A8AB7DEC3970D5A693D2BC84 /* PBXTargetDependency */,
-				F2F53F78D25C64C4C4371E5D /* PBXTargetDependency */,
 				56D1F098C3EE3EECC13BD041 /* PBXTargetDependency */,
 				EE07C78293DC38C5356D12D7 /* PBXTargetDependency */,
 				902D8C989F1AE5B7C56992B0 /* PBXTargetDependency */,
@@ -11935,11 +11923,6 @@
 			isa = PBXTargetDependency;
 			target = A57FDE871C99A52BEEDEE68C /* fltk */;
 			targetProxy = 8CE9C1520C41EC2819C53DCF /* PBXContainerItemProxy */;
-		};
-		F2F53F78D25C64C4C4371E5D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3C13C653905795060D6D4F0A /* fltk_forms */;
-			targetProxy = 4667258284C31599AAB8D07C /* PBXContainerItemProxy */;
 		};
 		F3CCF87201B614B0B3F39D9B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

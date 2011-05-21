@@ -36,7 +36,7 @@
 #include <fltk3/x.h>	      // for Fl_Region
 #include <fltk3/enumerations.h>  // for the color names
 #include <fltk3/Window.h>     // for fltk3::set_spot()
-#include <fltk3/Device.h>     // for fl_graphics_driver
+#include <fltk3/Device.h>     // for fltk3::graphics_driver
 
 // Image class...
 
@@ -61,7 +61,7 @@ namespace fltk3 {
    the foreground is not set for the current window.
    \param[in] c color 
    */
-  inline void color(fltk3::Color c) {fl_graphics_driver->color(c); } // select indexed color
+  inline void color(fltk3::Color c) {fltk3::graphics_driver->color(c); } // select indexed color
   /** for back compatibility - use fltk3::color(fltk3::Color c) instead */
   inline void color(int c) {color((fltk3::Color)c);}
   /**
@@ -74,12 +74,12 @@ namespace fltk3 {
    the foreground is not set for the current window.
    \param[in] r,g,b color components
    */
-  inline void color(uchar r, uchar g, uchar b) {fl_graphics_driver->color(r,g,b); } // select actual color
+  inline void color(uchar r, uchar g, uchar b) {fltk3::graphics_driver->color(r,g,b); } // select actual color
   /**
    Returns the last fltk3::color() that was set.
    This can be used for state save/restore.
    */
-  inline fltk3::Color color() {return fl_graphics_driver->color();}
+  inline fltk3::Color color() {return fltk3::graphics_driver->color();}
   /** @} */
   
   /** \addtogroup fl_drawings
@@ -93,13 +93,13 @@ namespace fltk3 {
    \param[in] x,y,w,h position and size
    */
   inline void push_clip(int x, int y, int w, int h) {
-    fl_graphics_driver->push_clip(x,y,w,h); 
+    fltk3::graphics_driver->push_clip(x,y,w,h); 
   }
   
   /**
    Pushes an empty clip region onto the stack so nothing will be clipped.
    */
-  inline void push_no_clip() {fl_graphics_driver->push_no_clip(); }
+  inline void push_no_clip() {fltk3::graphics_driver->push_no_clip(); }
   
   /**
    Restores the previous clip region.
@@ -108,7 +108,7 @@ namespace fltk3 {
    Unpredictable results may occur if the clip stack is not empty when
    you return to FLTK.
    */
-  inline void pop_clip() {fl_graphics_driver->pop_clip(); }
+  inline void pop_clip() {fltk3::graphics_driver->pop_clip(); }
   
   /**
    Does the rectangle intersect the current clip region?
@@ -120,7 +120,7 @@ namespace fltk3 {
    Under X this returns 2 if the rectangle is partially clipped, 
    and 1 if it is entirely inside the clip region.
    */
-  inline int not_clipped(int x, int y, int w, int h) {return fl_graphics_driver->not_clipped(x,y,w,h); }
+  inline int not_clipped(int x, int y, int w, int h) {return fltk3::graphics_driver->not_clipped(x,y,w,h); }
   /**
    Intersects the rectangle with the current clip region and returns the
    bounding box of the result.
@@ -133,27 +133,27 @@ namespace fltk3 {
    \returns Non-zero if the resulting rectangle is different to the original.
    */
   inline int clip_box(int x , int y, int w, int h, int& X, int& Y, int& W, int& H) 
-  {return fl_graphics_driver->clip_box(x,y,w,h,X,Y,W,H); }
+  {return fltk3::graphics_driver->clip_box(x,y,w,h,X,Y,W,H); }
   /** Undoes any clobbering of clip done by your program */
-  inline void restore_clip() { fl_graphics_driver->restore_clip(); };
+  inline void restore_clip() { fltk3::graphics_driver->restore_clip(); };
   /**
    Replaces the top of the clipping stack with a clipping region of any shape.
    
    Fl_Region is an operating system specific type.
    \param[in] r clipping region
    */
-  inline void clip_region(Fl_Region r) { fl_graphics_driver->clip_region(r); };
+  inline void clip_region(Fl_Region r) { fltk3::graphics_driver->clip_region(r); };
   /**
    Returns the current clipping region.
    */
-  inline Fl_Region clip_region() { return fl_graphics_driver->clip_region(); };
+  inline Fl_Region clip_region() { return fltk3::graphics_driver->clip_region(); };
   
   
   // points:
   /**
    Draws a single pixel at the given coordinates
    */
-  inline void point(int x, int y) { fl_graphics_driver->point(x,y); }
+  inline void point(int x, int y) { fltk3::graphics_driver->point(x,y); }
   
   
   // line type:
@@ -184,7 +184,7 @@ namespace fltk3 {
    \note      The \p dashes array does not work under Windows 95, 98 or Me,
    since those operating systems do not support complex line styles.
    */
-  inline void line_style(int style, int width=0, char* dashes=0) {fl_graphics_driver->line_style(style,width,dashes); }
+  inline void line_style(int style, int width=0, char* dashes=0) {fltk3::graphics_driver->line_style(style,width,dashes); }
   enum {
     SOLID	= 0,		///< line style: <tt>___________</tt>
     DASH	= 1,		///< line style: <tt>_ _ _ _ _ _</tt>
@@ -208,12 +208,12 @@ namespace fltk3 {
    This function is meant for quick drawing of simple boxes. The behavior is 
    undefined for line widths that are not 1.
    */
-  inline void rect(int x, int y, int w, int h) { fl_graphics_driver->rect(x,y,w,h); }
+  inline void rect(int x, int y, int w, int h) { fltk3::graphics_driver->rect(x,y,w,h); }
   
   /** Draws with passed color a 1-pixel border \e inside the given bounding box */
   inline void rect(int x, int y, int w, int h, fltk3::Color c) {fltk3::color(c); fltk3::rect(x,y,w,h);}
   /** Colors with current color a rectangle that exactly fills the given bounding box */
-  inline void rectf(int x, int y, int w, int h) { fl_graphics_driver->rectf(x,y,w,h); }
+  inline void rectf(int x, int y, int w, int h) { fltk3::graphics_driver->rectf(x,y,w,h); }
   /** Colors with passed color a rectangle that exactly fills the given bounding box */
   inline void rectf(int x, int y, int w, int h, fltk3::Color c) {fltk3::color(c); fltk3::rectf(x,y,w,h);}
   
@@ -230,63 +230,63 @@ namespace fltk3 {
   /**
    Draws a line from (x,y) to (x1,y1)
    */
-  inline void line(int x, int y, int x1, int y1) {fl_graphics_driver->line(x,y,x1,y1); }
+  inline void line(int x, int y, int x1, int y1) {fltk3::graphics_driver->line(x,y,x1,y1); }
   /**
    Draws a line from (x,y) to (x1,y1) and another from (x1,y1) to (x2,y2)
    */
-  inline void line(int x, int y, int x1, int y1, int x2, int y2) {fl_graphics_driver->line(x,y,x1,y1,x2,y2); }
+  inline void line(int x, int y, int x1, int y1, int x2, int y2) {fltk3::graphics_driver->line(x,y,x1,y1,x2,y2); }
   
   // closed line segments:
   /**
    Outlines a 3-sided polygon with lines
    */
-  inline void loop(int x, int y, int x1, int y1, int x2, int y2) {fl_graphics_driver->loop(x,y,x1,y1,x2,y2); }
+  inline void loop(int x, int y, int x1, int y1, int x2, int y2) {fltk3::graphics_driver->loop(x,y,x1,y1,x2,y2); }
   /**
    Outlines a 4-sided polygon with lines
    */
   inline void loop(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) 
-  {fl_graphics_driver->loop(x,y,x1,y1,x2,y2,x3,y3); }
+  {fltk3::graphics_driver->loop(x,y,x1,y1,x2,y2,x3,y3); }
   
   // filled polygons
   /**
    Fills a 3-sided polygon. The polygon must be convex.
    */
-  inline void polygon(int x, int y, int x1, int y1, int x2, int y2) {fl_graphics_driver->polygon(x,y,x1,y1,x2,y2); }
+  inline void polygon(int x, int y, int x1, int y1, int x2, int y2) {fltk3::graphics_driver->polygon(x,y,x1,y1,x2,y2); }
   /**
    Fills a 4-sided polygon. The polygon must be convex.
    */
   inline void polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) 
-  { fl_graphics_driver->polygon(x,y,x1,y1,x2,y2,x3,y3); }
+  { fltk3::graphics_driver->polygon(x,y,x1,y1,x2,y2,x3,y3); }
   
   // draw rectilinear lines, horizontal segment first:
   /**
    Draws a horizontal line from (x,y) to (x1,y)
    */
-  inline void xyline(int x, int y, int x1) {fl_graphics_driver->xyline(x,y,x1);}
+  inline void xyline(int x, int y, int x1) {fltk3::graphics_driver->xyline(x,y,x1);}
   /**
    Draws a horizontal line from (x,y) to (x1,y), then vertical from (x1,y) to (x1,y2)
    */
-  inline void xyline(int x, int y, int x1, int y2) {fl_graphics_driver->xyline(x,y,x1,y2);}
+  inline void xyline(int x, int y, int x1, int y2) {fltk3::graphics_driver->xyline(x,y,x1,y2);}
   /**
    Draws a horizontal line from (x,y) to (x1,y), then a vertical from (x1,y) to (x1,y2)
    and then another horizontal from (x1,y2) to (x3,y2)
    */
-  inline void xyline(int x, int y, int x1, int y2, int x3) {fl_graphics_driver->xyline(x,y,x1,y2,x3);}
+  inline void xyline(int x, int y, int x1, int y2, int x3) {fltk3::graphics_driver->xyline(x,y,x1,y2,x3);}
   
   // draw rectilinear lines, vertical segment first:
   /**
    Draws a vertical line from (x,y) to (x,y1)
    */
-  inline void yxline(int x, int y, int y1) {fl_graphics_driver->yxline(x,y,y1);}
+  inline void yxline(int x, int y, int y1) {fltk3::graphics_driver->yxline(x,y,y1);}
   /**
    Draws a vertical line from (x,y) to (x,y1), then a horizontal from (x,y1) to (x2,y1)
    */
-  inline void yxline(int x, int y, int y1, int x2) {fl_graphics_driver->yxline(x,y,y1,x2);}
+  inline void yxline(int x, int y, int y1, int x2) {fltk3::graphics_driver->yxline(x,y,y1,x2);}
   /**
    Draws a vertical line from (x,y) to (x,y1) then a horizontal from (x,y1)
    to (x2,y1), then another vertical from (x2,y1) to (x2,y3)
    */
-  inline void yxline(int x, int y, int y1, int x2, int y3) {fl_graphics_driver->yxline(x,y,y1,x2,y3);}
+  inline void yxline(int x, int y, int y1, int x2, int y3) {fltk3::graphics_driver->yxline(x,y,y1,x2,y3);}
   
   // circular lines and pie slices (code in fltk3::arci.C):
   /**
@@ -311,7 +311,7 @@ namespace fltk3 {
    counter-clockwise from 3 o'clock. \p a2 must be greater
    than or equal to \p a1.
    */
-  inline void arc(int x, int y, int w, int h, double a1, double a2) {fl_graphics_driver->arc(x,y,w,h,a1,a2); }
+  inline void arc(int x, int y, int w, int h, double a1, double a2) {fltk3::graphics_driver->arc(x,y,w,h,a1,a2); }
   /**
    Draw filled ellipse sections using integer coordinates.
    
@@ -324,7 +324,7 @@ namespace fltk3 {
    counter-clockwise from 3 o'clock. \p a2 must be greater
    than or equal to \p a1.
    */
-  inline void pie(int x, int y, int w, int h, double a1, double a2) {fl_graphics_driver->pie(x,y,w,h,a1,a2); }
+  inline void pie(int x, int y, int w, int h, double a1, double a2) {fltk3::graphics_driver->pie(x,y,w,h,a1,a2); }
   /** fltk3::chord declaration is a place holder - the function does not yet exist */
   FLTK3_EXPORT void chord(int x, int y, int w, int h, double a1, double a2); // nyi
   
@@ -333,31 +333,31 @@ namespace fltk3 {
    Saves the current transformation matrix on the stack. 
    The maximum depth of the stack is 32.
    */
-  inline void push_matrix() { fl_graphics_driver->push_matrix(); };
+  inline void push_matrix() { fltk3::graphics_driver->push_matrix(); };
   /**
    Restores the current transformation matrix from the stack.
    */
-  inline void pop_matrix() { fl_graphics_driver->pop_matrix(); };
+  inline void pop_matrix() { fltk3::graphics_driver->pop_matrix(); };
   /**
    Concatenates scaling transformation onto the current one.
    \param[in] x,y scale factors in x-direction and y-direction
    */
-  inline void scale(double x, double y) { fl_graphics_driver->scale(x, y); };
+  inline void scale(double x, double y) { fltk3::graphics_driver->scale(x, y); };
   /**
    Concatenates scaling transformation onto the current one.
    \param[in] x scale factor in both x-direction and y-direction
    */
-  inline void scale(double x) { fl_graphics_driver->scale(x, x); };
+  inline void scale(double x) { fltk3::graphics_driver->scale(x, x); };
   /**
    Concatenates translation transformation onto the current one.
    \param[in] x,y translation factor in x-direction and y-direction
    */
-  inline void translate(double x, double y) { fl_graphics_driver->translate(x, y); };
+  inline void translate(double x, double y) { fltk3::graphics_driver->translate(x, y); };
   /**
    Concatenates rotation transformation onto the current one.
    \param[in] d - rotation angle, counter-clockwise in degrees (not radians)
    */
-  inline void rotate(double d) { fl_graphics_driver->rotate(d); };
+  inline void rotate(double d) { fltk3::graphics_driver->rotate(d); };
   /**
    Concatenates another transformation onto the current one.
    
@@ -365,29 +365,29 @@ namespace fltk3 {
    <tt> X' = aX + cY + x </tt> and <tt> Y' = bX +dY + y </tt>
    */
   inline void mult_matrix(double a, double b, double c, double d, double x,double y) 
-  { fl_graphics_driver->mult_matrix(a, b, c, d, x, y); };
+  { fltk3::graphics_driver->mult_matrix(a, b, c, d, x, y); };
   /**
    Starts drawing a list of points. Points are added to the list with fltk3::vertex()
    */
-  inline void begin_points() {fl_graphics_driver->begin_points(); }
+  inline void begin_points() {fltk3::graphics_driver->begin_points(); }
   /**
    Starts drawing a list of lines.
    */
-  inline void begin_line() {fl_graphics_driver->begin_line(); }
+  inline void begin_line() {fltk3::graphics_driver->begin_line(); }
   /**
    Starts drawing a closed sequence of lines.
    */
-  inline void begin_loop() {fl_graphics_driver->begin_loop(); }
+  inline void begin_loop() {fltk3::graphics_driver->begin_loop(); }
   
   /**
    Starts drawing a convex filled polygon.
    */
-  inline void begin_polygon() {fl_graphics_driver->begin_polygon(); }
+  inline void begin_polygon() {fltk3::graphics_driver->begin_polygon(); }
   /**
    Adds a single vertex to the current path.
    \param[in] x,y coordinate
    */
-  inline void vertex(double x, double y) {fl_graphics_driver->vertex(x,y); }
+  inline void vertex(double x, double y) {fltk3::graphics_driver->vertex(x,y); }
   /**
    Adds a series of points on a Bezier curve to the path.
    The curve ends (and two of the points) are at X0,Y0 and X3,Y3.
@@ -397,7 +397,7 @@ namespace fltk3 {
    \param[in] X3,Y3 curve end point
    */
   inline void curve(double X0, double Y0, double X1, double Y1, double X2, double Y2, double X3, double Y3)
-  {fl_graphics_driver->curve(X0,Y0,X1,Y1,X2,Y2,X3,Y3); }
+  {fltk3::graphics_driver->curve(X0,Y0,X1,Y1,X2,Y2,X3,Y3); }
   /**
    Adds a series of points to the current path on the arc of a circle.
    You can get elliptical paths by using scale and rotate before calling fltk3::arc().
@@ -406,7 +406,7 @@ namespace fltk3 {
    counter-clockwise from 3 o'clock. If \p end is less than \p start
    then it draws the arc in a clockwise direction.
    */
-  inline void arc(double x, double y, double r, double start, double end) {fl_graphics_driver->arc(x,y,r,start,end); }
+  inline void arc(double x, double y, double r, double start, double end) {fltk3::graphics_driver->arc(x,y,r,start,end); }
   /**
    fltk3::circle() is equivalent to fltk3::arc(x,y,r,0,360), but may be faster.
    
@@ -414,23 +414,23 @@ namespace fltk3 {
    a complex polygon you must use fltk3::arc()
    \param[in] x,y,r center and radius of circle
    */
-  inline void circle(double x, double y, double r) {fl_graphics_driver->circle(x,y,r); }
+  inline void circle(double x, double y, double r) {fltk3::graphics_driver->circle(x,y,r); }
   /**
    Ends list of points, and draws.
    */
-  inline void end_points() {fl_graphics_driver->end_points(); }
+  inline void end_points() {fltk3::graphics_driver->end_points(); }
   /**
    Ends list of lines, and draws.
    */
-  inline void end_line() {fl_graphics_driver->end_line(); }
+  inline void end_line() {fltk3::graphics_driver->end_line(); }
   /**
    Ends closed sequence of lines, and draws.
    */
-  inline void end_loop() {fl_graphics_driver->end_loop(); }
+  inline void end_loop() {fltk3::graphics_driver->end_loop(); }
   /**
    Ends convex filled polygon, and draws.
    */
-  inline void end_polygon() {fl_graphics_driver->end_polygon(); }
+  inline void end_polygon() {fltk3::graphics_driver->end_polygon(); }
   /**
    Starts drawing a complex filled polygon.
    
@@ -445,7 +445,7 @@ namespace fltk3 {
    whether "even/odd" or "non-zero" winding rules are used to fill them.
    Holes should be drawn in the opposite direction to the outside loop.
    */
-  inline void begin_complex_polygon() {fl_graphics_driver->begin_complex_polygon(); }
+  inline void begin_complex_polygon() {fltk3::graphics_driver->begin_complex_polygon(); }
   
   /**
    Call fltk3::gap() to separate loops of the path.
@@ -453,37 +453,37 @@ namespace fltk3 {
    It is unnecessary but harmless to call fltk3::gap() before the first vertex,
    after the last vertex, or several times in a row.
    */
-  inline void gap() {fl_graphics_driver->gap(); }
+  inline void gap() {fltk3::graphics_driver->gap(); }
   /**
    Ends complex filled polygon, and draws.
    */
-  inline void end_complex_polygon() {fl_graphics_driver->end_complex_polygon(); }
+  inline void end_complex_polygon() {fltk3::graphics_driver->end_complex_polygon(); }
   // get and use transformed positions:
   /**
    Transforms coordinate using the current transformation matrix.
    \param[in] x,y coordinate
    */
-  inline double transform_x(double x, double y) {return fl_graphics_driver->transform_x(x, y); };
+  inline double transform_x(double x, double y) {return fltk3::graphics_driver->transform_x(x, y); };
   /**
    Transforms coordinate using the current transformation matrix.
    \param[in] x,y coordinate
    */
-  inline double transform_y(double x, double y) {return fl_graphics_driver->transform_y(x, y); };
+  inline double transform_y(double x, double y) {return fltk3::graphics_driver->transform_y(x, y); };
   /**
    Transforms distance using current transformation matrix.
    \param[in] x,y coordinate
    */
-  inline double transform_dx(double x, double y) {return fl_graphics_driver->transform_dx(x, y); };
+  inline double transform_dx(double x, double y) {return fltk3::graphics_driver->transform_dx(x, y); };
   /**
    Transforms distance using current transformation matrix.
    \param[in] x,y coordinate
    */
-  inline double transform_dy(double x, double y) {return fl_graphics_driver->transform_dy(x, y); };
+  inline double transform_dy(double x, double y) {return fltk3::graphics_driver->transform_dy(x, y); };
   /**
    Adds coordinate pair to the vertex list without further transformations.
    \param[in] xf,yf transformed coordinate
    */
-  inline void transformed_vertex(double xf, double yf) {fl_graphics_driver->transformed_vertex(xf,yf); }
+  inline void transformed_vertex(double xf, double yf) {fltk3::graphics_driver->transformed_vertex(xf,yf); }
   /** @} */
   
   /** \addtogroup  fl_attributes
@@ -500,39 +500,39 @@ namespace fltk3 {
    The size of the font is measured in pixels and not "points".
    Lines should be spaced \p size pixels apart or more.
    */
-  inline void font(fltk3::Font face, fltk3::Fontsize size) { fl_graphics_driver->font(face,size); }
+  inline void font(fltk3::Font face, fltk3::Fontsize size) { fltk3::graphics_driver->font(face,size); }
   
   /**
    Returns the \p face set by the most recent call to fltk3::font().
    This can be used to save/restore the font.
    */
-  inline fltk3::Font font() {return fl_graphics_driver->font();}
+  inline fltk3::Font font() {return fltk3::graphics_driver->font();}
   /**
    Returns the \p size set by the most recent call to fltk3::font().
    This can be used to save/restore the font.
    */
-  inline fltk3::Fontsize size() {return fl_graphics_driver->size();}
+  inline fltk3::Fontsize size() {return fltk3::graphics_driver->size();}
   
   // information you can get about the current font:
   /**
    Returns the recommended minimum line spacing for the current font.
    You can also use the value of \p size passed to fltk3::font()
    */
-  inline int height() {return fl_graphics_driver->height();}
+  inline int height() {return fltk3::graphics_driver->height();}
   FLTK3_EXPORT int height(int font, int size);
   /**
    Returns the recommended distance above the bottom of a fltk3::height() tall box to
    draw the text at so it looks centered vertically in that box.
    */
-  inline int  descent() {return fl_graphics_driver->descent();}
+  inline int  descent() {return fltk3::graphics_driver->descent();}
   /** Returns the typographical width of a nul-terminated string */
   FLTK3_EXPORT double width(const char* txt);
   /** Returns the typographical width of a sequence of \p n characters */
-  inline double width(const char* txt, int n) {return fl_graphics_driver->width(txt, n);}
+  inline double width(const char* txt, int n) {return fltk3::graphics_driver->width(txt, n);}
   /** Returns the typographical width of a single character.
    \note if a valid fl_gc is NOT found then it uses the first window gc,
    or the screen gc if no fltk window is available when called. */
-  inline double width(unsigned int c)  {return fl_graphics_driver->width(c);}
+  inline double width(unsigned int c)  {return fltk3::graphics_driver->width(c);}
   /** Determines the minimum pixel dimensions of a nul-terminated string.
    
    Usage: given a string "txt" drawn using fltk3::draw(txt, x, y) you would determine
@@ -547,7 +547,7 @@ namespace fltk3 {
    \see fltk3::text_extents(const char*, int& dx, int& dy, int& w, int& h)
    */
   inline void text_extents(const char *t, int n, int& dx, int& dy, int& w, int& h)
-  {fl_graphics_driver->text_extents(t, n, dx, dy, w, h);}
+  {fltk3::graphics_driver->text_extents(t, n, dx, dy, w, h);}
   
   // font encoding:
   // Note: doxygen comments here to avoid duplication for os-sepecific cases
@@ -605,17 +605,17 @@ namespace fltk3 {
   /**
    Draws an array of \p n characters starting at the given location.
    */
-  inline void draw(const char* str, int n, int x, int y) {fl_graphics_driver->draw(str,n,x,y); }
+  inline void draw(const char* str, int n, int x, int y) {fltk3::graphics_driver->draw(str,n,x,y); }
   /**
    Draws an array of \p n characters starting at the given location,
    rotating \p angle degrees counter-clockwise.
    */
-  inline void draw(int angle,const char* str, int n, int x, int y) {fl_graphics_driver->draw(angle,str,n,x,y); }
+  inline void draw(int angle,const char* str, int n, int x, int y) {fltk3::graphics_driver->draw(angle,str,n,x,y); }
   
   /**
    Draws an array of \p n characters right to left starting at given location.
    */
-  inline void rtl_draw(const char* str, int n, int x, int y) {fl_graphics_driver->rtl_draw(str,n,x,y); }
+  inline void rtl_draw(const char* str, int n, int x, int y) {fltk3::graphics_driver->rtl_draw(str,n,x,y); }
   FLTK3_EXPORT void measure(const char* str, int& x, int& y,
                             int draw_symbols = 1);
   FLTK3_EXPORT void draw(const char* str, int x, int y, int w, int h,
@@ -669,14 +669,14 @@ namespace fltk3 {
    to 32 bits.
    */
   inline void draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0)
-  { fl_graphics_driver->draw_image(buf, X, Y, W, H, D, L); }
+  { fltk3::graphics_driver->draw_image(buf, X, Y, W, H, D, L); }
   
   /**
    Draws a gray-scale (1 channel) image.
    \see fltk3::draw_image(const uchar* buf, int X,int Y,int W,int H, int D, int L)
    */
   inline void draw_image_mono(const uchar* buf, int X,int Y,int W,int H, int D=1, int L=0)
-  { fl_graphics_driver->draw_image_mono(buf, X, Y, W, H, D, L); }
+  { fltk3::graphics_driver->draw_image_mono(buf, X, Y, W, H, D, L); }
   
   /**
    Draws an image using a callback function to generate image data.
@@ -711,14 +711,14 @@ namespace fltk3 {
    
    If \p D is 4 or more, you must fill in the unused bytes with zero.
    */
-  inline void draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=3)
-  { fl_graphics_driver->draw_image(cb, data, X, Y, W, H, D); }
+  inline void draw_image(fltk3::DrawImageCb cb, void* data, int X,int Y,int W,int H, int D=3)
+  { fltk3::graphics_driver->draw_image(cb, data, X, Y, W, H, D); }
   
   /**
    Draws a gray-scale image using a callback function to generate image data.
-   \see fltk3::draw_image(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D)
+   \see fltk3::draw_image(fltk3::DrawImageCb cb, void* data, int X,int Y,int W,int H, int D)
    */
-  FLTK3_EXPORT void draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,int W,int H, int D=1);
+  FLTK3_EXPORT void draw_image_mono(fltk3::DrawImageCb cb, void* data, int X,int Y,int W,int H, int D=1);
   
   /**
    Checks whether platform supports true alpha blending for RGBA images.

@@ -29,18 +29,20 @@
 #define Fltk3_Multi_Label_H
 
 namespace fltk3 { 
+  
   class Widget; 
   struct MenuItem;
+  
+  struct FLTK3_EXPORT MultiLabel {
+    const char* labela;
+    const char* labelb;
+    uchar typea;
+    uchar typeb;
+    void label(fltk3::Widget*);
+    void label(fltk3::MenuItem*);
+  };
+  
 }
-
-struct FLTK3_EXPORT Fl_Multi_Label {
-  const char* labela;
-  const char* labelb;
-  uchar typea;
-  uchar typeb;
-  void label(fltk3::Widget*);
-  void label(fltk3::MenuItem*);
-};
 
 #endif
 

@@ -26,40 +26,44 @@
 //
 
 /* \file
-   Fl_Menu_Window widget . */
+ fltk3::MenuWindow widget . */
 
 #ifndef Fltk3_Menu_Window_H
 #define Fltk3_Menu_Window_H
 
 #include "SingleWindow.h"
 
-/**
-  The Fl_Menu_Window widget is a window type used for menus. By
-  default the window is drawn in the hardware overlay planes if they are
-  available so that the menu don't force the rest of the window to
-  redraw.
-*/
-class FLTK3_EXPORT Fl_Menu_Window : public fltk3::SingleWindow {
-public:
-  void show();
-  void erase();
-  void flush();
-  void hide();
-  /** Tells if hardware overlay mode is set */
-  unsigned int overlay() {return !(flags()&NO_OVERLAY);}
-  /** Tells FLTK to use hardware overlay planes if they are available.  */
-  void set_overlay() {clear_flag(NO_OVERLAY);}
-  /** Tells FLTK to use normal drawing planes instead of overlay planes.
-      This is usually necessary if your menu contains multi-color pixmaps. */
-  void clear_overlay() {set_flag(NO_OVERLAY);}
-  ~Fl_Menu_Window();
-  /** Creates a new Fl_Menu_Window widget using the given size, and label string. */
-  Fl_Menu_Window(int W, int H, const char *l = 0)
+namespace fltk3 {
+  
+  /**
+   The fltk3::MenuWindow widget is a window type used for menus. By
+   default the window is drawn in the hardware overlay planes if they are
+   available so that the menu don't force the rest of the window to
+   redraw.
+   */
+  class FLTK3_EXPORT MenuWindow : public fltk3::SingleWindow {
+  public:
+    void show();
+    void erase();
+    void flush();
+    void hide();
+    /** Tells if hardware overlay mode is set */
+    unsigned int overlay() {return !(flags()&NO_OVERLAY);}
+    /** Tells FLTK to use hardware overlay planes if they are available.  */
+    void set_overlay() {clear_flag(NO_OVERLAY);}
+    /** Tells FLTK to use normal drawing planes instead of overlay planes.
+     This is usually necessary if your menu contains multi-color pixmaps. */
+    void clear_overlay() {set_flag(NO_OVERLAY);}
+    ~MenuWindow();
+    /** Creates a new fltk3::MenuWindow widget using the given size, and label string. */
+    MenuWindow(int W, int H, const char *l = 0)
     : fltk3::SingleWindow(W,H,l) { image(0); }
-  /** Creates a new Fl_Menu_Window widget using the given position, size, and label string. */
-  Fl_Menu_Window(int X, int Y, int W, int H, const char *l = 0)
+    /** Creates a new fltk3::MenuWindow widget using the given position, size, and label string. */
+    MenuWindow(int X, int Y, int W, int H, const char *l = 0)
     : fltk3::SingleWindow(X,Y,W,H,l) { image(0); }
-};
+  };
+  
+}
 
 #endif
 

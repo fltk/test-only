@@ -137,7 +137,7 @@ typedef HBITMAP Fl_Offscreen;
 
 # define fl_begin_offscreen(b) \
    HDC _sgc=fl_gc; Window _sw=fl_window; \
-   Fl_Surface_Device *_ss = Fl_Surface_Device::surface(); Fl_Display_Device::display_device()->set_current(); \
+   fltk3::SurfaceDevice *_ss = fltk3::SurfaceDevice::surface(); fltk3::DisplayDevice::display_device()->set_current(); \
    fl_gc=fl_makeDC(b); int _savedc = SaveDC(fl_gc); fl_window=(HWND)b; fltk3::push_no_clip()
 
 # define fl_end_offscreen() \

@@ -36,14 +36,14 @@
   Draws dial at given position and size.
   \param[in] X, Y, W, H position and size
 */
-void Fl_Dial::draw(int X, int Y, int W, int H) {
+void fltk3::Dial::draw(int X, int Y, int W, int H) {
   if (damage()&fltk3::DAMAGE_ALL) draw_box(box(), X, Y, W, H, color());
   X += fltk3::box_dx(box());
   Y += fltk3::box_dy(box());
   W -= fltk3::box_dw(box());
   H -= fltk3::box_dh(box());
   double angle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;
-  if (type() == FL_FILL_DIAL) {
+  if (type() == fltk3::FILL_DIAL) {
     // foo: draw this nicely in certain round box types
     int foo = (box() > fltk3::ROUND_UP_BOX && fltk3::box_dx(box()));
     if (foo) {X--; Y--; W+=2; H+=2;}
@@ -71,7 +71,7 @@ void Fl_Dial::draw(int X, int Y, int W, int H) {
   fltk3::rotate(45-angle);
   if (active_r()) fltk3::color(selection_color());
   else fltk3::color(fltk3::inactive(selection_color()));
-  if (type()) { // FL_LINE_DIAL
+  if (type()) { // fltk3::LINE_DIAL
     fltk3::begin_polygon();
     fltk3::vertex(0.0,   0.0);
     fltk3::vertex(-0.04, 0.0);
@@ -98,7 +98,7 @@ void Fl_Dial::draw(int X, int Y, int W, int H) {
 /**
   Draws dial at current position and size.
 */
-void Fl_Dial::draw() {
+void fltk3::Dial::draw() {
   draw(x(), y(), w(), h());
   draw_label();
 }
@@ -107,7 +107,7 @@ void Fl_Dial::draw() {
   Allows subclasses to handle event based on given position and size.
   \param[in] event, X, Y, W, H event to handle, related position and size.
 */
-int Fl_Dial::handle(int event, int X, int Y, int W, int H) {
+int fltk3::Dial::handle(int event, int X, int Y, int W, int H) {
   switch (event) {
   case fltk3::PUSH: {
     fltk3::WidgetTracker wp(this);  
@@ -145,15 +145,15 @@ int Fl_Dial::handle(int event, int X, int Y, int W, int H) {
 /**
   Allow subclasses to handle event based on current position and size.
 */
-int Fl_Dial::handle(int e) {
+int fltk3::Dial::handle(int e) {
   return handle(e, x(), y(), w(), h());
 }
 
-Fl_Dial::Fl_Dial(int X, int Y, int W, int H, const char* l)
 /**
-  Creates a new Fl_Dial widget using the given position, size,
-  and label string. The default type is FL_NORMAL_DIAL.
-*/
+ Creates a new fltk3::Dial widget using the given position, size,
+ and label string. The default type is fltk3::NORMAL_DIAL.
+ */
+fltk3::Dial::Dial(int X, int Y, int W, int H, const char* l)
 : fltk3::Valuator(X, Y, W, H, l) {
   box(fltk3::OVAL_BOX);
   selection_color(fltk3::INACTIVE_COLOR); // was 37

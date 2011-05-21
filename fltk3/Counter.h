@@ -26,96 +26,98 @@
 //
 
 /* \file
- Fl_Counter widget . */
+ fltk3::Counter widget . */
 
 // A numerical value with up/down step buttons.  From Forms.
 
 #ifndef Fltk3_Counter_H
 #define Fltk3_Counter_H
 
-#ifndef Fl_Valuator_H
 #include "Valuator.h"
-#endif
 
-// values for type():
-#define FL_NORMAL_COUNTER	0	/**< type() for counter with fast buttons */
-#define FL_SIMPLE_COUNTER	1	/**< type() for counter without fast buttons */
-
-/**
- Controls a single floating point value with button (or keyboard) arrows.
- Double arrows buttons achieve larger steps than simple arrows.
- \see Fl_Spinner for value input with vertical step arrows.
- <P align=center>\image html counter.png</P>
- \image latex counter.png "Fl_Counter" width=4cm
- 
- \todo Refactor the doxygen comments for Fl_Counter type() documentation.
- 
- The type of an Fl_Counter object can be set using type(uchar t) to:
- \li \c FL_NORMAL_COUNTER: Displays a counter with 4 arrow buttons.
- \li \c FL_SIMPLE_COUNTER: Displays a counter with only 2 arrow buttons.
- */
-class FLTK3_EXPORT Fl_Counter : public fltk3::Valuator {
+namespace fltk3 {
   
-  fltk3::Font textfont_;
-  fltk3::Fontsize textsize_;
-  fltk3::Color textcolor_;
-  double lstep_;
-  uchar mouseobj;
-  static void repeat_callback(void *);
-  int calc_mouseobj();
-  void increment_cb();
-  
-protected:
-  
-  void draw();
-  
-public:
-  
-  int handle(int);
-  
-  Fl_Counter(int X, int Y, int W, int H, const char* L = 0);
-  ~Fl_Counter();
+  // values for type():
+  const uchar NORMAL_COUNTER	= 0;	/**< type() for counter with fast buttons */
+  const uchar SIMPLE_COUNTER	= 1;	/**< type() for counter without fast buttons */
   
   /**
-   Sets the increment for the large step buttons.
-   The default value is 1.0.
-   \param[in] a large step increment.
+   Controls a single floating point value with button (or keyboard) arrows.
+   Double arrows buttons achieve larger steps than simple arrows.
+   \see fltk3::Spinner for value input with vertical step arrows.
+   <P align=center>\image html counter.png</P>
+   \image latex counter.png "fltk3::Counter" width=4cm
+   
+   \todo Refactor the doxygen comments for fltk3::Counter type() documentation.
+   
+   The type of an fltk3::Counter object can be set using type(uchar t) to:
+   \li \c fltk3::NORMAL_COUNTER: Displays a counter with 4 arrow buttons.
+   \li \c fltk3::SIMPLE_COUNTER: Displays a counter with only 2 arrow buttons.
    */
-  void lstep(double a) {lstep_ = a;}
+  class FLTK3_EXPORT Counter : public fltk3::Valuator {
+    
+    fltk3::Font textfont_;
+    fltk3::Fontsize textsize_;
+    fltk3::Color textcolor_;
+    double lstep_;
+    uchar mouseobj;
+    static void repeat_callback(void *);
+    int calc_mouseobj();
+    void increment_cb();
+    
+  protected:
+    
+    void draw();
+    
+  public:
+    
+    int handle(int);
+    
+    Counter(int X, int Y, int W, int H, const char* L = 0);
+    ~Counter();
+    
+    /**
+     Sets the increment for the large step buttons.
+     The default value is 1.0.
+     \param[in] a large step increment.
+     */
+    void lstep(double a) {lstep_ = a;}
+    
+    /**
+     Sets the increments for the normal and large step buttons.
+     \param[in] a, b normal and large step increments.
+     */
+    void step(double a,double b) {fltk3::Valuator::step(a); lstep_ = b;}
+    
+    /**
+     Sets the increment for the normal step buttons.
+     \param[in] a normal step increment.
+     */
+    void step(double a) {fltk3::Valuator::step(a);}
+    
+    /**
+     Returns the increment for normal step buttons.
+     */
+    double step() const {return fltk3::Valuator::step();}
+    
+    /** Gets the text font */
+    fltk3::Font textfont() const {return textfont_;}
+    /** Sets the text font to \p s */
+    void textfont(fltk3::Font s) {textfont_ = s;}
+    
+    /** Gets the font size */
+    fltk3::Fontsize textsize() const {return textsize_;}
+    /** Sets the font size to \p s */
+    void textsize(fltk3::Fontsize s) {textsize_ = s;}
+    
+    /** Gets the font color */
+    fltk3::Color textcolor() const {return textcolor_;}
+    /** Sets the font color to \p s */
+    void textcolor(fltk3::Color s) {textcolor_ = s;}
+    
+  };
   
-  /**
-   Sets the increments for the normal and large step buttons.
-   \param[in] a, b normal and large step increments.
-   */
-  void step(double a,double b) {fltk3::Valuator::step(a); lstep_ = b;}
-  
-  /**
-   Sets the increment for the normal step buttons.
-   \param[in] a normal step increment.
-   */
-  void step(double a) {fltk3::Valuator::step(a);}
-  
-  /**
-   Returns the increment for normal step buttons.
-   */
-  double step() const {return fltk3::Valuator::step();}
-  
-  /** Gets the text font */
-  fltk3::Font textfont() const {return textfont_;}
-  /** Sets the text font to \p s */
-  void textfont(fltk3::Font s) {textfont_ = s;}
-  
-  /** Gets the font size */
-  fltk3::Fontsize textsize() const {return textsize_;}
-  /** Sets the font size to \p s */
-  void textsize(fltk3::Fontsize s) {textsize_ = s;}
-  
-  /** Gets the font color */
-  fltk3::Color textcolor() const {return textcolor_;}
-  /** Sets the font color to \p s */
-  void textcolor(fltk3::Color s) {textcolor_ = s;}
-  
-};
+}
 
 #endif
 

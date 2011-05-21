@@ -70,10 +70,10 @@ namespace fltk3 {
   };
   
   /** For internal use only */
-  class FLTK3_EXPORT cc_Value_Input : public Fl_Value_Input {
+  class FLTK3_EXPORT cc_Value_Input : public fltk3::ValueInput {
   public:
     int format(char*);
-    cc_Value_Input(int X, int Y, int W, int H) : Fl_Value_Input(X,Y,W,H) {}
+    cc_Value_Input(int X, int Y, int W, int H) : fltk3::ValueInput(X,Y,W,H) {}
   };
   
 #endif // !FL_DOXYGEN
@@ -101,7 +101,7 @@ namespace fltk3 {
    arbitrary RGB color. They can pick the hue and saturation in the "hue box"
    on the left (hold down CTRL to just change the saturation), and the
    brightness using the vertical slider. Or they can type the 8-bit numbers
-   into the RGB Fl_Value_Input fields, or drag the mouse across them to adjust
+   into the RGB fltk3::ValueInput fields, or drag the mouse across them to adjust
    them.  The pull-down menu lets the user set the input fields to show RGB,
    HSV, or 8-bit RGB (0 to 255).
    

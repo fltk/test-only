@@ -26,25 +26,28 @@
 //
 
 /* \file
-  
-   Fl_XPM_Image class . */
+ 
+ fltk3::XPMImage class . */
 
 #ifndef Fltk3_XPM_Image_H
 #define Fltk3_XPM_Image_H
 #  include "Pixmap.h"
 
-/**
-  The Fl_XPM_Image class supports loading, caching,
-  and drawing of X Pixmap (XPM) images, including transparency.
-*/
-class FLTK3_EXPORT Fl_XPM_Image : public fltk3::Pixmap {
-
+namespace fltk3 {
+  /**
+   The fltk3::XPMImage class supports loading, caching,
+   and drawing of X Pixmap (XPM) images, including transparency.
+   */
+  class FLTK3_EXPORT XPMImage : public fltk3::Pixmap {
+    
   public:
+    
+    XPMImage(const char* filename);
+  };
+  
+}
 
-  Fl_XPM_Image(const char* filename);
-};
-
-#endif // !Fl_XPM_Image
+#endif // !fltk3::XPMImage
 
 //
 // End of "$Id: XPMImage.h 7903 2010-11-28 21:06:39Z matt $".

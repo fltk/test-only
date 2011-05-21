@@ -58,13 +58,13 @@ static void dataReleaseCB(void *info, const void *data, size_t size)
  */
 static void innards(const uchar *buf, int X, int Y, int W, int H,
 		    int delta, int linedelta, int mono,
-		    Fl_Draw_Image_Cb cb, void* userdata)
+		    fltk3::DrawImageCb cb, void* userdata)
 {
   if (!linedelta) linedelta = W*delta;
 
   const void *array = buf;
   uchar *tmpBuf = 0;
-  if (cb || Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id) {
+  if (cb || fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) {
     tmpBuf = new uchar[ H*W*delta ];
     if (cb) {
       for (int i=0; i<H; i++) {
@@ -151,17 +151,17 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   CGContextSetShouldAntialias(fl_gc, true);
 }
 
-void Fl_Quartz_Graphics_Driver::draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
+void fltk3::QuartzGraphicsDriver::draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
   innards(buf,x,y,w,h,d,l,(d<3&&d>-3),0,0);
 }
-void Fl_Quartz_Graphics_Driver::draw_image(Fl_Draw_Image_Cb cb, void* data,
+void fltk3::QuartzGraphicsDriver::draw_image(fltk3::DrawImageCb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   innards(0,x,y,w,h,d,0,(d<3&&d>-3),cb,data);
 }
-void Fl_Quartz_Graphics_Driver::draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
+void fltk3::QuartzGraphicsDriver::draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
   innards(buf,x,y,w,h,d,l,1,0,0);
 }
-void Fl_Quartz_Graphics_Driver::draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
+void fltk3::QuartzGraphicsDriver::draw_image_mono(fltk3::DrawImageCb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   innards(0,x,y,w,h,d,0,1,cb,data);
 }

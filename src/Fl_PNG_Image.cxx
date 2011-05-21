@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_PNG_Image routines.
+// fltk3::PNGImage routines.
 //
 // Copyright 1997-2011 by Easy Software Products.
 // Image support by Matthias Melcher, Copyright 2000-2009.
@@ -28,7 +28,7 @@
 // Contents:
 
 //
-//   Fl_PNG_Image::Fl_PNG_Image() - Load a PNG image file.
+//   fltk3::PNGImage::fltk3::PNGImage() - Load a PNG image file.
 //
 
 //
@@ -85,7 +85,7 @@ static void png_read_data_from_mem( png_structp png_ptr, //pointer to our data
 
   \param[in] filename	Name of PNG file to read
 */
-Fl_PNG_Image::Fl_PNG_Image (const char *filename): fltk3::RGBImage(0,0,0)
+fltk3::PNGImage::fltk3::PNGImage (const char *filename): fltk3::RGBImage(0,0,0)
 {
   load_png_(filename, NULL, 0);
 }
@@ -102,13 +102,13 @@ Fl_PNG_Image::Fl_PNG_Image (const char *filename): fltk3::RGBImage(0,0,0)
  \param buffer	  Pointer to the start of the PNG image in memory
  \param maxsize   Size in bytes of the memory buffer containing the PNG image
  */
-Fl_PNG_Image::Fl_PNG_Image (
+fltk3::PNGImage::fltk3::PNGImage (
       const char *name_png, const unsigned char *buffer, int maxsize): fltk3::RGBImage(0,0,0)
 {
   load_png_(name_png, buffer, maxsize);
 }
 
-void Fl_PNG_Image::load_png_(const char *name_png, const unsigned char *buffer_png, int maxsize)
+void fltk3::PNGImage::load_png_(const char *name_png, const unsigned char *buffer_png, int maxsize)
 {
 #if defined(HAVE_LIBPNG) && defined(HAVE_LIBZ)
   int i;	  // Looping var

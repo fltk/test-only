@@ -48,7 +48,7 @@
 // these are used to identify which buttons are which:
 void key_cb(Fl_Button*, void*) {}
 void shift_cb(Fl_Button*, void*) {}
-void wheel_cb(Fl_Dial*, void*) {}
+void wheel_cb(fltk3::Dial*, void*) {}
 
 // this is used to stop Esc from exiting the program:
 int handle(int e) {

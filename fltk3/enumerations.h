@@ -151,7 +151,7 @@ namespace fltk3 {
      
      If a widget wants the focus, it should change itself to display the 
      fact that it has the focus, and return non-zero from its handle() method.
-     It then becomes the fltk3::focus() widget and gets FL_KEYDOWN, fltk3::KEYUP, 
+     It then becomes the fltk3::focus() widget and gets fltk3::KEYDOWN, fltk3::KEYUP, 
      and fltk3::UNFOCUS events.
      
      The focus will change either because the window manager changed which 
@@ -167,8 +167,8 @@ namespace fltk3 {
      */
     UNFOCUS		= 7,
     
-    /** A key was pressed (FL_KEYDOWN) or released (fltk3::KEYUP). 
-     Fl_KEYBOARD is a synonym for FL_KEYDOWN.
+    /** A key was pressed (fltk3::KEYDOWN) or released (fltk3::KEYUP). 
+     Fl_KEYBOARD is a synonym for fltk3::KEYDOWN.
      The key can be found in fltk3::event_key().
      The text that the key should insert can be found with fltk3::event_text() 
      and its length is in fltk3::event_length(). If you use the key handle()
@@ -185,17 +185,17 @@ namespace fltk3 {
      
      fltk3::KEYUP events are sent to the widget that currently has focus. This 
      is not necessarily the same widget that received the corresponding 
-     FL_KEYDOWN event because focus may have changed between events.
+     fltk3::KEYDOWN event because focus may have changed between events.
      */
     KEYDOWN		= 8,
     
-    /** Equivalent to FL_KEYDOWN.
-     \see FL_KEYDOWN
+    /** Equivalent to fltk3::KEYDOWN.
+     \see fltk3::KEYDOWN
      */
     KEYBOARD		= 8,
     
     /** Key release event.
-     \see FL_KEYDOWN
+     \see fltk3::KEYDOWN
      */
     KEYUP		= 9,
     

@@ -69,7 +69,7 @@ static char SWAP_TYPE = 0 ; // 0 = determine it from environment variable
 
 /**  Returns non-zero if the hardware supports the given or current OpenGL  mode. */
 int fltk3::GlWindow::can_do(int a, const int *b) {
-  return Fl_Gl_Choice::find(a,b) != 0;
+  return fltk3::GlChoice::find(a,b) != 0;
 }
 
 void fltk3::GlWindow::show() {
@@ -78,10 +78,10 @@ void fltk3::GlWindow::show() {
 #endif
   if (!shown()) {
     if (!g) {
-      g = Fl_Gl_Choice::find(mode_,alist);
+      g = fltk3::GlChoice::find(mode_,alist);
 
       if (!g && (mode_ & fltk3::DOUBLE) == fltk3::SINGLE) {
-        g = Fl_Gl_Choice::find(mode_ | fltk3::DOUBLE,alist);
+        g = fltk3::GlChoice::find(mode_ | fltk3::DOUBLE,alist);
 	if (g) mode_ |= fltk3::FAKE_SINGLE;
       }
 
@@ -129,12 +129,12 @@ int fltk3::GlWindow::mode(int m, const int *a) {
   int oldmode = mode_;
 #endif // !__APPLE__
 #if !defined(WIN32) && !defined(__APPLE__)
-  Fl_Gl_Choice* oldg = g;
+  fltk3::GlChoice* oldg = g;
 #endif // !WIN32 && !__APPLE__
   context(0);
   mode_ = m; alist = a;
   if (shown()) {
-    g = Fl_Gl_Choice::find(m, a);
+    g = fltk3::GlChoice::find(m, a);
 
 #if defined(USE_X11)
     // under X, if the visual changes we must make a new X window (yuck!):

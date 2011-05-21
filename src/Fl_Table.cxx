@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_Table -- A table widget
+// fltk3::Table -- A table widget
 //
 // Copyright 2002 by Greg Ercolano.
 // Copyright (c) 2004 O'ksi'D
@@ -33,7 +33,7 @@
 #define SCROLLBAR_SIZE	16
 
 // Scroll display so 'row' is at top
-void Fl_Table::row_position(int row) {
+void fltk3::Table::row_position(int row) {
   if ( _row_position == row ) return;		// OPTIMIZATION: no change? avoid redraw
   if ( row < 0 ) row = 0;
   else if ( row >= rows() ) row = rows() - 1;
@@ -49,7 +49,7 @@ void Fl_Table::row_position(int row) {
 }
 
 // Scroll display so 'col' is at left
-void Fl_Table::col_position(int col) {
+void fltk3::Table::col_position(int col) {
   if ( _col_position == col ) return;	// OPTIMIZATION: no change? avoid redraw
   if ( col < 0 ) col = 0;
   else if ( col >= cols() ) col = cols() - 1;
@@ -65,7 +65,7 @@ void Fl_Table::col_position(int col) {
 }
 
 // Find scroll position of a row (in pixels)
-long Fl_Table::row_scroll_position(int row) {
+long fltk3::Table::row_scroll_position(int row) {
   int startrow = 0;
   long scroll = 0; 
   // OPTIMIZATION: 
@@ -82,7 +82,7 @@ long Fl_Table::row_scroll_position(int row) {
 }
 
 // Find scroll position of a column (in pixels)
-long Fl_Table::col_scroll_position(int col) {
+long fltk3::Table::col_scroll_position(int col) {
   int startcol = 0;
   long scroll = 0;
   // OPTIMIZATION: 
@@ -99,7 +99,7 @@ long Fl_Table::col_scroll_position(int col) {
 }
 
 // Ctor
-Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : fltk3::Group(X,Y,W,H,l) {
+fltk3::Table::Table(int X, int Y, int W, int H, const char *l) : fltk3::Group(X,Y,W,H,l) {
   _rows             = 0;
   _cols             = 0;
   _row_header_w     = 40;
@@ -138,12 +138,12 @@ Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : fltk3::Group(X,Y
   
   box(fltk3::THIN_DOWN_FRAME);
   
-  vscrollbar = new Fl_Scrollbar(x()+w()-SCROLLBAR_SIZE, y(),
+  vscrollbar = new fltk3::Scrollbar(x()+w()-SCROLLBAR_SIZE, y(),
                                 SCROLLBAR_SIZE, h()-SCROLLBAR_SIZE);
   vscrollbar->type(fltk3::VERTICAL);
   vscrollbar->callback(scroll_cb, (void*)this);
   
-  hscrollbar = new Fl_Scrollbar(x(), y()+h()-SCROLLBAR_SIZE,
+  hscrollbar = new fltk3::Scrollbar(x(), y()+h()-SCROLLBAR_SIZE,
                                 w(), SCROLLBAR_SIZE);
   hscrollbar->type(fltk3::HORIZONTAL);
   hscrollbar->callback(scroll_cb, (void*)this);
@@ -163,12 +163,12 @@ Fl_Table::Fl_Table(int X, int Y, int W, int H, const char *l) : fltk3::Group(X,Y
 }
 
 // Dtor
-Fl_Table::~Fl_Table() {
+fltk3::Table::~Table() {
   // The parent fltk3::Group takes care of destroying scrollbars
 }
 
 // Set height of a row
-void Fl_Table::row_height(int row, int height) {
+void fltk3::Table::row_height(int row, int height) {
   if ( row < 0 ) return;
   if ( row < (int)_rowheights.size() && _rowheights[row] == height ) {
     return;		// OPTIMIZATION: no change? avoid redraw
@@ -192,7 +192,7 @@ void Fl_Table::row_height(int row, int height) {
 }
 
 // Set width of a column
-void Fl_Table::col_width(int col, int width)
+void fltk3::Table::col_width(int col, int width)
 {
   if ( col < 0 ) return;
   if ( col < (int)_colwidths.size() && _colwidths[col] == width ) {
@@ -218,7 +218,7 @@ void Fl_Table::col_width(int col, int width)
 }
 
 // Return row/col clamped to reality
-int Fl_Table::row_col_clamp(TableContext context, int &R, int &C) {
+int fltk3::Table::row_col_clamp(TableContext context, int &R, int &C) {
   int clamped = 0;
   if ( R < 0 ) { R = 0; clamped = 1; }
   if ( C < 0 ) { C = 0; clamped = 1; }
@@ -244,7 +244,7 @@ int Fl_Table::row_col_clamp(TableContext context, int &R, int &C) {
 }
 
 // Return bounding region for given context
-void Fl_Table::get_bounds(TableContext context, int &X, int &Y, int &W, int &H) {
+void fltk3::Table::get_bounds(TableContext context, int &X, int &Y, int &W, int &H) {
   switch ( context ) {
     case CONTEXT_COL_HEADER:
       // Column header clipping.
@@ -269,7 +269,7 @@ void Fl_Table::get_bounds(TableContext context, int &X, int &Y, int &W, int &H) 
       
       // TODO: Add other contexts..
     default:
-      fprintf(stderr, "Fl_Table::get_bounds(): context %d unimplemented\n", (int)context);
+      fprintf(stderr, "fltk3::Table::get_bounds(): context %d unimplemented\n", (int)context);
       return;
   }
   //NOTREACHED
@@ -280,7 +280,7 @@ void Fl_Table::get_bounds(TableContext context, int &X, int &Y, int &W, int &H) 
 //    Returns R/C and context.
 //    Also returns resizeflag, if mouse is hovered over a resize boundary.
 //
-Fl_Table::TableContext Fl_Table::cursor2rowcol(int &R, int &C, ResizeFlag &resizeflag) {
+fltk3::Table::TableContext fltk3::Table::cursor2rowcol(int &R, int &C, ResizeFlag &resizeflag) {
   // return values
   R = C = 0;
   resizeflag = RESIZE_NONE;
@@ -360,7 +360,7 @@ Fl_Table::TableContext Fl_Table::cursor2rowcol(int &R, int &C, ResizeFlag &resiz
 //     If R or C are out of range, returns -1 
 //     with X/Y/W/H set to zero.
 //
-int Fl_Table::find_cell(TableContext context, int R, int C, int &X, int &Y, int &W, int &H) {
+int fltk3::Table::find_cell(TableContext context, int R, int C, int &X, int &Y, int &W, int &H) {
   if ( row_col_clamp(context, R, C) ) {		// row or col out of range? error
     X=Y=W=H=0;
     return(-1);
@@ -389,32 +389,32 @@ int Fl_Table::find_cell(TableContext context, int R, int C, int &X, int &Y, int 
       
       // TODO -- HANDLE OTHER CONTEXTS
     default:
-      fprintf(stderr, "Fl_Table::find_cell: unknown context %d\n", (int)context);
+      fprintf(stderr, "fltk3::Table::find_cell: unknown context %d\n", (int)context);
       return(-1);
   }
   //NOTREACHED
 }
 
 // Enable automatic scroll-selection
-void Fl_Table::_start_auto_drag() {
+void fltk3::Table::_start_auto_drag() {
   if (_auto_drag) return;
   _auto_drag = 1;
   fltk3::add_timeout(0.3, _auto_drag_cb2, this);
 }
 
 // Disable automatic scroll-selection
-void Fl_Table::_stop_auto_drag() {
+void fltk3::Table::_stop_auto_drag() {
   if (!_auto_drag) return;
   fltk3::remove_timeout(_auto_drag_cb2, this);
   _auto_drag = 0;
 }
 
-void Fl_Table::_auto_drag_cb2(void *d) {
-  ((Fl_Table*)d)->_auto_drag_cb();
+void fltk3::Table::_auto_drag_cb2(void *d) {
+  ((fltk3::Table*)d)->_auto_drag_cb();
 }
 
 // Handle automatic scroll-selection if mouse selection dragged off table edge
-void Fl_Table::_auto_drag_cb() {
+void fltk3::Table::_auto_drag_cb() {
   int lx = fltk3::e_x;
   int ly = fltk3::e_y;
   if (_selecting == CONTEXT_COL_HEADER)
@@ -465,7 +465,7 @@ void Fl_Table::_auto_drag_cb() {
 }
 
 // Recalculate the window dimensions
-void Fl_Table::recalc_dimensions() {
+void fltk3::Table::recalc_dimensions() {
   // Recalc to* (Table Outer), ti* (Table Inner), wi* ( Widget Inner)
   wix = ( x() + fltk3::box_dx(box())); tox = wix; tix = tox + fltk3::box_dx(table->box());
   wiy = ( y() + fltk3::box_dy(box())); toy = wiy; tiy = toy + fltk3::box_dy(table->box());
@@ -505,7 +505,7 @@ void Fl_Table::recalc_dimensions() {
 //    Does not handle redraw().
 //    TODO: Assumes ti[xywh] has already been recalculated.
 //
-void Fl_Table::table_scrolled() {
+void fltk3::Table::table_scrolled() {
   // Find top row
   int y, row, voff = vscrollbar->value();
   for ( row=y=0; row < _rows; row++ ) {
@@ -547,7 +547,7 @@ void Fl_Table::table_scrolled() {
 //    Recalculates the scrollbar sizes.
 //    Makes no assumptions about any pre-initialized data.
 //
-void Fl_Table::table_resized() {
+void fltk3::Table::table_resized() {
   table_h = row_scroll_position(rows());
   table_w = col_scroll_position(cols()); 
   recalc_dimensions(); 
@@ -587,15 +587,15 @@ void Fl_Table::table_resized() {
 }
 
 // Someone moved a scrollbar
-void Fl_Table::scroll_cb(fltk3::Widget*w, void *data) {
-  Fl_Table *o = (Fl_Table*)data;
+void fltk3::Table::scroll_cb(fltk3::Widget*w, void *data) {
+  fltk3::Table *o = (fltk3::Table*)data;
   o->recalc_dimensions();	// recalc tix, tiy, etc.
   o->table_scrolled();
   o->redraw();
 }
 
 // Set number of rows
-void Fl_Table::rows(int val) {
+void fltk3::Table::rows(int val) {
   int oldrows = _rows;
   _rows = val;
   {
@@ -617,7 +617,7 @@ void Fl_Table::rows(int val) {
 }
 
 // Set number of cols
-void Fl_Table::cols(int val) {
+void fltk3::Table::cols(int val) {
   _cols = val;
   {
     int default_w = ( _colwidths.size() > 0 ) ? _colwidths[_colwidths.size()-1] : 80;
@@ -632,14 +632,14 @@ void Fl_Table::cols(int val) {
 }
 
 // Change mouse cursor to different type
-void Fl_Table::change_cursor(fltk3::Cursor newcursor) {
+void fltk3::Table::change_cursor(fltk3::Cursor newcursor) {
   if ( newcursor != _last_cursor ) {
     fltk3::cursor(newcursor, fltk3::BLACK, fltk3::WHITE);
     _last_cursor = newcursor;
   }
 }
 
-void Fl_Table::damage_zone(int r1, int c1, int r2, int c2, int r3, int c3) {
+void fltk3::Table::damage_zone(int r1, int c1, int r2, int c2, int r3, int c3) {
   int R1 = r1, C1 = c1;
   int R2 = r2, C2 = c2;
   if (r1 > R2) R2 = r1;
@@ -665,7 +665,7 @@ void Fl_Table::damage_zone(int r1, int c1, int r2, int c2, int r3, int c3) {
   redraw_range(R1, R2, C1, C2);
 }
 
-int Fl_Table::move_cursor(int R, int C) {
+int fltk3::Table::move_cursor(int R, int C) {
   if (select_row == -1) R++;
   if (select_col == -1) C++;
   R += select_row;
@@ -697,7 +697,7 @@ fprintf(stderr,"Table %s: ** Event: %s --\n", (label()?label():"none"), eventnam
 #endif
 
 // Handle FLTK events
-int Fl_Table::handle(int event) {
+int fltk3::Table::handle(int event) {
   PRINTEVENT;
   int ret = fltk3::Group::handle(event);	// let FLTK group handle events first
   if (ret) {
@@ -1025,7 +1025,7 @@ int Fl_Table::handle(int event) {
 // Resize FLTK override
 //     Handle resize events if user resizes parent window.
 //
-void Fl_Table::resize(int X, int Y, int W, int H) {
+void fltk3::Table::resize(int X, int Y, int W, int H) {
   // Tell group to resize, and recalc our own widget as well
   fltk3::Group::resize(X, Y, W, H);
   table_resized();
@@ -1033,7 +1033,7 @@ void Fl_Table::resize(int X, int Y, int W, int H) {
 }
 
 // Draw a cell
-void Fl_Table::_redraw_cell(TableContext context, int r, int c) {
+void fltk3::Table::_redraw_cell(TableContext context, int r, int c) {
   if ( r < 0 || c < 0 ) return;
   int X,Y,W,H;
   find_cell(context, r, c, X, Y, W, H);	// find positions of cell
@@ -1044,7 +1044,7 @@ void Fl_Table::_redraw_cell(TableContext context, int r, int c) {
  See if the cell at row \p r and column \p c is selected.
  \returns 1 if the cell is selected, 0 if not.
  */
-int Fl_Table::is_selected(int r, int c) {
+int fltk3::Table::is_selected(int r, int c) {
   int s_left, s_right, s_top, s_bottom;
   
   if (select_col > current_col) {
@@ -1075,7 +1075,7 @@ int Fl_Table::is_selected(int r, int c) {
   \param[in] row_bot   Returns the bottom row of selection area
   \param[in] col_right Returns the right column of selection area
 */
-void Fl_Table::get_selection(int& row_top, int& col_left, int& row_bot, int& col_right) {
+void fltk3::Table::get_selection(int& row_top, int& col_left, int& row_bot, int& col_right) {
   if (select_col > current_col) {
     col_left  = current_col;
     col_right = select_col;
@@ -1103,7 +1103,7 @@ void Fl_Table::get_selection(int& row_top, int& col_left, int& row_bot, int& col
   \param[in] row_bot   Bottom row of selection area
   \param[in] col_right Right column of selection area
 */
-void Fl_Table::set_selection(int row_top, int col_left, int row_bot, int col_right) {
+void fltk3::Table::set_selection(int row_top, int col_left, int row_bot, int col_right) {
   damage_zone(current_row, current_col, select_row, select_col);
   current_col = col_left;
   current_row = row_top;
@@ -1112,11 +1112,11 @@ void Fl_Table::set_selection(int row_top, int col_left, int row_bot, int col_rig
   damage_zone(current_row, current_col, select_row, select_col);
 }
 
-// Draw the entire Fl_Table
+// Draw the entire fltk3::Table
 //    Override the draw() routine to draw the table.
 //    Then tell the group to draw over us.
 //
-void Fl_Table::draw() {   
+void fltk3::Table::draw() {   
   draw_cell(CONTEXT_STARTPAGE, 0, 0,	 	// let user's drawing routine
             tix, tiy, tiw, tih);		// prep new page
   

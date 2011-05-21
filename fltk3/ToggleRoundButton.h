@@ -29,7 +29,19 @@
 
 #ifndef Fl_Toggle_Round_Button
 #include "RoundButton.h"
-#define Fl_Toggle_Round_Button fltk3::RoundButton
+
+namespace fltk3 {
+  
+  class FLTK3_EXPORT ToggleRoundButton : public RoundButton {
+  protected:
+    virtual void draw();
+  public:
+    ToggleRoundButton(int x,int y,int w,int h,const char *l = 0)
+    : RoundButton(x, y, w, h, l) {}
+  };
+  
+}
+
 #endif
 
 //

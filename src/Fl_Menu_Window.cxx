@@ -50,7 +50,7 @@ extern uchar fl_overlay; // changes how fltk3::color(x) works
 
 #include <stdio.h>
 
-void Fl_Menu_Window::show() {
+void fltk3::MenuWindow::show() {
 #if HAVE_OVERLAY
   if (!shown() && overlay() && fl_find_overlay_visual()) {
     XInstallColormap(fl_display, fl_overlay_colormap);
@@ -62,7 +62,7 @@ void Fl_Menu_Window::show() {
     fltk3::SingleWindow::show();
 }
 
-void Fl_Menu_Window::flush() {
+void fltk3::MenuWindow::flush() {
 #if HAVE_OVERLAY
   if (!fl_overlay_visual || !overlay()) {fltk3::SingleWindow::flush(); return;}
   Fl_X *myi = Fl_X::i(this);
@@ -84,7 +84,7 @@ void Fl_Menu_Window::flush() {
 }
 
 /** Erases the window, does nothing if HAVE_OVERLAY is not defined config.h */
-void Fl_Menu_Window::erase() {
+void fltk3::MenuWindow::erase() {
 #if HAVE_OVERLAY
   if (!gc || !shown()) return;
 //XSetForeground(fl_display, gc, 0);
@@ -95,13 +95,13 @@ void Fl_Menu_Window::erase() {
 
 // Fix the colormap flashing on Maximum Impact Graphics by erasing the
 // menu before unmapping it:
-void Fl_Menu_Window::hide() {
+void fltk3::MenuWindow::hide() {
   erase();
   fltk3::SingleWindow::hide();
 }
 
 /**  Destroys the window and all of its children.*/
-Fl_Menu_Window::~Fl_Menu_Window() {
+fltk3::MenuWindow::~MenuWindow() {
   hide();
 }
 

@@ -77,9 +77,9 @@ fltk3::IntInput *print_from=(fltk3::IntInput *)0;
 
 fltk3::IntInput *print_to=(fltk3::IntInput *)0;
 
-Fl_Spinner *print_copies=(Fl_Spinner *)0;
+fltk3::Spinner *print_copies=(fltk3::Spinner *)0;
 
-static void cb_print_copies(Fl_Spinner*, void*) {
+static void cb_print_copies(fltk3::Spinner*, void*) {
   if (print_copies->value() == 1) {
   print_collate_button->deactivate();
   print_collate_group[0]->deactivate();
@@ -105,7 +105,7 @@ static void cb_Cancel(fltk3::Button*, void*) {
   print_panel->hide();
 }
 
-Fl_Progress *print_progress=(Fl_Progress *)0;
+fltk3::Progress *print_progress=(fltk3::Progress *)0;
 
 fltk3::DoubleWindow *print_properties_panel=(fltk3::DoubleWindow *)0;
 
@@ -294,10 +294,10 @@ fltk3::DoubleWindow* make_print_panel() {
         o->box(fltk3::THIN_DOWN_BOX);
         o->labelfont(1);
         o->align(fltk3::Align(fltk3::ALIGN_TOP_LEFT));
-        { print_copies = new Fl_Spinner(321, 96, 45, 25, "# Copies:");
+        { print_copies = new fltk3::Spinner(321, 96, 45, 25, "# Copies:");
           print_copies->callback((fltk3::Callback*)cb_print_copies);
           print_copies->when(fltk3::WHEN_CHANGED);
-        } // Fl_Spinner* print_copies
+        } // fltk3::Spinner* print_copies
         { print_collate_button = new fltk3::CheckButton(376, 96, 64, 25, "Collate");
           print_collate_button->down_box(fltk3::DOWN_BOX);
           print_collate_button->callback((fltk3::Callback*)cb_print_collate_button);
@@ -440,10 +440,10 @@ fltk3::DoubleWindow* make_print_panel() {
       } // fltk3::Button* o
       print_panel_controls->end();
     } // fltk3::Group* print_panel_controls
-    { print_progress = new Fl_Progress(10, 203, 289, 21);
+    { print_progress = new fltk3::Progress(10, 203, 289, 21);
       print_progress->selection_color((fltk3::Color)4);
       print_progress->hide();
-    } // Fl_Progress* print_progress
+    } // fltk3::Progress* print_progress
     print_panel->set_modal();
     print_panel->end();
   } // fltk3::DoubleWindow* print_panel

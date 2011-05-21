@@ -35,18 +35,18 @@
 
 extern void fl_quartz_restore_line_style_();
 
-Fl_System_Printer::Fl_System_Printer(void)
+fltk3::SystemPrinter::SystemPrinter(void)
 {
   x_offset = 0;
   y_offset = 0;
   scale_x = scale_y = 1.;
   gc = 0;
-  driver(Fl_Display_Device::display_device()->driver());
+  driver(fltk3::DisplayDevice::display_device()->driver());
 }
 
-Fl_System_Printer::~Fl_System_Printer(void) {}
+fltk3::SystemPrinter::~SystemPrinter(void) {}
 
-int Fl_System_Printer::start_job (int pagecount, int *frompage, int *topage)
+int fltk3::SystemPrinter::start_job (int pagecount, int *frompage, int *topage)
 //printing using a Quartz graphics context
 //returns 0 iff OK
 {
@@ -138,7 +138,7 @@ int Fl_System_Printer::start_job (int pagecount, int *frompage, int *topage)
   return 0;
 }
 
-void Fl_System_Printer::margins(int *left, int *top, int *right, int *bottom)
+void fltk3::SystemPrinter::margins(int *left, int *top, int *right, int *bottom)
 {
   PMPaper paper;
   PMGetPageFormatPaper(pageFormat, &paper);
@@ -160,7 +160,7 @@ void Fl_System_Printer::margins(int *left, int *top, int *right, int *bottom)
   }
 }
 
-int Fl_System_Printer::printable_rect(int *w, int *h)
+int fltk3::SystemPrinter::printable_rect(int *w, int *h)
 //returns 0 iff OK
 {
   OSStatus status;
@@ -177,7 +177,7 @@ int Fl_System_Printer::printable_rect(int *w, int *h)
   return 0;
 }
 
-void Fl_System_Printer::origin(int x, int y)
+void fltk3::SystemPrinter::origin(int x, int y)
 {
   x_offset = x;
   y_offset = y;
@@ -190,7 +190,7 @@ void Fl_System_Printer::origin(int x, int y)
   CGContextSaveGState(fl_gc);
 }
 
-void Fl_System_Printer::scale (float s_x, float s_y)
+void fltk3::SystemPrinter::scale (float s_x, float s_y)
 {
   if (s_y == 0.) s_y = s_x;
   scale_x = s_x;
@@ -204,7 +204,7 @@ void Fl_System_Printer::scale (float s_x, float s_y)
   CGContextSaveGState(fl_gc);
 }
 
-void Fl_System_Printer::rotate (float rot_angle)
+void fltk3::SystemPrinter::rotate (float rot_angle)
 {
   angle = - rot_angle * M_PI / 180.;
   CGContextRestoreGState(fl_gc);
@@ -216,20 +216,20 @@ void Fl_System_Printer::rotate (float rot_angle)
   CGContextSaveGState(fl_gc);
 }
 
-void Fl_System_Printer::translate(int x, int y)
+void fltk3::SystemPrinter::translate(int x, int y)
 {
   CGContextSaveGState(fl_gc);
   CGContextTranslateCTM(fl_gc, x, y );
   CGContextSaveGState(fl_gc);
 }
 
-void Fl_System_Printer::untranslate(void)
+void fltk3::SystemPrinter::untranslate(void)
 {
   CGContextRestoreGState(fl_gc);
   CGContextRestoreGState(fl_gc);
 }
 
-int Fl_System_Printer::start_page (void)
+int fltk3::SystemPrinter::start_page (void)
 {	
   OSStatus status = PMSessionBeginPageNoDialog(printSession, pageFormat, NULL);
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
@@ -277,7 +277,7 @@ int Fl_System_Printer::start_page (void)
   return status != noErr;
 }
 
-int Fl_System_Printer::end_page (void)
+int fltk3::SystemPrinter::end_page (void)
 {	
   CGContextFlush(fl_gc);
   CGContextRestoreGState(fl_gc);
@@ -287,7 +287,7 @@ int Fl_System_Printer::end_page (void)
   return status != noErr;
 }
 
-void Fl_System_Printer::end_job (void)
+void fltk3::SystemPrinter::end_job (void)
 {
   OSStatus status;
   
@@ -296,7 +296,7 @@ void Fl_System_Printer::end_job (void)
     fltk3::alert ("PM Session error %d", (int)status);
   }
   PMSessionEndDocumentNoDialog(printSession);
-  Fl_Display_Device::display_device()->set_current();
+  fltk3::DisplayDevice::display_device()->set_current();
   fl_gc = 0;
   fltk3::first_window()->show();
 }

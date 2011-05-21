@@ -59,7 +59,7 @@ const char * const fl_eventnames[] =
   "fltk3::DRAG",
   "fltk3::FOCUS",
   "fltk3::UNFOCUS",
-  "FL_KEYDOWN",
+  "fltk3::KEYDOWN",
   "fltk3::KEYUP",
   "fltk3::CLOSE",
   "fltk3::MOVE",

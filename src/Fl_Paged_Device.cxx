@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// implementation of Fl_Paged_Device class for the Fast Light Tool Kit (FLTK).
+// implementation of fltk3::PagedDevice class for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 2010-2011 by Bill Spitzak and others.
 //
@@ -24,15 +24,15 @@
 //
 //     http://www.fltk.org/str.php
 //
-/** \file Fl_Paged_Device.cxx
- \brief implementation of class Fl_Paged_Device.
+/** \file fltk3::PagedDevice.cxx
+ \brief implementation of class fltk3::PagedDevice.
  */
 
 #include <fltk3/PagedDevice.h>
 #include <fltk3/run.h>
 #include <fltk3/draw.h>
 
-const char *Fl_Paged_Device::class_id = "Fl_Paged_Device";
+const char *fltk3::PagedDevice::class_id = "fltk3::PagedDevice";
 
 
 /**
@@ -46,7 +46,7 @@ const char *Fl_Paged_Device::class_id = "Fl_Paged_Device";
  to the current origin of graphics functions.
  @param[in] delta_y Same as above, vertically.
  */
-void Fl_Paged_Device::print_widget(fltk3::Widget* widget, int delta_x, int delta_y) 
+void fltk3::PagedDevice::print_widget(fltk3::Widget* widget, int delta_x, int delta_y) 
 { 
   int old_x, old_y, new_x, new_y, is_window;
   if ( ! widget->visible() ) return;
@@ -68,8 +68,8 @@ void Fl_Paged_Device::print_widget(fltk3::Widget* widget, int delta_x, int delta
   // we do some trickery to recognize OpenGL windows and draw them via a plugin
   int drawn_by_plugin = 0;
   if (widget->as_gl_window()) {
-    Fl_Plugin_Manager pm("fltk:device");  
-    Fl_Device_Plugin *pi = (Fl_Device_Plugin*)pm.plugin("opengl.device.fltk.org");
+    fltk3::PluginManager pm("fltk:device");  
+    fltk3::DevicePlugin *pi = (fltk3::DevicePlugin*)pm.plugin("opengl.device.fltk.org");
     if (pi) {
       int width, height;
       this->printable_rect(&width, &height);
@@ -89,7 +89,7 @@ void Fl_Paged_Device::print_widget(fltk3::Widget* widget, int delta_x, int delta
 }
 
 
-void Fl_Paged_Device::traverse(fltk3::Widget *widget)
+void fltk3::PagedDevice::traverse(fltk3::Widget *widget)
 {
   fltk3::Group *g = widget->as_group();
   if (!g) return;
@@ -110,7 +110,7 @@ void Fl_Paged_Device::traverse(fltk3::Widget *widget)
  @param[out] x If non-null, *x is set to the horizontal page offset of graphics origin.
  @param[out] y Same as above, vertically.
  */
-void Fl_Paged_Device::origin(int *x, int *y)
+void fltk3::PagedDevice::origin(int *x, int *y)
 {
   if (x) *x = x_offset;
   if (y) *y = y_offset;
@@ -127,10 +127,10 @@ void Fl_Paged_Device::origin(int *x, int *y)
  @param delta_x Optional horizontal offset from current graphics origin where to print the captured rectangle.
  @param delta_y As above, vertically.
  */
-void Fl_Paged_Device::print_window_part(fltk3::Window *win, int x, int y, int w, int h, int delta_x, int delta_y)
+void fltk3::PagedDevice::print_window_part(fltk3::Window *win, int x, int y, int w, int h, int delta_x, int delta_y)
 {
-  Fl_Surface_Device *current = Fl_Surface_Device::surface();
-  Fl_Display_Device::display_device()->set_current();
+  fltk3::SurfaceDevice *current = fltk3::SurfaceDevice::surface();
+  fltk3::DisplayDevice::display_device()->set_current();
   fltk3::Window *save_front = fltk3::first_window();
   win->show();
   fl_gc = NULL;
@@ -156,7 +156,7 @@ void Fl_Paged_Device::print_window_part(fltk3::Window *win, int x, int y, int w,
  @param[out] topage if non-null, *topage is set to the last page the user wants printed
  @return 0 if OK, non-zero if any error
  */
-int Fl_Paged_Device::start_job(int pagecount, int *frompage, int *topage) {return 1;}
+int fltk3::PagedDevice::start_job(int pagecount, int *frompage, int *topage) {return 1;}
 
 /**
  @brief Starts a new printed page
@@ -165,7 +165,7 @@ int Fl_Paged_Device::start_job(int pagecount, int *frompage, int *topage) {retur
  and with origin at the top left of the printable page area.
  @return 0 if OK, non-zero if any error
  */
-int Fl_Paged_Device::start_page (void) {return 1;}
+int fltk3::PagedDevice::start_page (void) {return 1;}
 
 /**
  @brief Computes the width and height of the printable area of the page.
@@ -175,7 +175,7 @@ int Fl_Paged_Device::start_page (void) {return 1;}
  Values account for the user-selected paper type and print orientation.
  @return 0 if OK, non-zero if any error
  */
-int Fl_Paged_Device::printable_rect(int *w, int *h) {return 1;}
+int fltk3::PagedDevice::printable_rect(int *w, int *h) {return 1;}
 
 /**
  @brief Computes the dimensions of margins that lie between the printable page area and
@@ -188,7 +188,7 @@ int Fl_Paged_Device::printable_rect(int *w, int *h) {return 1;}
  @param[out] right If non-null, *right is set to the right margin size.
  @param[out] bottom If non-null, *bottom is set to the bottom margin size.
  */
-void Fl_Paged_Device::margins(int *left, int *top, int *right, int *bottom) {}
+void fltk3::PagedDevice::margins(int *left, int *top, int *right, int *bottom) {}
 
 /**
  @brief Sets the position in page coordinates of the origin of graphics functions.
@@ -201,7 +201,7 @@ void Fl_Paged_Device::margins(int *left, int *top, int *right, int *bottom) {}
  @param[in] x Horizontal position in page coordinates of the desired origin of graphics functions.
  @param[in] y Same as above, vertically.
  */
-void Fl_Paged_Device::origin(int x, int y) {}
+void fltk3::PagedDevice::origin(int x, int y) {}
 
 /**
  @brief Changes the scaling of page coordinates.
@@ -214,7 +214,7 @@ void Fl_Paged_Device::origin(int x, int y) {}
   The value 0. is equivalent to setting \p scale_y = \p scale_x. Thus, scale(factor);
   is equivalent to scale(factor, factor);
  */
-void Fl_Paged_Device::scale (float scale_x, float scale_y) {}
+void fltk3::PagedDevice::scale (float scale_x, float scale_y) {}
 
 /**
  @brief Rotates the graphics operations relatively to paper.
@@ -223,19 +223,19 @@ void Fl_Paged_Device::scale (float scale_x, float scale_y) {}
  Successive rotate() calls don't combine their effects.
  @param angle Rotation angle in counter-clockwise degrees.
  */
-void Fl_Paged_Device::rotate(float angle) {}
+void fltk3::PagedDevice::rotate(float angle) {}
 
 /**
  @brief To be called at the end of each page.
 
  @return 0 if OK, non-zero if any error.
  */
-int Fl_Paged_Device::end_page (void) {return 1;}
+int fltk3::PagedDevice::end_page (void) {return 1;}
 
 /**
  @brief To be called at the end of a print job.
  */
-void Fl_Paged_Device::end_job (void) {}
+void fltk3::PagedDevice::end_job (void) {}
 
 /**
  @brief Translates the current graphics origin accounting for the current rotation.
@@ -244,14 +244,14 @@ void Fl_Paged_Device::end_job (void) {}
  Each translate() call must be matched by an untranslate() call.
  Successive translate() calls add up their effects.
  */
-void Fl_Paged_Device::translate(int x, int y) {}
+void fltk3::PagedDevice::translate(int x, int y) {}
 
 /**
  @brief Undoes the effect of a previous translate() call.
  */
-void Fl_Paged_Device::untranslate(void) {}
+void fltk3::PagedDevice::untranslate(void) {}
 
-const Fl_Paged_Device::page_format Fl_Paged_Device::page_formats[NO_PAGE_FORMATS] = { 
+const fltk3::PagedDevice::page_format fltk3::PagedDevice::page_formats[NO_PAGE_FORMATS] = { 
   // order of enum Page_Format
   // comes from appendix B of 5003.PPD_Spec_v4.3.pdf
   

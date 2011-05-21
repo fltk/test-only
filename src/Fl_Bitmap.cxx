@@ -249,7 +249,7 @@ Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *array) 
 }
 
 void fltk3::Bitmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
-  fl_graphics_driver->draw(this, XP, YP, WP, HP, cx, cy);
+  fltk3::graphics_driver->draw(this, XP, YP, WP, HP, cx, cy);
 }
 
 static int start(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int w, int h, int &cx, int &cy, 
@@ -269,7 +269,7 @@ static int start(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int w, int h
 }
 
 #ifdef __APPLE__
-void Fl_Quartz_Graphics_Driver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {
+void fltk3::QuartzGraphicsDriver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   if (!bm->array) {
     bm->draw_empty(XP, YP);
@@ -304,7 +304,7 @@ void Fl_GDI_Graphics_Driver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int
   HDC tempdc;
   int save;
   BOOL use_print_algo = false;
-  if (Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id) {
+  if (fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) {
     static HMODULE hMod = NULL;
     if (!hMod) {
       hMod = LoadLibrary("MSIMG32.DLL");

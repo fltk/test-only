@@ -113,9 +113,9 @@ fltk3::TextDisplay::TextDisplay(int X, int Y, int W, int H, const char* l)
   text_area.w = 0;
   text_area.h = 0;
   
-  mVScrollBar = new Fl_Scrollbar(0,0,1,1);
+  mVScrollBar = new fltk3::Scrollbar(0,0,1,1);
   mVScrollBar->callback((fltk3::Callback*)v_scrollbar_cb, this);
-  mHScrollBar = new Fl_Scrollbar(0,0,1,1);
+  mHScrollBar = new fltk3::Scrollbar(0,0,1,1);
   mHScrollBar->callback((fltk3::Callback*)h_scrollbar_cb, this);
   mHScrollBar->type(fltk3::HORIZONTAL);
   
@@ -2607,7 +2607,7 @@ void fltk3::TextDisplay::update_h_scrollbar() {
 /**
  \brief Callbacks for drag or valueChanged on scrollbars.
  */
-void fltk3::TextDisplay::v_scrollbar_cb(Fl_Scrollbar* b, fltk3::TextDisplay* textD) {
+void fltk3::TextDisplay::v_scrollbar_cb(fltk3::Scrollbar* b, fltk3::TextDisplay* textD) {
   if (b->value() == textD->mTopLineNum) return;
   textD->scroll(b->value(), textD->mHorizOffset);
 }
@@ -2617,7 +2617,7 @@ void fltk3::TextDisplay::v_scrollbar_cb(Fl_Scrollbar* b, fltk3::TextDisplay* tex
 /**
  \brief Callbacks for drag or valueChanged on scrollbars.
  */
-void fltk3::TextDisplay::h_scrollbar_cb(Fl_Scrollbar* b, fltk3::TextDisplay* textD) {
+void fltk3::TextDisplay::h_scrollbar_cb(fltk3::Scrollbar* b, fltk3::TextDisplay* textD) {
   if (b->value() == textD->mHorizOffset) return;
   textD->scroll(textD->mTopLineNum, b->value());
 }
@@ -3361,7 +3361,7 @@ void fltk3::TextDisplay::draw(void) {
   // draw the non-text, non-scrollbar areas.
   if (damage() & fltk3::DAMAGE_ALL) {
     //    printf("drawing all (box = %d)\n", box());
-    if (Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id) {
+    if (fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) {
       // if to printer, draw the background
       fltk3::rectf(text_area.x, text_area.y, text_area.w, text_area.h, color() );
     }

@@ -33,10 +33,10 @@
 
 #  include "Image.h"
 
-class Fl_JPEG_Image;
-class Fl_PNG_Image;
-
 namespace fltk3 {
+
+  class JPEGImage;
+  class PNGImage;
   
   // Test function for adding new formats
   typedef fltk3::Image *(*SharedHandler)(const char *name, uchar *header,
@@ -52,8 +52,8 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT SharedImage : public fltk3::Image {
     
-    friend class ::Fl_JPEG_Image;
-    friend class ::Fl_PNG_Image;
+    friend class JPEGImage;
+    friend class PNGImage;
     
   protected:
     

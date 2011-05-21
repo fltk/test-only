@@ -480,7 +480,7 @@ inline int fl_isdisplayed_browser_line(fltk3::Widget* o, int n) {
 #define FL_RETURN_BUTTON	6
 #define FL_HIDDEN_RET_BUTTON	7
 #define FL_PUSH_BUTTON		fltk3::TOGGLE_BUTTON
-#define fltk3::MENU_BUTTON		9
+#define FL_MENU_BUTTON		9
 
 FLTK3_EXPORT fltk3::Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
 inline int fl_get_button(fltk3::Widget* b) {return ((fltk3::Button*)b)->value();}
@@ -575,22 +575,22 @@ inline void fl_get_clock(fltk3::Widget* o, int* h, int* m, int* s) {
 }
 
 #include "Counter.h"
-forms_constructor(Fl_Counter, fl_add_counter)
+forms_constructor(fltk3::Counter, fl_add_counter)
 inline void fl_set_counter_value(fltk3::Widget* o, double v) {
-    ((Fl_Counter*)o)->value(v);}
+    ((fltk3::Counter*)o)->value(v);}
 inline void fl_set_counter_bounds(fltk3::Widget* o, double a, double b) {
-    ((Fl_Counter*)o)->bounds(a,b);}
+    ((fltk3::Counter*)o)->bounds(a,b);}
 inline void fl_set_counter_step(fltk3::Widget* o, double a, double b) {
-    ((Fl_Counter*)o)->step(a,b);}
+    ((fltk3::Counter*)o)->step(a,b);}
 inline void fl_set_counter_precision(fltk3::Widget* o, int v) {
-    ((Fl_Counter*)o)->precision(v);}
+    ((fltk3::Counter*)o)->precision(v);}
 inline void fl_set_counter_return(fltk3::Widget* o, int v) {
-    ((Fl_Counter*)o)->when((fltk3::When)(v|fltk3::WHEN_RELEASE));}
+    ((fltk3::Counter*)o)->when((fltk3::When)(v|fltk3::WHEN_RELEASE));}
 inline double fl_get_counter_value(fltk3::Widget* o) {
-    return ((Fl_Counter*)o)->value();}
+    return ((fltk3::Counter*)o)->value();}
 inline void fl_get_counter_bounds(fltk3::Widget* o, float* a, float* b) {
-  *a = float(((Fl_Counter*)o)->minimum());
-  *b = float(((Fl_Counter*)o)->maximum());
+  *a = float(((fltk3::Counter*)o)->minimum());
+  *b = float(((fltk3::Counter*)o)->maximum());
 }
 //inline void fl_set_counter_filter(fltk3::Widget*,const char* (*)(fltk3::Widget*,double,int));
 
@@ -604,26 +604,26 @@ inline void fl_set_cursor(fltk3::Window* w, fltk3::Cursor c) {w->cursor(c);}
 #define FL_DIAL_COL1 fltk3::GRAY
 #define FL_DIAL_COL2 37
 
-forms_constructor(Fl_Dial, fl_add_dial)
+forms_constructor(fltk3::Dial, fl_add_dial)
 inline void fl_set_dial_value(fltk3::Widget* o, double v) {
-  ((Fl_Dial*)o)->value(v);}
+  ((fltk3::Dial*)o)->value(v);}
 inline double fl_get_dial_value(fltk3::Widget* o) {
-  return ((Fl_Dial*)o)->value();}
+  return ((fltk3::Dial*)o)->value();}
 inline void fl_set_dial_bounds(fltk3::Widget* o, double a, double b) {
-  ((Fl_Dial*)o)->bounds(a, b);}
+  ((fltk3::Dial*)o)->bounds(a, b);}
 inline void fl_get_dial_bounds(fltk3::Widget* o, float* a, float* b) {
-  *a = float(((Fl_Dial*)o)->minimum());
-  *b = float(((Fl_Dial*)o)->maximum());
+  *a = float(((fltk3::Dial*)o)->minimum());
+  *b = float(((fltk3::Dial*)o)->maximum());
 }
 inline void fl_set_dial_return(fltk3::Widget* o, int i) {
-  ((Fl_Dial*)o)->when((fltk3::When)(i|fltk3::WHEN_RELEASE));}
+  ((fltk3::Dial*)o)->when((fltk3::When)(i|fltk3::WHEN_RELEASE));}
 inline void fl_set_dial_angles(fltk3::Widget* o, int a, int b) {
-  ((Fl_Dial*)o)->angles((short)a, (short)b);}
+  ((fltk3::Dial*)o)->angles((short)a, (short)b);}
 //inline void fl_set_dial_cross(fltk3::Widget* o, int);
 // inline void fl_set_dial_direction(fltk3::Widget* o, uchar d) {
-//   ((Fl_Dial*)o)->direction(d);}
+//   ((fltk3::Dial*)o)->direction(d);}
 inline void fl_set_dial_step(fltk3::Widget* o, double v) {
-  ((Fl_Dial*)o)->step(v);}
+  ((fltk3::Dial*)o)->step(v);}
 
 // Frames:
 
@@ -749,33 +749,33 @@ inline const char* fl_get_menu_text(fltk3::Widget* o) {
 
 #include "Positioner.h"
 #define FL_NORMAL_POSITIONER	0
-forms_constructor(Fl_Positioner, fl_add_positioner)
+forms_constructor(fltk3::Positioner, fl_add_positioner)
 inline void fl_set_positioner_xvalue(fltk3::Widget* o, double v) {
-    ((Fl_Positioner*)o)->xvalue(v);}
+    ((fltk3::Positioner*)o)->xvalue(v);}
 inline double fl_get_positioner_xvalue(fltk3::Widget* o) {
-    return ((Fl_Positioner*)o)->xvalue();}
+    return ((fltk3::Positioner*)o)->xvalue();}
 inline void fl_set_positioner_xbounds(fltk3::Widget* o, double a, double b) {
-    ((Fl_Positioner*)o)->xbounds(a,b);}
+    ((fltk3::Positioner*)o)->xbounds(a,b);}
 inline void fl_get_positioner_xbounds(fltk3::Widget* o, float* a, float* b) {
-  *a = float(((Fl_Positioner*)o)->xminimum());
-  *b = float(((Fl_Positioner*)o)->xmaximum());
+  *a = float(((fltk3::Positioner*)o)->xminimum());
+  *b = float(((fltk3::Positioner*)o)->xmaximum());
 }
 inline void fl_set_positioner_yvalue(fltk3::Widget* o, double v) {
-    ((Fl_Positioner*)o)->yvalue(v);}
+    ((fltk3::Positioner*)o)->yvalue(v);}
 inline double fl_get_positioner_yvalue(fltk3::Widget* o) {
-    return ((Fl_Positioner*)o)->yvalue();}
+    return ((fltk3::Positioner*)o)->yvalue();}
 inline void fl_set_positioner_ybounds(fltk3::Widget* o, double a, double b) {
-    ((Fl_Positioner*)o)->ybounds(a,b);}
+    ((fltk3::Positioner*)o)->ybounds(a,b);}
 inline void fl_get_positioner_ybounds(fltk3::Widget* o, float* a, float* b) {
-  *a = float(((Fl_Positioner*)o)->yminimum());
-  *b = float(((Fl_Positioner*)o)->ymaximum());
+  *a = float(((fltk3::Positioner*)o)->yminimum());
+  *b = float(((fltk3::Positioner*)o)->ymaximum());
 }
 inline void fl_set_positioner_xstep(fltk3::Widget* o, double v) {
-    ((Fl_Positioner*)o)->xstep(v);}
+    ((fltk3::Positioner*)o)->xstep(v);}
 inline void fl_set_positioner_ystep(fltk3::Widget* o, double v) {
-    ((Fl_Positioner*)o)->ystep(v);}
+    ((fltk3::Positioner*)o)->ystep(v);}
 inline void fl_set_positioner_return(fltk3::Widget* o, int v) {
-    ((Fl_Positioner*)o)->when((fltk3::When)(v|fltk3::WHEN_RELEASE));}
+    ((fltk3::Positioner*)o)->when((fltk3::When)(v|fltk3::WHEN_RELEASE));}
 
 #include "Slider.h"
 
@@ -822,12 +822,12 @@ public:
 forms_constructorb(Fl_FormsText, fl_add_text)
 
 #include "Timer.h"
-forms_constructort(Fl_Timer, fl_add_timer)
-inline void fl_set_timer(fltk3::Widget* o, double v) {((Fl_Timer*)o)->value(v);}
-inline double fl_get_timer(fltk3::Widget* o) {return ((Fl_Timer*)o)->value();}
-inline void fl_suspend_timer(fltk3::Widget* o) {((Fl_Timer*)o)->suspended(1);}
-inline void fl_resume_timer(fltk3::Widget* o) {((Fl_Timer*)o)->suspended(0);}
-inline void fl_set_timer_countup(fltk3::Widget* o,char d) {((Fl_Timer*)o)->direction(d);}
+forms_constructort(fltk3::Timer, fl_add_timer)
+inline void fl_set_timer(fltk3::Widget* o, double v) {((fltk3::Timer*)o)->value(v);}
+inline double fl_get_timer(fltk3::Widget* o) {return ((fltk3::Timer*)o)->value();}
+inline void fl_suspend_timer(fltk3::Widget* o) {((fltk3::Timer*)o)->suspended(1);}
+inline void fl_resume_timer(fltk3::Widget* o) {((fltk3::Timer*)o)->suspended(0);}
+inline void fl_set_timer_countup(fltk3::Widget* o,char d) {((fltk3::Timer*)o)->direction(d);}
 void fl_gettime(long* sec, long* usec);
 
 // Fl_XYPlot nyi

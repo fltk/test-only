@@ -40,10 +40,11 @@
 typedef void* GLContext; // actually a GLXContext or HGLDC
 #endif
 
-class Fl_Gl_Choice; // structure to hold result of glXChooseVisual
 
 namespace fltk3 {
-  
+
+  class GlChoice; // structure to hold result of glXChooseVisual
+
   /**
    The fltk3::GlWindow widget sets things up so OpenGL works.
    
@@ -68,7 +69,7 @@ namespace fltk3 {
     
     int mode_;
     const int *alist;
-    Fl_Gl_Choice *g;
+    GlChoice *g;
     GLContext context_;
     char valid_f_;
     char damage1_; // damage() of back buffer

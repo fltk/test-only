@@ -95,13 +95,13 @@ extern FLTK3_EXPORT ulong fl_event_time;
 typedef ulong Fl_Offscreen;
 #   define fl_create_offscreen(w,h) \
   XCreatePixmap(fl_display, \
-	      (Fl_Surface_Device::surface()->class_name() == Fl_Display_Device::class_id ? \
+	      (fltk3::SurfaceDevice::surface()->class_name() == fltk3::DisplayDevice::class_id ? \
 	      fl_window : fl_xid(fltk3::first_window()) ) , \
 	      w, h, fl_visual->depth)
 // begin/end are macros that save the old state in local variables:
 #    define fl_begin_offscreen(pixmap) \
   Window _sw=fl_window; fl_window=pixmap; \
-  Fl_Surface_Device *_ss = Fl_Surface_Device::surface(); Fl_Display_Device::display_device()->set_current(); \
+  fltk3::SurfaceDevice *_ss = fltk3::SurfaceDevice::surface(); fltk3::DisplayDevice::display_device()->set_current(); \
   fltk3::push_no_clip()
 #    define fl_end_offscreen() \
   fltk3::pop_clip(); fl_window = _sw; _ss->set_current()

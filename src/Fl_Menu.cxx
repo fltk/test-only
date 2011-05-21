@@ -92,7 +92,7 @@ static const fltk3::Menu_* button=0;
 ////////////////////////////////////////////////////////////////
 
 // tiny window for title of menu:
-class menutitle : public Fl_Menu_Window {
+class menutitle : public fltk3::MenuWindow {
   void draw();
 public:
   const fltk3::MenuItem* menu;
@@ -100,7 +100,7 @@ public:
 };
 
 // each vertical menu has one of these:
-class menuwindow : public Fl_Menu_Window {
+class menuwindow : public fltk3::MenuWindow {
   void draw();
   void drawentry(const fltk3::MenuItem*, int i, int erase);
 public:
@@ -271,7 +271,7 @@ void fltk3::MenuItem::draw(int x, int y, int w, int h, const fltk3::Menu_* m,
 }
 
 menutitle::menutitle(int X, int Y, int W, int H, const fltk3::MenuItem* L) :
-  Fl_Menu_Window(X, Y, W, H, 0) {
+  fltk3::MenuWindow(X, Y, W, H, 0) {
   end();
   set_modal();
   clear_border();
@@ -283,7 +283,7 @@ menutitle::menutitle(int X, int Y, int W, int H, const fltk3::MenuItem* L) :
 menuwindow::menuwindow(const fltk3::MenuItem* m, int X, int Y, int Wp, int Hp,
 		       const fltk3::MenuItem* picked, const fltk3::MenuItem* t, 
 		       int menubar, int menubar_title, int right_edge)
-  : Fl_Menu_Window(X, Y, Wp, Hp, 0)
+  : fltk3::MenuWindow(X, Y, Wp, Hp, 0)
 {
   int scr_x, scr_y, scr_w, scr_h;
   int tx = X, ty = Y;
@@ -413,7 +413,7 @@ menuwindow::~menuwindow() {
 
 void menuwindow::position(int X, int Y) {
   if (title) {title->position(X, title->y()+Y-y());}
-  Fl_Menu_Window::position(X, Y);
+  fltk3::MenuWindow::position(X, Y);
   // x(X); y(Y); // don't wait for response from X
 }
 
@@ -429,7 +429,7 @@ void menuwindow::autoscroll(int n) {
     if (Y < 0) return;
     Y = -Y-10;
   }
-  Fl_Menu_Window::position(x(), y()+Y);
+  fltk3::MenuWindow::position(x(), y()+Y);
   // y(y()+Y); // don't wait for response from X
 }
 

@@ -3502,7 +3502,7 @@ quote_char(const char *p) {	// I - Quoted string
 static void
 scrollbar_callback(fltk3::Widget *s, void *)
 {
-  ((fltk3::HelpView *)(s->parent()))->topline(int(((Fl_Scrollbar*)s)->value()));
+  ((fltk3::HelpView *)(s->parent()))->topline(int(((fltk3::Scrollbar*)s)->value()));
 }
 
 
@@ -3510,7 +3510,7 @@ scrollbar_callback(fltk3::Widget *s, void *)
 static void
 hscrollbar_callback(fltk3::Widget *s, void *)
 {
-  ((fltk3::HelpView *)(s->parent()))->leftline(int(((Fl_Scrollbar*)s)->value()));
+  ((fltk3::HelpView *)(s->parent()))->leftline(int(((fltk3::Scrollbar*)s)->value()));
 }
 
 

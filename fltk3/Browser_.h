@@ -44,7 +44,7 @@ namespace fltk3 {
   const uchar NORMAL_BROWSER	= 0;	/**< type() of fltk3::Browser */
   const uchar SELECT_BROWSER	= 1;	/**< type() of FL_Select_Browser */
   const uchar HOLD_BROWSER	= 2;	/**< type() of fltk3::HoldBrowser */
-  const uchar MULTI_BROWSER	= 3;	/**< type() of Fl_Multi_Browser */
+  const uchar MULTI_BROWSER	= 3;	/**< type() of fltk3::MultiBrowser */
   
   const uchar SORT_ASCENDING	= 0;	/**< sort browser items in ascending alphabetic order. */
   const uchar SORT_DESCENDING	= 1;	/**< sort in descending order */
@@ -172,7 +172,7 @@ namespace fltk3 {
      
      For multiple selection browsers this call returns the currently focused item,
      even if it is not selected. To find all selected items, call 
-     Fl_Multi_Browser::selected() for every item in question.
+     fltk3::MultiBrowser::selected() for every item in question.
      */
     void *selection() const { return selection_; }
     void new_list(); // completely clobber all data, as though list replaced
@@ -199,11 +199,11 @@ namespace fltk3 {
     /**
      Vertical scrollbar. Public, so that it can be accessed directly.
      */
-    Fl_Scrollbar scrollbar;
+    fltk3::Scrollbar scrollbar;
     /**
      Horizontal scrollbar. Public, so that it can be accessed directly.
      */
-    Fl_Scrollbar hscrollbar;
+    fltk3::Scrollbar hscrollbar;
     
     int handle(int event);
     void resize(int X,int Y,int W,int H);

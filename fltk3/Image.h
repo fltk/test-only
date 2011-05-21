@@ -34,13 +34,11 @@
 #  include "enumerations.h"
 
 
-class Fl_Quartz_Graphics_Driver;
-class Fl_GDI_Graphics_Driver;
-class Fl_Xlib_Graphics_Driver;
-
-
 namespace fltk3 { 
   
+  class QuartzGraphicsDriver;
+  class GDIGraphicsDriver;
+  class XlibGraphicsDriver;
   class Widget; 
   struct Label;
   struct MenuItem;
@@ -181,9 +179,9 @@ namespace fltk3 {
    &lt;FL/RGBImage.h&gt; should be included.
    */
   class FLTK3_EXPORT RGBImage : public Image {
-    friend class ::Fl_Quartz_Graphics_Driver;
-    friend class ::Fl_GDI_Graphics_Driver;
-    friend class ::Fl_Xlib_Graphics_Driver;
+    friend class QuartzGraphicsDriver;
+    friend class GDIGraphicsDriver;
+    friend class XlibGraphicsDriver;
   public:
     
     const uchar *array;

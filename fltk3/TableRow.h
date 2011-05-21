@@ -41,8 +41,8 @@ namespace fltk3 {
    
    This class implements a simple table with the ability to select
    rows.  This widget is similar to an fltk3::Browser with columns.  Most
-   methods of importance will be found in the Fl_Table widget, such
-   as Fl_Table::rows() and Fl_Table::cols().
+   methods of importance will be found in the fltk3::Table widget, such
+   as fltk3::Table::rows() and fltk3::Table::cols().
    
    To be useful it must be subclassed and at minimum the draw_cell()
    method must be overridden to provide the content of the cells. This widget
@@ -51,9 +51,9 @@ namespace fltk3 {
    
    Events on the cells and/or headings generate callbacks when they are 
    clicked by the user.  You control when events are generated based on
-   the values you supply for Fl_Table::when().
+   the values you supply for fltk3::Table::when().
    */
-  class FLTK3_EXPORT TableRow : public Fl_Table {
+  class FLTK3_EXPORT TableRow : public fltk3::Table {
   public:
     enum TableRowSelectMode {
       SELECT_NONE,		// no selection allowed
@@ -137,7 +137,7 @@ namespace fltk3 {
     int handle(int event);
     int find_cell(TableContext context,		// find cell's x/y/w/h given r/c
                   int R, int C, int &X, int &Y, int &W, int &H) {
-      return(Fl_Table::find_cell(context, R, C, X, Y, W, H));
+      return(fltk3::Table::find_cell(context, R, C, X, Y, W, H));
     }
     
   public:
@@ -146,7 +146,7 @@ namespace fltk3 {
      This creates an empty table with no rows or columns,
      with headers and row/column resize behavior disabled.
      */   
-    TableRow(int X, int Y, int W, int H, const char *l=0) : Fl_Table(X,Y,W,H,l) {
+    TableRow(int X, int Y, int W, int H, const char *l=0) : fltk3::Table(X,Y,W,H,l) {
       _dragging_select = 0;
       _last_row        = -1;
       _last_y          = -1;
@@ -163,7 +163,7 @@ namespace fltk3 {
     
     void rows(int val);			// set number of rows
     int rows() {				// get number of rows
-      return(Fl_Table::rows());
+      return(fltk3::Table::rows());
     }
     
     /**
@@ -202,7 +202,7 @@ namespace fltk3 {
     void clear() {
       rows(0);		// implies clearing selection
       cols(0);
-      Fl_Table::clear();	// clear the table
+      fltk3::Table::clear();	// clear the table
     }
   };
   

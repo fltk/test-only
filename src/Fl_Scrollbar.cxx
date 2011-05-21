@@ -35,7 +35,7 @@
 #define INITIALREPEAT .5
 #define REPEAT .05
 
-void Fl_Scrollbar::increment_cb() {
+void fltk3::Scrollbar::increment_cb() {
   char inv = maximum()<minimum();
   int ls = inv ? -linesize_ : linesize_;
   int i;
@@ -66,13 +66,13 @@ void Fl_Scrollbar::increment_cb() {
   handle_drag(clamp(value() + i));
 }
 
-void Fl_Scrollbar::timeout_cb(void* v) {
-  Fl_Scrollbar* s = (Fl_Scrollbar*)v;
+void fltk3::Scrollbar::timeout_cb(void* v) {
+  fltk3::Scrollbar* s = (fltk3::Scrollbar*)v;
   s->increment_cb();
   fltk3::add_timeout(REPEAT, timeout_cb, s);
 }
 
-int Fl_Scrollbar::handle(int event) {
+int fltk3::Scrollbar::handle(int event) {
   // area of scrollbar:
   int area;
   int X=x(); int Y=y(); int W=w(); int H=h();
@@ -206,7 +206,7 @@ int Fl_Scrollbar::handle(int event) {
   return 0;
 }
 
-void Fl_Scrollbar::draw() {
+void fltk3::Scrollbar::draw() {
   if (damage()&fltk3::DAMAGE_ALL) draw_box();
   int X = x()+fltk3::box_dx(box());
   int Y = y()+fltk3::box_dy(box());
@@ -267,10 +267,10 @@ void Fl_Scrollbar::draw() {
 }
 
 /**
-  Creates a new Fl_Scrollbar widget with given position, size, and label.
+  Creates a new fltk3::Scrollbar widget with given position, size, and label.
   You need to do type(fltk3::HORIZONTAL) if you want a horizontal scrollbar.
 */
-Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
+fltk3::Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
   : fltk3::Slider(X, Y, W, H, L) {
   box(fltk3::FLAT_BOX);
   color(fltk3::DARK2);
@@ -281,7 +281,7 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 /**  Destroys the Scrollbar. */
-Fl_Scrollbar::~Fl_Scrollbar() {
+fltk3::Scrollbar::~Scrollbar() {
   if (pushed_)
     fltk3::remove_timeout(timeout_cb, this);
 }

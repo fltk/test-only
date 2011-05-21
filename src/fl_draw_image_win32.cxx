@@ -114,7 +114,7 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
 
 static void innards(const uchar *buf, int X, int Y, int W, int H,
 		    int delta, int linedelta, int depth,
-		    Fl_Draw_Image_Cb cb, void* userdata)
+		    fltk3::DrawImageCb cb, void* userdata)
 {
   char indexed = 0;
 
@@ -178,7 +178,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   int blocking = h;
   {int size = linesize*h;
   // when printing, don't limit buffer size not to get a crash in StretchDIBits
-  if (size > MAXBUFFER && Fl_Surface_Device::surface()->class_name() != Fl_Printer::class_id) {
+  if (size > MAXBUFFER && fltk3::SurfaceDevice::surface()->class_name() != fltk3::Printer::class_id) {
     size = MAXBUFFER;
     blocking = MAXBUFFER/linesize;
   }
@@ -256,7 +256,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
         }            
       }
     }
-    if(Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id) {
+    if(fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) {
       // if print context, device and logical units are not equal, so SetDIBitsToDevice
       // does not do the expected job, whereas StretchDIBits does it.
       StretchDIBits(fl_gc, x, y+j-k, w, k, 0, 0, w, k,
@@ -297,7 +297,7 @@ void Fl_GDI_Graphics_Driver::draw_image(const uchar* buf, int x, int y, int w, i
   }
 }
 
-void Fl_GDI_Graphics_Driver::draw_image(Fl_Draw_Image_Cb cb, void* data,
+void Fl_GDI_Graphics_Driver::draw_image(fltk3::DrawImageCb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   if (fl_abs(d)&FL_IMAGE_WITH_ALPHA) {
     d ^= FL_IMAGE_WITH_ALPHA;
@@ -316,7 +316,7 @@ void Fl_GDI_Graphics_Driver::draw_image_mono(const uchar* buf, int x, int y, int
   }
 }
 
-void Fl_GDI_Graphics_Driver::draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
+void Fl_GDI_Graphics_Driver::draw_image_mono(fltk3::DrawImageCb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   if (fl_abs(d)&FL_IMAGE_WITH_ALPHA) {
     d ^= FL_IMAGE_WITH_ALPHA;

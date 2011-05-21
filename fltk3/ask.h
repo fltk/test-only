@@ -25,6 +25,8 @@
 //     http://www.fltk.org/str.php
 //
 
+// FLTK 123 complete
+
 #ifndef fltk3_ask_H
 #  define fltk3_ask_H
 
@@ -51,7 +53,7 @@ namespace fltk3 {
     BEEP_NOTIFICATION
   };
   
-  FLTK3_EXPORT void beep(int type = fltk3::BEEP_DEFAULT);
+  FLTK3_EXPORT void beep(int type = BEEP_DEFAULT);
   FLTK3_EXPORT void message(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
   FLTK3_EXPORT void alert(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
   // fltk3::ask() is deprecated since it uses "Yes" and "No" for the buttons,
@@ -62,11 +64,11 @@ namespace fltk3 {
   FLTK3_EXPORT const char *input(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
   FLTK3_EXPORT const char *password(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
   
-  FLTK3_EXPORT fltk3::Widget *message_icon();
-  extern FLTK3_EXPORT fltk3::Font message_font_;
-  extern FLTK3_EXPORT fltk3::Fontsize message_size_;
-  inline void message_font(fltk3::Font f, fltk3::Fontsize s) {
-    fltk3::message_font_ = f; fltk3::message_size_ = s;
+  FLTK3_EXPORT Widget *message_icon();
+  extern FLTK3_EXPORT Font message_font_;
+  extern FLTK3_EXPORT Fontsize message_size_;
+  inline void message_font(Font f, Fontsize s) {
+    message_font_ = f; message_size_ = s;
   }
   
   FLTK3_EXPORT void message_hotspot(int enable);

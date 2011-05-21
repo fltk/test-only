@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_XBM_Image routines.
+// fltk3::XBMImage routines.
 //
 // Copyright 1997-2010 by Bill Spitzak and others.
 //
@@ -26,7 +26,7 @@
 //
 // Contents:
 //
-//   Fl_XBM_Image::Fl_XBM_Image() - Load an XBM file.
+//   fltk3::XBMImage::fltk3::XBMImage() - Load an XBM file.
 //
 
 //
@@ -41,7 +41,7 @@
 #include "flstring.h"
 
 //
-// 'Fl_XBM_Image::Fl_XBM_Image()' - Load an XBM file.
+// 'fltk3::XBMImage::fltk3::XBMImage()' - Load an XBM file.
 //
 
 /**  
@@ -49,7 +49,7 @@
   <P>The destructor free all memory and server resources that are used by 
   the image.
 */
-Fl_XBM_Image::Fl_XBM_Image(const char *name) : fltk3::Bitmap((const char *)0,0,0) {
+fltk3::XBMImage::XBMImage(const char *name) : fltk3::Bitmap((const char *)0,0,0) {
   FILE	*f;
   uchar	*ptr;
 

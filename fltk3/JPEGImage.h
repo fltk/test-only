@@ -26,25 +26,30 @@
 //
 
 /* \file
-   Fl_JPEG_Image class . */
+ fltk3::JPEGImage class . */
 
 #ifndef Fltk3_JPEG_Image_H
 #define Fltk3_JPEG_Image_H
 #  include "Image.h"
 
-/**
-  The Fl_JPEG_Image class supports loading, caching,
-  and drawing of Joint Photographic Experts Group (JPEG) File
-  Interchange Format (JFIF) images. The class supports grayscale
-  and color (RGB) JPEG image files.
-*/
-class FLTK3_EXPORT Fl_JPEG_Image : public fltk3::RGBImage {
 
-public:
-
-  Fl_JPEG_Image(const char *filename);
-  Fl_JPEG_Image(const char *name, const unsigned char *data);
-};
+namespace fltk3 {
+  
+  /**
+   The fltk3::JPEGImage class supports loading, caching,
+   and drawing of Joint Photographic Experts Group (JPEG) File
+   Interchange Format (JFIF) images. The class supports grayscale
+   and color (RGB) JPEG image files.
+   */
+  class FLTK3_EXPORT JPEGImage : public fltk3::RGBImage {
+    
+  public:
+    
+    JPEGImage(const char *filename);
+    JPEGImage(const char *name, const unsigned char *data);
+  };
+  
+}
 
 #endif
 

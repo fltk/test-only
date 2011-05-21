@@ -52,12 +52,12 @@ namespace fltk3 {
 
 
 /**
-  Creates a new Fl_File_Input widget using the given position,
+  Creates a new fltk3::FileInput widget using the given position,
   size, and label string. The default boxtype is fltk3::DOWN_BOX.
   \param[in] X, Y, W, H position and size of the widget
   \param[in] L widget label, default is no label
 */
-Fl_File_Input::Fl_File_Input(int X, int Y, int W, int H, const char *L)
+fltk3::FileInput::FileInput(int X, int Y, int W, int H, const char *L)
   : fltk3::Input(X, Y, W, H, L) {
   buttons_[0] = 0;
   errorcolor_ = fltk3::RED;
@@ -70,7 +70,7 @@ Fl_File_Input::Fl_File_Input(int X, int Y, int W, int H, const char *L)
 /**
   Draw directory buttons.
 */
-void Fl_File_Input::draw_buttons() {
+void fltk3::FileInput::draw_buttons() {
   int	i,					// Looping var
 	X;					// Current X position
 
@@ -107,7 +107,7 @@ void Fl_File_Input::draw_buttons() {
 /**
   Update the sizes of the directory buttons.
 */
-void Fl_File_Input::update_buttons() {
+void fltk3::FileInput::update_buttons() {
   int		i;				// Looping var
   const char	*start,				// Start of path component
 		*end;				// End of path component
@@ -148,7 +148,7 @@ void Fl_File_Input::update_buttons() {
   \param[in] len lengh of value
 */
 int						// O - TRUE on success
-Fl_File_Input::value(const char *str,		// I - New string value
+fltk3::FileInput::value(const char *str,		// I - New string value
                      int        len) {		// I - Length of value
   damage(fltk3::DAMAGE_BAR);
   return fltk3::Input::value(str,len);
@@ -161,7 +161,7 @@ Fl_File_Input::value(const char *str,		// I - New string value
   \param[in] str new string value
 */
 int						// O - TRUE on success
-Fl_File_Input::value(const char *str) {		// I - New string value
+fltk3::FileInput::value(const char *str) {		// I - New string value
   damage(fltk3::DAMAGE_BAR);
   return fltk3::Input::value(str);
 }
@@ -170,7 +170,7 @@ Fl_File_Input::value(const char *str) {		// I - New string value
 /**
   Draws the file input widget
 */
-void Fl_File_Input::draw() {
+void fltk3::FileInput::draw() {
   fltk3::Boxtype b = box();
   if (damage() & (fltk3::DAMAGE_BAR | fltk3::DAMAGE_ALL)) draw_buttons();
   // this flag keeps fltk3::Input_::drawtext from drawing a bogus box!
@@ -191,7 +191,7 @@ void Fl_File_Input::draw() {
   \param[in] event
 */
 int						// O - TRUE if we handled event
-Fl_File_Input::handle(int event) 		// I - Event
+fltk3::FileInput::handle(int event) 		// I - Event
 {
 //  printf("handle(event = %d)\n", event);
   static char inButtonBar = 0;
@@ -237,7 +237,7 @@ Fl_File_Input::handle(int event) 		// I - Event
   \param[in] event
 */
 int						// O - TRUE if we handled event
-Fl_File_Input::handle_button(int event)		// I - Event
+fltk3::FileInput::handle_button(int event)		// I - Event
 {
   int		i,				// Looping var
 		X;				// Current X position

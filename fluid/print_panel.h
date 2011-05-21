@@ -48,14 +48,14 @@ extern fltk3::RoundButton *print_selection;
 extern fltk3::IntInput *print_from;
 extern fltk3::IntInput *print_to;
 #include <fltk3/Spinner.h>
-extern Fl_Spinner *print_copies;
+extern fltk3::Spinner *print_copies;
 #include <fltk3/CheckButton.h>
 extern fltk3::CheckButton *print_collate_button;
 extern fltk3::Group *print_collate_group[2];
 #include <fltk3/ReturnButton.h>
 extern void print_cb(fltk3::ReturnButton*, void*);
 #include <fltk3/Progress.h>
-extern Fl_Progress *print_progress;
+extern fltk3::Progress *print_progress;
 extern fltk3::DoubleWindow *print_properties_panel;
 extern fltk3::Choice *print_page_size;
 extern fltk3::Button *print_output_mode[4];

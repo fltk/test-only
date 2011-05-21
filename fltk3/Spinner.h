@@ -26,7 +26,7 @@
 //
 
 /* \file
-   Fl_Spinner widget . */
+   fltk3::Spinner widget . */
 
 #ifndef Fltk3_Spinner_H
 #  define Fltk3_Spinner_H
@@ -42,13 +42,12 @@
 #  include <stdio.h>
 #  include <stdlib.h>
 
-
 /**
   This widget is a combination of the input
   widget and repeat buttons. The user can either type into the
   input area or use the buttons to change the value.
 */
-class FLTK3_EXPORT Fl_Spinner : public fltk3::Group {
+class FLTK3_EXPORT Spinner : public fltk3::Group {
   
   double	value_;			// Current value
   double	minimum_;		// Minimum value
@@ -62,7 +61,7 @@ class FLTK3_EXPORT Fl_Spinner : public fltk3::Group {
 		down_button_;		// Down button
 
 
-  static void	sb_cb(fltk3::Widget *w, Fl_Spinner *sb) {
+  static void	sb_cb(fltk3::Widget *w, fltk3::Spinner *sb) {
 		  double v;		// New value
 
 		  if (w == &(sb->input_)) {
@@ -119,11 +118,11 @@ class FLTK3_EXPORT Fl_Spinner : public fltk3::Group {
   public:
 
 		/**
-		  Creates a new Fl_Spinner widget using the given position, size,
+		  Creates a new fltk3::Spinner widget using the given position, size,
 		  and label string.
 		  <P>Inherited destructor Destroys the widget and any value associated with it.
 		*/
-		Fl_Spinner(int X, int Y, int W, int H, const char *L = 0)
+		Spinner(int X, int Y, int W, int H, const char *L = 0)
 		  : fltk3::Group(X, Y, W, H, L),
 		    input_(X, Y, W - H / 2 - 2, H),
 		    up_button_(X + W - H / 2 - 2, Y, H / 2 + 2, H / 2, "@-42<"),
@@ -156,7 +155,7 @@ class FLTK3_EXPORT Fl_Spinner : public fltk3::Group {
 
   int		handle(int event) {
 		  switch (event) {
-		    case FL_KEYDOWN :
+		    case fltk3::KEYDOWN :
 		    case fltk3::SHORTCUT :
 		      if (fltk3::event_key() == fltk3::UpKey) {
 			up_button_.do_callback();
@@ -202,7 +201,7 @@ class FLTK3_EXPORT Fl_Spinner : public fltk3::Group {
     type() should be changed to floating point. 
   */
   double	step() const { return (step_); }
-  /** See double Fl_Spinner::step() const */
+  /** See double fltk3::Spinner::step() const */
   void		step(double s) {
 		  step_ = s;
 		  if (step_ != (int)step_) input_.type(fltk3::FLOAT_INPUT);
@@ -234,7 +233,7 @@ class FLTK3_EXPORT Fl_Spinner : public fltk3::Group {
 		  input_.textsize(s);
 		}
   /** Gets the numeric representation in the input field.
-   \see Fl_Spinner::type(uchar) 
+   \see fltk3::Spinner::type(uchar) 
   */
   uchar		type() const { return (input_.type()); }
   /** Sets the numeric representation in the input field.

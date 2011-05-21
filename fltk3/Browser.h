@@ -63,7 +63,7 @@ namespace fltk3 {
    subclasses 
    fltk3::SelectBrowser, 
    fltk3::HoldBrowser, and 
-   Fl_Multi_Browser react to user clicks to select lines in
+   fltk3::MultiBrowser react to user clicks to select lines in
    the browser and do callbacks.
    
    The base class

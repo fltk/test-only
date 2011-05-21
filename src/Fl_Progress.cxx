@@ -27,8 +27,8 @@
 // Contents:
 
 //
-//   Fl_Progress::draw()        - Draw the check button.
-//   Fl_Progress::Fl_Progress() - Construct a Fl_Progress widget.
+//   fltk3::Progress::draw()        - Draw the check button.
+//   fltk3::Progress::fltk3::Progress() - Construct a fltk3::Progress widget.
 //
 
 //
@@ -41,17 +41,17 @@
 
 
 //
-// Fl_Progress is a progress bar widget based off fltk3::Widget that shows a
+// fltk3::Progress is a progress bar widget based off fltk3::Widget that shows a
 // standard progress bar...
 //
 
 
 //
-// 'Fl_Progress::draw()' - Draw the progress bar.
+// 'fltk3::Progress::draw()' - Draw the progress bar.
 //
 
 /** Draws the progress bar. */
-void Fl_Progress::draw()
+void fltk3::Progress::draw()
 {
   int	progress;	// Size of progress bar...
   int	bx, by, bw, bh;	// Box areas...
@@ -107,7 +107,7 @@ void Fl_Progress::draw()
     
     The default colors are fltk3::BACKGROUND2_COLOR and fltk3::YELLOW, resp.
 */
-Fl_Progress::Fl_Progress(int X, int Y, int W, int H, const char* L)
+fltk3::Progress::Progress(int X, int Y, int W, int H, const char* L)
 : fltk3::Widget(X, Y, W, H, L) {
   align(fltk3::ALIGN_INSIDE);
   box(fltk3::DOWN_BOX);

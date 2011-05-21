@@ -93,10 +93,10 @@
 */
 
 static Fl_GDI_Graphics_Driver fl_gdi_driver;
-static Fl_Display_Device fl_gdi_display(&fl_gdi_driver);
-FLTK3_EXPORT Fl_Graphics_Driver *fl_graphics_driver = (Fl_Graphics_Driver*)&fl_gdi_driver; // the current target driver of graphics operations
-Fl_Surface_Device* Fl_Surface_Device::_surface = (Fl_Surface_Device*)&fl_gdi_display; // the current target surface of graphics operations
-Fl_Display_Device *Fl_Display_Device::_display = &fl_gdi_display; // the platform display
+static fltk3::DisplayDevice fl_gdi_display(&fl_gdi_driver);
+FLTK3_EXPORT fltk3::GraphicsDriver *fltk3::graphics_driver = (fltk3::GraphicsDriver*)&fl_gdi_driver; // the current target driver of graphics operations
+fltk3::SurfaceDevice* fltk3::SurfaceDevice::_surface = (fltk3::SurfaceDevice*)&fl_gdi_display; // the current target surface of graphics operations
+fltk3::DisplayDevice *fltk3::DisplayDevice::_display = &fl_gdi_display; // the platform display
 
 // dynamic wsock dll handling api:
 #if defined(__CYGWIN__) && !defined(SOCKET)
@@ -1780,7 +1780,7 @@ void fltk3::Window::show() {
   } else {
     labeltype(fltk3::NO_LABEL);
   }
-  Fl_Tooltip::exit(this);
+  fltk3::Tooltip::exit(this);
   if (!shown()) {
     // if (can_boxcheat(box())) fl_background_pixel = fl_xpixel(color());
     Fl_X::make(this);
@@ -1934,7 +1934,7 @@ void fl_cleanup_dc_list(void) {          // clean up the list
 }
 
 Fl_Region XRectangleRegion(int x, int y, int w, int h) {
-  if (Fl_Surface_Device::surface()->class_name() == Fl_Display_Device::class_id) return CreateRectRgn(x,y,x+w,y+h);
+  if (fltk3::SurfaceDevice::surface()->class_name() == fltk3::DisplayDevice::class_id) return CreateRectRgn(x,y,x+w,y+h);
   // because rotation may apply, the rectangle becomes a polygon in device coords
   POINT pt[4] = { {x, y}, {x + w, y}, {x + w, y + h}, {x, y + h} };
   LPtoDP(fl_gc, pt, 4);
@@ -1962,7 +1962,7 @@ int fltk3::Window::decorated_h()
   return h() + bt + 2 * by;
 }
 
-void Fl_Paged_Device::print_window(fltk3::Window *win, int x_offset, int y_offset)
+void fltk3::PagedDevice::print_window(fltk3::Window *win, int x_offset, int y_offset)
 {
   if (win->parent() || !win->border()) {
     this->print_widget(win, x_offset, y_offset);
@@ -1972,7 +1972,7 @@ void Fl_Paged_Device::print_window(fltk3::Window *win, int x_offset, int y_offse
   Fl_X::fake_X_wm(win, X, Y, bt, bx, by);
   ww = win->w() + 2 * bx;
   wh = win->h() + bt + 2 * by;
-  Fl_Display_Device::display_device()->set_current(); // make window current
+  fltk3::DisplayDevice::display_device()->set_current(); // make window current
   win->show();
   fltk3::check();
   win->make_current();
@@ -2002,13 +2002,13 @@ void Fl_Paged_Device::print_window(fltk3::Window *win, int x_offset, int y_offse
 }  
 
 #ifdef USE_PRINT_BUTTON
-// to test the Fl_Printer class creating a "Print front window" button in a separate window
+// to test the fltk3::Printer class creating a "Print front window" button in a separate window
 // contains also preparePrintFront call above
 #include <fltk3/Printer.h>
 #include <fltk3/Button.h>
 void printFront(fltk3::Widget *o, void *data)
 {
-  Fl_Printer printer;
+  fltk3::Printer printer;
   o->window()->hide();
   fltk3::Window *win = fltk3::first_window();
   if(!win) return;

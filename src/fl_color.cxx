@@ -129,14 +129,14 @@ void Fl_Xlib_Graphics_Driver::color(fltk3::Color i) {
     unsigned rgb = (unsigned)i;
     fltk3::color((uchar)(rgb >> 24), (uchar)(rgb >> 16), (uchar)(rgb >> 8));
   } else {
-    Fl_Graphics_Driver::color(i);
+    fltk3::GraphicsDriver::color(i);
     if(!fl_gc) return; // don't get a default gc if current window is not yet created/valid
     XSetForeground(fl_display, fl_gc, fl_xpixel(i));
   }
 }
 
 void Fl_Xlib_Graphics_Driver::color(uchar r,uchar g,uchar b) {
-  Fl_Graphics_Driver::color( fltk3::rgb_color(r, g, b) );
+  fltk3::GraphicsDriver::color( fltk3::rgb_color(r, g, b) );
   if(!fl_gc) return; // don't get a default gc if current window is not yet created/valid
   XSetForeground(fl_display, fl_gc, fl_xpixel(r,g,b));
 }

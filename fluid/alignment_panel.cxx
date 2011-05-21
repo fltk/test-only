@@ -69,7 +69,7 @@ fltk3::DoubleWindow* make_project_window() {
       o->tooltip("Close this dialog.");
       o->callback((fltk3::Callback*)cb_Close);
     } // fltk3::Button* o
-    { Fl_Tabs* o = new Fl_Tabs(10, 10, 378, 195);
+    { fltk3::TabGroup* o = new fltk3::TabGroup(10, 10, 378, 195);
       o->selection_color((fltk3::Color)12);
       { fltk3::Group* o = new fltk3::Group(10, 36, 378, 169, "Output");
         o->hide();
@@ -145,7 +145,7 @@ fltk3::DoubleWindow* make_project_window() {
         o->end();
       } // fltk3::Group* o
       o->end();
-    } // Fl_Tabs* o
+    } // fltk3::TabGroup* o
     project_window->set_modal();
     project_window->end();
   } // fltk3::DoubleWindow* project_window
@@ -168,7 +168,7 @@ fltk3::MenuItem menu_scheme_choice[] = {
 fltk3::CheckButton *tooltips_button=(fltk3::CheckButton *)0;
 
 static void cb_tooltips_button(fltk3::CheckButton*, void*) {
-  Fl_Tooltip::enable(tooltips_button->value());
+  fltk3::Tooltip::enable(tooltips_button->value());
 fluid_prefs.set("show_tooltips", tooltips_button->value());
 }
 
@@ -198,9 +198,9 @@ fluid_prefs.set("show_comments", show_comments);
 redraw_browser();
 }
 
-Fl_Spinner *recent_spinner=(Fl_Spinner *)0;
+fltk3::Spinner *recent_spinner=(fltk3::Spinner *)0;
 
-static void cb_recent_spinner(Fl_Spinner*, void*) {
+static void cb_recent_spinner(fltk3::Spinner*, void*) {
   fluid_prefs.set("recent_files", recent_spinner->value());
 load_history();
 }
@@ -234,7 +234,7 @@ fltk3::DoubleWindow* make_settings_window() {
         int b;
         fluid_prefs.get("show_tooltips", b, 1);
         tooltips_button->value(b);
-        Fl_Tooltip::enable(b);
+        fltk3::Tooltip::enable(b);
       } // fltk3::CheckButton* tooltips_button
       { completion_button = new fltk3::CheckButton(116, 68, 186, 25, "Show Completion Dialogs");
         completion_button->down_box(fltk3::DOWN_BOX);
@@ -265,7 +265,7 @@ fltk3::DoubleWindow* make_settings_window() {
       } // fltk3::CheckButton* show_comments_button
       o->end();
     } // fltk3::Group* o
-    { recent_spinner = new Fl_Spinner(115, 173, 40, 25, "# Recent Files: ");
+    { recent_spinner = new fltk3::Spinner(115, 173, 40, 25, "# Recent Files: ");
       recent_spinner->labelfont(1);
       recent_spinner->callback((fltk3::Callback*)cb_recent_spinner);
       recent_spinner->when(fltk3::WHEN_CHANGED);
@@ -273,7 +273,7 @@ fltk3::DoubleWindow* make_settings_window() {
       fluid_prefs.get("recent_files", c, 5);
       recent_spinner->maximum(10);
       recent_spinner->value(c);
-    } // Fl_Spinner* recent_spinner
+    } // fltk3::Spinner* recent_spinner
     { fltk3::Button* o = new fltk3::Button(266, 205, 64, 25, "Close");
       o->tooltip("Close this dialog.");
       o->callback((fltk3::Callback*)cb_Close1);

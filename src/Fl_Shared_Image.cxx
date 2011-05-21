@@ -236,9 +236,9 @@ void fltk3::SharedImage::reload() {
 
   // Load the image as appropriate...
   if (memcmp(header, "#define", 7) == 0) // XBM file
-    img = new Fl_XBM_Image(name_);
+    img = new fltk3::XBMImage(name_);
   else if (memcmp(header, "/* XPM */", 9) == 0) // XPM file
-    img = new Fl_XPM_Image(name_);
+    img = new fltk3::XPMImage(name_);
   else {
     // Not a standard format; try an image handler...
     for (i = 0, img = 0; i < num_handlers_; i ++) {
@@ -390,8 +390,8 @@ fltk3::SharedImage* fltk3::SharedImage::find(const char *n, int W, int H) {
  
  \see fltk3::SharedImage::find(const char *n, int W, int H)
  \see fltk3::SharedImage::release() 
- \see Fl_JPEG_Image::Fl_JPEG_Image(const char *name, const unsigned char *data)
- \see Fl_PNG_Image::Fl_PNG_Image (const char *name_png, const unsigned char *buffer, int maxsize)
+ \see fltk3::JPEGImage::JPEGImage(const char *name, const unsigned char *data)
+ \see fltk3::PNGImage::fltk3::PNGImage (const char *name_png, const unsigned char *buffer, int maxsize)
 */
 fltk3::SharedImage* fltk3::SharedImage::get(const char *n, int W, int H) {
   fltk3::SharedImage	*temp;		// Image

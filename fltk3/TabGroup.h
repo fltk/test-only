@@ -26,64 +26,68 @@
 //
 
 /* \file
-   Fl_Tabs widget . */
+ fltk3::TabGroup widget . */
 
 #ifndef Fltk3_Tabs_H
 #define Fltk3_Tabs_H
 
 #include "Group.h"
 
-/**
-  The Fl_Tabs widget is the "file card tabs"
-  interface that allows you to put lots and lots of buttons and
-  switches in a panel, as popularized by many toolkits.
+namespace fltk3 {
   
-  \image html  tabs.png
-  \image latex tabs.png "Fl_Tabs" width=8cm
+  /**
+   The fltk3::TabGroup widget is the "file card tabs"
+   interface that allows you to put lots and lots of buttons and
+   switches in a panel, as popularized by many toolkits.
+   
+   \image html  tabs.png
+   \image latex tabs.png "fltk3::TabGroup" width=8cm
+   
+   Clicking the tab makes a child visible() by calling
+   show() on it, and all other children are made invisible
+   by calling hide() on them. Usually the children are fltk3::Group widgets
+   containing several widgets themselves.
+   
+   Each child makes a card, and its label() is printed
+   on the card tab, including the label font and style.  The
+   selection color of that child is used to color the tab, while
+   the color of the child determines the background color of the pane.
+   
+   The size of the tabs is controlled by the bounding box of the
+   children (there should be some space between the children and
+   the edge of the fltk3::TabGroup), and the tabs may be placed
+   "inverted" on the bottom - this is determined by which
+   gap is larger. It is easiest to lay this out in fluid, using the
+   fluid browser to select each child group and resize them until
+   the tabs look the way you want them to.
+   */
+  class FLTK3_EXPORT TabGroup : public fltk3::Group {
+    fltk3::Widget *value_;
+    fltk3::Widget *push_;
+    int *tab_pos;		// array of x-offsets of tabs per child + 1
+    int *tab_width;	// array of widths of tabs per child + 1
+    int tab_count;	// array size
+    int tab_positions();	// allocate and calculate tab positions
+    void clear_tab_positions();
+    int tab_height();
+    void draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int sel=0);
+  protected:
+    void redraw_tabs();
+    void draw();
+    
+  public:
+    int handle(int);
+    fltk3::Widget *value();
+    int value(fltk3::Widget *);
+    fltk3::Widget *push() const {return push_;}
+    int push(fltk3::Widget *);
+    TabGroup(int,int,int,int,const char * = 0);
+    fltk3::Widget *which(int event_x, int event_y);
+    ~TabGroup();
+    void client_area(int &rx, int &ry, int &rw, int &rh, int tabh=0);
+  };
   
-  Clicking the tab makes a child visible() by calling
-  show() on it, and all other children are made invisible
-  by calling hide() on them. Usually the children are fltk3::Group widgets
-  containing several widgets themselves.
-  
-  Each child makes a card, and its label() is printed
-  on the card tab, including the label font and style.  The
-  selection color of that child is used to color the tab, while
-  the color of the child determines the background color of the pane.
-  
-  The size of the tabs is controlled by the bounding box of the
-  children (there should be some space between the children and
-  the edge of the Fl_Tabs), and the tabs may be placed
-  "inverted" on the bottom - this is determined by which
-  gap is larger. It is easiest to lay this out in fluid, using the
-  fluid browser to select each child group and resize them until
-  the tabs look the way you want them to.
-*/
-class FLTK3_EXPORT Fl_Tabs : public fltk3::Group {
-  fltk3::Widget *value_;
-  fltk3::Widget *push_;
-  int *tab_pos;		// array of x-offsets of tabs per child + 1
-  int *tab_width;	// array of widths of tabs per child + 1
-  int tab_count;	// array size
-  int tab_positions();	// allocate and calculate tab positions
-  void clear_tab_positions();
-  int tab_height();
-  void draw_tab(int x1, int x2, int W, int H, fltk3::Widget* o, int sel=0);
-protected:
-  void redraw_tabs();
-  void draw();
-
-public:
-  int handle(int);
-  fltk3::Widget *value();
-  int value(fltk3::Widget *);
-  fltk3::Widget *push() const {return push_;}
-  int push(fltk3::Widget *);
-  Fl_Tabs(int,int,int,int,const char * = 0);
-  fltk3::Widget *which(int event_x, int event_y);
-  ~Fl_Tabs();
-  void client_area(int &rx, int &ry, int &rw, int &rh, int tabh=0);
-};
+}
 
 #endif
 

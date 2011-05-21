@@ -29,7 +29,7 @@
 #include <fltk3/Printer.h>
 #include <fltk3/GlWindow.h>
 #include "Fl_Gl_Choice.H"
-#include <fltk3//run.h>
+#include <fltk3/run.h>
 #ifndef __APPLE__
 #include <fltk3/draw.h>
 #endif
@@ -53,9 +53,9 @@ static void print_gl_window(fltk3::GlWindow *glw, int x, int y, int height)
   _XGC *save_gc = fl_gc;
   const int bytesperpixel = 3;
 #endif
-  Fl_Surface_Device *save_surface = Fl_Surface_Device::surface();
+  fltk3::SurfaceDevice *save_surface = fltk3::SurfaceDevice::surface();
   fl_gc = NULL;
-  Fl_Display_Device::display_device()->set_current();
+  fltk3::DisplayDevice::display_device()->set_current();
 #ifdef WIN32
   fltk3::check();
   fltk3::Window *win = (fltk3::Window*)glw;
@@ -133,9 +133,9 @@ static void print_gl_window(fltk3::GlWindow *glw, int x, int y, int height)
  This class will make sure that OpenGL printing is available if fltk_gl
  was linked to the program.
  */
-class Fl_Gl_Device_Plugin : public Fl_Device_Plugin {
+class Fl_Gl_Device_Plugin : public fltk3::DevicePlugin {
 public:
-  Fl_Gl_Device_Plugin() : Fl_Device_Plugin(name()) { }
+  Fl_Gl_Device_Plugin() : fltk3::DevicePlugin(name()) { }
   virtual const char *name() { return "opengl.device.fltk.org"; }
   virtual int print(fltk3::Widget *w, int x, int y, int height) {
     fltk3::GlWindow *glw = w->as_gl_window();

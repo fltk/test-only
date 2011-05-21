@@ -1626,34 +1626,34 @@ void fltk3::Preferences::Node::deleteIndex() {
  * \param[in] klass plugins are grouped in classes
  * \param[in] name every plugin should have a unique name
  */
-Fl_Plugin::Fl_Plugin(const char *klass, const char *name)
+fltk3::Plugin::Plugin(const char *klass, const char *name)
 : id(0) {
 #ifdef FL_PLUGIN_VERBOSE
-  printf("Fl_Plugin: creating a plugin, class \"%s\", name \"%s\"\n",
+  printf("fltk3::Plugin: creating a plugin, class \"%s\", name \"%s\"\n",
          klass, name);
 #endif
-  Fl_Plugin_Manager pm(klass);
+  fltk3::PluginManager pm(klass);
   id = pm.addPlugin(name, this);
 }
 
 /**
  * \brief Clear the plugin and remove it from the database.
  */
-Fl_Plugin::~Fl_Plugin() {
+fltk3::Plugin::~Plugin() {
 #ifdef FL_PLUGIN_VERBOSE
-  printf("Fl_Plugin: deleting a plugin\n");
+  printf("fltk3::Plugin: deleting a plugin\n");
 #endif
   if (id)
-    Fl_Plugin_Manager::remove(id);
+    fltk3::PluginManager::remove(id);
 }
 
 /**
  * \brief Manage all plugins belonging to one class.
  */
-Fl_Plugin_Manager::Fl_Plugin_Manager(const char *klass)
+fltk3::PluginManager::PluginManager(const char *klass)
 : fltk3::Preferences(0, fltk3::Preferences::Name("%s/%s", "plugins", klass)) {
 #ifdef FL_PLUGIN_VERBOSE
-  printf("Fl_Plugin: creating a plugin manager for class \"%s\"\n", klass);
+  printf("fltk3::Plugin: creating a plugin manager for class \"%s\"\n", klass);
 #endif
 }
 
@@ -1663,9 +1663,9 @@ Fl_Plugin_Manager::Fl_Plugin_Manager(const char *klass)
  * Calling this does not remove the database itself or any plugins. It just
  * removes the reference to the database.
  */
-Fl_Plugin_Manager::~Fl_Plugin_Manager() {
+fltk3::PluginManager::~PluginManager() {
 #ifdef FL_PLUGIN_VERBOSE
-  printf("Fl_Plugin: deleting a plugin manager\n");
+  printf("fltk3::Plugin: deleting a plugin manager\n");
 #endif
 }
 
@@ -1700,14 +1700,14 @@ static void p2a(void *vp, char *d) {
 /**
  * \brief Return the address of a plugin by index.
  */
-Fl_Plugin *Fl_Plugin_Manager::plugin(int index) {
+fltk3::Plugin *fltk3::PluginManager::plugin(int index) {
   char buf[34];
-  Fl_Plugin *ret = 0;
+  fltk3::Plugin *ret = 0;
   fltk3::Preferences pin(this, index);
   pin.get("address", buf, "", 34);
-  if (buf[0]=='@') ret = (Fl_Plugin*)a2p(buf+1);
+  if (buf[0]=='@') ret = (fltk3::Plugin*)a2p(buf+1);
 #ifdef FL_PLUGIN_VERBOSE
-  printf("Fl_Plugin: returning plugin at index %d: (%s) %p\n", index, buf, ret);
+  printf("fltk3::Plugin: returning plugin at index %d: (%s) %p\n", index, buf, ret);
 #endif
   return ret;
 }
@@ -1715,20 +1715,20 @@ Fl_Plugin *Fl_Plugin_Manager::plugin(int index) {
 /**
  * \brief Return the address of a plugin by name.
  */
-Fl_Plugin *Fl_Plugin_Manager::plugin(const char *name) {
+fltk3::Plugin *fltk3::PluginManager::plugin(const char *name) {
   char buf[34];
-  Fl_Plugin *ret = 0;
+  fltk3::Plugin *ret = 0;
   if (groupExists(name)) {
     fltk3::Preferences pin(this, name);
     pin.get("address", buf, "", 34);
-    if (buf[0]=='@') ret = (Fl_Plugin*)a2p(buf+1);
+    if (buf[0]=='@') ret = (fltk3::Plugin*)a2p(buf+1);
 #ifdef FL_PLUGIN_VERBOSE
-    printf("Fl_Plugin: returning plugin named \"%s\": (%s) %p\n", name, buf, ret);
+    printf("fltk3::Plugin: returning plugin named \"%s\": (%s) %p\n", name, buf, ret);
 #endif
     return ret;
   } else {
 #ifdef FL_PLUGIN_VERBOSE
-    printf("Fl_Plugin: no plugin found named \"%s\"\n", name);
+    printf("fltk3::Plugin: no plugin found named \"%s\"\n", name);
 #endif
     return 0L;
   }
@@ -1737,13 +1737,13 @@ Fl_Plugin *Fl_Plugin_Manager::plugin(const char *name) {
 /**
  * \brief This function adds a new plugin to the database.
  *
- * There is no need to call this function explicitly. Every Fl_Plugin constructor
+ * There is no need to call this function explicitly. Every fltk3::Plugin constructor
  * will call this function at initialization time.
  */
-fltk3::Preferences::ID Fl_Plugin_Manager::addPlugin(const char *name, Fl_Plugin *plugin) {
+fltk3::Preferences::ID fltk3::PluginManager::addPlugin(const char *name, fltk3::Plugin *plugin) {
   char buf[34];
 #ifdef FL_PLUGIN_VERBOSE
-  printf("Fl_Plugin: adding plugin named \"%s\" at 0x%p\n", name, plugin);
+  printf("fltk3::Plugin: adding plugin named \"%s\" at 0x%p\n", name, plugin);
 #endif
   fltk3::Preferences pin(this, name);
   buf[0] = '@'; p2a(plugin, buf+1);
@@ -1754,10 +1754,10 @@ fltk3::Preferences::ID Fl_Plugin_Manager::addPlugin(const char *name, Fl_Plugin 
 /**
  * \brief Remove any plugin.
  *
- * There is no need to call this function explicitly. Every Fl_Plugin destructor
+ * There is no need to call this function explicitly. Every fltk3::Plugin destructor
  * will call this function at destruction time.
  */
-void Fl_Plugin_Manager::removePlugin(fltk3::Preferences::ID id) {
+void fltk3::PluginManager::removePlugin(fltk3::Preferences::ID id) {
   fltk3::Preferences::remove(id);
 }
 
@@ -1766,10 +1766,10 @@ void Fl_Plugin_Manager::removePlugin(fltk3::Preferences::ID id) {
  *
  * A module must be a dynamically linkable file for the given operating system.
  * When loading a module, its +init function will be called which in turn calls
- * the constructor of all statically initialized Fl_Plugin classes and adds
+ * the constructor of all statically initialized fltk3::Plugin classes and adds
  * them to the database.
  */
-int Fl_Plugin_Manager::load(const char *filename) {
+int fltk3::PluginManager::load(const char *filename) {
   // the functions below will autmaticaly load plugins that are defined:
   // Fl_My_Plugin plugin();
 #if defined(WIN32) && !defined(__CYGWIN__)
@@ -1784,7 +1784,7 @@ int Fl_Plugin_Manager::load(const char *filename) {
 /**
  * \brief Use this function to load a whole directory full of modules.
  */
-int Fl_Plugin_Manager::loadAll(const char *filepath, const char *pattern) {
+int fltk3::PluginManager::loadAll(const char *filepath, const char *pattern) {
   struct dirent **dir;
   int i, n = fl_filename_list(filepath, &dir);
   for (i=0; i<n; i++) {

@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// implementation of Fl_Device class for the Fast Light Tool Kit (FLTK).
+// implementation of fltk3::Device class for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 2010-2011 by Bill Spitzak and others.
 //
@@ -29,12 +29,12 @@
 #include <fltk3/Device.h>
 #include <fltk3/Image.h>
 
-const char *Fl_Device::class_id = "Fl_Device";
-const char *Fl_Surface_Device::class_id = "Fl_Surface_Device";
-const char *Fl_Display_Device::class_id = "Fl_Display_Device";
-const char *Fl_Graphics_Driver::class_id = "Fl_Graphics_Driver";
+const char *fltk3::Device::class_id = "fltk3::Device";
+const char *fltk3::SurfaceDevice::class_id = "fltk3::SurfaceDevice";
+const char *fltk3::DisplayDevice::class_id = "fltk3::DisplayDevice";
+const char *fltk3::GraphicsDriver::class_id = "fltk3::GraphicsDriver";
 #if defined(__APPLE__) || defined(FL_DOXYGEN)
-const char *Fl_Quartz_Graphics_Driver::class_id = "Fl_Quartz_Graphics_Driver";
+const char *fltk3::QuartzGraphicsDriver::class_id = "fltk3::QuartzGraphicsDriver";
 #endif
 #if defined(WIN32) || defined(FL_DOXYGEN)
 const char *Fl_GDI_Graphics_Driver::class_id = "Fl_GDI_Graphics_Driver";
@@ -45,15 +45,15 @@ const char *Fl_Xlib_Graphics_Driver::class_id = "Fl_Xlib_Graphics_Driver";
 
 
 /** \brief Use this drawing surface for future graphics requests. */
-void Fl_Surface_Device::set_current(void)
+void fltk3::SurfaceDevice::set_current(void)
 {
-  fl_graphics_driver = _driver;
+  fltk3::graphics_driver = _driver;
   _surface = this;
 }
 
-const Fl_Graphics_Driver::matrix Fl_Graphics_Driver::m0 = {1, 0, 0, 1, 0, 0};
+const fltk3::GraphicsDriver::matrix fltk3::GraphicsDriver::m0 = {1, 0, 0, 1, 0, 0};
 
-Fl_Graphics_Driver::Fl_Graphics_Driver() {
+fltk3::GraphicsDriver::GraphicsDriver() {
   font_ = 0;
   size_ = 0;
   sptr=0; rstackptr=0; 
@@ -64,7 +64,7 @@ Fl_Graphics_Driver::Fl_Graphics_Driver() {
   font_descriptor_ = NULL;
 };
 
-void Fl_Graphics_Driver::text_extents(const char*t, int n, int& dx, int& dy, int& w, int& h)
+void fltk3::GraphicsDriver::text_extents(const char*t, int n, int& dx, int& dy, int& w, int& h)
 {
   w = (int)width(t, n);
   h = - height();
@@ -72,7 +72,7 @@ void Fl_Graphics_Driver::text_extents(const char*t, int n, int& dx, int& dy, int
   dy = descent();
 }
 
-Fl_Display_Device::Fl_Display_Device(Fl_Graphics_Driver *graphics_driver) : Fl_Surface_Device( graphics_driver) {
+fltk3::DisplayDevice::DisplayDevice(fltk3::GraphicsDriver *graphics_driver) : fltk3::SurfaceDevice( graphics_driver) {
 #ifdef __APPLE__
   SInt32 versionMajor = 0;
   SInt32 versionMinor = 0;

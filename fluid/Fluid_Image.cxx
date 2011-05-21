@@ -128,7 +128,7 @@ void Fluid_Image::write_static() {
     }
     
     write_c(";\n");
-    write_c("static Fl_JPEG_Image %s(\"%s\", %s);\n",
+    write_c("static fltk3::JPEGImage %s(\"%s\", %s);\n",
 	    unique_id(this, "image", fl_filename_name(name()), 0),
 	    fl_filename_name(name()),
 	    unique_id(this, "idata", fl_filename_name(name()), 0));

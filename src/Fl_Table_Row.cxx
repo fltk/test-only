@@ -156,7 +156,7 @@ void fltk3::TableRow::select_all_rows(int flag) {
 
 // Set number of rows
 void fltk3::TableRow::rows(int val) {
-  Fl_Table::rows(val);
+  fltk3::Table::rows(val);
   while ( val > (int)_rowselect.size() ) { _rowselect.push_back(0); }	// enlarge
   while ( val < (int)_rowselect.size() ) { _rowselect.pop_back(); }	// shrink
 }
@@ -171,7 +171,7 @@ int fltk3::TableRow::handle(int event) {
   //      eventnames[event], fltk3::event_x(), fltk3::event_y());	// debugging
   
   // Let base class handle event
-  int ret = Fl_Table::handle(event);
+  int ret = fltk3::Table::handle(event);
   
   // The following code disables cell selection.. why was it added? -erco 05/18/03
   // if ( ret ) { _last_y = fltk3::event_y(); return(1); }	// base class 'handled' it (eg. column resize)

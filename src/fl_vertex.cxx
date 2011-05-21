@@ -44,21 +44,21 @@
 #include <fltk3/math.h>
 #include <stdlib.h>
 
-void Fl_Graphics_Driver::push_matrix() {
+void fltk3::GraphicsDriver::push_matrix() {
   if (sptr==matrix_stack_size)
     fltk3::error("fltk3::push_matrix(): matrix stack overflow.");
   else
     stack[sptr++] = m;
 }
 
-void Fl_Graphics_Driver::pop_matrix() {
+void fltk3::GraphicsDriver::pop_matrix() {
   if (sptr==0)
     fltk3::error("fltk3::pop_matrix(): matrix stack underflow.");
   else 
     m = stack[--sptr];
 }
 
-void Fl_Graphics_Driver::mult_matrix(double a, double b, double c, double d, double x, double y) {
+void fltk3::GraphicsDriver::mult_matrix(double a, double b, double c, double d, double x, double y) {
   matrix o;
   o.a = a*m.a + b*m.c;
   o.b = a*m.b + b*m.d;
@@ -69,7 +69,7 @@ void Fl_Graphics_Driver::mult_matrix(double a, double b, double c, double d, dou
   m = o;
 }
 
-void Fl_Graphics_Driver::rotate(double d) {
+void fltk3::GraphicsDriver::rotate(double d) {
   if (d) {
     double s, c;
     if (d == 0) {s = 0; c = 1;}
@@ -81,23 +81,23 @@ void Fl_Graphics_Driver::rotate(double d) {
   }
 }
 
-void Fl_Graphics_Driver::begin_points() {n = 0; what = POINT_;}
+void fltk3::GraphicsDriver::begin_points() {n = 0; what = POINT_;}
 
-void Fl_Graphics_Driver::begin_line() {n = 0; what = LINE;}
+void fltk3::GraphicsDriver::begin_line() {n = 0; what = LINE;}
 
-void Fl_Graphics_Driver::begin_loop() {n = 0; what = LOOP;}
+void fltk3::GraphicsDriver::begin_loop() {n = 0; what = LOOP;}
 
-void Fl_Graphics_Driver::begin_polygon() {n = 0; what = POLYGON;}
+void fltk3::GraphicsDriver::begin_polygon() {n = 0; what = POLYGON;}
 
-double Fl_Graphics_Driver::transform_x(double x, double y) {return x*m.a + y*m.c + m.x;}
+double fltk3::GraphicsDriver::transform_x(double x, double y) {return x*m.a + y*m.c + m.x;}
 
-double Fl_Graphics_Driver::transform_y(double x, double y) {return x*m.b + y*m.d + m.y;}
+double fltk3::GraphicsDriver::transform_y(double x, double y) {return x*m.b + y*m.d + m.y;}
 
-double Fl_Graphics_Driver::transform_dx(double x, double y) {return x*m.a + y*m.c;}
+double fltk3::GraphicsDriver::transform_dx(double x, double y) {return x*m.a + y*m.c;}
 
-double Fl_Graphics_Driver::transform_dy(double x, double y) {return x*m.b + y*m.d;}
+double fltk3::GraphicsDriver::transform_dy(double x, double y) {return x*m.b + y*m.d;}
 
-void Fl_Graphics_Driver::transformed_vertex0(COORD_T x, COORD_T y) {
+void fltk3::GraphicsDriver::transformed_vertex0(COORD_T x, COORD_T y) {
   if (!n || x != p[n-1].x || y != p[n-1].y) {
     if (n >= p_size) {
       p_size = p ? 2*p_size : 16;
@@ -109,7 +109,7 @@ void Fl_Graphics_Driver::transformed_vertex0(COORD_T x, COORD_T y) {
   }
 }
 
-void Fl_Graphics_Driver::transformed_vertex(double xf, double yf) {
+void fltk3::GraphicsDriver::transformed_vertex(double xf, double yf) {
 #ifdef __APPLE_QUARTZ__
   transformed_vertex0(COORD_T(xf), COORD_T(yf));
 #else
@@ -117,11 +117,11 @@ void Fl_Graphics_Driver::transformed_vertex(double xf, double yf) {
 #endif
 }
 
-void Fl_Graphics_Driver::vertex(double x,double y) {
+void fltk3::GraphicsDriver::vertex(double x,double y) {
   transformed_vertex0(COORD_T(x*m.a + y*m.c + m.x), COORD_T(x*m.b + y*m.d + m.y));
 }
 
-void Fl_Graphics_Driver::end_points() {
+void fltk3::GraphicsDriver::end_points() {
 #if defined(USE_X11)
   if (n>1) XDrawPoints(fl_display, fl_window, fl_gc, p, n, 0);
 #elif defined(WIN32)
@@ -139,7 +139,7 @@ void Fl_Graphics_Driver::end_points() {
 #endif
 }
 
-void Fl_Graphics_Driver::end_line() {
+void fltk3::GraphicsDriver::end_line() {
   if (n < 2) {
     fltk3::end_points();
     return;
@@ -161,17 +161,17 @@ void Fl_Graphics_Driver::end_line() {
 #endif
 }
 
-void Fl_Graphics_Driver::fixloop() {  // remove equal points from closed path
+void fltk3::GraphicsDriver::fixloop() {  // remove equal points from closed path
   while (n>2 && p[n-1].x == p[0].x && p[n-1].y == p[0].y) n--;
 }
 
-void Fl_Graphics_Driver::end_loop() {
+void fltk3::GraphicsDriver::end_loop() {
   fixloop();
   if (n>2) fltk3::transformed_vertex((COORD_T)p[0].x, (COORD_T)p[0].y);
   fltk3::end_line();
 }
 
-void Fl_Graphics_Driver::end_polygon() {
+void fltk3::GraphicsDriver::end_polygon() {
   fixloop();
   if (n < 3) {
     fltk3::end_line();
@@ -198,7 +198,7 @@ void Fl_Graphics_Driver::end_polygon() {
 #endif
 }
 
-void Fl_Graphics_Driver::begin_complex_polygon() {
+void fltk3::GraphicsDriver::begin_complex_polygon() {
   fltk3::begin_polygon();
   gap_ = 0;
 #if defined(WIN32)
@@ -206,7 +206,7 @@ void Fl_Graphics_Driver::begin_complex_polygon() {
 #endif
 }
 
-void Fl_Graphics_Driver::gap() {
+void fltk3::GraphicsDriver::gap() {
   while (n>gap_+2 && p[n-1].x == p[gap_].x && p[n-1].y == p[gap_].y) n--;
   if (n > gap_+2) {
     fltk3::transformed_vertex((COORD_T)p[gap_].x, (COORD_T)p[gap_].y);
@@ -219,7 +219,7 @@ void Fl_Graphics_Driver::gap() {
   }
 }
 
-void Fl_Graphics_Driver::end_complex_polygon() {
+void fltk3::GraphicsDriver::end_complex_polygon() {
   fltk3::gap();
   if (n < 3) {
     fltk3::end_line();
@@ -250,7 +250,7 @@ void Fl_Graphics_Driver::end_complex_polygon() {
 // warning: these do not draw rotated ellipses correctly!
 // See fltk3::arc.c for portable version.
 
-void Fl_Graphics_Driver::circle(double x, double y,double r) {
+void fltk3::GraphicsDriver::circle(double x, double y,double r) {
   double xt = fltk3::transform_x(x,y);
   double yt = fltk3::transform_y(x,y);
   double rx = r * (m.c ? sqrt(m.a*m.a+m.c*m.c) : fabs(m.a));

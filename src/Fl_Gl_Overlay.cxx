@@ -182,7 +182,7 @@ void fltk3::GlWindow::make_overlay() {
 
 int fltk3::GlWindow::can_do_overlay() {
   if (!g) {
-    g = Fl_Gl_Choice::find(mode_,alist);
+    g = fltk3::GlChoice::find(mode_,alist);
     if (!g) return 0;
   }
   return (g->pfd.bReserved & 15) != 0;

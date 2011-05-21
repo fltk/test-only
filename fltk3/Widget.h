@@ -158,7 +158,7 @@ namespace fltk3 {
       MENU_WINDOW     = 1<<12,  ///< a temporary popup window, dismissed by clicking outside (fltk3::Window)
       TOOLTIP_WINDOW  = 1<<13,  ///< a temporary popup, transparent to events, and dismissed easily (fltk3::Window)
       MODAL           = 1<<14,  ///< a window blocking input to all other winows (fltk3::Window)
-      NO_OVERLAY      = 1<<15,  ///< window not using a hardware overlay plane (Fl_Menu_Window)
+      NO_OVERLAY      = 1<<15,  ///< window not using a hardware overlay plane (fltk3::MenuWindow)
       GROUP_RELATIVE  = 1<<16,  ///< position this widget relative to the parent group, not to the window
       COPIED_TOOLTIP  = 1<<17,  ///< the widget tooltip is internally copied, its destruction is handled by the widget
                                 // (space for more flags)
@@ -212,8 +212,8 @@ namespace fltk3 {
      (because draw() is virtual) like this:
      
      \code
-     fltk3::Widget *s = &scroll;		// scroll is an embedded Fl_Scrollbar
-     s->draw();			// calls Fl_Scrollbar::draw()
+     fltk3::Widget *s = &scroll;		// scroll is an embedded fltk3::Scrollbar
+     s->draw();			// calls fltk3::Scrollbar::draw()
      \endcode
      */
     virtual void draw();
@@ -521,8 +521,8 @@ namespace fltk3 {
      */
     const char *tooltip() const {return tooltip_;}
     
-    void tooltip(const char *text);		// see Fl_Tooltip
-    void copy_tooltip(const char *text);		// see Fl_Tooltip
+    void tooltip(const char *text);		// see fltk3::Tooltip
+    void copy_tooltip(const char *text);		// see fltk3::Tooltip
     
     /** Gets the current callback function for the widget.
      Each widget has a single callback.

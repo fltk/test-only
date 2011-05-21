@@ -341,7 +341,7 @@ int fltk3::draw_pixmap(const char*const* cdata, int x, int y, fltk3::Color bg) {
 #endif
   
 #ifdef  __APPLE_QUARTZ__
-  if (fl_graphics_driver->class_name() == Fl_Quartz_Graphics_Driver::class_id ) {
+  if (fltk3::graphics_driver->class_name() == fltk3::QuartzGraphicsDriver::class_id ) {
     bool transparent = (transparent_index>=0);
     transparent = true;
     U32 *array = new U32[d.w * d.h], *q = array;

@@ -54,10 +54,10 @@
 #  include <X11/keysym.h>
 
 static Fl_Xlib_Graphics_Driver fl_xlib_driver;
-static Fl_Display_Device fl_xlib_display(&fl_xlib_driver);
-FLTK3_EXPORT Fl_Graphics_Driver *fl_graphics_driver = (Fl_Graphics_Driver*)&fl_xlib_driver; // the current target device of graphics operations
-Fl_Surface_Device* Fl_Surface_Device::_surface = (Fl_Surface_Device*)&fl_xlib_display; // the current target surface of graphics operations
-Fl_Display_Device *Fl_Display_Device::_display = &fl_xlib_display;// the platform display
+static fltk3::DisplayDevice fl_xlib_display(&fl_xlib_driver);
+FLTK3_EXPORT fltk3::GraphicsDriver *fltk3::graphics_driver = (fltk3::GraphicsDriver*)&fl_xlib_driver; // the current target device of graphics operations
+fltk3::SurfaceDevice* fltk3::SurfaceDevice::_surface = (fltk3::SurfaceDevice*)&fl_xlib_display; // the current target surface of graphics operations
+fltk3::DisplayDevice *fltk3::DisplayDevice::_display = &fl_xlib_display;// the platform display
 
 ////////////////////////////////////////////////////////////////
 // interface to poll/select call:
@@ -1229,7 +1229,7 @@ int fl_handle(const XEvent& thisevent)
       buffer = (char*) malloc(buffer_len);
     }
     if (xevent.type == KeyPress) {
-      event = FL_KEYDOWN;
+      event = fltk3::KEYDOWN;
       int len = 0;
 
       if (fl_xim_ic) {
@@ -1866,7 +1866,7 @@ void fltk3::Window::show() {
   } else {
     labeltype(fltk3::NO_LABEL);
   }
-  Fl_Tooltip::exit(this);
+  fltk3::Tooltip::exit(this);
   if (!shown()) {
     fl_open_display();
     // Don't set background pixel for double-buffered windows...
@@ -1930,13 +1930,13 @@ int fltk3::Window::decorated_w()
   return attributes.width;
 }
 
-void Fl_Paged_Device::print_window(fltk3::Window *win, int x_offset, int y_offset)
+void fltk3::PagedDevice::print_window(fltk3::Window *win, int x_offset, int y_offset)
 {
   if (win->parent() || !win->border()) {
     this->print_widget(win, x_offset, y_offset);
     return;
     }
-  Fl_Display_Device::display_device()->set_current();
+  fltk3::DisplayDevice::display_device()->set_current();
   win->show();
   fltk3::check();
   win->make_current();
@@ -1971,13 +1971,13 @@ void Fl_Paged_Device::print_window(fltk3::Window *win, int x_offset, int y_offse
 
 
 #ifdef USE_PRINT_BUTTON
-// to test the Fl_Printer class creating a "Print front window" button in a separate window
+// to test the fltk3::Printer class creating a "Print front window" button in a separate window
 // contains also preparePrintFront call above
 #include <fltk3/Printer.h>
 #include <fltk3/Button.h>
 void printFront(fltk3::Widget *o, void *data)
 {
-  Fl_Printer printer;
+  fltk3::Printer printer;
   o->window()->hide();
   fltk3::Window *win = fltk3::first_window();
   if(!win) return;

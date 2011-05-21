@@ -36,7 +36,7 @@
 #include <fltk3/Pixmap.h>
 #include <fltk3/Bitmap.h>
  
-int Fl_PostScript_Graphics_Driver::alpha_mask(const uchar * data, int w, int h, int D, int LD){
+int fltk3::PostScriptGraphicsDriver::alpha_mask(const uchar * data, int w, int h, int D, int LD){
 
   mask = 0;
   if ((D/2)*2 != D){ //no mask info
@@ -195,7 +195,7 @@ static inline uchar swap_byte(const uchar b) {
 extern uchar **fl_mask_bitmap;
 
 
-void Fl_PostScript_Graphics_Driver::draw_image(const uchar *data, int ix, int iy, int iw, int ih, int D, int LD) {
+void fltk3::PostScriptGraphicsDriver::draw_image(const uchar *data, int ix, int iy, int iw, int ih, int D, int LD) {
   double x = ix, y = iy, w = iw, h = ih;
 
   if (D<3){ //mono
@@ -262,7 +262,7 @@ void Fl_PostScript_Graphics_Driver::draw_image(const uchar *data, int ix, int iy
 
 }
 
-void Fl_PostScript_Graphics_Driver::draw_image(Fl_Draw_Image_Cb call, void *data, int ix, int iy, int iw, int ih, int D) {
+void fltk3::PostScriptGraphicsDriver::draw_image(fltk3::DrawImageCb call, void *data, int ix, int iy, int iw, int ih, int D) {
   double x = ix, y = iy, w = iw, h = ih;
 
   int level2_mask = 0;
@@ -349,7 +349,7 @@ void Fl_PostScript_Graphics_Driver::draw_image(Fl_Draw_Image_Cb call, void *data
   delete[] rgbdata;
 }
 
-void Fl_PostScript_Graphics_Driver::draw_image_mono(const uchar *data, int ix, int iy, int iw, int ih, int D, int LD) {
+void fltk3::PostScriptGraphicsDriver::draw_image_mono(const uchar *data, int ix, int iy, int iw, int ih, int D, int LD) {
   double x = ix, y = iy, w = iw, h = ih;
 
   fprintf(output,"save\n");
@@ -411,7 +411,7 @@ void Fl_PostScript_Graphics_Driver::draw_image_mono(const uchar *data, int ix, i
 
 
 
-void Fl_PostScript_Graphics_Driver::draw_image_mono(Fl_Draw_Image_Cb call, void *data, int ix, int iy, int iw, int ih, int D) {
+void fltk3::PostScriptGraphicsDriver::draw_image_mono(fltk3::DrawImageCb call, void *data, int ix, int iy, int iw, int ih, int D) {
   double x = ix, y = iy, w = iw, h = ih;
 
   fprintf(output,"save\n");
@@ -461,7 +461,7 @@ void Fl_PostScript_Graphics_Driver::draw_image_mono(Fl_Draw_Image_Cb call, void 
 ////////////////////////////// Image classes //////////////////////
 
 
-void Fl_PostScript_Graphics_Driver::draw(fltk3::Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy){
+void fltk3::PostScriptGraphicsDriver::draw(fltk3::Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy){
   const char * const * di =pxm->data();
   int w,h;
   if (!fltk3::measure_pixmap(di, w, h)) return;
@@ -477,7 +477,7 @@ void Fl_PostScript_Graphics_Driver::draw(fltk3::Pixmap * pxm,int XP, int YP, int
   fl_mask_bitmap=0;
 }
 
-void Fl_PostScript_Graphics_Driver::draw(fltk3::RGBImage * rgb,int XP, int YP, int WP, int HP, int cx, int cy){
+void fltk3::PostScriptGraphicsDriver::draw(fltk3::RGBImage * rgb,int XP, int YP, int WP, int HP, int cx, int cy){
   const uchar  * di = rgb->array;
   int w = rgb->w();
   int h = rgb->h();
@@ -491,7 +491,7 @@ void Fl_PostScript_Graphics_Driver::draw(fltk3::RGBImage * rgb,int XP, int YP, i
   mask=0;
 }
 
-void Fl_PostScript_Graphics_Driver::draw(fltk3::Bitmap * bitmap,int XP, int YP, int WP, int HP, int cx, int cy){
+void fltk3::PostScriptGraphicsDriver::draw(fltk3::Bitmap * bitmap,int XP, int YP, int WP, int HP, int cx, int cy){
   const uchar  * di = bitmap->array;
   int w,h;
   int LD=(bitmap->w()+7)/8;

@@ -26,34 +26,38 @@
 //
 
 /* \file
-   Fl_Multi_Browser widget . */
+ fltk3::MultiBrowser widget . */
 
 #ifndef Fltk3_Multi_Browser_H
 #define Fltk3_Multi_Browser_H
 
 #include "Browser.h"
 
-/**
-  The Fl_Multi_Browser class is a subclass of fltk3::Browser
-  which lets the user select any set of the lines.  The user interface
-  is Macintosh style: clicking an item turns off all the others and
-  selects that one, dragging selects all the items the mouse moves over,
-  and shift + click toggles the items. This is different then how forms
-  did it.  Normally the callback is done when the user releases the
-  mouse, but you can change this with when().
-  <P>See fltk3::Browser for methods to add and remove lines from the browser.
-*/
-class FLTK3_EXPORT Fl_Multi_Browser : public fltk3::Browser {
-public:
+namespace fltk3 {
+  
   /**
-      Creates a new Fl_Multi_Browser widget using the given
-    position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
-    The constructor specializes fltk3::Browser() by setting the type to fltk3::MULTI_BROWSER.
-    The destructor destroys the widget and frees all memory that has been allocated.
-  */
-    Fl_Multi_Browser(int X,int Y,int W,int H,const char *L=0)
-	: fltk3::Browser(X,Y,W,H,L) {type(fltk3::MULTI_BROWSER);}
-};
+   The fltk3::MultiBrowser class is a subclass of fltk3::Browser
+   which lets the user select any set of the lines.  The user interface
+   is Macintosh style: clicking an item turns off all the others and
+   selects that one, dragging selects all the items the mouse moves over,
+   and shift + click toggles the items. This is different then how forms
+   did it.  Normally the callback is done when the user releases the
+   mouse, but you can change this with when().
+   <P>See fltk3::Browser for methods to add and remove lines from the browser.
+   */
+  class FLTK3_EXPORT MultiBrowser : public fltk3::Browser {
+  public:
+    /**
+     Creates a new fltk3::MultiBrowser widget using the given
+     position, size, and label string. The default boxtype is fltk3::DOWN_BOX.
+     The constructor specializes fltk3::Browser() by setting the type to fltk3::MULTI_BROWSER.
+     The destructor destroys the widget and frees all memory that has been allocated.
+     */
+    MultiBrowser(int X,int Y,int W,int H,const char *L=0)
+    : fltk3::Browser(X,Y,W,H,L) {type(fltk3::MULTI_BROWSER);}
+  };
+  
+}
 
 #endif
 

@@ -39,7 +39,7 @@ static double flinear(double val, double smin, double smax, double gmin, double 
   else return gmin + (gmax - gmin) * (val - smin) / (smax - smin);
 }
 
-void Fl_Positioner::draw(int X, int Y, int W, int H) {
+void fltk3::Positioner::draw(int X, int Y, int W, int H) {
   int x1 = X + 4;
   int y1 = Y + 4;
   int w1 = W - 2 * 4;
@@ -52,13 +52,13 @@ void Fl_Positioner::draw(int X, int Y, int W, int H) {
   fltk3::yxline(xx, y1, y1+h1);
 }
 
-void Fl_Positioner::draw() {
+void fltk3::Positioner::draw() {
   draw(x(), y(), w(), h());
   draw_label();
 }
 
 /** Returns the current position in x and y.*/
-int Fl_Positioner::value(double X, double Y) {
+int fltk3::Positioner::value(double X, double Y) {
   clear_changed();
   if (X == xvalue_ && Y == yvalue_) return 0;
   xvalue_ = X; yvalue_ = Y;
@@ -67,16 +67,16 @@ int Fl_Positioner::value(double X, double Y) {
 }
 
 /** Sets the X axis coordinate.*/
-int Fl_Positioner::xvalue(double X) {
+int fltk3::Positioner::xvalue(double X) {
   return(value(X, yvalue_));
 }
 
 /** Sets the Y axis coordinate.*/
-int Fl_Positioner::yvalue(double Y) {
+int fltk3::Positioner::yvalue(double Y) {
   return(value(xvalue_, Y));
 }
 
-int Fl_Positioner::handle(int event, int X, int Y, int W, int H) {
+int fltk3::Positioner::handle(int event, int X, int Y, int W, int H) {
   switch (event) {
   case fltk3::PUSH:
   case fltk3::DRAG:
@@ -120,15 +120,15 @@ int Fl_Positioner::handle(int event, int X, int Y, int W, int H) {
   }
 }
 
-int Fl_Positioner::handle(int e) {
+int fltk3::Positioner::handle(int e) {
   return handle(e, x(), y(), w(), h());
 }
 
 /**
-  Creates a new Fl_Positioner widget using the given position,
+  Creates a new fltk3::Positioner widget using the given position,
   size, and label string. The default boxtype is fltk3::NO_BOX.
 */
-Fl_Positioner::Fl_Positioner(int X, int Y, int W, int H, const char* l)
+fltk3::Positioner::Positioner(int X, int Y, int W, int H, const char* l)
 : fltk3::Widget(X, Y, W, H, l) {
   box(fltk3::DOWN_BOX);
   selection_color(fltk3::RED);
@@ -141,7 +141,7 @@ Fl_Positioner::Fl_Positioner(int X, int Y, int W, int H, const char* l)
 }
 
 /** Sets the X axis bounds.*/
-void Fl_Positioner::xbounds(double a, double b) {
+void fltk3::Positioner::xbounds(double a, double b) {
   if (a != xmin || b != xmax) {
     xmin = a; xmax = b;
     redraw();
@@ -149,7 +149,7 @@ void Fl_Positioner::xbounds(double a, double b) {
 }
 
 /** Sets the Y axis bounds.*/
-void Fl_Positioner::ybounds(double a, double b) {
+void fltk3::Positioner::ybounds(double a, double b) {
   if (a != ymin || b != ymax) {
     ymin = a; ymax = b;
     redraw();

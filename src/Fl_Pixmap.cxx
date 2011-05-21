@@ -78,7 +78,7 @@ void fltk3::Pixmap::measure() {
 }
 
 void fltk3::Pixmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
-  fl_graphics_driver->draw(this, XP, YP, WP, HP, cx, cy);
+  fltk3::graphics_driver->draw(this, XP, YP, WP, HP, cx, cy);
 }
 
 static int start(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int w, int h, int &cx, int &cy, 
@@ -109,7 +109,7 @@ static int start(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int w, int 
 }
 
 #ifdef __APPLE__
-void Fl_Quartz_Graphics_Driver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
+void fltk3::QuartzGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   if (pxm->w() < 0) pxm->measure();
   int code = start(pxm, XP, YP, WP, HP, pxm->w(), pxm->h(), cx, cy, X, Y, W, H);
@@ -148,7 +148,7 @@ void Fl_GDI_Graphics_Driver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, in
     }
     fl_end_offscreen();
   }
-  if (Fl_Surface_Device::surface()->class_name() == Fl_Printer::class_id) {
+  if (fltk3::SurfaceDevice::surface()->class_name() == fltk3::Printer::class_id) {
     typedef BOOL (WINAPI* fl_transp_func)  (HDC,int,int,int,int,HDC,int,int,int,int,UINT);
     static HMODULE hMod = NULL;
     static fl_transp_func fl_TransparentBlt = NULL;

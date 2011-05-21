@@ -60,11 +60,11 @@
  */
 
 static void scrollbar_callback(fltk3::Widget* s, void*) {
-  ((fltk3::Browser_*)(s->parent()))->position(int(((Fl_Scrollbar*)s)->value()));
+  ((fltk3::Browser_*)(s->parent()))->position(int(((fltk3::Scrollbar*)s)->value()));
 }
 
 static void hscrollbar_callback(fltk3::Widget* s, void*) {
-  ((fltk3::Browser_*)(s->parent()))->hposition(int(((Fl_Scrollbar*)s)->value()));
+  ((fltk3::Browser_*)(s->parent()))->hposition(int(((fltk3::Scrollbar*)s)->value()));
 }
 
 // return where to draw the actual box:

@@ -115,13 +115,13 @@ const char* fl_encoding_ = "iso10646-1";
 
 static void fl_xft_font(Fl_Xlib_Graphics_Driver *driver, fltk3::Font fnum, fltk3::Fontsize size, int angle) {
   if (fnum==-1) { // special case to stop font caching
-    driver->Fl_Graphics_Driver::font(0, 0);
+    driver->fltk3::GraphicsDriver::font(0, 0);
     return;
   }
   Fl_Font_Descriptor* f = driver->font_descriptor();
-  if (fnum == driver->Fl_Graphics_Driver::font() && size == driver->size() && f && f->angle == angle)
+  if (fnum == driver->fltk3::GraphicsDriver::font() && size == driver->size() && f && f->angle == angle)
     return;
-  driver->Fl_Graphics_Driver::font(fnum, size);
+  driver->fltk3::GraphicsDriver::font(fnum, size);
   Fl_Fontdesc *font = fltk3::fonts + fnum;
   // search the fontsizes we have generated already
   for (f = font->first; f; f = f->next) {
@@ -344,7 +344,7 @@ Fl_Font_Descriptor::Fl_Font_Descriptor(const char* name, fltk3::Fontsize fsize, 
 }
 
 Fl_Font_Descriptor::~Fl_Font_Descriptor() {
-  if (this == fl_graphics_driver->font_descriptor()) fl_graphics_driver->font_descriptor(NULL);
+  if (this == fltk3::graphics_driver->font_descriptor()) fltk3::graphics_driver->font_descriptor(NULL);
 //  XftFontClose(fl_display, font);
 }
 
@@ -400,7 +400,7 @@ double Fl_Xlib_Graphics_Driver::width(const char* str, int n) {
 }
 
 /*double fltk3::width(uchar c) {
-  return fl_graphics_driver->width((const char *)(&c), 1);
+  return fltk3::graphics_driver->width((const char *)(&c), 1);
 }*/
 
 static double fl_xft_width(Fl_Font_Descriptor *desc, FcChar32 *str, int n) {
@@ -451,7 +451,7 @@ void Fl_Xlib_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &d
 // original fltk code did.
 // NOTE: On my test boxes (FC6, FC7, FC8, ubuntu8.04, 9.04, 9.10) this works 
 //       well for the fltk "built-in" font names.
-static XFontStruct* load_xfont_for_xft2(Fl_Graphics_Driver *driver) {
+static XFontStruct* load_xfont_for_xft2(fltk3::GraphicsDriver *driver) {
   XFontStruct* xgl_font = 0;
   int size = driver->size();
   int fnum = driver->font();
@@ -519,7 +519,7 @@ static XFontStruct* load_xfont_for_xft2(Fl_Graphics_Driver *driver) {
 } // end of load_xfont_for_xft2
 #  endif
 
-static XFontStruct* fl_xxfont(Fl_Graphics_Driver *driver) {
+static XFontStruct* fl_xxfont(fltk3::GraphicsDriver *driver) {
 #  if XFT_MAJOR > 1
   // kludge! XFT 2 and later does not provide core fonts for us to use with GL
   // try to load a bitmap X font instead
@@ -547,7 +547,7 @@ static XFontStruct* fl_xxfont(Fl_Graphics_Driver *driver) {
 }
 
 XFontStruct* Fl_XFont_On_Demand::value() {
-  if (!ptr) ptr = fl_xxfont(fl_graphics_driver);
+  if (!ptr) ptr = fl_xxfont(fltk3::graphics_driver);
   return ptr;
 }
 
@@ -606,8 +606,8 @@ void Fl_Xlib_Graphics_Driver::draw(const char *str, int n, int x, int y) {
   // Use fltk's color allocator, copy the results to match what
   // XftCollorAllocValue returns:
   XftColor color;
-  color.pixel = fl_xpixel(Fl_Graphics_Driver::color());
-  uchar r,g,b; fltk3::get_color(Fl_Graphics_Driver::color(), r,g,b);
+  color.pixel = fl_xpixel(fltk3::GraphicsDriver::color());
+  uchar r,g,b; fltk3::get_color(fltk3::GraphicsDriver::color(), r,g,b);
   color.color.red   = ((int)r)*0x101;
   color.color.green = ((int)g)*0x101;
   color.color.blue  = ((int)b)*0x101;
@@ -622,12 +622,12 @@ void Fl_Xlib_Graphics_Driver::draw(const char *str, int n, int x, int y) {
 }
 
 void Fl_Xlib_Graphics_Driver::draw(int angle, const char *str, int n, int x, int y) {
-  fl_xft_font(this, this->Fl_Graphics_Driver::font(), this->size(), angle);
+  fl_xft_font(this, this->fltk3::GraphicsDriver::font(), this->size(), angle);
   this->draw(str, n, (int)x, (int)y);
-  fl_xft_font(this, this->Fl_Graphics_Driver::font(), this->size(), 0);
+  fl_xft_font(this, this->fltk3::GraphicsDriver::font(), this->size(), 0);
 }
 
-static void fl_drawUCS4(Fl_Graphics_Driver *driver, const FcChar32 *str, int n, int x, int y) {
+static void fl_drawUCS4(fltk3::GraphicsDriver *driver, const FcChar32 *str, int n, int x, int y) {
 #if USE_OVERLAY
   XftDraw*& draw_ = fl_overlay ? draw_overlay : ::draw_;
   if (fl_overlay) {

@@ -26,76 +26,78 @@
 //
 
 /* \file
-   Fl_Plugin class . */
+ fltk3::Plugin class . */
 
 #ifndef Fltk3_Plugin_H
-#  define Fltk3_Plugin_H
+#define Fltk3_Plugin_H
 
-#  include "Preferences.h"
+#include "Preferences.h"
 
-
-/**
- \brief Fl_Plugin allows link-time and run-time integration of binary modules.
- 
- Fl_Plugin and Fl_Plugin_Manager provide a small and simple solution for
- linking C++ classes at run-time, or optionally linking modules at compile
- time without the need to change the main application.
-
- Fl_Plugin_Manager uses static initialisation to create the plugin interface
- early during startup. Plugins are stored in a temporary database, organized
- in classes.
- 
- Plugins should derive a new class from Fl_Plugin as a base:
- \code
- class My_Plugin : public Fl_Plugin {
- public:
-   My_Plugin() : Fl_Plugin("effects", "blur") { }
+namespace fltk3 {
+  
+  /**
+   \brief fltk3::Plugin allows link-time and run-time integration of binary modules.
+   
+   fltk3::Plugin and fltk3::PluginManager provide a small and simple solution for
+   linking C++ classes at run-time, or optionally linking modules at compile
+   time without the need to change the main application.
+   
+   fltk3::PluginManager uses static initialisation to create the plugin interface
+   early during startup. Plugins are stored in a temporary database, organized
+   in classes.
+   
+   Plugins should derive a new class from fltk3::Plugin as a base:
+   \code
+   class My_Plugin : public fltk3::Plugin {
+   public:
+   My_Plugin() : fltk3::Plugin("effects", "blur") { }
    void do_something(...);
- };
- My_Plugin blur_plugin();
- \endcode
- 
- Plugins can be put into modules and either linked befor distribution, or loaded
- from dynamically linkable files. An Fl_Plugin_Manager is used to list and 
- access all currently loaded plugins.
- \code
- Fl_Plugin_Manager mgr("effects");
- int i, n = mgr.plugins();
- for (i=0; i<n; i++) {
+   };
+   My_Plugin blur_plugin();
+   \endcode
+   
+   Plugins can be put into modules and either linked befor distribution, or loaded
+   from dynamically linkable files. An fltk3::PluginManager is used to list and 
+   access all currently loaded plugins.
+   \code
+   fltk3::PluginManager mgr("effects");
+   int i, n = mgr.plugins();
+   for (i=0; i<n; i++) {
    My_Plugin *pin = (My_Plugin*)mgr.plugin(i);
    pin->do_something();
- }
- \endcode
- */
-class FLTK3_EXPORT Fl_Plugin  {
-  fltk3::Preferences::ID id;
-public:
-  Fl_Plugin(const char *klass, const char *name);
-  virtual ~Fl_Plugin();
-};
-
-
-/**
- \brief Fl_Plugin_Manager manages link-time and run-time plugin binaries.
- \see Fl_Plugin
- */
-class FLTK3_EXPORT Fl_Plugin_Manager : public fltk3::Preferences {
-public:
-  Fl_Plugin_Manager(const char *klass);
-  ~Fl_Plugin_Manager();
-  
-  /** \brief Return the number of plugins in the klass.
+   }
+   \endcode
    */
-  int plugins() { return groups(); }
-  Fl_Plugin *plugin(int index);
-  Fl_Plugin *plugin(const char *name);
-  fltk3::Preferences::ID addPlugin(const char *name, Fl_Plugin *plugin);
+  class FLTK3_EXPORT Plugin  {
+    fltk3::Preferences::ID id;
+  public:
+    Plugin(const char *klass, const char *name);
+    virtual ~Plugin();
+  };
   
-  static void removePlugin(fltk3::Preferences::ID id);
-  static int load(const char *filename);
-  static int loadAll(const char *filepath, const char *pattern=0);
-};
-
+  
+  /**
+   \brief fltk3::PluginManager manages link-time and run-time plugin binaries.
+   \see fltk3::Plugin
+   */
+  class FLTK3_EXPORT PluginManager : public fltk3::Preferences {
+  public:
+    PluginManager(const char *klass);
+    ~PluginManager();
+    
+    /** \brief Return the number of plugins in the klass.
+     */
+    int plugins() { return groups(); }
+    fltk3::Plugin *plugin(int index);
+    fltk3::Plugin *plugin(const char *name);
+    fltk3::Preferences::ID addPlugin(const char *name, fltk3::Plugin *plugin);
+    
+    static void removePlugin(fltk3::Preferences::ID id);
+    static int load(const char *filename);
+    static int loadAll(const char *filepath, const char *pattern=0);
+  };
+  
+}
 
 #endif // !Fl_Preferences_H
 

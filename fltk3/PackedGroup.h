@@ -44,7 +44,7 @@ namespace fltk3 {
    then the children are resized to the width and are stacked below each
    other.  Then the fltk3::PackedGroup resizes itself to surround the child
    widgets.
-   <P>This widget is needed for the Fl_Tabs.
+   <P>This widget is needed for the fltk3::TabGroup.
    In addition you may want to put the fltk3::PackedGroup inside an 
    fltk3::ScrollGroup.
    

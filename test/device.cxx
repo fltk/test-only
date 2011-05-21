@@ -19,21 +19,21 @@
 #include <math.h>
 #include <fltk3/run.h>
 
-#include <fltk3/Overlay_Window.h>
-#include <fltk3/Light_Button.h>
+#include <fltk3/OverlayWindow.h>
+#include <fltk3/LightButton.h>
 #include <fltk3/draw.h>
 #include <fltk3/Clock.h>
 #include "pixmaps/porsche.xpm"
 #include <fltk3/Pixmap.h>
 #include <fltk3/Bitmap.h>
-#include <fltk3/Round_Button.h>
+#include <fltk3/RoundButton.h>
 
 
 #include <fltk3/Printer.h>
 
-//#include "fl_printer_chooser.H"
+//#include "fltk3::printer_chooser.H"
 
-#include <fltk3/File_Chooser.h>
+#include <fltk3/FileChooser.h>
 #include <fltk3/draw.h>
 
 
@@ -107,55 +107,55 @@ static uchar sorceress_bits[] = {
    0xff, 0xff, 0x40, 0xf0, 0xff, 0xff, 0xff, 0x07, 0xff, 0xff, 0xff, 0xff,
    0x41, 0xf0, 0xff, 0xff, 0xff, 0x07};
 
-class MyWidget: public Fl_Box{
+class MyWidget: public fltk3::Box{
 protected:
   void draw(){
-    Fl_Box::draw();
-    fl_color(FL_RED);
-    fl_rectf(x()+5,y()+5,w()-10,h()-10);
-    fl_push_clip(x()+6,y()+6,w()-12,h()-12);
-    fl_color(FL_DARK_GREEN);
-    fl_rectf(x()+5,y()+5,w()-10,h()-10);
-    fl_pop_clip();
-    fl_color(FL_YELLOW);
-    fl_rectf(x()+7,y()+7,w()-14,h()-14);
-    fl_color(FL_BLUE);
+    fltk3::Box::draw();
+    fltk3::color(fltk3::RED);
+    fltk3::rectf(x()+5,y()+5,w()-10,h()-10);
+    fltk3::push_clip(x()+6,y()+6,w()-12,h()-12);
+    fltk3::color(fltk3::DARK_GREEN);
+    fltk3::rectf(x()+5,y()+5,w()-10,h()-10);
+    fltk3::pop_clip();
+    fltk3::color(fltk3::YELLOW);
+    fltk3::rectf(x()+7,y()+7,w()-14,h()-14);
+    fltk3::color(fltk3::BLUE);
 
-    fl_rect(x()+8,y()+8,w()-16,h()-16);
-    fl_push_clip(x()+25,y()+25,w()-50, h()-50);
-    fl_color(FL_BLACK);
-    fl_rect(x()+24,y()+24,w()-48,h()-48);
-    fl_line(x()+27,y()+27,x()+w()-27,y()+h()-27);
-    fl_line(x()+27,y()+h()-27,x()+w()-27,y()+27);
-    //fl_rect(x()+30,y()+30,w()-60,h()-60);
-    fl_pop_clip();
+    fltk3::rect(x()+8,y()+8,w()-16,h()-16);
+    fltk3::push_clip(x()+25,y()+25,w()-50, h()-50);
+    fltk3::color(fltk3::BLACK);
+    fltk3::rect(x()+24,y()+24,w()-48,h()-48);
+    fltk3::line(x()+27,y()+27,x()+w()-27,y()+h()-27);
+    fltk3::line(x()+27,y()+h()-27,x()+w()-27,y()+27);
+    //fltk3::rect(x()+30,y()+30,w()-60,h()-60);
+    fltk3::pop_clip();
 
   }
 public:
-    MyWidget(int x, int y):Fl_Box(x,y,100,100, "Clipping and rect(f):\nYellow rect.framed\nby B-Y-G-R rect. 1 p.\nthick. Your printer may \nrender very thin lines\nsurrounding \"X\""){
-      align(FL_ALIGN_TOP);
+    MyWidget(int x, int y):fltk3::Box(x,y,100,100, "Clipping and rect(f):\nYellow rect.framed\nby B-Y-G-R rect. 1 p.\nthick. Your printer may \nrender very thin lines\nsurrounding \"X\""){
+      align(fltk3::ALIGN_TOP);
       labelsize(10);
     };
 };
 
 
-class MyWidget2: public Fl_Box{
+class MyWidget2: public fltk3::Box{
 protected:
   void draw(){
-    Fl_Box::draw();
+    fltk3::Box::draw();
     int d;
-//    fl_line_style(0);
+//    fltk3::line_style(0);
     for(d=y()+5;d<48+y();d+=2){
-      fl_xyline(x()+5,d,x()+48);
+      fltk3::xyline(x()+5,d,x()+48);
     }
 
     
 
-   fl_push_clip(x()+52,y()+5,45,43);
+   fltk3::push_clip(x()+52,y()+5,45,43);
    for(d=y()+5;d<150+y();d+=3){
-     fl_line(x()+52,d,x()+92,d-40);
+     fltk3::line(x()+52,d,x()+92,d-40);
    }
-   fl_pop_clip();
+   fltk3::pop_clip();
 
 
 
@@ -164,101 +164,99 @@ protected:
 
 
     
-    fl_line_style(FL_DASH);
-    fl_xyline(x()+5,y()+55,x()+48);
-    fl_line_style(FL_DOT);
-    fl_xyline(x()+5,y()+58,x()+48);
-    fl_line_style(FL_DASHDOT);
-    fl_xyline(x()+5,y()+61,x()+48);
-    fl_line_style(FL_DASHDOTDOT);
-    fl_xyline(x()+5,y()+64,x()+48);
-    fl_line_style(0,0,(char*)"\7\3\7\2");
-    fl_xyline(x()+5,y()+67,x()+48);
+    fltk3::line_style(fltk3::DASH);
+    fltk3::xyline(x()+5,y()+55,x()+48);
+    fltk3::line_style(fltk3::DOT);
+    fltk3::xyline(x()+5,y()+58,x()+48);
+    fltk3::line_style(fltk3::DASHDOT);
+    fltk3::xyline(x()+5,y()+61,x()+48);
+    fltk3::line_style(fltk3::DASHDOTDOT);
+    fltk3::xyline(x()+5,y()+64,x()+48);
+    fltk3::line_style(0,0,(char*)"\7\3\7\2");
+    fltk3::xyline(x()+5,y()+67,x()+48);
 
 
 
 
 
       
-    fl_line_style(0);
+    fltk3::line_style(0);
 
 
 
 
-    fl_line(x()+5,y()+72,x()+25,y()+95);
-    fl_line(x()+8,y()+72,x()+28,y()+95,x()+31,y()+72);
+    fltk3::line(x()+5,y()+72,x()+25,y()+95);
+    fltk3::line(x()+8,y()+72,x()+28,y()+95,x()+31,y()+72);
 
-    fl_color(FL_YELLOW);
-    fl_polygon(x()+11, y()+72,x()+27,y()+91,x()+29,y()+72);
-    fl_color(FL_RED);
-    fl_loop(x()+11, y()+72,x()+27,y()+91,x()+29,y()+72);
+    fltk3::color(fltk3::YELLOW);
+    fltk3::polygon(x()+11, y()+72,x()+27,y()+91,x()+29,y()+72);
+    fltk3::color(fltk3::RED);
+    fltk3::loop(x()+11, y()+72,x()+27,y()+91,x()+29,y()+72);
 
-	fl_color(FL_BLUE); ////
-	fl_line_style(FL_SOLID, 6);
-    fl_loop(x()+31, y()+12,x()+47,y()+31,x()+49,y()+12);
-	fl_line_style(0);
+	fltk3::color(fltk3::BLUE); ////
+	fltk3::line_style(fltk3::SOLID, 6);
+    fltk3::loop(x()+31, y()+12,x()+47,y()+31,x()+49,y()+12);
+	fltk3::line_style(0);
 
 
-    fl_color(200,0,200);
-    fl_polygon(x()+35,y()+72,x()+33,y()+95,x()+48,y()+95,x()+43,y()+72);
-    fl_color(FL_GREEN);
-    fl_loop(x()+35,y()+72,x()+33,y()+95,x()+48,y()+95,x()+43,y()+72);
+    fltk3::color(200,0,200);
+    fltk3::polygon(x()+35,y()+72,x()+33,y()+95,x()+48,y()+95,x()+43,y()+72);
+    fltk3::color(fltk3::GREEN);
+    fltk3::loop(x()+35,y()+72,x()+33,y()+95,x()+48,y()+95,x()+43,y()+72);
 
  
 
-	fl_color(FL_BLUE);    
-    fl_yxline(x()+65,y()+63,y()+66);
-	fl_color(FL_GREEN);    
-    fl_yxline(x()+66,y()+66,y()+63);
+	fltk3::color(fltk3::BLUE);    
+    fltk3::yxline(x()+65,y()+63,y()+66);
+	fltk3::color(fltk3::GREEN);    
+    fltk3::yxline(x()+66,y()+66,y()+63);
 
-    fl_color(FL_BLUE);
-    fl_rect(x()+80,y()+55,5,5);
-    fl_color(FL_YELLOW);
-    fl_rectf(x()+81,y()+56,3,3);
-    fl_color(FL_BLACK);
-    fl_point(x()+82,y()+57);
+    fltk3::color(fltk3::BLUE);
+    fltk3::rect(x()+80,y()+55,5,5);
+    fltk3::color(fltk3::YELLOW);
+    fltk3::rectf(x()+81,y()+56,3,3);
+    fltk3::color(fltk3::BLACK);
+    fltk3::point(x()+82,y()+57);
 
-    fl_color(FL_BLUE);
-    fl_rect(x()+56, y()+79, 24, 17);
-    fl_color(FL_CYAN);
-    fl_rectf(x()+57, y()+80, 22 , 15 );
-    fl_color(FL_RED);
-    fl_arc(x()+57, y()+80, 22 ,15 ,40, 270);
-    fl_color(FL_YELLOW);
-    fl_pie(x()+58, y()+81, 20 ,13 ,40, 270);
-
-
+    fltk3::color(fltk3::BLUE);
+    fltk3::rect(x()+56, y()+79, 24, 17);
+    fltk3::color(fltk3::CYAN);
+    fltk3::rectf(x()+57, y()+80, 22 , 15 );
+    fltk3::color(fltk3::RED);
+    fltk3::arc(x()+57, y()+80, 22 ,15 ,40, 270);
+    fltk3::color(fltk3::YELLOW);
+    fltk3::pie(x()+58, y()+81, 20 ,13 ,40, 270);
 
 
-	fl_line_style(0);
 
 
-	fl_color(FL_BLACK);
-  fl_point(x()+58,y()+58);
-	fl_color(FL_RED);
-	fl_yxline(x()+59,y()+58,y()+59);
-  fl_color(FL_GREEN);
-	fl_yxline(x()+60,y()+59,y()+58);
-  fl_color(FL_BLACK);
-	fl_xyline(x()+61,y()+58,x()+62);
-  fl_color(FL_RED);
-	fl_xyline(x()+62,y()+59,x()+61);
-
-  fl_color(FL_GREEN);
-  fl_yxline(x()+57,y()+58,y()+59,x()+58);
-  fl_color(FL_BLUE);
-  fl_xyline(x()+58,y()+60,x()+56,y()+58);
-  fl_color(FL_RED);
-  fl_xyline(x()+58,y()+61,x()+56,y()+63);
-  fl_color(FL_GREEN);
-  fl_yxline(x()+57,y()+63,y()+62,x()+58);
-
-  fl_color(FL_BLUE);
-  fl_line(x()+58,y()+63, x()+60, y()+65);
-  fl_color(FL_BLACK);
-  fl_line(x()+61,y()+65, x()+59, y()+63);
+	fltk3::line_style(0);
 
 
+	fltk3::color(fltk3::BLACK);
+  fltk3::point(x()+58,y()+58);
+	fltk3::color(fltk3::RED);
+	fltk3::yxline(x()+59,y()+58,y()+59);
+  fltk3::color(fltk3::GREEN);
+	fltk3::yxline(x()+60,y()+59,y()+58);
+  fltk3::color(fltk3::BLACK);
+	fltk3::xyline(x()+61,y()+58,x()+62);
+  fltk3::color(fltk3::RED);
+	fltk3::xyline(x()+62,y()+59,x()+61);
+
+  fltk3::color(fltk3::GREEN);
+  fltk3::yxline(x()+57,y()+58,y()+59,x()+58);
+  fltk3::color(fltk3::BLUE);
+  fltk3::xyline(x()+58,y()+60,x()+56,y()+58);
+  fltk3::color(fltk3::RED);
+  fltk3::xyline(x()+58,y()+61,x()+56,y()+63);
+  fltk3::color(fltk3::GREEN);
+  fltk3::yxline(x()+57,y()+63,y()+62,x()+58);
+
+  fltk3::color(fltk3::BLUE);
+  fltk3::line(x()+58,y()+63, x()+60, y()+65);
+  fltk3::color(fltk3::BLACK);
+  fltk3::line(x()+61,y()+65, x()+59, y()+63);
 
 
 
@@ -266,306 +264,308 @@ protected:
 
 
 
-    fl_color(FL_BLACK);
+
+
+    fltk3::color(fltk3::BLACK);
   };
   
 public:
-  MyWidget2(int x, int y):Fl_Box(x,y,100,100, "Integer primitives"){
+  MyWidget2(int x, int y):fltk3::Box(x,y,100,100, "Integer primitives"){
       labelsize(10);
-      align(FL_ALIGN_TOP);
+      align(fltk3::ALIGN_TOP);
     };
 };
 
 
-class MyWidget3: public Fl_Box{
+class MyWidget3: public fltk3::Box{
 protected:
   void draw(){
-    Fl_Box::draw();
+    fltk3::Box::draw();
     double d;
-//    fl_line_style(0);
-    fl_push_clip(x()+5,y()+5,45,43);
+//    fltk3::line_style(0);
+    fltk3::push_clip(x()+5,y()+5,45,43);
     for(d=y()+5;d<95+y();d+=1.63){
-      fl_begin_line();
-      fl_vertex(x()+5,d);
-      fl_vertex(x()+48,d);
-      fl_end_line();
+      fltk3::begin_line();
+      fltk3::vertex(x()+5,d);
+      fltk3::vertex(x()+48,d);
+      fltk3::end_line();
     }
-    fl_pop_clip();
+    fltk3::pop_clip();
 
-    fl_push_clip(x()+52,y()+5,45,43);
+    fltk3::push_clip(x()+52,y()+5,45,43);
     for(d=y()+5;d<150+y();d+=2.3052){
-      fl_begin_line();
-      fl_vertex(x()+52,d);
-      fl_vertex(x()+92,d-43);
-      fl_end_line();
+      fltk3::begin_line();
+      fltk3::vertex(x()+52,d);
+      fltk3::vertex(x()+92,d-43);
+      fltk3::end_line();
     }
-    fl_pop_clip();
+    fltk3::pop_clip();
 
   };
 public:
-  MyWidget3(int x, int y):Fl_Box(x,y,100,100, "Sub-pixel drawing of\nlines 1.63 points apart\nOn the screen you\ncan see aliasing, the\nprinter should render\nthem properly"){
+  MyWidget3(int x, int y):fltk3::Box(x,y,100,100, "Sub-pixel drawing of\nlines 1.63 points apart\nOn the screen you\ncan see aliasing, the\nprinter should render\nthem properly"){
       labelsize(10);
-      align(FL_ALIGN_TOP);
+      align(fltk3::ALIGN_TOP);
     };
 };
 
 
 
-class MyWidget4: public Fl_Box{
+class MyWidget4: public fltk3::Box{
 protected:
   void draw(){
-    Fl_Box::draw();
-    fl_push_matrix();
-    fl_translate(x(),y());
-    fl_scale(.75,.75);
+    fltk3::Box::draw();
+    fltk3::push_matrix();
+    fltk3::translate(x(),y());
+    fltk3::scale(.75,.75);
 
     
     
-    fl_line_style(FL_SOLID , 5);
-    fl_begin_line();
-    fl_vertex(10, 160);
-    fl_vertex(40, 160);
-    fl_vertex(40, 190);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::line_style(fltk3::SOLID , 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 160);
+    fltk3::vertex(40, 160);
+    fltk3::vertex(40, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
 
-    fl_color(FL_RED);
-    fl_line_style(FL_SOLID | FL_CAP_FLAT |FL_JOIN_MITER , 5);
-    fl_begin_line();
-    fl_vertex(10, 150);
-    fl_vertex(50, 150);
-    fl_vertex(50, 190);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::color(fltk3::RED);
+    fltk3::line_style(fltk3::SOLID | fltk3::CAP_FLAT |fltk3::JOIN_MITER , 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 150);
+    fltk3::vertex(50, 150);
+    fltk3::vertex(50, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
-    fl_color(FL_GREEN);   
-    fl_line_style(FL_SOLID | FL_CAP_ROUND |FL_JOIN_ROUND , 5);
-    fl_begin_line();
-    fl_vertex(10, 140);
-    fl_vertex(60, 140);
-    fl_vertex(60, 190);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::color(fltk3::GREEN);   
+    fltk3::line_style(fltk3::SOLID | fltk3::CAP_ROUND |fltk3::JOIN_ROUND , 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 140);
+    fltk3::vertex(60, 140);
+    fltk3::vertex(60, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
-    fl_color(FL_BLUE);
-    fl_line_style(FL_SOLID | FL_CAP_SQUARE |FL_JOIN_BEVEL , 5);
-    fl_begin_line();
-    fl_vertex(10, 130);
-    fl_vertex(70, 130);
-    fl_vertex(70, 190);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::color(fltk3::BLUE);
+    fltk3::line_style(fltk3::SOLID | fltk3::CAP_SQUARE |fltk3::JOIN_BEVEL , 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 130);
+    fltk3::vertex(70, 130);
+    fltk3::vertex(70, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
-    fl_color(FL_BLACK);
-    fl_line_style(FL_DASH , 5);
-    fl_begin_line();
-    fl_vertex(10, 120);
-    fl_vertex(80, 120);
-    fl_vertex(80, 190);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::color(fltk3::BLACK);
+    fltk3::line_style(fltk3::DASH , 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 120);
+    fltk3::vertex(80, 120);
+    fltk3::vertex(80, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
-    fl_color(FL_RED);
-    fl_line_style(FL_DASH |FL_CAP_FLAT , 5);
-    fl_begin_line();
-    fl_vertex(10, 110);
-    fl_vertex(90, 110);
-    fl_vertex(90, 190);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::color(fltk3::RED);
+    fltk3::line_style(fltk3::DASH |fltk3::CAP_FLAT , 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 110);
+    fltk3::vertex(90, 110);
+    fltk3::vertex(90, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
  
-    fl_color(FL_GREEN);
-    fl_line_style(FL_DASH |FL_CAP_ROUND , 5);
-    fl_begin_line();
-    fl_vertex(10, 100);
-    fl_vertex(100, 100);
-    fl_vertex(100, 190);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::color(fltk3::GREEN);
+    fltk3::line_style(fltk3::DASH |fltk3::CAP_ROUND , 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 100);
+    fltk3::vertex(100, 100);
+    fltk3::vertex(100, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
 
-    fl_color(FL_BLUE);
-    fl_line_style(FL_DASH |FL_CAP_SQUARE , 5);
-    fl_begin_line();
-    fl_vertex(10, 90);
-    fl_vertex(110, 90);
-    fl_vertex(110, 190);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::color(fltk3::BLUE);
+    fltk3::line_style(fltk3::DASH |fltk3::CAP_SQUARE , 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 90);
+    fltk3::vertex(110, 90);
+    fltk3::vertex(110, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
-    fl_color(FL_BLACK);
-    fl_line_style(FL_DOT, 5);
-    fl_begin_line();
-    fl_vertex(10, 80);
-    fl_vertex(120, 80);
-    fl_vertex(120, 190);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::color(fltk3::BLACK);
+    fltk3::line_style(fltk3::DOT, 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 80);
+    fltk3::vertex(120, 80);
+    fltk3::vertex(120, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
-    fl_color(FL_RED);
-    fl_line_style(FL_DOT | FL_CAP_FLAT, 5);
-    fl_begin_line();
-    fl_vertex(10, 70);
-    fl_vertex(130, 70);
-    fl_vertex(130, 190);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::color(fltk3::RED);
+    fltk3::line_style(fltk3::DOT | fltk3::CAP_FLAT, 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 70);
+    fltk3::vertex(130, 70);
+    fltk3::vertex(130, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
-    fl_color(FL_GREEN);
-    fl_line_style(FL_DOT | FL_CAP_ROUND, 5);
-    fl_begin_line();
-    fl_vertex(10, 60);
-    fl_vertex(140, 60);
-    fl_vertex(140, 190);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::color(fltk3::GREEN);
+    fltk3::line_style(fltk3::DOT | fltk3::CAP_ROUND, 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 60);
+    fltk3::vertex(140, 60);
+    fltk3::vertex(140, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
-    fl_color(FL_BLUE);
-    fl_line_style(FL_DOT | FL_CAP_SQUARE, 5);
-    fl_begin_line();
-    fl_vertex(10, 50);
-    fl_vertex(150, 50);
-    fl_vertex(150, 190);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::color(fltk3::BLUE);
+    fltk3::line_style(fltk3::DOT | fltk3::CAP_SQUARE, 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 50);
+    fltk3::vertex(150, 50);
+    fltk3::vertex(150, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
-    fl_color(FL_BLACK);
-    fl_line_style(FL_DASHDOT |FL_CAP_ROUND |FL_JOIN_ROUND , 5);
-    fl_begin_line();
-    fl_vertex(10, 40);
-    fl_vertex(160, 40);
-    fl_vertex(160, 190);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::color(fltk3::BLACK);
+    fltk3::line_style(fltk3::DASHDOT |fltk3::CAP_ROUND |fltk3::JOIN_ROUND , 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 40);
+    fltk3::vertex(160, 40);
+    fltk3::vertex(160, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
-    fl_color(FL_RED);
-    fl_line_style(FL_DASHDOTDOT |FL_CAP_SQUARE |FL_JOIN_BEVEL , 5);
-    fl_begin_line();
-    fl_vertex(10, 30);
-    fl_vertex(170, 30);
-    fl_vertex(170, 190);
-    fl_end_line();
-    fl_line_style(0);
-
-
-    fl_color(FL_GREEN);
-    fl_line_style(FL_DASHDOTDOT |FL_CAP_ROUND |FL_JOIN_ROUND , 5);
-    fl_begin_line();
-    fl_vertex(10, 20);
-    fl_vertex(180, 20);
-    fl_vertex(180, 190);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::color(fltk3::RED);
+    fltk3::line_style(fltk3::DASHDOTDOT |fltk3::CAP_SQUARE |fltk3::JOIN_BEVEL , 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 30);
+    fltk3::vertex(170, 30);
+    fltk3::vertex(170, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
 
-    fl_color(FL_BLUE);
-    fl_line_style(0, 5, (char*)"\12\3\4\2\2\1");
-    fl_begin_line();
-    fl_vertex(10, 10);
-    fl_vertex(190, 10);
-    fl_vertex(190, 190);
+    fltk3::color(fltk3::GREEN);
+    fltk3::line_style(fltk3::DASHDOTDOT |fltk3::CAP_ROUND |fltk3::JOIN_ROUND , 5);
+    fltk3::begin_line();
+    fltk3::vertex(10, 20);
+    fltk3::vertex(180, 20);
+    fltk3::vertex(180, 190);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
-    fl_end_line();
-    fl_line_style(0);
-    fl_pop_matrix();    
 
-    fl_color(FL_BLACK);
+    fltk3::color(fltk3::BLUE);
+    fltk3::line_style(0, 5, (char*)"\12\3\4\2\2\1");
+    fltk3::begin_line();
+    fltk3::vertex(10, 10);
+    fltk3::vertex(190, 10);
+    fltk3::vertex(190, 190);
+
+    fltk3::end_line();
+    fltk3::line_style(0);
+    fltk3::pop_matrix();    
+
+    fltk3::color(fltk3::BLACK);
 
 
 
  
   };
 public:
-  MyWidget4(int x, int y):Fl_Box(x,y,150,150, "Line styles"){
+  MyWidget4(int x, int y):fltk3::Box(x,y,150,150, "Line styles"){
       labelsize(10);
-      align(FL_ALIGN_TOP);
+      align(fltk3::ALIGN_TOP);
     };
 };
 
 
-class MyWidget5: public Fl_Box{
+class MyWidget5: public fltk3::Box{
 protected:
   void draw(){
-    Fl_Box::draw();
-    //fl_push_clip(x(),y(),w(),h());
-    fl_push_matrix();
+    fltk3::Box::draw();
+    //fltk3::push_clip(x(),y(),w(),h());
+    fltk3::push_matrix();
     
     
-    fl_translate(x(),y());
-    fl_push_matrix();
-    fl_mult_matrix(1,3,0,1,0,-20);
-    fl_color(FL_GREEN);
-    fl_begin_polygon();
-    fl_vertex(10,10);
-    fl_vertex(100,-80);
-    fl_vertex(100,-190);
-    fl_end_polygon();
+    fltk3::translate(x(),y());
+    fltk3::push_matrix();
+    fltk3::mult_matrix(1,3,0,1,0,-20);
+    fltk3::color(fltk3::GREEN);
+    fltk3::begin_polygon();
+    fltk3::vertex(10,10);
+    fltk3::vertex(100,-80);
+    fltk3::vertex(100,-190);
+    fltk3::end_polygon();
 
-    fl_color(FL_RED);
-    fl_line_style(FL_DASHDOT, 7);
-    fl_begin_loop();
+    fltk3::color(fltk3::RED);
+    fltk3::line_style(fltk3::DASHDOT, 7);
+    fltk3::begin_loop();
 
 
-    fl_vertex(10,10);
-    fl_vertex(100,-80);
-    fl_vertex(100,-190);
-    fl_end_loop();
-    fl_line_style(0);
+    fltk3::vertex(10,10);
+    fltk3::vertex(100,-80);
+    fltk3::vertex(100,-190);
+    fltk3::end_loop();
+    fltk3::line_style(0);
 
-    fl_color(FL_BLUE);
-    fl_line_style(FL_SOLID, 3);
-    fl_begin_loop();
-    fl_circle(60,-50,30);
-    fl_end_loop();
-    fl_line_style(0);
+    fltk3::color(fltk3::BLUE);
+    fltk3::line_style(fltk3::SOLID, 3);
+    fltk3::begin_loop();
+    fltk3::circle(60,-50,30);
+    fltk3::end_loop();
+    fltk3::line_style(0);
     
-    fl_pop_matrix();
-    fl_scale(1.8,1);
+    fltk3::pop_matrix();
+    fltk3::scale(1.8,1);
 
-    fl_color(FL_YELLOW);
-    fl_begin_polygon();
-    fl_arc(30,90,20,-45,200);
-    fl_end_polygon();
+    fltk3::color(fltk3::YELLOW);
+    fltk3::begin_polygon();
+    fltk3::arc(30,90,20,-45,200);
+    fltk3::end_polygon();
 
-    fl_color(FL_BLACK);
-    fl_line_style(FL_DASH, 3);
-    fl_begin_line();
-    fl_arc(30,90,20,-45,200);
-    fl_end_line();
-    fl_line_style(0);
+    fltk3::color(fltk3::BLACK);
+    fltk3::line_style(fltk3::DASH, 3);
+    fltk3::begin_line();
+    fltk3::arc(30,90,20,-45,200);
+    fltk3::end_line();
+    fltk3::line_style(0);
 
-    fl_translate(15,0);
-    fl_scale(1.5,3);
-    fl_begin_complex_polygon();
-    fl_vertex(30,70);
-    fl_arc(45,55,10,200,90);
-    fl_arc(55,45,8,-170,20);
-    fl_vertex(60,40);
-    fl_vertex(30,20);
-    fl_vertex(40,5);
-    fl_vertex(60,25);
-    //fl_vertex(50,50);
-    fl_curve(35,30,30,53,0,35,65,65);
-    fl_gap();
-    fl_vertex(50,25);
-    fl_vertex(40,10);
-    fl_vertex(35,20);
-    fl_end_complex_polygon();
+    fltk3::translate(15,0);
+    fltk3::scale(1.5,3);
+    fltk3::begin_complex_polygon();
+    fltk3::vertex(30,70);
+    fltk3::arc(45,55,10,200,90);
+    fltk3::arc(55,45,8,-170,20);
+    fltk3::vertex(60,40);
+    fltk3::vertex(30,20);
+    fltk3::vertex(40,5);
+    fltk3::vertex(60,25);
+    //fltk3::vertex(50,50);
+    fltk3::curve(35,30,30,53,0,35,65,65);
+    fltk3::gap();
+    fltk3::vertex(50,25);
+    fltk3::vertex(40,10);
+    fltk3::vertex(35,20);
+    fltk3::end_complex_polygon();
 
-    fl_pop_matrix();
+    fltk3::pop_matrix();
 
-//    fl_color(FL_BLACK);
-//    fl_line_style(0);
-    //fl_pop_clip();
+//    fltk3::color(fltk3::BLACK);
+//    fltk3::line_style(0);
+    //fltk3::pop_clip();
 
 
 
   };
 public:
-  MyWidget5(int x, int y):Fl_Box(x,y,230,250, "Complex (double) drawings:\nBlue ellipse may not be\ncorrectly transformed\ndue to non-orthogonal\ntransformation"){
+  MyWidget5(int x, int y):fltk3::Box(x,y,230,250, "Complex (double) drawings:\nBlue ellipse may not be\ncorrectly transformed\ndue to non-orthogonal\ntransformation"){
       labelsize(10);
-      align(FL_ALIGN_TOP);
+      align(fltk3::ALIGN_TOP);
     };
 };
 
@@ -595,10 +595,10 @@ void make_image() {
 }
 
 
-void print(Fl_Widget *, void *w) {
-    Fl_Widget * g = (Fl_Widget *)w;
+void print(fltk3::Widget *, void *w) {
+    fltk3::Widget * g = (fltk3::Widget *)w;
  
-  Fl_Printer * p = new Fl_Printer();
+  fltk3::Printer * p = new fltk3::Printer();
   if (!p->start_job(1)) {
     p->start_page();
     p->print_window(g->window());
@@ -608,50 +608,50 @@ void print(Fl_Widget *, void *w) {
   delete p;
 }
 
-/*void print2(Fl_Widget *, void *w) {
-  Fl_Widget * g = (Fl_Widget *)w;
-  Fl_Printer * p = fl_printer_chooser();
+/*void print2(fltk3::Widget *, void *w) {
+  fltk3::Widget * g = (fltk3::Widget *)w;
+  fltk3::Printer * p = fltk3::printer_chooser();
   if(!p) return;
-  p->page(Fl_Printer::A4);
+  p->page(fltk3::Printer::A4);
   // fitting inside margins 1 inch wide
-  p->place(g, FL_INCH, FL_INCH, p->page_width() - 2 * FL_INCH, p->page_height() - 2 * FL_INCH,  FL_ALIGN_CENTER);
-  Fl_Device * c = p->set_current();
-  fl_draw(g); 
+  p->place(g, fltk3::INCH, fltk3::INCH, p->page_width() - 2 * fltk3::INCH, p->page_height() - 2 * fltk3::INCH,  fltk3::ALIGN_CENTER);
+  fltk3::Device * c = p->set_current();
+  fltk3::draw(g); 
   c->set_current();
   delete p;
 };*/
 
 
-class My_Button:public Fl_Button{
+class My_Button:public fltk3::Button{
 protected:
   void draw(){
-    // Fl_Button::draw();
-       if (type() == FL_HIDDEN_BUTTON) return;
-      Fl_Color col = value() ? selection_color() : color();
-      draw_box(value() ? (down_box()?down_box():fl_down(box())) : box(), col);
-     fl_color(FL_WHITE);
-     fl_line_style(FL_SOLID,5);
-     fl_line(x()+15,y()+10,x()+w()-15,y()+h()-23);
-     fl_line(x()+w()-15,y()+10,x()+15,y()+h()-23);
-     fl_line_style(0);
+    // fltk3::Button::draw();
+       if (type() == fltk3::HIDDEN_BUTTON) return;
+      fltk3::Color col = value() ? selection_color() : color();
+      draw_box(value() ? (down_box()?down_box():fltk3::down(box())) : box(), col);
+     fltk3::color(fltk3::WHITE);
+     fltk3::line_style(fltk3::SOLID,5);
+     fltk3::line(x()+15,y()+10,x()+w()-15,y()+h()-23);
+     fltk3::line(x()+w()-15,y()+10,x()+15,y()+h()-23);
+     fltk3::line_style(0);
      draw_label();
 
   };
 public:
-  My_Button(int x, int y, int w, int h, const char * label = 0):Fl_Button(x,y,w,h,label){}
+  My_Button(int x, int y, int w, int h, const char * label = 0):fltk3::Button(x,y,w,h,label){}
 };
 
 
 int main(int argc, char ** argv) {
 
-  //Fl::scheme("plastic");
+  //fltk3::scheme("plastic");
 
 
 
-  Fl_Window * w2 = new Fl_Window(500,560,"Graphics test");
+  fltk3::Window * w2 = new fltk3::Window(500,560,"Graphics test");
 
 
-  Fl_Group *c2 =new Fl_Group(3, 43, 494, 514 );
+  fltk3::Group *c2 =new fltk3::Group(3, 43, 494, 514 );
 
   new MyWidget(10,140);
   new MyWidget2(110,80);
@@ -669,39 +669,39 @@ int main(int argc, char ** argv) {
   b_pixmap.image(pixmap);
 
   My_Button b_bitmap(10,445,100,100,"Bitmap");
-b_bitmap.labelcolor(FL_GREEN);
-  b_bitmap.image(new Fl_Bitmap(sorceress_bits,sorceress_width,sorceress_height));
+b_bitmap.labelcolor(fltk3::GREEN);
+  b_bitmap.image(new fltk3::Bitmap(sorceress_bits,sorceress_width,sorceress_height));
 
-  new Fl_Clock(360,230,120,120);
-  Fl_Return_Button * ret = new Fl_Return_Button (360, 360, 120,30, "Return");
+  new fltk3::Clock(360,230,120,120);
+  fltk3::ReturnButton * ret = new fltk3::ReturnButton (360, 360, 120,30, "Return");
   ret->deactivate();
-  Fl_Button but1(360, 390, 30, 30, "@->|");
-  but1.labelcolor(FL_DARK3);
-  Fl_Button but2(390, 390, 30, 30, "@UpArrow");
-  but2.labelcolor(FL_DARK3);
-  Fl_Button but3(420, 390, 30, 30, "@DnArrow");
-  but3.labelcolor(FL_DARK3);
-  Fl_Button but4(450, 390, 30, 30, "@+");
-  but4.labelcolor(FL_DARK3);
-  Fl_Button but5(360, 425, 120, 30, "Hello, World");
-  but5.labelfont(FL_BOLD|FL_ITALIC);
-  but5.labeltype(FL_SHADOW_LABEL);
-  but5.box(FL_ROUND_UP_BOX);
-//  but5.selection_color(FL_WHITE);
+  fltk3::Button but1(360, 390, 30, 30, "@->|");
+  but1.labelcolor(fltk3::DARK3);
+  fltk3::Button but2(390, 390, 30, 30, "@UpArrow");
+  but2.labelcolor(fltk3::DARK3);
+  fltk3::Button but3(420, 390, 30, 30, "@DnArrow");
+  but3.labelcolor(fltk3::DARK3);
+  fltk3::Button but4(450, 390, 30, 30, "@+");
+  but4.labelcolor(fltk3::DARK3);
+  fltk3::Button but5(360, 425, 120, 30, "Hello, World");
+  but5.labelfont(fltk3::BOLD|fltk3::ITALIC);
+  but5.labeltype(fltk3::SHADOW_LABEL);
+  but5.box(fltk3::ROUND_UP_BOX);
+//  but5.selection_color(fltk3::WHITE);
 
-  Fl_Button but6(360, 460, 120, 30, "Plastic");
-  but6.box(FL_PLASTIC_UP_BOX);
+  fltk3::Button but6(360, 460, 120, 30, "Plastic");
+  but6.box(fltk3::PLASTIC_UP_BOX);
 
-  //Fl_Button but7(, 480, 120, 30, "Engraved box");
-  //but7.box(FL_ENGRAVED_BOX);
-  { Fl_Group* o = new Fl_Group(360, 495, 120, 40);
-    o->box(FL_UP_BOX);
-   { Fl_Group* o = new Fl_Group(365, 500, 110, 30);
-      o->box(FL_THIN_UP_FRAME);
-      { Fl_Round_Button* o = new Fl_Round_Button(365, 500, 40, 30, "rad");
+  //fltk3::Button but7(, 480, 120, 30, "Engraved box");
+  //but7.box(fltk3::ENGRAVED_BOX);
+  { fltk3::Group* o = new fltk3::Group(360, 495, 120, 40);
+    o->box(fltk3::UP_BOX);
+   { fltk3::Group* o = new fltk3::Group(365, 500, 110, 30);
+      o->box(fltk3::THIN_UP_FRAME);
+      { fltk3::RoundButton* o = new fltk3::RoundButton(365, 500, 40, 30, "rad");
         o->value(1);
       }
-      { Fl_Check_Button* o = new Fl_Check_Button(410, 500, 60, 30, "check");
+      { fltk3::CheckButton* o = new fltk3::CheckButton(410, 500, 60, 30, "check");
         o->value(1);
 
       }
@@ -710,16 +710,16 @@ b_bitmap.labelcolor(FL_GREEN);
     o->end();
     o->deactivate();
   }
-  Fl_Box tx(120,492,230,50,"Background is not printed because\nencapsulating group, which we are\n printing, has not set the box type");
-  tx.box(FL_SHADOW_BOX);
+  fltk3::Box tx(120,492,230,50,"Background is not printed because\nencapsulating group, which we are\n printing, has not set the box type");
+  tx.box(fltk3::SHADOW_BOX);
   tx.labelsize(12);
 
   tx.hide();
 
   c2->end();
-  Fl_Button *b4 = new Fl_Button(10,5, 150, 25, "Print");
+  fltk3::Button *b4 = new fltk3::Button(10,5, 150, 25, "Print");
   b4->callback(print,c2);
-  /*Fl_Button *b5 = new Fl_Button(165,5, 90, 25, "Print");
+  /*fltk3::Button *b5 = new fltk3::Button(165,5, 90, 25, "Print");
   b5->tooltip("This is a tooltip");
   b5->callback(print2,c2);*/
 

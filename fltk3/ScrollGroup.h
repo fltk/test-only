@@ -83,7 +83,7 @@ namespace fltk3 {
    
    Another very useful child is a single fltk3::PackedGroup, which is itself a group
    that packs its children together and changes size to surround them.
-   Filling the fltk3::PackedGroup with Fl_Tabs groups (and then putting
+   Filling the fltk3::PackedGroup with fltk3::TabGroup groups (and then putting
    normal widgets inside those) gives you a very powerful scrolling list
    of individually-openable panels.
    
@@ -133,8 +133,8 @@ namespace fltk3 {
     
   public:
     
-    Fl_Scrollbar scrollbar;
-    Fl_Scrollbar hscrollbar;
+    fltk3::Scrollbar scrollbar;
+    fltk3::Scrollbar hscrollbar;
     
     void resize(int,int,int,int);
     int handle(int);

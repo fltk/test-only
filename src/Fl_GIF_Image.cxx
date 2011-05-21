@@ -1,7 +1,7 @@
 //
 // "$Id$"
 //
-// Fl_GIF_Image routines.
+// fltk3::GIFImage routines.
 //
 // Copyright 1997-2010 by Bill Spitzak and others.
 //
@@ -84,12 +84,12 @@ typedef unsigned char uchar;
   <P>The inherited destructor free all memory and server resources that are used by
   the image.
 */
-Fl_GIF_Image::Fl_GIF_Image(const char *infname) : fltk3::Pixmap((char *const*)0) {
+fltk3::GIFImage::GIFImage(const char *infname) : fltk3::Pixmap((char *const*)0) {
   FILE *GifFile;	// File to read
   char **new_data;	// Data array
 
   if ((GifFile = fl_fopen(infname, "rb")) == NULL) {
-    fltk3::error("Fl_GIF_Image: Unable to open %s!", infname);
+    fltk3::error("fltk3::GIFImage: Unable to open %s!", infname);
     return;
   }
 
@@ -100,7 +100,7 @@ Fl_GIF_Image::Fl_GIF_Image(const char *infname) : fltk3::Pixmap((char *const*)0)
   }
   if (b[0]!='G' || b[1]!='I' || b[2] != 'F') {
     fclose(GifFile);
-    fltk3::error("Fl_GIF_Image: %s is not a GIF file.\n", infname);
+    fltk3::error("fltk3::GIFImage: %s is not a GIF file.\n", infname);
     return;
   }
   if (b[3]!='8' || b[4]>'9' || b[5]!= 'a')
@@ -143,7 +143,7 @@ Fl_GIF_Image::Fl_GIF_Image(const char *infname) : fltk3::Pixmap((char *const*)0)
     int i = NEXTBYTE;
     if (i<0) {
       fclose(GifFile);
-      fltk3::error("Fl_GIF_Image: %s - unexpected EOF",infname); 
+      fltk3::error("fltk3::GIFImage: %s - unexpected EOF",infname); 
       return;
     }
     int blocklen;
@@ -270,7 +270,7 @@ Fl_GIF_Image::Fl_GIF_Image(const char *infname) : fltk3::Pixmap((char *const*)0)
     int i;
     if (CurCode < FreeCode) i = CurCode;
     else if (CurCode == FreeCode) {*tp++ = (uchar)FinChar; i = OldCode;}
-    else {fltk3::error("Fl_GIF_Image: %s - LZW Barf!", infname); break;}
+    else {fltk3::error("fltk3::GIFImage: %s - LZW Barf!", infname); break;}
 
     while (i >= ColorMapSize) {*tp++ = Suffix[i]; i = Prefix[i];}
     *tp++ = FinChar = i;

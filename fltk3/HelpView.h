@@ -241,7 +241,7 @@ namespace fltk3 {
     size_,			///< Total document length
     hsize_,			///< Maximum document width
     scrollbar_size_;	///< Size for both scrollbars
-    Fl_Scrollbar	scrollbar_,		///< Vertical scrollbar for document
+    fltk3::Scrollbar	scrollbar_,		///< Vertical scrollbar for document
     hscrollbar_;		///< Horizontal scrollbar
     
     static int    selection_first;

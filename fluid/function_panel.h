@@ -119,8 +119,8 @@ fltk3::Window* make_widgetbin();
 extern void toggle_sourceview_cb(fltk3::DoubleWindow*, void*);
 extern fltk3::DoubleWindow *sourceview_panel;
 #include <fltk3/TabGroup.h>
-extern void update_sourceview_position_cb(Fl_Tabs*, void*);
-extern Fl_Tabs *sv_tab;
+extern void update_sourceview_position_cb(fltk3::TabGroup*, void*);
+extern fltk3::TabGroup *sv_tab;
 extern CodeViewer *sv_source;
 extern CodeViewer *sv_header;
 extern void update_sourceview_cb(fltk3::Button*, void*);

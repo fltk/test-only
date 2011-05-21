@@ -26,58 +26,60 @@
 //
 
 /* \file
-   Fl_Timer widget . */
+ fltk3::Timer widget . */
 
 #ifndef Fltk3_Timer_H
 #define Fltk3_Timer_H
 
-#ifndef Fl_Widget_H
 #include "Widget.h"
-#endif
 
-// values for type():
-#define FL_NORMAL_TIMER		0
-#define FL_VALUE_TIMER		1
-#define FL_HIDDEN_TIMER		2
-
-/**
-  This is provided only to emulate the Forms Timer widget.  It works by
-  making a timeout callback every 1/5 second.  This is wasteful and
-  inaccurate if you just want something to happen a fixed time in the
-  future.  You should directly call 
-  fltk3::add_timeout() instead.
-*/
-class FLTK3_EXPORT Fl_Timer : public fltk3::Widget {
-  static void stepcb(void *);
-  void step();
-  char on, direction_;
-  double delay, total;
-  long lastsec,lastusec;
-protected:
-  void draw();
-public:
-  int handle(int);
-  Fl_Timer(uchar t,int x,int y,int w,int h, const char *l);
-  ~Fl_Timer();
-  void value(double);
-  /** See void Fl_Timer::value(double)  */
-  double value() const {return delay>0.0?delay:0.0;}
+namespace fltk3 {
+  
+  // values for type():
+  const uchar NORMAL_TIMER		= 0;
+  const uchar VALUE_TIMER		= 1;
+  const uchar HIDDEN_TIMER		= 2;
+  
   /**
-    Gets or sets the direction of the timer.  If the direction is zero
-    then the timer will count up, otherwise it will count down from the
-    initial value().
-  */
-  char direction() const {return direction_;}
-  /**
-    Gets or sets the direction of the timer.  If the direction is zero
-    then the timer will count up, otherwise it will count down from the
-    initial value().
-  */
-  void direction(char d) {direction_ = d;}
-  /**    Gets or sets whether the timer is suspended.  */
-  char suspended() const {return !on;}
-  void suspended(char d);
-};
+   This is provided only to emulate the Forms Timer widget.  It works by
+   making a timeout callback every 1/5 second.  This is wasteful and
+   inaccurate if you just want something to happen a fixed time in the
+   future.  You should directly call 
+   fltk3::add_timeout() instead.
+   */
+  class FLTK3_EXPORT Timer : public fltk3::Widget {
+    static void stepcb(void *);
+    void step();
+    char on, direction_;
+    double delay, total;
+    long lastsec,lastusec;
+  protected:
+    void draw();
+  public:
+    int handle(int);
+    Timer(uchar t,int x,int y,int w,int h, const char *l);
+    ~Timer();
+    void value(double);
+    /** See void fltk3::Timer::value(double)  */
+    double value() const {return delay>0.0?delay:0.0;}
+    /**
+     Gets or sets the direction of the timer.  If the direction is zero
+     then the timer will count up, otherwise it will count down from the
+     initial value().
+     */
+    char direction() const {return direction_;}
+    /**
+     Gets or sets the direction of the timer.  If the direction is zero
+     then the timer will count up, otherwise it will count down from the
+     initial value().
+     */
+    void direction(char d) {direction_ = d;}
+    /**    Gets or sets whether the timer is suspended.  */
+    char suspended() const {return !on;}
+    void suspended(char d);
+  };
+  
+}
 
 #endif
 

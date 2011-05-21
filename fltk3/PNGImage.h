@@ -26,27 +26,31 @@
 //
 
 /* \file
-   Fl_PNG_Image class . */
+ fltk3::PNGImage class . */
 
 #ifndef Fltk3_PNG_Image_H
 #define Fltk3_PNG_Image_H
 #  include "Image.h"
 
-/**
-  The Fl_PNG_Image class supports loading, caching,
-  and drawing of Portable Network Graphics (PNG) image files. The
-  class loads colormapped and full-color images and handles color-
-  and alpha-based transparency.
-*/
-class FLTK3_EXPORT Fl_PNG_Image : public fltk3::RGBImage {
-
-public:
-
-  Fl_PNG_Image(const char* filename);
-  Fl_PNG_Image (const char *name_png, const unsigned char *buffer, int datasize);
-private:
-  void load_png_(const char *name_png, const unsigned char *buffer_png, int datasize);
-};
+namespace fltk3 {
+  
+  /**
+   The fltk3::PNGImage class supports loading, caching,
+   and drawing of Portable Network Graphics (PNG) image files. The
+   class loads colormapped and full-color images and handles color-
+   and alpha-based transparency.
+   */
+  class FLTK3_EXPORT PNGImage : public fltk3::RGBImage {
+    
+  public:
+    
+    PNGImage(const char* filename);
+    PNGImage (const char *name_png, const unsigned char *buffer, int datasize);
+  private:
+    void load_png_(const char *name_png, const unsigned char *buffer_png, int datasize);
+  };
+  
+}
 
 #endif
 

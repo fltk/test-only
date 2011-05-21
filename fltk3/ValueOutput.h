@@ -42,7 +42,7 @@ namespace fltk3 {
    per pixel, the middle by 10 * step(), and the right button by 
    100 * step().
    <P>This is much lighter-weight than 
-   Fl_Value_Input because it contains no text editing code or
+   fltk3::ValueInput because it contains no text editing code or
    character buffer. </P>
    <P ALIGN=CENTER>\image html fltk3::ValueOutput.png 
    \image latex  fltk3::ValueOutput.png "fltk3::ValueOutput" width=4cm

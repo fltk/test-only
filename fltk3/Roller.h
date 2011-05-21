@@ -26,28 +26,30 @@
 //
 
 /* \file
-   Fl_Roller widget . */
+ fltk3::Roller widget . */
 
 #ifndef Fltk3_Roller_H
 #define Fltk3_Roller_H
 
-#ifndef Fl_Valuator_H
 #include "Valuator.h"
-#endif
 
-/**
-  The Fl_Roller widget is a "dolly" control commonly used to
-  move 3D objects.
-  <P ALIGN=CENTER>\image html Fl_Roller.png 
-  \image latex Fl_Roller.png "Fl_Roller" width=4cm
-*/
-class FLTK3_EXPORT Fl_Roller : public fltk3::Valuator {
-protected:
-  void draw();
-public:
-  int handle(int);
-  Fl_Roller(int X,int Y,int W,int H,const char* L=0);
-};
+namespace fltk3 {
+  
+  /**
+   The fltk3::Roller widget is a "dolly" control commonly used to
+   move 3D objects.
+   <P ALIGN=CENTER>\image html fltk3::Roller.png 
+   \image latex fltk3::Roller.png "fltk3::Roller" width=4cm
+   */
+  class FLTK3_EXPORT Roller : public fltk3::Valuator {
+  protected:
+    void draw();
+  public:
+    int handle(int);
+    Roller(int X,int Y,int W,int H,const char* L=0);
+  };
+  
+}
 
 #endif
 
