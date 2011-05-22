@@ -26,7 +26,7 @@
 //
 
 /* \file
-   fltk3::Spinner widget . */
+ fltk3::Spinner widget . */
 
 #ifndef Fltk3_Spinner_H
 #  define Fltk3_Spinner_H
@@ -42,223 +42,227 @@
 #  include <stdio.h>
 #  include <stdlib.h>
 
-/**
-  This widget is a combination of the input
-  widget and repeat buttons. The user can either type into the
-  input area or use the buttons to change the value.
-*/
-class FLTK3_EXPORT Spinner : public fltk3::Group {
+namespace fltk3 {
   
-  double	value_;			// Current value
-  double	minimum_;		// Minimum value
-  double	maximum_;		// Maximum value
-  double	step_;			// Amount to add/subtract for up/down
-  const char	*format_;		// Format string
-
-  fltk3::Input	input_;			// Input field for the value
-  fltk3::RepeatButton
-		up_button_,		// Up button
-		down_button_;		// Down button
-
-
-  static void	sb_cb(fltk3::Widget *w, fltk3::Spinner *sb) {
-		  double v;		// New value
-
-		  if (w == &(sb->input_)) {
-		    // Something changed in the input field...
-		    v = atof(sb->input_.value());
-
-		    if (v < sb->minimum_) {
-		      sb->value_ = sb->minimum_;
-		      sb->update();
-		    } else if (v > sb->maximum_) {
-		      sb->value_ = sb->maximum_;
-		      sb->update();
-		    } else sb->value_ = v;
-		  } else if (w == &(sb->up_button_)) {
-		    // Up button pressed...
-		    v = sb->value_ + sb->step_;
-
-		    if (v > sb->maximum_) sb->value_ = sb->minimum_;
-		    else sb->value_ = v;
-
-		    sb->update();
-		  } else if (w == &(sb->down_button_)) {
-		    // Down button pressed...
-		    v = sb->value_ - sb->step_;
-
-		    if (v < sb->minimum_) sb->value_ = sb->maximum_;
-		    else sb->value_ = v;
-
-		    sb->update();
-		  }
-
-		  sb->do_callback();
-		}
-  void		update() {
-		  char s[255];		// Value string
-
-                  if (format_[0]=='%'&&format_[1]=='.'&&format_[2]=='*') {  // precision argument
-                    // this code block is a simplified version of
-                    // fltk3::Valuator::format() and works well (but looks ugly)
-                    int c = 0;
-                    char temp[64], *sp = temp;
-                    sprintf(temp, "%.12f", step_);
-                    while (*sp) sp++;
-                    sp--;
-                    while (sp>temp && *sp=='0') sp--;
-                    while (sp>temp && (*sp>='0' && *sp<='9')) { sp--; c++; }
-		    sprintf(s, format_, c, value_);
-                  } else {
-		    sprintf(s, format_, value_);
-                  }
-		  input_.value(s);
-		}
-
-  public:
-
-		/**
-		  Creates a new fltk3::Spinner widget using the given position, size,
-		  and label string.
-		  <P>Inherited destructor Destroys the widget and any value associated with it.
-		*/
-		Spinner(int X, int Y, int W, int H, const char *L = 0)
-		  : fltk3::Group(X, Y, W, H, L),
-		    input_(X, Y, W - H / 2 - 2, H),
-		    up_button_(X + W - H / 2 - 2, Y, H / 2 + 2, H / 2, "@-42<"),
-		    down_button_(X + W - H / 2 - 2, Y + H - H / 2,
-		                 H / 2 + 2, H / 2, "@-42>") {
-		  end();
-
-		  value_   = 1.0;
-		  minimum_ = 1.0;
-		  maximum_ = 100.0;
-		  step_    = 1.0;
-		  format_  = "%g";
-
-		  align(fltk3::ALIGN_LEFT);
-
-		  input_.value("1");
-		  input_.type(fltk3::INT_INPUT);
-		  input_.when(fltk3::WHEN_ENTER_KEY | fltk3::WHEN_RELEASE);
-		  input_.callback((fltk3::Callback *)sb_cb, this);
-
-		  up_button_.callback((fltk3::Callback *)sb_cb, this);
-
-		  down_button_.callback((fltk3::Callback *)sb_cb, this);
-		}
-
-  /** Sets or returns the format string for the value. */
-  const char	*format() { return (format_); }
-  /** Sets or returns the format string for the value. */
-  void		format(const char *f) { format_ = f; update(); }
-
-  int		handle(int event) {
-		  switch (event) {
-		    case fltk3::KEYDOWN :
-		    case fltk3::SHORTCUT :
-		      if (fltk3::event_key() == fltk3::UpKey) {
-			up_button_.do_callback();
-			return 1;
-		      } else if (fltk3::event_key() == fltk3::DownKey) {
-			down_button_.do_callback();
-			return 1;
-		      } else return 0;
-
-		    case fltk3::FOCUS :
-		      if (input_.take_focus()) return 1;
-		      else return 0;
-		  }
-
-		  return fltk3::Group::handle(event);
-		}
-
-  /** Speling mistakes retained for source compatibility \deprecated */
-  double	maxinum() const { return (maximum_); }
-  /** Gets the maximum value of the widget. */
-  double	maximum() const { return (maximum_); }
-  /** Sets the maximum value of the widget. */
-  void		maximum(double m) { maximum_ = m; }
-  /** Speling mistakes retained for source compatibility \deprecated */
-  double	mininum() const { return (minimum_); }
-  /** Gets the minimum value of the widget. */
-  double	minimum() const { return (minimum_); }
-  /** Sets the minimum value of the widget. */
-  void		minimum(double m) { minimum_ = m; }
-  /** Sets the minimum and maximum values for the widget. */
-  void		range(double a, double b) { minimum_ = a; maximum_ = b; }
-  void		resize(int X, int Y, int W, int H) {
-		  fltk3::Group::resize(X,Y,W,H);
-
-		  input_.resize(X, Y, W - H / 2 - 2, H);
-		  up_button_.resize(X + W - H / 2 - 2, Y, H / 2 + 2, H / 2);
-		  down_button_.resize(X + W - H / 2 - 2, Y + H - H / 2,
-		                      H / 2 + 2, H / 2);
-		}
   /**
-    Sets or returns the amount to change the value when the user clicks a button. 
-    Before setting step to a non-integer value, the spinner 
-    type() should be changed to floating point. 
-  */
-  double	step() const { return (step_); }
-  /** See double fltk3::Spinner::step() const */
-  void		step(double s) {
-		  step_ = s;
-		  if (step_ != (int)step_) input_.type(fltk3::FLOAT_INPUT);
-		  else input_.type(fltk3::INT_INPUT);
-		  update();
-		}
-  /** Gets the color of the text in the input field. */
-  fltk3::Color	textcolor() const {
-		  return (input_.textcolor());
-		}
-  /** Sets the color of the text in the input field. */
-  void		textcolor(fltk3::Color c) {
-		  input_.textcolor(c);
-		}
-  /** Gets the font of the text in the input field. */
-  fltk3::Font       textfont() const {
-		  return (input_.textfont());
-		}
-  /** Sets the font of the text in the input field. */
-  void		textfont(fltk3::Font f) {
-		  input_.textfont(f);
-		}
-  /** Gets the size of the text in the input field. */
-  fltk3::Fontsize  textsize() const {
-		  return (input_.textsize());
-		}
-  /** Sets the size of the text in the input field. */
-  void		textsize(fltk3::Fontsize s) {
-		  input_.textsize(s);
-		}
-  /** Gets the numeric representation in the input field.
-   \see fltk3::Spinner::type(uchar) 
-  */
-  uchar		type() const { return (input_.type()); }
-  /** Sets the numeric representation in the input field.
-   Valid values are fltk3::INT_INPUT and fltk3::FLOAT_INPUT.
-   Also changes the format() template.
-   Setting a new spinner type via a superclass pointer will not work.
-   \note  type is not a virtual function. 
+   This widget is a combination of the input
+   widget and repeat buttons. The user can either type into the
+   input area or use the buttons to change the value.
    */
-  void		type(uchar v) { 
-                  if (v==fltk3::FLOAT_INPUT) {
-                    format("%.*f");
-                  } else {
-                    format("%.0f");
-                  }
-                  input_.type(v); 
-                }
-  /** Gets the current value of the widget. */
-  double	value() const { return (value_); }
-  /**
-    Sets the current value of the widget.
-    Before setting value to a non-integer value, the spinner 
-    type() should be changed to floating point. 
-  */
-  void		value(double v) { value_ = v; update(); }
-};
+  class FLTK3_EXPORT Spinner : public fltk3::Group {
+    
+    double	value_;			// Current value
+    double	minimum_;		// Minimum value
+    double	maximum_;		// Maximum value
+    double	step_;			// Amount to add/subtract for up/down
+    const char	*format_;		// Format string
+    
+    fltk3::Input	input_;			// Input field for the value
+    fltk3::RepeatButton
+    up_button_,		// Up button
+    down_button_;		// Down button
+    
+    
+    static void	sb_cb(fltk3::Widget *w, fltk3::Spinner *sb) {
+      double v;		// New value
+      
+      if (w == &(sb->input_)) {
+        // Something changed in the input field...
+        v = atof(sb->input_.value());
+        
+        if (v < sb->minimum_) {
+          sb->value_ = sb->minimum_;
+          sb->update();
+        } else if (v > sb->maximum_) {
+          sb->value_ = sb->maximum_;
+          sb->update();
+        } else sb->value_ = v;
+      } else if (w == &(sb->up_button_)) {
+        // Up button pressed...
+        v = sb->value_ + sb->step_;
+        
+        if (v > sb->maximum_) sb->value_ = sb->minimum_;
+        else sb->value_ = v;
+        
+        sb->update();
+      } else if (w == &(sb->down_button_)) {
+        // Down button pressed...
+        v = sb->value_ - sb->step_;
+        
+        if (v < sb->minimum_) sb->value_ = sb->maximum_;
+        else sb->value_ = v;
+        
+        sb->update();
+      }
+      
+      sb->do_callback();
+    }
+    void		update() {
+      char s[255];		// Value string
+      
+      if (format_[0]=='%'&&format_[1]=='.'&&format_[2]=='*') {  // precision argument
+                                                                // this code block is a simplified version of
+                                                                // fltk3::Valuator::format() and works well (but looks ugly)
+        int c = 0;
+        char temp[64], *sp = temp;
+        sprintf(temp, "%.12f", step_);
+        while (*sp) sp++;
+        sp--;
+        while (sp>temp && *sp=='0') sp--;
+        while (sp>temp && (*sp>='0' && *sp<='9')) { sp--; c++; }
+        sprintf(s, format_, c, value_);
+      } else {
+        sprintf(s, format_, value_);
+      }
+      input_.value(s);
+    }
+    
+  public:
+    
+    /**
+     Creates a new fltk3::Spinner widget using the given position, size,
+     and label string.
+     <P>Inherited destructor Destroys the widget and any value associated with it.
+     */
+    Spinner(int X, int Y, int W, int H, const char *L = 0)
+    : fltk3::Group(X, Y, W, H, L),
+    input_(X, Y, W - H / 2 - 2, H),
+    up_button_(X + W - H / 2 - 2, Y, H / 2 + 2, H / 2, "@-42<"),
+    down_button_(X + W - H / 2 - 2, Y + H - H / 2,
+                 H / 2 + 2, H / 2, "@-42>") {
+      end();
+      
+      value_   = 1.0;
+      minimum_ = 1.0;
+      maximum_ = 100.0;
+      step_    = 1.0;
+      format_  = "%g";
+      
+      align(fltk3::ALIGN_LEFT);
+      
+      input_.value("1");
+      input_.type(fltk3::INT_INPUT);
+      input_.when(fltk3::WHEN_ENTER_KEY | fltk3::WHEN_RELEASE);
+      input_.callback((fltk3::Callback *)sb_cb, this);
+      
+      up_button_.callback((fltk3::Callback *)sb_cb, this);
+      
+      down_button_.callback((fltk3::Callback *)sb_cb, this);
+    }
+    
+    /** Sets or returns the format string for the value. */
+    const char	*format() { return (format_); }
+    /** Sets or returns the format string for the value. */
+    void		format(const char *f) { format_ = f; update(); }
+    
+    int		handle(int event) {
+      switch (event) {
+        case fltk3::KEYDOWN :
+        case fltk3::SHORTCUT :
+          if (fltk3::event_key() == fltk3::UpKey) {
+            up_button_.do_callback();
+            return 1;
+          } else if (fltk3::event_key() == fltk3::DownKey) {
+            down_button_.do_callback();
+            return 1;
+          } else return 0;
+          
+        case fltk3::FOCUS :
+          if (input_.take_focus()) return 1;
+          else return 0;
+      }
+      
+      return fltk3::Group::handle(event);
+    }
+    
+    /** Speling mistakes retained for source compatibility \deprecated */
+    double	maxinum() const { return (maximum_); }
+    /** Gets the maximum value of the widget. */
+    double	maximum() const { return (maximum_); }
+    /** Sets the maximum value of the widget. */
+    void		maximum(double m) { maximum_ = m; }
+    /** Speling mistakes retained for source compatibility \deprecated */
+    double	mininum() const { return (minimum_); }
+    /** Gets the minimum value of the widget. */
+    double	minimum() const { return (minimum_); }
+    /** Sets the minimum value of the widget. */
+    void		minimum(double m) { minimum_ = m; }
+    /** Sets the minimum and maximum values for the widget. */
+    void		range(double a, double b) { minimum_ = a; maximum_ = b; }
+    void		resize(int X, int Y, int W, int H) {
+      fltk3::Group::resize(X,Y,W,H);
+      
+      input_.resize(X, Y, W - H / 2 - 2, H);
+      up_button_.resize(X + W - H / 2 - 2, Y, H / 2 + 2, H / 2);
+      down_button_.resize(X + W - H / 2 - 2, Y + H - H / 2,
+                          H / 2 + 2, H / 2);
+    }
+    /**
+     Sets or returns the amount to change the value when the user clicks a button. 
+     Before setting step to a non-integer value, the spinner 
+     type() should be changed to floating point. 
+     */
+    double	step() const { return (step_); }
+    /** See double fltk3::Spinner::step() const */
+    void		step(double s) {
+      step_ = s;
+      if (step_ != (int)step_) input_.type(fltk3::FLOAT_INPUT);
+      else input_.type(fltk3::INT_INPUT);
+      update();
+    }
+    /** Gets the color of the text in the input field. */
+    fltk3::Color	textcolor() const {
+      return (input_.textcolor());
+    }
+    /** Sets the color of the text in the input field. */
+    void		textcolor(fltk3::Color c) {
+      input_.textcolor(c);
+    }
+    /** Gets the font of the text in the input field. */
+    fltk3::Font       textfont() const {
+      return (input_.textfont());
+    }
+    /** Sets the font of the text in the input field. */
+    void		textfont(fltk3::Font f) {
+      input_.textfont(f);
+    }
+    /** Gets the size of the text in the input field. */
+    fltk3::Fontsize  textsize() const {
+      return (input_.textsize());
+    }
+    /** Sets the size of the text in the input field. */
+    void		textsize(fltk3::Fontsize s) {
+      input_.textsize(s);
+    }
+    /** Gets the numeric representation in the input field.
+     \see fltk3::Spinner::type(uchar) 
+     */
+    uchar		type() const { return (input_.type()); }
+    /** Sets the numeric representation in the input field.
+     Valid values are fltk3::INT_INPUT and fltk3::FLOAT_INPUT.
+     Also changes the format() template.
+     Setting a new spinner type via a superclass pointer will not work.
+     \note  type is not a virtual function. 
+     */
+    void		type(uchar v) { 
+      if (v==fltk3::FLOAT_INPUT) {
+        format("%.*f");
+      } else {
+        format("%.0f");
+      }
+      input_.type(v); 
+    }
+    /** Gets the current value of the widget. */
+    double	value() const { return (value_); }
+    /**
+     Sets the current value of the widget.
+     Before setting value to a non-integer value, the spinner 
+     type() should be changed to floating point. 
+     */
+    void		value(double v) { value_ = v; update(); }
+  };
+  
+}
 
 #endif // !Fltk3_Spinner_H
 
