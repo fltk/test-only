@@ -111,7 +111,7 @@ void grid_cb(fltk3::IntInput *i, long v) {
     if (p->is_window()) {
       w = (Fl_Window_Type *)p;
       ((fltk3::Window *)(w->o))->size_range(gridx, gridy,
-                                        Fl::w(), Fl::h(),
+                                        fltk3::w(), fltk3::h(),
                                         gridx, gridy, 0);
     }
   }
@@ -278,14 +278,14 @@ void use_FL_COMMAND_button_cb(fltk3::CheckButton* b, void*) {
 ////////////////////////////////////////////////////////////////
 
 fltk3::MenuItem window_type_menu[] = {
-  {"Single",0,0,(void*)FL_WINDOW},
-  {"Double",0,0,(void*)(FL_WINDOW+1)},
+  {"Single",0,0,(void*)fltk3::WINDOW},
+  {"Double",0,0,(void*)(fltk3::WINDOW+1)},
   {0}};
 
 static int overlays_invisible;
 
 // The following fltk3::Widget is used to simulate the windows.  It has
-// an overlay for the fluid ui, and special-cases the FL_NO_BOX.
+// an overlay for the fluid ui, and special-cases the fltk3::NO_BOX.
 
 class Overlay_Window : public fltk3::OverlayWindow {
   void draw();
@@ -300,14 +300,14 @@ public:
 void Overlay_Window::draw() {
   const int CHECKSIZE = 8;
   // see if box is clear or a frame or rounded:
-  if ((damage()&FL_DAMAGE_ALL) &&
-      (!box() || (box()>=4&&!(box()&2)) || box()>=_FL_ROUNDED_BOX)) {
+  if ((damage()&fltk3::DAMAGE_ALL) &&
+      (!box() || (box()>=4&&!(box()&2)) || box()>=fltk3::ROUNDED_BOX)) {
     // if so, draw checkerboard so user can see what areas are clear:
     for (int Y = 0; Y < h(); Y += CHECKSIZE) 
       for (int X = 0; X < w(); X += CHECKSIZE) {
 	fltk3::color(((Y/(2*CHECKSIZE))&1) != ((X/(2*CHECKSIZE))&1) ?
-		 FL_WHITE : FL_BLACK);
-	fl_rectf(X,Y,CHECKSIZE,CHECKSIZE);
+		 fltk3::WHITE : fltk3::BLACK);
+	fltk3::rectf(X,Y,CHECKSIZE,CHECKSIZE);
       }
   }
   fltk3::OverlayWindow::draw();
@@ -330,13 +330,13 @@ uchar *Overlay_Window::read_image(int &ww, int &hh) {
   // Redraw the window into the offscreen buffer...
   fl_begin_offscreen(offscreen);
 
-  if (!shown()) image(Fl::scheme_bg_);
+  if (!shown()) image(fltk3::scheme_bg_);
 
   redraw();
   draw();
 
   // Read the screen image...
-  pixels = fl_read_image(0, 0, 0, ww, hh);
+  pixels = fltk3::read_image(0, 0, 0, ww, hh);
 
   fl_end_offscreen();
 
@@ -353,8 +353,8 @@ int Overlay_Window::handle(int e) {
   int ret =  window->handle(e);
   if (ret==0) {
     switch (e) {
-      case FL_SHOW:
-      case FL_HIDE:
+      case fltk3::SHOW:
+      case fltk3::HIDE:
         ret = fltk3::OverlayWindow::handle(e);
     }
   }
@@ -428,8 +428,8 @@ void Fl_Window_Type::open() {
     w->resizable(p);
   }
 
-  w->image(Fl::scheme_bg_);
-  w->size_range(gridx, gridy, Fl::w(), Fl::h(), gridx, gridy, 0);
+  w->image(fltk3::scheme_bg_);
+  w->size_range(gridx, gridy, fltk3::w(), fltk3::h(), gridx, gridy, 0);
 }
 
 // Read an image of the window
@@ -530,7 +530,7 @@ void Overlay_Window::resize(int X,int Y,int W,int H) {
 // nearest multiple of gridsize, and snap to original position
 void Fl_Window_Type::newdx() {
   int mydx, mydy;
-  if (Fl::event_state(FL_ALT) || !snap) {
+  if (fltk3::event_state(fltk3::ALT) || !snap) {
     mydx = mx-x1;
     mydy = my-y1;
 
@@ -621,86 +621,86 @@ void Fl_Window_Type::newposition(Fl_Widget_Type *myo,int &X,int &Y,int &R,int &T
 // draw a vertical arrow pointing toward y2
 static void draw_v_arrow(int x, int y1, int y2) {
   int dy = (y1>y2) ? -1 : 1 ;
-  fl_yxline(x, y1, y2);
-  fl_xyline(x-4, y2, x+4);
-  fl_line(x-2, y2-dy*5, x, y2-dy);
-  fl_line(x+2, y2-dy*5, x, y2-dy);
+  fltk3::yxline(x, y1, y2);
+  fltk3::xyline(x-4, y2, x+4);
+  fltk3::line(x-2, y2-dy*5, x, y2-dy);
+  fltk3::line(x+2, y2-dy*5, x, y2-dy);
 }
 
 static void draw_h_arrow(int x1, int y, int x2) {
   int dx = (x1>x2) ? -1 : 1 ;
-  fl_xyline(x1, y, x2);
-  fl_yxline(x2, y-4, y+4);
-  fl_line(x2-dx*5, y-2, x2-dx, y);
-  fl_line(x2-dx*5, y+2, x2-dx, y);
+  fltk3::xyline(x1, y, x2);
+  fltk3::yxline(x2, y-4, y+4);
+  fltk3::line(x2-dx*5, y-2, x2-dx, y);
+  fltk3::line(x2-dx*5, y+2, x2-dx, y);
 }
 
 static void draw_top_brace(const fltk3::Widget *w) {
-  fl_yxline(w->x(), w->y()-2, w->y()+6);
-  fl_yxline(w->x()+w->w()-1, w->y()-2, w->y()+6);
-  fl_xyline(w->x()-2, w->y(), w->x()+w->w()+1);
+  fltk3::yxline(w->x(), w->y()-2, w->y()+6);
+  fltk3::yxline(w->x()+w->w()-1, w->y()-2, w->y()+6);
+  fltk3::xyline(w->x()-2, w->y(), w->x()+w->w()+1);
 }
 
 static void draw_left_brace(const fltk3::Widget *w) {
-  fl_xyline(w->x()-2, w->y(), w->x()+6);
-  fl_xyline(w->x()-2, w->y()+w->h()-1, w->x()+6);
-  fl_yxline(w->x(), w->y()-2, w->y()+w->h()+1);
+  fltk3::xyline(w->x()-2, w->y(), w->x()+6);
+  fltk3::xyline(w->x()-2, w->y()+w->h()-1, w->x()+6);
+  fltk3::yxline(w->x(), w->y()-2, w->y()+w->h()+1);
 }
 
 static void draw_right_brace(const fltk3::Widget *w) {
   int xx = w->x() + w->w() - 1;
-  fl_xyline(xx-6, w->y(), xx+2);
-  fl_xyline(xx-6, w->y()+w->h()-1, xx+2);
-  fl_yxline(xx, w->y()-2, w->y()+w->h()+1);
+  fltk3::xyline(xx-6, w->y(), xx+2);
+  fltk3::xyline(xx-6, w->y()+w->h()-1, xx+2);
+  fltk3::yxline(xx, w->y()-2, w->y()+w->h()+1);
 }
 
 static void draw_bottom_brace(const fltk3::Widget *w) {
   int yy = w->y() + w->h() - 1;
-  fl_yxline(w->x(), yy-6, yy+2);
-  fl_yxline(w->x()+w->w()-1, yy-6, yy+2);
-  fl_xyline(w->x()-2, yy, w->x()+w->w()+1);
+  fltk3::yxline(w->x(), yy-6, yy+2);
+  fltk3::yxline(w->x()+w->w()-1, yy-6, yy+2);
+  fltk3::xyline(w->x()-2, yy, w->x()+w->w()+1);
 }
 
-static void draw_height(int x, int y, int b, Fl_Align a) {
+static void draw_height(int x, int y, int b, fltk3::Align a) {
   char buf[16];
   int h = b - y;
   sprintf(buf, "%d", h);
-  fltk3::font(FL_HELVETICA, 9);
+  fltk3::font(fltk3::HELVETICA, 9);
   int lw = (int)fltk3::width(buf);
   int lx;
 
   b --;
   if (h < 30) {
     // Move height to the side...
-    if (a == FL_ALIGN_LEFT) lx = x - lw - 2;
+    if (a == fltk3::ALIGN_LEFT) lx = x - lw - 2;
     else lx = x + 2;
 
-    fl_yxline(x, y, b);
+    fltk3::yxline(x, y, b);
   } else {
     // Put height inside the arrows...
     lx = x - lw / 2;
 
-    fl_yxline(x, y, y + (h - 11) / 2);
-    fl_yxline(x, y + (h + 11) / 2, b);
+    fltk3::yxline(x, y, y + (h - 11) / 2);
+    fltk3::yxline(x, y + (h + 11) / 2, b);
   }
 
   // Draw the height...
-  fl_draw(buf, lx, y + (h + 9) / 2);
+  fltk3::draw(buf, lx, y + (h + 9) / 2);
 
   // Draw the arrowheads...
-  fl_line(x-2, y+5, x, y+1, x+2, y+5);
-  fl_line(x-2, b-5, x, b-1, x+2, b-5);
+  fltk3::line(x-2, y+5, x, y+1, x+2, y+5);
+  fltk3::line(x-2, b-5, x, b-1, x+2, b-5);
 
   // Draw the end lines...
-  fl_xyline(x - 4, y, x + 4);
-  fl_xyline(x - 4, b, x + 4);
+  fltk3::xyline(x - 4, y, x + 4);
+  fltk3::xyline(x - 4, b, x + 4);
 }
 
-static void draw_width(int x, int y, int r, Fl_Align a) {
+static void draw_width(int x, int y, int r, fltk3::Align a) {
   char buf[16];
   int w = r-x;
   sprintf(buf, "%d", w);
-  fltk3::font(FL_HELVETICA, 9);
+  fltk3::font(fltk3::HELVETICA, 9);
   int lw = (int)fltk3::width(buf);
   int ly = y + 4;
 
@@ -708,26 +708,26 @@ static void draw_width(int x, int y, int r, Fl_Align a) {
 
   if (lw > (w - 20)) {
     // Move width above/below the arrows...
-    if (a == FL_ALIGN_TOP) ly -= 10;
+    if (a == fltk3::ALIGN_TOP) ly -= 10;
     else ly += 10;
 
-    fl_xyline(x, y, r);
+    fltk3::xyline(x, y, r);
   } else {
     // Put width inside the arrows...
-    fl_xyline(x, y, x + (w - lw - 2) / 2);
-    fl_xyline(x + (w + lw + 2) / 2, y, r);
+    fltk3::xyline(x, y, x + (w - lw - 2) / 2);
+    fltk3::xyline(x + (w + lw + 2) / 2, y, r);
   }
 
   // Draw the width...
-  fl_draw(buf, x + (w - lw) / 2, ly);
+  fltk3::draw(buf, x + (w - lw) / 2, ly);
 
   // Draw the arrowheads...
-  fl_line(x+5, y-2, x+1, y, x+5, y+2);
-  fl_line(r-5, y-2, r-1, y, r-5, y+2);
+  fltk3::line(x+5, y-2, x+1, y, x+5, y+2);
+  fltk3::line(r-5, y-2, r-1, y, r-5, y+2);
 
   // Draw the end lines...
-  fl_yxline(x, y - 4, y + 4);
-  fl_yxline(r, y - 4, y + 4);
+  fltk3::yxline(x, y - 4, y + 4);
+  fltk3::yxline(r, y - 4, y + 4);
 }
 
 void Fl_Window_Type::draw_overlay() {
@@ -746,14 +746,14 @@ void Fl_Window_Type::draw_overlay() {
     recalc = 0;
     sx = bx; sy = by; sr = br; st = bt;
   }
-  fltk3::color(FL_RED);
+  fltk3::color(fltk3::RED);
   if (drag==BOX && (x1 != mx || y1 != my)) {
     int x = x1; int r = mx; if (x > r) {x = mx; r = x1;}
     int y = y1; int b = my; if (y > b) {y = my; b = y1;}
-    fl_rect(x,y,r-x,b-y);
+    fltk3::rect(x,y,r-x,b-y);
   }
   if (overlays_invisible && !drag) return;
-  if (selected) fl_rect(0,0,o->w(),o->h());
+  if (selected) fltk3::rect(0,0,o->w(),o->h());
   if (!numselected) return;
   int mybx,myby,mybr,mybt;
   int mysx,mysy,mysr,myst;
@@ -765,21 +765,21 @@ void Fl_Window_Type::draw_overlay() {
       Fl_Widget_Type* myo = (Fl_Widget_Type*)q;
       int x,y,r,t;
       newposition(myo,x,y,r,t);
-      if (!show_guides || !drag || numselected != 1) fl_rect(x,y,r-x,t-y);
+      if (!show_guides || !drag || numselected != 1) fltk3::rect(x,y,r-x,t-y);
       if (x < mysx) mysx = x;
       if (y < mysy) mysy = y;
       if (r > mysr) mysr = r;
       if (t > myst) myst = t;
-      if (!(myo->o->align() & FL_ALIGN_INSIDE)) {
+      if (!(myo->o->align() & fltk3::ALIGN_INSIDE)) {
         // Adjust left/right/top/bottom for top/bottom labels...
 	int ww, hh;
-	ww = (myo->o->align() & FL_ALIGN_WRAP) ? myo->o->w() : 0;
+	ww = (myo->o->align() & fltk3::ALIGN_WRAP) ? myo->o->w() : 0;
 	hh = myo->o->labelsize();
 	myo->o->measure_label(ww, hh);
-	if (myo->o->align() & FL_ALIGN_TOP) y -= hh;
-	else if (myo->o->align() & FL_ALIGN_BOTTOM) t += hh;
-	else if (myo->o->align() & FL_ALIGN_LEFT) x -= ww + 4;
-	else if (myo->o->align() & FL_ALIGN_RIGHT) r += ww + 4;
+	if (myo->o->align() & fltk3::ALIGN_TOP) y -= hh;
+	else if (myo->o->align() & fltk3::ALIGN_BOTTOM) t += hh;
+	else if (myo->o->align() & fltk3::ALIGN_LEFT) x -= ww + 4;
+	else if (myo->o->align() & fltk3::ALIGN_RIGHT) r += ww + 4;
       }
       if (x < mybx) mybx = x;
       if (y < myby) myby = y;
@@ -861,7 +861,7 @@ void Fl_Window_Type::draw_overlay() {
 
 	// Draw height guide
 	draw_height(x < 50 ? x+10 : x-10, y, t,
-	            x < 50 ? FL_ALIGN_RIGHT : FL_ALIGN_LEFT);
+	            x < 50 ? fltk3::ALIGN_RIGHT : fltk3::ALIGN_LEFT);
       }
 
       if (drag & (LEFT | RIGHT)) {
@@ -881,7 +881,7 @@ void Fl_Window_Type::draw_overlay() {
 
 	// Draw width guide
 	draw_width(x, y < 50 ? y+10 : y-10, r,
-	           y < 50 ? FL_ALIGN_BOTTOM : FL_ALIGN_TOP);
+	           y < 50 ? fltk3::ALIGN_BOTTOM : fltk3::ALIGN_TOP);
       }
     }
 
@@ -899,14 +899,14 @@ void Fl_Window_Type::draw_overlay() {
 	  int qy = qw->o->y();
 	  int qt = qw->o->y() + qw->o->h();
 
-	  if (!(qw->o->align() & FL_ALIGN_INSIDE)) {
+	  if (!(qw->o->align() & fltk3::ALIGN_INSIDE)) {
             // Adjust top/bottom for top/bottom labels...
 	    int ww, hh;
 	    ww = qw->o->w();
 	    hh = qw->o->labelsize();
 	    qw->o->measure_label(ww, hh);
-	    if (qw->o->align() & FL_ALIGN_TOP) qy -= hh;
-	    if (qw->o->align() & FL_ALIGN_BOTTOM) qt += hh;
+	    if (qw->o->align() & fltk3::ALIGN_TOP) qy -= hh;
+	    if (qw->o->align() & fltk3::ALIGN_BOTTOM) qt += hh;
 	  }
 
           // Do horizontal alignment when the widget is within 25
@@ -1080,15 +1080,15 @@ void Fl_Window_Type::draw_overlay() {
 
   // Draw selection box + resize handles...
   // draw box including all labels
-  fl_line_style(FL_DOT);
-  fl_rect(mybx,myby,mybr-mybx,mybt-myby);
-  fl_line_style(FL_SOLID);
+  fltk3::line_style(fltk3::DOT);
+  fltk3::rect(mybx,myby,mybr-mybx,mybt-myby);
+  fltk3::line_style(fltk3::SOLID);
   // draw box excluding labels
-  fl_rect(mysx,mysy,mysr-mysx,myst-mysy);
-  fl_rectf(mysx,mysy,5,5);
-  fl_rectf(mysr-5,mysy,5,5);
-  fl_rectf(mysr-5,myst-5,5,5);
-  fl_rectf(mysx,myst-5,5,5);
+  fltk3::rect(mysx,mysy,mysr-mysx,myst-mysy);
+  fltk3::rectf(mysx,mysy,5,5);
+  fltk3::rectf(mysr-5,mysy,5,5);
+  fltk3::rectf(mysr-5,myst-5,5,5);
+  fltk3::rectf(mysx,myst-5,5,5);
 }
 
 extern fltk3::MenuItem Main_Menu[];
@@ -1184,12 +1184,12 @@ void Fl_Window_Type::moveallchildren()
 int Fl_Window_Type::handle(int event) {
   static Fl_Type* selection;
   switch (event) {
-  case FL_PUSH:
-    x1 = mx = Fl::event_x();
-    y1 = my = Fl::event_y();
+  case fltk3::PUSH:
+    x1 = mx = fltk3::event_x();
+    y1 = my = fltk3::event_y();
     drag = dx = dy = 0;
     // test for popup menu:
-    if (Fl::event_button() >= 3) {
+    if (fltk3::event_button() >= 3) {
       in_this_only = this; // modifies how some menu items work.
       static const fltk3::MenuItem* myprev;
       const fltk3::MenuItem* m = New_Menu->popup(mx,my,"New",myprev);
@@ -1204,15 +1204,15 @@ int Fl_Window_Type::handle(int event) {
       Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
       for (fltk3::Widget *o1 = myo->o; o1; o1 = o1->parent())
 	if (!o1->visible()) goto CONTINUE2;
-      if (Fl::event_inside(myo->o)) {
+      if (fltk3::event_inside(myo->o)) {
         selection = myo;
-        if (Fl::event_clicks()==1)
+        if (fltk3::event_clicks()==1)
           reveal_in_browser(myo);
       }
     CONTINUE2:;
     }}
     // see if user grabs edges of selected region:
-    if (numselected && !(Fl::event_state(FL_SHIFT)) &&
+    if (numselected && !(fltk3::event_state(fltk3::SHIFT)) &&
 	mx<=br+snap && mx>=bx-snap && my<=bt+snap && my>=by-snap) {
       int snap1 = snap>5 ? snap : 5;
       int w1 = (br-bx)/4; if (w1 > snap1) w1 = snap1;
@@ -1227,8 +1227,8 @@ int Fl_Window_Type::handle(int event) {
     {Fl_Type* t = selection->click_test(mx, my);
     if (t) {
       //if (t == selection) return 1; // indicates mouse eaten w/o change
-      if (Fl::event_state(FL_SHIFT)) {
-	Fl::event_is_click(0);
+      if (fltk3::event_state(fltk3::SHIFT)) {
+	fltk3::event_is_click(0);
 	select(t, !t->selected);
       } else {
 	deselect();
@@ -1242,35 +1242,35 @@ int Fl_Window_Type::handle(int event) {
     }}
     return 1;
 
-  case FL_DRAG:
+  case fltk3::DRAG:
     if (!drag) return 0;
-    mx = Fl::event_x();
-    my = Fl::event_y();
+    mx = fltk3::event_x();
+    my = fltk3::event_y();
     newdx();
     return 1;
 
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     if (!drag) return 0;
-    mx = Fl::event_x();
-    my = Fl::event_y();
-    if (drag != BOX && (dx || dy || !Fl::event_is_click())) {
+    mx = fltk3::event_x();
+    my = fltk3::event_y();
+    if (drag != BOX && (dx || dy || !fltk3::event_is_click())) {
       if (dx || dy) moveallchildren();
-    } else if ((Fl::event_clicks() || Fl::event_state(FL_CTRL))) {
+    } else if ((fltk3::event_clicks() || fltk3::event_state(fltk3::CTRL))) {
       Fl_Widget_Type::open();
     } else {
       if (mx<x1) {int t = x1; x1 = mx; mx = t;}
       if (my<y1) {int t = y1; y1 = my; my = t;}
       int n = 0;
-      int toggle = Fl::event_state(FL_SHIFT);
+      int toggle = fltk3::event_state(fltk3::SHIFT);
       // clear selection on everything:
-      if (!toggle) deselect(); else Fl::event_is_click(0);
+      if (!toggle) deselect(); else fltk3::event_is_click(0);
       // select everything in box:
       for (Fl_Type*i=next; i&&i->level>level; i=i->next)
 	if (i->is_widget() && !i->is_menu_item()) {
 	Fl_Widget_Type* myo = (Fl_Widget_Type*)i;
 	for (fltk3::Widget *o1 = myo->o; o1; o1 = o1->parent())
 	  if (!o1->visible()) goto CONTINUE;
-	if (Fl::event_inside(myo->o)) selection = myo;
+	if (fltk3::event_inside(myo->o)) selection = myo;
 	if (myo->o->x()>=x1 && myo->o->y()>y1 &&
 	    myo->o->x()+myo->o->w()<mx && myo->o->y()+myo->o->h()<my) {
 	  n++;
@@ -1287,17 +1287,17 @@ int Fl_Window_Type::handle(int event) {
     ((Overlay_Window *)o)->redraw_overlay();
     return 1;
 
-  case FL_KEYBOARD: {
+  case fltk3::KEYBOARD: {
 
     int backtab = 0;
-    switch (Fl::event_key()) {
+    switch (fltk3::event_key()) {
 
-    case FL_Escape:
+    case fltk3::EscapeKey:
       ((fltk3::Window*)o)->hide();
       return 1;
 
-    case FL_Tab: {
-      if (Fl::event_state(FL_SHIFT)) backtab = 1;
+    case fltk3::TabKey: {
+      if (fltk3::event_state(fltk3::SHIFT)) backtab = 1;
       // find current child:
       Fl_Type *i = Fl_Type::current;
       while (i && (!i->is_widget() || i->is_menu_item())) i = i->parent;
@@ -1316,14 +1316,14 @@ int Fl_Window_Type::handle(int event) {
       deselect(); select(i,1);
       return 1;}
 
-    case FL_Left:  dx = -1; dy = 0; goto ARROW;
-    case FL_Right: dx = +1; dy = 0; goto ARROW;
-    case FL_Up:    dx = 0; dy = -1; goto ARROW;
-    case FL_Down:  dx = 0; dy = +1; goto ARROW;
+    case fltk3::LeftKey:  dx = -1; dy = 0; goto ARROW;
+    case fltk3::RightKey: dx = +1; dy = 0; goto ARROW;
+    case fltk3::UpKey:    dx = 0; dy = -1; goto ARROW;
+    case fltk3::DownKey:  dx = 0; dy = +1; goto ARROW;
     ARROW:
       // for some reason BOTTOM/TOP are swapped... should be fixed...
-      drag = (Fl::event_state(FL_SHIFT)) ? (RIGHT|TOP) : DRAG;
-      if (Fl::event_state(FL_CTRL)) {dx *= gridx; dy *= gridy;}
+      drag = (fltk3::event_state(fltk3::SHIFT)) ? (RIGHT|TOP) : DRAG;
+      if (fltk3::event_state(fltk3::CTRL)) {dx *= gridx; dy *= gridy;}
       moveallchildren();
       drag = 0;
       return 1;
@@ -1336,7 +1336,7 @@ int Fl_Window_Type::handle(int event) {
       return 0;
     }}
 
-  case FL_SHORTCUT: {
+  case fltk3::SHORTCUT: {
     in_this_only = this; // modifies how some menu items work.
     const fltk3::MenuItem* m = Main_Menu->test_shortcut();
     if (m && m->callback()) m->do_callback(this->o);
@@ -1400,7 +1400,7 @@ void Fl_Window_Type::read_property(const char *c) {
   } else if (!strcmp(c,"non_modal")) {
     non_modal = 1;
   } else if (!strcmp(c, "visible")) {
-    if (Fl::first_window()) open(); // only if we are using user interface
+    if (fltk3::first_window()) open(); // only if we are using user interface
   } else if (!strcmp(c,"noborder")) {
     ((fltk3::Window*)o)->border(0);
   } else if (!strcmp(c,"xclass")) {
@@ -1421,7 +1421,7 @@ void Fl_Window_Type::read_property(const char *c) {
 
 int Fl_Window_Type::read_fdesign(const char* propname, const char* value) {
   int x;
-  o->box(FL_NO_BOX); // because fdesign always puts an fltk3::Box next
+  o->box(fltk3::NO_BOX); // because fdesign always puts an fltk3::Box next
   if (!strcmp(propname,"Width")) {
     if (sscanf(value,"%d",&x) == 1) o->size(x,o->h());
   } else if (!strcmp(propname,"Height")) {

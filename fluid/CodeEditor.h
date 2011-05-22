@@ -42,7 +42,7 @@
 
 
 class CodeEditor : public fltk3::TextEditor {
-  static fltk3::TextDisplay::Style_Table_Entry styletable[];
+  static fltk3::TextDisplay::StyleTableEntry styletable[];
   static const char * const code_keywords[];
   static const char * const code_types[];
 

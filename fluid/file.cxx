@@ -560,33 +560,33 @@ int fdesign_magic;
 #include <fltk3/Group.h>
 
 static const char *class_matcher[] = {
-"FL_CHECKBUTTON", "fltk3::CheckButton",
-"FL_ROUNDBUTTON", "fltk3::RoundButton",
-"FL_ROUND3DBUTTON", "fltk3::RoundButton",
-"FL_LIGHTBUTTON", "fltk3::LightButton",
-"FL_FRAME", "fltk3::Box",
-"FL_LABELFRAME", "fltk3::Box",
-"FL_TEXT", "fltk3::Box",
-"FL_VALSLIDER", "fltk3::ValueSlider",
-"FL_MENU", "fltk3::MenuButton",
-"3", "FL_BITMAP",
-"1", "FL_BOX",
-"71","FL_BROWSER",
-"11","FL_BUTTON",
-"4", "FL_CHART",
-"42","FL_CHOICE",
-"61","FL_CLOCK",
-"25","FL_COUNTER",
-"22","FL_DIAL",
-"101","FL_FREE",
-"31","FL_INPUT",
+"fltk3::CHECKBUTTON", "fltk3::CheckButton",
+"fltk3::ROUNDBUTTON", "fltk3::RoundButton",
+"fltk3::ROUND3DBUTTON", "fltk3::RoundButton",
+"fltk3::LIGHTBUTTON", "fltk3::LightButton",
+"fltk3::FRAME", "fltk3::Box",
+"fltk3::LABELFRAME", "fltk3::Box",
+"fltk3::TEXT", "fltk3::Box",
+"fltk3::VALSLIDER", "fltk3::ValueSlider",
+"fltk3::MENU", "fltk3::MenuButton",
+"3", "fltk3::BITMAP",
+"1", "fltk3::BOX",
+"71","fltk3::BROWSER",
+"11","fltk3::BUTTON",
+"4", "fltk3::CHART",
+"42","fltk3::CHOICE",
+"61","fltk3::CLOCK",
+"25","fltk3::COUNTER",
+"22","fltk3::DIAL",
+"101","fltk3::FREE",
+"31","fltk3::INPUT",
 "12","fltk3::LightButton",
-"41","FL_MENU",
-"23","FL_POSITIONER",
+"41","fltk3::MENU",
+"23","fltk3::POSITIONER",
 "13","fltk3::RoundButton",
-"21","FL_SLIDER",
-"2", "FL_BOX", // was FL_TEXT
-"62","FL_TIMER",
+"21","fltk3::SLIDER",
+"2", "fltk3::BOX", // was fltk3::TEXT
+"62","fltk3::TIMER",
 "24","fltk3::ValueSlider",
 0};
 
@@ -615,14 +615,14 @@ void read_fdesign() {
 
     } else if (!strcmp(name,"class")) {
 
-      if (!strcmp(value,"FL_BEGIN_GROUP")) {
+      if (!strcmp(value,"fltk3::BEGIN_GROUP")) {
 	group = widget = (Fl_Widget_Type*)Fl_Type_make("fltk3::Group");
 	Fl_Type::current = group;
-      } else if (!strcmp(value,"FL_END_GROUP")) {
+      } else if (!strcmp(value,"fltk3::END_GROUP")) {
 	if (group) {
 	  fltk3::Group* g = (fltk3::Group*)(group->o);
-	  g->begin();
-	  g->forms_end();
+	  //g->begin(); FIXME: forms library no longer supported
+	  //g->forms_end();
 	  fltk3::Group::current(0);
 	}
 	group = widget = 0;

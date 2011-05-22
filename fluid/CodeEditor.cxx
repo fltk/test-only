@@ -38,13 +38,13 @@
 
 fltk3::TextDisplay::StyleTableEntry CodeEditor::
 		styletable[] = {	// Style table
-		  { FL_FOREGROUND_COLOR, FL_COURIER,        11 }, // A - Plain
-		  { FL_DARK_GREEN,       FL_COURIER_ITALIC, 11 }, // B - Line comments
-		  { FL_DARK_GREEN,       FL_COURIER_ITALIC, 11 }, // C - Block comments
-		  { FL_BLUE,             FL_COURIER,        11 }, // D - Strings
-		  { FL_DARK_RED,         FL_COURIER,        11 }, // E - Directives
-		  { FL_DARK_RED,         FL_COURIER_BOLD,   11 }, // F - Types
-		  { FL_BLUE,             FL_COURIER_BOLD,   11 }  // G - Keywords
+		  { fltk3::FOREGROUND_COLOR, fltk3::COURIER,        11 }, // A - Plain
+		  { fltk3::DARK_GREEN,       fltk3::COURIER_ITALIC, 11 }, // B - Line comments
+		  { fltk3::DARK_GREEN,       fltk3::COURIER_ITALIC, 11 }, // C - Block comments
+		  { fltk3::BLUE,             fltk3::COURIER,        11 }, // D - Strings
+		  { fltk3::DARK_RED,         fltk3::COURIER,        11 }, // E - Directives
+		  { fltk3::DARK_RED,         fltk3::COURIER_BOLD,   11 }, // F - Types
+		  { fltk3::BLUE,             fltk3::COURIER_BOLD,   11 }  // G - Keywords
 		};
 const char * const CodeEditor::
 		code_keywords[] = {	// Sorted list of C/C++ keywords...
@@ -361,7 +361,7 @@ int CodeEditor::auto_indent(int, CodeEditor* e) {
   }
   e->show_insert_position();
   e->set_changed();
-  if (e->when()&FL_WHEN_CHANGED) e->do_callback();
+  if (e->when()&fltk3::WHEN_CHANGED) e->do_callback();
 
   free(text);
 
@@ -390,7 +390,7 @@ CodeEditor::CodeEditor(int X, int Y, int W, int H, const char *L) :
   free(text);
 
   mBuffer->add_modify_callback(style_update, this);
-  add_key_binding(FL_Enter, FL_TEXT_EDITOR_ANY_STATE,
+  add_key_binding(fltk3::EnterKey, fltk3::TEXT_EDITOR_ANY_STATE,
                   (fltk3::TextEditor::Key_Func)auto_indent);
 }
 

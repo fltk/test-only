@@ -80,7 +80,7 @@ extern fltk3::CheckButton *completion_button;
 extern fltk3::CheckButton *openlast_button;
 extern fltk3::CheckButton *prevpos_button;
 extern fltk3::CheckButton *show_comments_button;
-#include <fltk3/fltk3::Spinner.h>
+#include <fltk3/Spinner.h>
 extern fltk3::Spinner *recent_spinner;
 fltk3::DoubleWindow* make_settings_window();
 extern fltk3::MenuItem menu_scheme_choice[];
