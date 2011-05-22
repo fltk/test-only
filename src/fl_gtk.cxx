@@ -44,7 +44,7 @@ static void gtk_color(fltk3::Color c) {
 }
 
 
-static void gtk_up_frame(int x, int y, int w, int h, fltk3::Color c) {
+void fl_gtk_up_frame(int x, int y, int w, int h, fltk3::Color c) {
   gtk_color(fltk3::color_average(fltk3::WHITE, c, 0.5));
   fltk3::xyline(x + 2, y + 1, x + w - 3);
   fltk3::yxline(x + 1, y + 2, y + h - 3);
@@ -63,8 +63,8 @@ static void gtk_up_frame(int x, int y, int w, int h, fltk3::Color c) {
 }
 
 
-static void gtk_up_box(int x, int y, int w, int h, fltk3::Color c) {
-  gtk_up_frame(x, y, w, h, c);
+void fl_gtk_up_box(int x, int y, int w, int h, fltk3::Color c) {
+  fl_gtk_up_frame(x, y, w, h, c);
 
   gtk_color(fltk3::color_average(fltk3::WHITE, c, 0.4f));
   fltk3::xyline(x + 2, y + 2, x + w - 3);
@@ -84,7 +84,7 @@ static void gtk_up_box(int x, int y, int w, int h, fltk3::Color c) {
 }
 
 
-static void gtk_down_frame(int x, int y, int w, int h, fltk3::Color c) {
+void fl_gtk_down_frame(int x, int y, int w, int h, fltk3::Color c) {
   gtk_color(fltk3::color_average(fltk3::BLACK, c, 0.5));
   fltk3::begin_loop();
     fltk3::vertex(x, y + 2);
@@ -106,8 +106,8 @@ static void gtk_down_frame(int x, int y, int w, int h, fltk3::Color c) {
 }
 
 
-static void gtk_down_box(int x, int y, int w, int h, fltk3::Color c) {
-  gtk_down_frame(x, y, w, h, c);
+void fl_gtk_down_box(int x, int y, int w, int h, fltk3::Color c) {
+  fl_gtk_down_frame(x, y, w, h, c);
 
   gtk_color(c);
   fltk3::rectf(x + 3, y + 3, w - 5, h - 4);
@@ -115,7 +115,7 @@ static void gtk_down_box(int x, int y, int w, int h, fltk3::Color c) {
 }
 
 
-static void gtk_thin_up_frame(int x, int y, int w, int h, fltk3::Color c) {
+void fl_gtk_thin_up_frame(int x, int y, int w, int h, fltk3::Color c) {
   gtk_color(fltk3::color_average(fltk3::WHITE, c, 0.6f));
   fltk3::xyline(x + 1, y, x + w - 2);
   fltk3::yxline(x, y + 1, y + h - 2);
@@ -126,8 +126,8 @@ static void gtk_thin_up_frame(int x, int y, int w, int h, fltk3::Color c) {
 }
 
 
-static void gtk_thin_up_box(int x, int y, int w, int h, fltk3::Color c) {
-  gtk_thin_up_frame(x, y, w, h, c);
+void fl_gtk_thin_up_box(int x, int y, int w, int h, fltk3::Color c) {
+  fl_gtk_thin_up_frame(x, y, w, h, c);
 
   gtk_color(fltk3::color_average(fltk3::WHITE, c, 0.4f));
   fltk3::xyline(x + 1, y + 1, x + w - 2);
@@ -146,7 +146,7 @@ static void gtk_thin_up_box(int x, int y, int w, int h, fltk3::Color c) {
 }
 
 
-static void gtk_thin_down_frame(int x, int y, int w, int h, fltk3::Color c) {
+void fl_gtk_thin_down_frame(int x, int y, int w, int h, fltk3::Color c) {
   gtk_color(fltk3::color_average(fltk3::BLACK, c, 0.4f));
   fltk3::xyline(x + 1, y, x + w - 2);
   fltk3::yxline(x, y + 1, y + h - 2);
@@ -157,8 +157,8 @@ static void gtk_thin_down_frame(int x, int y, int w, int h, fltk3::Color c) {
 }
 
 
-static void gtk_thin_down_box(int x, int y, int w, int h, fltk3::Color c) {
-  gtk_thin_down_frame(x, y, w, h, c);
+void fl_gtk_thin_down_box(int x, int y, int w, int h, fltk3::Color c) {
+  fl_gtk_thin_down_frame(x, y, w, h, c);
 
   gtk_color(c);
   fltk3::rectf(x + 1, y + 1, w - 2, h - 2);
@@ -212,7 +212,7 @@ static void draw(int which, int x,int y,int w,int h, int inset)
   }
 }
 
-void gtk_round_up_box(int x, int y, int w, int h, fltk3::Color c) {
+void fl_gtk_round_up_box(int x, int y, int w, int h, fltk3::Color c) {
   fltk3::color(c);
   draw(FILL,	    x,   y, w,   h, 2);
 
@@ -243,7 +243,7 @@ void gtk_round_up_box(int x, int y, int w, int h, fltk3::Color c) {
   draw(CLOSED,	    x,   y, w,   h, 0);
 }
 
-void gtk_round_down_box(int x, int y, int w, int h, fltk3::Color c) {
+void fl_gtk_round_down_box(int x, int y, int w, int h, fltk3::Color c) {
   fltk3::color(c);
   draw(FILL,	    x,   y, w,   h, 2);
 
@@ -260,7 +260,7 @@ void gtk_round_down_box(int x, int y, int w, int h, fltk3::Color c) {
 
 #else
 
-static void gtk_round_up_box(int x, int y, int w, int h, fltk3::Color c) {
+void fl_gtk_round_up_box(int x, int y, int w, int h, fltk3::Color c) {
   gtk_color(c);
   fltk3::pie(x, y, w, h, 0.0, 360.0);
   gtk_color(fltk3::color_average(fltk3::WHITE, c, 0.5f));
@@ -272,7 +272,7 @@ static void gtk_round_up_box(int x, int y, int w, int h, fltk3::Color c) {
 }
 
 
-static void gtk_round_down_box(int x, int y, int w, int h, fltk3::Color c) {
+void fl_gtk_round_down_box(int x, int y, int w, int h, fltk3::Color c) {
   gtk_color(c);
   fltk3::pie(x, y, w, h, 0.0, 360.0);
   gtk_color(fltk3::color_average(fltk3::BLACK, c, 0.2));

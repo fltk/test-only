@@ -85,7 +85,7 @@ static void png_read_data_from_mem( png_structp png_ptr, //pointer to our data
 
   \param[in] filename	Name of PNG file to read
 */
-fltk3::PNGImage::fltk3::PNGImage (const char *filename): fltk3::RGBImage(0,0,0)
+fltk3::PNGImage::PNGImage (const char *filename): fltk3::RGBImage(0,0,0)
 {
   load_png_(filename, NULL, 0);
 }
@@ -102,7 +102,7 @@ fltk3::PNGImage::fltk3::PNGImage (const char *filename): fltk3::RGBImage(0,0,0)
  \param buffer	  Pointer to the start of the PNG image in memory
  \param maxsize   Size in bytes of the memory buffer containing the PNG image
  */
-fltk3::PNGImage::fltk3::PNGImage (
+fltk3::PNGImage::PNGImage (
       const char *name_png, const unsigned char *buffer, int maxsize): fltk3::RGBImage(0,0,0)
 {
   load_png_(name_png, buffer, maxsize);

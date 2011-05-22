@@ -30,7 +30,7 @@
 
 #define BW 3
 
-static void fl_shadow_frame(int x, int y, int w, int h, fltk3::Color c) {
+void fl_shadow_frame(int x, int y, int w, int h, fltk3::Color c) {
   fltk3::color(fltk3::DARK3);
   fltk3::rectf(x+BW, y+h-BW,  w - BW, BW);
   fltk3::rectf(x+w-BW,  y+BW, BW,  h - BW);
@@ -38,7 +38,7 @@ static void fl_shadow_frame(int x, int y, int w, int h, fltk3::Color c) {
   fltk3::rect(x,y,w-BW,h-BW);
 }
 
-static void fl_shadow_box(int x, int y, int w, int h, fltk3::Color c) {
+void fl_shadow_box(int x, int y, int w, int h, fltk3::Color c) {
   fltk3::color(c);
   fltk3::rectf(x+1,y+1,w-2-BW,h-2-BW);
   fl_shadow_frame(x,y,w,h,fltk3::GRAY0);

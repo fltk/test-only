@@ -282,7 +282,7 @@ static void shade_round(int x, int y, int w, int h, const char *c, fltk3::Color 
 }
 
 
-static void up_frame(int x, int y, int w, int h, fltk3::Color c) {
+void fl_plastic_up_frame(int x, int y, int w, int h, fltk3::Color c) {
   frame_rect(x, y, w, h - 1, "KLDIIJLM", c);
 }
 
@@ -304,7 +304,7 @@ static void narrow_thin_box(int x, int y, int w, int h, fltk3::Color c) {
 }
 
 
-static void thin_up_box(int x, int y, int w, int h, fltk3::Color c) {
+void fl_plastic_thin_up_box(int x, int y, int w, int h, fltk3::Color c) {
 #ifdef USE_OLD_PLASTIC_BOX
   shade_rect(x + 2, y + 2, w - 4, h - 5, "RVQNOPQRSTUVWVQ", c);
   up_frame(x, y, w, h, c);
@@ -319,7 +319,7 @@ static void thin_up_box(int x, int y, int w, int h, fltk3::Color c) {
 }
 
 
-static void up_box(int x, int y, int w, int h, fltk3::Color c) {
+void fl_plastic_up_box(int x, int y, int w, int h, fltk3::Color c) {
 #ifdef USE_OLD_PLASTIC_BOX
   shade_rect(x + 2, y + 2, w - 4, h - 5, "RVQNOPQRSTUVWVQ", c);
   up_frame(x, y, w, h, c);
@@ -328,27 +328,27 @@ static void up_box(int x, int y, int w, int h, fltk3::Color c) {
     shade_rect(x + 1, y + 1, w - 2, h - 3, "RVQNOPQRSTUVWVQ", c);
     frame_rect(x, y, w, h - 1, "IJLM", c);
   } else {
-    thin_up_box(x, y, w, h, c);
+    fl_plastic_thin_up_box(x, y, w, h, c);
   }
 #endif // USE_OLD_PLASTIC_BOX
 }
 
 
-static void up_round(int x, int y, int w, int h, fltk3::Color c) {
+void fl_plastic_up_round(int x, int y, int w, int h, fltk3::Color c) {
   shade_round(x, y, w, h, "RVQNOPQRSTUVWVQ", c);
   frame_round(x, y, w, h, "IJLM", c);
 }
 
 
-static void down_frame(int x, int y, int w, int h, fltk3::Color c) {
+void fl_plastic_down_frame(int x, int y, int w, int h, fltk3::Color c) {
   frame_rect(x, y, w, h - 1, "LLLLTTRR", c);
 }
 
 
-static void down_box(int x, int y, int w, int h, fltk3::Color c) {
+void fl_plastic_down_box(int x, int y, int w, int h, fltk3::Color c) {
   if (w > 6 && h > 6) {
     shade_rect(x + 2, y + 2, w - 4, h - 5, "STUVWWWVT", c);
-    down_frame(x, y, w, h, c);
+    fl_plastic_down_frame(x, y, w, h, c);
   }
   else {
     narrow_thin_box(x, y, w, h, c);
@@ -356,7 +356,7 @@ static void down_box(int x, int y, int w, int h, fltk3::Color c) {
 }
 
 
-static void down_round(int x, int y, int w, int h, fltk3::Color c) {
+void fl_plastic_down_round(int x, int y, int w, int h, fltk3::Color c) {
   shade_round(x, y, w, h, "STUVWWWVT", c);
   frame_round(x, y, w, h, "IJLM", c);
 }

@@ -250,68 +250,109 @@ void fl_border_frame(int x, int y, int w, int h, fltk3::Color c) {
 
 ////////////////////////////////////////////////////////////////
 
+void fl_diamond_down_box(int x,int y,int w,int h,fltk3::Color bgcolor);
+void fl_diamond_up_box(int x,int y,int w,int h,fltk3::Color bgcolor);
+void fl_shadow_frame(int x, int y, int w, int h, fltk3::Color c);
+void fl_shadow_box(int x, int y, int w, int h, fltk3::Color c);
+
+void fl_round_up_box(int x, int y, int w, int h, fltk3::Color bgcolor);
+void fl_round_down_box(int x, int y, int w, int h, fltk3::Color bgcolor);
+void fl_rflat_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_rounded_frame(int x, int y, int w, int h, fltk3::Color c);
+void fl_rounded_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_rshadow_box(int x, int y, int w, int h, fltk3::Color c);
+
+void fl_oval_shadow_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_oval_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_oval_frame(int x, int y, int w, int h, fltk3::Color c);
+void fl_oval_flat_box(int x, int y, int w, int h, fltk3::Color c);
+
+void fl_plastic_up_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_plastic_down_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_plastic_up_frame(int x, int y, int w, int h, fltk3::Color c);
+void fl_plastic_down_frame(int x, int y, int w, int h, fltk3::Color c);
+void fl_plastic_thin_up_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_plastic_up_round(int x, int y, int w, int h, fltk3::Color c);
+void fl_plastic_down_round(int x, int y, int w, int h, fltk3::Color c);
+
+void fl_gtk_up_frame(int x, int y, int w, int h, fltk3::Color c);
+void fl_gtk_up_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_gtk_down_frame(int x, int y, int w, int h, fltk3::Color c);
+void fl_gtk_down_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_gtk_thin_up_frame(int x, int y, int w, int h, fltk3::Color c);
+void fl_gtk_thin_up_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_gtk_thin_down_frame(int x, int y, int w, int h, fltk3::Color c);
+void fl_gtk_thin_down_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_gtk_round_up_box(int x, int y, int w, int h, fltk3::Color c);
+void fl_gtk_round_down_box(int x, int y, int w, int h, fltk3::Color c);
+
 static struct {
   fltk3::BoxDrawF *f;
   uchar dx, dy, dw, dh;
   int set;
 } fl_box_table[256] = {
 // must match list in enumerations.h!!!
-  {fl_no_box,		0,0,0,0,1},		
-  {fltk3::rectf,		0,0,0,0,1}, // fltk3::FLAT_BOX
-  {fl_up_box,		D1,D1,D2,D2,1},
-  {fl_down_box,		D1,D1,D2,D2,1},
-  {fl_up_frame,		D1,D1,D2,D2,1},
-  {fl_down_frame,	D1,D1,D2,D2,1},
-  {fl_thin_up_box,	1,1,2,2,1},
-  {fl_thin_down_box,	1,1,2,2,1},
-  {fl_thin_up_frame,	1,1,2,2,1},
-  {fl_thin_down_frame,	1,1,2,2,1},
-  {fl_engraved_box,	2,2,4,4,1},
-  {fl_embossed_box,	2,2,4,4,1},
-  {fl_engraved_frame,	2,2,4,4,1},
-  {fl_embossed_frame,	2,2,4,4,1},
-  {fl_border_box,	1,1,2,2,1},
-  {fl_border_box,	1,1,5,5,0}, // _FL_SHADOW_BOX,
-  {fl_border_frame,	1,1,2,2,1},
-  {fl_border_frame,	1,1,5,5,0}, // _FL_SHADOW_FRAME,
-  {fl_border_box,	1,1,2,2,0}, // _FL_ROUNDED_BOX,
-  {fl_border_box,	1,1,2,2,0}, // _FL_RSHADOW_BOX,
-  {fl_border_frame,	1,1,2,2,0}, // _FL_ROUNDED_FRAME
-  {fltk3::rectf,		0,0,0,0,0}, // _FL_RFLAT_BOX,
-  {fl_up_box,		3,3,6,6,0}, // _FL_ROUND_UP_BOX
-  {fl_down_box,		3,3,6,6,0}, // _FL_ROUND_DOWN_BOX,
-  {fl_up_box,		0,0,0,0,0}, // _FL_DIAMOND_UP_BOX
-  {fl_down_box,		0,0,0,0,0}, // _FL_DIAMOND_DOWN_BOX
-  {fl_border_box,	1,1,2,2,0}, // _FL_OVAL_BOX,
-  {fl_border_box,	1,1,2,2,0}, // _FL_OVAL_SHADOW_BOX,
-  {fl_border_frame,	1,1,2,2,0}, // _FL_OVAL_FRAME
-  {fltk3::rectf,		0,0,0,0,0}, // _FL_OVAL_FLAT_BOX,
-  {fl_up_box,		4,4,8,8,0}, // _FL_PLASTIC_UP_BOX,
-  {fl_down_box,		2,2,4,4,0}, // _FL_PLASTIC_DOWN_BOX,
-  {fl_up_frame,		2,2,4,4,0}, // _FL_PLASTIC_UP_FRAME,
-  {fl_down_frame,	2,2,4,4,0}, // _FL_PLASTIC_DOWN_FRAME,
-  {fl_up_box,		2,2,4,4,0}, // _FL_PLASTIC_THIN_UP_BOX,
-  {fl_down_box,		2,2,4,4,0}, // _FL_PLASTIC_THIN_DOWN_BOX,
-  {fl_up_box,		2,2,4,4,0}, // _FL_PLASTIC_ROUND_UP_BOX,
-  {fl_down_box,		2,2,4,4,0}, // _FL_PLASTIC_ROUND_DOWN_BOX,
-  {fl_up_box,		2,2,4,4,0}, // _FL_GTK_UP_BOX,
-  {fl_down_box,		2,2,4,4,0}, // _FL_GTK_DOWN_BOX,
-  {fl_up_frame,		2,2,4,4,0}, // _FL_GTK_UP_FRAME,
-  {fl_down_frame,	2,2,4,4,0}, // _FL_GTK_DOWN_FRAME,
-  {fl_up_frame,		1,1,2,2,0}, // _FL_GTK_THIN_UP_FRAME,
-  {fl_down_frame,	1,1,2,2,0}, // _FL_GTK_THIN_DOWN_FRAME,
-  {fl_up_box,		1,1,2,2,0}, // _FL_GTK_THIN_ROUND_UP_BOX,
-  {fl_down_box,		1,1,2,2,0}, // _FL_GTK_THIN_ROUND_DOWN_BOX,
-  {fl_up_box,		2,2,4,4,0}, // _FL_GTK_ROUND_UP_BOX,
-  {fl_down_box,		2,2,4,4,0}, // _FL_GTK_ROUND_DOWN_BOX,
-  {fl_up_box,		3,3,6,6,0}, // FL_FREE_BOX+0
-  {fl_down_box,		3,3,6,6,0}, // FL_FREE_BOX+1
-  {fl_up_box,		3,3,6,6,0}, // FL_FREE_BOX+2
-  {fl_down_box,		3,3,6,6,0}, // FL_FREE_BOX+3
-  {fl_up_box,		3,3,6,6,0}, // FL_FREE_BOX+4
-  {fl_down_box,		3,3,6,6,0}, // FL_FREE_BOX+5
-  {fl_up_box,		3,3,6,6,0}, // FL_FREE_BOX+6
-  {fl_down_box,		3,3,6,6,0}, // FL_FREE_BOX+7
+  {fl_no_box,                   0,0,0,0,1},		
+  {fltk3::rectf,                0,0,0,0,1}, // fltk3::FLAT_BOX
+  {fl_up_box,                   D1,D1,D2,D2,1},
+  {fl_down_box,                 D1,D1,D2,D2,1},
+  {fl_up_frame,                 D1,D1,D2,D2,1},
+  {fl_down_frame,               D1,D1,D2,D2,1},
+  {fl_thin_up_box,              1,1,2,2,1},
+  {fl_thin_down_box,            1,1,2,2,1},
+  {fl_thin_up_frame,            1,1,2,2,1},
+  {fl_thin_down_frame,          1,1,2,2,1},
+  {fl_engraved_box,             2,2,4,4,1},
+  {fl_embossed_box,             2,2,4,4,1},
+  {fl_engraved_frame,           2,2,4,4,1},
+  {fl_embossed_frame,           2,2,4,4,1},
+  {fl_border_box,               1,1,2,2,1},
+  {fl_shadow_box,               1,1,5,5,0}, // FL_SHADOW_BOX,
+  {fl_border_frame,             1,1,2,2,1},
+  {fl_shadow_frame,             1,1,5,5,0}, // FL_SHADOW_FRAME,
+  
+  {fl_rounded_box,              1,1,2,2,0}, // FL_ROUNDED_BOX,
+  {fl_rshadow_box,              1,1,2,2,0}, // FL_RSHADOW_BOX,
+  {fl_rounded_frame,            1,1,2,2,0}, // FL_ROUNDED_FRAME
+  {fl_rflat_box,		0,0,0,0,0}, // FL_RFLAT_BOX,
+  {fl_round_up_box,		3,3,6,6,0}, // FL_ROUND_UP_BOX
+  {fl_round_down_box,		3,3,6,6,0}, // FL_ROUND_DOWN_BOX,
+  {fl_diamond_up_box,		0,0,0,0,0}, // FL_DIAMOND_UP_BOX
+  {fl_diamond_down_box,		0,0,0,0,0}, // FL_DIAMOND_DOWN_BOX
+  
+  {fl_oval_box,                 1,1,2,2,0}, // FL_OVAL_BOX,
+  {fl_oval_shadow_box,          1,1,2,2,0}, // FL_OVAL_SHADOW_BOX,
+  {fl_oval_frame,               1,1,2,2,0}, // FL_OVAL_FRAME
+  {fl_oval_flat_box,		0,0,0,0,0}, // FL_OVAL_FLAT_BOX,
+  
+  {fl_plastic_up_box,		4,4,8,8,0}, // FL_PLASTIC_UP_BOX,
+  {fl_plastic_down_box,		2,2,4,4,0}, // FL_PLASTIC_DOWN_BOX,
+  {fl_plastic_up_frame,		2,2,4,4,0}, // FL_PLASTIC_UP_FRAME,
+  {fl_plastic_down_frame,	2,2,4,4,0}, // FL_PLASTIC_DOWN_FRAME,
+  {fl_plastic_thin_up_box,	2,2,4,4,0}, // FL_PLASTIC_THIN_UP_BOX,
+  {fl_plastic_down_box,		2,2,4,4,0}, // FL_PLASTIC_THIN_DOWN_BOX,
+  {fl_plastic_up_round,		2,2,4,4,0}, // FL_PLASTIC_ROUND_UP_BOX,
+  {fl_plastic_down_round,	2,2,4,4,0}, // FL_PLASTIC_ROUND_DOWN_BOX,
+  
+  {fl_gtk_up_box,		2,2,4,4,0}, // FL_GTK_UP_BOX,
+  {fl_gtk_down_box,		2,2,4,4,0}, // FL_GTK_DOWN_BOX,
+  {fl_gtk_up_frame,		2,2,4,4,0}, // FL_GTK_UP_FRAME,
+  {fl_gtk_down_frame,           2,2,4,4,0}, // FL_GTK_DOWN_FRAME,
+  {fl_gtk_thin_up_box,		1,1,2,2,0}, // FL_GTK_THIN_ROUND_UP_BOX,
+  {fl_gtk_thin_down_box,	1,1,2,2,0}, // FL_GTK_THIN_ROUND_DOWN_BOX,
+  {fl_gtk_thin_up_frame,	1,1,2,2,0}, // FL_GTK_THIN_UP_FRAME,
+  {fl_gtk_thin_down_frame,	1,1,2,2,0}, // FL_GTK_THIN_DOWN_FRAME,
+  {fl_gtk_round_up_box,		2,2,4,4,0}, // FL_GTK_ROUND_UP_BOX,
+  {fl_gtk_round_down_box,	2,2,4,4,0}, // FL_GTK_ROUND_DOWN_BOX,
+  
+  {fl_up_box,                   3,3,6,6,0}, // FL_FREE_BOX+0
+  {fl_down_box,                 3,3,6,6,0}, // FL_FREE_BOX+1
+  {fl_up_box,                   3,3,6,6,0}, // FL_FREE_BOX+2
+  {fl_down_box,                 3,3,6,6,0}, // FL_FREE_BOX+3
+  {fl_up_box,                   3,3,6,6,0}, // FL_FREE_BOX+4
+  {fl_down_box,                 3,3,6,6,0}, // FL_FREE_BOX+5
+  {fl_up_box,                   3,3,6,6,0}, // FL_FREE_BOX+6
+  {fl_down_box,                 3,3,6,6,0}, // FL_FREE_BOX+7
 };
 
 /**
