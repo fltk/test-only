@@ -451,7 +451,7 @@ fltk::Window* make_window() {
       o->labelsize(10);
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::Keypad+'.'));
     }
-     {fltk::Widget* o = new fltk::Widget(400, 15, 80, 40, "Fl::event_state():");
+     {fltk::Widget* o = new fltk::Widget(400, 15, 80, 40, "fltk::event_state():");
       o->box(fltk::NO_BOX);
       o->labelsize(10);
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
