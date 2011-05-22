@@ -33,8 +33,7 @@
 #include <fltk3/MenuItem.h>
 #include <fltk3/MultiLabel.h>
 
-static void multi_labeltype(
-    const fltk3::Label* o, int x, int y, int w, int h, fltk3::Align a)
+void fl_multi_labeltype(const fltk3::Label* o, int x, int y, int w, int h, fltk3::Align a)
 {
   fltk3::MultiLabel* b = (fltk3::MultiLabel*)(o->value);
   fltk3::Label local = *o;
@@ -66,12 +65,12 @@ static void multi_measure(const fltk3::Label* o, int& w, int& h) {
 }
 
 void fltk3::MultiLabel::label(fltk3::Widget* o) {
-  fltk3::set_labeltype(fltk3::MULTI_LABEL, multi_labeltype, multi_measure);
+  fltk3::set_labeltype(fltk3::MULTI_LABEL, fl_multi_labeltype, multi_measure);
   o->label(fltk3::MULTI_LABEL, (const char*)this);
 }
 
 void fltk3::MultiLabel::label(fltk3::MenuItem* o) {
-  fltk3::set_labeltype(fltk3::MULTI_LABEL, multi_labeltype, multi_measure);
+  fltk3::set_labeltype(fltk3::MULTI_LABEL, fl_multi_labeltype, multi_measure);
   o->label(fltk3::MULTI_LABEL, (const char*)this);
 }
 

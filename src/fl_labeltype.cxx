@@ -58,14 +58,20 @@ fl_normal_measure(const fltk3::Label* o, int& W, int& H) {
 
 #define MAX_LABELTYPE 16
 
+void fl_shadow_label(const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align);
+void fl_engraved_label(const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align);
+void fl_embossed_label(const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align);
+void fl_multi_labeltype(const fltk3::Label* o, int x, int y, int w, int h, fltk3::Align a);
+void fl_icon_labeltype(const fltk3::Label* o, int x, int y, int w, int h, fltk3::Align a);
+
 static fltk3::LabelDrawF* table[MAX_LABELTYPE] = {
   fl_normal_label,
   fl_no_label,
-  fl_normal_label,	// _FL_SHADOW_LABEL,
-  fl_normal_label,	// _FL_ENGRAVED_LABEL,
-  fl_normal_label,	// _FL_EMBOSSED_LABEL,
-  fl_no_label,		// _FL_MULTI_LABEL,
-  fl_no_label,		// _FL_ICON_LABEL,
+  fl_shadow_label,	// FL_SHADOW_LABEL,
+  fl_engraved_label,	// FL_ENGRAVED_LABEL,
+  fl_embossed_label,	// _FL_EMBOSSED_LABEL,
+  fl_multi_labeltype,		// _FL_MULTI_LABEL,
+  fl_icon_labeltype,		// _FL_ICON_LABEL,
   // fltk3::FREE_LABELTYPE+n:
   fl_no_label, fl_no_label, fl_no_label,
   fl_no_label, fl_no_label, fl_no_label,

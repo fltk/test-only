@@ -48,15 +48,13 @@ static void innards(
   if (align & fltk3::ALIGN_CLIP) fltk3::pop_clip();
 }
 
-static void fl_shadow_label(
-    const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
+void fl_shadow_label(const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
   static int data[2][3] = {{2,2,fltk3::DARK3},{0,0,0}};
   innards(o, X, Y, W, H, align, data, 2);
 }
 
-static void fl_engraved_label(
-    const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
+void fl_engraved_label(const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
   static int data[7][3] = {
     {1,0,fltk3::LIGHT3},{1,1,fltk3::LIGHT3},{0,1,fltk3::LIGHT3},
@@ -65,8 +63,7 @@ static void fl_engraved_label(
   innards(o, X, Y, W, H, align, data, 7);
 }
 
-static void fl_embossed_label(
-    const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
+void fl_embossed_label(const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align)
 {
   static int data[7][3] = {
     {-1,0,fltk3::LIGHT3},{-1,-1,fltk3::LIGHT3},{0,-1,fltk3::LIGHT3},

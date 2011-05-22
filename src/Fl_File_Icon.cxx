@@ -468,8 +468,7 @@ void fltk3::FileIcon::label(fltk3::Widget *w)	// I - Widget to label
   \param[in] x, y, w, h position and size of label
   \param[in] a label alignment [not used]
 */
-void
-fltk3::FileIcon::labeltype(const fltk3::Label *o,	// I - Label data
+void fl_icon_labeltype(const fltk3::Label *o,	// I - Label data
                 	int            x,	// I - X position of label
 			int            y,	// I - Y position of label
 			int            w,	// I - Width of label
