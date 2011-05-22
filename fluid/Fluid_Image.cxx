@@ -57,7 +57,7 @@ void Fluid_Image::write_static() {
     // Write Pixmap data...
     write_c("\n");
     if (pixmap_header_written != write_number) {
-      write_c("#include <fltk3/Pixmap.h>\n");
+      write_c("#include <fltk3/fltk3::Pixmap.h>\n");
       pixmap_header_written = write_number;
     }
     write_c("static const char *%s[] = {\n",
@@ -90,14 +90,14 @@ void Fluid_Image::write_static() {
     // Write Bitmap data...
     write_c("\n");
     if (bitmap_header_written != write_number) {
-      write_c("#include <fltk3/Bitmap.h>\n");
+      write_c("#include <fltk3/Fl_Bitmap.h>\n");
       bitmap_header_written = write_number;
     }
     write_c("static unsigned char %s[] =\n",
 	    unique_id(this, "idata", fl_filename_name(name()), 0));
     write_cdata(img->data()[0], ((img->w() + 7) / 8) * img->h());
     write_c(";\n");
-    write_c("static fltk3::Bitmap %s(%s, %d, %d);\n",
+    write_c("static Fl_Bitmap %s(%s, %d, %d);\n",
 	    unique_id(this, "image", fl_filename_name(name()), 0),
 	    unique_id(this, "idata", fl_filename_name(name()), 0),
 	    img->w(), img->h());
@@ -105,7 +105,7 @@ void Fluid_Image::write_static() {
     // Write jpeg image data...
     write_c("\n");
     if (jpeg_header_written != write_number) {
-      write_c("#include <fltk3/JPEGImage.h>\n");
+      write_c("#include <fltk3/Fl_JPEG_Image.h>\n");
       jpeg_header_written = write_number;
     }
     write_c("static unsigned char %s[] =\n",
@@ -128,7 +128,7 @@ void Fluid_Image::write_static() {
     }
     
     write_c(";\n");
-    write_c("static fltk3::JPEGImage %s(\"%s\", %s);\n",
+    write_c("static Fl_JPEG_Image %s(\"%s\", %s);\n",
 	    unique_id(this, "image", fl_filename_name(name()), 0),
 	    fl_filename_name(name()),
 	    unique_id(this, "idata", fl_filename_name(name()), 0));
@@ -136,14 +136,14 @@ void Fluid_Image::write_static() {
     // Write image data...
     write_c("\n");
     if (image_header_written != write_number) {
-      write_c("#include <fltk3/Image.h>\n");
+      write_c("#include <fltk3/Fl_Image.h>\n");
       image_header_written = write_number;
     }
     write_c("static unsigned char %s[] =\n",
 	    unique_id(this, "idata", fl_filename_name(name()), 0));
     write_cdata(img->data()[0], (img->w() * img->d() + img->ld()) * img->h());
     write_c(";\n");
-    write_c("static fltk3::RGBImage %s(%s, %d, %d, %d, %d);\n",
+    write_c("static Fl_RGB_Image %s(%s, %d, %d, %d, %d);\n",
 	    unique_id(this, "image", fl_filename_name(name()), 0),
 	    unique_id(this, "idata", fl_filename_name(name()), 0),
 	    img->w(), img->h(), img->d(), img->ld());
@@ -246,9 +246,9 @@ Fluid_Image::~Fluid_Image() {
 const char *ui_find_image_name;
 Fluid_Image *ui_find_image(const char *oldname) {
   goto_source_dir();
-  fltk3::file_chooser_ok_label("Use Image");
-  const char *name = fltk3::file_chooser("Image?","Image Files (*.{bm,bmp,gif,jpg,pbm,pgm,png,ppm,xbm,xpm})",oldname,1);
-  fltk3::file_chooser_ok_label(NULL);
+  fl_file_chooser_ok_label("Use Image");
+  const char *name = fl_file_chooser("Image?","Image Files (*.{bm,bmp,gif,jpg,pbm,pgm,png,ppm,xbm,xpm})",oldname,1);
+  fl_file_chooser_ok_label(NULL);
   ui_find_image_name = name;
   Fluid_Image *ret = (name && *name) ? Fluid_Image::find(name) : 0;
   leave_source_dir();

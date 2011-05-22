@@ -521,10 +521,10 @@ void widget_size_cb(fltk3::Widget *, long size) {
       }
 
       fltk3::Widget *w = ((Fl_Widget_Type *)o)->o;
-      w->labelsize((fltk3::Font)size);
-      fltk3::Font f;
+      w->labelsize((Fl_Font)size);
+      Fl_Font f;
       int s = (int)size;
-      fltk3::Color c;
+      Fl_Color c;
       ((Fl_Widget_Type *)o)->textstuff(2, f, s, c);
 
       w->redraw();

@@ -31,10 +31,7 @@
 
 #include "Fl_Type.h"
 
-namespace fltk3 {
-  struct MenuItem;
-}
-
+struct fltk3::MenuItem;
 class Fluid_Image;
 
 extern void* const LOAD;

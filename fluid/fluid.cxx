@@ -104,8 +104,8 @@ int show_comments = 1;
 int show_coredevmenus = 1;
 
 // File history info...
-char	absolute_history[10][FLTK3_PATH_MAX];
-char	relative_history[10][FLTK3_PATH_MAX];
+char	absolute_history[10][FL_PATH_MAX];
+char	relative_history[10][FL_PATH_MAX];
 
 void	load_history();
 void	update_history(const char *);
@@ -132,11 +132,11 @@ void goto_source_dir() {
   if (!filename || !*filename) return;
   const char *p = fl_filename_name(filename);
   if (p <= filename) return; // it is in the current directory
-  char buffer[FLTK3_PATH_MAX];
+  char buffer[FL_PATH_MAX];
   strlcpy(buffer, filename, sizeof(buffer));
   int n = p-filename; if (n>1) n--; buffer[n] = 0;
   if (!pwd) {
-    pwd = getcwd(0,FLTK3_PATH_MAX);
+    pwd = getcwd(0,FL_PATH_MAX);
     if (!pwd) {fprintf(stderr,"getwd : %s\n",strerror(errno)); return;}
   }
   if (chdir(buffer)<0) {fprintf(stderr, "Can't chdir to %s : %s\n",
@@ -181,7 +181,7 @@ fltk3::Window *main_window;
 fltk3::MenuBar *main_menubar;
 
 static char* cutfname(int which = 0) {
-  static char name[2][FLTK3_PATH_MAX];
+  static char name[2][FL_PATH_MAX];
   static char beenhere = 0;
 
   if (!beenhere) {
@@ -198,9 +198,9 @@ static char* cutfname(int which = 0) {
 void save_cb(fltk3::Widget *, void *v) {
   const char *c = filename;
   if (v || !c || !*c) {
-    fltk3::file_chooser_ok_label("Save");
-    c=fltk3::file_chooser("Save To:", "FLUID Files (*.f[ld])", c);
-    fltk3::file_chooser_ok_label(NULL);
+    fl_file_chooser_ok_label("Save");
+    c=fl_file_chooser("Save To:", "FLUID Files (*.f[ld])", c);
+    fl_file_chooser_ok_label(NULL);
     if (!c) return;
 
     if (!access(c, 0)) {
@@ -214,7 +214,7 @@ void save_cb(fltk3::Widget *, void *v) {
       else
         basename = c;
 
-      if (fltk3::choice("The file \"%s\" already exists.\n"
+      if (fl_choice("The file \"%s\" already exists.\n"
                     "Do you want to replace it?", "Cancel",
 		    "Replace", NULL, basename) == 0) return;
     }
@@ -222,7 +222,7 @@ void save_cb(fltk3::Widget *, void *v) {
     if (v != (void *)2) set_filename(c);
   }
   if (!write_file(c)) {
-    fltk3::alert("Error writing %s: %s", c, strerror(errno));
+    fl_alert("Error writing %s: %s", c, strerror(errno));
     return;
   }
 
@@ -255,21 +255,21 @@ void save_template_cb(fltk3::Widget *, void *) {
 
   // Show the panel and wait for the user to do something...
   template_panel->show();
-  while (template_panel->shown()) fltk3::wait();
+  while (template_panel->shown()) Fl::wait();
 
   // Get the template name, return if it is empty...
   const char *c = template_name->value();
   if (!c || !*c) return;
 
   // Convert template name to filename_with_underscores
-  char safename[FLTK3_PATH_MAX], *safeptr;
+  char safename[FL_PATH_MAX], *safeptr;
   strlcpy(safename, c, sizeof(safename));
   for (safeptr = safename; *safeptr; safeptr ++) {
     if (isspace(*safeptr)) *safeptr = '_';
   }
 
   // Find the templates directory...
-  char filename[FLTK3_PATH_MAX];
+  char filename[FL_PATH_MAX];
   fluid_prefs.getUserdataPath(filename, sizeof(filename));
 
   strlcat(filename, "templates", sizeof(filename));
@@ -284,7 +284,7 @@ void save_template_cb(fltk3::Widget *, void *) {
 
   char *ext = filename + strlen(filename);
   if (ext >= (filename + sizeof(filename) - 5)) {
-    fltk3::alert("The template name \"%s\" is too long!", c);
+    fl_alert("The template name \"%s\" is too long!", c);
     return;
   }
 
@@ -292,13 +292,13 @@ void save_template_cb(fltk3::Widget *, void *) {
   strcpy(ext, ".fl");
 
   if (!access(filename, 0)) {
-    if (fltk3::choice("The template \"%s\" already exists.\n"
+    if (fl_choice("The template \"%s\" already exists.\n"
                   "Do you want to replace it?", "Cancel",
 		  "Replace", NULL, c) == 0) return;
   }
 
   if (!write_file(filename)) {
-    fltk3::alert("Error writing %s: %s", filename, strerror(errno));
+    fl_alert("Error writing %s: %s", filename, strerror(errno));
     return;
   }
 
@@ -327,7 +327,7 @@ void save_template_cb(fltk3::Widget *, void *) {
 
   if ((fp = fl_fopen(filename, "wb")) == NULL) {
     delete[] pixels;
-    fltk3::alert("Error writing %s: %s", filename, strerror(errno));
+    fl_alert("Error writing %s: %s", filename, strerror(errno));
     return;
   }
 
@@ -365,7 +365,7 @@ void save_template_cb(fltk3::Widget *, void *) {
 
 void revert_cb(fltk3::Widget *,void *) {
   if (modflag) {
-    if (!fltk3::choice("This user interface has been changed. Really revert?",
+    if (!fl_choice("This user interface has been changed. Really revert?",
                    "Cancel", "Revert", NULL)) return;
   }
   undo_suspend();
@@ -381,7 +381,7 @@ void revert_cb(fltk3::Widget *,void *) {
 
 void exit_cb(fltk3::Widget *,void *) {
   if (modflag)
-    switch (fltk3::choice("Do you want to save changes to this user\n"
+    switch (fl_choice("Do you want to save changes to this user\n"
                       "interface before exiting?", "Cancel",
                       "Save", "Don't Save"))
     {
@@ -422,7 +422,7 @@ void exit_cb(fltk3::Widget *,void *) {
 void
 apple_open_cb(const char *c) {
   if (modflag) {
-    switch (fltk3::choice("Do you want to save changes to this user\n"
+    switch (fl_choice("Do you want to save changes to this user\n"
                       "interface before opening another one?", "Don't Save",
                       "Save", "Cancel"))
     {
@@ -457,7 +457,7 @@ apple_open_cb(const char *c) {
 
 void open_cb(fltk3::Widget *, void *v) {
   if (!v && modflag) {
-    switch (fltk3::choice("Do you want to save changes to this user\n"
+    switch (fl_choice("Do you want to save changes to this user\n"
                       "interface before opening another one?", "Cancel",
                       "Save", "Don't Save"))
     {
@@ -470,9 +470,9 @@ void open_cb(fltk3::Widget *, void *v) {
   }
   const char *c;
   const char *oldfilename;
-  fltk3::file_chooser_ok_label("Open");
-  c = fltk3::file_chooser("Open:", "FLUID Files (*.f[ld])", filename);
-  fltk3::file_chooser_ok_label(NULL);
+  fl_file_chooser_ok_label("Open");
+  c = fl_file_chooser("Open:", "FLUID Files (*.f[ld])", filename);
+  fl_file_chooser_ok_label(NULL);
   if (!c) return;
   oldfilename = filename;
   filename    = NULL;
@@ -503,7 +503,7 @@ void open_cb(fltk3::Widget *, void *v) {
 
 void open_history_cb(fltk3::Widget *, void *v) {
   if (modflag) {
-    switch (fltk3::choice("Do you want to save changes to this user\n"
+    switch (fl_choice("Do you want to save changes to this user\n"
                       "interface before opening another one?", "Cancel",
                       "Save", "Don't Save"))
     {
@@ -537,7 +537,7 @@ void new_cb(fltk3::Widget *, void *v) {
   // Check if the current file has been modified...
   if (!v && modflag) {
     // Yes, ask the user what to do...
-    switch (fltk3::choice("Do you want to save changes to this user\n"
+    switch (fl_choice("Do you want to save changes to this user\n"
                       "interface before creating a new one?", "Cancel",
                       "Save", "Don't Save"))
     {
@@ -572,7 +572,7 @@ void new_cb(fltk3::Widget *, void *v) {
 
   // Show the panel and wait for the user to do something...
   template_panel->show();
-  while (template_panel->shown()) fltk3::wait();
+  while (template_panel->shown()) Fl::wait();
 
   // See if the user chose anything...
   int item = template_browser->value();
@@ -595,7 +595,7 @@ void new_cb(fltk3::Widget *, void *v) {
       FILE *infile, *outfile;
 
       if ((infile = fl_fopen(tname, "r")) == NULL) {
-	fltk3::alert("Error reading template file \"%s\":\n%s", tname,
+	fl_alert("Error reading template file \"%s\":\n%s", tname,
         	 strerror(errno));
 	set_modflag(0);
 	undo_clear();
@@ -603,7 +603,7 @@ void new_cb(fltk3::Widget *, void *v) {
       }
 
       if ((outfile = fl_fopen(cutfname(1), "w")) == NULL) {
-	fltk3::alert("Error writing buffer file \"%s\":\n%s", cutfname(1),
+	fl_alert("Error writing buffer file \"%s\":\n%s", cutfname(1),
         	 strerror(errno));
 	fclose(infile);
 	set_modflag(0);
@@ -652,15 +652,15 @@ const char* i18n_include = "";
 const char* i18n_function = "";
 const char* i18n_file = "";
 const char* i18n_set = "";
-char i18n_program[FLTK3_PATH_MAX] = "";
+char i18n_program[FL_PATH_MAX] = "";
 
 void write_cb(fltk3::Widget *, void *) {
   if (!filename) {
     save_cb(0,0);
     if (!filename) return;
   }
-  char cname[FLTK3_PATH_MAX];
-  char hname[FLTK3_PATH_MAX];
+  char cname[FL_PATH_MAX];
+  char hname[FL_PATH_MAX];
   strlcpy(i18n_program, fl_filename_name(filename), sizeof(i18n_program));
   fl_filename_setext(i18n_program, sizeof(i18n_program), "");
   if (*code_file_name == '.' && strchr(code_file_name, '/') == NULL) {
@@ -697,7 +697,7 @@ void write_strings_cb(fltk3::Widget *, void *) {
     save_cb(0,0);
     if (!filename) return;
   }
-  char sname[FLTK3_PATH_MAX];
+  char sname[FL_PATH_MAX];
   strlcpy(sname, fl_filename_name(filename), sizeof(sname));
   fl_filename_setext(sname, sizeof(sname), exts[i18n_type]);
   if (!compile_only) goto_source_dir();
@@ -736,7 +736,7 @@ static int ipasteoffset;
 
 void copy_cb(fltk3::Widget*, void*) {
   if (!Fl_Type::current) {
-    fltk3::beep();
+    fl_beep();
     return;
   }
   ipasteoffset = 10;
@@ -749,7 +749,7 @@ void copy_cb(fltk3::Widget*, void*) {
 extern void select_only(Fl_Type *);
 void cut_cb(fltk3::Widget *, void *) {
   if (!Fl_Type::current) {
-    fltk3::beep();
+    fl_beep();
     return;
   }
   if (!write_file(cutfname(),1)) {
@@ -767,7 +767,7 @@ void cut_cb(fltk3::Widget *, void *) {
 
 void delete_cb(fltk3::Widget *, void *) {
   if (!Fl_Type::current) {
-    fltk3::beep();
+    fl_beep();
     return;
   }
   undo_checkpoint();
@@ -800,7 +800,7 @@ void paste_cb(fltk3::Widget*, void*) {
 // Duplicate the selected widgets...
 void duplicate_cb(fltk3::Widget*, void*) {
   if (!Fl_Type::current) {
-    fltk3::beep();
+    fl_beep();
     return;
   }
 
@@ -848,14 +848,14 @@ void about_cb(fltk3::Widget *, void *) {
 
 void show_help(const char *name) {
   const char	*docdir;
-  char		helpname[FLTK3_PATH_MAX];
+  char		helpname[FL_PATH_MAX];
 
   if (!help_dialog) help_dialog = new fltk3::HelpDialog();
 
   if ((docdir = getenv("FLTK_DOCDIR")) == NULL) {
 #ifdef __EMX__
     // Doesn't make sense to have a hardcoded fallback
-    static char fltk_docdir[FLTK3_PATH_MAX];
+    static char fltk_docdir[FL_PATH_MAX];
 
     strlcpy(fltk_docdir, __XOS2RedirRoot("/XFree86/lib/X11/fltk/doc"),
             sizeof(fltk_docdir));
@@ -935,15 +935,15 @@ void manual_cb(fltk3::Widget *, void *) {
 // Draw a shaded box...
 static void win_box(int x, int y, int w, int h) {
   fltk3::color(0xc0, 0xc0, 0xc0);
-  fltk3::rectf(x, y, w, h);
+  fl_rectf(x, y, w, h);
   fltk3::color(0, 0, 0);
-  fltk3::rect(x, y, w, h);
+  fl_rect(x, y, w, h);
   fltk3::color(0xf0, 0xf0, 0xf0);
-  fltk3::rectf(x + 1, y + 1, 4, h - 2);
-  fltk3::rectf(x + 1, y + 1, w - 2, 4);
+  fl_rectf(x + 1, y + 1, 4, h - 2);
+  fl_rectf(x + 1, y + 1, w - 2, 4);
   fltk3::color(0x90, 0x90, 0x90);
-  fltk3::rectf(x + w - 5, y + 1, 4, h - 2);
-  fltk3::rectf(x + 1, y + h - 5, w - 2, 4);
+  fl_rectf(x + w - 5, y + 1, 4, h - 2);
+  fl_rectf(x + 1, y + h - 5, w - 2, 4);
 }
 
 // Load and show the print dialog...
@@ -1042,7 +1042,7 @@ void print_menu_cb(fltk3::Widget *, void *) {
 
   fl_gc = dialog.hDC;
   fl_window = (HWND)dialog.hDC;
-  fltk3::push_no_clip();
+  fl_push_no_clip();
 
   // Get the time and date...
   time_t curtime = time(NULL);
@@ -1056,15 +1056,15 @@ void print_menu_cb(fltk3::Widget *, void *) {
     // Draw header...
     StartPage(dialog.hDC);
 
-    fltk3::font(fltk3::HELVETICA_BOLD, fontsize);
+    fltk3::font(FL_HELVETICA_BOLD, fontsize);
     fltk3::color(0, 0, 0);
 
-    fltk3::draw(basename, 0, fontsize);
+    fl_draw(basename, 0, fontsize);
 
-    fltk3::draw(date, (width - (int)fltk3::width(date)) / 2, fontsize);
+    fl_draw(date, (width - (int)fltk3::width(date)) / 2, fontsize);
 
     sprintf(buffer, "%d/%d", winpage + 1, num_windows);
-    fltk3::draw(buffer, width - (int)fltk3::width(buffer), fontsize);
+    fl_draw(buffer, width - (int)fltk3::width(buffer), fontsize);
 
     // Get window image...
     uchar	*pixels;		// Window image data
@@ -1115,34 +1115,34 @@ void print_menu_cb(fltk3::Widget *, void *) {
             ww + 2 * xborder, hh + 6 * yborder);
 
     fltk3::color(0, 0, 255);
-    fltk3::rectf(ulx, uly - 4 * yborder, ww, 4 * yborder);
+    fl_rectf(ulx, uly - 4 * yborder, ww, 4 * yborder);
 
-    fltk3::font(fltk3::HELVETICA_BOLD, 2 * yborder);
+    fltk3::font(FL_HELVETICA_BOLD, 2 * yborder);
     fltk3::color(255, 255, 255);
-    fltk3::draw(win->label() ? win->label() : "Window",
+    fl_draw(win->label() ? win->label() : "Window",
             ulx + xborder, uly - 3 * yborder);
 
     int x = ulx + ww - 4 * xborder;
 
     win_box(x, uly - 4 * yborder, 4 * xborder, 4 * yborder);
     fltk3::color(0, 0, 0);
-    fltk3::line(x + xborder, uly - yborder,
+    fl_line(x + xborder, uly - yborder,
             x + 3 * xborder, uly - 3 * yborder);
-    fltk3::line(x + xborder, uly - 3 * yborder,
+    fl_line(x + xborder, uly - 3 * yborder,
             x + 3 * xborder, uly - yborder);
     x -= 4 * xborder;
 
     if (win->resizable()) {
       win_box(x, uly - 4 * yborder, 4 * xborder, 4 * yborder);
       fltk3::color(0, 0, 0);
-      fltk3::rect(x + xborder, uly - 3 * yborder, 2 * xborder, 2 * yborder);
+      fl_rect(x + xborder, uly - 3 * yborder, 2 * xborder, 2 * yborder);
       x -= 4 * xborder;
     }
 
     if (!win->modal()) {
       win_box(x, uly - 4 * yborder, 4 * xborder, 4 * yborder);
       fltk3::color(0, 0, 0);
-      fltk3::line(x + xborder, uly - yborder, x + 3 * xborder, uly - yborder);
+      fl_line(x + xborder, uly - yborder, x + 3 * xborder, uly - yborder);
       x -= 4 * xborder;
     }
 
@@ -1171,7 +1171,7 @@ void print_menu_cb(fltk3::Widget *, void *) {
 
   fl_gc = save_dc;
   fl_window = save_win;
-  fltk3::pop_clip();
+  fl_pop_clip();
 
   // Free the print DC and return...
   DeleteDC(dialog.hDC);
@@ -1201,7 +1201,7 @@ void print_menu_cb(fltk3::Widget *, void *) {
 // Quote a string for PostScript printing
 static const char *ps_string(const char *s) {
   char *bufptr;
-  static char buffer[FLTK3_PATH_MAX];
+  static char buffer[FL_PATH_MAX];
 
 
   if (!s) {
@@ -1273,7 +1273,7 @@ void print_cb(fltk3::ReturnButton *, void *) {
   print_progress->minimum(0);
   print_progress->maximum(num_pages);
   print_progress->value(0);
-  fltk3::check();
+  Fl::check();
 
   // Get the base filename...
   const char *basename = strrchr(filename, '/');
@@ -1291,12 +1291,12 @@ void print_cb(fltk3::ReturnButton *, void *) {
     outfile = popen(command, "w");
   } else {
     // Print to file...
-    fltk3::file_chooser_ok_label("Print");
-    const char *outname = fltk3::file_chooser("Print To", "PostScript (*.ps)", NULL, 1);
-    fltk3::file_chooser_ok_label(NULL);
+    fl_file_chooser_ok_label("Print");
+    const char *outname = fl_file_chooser("Print To", "PostScript (*.ps)", NULL, 1);
+    fl_file_chooser_ok_label(NULL);
 
     if (outname && !access(outname, 0)) {
-      if (fltk3::choice("The file \"%s\" already exists.\n"
+      if (fl_choice("The file \"%s\" already exists.\n"
                     "Do you want to replace it?", "Cancel",
 		    "Replace", NULL, outname) == 0) outname = NULL;
     }
@@ -1400,7 +1400,7 @@ void print_cb(fltk3::ReturnButton *, void *) {
 	sprintf(progress, "Printing page %d/%d...", page, num_pages);
 	print_progress->value(page);
 	print_progress->label(progress);
-	fltk3::check();
+	Fl::check();
 
         // Add common page stuff...
 	fprintf(outfile,
@@ -1619,7 +1619,7 @@ void print_cb(fltk3::ReturnButton *, void *) {
     else fclose(outfile);
   } else {
     // Unable to print...
-    fltk3::alert("Error printing: %s", strerror(errno));
+    fl_alert("Error printing: %s", strerror(errno));
   }
 
   // Hide progress, activate controls, hide print panel...
@@ -1637,93 +1637,93 @@ void toggle_widgetbin_cb(fltk3::Widget *, void *);
 void toggle_sourceview_cb(fltk3::DoubleWindow *, void *);
 
 fltk3::MenuItem Main_Menu[] = {
-{"&File",0,0,0,fltk3::SUBMENU},
-  {"&New...", fltk3::COMMAND+'n', new_cb, 0},
-  {"&Open...", fltk3::COMMAND+'o', open_cb, 0},
-  {"&Insert...", fltk3::COMMAND+'i', open_cb, (void*)1, fltk3::MENU_DIVIDER},
-  {"&Save", fltk3::COMMAND+'s', save_cb, 0},
-  {"Save &As...", fltk3::COMMAND+fltk3::SHIFT+'s', save_cb, (void*)1},
+{"&File",0,0,0,FL_SUBMENU},
+  {"&New...", FL_COMMAND+'n', new_cb, 0},
+  {"&Open...", FL_COMMAND+'o', open_cb, 0},
+  {"&Insert...", FL_COMMAND+'i', open_cb, (void*)1, FL_MENU_DIVIDER},
+  {"&Save", FL_COMMAND+'s', save_cb, 0},
+  {"Save &As...", FL_COMMAND+FL_SHIFT+'s', save_cb, (void*)1},
   {"Sa&ve A Copy...", 0, save_cb, (void*)2},
   {"Save &Template...", 0, save_template_cb},
-  {"&Revert...", 0, revert_cb, 0, fltk3::MENU_DIVIDER},
-  {"&Print...", fltk3::COMMAND+'p', print_menu_cb},
-  {"Write &Code...", fltk3::COMMAND+fltk3::SHIFT+'c', write_cb, 0},
-  {"&Write Strings...", fltk3::COMMAND+fltk3::SHIFT+'w', write_strings_cb, 0, fltk3::MENU_DIVIDER},
-  {relative_history[0], fltk3::COMMAND+'0', open_history_cb, absolute_history[0]},
-  {relative_history[1], fltk3::COMMAND+'1', open_history_cb, absolute_history[1]},
-  {relative_history[2], fltk3::COMMAND+'2', open_history_cb, absolute_history[2]},
-  {relative_history[3], fltk3::COMMAND+'3', open_history_cb, absolute_history[3]},
-  {relative_history[4], fltk3::COMMAND+'4', open_history_cb, absolute_history[4]},
-  {relative_history[5], fltk3::COMMAND+'5', open_history_cb, absolute_history[5]},
-  {relative_history[6], fltk3::COMMAND+'6', open_history_cb, absolute_history[6]},
-  {relative_history[7], fltk3::COMMAND+'7', open_history_cb, absolute_history[7]},
-  {relative_history[8], fltk3::COMMAND+'8', open_history_cb, absolute_history[8]},
-  {relative_history[9], fltk3::COMMAND+'9', open_history_cb, absolute_history[9], fltk3::MENU_DIVIDER},
-  {"&Quit", fltk3::COMMAND+'q', exit_cb},
+  {"&Revert...", 0, revert_cb, 0, FL_MENU_DIVIDER},
+  {"&Print...", FL_COMMAND+'p', print_menu_cb},
+  {"Write &Code...", FL_COMMAND+FL_SHIFT+'c', write_cb, 0},
+  {"&Write Strings...", FL_COMMAND+FL_SHIFT+'w', write_strings_cb, 0, FL_MENU_DIVIDER},
+  {relative_history[0], FL_COMMAND+'0', open_history_cb, absolute_history[0]},
+  {relative_history[1], FL_COMMAND+'1', open_history_cb, absolute_history[1]},
+  {relative_history[2], FL_COMMAND+'2', open_history_cb, absolute_history[2]},
+  {relative_history[3], FL_COMMAND+'3', open_history_cb, absolute_history[3]},
+  {relative_history[4], FL_COMMAND+'4', open_history_cb, absolute_history[4]},
+  {relative_history[5], FL_COMMAND+'5', open_history_cb, absolute_history[5]},
+  {relative_history[6], FL_COMMAND+'6', open_history_cb, absolute_history[6]},
+  {relative_history[7], FL_COMMAND+'7', open_history_cb, absolute_history[7]},
+  {relative_history[8], FL_COMMAND+'8', open_history_cb, absolute_history[8]},
+  {relative_history[9], FL_COMMAND+'9', open_history_cb, absolute_history[9], FL_MENU_DIVIDER},
+  {"&Quit", FL_COMMAND+'q', exit_cb},
   {0},
-{"&Edit",0,0,0,fltk3::SUBMENU},
-  {"&Undo", fltk3::COMMAND+'z', undo_cb},
-  {"&Redo", fltk3::COMMAND+fltk3::SHIFT+'z', redo_cb, 0, fltk3::MENU_DIVIDER},
-  {"C&ut", fltk3::COMMAND+'x', cut_cb},
-  {"&Copy", fltk3::COMMAND+'c', copy_cb},
-  {"&Paste", fltk3::COMMAND+'v', paste_cb},
-  {"Dup&licate", fltk3::COMMAND+'u', duplicate_cb},
-  {"&Delete", fltk3::DeleteKey, delete_cb, 0, fltk3::MENU_DIVIDER},
-  {"Select &All", fltk3::COMMAND+'a', select_all_cb},
-  {"Select &None", fltk3::COMMAND+fltk3::SHIFT+'a', select_none_cb, 0, fltk3::MENU_DIVIDER},
-  {"Pr&operties...", fltk3::FKey+1, openwidget_cb},
+{"&Edit",0,0,0,FL_SUBMENU},
+  {"&Undo", FL_COMMAND+'z', undo_cb},
+  {"&Redo", FL_COMMAND+FL_SHIFT+'z', redo_cb, 0, FL_MENU_DIVIDER},
+  {"C&ut", FL_COMMAND+'x', cut_cb},
+  {"&Copy", FL_COMMAND+'c', copy_cb},
+  {"&Paste", FL_COMMAND+'v', paste_cb},
+  {"Dup&licate", FL_COMMAND+'u', duplicate_cb},
+  {"&Delete", FL_Delete, delete_cb, 0, FL_MENU_DIVIDER},
+  {"Select &All", FL_COMMAND+'a', select_all_cb},
+  {"Select &None", FL_COMMAND+FL_SHIFT+'a', select_none_cb, 0, FL_MENU_DIVIDER},
+  {"Pr&operties...", FL_F+1, openwidget_cb},
   {"&Sort",0,sort_cb},
-  {"&Earlier", fltk3::FKey+2, earlier_cb},
-  {"&Later", fltk3::FKey+3, later_cb},
-  {"&Group", fltk3::FKey+7, group_cb},
-  {"Ung&roup", fltk3::FKey+8, ungroup_cb,0, fltk3::MENU_DIVIDER},
-  {"Hide O&verlays",fltk3::COMMAND+fltk3::SHIFT+'o',toggle_overlays},
-  {"Show Widget &Bin...",fltk3::ALT+'b',toggle_widgetbin_cb},
-  {"Show Source Code...",fltk3::ALT+fltk3::SHIFT+'s', (fltk3::Callback*)toggle_sourceview_cb, 0, fltk3::MENU_DIVIDER},
-  {"Pro&ject Settings...",fltk3::ALT+'p',show_project_cb},
-  {"GU&I Settings...",fltk3::ALT+fltk3::SHIFT+'p',show_settings_cb,0,fltk3::MENU_DIVIDER},
-  {"Global &FLTK Settings...",fltk3::ALT+fltk3::SHIFT+'g',show_global_settings_cb},
+  {"&Earlier", FL_F+2, earlier_cb},
+  {"&Later", FL_F+3, later_cb},
+  {"&Group", FL_F+7, group_cb},
+  {"Ung&roup", FL_F+8, ungroup_cb,0, FL_MENU_DIVIDER},
+  {"Hide O&verlays",FL_COMMAND+FL_SHIFT+'o',toggle_overlays},
+  {"Show Widget &Bin...",FL_ALT+'b',toggle_widgetbin_cb},
+  {"Show Source Code...",FL_ALT+FL_SHIFT+'s', (Fl_Callback*)toggle_sourceview_cb, 0, FL_MENU_DIVIDER},
+  {"Pro&ject Settings...",FL_ALT+'p',show_project_cb},
+  {"GU&I Settings...",FL_ALT+FL_SHIFT+'p',show_settings_cb,0,FL_MENU_DIVIDER},
+  {"Global &FLTK Settings...",FL_ALT+FL_SHIFT+'g',show_global_settings_cb},
   {0},
-{"&New", 0, 0, (void *)New_Menu, fltk3::SUBMENU_POINTER},
-{"&Layout",0,0,0,fltk3::SUBMENU},
-  {"&Align",0,0,0,fltk3::SUBMENU},
-    {"&Left",0,(fltk3::Callback *)align_widget_cb,(void*)10},
-    {"&Center",0,(fltk3::Callback *)align_widget_cb,(void*)11},
-    {"&Right",0,(fltk3::Callback *)align_widget_cb,(void*)12},
-    {"&Top",0,(fltk3::Callback *)align_widget_cb,(void*)13},
-    {"&Middle",0,(fltk3::Callback *)align_widget_cb,(void*)14},
-    {"&Bottom",0,(fltk3::Callback *)align_widget_cb,(void*)15},
+{"&New", 0, 0, (void *)New_Menu, FL_SUBMENU_POINTER},
+{"&Layout",0,0,0,FL_SUBMENU},
+  {"&Align",0,0,0,FL_SUBMENU},
+    {"&Left",0,(Fl_Callback *)align_widget_cb,(void*)10},
+    {"&Center",0,(Fl_Callback *)align_widget_cb,(void*)11},
+    {"&Right",0,(Fl_Callback *)align_widget_cb,(void*)12},
+    {"&Top",0,(Fl_Callback *)align_widget_cb,(void*)13},
+    {"&Middle",0,(Fl_Callback *)align_widget_cb,(void*)14},
+    {"&Bottom",0,(Fl_Callback *)align_widget_cb,(void*)15},
     {0},
-  {"&Space Evenly",0,0,0,fltk3::SUBMENU},
-    {"&Across",0,(fltk3::Callback *)align_widget_cb,(void*)20},
-    {"&Down",0,(fltk3::Callback *)align_widget_cb,(void*)21},
+  {"&Space Evenly",0,0,0,FL_SUBMENU},
+    {"&Across",0,(Fl_Callback *)align_widget_cb,(void*)20},
+    {"&Down",0,(Fl_Callback *)align_widget_cb,(void*)21},
     {0},
-  {"&Make Same Size",0,0,0,fltk3::SUBMENU},
-    {"&Width",0,(fltk3::Callback *)align_widget_cb,(void*)30},
-    {"&Height",0,(fltk3::Callback *)align_widget_cb,(void*)31},
-    {"&Both",0,(fltk3::Callback *)align_widget_cb,(void*)32},
+  {"&Make Same Size",0,0,0,FL_SUBMENU},
+    {"&Width",0,(Fl_Callback *)align_widget_cb,(void*)30},
+    {"&Height",0,(Fl_Callback *)align_widget_cb,(void*)31},
+    {"&Both",0,(Fl_Callback *)align_widget_cb,(void*)32},
     {0},
-  {"&Center In Group",0,0,0,fltk3::SUBMENU},
-    {"&Horizontal",0,(fltk3::Callback *)align_widget_cb,(void*)40},
-    {"&Vertical",0,(fltk3::Callback *)align_widget_cb,(void*)41},
+  {"&Center In Group",0,0,0,FL_SUBMENU},
+    {"&Horizontal",0,(Fl_Callback *)align_widget_cb,(void*)40},
+    {"&Vertical",0,(Fl_Callback *)align_widget_cb,(void*)41},
     {0},
-  {"Set &Widget Size",0,0,0,fltk3::SUBMENU|fltk3::MENU_DIVIDER},
-    {"&Tiny",fltk3::ALT+'1',(fltk3::Callback *)widget_size_cb,(void*)8,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,8},
-    {"&Small",fltk3::ALT+'2',(fltk3::Callback *)widget_size_cb,(void*)11,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,11},
-    {"&Normal",fltk3::ALT+'3',(fltk3::Callback *)widget_size_cb,(void*)14,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,14},
-    {"&Medium",fltk3::ALT+'4',(fltk3::Callback *)widget_size_cb,(void*)18,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,18},
-    {"&Large",fltk3::ALT+'5',(fltk3::Callback *)widget_size_cb,(void*)24,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,24},
-    {"&Huge",fltk3::ALT+'6',(fltk3::Callback *)widget_size_cb,(void*)32,0,fltk3::NORMAL_LABEL,fltk3::HELVETICA,32},
+  {"Set &Widget Size",0,0,0,FL_SUBMENU|FL_MENU_DIVIDER},
+    {"&Tiny",FL_ALT+'1',(Fl_Callback *)widget_size_cb,(void*)8,0,FL_NORMAL_LABEL,FL_HELVETICA,8},
+    {"&Small",FL_ALT+'2',(Fl_Callback *)widget_size_cb,(void*)11,0,FL_NORMAL_LABEL,FL_HELVETICA,11},
+    {"&Normal",FL_ALT+'3',(Fl_Callback *)widget_size_cb,(void*)14,0,FL_NORMAL_LABEL,FL_HELVETICA,14},
+    {"&Medium",FL_ALT+'4',(Fl_Callback *)widget_size_cb,(void*)18,0,FL_NORMAL_LABEL,FL_HELVETICA,18},
+    {"&Large",FL_ALT+'5',(Fl_Callback *)widget_size_cb,(void*)24,0,FL_NORMAL_LABEL,FL_HELVETICA,24},
+    {"&Huge",FL_ALT+'6',(Fl_Callback *)widget_size_cb,(void*)32,0,FL_NORMAL_LABEL,FL_HELVETICA,32},
     {0},
-  {"&Grid and Size Settings...",fltk3::COMMAND+'g',show_grid_cb},
+  {"&Grid and Size Settings...",FL_COMMAND+'g',show_grid_cb},
   {0},
-{"&Shell",0,0,0,fltk3::SUBMENU},
-  {"Execute &Command...",fltk3::ALT+'x',(fltk3::Callback *)show_shell_window},
-  {"Execute &Again...",fltk3::ALT+'g',(fltk3::Callback *)do_shell_command},
+{"&Shell",0,0,0,FL_SUBMENU},
+  {"Execute &Command...",FL_ALT+'x',(Fl_Callback *)show_shell_window},
+  {"Execute &Again...",FL_ALT+'g',(Fl_Callback *)do_shell_command},
   {0},
-{"&Help",0,0,0,fltk3::SUBMENU},
+{"&Help",0,0,0,FL_SUBMENU},
   {"&Rapid development with FLUID...",0,help_cb},
-  {"&FLTK Programmers Manual...",0,manual_cb, 0, fltk3::MENU_DIVIDER},
+  {"&FLTK Programmers Manual...",0,manual_cb, 0, FL_MENU_DIVIDER},
   {"&About FLUID...",0,about_cb},
   {0},
 {0}};
@@ -1742,16 +1742,16 @@ void scheme_cb(fltk3::Choice *, void *) {
 
   switch (scheme_choice->value()) {
     case 0 : // Default
-      fltk3::scheme(NULL);
+      Fl::scheme(NULL);
       break;
     case 1 : // None
-      fltk3::scheme("none");
+      Fl::scheme("none");
       break;
     case 2 : // Plastic
-      fltk3::scheme("plastic");
+      Fl::scheme("plastic");
       break;
     case 3 : // GTK+
-      fltk3::scheme("gtk+");
+      Fl::scheme("gtk+");
       break;
   }
 
@@ -1777,7 +1777,7 @@ void toggle_widgetbin_cb(fltk3::Widget *, void *) {
 void toggle_sourceview_cb(fltk3::DoubleWindow *, void *) {
   if (!sourceview_panel) {
     make_sourceview();
-    sourceview_panel->callback((fltk3::Callback*)toggle_sourceview_cb);
+    sourceview_panel->callback((Fl_Callback*)toggle_sourceview_cb);
     fltk3::Preferences svp(fluid_prefs, "sourceview");
     int autorefresh;
     svp.get("autorefresh", autorefresh, 1);
@@ -1820,9 +1820,9 @@ void make_main_window() {
   if (!main_window) {
     fltk3::Widget *o;
     main_window = new fltk3::DoubleWindow(WINWIDTH,WINHEIGHT,"fluid");
-    main_window->box(fltk3::NO_BOX);
+    main_window->box(FL_NO_BOX);
     o = make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
-    o->box(fltk3::FLAT_BOX);
+    o->box(FL_FLAT_BOX);
     o->tooltip("Double-click to view or change an item.");
     main_window->resizable(o);
     main_menubar = new fltk3::MenuBar(0,0,BROWSERWIDTH,MENUHEIGHT);
@@ -1831,7 +1831,7 @@ void make_main_window() {
     save_item = (fltk3::MenuItem*)main_menubar->find_item(save_cb);
     history_item = (fltk3::MenuItem*)main_menubar->find_item(open_history_cb);
     widgetbin_item = (fltk3::MenuItem*)main_menubar->find_item(toggle_widgetbin_cb);
-    sourceview_item = (fltk3::MenuItem*)main_menubar->find_item((fltk3::Callback*)toggle_sourceview_cb);
+    sourceview_item = (fltk3::MenuItem*)main_menubar->find_item((Fl_Callback*)toggle_sourceview_cb);
     main_menubar->global();
     fill_in_New_Menu();
     main_window->end();
@@ -1860,13 +1860,13 @@ void load_history() {
       fl_filename_relative(relative_history[i], sizeof(relative_history[i]),
                            absolute_history[i]);
 
-      if (i == 9) history_item[i].flags = fltk3::MENU_DIVIDER;
+      if (i == 9) history_item[i].flags = FL_MENU_DIVIDER;
       else history_item[i].flags = 0;
     } else break;
   }
 
   for (; i < 10; i ++) {
-    if (i) history_item[i-1].flags |= fltk3::MENU_DIVIDER;
+    if (i) history_item[i-1].flags |= FL_MENU_DIVIDER;
     history_item[i].hide();
   }
 }
@@ -1874,7 +1874,7 @@ void load_history() {
 // Update file history from preferences...
 void update_history(const char *flname) {
   int	i;		// Looping var
-  char	absolute[FLTK3_PATH_MAX];
+  char	absolute[FL_PATH_MAX];
   int	max_files;
 
 
@@ -1910,14 +1910,14 @@ void update_history(const char *flname) {
   for (i = 0; i < max_files; i ++) {
     fluid_prefs.set( fltk3::Preferences::Name("file%d", i), absolute_history[i]);
     if (absolute_history[i][0]) {
-      if (i == 9) history_item[i].flags = fltk3::MENU_DIVIDER;
+      if (i == 9) history_item[i].flags = FL_MENU_DIVIDER;
       else history_item[i].flags = 0;
     } else break;
   }
 
   for (; i < 10; i ++) {
     fluid_prefs.set( fltk3::Preferences::Name("file%d", i), "");
-    if (i) history_item[i-1].flags |= fltk3::MENU_DIVIDER;
+    if (i) history_item[i-1].flags |= FL_MENU_DIVIDER;
     history_item[i].hide();
   }
 }
@@ -2045,11 +2045,11 @@ static Fl_Process s_proc;
 static bool prepare_shell_command(const char * &command)  { // common pre-shell command code all platforms
   shell_window->hide();
   if (s_proc.desc()) {
-    fltk3::alert("Previous shell command still running!");
+    fl_alert("Previous shell command still running!");
     return false;
   }
   if ((command = shell_command_input->value()) == NULL || !*command) {
-    fltk3::alert("No shell command entered!");
+    fl_alert("No shell command entered!");
     return false;
   }
   if (shell_savefl_button->value()) {
@@ -2079,7 +2079,7 @@ shell_pipe_cb(int, void*) {
     shell_run_buffer->append(line);
   } else {
     // End of file; tell the parent...
-    fltk3::remove_fd(fileno(s_proc.desc()));
+    Fl::remove_fd(fileno(s_proc.desc()));
     s_proc.close();
     shell_run_buffer->append("... END SHELL COMMAND ...\n");
   }
@@ -2101,7 +2101,7 @@ do_shell_command(fltk3::ReturnButton*, void*) {
   shell_run_window->label("Shell Command Running...");
 
   if (s_proc.popen((char *)command) == NULL) {
-    fltk3::alert("Unable to run shell command: %s", strerror(errno));
+    fl_alert("Unable to run shell command: %s", strerror(errno));
     return;
   }
 
@@ -2109,15 +2109,15 @@ do_shell_command(fltk3::ReturnButton*, void*) {
   shell_run_window->hotspot(shell_run_display);
   shell_run_window->show();
 
-  fltk3::add_fd(fileno(s_proc.desc()), shell_pipe_cb);
+  Fl::add_fd(fileno(s_proc.desc()), shell_pipe_cb);
 
-  while (s_proc.desc()) fltk3::wait();
+  while (s_proc.desc()) Fl::wait();
 
   shell_run_button->activate();
   shell_run_window->label("Shell Command Complete");
-  fltk3::beep();
+  fl_beep();
 
-  while (shell_run_window->shown()) fltk3::wait();
+  while (shell_run_window->shown()) Fl::wait();
 }
 #else
 // Just do basic shell command stuff, no status window...
@@ -2129,7 +2129,7 @@ do_shell_command(fltk3::ReturnButton*, void*) {
   if (!prepare_shell_command(command)) return;
 
   if ((status = system(command)) != 0) {
-    fltk3::alert("Shell command returned status %d!", status);
+    fl_alert("Shell command returned status %d!", status);
   } else if (completion_button->value()) {
     fltk3::message("Shell command completed successfully!");
   }
@@ -2215,14 +2215,14 @@ void update_sourceview_cb(fltk3::Button*, void*)
     return;
   // generate space for the source and header file filenames
   if (!sv_source_filename) {
-    sv_source_filename = (char*)malloc(FLTK3_PATH_MAX);
-    fluid_prefs.getUserdataPath(sv_source_filename, FLTK3_PATH_MAX);
-    strlcat(sv_source_filename, "source_view_tmp.cxx", FLTK3_PATH_MAX);
+    sv_source_filename = (char*)malloc(FL_PATH_MAX);
+    fluid_prefs.getUserdataPath(sv_source_filename, FL_PATH_MAX);
+    strlcat(sv_source_filename, "source_view_tmp.cxx", FL_PATH_MAX);
   }
   if (!sv_header_filename) {
-    sv_header_filename = (char*)malloc(FLTK3_PATH_MAX);
-    fluid_prefs.getUserdataPath(sv_header_filename, FLTK3_PATH_MAX);
-    strlcat(sv_header_filename, "source_view_tmp.h", FLTK3_PATH_MAX);
+    sv_header_filename = (char*)malloc(FL_PATH_MAX);
+    fluid_prefs.getUserdataPath(sv_header_filename, FL_PATH_MAX);
+    strlcat(sv_header_filename, "source_view_tmp.h", FL_PATH_MAX);
   }
 
   strlcpy(i18n_program, fl_filename_name(sv_source_filename), sizeof(i18n_program));
@@ -2262,7 +2262,7 @@ void update_sourceview_timer(void*)
 // Set the "modified" flag and update the title of the main window...
 void set_modflag(int mf) {
   const char	*basename;
-  static char	title[FLTK3_PATH_MAX];
+  static char	title[FL_PATH_MAX];
 
   modflag = mf;
 
@@ -2285,8 +2285,8 @@ void set_modflag(int mf) {
     // we will only update ealiest 0.5 seconds after the last change, and only
     // if no other change was made, so dragging a widget will not generate any
     // CPU load
-    fltk3::remove_timeout(update_sourceview_timer, 0);
-    fltk3::add_timeout(0.5, update_sourceview_timer, 0);
+    Fl::remove_timeout(update_sourceview_timer, 0);
+    Fl::add_timeout(0.5, update_sourceview_timer, 0);
   }
 
   // Enable/disable the Save menu item...
@@ -2311,7 +2311,7 @@ static int arg(int argc, char** argv, int& i) {
     i += 2;
     return 2;
   }
-  fltk3::PluginManager pm("commandline");
+  Fl_Plugin_Manager pm("commandline");
   int j, n = pm.plugins();
   for (j=0; j<n; j++) {
     Fl_Commandline_Plugin *pi = (Fl_Commandline_Plugin*)pm.plugin(j);
@@ -2347,15 +2347,15 @@ static void sigint(SIGARG) {
 int main(int argc,char **argv) {
   int i = 1;
   
-  if (!fltk3::args(argc,argv,i,arg) || i < argc-1) {
+  if (!Fl::args(argc,argv,i,arg) || i < argc-1) {
     static const char *msg = 
       "usage: %s <switches> name.fl\n"
       " -c : write .cxx and .h and exit\n"
       " -cs : write .cxx and .h and strings and exit\n"
       " -o <name> : .cxx output filename, or extension if <name> starts with '.'\n"
       " -h <name> : .h output filename, or extension if <name> starts with '.'\n";
-    int len = strlen(msg) + strlen(argv[0]) + strlen(fltk3::help);
-    fltk3::PluginManager pm("commandline");
+    int len = strlen(msg) + strlen(argv[0]) + strlen(Fl::help);
+    Fl_Plugin_Manager pm("commandline");
     int i, n = pm.plugins();
     for (i=0; i<n; i++) {
       Fl_Commandline_Plugin *pi = (Fl_Commandline_Plugin*)pm.plugin(i);
@@ -2367,7 +2367,7 @@ int main(int argc,char **argv) {
       Fl_Commandline_Plugin *pi = (Fl_Commandline_Plugin*)pm.plugin(i);
       if (pi) strcat(buf, pi->help());
     }
-    strcat(buf, fltk3::help);
+    strcat(buf, Fl::help);
 #ifdef _MSC_VER
     fltk3::message("%s\n", buf);
 #else
@@ -2381,7 +2381,7 @@ int main(int argc,char **argv) {
   
   const char *c = argv[i];
 
-  fltk3::register_images();
+  fl_register_images();
 
   make_main_window();
 
@@ -2391,7 +2391,7 @@ int main(int argc,char **argv) {
 #ifdef __APPLE__
     fl_open_callback(apple_open_cb);
 #endif // __APPLE__
-    fltk3::visual((fltk3::Mode)(fltk3::DOUBLE|fltk3::INDEX));
+    Fl::visual((Fl_Mode)(FL_DOUBLE|FL_INDEX));
     fltk3::FileIcon::load_system_icons();
     main_window->callback(exit_cb);
     position_window(main_window,"main_window_pos", 1, 10, 30, WINWIDTH, WINHEIGHT );
@@ -2426,9 +2426,9 @@ int main(int argc,char **argv) {
   grid_cb(horizontal_input, 0); // Makes sure that windows get snap params...
 
 #ifdef WIN32
-  fltk3::run();
+  Fl::run();
 #else
-  while (!quit_flag) fltk3::wait();
+  while (!quit_flag) Fl::wait();
 
   if (quit_flag) exit_cb(0,0);
 #endif // WIN32

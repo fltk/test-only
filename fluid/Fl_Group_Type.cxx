@@ -158,24 +158,24 @@ class Fluid_Table : public fltk3::Table {
   //    Make this a dark thin upbox with the text inside.
   //
   void DrawHeader(const char *s, int X, int Y, int W, int H) {
-    fltk3::push_clip(X,Y,W,H);
-    fltk3::draw_box(fltk3::THIN_UP_BOX, X,Y,W,H, row_header_color());
-    fltk3::color(fltk3::BLACK);
-    fltk3::draw(s, X,Y,W,H, fltk3::ALIGN_CENTER);
-    fltk3::pop_clip();
+    fl_push_clip(X,Y,W,H);
+    fl_draw_box(FL_THIN_UP_BOX, X,Y,W,H, row_header_color());
+    fltk3::color(FL_BLACK);
+    fl_draw(s, X,Y,W,H, FL_ALIGN_CENTER);
+    fl_pop_clip();
   } 
   // Draw the cell data
   //    Dark gray text on white background with subtle border
   //
   void DrawData(const char *s, int X, int Y, int W, int H) {
-    fltk3::push_clip(X,Y,W,H);
+    fl_push_clip(X,Y,W,H);
     // Draw cell bg
-    fltk3::color(fltk3::WHITE); fltk3::rectf(X,Y,W,H);
+    fltk3::color(FL_WHITE); fl_rectf(X,Y,W,H);
     // Draw cell data
-    fltk3::color(fltk3::GRAY0); fltk3::draw(s, X,Y,W,H, fltk3::ALIGN_CENTER);
+    fltk3::color(FL_GRAY0); fl_draw(s, X,Y,W,H, FL_ALIGN_CENTER);
     // Draw box border
-    fltk3::color(color()); fltk3::rect(X,Y,W,H);
-    fltk3::pop_clip();
+    fltk3::color(color()); fl_rect(X,Y,W,H);
+    fl_pop_clip();
   } 
   // Handle drawing table's cells
   //     fltk3::Table calls this function to draw each visible cell in the table.
@@ -185,7 +185,7 @@ class Fluid_Table : public fltk3::Table {
     static char s[40];
     switch ( context ) {
       case CONTEXT_STARTPAGE:                   // before page is drawn..
-        fltk3::font(fltk3::HELVETICA, 16);              // set the font for our drawing operations
+        fltk3::font(FL_HELVETICA, 16);              // set the font for our drawing operations
         return; 
       case CONTEXT_COL_HEADER:                  // Draw column headers
         sprintf(s,"%c",'A'+COL);                // "A", "B", "C", etc.
@@ -254,9 +254,9 @@ Fl_Type* Fl_Tabs_Type::click_test(int x, int y) {
   // source code, so mark this project as changed.
   int changed = (a!=t->value());
   // okay, run the tabs ui until they let go of mouse:
-  t->handle(fltk3::PUSH);
-  fltk3::pushed(t);
-  while (fltk3::pushed()==t) fltk3::wait();
+  t->handle(FL_PUSH);
+  Fl::pushed(t);
+  while (Fl::pushed()==t) Fl::wait();
   if (changed) set_modflag(1);
   return (Fl_Type*)(t->value()->user_data());
 }
@@ -438,7 +438,7 @@ void Fl_Scroll_Type::copy_properties() {
 
 ////////////////////////////////////////////////////////////////
 
-const char tile_type_name[] = "fltk3::TiledGroup";
+const char tile_type_name[] = "Fl_Tile";
 
 Fl_Tile_Type Fl_Tile_type;	// the "factory"
 

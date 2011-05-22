@@ -54,6 +54,9 @@ typedef short COORD_T;
 #  define XPOINT XPoint
 #endif
 
+
+extern void gl_start();
+
 class Fl_Font_Descriptor;
 
 namespace fltk3 {
@@ -110,6 +113,7 @@ namespace fltk3 {
    in the \ref fl_drawings and \ref fl_attributes modules. 
    */
   class FLTK3_EXPORT GraphicsDriver : public fltk3::Device {
+    friend void ::gl_start();
   public:
     /** A 2D coordinate transformation matrix
      */

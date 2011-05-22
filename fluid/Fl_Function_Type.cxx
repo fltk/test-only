@@ -27,9 +27,9 @@
 
 #include <fltk3/run.h>
 #include <fltk3/Preferences.h>
-#include <fltk3/FileChooser.h>
+#include <fltk3/fltk3::FileChooser.h>
 #include "Fl_Type.h"
-#include <fltk3/showInput.h>
+#include <fltk3/ask.h>
 #include <fltk3/FileChooser.h>
 #include "../src/flstring.h"
 #include <stdio.h>
@@ -188,12 +188,12 @@ void Fl_Function_Type::open() {
   function_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fltk3::alert("%s", message);
+    if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = fltk3::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == f_panel_cancel) goto BREAK2;
       else if (w == f_panel_ok) break;
-      else if (!w) fltk3::wait();
+      else if (!w) Fl::wait();
     }
     const char*c = f_name_input->value();
     while (isspace(*c)) c++;
@@ -407,7 +407,7 @@ void Fl_Function_Type::write_code2() {
   
   if (ismain()) {
     if (havewidgets) write_c("  %s->show(argc, argv);\n", var);
-    if (havechildren) write_c("  return fltk3::run();\n");
+    if (havechildren) write_c("  return Fl::run();\n");
   } else if (havewidgets && !constructor && !return_type) {
     write_c("  return %s;\n", var);
   }
@@ -449,12 +449,12 @@ void Fl_Code_Type::open() {
   code_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fltk3::alert("%s", message);
+    if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = fltk3::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == code_panel_cancel) goto BREAK2;
       else if (w == code_panel_ok) break;
-      else if (!w) fltk3::wait();
+      else if (!w) Fl::wait();
     }
     char*c = code_input->buffer()->text();
     message = c_check(c); if (message) continue;
@@ -524,12 +524,12 @@ void Fl_CodeBlock_Type::open() {
   codeblock_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fltk3::alert("%s", message);
+    if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = fltk3::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == codeblock_panel_cancel) goto BREAK2;
       else if (w == codeblock_panel_ok) break;
-      else if (!w) fltk3::wait();
+      else if (!w) Fl::wait();
     }
     const char*c = code_before_input->value();
     message = c_check(c); if (message) continue;
@@ -628,12 +628,12 @@ void Fl_Decl_Type::open() {
   decl_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fltk3::alert("%s", message);
+    if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = fltk3::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == decl_panel_cancel) goto BREAK2;
       else if (w == decl_panel_ok) break;
-      else if (!w) fltk3::wait();
+      else if (!w) Fl::wait();
     }
     const char*c = decl_input->value();
     while (isspace(*c)) c++;
@@ -678,7 +678,7 @@ void Fl_Decl_Type::write_code1() {
   // handle a few keywords differently if inside a class
   if (is_in_class() && (   (!strncmp(c,"class",5) && isspace(c[5]))
                         || (!strncmp(c,"typedef",7) && isspace(c[7]))
-                        || (!strncmp(c,"FLTK3_EXPORT",9) && isspace(c[9]))
+                        || (!strncmp(c,"FL_EXPORT",9) && isspace(c[9]))
                         || (!strncmp(c,"struct",6) && isspace(c[6]))
                         ) ) {
     write_public(public_);
@@ -692,7 +692,7 @@ void Fl_Decl_Type::write_code1() {
       || (!strncmp(c,"class",5) && isspace(c[5]))
       || (!strncmp(c,"typedef",7) && isspace(c[7]))
       || (!strncmp(c,"using",5) && isspace(c[5]))
-      || (!strncmp(c,"FLTK3_EXPORT",9) && isspace(c[9]))
+      || (!strncmp(c,"FL_EXPORT",9) && isspace(c[9]))
       //    || !strncmp(c,"struct",6) && isspace(c[6])
       ) {
     if (public_) {
@@ -786,14 +786,14 @@ void Fl_Data_Type::open() {
   data_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fltk3::alert("%s", message);
+    if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = fltk3::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == data_panel_cancel) goto BREAK2;
       else if (w == data_panel_ok) break;
       else if (w == data_filebrowser) {
         goto_source_dir();
-        const char *fn = fltk3::file_chooser("Load Binary Data", 0L, data_filename->value(), 1);
+        const char *fn = fl_file_chooser("Load Binary Data", 0L, data_filename->value(), 1);
         leave_source_dir();
         if (fn) {
           if (strcmp(fn, data_filename->value()))
@@ -801,7 +801,7 @@ void Fl_Data_Type::open() {
           data_filename->value(fn);
         }
       }
-      else if (!w) fltk3::wait();
+      else if (!w) Fl::wait();
     }
     // store the variable name:
     const char*c = data_input->value();
@@ -934,7 +934,7 @@ void Fl_Data_Type::write_code1() {
     if (compile_only)
       fprintf(stderr, "FLUID ERROR: %s %s\n", message, fn);
     else
-      fltk3::alert("%s\n%s\n", message, fn);
+      fl_alert("%s\n%s\n", message, fn);
   }
   if (data) free(data);
 }
@@ -987,12 +987,12 @@ void Fl_DeclBlock_Type::open() {
   declblock_panel->show();
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fltk3::alert("%s", message);
+    if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = fltk3::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == declblock_panel_cancel) goto BREAK2;
       else if (w == declblock_panel_ok) break;
-      else if (!w) fltk3::wait();
+      else if (!w) Fl::wait();
     }
     const char*c = decl_before_input->value();
     while (isspace(*c)) c++;
@@ -1107,18 +1107,18 @@ void Fl_Comment_Type::open() {
   comment_in_header->value(in_h_);
   comment_panel->show();
   const char* message = 0;
-  char itempath[FLTK3_PATH_MAX]; itempath[0] = 0;
+  char itempath[FL_PATH_MAX]; itempath[0] = 0;
   int last_selected_item = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fltk3::alert("%s", message);
+    if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = fltk3::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == comment_panel_cancel) goto BREAK2;
       else if (w == comment_panel_ok) break;
       else if (w == comment_predefined) {
         if (comment_predefined->value()==1) {
           // add the current comment to the database
-          const char *xname = fltk3::input(
+          const char *xname = fl_input(
                                        "Please enter a name to reference the current\ncomment in your database.\n\n"
                                        "Use forward slashes '/' to create submenus.", 
                                        "My Comment");
@@ -1139,7 +1139,7 @@ void Fl_Comment_Type::open() {
           // remove the last selected comment from the database
           if (itempath[0]==0 || last_selected_item==0) {
             fltk3::message("Please select an entry form this menu first.");
-          } else if (fltk3::choice("Are you sure that you want to delete the entry\n"
+          } else if (fl_choice("Are you sure that you want to delete the entry\n"
 	                       "\"%s\"\nfrom the database?", "Cancel", "Delete",
 			       NULL, itempath)) {
             fltk3::Preferences db(fltk3::Preferences::USER, "fltk.org", "fluid_comments");
@@ -1171,16 +1171,16 @@ void Fl_Comment_Type::open() {
       }
       else if (w == comment_load) {
         // load a comment from disk
-	fltk3::file_chooser_ok_label("Use File");
-        const char *fname = fltk3::file_chooser("Pick a comment", 0L, 0L);
-	fltk3::file_chooser_ok_label(NULL);
+	fl_file_chooser_ok_label("Use File");
+        const char *fname = fl_file_chooser("Pick a comment", 0L, 0L);
+	fl_file_chooser_ok_label(NULL);
         if (fname) {
           if (comment_input->buffer()->loadfile(fname)) {
-            fltk3::alert("Error loading file\n%s", fname);
+            fl_alert("Error loading file\n%s", fname);
           }
         }
       }
-      else if (!w) fltk3::wait();
+      else if (!w) Fl::wait();
     }
     char*c = comment_input->buffer()->text();
     name(c);
@@ -1350,7 +1350,7 @@ void Fl_Class_Type::read_property(const char *c) {
 
 void Fl_Class_Type::open() {
   if (!class_panel) make_class_panel();
-  char fullname[FLTK3_PATH_MAX]="";
+  char fullname[FL_PATH_MAX]="";
   if (prefix() && strlen(prefix())) 
     sprintf(fullname,"%s %s",prefix(),name());
   else 
@@ -1366,12 +1366,12 @@ void Fl_Class_Type::open() {
   char *na=0,*pr=0,*p=0; // name and prefix substrings
   
   for (;;) { // repeat as long as there are errors
-    if (message) fltk3::alert("%s", message);
+    if (message) fl_alert("%s", message);
     for (;;) {
-      fltk3::Widget* w = fltk3::readqueue();
+      fltk3::Widget* w = Fl::readqueue();
       if (w == c_panel_cancel) goto BREAK2;
       else if (w == c_panel_ok) break;
-      else if (!w) fltk3::wait();
+      else if (!w) Fl::wait();
     }
     const char*c = c_name_input->value();
     char *s = strdup(c);

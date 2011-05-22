@@ -44,7 +44,7 @@
 #include <fltk3/Window.h>
 #include <fltk3/x.h>
 #include <fltk3/draw.h>
-#include "fltk3::GlChoice.H"
+#include "Fl_Gl_Choice.H"
 
 static GLContext context;
 static int clip_state_number=-1;

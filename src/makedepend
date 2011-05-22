@@ -975,7 +975,7 @@ fl_show_colormap.o: ../fltk3/x.h ../fltk3/enumerations.h ../fltk3/Window.h
 fl_show_colormap.o: ../fltk3/Group.h ../fltk3/Widget.h ../fltk3/Device.h
 fl_show_colormap.o: ../fltk3/Plugin.h ../fltk3/Preferences.h ../fltk3/Image.h
 fl_show_colormap.o: ../fltk3/Bitmap.h ../fltk3/Image.h ../fltk3/Pixmap.h
-fl_show_colormap.o: ../fltk3/RGBImage.h ../fltk3/showColormap.h ../config.h
+fl_show_colormap.o: ../fltk3/RGBImage.h ../fltk3/show_colormap.h ../config.h
 fl_symbols.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 fl_symbols.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 fl_symbols.o: ../fltk3/draw.h ../fltk3/x.h ../fltk3/Window.h
@@ -1004,127 +1004,6 @@ ps_image.o: ../fltk3/Bitmap.h ../fltk3/Image.h ../fltk3/Pixmap.h
 ps_image.o: ../fltk3/RGBImage.h ../fltk3/Window.h ../fltk3/Group.h
 ps_image.o: ../fltk3/Widget.h ../fltk3/draw.h ../fltk3/enumerations.h
 ps_image.o: ../fltk3/run.h ../fltk3/utf8.h
-forms_compatability.o: ../fltk3/forms.h ../fltk3/run.h ../fltk3/utf8.h
-forms_compatability.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
-forms_compatability.o: ../fltk3/enumerations.h ../fltk3/Group.h
-forms_compatability.o: ../fltk3/Widget.h ../fltk3/Window.h ../fltk3/draw.h
-forms_compatability.o: ../fltk3/x.h ../fltk3/enumerations.h ../fltk3/Window.h
-forms_compatability.o: ../fltk3/Device.h ../fltk3/Plugin.h
-forms_compatability.o: ../fltk3/Preferences.h ../fltk3/Image.h
-forms_compatability.o: ../fltk3/Bitmap.h ../fltk3/Image.h ../fltk3/Pixmap.h
-forms_compatability.o: ../fltk3/RGBImage.h ../fltk3/FormsBitmap.h
-forms_compatability.o: ../fltk3/Bitmap.h ../fltk3/FormsPixmap.h
-forms_compatability.o: ../fltk3/Pixmap.h ../fltk3/Box.h ../fltk3/Browser.h
-forms_compatability.o: ../fltk3/Browser_.h ../fltk3/Scrollbar.h
-forms_compatability.o: ../fltk3/Slider.h ../fltk3/Valuator.h ../fltk3/run.h
-forms_compatability.o: ../fltk3/Button.h ../fltk3/LightButton.h
-forms_compatability.o: ../fltk3/RoundButton.h ../fltk3/CheckButton.h
-forms_compatability.o: ../fltk3/Chart.h ../fltk3/Choice.h ../fltk3/Menu_.h
-forms_compatability.o: ../fltk3/MenuItem.h ../fltk3/Clock.h
-forms_compatability.o: ../fltk3/Counter.h ../fltk3/Dial.h ../fltk3/Free.h
-forms_compatability.o: ../fltk3/ask.h ../fltk3/showColormap.h
-forms_compatability.o: ../fltk3/filename.h ../fltk3/FileChooser.h
-forms_compatability.o: ../fltk3/DoubleWindow.h ../fltk3/Group.h
-forms_compatability.o: ../fltk3/Choice.h ../fltk3/MenuButton.h
-forms_compatability.o: ../fltk3/Button.h ../fltk3/Preferences.h
-forms_compatability.o: ../fltk3/TiledGroup.h ../fltk3/FileBrowser.h
-forms_compatability.o: ../fltk3/FileIcon.h ../fltk3/Box.h
-forms_compatability.o: ../fltk3/CheckButton.h ../fltk3/FileInput.h
-forms_compatability.o: ../fltk3/Input.h ../fltk3/Input_.h
-forms_compatability.o: ../fltk3/ReturnButton.h ../fltk3/ask.h
-forms_compatability.o: ../fltk3/Input.h ../fltk3/MenuButton.h
-forms_compatability.o: ../fltk3/Positioner.h ../fltk3/ValueSlider.h
-forms_compatability.o: ../fltk3/Timer.h ../fltk3/RepeatButton.h
-forms_bitmap.o: ../fltk3/forms.h ../fltk3/run.h ../fltk3/utf8.h
-forms_bitmap.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
-forms_bitmap.o: ../fltk3/enumerations.h ../fltk3/Group.h ../fltk3/Widget.h
-forms_bitmap.o: ../fltk3/Window.h ../fltk3/draw.h ../fltk3/x.h
-forms_bitmap.o: ../fltk3/enumerations.h ../fltk3/Window.h ../fltk3/Device.h
-forms_bitmap.o: ../fltk3/Plugin.h ../fltk3/Preferences.h ../fltk3/Image.h
-forms_bitmap.o: ../fltk3/Bitmap.h ../fltk3/Image.h ../fltk3/Pixmap.h
-forms_bitmap.o: ../fltk3/RGBImage.h ../fltk3/FormsBitmap.h ../fltk3/Bitmap.h
-forms_bitmap.o: ../fltk3/FormsPixmap.h ../fltk3/Pixmap.h ../fltk3/Box.h
-forms_bitmap.o: ../fltk3/Browser.h ../fltk3/Browser_.h ../fltk3/Scrollbar.h
-forms_bitmap.o: ../fltk3/Slider.h ../fltk3/Valuator.h ../fltk3/run.h
-forms_bitmap.o: ../fltk3/Button.h ../fltk3/LightButton.h
-forms_bitmap.o: ../fltk3/RoundButton.h ../fltk3/CheckButton.h
-forms_bitmap.o: ../fltk3/Chart.h ../fltk3/Choice.h ../fltk3/Menu_.h
-forms_bitmap.o: ../fltk3/MenuItem.h ../fltk3/Clock.h ../fltk3/Counter.h
-forms_bitmap.o: ../fltk3/Dial.h ../fltk3/Free.h ../fltk3/ask.h
-forms_bitmap.o: ../fltk3/showColormap.h ../fltk3/filename.h
-forms_bitmap.o: ../fltk3/FileChooser.h ../fltk3/DoubleWindow.h
-forms_bitmap.o: ../fltk3/Group.h ../fltk3/Choice.h ../fltk3/MenuButton.h
-forms_bitmap.o: ../fltk3/Button.h ../fltk3/Preferences.h
-forms_bitmap.o: ../fltk3/TiledGroup.h ../fltk3/FileBrowser.h
-forms_bitmap.o: ../fltk3/FileIcon.h ../fltk3/Box.h ../fltk3/CheckButton.h
-forms_bitmap.o: ../fltk3/FileInput.h ../fltk3/Input.h ../fltk3/Input_.h
-forms_bitmap.o: ../fltk3/ReturnButton.h ../fltk3/ask.h ../fltk3/Input.h
-forms_bitmap.o: ../fltk3/MenuButton.h ../fltk3/Positioner.h
-forms_bitmap.o: ../fltk3/ValueSlider.h ../fltk3/Timer.h
-forms_free.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
-forms_free.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
-forms_free.o: ../fltk3/Free.h ../fltk3/Widget.h
-forms_fselect.o: ../fltk3/forms.h ../fltk3/run.h ../fltk3/utf8.h
-forms_fselect.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
-forms_fselect.o: ../fltk3/enumerations.h ../fltk3/Group.h ../fltk3/Widget.h
-forms_fselect.o: ../fltk3/Window.h ../fltk3/draw.h ../fltk3/x.h
-forms_fselect.o: ../fltk3/enumerations.h ../fltk3/Window.h ../fltk3/Device.h
-forms_fselect.o: ../fltk3/Plugin.h ../fltk3/Preferences.h ../fltk3/Image.h
-forms_fselect.o: ../fltk3/Bitmap.h ../fltk3/Image.h ../fltk3/Pixmap.h
-forms_fselect.o: ../fltk3/RGBImage.h ../fltk3/FormsBitmap.h ../fltk3/Bitmap.h
-forms_fselect.o: ../fltk3/FormsPixmap.h ../fltk3/Pixmap.h ../fltk3/Box.h
-forms_fselect.o: ../fltk3/Browser.h ../fltk3/Browser_.h ../fltk3/Scrollbar.h
-forms_fselect.o: ../fltk3/Slider.h ../fltk3/Valuator.h ../fltk3/run.h
-forms_fselect.o: ../fltk3/Button.h ../fltk3/LightButton.h
-forms_fselect.o: ../fltk3/RoundButton.h ../fltk3/CheckButton.h
-forms_fselect.o: ../fltk3/Chart.h ../fltk3/Choice.h ../fltk3/Menu_.h
-forms_fselect.o: ../fltk3/MenuItem.h ../fltk3/Clock.h ../fltk3/Counter.h
-forms_fselect.o: ../fltk3/Dial.h ../fltk3/Free.h ../fltk3/ask.h
-forms_fselect.o: ../fltk3/showColormap.h ../fltk3/filename.h
-forms_fselect.o: ../fltk3/FileChooser.h ../fltk3/DoubleWindow.h
-forms_fselect.o: ../fltk3/Group.h ../fltk3/Choice.h ../fltk3/MenuButton.h
-forms_fselect.o: ../fltk3/Button.h ../fltk3/Preferences.h
-forms_fselect.o: ../fltk3/TiledGroup.h ../fltk3/FileBrowser.h
-forms_fselect.o: ../fltk3/FileIcon.h ../fltk3/Box.h ../fltk3/CheckButton.h
-forms_fselect.o: ../fltk3/FileInput.h ../fltk3/Input.h ../fltk3/Input_.h
-forms_fselect.o: ../fltk3/ReturnButton.h ../fltk3/ask.h ../fltk3/Input.h
-forms_fselect.o: ../fltk3/MenuButton.h ../fltk3/Positioner.h
-forms_fselect.o: ../fltk3/ValueSlider.h ../fltk3/Timer.h flstring.h
-forms_fselect.o: ../fltk3/Export.h ../config.h
-forms_pixmap.o: ../fltk3/forms.h ../fltk3/run.h ../fltk3/utf8.h
-forms_pixmap.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
-forms_pixmap.o: ../fltk3/enumerations.h ../fltk3/Group.h ../fltk3/Widget.h
-forms_pixmap.o: ../fltk3/Window.h ../fltk3/draw.h ../fltk3/x.h
-forms_pixmap.o: ../fltk3/enumerations.h ../fltk3/Window.h ../fltk3/Device.h
-forms_pixmap.o: ../fltk3/Plugin.h ../fltk3/Preferences.h ../fltk3/Image.h
-forms_pixmap.o: ../fltk3/Bitmap.h ../fltk3/Image.h ../fltk3/Pixmap.h
-forms_pixmap.o: ../fltk3/RGBImage.h ../fltk3/FormsBitmap.h ../fltk3/Bitmap.h
-forms_pixmap.o: ../fltk3/FormsPixmap.h ../fltk3/Pixmap.h ../fltk3/Box.h
-forms_pixmap.o: ../fltk3/Browser.h ../fltk3/Browser_.h ../fltk3/Scrollbar.h
-forms_pixmap.o: ../fltk3/Slider.h ../fltk3/Valuator.h ../fltk3/run.h
-forms_pixmap.o: ../fltk3/Button.h ../fltk3/LightButton.h
-forms_pixmap.o: ../fltk3/RoundButton.h ../fltk3/CheckButton.h
-forms_pixmap.o: ../fltk3/Chart.h ../fltk3/Choice.h ../fltk3/Menu_.h
-forms_pixmap.o: ../fltk3/MenuItem.h ../fltk3/Clock.h ../fltk3/Counter.h
-forms_pixmap.o: ../fltk3/Dial.h ../fltk3/Free.h ../fltk3/ask.h
-forms_pixmap.o: ../fltk3/showColormap.h ../fltk3/filename.h
-forms_pixmap.o: ../fltk3/FileChooser.h ../fltk3/DoubleWindow.h
-forms_pixmap.o: ../fltk3/Group.h ../fltk3/Choice.h ../fltk3/MenuButton.h
-forms_pixmap.o: ../fltk3/Button.h ../fltk3/Preferences.h
-forms_pixmap.o: ../fltk3/TiledGroup.h ../fltk3/FileBrowser.h
-forms_pixmap.o: ../fltk3/FileIcon.h ../fltk3/Box.h ../fltk3/CheckButton.h
-forms_pixmap.o: ../fltk3/FileInput.h ../fltk3/Input.h ../fltk3/Input_.h
-forms_pixmap.o: ../fltk3/ReturnButton.h ../fltk3/ask.h ../fltk3/Input.h
-forms_pixmap.o: ../fltk3/MenuButton.h ../fltk3/Positioner.h
-forms_pixmap.o: ../fltk3/ValueSlider.h ../fltk3/Timer.h
-forms_timer.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
-forms_timer.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
-forms_timer.o: ../fltk3/Timer.h ../fltk3/Widget.h ../fltk3/draw.h
-forms_timer.o: ../fltk3/x.h ../fltk3/Window.h ../fltk3/enumerations.h
-forms_timer.o: ../fltk3/Window.h ../fltk3/Group.h ../fltk3/Device.h
-forms_timer.o: ../fltk3/Plugin.h ../fltk3/Preferences.h ../fltk3/Image.h
-forms_timer.o: ../fltk3/Bitmap.h ../fltk3/Image.h ../fltk3/Pixmap.h
-forms_timer.o: ../fltk3/RGBImage.h
 Fl_Gl_Choice.o: ../config.h ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 Fl_Gl_Choice.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 Fl_Gl_Choice.o: ../fltk3/x.h ../fltk3/Window.h Fl_Gl_Choice.H
