@@ -129,7 +129,7 @@ void Fl_Group_Type::write_code2() {
   write_extra_code();
   write_c("%s%s->end();\n", indent(), var);
   if (resizable()) {
-    write_c("%sFl_Group::current()->resizable(%s);\n", indent(), var);
+    write_c("%sfltk3::Group::current()->resizable(%s);\n", indent(), var);
   }
   write_block_close();
 }
@@ -438,7 +438,7 @@ void Fl_Scroll_Type::copy_properties() {
 
 ////////////////////////////////////////////////////////////////
 
-const char tile_type_name[] = "Fl_Tile";
+const char tile_type_name[] = "fltk3::Tile";
 
 Fl_Tile_Type Fl_Tile_type;	// the "factory"
 

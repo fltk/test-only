@@ -312,7 +312,7 @@ void Widget_Browser::item_draw(void *v, int X, int Y, int, int) const {
   Y += comment_incr;
   if (l->is_widget() || l->is_class()) {
     const char* c = subclassname(l);
-    if (!strncmp(c,"Fl_",3)) c += 3;
+    if (!strncmp(c,"fltk3::",7)) c += 7;
     fltk3::font(textfont(), textsize());
     fltk3::draw(c, X, Y+13);
     X += int(fltk3::width(c)+fltk3::width('n'));
@@ -356,7 +356,7 @@ int Widget_Browser::item_width(void *v) const {
 
   if (l->is_widget() || l->is_class()) {
     const char* c = l->type_name();
-    if (!strncmp(c,"Fl_",3)) c += 3;
+    if (!strncmp(c,"fltk3::",7)) c += 7;
     fltk3::font(textfont(), textsize());
     W += int(fltk3::width(c) + fltk3::width('n'));
     c = l->name();

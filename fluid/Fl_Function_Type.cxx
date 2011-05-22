@@ -678,7 +678,7 @@ void Fl_Decl_Type::write_code1() {
   // handle a few keywords differently if inside a class
   if (is_in_class() && (   (!strncmp(c,"class",5) && isspace(c[5]))
                         || (!strncmp(c,"typedef",7) && isspace(c[7]))
-                        || (!strncmp(c,"fltk3::EXPORT",9) && isspace(c[9]))
+                        || (!strncmp(c,"FLTK3_EXPORT",9) && isspace(c[9]))
                         || (!strncmp(c,"struct",6) && isspace(c[6]))
                         ) ) {
     write_public(public_);
@@ -692,7 +692,7 @@ void Fl_Decl_Type::write_code1() {
       || (!strncmp(c,"class",5) && isspace(c[5]))
       || (!strncmp(c,"typedef",7) && isspace(c[7]))
       || (!strncmp(c,"using",5) && isspace(c[5]))
-      || (!strncmp(c,"fltk3::EXPORT",9) && isspace(c[9]))
+      || (!strncmp(c,"FLTK3_EXPORT",9) && isspace(c[9]))
       //    || !strncmp(c,"struct",6) && isspace(c[6])
       ) {
     if (public_) {

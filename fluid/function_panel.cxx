@@ -811,7 +811,7 @@ fltk3::Window* make_widgetbin() {
       { fltk3::Button* o = new fltk3::Button(89, 55, 24, 24);
         o->tooltip("Tile");
         o->box(fltk3::THIN_UP_BOX);
-        o->callback((fltk3::Callback*)type_make_cb, (void*)("Fl_Tile"));
+        o->callback((fltk3::Callback*)type_make_cb, (void*)("fltk3::TiledGroup"));
         o->image(pixmap[20]);
       } // fltk3::Button* o
       { fltk3::Button* o = new fltk3::Button(114, 55, 24, 24);

@@ -69,7 +69,7 @@ const char* subclassname(Fl_Type* l) {
     if (l->is_class()) return "fltk3::Group";
     if (p->o->type() == fltk3::WINDOW+1) return "fltk3::DoubleWindow";
     if (strcmp(p->type_name(), "fltk3::Input") == 0) {
-      if (p->o->type() == fltk3::FLOAT_INPUT) return "Fl_Float_Input";
+      if (p->o->type() == fltk3::FLOAT_INPUT) return "fltk3::FloatInput";
       if (p->o->type() == fltk3::INT_INPUT) return "fltk3::IntInput";
     }
   }
@@ -1975,7 +1975,7 @@ int isdeclare(const char *c) {
 
 void Fl_Widget_Type::write_static() {
   const char* t = subclassname(this);
-  if (!subclass() || (is_class() && !strncmp(t, "Fl_", 3))) {
+  if (!subclass() || (is_class() && !strncmp(t, "fltk3::", 7))) {
     write_declare("#include <fltk3/%s.h>", t);
   }
   for (int n=0; n < NUM_EXTRA_CODE; n++) {

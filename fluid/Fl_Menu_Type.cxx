@@ -234,11 +234,11 @@ void Fl_Menu_Item_Type::write_static() {
   if (k) {
     int i; 
     if (i18n_type) write_c("\nunsigned char %s::%s_i18n_done = 0;", k, menu_name(i));
-    write_c("\nFl_Menu_Item %s::%s[] = {\n", k, menu_name(i));
+    write_c("\nfltk3::MenuItem %s::%s[] = {\n", k, menu_name(i));
   } else {
     int i; 
     if (i18n_type) write_c("\nunsigned char %s_i18n_done = 0;", menu_name(i));
-    write_c("\nFl_Menu_Item %s[] = {\n", menu_name(i));
+    write_c("\nfltk3::MenuItem %s[] = {\n", menu_name(i));
   }
   Fl_Type* t = prev; while (t && t->is_menu_item()) t = t->prev;
   for (Fl_Type* q = t->next; q && q->is_menu_item(); q = q->next) {
@@ -287,14 +287,14 @@ int Fl_Menu_Item_Type::flags() {
 
 void Fl_Menu_Item_Type::write_item() {
   static const char * const labeltypes[] = {
-    "FL_NORMAL_LABEL",
-    "FL_NO_LABEL",
-    "FL_SHADOW_LABEL",
-    "FL_ENGRAVED_LABEL",
-    "FL_EMBOSSED_LABEL",
-    "FL_MULTI_LABEL",
-    "FL_ICON_LABEL",
-    "FL_IMAGE_LABEL"
+    "fltk3::NORMAL_LABEL",
+    "fltk3::NO_LABEL",
+    "fltk3::SHADOW_LABEL",
+    "fltk3::ENGRAVED_LABEL",
+    "fltk3::EMBOSSED_LABEL",
+    "fltk3::MULTI_LABEL",
+    "fltk3::ICON_LABEL",
+    "fltk3::IMAGE_LABEL"
   };
 
   write_c(" {");
@@ -304,7 +304,7 @@ void Fl_Menu_Item_Type::write_item() {
   if (((fltk3::Button*)o)->shortcut()) {
 		int s = ((fltk3::Button*)o)->shortcut();
 		if (use_FL_COMMAND && (s & (fltk3::CTRL|fltk3::META))) {
-			write_c(", FL_COMMAND|0x%x, ", s & ~(fltk3::CTRL|fltk3::META));
+			write_c(", fltk3::COMMAND|0x%x, ", s & ~(fltk3::CTRL|fltk3::META));
 		} else {
 			write_c(", 0x%x, ", s);
 		}
