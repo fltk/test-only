@@ -28,13 +28,13 @@
 #include <config.h>
 #include <fltk3/run.h>
 #include <fltk3/Window.h>
-#include <fltk3/Hor_Slider.h>
+#include <fltk3/HorSlider.h>
 #include <fltk3/math.h>
 
 #if HAVE_GL
 
 #include <fltk3/gl.h>
-#include <fltk3/Gl_Window.h>
+#include <fltk3/GlWindow.h>
 
 class shape_window : public fltk3::GlWindow {
   void draw();
@@ -70,11 +70,11 @@ void shape_window::draw() {
 #else
 
 #include <fltk3/Box.h>
-class shape_window : public Fl_Box {
+class shape_window : public fltk3::Box {
 public:	
   int sides;
   shape_window(int x,int y,int w,int h,const char *l=0)
-    :Fl_Box(FL_DOWN_BOX,x,y,w,h,l){
+    :fltk3::Box(fltk3::DOWN_BOX,x,y,w,h,l){
       label("This demo does\nnot work without GL");
   }
 };
@@ -82,7 +82,7 @@ public:
 #endif
 
 // when you change the data, as in this callback, you must call redraw():
-void sides_cb(Fl_Widget *o, void *p) {
+void sides_cb(fltk3::Widget *o, void *p) {
   shape_window *sw = (shape_window *)p;
   sw->sides = int(((fltk3::Slider *)o)->value());
   sw->redraw();
@@ -90,7 +90,7 @@ void sides_cb(Fl_Widget *o, void *p) {
 
 int main(int argc, char **argv) {
 
-  Fl_Window window(300, 330);
+  fltk3::Window window(300, 330);
 
 // the shape window could be it's own window, but here we make it
 // a child window:
@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
   //  window.size_range(300,330,0,0,1,1,1);
 // add a knob to control it:
   fltk3::HorSlider slider(50, 295, window.w()-60, 30, "Sides:");
-  slider.align(FL_ALIGN_LEFT);
+  slider.align(fltk3::ALIGN_LEFT);
   slider.callback(sides_cb,&sw);
   slider.value(sw.sides);
   slider.step(1);

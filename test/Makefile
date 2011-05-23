@@ -55,7 +55,6 @@ CPPFILES =\
 	fast_slow.cxx \
 	file_chooser.cxx \
 	fonts.cxx \
-	forms.cxx \
 	fractals.cxx \
 	fullscreen.cxx \
 	gl_overlay.cxx \
@@ -127,7 +126,6 @@ ALL =	\
 	fast_slow$(EXEEXT) \
 	file_chooser$(EXEEXT) \
 	fonts$(EXEEXT) \
-	forms$(EXEEXT) \
 	hello$(EXEEXT) \
 	help$(EXEEXT) \
 	iconize$(EXEEXT) \
@@ -310,7 +308,7 @@ clock$(EXEEXT): clock.o
 
 colbrowser$(EXEEXT): colbrowser.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ colbrowser.o $(LINKFLTKFORMS) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ colbrowser.o $(LINKFLTK) $(LDLIBS)
 
 color_chooser$(EXEEXT): color_chooser.o
 
@@ -340,10 +338,6 @@ file_chooser$(EXEEXT): file_chooser.o $(IMGLIBNAME)
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) file_chooser.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
 
 fonts$(EXEEXT): fonts.o
-
-forms$(EXEEXT): forms.o
-	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ forms.o $(LINKFLTKFORMS) $(LDLIBS)
 
 hello$(EXEEXT): hello.o
 
