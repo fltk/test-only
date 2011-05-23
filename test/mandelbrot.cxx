@@ -36,26 +36,26 @@ Drawing_Window mbrot;
 Drawing_Window jbrot;
 
 void idle(void*) {
-  if (!mbrot.d->idle() && !(jbrot.d && jbrot.d->idle())) Fl::remove_idle(idle);
+  if (!mbrot.d->idle() && !(jbrot.d && jbrot.d->idle())) fltk3::remove_idle(idle);
 }
 
 void set_idle() {
-  Fl::add_idle(idle);
+  fltk3::add_idle(idle);
 }
 
-static void window_callback(Fl_Widget*, void*) {exit(0);}
+static void window_callback(fltk3::Widget*, void*) {exit(0);}
 
-static void print(Fl_Widget *o, void *data)
+static void print(fltk3::Widget *o, void *data)
 {
   fltk3::Printer printer;
-  Fl_Window *win = o->window();
+  fltk3::Window *win = o->window();
   if(!win->visible()) return;
   win->make_current();
-  uchar *image_data = fl_read_image(NULL, 0, 0, win->w(), win->h(), 0);
+  uchar *image_data = fltk3::read_image(NULL, 0, 0, win->w(), win->h(), 0);
   if( printer.start_job(1) ) return;
   if( printer.start_page() ) return;
   printer.scale(.7,.7);
-  fl_draw_image(image_data, 0,0, win->w(), win->h());
+  fltk3::draw_image(image_data, 0,0, win->w(), win->h());
   printer.end_page();
   delete image_data;
   printer.end_job();
@@ -64,17 +64,17 @@ static void print(Fl_Widget *o, void *data)
 int main(int argc, char **argv) {
   mbrot.make_window();
     mbrot.window->begin();
-    Fl_Button* o = new Fl_Button(0, 0, 0, 0, NULL);
+    fltk3::Button* o = new fltk3::Button(0, 0, 0, 0, NULL);
     o->callback(print,NULL);
-    o->shortcut(FL_CTRL+'p');
+    o->shortcut(fltk3::CTRL+'p');
     mbrot.window->end();
 
   mbrot.d->X = -.75;
   mbrot.d->scale = 2.5;
   mbrot.update_label();
   int i = 0;
-  if (Fl::args(argc,argv,i) < argc) Fl::fatal(Fl::help);
-  Fl::visual(FL_RGB);
+  if (fltk3::args(argc,argv,i) < argc) fltk3::fatal(fltk3::help);
+  fltk3::visual(fltk3::RGB);
   mbrot.window->callback(window_callback);
   mbrot.window->show(argc,argv);
   fltk3::run();
@@ -100,7 +100,7 @@ int Drawing_Area::idle() {
     window()->make_current();
     int yy = drawn+y()+4;
     if (yy >= sy && yy <= sy+sh) erase_box();
-    fl_draw_image_mono(buffer+drawn*W,x()+3,yy,W,1,1,W);
+    fltk3::draw_image_mono(buffer+drawn*W,x()+3,yy,W,1,1,W);
     drawn++;
     return 1;
   }
@@ -135,7 +135,7 @@ int Drawing_Area::idle() {
 
 void Drawing_Area::erase_box() {
   window()->make_current();
-  fl_overlay_clear();
+  fltk3::overlay_clear();
 }
 
 int Drawing_Area::handle(int event) {
@@ -144,25 +144,25 @@ int Drawing_Area::handle(int event) {
   static int button;
   int x2,y2;
   switch (event) {
-  case FL_PUSH:
+  case fltk3::PUSH:
     erase_box();
-    ix = Fl::event_x(); if (ix<x()) ix=x(); if (ix>=x()+w()) ix=x()+w()-1;
-    iy = Fl::event_y(); if (iy<y()) iy=y(); if (iy>=y()+h()) iy=y()+h()-1;
+    ix = fltk3::event_x(); if (ix<x()) ix=x(); if (ix>=x()+w()) ix=x()+w()-1;
+    iy = fltk3::event_y(); if (iy<y()) iy=y(); if (iy>=y()+h()) iy=y()+h()-1;
     dragged = 0;
-    button = Fl::event_button();
+    button = fltk3::event_button();
     return 1;
-  case FL_DRAG:
+  case fltk3::DRAG:
     dragged = 1;
     erase_box();
-    x2 = Fl::event_x(); if (x2<x()) x2=x(); if (x2>=x()+w()) x2=x()+w()-1;
-    y2 = Fl::event_y(); if (y2<y()) y2=y(); if (y2>=y()+h()) y2=y()+h()-1;
+    x2 = fltk3::event_x(); if (x2<x()) x2=x(); if (x2>=x()+w()) x2=x()+w()-1;
+    y2 = fltk3::event_y(); if (y2<y()) y2=y(); if (y2>=y()+h()) y2=y()+h()-1;
     if (button != 1) {ix = x2; iy = y2; return 1;}
     if (ix < x2) {sx = ix; sw = x2-ix;} else {sx = x2; sw = ix-x2;}
     if (iy < y2) {sy = iy; sh = y2-iy;} else {sy = y2; sh = iy-y2;}
     window()->make_current();
-    fl_overlay_rect(sx,sy,sw,sh);
+    fltk3::overlay_rect(sx,sy,sw,sh);
     return 1;
-  case FL_RELEASE:
+  case fltk3::RELEASE:
     if (button == 1) {
       erase_box();
       if (dragged && sw > 3 && sh > 3) {
@@ -219,7 +219,7 @@ void Drawing_Area::resize(int XX,int YY,int WW,int HH) {
     H = HH-8;
     if (buffer) {delete[] buffer; buffer = 0; new_display();}
   }
-  Fl_Box::resize(XX,YY,WW,HH);
+  fltk3::Box::resize(XX,YY,WW,HH);
 }
 
 //

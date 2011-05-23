@@ -160,7 +160,7 @@ int main(int argc, char** argv) {
 #include <fltk3/ask.h>
 
 int main(int argc, char** argv) {
-  fl_message("please configure fltk with CAIRO enabled (--enable-cairo or --enable-cairoext)"); 
+  fltk3::message("please configure fltk with CAIRO enabled (--enable-cairo or --enable-cairoext)"); 
   return 0;
 }
 #endif
