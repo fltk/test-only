@@ -2517,10 +2517,10 @@ char Fl_Widget_Type::read_property(const char *c) {
       x += pasteoffset;
       y += pasteoffset;
       // FIXME temporary change!
-      if (read_version>=2.0 && o->parent() && o->parent()!=o->window()) {
-        x += o->parent()->x();
-        y += o->parent()->y();
-      }
+      //if (read_version>=2.0 && o->parent() && o->parent()!=o->window()) {
+      //  x += o->parent()->x();
+      //  y += o->parent()->y();
+      //}
       o->resize(x,y,w,h);
     }
   } else if (!strcmp(c,"tooltip")) {
