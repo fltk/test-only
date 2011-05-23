@@ -885,7 +885,7 @@ void Fl_Type::write_properties() {
   if (selected) write_word("selected");
 }
 
-void Fl_Type::read_property(const char *c) {
+char Fl_Type::read_property(const char *c) {
   if (!strcmp(c,"label"))
     label(read_word());
   else if (!strcmp(c,"user_data"))
@@ -900,8 +900,11 @@ void Fl_Type::read_property(const char *c) {
     open_ = 1;
   else if (!strcmp(c,"selected"))
     select(this,1);
-  else
+  else {
     read_error("Unknown property \"%s\"", c);
+    return 0;
+  }
+  return 1;
 }
 
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}

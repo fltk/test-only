@@ -1394,7 +1394,7 @@ void Fl_Window_Type::write_properties() {
 }
 
 extern int pasteoffset;
-void Fl_Window_Type::read_property(const char *c) {
+char Fl_Window_Type::read_property(const char *c) {
   if (!strcmp(c,"modal")) {
     modal = 1;
   } else if (!strcmp(c,"non_modal")) {
@@ -1415,8 +1415,9 @@ void Fl_Window_Type::read_property(const char *c) {
     Fl_Widget_Type::read_property(c);
     pasteoffset = 0; // make it not apply to contents
   } else {
-    Fl_Widget_Type::read_property(c);
+    return Fl_Widget_Type::read_property(c);
   }
+  return 1;
 }
 
 int Fl_Window_Type::read_fdesign(const char* propname, const char* value) {
@@ -1477,12 +1478,13 @@ void Fl_Widget_Class_Type::write_properties() {
   if (wc_relative) write_string("position_relative");
 }
 
-void Fl_Widget_Class_Type::read_property(const char *c) {
+char Fl_Widget_Class_Type::read_property(const char *c) {
   if (!strcmp(c,"position_relative")) {
     wc_relative = 1;
   } else {
-    Fl_Window_Type::read_property(c);
+    return Fl_Window_Type::read_property(c);
   }
+  return 1;
 }
 
 void Fl_Widget_Class_Type::write_code1() {

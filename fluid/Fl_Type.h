@@ -93,7 +93,7 @@ public:
 
   virtual const char *title(); // string for browser
   virtual const char *type_name() = 0; // type for code output
-  virtual const char *alt_type_name() { return type_name(); } // alternate type for FLTK2 code output
+  virtual const char *alt_type_name() { return type_name(); } // alternate type for FLTK1 file reading
 
   const char *name() const {return name_;}
   void name(const char *);
@@ -119,7 +119,7 @@ public:
   // read and write data to a saved file:
   void write();
   virtual void write_properties();
-  virtual void read_property(const char *);
+  virtual char read_property(const char *);
   virtual int read_fdesign(const char*, const char*);
 
   // write code, these are called in order:
@@ -179,6 +179,7 @@ public:
   void open();
   int ismain() {return name_ == 0;}
   virtual const char *type_name() {return "Function";}
+  virtual const char *alt_type_name() { return type_name(); }
   virtual const char *title() {
     return name() ? name() : "main()";
   }
@@ -187,7 +188,7 @@ public:
   virtual int is_public() const;
   int pixmapID() { return 7; }
   void write_properties();
-  void read_property(const char *);
+  char read_property(const char *);
   int has_signature(const char *, const char*) const;
 };
 
@@ -198,6 +199,7 @@ public:
   void write_code2();
   void open();
   virtual const char *type_name() {return "code";}
+  virtual const char *alt_type_name() { return type_name(); }
   int is_code_block() const {return 0;}
   int pixmapID() { return 8; }
   virtual int is_public() const;
@@ -215,12 +217,13 @@ public:
   void write_code2();
   void open();
   virtual const char *type_name() {return "codeblock";}
+  virtual const char *alt_type_name() { return type_name(); }
   int is_code_block() const {return 1;}
   int is_parent() const {return 1;}
   virtual int is_public() const;
   int pixmapID() { return 9; }
   void write_properties();
-  void read_property(const char *);
+  char read_property(const char *);
 };
 
 class Fl_Decl_Type : public Fl_Type {
@@ -233,8 +236,9 @@ public:
   void write_code2();
   void open();
   virtual const char *type_name() {return "decl";}
+  virtual const char *alt_type_name() { return type_name(); }
   void write_properties();
-  void read_property(const char *);
+  char read_property(const char *);
   virtual int is_public() const;
   int pixmapID() { return 10; }
 };
@@ -251,8 +255,9 @@ public:
   void write_code2();
   void open();
   virtual const char *type_name() {return "data";}
+  virtual const char *alt_type_name() { return type_name(); }
   void write_properties();
-  void read_property(const char *);
+  char read_property(const char *);
   int pixmapID() { return 49; }
 };
 
@@ -269,8 +274,9 @@ public:
   void write_code2();
   void open();
   virtual const char *type_name() {return "declblock";}
+  virtual const char *alt_type_name() { return type_name(); }
   void write_properties();
-  void read_property(const char *);
+  char read_property(const char *);
   int is_parent() const {return 1;}
   int is_decl_block() const {return 1;}
   virtual int is_public() const;
@@ -286,9 +292,10 @@ public:
   void write_code2();
   void open();
   virtual const char *type_name() {return "comment";}
+  virtual const char *alt_type_name() { return type_name(); }
   virtual const char *title(); // string for browser
   void write_properties();
-  void read_property(const char *);
+  char read_property(const char *);
   virtual int is_public() const { return 1; }
   virtual int is_comment() const { return 1; }
   int pixmapID() { return 46; }
@@ -312,13 +319,14 @@ public:
   void write_code2();
   void open();
   virtual const char *type_name() {return "class";}
+  virtual const char *alt_type_name() { return type_name(); }
   int is_parent() const {return 1;}
   int is_decl_block() const {return 1;}
   int is_class() const {return 1;}
   virtual int is_public() const;
   int pixmapID() { return 12; }
   void write_properties();
-  void read_property(const char *);
+  char read_property(const char *);
 
   // class prefix attribute access
   void prefix(const char* p);
@@ -391,7 +399,7 @@ public:
   virtual int is_public() const;
 
   virtual void write_properties();
-  virtual void read_property(const char *);
+  virtual char read_property(const char *);
   virtual int read_fdesign(const char*, const char*);
 
   virtual fltk3::Widget *enter_live_mode(int top=0);
@@ -582,7 +590,7 @@ public:
   uchar *read_image(int &ww, int &hh);	// Read an image of the window
 
   virtual void write_properties();
-  virtual void read_property(const char *);
+  virtual char read_property(const char *);
   virtual int read_fdesign(const char*, const char*);
 
   void add_child(Fl_Type*, Fl_Type*);
@@ -611,12 +619,13 @@ public:
   char wc_relative; // if true, reposition all child widgets in an fltk3::Group
 
   virtual void write_properties();
-  virtual void read_property(const char *);
+  virtual char read_property(const char *);
 
   void write_code1();
   void write_code2();
   Fl_Type *make();
   virtual const char *type_name() {return "widget_class";}
+  virtual const char *alt_type_name() {return "widget_class";}
   int pixmapID() { return 48; }
   int is_parent() const {return 1;}
   int is_code_block() const {return 1;}

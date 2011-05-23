@@ -152,7 +152,7 @@ void Fl_Function_Type::write_properties() {
   }
 }
 
-void Fl_Function_Type::read_property(const char *c) {
+char Fl_Function_Type::read_property(const char *c) {
   if (!strcmp(c,"private")) {
     public_ = 0;
   } else if (!strcmp(c,"protected")) {
@@ -162,8 +162,9 @@ void Fl_Function_Type::read_property(const char *c) {
   } else if (!strcmp(c,"return_type")) {
     storestring(read_word(),return_type);
   } else {
-    Fl_Type::read_property(c);
+    return Fl_Type::read_property(c);
   }
+  return 1;
 }
 
 #include "function_panel.h"
@@ -509,12 +510,13 @@ void Fl_CodeBlock_Type::write_properties() {
   }
 }
 
-void Fl_CodeBlock_Type::read_property(const char *c) {
+char Fl_CodeBlock_Type::read_property(const char *c) {
   if (!strcmp(c,"after")) {
     storestring(read_word(),after);
   } else {
-    Fl_Type::read_property(c);
+    return Fl_Type::read_property(c);
   }
+  return 1;
 }
 
 void Fl_CodeBlock_Type::open() {
@@ -595,7 +597,7 @@ void Fl_Decl_Type::write_properties() {
     write_string("global");
 }
 
-void Fl_Decl_Type::read_property(const char *c) {
+char Fl_Decl_Type::read_property(const char *c) {
   if (!strcmp(c,"public")) {
     public_ = 1;
   } else if (!strcmp(c,"private")) {
@@ -607,8 +609,9 @@ void Fl_Decl_Type::read_property(const char *c) {
   } else if (!strcmp(c,"global")) {
     static_ = 0;
   } else {
-    Fl_Type::read_property(c);
+    return Fl_Type::read_property(c);
   }
+  return 1;
 }
 
 void Fl_Decl_Type::open() {
@@ -760,12 +763,13 @@ void Fl_Data_Type::write_properties() {
   }
 }
 
-void Fl_Data_Type::read_property(const char *c) {
+char Fl_Data_Type::read_property(const char *c) {
   if (!strcmp(c,"filename")) {
     storestring(read_word(), filename_, 1);
   } else {
-    Fl_Decl_Type::read_property(c);
+    return Fl_Decl_Type::read_property(c);
   }
+  return 1;
 }
 
 void Fl_Data_Type::open() {
@@ -967,7 +971,7 @@ void Fl_DeclBlock_Type::write_properties() {
   write_word(after);
 }
 
-void Fl_DeclBlock_Type::read_property(const char *c) {
+char Fl_DeclBlock_Type::read_property(const char *c) {
   if(!strcmp(c,"public")) {
     public_ = 1;
   } else if(!strcmp(c,"protected")) {
@@ -975,8 +979,9 @@ void Fl_DeclBlock_Type::read_property(const char *c) {
   } else  if (!strcmp(c,"after")) {
     storestring(read_word(),after);
   } else {
-    Fl_Type::read_property(c);
+    return Fl_Type::read_property(c);
   }
+  return 1;
 }
 
 void Fl_DeclBlock_Type::open() {
@@ -1053,7 +1058,7 @@ void Fl_Comment_Type::write_properties() {
   if (in_h_) write_string("in_header"); else write_string("not_in_header");
 }
 
-void Fl_Comment_Type::read_property(const char *c) {
+char Fl_Comment_Type::read_property(const char *c) {
   if (!strcmp(c,"in_source")) {
     in_c_ = 1;
   } else if (!strcmp(c,"not_in_source")) {
@@ -1063,8 +1068,9 @@ void Fl_Comment_Type::read_property(const char *c) {
   } else if (!strcmp(c,"not_in_header")) {
     in_h_ = 0;
   } else {
-    Fl_Type::read_property(c);
+    return Fl_Type::read_property(c);
   }
+  return 1;
 }
 
 #include "comments.h"
@@ -1336,7 +1342,7 @@ void Fl_Class_Type::write_properties() {
   }
 }
 
-void Fl_Class_Type::read_property(const char *c) {
+char Fl_Class_Type::read_property(const char *c) {
   if (!strcmp(c,"private")) {
     public_ = 0;
   } else if (!strcmp(c,"protected")) {
@@ -1344,8 +1350,9 @@ void Fl_Class_Type::read_property(const char *c) {
   } else if (!strcmp(c,":")) {
     storestring(read_word(), subclass_of);
   } else {
-    Fl_Type::read_property(c);
+    return Fl_Type::read_property(c);
   }
+  return 1;
 }
 
 void Fl_Class_Type::open() {

@@ -90,7 +90,7 @@ void Fluid_Image::write_static() {
     // Write Bitmap data...
     write_c("\n");
     if (bitmap_header_written != write_number) {
-      write_c("#include <fltk3/fltk3::Bitmap.h>\n");
+      write_c("#include <fltk3/Bitmap.h>\n");
       bitmap_header_written = write_number;
     }
     write_c("static unsigned char %s[] =\n",
@@ -136,7 +136,7 @@ void Fluid_Image::write_static() {
     // Write image data...
     write_c("\n");
     if (image_header_written != write_number) {
-      write_c("#include <fltk3/fltk3::Image.h>\n");
+      write_c("#include <fltk3/Image.h>\n");
       image_header_written = write_number;
     }
     write_c("static unsigned char %s[] =\n",

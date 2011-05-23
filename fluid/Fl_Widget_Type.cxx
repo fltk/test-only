@@ -1976,7 +1976,7 @@ int isdeclare(const char *c) {
 void Fl_Widget_Type::write_static() {
   const char* t = subclassname(this);
   if (!subclass() || (is_class() && !strncmp(t, "fltk3::", 7))) {
-    write_declare("#include <fltk3/%s.h>", t);
+    write_declare("#include <fltk3/%s.h>", t+7);
   }
   for (int n=0; n < NUM_EXTRA_CODE; n++) {
     if (extra_code(n) && isdeclare(extra_code(n)))
@@ -2506,7 +2506,7 @@ void Fl_Widget_Type::write_properties() {
 
 int pasteoffset;
 extern double read_version;
-void Fl_Widget_Type::read_property(const char *c) {
+char Fl_Widget_Type::read_property(const char *c) {
   int x,y,w,h; fltk3::Font f; int s; fltk3::Color cc;
   if (!strcmp(c,"private")) {
     public_ = 0;
@@ -2639,14 +2639,15 @@ void Fl_Widget_Type::read_property(const char *c) {
       int n = atoi(c+4);
       if (n >= 0 && n <= NUM_EXTRA_CODE) {
         extra_code(n,read_word());
-        return;
+        return 1;
       }
     } else if (!strcmp(c,"extra_code")) {
       extra_code(0,read_word());
-      return;
+      return 1;
     }
-    Fl_Type::read_property(c);
+    return Fl_Type::read_property(c);
   }
+  return 1;
 }
 
 fltk3::MenuItem boxmenu1[] = {

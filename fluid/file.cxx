@@ -481,7 +481,10 @@ static void read_children(Fl_Type *p, int paste) {
     for (;;) {
       const char *cc = read_word();
       if (!cc || !strcmp(cc,"}")) break;
-      t->read_property(cc);
+      if (t->read_property(cc)==0) {
+        read_error("Unknown property \"%s\" for \"%s\".\n",cc, t->title());
+        goto CONTINUE;
+      }
     }
 
     if (!t->is_parent()) continue;
