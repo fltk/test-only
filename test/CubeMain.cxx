@@ -36,7 +36,7 @@ main(int argc, char **argv) {
     
 //Initial global objects.
     
-    Fl::visual(FL_DOUBLE|FL_INDEX);
+    fltk3::visual(fltk3::DOUBLE|fltk3::INDEX);
 
     cvui->show(argc, argv);
     

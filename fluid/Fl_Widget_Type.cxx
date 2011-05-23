@@ -2355,7 +2355,7 @@ void Fl_Widget_Type::write_widget_code() {
   if (!o->active())
     write_c("%s%s->deactivate();\n", indent(), var);
   if (!is_group() && resizable())
-    write_c("%sFl_Group::current()->resizable(%s);\n", indent(), var);
+    write_c("%sfltk3::Group::current()->resizable(%s);\n", indent(), var);
   if (hotspot()) {
     if (is_class())
       write_c("%shotspot(%s);\n", indent(), var);

@@ -30,7 +30,7 @@
 #include <config.h>
 #include <fltk3/run.h>
 #if HAVE_GL
-#  include <fltk3/Gl_Window.h>
+#  include <fltk3/GlWindow.h>
 #  include <fltk3/gl.h>
 #else
 #  include <fltk3/Box.h>

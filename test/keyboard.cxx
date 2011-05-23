@@ -46,79 +46,79 @@
 
 
 // these are used to identify which buttons are which:
-void key_cb(Fl_Button*, void*) {}
-void shift_cb(Fl_Button*, void*) {}
+void key_cb(fltk3::Button*, void*) {}
+void shift_cb(fltk3::Button*, void*) {}
 void wheel_cb(fltk3::Dial*, void*) {}
 
 // this is used to stop Esc from exiting the program:
 int handle(int e) {
-  return (e == FL_SHORTCUT); // eat all keystrokes
+  return (e == fltk3::SHORTCUT); // eat all keystrokes
 }
 
 int MyWindow::handle(int msg) {
-  if (msg==FL_MOUSEWHEEL)
+  if (msg==fltk3::MOUSEWHEEL)
   {
-    roller_x->value( roller_x->value() + Fl::e_dx * roller_x->step() );
-    roller_y->value( roller_y->value() + Fl::e_dy * roller_y->step() );
+    roller_x->value( roller_x->value() + fltk3::e_dx * roller_x->step() );
+    roller_y->value( roller_y->value() + fltk3::e_dy * roller_y->step() );
     return 1;
   }
   return 0;
 }
 
 struct keycode_table{int n; const char* text;} table[] = {
-  {FL_Escape, "FL_Escape"},
-  {FL_BackSpace, "FL_BackSpace"},
-  {FL_Tab, "FL_Tab"},
-  {FL_Enter, "FL_Enter"},
-  {FL_Print, "FL_Print"},
-  {FL_Scroll_Lock, "FL_Scroll_Lock"},
-  {FL_Pause, "FL_Pause"},
-  {FL_Insert, "FL_Insert"},
-  {FL_Home, "FL_Home"},
-  {FL_Page_Up, "FL_Page_Up"},
-  {FL_Delete, "FL_Delete"},
-  {FL_End, "FL_End"},
-  {FL_Page_Down, "FL_Page_Down"},
-  {FL_Left, "FL_Left"},
-  {FL_Up, "FL_Up"},
-  {FL_Right, "FL_Right"},
-  {FL_Down, "FL_Down"},
-  {FL_Shift_L, "FL_Shift_L"},
-  {FL_Shift_R, "FL_Shift_R"},
-  {FL_Control_L, "FL_Control_L"},
-  {FL_Control_R, "FL_Control_R"},
-  {FL_Caps_Lock, "FL_Caps_Lock"},
-  {FL_Alt_L, "FL_Alt_L"},
-  {FL_Alt_R, "FL_Alt_R"},
-  {FL_Meta_L, "FL_Meta_L"},
-  {FL_Meta_R, "FL_Meta_R"},
-  {FL_Menu, "FL_Menu"},
-  {FL_Help, "FL_Help"},
-  {FL_Num_Lock, "FL_Num_Lock"},
-  {FL_KP_Enter, "FL_KP_Enter"}
+  {fltk3::EscapeKey,      "fltk3::EscapeKey"},
+  {fltk3::BackSpaceKey,   "fltk3::BackSpaceKey"},
+  {fltk3::TabKey,         "fltk3::TabKey"},
+  {fltk3::EnterKey,       "fltk3::EnterKey"},
+  {fltk3::PrintKey,       "fltk3::PrintKey"},
+  {fltk3::ScrollLockKey,  "fltk3::ScrollLockKey"},
+  {fltk3::PauseKey,       "fltk3::PauseKey"},
+  {fltk3::InsertKey,      "fltk3::InsertKey"},
+  {fltk3::HomeKey,        "fltk3::HomeKey"},
+  {fltk3::PageUpKey,      "fltk3::PageUpKey"},
+  {fltk3::DeleteKey,      "fltk3::DeleteKey"},
+  {fltk3::EndKey,         "fltk3::EndKey"},
+  {fltk3::PageDownKey,    "fltk3::PageDownKey"},
+  {fltk3::LeftKey,        "fltk3::LeftKey"},
+  {fltk3::UpKey,          "fltk3::UpKey"},
+  {fltk3::RightKey,       "fltk3::RightKey"},
+  {fltk3::DownKey,        "fltk3::DownKey"},
+  {fltk3::ShiftLKey,      "fltk3::ShiftLKey"},
+  {fltk3::ShiftRKey,      "fltk3::ShiftRKey"},
+  {fltk3::ControlLKey,    "fltk3::ControlLKey"},
+  {fltk3::ControlRKey,    "fltk3::ControlRKey"},
+  {fltk3::CapsLockKey,    "fltk3::CapsLockKey"},
+  {fltk3::AltLKey,        "fltk3::AltLKey"},
+  {fltk3::AltRKey,        "fltk3::AltRKey"},
+  {fltk3::MetaLKey,       "fltk3::MetaLKey"},
+  {fltk3::MetaRKey,       "fltk3::MetaRKey"},
+  {fltk3::MenuKey,        "fltk3::MenuKey"},
+  {fltk3::HelpKey,        "fltk3::HelpKey"},
+  {fltk3::NumLockKey,     "fltk3::NumLockKey"},
+  {fltk3::KPEnterKey,     "fltk3::KPEnterKey"}
 };
 
 int main(int argc, char** argv) {
-  Fl::add_handler(handle);
+  fltk3::add_handler(handle);
   MyWindow *window = make_window();
   window->show(argc,argv);
-  while (Fl::wait()) {
+  while (fltk3::wait()) {
     const char *str;
     
     // update all the buttons with the current key and shift state:
     for (int i = 0; i < window->children(); i++) {
-      Fl_Widget* b = window->child(i);
-      if (b->callback() == (Fl_Callback*)key_cb) {
+      fltk3::Widget* b = window->child(i);
+      if (b->callback() == (fltk3::Callback*)key_cb) {
 	int i = b->argument();
 	if (!i) i = b->label()[0];
-        Fl_Button *btn = ((Fl_Button*)b);
-        int state = Fl::event_key(i);
+        fltk3::Button *btn = ((fltk3::Button*)b);
+        int state = fltk3::event_key(i);
         if (btn->value()!=state)
 	  btn->value(state);
-      } else if (b->callback() == (Fl_Callback*)shift_cb) {
+      } else if (b->callback() == (fltk3::Callback*)shift_cb) {
 	int i = b->argument();
-        Fl_Button *btn = ((Fl_Button*)b);
-        int state = Fl::event_state(i);
+        fltk3::Button *btn = ((fltk3::Button*)b);
+        int state = fltk3::event_state(i);
         if (btn->value()!=state)
 	  btn->value(state);
       }
@@ -127,17 +127,17 @@ int main(int argc, char** argv) {
     // figure out the keyname:
     char buffer[100];
     const char *keyname = buffer;
-    int k = Fl::event_key();
+    int k = fltk3::event_key();
     if (!k)
       keyname = "0";
     else if (k < 256) {
       sprintf(buffer, "'%c'", k);
-    } else if (k > FL_F && k <= FL_F_Last) {
-      sprintf(buffer, "FL_F+%d", k - FL_F);
-    } else if (k >= FL_KP && k <= FL_KP_Last) {
-      sprintf(buffer, "FL_KP+'%c'", k-FL_KP);
-    } else if (k >= FL_Button && k <= FL_Button+7) {
-      sprintf(buffer, "FL_Button+%d", k-FL_Button);
+    } else if (k > fltk3::FKey && k <= fltk3::FLastKey) {
+      sprintf(buffer, "fltk3::FKey+%d", k - fltk3::FKey);
+    } else if (k >= fltk3::KPKey && k <= fltk3::KPLastKey) {
+      sprintf(buffer, "fltk3::KPKey+'%c'", k-fltk3::KPKey);
+    } else if (k >= fltk3::MouseButton && k <= fltk3::MouseButton+7) {
+      sprintf(buffer, "fltk3::MouseButton+%d", k-fltk3::MouseButton);
     } else {
       sprintf(buffer, "0x%04x", k);
       for (int i = 0; i < int(sizeof(table)/sizeof(*table)); i++)
@@ -146,7 +146,7 @@ int main(int argc, char** argv) {
     if (strcmp(key_output->value(), keyname))
       key_output->value(keyname);
 
-    str = Fl::event_text();
+    str = fltk3::event_text();
     if (strcmp(text_output->value(), str))
       text_output->value(str);
   }

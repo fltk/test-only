@@ -31,11 +31,11 @@
 #  include <fltk3/run.h>
 #  include <fltk3/Window.h>
 
-class MyWindow : public Fl_Window {
+class MyWindow : public fltk3::Window {
   int handle(int);
 public:
   MyWindow(int w, int h, const char *t=0L) 
-    : Fl_Window( w, h, t ) { }
+  : fltk3::Window( w, h, t ) { }
 };
 
 #endif // !keyboard_h
