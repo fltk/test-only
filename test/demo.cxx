@@ -55,51 +55,51 @@
 
 /* The form description */
 
-void doexit(Fl_Widget *, void *);
-void doback(Fl_Widget *, void *);
-void dobut(Fl_Widget *, long);
+void doexit(fltk3::Widget *, void *);
+void doback(fltk3::Widget *, void *);
+void dobut(fltk3::Widget *, long);
 void doscheme(fltk3::Choice *c, void *) {
-  Fl::scheme(c->text(c->value()));
+  fltk3::scheme(c->text(c->value()));
 }
 
 fltk3::DoubleWindow *form;
-Fl_Button *but[9];
+fltk3::Button *but[9];
 
 void create_the_forms() {
-  Fl_Widget *obj;
+  fltk3::Widget *obj;
   form = new fltk3::DoubleWindow(350, 440);
-  obj = new Fl_Box(FL_FRAME_BOX,10,15,330,40,"FLTK Demonstration");
-  obj->color(FL_GRAY-4);
+  obj = new fltk3::Box(fltk3::FRAME_BOX,10,15,330,40,"FLTK Demonstration");
+  obj->color(fltk3::GRAY-4);
   obj->labelsize(24);
-  obj->labelfont(FL_BOLD);
-  obj->labeltype(FL_ENGRAVED_LABEL);
-  obj = new Fl_Box(FL_FRAME_BOX,10,65,330,330,0);
-  obj->color(FL_GRAY-8);
-  obj = new Fl_Button(280,405,60,25,"Exit");
+  obj->labelfont(fltk3::BOLD);
+  obj->labeltype(fltk3::ENGRAVED_LABEL);
+  obj = new fltk3::Box(fltk3::FRAME_BOX,10,65,330,330,0);
+  obj->color(fltk3::GRAY-8);
+  obj = new fltk3::Button(280,405,60,25,"Exit");
   obj->callback(doexit);
   fltk3::Choice *choice = new fltk3::Choice(75, 405, 100, 25, "Scheme:");
-  choice->labelfont(FL_HELVETICA_BOLD);
+  choice->labelfont(fltk3::HELVETICA_BOLD);
   choice->add("none");
   choice->add("gtk+");
   choice->add("plastic");
-  choice->callback((Fl_Callback *)doscheme);
-  Fl::scheme(NULL);
-  if (!Fl::scheme()) choice->value(0);
-  else if (!strcmp(Fl::scheme(), "gtk+")) choice->value(1);
+  choice->callback((fltk3::Callback *)doscheme);
+  fltk3::scheme(NULL);
+  if (!fltk3::scheme()) choice->value(0);
+  else if (!strcmp(fltk3::scheme(), "gtk+")) choice->value(1);
   else choice->value(2);
-  obj = new Fl_Button(10,15,330,380); obj->type(FL_HIDDEN_BUTTON);
+  obj = new fltk3::Button(10,15,330,380); obj->type(fltk3::HIDDEN_BUTTON);
   obj->callback(doback);
-  obj = but[0] = new Fl_Button( 30, 85,90,90);
-  obj = but[1] = new Fl_Button(130, 85,90,90);
-  obj = but[2] = new Fl_Button(230, 85,90,90);
-  obj = but[3] = new Fl_Button( 30,185,90,90);
-  obj = but[4] = new Fl_Button(130,185,90,90);
-  obj = but[5] = new Fl_Button(230,185,90,90);
-  obj = but[6] = new Fl_Button( 30,285,90,90);
-  obj = but[7] = new Fl_Button(130,285,90,90);
-  obj = but[8] = new Fl_Button(230,285,90,90);
+  obj = but[0] = new fltk3::Button( 30, 85,90,90);
+  obj = but[1] = new fltk3::Button(130, 85,90,90);
+  obj = but[2] = new fltk3::Button(230, 85,90,90);
+  obj = but[3] = new fltk3::Button( 30,185,90,90);
+  obj = but[4] = new fltk3::Button(130,185,90,90);
+  obj = but[5] = new fltk3::Button(230,185,90,90);
+  obj = but[6] = new fltk3::Button( 30,285,90,90);
+  obj = but[7] = new fltk3::Button(130,285,90,90);
+  obj = but[8] = new fltk3::Button(230,285,90,90);
   for (int i=0; i<9; i++) {
-    but[i]->align(FL_ALIGN_WRAP);
+    but[i]->align(fltk3::ALIGN_WRAP);
     but[i]->callback(dobut, i);
   }
   form->end();
@@ -219,7 +219,7 @@ void pop_menu()
 
 /* The callback Routines */
 
-void dobut(Fl_Widget *, long arg)
+void dobut(fltk3::Widget *, long arg)
 /* handles a button push */
 {
   int men = find_menu(stack[stsize-1]);
@@ -330,9 +330,9 @@ void dobut(Fl_Widget *, long arg)
   }
 }
 
-void doback(Fl_Widget *, void *) {pop_menu();}
+void doback(fltk3::Widget *, void *) {pop_menu();}
 
-void doexit(Fl_Widget *, void *) {exit(0);}
+void doexit(fltk3::Widget *, void *) {exit(0);}
 
 int load_the_menu(const char* fname)
 /* Loads the menu file. Returns whether successful. */
@@ -401,19 +401,19 @@ int main(int argc, char **argv) {
   strcpy(buf, argv[0]);
 #if ( defined _MSC_VER || defined __MWERKS__ ) && defined _DEBUG
   // MS_VisualC appends a 'd' to debugging executables. remove it.
-  fl_filename_setext( buf, "" );
+  fltk3::filename_setext( buf, "" );
   buf[ strlen(buf)-1 ] = 0;
 #endif
   fl_filename_setext(buf,".menu");
   const char *fname = buf;
   int i = 0;
-  if (!Fl::args(argc,argv,i) || i < argc-1)
-    Fl::fatal("Usage: %s <switches> <menufile>\n%s",argv[0],Fl::help);
+  if (!fltk3::args(argc,argv,i) || i < argc-1)
+    fltk3::fatal("Usage: %s <switches> <menufile>\n%s",argv[0],fltk3::help);
   if (i < argc) fname = argv[i];
   
   create_the_forms();
   
-  if (!load_the_menu(fname)) Fl::fatal("Can't open %s",fname);
+  if (!load_the_menu(fname)) fltk3::fatal("Can't open %s",fname);
   if (buf!=fname)
     strcpy(buf,fname);
   const char *c = fl_filename_name(buf);

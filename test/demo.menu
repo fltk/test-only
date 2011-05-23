@@ -78,7 +78,6 @@
 	@o:Input Choice:input_choice
 	@o:Preferences:preferences
 	@o:Threading:threads
-	@o:XForms Emulation:forms
 
 @main:Tutorial\nfrom\nManual...:@j
 	@j:ask\n(modified):ask
