@@ -49,7 +49,7 @@ char* fl_show_file_selector(const char *message,const char *dir,
   const char *q = fltk3::file_chooser(message,fl_pattern,fl_directory);
   if (!q) return 0;
   strlcpy(fl_directory, q, sizeof(fl_directory));
-  p = (char *)fl_filename_name(fl_directory);
+  p = (char *)fltk3::filename_name(fl_directory);
   strlcpy(fl_filename, p, sizeof(fl_filename));
   if (p > fl_directory+1) p--;
   *p = 0;

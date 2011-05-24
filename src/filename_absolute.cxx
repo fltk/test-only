@@ -53,16 +53,16 @@ inline int isdirsep(char c) {return c=='/' || c=='\\';}
     #include <fltk3/filename.h>
     [..]
     chdir("/var/tmp");
-    fl_filename_absolute(out, sizeof(out), "foo.txt");         // out="/var/tmp/foo.txt"
-    fl_filename_absolute(out, sizeof(out), "./foo.txt");       // out="/var/tmp/foo.txt"
-    fl_filename_absolute(out, sizeof(out), "../log/messages"); // out="/var/log/messages"
+    fltk3::filename_absolute(out, sizeof(out), "foo.txt");         // out="/var/tmp/foo.txt"
+    fltk3::filename_absolute(out, sizeof(out), "./foo.txt");       // out="/var/tmp/foo.txt"
+    fltk3::filename_absolute(out, sizeof(out), "../log/messages"); // out="/var/log/messages"
     \endcode
     \param[out] to resulting absolute filename
     \param[in]  tolen size of the absolute filename buffer 
     \param[in]  from relative filename
     \return 0 if no change, non zero otherwise
  */
-int fl_filename_absolute(char *to, int tolen, const char *from) {
+int fltk3::filename_absolute(char *to, int tolen, const char *from) {
   if (isdirsep(*from) || *from == '|'
 #if defined(WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
       || from[1]==':'
@@ -122,11 +122,11 @@ int fl_filename_absolute(char *to, int tolen, const char *from) {
     chdir("/var/tmp/somedir");       // set cwd to /var/tmp/somedir
     [..]
     char out[FLTK3_PATH_MAX];
-    fl_filename_relative(out, sizeof(out), "/var/tmp/somedir/foo.txt");  // out="foo.txt",    return=1
-    fl_filename_relative(out, sizeof(out), "/var/tmp/foo.txt");          // out="../foo.txt", return=1
-    fl_filename_relative(out, sizeof(out), "foo.txt");                   // out="foo.txt",    return=0 (no change)
-    fl_filename_relative(out, sizeof(out), "./foo.txt");                 // out="./foo.txt",  return=0 (no change)
-    fl_filename_relative(out, sizeof(out), "../foo.txt");                // out="../foo.txt", return=0 (no change)
+    fltk3::filename_relative(out, sizeof(out), "/var/tmp/somedir/foo.txt");  // out="foo.txt",    return=1
+    fltk3::filename_relative(out, sizeof(out), "/var/tmp/foo.txt");          // out="../foo.txt", return=1
+    fltk3::filename_relative(out, sizeof(out), "foo.txt");                   // out="foo.txt",    return=0 (no change)
+    fltk3::filename_relative(out, sizeof(out), "./foo.txt");                 // out="./foo.txt",  return=0 (no change)
+    fltk3::filename_relative(out, sizeof(out), "../foo.txt");                // out="../foo.txt", return=0 (no change)
     \endcode
     \param[out] to resulting relative filename
     \param[in]  tolen size of the relative filename buffer 
@@ -134,7 +134,7 @@ int fl_filename_absolute(char *to, int tolen, const char *from) {
     \return 0 if no change, non zero otherwise
  */
 int					// O - 0 if no change, 1 if changed
-fl_filename_relative(char       *to,	// O - Relative filename
+fltk3::filename_relative(char       *to,	// O - Relative filename
                      int        tolen,	// I - Size of "to" buffer
                      const char *from)  // I - Absolute filename
 {
@@ -144,7 +144,7 @@ fl_filename_relative(char       *to,	// O - Relative filename
     strlcpy(to, from, tolen);
     return 0;
   }
-  return fl_filename_relative(to, tolen, from, cwd_buf);
+  return fltk3::filename_relative(to, tolen, from, cwd_buf);
 }
 
 
@@ -156,7 +156,7 @@ fl_filename_relative(char       *to,	// O - Relative filename
  \return 0 if no change, non zero otherwise
  */
 int					// O - 0 if no change, 1 if changed
-fl_filename_relative(char       *to,	// O - Relative filename
+fltk3::filename_relative(char       *to,	// O - Relative filename
                      int        tolen,	// I - Size of "to" buffer
                      const char *from,  // I - Absolute filename
                      const char *base) { // I - Find path relative to this path

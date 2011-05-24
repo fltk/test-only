@@ -43,49 +43,48 @@
 
 /** \addtogroup filenames File names and URI utility functions
  File names and URI functions defined in <fltk3/filename.h>
-    @{ */
+ @{ */
 #ifdef _MAX_PATH
 const unsigned int FLTK3_PATH_MAX = _MAX_PATH;
+#elif defined(MAX_PATH)
+const unsigned int FLTK3_PATH_MAX = MAX_PATH;
 #else
 const unsigned int FLTK3_PATH_MAX = 2048; /**< all path buffers should use this length */
 #endif
 
-/** Gets the file name from a path.
-    Similar to basename(3), exceptions shown below.
-    \code
-    #include <fltk3/filename.h>
-    [..]
-    const char *out;
-    out = fl_filename_name("/usr/lib");     // out="lib"
-    out = fl_filename_name("/usr/");        // out=""      (basename(3) returns "usr" instead)
-    out = fl_filename_name("/usr");         // out="usr"
-    out = fl_filename_name("/");            // out=""      (basename(3) returns "/" instead)
-    out = fl_filename_name(".");            // out="."
-    out = fl_filename_name("..");           // out=".."
-    \endcode
-    \return a pointer to the char after the last slash, or to \p filename if there is none.
- */
-FLTK3_EXPORT const char *fl_filename_name(const char * filename);
-FLTK3_EXPORT const char *fl_filename_ext(const char *buf);
-FLTK3_EXPORT char *fl_filename_setext(char *to, int tolen, const char *ext);
-FLTK3_EXPORT int fl_filename_expand(char *to, int tolen, const char *from);
-FLTK3_EXPORT int fl_filename_absolute(char *to, int tolen, const char *from);
-FLTK3_EXPORT int fl_filename_relative(char *to, int tolen, const char *from);
-FLTK3_EXPORT int fl_filename_match(const char *name, const char *pattern);
-FLTK3_EXPORT int fl_filename_isdir(const char *name);
-
-#  if defined(__cplusplus) && !defined(FLTK3_DOXYGEN)
-/*
- * Under WIN32, we include filename.h from numericsort.c; this should probably change...
- */
-
-inline char *fl_filename_setext(char *to, const char *ext) { return fl_filename_setext(to, FLTK3_PATH_MAX, ext); }
-inline int fl_filename_expand(char *to, const char *from) { return fl_filename_expand(to, FLTK3_PATH_MAX, from); }
-inline int fl_filename_absolute(char *to, const char *from) { return fl_filename_absolute(to, FLTK3_PATH_MAX, from); }
-FLTK3_EXPORT int fl_filename_relative(char *to, int tolen, const char *from, const char *cwd);
-inline int fl_filename_relative(char *to, const char *from) { return fl_filename_relative(to, FLTK3_PATH_MAX, from); }
-#  endif /* __cplusplus */
-
+namespace fltk3 {
+  
+  /** Gets the file name from a path.
+   Similar to basename(3), exceptions shown below.
+   \code
+   #include <fltk3/filename.h>
+   [..]
+   const char *out;
+   out = fltk3::filename_name("/usr/lib");     // out="lib"
+   out = fltk3::filename_name("/usr/");        // out=""      (basename(3) returns "usr" instead)
+   out = fltk3::filename_name("/usr");         // out="usr"
+   out = fltk3::filename_name("/");            // out=""      (basename(3) returns "/" instead)
+   out = fltk3::filename_name(".");            // out="."
+   out = fltk3::filename_name("..");           // out=".."
+   \endcode
+   \return a pointer to the char after the last slash, or to \p filename if there is none.
+   */
+  FLTK3_EXPORT const char *filename_name(const char * filename);
+  FLTK3_EXPORT const char *filename_ext(const char *buf);
+  FLTK3_EXPORT char *filename_setext(char *to, int tolen, const char *ext);
+  FLTK3_EXPORT int filename_expand(char *to, int tolen, const char *from);
+  FLTK3_EXPORT int filename_absolute(char *to, int tolen, const char *from);
+  FLTK3_EXPORT int filename_relative(char *to, int tolen, const char *from);
+  FLTK3_EXPORT int filename_match(const char *name, const char *pattern);
+  FLTK3_EXPORT int filename_isdir(const char *name);
+  
+  inline char *filename_setext(char *to, const char *ext) { return filename_setext(to, FLTK3_PATH_MAX, ext); }
+  inline int filename_expand(char *to, const char *from) { return filename_expand(to, FLTK3_PATH_MAX, from); }
+  inline int filename_absolute(char *to, const char *from) { return filename_absolute(to, FLTK3_PATH_MAX, from); }
+  FLTK3_EXPORT int filename_relative(char *to, int tolen, const char *from, const char *cwd);
+  inline int filename_relative(char *to, const char *from) { return filename_relative(to, FLTK3_PATH_MAX, from); }
+  
+}
 
 #  if defined(WIN32) && !defined(__CYGWIN__) && !defined(__WATCOMC__)
 
@@ -116,52 +115,45 @@ struct dirent {char d_name[1];};
 #    undef fl_dirent_h_cyclic_include
 #  endif
 
-#  if defined (__cplusplus)
-extern "C" {
-#  endif /* __cplusplus */
-
-#  if !defined(FLTK3_DOXYGEN)
-FLTK3_EXPORT int fl_alphasort(struct dirent **, struct dirent **);
-FLTK3_EXPORT int fl_casealphasort(struct dirent **, struct dirent **);
-FLTK3_EXPORT int fl_casenumericsort(struct dirent **, struct dirent **);
-FLTK3_EXPORT int fl_numericsort(struct dirent **, struct dirent **);
-#  endif
-
-  namespace fltk3 {
-    typedef int (FileSortF)(struct dirent **, struct dirent **); /**< File sorting function. \see fl_filename_list() */
-  }
-
-#  if defined(__cplusplus)
-}
-
-/*
- * Portable "scandir" function.  Ugly but necessary...
- */
-
-FLTK3_EXPORT int fl_filename_list(const char *d, struct dirent ***l,
-                                  fltk3::FileSortF *s = fl_numericsort);
-FLTK3_EXPORT void fl_filename_free_list(struct dirent ***l, int n);
-
-/*
- * Generic function to open a Uniform Resource Identifier (URI) using a
- * system-defined program (added in FLTK 1.1.8)
- */
-
-FLTK3_EXPORT int	fl_open_uri(const char *uri, char *msg = (char *)0,
+namespace fltk3 {
+  
+#if !defined(FLTK3_DOXYGEN)
+  FLTK3_EXPORT int alphasort(struct dirent **, struct dirent **);
+  FLTK3_EXPORT int casealphasort(struct dirent **, struct dirent **);
+  FLTK3_EXPORT int casenumericsort(struct dirent **, struct dirent **);
+  FLTK3_EXPORT int numericsort(struct dirent **, struct dirent **);
+#endif
+  
+  typedef int (FileSortF)(struct dirent **, struct dirent **); /**< File sorting function. \see fltk3::filename_list() */
+  
+  /*
+   * Portable "scandir" function.  Ugly but necessary...
+   */
+  
+  FLTK3_EXPORT int filename_list(const char *d, struct dirent ***l,
+                                 fltk3::FileSortF *s = fltk3::numericsort);
+  FLTK3_EXPORT void filename_free_list(struct dirent ***l, int n);
+  
+  /*
+   * Generic function to open a Uniform Resource Identifier (URI) using a
+   * system-defined program (added in FLTK 1.1.8)
+   */
+  
+  FLTK3_EXPORT int open_uri(const char *uri, char *msg = (char *)0,
 		            int msglen = 0);
-
+  
 #    ifndef FLTK3_DOXYGEN
-/*
- * _fl_filename_isdir_quick() is a private function that checks for a
- * trailing slash and assumes that the passed name is a directory if
- * it finds one.  This function is used by fltk3::FileBrowser and
- * fltk3::FileChooser to avoid extra stat() calls, but is not supported
- * outside of FLTK...
- */
-int _fl_filename_isdir_quick(const char *name);
+  /*
+   * fltk3::_filename_isdir_quick() is a private function that checks for a
+   * trailing slash and assumes that the passed name is a directory if
+   * it finds one.  This function is used by fltk3::FileBrowser and
+   * fltk3::FileChooser to avoid extra stat() calls, but is not supported
+   * outside of FLTK...
+   */
+  int _filename_isdir_quick(const char *name);
 #    endif
-
-#  endif /* __cplusplus */
+  
+}
 
 #endif /* FLtk3_FILENAME_H */
 

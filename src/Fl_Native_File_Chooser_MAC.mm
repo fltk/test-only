@@ -408,8 +408,8 @@ void fltk3::NativeFileChooser::type(int val) {
 {
   if ( [nspopup indexOfSelectedItem] == [nspopup numberOfItems] - 1) return YES;
   const char *pathname = [filename fileSystemRepresentation];
-  if ( fl_filename_isdir(pathname) ) return YES;
-  if ( fl_filename_match(pathname, filter_pattern[ [nspopup indexOfSelectedItem] ]) ) return YES;
+  if ( fltk3::filename_isdir(pathname) ) return YES;
+  if ( fltk3::filename_match(pathname, filter_pattern[ [nspopup indexOfSelectedItem] ]) ) return YES;
   return NO;
 }
 @end

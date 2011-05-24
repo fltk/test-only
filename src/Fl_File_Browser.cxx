@@ -589,9 +589,9 @@ fltk3::FileBrowser::load(const char     *directory,// I - Directory to load
     else if (filename[i] != '/' && filename[i] != '\\')
       strlcat(filename, "/", sizeof(filename));
 
-    num_files = fl_filename_list(filename, &files, sort);
+    num_files = fltk3::filename_list(filename, &files, sort);
 #else
-    num_files = fl_filename_list(directory_, &files, sort);
+    num_files = fltk3::filename_list(directory_, &files, sort);
 #endif /* WIN32 || __EMX__ */
 
     if (num_files <= 0)
@@ -604,11 +604,11 @@ fltk3::FileBrowser::load(const char     *directory,// I - Directory to load
 
         icon = fltk3::FileIcon::find(filename);
 	if ((icon && icon->type() == fltk3::FileIcon::DIRECTORY) ||
-	     _fl_filename_isdir_quick(filename)) {
+	     fltk3::_filename_isdir_quick(filename)) {
           num_dirs ++;
           insert(num_dirs, files[i]->d_name, icon);
 	} else if (filetype_ == FILES &&
-	           fl_filename_match(files[i]->d_name, pattern_)) {
+	           fltk3::filename_match(files[i]->d_name, pattern_)) {
           add(files[i]->d_name, icon);
 	}
       }

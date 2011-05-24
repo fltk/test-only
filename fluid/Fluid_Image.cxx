@@ -61,7 +61,7 @@ void Fluid_Image::write_static() {
       pixmap_header_written = write_number;
     }
     write_c("static const char *%s[] = {\n",
-	    unique_id(this, "idata", fl_filename_name(name()), 0));
+	    unique_id(this, "idata", fltk3::filename_name(name()), 0));
     write_cstring(img->data()[0], strlen(img->data()[0]));
 
     int i;
@@ -84,8 +84,8 @@ void Fluid_Image::write_static() {
     }
     write_c("\n};\n");
     write_c("static fltk3::Pixmap %s(%s);\n",
-	    unique_id(this, "image", fl_filename_name(name()), 0),
-	    unique_id(this, "idata", fl_filename_name(name()), 0));
+	    unique_id(this, "image", fltk3::filename_name(name()), 0),
+	    unique_id(this, "idata", fltk3::filename_name(name()), 0));
   } else if (img->d() == 0) {
     // Write Bitmap data...
     write_c("\n");
@@ -94,14 +94,14 @@ void Fluid_Image::write_static() {
       bitmap_header_written = write_number;
     }
     write_c("static unsigned char %s[] =\n",
-	    unique_id(this, "idata", fl_filename_name(name()), 0));
+	    unique_id(this, "idata", fltk3::filename_name(name()), 0));
     write_cdata(img->data()[0], ((img->w() + 7) / 8) * img->h());
     write_c(";\n");
     write_c("static fltk3::Bitmap %s(%s, %d, %d);\n",
-	    unique_id(this, "image", fl_filename_name(name()), 0),
-	    unique_id(this, "idata", fl_filename_name(name()), 0),
+	    unique_id(this, "image", fltk3::filename_name(name()), 0),
+	    unique_id(this, "idata", fltk3::filename_name(name()), 0),
 	    img->w(), img->h());
-  } else if (strcmp(fl_filename_ext(name()), ".jpg")==0) {
+  } else if (strcmp(fltk3::filename_ext(name()), ".jpg")==0) {
     // Write jpeg image data...
     write_c("\n");
     if (jpeg_header_written != write_number) {
@@ -109,7 +109,7 @@ void Fluid_Image::write_static() {
       jpeg_header_written = write_number;
     }
     write_c("static unsigned char %s[] =\n",
-	    unique_id(this, "idata", fl_filename_name(name()), 0));
+	    unique_id(this, "idata", fltk3::filename_name(name()), 0));
         
     FILE *f = fltk3::fopen(name(), "rb");
     if (!f) {
@@ -129,9 +129,9 @@ void Fluid_Image::write_static() {
     
     write_c(";\n");
     write_c("static fltk3::JPEGImage %s(\"%s\", %s);\n",
-	    unique_id(this, "image", fl_filename_name(name()), 0),
-	    fl_filename_name(name()),
-	    unique_id(this, "idata", fl_filename_name(name()), 0));
+	    unique_id(this, "image", fltk3::filename_name(name()), 0),
+	    fltk3::filename_name(name()),
+	    unique_id(this, "idata", fltk3::filename_name(name()), 0));
   } else {
     // Write image data...
     write_c("\n");
@@ -140,12 +140,12 @@ void Fluid_Image::write_static() {
       image_header_written = write_number;
     }
     write_c("static unsigned char %s[] =\n",
-	    unique_id(this, "idata", fl_filename_name(name()), 0));
+	    unique_id(this, "idata", fltk3::filename_name(name()), 0));
     write_cdata(img->data()[0], (img->w() * img->d() + img->ld()) * img->h());
     write_c(";\n");
     write_c("static fltk3::RGBImage %s(%s, %d, %d, %d, %d);\n",
-	    unique_id(this, "image", fl_filename_name(name()), 0),
-	    unique_id(this, "idata", fl_filename_name(name()), 0),
+	    unique_id(this, "image", fltk3::filename_name(name()), 0),
+	    unique_id(this, "idata", fltk3::filename_name(name()), 0),
 	    img->w(), img->h(), img->d(), img->ld());
   }
 }
@@ -153,7 +153,7 @@ void Fluid_Image::write_static() {
 void Fluid_Image::write_code(const char *var, int inactive) {
   if (!img) return;
   write_c("%s%s->%s(%s);\n", indent(), var, inactive ? "deimage" : "image",
-	  unique_id(this, "image", fl_filename_name(name()), 0));
+	  unique_id(this, "image", fltk3::filename_name(name()), 0));
 }
 
 

@@ -34,13 +34,13 @@
    #include <fltk3/filename.h>
    [..]
    const char *out;
-   out = fl_filename_ext("/some/path/foo.txt");        // result: ".txt"
-   out = fl_filename_ext("/some/path/foo");            // result: NULL
+   out = fltk3::filename_ext("/some/path/foo.txt");        // result: ".txt"
+   out = fltk3::filename_ext("/some/path/foo");            // result: NULL
    \endcode
    \param[in] buf the filename to be parsed
    \return a pointer to the extension (including '.') if any or NULL otherwise
  */
-const char *fl_filename_ext(const char *buf) {
+const char *fltk3::filename_ext(const char *buf) {
   const char *q = 0;
   const char *p = buf;
   for (p=buf; *p; p++) {

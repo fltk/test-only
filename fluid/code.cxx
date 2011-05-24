@@ -387,7 +387,7 @@ int write_code(const char *s, const char *t) {
   fprintf(code_file, hdr, FL_VERSION);
 
   {char define_name[102];
-  const char* a = fl_filename_name(t);
+  const char* a = fltk3::filename_name(t);
   char* b = define_name;
   if (!isalpha(*a)) {*b++ = '_';}
   while (*a) {*b++ = isalnum(*a) ? *a : '_'; a++;}
@@ -416,7 +416,7 @@ int write_code(const char *s, const char *t) {
   }
   if (t && include_H_from_C) {
     if (*header_file_name == '.' && strchr(header_file_name, '/') == NULL) {
-      write_c("#include \"%s\"\n", fl_filename_name(t));
+      write_c("#include \"%s\"\n", fltk3::filename_name(t));
     } else {
       write_c("#include \"%s\"\n", t);
     }

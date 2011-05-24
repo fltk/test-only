@@ -1821,7 +1821,7 @@ void fltk3::Window::size_range_() {
 ////////////////////////////////////////////////////////////////
 
 // returns pointer to the filename, or null if name ends with '/'
-const char *fl_filename_name(const char *name) {
+const char *fltk3::filename_name(const char *name) {
   const char *p,*q;
   if (!name) return (0);
   for (p=q=name; *p;) if (*p++ == '/') q = p;
@@ -1834,7 +1834,7 @@ void fltk3::Window::label(const char *name,const char *iname) {
   if (shown() && !parent()) {
     if (!name) name = "";
     int namelen = strlen(name);
-    if (!iname) iname = fl_filename_name(name);
+    if (!iname) iname = fltk3::filename_name(name);
     int inamelen = strlen(iname);
     XChangeProperty(fl_display, i->xid, fl_NET_WM_NAME,      fl_XaUtf8String, 8, 0, (uchar*)name,  namelen);	// utf8
     XChangeProperty(fl_display, i->xid, XA_WM_NAME,          XA_STRING,       8, 0, (uchar*)name,  namelen);	// non-utf8

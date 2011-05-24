@@ -304,10 +304,10 @@ void dobut(fltk3::Widget *, long arg)
     if (arg) {
       *arg = 0;
       if (strcmp(cmd, "../fluid/fluid")==0) {
-        fl_filename_absolute(path, 2048, "../../../../test/");
+        fltk3::filename_absolute(path, 2048, "../../../../test/");
 	sprintf(command, "open Fluid.app --args %s%s", path, arg+1);
       } else {
-        fl_filename_absolute(path, 2048, "../../../../test/");
+        fltk3::filename_absolute(path, 2048, "../../../../test/");
 	sprintf(command, "open %s.app --args %s%s", cmd, path, arg+1);
       }
     } else {
@@ -404,7 +404,7 @@ int main(int argc, char **argv) {
   fltk3::filename_setext( buf, "" );
   buf[ strlen(buf)-1 ] = 0;
 #endif
-  fl_filename_setext(buf,".menu");
+  fltk3::filename_setext(buf,".menu");
   const char *fname = buf;
   int i = 0;
   if (!fltk3::args(argc,argv,i) || i < argc-1)
@@ -416,7 +416,7 @@ int main(int argc, char **argv) {
   if (!load_the_menu(fname)) fltk3::fatal("Can't open %s",fname);
   if (buf!=fname)
     strcpy(buf,fname);
-  const char *c = fl_filename_name(buf);
+  const char *c = fltk3::filename_name(buf);
   if (c > buf) {
     buf[c-buf] = 0; 
     if (chdir(buf)==-1) { /* ignore */ }

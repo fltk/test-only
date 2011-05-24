@@ -47,7 +47,7 @@ void load_file(const char *n) {
     img->release();
     img = 0L;
   }
-  if (fl_filename_isdir(n)) {
+  if (fltk3::filename_isdir(n)) {
     b->label("@fileopen"); // show a generic folder
     b->labelsize(64);
     b->labelcolor(fltk3::LIGHT2);

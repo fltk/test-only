@@ -75,13 +75,13 @@ namespace fltk3 {
     
     /**
      Sets or gets the filename filter. The pattern matching uses
-     the fl_filename_match()
+     the fltk3::filename_match()
      function in FLTK.
      */
     void	filter(const char *pattern);
     /**
      Sets or gets the filename filter. The pattern matching uses
-     the fl_filename_match()
+     the fltk3::filename_match()
      function in FLTK.
      */
     const char	*filter() const { return (pattern_); };
@@ -91,9 +91,9 @@ namespace fltk3 {
      loaded then the correct icon is associated with each file in the list.
      
      <P>The sort argument specifies a sort function to be used with
-     fl_filename_list().
+     fltk3::filename_list().
      */
-    int		load(const char *directory, fltk3::FileSortF *sort = fl_numericsort);
+    int		load(const char *directory, fltk3::FileSortF *sort = fltk3::numericsort);
     
     fltk3::Fontsize  textsize() const { return fltk3::Browser::textsize(); };
     void		textsize(fltk3::Fontsize s) { fltk3::Browser::textsize(s); iconsize_ = (uchar)(3 * s / 2); };

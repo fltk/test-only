@@ -57,7 +57,7 @@
  *                   a case-insensitive comparison...
  */
 
-static int numericsort(struct dirent **A, struct dirent **B, int cs) {
+static int pNumericsort(struct dirent **A, struct dirent **B, int cs) {
   const char* a = (*A)->d_name;
   const char* b = (*B)->d_name;
   int ret = 0;
@@ -91,19 +91,19 @@ static int numericsort(struct dirent **A, struct dirent **B, int cs) {
 }
 
 /*
- * 'fl_casenumericsort()' - Compare directory entries with case-sensitivity.
+ * 'fltk3::casenumericsort()' - Compare directory entries with case-sensitivity.
  */
 
-extern "C" int fl_casenumericsort(struct dirent **A, struct dirent **B) {
-  return numericsort(A, B, 0);
+int fltk3::casenumericsort(struct dirent **A, struct dirent **B) {
+  return pNumericsort(A, B, 0);
 }
 
 /*
- * 'fl_numericsort()' - Compare directory entries with case-sensitivity.
+ * 'fltk3::numericsort()' - Compare directory entries with case-sensitivity.
  */
 
-extern "C" int fl_numericsort(struct dirent **A, struct dirent **B) {
-  return numericsort(A, B, 1);
+int fltk3::numericsort(struct dirent **A, struct dirent **B) {
+  return pNumericsort(A, B, 1);
 }
 
 /*

@@ -109,7 +109,7 @@ fltk3::FileIcon::load(const char *f)	// I - File to read from
   const char	*ext;			// File extension
 
 
-  ext = fl_filename_ext(f);
+  ext = fltk3::filename_ext(f);
 
   if (ext && strcmp(ext, ".fti") == 0)
     i = load_fti(f);
@@ -815,13 +815,13 @@ load_kde_icons(const char *directory,	// I - Directory to load
 
 
   entries = (dirent **)0;
-  n       = fl_filename_list(directory, &entries);
+  n       = fltk3::filename_list(directory, &entries);
 
   for (i = 0; i < n; i ++) {
     if (entries[i]->d_name[0] != '.') {
       snprintf(full, sizeof(full), "%s/%s", directory, entries[i]->d_name);
 
-      if (fl_filename_isdir(full)) load_kde_icons(full, icondir);
+      if (fltk3::filename_isdir(full)) load_kde_icons(full, icondir);
       else load_kde_mimelnk(full, icondir);
     }
 

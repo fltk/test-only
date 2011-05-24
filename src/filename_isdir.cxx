@@ -41,10 +41,10 @@ static inline int isdirsep(char c) {return c=='/' || c=='\\';}
 #define isdirsep(c) ((c)=='/')
 #endif
 
-int _fl_filename_isdir_quick(const char* n) {
+int fltk3::_filename_isdir_quick(const char* n) {
   // Do a quick optimization for filenames with a trailing slash...
   if (*n && isdirsep(n[strlen(n) - 1])) return 1;
-  return fl_filename_isdir(n);
+  return fltk3::filename_isdir(n);
 }
 
 /**
@@ -52,13 +52,13 @@ int _fl_filename_isdir_quick(const char* n) {
    \code
    #include <fltk3/filename.h>
    [..]
-   fl_filename_isdir("/etc");		// returns non-zero
-   fl_filename_isdir("/etc/hosts");	// returns 0
+   fltk3::filename_isdir("/etc");		// returns non-zero
+   fltk3::filename_isdir("/etc/hosts");	// returns 0
    \endcode
    \param[in] n the filename to parse
    \return non zero if file exists and is a directory, zero otherwise
 */
-int fl_filename_isdir(const char* n) {
+int fltk3::filename_isdir(const char* n) {
   struct stat	s;
   char		fn[FLTK3_PATH_MAX];
   int		length;

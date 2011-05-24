@@ -203,7 +203,7 @@ fltk3::FileIcon::find(const char *filename,// I - Name of file */
 #ifdef WIN32
     if (filename[strlen(filename) - 1] == '/')
       filetype = DIRECTORY;
-    else if (fl_filename_isdir(filename))
+    else if (fltk3::filename_isdir(filename))
       filetype = DIRECTORY;
     else
       filetype = PLAIN;
@@ -233,14 +233,14 @@ fltk3::FileIcon::find(const char *filename,// I - Name of file */
   }
 
   // Look at the base name in the filename
-  name = fl_filename_name(filename);
+  name = fltk3::filename_name(filename);
 
   // Loop through the available file types and return any match that
   // is found...
   for (current = first_; current != (fltk3::FileIcon *)0; current = current->next_)
     if ((current->type_ == filetype || current->type_ == ANY) &&
-        (fl_filename_match(filename, current->pattern_) ||
-	 fl_filename_match(name, current->pattern_)))
+        (fltk3::filename_match(filename, current->pattern_) ||
+	 fltk3::filename_match(name, current->pattern_)))
       break;
 
   // Return the match (if any)...

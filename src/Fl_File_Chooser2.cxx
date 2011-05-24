@@ -104,7 +104,7 @@
   </TR>
  <TR>
   	<TD>sort</TD>
-  	<TD>fl_numericsort</TD>
+  	<TD>fltk3::numericsort</TD>
   </TR>
   </TABLE></CENTER>
 
@@ -140,7 +140,7 @@
   pattern to the end of the string you pass if you do not provide
   one. The first filter in the string is the default filter.
   
-  See the FLTK documentation on fl_filename_match()
+  See the FLTK documentation on fltk3::filename_match()
   for the kinds of pattern strings that are supported.
   
   The type argument can be one of the following:
@@ -185,7 +185,7 @@
 
 /** \fn void fltk3::FileChooser::filter(const char *pattern)
   Sets or gets the current filename filter patterns. The filter
-  patterns use fl_filename_match().
+  patterns use fltk3::filename_match().
   Multiple patterns can be used by separating them with tabs, like
   <tt>"*.jpg\t*.png\t*.gif\t*"</tt>. In addition, you can provide
   human-readable labels with the patterns inside parenthesis, like
@@ -397,7 +397,7 @@ const char	*fltk3::FileChooser::preview_label = "Preview";
 const char	*fltk3::FileChooser::save_label = "Save";
 const char	*fltk3::FileChooser::show_label = "Show:";
 const char      *fltk3::FileChooser::hidden_label = "Show hidden files";
-fltk3::FileSortF	*fltk3::FileChooser::sort = fl_numericsort;
+fltk3::FileSortF	*fltk3::FileChooser::sort = fltk3::numericsort;
 
 
 //
@@ -485,7 +485,7 @@ fltk3::FileChooser::directory(const char *d)// I - Directory to change to
 #else
     if (d[0] != '/' && d[0] != '\\')
 #endif /* WIN32 || __EMX__ */
-      fl_filename_absolute(directory_, d);
+      fltk3::filename_absolute(directory_, d);
     else
       strlcpy(directory_, d, sizeof(directory_));
 
@@ -714,9 +714,9 @@ fltk3::FileChooser::fileListCB()
   if (fltk3::event_clicks()) {
 #if (defined(WIN32) && ! defined(__CYGWIN__)) || defined(__EMX__)
     if ((strlen(pathname) == 2 && pathname[1] == ':') ||
-        _fl_filename_isdir_quick(pathname))
+        fltk3::_filename_isdir_quick(pathname))
 #else
-    if (_fl_filename_isdir_quick(pathname))
+    if (fltk3::_filename_isdir_quick(pathname))
 #endif /* WIN32 || __EMX__ */
     {
       // Change directories...
@@ -780,7 +780,7 @@ fltk3::FileChooser::fileListCB()
     if (callback_) (*callback_)(this, data_);
 
     // Activate the OK button as needed...
-    if (!_fl_filename_isdir_quick(pathname) || (type_ & DIRECTORY))
+    if (!fltk3::_filename_isdir_quick(pathname) || (type_ & DIRECTORY))
       okButton->activate();
     else
       okButton->deactivate();
@@ -819,7 +819,7 @@ fltk3::FileChooser::fileNameCB()
 
   // Expand ~ and $ variables as needed...
   if (strchr(filename, '~') || strchr(filename, '$')) {
-    fl_filename_expand(pathname, sizeof(pathname), filename);
+    fltk3::filename_expand(pathname, sizeof(pathname), filename);
     filename = pathname;
     value(pathname);
   }
@@ -832,7 +832,7 @@ fltk3::FileChooser::fileNameCB()
 #else
   if (directory_[0] != '\0' && filename[0] != '/') {
 #endif /* WIN32 || __EMX__ */
-    fl_filename_absolute(pathname, sizeof(pathname), filename);
+    fltk3::filename_absolute(pathname, sizeof(pathname), filename);
     value(pathname);
     fileName->mark(fileName->position()); // no selection after expansion
   } else if (filename != pathname) {
@@ -847,15 +847,15 @@ fltk3::FileChooser::fileNameCB()
     // Enter pressed - select or change directory...
 #if (defined(WIN32) && ! defined(__CYGWIN__)) || defined(__EMX__)
     if ((isalpha(pathname[0] & 255) && pathname[1] == ':' && !pathname[2]) ||
-        (_fl_filename_isdir_quick(pathname) &&
+        (fltk3::_filename_isdir_quick(pathname) &&
 	 compare_dirnames(pathname, directory_))) {
 #else
-    if (_fl_filename_isdir_quick(pathname) &&
+    if (fltk3::_filename_isdir_quick(pathname) &&
 	compare_dirnames(pathname, directory_)) {
 #endif /* WIN32 || __EMX__ */
       directory(pathname);
     } else if ((type_ & CREATE) || access(pathname, 0) == 0) {
-      if (!_fl_filename_isdir_quick(pathname) || (type_ & DIRECTORY)) {
+      if (!fltk3::_filename_isdir_quick(pathname) || (type_ & DIRECTORY)) {
 	// Update the preview box...
 	update_preview();
 
@@ -976,7 +976,7 @@ fltk3::FileChooser::fileNameCB()
 
     // See if we need to enable the OK button...
     if (((type_ & CREATE) || !access(fileName->value(), 0)) &&
-        (!fl_filename_isdir(fileName->value()) || (type_ & DIRECTORY))) {
+        (!fltk3::filename_isdir(fileName->value()) || (type_ & DIRECTORY))) {
       okButton->activate();
     } else {
       okButton->deactivate();
@@ -986,7 +986,7 @@ fltk3::FileChooser::fileNameCB()
     fileList->deselect(0);
     fileList->redraw();
     if (((type_ & CREATE) || !access(fileName->value(), 0)) &&
-        (!fl_filename_isdir(fileName->value()) || (type_ & DIRECTORY))) {
+        (!fltk3::filename_isdir(fileName->value()) || (type_ & DIRECTORY))) {
       okButton->activate();
     } else {
       okButton->deactivate();
@@ -1310,7 +1310,7 @@ fltk3::FileChooser::update_preview()
   if (filename == NULL) {
     // no file name at all, so we have an empty preview
     set = 1;
-  } else if (fl_filename_isdir(filename)) {
+  } else if (fltk3::filename_isdir(filename)) {
     // filename is a directory, show a folder icon
     newlabel = "@fileopen";
     set = 1;
@@ -1538,11 +1538,11 @@ fltk3::FileChooser::value(const char *filename)
 #endif // WIN32
 
   // See if there is a directory in there...
-  fl_filename_absolute(pathname, sizeof(pathname), filename);
+  fltk3::filename_absolute(pathname, sizeof(pathname), filename);
 
   if ((slash = strrchr(pathname, '/')) != NULL) {
     // Yes, change the display to the directory... 
-    if (!fl_filename_isdir(pathname)) *slash++ = '\0';
+    if (!fltk3::filename_isdir(pathname)) *slash++ = '\0';
 
     directory(pathname);
     if (*slash == '/') slash = pathname;

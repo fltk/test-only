@@ -1728,10 +1728,10 @@ void Fl_X::set_minmax(LPMINMAXINFO minmax)
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk3/filename.h> // need so FLTK3_EXPORT fl_filename_name works
+#include <fltk3/filename.h> // need so FLTK3_EXPORT fltk3::filename_name works
 
 // returns pointer to the filename, or null if name ends with '/'
-const char *fl_filename_name(const char *name) {
+const char *fltk3::filename_name(const char *name) {
   const char *p,*q;
   if (!name) return (0);
   q = name;

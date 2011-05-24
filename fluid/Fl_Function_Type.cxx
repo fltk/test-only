@@ -421,7 +421,7 @@ int Fl_Function_Type::has_signature(const char *rtype, const char *sig) const {
   if (rtype && !return_type) return 0;
   if (!name()) return 0;
   if ( (rtype==0L || strcmp(return_type, rtype)==0) 
-      && fl_filename_match(name(), sig)) {
+      && fltk3::filename_match(name(), sig)) {
     return 1;
   }
   return 0;

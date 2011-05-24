@@ -229,10 +229,10 @@ void template_load() {
   fluid_prefs.getUserdataPath(path, sizeof(path));
   strlcat(path, "templates", sizeof(path));
   
-  num_files = fl_filename_list(path, &files);
+  num_files = fltk3::filename_list(path, &files);
   
   for (i = 0; i < num_files; i ++) {
-    if (fl_filename_match(files[i]->d_name, "*.fl")) {
+    if (fltk3::filename_match(files[i]->d_name, "*.fl")) {
       // Format the name as the filename with "_" replaced with " "
       // and without the trailing ".fl"...
       strlcpy(name, files[i]->d_name, sizeof(name));

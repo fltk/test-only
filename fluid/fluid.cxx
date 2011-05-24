@@ -130,7 +130,7 @@ static char in_source_dir;
 void goto_source_dir() {
   if (in_source_dir) return;
   if (!filename || !*filename) return;
-  const char *p = fl_filename_name(filename);
+  const char *p = fltk3::filename_name(filename);
   if (p <= filename) return; // it is in the current directory
   char buffer[FLTK3_PATH_MAX];
   strlcpy(buffer, filename, sizeof(buffer));
@@ -661,17 +661,17 @@ void write_cb(fltk3::Widget *, void *) {
   }
   char cname[FLTK3_PATH_MAX];
   char hname[FLTK3_PATH_MAX];
-  strlcpy(i18n_program, fl_filename_name(filename), sizeof(i18n_program));
-  fl_filename_setext(i18n_program, sizeof(i18n_program), "");
+  strlcpy(i18n_program, fltk3::filename_name(filename), sizeof(i18n_program));
+  fltk3::filename_setext(i18n_program, sizeof(i18n_program), "");
   if (*code_file_name == '.' && strchr(code_file_name, '/') == NULL) {
-    strlcpy(cname, fl_filename_name(filename), sizeof(cname));
-    fl_filename_setext(cname, sizeof(cname), code_file_name);
+    strlcpy(cname, fltk3::filename_name(filename), sizeof(cname));
+    fltk3::filename_setext(cname, sizeof(cname), code_file_name);
   } else {
     strlcpy(cname, code_file_name, sizeof(hname));
   }
   if (*header_file_name == '.' && strchr(header_file_name, '/') == NULL) {
-    strlcpy(hname, fl_filename_name(filename), sizeof(hname));
-    fl_filename_setext(hname, sizeof(hname), header_file_name);
+    strlcpy(hname, fltk3::filename_name(filename), sizeof(hname));
+    fltk3::filename_setext(hname, sizeof(hname), header_file_name);
   } else {
     strlcpy(hname, header_file_name, sizeof(hname));
   }
@@ -698,8 +698,8 @@ void write_strings_cb(fltk3::Widget *, void *) {
     if (!filename) return;
   }
   char sname[FLTK3_PATH_MAX];
-  strlcpy(sname, fl_filename_name(filename), sizeof(sname));
-  fl_filename_setext(sname, sizeof(sname), exts[i18n_type]);
+  strlcpy(sname, fltk3::filename_name(filename), sizeof(sname));
+  fltk3::filename_setext(sname, sizeof(sname), exts[i18n_type]);
   if (!compile_only) goto_source_dir();
   int x = write_strings(sname);
   if (!compile_only) leave_source_dir();
@@ -906,14 +906,14 @@ void show_help(const char *name) {
        "</body></html>"
        );
     } else if (strcmp(name, "license.html")==0) {
-      fl_open_uri("http://www.fltk.org/doc-1.3/license.html");
+      fltk3::open_uri("http://www.fltk.org/doc-1.3/license.html");
       return;
     } else if (strcmp(name, "index.html")==0) {
-      fl_open_uri("http://www.fltk.org/doc-1.3/index.html");
+      fltk3::open_uri("http://www.fltk.org/doc-1.3/index.html");
       return;
     } else {
       snprintf(helpname, sizeof(helpname), "http://www.fltk.org/%s", name);
-      fl_open_uri(helpname);
+      fltk3::open_uri(helpname);
       return;
     }
   }
@@ -1857,7 +1857,7 @@ void load_history() {
     fluid_prefs.get( fltk3::Preferences::Name("file%d", i), absolute_history[i], "", sizeof(absolute_history[i]));
     if (absolute_history[i][0]) {
       // Make a relative version of the filename for the menu...
-      fl_filename_relative(relative_history[i], sizeof(relative_history[i]),
+      fltk3::filename_relative(relative_history[i], sizeof(relative_history[i]),
                            absolute_history[i]);
 
       if (i == 9) history_item[i].flags = fltk3::MENU_DIVIDER;
@@ -1881,7 +1881,7 @@ void update_history(const char *flname) {
   fluid_prefs.get("recent_files", max_files, 5);
   if (max_files > 10) max_files = 10;
 
-  fl_filename_absolute(absolute, sizeof(absolute), flname);
+  fltk3::filename_absolute(absolute, sizeof(absolute), flname);
 
   for (i = 0; i < max_files; i ++)
 #if defined(WIN32) || defined(__APPLE__)
@@ -1903,7 +1903,7 @@ void update_history(const char *flname) {
   // Put the new file at the top...
   strlcpy(absolute_history[0], absolute, sizeof(absolute_history[0]));
 
-  fl_filename_relative(relative_history[0], sizeof(relative_history[0]),
+  fltk3::filename_relative(relative_history[0], sizeof(relative_history[0]),
                        absolute_history[0]);
 
   // Update the menu items as needed...
@@ -2225,8 +2225,8 @@ void update_sourceview_cb(fltk3::Button*, void*)
     strlcat(sv_header_filename, "source_view_tmp.h", FLTK3_PATH_MAX);
   }
 
-  strlcpy(i18n_program, fl_filename_name(sv_source_filename), sizeof(i18n_program));
-  fl_filename_setext(i18n_program, sizeof(i18n_program), "");
+  strlcpy(i18n_program, fltk3::filename_name(sv_source_filename), sizeof(i18n_program));
+  fltk3::filename_setext(i18n_program, sizeof(i18n_program), "");
   const char *code_file_name_bak = code_file_name;
   code_file_name = sv_source_filename;
   const char *header_file_name_bak = header_file_name;

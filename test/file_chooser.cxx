@@ -374,7 +374,7 @@ show_callback(void)
       if (!fc->value(i))
         break;
 
-      fl_filename_relative(relative, sizeof(relative), fc->value(i));
+      fltk3::filename_relative(relative, sizeof(relative), fc->value(i));
 
       files->add(relative,
                  fltk3::FileIcon::find(fc->value(i), fltk3::FileIcon::PLAIN));

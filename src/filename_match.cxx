@@ -50,7 +50,7 @@
     \param[in] p the string pattern 
     \return non zero if the string matches the pattern
 */
-int fl_filename_match(const char *s, const char *p) {
+int fltk3::filename_match(const char *s, const char *p) {
   int matched;
 
   for (;;) {
@@ -62,7 +62,7 @@ int fl_filename_match(const char *s, const char *p) {
 
     case '*' :	// match 0-n of any characters
       if (!*p) return 1; // do trailing * quickly
-      while (!fl_filename_match(s, p)) if (!*s++) return 0;
+      while (!fltk3::filename_match(s, p)) if (!*s++) return 0;
       return 1;
 
     case '[': {	// match one character in set of form [abc-d] or [^a-b]
@@ -86,7 +86,7 @@ int fl_filename_match(const char *s, const char *p) {
 
     case '{' : // {pattern1|pattern2|pattern3}
     NEXTCASE:
-    if (fl_filename_match(s,p)) return 1;
+    if (fltk3::filename_match(s,p)) return 1;
     for (matched = 0;;) {
       switch (*p++) {
       case '\\': if (*p) p++; break;

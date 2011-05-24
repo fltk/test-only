@@ -47,6 +47,7 @@ extern "C" {
 
 
 #include <fltk3/run.h>
+#include <fltk3/filename.h>
 #include <fltk3/x.h>
 #include <fltk3/Window.h>
 #include <fltk3/Tooltip.h>
@@ -2195,7 +2196,7 @@ void fltk3::Window::size_range_() {
 /*
  * returns pointer to the filename, or null if name ends with ':'
  */
-const char *fl_filename_name( const char *name ) 
+const char *fltk3::filename_name( const char *name ) 
 {
   const char *p, *q;
   if (!name) return (0);

@@ -41,13 +41,13 @@
    #include <fltk3/filename.h>
    [..]
    char buf[FLTK3_PATH_MAX] = "/path/myfile.cxx";
-   fl_filename_setext(buf, sizeof(buf), ".txt");      // buf[] becomes "/path/myfile.txt"
+   fltk3::filename_setext(buf, sizeof(buf), ".txt");      // buf[] becomes "/path/myfile.txt"
    \endcode
 
    \return buf itself for calling convenience.
 */
-char *fl_filename_setext(char *buf, int buflen, const char *ext) {
-  char *q = (char *)fl_filename_ext(buf);
+char *fltk3::filename_setext(char *buf, int buflen, const char *ext) {
+  char *q = (char *)fltk3::filename_ext(buf);
   if (ext) {
     strlcpy(q,ext,buflen - (q - buf));
   } else *q = 0;

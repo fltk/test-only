@@ -1786,10 +1786,10 @@ int fltk3::PluginManager::load(const char *filename) {
  */
 int fltk3::PluginManager::loadAll(const char *filepath, const char *pattern) {
   struct dirent **dir;
-  int i, n = fl_filename_list(filepath, &dir);
+  int i, n = fltk3::filename_list(filepath, &dir);
   for (i=0; i<n; i++) {
     struct dirent *e = dir[i];
-    if (pattern==0 || fl_filename_match(e->d_name, pattern)) {
+    if (pattern==0 || fltk3::filename_match(e->d_name, pattern)) {
       load(fltk3::Preferences::Name("%s%s", filepath, e->d_name));
     }
     free(e);

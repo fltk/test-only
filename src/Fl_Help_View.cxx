@@ -62,7 +62,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fltk3/utf8.h>
-#include <fltk3/filename.h>	// fl_open_uri()
+#include <fltk3/filename.h>	// fltk3::open_uri()
 #include "flstring.h"
 #include <ctype.h>
 #include <errno.h>
@@ -3126,7 +3126,7 @@ fltk3::HelpView::load(const char *f)// I - Filename to load (may also have targe
       strncmp(f, "mailto:", 7) == 0 ||
       strncmp(f, "news:", 5) == 0) {
     char urimsg[FLTK3_PATH_MAX];
-    if ( fl_open_uri(f, urimsg, sizeof(urimsg)) == 0 ) {
+    if ( fltk3::open_uri(f, urimsg, sizeof(urimsg)) == 0 ) {
       clear_selection();
 
       strlcpy(newname, f, sizeof(newname));

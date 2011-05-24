@@ -129,7 +129,7 @@ fltk3::file_chooser(const char *message,	// I - Message in titlebar
         strlcpy(retname, fc->value(), sizeof(retname));
       else 
         *retname = 0;
-      const char *n = fl_filename_name(retname);
+      const char *n = fltk3::filename_name(retname);
       if (n) *((char*)n) = 0;
       fc->value("");
       fc->directory(retname);
@@ -145,7 +145,7 @@ fltk3::file_chooser(const char *message,	// I - Message in titlebar
     fltk3::wait();
 
   if (fc->value() && relative) {
-    fl_filename_relative(retname, sizeof(retname), fc->value());
+    fltk3::filename_relative(retname, sizeof(retname), fc->value());
 
     return retname;
   } else if (fc->value()) return (char *)fc->value();
@@ -186,7 +186,7 @@ fltk3::dir_chooser(const char *message,	// I - Message for titlebar
     fltk3::wait();
 
   if (fc->value() && relative) {
-    fl_filename_relative(retname, sizeof(retname), fc->value());
+    fltk3::filename_relative(retname, sizeof(retname), fc->value());
 
     return retname;
   } else if (fc->value()) return (char *)fc->value();

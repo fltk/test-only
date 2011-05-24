@@ -1,11 +1,11 @@
 //
 // "$Id$"
 //
-// fl_open_uri() code for FLTK.
+// fltk3::open_uri() code for FLTK.
 //
 // Test with:
 //
-//    gcc -I/fltk/dir -I/fltk/dir/src -DTEST -o fl_open_uri fl_open_uri.cxx -lfltk
+//    gcc -I/fltk/dir -I/fltk/dir/src -DTEST -o fltk3::open_uri fltk3::open_uri.cxx -lfltk
 //
 // Copyright 2003-2010 by Michael R Sweet
 //
@@ -78,7 +78,7 @@ static int	run_program(const char *program, char **argv, char *msg, int msglen);
  * #include <fltk3/filename.h>
  * [..]
  * char errmsg[512];
- * if ( !fl_open_uri("http://google.com/", errmsg, sizeof(errmsg)) ) {
+ * if ( !fltk3::open_uri("http://google.com/", errmsg, sizeof(errmsg)) ) {
  *     char warnmsg[768];
  *     sprintf(warnmsg, "Error: %s", errmsg);
  *     fltk3::alert(warnmsg);
@@ -92,7 +92,7 @@ static int	run_program(const char *program, char **argv, char *msg, int msglen);
  */
 
 int
-fl_open_uri(const char *uri, char *msg, int msglen) {
+fltk3::open_uri(const char *uri, char *msg, int msglen) {
   // Supported URI schemes...
   static const char * const schemes[] = {
     "file://",
@@ -366,11 +366,11 @@ int main(int argc, char **argv) {
 
 
   if (argc != 2) {
-    puts("Usage: fl_open_uri URI");
+    puts("Usage: fltk3::open_uri URI");
     return 1;
   }
 
-  if (!fl_open_uri(argv[1], msg, sizeof(msg))) {
+  if (!fltk3::open_uri(argv[1], msg, sizeof(msg))) {
     puts(msg);
     return 1;
   } else return 0;
