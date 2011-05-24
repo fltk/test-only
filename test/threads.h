@@ -28,16 +28,16 @@
 // Inline classes to provide portable support for threads and mutexes.
 //
 // FLTK does not use this (it has an internal mutex implementation
-// that is used if Fl::lock() is called). This header file's only
+// that is used if fltk3::lock() is called). This header file's only
 // purpose is so we can write portable demo programs. It may be useful
 // or an inspiration to people who want to try writing multithreaded
 // programs themselves.
 //
-// FLTK has no multithreaded support unless the main thread calls Fl::lock().
-// This main thread is the only thread allowed to call fltk3::run() or Fl::wait().
+// FLTK has no multithreaded support unless the main thread calls fltk3::lock().
+// This main thread is the only thread allowed to call fltk3::run() or fltk3::wait().
 // From then on FLTK will be locked except when the main thread is actually
-// waiting for events from the user. Other threads must call Fl::lock() and
-// Fl::unlock() to surround calls to FLTK (such as to change widgets or
+// waiting for events from the user. Other threads must call fltk3::lock() and
+// fltk3::unlock() to surround calls to FLTK (such as to change widgets or
 // redraw them).
 
 #ifndef Threads_H

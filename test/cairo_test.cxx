@@ -145,7 +145,7 @@ static void my_cairo_draw_cb(Fl_Cairo_Window* window, cairo_t* cr) {
 
 int main(int argc, char** argv) {
 #ifdef AUTOLINK
-  Fl::cairo_autolink_context(true);
+  fltk3::cairo_autolink_context(true);
 #endif
     Fl_Cairo_Window window(300,300);
     

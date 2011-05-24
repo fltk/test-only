@@ -8,7 +8,7 @@
 // the need to define callbacks.
 //
 // This also demonstrates how to trap attempts by the user to
-// close the last window by overriding Fl::exit
+// close the last window by overriding fltk3::exit
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
 //

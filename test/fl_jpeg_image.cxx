@@ -96,12 +96,12 @@ int arg(int argc, char **argv, int &i) {
 int main(int argc, char ** argv) {
 
   int i = 1;
-  if (!Fl::args(argc,argv,i,arg) || i != argc-1) {
+  if (!fltk3::args(argc,argv,i,arg) || i != argc-1) {
     fprintf(stderr,"usage: %s <switches> image_file\n"
 " -v # : use visual\n"
 " -m : monochrome\n"
 "%s\n",
-	    argv[0],Fl::help);
+	    argv[0],fltk3::help);
     exit(1);
   }
 

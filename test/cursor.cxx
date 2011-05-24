@@ -139,7 +139,7 @@ int main(int argc, char **argv) {
   // draw the manual's diagram of cursors...
   window.size(400,800);
   int y = 300;
-  Fl::set_font(fltk3::FREE_FONT, "cursor");
+  fltk3::set_font(fltk3::FREE_FONT, "cursor");
   char buf[100]; char *p = buf;
   for (fltk3::Menu* m = choices; m->label(); m++) {
     fltk3::Box* b = new fltk3::Box(35,y,150,25,m->label());
