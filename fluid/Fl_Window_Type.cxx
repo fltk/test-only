@@ -324,7 +324,7 @@ uchar *Overlay_Window::read_image(int &ww, int &hh) {
   ww = w();
   hh = h();
 
-  Fl_Offscreen offscreen = fl_create_offscreen(ww, hh);
+  fltk3::Offscreen offscreen = fl_create_offscreen(ww, hh);
   uchar *pixels;
 
   // Redraw the window into the offscreen buffer...

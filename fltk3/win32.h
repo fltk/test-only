@@ -30,12 +30,15 @@
 // portability of even the system-specific code...
 
 #ifndef FLTK3_DOXYGEN
-#ifndef Fl_X_H
+#ifndef Fltk3_X_H
 #  error "Never use <fltk3/win32.h> directly; include <fltk3/x.h> instead."
-#endif // !Fl_X_H
+#endif // !Fltk3_X_H
 
 #include <windows.h>
-typedef HRGN Fl_Region;
+
+namespace fltk3 {
+  typedef ::HRGN Region;
+}
 typedef HWND Window;
 typedef POINT XPoint;
 
@@ -56,9 +59,9 @@ typedef POINT XPoint;
 
 // some random X equivalents
 struct XRectangle {int x, y, width, height;};
-extern Fl_Region XRectangleRegion(int x, int y, int w, int h);
-inline void XDestroyRegion(Fl_Region r) {DeleteObject(r);}
-inline void XClipBox(Fl_Region r,XRectangle* rect) {
+extern fltk3::Region XRectangleRegion(int x, int y, int w, int h);
+inline void XDestroyRegion(fltk3::Region r) {DeleteObject(r);}
+inline void XClipBox(fltk3::Region r,XRectangle* rect) {
     RECT win_rect; GetRgnBox(r,&win_rect);
     rect->x=win_rect.left;
     rect->y=win_rect.top;
@@ -77,7 +80,7 @@ public:
   Window xid;
   HBITMAP other_xid; // for double-buffered windows
   fltk3::Window* w;
-  Fl_Region region;
+  fltk3::Region region;
   Fl_X *next;
   int wait_for_expose;
   HDC private_dc; // used for OpenGL
@@ -110,7 +113,7 @@ FLTK3_EXPORT Window fl_xid_(const fltk3::Window* w);
 #endif // FL_LIBRARY || FLTK3_INTERNALS
 
 FLTK3_EXPORT fltk3::Window* fl_find(Window xid);
-FLTK3_EXPORT void fltk3::clip_region(Fl_Region);
+FLTK3_EXPORT void fltk3::clip_region(fltk3::Region);
 
 // most recent fltk3::color() or fl_rgbcolor() points at one of these:
 extern FLTK3_EXPORT struct Fl_XMap {
@@ -131,7 +134,7 @@ extern FLTK3_EXPORT HDC fl_GetDC(Window);
 extern FLTK3_EXPORT HDC fl_makeDC(HBITMAP);
 
 // off-screen pixmaps: create, destroy, draw into, copy to window
-typedef HBITMAP Fl_Offscreen;
+typedef HBITMAP fltk3::Offscreen;
 #define fl_create_offscreen(w, h) \
   CreateCompatibleBitmap( (fl_gc ? fl_gc : fl_GetDC(0) ) , w, h)
 
@@ -149,11 +152,13 @@ FLTK3_EXPORT void fl_copy_offscreen_with_alpha(int x,int y,int w,int h,HBITMAP p
 #define fl_delete_offscreen(bitmap) DeleteObject(bitmap)
 
 // Bitmap masks
-typedef HBITMAP Fl_Bitmask;
+namespace fltk3 {
+  typedef HBITMAP Bitmask;
+}
 
-extern FLTK3_EXPORT Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data);
-extern FLTK3_EXPORT Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);
-extern FLTK3_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
+extern FLTK3_EXPORT fltk3::Bitmask fl_create_bitmask(int w, int h, const uchar *data);
+extern FLTK3_EXPORT fltk3::Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);
+extern FLTK3_EXPORT void fl_delete_bitmask(fltk3::Bitmask bm);
 
 // Dummy function to register a function for opening files via the window manager...
 inline void fl_open_callback(void (*)(const char *)) {}

@@ -58,7 +58,7 @@ static fltk3::GlChoice* gl_choice;
 static fltk3::GlChoice* gl_choice;
 #endif
 
-Fl_Region XRectangleRegion(int x, int y, int w, int h); // in fltk3::rect.cxx
+fltk3::Region XRectangleRegion(int x, int y, int w, int h); // in fltk3::rect.cxx
 
 /** Creates an OpenGL context */
 void gl_start() {

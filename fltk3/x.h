@@ -41,8 +41,8 @@
  \endverbatim
 */
 
-#if !defined(Fl_X_H) && !defined(FLTK3_DOXYGEN) 
-#  define Fl_X_H
+#if !defined(Fltk3_X_H) && !defined(FLTK3_DOXYGEN) 
+#  define Fltk3_X_H
 
 #  include "enumerations.h"
 
@@ -62,8 +62,8 @@
 #    include <X11/Xatom.h>
 #    include "Window.h"
 #    include "Xutf8.h"
-// Mirror X definition of Region to Fl_Region, for portability...
-typedef Region Fl_Region;
+// Mirror X definition of Region to fltk3::Region, for portability...
+typedef Region fltk3::Region;
 
 FLTK3_EXPORT void fl_open_display();
 FLTK3_EXPORT void fl_open_display(Display*);
@@ -81,8 +81,8 @@ extern FLTK3_EXPORT GC fl_gc;
 extern FLTK3_EXPORT Window fl_window;
 FLTK3_EXPORT ulong fl_xpixel(fltk3::Color i);
 FLTK3_EXPORT ulong fl_xpixel(uchar r, uchar g, uchar b);
-FLTK3_EXPORT void fltk3::clip_region(Fl_Region);
-FLTK3_EXPORT Fl_Region fltk3::clip_region();
+FLTK3_EXPORT void fltk3::clip_region(fltk3::Region);
+FLTK3_EXPORT fltk3::Region fltk3::clip_region();
 
 // feed events into fltk:
 FLTK3_EXPORT int fl_handle(const XEvent&);
@@ -92,7 +92,9 @@ extern FLTK3_EXPORT const XEvent* fl_xevent;
 extern FLTK3_EXPORT ulong fl_event_time;
 
 // off-screen pixmaps: create, destroy, draw into, copy to window:
-typedef ulong Fl_Offscreen;
+namespace fltk3 {
+  typedef ulong Offscreen;
+}
 #   define fl_create_offscreen(w,h) \
   XCreatePixmap(fl_display, \
 	      (fltk3::SurfaceDevice::surface()->class_name() == fltk3::DisplayDevice::class_id ? \
@@ -106,20 +108,22 @@ typedef ulong Fl_Offscreen;
 #    define fl_end_offscreen() \
   fltk3::pop_clip(); fl_window = _sw; _ss->set_current()
 
-extern void fl_copy_offscreen(int x, int y, int w, int h, Fl_Offscreen pixmap, int srcx, int srcy);
+extern void fl_copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy);
 #    define fl_delete_offscreen(pixmap) XFreePixmap(fl_display, pixmap)
 
 // Bitmap masks
-typedef ulong Fl_Bitmask;
+namespace fltk3 {
+  typedef ulong Bitmask;
+}
 
-extern FLTK3_EXPORT Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data);
-extern FLTK3_EXPORT Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);
-extern FLTK3_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
+extern FLTK3_EXPORT fltk3::Bitmask fl_create_bitmask(int w, int h, const uchar *data);
+extern FLTK3_EXPORT fltk3::Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);
+extern FLTK3_EXPORT void fl_delete_bitmask(fltk3::Bitmask bm);
 
 #if defined(FL_LIBRARY) || defined(FLTK3_INTERNALS)
 extern FLTK3_EXPORT Window fltk3::message_window;
 extern FLTK3_EXPORT void *fl_xftfont;
-FLTK3_EXPORT Fl_Region XRectangleRegion(int x, int y, int w, int h); // in fltk3::rect.cxx
+FLTK3_EXPORT fltk3::Region XRectangleRegion(int x, int y, int w, int h); // in fltk3::rect.cxx
 
 // access to core fonts:
 // This class provides a "smart pointer" that returns a pointer to an XFontStruct.
@@ -155,7 +159,7 @@ public:
   Window xid;
   Window other_xid;
   fltk3::Window *w;
-  Fl_Region region;
+  fltk3::Region region;
   Fl_X *next;
   char wait_for_expose;
   char backbuffer_bad; // used for XDBE

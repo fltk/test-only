@@ -95,7 +95,7 @@ int fl_filename_isdir(const char* n) {
   }
 #endif
 
-  return !fl_stat(n, &s) && (s.st_mode&0170000)==0040000;
+  return !fltk3::stat(n, &s) && (s.st_mode&0170000)==0040000;
 }
 
 //

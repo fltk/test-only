@@ -83,7 +83,7 @@ namespace fltk3 {
      Every fltk3::Preferences-Group has a uniqe ID.
      
      ID's can be retrieved from an fltk3::Preferences-Group and can then be used
-     to create more Fl_Preference references to the same data set, as long as the 
+     to create more fltk3::Preferences references to the same data set, as long as the 
      database remains open.
      */
     typedef void *ID;

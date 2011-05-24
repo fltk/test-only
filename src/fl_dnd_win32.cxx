@@ -231,10 +231,10 @@ private:
       const wchar_t *wstuff = (const wchar_t *)stuff;
       while (*wstuff++) srclen++;
       wstuff = (const wchar_t *)stuff;
-      unsigned utf8len = fl_utf8fromwc(NULL, 0, wstuff, srclen);
+      unsigned utf8len = fltk3::utf8fromwc(NULL, 0, wstuff, srclen);
       currDragSize = utf8len;
       currDragData = (char*)malloc(utf8len + 1);
-      fl_utf8fromwc(currDragData, currDragSize+1, wstuff, srclen+1); // include null-byte
+      fltk3::utf8fromwc(currDragData, currDragSize+1, wstuff, srclen+1); // include null-byte
       GlobalUnlock( medium.hGlobal );
       ReleaseStgMedium( &medium );
       currDragResult = 1;
@@ -253,9 +253,9 @@ private:
       last = p + strlen(p);
       q = currDragData;
       while (p < last) {
-	u = fl_utf8decode(p, last, &len);
+	u = fltk3::utf8decode(p, last, &len);
 	p += len;
-	len = fl_utf8encode(u, q);
+	len = fltk3::utf8encode(u, q);
 	q += len;
 	}
       *q = 0;
@@ -292,7 +292,7 @@ private:
 
         currDragData = (char*) malloc(nn * 5 + 1);
 //      fltk3::e_length = fl_unicode2utf(bu, nn, fltk3::e_text);
-        currDragSize = fl_utf8fromwc(currDragData, (nn*5+1), bu, nn);
+        currDragSize = fltk3::utf8fromwc(currDragData, (nn*5+1), bu, nn);
         currDragData[currDragSize] = 0;
         free(bu);
 
@@ -456,10 +456,10 @@ public:
         (pformatetcIn->tymed & TYMED_HGLOBAL) &&
         (pformatetcIn->cfFormat == CF_UNICODETEXT))
     {
-      int utf16_len = fl_utf8toUtf16(fl_selection_buffer[0], fl_selection_length[0], 0, 0);
+      int utf16_len = fltk3::utf8toUtf16(fl_selection_buffer[0], fl_selection_length[0], 0, 0);
       HGLOBAL gh = GlobalAlloc( GHND, utf16_len * 2 + 2 );
       char *pMem = (char*)GlobalLock( gh );
-      fl_utf8toUtf16(fl_selection_buffer[0], fl_selection_length[0], (unsigned short*)pMem, utf16_len + 1);
+      fltk3::utf8toUtf16(fl_selection_buffer[0], fl_selection_length[0], (unsigned short*)pMem, utf16_len + 1);
 //      HGLOBAL gh = GlobalAlloc( GHND| GMEM_SHARE,
 //                            (fl_selection_length[0]+4) * sizeof(short)
 //                            + sizeof(DROPFILES));

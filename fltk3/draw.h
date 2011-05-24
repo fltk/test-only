@@ -33,7 +33,7 @@
 #ifndef fltk3_draw_H
 #define fltk3_draw_H
 
-#include <fltk3/x.h>	      // for Fl_Region
+#include <fltk3/x.h>	      // for fltk3::Region
 #include <fltk3/enumerations.h>  // for the color names
 #include <fltk3/Window.h>     // for fltk3::set_spot()
 #include <fltk3/Device.h>     // for fltk3::graphics_driver
@@ -139,14 +139,14 @@ namespace fltk3 {
   /**
    Replaces the top of the clipping stack with a clipping region of any shape.
    
-   Fl_Region is an operating system specific type.
+   fltk3::Region is an operating system specific type.
    \param[in] r clipping region
    */
-  inline void clip_region(Fl_Region r) { fltk3::graphics_driver->clip_region(r); };
+  inline void clip_region(fltk3::Region r) { fltk3::graphics_driver->clip_region(r); };
   /**
    Returns the current clipping region.
    */
-  inline Fl_Region clip_region() { return fltk3::graphics_driver->clip_region(); };
+  inline fltk3::Region clip_region() { return fltk3::graphics_driver->clip_region(); };
   
   
   // points:

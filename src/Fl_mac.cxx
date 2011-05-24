@@ -104,7 +104,7 @@ char fl_key_vector[32];              // used by fltk3::get_key()
 bool fl_show_iconic;                 // true if called from iconize() - shows the next created window in collapsed state
 int fl_disable_transient_for;        // secret method of removing TRANSIENT_FOR
 const fltk3::Window* fl_modal_for;       // parent of modal() window
-Fl_Region fl_window_region = 0;
+fltk3::Region fl_window_region = 0;
 Window fl_window;
 fltk3::Window *fltk3::Window::current_;
 EventRef fl_os_event;		// last (mouse) event
@@ -1203,7 +1203,7 @@ static int keycodeToUnicode(
   // FIXME no bounds check (see maxchars)
   unsigned i;
   for (i=0; i<actuallength; ++i) {
-    len += fl_utf8encode(utext[i], uniChars+len);
+    len += fltk3::utf8encode(utext[i], uniChars+len);
   }
   uniChars[len] = 0;
   return len;
@@ -1253,7 +1253,7 @@ pascal OSStatus carbonTextHandler(
   // FIXME: oversimplified!
   unsigned ucs = buf[0];
   char utf8buf[20];
-  int len = fl_utf8encode(ucs, utf8buf);
+  int len = fltk3::utf8encode(ucs, utf8buf);
   fltk3::e_length = len;
   fltk3::e_text = utf8buf;
   while (window->parent()) window = window->window();
@@ -2470,7 +2470,7 @@ void fltk3::Window::make_current()
   {
     fltk3::Window *cw = cx->w;
     if (!cw->visible_r()) continue;
-    Fl_Region r = NewRgn();
+    fltk3::Region r = NewRgn();
     SetRectRgn( r, cw->x() - xp, cw->y() - yp, 
                    cw->x() + cw->w() - xp, cw->y() + cw->h() - yp );
     DiffRgn( fl_window_region, r, fl_window_region );

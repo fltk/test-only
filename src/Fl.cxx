@@ -1656,12 +1656,12 @@ void fltk3::Widget::damage(uchar fl, int X, int Y, int W, int H) {
       R.x = X; R.y = Y; R.width = W; R.height = H;
       XUnionRectWithRegion(&R, i->region, i->region);
 #elif defined(WIN32)
-      Fl_Region R = XRectangleRegion(X, Y, W, H);
+      fltk3::Region R = XRectangleRegion(X, Y, W, H);
       CombineRgn(i->region, i->region, R, RGN_OR);
       XDestroyRegion(R);
 #elif defined(__APPLE_QUARTZ__)
       CGRect arg = fl_cgrectmake_cocoa(X, Y, W, H);
-      int j; // don't add a rectangle totally inside the Fl_Region
+      int j; // don't add a rectangle totally inside the fltk3::Region
       for(j = 0; j < i->region->count; j++) {
         if(CGRectContainsRect(i->region->rects[j], arg)) break;
       }

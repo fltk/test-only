@@ -188,12 +188,12 @@ void fltk3::RGBImage::uncache() {
   }
 #else
   if (id_) {
-    fl_delete_offscreen((Fl_Offscreen)id_);
+    fl_delete_offscreen((fltk3::Offscreen)id_);
     id_ = 0;
   }
 
   if (mask_) {
-    fl_delete_bitmask((Fl_Bitmask)mask_);
+    fl_delete_bitmask((fltk3::Bitmask)mask_);
     mask_ = 0;
   }
 #endif
@@ -502,11 +502,11 @@ void Fl_GDI_Graphics_Driver::draw(fltk3::RGBImage *img, int XP, int YP, int WP, 
   if (!img->id_) {
     img->id_ = fl_create_offscreen(img->w(), img->h());
     if ((img->d() == 2 || img->d() == 4) && fltk3::can_do_alpha_blending()) {
-      fl_begin_offscreen((Fl_Offscreen)img->id_);
+      fl_begin_offscreen((fltk3::Offscreen)img->id_);
       fltk3::draw_image(img->array, 0, 0, img->w(), img->h(), img->d()|FL_IMAGE_WITH_ALPHA, img->ld());
       fl_end_offscreen();
     } else {
-      fl_begin_offscreen((Fl_Offscreen)img->id_);
+      fl_begin_offscreen((fltk3::Offscreen)img->id_);
       fltk3::draw_image(img->array, 0, 0, img->w(), img->h(), img->d(), img->ld());
       fl_end_offscreen();
       if (img->d() == 2 || img->d() == 4) {
@@ -524,9 +524,9 @@ void Fl_GDI_Graphics_Driver::draw(fltk3::RGBImage *img, int XP, int YP, int WP, 
     RestoreDC(new_gc,save);
     DeleteDC(new_gc);
   } else if (img->d()==2 || img->d()==4) {
-    fl_copy_offscreen_with_alpha(X, Y, W, H, (Fl_Offscreen)img->id_, cx, cy);
+    fl_copy_offscreen_with_alpha(X, Y, W, H, (fltk3::Offscreen)img->id_, cx, cy);
   } else {
-    fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)img->id_, cx, cy);
+    fl_copy_offscreen(X, Y, W, H, (fltk3::Offscreen)img->id_, cx, cy);
   }
 }
 
@@ -544,7 +544,7 @@ void Fl_Xlib_Graphics_Driver::draw(fltk3::RGBImage *img, int XP, int YP, int WP,
   if (!img->id_) {
     if (img->d() == 1 || img->d() == 3) {
       img->id_ = fl_create_offscreen(img->w(), img->h());
-      fl_begin_offscreen((Fl_Offscreen)img->id_);
+      fl_begin_offscreen((fltk3::Offscreen)img->id_);
       fltk3::draw_image(img->array, 0, 0, img->w(), img->h(), img->d(), img->ld());
       fl_end_offscreen();
     }

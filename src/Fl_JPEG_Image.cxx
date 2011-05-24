@@ -119,7 +119,7 @@ fltk3::JPEGImage::JPEGImage(const char *filename)	// I - File to load
   array = (uchar *)0;
   
   // Open the image file...
-  if ((fp = fl_fopen(filename, "rb")) == NULL) return;
+  if ((fp = fltk3::fopen(filename, "rb")) == NULL) return;
   
   // Setup the decompressor info and read the header...
   dinfo.err                = jpeg_std_error((jpeg_error_mgr *)&jerr);

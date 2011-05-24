@@ -755,7 +755,7 @@ void fltk3::TextDisplay::overstrike(const char* text) {
   /* determine how many displayed character positions are covered */
   startIndent = mBuffer->count_displayed_characters( lineStart, startPos );
   indent = startIndent;
-  for ( c = text; *c != '\0'; c += fl_utf8len1(*c) )
+  for ( c = text; *c != '\0'; c += fltk3::utf8len1(*c) )
     indent++;
   endIndent = indent;
   
@@ -1737,7 +1737,7 @@ int fltk3::TextDisplay::handle_vline(
   style = position_style(lineStartPos, lineLen, 0);
   for (i=0; i<lineLen; ) {
     currChar = lineStr[i]; // one byte is enough to handele tabs and other cases
-    int len = fl_utf8len1(currChar);
+    int len = fltk3::utf8len1(currChar);
     if (len<=0) len = 1; // OUCH!
     charStyle = position_style(lineStartPos, lineLen, i);
     if (charStyle!=style || currChar=='\t' || prevChar=='\t') {
@@ -1831,7 +1831,7 @@ int fltk3::TextDisplay::find_x(const char *s, int len, int style, int x) const {
   // TODO: use binary search which may be quicker.
   int i = 0;
   while (i<len) {
-    int cl = fl_utf8len1(s[i]);
+    int cl = fltk3::utf8len1(s[i]);
     int w = int( string_width(s, i+cl, style) );
     if (w>x) 
       return i;
@@ -3206,7 +3206,7 @@ double fltk3::TextDisplay::measure_proportional_character(const char *s, int xPi
     return (((xPix/tab)+1)*tab) - xPix;
   }
   
-  int charLen = fl_utf8len1(*s), style = 0;
+  int charLen = fltk3::utf8len1(*s), style = 0;
   if (mStyleBuffer) {
     style = mStyleBuffer->byte_at(pos);
   }

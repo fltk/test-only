@@ -93,7 +93,7 @@ namespace fltk3 {
      <P>The sort argument specifies a sort function to be used with
      fl_filename_list().
      */
-    int		load(const char *directory, Fl_File_Sort_F *sort = fl_numericsort);
+    int		load(const char *directory, fltk3::FileSortF *sort = fl_numericsort);
     
     fltk3::Fontsize  textsize() const { return fltk3::Browser::textsize(); };
     void		textsize(fltk3::Fontsize s) { fltk3::Browser::textsize(s); iconsize_ = (uchar)(3 * s / 2); };

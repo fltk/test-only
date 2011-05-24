@@ -340,7 +340,7 @@ int load_the_menu(const char* fname)
   FILE *fin = 0;
   char line[256], mname[64],iname[64],cname[64];
   int i, j;
-  fin = fl_fopen(fname,"r");
+  fin = fltk3::fopen(fname,"r");
 #if defined ( USING_XCODE )
   if (fin == NULL) {
     // mac os bundle menu detection:
@@ -350,7 +350,7 @@ int load_the_menu(const char* fname)
     pos = strrchr(fname,'/');
     if (!pos) return 0;
     strcpy(pos,"/Resources/demo.menu");
-    fin  = fl_fopen(fname,"r");
+    fin  = fltk3::fopen(fname,"r");
   }
 #endif
   if (fin == NULL) {

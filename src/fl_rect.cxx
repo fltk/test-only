@@ -516,11 +516,11 @@ void fltk3::GraphicsDriver::point(int x, int y) {
 #if !defined(WIN32) && !defined(__APPLE__)
 // Missing X call: (is this the fastest way to init a 1-rectangle region?)
 // MSWindows equivalent exists, implemented inline in win32.h
-Fl_Region XRectangleRegion(int x, int y, int w, int h) {
+fltk3::Region XRectangleRegion(int x, int y, int w, int h) {
   XRectangle R;
   clip_to_short(x, y, w, h);
   R.x = x; R.y = y; R.width = w; R.height = h;
-  Fl_Region r = XCreateRegion();
+  fltk3::Region r = XCreateRegion();
   XUnionRectWithRegion(&R, r, r);
   return r;
 }
@@ -528,7 +528,7 @@ Fl_Region XRectangleRegion(int x, int y, int w, int h) {
 
 void fltk3::GraphicsDriver::restore_clip() {
   fl_clip_state_number++;
-  Fl_Region r = rstack[rstackptr];
+  fltk3::Region r = rstack[rstackptr];
 #if defined(USE_X11)
   if (r) XSetRegion(fl_display, fl_gc, r);
   else XSetClipMask(fl_display, fl_gc, 0);
@@ -554,25 +554,25 @@ void fltk3::GraphicsDriver::restore_clip() {
 #endif
 }
 
-void fltk3::GraphicsDriver::clip_region(Fl_Region r) {
-  Fl_Region oldr = rstack[rstackptr];
+void fltk3::GraphicsDriver::clip_region(fltk3::Region r) {
+  fltk3::Region oldr = rstack[rstackptr];
   if (oldr) XDestroyRegion(oldr);
   rstack[rstackptr] = r;
   fltk3::restore_clip();
 }
 
-Fl_Region fltk3::GraphicsDriver::clip_region() {
+fltk3::Region fltk3::GraphicsDriver::clip_region() {
   return rstack[rstackptr];
 }
 
 void fltk3::GraphicsDriver::push_clip(int x, int y, int w, int h) {
-  Fl_Region r;
+  fltk3::Region r;
   if (w > 0 && h > 0) {
     r = XRectangleRegion(x,y,w,h);
-    Fl_Region current = rstack[rstackptr];
+    fltk3::Region current = rstack[rstackptr];
     if (current) {
 #if defined(USE_X11)
-      Fl_Region temp = XCreateRegion();
+      fltk3::Region temp = XCreateRegion();
       XIntersectRegion(current, r, temp);
       XDestroyRegion(r);
       r = temp;
@@ -611,7 +611,7 @@ void fltk3::GraphicsDriver::push_no_clip() {
 // pop back to previous clip:
 void fltk3::GraphicsDriver::pop_clip() {
   if (rstackptr > 0) {
-    Fl_Region oldr = rstack[rstackptr--];
+    fltk3::Region oldr = rstack[rstackptr--];
     if (oldr) XDestroyRegion(oldr);
   } else fltk3::warning("fltk3::pop_clip: clip stack underflow!\n");
   fltk3::restore_clip();
@@ -619,7 +619,7 @@ void fltk3::GraphicsDriver::pop_clip() {
 
 int fltk3::GraphicsDriver::not_clipped(int x, int y, int w, int h) {
   if (x+w <= 0 || y+h <= 0) return 0;
-  Fl_Region r = rstack[rstackptr];
+  fltk3::Region r = rstack[rstackptr];
   if (!r) return 1;
 #if defined (USE_X11)
   // get rid of coordinates outside the 16-bit range the X calls take.
@@ -650,7 +650,7 @@ int fltk3::GraphicsDriver::not_clipped(int x, int y, int w, int h) {
 // return rectangle surrounding intersection of this rectangle and clip:
 int fltk3::GraphicsDriver::clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H){
   X = x; Y = y; W = w; H = h;
-  Fl_Region r = rstack[rstackptr];
+  fltk3::Region r = rstack[rstackptr];
   if (!r) return 0;
 #if defined(USE_X11)
   switch (XRectInRegion(r, x, y, w, h)) {
@@ -662,8 +662,8 @@ int fltk3::GraphicsDriver::clip_box(int x, int y, int w, int h, int& X, int& Y, 
   default: // partial:
     break;
   }
-  Fl_Region rr = XRectangleRegion(x,y,w,h);
-  Fl_Region temp = XCreateRegion();
+  fltk3::Region rr = XRectangleRegion(x,y,w,h);
+  fltk3::Region temp = XCreateRegion();
   XIntersectRegion(r, rr, temp);
   XRectangle rect;
   XClipBox(temp, &rect);
@@ -676,8 +676,8 @@ int fltk3::GraphicsDriver::clip_box(int x, int y, int w, int h, int& X, int& Y, 
 // intersection, so we have to check for partial intersection ourselves.
 // However, given that the regions may be composite, we have to do
 // some voodoo stuff...
-  Fl_Region rr = XRectangleRegion(x,y,w,h);
-  Fl_Region temp = CreateRectRgn(0,0,0,0);
+  fltk3::Region rr = XRectangleRegion(x,y,w,h);
+  fltk3::Region temp = CreateRectRgn(0,0,0,0);
   int ret;
   if (CombineRgn(temp, rr, r, RGN_AND) == NULLREGION) { // disjoint
     W = H = 0;

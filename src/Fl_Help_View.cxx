@@ -223,7 +223,7 @@ img->draw()
 
 // We don't put the offscreen buffer in the help view class because
 // we'd need to include x.h in the header...
-static Fl_Offscreen fl_help_view_buffer;
+static fltk3::Offscreen fl_help_view_buffer;
 int fltk3::HelpView::selection_first = 0;
 int fltk3::HelpView::selection_last = 0;
 int fltk3::HelpView::selection_push_first = 0;
@@ -715,7 +715,7 @@ fltk3::HelpView::draw()
               char buf[8];
               wchar_t b[] = {0x2022, 0x0};
 //            buf[fl_unicode2utf(b, 1, buf)] = 0;
-              unsigned dstlen = fl_utf8fromwc(buf, 8, b, 1);
+              unsigned dstlen = fltk3::utf8fromwc(buf, 8, b, 1);
               buf[dstlen] = 0;
               hv_draw(buf, xx - fsize + x() - leftline_, yy + y());
 	    }
@@ -940,7 +940,7 @@ fltk3::HelpView::draw()
 	    *s++ = '&';
 	  else {
             int l;
-            l = fl_utf8encode((unsigned int) qch, s);
+            l = fltk3::utf8encode((unsigned int) qch, s);
             if (l < 1) l = 1;
             s += l;
 	    ptr = strchr(ptr, ';') + 1;
@@ -1759,7 +1759,7 @@ void fltk3::HelpView::format() {
 	  *s++ = '&';
 	else {
           int l;
-          l = fl_utf8encode((unsigned int) qch, s);
+          l = fltk3::utf8encode((unsigned int) qch, s);
           if (l < 1) l = 1;
           s += l;
 	  ptr = strchr(ptr, ';') + 1;
@@ -2200,7 +2200,7 @@ fltk3::HelpView::format_table(int        *table_width,	// O - Total table width
 	*s++ = '&';
       else {
 //        int l;
-//        l = fl_utf8encode((unsigned int) qch, s);
+//        l = fltk3::utf8encode((unsigned int) qch, s);
 //        if (l < 1) l = 1;
 //        s += l;
 	*s++ = qch;
@@ -2630,7 +2630,7 @@ fltk3::HelpView::get_image(const char *name, int W, int H) {
   } else if (name[0] != '/' && strchr(name, ':') == NULL) {
     if (directory_[0]) snprintf(temp, sizeof(temp), "%s/%s", directory_, name);
     else {
-      fl_getcwd(dir, sizeof(dir));
+      fltk3::getcwd(dir, sizeof(dir));
       snprintf(temp, sizeof(temp), "file:%s/%s", dir, name);
     }
 
@@ -2728,7 +2728,7 @@ void fltk3::HelpView::follow_link(fltk3::HelpLink *linkp)
 	snprintf(temp, sizeof(temp), "%s/%s", directory_, linkp->filename);
       else
       {
-	  fl_getcwd(dir, sizeof(dir));
+	  fltk3::getcwd(dir, sizeof(dir));
 	snprintf(temp, sizeof(temp), "file:%s/%s", dir, linkp->filename);
       }
     }
@@ -3194,7 +3194,7 @@ fltk3::HelpView::load(const char *f)// I - Filename to load (may also have targe
   if (strncmp(localname, "file:", 5) == 0)
     localname += 5;	// Adjust for local filename...
 
-  if ((fp = fl_fopen(localname, "rb")) != NULL)
+  if ((fp = fltk3::fopen(localname, "rb")) != NULL)
   {
     fseek(fp, 0, SEEK_END);
     len = ftell(fp);

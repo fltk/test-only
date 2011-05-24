@@ -156,7 +156,6 @@
 		3B627DDF4E12177AED294C76 /* jdapimin.c in Sources */ = {isa = PBXBuildFile; fileRef = D3FB35B309F2E1E59D1618C8 /* jdapimin.c */; };
 		3B93665C37B124E7072A0C29 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		3BB6C389D42EA62871E9F4B4 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
-		3BD005D954ABCB5983F540AB /* fl_utf.c in Sources */ = {isa = PBXBuildFile; fileRef = 42660BA0E346168608D0FADB /* fl_utf.c */; };
 		3C0CA0BFF07538026590AE21 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		3C2E57EF6298BB0FC9412871 /* Fl_own_colormap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = AAE8D31DC4F024028C66743C /* Fl_own_colormap.cxx */; };
 		3D0A39265F7745FB60BD740F /* fltk_gl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = EA8E6EC230301E597B9D9AED /* fltk_gl.framework */; };
@@ -609,6 +608,7 @@
 		C9165EA81291A304003FF4F0 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C9165EAA1291A304003FF4F0 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C9165ED41291A376003FF4F0 /* unittests.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C9165ED31291A376003FF4F0 /* unittests.cxx */; };
+		C945A66C138C277D0043D11D /* fl_utf.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C945A66B138C277D0043D11D /* fl_utf.cxx */; };
 		C9568C181380730900CDA5BF /* Adjuster.h in Headers */ = {isa = PBXBuildFile; fileRef = C9568B8A1380730100CDA5BF /* Adjuster.h */; };
 		C9568C191380730900CDA5BF /* ask.h in Headers */ = {isa = PBXBuildFile; fileRef = C9568B8B1380730100CDA5BF /* ask.h */; };
 		C9568C1A1380730900CDA5BF /* Bitmap.h in Headers */ = {isa = PBXBuildFile; fileRef = C9568B8C1380730100CDA5BF /* Bitmap.h */; };
@@ -4132,7 +4132,6 @@
 		4120FB2B23E168C4377E78E2 /* image.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = image.cxx; path = ../../test/image.cxx; sourceTree = SOURCE_ROOT; };
 		4194C917D667C0E2FCEF0A39 /* Fl_Valuator.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Valuator.cxx; path = ../../src/Fl_Valuator.cxx; sourceTree = SOURCE_ROOT; };
 		41D6B03607BD43BB0D703411 /* Fl_Repeat_Button.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Repeat_Button.cxx; path = ../../src/Fl_Repeat_Button.cxx; sourceTree = SOURCE_ROOT; };
-		42660BA0E346168608D0FADB /* fl_utf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = fl_utf.c; path = ../../src/fl_utf.c; sourceTree = SOURCE_ROOT; };
 		428497C5DD96FDB07B2A8BC5 /* jdmainct.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jdmainct.c; path = ../../jpeg/jdmainct.c; sourceTree = SOURCE_ROOT; };
 		42C67E2C7BDA83D7AACF300C /* CubeView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CubeView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42C83618F3462133634D3CF9 /* output.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = output.cxx; path = ../../test/output.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -4578,6 +4577,7 @@
 		C915E3F413842F3F00C5FD27 /* Rectangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rectangle.h; path = ../../fltk3/Rectangle.h; sourceTree = "<group>"; };
 		C9165EAF1291A304003FF4F0 /* utf8.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = utf8.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9165ED31291A376003FF4F0 /* unittests.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = unittests.cxx; path = ../../test/unittests.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		C945A66B138C277D0043D11D /* fl_utf.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fl_utf.cxx; path = ../../src/fl_utf.cxx; sourceTree = "<group>"; };
 		C9568B8A1380730100CDA5BF /* Adjuster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Adjuster.h; path = ../../fltk3/Adjuster.h; sourceTree = "<group>"; };
 		C9568B8B1380730100CDA5BF /* ask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ask.h; path = ../../fltk3/ask.h; sourceTree = "<group>"; };
 		C9568B8C1380730100CDA5BF /* Bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bitmap.h; path = ../../fltk3/Bitmap.h; sourceTree = "<group>"; };
@@ -5789,8 +5789,8 @@
 				7C57535613D421F393DD662F /* fl_shortcut.cxx */,
 				EB15CE98189A4C0A7A8A480F /* fl_show_colormap.cxx */,
 				7C8D88FDB0A0A32E59465025 /* fl_symbols.cxx */,
-				42660BA0E346168608D0FADB /* fl_utf.c */,
 				DEF20F6B91F7FB0EBCBD2411 /* fl_utf8.cxx */,
+				C945A66B138C277D0043D11D /* fl_utf.cxx */,
 				67A896B990EDB45C5BC93F01 /* fl_vertex.cxx */,
 				530B066D0F3AC2972D9FEC30 /* flstring.c */,
 				C964A6D1138857DE004A8700 /* numericsort.cxx */,
@@ -10246,7 +10246,6 @@
 				864A7D2E295FB8125D768AC6 /* fl_shortcut.cxx in Sources */,
 				2800B0509A5D20FABE8F02DC /* fl_show_colormap.cxx in Sources */,
 				0262498E858406B6E51BD4E4 /* fl_symbols.cxx in Sources */,
-				3BD005D954ABCB5983F540AB /* fl_utf.c in Sources */,
 				AEC9E288AC9E09B99855D15C /* fl_utf8.cxx in Sources */,
 				D2649C006A1AF19ADB38855E /* fl_vertex.cxx in Sources */,
 				51FC4E43CA74B5CB3FD91147 /* flstring.c in Sources */,
@@ -10259,6 +10258,7 @@
 				9DD7A2B6D63D30C07781F446 /* is_spacing.c in Sources */,
 				299CB8A2848CB844BCEC7829 /* Fl_Paged_Device.cxx in Sources */,
 				C9A0982813885FAE00BB5C57 /* numericsort.cxx in Sources */,
+				C945A66C138C277D0043D11D /* fl_utf.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

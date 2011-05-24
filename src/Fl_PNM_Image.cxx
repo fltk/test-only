@@ -65,7 +65,7 @@ fltk3::PNMImage::PNMImage(const char *name)	// I - File to read
 		maxval;		// Maximum pixel value
 
 
-  if ((fp = fl_fopen(name, "rb")) == NULL) return;
+  if ((fp = fltk3::fopen(name, "rb")) == NULL) return;
 
   //
   // Read the file header in the format:

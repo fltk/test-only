@@ -208,7 +208,7 @@ fltk3::FileIcon::find(const char *filename,// I - Name of file */
     else
       filetype = PLAIN;
 #else
-    if (!fl_stat(filename, &fileinfo))
+    if (!fltk3::stat(filename, &fileinfo))
     {
       if (S_ISDIR(fileinfo.st_mode))
         filetype = DIRECTORY;

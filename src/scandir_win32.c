@@ -67,10 +67,10 @@ int fl_scandir(const char *dirname, struct dirent ***namelist,
      /* unsigned short * wbuf = (unsigned short*)malloc(sizeof(short) *(len + 10)); */
      /* wbuf[fl_utf2unicode(findIn, strlen(findIn), wbuf)] = 0; */
 	unsigned short *wbuf = NULL;
-	unsigned wlen = fl_utf8toUtf16(findIn, strlen(findIn), NULL, 0); /* Pass NULL to query length */
+	unsigned wlen = fltk3::utf8toUtf16(findIn, strlen(findIn), NULL, 0); /* Pass NULL to query length */
 	wlen++; /* add a little extra for termination etc. */
 	wbuf = (unsigned short*)malloc(sizeof(unsigned short)*wlen);
-	wlen = fl_utf8toUtf16(findIn, strlen(findIn), wbuf, wlen); /* actually convert the filename */
+	wlen = fltk3::utf8toUtf16(findIn, strlen(findIn), wbuf, wlen); /* actually convert the filename */
 	wbuf[wlen] = 0; /* NULL terminate the resultant string */
 	h = FindFirstFileW(wbuf, &findw); /* get a handle to the first filename in the search */
 	free(wbuf); /* release the "wide" buffer before the pointer goes out of scope */
@@ -90,7 +90,7 @@ int fl_scandir(const char *dirname, struct dirent ***namelist,
 	selectDir=(struct dirent*)malloc(sizeof(struct dirent)+dstlen);
 
      /* l = fl_unicode2utf(findw.cFileName, l, selectDir->d_name); */
-	l = fl_utf8fromwc(selectDir->d_name, dstlen, findw.cFileName, l);
+	l = fltk3::utf8fromwc(selectDir->d_name, dstlen, findw.cFileName, l);
 
 	selectDir->d_name[l] = 0;
 	if (findw.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {

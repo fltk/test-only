@@ -52,7 +52,7 @@ namespace fltk3 {
     MENU_HORIZONTAL = 0x100	///< ??? -- reserved
   };
   
-  extern FLTK3_EXPORT Fl_Shortcut old_shortcut(const char*);
+  extern FLTK3_EXPORT fltk3::Shortcut old_shortcut(const char*);
     
   /**
    The fltk3::MenuItem structure defines a single menu item that

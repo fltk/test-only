@@ -330,7 +330,7 @@ void fltk3::GlWindow::flush() {
 #else
       SWAP_TYPE = UNDEFINED;
 #endif
-      const char* c = fl_getenv("GL_SWAP_TYPE");
+      const char* c = fltk3::getenv("GL_SWAP_TYPE");
       if (c) {
 	if (!strcmp(c,"COPY")) SWAP_TYPE = COPY;
 	else if (!strcmp(c, "NODAMAGE")) SWAP_TYPE = NODAMAGE;

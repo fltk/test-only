@@ -684,7 +684,7 @@ namespace fltk3 {
   void compose_reset();
   int event_inside(int,int,int,int);
   int event_inside(const fltk3::Widget*);
-  int test_shortcut(Fl_Shortcut);
+  int test_shortcut(fltk3::Shortcut);
   
   // event destinations:
   int handle(int, fltk3::Window*);

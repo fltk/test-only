@@ -94,7 +94,7 @@ fltk3::BMPImage::BMPImage(const char *bmp) // I - File to read
 
 
   // Open the file...
-  if ((fp = fl_fopen(bmp, "rb")) == NULL) return;
+  if ((fp = fltk3::fopen(bmp, "rb")) == NULL) return;
 
   // Get the header...
   byte = (uchar)getc(fp);	// Check "BM" sync chars

@@ -87,13 +87,13 @@ typedef unsigned int NSUInteger;
 
 // external functions
 extern void fl_fix_focus();
-extern Fl_Offscreen fl_create_offscreen_with_alpha(int w, int h);
+extern fltk3::Offscreen fl_create_offscreen_with_alpha(int w, int h);
 
 // forward definition of functions in this file
 // converting cr lf converter function
 static void convert_crlf(char * string, size_t len);
 static void createAppleMenu(void);
-static Fl_Region MacRegionMinusRect(Fl_Region r, int x,int y,int w,int h);
+static fltk3::Region MacRegionMinusRect(fltk3::Region r, int x,int y,int w,int h);
 static void cocoaMouseHandler(NSEvent *theEvent);
 
 static fltk3::QuartzGraphicsDriver fl_quartz_driver;
@@ -1560,7 +1560,7 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
   if(!title) { // fallback when name contains malformed UTF-8
     int l = strlen(name);
     unsigned short* utf16 = new unsigned short[l + 1];
-    l = fl_utf8toUtf16(name, l, utf16, l + 1);
+    l = fltk3::utf8toUtf16(name, l, utf16, l + 1);
     title = CFStringCreateWithCharacters(NULL, utf16, l);
     delete[] utf16;
     }
@@ -2329,11 +2329,11 @@ void fltk3::Window::make_current()
   [[(NSWindow*)i->xid contentView]  lockFocus];
   i->gc = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
   fl_gc = i->gc;
-  Fl_Region fl_window_region = XRectangleRegion(0,0,w(),h());
+  fltk3::Region fl_window_region = XRectangleRegion(0,0,w(),h());
   if ( ! this->window() ) {
     for ( Fl_X *cx = i->xidChildren; cx; cx = cx->xidNext ) {	// clip-out all sub-windows
       fltk3::Window *cw = cx->w;
-      Fl_Region from = fl_window_region;
+      fltk3::Region from = fl_window_region;
       fl_window_region = MacRegionMinusRect(from, cw->x(), cw->y(), cw->w(), cw->h() );
       XDestroyRegion(from);
     }
@@ -2695,10 +2695,10 @@ void Fl_X::unmap() {
 }
 
 
-// removes x,y,w,h rectangle from region r and returns result as a new Fl_Region
-static Fl_Region MacRegionMinusRect(Fl_Region r, int x,int y,int w,int h)
+// removes x,y,w,h rectangle from region r and returns result as a new fltk3::Region
+static fltk3::Region MacRegionMinusRect(fltk3::Region r, int x,int y,int w,int h)
 {
-  Fl_Region outr = (Fl_Region)malloc(sizeof(*outr));
+  fltk3::Region outr = (fltk3::Region)malloc(sizeof(*outr));
   outr->rects = (CGRect*)malloc(4 * r->count * sizeof(CGRect));
   outr->count = 0;
   CGRect rect = fl_cgrectmake_cocoa(x, y, w, h);
@@ -2741,12 +2741,12 @@ static Fl_Region MacRegionMinusRect(Fl_Region r, int x,int y,int w,int h)
   return outr;
 }
 
-// intersects current and x,y,w,h rectangle and returns result as a new Fl_Region
-Fl_Region Fl_X::intersect_region_and_rect(Fl_Region current, int x,int y,int w, int h)
+// intersects current and x,y,w,h rectangle and returns result as a new fltk3::Region
+fltk3::Region Fl_X::intersect_region_and_rect(fltk3::Region current, int x,int y,int w, int h)
 {
   if (current == NULL) return XRectangleRegion(x,y,w,h);
   CGRect r = fl_cgrectmake_cocoa(x, y, w, h);
-  Fl_Region outr = (Fl_Region)malloc(sizeof(*outr));
+  fltk3::Region outr = (fltk3::Region)malloc(sizeof(*outr));
   outr->count = current->count;
   outr->rects =(CGRect*)malloc(outr->count * sizeof(CGRect));
   int j = 0;
@@ -2793,7 +2793,7 @@ static NSCursor *PrepareCursor(NSCursor *cursor, CGContextRef (*f)() )
   if (cursor == nil) {
     CGContextRef c = f();
     NSImage *image = CGBitmapContextToNSImage(c);
-    fl_delete_offscreen( (Fl_Offscreen)c ); 
+    fl_delete_offscreen( (fltk3::Offscreen)c ); 
     NSPoint pt = {[image size].width/2, [image size].height/2};
     cursor = [[NSCursor alloc] initWithImage:image hotSpot:pt];
   }
@@ -3226,7 +3226,7 @@ static NSImage *imageFromText(const char *text, int *pwidth, int *pheight)
   }
   height = nl * fltk3::height() + 3;
   width += 6;
-  Fl_Offscreen off = fl_create_offscreen_with_alpha(width, height);
+  fltk3::Offscreen off = fl_create_offscreen_with_alpha(width, height);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fltk3::rectf(0,0,width,height);
@@ -3255,7 +3255,7 @@ static NSImage *imageFromText(const char *text, int *pwidth, int *pheight)
 static NSImage *defaultDragImage(int *pwidth, int *pheight)
 {
   const int width = 16, height = 16;
-  Fl_Offscreen off = fl_create_offscreen_with_alpha(width, height);
+  fltk3::Offscreen off = fl_create_offscreen_with_alpha(width, height);
   fl_begin_offscreen(off);
   CGContextSetRGBFillColor( (CGContextRef)off, 0,0,0,0);
   fltk3::rectf(0,0,width,height);

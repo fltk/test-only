@@ -26,7 +26,7 @@
 //
 
 /* \file
-   Fl_Free widget . */
+   fltk3::Free widget . */
 
 #ifndef Fltk3_Free_H
 #define Fltk3_Free_H

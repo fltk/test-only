@@ -418,7 +418,7 @@ fltk3::FileBrowser::FileBrowser(int        X,  // I - Upper-lefthand X coordinat
 
 int						// O - Number of files loaded
 fltk3::FileBrowser::load(const char     *directory,// I - Directory to load
-                      Fl_File_Sort_F *sort)	// I - Sort function to use
+                      fltk3::FileSortF *sort)	// I - Sort function to use
 {
   int		i;				// Looping var
   int		num_files;			// Number of files in directory
@@ -542,13 +542,13 @@ fltk3::FileBrowser::load(const char     *directory,// I - Directory to load
     // Open the file that contains a list of mounted filesystems...
     //
 
-    mtab = fl_fopen("/etc/mnttab", "r");	// Fairly standard
+    mtab = fltk3::fopen("/etc/mnttab", "r");	// Fairly standard
     if (mtab == NULL)
-      mtab = fl_fopen("/etc/mtab", "r");	// More standard
+      mtab = fltk3::fopen("/etc/mtab", "r");	// More standard
     if (mtab == NULL)
-      mtab = fl_fopen("/etc/fstab", "r");	// Otherwise fallback to full list
+      mtab = fltk3::fopen("/etc/fstab", "r");	// Otherwise fallback to full list
     if (mtab == NULL)
-      mtab = fl_fopen("/etc/vfstab", "r");	// Alternate full list file
+      mtab = fltk3::fopen("/etc/vfstab", "r");	// Alternate full list file
 
     if (mtab != NULL)
     {

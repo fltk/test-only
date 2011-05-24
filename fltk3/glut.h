@@ -487,7 +487,7 @@ FLTK3_EXPORT void glutSolidTetrahedron();
 FLTK3_EXPORT void glutWireIcosahedron();
 FLTK3_EXPORT void glutSolidIcosahedron();
 
-#endif // !Fl_glut_H
+#endif // !Fltk3_glut_H
 
 //
 // End of "$Id: glut.h 8623 2011-04-24 17:09:41Z AlbrechtS $".

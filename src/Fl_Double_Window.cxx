@@ -69,7 +69,7 @@ void fltk3::DoubleWindow::show() {
   fltk3::Window::show();
 }
 
-static void fl_copy_offscreen_to_display(int x, int y, int w, int h, Fl_Offscreen pixmap, int srcx, int srcy);
+static void fl_copy_offscreen_to_display(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy);
 
 /** \addtogroup fl_drawings
  @{
@@ -80,7 +80,7 @@ static void fl_copy_offscreen_to_display(int x, int y, int w, int h, Fl_Offscree
  \param pixmap  offscreen buffer containing the rectangle to copy
  \param srcx,srcy origin in offscreen buffer of rectangle to copy
  */
-void fl_copy_offscreen(int x, int y, int w, int h, Fl_Offscreen pixmap, int srcx, int srcy) {
+void fl_copy_offscreen(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy) {
   if (fltk3::graphics_driver == fltk3::DisplayDevice::display_device()->driver()) {
     fl_copy_offscreen_to_display(x, y, w, h, pixmap, srcx, srcy);
   }
@@ -96,7 +96,7 @@ void fl_copy_offscreen(int x, int y, int w, int h, Fl_Offscreen pixmap, int srcx
 
 #if defined(USE_X11)
 
-static void fl_copy_offscreen_to_display(int x, int y, int w, int h, Fl_Offscreen pixmap, int srcx, int srcy) {
+static void fl_copy_offscreen_to_display(int x, int y, int w, int h, fltk3::Offscreen pixmap, int srcx, int srcy) {
   XCopyArea(fl_display, pixmap, fl_window, fl_gc, srcx, srcy, w, h, x, y);
 }
 
@@ -204,13 +204,13 @@ char fltk3::can_do_alpha_blending() {
   return 1;
 }
 
-Fl_Offscreen fl_create_offscreen_with_alpha(int w, int h) {
+fltk3::Offscreen fl_create_offscreen_with_alpha(int w, int h) {
   void *data = calloc(w*h,4);
   CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
   CGContextRef ctx = CGBitmapContextCreate(
     data, w, h, 8, w*4, lut, kCGImageAlphaPremultipliedLast);
   CGColorSpaceRelease(lut);
-  return (Fl_Offscreen)ctx;
+  return (fltk3::Offscreen)ctx;
 }
 
 /** \addtogroup fl_drawings
@@ -222,13 +222,13 @@ Fl_Offscreen fl_create_offscreen_with_alpha(int w, int h) {
  \param w,h     width and height in pixels of the buffer.
  \return    the created graphics buffer.
  */
-Fl_Offscreen fl_create_offscreen(int w, int h) {
+fltk3::Offscreen fl_create_offscreen(int w, int h) {
   void *data = calloc(w*h,4);
   CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
   CGContextRef ctx = CGBitmapContextCreate(
     data, w, h, 8, w*4, lut, kCGImageAlphaNoneSkipLast);
   CGColorSpaceRelease(lut);
-  return (Fl_Offscreen)ctx;
+  return (fltk3::Offscreen)ctx;
 }
 
 static void bmProviderRelease (void *src, const void *data, size_t size) {
@@ -237,7 +237,7 @@ static void bmProviderRelease (void *src, const void *data, size_t size) {
   if(count == 1) free((void*)data);
 }
 
-static void fl_copy_offscreen_to_display(int x,int y,int w,int h,Fl_Offscreen osrc,int srcx,int srcy) {
+static void fl_copy_offscreen_to_display(int x,int y,int w,int h,fltk3::Offscreen osrc,int srcx,int srcy) {
   CGContextRef src = (CGContextRef)osrc;
   void *data = CGBitmapContextGetData(src);
   int sw = CGBitmapContextGetWidth(src);
@@ -263,7 +263,7 @@ static void fl_copy_offscreen_to_display(int x,int y,int w,int h,Fl_Offscreen os
 /**  Deletion of an offscreen graphics buffer.
  \param ctx     the buffer to be deleted.
  */
-void fl_delete_offscreen(Fl_Offscreen ctx) {
+void fl_delete_offscreen(fltk3::Offscreen ctx) {
   if (!ctx) return;
   void *data = CGBitmapContextGetData((CGContextRef)ctx);
   CFIndex count = CFGetRetainCount(ctx);
@@ -280,7 +280,7 @@ static fltk3::SurfaceDevice *_ss;
 /**  Send all subsequent drawing commands to this offscreen buffer.
  \param ctx     the offscreen buffer.
  */
-void fl_begin_offscreen(Fl_Offscreen ctx) {
+void fl_begin_offscreen(fltk3::Offscreen ctx) {
   _ss = fltk3::SurfaceDevice::surface(); 
   fltk3::DisplayDevice::display_device()->set_current();
   if (stack_ix<stack_max) {

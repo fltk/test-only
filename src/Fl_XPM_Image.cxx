@@ -61,7 +61,7 @@ static int hexdigit(int x) {	// I - Hex digit...
 fltk3::XPMImage::XPMImage(const char *name) : fltk3::Pixmap((char *const*)0) {
   FILE *f;
 
-  if ((f = fl_fopen(name, "rb")) == NULL) return;
+  if ((f = fltk3::fopen(name, "rb")) == NULL) return;
 
   // read all the c-strings out of the file:
   char** new_data = new char *[INITIALLINES];

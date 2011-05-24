@@ -28,7 +28,7 @@
 #include <config.h>
 
 /* from fl_utf.c */
-extern unsigned fl_utf8toUtf16(const char* src, unsigned srclen, unsigned short* dst, unsigned dstlen);
+extern unsigned fltk3::utf8toUtf16(const char* src, unsigned srclen, unsigned short* dst, unsigned dstlen);
 
 static CGAffineTransform font_mx = { 1, 0, 0, -1, 0, 0 };
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
@@ -220,13 +220,13 @@ static unsigned utfWlen = 0;
 
 static UniChar *mac_Utf8_to_Utf16(const char *txt, int len, int *new_len)
 {
-  unsigned wlen = fl_utf8toUtf16(txt, len, (unsigned short*)utfWbuf, utfWlen);
+  unsigned wlen = fltk3::utf8toUtf16(txt, len, (unsigned short*)utfWbuf, utfWlen);
   if (wlen >= utfWlen)
   {
     utfWlen = wlen + 100;
 	if (utfWbuf) free(utfWbuf);
     utfWbuf = (UniChar*)malloc((utfWlen)*sizeof(UniChar));
-	wlen = fl_utf8toUtf16(txt, len, (unsigned short*)utfWbuf, utfWlen);
+	wlen = fltk3::utf8toUtf16(txt, len, (unsigned short*)utfWbuf, utfWlen);
   }
   *new_len = wlen;
   return utfWbuf;
@@ -390,9 +390,9 @@ double fltk3::QuartzGraphicsDriver::width(unsigned int wc) {
   }
   else {
 //    char buf[4];
-//    l = fl_utf8encode(wc, buf);
-//    l = (int)fl_utf8toUtf16(buf, l, utf16, 3);
-    l = (int)fl_ucs_to_Utf16(wc, utf16, 3);
+//    l = fltk3::utf8encode(wc, buf);
+//    l = (int)fltk3::utf8toUtf16(buf, l, utf16, 3);
+    l = (int)fltk3::ucs_to_Utf16(wc, utf16, 3);
   }
   return fl_mac_width(utf16, l, font_descriptor());
 }

@@ -75,8 +75,8 @@ const char* fltk3::Input_::expand(const char* p, char* buf) const {
 
   if (input_type()==fltk3::SECRET_INPUT) {
     while (o<e && p < value_+size_) {
-      if (fl_utf8len((char)p[0]) >= 1) {
-	l_secret = fl_utf8encode(secret_char, o);
+      if (fltk3::utf8len((char)p[0]) >= 1) {
+	l_secret = fltk3::utf8encode(secret_char, o);
 	o += l_secret;
       }
       p++;
@@ -101,7 +101,7 @@ const char* fltk3::Input_::expand(const char* p, char* buf) const {
     if (c < ' ' || c == 127) {
       if (c=='\n' && input_type()==fltk3::MULTILINE_INPUT) {p--; break;}
       if (c == '\t' && input_type()==fltk3::MULTILINE_INPUT) {
-        for (c = fl_utf_nb_char((uchar*)buf, o-buf)%8; c<8 && o<e; c++) {
+        for (c = fltk3::utf_nb_char((uchar*)buf, o-buf)%8; c<8 && o<e; c++) {
           *o++ = ' ';
         }
       } else {
@@ -138,7 +138,7 @@ double fltk3::Input_::expandpos(
   int l;
   if (input_type()==fltk3::SECRET_INPUT) {
     while (p<e) {
-      l = fl_utf8len((char)p[0]);
+      l = fltk3::utf8len((char)p[0]);
       if (l >= 1) n += l_secret;
       p += l;
     }
@@ -152,7 +152,7 @@ double fltk3::Input_::expandpos(
     } else {
       n++;
     }
-    chr += fl_utf8len((char)p[0]) >= 1;
+    chr += fltk3::utf8len((char)p[0]) >= 1;
     p++;
   }
   if (returnn) *returnn = n;
@@ -531,7 +531,7 @@ void fltk3::Input_::handle_mouse(int X, int Y, int /*W*/, int /*H*/, int drag) {
   const char *l, *r, *t; double f0 = fltk3::event_x()-X+xscroll_;
   for (l = p, r = e; l<r; ) {
     double f;
-    int cw = fl_utf8len((char)l[0]);
+    int cw = fltk3::utf8len((char)l[0]);
     if (cw < 1) cw = 1;
     t = l+cw;
     f = X-xscroll_+expandpos(p, t, buf, 0);
@@ -540,7 +540,7 @@ void fltk3::Input_::handle_mouse(int X, int Y, int /*W*/, int /*H*/, int drag) {
   }
   if (l < e) { // see if closer to character on right:
     double f1;
-    int cw = fl_utf8len((char)l[0]);
+    int cw = fltk3::utf8len((char)l[0]);
     if (cw > 0) {
       f1 = X-xscroll_+expandpos(p, l + cw, buf, 0) - fltk3::event_x();
       if (f1 < f0) l = l+cw;
@@ -610,19 +610,19 @@ int fltk3::Input_::position(int p, int m) {
   if (p == m) is_same = 1;
 
   while (p < position_ && p > 0 && (size() - p) > 0 &&
-       (fl_utf8len((char)(value() + p)[0]) < 1)) { p--; }
-  int ul = fl_utf8len((char)(value() + p)[0]);
+       (fltk3::utf8len((char)(value() + p)[0]) < 1)) { p--; }
+  int ul = fltk3::utf8len((char)(value() + p)[0]);
   while (p < size() && p > position_ && ul < 0) {
        p++;
-       ul = fl_utf8len((char)(value() + p)[0]);
+       ul = fltk3::utf8len((char)(value() + p)[0]);
   }
 
   while (m < mark_ && m > 0 && (size() - m) > 0 &&
-       (fl_utf8len((char)(value() + m)[0]) < 1)) { m--; }
-  ul = fl_utf8len((char)(value() + m)[0]);
+       (fltk3::utf8len((char)(value() + m)[0]) < 1)) { m--; }
+  ul = fltk3::utf8len((char)(value() + m)[0]);
   while (m < size() && m > mark_ && ul < 0) {
        m++;
-       ul = fl_utf8len((char)(value() + m)[0]);
+       ul = fltk3::utf8len((char)(value() + m)[0]);
   }
   if (is_same) m = p;
   if (p == position_ && m == mark_) return 0;
@@ -765,11 +765,11 @@ int fltk3::Input_::replace(int b, int e, const char* text, int ilen) {
   if (e>size_) e = size_;
   if (e<b) {int t=b; b=e; e=t;}
   while (b != e && b > 0 && (size_ - b) > 0 &&
-       (fl_utf8len((value_ + b)[0]) < 1)) { b--; }
-  ul = fl_utf8len((char)(value_ + e)[0]);
+       (fltk3::utf8len((value_ + b)[0]) < 1)) { b--; }
+  ul = fltk3::utf8len((char)(value_ + e)[0]);
   while (e < size_ && e > 0 && ul < 0) {
        e++;
-       ul = fl_utf8len((char)(value_ + e)[0]);
+       ul = fltk3::utf8len((char)(value_ + e)[0]);
   }
   if (text && !ilen) ilen = strlen(text);
   if (e<=b && !ilen) return 0; // don't clobber undo for a null operation
@@ -1266,7 +1266,7 @@ int fltk3::Input_::linesPerPage() {
 unsigned int fltk3::Input_::index(int i) const 
 {
   int len = 0;
-  return fl_utf8decode(value_+i, value_+size_, &len);
+  return fltk3::utf8decode(value_+i, value_+size_, &len);
 }
 
 //

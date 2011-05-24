@@ -89,7 +89,7 @@ fltk3::read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
   bi.bmiHeader.biClrUsed = 0;
   bi.bmiHeader.biClrImportant = 0;
 
-  // copy bitmap from original DC (Window, Fl_Offscreen, ...)
+  // copy bitmap from original DC (Window, fltk3::Offscreen, ...)
 
   HDC hdc = CreateCompatibleDC(fl_gc);
   HBITMAP hbm = CreateCompatibleBitmap(fl_gc,w,h);

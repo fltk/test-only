@@ -228,7 +228,7 @@ namespace fltk3 {
      the sort function that is used when loading
      the contents of a directory.
      */
-    static Fl_File_Sort_F *sort; 
+    static fltk3::FileSortF *sort; 
   private:
     fltk3::Widget* ext_group; 
   public:

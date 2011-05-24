@@ -251,7 +251,7 @@ unsigned int fltk3::TextBuffer::char_at(int pos) const {
   IS_UTF8_ALIGNED2(this, (pos))
   
   const char *src = address(pos);
-  return fl_utf8decode(src, 0, 0);
+  return fltk3::utf8decode(src, 0, 0);
 } 
 
 
@@ -1032,7 +1032,7 @@ int fltk3::TextBuffer::search_forward(int startPos, const char *searchString,
           *foundPos = startPos;
           return 1;
         }
-        int l = fl_utf8len1(c);
+        int l = fltk3::utf8len1(c);
         if (memcmp(sp, address(bp), l))
           break;
         sp += l; bp += l;
@@ -1051,8 +1051,8 @@ int fltk3::TextBuffer::search_forward(int startPos, const char *searchString,
         }
         int l;
         unsigned int b = char_at(bp);
-        unsigned int s = fl_utf8decode(sp, 0, &l);
-        if (fl_tolower(b)!=fl_tolower(s))
+        unsigned int s = fltk3::utf8decode(sp, 0, &l);
+        if (fltk3::tolower(b)!=fltk3::tolower(s))
           break;
         sp += l; 
         bp = next_char(bp);
@@ -1084,7 +1084,7 @@ int fltk3::TextBuffer::search_backward(int startPos, const char *searchString,
           *foundPos = startPos;
           return 1;
         }
-        int l = fl_utf8len1(c);
+        int l = fltk3::utf8len1(c);
         if (memcmp(sp, address(bp), l))
           break;
         sp += l; bp += l;
@@ -1103,8 +1103,8 @@ int fltk3::TextBuffer::search_backward(int startPos, const char *searchString,
         }
         int l;
         unsigned int b = char_at(bp);
-        unsigned int s = fl_utf8decode(sp, 0, &l);
-        if (fl_tolower(b)!=fl_tolower(s))
+        unsigned int s = fltk3::utf8decode(sp, 0, &l);
+        if (fltk3::tolower(b)!=fltk3::tolower(s))
           break;
         sp += l; 
         bp = next_char(bp);
@@ -1582,7 +1582,7 @@ static int general_input_filter(char *buffer, int buflen,
       endline -= (p - line);
       return q - buffer;
     }
-    lq = fl_utf8encode( p_trf(p), multibyte );
+    lq = fltk3::utf8encode( p_trf(p), multibyte );
     memcpy(q, multibyte, lq);
     q += lq; 
   }
@@ -1615,7 +1615,7 @@ static int utf8_input_filter(char *buffer, int buflen, char *line, int sline, ch
       if (r == 0) return q - buffer;
       p = line;
     }
-    l = fl_utf8len1(*p);
+    l = fltk3::utf8len1(*p);
     if (p + l > endline) {
       memmove(line, p, endline - p);
       endline -= (p - line);
@@ -1625,8 +1625,8 @@ static int utf8_input_filter(char *buffer, int buflen, char *line, int sline, ch
       if (endline - line < l) break;
     }
     while ( l > 0) {
-      u = fl_utf8decode(p, p+l, &lp);
-      lq = fl_utf8encode(u, multibyte);
+      u = fltk3::utf8decode(p, p+l, &lp);
+      lq = fltk3::utf8encode(u, multibyte);
       if (lp != l || lq != l) *input_was_changed = true;
       if (q + lq > buffer + buflen) {
 	memmove(line, p, endline - p);
@@ -1658,7 +1658,7 @@ const char *fltk3::TextBuffer::file_encoding_warning_message =
  int fltk3::TextBuffer::insertfile(const char *file, int pos, int buflen)
 {
   FILE *fp;
-  if (!(fp = fl_fopen(file, "r")))
+  if (!(fp = fltk3::fopen(file, "r")))
     return 1;
   char *buffer = new char[buflen + 1];  
   char *endline, line[100];
@@ -1700,7 +1700,7 @@ int fltk3::TextBuffer::outputfile(const char *file,
 			       int start, int end,
 			       int buflen) {
   FILE *fp;
-  if (!(fp = fl_fopen(file, "w")))
+  if (!(fp = fltk3::fopen(file, "w")))
     return 1;
   for (int n; (n = min(end - start, buflen)); start += n) {
     const char *p = text_range(start, start + n);
@@ -1758,7 +1758,7 @@ int fltk3::TextBuffer::prev_char(int pos) const
 int fltk3::TextBuffer::next_char(int pos) const
 {
   IS_UTF8_ALIGNED2(this, (pos))  
-  int n = fl_utf8len1(byte_at(pos));
+  int n = fltk3::utf8len1(byte_at(pos));
   pos += n;
   if (pos>=mLength)
     return mLength;

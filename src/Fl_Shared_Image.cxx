@@ -227,7 +227,7 @@ void fltk3::SharedImage::reload() {
 
   if (!name_) return;
 
-  if ((fp = fl_fopen(name_, "rb")) != NULL) {
+  if ((fp = fltk3::fopen(name_, "rb")) != NULL) {
     if (fread(header, 1, sizeof(header), fp)==0) { /* ignore */ }
     fclose(fp);
   } else {

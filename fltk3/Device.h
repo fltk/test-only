@@ -134,7 +134,7 @@ namespace fltk3 {
     int fl_clip_state_number;
     int rstackptr;
     static const int region_stack_max = REGION_STACK_SIZE - 1;
-    Fl_Region rstack[REGION_STACK_SIZE];
+    fltk3::Region rstack[REGION_STACK_SIZE];
 #ifdef WIN32
     int numcount;
     int counts[20];
@@ -264,9 +264,9 @@ namespace fltk3 {
     /** \brief see fltk3::transform_dy(double x, double y). */
     double transform_dy(double x, double y);
     /** \brief see fltk3::clip_region(). */
-    Fl_Region clip_region();
-    /** \brief see fltk3::clip_region(Fl_Region r). */
-    void clip_region(Fl_Region r);
+    fltk3::Region clip_region();
+    /** \brief see fltk3::clip_region(fltk3::Region r). */
+    void clip_region(fltk3::Region r);
     /** \brief see fltk3::restore_clip(). */
     void restore_clip();
     

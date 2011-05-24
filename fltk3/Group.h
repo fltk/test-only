@@ -26,7 +26,7 @@
 //
 
 /* \file
- fltk3::Group, Fl_End classes . */
+ fltk3::Group, fltk3::End classes . */
 
 #ifndef FLTK3_GROUP_H
 #define FLTK3_GROUP_H

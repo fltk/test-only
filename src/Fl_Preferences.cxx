@@ -1052,7 +1052,7 @@ fltk3::Preferences::RootNode::RootNode( fltk3::Preferences *prefs, Root root, co
     wcscpy(b, (xchar *) filename);
 #endif
     //  filename[fl_unicode2utf(b, wcslen((xchar*)b), filename)] = 0;
-    unsigned len = fl_utf8fromwc(filename, (FLTK3_PATH_MAX-1), b, wcslen(b));
+    unsigned len = fltk3::utf8fromwc(filename, (FLTK3_PATH_MAX-1), b, wcslen(b));
     filename[len] = 0;
     free(b);
   }
@@ -1068,7 +1068,7 @@ fltk3::Preferences::RootNode::RootNode( fltk3::Preferences *prefs, Root root, co
       strcpy(filename, "/Library/Preferences");
       break;
     case USER:
-      sprintf(filename, "%s/Library/Preferences", fl_getenv("HOME"));
+      sprintf(filename, "%s/Library/Preferences", fltk3::getenv("HOME"));
       break;
   }
   snprintf(filename + strlen(filename), sizeof(filename) - strlen(filename),
@@ -1077,7 +1077,7 @@ fltk3::Preferences::RootNode::RootNode( fltk3::Preferences *prefs, Root root, co
   const char *e;
   switch (root) {
     case USER:
-      if ((e = fl_getenv("HOME")) != NULL) {
+      if ((e = fltk3::getenv("HOME")) != NULL) {
 	strlcpy(filename, e, sizeof(filename));
 
 	if (filename[strlen(filename)-1] != '/') {
@@ -1157,7 +1157,7 @@ int fltk3::Preferences::RootNode::read() {
   if (!filename_)   // RUNTIME preferences
     return -1; 
   char buf[1024];
-  FILE *f = fl_fopen( filename_, "rb" );
+  FILE *f = fltk3::fopen( filename_, "rb" );
   if ( !f )
     return -1; 
   if (fgets( buf, 1024, f )==0) { /* ignore */ }
@@ -1192,8 +1192,8 @@ int fltk3::Preferences::RootNode::read() {
 int fltk3::Preferences::RootNode::write() {
   if (!filename_)   // RUNTIME preferences
     return -1; 
-  fl_make_path_for_file(filename_);
-  FILE *f = fl_fopen( filename_, "wb" );
+  fltk3::make_path_for_file(filename_);
+  FILE *f = fltk3::fopen( filename_, "wb" );
   if ( !f )
     return -1; 
   fprintf( f, "; FLTK preferences file format 1.0\n" );
@@ -1208,11 +1208,11 @@ int fltk3::Preferences::RootNode::write() {
     p = filename_ + 9;
     do {			 // for each directory to the pref file
       *p = 0;
-      fl_chmod(filename_, 0755); // rwxr-xr-x
+      fltk3::chmod(filename_, 0755); // rwxr-xr-x
       *p = '/';
       p = strchr(p+1, '/');
     } while (p);
-    fl_chmod(filename_, 0644);   // rw-r--r--
+    fltk3::chmod(filename_, 0644);   // rw-r--r--
   }
 #endif
   return 0;
@@ -1229,11 +1229,11 @@ char fltk3::Preferences::RootNode::getPath( char *path, int pathlen ) {
   s = strrchr( path, '.' );
   if ( !s ) return 0;
   *s = 0;
-  char ret = fl_make_path( path );
+  char ret = fltk3::make_path( path );
 #if !(defined(__APPLE__) || defined(WIN32))
   // unix: make sure that system prefs dir. is user-readable
   if (strncmp(path, "/etc/fltk/", 10) == 0) {
-    fl_chmod(path, 0755); // rwxr-xr-x
+    fltk3::chmod(path, 0755); // rwxr-xr-x
   }
 #endif
   strcpy( s, "/" );

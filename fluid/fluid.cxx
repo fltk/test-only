@@ -325,7 +325,7 @@ void save_template_cb(fltk3::Widget *, void *) {
 
   FILE *fp;
 
-  if ((fp = fl_fopen(filename, "wb")) == NULL) {
+  if ((fp = fltk3::fopen(filename, "wb")) == NULL) {
     delete[] pixels;
     fltk3::alert("Error writing %s: %s", filename, strerror(errno));
     return;
@@ -353,7 +353,7 @@ void save_template_cb(fltk3::Widget *, void *) {
 
 #  if 0 // The original PPM output code...
   strcpy(ext, ".ppm");
-  fp = fl_fopen(filename, "wb");
+  fp = fltk3::fopen(filename, "wb");
   fprintf(fp, "P6\n%d %d 255\n", w, h);
   fwrite(pixels, w * h, 3, fp);
   fclose(fp);
@@ -594,7 +594,7 @@ void new_cb(fltk3::Widget *, void *v) {
       char line[1024], *ptr, *next;
       FILE *infile, *outfile;
 
-      if ((infile = fl_fopen(tname, "r")) == NULL) {
+      if ((infile = fltk3::fopen(tname, "r")) == NULL) {
 	fltk3::alert("Error reading template file \"%s\":\n%s", tname,
         	 strerror(errno));
 	set_modflag(0);
@@ -602,7 +602,7 @@ void new_cb(fltk3::Widget *, void *v) {
 	return;
       }
 
-      if ((outfile = fl_fopen(cutfname(1), "w")) == NULL) {
+      if ((outfile = fltk3::fopen(cutfname(1), "w")) == NULL) {
 	fltk3::alert("Error writing buffer file \"%s\":\n%s", cutfname(1),
         	 strerror(errno));
 	fclose(infile);
@@ -1301,7 +1301,7 @@ void print_cb(fltk3::ReturnButton *, void *) {
 		    "Replace", NULL, outname) == 0) outname = NULL;
     }
 
-    if (outname) outfile = fl_fopen(outname, "w");
+    if (outname) outfile = fltk3::fopen(outname, "w");
     else outfile = NULL;
   }
 
@@ -1932,7 +1932,7 @@ public:
 
   // FIXME: popen needs the utf8 equivalen fl_popen
   FILE * popen	(const char *cmd, const char *mode="r");
-  //not necessary here: FILE * fl_fopen	(const char *file, const char *mode="r");
+  //not necessary here: FILE * fltk3::fopen	(const char *file, const char *mode="r");
   int  close();
 
   FILE * desc() const { return _fpt;} // non null if file is open

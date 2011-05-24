@@ -216,7 +216,7 @@ fltk3::GlChoice *fltk3::GlChoice::find(int m, const int *alistp) {
 
   if (/*MaxCmapsOfScreen(ScreenOfDisplay(fl_display,fl_screen))==1 && */
       visp->visualid == fl_visual->visualid &&
-      !fl_getenv("MESA_PRIVATE_CMAP"))
+      !fltk3::getenv("MESA_PRIVATE_CMAP"))
     g->colormap = fl_colormap;
   else
     g->colormap = XCreateColormap(fl_display, RootWindow(fl_display,fl_screen),

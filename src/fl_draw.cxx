@@ -144,7 +144,7 @@ fltk3::expand_text(const char* from, char* buf, int maxbuf, double maxw, int& n,
     if (o > e) break; // don't overflow buffer
 
     if (c == '\t') {
-      for (c = fl_utf_nb_char((uchar*)buf, o-buf)%8; c<8 && o<e; c++) 
+      for (c = fltk3::utf_nb_char((uchar*)buf, o-buf)%8; c<8 && o<e; c++) 
            *o++ = ' ';
     } else if (c == '&' && fltk3::draw_shortcut && *(p+1)) {
       if (*(p+1) == '&') {p++; *o++ = '&';}

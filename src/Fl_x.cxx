@@ -1251,7 +1251,7 @@ int fl_handle(const XEvent& thisevent)
         if (keysym && keysym < 0x400) { // a character in latin-1,2,3,4 sets
           // force it to type a character (not sure if this ever is needed):
           // if (!len) {buffer[0] = char(keysym); len = 1;}
-          len = fl_utf8encode(XKeysymToUcs(keysym), buffer);
+          len = fltk3::utf8encode(XKeysymToUcs(keysym), buffer);
           if (len < 1) len = 1;
           // ignore all effects of shift on the keysyms, which makes it a lot
           // easier to program shortcuts and is Windoze-compatible:

@@ -63,7 +63,7 @@ int fltk3::test_shortcut(unsigned int shortcut) {
   if (!shortcut) return 0;
 
   unsigned int v = shortcut & fltk3::KEY_MASK;
-  if (((unsigned)fl_tolower(v))!=v) {
+  if (((unsigned)fltk3::tolower(v))!=v) {
     shortcut |= fltk3::SHIFT;
   }
 
@@ -81,7 +81,7 @@ int fltk3::test_shortcut(unsigned int shortcut) {
   if (!(mismatch&(fltk3::SHIFT)) && key == (unsigned)fltk3::event_key()) return 1;
 
   // try matching utf8, ignore shift:
-  unsigned int firstChar = fl_utf8decode(fltk3::event_text(), fltk3::event_text()+fltk3::event_length(), 0);
+  unsigned int firstChar = fltk3::utf8decode(fltk3::event_text(), fltk3::event_text()+fltk3::event_length(), 0);
   if ( ! (fltk3::CAPS_LOCK&shift) && key==firstChar) return 1;
 
   // kludge so that Ctrl+'_' works (as opposed to Ctrl+'^_'):
@@ -194,7 +194,7 @@ const char* fltk3::shortcut_label(unsigned int shortcut, const char **eom) {
   if (!shortcut) {*p = 0; return buf;}
   // fix upper case shortcuts
   unsigned int v = shortcut & fltk3::KEY_MASK;
-  if (((unsigned)fl_tolower(v))!=v) {
+  if (((unsigned)fltk3::tolower(v))!=v) {
     shortcut |= fltk3::SHIFT;
   }
 #ifdef __APPLE__
@@ -241,7 +241,7 @@ const char* fltk3::shortcut_label(unsigned int shortcut, const char **eom) {
       *p++ = uchar(key & 127);
     } else {
       // if none found, use the keystroke as a match:
-      p += fl_utf8encode(fl_toupper(key), p); 
+      p += fltk3::utf8encode(fltk3::toupper(key), p); 
     }
   }
   *p = 0;
@@ -252,7 +252,7 @@ const char* fltk3::shortcut_label(unsigned int shortcut, const char **eom) {
   else if (key > 32 && key < 0x100) q = 0;
   else q = XKeysymToString(key);
   if (!q) {
-    p += fl_utf8encode(fl_toupper(key), p); 
+    p += fltk3::utf8encode(fltk3::toupper(key), p); 
     *p = 0; 
     return buf;
   }
@@ -310,7 +310,7 @@ unsigned int fltk3::Widget::label_shortcut(const char *t) {
   for (;;) {
     if (*t==0) return 0;
     if (*t=='&') {
-      unsigned int s = fl_utf8decode(t+1, 0, 0);
+      unsigned int s = fltk3::utf8decode(t+1, 0, 0);
       if (s==0) return 0;
       else if (s==(unsigned int)'&') t++;
       else return s;
@@ -342,7 +342,7 @@ int fltk3::Widget::test_shortcut(const char *t, const bool require_alt) {
   if (!t) return 0;
   // for menubars etc. shortcuts must work only if the Alt modifier is pressed
   if (require_alt && fltk3::event_state(fltk3::ALT)==0) return 0;
-  unsigned int c = fl_utf8decode(fltk3::event_text(), fltk3::event_text()+fltk3::event_length(), 0);
+  unsigned int c = fltk3::utf8decode(fltk3::event_text(), fltk3::event_text()+fltk3::event_length(), 0);
 #ifdef __APPLE__
   // this line makes underline shortcuts work the same way they do on MSWindow
   // and Linux. 

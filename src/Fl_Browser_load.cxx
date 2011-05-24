@@ -48,7 +48,7 @@ int fltk3::Browser::load(const char *filename) {
     int i;
     clear();
     if (!filename || !(filename[0])) return 1;
-    FILE *fl = fl_fopen(filename,"r");
+    FILE *fl = fltk3::fopen(filename,"r");
     if (!fl) return 0;
     i = 0;
     do {

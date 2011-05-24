@@ -30,14 +30,17 @@
 // portability of even the system-specific code...
 #ifndef FLTK3_DOXYGEN
 
-#if !defined(Fl_X_H)
+#if !defined(Fltk3_X_H)
 #  error "Never use <fltk3/osx.h> directly; include <fltk3/x.h> instead."
-#endif // !Fl_X_H
+#endif // !Fltk3_X_H
 #include <fltk3/Widget.h>
 
 typedef void* Window;	    // this is really a pointer to the subclass FLWindow of NSWindow
-typedef void* Fl_Offscreen; // this is really a CGContextRef
-typedef void* Fl_Bitmask;   // this is really a CGImageRef
+
+namespace fltk3 {
+  typedef void* Offscreen; // this is really a CGContextRef
+  typedef void* Bitmask;   // this is really a CGImageRef
+}
 
 #include <AvailabilityMacros.h>
 #ifndef MAC_OS_X_VERSION_10_3
@@ -55,7 +58,9 @@ typedef void* Fl_Bitmask;   // this is really a CGImageRef
 
 #if !(defined(FL_LIBRARY) || defined(FLTK3_INTERNALS)) // this part is used when compiling an application program
 
-typedef void* Fl_Region;
+namespace fltk3 {
+  typedef void* Region;
+}
 typedef void* Fl_CGContextRef;
 typedef void* Fl_PMPrintSettings;
 typedef void* Fl_PMPageFormat;
@@ -72,10 +77,12 @@ typedef PMPrintSettings Fl_PMPrintSettings;
 typedef PMPageFormat	Fl_PMPageFormat;
 typedef PMPrintSession	Fl_PMPrintSession;
 
-typedef struct flCocoaRegion {
-  int count;
-  CGRect *rects;
-} *Fl_Region;  // a region is the union of a series of rectangles
+namespace fltk3 {
+  typedef struct flCocoaRegion {
+    int count;
+    CGRect *rects;
+  } *Region;  // a region is the union of a series of rectangles
+}
 
 #  include "Window.h"
 
@@ -91,14 +98,14 @@ typedef float CGFloat;
 #endif // CGFLOAT_DEFINED
 
 extern CGRect fl_cgrectmake_cocoa(int x, int y, int w, int h);
-inline Fl_Region XRectangleRegion(int x, int y, int w, int h) {
-  Fl_Region R = (Fl_Region)malloc(sizeof(*R));
+inline fltk3::Region XRectangleRegion(int x, int y, int w, int h) {
+  fltk3::Region R = (fltk3::Region)malloc(sizeof(*R));
   R->count = 1;
   R->rects = (CGRect *)malloc(sizeof(CGRect));
   *(R->rects) = fl_cgrectmake_cocoa(x, y, w, h);
   return R;
 }
-inline void XDestroyRegion(Fl_Region r) {
+inline void XDestroyRegion(fltk3::Region r) {
   if(r) {
     free(r->rects);
     free(r);
@@ -113,10 +120,10 @@ class Fl_X {
   
 public:
   Window xid;              // pointer to the Cocoa window object (FLWindow*)
-  Fl_Offscreen other_xid;  // pointer for offscreen bitmaps (overlay window)
+  fltk3::Offscreen other_xid;  // pointer for offscreen bitmaps (overlay window)
   fltk3::Window *w;            // FLTK window for 
-  Fl_Region region;
-  Fl_Region subRegion;     // region for this specific subwindow
+  fltk3::Region region;
+  fltk3::Region subRegion;     // region for this specific subwindow
   Fl_X *next;              // linked tree to support subwindows
   Fl_X *xidChildren, *xidNext; // more subwindow tree
   int wait_for_expose;
@@ -144,7 +151,7 @@ public:
   void set_cursor(fltk3::Cursor);
   static CGImageRef CGImage_from_window_rect(fltk3::Window *win, int x, int y, int w, int h);
   static unsigned char *bitmap_from_window_rect(fltk3::Window *win, int x, int y, int w, int h, int *bytesPerPixel);
-  static Fl_Region intersect_region_and_rect(Fl_Region current, int x,int y,int w, int h);
+  static fltk3::Region intersect_region_and_rect(fltk3::Region current, int x,int y,int w, int h);
   static CGContextRef watch_cursor_image(void);
   static CGContextRef help_cursor_image(void);
   static CGContextRef nesw_cursor_image(void);
@@ -173,16 +180,16 @@ namespace fltk3 {
 extern Window fl_xid(const fltk3::Window*);
 
 namespace fltk3 {
-  void clip_region(Fl_Region);
+  void clip_region(fltk3::Region);
 }
 
-extern FLTK3_EXPORT Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data);
-extern FLTK3_EXPORT Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);
-extern FLTK3_EXPORT void fl_delete_bitmask(Fl_Bitmask bm);
-extern Fl_Offscreen fl_create_offscreen(int w, int h);
-extern void fl_copy_offscreen(int x,int y,int w,int h, Fl_Offscreen gWorld, int srcx,int srcy);
-extern void fl_delete_offscreen(Fl_Offscreen gWorld);
-extern void fl_begin_offscreen(Fl_Offscreen gWorld);
+extern FLTK3_EXPORT fltk3::Bitmask fl_create_bitmask(int w, int h, const uchar *data);
+extern FLTK3_EXPORT fltk3::Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *data);
+extern FLTK3_EXPORT void fl_delete_bitmask(fltk3::Bitmask bm);
+extern fltk3::Offscreen fl_create_offscreen(int w, int h);
+extern void fl_copy_offscreen(int x,int y,int w,int h, fltk3::Offscreen gWorld, int srcx,int srcy);
+extern void fl_delete_offscreen(fltk3::Offscreen gWorld);
+extern void fl_begin_offscreen(fltk3::Offscreen gWorld);
 extern void fl_end_offscreen();
 
 extern FLTK3_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b);

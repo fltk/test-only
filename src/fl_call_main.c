@@ -70,7 +70,7 @@ static int mbcs2utf(const char *s, int l, char *dst)
   mbwbuf = (xchar*)malloc(dstlen * sizeof(xchar));
   l = mbstowcs(mbwbuf, s, l);
 /* l = fl_unicode2utf(mbwbuf, l, dst); */
-  l = fl_utf8fromwc(dst, dstlen, mbwbuf, l);
+  l = fltk3::utf8fromwc(dst, dstlen, mbwbuf, l);
   dst[l] = 0;
   free(mbwbuf);
   return l;
@@ -108,7 +108,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       dstlen = (l * 5) + 1;
       ar[i] = (char*) malloc(dstlen);
 /*    ar[i][fl_unicode2utf(__wargv[i], l, ar[i])] = 0; */
-      dstlen = fl_utf8fromwc(ar[i], dstlen, __wargv[i], l);
+      dstlen = fltk3::utf8fromwc(ar[i], dstlen, __wargv[i], l);
       ar[i][dstlen] = 0;
     } else {
       for (l = 0; __argv[i] && __argv[i][l]; l++) {};

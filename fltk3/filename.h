@@ -127,7 +127,9 @@ FLTK3_EXPORT int fl_casenumericsort(struct dirent **, struct dirent **);
 FLTK3_EXPORT int fl_numericsort(struct dirent **, struct dirent **);
 #  endif
 
-  typedef int (Fl_File_Sort_F)(struct dirent **, struct dirent **); /**< File sorting function. \see fl_filename_list() */
+  namespace fltk3 {
+    typedef int (FileSortF)(struct dirent **, struct dirent **); /**< File sorting function. \see fl_filename_list() */
+  }
 
 #  if defined(__cplusplus)
 }
@@ -137,7 +139,7 @@ FLTK3_EXPORT int fl_numericsort(struct dirent **, struct dirent **);
  */
 
 FLTK3_EXPORT int fl_filename_list(const char *d, struct dirent ***l,
-                                  Fl_File_Sort_F *s = fl_numericsort);
+                                  fltk3::FileSortF *s = fl_numericsort);
 FLTK3_EXPORT void fl_filename_free_list(struct dirent ***l, int n);
 
 /*

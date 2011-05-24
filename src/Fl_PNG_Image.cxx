@@ -121,7 +121,7 @@ void fltk3::PNGImage::load_png_(const char *name_png, const unsigned char *buffe
   int from_memory = (buffer_png != NULL); // true if reading image from memory
 
   if (!from_memory) {
-    if ((fp = fl_fopen(name_png, "rb")) == NULL) return;
+    if ((fp = fltk3::fopen(name_png, "rb")) == NULL) return;
   }
   else name_png = "In-memory PNG data";
 

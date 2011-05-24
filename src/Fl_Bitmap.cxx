@@ -43,7 +43,7 @@
 #if defined(__APPLE_QUARTZ__)
 
 
-Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *array) {
+fltk3::Bitmask fl_create_bitmask(int w, int h, const uchar *array) {
   static uchar reverse[16] =    /* Bit reversal lookup table */
     { 0x00, 0x88, 0x44, 0xcc, 0x22, 0xaa, 0x66, 0xee, 
       0x11, 0x99, 0x55, 0xdd, 0x33, 0xbb, 0x77, 0xff };
@@ -56,9 +56,9 @@ Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *array) {
   CGDataProviderRef srcp = CGDataProviderCreateWithData( 0L, bmask, rowBytes*h, 0L);
   CGImageRef id_ = CGImageMaskCreate( w, h, 1, 1, rowBytes, srcp, 0L, false);
   CGDataProviderRelease(srcp);
-  return (Fl_Bitmask)id_;
+  return (fltk3::Bitmask)id_;
 }
-void fl_delete_bitmask(Fl_Bitmask bm) {
+void fl_delete_bitmask(fltk3::Bitmask bm) {
   if (bm) CGImageRelease((CGImageRef)bm);
 }
 
@@ -67,7 +67,7 @@ void fl_delete_bitmask(Fl_Bitmask bm) {
 
 
 // 'fl_create_bitmap()' - Create a 1-bit bitmap for drawing...
-static Fl_Bitmask fl_create_bitmap(int w, int h, const uchar *data) {
+static fltk3::Bitmask fl_create_bitmap(int w, int h, const uchar *data) {
   // we need to pad the lines out to words & swap the bits
   // in each byte.
   int w1 = (w+7)/8;
@@ -75,7 +75,7 @@ static Fl_Bitmask fl_create_bitmap(int w, int h, const uchar *data) {
   uchar* newarray = new uchar[w2*h];
   const uchar* src = data;
   uchar* dest = newarray;
-  Fl_Bitmask bm;
+  fltk3::Bitmask bm;
   static uchar reverse[16] =	/* Bit reversal lookup table */
   	      { 0x00, 0x88, 0x44, 0xcc, 0x22, 0xaa, 0x66, 0xee,
 		0x11, 0x99, 0x55, 0xdd, 0x33, 0xbb, 0x77, 0xff };
@@ -95,10 +95,10 @@ static Fl_Bitmask fl_create_bitmap(int w, int h, const uchar *data) {
 }
 
 // 'fl_create_bitmask()' - Create an N-bit bitmap for masking...
-Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data) {
+fltk3::Bitmask fl_create_bitmask(int w, int h, const uchar *data) {
   // this won't work when the user changes display mode during run or
   // has two screens with differnet depths
-  Fl_Bitmask bm;
+  fltk3::Bitmask bm;
   static uchar hiNibble[16] =
   { 0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
     0x10, 0x90, 0x50, 0xd0, 0x30, 0xb0, 0x70, 0xf0 };
@@ -154,7 +154,7 @@ Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data) {
 }
 
 
-void fl_delete_bitmask(Fl_Bitmask bm) {
+void fl_delete_bitmask(fltk3::Bitmask bm) {
   DeleteObject((HGDIOBJ)bm);
 }
 
@@ -162,13 +162,13 @@ void fl_delete_bitmask(Fl_Bitmask bm) {
 #else // X11 bitmask functions
 
 
-Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data) {
+fltk3::Bitmask fl_create_bitmask(int w, int h, const uchar *data) {
   return XCreateBitmapFromData(fl_display, fl_window, (const char *)data,
                                (w+7)&-8, h);
 }
 
-void fl_delete_bitmask(Fl_Bitmask bm) {
-  fl_delete_offscreen((Fl_Offscreen)bm);
+void fl_delete_bitmask(fltk3::Bitmask bm) {
+  fl_delete_offscreen((fltk3::Offscreen)bm);
 }
 
 
@@ -176,8 +176,8 @@ void fl_delete_bitmask(Fl_Bitmask bm) {
 
 
 // Create a 1-bit mask used for alpha blending
-Fl_Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *array) {
-  Fl_Bitmask bm;
+fltk3::Bitmask fl_create_alphamask(int w, int h, int d, int ld, const uchar *array) {
+  fltk3::Bitmask bm;
   int bmw = (w + 7) / 8;
   uchar *bitmap = new uchar[bmw * h];
   uchar *bitptr, bit;
@@ -313,7 +313,7 @@ void Fl_GDI_Graphics_Driver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int
     if (fl_TransparentBlt) use_print_algo = true;
   }
   if (use_print_algo) { // algorithm for bitmap output to Fl_GDI_Printer
-    Fl_Offscreen tmp_id = fl_create_offscreen(W, H);
+    fltk3::Offscreen tmp_id = fl_create_offscreen(W, H);
     fl_begin_offscreen(tmp_id);
     fltk3::Color save_c = fltk3::color(); // save bitmap's desired color
     uchar r, g, b;
@@ -382,9 +382,9 @@ fltk3::Bitmap::~Bitmap() {
 void fltk3::Bitmap::uncache() {
   if (id_) {
 #ifdef __APPLE_QUARTZ__
-    fl_delete_bitmask((Fl_Bitmask)id_);
+    fl_delete_bitmask((fltk3::Bitmask)id_);
 #else
-    fl_delete_bitmask((Fl_Offscreen)id_);
+    fl_delete_bitmask((fltk3::Offscreen)id_);
 #endif
     id_ = 0;
   }

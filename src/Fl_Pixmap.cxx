@@ -58,7 +58,7 @@ extern void fl_release_dc(HWND, HDC);      // located in Fl_win32.cxx
 #endif
 
 #ifdef __APPLE_QUARTZ__
-extern Fl_Offscreen fl_create_offscreen_with_alpha(int w, int h);
+extern fltk3::Offscreen fl_create_offscreen_with_alpha(int w, int h);
 #endif
 
 extern uchar **fl_mask_bitmap; // used by fltk3::draw_pixmap.cxx to store mask
@@ -119,11 +119,11 @@ void fltk3::QuartzGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int W
     }
   if (!pxm->id_) {
     pxm->id_ = fl_create_offscreen_with_alpha(pxm->w(), pxm->h());
-    fl_begin_offscreen((Fl_Offscreen)pxm->id_);
+    fl_begin_offscreen((fltk3::Offscreen)pxm->id_);
     fltk3::draw_pixmap(pxm->data(), 0, 0, fltk3::GREEN);
     fl_end_offscreen();
     }
-  fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)pxm->id_, cx, cy);
+  fl_copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
 }
 
 #elif defined(WIN32)
@@ -137,7 +137,7 @@ void Fl_GDI_Graphics_Driver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, in
   }
   if (!pxm->id_) {
     pxm->id_ = fl_create_offscreen(pxm->w(), pxm->h());
-    fl_begin_offscreen((Fl_Offscreen)pxm->id_);
+    fl_begin_offscreen((fltk3::Offscreen)pxm->id_);
     uchar *bitmap = 0;
     fl_mask_bitmap = &bitmap;
     fltk3::draw_pixmap(pxm->data(), 0, 0, fltk3::BLACK);
@@ -157,7 +157,7 @@ void Fl_GDI_Graphics_Driver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, in
       if(hMod) fl_TransparentBlt = (fl_transp_func)GetProcAddress(hMod, "TransparentBlt");
     }
     if (fl_TransparentBlt) {
-      Fl_Offscreen tmp_id = fl_create_offscreen(pxm->w(), pxm->h());
+      fltk3::Offscreen tmp_id = fl_create_offscreen(pxm->w(), pxm->h());
       fl_begin_offscreen(tmp_id);
       uchar *bitmap = 0;
       fl_mask_bitmap = &bitmap;
@@ -175,7 +175,7 @@ void Fl_GDI_Graphics_Driver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, in
       fl_delete_offscreen(tmp_id);
     }
     else {
-      fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)pxm->id_, cx, cy);
+      fl_copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
     }
   }
   else if (pxm->mask_) {
@@ -188,7 +188,7 @@ void Fl_GDI_Graphics_Driver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, in
     RestoreDC(new_gc,save);
     DeleteDC(new_gc);
   } else {
-    fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)pxm->id_, cx, cy);
+    fl_copy_offscreen(X, Y, W, H, (fltk3::Offscreen)pxm->id_, cx, cy);
   }
 }
 
@@ -203,7 +203,7 @@ void Fl_Xlib_Graphics_Driver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, i
   }
   if (!pxm->id_) {
     pxm->id_ = fl_create_offscreen(pxm->w(), pxm->h());
-    fl_begin_offscreen((Fl_Offscreen)pxm->id_);
+    fl_begin_offscreen((fltk3::Offscreen)pxm->id_);
     uchar *bitmap = 0;
     fl_mask_bitmap = &bitmap;
     fltk3::draw_pixmap(pxm->data(), 0, 0, fltk3::BLACK);
@@ -247,12 +247,12 @@ fltk3::Pixmap::~Pixmap() {
 
 void fltk3::Pixmap::uncache() {
   if (id_) {
-    fl_delete_offscreen((Fl_Offscreen)id_);
+    fl_delete_offscreen((fltk3::Offscreen)id_);
     id_ = 0;
   }
 
   if (mask_) {
-    fl_delete_bitmask((Fl_Bitmask)mask_);
+    fl_delete_bitmask((fltk3::Bitmask)mask_);
     mask_ = 0;
   }
 }

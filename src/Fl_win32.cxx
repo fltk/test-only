@@ -563,11 +563,11 @@ void fltk3::copy(const char *stuff, int len, int clipboard) {
     // set up for "delayed rendering":
     if (OpenClipboard(NULL)) {
       // if the system clipboard works, use it
-      int utf16_len = fl_utf8toUtf16(fl_selection_buffer[clipboard], fl_selection_length[clipboard], 0, 0);
+      int utf16_len = fltk3::utf8toUtf16(fl_selection_buffer[clipboard], fl_selection_length[clipboard], 0, 0);
       EmptyClipboard();
       HGLOBAL hMem = GlobalAlloc(GHND, utf16_len * 2 + 2); // moveable and zero'ed mem alloc.
       LPVOID memLock = GlobalLock(hMem);
-      fl_utf8toUtf16(fl_selection_buffer[clipboard], fl_selection_length[clipboard], (unsigned short*) memLock, utf16_len + 1);
+      fltk3::utf8toUtf16(fl_selection_buffer[clipboard], fl_selection_length[clipboard], (unsigned short*) memLock, utf16_len + 1);
       GlobalUnlock(hMem);
       SetClipboardData(CF_UNICODETEXT, hMem);
       CloseClipboard();
@@ -611,7 +611,7 @@ void fltk3::paste(fltk3::Widget &receiver, int clipboard) {
       wchar_t *memLock = (wchar_t*) GlobalLock(h);
       int utf16_len = wcslen(memLock);
       fltk3::e_text = (char*) malloc (utf16_len * 4 + 1);
-      int utf8_len = fl_utf8fromwc(fltk3::e_text, utf16_len * 4, memLock, utf16_len);
+      int utf8_len = fltk3::utf8fromwc(fltk3::e_text, utf16_len * 4, memLock, utf16_len);
       *(fltk3::e_text + utf8_len) = 0;
       LPSTR a,b;
       a = b = fltk3::e_text;
@@ -860,7 +860,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;
 
   case WM_PAINT: {
-    Fl_Region R;
+    fltk3::Region R;
     Fl_X *i = Fl_X::i(window);
     i->wait_for_expose = 0;
     char redraw_whole_window = false;
@@ -1022,7 +1022,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
       xchar u = (xchar) wParam;
 //    fltk3::e_length = fl_unicode2utf(&u, 1, buffer);
-      fltk3::e_length = fl_utf8fromwc(buffer, 1024, &u, 1);
+      fltk3::e_length = fltk3::utf8fromwc(buffer, 1024, &u, 1);
       buffer[fltk3::e_length] = 0;
 
 
@@ -1079,7 +1079,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 #ifdef FLTK_PREVIEW_DEAD_KEYS
       if ((lParam & (1<<24))==0) { // clear if dead key (always?)
         xchar u = (xchar) wParam;
-        fltk3::e_length = fl_utf8fromwc(buffer, 1024, &u, 1);
+        fltk3::e_length = fltk3::utf8fromwc(buffer, 1024, &u, 1);
         buffer[fltk3::e_length] = 0;
       } else { // set if "extended key" (never printable?)
         buffer[0] = 0;
@@ -1178,13 +1178,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_RENDERFORMAT: {
     HANDLE h;
 
-//  int l = fl_utf_nb_char((unsigned char*)fl_selection_buffer[1], fl_selection_length[1]);
-    int l = fl_utf8toUtf16(fl_selection_buffer[1], fl_selection_length[1], NULL, 0); // Pass NULL buffer to query length required
+//  int l = fltk3::utf_nb_char((unsigned char*)fl_selection_buffer[1], fl_selection_length[1]);
+    int l = fltk3::utf8toUtf16(fl_selection_buffer[1], fl_selection_length[1], NULL, 0); // Pass NULL buffer to query length required
     h = GlobalAlloc(GHND, (l+1) * sizeof(unsigned short));
     if (h) {
       unsigned short *g = (unsigned short*) GlobalLock(h);
 //    fl_utf2unicode((unsigned char *)fl_selection_buffer[1], fl_selection_length[1], (xchar*)g);
-      l = fl_utf8toUtf16(fl_selection_buffer[1], fl_selection_length[1], g, (l+1));
+      l = fltk3::utf8toUtf16(fl_selection_buffer[1], fl_selection_length[1], g, (l+1));
       g[l] = 0;
       GlobalUnlock(h);
       SetClipboardData(CF_UNICODETEXT, h);
@@ -1418,7 +1418,7 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
 
   // convert UTF-8 class_name to wchar_t for RegisterClassExW and CreateWindowExW
 
-  fl_utf8toUtf16(class_name,strlen(class_name),		// in
+  fltk3::utf8toUtf16(class_name,strlen(class_name),		// in
 		 (unsigned short*)class_namew,		// out
 		 sizeof(class_namew)/sizeof(wchar_t));	// max. size
 
@@ -1531,10 +1531,10 @@ Fl_X* Fl_X::make(fltk3::Window* w) {
 //  lab = (WCHAR*) malloc((l + 1) * sizeof(short));
 //  l = fl_utf2unicode((unsigned char*)w->label(), l, (xchar*)lab);
 //  lab[l] = 0;
-    unsigned wlen = fl_utf8toUtf16(w->label(), l, NULL, 0); // Pass NULL to query length
+    unsigned wlen = fltk3::utf8toUtf16(w->label(), l, NULL, 0); // Pass NULL to query length
     wlen++;
     lab = (WCHAR *) malloc(sizeof(WCHAR)*wlen);
-    wlen = fl_utf8toUtf16(w->label(), l, (unsigned short*)lab, wlen);
+    wlen = fltk3::utf8toUtf16(w->label(), l, (unsigned short*)lab, wlen);
     lab[wlen] = 0;
   }
   x->xid = CreateWindowExW(
@@ -1748,10 +1748,10 @@ void fltk3::Window::label(const char *name,const char *iname) {
     int l = strlen(name);
 //  WCHAR *lab = (WCHAR*) malloc((l + 1) * sizeof(short));
 //  l = fl_utf2unicode((unsigned char*)name, l, (xchar*)lab);
-    unsigned wlen = fl_utf8toUtf16(name, l, NULL, 0); // Pass NULL to query length
+    unsigned wlen = fltk3::utf8toUtf16(name, l, NULL, 0); // Pass NULL to query length
     wlen++;
     unsigned short * lab = (unsigned short*)malloc(sizeof(unsigned short)*wlen);
-    wlen = fl_utf8toUtf16(name, l, lab, wlen);
+    wlen = fltk3::utf8toUtf16(name, l, lab, wlen);
     lab[wlen] = 0;
     SetWindowTextW(i->xid, (WCHAR *)lab);
     free(lab);
@@ -1933,7 +1933,7 @@ void fl_cleanup_dc_list(void) {          // clean up the list
   } while(t);
 }
 
-Fl_Region XRectangleRegion(int x, int y, int w, int h) {
+fltk3::Region XRectangleRegion(int x, int y, int w, int h) {
   if (fltk3::SurfaceDevice::surface()->class_name() == fltk3::DisplayDevice::class_id) return CreateRectRgn(x,y,x+w,y+h);
   // because rotation may apply, the rectangle becomes a polygon in device coords
   POINT pt[4] = { {x, y}, {x + w, y}, {x + w, y + h}, {x, y + h} };

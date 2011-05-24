@@ -88,7 +88,7 @@ fltk3::GIFImage::GIFImage(const char *infname) : fltk3::Pixmap((char *const*)0) 
   FILE *GifFile;	// File to read
   char **new_data;	// Data array
 
-  if ((GifFile = fl_fopen(infname, "rb")) == NULL) {
+  if ((GifFile = fltk3::fopen(infname, "rb")) == NULL) {
     fltk3::error("fltk3::GIFImage: Unable to open %s!", infname);
     return;
   }

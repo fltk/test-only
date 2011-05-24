@@ -397,7 +397,7 @@ const char	*fltk3::FileChooser::preview_label = "Preview";
 const char	*fltk3::FileChooser::save_label = "Save";
 const char	*fltk3::FileChooser::show_label = "Show:";
 const char      *fltk3::FileChooser::hidden_label = "Show hidden files";
-Fl_File_Sort_F	*fltk3::FileChooser::sort = fl_numericsort;
+fltk3::FileSortF	*fltk3::FileChooser::sort = fl_numericsort;
 
 
 //
@@ -1316,7 +1316,7 @@ fltk3::FileChooser::update_preview()
     set = 1;
   } else {
     struct stat s;
-    if (fl_stat(filename, &s)==0) {
+    if (fltk3::stat(filename, &s)==0) {
       if ((s.st_mode&S_IFMT)!=S_IFREG) {
         // this is no regular file, probably some kind of device
         newlabel = "@-3refresh"; // a cross
@@ -1352,7 +1352,7 @@ fltk3::FileChooser::update_preview()
     int		bytes;
     char	*ptr;
 
-    if (filename) fp = fl_fopen(filename, "rb");
+    if (filename) fp = fltk3::fopen(filename, "rb");
     else fp = NULL;
 
     if (fp != NULL) {

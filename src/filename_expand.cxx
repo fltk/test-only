@@ -84,7 +84,7 @@ int fl_filename_expand(char *to,int tolen, const char *from) {
     switch (*a) {
     case '~':	// a home directory name
       if (e <= a+1) {	// current user's directory
-        value = fl_getenv("HOME");
+        value = fltk3::getenv("HOME");
 #ifndef WIN32
       } else {	// another user's directory
 	struct passwd *pwd;
@@ -96,7 +96,7 @@ int fl_filename_expand(char *to,int tolen, const char *from) {
       }
       break;
     case '$':		/* an environment variable */
-      {char t = *e; *(char *)e = 0; value = fl_getenv(a+1); *(char *)e = t;}
+      {char t = *e; *(char *)e = 0; value = fltk3::getenv(a+1); *(char *)e = t;}
       break;
     }
     if (value) {

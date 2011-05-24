@@ -171,10 +171,10 @@ double Fl_GDI_Graphics_Driver::width(const char* c, int n) {
   while (i < n) {
     unsigned int ucs;
     int l;
-    ucs = fl_utf8decode((const char*)(c + i), end, &l);
+    ucs = fltk3::utf8decode((const char*)(c + i), end, &l);
 //  if (l < 1) l = 1;
     i += l;
-    if (!fl_nonspacing(ucs)) {
+    if (!fltk3::nonspacing(ucs)) {
       w += width(ucs);
     }
   }
@@ -200,7 +200,7 @@ double Fl_GDI_Graphics_Driver::width(unsigned int c) {
     int cc; // cell count
     unsigned short u16[4]; // Array for UTF16 representation of c
     // Creates a UTF16 string from a UCS code point.
-    cc = fl_ucs_to_Utf16(c, u16, 4);
+    cc = fltk3::ucs_to_Utf16(c, u16, 4);
     // Make sure the current font is selected before we make the measurement
     SelectObject(fl_gc, fltk3::fontsize->fid);
     // measure the glyph width
@@ -313,14 +313,14 @@ void Fl_GDI_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &dy
   if (!gc) goto exit_error; // no valid gc, attempt to use fallback measure
 
   // now convert the string to WCHAR and measure it
-  len = fl_utf8toUtf16(c, n, ext_buff, wc_len);
+  len = fltk3::utf8toUtf16(c, n, ext_buff, wc_len);
   if(len >= wc_len) {
     if(ext_buff) {delete [] ext_buff;}
     if(w_buff) {delete [] w_buff;}
     wc_len = len + 64;
     ext_buff = new unsigned short[wc_len];
     w_buff = new WORD[wc_len];
-    len = fl_utf8toUtf16(c, n, ext_buff, wc_len);
+    len = fltk3::utf8toUtf16(c, n, ext_buff, wc_len);
   }
   SelectObject(gc, fltk3::fontsize->fid);
 
@@ -390,11 +390,11 @@ exit_error:
 void Fl_GDI_Graphics_Driver::draw(const char* str, int n, int x, int y) {
   COLORREF oldColor = SetTextColor(fl_gc, fl_RGB());
   SelectObject(fl_gc, font_descriptor()->fid);
-  int wn = fl_utf8toUtf16(str, n, wstr, wstr_len);
+  int wn = fltk3::utf8toUtf16(str, n, wstr, wstr_len);
   if(wn >= wstr_len) {
     wstr = (unsigned short*) realloc(wstr, sizeof(unsigned short) * (wn + 1));
     wstr_len = wn + 1;
-    wn = fl_utf8toUtf16(str, n, wstr, wstr_len);
+    wn = fltk3::utf8toUtf16(str, n, wstr, wstr_len);
   }
   TextOutW(fl_gc, x, y, (WCHAR*)wstr, wn);
   SetTextColor(fl_gc, oldColor); // restore initial state
@@ -405,11 +405,11 @@ void Fl_GDI_Graphics_Driver::draw(int angle, const char* str, int n, int x, int 
   int wn = 0; // count of UTF16 cells to render full string
   COLORREF oldColor = SetTextColor(fl_gc, fl_RGB());
   SelectObject(fl_gc, font_descriptor()->fid);
-  wn = fl_utf8toUtf16(str, n, wstr, wstr_len);
+  wn = fltk3::utf8toUtf16(str, n, wstr, wstr_len);
   if(wn >= wstr_len) { // Array too small
     wstr = (unsigned short*) realloc(wstr, sizeof(unsigned short) * (wn + 1));
     wstr_len = wn + 1;
-    wn = fl_utf8toUtf16(str, n, wstr, wstr_len); // respin the translation
+    wn = fltk3::utf8toUtf16(str, n, wstr, wstr_len); // respin the translation
   }
   TextOutW(fl_gc, x, y, (WCHAR*)wstr, wn);
   SetTextColor(fl_gc, oldColor);
@@ -418,11 +418,11 @@ void Fl_GDI_Graphics_Driver::draw(int angle, const char* str, int n, int x, int 
 
 void Fl_GDI_Graphics_Driver::rtl_draw(const char* c, int n, int x, int y) {
   int wn;
-  wn = fl_utf8toUtf16(c, n, wstr, wstr_len);
+  wn = fltk3::utf8toUtf16(c, n, wstr, wstr_len);
   if(wn >= wstr_len) {
     wstr = (unsigned short*) realloc(wstr, sizeof(unsigned short) * (wn + 1));
     wstr_len = wn + 1;
-    wn = fl_utf8toUtf16(c, n, wstr, wstr_len);
+    wn = fltk3::utf8toUtf16(c, n, wstr, wstr_len);
   }
 
   COLORREF oldColor = SetTextColor(fl_gc, fl_RGB());
@@ -434,7 +434,7 @@ void Fl_GDI_Graphics_Driver::rtl_draw(const char* c, int n, int x, int y) {
     lx = (int) width(wstr[i]);
     x -= lx;
     TextOutW(fl_gc, x, y, (WCHAR*)wstr + i, 1);
-    if (fl_nonspacing(wstr[i])) {
+    if (fltk3::nonspacing(wstr[i])) {
       x += lx;
     }
     i++;

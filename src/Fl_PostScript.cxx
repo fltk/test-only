@@ -1052,7 +1052,7 @@ static void transformed_draw_extra(const char* str, int n, double x, double y, i
   // create an offscreen image of the string
   fltk3::Color text_color = driver->color();
   fltk3::Color bg_color = fltk3::contrast(fltk3::WHITE, text_color);
-  Fl_Offscreen off = fl_create_offscreen(w_scaled, (int)(h+3*scale) );
+  fltk3::Offscreen off = fl_create_offscreen(w_scaled, (int)(h+3*scale) );
   fl_begin_offscreen(off);
   fltk3::color(bg_color);
   // color offscreen background with a shade contrasting with the text color
@@ -1139,7 +1139,7 @@ void fltk3::PostScriptGraphicsDriver::transformed_draw(const char* str, int n, d
   const char *str2 = str;
   while (str2 < last) {
     // Extract each unicode character of string.
-    unsigned utf = fl_utf8decode(str2, last, &len);
+    unsigned utf = fltk3::utf8decode(str2, last, &len);
     str2 += len;
     if (utf <= 0x17F) { // until Latin Extended-A
       ;

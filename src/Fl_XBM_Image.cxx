@@ -53,7 +53,7 @@ fltk3::XBMImage::XBMImage(const char *name) : fltk3::Bitmap((const char *)0,0,0)
   FILE	*f;
   uchar	*ptr;
 
-  if ((f = fl_fopen(name, "rb")) == NULL) return;
+  if ((f = fltk3::fopen(name, "rb")) == NULL) return;
 
   char buffer[1024];
   char junk[1024];

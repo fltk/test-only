@@ -120,7 +120,7 @@ void create_the_forms() {
   label[i++] = '\n';
   for (c = 0xA1; c < 0x600; c += 9) {
     if (!(++n&(0x1f))) label[i++]='\n';
-    i += fl_utf8encode((unsigned int)c, label + i);
+    i += fltk3::utf8encode((unsigned int)c, label + i);
   }
   label[i] = 0;
 

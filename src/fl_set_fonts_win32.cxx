@@ -72,10 +72,10 @@ enumcbw(CONST LOGFONTW    *lpelf,
   if (!p && lpelf->lfCharSet != ANSI_CHARSET) return 1;
   char *n = NULL;
   int l = wcslen(lpelf->lfFaceName);
-  unsigned dstlen = fl_utf8fromwc(n, 0, (xchar*)lpelf->lfFaceName, l) + 1; // measure the string
+  unsigned dstlen = fltk3::utf8fromwc(n, 0, (xchar*)lpelf->lfFaceName, l) + 1; // measure the string
   n = (char*) malloc(dstlen);
 //n[fl_unicode2utf((xchar*)lpelf->lfFaceName, l, n)] = 0;
-  dstlen = fl_utf8fromwc(n, dstlen, (xchar*)lpelf->lfFaceName, l); // convert the string
+  dstlen = fltk3::utf8fromwc(n, dstlen, (xchar*)lpelf->lfFaceName, l); // convert the string
   n[dstlen] = 0;
   for (int i=0; i<fltk3::FREE_FONT; i++) // skip if one of our built-in fonts
 	  if (!strcmp(fltk3::get_font_name((fltk3::Font)i),n)) {free(n);return 1;}
@@ -151,14 +151,14 @@ fltk3::get_font_sizes(fltk3::Font fnum, int*& sizep) {
   cyPerInch = GetDeviceCaps(fl_gc, LOGPIXELSY);
   if (cyPerInch < 1) cyPerInch = 1;
 
-//  int l = fl_utf_nb_char((unsigned char*)s->name+1, strlen(s->name+1));
+//  int l = fltk3::utf_nb_char((unsigned char*)s->name+1, strlen(s->name+1));
 //  unsigned short *b = (unsigned short*) malloc((l + 1) * sizeof(short));
 //  fl_utf2unicode((unsigned char*)s->name+1, l, (xchar*)b);
 	const char *nm = (const char*)s->name+1;
 	int len = strlen(s->name+1);
-    int l = fl_utf8toUtf16(nm, len, NULL, 0); // Pass NULL to query length required
+    int l = fltk3::utf8toUtf16(nm, len, NULL, 0); // Pass NULL to query length required
     unsigned short *b = (unsigned short*) malloc((l + 1) * sizeof(short));
-    l = fl_utf8toUtf16(nm, len, b, (l+1)); // Now do the conversion
+    l = fltk3::utf8toUtf16(nm, len, b, (l+1)); // Now do the conversion
     b[l] = 0;
     EnumFontFamiliesW(fl_gc, (WCHAR*)b, (FONTENUMPROCW)EnumSizeCbW, 0);
 	free(b);

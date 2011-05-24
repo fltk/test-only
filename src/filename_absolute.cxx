@@ -76,7 +76,7 @@ int fl_filename_absolute(char *to, int tolen, const char *from) {
   char *temp = new char[tolen];
   const char *start = from;
 
-  a = fl_getcwd(temp, tolen);
+  a = fltk3::getcwd(temp, tolen);
   if (!a) {
     strlcpy(to, from, tolen);
     delete[] temp;
@@ -140,7 +140,7 @@ fl_filename_relative(char       *to,	// O - Relative filename
 {
   char cwd_buf[FLTK3_PATH_MAX];	// Current directory
   // get the current directory and return if we can't
-  if (!fl_getcwd(cwd_buf, sizeof(cwd_buf))) {
+  if (!fltk3::getcwd(cwd_buf, sizeof(cwd_buf))) {
     strlcpy(to, from, tolen);
     return 0;
   }

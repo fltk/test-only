@@ -71,7 +71,7 @@
 /*!Set to 1 to turn bad UTF8 bytes into ISO-8859-1. If this is to zero
    they are instead turned into the Unicode REPLACEMENT CHARACTER, of
    value 0xfffd.
-   If this is on fl_utf8decode() will correctly map most (perhaps all)
+   If this is on fltk3::utf8decode() will correctly map most (perhaps all)
    human-readable text that is in ISO-8859-1. This may allow you
    to completely ignore character sets in your code because virtually
    everything is either ISO-8859-1 or UTF-8.
@@ -125,7 +125,7 @@ static unsigned short cp1252[32] = {
 
     \code
     if (*p & 0x80) {              // what should be a multibyte encoding
-      code = fl_utf8decode(p,end,&len);
+      code = fltk3::utf8decode(p,end,&len);
       if (len<2) code = 0xFFFD;   // Turn errors into REPLACEMENT CHARACTER
     } else {                      // handle the 1-byte utf8 encoding:
       code = *p;
@@ -137,7 +137,7 @@ static unsigned short cp1252[32] = {
     speed up the scanning of strings where the majority of characters
     are ASCII.
 */
-unsigned fl_utf8decode(const char* p, const char* end, int* len)
+unsigned fltk3::utf8decode(const char* p, const char* end, int* len)
 {
   unsigned char c = *(unsigned char*)p;
   if (c < 0x80) {
@@ -224,12 +224,12 @@ unsigned fl_utf8decode(const char* p, const char* end, int* len)
 
   This function is for moving a pointer that was jumped to the
   middle of a string, such as when doing a binary search for
-  a position. You should use either this or fl_utf8back() depending
+  a position. You should use either this or fltk3::utf8back() depending
   on which direction your algorithim can handle the pointer
-  moving. Do not use this to scan strings, use fl_utf8decode()
+  moving. Do not use this to scan strings, use fltk3::utf8decode()
   instead.
 */
-const char* fl_utf8fwd(const char* p, const char* start, const char* end)
+const char* fltk3::utf8fwd(const char* p, const char* start, const char* end)
 {
   const char* a;
   int len;
@@ -241,7 +241,7 @@ const char* fl_utf8fwd(const char* p, const char* start, const char* end)
     if (!(a[0]&0x80)) return p;
     if ((a[0]&0x40)) break;
   }
-  fl_utf8decode(a,end,&len);
+  fltk3::utf8decode(a,end,&len);
   a += len;
   if (a > p) return a;
   return p;
@@ -260,7 +260,7 @@ const char* fl_utf8fwd(const char* p, const char* start, const char* end)
 
   If you wish to decrement a UTF-8 pointer, pass p-1 to this.
 */
-const char* fl_utf8back(const char* p, const char* start, const char* end)
+const char* fltk3::utf8back(const char* p, const char* start, const char* end)
 {
   const char* a;
   int len;
@@ -272,14 +272,14 @@ const char* fl_utf8back(const char* p, const char* start, const char* end)
     if (!(a[0]&0x80)) return p;
     if ((a[0]&0x40)) break;
   }
-  fl_utf8decode(a,end,&len);
+  fltk3::utf8decode(a,end,&len);
   if (a+len > p) return a;
   return p;
 }
 
 /*! Returns number of bytes that utf8encode() will use to encode the
   character \p ucs. */
-int fl_utf8bytes(unsigned ucs) {
+int fltk3::utf8bytes(unsigned ucs) {
   if (ucs < 0x000080U) {
     return 1;
   } else if (ucs < 0x000800U) {
@@ -306,10 +306,10 @@ int fl_utf8bytes(unsigned ucs) {
     RFC 3629 also says many other values for \p ucs are illegal (in
     the range 0xd800 to 0xdfff, or ending with 0xfffe or
     0xffff). However I encode these as though they are legal, so that
-    utf8encode/fl_utf8decode will be the identity for all codes between 0
+    utf8encode/fltk3::utf8decode will be the identity for all codes between 0
     and 0x10ffff.
 */
-int fl_utf8encode(unsigned ucs, char* buf) {
+int fltk3::utf8encode(unsigned ucs, char* buf) {
   if (ucs < 0x000080U) {
     buf[0] = ucs;
     return 1;
@@ -363,7 +363,7 @@ int fl_utf8encode(unsigned ucs, char* buf) {
     value can be converted, and setting \p dstlen to 3 or more will allow
     a NULL terminated sequence to be returned.
 */
-unsigned fl_ucs_to_Utf16(const unsigned ucs, unsigned short *dst, const unsigned dstlen)
+unsigned fltk3::ucs_to_Utf16(const unsigned ucs, unsigned short *dst, const unsigned dstlen)
 {
   /* The rule for direct conversion from UCS to UTF16 is:
    * - if UCS >  0x0010FFFF then UCS is invalid
@@ -402,7 +402,7 @@ unsigned fl_ucs_to_Utf16(const unsigned ucs, unsigned short *dst, const unsigned
   /* NULL terminate the output, if there is space */
   if(count < dstlen) { out[count] = 0; }
   return count;
-} /* fl_ucs_to_Utf16 */
+} /* fltk3::ucs_to_Utf16 */
 
 /*! Convert a UTF-8 sequence into an array of 16-bit characters. These
     are used by some system calls, especially on Windows.
@@ -432,7 +432,7 @@ unsigned fl_ucs_to_Utf16(const unsigned ucs, unsigned short *dst, const unsigned
     "surrogate pairs" which take two words each (this is called UTF-16
     encoding).
 */
-unsigned fl_utf8toUtf16(const char* src, unsigned srclen,
+unsigned fltk3::utf8toUtf16(const char* src, unsigned srclen,
 		  unsigned short* dst, unsigned dstlen)
 {
   const char* p = src;
@@ -443,7 +443,7 @@ unsigned fl_utf8toUtf16(const char* src, unsigned srclen,
     if (!(*p & 0x80)) { /* ascii */
       dst[count] = *p++;
     } else {
-      int len; unsigned ucs = fl_utf8decode(p,e,&len);
+      int len; unsigned ucs = fltk3::utf8decode(p,e,&len);
       p += len;
       if (ucs < 0x10000) {
 	dst[count] = ucs;
@@ -460,7 +460,7 @@ unsigned fl_utf8toUtf16(const char* src, unsigned srclen,
   while (p < e) {
     if (!(*p & 0x80)) p++;
     else {
-      int len; unsigned ucs = fl_utf8decode(p,e,&len);
+      int len; unsigned ucs = fltk3::utf8decode(p,e,&len);
       p += len;
       if (ucs >= 0x10000) ++count;
     }
@@ -474,7 +474,7 @@ unsigned fl_utf8toUtf16(const char* src, unsigned srclen,
   Converts a UTF-8 string into a wide character string.
 
   This function generates 32-bit wchar_t (e.g. "ucs4" as it were) except
-  on Windows where it is equivalent to fl_utf8toUtf16 and returns
+  on Windows where it is equivalent to fltk3::utf8toUtf16 and returns
   UTF-16.
 
   \p src points at the UTF-8, and \p srclen is the number of bytes to
@@ -500,11 +500,11 @@ unsigned fl_utf8toUtf16(const char* src, unsigned srclen,
   Note that Windows includes Cygwin, i.e. compiled with Cygwin's POSIX
   layer (cygwin1.dll, --enable-cygwin), either native (GDI) or X11.
   */
-unsigned fl_utf8towc(const char* src, unsigned srclen,
+unsigned fltk3::utf8towc(const char* src, unsigned srclen,
 		  wchar_t* dst, unsigned dstlen)
 {
 #if defined(WIN32) || defined(__CYGWIN__)
-  return fl_utf8toUtf16(src, srclen, (unsigned short*)dst, dstlen);
+  return fltk3::utf8toUtf16(src, srclen, (unsigned short*)dst, dstlen);
 #else
   const char* p = src;
   const char* e = src+srclen;
@@ -517,7 +517,7 @@ unsigned fl_utf8towc(const char* src, unsigned srclen,
     if (!(*p & 0x80)) { /* ascii */
       dst[count] = *p++;
     } else {
-      int len; unsigned ucs = fl_utf8decode(p,e,&len);
+      int len; unsigned ucs = fltk3::utf8decode(p,e,&len);
       p += len;
       dst[count] = (wchar_t)ucs;
     }
@@ -527,7 +527,7 @@ unsigned fl_utf8towc(const char* src, unsigned srclen,
   while (p < e) {
     if (!(*p & 0x80)) p++;
     else {
-      int len; fl_utf8decode(p,e,&len);
+      int len; fltk3::utf8decode(p,e,&len);
       p += len;
     }
     ++count;
@@ -542,7 +542,7 @@ unsigned fl_utf8towc(const char* src, unsigned srclen,
     replaced with '?'.
 
     Errors in the UTF-8 are converted as individual bytes, same as
-    fl_utf8decode() does. This allows ISO-8859-1 text mistakenly identified
+    fltk3::utf8decode() does. This allows ISO-8859-1 text mistakenly identified
     as UTF-8 to be printed correctly (and possibly CP1512 on Windows).
 
     \p src points at the UTF-8, and \p srclen is the number of bytes to
@@ -556,7 +556,7 @@ unsigned fl_utf8towc(const char* src, unsigned srclen,
     nothing is written and this call just measures the storage space
     needed.
 */
-unsigned fl_utf8toa(const char* src, unsigned srclen,
+unsigned fltk3::utf8toa(const char* src, unsigned srclen,
 		 char* dst, unsigned dstlen)
 {
   const char* p = src;
@@ -570,7 +570,7 @@ unsigned fl_utf8toa(const char* src, unsigned srclen,
       dst[count] = c;
       p++;
     } else {
-      int len; unsigned ucs = fl_utf8decode(p,e,&len);
+      int len; unsigned ucs = fltk3::utf8decode(p,e,&len);
       p += len;
       if (ucs < 0x100) dst[count] = ucs;
       else dst[count] = '?';
@@ -582,7 +582,7 @@ unsigned fl_utf8toa(const char* src, unsigned srclen,
     if (!(*p & 0x80)) p++;
     else {
       int len;
-      fl_utf8decode(p,e,&len);
+      fltk3::utf8decode(p,e,&len);
       p += len;
     }
     ++count;
@@ -611,13 +611,13 @@ unsigned fl_utf8toa(const char* src, unsigned srclen,
     though they are 0xFFFD (REPLACEMENT CHARACTER). Characters in the
     range 0xd800 to 0xdfff, or ending with 0xfffe or 0xffff are also
     illegal according to RFC 3629. However I encode these as though
-    they are legal, so that fl_utf8towc will return the original data.
+    they are legal, so that fltk3::utf8towc will return the original data.
 
     On Windows "surrogate pairs" are converted to a single character
     and UTF-8 encoded (as 4 bytes). Mismatched halves of surrogate
     pairs are converted as though they are individual characters.
 */
-unsigned fl_utf8fromwc(char* dst, unsigned dstlen,
+unsigned fltk3::utf8fromwc(char* dst, unsigned dstlen,
 		    const wchar_t* src, unsigned srclen) {
   unsigned i = 0;
   unsigned count = 0;
@@ -705,7 +705,7 @@ unsigned fl_utf8fromwc(char* dst, unsigned dstlen,
     no conversion is necessary, as only ASCII characters are in the
     string.
 */
-unsigned fl_utf8froma(char* dst, unsigned dstlen,
+unsigned fltk3::utf8froma(char* dst, unsigned dstlen,
 		   const char* src, unsigned srclen) {
   const char* p = src;
   const char* e = src+srclen;
@@ -740,7 +740,7 @@ unsigned fl_utf8froma(char* dst, unsigned dstlen,
 #endif
 
 /*! Return true if the "locale" seems to indicate that UTF-8 encoding
-    is used. If true the fl_utf8to_mb and fl_utf8from_mb don't do anything
+    is used. If true the fltk3::utf8to_mb and fltk3::utf8from_mb don't do anything
     useful.
 
     <i>It is highly recommended that you change your system so this
@@ -751,7 +751,7 @@ unsigned fl_utf8froma(char* dst, unsigned dstlen,
     it is likely that all non-Asian Unix systems will return true,
     due to the compatibility of UTF-8 with ISO-8859-1.
 */
-int fl_utf8locale(void) {
+int fltk3::utf8locale(void) {
   static int ret = 2;
   if (ret == 2) {
 #ifdef WIN32
@@ -782,20 +782,20 @@ int fl_utf8locale(void) {
     nothing is written and this call just measures the storage space
     needed.
 
-    If fl_utf8locale() returns true then this does not change the data.
+    If fltk3::utf8locale() returns true then this does not change the data.
 */
-unsigned fl_utf8to_mb(const char* src, unsigned srclen,
+unsigned fltk3::utf8to_mb(const char* src, unsigned srclen,
 		  char* dst, unsigned dstlen)
 {
-  if (!fl_utf8locale()) {
+  if (!fltk3::utf8locale()) {
 #ifdef WIN32
     wchar_t lbuf[1024];
     wchar_t* buf = lbuf;
-    unsigned length = fl_utf8towc(src, srclen, buf, 1024);
+    unsigned length = fltk3::utf8towc(src, srclen, buf, 1024);
     unsigned ret;
     if (length >= 1024) {
       buf = (wchar_t*)(malloc((length+1)*sizeof(wchar_t)));
-      fl_utf8towc(src, srclen, buf, length+1);
+      fltk3::utf8towc(src, srclen, buf, length+1);
     }
     if (dstlen) {
       /* apparently this does not null-terminate, even though msdn
@@ -814,11 +814,11 @@ unsigned fl_utf8to_mb(const char* src, unsigned srclen,
 #else
     wchar_t lbuf[1024];
     wchar_t* buf = lbuf;
-    unsigned length = fl_utf8towc(src, srclen, buf, 1024);
+    unsigned length = fltk3::utf8towc(src, srclen, buf, 1024);
     int ret;
     if (length >= 1024) {
       buf = (wchar_t*)(malloc((length+1)*sizeof(wchar_t)));
-      fl_utf8towc(src, srclen, buf, length+1);
+      fltk3::utf8towc(src, srclen, buf, length+1);
     }
     if (dstlen) {
       ret = wcstombs(dst, buf, dstlen);
@@ -854,14 +854,14 @@ unsigned fl_utf8to_mb(const char* src, unsigned srclen,
 
     On Unix or on Windows when a UTF-8 locale is in effect, this
     does not change the data.
-    You may also want to check if fl_utf8test() returns non-zero, so that
+    You may also want to check if fltk3::utf8test() returns non-zero, so that
     the filesystem can store filenames in UTF-8 encoding regardless of
     the locale.
 */
-unsigned fl_utf8from_mb(char* dst, unsigned dstlen,
+unsigned fltk3::utf8from_mb(char* dst, unsigned dstlen,
 		    const char* src, unsigned srclen)
 {
-  if (!fl_utf8locale()) {
+  if (!fltk3::utf8locale()) {
 #ifdef WIN32
     wchar_t lbuf[1024];
     wchar_t* buf = lbuf;
@@ -873,7 +873,7 @@ unsigned fl_utf8from_mb(char* dst, unsigned dstlen,
       buf = (wchar_t*)(malloc(length*sizeof(wchar_t)));
       MultiByteToWideChar(GetACP(), 0, src, srclen, buf, length);
     }
-    ret = fl_utf8fromwc(dst, dstlen, buf, length);
+    ret = fltk3::utf8fromwc(dst, dstlen, buf, length);
     if (buf != lbuf) free((void*)buf);
     return ret;
 #else
@@ -888,7 +888,7 @@ unsigned fl_utf8from_mb(char* dst, unsigned dstlen,
       mbstowcs(buf, src, length);
     }
     if (length >= 0) {
-      ret = fl_utf8fromwc(dst, dstlen, buf, length);
+      ret = fltk3::utf8fromwc(dst, dstlen, buf, length);
       if (buf != lbuf) free((void*)buf);
       return ret;
     }
@@ -908,7 +908,7 @@ unsigned fl_utf8from_mb(char* dst, unsigned dstlen,
 /*! Examines the first \p srclen bytes in \p src and returns a verdict
     on whether it is UTF-8 or not.
     - Returns 0 if there is any illegal UTF-8 sequences, using the
-      same rules as fl_utf8decode(). Note that some UCS values considered
+      same rules as fltk3::utf8decode(). Note that some UCS values considered
       illegal by RFC 3629, such as 0xffff, are considered legal by this.
     - Returns 1 if there are only single-byte characters (ie no bytes
       have the high bit set). This is legal UTF-8, but also indicates
@@ -925,13 +925,13 @@ unsigned fl_utf8from_mb(char* dst, unsigned dstlen,
     this is done we will be able to cleanly transition to a locale-less
     encoding.
 */
-int fl_utf8test(const char* src, unsigned srclen) {
+int fltk3::utf8test(const char* src, unsigned srclen) {
   int ret = 1;
   const char* p = src;
   const char* e = src+srclen;
   while (p < e) {
     if (*p & 0x80) {
-      int len; fl_utf8decode(p,e,&len);
+      int len; fltk3::utf8decode(p,e,&len);
       if (len < 2) return 0;
       if (len > ret) ret = len;
       p += len;
@@ -963,28 +963,28 @@ int fl_utf8test(const char* src, unsigned srclen) {
     CP1252, and C0/C1 control characters and DEL will return -1.
     You are advised to use fltk3::width(const char* src) instead.
  */
-int fl_wcwidth_(unsigned int ucs) {
+int fltk3::wcwidth_(unsigned int ucs) {
   return mk_wcwidth(ucs);
 }
 
-/** extended wrapper around  fl_wcwidth_(unsigned int ucs) function.
+/** extended wrapper around  fltk3::wcwidth_(unsigned int ucs) function.
     \param[in] src pointer to start of UTF-8 byte sequence
     \returns width of character in columns
 
     Depending on build options, this function may map C1 control
     characters (0x80 to 0x9f) to CP1252, and return the width of
     that character instead. This is not the same behaviour as
-    fl_wcwidth_(unsigned int ucs) .
+    fltk3::wcwidth_(unsigned int ucs) .
 
     Note that other control characters and DEL will still return -1,
     so if you want different behaviour, you need to test for those
-    characters before calling fl_wcwidth(), and handle them separately.
+    characters before calling fltk3::wcwidth(), and handle them separately.
  */
-int fl_wcwidth(const char* src) {
-  int len = fl_utf8len(*src);
+int fltk3::wcwidth(const char* src) {
+  int len = fltk3::utf8len(*src);
   int ret = 0;
-  unsigned int ucs = fl_utf8decode(src, src+len, &ret);
-  int width = fl_wcwidth_(ucs);
+  unsigned int ucs = fltk3::utf8decode(src, src+len, &ret);
+  int width = fltk3::wcwidth_(ucs);
   return width;
 }
 

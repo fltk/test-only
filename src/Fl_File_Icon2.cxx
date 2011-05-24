@@ -141,7 +141,7 @@ fltk3::FileIcon::load_fti(const char *fti)	// I - File to read from
 
 
   // Try to open the file...
-  if ((fp = fl_fopen(fti, "rb")) == NULL)
+  if ((fp = fltk3::fopen(fti, "rb")) == NULL)
   {
     fltk3::error("fltk3::FileIcon::load_fti(): Unable to open \"%s\" - %s",
               fti, strerror(errno));
@@ -853,7 +853,7 @@ load_kde_mimelnk(const char *filename,	// I - mimelnk filename
   pattern[0]      = '\0';
   iconfilename[0] = '\0';
 
-  if ((fp = fl_fopen(filename, "rb")) != NULL) {
+  if ((fp = fltk3::fopen(filename, "rb")) != NULL) {
     while (fgets(tmp, sizeof(tmp), fp)) {
       if ((val = get_kde_val(tmp, "Icon")) != NULL)
 	strlcpy(iconfilename, val, sizeof(iconfilename));

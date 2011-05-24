@@ -252,7 +252,7 @@ namespace fltk3 {
     const char* value() const {return value_;}
     
     /* Returns the character at index \p i. */
-    Fl_Char index(int i) const;
+    fltk3::Char index(int i) const;
     
     /**
      Returns the number of bytes in value(). 

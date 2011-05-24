@@ -359,12 +359,12 @@ static const wchar_t *utf8reformat(const char *str, int& n)
   static int lbuf = 0;
   int newn;
   if (n == 0) return empty;
-  newn = fl_utf8towc(str, n, (wchar_t*)buffer, lbuf);
+  newn = fltk3::utf8towc(str, n, (wchar_t*)buffer, lbuf);
   if (newn >= lbuf) {
     lbuf = newn + 100;
     if (buffer) free(buffer);
     buffer = (wchar_t*)malloc(lbuf * sizeof(wchar_t));
-    n = fl_utf8towc(str, n, (wchar_t*)buffer, lbuf);
+    n = fltk3::utf8towc(str, n, (wchar_t*)buffer, lbuf);
   } else {
     n = newn;
   }

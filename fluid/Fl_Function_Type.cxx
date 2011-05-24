@@ -883,7 +883,7 @@ void Fl_Data_Type::write_code1() {
   int nData = -1;
   // path should be set correctly already
   if (filename_ && !write_sourceview) {
-    FILE *f = fl_fopen(filename_, "rb");
+    FILE *f = fltk3::fopen(filename_, "rb");
     if (!f) {
       message = "Can't include binary file. Can't open";
     } else {

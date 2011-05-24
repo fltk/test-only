@@ -40,24 +40,28 @@ typedef unsigned char uchar;
 /** unsigned long */
 typedef unsigned long ulong;
 
-/** Flexible length utf8 Unicode text
- *
- *  \todo FIXME: temporary (?) typedef to mark UTF8 and Unicode conversions
- */
-typedef char *Fl_String;
-
-/** Flexible length utf8 Unicode read-only string
- *  \sa Fl_String
- */
-typedef const char *Fl_CString;
-
-/** 24-bit Unicode character + 8-bit indicator for keyboard flags */
-typedef unsigned int Fl_Shortcut;
-
-/** 24-bit Unicode character - upper 8-bits are unused */
-typedef unsigned int Fl_Char;
- 
-/*@}*/	/* group: Miscellaneous */
+namespace fltk3 {
+  
+  /** Flexible length utf8 Unicode text
+   *
+   *  \todo FIXME: temporary (?) typedef to mark UTF8 and Unicode conversions
+   */
+  typedef char *String;
+  
+  /** Flexible length utf8 Unicode read-only string
+   *  \sa fltk3::String
+   */
+  typedef const char *CString;
+  
+  /** 24-bit Unicode character + 8-bit indicator for keyboard flags */
+  typedef unsigned int Shortcut;
+  
+  /** 24-bit Unicode character - upper 8-bits are unused */
+  typedef unsigned int Char;
+  
+  /*@}*/	/* group: Miscellaneous */
+  
+}
 
 #endif
 

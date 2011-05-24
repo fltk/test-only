@@ -38,8 +38,8 @@
 
 #ifdef ASSERT_UTF8
 # include <assert.h>
-# define IS_UTF8_ALIGNED(a) if (a && *a) assert(fl_utf8len(*(a))>0);
-# define IS_UTF8_ALIGNED2(a, b) if (b>=0 && b<a->length()) assert(fl_utf8len(a->byte_at(b))>0);
+# define IS_UTF8_ALIGNED(a) if (a && *a) assert(fltk3::utf8len(*(a))>0);
+# define IS_UTF8_ALIGNED2(a, b) if (b>=0 && b<a->length()) assert(fltk3::utf8len(a->byte_at(b))>0);
 #else
 # define IS_UTF8_ALIGNED(a)
 # define IS_UTF8_ALIGNED2(a, b)

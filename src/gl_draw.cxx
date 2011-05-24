@@ -217,11 +217,11 @@ void gl_draw(const char* str, int n) {
 #else
   static xchar *buf = NULL;
   static int l = 0;
-  int wn = fl_utf8toUtf16(str, n, (unsigned short*)buf, l);
+  int wn = fltk3::utf8toUtf16(str, n, (unsigned short*)buf, l);
   if(wn >= l) {
     buf = (xchar*) realloc(buf, sizeof(xchar) * (wn + 1));
     l = wn + 1;
-    wn = fl_utf8toUtf16(str, n, (unsigned short*)buf, l);
+    wn = fltk3::utf8toUtf16(str, n, (unsigned short*)buf, l);
   }
   n = wn;
 

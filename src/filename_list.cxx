@@ -80,7 +80,7 @@ int fl_casealphasort(struct dirent **a, struct dirent **b) {
    \return the number of entries if no error, a negative value otherwise.
 */
 int fl_filename_list(const char *d, dirent ***list,
-                     Fl_File_Sort_F *sort) {
+                     fltk3::FileSortF *sort) {
 #if defined(WIN32) && !defined(__CYGWIN__) && !defined(HAVE_SCANDIR)
   // For Windows we have a special scandir implementation that uses
   // the Win32 "wide" functions for lookup, avoiding the code page mess
@@ -98,7 +98,7 @@ int fl_filename_list(const char *d, dirent ***list,
   dirloc = (char *)d;
 #else
   dirloc = (char *)malloc(dirlen + 1);
-  fl_utf8to_mb(d, dirlen, dirloc, dirlen + 1);
+  fltk3::utf8to_mb(d, dirlen, dirloc, dirlen + 1);
 #endif
 
 #ifndef HAVE_SCANDIR
@@ -144,7 +144,7 @@ int fl_filename_list(const char *d, dirent ***list,
 #ifdef __APPLE__
     newlen = len;
 #else
-    newlen = fl_utf8from_mb(NULL, 0, de->d_name, len);
+    newlen = fltk3::utf8from_mb(NULL, 0, de->d_name, len);
 #endif
     dirent *newde = (dirent*)malloc(de->d_name - (char*)de + newlen + 2); // Add space for a / and a nul
 
@@ -153,7 +153,7 @@ int fl_filename_list(const char *d, dirent ***list,
 #ifdef __APPLE__
     strcpy(newde->d_name, de->d_name);
 #else
-    fl_utf8from_mb(newde->d_name, newlen + 1, de->d_name, len);
+    fltk3::utf8from_mb(newde->d_name, newlen + 1, de->d_name, len);
 #endif
 
     // Check if dir (checks done on "old" name as we need to interact with

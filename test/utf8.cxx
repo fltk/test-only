@@ -340,7 +340,7 @@ static void create_font_widget()
   label[i++] = '\n';
   for (c = 0xA1; c < 0x600; c += 9) {
     if (!(++n&(0x1f))) label[i++]='\n';
-    i += fl_utf8encode((unsigned int)c, label + i);
+    i += fltk3::utf8encode((unsigned int)c, label + i);
   }
   label[i] = 0;
   
@@ -546,7 +546,7 @@ public:
         static const char lut[] = "0123456789abcdef";
         const char *t = fltk3::event_text();
         int i, n;
-        unsigned int ucode = fl_utf8decode(t, t+fltk3::event_length(), &n);
+        unsigned int ucode = fltk3::utf8decode(t, t+fltk3::event_length(), &n);
         if (n==0) {
           value("");
           return 1;
@@ -582,7 +582,7 @@ int main(int argc, char** argv)
   char *utf8 = (char*) malloc(strlen(latin1) * 5 + 1);
   l = 0;
   //	l = fltk3::latin12utf((const unsigned char*)latin1, strlen(latin1), utf8);
-  l = fl_utf8froma(utf8, (strlen(latin1) * 5 + 1), latin1, strlen(latin1));
+  l = fltk3::utf8froma(utf8, (strlen(latin1) * 5 + 1), latin1, strlen(latin1));
   
   make_font_chooser();
   extra_font = fltk3::TIMES_BOLD_ITALIC;
@@ -622,7 +622,7 @@ int main(int argc, char** argv)
     int i = 16 * y;
     for (int x = 0; x < 16; x++) {
       int l;
-      l = fl_utf8encode(i, buf + o);
+      l = fltk3::utf8encode(i, buf + o);
       if (l < 1) l = 1;
       o += l;
       i++;
@@ -643,13 +643,13 @@ int main(int argc, char** argv)
   
   char *utf8l = (char*) malloc(strlen(utf8) * 3 + 1);
   fltk3::Input i2(5, 35, 190, 25);
-  l = fl_utf_tolower((const unsigned char*)utf8, l, utf8l);
+  l = fltk3::utf_tolower((const unsigned char*)utf8, l, utf8l);
   utf8l[l] = '\0';
   i2.value(utf8l);
   
   char *utf8u = (char*) malloc(strlen(utf8l) * 3 + 1);
   fltk3::Input i3(5, 65, 190, 25);
-  l = fl_utf_toupper((const unsigned char*)utf8l, l, utf8u);
+  l = fltk3::utf_toupper((const unsigned char*)utf8l, l, utf8u);
   utf8u[l] = '\0';
   i3.value(utf8u);
   
@@ -663,7 +663,7 @@ int main(int argc, char** argv)
   
   char abuf[40];
   //  l = fltk3::unicode2utf(r_to_l_txt, 8, abuf);
-  l = fl_utf8fromwc(abuf, 40, r_to_l_txt, 8);
+  l = fltk3::utf8fromwc(abuf, 40, r_to_l_txt, 8);
   abuf[l] = 0;
   
   right_left_input i5(5, 115, 190, 50);
@@ -683,7 +683,7 @@ int main(int argc, char** argv)
     1604, 0x20, 1603, 0x20, 1608, 0x20, 1583, 0};
   
   //  l = fltk3::unicode2utf(r_to_l_txt1, 14, abuf);
-  l = fl_utf8fromwc(abuf, 40, r_to_l_txt1, 14);
+  l = fltk3::utf8fromwc(abuf, 40, r_to_l_txt1, 14);
   abuf[l] = 0;
   right_left_input i6(5, 175, 190, 50);
   i6.textfont(extra_font);

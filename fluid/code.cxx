@@ -354,13 +354,13 @@ int write_code(const char *s, const char *t) {
   current_widget_class = 0L;
   if (!s) code_file = stdout;
   else {
-    FILE *f = fl_fopen(s, filemode);
+    FILE *f = fltk3::fopen(s, filemode);
     if (!f) return 0;
     code_file = f;
   }
   if (!t) header_file = stdout;
   else {
-    FILE *f = fl_fopen(t, filemode);
+    FILE *f = fltk3::fopen(t, filemode);
     if (!f) {fclose(code_file); return 0;}
     header_file = f;
   }
@@ -468,7 +468,7 @@ int write_code(const char *s, const char *t) {
 }
 
 int write_strings(const char *sfile) {
-  FILE *fp = fl_fopen(sfile, "w");
+  FILE *fp = fltk3::fopen(sfile, "w");
   Fl_Type *p;
   Fl_Widget_Type *w;
   int i;

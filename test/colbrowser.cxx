@@ -159,9 +159,9 @@ static int load_browser(char *fname)
   int r, g, b,  lr  = -1 , lg = -1, lb = -1;
   char name[256], buf[256];
 #ifdef __EMX__
-  if (!(fp = fl_fopen(__XOS2RedirRoot(fname), "r")))
+  if (!(fp = fltk3::fopen(__XOS2RedirRoot(fname), "r")))
 #else
-    if (!(fp = fl_fopen(fname, "r")))
+    if (!(fp = fltk3::fopen(fname, "r")))
 #endif
     {
       fltk3::alert("%s\n%s\n%s","Load", fname, "Can't open");
