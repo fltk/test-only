@@ -32,7 +32,7 @@
 using namespace fltk3;
 
 int main(int argc, char **argv) {
-  Window *window = new Window(340,180);
+  fltk3::Window *window = new fltk3::Window(340,180);
   Box *box = new Box(20,40,300,100,"Hello, World!");
   box->box(UP_BOX);
   box->labelfont(BOLD+ITALIC);

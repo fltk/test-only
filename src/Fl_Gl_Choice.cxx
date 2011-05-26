@@ -111,7 +111,7 @@ fltk3::GlChoice *fltk3::GlChoice::find(int m, const int *alistp) {
   XVisualInfo *visp = glXChooseVisual(fl_display, fl_screen, (int *)blist);
   if (!visp) {
 #    if defined(GLX_VERSION_1_1) && defined(GLX_SGIS_multisample)
-    if (m&fltk3::MULTISAMPLE) return find(m&~FL_MULTISAMPLE,0);
+    if (m&fltk3::MULTISAMPLE) return find(m&~fltk3::MULTISAMPLE,0);
 #    endif
     return 0;
   }

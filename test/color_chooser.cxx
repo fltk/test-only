@@ -132,14 +132,14 @@ int main(int argc, char ** argv) {
     } else if (argv[i][0] != '-') {
 #if !defined(WIN32) && !defined(__APPLE__)
       int visid = atoi(argv[i]);
-      fltk3::open_display();
+      fl_open_display();
       XVisualInfo templt; int num;
       templt.visualid = visid;
-      fltk3::visual = XGetVisualInfo(fltk3::display, VisualIDMask, &templt, &num);
-      if (!fltk3::visual) fltk3::fatal("No visual with id %d",visid);
-      fltk3::colormap = XCreateColormap(fltk3::display, RootWindow(fltk3::display,fltk3::screen),
-                                    fltk3::visual->visual, AllocNone);
-      fltk3::xpixel(fltk3::BLACK); // make sure black is allocated
+      fl_visual = XGetVisualInfo(fl_display, VisualIDMask, &templt, &num);
+      if (!fl_visual) fltk3::fatal("No visual with id %d",visid);
+      fl_colormap = XCreateColormap(fl_display, RootWindow(fl_display,fl_screen),
+                                    fl_visual->visual, AllocNone);
+      fl_xpixel(fltk3::BLACK); // make sure black is allocated
 #else
       fltk3::fatal("Visual id's not supported on MSWindows or MacOS.");
 #endif

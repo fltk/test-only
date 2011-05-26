@@ -66,18 +66,18 @@ int main(int argc, char **argv) {
   fltk3::args(argc,argv,i,arg);
 
   if (visid >= 0) {
-    fltk3::open_display();
+    fl_open_display();
     XVisualInfo templt; int num;
     templt.visualid = visid;
-    fltk3::visual = XGetVisualInfo(fltk3::display, VisualIDMask, &templt, &num);
-    if (!fltk3::visual) {
+    fl_visual = XGetVisualInfo(fl_display, VisualIDMask, &templt, &num);
+    if (!fl_visual) {
       fprintf(stderr, "No visual with id %d, use one of:\n",visid);
       list_visuals();
       exit(1);
     }
-    fltk3::colormap = XCreateColormap(fltk3::display, RootWindow(fltk3::display,fltk3::screen),
-				fltk3::visual->visual, AllocNone);
-    fltk3::xpixel(fltk3::BLACK); // make sure black is allocated in overlay visuals
+    fl_colormap = XCreateColormap(fl_display, RootWindow(fl_display,fl_screen),
+				fl_visual->visual, AllocNone);
+    fl_xpixel(fltk3::BLACK); // make sure black is allocated in overlay visuals
   } else {
     fltk3::visual(fltk3::RGB);
   }

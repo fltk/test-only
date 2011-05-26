@@ -133,7 +133,7 @@ fltk3::read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
   if (!image) {
     // fetch absolute coordinates
     int dx, dy, sx, sy, sw, sh;
-    Window child_win;
+    ::Window child_win;
     
     fltk3::Window *win;
     if (allow_outside) win = (fltk3::Window*)1;

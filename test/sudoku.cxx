@@ -464,25 +464,25 @@ void SudokuSound::play(char note) {
   XKeyboardControl	control;
 
   // Get original pitch and duration...
-  XGetKeyboardControl(fltk3::display, &state);
+  XGetKeyboardControl(fl_display, &state);
 
   // Sound a tone for the given note...
   control.bell_percent  = 100;
   control.bell_pitch    = frequencies[note - 'A'];
   control.bell_duration = 50;
 
-  XChangeKeyboardControl(fltk3::display,
+  XChangeKeyboardControl(fl_display,
                          KBBellPercent | KBBellPitch | KBBellDuration,
 			 &control);
-  XBell(fltk3::display, 100);
-  XFlush(fltk3::display);
+  XBell(fl_display, 100);
+  XFlush(fl_display);
 
   // Restore original pitch and duration...
   control.bell_percent  = state.bell_percent;
   control.bell_pitch    = state.bell_pitch;
   control.bell_duration = state.bell_duration;
 
-  XChangeKeyboardControl(fltk3::display,
+  XChangeKeyboardControl(fl_display,
                          KBBellPercent | KBBellPitch | KBBellDuration,
 			 &control);
 #endif // __APPLE__
@@ -713,8 +713,8 @@ Sudoku::Sudoku()
 #ifdef WIN32
   icon((char *)LoadIcon(fltk3::display, MAKEINTRESOURCE(IDI_ICON)));
 #elif !defined(__APPLE__)
-  fltk3::open_display();
-  icon((char *)XCreateBitmapFromData(fltk3::display, DefaultRootWindow(fltk3::display),
+  fl_open_display();
+  icon((char *)XCreateBitmapFromData(fl_display, DefaultRootWindow(fl_display),
                                      (char *)sudoku_bits, sudoku_width,
 				     sudoku_height));
 #endif // WIN32

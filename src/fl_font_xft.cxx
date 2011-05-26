@@ -113,7 +113,7 @@ void *fl_xftfont = 0;
 //const char* fl_encoding_ = "iso8859-1";
 const char* fl_encoding_ = "iso10646-1";
 
-static void fl_xft_font(Fl_Xlib_Graphics_Driver *driver, fltk3::Font fnum, fltk3::Fontsize size, int angle) {
+static void fl_xft_font(fltk3::XlibGraphicsDriver *driver, fltk3::Font fnum, fltk3::Fontsize size, int angle) {
   if (fnum==-1) { // special case to stop font caching
     driver->fltk3::GraphicsDriver::font(0, 0);
     return;
@@ -142,7 +142,7 @@ static void fl_xft_font(Fl_Xlib_Graphics_Driver *driver, fltk3::Font fnum, fltk3
   fl_xftfont = (void*)f->font;
 }
 
-void Fl_Xlib_Graphics_Driver::font(fltk3::Font fnum, fltk3::Fontsize size) {
+void fltk3::XlibGraphicsDriver::font(fltk3::Font fnum, fltk3::Fontsize size) {
   fl_xft_font(this,fnum,size,0);
 }
 
@@ -382,17 +382,17 @@ static void utf8extents(Fl_Font_Descriptor *desc, const char *str, int n, XGlyph
 #endif
 }
 
-int Fl_Xlib_Graphics_Driver::height() {
+int fltk3::XlibGraphicsDriver::height() {
   if (font_descriptor()) return font_descriptor()->font->ascent + font_descriptor()->font->descent;
   else return -1;
 }
 
-int Fl_Xlib_Graphics_Driver::descent() {
+int fltk3::XlibGraphicsDriver::descent() {
   if (font_descriptor()) return font_descriptor()->font->descent;
   else return -1;
 }
 
-double Fl_Xlib_Graphics_Driver::width(const char* str, int n) {
+double fltk3::XlibGraphicsDriver::width(const char* str, int n) {
   if (!font_descriptor()) return -1.0;
   XGlyphInfo i;
   utf8extents(font_descriptor(), str, n, &i);
@@ -410,11 +410,11 @@ static double fl_xft_width(Fl_Font_Descriptor *desc, FcChar32 *str, int n) {
   return i.xOff;
 }
 
-double Fl_Xlib_Graphics_Driver::width(unsigned int c) {
+double fltk3::XlibGraphicsDriver::width(unsigned int c) {
   return fl_xft_width(font_descriptor(), (FcChar32 *)(&c), 1);
 }
 
-void Fl_Xlib_Graphics_Driver::text_extents(const char *c, int n, int &dx, int &dy, int &w, int &h) {
+void fltk3::XlibGraphicsDriver::text_extents(const char *c, int n, int &dx, int &dy, int &w, int &h) {
   if (!font_descriptor()) {
     w = h = 0;
     dx = dy = 0;
@@ -579,7 +579,7 @@ void fl_destroy_xft_draw(Window id) {
 #endif
 }
 
-void Fl_Xlib_Graphics_Driver::draw(const char *str, int n, int x, int y) {
+void fltk3::XlibGraphicsDriver::draw(const char *str, int n, int x, int y) {
   if ( !this->font_descriptor() ) {
     this->font(fltk3::HELVETICA, fltk3::NORMAL_SIZE);
   }
@@ -621,7 +621,7 @@ void Fl_Xlib_Graphics_Driver::draw(const char *str, int n, int x, int y) {
 #endif
 }
 
-void Fl_Xlib_Graphics_Driver::draw(int angle, const char *str, int n, int x, int y) {
+void fltk3::XlibGraphicsDriver::draw(int angle, const char *str, int n, int x, int y) {
   fl_xft_font(this, this->fltk3::GraphicsDriver::font(), this->size(), angle);
   this->draw(str, n, (int)x, (int)y);
   fl_xft_font(this, this->fltk3::GraphicsDriver::font(), this->size(), 0);
@@ -662,7 +662,7 @@ static void fl_drawUCS4(fltk3::GraphicsDriver *driver, const FcChar32 *str, int 
 }
 
 
-void Fl_Xlib_Graphics_Driver::rtl_draw(const char* c, int n, int x, int y) {
+void fltk3::XlibGraphicsDriver::rtl_draw(const char* c, int n, int x, int y) {
 
 #if defined(__GNUC__)
 // FIXME: warning Need to improve this XFT right to left draw function

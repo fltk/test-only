@@ -355,10 +355,10 @@ static void figure_out_visual() {
   fl_xpixel(fltk3::WHITE); // also make sure white is allocated
 
   static XPixmapFormatValues *pfvlist;
-  static int fltk3::NUM_pfv;
-  if (!pfvlist) pfvlist = XListPixmapFormats(fl_display,&fltk3::NUM_pfv);
+  static int NUM_pfv;
+  if (!pfvlist) pfvlist = XListPixmapFormats(fl_display,&NUM_pfv);
   XPixmapFormatValues *pfv;
-  for (pfv = pfvlist; pfv < pfvlist+fltk3::NUM_pfv; pfv++)
+  for (pfv = pfvlist; pfv < pfvlist+NUM_pfv; pfv++)
     if (pfv->depth == fl_visual->depth) break;
   xi.format = ZPixmap;
   xi.byte_order = ImageByteOrder(fl_display);
@@ -543,17 +543,17 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   }
 }
 
-void Fl_Xlib_Graphics_Driver::draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
+void fltk3::XlibGraphicsDriver::draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
   innards(buf,x,y,w,h,d,l,(d<3&&d>-3),0,0);
 }
-void Fl_Xlib_Graphics_Driver::draw_image(fltk3::DrawImageCb cb, void* data,
+void fltk3::XlibGraphicsDriver::draw_image(fltk3::DrawImageCb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   innards(0,x,y,w,h,d,0,(d<3&&d>-3),cb,data);
 }
-void Fl_Xlib_Graphics_Driver::draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
+void fltk3::XlibGraphicsDriver::draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
   innards(buf,x,y,w,h,d,l,1,0,0);
 }
-void Fl_Xlib_Graphics_Driver::draw_image_mono(fltk3::DrawImageCb cb, void* data,
+void fltk3::XlibGraphicsDriver::draw_image_mono(fltk3::DrawImageCb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   innards(0,x,y,w,h,d,0,1,cb,data);
 }
