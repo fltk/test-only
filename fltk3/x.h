@@ -63,7 +63,9 @@
 #    include "Window.h"
 #    include "Xutf8.h"
 // Mirror X definition of Region to fltk3::Region, for portability...
-typedef Region fltk3::Region;
+namespace fltk3 {
+  typedef ::Region Region;
+}
 
 FLTK3_EXPORT void fl_open_display();
 FLTK3_EXPORT void fl_open_display(Display*);
@@ -81,8 +83,11 @@ extern FLTK3_EXPORT GC fl_gc;
 extern FLTK3_EXPORT Window fl_window;
 FLTK3_EXPORT ulong fl_xpixel(fltk3::Color i);
 FLTK3_EXPORT ulong fl_xpixel(uchar r, uchar g, uchar b);
-FLTK3_EXPORT void fltk3::clip_region(fltk3::Region);
-FLTK3_EXPORT fltk3::Region fltk3::clip_region();
+
+namespace fltk3 {
+  FLTK3_EXPORT void clip_region(fltk3::Region);
+  FLTK3_EXPORT fltk3::Region clip_region();
+}
 
 // feed events into fltk:
 FLTK3_EXPORT int fl_handle(const XEvent&);
@@ -102,7 +107,7 @@ namespace fltk3 {
 	      w, h, fl_visual->depth)
 // begin/end are macros that save the old state in local variables:
 #    define fl_begin_offscreen(pixmap) \
-  Window _sw=fl_window; fl_window=pixmap; \
+  ::Window _sw=fl_window; fl_window=pixmap; \
   fltk3::SurfaceDevice *_ss = fltk3::SurfaceDevice::surface(); fltk3::DisplayDevice::display_device()->set_current(); \
   fltk3::push_no_clip()
 #    define fl_end_offscreen() \
@@ -121,7 +126,9 @@ extern FLTK3_EXPORT fltk3::Bitmask fl_create_alphamask(int w, int h, int d, int 
 extern FLTK3_EXPORT void fl_delete_bitmask(fltk3::Bitmask bm);
 
 #if defined(FL_LIBRARY) || defined(FLTK3_INTERNALS)
-extern FLTK3_EXPORT Window fltk3::message_window;
+namespace fltk3 {
+  extern FLTK3_EXPORT Window message_window;
+}
 extern FLTK3_EXPORT void *fl_xftfont;
 FLTK3_EXPORT fltk3::Region XRectangleRegion(int x, int y, int w, int h); // in fltk3::rect.cxx
 

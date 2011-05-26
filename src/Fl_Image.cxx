@@ -531,7 +531,7 @@ void Fl_GDI_Graphics_Driver::draw(fltk3::RGBImage *img, int XP, int YP, int WP, 
 }
 
 #else
-void Fl_Xlib_Graphics_Driver::draw(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int cx, int cy) {
+void fltk3::XlibGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   // Don't draw an empty image...
   if (!img->d() || !img->array) {

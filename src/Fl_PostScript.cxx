@@ -33,7 +33,7 @@
 #include <fltk3/PostScript.h>
 #include <fltk3/NativeFileChooser.h>
 #if defined(USE_X11)
-#include "Font.H"
+#include "Fl_Font.H"
 #if USE_XFT
 #include <X11/Xft/Xft.h>
 #endif

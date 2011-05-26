@@ -193,7 +193,7 @@ void Fl_GDI_Graphics_Driver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, in
 }
 
 #else // Xlib
-void Fl_Xlib_Graphics_Driver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
+void fltk3::XlibGraphicsDriver::draw(fltk3::Pixmap *pxm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   if (pxm->w() < 0) pxm->measure();
   int code = start(pxm, XP, YP, WP, HP, pxm->w(), pxm->h(), cx, cy, X, Y, W, H);

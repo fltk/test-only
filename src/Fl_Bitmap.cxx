@@ -349,7 +349,7 @@ void Fl_GDI_Graphics_Driver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int
 }  
 
 #else // Xlib
-void Fl_Xlib_Graphics_Driver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {
+void fltk3::XlibGraphicsDriver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   if (!bm->array) {
     bm->draw_empty(XP, YP);

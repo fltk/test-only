@@ -42,7 +42,7 @@
   Optional \p val presets the type of browser this will be, 
   which can also be changed with type().
 */
-fltk3::NativeFileChooser::fltk3::NativeFileChooser(int val) {
+fltk3::NativeFileChooser::NativeFileChooser(int val) {
   //// CANT USE THIS -- MESSES UP LINKING/CREATES DEPENDENCY ON fltk_images.
   //// Have app call this from main() instead.
   ////
@@ -70,7 +70,7 @@ fltk3::NativeFileChooser::fltk3::NativeFileChooser(int val) {
   Destructor. 
   Deallocates any resources allocated to this widget.
 */
-fltk3::NativeFileChooser::~Fl_Native_File_Chooser() {
+fltk3::NativeFileChooser::~NativeFileChooser() {
   delete _file_chooser;
   _filter      = strfree(_filter);
   _parsedfilt  = strfree(_parsedfilt);
@@ -198,7 +198,7 @@ int fltk3::NativeFileChooser::show() {
     // HANDLE SHOWING 'SaveAs' CONFIRM
     if ( options() & SAVEAS_CONFIRM && type() == BROWSE_SAVE_FILE ) {
       struct stat buf;
-      if ( stat(_file_chooser->value(), &buf) != -1 ) {
+      if ( fltk3::stat(_file_chooser->value(), &buf) != -1 ) {
 	if ( buf.st_mode & S_IFREG ) {		// Regular file + exists?
 	  if ( exist_dialog() == 0 ) {
 	    return(1);
