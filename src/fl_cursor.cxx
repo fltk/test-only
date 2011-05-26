@@ -243,7 +243,7 @@ void fltk3::Window::cursor(fltk3::Cursor c, fltk3::Color, fltk3::Color) {
 static struct TableEntry {
   uchar bits[CURSORSIZE*CURSORSIZE/8];
   uchar mask[CURSORSIZE*CURSORSIZE/8];
-  Cursor cursor;
+  ::Cursor cursor;
 } table[] = {
   {{	// fltk3::CURSOR_NS
    0x00, 0x00, 0x80, 0x01, 0xc0, 0x03, 0xe0, 0x07, 0x80, 0x01, 0x80, 0x01,
@@ -282,7 +282,7 @@ static struct TableEntry {
 
 void fltk3::Window::cursor(fltk3::Cursor c, fltk3::Color fg, fltk3::Color bg) {
   if (!shown()) return;
-  Cursor xc;
+  ::Cursor xc;
   int deleteit = 0;
   if (c == fltk3::CURSOR_DEFAULT) {
     c  = cursor_default;
@@ -297,10 +297,10 @@ void fltk3::Window::cursor(fltk3::Cursor c, fltk3::Color fg, fltk3::Color bg) {
       TableEntry *q = (c > fltk3::CURSOR_NESW) ? table+4 : table+(c-fltk3::CURSOR_NS);
       if (!(q->cursor)) {
 	XColor dummy = { 0 };
-	Pixmap p = XCreateBitmapFromData(fl_display,
+	::Pixmap p = XCreateBitmapFromData(fl_display,
 	  RootWindow(fl_display, fl_screen), (const char*)(q->bits),
 	  CURSORSIZE, CURSORSIZE);
-	Pixmap m = XCreateBitmapFromData(fl_display,
+	::Pixmap m = XCreateBitmapFromData(fl_display,
 	  RootWindow(fl_display, fl_screen), (const char*)(q->mask),
 	  CURSORSIZE, CURSORSIZE);
 	q->cursor = XCreatePixmapCursor(fl_display, p,m,&dummy, &dummy,

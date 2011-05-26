@@ -48,7 +48,7 @@ extern Atom fl_XaUtf8String;
 extern char fl_i_own_selection[2];
 extern char *fl_selection_buffer[2];
 
-extern void fl_sendClientMessage(Window window, Atom message,
+extern void fl_sendClientMessage(::Window window, Atom message,
                                  unsigned long d0,
                                  unsigned long d1=0,
                                  unsigned long d2=0,
@@ -57,7 +57,7 @@ extern void fl_sendClientMessage(Window window, Atom message,
 
 // return version # of Xdnd this window supports.  Also change the
 // window to the proxy if it uses a proxy:
-static int dnd_aware(Window& window) {
+static int dnd_aware(::Window& window) {
   Atom actual; int format; unsigned long count, remaining;
   unsigned char *data = 0;
   XGetWindowProperty(fl_display, window, fl_XdndAware,
@@ -89,9 +89,9 @@ static int local_handle(int event, fltk3::Window* window) {
 int fltk3::dnd() {
   fltk3::Window *source_fl_win = fltk3::first_window();
   fltk3::first_window()->cursor(fltk3::CURSOR_MOVE);
-  Window source_window = fl_xid(fltk3::first_window());
+  ::Window source_window = fl_xid(fltk3::first_window());
   fl_local_grab = grabfunc;
-  Window target_window = 0;
+  ::Window target_window = 0;
   fltk3::Window* local_window = 0;
   int dndversion = 4; int dest_x, dest_y;
   XSetSelectionOwner(fl_display, fl_XdndSelection, fltk3::message_window, fl_event_time);
@@ -99,10 +99,10 @@ int fltk3::dnd() {
   while (fltk3::pushed()) {
 
     // figure out what window we are pointing at:
-    Window new_window = 0; int new_version = 0;
+    ::Window new_window = 0; int new_version = 0;
     fltk3::Window* new_local_window = 0;
-    for (Window child = RootWindow(fl_display, fl_screen);;) {
-      Window root; unsigned int junk3;
+    for (::Window child = RootWindow(fl_display, fl_screen);;) {
+      ::Window root; unsigned int junk3;
       XQueryPointer(fl_display, child, &root, &child,
 		    &e_x_root, &e_y_root, &dest_x, &dest_y, &junk3);
       if (!child) {

@@ -43,6 +43,7 @@
 #  include <fltk3/Tooltip.h>
 #  include <fltk3/draw.h>
 #  include <fltk3/PagedDevice.h>
+#  include <fltk3/filename.h>
 #  include <stdio.h>
 #  include <stdlib.h>
 #  include "flstring.h"
@@ -53,7 +54,7 @@
 #  include <X11/Xlib.h>
 #  include <X11/keysym.h>
 
-static Fl_Xlib_Graphics_Driver fl_xlib_driver;
+static fltk3::XlibGraphicsDriver fl_xlib_driver;
 static fltk3::DisplayDevice fl_xlib_display(&fl_xlib_driver);
 FLTK3_EXPORT fltk3::GraphicsDriver *fltk3::graphics_driver = (fltk3::GraphicsDriver*)&fl_xlib_driver; // the current target device of graphics operations
 fltk3::SurfaceDevice* fltk3::SurfaceDevice::_surface = (fltk3::SurfaceDevice*)&fl_xlib_display; // the current target surface of graphics operations
@@ -294,7 +295,9 @@ static void convert_crlf(unsigned char *string, long& len) {
 ////////////////////////////////////////////////////////////////
 
 Display *fl_display;
-Window fltk3::message_window = 0;
+namespace fltk3 {
+ ::Window message_window = 0;
+}
 int fl_screen;
 XVisualInfo *fl_visual;
 Colormap fl_colormap;
@@ -707,8 +710,8 @@ int fltk3::h() {
 
 void fltk3::get_mouse(int &xx, int &yy) {
   fl_open_display();
-  Window root = RootWindow(fl_display, fl_screen);
-  Window c; int mx,my,cx,cy; unsigned int mask;
+  ::Window root = RootWindow(fl_display, fl_screen);
+  ::Window c; int mx,my,cx,cy; unsigned int mask;
   XQueryPointer(fl_display,root,&root,&c,&mx,&my,&cx,&cy,&mask);
   xx = mx;
   yy = my;
@@ -742,13 +745,13 @@ void fltk3::paste(fltk3::Widget &receiver, int clipboard) {
                     fl_xid(fltk3::first_window()), fl_event_time);
 }
 
-Window fl_dnd_source_window;
+::Window fl_dnd_source_window;
 Atom *fl_dnd_source_types; // null-terminated list of data types being supplied
 Atom fl_dnd_type;
 Atom fl_dnd_source_action;
 Atom fl_dnd_action;
 
-void fl_sendClientMessage(Window window, Atom message,
+void fl_sendClientMessage(::Window window, Atom message,
                                  unsigned long d0,
                                  unsigned long d1=0,
                                  unsigned long d2=0,
@@ -863,8 +866,8 @@ int fl_handle(const XEvent& thisevent)
 {
   XEvent xevent = thisevent;
   fl_xevent = &thisevent;
-  Window xid = xevent.xany.window;
-  static Window xim_win = 0;
+  ::Window xid = xevent.xany.window;
+  static ::Window xim_win = 0;
 
   if (fl_xim_ic && xevent.type == DestroyNotify &&
         xid != xim_win && !fl_find(xid))
@@ -900,7 +903,7 @@ int fl_handle(const XEvent& thisevent)
         fltk3::set_spot(spotf, spots, spot.x, spot.y, spot.width, spot.height);
 #else
     if (fltk3::first_window() && fltk3::first_window()->modal()) {
-      Window x  = fl_xid(fltk3::first_window());
+      ::Window x  = fl_xid(fltk3::first_window());
       if (x != xim_win) {
         xim_win  = x;
         XSetICValues(fl_xim_ic,
@@ -1166,7 +1169,7 @@ int fl_handle(const XEvent& thisevent)
       in_a_window = true;
       fl_dnd_source_window = data[0];
       fl_event_time = data[2];
-      Window to_window = fl_xevent->xclient.window;
+      ::Window to_window = fl_xevent->xclient.window;
       fltk3::e_text = unknown;
       fltk3::e_length = unknown_len;
       if (fltk3::handle(fltk3::DND_RELEASE, window)) {
@@ -1459,7 +1462,7 @@ int fl_handle(const XEvent& thisevent)
     // figure out where OS really put window
     XWindowAttributes actual;
     XGetWindowAttributes(fl_display, fl_xid(window), &actual);
-    Window cr; int X, Y, W = actual.width, H = actual.height;
+    ::Window cr; int X, Y, W = actual.width, H = actual.height;
     XTranslateCoordinates(fl_display, fl_xid(window), actual.root,
                           0, 0, &X, &Y, &cr);
 
@@ -1471,7 +1474,7 @@ int fl_handle(const XEvent& thisevent)
 
   case ReparentNotify: {
     int xpos, ypos;
-    Window junk;
+    ::Window junk;
 
     // on some systems, the ReparentNotify event is not handled as we would expect.
     XErrorHandler oldHandler = XSetErrorHandler(catchXExceptions());
@@ -1537,7 +1540,7 @@ void fltk3::Window::resize(int X,int Y,int W,int H) {
 
 void fl_fix_focus(); // in Fl.cxx
 
-Fl_X* Fl_X::set_xid(fltk3::Window* win, Window winxid) {
+Fl_X* Fl_X::set_xid(fltk3::Window* win, ::Window winxid) {
   Fl_X* xp = new Fl_X;
   xp->xid = winxid;
   xp->other_xid = 0;
@@ -1883,7 +1886,7 @@ preparePrintFront();
 #endif
 }
 
-Window fl_window;
+::Window fl_window;
 fltk3::Window *fltk3::Window::current_;
 GC fl_gc;
 
@@ -1902,7 +1905,7 @@ void fltk3::Window::make_current() {
 #endif
 }
 
-Window fl_xid_(const fltk3::Window* w)
+::Window fl_xid_(const fltk3::Window* w)
 {
   return Fl_X::i(w)->xid;
 }
@@ -1911,7 +1914,7 @@ Window fl_xid_(const fltk3::Window* w)
 int fltk3::Window::decorated_h()
 {
   if (parent() || !shown()) return h();
-  Window root, parent, *children;
+  ::Window root, parent, *children;
   unsigned n;
   XQueryTree(fl_display, i->xid, &root, &parent, &children, &n); if (n) XFree(children);
   XWindowAttributes attributes;
@@ -1922,7 +1925,7 @@ int fltk3::Window::decorated_h()
 int fltk3::Window::decorated_w()
 {
   if (parent() || !shown()) return w();
-  Window root, parent, *children;
+  ::Window root, parent, *children;
   unsigned n;
   XQueryTree(fl_display, i->xid, &root, &parent, &children, &n); if (n) XFree(children);
   XWindowAttributes attributes;
@@ -1940,7 +1943,7 @@ void fltk3::PagedDevice::print_window(fltk3::Window *win, int x_offset, int y_of
   win->show();
   fltk3::check();
   win->make_current();
-  Window root, parent, *children, child_win, from;
+  ::Window root, parent, *children, child_win, from;
   unsigned n;
   int bx, bt;
   from = fl_window;

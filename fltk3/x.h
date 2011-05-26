@@ -127,7 +127,7 @@ extern FLTK3_EXPORT void fl_delete_bitmask(fltk3::Bitmask bm);
 
 #if defined(FL_LIBRARY) || defined(FLTK3_INTERNALS)
 namespace fltk3 {
-  extern FLTK3_EXPORT Window message_window;
+  extern FLTK3_EXPORT ::Window message_window;
 }
 extern FLTK3_EXPORT void *fl_xftfont;
 FLTK3_EXPORT fltk3::Region XRectangleRegion(int x, int y, int w, int h); // in fltk3::rect.cxx

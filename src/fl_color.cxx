@@ -124,7 +124,7 @@ Fl_XColor fl_xmap[1][256];
 #    define fl_overlay 0
 #  endif
 
-void Fl_Xlib_Graphics_Driver::color(fltk3::Color i) {
+void fltk3::XlibGraphicsDriver::color(fltk3::Color i) {
   if (i & 0xffffff00) {
     unsigned rgb = (unsigned)i;
     fltk3::color((uchar)(rgb >> 24), (uchar)(rgb >> 16), (uchar)(rgb >> 8));
@@ -135,7 +135,7 @@ void Fl_Xlib_Graphics_Driver::color(fltk3::Color i) {
   }
 }
 
-void Fl_Xlib_Graphics_Driver::color(uchar r,uchar g,uchar b) {
+void fltk3::XlibGraphicsDriver::color(uchar r,uchar g,uchar b) {
   fltk3::GraphicsDriver::color( fltk3::rgb_color(r, g, b) );
   if(!fl_gc) return; // don't get a default gc if current window is not yet created/valid
   XSetForeground(fl_display, fl_gc, fl_xpixel(r,g,b));
