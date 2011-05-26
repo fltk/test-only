@@ -117,20 +117,17 @@ esac
 
 dnl Define the libraries and link options we will need.
 LINKFLTK="../lib/libfltk.a"
-LINKFLTKFORMS="../lib/libfltk_forms.a"
 LINKFLTKGL="../lib/libfltk_gl.a"
 LINKFLTKIMG="../lib/libfltk_images.a"
 GLDEMOS="gldemos"
 
 LIBEXT=".a"
 LIBNAME="../lib/libfltk.a"
-FLLIBNAME="../lib/libfltk_forms.a"
 GLLIBNAME="../lib/libfltk_gl.a"
 IMGLIBNAME="../lib/libfltk_images.a"
 CAIROLIBNAME="../lib/libfltk_cairo.a"
 
 LIBBASENAME="libfltk.a"
-FLLIBBASENAME="libfltk_forms.a"
 GLLIBBASENAME="libfltk_gl.a"
 IMGLIBBASENAME="libfltk_images.a"
 CAIROLIBBASENAME="libfltk_cairo.a"
@@ -188,7 +185,6 @@ AC_SUBST(CAIROLIBNAME)
 AC_SUBST(LIBEXT)
 AC_SUBST(LIBNAME)
 AC_SUBST(LINKFLTK)
-AC_SUBST(LINKFLTKFORMS)
 AC_SUBST(LINKFLTKGL)
 AC_SUBST(LINKFLTKIMG)
 
@@ -223,7 +219,6 @@ if test x$enable_shared = xyes; then
     case $uname in
 	Darwin*)
             DSONAME="libfltk.$FL_API_VERSION.dylib"
-            FLDSONAME="libfltk_forms.$FL_API_VERSION.dylib"
             GLDSONAME="libfltk_gl.$FL_API_VERSION.dylib"
             IMGDSONAME="libfltk_images.$FL_API_VERSION.dylib"
             CAIRODSONAME="libfltk_cairo.$FL_API_VERSION.dylib"
@@ -232,7 +227,6 @@ if test x$enable_shared = xyes; then
 
 	SunOS* | UNIX_S*)
             DSONAME="libfltk.so.$FL_API_VERSION"
-            FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
             CAIRODSONAME="libfltk_cairo.so.$FL_API_VERSION"
@@ -243,7 +237,6 @@ if test x$enable_shared = xyes; then
 	    ;;
 	HP-UX*)
             DSONAME="libfltk.sl.$FL_API_VERSION"
-            FLDSONAME="libfltk_forms.sl.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.sl.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.sl.$FL_API_VERSION"
             CAIRODSONAME="libfltk_cairo.sl.$FL_API_VERSION"
@@ -254,7 +247,6 @@ if test x$enable_shared = xyes; then
 	    ;;
 	IRIX*)
             DSONAME="libfltk.so.$FL_API_VERSION"
-            FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
             CAIRODSONAME="libfltk_cairo.so.$FL_API_VERSION"
@@ -265,7 +257,6 @@ if test x$enable_shared = xyes; then
 	    ;;
 	OSF1*)
             DSONAME="libfltk.so.$FL_API_VERSION"
-            FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
             CAIRODSONAME="libfltk_cairo.so.$FL_API_VERSION"
@@ -276,7 +267,6 @@ if test x$enable_shared = xyes; then
 	    ;;
 	Linux* | *BSD*)
             DSONAME="libfltk.so.$FL_API_VERSION"
-            FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
             CAIRODSONAME="libfltk_cairo.so.$FL_API_VERSION"
@@ -287,7 +277,6 @@ if test x$enable_shared = xyes; then
 	    ;;
 	AIX*)
             DSONAME="libfltk_s.a"
-            FLDSONAME="libfltk_forms_s.a"
             GLDSONAME="libfltk_gl_s.a"
             IMGDSONAME="libfltk_images_s.a"
             CAIRODSONAME="libfltk_cairo_s.a"
@@ -298,20 +287,17 @@ if test x$enable_shared = xyes; then
 	    PICFLAG=0
 	    if test x$enable_cygwin != xyes; then
 		DSONAME="mgwfltknox-$FL_API_VERSION.dll"
-		FLDSONAME="mgwfltknox_forms-$FL_API_VERSION.dll"
 		GLDSONAME="mgwfltknox_gl-$FL_API_VERSION.dll"
 		IMGDSONAME="mgwfltknox_images-$FL_API_VERSION.dll"
 		CAIRODSONAME="mgwfltknox_cairo-$FL_API_VERSION.dll"
 	    else
 		if test x$enable_x11 = xyes; then
 		    DSONAME="cygfltk-$FL_API_VERSION.dll"
-		    FLDSONAME="cygfltk_forms-$FL_API_VERSION.dll"
 		    GLDSONAME="cygfltk_gl-$FL_API_VERSION.dll"
 		    IMGDSONAME="cygfltk_images-$FL_API_VERSION.dll"
 		    CAIRODSONAME="cygfltk_cairo-$FL_API_VERSION.dll"
 		else
 		    DSONAME="cygfltknox-$FL_API_VERSION.dll"
-		    FLDSONAME="cygfltknox_forms-$FL_API_VERSION.dll"
 		    GLDSONAME="cygfltknox_gl-$FL_API_VERSION.dll"
 		    IMGDSONAME="cygfltknox_images-$FL_API_VERSION.dll"
 		    CAIRODSONAME="cygfltknox_cairo-$FL_API_VERSION.dll"
@@ -330,7 +316,6 @@ if test x$enable_shared = xyes; then
 	*)
             AC_MSG_WARN(Shared libraries may not be supported.  Trying -shared option with compiler.)
             DSONAME="libfltk.so.$FL_API_VERSION"
-            FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
             CAIRODSONAME="libfltk_cairo.so.$FL_API_VERSION"
@@ -338,7 +323,7 @@ if test x$enable_shared = xyes; then
 	    ;;
     esac
 
-    LINKSHARED="-L../src $FLTKCAIROOPTION -lfltk_images$SHAREDSUFFIX -lfltk_forms$SHAREDSUFFIX -lfltk$SHAREDSUFFIX"
+    LINKSHARED="-L../src $FLTKCAIROOPTION -lfltk_images$SHAREDSUFFIX -lfltk$SHAREDSUFFIX"
 else
     DSOCOMMAND="echo"
     DSOLINK=""
@@ -350,7 +335,7 @@ else
     PICFLAG=0
     SHAREDSUFFIX=""
     FLUID="fluid"
-    LINKSHARED="$LINKFLTKCAIRO ../lib/libfltk_images.a ../lib/libfltk_forms.a ../lib/libfltk.a"
+    LINKSHARED="$LINKFLTKCAIRO ../lib/libfltk_images.a ../lib/libfltk.a"
 fi
 
 AC_SUBST(DSOCOMMAND)

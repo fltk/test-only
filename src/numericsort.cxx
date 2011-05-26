@@ -48,9 +48,8 @@
 #      include <ndir.h>
 #    endif /* HAVE_NDIR_H */
 #  endif /* HAVE_DIRENT_H */
-#else /* For WIN32 variants */
-#  include <fltk3/filename.h>
 #endif /* !WIN32 || __CYGWIN__ */
+#include <fltk3/filename.h>
 
 /*
  * 'numericsort()' - Compare two directory entries, possibly with
