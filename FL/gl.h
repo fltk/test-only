@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -70,6 +69,8 @@
 #    include <GL/gl.h>
 #  endif
 
+#if 0 // FIXME: 123
+
 FL_EXPORT void gl_start();
 FL_EXPORT void gl_finish();
 
@@ -105,6 +106,8 @@ extern FL_EXPORT int gl_texture_pile_height();
 #endif
 
 FL_EXPORT void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
+
+#endif
 
 #endif // !FL_gl_H
 

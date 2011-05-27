@@ -29,6 +29,7 @@
 #  define Fl_H
 
 #include <fltk3/run.h>
+#include <fltk3/Widget.h>
 
 #ifdef FLTK_HAVE_CAIRO
 # include <FL/Fl_Cairo.H>
@@ -115,18 +116,33 @@ public: // should be private!
   static int reload_scheme(); // platform dependent
   static int scrollbar_size();
   static void scrollbar_size(int W);
-  static int wait();
-  static double wait(double time);
-  static int check();
-  static int ready();
 #endif
+  
+  static int wait() {
+    return fltk3::wait(); 
+  }
+  
+  static double wait(double time) {
+    return fltk3::wait(time); 
+  }
+  
+  static int check() {
+    return fltk3::check(); 
+  }
+  
+  static int ready() {
+    return fltk3::ready(); 
+  }
   
   static int run() { 
     return fltk3::run(); 
   }
 
+  static Fl_Widget *readqueue() {
+    return (Fl_Widget*)(fltk3::readqueue()->wrapper());
+  }
+  
 #if 0 // FIXME: 123
-  static Fl_Widget* readqueue();
   static void add_timeout(double t, Fl_Timeout_Handler,void* = 0); // platform dependent
   static void repeat_timeout(double t, Fl_Timeout_Handler, void* = 0); // platform dependent
   static int  has_timeout(Fl_Timeout_Handler, void* = 0);

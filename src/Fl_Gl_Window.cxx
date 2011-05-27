@@ -32,6 +32,7 @@ extern int fl_gl_load_plugin;
 
 static int temp = fl_gl_load_plugin;
 
+#include <fltk3/Wrapper.h>
 #include <fltk3/run.h>
 #include <fltk3/x.h>
 #ifdef __APPLE__
@@ -532,7 +533,31 @@ void fltk3::GlWindow::draw_overlay() {}
   buffers are swapped after this function is completed.
 */
 void fltk3::GlWindow::draw() {
-    fltk3::fatal("fltk3::GlWindow::draw() *must* be overriden. Please refer to the documentation.");
+  //FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
+  
+  if (pWrapper) { 
+    // We only do this tests if there is a wrapper connected to me.
+    if ( pWrapper->pVCalls & Wrapper::pVCallWidgetDraw ) { 
+      // if my flag is set, we are being called from the wrapper, so we simply
+      // continue with the original code. The wrapper mus clear the flag.
+    } else { 
+      // if my flag is clear, we are called from the core. So lets set the 
+      // flag and call the wrapper.
+      pWrapper->pVCalls |= Wrapper::pVCallWidgetDraw; 
+      ((WidgetWrapper*)pWrapper)->draw(); 
+      if ( (pWrapper->pVCalls & Wrapper::pVCallWidgetDraw) ) {
+        // If the flag is still set, the function was overridden in the wrapper.
+        // Clear the flag for the next call and abort.
+        pWrapper->pVCalls &= ~Wrapper::pVCallWidgetDraw; 
+        return; 
+      } else {
+        // If the wrapper returns with the flag cleared, the default code was 
+        // called and we continue with the original code.
+      }
+    } 
+  }
+  
+  fltk3::fatal("fltk3::GlWindow::draw() *must* be overriden. Please refer to the documentation.");
 }
 
 

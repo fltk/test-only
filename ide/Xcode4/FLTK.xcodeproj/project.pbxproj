@@ -473,6 +473,19 @@
 		C910D4FD13901FC1003643F5 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C910D4FF13901FC1003643F5 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C910D5091390206E003643F5 /* pixmap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C910D5081390206E003643F5 /* pixmap.cxx */; };
+		C910D51313903794003643F5 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
+		C910D51413903794003643F5 /* fltk_gl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA8E6EC230301E597B9D9AED /* fltk_gl.framework */; };
+		C910D51513903794003643F5 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05376DC900B2C885B847EA36 /* OpenGL.framework */; };
+		C910D51613903794003643F5 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACB2F49A22C3FB3E837EC61 /* AGL.framework */; };
+		C910D51813903794003643F5 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
+		C910D51913903794003643F5 /* fltk_gl.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = EA8E6EC230301E597B9D9AED /* fltk_gl.framework */; };
+		C910D52313903856003643F5 /* cube.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C910D5211390384D003643F5 /* cube.cxx */; };
+		C910D53113904487003643F5 /* Fl_Gl_Window.H in Headers */ = {isa = PBXBuildFile; fileRef = C910D5251390447B003643F5 /* Fl_Gl_Window.H */; };
+		C910D53213904487003643F5 /* gl_draw.H in Headers */ = {isa = PBXBuildFile; fileRef = C910D5261390447B003643F5 /* gl_draw.H */; };
+		C910D53313904487003643F5 /* gl.h in Headers */ = {isa = PBXBuildFile; fileRef = C910D5271390447B003643F5 /* gl.h */; };
+		C910D53413904487003643F5 /* gl2opengl.h in Headers */ = {isa = PBXBuildFile; fileRef = C910D5281390447B003643F5 /* gl2opengl.h */; };
+		C910D53513904487003643F5 /* glu.h in Headers */ = {isa = PBXBuildFile; fileRef = C910D5291390447B003643F5 /* glu.h */; };
+		C910D53613904487003643F5 /* glut.H in Headers */ = {isa = PBXBuildFile; fileRef = C910D52A1390447B003643F5 /* glut.H */; };
 		C915E2CB1382D16E00C5FD27 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C915E2CD1382D16E00C5FD27 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C915E2DA1382D8ED00C5FD27 /* Enumerations.H in Headers */ = {isa = PBXBuildFile; fileRef = 84CE79448708855561FEE498 /* Enumerations.H */; };
@@ -1593,6 +1606,18 @@
 			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
 		};
 		C910D50013901FC1003643F5 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		C910D51A13903794003643F5 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.fl";
@@ -2869,6 +2894,20 @@
 			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
 			remoteInfo = fltk;
 		};
+		C910D50C13903794003643F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4BF1A7FFEACF5F31B4127482 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk;
+		};
+		C910D50E13903794003643F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4BF1A7FFEACF5F31B4127482 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C13484C4A9262C58D8FA7242;
+			remoteInfo = fltk_gl;
+		};
 		C915E2C61382D16E00C5FD27 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4BF1A7FFEACF5F31B4127482 /* Project object */;
@@ -3746,6 +3785,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C910D51713903794003643F5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C910D51813903794003643F5 /* fltk.framework in CopyFiles */,
+				C910D51913903794003643F5 /* fltk_gl.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C915E2CC1382D16E00C5FD27 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4475,6 +4525,14 @@
 		C8AE10A8DDF53B8B27E3215A /* Fl_Choice.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Choice.H; path = ../../FL/Fl_Choice.H; sourceTree = SOURCE_ROOT; };
 		C910D50413901FC1003643F5 /* pixmap1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pixmap1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C910D5081390206E003643F5 /* pixmap.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pixmap.cxx; path = ../../test1/pixmap.cxx; sourceTree = "<group>"; };
+		C910D51E13903794003643F5 /* cube1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cube1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C910D5211390384D003643F5 /* cube.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cube.cxx; path = ../../test1/cube.cxx; sourceTree = "<group>"; };
+		C910D5251390447B003643F5 /* Fl_Gl_Window.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Gl_Window.H; path = ../../FL/Fl_Gl_Window.H; sourceTree = "<group>"; };
+		C910D5261390447B003643F5 /* gl_draw.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gl_draw.H; path = ../../FL/gl_draw.H; sourceTree = "<group>"; };
+		C910D5271390447B003643F5 /* gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gl.h; path = ../../FL/gl.h; sourceTree = "<group>"; };
+		C910D5281390447B003643F5 /* gl2opengl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gl2opengl.h; path = ../../FL/gl2opengl.h; sourceTree = "<group>"; };
+		C910D5291390447B003643F5 /* glu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glu.h; path = ../../FL/glu.h; sourceTree = "<group>"; };
+		C910D52A1390447B003643F5 /* glut.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = glut.H; path = ../../FL/glut.H; sourceTree = "<group>"; };
 		C915E2D21382D16E00C5FD27 /* hello1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C915E2D71382D83A00C5FD27 /* hello.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hello.cxx; path = ../../test1/hello.cxx; sourceTree = "<group>"; };
 		C915E36A1383FA8800C5FD27 /* hello2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello2.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -5448,6 +5506,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C910D51213903794003643F5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C910D51313903794003643F5 /* fltk.framework in Frameworks */,
+				C910D51413903794003643F5 /* fltk_gl.framework in Frameworks */,
+				C910D51513903794003643F5 /* OpenGL.framework in Frameworks */,
+				C910D51613903794003643F5 /* AGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C915E2CA1382D16E00C5FD27 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -6209,6 +6278,7 @@
 			isa = PBXGroup;
 			children = (
 				7E097C61B5952D56DFB93ECF /* Headers */,
+				C910D5241390441F003643F5 /* Headers1 */,
 				27C65F509527076EB26E9C0F /* Fl_Gl_Choice.cxx */,
 				A7A692EB67C5CBE35D4A4B5C /* Fl_Gl_Device_Plugin.cxx */,
 				8E81EE378D475F9CFDE296C9 /* Fl_Gl_Overlay.cxx */,
@@ -6640,6 +6710,27 @@
 			name = pixmap1;
 			sourceTree = "<group>";
 		};
+		C910D520139037AD003643F5 /* cube */ = {
+			isa = PBXGroup;
+			children = (
+				C910D5211390384D003643F5 /* cube.cxx */,
+			);
+			name = cube;
+			sourceTree = "<group>";
+		};
+		C910D5241390441F003643F5 /* Headers1 */ = {
+			isa = PBXGroup;
+			children = (
+				C910D5251390447B003643F5 /* Fl_Gl_Window.H */,
+				C910D5261390447B003643F5 /* gl_draw.H */,
+				C910D5271390447B003643F5 /* gl.h */,
+				C910D5281390447B003643F5 /* gl2opengl.h */,
+				C910D5291390447B003643F5 /* glu.h */,
+				C910D52A1390447B003643F5 /* glut.H */,
+			);
+			name = Headers1;
+			sourceTree = "<group>";
+		};
 		C915E2D51382D1AC00C5FD27 /* hello1 */ = {
 			isa = PBXGroup;
 			children = (
@@ -6651,6 +6742,7 @@
 		C915E2D61382D1C600C5FD27 /* Test1 */ = {
 			isa = PBXGroup;
 			children = (
+				C910D520139037AD003643F5 /* cube */,
 				C915E2D51382D1AC00C5FD27 /* hello1 */,
 				C910D50713901FE4003643F5 /* pixmap1 */,
 			);
@@ -7198,6 +7290,7 @@
 				C915E2D21382D16E00C5FD27 /* hello1.app */,
 				C915E36A1383FA8800C5FD27 /* hello2.app */,
 				C910D50413901FC1003643F5 /* pixmap1.app */,
+				C910D51E13903794003643F5 /* cube1.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -7591,6 +7684,12 @@
 				C915E3581382D8ED00C5FD27 /* x.H in Headers */,
 				C915E3591382D8ED00C5FD27 /* Fl_Paged_Device.H in Headers */,
 				C965812A1386B8EF00DF7523 /* show_colormap.h in Headers */,
+				C910D53113904487003643F5 /* Fl_Gl_Window.H in Headers */,
+				C910D53213904487003643F5 /* gl_draw.H in Headers */,
+				C910D53313904487003643F5 /* gl.h in Headers */,
+				C910D53413904487003643F5 /* gl2opengl.h in Headers */,
+				C910D53513904487003643F5 /* glu.h in Headers */,
+				C910D53613904487003643F5 /* glut.H in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8948,6 +9047,27 @@
 			productReference = C910D50413901FC1003643F5 /* pixmap1.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C910D50A13903794003643F5 /* cube1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C910D51B13903794003643F5 /* Build configuration list for PBXNativeTarget "cube1" */;
+			buildPhases = (
+				C910D50F13903794003643F5 /* Resources */,
+				C910D51013903794003643F5 /* Sources */,
+				C910D51213903794003643F5 /* Frameworks */,
+				C910D51713903794003643F5 /* CopyFiles */,
+			);
+			buildRules = (
+				C910D51A13903794003643F5 /* PBXBuildRule */,
+			);
+			dependencies = (
+				C910D50B13903794003643F5 /* PBXTargetDependency */,
+				C910D50D13903794003643F5 /* PBXTargetDependency */,
+			);
+			name = cube1;
+			productName = cube;
+			productReference = C910D51E13903794003643F5 /* cube1.app */;
+			productType = "com.apple.product-type.application";
+		};
 		C915E2C41382D16E00C5FD27 /* hello1 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C915E2CF1382D16E00C5FD27 /* Build configuration list for PBXNativeTarget "hello1" */;
@@ -9393,6 +9513,7 @@
 				C915E2C41382D16E00C5FD27 /* hello1 */,
 				C915E35C1383FA8800C5FD27 /* hello2 */,
 				C910D4F613901FC1003643F5 /* pixmap1 */,
+				C910D50A13903794003643F5 /* cube1 */,
 			);
 		};
 /* End PBXProject section */
@@ -9850,6 +9971,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C910D4F913901FC1003643F5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C910D50F13903794003643F5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -10707,6 +10835,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				C910D5091390206E003643F5 /* pixmap.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C910D51013903794003643F5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C910D52313903856003643F5 /* cube.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11592,6 +11728,16 @@
 			isa = PBXTargetDependency;
 			target = A57FDE871C99A52BEEDEE68C /* fltk */;
 			targetProxy = C910D4F813901FC1003643F5 /* PBXContainerItemProxy */;
+		};
+		C910D50B13903794003643F5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk */;
+			targetProxy = C910D50C13903794003643F5 /* PBXContainerItemProxy */;
+		};
+		C910D50D13903794003643F5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C13484C4A9262C58D8FA7242 /* fltk_gl */;
+			targetProxy = C910D50E13903794003643F5 /* PBXContainerItemProxy */;
 		};
 		C915E2C51382D16E00C5FD27 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -15820,6 +15966,69 @@
 			};
 			name = Release;
 		};
+		C910D51C13903794003643F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "USING_XCODE=1";
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode3/,
+					../../,
+					../../png,
+					../../jpeg,
+				);
+				INFOPLIST_FILE = "plists/cube-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_NAME = cube1;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		C910D51D13903794003643F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "USING_XCODE=1";
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode3/,
+					../../,
+					../../png,
+					../../jpeg,
+				);
+				INFOPLIST_FILE = "plists/cube-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_NAME = cube1;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Release;
+		};
 		C915E2D01382D16E00C5FD27 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -17353,6 +17562,15 @@
 			buildConfigurations = (
 				C910D50213901FC1003643F5 /* Debug */,
 				C910D50313901FC1003643F5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C910D51B13903794003643F5 /* Build configuration list for PBXNativeTarget "cube1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C910D51C13903794003643F5 /* Debug */,
+				C910D51D13903794003643F5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

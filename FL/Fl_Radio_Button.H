@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -32,12 +31,21 @@
 #ifndef Fl_Radio_Button_H
 #define Fl_Radio_Button_H
 
+#include <fltk3/RadioButton.h>
 #include "Fl_Button.H"
 
+
 class FL_EXPORT Fl_Radio_Button : public Fl_Button {
+  
 public:
-    Fl_Radio_Button(int x,int y,int w,int h,const char *l=0)
-	: Fl_Button(x,y,w,h,l) {type(FL_RADIO_BUTTON);}
+  
+  Fl_Radio_Button() { /* empty */ }
+  
+  Fl_Radio_Button(int x,int y,int w,int h,const char *l=0) {
+    _p = new fltk3::RadioLightButton(x, y, w, h, l);
+    _p->wrapper(this);
+  }
+
 };
 
 #endif

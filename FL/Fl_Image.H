@@ -39,7 +39,6 @@ struct Fl_Label;
 
 namespace fltk3 {
   inline Fl_Image *_3to1_image(Image *w) { return (Fl_Image*)w->wrapper(); }
-  //inline Widget *_1to3_widget(Fl_Widget *w) { return ((fltk3::Widget*)_p); }
 }
 
 class FL_EXPORT Fl_Image : public fltk3::Wrapper {

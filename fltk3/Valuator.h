@@ -33,6 +33,8 @@
 
 #include "Widget.h"
 
+class Fl_Valuator;
+
 namespace fltk3 {
   
   // shared type() values for classes that work in both directions:
@@ -53,6 +55,8 @@ namespace fltk3 {
    For consistency the symbol fltk3::VERTICAL is defined as zero.
    */
   class FLTK3_EXPORT Valuator : public fltk3::Widget {
+    
+    friend class ::Fl_Valuator;
     
     double value_;
     double previous_value_;

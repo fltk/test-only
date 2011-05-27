@@ -108,9 +108,27 @@ namespace fltk3 {
   class WidgetWrapper : public Wrapper {
   public:
     virtual ~WidgetWrapper() {}
-    FLTK3_WRAPPER_VCALLS_OBJECT(draw(),
-                                draw(),
-                                Draw)
+    //FLTK3_WRAPPER_VCALLS_OBJECT(draw(),
+    //                            draw(),
+    //                            Draw)
+    
+    virtual void draw() {
+      if ( pVCalls & pVCallWidgetDraw ) {
+        // if my flag is set, we are called from the object that we wrap.
+        // Tell the caller that this function was not overridden by clearing 
+        // the flag
+        pVCalls &= ~pVCallWidgetDraw;
+      } else {
+        // if my flag is not set, we were called from the wrapper side, probably
+        // from the function overriding us. Set our flag and call the original
+        // function
+        pVCalls |= pVCallWidgetDraw;
+        ((fltk3::Widget*)_p)->draw();
+        pVCalls &= ~pVCallWidgetDraw;
+      }
+    }
+
+    
     FLTK3_WRAPPER_VCALLS_OBJECT_INT(handle(int event),
                                     handle(event),
                                     Handle)

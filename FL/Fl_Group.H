@@ -52,13 +52,16 @@ protected:
 public:
   Fl_Group(int,int,int,int, const char * = 0);
 
+  void begin() {
+    ((fltk3::Group*)_p)->begin();
+  }
+    
   void end() {
     ((fltk3::Group*)_p)->end();
   }
   
 #if 0 // FIXME: 123
   int handle(int);
-  void begin();
   static Fl_Group *current();
   static void current(Fl_Group *g);
   int children() const {return children_;}
