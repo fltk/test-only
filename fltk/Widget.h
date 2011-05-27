@@ -294,39 +294,7 @@ namespace fltk {
     void* foreach(const AssociationType&, AssociationFunctor&) const;
     bool  remove(const AssociationType&, void* data);
     bool  find(const AssociationType&, void* data) const;
-    
-#ifdef FLTK_1_WIDGET  // back-compatability section:
-    
-    Box*	down_box()		const { return box(); }
-    Box*	slider()		const { return buttonbox(); }
-    Box*	box2()			const { return box(); }
-    Box*	fly_box()		const { return box(); }
-    Color	color2()		const { return selection_color(); }
-    Color	color3()		const { return buttoncolor(); }
-    Color	down_labelcolor()	const { return selection_textcolor(); }
-    Color	fly_color()		const { return highlight_color(); }
-    Color	selected_textcolor()	const { return selection_textcolor(); }
-    Color	cursor_color()		const { return selection_color(); }
-    float text_size()		const { return textsize(); }
-    float label_size()		const { return labelsize(); }
-    
-    void down_box(Box* a)		{ box(a); }
-    void slider(Box* a)		{ buttonbox(a); }
-    void fly_box(Box*)		{ }
-    void color(Color a, Color b)	{ color(a); selection_color(b); }
-    void color2(Color a)		{ selection_color(a); }
-    void color3(Color a)		{ buttoncolor(a); }
-    void down_labelcolor(Color a)	{ selection_textcolor(a); }
-    void labelfont(unsigned a)	{ labelfont(font(a)); }
-    void fly_color(Color a)	{ highlight_color(a); }
-    void textfont(unsigned a)	{ textfont(font(a)); }
-    void selected_textcolor(Color a) { selection_textcolor(a); }
-    void cursor_color(Color a)	{ selection_color(a); }
-    void text_size(float n)	{ textsize(n); }
-    void label_size(float n)	{ labelsize(n); }
-    
-#endif
-    
+        
   private:
     
     const char*		label_;

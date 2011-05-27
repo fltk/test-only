@@ -50,6 +50,8 @@ typedef long fl_intptr_t;
 typedef unsigned long fl_uintptr_t;
 #endif
 
+class Fl_Widget;
+
 namespace fltk3 { 
   class Widget; 
   class Group;
@@ -111,6 +113,7 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT Widget : public Rectangle {
     friend class Group;
+    friend class ::Fl_Widget;
     
     fltk3::Group* parent_;
     fltk3::Callback* callback_;
@@ -859,7 +862,7 @@ namespace fltk3 {
      \return a bitmap of flags describing the kind of damage to the widget
      \see damage(uchar), clear_damage(uchar)
      */
-    uchar damage() const {return damage_;}
+    fltk3::Damage damage() const {return (fltk3::Damage)damage_;}
     
     /** Clears or sets the damage flags.
      Damage flags are cleared when parts of the widget drawing is repaired.
