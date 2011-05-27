@@ -39,9 +39,11 @@ static void default_callback(const char*) {}
 static void		(*current_callback)(const char*) = default_callback;
 static const char	*current_label = "Ok";
 
-// Prototype for a local function
+#ifdef _WIN32
+// Prototype for local functions regarding the WIN32 filechooser
 static wchar_t* patternToWin(const char* const pat, int len);
 static unsigned windowsWLen(const wchar_t* const string);
+#endif
 
 // Do a file chooser callback...
 static void callback(FileChooser *, void*) {
@@ -275,7 +277,7 @@ const char * fltk::file_chooser(const char *message, const char *pattern,
   else return 0;
 }
 
-
+#ifdef _WIN32
 // This function converts a FLTK pattern to Windows' format.
 // It is only static and not available via the API.
 wchar_t* patternToWin(const char* const pat, int len) {
@@ -350,6 +352,7 @@ unsigned windowsWLen(const wchar_t* const string) {
     if (!string[out] && !string[out+1])
       return out;
 }
+#endif
 
 //
 // End of "$Id$".

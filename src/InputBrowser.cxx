@@ -66,15 +66,14 @@ InputBrowser::InputBrowser(int x, int y, int w, int h, const char *l)
   ibinput = &m_input;
 }
 
-void
-InputBrowser::input_cb(Input *w, InputBrowser *ib)
-{
+void InputBrowser::input_cb(Input *w, InputBrowser *ib) {
   ib->do_callback();
 }
 
 // these are only used when in grabbed state so only one exists at once
 static InputBrowser *ib;
 static Browser *browser;
+static bool toggle;
 
 namespace fltk {
 
@@ -82,13 +81,12 @@ class ComboWindow : public MenuWindow {
   public:
     int handle(int);
 //    ComboWindow(int x, int y, int w, int h) : MenuWindow(x, y, w, h) { box(NO_BOX); }
-    ComboWindow(int x, int y, int w, int h) : MenuWindow(x, y, w, h) { ; }
+    ComboWindow(int x, int y, int w, int h) : MenuWindow(x, y, w, h) {}
 };
 
 }
 
-int
-ComboWindow::handle(int event) {
+int ComboWindow::handle(int event) {
   switch (event) {
   case MOVE:
   case DRAG:
@@ -123,8 +121,7 @@ extern void browser_glyph(int glyph, const Rectangle&);
 ComboBrowser::ComboBrowser(int x, int y, int w, int h)
 : Browser(x, y, w, h, 0) {}
 
-int
-ComboBrowser::handle(int event) {
+int ComboBrowser::handle(int event) {
   if(event_key()==DownKey && (!item() || children()==1)) {
     item(child(0));
     fltk::focus(item());
@@ -138,11 +135,13 @@ ComboBrowser::handle(int event) {
         (event_key()!=EscapeKey) &&
 	(event_key()!=UpKey) &&
 	(event_key()!=DownKey) && 
-	(event_key()!=ReturnKey && !item()) )
+	(event_key()!=ReturnKey && !item()) ) 
       // give a chance to the browser to handle the menu shortcuts
       return ibinput->handle(KEY);
   }
 
+  // This "was_wheel" section seems pretty counter-intuitive; if 
+  // I scroll the mouse 8 times I expect it to move 8 times.
   static bool was_wheel=false;
   if(was_wheel) {
     was_wheel=false;
@@ -165,6 +164,10 @@ ComboBrowser::handle(int event) {
 
   case PUSH: {
     if (!event_inside(Rectangle(0, 0, w(), h()))) {
+      // If we've just clicked on the button, set toggle
+      // the button is a h() x h() square
+      if (event_x() < ib->w() && event_x() > ib->w() - ib->h() && event_y() > -ib->h() && event_y() < 0) 
+	toggle = true;
       ib->hide_popup();
       // Rectangle below is InputBrowser area
       if (event_inside(Rectangle(0, -ib->h(), ib->w(), 0))) ib->send(PUSH);
@@ -185,11 +188,11 @@ ComboBrowser::handle(int event) {
       fltk::pushed(this);
       return 0;
     }
-
+    break;
+  
   default:
     break;
   }
-
   return Browser::handle(event);
 }
 
@@ -231,8 +234,7 @@ public:
 } share_list; // only one instance of this.
 
 
-int
-InputBrowser::handle(int event) {
+int InputBrowser::handle(int event) {
   int TX, TY = 0, TW, TH = h();
   if(type()&NONEDITABLE) {
       TX = 0;
@@ -271,13 +273,16 @@ InputBrowser::handle(int event) {
     case MOUSEWHEEL: {
 
       // prevent double events
-      static bool was_wheel=false;
+      // BS: Why? What possible purpose does that serve?
+      //     If I roll the mousewheel 8 times, I expect it to cycle through
+      //     8 elements.
+     /* static bool was_wheel=false;
       if(was_wheel) {
 	  was_wheel=false;
 	  return 1;
       } else {
 	  was_wheel=true;
-      }
+      }*/
 
       // horizontal wheel
       if (event_dy() == 0)
@@ -307,10 +312,15 @@ InputBrowser::handle(int event) {
     }
 
     case PUSH: {
-      if (!win || !win->visible())
-	  popup();
-      else
-	  hide_popup();
+      // BS: The following lines are unnessecary; the PUSH in the ComboBrowser
+      // automatically calls exit_modal() before this.
+      // Further, when exec returns it calls hide(); which will destroy the window
+//      if ((!win || !win->visible())) {
+      popup();
+//      }
+//      else 
+//	hide_popup();
+      
       return 1;
     }
 
@@ -324,8 +334,7 @@ InputBrowser::handle(int event) {
   return 0;
 }
 
-void
-InputBrowser::draw() {
+void InputBrowser::draw() {
   drawstyle(style(),flags());
   minw_ = w();
   Rectangle r(w(),h()); box()->inset(r);
@@ -358,15 +367,19 @@ InputBrowser::draw() {
   }
 }
 
-void
-InputBrowser::hide_popup() {
+void InputBrowser::hide_popup() {
   if (win && win->visible()) {
     fltk::exit_modal();
   }
 }
 
-void
-InputBrowser::popup() {
+void InputBrowser::popup() {
+  // if the user is pressing the down button to close the popup, honour this!
+  if (toggle) {
+    toggle = false;
+    return;
+  }
+
   bool resize_only = false;
 
   if (!win || !win->visible()) {
@@ -416,21 +429,23 @@ InputBrowser::popup() {
   // I don't know what this code does, but it doesn't work
   // WAS: I believe it is trying to make the menu go above the combobox
   //      if it does not fit below on the screen
-  /*      const Monitor& monitor = Monitor::find(event_x_root(), event_y_root());
-	  int down = monitor.h() - Y;
-	  int up = event_y_root() - event_y();
-	  if (H > down) {
-	  if (up > down) {
-	  Y = event_y_root() - event_y() - H;
-	  if (Y < 0) { Y = 0; H = up; }
-	  } else {
-	  H = down;
-	  }
-	  }
-	  if (X + W > monitor.r()) {
-	  X = monitor.r() - W;
-	  if (X < 0) { X = 0; W = monitor.r(); }
-	  }*/
+  // BS: It works fine, and has been re-incorporated as it's terrifically
+  //     useful 
+  const Monitor& monitor = Monitor::find(event_x_root(), event_y_root());
+  int down = monitor.h() - Y;
+  int up = event_y_root() - event_y();
+  if (H > down) {
+    if (up > down) {
+      Y = event_y_root() - event_y() - H;
+      if (Y < 0) { Y = 0; H = up; }
+    } else {
+      H = down;
+    }
+  }
+  if (X + W > monitor.r()) {
+    X = monitor.r() - W;
+    if (X < 0) { X = 0; W = monitor.r(); }
+  }
 
   win->resize(X, Y, W, H);
   list->Widget::resize(W, H);

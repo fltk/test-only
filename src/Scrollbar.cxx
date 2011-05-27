@@ -187,7 +187,7 @@ int Scrollbar::handle(int event) {
     }
     goto J1;
   case DRAG:
-    if (which_pushed==SLIDER) {redraw(); return Slider::handle(event, r);}
+    if (which_pushed==SLIDER) {redraw(DAMAGE_HIGHLIGHT); return Slider::handle(event, r);}
     if (which_part == SLIDER) which_part = NOTHING;
     // it is okay to switch between arrows and nothing, but no other
     // changes are allowed:
@@ -241,7 +241,7 @@ int Scrollbar::handle(int event) {
 }
 
 void Scrollbar::draw() {
-  if (damage()&DAMAGE_ALL) draw_frame();
+  if (damage()&(DAMAGE_ALL|DAMAGE_HIGHLIGHT)) draw_frame();
 
   Rectangle r(w(),h()); box()->inset(r);
 

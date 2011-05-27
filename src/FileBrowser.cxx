@@ -159,10 +159,7 @@ FileBrowser::load(const char     *directory,// I - Directory to load
       {
         sprintf(filename, "%c:/", i);
 
-	if (i < 'C')
-	  add(filename, icon);
-	else
-	  add(filename, icon);
+	add(filename, icon);
 
 	num_files ++;
       }

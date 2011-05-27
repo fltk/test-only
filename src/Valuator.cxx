@@ -232,7 +232,7 @@ void Valuator::handle_drag(double v) {
   value. It may call the callback. */
 void Valuator::handle_release() {
   if (when()&WHEN_RELEASE && !pushed()) {
-    // insure changed() is off even if no callback is done.  It may have
+    // ensure changed() is off even if no callback is done.  It may have
     // been turned on by the drag, and then the slider returned to it's
     // initial position:
     clear_changed();
