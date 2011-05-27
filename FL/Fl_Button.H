@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -29,6 +28,7 @@
 #ifndef Fl_Button_H
 #define Fl_Button_H
 
+#include <fltk3/Button.h>
 #include "Fl_Widget.H"
 
 #define FL_NORMAL_BUTTON	0
@@ -36,27 +36,53 @@
 #define FL_RADIO_BUTTON		(FL_RESERVED_TYPE+2)
 #define FL_HIDDEN_BUTTON	3
 
+#if 0 // FIXME: 123
 extern FL_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
 
 class Fl_Widget_Tracker;
+#endif
 
 class FL_EXPORT Fl_Button : public Fl_Widget {
 
 protected:
   
+#if 0 // FIXME: 123
   static void key_release_timeout(void*);
   void simulate_key_action();
   virtual void draw();
-
+#endif
+  
 public:
 
+  Fl_Button() {}
+
+  Fl_Button(int x, int y, int w, int h, const char *label = 0) {
+    _p = new fltk3::Button(x, y, w, h, label);
+    _p->wrapper(this);
+  }
+
+  int value(int v) {
+    return ((fltk3::Button*)_p)->value(v);
+  }
+  
+  char value() const {
+    return ((fltk3::Button*)_p)->value();
+  }
+  
+  int set() {
+    return ((fltk3::Button*)_p)->set();
+  }
+  
+  int clear() {
+    return ((fltk3::Button*)_p)->clear();
+  }
+  
+  void setonly() {
+    ((fltk3::Button*)_p)->setonly();
+  }
+  
+#if 0 // FIXME: 123
   virtual int handle(int);
-  Fl_Button(int X, int Y, int W, int H, const char *L = 0);
-  int value(int v);
-  char value() const {return value_;}
-  int set() {return value(1);}
-  int clear() {return value(0);}
-  void setonly();
   int shortcut() const {return shortcut_;}
   void shortcut(int s) {shortcut_ = s;}
   Fl_Boxtype down_box() const {return (Fl_Boxtype)down_box_;}
@@ -64,6 +90,8 @@ public:
   void shortcut(const char *s) {shortcut(fl_old_shortcut(s));}
   Fl_Color down_color() const {return selection_color();}
   void down_color(unsigned c) {selection_color(c);}
+#endif
+  
 };
 
 #endif

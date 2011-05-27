@@ -470,6 +470,9 @@
 		C734B46832FFC64A9397F6AE /* Fl_PNG_Image.cxx in Sources */ = {isa = PBXBuildFile; fileRef = CE1157541DFCB8DC69A00345 /* Fl_PNG_Image.cxx */; };
 		C814931FE2E8127B4DD729FD /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C8D2445DE4DB272D6140EB4D /* ps_image.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 1C75365D167645656C3A6752 /* ps_image.cxx */; };
+		C910D4FD13901FC1003643F5 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
+		C910D4FF13901FC1003643F5 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
+		C910D5091390206E003643F5 /* pixmap.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C910D5081390206E003643F5 /* pixmap.cxx */; };
 		C915E2CB1382D16E00C5FD27 /* fltk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C915E2CD1382D16E00C5FD27 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C915E2DA1382D8ED00C5FD27 /* Enumerations.H in Headers */ = {isa = PBXBuildFile; fileRef = 84CE79448708855561FEE498 /* Enumerations.H */; };
@@ -1578,6 +1581,18 @@
 			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
 		};
 		C7AD5A2EA43D3ED3CB9D65A3 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.fl";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx",
+				"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}";
+		};
+		C910D50013901FC1003643F5 /* PBXBuildRule */ = {
 			isa = PBXBuildRule;
 			compilerSpec = com.apple.compilers.proxy.script;
 			filePatterns = "*.fl";
@@ -2847,6 +2862,13 @@
 			remoteGlobalIDString = 9EA6FF727BC736133B0B85A1;
 			remoteInfo = pixmap;
 		};
+		C910D4F813901FC1003643F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4BF1A7FFEACF5F31B4127482 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A57FDE871C99A52BEEDEE68C;
+			remoteInfo = fltk;
+		};
 		C915E2C61382D16E00C5FD27 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4BF1A7FFEACF5F31B4127482 /* Project object */;
@@ -3714,6 +3736,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C910D4FE13901FC1003643F5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C910D4FF13901FC1003643F5 /* fltk.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C915E2CC1382D16E00C5FD27 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -4441,6 +4473,8 @@
 		C7C5A11DD7448F61DFC69398 /* glpuzzle.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = glpuzzle.cxx; path = ../../test/glpuzzle.cxx; sourceTree = SOURCE_ROOT; };
 		C84F99F5AC8C6517F45055B0 /* jdmerge.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jdmerge.c; path = ../../jpeg/jdmerge.c; sourceTree = SOURCE_ROOT; };
 		C8AE10A8DDF53B8B27E3215A /* Fl_Choice.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Choice.H; path = ../../FL/Fl_Choice.H; sourceTree = SOURCE_ROOT; };
+		C910D50413901FC1003643F5 /* pixmap1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pixmap1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C910D5081390206E003643F5 /* pixmap.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pixmap.cxx; path = ../../test1/pixmap.cxx; sourceTree = "<group>"; };
 		C915E2D21382D16E00C5FD27 /* hello1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C915E2D71382D83A00C5FD27 /* hello.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hello.cxx; path = ../../test1/hello.cxx; sourceTree = "<group>"; };
 		C915E36A1383FA8800C5FD27 /* hello2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hello2.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -5403,6 +5437,14 @@
 				A749C4ADD4C26B198214260A /* fltk.framework in Frameworks */,
 				B4BC9DB7D7B4E290A81FB8E8 /* fltk_png.framework in Frameworks */,
 				D400876E21DFE46F52E0B4A6 /* fltk_jpeg.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C910D4FC13901FC1003643F5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C910D4FD13901FC1003643F5 /* fltk.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6590,6 +6632,14 @@
 			name = checkers;
 			sourceTree = "<group>";
 		};
+		C910D50713901FE4003643F5 /* pixmap1 */ = {
+			isa = PBXGroup;
+			children = (
+				C910D5081390206E003643F5 /* pixmap.cxx */,
+			);
+			name = pixmap1;
+			sourceTree = "<group>";
+		};
 		C915E2D51382D1AC00C5FD27 /* hello1 */ = {
 			isa = PBXGroup;
 			children = (
@@ -6602,6 +6652,7 @@
 			isa = PBXGroup;
 			children = (
 				C915E2D51382D1AC00C5FD27 /* hello1 */,
+				C910D50713901FE4003643F5 /* pixmap1 */,
 			);
 			name = Test1;
 			sourceTree = "<group>";
@@ -7146,6 +7197,7 @@
 				C9165EAF1291A304003FF4F0 /* utf8.app */,
 				C915E2D21382D16E00C5FD27 /* hello1.app */,
 				C915E36A1383FA8800C5FD27 /* hello2.app */,
+				C910D50413901FC1003643F5 /* pixmap1.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -8876,6 +8928,26 @@
 			productReference = 6F994D2DFFEA5301950F21B3 /* rotated_text.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C910D4F613901FC1003643F5 /* pixmap1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C910D50113901FC1003643F5 /* Build configuration list for PBXNativeTarget "pixmap1" */;
+			buildPhases = (
+				C910D4F913901FC1003643F5 /* Resources */,
+				C910D4FA13901FC1003643F5 /* Sources */,
+				C910D4FC13901FC1003643F5 /* Frameworks */,
+				C910D4FE13901FC1003643F5 /* CopyFiles */,
+			);
+			buildRules = (
+				C910D50013901FC1003643F5 /* PBXBuildRule */,
+			);
+			dependencies = (
+				C910D4F713901FC1003643F5 /* PBXTargetDependency */,
+			);
+			name = pixmap1;
+			productName = pixmap;
+			productReference = C910D50413901FC1003643F5 /* pixmap1.app */;
+			productType = "com.apple.product-type.application";
+		};
 		C915E2C41382D16E00C5FD27 /* hello1 */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C915E2CF1382D16E00C5FD27 /* Build configuration list for PBXNativeTarget "hello1" */;
@@ -9320,6 +9392,7 @@
 				E167C0E81B125EBADAC8ED73 /* valuators */,
 				C915E2C41382D16E00C5FD27 /* hello1 */,
 				C915E35C1383FA8800C5FD27 /* hello2 */,
+				C910D4F613901FC1003643F5 /* pixmap1 */,
 			);
 		};
 /* End PBXProject section */
@@ -9770,6 +9843,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C82F55B77BDFE26B6897FE76 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C910D4F913901FC1003643F5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -10619,6 +10699,14 @@
 				438CCCA43724B2E59680EF6B /* template_panel.cxx in Sources */,
 				27B4C89E8CBF260313ACA42E /* undo.cxx in Sources */,
 				B7D0770AC83AA04E8E12B76E /* widget_panel.cxx in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C910D4FA13901FC1003643F5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C910D5091390206E003643F5 /* pixmap.cxx in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11499,6 +11587,11 @@
 			isa = PBXTargetDependency;
 			target = C13484C4A9262C58D8FA7242 /* fltk_gl */;
 			targetProxy = E815B04FEBE5E16EBC1829AC /* PBXContainerItemProxy */;
+		};
+		C910D4F713901FC1003643F5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A57FDE871C99A52BEEDEE68C /* fltk */;
+			targetProxy = C910D4F813901FC1003643F5 /* PBXContainerItemProxy */;
 		};
 		C915E2C51382D16E00C5FD27 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -15664,6 +15757,69 @@
 			};
 			name = Debug;
 		};
+		C910D50213901FC1003643F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "USING_XCODE=1";
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode3/,
+					../../,
+					../../png,
+					../../jpeg,
+				);
+				INFOPLIST_FILE = "plists/pixmap-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_NAME = pixmap1;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Debug;
+		};
+		C910D50313901FC1003643F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "USING_XCODE=1";
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode3/,
+					../../,
+					../../png,
+					../../jpeg,
+				);
+				INFOPLIST_FILE = "plists/pixmap-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+				);
+				PRODUCT_NAME = pixmap1;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+			};
+			name = Release;
+		};
 		C915E2D01382D16E00C5FD27 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -17188,6 +17344,15 @@
 			buildConfigurations = (
 				1373D54F13CA9B830F63E0A6 /* Debug */,
 				BC600252A4D09B60D0F85504 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C910D50113901FC1003643F5 /* Build configuration list for PBXNativeTarget "pixmap1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C910D50213901FC1003643F5 /* Debug */,
+				C910D50313901FC1003643F5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

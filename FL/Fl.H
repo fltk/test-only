@@ -80,12 +80,30 @@ public: // should be private!
   static int add_awake_handler_(Fl_Awake_Handler, void*);
   static int get_awake_handler_(Fl_Awake_Handler&, void*&);
   static double version();
-  static int arg(int argc, char **argv, int& i);
-  static int args(int argc, char **argv, int& i, Fl_Args_Handler cb = 0);
-  static void args(int argc, char **argv);
+#endif
+  
+  static int arg(int argc, char **argv, int& i) {
+    return fltk3::arg(argc, argv, i);
+  }
+  
+  static int args(int argc, char **argv, int& i, Fl_Args_Handler cb = 0) {
+    return fltk3::args(argc, argv, i, cb);
+  }
+  
+  static void args(int argc, char **argv) {
+    fltk3::args(argc, argv);
+  }
+  
+#if 0 // FIXME: 123
   static const char* const help;
   static void display(const char*);
-  static int visual(int);
+#endif
+  
+  static int visual(int m) {
+    return fltk3::visual(m);
+  }
+  
+#if 0 // FIXME: 123
   static int gl_visual(int, int *alist=0); // platform dependent
   static void own_colormap();
   static void get_system_colors();
@@ -102,7 +120,11 @@ public: // should be private!
   static int check();
   static int ready();
 #endif
-  static int run() { return fltk3::run(); }
+  
+  static int run() { 
+    return fltk3::run(); 
+  }
+
 #if 0 // FIXME: 123
   static Fl_Widget* readqueue();
   static void add_timeout(double t, Fl_Timeout_Handler,void* = 0); // platform dependent
@@ -124,7 +146,14 @@ public: // should be private!
   static void flush();
   static void (*warning)(const char*, ...);
   static void (*error)(const char*, ...);
-  static void (*fatal)(const char*, ...);
+#endif
+  
+  static void fatal(const char*, ...) {
+    // FIXME: 123 - this is a function pointer. Not sure if we can wrap this
+    // FIXME: 123 - also, to wrap the varargs, we need the appropriate va function in fltk3
+  }
+  
+#if 0 // FIXME: 123
   static Fl_Window* first_window();
   static void first_window(Fl_Window*);
   static Fl_Window* next_window(const Fl_Window*);

@@ -32,6 +32,7 @@
 #include <fltk3/Widget.h>
 
 #include "Enumerations.H"
+#include "Fl_Image.H"
 
 #ifdef _WIN64
 #ifdef __GNUC__
@@ -328,35 +329,35 @@ public:
   }
 
   Fl_Image* image() {
-    return 0L; // FIXME: 123
+    return fltk3::_3to1_image(((fltk3::Widget*)_p)->image());
   }
   
   const Fl_Image* image() const {
-    return 0L; // FIXME: 123
+    return fltk3::_3to1_image(((fltk3::Widget*)_p)->image());
   }
   
   void image(Fl_Image* img) {
-    // FIXME: 123
+    ((fltk3::Widget*)_p)->image( (fltk3::Image*)(img->_p) );
   }
   
   void image(Fl_Image& img) {
-    // FIXME: 123
+    ((fltk3::Widget*)_p)->image( (fltk3::Image&)(img._p) );
   }
   
   Fl_Image* deimage() {
-    return 0L; // FIXME: 123
+    return fltk3::_3to1_image(((fltk3::Widget*)_p)->deimage());
   }
   
   const Fl_Image* deimage() const {
-    return 0L; // FIXME: 123
+    return fltk3::_3to1_image(((fltk3::Widget*)_p)->deimage());
   }
   
   void deimage(Fl_Image* img) {
-    // FIXME: 123
+    ((fltk3::Widget*)_p)->deimage( (fltk3::Image*)(img->_p) );
   }
   
   void deimage(Fl_Image& img) {
-    // FIXME: 123
+    ((fltk3::Widget*)_p)->deimage( (fltk3::Image&)(img._p) );
   }
   
   const char *tooltip() const {

@@ -29,9 +29,10 @@
  fltk3::Image, fltk3::RGBImage classes . */
 
 #ifndef Fltk3_Image_H
-#  define Fltk3_Image_H
+#define Fltk3_Image_H
 
-#  include "enumerations.h"
+#include "Object.h"
+#include "enumerations.h"
 
 
 namespace fltk3 { 
@@ -54,7 +55,7 @@ namespace fltk3 {
    drawing by itself, calling the draw() method results in
    a box with an X in it being drawn instead.
    */
-  class FLTK3_EXPORT Image {
+  class FLTK3_EXPORT Image : public Object {
     int w_, h_, d_, ld_, count_;
     const char * const *data_;
     

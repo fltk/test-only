@@ -1,7 +1,7 @@
 //
-// "$Id$"
+// "$Id: hello.cxx 8226 2011-01-09 14:26:21Z matt $"
 //
-// Toggle button header file for the Fast Light Tool Kit (FLTK).
+// Hello, World! program for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
 //
@@ -25,26 +25,23 @@
 //     http://www.fltk.org/str.php
 //
 
-#ifndef Fl_Toggle_Button_H
-#define Fl_Toggle_Button_H
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Box.H>
 
-#include <fltk3/ToggleButton.h>
-#include "Fl_Button.H"
-
-class FL_EXPORT Fl_Toggle_Button : public Fl_Button {
-  
-public:
-  
-  Fl_Toggle_Button() {}
-  
-  Fl_Toggle_Button(int X,int Y,int W,int H,const char *l=0) {
-    _p = new fltk3::ToggleButton(X, Y, W, H, l);
-    _p->wrapper(this);
-  }
-};
-
-#endif
+int main(int argc, char **argv) {
+  Fl_Window *window = new Fl_Window(340,180);
+  Fl_Box *box = new Fl_Box(20,40,300,100,"Hello, World!");
+  box->box(FL_UP_BOX);
+  box->labelfont(FL_BOLD+FL_ITALIC);
+  box->labelsize(36);
+  box->labeltype(FL_SHADOW_LABEL);
+  window->end();
+  window->show(argc, argv);
+  return Fl::run();
+}
 
 //
-// End of "$Id$".
+// End of "$Id: hello.cxx 8226 2011-01-09 14:26:21Z matt $".
 //
+

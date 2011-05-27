@@ -54,6 +54,9 @@ protected:
 #endif
   
 public:
+  
+  Fl_Window() {}
+  
   Fl_Window(int w, int h, const char* label = 0) {
     _p = new fltk3::Window(w, h, label);
     _p->wrapper(this);

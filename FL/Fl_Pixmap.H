@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -26,26 +25,19 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Pixmap widget . */
-
 #ifndef Fl_Pixmap_H
 #define Fl_Pixmap_H
-#  include "Fl_Image.H"
 
-class Fl_Widget;
-struct Fl_Menu_Item;
+#include <fltk3/Pixmap.h>
+#include "Fl_Image.H"
 
-// Older C++ compilers don't support the explicit keyword... :(
-#  if defined(__sgi) && !defined(_COMPILER_VERSION)
-#    define explicit
-#  endif // __sgi && !_COMPILER_VERSION
+//class Fl_Widget;
+//struct Fl_Menu_Item;
 
-/**
-  The Fl_Pixmap class supports caching and drawing of colormap
-  (pixmap) images, including transparency.
-*/
+
 class FL_EXPORT Fl_Pixmap : public Fl_Image {
+  
+#if 0 // FIXME: 123
   friend class Fl_Quartz_Graphics_Driver;
   friend class Fl_GDI_Graphics_Driver;
   friend class Fl_Xlib_Graphics_Driver;
@@ -56,13 +48,38 @@ class FL_EXPORT Fl_Pixmap : public Fl_Image {
   protected:
 
   void measure();
+#endif
+  
+public:
+  
+  Fl_Pixmap() {}
 
-  public:
-
+  explicit Fl_Pixmap(char * const * D) {
+    _p = new fltk3::Pixmap(D);
+    _p->wrapper(this);
+  }
+  
+  explicit Fl_Pixmap(uchar * const * D) {
+    _p = new fltk3::Pixmap(D);
+    _p->wrapper(this);
+  }
+  
+  explicit Fl_Pixmap(const char * const * D) {
+    _p = new fltk3::Pixmap(D);
+    _p->wrapper(this);
+  }
+  
+  explicit Fl_Pixmap(const uchar * const * D) {
+    _p = new fltk3::Pixmap(D);
+    _p->wrapper(this);
+  }
+  
+#if 0 // FIXME: 123
   int alloc_data; // Non-zero if data was allocated
   
-  private:
+private:
 
+  
 #if defined(__APPLE__) || defined(WIN32)
   void *id_; // for internal use
   void *mask_; // for internal use (mask bitmap)
@@ -73,14 +90,6 @@ class FL_EXPORT Fl_Pixmap : public Fl_Image {
   
   public:
 
-  /**    The constructors create a new pixmap from the specified XPM data.  */
-  explicit Fl_Pixmap(char * const * D) : Fl_Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
-  /**    The constructors create a new pixmap from the specified XPM data.  */
-  explicit Fl_Pixmap(uchar* const * D) : Fl_Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
-  /**    The constructors create a new pixmap from the specified XPM data.  */
-  explicit Fl_Pixmap(const char * const * D) : Fl_Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
-  /**    The constructors create a new pixmap from the specified XPM data.  */
-  explicit Fl_Pixmap(const uchar* const * D) : Fl_Image(-1,0,1), alloc_data(0), id_(0), mask_(0) {set_data((const char*const*)D); measure();}
   virtual ~Fl_Pixmap();
   virtual Fl_Image *copy(int W, int H);
   Fl_Image *copy() { return copy(w(), h()); }
@@ -91,6 +100,8 @@ class FL_EXPORT Fl_Pixmap : public Fl_Image {
   virtual void label(Fl_Widget*w);
   virtual void label(Fl_Menu_Item*m);
   virtual void uncache();
+#endif
+  
 };
 
 #endif

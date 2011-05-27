@@ -76,9 +76,21 @@ public:
   void remove(Fl_Widget&);
   void remove(Fl_Widget* o) {remove(*o);}
   void clear();
-  void resizable(Fl_Widget& o) {resizable_ = &o;}
-  void resizable(Fl_Widget* o) {resizable_ = o;}
-  Fl_Widget* resizable() const {return resizable_;}
+#endif
+  
+  void resizable(Fl_Widget& o) {
+    ((fltk3::Group*)_p)->resizable((fltk3::Widget&)(*o._p));
+  }
+  
+  void resizable(Fl_Widget* o) {
+    ((fltk3::Group*)_p)->resizable((fltk3::Widget*)(o->_p));
+  }
+  
+  Fl_Widget* resizable() const {
+    return fltk3::_3to1_widget(((fltk3::Group*)_p)->resizable());
+  }
+  
+#if 0 // FIXME: 123
   void add_resizable(Fl_Widget& o) {resizable_ = &o; add(o);}
   void init_sizes();
   void clip_children(int c) { if (c) set_flag(CLIP_CHILDREN); else clear_flag(CLIP_CHILDREN); }
