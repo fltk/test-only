@@ -640,7 +640,7 @@ void Image::draw(int x, int y) const {
   AABBBBBAA
   This function is mostly called from within FLTK's themes.
 */
-void Image::draw_diced(const Rectangle& R) {
+void Image::draw_diced(const fltk::Rectangle& R) {
 //  fetch_if_needed();
   int w, h; measure(w, h);
   int cw = w / 3;            // Corner width 
@@ -651,15 +651,15 @@ void Image::draw_diced(const Rectangle& R) {
   int dy = R.y();
   int dlw = R.w() - 2*cw;
   int dlh = R.h() - 2*ch;
-  draw(Rectangle(0, 0, cw, ch), 		Rectangle(dx, dy, cw, ch));
-  draw(Rectangle(cw, 0, lw, ch),		Rectangle(dx + cw, dy, dlw, ch));
-  draw(Rectangle(cw + lw, 0, cw, ch), 		Rectangle(dx + cw + dlw, dy, cw, ch));
-  draw(Rectangle(0, ch, cw, lh),		Rectangle(dx, dy + ch, cw, dlh));
-  draw(Rectangle(cw + lw, ch, cw, lh),		Rectangle(dx + cw + dlw, dy + ch, cw, dlh));
-  draw(Rectangle(0, ch + lh, cw, ch),		Rectangle(dx, dy + ch + dlh, cw, ch));
-  draw(Rectangle(cw + lw, ch + lh, cw, ch), 	Rectangle(dx + cw + dlw, dy + ch + dlh, cw, ch));
-  draw(Rectangle(cw, ch + lh, lw, ch), 		Rectangle(dx + cw, dy + ch + dlh, dlw, ch));
-  draw(Rectangle(cw, ch, lw, lh), 		Rectangle(dx + cw, dy + ch, dlw, dlh));
+  draw(fltk::Rectangle(0, 0, cw, ch), 			fltk::Rectangle(dx, dy, cw, ch));
+  draw(fltk::Rectangle(cw, 0, lw, ch),			fltk::Rectangle(dx + cw, dy, dlw, ch));
+  draw(fltk::Rectangle(cw + lw, 0, cw, ch), 		fltk::Rectangle(dx + cw + dlw, dy, cw, ch));
+  draw(fltk::Rectangle(0, ch, cw, lh),			fltk::Rectangle(dx, dy + ch, cw, dlh));
+  draw(fltk::Rectangle(cw + lw, ch, cw, lh),		fltk::Rectangle(dx + cw + dlw, dy + ch, cw, dlh));
+  draw(fltk::Rectangle(0, ch + lh, cw, ch),		fltk::Rectangle(dx, dy + ch + dlh, cw, ch));
+  draw(fltk::Rectangle(cw + lw, ch + lh, cw, ch), 	fltk::Rectangle(dx + cw + dlw, dy + ch + dlh, cw, ch));
+  draw(fltk::Rectangle(cw, ch + lh, lw, ch), 		fltk::Rectangle(dx + cw, dy + ch + dlh, dlw, ch));
+  draw(fltk::Rectangle(cw, ch, lw, lh), 		fltk::Rectangle(dx + cw, dy + ch, dlw, dlh));
 };
 
 
