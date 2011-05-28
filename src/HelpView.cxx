@@ -2334,7 +2334,7 @@ HelpView::get_image(const char *name, int W, int H) {
   } else if (name[0] != '/' && strchr(name, ':') == NULL) {
     if (directory_[0]) snprintf(temp, sizeof(temp), "%s/%s", directory_, name);
     else {
-      getcwd(dir, sizeof(dir));
+      if(getcwd(dir, sizeof(dir))); //ignore the return value
       snprintf(temp, sizeof(temp), "file:%s/%s", dir, name);
     }
 
@@ -2458,7 +2458,7 @@ HelpView::handle(int event)	// I - Event to handle
 	  snprintf(temp, sizeof(temp), "%s/%s", directory_, linkp->filename);
 	else
 	{
-	  getcwd(dir, sizeof(dir));
+	  if(getcwd(dir, sizeof(dir))); //ignore the return value
 	  snprintf(temp, sizeof(temp), "file:%s/%s", dir, linkp->filename);
 	}
       }
@@ -2675,7 +2675,7 @@ HelpView::load(const char *f)// I - Filename to load (may also have target)
       rewind(fp);
 
       value_ = (const char *)calloc(len + 1, 1);
-      fread((void *)value_, 1, len, fp);
+      if(fread((void *)value_, 1, len, fp)); //ignore the return value
       fclose(fp);
     }
     else

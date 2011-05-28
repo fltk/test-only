@@ -57,7 +57,7 @@ void load_coding_style()
   if(fp){
     char buffer[256];
     while(!feof(fp)){
-  	  fgets(buffer, sizeof(buffer), fp);
+  	  if(fgets(buffer, sizeof(buffer), fp)); //ignore the return result
   	  char *p = strtok(buffer, "=");
 	  for(int i=0; options[i].name; i++)
 		  if(strcasecmp(options[i].name, buffer) == 0)

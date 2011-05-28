@@ -774,9 +774,9 @@ int Preferences::RootNode::read()
   char buf[1024];
   FILE *f = fopen( filename_, "rb" );
   if ( !f ) return 0;
-  fgets( buf, 1024, f );
-  fgets( buf, 1024, f );
-  fgets( buf, 1024, f );
+  if(fgets( buf, 1024, f ));
+  if(fgets( buf, 1024, f ));
+  if(fgets( buf, 1024, f )); //ignore these return values from fgets()
   Node *nd = prefs_->node;
   for (;;)
   {

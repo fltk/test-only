@@ -160,7 +160,7 @@ bool pnmImage::fetch() {
       case 5 :
       case 6 :
         if (maxval < 256) {
-          fread(ptr, w, depth(), fp);
+          if(fread(ptr, w, depth(), fp)); //ignore the unused result
         } else {
           val = (uchar)getc(fp);
           val = (val<<8)|(uchar)getc(fp);

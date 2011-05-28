@@ -175,7 +175,7 @@ SharedImage * SharedImage::get(const char *n) {
 
 
   if (n  && (*n) && (fp = fopen(n, "rb")) != NULL) {
-    fread(header, 1, sizeof(header), fp);
+    if(fread(header, 1, sizeof(header), fp)); // ignore the return value
     fclose(fp);
   } else {
     return NULL;

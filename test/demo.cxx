@@ -267,7 +267,7 @@ void dobut(fltk::Widget *, long arg)
     char* command = new char[icommand_length+5]; // 5 for extra './' and ' &\0' 
 
     sprintf(command, "./%s &", menus[men].icommand[bn]);
-    system(command);
+    if(system(command)); // Kill the warn_unused_result error
 
     delete command;
 #endif // _WIN32
@@ -337,7 +337,7 @@ int main(int argc, char **argv) {
   if (!load_the_menu(fname)) fltk::fatal("Can't open %s",fname);
   strcpy(buf,fname);
   const char *c = fltk::filename_name(buf);
-  if (c > buf) {buf[c-buf] = 0; chdir(buf);}
+  if (c > buf) {buf[c-buf] = 0; if(chdir(buf)){/*Kill the warn_unused_result error*/};}
   push_menu("@main");
   form->show(argc,argv);
   fltk::run();

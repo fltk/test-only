@@ -157,7 +157,7 @@
 # include <fltk/Threads.h>
 
 # if defined(PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP) && !defined(__CYGWIN__)
-static pthread_mutexattr_t recursive_attrib={PTHREAD_MUTEX_RECURSIVE_NP};
+static pthread_mutexattr_t recursive_attrib = {{PTHREAD_MUTEX_RECURSIVE_NP}};
 fltk::RecursiveMutex::RecursiveMutex() : Mutex(&recursive_attrib) {}
 # elif defined(PTHREAD_MUTEX_RECURSIVE)
 static pthread_mutexattr_t* recursive_attrib() {
@@ -211,7 +211,7 @@ static int thread_filedes[2];
 static void init_function() {
   // Init threads communication pipe to let threads awake FLTK from wait
   main_thread_id = pthread_self();
-  pipe(thread_filedes);
+  if(pipe(thread_filedes)); //ignore the return value
   fcntl(thread_filedes[0], F_SETFL, O_NONBLOCK);
   fltk::add_fd(thread_filedes[0], fltk::READ, thread_awake_cb);
   fl_lock_function = init_or_lock_function = lock_function;
@@ -228,7 +228,7 @@ bool fltk::in_main_thread() {
 }
 
 void fltk::awake(void* msg) {
-  write(thread_filedes[1], &msg, sizeof(void*));
+  if(write(thread_filedes[1], &msg, sizeof(void*))); //ignore the return value
 }
 
 // the following is already defined in CYGWIN

@@ -355,7 +355,7 @@ void TextBuffer::copy(TextBuffer *from_buf, int from_start, int from_end, int to
  * from the undo buffer.
  */
 int TextBuffer::undo(int *cursorPos) {
-  if (undowidget != this || !undocut && !undoinsert &&!mCanUndo) return 0;
+  if (undowidget != this || (!undocut && !undoinsert &&!mCanUndo)) return 0;
 
   int ilen = undocut;
   int xlen = undoinsert;
@@ -1799,7 +1799,7 @@ static void overlayRectInLine(const char *line, char *ins_line, int rectstart,
 }
 
 char *TextBuffer::selection_text_(TextSelection *sel) {
-  int start, end, isRect, rectstart, rectend;
+  int start, end, isRect, rectstart = 0, rectend = 0;
   char *s;
 
   /* If there's no selection, return an allocated empty string */
@@ -1817,8 +1817,7 @@ char *TextBuffer::selection_text_(TextSelection *sel) {
 }
 
 void TextBuffer::remove_selection_(TextSelection *sel) {
-  int start, end;
-  int isRect, rectstart, rectend;
+  int start, end, isRect, rectstart = 0, rectend = 0;
 
   if (!sel->position(&start, &end, &isRect, &rectstart, &rectend))
     return;
@@ -1831,7 +1830,7 @@ void TextBuffer::remove_selection_(TextSelection *sel) {
 }
 
 void TextBuffer::replace_selection_(TextSelection *sel, const char *s) {
-  int start, end, isRect, rectstart, rectend;
+  int start, end, isRect, rectstart = 0, rectend = 0;
   TextSelection old_selection = *sel;
 
   /* If there's no selection, return */

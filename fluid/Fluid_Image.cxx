@@ -105,7 +105,7 @@ void generic_image::write_static() {
 	indentation += 2;
 	char s[MAX_CLINESIZE+1];
 	do {
-	  fgets(s, MAX_CLINESIZE+1, fp);
+	  if(fgets(s, MAX_CLINESIZE+1, fp)); //ignore the return value
 	} while (!feof(fp) && !strchr(s, '{'));
 	while (!feof(fp) && fgets(s, MAX_CLINESIZE+1, fp)) {
 		write_c(indent());
@@ -293,7 +293,7 @@ Fluid_Image* Fluid_Image::find(const char *name) {
     // now see if we can identify the type, by reading in some data
     // and asking all the types we know about:
     char buffer[1025];
-    fread(buffer, 1, 1024, f);
+    if(fread(buffer, 1, 1024, f)); // Ignore the return value
     rewind(f);
     buffer[1024] = 0; // null-terminate so strstr() works
     if (generic_image::test_file(buffer)) {
