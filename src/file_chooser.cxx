@@ -133,14 +133,14 @@ void fltk::use_system_file_chooser(bool useit) {use_system_fc = useit;}
   system FileChooser is opened. If the user picks multiple files,
   these will be separated by a new line.
 
-  \param \a message is a string used to title the window.
+  \param message is a string used to title the window.
 
-  \param \a pattern is used to limit the files listed in a directory to those
+  \param pattern is used to limit the files listed in a directory to those
   matching the pattern. This matching is done by filename_match(). Use
   NULL to show all files. If use_system_file_chooser() is set to true, this
   will automatically include the "All Files" option.
 
-  \param \a fname is a default folder/filename to fill in the chooser
+  \param fname is a default folder/filename to fill in the chooser
   with. If this ends with a '/' then this is a default folder and
   no file is preselected.
 
@@ -149,11 +149,11 @@ void fltk::use_system_file_chooser(bool useit) {use_system_fc = useit;}
   is used. The first time the file chooser is called this defaults to
   a blank string.
 
-  \param \a save determines whether or not the chooser is created in "save"
+  \param save determines whether or not the chooser is created in "save"
   or "open" mode. This only effects WIN32 and will probably be replaced by the
   option to OR FileChooser flags together.
 
-  \param \a relative is used to determine whether this function returns a relative
+  \param relative is used to determine whether this function returns a relative
   or an absolute pathname.
 
   \return The returned value points at a static buffer that is only good until

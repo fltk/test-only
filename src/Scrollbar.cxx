@@ -60,7 +60,7 @@ using namespace fltk;
   If you call value() this is set to 1 linesize() less than the window.
 */
 
-/*! \fn int Scrollbar::value()
+/*! \fn int Scrollbar::value() const
   Return the current position of the scrollbar as an integer.
 
   Scrollbars have step(1) preset (they always return integers). If

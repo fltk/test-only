@@ -75,8 +75,8 @@ static void changed_stuff(Input* i) {
   - fltk::WHEN_ENTER_KEY_ALWAYS: The Enter key will do the callback
     even if the text has not changed. Useful for command fields.
     Also you need to do this if you want both the enter key and
-    either WHEN_CHANGED or WHEN_RELEASE, in this case you can tell
-    if Enter was typed by testing fltk::event_key()==fltk::EnterKey.
+    either fltk::WHEN_CHANGED or fltk::WHEN_RELEASE, in this case you 
+	can tell if Enter was typed by testing fltk::event_key()==fltk::ReturnKey.
   - fltk::WHEN_RELEASE: Deprecated. The callback is done if the
     text has changed and the user clicks on another widget or the
     focus moves (which can happen due to the window this widget

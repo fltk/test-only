@@ -22,7 +22,7 @@ developers across the world with a central repository in the US.
 
 \section licensing Licensing
 
-FLTK comes with complete free source code. FLTK is &copy;1998-2007
+FLTK comes with complete free source code. FLTK is &copy;1998-2011
 by Bill Spitzak and others.  Use and distribution of FLTK is governed
 by the <A HREF=license.html>FLTK Library License</a>, which is the GNU
 Library General Public License with an \e exception added that allows you
@@ -63,7 +63,7 @@ However, FLTK works fine as a shared library. It is often included in
 this form on Linux distributions.
 
 Here are some of the core features unique to FLTK:
-- sizeof(fltk:\:Widget) == 60.
+- sizeof(fltk::Widget) == 60.
 - The &quot;core&quot; (the &quot;hello&quot; program compiled &amp; linked with a static 
 FLTK  library using gcc on a 486 and then stripped) is 82K.
 - The FLUID program (which includes every widget) is 352k.
@@ -157,6 +157,6 @@ though currently all source code is actually on the fltk.org site.
 
 (Other stuff was here but I believe it was inaccurate. Need info on how
 to read the mailing lists using usenet, get svn access, post bugs,
-etc. This information is currently available at http:/www.fltk.org)
+etc. This information is currently available at http://www.fltk.org)
 
 */

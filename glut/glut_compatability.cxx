@@ -56,7 +56,7 @@ to manipulate instances directly rather than use GLUT window id's.
 These may be created without opening the display, and thus can fit
 better into FLTK's method of creating windows.
 
-The current GLUT window is available in the global variable ::glut_window.
+The current GLUT window is available in the global variable fltk::glut_window.
 
 */
 

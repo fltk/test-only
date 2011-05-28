@@ -44,7 +44,7 @@ namespace fltk {
 
 /*! Type returned by fltk::Widget::flags() and passed to fltk::Box
   and many other drawing functions. */
-typedef int Flags;
+typedef unsigned Flags;
 
 /*! For back compatability with fltk1.1 */
 typedef Flags Align; // for back compatability

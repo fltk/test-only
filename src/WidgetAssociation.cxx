@@ -244,7 +244,7 @@ bool Widget::find(const AssociationType& at, void* data) const {
 
 /*!
   Call the functor for each piece of data of the give AssociationType.
-  This is a wrapper for ::foreach(&at, this, fkt).
+  This is a wrapper for fltk::foreach(&at, this, fkt).
  */
 void* Widget::foreach(const AssociationType& at, AssociationFunctor& fkt) const { return fltk::foreach(&at, this, fkt); }
 
