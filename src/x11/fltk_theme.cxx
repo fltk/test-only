@@ -1,4 +1,5 @@
 #include <fltk/Style.h>
+#include <fltk/Button.h>
 #include <fltk/Symbol.h>
 #include <fltk/SharedImage.h>
 #include <fltk/draw.h>
@@ -255,7 +256,7 @@ static class XPBox : public Box {
     void _draw(const Rectangle& R) const {
       pixie_box_init_check();
 
-      if (drawflags() & PUSHED)
+      if (drawflags() & PUSHED || (drawflags() & STATE))
         pixie = pixie_down;
       else if (drawflags() & HIGHLIGHT)
         pixie = pixie_hilight;
