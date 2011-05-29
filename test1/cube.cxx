@@ -37,6 +37,7 @@
 #include <stdlib.h>
 
 #if !HAVE_GL
+
 class cube_box : public Fl_Box {
 public:
   double lasttime;
@@ -48,6 +49,7 @@ public:
       label("This demo does\nnot work without GL");
   }
 };
+
 #else
 
 #include <FL/Fl_Gl_Window.H>
