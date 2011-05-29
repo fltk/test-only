@@ -37,7 +37,7 @@ const char *fltk3::GraphicsDriver::class_id = "fltk3::GraphicsDriver";
 const char *fltk3::QuartzGraphicsDriver::class_id = "fltk3::QuartzGraphicsDriver";
 #endif
 #if defined(WIN32) || defined(FLTK3_DOXYGEN)
-const char *Fl_GDI_Graphics_Driver::class_id = "Fl_GDI_Graphics_Driver";
+const char *fltk3::GDIGraphicsDriver::class_id = "Fl_GDI_Graphics_Driver";
 #endif
 #if !(defined(__APPLE__) || defined(WIN32))
 namespace fltk3 {

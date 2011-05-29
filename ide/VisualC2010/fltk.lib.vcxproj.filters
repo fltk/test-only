@@ -393,7 +393,6 @@
     <ClCompile Include="..\..\src\Fl_Browser_load.cxx" />
     <ClCompile Include="..\..\src\Fl_Button.cxx" />
     <ClCompile Include="..\..\cairo\Fl_Cairo.cxx" />
-    <ClCompile Include="..\..\src\fl_call_main.c" />
     <ClCompile Include="..\..\src\Fl_Chart.cxx" />
     <ClCompile Include="..\..\src\Fl_Check_Browser.cxx" />
     <ClCompile Include="..\..\src\Fl_Check_Button.cxx" />
@@ -491,7 +490,6 @@
     <ClCompile Include="..\..\src\Fl_Tree_Item.cxx" />
     <ClCompile Include="..\..\src\Fl_Tree_Item_Array.cxx" />
     <ClCompile Include="..\..\src\Fl_Tree_Prefs.cxx" />
-    <ClCompile Include="..\..\src\fl_utf.c" />
     <ClCompile Include="..\..\src\fl_utf8.cxx" />
     <ClCompile Include="..\..\src\Fl_Valuator.cxx" />
     <ClCompile Include="..\..\src\Fl_Value_Input.cxx" />
@@ -511,10 +509,12 @@
     <ClCompile Include="..\..\src\flstring.c" />
     <ClCompile Include="..\..\src\xutf8\is_right2left.c" />
     <ClCompile Include="..\..\src\xutf8\is_spacing.c" />
-    <ClCompile Include="..\..\src\numericsort.c" />
     <ClCompile Include="..\..\src\ps_image.cxx" />
-    <ClCompile Include="..\..\src\scandir.c" />
     <ClCompile Include="..\..\src\screen_xywh.cxx" />
     <ClCompile Include="..\..\src\vsnprintf.c" />
+    <ClCompile Include="..\..\src\fl_call_main.cxx" />
+    <ClCompile Include="..\..\src\fl_utf.cxx" />
+    <ClCompile Include="..\..\src\numericsort.cxx" />
+    <ClCompile Include="..\..\src\scandir.cxx" />
   </ItemGroup>
 </Project>

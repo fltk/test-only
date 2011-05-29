@@ -264,10 +264,6 @@
       <Project>{e070aafc-9d03-41a3-bc7d-30887ea0d50f}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="fltkforms.vcxproj">
-      <Project>{c17bab42-f00b-4f71-9df6-a921511c89ee}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

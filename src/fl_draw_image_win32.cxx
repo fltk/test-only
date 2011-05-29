@@ -288,38 +288,38 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 
 static int fl_abs(int v) { return v<0 ? -v : v; }
 
-void Fl_GDI_Graphics_Driver::draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
-  if (fl_abs(d)&FL_IMAGE_WITH_ALPHA) {
-    d ^= FL_IMAGE_WITH_ALPHA;
+void fltk3::GDIGraphicsDriver::draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
+  if (fl_abs(d)&fltk3::IMAGE_WITH_ALPHA) {
+    d ^= fltk3::IMAGE_WITH_ALPHA;
     innards(buf,x,y,w,h,d,l,fl_abs(d),0,0);
   } else {
     innards(buf,x,y,w,h,d,l,(d<3&&d>-3),0,0);
   }
 }
 
-void Fl_GDI_Graphics_Driver::draw_image(fltk3::DrawImageCb cb, void* data,
+void fltk3::GDIGraphicsDriver::draw_image(fltk3::DrawImageCb cb, void* data,
 		   int x, int y, int w, int h,int d) {
-  if (fl_abs(d)&FL_IMAGE_WITH_ALPHA) {
-    d ^= FL_IMAGE_WITH_ALPHA;
+  if (fl_abs(d)&fltk3::IMAGE_WITH_ALPHA) {
+    d ^= fltk3::IMAGE_WITH_ALPHA;
     innards(0,x,y,w,h,d,0,(d<3&&d>-3),cb,data);
   } else {
     innards(0,x,y,w,h,d,0,(d<3&&d>-3),cb,data);
   }
 }
 
-void Fl_GDI_Graphics_Driver::draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
-  if (fl_abs(d)&FL_IMAGE_WITH_ALPHA) {
-    d ^= FL_IMAGE_WITH_ALPHA;
+void fltk3::GDIGraphicsDriver::draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
+  if (fl_abs(d)&fltk3::IMAGE_WITH_ALPHA) {
+    d ^= fltk3::IMAGE_WITH_ALPHA;
     innards(buf,x,y,w,h,d,l,1,0,0);
   } else {
     innards(buf,x,y,w,h,d,l,1,0,0);
   }
 }
 
-void Fl_GDI_Graphics_Driver::draw_image_mono(fltk3::DrawImageCb cb, void* data,
+void fltk3::GDIGraphicsDriver::draw_image_mono(fltk3::DrawImageCb cb, void* data,
 		   int x, int y, int w, int h,int d) {
-  if (fl_abs(d)&FL_IMAGE_WITH_ALPHA) {
-    d ^= FL_IMAGE_WITH_ALPHA;
+  if (fl_abs(d)&fltk3::IMAGE_WITH_ALPHA) {
+    d ^= fltk3::IMAGE_WITH_ALPHA;
     innards(0,x,y,w,h,d,0,1,cb,data);
   } else {
     innards(0,x,y,w,h,d,0,1,cb,data);

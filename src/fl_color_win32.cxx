@@ -92,7 +92,7 @@ static void set_xmap(Fl_XMap& xmap, COLORREF c) {
   xmap.brush = -1;
 }
 
-void Fl_GDI_Graphics_Driver::color(fltk3::Color i) {
+void fltk3::GDIGraphicsDriver::color(fltk3::Color i) {
   if (i & 0xffffff00) {
     unsigned rgb = (unsigned)i;
     fltk3::color((uchar)(rgb >> 24), (uchar)(rgb >> 16), (uchar)(rgb >> 8));
@@ -116,7 +116,7 @@ void Fl_GDI_Graphics_Driver::color(fltk3::Color i) {
   }
 }
 
-void Fl_GDI_Graphics_Driver::color(uchar r, uchar g, uchar b) {
+void fltk3::GDIGraphicsDriver::color(uchar r, uchar g, uchar b) {
   static Fl_XMap xmap;
   COLORREF c = RGB(r,g,b);
   fltk3::GraphicsDriver::color( fltk3::rgb_color(r, g, b) );

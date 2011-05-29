@@ -352,10 +352,6 @@
       <Project>{f0b8f4bd-955d-43cb-980c-805364d04a25}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="fltkforms.vcxproj">
-      <Project>{c17bab42-f00b-4f71-9df6-a921511c89ee}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="fltkgl.vcxproj">
       <Project>{f7974a9c-c255-4385-96bc-e24ee0816f7c}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
@@ -370,10 +366,6 @@
     </ProjectReference>
     <ProjectReference Include="fonts.vcxproj">
       <Project>{df2a883a-7356-4603-9cb1-e8f1e6b1549d}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
-    <ProjectReference Include="forms.vcxproj">
-      <Project>{b1749154-f87b-489d-b4b0-abd5ed20a96f}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="fractals.vcxproj">

@@ -130,7 +130,7 @@ static void dnullcat(char*&wp, const char *string, int n = -1 ) {
 }
 
 // CTOR
-fltk3::NativeFileChooser::fltk3::NativeFileChooser(int val) {
+fltk3::NativeFileChooser::NativeFileChooser(int val) {
   _btype           = val;
   _options         = NO_OPTIONS;
   memset((void*)&_ofn, 0, sizeof(OPENFILENAMEW));
@@ -149,7 +149,7 @@ fltk3::NativeFileChooser::fltk3::NativeFileChooser(int val) {
 }
 
 // DTOR
-fltk3::NativeFileChooser::~Fl_Native_File_Chooser() {
+fltk3::NativeFileChooser::~NativeFileChooser() {
   //_pathnames                // managed by clear_pathnames()
   //_tpathnames               // managed by clear_pathnames()
   _directory   = strfree(_directory);

@@ -288,7 +288,7 @@ void fltk3::QuartzGraphicsDriver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP
 }
 
 #elif defined(WIN32)
-void Fl_GDI_Graphics_Driver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {
+void fltk3::GDIGraphicsDriver::draw(fltk3::Bitmap *bm, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   if (!bm->array) {
     bm->draw_empty(XP, YP);

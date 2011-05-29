@@ -54,8 +54,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltk", "fltk.lib.vcxproj", 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkdll", "fltkdll.vcxproj", "{F0B8F4BD-955D-43CB-980C-805364D04A25}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkforms", "fltkforms.vcxproj", "{C17BAB42-F00B-4F71-9DF6-A921511C89EE}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkgl", "fltkgl.vcxproj", "{F7974A9C-C255-4385-96BC-E24EE0816F7C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fltkimages", "fltkimages.vcxproj", "{6E8E1663-B88D-4454-ADF2-279666A93306}"
@@ -66,8 +64,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fluid", "fluid.vcxproj", "{
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fonts", "fonts.vcxproj", "{DF2A883A-7356-4603-9CB1-E8F1E6B1549D}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "forms", "forms.vcxproj", "{B1749154-F87B-489D-B4B0-ABD5ED20A96F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fractals", "fractals.vcxproj", "{58A83386-65E6-4F22-8712-8B6B7E62913D}"
 EndProject
@@ -370,14 +366,6 @@ Global
 		{F0B8F4BD-955D-43CB-980C-805364D04A25}.Release Cairo|Win32.Build.0 = Release Cairo|Win32
 		{F0B8F4BD-955D-43CB-980C-805364D04A25}.Release|Win32.ActiveCfg = Release|Win32
 		{F0B8F4BD-955D-43CB-980C-805364D04A25}.Release|Win32.Build.0 = Release|Win32
-		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Debug Cairo|Win32.ActiveCfg = Debug Cairo|Win32
-		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Debug Cairo|Win32.Build.0 = Debug Cairo|Win32
-		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Debug|Win32.ActiveCfg = Debug|Win32
-		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Debug|Win32.Build.0 = Debug|Win32
-		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Release Cairo|Win32.ActiveCfg = Release Cairo|Win32
-		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Release Cairo|Win32.Build.0 = Release Cairo|Win32
-		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Release|Win32.ActiveCfg = Release|Win32
-		{C17BAB42-F00B-4F71-9DF6-A921511C89EE}.Release|Win32.Build.0 = Release|Win32
 		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Debug Cairo|Win32.ActiveCfg = Debug Cairo|Win32
 		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Debug Cairo|Win32.Build.0 = Debug Cairo|Win32
 		{F7974A9C-C255-4385-96BC-E24EE0816F7C}.Debug|Win32.ActiveCfg = Debug|Win32
@@ -410,14 +398,6 @@ Global
 		{DF2A883A-7356-4603-9CB1-E8F1E6B1549D}.Release Cairo|Win32.Build.0 = Release Cairo|Win32
 		{DF2A883A-7356-4603-9CB1-E8F1E6B1549D}.Release|Win32.ActiveCfg = Release|Win32
 		{DF2A883A-7356-4603-9CB1-E8F1E6B1549D}.Release|Win32.Build.0 = Release|Win32
-		{B1749154-F87B-489D-B4B0-ABD5ED20A96F}.Debug Cairo|Win32.ActiveCfg = Debug Cairo|Win32
-		{B1749154-F87B-489D-B4B0-ABD5ED20A96F}.Debug Cairo|Win32.Build.0 = Debug Cairo|Win32
-		{B1749154-F87B-489D-B4B0-ABD5ED20A96F}.Debug|Win32.ActiveCfg = Debug|Win32
-		{B1749154-F87B-489D-B4B0-ABD5ED20A96F}.Debug|Win32.Build.0 = Debug|Win32
-		{B1749154-F87B-489D-B4B0-ABD5ED20A96F}.Release Cairo|Win32.ActiveCfg = Release Cairo|Win32
-		{B1749154-F87B-489D-B4B0-ABD5ED20A96F}.Release Cairo|Win32.Build.0 = Release Cairo|Win32
-		{B1749154-F87B-489D-B4B0-ABD5ED20A96F}.Release|Win32.ActiveCfg = Release|Win32
-		{B1749154-F87B-489D-B4B0-ABD5ED20A96F}.Release|Win32.Build.0 = Release|Win32
 		{58A83386-65E6-4F22-8712-8B6B7E62913D}.Debug Cairo|Win32.ActiveCfg = Debug Cairo|Win32
 		{58A83386-65E6-4F22-8712-8B6B7E62913D}.Debug Cairo|Win32.Build.0 = Debug Cairo|Win32
 		{58A83386-65E6-4F22-8712-8B6B7E62913D}.Debug|Win32.ActiveCfg = Debug|Win32

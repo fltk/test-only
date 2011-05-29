@@ -711,7 +711,7 @@ Sudoku::Sudoku()
 
   // Set icon for window (MacOS uses app bundle for icon...)
 #ifdef WIN32
-  icon((char *)LoadIcon(fltk3::display, MAKEINTRESOURCE(IDI_ICON)));
+  icon((char *)LoadIcon((HINSTANCE)fltk3::display, MAKEINTRESOURCE(IDI_ICON)));
 #elif !defined(__APPLE__)
   fl_open_display();
   icon((char *)XCreateBitmapFromData(fl_display, DefaultRootWindow(fl_display),

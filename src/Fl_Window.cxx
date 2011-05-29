@@ -169,7 +169,9 @@ void fltk3::default_atclose(fltk3::Window* window, void* v) {
   fltk3::Widget::default_callback(window, v); // put on fltk3::read_queue()
 }
 /** Back compatibility: default window callback handler \see fltk3::set_atclose() */
-void (*fltk3::atclose)(fltk3::Window*, void*) = default_atclose;
+namespace fltk3 {
+	void (*atclose)(fltk3::Window*, void*) = default_atclose;
+}
 /** Back compatibility: Sets the default callback v for win to call on close event */
 void fltk3::Window::default_callback(fltk3::Window* win, void* v) {
   fltk3::atclose(win, v);

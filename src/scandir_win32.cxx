@@ -33,6 +33,12 @@
 #include <windows.h>
 #include <stdlib.h>
 
+extern "C" {
+int fl_scandir(const char *dirname, struct dirent ***namelist,
+	       int (*select)(struct dirent *),
+	       int (*compar)(struct dirent **, struct dirent **));
+}
+
 int fl_scandir(const char *dirname, struct dirent ***namelist,
 	       int (*select)(struct dirent *),
 	       int (*compar)(struct dirent **, struct dirent **)) {
@@ -72,7 +78,7 @@ int fl_scandir(const char *dirname, struct dirent ***namelist,
 	wbuf = (unsigned short*)malloc(sizeof(unsigned short)*wlen);
 	wlen = fltk3::utf8toUtf16(findIn, strlen(findIn), wbuf, wlen); /* actually convert the filename */
 	wbuf[wlen] = 0; /* NULL terminate the resultant string */
-	h = FindFirstFileW(wbuf, &findw); /* get a handle to the first filename in the search */
+	h = FindFirstFileW((LPCWSTR)wbuf, &findw); /* get a handle to the first filename in the search */
 	free(wbuf); /* release the "wide" buffer before the pointer goes out of scope */
   }
   if (h==INVALID_HANDLE_VALUE) {

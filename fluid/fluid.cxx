@@ -1042,7 +1042,7 @@ void print_menu_cb(fltk3::Widget *, void *) {
 
   fl_gc = dialog.hDC;
   fl_window = (HWND)dialog.hDC;
-  fl_push_no_clip();
+  fltk3::push_no_clip();
 
   // Get the time and date...
   time_t curtime = time(NULL);

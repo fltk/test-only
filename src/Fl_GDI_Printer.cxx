@@ -34,12 +34,12 @@
 
 extern HWND fl_window;
 
-fltk3::SystemPrinter::fltk3::SystemPrinter(void) : fltk3::PagedDevice() {
+fltk3::SystemPrinter::SystemPrinter(void) : fltk3::PagedDevice() {
   hPr = NULL;
   driver(fltk3::DisplayDevice::display_device()->driver());
 }
 
-fltk3::SystemPrinter::~Fl_System_Printer(void) {
+fltk3::SystemPrinter::~SystemPrinter(void) {
   if (hPr) end_job();
 }
 

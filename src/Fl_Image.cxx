@@ -489,7 +489,7 @@ void fltk3::QuartzGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int
 }
 
 #elif defined(WIN32)
-void Fl_GDI_Graphics_Driver::draw(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int cx, int cy) {
+void fltk3::GDIGraphicsDriver::draw(fltk3::RGBImage *img, int XP, int YP, int WP, int HP, int cx, int cy) {
   int X, Y, W, H;
   // Don't draw an empty image...
   if (!img->d() || !img->array) {
@@ -503,7 +503,7 @@ void Fl_GDI_Graphics_Driver::draw(fltk3::RGBImage *img, int XP, int YP, int WP, 
     img->id_ = fl_create_offscreen(img->w(), img->h());
     if ((img->d() == 2 || img->d() == 4) && fltk3::can_do_alpha_blending()) {
       fl_begin_offscreen((fltk3::Offscreen)img->id_);
-      fltk3::draw_image(img->array, 0, 0, img->w(), img->h(), img->d()|FL_IMAGE_WITH_ALPHA, img->ld());
+      fltk3::draw_image(img->array, 0, 0, img->w(), img->h(), img->d()|fltk3::IMAGE_WITH_ALPHA, img->ld());
       fl_end_offscreen();
     } else {
       fl_begin_offscreen((fltk3::Offscreen)img->id_);

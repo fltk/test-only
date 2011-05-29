@@ -77,7 +77,7 @@ inline void XClipBox(fltk3::Region r,XRectangle* rect) {
 class FLTK3_EXPORT Fl_X {
 public:
   // member variables - add new variables only at the end of this block
-  Window xid;
+  ::Window xid;
   HBITMAP other_xid; // for double-buffered windows
   fltk3::Window* w;
   fltk3::Region region;
@@ -105,15 +105,18 @@ extern FLTK3_EXPORT HPALETTE fl_palette; // non-zero only on 8-bit displays!
 extern FLTK3_EXPORT void fl_release_dc(HWND w, HDC dc);
 extern FLTK3_EXPORT void fl_save_dc( HWND w, HDC dc);
 
-inline Window fl_xid(const fltk3::Window* w) { Fl_X *temp = Fl_X::i(w); return temp ? temp->xid : 0; }
+inline ::Window fl_xid(const fltk3::Window* w) { Fl_X *temp = Fl_X::i(w); return temp ? temp->xid : 0; }
 
 #else
-FLTK3_EXPORT Window fl_xid_(const fltk3::Window* w);
+FLTK3_EXPORT ::Window fl_xid_(const fltk3::Window* w);
 #define fl_xid(w) fl_xid_(w)
 #endif // FL_LIBRARY || FLTK3_INTERNALS
 
-FLTK3_EXPORT fltk3::Window* fl_find(Window xid);
-FLTK3_EXPORT void fltk3::clip_region(fltk3::Region);
+FLTK3_EXPORT fltk3::Window* fl_find(::Window xid);
+
+namespace fltk3 {
+  FLTK3_EXPORT void clip_region(fltk3::Region);
+}
 
 // most recent fltk3::color() or fl_rgbcolor() points at one of these:
 extern FLTK3_EXPORT struct Fl_XMap {
@@ -127,19 +130,22 @@ FLTK3_EXPORT HBRUSH fl_brush(); // allocates a brush if necessary
 FLTK3_EXPORT HBRUSH fl_brush_action(int); // now does the real work
 
 extern FLTK3_EXPORT HINSTANCE fl_display;
-extern FLTK3_EXPORT Window fl_window;
+extern FLTK3_EXPORT ::Window fl_window;
 extern FLTK3_EXPORT HDC fl_gc;
 extern FLTK3_EXPORT MSG fl_msg;
-extern FLTK3_EXPORT HDC fl_GetDC(Window);
+extern FLTK3_EXPORT HDC fl_GetDC(::Window);
 extern FLTK3_EXPORT HDC fl_makeDC(HBITMAP);
 
 // off-screen pixmaps: create, destroy, draw into, copy to window
-typedef HBITMAP fltk3::Offscreen;
+namespace fltk3 {
+	typedef HBITMAP Offscreen;
+}
+
 #define fl_create_offscreen(w, h) \
   CreateCompatibleBitmap( (fl_gc ? fl_gc : fl_GetDC(0) ) , w, h)
 
 # define fl_begin_offscreen(b) \
-   HDC _sgc=fl_gc; Window _sw=fl_window; \
+   HDC _sgc=fl_gc; ::Window _sw=fl_window; \
    fltk3::SurfaceDevice *_ss = fltk3::SurfaceDevice::surface(); fltk3::DisplayDevice::display_device()->set_current(); \
    fl_gc=fl_makeDC(b); int _savedc = SaveDC(fl_gc); fl_window=(HWND)b; fltk3::push_no_clip()
 
