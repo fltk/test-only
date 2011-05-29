@@ -36,8 +36,10 @@ namespace fltk {
 
 class FL_API Button : public Widget {
 public:
-  enum {HIDDEN=3}; // back-comptability value to hide the button
-
+  /** Back-compatibility enumeration */
+  enum {
+    HIDDEN=3 //!< Indicates that the button should be hidden
+  };
   bool	value() const { return state(); }
   bool	value(bool v) { return state(v); }
 

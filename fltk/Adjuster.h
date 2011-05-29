@@ -23,9 +23,6 @@
 //    http://www.fltk.org/str.php
 //
 
-// Undocumented valuator provided for back-compatability.
-// This may be removed before the final version.
-// 3-button "slider", made for Nuke
 
 #ifndef fltk_Adjuster_h
 #define fltk_Adjuster_h
@@ -33,7 +30,10 @@
 #include "Valuator.h"
 
 namespace fltk {
-
+/** This valuator is provided for back-compatability ONLY.
+  This may be removed before the final version!
+  3-button "slider", made for Nuke
+*/
 class FL_API Adjuster : public Valuator {
 public:
   Adjuster(int x, int y, int w, int h, const char *l=0);

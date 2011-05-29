@@ -153,9 +153,10 @@ extern FL_API void	stop_drawing(HWND);
 ////////////////////////////////////////////////////////////////
 #ifdef fltk_Window_h // only include this if <fltk/Fl_Window.h> was included
 
-// When fltk tells X about a window, one of these objects is created.
-// Warning: this object is highly subject to change!  It's definition
-// is only here so that fl_xid can be declared inline:
+/** When fltk tells WIN32 about a Window, one of these objects is created.
+    Warning: this object is highly subject to change!  It's definition
+    is only here so that fl_xid can be declared inline
+*/
 
 class FL_API CreatedWindow {
 public:
@@ -178,8 +179,15 @@ public:
   static void create(Window*);
 };
 
-// convert xid <-> Window:
+/** Converts a Window to a xid
+    \param w The Window to find
+    \return The Window's HWND xid
+*/
 inline HWND xid(const Window*w) {return CreatedWindow::find(w)->xid;}
+/** Converts a xid to a Window
+    \param xid The HWND xid to find
+    \return The window structure this HWND refers to, or NULL if xid is invalid
+*/
 Window* find(HWND xid);
 
 extern FL_API HCURSOR default_cursor;

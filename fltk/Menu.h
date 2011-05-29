@@ -96,13 +96,21 @@ public:
   Widget* insert(int n, const char*, void* = 0);
 
   // Undo the overrides of stuff from Group:
+  /** Calls Group::add(o) */
   void add(Widget& o) {Group::add(o);}
-  void add(Widget* o) {add(*o);}
+  /** Calls Menu::add(*o) */ 
+  inline void add(Widget* o) {add(*o);}
+  /** Calls Group::insert(o, n) */
   void insert(Widget& o, int n) {Group::insert(o, n);}
+  /** Calls Group::replace(index, o) */
   void replace(int index, Widget& o) {Group::replace(index, o);}
+  /** Calls Group::replace(old, o) */
   void replace(Widget& old, Widget& o) {Group::replace(old,o);}
+  /** Calls Group::remove(index) */
   void remove(int index) {Group::remove(index);}
+  /** Calls Group::remove(o) */
   void remove(Widget& o) {Group::remove(o);}
+  /** Calls Group::remove(o) */
   void remove(Widget* o) {Group::remove(o);}
 
 #ifdef Fl_Menu_Item_h

@@ -84,6 +84,97 @@
 
 using namespace fltk;
 
+/** \class fltk::FileChooser
+  The fltk::FileChooser widget displays a standard file selection
+  dialogue that supports various selection modes.
+
+  \image html FileChooser.jpg
+  \image latex FileChooer.jpg "FileChooser" width=12cm
+
+  The fltk::FileChooser class also exports several static values
+  that may be used to localise or customise the appearance of all file chooser
+  dialogues:
+
+  <CENTER><TABLE BORDER="1">
+    <TR>
+      <TH>Member</TH>
+      <TH>Default value</TH>
+    </TR>
+    <TR>
+      <TD>add_favorites_label</TD>
+      <TD>"Add to Favorites"</TD>
+    </TR>
+    <TR>
+      <TD>all_files_label</TD>
+      <TD>"All Files (*)"</TD>
+    </TR>
+    <TR>
+      <TD>custom_filter_label</TD>
+      <TD>"Custom Filter"</TD>
+    </TR>
+    <TR>
+      <TD>existing_file_label</TD>
+      <TD>"Please choose an existing file!"</TD>
+    </TR>
+    <TR>
+      <TD>favorites_label</TD>
+      <TD>"Favorites"</TD>
+    </TR>
+    <TR>
+      <TD>filename_label</TD>
+      <TD>"Filename:"</TD>
+    </TR>
+    <TR>
+      <TD>filesystems_label</TD>
+      <TD>"My Computer" (WIN32)<BR>
+          "File Systems" (all others)</TD>
+    </TR>
+    <TR>
+       <TD>hidden_label</TD>
+       <TD>"Show hidden files:"</TD>
+    </TR>
+    <TR>
+       <TD>manage_favorites_label</TD>
+       <TD>"Manage Favorites"</TD>
+    </TR>
+    <TR>
+       <TD>new_directory_label</TD>
+       <TD>"New Directory?"</TD>
+    </TR>
+    <TR>
+       <TD>new_directory_tooltip</TD>
+       <TD>"Create a new directory."</TD>
+    </TR>
+    <TR>
+       <TD>preview_label</TD>
+       <TD>"Preview"</TD>
+    </TR>
+    <TR>
+       <TD>save_label</TD>
+       <TD>"Save"</TD>
+    </TR>
+    <TR>
+       <TD>show_label</TD>
+       <TD>"Show:"</TD>
+    </TR>
+    <TR>
+       <TD>sort</TD>
+       <TD>casenumericsort</TD>
+    </TR>
+	<TR>
+	   <TD>sort_menu_label</TD>
+	   <TD>"Sort Method"</TD>
+	</TR>
+    </TABLE></CENTER>
+
+  The fltk::FileChooser::sort member specifies the sort function that is 
+  used when loading the contents of a directory and can be customised
+  at run-time.
+
+  For more complex customisation, considering copying the fltk::FileChooser
+  code and modifying it accordingly.
+*/
+
 //
 // File chooser label strings and sort function...
 //

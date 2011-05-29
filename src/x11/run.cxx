@@ -1265,7 +1265,7 @@ static void set_stylus_data() {
   You can use this to feed artifical X events to it, or to use your
   own code to get events from X.
 
-  Besides feeding events your code should call flush() periodically so
+  Besides feeding events your code should call fltk::flush() periodically so
   that FLTK redraws its windows.
 
   This function will call any widget callbacks from the widget code.
@@ -2539,11 +2539,11 @@ static bool can_xdbe() {
 #endif
 
 /**
-This virtual function is called by ::flush() to update the
+This virtual function is called by fltk::flush() to update the
 window. You can override it for special window subclasses to change
 how they draw.
 
-For FLTK's normal windows this calls make_current(), then perhaps sets
+For FLTK's normal windows this calls Window::make_current(), then perhaps sets
 up the clipping if the only damage is expose events, and then draw(),
 and then does some extra work to get the back buffer copied or swapped
 into the front buffer.

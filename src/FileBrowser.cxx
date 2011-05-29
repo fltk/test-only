@@ -79,16 +79,19 @@
 
 using namespace fltk;
 
-//
-// 'FileBrowser::FileBrowser()' - Create a FileBrowser widget.
-//
+/** \class fltk::FileBrowser
+  The fltk::FileBrowser widget displays a list of filenames, optionally
+  with file-specific icons.
+*/
 
-FileBrowser::FileBrowser(int        X,  // I - Upper-lefthand X coordinate
-                        	 int        Y,  // I - Upper-lefthand Y coordinate
-				 int        W,  // I - Width in pixels
-				 int        H,  // I - Height in pixels
-				 const char *l)	// I - Label text
- : Browser(X, Y, W, H, l) {
+/** Create a FileBrowser widget
+  \param X Upper left-hand X coordinate
+  \param Y Upper right-hand Y coordinate
+  \param W Width in pixels
+  \param H Height in pixels
+  \param l Label text  
+ */
+FileBrowser::FileBrowser(int X, int Y, int W, int H, const char *l) : Browser(X, Y, W, H, l) {
   // Initialize the filter pattern, current directory, and icon size...
   pattern_   = "*";
   directory_ = "";
@@ -97,14 +100,12 @@ FileBrowser::FileBrowser(int        X,  // I - Upper-lefthand X coordinate
   show_hidden_ = false;
 }
 
-//
-// 'FileBrowser::load()' - Load a directory into the browser.
-//
-
-int						// O - Number of files loaded
-FileBrowser::load(const char     *directory,// I - Directory to load
-                      FileSortF *sort)	// I - Sort function to use
-{
+/** Load a directory into the browser.
+  \param directory Directory to load
+  \param sort Sorting function to use
+  \return Number of files loaded
+*/
+int FileBrowser::load(const char *directory, FileSortF *sort) {
   int		i;				// Looping var
   int		num_files;			// Number of files in directory
   int		num_dirs;			// Number of directories in list
@@ -311,10 +312,10 @@ FileBrowser::load(const char     *directory,// I - Directory to load
 }
 
 
-//
-// 'FileBrowser::filter()' - Set the filename filter.
-//
-// I - Pattern string
+/** Set the filename filter.
+  \param pattern Pattern to filter with. Eventually should deal with proper regex!
+*/
+
 void FileBrowser::filter(const char *pattern)	{
   // If pattern is NULL set the pattern to "*"...
   if (pattern) pattern_ = pattern;
@@ -343,6 +344,11 @@ void FileItem::draw()  {
 }
 ////////////////////////////////////////////////////////////////
 
+/** Add a line to the filebrowser
+  \param line Name of the line to add
+  \param icon Optional icon to add to this item
+*/
+
 void FileBrowser::add(const char *line, FileIcon *icon) {
     this->begin();
     FileItem * i = new FileItem(strdup(line),icon);
@@ -350,6 +356,13 @@ void FileBrowser::add(const char *line, FileIcon *icon) {
     this->end();
 }
 
+/** Insert an item into the file browser at the 'n'th position
+    
+    This shifts everything up to and including this position \a back and then places the current item in this spot.
+  \param n The position to insert at. This will append if necessary
+  \param label The name of the line to add
+  \param icon Optional icon to add to this item
+*/
 void FileBrowser::insert(int n, const char *label, FileIcon*icon) {
     current(0);
     FileItem * i = new FileItem(strdup(label),icon);

@@ -58,9 +58,9 @@ using namespace fltk;
   \image html clock.gif
 
   Design credits:
-  Original clock display written by Paul Haeberli at SGI.
-  Modifications by Mark Overmars for Forms
-  Further changes by Bill Spitzak for fltk
+  Original clock display written by Paul Haeberli at SGI.\n
+  Modifications by Mark Overmars for Forms\n
+  Further changes by Bill Spitzak for fltk\n
 */
 
 const float hourhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -7.0f}};
@@ -76,6 +76,10 @@ static void drawhand(float ang,const float v[][2],Color fill,Color line)
   pop_matrix();
 }
 
+/** Draws the hands on the clock.
+    \param fill The fltk::Color used to fill the hands
+    \param line The fltk::Color used to draw the hand outlines
+*/
 void ClockOutput::drawhands(Color fill, Color line) {
   drawhand(-360*(hour()+minute()/60.0f)/12, hourhand, fill, line);
   drawhand(-360*(minute()+second()/60.0f)/60, minhand, fill, line);
@@ -92,6 +96,12 @@ static void rect(float x, float y, float w, float h) {
   fillpath();
 }
 
+/** The draw function
+    \param x The x position of the ClockOutput
+    \param y The y position of the ClockOutput
+    \param w The width of the ClockOutput
+    \param h The height of the ClockOutput
+*/
 void ClockOutput::draw(int x, int y, int w, int h) {
   if (type() == ROUND) {
     addchord(Rectangle(x,y,w,h),0,360);
@@ -122,28 +132,33 @@ void ClockOutput::draw(int x, int y, int w, int h) {
   pop_matrix();
 }
 
+/** Draws a background box and then throws to 
+    ClockOutput::draw(int, int, int int) */
 void ClockOutput::draw() {
   draw_box();
   draw(0, 0, w(), h());
 }
 
 /*! \fn int ClockOutput::hour() const
-  Return the hour sent to the last call to value(). */
+  \return The hour sent to the last call to value(). */
 /*! \fn int ClockOutput::minute() const
-  Return the minute sent to the last call to value(). */
+  \return The minute sent to the last call to value(). */
 /*! \fn int ClockOutput::second() const
-  Return the second sent to the last call to value(). */
+  \return The second sent to the last call to value(). */
 
 /*! \fn unsigned long ClockOutput::value() const
-  Return the last Unix timestamp the clock was set to.
+  \return the last Unix timestamp the clock was set to.
 */
 
 /*! Set the hour, minute, and second to display. The hour is effectively
-  taken modulus 12 and the minute and second modulus 60 to figure out
+  taken modulo 12 and the minute and second modulo 60 to figure out
   where to place the hands. Redraw happens only if different.
 
   This does not set the unsigned long value() member, as it can't
   because it does not know the date.
+  \param h The hour to draw the hour hand pointing to
+  \param m The minute to draw the minute hand pointing to
+  \param s The seconds to draw the second hand pointing to
 */
 void ClockOutput::value(int h, int m, int s) {
   if (h!=hour_ || m!=minute_ || s!=second_) {
@@ -154,7 +169,9 @@ void ClockOutput::value(int h, int m, int s) {
 
 /*! Set the clock to a Unix timestamp. The value is passed through
   the localtime() library function and used to get the hour, minute,
-  and second. */
+  and second. 
+  \param v The unix timestamp used to calculate the time
+*/
 void ClockOutput::value(unsigned long v) {
   value_ = v;
   const time_t vv = (time_t)v;
@@ -164,9 +181,22 @@ void ClockOutput::value(unsigned long v) {
 
 ////////////////////////////////////////////////////////////////
 
+/** The default constructor handballs to ClockOutput()
+    \param x The x position of the Clock, relative to the Group
+    \param y The y position of the Clock, relative to the Group 
+    \param w The width of the Clock
+    \param h The height of the Clock
+    \param l The label of the Clock
+*/
 Clock::Clock(int x, int y, int w, int h, const char *l)
   : ClockOutput(x, y, w, h, l) {}
 
+/** The Clock's handle routine
+    This only reads SHOW, HIDE and TIMEOUT events, otherwise
+    it throws back to ClockOutput::handle
+    \param event The event to handle
+    \return 1 if the event was successfully handled,\n 0 otherwise
+*/
 int Clock::handle(int event) {
   switch (event) {
   case SHOW:
@@ -196,8 +226,16 @@ static void revert(Style* s) {
   //s->textcolor_ = BLACK;
 }
 static NamedStyle style("Clock", revert, &Clock::default_style);
+/** The default_style for Clock reverts selection_color_ to GRAY85, which
+    is the colour used to fill the hands. Everything else is inherited */
 NamedStyle* Clock::default_style = &::style;
 
+/** The default constructor initialised the default_style based on Clock::default_style, sets ALIGN_BOTTOM and then sets all time to 0 
+    \param x The x position of the ClockOutput, relative to the Group
+    \param y The y position of the ClockOutput, relative to the Group
+    \param w The width of the ClockOutput
+    \param h The height of the ClockOutput
+    \param l The label of the ClockOutput*/
 ClockOutput::ClockOutput(int x, int y, int w, int h, const char *l)
 : Widget(x, y, w, h, l) {
   style(Clock::default_style);

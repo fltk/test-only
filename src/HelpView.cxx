@@ -49,6 +49,7 @@
 //   HelpView::value()           - Set the help text directly.
 //   scrollbar_callback()            - A callback for the scrollbar.
 //
+/**\todo isspace probably breaks on UTF8, yet it's used all throughout */
 
 //
 // Include necessary header files...
@@ -149,18 +150,18 @@ static const char *broken_xpm[] =
 static xpmImage broken_image(broken_xpm);
 
 
-//
-// 'HelpView::add_block()' - Add a text block to the list.
-//
+/** Add a text block to the HelpView.
 
-HelpBlock *					// O - Pointer to new block
-HelpView::add_block(const char   *s,	// I - Pointer to start of block text
-                	int           xx,	// I - X position of block
-			int           yy,	// I - Y position of block
-			int           ww,	// I - Right margin of block
-			int           hh,	// I - Height of block
-			uchar border)	// I - Draw border?
-{
+  \param s Pointer to the start of a block of text
+  \param xx X position of the block
+  \param yy Y position of the block
+  \param ww Width of the block
+  \param hh Height of the block
+  \param border Flag which, if set to a non-zero value, draws the border
+
+  \returns A pointer to the new block is returned
+*/
+HelpBlock* HelpView::add_block(const char *s, int xx, int yy, int ww, int hh,uchar border) {
   HelpBlock	*temp;				// New block
 
 
@@ -193,17 +194,14 @@ HelpView::add_block(const char   *s,	// I - Pointer to start of block text
 }
 
 
-//
-// 'HelpView::add_link()' - Add a new link to the list.
-//
-
-void
-HelpView::add_link(const char *n,	// I - Name of link
-                      int        xx,	// I - X position of link
-		      int        yy,	// I - Y position of link
-		      int        ww,	// I - Width of link text
-		      int        hh)	// I - Height of link text
-{
+/** Add a new link to the list.
+  \param n Name of the link
+  \param xx X position of the link
+  \param yy Y position of the link
+  \param ww Width of the link text
+  \param hh Height of the link text
+*/
+void HelpView::add_link(const char *n, int xx, int yy, int ww, int hh) {
   HelpLink	*temp;			// New link
   char		*target;		// Pointer to target name
 
@@ -239,14 +237,11 @@ HelpView::add_link(const char *n,	// I - Name of link
 }
 
 
-//
-// 'HelpView::add_target()' - Add a new target to the list.
-//
-
-void
-HelpView::add_target(const char *n,	// I - Name of target
-                	int        yy)	// I - Y position of target
-{
+/** Add a new target to the list.
+  \param n Name of the target
+  \param yy Y position of the target
+*/
+void HelpView::add_target(const char *n, int yy) {
   HelpTarget	*temp;			// New target
 
 
@@ -269,29 +264,25 @@ HelpView::add_target(const char *n,	// I - Name of target
 }
 
 
-//
-// 'HelpView::compare_targets()' - Compare two targets.
-//
-
-int							// O - Result of comparison
-HelpView::compare_targets(const HelpTarget *t0,	// I - First target
-                             const HelpTarget *t1)	// I - Second target
-{
+/** Compare two targets with a case-insensitive match.
+  \param t0 The first target
+  \param t1 The second target
+  \return An integer less than 0 if t0 is lexicographically less than t1, zero if t0 and t1 are the same and an integer greater than 0 if t0 is lexicographically greater than t1 (just like strncasecmp!)
+*/
+int HelpView::compare_targets(const HelpTarget *t0, const HelpTarget *t1) {
   return (strcasecmp(t0->name, t1->name));
 }
 
 
-//
-// 'HelpView::do_align()' - Compute the alignment for a line in a block.
-//
-
-int						// O - New line
-HelpView::do_align(HelpBlock *block,	// I - Block to add to
-                      int          line,	// I - Current line
-		      int          xx,		// I - Current X position
-		      int          a,		// I - Current alignment
-		      int          &l)		// IO - Starting link
-{
+/** Compute the alignment for a line in a block.
+  \param block Block that will be aligned
+  \param line The current line
+  \param xx Current X position
+  \param a The current alignment
+  \param l The integer value of the starting link. This is returned after the HelpView has done its computations
+  \returns The new position of the line
+*/
+int HelpView::do_align(HelpBlock *block, int line, int xx, int a, int& l) {
   int	offset;					// Alignment offset
 
 
@@ -324,26 +315,31 @@ HelpView::do_align(HelpBlock *block,	// I - Block to add to
 }
 
 
-//
-// 'HelpView::draw()' - Draw the HelpView widget.
-//
 
 static void fltk_line(int x0,int y0, int x1,int y1) {fltk::drawline(x0,y0,x1,y1);}
 static void fltk_xyline(int x, int y, int x1) {
   fltk::drawline(x,y,x1,y);
 }
 
-void 
-HelpView::write_text (const char * buf, const char * ptr, int X, int Y, int X1, int underline) {
+/** Draws a block of text in the HelpView
+  \param buf The text buffer to draw
+  \param ptr Currently UNUSED.
+  \param X The X position to draw into
+  \param Y The Y position to draw into
+  \param X1 The width of the underline
+  \param underline Whether or not to underline this current piece of text
+*/
+void HelpView::write_text (const char * buf, const char * ptr, int X, int Y, int X1, int underline) {
     drawtext (buf, (float) X, (float) Y);
     if (underline) {
       fltk_xyline(X, Y+1, X+X1);
     }
 }
 
-void
-HelpView::draw()
-{
+/** Draw the HelpView widget.
+    Like any other FLTK drawing method, you should never call this directly!
+*/
+void HelpView::draw() {
   int			i;		// Looping var
   const HelpBlock	*block;		// Pointer to current block
   const char		*ptr,		// Pointer to text in block
@@ -880,14 +876,12 @@ HelpView::draw()
 }
 
 
-//
-// 'HelpView::find()' - Find the specified string...
-//
-
-int						// O - Matching position or -1 if not found
-HelpView::find(const char *s,		// I - String to find
-                   int        p)		// I - Starting position
-{
+/** Find the specified string.
+  \param s The string to find
+  \param p The starting position to search from
+  \return Returns the position the match begins, or -1 if no match is found
+*/
+int HelpView::find(const char *s, int p) {
   int		i,				// Looping var
 		c;				// Current character
   HelpBlock	*b;				// Current block
@@ -942,13 +936,13 @@ HelpView::find(const char *s,		// I - String to find
 }
 
 
-//
-// 'HelpView::format()' - Format the help text.
-//
+/** Format the help text.
 
-void
-HelpView::format()
-{
+  This looks like it converts everything into HTML from standard text and draws it properly
+  \todo FIX THIS DOCUMENTATION!
+*/
+
+void HelpView::format() {
   int		i;		// Looping var
   int		done;		// Are we done yet?
   HelpBlock	*block,		// Current block
@@ -1713,15 +1707,12 @@ HelpView::format()
 }
 
 
-//
-// 'HelpView::format_table()' - Format a table...
-//
-
-void
-HelpView::format_table(int        *table_width,	// O - Total table width
-                           int        *columns,		// O - Column widths
-	                   const char *table)		// I - Pointer to start of table
-{
+/** Format a table in the HelpView
+  \param[out] table_width The total table width, returned
+  \param[out] columns The column widths, returned
+  \param table Pointer to the start of the HTML table to format
+*/
+void HelpView::format_table(int *table_width, int *columns, const char *table) {
   int		column,					// Current column
 		num_columns,				// Number of columns
 		colspan,				// COLSPAN attribute
@@ -2144,14 +2135,12 @@ HelpView::format_table(int        *table_width,	// O - Total table width
 }
 
 
-//
-// 'HelpView::get_align()' - Get an alignment attribute.
-//
-
-int					// O - Alignment
-HelpView::get_align(const char *p,	// I - Pointer to start of attrs
-                        int        a)	// I - Default alignment
-{
+/** Get an alignment attribute (i.e. HTML's LEFT/CENTER/RIGHT).
+  \param p Pointer to the start of attributes
+  \param a The default alignment
+  \returns The alignment attrbute
+*/
+int HelpView::get_align(const char *p, int a) {
   char	buf[255];			// Alignment value
 
 
@@ -2167,16 +2156,14 @@ HelpView::get_align(const char *p,	// I - Pointer to start of attrs
 }
 
 
-//
-// 'HelpView::get_attr()' - Get an attribute value from the string.
-//
-
-const char *					// O - Pointer to buf or NULL
-HelpView::get_attr(const char *p,		// I - Pointer to start of attributes
-                      const char *n,		// I - Name of attribute
-		      char       *buf,		// O - Buffer for attribute value
-		      int        bufsize)	// I - Size of buffer
-{
+/** Get a HTML attribute value from the string.
+  \param p Pointer to the start of the attribute
+  \param n Name of the attribute
+  \param[out] buf Buffer for the attribute values, returned to the user. Terminated by a single '\0'
+  \param bufsize Length of the buffer
+  \return Pointer to the start of the buffer, or NULL if no attributes exist.
+*/
+const char* HelpView::get_attr(const char *p, const char *n, char *buf, int bufsize) {
   char	name[255],				// Name from string
 	*ptr,					// Pointer into name or value
 	quote;					// Quote
@@ -2242,14 +2229,12 @@ HelpView::get_attr(const char *p,		// I - Pointer to start of attributes
 }
 
 
-//
-// 'HelpView::get_color()' - Get an alignment attribute.
-//
-
-Color				// O - Color value
-HelpView::get_color(const char *n,	// I - Color name
-                        Color   c)	// I - Default color value
-{
+/** Get a colour's alignment attribute.
+  \param n Colour name
+  \param c Default fltk::Color value
+  \return The fltk::Color corresponding to this allignment attribute
+*/
+Color HelpView::get_color(const char *n, Color c) {
   int	i;				// Looping var
   int	rgb, r, g, b;			// RGB values
   static const struct {			// Color name table
@@ -2303,12 +2288,13 @@ HelpView::get_color(const char *n,	// I - Color name
   }
 }
 
-//
-// 'HelpView::get_image()' - Get an inline image.
-//
-
-SharedImage *
-HelpView::get_image(const char *name, int W, int H) {
+/** Get an inline image.
+  \param name Image name
+  \param W image width
+  \param H image height
+  \return The image requested, or broken_image if the requested image doesn't exist
+*/
+SharedImage* HelpView::get_image(const char *name, int W, int H) {
   const char	*localname;		// Local filename
   char		dir[1024];		// Current directory
   char		temp[1024],		// Temporary filename
@@ -2354,12 +2340,11 @@ HelpView::get_image(const char *name, int W, int H) {
 }
 
 
-//
-// 'HelpView::get_length()' - Get a length value, either absolute or %.
-//
-
-int
-HelpView::get_length(const char *l) {	// I - Value
+/** Get a length value, either absolute or percentage
+  \param l Value to be converted, as a string
+  \returns A converted length value
+*/
+int HelpView::get_length(const char *l) {
   int	val;					// Integer value
 
   if (!l[0]) return 0;
@@ -2376,13 +2361,11 @@ HelpView::get_length(const char *l) {	// I - Value
 }
 
 
-//
-// 'HelpView::handle()' - Handle events in the widget.
-//
-
-int				// O - 1 if we handled it, 0 otherwise
-HelpView::handle(int event)	// I - Event to handle
-{
+/** Handle events in the widget.
+  \param event The event to handle
+  \return 1 if the event was handled, 0 if the HelpView couldn't determine the correct thing to do with this event
+*/
+int HelpView::handle(int event)	{
   int		i;		// Looping var
   int		xx, yy;		// Adjusted mouse position
   HelpLink	*linkp;		// Current link
@@ -2504,31 +2487,39 @@ void HelpView::popfont (Font *&f, int &s) {
     setfont(f, (float)s-1);
 }
 
+/** Sets the current (or default) text colour
+ \param c the fltk::Color of the new color
+*/
 void HelpView::textcolor (Color c) {
 if (textcolor_ == defcolor_)
   textcolor_ = c;
 defcolor_ = c;
 }
 
+/** Sets the current text font and reformats the HelpView
+  \param f A pointer to a fltk::Font structure
+*/
 void HelpView::textfont (Font *f) {
 textfont_ = f;
 format();
 }
 
+/** Changes the text size within the HelpView, then reformats
+  \param s Integer height of the text
+*/
 void HelpView::textsize (int s) {
 textsize_ = s;
 format ();
 }
 
-//
-// 'HelpView::HelpView()' - Build a HelpView widget.
-//
-
-HelpView::HelpView(int        xx,	// I - Left position
-                	   int        yy,	// I - Top position
-			   int        ww,	// I - Width in pixels
-			   int        hh,	// I - Height in pixels
-			   const char *l)
+/** Build a HelpView widget.
+  \param xx Left X position
+  \param yy Top Y positoin
+  \param ww Width in pixels
+  \param hh Height in pixels
+  \param l  Name of the HelpView
+*/
+HelpView::HelpView(int xx, int yy, int ww, int hh, const char *l)
     : Group(xx, yy, ww, hh, l)
 {
   begin();
@@ -2586,10 +2577,10 @@ HelpView::HelpView(int        xx,	// I - Left position
 }
 
 
-//
-// 'HelpView::~HelpView()' - Destroy a HelpView widget.
-//
+/** Destroy a HelpView widget.
 
+    calls free() on everything the HelpView has dynamically allocated
+*/
 HelpView::~HelpView()
 {
   if (nblocks_)
@@ -2603,13 +2594,11 @@ HelpView::~HelpView()
 }
 
 
-//
-// 'HelpView::load()' - Load the specified file.
-//
-
-int				// O - 0 on success, -1 on error
-HelpView::load(const char *f)// I - Filename to load (may also have target)
-{
+/** Load the specified file.
+  \param f Filename to load (which may also be a target, like http://www.fltk.org/)
+  \return 0 on success or -1 for an error
+*/
+int HelpView::load(const char *f) {
   FILE		*fp;		// File to read from
   long		len;		// Length of file
   char		*target;	// Target in file
@@ -2700,8 +2689,10 @@ HelpView::load(const char *f)// I - Filename to load (may also have target)
   return (0);
 }
 
-void 
-HelpView::layout() {
+/** HelpView's layout method.
+  Similar to Widget::layout() in use.
+*/
+void HelpView::layout() {
   Rectangle inside(0, 0, w(), h());
   Box *b = box() ? box () : DOWN_BOX;
   b->inset(inside);
@@ -2735,13 +2726,10 @@ HelpView::layout() {
 }
 
 
-//
-// 'HelpView::topline()' - Set the top line to the named target.
-//
-
-void
-HelpView::topline(const char *n)	// I - Target name
-{
+/** Set the top line to the named target.
+  \param n The target name
+*/
+void HelpView::topline(const char *n) {
   HelpTarget key,			// Target name key
 		*target;		// Pointer to matching target
 
@@ -2759,13 +2747,10 @@ HelpView::topline(const char *n)	// I - Target name
 }
 
 
-//
-// 'HelpView::topline()' - Set the top line by number.
-//
-
-void
-HelpView::topline(int t)	// I - Top line number
-{
+/** Set the top line by number.
+  \param t The top line number
+*/
+void HelpView::topline(int t) {
   if (!value_)
     return;
 
@@ -2784,13 +2769,10 @@ HelpView::topline(int t)	// I - Top line number
 }
 
 
-//
-// 'HelpView::leftline()' - Set the left position.
-//
-
-void
-HelpView::leftline(int l)	// I - Left position
-{
+/** Set the left position.
+  \param l Left position
+*/
+void HelpView::leftline(int l) {
   if (!value_)
     return;
 
@@ -2807,13 +2789,15 @@ HelpView::leftline(int l)	// I - Left position
 }
 
 
-//
-// 'HelpView::value()' - Set the help text directly.
-//
-
-void
-HelpView::value(const char *v)	// I - Text to view
-{
+/** Set the help text directly.
+  To use this function, store all your HTML in a buffer and then call
+  \code
+  my_help_view.value(buffer);
+  \endcode
+  HelpView will automatically attempt to format your HTML
+  \param v The text to view
+*/
+void HelpView::value(const char *v) {
   if (!v)
     return;
 

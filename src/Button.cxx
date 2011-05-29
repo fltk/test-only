@@ -56,29 +56,43 @@ using namespace fltk;
 */
 
 /*! \fn bool Button::value() const
-  The current value. True means it is pushed down, false means it is
-  not pushed down. The ToggleButton subclass provides the ability for
+  The current value. The ToggleButton subclass provides the ability for
   the user to change this value permanently, otherwise it is just
   temporary while the user is holding the button down.
 
   This is the same as Widget::state().
+
+  \return true if the button is pushed down, false otherwise
 */
 
 /*! \fn bool Button::value(bool)
-  Change the value(). Redraws the button and returns true if the new
-  value is different. This is the same function as Widget::state().
+  Changes the value() and redraws the button.
+  This is the same function as Widget::state().
   See also Widget::set(), Widget::clear(), and Widget::setonly().
 
-  If you turn it on, a normal button will draw pushed-in, until
-  the user clicks it and releases it.
+  \param v The new value for the button; true for pushed down, false
+  for not pushed down.
+  If you pass "true" as the value, a normal button will draw 
+  pushed-in, until the user clicks it and releases it.
+  \return true if the new value is different, false otherwise
 */
 
 static bool initial_state;
 
+/** Wrapper around Button::handle(int event, const Rectangle& rectangle)
+    \param event The event that this button has received
+    \return 1 if the button has successfully handled the event,\n 0 otherwise
+*/
 int Button::handle(int event) {
   return handle(event, Rectangle(w(),h()));
 }
 
+/** The Button's own handle function. See Widget::handle
+    \param event The event to handle
+    \param rectangle The rectangle this event occurred within.
+    You can change this value, or inspect it in a subclass, to determine
+    what you want your button to do if the user clicks on different sections
+*/
 int Button::handle(int event, const Rectangle& rectangle) {
   switch (event) {
   case ENTER:
@@ -162,13 +176,13 @@ extern Widget* fl_did_clipping;
   This function provides a mess of back-compatabilty and Windows
   emulation to subclasses of Button to draw with. It will draw the
   button according to the current state of being pushed and it's
-  state(). If non-zero is passed for \a glyph_width then the glyph()
-  is drawn in that space on the left (or on the right if negative),
-  and it assummes the glyph indicates the state(), so the box is only
-  used to indicate the pushed state.
+  state().
+  \param glyph_width If non-zero is passed for \a glyph_width 
+  then the glyph() is drawn in that space on the left (or on the 
+  right if negative), and it assummes the glyph indicates the 
+  state(), so the box is only used to indicate the pushed state.
 */
-void Button::draw(int glyph_width) const
-{
+void Button::draw(int glyph_width) const {
   // For back-compatability, setting color() or box() directly on a plain
   // button will cause it to act like buttoncolor() or buttonbox() are
   // set:
@@ -245,6 +259,9 @@ void Button::draw(int glyph_width) const
   box->draw_symbol_overlay(r);
 }
 
+/** The virtual draw() function makes sure the button isn't hidden, then
+    calls Button::draw(int glyph_width) with a width of 0 
+*/
 void Button::draw() {
   if (type() == HIDDEN) {
     fl_did_clipping = this;
@@ -256,8 +273,19 @@ void Button::draw() {
 ////////////////////////////////////////////////////////////////
 
 static NamedStyle style("Button", 0, &Button::default_style);
+/** This sets the Button's default style to one with \b no revert function
+    It thus inherits its style from the "default" style and from Group::default_style
+*/
 NamedStyle* Button::default_style = &::style;
 
+/** The default constructor calls Widget() with x, y, w, h and l.
+    It also sets the style to the default_style
+    \param x The x position of the Button, relative to the group
+    \param y The y position of the Button, relative to the group
+    \param w The width of the Button
+    \param h The height of the Button
+    \param l The Button's label
+*/
 Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
   style(default_style);
   //set_click_to_focus();

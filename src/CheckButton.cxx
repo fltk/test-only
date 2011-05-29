@@ -76,6 +76,7 @@ public:
   CheckBox() : Symbol("checkbox") {}
 } glyph;
 
+/** Handballs drawing onto Button::draw(), with a glyph width of textsize()+2*/
 void CheckButton::draw() {
   Button::draw(int(textsize())+2);
 }
@@ -86,8 +87,19 @@ static void revert(Style* s) {
   s->glyph_ = &glyph;
 }
 static NamedStyle style("Check_Button", revert, &CheckButton::default_style);
+/** The default style for a CheckButton reverts to NO_BOX and a default glyph
+ (the check mark to the left)
+*/
 NamedStyle* CheckButton::default_style = &::style;
 
+/** The constructor handballs creation to Button(), sets type(TOGGLE) and
+    sets ALIGN_LEFT|ALIGN_INSIDE on the label
+    \param x The x position of the CheckButton, relative to the group
+    \param y The y position of the CheckButton, relative to the group
+    \param w The width of the CheckButton
+    \param h The height of the CheckButton
+    \param l The CheckButton's label
+*/
 CheckButton::CheckButton(int x, int y, int w, int h, const char *l)
   : Button(x, y, w, h, l)
 {

@@ -117,60 +117,63 @@ using namespace fltk;
 #define TRIANGLE_GLYPH 0 // use Macintosh/fltk-style glyphs
 
 /*! \fn int Browser::width() const
-  The width of the longest item in the browser, measured in pixels. If
-  this is changed (by adding or deleting items or opening or closing a
-  parent item) then layout() must be called before this is correct.
+  \return The width of the longest item in the browser, measured in pixels. 
+  
+  If this is changed (by adding or deleting items or opening or closing 
+  a parent item) then layout() must be called before this is correct.
 */
 
 /*! \fn int Browser::height() const
-  The height of all the visible items in the browser, measured in
-  pixels. If this is changed (by adding or deleting items or opening
+  \return The height of all the visible items in the browser, measured in
+  pixels. 
+  
+  If this is changed (by adding or deleting items or opening
   or closing a parent item) then layout() must be called before this
   is correct.
 */
 
 /*! \fn int Browser::box_width() const
-  The width of the display area of the browser in pixels, this is w()
-  minus the edges of the box() minus the width of the vertical
-  scrollbar, if visible. If this is changed (by resizing the widget,
-  adding or deleting items or opening or closing a parent item such
-  that the scrollbar visibility changes) then layout() must be called
-  before this is correct.
+  \return The width of the display area of the browser in pixels; 
+  this is w() minus the edges of the box() minus the width of the 
+  vertical scrollbar, if visible. 
+  
+  If this is changed (by resizing the widget, adding or deleting items 
+  or opening or closing a parent item such that the scrollbar visibility 
+  changes) then layout() must be called before this is correct.
 */
 
 /*! \fn int Browser::box_height() const
-  The height of the display area of the browser in pixels, this is h()
-  minus the edges of the box() minus the height of the horizontal
-  scrollbar, if visible. If this is changed (by resizing the widget,
+  \return The height of the display area of the browser in pixels,
+  this is h() minus the edges of the box() minus the height of the 
+  horizontal scrollbar, if visible. 
+  
+  If this is changed (by resizing the widget,
   adding or deleting items or opening or closing a parent item such
   that the scrollbar visibility changes) then layout() must be called
   before this is correct.
 */
 
 /*! \fn void Browser::indented(bool v)
-  Turn this on to for space to be reserved for open/close boxes drawn
-  to the left of top-level items. You usually want this for a
-  hierarchial browser. This should be off for a flat browser, or to
-  emulate Windows Explorer where "my computer" does not have an
-  open/close to the left of it. The default value is false.
+  \param v Turn this on to for space to be reserved for open/close 
+  boxes drawn to the left of top-level items. You usually want this
+  for a hierarchial browser. This should be off for a flat browser,
+  or to emulate Windows Explorer where "My Computer" does not have 
+  an open/close to the left of it.\n
+  The default value is false.
 */
 
 /*! \fn Widget *Browser::header(int col)
-  Return pointer to Widget in column \a col, starting from index 0.
+  \param col The index of the required column
+  \return pointer to Widget in column \a col, starting from index 0.
   If column \a col is invalid, NULL is returned.
 */
 
 /*! \fn int Browser::nheader() const
-  Return number of columns in browser.
+  \return The number of columns in the Browser.
 */
 
 ////////////////////////////////////////////////////////////////
 // Moving between items:
-
-// A "mark" is like a pointer to a widget somewhere in the hierarchy
-// of the Browser. Actually it is an array of child indicies, and also
-// the vertical position and index number (used to decide stripe color)
-// of the item.
 
 // The Browser has space to store a fixed number of marks.
 
@@ -182,17 +185,18 @@ using namespace fltk;
 // item, even ones that cannot be seen, by using goto_item.
 
 /*!
-  Return true if the item would be visible to the user if the browser
-  was scrolled to the correct location. This means that the
-  fltk::INVISIBLE flag is not set on it, and all parents of it are
-  open and visible as well.
+  \return true if the current item would be visible to the user 
+  if the browser was scrolled to the correct location. This means 
+  that the fltk::INVISIBLE flag is not set on it, and all parents 
+  of it are open and visible as well.
 */
 bool Browser::item_is_visible() const {
   return HERE.open_level >= HERE.level && item() && item()->visible();
 }
 
 /*! This function increases the number of levels we can store in each
-  mark, and sets the level of the current mark to n. */
+  mark, and sets the level of the current mark to n.
+  \param n The requested level of the current mark */
 void Browser::set_level(unsigned n) {
   if (n+1 > HERE.indexes_size) {
     int* newlist = new int[n+1];
@@ -218,6 +222,9 @@ void Browser::set_level(unsigned n) {
   If you have invisible items in the browser you should use
   goto_index(0) if you want to go to the first item even if it is
   invisible.
+
+  \returns the Widget for the very first visible Item, or NULL if this
+  doesn't exist
 */
 Widget* Browser::goto_top() {
   HERE.level = 0;
@@ -240,9 +247,12 @@ Widget* Browser::goto_top() {
   Sets the item() to the "focus" (the item with the dotted square in
   an fltk::MultiBrowser, and the selected item in a normal
   fltk::Browser.
+  \return The focused Item's Widget.
 */
 
-/*! set current item to a particular mark */
+/*! Go to a particular Mark
+  \param mark The Mark to traverse to
+  \return The Widget referred to by this mark */
 Widget* Browser::goto_mark(const Mark& mark) {
   HERE = mark;
   for (unsigned L = 0; L <= HERE.level; L++) {
@@ -254,7 +264,8 @@ Widget* Browser::goto_mark(const Mark& mark) {
   return item();
 }
 
-/** Copy constructor */
+/** Copy constructor. Copies one Mark to another
+  \param source The Mark to copy */
 Browser::Mark::Mark(const Mark& source) {
   level = source.level;
   open_level = source.open_level;
@@ -268,7 +279,9 @@ Browser::Mark::Mark(const Mark& source) {
     indexes[i] = source.indexes[i];
 }
 
-/** Assignment */
+/** Assignment. Overwrites the current Mark with source
+  \param source The Mark to overwrite with
+*/
 const Browser::Mark& Browser::Mark::operator=(const Mark& source) {
   if (&source != this) {
     if (indexes != &index0) delete[] indexes;
@@ -305,23 +318,25 @@ static int compare_marks(const int* index1, unsigned L1,
   }
 }
 
-/** - Return -2 or less if this is before mark2
-    - Return -1 if this is a parent of mark2
-    - Return 0 if this is equal to mark2
-    - Return 1 if this is a child of mark2
-    - return 2 or greater if this is after mark2
+/** Compares the current mark's position to another mark's position
+  \param mark2 The mark to compare with
+  \return -2 or less if this is before mark2\n
+          -1 if this is a parent of mark2\n
+           0 if this is equal to mark2\n
+           1 if this is a child of mark2\n
+           2 or greater if this is after mark2\n
 */
 int Browser::Mark::compare(const Mark& mark2) const {
   return ::compare_marks(indexes, level, mark2.indexes, mark2.level);
 }
 
-/*!  Return true if the current item is a parent. Notice that it may
+/*!  \return true if the current item is a parent. Note that it may
   have zero children. */
 bool Browser::item_is_parent() const {
   return children(HERE.indexes, HERE.level+1) >= 0;
 }
 
-/** If item_is_parent() is true, return true if this item is open.
+/** \return true if item_is_parent() is true and this item is open. \n
     If this is not a parent the result is undefined. */
 bool Browser::item_is_open() const {
   if (item()->flag(fltk::OPENED)) return true;
@@ -332,13 +347,18 @@ bool Browser::item_is_open() const {
   return true;
 }
 
+/** Gets the current item's height and calls layout if needed
+  \return The current item's height. 
+*/
 int Browser::item_h() const {
   if (!item()->h()) item()->layout();
   return item()->h();
 }
 
-/*! Move forward to the next visible item (what down-arrow does).
-  This does not move and returns null if we are at the bottom. */
+/*! Move forward to the next visible Item (what the down-arrow does).
+  This does not move and returns null if we are at the bottom.
+  \return The next visible Item's Widget or NULL if this isn't possible
+*/
 Widget* Browser::next_visible() {
   if (item_is_visible()) {
     HERE.position += item_h();
@@ -383,7 +403,9 @@ Widget* Browser::next_visible() {
 }
 
 /*! Move backward to previous visible item:
-  This does not move and returns null if we are at the top. */
+  This does not move and returns null if we are at the top. 
+  \return The Widget of the previous Item, or NULL if this is not possible
+*/
 Widget* Browser::previous_visible() {
 
   // if we are on a child of a closed or invisible parent, pretend
@@ -433,7 +455,8 @@ Widget* Browser::previous_visible() {
   moves to the first child. If not a parent, it moves to the next
   child of it's parent. If it is the last child it moves to the
   parent's brother. Repeatedly calling this will visit every child of
-  the browser. This returns the widget. If the current widget is the
+  the browser. 
+  \return This returns the widget. If the current widget is the
   last one this returns null, but the current widget remains on the
   last one.
 
@@ -462,8 +485,10 @@ Widget* Browser::next() {
   }
 }
 
-/*! Set the current item() to the last one who's top is at or before
-  \a Y pixels from the top. */
+/*! Set the current item() to the last one whose top is at or before
+  \a Y pixels from the top. 
+  \param Y The minimum distance from the top
+  \return The last Item's Widget whose top is at or before \a Y*/
 Widget* Browser::goto_position(int Y) {
   if (Y < 0) Y = 0;
   if (layout_damage() || Y<=yposition_/2 || !goto_mark(FIRST_VISIBLE)) {
@@ -489,7 +514,9 @@ Widget* Browser::goto_position(int Y) {
 */
 
 static bool nodamage;
-/*! Set item referenced by this mark as being damaged. */
+/*! Set item referenced by this mark as being damaged. 
+  \param mark The damaged item being referenced through its Mark
+*/
 void Browser::damage_item(const Mark& mark) {
   if (nodamage) return;
   if (!mark.is_set()) return;
@@ -507,41 +534,46 @@ void Browser::damage_item(const Mark& mark) {
 }
 
 /*! \fn int Browser::current_level() const
-  Return the nesting level of the current item (how many parents it has).  */
+  \return The nesting level of the current item (how many parents it has).  */
 
 /*! \fn const int* Browser::current_index() const
- Return an array of current_level()+1 indexes saying which child at
- each level includes the current item.
+ \return An array of current_level()+1 indexes saying which child at
+ each level including the current item.
 */
 
 /*! \fn int Browser::current_position() const
-  Return the y position, in pixels, of the top edge of the current
-  item. You may also want the height, which is in item_h().
+  \return The y position, in pixels, of the top edge of the current
+  item.
+  
+  You may also want the height, which is in item_h().
 */
 
 /*! \fn int Browser::focus_level() const
-  Return the nesting level of the focus (how many parents it has).
+  \return The nesting level of the focus (how many parents it has).
   The focus is the selected item the user sees.
 */
 
 /*! \fn const int* Browser::focus_index() const
- Return an array of focus_level()+1 indexes saying which child at
+ \return An array of focus_level()+1 indexes saying which child at
  each level includes the focus.
 */
 
 /*! \fn int Browser::focus_position() const
-  Return the y position, in pixels, of the top edge of the focus
-  item. You may also want the height, which is in
-  goto_focus(); item_h().
+  \return The y position, in pixels, of the top edge of the focus
+  item.
+  
+  You may also want the height, which is in 
+  \code goto_focus(); item_h() \endcode.
 */
 
 /*! \fn void Browser::value(int v)
-  Same as goto_index(v);set_focus();, to change the current item in a
-  non-hierarchial browser.
+  Same as \code goto_index(v);set_focus();\endcode, to change 
+  the current item in a non-hierarchial browser.
+  \param v The item to change to
 */
 
 /*! \fn int Browser::value() const
-  Returns focus_index(v)[0], to get the current item in a
+  \return focus_index(v)[0], to get the current item in a
   non-hierarchial browser.
 */
 
@@ -610,9 +642,10 @@ static BrowserGlyph glyph;
 // this is non-zero if a drag was started in a group open/close box:
 static char openclose_drag;
 
-// Draws the current item:
-// If damage is non-zero it draws the left-hand glyphs and or's that damage
-// into the item.
+/** Draws the current item
+  \param damage If \a damage is non-zero it draws the left-hand glyphs 
+  and OR's that damage into the item.
+*/
 void Browser::draw_item(int damage) {
 
   int x = interior.x()-xposition_;
@@ -688,10 +721,17 @@ void Browser::draw_item(int damage) {
 
 }
 
+/** The callback that forces the Browser to redraw the clip
+    \param v The Browser that called this function
+    \param r The Rectangle for the clip region
+*/
 void Browser::draw_clip_cb(void* v, const Rectangle& r) {
   ((Browser*)v)->draw_clip(r);
 }
 
+/** Draws the Browser's clip region
+  \param r The Rectangle representing the clip region
+*/
 void Browser::draw_clip(const Rectangle& r) {
   push_clip(r);
 
@@ -801,10 +841,12 @@ void Browser::draw() {
 ////////////////////////////////////////////////////////////////
 // Scrolling and layout:
 
-/*!  If the current item is a parent, set the open state (the
+/*! Opens the current item (which must be a parent)
+  \param open If the current item is a parent, set the open state (the
   fltk::STATE flags) to the given value and redraw the browser
-  correctly. Returns true if the state was actually changed, returns
-  false if it was already in that state.  */
+  correctly. 
+  \returns true if the state was actually changed, or false if 
+  it was already in that state.  */
 bool Browser::set_item_opened(bool open)
 {
   if (!item() || item_is_open()==open || !item_is_parent()) return false;
@@ -823,9 +865,11 @@ bool Browser::set_item_opened(bool open)
   return true;
 }
 
-/*!  Turn off or on the fltk::INVISIBLE flag on the given item and
-  redraw the browser if necessary. Returns true if the state was
-  actually changed, returns false if it was already in that state.  */
+/*! Turns off or on the fltk::INVISIBLE flag on the given item and
+  redraw the browser if necessary. 
+  \param value The new value of the flag on the given item 
+  \return true if the state was actually changed or false if it 
+  was already in that state.  */
 bool Browser::set_item_visible(bool value)
 {
   if (!item()) return false;
@@ -1009,12 +1053,17 @@ void Browser::layout() {
   Item::clear_style();
 }
 
+/** The callback to move horizontal scrollbar
+  \param o The horizontal Scrollbar
+*/
 void Browser::hscrollbar_cb(Widget* o, void*) {
   ((Browser*)(o->parent()))->xposition(int(((Scrollbar*)o)->value()));
 }
 
 /*! Set the horizontal scrolling position, measured in pixels. Zero is
-  the normal position where the left edge of the child widgets is visible. */
+  the normal position where the left edge of the child widgets is visible. 
+  \param X The new scrolling position
+*/
 void Browser::xposition(int X) {
   int dx = xposition_-X;
   if (dx) {
@@ -1025,13 +1074,18 @@ void Browser::xposition(int X) {
   }
 }
 
+/** The vertical Scrollbar callback
+  \param o The vertical Scrollbar
+*/
 void Browser::scrollbar_cb(Widget* o, void*) {
   ((Browser*)(o->parent()))->yposition(int(((Scrollbar*)o)->value()));
 }
 
 /*! Set the vertical scrolling position, measured in pixels. Zero means
   the top of the first item is visible. Positive numbers scroll the
-  display up. */
+  display up.
+  \param Y The new vertical Scrollbar position
+*/
 void Browser::yposition(int Y) {
   if (Y == yposition_) return;
   ((Slider*)(&scrollbar))->value(Y);
@@ -1046,7 +1100,8 @@ void Browser::yposition(int Y) {
 
 /*! Change the focus (the selected item, or in an fltk::MultiBrowser
   the item that has a dotted box around it, to the current item.
-  This calls make_item_visible().  */
+  This calls make_item_visible().
+  \return If the focus is changed, returns true, otherwise returns false */
 bool Browser::set_focus() {
   bool ret = !at_mark(FOCUS);
   if (ret) {
@@ -1072,7 +1127,8 @@ bool Browser::set_focus() {
   assigned to the browser.
 
   The browser is then scrolled by calling yposition() so the item is
-  visible. The optional argument tells how to scroll. If not specified
+  visible. 
+  \param where The optional argument tells how to scroll. If not specified
   (or the default value of fltk::Browser::NOSCROLL is given) then the
   browser is scrolled as little as possible to show the item. If it is
   fltk::Browser::TOP then the item is put at the top of the
@@ -1081,6 +1137,9 @@ bool Browser::set_focus() {
   item is put at the bottom of the browser.
 
   This does nothing if the current item is null.
+  \return false if the current item is null or the item was already visible\n
+          true otherwise
+
 */
 bool Browser::make_item_visible(linepos where) {
   if (!item()) return false;
@@ -1127,30 +1186,43 @@ bool Browser::make_item_visible(linepos where) {
   return changed;
 }
 
-/*! This is for use by the MultiBrowser subclass.
-  select or deselect an item in parameter, 
-  optionally execute a callback (calls set_item_selected()).
+/*! This is for use by the MultiBrowser subclass. \n
   This method changes item position in the tree.
+  \param e Used to select or deselect an Widget, 
+  \param v true selects, false deselects
+  \param do_callback optionally execute a callback 
+  (calls set_item_selected() - see this for further documentation).
+  \return Returns set_item_selected(); see this function for more information.
 */
-bool  Browser::select(Widget* e, int v, int do_callback) {
-	if (!item()) goto_top();
+bool Browser::select(Widget* e, int v, int do_callback) {
+  if (!item()) goto_top();
     Widget* i = item();
-	Widget *c;
-	while  (item()!=e) {
-		c=next_visible();
-		if (c==i || (!c && (c=goto_top())==i)) return false;
-	}
-	return set_item_selected(v ? true: false, do_callback);
+    Widget *c;
+    while  (item()!=e) {
+      c=next_visible();
+      if (c==i || (!c && (c=goto_top())==i)) return false;
+    }
+  return set_item_selected(v ? true: false, do_callback);
 }
 /*! This is for use by the MultiBrowser subclass.
   Turn the fltk::SELECTED flag on or off in the current item (use
   goto_index() to set the current item before calling this).
 
+  \param value This is the toggle switch; if true this item is SELECTED 
+  otherwise it's deselected
+  \param do_callback A logical OR of when this callback should be executed,
+  which is internally logical AND'd with when(). If when() & \a do_callback
+  returns 0 but do_callback is positive, this does set_changed()
+
   If this is not a MultiBrowser, this does select_only_this()
   if \a value is true, and deselect() if \a value is false.
 
-  If do_callback has some bits that are also in when() then the
-  callback is done for each item that changes selected state.
+  \return If the Browser is a MultiBrowser, returns false if 
+  the item doesn't exist or the item is already selected and value 
+  is true (or the item is not selected and value is false)
+  or true otherwise\n
+  If the item is a regular Browser, returns set_only_this() or 
+  deselect(do_callback) based on \a value
 */
 
 bool Browser::set_item_selected(bool value, int do_callback) {
@@ -1184,32 +1256,41 @@ bool Browser::set_item_selected(bool value, int do_callback) {
   }
 }
 
-/*! Turn off selection of all items in the browser. For the normal
-  (not Multi) Browser, this puts it in a special state where nothing
+/*! Turn off current selection of all items in the browser. For 
+  the regular Browser, this puts it in a special state where nothing
   is highlighted and index(0) returns -1. The user cannot get it into
   this state with the GUI.
 
   For a MultiBrowser the user can get this state by ctrl+clicking the
   selected items off.
 
-  If \a do_callback has some bits that are also in when() then the
-  callback is done for each item that changes selected state.
+  \param do_callback If \a do_callback has some bits that are also in 
+  when() then the callback is done for each item that changes 
+  selected state.
+  \return true if there were items to turn off, false otherwise.
+  \todo CHECK THIS!
 */
 bool Browser::deselect(int do_callback) {
   HERE.unset(); item(0);
   return select_only_this(do_callback);
 }
 
-/*! Make the given item be the current one. For the MultiBrowser subclass
+/*! Make an item be the only one selected. For the MultiBrowser subclass
   this will turn off selection of all other items and turn it on
   for this one and also set the focus here. If the selection
-  changes and when()&do_callback is non-zero, the callback is done.
+  changes and when() & do_callback is non-zero, the callback is done.
 
-  For the multibrowser, the callback is done for each item that changes,
+  For the MultiBrowser, the callback is done for each item that changes,
   whether it turns on or off.
+
+  \param do_callback Logical OR of WHEN_* conditions to trigger the callback
+  \return For a Browser, returns false if the focus couldn't be changed\n
+          returns true otherwise.\n
+	  For a MultiBrowser, returns false if the item is not already
+	  selected\n returns true otherwise
 */
 bool Browser::select_only_this(int do_callback) {
-  if (multi() ) {
+  if (multi()) {
     set_focus();
     bool ret = false;
     // Turn off all other items and set damage:
@@ -1239,8 +1320,10 @@ bool Browser::select_only_this(int do_callback) {
   }
 }
 
-// check if current item is not the highlighted one, needs highligting,
-// and trigger the old and new highlighted ones to redraw if so:
+/** Checks if the current item is not the highlighted one and needs 
+    highligting, and trigger the old and new highlighted ones to 
+    redraw if so
+*/
 void Browser::set_belowmouse() {
   // update highlighting:
   if (at_mark(BELOWMOUSE)) return;
@@ -1254,7 +1337,7 @@ void Browser::set_belowmouse() {
   }
 }
 
-// Indicate that nothing should be highlighted:
+/** Indicates that nothing should be highlighted */
 void Browser::clear_belowmouse() {
   damage_item(BELOWMOUSE);
   BELOWMOUSE.unset();
@@ -1494,7 +1577,10 @@ int Browser::handle(int event) {
 /*! Go to the focus if it is visible and return it.
   If it is not visible, go to the top of the visible region and return
   zero. This is used by keystrokes so the browser does not scroll
-  unexpectedly. */
+  unexpectedly. 
+  \return The Widget for the Item that holds the focus, if it's visible.
+  Returns NULL otherwise
+*/
 Widget* Browser::goto_visible_focus() {
   if (FOCUS.position >= yposition_ &&
       FOCUS.position <= yposition_+interior.h()) {
@@ -1508,14 +1594,23 @@ Widget* Browser::goto_visible_focus() {
   return 0;
 }
 
-/*! Go to a nested item. indexes must contain level+1 index
-  numbers. The first number indicates the top-level item number, the
-  second indicates the child number of that parent, and so on. This
-  sets the current item() to the given item and also returns it. If
-  the values are out of range then null is returned.
+/*! Go to a nested item. This sets the current item() to the given 
+    item.
+    
+     and also returns it. If
+    the values are out of range then null is returned.
+  
+  \param indexes An integer array. indexes[0] must contain the index 
+  of the top-level item, indexes[1] must contain the index of the
+  child of this top level item relative to the parent, and so on.
+  \param level The depth of the node to go to (and the length of indexes,
+  + 1)
 
   A negative number in indexes[0] will make it go into a special
   no-item state where select_only_this() will do deselect().
+  \return NULL if the Browser is empty or a negative number was passed
+  in index[0] (or the value(s) passed were out of range)\n
+  the Widget that was moved to otherwise
 */
 Widget* Browser::goto_index(const int* indexes, unsigned level) {
   // negative numbers make nothing be selected:
@@ -1556,13 +1651,22 @@ Widget* Browser::goto_index(const int* indexes, unsigned level) {
 }
 
 /*! Go to the i'th item in the top level. If i is out of range null is
-  returned. */
+  returned.
+  \param i The item to go to
+  \return The Widget the Browser has moved to, or NULL if this is out of range
+  */
 Widget* Browser::goto_index(int i) {
   return goto_index(&i,0);
 }
 
 /*! Go to an item at any level up to 5. Negative numbers indicate that
-  no more levels should be looked at. */
+  no more levels should be looked at. 
+  \param a The top level index
+  \param b The child of the top level's index
+  \param c The child of \a b's index 
+  \param d The child of \a c's index
+  \param e The child of \a d's index
+*/
 Widget* Browser::goto_index(int a, int b, int c, int d, int e) {
   int indexes[6];
   int i = 0;
@@ -1586,8 +1690,9 @@ Widget* Browser::goto_index(int a, int b, int c, int d, int e) {
   should start printing text at. These are measured from the left edge
   of the browser, including any area for the open/close + glyphs.
 
+  \param t A constant integer array, with the 'i'th position representing
+  the width of column i
   \li Array must end with 0 (zero) always
-
   \li You can define flexible column by setting column width to -1.
       If you have flexible column in browser, all columns are resized to
       match width of the browser, by resizing flexible column.
@@ -1631,6 +1736,13 @@ void Browser::column_widths(const int *t) {
   redraw();
 }
 
+/** Sets the start position of a column to a certain position
+  \param col The index of the column to move
+  \param x The x position, in pixels, that this column is to be moved to
+  \return -1 if the index is out of bounds or the user is attempting to adjust
+  the first column,\n
+  the distance in pixels the column had to move, otherwise
+*/
 int Browser::set_column_start(int col, int x) {
   // we must adjust all this column and the column to the left so that the
   // resulting edge ends at x
@@ -1678,6 +1790,11 @@ RETURN:
   return dx;
 }
 
+/** The callback that is triggered when the user clicks on a column header
+  \param ww The widget that was clicked on
+  \param d An integer representing the index of the column that was clicked,
+  used to trigger the column's callback
+*/
 void Browser::column_click_cb_(Widget *ww, void *d) {
   Browser *w = (Browser*)(ww->parent());
   w->selected_column_ = int(long(d));
@@ -1761,6 +1878,8 @@ public:
   print into the correct columns by putting '\\t' characters into
   their text. Or they can look at fltk::column_widths() to find
   the settings from their draw() methods.
+
+  \param t A const char* array of labels
 */
 void Browser::column_labels(const char **t) {
   column_labels_ = t;
@@ -1793,6 +1912,8 @@ void Browser::column_labels(const char **t) {
   Check this to see which one they clicked. This will return a
   negative number if the callback is being done for some other
   reason, such as the user clicking on an item.
+  \return The index of the selected column, or negative if no column was 
+  selected
 */
 
 ////////////////////////////////////////////////////////////////
@@ -1803,15 +1924,19 @@ void Browser::column_labels(const char **t) {
 
 /*! Same as goto_index(line),set_item_selected(value), to change the
   selected state of an item in a non-hierarchial
-  MultiBrowser. If \a line is out of range nothing happens. */
+  MultiBrowser.
+  \param line The line of the widget to look at
+  \param value Flag representing whether or not to select this item
+  \return If \a line is out of range this returns false, else returns true. */
 bool Browser::select(int line, bool value) {
   if (!goto_index(line)) return false;
   return set_item_selected(value, false);
 }
 
 /*! Does goto_index(line),item_selected() to return the selection
-  state of an item in a non-hierarchial MultiBrowser. If \a line
-  is out of range it returns false.
+  state of an item in a non-hierarchial MultiBrowser.
+  \param line The line to look at
+  \return If \a line is out of range it returns false, else returns true
 */
 bool Browser::selected(int line) {
   if (!goto_index(line)) return false;
@@ -1819,7 +1944,8 @@ bool Browser::selected(int line) {
 }
 
 /*! Convenience function for non-hierarchial browsers.
-  Returns true if the indexed item is visible (ie not hidden).
+  \param line The line this item is on
+  \return true if the indexed item is visible,\n false otherwise
 */
 bool Browser::displayed(int line) {
   if (!goto_index(line)) return false;
@@ -1836,38 +1962,38 @@ bool Browser::display(int line, bool value) {
 
 /*! \fn int Browser::topline() const
   Convenience function for non-hierarchial browsers.
-  Returns the index if the top-level item that is at the top of the
+  \return The index of the top-level item that is at the top of the
   scrolling window. */
 
 /*! \fn void Browser::topline(int line)
   Convenience function for non-hierarchial browsers.
-  Make the indexed item visible and scroll to put it at the top of
-  the browser. */
+  \param line Make the indexed item visible and scroll to put it 
+  at the top of the browser. */
 
 /*! \fn void Browser::middleline(int line)
   Convenience function for non-hierarchial browsers.
-  Make the indexed item visible and scroll to put it in the middle
-  of the browser if it is not already visible (passes NO_SCROLL
-  to make_item_visible(). */
+  \param line Make the indexed item visible and scroll to put it 
+  in the middle of the browser if it is not already visible 
+  (passes NO_SCROLL to make_item_visible(). */
 
 /*! \fn void Browser::bottomline(int line)
   Convenience function for non-hierarchial browsers.
-  Make the indexed item visible and scroll to put it at the bottom of
-  the browser. */
+  \param line Make the indexed item visible and scroll to put it 
+  at the bottom of the browser. */
 
-/** 
- * Accessor (get) method which returns TRUE if lines should be displayed, or FALSE
- * otwherwize.
- */
+/** Accessor method 
+  \return true if lines should be displayed, or false otherwise
+*/
 bool Browser::display_lines() const {
   return displaylines_;
 }
 
 /**
- * Accessor (set) method which is used to set the value of the "displaylines_"
- * member. If you set display to FALSE it will mean that you do not want
- * lines of the tree to be displayed.
- */
+  Accessor (set) method which is used to set the value of the 
+  "displaylines_" member. 
+   \param display If you set display to false it will mean that 
+   you do not want lines of the tree to be displayed.
+*/
 void Browser::display_lines(bool display) {
   displaylines_ = display;
 }
@@ -1961,12 +2087,14 @@ Browser::~Browser() {
   Sets a default value for image() on each item that is not a parent
   of other items. If the item has no image() then this one is used
   for it.
+  \param s The symbol to use for the image
 */
 
 /*! \fn Browser::group_symbol(const Symbol*);
   Sets a default value for image() on each item that is a hierarchy
   parent. If the parent item has no image() then this one is used
   for it.
+  \param s The symbol to use for the image
 */
 
 //

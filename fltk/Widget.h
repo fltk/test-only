@@ -37,10 +37,10 @@ class FL_API AssociationType;
 class FL_API AssociationFunctor;
 struct Cursor;
 
-typedef void (Callback )(Widget*, void*);
-typedef Callback* Callback_p; // needed for BORLAND
-typedef void (Callback0)(Widget*);
-typedef void (Callback1)(Widget*, long);
+typedef void (Callback )(Widget*, void*); /**< Callback is a function pointer to a fltk callback mechanism. It points to any function void foo(Widget*, void*) */
+typedef Callback* Callback_p; /**< A pointer to a Callback. Needed for BORLAND */
+typedef void (Callback0)(Widget*); /**< Function pointer to a callback with only one argument, the widget */
+typedef void (Callback1)(Widget*, long); /**<Function pointer to a callback with a long argument instead of a void argument*/
 
 #ifdef FLTK_1_WIDGET  // back-compatability section:
 FL_API Font* font(int);
@@ -315,15 +315,16 @@ private:
 
 };
 
-enum { // Widget::when() values
-  WHEN_NEVER		= 0,
-  WHEN_CHANGED		= 1,
-  WHEN_RELEASE		= 4,
-  WHEN_RELEASE_ALWAYS	= 6,
-  WHEN_ENTER_KEY	= 8,
-  WHEN_ENTER_KEY_ALWAYS	=10,
-  WHEN_ENTER_KEY_CHANGED=11,
-  WHEN_NOT_CHANGED	= 2 // modifier bit to disable changed() test
+/**Widget::when() values*/
+enum {
+  WHEN_NEVER		= 0, /**< Never triggers the callback*/
+  WHEN_CHANGED		= 1, /**< Triggers the callback when the data has changed */
+  WHEN_RELEASE		= 4, /**< Triggers the callback when the data has changed and the mouse button has been released */
+  WHEN_RELEASE_ALWAYS	= 6, /**< Triggers the callback when the mouse button has been released, regardless of the data's state*/
+  WHEN_ENTER_KEY	= 8, /**< Triggers the callback when the user hits the Enter key and the data has changed*/
+  WHEN_ENTER_KEY_ALWAYS	=10, /**< Triggers the callback when the user hits the Enter key, regardless of the data's state */
+  WHEN_ENTER_KEY_CHANGED=11, /**< Triggers the callback either when the data has changed or the user hits the Enter key */
+  WHEN_NOT_CHANGED	= 2  /**< Modifier bit to disable changed() test */
 };
 
 }

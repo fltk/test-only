@@ -143,23 +143,27 @@ extern FL_API XftFont*  xftfont();
 /**
   When fltk tells X about a window, one of these objects is created.
   Warning: this object is highly subject to change!  It's definition
-  is only here so that xid(Window) can be declared inline:
+  is only here so that xid(Window) can be declared inline
 */
 class FL_API CreatedWindow {
 public:
-  XWindow xid;
-  XWindow backbuffer;
-  XWindow frontbuffer;
-  Window *window;
-  Region region;
+  XWindow xid; //!< The CreatedWindow's XWindow IDentifier
+  XWindow backbuffer; //!< The CreatedWindow's secondary buffer
+  XWindow frontbuffer; //!< The CreatedWindow's primary buffer
+  Window *window; //!< The Window (if any) this CreatedWindow refers to
+  Region region; //!< The X Region this Window operates on
   void expose(const Rectangle&);
-  CreatedWindow *next;
-  bool wait_for_expose;
-  bool backbuffer_bad; // used for XDBE
-  bool overlay; // true if redraw_overlay was called
-  ::Cursor cursor;
+  CreatedWindow *next; //!< The next CreatedWindow in the linked list
+  bool wait_for_expose; //!< Boolean flag determining whether or not the window must wait until it is exposed to receive eventsf
+  bool backbuffer_bad; //!< used for XDBE
+  bool overlay; //!< Whether or not to redraw the overlay on the next redraw loop
+  ::Cursor cursor; //!< The XCursor this window uses
   const Widget* cursor_for;
-  static CreatedWindow* first;
+  static CreatedWindow* first; //!< The first CreatedWindow of the linked list
+  /** Finds a Window's corresponding CreatedWindow
+      \param window the Window to find
+      \return A pointer to the Window's CreatedWindow
+  */
   static CreatedWindow* find(const Window* window) {return window->i;}
   void sendxjunk();
   static void create(Window*,
@@ -169,8 +173,15 @@ public:
   Rectangle current_size;
 };
 
-// convert xid <-> Window:
+/** Converts a Window to its xid
+    \param w The window to convert
+    \return The value of the Window's xid
+*/
 inline XWindow xid(const Window*w) {return CreatedWindow::find(w)->xid;}
+/** Converts a xid to its equivalent Window
+    \param xid The XWindow ID of the window
+    \return The Window matching this xid, or NULL if it doesn't exist
+*/
 Window* find(XWindow xid);
 
 #  endif // Window_h

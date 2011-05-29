@@ -31,25 +31,31 @@
 
 using namespace fltk;
 
-int Browser::load(const char *filename) 
-{
+/** Adds the contents of a file to a browser, splitting at newlines.
+    This is useful if the browser was storing items that should be saved
+    on program exit and reloaded next time the program is started
+
+    \param filename The name of the file to load
+    \return 0 if the file couldn't be opened, -1 if filename is NULL or
+    contains no text and 1 otherwise
+*/
+int Browser::load(const char *filename) {
 #define MAXBLINE 1024
   char newtext[MAXBLINE];
   int c;
   int i;
   clear();
-  if (!filename || !(filename[0])) return 1;
+  if (!filename || !(filename[0])) return -1;
   FILE *fl = fopen(filename,"r");
   if (!fl) return 0;
   i = 0;
   do {
-	  c = getc(fl);
+    c = getc(fl);
     if (c == '\n' || c <= 0 || i>=(MAXBLINE-1)) {
       newtext[i] = 0;
       add(newtext);
       i = 0;
-    } else
-	    newtext[i++] = c;
+    } else newtext[i++] = c;
   } while (c >= 0);
   fclose(fl);
   return 1;

@@ -75,6 +75,7 @@ extern bool fl_hide_underscore;
 
 /*! You can change the icon drawn on the right edge by setting glyph()
   to your own function that draws whatever you want.
+  Otherwise, draw draws its default glyph on the right of the box
 */
 void Choice::draw() {
   if (damage() & DAMAGE_ALL) draw_frame();
@@ -128,10 +129,21 @@ static bool try_item(Choice* choice, int i) {
   return true;
 }
 
+/** The default handle() passes control to handle(e, rectangle)
+    which attempts popup the menu / close the menu based on click area
+    \param e The event to handle
+    \return 1 if the event was successfully handled,\n 0 otherwise
+*/ 
 int Choice::handle(int e) {
   return handle(e,Rectangle(w(),h()));
 }
 
+/** This function attempts to deal with where the user clicked in an effort
+    to pop the menu up in the right place.
+    \param e The event to handle
+    \param rectangle The Choice's rectangle
+    \return 1 if the event was successfully handled.\n 0 otherwise
+*/
 int Choice::handle(int e, const Rectangle& rectangle) {
   int children = this->children(0,0);
   switch (e) {
@@ -236,10 +248,22 @@ static void revert(Style* s) {
 #endif
 }
 static NamedStyle style("Choice", revert, &Choice::default_style);
+/** Sets the default style to nothing unless either of MOTIF_STYLE or
+    MAC_STYLE are defined (within the source file) which they aren't, by 
+    default. Inherits from Group::default_style and the 
+    "default" style, unless either of the above are defined (in which case
+    the glyph will be changed and, for MOTIF_STYLE, the buttonbox_ will be
+    changed
+*/
 NamedStyle* Choice::default_style = &::style;
 
 /*! The constructor makes the menu empty. See Menu and StringList
   for information on how to set the menu to a list of items.
+  \param x The x position of the Choice, relative to the Group
+  \param y The y position of the Choice, relative to the Group
+  \param w The width of the Choice, relative to the Group
+  \param h The height of the Choice, relative to the Group
+  \param l The label of the Choice
 */
 Choice::Choice(int x,int y,int w,int h, const char *l) : Menu(x,y,w,h,l) {
   value(0);

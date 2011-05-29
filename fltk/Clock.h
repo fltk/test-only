@@ -30,12 +30,19 @@
 
 namespace fltk {
 
-// a ClockOutput can be used to display a program-supplied time:
+/** A ClockOutput can be used to display a program-supplied time */
 
 class FL_API ClockOutput : public Widget {
 public:
-  enum {SQUARE = 0, ANALOG = 0, ROUND, DIGITAL};
+  /** The type of clock */
+  enum {
+    SQUARE = 0, //!< A square looking clock. Currently the same as ANALOG
+    ANALOG = 0, //!< An old-school analog clock
+    ROUND,  //!< A round clock
+    DIGITAL //!< A digital clock. Apparently NYI. \todo ...
+  };
   ClockOutput(int x,int y,int w,int h, const char *l = 0);
+
   void value(unsigned long v);	// set to this Unix time
   void value(int,int,int);	// set hour, minute, second
   unsigned long value() const {return value_;}
@@ -46,8 +53,10 @@ protected:
   void draw(int, int, int, int);
   void draw();
 private:
-  int hour_, minute_, second_;
-  unsigned long value_;
+  int hour_, //!< The current hour in the ClockOutput
+      minute_, //!< The current minute in the ClockOutput
+      second_; //!< The current second in the ClockOutput
+  unsigned long value_; //!< The current unix time, passed through value()
   void drawhands(Color, Color); // part of draw
 };
 
@@ -56,6 +65,8 @@ private:
 class FL_API Clock : public ClockOutput {
 public:
   int handle(int);
+  /** This looks NYI and, really, pretty useless. It's going to be removed
+      from the API unless I can find a \b really good reason to keep it */
   void update();
   Clock(int x,int y,int w,int h, const char *l = 0);
   static NamedStyle* default_style;
