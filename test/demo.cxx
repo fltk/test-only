@@ -82,11 +82,13 @@ void create_the_forms() {
   choice->add("none");
   choice->add("gtk+");
   choice->add("plastic");
+  choice->add("classic");
   choice->callback((fltk3::Callback *)doscheme);
   fltk3::scheme(NULL);
   if (!fltk3::scheme()) choice->value(0);
   else if (!strcmp(fltk3::scheme(), "gtk+")) choice->value(1);
-  else choice->value(2);
+  else if (!strcmp(fltk3::scheme(), "plastic")) choice->value(2);
+  else choice->value(3);
   obj = new fltk3::Button(10,15,330,380); obj->type(fltk3::HIDDEN_BUTTON);
   obj->callback(doback);
   obj = but[0] = new fltk3::Button( 30, 85,90,90);

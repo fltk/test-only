@@ -25,9 +25,6 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Valuator widget . */
-
 #ifndef Fl_Valuator_H
 #define Fl_Valuator_H
 
@@ -49,37 +46,84 @@ protected:
     _p->wrapper(this);
   }
 
-#if 0 // FIXME: 123
+  int horizontal() const {
+    return ((fltk3::Valuator*)_p)->horizontal();
+  }
   
-  int horizontal() const {return type()& FL_HORIZONTAL;}
-  Fl_Valuator(int X, int Y, int W, int H, const char* L);
-  double previous_value() const {return previous_value_;}
-  void handle_push() {previous_value_ = value_;}
-  double softclamp(double);
-  void handle_drag(double newvalue);
-  void handle_release();
-  virtual void value_damage();
-  void set_value(double v) {value_ = v;}
+  double previous_value() const {
+    return ((fltk3::Valuator*)_p)->previous_value();
+  }
+  
+  void handle_push() {
+    ((fltk3::Valuator*)_p)->handle_push();
+  }
+  
+  double softclamp(double v) {
+    return ((fltk3::Valuator*)_p)->softclamp(v);
+  }
+  
+  void handle_drag(double newvalue) {
+    ((fltk3::Valuator*)_p)->handle_drag(newvalue);
+  }
+  
+  void handle_release() {
+    ((fltk3::Valuator*)_p)->handle_release();
+  }
+  
+  // FIXME: 123 - this method was virtual 
+  void value_damage() {
+    ((fltk3::Valuator*)_p)->value_damage();
+  }
+  
+  void set_value(double v) {
+    ((fltk3::Valuator*)_p)->set_value(v);
+  }
 
-#endif
-  
 public:
 
-#if 0 // FIXME: 123
-
-  void bounds(double a, double b) {min=a; max=b;}
-  double minimum() const {return min;}
-  void minimum(double a) {min = a;}
-  double maximum() const {return max;}
-  void maximum(double a) {max = a;}
-  void range(double a, double b) {min = a; max = b;}
-  void step(int a) {A = a; B = 1;}
-  void step(double a, int b) {A = a; B = b;}
-  void step(double s);
-  double step() const {return A/B;}
-  void precision(int);
-
-#endif
+  void bounds(double a, double b) {
+    ((fltk3::Valuator*)_p)->bounds(a, b);
+  }
+  
+  double minimum() const {
+    return ((fltk3::Valuator*)_p)->minimum();
+  }
+  
+  void minimum(double a) {
+    ((fltk3::Valuator*)_p)->minimum(a);
+  }
+  
+  double maximum() const {
+    return ((fltk3::Valuator*)_p)->maximum();
+  }
+  
+  void maximum(double a) {
+    ((fltk3::Valuator*)_p)->maximum(a);
+  }
+  
+  void range(double a, double b) {
+    ((fltk3::Valuator*)_p)->range(a, b);
+  }
+  
+  void step(int a) {
+    ((fltk3::Valuator*)_p)->step(a);
+  }
+  
+  void step(double a, int b) {
+    ((fltk3::Valuator*)_p)->step(a, b);
+  }
+  
+  void step(double s) {
+    ((fltk3::Valuator*)_p)->step(s);
+  }
+  
+  double step() const {
+    return ((fltk3::Valuator*)_p)->step();
+  }
+  
+  void precision(int x) {
+    ((fltk3::Valuator*)_p)->precision(x);
+  }
 
   double value() const {
     return ((fltk3::Valuator*)_p)->value();
@@ -89,14 +133,22 @@ public:
     return ((fltk3::Valuator*)_p)->value(v);
   }
 
-#if 0 // FIXME: 123
+  // FIXME: 123 - this method was virtual 
+  int format(char *f) {
+    return ((fltk3::Valuator*)_p)->format(f);
+  }
   
-  virtual int format(char*);
-  double round(double);
-  double clamp(double);
-  double increment(double, int);
-
-#endif
+  double round(double v) {
+    return ((fltk3::Valuator*)_p)->round(v);
+  }
+  
+  double clamp(double v) {
+    return ((fltk3::Valuator*)_p)->clamp(v);
+  }
+  
+  double increment(double v, int x) {
+    return ((fltk3::Valuator*)_p)->increment(v, x);
+  }
 
 };
 

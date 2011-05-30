@@ -33,6 +33,9 @@
 
 #include "Widget.h"
 
+class Fl_Button;
+
+
 namespace fltk3 {
   // values for type()
   const uchar NORMAL_BUTTON = 0;   /**< value() will be set to 1 during the press of the button and 
@@ -81,6 +84,8 @@ namespace fltk3 {
    dragged around in and out of the button).
    */
   class FLTK3_EXPORT Button : public Widget {
+    
+    friend class ::Fl_Button;
     
     int shortcut_;
     char value_;

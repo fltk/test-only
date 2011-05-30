@@ -36,15 +36,11 @@ class FL_EXPORT Fl_Light_Button : public Fl_Button {
   
 protected:
   
-#if 0 // FIXME: 123
-    virtual void draw();
-#endif
+  FLTK3_WRAPPER_VCALLS_OBJECT(LightButton, draw(), draw(), Draw)
   
 public:
 
-#if 0 // FIXME: 123
-  virtual int handle(int);
-#endif
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(LightButton, handle(int event), handle(event), Handle)
   
   Fl_Light_Button() { /* empty */ }
   

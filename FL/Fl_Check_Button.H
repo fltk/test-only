@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -26,32 +25,23 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Check_Button widget . */
-
 #ifndef Fl_Check_Button_H
 #define Fl_Check_Button_H
 
+#include <fltk3/CheckButton.h>
 #include "Fl_Light_Button.H"
 
-/**
-  \class Fl_Check_Button
-  \brief A button with an "checkmark" to show its status.
-
-  \image html Fl_Check_Button.png
-  \image latex Fl_Check_Button.png  "Fl_Check_Button" width=4cm
-  Buttons generate callbacks when they are clicked by the user. You control
-  exactly when and how by changing the values for type() and when().
-
-  The Fl_Check_Button subclass displays its "ON" state by showing a "checkmark"
-  rather than drawing itself pushed in.
-  
-  \todo Refactor Fl_Check_Button doxygen comments (add color() info etc?)
-  \todo Generate Fl_Check_Button.gif with visible checkmark.
- */
 class FL_EXPORT Fl_Check_Button : public Fl_Light_Button {
+  
 public:
-  Fl_Check_Button(int X, int Y, int W, int H, const char *L = 0);
+  
+  Fl_Check_Button() { /* empty */ }
+    
+  Fl_Check_Button(int X, int Y, int W, int H, const char *L = 0) {
+    _p = new fltk3::CheckButton(x, y, w, h, label);
+    _p->wrapper(this);
+  }
+
 };
 
 #endif

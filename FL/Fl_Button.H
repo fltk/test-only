@@ -36,21 +36,18 @@
 #define FL_RADIO_BUTTON		(FL_RESERVED_TYPE+2)
 #define FL_HIDDEN_BUTTON	3
 
-#if 0 // FIXME: 123
-extern FL_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
+// FIXME: 123 extern FL_EXPORT Fl_Shortcut fl_old_shortcut(const char*);
 
 class Fl_Widget_Tracker;
-#endif
+
 
 class FL_EXPORT Fl_Button : public Fl_Widget {
 
 protected:
   
-#if 0 // FIXME: 123
-  static void key_release_timeout(void*);
-  void simulate_key_action();
-  virtual void draw();
-#endif
+  void simulate_key_action() {
+    ((fltk3::Button*)_p)->simulate_key_action();
+  }
   
 public:
 
@@ -60,6 +57,16 @@ public:
     _p = new fltk3::Button(x, y, w, h, label);
     _p->wrapper(this);
   }
+
+  FLTK3_WRAPPER_VCALLS_OBJECT(Button, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Button, hide(), hide(), Hide)
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Button, show(), show(), Show)
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Button, draw(), draw(), Draw)
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Button, handle(int event), handle(event), Handle)
 
   int value(int v) {
     return ((fltk3::Button*)_p)->value(v);
@@ -81,16 +88,33 @@ public:
     ((fltk3::Button*)_p)->setonly();
   }
   
-#if 0 // FIXME: 123
-  virtual int handle(int);
-  int shortcut() const {return shortcut_;}
-  void shortcut(int s) {shortcut_ = s;}
-  Fl_Boxtype down_box() const {return (Fl_Boxtype)down_box_;}
-  void down_box(Fl_Boxtype b) {down_box_ = b;}
-  void shortcut(const char *s) {shortcut(fl_old_shortcut(s));}
-  Fl_Color down_color() const {return selection_color();}
-  void down_color(unsigned c) {selection_color(c);}
-#endif
+  int shortcut() const {
+    return ((fltk3::Button*)_p)->shortcut();
+  }
+  
+  void shortcut(int s) {
+    ((fltk3::Button*)_p)->shortcut(s);
+  }
+  
+  Fl_Boxtype down_box() const {
+    return fltk3::_3to1_boxtype( ((fltk3::Button*)_p)->down_box() );
+  }
+  
+  void down_box(Fl_Boxtype b) {
+    ((fltk3::Button*)_p)->down_box(fltk3::_1to3_boxtype(b) );
+  }
+  
+  void shortcut(const char *s) {
+    ((fltk3::Button*)_p)->shortcut(s);
+  }
+  
+  Fl_Color down_color() const {
+    return fltk3::_3to1_color( ((fltk3::Button*)_p)->down_color() );
+  }
+  
+  void down_color(unsigned c) {
+    ((fltk3::Button*)_p)->down_color( fltk3::_1to3_color(c) );
+  }
   
 };
 
