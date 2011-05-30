@@ -71,14 +71,6 @@ struct FL_EXPORT Fl_Label {
 };
 
 
-namespace fltk3 {
-  inline Fl_Widget *_3to1_widget(Widget *w) { return (Fl_Widget*)w->wrapper(); }
-  inline Fl_Window *_3to1_window(Widget *w) { return (Fl_Window*)w->wrapper(); }
-  inline Fl_Group *_3to1_group(Widget *w) { return (Fl_Group*)w->wrapper(); }
-  //inline Widget *_1to3_widget(Fl_Widget *w) { return ((fltk3::Widget*)_p); }
-}
-
-
 class FL_EXPORT Fl_Widget : public fltk3::WidgetWrapper {
   
   friend class Fl_Group;
@@ -206,7 +198,7 @@ public:
   }
   
   Fl_Window* window() const {
-    return fltk3::_3to1_window( ((fltk3::Widget*)_p)->parent() );
+    return fltk3::_3to1_window( ((fltk3::Widget*)_p)->window() );
   }
 
   uchar type() const {

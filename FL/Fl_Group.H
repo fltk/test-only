@@ -31,14 +31,12 @@
 #include "Fl_Widget.H"
 
 class FL_EXPORT Fl_Group : public Fl_Widget {
-#if 0 // FIXME: 123
-  int navigation(int);
-  Fl_Group(const Fl_Group&);
-  Fl_Group& operator=(const Fl_Group&);
-#endif
+
+  Fl_Group(const Fl_Group&); /* empty */
+  Fl_Group& operator=(const Fl_Group&); /* empty */
   
 protected:  
-  Fl_Group() {}
+  Fl_Group() { /* empty */ }
 
 #if 0 // FIXME: 123
   void draw();

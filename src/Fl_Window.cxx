@@ -33,6 +33,7 @@
 #include <fltk3/run.h>
 #include <fltk3/x.h>
 #include <fltk3/Window.h>
+#include <fltk3/Wrapper.h>
 #include <stdlib.h>
 #include "flstring.h"
 
@@ -287,6 +288,22 @@ const void *fltk3::Window::icon() const {
 /** Sets the current icon window target dependent data. */
 void fltk3::Window::icon(const void * ic) {
   icon_ = ic;
+}
+
+
+// =================== FLTK 1 compatibility ====================================
+
+class Fl_Widget;
+class Fl_Window;
+class Fl_Group;
+
+namespace fltk3 {
+  void *_wrapper(Widget *w) { return w->wrapper(); }
+  void *_wrapper(Window *w) { return w->wrapper(); }
+  void *_wrapper(Group *w)  { return w->wrapper(); }
+  void *_object(Fl_Widget *w) { return ((Wrapper*)w)->_p; }
+  void *_object(Fl_Window *w) { return ((Wrapper*)w)->_p; }
+  void *_object(Fl_Group *w) { return ((Wrapper*)w)->_p; }
 }
 
 

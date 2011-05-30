@@ -55,19 +55,35 @@ typedef void (*Fl_Awake_Handler)(void *data);
 typedef void (*Fl_Idle_Handler)(void *data);
 typedef void (*Fl_Old_Idle_Handler)();
 typedef void (*Fl_FD_Handler)(int fd, void *data);
-typedef int (*Fl_Event_Handler)(int event);
+typedef int  (*Fl_Event_Handler)(int event);
 typedef void (*Fl_Abort_Handler)(const char *format,...);
 typedef void (*Fl_Atclose_Handler)(Fl_Window *window, void *data);
-typedef int (*Fl_Args_Handler)(int argc, char **argv, int &i);
-typedef int (*Fl_Event_Dispatch)(int event, Fl_Window *w);
+typedef int  (*Fl_Args_Handler)(int argc, char **argv, int &i);
+typedef int  (*Fl_Event_Dispatch)(int event, Fl_Window *w);
 
 class FL_EXPORT Fl {
-#if 0 // FIXME: 123  
-  Fl() {};
-#endif
+  
+  Fl() { /* empty */ };
+
 public: // should be private!
+  
 #if 0 // FIXME: 123
-  static void damage(int d) {damage_ = d;}
+  // these have not been wrapped yet!
+  static void (*idle)();
+  static int get_awake_handler_(Fl_Awake_Handler &h, void *&d) {}
+  static void (*warning)(const char*, ...);
+  static void (*error)(const char*, ...);
+  static void (*atclose)(Fl_Window*,void*);
+  static void fatal(const char*, ...) { }
+  static void watch_widget_pointer(Fl_Widget *&w);
+  static void release_widget_pointer(Fl_Widget *&w);
+  static void clear_widget_pointer(Fl_Widget const *w);
+#endif
+  
+  static void damage(int d) {
+    fltk3::damage(d);
+  }
+  
   typedef enum {
     OPTION_ARROW_FOCUS = 0,
     OPTION_VISIBLE_FOCUS,
@@ -75,13 +91,22 @@ public: // should be private!
     OPTION_SHOW_TOOLTIPS,
     OPTION_LAST
   } Fl_Option;
-  static bool option(Fl_Option opt);
-  static void option(Fl_Option opt, bool val);
-  static void (*idle)();
-  static int add_awake_handler_(Fl_Awake_Handler, void*);
-  static int get_awake_handler_(Fl_Awake_Handler&, void*&);
-  static double version();
-#endif
+  
+  static bool option(Fl_Option opt) {
+    return fltk3::option((fltk3::Option)opt);
+  }
+  
+  static void option(Fl_Option opt, bool val) {
+    fltk3::option((fltk3::Option)opt, val);
+  }
+  
+  static int add_awake_handler_(Fl_Awake_Handler h, void *d) {
+    return fltk3::add_awake_handler_((fltk3::AwakeHandler)h, d);
+  }
+  
+  static double version() {
+    return fltk3::version();
+  }
   
   static int arg(int argc, char **argv, int& i) {
     return fltk3::arg(argc, argv, i);
@@ -95,28 +120,61 @@ public: // should be private!
     fltk3::args(argc, argv);
   }
   
-#if 0 // FIXME: 123
-  static const char* const help;
-  static void display(const char*);
-#endif
+  static const char* const help_text() {
+    return fltk3::help;
+  }
+
+  static void display(const char *d) {
+    fltk3::display(d);
+  }
   
   static int visual(int m) {
     return fltk3::visual(m);
   }
   
-#if 0 // FIXME: 123
-  static int gl_visual(int, int *alist=0); // platform dependent
-  static void own_colormap();
-  static void get_system_colors();
-  static void foreground(uchar, uchar, uchar);
-  static void background(uchar, uchar, uchar);
-  static void background2(uchar, uchar, uchar);
-  static int scheme(const char*);
-  static const char* scheme() {return scheme_;}
-  static int reload_scheme(); // platform dependent
-  static int scrollbar_size();
-  static void scrollbar_size(int W);
-#endif
+  static int gl_visual(int a, int *b=0) {
+    return fltk3::gl_visual(a, b);
+  }
+  
+  static void own_colormap() {
+    fltk3::own_colormap();
+  }
+  
+  static void get_system_colors() {
+    fltk3::get_system_colors();
+  }
+  
+  static void foreground(uchar r, uchar g, uchar b) {
+    fltk3::foreground(r, g, b);
+  }
+  
+  static void background(uchar r, uchar g, uchar b) {
+    fltk3::background(r, g, b);
+  }
+  
+  static void background2(uchar r, uchar g, uchar b) {
+    fltk3::background2(r, g, b);
+  }
+  
+  static int scheme(const char *s) {
+    return fltk3::scheme(s);
+  }
+  
+  static const char* scheme() {
+    return fltk3::scheme();
+  }
+  
+  static int reload_scheme() {
+    return fltk3::reload_scheme();
+  }
+  
+  static int scrollbar_size() {
+    return fltk3::scrollbar_size();
+  }
+  
+  static void scrollbar_size(int W) {
+    fltk3::scrollbar_size(W);
+  }
   
   static int wait() {
     return fltk3::wait(); 
@@ -139,148 +197,504 @@ public: // should be private!
   }
 
   static Fl_Widget *readqueue() {
-    return (Fl_Widget*)(fltk3::readqueue()->wrapper());
+    return fltk3::_3to1_widget( fltk3::readqueue() );
   }
   
-#if 0 // FIXME: 123
-  static void add_timeout(double t, Fl_Timeout_Handler,void* = 0); // platform dependent
-  static void repeat_timeout(double t, Fl_Timeout_Handler, void* = 0); // platform dependent
-  static int  has_timeout(Fl_Timeout_Handler, void* = 0);
-  static void remove_timeout(Fl_Timeout_Handler, void* = 0);
-  static void add_check(Fl_Timeout_Handler, void* = 0);
-  static int  has_check(Fl_Timeout_Handler, void* = 0);
-  static void remove_check(Fl_Timeout_Handler, void* = 0);
-  static void add_fd(int fd, int when, Fl_FD_Handler cb, void* = 0); // platform dependent
-  static void add_fd(int fd, Fl_FD_Handler cb, void* = 0); // platform dependent
-  static void remove_fd(int, int when); // platform dependent
-  static void remove_fd(int); // platform dependent
-  static void add_idle(Fl_Idle_Handler cb, void* data = 0);
-  static int  has_idle(Fl_Idle_Handler cb, void* data = 0);
-  static void remove_idle(Fl_Idle_Handler cb, void* data = 0);
-  static int damage() {return damage_;}
-  static void redraw();
-  static void flush();
-  static void (*warning)(const char*, ...);
-  static void (*error)(const char*, ...);
-#endif
-  
-  static void fatal(const char*, ...) {
-    // FIXME: 123 - this is a function pointer. Not sure if we can wrap this
-    // FIXME: 123 - also, to wrap the varargs, we need the appropriate va function in fltk3
+  static void add_timeout(double t, Fl_Timeout_Handler h, void *p = 0) {
+    fltk3::add_timeout(t, (fltk3::TimeoutHandler)h, p);
   }
   
-#if 0 // FIXME: 123
-  static Fl_Window* first_window();
-  static void first_window(Fl_Window*);
-  static Fl_Window* next_window(const Fl_Window*);
-  static Fl_Window* modal() {return modal_;}
-  static Fl_Window* grab() {return grab_;}
-  static void grab(Fl_Window*); // platform dependent
-  static int event()		{return e_number;}
-  static int event_x()	{return e_x;}
-  static int event_y()	{return e_y;}
-  static int event_x_root()	{return e_x_root;}
-  static int event_y_root()	{return e_y_root;}
-  static int event_dx()	{return e_dx;}
-  static int event_dy()	{return e_dy;}
-  static void get_mouse(int &,int &); // platform dependent
-  static int event_clicks()	{return e_clicks;}
-  static void event_clicks(int i) {e_clicks = i;}
-  static int event_is_click()	{return e_is_click;}
-  static void event_is_click(int i) {e_is_click = i;}
-  static int event_button()	{return e_keysym-FL_Button;}
-  static int event_state()	{return e_state;}
-  static int event_state(int i) {return e_state&i;}
-  static int event_key()	{return e_keysym;}
-  static int event_original_key(){return e_original_keysym;}
-  static int event_key(int key);
-  static int get_key(int key); // platform dependent
-  static const char* event_text() {return e_text;}
-  static int event_length() {return e_length;}
-  static int compose(int &del);
-  static void compose_reset();
-  static int event_inside(int,int,int,int);
-  static int event_inside(const Fl_Widget*);
-  static int test_shortcut(Fl_Shortcut);
-  static int handle(int, Fl_Window*);
-  static int handle_(int, Fl_Window*);
-  static Fl_Widget* belowmouse() {return belowmouse_;}
-  static void belowmouse(Fl_Widget*);
-  static Fl_Widget* pushed()	{return pushed_;}
-  static void pushed(Fl_Widget*);
-  static Fl_Widget* focus()	{return focus_;}
-  static void focus(Fl_Widget*);
-  static void add_handler(Fl_Event_Handler h);
-  static void remove_handler(Fl_Event_Handler h);
-  static void event_dispatch(Fl_Event_Dispatch d);
-  static Fl_Event_Dispatch event_dispatch();
-  static void copy(const char* stuff, int len, int destination = 0); // platform dependent
-  static void paste(Fl_Widget &receiver, int source /*=0*/); // platform dependent
-  static int dnd(); // platform dependent
-  static Fl_Widget* selection_owner() {return selection_owner_;}
-  static void selection_owner(Fl_Widget*);
-  static void selection(Fl_Widget &owner, const char*, int len);
-  static void paste(Fl_Widget &receiver);
-  static int x(); // platform dependent
-  static int y(); // platform dependent
-  static int w(); // platform dependent
-  static int h(); // platform dependent
-  static int screen_count();
-  static void screen_xywh(int &X, int &Y, int &W, int &H) {    screen_xywh(X, Y, W, H, e_x_root, e_y_root);  }
-  static void screen_xywh(int &X, int &Y, int &W, int &H, int mx, int my);
-  static void screen_xywh(int &X, int &Y, int &W, int &H, int n); 
-  static void screen_xywh(int &X, int &Y, int &W, int &H, int mx, int my, int mw, int mh);
-  static void screen_dpi(float &h, float &v, int n=0);
-  static void	set_color(Fl_Color, uchar, uchar, uchar);
-  static void	set_color(Fl_Color i, unsigned c); // platform dependent
-  static unsigned get_color(Fl_Color i);
-  static void	get_color(Fl_Color i, uchar &red, uchar &green, uchar &blue);
-  static void	free_color(Fl_Color i, int overlay = 0); // platform dependent
-  static const char* get_font(Fl_Font);
-  static const char* get_font_name(Fl_Font, int* attributes = 0);
-  static int get_font_sizes(Fl_Font, int*& sizep);
-  static void set_font(Fl_Font, const char*);
-  static void set_font(Fl_Font, Fl_Font);
-  static Fl_Font set_fonts(const char* = 0); // platform dependent
-  static void set_labeltype(Fl_Labeltype,Fl_Label_Draw_F*,Fl_Label_Measure_F*);
-  static void set_labeltype(Fl_Labeltype, Fl_Labeltype from); // is it defined ?
-  static Fl_Box_Draw_F *get_boxtype(Fl_Boxtype);
-  static void set_boxtype(Fl_Boxtype, Fl_Box_Draw_F*,uchar,uchar,uchar,uchar);
-  static void set_boxtype(Fl_Boxtype, Fl_Boxtype from);
-  static int box_dx(Fl_Boxtype);
-  static int box_dy(Fl_Boxtype);
-  static int box_dw(Fl_Boxtype);
-  static int box_dh(Fl_Boxtype);
-  static int draw_box_active();
-  static void set_abort(Fl_Abort_Handler f) {fatal = f;}
-  static void (*atclose)(Fl_Window*,void*);
-  static void default_atclose(Fl_Window*,void*);
-  static void set_atclose(Fl_Atclose_Handler f) {atclose = f;}
-  static int event_shift() {return e_state&FL_SHIFT;}
-  static int event_ctrl() {return e_state&FL_CTRL;}
-  static int event_command() {return e_state&FL_COMMAND;}
-  static int event_alt() {return e_state&FL_ALT;}
-  static int event_buttons() {return e_state&0x7f000000;}
-  static int event_button1() {return e_state&FL_BUTTON1;}
-  static int event_button2() {return e_state&FL_BUTTON2;}
-  static int event_button3() {return e_state&FL_BUTTON3;}
-  static void set_idle(Fl_Old_Idle_Handler cb) {idle = cb;}
-  static void grab(Fl_Window& win) {grab(&win);}
-  static void release() {grab(0);}
-  static void visible_focus(int v) { option(OPTION_VISIBLE_FOCUS, (v!=0)); }
-  static int  visible_focus() { return option(OPTION_VISIBLE_FOCUS); }
-  static void dnd_text_ops(int v) { option(OPTION_DND_TEXT, (v!=0)); }
-  static int  dnd_text_ops() { return option(OPTION_DND_TEXT); }
-  static int lock();
-  static void unlock();
-  static void awake(void* message = 0);
-  static int awake(Fl_Awake_Handler cb, void* message = 0);
-  static void* thread_message(); // platform dependent
-  static void delete_widget(Fl_Widget *w);
-  static void do_widget_deletion();
-  static void watch_widget_pointer(Fl_Widget *&w);
-  static void release_widget_pointer(Fl_Widget *&w);
-  static void clear_widget_pointer(Fl_Widget const *w);
+  static void repeat_timeout(double t, Fl_Timeout_Handler h, void *p = 0) {
+    fltk3::repeat_timeout(t, (fltk3::TimeoutHandler)h, p);
+  }
+  
+  static int has_timeout(Fl_Timeout_Handler h, void *p = 0) {
+    return fltk3::has_timeout((fltk3::TimeoutHandler)h, p);
+  }
+  
+  static void remove_timeout(Fl_Timeout_Handler h, void *p = 0) {
+    fltk3::remove_timeout((fltk3::TimeoutHandler)h, p);
+  }
+  
+  static void add_check(Fl_Timeout_Handler h, void *p = 0) {
+    fltk3::add_check((fltk3::TimeoutHandler)h, p);
+  }
+  
+  static int has_check(Fl_Timeout_Handler h, void *p = 0) {
+    return fltk3::has_check((fltk3::TimeoutHandler)h, p);
+  }
+  
+  static void remove_check(Fl_Timeout_Handler h, void *p = 0) {
+    fltk3::remove_check((fltk3::TimeoutHandler)h, p);
+  }
+  
+  static void add_fd(int fd, int when, Fl_FD_Handler cb, void *d = 0) {
+    fltk3::add_fd(fd, when, (fltk3::FDHandler)cb, d);
+  }
+  
+  static void add_fd(int fd, Fl_FD_Handler cb, void *d = 0) {
+    fltk3::add_fd(fd, (fltk3::FDHandler)cb, d);
+  }
+  
+  static void remove_fd(int fd, int when) {
+    fltk3::remove_fd(fd, when);
+  }
+  
+  static void remove_fd(int fd) {
+    fltk3::remove_fd(fd);
+  }
+  
+  static void add_idle(Fl_Idle_Handler cb, void* data = 0) {
+    fltk3::add_idle((fltk3::IdleHandler)cb, data);
+  }
+  
+  static int  has_idle(Fl_Idle_Handler cb, void* data = 0) {
+    return fltk3::has_idle((fltk3::IdleHandler)cb, data);
+  }
+  
+  static void remove_idle(Fl_Idle_Handler cb, void* data = 0) {
+    fltk3::remove_idle((fltk3::IdleHandler)cb, data);
+  }
+  
+  static int damage() {
+    return fltk3::damage();
+  }
+  
+  static void redraw() {
+    fltk3::redraw();
+  }
+  
+  static void flush() {
+    fltk3::flush();
+  }
+      
+  static Fl_Window* first_window() {
+    return fltk3::_3to1_window( fltk3::first_window() );
+  }
+  
+  static void first_window(Fl_Window *w) {
+    fltk3::first_window( fltk3::_1to3_window(w) );
+  }
+  
+  static Fl_Window* next_window(const Fl_Window *w) {
+    return fltk3::_3to1_window( fltk3::next_window( fltk3::_1to3_window((Fl_Window*)w) ) );
+  }
+  
+  static Fl_Window* modal() {
+    return fltk3::_3to1_window( fltk3::modal() );
+  }
+  static Fl_Window* grab() {
+    return fltk3::_3to1_window( fltk3::grab() );
+  }
+  
+  static void grab(Fl_Window *w) {
+    fltk3::grab( fltk3::_1to3_window(w) );
+  }
+  
+  static int event() {
+    return fltk3::event();
+  }
+  
+  static int event_x() {
+    return fltk3::event_x();
+  }
+  
+  static int event_y() {
+    return fltk3::event_y();
+  }
+  
+  static int event_x_root() {
+    return fltk3::event_x_root();
+  }
+  
+  static int event_y_root() {
+    return fltk3::event_y_root();
+  }
+  
+  static int event_dx() {
+    return fltk3::event_dx();
+  }
+  
+  static int event_dy()	{
+    return fltk3::event_dy();
+  }
+  
+  static void get_mouse(int &x, int &y) {
+    fltk3::get_mouse(x, y);
+  }
+  
+  static int event_clicks() {
+    return fltk3::event_clicks();
+  }
+  
+  static void event_clicks(int i) {
+    fltk3::event_clicks(i);
+  }
+  
+  static int event_is_click() {
+    return fltk3::event_is_click();
+  }
+  
+  static void event_is_click(int i) {
+    fltk3::event_is_click(i);
+  }
+  
+  static int event_button() {
+    return fltk3::event_button();
+  }
+  
+  static int event_state() {
+    return fltk3::event_state();
+  }
+  
+  static int event_state(int i) {
+    return fltk3::event_state(i);
+  }
+  
+  static int event_key() {
+    return fltk3::event_key();
+  }
+  
+  static int event_original_key() {
+    return fltk3::event_original_key();
+  }
+  
+  static int event_key(int key) {
+    return fltk3::event_key(key);
+  }
+  
+  static int get_key(int key) {
+    return fltk3::get_key(key);
+  }
+  
+  static const char *event_text() {
+    return fltk3::event_text();
+  }
+  
+  static int event_length() {
+    return fltk3::event_length();
+  }
+  
+  static int compose(int &del) {
+    return fltk3::compose(del);
+  }
+  
+  static void compose_reset() {
+    fltk3::compose_reset();
+  }
+  
+  static int event_inside(int x, int y, int w, int h) {
+    return fltk3::event_inside(x, y, w, h);
+  }
+  
+  static int event_inside(const Fl_Widget *w) {
+    return fltk3::event_inside( fltk3::_1to3_widget((Fl_Widget*)w) );
+  }
+  
+  static int test_shortcut(unsigned int s) {
+    return fltk3::test_shortcut(s);
+  }
+  
+  static int handle(int e, Fl_Window *w) {
+    return fltk3::handle( fltk3::_1to3_event((Fl_Event)e), fltk3::_1to3_window(w) );
+  }
+  
+  static int handle_(int e, Fl_Window *w) {
+    return fltk3::handle_( fltk3::_1to3_event((Fl_Event)e), fltk3::_1to3_window(w) );
+  }
+  
+  static Fl_Widget* belowmouse() {
+    return fltk3::_3to1_widget( fltk3::belowmouse() );
+  }
+  
+  static void belowmouse(Fl_Widget *w) {
+    fltk3::belowmouse(fltk3::_1to3_widget(w));
+  }
+  
+  static Fl_Widget* pushed() {
+    return fltk3::_3to1_widget( fltk3::pushed() );
+  }
+  
+  static void pushed(Fl_Widget *w) {
+    fltk3::pushed(fltk3::_1to3_widget(w));
+  }
+  
+  static Fl_Widget* focus() {
+    return fltk3::_3to1_widget( fltk3::focus() );
+  }
+    
+  static void focus(Fl_Widget *w) {
+    fltk3::focus(fltk3::_1to3_widget(w));
+  }
+  
+  static void add_handler(Fl_Event_Handler h) {
+    fltk3::add_handler((fltk3::EventHandler)h);
+  }
+  
+  static void remove_handler(Fl_Event_Handler h) {
+    fltk3::remove_handler((fltk3::EventHandler)h);
+  }
+  
+  static void event_dispatch(Fl_Event_Dispatch d) {
+    fltk3::event_dispatch((fltk3::EventDispatch)d);
+  }
+  
+  static Fl_Event_Dispatch event_dispatch() {
+    return 0L; // FIXME: 123 - (fltk3::EventDispatch)fltk3::event_dispatch();
+  }
+  
+  static void copy(const char* stuff, int len, int destination = 0) {
+    fltk3::copy(stuff, len, destination);
+  }
+
+  static void paste(Fl_Widget &receiver, int source) {
+    fltk3::paste( *fltk3::_1to3_widget(&receiver), source);
+  }
+  
+  static int dnd() {
+    return fltk3::dnd();
+  }
+  
+  static Fl_Widget* selection_owner() {
+    return fltk3::_3to1_widget( fltk3::selection_owner() );
+  }
+  
+  static void selection_owner(Fl_Widget *w) {
+    fltk3::selection_owner(fltk3::_1to3_widget(w));
+  }
+  
+  static void selection(Fl_Widget &owner, const char *t, int len) {
+    fltk3::selection(*fltk3::_1to3_widget(&owner), t, len);
+  }
+  
+  static void paste(Fl_Widget &receiver) {
+    fltk3::paste(*fltk3::_1to3_widget(&receiver));
+  }
+  
+  static int x() {
+    return fltk3::x();
+  }
+  
+  static int y() {
+    return fltk3::y();
+  }
+
+  static int w() {
+    return fltk3::w();
+  }
+
+  static int h() {
+    return fltk3::h();
+  }
+
+  static int screen_count() {
+    return fltk3::screen_count();
+  }
+  
+  static void screen_xywh(int &X, int &Y, int &W, int &H) {
+    fltk3::screen_xywh(X, Y, W, H);
+  }
+  
+  static void screen_xywh(int &X, int &Y, int &W, int &H, int mx, int my) {
+    fltk3::screen_xywh(X, Y, W, H, mx, my);
+  }
+  
+  static void screen_xywh(int &X, int &Y, int &W, int &H, int n) {
+    fltk3::screen_xywh(X, Y, W, H, n);
+  }
+  
+  static void screen_xywh(int &X, int &Y, int &W, int &H, int mx, int my, int mw, int mh) {
+    fltk3::screen_xywh(X, Y, W, H, mx, my, mw, mh);
+  }
+  
+  static void screen_dpi(float &h, float &v, int n=0) {
+    fltk3::screen_dpi(h, v, n);
+  }
+  
+  static void set_color(Fl_Color c, uchar r, uchar g, uchar b) {
+    fltk3::set_color(c, r, g, b);
+  }
+  
+  static void set_color(Fl_Color i, unsigned c) {
+    fltk3::set_color(i, c);
+  }
+  
+  static unsigned get_color(Fl_Color i) {
+    return fltk3::get_color(i);
+  }
+  
+  static void get_color(Fl_Color i, uchar &red, uchar &green, uchar &blue) {
+    fltk3::get_color(i, red, green, blue);
+  }
+  
+  static void free_color(Fl_Color i, int overlay = 0) {
+    fltk3::free_color(i, overlay);
+  }
+  
+  static const char* get_font(Fl_Font f) {
+    return fltk3::get_font(fltk3::_1to3_font(f));
+  }
+  
+  static const char* get_font_name(Fl_Font f, int* attributes = 0) {
+    return fltk3::get_font_name(fltk3::_1to3_font(f), attributes);
+  }
+  
+  static int get_font_sizes(Fl_Font f, int*& sizep) {
+    return fltk3::get_font_sizes(fltk3::_1to3_font(f), sizep);
+  }
+  
+  static void set_font(Fl_Font f, const char *t) {
+    fltk3::set_font(fltk3::_1to3_font(f), t);
+  }
+  
+  static void set_font(Fl_Font a, Fl_Font b) {
+    fltk3::set_font(fltk3::_1to3_font(a), fltk3::_1to3_font(b));
+  }
+  
+  static Fl_Font set_fonts(const char *t = 0) {
+    return fltk3::_3to1_font( fltk3::set_fonts(t) );
+  }
+  
+  static void set_labeltype(Fl_Labeltype a, Fl_Label_Draw_F *b, Fl_Label_Measure_F *c) {
+    fltk3::set_labeltype(fltk3::_1to3_labeltype(a), (fltk3::LabelDrawF*)b, (fltk3::LabelMeasureF*)c);
+  }
+  
+  static void set_labeltype(Fl_Labeltype a, Fl_Labeltype b) {
+    fltk3::set_labeltype(fltk3::_1to3_labeltype(a), fltk3::_1to3_labeltype(b));
+  }
+  
+  static Fl_Box_Draw_F *get_boxtype(Fl_Boxtype b) {
+    return (fltk3::BoxDrawF*)fltk3::get_boxtype(fltk3::_1to3_boxtype(b));
+  }
+  
+  static void set_boxtype(Fl_Boxtype a, Fl_Box_Draw_F *b, uchar c, uchar d, uchar e, uchar f) {
+    fltk3::set_boxtype(fltk3::_1to3_boxtype(a), (fltk3::BoxDrawF*)b, c, d, e, f);
+  }
+  
+  static void set_boxtype(Fl_Boxtype a, Fl_Boxtype b) {
+    fltk3::set_boxtype(fltk3::_1to3_boxtype(a), fltk3::_1to3_boxtype(b));
+  }
+  
+  static int box_dx(Fl_Boxtype b) {
+    return fltk3::box_dx(fltk3::_1to3_boxtype(b));
+  }
+  
+  static int box_dy(Fl_Boxtype b) {
+    return fltk3::box_dy(fltk3::_1to3_boxtype(b));
+  }
+  
+  static int box_dw(Fl_Boxtype b) {
+    return fltk3::box_dw(fltk3::_1to3_boxtype(b));
+  }
+  
+  static int box_dh(Fl_Boxtype b) {
+    return fltk3::box_dh(fltk3::_1to3_boxtype(b));
+  }
+  
+  static int draw_box_active() {
+    return fltk3::draw_box_active();
+  }
+  
+  static void set_abort(Fl_Abort_Handler f) {
+    fltk3::set_abort((fltk3::AbortHandler)f);
+  }
+  
+  static void default_atclose(Fl_Window *w, void *d) {
+    fltk3::default_atclose(fltk3::_1to3_window(w), d);
+  }
+  
+  static void set_atclose(Fl_Atclose_Handler f) {
+    fltk3::set_atclose((fltk3::AtcloseHandler)f);
+  }
+  
+  static int event_shift() {
+    return fltk3::event_shift();
+  }
+  
+  static int event_ctrl() {
+    return fltk3::event_ctrl();
+  }
+  
+  static int event_command() {
+    return fltk3::event_command();
+  }
+  
+  static int event_alt() {
+    return fltk3::event_alt();
+  }
+  
+  static int event_buttons() {
+    return fltk3::event_buttons();
+  }
+  
+  static int event_button1() {
+    return fltk3::event_button1();
+  }
+  
+  static int event_button2() {
+    return fltk3::event_button2();
+  }
+  
+  static int event_button3() {
+    return fltk3::event_button3();
+  }
+  
+  static void set_idle(Fl_Old_Idle_Handler cb) {
+    fltk3::set_idle((fltk3::OldIdleHandler)cb);
+  }
+  
+  static void grab(Fl_Window& win) {
+    fltk3::grab(*(fltk3::_1to3_window(&win)));
+  }
+  
+  static void release() {
+    fltk3::release();
+  }
+  
+  static void visible_focus(int v) {
+    fltk3::visible_focus(v);
+  }
+  
+  static int visible_focus() {
+    return fltk3::visible_focus();
+  }
+  
+  static void dnd_text_ops(int v) {
+    fltk3::dnd_text_ops(v);
+  }
+  
+  static int dnd_text_ops() {
+    return fltk3::dnd_text_ops();
+  }
+  
+  static int lock() {
+    return fltk3::lock();
+  }
+  
+  static void unlock() {
+    return fltk3::unlock();
+  }
+  
+  static void awake(void* message = 0) {
+    fltk3::awake(message);
+  }
+  
+  static int awake(Fl_Awake_Handler cb, void* message = 0) {
+    return fltk3::awake((fltk3::AwakeHandler)cb, message);
+  }
+  
+  static void* thread_message() {
+    return fltk3::thread_message();
+  }
+  
+  static void delete_widget(Fl_Widget *w) {
+    fltk3::delete_widget(fltk3::_1to3_widget(w));
+  }
+  
+  static void do_widget_deletion() {
+    fltk3::do_widget_deletion();
+  }
+    
 #ifdef FLTK_HAVE_CAIRO
 public:
   static cairo_t * cairo_make_current(Fl_Window* w);
@@ -294,22 +708,26 @@ private:
   static Fl_Cairo_State cairo_state_;
 public:
 #endif // FLTK_HAVE_CAIRO
-#endif
 };
 
 
-#if 0 // FIXME: 123
-
-class FL_EXPORT Fl_Widget_Tracker {
+class FL_EXPORT Fl_Widget_Tracker: public fltk3::WidgetTracker {
 public:
-  Fl_Widget_Tracker(Fl_Widget *wi);
-  ~Fl_Widget_Tracker();
-  Fl_Widget *widget() {return wp_;}
-  int deleted() {return wp_ == 0;}
-  int exists()  {return wp_ != 0;}
+  Fl_Widget_Tracker(Fl_Widget *wi) :
+    fltk3::WidgetTracker(fltk3::_1to3_widget(wi))
+  { }
+  ~Fl_Widget_Tracker() { }
+  Fl_Widget *widget() {
+    return fltk3::_3to1_widget(fltk3::WidgetTracker::widget());
+  }
+  int deleted() {
+    return fltk3::WidgetTracker::deleted();
+  }
+  int exists()  {
+    return fltk3::WidgetTracker::exists();
+  }
 };
 
-#endif
 
 #endif // !Fl_H
 

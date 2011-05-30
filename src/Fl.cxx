@@ -2001,7 +2001,6 @@ fltk3::WidgetTracker::~WidgetTracker()
   fltk3::release_widget_pointer(wp_); // remove pointer from watch list
 }
 
-
 //
 // End of "$Id$".
 //
