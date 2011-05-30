@@ -37,7 +37,7 @@
 #  include <stdio.h>
 #  include <math.h>
 
-fltk3::Thread prime_thread;
+Thread prime_thread;
 
 fltk3::Browser *browser1, *browser2;
 fltk3::ValueOutput *value1, *value2;
@@ -145,15 +145,15 @@ int main(int argc, char **argv)
   // Start threads...
 
   // One thread displaying in one browser
-  fltk3::create_thread(prime_thread, prime_func, browser1);
+  create_thread(prime_thread, prime_func, browser1);
 
   // Several threads displaying in another browser
-  fltk3::create_thread(prime_thread, prime_func, browser2);
-  fltk3::create_thread(prime_thread, prime_func, browser2);
-  fltk3::create_thread(prime_thread, prime_func, browser2);
-  fltk3::create_thread(prime_thread, prime_func, browser2);
-  fltk3::create_thread(prime_thread, prime_func, browser2);
-  fltk3::create_thread(prime_thread, prime_func, browser2);
+  create_thread(prime_thread, prime_func, browser2);
+  create_thread(prime_thread, prime_func, browser2);
+  create_thread(prime_thread, prime_func, browser2);
+  create_thread(prime_thread, prime_func, browser2);
+  create_thread(prime_thread, prime_func, browser2);
+  create_thread(prime_thread, prime_func, browser2);
 
   fltk3::run();
 
