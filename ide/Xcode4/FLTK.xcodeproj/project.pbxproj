@@ -776,12 +776,6 @@
 		C9A0982813885FAE00BB5C57 /* numericsort.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C964A6D1138857DE004A8700 /* numericsort.cxx */; };
 		C9A374AB3AD29E141C659819 /* fltk.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FEB0F8FE6383384180570D94 /* fltk.framework */; };
 		C9C4C91FDA73557BB6B69F3D /* jchuff.c in Sources */ = {isa = PBXBuildFile; fileRef = D9DB580DCA05DE487FACA272 /* jchuff.c */; };
-		C9EDD4C31274B94D00ADB21C /* Fl_Gl_Window.H in CopyFiles */ = {isa = PBXBuildFile; fileRef = E7C720E51DAC292F13358811 /* Fl_Gl_Window.H */; };
-		C9EDD4C41274B94D00ADB21C /* gl.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8C1CBF782BBD9CCBFC0B451B /* gl.h */; };
-		C9EDD4C51274B94D00ADB21C /* gl2opengl.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4C9AF6F2C1B78A67FFD177F9 /* gl2opengl.h */; };
-		C9EDD4C61274B94D00ADB21C /* gl_draw.H in CopyFiles */ = {isa = PBXBuildFile; fileRef = 88C72DFE480F42D0547F786B /* gl_draw.H */; };
-		C9EDD4C71274B94D00ADB21C /* glu.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = E159325B70E8DAA4D9DE0C1B /* glu.h */; };
-		C9EDD4C81274B94D00ADB21C /* glut.H in CopyFiles */ = {isa = PBXBuildFile; fileRef = 451D01896EFDD83277515630 /* glut.H */; };
 		C9EDD4C91274B95700ADB21C /* Fl_BMP_Image.H in CopyFiles */ = {isa = PBXBuildFile; fileRef = B20D11CF3F871C99011F632E /* Fl_BMP_Image.H */; };
 		C9EDD4CA1274B95700ADB21C /* Fl_GIF_Image.H in CopyFiles */ = {isa = PBXBuildFile; fileRef = BA939493F873CF0518DB0A1B /* Fl_GIF_Image.H */; };
 		C9EDD4CB1274B95700ADB21C /* Fl_Help_Dialog.H in CopyFiles */ = {isa = PBXBuildFile; fileRef = A2E97BA0812AEC32965573B8 /* Fl_Help_Dialog.H */; };
@@ -3851,12 +3845,6 @@
 				C9EDD4CD1274B95700ADB21C /* Fl_JPEG_Image.H in CopyFiles */,
 				C9EDD4CE1274B95700ADB21C /* Fl_PNG_Image.H in CopyFiles */,
 				C9EDD4CF1274B95700ADB21C /* Fl_PNM_Image.H in CopyFiles */,
-				C9EDD4C31274B94D00ADB21C /* Fl_Gl_Window.H in CopyFiles */,
-				C9EDD4C41274B94D00ADB21C /* gl.h in CopyFiles */,
-				C9EDD4C51274B94D00ADB21C /* gl2opengl.h in CopyFiles */,
-				C9EDD4C61274B94D00ADB21C /* gl_draw.H in CopyFiles */,
-				C9EDD4C71274B94D00ADB21C /* glu.h in CopyFiles */,
-				C9EDD4C81274B94D00ADB21C /* glut.H in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4221,7 +4209,6 @@
 		4343E645136756B9FEEE6902 /* fl_cursor.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fl_cursor.cxx; path = ../../src/fl_cursor.cxx; sourceTree = SOURCE_ROOT; };
 		43D9A7CD936B1382F5EA23E1 /* about_panel.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = about_panel.cxx; path = ../../fluid/about_panel.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		44277061B27BFBE1FB22B79B /* menubar.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = menubar.cxx; path = ../../test/menubar.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		451D01896EFDD83277515630 /* glut.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = glut.H; path = ../../FL/glut.H; sourceTree = SOURCE_ROOT; };
 		4577F046D6D5D93D2553BFBC /* jdtrans.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jdtrans.c; path = ../../jpeg/jdtrans.c; sourceTree = SOURCE_ROOT; };
 		45B993D3FA0EED6037499D3A /* color_chooser.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = color_chooser.cxx; path = ../../test/color_chooser.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		461BBD068DF8C58F4FFB131B /* Fl_Round_Clock.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Round_Clock.H; path = ../../FL/Fl_Round_Clock.H; sourceTree = SOURCE_ROOT; };
@@ -4236,7 +4223,6 @@
 		4BDB9923B5247EC384C1E74D /* pixmap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pixmap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C2979BC9629FABDCC0271BB /* jcmainct.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jcmainct.c; path = ../../jpeg/jcmainct.c; sourceTree = SOURCE_ROOT; };
 		4C2EEE3E17025A63A0AEEF5F /* hello.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = hello.cxx; path = ../../test/hello.cxx; sourceTree = SOURCE_ROOT; };
-		4C9AF6F2C1B78A67FFD177F9 /* gl2opengl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gl2opengl.h; path = ../../FL/gl2opengl.h; sourceTree = SOURCE_ROOT; };
 		4CABCBB89F9DD5CF57BB9779 /* Fl_Paged_Device.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Paged_Device.H; path = ../../FL/Fl_Paged_Device.H; sourceTree = SOURCE_ROOT; };
 		4CD4094D8712818EACF5C7C5 /* Fl_Progress.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Progress.H; path = ../../FL/Fl_Progress.H; sourceTree = SOURCE_ROOT; };
 		4CD5A5D2975A2CCB77EBAD43 /* jutils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jutils.c; path = ../../jpeg/jutils.c; sourceTree = SOURCE_ROOT; };
@@ -4377,14 +4363,12 @@
 		877ED586A536CA9D898220D3 /* Fl_GIF_Image.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_GIF_Image.cxx; path = ../../src/Fl_GIF_Image.cxx; sourceTree = SOURCE_ROOT; };
 		87F83C8E6003FAE14C4E8249 /* Fl_PNG_Image.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_PNG_Image.H; path = ../../FL/Fl_PNG_Image.H; sourceTree = SOURCE_ROOT; };
 		87F89271469726AE756E4D93 /* Fl_Cairo.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Cairo.H; path = ../../FL/Fl_Cairo.H; sourceTree = SOURCE_ROOT; };
-		88C72DFE480F42D0547F786B /* gl_draw.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = gl_draw.H; path = ../../FL/gl_draw.H; sourceTree = SOURCE_ROOT; };
 		88F715478C4F84C8E55B0820 /* Fl_Menu_Type.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Fl_Menu_Type.cxx; path = ../../fluid/Fl_Menu_Type.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		8985E851BEC6BB2BC613E5AD /* Fl_Menu_.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Menu_.H; path = ../../FL/Fl_Menu_.H; sourceTree = SOURCE_ROOT; };
 		8A322CF28E7EAA76A260345A /* Fl_Multiline_Input.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Multiline_Input.H; path = ../../FL/Fl_Multiline_Input.H; sourceTree = SOURCE_ROOT; };
 		8A748CC814B1697A7E2F9D1A /* blocks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = blocks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AA117275273E1E3B906DA35 /* pngget.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngget.c; path = ../../png/pngget.c; sourceTree = SOURCE_ROOT; };
 		8B02E11D61E46AD79DE7EFE7 /* Fl_Cairo_Window.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Cairo_Window.H; path = ../../FL/Fl_Cairo_Window.H; sourceTree = SOURCE_ROOT; };
-		8C1CBF782BBD9CCBFC0B451B /* gl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = gl.h; path = ../../FL/gl.h; sourceTree = SOURCE_ROOT; };
 		8C53A414ED45A9276B8B4C40 /* cursor.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = cursor.cxx; path = ../../test/cursor.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		8C5CB5680264401FDA1C693C /* Fl_Tooltip.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Tooltip.H; path = ../../FL/Fl_Tooltip.H; sourceTree = SOURCE_ROOT; };
 		8D4E2F8A10BA06E332B7EB03 /* demo.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = demo.cxx; path = ../../test/demo.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -4893,7 +4877,6 @@
 		DEF20F6B91F7FB0EBCBD2411 /* fl_utf8.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fl_utf8.cxx; path = ../../src/fl_utf8.cxx; sourceTree = SOURCE_ROOT; };
 		DF2662F7275F8873F9BA6C64 /* device.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = device.cxx; path = ../../test/device.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		E0132688B22159A85307F264 /* forms.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = forms.H; path = ../../FL/forms.H; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		E159325B70E8DAA4D9DE0C1B /* glu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = glu.h; path = ../../FL/glu.h; sourceTree = SOURCE_ROOT; };
 		E1BF46F43DB886EB2301F83A /* fast_slow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fast_slow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E21339D33557BB5501B08AB1 /* Fl_Button.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Button.H; path = ../../FL/Fl_Button.H; sourceTree = SOURCE_ROOT; };
 		E4337D2D7CEEDCAD78B068E5 /* jctrans.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jctrans.c; path = ../../jpeg/jctrans.c; sourceTree = SOURCE_ROOT; };
@@ -4903,7 +4886,6 @@
 		E4A2A361D4B13B70464C6A26 /* fl_plastic.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fl_plastic.cxx; path = ../../src/fl_plastic.cxx; sourceTree = SOURCE_ROOT; };
 		E618B793B357747DC837667E /* jmemmgr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jmemmgr.c; path = ../../jpeg/jmemmgr.c; sourceTree = SOURCE_ROOT; };
 		E73F55075EA0F5C4BC6C0D03 /* symbols.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = symbols.cxx; path = ../../test/symbols.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		E7C720E51DAC292F13358811 /* Fl_Gl_Window.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Gl_Window.H; path = ../../FL/Fl_Gl_Window.H; sourceTree = SOURCE_ROOT; };
 		E82932DF2A0C624C6EDC9207 /* Fl_Tile.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Tile.cxx; path = ../../src/Fl_Tile.cxx; sourceTree = SOURCE_ROOT; };
 		E82DD2B5676CF315E945AF23 /* Fl_FormsBitmap.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_FormsBitmap.H; path = ../../FL/Fl_FormsBitmap.H; sourceTree = SOURCE_ROOT; };
 		E840F8E478F4C8C6038E235B /* resize.fl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; lineEnding = 0; name = resize.fl; path = ../../test/resize.fl; sourceTree = SOURCE_ROOT; };
@@ -6299,12 +6281,6 @@
 		7E097C61B5952D56DFB93ECF /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				E7C720E51DAC292F13358811 /* Fl_Gl_Window.H */,
-				8C1CBF782BBD9CCBFC0B451B /* gl.h */,
-				4C9AF6F2C1B78A67FFD177F9 /* gl2opengl.h */,
-				88C72DFE480F42D0547F786B /* gl_draw.H */,
-				E159325B70E8DAA4D9DE0C1B /* glu.h */,
-				451D01896EFDD83277515630 /* glut.H */,
 			);
 			name = Headers;
 			sourceTree = "<group>";

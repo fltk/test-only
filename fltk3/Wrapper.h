@@ -58,12 +58,12 @@ if (pWrapper) {
 }
 */
 
-#define FLTK3_WRAPPER_VCALLS_OBJECT(proto, call, flag) \
+#define FLTK3_WRAPPER_VCALLS_OBJECT(klass, proto, call, flag) \
   virtual void proto { \
     if ( pVCalls & pVCallWidget##flag ) { \
     } else { \
       pVCalls |= pVCallWidget##flag; \
-      ((fltk3::Widget*)_p)->call; \
+      ((fltk3::klass*)_p)->call; \
       pVCalls &= ~pVCallWidget##flag; \
     } \
   }
@@ -83,13 +83,13 @@ if (pWrapper) {
   }
 
 
-#define FLTK3_WRAPPER_VCALLS_OBJECT_INT(proto, call, flag) \
+#define FLTK3_WRAPPER_VCALLS_OBJECT_INT(klass, proto, call, flag) \
   virtual int proto { \
     int ret = 0; \
     if ( pVCalls & pVCallWidget##flag ) { \
     } else { \
       pVCalls |= pVCallWidget##flag; \
-      ret = ((fltk3::Widget*)_p)->call; \
+      ret = ((fltk3::klass*)_p)->call; \
       pVCalls &= ~pVCallWidget##flag; \
     } \
     return ret; \
@@ -159,16 +159,20 @@ namespace fltk3 {
     }
 
     
-    FLTK3_WRAPPER_VCALLS_OBJECT_INT(handle(int event),
+    FLTK3_WRAPPER_VCALLS_OBJECT_INT(Widget,
+                                    handle(int event),
                                     handle(event),
                                     Handle)
-    FLTK3_WRAPPER_VCALLS_OBJECT(resize(int x, int y, int w, int h),
+    FLTK3_WRAPPER_VCALLS_OBJECT(Widget,
+                                resize(int x, int y, int w, int h),
                                 resize(x, y, w, h),
                                 Resize)
-    FLTK3_WRAPPER_VCALLS_OBJECT(show(),
+    FLTK3_WRAPPER_VCALLS_OBJECT(Widget,
+                                show(),
                                 show(),
                                 Show)
-    FLTK3_WRAPPER_VCALLS_OBJECT(hide(),
+    FLTK3_WRAPPER_VCALLS_OBJECT(Widget,
+                                hide(),
                                 hide(),
                                 Hide)
   };

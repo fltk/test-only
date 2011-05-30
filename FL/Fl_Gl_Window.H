@@ -35,7 +35,9 @@
 typedef void* GLContext; // actually a GLXContext or HGLDC
 #endif
 
+
 class Fl_Gl_Choice; // structure to hold result of glXChooseVisual
+
 
 class FL_EXPORT Fl_Gl_Window : public Fl_Window {
 
@@ -47,60 +49,113 @@ public:
     _p = new fltk3::GlWindow(X, Y, W, H, l);
     _p->wrapper(this);
   }
-
-#if 0 // FIXME: 123
-
-  void show();
-  void show(int a, char **b) {Fl_Window::show(a,b);}
-  void flush();
-  void hide();
-  void resize(int,int,int,int);
-  int handle(int);
   
-#endif
+  Fl_Gl_Window(int W, int H, const char *l=0) {
+    _p = new fltk3::GlWindow(W, H, l);
+    _p->wrapper(this);
+  }
   
+  void show(int a, char **b) {
+    ((fltk3::GlWindow*)_p)->show(a, b);
+  }
+  
+  void flush() {
+    ((fltk3::GlWindow*)_p)->flush();
+  }
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(GlWindow, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
+
+  FLTK3_WRAPPER_VCALLS_OBJECT(GlWindow, hide(), hide(), Hide)
+
+  FLTK3_WRAPPER_VCALLS_OBJECT(GlWindow, show(), show(), Show)
+
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(GlWindow, handle(int event), handle(event), Handle)
+    
   char valid() const {
     return ((fltk3::GlWindow*)_p)->valid();
   }
   
-  void show() const { // FIXME: 123 - this is a virtual function!
-    ((fltk3::GlWindow*)_p)->show();
+  void valid(char v) {
+    ((fltk3::GlWindow*)_p)->valid(v);
   }
   
-#if 0 // FIXME: 123
-
-  void valid(char v) {if (v) valid_f_ |= 1; else valid_f_ &= 0xfe;}
-  void invalidate();
-  char context_valid() const {return valid_f_ & 2;}
-  void context_valid(char v) {if (v) valid_f_ |= 2; else valid_f_ &= 0xfd;}
-  static int can_do(int m) {return can_do(m,0);}
-  static int can_do(const int *m) {return can_do(0, m);}
-  int can_do() {return can_do(mode_,alist);}
-  Fl_Mode mode() const {return (Fl_Mode)mode_;}
-  int mode(int a) {return mode(a,0);}
-  int mode(const int *a) {return mode(0, a);}
-  void* context() const {return context_;}
-  void context(void*, int destroy_flag = 0);
-  void make_current();
-  void swap_buffers();
-  void ortho();
-  int can_do_overlay();
-  void redraw_overlay();
-  void hide_overlay();
-  void make_overlay_current();
+  void invalidate() {
+    ((fltk3::GlWindow*)_p)->invalidate();
+  }
+  
+  char context_valid() const {
+    return ((fltk3::GlWindow*)_p)->context_valid();
+  }
+  
+  void context_valid(char v) {
+    ((fltk3::GlWindow*)_p)->context_valid(v);
+  }
+  
+  static int can_do(int m) {
+    return fltk3::GlWindow::can_do(m);
+  }
+  
+  static int can_do(const int *m) {
+    return fltk3::GlWindow::can_do(m);
+  }
+  
+  int can_do() {
+    return ((fltk3::GlWindow*)_p)->can_do();
+  }
+  
+  Fl_Mode mode() const {
+    ((fltk3::GlWindow*)_p)->mode();
+  }
+  
+  int mode(int a) {
+    return ((fltk3::GlWindow*)_p)->mode(a);
+  }
+  
+  int mode(const int *a) {
+    return ((fltk3::GlWindow*)_p)->mode(a);
+  }
+  
+  void* context() const {
+    return ((fltk3::GlWindow*)_p)->context();
+  }
+  
+  void context(void *a, int destroy_flag = 0) {
+    ((fltk3::GlWindow*)_p)->context(a, destroy_flag);
+  }
+  
+  void make_current() {
+    ((fltk3::GlWindow*)_p)->make_current();
+  }
+  
+  void swap_buffers() {
+    ((fltk3::GlWindow*)_p)->swap_buffers();
+  }
+  
+  void ortho() {
+    ((fltk3::GlWindow*)_p)->ortho();
+  }
+  
+  int can_do_overlay() {
+    return ((fltk3::GlWindow*)_p)->can_do_overlay();
+  }
+  
+  void redraw_overlay() {
+    ((fltk3::GlWindow*)_p)->redraw_overlay();
+  }
+  
+  void hide_overlay() {
+    ((fltk3::GlWindow*)_p)->hide_overlay();
+  }
+  
+  void make_overlay_current() {
+    ((fltk3::GlWindow*)_p)->make_overlay_current();
+  }
+  
   virtual Fl_Gl_Window* as_gl_window() {return this;}
-  ~Fl_Gl_Window();
-  Fl_Gl_Window(int W, int H, const char *l=0) : Fl_Window(W,H,l) {init();}
-
-#endif
 
 protected:
 
-#if 0 // FIXME: 123
-
-  virtual void draw();
-  
-#endif
+  FLTK3_WRAPPER_VCALLS_OBJECT(GlWindow, draw(), draw(), Draw)
   
 };
 
