@@ -36,8 +36,10 @@
 
 class Fl_X;
 
-namespace fltk3 {
+class Fl_Window;
 
+namespace fltk3 {
+  
   const uchar WINDOW = 0xF0;		///< window type id all subclasses have type() >= this
   const uchar DOUBLE_WINDOW = 0xF1;   ///< double window type id
 
@@ -59,6 +61,8 @@ namespace fltk3 {
    window. fltk3::Window has a default callback that calls fltk3::Window::hide().
    */
   class FLTK3_EXPORT Window : public Group {
+
+    friend class ::Fl_Window;
     
     static char *default_xclass_;
     

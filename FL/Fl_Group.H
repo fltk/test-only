@@ -36,16 +36,30 @@ class FL_EXPORT Fl_Group : public Fl_Widget {
   Fl_Group& operator=(const Fl_Group&); /* empty */
   
 protected:  
+  
   Fl_Group() { /* empty */ }
 
-#if 0 // FIXME: 123
-  void draw();
-  void draw_child(Fl_Widget& widget) const;
-  void draw_children();
-  void draw_outside_label(const Fl_Widget& widget) const ;
-  void update_child(Fl_Widget& widget) const;
-  int  *sizes();
-#endif
+  FLTK3_WRAPPER_VCALLS_OBJECT(Group, draw(), draw(), Draw)
+  
+  void draw_child(Fl_Widget& widget) const {
+    ((fltk3::Group*)_p)->draw_child(*(fltk3::_1to3_widget(&widget)));
+  }
+  
+  void draw_children() {
+    ((fltk3::Group*)_p)->draw_children();
+  }
+  
+  void draw_outside_label(const Fl_Widget& widget) const {
+    ((fltk3::Group*)_p)->draw_outside_label(*(fltk3::_1to3_widget((Fl_Widget*)&widget)));
+  }
+  
+  void update_child(Fl_Widget& widget) const {
+    ((fltk3::Group*)_p)->update_child(*(fltk3::_1to3_widget(&widget)));
+  }
+  
+  int *sizes() {
+    return ((fltk3::Group*)_p)->sizes();
+  }
   
 public:
   
@@ -53,6 +67,14 @@ public:
     _p = new fltk3::Group(x, y, w, h, label);
     _p->wrapper(this);
   }
+
+  FLTK3_WRAPPER_VCALLS_OBJECT(Group, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Group, hide(), hide(), Hide)
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Group, show(), show(), Show)
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Group, handle(int event), handle(event), Handle)
 
   void begin() {
     ((fltk3::Group*)_p)->begin();
@@ -66,54 +88,106 @@ public:
     return fltk3::_3to1_group( fltk3::Group::current() );
   }
   
-#if 0 // FIXME: 123
-  int handle(int);
-  static void current(Fl_Group *g);
-  int children() const {return children_;}
-  Fl_Widget* child(int n) const {return array()[n];}
-  int find(const Fl_Widget*) const;
-  int find(const Fl_Widget& o) const {return find(&o);}
-  Fl_Widget* const* array() const;
-  void resize(int,int,int,int);
-  virtual ~Fl_Group();
-  void add(Fl_Widget&);
-  void add(Fl_Widget* o) {add(*o);}
-  void insert(Fl_Widget&, int i);
-  void insert(Fl_Widget& o, Fl_Widget* before) {insert(o,find(before));}
-  void remove(int index);
-  void remove(Fl_Widget&);
-  void remove(Fl_Widget* o) {remove(*o);}
-  void clear();
-#endif
+  static void current(Fl_Group *g) {
+    fltk3::Group::current(fltk3::_1to3_group(g));
+  }
+  
+  int children() const {
+    return ((fltk3::Group*)_p)->children();
+  }
+  
+  Fl_Widget* child(int n) const {
+    return fltk3::_3to1_widget( ((fltk3::Group*)_p)->child(n) );
+  }
+  
+  int find(const Fl_Widget *w) const {
+    return ((fltk3::Group*)_p)->find(fltk3::_1to3_widget((Fl_Widget*)w));
+  }
+  
+  int find(const Fl_Widget& o) const {
+    return ((fltk3::Group*)_p)->find(*(fltk3::_1to3_widget((Fl_Widget*)&o)));
+  }
+  
+  // FIXME: 123 - can't traslate easily! Fl_Widget* const* array() const;
+  
+  void add(Fl_Widget &o) {
+    ((fltk3::Group*)_p)->find(*(fltk3::_1to3_widget(&o)));
+  }
+  
+  void add(Fl_Widget* o) {
+    ((fltk3::Group*)_p)->add(fltk3::_1to3_widget(o));
+  }
+  
+  void insert(Fl_Widget &o, int i) {
+    ((fltk3::Group*)_p)->insert(*(fltk3::_1to3_widget(&o)), i);
+  }
+  
+  void insert(Fl_Widget& o, Fl_Widget* before) {
+    ((fltk3::Group*)_p)->insert(*(fltk3::_1to3_widget(&o)), fltk3::_1to3_widget((Fl_Widget*)before));
+  }
+  
+  void remove(int index) {
+    ((fltk3::Group*)_p)->remove(index);
+  }
+  
+  void remove(Fl_Widget &o) {
+    ((fltk3::Group*)_p)->remove(*(fltk3::_1to3_widget(&o)));
+  }
+  
+  void remove(Fl_Widget* o) {
+    ((fltk3::Group*)_p)->remove(fltk3::_1to3_widget(o));
+  }
+  
+  void clear() {
+    ((fltk3::Group*)_p)->clear();
+  }
   
   void resizable(Fl_Widget& o) {
-    ((fltk3::Group*)_p)->resizable((fltk3::Widget&)(*o._p));
+    ((fltk3::Group*)_p)->resizable(*(fltk3::_1to3_widget(&o)));
   }
   
   void resizable(Fl_Widget* o) {
-    ((fltk3::Group*)_p)->resizable((fltk3::Widget*)(o->_p));
+    ((fltk3::Group*)_p)->resizable(fltk3::_1to3_widget(o));
   }
   
   Fl_Widget* resizable() const {
     return fltk3::_3to1_widget(((fltk3::Group*)_p)->resizable());
   }
   
-#if 0 // FIXME: 123
-  void add_resizable(Fl_Widget& o) {resizable_ = &o; add(o);}
-  void init_sizes();
-  void clip_children(int c) { if (c) set_flag(CLIP_CHILDREN); else clear_flag(CLIP_CHILDREN); }
-  unsigned int clip_children() { return (flags() & CLIP_CHILDREN) != 0; }
+  void add_resizable(Fl_Widget& o) {
+    ((fltk3::Group*)_p)->add_resizable(*(fltk3::_1to3_widget(&o)));
+  }
+  
+  void init_sizes() {
+    ((fltk3::Group*)_p)->init_sizes();
+  }
+  
+  void clip_children(int c) {
+    ((fltk3::Group*)_p)->clip_children(c);
+  }
+  
+  unsigned int clip_children() {
+    return ((fltk3::Group*)_p)->clip_children();
+  }
+  
   virtual Fl_Group* as_group() { return this; }
-  void focus(Fl_Widget* W) {W->take_focus();}
-  void forms_end();
-#endif
+  
+  void focus(Fl_Widget* W) {
+    ((fltk3::Group*)_p)->remove(fltk3::_1to3_widget(W));
+  }
+  
+  void forms_end() {
+    ((fltk3::Group*)_p)->forms_end();
+  }
   
 };
+
 
 class FL_EXPORT Fl_End {
 public:
   Fl_End() { Fl_Group::current()->end(); }
 };
+
 
 #endif
 

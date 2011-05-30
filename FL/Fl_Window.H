@@ -43,15 +43,19 @@ class FL_EXPORT Fl_Window : public Fl_Group {
   Fl_Window(const Fl_Window&);
   Fl_Window& operator=(const Fl_Window&);
 
-#if 0 // FIXME: 123
-
 protected:
   
-  virtual void draw();
-  virtual void flush();
-  void force_position(int force);
-  int force_position() const { return ((flags() & FORCE_POSITION)?1:0); }
-#endif
+  void flush() {
+    ((fltk3::Window*)_p)->flush();
+  }
+  
+  void force_position(int force) {
+    ((fltk3::Window*)_p)->force_position(force);
+  }
+  
+  int force_position() const {
+    return ((fltk3::Window*)_p)->force_position();
+  }
   
 public:
   
@@ -67,70 +71,193 @@ public:
     _p->wrapper(this);
   }
   
-#if 0 // FIXME: 123
-  virtual ~Fl_Window();
-  virtual int handle(int);
-  virtual void resize(int,int,int,int);
-  void border(int b);
-  void clear_border()	{set_flag(NOBORDER);}
-  unsigned int border() const	{return !(flags() & NOBORDER);}
-  void set_override()	{set_flag(NOBORDER|OVERRIDE);}
-  unsigned int override() const  { return flags()&OVERRIDE; }
-  void set_modal()	{set_flag(MODAL);}
-  unsigned int modal() const	{return flags() & MODAL;}
-  void set_non_modal()	{set_flag(NON_MODAL);}
-  unsigned int non_modal() const {return flags() & (NON_MODAL|MODAL);}
-  void set_menu_window()	{set_flag(MENU_WINDOW);}
-  unsigned int menu_window() const {return flags() & MENU_WINDOW;}
-  void set_tooltip_window();
-  unsigned int tooltip_window() const {return flags() & TOOLTIP_WINDOW;}
-  void hotspot(int x, int y, int offscreen = 0);
-  void hotspot(const Fl_Widget*, int offscreen = 0);
-  void hotspot(const Fl_Widget& p, int offscreen = 0) {hotspot(&p,offscreen);}
-  void free_position()	{clear_flag(FORCE_POSITION);}
-  void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0, int g=0);
-  const char* label() const	{return Fl_Widget::label();}
-  const char* iconlabel() const	{return iconlabel_;}
-  void label(const char*);
-  void iconlabel(const char*);
-  void label(const char* label, const char* iconlabel); // platform dependent
-  void copy_label(const char* a);
-  static void default_xclass(const char*);
-  static const char *default_xclass();
-  const char* xclass() const;
-  void xclass(const char* c);
-  const void* icon() const;
-  void icon(const void * ic);
-  int shown() {return i != 0;}
-  virtual void show();
-  virtual void hide();
-#endif
+  FLTK3_WRAPPER_VCALLS_OBJECT(Window, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Window, hide(), hide(), Hide)
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Window, show(), show(), Show)
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Window, draw(), draw(), Draw)
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Window, handle(int event), handle(event), Handle)
+  
+  void border(int b) {
+    ((fltk3::Window*)_p)->border(b);
+  }
+  
+  void clear_border() {
+    ((fltk3::Window*)_p)->clear_border();
+  }
+  
+  unsigned int border() const {
+    return ((fltk3::Window*)_p)->border();
+  }
+  
+  void set_override() {
+    ((fltk3::Window*)_p)->set_override();
+  }
+  
+  unsigned int override() const {
+    return ((fltk3::Window*)_p)->override();
+  }
+  
+  void set_modal() {
+    ((fltk3::Window*)_p)->set_modal();
+  }
+  
+  unsigned int modal() const {
+    return ((fltk3::Window*)_p)->modal();
+  }
+  
+  void set_non_modal() {
+    ((fltk3::Window*)_p)->set_non_modal();
+  }
+  
+  unsigned int non_modal() const {
+    return ((fltk3::Window*)_p)->non_modal();
+  }
+  
+  void set_menu_window() {
+    ((fltk3::Window*)_p)->set_menu_window();
+  }
+  
+  unsigned int menu_window() const {
+    return ((fltk3::Window*)_p)->menu_window();
+  }
+  
+  void set_tooltip_window() {
+    ((fltk3::Window*)_p)->set_tooltip_window();
+  }
+  
+  unsigned int tooltip_window() const {
+    return ((fltk3::Window*)_p)->tooltip_window();
+  }
+  
+  void hotspot(int x, int y, int offscreen = 0) {
+    ((fltk3::Window*)_p)->hotspot(x, y, offscreen);
+  }
+  
+  void hotspot(const Fl_Widget *w, int offscreen = 0) {
+    ((fltk3::Window*)_p)->hotspot(fltk3::_1to3_widget((Fl_Widget*)w), offscreen);
+  }
+  
+  void hotspot(const Fl_Widget& p, int offscreen = 0) {
+    ((fltk3::Window*)_p)->hotspot(*fltk3::_1to3_widget((Fl_Widget*)&p), offscreen);
+  }
+  
+  void free_position() {
+    ((fltk3::Window*)_p)->free_position();
+  }
+  
+  void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0, int g=0) {
+    ((fltk3::Window*)_p)->size_range(a, b, c, d, e, f, g);
+  }
+  
+  const char* label() const {
+    return ((fltk3::Window*)_p)->label();
+  }
+  
+  const char* iconlabel() const	{
+    return ((fltk3::Window*)_p)->iconlabel();
+  }
+  
+  void label(const char *t) {
+    ((fltk3::Window*)_p)->label(t);
+  }
+  
+  void iconlabel(const char *t) {
+    ((fltk3::Window*)_p)->iconlabel(t);
+  }
+  
+  void label(const char* a, const char* b) {
+    ((fltk3::Window*)_p)->label(a, b);
+  }
+  
+  void copy_label(const char* a) {
+    ((fltk3::Window*)_p)->copy_label(a);
+  }
+  
+  static void default_xclass(const char *c) {
+    fltk3::Window::default_xclass(c);
+  }
+  
+  static const char *default_xclass() {
+    return fltk3::Window::default_xclass();
+  }
+  
+  const char* xclass() const {
+    ((fltk3::Window*)_p)->xclass();
+  }
+  
+  void xclass(const char* c) {
+    ((fltk3::Window*)_p)->xclass(c);
+  }
+  
+  const void* icon() const {
+    return ((fltk3::Window*)_p)->icon();
+  }
+  
+  void icon(const void * ic) {
+    ((fltk3::Window*)_p)->icon(ic);
+  }
+  
+  int shown() {
+    return ((fltk3::Window*)_p)->shown();
+  }
   
   void show(int argc, char **argv) {
     ((fltk3::Window*)_p)->show(argc, argv);
   }
   
-#if 0 // FIXME: 123
-  void fullscreen();
-  void fullscreen_off(int,int,int,int);
-  void iconize();
-  int x_root() const ;
-  int y_root() const ;
-  static Fl_Window *current();
-  void make_current();
+  void fullscreen() {
+    ((fltk3::Window*)_p)->fullscreen();
+  }
+  
+  void fullscreen_off(int x, int y, int w, int h) {
+    ((fltk3::Window*)_p)->fullscreen_off(x, y, w, h);
+  }
+  
+  void iconize() {
+    ((fltk3::Window*)_p)->iconize();
+  }
+    
+  int x_root() const {
+    ((fltk3::Window*)_p)->y_root();
+  }
+  
+  int y_root() const {
+    ((fltk3::Window*)_p)->y_root();
+  }
+  
+  static Fl_Window *current() {
+    return fltk3::_3to1_window( fltk3::Window::current() );
+  }
+  
+  void make_current() {
+    ((fltk3::Window*)_p)->make_current();
+  }
+  
   virtual Fl_Window* as_window() { return this; }
-#endif
   
   void cursor(Fl_Cursor c, Fl_Color a=FL_BLACK, Fl_Color b=FL_WHITE) {
     ((fltk3::Window*)_p)->cursor( fltk3::_1to3_cursor(c), fltk3::_1to3_color(a), fltk3::_1to3_color(b));
   }
   
-#if 0 // FIXME: 123
-  void default_cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
-  static void default_callback(Fl_Window*, void* v);
-  int decorated_w();
-  int decorated_h();
-#endif
+  void default_cursor(Fl_Cursor c, Fl_Color a=FL_BLACK, Fl_Color b=FL_WHITE) {
+    ((fltk3::Window*)_p)->default_cursor(fltk3::_1to3_cursor(c), fltk3::_1to3_color(a), fltk3::_1to3_color(b));
+  }
+  
+  static void default_callback(Fl_Window *w, void* v) {
+    fltk3::Window::default_callback(fltk3::_1to3_window(w), v);
+  }
+  
+  int decorated_w() {
+    ((fltk3::Window*)_p)->decorated_w();
+  }
+  
+  int decorated_h() {
+    return ((fltk3::Window*)_p)->decorated_h();
+  }
 
 };
 
