@@ -57,6 +57,8 @@ typedef Fl_Callback* Fl_Callback_p; // needed for BORLAND
 typedef void (Fl_Callback0)(Fl_Widget*);
 typedef void (Fl_Callback1)(Fl_Widget*, long);
 
+
+#if 0 // FIXME: 123 - not sure how to translate this yet
 struct FL_EXPORT Fl_Label {
   const char* value;
   Fl_Image* image;
@@ -69,6 +71,7 @@ struct FL_EXPORT Fl_Label {
   void draw(int,int,int,int, Fl_Align) const ;
   void measure(int &w, int &h) const ;
 };
+#endif
 
 
 class FL_EXPORT Fl_Widget : public fltk3::WidgetWrapper {
@@ -177,17 +180,21 @@ public:
     _p->wrapper(this);
   }
 
-#if 0 // FIXME: 123
-  virtual ~Fl_Widget();
-  virtual void draw() = 0;
-  virtual int handle(int event);
-  virtual void resize(int x, int y, int w, int h);
-  virtual void show();
-  virtual void hide();
+  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, hide(), hide(), Hide)
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, show(), show(), Show)
+
+  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, draw(), draw(), Draw)
+
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Widget, handle(int event), handle(event), Handle)
+  
   virtual Fl_Group* as_group() {return 0;}
+  
   virtual Fl_Window* as_window() {return 0;}
+  
   virtual class Fl_Gl_Window* as_gl_window() {return 0;}
-#endif
   
   Fl_Group *parent() const {
     return fltk3::_3to1_group( ((fltk3::Widget*)_p)->parent() );
