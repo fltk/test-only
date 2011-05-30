@@ -33,6 +33,31 @@
 
 #include <fltk3/Widget.h>
 
+/*
+ FLTK3_OBJECT_VCALLS_WRAPPER:
+if (pWrapper) { 
+  // We only do this tests if there is a wrapper connected to me.
+  if ( pWrapper->pVCalls & Wrapper::pVCallWidgetDraw ) { 
+    // if my flag is set, we are being called from the wrapper, so we simply
+    // continue with the original code. The wrapper mus clear the flag.
+  } else { 
+    // if my flag is clear, we are called from the core. So lets set the 
+    // flag and call the wrapper.
+    pWrapper->pVCalls |= Wrapper::pVCallWidgetDraw; 
+    ((WidgetWrapper*)pWrapper)->draw(); 
+    if ( (pWrapper->pVCalls & Wrapper::pVCallWidgetDraw) ) {
+      // If the flag is still set, the function was overridden in the wrapper.
+      // Clear the flag for the next call and abort.
+      pWrapper->pVCalls &= ~Wrapper::pVCallWidgetDraw; 
+      return; 
+    } else {
+      // If the wrapper returns with the flag cleared, the default code was 
+      // called and we continue with the original code.
+    }
+  } 
+}
+*/
+
 #define FLTK3_WRAPPER_VCALLS_OBJECT(proto, call, flag) \
   virtual void proto { \
     if ( pVCalls & pVCallWidget##flag ) { \
@@ -49,11 +74,14 @@
     } else { \
       pWrapper->pVCalls |= Wrapper::pVCallWidget##flag; \
       ((WidgetWrapper*)pWrapper)->call; \
-      if ( !(pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) \
+      if ( (pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) { \
+        pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
         return; \
+      } else { \
+      } \
     } \
-    pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
   }
+
 
 #define FLTK3_WRAPPER_VCALLS_OBJECT_INT(proto, call, flag) \
   virtual int proto { \
@@ -73,10 +101,12 @@
     } else { \
       pWrapper->pVCalls |= Wrapper::pVCallWidget##flag; \
       int ret = ((WidgetWrapper*)pWrapper)->call; \
-      if ( !(pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) \
+      if ( (pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) { \
+        pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
         return ret; \
+      } else { \
+      } \
     } \
-    pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
   }
 
 

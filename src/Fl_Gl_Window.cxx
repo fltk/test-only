@@ -533,30 +533,7 @@ void fltk3::GlWindow::draw_overlay() {}
   buffers are swapped after this function is completed.
 */
 void fltk3::GlWindow::draw() {
-  //FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
-  
-  if (pWrapper) { 
-    // We only do this tests if there is a wrapper connected to me.
-    if ( pWrapper->pVCalls & Wrapper::pVCallWidgetDraw ) { 
-      // if my flag is set, we are being called from the wrapper, so we simply
-      // continue with the original code. The wrapper mus clear the flag.
-    } else { 
-      // if my flag is clear, we are called from the core. So lets set the 
-      // flag and call the wrapper.
-      pWrapper->pVCalls |= Wrapper::pVCallWidgetDraw; 
-      ((WidgetWrapper*)pWrapper)->draw(); 
-      if ( (pWrapper->pVCalls & Wrapper::pVCallWidgetDraw) ) {
-        // If the flag is still set, the function was overridden in the wrapper.
-        // Clear the flag for the next call and abort.
-        pWrapper->pVCalls &= ~Wrapper::pVCallWidgetDraw; 
-        return; 
-      } else {
-        // If the wrapper returns with the flag cleared, the default code was 
-        // called and we continue with the original code.
-      }
-    } 
-  }
-  
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   fltk3::fatal("fltk3::GlWindow::draw() *must* be overriden. Please refer to the documentation.");
 }
 
@@ -566,18 +543,7 @@ void fltk3::GlWindow::draw() {
  */
 int fltk3::GlWindow::handle(int event) 
 {
-#ifdef __APPLE_QUARTZ__
-  /*if (event==fltk3::HIDE) {
-    // if we are not hidden, just the parent was hidden, so we must throw away the context
-    if (!visible_r())
-      context(0); // remove context without setting the hidden flags
-  }
-  if (event==fltk3::SHOW) {
-    // if we are not hidden, just the parent was shown, so we must create a new context
-    if (visible_r())
-      show(); //
-  }*/
-#endif
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   return fltk3::Window::handle(event);
 }
 

@@ -57,9 +57,7 @@ public:
 
 class cube_box : public Fl_Gl_Window {
   void draw();
-#if 0 // FIXME: 123
   int handle(int);
-#endif
 public:
   double lasttime;
   int wire;
@@ -130,8 +128,6 @@ void cube_box::draw() {
   glEnable(GL_DEPTH_TEST);
 }
 
-#if 0 // FIXME: 123
-
 int cube_box::handle(int e) {
   switch (e) {
   case FL_ENTER: cursor(FL_CURSOR_CROSS); break;
@@ -139,8 +135,6 @@ int cube_box::handle(int e) {
   }
   return Fl_Gl_Window::handle(e);
 }
-
-#endif
 
 #endif
 

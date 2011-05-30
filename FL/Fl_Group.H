@@ -48,7 +48,11 @@ protected:
 #endif
   
 public:
-  Fl_Group(int,int,int,int, const char * = 0);
+  
+  Fl_Group(int x, int y, int w, int h, const char *label = 0) {
+    _p = new fltk3::Group(x, y, w, h, label);
+    _p->wrapper(this);
+  }
 
   void begin() {
     ((fltk3::Group*)_p)->begin();
@@ -58,9 +62,12 @@ public:
     ((fltk3::Group*)_p)->end();
   }
   
+  static Fl_Group *current() {
+    return fltk3::_3to1_group( fltk3::Group::current() );
+  }
+  
 #if 0 // FIXME: 123
   int handle(int);
-  static Fl_Group *current();
   static void current(Fl_Group *g);
   int children() const {return children_;}
   Fl_Widget* child(int n) const {return array()[n];}
@@ -98,18 +105,14 @@ public:
   unsigned int clip_children() { return (flags() & CLIP_CHILDREN) != 0; }
   virtual Fl_Group* as_group() { return this; }
   void focus(Fl_Widget* W) {W->take_focus();}
-  Fl_Widget* & _ddfdesign_kludge() {return resizable_;}
   void forms_end();
 #endif
   
 };
 
 class FL_EXPORT Fl_End {
-#if 0 // FIXME: 123
 public:
-  /** All it does is calling Fl_Group::current()->end() */
-  Fl_End() {Fl_Group::current()->end();}
-#endif
+  Fl_End() { Fl_Group::current()->end(); }
 };
 
 #endif

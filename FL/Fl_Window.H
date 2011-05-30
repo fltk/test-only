@@ -62,8 +62,12 @@ public:
     _p->wrapper(this);
   }
   
+  Fl_Window(int x, int y, int w, int h, const char* label = 0) {
+    _p = new fltk3::Window(x, y, w, h, label);
+    _p->wrapper(this);
+  }
+  
 #if 0 // FIXME: 123
-  Fl_Window(int x, int y, int w, int h, const char* title = 0);
   virtual ~Fl_Window();
   virtual int handle(int);
   virtual void resize(int,int,int,int);
@@ -115,7 +119,13 @@ public:
   static Fl_Window *current();
   void make_current();
   virtual Fl_Window* as_window() { return this; }
-  void cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE); // platform dependent
+#endif
+  
+  void cursor(Fl_Cursor c, Fl_Color a=FL_BLACK, Fl_Color b=FL_WHITE) {
+    ((fltk3::Window*)_p)->cursor( fltk3::_1to3_cursor(c), fltk3::_1to3_color(a), fltk3::_1to3_color(b));
+  }
+  
+#if 0 // FIXME: 123
   void default_cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
   static void default_callback(Fl_Window*, void* v);
   int decorated_w();
