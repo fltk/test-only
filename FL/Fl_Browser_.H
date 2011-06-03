@@ -29,6 +29,7 @@
 #ifndef Fl_Browser__H
 #define Fl_Browser__H
 
+#include <fltk3/Browser_.h>
 #include "Fl_Group.H"
 #include "Fl_Scrollbar.H"
 #include "Fl.H"
@@ -45,6 +46,7 @@ class FL_EXPORT Fl_Browser_ : public Fl_Group {
 
 protected:
 
+  // FIXME: 123 virtual methods
   virtual void *item_first() const = 0;
   virtual void *item_next(void *item) const = 0;
   virtual void *item_prev(void *item) const = 0;
@@ -61,61 +63,179 @@ protected:
   virtual int incr_height() const ;	// average height of an item
   virtual void item_select(void *item,int val=1);
   virtual int item_selected(void *item) const ;
-  void *top() const { return top_; }
-  void *selection() const { return selection_; }
-  void new_list(); // completely clobber all data, as though list replaced
-  void deleting(void *item); // get rid of any pointers to item
-  void replacing(void *a,void *b); // change a pointers to b
-  void swapping(void *a,void *b); // exchange pointers a and b
-  void inserting(void *a,void *b); // insert b near a
-  int displayed(void *item) const ; // true if this item is visible
-  void redraw_line(void *item); // minimal update, no change in size
-  void redraw_lines() { damage(FL_DAMAGE_SCROLL); } // redraw all of them
-  void bbox(int &X,int &Y,int &W,int &H) const;
-  int leftedge() const;	// x position after scrollbar & border
-  void *find_item(int ypos); // item under mouse
-  void draw();
-  Fl_Browser_(int X,int Y,int W,int H,const char *L=0);
+  
+  void *top() const {
+    return ((fltk3::Browser_*)_p)->top();
+  }
+  
+  void *selection() const { 
+    return ((fltk3::Browser_*)_p)->selection();
+  }
+  
+  void new_list() {
+    ((fltk3::Browser_*)_p)->new_list();
+  }
+  
+  void deleting(void *item) {
+    ((fltk3::Browser_*)_p)->deleting(item);
+  }
+  
+  void replacing(void *a,void *b) {
+    ((fltk3::Browser_*)_p)->replacing(a, b);
+  }
+  
+  void swapping(void *a,void *b) {
+    ((fltk3::Browser_*)_p)->swapping(a, b);
+  }
+  
+  void inserting(void *a,void *b) {
+    ((fltk3::Browser_*)_p)->inserting(a, b);
+  }
+  
+  int displayed(void *item) const {
+    return ((fltk3::Browser_*)_p)->displayed(item);
+  }
+  
+  void redraw_line(void *item) {
+    ((fltk3::Browser_*)_p)->redraw_line(item);
+  }
+  
+  void redraw_lines() { 
+    ((fltk3::Browser_*)_p)->redraw_lines();
+  }
+  
+  void bbox(int &X,int &Y,int &W,int &H) const {
+    ((fltk3::Browser_*)_p)->bbox(X, Y, W, H);
+  }
+  
+  int leftedge() const {
+    return ((fltk3::Browser_*)_p)->leftedge();
+  }
+  
+  void *find_item(int ypos) {
+    return ((fltk3::Browser_*)_p)->find_item(ypos);
+  }
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Browser_, draw(), draw(), Draw)
+  
+  Fl_Browser_() { /* empty */ }
+  
+  Fl_Browser_(int X,int Y,int W,int H,const char *L=0) {
+    _p = new fltk3::Browser(x, y, w, h, label);
+    _p->wrapper(this);
+  }
 
 public:
 
-  Fl_Scrollbar scrollbar;
-  Fl_Scrollbar hscrollbar;
+  // FIXME: 123 Fl_Scrollbar scrollbar;
+  
+  // FIXME: 123 Fl_Scrollbar hscrollbar;
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Browser_, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
 
-  int handle(int event);
-  void resize(int X,int Y,int W,int H);
-  int select(void *item,int val=1,int docallbacks=0);
-  int select_only(void *item,int docallbacks=0);
-  int deselect(int docallbacks=0);
-  int position() const { return position_; }
-  void position(int pos); // scroll to here
-  int hposition() const { return hposition_; }
-  void hposition(int); // pan to here
-  void display(void *item); // scroll so this item is shown
-  enum { // values for has_scrollbar()
-    HORIZONTAL = 1,		///< Only show horizontal scrollbar.
-    VERTICAL = 2,		///< Only show vertical scrollbar.
-    BOTH = 3,			///< Show both scrollbars. (default)
-    ALWAYS_ON = 4,		///< Specified scrollbar(s) should 'always' be shown (to be used with HORIZONTAL/VERTICAL)
-    HORIZONTAL_ALWAYS = 5,	///< Horizontal scrollbar always on.
-    VERTICAL_ALWAYS = 6,	///< Vertical scrollbar always on.
-    BOTH_ALWAYS = 7		///< Both scrollbars always on.
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Browser_, handle(int event), handle(event), Handle)
+
+  int select(void *item,int val=1,int docallbacks=0) {
+    return ((fltk3::Browser_*)_p)->select(item, val, docallbacks);
+  }
+  
+  int select_only(void *item,int docallbacks=0) {
+    return ((fltk3::Browser_*)_p)->select_only(item, docallbacks);
+  }
+  
+  int deselect(int docallbacks=0) {
+    return ((fltk3::Browser_*)_p)->deselect(docallbacks);
+  }
+  
+  int position() const {
+    return ((fltk3::Browser_*)_p)->position();
+  }
+  
+  void position(int pos) {
+    ((fltk3::Browser_*)_p)->position(pos);
+  }
+  
+  int hposition() const { 
+    return ((fltk3::Browser_*)_p)->hposition();
+  }
+  
+  void hposition(int p) {
+    ((fltk3::Browser_*)_p)->hposition(p);
+  }
+  
+  void display(void *item) {
+    ((fltk3::Browser_*)_p)->display(item);
+  }
+  
+  enum {
+    HORIZONTAL = 1,
+    VERTICAL = 2,
+    BOTH = 3,
+    ALWAYS_ON = 4,
+    HORIZONTAL_ALWAYS = 5,
+    VERTICAL_ALWAYS = 6,
+    BOTH_ALWAYS = 7
   };
-  uchar has_scrollbar() const { return has_scrollbar_; }
-  void has_scrollbar(uchar mode) { has_scrollbar_ = mode; }
-  Fl_Font textfont() const { return textfont_; }
-  void textfont(Fl_Font font) { textfont_ = font; }
-  Fl_Fontsize textsize() const { return textsize_; }
-  void textsize(Fl_Fontsize size) { textsize_ = size; }
-  Fl_Color textcolor() const { return textcolor_; }
-  void textcolor(Fl_Color col) { textcolor_ = col; }
-  int scrollbar_size() const;
-  void scrollbar_size(int size);
-  int scrollbar_width() const;
-  void scrollbar_width(int width);
-  void scrollbar_right() { scrollbar.align(FL_ALIGN_RIGHT); }
-  void scrollbar_left() { scrollbar.align(FL_ALIGN_LEFT); }
-  void sort(int flags=0);
+  
+  uchar has_scrollbar() const { 
+    return ((fltk3::Browser_*)_p)->has_scrollbar();
+  }
+  
+  void has_scrollbar(uchar mode) {
+    ((fltk3::Browser_*)_p)->has_scrollbar(mode);
+  }
+  
+  Fl_Font textfont() const { 
+    return fltk3::_3to1_font( ((fltk3::Browser_*)_p)->textfont() ); 
+  }
+                             
+  void textfont(Fl_Font font) { 
+    ((fltk3::Browser_*)_p)->font( fltk3::_1to3_font(font) );
+  }
+  
+  Fl_Fontsize textsize() const { 
+    return fltk3::_3to1_fontsize( ((fltk3::Browser_*)_p)->textsize() );
+  }
+  
+  void textsize(Fl_Fontsize size) {
+    ((fltk3::Browser_*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+  }
+  
+  Fl_Color textcolor() const { 
+    return fltk3::_3to1_color( ((fltk3::Browser_*)_p)->textcolor() );
+  }
+  
+  void textcolor(Fl_Color col) { 
+    ((fltk3::Browser_*)_p)->textcolor( fltk3::_1to3_color(col) );
+  }
+  
+  int scrollbar_size() const {
+    return ((fltk3::Browser_*)_p)->scrollbar_size();
+  }
+  
+  void scrollbar_size(int size) {
+    ((fltk3::Browser_*)_p)->scrollbar_size(size);
+  }
+  
+  int scrollbar_width() const {
+    return ((fltk3::Browser_*)_p)->scrollbar_width();
+  }
+  
+  void scrollbar_width(int width) {
+    ((fltk3::Browser_*)_p)->scrollbar_width(width);
+  }
+  
+  void scrollbar_right() { 
+    ((fltk3::Browser_*)_p)->scrollbar_right();
+  }
+  
+  void scrollbar_left() {
+    ((fltk3::Browser_*)_p)->scrollbar_left();
+  }
+  
+  void sort(int flags=0) {
+    ((fltk3::Browser_*)_p)->sort(flags);
+  }
 };
 
 #endif

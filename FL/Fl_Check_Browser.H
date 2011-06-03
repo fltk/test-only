@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Fl_Check_Browser header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,93 +26,88 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Check_Browser widget . */
-
 #ifndef Fl_Check_Browser_H
 #define Fl_Check_Browser_H
 
+#include <fltk3/CheckBrowser.h>
 #include "Fl.H"
 #include "Fl_Browser_.H"
 
-/**
-  The Fl_Check_Browser widget displays a scrolling list of text
-  lines that may be selected and/or checked by the user.
-*/
 class FL_EXPORT Fl_Check_Browser : public Fl_Browser_ {
-  /* required routines for Fl_Browser_ subclass: */
 
-  void *item_first() const;
-  void *item_next(void *) const;
-  void *item_prev(void *) const;
-  int item_height(void *) const;
-  int item_width(void *) const;
-  void item_draw(void *, int, int, int, int) const;
-  void item_select(void *, int);
-  int item_selected(void *) const;
+public:
 
-  /* private data */
+  Fl_Check_Browser() { /* empty */ }
+  
+  Fl_Check_Browser(int x, int y, int w, int h, const char *l = 0) {
+    _p = new fltk3::CheckBrowser(x, y, w, h, l);
+    _p->wrapper(this);
+  }
 
-  public: // IRIX 5.3 C++ compiler doesn't support private structures...
+  int add(char *s) {
+    return ((fltk3::CheckBrowser*)_p)->add(s);
+  }
+  
+  int add(char *s, int b) {
+    return ((fltk3::CheckBrowser*)_p)->add(s, b);
+  }
+  
+  int remove(int item) {
+    return ((fltk3::CheckBrowser*)_p)->remove(item);
+  }
 
-#ifndef FL_DOXYGEN
-  /** For internal use only. */
-  struct cb_item {
-	  cb_item *next;	/**< For internal use only. */
-	  cb_item *prev;	/**< For internal use only. */
-	  char checked;		/**< For internal use only. */
-	  char selected;	/**< For internal use only. */
-	  char *text;		/**< For internal use only. */
-  };
-#endif // !FL_DOXYGEN
+  int add(const char *s) { 
+    return ((fltk3::CheckBrowser*)_p)->add(s); 
+  }
+  
+  int add(const char *s, int b) { 
+    return ((fltk3::CheckBrowser*)_p)->add(s, b); 
+  }
 
-  private:
+  void clear() {
+    ((fltk3::CheckBrowser*)_p)->clear();
+  }
+  
+  int nitems() const { 
+    return ((fltk3::CheckBrowser*)_p)->nitems();
+  }
+  
+  int nchecked() const { 
+    return((fltk3::CheckBrowser*)_p)->nchecked();
+  }
+  
+  int checked(int item) const {
+    return ((fltk3::CheckBrowser*)_p)->checked(item);
+  }
+  
+  void checked(int item, int b) {
+    ((fltk3::CheckBrowser*)_p)->checked(item, b);
+  }
+  
+  void set_checked(int item) { 
+    ((fltk3::CheckBrowser*)_p)->set_checked(item);
+  }
+  
+  void check_all() {
+    ((fltk3::CheckBrowser*)_p)->check_all();
+  }
+  
+  void check_none() {
+    ((fltk3::CheckBrowser*)_p)->check_none();
+  }
+  
+  int value() const {
+    return ((fltk3::CheckBrowser*)_p)->value();
+  }
+  
+  char *text(int item) const {
+    return ((fltk3::CheckBrowser*)_p)->text(item);
+  }
 
-  cb_item *first;
-  cb_item *last;
-  cb_item *cache;
-  int cached_item;
-  int nitems_;
-  int nchecked_;
-  cb_item *find_item(int) const;
-  int lineno(cb_item *) const;
+protected:
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(CheckBrowser, handle(int event), handle(event), Handle)
 
-  public:
-
-  Fl_Check_Browser(int x, int y, int w, int h, const char *l = 0);
-   /** The destructor deletes all list items and destroys the browser. */
-  ~Fl_Check_Browser() { clear(); }
-  int add(char *s);               // add an (unchecked) item
-  int add(char *s, int b);        // add an item and set checked
-				  // both return the new nitems()
-  int remove(int item);           // delete an item. Returns nitems()
-
-  // inline const char * methods to avoid breaking binary compatibility...
-   /** See int Fl_Check_Browser::add(char *s) */
-  int add(const char *s) { return add((char *)s); }
-  /** See int Fl_Check_Browser::add(char *s) */
-  int add(const char *s, int b) { return add((char *)s, b); }
-
-  void clear();                   // delete all items
-  /**
-    Returns how many lines are in the browser.  The last line number is equal to
-    this.
-  */
-  int nitems() const { return nitems_; }
-  /**    Returns how many items are currently checked.  */
-  int nchecked() const { return nchecked_; }
-  int checked(int item) const;
-  void checked(int item, int b);
-  /**    Equivalent to Fl_Check_Browser::checked(item, 1).  */
-  void set_checked(int item) { checked(item, 1); }
-  void check_all();
-  void check_none();
-  int value() const;              // currently selected item
-  char *text(int item) const;     // returns pointer to internal buffer
-
-  protected:
-
-  int handle(int);
 };
 
 #endif // Fl_Check_Browser_H

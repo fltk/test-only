@@ -3,6 +3,7 @@
 //
 // Browser header file for the Fast Light Tool Kit (FLTK).
 // FLTK 123 wrapper started
+//  - protected virtual functions missing
 //
 // Copyright 1998-2011 by Bill Spitzak and others.
 //
@@ -63,47 +64,162 @@ protected:
 
 public:
 
-  void remove(int line);
-  void add(const char* newtext, void* d = 0);
-  void insert(int line, const char* newtext, void* d = 0);
-  void move(int to, int from);
-  int  load(const char* filename);
-  void swap(int a, int b);
-  void clear();
-  int size() const { return lines; }
-  void size(int W, int H) { Fl_Widget::size(W, H); }
-  int topline() const ;
+  void remove(int line) {
+    ((fltk3::Browser*)_p)->remove(line);
+  }
+  
+  void add(const char* newtext, void* d = 0) {
+    ((fltk3::Browser*)_p)->add(newtext, d);
+  }
+  
+  void insert(int line, const char* newtext, void* d = 0) {
+    ((fltk3::Browser*)_p)->insert(line, newtext, d);
+  }
+  
+  void move(int to, int from) {
+    ((fltk3::Browser*)_p)->move(to, from);
+  }
+  
+  int  load(const char* filename) {
+    ((fltk3::Browser*)_p)->load(filename);
+  }
+  
+  void swap(int a, int b) {
+    ((fltk3::Browser*)_p)->swap(a, b);
+  }
+  
+  void clear() {
+    ((fltk3::Browser*)_p)->clear();
+  }
+  
+  int size() const { 
+    return ((fltk3::Browser*)_p)->size();
+  }
+
+  void size(int W, int H) { 
+    ((fltk3::Browser*)_p)->size(W, H);
+  }
+  
+  int topline() const {
+    return ((fltk3::Browser*)_p)->topline();
+  }
+  
   enum Fl_Line_Position { TOP, BOTTOM, MIDDLE };
-  void lineposition(int line, Fl_Line_Position pos);
-  void topline(int line) { lineposition(line, TOP); }
-  void bottomline(int line) { lineposition(line, BOTTOM); }
-  void middleline(int line) { lineposition(line, MIDDLE); }
-  int select(int line, int val=1);
-  int selected(int line) const ;
-  void show(int line);
-  void show() { Fl_Widget::show(); }
-  void hide(int line);
-  void hide() { Fl_Widget::hide(); }
-  int visible(int line) const ;
-  int value() const ;
-  void value(int line) { select(line); }
-  const char* text(int line) const ;
-  void text(int line, const char* newtext);
-  void* data(int line) const ;
-  void data(int line, void* d);
-  Fl_Browser(int X, int Y, int W, int H, const char *L = 0);
-  ~Fl_Browser() { clear(); }
-  char format_char() const { return format_char_; }
-  void format_char(char c) { format_char_ = c; }
-  char column_char() const { return column_char_; }
-  void column_char(char c) { column_char_ = c; }
-  const int* column_widths() const { return column_widths_; }
-  void column_widths(const int* arr) { column_widths_ = arr; }
-  int displayed(int line) const { return Fl_Browser_::displayed(find_line(line)); }
-  void make_visible(int line) ;
-  void icon(int line, Fl_Image* icon);
-  Fl_Image* icon(int line) const;
-  void remove_icon(int line);
+  
+  void lineposition(int line, Fl_Line_Position pos) {
+    ((fltk3::Browser*)_p)->lineposition(line, pos);
+  }
+  
+  void topline(int line) { 
+    ((fltk3::Browser*)_p)->topline(line);
+  }
+  
+  void bottomline(int line) { 
+    ((fltk3::Browser*)_p)->bottomline(line);
+  }
+  
+  void middleline(int line) { 
+    ((fltk3::Browser*)_p)->middleline(line);
+  }
+  
+  int select(int line, int val=1) {
+    return ((fltk3::Browser*)_p)->select(line, val);
+  }
+  
+  int selected(int line) const {
+    return ((fltk3::Browser*)_p)->selected(line);
+  }
+  
+  void show(int line) {
+    ((fltk3::Browser*)_p)->show(line);
+  }
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Browser, show(), show(), Show)
+  
+  void hide(int line) {
+    ((fltk3::Browser*)_p)->hide(line);
+  }
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Browser, hide(), hide(), Hide)
+  
+  int visible(int line) const {
+    return ((fltk3::Browser*)_p)->visible(line);
+  }
+  
+  int value() const {
+    return ((fltk3::Browser*)_p)->value();
+  }
+  
+  void value(int line) { 
+    ((fltk3::Browser*)_p)->value(line);
+  }
+  
+  const char* text(int line) const {
+    return ((fltk3::Browser*)_p)->text(line);
+  }
+  
+  void text(int line, const char* newtext) {
+    ((fltk3::Browser*)_p)->text(line, newtext);
+  }
+  
+  void* data(int line) const {
+    return ((fltk3::Browser*)_p)->data(line);
+  }
+  
+  void data(int line, void* d) {
+    ((fltk3::Browser*)_p)->data(line, d);
+  }
+
+  Fl_Browser() { /* empty */ }
+  
+  Fl_Browser(int X, int Y, int W, int H, const char *L = 0) {
+    _p = new fltk3::Browser(x, y, w, h, label);
+    _p->wrapper(this);
+  }
+  
+  char format_char() const { 
+    return ((fltk3::Browser*)_p)->format_char();
+  }
+  
+  void format_char(char c) { 
+    ((fltk3::Browser*)_p)->format_char(c);
+  }
+  
+  char column_char() const { 
+    return ((fltk3::Browser*)_p)->column_char();
+  }
+  
+  void column_char(char c) { 
+    ((fltk3::Browser*)_p)->column_char(c);
+  }
+  
+  const int* column_widths() const { 
+    return ((fltk3::Browser*)_p)->column_widths();
+  }
+  
+  void column_widths(const int* arr) {
+    ((fltk3::Browser*)_p)->column_widths(arr);
+  }
+  
+  int displayed(int line) const { 
+    return ((fltk3::Browser*)_p)->displayed(line);
+  }
+  
+  void make_visible(int line) {
+    ((fltk3::Browser*)_p)->make_visible(line);
+  }
+  
+  void icon(int line, Fl_Image* icon) {
+    ((fltk3::Browser*)_p)->icon( line, fltk3::_1to3_image(icon) );
+  }
+  
+  Fl_Image* icon(int line) const {
+    return fltk3::_3to1_image( ((fltk3::Browser*)_p)->icon(line) );
+  }
+  
+  void remove_icon(int line) {
+    ((fltk3::Browser*)_p)->remove_icon(line);
+  }
 };
 
 #endif
