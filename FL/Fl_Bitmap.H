@@ -1,8 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Bitmap header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper started
+//  - virtual image functions missing
+//  - "copy" needs to generate a wrapper
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
 //
@@ -26,56 +28,59 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Bitmap widget . */
-
 #ifndef Fl_Bitmap_H
 #define Fl_Bitmap_H
-#  include "Fl_Image.H"
+
+#include <fltk3/Bitmap.h>
+#include "Fl_Image.H"
 
 class Fl_Widget;
 struct Fl_Menu_Item;
 
-/**
-  The Fl_Bitmap class supports caching and drawing of mono-color
-  (bitmap) images. Images are drawn using the current color.
-*/
 class FL_EXPORT Fl_Bitmap : public Fl_Image {
-  friend class Fl_Quartz_Graphics_Driver;
-  friend class Fl_GDI_Graphics_Driver;
-  friend class Fl_Xlib_Graphics_Driver;
+
 public:
-
-  /** pointer to raw bitmap data */
-  const uchar *array;
-  /** Non-zero if array points to bitmap data allocated internally */
-  int alloc_array;
   
-  private:
+  const uchar *get_array() { 
+    return ((fltk3::Bitmap*)_p)->array;
+  }
+  
+  int get_alloca_arrya() {
+    return ((fltk3::Bitmap*)_p)->alloc_array;
+  }
 
-#if defined(__APPLE__) || defined(WIN32)
-  /** for internal use */
-  void *id_;
-#else
-  /** for internal use */
-  unsigned id_;
-#endif // __APPLE__ || WIN32
+  Fl_Bitmap(const uchar *bits, int W, int H) {
+    _p = new fltk3::Bitmap(bits, W, H);
+    _p->wrapper(this);
+  }
 
-  public:
+  Fl_Bitmap(const char *bits, int W, int H) {
+    _p = new fltk3::Bitmap(bits, W, H);
+    _p->wrapper(this);
+  }
 
-  /** The constructors create a new bitmap from the specified bitmap data */
-  Fl_Bitmap(const uchar *bits, int W, int H) :
-    Fl_Image(W,H,0), array(bits), alloc_array(0), id_(0) {data((const char **)&array, 1);}
-  /** The constructors create a new bitmap from the specified bitmap data */
-  Fl_Bitmap(const char *bits, int W, int H) :
-    Fl_Image(W,H,0), array((const uchar *)bits), alloc_array(0), id_(0) {data((const char **)&array, 1);}
-  virtual ~Fl_Bitmap();
-  virtual Fl_Image *copy(int W, int H);
-  Fl_Image *copy() { return copy(w(), h()); }
+  // FIXME: 123 - virtual funciton!
+  virtual Fl_Image *copy(int W, int H) {
+    ((fltk3::Bitmap*)_p)->
+  }
+  
+  // FIXME: 123 - virtual function! Creates a new object!
+  Fl_Image *copy();
+  
+  // FIXME: 123 - virtual function!
   virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
-  void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
+  
+  void draw(int X, int Y) {
+    ((fltk3::Bitmap*)_p)->draw(X, Y);
+  }
+  
+  // FIXME: 123 - virtual function!
   virtual void label(Fl_Widget*w);
+  
+  // FIXME: 123 - virtual function!
   virtual void label(Fl_Menu_Item*m);
+  
+  // FIXME: 123 - virtual function!
   virtual void uncache();
 };
 

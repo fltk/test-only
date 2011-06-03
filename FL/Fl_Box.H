@@ -2,8 +2,9 @@
 // "$Id$"
 //
 // Box header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper complete
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -33,10 +34,9 @@
 
 class FL_EXPORT Fl_Box : public Fl_Widget {
 
-#if 0 // FIXME: 123
 protected:
-  void draw();
-#endif
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Box, draw(), draw(), Draw)
 
 public:
   Fl_Box(int x, int y, int w, int h, const char *label=0) {
@@ -49,9 +49,7 @@ public:
     _p->wrapper(this);
   }
   
-#if 0 // FIXME: 123
-  virtual int handle(int);
-#endif
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Box, handle(int event), handle(event), Handle)
 };
 
 #endif

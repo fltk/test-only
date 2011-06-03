@@ -33,6 +33,8 @@
 
 #include "Slider.h"
 
+class Fl_Scrollbar;
+
 namespace fltk3 {
   
   /**
@@ -52,6 +54,8 @@ namespace fltk3 {
    \image latex scrollbar.png "fltk3::Scrollbar" width=4cm
    */
   class FLTK3_EXPORT Scrollbar : public fltk3::Slider {
+    
+    friend class ::Fl_Scrollbar;
     
     int linesize_;
     int pushed_;

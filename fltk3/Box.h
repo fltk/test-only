@@ -33,6 +33,8 @@
 
 #include "Widget.h"
 
+class Fl_Box;
+
 namespace fltk3 { 
   
   class Widget;
@@ -43,6 +45,9 @@ namespace fltk3 {
    will let you draw a frame around them.
    */
   class FLTK3_EXPORT Box : public fltk3::Widget {
+    
+    friend class ::Fl_Box;
+    
   protected:
     void draw();
   public:

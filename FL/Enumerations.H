@@ -2,6 +2,7 @@
 // "$Id$"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper complete
 //
 // Copyright 1998-2011 by Bill Spitzak and others.
 //

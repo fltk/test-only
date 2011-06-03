@@ -37,6 +37,8 @@
 
 #include "Valuator.h"
 
+class Fl_Adjuster;
+
 namespace fltk3 {
   
   /**
@@ -52,6 +54,9 @@ namespace fltk3 {
    click decrements by 10 times  the amount.
    */
   class FLTK3_EXPORT Adjuster : public Valuator {
+    
+    friend class ::Fl_Adjuster;
+    
     int drag;
     int ix;
     int soft_;
