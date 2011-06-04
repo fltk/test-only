@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // File_Input header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 // Original version Copyright 1998 by Curtis Edwards.
 //
 // This library is free software; you can redistribute it and/or
@@ -27,75 +27,61 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_File_Input widget . */
 
 #ifndef Fl_File_Input_H
-#  define Fl_File_Input_H
+#define Fl_File_Input_H
 
-#  include <FL/Fl_Input.H>
+#include <fltk3/FileInput.h>
+#include <FL/Fl_Input.H>
 
-/**
-  \class Fl_File_Input
-  \brief This widget displays a pathname in a text input field.
 
-  A navigation bar located above the input field allows the user to
-  navigate upward in the directory tree.
-  You may want to handle FL_WHEN_CHANGED events for tracking text changes
-  and also FL_WHEN_RELEASE for button release when changing to parent dir.
-  FL_WHEN_RELEASE callback won't be called if the directory clicked 
-  is the same that the current one.
-  <P align=CENTER> \image html Fl_File_Input.png </P> 
-  \image latex Fl_File_Input.png "Fl_File_Input"  width=6cm
-  \note As all Fl_Input derived objects, Fl_File_Input may call its callback
-  when loosing focus (see FL_UNFOCUS) to update its state like its cursor shape.
-  One resulting side effect is that you should call clear_changed() early in your callback
-  to avoid reentrant calls if you plan to show another window or dialog box in the callback.
-*/
 class FL_EXPORT Fl_File_Input : public Fl_Input {
   
-  Fl_Color	errorcolor_;
-  char		ok_entry_;
-  uchar		down_box_;
-  short		buttons_[200];
-  short		pressed_;
-
-  void		draw_buttons();
-  int		handle_button(int event);
-  void		update_buttons();
-
-public:
-
-  Fl_File_Input(int X, int Y, int W, int H, const char *L=0);
-
-  virtual int handle(int event);
-
 protected:
-  virtual void draw();
-
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, draw(), draw(), Draw)
+  
 public:
-  /** Gets the box type used for the navigation bar. */
-  Fl_Boxtype	down_box() const { return (Fl_Boxtype)down_box_; }
-  /** Sets the box type to use for the navigation bar.  */
-  void		down_box(Fl_Boxtype b) { down_box_ = b; }
 
-  /**
-    Gets the current error color.
-    \todo Better docs for Fl_File_Input::errorcolor() - is it even used?
-  */
-  Fl_Color	errorcolor() const { return errorcolor_; }
-  /** Sets the current error color to \p c */
-  void		errorcolor(Fl_Color c) { errorcolor_ = c; }
+  Fl_File_Input() { /* empty */ }
+  
+  Fl_File_Input(int X, int Y, int W, int H, const char *L=0) {
+    _p = new fltk3::FileInput(x, y, w, h, label);
+    _p->wrapper(this);
+  }
 
-  int	value(const char *str);
-  int	value(const char *str, int len);
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Widget, handle(int event), handle(event), Handle)
 
-  /**
-    Returns the current value, which is a pointer to an internal buffer
-    and is valid only until the next event is handled.
-  */
-  const char	*value() { return Fl_Input_::value(); }
+  Fl_Boxtype down_box() const { 
+    return fltk3::_3to1_boxtype( ((fltk3::FileInput*)_p)->down_box() );
+  }
+
+  void down_box(Fl_Boxtype b) { 
+    ((fltk3::FileInput*)_p)->down_box(fltk3::_1to3_boxtype(b));
+  }
+
+  Fl_Color errorcolor() const { 
+    return fltk3::_3to1_color( ((fltk3::FileInput*)_p)->errorcolor() );
+  }
+
+  void errorcolor(Fl_Color c) { 
+    ((fltk3::FileInput*)_p)->errorcolor( fltk3::_1to3_color(c) );
+  }
+
+  int value(const char *str) {
+    return ((fltk3::FileInput*)_p)->value(str);
+  }
+  
+  int value(const char *str, int len) {
+    return ((fltk3::FileInput*)_p)->value(str, len);
+  }
+
+  const char *value() { 
+    return ((fltk3::FileInput*)_p)->value();
+  }
+  
 };
+
 
 #endif // !Fl_File_Input_H
 

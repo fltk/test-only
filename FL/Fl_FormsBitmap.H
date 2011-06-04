@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -26,29 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_FormsBitmap widget . */
-
 #ifndef Fl_FormsBitmap_H
 #define Fl_FormsBitmap_H
 
-#include "Fl_Bitmap.H"
-
-/** 
-    Forms compatibility Bitmap Image Widget
-*/
-class FL_EXPORT Fl_FormsBitmap : public Fl_Widget {
-    Fl_Bitmap *b;
-protected:
-    void draw();
-public:
-    Fl_FormsBitmap(Fl_Boxtype, int, int, int, int, const char * = 0);
-    void set(int W, int H, const uchar *bits);
-    /** Sets a new bitmap. */
-    void bitmap(Fl_Bitmap *B) {b = B;}
-    /** Gets a the current associated Fl_Bitmap objects. */
-    Fl_Bitmap *bitmap() const {return b;}
-};
+#error "Forms" emulation is no longer supported in FLTK 3. Please use 1.3.0
 
 #endif
 

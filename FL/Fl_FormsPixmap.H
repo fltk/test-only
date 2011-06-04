@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -26,36 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_FormsPixmap widget . */
-
 #ifndef Fl_FormsPixmap_H
 #define Fl_FormsPixmap_H
 
-#include "Fl_Pixmap.H"
-
-/**
-  \class Fl_FormsPixmap
-  \brief Forms pixmap drawing routines
-*/
-class FL_EXPORT Fl_FormsPixmap : public Fl_Widget {
-    Fl_Pixmap *b;
-protected:
-    void draw();
-public:
-    Fl_FormsPixmap(Fl_Boxtype t, int X, int Y, int W, int H, const char *L= 0);
-
-    void set(/*const*/char * const * bits);
-
-    /**
-      Set the internal pixmap pointer to an existing pixmap.
-      \param[in] B existing pixmap
-    */
-    void Pixmap(Fl_Pixmap *B) {b = B;}
-
-    /** Get the internal pixmap pointer. */
-    Fl_Pixmap *Pixmap() const {return b;}
-};
+#error "Forms" emulation is no longer supported in FLTK 3. Please use 1.3.0
 
 #endif
 

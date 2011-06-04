@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Floating point input header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,29 +26,24 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Float_Input widget . */
-
-
 #ifndef Fl_Float_Input_H
 #define Fl_Float_Input_H
 
+#include <fltk3/FloatInput.h>
 #include "Fl_Input.H"
 
-/**
-  The Fl_Float_Input class is a subclass of Fl_Input
-  that only allows the user to type floating point numbers (sign,
-  digits, decimal point, more digits, 'E' or 'e', sign, digits).
-*/
-class Fl_Float_Input : public Fl_Input { // don't use FL_EXPORT here !
+
+class Fl_Float_Input : public Fl_Input {
+  
 public:
-  /**
-      Creates a new Fl_Float_Input widget using the given position,
-    size, and label string. The default boxtype is FL_DOWN_BOX.
-  <P> Inherited destructor destroys the widget and any value associated with it
-  */
-  Fl_Float_Input(int X,int Y,int W,int H,const char *l = 0)
-    : Fl_Input(X,Y,W,H,l) {type(FL_FLOAT_INPUT);}
+
+  Fl_Float_Input() { /* empty */ }
+  
+  Fl_Float_Input(int X,int Y,int W,int H,const char *l = 0) {
+    _p = new fltk3::FloatInput(X, Y, W, H, l);
+    _p->wrapper(this);
+  }
+  
 };
 
 #endif

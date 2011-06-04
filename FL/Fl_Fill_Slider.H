@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Filled slider header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,19 +26,22 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Fill_Slider widget . */
-
 #ifndef Fl_Fill_Slider_H
 #define Fl_Fill_Slider_H
 
+#include <fltk3/FillSlider.h>
 #include "Fl_Slider.H"
-/** Widget that draws a filled horizontal  slider,  useful as a progress or value meter*/
+
 class FL_EXPORT Fl_Fill_Slider : public Fl_Slider {
+  
 public:
-    /** Creates the slider from its position,size and optional title. */
-    Fl_Fill_Slider(int x,int y,int w,int h,const char *l=0)
-	: Fl_Slider(x,y,w,h,l) {type(FL_VERT_FILL_SLIDER);}
+  
+  Fl_Fill_Slider() { /* empty */ }
+  
+  Fl_Fill_Slider(int x,int y,int w,int h,const char *l=0) {
+    _p = new fltk3::FillSlider(x, y, w, h, l);
+    _p->wrapper(this);
+  }
 };
 
 #endif

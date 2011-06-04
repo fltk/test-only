@@ -28,7 +28,7 @@
 #ifndef _FLTK3_FORMS_H_
 #define _FLTK3_FORMS_H_
 
-#error "Forms" emulation is no longer supported in FLTK 3. Please sue 1.3.0
+#error "Forms" emulation is no longer supported in FLTK 3. Please use 1.3.0
 
 #endif	/* define __FORMS_H__ */
 

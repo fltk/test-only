@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Dial header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,68 +26,60 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Dial widget . */
-
 #ifndef Fl_Dial_H
 #define Fl_Dial_H
 
-#ifndef Fl_Valuator_H
+#include <fltk3/Dial.h>
 #include "Fl_Valuator.H"
-#endif
 
-// values for type():
-#define FL_NORMAL_DIAL	0	/**< type() for dial variant with dot */
-#define FL_LINE_DIAL	1	/**< type() for dial variant with line */
-#define FL_FILL_DIAL	2	/**< type() for dial variant with filled arc */
+#define FL_NORMAL_DIAL	0
+#define FL_LINE_DIAL	1
+#define FL_FILL_DIAL	2
 
-/**
-  The Fl_Dial widget provides a circular dial to control a
-  single floating point value.
-  <P ALIGN=CENTER>\image html dial.png 
-  \image latex dial.png "Fl_Dial" width=4cm
-  Use type() to set the type of the dial to:
-  <UL>
-  <LI>FL_NORMAL_DIAL - Draws a normal dial with a knob. </LI>
-  <LI>FL_LINE_DIAL - Draws a dial with a line. </LI>
-  <LI>FL_FILL_DIAL - Draws a dial with a filled arc. </LI>
-  </UL>
-
-*/
 class FL_EXPORT Fl_Dial : public Fl_Valuator {
-
-  short a1,a2;
 
 protected:
 
-  // these allow subclasses to put the dial in a smaller area:
-  void draw(int X, int Y, int W, int H);
-  int handle(int event, int X, int Y, int W, int H);
-  void draw();
+  void draw(int X, int Y, int W, int H) {
+    ((fltk3::Dial*)_p)->draw(X, Y, W, H);
+  }
+  
+  int handle(int event, int X, int Y, int W, int H) {
+    return ((fltk3::Dial*)_p)->handle(event, X, Y, W, H);
+  }
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Dial, draw(), draw(), Draw)
 
 public:
 
-  int handle(int);
-  /**
-    Creates a new Fl_Dial widget using the given position, size,
-    and label string. The default type is FL_NORMAL_DIAL.
-  */
-  Fl_Dial(int x,int y,int w,int h, const char *l = 0);
-  /** 
-     Sets Or gets the angles used for the minimum and maximum values.  The default
-     values are 45 and 315 (0 degrees is straight down and the angles
-     progress clockwise).  Normally angle1 is less than angle2, but if you
-     reverse them the dial moves counter-clockwise.
-  */
-  short angle1() const {return a1;}
-  /** See short angle1() const */
-  void angle1(short a) {a1 = a;}
-  /** See short angle1() const */
-  short angle2() const {return a2;}
-  /** See short angle1() const */
-  void angle2(short a) {a2 = a;}
-  /** See short angle1() const */
-  void angles(short a, short b) {a1 = a; a2 = b;}
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Dial, handle(int event), handle(event), Handle)
+
+  Fl_Dial() { /* empty */ }
+  
+  Fl_Dial(int x,int y,int w,int h, const char *l = 0) {
+    _p = new fltk3::Dial(x, y, w, h, label);
+    _p->wrapper(this);
+  }
+  
+  short angle1() const {
+    return ((fltk3::Dial*)_p)->angle1();
+  }
+  
+  void angle1(short a) {
+    ((fltk3::Dial*)_p)->angle1(a);
+  }
+  
+  short angle2() const {
+    return ((fltk3::Dial*)_p)->angle2();
+  }
+  
+  void angle2(short a) {
+    ((fltk3::Dial*)_p)->angle2(a);
+  }
+  
+  void angles(short a, short b) {
+    ((fltk3::Dial*)_p)->angles(a, b);
+  }
 
 };
 

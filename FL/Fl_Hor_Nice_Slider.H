@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Horizontal "nice" slider header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,18 +26,23 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Hor_Nice_Slider widget . */
-
 #ifndef Fl_Hor_Nice_Slider_H
 #define Fl_Hor_Nice_Slider_H
 
+#include <fltk3/HorNiceSlider.h>
 #include "Fl_Slider.H"
 
 class FL_EXPORT Fl_Hor_Nice_Slider : public Fl_Slider {
+  
 public:
-    Fl_Hor_Nice_Slider(int x,int y,int w,int h,const char *l=0)
-	: Fl_Slider(x,y,w,h,l) {type(FL_HOR_NICE_SLIDER); box(FL_FLAT_BOX);}
+  
+  Fl_Hor_Nice_Slider() {}
+  
+  Fl_Hor_Nice_Slider(int x,int y,int w,int h,const char *l=0) {
+    _p = new fltk3::HorNiceSlider(x, y, w, h, l);
+    _p->wrapper(this);
+  }
+
 };
 
 #endif

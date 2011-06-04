@@ -2,8 +2,9 @@
 // "$Id$"
 //
 // Double-buffered window header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,47 +26,49 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Double_Window widget . */
-
 #ifndef Fl_Double_Window_H
 #define Fl_Double_Window_H
 
 #include <fltk3/DoubleWindow.h>
 #include "Fl_Window.H"
 
+
 class FL_EXPORT Fl_Double_Window : public Fl_Window {
   
 protected:
   
-#if 0 // FIXME: 123  
-  void flush(int eraseoverlay);
-  char force_doublebuffering_;
-#endif
+  void flush(int eraseoverlay) {
+    ((fltk3::DoubleWindow*)_p)->flush(eraseoverlay);
+  }
   
 public:
-
-  Fl_Double_Window() {}
   
-  Fl_Double_Window(int w, int h, const char* label = 0) {
-    _p = new fltk3::DoubleWindow(w, h, label);
+  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, show(), show(), Show)
+  
+  void show(int a, char **b) {
+    ((fltk3::DoubleWindow*)_p)->show(a, b);
+  }
+  
+  void flush() {
+    ((fltk3::DoubleWindow*)_p)->flush();
+  }
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(DoubleWindow, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
+
+  FLTK3_WRAPPER_VCALLS_OBJECT(DoubleWindow, hide(), hide(), Hide)
+
+  Fl_Double_Window() { /* empty */ }
+  
+  Fl_Double_Window(int W, int H, const char *l = 0) {
+    _p = new fltk3::DoubleWindow(W, H, l);
     _p->wrapper(this);
   }
   
-#if 0 // FIXME: 123  
-
-  void show();
-  void show(int a, char **b) {Fl_Window::show(a,b);}
-  void flush();
-  void resize(int,int,int,int);
-  void hide();
-  ~Fl_Double_Window();
-  Fl_Double_Window(int W, int H, const char *l = 0) 
-    : Fl_Window(W,H,l), force_doublebuffering_(0) { type(FL_DOUBLE_WINDOW); }
-  Fl_Double_Window(int X, int Y, int W, int H, const char *l = 0)
-    : Fl_Window(X,Y,W,H,l), force_doublebuffering_(0) { type(FL_DOUBLE_WINDOW); }
-#endif
-
+  Fl_Double_Window(int X, int Y, int W, int H, const char *l = 0) {
+    _p = new fltk3::DoubleWindow(X, Y, W, H, l);
+    _p->wrapper(this);
+  }
+  
 };
 
 #endif

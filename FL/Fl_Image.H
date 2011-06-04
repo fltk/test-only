@@ -2,6 +2,8 @@
 // "$Id$"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper started
+//  - image base wrapper class must be implemented including missing flags
 //
 // Copyright 1998-2011 by Bill Spitzak and others.
 //
@@ -41,25 +43,46 @@ namespace fltk3 {
   inline Fl_Image *_3to1_image(Image *w) { return (Fl_Image*)w->wrapper(); }
 }
 
+
 class FL_EXPORT Fl_Image : public fltk3::Wrapper {
   
   Fl_Image & operator=(const Fl_Image &);
   Fl_Image(const Fl_Image &);
 
-#if 0 // FIXME: 123
-  
 protected:
 
-  void w(int W) {w_ = W;}
-  void h(int H) {h_ = H;}
-  void d(int D) {d_ = D;}
-  void ld(int LD) {ld_ = LD;}
-  void data(const char * const *p, int c) {data_ = p; count_ = c;}
-  void draw_empty(int X, int Y);
-  static void labeltype(const Fl_Label *lo, int lx, int ly, int lw, int lh, Fl_Align la);
-  static void measure(const Fl_Label *lo, int &lw, int &lh);
-
-#endif
+  void w(int W) {
+    ((fltk3::Image*)_p)->w(W);
+  }
+  
+  void h(int H) {
+    ((fltk3::Image*)_p)->h(H);
+  }
+  
+  void d(int D) {
+    ((fltk3::Image*)_p)->d(D);
+  }
+  
+  void ld(int LD) {
+    ((fltk3::Image*)_p)->ld(LD);
+  }
+  
+  void data(const char * const *p, int c) {
+    ((fltk3::Image*)_p)->data(p, c);
+  }
+  
+  void draw_empty(int X, int Y) {
+    ((fltk3::Image*)_p)->draw_empty(X, Y);
+  }
+  
+  // FIXME: 123 - Fl_Label not wrapped!
+  static void labeltype(const Fl_Label *lo, int lx, int ly, int lw, int lh, Fl_Align la) {
+    fltk3::Image::labeltype((fltk3::Label*)lo, lx, ly, lw, lh, fltk3::_1to3_align(la));
+  }
+  
+  static void measure(const Fl_Label *lo, int &lw, int &lh) {
+    fltk3::Image::measure((fltk3::Label*)lo, lw, lh);
+  }
 
 public:
 
@@ -70,72 +93,108 @@ public:
     _p->wrapper(this);
   }
   
-#if 0 // FIXME: 123
-
-  int w() const {return w_;}
-  int h() const {return h_;}
-  int d() const {return d_;}
-  int ld() const {return ld_;}
-  int count() const {return count_;}
-  const char * const *data() const {return data_;}
-  Fl_Image(int W, int H, int D) {w_ = W; h_ = H; d_ = D; ld_ = 0; count_ = 0; data_ = 0;}
-  virtual ~Fl_Image();
-  virtual Fl_Image *copy(int W, int H);
+  int w() const {
+    return ((fltk3::Image*)_p)->w();
+  }
   
-#endif
+  int h() const {
+    return ((fltk3::Image*)_p)->h();
+  }
+  
+  int d() const {
+    return ((fltk3::Image*)_p)->d();
+  }
+  
+  int ld() const {
+    return ((fltk3::Image*)_p)->ld();
+  }
+  
+  int count() const {
+    return ((fltk3::Image*)_p)->count();
+  }
+  
+  const char * const *data() const {
+    return ((fltk3::Image*)_p)->data();
+  }
+  
+  Fl_Image(int W, int H, int D) {
+    _p = new fltk3::Image(W, H, D);
+    _p->wrapper(this);
+  }
+  
+  // FIXME: 123 - virtual
+  Fl_Image *copy(int W, int H) {
+    return new Fl_Image( ((fltk3::Image*)_p)->copy(W, H) );
+  }
   
   Fl_Image *copy() { 
     return new Fl_Image( ((fltk3::Image*)_p)->copy() );
   }
   
-#if 0 // FIXME: 123
-
-  virtual void color_average(Fl_Color c, float i);
-  
-#endif
+  // FIXME: 123 - virtual
+  void color_average(Fl_Color c, float i) {
+    ((fltk3::Image*)_p)->color_average(fltk3::_1to3_color(c), i);
+  }
   
   void inactive() {
     ((fltk3::Image*)_p)->inactive();
   }
 
-#if 0 // FIXME: 123
-
+  // FIXME: 123 - virtual
   virtual void desaturate();
+  // FIXME: 123 - virtual
   virtual void label(Fl_Widget*w);
+  // FIXME: 123 - virtual
   virtual void label(Fl_Menu_Item*m);
-  virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0); // platform dependent
-  void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);} // platform dependent
+  // FIXME: 123 - virtual
+  virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
+  // FIXME: 123 - virtual
   virtual void uncache();
 
-#endif
+  void draw(int X, int Y) {
+    ((fltk3::Image*)_p)->draw(X, Y);
+  }
 
 };
 
 
 class FL_EXPORT Fl_RGB_Image : public Fl_Image {
 
-#if 0 // FIXME: 123
-
-  friend class Fl_Quartz_Graphics_Driver;
-  friend class Fl_GDI_Graphics_Driver;
-  friend class Fl_Xlib_Graphics_Driver;
-  
 public:
 
-  Fl_RGB_Image(const uchar *bits, int W, int H, int D=3, int LD=0);
-  virtual ~Fl_RGB_Image();
+  Fl_RGB_Image(const uchar *bits, int W, int H, int D=3, int LD=0) {
+    _p = new fltk3::RGBImage(bits, W, H, D, LD);
+    _p->wrapper(this);
+  }
+  
+  Fl_RGB_Image(fltk3::Image *img) {
+    _p = img;
+    _p->wrapper(this);
+  }
+  
+  Fl_Image *copy() { 
+    return new Fl_RGB_Image( ((fltk3::RGBImage*)_p)->copy() );
+  }
+  
+  void draw(int X, int Y) {
+    ((fltk3::Image*)_p)->draw(X, Y);
+  }
+  
+  // FIXME: 123 - virtual
   virtual Fl_Image *copy(int W, int H);
-  Fl_Image *copy() { return copy(w(), h()); }
+  // FIXME: 123 - virtual
   virtual void color_average(Fl_Color c, float i);
+  // FIXME: 123 - virtual
   virtual void desaturate();
+  // FIXME: 123 - virtual
   virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
-  void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
+  // FIXME: 123 - virtual
   virtual void label(Fl_Widget*w);
+  // FIXME: 123 - virtual
   virtual void label(Fl_Menu_Item*m);
+  // FIXME: 123 - virtual
   virtual void uncache();
-  
-#endif
-  
+    
 };
 
 #endif // !Fl_Image_H

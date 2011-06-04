@@ -31,7 +31,7 @@
 #ifndef Fltk3_FormsBitmap_H
 #define Fltk3_FormsBitmap_H
 
-#error "Forms" emulation is no longer supported in FLTK 3. Please sue 1.3.0
+#error "Forms" emulation is no longer supported in FLTK 3. Please use 1.3.0
 
 #endif
 

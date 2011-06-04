@@ -35,6 +35,9 @@
 #include "enumerations.h"
 
 
+class Fl_Image;
+
+
 namespace fltk3 { 
   
   class QuartzGraphicsDriver;
@@ -56,6 +59,9 @@ namespace fltk3 {
    a box with an X in it being drawn instead.
    */
   class FLTK3_EXPORT Image : public Object {
+    
+    friend class ::Fl_Image;
+    
     int w_, h_, d_, ld_, count_;
     const char * const *data_;
     

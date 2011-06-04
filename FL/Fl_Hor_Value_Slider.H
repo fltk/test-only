@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Horizontal value slider header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,18 +26,23 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Hor_Value_Slider widget . */
-
 #ifndef Fl_Hor_Value_Slider_H
 #define Fl_Hor_Value_Slider_H
 
+#include <fltk3/HorValueSlider.h>
 #include "Fl_Value_Slider.H"
 
 class FL_EXPORT Fl_Hor_Value_Slider : public Fl_Value_Slider {
+  
 public:
-    Fl_Hor_Value_Slider(int X,int Y,int W,int H,const char *l=0)
-	: Fl_Value_Slider(X,Y,W,H,l) {type(FL_HOR_SLIDER);}
+  
+  Fl_Hor_Value_Slider() {}
+  
+  Fl_Hor_Value_Slider(int X,int Y,int W,int H,const char *l=0) {
+    _p = new fltk3::HorValueSlider(X, Y, W, H, l);
+    _p->wrapper(this);
+  }
+
 };
 
 #endif
