@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Line dial header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,19 +26,27 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Line_Dial widget . */
 
 #ifndef Fl_Line_Dial_H
 #define Fl_Line_Dial_H
 
+#include <fltk3/LineDial.h>
 #include "Fl_Dial.H"
 
+
 class FL_EXPORT Fl_Line_Dial : public Fl_Dial {
+  
 public:
-    Fl_Line_Dial(int x,int y,int w,int h, const char *l = 0)
-	: Fl_Dial(x,y,w,h,l) {type(FL_LINE_DIAL);}
+  
+  Fl_Line_Dial() { /* empty */ }
+  
+  Fl_Line_Dial(int x,int y,int w,int h, const char *l = 0) {
+    _p = new fltk3::LineDial(x, y, w, h, l);
+    _p->wrapper(this);
+  }
+  
 };
+
 
 #endif
 

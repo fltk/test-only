@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Multiline input header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,42 +26,24 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Multiline_Input widget . */
-
 
 #ifndef Fl_Multiline_Input_H
 #define Fl_Multiline_Input_H
 
+#include <fltk3/MultilineInput.h>
 #include "Fl_Input.H"
 
-/**
-  This input field displays '\n' characters as new lines rather than ^J,
-  and accepts the Return, Tab, and up and down arrow keys.  This is for
-  editing multiline text.
-
-  This is far from the nirvana of text editors, and is probably only
-  good for small bits of text, 10 lines at most. Note that this widget
-  does not support scrollbars or per-character color control.
-
-  If you are presenting large amounts of text and need scrollbars
-  or full color control of characters, you probably want Fl_Text_Editor
-  instead.
-
-  In FLTK 1.3.x, the default behavior of the 'Tab' key was changed
-  to support consistent focus navigation. To get the older FLTK 1.1.x
-  behavior, set Fl_Input_::tab_nav() to 0. Newer programs should consider using
-  Fl_Text_Editor.
-*/
 class FL_EXPORT Fl_Multiline_Input : public Fl_Input {
+
 public:
-  /**
-    Creates a new Fl_Multiline_Input widget using the given
-    position, size, and label string. The default boxtype is FL_DOWN_BOX.
-    <P>Inherited destructor destroys the widget and any value associated with it.
-  */
-  Fl_Multiline_Input(int X,int Y,int W,int H,const char *l = 0)
-    : Fl_Input(X,Y,W,H,l) {type(FL_MULTILINE_INPUT);}
+
+  Fl_Multiline_Input() { /* empty */ }
+  
+  Fl_Multiline_Input(int X,int Y,int W,int H,const char *l = 0) {
+    _p = new fltk3::MultilineInput(x, y, w, h, label);
+    _p->wrapper(this);
+  }
+
 };
 
 #endif

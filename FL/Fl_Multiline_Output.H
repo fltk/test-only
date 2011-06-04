@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Multi line output header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,36 +26,24 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Multiline_Output widget . */
-
 #ifndef Fl_Multiline_Output_H
 #define Fl_Multiline_Output_H
 
+#include <fltk3/MultilineOutput.h>
 #include "Fl_Output.H"
 
-/**
-  This widget is a subclass of Fl_Output that displays multiple
-  lines of text. It also displays tab characters as whitespace to the
-  next column.
 
-  Note that this widget does not support scrollbars, or per-character
-  color control.
-
-  If you are presenting large amounts of read-only text 
-  and need scrollbars, or full color control of characters,
-  then use Fl_Text_Display. If you want to display HTML text,
-  use Fl_Help_View.
-*/
 class FL_EXPORT Fl_Multiline_Output : public Fl_Output {
+  
 public:
-  /**
-    Creates a new Fl_Multiline_Output widget using the given
-    position, size, and label string. The default boxtype is FL_DOWN_BOX
-    <P> Inherited destructor destroys the widget and any value associated with it.
-  */
-  Fl_Multiline_Output(int X,int Y,int W,int H,const char *l = 0)
-    : Fl_Output(X,Y,W,H,l) {type(FL_MULTILINE_OUTPUT);}
+
+  Fl_Multiline_Output() { /* emty */ }
+  
+  Fl_Multiline_Output(int X,int Y,int W,int H,const char *l = 0) {
+    _p = new fltk3::MultilineOutput(X, Y, W, H, l);
+    _p->wrapper(this);
+  }
+  
 };
 
 #endif

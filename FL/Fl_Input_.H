@@ -2,7 +2,7 @@
 // "$Id$"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
-// FLTK 123 wrapper started
+// FLTK 123 wrapper finished
 //
 // Copyright 1998-2011 by Bill Spitzak and others.
 //
@@ -52,127 +52,234 @@ class FL_EXPORT Fl_Input_ : public Fl_Widget {
 protected:
 
   int word_start(int i) const {
-    return ((fltk3::Input_*)_p)->word_start();
+    return ((fltk3::Input_*)_p)->word_start(i);
   }
 
-  int word_end(int i) const;
+  int word_end(int i) const {
+    return ((fltk3::Input_*)_p)->word_end(i);
+  }
 
-  int line_start(int i) const;
+  int line_start(int i) const {
+    return ((fltk3::Input_*)_p)->line_start(i);
+  }
   
-  int line_end(int i) const;
+  int line_end(int i) const {
+    return ((fltk3::Input_*)_p)->line_end(i);
+  }
 
-  void drawtext(int, int, int, int);
+  void drawtext(int x, int y, int w, int h) {
+    ((fltk3::Input_*)_p)->drawtext(x, y, w, h);
+  }
 
-  int up_down_position(int, int keepmark=0);
+  int up_down_position(int a, int b=0) {
+    return ((fltk3::Input_*)_p)->up_down_position(a, b);
+  }
 
-  void handle_mouse(int, int, int, int, int keepmark=0);
+  void handle_mouse(int a, int b, int c, int d, int e=0) {
+    ((fltk3::Input_*)_p)->handle_mouse(a, b, c, d, e);
+  }
 
-  int handletext(int e, int, int, int, int);
+  int handletext(int a, int b, int c, int d, int e) {
+    return ((fltk3::Input_*)_p)->handletext(a, b, c, d, e);
+  }
 
-  void maybe_do_callback();
+  void maybe_do_callback() {
+    ((fltk3::Input_*)_p)->maybe_do_callback();
+  }
 
-  int xscroll() const {return xscroll_;}
+  int xscroll() const {
+    return ((fltk3::Input_*)_p)->xscroll();
+  }
 
-  int yscroll() const {return yscroll_;}
+  int yscroll() const {
+    return ((fltk3::Input_*)_p)->yscroll();
+  }
 
-  void yscroll(int y) { yscroll_ = y; damage(FL_DAMAGE_EXPOSE);}
+  void yscroll(int y) { 
+    ((fltk3::Input_*)_p)->yscroll(y);
+  }
 
-  int linesPerPage();
+  int linesPerPage() {
+    return ((fltk3::Input_*)_p)->linesPerPage();
+  }
 
 public:
 
-  void resize(int, int, int, int);
+  FLTK3_WRAPPER_VCALLS_OBJECT(Input_, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
+  
+  Fl_Input_() { /* empty */ }
+  
+  Fl_Input_(int x, int y, int w, int h, const char *label = 0) {
+    _p = new fltk3::Input_(x, y, w, h, label);
+    _p->wrapper(this);
+  }
 
-  Fl_Input_(int, int, int, int, const char* = 0);
+  int value(const char *v) {
+    return ((fltk3::Input_*)_p)->value(v);
+  }
 
-  int value(const char*);
+  int value(const char *a, int b) {
+    return ((fltk3::Input_*)_p)->value(a, b);
+  }
 
-  int value(const char*, int);
+  int static_value(const char *a) {
+    return ((fltk3::Input_*)_p)->static_value(a);
+  }
 
-  int static_value(const char*);
+  int static_value(const char *a, int b) {
+    return ((fltk3::Input_*)_p)->static_value(a, b);
+  }
 
-  int static_value(const char*, int);
+  const char* value() const {
+    return ((fltk3::Input_*)_p)->value();
+  }
 
-  const char* value() const {return value_;}
+  Fl_Char index(int i) const {
+    return ((fltk3::Input_*)_p)->index(i);
+  }
 
-  Fl_Char index(int i) const;
+  int size() const {
+    return ((fltk3::Input_*)_p)->size();
+  }
 
-  int size() const {return size_;}
+  void size(int W, int H) { 
+    ((fltk3::Input_*)_p)->size(W, H); 
+  }
 
-  void size(int W, int H) { Fl_Widget::size(W, H); }
+  int maximum_size() const {
+    return ((fltk3::Input_*)_p)->maximum_size();
+  }
 
-  int maximum_size() const {return maximum_size_;}
+  void maximum_size(int m) {
+    ((fltk3::Input_*)_p)->maximum_size(m);
+  }
 
-  void maximum_size(int m) {maximum_size_ = m;}
+  int position() const {
+    return ((fltk3::Input_*)_p)->position();
+  }
 
-  int position() const {return position_;}
+  int mark() const {
+    return ((fltk3::Input_*)_p)->mark();
+  }
 
-  int mark() const {return mark_;}
+  int position(int p, int m) {
+    return ((fltk3::Input_*)_p)->position(p, m);
+  }
 
-  int position(int p, int m);
+  int position(int p) {
+    return ((fltk3::Input_*)_p)->position(p);
+  }
 
-  int position(int p) {return position(p, p);}
+  int mark(int m) {
+    return ((fltk3::Input_*)_p)->mark(m);
+  }
 
-  int mark(int m) {return position(position(), m);}
+  int replace(int a, int b, const char *c, int d=0) {
+    return ((fltk3::Input_*)_p)->replace(a, b, c, d);
+  }
 
-  int replace(int, int, const char*, int=0);
+  int cut() {
+    return ((fltk3::Input_*)_p)->cut();
+  }
 
-  int cut() {return replace(position(), mark(), 0);}
+  int cut(int n) {
+    return ((fltk3::Input_*)_p)->cut(n);
+  }
 
-  int cut(int n) {return replace(position(), position()+n, 0);}
+  int cut(int a, int b) {
+    return ((fltk3::Input_*)_p)->cut(a, b);
+  }
 
-  int cut(int a, int b) {return replace(a, b, 0);}
+  int insert(const char* t, int l=0) {
+    return ((fltk3::Input_*)_p)->insert(t, l);
+  }
 
-  int insert(const char* t, int l=0){return replace(position_, mark_, t, l);}
+  int copy(int clipboard) {
+    return ((fltk3::Input_*)_p)->copy(clipboard);
+  }
 
-  int copy(int clipboard);
+  int undo() {
+    return ((fltk3::Input_*)_p)->undo();
+  }
 
-  int undo();
+  int copy_cuts() {
+    return ((fltk3::Input_*)_p)->copy_cuts();
+  }
 
-  int copy_cuts();
+  int shortcut() const {
+    return ((fltk3::Input_*)_p)->shortcut();
+  }
 
-  int shortcut() const {return shortcut_;}
+  void shortcut(int s) {
+    ((fltk3::Input_*)_p)->shortcut(s);
+  }
 
-  void shortcut(int s) {shortcut_ = s;}
+  Fl_Font textfont() const { 
+    return fltk3::_3to1_font( ((fltk3::Input_*)_p)->textfont() ); 
+  }
+  
+  void textfont(Fl_Font font) { 
+    ((fltk3::Input_*)_p)->font( fltk3::_1to3_font(font) );
+  }
+  
+  Fl_Fontsize textsize() const { 
+    return fltk3::_3to1_fontsize( ((fltk3::Input_*)_p)->textsize() );
+  }
+  
+  void textsize(Fl_Fontsize size) {
+    ((fltk3::Input_*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+  }
+  
+  Fl_Color textcolor() const { 
+    return fltk3::_3to1_color( ((fltk3::Input_*)_p)->textcolor() );
+  }
+  
+  void textcolor(Fl_Color col) { 
+    ((fltk3::Input_*)_p)->textcolor( fltk3::_1to3_color(col) );
+  }
 
-  Fl_Font textfont() const {return textfont_;}
+  Fl_Color cursor_color() const {
+    return fltk3::_3to1_color( ((fltk3::Input_*)_p)->cursor_color() );
+  }
 
-  void textfont(Fl_Font s) {textfont_ = s;}
+  void cursor_color(Fl_Color n) {
+    ((fltk3::Input_*)_p)->cursor_color( fltk3::_1to3_color(n) );
+  }
 
-  Fl_Fontsize textsize() const {return textsize_;}
+  int input_type() const {
+    return ((fltk3::Input_*)_p)->input_type();
+  }
 
-  void textsize(Fl_Fontsize s) {textsize_ = s;}
+  void input_type(int t) { 
+    ((fltk3::Input_*)_p)->input_type(t);
+  }
 
-  Fl_Color textcolor() const {return textcolor_;}
+  int readonly() const { 
+    return ((fltk3::Input_*)_p)->readonly();
+  }
 
-  void textcolor(Fl_Color n) {textcolor_ = n;}
+  void readonly(int b) { 
+    ((fltk3::Input_*)_p)->readonly(b);
+  }
 
-  Fl_Color cursor_color() const {return cursor_color_;}
+  int wrap() const { 
+    return ((fltk3::Input_*)_p)->wrap();
+  }
 
-  void cursor_color(Fl_Color n) {cursor_color_ = n;}
-
-  int input_type() const {return type() & FL_INPUT_TYPE; }
-
-  void input_type(int t) { type((uchar)(t | readonly())); }
-
-  int readonly() const { return type() & FL_INPUT_READONLY; }
-
-  void readonly(int b) { if (b) type((uchar)(type() | FL_INPUT_READONLY));
-                         else type((uchar)(type() & ~FL_INPUT_READONLY)); }
-
-  int wrap() const { return type() & FL_INPUT_WRAP; }
-
-  void wrap(int b) { if (b) type((uchar)(type() | FL_INPUT_WRAP));
-                         else type((uchar)(type() & ~FL_INPUT_WRAP)); }
+  void wrap(int b) { 
+    ((fltk3::Input_*)_p)->wrap(b);
+  }
 
   void tab_nav(int val) {
-    tab_nav_ = val;
+    ((fltk3::Input_*)_p)->tab_nav(val);
   }
 
   int tab_nav() const {
-    return tab_nav_;
+    return ((fltk3::Input_*)_p)->tab_nav();
   }
+  
 };
+
 
 #endif 
 

@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Integer input header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,28 +26,27 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Int_Input widget . */
 
 #ifndef Fl_Int_Input_H
 #define Fl_Int_Input_H
 
+#include <fltk3/IntInput.h>
 #include "Fl_Input.H"
 
-/**
-  The Fl_Int_Input class is a subclass of Fl_Input
-  that only allows the user to type decimal digits (or hex numbers of the form 0xaef).
-*/
+
 class FL_EXPORT Fl_Int_Input : public Fl_Input {
+
 public:
-  /**
-    Creates a new Fl_Int_Input widget using the given position,
-    size, and label string. The default boxtype is FL_DOWN_BOX.
-    <P>Inherited destructor Destroys the widget and any value associated with it.
-  */
-  Fl_Int_Input(int X,int Y,int W,int H,const char *l = 0)
-      : Fl_Input(X,Y,W,H,l) {type(FL_INT_INPUT);}
+  
+  Fl_Int_Input() { /* empty */ }
+  
+  Fl_Int_Input(int X,int Y,int W,int H,const char *l = 0) {
+    _p = new fltk3::IntInput(X, Y, W, H, l);
+    _p->wrapper(this);
+  }
+
 };
+
 
 #endif
 
