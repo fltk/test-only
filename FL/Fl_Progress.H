@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Progress bar widget definitions.
+// FLTK 123 wrapper finished
 //
-// Copyright 2000-2010 by Michael Sweet.
+// Copyright 2000-2011 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,53 +26,52 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Progress widget . */
-
 #ifndef _Fl_Progress_H_
-#  define _Fl_Progress_H_
+#define _Fl_Progress_H_
 
-//
-// Include necessary headers.
-//
-
+#include <fltk3/Progress.h>
 #include "Fl_Widget.H"
 
 
-//
-// Progress class...
-//
-/**
-    Displays a progress bar for the user.
-*/
 class FL_EXPORT Fl_Progress : public Fl_Widget {
   
-  float	value_,
-	minimum_,
-	maximum_;
+protected:
 
-  protected:
+  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, draw(), draw(), Draw)
 
-  virtual void draw();
+public:
 
-  public:
+  Fl_Progress() { }
+  
+  Fl_Progress(int x, int y, int w, int h, const char *l = 0) {
+    _p = new fltk3::Progress(x, y, w, h, l);
+    _p->wrapper(this);
+  }
 
-  Fl_Progress(int x, int y, int w, int h, const char *l = 0);
+  void	maximum(float v) { 
+    ((fltk3::Progress*)_p)->maximum(v);
+  }
 
-  /** Sets the maximum value in the progress widget.  */
-  void	maximum(float v) { maximum_ = v; redraw(); }
-  /** Gets the maximum value in the progress widget.  */
-  float	maximum() const { return (maximum_); }
+  float	maximum() const { 
+    return ((fltk3::Progress*)_p)->maximum();
+  }
 
-  /** Sets the minimum value in the progress widget.  */
-  void	minimum(float v) { minimum_ = v; redraw(); }
-  /** Gets the minimum value in the progress widget.  */
-  float	minimum() const { return (minimum_); }
+  void minimum(float v) {
+    ((fltk3::Progress*)_p)->minimum(v);
+  }
 
-  /** Sets the current value in the progress widget.  */
-  void	value(float v) { value_ = v; redraw(); }
-  /** Gets the current value in the progress widget.  */
-  float	value() const { return (value_); }
+  float	minimum() const { 
+    return ((fltk3::Progress*)_p)->minimum();
+  }
+
+  void value(float v) {
+    ((fltk3::Progress*)_p)->value(v);
+  }
+
+  float	value() const { 
+    return ((fltk3::Progress*)_p)->value();
+  }
+  
 };
 
 #endif // !_Fl_Progress_H_

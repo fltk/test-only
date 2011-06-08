@@ -31,7 +31,7 @@
 #ifndef Fltk3_Free_H
 #define Fltk3_Free_H
 
-#error "fltk3::Free" widget no longer supported.
+#error "Forms" emulation is no longer supported in FLTK 3. Please use 1.3.0
 
 #endif
 

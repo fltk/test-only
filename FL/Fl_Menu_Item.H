@@ -2,7 +2,15 @@
 // "$Id$"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
-// FLTK 123 wrapper started
+// FLTK 123 wrapper finished
+//  - this wrapper goes a slightly differen way that other wrapper. It does
+//    not derive from FLTK3 or wrap FLTK3, but mirrors the FLTK 3 struct.
+//    The idea is that the Fl_Menu_Item array approach will deprecate. In a 
+//    widget system based on tree structures, an array of structs is not
+//    logical. FLTK 3 will ultimately use the FLTK 2 approch. The FLTK 1
+//  - Fl_Menu_Item struct will remain for compatibility only.
+//  - the FLTK3 interface must not be changed
+//  - the FLTK3 interface should be hidden
 //
 // Copyright 1998-2011 by Bill Spitzak and others.
 //
@@ -65,10 +73,13 @@ struct FL_EXPORT Fl_Menu_Item {
   Fl_Fontsize labelsize_;
   Fl_Color labelcolor_;
 
-  const Fl_Menu_Item *next(int=1) const;
+  const Fl_Menu_Item *next(int i=1) const {
+    return (Fl_Menu_Item*)fltk3::MenuItem::next(i);
+  }
 
   Fl_Menu_Item *next(int i=1) {
-    return (Fl_Menu_Item*)(((const Fl_Menu_Item*)this)->next(i));}
+    return (Fl_Menu_Item*)(((const Fl_Menu_Item*)this)->next(i));
+  }
 
   const Fl_Menu_Item *first() const { return next(0); }
 
@@ -130,7 +141,9 @@ struct FL_EXPORT Fl_Menu_Item {
 
   void clear() {flags &= ~FL_MENU_VALUE;}
 
-  void setonly();
+  void setonly() {
+    fltk3::MenuItem::setonly();
+  }
 
   int visible() const {return !(flags&FL_MENU_INVISIBLE);}
 
@@ -150,26 +163,40 @@ struct FL_EXPORT Fl_Menu_Item {
 
   void image(Fl_Image& a) {a.label(this);}
 
-  int measure(int* h, const Fl_Menu_*) const;
+  int measure(int* h, const Fl_Menu_ *m) const {
+    return fltk3::MenuItem::measure(h, (fltk3::Menu_*)m);
+  }
 
-  void draw(int x, int y, int w, int h, const Fl_Menu_*, int t=0) const;
+  void draw(int x, int y, int w, int h, const Fl_Menu_ *m, int t=0) const {
+    fltk3::MenuItem::draw(x, y, w, h, (fltk3::Menu_*)m, t);
+  }
 
   const Fl_Menu_Item* popup(
     int X, int Y,
     const char *title = 0,
     const Fl_Menu_Item* picked=0,
-    const Fl_Menu_* = 0) const;
+    const Fl_Menu_* m=0) const
+  {
+    return (Fl_Menu_Item*)fltk3::MenuItem::popup(X, Y, title, (fltk3::MenuItem*)picked, (fltk3::Menu_*)m);
+  }
   
   const Fl_Menu_Item* pulldown(
     int X, int Y, int W, int H,
     const Fl_Menu_Item* picked = 0,
     const Fl_Menu_* = 0,
     const Fl_Menu_Item* title = 0,
-    int menubar=0) const;
+    int menubar=0) const 
+  {
+    return (Fl_Menu_Item*)fltk3::MenuItem::pulldown(X, Y, W, H, (fltk3::MenuItem*)picked, (fltk3::Menu_*)m, (fltk3::MenuItem*)title, menubar);
+  }
   
-  const Fl_Menu_Item* test_shortcut() const;
+  const Fl_Menu_Item* test_shortcut() const {
+    return (Fl_Menu_Item*)fltk3::MenuItem::test_shortcut();
+  }
   
-  const Fl_Menu_Item* find_shortcut(int *ip=0, const bool require_alt = false) const;
+  const Fl_Menu_Item* find_shortcut(int *ip=0, const bool require_alt = false) const {
+    return (Fl_Menu_Item*)fltk3::MenuItem::find_shortcut(ip, require_alt);
+  }
 
   void do_callback(Fl_Widget* o) const {callback_(o, user_data_);}
 
@@ -183,15 +210,21 @@ struct FL_EXPORT Fl_Menu_Item {
 
   void uncheck() {flags &= ~FL_MENU_VALUE;}
 
-  int insert(int,const char*,int,Fl_Callback*,void* =0, int =0);
+  int insert(int a, const char *b, int c, Fl_Callback *d, void *e=0, int f=0) {
+    return fltk3::MenuItem::insert(a, ,b, c, d, e, f);
+  }
 
-  int add(const char*, int shortcut, Fl_Callback*, void* =0, int = 0);
+  int add(const char *a, int b, Fl_Callback *c, void *d=0, int e= 0) {
+    return fltk3::MenuItem::add(a, ,b, c, d, e);
+  }
 
-  int add(const char*a, const char* b, Fl_Callback* c,
-	  void* d = 0, int e = 0) {
-    return add(a,fl_old_shortcut(b),c,d,e);}
+  int add(const char*a, const char* b, Fl_Callback* c, void* d = 0, int e = 0) {
+    return add(a,fl_old_shortcut(b),c,d,e);
+  }
 
-  int size() const ;
+  int size() const {
+    return fltk3::MenuItem::size();
+  }
 
 };
 

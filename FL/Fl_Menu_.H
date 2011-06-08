@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,140 +26,193 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Menu_ widget . */
-
 #ifndef Fl_Menu__H
 #define Fl_Menu__H
 
-#ifndef Fl_Widget_H
+#include <fltk3/Menu_.h>
 #include "Fl_Widget.H"
-#endif
 #include "Fl_Menu_Item.H"
 
-/**
-  Base class of all widgets that have a menu in FLTK.
-  Currently FLTK provides you with 
-  Fl_Menu_Button, Fl_Menu_Bar, and Fl_Choice.
-  
-  <P>The class contains a pointer to an array of structures of type  Fl_Menu_Item.  The
-  array may either be supplied directly by the user program, or it may
-  be "private": a dynamically allocated array managed by the Fl_Menu_.
-*/
+
 class FL_EXPORT Fl_Menu_ : public Fl_Widget {
 
-  Fl_Menu_Item *menu_;
-  const Fl_Menu_Item *value_;
-
-protected:
-
-  uchar alloc;			// flag indicates if menu_ is a dynamic copy (=1) or not (=0)
-  uchar down_box_;
-  Fl_Font textfont_;
-  Fl_Fontsize textsize_;
-  Fl_Color textcolor_;
-
 public:
-  Fl_Menu_(int,int,int,int,const char * =0);
-  ~Fl_Menu_();
-
-  int item_pathname(char *name, int namelen, const Fl_Menu_Item *finditem=0) const;
-  const Fl_Menu_Item* picked(const Fl_Menu_Item*);
-  const Fl_Menu_Item* find_item(const char *name);
-  const Fl_Menu_Item* find_item(Fl_Callback*);
-  int find_index(const char *name) const;
-  int find_index(const Fl_Menu_Item *item) const;
-  int find_index(Fl_Callback *cb) const;
-
-  /**
-    Returns the menu item with the entered shortcut (key value).
-
-    This searches the complete menu() for a shortcut that matches the
-    entered key value.  It must be called for a FL_KEYBOARD or FL_SHORTCUT
-    event.
-
-    If a match is found, the menu's callback will be called.
-
-    \return matched Fl_Menu_Item or NULL.
-  */
-  const Fl_Menu_Item* test_shortcut() {return picked(menu()->test_shortcut());}
-  void global();
-
-  /**
-    Returns a pointer to the array of Fl_Menu_Items.  This will either be
-    the value passed to menu(value) or the private copy.
-  */  
-  const Fl_Menu_Item *menu() const {return menu_;}
-  void menu(const Fl_Menu_Item *m);
-  void copy(const Fl_Menu_Item *m, void* user_data = 0);
-  int insert(int index, const char*, int shortcut, Fl_Callback*, void* = 0, int = 0);
-  int  add(const char*, int shortcut, Fl_Callback*, void* = 0, int = 0);
-  /** See int Fl_Menu_::add(const char* label, int shortcut, Fl_Callback*, void *user_data=0, int flags=0) */
-  int  add(const char* a, const char* b, Fl_Callback* c, void* d = 0, int e = 0) {
-      return add(a,fl_old_shortcut(b),c,d,e);
+  
+  Fl_Menu_() { /* empty */ }
+  
+  Fl_Menu_(int x, int y, int w, int h, const char *label=0) {
+    _p = new fltk3::Menu_(x, y, w, h, label);
+    _p->wrapper(this);
   }
-  /** See int Fl_Menu_::insert(const char* label, int shortcut, Fl_Callback*, void *user_data=0, int flags=0) */
+
+  int item_pathname(char *name, int namelen, const Fl_Menu_Item *finditem=0) const {
+    return ((fltk3::Menu_*)_p)->item_pathname(name, nameLen, fintitem);
+  }
+  
+  const Fl_Menu_Item* picked(const Fl_Menu_Item *i) {
+    return (Fl_Menu_Item*) ((fltk3::Menu_*)_p)->picked( (fltk3::MenuItem*)i );
+  }
+  
+  const Fl_Menu_Item* find_item(const char *name) {
+    return (Fl_Menu_Item*) ((fltk3::Menu_*)_p)->find_item(name);
+  }
+  
+  const Fl_Menu_Item* find_item(Fl_Callback *cb) {
+    return (Fl_Menu_Item*) ((fltk3::Menu_*)_p)->find_item( (fltk3::Callback*)cb );
+  }
+  
+  int find_index(const char *name) const {
+    return ((fltk3::Menu_*)_p)->find_index(name);
+  }
+  
+  int find_index(const Fl_Menu_Item *item) const {
+    return ((fltk3::Menu_*)_p)->find_index( (fltk3::MenuItem*)item );
+  }
+  
+  int find_index(Fl_Callback *cb) const {
+    return ((fltk3::Menu_*)_p)->find_index( fltk3::Callback(cb) );
+  }
+                                           
+  const Fl_Menu_Item* test_shortcut() {
+    return (Fl_Menu_Item*) ((fltk3::Menu_*)_p)->test_shortcut();
+  }
+                                           
+  void global() {
+    ((fltk3::Menu_*)_p)->global();
+  }
+                                             
+  const Fl_Menu_Item *menu() const {
+    return (Fl_Menu_Item*) menu();
+  }
+  
+  void menu(const Fl_Menu_Item *m) {
+    ((fltk3::Menu_*)_p)->menu( (fltk3::MenuItem*)m );
+  }
+  
+  void copy(const Fl_Menu_Item *m, void* user_data = 0) {
+    ((fltk3::Menu_*)_p)->copy( (fltk3::MenuItem*)m, user_data );
+  }
+  
+  int insert(int a, const char *b, int c, Fl_Callback *d, void *e=0, int f=0) {
+    return ((fltk3::Menu_*)_p)->insert(a, b, c, (fltk3::Callback*)d, e, f);
+  }
+  
+  int add(const char *a, int b, Fl_Callback *c, void *d=0, int e=0) {
+    return ((fltk3::Menu_*)_p)->add(a, b, (fltk3::Callback*)c, d, e);
+  }
+  
+  int add(const char* a, const char* b, Fl_Callback* c, void* d = 0, int e = 0) {
+    return ((fltk3::Menu_*)_p)->add(a, b, (fltk3::Callback*)c, d, e);
+  }
+  
   int insert(int index, const char* a, const char* b, Fl_Callback* c, void* d = 0, int e = 0) {
-      return insert(index,a,fl_old_shortcut(b),c,d,e);
+    return ((fltk3::Menu_*)_p)->insert(index, a, b, (fltk3::Callback*)c, d, e);
   }
-  int  add(const char *);
-  int  size() const ;
-  void size(int W, int H) { Fl_Widget::size(W, H); }
-  void clear();
-  int clear_submenu(int index);
-  void replace(int,const char *);
-  void remove(int);
- /** Changes the shortcut of item i to n.  */
-  void shortcut(int i, int s) {menu_[i].shortcut(s);}
-  /** Sets the flags of item i.  For a list of the flags, see Fl_Menu_Item.  */
-  void mode(int i,int fl) {menu_[i].flags = fl;}
-  /** Gets the flags of item i.  For a list of the flags, see Fl_Menu_Item.  */
-  int  mode(int i) const {return menu_[i].flags;}
-
-  /** Returns a pointer to the last menu item that was picked.  */
-  const Fl_Menu_Item *mvalue() const {return value_;}
-  /** Returns the index into menu() of the last item chosen by the user.  It is zero initially. */
-  int value() const {return value_ ? (int)(value_-menu_) : -1;}
-  int value(const Fl_Menu_Item*);
-  /**
-    The value is the index into menu() of the last item chosen by
-    the user.  It is zero initially.  You can set it as an integer, or set
-    it with a pointer to a menu item.  The set routines return non-zero if
-    the new value is different than the old one.
-  */
-  int value(int i) {return value(menu_+i);}
-  /** Returns the title of the last item chosen.  */
-  const char *text() const {return value_ ? value_->text : 0;}
-  /** Returns the title of item i.  */
-  const char *text(int i) const {return menu_[i].text;}
-
-  /** Gets the current font of menu item labels.  */
-  Fl_Font textfont() const {return textfont_;}
-  /**  Sets the current font of menu item labels.  */
-  void textfont(Fl_Font c) {textfont_=c;}
-  /**  Gets the font size of menu item labels.  */
-  Fl_Fontsize textsize() const {return textsize_;}
-  /**  Sets the font size of menu item labels.  */
-  void textsize(Fl_Fontsize c) {textsize_=c;}
-  /** Get the current color of menu item labels.  */
-  Fl_Color textcolor() const {return textcolor_;}
-  /** Sets the current color of menu item labels. */
-  void textcolor(Fl_Color c) {textcolor_=c;}
-
-  /**
-    This box type is used to surround the currently-selected items in the
-    menus.  If this is FL_NO_BOX then it acts like 
-    FL_THIN_UP_BOX and selection_color() acts like 
-    FL_WHITE, for back compatibility.    
-  */
-  Fl_Boxtype down_box() const {return (Fl_Boxtype)down_box_;}
-  /**    See Fl_Boxtype Fl_Menu_::down_box() const   */
-  void down_box(Fl_Boxtype b) {down_box_ = b;}
-
-  /** For back compatibility, same as selection_color() */
-  Fl_Color down_color() const {return selection_color();}
-  /** For back compatibility, same as selection_color() */
-  void down_color(unsigned c) {selection_color(c);}
+  
+  int add(const char *a) {
+    return ((fltk3::Menu_*)_p)->add(a);
+  }
+  
+  int size() const {
+    return ((fltk3::Menu_*)_p)->size();
+  }
+  
+  void size(int W, int H) { 
+    ((fltk3::Menu_*)_p)->size(W, H);
+  }
+  
+  void clear() {
+    ((fltk3::Menu_*)_p)->clear();
+  }
+  
+  int clear_submenu(int index) {
+    return ((fltk3::Menu_*)_p)->clear_submenu(index);
+  }
+  
+  void replace(int a, const char *b) {
+    ((fltk3::Menu_*)_p)->replace(a, b);
+  }
+  
+  void remove(int a) {
+    ((fltk3::Menu_*)_p)->remove(a);
+  }
+  
+  void shortcut(int i, int s) {
+    ((fltk3::Menu_*)_p)->shortcut(i, s);
+  }
+  
+  void mode(int i,int fl) {
+    ((fltk3::Menu_*)_p)->mode(i, fl);
+  }
+  
+  int  mode(int i) const {
+    return ((fltk3::Menu_*)_p)->mode(i);
+  }
+  
+  const Fl_Menu_Item *mvalue() const {
+    return (fltk3::MenuItem*) ((fltk3::Menu_*)_p)->mvalue();
+  }
+  
+  int value() const {
+    return ((fltk3::Menu_*)_p)->value();
+  }
+  
+  int value(const Fl_Menu_Item *m) {
+    return ((fltk3::Menu_*)_p)->value( (fltk3::MenuItem*)m );
+  }
+  
+  int value(int i) {
+    return ((fltk3::Menu_*)_p)->value(i);
+  }
+  
+  const char *text() const {
+    return ((fltk3::Menu_*)_p)->text();
+  }
+  
+  const char *text(int i) const {
+    return ((fltk3::Menu_*)_p)->text(i);
+  }
+  
+  Fl_Font textfont() const { 
+    return fltk3::_3to1_font( ((fltk3::Menu_*)_p)->textfont() ); 
+  }
+  
+  void textfont(Fl_Font font) { 
+    ((fltk3::Menu_*)_p)->font( fltk3::_1to3_font(font) );
+  }
+  
+  Fl_Fontsize textsize() const { 
+    return fltk3::_3to1_fontsize( ((fltk3::Menu_*)_p)->textsize() );
+  }
+  
+  void textsize(Fl_Fontsize size) {
+    ((fltk3::Menu_*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+  }
+  
+  Fl_Color textcolor() const { 
+    return fltk3::_3to1_color( ((fltk3::Menu_*)_p)->textcolor() );
+  }
+  
+  void textcolor(Fl_Color col) { 
+    ((fltk3::Menu_*)_p)->textcolor( fltk3::_1to3_color(col) );
+  }
+  
+  Fl_Boxtype down_box() const {
+    return fltk3::_3to1_boxtype( ((fltk3::Menu_*)_p)->down_box() );
+  }
+  
+  void down_box(Fl_Boxtype b) {
+    ((fltk3::Menu_*)_p)->down_box( fltk3::_1to3_boxtype(b) );
+  }
+  
+  Fl_Color down_color() const {
+    return fltk3::_3to1_color( ((fltk3::Menu_*)_p)->down_color() );
+  }
+  
+  void down_color(unsigned c) {
+    ((fltk3::Menu_*)_p)->down_color( fltk3::_1to3_color(c) );
+  }
+  
 };
 
 #endif

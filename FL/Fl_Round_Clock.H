@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Round clock header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,21 +26,24 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Round_Clock widget . */
-
 #ifndef Fl_Round_Clock_H
 #define Fl_Round_Clock_H
 
+#include <fltk3/RoundClock.h>
 #include "Fl_Clock.H"
 
-/** A clock widget of type FL_ROUND_CLOCK. Has no box. */
+
 class FL_EXPORT Fl_Round_Clock : public Fl_Clock {
+  
 public:
-    /** Creates the clock widget, setting his type and box. */
-    Fl_Round_Clock(int x,int y,int w,int h, const char *l = 0)
-	: Fl_Clock(x,y,w,h,l) {type(FL_ROUND_CLOCK); box(FL_NO_BOX);}
+
+  Fl_Round_Clock(int x,int y,int w,int h, const char *l = 0) {
+    _p = new fltk3::RoundClock(x, y, w, h, l);
+    _p->wrapper(this);
+  }
+
 };
+
 
 #endif
 

@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Positioner header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,75 +26,106 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Positioner widget . */
-
 #ifndef Fl_Positioner_H
 #define Fl_Positioner_H
 
-#ifndef Fl_Widget_H
+#include <fltk3/Positioner.h>
 #include "Fl_Widget.H"
-#endif
 
-/**
-  This class is provided for Forms compatibility.  It provides 2D input.
-  It would be useful if this could be put atop another widget so that the
-  crosshairs are on top, but this is not implemented.  The color of the
-  crosshairs is selection_color().
-  <P ALIGN=CENTER>\image html  positioner.png </P> 
-  \image latex  positioner.png " Fl_Positioner" width=4cm
-*/
+
 class FL_EXPORT Fl_Positioner : public Fl_Widget {
-
-  double xmin, ymin;
-  double xmax, ymax;
-  double xvalue_, yvalue_;
-  double xstep_, ystep_;
 
 protected:
 
-  // these allow subclasses to put the dial in a smaller area:
-  void draw(int, int, int, int);
-  int handle(int, int, int, int, int);
-  void draw();
+  void draw(int x, int y, int w, int h) {
+    ((fltk3::Positioner*)_p)->draw(x, y, w, h);
+  }
+  
+  int handle(int e, int x, int y, int w, int h) {
+    ((fltk3::Positioner*)_p)->handle(e, x, y, w, h);
+  }
+
+  FLTK3_WRAPPER_VCALLS_OBJECT(Positioner, draw(), draw(), Draw)
 
 public:
 
-  int handle(int);
-  /**
-    Creates a new Fl_Positioner widget using the given position,
-    size, and label string. The default boxtype is FL_NO_BOX.
-  */
-  Fl_Positioner(int x,int y,int w,int h, const char *l=0);
-  /** Gets the X axis coordinate.*/
-  double xvalue() const {return xvalue_;}
-  /** Gets the Y axis coordinate.*/
-  double yvalue() const {return yvalue_;}
-  int xvalue(double);
-  int yvalue(double);
-  int value(double,double);
-  void xbounds(double, double);
-  /** Gets the X axis minimum */
-  double xminimum() const {return xmin;}
-  /** Same as xbounds(a, xmaximum()) */
-  void xminimum(double a) {xbounds(a,xmax);}
-  /** Gets the X axis maximum */
-  double xmaximum() const {return xmax;}
-  /** Same as xbounds(xminimum(), a) */
-  void xmaximum(double a) {xbounds(xmin,a);}
-  void ybounds(double, double);
-  /** Gets the Y axis minimum */
-  double yminimum() const {return ymin;}
-  /** Same as ybounds(a, ymaximum()) */
-  void yminimum(double a) {ybounds(a, ymax);}
-  /** Gets the Y axis maximum */
-  double ymaximum() const {return ymax;}
-  /** Same as ybounds(ymininimum(), a) */
-  void ymaximum(double a) {ybounds(ymin, a);}
-  /** Sets the stepping value for the X axis.*/
-  void xstep(double a) {xstep_ = a;}
-  /** Sets the stepping value for the Y axis.*/
-  void ystep(double a) {ystep_ = a;}
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Positioner, handle(int event), handle(event), Handle)
+  
+  Fl_Positioner() { }
+  
+  Fl_Positioner(int x,int y,int w,int h, const char *l=0) {
+    _p = new fltk3::Positioner(x, y, w, h, l);
+    _p->wrapper(this);
+  }
+  
+  double xvalue() const {
+    return ((fltk3::Positioner*)_p)->xvalue();
+  }
+  
+  double yvalue() const {
+    return ((fltk3::Positioner*)_p)->yvalue();
+  }
+  
+  int xvalue(double v) {
+    return ((fltk3::Positioner*)_p)->xvalue(v);
+  }
+  
+  int yvalue(double a) {
+    return ((fltk3::Positioner*)_p)->yvalue(a);
+  }
+  
+  int value(double a, double b) {
+    return ((fltk3::Positioner*)_p)->value(a, b);
+  }
+  
+  void xbounds(double a, double b) {
+    ((fltk3::Positioner*)_p)->xbounds(a, b);
+  }
+  
+  double xminimum() const {
+    return ((fltk3::Positioner*)_p)->xminimum();
+  }
+  
+  void xminimum(double a) {
+    ((fltk3::Positioner*)_p)->xminimum(a);
+  }
+  
+  double xmaximum() const {
+    return ((fltk3::Positioner*)_p)->xmaximum();
+  }
+  
+  void xmaximum(double a) {
+    ((fltk3::Positioner*)_p)->xmaximum(a);
+  }
+  
+  void ybounds(double a, double b) {
+    ((fltk3::Positioner*)_p)->ybounds(a, b);
+  }
+  
+  double yminimum() const {
+    return ((fltk3::Positioner*)_p)->yminimum();
+  }
+  
+  void yminimum(double a) {
+    ((fltk3::Positioner*)_p)->yminimum(a);
+  }
+  
+  double ymaximum() const {
+    return ((fltk3::Positioner*)_p)->ymaximum();
+  }
+  
+  void ymaximum(double a) {
+    ((fltk3::Positioner*)_p)->ymaximum(a);
+  }
+  
+  void xstep(double a) {
+    ((fltk3::Positioner*)_p)->xstep(a);
+  }
+  
+  void ystep(double a) {
+    ((fltk3::Positioner*)_p)->ystep(a);
+  }
+  
 };
 
 #endif

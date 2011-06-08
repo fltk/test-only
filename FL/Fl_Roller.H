@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Roller header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,28 +26,30 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Roller widget . */
-
 #ifndef Fl_Roller_H
 #define Fl_Roller_H
 
-#ifndef Fl_Valuator_H
+#include <fltk3/Roller.h>
 #include "Fl_Valuator.H"
-#endif
 
-/**
-  The Fl_Roller widget is a "dolly" control commonly used to
-  move 3D objects.
-  <P ALIGN=CENTER>\image html Fl_Roller.png 
-  \image latex Fl_Roller.png "Fl_Roller" width=4cm
-*/
+
 class FL_EXPORT Fl_Roller : public Fl_Valuator {
+
 protected:
-  void draw();
+
+  FLTK3_WRAPPER_VCALLS_OBJECT(Roller, draw(), draw(), Draw)
+  
 public:
-  int handle(int);
-  Fl_Roller(int X,int Y,int W,int H,const char* L=0);
+
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Roller, handle(int event), handle(event), Handle)
+
+  Fl_Roller() {}
+  
+  Fl_Roller(int X,int Y,int W,int H,const char* L=0) {
+    _p = new fltk3::Roller(X, Y, W, H, L);
+    _p->wrapper(this);
+  }
+  
 };
 
 #endif

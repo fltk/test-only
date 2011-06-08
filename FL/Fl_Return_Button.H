@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Return button header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,32 +26,30 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Return_Button widget . */
-
 #ifndef Fl_Return_Button_H
 #define Fl_Return_Button_H
+
+#include <fltk3/ReturnButton.h>
 #include "Fl_Button.H"
 
-/**
-  The Fl_Return_Button is a subclass of Fl_Button that
-  generates a callback when it is pressed or when the user presses the
-  Enter key.  A carriage-return symbol is drawn next to the button label.
-  <P ALIGN=CENTER>\image html Fl_Return_Button.png 
-  \image latex Fl_Return_Button.png "Fl_Return_Button" width=4cm
-*/
+
 class FL_EXPORT Fl_Return_Button : public Fl_Button {
+
 protected:
-  void draw();
+
+  FLTK3_WRAPPER_VCALLS_OBJECT(ReturnButton, draw(), draw(), Draw)
+
 public:
-  int handle(int);
-  /**
-    Creates a new Fl_Return_Button widget using the given
-    position, size, and label string. The default boxtype is FL_UP_BOX.
-    <P> The inherited destructor deletes the button.
-  */
-  Fl_Return_Button(int X, int Y, int W, int H,const char *l=0)
-    : Fl_Button(X,Y,W,H,l) {}
+
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(ReturnButton, handle(int event), handle(event), Handle)
+
+  Fl_Return_Button() {}
+  
+  Fl_Return_Button(int X, int Y, int W, int H,const char *l=0) {
+    _p = new fltk3::ReturnButton(x, y, w, h, label);
+    _p->wrapper(this);
+  }
+
 };
 
 #endif

@@ -1,8 +1,8 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Menu window header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
 // Copyright 1998-2010 by Bill Spitzak and others.
 //
@@ -26,40 +26,52 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Menu_Window widget . */
-
 #ifndef Fl_Menu_Window_H
 #define Fl_Menu_Window_H
 
+#include <fltk3/MenuWindow.h>
 #include "Fl_Single_Window.H"
 
-/**
-  The Fl_Menu_Window widget is a window type used for menus. By
-  default the window is drawn in the hardware overlay planes if they are
-  available so that the menu don't force the rest of the window to
-  redraw.
-*/
+
 class FL_EXPORT Fl_Menu_Window : public Fl_Single_Window {
+  
 public:
-  void show();
-  void erase();
-  void flush();
-  void hide();
-  /** Tells if hardware overlay mode is set */
-  unsigned int overlay() {return !(flags()&NO_OVERLAY);}
-  /** Tells FLTK to use hardware overlay planes if they are available.  */
-  void set_overlay() {clear_flag(NO_OVERLAY);}
-  /** Tells FLTK to use normal drawing planes instead of overlay planes.
-      This is usually necessary if your menu contains multi-color pixmaps. */
-  void clear_overlay() {set_flag(NO_OVERLAY);}
-  ~Fl_Menu_Window();
-  /** Creates a new Fl_Menu_Window widget using the given size, and label string. */
-  Fl_Menu_Window(int W, int H, const char *l = 0)
-    : Fl_Single_Window(W,H,l) { image(0); }
-  /** Creates a new Fl_Menu_Window widget using the given position, size, and label string. */
-  Fl_Menu_Window(int X, int Y, int W, int H, const char *l = 0)
-    : Fl_Single_Window(X,Y,W,H,l) { image(0); }
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(MenuWindow, hide(), hide(), Hide)
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(MenuWindow, show(), show(), Show)
+  
+  void erase() {
+    ((fltk3::MenuWindow*)_p)->erase();
+  }
+  
+  void flush() {
+    ((fltk3::MenuWindow*)_p)->flush();
+  }
+    
+  unsigned int overlay() {
+    return ((fltk3::MenuWindow*)_p)->overlay();
+  }
+
+  void set_overlay() {
+    ((fltk3::MenuWindow*)_p)->set_overlay();
+  }
+
+  void clear_overlay() {
+    ((fltk3::MenuWindow*)_p)->clear_overlay();
+  }
+
+  Fl_Menu_Window() { /* empty */ }
+  
+  Fl_Menu_Window(int W, int H, const char *l = 0) {
+    _p = new fltk3::MenuWindow(W, H, l);
+    _p->wrapper(this);
+  }
+  
+  Fl_Menu_Window(int X, int Y, int W, int H, const char *l = 0) {
+    _p = new fltk3::MenuWindow(X, Y, W, H, l);
+    _p->wrapper(this);
+  }
 };
 
 #endif

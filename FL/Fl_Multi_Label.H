@@ -1,10 +1,11 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Multi-label header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
+//  - struct is cloned, not wrapped
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,6 +30,9 @@
 #ifndef Fl_Multi_Label_H
 #define Fl_Multi_Label_H
 
+#include <fltk3/MultiLabel.h>
+#include "Enumerations.H"
+
 class Fl_Widget;
 struct Fl_Menu_Item;
 
@@ -37,8 +41,15 @@ struct FL_EXPORT Fl_Multi_Label {
   const char* labelb;
   uchar typea;
   uchar typeb;
-  void label(Fl_Widget*);
-  void label(Fl_Menu_Item*);
+  
+  void label(Fl_Widget *w) {
+    ((fltk3::Multilabel*)_p)->label( fltk3::_1to3_widget(w) );
+  }
+  
+  void label(Fl_Menu_Item*) {
+    ((fltk3::Multilabel*)_p)->label( (fltk3::MenuItem*)w );
+  }
+
 };
 
 #endif

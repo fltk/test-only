@@ -2,8 +2,9 @@
 // "$Id$"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -41,17 +42,18 @@
 
 class FL_EXPORT Fl_Slider : public Fl_Valuator {
 
-#if 0 // FIXME: 123
-  
 protected:
 
-  // these allow subclasses to put the slider in a smaller area:
-  void draw(int, int, int, int);
-  int handle(int, int, int, int, int);
-  void draw();
+  void draw(int x, int y, int w, int h) {
+    ((fltk3::Slider*)_p)->draw(x, y, w, h);
+  }
   
-#endif
+  int handle(int e, int x, int y, int w, int h) {
+    return ((fltk3::Slider*)_p)->handle(e, x, y, w, h);
+  }
   
+  FLTK3_WRAPPER_VCALLS_OBJECT(Slider, draw(), draw(), Draw)
+    
 public:
 
   Fl_Slider() { /* empty */ }
@@ -70,16 +72,27 @@ public:
     ((fltk3::Slider*)_p)->bounds(a, b);
   }
   
-#if 0 // FIXME: 123
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Widget, handle(int event), handle(event), Handle)
 
-  ivirtual nt handle(int);
-  int scrollvalue(int pos,int size,int first,int total);
-  float slider_size() const {return slider_size_;}
-  void slider_size(double v);
-  Fl_Boxtype slider() const {return (Fl_Boxtype)slider_;}
-  void slider(Fl_Boxtype c) {slider_ = c;}
-
-#endif
+  int scrollvalue(int pos,int size,int first,int total) {
+    return ((fltk3::Slider*)_p)->scrollvalue(pos, size, first, total);
+  }
+  
+  float slider_size() const {
+    return ((fltk3::Slider*)_p)->slider_size();
+  }
+  
+  void slider_size(double v) {
+    ((fltk3::Slider*)_p)->slider_size(v);
+  }
+  
+  Fl_Boxtype slider() const {
+    return fltk3::_3to1_boxtype( ((fltk3::Slider*)_p)->slider() );
+  }
+  
+  void slider(Fl_Boxtype c) {
+    ((fltk3::Slider*)_p)->slider( fltk3::_1to3_boxtype(c) );
+  }
 
 };
 

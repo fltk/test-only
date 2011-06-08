@@ -33,6 +33,10 @@
 
 #include "Valuator.h"
 
+
+class Fl_Slider;
+
+
 namespace fltk3 {
   
   // values for type(), lowest bit indicate horizontal:
@@ -69,6 +73,8 @@ namespace fltk3 {
    \image latex slider.png "fltk3::Slider" width=4cm
    */
   class FLTK3_EXPORT Slider : public fltk3::Valuator {
+    
+    friend class ::Fl_Slider;
     
     float slider_size_;
     uchar slider_;

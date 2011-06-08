@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Secret input header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,29 +26,26 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Secret_Input widget . */
-
 #ifndef Fl_Secret_Input_H
 #define Fl_Secret_Input_H
 
+#include <fltk3/SecretInput.h>
 #include "Fl_Input.H"
 
-/**
-  The Fl_Secret_Input class is a subclass of Fl_Input
-  that displays its input as a string of asterisks.  This subclass is
-  usually used to receive passwords and other "secret" information.
-*/
+
 class FL_EXPORT Fl_Secret_Input : public Fl_Input {
+
 public:
-  /**
-    Creates a new Fl_Secret_Input widget using the given
-    position, size, and label string. The default boxtype is FL_DOWN_BOX.
-    <P>Inherited destructor destroys the widget and any value associated with it.
-  */
-  Fl_Secret_Input(int X,int Y,int W,int H,const char *l = 0)
-    : Fl_Input(X,Y,W,H,l) {type(FL_SECRET_INPUT);}
+
+  Fl_Secret_Input() {}
+  
+  Fl_Secret_Input(int X,int Y,int W,int H,const char *l = 0) {
+    _p = new fltk3::SecretInput(X, Y, W, H, l);
+    _p->wrapper(this);
+  }
+
 };
+
 
 #endif
 
