@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Tab header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,65 +26,59 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Tabs widget . */
-
 #ifndef Fl_Tabs_H
 #define Fl_Tabs_H
 
+#include <fltk3/TabGroup.h>
 #include "Fl_Group.H"
 
-/**
-  The Fl_Tabs widget is the "file card tabs"
-  interface that allows you to put lots and lots of buttons and
-  switches in a panel, as popularized by many toolkits.
-  
-  \image html  tabs.png
-  \image latex tabs.png "Fl_Tabs" width=8cm
-  
-  Clicking the tab makes a child visible() by calling
-  show() on it, and all other children are made invisible
-  by calling hide() on them. Usually the children are Fl_Group widgets
-  containing several widgets themselves.
-  
-  Each child makes a card, and its label() is printed
-  on the card tab, including the label font and style.  The
-  selection color of that child is used to color the tab, while
-  the color of the child determines the background color of the pane.
-  
-  The size of the tabs is controlled by the bounding box of the
-  children (there should be some space between the children and
-  the edge of the Fl_Tabs), and the tabs may be placed
-  "inverted" on the bottom - this is determined by which
-  gap is larger. It is easiest to lay this out in fluid, using the
-  fluid browser to select each child group and resize them until
-  the tabs look the way you want them to.
-*/
 class FL_EXPORT Fl_Tabs : public Fl_Group {
-  Fl_Widget *value_;
-  Fl_Widget *push_;
-  int *tab_pos;		// array of x-offsets of tabs per child + 1
-  int *tab_width;	// array of widths of tabs per child + 1
-  int tab_count;	// array size
-  int tab_positions();	// allocate and calculate tab positions
-  void clear_tab_positions();
-  int tab_height();
-  void draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int sel=0);
+
 protected:
-  void redraw_tabs();
-  void draw();
+  
+  void redraw_tabs() {
+    ((fltk3::TabGroup*)_p)->redraw_tabs();
+  }
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(TabGroup, draw(), draw(), Draw)
 
 public:
-  int handle(int);
-  Fl_Widget *value();
-  int value(Fl_Widget *);
-  Fl_Widget *push() const {return push_;}
-  int push(Fl_Widget *);
-  Fl_Tabs(int,int,int,int,const char * = 0);
-  Fl_Widget *which(int event_x, int event_y);
-  ~Fl_Tabs();
-  void client_area(int &rx, int &ry, int &rw, int &rh, int tabh=0);
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(TabGroup, handle(int event), handle(event), Handle)
+  
+  Fl_Widget *value() {
+    return fltk3::_3to1_widget( ((fltk3::TabGroup*)_p)->value() );
+  }
+  
+  int value(Fl_Widget *w) {
+    return ((fltk3::TabGroup*)_p)->value( fltk3::_1to3_widget(w) );
+  }
+  
+  Fl_Widget *push() const {
+    return fltk3::_3to1_widget( ((fltk3::TabGroup*)_p)->push() );
+  }
+  
+  int push(Fl_Widget *w) {
+    return ((fltk3::TabGroup*)_p)->push( fltk3::_1to3_widget(w) );
+  }
+  
+  Fl_Tabs() {}
+  
+  Fl_Tabs(int x, int y, int w, int h, const char *label=0) {
+    _p = new fltk3::TabGroup(x, y, w, h, label);
+    _p->wrapper(this);
+  }
+  
+  Fl_Widget *which(int event_x, int event_y) {
+    return fltk3::_3to1_widget( ((fltk3::TabGroup*)_p)->which(event_x, event_y) );
+  }
+  
+  void client_area(int &rx, int &ry, int &rw, int &rh, int tabh=0) {
+    ((fltk3::TabGroup*)_p)->client_area(rx, ry, rw, rh, tabh);
+  }
+  
 };
+
 
 #endif
 
