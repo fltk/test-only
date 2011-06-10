@@ -206,6 +206,7 @@ FL_API bool reset_theme();
 }
 
 extern "C" FL_API bool fltk_theme();
+extern "C" FL_API bool xp_theme();
 
 //@}
 
