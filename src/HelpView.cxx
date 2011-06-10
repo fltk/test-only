@@ -2413,6 +2413,7 @@ int HelpView::handle(int event)	{
     strlcpy(target, linkp->name, sizeof(target));
 
     set_changed();
+    relayout();
 
     if (strcmp(linkp->filename, filename_) != 0 && linkp->filename[0])
     {
@@ -2809,6 +2810,7 @@ void HelpView::value(const char *v) {
   format();
 
   set_changed();
+  relayout();
   topline(0);
   leftline(0);
 }
