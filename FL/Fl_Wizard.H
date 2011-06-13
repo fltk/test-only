@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Fl_Wizard widget definitions.
+// FLTK 123 wrapper finished
 //
-// Copyright 1999-2010 by Easy Software Products.
+// Copyright 1999-2011 by Easy Software Products.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,43 +26,40 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Wizard widget . */
-
-//
-// Include necessary header files...
-//
-
 #ifndef _Fl_Wizard_H_
-#  define _Fl_Wizard_H_
+#define _Fl_Wizard_H_
 
-#  include <FL/Fl_Group.H>
+#include <fltk3/WizardGroup.h>
+#include <FL/Fl_Group.H>
 
 
-/**
-    This widget is based off the Fl_Tabs
-    widget, but instead of displaying tabs it only changes "tabs" under
-    program control. Its primary purpose is to support "wizards" that
-    step a user through configuration or troubleshooting tasks.
-
-    <P>As with Fl_Tabs, wizard panes are composed of child (usually
-    Fl_Group) widgets. Navigation buttons must be added separately.
-*/
 class FL_EXPORT Fl_Wizard : public Fl_Group {
 
-  Fl_Widget *value_;
+public:
 
-  void draw();
+  Fl_Wizard(int x, int y, int w, int h, const char *label = 0) {
+    _p = new fltk3::WizardGroup(x, y, w, h, label);
+    _p->wrapper(this);
+  }
 
-  public:
-
-  Fl_Wizard(int, int, int, int, const char * = 0);
-
-  void		next();
-  void		prev();
-  Fl_Widget	*value();
-  void		value(Fl_Widget *);
+  void next() {
+    ((fltk3::WizardGroup*)_p)->next();
+  }
+  
+  void prev() {
+    ((fltk3::WizardGroup*)_p)->prev();
+  }
+  
+  Fl_Widget *value() {
+    return fltk3::_3to1_widget( ((fltk3::WizardGroup*)_p)->value() );
+  }
+  
+  void value(Fl_Widget *w) {
+    ((fltk3::WizardGroup*)_p)->value( fltk3::_1to3_widget(w) );
+  }
+  
 };
+
 
 #endif // !_Fl_Wizard_H_
 

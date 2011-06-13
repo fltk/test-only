@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Value output header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,67 +26,60 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Value_Output widget . */
-
 #ifndef Fl_Value_Output_H
 #define Fl_Value_Output_H
 
-#ifndef Fl_Valuator_H
+#include <fltk3/ValueOutput.h>
 #include "Fl_Valuator.H"
-#endif
 
-/**
-  The Fl_Value_Output widget displays a floating point value.
-  If step() is not zero, the user can adjust the value by
-  dragging the mouse left and right.  The left button moves one step()
-  per pixel, the middle by 10 * step(), and the right button by 
-  100 * step().
-  <P>This is much lighter-weight than 
-  Fl_Value_Input because it contains no text editing code or
-  character buffer. </P>
-  <P ALIGN=CENTER>\image html Fl_Value_Output.png 
-  \image latex  Fl_Value_Output.png "Fl_Value_Output" width=4cm
-*/
+
 class FL_EXPORT Fl_Value_Output : public Fl_Valuator {
-  Fl_Font textfont_;
-  Fl_Fontsize textsize_;
-  uchar soft_;
-  Fl_Color textcolor_;
 
 protected:
-  void draw();
+
+  FLTK3_WRAPPER_VCALLS_OBJECT(ValueOutput, draw(), draw(), Draw)
 
 public:
-  int handle(int);
-  Fl_Value_Output(int x,int y,int w,int h,const char *l=0);
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(ValueOutput, handle(int event), handle(event), Handle)
+  
+  Fl_Value_Output(int x,int y,int w,int h,const char *l=0) {
+    _p = new fltk3::ValueOutput(x, y, w, h, l);
+    _p->wrapper(this);
+  }
 
-  /**
-    If "soft" is turned on, the user is allowed to drag the value outside
-    the range.  If they drag the value to one of the ends, let go, then
-    grab again and continue to drag, they can get to any value.  Default is
-    one.
-  */
-  void soft(uchar s) {soft_ = s;}
-  /**
-    If "soft" is turned on, the user is allowed to drag the value outside
-    the range.  If they drag the value to one of the ends, let go, then
-    grab again and continue to drag, they can get to any value.  Default is
-    one.
-  */
-  uchar soft() const {return soft_;}
-
-  /**    Gets the typeface of the text in the value box.  */
-  Fl_Font textfont() const {return textfont_;}
-  /**    Sets the typeface of the text in the value box.  */
-  void textfont(Fl_Font s) {textfont_ = s;}
-  /**    Gets the size of the text in the value box.  */
-  Fl_Fontsize textsize() const {return textsize_;}
-  void textsize(Fl_Fontsize s) {textsize_ = s;}
-  /**    Sets the color of the text in the value box.  */
-  Fl_Color textcolor() const {return textcolor_;}
-  /**    Gets the color of the text in the value box.  */
-  void textcolor(Fl_Color s) {textcolor_ = s;}
+  void soft(char s) {
+    ((fltk3::ValueOutput*)_p)->soft(s);
+  }
+  
+  char soft() const {
+    return ((fltk3::ValueOutput*)_p)->soft();
+  }
+  
+  Fl_Font textfont() const { 
+    return fltk3::_3to1_font( ((fltk3::ValueOutput*)_p)->textfont() ); 
+  }
+  
+  void textfont(Fl_Font font) { 
+    ((fltk3::ValueOutput*)_p)->font( fltk3::_1to3_font(font) );
+  }
+  
+  Fl_Fontsize textsize() const { 
+    return fltk3::_3to1_fontsize( ((fltk3::ValueOutput*)_p)->textsize() );
+  }
+  
+  void textsize(Fl_Fontsize size) {
+    ((fltk3::ValueOutput*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+  }
+  
+  Fl_Color textcolor() const { 
+    return fltk3::_3to1_color( ((fltk3::ValueOutput*)_p)->textcolor() );
+  }
+  
+  void textcolor(Fl_Color col) { 
+    ((fltk3::ValueOutput*)_p)->textcolor( fltk3::_1to3_color(col) );
+  }
+  
 };
 
 #endif

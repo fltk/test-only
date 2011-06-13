@@ -2,8 +2,9 @@
 // "$Id$"
 //
 // Toggle button header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,6 +32,7 @@
 #include <fltk3/ToggleButton.h>
 #include "Fl_Button.H"
 
+
 class FL_EXPORT Fl_Toggle_Button : public Fl_Button {
   
 public:
@@ -41,7 +43,9 @@ public:
     _p = new fltk3::ToggleButton(X, Y, W, H, l);
     _p->wrapper(this);
   }
+
 };
+
 
 #endif
 

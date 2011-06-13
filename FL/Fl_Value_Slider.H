@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Value slider header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,42 +26,54 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Value_Slider widget . */
-
 #ifndef Fl_Value_Slider_H
 #define Fl_Value_Slider_H
 
+#include <fltk3/ValueSlider.h>
 #include "Fl_Slider.H"
 
-/**
-  The Fl_Value_Slider widget is a Fl_Slider widget
-  with a box displaying the current value.
-  <P ALIGN=CENTER>\image html value_slider.png 
-  \image latex  value_slider.png "Fl_Value_Slider" width=4cm
-*/
+
 class FL_EXPORT Fl_Value_Slider : public Fl_Slider {
-    Fl_Font textfont_;
-    Fl_Fontsize textsize_;
-    Fl_Color textcolor_;
+
 protected:
-    void draw();
+
+  FLTK3_WRAPPER_VCALLS_OBJECT(ValueSlider, draw(), draw(), Draw)
+  
 public:
-    int handle(int);
-    Fl_Value_Slider(int x,int y,int w,int h, const char *l = 0);
-    /**    Gets the typeface of the text in the value box.  */
-    Fl_Font textfont() const {return textfont_;}
-    /**    Sets the typeface of the text in the value box.  */
-    void textfont(Fl_Font s) {textfont_ = s;}
-    /**    Gets the size of the text in the value box.  */
-    Fl_Fontsize textsize() const {return textsize_;}
-    /**    Sets the size of the text in the value box.  */
-    void textsize(Fl_Fontsize s) {textsize_ = s;}
-    /**    Gets the color of the text in the value box.  */
-    Fl_Color textcolor() const {return textcolor_;}
-    /**    Sets the color of the text in the value box.  */
-    void textcolor(Fl_Color s) {textcolor_ = s;}
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(ValueSlider, handle(int event), handle(event), Handle)
+  
+  Fl_Value_Slider(int x,int y,int w,int h, const char *l = 0) {
+    _p = new fltk3::ValueSlider(x, y, w, h, l);
+    _p->wrapper(this);
+  }
+  
+  Fl_Font textfont() const { 
+    return fltk3::_3to1_font( ((fltk3::ValueSlider*)_p)->textfont() ); 
+  }
+  
+  void textfont(Fl_Font font) { 
+    ((fltk3::ValueSlider*)_p)->font( fltk3::_1to3_font(font) );
+  }
+  
+  Fl_Fontsize textsize() const { 
+    return fltk3::_3to1_fontsize( ((fltk3::ValueSlider*)_p)->textsize() );
+  }
+  
+  void textsize(Fl_Fontsize size) {
+    ((fltk3::ValueSlider*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+  }
+  
+  Fl_Color textcolor() const { 
+    return fltk3::_3to1_color( ((fltk3::ValueSlider*)_p)->textcolor() );
+  }
+  
+  void textcolor(Fl_Color col) { 
+    ((fltk3::ValueSlider*)_p)->textcolor( fltk3::_1to3_color(col) );
+  }
+  
 };
+
 
 #endif
 

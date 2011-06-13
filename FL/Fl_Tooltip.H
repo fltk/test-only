@@ -1,8 +1,8 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Tooltip header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 alias finished
 //
 // Copyright 1998-2011 by Bill Spitzak and others.
 //
@@ -26,86 +26,72 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Tooltip widget . */
-
 #ifndef Fl_Tooltip_H
 #define Fl_Tooltip_H
 
+#include <fltk3/Tooltip.h>
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 
-/**
-  The Fl_Tooltip class provides tooltip support for
-  all FLTK widgets. It contains only static methods.
-*/
-class FL_EXPORT Fl_Tooltip {
-public:
-  /**    Gets the tooltip delay. The default delay is 1.0 seconds.  */
-  static float delay() { return delay_; }
-  /**    Sets the tooltip delay. The default delay is 1.0 seconds.  */
-  static void delay(float f) { delay_ = f; }
-  /**
-    Gets the tooltip hover delay, the delay between tooltips.
-    The default delay is 0.2 seconds.
-  */
-  static float hoverdelay() { return hoverdelay_; }
-  /**
-    Sets the tooltip hover delay, the delay between tooltips.
-    The default delay is 0.2 seconds.
-  */
-  static void hoverdelay(float f) { hoverdelay_ = f; }
-  /**    Returns non-zero if tooltips are enabled.  */
-  static int enabled() { return Fl::option(Fl::OPTION_SHOW_TOOLTIPS); }
-  /**    Enables tooltips on all widgets (or disables if <i>b</i> is false).  */
-  static void enable(int b = 1) { Fl::option(Fl::OPTION_SHOW_TOOLTIPS, (b!=0));}
-  /**    Same as enable(0), disables tooltips on all widgets.  */
-  static void disable() { enable(0); }
-  static void (*enter)(Fl_Widget* w);
-  static void enter_area(Fl_Widget* w, int X, int Y, int W, int H, const char* tip);
-  static void (*exit)(Fl_Widget *w);
-  /** Gets the current widget target */
-  static Fl_Widget* current() {return widget_;}
-  static void current(Fl_Widget*);
 
-  /**    Gets the typeface for the tooltip text.  */
-  static Fl_Font font() { return font_; }
-  /**    Sets the typeface for the tooltip text.  */
-  static void font(Fl_Font i) { font_ = i; }
-  /**    Gets the size of the tooltip text.  */
-  static Fl_Fontsize size() { return (size_ == -1 ? FL_NORMAL_SIZE : size_); }
-  /**    Sets the size of the tooltip text.  */
-  static void size(Fl_Fontsize s) { size_ = s; }
-  /** Gets the background color for tooltips. The default background color is a pale yellow.  */
-  static Fl_Color color() { return color_; }
-  /** Sets the background color for tooltips. The default background color is a pale yellow.  */
-  static void color(Fl_Color c) { color_ = c; }
-  /** Gets the color of the text in the tooltip. The default is  black. */
-  static Fl_Color textcolor() { return textcolor_; }
-  /** Sets the color of the text in the tooltip. The default is  black. */
-  static void textcolor(Fl_Color c) { textcolor_ = c; }
+class FL_EXPORT Fl_Tooltip : public fltk3::Tooltip {
+  
+public:
+
+  // FIXME: 123 - static void (*enter)(Fl_Widget* w);
+  
+  static void enter_area(Fl_Widget* w, int X, int Y, int W, int H, const char* tip) {
+    fltk3::Tooltip::enter_area(fltk3::_1to3_widget(w), X, Y, W, H, tip);
+  }
+  
+  // FIXME: 123 - static void (*exit)(Fl_Widget *w);
+  
+  static Fl_Widget* current() {
+    return fltk3::_3to1_widget( fltk3::Tooltip::current() );
+  }
+  
+  static void current(Fl_Widget *w) {
+    fltk3::Tooltip::current(fltk3::_1to3_widget(w));
+  }
+
+  static Fl_Font font() {
+    return fltk3::_3to1_font( fltk3::Tooltip::font() );
+  }
+
+  static void font(Fl_Font i) {
+    fltk3::Tooltip::font(fltk3::_1to3_font(i));
+  }
+
+  static Fl_Fontsize size() { 
+    return fltk3::_3to1_fontsize( fltk3::Tooltip::size() );
+  }
+
+  static void size(Fl_Fontsize s) {
+    fltk3::Tooltip::size(fltk3::_1to3_fontsize(s));
+  }
+
+  static Fl_Color color() { 
+    return fltk3::_3to1_color( fltk3::Tooltip::color() );
+  }
+
+  static void color(Fl_Color c) { 
+    fltk3::Tooltip::color(fltk3::_1to3_color(c));
+  }
+
+  static Fl_Color textcolor() { 
+    return fltk3::_3to1_color( fltk3::Tooltip::textcolor() );
+  }
+
+  static void textcolor(Fl_Color c) { 
+    fltk3::Tooltip::textcolor(fltk3::_1to3_color(c));
+  }
+  
 #ifdef __APPLE__
-  // the unique tooltip window
-  static Fl_Window* current_window(void);
+  static Fl_Window* current_window(void) {
+    return fltk3::_3to1_window( fltk3::Tooltip::current_window() );
+  }
 #endif
 
-  // These should not be public, but Fl_Widget::tooltip() needs them...
-  // fabien: made it private with only a friend function access
-private:
-  friend void Fl_Widget::tooltip(const char *);
-  friend void Fl_Widget::copy_tooltip(const char *);
-  static void enter_(Fl_Widget* w);
-  static void exit_(Fl_Widget *w);
-  static void set_enter_exit_once_();
-
-private:
-  static float delay_; //!< delay before a tooltip is shown
-  static float hoverdelay_; //!< delay between tooltips
-  static Fl_Color color_;
-  static Fl_Color textcolor_;
-  static Fl_Font font_;
-  static Fl_Fontsize size_;
-  static Fl_Widget* widget_; //!< Keeps track of the current target widget
 };
 
 #endif

@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Header file for Fl_Text_Display class.
+// FLTK 123 wrapper finished
 //
-// Copyright 2001-2010 by Bill Spitzak and others.
+// Copyright 2001-2011 by Bill Spitzak and others.
 // Original code Copyright Mark Edel.  Permission to distribute under
 // the LGPL for the FLTK library granted by Mark Edel.
 //
@@ -28,56 +28,30 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
- Fl_Text_Display widget . */
-
 #ifndef FL_TEXT_DISPLAY_H
 #define FL_TEXT_DISPLAY_H
 
-#include "fl_draw.H"
-#include "Fl_Group.H"
-#include "Fl_Widget.H"
-#include "Fl_Scrollbar.H"
+#include <fltk3/TextDisply.h>
 #include "Fl_Text_Buffer.H"
 
-/**
- \brief Rich text display widget.
- 
- This is the FLTK text display widget. It allows the user to view multiple lines
- of text and supports highlighting and scrolling. The buffer that is displayed 
- in the widget is managed by the Fl_Text_Buffer class. A single Text Buffer
- can be displayed by multiple Text Displays.
- */
+
 class FL_EXPORT Fl_Text_Display: public Fl_Group {
 
 public:
   
-  /** 
-   text display cursor shapes enumeration 
-   */
   enum {
-    NORMAL_CURSOR,    /**< I-beam */
-    CARET_CURSOR,     /**< caret under the text */
-    DIM_CURSOR,       /**< dim I-beam */
-    BLOCK_CURSOR,     /**< unfille box under the current character */
-    HEAVY_CURSOR      /**< thick I-beam */
+    NORMAL_CURSOR,
+    CARET_CURSOR,
+    DIM_CURSOR,
+    BLOCK_CURSOR,
+    HEAVY_CURSOR
   };
   
-  /**
-   the character position is the left edge of a character, whereas 
-   the cursor is thought to be between the centers of two consecutive
-   characters.
-   */
   enum {
     CURSOR_POS, 
     CHARACTER_POS
   };
   
-  /** 
-   drag types - they match Fl::event_clicks() so that single clicking to
-   start a collection selects by character, double clicking selects by
-   word and triple clicking selects by line.
-   */
   enum {
     DRAG_NONE = -2,
     DRAG_START_DND = -1,
@@ -96,14 +70,8 @@ public:
     WRAP_AT_BOUNDS  /**< wrap text so that it fits into the widget width */
   };    
   
-  friend void fl_text_drag_me(int pos, Fl_Text_Display* d);
-  
   typedef void (*Unfinished_Style_Cb)(int, void *);
   
-  /** 
-   This structure associates the color, font, andsize of a string to draw
-   with an attribute mask matching attr
-   */
   struct Style_Table_Entry {
     Fl_Color    color;
     Fl_Font     font;
@@ -111,212 +79,250 @@ public:
     unsigned    attr;
   };
   
-  Fl_Text_Display(int X, int Y, int W, int H, const char *l = 0);
-  ~Fl_Text_Display();
+  Fl_Text_Display() {}
   
-  virtual int handle(int e);
+  Fl_Text_Display(int X, int Y, int W, int H, const char *l = 0) {
+    _p = new fltk3::TextDisplay(X, Y, W, H, l);
+    _p->wrapper(this);
+  }
+    
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(TextDisplay, handle(int event), handle(event), Handle)
   
-  void buffer(Fl_Text_Buffer* buf);
+  void buffer(Fl_Text_Buffer* buf) {
+    ((fltk3::TextDisplay*)_p)->buffer(buf);
+  }
   
-  /**
-   Sets the current text buffer associated with the text widget.
-   Multiple text widgets can be associated with the same text buffer.
-   \param buf new text buffer
-   */
-  void buffer(Fl_Text_Buffer& buf) { buffer(&buf); }
+  void buffer(Fl_Text_Buffer& buf) { 
+    ((fltk3::TextDisplay*)_p)->buffer(buf);
+  }
   
-  /**
-   Gets the current text buffer associated with the text widget.
-   Multiple text widgets can be associated with the same text buffer.
-   \return current text buffer
-   */
-  Fl_Text_Buffer* buffer() const { return mBuffer; }
+  Fl_Text_Buffer* buffer() const { 
+    return (Fl_Text_Buffer*) ((fltk3::TextDisplay*)_p)->buffer();
+  }
   
-  void redisplay_range(int start, int end);
-  void scroll(int topLineNum, int horizOffset);
-  void insert(const char* text);
-  void overstrike(const char* text);
-  void insert_position(int newPos);
+  void redisplay_range(int start, int end) {
+    ((fltk3::TextDisplay*)_p)->redisplay_range(start, end);
+  }
   
-  /** 
-   Gets the position of the text insertion cursor for text display.
-   \return insert position index into text buffer 
-   */
-  int insert_position() const { return mCursorPos; }
-  int position_to_xy(int pos, int* x, int* y) const;
+  void scroll(int topLineNum, int horizOffset) {
+    ((fltk3::TextDisplay*)_p)->scroll(topLineNum, horizOffset);
+  }
+  
+  void insert(const char* text) {
+    ((fltk3::TextDisplay*)_p)->insert(text);
+  }
+  
+  void overstrike(const char* text) {
+    ((fltk3::TextDisplay*)_p)->overstrike(text);
+  }
+  
+  void insert_position(int newPos) {
+    ((fltk3::TextDisplay*)_p)->insert_position(newPos);
+  }
+  
+  int insert_position() const { 
+    return ((fltk3::TextDisplay*)_p)->insert_position();
+  }
+  
+  int position_to_xy(int pos, int* x, int* y) const {
+    return ((fltk3::TextDisplay*)_p)->position_to_xy(pos, x, y);
+  }
 
-  int in_selection(int x, int y) const;
-  void show_insert_position();
+  int in_selection(int x, int y) const {
+    return ((fltk3::TextDisplay*)_p)->in_selection(x, y);
+  }
   
-  int move_right();
-  int move_left();
-  int move_up();  
-  int move_down();
-  int count_lines(int start, int end, bool start_pos_is_line_start) const;
-  int line_start(int pos) const;
-  int line_end(int startPos, bool startPosIsLineStart) const;
-  int skip_lines(int startPos, int nLines, bool startPosIsLineStart);
-  int rewind_lines(int startPos, int nLines);
-  void next_word(void);
-  void previous_word(void);
+  void show_insert_position() {
+    ((fltk3::TextDisplay*)_p)->show_insert_position();
+  }
   
-  void show_cursor(int b = 1);
+  int move_right() {
+    return ((fltk3::TextDisplay*)_p)->move_right();
+  }
   
-  /**
-   Hides the text cursor.
-   */
-  void hide_cursor() { show_cursor(0); }
+  int move_left() {
+    return ((fltk3::TextDisplay*)_p)->move_left();
+  }
+                                                  
+  int move_up() {
+    return ((fltk3::TextDisplay*)_p)->move_up();
+  }
   
-  void cursor_style(int style);
+  int move_down() {
+    return ((fltk3::TextDisplay*)_p)->move_down();
+  }
   
-  /**
-   Gets the text cursor color.  
-   \return cursor color
-   */
-  Fl_Color cursor_color() const {return mCursor_color;}
+  int count_lines(int start, int end, bool s) const {
+    return ((fltk3::TextDisplay*)_p)->count_lines(start, end, s);
+  }
   
-  /**    
-   Sets the text cursor color.
-   \param n new cursor color
-   */
-  void cursor_color(Fl_Color n) {mCursor_color = n;}
+  int line_start(int pos) const {
+    return ((fltk3::TextDisplay*)_p)->line_start(pos);
+  }
   
-  /**   
-   Gets the width/height of the scrollbars.
-   /return width of scrollbars
-   */
-  int scrollbar_width() const { return scrollbar_width_; }
+  int line_end(int startPos, bool s) const {
+    return ((fltk3::TextDisplay*)_p)->line_end(startPos, s);
+  }
   
-  /**
-   Sets the width/height of the scrollbars.
-   \param W width of scrollbars
-   */
-  void scrollbar_width(int W) { scrollbar_width_ = W; }
+  int skip_lines(int startPos, int nLines, bool s) {
+    return ((fltk3::TextDisplay*)_p)->skip_lines(startPos, nLines, s);
+  }
   
-  /**
-   Gets the scrollbar alignment type.
-   \return scrollbar alignment
-   */
-  Fl_Align scrollbar_align() const { return scrollbar_align_; }
+  int rewind_lines(int startPos, int nLines) {
+    return ((fltk3::TextDisplay*)_p)->rewind_lines(startPos, nLines);
+  }
   
-  /**
-   Sets the scrollbar alignment type.
-   \param a new scrollbar alignment
-   */
-  void scrollbar_align(Fl_Align a) { scrollbar_align_ = a; }
+  void next_word(void) {
+    ((fltk3::TextDisplay*)_p)->next_word();
+  }
   
-  /**
-   Moves the insert position to the beginning of the current word.
-   \param pos start calculation at this index
-   \return beginning of the words
-   */
-  int word_start(int pos) const { return buffer()->word_start(pos); }
+  void previous_word(void) {
+    ((fltk3::TextDisplay*)_p)->previous_word();
+  }
   
-  /** 
-   Moves the insert position to the end of the current word.
-   \param pos start calculation at this index
-   \return index of first character after the end of the word
-   */
-  int word_end(int pos) const { return buffer()->word_end(pos); }
+  void show_cursor(int b = 1) {
+    ((fltk3::TextDisplay*)_p)->show_cursor(b);
+  }
   
+  void hide_cursor() {
+    ((fltk3::TextDisplay*)_p)->hide_cursor();
+  }
+  
+  void cursor_style(int style) {
+    ((fltk3::TextDisplay*)_p)->cursor_style(style);
+  }
+  
+  Fl_Color cursor_color() const {
+    return fltk3::_3to1_color( ((fltk3::TextDisplay*)_p)->cursor_color() );
+  }
+  
+  void cursor_color(Fl_Color n) {
+    ((fltk3::TextDisplay*)_p)->cursor_color(fltk3::_1to3_color(n));
+  }
+  
+  int scrollbar_width() const { 
+    return ((fltk3::TextDisplay*)_p)->scrollbar_width();
+  }
+  
+  void scrollbar_width(int W) {
+    ((fltk3::TextDisplay*)_p)->scrollbar_width(W);
+  }
+  
+  Fl_Align scrollbar_align() const { 
+    return fltk3::_3to1_align( ((fltk3::TextDisplay*)_p)->scrollbar_align() );
+  }
+  
+  void scrollbar_align(Fl_Align a) { 
+    ((fltk3::TextDisplay*)_p)->scrollbar_align( fltk3::_1to3_align(a) );
+  }
+  
+  int word_start(int pos) const { 
+    return ((fltk3::TextDisplay*)_p)->word_start(pos);
+  }
+  
+  int word_end(int pos) const { 
+    return ((fltk3::TextDisplay*)_p)->word_end(pos); 
+  }
   
   void highlight_data(Fl_Text_Buffer *styleBuffer,
                       const Style_Table_Entry *styleTable,
                       int nStyles, char unfinishedStyle,
                       Unfinished_Style_Cb unfinishedHighlightCB,
-                      void *cbArg);
+                      void *cbArg) {
+    ((fltk3::TextDisplay*)_p)->highlight_data((fltk3::TextBuffer*)styleBuffer,
+                                              (fltk3::TextBuffer::StyleTableEntry*)styleTable,
+                                              nStyles, unfinishedStyle,
+                                              (fltk3::UnfinishedStyleCb)unfinishedHighlightCB,
+                                              cbArg);
+  }
   
-  int position_style(int lineStartPos, int lineLen, int lineIndex) const;
+  int position_style(int lineStartPos, int lineLen, int lineIndex) const {
+    return ((fltk3::TextDisplay*)_p)->position_style(lineStartPos, lineLen, lineIndex);
+  }
   
-  /** 
-   \todo FIXME : get set methods pointing on shortcut_ 
-   have no effects as shortcut_ is unused in this class and derived! 
-   \return the current shortcut key
-   */
-  int shortcut() const {return shortcut_;}
+  int shortcut() const {
+    return ((fltk3::TextDisplay*)_p)->shortcut();
+  }
   
-  /**
-   \todo FIXME : get set methods pointing on shortcut_ 
-   have no effects as shortcut_ is unused in this class and derived! 
-   \param s the new shortcut key
-   */
-  void shortcut(int s) {shortcut_ = s;}
+  void shortcut(int s) {
+    ((fltk3::TextDisplay*)_p)->shortcut(s);
+  }
   
-  /**
-   Gets the default font used when drawing text in the widget.
-   \return current text font face unless overridden by a style
-   */
-  Fl_Font textfont() const {return textfont_;}
+  Fl_Font textfont() const { 
+    return fltk3::_3to1_font( ((fltk3::TextDisplay*)_p)->textfont() ); 
+  }
   
-  /**
-   Sets the default font used when drawing text in the widget.
-   \param s default text font face
-   */
-  void textfont(Fl_Font s) {textfont_ = s; mColumnScale = 0;}
+  void textfont(Fl_Font font) { 
+    ((fltk3::TextDisplay*)_p)->font( fltk3::_1to3_font(font) );
+  }
   
-  /**
-   Gets the default size of text in the widget.
-   \return current text height unless overridden by a style
-   */
-  Fl_Fontsize textsize() const {return textsize_;}
+  Fl_Fontsize textsize() const { 
+    return fltk3::_3to1_fontsize( ((fltk3::TextDisplay*)_p)->textsize() );
+  }
   
-  /**
-   Sets the default size of text in the widget.
-   \param s new text size
-   */
-  void textsize(Fl_Fontsize s) {textsize_ = s; mColumnScale = 0;}
+  void textsize(Fl_Fontsize size) {
+    ((fltk3::TextDisplay*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+  }
   
-  /**
-   Gets the default color of text in the widget.
-   \return text color unless overridden by a style
-   */
-  Fl_Color textcolor() const {return textcolor_;}
+  Fl_Color textcolor() const { 
+    return fltk3::_3to1_color( ((fltk3::TextDisplay*)_p)->textcolor() );
+  }
   
-  /**
-   Sets the default color of text in the widget.
-   \param n new text color
-   */
-  void textcolor(Fl_Color n) {textcolor_ = n;}
+  void textcolor(Fl_Color col) { 
+    ((fltk3::TextDisplay*)_p)->textcolor( fltk3::_1to3_color(col) );
+  }
   
-  int wrapped_column(int row, int column) const;
-  int wrapped_row(int row) const;
-  void wrap_mode(int wrap, int wrap_margin);
+  int wrapped_column(int row, int column) const {
+    return ((fltk3::TextDisplay*)_p)->wrapped_column(row, column);
+  }
   
-  virtual void resize(int X, int Y, int W, int H);
+  int wrapped_row(int row) const {
+    return ((fltk3::TextDisplay*)_p)->wrapped_column(row);
+  }
+  
+  void wrap_mode(int wrap, int wrap_margin) {
+    ((fltk3::TextDisplay*)_p)->wrap_mode(wrap, wrap_margin);
+  }
+  
+  FLTK3_WRAPPER_VCALLS_OBJECT(TextDisplay, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
 
-  /**
-   Convert an x pixel position into a column number.
-   \param x number of pixels from the left margin
-   \return an approximate column number based on the main font
-   */
-  double x_to_col(double x) const;
+  double x_to_col(double x) const {
+    return ((fltk3::TextDisplay*)_p)->x_to_col(x);
+  }
   
-  /**
-   Convert a column number into an x pixel position.
-   \param col an approximate column number based on the main font
-   \return number of pixels from the left margin to the left of an
-	   average sized character
-   */
-  double col_to_x(double col) const;
+  double col_to_x(double col) const {
+    return ((fltk3::TextDisplay*)_p)->col_to_x(col);
+  }
   
 protected:
-  // Most (all?) of this stuff should only be called from resize() or
-  // draw().
-  // Anything with "vline" indicates thats it deals with currently
-  // visible lines.
   
-  virtual void draw();
-  void draw_text(int X, int Y, int W, int H);
-  void draw_range(int start, int end);
-  void draw_cursor(int, int);
+  FLTK3_WRAPPER_VCALLS_OBJECT(TextDisplay, draw(), draw(), Draw)
+
+  void draw_text(int X, int Y, int W, int H) {
+    ((fltk3::TextDisplay*)_p)->draw_text(X, Y, W, h);
+  }
   
-  void draw_string(int style, int x, int y, int toX, const char *string,
-                   int nChars) const;
+  void draw_range(int start, int end) {
+    ((fltk3::TextDisplay*)_p)->draw_range(start, end);
+  }
+  
+  void draw_cursor(int a, int b) {
+    ((fltk3::TextDisplay*)_p)->draw_cursor(a, b);
+  }
+  
+  void draw_string(int style, int x, int y, int toX, const char *string, int nChars) const {
+    ((fltk3::TextDisplay*)_p)->draw_string(style, x, y, toX, string, nChars);
+  }
   
   void draw_vline(int visLineNum, int leftClip, int rightClip,
-                  int leftCharIndex, int rightCharIndex);
+                  int leftCharIndex, int rightCharIndex) {
+    ((fltk3::TextDisplay*)_p)->draw_vline(visLineNum, leftClip, rightClip,
+                                          leftCharIndex, rightCharIndex);
+  }
   
-  int find_x(const char *s, int len, int style, int x) const;
+  int find_x(const char *s, int len, int style, int x) const {
+    return ((fltk3::TextDisplay*)_p)->find_x(s, len, style, x);
+  }
   
   enum { 
     DRAW_LINE, 
@@ -328,150 +334,167 @@ protected:
   int handle_vline(int mode, 
                    int lineStart, int lineLen, int leftChar, int rightChar,
                    int topClip, int bottomClip,
-                   int leftClip, int rightClip) const;
+                   int leftClip, int rightClip) const {
+    return ((fltk3::TextDisplay*)_p)->handle_vline(mode, 
+                                            lineStart, lineLen, leftChar, rightChar,
+                                            topClip, bottomClip,
+                                            leftClip, rightChar);
+  }
   
-  void draw_line_numbers(bool clearAll);
+  void draw_line_numbers(bool clearAll) {
+    ((fltk3::TextDisplay*)_p)->draw_line_numbers(clearAll);
+  }
   
-  void clear_rect(int style, int x, int y, int width, int height) const;
-  void display_insert();
+  void clear_rect(int style, int x, int y, int width, int height) const {
+    ((fltk3::TextDisplay*)_p)->clear_rect(style, x, y, width, height);
+  }
   
-  void offset_line_starts(int newTopLineNum);
+  void display_insert() {
+    ((fltk3::TextDisplay*)_p)->display_insert();
+  }
   
-  void calc_line_starts(int startLine, int endLine);
+  void offset_line_starts(int newTopLineNum) {
+    ((fltk3::TextDisplay*)_p)->offset_line_starts(newTopLineNum);
+  }
+  
+  void calc_line_starts(int startLine, int endLine) {
+    ((fltk3::TextDisplay*)_p)->calc_line_starts(startLine, endLine);
+  }
   
   void update_line_starts(int pos, int charsInserted, int charsDeleted,
-                          int linesInserted, int linesDeleted, int *scrolled);
+                          int linesInserted, int linesDeleted, int *scrolled) {
+    ((fltk3::TextDisplay*)_p)->update_line_starts(pos, charsInserted, charsDeleted,
+                                                  linesInserted, linesDeleted, scrolled);
+  }
   
-  void calc_last_char();
+  void calc_last_char() {
+    ((fltk3::TextDisplay*)_p)->calc_last_char();
+  }
   
-  int position_to_line( int pos, int* lineNum ) const;
-  double string_width(const char* string, int length, int style) const;
+  int position_to_line( int pos, int* lineNum ) const {
+    return ((fltk3::TextDisplay*)_p)->position_to_line(pos, lineNum);
+  }
   
-  static void scroll_timer_cb(void*);
+  double string_width(const char* string, int length, int style) const {
+    return ((fltk3::TextDisplay*)_p)->string_width(string, length, style);
+  }
   
-  static void buffer_predelete_cb(int pos, int nDeleted, void* cbArg);
+  static void scroll_timer_cb(void *v) {
+    fltk3::TextDisplay::scroll_timer_cb(v);
+  }
+  
+  static void buffer_predelete_cb(int pos, int nDeleted, void* cbArg) {
+    fltk3::TextDisplay::buffer_predelete_cb(pos, nDeleted, cbArg);
+  }
+  
   static void buffer_modified_cb(int pos, int nInserted, int nDeleted,
                                  int nRestyled, const char* deletedText,
-                                 void* cbArg);
+                                 void* cbArg) {
+    fltk3::TextDisplay::buffer_modified_cb(pos, nInserted, nDeleted,
+                                          nRestyled, deletedText,
+                                          cbArg);
+  }
   
-  static void h_scrollbar_cb(Fl_Scrollbar* w, Fl_Text_Display* d);
-  static void v_scrollbar_cb( Fl_Scrollbar* w, Fl_Text_Display* d);
-  void update_v_scrollbar();
-  void update_h_scrollbar();
-  int measure_vline(int visLineNum) const;
-  int longest_vline() const;
-  int empty_vlines() const;
-  int vline_length(int visLineNum) const;
-  int xy_to_position(int x, int y, int PosType = CHARACTER_POS) const;
   
-  void xy_to_rowcol(int x, int y, int* row, int* column,
-                    int PosType = CHARACTER_POS) const;
-  void maintain_absolute_top_line_number(int state);
-  int get_absolute_top_line_number() const;
-  void absolute_top_line_number(int oldFirstChar);
-  int maintaining_absolute_top_line_number() const;
-  void reset_absolute_top_line_number();
-  int position_to_linecol(int pos, int* lineNum, int* column) const;
-  int scroll_(int topLineNum, int horizOffset);
+  // FIXME: 123 - static void h_scrollbar_cb(Fl_Scrollbar* w, Fl_Text_Display* d);
+  // FIXME: 123 - static void v_scrollbar_cb( Fl_Scrollbar* w, Fl_Text_Display* d) {
+    
+  void update_v_scrollbar() {
+    ((fltk3::TextDisplay*)_p)->update_v_scrollbar();
+  }
   
-  void extend_range_for_styles(int* start, int* end);
+  void update_h_scrollbar() {
+    ((fltk3::TextDisplay*)_p)->update_h_scrollbar();
+  }
+  
+  int measure_vline(int visLineNum) const {
+    return ((fltk3::TextDisplay*)_p)->measure_vline(visLineNum);
+  }
+  
+  int longest_vline() const { 
+    return ((fltk3::TextDisplay*)_p)->longest_vline();
+  }
+  
+  int empty_vlines() const {
+    return ((fltk3::TextDisplay*)_p)->empty_vlines();
+  }
+  
+  int vline_length(int visLineNum) const {
+    return ((fltk3::TextDisplay*)_p)->vline_length(visLineNum);
+  }
+  
+  int xy_to_position(int x, int y, int PosType = CHARACTER_POS) const {
+    return ((fltk3::TextDisplay*)_p)->xy_to_position(x, y, PosType);
+  }
+  
+  void xy_to_rowcol(int x, int y, int* row, int* column, int PosType = CHARACTER_POS) const {
+    ((fltk3::TextDisplay*)_p)->xy_to_rowcol(x, y, row, column, PosType);
+  }
+  
+  void maintain_absolute_top_line_number(int state) {
+    ((fltk3::TextDisplay*)_p)->maintaining_absolute_top_line_number(state);
+  }
+  
+  int get_absolute_top_line_number() const {
+    return ((fltk3::TextDisplay*)_p)->get_absolute_top_line_number();
+  }
+  
+  void absolute_top_line_number(int oldFirstChar) {
+    ((fltk3::TextDisplay*)_p)->absolute_top_line_number();
+  }
+  
+  int maintaining_absolute_top_line_number() const {
+    return ((fltk3::TextDisplay*)_p)->maintaining_absolute_top_line_number();
+  }
+  
+  void reset_absolute_top_line_number() {
+    ((fltk3::TextDisplay*)_p)->reset_absolute_top_line_number();
+  }
+    
+  int position_to_linecol(int pos, int* lineNum, int* column) const {
+    return ((fltk3::TextDisplay*)_p)->position_to_linecol(pos, lineNum, column);
+  }
+  
+  int scroll_(int topLineNum, int horizOffset) {
+    return ((fltk3::TextDisplay*)_p)->scroll_(topLineNum, horizOffset);
+  }
+  
+  void extend_range_for_styles(int* start, int* end) {
+    ((fltk3::TextDisplay*)_p)->extend_range_for_styles(start, end);
+  }
   
   void find_wrap_range(const char *deletedText, int pos, int nInserted,
                        int nDeleted, int *modRangeStart, int *modRangeEnd,
                        int *linesInserted, int *linesDeleted);
-  void measure_deleted_lines(int pos, int nDeleted);
+  
+  void measure_deleted_lines(int pos, int nDeleted) {
+    ((fltk3::TextDisplay*)_p)->measure_deleted_lines(pos, nDeleted);
+  }
+  
   void wrapped_line_counter(Fl_Text_Buffer *buf, int startPos, int maxPos,
                             int maxLines, bool startPosIsLineStart,
                             int styleBufOffset, int *retPos, int *retLines,
                             int *retLineStart, int *retLineEnd,
-                            bool countLastLineMissingNewLine = true) const;
-  void find_line_end(int pos, bool start_pos_is_line_start, int *lineEnd,
-                     int *nextLineStart) const;
-  double measure_proportional_character(const char *s, int colNum, int pos) const;
-  int wrap_uses_character(int lineEndPos) const;
+                            bool countLastLineMissingNewLine = true) const {
+    ((fltk3::TextDisplay*)_p)->wrapped_line_counter((fltk3::TextBuffer*)buf,
+                                                    startPos, maxPos,
+                                                    maxLines, startPosIsLineStart,
+                                                    styleBufOffset, retPos, retLines,
+                                                    retLineStart, retLineEnd,
+                                                    countLastLineMissingNewLine);
+  }
   
-  int damage_range1_start, damage_range1_end;
-  int damage_range2_start, damage_range2_end;
-  int mCursorPos;
-  int mCursorOn;
-  int mCursorOldY;              /* Y pos. of cursor for blanking */
-  int mCursorToHint;            /* Tells the buffer modified callback
-                                 where to move the cursor, to reduce
-                                 the number of redraw calls */
-  int mCursorStyle;             /* One of enum cursorStyles above */
-  int mCursorPreferredXPos;     /* Pixel position for vert. cursor movement */
-  int mNVisibleLines;           /* # of visible (displayed) lines */
-  int mNBufferLines;            /* # of newlines in the buffer */
-  Fl_Text_Buffer* mBuffer;      /* Contains text to be displayed */
-  Fl_Text_Buffer* mStyleBuffer; /* Optional parallel buffer containing
-                                 color and font information */
-  int mFirstChar, mLastChar;    /* Buffer positions of first and last
-                                 displayed character (lastChar points
-                                 either to a newline or one character
-                                 beyond the end of the buffer) */
-  int mContinuousWrap;          /* Wrap long lines when displaying */
-  int mWrapMarginPix; 	    	/* Margin in # of pixels for
-                                 wrapping in continuousWrap mode */
-  int* mLineStarts;
-  int mTopLineNum;              /* Line number of top displayed line
-                                 of file (first line of file is 1) */
-  int mAbsTopLineNum;           /* In continuous wrap mode, the line
-                                  number of the top line if the text
-                                  were not wrapped (note that this is
-                                  only maintained as needed). */
-  int mNeedAbsTopLineNum;       /* Externally settable flag to continue
-                                 maintaining absTopLineNum even if
-                                 it isn't needed for line # display */
-  int mHorizOffset;             /* Horizontal scroll pos. in pixels */
-  int mTopLineNumHint;          /* Line number of top displayed line
-                                 of file (first line of file is 1) */
-  int mHorizOffsetHint;         /* Horizontal scroll pos. in pixels */
-  int mNStyles;                 /* Number of entries in styleTable */
-  const Style_Table_Entry *mStyleTable; /* Table of fonts and colors for
-                                         coloring/syntax-highlighting */
-  char mUnfinishedStyle;        /* Style buffer entry which triggers
-                                 on-the-fly reparsing of region */
-  Unfinished_Style_Cb mUnfinishedHighlightCB; /* Callback to parse "unfinished" */
-  /* regions */
-  void* mHighlightCBArg;        /* Arg to unfinishedHighlightCB */
+  void find_line_end(int pos, bool start_pos_is_line_start, int *lineEnd, int *nextLineStart) const {
+    ((fltk3::TextDisplay*)_p)->find_line_end(pos, start_pos_is_line_start, lineEnd, nextLineStart);
+  }
   
-  int mMaxsize;
+  double measure_proportional_character(const char *s, int colNum, int pos) const {
+    return ((fltk3::TextDisplay*)_p)->measure_proportional_character(s, colNum, pos);
+  }
   
-  int mSuppressResync;          /* Suppress resynchronization of line
-                                 starts during buffer updates */
-  int mNLinesDeleted;           /* Number of lines deleted during
-                                 buffer modification (only used
-                                 when resynchronization is suppressed) */
-  int mModifyingTabDistance;    /* Whether tab distance is being
-                                 modified */
+  int wrap_uses_character(int lineEndPos) const {
+    return ((fltk3::TextDisplay*)_p)->wrap_uses_character(lineEndPos);
   
-  mutable double mColumnScale; /* Width in pixels of an average character. This
-                                 value is calculated as needed (lazy eval); it 
-                                 needs to be mutable so that it can be calculated
-                                 within a method marked as "const" */
-  
-  Fl_Color mCursor_color;
-  
-  Fl_Scrollbar* mHScrollBar;
-  Fl_Scrollbar* mVScrollBar;
-  int scrollbar_width_;
-  Fl_Align scrollbar_align_;
-  int dragPos, dragType, dragging;
-  int display_insert_position_hint;
-  struct { int x, y, w, h; } text_area;
-  
-  int shortcut_;
-  
-  Fl_Font textfont_;
-  Fl_Fontsize textsize_;
-  Fl_Color textcolor_;
-  
-  // The following are not presently used from the original NEdit code,
-  // but are being put here so that future versions of Fl_Text_Display
-  // can implement line numbers without breaking binary compatibility.
-  
-  /* Line number margin and width */
-  int mLineNumLeft, mLineNumWidth;
 };
 
 #endif
