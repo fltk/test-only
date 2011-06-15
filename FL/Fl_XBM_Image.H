@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // XBM image header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,23 +26,26 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_XBM_Image class . */
-
 #ifndef Fl_XBM_Image_H
 #define Fl_XBM_Image_H
-#  include "Fl_Bitmap.H"
 
-/**
-  The Fl_XBM_Image class supports loading, caching,
-  and drawing of X Bitmap (XBM) bitmap files.
-*/
+#include <fltk3/XBMImage.h>
+#include "Fl_Bitmap.H"
+
+
 class FL_EXPORT Fl_XBM_Image : public Fl_Bitmap {
 
-  public:
+public:
 
-  Fl_XBM_Image(const char* filename);
+  Fl_XBM_Image() {}
+  
+  Fl_XBM_Image(const char* filename) {
+    _p = new fltk3::XBMImage(filename);
+    _p->wrapper(this);
+  }
+  
 };
+
 
 #endif // !Fl_XBM_Image_H
 

@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // XPM image header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,24 +26,26 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-  
-   Fl_XPM_Image class . */
-
 #ifndef Fl_XPM_Image_H
 #define Fl_XPM_Image_H
-#  include "Fl_Pixmap.H"
 
-/**
-  The Fl_XPM_Image class supports loading, caching,
-  and drawing of X Pixmap (XPM) images, including transparency.
-*/
+#include <fltk3/XPMImage.h>
+#include "Fl_Pixmap.H"
+
+
 class FL_EXPORT Fl_XPM_Image : public Fl_Pixmap {
 
-  public:
+public:
 
-  Fl_XPM_Image(const char* filename);
+  Fl_XPM_Image() {}
+  
+  Fl_XPM_Image(const char* filename) {
+    _p = new fltk3::XPMImage(filename);
+    _p->wrapper(this);
+  }
+  
 };
+
 
 #endif // !Fl_XPM_Image
 
