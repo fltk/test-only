@@ -3,7 +3,7 @@
 //
 // Definition of classes Fl_Device, Fl_Graphics_Driver, Fl_Surface_Device, 
 // Fl_Display_Device for the Fast Light Tool Kit (FLTK).
-// FLTK 123 wrapper finished
+// FLTK 123 wrapper started
 //
 // Copyright 2010-2011 by Bill Spitzak and others.
 //
@@ -31,6 +31,7 @@
 #define Fl_Device_H
 
 #include <fltk3/Device.h>
+#include <fltk3/Wrapper.h>
 
 #if 0 // FIXME: 123
 
@@ -41,7 +42,11 @@
 #include <FL/Fl_Pixmap.H>
 #include <FL/Fl_RGB_Image.H>
 
+#endif
+
 class Fl_Graphics_Driver;
+
+#if 0
 class Fl_Font_Descriptor;
 FL_EXPORT extern Fl_Graphics_Driver *fl_graphics_driver;
 #endif
@@ -63,31 +68,25 @@ typedef short COORD_T;
 #  define XPOINT XPoint
 #endif
 
-/**
- \brief All graphical output devices and all graphics systems.
- */
-class FL_EXPORT Fl_Device {
+#endif // 123
+
+
+class FL_EXPORT Fl_Device : public fltk3::Wrapper {
+
+protected:
+  
+  Fl_Device() { /* don't call me */ }
+
 public:
-  /** A string that identifies each subclass of Fl_Device.
-     Function class_name() applied to a device of this class returns this string.
-   */
-  static const char *class_id;
-  /** 
-   Returns the name of the class of this object. 
-   The class of an instance of an Fl_Device subclass can be checked with code such as:
-   \code
-   if ( instance->class_name() == Fl_Printer::class_id ) { ... }
-   \endcode
-   */
-  virtual const char *class_name() {return class_id;};
-  /** 
-   Virtual destructor.
-   
-   The destructor of Fl_Device must be virtual to make the destructors of
-   derived classes being called correctly on destruction.
-   */
-  virtual ~Fl_Device() {};
+
+  virtual const char *class_name() {
+    return ((fltk3::Device*)_p)->class_name();
+  }  
+  
 };
+
+
+#if 0 // 123
 
 #define FL_REGION_STACK_SIZE 10
 #define FL_MATRIX_STACK_SIZE 32
@@ -105,7 +104,7 @@ public:
    */
   struct matrix {double a, b, c, d, x, y;};
 private:
-  static const matrix m0;
+  tatic const matrix m0;
   Fl_Font font_; // current font
   Fl_Fontsize size_; // current font size
   Fl_Color color_; // current color
@@ -485,29 +484,41 @@ public:
 };
 #endif
 
-/**
- \brief A surface that's susceptible to receive graphical output.
- */
+#endif // 123
+
 class FL_EXPORT Fl_Surface_Device : public Fl_Device {
-  /** \brief The graphics driver in use by this surface. */
-  Fl_Graphics_Driver *_driver;
-  static Fl_Surface_Device *_surface; // the surface that currently receives graphics output
+
 protected:
-  /** \brief Constructor that sets the graphics driver to use for the created surface. */
-  Fl_Surface_Device(Fl_Graphics_Driver *graphics_driver) {_driver = graphics_driver; };
+
+  Fl_Surface_Device(Fl_Graphics_Driver*) {
+    /* empty */
+  }
+
 public:
-  static const char *class_id;
-  const char *class_name() {return class_id;};
-  virtual void set_current(void);
-  /** \brief Sets the graphics driver of this drawing surface. */
-  inline void driver(Fl_Graphics_Driver *graphics_driver) {_driver = graphics_driver;};
-  /** \brief Returns the graphics driver of this drawing surface. */
-  inline Fl_Graphics_Driver *driver() {return _driver; };
-  /** \brief the surface that currently receives graphics output */
-  static inline Fl_Surface_Device *surface() {return _surface; }; 
-  /** \brief The destructor. */
-  virtual ~Fl_Surface_Device() {}
+  
+  const char *class_name() {
+    return ((fltk3::SurfaceDevice*)_p)->class_name();
+  }
+  
+  virtual void set_current(void) {
+    ((fltk3::SurfaceDevice*)_p)->set_current();
+  }
+
+  void driver(Fl_Graphics_Driver *d) {
+    ((fltk3::SurfaceDevice*)_p)->driver((fltk3::GraphicsDriver*)d);
+  }
+  
+  Fl_Graphics_Driver *driver() {
+    return (Fl_Graphics_Driver*)((fltk3::SurfaceDevice*)_p)->driver();
+  }
+  
+  static Fl_Surface_Device *surface() {
+    return (Fl_Surface_Device*)fltk3::SurfaceDevice::surface(); 
+  }
+  
 };
+
+#if 0 // 123
 
 /**
  \brief A display to which the computer can draw.

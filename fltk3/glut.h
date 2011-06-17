@@ -45,6 +45,8 @@
 #include "run.h"
 #include "GlWindow.h"
 
+class Fl_Glut_Window;
+
 namespace fltk3 {
   
   /** 
@@ -52,6 +54,9 @@ namespace fltk3 {
    (plus several more static variables hidden in glut_compatability.cxx):
    */
   class FLTK3_EXPORT GlutWindow : public GlWindow {
+
+    friend class ::Fl_Glut_Window;
+
     void _init();
     int mouse_down;
   protected:

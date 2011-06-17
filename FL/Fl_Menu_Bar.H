@@ -43,6 +43,8 @@ public:
   
   FLTK3_WRAPPER_VCALLS_OBJECT_INT(MenuBar, handle(int event), handle(event), Handle)
 
+  Fl_Menu_Bar() {}
+
   Fl_Menu_Bar(int X, int Y, int W, int H,const char *l=0) {
     _p = new fltk3::MenuBar(X, Y, W, H, l);
     _p->wrapper(this);

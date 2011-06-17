@@ -814,7 +814,7 @@ int main(int argc, char** argv)
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
   glutCreateWindow("Fractal Planet?");
   window.end();
-  window.resizable(glut_window);
+  window.resizable(fltk1_glut_window());
 
   agvInit(1); /* 1 cause we don't have our own idle */
 

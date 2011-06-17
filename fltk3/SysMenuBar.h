@@ -31,6 +31,8 @@
 #include "MenuBar.h"
 #include "x.h"
 
+class Fl_Sys_Menu_Bar;
+
 namespace fltk3 {
   
 #if defined(__APPLE__) || defined(FLTK3_DOXYGEN)
@@ -41,6 +43,9 @@ namespace fltk3 {
    * On other than Mac OS X platforms, fltk3::SysMenuBar is a synonym of class fltk3::MenuBar.
    */
   class FLTK3_EXPORT SysMenuBar : public fltk3::MenuBar {
+
+    friend class ::Fl_Sys_Menu_Bar;
+
   protected:
     void draw();
   public:

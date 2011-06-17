@@ -58,15 +58,15 @@ namespace fltk3 {
   void *_wrapper(Widget*);
   void *_wrapper(Window*);
   void *_wrapper(Group*);
-  inline Fl_Widget *_3to1_widget(Widget *w) { return (Fl_Widget*)_wrapper(w); }
-  inline Fl_Window *_3to1_window(Window *w) { return (Fl_Window*)_wrapper(w); }
-  inline Fl_Group  *_3to1_group(Group *w) { return (Fl_Group*)_wrapper(w); }
+  inline Fl_Widget *_3to1_widget(Widget *w) { return w?(Fl_Widget*)_wrapper(w):0; }
+  inline Fl_Window *_3to1_window(Window *w) { return w?(Fl_Window*)_wrapper(w):0; }
+  inline Fl_Group  *_3to1_group(Group *w) { return w?(Fl_Group*)_wrapper(w):0; }
   void *_object(Fl_Widget *w);
   void *_object(Fl_Window *w);
   void *_object(Fl_Group *w);
-  inline Widget *_1to3_widget(Fl_Widget *w) { return (fltk3::Widget*)_object(w); }
-  inline Window *_1to3_window(Fl_Window *w) { return (fltk3::Window*)_object(w); }
-  inline Group  *_1to3_group(Fl_Group *w) { return (fltk3::Group*)_object(w); }
+  inline Widget *_1to3_widget(Fl_Widget *w) { return w?(fltk3::Widget*)_object(w):0; }
+  inline Window *_1to3_window(Fl_Window *w) { return w?(fltk3::Window*)_object(w):0; }
+  inline Group  *_1to3_group(Fl_Group *w) { return w?(fltk3::Group*)_object(w):0; }
 }
 
 

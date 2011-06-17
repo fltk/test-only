@@ -1,8 +1,8 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
 // Copyright 1998-2011 by Bill Spitzak and others.
 //
@@ -26,42 +26,32 @@
 //     http://www.fltk.org/str.php
 //
 
-// Emulation of GLUT using fltk.
-
-// GLUT is Copyright (c) Mark J. Kilgard, 1994, 1995, 1996:
-// "This program is freely distributable without licensing fees  and is
-// provided without guarantee or warrantee expressed or  implied. This
-// program is -not- in the public domain."
-
-// Although I have copied the GLUT API, none of my code is based on
-// any GLUT implementation details and is therefore covered by the LGPL.
-
-// Commented out lines indicate parts of GLUT that are not emulated.
-
 #ifndef Fl_glut_H
-#  define Fl_glut_H
+#define Fl_glut_H
 
-#  include "gl.h"
+#include <fltk3/glut.h>
+#include "gl.h"
+#include "Fl.H"
+#include "Fl_Gl_Window.H"
 
 
-#  include "Fl.H"
-#  include "Fl_Gl_Window.H"
-
-/** 
-  GLUT is emulated using this window class and these static variables
-  (plus several more static variables hidden in glut_compatability.cxx):
-*/
 class FL_EXPORT Fl_Glut_Window : public Fl_Gl_Window {
-  void _init();
-  int mouse_down;
+
 protected:
-  void draw();
-  void draw_overlay();
-  int handle(int);
-public: // so the inline functions work
-  int number;
-  int menu[3];
-  void make_current();
+
+  FLTK3_WRAPPER_VCALLS_OBJECT(GlutWindow, draw(), draw(), Draw)
+
+  FLTK3_WRAPPER_VCALLS_OBJECT(OverlayWindow, draw_overlay(), draw_overlay(), DrawOverlay)
+
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(GlutWindow, handle(int event), handle(event), Handle)
+
+public:
+
+  void make_current() {
+    ((fltk3::GlutWindow*)_p)->make_current();
+  }
+  
+#if 0 // FIXME: 123 - can't wrap
   void (*display)();
   void (*overlaydisplay)();
   void (*reshape)(int w, int h);
@@ -72,11 +62,25 @@ public: // so the inline functions work
   void (*entry)(int);
   void (*visibility)(int);
   void (*special)(int, int x, int y);
-  Fl_Glut_Window(int w, int h, const char *);
-  Fl_Glut_Window(int x, int y, int w, int h, const char *);
-  ~Fl_Glut_Window();
+#endif
+  
+  Fl_Glut_Window(int w, int h, const char *l) {
+    _p = new fltk3::GlutWindow(w, h, l);
+    _p->wrapper(this);
+  }
+  
+  Fl_Glut_Window(int x, int y, int w, int h, const char *l) {
+    _p = new fltk3::GlutWindow(x, y, w, h, l);
+    _p->wrapper(this);
+  }
+  
 };
 
+inline Fl_Glut_Window *fltk1_glut_window() {
+  return (Fl_Glut_Window*)fltk3::_3to1_window(glut_window);
+}
+
+#if 0 // FIXME: 123
 extern FL_EXPORT Fl_Glut_Window *glut_window;	// the current window
 extern FL_EXPORT int glut_menu;			// the current menu
 
@@ -85,14 +89,10 @@ extern FL_EXPORT void (*glut_idle_function)();
 extern FL_EXPORT void (*glut_menustate_function)(int);
 extern FL_EXPORT void (*glut_menustatus_function)(int,int,int);
 
-////////////////////////////////////////////////////////////////
-
-//#  define GLUT_API_VERSION This does not match any version of GLUT exactly...
-
 FL_EXPORT void glutInit(int *argcp, char **argv); // creates first window
 
 FL_EXPORT void glutInitDisplayMode(unsigned int mode);
-// the FL_ symbols have the same value as the GLUT ones:
+
 #  define GLUT_RGB	FL_RGB
 #  define GLUT_RGBA	FL_RGB
 #  define GLUT_INDEX	FL_INDEX
@@ -484,6 +484,8 @@ FL_EXPORT void glutWireTetrahedron();
 FL_EXPORT void glutSolidTetrahedron();
 FL_EXPORT void glutWireIcosahedron();
 FL_EXPORT void glutSolidIcosahedron();
+
+#endif
 
 #endif // !Fl_glut_H
 

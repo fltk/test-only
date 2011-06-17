@@ -34,6 +34,7 @@
 #define Fltk3_Device_H
 
 #include <fltk3/x.h>
+#include <fltk3/Object.h>
 #include <fltk3/Plugin.h>
 #include <fltk3/Image.h>
 #include <fltk3/Bitmap.h>
@@ -78,7 +79,7 @@ namespace fltk3 {
   /**
    \brief All graphical output devices and all graphics systems.
    */
-  class FLTK3_EXPORT Device {
+  class FLTK3_EXPORT Device : public Object {
   public:
     /** A string that identifies each subclass of fltk3::Device.
      Function class_name() applied to a device of this class returns this string.

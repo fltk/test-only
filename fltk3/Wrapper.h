@@ -31,7 +31,7 @@
 #ifndef FLTK3_Wrapper_H
 #define FLTK3_Wrapper_H
 
-#include <fltk3/Widget.h>
+#include <fltk3/Window.h>
 
 /*
  FLTK3_OBJECT_VCALLS_WRAPPER:
@@ -132,6 +132,7 @@ namespace fltk3 {
     static const unsigned int pVCallWidgetResize  = 1<<3;
     static const unsigned int pVCallWidgetShow    = 1<<4;
     static const unsigned int pVCallWidgetHide    = 1<<5;
+    static const unsigned int pVCallWidgetDrawOverlay = 1<<6;
   };
   
   
@@ -175,6 +176,10 @@ namespace fltk3 {
                                 hide(),
                                 hide(),
                                 Hide)
+    FLTK3_WRAPPER_VCALLS_OBJECT(Window,
+                                draw_overlay(),
+                                draw_overlay(),
+                                DrawOverlay)
   };
   
   

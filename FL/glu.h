@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // GLu header file for the Fast Light Tool Kit (FLTK).
+// FLTK 3 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // You must include this instead of GL/gl.h to get the Microsoft
 // APIENTRY stuff included (from <windows.h>) prior to the OpenGL
@@ -34,25 +34,10 @@
 //
 
 #ifndef FL_glu_H
-#  define FL_glu_H
+#define FL_glu_H
 
-#  include "Enumerations.H" // for color names
-#  ifdef WIN32
-#    include <windows.h>
-#  endif
-#  ifndef APIENTRY
-#    if defined(__CYGWIN__)
-#      define APIENTRY __attribute__ ((__stdcall__))
-#    else
-#      define APIENTRY
-#    endif
-#  endif
-
-#  ifdef __APPLE__
-#    include <OpenGL/glu.h>
-#  else
-#    include <GL/glu.h>
-#  endif
+#include "Enumerations.H" // for color names
+#include <fltk3/glu.h>
 
 #endif // !FL_glu_H
 

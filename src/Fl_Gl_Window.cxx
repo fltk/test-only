@@ -513,7 +513,9 @@ void fltk3::GlWindow::init() {
   and on whether overlays are real or simulated, the OpenGL context may
   be the same or different between the overlay and main window.
 */
-void fltk3::GlWindow::draw_overlay() {}
+void fltk3::GlWindow::draw_overlay() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw_overlay(), DrawOverlay)
+}
 
 #endif
 

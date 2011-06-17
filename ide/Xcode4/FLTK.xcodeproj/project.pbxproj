@@ -6557,6 +6557,7 @@
 				D585CB55BDA143D343033352 /* Fl_Output.H */,
 				1FCDDD4E00F7CAA8193CAE04 /* Fl_Overlay_Window.H */,
 				52C3B1D0A473BDC01D497917 /* Fl_Pack.H */,
+				4CABCBB89F9DD5CF57BB9779 /* Fl_Paged_Device.H */,
 				B8455C1BD96FF6FB3C197C34 /* Fl_Pixmap.H */,
 				A8F89055CABBCFECCC4CC940 /* Fl_Plugin.H */,
 				20A898FCF6349F72BABDC497 /* Fl_Positioner.H */,
@@ -6624,7 +6625,6 @@
 				D5CE28437ABB8513BE08AC77 /* names.h */,
 				62281FC096BA407C4F1E6824 /* win32.H */,
 				83CED42A779FA76E98D37CA8 /* x.H */,
-				4CABCBB89F9DD5CF57BB9779 /* Fl_Paged_Device.H */,
 			);
 			name = Headers1;
 			sourceTree = "<group>";

@@ -104,7 +104,7 @@ public:
   }
   
   Fl_Mode mode() const {
-    ((fltk3::GlWindow*)_p)->mode();
+    return (Fl_Mode)((fltk3::GlWindow*)_p)->mode();
   }
   
   int mode(int a) {

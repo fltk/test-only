@@ -33,6 +33,10 @@
 
 #include "Valuator.h"
 
+
+class Fl_Roller;
+
+
 namespace fltk3 {
   
   /**
@@ -42,6 +46,9 @@ namespace fltk3 {
    \image latex fltk3::Roller.png "fltk3::Roller" width=4cm
    */
   class FLTK3_EXPORT Roller : public fltk3::Valuator {
+
+    friend class ::Fl_Roller;
+
   protected:
     void draw();
   public:

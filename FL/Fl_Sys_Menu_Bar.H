@@ -39,8 +39,8 @@ class FL_EXPORT Fl_Sys_Menu_Bar : public Fl_Menu_Bar {
   
 protected:
   
-  void draw();
-  
+  FLTK3_WRAPPER_VCALLS_OBJECT(SysMenuBar, draw(), draw(), Draw)
+ 
 public:
 
   Fl_Sys_Menu_Bar(int x,int y,int w,int h,const char *l=0) {
@@ -53,11 +53,11 @@ public:
   }
   
   int add(const char* label, int shortcut, Fl_Callback *cb, void *user_data=0, int flags=0) {
-    return ((fltk3::SysMenuBar*)_p)->add(label, shortcut, cb, user_data, flags);
+    return ((fltk3::SysMenuBar*)_p)->add(label, shortcut, (fltk3::Callback*)cb, user_data, flags);
   }
   
   int insert(int index, const char* label, int shortcut, Fl_Callback *cb, void *user_data=0, int flags=0) {
-    return ((fltk3::SysMenuBar*)_p)->insert(index, label, shortcut, cb, user_data, flags);
+    return ((fltk3::SysMenuBar*)_p)->insert(index, label, shortcut, (fltk3::Callback*)cb, user_data, flags);
   }
   
   void remove(int n) {

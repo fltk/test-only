@@ -191,7 +191,7 @@ int main(int argc, char **argv) {
 
   int i=0;
   if (Fl::args(argc,argv,i,arg) < argc)
-    Fl::fatal("Options are:\n -2 = 2 windows\n -f = startup fullscreen\n%s",Fl::help);
+    Fl::fatal("Options are:\n -2 = 2 windows\n -f = startup fullscreen\n%s",Fl::help_text());
 
   Fl_Single_Window window(300,300+30*NUMB); window.end();
 

@@ -63,6 +63,7 @@ namespace fltk3 {
   class FLTK3_EXPORT Window : public Group {
 
     friend class ::Fl_Window;
+    friend class WidgetWrapper;
     
     static char *default_xclass_;
     
@@ -91,6 +92,10 @@ namespace fltk3 {
     /** Stores the last window that was made current. See current() const */
     static Window *current_;
     virtual void draw();
+
+    /* only needed by derived classes */
+    virtual void draw_overlay() {}
+
     /** Forces the window to be drawn, this window is also made current and calls draw(). */
     virtual void flush();
     
