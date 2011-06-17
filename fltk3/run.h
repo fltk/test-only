@@ -125,7 +125,7 @@ namespace fltk3 {
   extern int e_state;
   extern int e_clicks;
   extern int e_is_click;
-  extern int e_keysym;
+  extern unsigned int e_keysym;
   extern char* e_text;
   extern int e_length;
   extern fltk3::EventDispatch e_dispatch;
@@ -564,7 +564,7 @@ namespace fltk3 {
    \retval fltk3::LEFT_MOUSE \retval fltk3::MIDDLE_MOUSE \retval fltk3::RIGHT_MOUSE.
    \see fltk3::event_buttons()
    */
-  inline int event_button()	{return e_keysym-fltk3::MouseButton;}
+  inline unsigned int event_button()	{return e_keysym-fltk3::MouseButton;}
   /**
    This is a bitfield of what shift states were on and what mouse buttons
    were held down during the most recent event. The second version
@@ -602,7 +602,7 @@ namespace fltk3 {
    \returns an integer 'key code', or 0 if the last event was not a key press or release.
    \see int event_key(int), event_text(), compose(int&).
    */
-  inline int event_key()	{return e_keysym;}
+  inline unsigned int event_key()	{return e_keysym;}
   /**
    Returns the keycode of the last key event, regardless of the NumLock state.
    

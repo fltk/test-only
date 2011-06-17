@@ -33,6 +33,11 @@
 
 #include "Widget.h"
 
+
+class Fl_Clock;
+class Fl_Clock_Output;
+
+
 namespace fltk3 {
   
   // values for type:
@@ -61,6 +66,9 @@ namespace fltk3 {
    \image latex round_clock.png "fltk3::ROUND_CLOCK type" width=4cm
    */
   class FLTK3_EXPORT ClockOutput : public Widget {
+
+    friend class ::Fl_Clock_Output;
+
     int hour_, minute_, second_;
     ulong value_;
     void drawhands(fltk3::Color,fltk3::Color); // part of draw
@@ -120,6 +128,9 @@ namespace fltk3 {
    \image latex round_clock.png "fltk3::ROUND_CLOCK type" width=4cm
    */
   class FLTK3_EXPORT Clock : public ClockOutput {
+
+    friend class ::Fl_Clock;
+
   public:
     int handle(int);
     

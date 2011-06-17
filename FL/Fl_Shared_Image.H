@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Shared image header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,27 +26,17 @@
 //     http://www.fltk.org/str.php
 //
 
-/** \file
-   Fl_Shared_Image class. */
-
 #ifndef Fl_Shared_Image_H
-#  define Fl_Shared_Image_H
+#define Fl_Shared_Image_H
 
-#  include "Fl_Image.H"
+#include <fltk3/SharedImage.h>
+#include "Fl_Image.H"
 
+#if 0 // FIXME: 123
 
-// Test function for adding new formats
 typedef Fl_Image *(*Fl_Shared_Handler)(const char *name, uchar *header,
                                        int headerlen);
 
-// Shared images class. 
-/**
-  This class supports caching, loading,
-  and drawing of image files. Most applications will also want to
-  link against the fltk_images library and call the
-  fl_register_images()
-  function to support standard image formats such as BMP, GIF, JPEG, and PNG.
-*/
 class FL_EXPORT Fl_Shared_Image : public Fl_Image {
   
   friend class Fl_JPEG_Image;
@@ -107,6 +97,8 @@ protected:
 //
 
 FL_EXPORT extern void fl_register_images();
+
+#endif
 
 #endif // !Fl_Shared_Image_H
 

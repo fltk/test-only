@@ -124,7 +124,7 @@ void sort_cb(Fl_Widget *, void *) {
 
 int main(int argc, char **argv) {
   int i;
-  if (!Fl::args(argc,argv,i)) Fl::fatal(Fl::help);
+  if (!Fl::args(argc,argv,i)) Fl::fatal(Fl::help_text());
   const char* fname = (i < argc) ? argv[i] : "browser.cxx";
   Fl_Double_Window window(480,400,fname);
   browser = new Fl_Select_Browser(0,0,480,350,0);

@@ -46,7 +46,7 @@ public:
   }
 
   int item_pathname(char *name, int namelen, const Fl_Menu_Item *finditem=0) const {
-    return ((fltk3::Menu_*)_p)->item_pathname(name, nameLen, fintitem);
+    return ((fltk3::Menu_*)_p)->item_pathname(name, namelen, (const fltk3::MenuItem*)finditem);
   }
   
   const Fl_Menu_Item* picked(const Fl_Menu_Item *i) {
@@ -70,7 +70,7 @@ public:
   }
   
   int find_index(Fl_Callback *cb) const {
-    return ((fltk3::Menu_*)_p)->find_index( fltk3::Callback(cb) );
+    return ((fltk3::Menu_*)_p)->find_index( (fltk3::Callback*)cb );
   }
                                            
   const Fl_Menu_Item* test_shortcut() {
@@ -150,7 +150,7 @@ public:
   }
   
   const Fl_Menu_Item *mvalue() const {
-    return (fltk3::MenuItem*) ((fltk3::Menu_*)_p)->mvalue();
+    return (const Fl_Menu_Item*) ((const fltk3::Menu_*)_p)->mvalue();
   }
   
   int value() const {
@@ -178,7 +178,7 @@ public:
   }
   
   void textfont(Fl_Font font) { 
-    ((fltk3::Menu_*)_p)->font( fltk3::_1to3_font(font) );
+    ((fltk3::Menu_*)_p)->textfont( fltk3::_1to3_font(font) );
   }
   
   Fl_Fontsize textsize() const { 
@@ -186,7 +186,7 @@ public:
   }
   
   void textsize(Fl_Fontsize size) {
-    ((fltk3::Menu_*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+    ((fltk3::Menu_*)_p)->textsize( fltk3::_1to3_fontsize(size) );
   }
   
   Fl_Color textcolor() const { 

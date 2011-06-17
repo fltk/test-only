@@ -33,6 +33,10 @@
 
 #include "Button.h"
 
+
+class Fl_Return_Button;
+
+
 namespace fltk3 {
   /**
    The fltk3::ReturnButton is a subclass of fltk3::Button that
@@ -42,6 +46,9 @@ namespace fltk3 {
    \image latex fltk3::ReturnButton.png "fltk3::ReturnButton" width=4cm
    */
   class FLTK3_EXPORT ReturnButton : public Button {
+
+    friend class ::Fl_Return_Button;
+
   protected:
     void draw();
   public:

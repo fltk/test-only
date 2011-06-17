@@ -33,6 +33,8 @@
 
 #include "Menu_.h"
 
+class Fl_Menu_Bar;
+
 namespace fltk3 {
   
   /**
@@ -62,6 +64,9 @@ namespace fltk3 {
    callbacks exactly the same as when you pick the item with the mouse.
    */
   class FLTK3_EXPORT MenuBar : public fltk3::Menu_ {
+
+    friend class ::Fl_Menu_Bar;
+
   protected:
     void draw();
   public:

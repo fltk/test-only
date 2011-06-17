@@ -46,7 +46,7 @@ public:
   Fl_Return_Button() {}
   
   Fl_Return_Button(int X, int Y, int W, int H,const char *l=0) {
-    _p = new fltk3::ReturnButton(x, y, w, h, label);
+    _p = new fltk3::ReturnButton(X, Y, W, H, l);
     _p->wrapper(this);
   }
 

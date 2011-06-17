@@ -42,7 +42,7 @@ protected:
   FLTK3_WRAPPER_VCALLS_OBJECT_INT(Adjuster, handle(int event), handle(event), Handle)
     
   void value_damage() {
-    ((fltk3::Ajuster*)_p)->value_damage();
+    ((fltk3::Adjuster*)_p)->value_damage();
   }
   
 public:
@@ -55,11 +55,11 @@ public:
   }
 
   void soft(int s) {
-    ((fltk3::Ajuster*)_p)->soft(s);
+    ((fltk3::Adjuster*)_p)->soft(s);
   }
   
   int soft() const {
-    return ((fltk3::Ajuster*)_p)->soft();
+    return ((fltk3::Adjuster*)_p)->soft();
   }
 };
 

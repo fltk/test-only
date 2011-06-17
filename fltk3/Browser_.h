@@ -28,14 +28,14 @@
 /* \file
  fltk3::Browser_ widget . */
 
-// Yes, I know this should be a template...
-
 #ifndef Fltk3_Browser__H
 #define Fltk3_Browser__H
 
 #include "Group.h"
 #include "Scrollbar.h"
 #include <fltk3/run.h>		// fltk3::scrollbar_size()
+
+class Fl_Browser_;
 
 namespace fltk3 {
   
@@ -65,6 +65,9 @@ namespace fltk3 {
    other slow operation.
    */
   class FLTK3_EXPORT Browser_ : public fltk3::Group {
+
+    friend class ::Fl_Browser_;
+
     int position_;	// where user wants it scrolled to
     int real_position_;	// the current vertical scrolling position
     int hposition_;	// where user wants it panned to

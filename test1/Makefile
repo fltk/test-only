@@ -103,7 +103,7 @@ CPPFILES =\
 	utf8.cxx
 
 ALL =	\
-	unittests$(EXEEXT) \
+#	unittests$(EXEEXT) \
 	adjuster$(EXEEXT) \
 	arc$(EXEEXT) \
 	ask$(EXEEXT) \

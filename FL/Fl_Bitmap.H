@@ -49,6 +49,8 @@ public:
     return ((fltk3::Bitmap*)_p)->alloc_array;
   }
 
+  Fl_Bitmap() {}
+
   Fl_Bitmap(const uchar *bits, int W, int H) {
     _p = new fltk3::Bitmap(bits, W, H);
     _p->wrapper(this);
@@ -61,27 +63,27 @@ public:
 
   // FIXME: 123 - virtual funciton!
   virtual Fl_Image *copy(int W, int H) {
-    ((fltk3::Bitmap*)_p)->
+    return 0;
   }
   
   // FIXME: 123 - virtual function! Creates a new object!
-  Fl_Image *copy();
+  Fl_Image *copy() { return 0L; }
   
   // FIXME: 123 - virtual function!
-  virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
+  virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0) { }
   
   void draw(int X, int Y) {
     ((fltk3::Bitmap*)_p)->draw(X, Y);
   }
   
   // FIXME: 123 - virtual function!
-  virtual void label(Fl_Widget*w);
+  virtual void label(Fl_Widget*w) { }
   
   // FIXME: 123 - virtual function!
-  virtual void label(Fl_Menu_Item*m);
+  virtual void label(Fl_Menu_Item*m) {}
   
   // FIXME: 123 - virtual function!
-  virtual void uncache();
+  virtual void uncache() { }
 };
 
 #endif

@@ -1,8 +1,8 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // Standard dialog header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper started
 //
 // Copyright 1998-2011 by Bill Spitzak and others.
 //
@@ -27,12 +27,14 @@
 //
 
 #ifndef fl_ask_H
-#  define fl_ask_H
+#define fl_ask_H
 
-#  include "Enumerations.H"
+#include <fltk3/ask.h>
+#include <stdarg.h>
+#include "Enumerations.H"
 
 class Fl_Widget;
-/** Different system beeps available. \relatesalso fl_beep(int) */
+
 enum {
   FL_BEEP_DEFAULT = 0,
   FL_BEEP_MESSAGE,
@@ -42,41 +44,50 @@ enum {
   FL_BEEP_NOTIFICATION
 };
 
-#  ifdef __GNUC__
-#    define __fl_attr(x) __attribute__ (x)
-#  else
-#    define __fl_attr(x)
-#  endif // __GNUC__
+inline void fl_beep(int type = FL_BEEP_DEFAULT) {
+  fltk3::beep(type);
+}
 
-FL_EXPORT void fl_beep(int type = FL_BEEP_DEFAULT);
-FL_EXPORT void fl_message(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
-FL_EXPORT void fl_alert(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
-// fl_ask() is deprecated since it uses "Yes" and "No" for the buttons,
-// which does not conform to the current FLTK Human Interface Guidelines.
-// Use fl_choice() instead with the appropriate verbs instead.
-FL_EXPORT int fl_ask(const char *,...) __fl_attr((__format__ (__printf__, 1, 2), __deprecated__));
-FL_EXPORT int fl_choice(const char *q,const char *b0,const char *b1,const char *b2,...) __fl_attr((__format__ (__printf__, 1, 5)));
-FL_EXPORT const char *fl_input(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
-FL_EXPORT const char *fl_password(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
+void fl_message(const char *fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
+  fltk3::message(ap, fmt);
+  va_end(ap);
+}
 
-FL_EXPORT Fl_Widget *fl_message_icon();
-extern FL_EXPORT Fl_Font fl_message_font_;
-extern FL_EXPORT Fl_Fontsize fl_message_size_;
+inline void fl_alert(const char *fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
+  fltk3::alert(ap, fmt);
+  va_end(ap);
+}
+
+// FIXME: 123- inline int fl_ask(const char *,...) __fl_attr((__format__ (__printf__, 1, 2), __deprecated__));
+// FIXME: 123- inline int fl_choice(const char *q,const char *b0,const char *b1,const char *b2,...) __fl_attr((__format__ (__printf__, 1, 5)));
+// FIXME: 123- inline const char *fl_input(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
+// FIXME: 123- inline const char *fl_password(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
+
+#if 0 // FIXME: 123
+inline Fl_Widget *fl_message_icon();
+extern inline Fl_Font fl_message_font_;
+extern inline Fl_Fontsize fl_message_size_;
 inline void fl_message_font(Fl_Font f, Fl_Fontsize s) {
   fl_message_font_ = f; fl_message_size_ = s;}
 
-FL_EXPORT void fl_message_hotspot(int enable);
-FL_EXPORT int fl_message_hotspot(void);
+inline void fl_message_hotspot(int enable);
+inline int fl_message_hotspot(void);
 
-FL_EXPORT void fl_message_title(const char *title);
-FL_EXPORT void fl_message_title_default(const char *title);
+inline void fl_message_title(const char *title);
+inline void fl_message_title_default(const char *title);
 
 // pointers you can use to change FLTK to a foreign language:
-extern FL_EXPORT const char* fl_no;
-extern FL_EXPORT const char* fl_yes;
-extern FL_EXPORT const char* fl_ok;
-extern FL_EXPORT const char* fl_cancel;
-extern FL_EXPORT const char* fl_close;
+extern inline const char* fl_no;
+extern inline const char* fl_yes;
+extern inline const char* fl_ok;
+extern inline const char* fl_cancel;
+extern inline const char* fl_close;
+#endif
+
 #endif // !fl_ask_H
 
 //

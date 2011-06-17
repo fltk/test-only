@@ -1,9 +1,9 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
-// Definition of classes Fl_Device, Fl_Graphics_Driver, Fl_Surface_Device, Fl_Display_Device
-// for the Fast Light Tool Kit (FLTK).
+// Definition of classes Fl_Device, Fl_Graphics_Driver, Fl_Surface_Device, 
+// Fl_Display_Device for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper finished
 //
 // Copyright 2010-2011 by Bill Spitzak and others.
 //
@@ -26,13 +26,13 @@
 //
 //     http://www.fltk.org/str.php
 //
-/** \file Fl_Device.H 
- \brief declaration of classes Fl_Device, Fl_Graphics_Driver, Fl_Surface_Device, 
- Fl_Display_Device, Fl_Device_Plugin.
-*/
 
 #ifndef Fl_Device_H
 #define Fl_Device_H
+
+#include <fltk3/Device.h>
+
+#if 0 // FIXME: 123
 
 #include <FL/x.H>
 #include <FL/Fl_Plugin.H>
@@ -43,19 +43,12 @@
 
 class Fl_Graphics_Driver;
 class Fl_Font_Descriptor;
-/** \brief Points to the driver that currently receives all graphics requests */
 FL_EXPORT extern Fl_Graphics_Driver *fl_graphics_driver;
+#endif
 
-/**
- signature of image generation callback function.
- \param[in]  data  user data passed to function
- \param[in]  x,y,w position and width of scan line in image
- \param[out] buf   buffer for generated image data. You must copy \p w
- pixels from scanline \p y, starting at pixel \p x
- to this buffer.
- */
 typedef void (*Fl_Draw_Image_Cb)(void* data,int x,int y,int w,uchar* buf);
 
+#if 0 // FIXME: 123
 // typedef what the x,y fields in a point are:
 #ifdef WIN32
 typedef int COORD_T;
@@ -551,6 +544,8 @@ public:
    */
   virtual int print(Fl_Widget* w, int x, int y, int height) = 0;
 };
+
+#endif
 
 #endif // Fl_Device_H
 

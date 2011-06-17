@@ -47,22 +47,22 @@ class FL_EXPORT Fl_Browser_ : public Fl_Group {
 protected:
 
   // FIXME: 123 virtual methods
-  virtual void *item_first() const = 0;
-  virtual void *item_next(void *item) const = 0;
-  virtual void *item_prev(void *item) const = 0;
+  virtual void *item_first() const { return 0; }
+  virtual void *item_next(void *item) const { return 0; }
+  virtual void *item_prev(void *item) const { return 0; }
   virtual void *item_last() const { return 0L; }
-  virtual int item_height(void *item) const = 0;
-  virtual int item_width(void *item) const = 0;
-  virtual int item_quick_height(void *item) const ;
-  virtual void item_draw(void *item,int X,int Y,int W,int H) const = 0;
+  virtual int item_height(void *item) const { return 0; }
+  virtual int item_width(void *item) const { return 0; }
+  virtual int item_quick_height(void *item) const { return 0; }
+  virtual void item_draw(void *item,int X,int Y,int W,int H) const {}
   virtual const char *item_text(void *item) const { (void)item; return 0L; }
   virtual void item_swap(void *a,void *b) { (void)a; (void)b; }
   virtual void *item_at(int index) const { (void)index; return 0L; }
-  virtual int full_width() const ;	// current width of all items
-  virtual int full_height() const ;	// current height of all items
-  virtual int incr_height() const ;	// average height of an item
-  virtual void item_select(void *item,int val=1);
-  virtual int item_selected(void *item) const ;
+  virtual int full_width() const { return 0; }
+  virtual int full_height() const { return 0; }
+  virtual int incr_height() const { return 0; }
+  virtual void item_select(void *item,int val=1) { }
+  virtual int item_selected(void *item) const { return 0; }
   
   void *top() const {
     return ((fltk3::Browser_*)_p)->top();
@@ -119,12 +119,7 @@ protected:
   FLTK3_WRAPPER_VCALLS_OBJECT(Browser_, draw(), draw(), Draw)
   
   Fl_Browser_() { /* empty */ }
-  
-  Fl_Browser_(int X,int Y,int W,int H,const char *L=0) {
-    _p = new fltk3::Browser(x, y, w, h, label);
-    _p->wrapper(this);
-  }
-
+ 
 public:
 
   // FIXME: 123 Fl_Scrollbar scrollbar;
@@ -190,7 +185,7 @@ public:
   }
                              
   void textfont(Fl_Font font) { 
-    ((fltk3::Browser_*)_p)->font( fltk3::_1to3_font(font) );
+    ((fltk3::Browser_*)_p)->textfont( fltk3::_1to3_font(font) );
   }
   
   Fl_Fontsize textsize() const { 
@@ -198,7 +193,7 @@ public:
   }
   
   void textsize(Fl_Fontsize size) {
-    ((fltk3::Browser_*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+    ((fltk3::Browser_*)_p)->textsize( fltk3::_1to3_fontsize(size) );
   }
   
   Fl_Color textcolor() const { 

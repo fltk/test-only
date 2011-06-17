@@ -331,17 +331,17 @@ void fltk3::beep(int type) {
    \param[in] fmt can be used as an sprintf-like format and variables for the message text
  */
 void fltk3::message(const char *fmt, ...) {
-
-  if (avoidRecursion) return;
-
   va_list ap;
-
-  fltk3::beep(fltk3::BEEP_MESSAGE);
-
   va_start(ap, fmt);
+  alert(ap, fmt);
+  va_end(ap);
+}
+
+void fltk3::message(va_list ap, const char *fmt) {
+  if (avoidRecursion) return;
+  fltk3::beep(fltk3::BEEP_MESSAGE);
   iconlabel = "i";
   innards(fmt, ap, 0, fltk3::close, 0);
-  va_end(ap);
   iconlabel = "?";
 }
 
@@ -354,19 +354,20 @@ void fltk3::message(const char *fmt, ...) {
    \param[in] fmt can be used as an sprintf-like format and variables for the message text
  */
 void fltk3::alert(const char *fmt, ...) {
-
-  if (avoidRecursion) return;
-
   va_list ap;
-
-  fltk3::beep(fltk3::BEEP_ERROR);
-
   va_start(ap, fmt);
+  alert(ap, fmt);
+  va_end(ap);
+}
+
+void fltk3::alert(va_list ap, const char *fmt) {
+  if (avoidRecursion) return;
+  fltk3::beep(fltk3::BEEP_ERROR);
   iconlabel = "!";
   innards(fmt, ap, 0, fltk3::close, 0);
-  va_end(ap);
   iconlabel = "?";
 }
+
 /** Shows a dialog displaying the \p fmt message,
     this dialog features 2 yes/no buttons
 

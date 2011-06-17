@@ -41,9 +41,6 @@ class Fl_X;
 
 class FL_EXPORT Fl_Window : public Fl_Group {
 
-  Fl_Window(const Fl_Window&);
-  Fl_Window& operator=(const Fl_Window&);
-
 protected:
   
   void flush() {
@@ -187,7 +184,7 @@ public:
   }
   
   const char* xclass() const {
-    ((fltk3::Window*)_p)->xclass();
+    return ((fltk3::Window*)_p)->xclass();
   }
   
   void xclass(const char* c) {
@@ -223,11 +220,11 @@ public:
   }
     
   int x_root() const {
-    ((fltk3::Window*)_p)->y_root();
+    return ((fltk3::Window*)_p)->y_root();
   }
   
   int y_root() const {
-    ((fltk3::Window*)_p)->y_root();
+    return ((fltk3::Window*)_p)->y_root();
   }
   
   static Fl_Window *current() {
@@ -253,7 +250,7 @@ public:
   }
   
   int decorated_w() {
-    ((fltk3::Window*)_p)->decorated_w();
+    return ((fltk3::Window*)_p)->decorated_w();
   }
   
   int decorated_h() {

@@ -35,6 +35,7 @@
 #include "Enumerations.H"
 
 class Fl_Widget;
+class Fl_Image;
 struct Fl_Menu_Item;
 struct Fl_Label;
 
@@ -46,9 +47,6 @@ namespace fltk3 {
 
 class FL_EXPORT Fl_Image : public fltk3::Wrapper {
   
-  Fl_Image & operator=(const Fl_Image &);
-  Fl_Image(const Fl_Image &);
-
 protected:
 
   void w(int W) {
@@ -86,7 +84,7 @@ protected:
 
 public:
 
-  Fl_Image() {}
+  Fl_Image() { }
   
   Fl_Image(fltk3::Image *img) {
     _p = img;
@@ -141,15 +139,15 @@ public:
   }
 
   // FIXME: 123 - virtual
-  virtual void desaturate();
+  virtual void desaturate() {}
   // FIXME: 123 - virtual
-  virtual void label(Fl_Widget*w);
+  virtual void label(Fl_Widget*w) {}
   // FIXME: 123 - virtual
-  virtual void label(Fl_Menu_Item*m);
+  virtual void label(Fl_Menu_Item*m) {}
   // FIXME: 123 - virtual
-  virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
+  virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0) {}
   // FIXME: 123 - virtual
-  virtual void uncache();
+  virtual void uncache() {}
 
   void draw(int X, int Y) {
     ((fltk3::Image*)_p)->draw(X, Y);
@@ -181,21 +179,27 @@ public:
   }
   
   // FIXME: 123 - virtual
-  virtual Fl_Image *copy(int W, int H);
+  virtual Fl_Image *copy(int W, int H) { return 0L; }
   // FIXME: 123 - virtual
-  virtual void color_average(Fl_Color c, float i);
+  virtual void color_average(Fl_Color c, float i) {}
   // FIXME: 123 - virtual
-  virtual void desaturate();
+  virtual void desaturate() {}
   // FIXME: 123 - virtual
-  virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
+  virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0) {}
   // FIXME: 123 - virtual
-  virtual void label(Fl_Widget*w);
+  virtual void label(Fl_Widget*w) {}
   // FIXME: 123 - virtual
-  virtual void label(Fl_Menu_Item*m);
+  virtual void label(Fl_Menu_Item*m) {}
   // FIXME: 123 - virtual
-  virtual void uncache();
+  virtual void uncache() {}
     
 };
+
+
+namespace fltk3 {
+  inline Image *_1to3_image(Fl_Image *w) { return ((fltk3::Image*)w->_p); }
+}
+
 
 #endif // !Fl_Image_H
 

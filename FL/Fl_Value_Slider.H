@@ -42,6 +42,8 @@ protected:
 public:
   
   FLTK3_WRAPPER_VCALLS_OBJECT_INT(ValueSlider, handle(int event), handle(event), Handle)
+
+  Fl_Value_Slider() {}
   
   Fl_Value_Slider(int x,int y,int w,int h, const char *l = 0) {
     _p = new fltk3::ValueSlider(x, y, w, h, l);
@@ -53,7 +55,7 @@ public:
   }
   
   void textfont(Fl_Font font) { 
-    ((fltk3::ValueSlider*)_p)->font( fltk3::_1to3_font(font) );
+    ((fltk3::ValueSlider*)_p)->textfont( fltk3::_1to3_font(font) );
   }
   
   Fl_Fontsize textsize() const { 
@@ -61,7 +63,7 @@ public:
   }
   
   void textsize(Fl_Fontsize size) {
-    ((fltk3::ValueSlider*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+    ((fltk3::ValueSlider*)_p)->textsize( fltk3::_1to3_fontsize(size) );
   }
   
   Fl_Color textcolor() const { 

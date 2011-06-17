@@ -37,7 +37,7 @@ class FL_EXPORT Fl_Menu_Button : public Fl_Menu_ {
   
 protected:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, draw(), draw(), Draw)
+  FLTK3_WRAPPER_VCALLS_OBJECT(MenuButton, draw(), draw(), Draw)
   
 public:
 
@@ -51,7 +51,7 @@ public:
     POPUP123
   };
   
-  int handle(int);
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(MenuButton, handle(int e), handle(e), Handle)
   
   const Fl_Menu_Item* popup() {
     return (Fl_Menu_Item*) ((fltk3::MenuButton*)_p)->popup();

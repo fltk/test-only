@@ -77,12 +77,13 @@ public: // should be private!
   static void (*warning)(const char*, ...);
   static void (*error)(const char*, ...);
   static void (*atclose)(Fl_Window*,void*);
-  static void fatal(const char*, ...) { }
   static void watch_widget_pointer(Fl_Widget *&w);
   static void release_widget_pointer(Fl_Widget *&w);
   static void clear_widget_pointer(Fl_Widget const *w);
 #endif
-  
+
+  static void fatal(const char* format, ...) { /* FIXME: 123 */ }
+
   static void damage(int d) {
     fltk3::damage(d);
   }

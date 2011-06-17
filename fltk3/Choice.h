@@ -33,6 +33,8 @@
 
 #include "Menu_.h"
 
+class Fl_Choice;
+
 namespace fltk3 {
   
   /**
@@ -85,6 +87,9 @@ namespace fltk3 {
    Sets the current down box type to \p b.
    */
   class FLTK3_EXPORT Choice : public fltk3::Menu_ {
+
+    friend class ::Fl_Choice;
+
   protected:
     void draw();
   public:

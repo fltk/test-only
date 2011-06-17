@@ -80,12 +80,6 @@ class FL_EXPORT Fl_Widget : public fltk3::WidgetWrapper {
   
   friend class Fl_Group;
 
-private:
-  
-  Fl_Widget(const Fl_Widget &); /* make unavailable */
-  
-  Fl_Widget& operator=(const Fl_Widget &); /* make unavailable */
-
 protected:
   
   Fl_Widget() { /*blank */ }
@@ -342,7 +336,7 @@ public:
   }
   
   void image(Fl_Image& img) {
-    ((fltk3::Widget*)_p)->image( (fltk3::Image&)(img._p) );
+    ((fltk3::Widget*)_p)->image( *(fltk3::Image*)(img._p) );
   }
   
   Fl_Image* deimage() {
@@ -358,7 +352,7 @@ public:
   }
   
   void deimage(Fl_Image& img) {
-    ((fltk3::Widget*)_p)->deimage( (fltk3::Image&)(img._p) );
+    ((fltk3::Widget*)_p)->deimage( *(fltk3::Image*)(img._p) );
   }
   
   const char *tooltip() const {

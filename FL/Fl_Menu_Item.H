@@ -74,11 +74,11 @@ struct FL_EXPORT Fl_Menu_Item {
   Fl_Color labelcolor_;
 
   const Fl_Menu_Item *next(int i=1) const {
-    return (Fl_Menu_Item*)fltk3::MenuItem::next(i);
+    return (Fl_Menu_Item*)((fltk3::MenuItem*)this)->next(i);
   }
 
   Fl_Menu_Item *next(int i=1) {
-    return (Fl_Menu_Item*)(((const Fl_Menu_Item*)this)->next(i));
+    return (Fl_Menu_Item*)((const fltk3::MenuItem*)this)->next(i);
   }
 
   const Fl_Menu_Item *first() const { return next(0); }
@@ -142,7 +142,7 @@ struct FL_EXPORT Fl_Menu_Item {
   void clear() {flags &= ~FL_MENU_VALUE;}
 
   void setonly() {
-    fltk3::MenuItem::setonly();
+    ((fltk3::MenuItem*)this)->setonly();
   }
 
   int visible() const {return !(flags&FL_MENU_INVISIBLE);}
@@ -164,11 +164,11 @@ struct FL_EXPORT Fl_Menu_Item {
   void image(Fl_Image& a) {a.label(this);}
 
   int measure(int* h, const Fl_Menu_ *m) const {
-    return fltk3::MenuItem::measure(h, (fltk3::Menu_*)m);
+    return ((fltk3::MenuItem*)this)->measure(h, (fltk3::Menu_*)m);
   }
 
   void draw(int x, int y, int w, int h, const Fl_Menu_ *m, int t=0) const {
-    fltk3::MenuItem::draw(x, y, w, h, (fltk3::Menu_*)m, t);
+    ((fltk3::MenuItem*)this)->draw(x, y, w, h, (fltk3::Menu_*)m, t);
   }
 
   const Fl_Menu_Item* popup(
@@ -177,25 +177,27 @@ struct FL_EXPORT Fl_Menu_Item {
     const Fl_Menu_Item* picked=0,
     const Fl_Menu_* m=0) const
   {
-    return (Fl_Menu_Item*)fltk3::MenuItem::popup(X, Y, title, (fltk3::MenuItem*)picked, (fltk3::Menu_*)m);
+    return (Fl_Menu_Item*)((fltk3::MenuItem*)this)->popup(X, Y, title, (fltk3::MenuItem*)picked, (fltk3::Menu_*)m);
   }
   
   const Fl_Menu_Item* pulldown(
     int X, int Y, int W, int H,
     const Fl_Menu_Item* picked = 0,
-    const Fl_Menu_* = 0,
+    const Fl_Menu_* m = 0,
     const Fl_Menu_Item* title = 0,
     int menubar=0) const 
   {
-    return (Fl_Menu_Item*)fltk3::MenuItem::pulldown(X, Y, W, H, (fltk3::MenuItem*)picked, (fltk3::Menu_*)m, (fltk3::MenuItem*)title, menubar);
+    return (Fl_Menu_Item*)((fltk3::MenuItem*)this)->pulldown(X, Y, W, H, 
+                                                             (fltk3::MenuItem*)picked, (fltk3::Menu_*)m, 
+                                                             (fltk3::MenuItem*)title, menubar);
   }
   
   const Fl_Menu_Item* test_shortcut() const {
-    return (Fl_Menu_Item*)fltk3::MenuItem::test_shortcut();
+    return (Fl_Menu_Item*)((fltk3::MenuItem*)this)->test_shortcut();
   }
   
   const Fl_Menu_Item* find_shortcut(int *ip=0, const bool require_alt = false) const {
-    return (Fl_Menu_Item*)fltk3::MenuItem::find_shortcut(ip, require_alt);
+    return (Fl_Menu_Item*)((fltk3::MenuItem*)this)->find_shortcut(ip, require_alt);
   }
 
   void do_callback(Fl_Widget* o) const {callback_(o, user_data_);}
@@ -211,11 +213,11 @@ struct FL_EXPORT Fl_Menu_Item {
   void uncheck() {flags &= ~FL_MENU_VALUE;}
 
   int insert(int a, const char *b, int c, Fl_Callback *d, void *e=0, int f=0) {
-    return fltk3::MenuItem::insert(a, ,b, c, d, e, f);
+    return ((fltk3::MenuItem*)this)->insert(a, b, c, (fltk3::Callback*)d, e, f);
   }
 
   int add(const char *a, int b, Fl_Callback *c, void *d=0, int e= 0) {
-    return fltk3::MenuItem::add(a, ,b, c, d, e);
+    return ((fltk3::MenuItem*)this)->add(a, b, (fltk3::Callback*)c, d, e);
   }
 
   int add(const char*a, const char* b, Fl_Callback* c, void* d = 0, int e = 0) {
@@ -223,7 +225,7 @@ struct FL_EXPORT Fl_Menu_Item {
   }
 
   int size() const {
-    return fltk3::MenuItem::size();
+    return ((fltk3::MenuItem*)this)->size();
   }
 
 };

@@ -28,9 +28,10 @@
 // FLTK 123 complete
 
 #ifndef fltk3_ask_H
-#  define fltk3_ask_H
+#define fltk3_ask_H
 
-#  include "enumerations.h"
+#include "enumerations.h"
+#include <stdarg.h>
 
 #  ifdef __GNUC__
 #    define __fl_attr(x) __attribute__ (x)
@@ -55,7 +56,9 @@ namespace fltk3 {
   
   FLTK3_EXPORT void beep(int type = BEEP_DEFAULT);
   FLTK3_EXPORT void message(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
+  FLTK3_EXPORT void message(va_list, const char *);
   FLTK3_EXPORT void alert(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
+  FLTK3_EXPORT void alert(va_list, const char *);
   // fltk3::ask() is deprecated since it uses "Yes" and "No" for the buttons,
   // which does not conform to the current FLTK Human Interface Guidelines.
   // Use fltk3::choice() instead with the appropriate verbs instead.

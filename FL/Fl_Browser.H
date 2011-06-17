@@ -41,26 +41,26 @@ class FL_EXPORT Fl_Browser : public Fl_Browser_ {
 protected:
 
   // FIXME: 123 - many of these are virtual!
-  void* item_first() const ;
-  void* item_next(void* item) const ;
-  void* item_prev(void* item) const ;
-  void* item_last()const ;
-  int item_selected(void* item) const ;
-  void item_select(void* item, int val);
-  int item_height(void* item) const ;
-  int item_width(void* item) const ;
-  void item_draw(void* item, int X, int Y, int W, int H) const ;
-  int full_height() const ;
-  int incr_height() const ;
-  const char *item_text(void *item) const;
+  void* item_first() const { return 0L; }
+  void* item_next(void* item) const { return 0L; }
+  void* item_prev(void* item) const { return 0L; }
+  void* item_last()const { return 0L; }
+  int item_selected(void* item) const { return 0; }
+  void item_select(void* item, int val) {}
+  int item_height(void* item) const { return 0; }
+  int item_width(void* item) const { return 0; }
+  void item_draw(void* item, int X, int Y, int W, int H) const {}
+  int full_height() const { return 0; }
+  int incr_height() const { return 0; }
+  const char *item_text(void *item) const { return 0L; }
   void item_swap(void *a, void *b) { swap((FL_BLINE*)a, (FL_BLINE*)b); }
   void *item_at(int line) const { return (void*)find_line(line); }
 
-  FL_BLINE* find_line(int line) const ;
-  FL_BLINE* _remove(int line) ;
-  void insert(int line, FL_BLINE* item);
-  int lineno(void *item) const ;
-  void swap(FL_BLINE *a, FL_BLINE *b);
+  FL_BLINE* find_line(int line) const  { return 0; }
+  FL_BLINE* _remove(int line) { return 0; }
+  void insert(int line, FL_BLINE* item) {}
+  int lineno(void *item) const { return 0; }
+  void swap(FL_BLINE *a, FL_BLINE *b) {}
 
 public:
 
@@ -81,7 +81,7 @@ public:
   }
   
   int  load(const char* filename) {
-    ((fltk3::Browser*)_p)->load(filename);
+    return ((fltk3::Browser*)_p)->load(filename);
   }
   
   void swap(int a, int b) {
@@ -107,7 +107,7 @@ public:
   enum Fl_Line_Position { TOP, BOTTOM, MIDDLE };
   
   void lineposition(int line, Fl_Line_Position pos) {
-    ((fltk3::Browser*)_p)->lineposition(line, pos);
+    ((fltk3::Browser*)_p)->lineposition(line, (fltk3::Browser::LinePosition)pos);
   }
   
   void topline(int line) { 
@@ -173,7 +173,7 @@ public:
   Fl_Browser() { /* empty */ }
   
   Fl_Browser(int X, int Y, int W, int H, const char *L = 0) {
-    _p = new fltk3::Browser(x, y, w, h, label);
+    _p = new fltk3::Browser(X, Y, W, H, L);
     _p->wrapper(this);
   }
   

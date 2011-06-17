@@ -37,28 +37,20 @@
 #include <FL/Fl_Round_Button.H>
 #include <FL/Fl_Tooltip.H>
 
-int main(int argc, char **argv)
-{
-  Fl_Window *w = new Fl_Window(0,0,100,100);
-  
-  Fl_Group *flow_panel = new Fl_Group(2,2,100,100);
-  Fl_Button *button1 = new Fl_Button(2,2,80,40,"Hello");
-  Fl_Window *window = new Fl_Window(2,2,300,300);
-  
-  Fl_Group::current(NULL);
-  
-  flow_panel->begin();
-  flow_panel->add(button1);
-  flow_panel->end();
-  
-  window->begin();
-  window->add(flow_panel);
+int main(int argc, char ** argv) {
+  Fl_Window *window = new Fl_Window(320,130);
+  Fl_Button *b = new Fl_Button(10, 10, 130, 30, "Fl_Button");
+  b->tooltip("This is a Tooltip.");
+  new Fl_Return_Button(150, 10, 160, 30, "Fl_Return_Button");
+  new Fl_Repeat_Button(10,50,130,30,"Fl_Repeat_Button");
+  new Fl_Light_Button(10,90,130,30,"Fl_Light_Button");
+  new Fl_Round_Button(150,50,160,30,"Fl_Round_Button");
+  new Fl_Check_Button(150,90,160,30,"Fl_Check_Button");
   window->end();
-  window->show();
-  flow_panel->show();
-  button1->show();
-  
-  Fl::run();
-  
-  return 0;
+  window->show(argc,argv);
+  return Fl::run();
 }
+
+//
+// End of "$Id: buttons.cxx 7903 2010-11-28 21:06:39Z matt $".
+//

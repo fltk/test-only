@@ -33,6 +33,10 @@
 
 #include "Slider.h"
 
+
+class Fl_Value_Slider;
+
+
 namespace fltk3 {
   
   /**
@@ -42,6 +46,9 @@ namespace fltk3 {
    \image latex  value_slider.png "fltk3::ValueSlider" width=4cm
    */
   class FLTK3_EXPORT ValueSlider : public fltk3::Slider {
+
+    friend class ::Fl_Value_Slider;
+
     fltk3::Font textfont_;
     fltk3::Fontsize textsize_;
     fltk3::Color textcolor_;

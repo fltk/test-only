@@ -30,6 +30,7 @@
 #define Fl_Repeat_Button_H
 
 
+#include <fltk3/RepeatButton.h>
 #include "Fl.H"
 #include "Fl_Button.H"
 
@@ -38,10 +39,10 @@ class FL_EXPORT Fl_Repeat_Button : public Fl_Button {
 
 public:
 
-  int handle(int);
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(RepeatButton, handle(int event), handle(event), Handle)
 
   Fl_Repeat_Button() {}
-  
+
   Fl_Repeat_Button(int X,int Y,int W,int H,const char *l=0) {
     _p = new fltk3::RepeatButton(X, Y, W, H, l);
     _p->wrapper(this);

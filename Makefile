@@ -90,10 +90,6 @@ distclean: clean
 		$(RM) test/`basename $$file .fl`.cxx; \
 		$(RM) test/`basename $$file .fl`.h; \
 	done
-	for file in test1/*.fl; do\
-		$(RM) test1/`basename $$file .fl`.cxx; \
-		$(RM) test1/`basename $$file .fl`.h; \
-	done
 
 fltk-config: configure configh.in fltk-config.in
 	if test -f config.status; then \

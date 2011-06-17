@@ -103,6 +103,8 @@ inline int fl_numericsort(struct dirent **a, struct dirent **b) {
   return fltk3::alphasort(a, b);
 }
 
+#if 0 // FIXME: 123
+
 typedef fltk3::FileSortF Fl_File_Sort_F;
 
 FL_EXPORT int fl_filename_list(const char *d, struct dirent ***l,
@@ -114,7 +116,7 @@ FL_EXPORT int	fl_open_uri(const char *uri, char *msg = (char *)0,
 
 int _fl_filename_isdir_quick(const char *name);
 
-#  endif /* __cplusplus */
+#endif
 
 
 #endif /* FL_FILENAME_H */

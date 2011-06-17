@@ -34,6 +34,10 @@
 #include "Group.h"
 #include "Scrollbar.h"
 
+
+class Fl_Scroll;
+
+
 namespace fltk3 {
   
   /**
@@ -96,7 +100,9 @@ namespace fltk3 {
    scrollbars and neighboring objects.</I>
    */
   class FLTK3_EXPORT ScrollGroup : public fltk3::Group {
-    
+   
+    friend class ::Fl_Scroll;
+ 
     int xposition_, yposition_;
     int oldx, oldy;
     int scrollbar_size_;

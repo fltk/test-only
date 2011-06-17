@@ -57,7 +57,7 @@ public:
   }
 
   int value(const Fl_Menu_Item* v) {
-    return ((fltk3::Choice*)_p)->value(v);
+    return ((fltk3::Choice*)_p)->value((fltk3::MenuItem*)v);
   }
   
 };

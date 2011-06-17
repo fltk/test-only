@@ -39,7 +39,7 @@ public:
   Fl_Check_Button() { /* empty */ }
     
   Fl_Check_Button(int X, int Y, int W, int H, const char *L = 0) {
-    _p = new fltk3::CheckButton(x, y, w, h, label);
+    _p = new fltk3::CheckButton(X, Y, W, H, L);
     _p->wrapper(this);
   }
 

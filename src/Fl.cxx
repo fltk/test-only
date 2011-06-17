@@ -91,9 +91,9 @@ int		fltk3::damage_,
 		fltk3::e_state,
 		fltk3::e_clicks,
 		fltk3::e_is_click,
-		fltk3::e_keysym,
                 fltk3::e_original_keysym,
 		fltk3::scrollbar_size_ = 16;
+unsigned int fltk3::e_keysym;
 
 char		*fltk3::e_text = (char *)"";
 int		fltk3::e_length;
@@ -934,7 +934,7 @@ void fl_fix_focus() {
   // set focus based on fltk3::modal() and fl_xfocus
   fltk3::Widget* w = fl_xfocus;
   if (w) {
-    int saved = fltk3::e_keysym;
+    unsigned int saved = fltk3::e_keysym;
     if (fltk3::e_keysym < (fltk3::MouseButton + fltk3::LEFT_MOUSE) ||
         fltk3::e_keysym > (fltk3::MouseButton + fltk3::RIGHT_MOUSE))
       fltk3::e_keysym = 0; // make sure widgets don't think a keystroke moved focus

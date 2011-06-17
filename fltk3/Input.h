@@ -33,6 +33,8 @@
 
 #include "Input_.h"
 
+class Fl_Input;
+
 namespace fltk3 {
   
   /**
@@ -230,6 +232,9 @@ namespace fltk3 {
    </TD></TR></TABLE>
    */
   class FLTK3_EXPORT Input : public fltk3::Input_ {
+
+    friend class ::Fl_Input;
+
     int handle_key();
     int shift_position(int p);
     int shift_up_down_position(int p);

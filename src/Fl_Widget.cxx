@@ -338,7 +338,11 @@ fltk3::Widget::copy_label(const char *a) {
 void
 fltk3::Widget::do_callback(fltk3::Widget* o,void* arg) {
   fltk3::WidgetTracker wp(this);
-  callback_(o,arg);
+  if (o && o->pWrapper) {
+    callback_((fltk3::Widget*)o->pWrapper, arg);
+  } else {
+    callback_(o,arg);
+  }
   if (wp.deleted()) return;
   if (callback_ != default_callback)
     clear_changed();

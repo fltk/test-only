@@ -272,7 +272,8 @@ inline Fl_Boxtype fl_frame(Fl_Boxtype b) {
 #define FL_DIAMOND_BOX FL_DIAMOND_DOWN_BOX
 
 typedef enum {
-  FL_NORMAL_LABEL	= 0,
+  FL_NORMAL_LABEL = 0,
+  FL_SYMBOL_LABEL = 0,
   FL_NO_LABEL,
   FL_SHADOW_LABEL,
   FL_ENGRAVED_LABEL,
