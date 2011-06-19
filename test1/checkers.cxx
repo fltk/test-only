@@ -148,13 +148,13 @@ int nodes;		// count of nodes
 typedef char piece;
 
 // Piece values so that BLACK and WHITE are bit flags:
-#define EMPTY 0
-#define BLACK 1
-#define WHITE 2
-#define KING 4
-#define BLACKKING 5
-#define WHITEKING 6
-#define BLUE 8
+const char EMPTY = 0;
+const char BLACK = 1;
+const char WHITE = 2;
+const char KING = 4;
+const char BLACKKING = 5;
+const char WHITEKING = 6;
+const char BLUE = 8;
 
 const piece flip[9] = {
   EMPTY, WHITE, BLACK, 0, 0, WHITEKING, BLACKKING, 0, BLUE};

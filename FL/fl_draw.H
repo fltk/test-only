@@ -384,26 +384,30 @@ inline void fl_measure(const char* str, int& x, int& y, int draw_symbols = 1) {
   fltk3::measure(str, x, y, draw_symbols);
 }
 
-
-#if 0 // FIXME: 123
-
 inline void fl_draw(const char* str, int x, int y, int w, int h, Fl_Align align, Fl_Image* img=0, int draw_symbols = 1) {
+  fltk3::draw(str, x, y, w, h, fltk3::_1to3_align(align), fltk3::_1to3_image(img), draw_symbols);
 }
 
+#if 0 // FIXME: 123
 inline void fl_draw(const char* str, int x, int y, int w, int h,
                        Fl_Align align,
                        void (*callthis)(const char *,int,int,int),
                     Fl_Image* img=0, int draw_symbols = 1) {
 }
 
-FL_EXPORT void fl_frame(const char* s, int x, int y, int w, int h);
-
-FL_EXPORT void fl_frame2(const char* s, int x, int y, int w, int h);
-
-FL_EXPORT void fl_draw_box(Fl_Boxtype, int x, int y, int w, int h, Fl_Color);
-
 #endif
 
+inline void fl_frame(const char* s, int x, int y, int w, int h) {
+  fltk3::frame(s, x, y, w, h);
+}
+
+inline void fl_frame2(const char* s, int x, int y, int w, int h) {
+  fltk3::frame2(s, x, y, w, h);
+}
+
+inline void fl_draw_box(Fl_Boxtype b, int x, int y, int w, int h, Fl_Color c) {
+  fltk3::draw_box(fltk3::_1to3_boxtype(b), x, y, w, h, fltk3::_1to3_color(c));
+}
 
 inline void fl_draw_image(const uchar* buf, int X,int Y,int W,int H, int D=3, int L=0) { 
   fltk3::draw_image(buf, X, Y, W, H, D, L); 

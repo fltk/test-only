@@ -17,8 +17,8 @@ Fl_Adjuster.o: ../fltk3/Image.h ../fltk3/draw.h ../fltk3/x.h
 Fl_Adjuster.o: ../fltk3/Window.h ../fltk3/enumerations.h ../fltk3/Window.h
 Fl_Adjuster.o: ../fltk3/Group.h ../fltk3/Device.h ../fltk3/Object.h
 Fl_Adjuster.o: ../fltk3/Plugin.h ../fltk3/Preferences.h ../fltk3/Image.h
-Fl_Adjuster.o: ../fltk3/Pixmap.h ../fltk3/RGBImage.h fastarrow.h
-Fl_Adjuster.o: mediumarrow.h slowarrow.h
+Fl_Adjuster.o: ../fltk3/Pixmap.h ../fltk3/RGBImage.h ../fltk3/Wrapper.h
+Fl_Adjuster.o: fastarrow.h mediumarrow.h slowarrow.h
 Fl_Bitmap.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 Fl_Bitmap.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 Fl_Bitmap.o: ../fltk3/x.h ../fltk3/Window.h ../fltk3/draw.h

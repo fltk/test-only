@@ -29,6 +29,7 @@
 #include <fltk3/Adjuster.h>
 #include <fltk3/Bitmap.h>
 #include <fltk3/draw.h>
+#include <fltk3/Wrapper.h>
 
 #include "fastarrow.h"
 static fltk3::Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
@@ -41,6 +42,7 @@ static fltk3::Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height
 void fltk3::Adjuster::value_damage() {}
 
 void fltk3::Adjuster::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   int dx, dy, W, H;
   if (w()>=h()) {
     dx = W = w()/3;

@@ -18,23 +18,25 @@ unittests.o: ../FL/Fl_Slider.H ../fltk3/Slider.h ../FL/Fl_Valuator.H
 unittests.o: ../fltk3/Valuator.h ../FL/Fl.H ../FL/Fl_Help_View.H
 unittests.o: ../fltk3/HelpView.h ../fltk3/run.h ../fltk3/draw.h ../fltk3/x.h
 unittests.o: ../fltk3/Device.h ../fltk3/Object.h ../fltk3/Plugin.h
-unittests.o: Preferences.h ../FL/Fl_Preferences.H ../fltk3/Button.h
-unittests.o: ../fltk3/Group.h ../fltk3/Input.h ../fltk3/Input_.h
-unittests.o: ../fltk3/Choice.h ../fltk3/Menu_.h ../fltk3/MenuItem.h
-unittests.o: ../fltk3/RoundButton.h ../fltk3/LightButton.h ../fltk3/Button.h
-unittests.o: ../fltk3/Box.h ../fltk3/CheckButton.h ../fltk3/IntInput.h
-unittests.o: ../fltk3/Input.h ../fltk3/ValueSlider.h ../fltk3/Bitmap.h
-unittests.o: ../fltk3/Pixmap.h ../fltk3/RGBImage.h ../fltk3/SharedImage.h
-unittests.o: ../fltk3/filename.h ../FL/fl_draw.H ../fltk3/draw.h ../FL/x.H
-unittests.o: ../FL/Enumerations.H ../FL/Fl_Window.H ../FL/Fl_Device.H
-unittests.o: ../FL/Fl_Shared_Image.H ../fltk3/SharedImage.h ../FL/filename.H
-unittests.o: ../fltk3/filename.h ../FL/Fl_Group.H ../FL/Fl_Box.H
-unittests.o: ../FL/fl_draw.H unittest_about.cxx unittest_points.cxx
-unittests.o: unittest_lines.cxx unittest_rects.cxx unittest_circles.cxx
-unittests.o: unittest_text.cxx unittest_images.cxx unittest_viewport.cxx
+unittests.o: Preferences.h ../FL/Fl_Preferences.H ../fltk3/Preferences.h
+unittests.o: ../fltk3/Button.h ../fltk3/Group.h ../fltk3/Input.h
+unittests.o: ../fltk3/Input_.h ../fltk3/Choice.h ../fltk3/Menu_.h
+unittests.o: ../fltk3/MenuItem.h ../fltk3/RoundButton.h
+unittests.o: ../fltk3/LightButton.h ../fltk3/Button.h ../fltk3/Box.h
+unittests.o: ../fltk3/CheckButton.h ../fltk3/IntInput.h ../fltk3/Input.h
+unittests.o: ../fltk3/ValueSlider.h ../fltk3/Bitmap.h ../fltk3/Pixmap.h
+unittests.o: ../fltk3/RGBImage.h ../fltk3/SharedImage.h ../fltk3/filename.h
+unittests.o: ../FL/fl_draw.H ../fltk3/draw.h ../FL/x.H ../FL/Enumerations.H
+unittests.o: ../FL/Fl_Window.H ../FL/Fl_Device.H ../FL/Fl_Shared_Image.H
+unittests.o: ../fltk3/SharedImage.h ../FL/filename.H ../fltk3/filename.h
+unittests.o: ../FL/Fl_Group.H ../FL/Fl_Box.H ../FL/fl_draw.H
+unittests.o: unittest_about.cxx unittest_points.cxx unittest_lines.cxx
+unittests.o: unittest_rects.cxx unittest_circles.cxx unittest_text.cxx
+unittests.o: unittest_images.cxx unittest_viewport.cxx
 unittests.o: unittest_scrollbarsize.cxx ../FL/Fl_Browser.H ../FL/Fl_Tree.H
-unittests.o: ../FL/Fl_Scrollbar.H ../FL/Fl_Tree_Item.H ../FL/Fl_Widget.H
-unittests.o: ../FL/Fl_Image.H ../FL/Fl_Tree_Item_Array.H
+unittests.o: ../fltk3/Tree.h ../fltk3/TreeItem.h ../fltk3/TreeItemArray.h
+unittests.o: ../fltk3/TreePrefs.h ../FL/Fl_Scrollbar.H ../FL/Fl_Tree_Item.H
+unittests.o: ../FL/Fl_Widget.H ../FL/Fl_Image.H ../FL/Fl_Tree_Item_Array.H
 unittests.o: ../FL/Fl_Tree_Prefs.H ../FL/Fl_Value_Slider.H
 adjuster.o: ../FL/Fl.H ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 adjuster.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
@@ -97,16 +99,17 @@ blocks.o: ../fltk3/Group.h ../fltk3/Widget.h ../FL/Fl_Window.H
 blocks.o: ../fltk3/Wrapper.h ../fltk3/Window.h ../FL/Fl_Group.H
 blocks.o: ../FL/Fl_Widget.H ../FL/Fl_Image.H ../fltk3/Image.h
 blocks.o: ../FL/Fl_Button.H ../fltk3/Button.h ../FL/Fl_Preferences.H
-blocks.o: ../FL/Fl_XPM_Image.H ../fltk3/XPMImage.h ../fltk3/Pixmap.h
-blocks.o: ../fltk3/Image.h ../FL/Fl_Pixmap.H ../fltk3/Pixmap.h
-blocks.o: ../FL/Fl_XBM_Image.H ../fltk3/XBMImage.h ../fltk3/Bitmap.h
-blocks.o: ../FL/Fl_Bitmap.H ../fltk3/Bitmap.h ../FL/Fl_Tiled_Image.H
-blocks.o: ../FL/fl_draw.H ../FL/x.H ../fltk3/x.h ../config.h
-blocks.o: pixmaps/blast.xpm pixmaps/red.xpm pixmaps/red_bomb.xpm
-blocks.o: pixmaps/green.xpm pixmaps/green_bomb.xpm pixmaps/blue.xpm
-blocks.o: pixmaps/blue_bomb.xpm pixmaps/yellow.xpm pixmaps/yellow_bomb.xpm
-blocks.o: pixmaps/cyan.xpm pixmaps/cyan_bomb.xpm pixmaps/magenta.xpm
-blocks.o: pixmaps/magenta_bomb.xpm pixmaps/gray.xpm pixmaps/gray_bomb.xpm
+blocks.o: ../fltk3/Preferences.h ../FL/Fl_XPM_Image.H ../fltk3/XPMImage.h
+blocks.o: ../fltk3/Pixmap.h ../fltk3/Image.h ../FL/Fl_Pixmap.H
+blocks.o: ../fltk3/Pixmap.h ../FL/Fl_XBM_Image.H ../fltk3/XBMImage.h
+blocks.o: ../fltk3/Bitmap.h ../FL/Fl_Bitmap.H ../fltk3/Bitmap.h
+blocks.o: ../FL/Fl_Tiled_Image.H ../fltk3/TiledImage.h ../FL/fl_draw.H
+blocks.o: ../FL/x.H ../fltk3/x.h ../config.h pixmaps/blast.xpm
+blocks.o: pixmaps/red.xpm pixmaps/red_bomb.xpm pixmaps/green.xpm
+blocks.o: pixmaps/green_bomb.xpm pixmaps/blue.xpm pixmaps/blue_bomb.xpm
+blocks.o: pixmaps/yellow.xpm pixmaps/yellow_bomb.xpm pixmaps/cyan.xpm
+blocks.o: pixmaps/cyan_bomb.xpm pixmaps/magenta.xpm pixmaps/magenta_bomb.xpm
+blocks.o: pixmaps/gray.xpm pixmaps/gray_bomb.xpm
 boxtype.o: ../FL/Fl.H ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 boxtype.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 boxtype.o: ../fltk3/Widget.h ../fltk3/Rectangle.h ../fltk3/Object.h
@@ -262,8 +265,8 @@ cube.o: ../fltk3/MenuBar.h ../FL/Fl_Menu_.H ../fltk3/Menu_.h
 cube.o: ../FL/Fl_Menu_Item.H ../fltk3/MenuItem.h ../FL/x.H ../fltk3/x.h
 cube.o: ../FL/Fl_Printer.H ../fltk3/Printer.h ../fltk3/PagedDevice.h
 cube.o: ../fltk3/Device.h ../fltk3/Object.h ../fltk3/Plugin.h Preferences.h
-cube.o: ../FL/Fl_Preferences.H ../fltk3/DoubleWindow.h ../fltk3/Group.h
-cube.o: ../fltk3/Input.h ../fltk3/Input_.h ../fltk3/Choice.h
+cube.o: ../FL/Fl_Preferences.H ../fltk3/Preferences.h ../fltk3/DoubleWindow.h
+cube.o: ../fltk3/Group.h ../fltk3/Input.h ../fltk3/Input_.h ../fltk3/Choice.h
 cube.o: ../fltk3/RoundButton.h ../fltk3/CheckButton.h ../fltk3/IntInput.h
 cube.o: ../fltk3/Input.h ../fltk3/ValueSlider.h ../fltk3/Slider.h
 cube.o: ../fltk3/Valuator.h ../fltk3/Bitmap.h ../fltk3/Pixmap.h
@@ -276,17 +279,7 @@ CubeMain.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
 CubeMain.o: ../fltk3/enumerations.h ../fltk3/Widget.h ../fltk3/Rectangle.h
 CubeMain.o: ../fltk3/Object.h ../FL/fl_utf8.h ../FL/Enumerations.H
 CubeMain.o: ../fltk3/enumerations.h ../FL/Fl_Export.H ../FL/fl_types.h
-CubeMain.o: ../fltk3/types.h CubeViewUI.h ../FL/Fl_Double_Window.H
-CubeMain.o: ../fltk3/DoubleWindow.h ../fltk3/Window.h ../fltk3/Group.h
-CubeMain.o: ../fltk3/Widget.h ../FL/Fl_Window.H ../fltk3/Wrapper.h
-CubeMain.o: ../fltk3/Window.h ../FL/Fl_Group.H ../FL/Fl_Widget.H
-CubeMain.o: ../FL/Fl_Image.H ../fltk3/Image.h ../FL/Fl_Group.H
-CubeMain.o: ../FL/Fl_Roller.H ../fltk3/Roller.h ../fltk3/Valuator.h
-CubeMain.o: ../FL/Fl_Valuator.H ../fltk3/Valuator.h ../FL/Fl_Slider.H
-CubeMain.o: ../fltk3/Slider.h ../FL/Fl_Box.H ../fltk3/Box.h CubeView.h
-CubeMain.o: ../FL/Fl_Gl_Window.H ../fltk3/GlWindow.h ../FL/gl.h ../fltk3/gl.h
-CubeMain.o: ../FL/Fl_Value_Slider.H ../fltk3/ValueSlider.h ../fltk3/Slider.h
-CubeMain.o: ../FL/Fl_Slider.H
+CubeMain.o: ../fltk3/types.h
 CubeView.o: CubeView.h ../config.h ../FL/Fl.H ../fltk3/run.h ../fltk3/utf8.h
 CubeView.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
 CubeView.o: ../fltk3/enumerations.h ../fltk3/Widget.h ../fltk3/Rectangle.h
@@ -362,30 +355,30 @@ device.o: ../FL/Fl_Light_Button.H ../fltk3/LightButton.h ../FL/Fl_Button.H
 device.o: ../FL/Fl_Printer.H ../fltk3/Printer.h ../fltk3/x.h
 device.o: ../fltk3/PagedDevice.h ../fltk3/Device.h ../fltk3/Object.h
 device.o: ../fltk3/Plugin.h Preferences.h ../FL/Fl_Preferences.H
-device.o: ../fltk3/Button.h ../fltk3/Group.h ../fltk3/Input.h
-device.o: ../fltk3/Input_.h ../fltk3/Choice.h ../fltk3/Menu_.h
-device.o: ../fltk3/MenuItem.h ../fltk3/Box.h ../fltk3/CheckButton.h
-device.o: ../fltk3/IntInput.h ../fltk3/Input.h ../fltk3/ValueSlider.h
-device.o: ../fltk3/Slider.h ../fltk3/Valuator.h ../fltk3/RGBImage.h
-device.o: ../fltk3/draw.h ../fltk3/PostScript.h ../FL/x.H
+device.o: ../fltk3/Preferences.h ../fltk3/Button.h ../fltk3/Group.h
+device.o: ../fltk3/Input.h ../fltk3/Input_.h ../fltk3/Choice.h
+device.o: ../fltk3/Menu_.h ../fltk3/MenuItem.h ../fltk3/Box.h
+device.o: ../fltk3/CheckButton.h ../fltk3/IntInput.h ../fltk3/Input.h
+device.o: ../fltk3/ValueSlider.h ../fltk3/Slider.h ../fltk3/Valuator.h
+device.o: ../fltk3/RGBImage.h ../fltk3/draw.h ../fltk3/PostScript.h ../FL/x.H
 device.o: ../FL/Fl_Paged_Device.H ../FL/Fl_Device.H ../FL/Fl_Window.H
 device.o: ../FL/Fl_RGB_Image.H ../FL/Fl_PostScript.H ../FL/Fl_File_Chooser.H
-device.o: ../fltk3/FileChooser.h ../fltk3/MenuButton.h ../fltk3/Preferences.h
-device.o: ../fltk3/TiledGroup.h ../fltk3/FileBrowser.h ../fltk3/Browser.h
-device.o: ../fltk3/Browser_.h ../fltk3/Scrollbar.h ../fltk3/FileIcon.h
-device.o: ../fltk3/run.h ../fltk3/filename.h ../fltk3/FileInput.h
-device.o: ../fltk3/ReturnButton.h ../fltk3/ask.h ../FL/Fl_Double_Window.H
-device.o: ../FL/Fl_Group.H ../FL/Fl_Choice.H ../FL/Fl_Menu_.H
-device.o: ../fltk3/Menu_.h ../FL/Fl_Menu_Item.H ../fltk3/MenuItem.h
-device.o: ../FL/Fl_Menu_Button.H ../FL/Fl_Button.H ../FL/Fl_Tile.H
-device.o: ../FL/Fl_File_Browser.H ../FL/Fl_Browser.H ../fltk3/Browser.h
-device.o: ../FL/Fl_Browser_.H ../fltk3/Browser_.h ../FL/Fl_Scrollbar.H
-device.o: ../fltk3/Scrollbar.h ../FL/Fl_Slider.H ../fltk3/Slider.h
-device.o: ../FL/Fl_Valuator.H ../fltk3/Valuator.h ../FL/Fl.H
-device.o: ../FL/Fl_File_Icon.H ../fltk3/FileIcon.h ../FL/filename.H
-device.o: ../fltk3/filename.h ../FL/Fl_Box.H ../FL/Fl_Check_Button.H
-device.o: ../FL/Fl_File_Input.H ../FL/Fl_Input.H ../FL/Fl_Input_.H
-device.o: ../fltk3/Input_.h ../FL/Fl_Return_Button.H ../FL/fl_ask.H
+device.o: ../fltk3/FileChooser.h ../fltk3/MenuButton.h ../fltk3/TiledGroup.h
+device.o: ../fltk3/FileBrowser.h ../fltk3/Browser.h ../fltk3/Browser_.h
+device.o: ../fltk3/Scrollbar.h ../fltk3/FileIcon.h ../fltk3/run.h
+device.o: ../fltk3/filename.h ../fltk3/FileInput.h ../fltk3/ReturnButton.h
+device.o: ../fltk3/ask.h ../FL/Fl_Double_Window.H ../FL/Fl_Group.H
+device.o: ../FL/Fl_Choice.H ../FL/Fl_Menu_.H ../fltk3/Menu_.h
+device.o: ../FL/Fl_Menu_Item.H ../fltk3/MenuItem.h ../FL/Fl_Menu_Button.H
+device.o: ../FL/Fl_Button.H ../FL/Fl_Tile.H ../FL/Fl_File_Browser.H
+device.o: ../FL/Fl_Browser.H ../fltk3/Browser.h ../FL/Fl_Browser_.H
+device.o: ../fltk3/Browser_.h ../FL/Fl_Scrollbar.H ../fltk3/Scrollbar.h
+device.o: ../FL/Fl_Slider.H ../fltk3/Slider.h ../FL/Fl_Valuator.H
+device.o: ../fltk3/Valuator.h ../FL/Fl.H ../FL/Fl_File_Icon.H
+device.o: ../fltk3/FileIcon.h ../FL/filename.H ../fltk3/filename.h
+device.o: ../FL/Fl_Box.H ../FL/Fl_Check_Button.H ../FL/Fl_File_Input.H
+device.o: ../FL/Fl_Input.H ../FL/Fl_Input_.H ../fltk3/Input_.h
+device.o: ../FL/Fl_Return_Button.H ../FL/fl_ask.H
 doublebuffer.o: ../FL/Fl.H ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 doublebuffer.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 doublebuffer.o: ../fltk3/Widget.h ../fltk3/Rectangle.h ../fltk3/Object.h
@@ -509,19 +502,20 @@ forms.o: ../fltk3/Window.h ../fltk3/Group.h ../fltk3/Widget.h
 forms.o: ../fltk3/Xutf8.h ../FL/Enumerations.H ../FL/Fl_Window.H
 forms.o: ../FL/Fl_Device.H ../fltk3/Device.h ../fltk3/Object.h
 forms.o: ../fltk3/Plugin.h Preferences.h ../fltk3/run.h ../fltk3/utf8.h
-forms.o: ../FL/Fl_Preferences.H ../fltk3/DoubleWindow.h ../fltk3/Button.h
-forms.o: ../fltk3/Group.h ../fltk3/Input.h ../fltk3/Input_.h
-forms.o: ../fltk3/Choice.h ../fltk3/Menu_.h ../fltk3/MenuItem.h
-forms.o: ../fltk3/Image.h ../fltk3/RoundButton.h ../fltk3/LightButton.h
-forms.o: ../fltk3/Button.h ../fltk3/Box.h ../fltk3/CheckButton.h
-forms.o: ../fltk3/IntInput.h ../fltk3/Input.h ../fltk3/ValueSlider.h
-forms.o: ../fltk3/Slider.h ../fltk3/Valuator.h ../fltk3/Bitmap.h
-forms.o: ../fltk3/Pixmap.h ../fltk3/RGBImage.h ../FL/Fl_FormsBitmap.H
-forms.o: ../FL/Fl_FormsPixmap.H ../FL/Fl_Box.H ../FL/Fl_Browser.H
-forms.o: ../fltk3/Browser.h ../FL/Fl_Browser_.H ../fltk3/Browser_.h
-forms.o: ../FL/Fl_Scrollbar.H ../fltk3/Scrollbar.h ../FL/Fl_Slider.H
-forms.o: ../fltk3/Slider.h ../FL/Fl_Valuator.H ../fltk3/Valuator.h
-forms.o: ../FL/Fl_Button.H ../FL/Fl_Light_Button.H ../fltk3/LightButton.h
+forms.o: ../FL/Fl_Preferences.H ../fltk3/Preferences.h
+forms.o: ../fltk3/DoubleWindow.h ../fltk3/Button.h ../fltk3/Group.h
+forms.o: ../fltk3/Input.h ../fltk3/Input_.h ../fltk3/Choice.h
+forms.o: ../fltk3/Menu_.h ../fltk3/MenuItem.h ../fltk3/Image.h
+forms.o: ../fltk3/RoundButton.h ../fltk3/LightButton.h ../fltk3/Button.h
+forms.o: ../fltk3/Box.h ../fltk3/CheckButton.h ../fltk3/IntInput.h
+forms.o: ../fltk3/Input.h ../fltk3/ValueSlider.h ../fltk3/Slider.h
+forms.o: ../fltk3/Valuator.h ../fltk3/Bitmap.h ../fltk3/Pixmap.h
+forms.o: ../fltk3/RGBImage.h ../FL/Fl_FormsBitmap.H ../FL/Fl_FormsPixmap.H
+forms.o: ../FL/Fl_Box.H ../FL/Fl_Browser.H ../fltk3/Browser.h
+forms.o: ../FL/Fl_Browser_.H ../fltk3/Browser_.h ../FL/Fl_Scrollbar.H
+forms.o: ../fltk3/Scrollbar.h ../FL/Fl_Slider.H ../fltk3/Slider.h
+forms.o: ../FL/Fl_Valuator.H ../fltk3/Valuator.h ../FL/Fl_Button.H
+forms.o: ../FL/Fl_Light_Button.H ../fltk3/LightButton.h
 forms.o: ../FL/Fl_Round_Button.H ../FL/Fl_Check_Button.H ../FL/Fl_Chart.H
 forms.o: ../fltk3/Chart.h ../FL/Fl_Choice.H ../FL/Fl_Menu_.H ../fltk3/Menu_.h
 forms.o: ../FL/Fl_Menu_Item.H ../fltk3/MenuItem.h ../FL/Fl_Clock.H
@@ -529,11 +523,11 @@ forms.o: ../FL/Fl_Counter.H ../fltk3/Counter.h ../FL/Fl_Dial.H
 forms.o: ../fltk3/Dial.h ../FL/Fl_Free.H ../FL/fl_ask.H ../fltk3/ask.h
 forms.o: ../FL/fl_show_colormap.H ../fltk3/show_colormap.h ../FL/filename.H
 forms.o: ../fltk3/filename.h ../FL/Fl_File_Chooser.H ../fltk3/FileChooser.h
-forms.o: ../fltk3/MenuButton.h ../fltk3/Preferences.h ../fltk3/TiledGroup.h
-forms.o: ../fltk3/FileBrowser.h ../fltk3/Browser.h ../fltk3/Browser_.h
-forms.o: ../fltk3/Scrollbar.h ../fltk3/FileIcon.h ../fltk3/run.h
-forms.o: ../fltk3/filename.h ../fltk3/FileInput.h ../fltk3/ReturnButton.h
-forms.o: ../FL/Fl.H ../FL/fl_utf8.h ../FL/Fl_Double_Window.H ../FL/Fl_Group.H
+forms.o: ../fltk3/MenuButton.h ../fltk3/TiledGroup.h ../fltk3/FileBrowser.h
+forms.o: ../fltk3/Browser.h ../fltk3/Browser_.h ../fltk3/Scrollbar.h
+forms.o: ../fltk3/FileIcon.h ../fltk3/run.h ../fltk3/filename.h
+forms.o: ../fltk3/FileInput.h ../fltk3/ReturnButton.h ../FL/Fl.H
+forms.o: ../FL/fl_utf8.h ../FL/Fl_Double_Window.H ../FL/Fl_Group.H
 forms.o: ../FL/Fl_Choice.H ../FL/Fl_Menu_Button.H ../FL/Fl_Button.H
 forms.o: ../FL/Fl_Tile.H ../FL/Fl_File_Browser.H ../FL/Fl_File_Icon.H
 forms.o: ../fltk3/FileIcon.h ../FL/Fl_Box.H ../FL/Fl_Check_Button.H
@@ -619,18 +613,18 @@ help.o: ../fltk3/Input_.h ../FL/Fl_Box.H ../fltk3/Box.h ../FL/Fl_Help_View.H
 help.o: ../fltk3/HelpView.h ../fltk3/run.h ../fltk3/Scrollbar.h
 help.o: ../fltk3/Slider.h ../fltk3/Valuator.h ../fltk3/draw.h ../fltk3/x.h
 help.o: ../fltk3/Device.h ../fltk3/Object.h ../fltk3/Plugin.h Preferences.h
-help.o: ../FL/Fl_Preferences.H ../fltk3/Group.h ../fltk3/Choice.h
-help.o: ../fltk3/Menu_.h ../fltk3/MenuItem.h ../fltk3/Image.h
-help.o: ../fltk3/RoundButton.h ../fltk3/LightButton.h ../fltk3/Button.h
-help.o: ../fltk3/CheckButton.h ../fltk3/IntInput.h ../fltk3/Input.h
-help.o: ../fltk3/ValueSlider.h ../fltk3/Bitmap.h ../fltk3/Pixmap.h
-help.o: ../fltk3/RGBImage.h ../fltk3/SharedImage.h ../fltk3/filename.h
-help.o: ../FL/Fl.H ../FL/Fl_Scrollbar.H ../fltk3/Scrollbar.h
-help.o: ../FL/Fl_Slider.H ../fltk3/Slider.h ../FL/Fl_Valuator.H
-help.o: ../fltk3/Valuator.h ../FL/fl_draw.H ../fltk3/draw.h ../FL/x.H
-help.o: ../FL/Enumerations.H ../FL/Fl_Window.H ../FL/Fl_Device.H
-help.o: ../FL/Fl_Shared_Image.H ../fltk3/SharedImage.h ../FL/filename.H
-help.o: ../fltk3/filename.h
+help.o: ../FL/Fl_Preferences.H ../fltk3/Preferences.h ../fltk3/Group.h
+help.o: ../fltk3/Choice.h ../fltk3/Menu_.h ../fltk3/MenuItem.h
+help.o: ../fltk3/Image.h ../fltk3/RoundButton.h ../fltk3/LightButton.h
+help.o: ../fltk3/Button.h ../fltk3/CheckButton.h ../fltk3/IntInput.h
+help.o: ../fltk3/Input.h ../fltk3/ValueSlider.h ../fltk3/Bitmap.h
+help.o: ../fltk3/Pixmap.h ../fltk3/RGBImage.h ../fltk3/SharedImage.h
+help.o: ../fltk3/filename.h ../FL/Fl.H ../FL/Fl_Scrollbar.H
+help.o: ../fltk3/Scrollbar.h ../FL/Fl_Slider.H ../fltk3/Slider.h
+help.o: ../FL/Fl_Valuator.H ../fltk3/Valuator.h ../FL/fl_draw.H
+help.o: ../fltk3/draw.h ../FL/x.H ../FL/Enumerations.H ../FL/Fl_Window.H
+help.o: ../FL/Fl_Device.H ../FL/Fl_Shared_Image.H ../fltk3/SharedImage.h
+help.o: ../FL/filename.H ../fltk3/filename.h
 iconize.o: ../FL/Fl.H ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 iconize.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 iconize.o: ../fltk3/Widget.h ../fltk3/Rectangle.h ../fltk3/Object.h
@@ -756,17 +750,18 @@ mandelbrot.o: ../fltk3/Printer.h ../fltk3/x.h ../fltk3/Window.h
 mandelbrot.o: ../fltk3/Group.h ../fltk3/Xutf8.h ../fltk3/PagedDevice.h
 mandelbrot.o: ../fltk3/Device.h ../fltk3/Object.h ../fltk3/Plugin.h
 mandelbrot.o: Preferences.h ../fltk3/run.h ../fltk3/utf8.h
-mandelbrot.o: ../FL/Fl_Preferences.H ../fltk3/DoubleWindow.h ../fltk3/Group.h
-mandelbrot.o: ../fltk3/Input.h ../fltk3/Input_.h ../fltk3/Choice.h
-mandelbrot.o: ../fltk3/Menu_.h ../fltk3/MenuItem.h ../fltk3/Image.h
-mandelbrot.o: ../fltk3/RoundButton.h ../fltk3/LightButton.h ../fltk3/Button.h
-mandelbrot.o: ../fltk3/Box.h ../fltk3/CheckButton.h ../fltk3/IntInput.h
-mandelbrot.o: ../fltk3/Input.h ../fltk3/ValueSlider.h ../fltk3/Slider.h
-mandelbrot.o: ../fltk3/Valuator.h ../fltk3/Bitmap.h ../fltk3/Pixmap.h
-mandelbrot.o: ../fltk3/RGBImage.h ../fltk3/draw.h ../fltk3/PostScript.h
-mandelbrot.o: ../FL/x.H ../FL/Fl_Paged_Device.H ../FL/Fl_Device.H
-mandelbrot.o: ../FL/Fl_Window.H ../FL/Fl_Pixmap.H ../FL/Fl_RGB_Image.H
-mandelbrot.o: ../FL/Fl_Bitmap.H ../FL/Fl_PostScript.H
+mandelbrot.o: ../FL/Fl_Preferences.H ../fltk3/Preferences.h
+mandelbrot.o: ../fltk3/DoubleWindow.h ../fltk3/Group.h ../fltk3/Input.h
+mandelbrot.o: ../fltk3/Input_.h ../fltk3/Choice.h ../fltk3/Menu_.h
+mandelbrot.o: ../fltk3/MenuItem.h ../fltk3/Image.h ../fltk3/RoundButton.h
+mandelbrot.o: ../fltk3/LightButton.h ../fltk3/Button.h ../fltk3/Box.h
+mandelbrot.o: ../fltk3/CheckButton.h ../fltk3/IntInput.h ../fltk3/Input.h
+mandelbrot.o: ../fltk3/ValueSlider.h ../fltk3/Slider.h ../fltk3/Valuator.h
+mandelbrot.o: ../fltk3/Bitmap.h ../fltk3/Pixmap.h ../fltk3/RGBImage.h
+mandelbrot.o: ../fltk3/draw.h ../fltk3/PostScript.h ../FL/x.H
+mandelbrot.o: ../FL/Fl_Paged_Device.H ../FL/Fl_Device.H ../FL/Fl_Window.H
+mandelbrot.o: ../FL/Fl_Pixmap.H ../FL/Fl_RGB_Image.H ../FL/Fl_Bitmap.H
+mandelbrot.o: ../FL/Fl_PostScript.H
 menubar.o: ../FL/Fl.H ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 menubar.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 menubar.o: ../fltk3/Widget.h ../fltk3/Rectangle.h ../fltk3/Object.h
@@ -952,12 +947,12 @@ pixmap.o: ../FL/Fl_Toggle_Button.H ../fltk3/ToggleButton.h ../fltk3/Button.h
 pixmap.o: ../FL/Fl_Button.H ../FL/Fl_Multi_Label.H ../fltk3/MultiLabel.h
 preferences.o: preferences.h ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 preferences.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
-preferences.o: ../FL/Fl_Preferences.H ../FL/Fl_Export.H
-preferences.o: ../fltk3/DoubleWindow.h ../fltk3/Window.h ../fltk3/Group.h
-preferences.o: ../fltk3/Widget.h ../fltk3/Button.h ../fltk3/Group.h
-preferences.o: ../fltk3/Input.h ../fltk3/Input_.h ../fltk3/Choice.h
-preferences.o: ../fltk3/Menu_.h ../fltk3/MenuItem.h ../fltk3/Image.h
-preferences.o: ../fltk3/RoundButton.h ../fltk3/LightButton.h
+preferences.o: ../FL/Fl_Preferences.H ../fltk3/Preferences.h
+preferences.o: ../FL/Fl_Export.H ../fltk3/DoubleWindow.h ../fltk3/Window.h
+preferences.o: ../fltk3/Group.h ../fltk3/Widget.h ../fltk3/Button.h
+preferences.o: ../fltk3/Group.h ../fltk3/Input.h ../fltk3/Input_.h
+preferences.o: ../fltk3/Choice.h ../fltk3/Menu_.h ../fltk3/MenuItem.h
+preferences.o: ../fltk3/Image.h ../fltk3/RoundButton.h ../fltk3/LightButton.h
 preferences.o: ../fltk3/Button.h ../fltk3/Box.h ../fltk3/CheckButton.h
 preferences.o: ../fltk3/IntInput.h ../fltk3/Input.h ../fltk3/ValueSlider.h
 preferences.o: ../fltk3/Slider.h ../fltk3/Valuator.h ../FL/filename.H
@@ -983,30 +978,30 @@ device.o: ../FL/Fl_Light_Button.H ../fltk3/LightButton.h ../FL/Fl_Button.H
 device.o: ../FL/Fl_Printer.H ../fltk3/Printer.h ../fltk3/x.h
 device.o: ../fltk3/PagedDevice.h ../fltk3/Device.h ../fltk3/Object.h
 device.o: ../fltk3/Plugin.h Preferences.h ../FL/Fl_Preferences.H
-device.o: ../fltk3/Button.h ../fltk3/Group.h ../fltk3/Input.h
-device.o: ../fltk3/Input_.h ../fltk3/Choice.h ../fltk3/Menu_.h
-device.o: ../fltk3/MenuItem.h ../fltk3/Box.h ../fltk3/CheckButton.h
-device.o: ../fltk3/IntInput.h ../fltk3/Input.h ../fltk3/ValueSlider.h
-device.o: ../fltk3/Slider.h ../fltk3/Valuator.h ../fltk3/RGBImage.h
-device.o: ../fltk3/draw.h ../fltk3/PostScript.h ../FL/x.H
+device.o: ../fltk3/Preferences.h ../fltk3/Button.h ../fltk3/Group.h
+device.o: ../fltk3/Input.h ../fltk3/Input_.h ../fltk3/Choice.h
+device.o: ../fltk3/Menu_.h ../fltk3/MenuItem.h ../fltk3/Box.h
+device.o: ../fltk3/CheckButton.h ../fltk3/IntInput.h ../fltk3/Input.h
+device.o: ../fltk3/ValueSlider.h ../fltk3/Slider.h ../fltk3/Valuator.h
+device.o: ../fltk3/RGBImage.h ../fltk3/draw.h ../fltk3/PostScript.h ../FL/x.H
 device.o: ../FL/Fl_Paged_Device.H ../FL/Fl_Device.H ../FL/Fl_Window.H
 device.o: ../FL/Fl_RGB_Image.H ../FL/Fl_PostScript.H ../FL/Fl_File_Chooser.H
-device.o: ../fltk3/FileChooser.h ../fltk3/MenuButton.h ../fltk3/Preferences.h
-device.o: ../fltk3/TiledGroup.h ../fltk3/FileBrowser.h ../fltk3/Browser.h
-device.o: ../fltk3/Browser_.h ../fltk3/Scrollbar.h ../fltk3/FileIcon.h
-device.o: ../fltk3/run.h ../fltk3/filename.h ../fltk3/FileInput.h
-device.o: ../fltk3/ReturnButton.h ../fltk3/ask.h ../FL/Fl_Double_Window.H
-device.o: ../FL/Fl_Group.H ../FL/Fl_Choice.H ../FL/Fl_Menu_.H
-device.o: ../fltk3/Menu_.h ../FL/Fl_Menu_Item.H ../fltk3/MenuItem.h
-device.o: ../FL/Fl_Menu_Button.H ../FL/Fl_Button.H ../FL/Fl_Tile.H
-device.o: ../FL/Fl_File_Browser.H ../FL/Fl_Browser.H ../fltk3/Browser.h
-device.o: ../FL/Fl_Browser_.H ../fltk3/Browser_.h ../FL/Fl_Scrollbar.H
-device.o: ../fltk3/Scrollbar.h ../FL/Fl_Slider.H ../fltk3/Slider.h
-device.o: ../FL/Fl_Valuator.H ../fltk3/Valuator.h ../FL/Fl.H
-device.o: ../FL/Fl_File_Icon.H ../fltk3/FileIcon.h ../FL/filename.H
-device.o: ../fltk3/filename.h ../FL/Fl_Box.H ../FL/Fl_Check_Button.H
-device.o: ../FL/Fl_File_Input.H ../FL/Fl_Input.H ../FL/Fl_Input_.H
-device.o: ../fltk3/Input_.h ../FL/Fl_Return_Button.H ../FL/fl_ask.H
+device.o: ../fltk3/FileChooser.h ../fltk3/MenuButton.h ../fltk3/TiledGroup.h
+device.o: ../fltk3/FileBrowser.h ../fltk3/Browser.h ../fltk3/Browser_.h
+device.o: ../fltk3/Scrollbar.h ../fltk3/FileIcon.h ../fltk3/run.h
+device.o: ../fltk3/filename.h ../fltk3/FileInput.h ../fltk3/ReturnButton.h
+device.o: ../fltk3/ask.h ../FL/Fl_Double_Window.H ../FL/Fl_Group.H
+device.o: ../FL/Fl_Choice.H ../FL/Fl_Menu_.H ../fltk3/Menu_.h
+device.o: ../FL/Fl_Menu_Item.H ../fltk3/MenuItem.h ../FL/Fl_Menu_Button.H
+device.o: ../FL/Fl_Button.H ../FL/Fl_Tile.H ../FL/Fl_File_Browser.H
+device.o: ../FL/Fl_Browser.H ../fltk3/Browser.h ../FL/Fl_Browser_.H
+device.o: ../fltk3/Browser_.h ../FL/Fl_Scrollbar.H ../fltk3/Scrollbar.h
+device.o: ../FL/Fl_Slider.H ../fltk3/Slider.h ../FL/Fl_Valuator.H
+device.o: ../fltk3/Valuator.h ../FL/Fl.H ../FL/Fl_File_Icon.H
+device.o: ../fltk3/FileIcon.h ../FL/filename.H ../fltk3/filename.h
+device.o: ../FL/Fl_Box.H ../FL/Fl_Check_Button.H ../FL/Fl_File_Input.H
+device.o: ../FL/Fl_Input.H ../FL/Fl_Input_.H ../fltk3/Input_.h
+device.o: ../FL/Fl_Return_Button.H ../FL/fl_ask.H
 radio.o: radio.h ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 radio.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 radio.o: ../fltk3/DoubleWindow.h ../fltk3/Window.h ../fltk3/Group.h
@@ -1116,21 +1111,22 @@ sudoku.o: ../FL/Fl_Help_View.H ../fltk3/HelpView.h ../fltk3/run.h
 sudoku.o: ../fltk3/Scrollbar.h ../fltk3/Slider.h ../fltk3/Valuator.h
 sudoku.o: ../fltk3/draw.h ../fltk3/x.h ../fltk3/Device.h ../fltk3/Object.h
 sudoku.o: ../fltk3/Plugin.h Preferences.h ../FL/Fl_Preferences.H
-sudoku.o: ../fltk3/Group.h ../fltk3/Choice.h ../fltk3/Menu_.h
-sudoku.o: ../fltk3/MenuItem.h ../fltk3/Image.h ../fltk3/RoundButton.h
-sudoku.o: ../fltk3/LightButton.h ../fltk3/Button.h ../fltk3/CheckButton.h
-sudoku.o: ../fltk3/IntInput.h ../fltk3/Input.h ../fltk3/ValueSlider.h
-sudoku.o: ../fltk3/Bitmap.h ../fltk3/Pixmap.h ../fltk3/RGBImage.h
-sudoku.o: ../fltk3/SharedImage.h ../fltk3/filename.h ../FL/Fl.H
-sudoku.o: ../FL/Fl_Scrollbar.H ../fltk3/Scrollbar.h ../FL/Fl_Slider.H
-sudoku.o: ../fltk3/Slider.h ../FL/Fl_Valuator.H ../fltk3/Valuator.h
-sudoku.o: ../FL/fl_draw.H ../fltk3/draw.h ../FL/x.H ../FL/Fl_Window.H
-sudoku.o: ../FL/Fl_Device.H ../FL/Fl_Shared_Image.H ../fltk3/SharedImage.h
-sudoku.o: ../FL/filename.H ../fltk3/filename.h ../FL/Fl_Sys_Menu_Bar.H
-sudoku.o: ../fltk3/SysMenuBar.h ../fltk3/MenuBar.h ../fltk3/x.h
-sudoku.o: ../FL/Fl_Menu_Bar.H ../fltk3/MenuBar.h ../FL/Fl_Menu_.H
-sudoku.o: ../fltk3/Menu_.h ../FL/Fl_Menu_Item.H ../fltk3/MenuItem.h ../FL/x.H
-sudoku.o: ../FL/math.h ../fltk3/math.h pixmaps/sudoku.xbm ../config.h
+sudoku.o: ../fltk3/Preferences.h ../fltk3/Group.h ../fltk3/Choice.h
+sudoku.o: ../fltk3/Menu_.h ../fltk3/MenuItem.h ../fltk3/Image.h
+sudoku.o: ../fltk3/RoundButton.h ../fltk3/LightButton.h ../fltk3/Button.h
+sudoku.o: ../fltk3/CheckButton.h ../fltk3/IntInput.h ../fltk3/Input.h
+sudoku.o: ../fltk3/ValueSlider.h ../fltk3/Bitmap.h ../fltk3/Pixmap.h
+sudoku.o: ../fltk3/RGBImage.h ../fltk3/SharedImage.h ../fltk3/filename.h
+sudoku.o: ../FL/Fl.H ../FL/Fl_Scrollbar.H ../fltk3/Scrollbar.h
+sudoku.o: ../FL/Fl_Slider.H ../fltk3/Slider.h ../FL/Fl_Valuator.H
+sudoku.o: ../fltk3/Valuator.h ../FL/fl_draw.H ../fltk3/draw.h ../FL/x.H
+sudoku.o: ../FL/Fl_Window.H ../FL/Fl_Device.H ../FL/Fl_Shared_Image.H
+sudoku.o: ../fltk3/SharedImage.h ../FL/filename.H ../fltk3/filename.h
+sudoku.o: ../FL/Fl_Sys_Menu_Bar.H ../fltk3/SysMenuBar.h ../fltk3/MenuBar.h
+sudoku.o: ../fltk3/x.h ../FL/Fl_Menu_Bar.H ../fltk3/MenuBar.h
+sudoku.o: ../FL/Fl_Menu_.H ../fltk3/Menu_.h ../FL/Fl_Menu_Item.H
+sudoku.o: ../fltk3/MenuItem.h ../FL/x.H ../FL/math.h ../fltk3/math.h
+sudoku.o: pixmaps/sudoku.xbm ../config.h
 symbols.o: ../FL/Fl.H ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 symbols.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 symbols.o: ../fltk3/Widget.h ../fltk3/Rectangle.h ../fltk3/Object.h
@@ -1207,8 +1203,8 @@ tiled_image.o: ../FL/Fl_Window.H ../fltk3/Wrapper.h ../fltk3/Window.h
 tiled_image.o: ../FL/Fl_Group.H ../FL/Fl_Widget.H ../FL/Fl_Image.H
 tiled_image.o: ../fltk3/Image.h ../FL/Fl_Button.H ../fltk3/Button.h
 tiled_image.o: ../FL/Fl_Pixmap.H ../fltk3/Pixmap.h ../fltk3/Image.h
-tiled_image.o: ../FL/Fl_Tiled_Image.H pixmaps/tile.xpm ../FL/x.H ../fltk3/x.h
-tiled_image.o: list_visuals.cxx ../config.h
+tiled_image.o: ../FL/Fl_Tiled_Image.H ../fltk3/TiledImage.h pixmaps/tile.xpm
+tiled_image.o: ../FL/x.H ../fltk3/x.h list_visuals.cxx ../config.h
 tree.o: tree.h ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 tree.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h ../FL/Fl.H
 tree.o: ../fltk3/Widget.h ../fltk3/Rectangle.h ../fltk3/Object.h
@@ -1216,17 +1212,19 @@ tree.o: ../FL/fl_utf8.h ../FL/Enumerations.H ../fltk3/enumerations.h
 tree.o: ../FL/Fl_Export.H ../FL/fl_types.h ../fltk3/types.h ../FL/Fl_Pixmap.H
 tree.o: ../fltk3/Pixmap.h ../fltk3/Image.h ../FL/Fl_Image.H ../fltk3/Image.h
 tree.o: ../fltk3/Wrapper.h ../fltk3/Window.h ../FL/Fl_Group.H ../FL/Fl_Tree.H
+tree.o: ../fltk3/Tree.h ../fltk3/Group.h ../fltk3/Scrollbar.h ../fltk3/draw.h
+tree.o: ../fltk3/TreeItem.h ../fltk3/TreeItemArray.h ../fltk3/TreePrefs.h
 tree.o: ../FL/Fl_Scrollbar.H ../FL/fl_draw.H ../FL/Fl_Tree_Item.H
 tree.o: ../FL/Fl_Widget.H ../FL/Fl_Image.H ../FL/Fl_Tree_Item_Array.H
 tree.o: ../FL/Fl_Tree_Prefs.H ../FL/fl_ask.H ../fltk3/ask.h
 tree.o: ../FL/fl_message.H ../FL/fl_ask.H ../FL/Fl_File_Chooser.H
 tree.o: ../fltk3/FileChooser.h ../fltk3/DoubleWindow.h ../fltk3/Window.h
-tree.o: ../fltk3/Group.h ../fltk3/Widget.h ../fltk3/Group.h ../fltk3/Choice.h
-tree.o: ../fltk3/Menu_.h ../fltk3/MenuItem.h ../fltk3/MenuButton.h
-tree.o: ../fltk3/Button.h ../fltk3/Preferences.h ../fltk3/TiledGroup.h
-tree.o: ../fltk3/FileBrowser.h ../fltk3/Browser.h ../fltk3/Browser_.h
-tree.o: ../fltk3/Scrollbar.h ../fltk3/Slider.h ../fltk3/Valuator.h
-tree.o: ../fltk3/FileIcon.h ../fltk3/run.h ../fltk3/filename.h ../fltk3/Box.h
+tree.o: ../fltk3/Group.h ../fltk3/Widget.h ../fltk3/Choice.h ../fltk3/Menu_.h
+tree.o: ../fltk3/MenuItem.h ../fltk3/MenuButton.h ../fltk3/Button.h
+tree.o: ../fltk3/Preferences.h ../fltk3/TiledGroup.h ../fltk3/FileBrowser.h
+tree.o: ../fltk3/Browser.h ../fltk3/Browser_.h ../fltk3/Scrollbar.h
+tree.o: ../fltk3/Slider.h ../fltk3/Valuator.h ../fltk3/FileIcon.h
+tree.o: ../fltk3/run.h ../fltk3/filename.h ../fltk3/Box.h
 tree.o: ../fltk3/CheckButton.h ../fltk3/LightButton.h ../fltk3/Button.h
 tree.o: ../fltk3/FileInput.h ../fltk3/Input.h ../fltk3/Input_.h
 tree.o: ../fltk3/ReturnButton.h ../FL/Fl_Double_Window.H ../FL/Fl_Window.H
@@ -1235,8 +1233,8 @@ tree.o: ../fltk3/Menu_.h ../FL/Fl_Menu_Item.H ../fltk3/MenuItem.h
 tree.o: ../FL/Fl_Menu_Button.H ../FL/Fl_Button.H ../FL/Fl_Preferences.H
 tree.o: ../FL/Fl_Tile.H ../FL/Fl_File_Browser.H ../FL/Fl_Browser.H
 tree.o: ../fltk3/Browser.h ../FL/Fl_Browser_.H ../fltk3/Browser_.h
-tree.o: ../FL/Fl_Scrollbar.H ../fltk3/Scrollbar.h ../FL/Fl_Slider.H
-tree.o: ../fltk3/Slider.h ../FL/Fl_Valuator.H ../fltk3/Valuator.h ../FL/Fl.H
+tree.o: ../FL/Fl_Scrollbar.H ../FL/Fl_Slider.H ../fltk3/Slider.h
+tree.o: ../FL/Fl_Valuator.H ../fltk3/Valuator.h ../FL/Fl.H
 tree.o: ../FL/Fl_File_Icon.H ../fltk3/FileIcon.h ../FL/filename.H
 tree.o: ../fltk3/filename.h ../FL/Fl_Box.H ../FL/Fl_Check_Button.H
 tree.o: ../FL/Fl_Light_Button.H ../fltk3/LightButton.h ../FL/Fl_Button.H

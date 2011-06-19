@@ -61,7 +61,7 @@ public:
   }
   
   void textfont(Fl_Font font) { 
-    ((fltk3::ValueOutput*)_p)->font( fltk3::_1to3_font(font) );
+    ((fltk3::ValueOutput*)_p)->textfont( fltk3::_1to3_font(font) );
   }
   
   Fl_Fontsize textsize() const { 
@@ -69,7 +69,7 @@ public:
   }
   
   void textsize(Fl_Fontsize size) {
-    ((fltk3::ValueOutput*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+    ((fltk3::ValueOutput*)_p)->textsize( fltk3::_1to3_fontsize(size) );
   }
   
   Fl_Color textcolor() const { 
