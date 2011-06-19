@@ -31,6 +31,7 @@
 #ifndef FLTK3_OBJECT_H
 #define FLTK3_OBJECT_H
 
+
 namespace fltk3 {
   
   class Wrapper; 

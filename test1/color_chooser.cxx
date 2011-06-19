@@ -121,7 +121,7 @@ int main(int argc, char ** argv) {
     printf(" # : use this visual with an empty colormap:\n");
     list_visuals();
 #endif
-    puts(Fl::help);
+    puts(Fl::help_text());
     exit(1);
   }
   if (i!=argc) {

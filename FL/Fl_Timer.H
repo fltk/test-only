@@ -41,11 +41,11 @@ class FL_EXPORT Fl_Timer : public Fl_Widget {
   
 protected:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, draw(), draw(), Draw)
+  FLTK3_WRAPPER_VCALLS_OBJECT(Timer, draw(), draw(), Draw)
   
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Widget, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Timer, handle(int event), handle(event), Handle)
   
   Fl_Timer(uchar t,int x,int y,int w,int h, const char *l) {
     _p = new fltk3::Timer(t, x, y, w, h, l);

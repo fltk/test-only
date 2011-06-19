@@ -34,12 +34,118 @@
 #include <fltk3/Window.h>
 
 /*
+ 
+ Wrapping a virtual function is somewhat complicated. There are few virtual
+ functions in FLTK, but wrapping those needs to be perfect. 
+
+ Here are the use cases we need to cover. The draw() method is usually called
+ from the core and can (or must) be overriden by the user. show() is usually
+ called by the user and must call the correct show() in FLTK 3.
+ 
+ To add complexity, an overridden method may call the originl method or a 
+ method of the superclass at any time.
+ 
+ 
+ A: draw() called by the core, not overridden:
+ 
+ user over FLTK1 FLTK3 core flag
+ 
+                       core  0     core calls FLTK3 draw()
+                      /              virtual call
+                 FLTK3       0->1  checks if a wrapper exists and calls it
+                /                    direct call
+           FLTK1             1     method not overridden, call FLTK3
+                \                    direct call
+                 FLTK3       1     call from FLTK1, run FLTK3 draw() and return
+                /                    return
+           FLTK1             1->0  return to FLTK3
+                \                    return
+                 FLTK3       0     we are done here, return to core
+                      \              return
+                       core  0
+ 
+ 
+ B: draw() called by the core, wrapper overridden by the user:
+ 
+ user over FLTK1 FLTK3 core flag
+ 
+                       core  0     core calls FLTK3 draw()
+                      /              virtual call
+                 FLTK3       0->1  checks if a wrapper exists and calls it
+          ,-----'                    direct call
+      over                   1     method overridden, eventually returns to FLTK3
+          `-----.                    return
+                 FLTK3       1->0  method overriden, don't run FLTK3 draw(), return
+                      \              return
+                       core  0
+
+ 
+ C: draw() called by the core, wrapper overridden by the user, overriden method calls original draw
+ 
+ user over FLTK1 FLTK3 core flag
+ 
+                       core  0     core calls FLTK3 draw()
+                      /              virtual call
+                 FLTK3       0->1  checks if a wrapper exists and calls it
+          ,-----'                    direct call
+      over                   1     method overridden, calls original draw()
+          \                          virtual or direct call
+           FLTK1             1     call FLTK3
+                \                    direct call
+                 FLTK3       1     call from FLTK1, run FLTK3 draw() and return
+                /                    return
+           FLTK1             1     return to wherever we came from
+          /                          return
+      over                   1     eventually returns to FLTK3
+          `-----.                    return
+                 FLTK3       1->0  method overriden, don't run FLTK3 draw(), return
+                      \              return
+                       core  0
+ 
+
+ D: show() called by the user, nothing overridden
+
+ user over FLTK1 FLTK3 core flag
+ 
+ user                        0     user calls virtual method
+     `----.                          virtual or direct call
+           FLTK1             0->1  call FLTK3
+                \                    direct call
+                 FLTK3       1     call from FLTK1, run FLTK3 draw() and return
+                /                    return
+           FLTK1             1->0  return to wherever we came from
+     ,----'                          return
+ user
+
+ 
+ E: show() called by the user, overridden by the user, calling original show()
+ 
+ user over FLTK1 FLTK3 core flag
+ 
+ user                        0     user calls virtual method
+     \                               virtual call
+      over                   0     call original function
+          \                          direct call
+           FLTK1             0->1  call FLTK3
+                \                    direct call
+                 FLTK3       1     call from FLTK1, run FLTK3 draw() and return
+                /                    return
+           FLTK1             1->0  return to wherever we came from
+          /                          return
+      over                   0     eventually return to use
+     /                               return
+ user
+ 
+ 
+ */
+
+/*
  FLTK3_OBJECT_VCALLS_WRAPPER:
 if (pWrapper) { 
   // We only do this tests if there is a wrapper connected to me.
   if ( pWrapper->pVCalls & Wrapper::pVCallWidgetDraw ) { 
     // if my flag is set, we are being called from the wrapper, so we simply
-    // continue with the original code. The wrapper mus clear the flag.
+    // continue with the original code. The wrapper must clear the flag.
   } else { 
     // if my flag is clear, we are called from the core. So lets set the 
     // flag and call the wrapper.
@@ -56,8 +162,23 @@ if (pWrapper) {
     }
   } 
 }
+
+ FLTK3_WRAPPER_VCALLS_OBJECT
+virtual void proto { \
+  if ( pVCalls & pVCallWidget##flag ) { \
+    // if my flag is set, we are called from the core. Clear the flag so the core function knows
+    // that we were not overridden.
+    pVCalls &= ~pVCallWidget##flag;
+  } else { \
+    // if my flag is cleared, we are called from 
+    pVCalls |= pVCallWidget##flag; \
+    ((fltk3::klass*)_p)->call; \
+    pVCalls &= ~pVCallWidget##flag; \
+  } \
+}
 */
 
+/*
 #define FLTK3_WRAPPER_VCALLS_OBJECT(klass, proto, call, flag) \
   virtual void proto { \
     if ( pVCalls & pVCallWidget##flag ) { \
@@ -77,7 +198,6 @@ if (pWrapper) {
       if ( (pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) { \
         pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
         return; \
-      } else { \
       } \
     } \
   }
@@ -108,7 +228,7 @@ if (pWrapper) {
       } \
     } \
   }
-
+*/
 
 namespace fltk3 {
   
@@ -139,27 +259,10 @@ namespace fltk3 {
   class WidgetWrapper : public Wrapper {
   public:
     virtual ~WidgetWrapper() {}
-    //FLTK3_WRAPPER_VCALLS_OBJECT(draw(),
-    //                            draw(),
-    //                            Draw)
-    
-    virtual void draw() {
-      if ( pVCalls & pVCallWidgetDraw ) {
-        // if my flag is set, we are called from the object that we wrap.
-        // Tell the caller that this function was not overridden by clearing 
-        // the flag
-        pVCalls &= ~pVCallWidgetDraw;
-      } else {
-        // if my flag is not set, we were called from the wrapper side, probably
-        // from the function overriding us. Set our flag and call the original
-        // function
-        pVCalls |= pVCallWidgetDraw;
-        ((fltk3::Widget*)_p)->draw();
-        pVCalls &= ~pVCallWidgetDraw;
-      }
-    }
-
-    
+    FLTK3_WRAPPER_VCALLS_OBJECT(Widget, 
+                                draw(),
+                                draw(),
+                                Draw)
     FLTK3_WRAPPER_VCALLS_OBJECT_INT(Widget,
                                     handle(int event),
                                     handle(event),

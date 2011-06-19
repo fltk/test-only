@@ -74,7 +74,7 @@ public:
   }
   
   void textfont(Fl_Font font) { 
-    ((fltk3::ValueInput*)_p)->font( fltk3::_1to3_font(font) );
+    ((fltk3::ValueInput*)_p)->textfont( fltk3::_1to3_font(font) );
   }
   
   Fl_Fontsize textsize() const { 
@@ -82,7 +82,7 @@ public:
   }
   
   void textsize(Fl_Fontsize size) {
-    ((fltk3::ValueInput*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+    ((fltk3::ValueInput*)_p)->textsize( fltk3::_1to3_fontsize(size) );
   }
   
   Fl_Color textcolor() const { 
@@ -98,7 +98,7 @@ public:
   }
   
   void cursor_color(Fl_Color n) {
-    ((fltk3::ValueInput*)_p)->cursor_color( fltk3::_1to3_color(col) );
+    ((fltk3::ValueInput*)_p)->cursor_color( fltk3::_1to3_color(n) );
   }
 
 };

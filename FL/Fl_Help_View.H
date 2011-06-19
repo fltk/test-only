@@ -153,7 +153,7 @@ public:
     return ((fltk3::HelpView*)_p)->load(f);
   }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
+  FLTK3_WRAPPER_VCALLS_OBJECT(HelpView, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
   
   int size() const {
     return ((fltk3::HelpView*)_p)->size();

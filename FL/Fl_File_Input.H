@@ -39,7 +39,7 @@ class FL_EXPORT Fl_File_Input : public Fl_Input {
   
 protected:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, draw(), draw(), Draw)
+  FLTK3_WRAPPER_VCALLS_OBJECT(FileInput, draw(), draw(), Draw)
   
 public:
 
@@ -50,7 +50,7 @@ public:
     _p->wrapper(this);
   }
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Widget, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(FileInput, handle(int event), handle(event), Handle)
 
   Fl_Boxtype down_box() const { 
     return fltk3::_3to1_boxtype( ((fltk3::FileInput*)_p)->down_box() );

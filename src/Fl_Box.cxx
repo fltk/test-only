@@ -27,9 +27,11 @@
 
 #include <fltk3/Widget.h>
 #include <fltk3/Box.h>
+#include <fltk3/Wrapper.h>
 
 
 void fltk3::Box::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   draw_box();
   draw_label();
 }

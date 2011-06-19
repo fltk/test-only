@@ -351,19 +351,7 @@ fltk3::Widget::do_callback(fltk3::Widget* o,void* arg) {
 /** Draw a box.
  */
 void fltk3::Widget::draw() {
-  //FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
-  
-  if (pWrapper) { 
-    if ( pWrapper->pVCalls & Wrapper::pVCallWidgetDraw ) { 
-    } else { 
-      pWrapper->pVCalls |= Wrapper::pVCallWidgetDraw; 
-      ((WidgetWrapper*)pWrapper)->draw(); 
-      if ( (pWrapper->pVCalls & Wrapper::pVCallWidgetDraw) ) 
-        return; 
-    } 
-    pWrapper->pVCalls &= ~Wrapper::pVCallWidgetDraw; 
-  }
-
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   draw_box();
   draw_label();
 }

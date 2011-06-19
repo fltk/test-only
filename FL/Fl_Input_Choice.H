@@ -90,7 +90,7 @@ public:
   // FIXME: 123
   void menu(const Fl_Menu_Item *m) { menu_->menu(m); }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
+  FLTK3_WRAPPER_VCALLS_OBJECT(InputChoice, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
   
   Fl_Font textfont() const { 
     return fltk3::_3to1_font( ((fltk3::InputChoice*)_p)->textfont() ); 

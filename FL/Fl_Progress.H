@@ -37,7 +37,7 @@ class FL_EXPORT Fl_Progress : public Fl_Widget {
   
 protected:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, draw(), draw(), Draw)
+  FLTK3_WRAPPER_VCALLS_OBJECT(Progress, draw(), draw(), Draw)
 
 public:
 

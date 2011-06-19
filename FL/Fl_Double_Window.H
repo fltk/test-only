@@ -43,7 +43,7 @@ protected:
   
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, show(), show(), Show)
+  FLTK3_WRAPPER_VCALLS_OBJECT(DoubleWindow, show(), show(), Show)
   
   void show(int a, char **b) {
     ((fltk3::DoubleWindow*)_p)->show(a, b);

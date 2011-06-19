@@ -34,6 +34,8 @@
 #include "Valuator.h"
 #include "Input.h"
 
+class Fl_Value_Input;
+
 namespace fltk3 {
   
   /**
@@ -65,6 +67,9 @@ namespace fltk3 {
    \image latex  fltk3::ValueInput.png "fltk3::ValueInput" width=4cm
    */
   class FLTK3_EXPORT ValueInput : public fltk3::Valuator {
+
+   friend class ::Fl_Value_Input;
+
   public:
     /* This is the encapsulated fltk3::Input attribute to which 
      this class delegates the value font, color and shortcut */

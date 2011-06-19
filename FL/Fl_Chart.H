@@ -55,7 +55,7 @@ class FL_EXPORT Fl_Chart : public Fl_Widget {
 
 protected:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, draw(), draw(), Draw)
+  FLTK3_WRAPPER_VCALLS_OBJECT(Chart, draw(), draw(), Draw)
   
 public:
   

@@ -42,7 +42,7 @@ class FL_EXPORT Fl_Clock_Output : public Fl_Widget {
 
 protected:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(Widget, draw(), draw(), Draw)
+  FLTK3_WRAPPER_VCALLS_OBJECT(ClockOutput, draw(), draw(), Draw)
 
   void draw(int X, int Y, int W, int H) {
     ((fltk3::ClockOutput*)_p)->draw(X, Y, W, H);
@@ -87,7 +87,7 @@ class FL_EXPORT Fl_Clock : public Fl_Clock_Output {
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Widget, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Clock, handle(int event), handle(event), Handle)
 
   Fl_Clock() { /* empty */ }
   

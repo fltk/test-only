@@ -43,7 +43,7 @@ class FL_EXPORT Fl_Color_Chooser : public Fl_Group {
 public:
   
   int mode() {
-    return ((fltk3::ColorChooser*)_p)->mode());
+    return ((fltk3::ColorChooser*)_p)->mode();
   }
             
   void mode(int newMode) {
@@ -100,12 +100,12 @@ public:
 };
 
 
-FL_EXPORT int fl_color_chooser(const char* name, double& r, double& g, double& b, int m=-1) {
-  fltk3::color_chooser(name, r, g, b, m);
+inline int fl_color_chooser(const char* name, double& r, double& g, double& b, int m=-1) {
+  return fltk3::color_chooser(name, r, g, b, m);
 }
 
-FL_EXPORT int fl_color_chooser(const char* name, uchar& r, uchar& g, uchar& b, int m=-1) {
-  fltk3::color_chooser(name, r, g, b, m);
+inline int fl_color_chooser(const char* name, uchar& r, uchar& g, uchar& b, int m=-1) {
+  return fltk3::color_chooser(name, r, g, b, m);
 }
 
 
