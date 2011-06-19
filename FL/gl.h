@@ -66,9 +66,7 @@
 // void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
 // inline void gl_color(int c);
 
-inline void gl_color(Fl_Color i) {
-  gl_color(fltk3::_1to3_color(i));
-}
+// inline void gl_color(Fl_Color i) { gl_color(fltk3::_1to3_color(i)); }
 
 inline void gl_draw(const char *s, int x, int y, int w, int h, Fl_Align a) {
   gl_draw(s, x, y, w, h, fltk3::_1to3_align(a));
