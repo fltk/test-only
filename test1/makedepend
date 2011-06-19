@@ -276,7 +276,17 @@ CubeMain.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
 CubeMain.o: ../fltk3/enumerations.h ../fltk3/Widget.h ../fltk3/Rectangle.h
 CubeMain.o: ../fltk3/Object.h ../FL/fl_utf8.h ../FL/Enumerations.H
 CubeMain.o: ../fltk3/enumerations.h ../FL/Fl_Export.H ../FL/fl_types.h
-CubeMain.o: ../fltk3/types.h
+CubeMain.o: ../fltk3/types.h CubeViewUI.h ../FL/Fl_Double_Window.H
+CubeMain.o: ../fltk3/DoubleWindow.h ../fltk3/Window.h ../fltk3/Group.h
+CubeMain.o: ../fltk3/Widget.h ../FL/Fl_Window.H ../fltk3/Wrapper.h
+CubeMain.o: ../fltk3/Window.h ../FL/Fl_Group.H ../FL/Fl_Widget.H
+CubeMain.o: ../FL/Fl_Image.H ../fltk3/Image.h ../FL/Fl_Group.H
+CubeMain.o: ../FL/Fl_Roller.H ../fltk3/Roller.h ../fltk3/Valuator.h
+CubeMain.o: ../FL/Fl_Valuator.H ../fltk3/Valuator.h ../FL/Fl_Slider.H
+CubeMain.o: ../fltk3/Slider.h ../FL/Fl_Box.H ../fltk3/Box.h CubeView.h
+CubeMain.o: ../FL/Fl_Gl_Window.H ../fltk3/GlWindow.h ../FL/gl.h ../fltk3/gl.h
+CubeMain.o: ../FL/Fl_Value_Slider.H ../fltk3/ValueSlider.h ../fltk3/Slider.h
+CubeMain.o: ../FL/Fl_Slider.H
 CubeView.o: CubeView.h ../config.h ../FL/Fl.H ../fltk3/run.h ../fltk3/utf8.h
 CubeView.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
 CubeView.o: ../fltk3/enumerations.h ../fltk3/Widget.h ../fltk3/Rectangle.h
