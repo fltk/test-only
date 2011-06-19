@@ -140,12 +140,6 @@ cube.o: ../fltk3/Image.h ../fltk3/Bitmap.h ../fltk3/Pixmap.h
 cube.o: ../fltk3/RGBImage.h ../fltk3/draw.h ../fltk3/PostScript.h
 CubeMain.o: ../config.h ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 CubeMain.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
-CubeMain.o: CubeViewUI.h ../fltk3/DoubleWindow.h ../fltk3/Window.h
-CubeMain.o: ../fltk3/Group.h ../fltk3/Widget.h ../fltk3/Rectangle.h
-CubeMain.o: ../fltk3/Object.h ../fltk3/Group.h ../fltk3/Roller.h
-CubeMain.o: ../fltk3/Valuator.h ../fltk3/Slider.h ../fltk3/Box.h CubeView.h
-CubeMain.o: ../fltk3/GlWindow.h ../fltk3/gl.h ../fltk3/ValueSlider.h
-CubeMain.o: ../fltk3/Slider.h
 CubeView.o: CubeView.h ../config.h ../fltk3/run.h ../fltk3/utf8.h
 CubeView.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
 CubeView.o: ../fltk3/enumerations.h ../fltk3/GlWindow.h ../fltk3/Window.h
@@ -331,12 +325,6 @@ input_choice.o: ../fltk3/utf8.h ../fltk3/Xutf8.h ../fltk3/Group.h
 input_choice.o: ../fltk3/Input.h ../fltk3/Input_.h ../fltk3/MenuButton.h
 input_choice.o: ../fltk3/Menu_.h ../fltk3/MenuItem.h ../fltk3/Image.h
 input_choice.o: ../fltk3/draw.h
-keyboard.o: keyboard_ui.h ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
-keyboard.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
-keyboard.o: keyboard.h ../fltk3/Window.h ../fltk3/Button.h ../fltk3/Widget.h
-keyboard.o: ../fltk3/Rectangle.h ../fltk3/Object.h ../fltk3/Output.h
-keyboard.o: ../fltk3/Input.h ../fltk3/Box.h ../fltk3/Dial.h
-keyboard.o: ../fltk3/Valuator.h
 label.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h ../fltk3/types.h
 label.o: ../fltk3/Xutf8.h ../fltk3/enumerations.h ../fltk3/DoubleWindow.h
 label.o: ../fltk3/Window.h ../fltk3/Group.h ../fltk3/Widget.h
@@ -355,23 +343,21 @@ line_style.o: ../fltk3/draw.h ../fltk3/Choice.h ../fltk3/Menu_.h
 line_style.o: ../fltk3/MenuItem.h ../fltk3/Image.h ../fltk3/CheckButton.h
 line_style.o: ../fltk3/LightButton.h ../fltk3/Button.h ../fltk3/Box.h
 list_visuals.o: ../config.h
-mandelbrot.o: mandelbrot_ui.h ../fltk3/run.h ../fltk3/utf8.h
-mandelbrot.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
-mandelbrot.o: ../fltk3/enumerations.h mandelbrot.h ../fltk3/Box.h
-mandelbrot.o: ../fltk3/Widget.h ../fltk3/Rectangle.h ../fltk3/Object.h
-mandelbrot.o: ../fltk3/Slider.h ../fltk3/Valuator.h ../fltk3/DoubleWindow.h
-mandelbrot.o: ../fltk3/Window.h ../fltk3/Group.h ../fltk3/Input.h
-mandelbrot.o: ../fltk3/Input_.h ../fltk3/Window.h ../fltk3/FloatInput.h
-mandelbrot.o: ../fltk3/Input.h ../fltk3/draw.h ../fltk3/Button.h
-mandelbrot.o: ../fltk3/Printer.h ../fltk3/x.h ../fltk3/PagedDevice.h
-mandelbrot.o: ../fltk3/Device.h ../fltk3/Object.h ../fltk3/Plugin.h
-mandelbrot.o: Preferences.h ../fltk3/Preferences.h ../fltk3/Group.h
-mandelbrot.o: ../fltk3/Choice.h ../fltk3/Menu_.h ../fltk3/MenuItem.h
-mandelbrot.o: ../fltk3/Image.h ../fltk3/RoundButton.h ../fltk3/LightButton.h
-mandelbrot.o: ../fltk3/Button.h ../fltk3/CheckButton.h ../fltk3/IntInput.h
-mandelbrot.o: ../fltk3/ValueSlider.h ../fltk3/Slider.h ../fltk3/Image.h
-mandelbrot.o: ../fltk3/Bitmap.h ../fltk3/Pixmap.h ../fltk3/RGBImage.h
-mandelbrot.o: ../fltk3/PostScript.h
+mandelbrot.o: ../fltk3/draw.h ../fltk3/Button.h ../fltk3/Widget.h
+mandelbrot.o: ../fltk3/enumerations.h ../fltk3/Export.h ../fltk3/types.h
+mandelbrot.o: ../fltk3/Rectangle.h ../fltk3/Object.h ../fltk3/Printer.h
+mandelbrot.o: ../fltk3/x.h ../fltk3/Window.h ../fltk3/Group.h
+mandelbrot.o: ../fltk3/Xutf8.h ../fltk3/PagedDevice.h ../fltk3/Device.h
+mandelbrot.o: ../fltk3/Object.h ../fltk3/Plugin.h Preferences.h
+mandelbrot.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Preferences.h
+mandelbrot.o: ../fltk3/DoubleWindow.h ../fltk3/Group.h ../fltk3/Input.h
+mandelbrot.o: ../fltk3/Input_.h ../fltk3/Choice.h ../fltk3/Menu_.h
+mandelbrot.o: ../fltk3/MenuItem.h ../fltk3/Image.h ../fltk3/RoundButton.h
+mandelbrot.o: ../fltk3/LightButton.h ../fltk3/Button.h ../fltk3/Box.h
+mandelbrot.o: ../fltk3/CheckButton.h ../fltk3/IntInput.h ../fltk3/Input.h
+mandelbrot.o: ../fltk3/ValueSlider.h ../fltk3/Slider.h ../fltk3/Valuator.h
+mandelbrot.o: ../fltk3/Image.h ../fltk3/Bitmap.h ../fltk3/Pixmap.h
+mandelbrot.o: ../fltk3/RGBImage.h ../fltk3/Window.h ../fltk3/PostScript.h
 menubar.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h ../fltk3/types.h
 menubar.o: ../fltk3/Xutf8.h ../fltk3/enumerations.h ../fltk3/Box.h
 menubar.o: ../fltk3/Widget.h ../fltk3/Rectangle.h ../fltk3/Object.h

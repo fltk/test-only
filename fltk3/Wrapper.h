@@ -139,96 +139,46 @@
  
  */
 
-/*
- FLTK3_OBJECT_VCALLS_WRAPPER:
-if (pWrapper) { 
-  // We only do this tests if there is a wrapper connected to me.
-  if ( pWrapper->pVCalls & Wrapper::pVCallWidgetDraw ) { 
-    // if my flag is set, we are being called from the wrapper, so we simply
-    // continue with the original code. The wrapper must clear the flag.
-  } else { 
-    // if my flag is clear, we are called from the core. So lets set the 
-    // flag and call the wrapper.
-    pWrapper->pVCalls |= Wrapper::pVCallWidgetDraw; 
-    ((WidgetWrapper*)pWrapper)->draw(); 
-    if ( (pWrapper->pVCalls & Wrapper::pVCallWidgetDraw) ) {
-      // If the flag is still set, the function was overridden in the wrapper.
-      // Clear the flag for the next call and abort.
-      pWrapper->pVCalls &= ~Wrapper::pVCallWidgetDraw; 
-      return; 
-    } else {
-      // If the wrapper returns with the flag cleared, the default code was 
-      // called and we continue with the original code.
-    }
-  } 
-}
-
- FLTK3_WRAPPER_VCALLS_OBJECT
+#define FLTK3_WRAPPER_VCALLS_OBJECT(klass, proto, call, flag) \
 virtual void proto { \
   if ( pVCalls & pVCallWidget##flag ) { \
-    // if my flag is set, we are called from the core. Clear the flag so the core function knows
-    // that we were not overridden.
-    pVCalls &= ~pVCallWidget##flag;
+    ((fltk3::klass*)_p)->call; \
   } else { \
-    // if my flag is cleared, we are called from 
     pVCalls |= pVCallWidget##flag; \
     ((fltk3::klass*)_p)->call; \
     pVCalls &= ~pVCallWidget##flag; \
   } \
 }
-*/
-
-/*
-#define FLTK3_WRAPPER_VCALLS_OBJECT(klass, proto, call, flag) \
-  virtual void proto { \
-    if ( pVCalls & pVCallWidget##flag ) { \
-    } else { \
-      pVCalls |= pVCallWidget##flag; \
-      ((fltk3::klass*)_p)->call; \
-      pVCalls &= ~pVCallWidget##flag; \
-    } \
-  }
-
-#define FLTK3_OBJECT_VCALLS_WRAPPER(call, flag) \
-  if (pWrapper) { \
-    if ( pWrapper->pVCalls & Wrapper::pVCallWidget##flag ) { \
-    } else { \
-      pWrapper->pVCalls |= Wrapper::pVCallWidget##flag; \
-      ((WidgetWrapper*)pWrapper)->call; \
-      if ( (pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) { \
-        pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
-        return; \
-      } \
-    } \
-  }
-
 
 #define FLTK3_WRAPPER_VCALLS_OBJECT_INT(klass, proto, call, flag) \
-  virtual int proto { \
-    int ret = 0; \
-    if ( pVCalls & pVCallWidget##flag ) { \
-    } else { \
-      pVCalls |= pVCallWidget##flag; \
-      ret = ((fltk3::klass*)_p)->call; \
-      pVCalls &= ~pVCallWidget##flag; \
-    } \
-    return ret; \
+virtual int proto { \
+  int ret = 0; \
+  if ( pVCalls & pVCallWidget##flag ) { \
+    ret = ((fltk3::klass*)_p)->call; \
+  } else { \
+    pVCalls |= pVCallWidget##flag; \
+    ret = ((fltk3::klass*)_p)->call; \
+    pVCalls &= ~pVCallWidget##flag; \
+  } \
+  return ret; \
+}
+
+#define FLTK3_OBJECT_VCALLS_WRAPPER(call, flag) \
+  if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) { \
+    pWrapper->pVCalls |= Wrapper::pVCallWidget##flag; \
+    ((WidgetWrapper*)pWrapper)->call; \
+    pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
+    return; \
   }
 
 #define FLTK3_OBJECT_VCALLS_WRAPPER_INT(call, flag) \
-  if (pWrapper) { \
-    if ( pWrapper->pVCalls & Wrapper::pVCallWidget##flag ) { \
-    } else { \
-      pWrapper->pVCalls |= Wrapper::pVCallWidget##flag; \
-      int ret = ((WidgetWrapper*)pWrapper)->call; \
-      if ( (pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) { \
-        pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
-        return ret; \
-      } else { \
-      } \
-    } \
+  if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) { \
+    pWrapper->pVCalls |= Wrapper::pVCallWidget##flag; \
+    int ret = ((WidgetWrapper*)pWrapper)->call; \
+    pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
+    return ret; \
   }
-*/
+
 
 namespace fltk3 {
   
