@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -6,6 +5,7 @@
 #ifndef FL_TREE_ITEM_H
 #define FL_TREE_ITEM_H
 
+#include <fltk3/TreeItem.h>
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Image.H>
@@ -36,52 +36,29 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
+// 123 Wrapper started
+//  - TODO: 123 - many methods not yet wrapped!
+//
 
-///
-/// \file
-/// \brief This file contains the definitions for Fl_Tree_Item
-///
 
-/// \brief Tree item
-///
-/// This class is a single tree item, and manages all of the item's attributes.
-/// Fl_Tree_Item is used by Fl_Tree, which is comprised of many instances of Fl_Tree_Item.
-///
-/// Fl_Tree_Item is hierarchical; it dynamically manages an Fl_Tree_Item_Array of children
-/// that are themselves instances of Fl_Tree_Item. Each item can have zero or more children.
-/// When an item has children, close() and open() can be used to hide or show them.
-///
-/// Items have their own attributes; font size, face, color.
-/// Items maintain their own hierarchy of children.
-///
-/// When you make changes to items, you'll need to tell the tree to redraw()
-/// for the changes to show up.
-///
-class FL_EXPORT Fl_Tree_Item {
-  const char             *_label;		// label (memory managed)
-  Fl_Font                 _labelfont;		// label's font face
-  Fl_Fontsize             _labelsize;		// label's font size
-  Fl_Color                _labelfgcolor;	// label's fg color
-  Fl_Color                _labelbgcolor;	// label's bg color
-  char                    _open;		// item is open?
-  char                    _visible;		// item is visible?
-  char                    _active;		// item activated?
-  char                    _selected;		// item selected?
-  int                     _xywh[4];		// xywh of this widget (if visible)
-  int                     _collapse_xywh[4];	// xywh of collapse icon (if any)
-  int                     _label_xywh[4];	// xywh of label
-  Fl_Widget              *_widget;		// item's label widget (optional)
-  Fl_Image               *_usericon;		// item's user-specific icon (optional)
-  Fl_Tree_Item_Array      _children;		// array of child items
-  Fl_Tree_Item           *_parent;		// parent item (=0 if root)
-  void                   *_userdata;    	// user data that can be associated with an item
+class FL_EXPORT Fl_Tree_Item : public fltk3::TreeItem {
+
 protected:
-  void show_widgets();
-  void hide_widgets();
-  void draw_vertical_connector(int x, int y1, int y2, const Fl_Tree_Prefs &prefs);
-  void draw_horizontal_connector(int x1, int x2, int y, const Fl_Tree_Prefs &prefs);
+
+  //void show_widgets();
+  //void hide_widgets();
+  //void draw_vertical_connector(int x, int y1, int y2, const Fl_Tree_Prefs &prefs);
+  //void draw_horizontal_connector(int x1, int x2, int y, const Fl_Tree_Prefs &prefs);
+  
 public:
-  Fl_Tree_Item(const Fl_Tree_Prefs &prefs);	// CTOR
+  
+  Fl_Tree_Item(const Fl_Tree_Prefs &prefs) 
+  : fltk3::TreeItem(prefs)
+  {
+  }
+  
+#if 0
+  
   ~Fl_Tree_Item();				// DTOR
   Fl_Tree_Item(const Fl_Tree_Item *o);		// COPY CTOR
   int x() const { return(_xywh[0]); }
@@ -329,6 +306,8 @@ public:
   int is_root() const {
     return(_parent==0?1:0);
   }
+#endif
+  
 };
 
 #endif /*FL_TREE_ITEM_H*/

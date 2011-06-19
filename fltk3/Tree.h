@@ -13,6 +13,8 @@
 #include <fltk3/TreeItem.h>
 #include <fltk3/TreePrefs.h>
 
+class Fl_Tree;
+
 namespace fltk3 {
   
   //////////////////////
@@ -199,6 +201,9 @@ namespace fltk3 {
   
   
   class FLTK3_EXPORT Tree : public fltk3::Group {
+
+    friend class ::Fl_Tree;
+
     fltk3::TreeItem  *_root;				// can be null!
     fltk3::TreeItem  *_item_focus;			// item that has focus box
     fltk3::TreeItem  *_callback_item;		// item invoked during callback (can be NULL)

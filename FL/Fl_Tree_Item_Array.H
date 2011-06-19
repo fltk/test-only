@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -6,6 +5,7 @@
 #ifndef _FL_TREE_ITEM_ARRAY_H
 #define _FL_TREE_ITEM_ARRAY_H
 
+#include <fltk3/TreeItemArray.h>
 #include "Fl_Export.H"
 
 class FL_EXPORT Fl_Tree_Item;	// forward decl must *precede* first doxygen comment block
@@ -33,30 +33,19 @@ class FL_EXPORT Fl_Tree_Item;	// forward decl must *precede* first doxygen comme
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
+// 123 Wrapper started
+//  - TODO: 123 - many methods not yet wrapped!
+//
 
-///
-/// \file
-/// \brief This file defines a class that manages an array of Fl_Tree_Item pointers.
-///
+class FL_EXPORT Fl_Tree_Item_Array : public fltk3::TreeItemArray {
 
-/// \brief Manages an array of Fl_Tree_Item pointers.
-///
-/// Because FLTK 1.x.x. has mandated that templates and STL not be used,
-/// we use this class to dynamically manage the arrays.
-///
-/// None of the methods do range checking on index values; the caller
-/// must be sure that index values are within the range 0<index<total()
-/// (unless otherwise noted).
-///
-
-class FL_EXPORT Fl_Tree_Item_Array {
-  Fl_Tree_Item **_items;	// items array
-  int _total;			// #items in array
-  int _size;			// #items *allocated* for array
-  int _chunksize;		// #items to enlarge mem allocation
-  void enlarge(int count);
 public:
-  Fl_Tree_Item_Array(int new_chunksize = 10);		// CTOR
+  Fl_Tree_Item_Array(int new_chunksize = 10) 
+  : fltk3::TreeItemArray(new_chunksize)
+  {
+  }
+  
+#if 0  
   ~Fl_Tree_Item_Array();				// DTOR
   Fl_Tree_Item_Array(const Fl_Tree_Item_Array *o);	// COPY CTOR
   /// Return the item and index \p i.
@@ -82,6 +71,8 @@ public:
   void insert(int pos, Fl_Tree_Item *new_item);
   void remove(int index);
   int  remove(Fl_Tree_Item *item);
+#endif
+  
 };
 
 #endif /*_FL_TREE_ITEM_ARRAY_H*/

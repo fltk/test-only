@@ -380,17 +380,17 @@ void fltk3::alert(va_list ap, const char *fmt) {
    \retval 1 if yes is selected
  */
 int fltk3::ask(const char *fmt, ...) {
-
-  if (avoidRecursion) return 0;
-
   va_list ap;
-
-  fltk3::beep(fltk3::BEEP_QUESTION);
-
   va_start(ap, fmt);
-  int r = innards(fmt, ap, fltk3::no, fltk3::yes, 0);
+  int ret = ask(ap, fmt);
   va_end(ap);
+  return ret;
+}
 
+int fltk3::ask(va_list ap, const char *fmt) {
+  if (avoidRecursion) return 0;
+  fltk3::beep(fltk3::BEEP_QUESTION);
+  int r = innards(fmt, ap, fltk3::no, fltk3::yes, 0);
   return r;
 }
 
@@ -409,19 +409,21 @@ int fltk3::ask(const char *fmt, ...) {
    \retval 1 if the second button with \p b1 text is selected
    \retval 2 if the third button with \p b2 text is selected
  */
-int fltk3::choice(const char*fmt,const char *b0,const char *b1,const char *b2,...){
-
-  if (avoidRecursion) return 0;
-
+int fltk3::choice(const char*fmt,const char *b0,const char *b1,const char *b2,...) {
   va_list ap;
-
-  fltk3::beep(fltk3::BEEP_QUESTION);
-
   va_start(ap, b2);
-  int r = innards(fmt, ap, b0, b1, b2);
+  int ret = choice(ap, fmt, b0, b1, b2);
   va_end(ap);
+  return ret;
+}
+  
+int fltk3::choice(va_list ap, const char*fmt,const char *b0,const char *b1,const char *b2) {
+  if (avoidRecursion) return 0;
+  fltk3::beep(fltk3::BEEP_QUESTION);
+  int r = innards(fmt, ap, b0, b1, b2);
   return r;
 }
+
 /** Gets the fltk3::Box icon container of the current default dialog used in
     many common dialogs like fltk3::message(), fltk3::alert(),
     fltk3::ask(), fltk3::choice(), fltk3::input(), fltk3::password()
@@ -455,15 +457,17 @@ static const char* input_innards(const char* fmt, va_list ap,
    \return the user string input if OK was pushed, NULL if Cancel was pushed or another dialog box was still open
  */
 const char* fltk3::input(const char *fmt, const char *defstr, ...) {
-
-  if (avoidRecursion) return 0;
-
-  fltk3::beep(fltk3::BEEP_QUESTION);
-
   va_list ap;
   va_start(ap, defstr);
-  const char* r = input_innards(fmt, ap, defstr, fltk3::NORMAL_INPUT);
+  const char *ret = input(ap, fmt, defstr);
   va_end(ap);
+  return ret;
+}
+
+const char* fltk3::input(va_list ap, const char *fmt, const char *defstr) {
+  if (avoidRecursion) return 0;
+  fltk3::beep(fltk3::BEEP_QUESTION);
+  const char* r = input_innards(fmt, ap, defstr, fltk3::NORMAL_INPUT);
   return r;
 }
 
@@ -481,15 +485,17 @@ const char* fltk3::input(const char *fmt, const char *defstr, ...) {
    \return the user string input if OK was pushed, NULL if Cancel was pushed or aother dialog box was still open
  */
 const char *fltk3::password(const char *fmt, const char *defstr, ...) {
-
-  if (avoidRecursion) return 0;
-
-  fltk3::beep(fltk3::BEEP_PASSWORD);
-
   va_list ap;
   va_start(ap, defstr);
-  const char* r = input_innards(fmt, ap, defstr, fltk3::SECRET_INPUT);
+  const char *ret = password(ap, fmt, defstr);
   va_end(ap);
+  return ret;
+}
+
+const char *fltk3::password(va_list ap, const char *fmt, const char *defstr) {
+  if (avoidRecursion) return 0;
+  fltk3::beep(fltk3::BEEP_PASSWORD);
+  const char* r = input_innards(fmt, ap, defstr, fltk3::SECRET_INPUT);
   return r;
 }
 

@@ -63,9 +63,13 @@ namespace fltk3 {
   // which does not conform to the current FLTK Human Interface Guidelines.
   // Use fltk3::choice() instead with the appropriate verbs instead.
   FLTK3_EXPORT int ask(const char *,...) __fl_attr((__format__ (__printf__, 1, 2), __deprecated__));
+  FLTK3_EXPORT int ask(va_list, const char *);
   FLTK3_EXPORT int choice(const char *q,const char *b0,const char *b1,const char *b2,...) __fl_attr((__format__ (__printf__, 1, 5)));
+  FLTK3_EXPORT int choice(va_list, const char *, const char *, const char *, const char *);
   FLTK3_EXPORT const char *input(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
+  FLTK3_EXPORT const char *input(va_list, const char *, const char *d=0);
   FLTK3_EXPORT const char *password(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
+  FLTK3_EXPORT const char *password(va_list, const char *, const char *d=0);
   
   FLTK3_EXPORT Widget *message_icon();
   extern FLTK3_EXPORT Font message_font_;

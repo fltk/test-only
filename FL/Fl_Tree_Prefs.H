@@ -1,4 +1,3 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
@@ -28,46 +27,22 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
+// 123 Wrapper started
+//  - TODO: 123 - many methods not yet wrapped!
+//
 
-///
-/// \file
-/// \brief This file contains the definitions for Fl_Tree's preferences.
-///
-/// \code
-///                  Fl_Tree_Prefs
-///                       :
-///                  .....:.......
-///                  :           :
-///               Fl_Tree        :
-///                  |_____ Fl_Tree_Item
-///
-/// \endcode
-///
-
-/// \class Fl_Tree_Prefs
-/// \brief Tree widget's preferences.
-
-/// \enum Fl_Tree_Sort
-/// Sort order options for items added to the tree
-///
 enum Fl_Tree_Sort {
   FL_TREE_SORT_NONE=0,	///< No sorting; items are added in the order defined (default).
   FL_TREE_SORT_ASCENDING=1,	///< Add items in ascending sort order.
   FL_TREE_SORT_DESCENDING=2	///< Add items in descending sort order.
 };
 
-/// \enum Fl_Tree_Connector
-/// Defines the style of connection lines between items.
-///
 enum Fl_Tree_Connector {
   FL_TREE_CONNECTOR_NONE=0,	///< Use no lines connecting items
   FL_TREE_CONNECTOR_DOTTED=1,	///< Use dotted lines connecting items (default)
   FL_TREE_CONNECTOR_SOLID=2	///< Use solid lines connecting items
 };
 
-/// \enum Fl_Tree_Select
-/// Tree selection style.
-///
 enum Fl_Tree_Select {
   FL_TREE_SELECT_NONE=0,	///< Nothing selected when items are clicked
   FL_TREE_SELECT_SINGLE=1,	///< Single item selected when item is clicked (default)
@@ -75,41 +50,15 @@ enum Fl_Tree_Select {
   ///< SHIFT or CTRL or mouse drags.
 };
 
-/// \class Fl_Tree_Prefs
-///
-/// \brief Fl_Tree's Preferences class.
-///
-/// This class manages the Fl_Tree's defaults.
-/// You should probably be using the methods in Fl_Tree
-/// instead of trying to accessing tree's preferences settings directly.
-///
-class FL_EXPORT Fl_Tree_Prefs {
-  Fl_Font _labelfont;			// label's font face
-  Fl_Fontsize _labelsize;		// label's font size
-  int _margintop;			// -- 
-  int _marginleft;			//   |- tree's margins
-  //int _marginright;			//   |
-  //int _marginbottom;			// --
-  int _openchild_marginbottom;		// extra space below an open child tree
-  int _usericonmarginleft;		// space to left of user icon (if any)
-  int _labelmarginleft;			// space to left of label
-  int _connectorwidth;			// connector width (right of open/close icon)
-  int _linespacing;			// vertical space between lines
-  // Colors
-  Fl_Color _labelfgcolor;		// label's foreground color
-  Fl_Color _labelbgcolor;		// background color
-  Fl_Color _connectorcolor;		// connector dotted line color
-  Fl_Tree_Connector _connectorstyle;	// connector line style
-  Fl_Image *_openimage;			// the 'open' icon [+]
-  Fl_Image *_closeimage;		// the 'close' icon [-]
-  Fl_Image *_userimage;			// user's own icon
-  char _showcollapse;			// 1=show collapse icons, 0=don't
-  char _showroot;			// show the root item as part of the tree
-  Fl_Tree_Sort   _sortorder;		// none, ascening, descending, etc.
-  Fl_Boxtype     _selectbox;		// selection box type
-  Fl_Tree_Select _selectmode;		// selection mode
+class FL_EXPORT Fl_Tree_Prefs : public fltk3::TreePrefs {
+
 public:
-  Fl_Tree_Prefs();
+  Fl_Tree_Prefs() 
+  : fltk3::TreePrefs()
+  {
+  }
+  
+#if 0
   
   ////////////////////////////
   // Labels
@@ -335,6 +284,8 @@ public:
   inline void selectmode(Fl_Tree_Select val) {
     _selectmode = val;
   }
+#endif
+  
 };
 
 #endif /*FL_TREE_PREFS_H*/

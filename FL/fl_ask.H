@@ -62,10 +62,37 @@ inline void fl_alert(const char *fmt, ...) {
   va_end(ap);
 }
 
-// FIXME: 123- inline int fl_ask(const char *,...) __fl_attr((__format__ (__printf__, 1, 2), __deprecated__));
-// FIXME: 123- inline int fl_choice(const char *q,const char *b0,const char *b1,const char *b2,...) __fl_attr((__format__ (__printf__, 1, 5)));
-// FIXME: 123- inline const char *fl_input(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
-// FIXME: 123- inline const char *fl_password(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
+inline int fl_ask(const char *fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
+  int ret = fltk3::ask(ap, fmt);
+  va_end(ap);
+  return ret;
+}
+
+inline int fl_choice(const char *q,const char *b0,const char *b1,const char *b2, ...) {
+  va_list ap;
+  va_start(ap, b2);
+  int ret = fltk3::choice(ap, q, b0, b1, b2);
+  va_end(ap);
+  return ret;
+}
+
+inline const char *fl_input(const char *label, const char *deflt = 0, ...) {
+  va_list ap;
+  va_start(ap, deflt);
+  const char *ret = fltk3::input(ap, label, deflt);
+  va_end(ap);
+  return ret;
+}
+
+inline const char *fl_password(const char *label, const char *deflt = 0, ...) {
+  va_list ap;
+  va_start(ap, deflt);
+  const char *ret = fltk3::password(ap, label, deflt);
+  va_end(ap);
+  return ret;
+}
 
 #if 0 // FIXME: 123
 inline Fl_Widget *fl_message_icon();
@@ -73,13 +100,25 @@ extern inline Fl_Font fl_message_font_;
 extern inline Fl_Fontsize fl_message_size_;
 inline void fl_message_font(Fl_Font f, Fl_Fontsize s) {
   fl_message_font_ = f; fl_message_size_ = s;}
+#endif
 
-inline void fl_message_hotspot(int enable);
-inline int fl_message_hotspot(void);
+inline void fl_message_hotspot(int enable) {
+  fltk3::message_hotspot(enable);
+}
 
-inline void fl_message_title(const char *title);
-inline void fl_message_title_default(const char *title);
+inline int fl_message_hotspot(void) {
+  return fltk3::message_hotspot();
+}
 
+inline void fl_message_title(const char *title) {
+  fltk3::message_title(title);
+}
+
+inline void fl_message_title_default(const char *title) {
+  fltk3::message_title_default(title);
+}
+
+#if 0 // FIXME: 123
 // pointers you can use to change FLTK to a foreign language:
 extern inline const char* fl_no;
 extern inline const char* fl_yes;

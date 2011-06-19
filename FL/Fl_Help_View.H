@@ -146,7 +146,7 @@ public:
   }
   
   void link(Fl_Help_Func *fn) {
-    ((fltk3::HelpView*)_p)->link(fn);
+    ((fltk3::HelpView*)_p)->link((fltk3::HelpFunc*)fn);
   }
   
   int load(const char *f) {
@@ -168,7 +168,7 @@ public:
   }
   
   void textfont(Fl_Font font) { 
-    ((fltk3::HelpView*)_p)->font( fltk3::_1to3_font(font) );
+    ((fltk3::HelpView*)_p)->textfont( fltk3::_1to3_font(font) );
   }
   
   Fl_Fontsize textsize() const { 
@@ -176,7 +176,7 @@ public:
   }
   
   void textsize(Fl_Fontsize size) {
-    ((fltk3::HelpView*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+    ((fltk3::HelpView*)_p)->textsize( fltk3::_1to3_fontsize(size) );
   }
   
   Fl_Color textcolor() const { 
