@@ -1117,6 +1117,7 @@ void fltk3::Table::set_selection(int row_top, int col_left, int row_bot, int col
 //    Then tell the group to draw over us.
 //
 void fltk3::Table::draw() {   
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   draw_cell(CONTEXT_STARTPAGE, 0, 0,	 	// let user's drawing routine
             tix, tiy, tiw, tih);		// prep new page
   

@@ -69,6 +69,8 @@ fltk3::WizardGroup::WizardGroup(int        xx,	// I - Lefthand position
 //
 /** Draws the wizard border and visible child. */
 void fltk3::WizardGroup::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
+
   fltk3::Widget	*kid;	// Visible child
 
 

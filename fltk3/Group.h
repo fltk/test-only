@@ -32,6 +32,7 @@
 #define FLTK3_GROUP_H
 
 #include "Widget.h"
+#include <fltk3/Wrapper.h>
 
 class Fl_Group;
 

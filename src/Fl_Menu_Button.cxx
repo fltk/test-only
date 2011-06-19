@@ -33,6 +33,7 @@
 static fltk3::MenuButton	*pressed_menu_button_ = 0;
 
 void fltk3::MenuButton::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   if (!box() || type()) return;
   draw_box(pressed_menu_button_ == this ? fltk3::down(box()) : box(), color());
   draw_label();

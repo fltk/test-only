@@ -99,6 +99,7 @@ void fltk3::Dial::draw(int X, int Y, int W, int H) {
   Draws dial at current position and size.
 */
 void fltk3::Dial::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   draw(x(), y(), w(), h());
   draw_label();
 }

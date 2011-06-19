@@ -46,6 +46,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 #ifdef WIN32
 #  include <sys/types.h>
@@ -226,6 +227,8 @@ namespace fltk3 {
   
   /* OD: Portable UTF8 aware open wrapper */
   FLTK3_EXPORT int open(const char* f, int o, ...);
+  
+  FLTK3_EXPORT int open(va_list, const char* f, int o);
   
   /* OD: Portable UTF8 aware unlink wrapper */
   FLTK3_EXPORT int unlink(const char *f);

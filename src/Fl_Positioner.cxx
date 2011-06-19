@@ -53,6 +53,7 @@ void fltk3::Positioner::draw(int X, int Y, int W, int H) {
 }
 
 void fltk3::Positioner::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   draw(x(), y(), w(), h());
   draw_label();
 }

@@ -32,6 +32,7 @@
 #define Fltk3_Dial_H
 
 #include "Valuator.h"
+#include <fltk3/Wrapper.h>
 
 namespace fltk3 {
   

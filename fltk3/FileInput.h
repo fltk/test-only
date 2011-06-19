@@ -33,6 +33,8 @@
 #  define Fltk3_File_Input_H
 
 #  include <fltk3/Input.h>
+#include <fltk3/Wrapper.h>
+
 
 namespace fltk3 {
   

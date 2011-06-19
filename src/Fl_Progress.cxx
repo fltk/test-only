@@ -53,6 +53,7 @@
 /** Draws the progress bar. */
 void fltk3::Progress::draw()
 {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   int	progress;	// Size of progress bar...
   int	bx, by, bw, bh;	// Box areas...
   int	tx, tw;		// Temporary X + width

@@ -115,6 +115,7 @@ void fltk3::ClockOutput::draw(int X, int Y, int W, int H) {
   Draw clock with current position and size.
 */
 void fltk3::ClockOutput::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   draw(x(), y(), w(), h());
   draw_label();
 }

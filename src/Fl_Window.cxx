@@ -103,6 +103,7 @@ int fltk3::Window::y_root() const {
 }
 
 void fltk3::Window::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
 
   // The following is similar to fltk3::Group::draw(), but ...
   //  - we draw the box with x=0 and y=0 instead of x() and y()

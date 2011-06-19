@@ -73,6 +73,7 @@ namespace fltk3 {
   }
   
   void ColorMenu::draw() {
+    FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
     if (damage() != fltk3::DAMAGE_CHILD) {
       fltk3::draw_box(fltk3::UP_BOX,0,0,w(),h(),color());
       for (int c = 0; c < 256; c++) drawbox((fltk3::Color)c);

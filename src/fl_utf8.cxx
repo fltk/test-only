@@ -558,11 +558,16 @@ char *fltk3::getenv(const char* v)
 
 int fltk3::open(const char* f, int oflags, ...)
 {
-  int pmode;
   va_list ap;
   va_start(ap, oflags);
-  pmode = va_arg (ap, int);
+  int ret = fltk3::open(ap, f, oflags);
   va_end(ap);
+  return ret;
+}
+
+int fltk3::open(va_list ap, const char* f, int oflags) {
+  int pmode;
+  pmode = va_arg(ap, int);
 #if defined (WIN32) && !defined(__CYGWIN__)
   int l = strlen(f);
   //		wbuf = (xchar*)realloc(wbuf, sizeof(xchar) * (l+1));
@@ -572,9 +577,9 @@ int fltk3::open(const char* f, int oflags, ...)
   wn = fltk3::utf8toUtf16(f, l, (unsigned short *)wbuf, wn); // Convert string
   wbuf[wn] = 0;
   if (pmode == -1) return ::_wopen(wbuf, oflags);
-  else return _wopen(wbuf, oflags, pmode);
+  else return ::_wopen(wbuf, oflags, pmode);
 #else
-  if (pmode == -1) return open(f, oflags);
+  if (pmode == -1) return ::open(f, oflags);
   else return ::open(f, oflags, pmode);
 #endif
 }

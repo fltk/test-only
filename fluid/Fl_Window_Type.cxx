@@ -36,6 +36,7 @@
 #include <fltk3/x.h>
 #include <fltk3/MenuItem.h>
 #include <fltk3/RoundButton.h>
+#include <fltk3/Wrapper.h>
 #include "Fl_Widget_Type.h"
 #include "undo.h"
 #include <math.h>
@@ -297,6 +298,7 @@ public:
   void resize(int,int,int,int);
   uchar *read_image(int &ww, int &hh);
 };
+
 void Overlay_Window::draw() {
   const int CHECKSIZE = 8;
   // see if box is clear or a frame or rounded:

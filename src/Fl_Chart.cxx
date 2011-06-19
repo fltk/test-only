@@ -231,7 +231,7 @@ static void draw_piechart(int x,int y,int w,int h,
 }
 
 void fltk3::Chart::draw() {
-
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
     draw_box();
     fltk3::Boxtype b = box();
     int xx = x()+fltk3::box_dx(b); // was 9 instead of dx...

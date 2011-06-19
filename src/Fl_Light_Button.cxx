@@ -38,6 +38,7 @@
 #include "flstring.h"
 
 void fltk3::LightButton::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   if (box()) draw_box(this==fltk3::pushed() ? fltk3::down(box()) : box(), color());
   fltk3::Color col = value() ? (active_r() ? selection_color() :
                             fltk3::inactive(selection_color())) : color();

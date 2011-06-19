@@ -32,6 +32,7 @@
 #define Fltk3_Clock_H
 
 #include "Widget.h"
+#include <fltk3/Wrapper.h>
 
 
 class Fl_Clock;

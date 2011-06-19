@@ -34,6 +34,7 @@
 #include <fltk3/draw.h>
 
 void fltk3::ValueOutput::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   fltk3::Boxtype b = box() ? box() : fltk3::DOWN_BOX;
   int X = x()+fltk3::box_dx(b);
   int Y = y()+fltk3::box_dy(b);

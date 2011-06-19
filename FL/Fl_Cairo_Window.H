@@ -63,6 +63,7 @@ public:
 protected:
   /** Overloaded to provide cairo callback support */
   void draw() {
+    FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
     Fl_Double_Window::draw();
     // manual method ? if yes explicitly get a cairo_context here
     if (!Fl::cairo_autolink_context()) 

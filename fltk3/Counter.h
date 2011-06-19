@@ -34,6 +34,7 @@
 #define Fltk3_Counter_H
 
 #include "Valuator.h"
+#include <fltk3/Wrapper.h>
 
 namespace fltk3 {
   

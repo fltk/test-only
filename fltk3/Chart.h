@@ -32,6 +32,7 @@
 #define Fltk3_Chart_H
 
 #include "Widget.h"
+#include <fltk3/Wrapper.h>
 
 namespace fltk3 {
   

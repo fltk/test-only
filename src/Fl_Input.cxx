@@ -46,6 +46,7 @@
 
 
 void fltk3::Input::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   if (input_type() == fltk3::HIDDEN_INPUT) return;
   fltk3::Boxtype b = box();
   if (damage() & fltk3::DAMAGE_ALL) draw_box(b, color());

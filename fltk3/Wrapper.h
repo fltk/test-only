@@ -31,7 +31,8 @@
 #ifndef FLTK3_Wrapper_H
 #define FLTK3_Wrapper_H
 
-#include <fltk3/Window.h>
+#include <fltk3/Widget.h>
+#include <fltk3/Wrapper.h>
 
 /*
  
@@ -229,10 +230,11 @@ namespace fltk3 {
                                 hide(),
                                 hide(),
                                 Hide)
-    FLTK3_WRAPPER_VCALLS_OBJECT(Window,
-                                draw_overlay(),
-                                draw_overlay(),
-                                DrawOverlay)
+    virtual void draw_overlay() {} // neede by overlay windows
+//    FLTK3_WRAPPER_VCALLS_OBJECT(Window,
+//                                draw_overlay(),
+//                                draw_overlay(),
+//                                DrawOverlay)
   };
   
   

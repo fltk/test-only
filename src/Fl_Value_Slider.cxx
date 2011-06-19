@@ -43,6 +43,7 @@ fltk3::ValueSlider::ValueSlider(int X, int Y, int W, int H, const char*l)
 }
 
 void fltk3::ValueSlider::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   int sxx = x(), syy = y(), sww = w(), shh = h();
   int bxx = x(), byy = y(), bww = w(), bhh = h();
   if (horizontal()) {

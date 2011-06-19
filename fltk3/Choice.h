@@ -32,6 +32,7 @@
 #define Fltk3_Choice_H
 
 #include "Menu_.h"
+#include <fltk3/Wrapper.h>
 
 class Fl_Choice;
 

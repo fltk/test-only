@@ -47,6 +47,8 @@
 #    include <dlfcn.h>
 #  endif // HAVE_DLFCN_H
 #  define MAXWINDOWS 32
+#include <fltk3/Wrapper.h>
+
 static fltk3::GlutWindow *windows[MAXWINDOWS+1];
 
 static void (*glut_idle_func)() = 0; // global glut idle function
@@ -66,6 +68,7 @@ void fltk3::GlutWindow::make_current() {
 
 static int indraw;
 void fltk3::GlutWindow::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   glut_window = this;
   indraw = 1;
   if (!valid()) {reshape(w(),h()); valid(1);}

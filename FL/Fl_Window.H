@@ -56,6 +56,8 @@ protected:
   }
   
 public:
+
+  FLTK3_WRAPPER_VCALLS_OBJECT(Window, draw_overlay(), draw_overlay(), DrawOverlay)
   
   Fl_Window() {}
   

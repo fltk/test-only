@@ -30,6 +30,7 @@
 #include <fltk3/draw.h>
 
 void fltk3::MenuBar::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   draw_box();
   if (!menu() || !menu()->text) return;
   const fltk3::MenuItem* m;

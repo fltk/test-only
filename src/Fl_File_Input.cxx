@@ -171,6 +171,7 @@ fltk3::FileInput::value(const char *str) {		// I - New string value
   Draws the file input widget
 */
 void fltk3::FileInput::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   fltk3::Boxtype b = box();
   if (damage() & (fltk3::DAMAGE_BAR | fltk3::DAMAGE_ALL)) draw_buttons();
   // this flag keeps fltk3::Input_::drawtext from drawing a bogus box!

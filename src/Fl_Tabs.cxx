@@ -316,6 +316,7 @@ int fltk3::TabGroup::value(fltk3::Widget *newvalue) {
 enum {LEFT, RIGHT, SELECTED};
 
 void fltk3::TabGroup::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   fltk3::Widget *v = value();
   int H = tab_height();
 

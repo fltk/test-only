@@ -39,6 +39,7 @@
 #include <fltk3/Button.h>
 #include <fltk3/ValueInput.h>
 #include <fltk3/TextDisplay.h>
+#include <fltk3/Wrapper.h>
 #include "../src/flstring.h"
 #include <stdio.h>
 #include <stdlib.h>

@@ -35,6 +35,7 @@
 // button: it draws the text of the current pick and a down-arrow.
 
 void fltk3::Choice::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   int dx = fltk3::box_dx(fltk3::DOWN_BOX);
   int dy = fltk3::box_dy(fltk3::DOWN_BOX);
   int H = h() - 2 * dy;

@@ -70,6 +70,7 @@ void fl_gettime(long* sec, long* usec) {
 }
 
 void fltk3::Timer::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   int tt;
   fltk3::Color col;
   char str[32];

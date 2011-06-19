@@ -264,6 +264,7 @@ int fltk3::Tree::item_pathname(char *pathname, int pathnamelen, const fltk3::Tre
 
 /// Standard FLTK draw() method, handles draws the tree widget.
 void fltk3::Tree::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   // Let group draw box+label but *NOT* children.
   // We handle drawing children ourselves by calling each item's draw()
   //

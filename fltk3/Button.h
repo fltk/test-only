@@ -32,6 +32,7 @@
 #define FLTK3_BUTTON_H
 
 #include "Widget.h"
+#include <fltk3/Wrapper.h>
 
 class Fl_Button;
 

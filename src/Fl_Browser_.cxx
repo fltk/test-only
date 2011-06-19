@@ -32,6 +32,7 @@
 #include <fltk3/Widget.h>
 #include <fltk3/Browser_.h>
 #include <fltk3/draw.h>
+#include <fltk3/Wrapper.h>
 
 
 // This is the base class for browsers.  To be useful it must be
@@ -335,6 +336,7 @@ void fltk3::Browser_::display(void* item) {
  Draws the list within the normal widget bounding box.
  */
 void fltk3::Browser_::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   int drawsquare = 0;
   update_top();
   int full_width_ = full_width();

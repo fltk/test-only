@@ -244,6 +244,7 @@ void fltk3::ScrollGroup::bbox(int& X, int& Y, int& W, int& H) {
 }
 
 void fltk3::ScrollGroup::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   fix_scrollbar_order();
   int X,Y,W,H; bbox(X,Y,W,H);
 

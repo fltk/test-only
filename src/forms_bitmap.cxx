@@ -43,6 +43,7 @@ void Fl_FormsBitmap::set(int W, int H, const uchar *bits) {
 
 /** Draws the bitmap and its associated box. */
 void Fl_FormsBitmap::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   draw_box(box(), selection_color());
   if (b) {fltk3::color(color()); b->draw(x(), y(), w(), h());}
   draw_label();

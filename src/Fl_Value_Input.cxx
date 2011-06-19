@@ -49,6 +49,7 @@ void fltk3::ValueInput::input_cb(fltk3::Widget*, void* v) {
 }
 
 void fltk3::ValueInput::draw() {
+  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   if (damage()&~fltk3::DAMAGE_CHILD) input.clear_damage(fltk3::DAMAGE_ALL);
   input.box(box());
   input.color(color(), selection_color());
