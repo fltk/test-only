@@ -31,7 +31,7 @@
 #ifndef FL_TEXT_DISPLAY_H
 #define FL_TEXT_DISPLAY_H
 
-#include <fltk3/TextDisply.h>
+#include <fltk3/TextDisplay.h>
 #include "Fl_Text_Buffer.H"
 
 
