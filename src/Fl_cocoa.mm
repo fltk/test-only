@@ -239,7 +239,7 @@ public:
     pthread_mutex_init(&_datalock, NULL);
     FD_ZERO(&_fdsets[0]); FD_ZERO(&_fdsets[1]); FD_ZERO(&_fdsets[2]);
     _cancelpipe[0] = _cancelpipe[1] = 0;
-    _maxfd = 0;
+    _maxfd = -1;
   }
   
   ~DataReady()
@@ -297,7 +297,6 @@ void DataReady::AddFD(int n, int events, void (*cb)(int, void*), void *v)
   /*LOCK*/  if (events & POLLIN)  FD_SET(n, &_fdsets[0]);
   /*LOCK*/  if (events & POLLOUT) FD_SET(n, &_fdsets[1]);
   /*LOCK*/  if (events & POLLERR) FD_SET(n, &_fdsets[2]);
-  /*LOCK*/  if (n > _maxfd) _maxfd = n;
   DataUnlock();
 }
 
@@ -305,12 +304,14 @@ void DataReady::AddFD(int n, int events, void (*cb)(int, void*), void *v)
 void DataReady::RemoveFD(int n, int events)
 {
   int i,j;
+  _maxfd = -1; // recalculate maxfd on the fly
   for (i=j=0; i<nfds; i++) {
     if (fds[i].fd == n) {
       int e = fds[i].events & ~events;
       if (!e) continue; // if no events left, delete this fd
       fds[i].events = e;
     }
+     if (fds[i].fd > _maxfd) _maxfd = fds[i].fd;
     // move it down in the array if necessary:
     if (j<i) {
       fds[j] = fds[i];
@@ -1731,6 +1732,8 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
   fltk3::Window *window = (fltk3::Window*)[(FLWindow*)[theEvent window] getFl_Window];
   fltk3::first_window(window);
   cocoaKeyboardHandler(theEvent);
+  NSString *s = [theEvent characters];
+  if ([s length] >= 1) [FLView prepareEtext:[s substringToIndex:1]];
   fltk3::handle(fltk3::KEYUP,window);
   fl_unlock_function();
 }
@@ -1745,7 +1748,7 @@ static void  q_set_window_title(NSWindow *nsw, const char * name, const char *mi
   if ( tMods )
   {
     unsigned short keycode = [theEvent keyCode];
-    fltk3::e_keysym = macKeyLookUp[keycode & 0x7f];
+    fltk3::e_keysym = fltk3::e_original_keysym = macKeyLookUp[keycode & 0x7f];
     if ( fltk3::e_keysym ) 
       sendEvent = ( prevMods<mods ) ? fltk3::KEYBOARD : fltk3::KEYUP;
     fltk3::e_length = 0;
@@ -2913,7 +2916,9 @@ static void createAppleMenu(void)
   NSMenuItem *menuItem;
   NSString *title;
 
-  NSString *nsappname = [[NSProcessInfo processInfo] processName];
+  NSString *nsappname = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
+  if (nsappname == nil)
+    nsappname = [[NSProcessInfo processInfo] processName];
   appleMenu = [[NSMenu alloc] initWithTitle:@""];
   /* Add menu items */
   title = [[NSString stringWithUTF8String:Fl_Mac_App_Menu::about] stringByAppendingString:nsappname];
@@ -3387,12 +3392,13 @@ CGRect fl_cgrectmake_cocoa(int x, int y, int w, int h) {
 
 Window fl_xid(const fltk3::Window* w)
 {
-  return Fl_X::i(w)->xid;
+  Fl_X *temp = Fl_X::i(w);
+  return temp ? temp->xid : 0;
 }
 
 int fltk3::Window::decorated_w()
 {
-  if (parent() || !border()) return w();
+  if (!shown() || parent() || !border() || !visible()) return w();
   int bx, by, bt;
   get_window_frame_sizes(bx, by, bt);
   return w() + 2 * bx;
@@ -3400,7 +3406,7 @@ int fltk3::Window::decorated_w()
 
 int fltk3::Window::decorated_h()
 {
-  if (parent() || !border()) return h();
+  if (!shown() || parent() || !border() || !visible()) return h();
   int bx, by, bt;
   get_window_frame_sizes(bx, by, bt);
   return h() + bt + by;
@@ -3408,7 +3414,7 @@ int fltk3::Window::decorated_h()
 
 void fltk3::PagedDevice::print_window(fltk3::Window *win, int x_offset, int y_offset)
 {
-  if (!win->shown() || win->parent() || !win->border()) {
+  if (!win->shown() || win->parent() || !win->border() || !win->visible()) {
     this->print_widget(win, x_offset, y_offset);
     return;
   }
