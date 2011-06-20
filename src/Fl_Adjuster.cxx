@@ -68,6 +68,7 @@ void fltk3::Adjuster::draw() {
 }
 
 int fltk3::Adjuster::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   double v;
   int delta;
   int mx = fltk3::event_x();

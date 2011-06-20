@@ -53,6 +53,7 @@ void fltk3::MenuBar::draw() {
 }
 
 int fltk3::MenuBar::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   const fltk3::MenuItem* v;
   if (menu() && menu()->text) switch (event) {
   case fltk3::ENTER:

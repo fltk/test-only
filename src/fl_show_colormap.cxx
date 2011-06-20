@@ -29,6 +29,7 @@
 #include <fltk3/SingleWindow.h>
 #include <fltk3/draw.h>
 #include <fltk3/show_colormap.h>
+#include <fltk3/Wrapper.h>
 #include <config.h>
 
 #define BOXSIZE 14
@@ -85,6 +86,7 @@ namespace fltk3 {
   }
   
   int ColorMenu::handle(int e) {
+    FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(e), Handle)
     fltk3::Color c = which;
     switch (e) {
       case fltk3::PUSH:

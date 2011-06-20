@@ -38,6 +38,7 @@ void fltk3::Box::draw() {
 
 
 int fltk3::Box::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   if (event == fltk3::ENTER || event == fltk3::LEAVE) return 1;
   else return 0;
 }

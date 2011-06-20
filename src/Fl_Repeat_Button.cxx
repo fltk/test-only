@@ -38,6 +38,7 @@ void fltk3::RepeatButton::repeat_callback(void *v) {
 }
 
 int fltk3::RepeatButton::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   int newval;
   switch (event) {
   case fltk3::HIDE:

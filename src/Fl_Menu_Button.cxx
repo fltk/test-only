@@ -28,6 +28,7 @@
 #include <fltk3/run.h>
 #include <fltk3/MenuButton.h>
 #include <fltk3/draw.h>
+#include <fltk3/Wrapper.h>
 
 
 static fltk3::MenuButton	*pressed_menu_button_ = 0;
@@ -72,6 +73,7 @@ const fltk3::MenuItem* fltk3::MenuButton::popup() {
 }
 
 int fltk3::MenuButton::handle(int e) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(e), Handle)
   if (!menu() || !menu()->text) return 0;
   switch (e) {
   case fltk3::ENTER: /* FALLTHROUGH */

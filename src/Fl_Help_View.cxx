@@ -2947,6 +2947,7 @@ void fltk3::HelpView::end_selection(int clipboard)
 int				// O - 1 if we handled it, 0 otherwise
 fltk3::HelpView::handle(int event)	// I - Event to handle
 {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   static fltk3::HelpLink *linkp;   // currently clicked link
 
   int xx = fltk3::event_x() - x() + leftline_;

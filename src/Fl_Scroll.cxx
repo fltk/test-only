@@ -412,6 +412,7 @@ fltk3::ScrollGroup::ScrollGroup(int X,int Y,int W,int H,const char* L)
 }
 
 int fltk3::ScrollGroup::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   fix_scrollbar_order();
   return fltk3::Group::handle(event);
 }

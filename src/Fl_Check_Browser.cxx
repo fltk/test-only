@@ -319,6 +319,7 @@ void fltk3::CheckBrowser::check_none() {
 }
 
 int fltk3::CheckBrowser::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   if (event==fltk3::PUSH)
     deselect();
   return fltk3::Browser_::handle(event);

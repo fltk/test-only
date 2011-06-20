@@ -96,7 +96,7 @@ inline int fl_execvp(const char *file, char *const *argv);
 inline int fl_open(const char* f, int o, ...) {
   va_list ap;
   va_start(ap, o);
-  int ret = fltk3::open(ap, f, o);
+  int ret = fltk3::va_open(ap, f, o);
   va_end(ap);
   return ret;
 }

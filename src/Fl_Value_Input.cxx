@@ -70,6 +70,7 @@ void fltk3::ValueInput::value_damage() {
 }
 
 int fltk3::ValueInput::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   double v;
   int delta;
   int mx = fltk3::event_x_root();

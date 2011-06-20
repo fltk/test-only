@@ -33,6 +33,7 @@
 #include <math.h>
 
 int fltk3::Roller::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   static int ipos;
   int newpos = horizontal() ? fltk3::event_x() : fltk3::event_y();
   switch (event) {

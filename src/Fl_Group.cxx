@@ -148,7 +148,7 @@ static int navkey() {
 }
 
 int fltk3::Group::handle(int event) {
-
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   fltk3::Widget*const* a = array();
   int i;
   fltk3::Widget* o;

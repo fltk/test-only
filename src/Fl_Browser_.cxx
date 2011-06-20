@@ -699,6 +699,7 @@ int fltk3::Browser_::select_only(void* item, int docallbacks) {
  \returns 1 if event was processed, 0 if not.
  */
 int fltk3::Browser_::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   
   // NOTE:
   // We use fltk3::WidgetTracker to test if the user has deleted

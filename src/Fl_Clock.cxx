@@ -196,6 +196,7 @@ static void tick(void *v) {
 }
 
 int fltk3::Clock::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   switch (event) {
   case fltk3::SHOW:
     tick(this);

@@ -698,6 +698,7 @@ fprintf(stderr,"Table %s: ** Event: %s --\n", (label()?label():"none"), eventnam
 
 // Handle FLTK events
 int fltk3::Table::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   PRINTEVENT;
   int ret = fltk3::Group::handle(event);	// let FLTK group handle events first
   if (ret) {

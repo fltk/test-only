@@ -54,6 +54,7 @@ void fltk3::ValueOutput::draw() {
 }
 
 int fltk3::ValueOutput::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   if (!step()) return 0;
   double v;
   int delta;

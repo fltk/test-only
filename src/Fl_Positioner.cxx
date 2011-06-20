@@ -32,6 +32,7 @@
 #include <fltk3/run.h>
 #include <fltk3/Positioner.h>
 #include <fltk3/draw.h>
+#include <fltk3/Wrapper.h>
 
 static double flinear(double val, double smin, double smax, double gmin, double gmax)
 {
@@ -122,6 +123,7 @@ int fltk3::Positioner::handle(int event, int X, int Y, int W, int H) {
 }
 
 int fltk3::Positioner::handle(int e) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(e), Handle)
   return handle(e, x(), y(), w(), h());
 }
 

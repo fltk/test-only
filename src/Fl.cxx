@@ -34,6 +34,7 @@
 #include <fltk3/run.h>
 #include <fltk3/Window.h>
 #include <fltk3/Tooltip.h>
+#include <fltk3/Wrapper.h>
 
 // recent versions of MinGW warn: "Please include winsock2.h before windows.h",
 // hence we must include winsock2.h before fltk3/x.h (A.S. Dec. 2010)
@@ -1463,6 +1464,7 @@ fltk3::Window::~Window() {
 
 int fltk3::Window::handle(int ev)
 {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(ev), Handle)
   if (parent()) {
     switch (ev) {
     case fltk3::SHOW:

@@ -88,6 +88,7 @@ void fltk3::Button::draw() {
 }
 
 int fltk3::Button::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   int newval;
   switch (event) {
   case fltk3::ENTER: /* FALLTHROUGH */

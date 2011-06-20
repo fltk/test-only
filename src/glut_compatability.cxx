@@ -89,6 +89,7 @@ void fltk3::GlutWindow::draw_overlay() {
 static void domenu(int, int, int);
 
 int fltk3::GlutWindow::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   make_current();
   int ex = fltk3::event_x();
   int ey = fltk3::event_y();

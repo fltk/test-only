@@ -123,6 +123,7 @@ void fltk3::Timer::step() {
 }
 
 int fltk3::Timer::handle(int event) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
   if (event == fltk3::RELEASE && delay <= 0) value(0.0);
   return 0;
 }

@@ -8,6 +8,7 @@
 
 #include <fltk3/Tree.h>
 #include <fltk3/Preferences.h>
+#include <fltk3/Wrapper.h>
 
 //////////////////////
 // fltk3::Tree.cxx
@@ -500,6 +501,7 @@ fltk3::TreeItem *fltk3::Tree::next_selected_item(fltk3::TreeItem *item) {
 
 /// Standard FLTK event handler for this widget.
 int fltk3::Tree::handle(int e) {
+  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(e), Handle)
   int ret = 0;
   // Developer note: fltk3::Browser_::handle() used for reference here..
   // #include <fltk3/names.h>	// for event debugging
