@@ -18,7 +18,7 @@ unittests.o: ../fltk3/Scrollbar.h ../FL/Fl_Slider.H ../fltk3/Slider.h
 unittests.o: ../FL/Fl_Valuator.H ../fltk3/Valuator.h ../FL/Fl.H
 unittests.o: ../FL/Fl_Help_View.H ../fltk3/HelpView.h ../fltk3/run.h
 unittests.o: ../fltk3/draw.h ../fltk3/x.h ../fltk3/Device.h ../fltk3/Object.h
-unittests.o: ../fltk3/Plugin.h Preferences.h ../FL/Fl_Preferences.H
+unittests.o: ../fltk3/Plugin.h ../FL/Fl_Preferences.H
 unittests.o: ../fltk3/Preferences.h ../fltk3/Button.h ../fltk3/Group.h
 unittests.o: ../fltk3/Input.h ../fltk3/Input_.h ../fltk3/Choice.h
 unittests.o: ../fltk3/Menu_.h ../fltk3/MenuItem.h ../fltk3/RoundButton.h
