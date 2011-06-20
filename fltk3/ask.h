@@ -56,20 +56,20 @@ namespace fltk3 {
   
   FLTK3_EXPORT void beep(int type = BEEP_DEFAULT);
   FLTK3_EXPORT void message(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
-  FLTK3_EXPORT void va_message(va_list, const char *);
+  FLTK3_EXPORT void vmessage(const char *, va_list);
   FLTK3_EXPORT void alert(const char *,...) __fl_attr((__format__ (__printf__, 1, 2)));
-  FLTK3_EXPORT void va_alert(va_list, const char *);
+  FLTK3_EXPORT void valert(const char *, va_list);
   // fltk3::ask() is deprecated since it uses "Yes" and "No" for the buttons,
   // which does not conform to the current FLTK Human Interface Guidelines.
   // Use fltk3::choice() instead with the appropriate verbs instead.
   FLTK3_EXPORT int ask(const char *,...) __fl_attr((__format__ (__printf__, 1, 2), __deprecated__));
-  FLTK3_EXPORT int va_ask(va_list, const char *);
+  FLTK3_EXPORT int vask(const char *, va_list);
   FLTK3_EXPORT int choice(const char *q,const char *b0,const char *b1,const char *b2,...) __fl_attr((__format__ (__printf__, 1, 5)));
-  FLTK3_EXPORT int va_choice(va_list, const char *, const char *, const char *, const char *);
+  FLTK3_EXPORT int vchoice(const char *, const char *, const char *, const char *, va_list);
   FLTK3_EXPORT const char *input(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
-  FLTK3_EXPORT const char *va_input(va_list, const char *, const char *d=0);
+  FLTK3_EXPORT const char *vinput(const char *, const char *d, va_list);
   FLTK3_EXPORT const char *password(const char *label, const char *deflt = 0, ...) __fl_attr((__format__ (__printf__, 1, 3)));
-  FLTK3_EXPORT const char *va_password(va_list, const char *, const char *d=0);
+  FLTK3_EXPORT const char *vpassword(const char *, const char *d, va_list);
   
   FLTK3_EXPORT Widget *message_icon();
   extern FLTK3_EXPORT Font message_font_;

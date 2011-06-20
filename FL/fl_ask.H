@@ -51,21 +51,21 @@ inline void fl_beep(int type = FL_BEEP_DEFAULT) {
 void fl_message(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
-  fltk3::va_message(ap, fmt);
+  fltk3::vmessage(fmt, ap);
   va_end(ap);
 }
 
 inline void fl_alert(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
-  fltk3::va_alert(ap, fmt);
+  fltk3::alert(fmt, ap);
   va_end(ap);
 }
 
 inline int fl_ask(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
-  int ret = fltk3::va_ask(ap, fmt);
+  int ret = fltk3::vask(fmt, ap);
   va_end(ap);
   return ret;
 }
@@ -73,7 +73,7 @@ inline int fl_ask(const char *fmt, ...) {
 inline int fl_choice(const char *q,const char *b0,const char *b1,const char *b2, ...) {
   va_list ap;
   va_start(ap, b2);
-  int ret = fltk3::va_choice(ap, q, b0, b1, b2);
+  int ret = fltk3::vchoice(q, b0, b1, b2, ap);
   va_end(ap);
   return ret;
 }
@@ -81,7 +81,7 @@ inline int fl_choice(const char *q,const char *b0,const char *b1,const char *b2,
 inline const char *fl_input(const char *label, const char *deflt = 0, ...) {
   va_list ap;
   va_start(ap, deflt);
-  const char *ret = fltk3::va_input(ap, label, deflt);
+  const char *ret = fltk3::vinput(label, deflt, ap);
   va_end(ap);
   return ret;
 }
@@ -89,7 +89,7 @@ inline const char *fl_input(const char *label, const char *deflt = 0, ...) {
 inline const char *fl_password(const char *label, const char *deflt = 0, ...) {
   va_list ap;
   va_start(ap, deflt);
-  const char *ret = fltk3::va_password(ap, label, deflt);
+  const char *ret = fltk3::vpassword(label, deflt, ap);
   va_end(ap);
   return ret;
 }

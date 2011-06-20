@@ -560,12 +560,12 @@ int fltk3::open(const char* f, int oflags, ...)
 {
   va_list ap;
   va_start(ap, oflags);
-  int ret = fltk3::va_open(ap, f, oflags);
+  int ret = fltk3::vopen(f, oflags, ap);
   va_end(ap);
   return ret;
 }
 
-int fltk3::va_open(va_list ap, const char* f, int oflags) {
+int fltk3::vopen(const char* f, int oflags, va_list ap) {
   int pmode;
   pmode = va_arg(ap, int);
 #if defined (WIN32) && !defined(__CYGWIN__)
