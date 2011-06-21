@@ -127,6 +127,12 @@ void default_widget_size_cb(fltk3::RoundButton *b, long size) {
 }
 
 
+void proj_version_cb(fltk3::Choice*, void*) {
+  // TODO: change version number of .fl file and fix database
+  set_modflag(1);
+}
+
+
 void i18n_type_cb(fltk3::Choice *c, void *) {
   undo_checkpoint();
 

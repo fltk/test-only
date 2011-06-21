@@ -41,6 +41,9 @@
 
 static FILE *fout;
 
+double read_version;
+double write_version;
+
 int open_write(const char *s) {
   if (!s) {fout = stdout; return 1;}
   FILE *f = fltk3::fopen(s,"w");
@@ -360,8 +363,6 @@ int write_file(const char *filename, int selected_only) {
 
 void read_fdesign();
 
-double read_version;
-
 extern Fl_Type *Fl_Type_make(const char *tn);
 
 static void read_children(Fl_Type *p, int paste) {
@@ -387,7 +388,7 @@ static void read_children(Fl_Type *p, int paste) {
 
     if (!strcmp(c,"version")) {
       c = read_word();
-      read_version = strtod(c,0);
+      read_version = write_version = strtod(c,0);
       if (read_version<=0 || read_version>FL_VERSION)
         read_error("unknown version '%s'",c);
       continue;
@@ -505,7 +506,7 @@ int read_file(const char *filename, int merge) {
   Fl_Type *o;
   read_version = 0.0;
   if (!open_read(filename)) return 0;
-  if (merge) deselect(); else    delete_all();
+  if (merge) deselect(); else delete_all();
   read_children(Fl_Type::current, merge);
   Fl_Type::current = 0;
   // Force menu items to be rebuilt...
