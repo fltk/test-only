@@ -29,6 +29,7 @@
 #ifndef Fl_Group_H
 #define Fl_Group_H
 
+#include <fltk3/Group.h>
 #include "Fl_Widget.H"
 
 class FL_EXPORT Fl_Group : public Fl_Widget {
@@ -72,7 +73,7 @@ public:
   
   FLTK3_WRAPPER_VCALLS_OBJECT(Group, show(), show(), Show)
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Group, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Group, handle(int event), handle(event), Handle)
 
   void begin() {
     ((fltk3::Group*)_p)->begin();

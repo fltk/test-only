@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // PNM image header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper complete
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,25 +26,24 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_PNM_Image class . */
-
 #ifndef Fl_PNM_Image_H
 #define Fl_PNM_Image_H
-#  include "Fl_Image.H"
 
-/**
-  The Fl_PNM_Image class supports loading, caching,
-  and drawing of Portable Anymap (PNM, PBM, PGM, PPM) image files. The class
-  loads bitmap, grayscale, and full-color images in both ASCII and
-  binary formats.
-*/
+#include <fltk3/PNMImage.h>
+#include "Fl_Image.H"
+
+
 class FL_EXPORT Fl_PNM_Image : public Fl_RGB_Image {
 
-  public:
+public:
 
-  Fl_PNM_Image(const char* filename);
+  Fl_PNM_Image(const char* filename) {
+    _p = new fltk3::PNMImage(filename);
+    _p->wrapper(this);
+  }
+
 };
+
 
 #endif
 

@@ -48,7 +48,7 @@ public:
     _p->wrapper(this);
   }
     
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Scrollbar, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Scrollbar, handle(int event), handle(event), Handle)
 
   int value() const {
     return ((fltk3::Scrollbar*)_p)->value();

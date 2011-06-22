@@ -82,10 +82,6 @@ class FL_EXPORT Fl_Widget : public fltk3::WidgetWrapper {
 
 protected:
   
-  Fl_Widget() { /*blank */ }
-
-protected:
-  
   void x(int v) {
     ((fltk3::Widget*)_p)->x(v);
   }
@@ -171,6 +167,9 @@ protected:
   }
   
 public:
+
+  Fl_Widget() { /*blank */ }
+
   Fl_Widget(int x, int y, int w, int h, const char *label=0L) {
     _p = new fltk3::Widget(x, y, w, h, label);
     _p->wrapper(this);
@@ -184,7 +183,7 @@ public:
 
   FLTK3_WRAPPER_VCALLS_OBJECT(Widget, draw(), draw(), Draw)
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Widget, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Widget, handle(int event), handle(event), Handle)
   
   virtual Fl_Group* as_group() {return 0;}
   

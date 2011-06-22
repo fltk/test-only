@@ -33,6 +33,8 @@
 
 #include "LightButton.h"
 
+class Fl_Check_Button;
+
 namespace fltk3 {
   
   /**
@@ -51,6 +53,7 @@ namespace fltk3 {
    \todo Generate fltk3::CheckButton.gif with visible checkmark.
    */
   class FLTK3_EXPORT CheckButton : public fltk3::LightButton {
+    friend class ::Fl_Check_Button;
   public:
     CheckButton(int X, int Y, int W, int H, const char *L = 0);
   };

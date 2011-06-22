@@ -45,7 +45,7 @@ protected:
 
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(TabGroup, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, TabGroup, handle(int event), handle(event), Handle)
   
   Fl_Widget *value() {
     return fltk3::_3to1_widget( ((fltk3::TabGroup*)_p)->value() );

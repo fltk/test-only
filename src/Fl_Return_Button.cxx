@@ -60,7 +60,7 @@ void fltk3::ReturnButton::draw() {
 }
 
 int fltk3::ReturnButton::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   if (event == fltk3::SHORTCUT &&
       (fltk3::event_key() == fltk3::EnterKey || fltk3::event_key() == fltk3::KPEnterKey)) {
     simulate_key_action();

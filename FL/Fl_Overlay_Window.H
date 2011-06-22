@@ -45,12 +45,12 @@ public:
 
   FLTK3_WRAPPER_VCALLS_OBJECT(OverlayWindow, draw_overlay(), draw_overlay(), DrawOverlay)
   
-  void flush();  {
+  void flush() {
     ((fltk3::OverlayWindow*)_p)->flush();
   }
   
   int can_do_overlay() {
-    ((fltk3::OverlayWindow*)_p)->can_do_overlay();
+    return ((fltk3::OverlayWindow*)_p)->can_do_overlay();
   }
   
   void redraw_overlay() {

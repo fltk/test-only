@@ -41,6 +41,8 @@ public:
 
   enum { FILES, DIRECTORIES };
 
+  Fl_File_Browser() { /* empty */ }
+
   Fl_File_Browser(int x, int y, int w, int h, const char *label = 0) {
     _p = new fltk3::FileBrowser(x, y, w, h, label);
     _p->wrapper(this);
@@ -71,7 +73,7 @@ public:
   }
   
   void textsize(Fl_Fontsize size) {
-    ((fltk3::FileBrowser*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+    ((fltk3::FileBrowser*)_p)->textsize( fltk3::_1to3_fontsize(size) );
   }
   
   int filetype() const { 

@@ -36,8 +36,12 @@
 
 #include "TextDisplay.h"
 
+
+class Fl_Text_Editor;
+
+
 namespace fltk3 {
-  
+
   // key will match in any state
   const unsigned int TEXT_EDITOR_ANY_STATE = -1L;
   
@@ -49,16 +53,19 @@ namespace fltk3 {
    class.
    */
   class FLTK3_EXPORT TextEditor : public fltk3::TextDisplay {
+
+    friend class ::Fl_Text_Editor;
+
   public:
     /** Key function binding callback type */
-    typedef int (*Key_Func)(int key, fltk3::TextEditor* editor);
+    typedef int (*KeyFunc)(int key, fltk3::TextEditor* editor);
     
     /** Simple linked list associating a key/state to a function */
-    struct Key_Binding {
+    struct KeyBinding {
       int          key;		///< the key pressed
       int          state;	///< the state of key modifiers
-      Key_Func     function;	///< associated function
-      Key_Binding* next;	///< next key binding in the list
+      KeyFunc     function;	///< associated function
+      KeyBinding* next;	///< next key binding in the list
     };
     
     TextEditor(int X, int Y, int W, int H, const char* l = 0);
@@ -77,24 +84,24 @@ namespace fltk3 {
      */
     int insert_mode() { return insert_mode_; }
     
-    void add_key_binding(int key, int state, Key_Func f, Key_Binding** list);
+    void add_key_binding(int key, int state, KeyFunc f, KeyBinding** list);
     /** Adds a key of state "state" with the function "function" */
-    void add_key_binding(int key, int state, Key_Func f)
+    void add_key_binding(int key, int state, KeyFunc f)
     { add_key_binding(key, state, f, &key_bindings); }
-    void remove_key_binding(int key, int state, Key_Binding** list);
+    void remove_key_binding(int key, int state, KeyBinding** list);
     /** Removes the key binding associated with the key "key" of state "state". */
     void remove_key_binding(int key, int state)
     { remove_key_binding(key, state, &key_bindings); }
-    void remove_all_key_bindings(Key_Binding** list);
+    void remove_all_key_bindings(KeyBinding** list);
     /** Removes all of the key bindings associated with the text editor or list. */
     void remove_all_key_bindings() { remove_all_key_bindings(&key_bindings); }
-    void add_default_key_bindings(Key_Binding** list);
-    Key_Func bound_key_function(int key, int state, Key_Binding* list);
+    void add_default_key_bindings(KeyBinding** list);
+    KeyFunc bound_key_function(int key, int state, KeyBinding* list);
     /**  Returns the function associated with a key binding. */
-    Key_Func bound_key_function(int key, int state)
+    KeyFunc bound_key_function(int key, int state)
     { return bound_key_function(key, state, key_bindings); }
     /**  Sets the default key function for unassigned keys. */
-    void default_key_function(Key_Func f) { default_key_function_ = f; }
+    void default_key_function(KeyFunc f) { default_key_function_ = f; }
     
     // functions for the built in default bindings
     static int kf_default(int c, fltk3::TextEditor* e);
@@ -129,9 +136,9 @@ namespace fltk3 {
     
 #ifndef FLTK3_DOXYGEN
     int insert_mode_;
-    Key_Binding* key_bindings;
-    static Key_Binding* global_key_bindings;
-    Key_Func default_key_function_;
+    KeyBinding* key_bindings;
+    static KeyBinding* global_key_bindings;
+    KeyFunc default_key_function_;
 #endif
   };
   

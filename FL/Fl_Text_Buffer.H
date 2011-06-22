@@ -44,11 +44,9 @@ public:
 };
 
 
-typedef void (*Fl_Text_Modify_Cb)(int pos, int nInserted, int nDeleted,
-                                  int nRestyled, const char* deletedText,
-                                  void* cbArg);
+typedef fltk3::TextModifyCb Fl_Text_Modify_Cb;
 
-typedef void (*Fl_Text_Predelete_Cb)(int pos, int nDeleted, void* cbArg);
+typedef fltk3::TextPredeleteCb Fl_Text_Predelete_Cb;
 
 
 class FL_EXPORT Fl_Text_Buffer : public fltk3::TextBuffer {
@@ -59,19 +57,19 @@ public:
   : fltk3::TextBuffer(requestedSize, preferredGapSize) { }
 
   void add_modify_callback(Fl_Text_Modify_Cb cb, void* v) {
-    fltk3::add_modify_callback( (fltk3::TextModifyCb)cb, v);
+    fltk3::TextBuffer::add_modify_callback( (fltk3::TextModifyCb)cb, v);
   }
   
   void remove_modify_callback(Fl_Text_Modify_Cb cb, void* v) {
-    fltk3::remove_modify_callback( (fltk3::TextModifyCb)cb, v);
+    fltk3::TextBuffer::remove_modify_callback( (fltk3::TextModifyCb)cb, v);
   }
   
   void add_predelete_callback(Fl_Text_Predelete_Cb cb, void* v) {
-    fltk3::add_predelete_callback( (fltk3::TextPredeleteCb)cb, v);
+    fltk3::TextBuffer::add_predelete_callback( (fltk3::TextPredeleteCb)cb, v);
   }    
 
-  void remove_predelete_callback(Fl_Text_Predelete_Cb predelCB, void* cbArg) {
-    fltk3::remove_predelete_callback( (fltk3::TextPredeleteCb)cb, v);
+  void remove_predelete_callback(Fl_Text_Predelete_Cb cb, void* v) {
+    fltk3::TextBuffer::remove_predelete_callback( (fltk3::TextPredeleteCb)cb, v);
   }
 
   const Fl_Text_Selection* primary_selection() const { 

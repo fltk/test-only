@@ -43,7 +43,7 @@ public:
   Fl_Radio_Button() { /* empty */ }
   
   Fl_Radio_Button(int x,int y,int w,int h,const char *l=0) {
-    _p = new fltk3::RadioLightButton(x, y, w, h, l);
+    _p = new fltk3::RadioButton(x, y, w, h, l);
     _p->wrapper(this);
   }
 

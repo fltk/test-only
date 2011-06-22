@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id$"
 //
 // PNG image header file for the Fast Light Tool Kit (FLTK).
+// FLTK 123 wrapper complete
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,27 +26,27 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_PNG_Image class . */
-
 #ifndef Fl_PNG_Image_H
 #define Fl_PNG_Image_H
-#  include "Fl_Image.H"
 
-/**
-  The Fl_PNG_Image class supports loading, caching,
-  and drawing of Portable Network Graphics (PNG) image files. The
-  class loads colormapped and full-color images and handles color-
-  and alpha-based transparency.
-*/
+#include <fltk3/PNGImage.h>
+#include "Fl_Image.H"
+
+
 class FL_EXPORT Fl_PNG_Image : public Fl_RGB_Image {
 
 public:
 
-  Fl_PNG_Image(const char* filename);
-  Fl_PNG_Image (const char *name_png, const unsigned char *buffer, int datasize);
-private:
-  void load_png_(const char *name_png, const unsigned char *buffer_png, int datasize);
+  Fl_PNG_Image(const char* filename) {
+    _p = new fltk3::PNGImage(filename);
+    _p->wrapper(this);
+  }
+
+  Fl_PNG_Image (const char *name_png, const unsigned char *buffer, int datasize) {
+    _p = new fltk3::PNGImage(name_png, buffer, datasize);
+    _p->wrapper(this);
+  }
+
 };
 
 #endif

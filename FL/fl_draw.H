@@ -428,7 +428,13 @@ FL_EXPORT void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int X,int Y,i
 
 FL_EXPORT char fl_can_do_alpha_blending();
 
-FL_EXPORT uchar *fl_read_image(uchar *p,int X,int Y,int W,int H,int alpha=0);
+#endif
+
+inline uchar *fl_read_image(uchar *p,int X,int Y,int W,int H,int alpha=0) {
+  return fltk3::read_image(p, X, Y, W, H, alpha);
+}
+
+#if 0
 
 FL_EXPORT int fl_draw_pixmap(/*const*/ char* const* data, int x,int y,Fl_Color=FL_GRAY);
 
@@ -467,20 +473,29 @@ inline void fl_cursor(Fl_Cursor c, Fl_Color fg=FL_BLACK, Fl_Color bg=FL_WHITE) {
   fltk3::cursor((fltk3::Cursor)c, fltk3::_1to3_color(fg), fltk3::_1to3_color(bg));
 }
 
-#if 0
-FL_EXPORT const char* fl_expand_text(const char* from, char* buf, int maxbuf,
+inline const char* fl_expand_text(const char* from, char* buf, int maxbuf,
                                      double maxw, int& n, double &width,
-                                     int wrap, int draw_symbols = 0);
+                                     int wrap, int draw_symbols = 0) {
+  return fltk3::expand_text(from, buf, maxbuf, maxw, n, width, wrap, draw_symbols);
+}
 
+inline void fl_set_status(int X, int Y, int W, int H) {
+  fltk3::set_status(X, Y, W, H);
+}
 
+inline void fl_set_spot(int font, int size, int X, int Y, int W, int H, Fl_Window *win=0) {
+  fltk3::set_spot(fltk3::_1to3_font(font), size, X, Y, W, H, fltk3::_1to3_window(win));
+}
 
-FL_EXPORT void fl_set_status(int X, int Y, int W, int H);
+inline void fl_reset_spot(void) {
+  fltk3::reset_spot();
+}
 
-FL_EXPORT void fl_set_spot(int font, int size, int X, int Y, int W, int H, Fl_Window *win=0);
+inline int fl_draw_symbol(const char* label,int x,int y,int w,int h, Fl_Color c) {
+  return fltk3::draw_symbol(label, x, y, w, h, fltk3::_1to3_color(c));
+}
 
-FL_EXPORT void fl_reset_spot(void);
-
-FL_EXPORT int fl_draw_symbol(const char* label,int x,int y,int w,int h, Fl_Color);
+#if 0 // FIXME: 123
 
 FL_EXPORT int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scalable);
 

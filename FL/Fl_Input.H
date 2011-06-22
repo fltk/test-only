@@ -40,7 +40,7 @@ protected:
   
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Input, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Input, handle(int event), handle(event), Handle)
   
   Fl_Input() { /* empty */ }
   

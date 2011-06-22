@@ -36,18 +36,14 @@
 class Fl_Widget;
 struct Fl_Menu_Item;
 
-struct FL_EXPORT Fl_Multi_Label {
-  const char* labela;
-  const char* labelb;
-  uchar typea;
-  uchar typeb;
+struct FL_EXPORT Fl_Multi_Label : public fltk3::MultiLabel {
   
   void label(Fl_Widget *w) {
-    ((fltk3::Multilabel*)_p)->label( fltk3::_1to3_widget(w) );
+    fltk3::MultiLabel::label( fltk3::_1to3_widget(w) );
   }
   
-  void label(Fl_Menu_Item*) {
-    ((fltk3::Multilabel*)_p)->label( (fltk3::MenuItem*)w );
+  void label(Fl_Menu_Item *w) {
+    fltk3::MultiLabel::label( (fltk3::MenuItem*)w );
   }
 
 };

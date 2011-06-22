@@ -43,7 +43,7 @@ class FL_EXPORT Fl_Text_Editor : public Fl_Text_Display {
 public:
 
   typedef int (*Key_Func)(int key, Fl_Text_Editor* editor);
-  
+ 
   struct Key_Binding {
     int          key;		///< the key pressed
     int          state;	///< the state of key modifiers
@@ -51,14 +51,14 @@ public:
     Key_Binding* next;	///< next key binding in the list
   };
   
-  Fl_Text_Editor() {}
+  Fl_Text_Editor() { /* empty */ }
   
   Fl_Text_Editor(int X, int Y, int W, int H, const char* l = 0) {
     _p = new fltk3::TextEditor(X, Y, W, H, l);
     _p->wrapper(this);
   }
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(TextEditor, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, TextEditor, handle(int event), handle(event), Handle)
 
   void insert_mode(int b) {
     ((fltk3::TextEditor*)_p)->insert_mode(b);
@@ -69,15 +69,15 @@ public:
   }
   
   void add_key_binding(int key, int state, Key_Func f, Key_Binding** list) {
-    ((fltk3::TextEditor*)_p)->add_key_binding(key, state, f, list);
+    ((fltk3::TextEditor*)_p)->add_key_binding(key, state, (fltk3::TextEditor::KeyFunc)f, (fltk3::TextEditor::KeyBinding**)list);
   }
 
   void add_key_binding(int key, int state, Key_Func f) {
-    ((fltk3::TextEditor*)_p)->add_key_binding(key, state, f);
+    ((fltk3::TextEditor*)_p)->add_key_binding(key, state, (fltk3::TextEditor::KeyFunc)f);
   }
 
   void remove_key_binding(int key, int state, Key_Binding** list) {
-    ((fltk3::TextEditor*)_p)->remove_key_binding(key, state, list);
+    ((fltk3::TextEditor*)_p)->remove_key_binding(key, state, (fltk3::TextEditor::KeyBinding**)list);
   }
 
   void remove_key_binding(int key, int state) {
@@ -85,7 +85,7 @@ public:
   }
 
   void remove_all_key_bindings(Key_Binding** list) {
-    ((fltk3::TextEditor*)_p)->remove_all_key_bindings(list);
+    ((fltk3::TextEditor*)_p)->remove_all_key_bindings((fltk3::TextEditor::KeyBinding**)list);
   }
 
   void remove_all_key_bindings() {
@@ -93,126 +93,131 @@ public:
   }
 
   void add_default_key_bindings(Key_Binding** list) {
-    ((fltk3::TextEditor*)_p)->add_default_key_bindings(list);
+    ((fltk3::TextEditor*)_p)->add_default_key_bindings((fltk3::TextEditor::KeyBinding**)list);
   }
   
   Key_Func bound_key_function(int key, int state, Key_Binding* list) {
-    return ((fltk3::TextEditor*)_p)->bound_key_function(key, state, list);
+    return (Key_Func)((fltk3::TextEditor*)_p)->bound_key_function(key, state, (fltk3::TextEditor::KeyBinding*)list);
   }
   
   Key_Func bound_key_function(int key, int state) {
-    return ((fltk3::TextEditor*)_p)->bound_key_function(key, state);
+    return (Key_Func)((fltk3::TextEditor*)_p)->bound_key_function(key, state);
   }
 
   void default_key_function(Key_Func f) {
-    ((fltk3::TextEditor*)_p)->default_key_function(f);
+    ((fltk3::TextEditor*)_p)->default_key_function((fltk3::TextEditor::KeyFunc)f);
   }
   
   static int kf_default(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_default(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_default(c, (fltk3::TextEditor*)fltk3::_1to3_widget(e));
+    // FIXME: all this key function emulation is not thought through!
   }
   
   static int kf_ignore(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_ignore(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_ignore(c, (fltk3::TextEditor*)e);
   }
   
   static int kf_backspace(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_backspace(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_backspace(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_enter(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_enter(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_enter(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_move(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_move(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_move(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_shift_move(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_shift_move(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_shift_move(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_ctrl_move(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_ctrl_move(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_ctrl_move(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_c_s_move(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_c_s_move(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_c_s_move(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_meta_move(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_meta_move(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_meta_move(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_m_s_move(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_m_s_move(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_m_s_move(c, (fltk3::TextEditor*)e);
   }
 
-  static int kf_home(int, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_home(c, (fltk3::TextEditor*)e);
+  static int kf_home(int c, Fl_Text_Editor* e) {
+    return fltk3::TextEditor::kf_home(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_end(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_end(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_end(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_left(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_left(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_left(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_up(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_up(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_up(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_right(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_right(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_right(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_down(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_down(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_down(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_page_up(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_page_up(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_page_up(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_page_down(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_page_down(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_page_down(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_insert(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_insert(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_insert(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_delete(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_delete(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_delete(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_copy(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_copy(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_copy(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_cut(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_cut(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_cut(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_paste(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_paste(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_paste(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_select_all(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_select_all(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_select_all(c, (fltk3::TextEditor*)e);
   }
 
   static int kf_undo(int c, Fl_Text_Editor* e) {
-    fltk3::TextEditor::kf_undo(c, (fltk3::TextEditor*)e);
+    return fltk3::TextEditor::kf_undo(c, (fltk3::TextEditor*)e);
   }
   
 protected:
   
-  int handle_key();
+  int handle_key() {
+    return ((fltk3::TextEditor*)_p)->handle_key();
+  }
   
-  void maybe_do_callback();
+  void maybe_do_callback() {
+    ((fltk3::TextEditor*)_p)->maybe_do_callback();
+  }
   
 };
 

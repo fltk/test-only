@@ -31,7 +31,7 @@
 #ifndef Fltk3_Plugin_H
 #define Fltk3_Plugin_H
 
-#include "Preferences.h"
+#include <fltk3/Preferences.h>
 
 namespace fltk3 {
   

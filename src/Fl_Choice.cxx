@@ -164,7 +164,7 @@ int fltk3::Choice::value(int v) {
 }
 
 int fltk3::Choice::handle(int e) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(e), Handle)
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(e), Handle)
   if (!menu() || !menu()->text) return 0;
   const fltk3::MenuItem* v;
   switch (e) {

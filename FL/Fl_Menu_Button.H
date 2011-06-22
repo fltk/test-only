@@ -51,7 +51,7 @@ public:
     POPUP123
   };
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(MenuButton, handle(int e), handle(e), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, MenuButton, handle(int e), handle(e), Handle)
   
   const Fl_Menu_Item* popup() {
     return (Fl_Menu_Item*) ((fltk3::MenuButton*)_p)->popup();

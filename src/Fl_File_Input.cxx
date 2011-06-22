@@ -194,7 +194,7 @@ void fltk3::FileInput::draw() {
 int						// O - TRUE if we handled event
 fltk3::FileInput::handle(int event) 		// I - Event
 {
-  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
 //  printf("handle(event = %d)\n", event);
   static char inButtonBar = 0;
 

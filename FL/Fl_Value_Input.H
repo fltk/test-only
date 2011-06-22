@@ -42,7 +42,7 @@ protected:
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(ValueInput, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, ValueInput, handle(int event), handle(event), Handle)
   
   FLTK3_WRAPPER_VCALLS_OBJECT(ValueInput, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
   

@@ -41,7 +41,7 @@ protected:
   
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(ValueSlider, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, ValueSlider, handle(int event), handle(event), Handle)
 
   Fl_Value_Slider() {}
   

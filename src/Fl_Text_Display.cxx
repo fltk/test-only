@@ -250,7 +250,7 @@ void fltk3::TextDisplay::buffer( fltk3::TextBuffer *buf ) {
 void fltk3::TextDisplay::highlight_data(fltk3::TextBuffer *styleBuffer,
                                      const StyleTableEntry *styleTable,
                                      int nStyles, char unfinishedStyle,
-                                     Unfinished_Style_Cb unfinishedHighlightCB,
+                                     UnfinishedStyleCb unfinishedHighlightCB,
                                      void *cbArg ) {
   mStyleBuffer = styleBuffer;
   mStyleTable = styleTable;
@@ -3547,7 +3547,7 @@ void fltk3::TextDisplay::scroll_timer_cb(void *user_data) {
  \brief Event handling.
  */
 int fltk3::TextDisplay::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   if (!buffer()) return 0;
   // This isn't very elegant!
   if (!fltk3::event_inside(text_area.x, text_area.y, text_area.w, text_area.h) &&

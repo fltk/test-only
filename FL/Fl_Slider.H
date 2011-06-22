@@ -72,7 +72,7 @@ public:
     ((fltk3::Slider*)_p)->bounds(a, b);
   }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Slider, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Slider, handle(int event), handle(event), Handle)
 
   int scrollvalue(int pos,int size,int first,int total) {
     return ((fltk3::Slider*)_p)->scrollvalue(pos, size, first, total);

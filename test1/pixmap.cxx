@@ -64,7 +64,7 @@ int arg(int, char **argv, int &i) {
 int main(int argc, char **argv) {
   int i = 1;
   if (Fl::args(argc,argv,i,arg) < argc)
-    Fl::fatal(" -8 # : use default visual\n%s\n",Fl::help);
+    Fl::fatal(" -8 # : use default visual\n%s\n",Fl::help_text());
 
   Fl_Double_Window window(400,400); ::w = &window;
   Fl_Button b(140,160,120,120,"Pixmap"); ::b = &b;

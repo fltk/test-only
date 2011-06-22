@@ -36,6 +36,8 @@
 #include "Valuator.h"
 #include <fltk3/Wrapper.h>
 
+class Fl_Counter;
+
 namespace fltk3 {
   
   // values for type():
@@ -56,6 +58,8 @@ namespace fltk3 {
    \li \c fltk3::SIMPLE_COUNTER: Displays a counter with only 2 arrow buttons.
    */
   class FLTK3_EXPORT Counter : public fltk3::Valuator {
+
+    friend class ::Fl_Counter;
     
     fltk3::Font textfont_;
     fltk3::Fontsize textsize_;

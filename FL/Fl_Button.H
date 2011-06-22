@@ -67,7 +67,7 @@ public:
   
   FLTK3_WRAPPER_VCALLS_OBJECT(Button, draw(), draw(), Draw)
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Button, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Button, handle(int event), handle(event), Handle)
 
   int value(int v) {
     return ((fltk3::Button*)_p)->value(v);

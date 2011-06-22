@@ -46,11 +46,11 @@ public:
   Fl_File_Input() { /* empty */ }
   
   Fl_File_Input(int X, int Y, int W, int H, const char *L=0) {
-    _p = new fltk3::FileInput(x, y, w, h, label);
+    _p = new fltk3::FileInput(X, Y, W, H, L);
     _p->wrapper(this);
   }
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(FileInput, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, FileInput, handle(int event), handle(event), Handle)
 
   Fl_Boxtype down_box() const { 
     return fltk3::_3to1_boxtype( ((fltk3::FileInput*)_p)->down_box() );

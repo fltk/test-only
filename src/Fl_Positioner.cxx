@@ -123,7 +123,7 @@ int fltk3::Positioner::handle(int event, int X, int Y, int W, int H) {
 }
 
 int fltk3::Positioner::handle(int e) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(e), Handle)
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(e), Handle)
   return handle(e, x(), y(), w(), h());
 }
 

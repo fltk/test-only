@@ -87,7 +87,7 @@ class FL_EXPORT Fl_Clock : public Fl_Clock_Output {
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Clock, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Clock, handle(int event), handle(event), Handle)
 
   Fl_Clock() { /* empty */ }
   

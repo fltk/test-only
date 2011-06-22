@@ -545,7 +545,7 @@ void fltk3::GlWindow::draw() {
  */
 int fltk3::GlWindow::handle(int event) 
 {
-  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   return fltk3::Window::handle(event);
 }
 

@@ -48,7 +48,7 @@ inline void fl_beep(int type = FL_BEEP_DEFAULT) {
   fltk3::beep(type);
 }
 
-void fl_message(const char *fmt, ...) {
+inline void fl_message(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
   fltk3::vmessage(fmt, ap);

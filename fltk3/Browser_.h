@@ -94,25 +94,25 @@ namespace fltk3 {
      to return the first item in the list.
      \see item_first(), item_next(), item_last(), item_prev()
      */
-    virtual void *item_first() const = 0;
+    virtual void *item_first() const;
     /**
      This method must be provided by the subclass
      to return the item in the list after \p item.
      \see item_first(), item_next(), item_last(), item_prev()
      */
-    virtual void *item_next(void *item) const = 0;
+    virtual void *item_next(void *item) const;
     /**
      This method must be provided by the subclass
      to return the item in the list before \p item.
      \see item_first(), item_next(), item_last(), item_prev()
      */
-    virtual void *item_prev(void *item) const = 0;
+    virtual void *item_prev(void *item) const;
     /**
      This method must be provided by the subclass
      to return the last item in the list.
      \see item_first(), item_next(), item_last(), item_prev()
      */
-    virtual void *item_last() const { return 0L; }
+    virtual void *item_last() const;
     /** 
      This method must be provided by the subclass to return 
      the height of \p item in pixels.
@@ -121,7 +121,7 @@ namespace fltk3 {
      \returns The height of the specified \p item in pixels.
      \see item_height(), item_width(), item_quick_height()
      */
-    virtual int item_height(void *item) const = 0;
+    virtual int item_height(void *item) const;
     /**
      This method must be provided by the subclass to return the width of the
      \p item in pixels.  Allow for two additional pixels for the list
@@ -129,32 +129,32 @@ namespace fltk3 {
      \param[in] item The item whose width is returned.
      \returns The width of the item in pixels.
      */
-    virtual int item_width(void *item) const = 0;
+    virtual int item_width(void *item) const;
     virtual int item_quick_height(void *item) const ;
     /**
      This method must be provided by the subclass to draw the \p item
      in the area indicated by \p X, \p Y, \p W, \p H.
      */
-    virtual void item_draw(void *item,int X,int Y,int W,int H) const = 0;
+    virtual void item_draw(void *item,int X,int Y,int W,int H) const;
     /**
      This optional method returns a string (label) that may be used for sorting. 
      \param[in] item The item whose label text is returned.
      \returns The item's text label. (Can be NULL if blank)
      */
-    virtual const char *item_text(void *item) const { (void)item; return 0L; }
+    virtual const char *item_text(void *item) const;
     /**
      This optional method should be provided by the subclass 
      to efficiently swap browser items \p a and \p b, such as for sorting.
      \param[in] a,b The two items to be swapped.
      */
-    virtual void item_swap(void *a,void *b) { (void)a; (void)b; }
+    virtual void item_swap(void *a,void *b);
     /**
      This method must be provided by the subclass 
      to return the item for the specified \p index. 
      \param[in] index The \p index of the item to be returned
      \returns The item at the specified \p index.
      */
-    virtual void *item_at(int index) const { (void)index; return 0L; }
+    virtual void *item_at(int index) const;
     // you don't have to provide these but it may help speed it up:
     virtual int full_width() const ;	// current width of all items
     virtual int full_height() const ;	// current height of all items

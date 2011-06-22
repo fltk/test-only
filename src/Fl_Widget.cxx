@@ -105,7 +105,7 @@ static void cleanup_readqueue(fltk3::Widget *w) {
 ////////////////////////////////////////////////////////////////
 
 int fltk3::Widget::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   return 0;
 }
 

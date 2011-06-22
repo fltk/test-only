@@ -41,7 +41,7 @@ protected:
 
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(ValueOutput, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, ValueOutput, handle(int event), handle(event), Handle)
   
   Fl_Value_Output(int x,int y,int w,int h,const char *l=0) {
     _p = new fltk3::ValueOutput(x, y, w, h, l);

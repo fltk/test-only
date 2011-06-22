@@ -41,7 +41,6 @@ CPPFILES =\
 	cairo_test.cxx \
 	checkers.cxx \
 	clock.cxx \
-	colbrowser.cxx \
 	color_chooser.cxx \
 	cube.cxx \
 	CubeMain.cxx \
@@ -55,7 +54,6 @@ CPPFILES =\
 	fast_slow.cxx \
 	file_chooser.cxx \
 	fonts.cxx \
-	forms.cxx \
 	fractals.cxx \
 	fullscreen.cxx \
 	gl_overlay.cxx \
@@ -116,7 +114,6 @@ ALL =	\
 	cairo_test$(EXEEXT) \
 	checkers$(EXEEXT) \
 	clock$(EXEEXT) \
-	colbrowser$(EXEEXT) \
 	color_chooser$(EXEEXT) \
 	cursor$(EXEEXT) \
 	curve$(EXEEXT) \
@@ -127,7 +124,6 @@ ALL =	\
 	fast_slow$(EXEEXT) \
 	file_chooser$(EXEEXT) \
 	fonts$(EXEEXT) \
-	forms$(EXEEXT) \
 	hello$(EXEEXT) \
 	help$(EXEEXT) \
 	iconize$(EXEEXT) \
@@ -267,9 +263,9 @@ uninstall-osx:
 	$(RMDIR) $(DESTDIR)/Applications/sudoku.app
 
 # FLUID file rules
-.fl.cxx .fl.h:	../fluid/fluid$(EXEEXT)
+.fl.cxx .fl.h:	../fluid1/fluid$(EXEEXT)
 	echo Generating $@ and header from $<...
-	../fluid/fluid$(EXEEXT) -c $<
+	../fluid1/fluid$(EXEEXT) -c $<
 
 # All demos depend on the FLTK library...
 $(ALL): $(LIBNAME)
@@ -308,10 +304,6 @@ checkers$(EXEEXT): checkers.o
 
 clock$(EXEEXT): clock.o
 
-colbrowser$(EXEEXT): colbrowser.o
-	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ colbrowser.o $(LINKFLTKFORMS) $(LDLIBS)
-
 color_chooser$(EXEEXT): color_chooser.o
 
 cursor$(EXEEXT): cursor.o
@@ -320,7 +312,7 @@ curve$(EXEEXT): curve.o
 
 demo$(EXEEXT): demo.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ demo.o $(LINKFLTKFORMS) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ demo.o $(LINKFLTK) $(LDLIBS)
 
 device$(EXEEXT): device.o $(IMGLIBNAME)
 	echo Linking $@...
@@ -333,17 +325,13 @@ editor$(EXEEXT): editor.o
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) editor.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
 
 fast_slow$(EXEEXT): fast_slow.o
-fast_slow.cxx:	fast_slow.fl ../fluid/fluid$(EXEEXT)
+fast_slow.cxx:	fast_slow.fl ../fluid1/fluid$(EXEEXT)
 
 file_chooser$(EXEEXT): file_chooser.o $(IMGLIBNAME)
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) file_chooser.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
 
 fonts$(EXEEXT): fonts.o
-
-forms$(EXEEXT): forms.o
-	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ forms.o $(LINKFLTKFORMS) $(LDLIBS)
 
 hello$(EXEEXT): hello.o
 
@@ -356,7 +344,7 @@ iconize$(EXEEXT): iconize.o
 image$(EXEEXT): image.o
 
 inactive$(EXEEXT): inactive.o
-inactive.cxx:	inactive.fl ../fluid/fluid$(EXEEXT)
+inactive.cxx:	inactive.fl ../fluid1/fluid$(EXEEXT)
 
 input$(EXEEXT): input.o
 
@@ -366,11 +354,11 @@ keyboard$(EXEEXT): keyboard_ui.o keyboard.o
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ keyboard.o keyboard_ui.o $(LINKFLTK) $(LDLIBS)
 keyboard_ui.o:	keyboard_ui.h
-keyboard_ui.cxx:	keyboard_ui.fl ../fluid/fluid$(EXEEXT)
+keyboard_ui.cxx:	keyboard_ui.fl ../fluid1/fluid$(EXEEXT)
 
 label$(EXEEXT): label.o
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ label.o $(LINKFLTKFORMS) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ label.o $(LINKFLTK) $(LDLIBS)
 
 line_style$(EXEEXT): line_style.o
 
@@ -380,7 +368,7 @@ mandelbrot$(EXEEXT): mandelbrot_ui.o mandelbrot.o
 	echo Linking $@...
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ mandelbrot.o mandelbrot_ui.o $(LINKFLTK) $(LDLIBS)
 mandelbrot_ui.o:	mandelbrot_ui.h
-mandelbrot_ui.cxx:	mandelbrot_ui.fl ../fluid/fluid$(EXEEXT)
+mandelbrot_ui.cxx:	mandelbrot_ui.fl ../fluid1/fluid$(EXEEXT)
 
 menubar$(EXEEXT): menubar.o
 
@@ -396,7 +384,7 @@ navigation$(EXEEXT): navigation.o
 
 output$(EXEEXT): output.o $(FLLIBNAME)
 	echo Linking $@...
-	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ output.o $(LINKFLTKFORMS) $(LDLIBS)
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ output.o $(LINKFLTK) $(LDLIBS)
 
 overlay$(EXEEXT): overlay.o
 
@@ -409,15 +397,15 @@ pixmap_browser$(EXEEXT): pixmap_browser.o $(IMGLIBNAME)
 	$(CXX) $(ARCHFLAGS) $(LDFLAGS) pixmap_browser.o -o $@ $(LINKFLTKIMG) $(LDLIBS)
 
 preferences$(EXEEXT):	preferences.o
-preferences.cxx:	preferences.fl ../fluid/fluid$(EXEEXT)
+preferences.cxx:	preferences.fl ../fluid1/fluid$(EXEEXT)
 
 device$(EXEEXT): device.o
 
 radio$(EXEEXT): radio.o
-radio.cxx:	radio.fl ../fluid/fluid$(EXEEXT)
+radio.cxx:	radio.fl ../fluid1/fluid$(EXEEXT)
 
 resize$(EXEEXT): resize.o
-resize.cxx:	resize.fl ../fluid/fluid$(EXEEXT)
+resize.cxx:	resize.fl ../fluid1/fluid$(EXEEXT)
 
 resizebox$(EXEEXT): resizebox.o
 
@@ -442,7 +430,7 @@ symbols$(EXEEXT): symbols.o
 table$(EXEEXT): table.o
 
 tabs$(EXEEXT): tabs.o
-tabs.cxx:	tabs.fl ../fluid/fluid$(EXEEXT)
+tabs.cxx:	tabs.fl ../fluid1/fluid$(EXEEXT)
 
 threads$(EXEEXT): threads.o
 # This ensures that we have this dependency even if threads are not
@@ -454,10 +442,10 @@ tile$(EXEEXT): tile.o
 tiled_image$(EXEEXT): tiled_image.o
 
 tree$(EXEEXT): tree.o
-tree.cxx:	tree.fl ../fluid/fluid$(EXEEXT)
+tree.cxx:	tree.fl ../fluid1/fluid$(EXEEXT)
 
 valuators$(EXEEXT): valuators.o
-valuators.cxx:	valuators.fl ../fluid/fluid$(EXEEXT)
+valuators.cxx:	valuators.fl ../fluid1/fluid$(EXEEXT)
 
 # All OpenGL demos depend on the FLTK and FLTK_GL libraries...
 $(GLALL): $(LIBNAME) $(GLLIBNAME)
@@ -471,7 +459,7 @@ CubeView$(EXEEXT): CubeMain.o CubeView.o CubeViewUI.o
 CubeMain.o: CubeViewUI.h CubeView.h CubeViewUI.cxx
 CubeView.o: CubeView.h
 CubeViewUI.o:	CubeViewUI.cxx CubeViewUI.h
-CubeViewUI.cxx:	CubeViewUI.fl ../fluid/fluid$(EXEEXT)
+CubeViewUI.cxx:	CubeViewUI.fl ../fluid1/fluid$(EXEEXT)
 
 cube$(EXEEXT): cube.o
 	echo Linking $@...

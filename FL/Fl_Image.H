@@ -41,7 +41,7 @@ struct Fl_Label;
 
 
 namespace fltk3 {
-  inline Fl_Image *_3to1_image(Image *w) { return (Fl_Image*)w->wrapper(); }
+  inline Fl_Image *_3to1_image(Image *w) { return w?(Fl_Image*)w->wrapper():0; }
 }
 
 
@@ -160,6 +160,8 @@ class FL_EXPORT Fl_RGB_Image : public Fl_Image {
 
 public:
 
+  Fl_RGB_Image() { /* empty */ }
+
   Fl_RGB_Image(const uchar *bits, int W, int H, int D=3, int LD=0) {
     _p = new fltk3::RGBImage(bits, W, H, D, LD);
     _p->wrapper(this);
@@ -197,7 +199,7 @@ public:
 
 
 namespace fltk3 {
-  inline Image *_1to3_image(Fl_Image *w) { return ((fltk3::Image*)w->_p); }
+  inline Image *_1to3_image(Fl_Image *w) { return w?((fltk3::Image*)w->_p):0; }
 }
 
 

@@ -58,8 +58,8 @@ int handle(int e) {
 int MyWindow::handle(int msg) {
   if (msg==FL_MOUSEWHEEL)
   {
-    roller_x->value( roller_x->value() + Fl::e_dx * roller_x->step() );
-    roller_y->value( roller_y->value() + Fl::e_dy * roller_y->step() );
+    roller_x->value( roller_x->value() + Fl::event_dx() * roller_x->step() );
+    roller_y->value( roller_y->value() + Fl::event_dy() * roller_y->step() );
     return 1;
   }
   return 0;

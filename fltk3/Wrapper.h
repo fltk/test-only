@@ -151,9 +151,9 @@ virtual void proto { \
   } \
 }
 
-#define FLTK3_WRAPPER_VCALLS_OBJECT_INT(klass, proto, call, flag) \
-virtual int proto { \
-  int ret = 0; \
+#define FLTK3_WRAPPER_VCALLS_OBJECT_RET(rtype, klass, proto, call, flag) \
+virtual rtype proto { \
+  rtype ret = 0; \
   if ( pVCalls & pVCallWidget##flag ) { \
     ret = ((fltk3::klass*)_p)->call; \
   } else { \
@@ -172,10 +172,10 @@ virtual int proto { \
     return; \
   }
 
-#define FLTK3_OBJECT_VCALLS_WRAPPER_INT(call, flag) \
+#define FLTK3_OBJECT_VCALLS_WRAPPER_RET(rtype, call, flag) \
   if (pWrapper && !(pWrapper->pVCalls & Wrapper::pVCallWidget##flag) ) { \
     pWrapper->pVCalls |= Wrapper::pVCallWidget##flag; \
-    int ret = ((WidgetWrapper*)pWrapper)->call; \
+    rtype ret = ((WidgetWrapper*)pWrapper)->call; \
     pWrapper->pVCalls &= ~Wrapper::pVCallWidget##flag; \
     return ret; \
   }
@@ -196,45 +196,59 @@ namespace fltk3 {
     : _p(0L), pVCalls(0) { }
     virtual ~Wrapper();
     
-    unsigned int pVCalls;
+    mutable unsigned int pVCalls;
     static const unsigned int pVCallDtor          = 1<<0;
     static const unsigned int pVCallWidgetDraw    = 1<<1;
     static const unsigned int pVCallWidgetHandle  = 1<<2;
     static const unsigned int pVCallWidgetResize  = 1<<3;
     static const unsigned int pVCallWidgetShow    = 1<<4;
     static const unsigned int pVCallWidgetHide    = 1<<5;
-    static const unsigned int pVCallWidgetDrawOverlay = 1<<6;
+    static const unsigned int pVCallWidgetDrawOverlay         = 1<<6;
+    static const unsigned int pVCallWidgetBrowserItemFirst    = 1<<7;
+    static const unsigned int pVCallWidgetBrowserItemNext     = 1<<8;
+    static const unsigned int pVCallWidgetBrowserItemPrev     = 1<<9;
+    static const unsigned int pVCallWidgetBrowserItemLast     = 1<<10;
+    static const unsigned int pVCallWidgetBrowserItemHeight   = 1<<11;
+    static const unsigned int pVCallWidgetBrowserItemWidth    = 1<<12;
+    static const unsigned int pVCallWidgetBrowserItemQuickHeight = 1<<13;
+    static const unsigned int pVCallWidgetBrowserItemDraw     = 1<<14;
+    static const unsigned int pVCallWidgetBrowserItemText     = 1<<15;
+    static const unsigned int pVCallWidgetBrowserItemSwap     = 1<<16;
+    static const unsigned int pVCallWidgetBrowserItemAt       = 1<<17;
+    static const unsigned int pVCallWidgetBrowserFullWidth    = 1<<18;
+    static const unsigned int pVCallWidgetBrowserFullHeight   = 1<<19;
+    static const unsigned int pVCallWidgetBrowserIncrHeight   = 1<<20;
+    static const unsigned int pVCallWidgetBrowserItemSelect   = 1<<21;
+    static const unsigned int pVCallWidgetBrowserItemSelected = 1<<22;
+    
   };
-  
+
   
   class WidgetWrapper : public Wrapper {
   public:
     virtual ~WidgetWrapper() {}
-    FLTK3_WRAPPER_VCALLS_OBJECT(Widget, 
-                                draw(),
-                                draw(),
-                                Draw)
-    FLTK3_WRAPPER_VCALLS_OBJECT_INT(Widget,
-                                    handle(int event),
-                                    handle(event),
-                                    Handle)
-    FLTK3_WRAPPER_VCALLS_OBJECT(Widget,
-                                resize(int x, int y, int w, int h),
-                                resize(x, y, w, h),
-                                Resize)
-    FLTK3_WRAPPER_VCALLS_OBJECT(Widget,
-                                show(),
-                                show(),
-                                Show)
-    FLTK3_WRAPPER_VCALLS_OBJECT(Widget,
-                                hide(),
-                                hide(),
-                                Hide)
+    FLTK3_WRAPPER_VCALLS_OBJECT(Widget, draw(), draw(), Draw)
+    FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Widget, handle(int event), handle(event), Handle)
+    FLTK3_WRAPPER_VCALLS_OBJECT(Widget, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
+    FLTK3_WRAPPER_VCALLS_OBJECT(Widget, show(), show(), Show)
+    FLTK3_WRAPPER_VCALLS_OBJECT(Widget, hide(), hide(), Hide)
     virtual void draw_overlay() {} // neede by overlay windows
-//    FLTK3_WRAPPER_VCALLS_OBJECT(Window,
-//                                draw_overlay(),
-//                                draw_overlay(),
-//                                DrawOverlay)
+    virtual void *item_first() const { return 0; }
+    virtual void *item_next(void *item) const { return 0; }
+    virtual void *item_prev(void *item) const { return 0; }    
+    virtual void *item_last() const { return 0; }
+    virtual int item_height(void *item) const { return 0; }
+    virtual int item_width(void *item) const { return 0; }
+    virtual int item_quick_height(void *item) const { return 0; }
+    virtual void item_draw(void *item,int X,int Y,int W,int H) const {}
+    virtual const char *item_text(void *item) const { (void)item; return 0L; }
+    virtual void item_swap(void *a,void *b) { (void)a; (void)b; }
+    virtual void *item_at(int index) const { (void)index; return 0L; }
+    virtual int full_width() const { return 0; }
+    virtual int full_height() const { return 0; }
+    virtual int incr_height() const { return 0; }
+    virtual void item_select(void *item,int val=1) { }
+    virtual int item_selected(void *item) const { return 0; }
   };
   
   

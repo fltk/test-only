@@ -91,14 +91,14 @@ fltk3::TextEditor::TextEditor(int X, int Y, int W, int H,  const char* l)
 }
 
 #ifndef FLTK3_DOXYGEN
-fltk3::TextEditor::Key_Binding* fltk3::TextEditor::global_key_bindings = 0;
+fltk3::TextEditor::KeyBinding* fltk3::TextEditor::global_key_bindings = 0;
 #endif
 
 // These are the default key bindings every widget should start with
 static struct {
   int key;
   int state;
-  fltk3::TextEditor::Key_Func func;
+  fltk3::TextEditor::KeyFunc func;
 } default_key_bindings[] = {
   { fltk3::EscapeKey,    fltk3::TEXT_EDITOR_ANY_STATE, fltk3::TextEditor::kf_ignore     },
   { fltk3::EnterKey,     fltk3::TEXT_EDITOR_ANY_STATE, fltk3::TextEditor::kf_enter      },
@@ -170,7 +170,7 @@ static struct {
 };
 
 /**  Adds all of the default editor key bindings to the specified key binding list.*/
-void fltk3::TextEditor::add_default_key_bindings(Key_Binding** list) {
+void fltk3::TextEditor::add_default_key_bindings(KeyBinding** list) {
   for (int i = 0; default_key_bindings[i].key; i++) {
     add_key_binding(default_key_bindings[i].key,
                     default_key_bindings[i].state,
@@ -180,8 +180,8 @@ void fltk3::TextEditor::add_default_key_bindings(Key_Binding** list) {
 }
 
 /**  Returns the function associated with a key binding.*/
-fltk3::TextEditor::Key_Func fltk3::TextEditor::bound_key_function(int key, int state, Key_Binding* list) {
-  Key_Binding* cur;
+fltk3::TextEditor::KeyFunc fltk3::TextEditor::bound_key_function(int key, int state, KeyBinding* list) {
+  KeyBinding* cur;
   for (cur = list; cur; cur = cur->next)
     if (cur->key == key)
       if (cur->state == fltk3::TEXT_EDITOR_ANY_STATE || cur->state == state)
@@ -191,8 +191,8 @@ fltk3::TextEditor::Key_Func fltk3::TextEditor::bound_key_function(int key, int s
 }
 
 /**  Removes all of the key bindings associated with the text editor or list.*/
-void fltk3::TextEditor::remove_all_key_bindings(Key_Binding** list) {
-  Key_Binding *cur, *next;
+void fltk3::TextEditor::remove_all_key_bindings(KeyBinding** list) {
+  KeyBinding *cur, *next;
   for (cur = *list; cur; cur = next) {
     next = cur->next;
     delete cur;
@@ -201,8 +201,8 @@ void fltk3::TextEditor::remove_all_key_bindings(Key_Binding** list) {
 }
 
 /** Removes the key binding associated with the key "key" of state "state" */
-void fltk3::TextEditor::remove_key_binding(int key, int state, Key_Binding** list) {
-  Key_Binding *cur, *last = 0;
+void fltk3::TextEditor::remove_key_binding(int key, int state, KeyBinding** list) {
+  KeyBinding *cur, *last = 0;
   for (cur = *list; cur; last = cur, cur = cur->next)
     if (cur->key == key && cur->state == state) break;
   if (!cur) return;
@@ -211,9 +211,9 @@ void fltk3::TextEditor::remove_key_binding(int key, int state, Key_Binding** lis
   delete cur;
 }
 /** Adds a key of state "state" with the function "function" */
-void fltk3::TextEditor::add_key_binding(int key, int state, Key_Func function,
-                                Key_Binding** list) {
-  Key_Binding* kb = new Key_Binding;
+void fltk3::TextEditor::add_key_binding(int key, int state, KeyFunc function,
+                                KeyBinding** list) {
+  KeyBinding* kb = new KeyBinding;
   kb->key = key;
   kb->state = state;
   kb->function = function;
@@ -543,7 +543,7 @@ int fltk3::TextEditor::handle_key() {
 
   int key = fltk3::event_key(), state = fltk3::event_state(), c = fltk3::event_text()[0];
   state &= fltk3::SHIFT|fltk3::CTRL|fltk3::ALT|fltk3::META; // only care about these states
-  Key_Func f;
+  KeyFunc f;
   f = bound_key_function(key, state, global_key_bindings);
   if (!f) f = bound_key_function(key, state, key_bindings);
   if (f) return f(key, this);
@@ -559,7 +559,7 @@ void fltk3::TextEditor::maybe_do_callback() {
 }
 
 int fltk3::TextEditor::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   static int dndCursorPos;
   
   if (!buffer()) return 0;

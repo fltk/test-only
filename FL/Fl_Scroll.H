@@ -53,7 +53,7 @@ public:
 
   FLTK3_WRAPPER_VCALLS_OBJECT(ScrollGroup, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(ScrollGroup, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, ScrollGroup, handle(int event), handle(event), Handle)
 
   Fl_Scroll() {}
   
@@ -96,6 +96,32 @@ public:
     ((fltk3::ScrollGroup*)_p)->scrollbar_size(size);
   }   
   
+  Fl_Scrollbar *vertical_scrollbar() {
+    fltk3::Scrollbar *scr3 = &((fltk3::ScrollGroup*)_p)->scrollbar;
+    if (!scr3) 
+      return 0L;
+    Fl_Scrollbar *scr1 = (Fl_Scrollbar*)scr3->wrapper();
+    if (!scr1) {
+      scr1 = new Fl_Scrollbar();
+      scr1->_p = scr3;
+      scr3->wrapper(scr1);
+    }
+    return scr1;
+  }
+
+  Fl_Scrollbar *horizontal_scrollbar() {
+    fltk3::Scrollbar *scr3 = &((fltk3::ScrollGroup*)_p)->hscrollbar;
+    if (!scr3) 
+      return 0L;
+    Fl_Scrollbar *scr1 = (Fl_Scrollbar*)scr3->wrapper();
+    if (!scr1) {
+      scr1 = new Fl_Scrollbar();
+      scr1->_p = scr3;
+      scr3->wrapper(scr1);
+    }
+    return scr1;
+  }
+
 };
 
 

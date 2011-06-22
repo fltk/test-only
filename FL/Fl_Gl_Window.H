@@ -69,7 +69,7 @@ public:
 
   FLTK3_WRAPPER_VCALLS_OBJECT(GlWindow, show(), show(), Show)
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(GlWindow, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, GlWindow, handle(int event), handle(event), Handle)
     
   char valid() const {
     return ((fltk3::GlWindow*)_p)->valid();

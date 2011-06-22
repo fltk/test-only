@@ -34,6 +34,8 @@
 #include "run.h"
 #include "Browser_.h"
 
+class Fl_Check_Browser;
+
 namespace fltk3 {
   
   /**
@@ -41,6 +43,9 @@ namespace fltk3 {
    lines that may be selected and/or checked by the user.
    */
   class FLTK3_EXPORT CheckBrowser : public fltk3::Browser_ {
+
+    friend class ::Fl_Check_Browser;
+
     /* required routines for fltk3::Browser_ subclass: */
     
     void *item_first() const;

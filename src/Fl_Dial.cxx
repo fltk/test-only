@@ -148,7 +148,7 @@ int fltk3::Dial::handle(int event, int X, int Y, int W, int H) {
   Allow subclasses to handle event based on current position and size.
 */
 int fltk3::Dial::handle(int e) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(e), Handle)
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(e), Handle)
   return handle(e, x(), y(), w(), h());
 }
 

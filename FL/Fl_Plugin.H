@@ -1,10 +1,10 @@
-#error header has not been ported to 3.0 yet
 //
 // "$Id: Fl_Plugin.H 6995 2010-01-12 08:48:55Z matt $"
 //
-// A Plugin system for FLTK, implemented in Fl_Preferences.cxx.
+// A Plugin system for FLTK, implemented in Fl_Plugin_Manager.cxx.
+// FLTK 123 wrapper completed
 //
-// Copyright 2002-2010 by Matthias Melcher.
+// Copyright 2002-2011 by Matthias Melcher.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,80 +26,42 @@
 //     http://www.fltk.org/str.php
 //
 
-/* \file
-   Fl_Plugin class . */
-
 #ifndef Fl_Plugin_H
-#  define Fl_Plugin_H
+#define Fl_Plugin_H
 
-#  include "Fl_Preferences.H"
+#include <fltk3/Plugin.h>
+#include "Fl_Preferences.H"
 
 
-/**
- \brief Fl_Plugin allows link-time and run-time integration of binary modules.
- 
- Fl_Plugin and Fl_Plugin_Manager provide a small and simple solution for
- linking C++ classes at run-time, or optionally linking modules at compile
- time without the need to change the main application.
-
- Fl_Plugin_Manager uses static initialisation to create the plugin interface
- early during startup. Plugins are stored in a temporary database, organized
- in classes.
- 
- Plugins should derive a new class from Fl_Plugin as a base:
- \code
- class My_Plugin : public Fl_Plugin {
- public:
-   My_Plugin() : Fl_Plugin("effects", "blur") { }
-   void do_something(...);
- };
- My_Plugin blur_plugin();
- \endcode
- 
- Plugins can be put into modules and either linked befor distribution, or loaded
- from dynamically linkable files. An Fl_Plugin_Manager is used to list and 
- access all currently loaded plugins.
- \code
- Fl_Plugin_Manager mgr("effects");
- int i, n = mgr.plugins();
- for (i=0; i<n; i++) {
-   My_Plugin *pin = (My_Plugin*)mgr.plugin(i);
-   pin->do_something();
- }
- \endcode
- */
-class FL_EXPORT Fl_Plugin  {
-  Fl_Preferences::ID id;
+class FL_EXPORT Fl_Plugin : public fltk3::Plugin {
 public:
-  Fl_Plugin(const char *klass, const char *name);
-  virtual ~Fl_Plugin();
+  Fl_Plugin(const char *klass, const char *name) 
+  : fltk3::Plugin(klass, name) 
+  {
+  }
 };
 
 
-/**
- \brief Fl_Plugin_Manager manages link-time and run-time plugin binaries.
- \see Fl_Plugin
- */
-class FL_EXPORT Fl_Plugin_Manager : public Fl_Preferences {
+class FL_EXPORT Fl_Plugin_Manager : public fltk3::PluginManager {
 public:
-  Fl_Plugin_Manager(const char *klass);
-  ~Fl_Plugin_Manager();
-  
-  /** \brief Return the number of plugins in the klass.
-   */
-  int plugins() { return groups(); }
-  Fl_Plugin *plugin(int index);
-  Fl_Plugin *plugin(const char *name);
-  Fl_Preferences::ID addPlugin(const char *name, Fl_Plugin *plugin);
-  
-  static void removePlugin(Fl_Preferences::ID id);
-  static int load(const char *filename);
-  static int loadAll(const char *filepath, const char *pattern=0);
+  Fl_Plugin_Manager(const char *klass) 
+  : fltk3::PluginManager(klass)
+  {
+  }
+   
+  Fl_Plugin *plugin(int index) {
+    return (Fl_Plugin*)fltk3::PluginManager::plugin(index);
+  }
+
+  Fl_Plugin *plugin(const char *name) {
+    return (Fl_Plugin*)fltk3::PluginManager::plugin(name);
+  }
+
 };
 
 
-#endif // !Fl_Preferences_H
+#endif // !Fl_Plugin_Manager_H
 
 //
-// End of "$Id: Fl_Preferences.H 6995 2010-01-12 08:48:55Z matt $".
+// End of "$Id: Fl_Plugin_Manager.H 6995 2010-01-12 08:48:55Z matt $".
 //

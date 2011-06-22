@@ -106,7 +106,7 @@ public:
 
 protected:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(CheckBrowser, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, CheckBrowser, handle(int event), handle(event), Handle)
 
 };
 

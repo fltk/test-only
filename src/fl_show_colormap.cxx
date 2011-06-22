@@ -86,7 +86,7 @@ namespace fltk3 {
   }
   
   int ColorMenu::handle(int e) {
-    FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(e), Handle)
+    FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(e), Handle)
     fltk3::Color c = which;
     switch (e) {
       case fltk3::PUSH:

@@ -44,7 +44,7 @@ public:
     _p->wrapper(this);
   }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Spinner, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Spinner, handle(int event), handle(event), Handle)
 
   const char *format() { 
     return ((fltk3::Spinner*)_p)->format();
@@ -89,7 +89,7 @@ public:
   }
   
   void textfont(Fl_Font font) { 
-    ((fltk3::Spinner*)_p)->font( fltk3::_1to3_font(font) );
+    ((fltk3::Spinner*)_p)->textfont( fltk3::_1to3_font(font) );
   }
   
   Fl_Fontsize textsize() const { 
@@ -97,7 +97,7 @@ public:
   }
   
   void textsize(Fl_Fontsize size) {
-    ((fltk3::Spinner*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+    ((fltk3::Spinner*)_p)->textsize( fltk3::_1to3_fontsize(size) );
   }
   
   Fl_Color textcolor() const { 

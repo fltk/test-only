@@ -72,17 +72,15 @@ public:
   
   FLTK3_WRAPPER_VCALLS_OBJECT(Tree, draw(), draw(), Draw)
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Tree, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Tree, handle(int event), handle(event), Handle)
   
-#if 0
   void root_label(const char *new_label) {
-    if ( ! _root ) return;
-    _root->label(new_label);
+    ((fltk3::Tree*)_p)->root_label(new_label);
   }
+
   Fl_Tree_Item* root() {
-    return(_root);
+    return (Fl_Tree_Item*)((fltk3::Tree*)_p)->root();
   }
-#endif
   
   Fl_Tree_Item *add(const char *path) {
     return (Fl_Tree_Item*)((fltk3::Tree*)_p)->add(path);
@@ -92,272 +90,200 @@ public:
     return (Fl_Tree_Item*)((fltk3::Tree*)_p)->add(item, name);
   }
   
-#if 0
-  Fl_Tree_Item *insert_above(Fl_Tree_Item *above, const char *name);
-  Fl_Tree_Item* insert(Fl_Tree_Item *item, const char *name, int pos);
+  Fl_Tree_Item *insert_above(Fl_Tree_Item *above, const char *name) {
+    return (Fl_Tree_Item*)((fltk3::Tree*)_p)->insert_above((fltk3::TreeItem*)above, name);
+  }
+
+  Fl_Tree_Item* insert(Fl_Tree_Item *item, const char *name, int pos) {
+    return (Fl_Tree_Item*)((fltk3::Tree*)_p)->insert((fltk3::TreeItem*)item, name, pos);
+  }
+
   int remove(Fl_Tree_Item *item) {
-    if ( item == _root ) {
-      clear();
-    } else {
-      Fl_Tree_Item *parent = item->parent();		// find item's parent
-      if ( ! parent ) return(-1);
-      parent->remove_child(item);			// remove child + children
-    }
-    return(0);
-  } 
+    return ((fltk3::Tree*)_p)->remove((fltk3::TreeItem*)item);
+  }
+
   void clear() {
-    if ( ! _root ) return;
-    _root->clear_children();
-    delete _root; _root = 0;
-  } 
+    ((fltk3::Tree*)_p)->clear();
+  }
+
   void clear_children(Fl_Tree_Item *item) {
-    if ( item->has_children() ) {
-      item->clear_children();
-      redraw();				// redraw only if there were children to clear
-    }
+    ((fltk3::Tree*)_p)->clear_children((fltk3::TreeItem*)item);
   } 
-  Fl_Tree_Item *find_item(const char *path);
-  const Fl_Tree_Item *find_item(const char *path) const;
-  int item_pathname(char *pathname, int pathnamelen, const Fl_Tree_Item *item) const;
-  const Fl_Tree_Item *find_clicked() const;
+
+  Fl_Tree_Item *find_item(const char *path) {
+    return (Fl_Tree_Item*)((fltk3::Tree*)_p)->find_item(path);
+  }
+
+  const Fl_Tree_Item *find_item(const char *path) const {
+    return (Fl_Tree_Item*)((fltk3::Tree*)_p)->find_item(path);
+  }
+
+  int item_pathname(char *pathname, int pathnamelen, const Fl_Tree_Item *item) const {
+    return ((fltk3::Tree*)_p)->item_pathname(pathname, pathnamelen, (fltk3::TreeItem*)item);
+  }
+
+  const Fl_Tree_Item *find_clicked() const {
+    return (const Fl_Tree_Item*)((fltk3::Tree*)_p)->find_clicked();
+  }
+
   Fl_Tree_Item *item_clicked() {
-    return(_callback_item);
+    return (Fl_Tree_Item*)((fltk3::Tree*)_p)->item_clicked();
   }
-  Fl_Tree_Item *first();
-  Fl_Tree_Item *next(Fl_Tree_Item *item=0);
-  Fl_Tree_Item *prev(Fl_Tree_Item *item=0);
-  Fl_Tree_Item *last();
-  Fl_Tree_Item *first_selected_item();
-  Fl_Tree_Item *next_selected_item(Fl_Tree_Item *item=0);
+
+  Fl_Tree_Item *first() {
+    return (Fl_Tree_Item*)((fltk3::Tree*)_p)->first();
+  }
+
+  Fl_Tree_Item *next(Fl_Tree_Item *item=0) {
+    return (Fl_Tree_Item*)((fltk3::Tree*)_p)->next((fltk3::TreeItem*)item);
+  }
+
+  Fl_Tree_Item *prev(Fl_Tree_Item *item=0) {
+    return (Fl_Tree_Item*)((fltk3::Tree*)_p)->prev((fltk3::TreeItem*)item);
+  }
+
+  Fl_Tree_Item *last() {
+    return (Fl_Tree_Item*)((fltk3::Tree*)_p)->last();
+  }
+
+  Fl_Tree_Item *first_selected_item() {
+    return (Fl_Tree_Item*)((fltk3::Tree*)_p)->first_selected_item();
+  }
+
+  Fl_Tree_Item *next_selected_item(Fl_Tree_Item *item=0) {
+    return (Fl_Tree_Item*)((fltk3::Tree*)_p)->next_selected_item((fltk3::TreeItem*)item);
+  }
+
   int open(Fl_Tree_Item *item, int docallback=1) {
-    if ( item->is_open() ) return(0);
-    item->open();
-    redraw();
-    if ( docallback ) {
-      do_callback_for_item(item, FL_TREE_REASON_OPENED);
-    }
-    return(1);
+    return ((fltk3::Tree*)_p)->open((fltk3::TreeItem*)item, docallback);
   }
+
   int open(const char *path, int docallback=1) {
-    Fl_Tree_Item *item = find_item(path);
-    if ( ! item ) return(-1);
-    return(open(item, docallback));
+    return ((fltk3::Tree*)_p)->open(path, docallback);
   }
+
   void open_toggle(Fl_Tree_Item *item, int docallback=1) {
-    if ( item->is_open() ) {
-      close(item, docallback);
-    } else {
-      open(item, docallback);
-    }
+    return ((fltk3::Tree*)_p)->open_toggle((fltk3::TreeItem*)item, docallback);
   }
+
   int close(Fl_Tree_Item *item, int docallback=1) {
-    if ( item->is_close() ) return(0);
-    item->close();
-    redraw();
-    if ( docallback ) {
-      do_callback_for_item(item, FL_TREE_REASON_CLOSED);
-    }
-    return(1);
+    return ((fltk3::Tree*)_p)->close((fltk3::TreeItem*)item, docallback);
   }
+
   int close(const char *path, int docallback=1) {
-    Fl_Tree_Item *item = find_item(path);
-    if ( ! item ) return(-1);
-    return(close(item, docallback));
+    return ((fltk3::Tree*)_p)->open(path, docallback);
   }
+
   int is_open(Fl_Tree_Item *item) const {
-    return(item->is_open()?1:0);
+    return ((fltk3::Tree*)_p)->is_open((fltk3::TreeItem*)item);
   }
+
   int is_open(const char *path) const {
-    const Fl_Tree_Item *item = find_item(path);
-    if ( ! item ) return(-1);
-    return(item->is_open()?1:0);
+    return ((fltk3::Tree*)_p)->is_open(path);
   }
+
   int is_close(Fl_Tree_Item *item) const {
-    return(item->is_close());
+    return ((fltk3::Tree*)_p)->is_close((fltk3::TreeItem*)item);
   }
+
   int is_close(const char *path) const {
-    const Fl_Tree_Item *item = find_item(path);
-    if ( ! item ) return(-1);
-    return(item->is_close()?1:0);
+    return ((fltk3::Tree*)_p)->is_close(path);
   }
+
   int select(Fl_Tree_Item *item, int docallback=1) {
-    if ( ! item->is_selected() ) {
-      item->select();
-      set_changed();
-      if ( docallback ) {
-        do_callback_for_item(item, FL_TREE_REASON_SELECTED);
-      }
-      redraw();
-      return(1);
-    }
-    return(0);
+    return ((fltk3::Tree*)_p)->select((fltk3::TreeItem*)item, docallback);
   }
+
+#if 0
   int select(const char *path, int docallback=1) {
-    Fl_Tree_Item *item = find_item(path);
-    if ( ! item ) return(-1);
-    return(select(item, docallback));
   }
   void select_toggle(Fl_Tree_Item *item, int docallback=1) {
-    item->select_toggle();
-    set_changed();
-    if ( docallback ) {
-      do_callback_for_item(item, item->is_selected() ? FL_TREE_REASON_SELECTED
-                                                     : FL_TREE_REASON_DESELECTED);
-    }
-    redraw();
   }
   int deselect(Fl_Tree_Item *item, int docallback=1) {
-    if ( item->is_selected() ) {
-      item->deselect();
-      set_changed();
-      if ( docallback ) {
-        do_callback_for_item(item, FL_TREE_REASON_DESELECTED);
-      }
-      redraw();
-      return(1);
-    }
-    return(0);
   }
   int deselect(const char *path, int docallback=1) {
-    Fl_Tree_Item *item = find_item(path);
-    if ( ! item ) return(-1);
-    return(deselect(item, docallback));
   }
   int deselect_all(Fl_Tree_Item *item=0, int docallback=1);
   int select_only(Fl_Tree_Item *selitem, int docallback=1);
   int select_all(Fl_Tree_Item *item=0, int docallback=1);
   void set_item_focus(Fl_Tree_Item *o);
   int is_selected(Fl_Tree_Item *item) const {
-    return(item->is_selected()?1:0);
   }
   int is_selected(const char *path) {
-    Fl_Tree_Item *item = find_item(path);
-    if ( ! item ) return(-1);
-    return(is_selected(item));
   }
   void show_self() {
-    if ( ! _root ) return;
-    _root->show_self();
   }
   Fl_Fontsize item_labelsize() const {
-    return(_prefs.labelsize());
   }
   void item_labelsize(Fl_Fontsize val) {
-    _prefs.labelsize(val);
   }
   Fl_Font item_labelfont() const {
-    return(_prefs.labelfont());
   }
   void item_labelfont(Fl_Font val) {
-    _prefs.labelfont(val);
   }
   Fl_Color item_labelfgcolor(void) const {
-    return(_prefs.labelfgcolor());
   }
   void item_labelfgcolor(Fl_Color val) {
-    _prefs.labelfgcolor(val);
   }
   Fl_Color item_labelbgcolor(void) const {
-    return(_prefs.labelbgcolor());
   }
   void item_labelbgcolor(Fl_Color val) {
-    _prefs.labelbgcolor(val);
   }
   Fl_Color connectorcolor() const {
-    return(_prefs.connectorcolor());
   }
   void connectorcolor(Fl_Color val) {
-    _prefs.connectorcolor(val);
   }
   int marginleft() const {
-    return(_prefs.marginleft());
   }
   void marginleft(int val) {
-    _prefs.marginleft(val);
-    redraw();
   }
   int margintop() const {
-    return(_prefs.margintop());
   }
   void margintop(int val) {
-    _prefs.margintop(val);
-    redraw();
   }
   int openchild_marginbottom() const {
-    return(_prefs.openchild_marginbottom());
   }
   void openchild_marginbottom(int val) {
-    _prefs.openchild_marginbottom(val);
-    redraw();
   }
   int connectorwidth() const {
-    return(_prefs.connectorwidth());
   }
   void connectorwidth(int val) {
-    _prefs.connectorwidth(val);
-    redraw();
   }
   Fl_Image *usericon() const {
-    return(_prefs.usericon());
   }
   void usericon(Fl_Image *val) {
-    _prefs.usericon(val);
-    redraw();
   }
   Fl_Image *openicon() const {
-    return(_prefs.openicon());
   }
   void openicon(Fl_Image *val) {
-    _prefs.openicon(val);
-    redraw();
   }
   Fl_Image *closeicon() const {
-    return(_prefs.closeicon());
   }
   void closeicon(Fl_Image *val) {
-    _prefs.closeicon(val);
-    redraw();
   }
   int showcollapse() const {
-    return(_prefs.showcollapse());
   }
   void showcollapse(int val) {
-    _prefs.showcollapse(val);
-    redraw();
   }
   int showroot() const {
-    return(_prefs.showroot());
   }
   void showroot(int val) {
-    _prefs.showroot(val);
-    redraw();
   }
   Fl_Tree_Connector connectorstyle() const {
-    return(_prefs.connectorstyle());
   }
   void connectorstyle(Fl_Tree_Connector val) {
-    _prefs.connectorstyle(val);
-    redraw();
   }
   Fl_Tree_Sort sortorder() const {
-    return(_prefs.sortorder());
   }
   void sortorder(Fl_Tree_Sort val) {
-    _prefs.sortorder(val);
-    // no redraw().. only affects new add()itions
   }
   Fl_Boxtype selectbox() const {
-    return(_prefs.selectbox());
   }
   void selectbox(Fl_Boxtype val) {
-    _prefs.selectbox(val);
-    redraw();
   }
   Fl_Tree_Select selectmode() const {
-    return(_prefs.selectmode());
   }
   void selectmode(Fl_Tree_Select val) {
-    _prefs.selectmode(val);
   }
   int displayed(Fl_Tree_Item *item);
   void show_item(Fl_Tree_Item *item, int yoff);
@@ -369,7 +295,6 @@ public:
   int  vposition() const;
   void vposition(int ypos);
   int is_scrollbar(Fl_Widget *w) {
-      return( ( w == _vscroll ) ? 1 : 0 );
   }
 #endif
   
@@ -383,16 +308,12 @@ public:
   
 #if 0
   void callback_item(Fl_Tree_Item* item) {
-    _callback_item = item;
   }
   Fl_Tree_Item* callback_item() {
-    return(_callback_item);
   }
   void callback_reason(Fl_Tree_Reason reason) {
-    _callback_reason = reason;
   }
   Fl_Tree_Reason callback_reason() const {
-    return(_callback_reason);
   }
   void load(class Fl_Preferences&);
 #endif

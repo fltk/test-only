@@ -699,7 +699,7 @@ int fltk3::Browser_::select_only(void* item, int docallbacks) {
  \returns 1 if event was processed, 0 if not.
  */
 int fltk3::Browser_::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   
   // NOTE:
   // We use fltk3::WidgetTracker to test if the user has deleted
@@ -1049,6 +1049,7 @@ void fltk3::Browser_::sort(int flags) {
  \returns The height, in pixels.
  */
 int fltk3::Browser_::item_quick_height(void* item) const {
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, item_quick_height(item), BrowserItemQuickHeight)
   return item_height(item);
 }
 
@@ -1059,6 +1060,7 @@ int fltk3::Browser_::item_quick_height(void* item) const {
  \returns The average height of items, in pixels.
  */
 int fltk3::Browser_::incr_height() const {
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, incr_height(), BrowserIncrHeight)
   return item_quick_height(item_first());
 }
 
@@ -1070,6 +1072,7 @@ int fltk3::Browser_::incr_height() const {
  \returns The height of the entire list, in pixels.
  */
 int fltk3::Browser_::full_height() const {
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, full_height(), BrowserFullHeight)
   int t = 0;
   for (void* p = item_first(); p; p = item_next(p))
     t += item_quick_height(p);
@@ -1083,6 +1086,7 @@ int fltk3::Browser_::full_height() const {
  \returns The maximum width of all the items, in pixels.
  */
 int fltk3::Browser_::full_width() const {
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, full_width(), BrowserFullWidth)
   return max_width;
 }
 
@@ -1095,7 +1099,9 @@ int fltk3::Browser_::full_width() const {
  \param[in] val The optional selection state; 1=select, 0=de-select.\n
  The default is to select the item (1).
  */
-void fltk3::Browser_::item_select(void *item, int val) {}
+void fltk3::Browser_::item_select(void *item, int val) {
+  FLTK3_OBJECT_VCALLS_WRAPPER(item_select(item, val), BrowserItemSelect)
+}
 
 /**
  This method must be implemented by the subclass if it supports
@@ -1103,7 +1109,58 @@ void fltk3::Browser_::item_select(void *item, int val) {}
  The method should return 1 if \p item is selected, or 0 otherwise.
  \param[in] item The item to test.
  */
-int fltk3::Browser_::item_selected(void* item) const { return item==selection_ ? 1 : 0; }
+int fltk3::Browser_::item_selected(void* item) const { 
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, item_selected(item), BrowserItemSelected)
+  return item==selection_ ? 1 : 0; 
+}
+
+void *fltk3::Browser_::item_first() const {
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(void*, item_first(), BrowserItemFirst)
+  return 0;
+}
+
+void *fltk3::Browser_::item_next(void *item) const {
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(void*, item_next(item), BrowserItemNext)
+  return 0;
+}
+
+void *fltk3::Browser_::item_prev(void *item) const {
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(void*, item_prev(item), BrowserItemPrev)
+  return 0;
+}
+
+void *fltk3::Browser_::item_last() const {
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(void*, item_last(), BrowserItemLast)
+  return 0;
+}
+
+int fltk3::Browser_::item_height(void *item) const {
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, item_height(item), BrowserItemHeight)
+  return 0;
+}
+
+int fltk3::Browser_::item_width(void *item) const { 
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, item_width(item), BrowserItemWidth)
+  return 0;
+}
+
+void fltk3::Browser_::item_draw(void *item,int X,int Y,int W,int H) const {
+  FLTK3_OBJECT_VCALLS_WRAPPER(item_draw(item, X, Y, W, H), BrowserItemDraw)
+}
+
+const char *fltk3::Browser_::item_text(void *item) const {
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(const char *, item_text(item), BrowserItemText)
+  return 0L;
+}
+
+void fltk3::Browser_::item_swap(void *a,void *b) { 
+  FLTK3_OBJECT_VCALLS_WRAPPER(item_swap(a, b), BrowserItemSwap)
+}
+
+void *fltk3::Browser_::item_at(int index) const { 
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(void *, item_at(index), BrowserItemAt)
+  return 0L; 
+}
 
 //
 // End of "$Id$".

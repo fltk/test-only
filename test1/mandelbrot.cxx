@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
   mbrot.d->scale = 2.5;
   mbrot.update_label();
   int i = 0;
-  if (Fl::args(argc,argv,i) < argc) Fl::fatal(Fl::help);
+  if (Fl::args(argc,argv,i) < argc) Fl::fatal(Fl::help_text());
   Fl::visual(FL_RGB);
   mbrot.window->callback(window_callback);
   mbrot.window->show(argc,argv);

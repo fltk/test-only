@@ -35,6 +35,10 @@
 
 #define FL_PATH_MAX 2048
 
+
+typedef fltk3::FileSortF Fl_File_Sort_F;
+
+
 inline const char *fl_filename_name(const char * filename) {
   return fltk3::filename_name(filename);
 }
@@ -103,20 +107,18 @@ inline int fl_numericsort(struct dirent **a, struct dirent **b) {
   return fltk3::alphasort(a, b);
 }
 
-#if 0 // FIXME: 123
 
-typedef fltk3::FileSortF Fl_File_Sort_F;
+inline int fl_filename_list(const char *d, struct dirent ***l, Fl_File_Sort_F *s = fl_numericsort) {
+  return fltk3::filename_list(d, l, (fltk3::FileSortF*)fl_numericsort);
+}
 
-FL_EXPORT int fl_filename_list(const char *d, struct dirent ***l,
-                               Fl_File_Sort_F *s = fl_numericsort);
-FL_EXPORT void fl_filename_free_list(struct dirent ***l, int n);
+inline void fl_filename_free_list(struct dirent ***l, int n) {
+  fltk3::filename_free_list(l, n);
+}
 
-FL_EXPORT int	fl_open_uri(const char *uri, char *msg = (char *)0,
-		            int msglen = 0);
-
-int _fl_filename_isdir_quick(const char *name);
-
-#endif
+inline int fl_open_uri(const char *uri, char *msg = (char *)0, int msglen = 0) {
+  return fltk3::open_uri(uri, msg, msglen);
+}
 
 
 #endif /* FL_FILENAME_H */

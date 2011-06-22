@@ -52,12 +52,12 @@ protected:
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Dial, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Dial, handle(int event), handle(event), Handle)
 
   Fl_Dial() { /* empty */ }
   
   Fl_Dial(int x,int y,int w,int h, const char *l = 0) {
-    _p = new fltk3::Dial(x, y, w, h, label);
+    _p = new fltk3::Dial(x, y, w, h, l);
     _p->wrapper(this);
   }
   

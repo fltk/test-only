@@ -37,6 +37,10 @@
 
 #include "Widget.h"
 
+
+class Fl_Progress;
+
+
 namespace fltk3 {
   
   //
@@ -46,6 +50,8 @@ namespace fltk3 {
    Displays a progress bar for the user.
    */
   class FLTK3_EXPORT Progress : public fltk3::Widget {
+
+    friend class ::Fl_Progress;
     
     float	value_,
     minimum_,

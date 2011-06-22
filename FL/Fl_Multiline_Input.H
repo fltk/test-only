@@ -40,7 +40,7 @@ public:
   Fl_Multiline_Input() { /* empty */ }
   
   Fl_Multiline_Input(int X,int Y,int W,int H,const char *l = 0) {
-    _p = new fltk3::MultilineInput(x, y, w, h, label);
+    _p = new fltk3::MultilineInput(X, Y, W, H, l);
     _p->wrapper(this);
   }
 

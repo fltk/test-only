@@ -65,7 +65,7 @@ void fltk3::ValueSlider::draw() {
 }
 
 int fltk3::ValueSlider::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   if (event == fltk3::PUSH && fltk3::visible_focus()) {
     fltk3::focus(this);
     redraw();

@@ -4,7 +4,6 @@
 // Fl_File_Icon definitions.
 // FLTK 123 wrapper started
 //  - no virtual members, the class is simply derived from FLTK3
-//  - FL_Label not yet wrapped
 //
 // Copyright 1999-2011 by Michael Sweet.
 //
@@ -37,14 +36,15 @@
 #  define FL_ICON_COLOR (Fl_Color)0xffffffff	/**< icon color [background?]*/
 
 
-class FL_EXPORT Fl_File_Icon : public fltk3::FileIocn {
+class FL_EXPORT Fl_File_Icon : public fltk3::FileIcon {
   
 public:
 
   Fl_File_Icon(const char *p, int t, int nd = 0, short *d = 0) 
   : fltk3::FileIcon(p, t, nd, d) {
   }
-  ~Fl_File_Icon();
+
+  ~Fl_File_Icon() { }
 
   short *add_color(Fl_Color c) {
     return fltk3::FileIcon::add_color(fltk3::_1to3_color(c));
@@ -59,17 +59,19 @@ public:
   }
 
   static void labeltype(const Fl_Label *o, int x, int y, int w, int h, Fl_Align a) {
-    // FIXME: 123 - Fl_Label not yet wrapped
-    fltk3::FileIcon::labeltype((fltk3::Label)o, x, y, w, h, fltk3::_1to3_align(a));
+    fltk3::FileIcon::labeltype((fltk3::Label*)o, x, y, w, h, fltk3::_1to3_align(a));
   }
   
   Fl_File_Icon	*next() { 
+    return (Fl_File_Icon*)fltk3::FileIcon::next();
   }
   
   static Fl_File_Icon *find(const char *filename, int filetype = ANY) {
+    return (Fl_File_Icon*)fltk3::FileIcon::find(filename, filetype);
   }
 
   static Fl_File_Icon *first() { 
+    return (Fl_File_Icon*)fltk3::FileIcon::first();
   }
   
 };

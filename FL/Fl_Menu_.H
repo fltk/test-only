@@ -82,7 +82,7 @@ public:
   }
                                              
   const Fl_Menu_Item *menu() const {
-    return (Fl_Menu_Item*) menu();
+    return (Fl_Menu_Item*)((fltk3::Menu_*)_p)->menu();
   }
   
   void menu(const Fl_Menu_Item *m) {

@@ -41,7 +41,7 @@ protected:
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(ReturnButton, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, ReturnButton, handle(int event), handle(event), Handle)
 
   Fl_Return_Button() {}
   

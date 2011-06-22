@@ -37,6 +37,8 @@ class Fl_Output : public Fl_Input {
 
 public:
 
+  Fl_Output() { /* empty */ }
+
   Fl_Output(int X,int Y,int W,int H, const char *l = 0) {
     _p = new fltk3::Output(X, Y, W, H, l);
     _p->wrapper(this);

@@ -39,7 +39,7 @@ protected:
   
   FLTK3_WRAPPER_VCALLS_OBJECT(Adjuster, draw(), draw(), Draw)
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Adjuster, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Adjuster, handle(int event), handle(event), Handle)
     
   void value_damage() {
     ((fltk3::Adjuster*)_p)->value_damage();

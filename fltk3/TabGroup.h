@@ -33,6 +33,10 @@
 
 #include "Group.h"
 
+
+class Fl_Tabs;
+
+
 namespace fltk3 {
   
   /**
@@ -62,6 +66,9 @@ namespace fltk3 {
    the tabs look the way you want them to.
    */
   class FLTK3_EXPORT TabGroup : public fltk3::Group {
+
+    friend class ::Fl_Tabs;
+
     fltk3::Widget *value_;
     fltk3::Widget *push_;
     int *tab_pos;		// array of x-offsets of tabs per child + 1

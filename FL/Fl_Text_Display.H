@@ -33,6 +33,7 @@
 
 #include <fltk3/TextDisplay.h>
 #include "Fl_Text_Buffer.H"
+#include "Fl_Group.H"
 
 
 class FL_EXPORT Fl_Text_Display: public Fl_Group {
@@ -70,7 +71,7 @@ public:
     WRAP_AT_BOUNDS  /**< wrap text so that it fits into the widget width */
   };    
   
-  typedef void (*Unfinished_Style_Cb)(int, void *);
+  typedef fltk3::TextDisplay::UnfinishedStyleCb Unfinished_Style_Cb;
   
   struct Style_Table_Entry {
     Fl_Color    color;
@@ -86,7 +87,7 @@ public:
     _p->wrapper(this);
   }
     
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(TextDisplay, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, TextDisplay, handle(int event), handle(event), Handle)
   
   void buffer(Fl_Text_Buffer* buf) {
     ((fltk3::TextDisplay*)_p)->buffer(buf);
@@ -98,6 +99,14 @@ public:
   
   Fl_Text_Buffer* buffer() const { 
     return (Fl_Text_Buffer*) ((fltk3::TextDisplay*)_p)->buffer();
+  }
+  
+  void styleBuffer(Fl_Text_Buffer* buf) {
+    ((fltk3::TextDisplay*)_p)->mStyleBuffer = buf;
+  }
+  
+  Fl_Text_Buffer* styleBuffer() const { 
+    return (Fl_Text_Buffer*) ((fltk3::TextDisplay*)_p)->mStyleBuffer;
   }
   
   void redisplay_range(int start, int end) {
@@ -230,9 +239,9 @@ public:
                       Unfinished_Style_Cb unfinishedHighlightCB,
                       void *cbArg) {
     ((fltk3::TextDisplay*)_p)->highlight_data((fltk3::TextBuffer*)styleBuffer,
-                                              (fltk3::TextBuffer::StyleTableEntry*)styleTable,
+                                              (fltk3::TextDisplay::StyleTableEntry*)styleTable,
                                               nStyles, unfinishedStyle,
-                                              (fltk3::UnfinishedStyleCb)unfinishedHighlightCB,
+                                              (fltk3::TextDisplay::UnfinishedStyleCb)unfinishedHighlightCB,
                                               cbArg);
   }
   
@@ -253,7 +262,7 @@ public:
   }
   
   void textfont(Fl_Font font) { 
-    ((fltk3::TextDisplay*)_p)->font( fltk3::_1to3_font(font) );
+    ((fltk3::TextDisplay*)_p)->textfont( fltk3::_1to3_font(font) );
   }
   
   Fl_Fontsize textsize() const { 
@@ -261,7 +270,7 @@ public:
   }
   
   void textsize(Fl_Fontsize size) {
-    ((fltk3::TextDisplay*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+    ((fltk3::TextDisplay*)_p)->textsize( fltk3::_1to3_fontsize(size) );
   }
   
   Fl_Color textcolor() const { 
@@ -277,7 +286,7 @@ public:
   }
   
   int wrapped_row(int row) const {
-    return ((fltk3::TextDisplay*)_p)->wrapped_column(row);
+    return ((fltk3::TextDisplay*)_p)->wrapped_row(row);
   }
   
   void wrap_mode(int wrap, int wrap_margin) {
@@ -299,7 +308,7 @@ protected:
   FLTK3_WRAPPER_VCALLS_OBJECT(TextDisplay, draw(), draw(), Draw)
 
   void draw_text(int X, int Y, int W, int H) {
-    ((fltk3::TextDisplay*)_p)->draw_text(X, Y, W, h);
+    ((fltk3::TextDisplay*)_p)->draw_text(X, Y, W, H);
   }
   
   void draw_range(int start, int end) {
@@ -432,7 +441,7 @@ protected:
   }
   
   void maintain_absolute_top_line_number(int state) {
-    ((fltk3::TextDisplay*)_p)->maintaining_absolute_top_line_number(state);
+    ((fltk3::TextDisplay*)_p)->maintain_absolute_top_line_number(state);
   }
   
   int get_absolute_top_line_number() const {
@@ -440,7 +449,7 @@ protected:
   }
   
   void absolute_top_line_number(int oldFirstChar) {
-    ((fltk3::TextDisplay*)_p)->absolute_top_line_number();
+    ((fltk3::TextDisplay*)_p)->absolute_top_line_number(oldFirstChar);
   }
   
   int maintaining_absolute_top_line_number() const {
@@ -494,8 +503,10 @@ protected:
   
   int wrap_uses_character(int lineEndPos) const {
     return ((fltk3::TextDisplay*)_p)->wrap_uses_character(lineEndPos);
-  
-};
+  }
+
+};  
+
 
 #endif
 

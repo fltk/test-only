@@ -84,11 +84,13 @@ public:
     ((fltk3::InputChoice*)_p)->down_box( fltk3::_1to3_boxtype(b) );
   }
 
-  // FIXME: 123
-  const Fl_Menu_Item *menu() { return (menu_->menu()); }
+  const Fl_Menu_Item *menu() { 
+    return (Fl_Menu_Item*)((fltk3::InputChoice*)_p)->menu(); 
+  }
   
-  // FIXME: 123
-  void menu(const Fl_Menu_Item *m) { menu_->menu(m); }
+  void menu(const Fl_Menu_Item *m) { 
+    ((fltk3::InputChoice*)_p)->menu((fltk3::MenuItem*)m); 
+  }
   
   FLTK3_WRAPPER_VCALLS_OBJECT(InputChoice, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
   
@@ -97,7 +99,7 @@ public:
   }
   
   void textfont(Fl_Font font) { 
-    ((fltk3::InputChoice*)_p)->font( fltk3::_1to3_font(font) );
+    ((fltk3::InputChoice*)_p)->textfont( fltk3::_1to3_font(font) );
   }
   
   Fl_Fontsize textsize() const { 
@@ -105,7 +107,7 @@ public:
   }
   
   void textsize(Fl_Fontsize size) {
-    ((fltk3::InputChoice*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+    ((fltk3::InputChoice*)_p)->textsize( fltk3::_1to3_fontsize(size) );
   }
   
   Fl_Color textcolor() const { 
@@ -121,7 +123,7 @@ public:
   }
   
   void value(const char *val) { 
-    ((fltk3::InputChoice*)_p)->val();
+    ((fltk3::InputChoice*)_p)->value(val);
   }
   
   void value(int val) {
@@ -129,10 +131,14 @@ public:
   }
   
   // FIXME: 123
-  Fl_Menu_Button *menubutton();
+  Fl_Menu_Button *menubutton() {
+    return (Fl_Menu_Button*)fltk3::_3to1_widget( ((fltk3::InputChoice*)_p)->menubutton() );
+  }
   
   // FIXME: 123
-  Fl_Input *input();
+  Fl_Input *input() {
+    return (Fl_Input*)fltk3::_3to1_widget( ((fltk3::InputChoice*)_p)->input() );
+  }
   
 };
 

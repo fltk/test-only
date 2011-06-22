@@ -59,7 +59,7 @@ public:
 
   FLTK3_WRAPPER_VCALLS_OBJECT(Window, draw_overlay(), draw_overlay(), DrawOverlay)
   
-  Fl_Window() {}
+  Fl_Window() { /* empty */ }
   
   Fl_Window(int w, int h, const char* label = 0) {
     _p = new fltk3::Window(w, h, label);
@@ -79,7 +79,7 @@ public:
   
   FLTK3_WRAPPER_VCALLS_OBJECT(Window, draw(), draw(), Draw)
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Window, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Window, handle(int event), handle(event), Handle)
   
   void border(int b) {
     ((fltk3::Window*)_p)->border(b);

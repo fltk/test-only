@@ -391,7 +391,7 @@ CodeEditor::CodeEditor(int X, int Y, int W, int H, const char *L) :
 
   mBuffer->add_modify_callback(style_update, this);
   add_key_binding(fltk3::EnterKey, fltk3::TEXT_EDITOR_ANY_STATE,
-                  (fltk3::TextEditor::Key_Func)auto_indent);
+                  (fltk3::TextEditor::KeyFunc)auto_indent);
 }
 
 // Destroy a CodeEditor widget...

@@ -126,7 +126,7 @@ int fltk3::Counter::calc_mouseobj() {
 }
 
 int fltk3::Counter::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   int i;
   switch (event) {
   case fltk3::RELEASE:

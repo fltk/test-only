@@ -39,7 +39,7 @@ class FL_EXPORT Fl_Repeat_Button : public Fl_Button {
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(RepeatButton, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, RepeatButton, handle(int event), handle(event), Handle)
 
   Fl_Repeat_Button() {}
 

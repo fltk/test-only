@@ -42,27 +42,30 @@
 #define FL_SORT_ASCENDING	0	/**< sort browser items in ascending alphabetic order. */
 #define FL_SORT_DESCENDING	1	/**< sort in descending order */
 
+
+namespace fltk3 { class Browser; }
+inline fltk3::Browser *fl_new_browser(int, int, int, int, const char*);
+
 class FL_EXPORT Fl_Browser_ : public Fl_Group {
 
 protected:
 
-  // FIXME: 123 virtual methods
-  virtual void *item_first() const { return 0; }
-  virtual void *item_next(void *item) const { return 0; }
-  virtual void *item_prev(void *item) const { return 0; }
-  virtual void *item_last() const { return 0L; }
-  virtual int item_height(void *item) const { return 0; }
-  virtual int item_width(void *item) const { return 0; }
-  virtual int item_quick_height(void *item) const { return 0; }
-  virtual void item_draw(void *item,int X,int Y,int W,int H) const {}
-  virtual const char *item_text(void *item) const { (void)item; return 0L; }
-  virtual void item_swap(void *a,void *b) { (void)a; (void)b; }
-  virtual void *item_at(int index) const { (void)index; return 0L; }
-  virtual int full_width() const { return 0; }
-  virtual int full_height() const { return 0; }
-  virtual int incr_height() const { return 0; }
-  virtual void item_select(void *item,int val=1) { }
-  virtual int item_selected(void *item) const { return 0; }
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser_, item_first() const, item_first(), BrowserItemFirst)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser_, item_next(void *item) const, item_next(item), BrowserItemNext);
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser_, item_prev(void *item) const, item_prev(item), BrowserItemPrev);
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void*, Browser_, item_last() const, item_last(), BrowserItemLast)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, item_height(void *item) const, item_height(item), BrowserItemHeight)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, item_width(void *item) const, item_width(item), BrowserItemWidth)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, item_quick_height(void *item) const, item_quick_height(item), BrowserItemQuickHeight)  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Browser_, item_draw(void *item, int X, int Y, int W, int H) const, item_draw(item, X, Y, W, H), BrowserItemDraw)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(const char *, Browser_, item_text(void *item) const, item_text(item), BrowserItemText)  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Browser_, item_swap(void *a, void *b), item_swap(a, b), BrowserItemSwap)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser_, item_at(int index) const, item_at(index), BrowserItemAt)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, full_width() const, full_width(), BrowserFullWidth)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, full_height() const, full_height(), BrowserFullHeight)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, incr_height() const, incr_height(), BrowserIncrHeight)  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Browser_, item_select(void *item, int val=1), item_select(item, val), BrowserItemSelect)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, item_selected(void *item) const, item_selected(item), BrowserItemSelected)  
   
   void *top() const {
     return ((fltk3::Browser_*)_p)->top();
@@ -119,6 +122,11 @@ protected:
   FLTK3_WRAPPER_VCALLS_OBJECT(Browser_, draw(), draw(), Draw)
   
   Fl_Browser_() { /* empty */ }
+
+  Fl_Browser_(int x, int y, int w, int h, const char *label=0) {
+    _p = (fltk3::Object*)fl_new_browser(x, y, w, h, label);
+    _p->wrapper(this);
+  }
  
 public:
 
@@ -128,7 +136,7 @@ public:
   
   FLTK3_WRAPPER_VCALLS_OBJECT(Browser_, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize)
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Browser_, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser_, handle(int event), handle(event), Handle)
 
   int select(void *item,int val=1,int docallbacks=0) {
     return ((fltk3::Browser_*)_p)->select(item, val, docallbacks);
@@ -232,6 +240,14 @@ public:
     ((fltk3::Browser_*)_p)->sort(flags);
   }
 };
+
+
+#include <fltk3/Browser.h>
+
+inline fltk3::Browser *fl_new_browser(int x, int y, int w, int h, const char *l) {
+  return new fltk3::Browser(x, y, w, h, l);
+}
+
 
 #endif
 

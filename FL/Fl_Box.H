@@ -49,7 +49,7 @@ public:
     _p->wrapper(this);
   }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Box, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Box, handle(int event), handle(event), Handle)
 };
 
 #endif

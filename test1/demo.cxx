@@ -408,7 +408,7 @@ int main(int argc, char **argv) {
   const char *fname = buf;
   int i = 0;
   if (!Fl::args(argc,argv,i) || i < argc-1)
-    Fl::fatal("Usage: %s <switches> <menufile>\n%s",argv[0],Fl::help);
+    Fl::fatal("Usage: %s <switches> <menufile>\n%s",argv[0],Fl::help_text());
   if (i < argc) fname = argv[i];
   
   create_the_forms();

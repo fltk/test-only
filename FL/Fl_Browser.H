@@ -40,21 +40,22 @@ class FL_EXPORT Fl_Browser : public Fl_Browser_ {
 
 protected:
 
-  // FIXME: 123 - many of these are virtual!
-  void* item_first() const { return 0L; }
-  void* item_next(void* item) const { return 0L; }
-  void* item_prev(void* item) const { return 0L; }
-  void* item_last()const { return 0L; }
-  int item_selected(void* item) const { return 0; }
-  void item_select(void* item, int val) {}
-  int item_height(void* item) const { return 0; }
-  int item_width(void* item) const { return 0; }
-  void item_draw(void* item, int X, int Y, int W, int H) const {}
-  int full_height() const { return 0; }
-  int incr_height() const { return 0; }
-  const char *item_text(void *item) const { return 0L; }
-  void item_swap(void *a, void *b) { swap((FL_BLINE*)a, (FL_BLINE*)b); }
-  void *item_at(int line) const { return (void*)find_line(line); }
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser, item_first() const, item_first(), BrowserItemFirst) 
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser, item_next(void *item) const, item_next(item), BrowserItemNext);
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser, item_prev(void *item) const, item_prev(item), BrowserItemPrev); 
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void*, Browser, item_last() const, item_last(), BrowserItemLast)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser, item_height(void *item) const, item_height(item), BrowserItemHeight)  
+  FLTK3_WRAPPER_VCALLS_OBJECT(Browser, item_select(void *item, int val=1), item_select(item, val), BrowserItemSelect)  
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser, item_selected(void *item) const, item_selected(item), BrowserItemSelected)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser, item_width(void *item) const, item_width(item), BrowserItemWidth)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser, item_quick_height(void *item) const, item_quick_height(item), BrowserItemQuickHeight)
+  FLTK3_WRAPPER_VCALLS_OBJECT(Browser, item_draw(void *item, int X, int Y, int W, int H) const, item_draw(item, X, Y, W, H), BrowserItemDraw)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(const char *, Browser, item_text(void *item) const, item_text(item), BrowserItemText)
+  FLTK3_WRAPPER_VCALLS_OBJECT(Browser, item_swap(void *a, void *b), item_swap(a, b), BrowserItemSwap)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(void *, Browser, item_at(int index) const, item_at(index), BrowserItemAt)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser, full_width() const, full_width(), BrowserFullWidth)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser, full_height() const, full_height(), BrowserFullHeight)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Browser, incr_height() const, incr_height(), BrowserIncrHeight)
 
   FL_BLINE* find_line(int line) const  { return 0; }
   FL_BLINE* _remove(int line) { return 0; }

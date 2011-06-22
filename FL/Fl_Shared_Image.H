@@ -32,10 +32,9 @@
 #include <fltk3/SharedImage.h>
 #include "Fl_Image.H"
 
-#if 0 // FIXME: 123
 
-typedef Fl_Image *(*Fl_Shared_Handler)(const char *name, uchar *header,
-                                       int headerlen);
+typedef fltk3::SharedHandler Fl_Shared_Handler;
+
 
 class FL_EXPORT Fl_Shared_Image : public Fl_Image {
   
@@ -44,6 +43,7 @@ class FL_EXPORT Fl_Shared_Image : public Fl_Image {
 
 protected:
 
+#if 0
   static Fl_Shared_Image **images_;	// Shared images
   static int	num_images_;		// Number of shared images
   static int	alloc_images_;		// Allocated shared images
@@ -59,19 +59,27 @@ protected:
 
   static int	compare(Fl_Shared_Image **i0, Fl_Shared_Image **i1);
 
-  // Use get() and release() to load/delete images in memory...
   Fl_Shared_Image();
   Fl_Shared_Image(const char *n, Fl_Image *img = 0);
-  virtual ~Fl_Shared_Image();
+
   void add();
   void update();
+#endif
 
-  public:
+public:
+
+#if 0
   /** Returns the filename of the shared image */
   const char	*name() { return name_; }
   /** Returns the number of references of this shared image. When reference is below 1, the image is deleted. */
   int		refcount() { return refcount_; }
-  void		release();
+#endif
+
+  void release() {
+    ((fltk3::SharedImage*)_p)->release();
+  }
+
+#if 0
   void		reload();
 
   virtual Fl_Image *copy(int W, int H);
@@ -81,24 +89,54 @@ protected:
   virtual void draw(int X, int Y, int W, int H, int cx, int cy);
   void draw(int X, int Y) { draw(X, Y, w(), h(), 0, 0); }
   virtual void uncache();
+#endif
 
-  static Fl_Shared_Image *find(const char *n, int W = 0, int H = 0);
-  static Fl_Shared_Image *get(const char *n, int W = 0, int H = 0);
+  static Fl_Shared_Image *find(const char *n, int W = 0, int H = 0) {
+    fltk3::SharedImage *img3 = fltk3::SharedImage::find(n, W, H);
+    if (!img3) 
+      return 0L;
+    Fl_Shared_Image *img1 = (Fl_Shared_Image*)img3->wrapper();
+    if (!img1) {
+      img1 = new Fl_Shared_Image();
+      img1->_p = img3;
+      img3->wrapper(img1);
+    }
+    return img1;
+  }
+
+  static Fl_Shared_Image *get(const char *n, int W = 0, int H = 0) {
+    fltk3::SharedImage *img3 = fltk3::SharedImage::get(n, W, H);
+    if (!img3) 
+      return 0L;
+    Fl_Shared_Image *img1 = (Fl_Shared_Image*)img3->wrapper();
+    if (!img1) {
+      img1 = new Fl_Shared_Image();
+      img1->_p = img3;
+      img3->wrapper(img1);
+    }
+    return img1;
+  }
+
+#if 0
   static Fl_Shared_Image **images();
   static int		num_images();
-  static void		add_handler(Fl_Shared_Handler f);
-  static void		remove_handler(Fl_Shared_Handler f);
+#endif
+
+#if 0 // TODO: 123 - can we port this?
+  static void add_handler(Fl_Shared_Handler f) {
+    fltk3::SharedImage::add_handler((fltk3::SharedHandler)f);
+  }
+
+  static void remove_handler(Fl_Shared_Handler f) {
+    fltk3::SharedImage::add_handler((fltk3::SharedHandler)f);
+  }
+#endif
+
 };
 
-//
-// The following function is provided in the fltk_images library and
-// registers all of the "extra" image file formats that are not part
-// of the core FLTK library...
-//
-
-FL_EXPORT extern void fl_register_images();
-
-#endif
+inline extern void fl_register_images() {
+  fltk3::register_images();
+}
 
 #endif // !Fl_Shared_Image_H
 

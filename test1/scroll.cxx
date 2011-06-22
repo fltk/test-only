@@ -87,7 +87,7 @@ Fl_Menu_Item choices[] = {
 };
 
 void align_cb(Fl_Widget*, void* v) {
-  thescroll->scrollbar.align((uchar)((fl_intptr_t)v));
+  thescroll->vertical_scrollbar()->align((uchar)((fl_intptr_t)v));
   thescroll->redraw();
 }
 

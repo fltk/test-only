@@ -37,7 +37,7 @@ class FL_EXPORT Fl_Tile : public Fl_Group {
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(TiledGroup, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, TiledGroup, handle(int event), handle(event), Handle)
   
   Fl_Tile() {}
   

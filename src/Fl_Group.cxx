@@ -148,7 +148,7 @@ static int navkey() {
 }
 
 int fltk3::Group::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_INT(handle(event), Handle)
+  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   fltk3::Widget*const* a = array();
   int i;
   fltk3::Widget* o;
@@ -831,6 +831,41 @@ void fltk3::Group::draw_outside_label(const fltk3::Widget& widget) const {
     W = wx+this->w()-X;
   }
   widget.draw_label(X,Y,W,H,(fltk3::Align)a);
+}
+
+void fltk3::Group::forms_end() {
+  // set the dimensions of a group to surround contents
+  if (children() && !w()) {
+    fltk3::Widget*const* a = array();
+    fltk3::Widget* o = *a++;
+    int rx = o->x();
+    int ry = o->y();
+    int rw = rx+o->w();
+    int rh = ry+o->h();
+    for (int i=children_-1; i--;) {
+      o = *a++;
+      if (o->x() < rx) rx = o->x();
+      if (o->y() < ry) ry = o->y();
+      if (o->x()+o->w() > rw) rw = o->x()+o->w();
+      if (o->y()+o->h() > rh) rh = o->y()+o->h();
+    }
+    x(rx);
+    y(ry);
+    w(rw-rx);
+    h(rh-ry);
+  }
+  // flip all the children's coordinate systems:
+  //if (fl_flip) {
+    fltk3::Widget* o = (type()>=fltk3::WINDOW) ? this : window();
+    int Y = o->h();
+    fltk3::Widget*const* a = array();
+    for (int i=children(); i--;) {
+      fltk3::Widget* ow = *a++;
+      int newy = Y-ow->y()-ow->h();
+      ow->y(newy);
+    }
+  //}
+  end();
 }
 
 //

@@ -32,6 +32,7 @@
 #define Fl_File_Chooser_H
 
 #include <fltk3/FileChooser.h>
+#include <fltk3/FileBrowser.h>
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
 #include <stdio.h>
@@ -80,25 +81,28 @@ public:
   }
   
   Fl_File_Browser *browser(void) {
-    return fltk3::_3to1_widget(fltk3::FileChooser::browser());
+    return (Fl_File_Browser*)fltk3::_3to1_widget(fltk3::FileChooser::browser());
   }
   
+  void callback(void (*cb)(Fl_File_Chooser *, void *), void *d = 0) {
+    fltk3::FileChooser::callback((void (*)(fltk3::FileChooser*, void*))cb, d);
+  }
 };
         
 
-FL_EXPORT char *fl_dir_chooser(const char *message,const char *fname,int relative=0) {
+inline char *fl_dir_chooser(const char *message,const char *fname,int relative=0) {
   return fltk3::dir_chooser(message, fname, relative);
 }
 
-FL_EXPORT char *fl_file_chooser(const char *message,const char *pat,const char *fname,int relative=0) {
+inline char *fl_file_chooser(const char *message,const char *pat,const char *fname,int relative=0) {
   return fltk3::file_chooser(message, pat, fname, relative);
 }
 
-FL_EXPORT void fl_file_chooser_callback(void (*cb)(const char*)) {
+inline  void fl_file_chooser_callback(void (*cb)(const char*)) {
   fltk3::file_chooser_callback(cb);
 }
 
-FL_EXPORT void fl_file_chooser_ok_label(const char*l) {
+inline void fl_file_chooser_ok_label(const char*l) {
   fltk3::file_chooser_ok_label(l);
 }
 

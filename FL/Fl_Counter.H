@@ -44,7 +44,7 @@ protected:
 
 public:
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Counter, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Counter, handle(int event), handle(event), Handle)
 
   Fl_Counter() { /* empty */ }
   
@@ -74,7 +74,7 @@ public:
   }
   
   void textfont(Fl_Font font) { 
-    ((fltk3::Counter*)_p)->font( fltk3::_1to3_font(font) );
+    ((fltk3::Counter*)_p)->textfont( fltk3::_1to3_font(font) );
   }
   
   Fl_Fontsize textsize() const { 
@@ -82,7 +82,7 @@ public:
   }
   
   void textsize(Fl_Fontsize size) {
-    ((fltk3::Counter*)_p)->textsize( fltk3::_1to3_fontsize(size); )
+    ((fltk3::Counter*)_p)->textsize( fltk3::_1to3_fontsize(size) );
   }
   
   Fl_Color textcolor() const { 

@@ -41,7 +41,7 @@ protected:
   
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(MenuBar, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, MenuBar, handle(int event), handle(event), Handle)
 
   Fl_Menu_Bar() {}
 

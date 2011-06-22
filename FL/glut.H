@@ -43,7 +43,7 @@ protected:
 
   FLTK3_WRAPPER_VCALLS_OBJECT(GlutWindow, draw_overlay(), draw_overlay(), DrawOverlay)
 
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(GlutWindow, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, GlutWindow, handle(int event), handle(event), Handle)
 
 public:
 

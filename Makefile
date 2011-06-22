@@ -27,7 +27,7 @@
 
 include makeinclude
 
-DIRS = $(IMAGEDIRS) src $(CAIRODIR) fluid test test1 documentation
+DIRS = $(IMAGEDIRS) src $(CAIRODIR) fluid test fluid1 test1 documentation
 
 all: makeinclude fltk-config
 	for dir in $(DIRS); do\
@@ -48,6 +48,7 @@ install-desktop: makeinclude
 	cd documentation; $(MAKE) $(MFLAGS) $(INSTALL_DESKTOP)
 	cd fluid; $(MAKE) $(MFLAGS) $(INSTALL_DESKTOP)
 	cd test; $(MAKE) $(MFLAGS) $(INSTALL_DESKTOP)
+	cd fluid1; $(MAKE) $(MFLAGS) $(INSTALL_DESKTOP)
 	cd test1; $(MAKE) $(MFLAGS) $(INSTALL_DESKTOP)
 
 uninstall: makeinclude
@@ -61,6 +62,7 @@ uninstall-desktop: makeinclude
 	cd documentation; $(MAKE) $(MFLAGS) $(UNINSTALL_DESKTOP)
 	cd fluid; $(MAKE) $(MFLAGS) $(UNINSTALL_DESKTOP)
 	cd test; $(MAKE) $(MFLAGS) $(UNINSTALL_DESKTOP)
+	cd fluid1; $(MAKE) $(MFLAGS) $(UNINSTALL_DESKTOP)
 	cd test1; $(MAKE) $(MFLAGS) $(UNINSTALL_DESKTOP)
 
 depend: makeinclude

@@ -38,6 +38,10 @@
 #include "Browser_.h"
 #include "Image.h"
 
+
+class Fl_Browser;
+
+
 namespace fltk3 {
 
   struct BrowserLine_;
@@ -90,6 +94,8 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT Browser : public fltk3::Browser_ {
     
+    friend class ::Fl_Browser;
+    
     fltk3::BrowserLine_ *first;		// the array of lines
     fltk3::BrowserLine_ *last;
     fltk3::BrowserLine_ *cache;
@@ -120,13 +126,13 @@ namespace fltk3 {
      \param[in] a,b the items to be swapped.
      \see swap(int,int), item_swap()
      */
-    void item_swap(void *a, void *b) { swap((fltk3::BrowserLine_*)a, (fltk3::BrowserLine_*)b); }
+    void item_swap(void *a, void *b);
     /** Return the item at specified \p line.
      \param[in] line The line of the item to return. (1 based)
      \returns The item, or NULL if line out of range.
      \see item_at(), find_line(), lineno()
      */
-    void *item_at(int line) const { return (void*)find_line(line); }
+    void *item_at(int line) const;
     
     fltk3::BrowserLine_* find_line(int line) const ;
     fltk3::BrowserLine_* _remove(int line) ;

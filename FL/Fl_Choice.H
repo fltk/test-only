@@ -41,7 +41,7 @@ protected:
   
 public:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_INT(Choice, handle(int event), handle(event), Handle)
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Choice, handle(int event), handle(event), Handle)
 
   Fl_Choice(int X, int Y, int W, int H, const char *L = 0) {
     _p = new fltk3::Choice(X, Y, W, H, L);

@@ -40,6 +40,9 @@
 #include "TextBuffer.h"
 
 
+class Fl_Text_Display;
+
+
 namespace fltk3 {
   
 /**
@@ -51,6 +54,8 @@ namespace fltk3 {
  can be displayed by multiple Text Displays.
  */
 class FLTK3_EXPORT TextDisplay: public fltk3::Group {
+
+friend class ::Fl_Text_Display;
 
 public:
   
@@ -100,7 +105,7 @@ public:
   
   friend void text_drag_me(int pos, fltk3::TextDisplay* d);
   
-  typedef void (*Unfinished_Style_Cb)(int, void *);
+  typedef void (*UnfinishedStyleCb)(int, void *);
   
   /** 
    This structure associates the color, font, andsize of a string to draw
@@ -225,7 +230,7 @@ public:
   void highlight_data(fltk3::TextBuffer *styleBuffer,
                       const StyleTableEntry *styleTable,
                       int nStyles, char unfinishedStyle,
-                      Unfinished_Style_Cb unfinishedHighlightCB,
+                      UnfinishedStyleCb unfinishedHighlightCB,
                       void *cbArg);
   
   int position_style(int lineStartPos, int lineLen, int lineIndex) const;
@@ -433,7 +438,7 @@ protected:
                                          coloring/syntax-highlighting */
   char mUnfinishedStyle;        /* Style buffer entry which triggers
                                  on-the-fly reparsing of region */
-  Unfinished_Style_Cb mUnfinishedHighlightCB; /* Callback to parse "unfinished" */
+  UnfinishedStyleCb mUnfinishedHighlightCB; /* Callback to parse "unfinished" */
   /* regions */
   void* mHighlightCBArg;        /* Arg to unfinishedHighlightCB */
   
