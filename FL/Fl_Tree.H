@@ -213,22 +213,41 @@ public:
   }
   void show_self() {
   }
+#endif
+
   Fl_Fontsize item_labelsize() const {
+    return fltk3::_3to1_fontsize( ((fltk3::Tree*)_p)->item_labelsize() );
   }
+
   void item_labelsize(Fl_Fontsize val) {
+    ((fltk3::Tree*)_p)->item_labelsize( fltk3::_1to3_fontsize(val) );
   }
+
   Fl_Font item_labelfont() const {
+    return fltk3::_3to1_font( ((fltk3::Tree*)_p)->item_labelfont() );
   }
+
   void item_labelfont(Fl_Font val) {
+    ((fltk3::Tree*)_p)->item_labelfont( fltk3::_1to3_font(val) );
   }
+
   Fl_Color item_labelfgcolor(void) const {
+    return fltk3::_3to1_color( ((fltk3::Tree*)_p)->item_labelfgcolor() );
   }
+
   void item_labelfgcolor(Fl_Color val) {
+    ((fltk3::Tree*)_p)->item_labelfgcolor( fltk3::_1to3_color(val) );
   }
+
   Fl_Color item_labelbgcolor(void) const {
+    return fltk3::_3to1_color( ((fltk3::Tree*)_p)->item_labelbgcolor() );
   }
+
   void item_labelbgcolor(Fl_Color val) {
+    ((fltk3::Tree*)_p)->item_labelbgcolor( fltk3::_1to3_color(val) );
   }
+
+#if 0
   Fl_Color connectorcolor() const {
   }
   void connectorcolor(Fl_Color val) {
@@ -249,10 +268,17 @@ public:
   }
   void connectorwidth(int val) {
   }
+#endif
+
   Fl_Image *usericon() const {
+    return fltk3::_3to1_image( ((fltk3::Tree*)_p)->usericon() );
   }
+
   void usericon(Fl_Image *val) {
+    ((fltk3::Tree*)_p)->usericon( fltk3::_1to3_image(val) );
   }
+
+#if 0
   Fl_Image *openicon() const {
   }
   void openicon(Fl_Image *val) {
@@ -273,10 +299,17 @@ public:
   }
   void connectorstyle(Fl_Tree_Connector val) {
   }
+#endif 
+
   Fl_Tree_Sort sortorder() const {
+    return (Fl_Tree_Sort)((fltk3::Tree*)_p)->sortorder();
   }
+
   void sortorder(Fl_Tree_Sort val) {
+    ((fltk3::Tree*)_p)->sortorder( (fltk3::TreeSort)val );
   }
+
+#if 0
   Fl_Boxtype selectbox() const {
   }
   void selectbox(Fl_Boxtype val) {
@@ -306,18 +339,26 @@ public:
     ((fltk3::Tree*)_p)->scrollbar_size(size);
   }   
   
-#if 0
   void callback_item(Fl_Tree_Item* item) {
+    ((fltk3::Tree*)_p)->callback_item((fltk3::TreeItem*)item);
   }
+
   Fl_Tree_Item* callback_item() {
+    return (Fl_Tree_Item*)((fltk3::Tree*)_p)->callback_item();
   }
+
   void callback_reason(Fl_Tree_Reason reason) {
+    ((fltk3::Tree*)_p)->callback_reason((fltk3::TreeReason)reason);
   }
+
   Fl_Tree_Reason callback_reason() const {
+    return (Fl_Tree_Reason)((fltk3::Tree*)_p)->callback_reason();
   }
-  void load(class Fl_Preferences&);
-#endif
-  
+
+  void load(class Fl_Preferences &p) {
+    ((fltk3::Tree*)_p)->load((fltk3::Preferences&)p);
+  }  
+
 };
 
 #endif /*FL_TREE_H*/

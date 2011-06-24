@@ -98,109 +98,165 @@ public:
     _p->wrapper(this);
   }
   
-#if 0 // TODO: 123 
-  virtual void clear() { rows(0); cols(0); }
-  void table_box(Fl_Boxtype val);
-  Fl_Boxtype table_box( void );
-#endif
+  Fl_Table() { /* empty */ }
+  
+  /*virtual*/ void clear() { 
+    ((fltk3::Table*)_p)->clear();
+  }
+
+  void table_box(Fl_Boxtype val) {
+    ((fltk3::Table*)_p)->table_box(fltk3::_1to3_boxtype(val));
+  }
+
+  Fl_Boxtype table_box( void ) {
+    return fltk3::_3to1_boxtype( ((fltk3::Table*)_p)->table_box() );
+  }
 
   void rows(int val) {
-    ((Fl_Table*)_p)->rows(val);
+    ((fltk3::Table*)_p)->rows(val);
   }
 
   int rows() {
-    return ((Fl_Table*)_p)->rows();
+    return ((fltk3::Table*)_p)->rows();
   }
 
   void cols(int val) {
-    ((Fl_Table*)_p)->cols(val);
+    ((fltk3::Table*)_p)->cols(val);
   }
 
   int cols() {
-    return ((Fl_Table*)_p)->cols();
+    return ((fltk3::Table*)_p)->cols();
   }
 
-#if 0
-  inline void visible_cells(int& r1, int& r2, int& c1, int& c2);
-  int is_interactive_resize();
-#endif
+  void visible_cells(int& r1, int& r2, int& c1, int& c2) {
+    ((fltk3::Table*)_p)->visible_cells(r1, r2, c1, c2);
+  }
+
+  int is_interactive_resize() {
+    return ((fltk3::Table*)_p)->is_interactive_resize();
+  }
 
   int row_resize() {
-    return ((Fl_Table*)_p)->row_resize();
+    return ((fltk3::Table*)_p)->row_resize();
   }
 
   void row_resize(int flag) {
-    ((Fl_Table*)_p)->row_resize(flag);
+    ((fltk3::Table*)_p)->row_resize(flag);
   }
 
   int col_resize() {
-    return ((Fl_Table*)_p)->col_resize();
+    return ((fltk3::Table*)_p)->col_resize();
   }
 
   void col_resize(int flag) {
-    ((Fl_Table*)_p)->col_resize(flag);
+    ((fltk3::Table*)_p)->col_resize(flag);
   }
 
-#if 0
-  inline int col_resize_min();
-  void col_resize_min(int val);
-  inline int row_resize_min();
-  void row_resize_min(int val);
-#endif
+  int col_resize_min() {
+    return ((fltk3::Table*)_p)->col_resize_min();
+  }
+
+  void col_resize_min(int val) {
+    ((fltk3::Table*)_p)->col_resize_min(val);
+  }
+
+  int row_resize_min() {
+    return ((fltk3::Table*)_p)->row_resize_min();
+  }
+
+  void row_resize_min(int val) {
+    ((fltk3::Table*)_p)->row_resize_min(val);
+  }
 
   int row_header() {
-    return ((Fl_Table*)_p)->row_header();
+    return ((fltk3::Table*)_p)->row_header();
   }
 
   void row_header(int flag) {
-    ((Fl_Table*)_p)->row_header();
+    ((fltk3::Table*)_p)->row_header();
   }
 
   int col_header() {
-    return ((Fl_Table*)_p)->col_header();
+    return ((fltk3::Table*)_p)->col_header();
   }
 
   void col_header(int flag) {
-    ((Fl_Table*)_p)->col_header(flag);
+    ((fltk3::Table*)_p)->col_header(flag);
   }
 
-#if 0
-  inline void col_header_height(int height);
-  inline int col_header_height();
-  inline void row_header_width(int width);
-  inline int row_header_width();
-#endif
+  void col_header_height(int height) {
+    ((fltk3::Table*)_p)->col_header_height(height);
+  }
+
+  int col_header_height() {
+    return ((fltk3::Table*)_p)->col_header_height();
+  }
+
+  void row_header_width(int width) {
+    ((fltk3::Table*)_p)->row_header_width(width);
+  }
+
+  int row_header_width() {
+    return ((fltk3::Table*)_p)->row_header_width();
+  }
 
   void row_header_color(Fl_Color val) {
-    ((Fl_Table*)_p)->row_header_color(fltk3::_1to3_color(val));
+    ((fltk3::Table*)_p)->row_header_color(fltk3::_1to3_color(val));
   }
 
   Fl_Color row_header_color() {
-    return fltk3::_3to1_color( ((Fl_Table*)_p)->row_header_color() );
+    return fltk3::_3to1_color( ((fltk3::Table*)_p)->row_header_color() );
   }
 
-#if 0
-  inline void col_header_color(Fl_Color val);
-  inline Fl_Color col_header_color();
-  void row_height(int row, int height);
-  inline int row_height(int row);
-  void col_width(int col, int width);
-  inline int col_width(int col);
-#endif
+  void col_header_color(Fl_Color val) {
+    ((fltk3::Table*)_p)->col_header_color(fltk3::_1to3_color(val));
+  }
+
+  inline Fl_Color col_header_color() {
+    return fltk3::_3to1_color( ((fltk3::Table*)_p)->col_header_color() );
+  }
+
+  void row_height(int row, int height) {
+    ((fltk3::Table*)_p)->row_height(row, height);
+  }
+
+  int row_height(int row) {
+    return ((fltk3::Table*)_p)->row_height(row);
+  }
+
+  void col_width(int col, int width) {
+    ((fltk3::Table*)_p)->col_width(col, width);
+  }
+
+  int col_width(int col) {
+    return ((fltk3::Table*)_p)->col_width(col);
+  }
 
   void row_height_all(int height) {
-    ((Fl_Table*)_p)->row_height_all(height);
+    ((fltk3::Table*)_p)->row_height_all(height);
   }
 
   void col_width_all(int width) {
-    ((Fl_Table*)_p)->col_width_all(width);
+    ((fltk3::Table*)_p)->col_width_all(width);
+  }
+
+  void row_position(int row) {
+    ((fltk3::Table*)_p)->row_position(row);
+  }
+
+  void col_position(int col) {
+    ((fltk3::Table*)_p)->col_position(col);
+  }
+
+  int row_position() {
+    return ((fltk3::Table*)_p)->row_position();
+  }
+
+  int col_position() {
+    return ((fltk3::Table*)_p)->col_position();
   }
 
 #if 0
-  void row_position(int row);			// set/get table's current scroll position
-  void col_position(int col);
-  int row_position() {				// current row position
-  int col_position() {				// current col position
   inline void top_row(int row) {		// set/get top row (deprecated)
   inline int top_row() {
   int is_selected(int r, int c);		// selected cell
@@ -222,9 +278,21 @@ public:
   int children() const {
   int find(const Fl_Widget *w) const {
   int find(const Fl_Widget &w) const {
+#endif
+
   int callback_row() {
+    return ((fltk3::Table*)_p)->callback_row();
+  }
+
   int callback_col() {
-  TableContext callback_context() {
+    return ((fltk3::Table*)_p)->callback_col();
+  }
+
+  TableContext callback_context() { 
+    return (TableContext)((fltk3::Table*)_p)->callback_context();
+  }
+
+#if 0
   void do_callback(TableContext context, int row, int col) {
 #endif
     
