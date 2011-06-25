@@ -194,26 +194,49 @@ public:
     return ((fltk3::Tree*)_p)->select((fltk3::TreeItem*)item, docallback);
   }
 
-#if 0
   int select(const char *path, int docallback=1) {
+    return ((fltk3::Tree*)_p)->select(path, docallback);
   }
+
   void select_toggle(Fl_Tree_Item *item, int docallback=1) {
+    ((fltk3::Tree*)_p)->select_toggle((fltk3::TreeItem*)item, docallback);
   }
+
   int deselect(Fl_Tree_Item *item, int docallback=1) {
+    return ((fltk3::Tree*)_p)->deselect((fltk3::TreeItem*)item, docallback);
   }
+
   int deselect(const char *path, int docallback=1) {
+    return ((fltk3::Tree*)_p)->deselect(path, docallback);
   }
-  int deselect_all(Fl_Tree_Item *item=0, int docallback=1);
-  int select_only(Fl_Tree_Item *selitem, int docallback=1);
-  int select_all(Fl_Tree_Item *item=0, int docallback=1);
-  void set_item_focus(Fl_Tree_Item *o);
+
+  int deselect_all(Fl_Tree_Item *item=0, int docallback=1) {
+    return ((fltk3::Tree*)_p)->deselect_all((fltk3::TreeItem*)item, docallback);
+  }
+
+  int select_only(Fl_Tree_Item *selitem, int docallback=1) {
+    return ((fltk3::Tree*)_p)->select_only((fltk3::TreeItem*)selitem, docallback);
+  }
+
+  int select_all(Fl_Tree_Item *item=0, int docallback=1) {
+    return ((fltk3::Tree*)_p)->select_all((fltk3::TreeItem*)item, docallback);
+  }
+
+  void set_item_focus(Fl_Tree_Item *o) {
+    ((fltk3::Tree*)_p)->set_item_focus((fltk3::TreeItem*)o);
+  }
+
   int is_selected(Fl_Tree_Item *item) const {
+    return ((fltk3::Tree*)_p)->is_selected((fltk3::TreeItem*)item);
   }
+
   int is_selected(const char *path) {
+    return ((fltk3::Tree*)_p)->is_selected(path);
   }
+
   void show_self() {
+    ((fltk3::Tree*)_p)->show_self();
   }
-#endif
 
   Fl_Fontsize item_labelsize() const {
     return fltk3::_3to1_fontsize( ((fltk3::Tree*)_p)->item_labelsize() );
@@ -247,28 +270,44 @@ public:
     ((fltk3::Tree*)_p)->item_labelbgcolor( fltk3::_1to3_color(val) );
   }
 
-#if 0
   Fl_Color connectorcolor() const {
+    return fltk3::_3to1_color( ((fltk3::Tree*)_p)->connectorcolor() );
   }
+
   void connectorcolor(Fl_Color val) {
+    ((fltk3::Tree*)_p)->connectorcolor( fltk3::_1to3_color(val) );
   }
+
   int marginleft() const {
+    return ((fltk3::Tree*)_p)->marginleft();
   }
+
   void marginleft(int val) {
+    ((fltk3::Tree*)_p)->marginleft(val);
   }
+
   int margintop() const {
+    return ((fltk3::Tree*)_p)->margintop();
   }
+
   void margintop(int val) {
+    ((fltk3::Tree*)_p)->margintop(val);
   }
+
   int openchild_marginbottom() const {
+    return ((fltk3::Tree*)_p)->openchild_marginbottom();
   }
+
   void openchild_marginbottom(int val) {
+    ((fltk3::Tree*)_p)->openchild_marginbottom(val);
   }
+
   int connectorwidth() const {
+    return ((fltk3::Tree*)_p)->connectorwidth();
   }
   void connectorwidth(int val) {
+    ((fltk3::Tree*)_p)->connectorwidth(val);
   }
-#endif
 
   Fl_Image *usericon() const {
     return fltk3::_3to1_image( ((fltk3::Tree*)_p)->usericon() );
@@ -278,28 +317,45 @@ public:
     ((fltk3::Tree*)_p)->usericon( fltk3::_1to3_image(val) );
   }
 
-#if 0
   Fl_Image *openicon() const {
+    return fltk3::_3to1_image( ((fltk3::Tree*)_p)->openicon() );
   }
+
   void openicon(Fl_Image *val) {
+    ((fltk3::Tree*)_p)->openicon( fltk3::_1to3_image(val) );
   }
+
   Fl_Image *closeicon() const {
+    return fltk3::_3to1_image( ((fltk3::Tree*)_p)->closeicon() );
   }
+
   void closeicon(Fl_Image *val) {
+    ((fltk3::Tree*)_p)->closeicon( fltk3::_1to3_image(val) );
   }
+
   int showcollapse() const {
+    return ((fltk3::Tree*)_p)->showcollapse();
   }
+
   void showcollapse(int val) {
+    ((fltk3::Tree*)_p)->showcollapse(val);
   }
+
   int showroot() const {
+    return ((fltk3::Tree*)_p)->showroot();
   }
+
   void showroot(int val) {
+    ((fltk3::Tree*)_p)->showroot(val);
   }
+
   Fl_Tree_Connector connectorstyle() const {
+    return (Fl_Tree_Connector)((fltk3::Tree*)_p)->connectorstyle();
   }
+
   void connectorstyle(Fl_Tree_Connector val) {
+    ((fltk3::Tree*)_p)->connectorstyle((fltk3::TreeConnector)val);
   }
-#endif 
 
   Fl_Tree_Sort sortorder() const {
     return (Fl_Tree_Sort)((fltk3::Tree*)_p)->sortorder();
@@ -314,22 +370,55 @@ public:
   }
   void selectbox(Fl_Boxtype val) {
   }
-  Fl_Tree_Select selectmode() const {
-  }
-  void selectmode(Fl_Tree_Select val) {
-  }
-  int displayed(Fl_Tree_Item *item);
-  void show_item(Fl_Tree_Item *item, int yoff);
-  void show_item(Fl_Tree_Item *item);
-  void show_item_bottom(Fl_Tree_Item *item);
-  void show_item_middle(Fl_Tree_Item *item);
-  void show_item_top(Fl_Tree_Item *item);
-  void display(Fl_Tree_Item *item);
-  int  vposition() const;
-  void vposition(int ypos);
-  int is_scrollbar(Fl_Widget *w) {
-  }
 #endif
+
+  Fl_Tree_Select selectmode() const {
+    return (Fl_Tree_Select)((fltk3::Tree*)_p)->selectmode();
+  }
+
+  void selectmode(Fl_Tree_Select val) {
+    ((fltk3::Tree*)_p)->selectmode((fltk3::TreeSelect)val);
+  }
+
+  int displayed(Fl_Tree_Item *item) {
+    return ((fltk3::Tree*)_p)->displayed((fltk3::TreeItem*)item);
+  }
+
+  void show_item(Fl_Tree_Item *item, int yoff){
+    ((fltk3::Tree*)_p)->show_item((fltk3::TreeItem*)item, yoff);
+  }
+
+  void show_item(Fl_Tree_Item *item) {
+    ((fltk3::Tree*)_p)->show_item((fltk3::TreeItem*)item);
+  }
+
+  void show_item_bottom(Fl_Tree_Item *item) {
+    ((fltk3::Tree*)_p)->show_item_bottom((fltk3::TreeItem*)item);
+  }
+
+  void show_item_middle(Fl_Tree_Item *item) {
+    ((fltk3::Tree*)_p)->show_item_middle((fltk3::TreeItem*)item);
+  }
+
+  void show_item_top(Fl_Tree_Item *item) {
+    ((fltk3::Tree*)_p)->show_item_top((fltk3::TreeItem*)item);
+  }
+
+  void display(Fl_Tree_Item *item) {
+    ((fltk3::Tree*)_p)->display((fltk3::TreeItem*)item);
+  }
+
+  int  vposition() const {
+    return ((fltk3::Tree*)_p)->vposition();
+  }
+
+  void vposition(int ypos) {
+    ((fltk3::Tree*)_p)->vposition(ypos);
+  }
+
+  int is_scrollbar(Fl_Widget *w) {
+    return ((fltk3::Tree*)_p)->is_scrollbar(fltk3::_1to3_widget(w));
+  }
   
   int scrollbar_size() const {
     return ((fltk3::Tree*)_p)->scrollbar_size();

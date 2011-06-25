@@ -116,14 +116,17 @@ public:
   Fl_Color labelbgcolor() const {
     return(_labelbgcolor); 
   }
-  /// Assign an FLTK widget to this item.
+#endif
+
   void widget(Fl_Widget *val) {
-    _widget = val; 
+    fltk3::TreeItem::widget( fltk3::_1to3_widget(val) );
   }
-  /// Return FLTK widget assigned to this item.
+
   Fl_Widget *widget() const {
-    return(_widget); 
+    return fltk3::_3to1_widget( fltk3::TreeItem::widget() );
   }
+
+#if 0
   /// Return the number of children this item has.
   int children() const {
     return(_children.total()); 
@@ -157,21 +160,37 @@ public:
   Fl_Tree_Item *insert(const Fl_Tree_Prefs &prefs, const char *new_label, int pos=0);
   Fl_Tree_Item *insert_above(const Fl_Tree_Prefs &prefs, const char *new_label);
   int depth() const;
-  Fl_Tree_Item *prev();
-  Fl_Tree_Item *next();
-  Fl_Tree_Item *next_sibling();
-  Fl_Tree_Item *prev_sibling();
+#endif 
+  Fl_Tree_Item *prev() {
+    return (Fl_Tree_Item*)fltk3::TreeItem::prev();
+  }
+
+  Fl_Tree_Item *next() {
+    return (Fl_Tree_Item*)fltk3::TreeItem::next();
+  }
+
+  Fl_Tree_Item *next_sibling() {
+    return (Fl_Tree_Item*)fltk3::TreeItem::next_sibling();
+  }
+
+  Fl_Tree_Item *prev_sibling() {
+    return (Fl_Tree_Item*)fltk3::TreeItem::prev_sibling();
+  }
+
+#if 0
   Fl_Tree_Item *next_displayed(Fl_Tree_Prefs &prefs);
   Fl_Tree_Item *prev_displayed(Fl_Tree_Prefs &prefs);
-  
-  /// Return the parent for this item. Returns NULL if we are the root.
+#endif  
+
   Fl_Tree_Item *parent() {
-    return(_parent);
+    return (Fl_Tree_Item*)fltk3::TreeItem::parent();
   }
-  /// Return the const parent for this item. Returns NULL if we are the root.
+
   const Fl_Tree_Item *parent() const {
-    return(_parent);
+    return (Fl_Tree_Item*)fltk3::TreeItem::parent();
   }
+
+#if 0
   /// Set the parent for this item.
   /// Should only be used by Fl_Tree's internals.
   ///
@@ -286,15 +305,17 @@ public:
     return(_visible ? 1 : 0);
   }
   int visible_r() const;
+#endif
 
-  /// Set the user icon's image. '0' will disable.
   void usericon(Fl_Image *val) {
-    _usericon = val;
+    fltk3::TreeItem::usericon(fltk3::_1to3_image(val));
   }
-  /// Get the user icon. Returns '0' if disabled.
+
   Fl_Image *usericon() const {
-    return(_usericon);
+    return fltk3::_3to1_image( fltk3::TreeItem::usericon() );
   }
+
+#if 0
   //////////////////
   // Events
   //////////////////
