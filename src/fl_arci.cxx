@@ -26,7 +26,7 @@
 //
 
 /**
-  \file fltk3::arci.cxx
+  \file fl_arci.cxx
   \brief Utility functions for drawing circles using integers
 */
 

@@ -26,7 +26,7 @@
 //
 
 /**
-  \file fltk3::line_style.cxx
+  \file fl_line_style.cxx
   \brief Line style drawing utility hiding different platforms.
 */
 

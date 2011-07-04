@@ -24,7 +24,7 @@
 //
 //     http://www.fltk.org/str.php
 //
-/** \file fltk3::PagedDevice.cxx
+/** \file Fl_Paged_Device.cxx
  \brief implementation of class fltk3::PagedDevice.
  */
 

@@ -26,7 +26,7 @@
 //
 
 /**
-  \file fltk3::color.cxx
+  \file fl_color.cxx
   \brief Color handling
 */
 

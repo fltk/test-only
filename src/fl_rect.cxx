@@ -26,7 +26,7 @@
 //
 
 /**
-  \file fltk3::rect.cxx
+  \file fl_rect.cxx
   \brief Drawing and clipping routines for rectangles.
 */
 

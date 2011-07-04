@@ -26,7 +26,7 @@
 //
 
 /**
-  \file fltk3::vertex.cxx
+  \file fl_vertex.cxx
   \brief  Portable drawing code for drawing arbitrary shapes with
           simple 2D transformations.
 */

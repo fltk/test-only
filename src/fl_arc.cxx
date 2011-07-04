@@ -26,7 +26,7 @@
 //
 
 /**
-  \file fltk3::arc.cxx
+  \file fl_arc.cxx
   \brief Utility functions for drawing arcs and circles.
 */
 

@@ -26,7 +26,7 @@
 //
 
 /**
-  \file fltk3::curve.cxx
+  \file fl_curve.cxx
   \brief Utility for drawing Bezier curves, adding the points to the
          current fl_begin/fltk3::vertex/fl_end path.
 
