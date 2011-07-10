@@ -303,7 +303,7 @@ void dobut(Fl_Widget *, long arg)
     
     if (arg) {
       *arg = 0;
-      if (strcmp(cmd, "../fluid/fluid")==0) {
+      if (strcmp(cmd, "../fluid1/fluid")==0) {
         fl_filename_absolute(path, 2048, "../../../../test/");
 	sprintf(command, "open Fluid.app --args %s%s", path, arg+1);
       } else {

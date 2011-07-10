@@ -288,11 +288,12 @@ void Widget_Browser::item_draw(void *v, int X, int Y, int, int) const {
   if (l->new_selected) fltk3::color(fltk3::contrast(fltk3::FOREGROUND_COLOR,fltk3::SELECTION_COLOR));
   else fltk3::color(fltk3::FOREGROUND_COLOR);
   fltk3::Pixmap *pm = pixmap[l->pixmapID()];
-  if (pm) pm->draw(X-18, Y);
+  if (pm) pm->draw(X-18+11, Y);
   switch (l->is_public()) {
-    case 0: lock_pixmap.draw(X - 17, Y); break;
-    case 2: protected_pixmap.draw(X - 17, Y); break;
+    case 0: lock_pixmap.draw(X-17+11, Y); break;
+    case 2: protected_pixmap.draw(X-17+11, Y); break;
   }
+  X -= 18;
   if (l->is_parent()) {
     if (!l->next || l->next->level <= l->level) {
       if (l->open_!=(l==pushedtitle)) {
@@ -307,8 +308,9 @@ void Widget_Browser::item_draw(void *v, int X, int Y, int, int) const {
         fltk3::polygon(X+2,Y+2,X+7,Y+7,X+2,Y+12);
       }
     }
-    X += 10;
   }
+  X += 10;
+  X += 18;
   Y += comment_incr;
   if (l->is_widget() || l->is_class()) {
     const char* c = subclassname(l);
@@ -409,7 +411,7 @@ int Widget_Browser::handle(int e) {
     l = (Fl_Type*)find_item(fltk3::event_y());
     if (l) {
       X += 12*l->level + 18 - hposition();
-      if (l->is_parent() && fltk3::event_x()>X && fltk3::event_x()<X+13) {
+      if (l->is_parent() && fltk3::event_x()>X-18 && fltk3::event_x()<X+13-18) {
 	title = pushedtitle = l;
 	redraw_line(l);
 	return 1;
@@ -421,7 +423,7 @@ int Widget_Browser::handle(int e) {
     l = (Fl_Type*)find_item(fltk3::event_y());
     if (l) {
       X += 12*l->level + 18 - hposition();
-      if (l->is_parent() && fltk3::event_x()>X && fltk3::event_x()<X+13) ;
+      if (l->is_parent() && fltk3::event_x()>X-18 && fltk3::event_x()<X+13-18) ;
       else l = 0;
     }
     if (l != pushedtitle) {

@@ -55,7 +55,7 @@
 	@u:fast && slow widgets:fast_slow
 	@u:inactive:inactive
 
-@main:Fluid\n(UI design tool):../fluid/fluid valuators.fl
+@main:Fluid\n(UI design tool):../fluid1/fluid valuators.fl
 
 @main:Cool\nDemos...:@e
 	@e:Mandelbrot:mandelbrot
