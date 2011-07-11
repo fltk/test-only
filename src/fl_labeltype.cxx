@@ -62,23 +62,34 @@ void fl_shadow_label(const fltk3::Label* o, int X, int Y, int W, int H, fltk3::A
 void fl_engraved_label(const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align);
 void fl_embossed_label(const fltk3::Label* o, int X, int Y, int W, int H, fltk3::Align align);
 void fl_multi_labeltype(const fltk3::Label* o, int x, int y, int w, int h, fltk3::Align a);
+void fl_multi_measure(const fltk3::Label* o, int& w, int& h);
 void fl_icon_labeltype(const fltk3::Label* o, int x, int y, int w, int h, fltk3::Align a);
 
 static fltk3::LabelDrawF* table[MAX_LABELTYPE] = {
   fl_normal_label,
   fl_no_label,
-  fl_shadow_label,	// FL_SHADOW_LABEL,
-  fl_engraved_label,	// FL_ENGRAVED_LABEL,
-  fl_embossed_label,	// _FL_EMBOSSED_LABEL,
-  fl_multi_labeltype,		// _FL_MULTI_LABEL,
-  fl_icon_labeltype,		// _FL_ICON_LABEL,
+  fl_shadow_label,      // fltk3::SHADOW_LABEL,
+  fl_engraved_label,    // fltk3::ENGRAVED_LABEL,
+  fl_embossed_label,    // fltk3::EMBOSSED_LABEL,
+  fl_multi_labeltype,   // fltk3::MULTI_LABEL,
+  fl_icon_labeltype,    // fltk3::ICON_LABEL,
+  fltk3::Image::labeltype, // fltk3::IMAGE_LABEL
   // fltk3::FREE_LABELTYPE+n:
-  fl_no_label, fl_no_label, fl_no_label,
+  fl_no_label, fl_no_label,
   fl_no_label, fl_no_label, fl_no_label,
   fl_no_label, fl_no_label, fl_no_label
 };
 
-static fltk3::LabelMeasureF* measure[MAX_LABELTYPE];
+static fltk3::LabelMeasureF* measure[MAX_LABELTYPE] = {
+  0L, // normal
+  0L, // no
+  0L, // shadow
+  0L, // engraved
+  0L, // embossed
+  fl_multi_measure, // multi
+  0L, //icon
+  fltk3::Image::measure // image
+};
 
 /** Sets the functions to call to draw and measure a specific labeltype. */
 void fltk3::set_labeltype(fltk3::Labeltype t,fltk3::LabelDrawF* f,fltk3::LabelMeasureF*m) 
@@ -93,6 +104,7 @@ void fltk3::Label::draw(int X, int Y, int W, int H, fltk3::Align align) const {
   if (!value && !image) return;
   table[type](this, X, Y, W, H, align);
 }
+
 /** 
     Measures the size of the label.
     \param[in,out] W, H : this is the requested size for the label text plus image;

@@ -92,11 +92,11 @@ namespace fltk3 {
      */
     void data(const char * const *p, int c) {data_ = p; count_ = c;}
     void draw_empty(int X, int Y);
+        
+  public:
     
     static void labeltype(const fltk3::Label *lo, int lx, int ly, int lw, int lh, fltk3::Align la);
     static void measure(const fltk3::Label *lo, int &lw, int &lh);
-    
-  public:
     
     /** 
      Returns the current image width in pixels.
