@@ -50,8 +50,6 @@ typedef long fl_intptr_t;
 typedef unsigned long fl_uintptr_t;
 #endif
 
-class Fl_Widget;
-
 namespace fltk3 { 
   class Widget; 
   class Group;
@@ -113,7 +111,6 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT Widget : public Rectangle {
     friend class Group;
-    friend class ::Fl_Widget;
     
     fltk3::Group* parent_;
     fltk3::Callback* callback_;

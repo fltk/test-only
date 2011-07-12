@@ -105,7 +105,6 @@ static void cleanup_readqueue(fltk3::Widget *w) {
 ////////////////////////////////////////////////////////////////
 
 int fltk3::Widget::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   return 0;
 }
 
@@ -261,7 +260,6 @@ int fltk3::Widget::active_r() const {
 }
 
 void fltk3::Widget::show() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(show(), Show)
   if (!visible()) {
     clear_flag(INVISIBLE);
     if (visible_r()) {
@@ -274,7 +272,6 @@ void fltk3::Widget::show() {
 }
 
 void fltk3::Widget::hide() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(hide(), Hide)
   if (visible_r()) {
     set_flag(INVISIBLE);
     for (fltk3::Widget *p = parent(); p; p = p->parent())
@@ -351,7 +348,6 @@ fltk3::Widget::do_callback(fltk3::Widget* o,void* arg) {
 /** Draw a box.
  */
 void fltk3::Widget::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   draw_box();
   draw_label();
 }
