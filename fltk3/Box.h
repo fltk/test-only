@@ -33,7 +33,6 @@
 
 #include "Widget.h"
 
-class Fl_Box;
 
 namespace fltk3 { 
   
@@ -46,10 +45,9 @@ namespace fltk3 {
    */
   class FLTK3_EXPORT Box : public fltk3::Widget {
     
-    friend class ::Fl_Box;
-    
   protected:
     void draw();
+    
   public:
     /**
      - The first constructor sets box() to fltk3::NO_BOX, which

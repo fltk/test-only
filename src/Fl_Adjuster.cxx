@@ -42,7 +42,6 @@ static fltk3::Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height
 void fltk3::Adjuster::value_damage() {}
 
 void fltk3::Adjuster::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   int dx, dy, W, H;
   if (w()>=h()) {
     dx = W = w()/3;
@@ -68,7 +67,6 @@ void fltk3::Adjuster::draw() {
 }
 
 int fltk3::Adjuster::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   double v;
   int delta;
   int mx = fltk3::event_x();

@@ -31,14 +31,12 @@
 
 
 void fltk3::Box::draw() {
-  FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
   draw_box();
   draw_label();
 }
 
 
 int fltk3::Box::handle(int event) {
-  FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle)
   if (event == fltk3::ENTER || event == fltk3::LEAVE) return 1;
   else return 0;
 }

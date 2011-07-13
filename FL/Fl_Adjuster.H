@@ -33,33 +33,36 @@
 #include "Fl_Valuator.H"
 
 
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Adjuster, Adjuster)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Adjuster, Adjuster)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Adjuster : public Fl_Valuator {
   
 protected:
   
-  FLTK3_WRAPPER_VCALLS_OBJECT(Adjuster, draw(), draw(), Draw)
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Adjuster, handle(int event), handle(event), Handle)
-    
   void value_damage() {
-    ((fltk3::Adjuster*)_p)->value_damage();
+    ((fltk3::Adjuster_I*)_p)->value_damage();
   }
   
 public:
   
+  FLTK3_WIDGET_VCALLS(Adjuster)
+  
   Fl_Adjuster() { /* empty */ }
   
   Fl_Adjuster(int x, int y, int w, int h, const char *label=0) {
-    _p = new fltk3::Adjuster(x, y, w, h, label);
+    _p = new fltk3::Adjuster_I(x, y, w, h, label);
     _p->wrapper(this);
   }
 
   void soft(int s) {
-    ((fltk3::Adjuster*)_p)->soft(s);
+    ((fltk3::Adjuster_I*)_p)->soft(s);
   }
   
   int soft() const {
-    return ((fltk3::Adjuster*)_p)->soft();
+    return ((fltk3::Adjuster_I*)_p)->soft();
   }
 };
 

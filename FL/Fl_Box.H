@@ -32,15 +32,20 @@
 #include <fltk3/Box.h>
 #include "Fl_Widget.H"
 
+
+FLTK3_WRAPPER_INTERFACE_BEGIN(Fl_Box, Box)
+FLTK3_WRAPPER_INTERFACE_WIDGET(Fl_Box, Box)
+FLTK3_WRAPPER_INTERFACE_END()
+
+
 class FL_EXPORT Fl_Box : public Fl_Widget {
 
-protected:
-  
-  FLTK3_WRAPPER_VCALLS_OBJECT(Box, draw(), draw(), Draw)
-
 public:
+
+  FLTK3_WIDGET_VCALLS(Box)
+
   Fl_Box(int x, int y, int w, int h, const char *label=0) {
-    _p = new fltk3::Box(x, y, w, h, label);
+    _p = new fltk3::Box_I(x, y, w, h, label);
     _p->wrapper(this);
   }
   
@@ -49,8 +54,8 @@ public:
     _p->wrapper(this);
   }
   
-  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, Box, handle(int event), handle(event), Handle)
 };
+
 
 #endif
 

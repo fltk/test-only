@@ -181,6 +181,50 @@ virtual rtype proto { \
   }
 
 
+#define FLTK3_WRAPPER_INTERFACE_BEGIN(type1, type3) \
+  class type1; \
+  namespace fltk3 { \
+    class type3##_I : public type3 { \
+      friend class ::type1; \
+    public: \
+      type3##_I(int x, int y, int w, int h, const char *l) \
+      : type3(x, y, w, h, l) { }
+
+#define FLTK3_WRAPPER_INTERFACE_WIDGET(type1, type3) \
+      void show() { \
+        FLTK3_OBJECT_VCALLS_WRAPPER(show(), Show) \
+        type3::show(); \
+      } \
+      void hide() { \
+        FLTK3_OBJECT_VCALLS_WRAPPER(hide(), Hide) \
+        type3::hide(); \
+      } \
+      void resize(int X, int Y, int W, int H) { \
+        FLTK3_OBJECT_VCALLS_WRAPPER(resize(X, Y, W, H), Resize) \
+        type3::resize(X, Y, W, H); \
+      } \
+      void draw() { \
+        FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw) \
+        type3::draw(); \
+      } \
+      int handle(int event) { \
+        FLTK3_OBJECT_VCALLS_WRAPPER_RET(int, handle(event), Handle) \
+        return type3::handle(event); \
+      }
+
+#define FLTK3_WRAPPER_INTERFACE_END() \
+    }; \
+  }
+
+
+#define FLTK3_WIDGET_VCALLS(type3) \
+  FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, show(), hide(), Show) \
+  FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, hide(), show(), Hide) \
+  FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, draw(), draw(), Draw) \
+  FLTK3_WRAPPER_VCALLS_OBJECT(type3##_I, resize(int x, int y, int w, int h), resize(x, y, w, h), Resize) \
+  FLTK3_WRAPPER_VCALLS_OBJECT_RET(int, type3##_I, handle(int event), handle(event), Handle)
+
+
 namespace fltk3 {
   
   class Object;
@@ -198,6 +242,7 @@ namespace fltk3 {
     
     mutable unsigned int pVCalls;
     static const unsigned int pVCallDtor          = 1<<0;
+    
     static const unsigned int pVCallWidgetDraw    = 1<<1;
     static const unsigned int pVCallWidgetHandle  = 1<<2;
     static const unsigned int pVCallWidgetResize  = 1<<3;
@@ -221,6 +266,13 @@ namespace fltk3 {
     static const unsigned int pVCallWidgetBrowserItemSelect   = 1<<21;
     static const unsigned int pVCallWidgetBrowserItemSelected = 1<<22;
     
+    static const unsigned int pVCallImageCopyWH       = 1<<1;
+    static const unsigned int pVCallImageColorAverage = 1<<2;
+    static const unsigned int pVCallImageDesaturate   = 1<<3;
+    static const unsigned int pVCallImageLabelW       = 1<<4;
+    static const unsigned int pVCallImageLabelM       = 1<<5;
+    static const unsigned int pVCallImageDraw         = 1<<6;
+    static const unsigned int pVCallImageUncache      = 1<<7;
   };
 
   
@@ -251,6 +303,20 @@ namespace fltk3 {
     virtual int item_selected(void *item) const { return 0; }
   };
   
+  
+  class ImageWrapper : public Wrapper {
+  public:
+    /*
+    virtual ~Image();
+    virtual fltk3::Image *copy(int W, int H);
+    virtual void color_average(fltk3::Color c, float i);
+    virtual void desaturate();
+    virtual void label(fltk3::Widget*w);
+    virtual void label(fltk3::MenuItem*m);
+    virtual void draw(int X, int Y, int W, int H, int cx=0, int cy=0); // platform dependent
+    virtual void uncache();
+     */
+  };
   
 }; // namespace fltk3
 
