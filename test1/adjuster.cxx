@@ -1,5 +1,5 @@
 //
-// "$Id: adjuster.cxx 7903 2010-11-28 21:06:39Z matt $"
+// "$Id$"
 //
 // Adjuster test program for the Fast Light Tool Kit (FLTK).
 //
@@ -62,5 +62,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: adjuster.cxx 7903 2010-11-28 21:06:39Z matt $".
+// End of "$Id$".
 //

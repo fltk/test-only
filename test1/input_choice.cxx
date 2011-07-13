@@ -1,5 +1,5 @@
 //
-// "$Id: input_choice.cxx 7903 2010-11-28 21:06:39Z matt $"
+// "$Id$"
 //
 // Test program for Fl_Input_Choice
 //
@@ -64,5 +64,5 @@ int main(int argc, char **argv) {
 
 
 //
-// End of "$Id: input_choice.cxx 7903 2010-11-28 21:06:39Z matt $".
+// End of "$Id$".
 //

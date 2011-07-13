@@ -1,5 +1,5 @@
 //
-// "$Id: scroll.cxx 7978 2010-12-08 14:00:35Z AlbrechtS $"
+// "$Id$"
 //
 // Fl_Scroll test program for the Fast Light Tool Kit (FLTK).
 //
@@ -140,5 +140,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: scroll.cxx 7978 2010-12-08 14:00:35Z AlbrechtS $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: ask.cxx 8441 2011-02-18 08:52:48Z AlbrechtS $"
+// "$Id$"
 //
 // Standard dialog test program for the Fast Light Tool Kit (FLTK).
 //
@@ -98,5 +98,5 @@ int main(int argc, char **argv) {
 }
     
 //
-// End of "$Id: ask.cxx 8441 2011-02-18 08:52:48Z AlbrechtS $".
+// End of "$Id$".
 //

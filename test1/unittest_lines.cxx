@@ -1,5 +1,5 @@
 //
-// "$Id: unittest_lines.cxx 7913 2010-11-29 18:18:27Z greg.ercolano $"
+// "$Id$"
 //
 // Unit tests for the Fast Light Tool Kit (FLTK).
 //
@@ -71,5 +71,5 @@ public:
 UnitTest lines("drawing lines", LineTest::create);
 
 //
-// End of "$Id: unittest_lines.cxx 7913 2010-11-29 18:18:27Z greg.ercolano $"
+// End of "$Id$"
 //

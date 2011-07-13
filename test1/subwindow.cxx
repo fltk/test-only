@@ -1,5 +1,5 @@
 //
-// "$Id: subwindow.cxx 8587 2011-04-14 13:04:57Z manolo $"
+// "$Id$"
 //
 // Nested window test program for the Fast Light Tool Kit (FLTK).
 //
@@ -187,5 +187,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: subwindow.cxx 8587 2011-04-14 13:04:57Z manolo $".
+// End of "$Id$".
 //

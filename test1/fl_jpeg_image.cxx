@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg_image.cxx 7913 2010-11-29 18:18:27Z greg.ercolano $"
+// "$Id$"
 //
 // fl_draw_image test program for the Fast Light Tool Kit (FLTK).
 //
@@ -199,5 +199,5 @@ void readtheimage(const char *name) {
 #endif
 
 //
-// End of "$Id: fl_jpeg_image.cxx 7913 2010-11-29 18:18:27Z greg.ercolano $".
+// End of "$Id$".
 //

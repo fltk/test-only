@@ -1,5 +1,5 @@
 //
-// "$Id: threads.h 7913 2010-11-29 18:18:27Z greg.ercolano $"
+// "$Id$"
 //
 // Simple threading API for the Fast Light Tool Kit (FLTK).
 //
@@ -77,5 +77,5 @@ static int fl_create_thread(Fl_Thread& t, void *(*f) (void *), void* p) {
 #endif // !Threads_h
 
 //
-// End of "$Id: threads.h 7913 2010-11-29 18:18:27Z greg.ercolano $".
+// End of "$Id$".
 //

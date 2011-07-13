@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile 8389 2011-02-06 14:08:08Z manolo $"
+# "$Id$"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -490,5 +490,5 @@ cairo_test$(EXEEXT): cairo_test.o
 	$(CXX) $(ARCHFLAGS) $(CAIROFLAGS) $(LDFLAGS) -o $@ cairo_test.o $(LINKFLTK) $(LINKFLTKCAIRO) $(GLDLIBS)
 
 #
-# End of "$Id: Makefile 8389 2011-02-06 14:08:08Z manolo $".
+# End of "$Id$".
 #

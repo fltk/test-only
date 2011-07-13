@@ -1,5 +1,5 @@
 //
-// "$Id: cube.cxx 8033 2010-12-15 12:11:16Z AlbrechtS $"
+// "$Id$"
 //
 // Another forms test program for the Fast Light Tool Kit (FLTK).
 //
@@ -227,5 +227,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: cube.cxx 8033 2010-12-15 12:11:16Z AlbrechtS $".
+// End of "$Id$".
 //

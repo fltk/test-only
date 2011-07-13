@@ -1,5 +1,5 @@
 //
-// "$Id: line_style.cxx 7982 2010-12-08 23:58:32Z AlbrechtS $"
+// "$Id$"
 //
 // Line style demo for the Fast Light Tool Kit (FLTK).
 //
@@ -173,5 +173,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: line_style.cxx 7982 2010-12-08 23:58:32Z AlbrechtS $".
+// End of "$Id$".
 //

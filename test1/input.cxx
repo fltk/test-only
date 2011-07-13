@@ -1,5 +1,5 @@
 //
-// "$Id: input.cxx 8419 2011-02-13 16:13:04Z greg.ercolano $"
+// "$Id$"
 //
 // Input field test program for the Fast Light Tool Kit (FLTK).
 //
@@ -167,5 +167,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: input.cxx 8419 2011-02-13 16:13:04Z greg.ercolano $".
+// End of "$Id$".
 //

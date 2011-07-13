@@ -1,5 +1,5 @@
 //
-// "$Id: fractals.cxx 8033 2010-12-15 12:11:16Z AlbrechtS $"
+// "$Id$"
 //
 // Fractal drawing demo for the Fast Light Tool Kit (FLTK).
 //
@@ -835,5 +835,5 @@ int main(int argc, char** argv)
 #endif
 
 //
-// End of "$Id: fractals.cxx 8033 2010-12-15 12:11:16Z AlbrechtS $".
+// End of "$Id$".
 //

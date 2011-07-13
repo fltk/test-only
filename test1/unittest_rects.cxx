@@ -1,5 +1,5 @@
 //
-// "$Id: unittest_rects.cxx 7913 2010-11-29 18:18:27Z greg.ercolano $"
+// "$Id$"
 //
 // Unit tests for the Fast Light Tool Kit (FLTK).
 //
@@ -62,5 +62,5 @@ public:
 UnitTest rects("rectangles", RectTest::create);
 
 //
-// End of "$Id: unittest_rects.cxx 7913 2010-11-29 18:18:27Z greg.ercolano $"
+// End of "$Id$"
 //

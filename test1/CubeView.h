@@ -1,5 +1,5 @@
 //
-// "$Id: CubeView.h 7913 2010-11-29 18:18:27Z greg.ercolano $"
+// "$Id$"
 //
 // CubeView class definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -120,5 +120,5 @@ private:
 #endif
 
 //
-// End of "$Id: CubeView.h 7913 2010-11-29 18:18:27Z greg.ercolano $".
+// End of "$Id$".
 //
