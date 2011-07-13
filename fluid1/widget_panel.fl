@@ -3,7 +3,7 @@ version 1.0300
 header_name {.h} 
 code_name {.cxx}
 comment {//
-// "$Id: widget_panel.fl 7913 2010-11-29 18:18:27Z greg.ercolano $"
+// "$Id$"
 //
 // Widget panel for the Fast Light Tool Kit (FLTK).
 //
@@ -685,6 +685,6 @@ Use Ctrl-J for newlines.} xywh {95 285 310 20} labelfont 1 labelsize 11 textsize
 
 comment {
 //
-// End of "$Id: widget_panel.fl 7913 2010-11-29 18:18:27Z greg.ercolano $".
+// End of "$Id$".
 //} {in_source in_header
 } 

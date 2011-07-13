@@ -3,7 +3,7 @@ version 1.0300
 header_name {.h} 
 code_name {.cxx}
 comment {//
-// "$Id: about_panel.fl 8306 2011-01-24 17:04:22Z matt $"
+// "$Id$"
 //
 // About dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -72,6 +72,6 @@ data fluid_org_png {
 
 comment {
 //
-// End of "$Id: about_panel.fl 8306 2011-01-24 17:04:22Z matt $".
+// End of "$Id$".
 //} {in_source in_header
 } 
