@@ -1009,6 +1009,14 @@ static void cb(fltk3::Widget *, void *v) {
 }
 
 fltk3::MenuItem New_Menu[] = {
+{"Workspace",0,0,0,fltk3::SUBMENU},
+  {"Application",0,cb,(void*)&Fl_App_Target_type},
+  {"Library",0,cb,(void*)&Fl_App_Target_type, fltk3::MENU_DIVIDER},
+  {"C/C++ File",0,cb,(void*)&Fl_Code_File_type},
+  {"Fluid File",0,cb,(void*)&Fl_Fluid_File_type},
+  {"Other File",0,cb,(void*)&Fl_File_type, fltk3::MENU_DIVIDER},
+  {"Group",0,cb,(void*)&Fl_Folder_type},
+{0},
 {"Code",0,0,0,fltk3::SUBMENU},
   {"Function/Method",0,cb,(void*)&Fl_Function_type},
   {"Code",0,cb,(void*)&Fl_Code_type},

@@ -47,6 +47,7 @@ extern int compile_only;
 extern void redraw_browser();
 extern void goto_source_dir();
 extern void leave_source_dir();
+extern char is_workspace();
 
 ////////////////////////////////////////////////////////////////
 // quick check of any C code for legality, returns an error message
@@ -128,7 +129,12 @@ int Fl_Function_Type::is_public() const {return public_;}
 
 Fl_Type *Fl_Function_Type::make() {
   Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_decl_block()) p = p->parent;
+  while (p && !p->is_decl_block() && !p->is_fluid_file()) 
+    p = p->parent;
+  if (!p && is_workspace()) {
+    fltk3::message("A Function can only be added to a Fluid File.");
+    return 0;
+  }
   Fl_Function_Type *o = new Fl_Function_Type();
   o->name("make_window()");
   o->return_type = 0;
@@ -574,7 +580,12 @@ int Fl_Decl_Type::is_public() const
 
 Fl_Type *Fl_Decl_Type::make() {
   Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_decl_block()) p = p->parent;
+  while (p && !p->is_decl_block() && !p->is_fluid_file()) 
+    p = p->parent;
+  if (!p && is_workspace()) {
+    fltk3::message("A Declaration can only be added to a Fluid File.");
+    return 0;
+  }
   Fl_Decl_Type *o = new Fl_Decl_Type();
   o->public_ = 0;
   o->static_ = 1;
@@ -744,7 +755,12 @@ void Fl_Decl_Type::write_code2() {}
 
 Fl_Type *Fl_Data_Type::make() {
   Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_decl_block()) p = p->parent;
+  while (p && !p->is_decl_block() && !p->is_fluid_file()) 
+    p = p->parent;
+  if (!p && is_workspace()) {
+    fltk3::message("Binary Data can only be added to a Fluid File.");
+    return 0;
+  }
   Fl_Data_Type *o = new Fl_Data_Type();
   o->public_ = 1;
   o->static_ = 1;
@@ -951,7 +967,12 @@ int Fl_DeclBlock_Type::is_public() const {return public_;}
 
 Fl_Type *Fl_DeclBlock_Type::make() {
   Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_decl_block()) p = p->parent;
+  while (p && !p->is_decl_block() && !p->is_fluid_file()) 
+    p = p->parent;
+  if (!p && is_workspace()) {
+    fltk3::message("A Declaration Block can only be added to a Fluid File.");
+    return 0;
+  }
   Fl_DeclBlock_Type *o = new Fl_DeclBlock_Type();
   o->name("#if 1");
   o->public_ = 0;
@@ -1040,7 +1061,12 @@ void Fl_DeclBlock_Type::write_code2() {
 
 Fl_Type *Fl_Comment_Type::make() {
   Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_code_block()) p = p->parent;
+  while (p && !p->is_code_block() && !p->is_fluid_file()) 
+    p = p->parent;
+  if (!p && is_workspace()) {
+    fltk3::message("A Comment can only be added to a Fluid File.");
+    return 0;
+  }
   Fl_Comment_Type *o = new Fl_Comment_Type();
   o->in_c_ = 1;
   o->in_h_ = 1;
@@ -1319,7 +1345,12 @@ void Fl_Class_Type::prefix(const char*p) {
 
 Fl_Type *Fl_Class_Type::make() {
   Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_decl_block()) p = p->parent;
+  while (p && !p->is_decl_block() && !p->is_fluid_file()) 
+    p = p->parent;
+  if (!p && is_workspace()) {
+    fltk3::message("A Class Declaration can only be added to a Fluid File.");
+    return 0;
+  }
   Fl_Class_Type *o = new Fl_Class_Type();
   o->name("UserInterface");
   o->class_prefix=0;

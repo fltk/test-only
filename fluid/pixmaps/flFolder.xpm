@@ -1,0 +1,29 @@
+/* XPM */
+static const char *flFolder_xpm[] = {
+/* width height ncolors chars_per_pixel */
+"16 16 6 1",
+/* colors */
+"a c #eeee22",
+"b c #aaaa00",
+"c c none",
+"d c #c0c0c0",
+"e c #8080ff",
+"f c #000000",
+/* pixels */
+"cccccccccccccccc",
+"ccfffffccccccccc",
+"cfaaaaafcccccccc",
+"fbbbbbbbfffffffc",
+"faaaaaaaaaaaaafc",
+"faaaaaaaaaaaaafc",
+"faaaaaaaaaaaaafc",
+"faaaaaaaaaaaaafc",
+"faaaaaaaaaaaaafc",
+"faaaaaaaaaaaaafc",
+"faaaaaaaaaaaaafc",
+"faaaaaaaaaaaaafc",
+"faaaaaaaaaaaaafc",
+"fffffffffffffffc",
+"cccccccccccccccc",
+"cccccccccccccccc"
+};

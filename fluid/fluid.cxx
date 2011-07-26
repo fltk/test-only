@@ -120,7 +120,7 @@ fltk3::MenuItem *sourceview_item = 0L;
 
 ////////////////////////////////////////////////////////////////
 
-static const char *filename;
+const char *filename;
 void set_filename(const char *c);
 void set_modflag(int mf);
 int modflag;
@@ -149,6 +149,12 @@ void leave_source_dir() {
   if (chdir(pwd)<0) {fprintf(stderr, "Can't chdir to %s : %s\n",
 			     pwd, strerror(errno));}
   in_source_dir = 0;
+}
+
+char is_workspace() {
+  if (Fl_Type::first && (Fl_Type::first->is_target() || Fl_Type::first->is_category() ))
+    return 1;
+  return 0;
 }
 
 char position_window(fltk3::Window *w, const char *prefsName, int Visible, int X, int Y, int W=0, int H=0 ) {
@@ -199,7 +205,10 @@ void save_cb(fltk3::Widget *, void *v) {
   const char *c = filename;
   if (v || !c || !*c) {
     fltk3::file_chooser_ok_label("Save");
-    c=fltk3::file_chooser("Save To:", "FLUID Files (*.f[ld])", c);
+    if (is_workspace())      
+      c=fltk3::file_chooser("Save Workspace To:", "FLUID Workspace (*.flw)", c);
+    else
+      c=fltk3::file_chooser("Save UI Design To:", "FLUID Design (*.f[ld])", c);
     fltk3::file_chooser_ok_label(NULL);
     if (!c) return;
 
@@ -471,7 +480,7 @@ void open_cb(fltk3::Widget *, void *v) {
   const char *c;
   const char *oldfilename;
   fltk3::file_chooser_ok_label("Open");
-  c = fltk3::file_chooser("Open:", "FLUID Files (*.f[ld])", filename);
+  c = fltk3::file_chooser("Open:", "FLUID Designs (*.f[ld])\tFLUID Workspaces (*.flw)", filename);
   fltk3::file_chooser_ok_label(NULL);
   if (!c) return;
   oldfilename = filename;
@@ -1635,6 +1644,9 @@ extern fltk3::MenuItem New_Menu[];
 
 void toggle_widgetbin_cb(fltk3::Widget *, void *);
 void toggle_sourceview_cb(fltk3::DoubleWindow *, void *);
+void convert_1_to_3_cb(fltk3::Widget *, void *);
+void convert_2_to_3_cb(fltk3::Widget *, void *);
+void write_makefiles_cb(fltk3::Widget *, void *);
 
 fltk3::MenuItem Main_Menu[] = {
 {"&File",0,0,0,fltk3::SUBMENU},
@@ -1719,7 +1731,17 @@ fltk3::MenuItem Main_Menu[] = {
   {0},
 {"&Shell",0,0,0,fltk3::SUBMENU},
   {"Execute &Command...",fltk3::ALT+'x',(fltk3::Callback *)show_shell_window},
-  {"Execute &Again...",fltk3::ALT+'g',(fltk3::Callback *)do_shell_command},
+  {"Execute &Again...",fltk3::ALT+'g',(fltk3::Callback *)do_shell_command,0,fltk3::MENU_DIVIDER},
+  {"Workspace",0,0,0,fltk3::SUBMENU},
+    {"Write Makefile",fltk3::COMMAND+'m',write_makefiles_cb},
+    {"Settings...",0,(fltk3::Callback *)0L},
+    {0},
+  {"Build Application",fltk3::COMMAND+'b',(fltk3::Callback *)0L},
+  {"Run Application",fltk3::COMMAND+'r',(fltk3::Callback *)0L},
+  {"Convert", 0, 0, 0, fltk3::SUBMENU},
+    {"FLTK 1 to 3", 0, convert_1_to_3_cb},
+    {"FLTK 2 to 3", 0, convert_2_to_3_cb},
+    {0},
   {0},
 {"&Help",0,0,0,fltk3::SUBMENU},
   {"&Rapid development with FLUID...",0,help_cb},

@@ -155,12 +155,151 @@ public:
   virtual int is_comment() const;
   virtual int is_class() const;
   virtual int is_public() const;
+  virtual int is_target() const { return 0; }
+  virtual int is_file() const { return 0; }
+  virtual int is_fluid_file() const { return 0; }
+  virtual int is_folder() const { return 0; }
+  virtual int is_category() const { return 0; }
+  virtual int is_workspace_type() const { return 0; }
 
   virtual int pixmapID() { return 0; }
 
   const char* class_name(const int need_nest) const;
   const class Fl_Class_Type* is_in_class() const;
 };
+
+class Fl_Workspace_Type : public Fl_Type {  
+  int pNUUID, pnUUID;
+  char **pUUIDName;
+  char **pUUID;
+  void set_UUID(const char *name, const char *uuid);
+  void set_UUID(int i, const char *uuid);
+  int find_UUID(const char *name);
+  static const char *verify_UUID(const char *uuid);
+public:
+  Fl_Workspace_Type();
+  ~Fl_Workspace_Type();
+  const char *get_UUID(const char *name);
+  const char *get_UUID_Xcode(const char *name);
+  void write_properties();
+  char read_property(const char *);
+  virtual int is_workspace_type() const { return 1; }
+};
+
+class Fl_Target_Type : public Fl_Workspace_Type {
+public:
+  Fl_Target_Type() :
+  Fl_Workspace_Type() {
+  }
+  ~Fl_Target_Type() {
+  }
+  const char *type_name() { return "target"; }
+  Fl_Type *make();
+  virtual int is_parent() const { return 1; }
+  virtual int is_target() const { return 1; }
+};
+extern Fl_Target_Type Fl_Target_type;
+
+class Fl_App_Target_Type : public Fl_Target_Type {
+public:
+  Fl_App_Target_Type() :
+  Fl_Target_Type() {
+  }
+  ~Fl_App_Target_Type() {
+  }
+  const char *type_name() { return "app_target"; }
+  Fl_Type *make();
+  virtual int pixmapID() { return 52; }
+  virtual void open();
+};
+extern Fl_App_Target_Type Fl_App_Target_type;
+
+class Fl_Lib_Target_Type : public Fl_Target_Type {
+public:
+  Fl_Lib_Target_Type() :
+  Fl_Target_Type() {
+  }
+  ~Fl_Lib_Target_Type() {
+  }
+  const char *type_name() { return "lib_target"; }
+  Fl_Type *make();
+  virtual int pixmapID() { return 52; } // FIXME: new icon
+  virtual void open();
+};
+extern Fl_Lib_Target_Type Fl_Lib_Target_type;
+
+class Fl_File_Type : public Fl_Workspace_Type {
+  char *pFilename;
+public:
+  Fl_File_Type() :
+  Fl_Workspace_Type(),
+  pFilename(0) {
+  }
+  ~Fl_File_Type() {
+    if (pFilename) free(pFilename);
+  }
+  const char *type_name() { return "file"; }
+  Fl_Type *make();
+  virtual int is_file() const { return 1; }
+  virtual int pixmapID() { return 53; } // FIXME: draw icon
+  void filename(const char *new_name);
+  const char *filename() { return pFilename; }
+  virtual void open();
+  virtual void write_properties();
+  virtual char read_property(const char *);
+};
+extern Fl_File_Type Fl_File_type;
+
+class Fl_Fluid_File_Type : public Fl_File_Type {
+public:
+  Fl_Fluid_File_Type() :
+  Fl_File_Type() {
+  }
+  ~Fl_Fluid_File_Type() {
+  }
+  const char *type_name() { return "fluid_file"; }
+  Fl_Type *make();
+  virtual int is_parent() const { return 1; } 
+  virtual int is_fluid_file() const { return 1; }
+  virtual int pixmapID() { return 53; }
+  virtual void open();
+};
+extern Fl_Fluid_File_Type Fl_Fluid_File_type;
+
+class Fl_Code_File_Type : public Fl_File_Type {
+public:
+  Fl_Code_File_Type() :
+  Fl_File_Type() {
+  }
+  ~Fl_Code_File_Type() {
+  }
+  const char *type_name() { return "code_file"; }
+  Fl_Type *make();
+  virtual int pixmapID() { return 55; }
+  virtual void open();
+};
+extern Fl_Code_File_Type Fl_Code_File_type;
+
+class Fl_Folder_Type : public Fl_Workspace_Type {
+public:
+  Fl_Folder_Type() :
+  Fl_Workspace_Type() {
+  }
+  ~Fl_Folder_Type() {
+  }
+  const char *type_name() { return "folder"; }
+  Fl_Type *make();
+  virtual int is_parent() const { return 1; }
+  virtual int is_folder() const { 
+    return parent && (parent->is_folder() || parent->is_target()); 
+  }
+  virtual int is_category() const { 
+    return parent==0 || parent->is_category(); 
+  }
+  virtual int pixmapID() { return 54; }
+  virtual void open();
+};
+extern Fl_Folder_Type Fl_Folder_type;
 
 class Fl_Function_Type : public Fl_Type {
   const char* return_type;

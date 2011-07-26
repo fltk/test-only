@@ -239,7 +239,7 @@ public:
     pthread_mutex_init(&_datalock, NULL);
     FD_ZERO(&_fdsets[0]); FD_ZERO(&_fdsets[1]); FD_ZERO(&_fdsets[2]);
     _cancelpipe[0] = _cancelpipe[1] = 0;
-    _maxfd = -1;
+    _maxfd = 0;
   }
   
   ~DataReady()
@@ -297,6 +297,7 @@ void DataReady::AddFD(int n, int events, void (*cb)(int, void*), void *v)
   /*LOCK*/  if (events & POLLIN)  FD_SET(n, &_fdsets[0]);
   /*LOCK*/  if (events & POLLOUT) FD_SET(n, &_fdsets[1]);
   /*LOCK*/  if (events & POLLERR) FD_SET(n, &_fdsets[2]);
+  /*LOCK*/  if (n > _maxfd) _maxfd = n;
   DataUnlock();
 }
 
@@ -304,14 +305,14 @@ void DataReady::AddFD(int n, int events, void (*cb)(int, void*), void *v)
 void DataReady::RemoveFD(int n, int events)
 {
   int i,j;
-  _maxfd = -1; // recalculate maxfd on the fly
+  _maxfd = 0; // recalculate maxfd on the fly
   for (i=j=0; i<nfds; i++) {
     if (fds[i].fd == n) {
       int e = fds[i].events & ~events;
       if (!e) continue; // if no events left, delete this fd
       fds[i].events = e;
     }
-     if (fds[i].fd > _maxfd) _maxfd = fds[i].fd;
+    if (fds[i].fd > _maxfd) _maxfd = fds[i].fd;
     // move it down in the array if necessary:
     if (j<i) {
       fds[j] = fds[i];
@@ -323,7 +324,6 @@ void DataReady::RemoveFD(int n, int events)
   /*LOCK*/  if (events & POLLIN)  FD_CLR(n, &_fdsets[0]);
   /*LOCK*/  if (events & POLLOUT) FD_CLR(n, &_fdsets[1]);
   /*LOCK*/  if (events & POLLERR) FD_CLR(n, &_fdsets[2]);
-  /*LOCK*/  if (n == _maxfd) _maxfd--;
   DataUnlock();
 }
 
