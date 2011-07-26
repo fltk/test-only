@@ -103,6 +103,11 @@ folder Applications {open
         uuid_Xcode4_PBXFileRef {425C2E3E-9BA2-4FF8-8D5E-D1F634A7B379}
         filename_and_path {fluid/widget_panel.cxx}
       }
+      code_file {workspace_panel.cxx} {
+        uuid_Xcode4_PBXBuildFile {608B6D5F-C180-4935-8136-7268F7C1C9BE}
+        uuid_Xcode4_PBXFileRef {43642281-C39A-4E19-B046-6CFE718FDFEE}
+        filename_and_path {fluid/workspace_panel.cxx}
+      }
     }
     folder Headers {open
     } {
@@ -154,9 +159,13 @@ folder Applications {open
         uuid_Xcode4_PBXFileRef {88491B5D-61FA-4D41-954E-528D7BD9DF52}
         filename_and_path {fluid/undo.h}
       }
-      code_file {widget_panel.h} {selected
+      code_file {widget_panel.h} {
         uuid_Xcode4_PBXFileRef {E66E13F7-CB1B-4DE1-801E-C7601315D72B}
         filename_and_path {fluid/widget_panel.h}
+      }
+      code_file {workspace_panel.h} {selected
+        uuid_Xcode4_PBXFileRef {EAF89B48-F485-4F7C-A942-5E212E45BAB1}
+        filename_and_path {fluid/workspace_panel.h}
       }
     }
   }

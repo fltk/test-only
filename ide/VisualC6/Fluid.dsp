@@ -165,5 +165,9 @@ SOURCE=..\..\fluid\undo.cxx
 
 SOURCE=..\..\fluid\widget_panel.cxx
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\workspace_panel.cxx
+# End Source File
 # End Target
 # End Project
