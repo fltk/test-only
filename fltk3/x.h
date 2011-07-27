@@ -185,7 +185,10 @@ public:
 extern FLTK3_EXPORT char fl_override_redirect; // hack into Fl_X::make_xid()
 extern FLTK3_EXPORT int fl_background_pixel;  // hack into Fl_X::make_xid()
 
-inline Window fl_xid(const fltk3::Window* w) { return Fl_X::i(w)->xid; }
+inline Window fl_xid(const fltk3::Window* w) { 
+  Fl_X *temp = Fl_X::i(w); 
+  return temp ? temp->xid : 0;
+}
 
 #else
 

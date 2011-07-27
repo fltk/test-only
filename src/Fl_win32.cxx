@@ -742,6 +742,7 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_LWIN,	fltk3::MetaLKey},
   {VK_RWIN,	fltk3::MetaRKey},
   {VK_APPS,	fltk3::MenuKey},
+  {VK_SLEEP,    fltk3::SleepKey},
   {VK_MULTIPLY,	fltk3::KPKey+'*'},
   {VK_ADD,	fltk3::KPKey+'+'},
   {VK_SUBTRACT,	fltk3::KPKey+'-'},
@@ -749,6 +750,23 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_DIVIDE,	fltk3::KPKey+'/'},
   {VK_NUMLOCK,	fltk3::NumLockKey},
   {VK_SCROLL,	fltk3::ScrollLockKey},
+# if defined(_WIN32_WINNT) && (_WIN32_WINNT >= 0x0500)
+  {VK_BROWSER_BACK, fltk3::BackKey},
+  {VK_BROWSER_FORWARD, fltk3::ForwardKey},
+  {VK_BROWSER_REFRESH, fltk3::RefreshKey},
+  {VK_BROWSER_STOP, fltk3::StopKey},
+  {VK_BROWSER_SEARCH, fltk3::SearchKey},
+  {VK_BROWSER_FAVORITES, fltk3::FavoritesKey},
+  {VK_BROWSER_HOME, fltk3::HomePageKey},
+  {VK_VOLUME_MUTE, fltk3::VolumeMuteKey},
+  {VK_VOLUME_DOWN, fltk3::VolumeDownKey},
+  {VK_VOLUME_UP, fltk3::VolumeUpKey},
+  {VK_MEDIA_NEXT_TRACK, fltk3::MediaNextKey},
+  {VK_MEDIA_PREV_TRACK, fltk3::MediaPrevKey},
+  {VK_MEDIA_STOP, fltk3::MediaStopKey},
+  {VK_MEDIA_PLAY_PAUSE, fltk3::MediaPlayKey},
+  {VK_LAUNCH_MAIL, fltk3::MailKey},
+#endif
   {0xba,	';'},
   {0xbb,	'='},
   {0xbc,	','},
@@ -1948,7 +1966,7 @@ Window fl_xid_(const fltk3::Window *w) {
 
 int fltk3::Window::decorated_w()
 {
-  if (parent() || !shown()) return w();
+  if (!shown() || parent() || !border() || !visible()) return w();
   int X, Y, bt, bx, by;
   Fl_X::fake_X_wm(this, X, Y, bt, bx, by);
   return w() + 2 * bx;
@@ -1956,7 +1974,7 @@ int fltk3::Window::decorated_w()
 
 int fltk3::Window::decorated_h()
 {
-  if (this->parent() || !shown()) return h();
+  if (!shown() || parent() || !border() || !visible()) return h();
   int X, Y, bt, bx, by;
   Fl_X::fake_X_wm(this, X, Y, bt, bx, by);
   return h() + bt + 2 * by;
@@ -1964,7 +1982,7 @@ int fltk3::Window::decorated_h()
 
 void fltk3::PagedDevice::print_window(fltk3::Window *win, int x_offset, int y_offset)
 {
-  if (win->parent() || !win->border()) {
+  if (!win->shown() || win->parent() || !win->border() || !win->visible()) {
     this->print_widget(win, x_offset, y_offset);
     return;
   }

@@ -761,13 +761,13 @@ namespace fltk3 {
    fl global screen functions declared in <fltk3/run.h>
    @{ */
   // screen size:
-  /** Returns the origin of the current screen, where 0 indicates the left side of the screen. */
+  /** Returns the origin of the current screen work area, where 0 indicates the left side of the screen. */
   int x(); // platform dependent
-  /** Returns the origin of the current screen, where 0 indicates the top edge of the screen. */
+  /** Returns the origin of the current screen work area, where 0 indicates the top edge of the screen. */
   int y(); // platform dependent
-  /** Returns the width of the screen in pixels. */
+  /** Returns the width of the screen work area in pixels. */
   int w(); // platform dependent
-  /** Returns the height of the screen in pixels. */
+  /** Returns the height of the screen work area in pixels. */
   int h(); // platform dependent
   
   // multi-head support:

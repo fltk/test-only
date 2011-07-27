@@ -46,7 +46,7 @@ namespace fltk3 {
    This class has no public constructor: don't instantiate it; use fltk3::Printer 
    or fltk3::PostScriptFileDevice instead.
    */
-  class PagedDevice : public fltk3::SurfaceDevice {
+  class FLTK3_EXPORT PagedDevice : public fltk3::SurfaceDevice {
   public:
     /**
      \brief Possible page formats.

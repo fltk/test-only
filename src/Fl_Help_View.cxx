@@ -2941,8 +2941,6 @@ void fltk3::HelpView::end_selection(int clipboard)
   free(txt);
 }
 
-#define ctrl(x) ((x)&0x1f)
-
 /** Handles events in the widget. */
 int				// O - 1 if we handled it, 0 otherwise
 fltk3::HelpView::handle(int event)	// I - Event to handle
@@ -3016,11 +3014,12 @@ fltk3::HelpView::handle(int event)	// I - Event to handle
       }
       return 1;
     case fltk3::SHORTCUT: {
-      char ascii = fltk3::event_text()[0];
-      switch (ascii) {
-        case ctrl('A'): select_all(); redraw(); return 1;
-        case ctrl('C'):
-        case ctrl('X'): end_selection(1); return 1;
+      if (fltk3::event_state() == fltk3::COMMAND) {
+        switch ( fltk3::event_key() ) {
+          case 'a': select_all(); redraw(); return 1;
+          case 'c':
+          case 'x': end_selection(1); return 1;
+        }
       }
       break; }
   }

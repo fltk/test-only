@@ -63,7 +63,7 @@ namespace fltk3 {
    <br> FLTK standard fonts are output using PostScript standard fonts: Helvetica, Courier, 
    Times (and their bold, oblique, italic variants).
    */
-  class PostScriptGraphicsDriver : public fltk3::GraphicsDriver {
+  class FLTK3_EXPORT PostScriptGraphicsDriver : public fltk3::GraphicsDriver {
   public: 
     static const char *class_id;
     const char *class_name() {return class_id;};
@@ -215,7 +215,7 @@ namespace fltk3 {
   /**
    \brief To send graphical output to a PostScript file.
    */
-  class PostScriptFileDevice : public fltk3::PagedDevice {
+  class FLTK3_EXPORT PostScriptFileDevice : public fltk3::PagedDevice {
 #ifdef __APPLE__
     Fl_CGContextRef gc;
 #endif

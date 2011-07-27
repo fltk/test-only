@@ -30,7 +30,7 @@
 #include <fltk3/fl_utf8.h>	// currently only Windows and Linux
 #endif
 
-#define SCROLLBAR_SIZE	16
+#define SCROLLBAR_SIZE	(fltk3::scrollbar_size())
 
 // Scroll display so 'row' is at top
 void fltk3::Table::row_position(int row) {
@@ -1119,6 +1119,13 @@ void fltk3::Table::set_selection(int row_top, int col_left, int row_bot, int col
 //
 void fltk3::Table::draw() {   
   FLTK3_OBJECT_VCALLS_WRAPPER(draw(), Draw)
+  // Check if scrollbar size changed
+  if ( ( vscrollbar && (SCROLLBAR_SIZE != vscrollbar->w()) ) || 
+       ( hscrollbar && (SCROLLBAR_SIZE != hscrollbar->h()) ) ) {
+    // handle size change, min/max, table dim's, etc
+  table_resized();
+  }
+  
   draw_cell(CONTEXT_STARTPAGE, 0, 0,	 	// let user's drawing routine
             tix, tiy, tiw, tih);		// prep new page
   

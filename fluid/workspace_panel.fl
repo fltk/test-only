@@ -29,6 +29,74 @@ comment {//
 } {in_source in_header
 } 
 
+Function {show_workspace_panel()} {open
+} {
+  codeblock {if (!workspace_panel)} {open
+  } {
+    {fltk3::Window} workspace_panel {open
+      xywh {893 184 382 325} type Double visible
+    } {
+      {fltk3::Button} {} {
+        label OK
+        xywh {260 285 95 25} labelsize 12
+      }
+      {fltk3::Input} {} {
+        label {Name:}
+        tooltip {name of the target - this will be used in the IDEs and as a general reference.} xywh {85 15 213 25} labelsize 12 textsize 12
+      }
+      {fltk3::Box} {} {
+        label Environments
+        xywh {10 49 362 2} box THIN_DOWN_FRAME labelsize 12 align 6
+      }
+      {fltk3::CheckButton} {} {
+        label {Universal Command Line}
+        xywh {85 83 215 20} down_box DOWN_BOX labelsize 12
+      }
+      {fltk3::CheckButton} {} {
+        label {MS Windows (tm)}
+        xywh {85 143 215 20} down_box DOWN_BOX labelsize 12
+      }
+      {fltk3::CheckButton} {} {
+        label {VisualC 6 }
+        xywh {100 163 215 20} down_box DOWN_BOX labelsize 12
+      }
+      {fltk3::CheckButton} {} {
+        label {VisualC 2008}
+        xywh {100 183 215 20} down_box DOWN_BOX labelsize 12
+      }
+      {fltk3::CheckButton} {} {
+        label {VisualC 2010}
+        xywh {100 203 215 20} down_box DOWN_BOX labelsize 12
+      }
+      {fltk3::CheckButton} {} {
+        label {Apple OS X (tm)}
+        xywh {85 223 215 20} down_box DOWN_BOX labelsize 12
+      }
+      {fltk3::CheckButton} {} {
+        label {Xcode 3} selected
+        xywh {100 243 215 20} down_box DOWN_BOX labelsize 12 deactivate
+      }
+      {fltk3::CheckButton} {} {
+        label {Xcode 4}
+        xywh {100 263 215 20} down_box DOWN_BOX labelsize 12
+      }
+      {fltk3::CheckButton} {} {
+        label {Makefile (make, gmake)}
+        xywh {101 103 215 20} down_box DOWN_BOX labelsize 12
+      }
+      {fltk3::CheckButton} {} {
+        label {CMake File (cmake)} selected
+        xywh {101 123 215 20} down_box DOWN_BOX labelsize 12 deactivate
+      }
+      {fltk3::CheckButton} {} {
+        label {all supported Environments}
+        xywh {70 64 215 20} down_box DOWN_BOX labelsize 12
+      }
+    }
+  }
+  code {workspace_panel->show();} {}
+} 
+
 Function {make_app_target_panel()} {open
 } {
   {fltk3::Window} {} {
@@ -36,7 +104,7 @@ Function {make_app_target_panel()} {open
     xywh {464 218 307 281} type Double visible
   } {
     {fltk3::Input} {} {
-      label {Name:} selected
+      label {Name:}
       tooltip {name of the target - this will be used in the IDEs and as a general reference.} xywh {70 20 213 25} labelsize 12 textsize 12
     }
     {fltk3::Input} {} {

@@ -50,13 +50,13 @@ namespace fltk3 {
    \code
    class My_Plugin : public fltk3::Plugin {
    public:
-   My_Plugin() : fltk3::Plugin("effects", "blur") { }
-   void do_something(...);
+     My_Plugin() : fltk3::Plugin("effects", "blur") { }
+     void do_something(...);
    };
    My_Plugin blur_plugin();
    \endcode
    
-   Plugins can be put into modules and either linked befor distribution, or loaded
+   Plugins can be put into modules and either linked before distribution, or loaded
    from dynamically linkable files. An fltk3::PluginManager is used to list and 
    access all currently loaded plugins.
    \code

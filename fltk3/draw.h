@@ -135,18 +135,18 @@ namespace fltk3 {
   inline int clip_box(int x , int y, int w, int h, int& X, int& Y, int& W, int& H) 
   {return fltk3::graphics_driver->clip_box(x,y,w,h,X,Y,W,H); }
   /** Undoes any clobbering of clip done by your program */
-  inline void restore_clip() { fltk3::graphics_driver->restore_clip(); };
+  inline void restore_clip() { fltk3::graphics_driver->restore_clip(); }
   /**
    Replaces the top of the clipping stack with a clipping region of any shape.
    
    fltk3::Region is an operating system specific type.
    \param[in] r clipping region
    */
-  inline void clip_region(fltk3::Region r) { fltk3::graphics_driver->clip_region(r); };
+  inline void clip_region(fltk3::Region r) { fltk3::graphics_driver->clip_region(r); }
   /**
    Returns the current clipping region.
    */
-  inline fltk3::Region clip_region() { return fltk3::graphics_driver->clip_region(); };
+  inline fltk3::Region clip_region() { return fltk3::graphics_driver->clip_region(); }
   
   
   // points:
@@ -333,31 +333,31 @@ namespace fltk3 {
    Saves the current transformation matrix on the stack. 
    The maximum depth of the stack is 32.
    */
-  inline void push_matrix() { fltk3::graphics_driver->push_matrix(); };
+  inline void push_matrix() { fltk3::graphics_driver->push_matrix(); }
   /**
    Restores the current transformation matrix from the stack.
    */
-  inline void pop_matrix() { fltk3::graphics_driver->pop_matrix(); };
+  inline void pop_matrix() { fltk3::graphics_driver->pop_matrix(); }
   /**
    Concatenates scaling transformation onto the current one.
    \param[in] x,y scale factors in x-direction and y-direction
    */
-  inline void scale(double x, double y) { fltk3::graphics_driver->scale(x, y); };
+  inline void scale(double x, double y) { fltk3::graphics_driver->scale(x, y); }
   /**
    Concatenates scaling transformation onto the current one.
    \param[in] x scale factor in both x-direction and y-direction
    */
-  inline void scale(double x) { fltk3::graphics_driver->scale(x, x); };
+  inline void scale(double x) { fltk3::graphics_driver->scale(x, x); }
   /**
    Concatenates translation transformation onto the current one.
    \param[in] x,y translation factor in x-direction and y-direction
    */
-  inline void translate(double x, double y) { fltk3::graphics_driver->translate(x, y); };
+  inline void translate(double x, double y) { fltk3::graphics_driver->translate(x, y); }
   /**
    Concatenates rotation transformation onto the current one.
    \param[in] d - rotation angle, counter-clockwise in degrees (not radians)
    */
-  inline void rotate(double d) { fltk3::graphics_driver->rotate(d); };
+  inline void rotate(double d) { fltk3::graphics_driver->rotate(d); }
   /**
    Concatenates another transformation onto the current one.
    
@@ -365,7 +365,7 @@ namespace fltk3 {
    <tt> X' = aX + cY + x </tt> and <tt> Y' = bX +dY + y </tt>
    */
   inline void mult_matrix(double a, double b, double c, double d, double x,double y) 
-  { fltk3::graphics_driver->mult_matrix(a, b, c, d, x, y); };
+  { fltk3::graphics_driver->mult_matrix(a, b, c, d, x, y); }
   /**
    Starts drawing a list of points. Points are added to the list with fltk3::vertex()
    */
@@ -463,22 +463,22 @@ namespace fltk3 {
    Transforms coordinate using the current transformation matrix.
    \param[in] x,y coordinate
    */
-  inline double transform_x(double x, double y) {return fltk3::graphics_driver->transform_x(x, y); };
+  inline double transform_x(double x, double y) {return fltk3::graphics_driver->transform_x(x, y); }
   /**
    Transforms coordinate using the current transformation matrix.
    \param[in] x,y coordinate
    */
-  inline double transform_y(double x, double y) {return fltk3::graphics_driver->transform_y(x, y); };
+  inline double transform_y(double x, double y) {return fltk3::graphics_driver->transform_y(x, y); }
   /**
    Transforms distance using current transformation matrix.
    \param[in] x,y coordinate
    */
-  inline double transform_dx(double x, double y) {return fltk3::graphics_driver->transform_dx(x, y); };
+  inline double transform_dx(double x, double y) {return fltk3::graphics_driver->transform_dx(x, y); }
   /**
    Transforms distance using current transformation matrix.
    \param[in] x,y coordinate
    */
-  inline double transform_dy(double x, double y) {return fltk3::graphics_driver->transform_dy(x, y); };
+  inline double transform_dy(double x, double y) {return fltk3::graphics_driver->transform_dy(x, y); }
   /**
    Adds coordinate pair to the vertex list without further transformations.
    \param[in] xf,yf transformed coordinate

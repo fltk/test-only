@@ -309,8 +309,6 @@
   /** \fn void * fltk3::FileChooser::user_data() const
     Gets the file chooser user data d */
 
-  /** \fn fltk3::FileBrowser* fltk3::FileChooser::browser()
-   returns a pointer to the underlying fltk3::FileBrowser object */
 // *** END OF OUT OF SOURCE DOC ***
 
 // Contents:
@@ -347,6 +345,7 @@
 #include <fltk3/ask.h>
 #include <fltk3/x.h>
 #include <fltk3/SharedImage.h>
+#include <fltk3/draw.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -1151,7 +1150,7 @@ fltk3::FileChooser::rescan()
   // Build the file list...
   fileList->load(directory_, sort);
 #ifndef WIN32	
-  if (!show_hidden->value()) remove_hidden_files();
+  if (!showHiddenButton->value()) remove_hidden_files();
 #endif
   // Update the preview box...
   update_preview();
@@ -1178,7 +1177,7 @@ void fltk3::FileChooser::rescan_keep_filename()
   // Build the file list...
   fileList->load(directory_, sort);
 #ifndef WIN32	
-  if (!show_hidden->value()) remove_hidden_files();
+  if (!showHiddenButton->value()) remove_hidden_files();
 #endif
   // Update the preview box...
   update_preview();
@@ -1576,6 +1575,41 @@ fltk3::FileChooser::value(const char *filename)
       break;
     }
 }
+  
+void fltk3::FileChooser::show()
+{
+  window->hotspot(fileList);
+  window->show();
+  fltk3::flush();
+  fltk3::cursor(fltk3::CURSOR_WAIT);
+  rescan_keep_filename();
+  fltk3::cursor(fltk3::CURSOR_DEFAULT);
+  fileName->take_focus();
+#ifdef WIN32
+  showHiddenButton->hide();
+#endif
+}
+  
+void fltk3::FileChooser::showHidden(int value)
+{
+  if (value) {
+    fileList->load(directory());
+  } else {
+    remove_hidden_files();
+    fileList->redraw();
+  }
+}
+
+void fltk3::FileChooser::remove_hidden_files()
+{
+  int count = fileList->size();
+  for(int num = count; num >= 1; num--) {
+    const char *p = fileList->text(num);
+    if (*p == '.' && strcmp(p, "../") != 0) fileList->remove(num);
+  }
+  fileList->topline(1);
+}
+  
 
 
 //

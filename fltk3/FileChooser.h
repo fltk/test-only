@@ -3,7 +3,7 @@
 //
 // fltk3::FileChooser dialog for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -97,6 +97,11 @@ namespace fltk3 {
   private:
     void cb_previewButton_i(fltk3::CheckButton*, void*);
     static void cb_previewButton(fltk3::CheckButton*, void*);
+  public:
+    fltk3::CheckButton *showHiddenButton;
+  private:
+    void cb_showHiddenButton_i(fltk3::CheckButton*, void*);
+    static void cb_showHiddenButton(fltk3::CheckButton*, void*);
     fltk3::FileInput *fileName;
     void cb_fileName_i(fltk3::FileInput*, void*);
     static void cb_fileName(fltk3::FileInput*, void*);
@@ -125,11 +130,6 @@ namespace fltk3 {
     fltk3::ReturnButton *favOkButton;
     void cb_favOkButton_i(fltk3::ReturnButton*, void*);
     static void cb_favOkButton(fltk3::ReturnButton*, void*);
-#ifndef WIN32
-    fltk3::CheckButton *show_hidden;
-    static void show_hidden_cb(fltk3::CheckButton*, void*);
-    void remove_hidden_files();
-#endif
   public:
     ~FileChooser();
     void callback(void (*cb)(fltk3::FileChooser *, void *), void *d = 0);
@@ -151,6 +151,10 @@ namespace fltk3 {
     const char * ok_label();
     void preview(int e); 
     int preview() const { return previewButton->value(); }; 
+  private:
+    void showHidden(int e); 
+    void remove_hidden_files(); 
+  public:
     void rescan(); 
     void rescan_keep_filename(); 
     void show();
@@ -233,7 +237,6 @@ namespace fltk3 {
     fltk3::Widget* ext_group; 
   public:
     fltk3::Widget* add_extra(fltk3::Widget* gr);
-    fltk3::FileBrowser *browser(void) {return fileList; };
   };
   
   FLTK3_EXPORT char *dir_chooser(const char *message,const char *fname,int relative=0);

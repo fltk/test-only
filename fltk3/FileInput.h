@@ -48,11 +48,13 @@ namespace fltk3 {
    You may want to handle fltk3::WHEN_CHANGED events for tracking text changes
    and also fltk3::WHEN_RELEASE for button release when changing to parent dir.
    fltk3::WHEN_RELEASE callback won't be called if the directory clicked 
-   is the same that the current one.
+   is the same as the current one.
+   
    <P align=CENTER> \image html fltk3::FileInput.png </P> 
    \image latex fltk3::FileInput.png "fltk3::FileInput"  width=6cm
+   
    \note As all fltk3::Input derived objects, fltk3::FileInput may call its callback
-   when loosing focus (see fltk3::UNFOCUS) to update its state like its cursor shape.
+   when losing focus (see fltk3::UNFOCUS) to update its state like its cursor shape.
    One resulting side effect is that you should call clear_changed() early in your callback
    to avoid reentrant calls if you plan to show another window or dialog box in the callback.
    */

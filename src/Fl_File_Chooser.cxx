@@ -3,7 +3,7 @@
 //
 // fltk3::FileChooser dialog for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -87,27 +87,14 @@ void fltk3::FileChooser::cb_previewButton_i(fltk3::CheckButton*, void*) {
 void fltk3::FileChooser::cb_previewButton(fltk3::CheckButton* o, void* v) {
   ((fltk3::FileChooser*)(o->parent()->parent()->parent()->user_data()))->cb_previewButton_i(o,v);
 }
-#ifndef WIN32
-void fltk3::FileChooser::remove_hidden_files()
-{
-  int count = fileList->size();
-  for(int num = count; num >= 1; num--) {
-    const char *p = fileList->text(num);
-    if (*p == '.' && strcmp(p, "../") != 0) fileList->remove(num);
-  }
-  fileList->topline(1);
+
+void fltk3::FileChooser::cb_showHiddenButton_i(fltk3::CheckButton*, void*) {
+  showHidden(showHiddenButton->value());
+}
+void fltk3::FileChooser::cb_showHiddenButton(fltk3::CheckButton* o, void* v) {
+  ((fltk3::FileChooser*)(o->parent()->parent()->parent()->user_data()))->cb_showHiddenButton_i(o,v);
 }
 
-void fltk3::FileChooser::show_hidden_cb(fltk3::CheckButton* o, void* data) {
-  fltk3::FileChooser *mychooser = (fltk3::FileChooser *)data;
-  if (o->value()) {
-    mychooser->browser()->load(mychooser->directory());
-  } else {
-    mychooser->remove_hidden_files();
-    mychooser->browser()->redraw();
-  }
-}
-#endif
 void fltk3::FileChooser::cb_fileName_i(fltk3::FileInput*, void*) {
   fileNameCB();
 }
@@ -228,15 +215,11 @@ fltk3::FileChooser::FileChooser(const char *d, const char *p, int t, const char 
           previewButton->callback((fltk3::Callback*)cb_previewButton);
           previewButton->label(preview_label);
         } // fltk3::CheckButton* previewButton
-#ifndef WIN32	
-        { show_hidden = new fltk3::CheckButton(
-	    previewButton->x() + previewButton->w() + 30, 275, 140, 20, "Show hidden files");
-          show_hidden->down_box(fltk3::DOWN_BOX);
-          show_hidden->value(0);
-          show_hidden->callback((fltk3::Callback*)show_hidden_cb, this);
-          show_hidden->label(hidden_label);
-        } // fltk3::CheckButton* show_hidden
-#endif	
+        { showHiddenButton = new fltk3::CheckButton(115, 275, 165, 20, "Show hidden files");
+          showHiddenButton->down_box(fltk3::DOWN_BOX);
+          showHiddenButton->callback((fltk3::Callback*)cb_showHiddenButton);
+          showHiddenButton->label(hidden_label);
+        } // fltk3::CheckButton* showHiddenButton
         { fltk3::Box* o = new fltk3::Box(115, 275, 365, 20);
           fltk3::Group::current()->resizable(o);
         } // fltk3::Box* o
@@ -315,31 +298,31 @@ fltk3::FileChooser::FileChooser(const char *d, const char *p, int t, const char 
     favWindow->end();
   } // fltk3::DoubleWindow* favWindow
   callback_ = 0;
-data_ = 0;
-directory_[0] = 0;
-window->size_range(window->w(), window->h(), fltk3::w(), fltk3::h());
-type(t);
-filter(p);
-update_favorites();
-value(d);
-type(t);
-int e;
-prefs_.get("preview", e, 1);
-preview(e);
-fltk3::Group::current(prev_current);
+  data_ = 0;
+  directory_[0] = 0;
+  window->size_range(window->w(), window->h(), fltk3::w(), fltk3::h());
+  type(t);
+  filter(p);
+  update_favorites();
+  value(d);
+  type(t);
+  int e;
+  prefs_.get("preview", e, 1);
+  preview(e);
+  fltk3::Group::current(prev_current);
   ext_group=(fltk3::Widget*)0;
 }
 
 fltk3::FileChooser::~FileChooser() {
   fltk3::remove_timeout((fltk3::TimeoutHandler)previewCB, this);
-if(ext_group)window->remove(ext_group);
-delete window;
-delete favWindow;
+  if(ext_group)window->remove(ext_group);
+  delete window;
+  delete favWindow;
 }
 
 void fltk3::FileChooser::callback(void (*cb)(fltk3::FileChooser *, void *), void *d ) {
   callback_ = cb;
-data_     = d;
+  data_     = d;
 }
 
 void fltk3::FileChooser::color(fltk3::Color c) {
@@ -364,7 +347,7 @@ int fltk3::FileChooser::filter_value() {
 
 void fltk3::FileChooser::filter_value(int f) {
   showChoice->value(f);
-showChoiceCB();
+  showChoiceCB();
 }
 
 void fltk3::FileChooser::hide() {
@@ -389,25 +372,15 @@ const char * fltk3::FileChooser::label() {
 
 void fltk3::FileChooser::ok_label(const char *l) {
   okButton->label(l);
-int w=0, h=0;
-okButton->measure_label(w, h);
-okButton->resize(cancelButton->x() - 50 - w, cancelButton->y(),
-                 w + 40, 25);
-okButton->parent()->init_sizes();
+  int w=0, h=0;
+  okButton->measure_label(w, h);
+  okButton->resize(cancelButton->x() - 50 - w, cancelButton->y(),
+                   w + 40, 25);
+  okButton->parent()->init_sizes();
 }
 
 const char * fltk3::FileChooser::ok_label() {
   return (okButton->label());
-}
-
-void fltk3::FileChooser::show() {
-  window->hotspot(fileList);
-window->show();
-fltk3::flush();
-fltk3::cursor(fltk3::CURSOR_WAIT);
-rescan_keep_filename();
-fltk3::cursor(fltk3::CURSOR_DEFAULT);
-fileName->take_focus();
 }
 
 int fltk3::FileChooser::shown() {
@@ -440,18 +413,18 @@ fltk3::Fontsize fltk3::FileChooser::textsize() {
 
 void fltk3::FileChooser::type(int t) {
   type_ = t;
-if (t & MULTI)
-  fileList->type(fltk3::MULTI_BROWSER);
-else
-  fileList->type(fltk3::HOLD_BROWSER);
-if (t & CREATE)
-  newButton->activate();
-else
-  newButton->deactivate();
-if (t & DIRECTORY)
-  fileList->filetype(fltk3::FileBrowser::DIRECTORIES);
-else
-  fileList->filetype(fltk3::FileBrowser::FILES);
+  if (t & MULTI)
+    fileList->type(fltk3::MULTI_BROWSER);
+  else
+    fileList->type(fltk3::HOLD_BROWSER);
+  if (t & CREATE)
+    newButton->activate();
+  else
+    newButton->deactivate();
+  if (t & DIRECTORY)
+    fileList->filetype(fltk3::FileBrowser::DIRECTORIES);
+  else
+    fileList->filetype(fltk3::FileBrowser::FILES);
 }
 
 int fltk3::FileChooser::type() {
@@ -474,27 +447,27 @@ fltk3::Widget* fltk3::FileChooser::add_extra(fltk3::Widget* gr) {
   fltk3::Widget* ret=ext_group;
   if (gr==ext_group) {
     return ret;
-      }
-      if (ext_group) {
-        int sh=ext_group->h()+4;
-fltk3::Widget* svres=window->resizable();
-window->resizable(NULL);
-window->size(window->w(),window->h()-sh);
-window->remove(ext_group);
-ext_group=NULL;
-window->resizable(svres);
-          }
-          if (gr) {
-            int nh=window->h()+gr->h()+4;
-fltk3::Widget* svres=window->resizable();
-window->resizable(NULL);
-window->size(window->w(),nh);
-gr->position(2,okButton->y()+okButton->h()+2);
-window->add(gr);
-ext_group=gr;
-window->resizable(svres);
-              }
-              return ret;
+  }
+  if (ext_group) {
+    int sh=ext_group->h()+4;
+    fltk3::Widget* svres=window->resizable();
+    window->resizable(NULL);
+    window->size(window->w(),window->h()-sh);
+    window->remove(ext_group);
+    ext_group=NULL;
+    window->resizable(svres);
+  }
+  if (gr) {
+    int nh=window->h()+gr->h()+4;
+    fltk3::Widget* svres=window->resizable();
+    window->resizable(NULL);
+    window->size(window->w(),nh);
+    gr->position(2,okButton->y()+okButton->h()+2);
+    window->add(gr);
+    ext_group=gr;
+    window->resizable(svres);
+  }
+  return ret;
 }
 
 //

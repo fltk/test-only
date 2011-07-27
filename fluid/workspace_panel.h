@@ -29,10 +29,14 @@
 #define workspace_panel_h
 #include <fltk3/run.h>
 #include <fltk3/DoubleWindow.h>
+extern fltk3::DoubleWindow *workspace_panel;
+#include <fltk3/Button.h>
 #include <fltk3/Input.h>
+#include <fltk3/Box.h>
+#include <fltk3/CheckButton.h>
+fltk3::DoubleWindow* show_workspace_panel();
 #include <fltk3/Choice.h>
 #include <fltk3/Output.h>
-#include <fltk3/Button.h>
 fltk3::DoubleWindow* make_app_target_panel();
 #endif
 

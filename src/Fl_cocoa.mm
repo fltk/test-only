@@ -239,7 +239,7 @@ public:
     pthread_mutex_init(&_datalock, NULL);
     FD_ZERO(&_fdsets[0]); FD_ZERO(&_fdsets[1]); FD_ZERO(&_fdsets[2]);
     _cancelpipe[0] = _cancelpipe[1] = 0;
-    _maxfd = 0;
+    _maxfd = -1;
   }
   
   ~DataReady()
@@ -305,7 +305,7 @@ void DataReady::AddFD(int n, int events, void (*cb)(int, void*), void *v)
 void DataReady::RemoveFD(int n, int events)
 {
   int i,j;
-  _maxfd = 0; // recalculate maxfd on the fly
+  _maxfd = -1; // recalculate maxfd on the fly
   for (i=j=0; i<nfds; i++) {
     if (fds[i].fd == n) {
       int e = fds[i].events & ~events;
@@ -2865,13 +2865,14 @@ void Fl_X::set_cursor(fltk3::Cursor c)
 @implementation FLaboutItemTarget
 - (void)showPanel
 {
-    NSDictionary *options;
-    options = [NSDictionary dictionaryWithObjectsAndKeys:
-                	     [NSString stringWithFormat:@" GUI with FLTK %d.%d", FL_MAJOR_VERSION,
-                              FL_MINOR_VERSION ], @"Copyright",
-                	     nil];
-    [NSApp  orderFrontStandardAboutPanelWithOptions:options];
-  }
+  NSDictionary *options;
+  options = [NSDictionary dictionaryWithObjectsAndKeys:
+             [[[NSAttributedString alloc] 
+               initWithString:[NSString stringWithFormat:@" GUI with FLTK %d.%d", 
+                               FL_MAJOR_VERSION, FL_MINOR_VERSION ]] autorelease], @"Credits",
+             nil];
+  [NSApp orderFrontStandardAboutPanelWithOptions:options];
+}
 //#include <fltk3/PostScript.h>
 - (void)printPanel
 {
@@ -2882,6 +2883,7 @@ void Fl_X::set_cursor(fltk3::Cursor c)
   if(!win) return;
   if( printer.start_job(1) ) return;
   if( printer.start_page() ) return;
+  fl_lock_function();
   // scale the printer device so that the window fits on the page
   float scale = 1;
   printer.printable_rect(&w, &h);
@@ -2898,12 +2900,13 @@ void Fl_X::set_cursor(fltk3::Cursor c)
   printer.printable_rect(&w, &h);
   printer.origin(w/2, h/2 );
   printer.rotate(20.);
-  printer.print_widget( win, - win->w()/2, - win->h()/2 );
+  printer.print_window( win, - win->w()/2, - win->h()/2 );
 #else
   printer.print_window(win);
 #endif
   printer.end_page();
   printer.end_job();
+  fl_unlock_function();
 }
 @end
 
@@ -2992,6 +2995,7 @@ static void createAppleMenu(void)
 @implementation FLMenuItem
 - (void) doCallback:(id)unused
 {
+  fl_lock_function();
   int flRank = [self tag];
   const fltk3::MenuItem *items = fltk3::sys_menu_bar->fltk3::Menu_::menu();
   const fltk3::MenuItem *item = items + flRank;
@@ -3020,11 +3024,14 @@ static void createAppleMenu(void)
       }
     }
   }
+  fl_unlock_function();
 }
 - (void) directCallback:(id)unused
 {
+  fl_lock_function();
   fltk3::MenuItem *item = (fltk3::MenuItem *)[(NSData*)[self representedObject] bytes];
   if ( item && item->callback() ) item->do_callback(NULL);
+  fl_unlock_function();
 }
 @end
 
@@ -3425,14 +3432,24 @@ void fltk3::PagedDevice::print_window(fltk3::Window *win, int x_offset, int y_of
   fl_gc = NULL;
   fltk3::check();
   win->make_current();
-  // capture the window title bar from screen
-  CGImageRef img = Fl_X::CGImage_from_window_rect(win, 0, -bt, win->w(), bt);
   this->set_current(); // back to the fltk3::PagedDevice
-  CGRect rect = { { 0, 0 }, { win->w(), bt } }; // print the title bar
-  Fl_X::q_begin_image(rect, 0, 0, win->w(), bt);
-  CGContextDrawImage(fl_gc, rect, img);
-  Fl_X::q_end_image();
-  CGImageRelease(img);
+  if (this->class_name() == fltk3::Printer::class_id) {
+    // capture as transparent image the window title bar from screen
+    CGImageRef img = Fl_X::CGImage_from_window_rect(win, 0, -bt, win->w(), bt);
+    CGRect rect = { { x_offset, y_offset }, { win->w(), bt } }; // print the title bar
+    Fl_X::q_begin_image(rect, 0, 0, win->w(), bt);
+    CGContextDrawImage(fl_gc, rect, img);
+    Fl_X::q_end_image();
+    CGImageRelease(img);
+  }
+  else {
+    // capture the window title bar from screen
+    uchar *top_image = fltk3::read_image(NULL, 0, -bt, win->w(), bt);
+    if (top_image) { // print the title bar
+      fltk3::draw_image(top_image, x_offset, y_offset, win->w(), bt, 3);
+      delete[] top_image;
+    }
+  }
   this->print_widget(win, x_offset, y_offset + bt); // print the window inner part
 }
 

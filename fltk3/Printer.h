@@ -3,7 +3,7 @@
 //
 // Printing support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 2010 by Bill Spitzak and others.
+// Copyright 2010-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -129,8 +129,8 @@ namespace fltk3 {
    fltk3::Printer allows to use all FLTK drawing, color, text, and clip functions, and to have them operate
    on printed page(s). There are two main, non exclusive, ways to use it.
    <ul><li>Print any widget (standard, custom, fltk3::Window, fltk3::GlWindow) as it appears 
-   on screen, with optional translation, scaling and rotation. This is done by calling print_widget() 
-   or print_window_part().
+   on screen, with optional translation, scaling and rotation. This is done by calling print_widget(),
+   print_window() or print_window_part().
    <li>Use a series of FLTK graphics commands (e.g., font, text, lines, colors, clip, image) to
    compose a page appropriately shaped for printing. 
    </ul>
@@ -155,7 +155,7 @@ namespace fltk3 {
    <li>Mac OS X platform: all graphics requests print as on display.
    </ul>
    */
-  class Printer : public fltk3::PagedDevice {
+  class FLTK3_EXPORT Printer : public fltk3::PagedDevice {
   public:
     static const char *class_id;
     const char *class_name() {return class_id;};

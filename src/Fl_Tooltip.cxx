@@ -59,7 +59,8 @@ public:
   void layout();
   /** Shows the tooltip windows only if a tooltip text is available. */
   void show() {
-    if (tip) fltk3::MenuWindow::show();
+    if (!tip) return;
+    fltk3::MenuWindow::show();
   }
 };
 
@@ -154,7 +155,7 @@ static void tooltip_timeout(void*) {
 }
 
 /**
-   This method is called when the mouse pointer enters a  widget.
+   This method is called when the mouse pointer enters a widget.
    <P>If this widget or one of its parents has a tooltip, enter it. This
    will do nothing if this is the current widget (even if the mouse moved
    out so an exit() was done and then moved back in). If no tooltip can

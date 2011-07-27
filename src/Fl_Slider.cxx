@@ -3,7 +3,7 @@
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,6 +30,10 @@
 #include <fltk3/draw.h>
 #include <math.h>
 #include "flstring.h"
+
+#if defined(FL_DLL)	// really needed for c'tors for MS VC++ only
+#include <fltk3/HorSlider.h>
+#endif
 
 void fltk3::Slider::_Slider() {
   slider_size_ = 0;
@@ -365,6 +369,25 @@ int fltk3::Slider::handle(int event) {
 		w()-fltk3::box_dw(box()),
 		h()-fltk3::box_dh(box()));
 }
+
+/*
+ The following constructor must not be in the header file if we
+ build a shared object (DLL). Instead it is defined here to force
+ the constructor (and default destructor as well) to be defined
+ in the DLL and exported (STR #2632).
+ 
+ Note: if you the ctor here, do the same changes in the specific
+ header file as well.  This redundant definition was chosen to enable
+ inline constructors in the header files (for static linking) as well
+ as the one here for dynamic linking (Windows DLL).
+ */
+
+#if defined(FL_DLL)
+
+fltk3::HorSlider::HorSlider(int X,int Y,int W,int H,const char *l)
+: fltk3::Slider(X,Y,W,H,l) {type(fltk3::HOR_SLIDER);}
+
+#endif // FL_DLL
 
 //
 // End of "$Id$".

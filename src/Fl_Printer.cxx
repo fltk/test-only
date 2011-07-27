@@ -108,6 +108,7 @@ fltk3::Printer::Printer(void) {
 #else
   printer = new fltk3::PostScriptPrinter();
 #endif
+  fltk3::SurfaceDevice::driver(printer->driver());
 }
 
 int fltk3::Printer::start_job(int pagecount, int *frompage, int *topage)

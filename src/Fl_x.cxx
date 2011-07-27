@@ -948,7 +948,7 @@ int fl_handle(const XEvent& thisevent)
       // bugs in X servers, or maybe to avoid an extra round-trip to
       // get the property length.  I copy this here:
       Atom actual; int format; unsigned long count, remaining;
-      unsigned char* portion;
+      unsigned char* portion = NULL;
       if (XGetWindowProperty(fl_display,
                              fl_xevent->xselection.requestor,
                              fl_xevent->xselection.property,
@@ -974,18 +974,17 @@ int fl_handle(const XEvent& thisevent)
 	      fl_event_time);
 	return true;
       }
-      XTextProperty text_prop;
-      text_prop.value=portion;
-      text_prop.format=format;
-      text_prop.encoding=actual;
-      text_prop.nitems=count;
-      char **text_list;
-      text_list = (char**)&portion;
-      int bytesnew = strlen(*text_list)+1;
-      buffer = (unsigned char*)realloc(buffer, bytesread+bytesnew+remaining);
-      memcpy(buffer+bytesread, *text_list, bytesnew);
+      // Make sure we got something sane...
+      if ((portion == NULL) || (format != 8) || (count == 0)) {
+        if (portion) XFree(portion);
+        return true;
+      }
+      buffer = (unsigned char*)realloc(buffer, bytesread+count+remaining+1);
+      memcpy(buffer+bytesread, portion, count);
       XFree(portion);
-      bytesread += bytesnew - 1;
+      bytesread += count;
+      // Cannot trust data to be null terminated
+      buffer[bytesread] = '\0';
       if (!remaining) break;
     }
     if (buffer) {
@@ -1073,7 +1072,20 @@ int fl_handle(const XEvent& thisevent)
 
   if (window) switch (xevent.type) {
 
-  case ClientMessage: {
+    case DestroyNotify: { // an X11 window was closed externally from the program
+      fltk3::handle(fltk3::CLOSE, window);
+      Fl_X* X = Fl_X::i(window);
+      if (X) { // indicates the FLTK window was not closed
+        X->xid = (::Window)0; // indicates the X11 window was already destroyed
+        window->hide();
+        int oldx = window->x(), oldy = window->y();
+        window->position(0, 0);
+        window->position(oldx, oldy);
+        window->show(); // recreate the X11 window in support of the FLTK window
+      }
+      return 1;
+    }
+    case ClientMessage: {
     Atom message = fl_xevent->xclient.message_type;
     const long* data = fl_xevent->xclient.data.l;
     if ((Atom)(data[0]) == WM_DELETE_WINDOW) {
@@ -1339,7 +1351,58 @@ int fl_handle(const XEvent& thisevent)
 	case XK_Super_R:
 	  keysym = fltk3::MetaRKey;
 	  break;
-      }
+    }
+    // Convert the multimedia keys to safer, portable values
+    switch (keysym) { // XF names come from X11/XF86keysym.h
+      case 0x1008FF11: // XF86XK_AudioLowerVolume:
+        keysym = fltk3::VolumeDownKey;
+        break;
+      case 0x1008FF12: // XF86XK_AudioMute:
+        keysym = fltk3::VolumeMuteKey;
+        break;
+      case 0x1008FF13: // XF86XK_AudioRaiseVolume:
+        keysym = fltk3::VolumeUpKey;
+        break;
+      case 0x1008FF14: // XF86XK_AudioPlay:
+        keysym = fltk3::MediaPlayKey;
+        break;
+      case 0x1008FF15: // XF86XK_AudioStop:
+        keysym = fltk3::MediaStopKey;
+        break;
+      case 0x1008FF16: // XF86XK_AudioPrev:
+        keysym = fltk3::MediaPrevKey;
+        break;
+      case 0x1008FF17: // XF86XK_AudioNext:
+        keysym = fltk3::MediaNextKey;
+        break;
+      case 0x1008FF18: // XF86XK_HomePage:
+        keysym = fltk3::HomePageKey;
+        break;
+      case 0x1008FF19: // XF86XK_Mail:
+        keysym = fltk3::MailKey;
+        break;
+      case 0x1008FF1B: // XF86XK_Search:
+        keysym = fltk3::SearchKey;
+        break;
+      case 0x1008FF26: // XF86XK_Back:
+        keysym = fltk3::BackKey;
+        break;
+      case 0x1008FF27: // XF86XK_Forward:
+      	keysym = fltk3::ForwardKey;
+        break;
+      case 0x1008FF28: // XF86XK_Stop:
+        keysym = fltk3::StopKey;
+        break;
+      case 0x1008FF29: // XF86XK_Refresh:
+        keysym = fltk3::RefreshKey;
+        break;
+      case 0x1008FF2F: // XF86XK_Sleep:
+        keysym = fltk3::SleepKey;
+        break;
+      case 0x1008FF30: // XF86XK_Favorites:
+        keysym = fltk3::FavoritesKey;
+        break;
+    }
     // We have to get rid of the XK_KP_function keys, because they are
     // not produced on Windoze and thus case statements tend not to check
     // for them.  There are 15 of these in the range 0xff91 ... 0xff9f
@@ -1907,48 +1970,67 @@ void fltk3::Window::make_current() {
 
 ::Window fl_xid_(const fltk3::Window* w)
 {
-  return Fl_X::i(w)->xid;
+  Fl_X *temp = Fl_X::i(w);
+  return temp ? temp->xid : 0;
 }
 
+static void decorated_win_size(Fl_Window *win, int &w, int &h)
+{
+  w = win->w();
+  h = win->h();
+  if (!win->shown() || win->parent() || !win->border() || !win->visible()) return;
+  ::Window root, parent, *children;
+  unsigned n = 0;
+  Status status = XQueryTree(fl_display, Fl_X::i(win)->xid, &root, &parent, &children, &n); 
+  if (status != 0 && n) XFree(children);
+  // when compiz is used, root and parent are the same window 
+  // and I don't know where to find the window decoration
+  if (status == 0 || root == parent) return; 
+  XWindowAttributes attributes;
+  XGetWindowAttributes(fl_display, parent, &attributes);
+  w = attributes.width;
+  h = attributes.height;
+}
 
 int fltk3::Window::decorated_h()
 {
-  if (parent() || !shown()) return h();
-  ::Window root, parent, *children;
-  unsigned n;
-  XQueryTree(fl_display, i->xid, &root, &parent, &children, &n); if (n) XFree(children);
-  XWindowAttributes attributes;
-  XGetWindowAttributes(fl_display, parent, &attributes);
-  return attributes.height;
+  int w, h;
+  decorated_win_size(this, w, h);
+  return h;
 }
 
 int fltk3::Window::decorated_w()
 {
-  if (parent() || !shown()) return w();
-  ::Window root, parent, *children;
-  unsigned n;
-  XQueryTree(fl_display, i->xid, &root, &parent, &children, &n); if (n) XFree(children);
-  XWindowAttributes attributes;
-  XGetWindowAttributes(fl_display, parent, &attributes);
-  return attributes.width;
+  int w, h;
+  decorated_win_size(this, w, h);
+  return w;
 }
 
 void fltk3::PagedDevice::print_window(fltk3::Window *win, int x_offset, int y_offset)
 {
-  if (win->parent() || !win->border()) {
+  if (!win->shown() || win->parent() || !win->border() || !win->visible()) {
     this->print_widget(win, x_offset, y_offset);
     return;
-    }
+  }
   fltk3::DisplayDevice::display_device()->set_current();
   win->show();
   fltk3::check();
   win->make_current();
   ::Window root, parent, *children, child_win, from;
-  unsigned n;
-  int bx, bt;
+  unsigned n = 0;
+  int bx, bt, do_it;
   from = fl_window;
-  XQueryTree(fl_display, fl_window, &root, &parent, &children, &n); if (n) XFree(children);
-  XTranslateCoordinates(fl_display, fl_window, parent, 0, 0, &bx, &bt, &child_win);
+  do_it = (XQueryTree(fl_display, fl_window, &root, &parent, &children, &n) != 0 && 
+           XTranslateCoordinates(fl_display, fl_window, parent, 0, 0, &bx, &bt, &child_win) == True);
+  if (n) XFree(children);
+  // hack to bypass STR #2648: when compiz is used, root and parent are the same window 
+  // and I don't know where to find the window decoration
+  if (do_it && root == parent) do_it = 0; 
+  if (!do_it) {
+    this->set_current();
+    this->print_widget(win, x_offset, y_offset);
+    return;
+  }
   fl_window = parent;
   uchar *top_image = 0, *left_image = 0, *right_image = 0, *bottom_image = 0;
   top_image = fltk3::read_image(NULL, 0, 0, - (win->w() + 2 * bx), bt);
@@ -1959,8 +2041,10 @@ void fltk3::PagedDevice::print_window(fltk3::Window *win, int x_offset, int y_of
   }
   fl_window = from;
   this->set_current();
-  fltk3::draw_image(top_image, x_offset, y_offset, win->w() + 2 * bx, bt, 3);
-  delete[] top_image;
+  if (top_image) {
+    fltk3::draw_image(top_image, x_offset, y_offset, win->w() + 2 * bx, bt, 3);
+    delete[] top_image;
+  }
   if (bx) {
     if (left_image) fltk3::draw_image(left_image, x_offset, y_offset + bt, bx, win->h() + bx, 3);
     if (right_image) fltk3::draw_image(right_image, x_offset + win->w() + bx, y_offset + bt, bx, win->h() + bx, 3);

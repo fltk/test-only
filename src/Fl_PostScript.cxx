@@ -548,6 +548,13 @@ int fltk3::PostScriptGraphicsDriver::start_postscript (int pagecount,
     top_margin = 12;
   }
   page_format_ = (enum fltk3::PagedDevice::Page_Format)(format | layout);
+  if (layout & fltk3::PagedDevice::LANDSCAPE){
+    ph_ = fltk3::PagedDevice::page_formats[format].width;
+    pw_ = fltk3::PagedDevice::page_formats[format].height;
+  } else {
+    pw_ = fltk3::PagedDevice::page_formats[format].width;
+    ph_ = fltk3::PagedDevice::page_formats[format].height;
+  }
   
   fputs("%!PS-Adobe-3.0\n", output);
   fputs("%%Creator: FLTK\n", output);
@@ -633,6 +640,7 @@ void fltk3::PostScriptGraphicsDriver::page(double pw, double ph, int media) {
   }
   ++nPages;
   fprintf(output, "%%%%Page: %i %i\n" , nPages , nPages);
+  fprintf(output, "%%%%PageBoundingBox: 0 0 %d %d\n", (int)pw, (int)ph);
   if (pw>ph){
     fprintf(output, "%%%%PageOrientation: Landscape\n");
   }else{
@@ -647,8 +655,8 @@ void fltk3::PostScriptGraphicsDriver::page(double pw, double ph, int media) {
   }
   fprintf(output, "%%%%EndPageSetup\n");
   
-  pw_ = pw;
-  ph_ = ph;
+  //pw_ = pw;
+  //ph_ = ph;
   reset();
   
   fprintf(output, "save\n");
@@ -676,15 +684,13 @@ void fltk3::PostScriptGraphicsDriver::page(double pw, double ph, int media) {
 }
 
 void fltk3::PostScriptGraphicsDriver::page(int format){
-  
-  
-  if(format &  fltk3::PagedDevice::LANDSCAPE){
+/*  if(format &  fltk3::PagedDevice::LANDSCAPE){
     ph_=fltk3::PagedDevice::page_formats[format & 0xFF].width;
     pw_=fltk3::PagedDevice::page_formats[format & 0xFF].height;
   }else{
     pw_=fltk3::PagedDevice::page_formats[format & 0xFF].width;
     ph_=fltk3::PagedDevice::page_formats[format & 0xFF].height;
-  }
+  }*/
   page(pw_,ph_,format & 0xFF00);//,orientation only;
 }
 

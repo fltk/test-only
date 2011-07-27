@@ -41,15 +41,20 @@ namespace fltk3 {
    that only allows the user to type floating point numbers (sign,
    digits, decimal point, more digits, 'E' or 'e', sign, digits).
    */
-  class FloatInput : public fltk3::Input { // don't use FLTK3_EXPORT here !
+  class FLTK3_EXPORT FloatInput : public fltk3::Input { // don't use FLTK3_EXPORT here !
   public:
     /**
      Creates a new fltk3::FloatInput widget using the given position,
      size, and label string. The default boxtype is fltk3::DOWN_BOX.
-     <P> Inherited destructor destroys the widget and any value associated with it
+     
+     Inherited destructor destroys the widget and any value associated with it
      */
+#if defined(FL_DLL)	// implementation in src/Fl_Input.cxx
+    FloatInput(int X,int Y,int W,int H,const char *l = 0);
+#else
     FloatInput(int X,int Y,int W,int H,const char *l = 0)
     : fltk3::Input(X,Y,W,H,l) {type(fltk3::FLOAT_INPUT);}
+#endif
   };
   
 }

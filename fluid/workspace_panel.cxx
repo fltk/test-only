@@ -27,6 +27,78 @@
 
 #include "workspace_panel.h"
 
+fltk3::DoubleWindow *workspace_panel=(fltk3::DoubleWindow *)0;
+
+fltk3::DoubleWindow* show_workspace_panel() {
+  if (!workspace_panel) {
+    { workspace_panel = new fltk3::DoubleWindow(382, 325);
+      { fltk3::Button* o = new fltk3::Button(260, 285, 95, 25, "OK");
+        o->labelsize(12);
+      } // fltk3::Button* o
+      { fltk3::Input* o = new fltk3::Input(85, 15, 213, 25, "Name:");
+        o->tooltip("name of the target - this will be used in the IDEs and as a general reference\
+.");
+        o->labelsize(12);
+        o->textsize(12);
+      } // fltk3::Input* o
+      { fltk3::Box* o = new fltk3::Box(10, 49, 362, 2, "Environments");
+        o->box(fltk3::THIN_DOWN_FRAME);
+        o->labelsize(12);
+        o->align(fltk3::Align(fltk3::ALIGN_BOTTOM_LEFT));
+      } // fltk3::Box* o
+      { fltk3::CheckButton* o = new fltk3::CheckButton(85, 83, 215, 20, "Universal Command Line");
+        o->down_box(fltk3::DOWN_BOX);
+        o->labelsize(12);
+      } // fltk3::CheckButton* o
+      { fltk3::CheckButton* o = new fltk3::CheckButton(85, 143, 215, 20, "MS Windows (tm)");
+        o->down_box(fltk3::DOWN_BOX);
+        o->labelsize(12);
+      } // fltk3::CheckButton* o
+      { fltk3::CheckButton* o = new fltk3::CheckButton(100, 163, 215, 20, "VisualC 6 ");
+        o->down_box(fltk3::DOWN_BOX);
+        o->labelsize(12);
+      } // fltk3::CheckButton* o
+      { fltk3::CheckButton* o = new fltk3::CheckButton(100, 183, 215, 20, "VisualC 2008");
+        o->down_box(fltk3::DOWN_BOX);
+        o->labelsize(12);
+      } // fltk3::CheckButton* o
+      { fltk3::CheckButton* o = new fltk3::CheckButton(100, 203, 215, 20, "VisualC 2010");
+        o->down_box(fltk3::DOWN_BOX);
+        o->labelsize(12);
+      } // fltk3::CheckButton* o
+      { fltk3::CheckButton* o = new fltk3::CheckButton(85, 223, 215, 20, "Apple OS X (tm)");
+        o->down_box(fltk3::DOWN_BOX);
+        o->labelsize(12);
+      } // fltk3::CheckButton* o
+      { fltk3::CheckButton* o = new fltk3::CheckButton(100, 243, 215, 20, "Xcode 3");
+        o->down_box(fltk3::DOWN_BOX);
+        o->labelsize(12);
+        o->deactivate();
+      } // fltk3::CheckButton* o
+      { fltk3::CheckButton* o = new fltk3::CheckButton(100, 263, 215, 20, "Xcode 4");
+        o->down_box(fltk3::DOWN_BOX);
+        o->labelsize(12);
+      } // fltk3::CheckButton* o
+      { fltk3::CheckButton* o = new fltk3::CheckButton(101, 103, 215, 20, "Makefile (make, gmake)");
+        o->down_box(fltk3::DOWN_BOX);
+        o->labelsize(12);
+      } // fltk3::CheckButton* o
+      { fltk3::CheckButton* o = new fltk3::CheckButton(101, 123, 215, 20, "CMake File (cmake)");
+        o->down_box(fltk3::DOWN_BOX);
+        o->labelsize(12);
+        o->deactivate();
+      } // fltk3::CheckButton* o
+      { fltk3::CheckButton* o = new fltk3::CheckButton(70, 64, 215, 20, "all supported Environments");
+        o->down_box(fltk3::DOWN_BOX);
+        o->labelsize(12);
+      } // fltk3::CheckButton* o
+      workspace_panel->end();
+    } // fltk3::DoubleWindow* workspace_panel
+      }
+      workspace_panel->show();
+  return workspace_panel;
+}
+
 fltk3::DoubleWindow* make_app_target_panel() {
   fltk3::DoubleWindow* w;
   { fltk3::DoubleWindow* o = new fltk3::DoubleWindow(307, 281, "Appliction Target");

@@ -370,6 +370,27 @@ namespace fltk3 {
   const unsigned int AltRKey	= 0xffea;	///< The right alt key. 
   const unsigned int DeleteKey	= 0xffff;	///< The delete key.
   
+  // These use the Private Use Area (PUA) of the Basic Multilingual Plane
+  // of Unicode. Guaranteed not to conflict with a proper Unicode character.
+  
+  // These primarily map to the XFree86 keysym range
+  const unsigned int VolumeDownKey   = 0xEF11;   ///< Volume control down        
+  const unsigned int VolumeMuteKey   = 0xEF12;   ///< Mute sound from the system 
+  const unsigned int VolumeUpKey     = 0xEF13;   ///< Volume control up          
+  const unsigned int MediaPlayKey    = 0xEF14;   ///< Start playing of audio     
+  const unsigned int MediaStopKey    = 0xEF15;   ///< Stop playing audio         
+  const unsigned int MediaPrevKey    = 0xEF16;   ///< Previous track             
+  const unsigned int MediaNextKey    = 0xEF17;   ///< Next track                 
+  const unsigned int HomePageKey     = 0xEF18;   ///< Display user's home page   
+  const unsigned int MailKey         = 0xEF19;   ///< Invoke user's mail program 
+  const unsigned int SearchKey       = 0xEF1B;   ///< Search                     
+  const unsigned int BackKey         = 0xEF26;   ///< Like back on a browser     
+  const unsigned int ForwardKey      = 0xEF27;   ///< Like forward on a browser  
+  const unsigned int StopKey         = 0xEF28;   ///< Stop current operation     
+  const unsigned int RefreshKey      = 0xEF29;   ///< Refresh the page           
+  const unsigned int SleepKey        = 0xEF2F;   ///< Put system to sleep        
+  const unsigned int FavoritesKey    = 0xEF30;   ///< Show favorite locations    
+  
   /*@}*/	// group: Mouse and Keyboard Events
   
   

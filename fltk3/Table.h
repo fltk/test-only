@@ -26,6 +26,7 @@
 // TODO:
 //    o Auto scroll during dragged selection
 //    o Keyboard navigation (up/down/left/right arrow)
+//    o Add scrollbar_size() method and integer [breaks ABI]
 //
 
 #ifndef _FLtk3_TABLE_H
@@ -220,6 +221,7 @@ namespace fltk3 {
     
     int _auto_drag;
     int _selecting;
+    //int _scrollbar_size;		// TODO: BREAKS ABI
     
     // An STL-ish vector without templates
     class FLTK3_EXPORT IntVector {
@@ -1074,6 +1076,8 @@ namespace fltk3 {
      */
     void callback(fltk3::Widget*, void*);
 #endif
+    //int scrollbar_size() const {		// TODO: BREAKS ABI
+    //void scrollbar_size(int size) {		// TODO: BREAKS ABI
   };
   
 }

@@ -3,7 +3,7 @@
 //
 // Output header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -36,32 +36,40 @@
 namespace fltk3 {
   
   /**
-   This widget displays a piece of text.  When you set the value()
-   , fltk3::Output does a strcpy() to it's own storage,
+   This widget displays a piece of text.
+
+   When you set the value() , Fl_Output does a strcpy() to its own storage,
    which is useful for program-generated values.  The user may select
    portions of the text using the mouse and paste the contents into other
    fields or programs.
-   <P align=CENTER>\image html text.png</P> 
-   \image latex text.png "fltk3::Output" width=8cm
-   <P>There is a single subclass, 
-   fltk3::MultilineOutput, which allows you to display multiple lines of
-   text. fltk3::MultilineOutput does not provide scroll bars. If a more 
-   complete text editing widget is needed, use fltk3::TextDisplay instead.</P>
-   <P>The text may contain any characters except \\0, and will correctly
+
+   <P align=CENTER>\image html text.png</P>
+   \image latex text.png "Fl_Output" width=8cm
+
+   There is a single subclass, Fl_Multiline_Output, which allows you to
+   display multiple lines of text. Fl_Multiline_Output does not provide
+   scroll bars. If a more complete text editing widget is needed, use
+   Fl_Text_Display instead.
+
+   The text may contain any characters except \\0, and will correctly
    display anything, using ^X notation for unprintable control characters
    and \\nnn notation for unprintable characters with the high bit set. It
-   assumes the font can draw any characters in the ISO-Latin1 character
-   set.
+   assumes the font can draw any characters in the ISO-Latin1 character set.
    */
-  class Output : public fltk3::Input { // don't use FLTK3_EXPORT here !
+  class FLTK3_EXPORT Output : public fltk3::Input { // don't use FLTK3_EXPORT here !
   public:
     /**
      Creates a new fltk3::Output widget using the given position,
      size, and label string. The default boxtype is fltk3::DOWN_BOX.
-     <P>Inherited destrucor destroys the widget and any value associated with it.
+     
+     Inherited destrucor destroys the widget and any value associated with it.
      */
+#if defined(FL_DLL)	// implementation in src/Fl_Input.cxx
+    Output(int X,int Y,int W,int H, const char *l = 0);
+#else
     Output(int X,int Y,int W,int H, const char *l = 0)
     : fltk3::Input(X, Y, W, H, l) {type(fltk3::NORMAL_OUTPUT);}
+#endif
   };
   
 }

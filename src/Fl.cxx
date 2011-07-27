@@ -27,21 +27,37 @@
 
 
 // warning: the Apple Quartz version still uses some Quickdraw calls,
-//          mostly to get around the single active context in QD and 
+//          mostly to get around the single active context in QD and
 //          to implement clipping. This should be changed into pure
 //          Quartz calls in the near future.
 #include <config.h>
-#include <fltk3/run.h>
-#include <fltk3/Window.h>
-#include <fltk3/Tooltip.h>
 #include <fltk3/Wrapper.h>
 
+/* We require Windows 2000 features (e.g. VK definitions) */
+#if defined(WIN32)
+# if !defined(WINVER) || (WINVER < 0x0500)
+#  ifdef WINVER
+#   undef WINVER
+#  endif
+#  define WINVER 0x0500
+# endif
+# if !defined(_WIN32_WINNT) || (_WIN32_WINNT < 0x0500)
+#  ifdef _WIN32_WINNT
+#   undef _WIN32_WINNT
+#  endif
+#  define _WIN32_WINNT 0x0500
+# endif
+#endif
+
 // recent versions of MinGW warn: "Please include winsock2.h before windows.h",
-// hence we must include winsock2.h before fltk3/x.h (A.S. Dec. 2010)
+// hence we must include winsock2.h before FL/Fl.H (A.S. Dec. 2010, IMM May 2011)
 #if defined(WIN32) && !defined(__CYGWIN__)
 #  include <winsock2.h>
 #endif
 
+#include <fltk3/run.h>
+#include <fltk3/Window.h>
+#include <fltk3/Tooltip.h>
 #include <fltk3/x.h>
 
 #include <ctype.h>
@@ -126,7 +142,7 @@ fltk3::version() {
 }
 
 /**
-  Gets the default scrollbar size used by 
+  Gets the default scrollbar size used by
   fltk3::Browser_,
   fltk3::HelpView,
   fltk3::ScrollGroup, and
@@ -283,7 +299,7 @@ void fltk3::repeat_timeout(double time, fltk3::TimeoutHandler cb, void *argp) {
   t->cb = cb;
   t->arg = argp;
   // insert-sort the new timeout:
-  Timeout** p = &first_timeout; 
+  Timeout** p = &first_timeout;
   while (*p && (*p)->time <= time) p = &((*p)->next);
   t->next = *p;
   *p = t;
@@ -1424,7 +1440,8 @@ void fltk3::Window::hide() {
 # if USE_XFT
   fl_destroy_xft_draw(ip->xid);
 # endif
-  XDestroyWindow(fl_display, ip->xid);
+  // this test makes sure ip->xid has not been destroyed already
+  if (ip->xid) XDestroyWindow(fl_display, ip->xid);
 #elif defined(WIN32)
   // this little trickery seems to avoid the popup window stacking problem
   HWND p = GetForegroundWindow();

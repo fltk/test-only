@@ -3,7 +3,7 @@
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2010 by Bill Spitzak and others.
+// Copyright 1998-2011 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -39,6 +39,15 @@
 #include <fltk3/draw.h>
 #include <fltk3/ask.h>
 #include "flstring.h"
+
+#if defined(FL_DLL)	// really needed for c'tors for MS VC++ only
+#include <fltk3/FloatInput.H>
+#include <fltk3/IntInput.H>
+#include <fltk3/MultilineInput.H>
+#include <fltk3/Output.H>
+#include <fltk3/MultilineOutput.H>
+#include <fltk3/SecretInput.H>
+#endif
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
@@ -764,6 +773,51 @@ int fltk3::Input::handle(int event) {
 fltk3::Input::Input(int X, int Y, int W, int H, const char *l)
 : fltk3::Input_(X, Y, W, H, l) {
 }
+
+/*
+ The following constructors must not be in the header file(s) if we
+ build a shared object (DLL). Instead they are defined here to force
+ the constructor (and default destructor as well) to be defined in
+ the DLL and exported (STR #2632).
+ 
+ Note: if you change any of them, do the same changes in the specific
+ header file as well.  This redundant definition was chosen to enable
+ inline constructors in the header files (for static linking) as well
+ as those here for dynamic linking (Windows DLL).
+ */
+#if defined(FL_DLL)
+
+Fl_Float_Input::Fl_Float_Input(int X,int Y,int W,int H,const char *l)
+: Fl_Input(X,Y,W,H,l) {
+  type(FL_FLOAT_INPUT);
+}
+
+Fl_Int_Input::Fl_Int_Input(int X,int Y,int W,int H,const char *l)
+: Fl_Input(X,Y,W,H,l) {
+  type(FL_INT_INPUT);
+}
+
+Fl_Multiline_Input::Fl_Multiline_Input(int X,int Y,int W,int H,const char *l)
+: Fl_Input(X,Y,W,H,l) {
+  type(FL_MULTILINE_INPUT);
+}
+
+Fl_Output::Fl_Output(int X,int Y,int W,int H, const char *l)
+: Fl_Input(X, Y, W, H, l) {
+  type(FL_NORMAL_OUTPUT);
+}
+
+Fl_Multiline_Output::Fl_Multiline_Output(int X,int Y,int W,int H,const char *l)
+: Fl_Output(X,Y,W,H,l) {
+  type(FL_MULTILINE_OUTPUT);
+}
+
+Fl_Secret_Input::Fl_Secret_Input(int X,int Y,int W,int H,const char *l)
+: Fl_Input(X,Y,W,H,l) {
+  type(FL_SECRET_INPUT);
+}
+
+#endif // FL_DLL
 
 //
 // End of "$Id$".

@@ -1687,6 +1687,11 @@ void convert_1_to_3_cb(fltk3::Widget *, void *);
 void convert_2_to_3_cb(fltk3::Widget *, void *);
 void write_makefiles_cb(fltk3::Widget *, void *);
 
+extern fltk3::DoubleWindow* show_workspace_panel();
+void workspace_settings_cb(fltk3::Widget*, void*) {
+  show_workspace_panel();
+}
+
 fltk3::MenuItem Main_Menu[] = {
 {"&File",0,0,0,fltk3::SUBMENU},
   {"&New...", fltk3::COMMAND+'n', new_cb, 0},
@@ -1773,7 +1778,7 @@ fltk3::MenuItem Main_Menu[] = {
   {"Execute &Again...",fltk3::ALT+'g',(fltk3::Callback *)do_shell_command,0,fltk3::MENU_DIVIDER},
   {"Workspace",0,0,0,fltk3::SUBMENU},
     {"Write Makefile",fltk3::COMMAND+'m',write_makefiles_cb},
-    {"Settings...",0,(fltk3::Callback *)0L},
+    {"Settings...",0,workspace_settings_cb},
     {0},
   {"Build Application",fltk3::COMMAND+'b',(fltk3::Callback *)0L},
   {"Run Application",fltk3::COMMAND+'r',(fltk3::Callback *)0L},
