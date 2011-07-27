@@ -28,6 +28,12 @@
 #ifndef workspace_panel_h
 #define workspace_panel_h
 #include <fltk3/run.h>
+#include <fltk3/DoubleWindow.h>
+#include <fltk3/Input.h>
+#include <fltk3/Choice.h>
+#include <fltk3/Output.h>
+#include <fltk3/Button.h>
+fltk3::DoubleWindow* make_app_target_panel();
 #endif
 
 //

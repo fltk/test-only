@@ -78,6 +78,21 @@ folder Applications {open
         uuid_Xcode4_PBXFileRef {C9E8495F-E0DA-41CA-A433-0EE31A53EA61}
         filename_and_path {fluid/file.cxx}
       }
+      code_file {file_xcode.cxx} {
+        uuid_Xcode4_PBXBuildFile {6274DFA2-A0BB-41B1-A445-DA19DDBEA45B}
+        uuid_Xcode4_PBXFileRef {8AB9E1DA-0E88-4EC9-BA9C-A772BE5E138D}
+        filename_and_path {fluid/file_xcode.cxx}
+      }
+      code_file {file_make.cxx} {
+        uuid_Xcode4_PBXBuildFile {440345C5-F414-46E0-8451-A4BF6404BAD8}
+        uuid_Xcode4_PBXFileRef {AA030641-32F5-4A30-83C3-AB4C12B116BF}
+        filename_and_path {fluid/file_make.cxx}
+      }
+      code_file {file_visualc.cxx} {selected
+        uuid_Xcode4_PBXBuildFile {90165E96-B379-4CFB-9443-96A69D1138FF}
+        uuid_Xcode4_PBXFileRef {3897A14B-FF80-4B19-905F-F4FB3BEC9F0E}
+        filename_and_path {fluid/file_visualc.cxx}
+      }
       code_file {fluid.cxx} {
         uuid_Xcode4_PBXBuildFile {040ADAF6-46C7-41CB-9C4C-280781FC1D34}
         uuid_Xcode4_PBXFileRef {248C3EC8-EF4A-40C8-84F8-B9844B50DD4D}
@@ -163,7 +178,7 @@ folder Applications {open
         uuid_Xcode4_PBXFileRef {E66E13F7-CB1B-4DE1-801E-C7601315D72B}
         filename_and_path {fluid/widget_panel.h}
       }
-      code_file {workspace_panel.h} {selected
+      code_file {workspace_panel.h} {
         uuid_Xcode4_PBXFileRef {EAF89B48-F485-4F7C-A942-5E212E45BAB1}
         filename_and_path {fluid/workspace_panel.h}
       }

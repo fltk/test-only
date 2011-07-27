@@ -937,6 +937,45 @@ void manual_cb(fltk3::Widget *, void *) {
   show_help("index.html");
 }
 
+// ------------ file conversion ------------------------------------------------
+
+extern int write_fltk_makefiles();
+extern int write_fltk_ide_xcode4();
+extern int write_fltk_ide_visualc6();
+extern int write_fltk_ide_visualc2008();
+extern int write_fltk_ide_visualc2010();
+
+void write_makefiles_cb(fltk3::Widget*, void*) {
+  // make sure that our workspace file has a proper file name and path
+  if (!filename) {
+    save_cb(0, 0);
+    if (!filename)
+      return;
+  }
+  // TODO: we need workspace settings that declare which of these systems will be written
+  // TODO: we need to collect error messages and output them
+  if (write_fltk_makefiles()) {
+    int v = fltk3::choice("Error writing Makefile build system", "Cancel", "Continue", 0);
+    if (v==0) return;
+  }
+  if (write_fltk_ide_xcode4()) {
+    int v = fltk3::choice("Error writing Xcode 4 build system", "Cancel", "Continue", 0);
+    if (v==0) return;
+  }
+  if (write_fltk_ide_visualc6()) {
+    int v = fltk3::choice("Error writing VisualC 6 build system", "Cancel", "Continue", 0);
+    if (v==0) return;
+  }
+  if (write_fltk_ide_visualc2008()) {
+    int v = fltk3::choice("Error writing VisualC 2008 build system", "Cancel", "Continue", 0);
+    if (v==0) return;
+  }
+  if (write_fltk_ide_visualc2010()) {
+    int v = fltk3::choice("Error writing VisualC 2010 build system", "Cancel", "Continue", 0);
+    if (v==0) return;
+  }
+}
+
 
 ////////////////////////////////////////////////////////////////
 

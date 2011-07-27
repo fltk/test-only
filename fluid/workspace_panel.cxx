@@ -27,6 +27,56 @@
 
 #include "workspace_panel.h"
 
+fltk3::DoubleWindow* make_app_target_panel() {
+  fltk3::DoubleWindow* w;
+  { fltk3::DoubleWindow* o = new fltk3::DoubleWindow(307, 281, "Appliction Target");
+    w = o;
+    { fltk3::Input* o = new fltk3::Input(70, 20, 213, 25, "Name:");
+      o->tooltip("name of the target - this will be used in the IDEs and as a general reference\
+.");
+      o->labelsize(12);
+      o->textsize(12);
+    } // fltk3::Input* o
+    { fltk3::Input* o = new fltk3::Input(70, 55, 213, 25, "File Name:");
+      o->tooltip("name of the final executable - the appropriate file extension will be added");
+      o->labelsize(12);
+      o->textsize(12);
+      o->deactivate();
+    } // fltk3::Input* o
+    { fltk3::Choice* o = new fltk3::Choice(70, 90, 215, 25, "File Type:");
+      o->down_box(fltk3::BORDER_BOX);
+      o->labelsize(12);
+      o->textsize(12);
+      o->deactivate();
+    } // fltk3::Choice* o
+    { fltk3::Choice* o = new fltk3::Choice(70, 125, 215, 25, "Location:");
+      o->down_box(fltk3::BORDER_BOX);
+      o->labelsize(12);
+      o->textsize(12);
+      o->deactivate();
+    } // fltk3::Choice* o
+    { fltk3::Output* o = new fltk3::Output(70, 160, 215, 25, "Full Path:");
+      o->labelsize(12);
+      o->textsize(12);
+      o->deactivate();
+    } // fltk3::Output* o
+    { fltk3::Button* o = new fltk3::Button(85, 240, 95, 25, "OK");
+      o->labelsize(12);
+    } // fltk3::Button* o
+    { fltk3::Button* o = new fltk3::Button(190, 240, 95, 25, "Cancel");
+      o->labelsize(12);
+    } // fltk3::Button* o
+    { fltk3::Choice* o = new fltk3::Choice(70, 195, 215, 25, "Use:");
+      o->down_box(fltk3::BORDER_BOX);
+      o->labelsize(12);
+      o->textsize(12);
+      o->deactivate();
+    } // fltk3::Choice* o
+    o->end();
+  } // fltk3::DoubleWindow* o
+  return w;
+}
+
 //
 // End of "$Id$".
 //

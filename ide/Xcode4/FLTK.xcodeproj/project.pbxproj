@@ -830,6 +830,9 @@
 		5F465A55435CA8E057FC11A9 /* code.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 09CC113E65D83D7E7A30D89C /* code.cxx */; };
 		660933C9BA1538C3896094E0 /* factory.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 5C7951B9D90F7E92AA6CA89A /* factory.cxx */; };
 		9180CE4007B5C41D6D64E491 /* file.cxx in Sources */ = {isa = PBXBuildFile; fileRef = C9E8495FA110AAD01A53EA61 /* file.cxx */; };
+		6274DFA2E10A7E5CDDBEA45B /* file_xcode.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 8AB9E1DA40411DEEBE5E138D /* file_xcode.cxx */; };
+		440345C5B2F420EE6404BAD8 /* file_make.cxx in Sources */ = {isa = PBXBuildFile; fileRef = AA03064178C5288F12B116BF /* file_make.cxx */; };
+		90165E96FF8202E59D1138FF /* file_visualc.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 3897A14BB49964A43BEC9F0E /* file_visualc.cxx */; };
 		040ADAF6070CB44B81FC1D34 /* fluid.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 248C3EC8AF823D7C4B50DD4D /* fluid.cxx */; };
 		70498161CDB940833C7265BE /* function_panel.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 0279DE51526CE67E6C8790BE /* function_panel.cxx */; };
 		DB7E42B7653F3E0346FB8ED8 /* template_panel.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 5C0AC8E487F6E0BFD04B0423 /* template_panel.cxx */; };
@@ -4805,6 +4808,9 @@
 		09CC113E65D83D7E7A30D89C /* code.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = code.cxx; path = ../../fluid/code.cxx; sourceTree = SOURCE_ROOT; };
 		5C7951B9D90F7E92AA6CA89A /* factory.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = factory.cxx; path = ../../fluid/factory.cxx; sourceTree = SOURCE_ROOT; };
 		C9E8495FA110AAD01A53EA61 /* file.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file.cxx; path = ../../fluid/file.cxx; sourceTree = SOURCE_ROOT; };
+		8AB9E1DA40411DEEBE5E138D /* file_xcode.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_xcode.cxx; path = ../../fluid/file_xcode.cxx; sourceTree = SOURCE_ROOT; };
+		AA03064178C5288F12B116BF /* file_make.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_make.cxx; path = ../../fluid/file_make.cxx; sourceTree = SOURCE_ROOT; };
+		3897A14BB49964A43BEC9F0E /* file_visualc.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = file_visualc.cxx; path = ../../fluid/file_visualc.cxx; sourceTree = SOURCE_ROOT; };
 		248C3EC8AF823D7C4B50DD4D /* fluid.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fluid.cxx; path = ../../fluid/fluid.cxx; sourceTree = SOURCE_ROOT; };
 		0279DE51526CE67E6C8790BE /* function_panel.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = function_panel.cxx; path = ../../fluid/function_panel.cxx; sourceTree = SOURCE_ROOT; };
 		5C0AC8E487F6E0BFD04B0423 /* template_panel.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = template_panel.cxx; path = ../../fluid/template_panel.cxx; sourceTree = SOURCE_ROOT; };
@@ -7124,6 +7130,9 @@
 				09CC113E65D83D7E7A30D89C /* code.cxx */,
 				5C7951B9D90F7E92AA6CA89A /* factory.cxx */,
 				C9E8495FA110AAD01A53EA61 /* file.cxx */,
+				8AB9E1DA40411DEEBE5E138D /* file_xcode.cxx */,
+				AA03064178C5288F12B116BF /* file_make.cxx */,
+				3897A14BB49964A43BEC9F0E /* file_visualc.cxx */,
 				248C3EC8AF823D7C4B50DD4D /* fluid.cxx */,
 				0279DE51526CE67E6C8790BE /* function_panel.cxx */,
 				5C0AC8E487F6E0BFD04B0423 /* template_panel.cxx */,
@@ -10803,6 +10812,9 @@
 				5F465A55435CA8E057FC11A9 /* code.cxx in Sources */,
 				660933C9BA1538C3896094E0 /* factory.cxx in Sources */,
 				9180CE4007B5C41D6D64E491 /* file.cxx in Sources */,
+				6274DFA2E10A7E5CDDBEA45B /* file_xcode.cxx in Sources */,
+				440345C5B2F420EE6404BAD8 /* file_make.cxx in Sources */,
+				90165E96FF8202E59D1138FF /* file_visualc.cxx in Sources */,
 				040ADAF6070CB44B81FC1D34 /* fluid.cxx in Sources */,
 				70498161CDB940833C7265BE /* function_panel.cxx in Sources */,
 				DB7E42B7653F3E0346FB8ED8 /* template_panel.cxx in Sources */,

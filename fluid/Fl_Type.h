@@ -38,6 +38,7 @@
 #include <fltk3/Menu.h>
 #include <fltk3/Plugin.h>
 #include "Fluid_Image.h"
+#include <fltk3/run.h>
 #include <fltk3/draw.h>
 
 void set_modflag(int mf);

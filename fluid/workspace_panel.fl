@@ -29,6 +29,47 @@ comment {//
 } {in_source in_header
 } 
 
+Function {make_app_target_panel()} {open
+} {
+  {fltk3::Window} {} {
+    label {Appliction Target} open
+    xywh {464 218 307 281} type Double visible
+  } {
+    {fltk3::Input} {} {
+      label {Name:} selected
+      tooltip {name of the target - this will be used in the IDEs and as a general reference.} xywh {70 20 213 25} labelsize 12 textsize 12
+    }
+    {fltk3::Input} {} {
+      label {File Name:}
+      tooltip {name of the final executable - the appropriate file extension will be added} xywh {70 55 213 25} labelsize 12 textsize 12 deactivate
+    }
+    {fltk3::Choice} {} {
+      label {File Type:} open
+      xywh {70 90 215 25} down_box BORDER_BOX labelsize 12 textsize 12 deactivate
+    } {}
+    {fltk3::Choice} {} {
+      label {Location:} open
+      xywh {70 125 215 25} down_box BORDER_BOX labelsize 12 textsize 12 deactivate
+    } {}
+    {fltk3::Output} {} {
+      label {Full Path:}
+      xywh {70 160 215 25} labelsize 12 textsize 12 deactivate
+    }
+    {fltk3::Button} {} {
+      label OK
+      xywh {85 240 95 25} labelsize 12
+    }
+    {fltk3::Button} {} {
+      label Cancel
+      xywh {190 240 95 25} labelsize 12
+    }
+    {fltk3::Choice} {} {
+      label {Use:} open
+      xywh {70 195 215 25} down_box BORDER_BOX labelsize 12 textsize 12 deactivate
+    } {}
+  }
+} 
+
 comment {
 //
 // End of "$Id$".
