@@ -35,6 +35,7 @@
 #include "../src/flstring.h"
 #include <stdarg.h>
 #include "alignment_panel.h"
+#include "workspace_panel.h"
 #include <fltk3/FileChooser.h>
 
 ////////////////////////////////////////////////////////////////
@@ -346,6 +347,12 @@ int write_file(const char *filename, int selected_only) {
     write_string("\nheader_name"); write_word(header_file_name);
     write_string("\ncode_name"); write_word(code_file_name);
   }
+  if (wks_name) {
+    write_string("\nwks_name %s", wks_name);
+  }
+  if (wks_env!=Fl_Environment_Choice::ENV_ALL) {
+    write_string("\nwks_env %d", wks_env);
+  }
   for (Fl_Type *p = Fl_Type::first; p;) {
     if (!selected_only || p->selected) {
       p->write();
@@ -452,6 +459,14 @@ static void read_children(Fl_Type *p, int paste) {
       if (!code_file_set) code_file_name = strdup(read_word());
       else read_word();
       goto CONTINUE;
+    }
+
+    if (!strcmp(c,"wks_name")) {
+      wks_name = strdup(read_word());
+    }
+    
+    if (!strcmp(c,"wks_env")) {
+      wks_env = atoi(read_word());
     }
 
     if (!strcmp(c, "snap") || !strcmp(c, "gridx") || !strcmp(c, "gridy")) {

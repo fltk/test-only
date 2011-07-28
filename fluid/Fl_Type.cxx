@@ -47,6 +47,7 @@
 #include <stdio.h>
 
 #include "Fl_Type.h"
+#include "workspace_panel.h"
 #include "undo.h"
 
 #include <fltk3/Pixmap.h>
@@ -192,7 +193,7 @@ extern int show_comments;
 
 ////////////////////////////////////////////////////////////////
 
-unsigned int wks_env = 0;
+unsigned int wks_env = Fl_Environment_Choice::ENV_ALL;
 char *wks_name = 0L;
 
 ////////////////////////////////////////////////////////////////

@@ -34,6 +34,9 @@
 //     http://www.fltk.org/str.php
 //
 
+#ifndef FLUID_TYPE_H
+#define FLUID_TYPE_H
+
 #include <fltk3/Widget.h>
 #include <fltk3/Menu.h>
 #include <fltk3/Plugin.h>
@@ -1020,6 +1023,7 @@ public:
   virtual void show_panel() { }
 };
 
+#endif
 
 //
 // End of "$Id$".

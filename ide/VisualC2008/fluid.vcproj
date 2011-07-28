@@ -1008,7 +1008,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\fluid\file_xcode.cxx"
+			RelativePath="..\..\fluid\file_cmake.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"
@@ -1097,6 +1097,50 @@
 		</File>
 		<File
 			RelativePath="..\..\fluid\file_visualc.cxx"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					FavorSizeOrSpeed="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Debug Cairo|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release Cairo|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					FavorSizeOrSpeed="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions=""
+				/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\fluid\file_xcode.cxx"
 			>
 			<FileConfiguration
 				Name="Debug|Win32"

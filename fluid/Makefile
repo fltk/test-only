@@ -40,9 +40,10 @@ CPPFILES = \
 	code.cxx\
 	factory.cxx\
 	file.cxx\
-	file_xcode.cxx\
+	file_cmake.cxx\
 	file_make.cxx\
 	file_visualc.cxx\
+	file_xcode.cxx\
 	fluid.cxx\
 	function_panel.cxx\
 	template_panel.cxx\

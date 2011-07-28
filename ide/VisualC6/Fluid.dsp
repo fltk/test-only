@@ -147,7 +147,7 @@ SOURCE=..\..\fluid\file.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\fluid\file_xcode.cxx
+SOURCE=..\..\fluid\file_cmake.cxx
 # End Source File
 # Begin Source File
 
@@ -156,6 +156,10 @@ SOURCE=..\..\fluid\file_make.cxx
 # Begin Source File
 
 SOURCE=..\..\fluid\file_visualc.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fluid\file_xcode.cxx
 # End Source File
 # Begin Source File
 

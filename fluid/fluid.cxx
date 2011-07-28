@@ -51,6 +51,7 @@
 #include "alignment_panel.h"
 #include "function_panel.h"
 #include "template_panel.h"
+#include "workspace_panel.h"
 #if !defined(WIN32) || defined(__CYGWIN__)
 #  include "print_panel.cxx"
 #endif // !WIN32 || __CYGWIN__
@@ -940,6 +941,7 @@ void manual_cb(fltk3::Widget *, void *) {
 // ------------ file conversion ------------------------------------------------
 
 extern int write_fltk_makefiles();
+extern int write_fltk_cmake();
 extern int write_fltk_ide_xcode4();
 extern int write_fltk_ide_visualc6();
 extern int write_fltk_ide_visualc2008();
@@ -954,23 +956,27 @@ void write_makefiles_cb(fltk3::Widget*, void*) {
   }
   // TODO: we need workspace settings that declare which of these systems will be written
   // TODO: we need to collect error messages and output them
-  if (write_fltk_makefiles()) {
+  if ((wks_env&Fl_Environment_Choice::ENV_MAKE) && write_fltk_makefiles()) {
     int v = fltk3::choice("Error writing Makefile build system", "Cancel", "Continue", 0);
     if (v==0) return;
   }
-  if (write_fltk_ide_xcode4()) {
+  if ((wks_env&Fl_Environment_Choice::ENV_CMAKE) && write_fltk_cmake()) {
+    int v = fltk3::choice("Error writing Makefile build system", "Cancel", "Continue", 0);
+    if (v==0) return;
+  }
+  if ((wks_env&Fl_Environment_Choice::ENV_XC4) && write_fltk_ide_xcode4()) {
     int v = fltk3::choice("Error writing Xcode 4 build system", "Cancel", "Continue", 0);
     if (v==0) return;
   }
-  if (write_fltk_ide_visualc6()) {
+  if ((wks_env&Fl_Environment_Choice::ENV_VC6) && write_fltk_ide_visualc6()) {
     int v = fltk3::choice("Error writing VisualC 6 build system", "Cancel", "Continue", 0);
     if (v==0) return;
   }
-  if (write_fltk_ide_visualc2008()) {
+  if ((wks_env&Fl_Environment_Choice::ENV_VC2008) && write_fltk_ide_visualc2008()) {
     int v = fltk3::choice("Error writing VisualC 2008 build system", "Cancel", "Continue", 0);
     if (v==0) return;
   }
-  if (write_fltk_ide_visualc2010()) {
+  if ((wks_env&Fl_Environment_Choice::ENV_VC2010) && write_fltk_ide_visualc2010()) {
     int v = fltk3::choice("Error writing VisualC 2010 build system", "Cancel", "Continue", 0);
     if (v==0) return;
   }
