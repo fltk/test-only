@@ -429,61 +429,77 @@ int Widget_Browser::handle(int e) {
   Fl_Type *l;
   int X,Y,W,H; bbox(X,Y,W,H);
   switch (e) {
-  case fltk3::PUSH:
-    if (!fltk3::event_inside(X,Y,W,H)) break;
-    l = (Fl_Type*)find_item(fltk3::event_y());
-    if (l) {
-      X += 12*l->level + 18 - hposition();
-      if (l->is_parent() && fltk3::event_x()>X-18 && fltk3::event_x()<X+13-18) {
-	title = pushedtitle = l;
-	redraw_line(l);
-	return 1;
-      }
-    }
-    break;
-  case fltk3::DRAG:
-    if (!title) break;
-    l = (Fl_Type*)find_item(fltk3::event_y());
-    if (l) {
-      X += 12*l->level + 18 - hposition();
-      if (l->is_parent() && fltk3::event_x()>X-18 && fltk3::event_x()<X+13-18) ;
-      else l = 0;
-    }
-    if (l != pushedtitle) {
-      if (pushedtitle) redraw_line(pushedtitle);
-      if (l) redraw_line(l);
-      pushedtitle = l;
-    }
-    return 1;
-  case fltk3::RELEASE:
-    if (!title) {
+    case fltk3::PUSH:
+      if (!fltk3::event_inside(X,Y,W,H)) break;
       l = (Fl_Type*)find_item(fltk3::event_y());
-      if (l && l->new_selected && (fltk3::event_clicks() || fltk3::event_state(fltk3::CTRL)))
-	l->open();
-      break;
-    }
-    l = pushedtitle;
-    title = pushedtitle = 0;
-    if (l) {
-      if (l->open_) {
-	l->open_ = 0;
-	for (Fl_Type*k = l->next; k&&k->level>l->level; k = k->next)
-	  k->visible = 0;
-      } else {
-	l->open_ = 1;
-	for (Fl_Type*k=l->next; k&&k->level>l->level;) {
-	  k->visible = 1;
-	  if (k->is_parent() && !k->open_) {
-	    Fl_Type *j;
-	    for (j = k->next; j && j->level>k->level; j = j->next);
-	    k = j;
-	  } else
-	    k = k->next;
-	}
+      if (l) {
+        X += 12*l->level + 18 - hposition();
+        if (l->is_parent() && fltk3::event_x()>X-18 && fltk3::event_x()<X+13-18) {
+          title = pushedtitle = l;
+          redraw_line(l);
+          return 1;
+        }
       }
-      redraw();
-    }
-    return 1;
+      break;
+    case fltk3::DRAG:
+      if (!title) break;
+      l = (Fl_Type*)find_item(fltk3::event_y());
+      if (l) {
+        X += 12*l->level + 18 - hposition();
+        if (l->is_parent() && fltk3::event_x()>X-18 && fltk3::event_x()<X+13-18) ;
+        else l = 0;
+      }
+      if (l != pushedtitle) {
+        if (pushedtitle) redraw_line(pushedtitle);
+        if (l) redraw_line(l);
+        pushedtitle = l;
+      }
+      return 1;
+    case fltk3::RELEASE:
+      if (!title) {
+        l = (Fl_Type*)find_item(fltk3::event_y());
+        if (l && l->new_selected && (fltk3::event_clicks() || fltk3::event_state(fltk3::CTRL)))
+          l->open();
+        break;
+      }
+      l = pushedtitle;
+      title = pushedtitle = 0;
+      if (l) {
+        if (l->open_) {
+          l->open_ = 0;
+          for (Fl_Type*k = l->next; k&&k->level>l->level; k = k->next)
+            k->visible = 0;
+        } else {
+          l->open_ = 1;
+          for (Fl_Type*k=l->next; k&&k->level>l->level;) {
+            k->visible = 1;
+            if (k->is_parent() && !k->open_) {
+              Fl_Type *j;
+              for (j = k->next; j && j->level>k->level; j = j->next);
+              k = j;
+            } else
+              k = k->next;
+          }
+        }
+        redraw();
+      }
+      return 1;
+    case fltk3::DND_ENTER:
+    case fltk3::DND_DRAG:
+    case fltk3::DND_RELEASE:
+      if (!fltk3::event_inside(X,Y,W,H)) break;
+      l = (Fl_Type*)find_item(fltk3::event_y());
+      if (l && l->dnd_available()) {
+        title = l;
+        return 1;
+      } else {
+        title = 0;
+        return 0;
+      }
+    case fltk3::PASTE:
+      if (title && title->dnd_available())
+        title->dnd_paste();
+      return 1;
   }
   return fltk3::Browser_::handle(e);
 }
@@ -1175,6 +1191,46 @@ char Fl_Workspace_Type::read_property(const char *name) {
   return 1;
 }
 
+int Fl_Workspace_Type::dnd_available() {
+  // FIXME: we should maybe test if the objects dropped are actually valid file names
+  if (filename && *filename && (is_target() || is_folder()))
+    return 1;
+  return 0;
+}
+
+int Fl_Workspace_Type::dnd_paste() {
+  if (filename && *filename && (is_target() || is_folder())) {
+    if (fltk3::event_text() && *fltk3::event_text()) {
+      char *basedir = strdup(filename); // global name of workspace file!
+      char *fn = (char*)fltk3::filename_name(basedir);
+      if (fn) *fn = 0;
+      char *files = strdup(fltk3::event_text()), *s = files, *e = s;
+      char done = 0;
+      for (;!done;) {
+        // find the end of the line
+        for (;;) {
+          if (*e==0) { done = 1; break; }
+          if (*e=='\n') { *e++ = 0; break; }
+          e++;
+        }
+        // add the file 's' to this item
+        if (e!=s) {
+          char buf[2048];
+          fltk3::filename_relative(buf, 2048, s, basedir);
+          Fl_Code_File_Type *o = new Fl_Code_File_Type();
+          o->filename(buf);
+          o->add(this);
+          o->factory = this;
+        }
+        s = e;
+      }
+      free(files);
+      free(basedir);
+    }
+  }
+  return 1;
+}
+
 // ------------ Target ---------------------------------------------------------
 
 Fl_Target_Type Fl_Target_type;
@@ -1200,7 +1256,7 @@ Fl_Target_Type *Fl_Target_Type::find(const char *name) {
 Fl_App_Target_Type Fl_App_Target_type;
 
 Fl_Type *Fl_App_Target_Type::make() {
-  // a target con only go into a workspace file
+  // a target can only go into a workspace file
   // TODO: we can offer to create a workspace if this is currently a GUI file
   if (Fl_Type::first && !is_workspace()) {
     fltk3::message("A Target can only be added to a Workspace.");

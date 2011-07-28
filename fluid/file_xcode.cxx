@@ -81,7 +81,6 @@ int write_fltk_ide_xcode4() {
             if (f->is_cplusplus_code()) {
               char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
               char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
-              // 836: DCB5F32CFF3DCFF6F2DA89E2 /* CodeEditor.cxx in Sources */ = {isa = PBXBuildFile; fileRef = CC0C80DA4DD31B6B2DB91096 /* CodeEditor.cxx */; };
               fprintf(out, "\t\t%s /* %s in %s */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };\n", 
                       PBXBuildFile, 
                       f->filename_name(), 

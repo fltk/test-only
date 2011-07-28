@@ -171,6 +171,9 @@ public:
 
   virtual int pixmapID() { return 0; }
 
+  virtual int dnd_available() { return 0; }
+  virtual int dnd_paste() { return 0; }
+  
   const char* class_name(const int need_nest) const;
   const class Fl_Class_Type* is_in_class() const;
 };
@@ -191,6 +194,8 @@ public:
   void write_properties();
   char read_property(const char *);
   virtual int is_workspace_type() const { return 1; }
+  virtual int dnd_available();
+  virtual int dnd_paste();
 };
 
 class Fl_Target_Type : public Fl_Workspace_Type {
