@@ -114,7 +114,7 @@ folder Applications {open
         uuid_Xcode4_PBXFileRef {5C0AC8E4-C774-4082-AD48-4DF7D04B0423}
         filename_and_path {fluid/template_panel.cxx}
       }
-      code_file {undo.cxx} {selected
+      code_file {undo.cxx} {
         uuid_Xcode4_PBXBuildFile {9F2F34D6-3E87-4B4C-A4E7-459A6F518639}
         uuid_Xcode4_PBXFileRef {6A66AFC5-0859-4BA2-8EF1-A85C3A828ED7}
         filename_and_path {fluid/undo.cxx}
@@ -160,7 +160,7 @@ folder Applications {open
         uuid_Xcode4_PBXFileRef {26103935-2D50-4B44-97C7-EE9AA857DE61}
         filename_and_path {fluid/alignment_panel.h}
       }
-      code_file {comments.h} {
+      code_file {comments.h} {selected
         uuid_Xcode4_PBXFileRef {19297348-7E5A-41AE-99F6-7AB10245A1D8}
         filename_and_path {fluid/comments.h}
       }
@@ -195,7 +195,14 @@ folder Applications {open
 folder Libraries {open
 } {
   app_target fltk {open
-  } {}
+  } {
+    folder Sources {open
+    } {
+      code_file {Fl_Adjuster.cxx} {
+        filename_and_path {src/Fl_Adjuster.cxx}
+      }
+    }
+  }
   app_target fltk_gl {open
   } {}
   app_target fltk_images {open

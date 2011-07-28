@@ -48,12 +48,7 @@ int write_fltk_ide_xcode4() {
   // destination is ide/Xcode4/FLTK.xcodeproj/project.pbxproj
 
   /* find the target named "Fluid" */
-  Fl_Type *tgt = Fl_Type::first;
-  while (tgt) {
-    if (tgt->is_target() && strcmp(tgt->name(), "Fluid")==0)
-      break;
-    tgt = tgt->next;
-  }
+  Fl_Type *tgt = Fl_Target_Type::find("Fluid");
   if (!tgt) {
     printf("FLUID target not found\n");
     return -1;
@@ -80,118 +75,74 @@ int write_fltk_ide_xcode4() {
         continue;
       } else { // single hash is a command
         copyLine = 0;
-        //char *semi = strchr(hash, ';');
-        //if (!semi) continue; // syntax error
         if (strncmp(hash, "#FluidBuildFileReferences;", 26)==0) {
-          Fl_Type *src = tgt->next;
-          while (src && src->level>tgt->level) {
-            if (src->is_file()) {
-              Fl_File_Type *f = (Fl_File_Type*)src;
-              const char *fn = f->filename();
-              if (fn) {
-                const char *ext = fltk3::filename_ext(fn);
-                if (ext && (strcmp(ext, ".cxx")==0 || strcmp(ext, ".cpp")==0)) {
-                  char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
-                  char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
-                  // 836: DCB5F32CFF3DCFF6F2DA89E2 /* CodeEditor.cxx in Sources */ = {isa = PBXBuildFile; fileRef = CC0C80DA4DD31B6B2DB91096 /* CodeEditor.cxx */; };
-                  fprintf(out, "\t\t%s /* %s in %s */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };\n", 
-                          PBXBuildFile, 
-                          fltk3::filename_name(fn), 
-                          "Sources", 
-                          PBXFileRef, 
-                          fltk3::filename_name(fn));
-                }
-              }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_cplusplus_code()) {
+              char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
+              char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
+              // 836: DCB5F32CFF3DCFF6F2DA89E2 /* CodeEditor.cxx in Sources */ = {isa = PBXBuildFile; fileRef = CC0C80DA4DD31B6B2DB91096 /* CodeEditor.cxx */; };
+              fprintf(out, "\t\t%s /* %s in %s */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };\n", 
+                      PBXBuildFile, 
+                      f->filename_name(), 
+                      "Sources", 
+                      PBXFileRef, 
+                      f->filename_name());
             }
-            src = src->next;
           }
           hash += 26;
         } else if (strncmp(hash, "#FluidFileReferences;", 21)==0) {
-          Fl_Type *src = tgt->next;
-          while (src && src->level>tgt->level) {
-            if (src->is_file()) {
-              Fl_File_Type *f = (Fl_File_Type*)src;
-              const char *fn = f->filename();
-              if (fn) {
-                const char *ext = fltk3::filename_ext(fn);
-                char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
-                // 4818: CC0C80DA4DD31B6B2DB91096 /* CodeEditor.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CodeEditor.cxx; path = ../../fluid/CodeEditor.cxx; sourceTree = SOURCE_ROOT; };
-                if (ext && (strcmp(ext, ".cxx")==0 || strcmp(ext, ".cpp")==0) ) {
-                  fprintf(out, "\t\t%s /* %s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = %s; path = ../../%s; sourceTree = SOURCE_ROOT; };\n", 
-                          PBXFileRef,
-                          fltk3::filename_name(fn), 
-                          fltk3::filename_name(fn), 
-                          fn);
-                } else if (ext && (strcmp(ext, ".h")==0)) {
-                    fprintf(out, "\t\t%s /* %s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = %s; path = ../../%s; sourceTree = SOURCE_ROOT; };\n", 
-                            PBXFileRef,
-                            fltk3::filename_name(fn), 
-                            fltk3::filename_name(fn), 
-                            fn);
-                }
-              }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_cplusplus_code()) {
+              char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
+              fprintf(out, "\t\t%s /* %s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = %s; path = ../../%s; sourceTree = SOURCE_ROOT; };\n", 
+                      PBXFileRef,
+                      f->filename_name(), 
+                      f->filename_name(), 
+                      f->filename());
+            } else if (f->is_cplusplus_header()) {
+              char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
+              fprintf(out, "\t\t%s /* %s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = %s; path = ../../%s; sourceTree = SOURCE_ROOT; };\n", 
+                      PBXFileRef,
+                      f->filename_name(), 
+                      f->filename_name(), 
+                      f->filename());
             }
-            src = src->next;
           }
           hash += 21;
         } else if (strncmp(hash, "#FluidHeadersGroup;", 19)==0) {
-          Fl_Type *src = tgt->next;
-          while (src && src->level>tgt->level) {
-            if (src->is_file()) {
-              Fl_File_Type *f = (Fl_File_Type*)src;
-              const char *fn = f->filename();
-              if (fn) {
-                const char *ext = fltk3::filename_ext(fn);
-                if (ext && strcmp(ext, ".h")==0) {
-                  char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
-                  fprintf(out, "\t\t\t\t%s /* %s */,\n", 
-                          PBXFileRef, 
-                          fltk3::filename_name(fn));
-                }
-              }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_cplusplus_header()) {
+              char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
+              fprintf(out, "\t\t\t\t%s /* %s */,\n", 
+                      PBXFileRef, 
+                      f->filename_name());
             }
-            src = src->next;
           }
           hash += 19;
         } else if (strncmp(hash, "#FluidSourcesGroup;", 19)==0) {
-          Fl_Type *src = tgt->next;
-          while (src && src->level>tgt->level) {
-            if (src->is_file()) {
-              Fl_File_Type *f = (Fl_File_Type*)src;
-              const char *fn = f->filename();
-              if (fn) {
-                const char *ext = fltk3::filename_ext(fn);
-                if (ext && (strcmp(ext, ".cxx")==0 || strcmp(ext, ".cpp")==0)) {
-                  char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
-                  // 7109: CC0C80DA4DD31B6B2DB91096 /* CodeEditor.cxx */,
-                  fprintf(out, "\t\t\t\t%s /* %s */,\n", 
-                          PBXFileRef, 
-                          fltk3::filename_name(fn));
-                }
-              }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_cplusplus_code()) {
+              char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
+              fprintf(out, "\t\t\t\t%s /* %s */,\n", 
+                      PBXFileRef, 
+                      f->filename_name());
             }
-            src = src->next;
           }
           hash += 19;
         } else if (strncmp(hash, "#FluidSourcesBuildPhase;", 23)==0) {
-          Fl_Type *src = tgt->next;
-          while (src && src->level>tgt->level) {
-            if (src->is_file()) {
-              Fl_File_Type *f = (Fl_File_Type*)src;
-              const char *fn = f->filename();
-              if (fn) {
-                const char *ext = fltk3::filename_ext(fn);
-                if (ext && (strcmp(ext, ".cxx")==0 || strcmp(ext, ".cpp")==0)) {
-                  char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
-                  // 10787: DCB5F32CFF3DCFF6F2DA89E2 /* CodeEditor.cxx in Sources */,
-                  fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
-                          PBXBuildFile, 
-                          fltk3::filename_name(fn), 
-                          "Sources");
-                }
-              }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_cplusplus_code()) {
+              char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
+              fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
+                      PBXBuildFile, 
+                      f->filename_name(), 
+                      "Sources");
             }
-            src = src->next;
           }
           hash += 23;
         } else {

@@ -204,6 +204,8 @@ public:
   Fl_Type *make();
   virtual int is_parent() const { return 1; }
   virtual int is_target() const { return 1; }
+  
+  static Fl_Target_Type *find(const char *name);
 };
 extern Fl_Target_Type Fl_Target_type;
 
@@ -251,9 +253,14 @@ public:
   virtual int pixmapID() { return 53; } // FIXME: draw icon
   void filename(const char *new_name);
   const char *filename() { return pFilename; }
+  const char *filename_name();
   virtual void open();
   virtual void write_properties();
   virtual char read_property(const char *);
+  static Fl_File_Type *first_file(Fl_Type *base);
+  Fl_File_Type *next_file(Fl_Type *base);
+  char is_cplusplus_code();
+  char is_cplusplus_header();
 };
 extern Fl_File_Type Fl_File_type;
 

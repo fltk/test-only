@@ -1184,6 +1184,17 @@ Fl_Type *Fl_Target_Type::make() {
   return 0L;
 }
 
+Fl_Target_Type *Fl_Target_Type::find(const char *name) {
+  Fl_Type *tgt = first;
+  while (tgt) {
+    if (tgt->is_target() && strcmp(tgt->name(), name)==0)
+      return (Fl_Target_Type*)tgt;
+    tgt = tgt->next;
+  }
+  return 0;
+}
+
+
 // ------------ Application Target ---------------------------------------------
 
 Fl_App_Target_Type Fl_App_Target_type;
@@ -1302,6 +1313,56 @@ void Fl_File_Type::write_properties() {
     write_string("filename_and_path");
     write_word(filename());
   }
+}
+
+Fl_File_Type *Fl_File_Type::first_file(Fl_Type *base) {
+  Fl_Type *src = base->next;
+  while (src && src->level>base->level) {
+    if (src->is_file()) 
+      return (Fl_File_Type*)src;
+    src = src->next;
+  }
+  return 0;
+}
+
+Fl_File_Type *Fl_File_Type::next_file(Fl_Type *base) {
+  Fl_Type *src = this->next;
+  while (src && src->level>base->level) {
+    if (src->is_file()) 
+      return (Fl_File_Type*)src;
+    src = src->next;
+  }
+  return 0;
+}
+
+char Fl_File_Type::is_cplusplus_code() {
+  const char *fn = filename();
+  if (fn) {
+    const char *ext = fltk3::filename_ext(fn);
+    if (ext && (strcmp(ext, ".cxx")==0 || strcmp(ext, ".cpp")==0)) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+char Fl_File_Type::is_cplusplus_header() {
+  const char *fn = filename();
+  if (fn) {
+    const char *ext = fltk3::filename_ext(fn);
+    if (ext && (strcmp(ext, ".h")==0 || strcmp(ext, ".H")==0)) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+const char *Fl_File_Type::filename_name() {
+  const char *fn = filename();
+  if (fn) {
+    return fltk3::filename_name(fn);
+  }
+  return 0;
 }
 
 // ------------ Fluid File -----------------------------------------------------

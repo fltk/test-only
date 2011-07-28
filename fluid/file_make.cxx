@@ -49,12 +49,7 @@ int write_fltk_makefiles() {
   }
   
   /* find the target named "Fluid" */
-  Fl_Type *tgt = Fl_Type::first;
-  while (tgt) {
-    if (tgt->is_target() && strcmp(tgt->name(), "Fluid")==0)
-      break;
-    tgt = tgt->next;
-  }
+  Fl_Type *tgt = Fl_Target_Type::find("Fluid");
   if (!tgt) {
     printf("FLUID target not found\n");
     return -1;
@@ -100,19 +95,11 @@ int write_fltk_makefiles() {
   
   /* loop through the target and write out all C++ files */
   fprintf(out, "CPPFILES = ");
-  Fl_Type *src = tgt->next;
-  while (src && src->level>tgt->level) {
-    if (src->is_file()) {
-      Fl_File_Type *f = (Fl_File_Type*)src;
-      const char *fn = f->filename();
-      if (fn) {
-        const char *ext = fltk3::filename_ext(fn);
-        if (ext && (strcmp(ext, ".cxx")==0 || strcmp(ext, ".cpp")==0)) {
-          fprintf(out, "\\\n\t%s", fltk3::filename_name(fn));
-        }
-      }
+  Fl_File_Type *f;
+  for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+    if (f->is_cplusplus_code()) {
+      fprintf(out, "\\\n\t%s", f->filename_name());
     }
-    src = src->next;
   }
   fprintf(out, "\n\n");
   

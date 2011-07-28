@@ -41,6 +41,18 @@
 
 extern char *filename;
 
+const char *DOS_path(const char *filename) {
+  static char buf[2048];
+  char *c;
+  strcpy(buf, filename);
+  for (c=buf;;c++) {
+    switch (*c) {
+      case '/': *c = '\\'; break;
+      case 0: break;
+    }
+  }
+  return buf;
+}
 
 int write_fltk_ide_visualc6() {
   if (!filename) {
@@ -49,12 +61,7 @@ int write_fltk_ide_visualc6() {
   }
   
   /* find the target named "Fluid" */
-  Fl_Type *tgt = Fl_Type::first;
-  while (tgt) {
-    if (tgt->is_target() && strcmp(tgt->name(), "Fluid")==0)
-      break;
-    tgt = tgt->next;
-  }
+  Fl_Type *tgt = Fl_Target_Type::find("Fluid");
   if (!tgt) {
     printf("FLUID target not found\n");
     return -1;
@@ -163,31 +170,15 @@ int write_fltk_ide_visualc6() {
   fprintf(out, "# Name \"Fluid - Win32 Debug\"\r\n");
   
   /* loop through the target and write out all C++ files */
-  Fl_Type *src = tgt->next;
-  while (src && src->level>tgt->level) {
-    if (src->is_file()) {
-      Fl_File_Type *f = (Fl_File_Type*)src;
-      const char *fn = f->filename();
-      if (fn) {
-        const char *ext = fltk3::filename_ext(fn);
-        if (ext && (strcmp(ext, ".cxx")==0 || strcmp(ext, ".cpp")==0)) {
-          char buf[2048], *c;
-          strcpy(buf, fn);
-          for (c=buf;;) {
-            c = strchr(c, '/');
-            if (!c) break;
-            *c = '\\';
-            c++;
-          }
-          fprintf(out, "# Begin Source File\r\n");
-          fprintf(out, "\r\n");
-          fprintf(out, "SOURCE=..\\..\\%s\r\n", buf);
-          fprintf(out, "# End Source File\r\n");
-        }
-      }
+  Fl_File_Type *f;
+  for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+    if (f->is_cplusplus_code()) {
+      fprintf(out, "# Begin Source File\r\n");
+      fprintf(out, "\r\n");
+      fprintf(out, "SOURCE=..\\..\\%s\r\n", DOS_path(f->filename()));
+      fprintf(out, "# End Source File\r\n");
     }
-    src = src->next;
-  }
+  }  
   
   fprintf(out, "# End Target\r\n");
   fprintf(out, "# End Project\r\n");
@@ -204,12 +195,7 @@ int write_fltk_ide_visualc2008() {
   }
   
   /* find the target named "Fluid" */
-  Fl_Type *tgt = Fl_Type::first;
-  while (tgt) {
-    if (tgt->is_target() && strcmp(tgt->name(), "Fluid")==0)
-      break;
-    tgt = tgt->next;
-  }
+  Fl_Type *tgt = Fl_Target_Type::find("Fluid");
   if (!tgt) {
     printf("FLUID target not found\n");
     return -1;
@@ -620,70 +606,54 @@ int write_fltk_ide_visualc2008() {
   fprintf(out, "\t<Files>\r\n");
   
   /* loop through the target and write out all C++ files */
-  Fl_Type *src = tgt->next;
-  while (src && src->level>tgt->level) {
-    if (src->is_file()) {
-      Fl_File_Type *f = (Fl_File_Type*)src;
-      const char *fn = f->filename();
-      if (fn) {
-        const char *ext = fltk3::filename_ext(fn);
-        if (ext && (strcmp(ext, ".cxx")==0 || strcmp(ext, ".cpp")==0)) {
-          char buf[2048], *c;
-          strcpy(buf, fn);
-          for (c=buf;;) {
-            c = strchr(c, '/');
-            if (!c) break;
-            *c = '\\';
-            c++;
-          }          
-          fprintf(out, "\t\t<File\r\n");
-          fprintf(out, "\t\t\tRelativePath=\"..\\..\\%s\"\r\n", buf);
-          fprintf(out, "\t\t\t>\r\n");
-          fprintf(out, "\t\t\t<FileConfiguration\r\n");
-          fprintf(out, "\t\t\t\tName=\"Debug|Win32\"\r\n");
-          fprintf(out, "\t\t\t\t>\r\n");
-          fprintf(out, "\t\t\t\t<Tool\r\n");
-          fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-          fprintf(out, "\t\t\t\t\tOptimization=\"0\"\r\n");
-          fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
-          fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
-          fprintf(out, "\t\t\t\t/>\r\n");
-          fprintf(out, "\t\t\t</FileConfiguration>\r\n");
-          fprintf(out, "\t\t\t<FileConfiguration\r\n");
-          fprintf(out, "\t\t\t\tName=\"Release|Win32\"\r\n");
-          fprintf(out, "\t\t\t\t>\r\n");
-          fprintf(out, "\t\t\t\t<Tool\r\n");
-          fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-          fprintf(out, "\t\t\t\t\tFavorSizeOrSpeed=\"0\"\r\n");
-          fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
-          fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
-          fprintf(out, "\t\t\t\t/>\r\n");
-          fprintf(out, "\t\t\t</FileConfiguration>\r\n");
-          fprintf(out, "\t\t\t<FileConfiguration\r\n");
-          fprintf(out, "\t\t\t\tName=\"Debug Cairo|Win32\"\r\n");
-          fprintf(out, "\t\t\t\t>\r\n");
-          fprintf(out, "\t\t\t\t<Tool\r\n");
-          fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-          fprintf(out, "\t\t\t\t\tOptimization=\"0\"\r\n");
-          fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
-          fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
-          fprintf(out, "\t\t\t\t/>\r\n");
-          fprintf(out, "\t\t\t</FileConfiguration>\r\n");
-          fprintf(out, "\t\t\t<FileConfiguration\r\n");
-          fprintf(out, "\t\t\t\tName=\"Release Cairo|Win32\"\r\n");
-          fprintf(out, "\t\t\t\t>\r\n");
-          fprintf(out, "\t\t\t\t<Tool\r\n");
-          fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-          fprintf(out, "\t\t\t\t\tFavorSizeOrSpeed=\"0\"\r\n");
-          fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
-          fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
-          fprintf(out, "\t\t\t\t/>\r\n");
-          fprintf(out, "\t\t\t</FileConfiguration>\r\n");
-          fprintf(out, "\t\t</File>\r\n");          
-        }
-      }
+  Fl_File_Type *f;
+  for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+    if (f->is_cplusplus_code()) {
+      fprintf(out, "\t\t<File\r\n");
+      fprintf(out, "\t\t\tRelativePath=\"..\\..\\%s\"\r\n", DOS_path(f->filename()));
+      fprintf(out, "\t\t\t>\r\n");
+      fprintf(out, "\t\t\t<FileConfiguration\r\n");
+      fprintf(out, "\t\t\t\tName=\"Debug|Win32\"\r\n");
+      fprintf(out, "\t\t\t\t>\r\n");
+      fprintf(out, "\t\t\t\t<Tool\r\n");
+      fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
+      fprintf(out, "\t\t\t\t\tOptimization=\"0\"\r\n");
+      fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
+      fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
+      fprintf(out, "\t\t\t\t/>\r\n");
+      fprintf(out, "\t\t\t</FileConfiguration>\r\n");
+      fprintf(out, "\t\t\t<FileConfiguration\r\n");
+      fprintf(out, "\t\t\t\tName=\"Release|Win32\"\r\n");
+      fprintf(out, "\t\t\t\t>\r\n");
+      fprintf(out, "\t\t\t\t<Tool\r\n");
+      fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
+      fprintf(out, "\t\t\t\t\tFavorSizeOrSpeed=\"0\"\r\n");
+      fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
+      fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
+      fprintf(out, "\t\t\t\t/>\r\n");
+      fprintf(out, "\t\t\t</FileConfiguration>\r\n");
+      fprintf(out, "\t\t\t<FileConfiguration\r\n");
+      fprintf(out, "\t\t\t\tName=\"Debug Cairo|Win32\"\r\n");
+      fprintf(out, "\t\t\t\t>\r\n");
+      fprintf(out, "\t\t\t\t<Tool\r\n");
+      fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
+      fprintf(out, "\t\t\t\t\tOptimization=\"0\"\r\n");
+      fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
+      fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
+      fprintf(out, "\t\t\t\t/>\r\n");
+      fprintf(out, "\t\t\t</FileConfiguration>\r\n");
+      fprintf(out, "\t\t\t<FileConfiguration\r\n");
+      fprintf(out, "\t\t\t\tName=\"Release Cairo|Win32\"\r\n");
+      fprintf(out, "\t\t\t\t>\r\n");
+      fprintf(out, "\t\t\t\t<Tool\r\n");
+      fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
+      fprintf(out, "\t\t\t\t\tFavorSizeOrSpeed=\"0\"\r\n");
+      fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
+      fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
+      fprintf(out, "\t\t\t\t/>\r\n");
+      fprintf(out, "\t\t\t</FileConfiguration>\r\n");
+      fprintf(out, "\t\t</File>\r\n");          
     }
-    src = src->next;
   }
   
   fprintf(out, "\t</Files>\r\n");
@@ -703,12 +673,7 @@ int write_fltk_ide_visualc2010() {
   }
   
   /* find the target named "Fluid" */
-  Fl_Type *tgt = Fl_Type::first;
-  while (tgt) {
-    if (tgt->is_target() && strcmp(tgt->name(), "Fluid")==0)
-      break;
-    tgt = tgt->next;
-  }
+  Fl_Type *tgt = Fl_Target_Type::find("Fluid");
   if (!tgt) {
     printf("FLUID target not found\n");
     return -1;
@@ -973,42 +938,26 @@ int write_fltk_ide_visualc2010() {
   fprintf(out, "    </Link>\r\n");
   fprintf(out, "  </ItemDefinitionGroup>\r\n");
   fprintf(out, "  <ItemGroup>\r\n");
-    
+  
   /* loop through the target and write out all C++ files */
-  Fl_Type *src = tgt->next;
-  while (src && src->level>tgt->level) {
-    if (src->is_file()) {
-      Fl_File_Type *f = (Fl_File_Type*)src;
-      const char *fn = f->filename();
-      if (fn) {
-        const char *ext = fltk3::filename_ext(fn);
-        if (ext && (strcmp(ext, ".cxx")==0 || strcmp(ext, ".cpp")==0)) {
-          char buf[2048], *c;
-          strcpy(buf, fn);
-          for (c=buf;;) {
-            c = strchr(c, '/');
-            if (!c) break;
-            *c = '\\';
-            c++;
-          }          
-          fprintf(out, "    <ClCompile Include=\"..\\..\\%s\">\r\n", buf);
-          fprintf(out, "      <Optimization Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">Disabled</Optimization>\r\n");
-          fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
-          fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-          fprintf(out, "      <Optimization Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">Disabled</Optimization>\r\n");
-          fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
-          fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-          fprintf(out, "      <FavorSizeOrSpeed Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">Neither</FavorSizeOrSpeed>\r\n");
-          fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
-          fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-          fprintf(out, "      <FavorSizeOrSpeed Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">Neither</FavorSizeOrSpeed>\r\n");
-          fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
-          fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-          fprintf(out, "    </ClCompile>\r\n");
-        }
-      }
+  Fl_File_Type *f;
+  for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+    if (f->is_cplusplus_code()) {
+      fprintf(out, "    <ClCompile Include=\"..\\..\\%s\">\r\n", DOS_path(f->filename()));
+      fprintf(out, "      <Optimization Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">Disabled</Optimization>\r\n");
+      fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
+      fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
+      fprintf(out, "      <Optimization Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">Disabled</Optimization>\r\n");
+      fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
+      fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
+      fprintf(out, "      <FavorSizeOrSpeed Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">Neither</FavorSizeOrSpeed>\r\n");
+      fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
+      fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
+      fprintf(out, "      <FavorSizeOrSpeed Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">Neither</FavorSizeOrSpeed>\r\n");
+      fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
+      fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
+      fprintf(out, "    </ClCompile>\r\n");
     }
-    src = src->next;
   }
 
   fprintf(out, "  </ItemGroup>\r\n");
