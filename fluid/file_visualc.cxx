@@ -48,7 +48,7 @@ const char *DOS_path(const char *filename) {
   for (c=buf;;c++) {
     switch (*c) {
       case '/': *c = '\\'; break;
-      case 0: break;
+      case 0: return buf;
     }
   }
   return buf;

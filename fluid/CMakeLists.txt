@@ -23,30 +23,6 @@ set(CPPFILES
 	undo.cxx
 	widget_panel.cxx
 	workspace_panel.cxx
-	CodeEditor.cxx
-	Fl_Function_Type.cxx
-	Fl_Group_Type.cxx
-	Fl_Menu_Type.cxx
-	Fl_Type.cxx
-	Fl_Widget_Type.cxx
-	Fl_Window_Type.cxx
-	Fluid_Image.cxx
-	about_panel.cxx
-	align_widget.cxx
-	alignment_panel.cxx
-	code.cxx
-	factory.cxx
-	file.cxx
-	file_cmake.cxx
-	file_make.cxx
-	file_visualc.cxx
-	file_xcode.cxx
-	fluid.cxx
-	function_panel.cxx
-	template_panel.cxx
-	undo.cxx
-	widget_panel.cxx
-	workspace_panel.cxx
 )
 add_executable(fluid ${CPPFILES})
 target_link_libraries(fluid fltk fltk_images fltk_forms)
