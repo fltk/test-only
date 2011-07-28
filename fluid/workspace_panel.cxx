@@ -149,92 +149,82 @@ position(X, Y);
 end();
 }
 
+/**
+   Set the environment flags
+*/
+void Fl_Environment_Choice::value(unsigned int v) {
+  pEnv = v;
+  cb_pMenuAll_i(0, 0);
+}
+
+/**
+   Get the environment flags
+*/
+unsigned int Fl_Environment_Choice::value() {
+  return pEnv;
+}
+
 fltk3::DoubleWindow *workspace_panel=(fltk3::DoubleWindow *)0;
+
+fltk3::Input *pName=(fltk3::Input *)0;
+
+Fl_Environment_Choice *pEnv=(Fl_Environment_Choice *)0;
+
+static void cb_OK(fltk3::Button*, void*) {
+  if (wks_name) free(wks_name);
+wks_name = strdup(pName->value());
+wks_env = pEnv->value();
+workspace_panel->hide();
+}
 
 fltk3::DoubleWindow* show_workspace_panel() {
   if (!workspace_panel) {
-    { workspace_panel = new fltk3::DoubleWindow(385, 416);
-      { fltk3::Button* o = new fltk3::Button(265, 365, 95, 25, "OK");
-        o->labelsize(12);
-      } // fltk3::Button* o
-      { fltk3::Input* o = new fltk3::Input(85, 15, 213, 25, "Name:");
-        o->tooltip("name of the target - this will be used in the IDEs and as a general reference\
+    { workspace_panel = new fltk3::DoubleWindow(274, 173, "Workspace Properties");
+      { pName = new fltk3::Input(85, 15, 170, 25, "Name:");
+        pName->tooltip("name of the target - this will be used in the IDEs and as a general reference\
 .");
-        o->labelsize(12);
-        o->textsize(12);
-      } // fltk3::Input* o
-      { fltk3::Box* o = new fltk3::Box(10, 49, 362, 2, "Environments");
+        pName->labelsize(12);
+        pName->textsize(12);
+      } // fltk3::Input* pName
+      { fltk3::Box* o = new fltk3::Box(10, 50, 288, 2, "Create Build Enviroments for:");
         o->box(fltk3::THIN_DOWN_FRAME);
         o->labelsize(12);
         o->align(fltk3::Align(fltk3::ALIGN_BOTTOM_LEFT));
       } // fltk3::Box* o
-      { fltk3::CheckButton* o = new fltk3::CheckButton(85, 83, 215, 20, "Universal Command Line");
-        o->down_box(fltk3::DOWN_BOX);
+      { pEnv = new Fl_Environment_Choice(85, 71, 170, 40);
+        pEnv->box(fltk3::FLAT_BOX);
+        pEnv->color(fltk3::BACKGROUND_COLOR);
+        pEnv->selection_color(fltk3::SELECTION_COLOR);
+        pEnv->labeltype(fltk3::NORMAL_LABEL);
+        pEnv->labelfont(0);
+        pEnv->labelsize(14);
+        pEnv->labelcolor(fltk3::FOREGROUND_COLOR);
+        pEnv->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        pEnv->when(fltk3::WHEN_RELEASE_ALWAYS);
+      } // Fl_Environment_Choice* pEnv
+      { fltk3::Button* o = new fltk3::Button(160, 130, 95, 25, "OK");
         o->labelsize(12);
-      } // fltk3::CheckButton* o
-      { fltk3::CheckButton* o = new fltk3::CheckButton(85, 143, 215, 20, "MS Windows (tm)");
-        o->down_box(fltk3::DOWN_BOX);
-        o->labelsize(12);
-      } // fltk3::CheckButton* o
-      { fltk3::CheckButton* o = new fltk3::CheckButton(100, 163, 215, 20, "VisualC 6 ");
-        o->down_box(fltk3::DOWN_BOX);
-        o->labelsize(12);
-      } // fltk3::CheckButton* o
-      { fltk3::CheckButton* o = new fltk3::CheckButton(100, 183, 215, 20, "VisualC 2008");
-        o->down_box(fltk3::DOWN_BOX);
-        o->labelsize(12);
-      } // fltk3::CheckButton* o
-      { fltk3::CheckButton* o = new fltk3::CheckButton(100, 203, 215, 20, "VisualC 2010");
-        o->down_box(fltk3::DOWN_BOX);
-        o->labelsize(12);
-      } // fltk3::CheckButton* o
-      { fltk3::CheckButton* o = new fltk3::CheckButton(85, 223, 215, 20, "Apple OS X (tm)");
-        o->down_box(fltk3::DOWN_BOX);
-        o->labelsize(12);
-      } // fltk3::CheckButton* o
-      { fltk3::CheckButton* o = new fltk3::CheckButton(100, 243, 215, 20, "Xcode 3");
-        o->down_box(fltk3::DOWN_BOX);
-        o->labelsize(12);
-        o->deactivate();
-      } // fltk3::CheckButton* o
-      { fltk3::CheckButton* o = new fltk3::CheckButton(100, 263, 215, 20, "Xcode 4");
-        o->down_box(fltk3::DOWN_BOX);
-        o->labelsize(12);
-      } // fltk3::CheckButton* o
-      { fltk3::CheckButton* o = new fltk3::CheckButton(101, 103, 215, 20, "Makefile (make, gmake)");
-        o->down_box(fltk3::DOWN_BOX);
-        o->labelsize(12);
-      } // fltk3::CheckButton* o
-      { fltk3::CheckButton* o = new fltk3::CheckButton(101, 123, 215, 20, "CMake File (cmake)");
-        o->down_box(fltk3::DOWN_BOX);
-        o->labelsize(12);
-        o->deactivate();
-      } // fltk3::CheckButton* o
-      { fltk3::CheckButton* o = new fltk3::CheckButton(70, 64, 215, 20, "all supported Environments");
-        o->down_box(fltk3::DOWN_BOX);
-        o->labelsize(12);
-      } // fltk3::CheckButton* o
-      { Fl_Environment_Choice* o = new Fl_Environment_Choice(85, 295, 170, 40);
-        o->box(fltk3::FLAT_BOX);
-        o->color(fltk3::LIGHT2);
-        o->selection_color(fltk3::SELECTION_COLOR);
-        o->labeltype(fltk3::NORMAL_LABEL);
-        o->labelfont(0);
-        o->labelsize(14);
-        o->labelcolor(fltk3::FOREGROUND_COLOR);
-        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
-        o->when(fltk3::WHEN_RELEASE_ALWAYS);
-      } // Fl_Environment_Choice* o
+        o->callback((fltk3::Callback*)cb_OK);
+      } // fltk3::Button* o
+      workspace_panel->set_modal();
       workspace_panel->end();
     } // fltk3::DoubleWindow* workspace_panel
       }
+      if (wks_name) 
+        pName->value(wks_name);
+      else
+        pName->value("unnamed workspace");
+      if (wks_env)  
+        pEnv->value(wks_env);  
+      else
+        pEnv->value(Fl_Environment_Choice::ENV_ALL);
       workspace_panel->show();
   return workspace_panel;
 }
 
 fltk3::DoubleWindow* make_app_target_panel() {
   fltk3::DoubleWindow* w;
-  { fltk3::DoubleWindow* o = new fltk3::DoubleWindow(307, 281, "Appliction Target");
+  { fltk3::DoubleWindow* o = new fltk3::DoubleWindow(307, 281, "Application Target");
     w = o;
     { fltk3::Input* o = new fltk3::Input(70, 20, 213, 25, "Name:");
       o->tooltip("name of the target - this will be used in the IDEs and as a general reference\

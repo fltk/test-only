@@ -29,6 +29,9 @@ comment {//
 } {in_source in_header
 } 
 
+decl {\#include "Fl_Type.h"} {public global
+} 
+
 decl {\#include <fltk3/Pixmap.h>} {public global
 } 
 
@@ -53,7 +56,7 @@ widget_class Fl_Environment_Choice {open
   decl {enum { ENV_NONE=0, ENV_ALL=0x007f, ENV_ALL_SHELL=0x0003, ENV_MAKE=0x0001, ENV_CMAKE=0x0002, ENV_ALL_VC=0x001c, ENV_VC6=0x0004, ENV_VC2008=0x0008, ENV_VC2010=0x0010, ENV_ALL_XC=0x0060, ENV_XC3=0x0020, ENV_XC4=0x0040 };} {public local
   }
   {fltk3::MenuButton} pEnvMenu {
-    label Environent open
+    label Environent
     xywh {0 0 170 20} labelsize 12
   } {
     MenuItem pMenuAll {
@@ -111,7 +114,7 @@ if (pEnv==ENV_ALL) {
   int n = strlen(buf);
   if (n>2) buf[n-2] = 0;
   pEnvList->copy_label(buf);
-}} selected
+}}
       xywh {0 0 100 20} labelsize 12 divider
     }
     Submenu {} {
@@ -213,84 +216,64 @@ while (mi->label()) {
     mi++;
   }
 }} {}
+  Function {value(unsigned int v)} {
+    comment {Set the environment flags} return_type void
+  } {
+    code {pEnv = v;
+cb_pMenuAll_i(0, 0);} {}
+  }
+  Function {value()} {
+    comment {Get the environment flags} return_type {unsigned int}
+  } {
+    code {return pEnv;} {}
+  }
 } 
 
 Function {show_workspace_panel()} {open
 } {
   codeblock {if (!workspace_panel)} {open
   } {
-    {fltk3::Window} workspace_panel {open
-      xywh {832 211 385 416} type Double visible
+    {fltk3::Window} workspace_panel {
+      label {Workspace Properties} open
+      xywh {832 211 274 173} type Double modal visible
     } {
-      {fltk3::Button} {} {
-        label OK
-        xywh {265 365 95 25} labelsize 12
-      }
-      {fltk3::Input} {} {
+      {fltk3::Input} pName {
         label {Name:}
-        tooltip {name of the target - this will be used in the IDEs and as a general reference.} xywh {85 15 213 25} labelsize 12 textsize 12
+        tooltip {name of the target - this will be used in the IDEs and as a general reference.} xywh {85 15 170 25} labelsize 12 textsize 12
       }
       {fltk3::Box} {} {
-        label Environments
-        xywh {10 49 362 2} box THIN_DOWN_FRAME labelsize 12 align 6
+        label {Create Build Enviroments for:}
+        xywh {10 50 288 2} box THIN_DOWN_FRAME labelsize 12 align 6
       }
-      {fltk3::CheckButton} {} {
-        label {Universal Command Line}
-        xywh {85 83 215 20} down_box DOWN_BOX labelsize 12
-      }
-      {fltk3::CheckButton} {} {
-        label {MS Windows (tm)}
-        xywh {85 143 215 20} down_box DOWN_BOX labelsize 12
-      }
-      {fltk3::CheckButton} {} {
-        label {VisualC 6 }
-        xywh {100 163 215 20} down_box DOWN_BOX labelsize 12
-      }
-      {fltk3::CheckButton} {} {
-        label {VisualC 2008}
-        xywh {100 183 215 20} down_box DOWN_BOX labelsize 12
-      }
-      {fltk3::CheckButton} {} {
-        label {VisualC 2010}
-        xywh {100 203 215 20} down_box DOWN_BOX labelsize 12
-      }
-      {fltk3::CheckButton} {} {
-        label {Apple OS X (tm)}
-        xywh {85 223 215 20} down_box DOWN_BOX labelsize 12
-      }
-      {fltk3::CheckButton} {} {
-        label {Xcode 3}
-        xywh {100 243 215 20} down_box DOWN_BOX labelsize 12 deactivate
-      }
-      {fltk3::CheckButton} {} {
-        label {Xcode 4}
-        xywh {100 263 215 20} down_box DOWN_BOX labelsize 12
-      }
-      {fltk3::CheckButton} {} {
-        label {Makefile (make, gmake)}
-        xywh {101 103 215 20} down_box DOWN_BOX labelsize 12
-      }
-      {fltk3::CheckButton} {} {
-        label {CMake File (cmake)}
-        xywh {101 123 215 20} down_box DOWN_BOX labelsize 12 deactivate
-      }
-      {fltk3::CheckButton} {} {
-        label {all supported Environments}
-        xywh {70 64 215 20} down_box DOWN_BOX labelsize 12
-      }
-      {fltk3::MenuButton} {} {open
-        xywh {85 295 170 40} box FLAT_BOX color 52
+      {fltk3::MenuButton} pEnv {open
+        xywh {85 71 170 40} box FLAT_BOX
         class Fl_Environment_Choice
       } {}
+      {fltk3::Button} {} {
+        label OK
+        callback {if (wks_name) free(wks_name);
+wks_name = strdup(pName->value());
+wks_env = pEnv->value();
+workspace_panel->hide();} selected
+        xywh {160 130 95 25} labelsize 12
+      }
     }
   }
-  code {workspace_panel->show();} {}
+  code {if (wks_name) 
+  pName->value(wks_name);
+else
+  pName->value("unnamed workspace");
+if (wks_env)  
+  pEnv->value(wks_env);  
+else
+  pEnv->value(Fl_Environment_Choice::ENV_ALL);
+workspace_panel->show();} {}
 } 
 
 Function {make_app_target_panel()} {open
 } {
   {fltk3::Window} {} {
-    label {Appliction Target} open
+    label {Application Target} open
     xywh {464 218 307 281} type Double visible
   } {
     {fltk3::Input} {} {

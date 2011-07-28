@@ -28,6 +28,7 @@
 #ifndef workspace_panel_h
 #define workspace_panel_h
 #include <fltk3/run.h>
+#include "Fl_Type.h"
 #include <fltk3/Pixmap.h>
 #include <fltk3/MultiLabel.h>
 extern fltk3::Pixmap menu_none_pixmap;
@@ -53,12 +54,15 @@ private:
   static void cb_pMenuAll(fltk3::Menu_*, void*);
 public:
   fltk3::Box *pEnvList;
+  void value(unsigned int v);
+  unsigned int value();
 };
 #include <fltk3/DoubleWindow.h>
 extern fltk3::DoubleWindow *workspace_panel;
-#include <fltk3/Button.h>
 #include <fltk3/Input.h>
-#include <fltk3/CheckButton.h>
+extern fltk3::Input *pName;
+extern Fl_Environment_Choice *pEnv;
+#include <fltk3/Button.h>
 fltk3::DoubleWindow* show_workspace_panel();
 #include <fltk3/Choice.h>
 #include <fltk3/Output.h>

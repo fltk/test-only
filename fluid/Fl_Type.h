@@ -43,6 +43,9 @@
 
 void set_modflag(int mf);
 
+extern unsigned int wks_env;
+extern char *wks_name;
+
 class Fl_Type {
 
   friend class Widget_Browser;
