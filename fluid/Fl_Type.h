@@ -179,9 +179,11 @@ public:
 };
 
 class Fl_Workspace_Type : public Fl_Type {  
+  unsigned int pEnv;
   int pNUUID, pnUUID;
   char **pUUIDName;
   char **pUUID;
+  
   void set_UUID(const char *name, const char *uuid);
   void set_UUID(int i, const char *uuid);
   int find_UUID(const char *name);
@@ -196,6 +198,8 @@ public:
   virtual int is_workspace_type() const { return 1; }
   virtual int dnd_available();
   virtual int dnd_paste();
+  void environments(unsigned int e) { pEnv = e; }
+  unsigned int environments() { return pEnv; }
 };
 
 class Fl_Target_Type : public Fl_Workspace_Type {
@@ -281,7 +285,6 @@ public:
   virtual int is_parent() const { return 1; } 
   virtual int is_fluid_file() const { return 1; }
   virtual int pixmapID() { return 53; }
-  virtual void open();
 };
 extern Fl_Fluid_File_Type Fl_Fluid_File_type;
 
@@ -295,7 +298,6 @@ public:
   const char *type_name() { return "code_file"; }
   Fl_Type *make();
   virtual int pixmapID() { return 55; }
-  virtual void open();
 };
 extern Fl_Code_File_Type Fl_Code_File_type;
 

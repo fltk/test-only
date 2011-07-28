@@ -1,7 +1,8 @@
 # data file for the Fltk User Interface Designer (fluid)
 version 3.0000 
 header_name {.h} 
-code_name {.cxx}
+code_name {.cxx} 
+wks_name FLTK
 comment {//
 // "$Id$"
 //
@@ -56,7 +57,7 @@ widget_class Fl_Environment_Choice {open
   decl {enum { ENV_NONE=0, ENV_ALL=0x007f, ENV_ALL_SHELL=0x0003, ENV_MAKE=0x0001, ENV_CMAKE=0x0002, ENV_ALL_VC=0x001c, ENV_VC6=0x0004, ENV_VC2008=0x0008, ENV_VC2010=0x0010, ENV_ALL_XC=0x0060, ENV_XC3=0x0020, ENV_XC4=0x0040 };} {public local
   }
   {fltk3::MenuButton} pEnvMenu {
-    label Environent
+    label Environent open
     xywh {0 0 170 20} labelsize 12
   } {
     MenuItem pMenuAll {
@@ -114,7 +115,10 @@ if (pEnv==ENV_ALL) {
   int n = strlen(buf);
   if (n>2) buf[n-2] = 0;
   pEnvList->copy_label(buf);
-}}
+}
+
+if (callback())
+  do_callback();} selected
       xywh {0 0 100 20} labelsize 12 divider
     }
     Submenu {} {
@@ -254,7 +258,7 @@ Function {show_workspace_panel()} {open
         callback {if (wks_name) free(wks_name);
 wks_name = strdup(pName->value());
 wks_env = pEnv->value();
-workspace_panel->hide();} selected
+workspace_panel->hide();}
         xywh {160 130 95 25} labelsize 12
       }
     }
@@ -274,7 +278,7 @@ Function {make_app_target_panel()} {open
 } {
   {fltk3::Window} {} {
     label {Application Target} open
-    xywh {464 218 307 281} type Double visible
+    xywh {550 437 307 281} type Double visible
   } {
     {fltk3::Input} {} {
       label {Name:}
@@ -308,6 +312,142 @@ Function {make_app_target_panel()} {open
       label {Use:} open
       xywh {70 195 215 25} down_box BORDER_BOX labelsize 12 textsize 12 deactivate
     } {}
+  }
+} 
+
+decl {extern void* const LOAD;} {private global
+} 
+
+decl {extern fltk3::Window *the_file_panel;} {private global
+} 
+
+Function {file_panel_name_cb(fltk3::Input *i, void *v)} {open private return_type void
+} {
+  code {if (v == LOAD) {
+      /*
+      i->static_value(current_widget->label());
+      if (strlen(i->value()) >= oldlabellen) {
+        oldlabellen = strlen(i->value())+128;
+        oldlabel = (char*)realloc(oldlabel,oldlabellen);
+      }
+      strcpy(oldlabel,i->value());
+      */
+    } else {
+      int mod = 0;
+      for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
+        if (o->selected && o->is_file()) {
+          ((Fl_File_Type*)o)->filename(i->value());
+          mod = 1;
+        }
+      }
+      if (mod) set_modflag(1);
+    }
+
+/*
+void name_cb(fltk3::Input* o, void *v) {
+  if (v == LOAD) {
+    static char buf[1024];
+    if (numselected != 1) {
+      snprintf(buf, sizeof(buf), "Widget Properties (%d widgets)", numselected);
+      o->hide();
+    } else {
+      o->static_value(current_widget->name());
+      o->show();
+      snprintf(buf, sizeof(buf), "%s Properties", current_widget->title());
+    }
+    
+    the_panel->label(buf);
+  } else {
+    if (numselected == 1) {
+      current_widget->name(o->value());
+      // I don't update window title, as it probably is being closed
+      // and wm2 (a window manager) barfs if you retitle and then
+      // hide a window:
+      // ((fltk3::Window*)(o->parent()->parent()->parent()))->label(current_widget->title());
+    }
+  }
+}
+*/} {}
+} 
+
+Function {file_panel_env_cb(Fl_Environment_Choice *i, void *v)} {open private return_type void
+} {
+  code {if (v == LOAD) {
+      /*
+      i->static_value(current_widget->label());
+      if (strlen(i->value()) >= oldlabellen) {
+        oldlabellen = strlen(i->value())+128;
+        oldlabel = (char*)realloc(oldlabel,oldlabellen);
+      }
+      strcpy(oldlabel,i->value());
+      */
+      // FIXME: current_widget needed
+      for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
+        if (o->selected && o->is_file()) {
+          i->value(((Fl_File_Type*)o)->environments());
+          return;
+        }
+      }
+    } else {
+      int mod = 0;
+      for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
+        if (o->selected && o->is_file()) {
+          ((Fl_File_Type*)o)->environments(i->value());
+          mod = 1;
+        }
+      }
+      if (mod) set_modflag(1);
+    }} {}
+} 
+
+Function {file_panel_ok_cb(fltk3::Widget*, void*)} {open private return_type void
+} {
+  code {fltk3::Widget*const* a = the_file_panel->array();
+    for (int i=the_file_panel->children(); i--;) {
+      fltk3::Widget* o = *a++;
+      if (o->changed()) {
+        o->do_callback();
+        //if (haderror) return;
+        o->clear_changed();
+      }
+    }
+  the_file_panel->hide();} {}
+} 
+
+Function {make_file_panel()} {open
+} {
+  {fltk3::Window} {} {open
+    xywh {510 319 405 136} type Double labelsize 11 align 80 resizable hotspot
+    code0 {o->size_range(o->w(), o->h());} visible
+  } {
+    {fltk3::Group} {} {
+      label {File Name:}
+      callback propagate_load open
+      xywh {75 15 309 20} labelfont 1 labelsize 11 align 4
+    } {
+      {fltk3::Input} {} {
+        callback file_panel_name_cb
+        tooltip {The label text for the widget.
+Use Ctrl-J for newlines.} xywh {75 15 170 20} labelfont 1 labelsize 11 when 1 textsize 11 resizable
+      }
+    }
+    {fltk3::MenuButton} {} {
+      callback file_panel_env_cb open
+      xywh {75 45 170 40} box FLAT_BOX
+      class Fl_Environment_Choice
+    } {}
+    {fltk3::Group} {} {open
+      xywh {9 100 400 20} labelsize 11
+    } {
+      {fltk3::Box} {} {
+        xywh {9 100 321 20} labelsize 11 resizable
+      }
+      {fltk3::ReturnButton} {} {
+        label Close
+        callback file_panel_ok_cb
+        xywh {330 100 64 20} labelsize 11
+      }
+    }
   }
 } 
 

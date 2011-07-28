@@ -1078,6 +1078,7 @@ extern char is_workspace();
 
 Fl_Workspace_Type::Fl_Workspace_Type()
 : Fl_Type(),
+  pEnv(Fl_Environment_Choice::ENV_ALL),
   pNUUID(0), pnUUID(0), 
   pUUIDName(0L), pUUID(0) 
 {
@@ -1311,6 +1312,7 @@ void Fl_Lib_Target_Type::open() {
 
 // ------------ Generic File ---------------------------------------------------
 
+extern fltk3::Window *the_file_panel;
 Fl_File_Type Fl_File_type;
 
 Fl_Type *Fl_File_Type::make() {
@@ -1343,13 +1345,6 @@ void Fl_File_Type::filename(const char *fn) {
   if (fn) {
     pFilename = strdup(fn);
     name(fltk3::filename_name(fn));
-  }
-}
-
-void Fl_File_Type::open() {
-  const char *lName = fltk3::input("Enter a file name:", filename());
-  if (lName) {
-    filename(lName);
   }
 }
 
@@ -1421,6 +1416,47 @@ const char *Fl_File_Type::filename_name() {
   return 0;
 }
 
+static int numselected = 0;
+static Fl_Type *current_widget;
+extern void* const LOAD;
+extern void propagate_load(fltk3::Group*, void*);
+
+// update the panel according to current widget set:
+static void load_file_panel() {
+  if (!the_file_panel) return;
+  
+  // find all the File Type subclasses currently selected:
+  numselected = 0;
+  current_widget = 0;
+  if (Fl_Type::current) {
+    if (Fl_Type::current->is_file())
+      current_widget=(Fl_Widget_Type*)Fl_Type::current;
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
+      if (o->is_file() && o->selected) {
+	numselected++;
+	if (!current_widget) current_widget = o;
+      }
+    }
+  }
+  if (numselected)
+    propagate_load(the_file_panel, LOAD);
+  else
+    the_file_panel->hide();
+}
+
+void Fl_File_Type::open() {
+  if (!the_file_panel) the_file_panel = make_file_panel();
+  load_file_panel();
+  if (numselected) the_file_panel->show();
+}
+
+//void Fl_File_Type::open() {
+//  const char *lName = fltk3::input("Enter a file name:", filename());
+//  if (lName) {
+//    filename(lName);
+//  }
+//}
+
 // ------------ Fluid File -----------------------------------------------------
 
 Fl_Fluid_File_Type Fl_Fluid_File_type;
@@ -1446,12 +1482,12 @@ Fl_Type *Fl_Fluid_File_Type::make() {
   return o;
 }
 
-void Fl_Fluid_File_Type::open() {
-  const char *lName = fltk3::input("Enter a Fluid file name:", filename());
-  if (lName) {
-    filename(lName);
-  }
-}
+//void Fl_Fluid_File_Type::open() {
+//  const char *lName = fltk3::input("Enter a Fluid file name:", filename());
+//  if (lName) {
+//    filename(lName);
+//  }
+//}
 
 // ------------ Fluid File -----------------------------------------------------
 
@@ -1478,12 +1514,12 @@ Fl_Type *Fl_Code_File_Type::make() {
   return o;
 }
 
-void Fl_Code_File_Type::open() {
-  const char *lName = fltk3::input("Enter a C/C++ file name:", filename());
-  if (lName) {
-    filename(lName);
-  }
-}
+//void Fl_Code_File_Type::open() {
+//  const char *lName = fltk3::input("Enter a C/C++ file name:", filename());
+//  if (lName) {
+//    filename(lName);
+//  }
+//}
 
 // ------------ Folder ---------------------------------------------------------
 

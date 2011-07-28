@@ -80,7 +80,10 @@ if (pEnv==ENV_ALL) {
   int n = strlen(buf);
   if (n>2) buf[n-2] = 0;
   pEnvList->copy_label(buf);
-};
+}
+
+if (callback())
+  do_callback();
 }
 void Fl_Environment_Choice::cb_pMenuAll(fltk3::Menu_* o, void* v) {
   ((Fl_Environment_Choice*)(o->parent()))->cb_pMenuAll_i(o,v);
@@ -268,6 +271,152 @@ fltk3::DoubleWindow* make_app_target_panel() {
       o->deactivate();
     } // fltk3::Choice* o
     o->end();
+  } // fltk3::DoubleWindow* o
+  return w;
+}
+extern void* const LOAD;
+extern fltk3::Window *the_file_panel;
+
+static void file_panel_name_cb(fltk3::Input *i, void *v) {
+  if (v == LOAD) {
+        /*
+        i->static_value(current_widget->label());
+        if (strlen(i->value()) >= oldlabellen) {
+          oldlabellen = strlen(i->value())+128;
+          oldlabel = (char*)realloc(oldlabel,oldlabellen);
+        }
+        strcpy(oldlabel,i->value());
+        */
+      } else {
+        int mod = 0;
+        for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
+          if (o->selected && o->is_file()) {
+            ((Fl_File_Type*)o)->filename(i->value());
+            mod = 1;
+          }
+        }
+        if (mod) set_modflag(1);
+      }
+  
+  /*
+  void name_cb(fltk3::Input* o, void *v) {
+    if (v == LOAD) {
+      static char buf[1024];
+      if (numselected != 1) {
+        snprintf(buf, sizeof(buf), "Widget Properties (%d widgets)", numselected);
+        o->hide();
+      } else {
+        o->static_value(current_widget->name());
+        o->show();
+        snprintf(buf, sizeof(buf), "%s Properties", current_widget->title());
+      }
+      
+      the_panel->label(buf);
+    } else {
+      if (numselected == 1) {
+        current_widget->name(o->value());
+        // I don't update window title, as it probably is being closed
+        // and wm2 (a window manager) barfs if you retitle and then
+        // hide a window:
+        // ((fltk3::Window*)(o->parent()->parent()->parent()))->label(current_widget->title());
+      }
+    }
+  }
+  */
+}
+
+static void file_panel_env_cb(Fl_Environment_Choice *i, void *v) {
+  if (v == LOAD) {
+        /*
+        i->static_value(current_widget->label());
+        if (strlen(i->value()) >= oldlabellen) {
+          oldlabellen = strlen(i->value())+128;
+          oldlabel = (char*)realloc(oldlabel,oldlabellen);
+        }
+        strcpy(oldlabel,i->value());
+        */
+        // FIXME: current_widget needed
+        for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
+          if (o->selected && o->is_file()) {
+            i->value(((Fl_File_Type*)o)->environments());
+            return;
+          }
+        }
+      } else {
+        int mod = 0;
+        for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
+          if (o->selected && o->is_file()) {
+            ((Fl_File_Type*)o)->environments(i->value());
+            mod = 1;
+          }
+        }
+        if (mod) set_modflag(1);
+      }
+}
+
+static void file_panel_ok_cb(fltk3::Widget*, void*) {
+  fltk3::Widget*const* a = the_file_panel->array();
+      for (int i=the_file_panel->children(); i--;) {
+        fltk3::Widget* o = *a++;
+        if (o->changed()) {
+          o->do_callback();
+          //if (haderror) return;
+          o->clear_changed();
+        }
+      }
+    the_file_panel->hide();
+}
+
+fltk3::DoubleWindow* make_file_panel() {
+  fltk3::DoubleWindow* w;
+  { fltk3::DoubleWindow* o = new fltk3::DoubleWindow(405, 136);
+    w = o;
+    o->labelsize(11);
+    o->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
+    o->hotspot(o);
+    { fltk3::Group* o = new fltk3::Group(75, 15, 309, 20, "File Name:");
+      o->labelfont(1);
+      o->labelsize(11);
+      o->callback((fltk3::Callback*)propagate_load);
+      o->align(fltk3::Align(fltk3::ALIGN_LEFT));
+      { fltk3::Input* o = new fltk3::Input(75, 15, 170, 20);
+        o->tooltip("The label text for the widget.\nUse Ctrl-J for newlines.");
+        o->labelfont(1);
+        o->labelsize(11);
+        o->textsize(11);
+        o->callback((fltk3::Callback*)file_panel_name_cb);
+        o->when(fltk3::WHEN_CHANGED);
+        fltk3::Group::current()->resizable(o);
+      } // fltk3::Input* o
+      o->end();
+    } // fltk3::Group* o
+    { Fl_Environment_Choice* o = new Fl_Environment_Choice(75, 45, 170, 40);
+      o->box(fltk3::FLAT_BOX);
+      o->color(fltk3::BACKGROUND_COLOR);
+      o->selection_color(fltk3::SELECTION_COLOR);
+      o->labeltype(fltk3::NORMAL_LABEL);
+      o->labelfont(0);
+      o->labelsize(14);
+      o->labelcolor(fltk3::FOREGROUND_COLOR);
+      o->callback((fltk3::Callback*)file_panel_env_cb);
+      o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+      o->when(fltk3::WHEN_RELEASE_ALWAYS);
+    } // Fl_Environment_Choice* o
+    { fltk3::Group* o = new fltk3::Group(9, 100, 400, 20);
+      o->labelsize(11);
+      { fltk3::Box* o = new fltk3::Box(9, 100, 321, 20);
+        o->labelsize(11);
+        fltk3::Group::current()->resizable(o);
+      } // fltk3::Box* o
+      { fltk3::ReturnButton* o = new fltk3::ReturnButton(330, 100, 64, 20, "Close");
+        o->labelsize(11);
+        o->callback((fltk3::Callback*)file_panel_ok_cb);
+      } // fltk3::ReturnButton* o
+      o->end();
+    } // fltk3::Group* o
+    o->size_range(o->w(), o->h());
+    o->end();
+    o->resizable(o);
   } // fltk3::DoubleWindow* o
   return w;
 }

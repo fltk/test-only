@@ -463,10 +463,12 @@ static void read_children(Fl_Type *p, int paste) {
 
     if (!strcmp(c,"wks_name")) {
       wks_name = strdup(read_word());
+      goto CONTINUE;
     }
     
     if (!strcmp(c,"wks_env")) {
       wks_env = atoi(read_word());
+      goto CONTINUE;
     }
 
     if (!strcmp(c, "snap") || !strcmp(c, "gridx") || !strcmp(c, "gridy")) {

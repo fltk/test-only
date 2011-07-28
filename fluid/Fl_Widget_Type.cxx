@@ -295,6 +295,7 @@ Fl_Type *sort(Fl_Type *parent) {
 #include <fltk3/show_colormap.h>
 
 static fltk3::Window *the_panel;
+fltk3::Window *the_file_panel;
 
 // All the callbacks use the argument to indicate whether to load or store.
 // This avoids the need for pointers to all the widgets, and keeps the
@@ -1889,6 +1890,7 @@ extern void update_sourceview_position();
 // Called when ui changes what objects are selected:
 // p is selected object, null for all deletions (we must throw away
 // old panel in that case, as the object may no longer exist)
+// FIXME: do this for the_file_panel as well
 void selection_changed(Fl_Type *p) {
   // store all changes to the current selected objects:
   if (p && the_panel && the_panel->visible()) {
