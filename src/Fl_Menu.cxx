@@ -81,7 +81,7 @@ const fltk3::MenuItem* fltk3::MenuItem::next(int n) const {
   if (!m->visible()) n++;
   while (n) {
     m = next_visible_or_not(m);
-    if (m->visible()) n--;
+    if (m->visible() || !m->text) n--;
   }
   return m;
 }

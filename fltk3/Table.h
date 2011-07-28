@@ -861,9 +861,14 @@ namespace fltk3 {
     }
     void add(fltk3::Widget& w) {
       table->add(w);
+      if ( table->children() > 2 ) {
+        table->show();
+      } else {
+        table->hide();
+      } 
     }
     void add(fltk3::Widget* w) {
-      table->add(w);
+      add(*w);
     }
     void insert(fltk3::Widget& w, int n) {
       table->insert(w,n);
