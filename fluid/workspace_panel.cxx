@@ -27,12 +27,134 @@
 
 #include "workspace_panel.h"
 
+void Fl_Environment_Choice::cb_pMenuAll_i(fltk3::Menu_*, void* v) {
+  // this is what we want to set or clear, pEnv is what we currently have
+unsigned int e = (intptr_t)v;
+// find a good logic for settting, clearing, and partial values
+if ( (pEnv&e)==e ) {
+  // if all bits in the menu are set, toggle the bits off
+  pEnv = pEnv ^ e;
+} else {
+  // some bits don't match, so switch all bits on
+  pEnv = pEnv | e;
+}
+
+// now update all menus
+e = pEnv;
+fltk3::MenuItem *mi = menu_pEnvMenu;
+int level = 0;
+while (mi->label()) {
+  unsigned int me = (intptr_t)mi->user_data();
+  if (me) {
+    fltk3::MultiLabel *ml = (fltk3::MultiLabel*)mi->label();
+    if ( (me&e)==0 ) {
+      ml->labela = (char*)&menu_none_pixmap;
+    } else if ( (me&e)==me ) {
+      ml->labela = (char*)&menu_all_pixmap;
+    } else {
+      ml->labela = (char*)&menu_multi_pixmap;
+    }
+  }
+  if (mi->flags&fltk3::SUBMENU) level++;
+  mi++;
+  while (level && !mi->label()) {
+    level--; 
+    mi++;
+  }
+}
+
+// update the text
+if (pEnv==ENV_ALL) {
+  pEnvList->label("- all -");
+} else if (pEnv==ENV_NONE) {
+  pEnvList->label("- none -");
+} else {
+  char buf[1024]; buf[0] = 0;
+  if (pEnv&ENV_MAKE) strcat(buf, "make, ");
+  if (pEnv&ENV_CMAKE) strcat(buf, "cmake, ");
+  if (pEnv&ENV_VC6) strcat(buf, "VC6, ");
+  if (pEnv&ENV_VC2008) strcat(buf, "VC2008, ");
+  if (pEnv&ENV_VC2010) strcat(buf, "VC2010, ");
+  if (pEnv&ENV_XC3) strcat(buf, "Xcode3, ");
+  if (pEnv&ENV_XC4) strcat(buf, "Xcode4, ");
+  int n = strlen(buf);
+  if (n>2) buf[n-2] = 0;
+  pEnvList->copy_label(buf);
+};
+}
+void Fl_Environment_Choice::cb_pMenuAll(fltk3::Menu_* o, void* v) {
+  ((Fl_Environment_Choice*)(o->parent()))->cb_pMenuAll_i(o,v);
+}
+
+fltk3::MenuItem Fl_Environment_Choice::menu_pEnvMenu[] = {
+ {"All Environments", 0,  (fltk3::Callback*)Fl_Environment_Choice::cb_pMenuAll, (void*)(ENV_ALL), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Command Line", 0,  0, 0, 64, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"All", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_ALL_SHELL), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Makefile (make, gmake)", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_MAKE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"CMake File (cmake)", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_CMAKE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {0,0,0,0,0,0,0,0,0},
+ {"MS Windows", 0,  0, 0, 64, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"All", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_ALL_VC), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"VisualC 6", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_VC6), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"VisualC 2008", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_VC2008), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"VisualC 2010", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_VC2010), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {0,0,0,0,0,0,0,0,0},
+ {"Apple OS X", 0,  0, 0, 64, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"All", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_ALL_XC), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Xcode 3", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_XC3), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Xcode 4", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_XC4), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {0,0,0,0,0,0,0,0,0},
+ {0,0,0,0,0,0,0,0,0}
+};
+fltk3::MenuItem* Fl_Environment_Choice::pMenuAll = Fl_Environment_Choice::menu_pEnvMenu + 0;
+Fl_Environment_Choice::Fl_Environment_Choice(int X, int Y, int W, int H, const char *L)
+  : fltk3::Group(0, 0, W, H, L) {
+this->box(fltk3::FLAT_BOX);
+this->color(fltk3::BACKGROUND_COLOR);
+this->selection_color(fltk3::BACKGROUND_COLOR);
+this->labeltype(fltk3::NO_LABEL);
+this->labelfont(0);
+this->labelsize(14);
+this->labelcolor(fltk3::FOREGROUND_COLOR);
+this->align(fltk3::Align(fltk3::ALIGN_TOP));
+this->when(fltk3::WHEN_RELEASE);
+{ pEnvMenu = new fltk3::MenuButton(0, 0, 170, 20, "Environent");
+  pEnvMenu->labelsize(12);
+  pEnvMenu->menu(menu_pEnvMenu);
+} // fltk3::MenuButton* pEnvMenu
+{ pEnvList = new fltk3::Box(0, 20, 170, 20, "make, cmake, Xcode3 Xcode4, VC6, VC2010, VC2008");
+  pEnvList->labelsize(9);
+  pEnvList->align(fltk3::Align(193|fltk3::ALIGN_INSIDE));
+} // fltk3::Box* pEnvList
+fltk3::MenuItem *mi = menu_pEnvMenu;
+int level = 0;
+while (mi->label()) {
+  unsigned int me = (intptr_t)mi->user_data();
+  if (me) {
+    fltk3::MultiLabel *ml = new fltk3::MultiLabel;
+    ml->labela = (char*)&menu_none_pixmap;
+    ml->labelb = mi->text;
+    ml->typea = fltk3::IMAGE_LABEL;
+    ml->typeb = fltk3::NORMAL_LABEL;
+    ml->label( mi );  
+  }
+  if (mi->flags&fltk3::SUBMENU) level++;
+  mi++;
+  while (level && !mi->label()) {
+    level--; 
+    mi++;
+  }
+}
+position(X, Y);
+end();
+}
+
 fltk3::DoubleWindow *workspace_panel=(fltk3::DoubleWindow *)0;
 
 fltk3::DoubleWindow* show_workspace_panel() {
   if (!workspace_panel) {
-    { workspace_panel = new fltk3::DoubleWindow(382, 325);
-      { fltk3::Button* o = new fltk3::Button(260, 285, 95, 25, "OK");
+    { workspace_panel = new fltk3::DoubleWindow(385, 416);
+      { fltk3::Button* o = new fltk3::Button(265, 365, 95, 25, "OK");
         o->labelsize(12);
       } // fltk3::Button* o
       { fltk3::Input* o = new fltk3::Input(85, 15, 213, 25, "Name:");
@@ -92,6 +214,17 @@ fltk3::DoubleWindow* show_workspace_panel() {
         o->down_box(fltk3::DOWN_BOX);
         o->labelsize(12);
       } // fltk3::CheckButton* o
+      { Fl_Environment_Choice* o = new Fl_Environment_Choice(85, 295, 170, 40);
+        o->box(fltk3::FLAT_BOX);
+        o->color(fltk3::LIGHT2);
+        o->selection_color(fltk3::SELECTION_COLOR);
+        o->labeltype(fltk3::NORMAL_LABEL);
+        o->labelfont(0);
+        o->labelsize(14);
+        o->labelcolor(fltk3::FOREGROUND_COLOR);
+        o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+        o->when(fltk3::WHEN_RELEASE_ALWAYS);
+      } // Fl_Environment_Choice* o
       workspace_panel->end();
     } // fltk3::DoubleWindow* workspace_panel
       }

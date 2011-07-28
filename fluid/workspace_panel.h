@@ -28,11 +28,36 @@
 #ifndef workspace_panel_h
 #define workspace_panel_h
 #include <fltk3/run.h>
+#include <fltk3/Pixmap.h>
+#include <fltk3/MultiLabel.h>
+extern fltk3::Pixmap menu_none_pixmap;
+extern fltk3::Pixmap menu_multi_pixmap;
+extern fltk3::Pixmap menu_all_pixmap;
+#include <fltk3/Group.h>
+#include <fltk3/MenuButton.h>
+extern void cb_pMenuAll(fltk3::Menu_*, void*);
+#include <fltk3/Box.h>
+
+class Fl_Environment_Choice : public fltk3::Group {
+public:
+  Fl_Environment_Choice(int X, int Y, int W, int H, const char *L = 0);
+protected:
+  unsigned int pEnv; 
+public:
+  enum { ENV_NONE=0, ENV_ALL=0x007f, ENV_ALL_SHELL=0x0003, ENV_MAKE=0x0001, ENV_CMAKE=0x0002, ENV_ALL_VC=0x001c, ENV_VC6=0x0004, ENV_VC2008=0x0008, ENV_VC2010=0x0010, ENV_ALL_XC=0x0060, ENV_XC3=0x0020, ENV_XC4=0x0040 }; 
+  fltk3::MenuButton *pEnvMenu;
+  static fltk3::MenuItem menu_pEnvMenu[];
+  static fltk3::MenuItem *pMenuAll;
+private:
+  void cb_pMenuAll_i(fltk3::Menu_*, void*);
+  static void cb_pMenuAll(fltk3::Menu_*, void*);
+public:
+  fltk3::Box *pEnvList;
+};
 #include <fltk3/DoubleWindow.h>
 extern fltk3::DoubleWindow *workspace_panel;
 #include <fltk3/Button.h>
 #include <fltk3/Input.h>
-#include <fltk3/Box.h>
 #include <fltk3/CheckButton.h>
 fltk3::DoubleWindow* show_workspace_panel();
 #include <fltk3/Choice.h>

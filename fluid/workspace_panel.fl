@@ -29,16 +29,202 @@ comment {//
 } {in_source in_header
 } 
 
+decl {\#include <fltk3/Pixmap.h>} {public global
+} 
+
+decl {\#include <fltk3/MultiLabel.h>} {public global
+} 
+
+decl {extern fltk3::Pixmap menu_none_pixmap;} {public global
+} 
+
+decl {extern fltk3::Pixmap menu_multi_pixmap;} {public global
+} 
+
+decl {extern fltk3::Pixmap menu_all_pixmap;} {public global
+} 
+
+widget_class Fl_Environment_Choice {open
+  xywh {494 182 170 40} type Double
+  class {fltk3::Group} visible position_relative
+} {
+  decl {unsigned int pEnv;} {protected local
+  }
+  decl {enum { ENV_NONE=0, ENV_ALL=0x007f, ENV_ALL_SHELL=0x0003, ENV_MAKE=0x0001, ENV_CMAKE=0x0002, ENV_ALL_VC=0x001c, ENV_VC6=0x0004, ENV_VC2008=0x0008, ENV_VC2010=0x0010, ENV_ALL_XC=0x0060, ENV_XC3=0x0020, ENV_XC4=0x0040 };} {public local
+  }
+  {fltk3::MenuButton} pEnvMenu {
+    label Environent open
+    xywh {0 0 170 20} labelsize 12
+  } {
+    MenuItem pMenuAll {
+      label {All Environments}
+      user_data ENV_ALL
+      callback {// this is what we want to set or clear, pEnv is what we currently have
+unsigned int e = (intptr_t)v;
+// find a good logic for settting, clearing, and partial values
+if ( (pEnv&e)==e ) {
+  // if all bits in the menu are set, toggle the bits off
+  pEnv = pEnv ^ e;
+} else {
+  // some bits don't match, so switch all bits on
+  pEnv = pEnv | e;
+}
+
+// now update all menus
+e = pEnv;
+fltk3::MenuItem *mi = menu_pEnvMenu;
+int level = 0;
+while (mi->label()) {
+  unsigned int me = (intptr_t)mi->user_data();
+  if (me) {
+    fltk3::MultiLabel *ml = (fltk3::MultiLabel*)mi->label();
+    if ( (me&e)==0 ) {
+      ml->labela = (char*)&menu_none_pixmap;
+    } else if ( (me&e)==me ) {
+      ml->labela = (char*)&menu_all_pixmap;
+    } else {
+      ml->labela = (char*)&menu_multi_pixmap;
+    }
+  }
+  if (mi->flags&fltk3::SUBMENU) level++;
+  mi++;
+  while (level && !mi->label()) {
+    level--; 
+    mi++;
+  }
+}
+
+// update the text
+if (pEnv==ENV_ALL) {
+  pEnvList->label("- all -");
+} else if (pEnv==ENV_NONE) {
+  pEnvList->label("- none -");
+} else {
+  char buf[1024]; buf[0] = 0;
+  if (pEnv&ENV_MAKE) strcat(buf, "make, ");
+  if (pEnv&ENV_CMAKE) strcat(buf, "cmake, ");
+  if (pEnv&ENV_VC6) strcat(buf, "VC6, ");
+  if (pEnv&ENV_VC2008) strcat(buf, "VC2008, ");
+  if (pEnv&ENV_VC2010) strcat(buf, "VC2010, ");
+  if (pEnv&ENV_XC3) strcat(buf, "Xcode3, ");
+  if (pEnv&ENV_XC4) strcat(buf, "Xcode4, ");
+  int n = strlen(buf);
+  if (n>2) buf[n-2] = 0;
+  pEnvList->copy_label(buf);
+}} selected
+      xywh {0 0 100 20} labelsize 12 divider
+    }
+    Submenu {} {
+      label {Command Line} open
+      xywh {0 0 100 20} labelsize 12
+    } {
+      MenuItem {} {
+        label All
+        user_data ENV_ALL_SHELL
+        callback cb_pMenuAll
+        xywh {10 10 100 20} labelsize 12 divider
+      }
+      MenuItem {} {
+        label {Makefile (make, gmake)}
+        user_data ENV_MAKE
+        callback cb_pMenuAll
+        xywh {0 0 100 20} labelsize 12
+      }
+      MenuItem {} {
+        label {CMake File (cmake)}
+        user_data ENV_CMAKE
+        callback cb_pMenuAll
+        xywh {0 0 100 20} labelsize 12
+      }
+    }
+    Submenu {} {
+      label {MS Windows} open
+      xywh {0 0 100 20} labelsize 12
+    } {
+      MenuItem {} {
+        label All
+        user_data ENV_ALL_VC
+        callback cb_pMenuAll
+        xywh {0 0 100 20} labelsize 12 divider
+      }
+      MenuItem {} {
+        label {VisualC 6}
+        user_data ENV_VC6
+        callback cb_pMenuAll
+        xywh {0 0 100 20} labelsize 12
+      }
+      MenuItem {} {
+        label {VisualC 2008}
+        user_data ENV_VC2008
+        callback cb_pMenuAll
+        xywh {0 0 100 20} labelsize 12
+      }
+      MenuItem {} {
+        label {VisualC 2010}
+        user_data ENV_VC2010
+        callback cb_pMenuAll
+        xywh {0 0 100 20} labelsize 12
+      }
+    }
+    Submenu {} {
+      label {Apple OS X} open
+      xywh {0 0 100 20} labelsize 12
+    } {
+      MenuItem {} {
+        label All
+        user_data ENV_ALL_XC
+        callback cb_pMenuAll
+        xywh {0 0 100 20} labelsize 12 divider
+      }
+      MenuItem {} {
+        label {Xcode 3}
+        user_data ENV_XC3
+        callback cb_pMenuAll
+        xywh {0 0 100 20} labelsize 12
+      }
+      MenuItem {} {
+        label {Xcode 4}
+        user_data ENV_XC4
+        callback cb_pMenuAll
+        xywh {0 0 100 20} labelsize 12
+      }
+    }
+  }
+  {fltk3::Box} pEnvList {
+    label {make, cmake, Xcode3 Xcode4, VC6, VC2010, VC2008}
+    xywh {0 20 170 20} labelsize 9 align 209
+  }
+  code {fltk3::MenuItem *mi = menu_pEnvMenu;
+int level = 0;
+while (mi->label()) {
+  unsigned int me = (intptr_t)mi->user_data();
+  if (me) {
+    fltk3::MultiLabel *ml = new fltk3::MultiLabel;
+    ml->labela = (char*)&menu_none_pixmap;
+    ml->labelb = mi->text;
+    ml->typea = fltk3::IMAGE_LABEL;
+    ml->typeb = fltk3::NORMAL_LABEL;
+    ml->label( mi );  
+  }
+  if (mi->flags&fltk3::SUBMENU) level++;
+  mi++;
+  while (level && !mi->label()) {
+    level--; 
+    mi++;
+  }
+}} {}
+} 
+
 Function {show_workspace_panel()} {open
 } {
   codeblock {if (!workspace_panel)} {open
   } {
     {fltk3::Window} workspace_panel {open
-      xywh {893 184 382 325} type Double visible
+      xywh {832 211 385 416} type Double visible
     } {
       {fltk3::Button} {} {
         label OK
-        xywh {260 285 95 25} labelsize 12
+        xywh {265 365 95 25} labelsize 12
       }
       {fltk3::Input} {} {
         label {Name:}
@@ -73,7 +259,7 @@ Function {show_workspace_panel()} {open
         xywh {85 223 215 20} down_box DOWN_BOX labelsize 12
       }
       {fltk3::CheckButton} {} {
-        label {Xcode 3} selected
+        label {Xcode 3}
         xywh {100 243 215 20} down_box DOWN_BOX labelsize 12 deactivate
       }
       {fltk3::CheckButton} {} {
@@ -85,13 +271,17 @@ Function {show_workspace_panel()} {open
         xywh {101 103 215 20} down_box DOWN_BOX labelsize 12
       }
       {fltk3::CheckButton} {} {
-        label {CMake File (cmake)} selected
+        label {CMake File (cmake)}
         xywh {101 123 215 20} down_box DOWN_BOX labelsize 12 deactivate
       }
       {fltk3::CheckButton} {} {
         label {all supported Environments}
         xywh {70 64 215 20} down_box DOWN_BOX labelsize 12
       }
+      {fltk3::MenuButton} {} {open
+        xywh {85 295 170 40} box FLAT_BOX color 52
+        class Fl_Environment_Choice
+      } {}
     }
   }
   code {workspace_panel->show();} {}
