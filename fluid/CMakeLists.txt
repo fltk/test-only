@@ -1,4 +1,3 @@
-
 set(CPPFILES
 	CodeEditor.cxx
 	Fl_Function_Type.cxx
@@ -14,35 +13,39 @@ set(CPPFILES
 	code.cxx
 	factory.cxx
 	file.cxx
+	file_cmake.cxx
+	file_make.cxx
+	file_visualc.cxx
+	file_xcode.cxx
 	fluid.cxx
 	function_panel.cxx
 	template_panel.cxx
 	undo.cxx
 	widget_panel.cxx
+	workspace_panel.cxx
 )
-
 add_executable(fluid ${CPPFILES})
 target_link_libraries(fluid fltk fltk_images fltk_forms)
 
 # link in optional libraries
 if(FLTK_HAVE_CAIRO)
-   target_link_libraries(fluid fltk_cairo)
+    target_link_libraries(fluid fltk_cairo)
 endif(FLTK_HAVE_CAIRO)
 
 if(FLTK_USE_GL)
-   target_link_libraries(fluid fltk_gl)
-   target_link_libraries(fluid ${OPENGL_LIBRARIES})
+    target_link_libraries(fluid fltk_gl)
+    target_link_libraries(fluid ${OPENGL_LIBRARIES})
 endif(FLTK_USE_GL)
 
 if(USE_XFT)
-   target_link_libraries(fluid ${X11_Xft_LIB})
+    target_link_libraries(fluid ${X11_Xft_LIB})
 endif(USE_XFT)
 
 if(HAVE_XINERAMA)
-   target_link_libraries(fluid ${X11_Xinerama_LIB})
+    target_link_libraries(fluid ${X11_Xinerama_LIB})
 endif(HAVE_XINERAMA)
 
 install(TARGETS fluid
-   EXPORT fltk-install
-   DESTINATION ${PREFIX_BIN}
+    EXPORT fltk-install
+    DESTINATION ${PREFIX_BIN}
 )

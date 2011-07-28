@@ -348,7 +348,7 @@ int write_file(const char *filename, int selected_only) {
     write_string("\ncode_name"); write_word(code_file_name);
   }
   if (wks_name) {
-    write_string("\nwks_name %s", wks_name);
+    write_string("\nwks_name "); write_word(wks_name);
   }
   if (wks_env!=Fl_Environment_Choice::ENV_ALL) {
     write_string("\nwks_env %d", wks_env);
