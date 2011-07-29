@@ -27,6 +27,8 @@
 
 #include "workspace_panel.h"
 
+#include <stdint.h>  /* For intptr_t.  */
+
 void Fl_Environment_Choice::cb_pMenuAll_i(fltk3::Menu_*, void* v) {
   // this is what we want to set or clear, pEnv is what we currently have
 unsigned int e = (intptr_t)v;
@@ -58,7 +60,7 @@ while (mi->label()) {
   if (mi->flags&fltk3::SUBMENU) level++;
   mi++;
   while (level && !mi->label()) {
-    level--; 
+    level--;
     mi++;
   }
 }
@@ -139,12 +141,12 @@ while (mi->label()) {
     ml->labelb = mi->text;
     ml->typea = fltk3::IMAGE_LABEL;
     ml->typeb = fltk3::NORMAL_LABEL;
-    ml->label( mi );  
+    ml->label( mi );
   }
   if (mi->flags&fltk3::SUBMENU) level++;
   mi++;
   while (level && !mi->label()) {
-    level--; 
+    level--;
     mi++;
   }
 }
@@ -213,12 +215,12 @@ fltk3::DoubleWindow* show_workspace_panel() {
       workspace_panel->end();
     } // fltk3::DoubleWindow* workspace_panel
       }
-      if (wks_name) 
+      if (wks_name)
         pName->value(wks_name);
       else
         pName->value("unnamed workspace");
-      if (wks_env)  
-        pEnv->value(wks_env);  
+      if (wks_env)
+        pEnv->value(wks_env);
       else
         pEnv->value(Fl_Environment_Choice::ENV_ALL);
       workspace_panel->show();
@@ -297,7 +299,7 @@ static void file_panel_name_cb(fltk3::Input *i, void *v) {
         }
         if (mod) set_modflag(1);
       }
-  
+
   /*
   void name_cb(fltk3::Input* o, void *v) {
     if (v == LOAD) {
@@ -310,7 +312,7 @@ static void file_panel_name_cb(fltk3::Input *i, void *v) {
         o->show();
         snprintf(buf, sizeof(buf), "%s Properties", current_widget->title());
       }
-      
+
       the_panel->label(buf);
     } else {
       if (numselected == 1) {
