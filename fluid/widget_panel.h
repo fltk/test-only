@@ -29,6 +29,7 @@
 
 #ifndef widget_panel_h
 #define widget_panel_h
+#include "Fl_Type.h"
 #include <fltk3/run.h>
 #include <fltk3/DoubleWindow.h>
 #include <fltk3/TabGroup.h>
@@ -114,7 +115,7 @@ extern void ok_cb(fltk3::ReturnButton*, void*);
 extern void cancel_cb(fltk3::Button*, void*);
 extern void live_mode_cb(fltk3::Button*, void*);
 extern fltk3::Button *wLiveMode;
-fltk3::DoubleWindow* make_widget_panel();
+Fl_Panel* make_widget_panel();
 extern fltk3::MenuItem menu_[];
 extern fltk3::MenuItem menu_1[];
 extern fltk3::MenuItem menu_2[];

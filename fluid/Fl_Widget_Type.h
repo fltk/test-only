@@ -34,7 +34,6 @@
 struct fltk3::MenuItem;
 class Fluid_Image;
 
-extern void* const LOAD;
 extern Fl_Widget_Type *current_widget; // one of the selected ones
 
 //

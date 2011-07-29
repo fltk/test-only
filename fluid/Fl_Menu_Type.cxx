@@ -618,7 +618,7 @@ int Shortcut_Button::handle(int e) {
 }
   
 void shortcut_in_cb(Shortcut_Button* i, void* v) {
-  if (v == LOAD) {
+  if (v == Fl_Panel::LOAD) {
     if (current_widget->is_button())
       i->svalue = ((fltk3::Button*)(current_widget->o))->shortcut();
     else if (current_widget->is_input())

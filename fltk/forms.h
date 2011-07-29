@@ -273,7 +273,6 @@ inline Fl_Group* fl_bgn_group() {return new Fl_Group(0,0,0,0,0);}
 inline void fl_addto_group(Fl_Widget* o) {((Fl_Group* )o)->begin();}
 FL_FORMS_API void fl_end_group();
 FL_FORMS_API void fl_end_form();
-#define resizebox _ddfdesign_kludge()
 
 inline void fl_scale_form(Fl_Window* f, double x, double y) {
   f->resizable(f); f->size(int(f->w()*x),int(f->h()*y));}

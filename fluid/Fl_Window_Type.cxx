@@ -452,7 +452,7 @@ uchar *Fl_Window_Type::read_image(int &ww, int &hh) {
 // control panel items:
 
 void modal_cb(fltk3::LightButton* i, void* v) {
-  if (v == LOAD) {
+  if (v == Fl_Panel::LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
     i->value(((Fl_Window_Type *)current_widget)->modal);
@@ -463,7 +463,7 @@ void modal_cb(fltk3::LightButton* i, void* v) {
 }
 
 void non_modal_cb(fltk3::LightButton* i, void* v) {
-  if (v == LOAD) {
+  if (v == Fl_Panel::LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
     i->value(((Fl_Window_Type *)current_widget)->non_modal);
@@ -474,7 +474,7 @@ void non_modal_cb(fltk3::LightButton* i, void* v) {
 }
 
 void border_cb(fltk3::LightButton* i, void* v) {
-  if (v == LOAD) {
+  if (v == Fl_Panel::LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
     i->value(((fltk3::Window*)(current_widget->o))->border());
@@ -485,7 +485,7 @@ void border_cb(fltk3::LightButton* i, void* v) {
 }
 
 void xclass_cb(fltk3::Input* i, void* v) {
-  if (v == LOAD) {
+  if (v == Fl_Panel::LOAD) {
     if (!current_widget->is_window()) {
       i->hide(); 
       i->parent()->hide(); // hides the "X Class:" label as well
@@ -1424,25 +1424,6 @@ char Fl_Window_Type::read_property(const char *c) {
     pasteoffset = 0; // make it not apply to contents
   } else {
     return Fl_Widget_Type::read_property(c);
-  }
-  return 1;
-}
-
-int Fl_Window_Type::read_fdesign(const char* propname, const char* value) {
-  int x;
-  o->box(fltk3::NO_BOX); // because fdesign always puts an fltk3::Box next
-  if (!strcmp(propname,"Width")) {
-    if (sscanf(value,"%d",&x) == 1) o->size(x,o->h());
-  } else if (!strcmp(propname,"Height")) {
-    if (sscanf(value,"%d",&x) == 1) o->size(o->w(),x);
-  } else if (!strcmp(propname,"NumberofWidgets")) {
-    return 1; // we can figure out count from file
-  } else if (!strcmp(propname,"border")) {
-    if (sscanf(value,"%d",&x) == 1) ((fltk3::Window*)o)->border(x);
-  } else if (!strcmp(propname,"title")) {
-    label(value);
-  } else {
-    return Fl_Widget_Type::read_fdesign(propname,value);
   }
   return 1;
 }

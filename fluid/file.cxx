@@ -369,8 +369,6 @@ int write_file(const char *filename, int selected_only) {
 ////////////////////////////////////////////////////////////////
 // read all the objects out of the input file:
 
-void read_fdesign();
-
 extern Fl_Type *Fl_Type_make(const char *tn);
 
 static void read_children(Fl_Type *p, int paste) {
@@ -386,12 +384,6 @@ static void read_children(Fl_Type *p, int paste) {
     if (!strcmp(c,"}")) {
       if (!p) read_error("Unexpected '}'");
       break;
-    }
-
-    // this is the first word in a .fd file:
-    if (!strcmp(c,"Magic:")) {
-      read_fdesign();
-      return;
     }
 
     if (!strcmp(c,"version")) {
@@ -534,137 +526,6 @@ int read_file(const char *filename, int merge) {
     if (o->selected) {Fl_Type::current = o; break;}
   selection_changed(Fl_Type::current);
   return close_read();
-}
-
-////////////////////////////////////////////////////////////////
-// Read Forms and XForms fdesign files:
-
-int read_fdesign_line(const char*& name, const char*& value) {
-
-  int length = 0;
-  int x;
-  // find a colon:
-  for (;;) {
-    x = getc(fin);
-    if (x < 0 && feof(fin)) return 0;
-    if (x == '\n') {length = 0; continue;} // no colon this line...
-    if (!isspace(x & 255)) {
-      buffer[length++] = x;
-      expand_buffer(length);
-    }
-    if (x == ':') break;
-  }
-  int valueoffset = length;
-  buffer[length-1] = 0;
-
-  // skip to start of value:
-  for (;;) {
-    x = getc(fin);
-    if ((x < 0 && feof(fin)) || x == '\n' || !isspace(x & 255)) break;
-  }
-
-  // read the value:
-  for (;;) {
-    if (x == '\\') {x = read_quoted(); if (x<0) continue;}
-    else if (x == '\n') break;
-    buffer[length++] = x;
-    expand_buffer(length);
-    x = getc(fin);
-  }
-  buffer[length] = 0;
-  name = buffer;
-  value = buffer+valueoffset;
-  return 1;
-}
-
-int fdesign_flip;
-int fdesign_magic;
-#include <fltk3/Group.h>
-
-static const char *class_matcher[] = {
-"fltk3::CHECKBUTTON", "fltk3::CheckButton",
-"fltk3::ROUNDBUTTON", "fltk3::RoundButton",
-"fltk3::ROUND3DBUTTON", "fltk3::RoundButton",
-"fltk3::LIGHTBUTTON", "fltk3::LightButton",
-"fltk3::FRAME", "fltk3::Box",
-"fltk3::LABELFRAME", "fltk3::Box",
-"fltk3::TEXT", "fltk3::Box",
-"fltk3::VALSLIDER", "fltk3::ValueSlider",
-"fltk3::MENU", "fltk3::MenuButton",
-"3", "fltk3::BITMAP",
-"1", "fltk3::BOX",
-"71","fltk3::BROWSER",
-"11","fltk3::BUTTON",
-"4", "fltk3::CHART",
-"42","fltk3::CHOICE",
-"61","fltk3::CLOCK",
-"25","fltk3::COUNTER",
-"22","fltk3::DIAL",
-"101","fltk3::FREE",
-"31","fltk3::INPUT",
-"12","fltk3::LightButton",
-"41","fltk3::MENU",
-"23","fltk3::POSITIONER",
-"13","fltk3::RoundButton",
-"21","fltk3::SLIDER",
-"2", "fltk3::BOX", // was fltk3::TEXT
-"62","fltk3::TIMER",
-"24","fltk3::ValueSlider",
-0};
-
-void read_fdesign() {
-  fdesign_magic = atoi(read_word());
-  fdesign_flip = (fdesign_magic < 13000);
-  Fl_Widget_Type *window = 0;
-  Fl_Widget_Type *group = 0;
-  Fl_Widget_Type *widget = 0;
-  if (!Fl_Type::current) {
-    Fl_Type *t = Fl_Type_make("Function");
-    t->name("create_the_forms()");
-    Fl_Type::current = t;
-  }
-  for (;;) {
-    const char *name;
-    const char *value;
-    if (!read_fdesign_line(name, value)) break;
-
-    if (!strcmp(name,"Name")) {
-
-      window = (Fl_Widget_Type*)Fl_Type_make("fltk3::Window");
-      window->name(value);
-      window->label(value);
-      Fl_Type::current = widget = window;
-
-    } else if (!strcmp(name,"class")) {
-
-      if (!strcmp(value,"fltk3::BEGIN_GROUP")) {
-	group = widget = (Fl_Widget_Type*)Fl_Type_make("fltk3::Group");
-	Fl_Type::current = group;
-      } else if (!strcmp(value,"fltk3::END_GROUP")) {
-	if (group) {
-	  fltk3::Group* g = (fltk3::Group*)(group->o);
-	  //g->begin(); FIXME: forms library no longer supported
-	  //g->forms_end();
-	  fltk3::Group::current(0);
-	}
-	group = widget = 0;
-	Fl_Type::current = window;
-      } else {
-	for (int i = 0; class_matcher[i]; i += 2)
-	  if (!strcmp(value,class_matcher[i])) {
-	    value = class_matcher[i+1]; break;}
-	widget = (Fl_Widget_Type*)Fl_Type_make(value);
-	if (!widget) {
-	  printf("class %s not found, using fltk3::Button\n", value);
-	  widget = (Fl_Widget_Type*)Fl_Type_make("fltk3::Button");
-	}
-      }
-
-    } else if (widget) {
-      if (!widget->read_fdesign(name, value))
-	printf("Ignoring \"%s: %s\"\n", name, value);
-    }
-  }
 }
 
 // ------------ file conversion ------------------------------------------------

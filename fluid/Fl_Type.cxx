@@ -948,8 +948,6 @@ char Fl_Type::read_property(const char *c) {
   return 1;
 }
 
-int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
-
 /**
  * Return 1 if the list contains a function with the given signature at the top level
  */
@@ -1416,30 +1414,31 @@ const char *Fl_File_Type::filename_name() {
   return 0;
 }
 
-static int numselected = 0;
+// FIXME: move to Fl_Panel
 static Fl_Type *current_widget;
-extern void* const LOAD;
+// FIXME: move to Fl_Panel
 extern void propagate_load(fltk3::Group*, void*);
 
 // update the panel according to current widget set:
+// FIXME: move to Fl_Panel
 static void load_file_panel() {
   if (!the_file_panel) return;
   
   // find all the File Type subclasses currently selected:
-  numselected = 0;
+  Fl_Panel::numselected = 0;
   current_widget = 0;
   if (Fl_Type::current) {
     if (Fl_Type::current->is_file())
       current_widget=(Fl_Widget_Type*)Fl_Type::current;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->is_file() && o->selected) {
-	numselected++;
+	Fl_Panel::numselected++;
 	if (!current_widget) current_widget = o;
       }
     }
   }
-  if (numselected)
-    propagate_load(the_file_panel, LOAD);
+  if (Fl_Panel::numselected)
+    propagate_load(the_file_panel, Fl_Panel::LOAD);
   else
     the_file_panel->hide();
 }
@@ -1447,7 +1446,7 @@ static void load_file_panel() {
 void Fl_File_Type::open() {
   if (!the_file_panel) the_file_panel = make_file_panel();
   load_file_panel();
-  if (numselected) the_file_panel->show();
+  if (Fl_Panel::numselected) the_file_panel->show();
 }
 
 //void Fl_File_Type::open() {
@@ -1548,6 +1547,18 @@ void Fl_Folder_Type::open() {
   if (lName) {
     name(lName);
   }
+}
+
+// ------------ Panel Base Class -----------------------------------------------
+
+void *const Fl_Panel::LOAD = (void *)"LOAD"; // "magic" pointer to indicate that we need to load values into the dialog
+int Fl_Panel::numselected = 0;
+
+Fl_Panel::Fl_Panel(int x, int y, int w, int h, const char *name) 
+: fltk3::DoubleWindow(w, h, name) {
+}
+
+Fl_Panel::~Fl_Panel() {
 }
 
 //

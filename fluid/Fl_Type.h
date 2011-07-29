@@ -38,6 +38,7 @@
 #define FLUID_TYPE_H
 
 #include <fltk3/Widget.h>
+#include <fltk3/DoubleWindow.h>
 #include <fltk3/Menu.h>
 #include <fltk3/Plugin.h>
 #include "Fluid_Image.h"
@@ -127,7 +128,6 @@ public:
   void write();
   virtual void write_properties();
   virtual char read_property(const char *);
-  virtual int read_fdesign(const char*, const char*);
 
   // write code, these are called in order:
   virtual void write_static(); // write static stuff to .c file
@@ -560,7 +560,6 @@ public:
 
   virtual void write_properties();
   virtual char read_property(const char *);
-  virtual int read_fdesign(const char*, const char*);
 
   virtual fltk3::Widget *enter_live_mode(int top=0);
   virtual void leave_live_mode();
@@ -751,7 +750,6 @@ public:
 
   virtual void write_properties();
   virtual char read_property(const char *);
-  virtual int read_fdesign(const char*, const char*);
 
   void add_child(Fl_Type*, Fl_Type*);
   void move_child(Fl_Type*, Fl_Type*);
@@ -1036,6 +1034,19 @@ public:
   // show a GUI panel to edit some data
   virtual void show_panel() { }
 };
+
+/*
+ * This is a base class for all panels that allow editing multiple items.
+ * Currently, this is the widget panel (the_panel) and the file panel
+ */
+class Fl_Panel : public fltk3::DoubleWindow {
+public:
+  Fl_Panel(int x, int y, int w, int h, const char *name=0L);
+  ~Fl_Panel();
+  static void *const LOAD;
+  static int numselected;
+};
+
 
 #endif
 

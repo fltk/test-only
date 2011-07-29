@@ -69,7 +69,7 @@ fltk3::DoubleWindow* show_workspace_panel();
 fltk3::DoubleWindow* make_app_target_panel();
 extern void propagate_load(fltk3::Group*, void*);
 #include <fltk3/ReturnButton.h>
-fltk3::DoubleWindow* make_file_panel();
+Fl_Panel* make_file_panel();
 #endif
 
 //

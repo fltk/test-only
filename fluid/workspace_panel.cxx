@@ -276,11 +276,10 @@ fltk3::DoubleWindow* make_app_target_panel() {
   } // fltk3::DoubleWindow* o
   return w;
 }
-extern void* const LOAD;
 extern fltk3::Window *the_file_panel;
 
 static void file_panel_name_cb(fltk3::Input *i, void *v) {
-  if (v == LOAD) {
+  if (v == Fl_Panel::LOAD) {
         /*
         i->static_value(current_widget->label());
         if (strlen(i->value()) >= oldlabellen) {
@@ -304,8 +303,8 @@ static void file_panel_name_cb(fltk3::Input *i, void *v) {
   void name_cb(fltk3::Input* o, void *v) {
     if (v == LOAD) {
       static char buf[1024];
-      if (numselected != 1) {
-        snprintf(buf, sizeof(buf), "Widget Properties (%d widgets)", numselected);
+      if (Fl_Panel::numselected != 1) {
+        snprintf(buf, sizeof(buf), "Widget Properties (%d widgets)", Fl_Panel::numselected);
         o->hide();
       } else {
         o->static_value(current_widget->name());
@@ -315,7 +314,7 @@ static void file_panel_name_cb(fltk3::Input *i, void *v) {
 
       the_panel->label(buf);
     } else {
-      if (numselected == 1) {
+      if (Fl_Panel::numselected == 1) {
         current_widget->name(o->value());
         // I don't update window title, as it probably is being closed
         // and wm2 (a window manager) barfs if you retitle and then
@@ -328,7 +327,7 @@ static void file_panel_name_cb(fltk3::Input *i, void *v) {
 }
 
 static void file_panel_env_cb(Fl_Environment_Choice *i, void *v) {
-  if (v == LOAD) {
+  if (v == Fl_Panel::LOAD) {
         /*
         i->static_value(current_widget->label());
         if (strlen(i->value()) >= oldlabellen) {
@@ -369,12 +368,19 @@ static void file_panel_ok_cb(fltk3::Widget*, void*) {
     the_file_panel->hide();
 }
 
-fltk3::DoubleWindow* make_file_panel() {
-  fltk3::DoubleWindow* w;
-  { fltk3::DoubleWindow* o = new fltk3::DoubleWindow(405, 136);
+Fl_Panel* make_file_panel() {
+  Fl_Panel* w;
+  { Fl_Panel* o = new Fl_Panel(0, 0, 405, 136, "File Properties");
     w = o;
+    o->box(fltk3::FLAT_BOX);
+    o->color(fltk3::BACKGROUND_COLOR);
+    o->selection_color(fltk3::BACKGROUND_COLOR);
+    o->labeltype(fltk3::NO_LABEL);
+    o->labelfont(0);
     o->labelsize(11);
+    o->labelcolor(fltk3::FOREGROUND_COLOR);
     o->align(fltk3::Align(fltk3::ALIGN_CLIP|fltk3::ALIGN_INSIDE));
+    o->when(fltk3::WHEN_RELEASE);
     o->hotspot(o);
     { fltk3::Group* o = new fltk3::Group(75, 15, 309, 20, "File Name:");
       o->labelfont(1);
@@ -419,7 +425,7 @@ fltk3::DoubleWindow* make_file_panel() {
     o->size_range(o->w(), o->h());
     o->end();
     o->resizable(o);
-  } // fltk3::DoubleWindow* o
+  } // Fl_Panel* o
   return w;
 }
 
