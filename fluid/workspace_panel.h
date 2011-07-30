@@ -54,6 +54,9 @@ private:
   static void cb_pMenuAll(fltk3::Menu_*, void*);
 public:
   fltk3::Box *pEnvList;
+protected:
+  void update_all();
+public:
   void value(unsigned int v);
   unsigned int value();
 };
@@ -67,7 +70,7 @@ fltk3::DoubleWindow* show_workspace_panel();
 #include <fltk3/Choice.h>
 #include <fltk3/Output.h>
 fltk3::DoubleWindow* make_app_target_panel();
-extern void propagate_load(fltk3::Group*, void*);
+void file_panel_set_cb(fltk3::Widget*, void *v);
 #include <fltk3/ReturnButton.h>
 Fl_Panel* make_file_panel();
 #endif

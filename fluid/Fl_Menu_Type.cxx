@@ -619,14 +619,14 @@ int Shortcut_Button::handle(int e) {
   
 void shortcut_in_cb(Shortcut_Button* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (current_widget->is_button())
-      i->svalue = ((fltk3::Button*)(current_widget->o))->shortcut();
-    else if (current_widget->is_input())
-      i->svalue = ((fltk3::Input_*)(current_widget->o))->shortcut();
-    else if (current_widget->is_value_input())
-      i->svalue = ((fltk3::ValueInput*)(current_widget->o))->shortcut();
-    else if (current_widget->is_text_display())
-      i->svalue = ((fltk3::TextDisplay*)(current_widget->o))->shortcut();
+    if (Fl_Panel::current->is_button())
+      i->svalue = ((fltk3::Button*)(Fl_Panel::current_widget()->o))->shortcut();
+    else if (Fl_Panel::current->is_input())
+      i->svalue = ((fltk3::Input_*)(Fl_Panel::current_widget()->o))->shortcut();
+    else if (Fl_Panel::current->is_value_input())
+      i->svalue = ((fltk3::ValueInput*)(Fl_Panel::current_widget()->o))->shortcut();
+    else if (Fl_Panel::current->is_text_display())
+      i->svalue = ((fltk3::TextDisplay*)(Fl_Panel::current_widget()->o))->shortcut();
     else {
       i->hide();
       return;

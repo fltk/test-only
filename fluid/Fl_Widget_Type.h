@@ -34,8 +34,6 @@
 struct fltk3::MenuItem;
 class Fluid_Image;
 
-extern Fl_Widget_Type *current_widget; // one of the selected ones
-
 //
 // End of "$Id$".
 //

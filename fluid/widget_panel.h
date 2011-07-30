@@ -34,7 +34,6 @@
 #include <fltk3/DoubleWindow.h>
 #include <fltk3/TabGroup.h>
 #include <fltk3/Group.h>
-extern void propagate_load(fltk3::Group*, void*);
 #include <fltk3/Input.h>
 extern void label_cb(fltk3::Input*, void*);
 #include <fltk3/Choice.h>

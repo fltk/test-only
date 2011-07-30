@@ -65,11 +65,11 @@ inline int fl_min(int a, int b) { return (a < b ? a : b); }
 
 // Update the XYWH values in the widget panel...
 static void update_xywh() {
-  if (current_widget && current_widget->is_widget()) {
-    widget_x_input->value(((Fl_Widget_Type *)current_widget)->o->x());
-    widget_y_input->value(((Fl_Widget_Type *)current_widget)->o->y());
-    widget_w_input->value(((Fl_Widget_Type *)current_widget)->o->w());
-    widget_h_input->value(((Fl_Widget_Type *)current_widget)->o->h());
+  if (Fl_Panel::current && Fl_Panel::current->is_widget()) {
+    widget_x_input->value(((Fl_Widget_Type *)Fl_Panel::current_widget())->o->x());
+    widget_y_input->value(((Fl_Widget_Type *)Fl_Panel::current_widget())->o->y());
+    widget_w_input->value(((Fl_Widget_Type *)Fl_Panel::current_widget())->o->w());
+    widget_h_input->value(((Fl_Widget_Type *)Fl_Panel::current_widget())->o->h());
   }
 }
 
@@ -453,47 +453,47 @@ uchar *Fl_Window_Type::read_image(int &ww, int &hh) {
 
 void modal_cb(fltk3::LightButton* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (!current_widget->is_window()) {i->hide(); return;}
+    if (!Fl_Panel::current->is_window()) {i->hide(); return;}
     i->show();
-    i->value(((Fl_Window_Type *)current_widget)->modal);
+    i->value(((Fl_Window_Type *)Fl_Panel::current_widget())->modal);
   } else {
-    ((Fl_Window_Type *)current_widget)->modal = i->value();
+    ((Fl_Window_Type *)Fl_Panel::current_widget())->modal = i->value();
     set_modflag(1);
   }
 }
 
 void non_modal_cb(fltk3::LightButton* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (!current_widget->is_window()) {i->hide(); return;}
+    if (!Fl_Panel::current->is_window()) {i->hide(); return;}
     i->show();
-    i->value(((Fl_Window_Type *)current_widget)->non_modal);
+    i->value(((Fl_Window_Type *)Fl_Panel::current_widget())->non_modal);
   } else {
-    ((Fl_Window_Type *)current_widget)->non_modal = i->value();
+    ((Fl_Window_Type *)Fl_Panel::current_widget())->non_modal = i->value();
     set_modflag(1);
   }
 }
 
 void border_cb(fltk3::LightButton* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (!current_widget->is_window()) {i->hide(); return;}
+    if (!Fl_Panel::current->is_window()) {i->hide(); return;}
     i->show();
-    i->value(((fltk3::Window*)(current_widget->o))->border());
+    i->value(((fltk3::Window*)(Fl_Panel::current_widget()->o))->border());
   } else {
-    ((fltk3::Window*)(current_widget->o))->border(i->value());
+    ((fltk3::Window*)(Fl_Panel::current_widget()->o))->border(i->value());
     set_modflag(1);
   }
 }
 
 void xclass_cb(fltk3::Input* i, void* v) {
   if (v == Fl_Panel::LOAD) {
-    if (!current_widget->is_window()) {
+    if (!Fl_Panel::current->is_window()) {
       i->hide(); 
       i->parent()->hide(); // hides the "X Class:" label as well
       return;
     }
     i->show();
     i->parent()->show();
-    i->value(((Fl_Widget_Type *)current_widget)->xclass);
+    i->value(((Fl_Widget_Type *)Fl_Panel::current_widget())->xclass);
   } else {
     int mod = 0;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {

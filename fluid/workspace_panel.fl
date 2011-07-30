@@ -48,7 +48,7 @@ decl {extern fltk3::Pixmap menu_multi_pixmap;} {public global
 decl {extern fltk3::Pixmap menu_all_pixmap;} {public global
 } 
 
-widget_class Fl_Environment_Choice {
+widget_class Fl_Environment_Choice {open
   xywh {494 182 170 40} type Double
   class {fltk3::Group} visible position_relative
 } {
@@ -74,48 +74,7 @@ if ( (pEnv&e)==e ) {
   pEnv = pEnv | e;
 }
 
-// now update all menus
-e = pEnv;
-fltk3::MenuItem *mi = menu_pEnvMenu;
-int level = 0;
-while (mi->label()) {
-  unsigned int me = (intptr_t)mi->user_data();
-  if (me) {
-    fltk3::MultiLabel *ml = (fltk3::MultiLabel*)mi->label();
-    if ( (me&e)==0 ) {
-      ml->labela = (char*)&menu_none_pixmap;
-    } else if ( (me&e)==me ) {
-      ml->labela = (char*)&menu_all_pixmap;
-    } else {
-      ml->labela = (char*)&menu_multi_pixmap;
-    }
-  }
-  if (mi->flags&fltk3::SUBMENU) level++;
-  mi++;
-  while (level && !mi->label()) {
-    level--; 
-    mi++;
-  }
-}
-
-// update the text
-if (pEnv==ENV_ALL) {
-  pEnvList->label("- all -");
-} else if (pEnv==ENV_NONE) {
-  pEnvList->label("- none -");
-} else {
-  char buf[1024]; buf[0] = 0;
-  if (pEnv&ENV_MAKE) strcat(buf, "make, ");
-  if (pEnv&ENV_CMAKE) strcat(buf, "cmake, ");
-  if (pEnv&ENV_VC6) strcat(buf, "VC6, ");
-  if (pEnv&ENV_VC2008) strcat(buf, "VC2008, ");
-  if (pEnv&ENV_VC2010) strcat(buf, "VC2010, ");
-  if (pEnv&ENV_XC3) strcat(buf, "Xcode3, ");
-  if (pEnv&ENV_XC4) strcat(buf, "Xcode4, ");
-  int n = strlen(buf);
-  if (n>2) buf[n-2] = 0;
-  pEnvList->copy_label(buf);
-}
+update_all();
 
 if (callback())
   do_callback();}
@@ -220,11 +179,56 @@ while (mi->label()) {
     mi++;
   }
 }} {}
+  Function {update_all()} {open protected return_type void
+  } {
+    code {// now update all menus
+unsigned int e = pEnv;
+fltk3::MenuItem *mi = menu_pEnvMenu;
+int level = 0;
+while (mi->label()) {
+  unsigned int me = (intptr_t)mi->user_data();
+  if (me) {
+    fltk3::MultiLabel *ml = (fltk3::MultiLabel*)mi->label();
+    if ( (me&e)==0 ) {
+      ml->labela = (char*)&menu_none_pixmap;
+    } else if ( (me&e)==me ) {
+      ml->labela = (char*)&menu_all_pixmap;
+    } else {
+      ml->labela = (char*)&menu_multi_pixmap;
+    }
+  }
+  if (mi->flags&fltk3::SUBMENU) level++;
+  mi++;
+  while (level && !mi->label()) {
+    level--; 
+    mi++;
+  }
+}
+
+// update the text
+if (pEnv==ENV_ALL) {
+  pEnvList->label("- all -");
+} else if (pEnv==ENV_NONE) {
+  pEnvList->label("- none -");
+} else {
+  char buf[1024]; buf[0] = 0;
+  if (pEnv&ENV_MAKE) strcat(buf, "make, ");
+  if (pEnv&ENV_CMAKE) strcat(buf, "cmake, ");
+  if (pEnv&ENV_VC6) strcat(buf, "VC6, ");
+  if (pEnv&ENV_VC2008) strcat(buf, "VC2008, ");
+  if (pEnv&ENV_VC2010) strcat(buf, "VC2010, ");
+  if (pEnv&ENV_XC3) strcat(buf, "Xcode3, ");
+  if (pEnv&ENV_XC4) strcat(buf, "Xcode4, ");
+  int n = strlen(buf);
+  if (n>2) buf[n-2] = 0;
+  pEnvList->copy_label(buf);
+}} {}
+  }
   Function {value(unsigned int v)} {
-    comment {Set the environment flags} return_type void
+    comment {Set the environment flags} open return_type void
   } {
     code {pEnv = v;
-cb_pMenuAll_i(0, 0);} {}
+update_all();} {}
   }
   Function {value()} {
     comment {Get the environment flags} return_type {unsigned int}
@@ -319,86 +323,48 @@ decl {extern fltk3::Window *the_file_panel;} {private global
 Function {file_panel_name_cb(fltk3::Input *i, void *v)} {open private return_type void
 } {
   code {if (v == Fl_Panel::LOAD) {
-      /*
-      i->static_value(current_widget->label());
-      if (strlen(i->value()) >= oldlabellen) {
-        oldlabellen = strlen(i->value())+128;
-        oldlabel = (char*)realloc(oldlabel,oldlabellen);
-      }
-      strcpy(oldlabel,i->value());
-      */
-    } else {
-      int mod = 0;
-      for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
-        if (o->selected && o->is_file()) {
-          ((Fl_File_Type*)o)->filename(i->value());
-          mod = 1;
-        }
-      }
-      if (mod) set_modflag(1);
-    }
-
-/*
-void name_cb(fltk3::Input* o, void *v) {
-  if (v == LOAD) {
     static char buf[1024];
-    if (numselected != 1) {
-      snprintf(buf, sizeof(buf), "Widget Properties (%d widgets)", numselected);
-      o->hide();
+    if (Fl_Panel::numselected != 1) {
+      snprintf(buf, sizeof(buf), "File Properties (%d files)", Fl_Panel::numselected);
+      i->hide();
     } else {
-      o->static_value(current_widget->name());
-      o->show();
-      snprintf(buf, sizeof(buf), "%s Properties", current_widget->title());
+      i->static_value(Fl_Panel::current_file()->filename());
+      i->show();
+      snprintf(buf, sizeof(buf), "%s Properties", Fl_Panel::current_file()->name());
     }
-    
-    the_panel->label(buf);
+    the_file_panel->label(buf);
   } else {
-    if (numselected == 1) {
-      current_widget->name(o->value());
-      // I don't update window title, as it probably is being closed
-      // and wm2 (a window manager) barfs if you retitle and then
-      // hide a window:
-      // ((fltk3::Window*)(o->parent()->parent()->parent()))->label(current_widget->title());
+    if (Fl_Panel::numselected == 1) {
+      Fl_Panel::current_file()->filename(i->value());
+      if (i->changed()) set_modflag(1);
     }
-  }
-}
-*/} {}
+  }} {}
 } 
 
 Function {file_panel_env_cb(Fl_Environment_Choice *i, void *v)} {open private return_type void
 } {
   code {if (v == Fl_Panel::LOAD) {
-      /*
-      i->static_value(current_widget->label());
-      if (strlen(i->value()) >= oldlabellen) {
-        oldlabellen = strlen(i->value())+128;
-        oldlabel = (char*)realloc(oldlabel,oldlabellen);
-      }
-      strcpy(oldlabel,i->value());
-      */
-      // FIXME: current_widget needed
-      for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
-        if (o->selected && o->is_file()) {
-          i->value(((Fl_File_Type*)o)->environments());
-          return;
-        }
-      }
-    } else {
-      int mod = 0;
-      for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
-        if (o->selected && o->is_file()) {
-          ((Fl_File_Type*)o)->environments(i->value());
+    i->value(Fl_Panel::current_file()->environments());
+  } else {
+    int mod = 0;
+    unsigned int e = i->value();
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
+      if (o->selected && o->is_file()) {
+        if (((Fl_File_Type*)o)->environments() != e) {
+          ((Fl_File_Type*)o)->environments(e);
           mod = 1;
         }
       }
-      if (mod) set_modflag(1);
-    }} {selected
-  }
+    }
+    if (mod) set_modflag(1);
+  }} {}
 } 
 
-Function {file_panel_ok_cb(fltk3::Widget*, void*)} {open private return_type void
+Function {file_panel_set_cb(fltk3::Widget*, void *v)} {open return_type void
 } {
-  code {fltk3::Widget*const* a = the_file_panel->array();
+  code {if (v == Fl_Panel::LOAD) {
+  } else {
+    fltk3::Widget*const* a = the_file_panel->array();
     for (int i=the_file_panel->children(); i--;) {
       fltk3::Widget* o = *a++;
       if (o->changed()) {
@@ -407,20 +373,29 @@ Function {file_panel_ok_cb(fltk3::Widget*, void*)} {open private return_type voi
         o->clear_changed();
       }
     }
-  the_file_panel->hide();} {}
+  }} {}
+} 
+
+Function {file_panel_ok_cb(fltk3::Widget*, void *v)} {open private return_type void
+} {
+  code {if (v == Fl_Panel::LOAD) {
+  } else {
+    file_panel_set_cb(0, 0);
+    the_file_panel->hide();
+  }} {}
 } 
 
 Function {make_file_panel()} {open
 } {
   {fltk3::Window} {} {
-    label {File Properties} open
+    label {File Properties} open selected
     xywh {510 319 405 136} type Double labelsize 11 align 80 resizable hotspot
     code0 {o->size_range(o->w(), o->h());}
-    class Fl_Panel visible
+    class Fl_Panel non_modal visible
   } {
     {fltk3::Group} {} {
       label {File Name:}
-      callback propagate_load open
+      callback {Fl_Panel::propagate_load} open
       xywh {75 15 309 20} labelfont 1 labelsize 11 align 4
     } {
       {fltk3::Input} {} {
@@ -434,7 +409,8 @@ Use Ctrl-J for newlines.} xywh {75 15 170 20} labelfont 1 labelsize 11 when 1 te
       xywh {75 45 170 40} box FLAT_BOX
       class Fl_Environment_Choice
     } {}
-    {fltk3::Group} {} {open
+    {fltk3::Group} {} {
+      callback {Fl_Panel::propagate_load} open
       xywh {9 100 400 20} labelsize 11
     } {
       {fltk3::Box} {} {

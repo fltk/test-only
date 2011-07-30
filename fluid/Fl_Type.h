@@ -178,6 +178,8 @@ public:
   const class Fl_Class_Type* is_in_class() const;
 };
 
+typedef int (Fl_Type::*RTTI_Query)() const;
+
 class Fl_Workspace_Type : public Fl_Type {  
   unsigned int pEnv;
   int pNUUID, pnUUID;
@@ -1043,8 +1045,14 @@ class Fl_Panel : public fltk3::DoubleWindow {
 public:
   Fl_Panel(int x, int y, int w, int h, const char *name=0L);
   ~Fl_Panel();
+  void load(RTTI_Query query);
+  
   static void *const LOAD;
   static int numselected;
+  static Fl_Type *current;
+  static Fl_Widget_Type *current_widget() { return (Fl_Widget_Type*)current; }
+  static Fl_File_Type *current_file() { return (Fl_File_Type*)current; }
+  static void propagate_load(fltk3::Group* g, void* v=LOAD);
 };
 
 

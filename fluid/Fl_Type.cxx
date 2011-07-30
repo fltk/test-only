@@ -1310,7 +1310,7 @@ void Fl_Lib_Target_Type::open() {
 
 // ------------ Generic File ---------------------------------------------------
 
-extern fltk3::Window *the_file_panel;
+extern Fl_Panel *the_file_panel;
 Fl_File_Type Fl_File_type;
 
 Fl_Type *Fl_File_Type::make() {
@@ -1414,38 +1414,9 @@ const char *Fl_File_Type::filename_name() {
   return 0;
 }
 
-// FIXME: move to Fl_Panel
-static Fl_Type *current_widget;
-// FIXME: move to Fl_Panel
-extern void propagate_load(fltk3::Group*, void*);
-
-// update the panel according to current widget set:
-// FIXME: move to Fl_Panel
-static void load_file_panel() {
-  if (!the_file_panel) return;
-  
-  // find all the File Type subclasses currently selected:
-  Fl_Panel::numselected = 0;
-  current_widget = 0;
-  if (Fl_Type::current) {
-    if (Fl_Type::current->is_file())
-      current_widget=(Fl_Widget_Type*)Fl_Type::current;
-    for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
-      if (o->is_file() && o->selected) {
-	Fl_Panel::numselected++;
-	if (!current_widget) current_widget = o;
-      }
-    }
-  }
-  if (Fl_Panel::numselected)
-    propagate_load(the_file_panel, Fl_Panel::LOAD);
-  else
-    the_file_panel->hide();
-}
-
 void Fl_File_Type::open() {
   if (!the_file_panel) the_file_panel = make_file_panel();
-  load_file_panel();
+  the_file_panel->load(&Fl_Type::is_file);
   if (Fl_Panel::numselected) the_file_panel->show();
 }
 
@@ -1553,6 +1524,7 @@ void Fl_Folder_Type::open() {
 
 void *const Fl_Panel::LOAD = (void *)"LOAD"; // "magic" pointer to indicate that we need to load values into the dialog
 int Fl_Panel::numselected = 0;
+Fl_Type *Fl_Panel::current = 0L;
 
 Fl_Panel::Fl_Panel(int x, int y, int w, int h, const char *name) 
 : fltk3::DoubleWindow(w, h, name) {
@@ -1560,6 +1532,43 @@ Fl_Panel::Fl_Panel(int x, int y, int w, int h, const char *name)
 
 Fl_Panel::~Fl_Panel() {
 }
+
+void Fl_Panel::propagate_load(fltk3::Group* g, void* v) {
+  if (v == Fl_Panel::LOAD) {
+    fltk3::Widget*const* a = g->array();
+    for (int i=g->children(); i--;) {
+      fltk3::Widget* o = *a++;
+      o->do_callback(o,Fl_Panel::LOAD);
+    }
+  }
+}
+
+
+// FIXME: make this a method of Fl_Panel
+// update the panel according to current widget set:
+void Fl_Panel::load(RTTI_Query type_query) {
+  if (!this) return;
+  
+  // find all the fltk3::Widget subclasses currently selected:
+  numselected = 0;
+  current = 0;
+  if (Fl_Type::current) {
+    if ((Fl_Type::current->*type_query)())
+      current = Fl_Type::current;
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
+      if ((o->*type_query)() && o->selected) {
+	numselected++;
+	if (!current) current = o;
+      }
+    }
+  }
+  if (numselected)
+    propagate_load(this);
+  else
+    hide();
+}
+
+
 
 //
 // End of "$Id$".
