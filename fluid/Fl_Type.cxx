@@ -1349,6 +1349,8 @@ void Fl_File_Type::filename(const char *fn) {
 char Fl_File_Type::read_property(const char *c) {
   if (!strcmp(c,"filename_and_path")) {
     filename(read_word());
+  } else  if (!strcmp(c,"environments")) {
+    environments(atoi(read_word()));
   } else {
     return Fl_Workspace_Type::read_property(c);
   }
@@ -1361,6 +1363,9 @@ void Fl_File_Type::write_properties() {
   if (filename() && *filename()) {
     write_string("filename_and_path");
     write_word(filename());
+  }
+  if (environments()!=Fl_Environment_Choice::ENV_ALL) {
+    write_string("environments %d", environments());
   }
 }
 
@@ -1420,13 +1425,6 @@ void Fl_File_Type::open() {
   if (Fl_Panel::numselected) the_file_panel->show();
 }
 
-//void Fl_File_Type::open() {
-//  const char *lName = fltk3::input("Enter a file name:", filename());
-//  if (lName) {
-//    filename(lName);
-//  }
-//}
-
 // ------------ Fluid File -----------------------------------------------------
 
 Fl_Fluid_File_Type Fl_Fluid_File_type;
@@ -1452,13 +1450,6 @@ Fl_Type *Fl_Fluid_File_Type::make() {
   return o;
 }
 
-//void Fl_Fluid_File_Type::open() {
-//  const char *lName = fltk3::input("Enter a Fluid file name:", filename());
-//  if (lName) {
-//    filename(lName);
-//  }
-//}
-
 // ------------ Fluid File -----------------------------------------------------
 
 Fl_Code_File_Type Fl_Code_File_type;
@@ -1483,13 +1474,6 @@ Fl_Type *Fl_Code_File_Type::make() {
   o->factory = this;
   return o;
 }
-
-//void Fl_Code_File_Type::open() {
-//  const char *lName = fltk3::input("Enter a C/C++ file name:", filename());
-//  if (lName) {
-//    filename(lName);
-//  }
-//}
 
 // ------------ Folder ---------------------------------------------------------
 

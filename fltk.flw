@@ -74,7 +74,7 @@ folder Applications {open
         uuid_Xcode4_PBXFileRef {5C7951B9-91C1-48CE-9D89-E31BAA6CA89A}
         filename_and_path {fluid/factory.cxx}
       }
-      code_file {file.cxx} {
+      code_file {file.cxx} {selected
         uuid_Xcode4_PBXBuildFile {9180CE40-4261-45D4-BA54-7E496D64E491}
         uuid_Xcode4_PBXFileRef {C9E8495F-E0DA-41CA-A433-0EE31A53EA61}
         filename_and_path {fluid/file.cxx}
@@ -160,7 +160,7 @@ folder Applications {open
         uuid_Xcode4_PBXFileRef {26103935-2D50-4B44-97C7-EE9AA857DE61}
         filename_and_path {fluid/alignment_panel.h}
       }
-      code_file {comments.h} {selected
+      code_file {comments.h} {
         uuid_Xcode4_PBXFileRef {19297348-7E5A-41AE-99F6-7AB10245A1D8}
         filename_and_path {fluid/comments.h}
       }
