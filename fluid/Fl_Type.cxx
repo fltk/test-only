@@ -306,7 +306,7 @@ void Widget_Browser::item_draw(void *v, int X, int Y, int, int) const {
     if (l->new_selected) fltk3::color(fltk3::contrast(fltk3::DARK_GREEN,fltk3::SELECTION_COLOR));
     else fltk3::color(fltk3::contrast(fltk3::DARK_GREEN,color()));
     fltk3::font(textfont()+fltk3::ITALIC, textsize()-2);
-    fltk3::draw(buf, (l->is_parent())?X+12:X, Y+12);
+    fltk3::draw(buf, X+12, Y+12);
     Y += comment_incr/2;
     comment_incr -= comment_incr/2;
   }
