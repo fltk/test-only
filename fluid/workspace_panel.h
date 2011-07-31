@@ -66,9 +66,6 @@ extern fltk3::Input *pName;
 extern Fl_Environment_Choice *pEnv;
 #include <fltk3/Button.h>
 fltk3::DoubleWindow* show_workspace_panel();
-#include <fltk3/Choice.h>
-#include <fltk3/Output.h>
-fltk3::DoubleWindow* make_app_target_panel();
 void file_panel_set_cb(fltk3::Widget*, void *v);
 #include <fltk3/ReturnButton.h>
 Fl_Panel* make_file_panel();

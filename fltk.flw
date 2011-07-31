@@ -7,8 +7,65 @@ folder Applications {open
 } {
   app_target Fluid {open
   } {
-    folder Sources {open
-    } {
+    folder Headers {} {
+      file_ref {CodeEditor.h} {
+        uuid_Xcode4_PBXFileRef {6A73CBE8-D82E-4770-B122-1162C650A349}
+        filename_and_path {fluid/CodeEditor.h}
+      }
+      file_ref {Fl_Type.h} {
+        uuid_Xcode4_PBXFileRef {6FEAD9ED-49D4-4725-90E9-2F5F252A8BB1}
+        filename_and_path {fluid/Fl_Type.h}
+      }
+      file_ref {Fl_Widget_Type.h} {
+        uuid_Xcode4_PBXFileRef {8D769D5B-8552-4F3F-870C-EB5F4D88BA7E}
+        filename_and_path {fluid/Fl_Widget_Type.h}
+      }
+      file_ref {Fluid_Image.h} {
+        uuid_Xcode4_PBXFileRef {65197118-1119-4E36-830B-52295D8E04FE}
+        filename_and_path {fluid/Fluid_Image.h}
+      }
+      file_ref {Shortcut_Button.h} {
+        uuid_Xcode4_PBXFileRef {E7FEDB0D-1218-4316-AB2F-F5E1E2C6FAA8}
+        filename_and_path {fluid/Shortcut_Button.h}
+      }
+      file_ref {about_panel.h} {
+        uuid_Xcode4_PBXFileRef {F420CC30-9E28-43A1-8F55-04F2A4285E2D}
+        filename_and_path {fluid/about_panel.h}
+      }
+      file_ref {alignment_panel.h} {
+        uuid_Xcode4_PBXFileRef {26103935-2D50-4B44-97C7-EE9AA857DE61}
+        filename_and_path {fluid/alignment_panel.h}
+      }
+      file_ref {comments.h} {
+        uuid_Xcode4_PBXFileRef {19297348-7E5A-41AE-99F6-7AB10245A1D8}
+        filename_and_path {fluid/comments.h}
+      }
+      file_ref {function_panel.h} {
+        uuid_Xcode4_PBXFileRef {88AC76F8-37BC-48CF-B6D1-33DCD67DFD98}
+        filename_and_path {fluid/function_panel.h}
+      }
+      file_ref {print_panel.h} {
+        uuid_Xcode4_PBXFileRef {D0E0882D-24C1-4A93-AF9E-109EC52D185C}
+        filename_and_path {fluid/print_panel.h}
+      }
+      file_ref {template_panel.h} {
+        uuid_Xcode4_PBXFileRef {000422E2-90D4-45AD-A495-95AC4385D9FE}
+        filename_and_path {fluid/template_panel.h}
+      }
+      file_ref {undo.h} {
+        uuid_Xcode4_PBXFileRef {88491B5D-61FA-4D41-954E-528D7BD9DF52}
+        filename_and_path {fluid/undo.h}
+      }
+      file_ref {widget_panel.h} {
+        uuid_Xcode4_PBXFileRef {E66E13F7-CB1B-4DE1-801E-C7601315D72B}
+        filename_and_path {fluid/widget_panel.h}
+      }
+      file_ref {workspace_panel.h} {
+        uuid_Xcode4_PBXFileRef {EAF89B48-F485-4F7C-A942-5E212E45BAB1}
+        filename_and_path {fluid/workspace_panel.h}
+      }
+    }
+    folder Sources {} {
       file_ref {CodeEditor.cxx} {
         uuid_Xcode4_PBXBuildFile {21531985-E735-4E4D-8AD4-601ECF511590}
         uuid_Xcode4_PBXFileRef {233B84BF-4134-4BEE-AB2F-9DFBE2B8842A}
@@ -74,7 +131,7 @@ folder Applications {open
         uuid_Xcode4_PBXFileRef {5C7951B9-91C1-48CE-9D89-E31BAA6CA89A}
         filename_and_path {fluid/factory.cxx}
       }
-      file_ref {file.cxx} {selected
+      file_ref {file.cxx} {
         uuid_Xcode4_PBXBuildFile {9180CE40-4261-45D4-BA54-7E496D64E491}
         uuid_Xcode4_PBXFileRef {C9E8495F-E0DA-41CA-A433-0EE31A53EA61}
         filename_and_path {fluid/file.cxx}
@@ -130,65 +187,6 @@ folder Applications {open
         filename_and_path {fluid/workspace_panel.cxx}
       }
     }
-    folder Headers {open
-    } {
-      file_ref {CodeEditor.h} {
-        uuid_Xcode4_PBXFileRef {6A73CBE8-D82E-4770-B122-1162C650A349}
-        filename_and_path {fluid/CodeEditor.h}
-      }
-      file_ref {Fl_Type.h} {
-        uuid_Xcode4_PBXFileRef {6FEAD9ED-49D4-4725-90E9-2F5F252A8BB1}
-        filename_and_path {fluid/Fl_Type.h}
-      }
-      file_ref {Fl_Widget_Type.h} {
-        uuid_Xcode4_PBXFileRef {8D769D5B-8552-4F3F-870C-EB5F4D88BA7E}
-        filename_and_path {fluid/Fl_Widget_Type.h}
-      }
-      file_ref {Fluid_Image.h} {
-        uuid_Xcode4_PBXFileRef {65197118-1119-4E36-830B-52295D8E04FE}
-        filename_and_path {fluid/Fluid_Image.h}
-      }
-      file_ref {Shortcut_Button.h} {
-        uuid_Xcode4_PBXFileRef {E7FEDB0D-1218-4316-AB2F-F5E1E2C6FAA8}
-        filename_and_path {fluid/Shortcut_Button.h}
-      }
-      file_ref {about_panel.h} {
-        uuid_Xcode4_PBXFileRef {F420CC30-9E28-43A1-8F55-04F2A4285E2D}
-        filename_and_path {fluid/about_panel.h}
-      }
-      file_ref {alignment_panel.h} {
-        uuid_Xcode4_PBXFileRef {26103935-2D50-4B44-97C7-EE9AA857DE61}
-        filename_and_path {fluid/alignment_panel.h}
-      }
-      file_ref {comments.h} {
-        uuid_Xcode4_PBXFileRef {19297348-7E5A-41AE-99F6-7AB10245A1D8}
-        filename_and_path {fluid/comments.h}
-      }
-      file_ref {function_panel.h} {
-        uuid_Xcode4_PBXFileRef {88AC76F8-37BC-48CF-B6D1-33DCD67DFD98}
-        filename_and_path {fluid/function_panel.h}
-      }
-      file_ref {print_panel.h} {
-        uuid_Xcode4_PBXFileRef {D0E0882D-24C1-4A93-AF9E-109EC52D185C}
-        filename_and_path {fluid/print_panel.h}
-      }
-      file_ref {template_panel.h} {
-        uuid_Xcode4_PBXFileRef {000422E2-90D4-45AD-A495-95AC4385D9FE}
-        filename_and_path {fluid/template_panel.h}
-      }
-      file_ref {undo.h} {
-        uuid_Xcode4_PBXFileRef {88491B5D-61FA-4D41-954E-528D7BD9DF52}
-        filename_and_path {fluid/undo.h}
-      }
-      file_ref {widget_panel.h} {
-        uuid_Xcode4_PBXFileRef {E66E13F7-CB1B-4DE1-801E-C7601315D72B}
-        filename_and_path {fluid/widget_panel.h}
-      }
-      file_ref {workspace_panel.h} {
-        uuid_Xcode4_PBXFileRef {EAF89B48-F485-4F7C-A942-5E212E45BAB1}
-        filename_and_path {fluid/workspace_panel.h}
-      }
-    }
   }
 } 
 
@@ -196,25 +194,1212 @@ folder Libraries {open
 } {
   app_target fltk {open
   } {
-    folder Sources {open
-    } {
+    folder Headers {} {
+      file_ref {Adjuster.h} {
+        filename_and_path {fltk3/Adjuster.h}
+      }
+      file_ref {ask.h} {
+        filename_and_path {fltk3/ask.h}
+      }
+      file_ref {Bitmap.h} {
+        filename_and_path {fltk3/Bitmap.h}
+      }
+      file_ref {BMPImage.h} {
+        filename_and_path {fltk3/BMPImage.h}
+      }
+      file_ref {Box.h} {
+        filename_and_path {fltk3/Box.h}
+      }
+      file_ref {Browser_.h} {
+        filename_and_path {fltk3/Browser_.h}
+      }
+      file_ref {Browser.h} {
+        filename_and_path {fltk3/Browser.h}
+      }
+      file_ref {Button.h} {
+        filename_and_path {fltk3/Button.h}
+      }
+      file_ref {Cairo.h} {
+        filename_and_path {fltk3/Cairo.h}
+      }
+      file_ref {CairoWindow.h} {
+        filename_and_path {fltk3/CairoWindow.h}
+      }
+      file_ref {Chart.h} {
+        filename_and_path {fltk3/Chart.h}
+      }
+      file_ref {CheckBrowser.h} {
+        filename_and_path {fltk3/CheckBrowser.h}
+      }
+      file_ref {CheckButton.h} {
+        filename_and_path {fltk3/CheckButton.h}
+      }
+      file_ref {Choice.h} {
+        filename_and_path {fltk3/Choice.h}
+      }
+      file_ref {Clock.h} {
+        filename_and_path {fltk3/Clock.h}
+      }
+      file_ref {ColorChooser.h} {
+        filename_and_path {fltk3/ColorChooser.h}
+      }
+      file_ref {Counter.h} {
+        filename_and_path {fltk3/Counter.h}
+      }
+      file_ref {Device.h} {
+        filename_and_path {fltk3/Device.h}
+      }
+      file_ref {Dial.h} {
+        filename_and_path {fltk3/Dial.h}
+      }
+      file_ref {dirent.h} {
+        filename_and_path {fltk3/dirent.h}
+      }
+      file_ref {DoubleWindow.h} {
+        filename_and_path {fltk3/DoubleWindow.h}
+      }
+      file_ref {draw.h} {
+        filename_and_path {fltk3/draw.h}
+      }
+      file_ref {enumerations.h} {
+        filename_and_path {fltk3/enumerations.h}
+      }
+      file_ref {Export.h} {
+        filename_and_path {fltk3/Export.h}
+      }
+      file_ref {FileBrowser.h} {
+        filename_and_path {fltk3/FileBrowser.h}
+      }
+      file_ref {FileChooser.h} {
+        filename_and_path {fltk3/FileChooser.h}
+      }
+      file_ref {FileIcon.h} {
+        filename_and_path {fltk3/FileIcon.h}
+      }
+      file_ref {FileInput.h} {
+        filename_and_path {fltk3/FileInput.h}
+      }
+      file_ref {filename.h} {
+        filename_and_path {fltk3/filename.h}
+      }
+      file_ref {FillDial.h} {
+        filename_and_path {fltk3/FillDial.h}
+      }
+      file_ref {FillSlider.h} {
+        filename_and_path {fltk3/FillSlider.h}
+      }
+      file_ref {FloatInput.h} {
+        filename_and_path {fltk3/FloatInput.h}
+      }
+      file_ref {forms.h} {
+        filename_and_path {fltk3/forms.h}
+      }
+      file_ref {FormsBitmap.h} {
+        filename_and_path {fltk3/FormsBitmap.h}
+      }
+      file_ref {FormsPixmap.h} {
+        filename_and_path {fltk3/FormsPixmap.h}
+      }
+      file_ref {Free.h} {
+        filename_and_path {fltk3/Free.h}
+      }
+      file_ref {GIFImage.h} {
+        filename_and_path {fltk3/GIFImage.h}
+      }
+      file_ref {gl.h} {
+        filename_and_path {fltk3/gl.h}
+      }
+      file_ref {gl2opengl.h} {
+        filename_and_path {fltk3/gl2opengl.h}
+      }
+      file_ref {glDraw.h} {
+        filename_and_path {fltk3/glDraw.h}
+      }
+      file_ref {glu.h} {
+        filename_and_path {fltk3/glu.h}
+      }
+      file_ref {glut.h} {
+        filename_and_path {fltk3/glut.h}
+      }
+      file_ref {GlWindow.h} {
+        filename_and_path {fltk3/GlWindow.h}
+      }
+      file_ref {Group.h} {
+        filename_and_path {fltk3/Group.h}
+      }
+      file_ref {HelpDialog.h} {
+        filename_and_path {fltk3/HelpDialog.h}
+      }
+      file_ref {HelpView.h} {
+        filename_and_path {fltk3/HelpView.h}
+      }
+      file_ref {HoldBrowser.h} {
+        filename_and_path {fltk3/HoldBrowser.h}
+      }
+      file_ref {HorFillSlider.h} {
+        filename_and_path {fltk3/HorFillSlider.h}
+      }
+      file_ref {HorNiceSlider.h} {
+        filename_and_path {fltk3/HorNiceSlider.h}
+      }
+      file_ref {HorSlider.h} {
+        filename_and_path {fltk3/HorSlider.h}
+      }
+      file_ref {HorValueSlider.h} {
+        filename_and_path {fltk3/HorValueSlider.h}
+      }
+      file_ref {Image.h} {
+        filename_and_path {fltk3/Image.h}
+      }
+      file_ref {Input_.h} {
+        filename_and_path {fltk3/Input_.h}
+      }
+      file_ref {Input.h} {
+        filename_and_path {fltk3/Input.h}
+      }
+      file_ref {InputChoice.h} {
+        filename_and_path {fltk3/InputChoice.h}
+      }
+      file_ref {IntInput.h} {
+        filename_and_path {fltk3/IntInput.h}
+      }
+      file_ref {JPEGImage.h} {
+        filename_and_path {fltk3/JPEGImage.h}
+      }
+      file_ref {LightButton.h} {
+        filename_and_path {fltk3/LightButton.h}
+      }
+      file_ref {LineDial.h} {
+        filename_and_path {fltk3/LineDial.h}
+      }
+      file_ref {math.h} {
+        filename_and_path {fltk3/math.h}
+      }
+      file_ref {Menu_.h} {
+        filename_and_path {fltk3/Menu_.h}
+      }
+      file_ref {Menu.h} {
+        filename_and_path {fltk3/Menu.h}
+      }
+      file_ref {MenuBar.h} {
+        filename_and_path {fltk3/MenuBar.h}
+      }
+      file_ref {MenuButton.h} {
+        filename_and_path {fltk3/MenuButton.h}
+      }
+      file_ref {MenuItem.h} {
+        filename_and_path {fltk3/MenuItem.h}
+      }
+      file_ref {MenuWindow.h} {
+        filename_and_path {fltk3/MenuWindow.h}
+      }
+      file_ref {message.h} {
+        filename_and_path {fltk3/message.h}
+      }
+      file_ref {MultiBrowser.h} {
+        filename_and_path {fltk3/MultiBrowser.h}
+      }
+      file_ref {MultiLabel.h} {
+        filename_and_path {fltk3/MultiLabel.h}
+      }
+      file_ref {MultilineInput.h} {
+        filename_and_path {fltk3/MultilineInput.h}
+      }
+      file_ref {MultilineOutput.h} {
+        filename_and_path {fltk3/MultilineOutput.h}
+      }
+      file_ref {names.h} {
+        filename_and_path {fltk3/names.h}
+      }
+      file_ref {NativeFileChooser.h} {
+        filename_and_path {fltk3/NativeFileChooser.h}
+      }
+      file_ref {NiceSlider.h} {
+        filename_and_path {fltk3/NiceSlider.h}
+      }
+      file_ref {Object.h} {
+        filename_and_path {fltk3/Object.h}
+      }
+      file_ref {osx.h} {
+        filename_and_path {fltk3/osx.h}
+      }
+      file_ref {Output.h} {
+        filename_and_path {fltk3/Output.h}
+      }
+      file_ref {OverlayWindow.h} {
+        filename_and_path {fltk3/OverlayWindow.h}
+      }
+      file_ref {PackedGroup.h} {
+        filename_and_path {fltk3/PackedGroup.h}
+      }
+      file_ref {PagedDevice.h} {
+        filename_and_path {fltk3/PagedDevice.h}
+      }
+      file_ref {Pixmap.h} {
+        filename_and_path {fltk3/Pixmap.h}
+      }
+      file_ref {Plugin.h} {
+        filename_and_path {fltk3/Plugin.h}
+      }
+      file_ref {PNGImage.h} {
+        filename_and_path {fltk3/PNGImage.h}
+      }
+      file_ref {PNMImage.h} {
+        filename_and_path {fltk3/PNMImage.h}
+      }
+      file_ref {Positioner.h} {
+        filename_and_path {fltk3/Positioner.h}
+      }
+      file_ref {PostScript.h} {
+        filename_and_path {fltk3/PostScript.h}
+      }
+      file_ref {Preferences.h} {
+        filename_and_path {fltk3/Preferences.h}
+      }
+      file_ref {Printer.h} {
+        filename_and_path {fltk3/Printer.h}
+      }
+      file_ref {Progress.h} {
+        filename_and_path {fltk3/Progress.h}
+      }
+      file_ref {RadioButton.h} {
+        filename_and_path {fltk3/RadioButton.h}
+      }
+      file_ref {RadioLightButton.h} {
+        filename_and_path {fltk3/RadioLightButton.h}
+      }
+      file_ref {RadioRoundButton.h} {
+        filename_and_path {fltk3/RadioRoundButton.h}
+      }
+      file_ref {Rectangle.h} {
+        filename_and_path {fltk3/Rectangle.h}
+      }
+      file_ref {RepeatButton.h} {
+        filename_and_path {fltk3/RepeatButton.h}
+      }
+      file_ref {ReturnButton.h} {
+        filename_and_path {fltk3/ReturnButton.h}
+      }
+      file_ref {RGBImage.h} {
+        filename_and_path {fltk3/RGBImage.h}
+      }
+      file_ref {Roller.h} {
+        filename_and_path {fltk3/Roller.h}
+      }
+      file_ref {RoundButton.h} {
+        filename_and_path {fltk3/RoundButton.h}
+      }
+      file_ref {RoundClock.h} {
+        filename_and_path {fltk3/RoundClock.h}
+      }
+      file_ref {run.h} {
+        filename_and_path {fltk3/run.h}
+      }
+      file_ref {Scrollbar.h} {
+        filename_and_path {fltk3/Scrollbar.h}
+      }
+      file_ref {ScrollGroup.h} {
+        filename_and_path {fltk3/ScrollGroup.h}
+      }
+      file_ref {SecretInput.h} {
+        filename_and_path {fltk3/SecretInput.h}
+      }
+      file_ref {SelectBrowser.h} {
+        filename_and_path {fltk3/SelectBrowser.h}
+      }
+      file_ref {SharedImage.h} {
+        filename_and_path {fltk3/SharedImage.h}
+      }
+      file_ref {show_colormap.h} {
+        filename_and_path {fltk3/show_colormap.h}
+      }
+      file_ref {showInput.h} {
+        filename_and_path {fltk3/showInput.h}
+      }
+      file_ref {SimpleCounter.h} {
+        filename_and_path {fltk3/SimpleCounter.h}
+      }
+      file_ref {SingleWindow.h} {
+        filename_and_path {fltk3/SingleWindow.h}
+      }
+      file_ref {Slider.h} {
+        filename_and_path {fltk3/Slider.h}
+      }
+      file_ref {Spinner.h} {
+        filename_and_path {fltk3/Spinner.h}
+      }
+      file_ref {SysMenuBar.h} {
+        filename_and_path {fltk3/SysMenuBar.h}
+      }
+      file_ref {TabGroup.h} {
+        filename_and_path {fltk3/TabGroup.h}
+      }
+      file_ref {Table.h} {
+        filename_and_path {fltk3/Table.h}
+      }
+      file_ref {TableRow.h} {
+        filename_and_path {fltk3/TableRow.h}
+      }
+      file_ref {TextBuffer.h} {
+        filename_and_path {fltk3/TextBuffer.h}
+      }
+      file_ref {TextDisplay.h} {
+        filename_and_path {fltk3/TextDisplay.h}
+      }
+      file_ref {TextEditor.h} {
+        filename_and_path {fltk3/TextEditor.h}
+      }
+      file_ref {TiledGroup.h} {
+        filename_and_path {fltk3/TiledGroup.h}
+      }
+      file_ref {TiledImage.h} {
+        filename_and_path {fltk3/TiledImage.h}
+      }
+      file_ref {Timer.h} {
+        filename_and_path {fltk3/Timer.h}
+      }
+      file_ref {ToggleButton.h} {
+        filename_and_path {fltk3/ToggleButton.h}
+      }
+      file_ref {ToggleLightButton.h} {
+        filename_and_path {fltk3/ToggleLightButton.h}
+      }
+      file_ref {ToggleRoundButton.h} {
+        filename_and_path {fltk3/ToggleRoundButton.h}
+      }
+      file_ref {Tooltip.h} {
+        filename_and_path {fltk3/Tooltip.h}
+      }
+      file_ref {Tree.h} {
+        filename_and_path {fltk3/Tree.h}
+      }
+      file_ref {TreeItem.h} {
+        filename_and_path {fltk3/TreeItem.h}
+      }
+      file_ref {TreeItemArray.h} {
+        filename_and_path {fltk3/TreeItemArray.h}
+      }
+      file_ref {TreePrefs.h} {
+        filename_and_path {fltk3/TreePrefs.h}
+      }
+      file_ref {types.h} {
+        filename_and_path {fltk3/types.h}
+      }
+      file_ref {utf8.h} {
+        filename_and_path {fltk3/utf8.h}
+      }
+      file_ref {Valuator.h} {
+        filename_and_path {fltk3/Valuator.h}
+      }
+      file_ref {ValueInput.h} {
+        filename_and_path {fltk3/ValueInput.h}
+      }
+      file_ref {ValueOutput.h} {
+        filename_and_path {fltk3/ValueOutput.h}
+      }
+      file_ref {ValueSlider.h} {
+        filename_and_path {fltk3/ValueSlider.h}
+      }
+      file_ref {Widget.h} {
+        filename_and_path {fltk3/Widget.h}
+      }
+      file_ref {win32.h} {
+        filename_and_path {fltk3/win32.h}
+      }
+      file_ref {Window.h} {
+        filename_and_path {fltk3/Window.h}
+      }
+      file_ref {WizardGroup.h} {
+        filename_and_path {fltk3/WizardGroup.h}
+      }
+      file_ref {Wrapper.h} {
+        filename_and_path {fltk3/Wrapper.h}
+      }
+      file_ref {x.h} {
+        filename_and_path {fltk3/x.h}
+      }
+      file_ref {XBMImage.h} {
+        filename_and_path {fltk3/XBMImage.h}
+      }
+      file_ref {XPMImage.h} {
+        filename_and_path {fltk3/XPMImage.h}
+      }
+      file_ref {Xutf8.h} {
+        filename_and_path {fltk3/Xutf8.h}
+      }
+    }
+    folder Sources {} {
+      file_ref {Fl_cocoa.mm} {
+        filename_and_path {src/Fl_cocoa.mm}
+      }
+      file_ref {Fl_Native_File_Chooser_MAC.mm} {
+        filename_and_path {src/Fl_Native_File_Chooser_MAC.mm}
+      }
+      file_ref {Fl_Quartz_Printer.mm} {
+        filename_and_path {src/Fl_Quartz_Printer.mm}
+      }
+      file_ref {Fl.cxx} {
+        filename_and_path {src/Fl.cxx}
+      }
       file_ref {Fl_Adjuster.cxx} {
         filename_and_path {src/Fl_Adjuster.cxx}
       }
+      file_ref {Fl_Bitmap.cxx} {
+        filename_and_path {src/Fl_Bitmap.cxx}
+      }
+      file_ref {Fl_Box.cxx} {
+        filename_and_path {src/Fl_Box.cxx}
+      }
+      file_ref {Fl_Browser.cxx} {
+        filename_and_path {src/Fl_Browser.cxx}
+      }
+      file_ref {Fl_Browser_.cxx} {
+        filename_and_path {src/Fl_Browser_.cxx}
+      }
+      file_ref {Fl_Browser_load.cxx} {
+        filename_and_path {src/Fl_Browser_load.cxx}
+      }
+      file_ref {Fl_Button.cxx} {
+        filename_and_path {src/Fl_Button.cxx}
+      }
+      file_ref {Fl_Chart.cxx} {
+        filename_and_path {src/Fl_Chart.cxx}
+      }
+      file_ref {Fl_Check_Browser.cxx} {
+        filename_and_path {src/Fl_Check_Browser.cxx}
+      }
+      file_ref {Fl_Check_Button.cxx} {
+        filename_and_path {src/Fl_Check_Button.cxx}
+      }
+      file_ref {Fl_Choice.cxx} {
+        filename_and_path {src/Fl_Choice.cxx}
+      }
+      file_ref {Fl_Clock.cxx} {
+        filename_and_path {src/Fl_Clock.cxx}
+      }
+      file_ref {Fl_Color_Chooser.cxx} {
+        filename_and_path {src/Fl_Color_Chooser.cxx}
+      }
+      file_ref {Fl_Counter.cxx} {
+        filename_and_path {src/Fl_Counter.cxx}
+      }
+      file_ref {Fl_Device.cxx} {
+        filename_and_path {src/Fl_Device.cxx}
+      }
+      file_ref {Fl_Dial.cxx} {
+        filename_and_path {src/Fl_Dial.cxx}
+      }
+      file_ref {Fl_Double_Window.cxx} {
+        filename_and_path {src/Fl_Double_Window.cxx}
+      }
+      file_ref {Fl_File_Browser.cxx} {
+        filename_and_path {src/Fl_File_Browser.cxx}
+      }
+      file_ref {Fl_File_Chooser.cxx} {
+        filename_and_path {src/Fl_File_Chooser.cxx}
+      }
+      file_ref {Fl_File_Chooser2.cxx} {
+        filename_and_path {src/Fl_File_Chooser2.cxx}
+      }
+      file_ref {Fl_File_Icon.cxx} {
+        filename_and_path {src/Fl_File_Icon.cxx}
+      }
+      file_ref {Fl_File_Input.cxx} {
+        filename_and_path {src/Fl_File_Input.cxx}
+      }
+      file_ref {Fl_Group.cxx} {
+        filename_and_path {src/Fl_Group.cxx}
+      }
+      file_ref {Fl_Help_View.cxx} {
+        filename_and_path {src/Fl_Help_View.cxx}
+      }
+      file_ref {Fl_Image.cxx} {
+        filename_and_path {src/Fl_Image.cxx}
+      }
+      file_ref {Fl_Input.cxx} {
+        filename_and_path {src/Fl_Input.cxx}
+      }
+      file_ref {Fl_Input_.cxx} {
+        filename_and_path {src/Fl_Input_.cxx}
+      }
+      file_ref {Fl_Light_Button.cxx} {
+        filename_and_path {src/Fl_Light_Button.cxx}
+      }
+      file_ref {Fl_Menu.cxx} {
+        filename_and_path {src/Fl_Menu.cxx}
+      }
+      file_ref {Fl_Menu_.cxx} {
+        filename_and_path {src/Fl_Menu_.cxx}
+      }
+      file_ref {Fl_Menu_Bar.cxx} {
+        filename_and_path {src/Fl_Menu_Bar.cxx}
+      }
+      file_ref {Fl_Menu_Button.cxx} {
+        filename_and_path {src/Fl_Menu_Button.cxx}
+      }
+      file_ref {Fl_Menu_Window.cxx} {
+        filename_and_path {src/Fl_Menu_Window.cxx}
+      }
+      file_ref {Fl_Menu_add.cxx} {
+        filename_and_path {src/Fl_Menu_add.cxx}
+      }
+      file_ref {Fl_Menu_global.cxx} {
+        filename_and_path {src/Fl_Menu_global.cxx}
+      }
+      file_ref {Fl_Multi_Label.cxx} {
+        filename_and_path {src/Fl_Multi_Label.cxx}
+      }
+      file_ref {Fl_Native_File_Chooser.cxx} {
+        filename_and_path {src/Fl_Native_File_Chooser.cxx}
+      }
+      file_ref {Fl_Overlay_Window.cxx} {
+        filename_and_path {src/Fl_Overlay_Window.cxx}
+      }
+      file_ref {Fl_Pack.cxx} {
+        filename_and_path {src/Fl_Pack.cxx}
+      }
+      file_ref {Fl_Paged_Device.cxx} {
+        filename_and_path {src/Fl_Paged_Device.cxx}
+      }
+      file_ref {Fl_Pixmap.cxx} {
+        filename_and_path {src/Fl_Pixmap.cxx}
+      }
+      file_ref {Fl_Positioner.cxx} {
+        filename_and_path {src/Fl_Positioner.cxx}
+      }
+      file_ref {Fl_Printer.cxx} {
+        filename_and_path {src/Fl_Printer.cxx}
+      }
+      file_ref {Fl_Preferences.cxx} {
+        filename_and_path {src/Fl_Preferences.cxx}
+      }
+      file_ref {Fl_Progress.cxx} {
+        filename_and_path {src/Fl_Progress.cxx}
+      }
+      file_ref {Fl_Repeat_Button.cxx} {
+        filename_and_path {src/Fl_Repeat_Button.cxx}
+      }
+      file_ref {Fl_Return_Button.cxx} {
+        filename_and_path {src/Fl_Return_Button.cxx}
+      }
+      file_ref {Fl_Roller.cxx} {
+        filename_and_path {src/Fl_Roller.cxx}
+      }
+      file_ref {Fl_Round_Button.cxx} {
+        filename_and_path {src/Fl_Round_Button.cxx}
+      }
+      file_ref {Fl_Scroll.cxx} {
+        filename_and_path {src/Fl_Scroll.cxx}
+      }
+      file_ref {Fl_Scrollbar.cxx} {
+        filename_and_path {src/Fl_Scrollbar.cxx}
+      }
+      file_ref {Fl_Shared_Image.cxx} {
+        filename_and_path {src/Fl_Shared_Image.cxx}
+      }
+      file_ref {Fl_Single_Window.cxx} {
+        filename_and_path {src/Fl_Single_Window.cxx}
+      }
+      file_ref {Fl_Slider.cxx} {
+        filename_and_path {src/Fl_Slider.cxx}
+      }
+      file_ref {Fl_Sys_Menu_Bar.cxx} {
+        filename_and_path {src/Fl_Sys_Menu_Bar.cxx}
+      }
+      file_ref {Fl_Table.cxx} {
+        filename_and_path {src/Fl_Table.cxx}
+      }
+      file_ref {Fl_Table_Row.cxx} {
+        filename_and_path {src/Fl_Table_Row.cxx}
+      }
+      file_ref {Fl_Tabs.cxx} {
+        filename_and_path {src/Fl_Tabs.cxx}
+      }
+      file_ref {Fl_Text_Buffer.cxx} {
+        filename_and_path {src/Fl_Text_Buffer.cxx}
+      }
+      file_ref {Fl_Text_Display.cxx} {
+        filename_and_path {src/Fl_Text_Display.cxx}
+      }
+      file_ref {Fl_Text_Editor.cxx} {
+        filename_and_path {src/Fl_Text_Editor.cxx}
+      }
+      file_ref {Fl_Tile.cxx} {
+        filename_and_path {src/Fl_Tile.cxx}
+      }
+      file_ref {Fl_Tiled_Image.cxx} {
+        filename_and_path {src/Fl_Tiled_Image.cxx}
+      }
+      file_ref {Fl_Tooltip.cxx} {
+        filename_and_path {src/Fl_Tooltip.cxx}
+      }
+      file_ref {Fl_Tree.cxx} {
+        filename_and_path {src/Fl_Tree.cxx}
+      }
+      file_ref {Fl_Tree_Item.cxx} {
+        filename_and_path {src/Fl_Tree_Item.cxx}
+      }
+      file_ref {Fl_Tree_Item_Array.cxx} {
+        filename_and_path {src/Fl_Tree_Item_Array.cxx}
+      }
+      file_ref {Fl_Tree_Prefs.cxx} {
+        filename_and_path {src/Fl_Tree_Prefs.cxx}
+      }
+      file_ref {Fl_Valuator.cxx} {
+        filename_and_path {src/Fl_Valuator.cxx}
+      }
+      file_ref {Fl_Value_Input.cxx} {
+        filename_and_path {src/Fl_Value_Input.cxx}
+      }
+      file_ref {Fl_Value_Output.cxx} {
+        filename_and_path {src/Fl_Value_Output.cxx}
+      }
+      file_ref {Fl_Value_Slider.cxx} {
+        filename_and_path {src/Fl_Value_Slider.cxx}
+      }
+      file_ref {Fl_Widget.cxx} {
+        filename_and_path {src/Fl_Widget.cxx}
+      }
+      file_ref {Fl_Window.cxx} {
+        filename_and_path {src/Fl_Window.cxx}
+      }
+      file_ref {Fl_Window_fullscreen.cxx} {
+        filename_and_path {src/Fl_Window_fullscreen.cxx}
+      }
+      file_ref {Fl_Window_hotspot.cxx} {
+        filename_and_path {src/Fl_Window_hotspot.cxx}
+      }
+      file_ref {Fl_Window_iconize.cxx} {
+        filename_and_path {src/Fl_Window_iconize.cxx}
+      }
+      file_ref {Fl_Wizard.cxx} {
+        filename_and_path {src/Fl_Wizard.cxx}
+      }
+      file_ref {Fl_XBM_Image.cxx} {
+        filename_and_path {src/Fl_XBM_Image.cxx}
+      }
+      file_ref {Fl_XPM_Image.cxx} {
+        filename_and_path {src/Fl_XPM_Image.cxx}
+      }
+      file_ref {Fl_abort.cxx} {
+        filename_and_path {src/Fl_abort.cxx}
+      }
+      file_ref {Fl_add_idle.cxx} {
+        filename_and_path {src/Fl_add_idle.cxx}
+      }
+      file_ref {Fl_arg.cxx} {
+        filename_and_path {src/Fl_arg.cxx}
+      }
+      file_ref {Fl_compose.cxx} {
+        filename_and_path {src/Fl_compose.cxx}
+      }
+      file_ref {Fl_display.cxx} {
+        filename_and_path {src/Fl_display.cxx}
+      }
+      file_ref {Fl_get_key.cxx} {
+        filename_and_path {src/Fl_get_key.cxx}
+      }
+      file_ref {Fl_get_system_colors.cxx} {
+        filename_and_path {src/Fl_get_system_colors.cxx}
+      }
+      file_ref {Fl_grab.cxx} {
+        filename_and_path {src/Fl_grab.cxx}
+      }
+      file_ref {Fl_lock.cxx} {
+        filename_and_path {src/Fl_lock.cxx}
+      }
+      file_ref {Fl_own_colormap.cxx} {
+        filename_and_path {src/Fl_own_colormap.cxx}
+      }
+      file_ref {Fl_visual.cxx} {
+        filename_and_path {src/Fl_visual.cxx}
+      }
+      file_ref {Fl_x.cxx} {
+        filename_and_path {src/Fl_x.cxx}
+      }
+      file_ref {cmap.cxx} {
+        filename_and_path {src/cmap.cxx}
+      }
+      file_ref {filename_absolute.cxx} {
+        filename_and_path {src/filename_absolute.cxx}
+      }
+      file_ref {filename_expand.cxx} {
+        filename_and_path {src/filename_expand.cxx}
+      }
+      file_ref {filename_ext.cxx} {
+        filename_and_path {src/filename_ext.cxx}
+      }
+      file_ref {filename_isdir.cxx} {
+        filename_and_path {src/filename_isdir.cxx}
+      }
+      file_ref {filename_list.cxx} {
+        filename_and_path {src/filename_list.cxx}
+      }
+      file_ref {filename_match.cxx} {
+        filename_and_path {src/filename_match.cxx}
+      }
+      file_ref {filename_setext.cxx} {
+        filename_and_path {src/filename_setext.cxx}
+      }
+      file_ref {fl_arc.cxx} {
+        filename_and_path {src/fl_arc.cxx}
+      }
+      file_ref {fl_arci.cxx} {
+        filename_and_path {src/fl_arci.cxx}
+      }
+      file_ref {fl_ask.cxx} {
+        filename_and_path {src/fl_ask.cxx}
+      }
+      file_ref {fl_boxtype.cxx} {
+        filename_and_path {src/fl_boxtype.cxx}
+      }
+      file_ref {fl_call_main.cxx} {
+        filename_and_path {src/fl_call_main.cxx}
+      }
+      file_ref {fl_color.cxx} {
+        filename_and_path {src/fl_color.cxx}
+      }
+      file_ref {fl_cursor.cxx} {
+        filename_and_path {src/fl_cursor.cxx}
+      }
+      file_ref {fl_curve.cxx} {
+        filename_and_path {src/fl_curve.cxx}
+      }
+      file_ref {fl_diamond_box.cxx} {
+        filename_and_path {src/fl_diamond_box.cxx}
+      }
+      file_ref {fl_dnd.cxx} {
+        filename_and_path {src/fl_dnd.cxx}
+      }
+      file_ref {fl_draw.cxx} {
+        filename_and_path {src/fl_draw.cxx}
+      }
+      file_ref {fl_draw_image.cxx} {
+        filename_and_path {src/fl_draw_image.cxx}
+      }
+      file_ref {fl_draw_pixmap.cxx} {
+        filename_and_path {src/fl_draw_pixmap.cxx}
+      }
+      file_ref {fl_encoding_latin1.cxx} {
+        filename_and_path {src/fl_encoding_latin1.cxx}
+      }
+      file_ref {fl_encoding_mac_roman.cxx} {
+        filename_and_path {src/fl_encoding_mac_roman.cxx}
+      }
+      file_ref {fl_engraved_label.cxx} {
+        filename_and_path {src/fl_engraved_label.cxx}
+      }
+      file_ref {fl_file_dir.cxx} {
+        filename_and_path {src/fl_file_dir.cxx}
+      }
+      file_ref {fl_font.cxx} {
+        filename_and_path {src/fl_font.cxx}
+      }
+      file_ref {fl_gtk.cxx} {
+        filename_and_path {src/fl_gtk.cxx}
+      }
+      file_ref {fl_labeltype.cxx} {
+        filename_and_path {src/fl_labeltype.cxx}
+      }
+      file_ref {fl_line_style.cxx} {
+        filename_and_path {src/fl_line_style.cxx}
+      }
+      file_ref {fl_open_uri.cxx} {
+        filename_and_path {src/fl_open_uri.cxx}
+      }
+      file_ref {fl_oval_box.cxx} {
+        filename_and_path {src/fl_oval_box.cxx}
+      }
+      file_ref {fl_overlay.cxx} {
+        filename_and_path {src/fl_overlay.cxx}
+      }
+      file_ref {fl_overlay_visual.cxx} {
+        filename_and_path {src/fl_overlay_visual.cxx}
+      }
+      file_ref {fl_plastic.cxx} {
+        filename_and_path {src/fl_plastic.cxx}
+      }
+      file_ref {fl_read_image.cxx} {
+        filename_and_path {src/fl_read_image.cxx}
+      }
+      file_ref {fl_rect.cxx} {
+        filename_and_path {src/fl_rect.cxx}
+      }
+      file_ref {fl_round_box.cxx} {
+        filename_and_path {src/fl_round_box.cxx}
+      }
+      file_ref {fl_rounded_box.cxx} {
+        filename_and_path {src/fl_rounded_box.cxx}
+      }
+      file_ref {fl_scroll_area.cxx} {
+        filename_and_path {src/fl_scroll_area.cxx}
+      }
+      file_ref {fl_set_font.cxx} {
+        filename_and_path {src/fl_set_font.cxx}
+      }
+      file_ref {fl_set_fonts.cxx} {
+        filename_and_path {src/fl_set_fonts.cxx}
+      }
+      file_ref {fl_shadow_box.cxx} {
+        filename_and_path {src/fl_shadow_box.cxx}
+      }
+      file_ref {fl_shortcut.cxx} {
+        filename_and_path {src/fl_shortcut.cxx}
+      }
+      file_ref {fl_show_colormap.cxx} {
+        filename_and_path {src/fl_show_colormap.cxx}
+      }
+      file_ref {fl_symbols.cxx} {
+        filename_and_path {src/fl_symbols.cxx}
+      }
+      file_ref {fl_utf8.cxx} {
+        filename_and_path {src/fl_utf8.cxx}
+      }
+      file_ref {fl_utf.cxx} {
+        filename_and_path {src/fl_utf.cxx}
+      }
+      file_ref {fl_vertex.cxx} {
+        filename_and_path {src/fl_vertex.cxx}
+      }
+      file_ref {flstring.c} {
+        filename_and_path {src/flstring.c}
+      }
+      file_ref {numericsort.cxx} {
+        filename_and_path {src/numericsort.cxx}
+      }
+      file_ref {ps_image.cxx} {
+        filename_and_path {src/ps_image.cxx}
+      }
+      file_ref {scandir.cxx} {
+        filename_and_path {src/scandir.cxx}
+      }
+      file_ref {screen_xywh.cxx} {
+        filename_and_path {src/screen_xywh.cxx}
+      }
+      file_ref {vsnprintf.c} {
+        filename_and_path {src/vsnprintf.c}
+      }
+      file_ref {case.c} {
+        filename_and_path {src/xutf8/case.c}
+      }
+      file_ref {is_right2left.c} {
+        filename_and_path {src/xutf8/is_right2left.c}
+      }
+      file_ref {is_spacing.c} {
+        filename_and_path {src/xutf8/is_spacing.c}
+      }
     }
   }
-  app_target fltk_gl {open
-  } {}
-  app_target fltk_images {open
-  } {}
-  app_target fltk_png {open
-  } {}
-  app_target fltk_jpeg {open
-  } {}
-  app_target fltk_forms {open
-  } {}
-  app_target fltk_zlib {open
-  } {}
+  app_target fltk_gl {} {
+    folder Sources {open
+    } {
+      file_ref {Fl_Gl_Choice.cxx} {
+        filename_and_path {src/Fl_Gl_Choice.cxx}
+      }
+      file_ref {Fl_Gl_Device_Plugin.cxx} {
+        filename_and_path {src/Fl_Gl_Device_Plugin.cxx}
+      }
+      file_ref {Fl_Gl_Overlay.cxx} {
+        filename_and_path {src/Fl_Gl_Overlay.cxx}
+      }
+      file_ref {Fl_Gl_Window.cxx} {
+        filename_and_path {src/Fl_Gl_Window.cxx}
+      }
+      file_ref {freeglut_geometry.cxx} {
+        filename_and_path {src/freeglut_geometry.cxx}
+      }
+      file_ref {freeglut_stroke_mono_roman.cxx} {
+        filename_and_path {src/freeglut_stroke_mono_roman.cxx}
+      }
+      file_ref {freeglut_stroke_roman.cxx} {
+        filename_and_path {src/freeglut_stroke_roman.cxx}
+      }
+      file_ref {freeglut_teapot.cxx} {
+        filename_and_path {src/freeglut_teapot.cxx}
+      }
+      file_ref {gl_draw.cxx} {
+        filename_and_path {src/gl_draw.cxx}
+      }
+      file_ref {glut_compatability.cxx} {
+        filename_and_path {src/glut_compatability.cxx}
+      }
+      file_ref {glut_font.cxx} {
+        filename_and_path {src/glut_font.cxx}
+      }
+    }
+  }
+  app_target fltk_images {} {
+    folder Sources {open
+    } {
+      file_ref {Fl_BMP_Image.cxx} {
+        filename_and_path {src/Fl_BMP_Image.cxx}
+      }
+      file_ref {Fl_File_Icon2.cxx} {
+        filename_and_path {src/Fl_File_Icon2.cxx}
+      }
+      file_ref {Fl_GIF_Image.cxx} {
+        filename_and_path {src/Fl_GIF_Image.cxx}
+      }
+      file_ref {Fl_Help_Dialog.cxx} {
+        filename_and_path {src/Fl_Help_Dialog.cxx}
+      }
+      file_ref {Fl_JPEG_Image.cxx} {
+        filename_and_path {src/Fl_JPEG_Image.cxx}
+      }
+      file_ref {Fl_PNG_Image.cxx} {
+        filename_and_path {src/Fl_PNG_Image.cxx}
+      }
+      file_ref {Fl_PNM_Image.cxx} {
+        filename_and_path {src/Fl_PNM_Image.cxx}
+      }
+      file_ref {fl_images_core.cxx} {
+        filename_and_path {src/fl_images_core.cxx}
+      }
+    }
+  }
+  app_target fltk_png {} {
+    folder Sources {open
+    } {
+      file_ref {png.c} {
+        filename_and_path {png/png.c}
+      }
+      file_ref {pngerror.c} {
+        filename_and_path {png/pngerror.c}
+      }
+      file_ref {pngget.c} {
+        filename_and_path {png/pngget.c}
+      }
+      file_ref {pngmem.c} {
+        filename_and_path {png/pngmem.c}
+      }
+      file_ref {pngpread.c} {
+        filename_and_path {png/pngpread.c}
+      }
+      file_ref {pngread.c} {
+        filename_and_path {png/pngread.c}
+      }
+      file_ref {pngrio.c} {
+        filename_and_path {png/pngrio.c}
+      }
+      file_ref {pngrtran.c} {
+        filename_and_path {png/pngrtran.c}
+      }
+      file_ref {pngrutil.c} {
+        filename_and_path {png/pngrutil.c}
+      }
+      file_ref {pngset.c} {
+        filename_and_path {png/pngset.c}
+      }
+      file_ref {pngtrans.c} {
+        filename_and_path {png/pngtrans.c}
+      }
+      file_ref {pngwio.c} {
+        filename_and_path {png/pngwio.c}
+      }
+      file_ref {pngwrite.c} {
+        filename_and_path {png/pngwrite.c}
+      }
+      file_ref {pngwtran.c} {
+        filename_and_path {png/pngwtran.c}
+      }
+      file_ref {pngwutil.c} {
+        filename_and_path {png/pngwutil.c}
+      }
+    }
+  }
+  app_target fltk_jpeg {} {
+    folder Sources {open
+    } {
+      file_ref {jaricom.c} {
+        filename_and_path {jpeg/jaricom.c}
+      }
+      file_ref {jcarith.c} {
+        filename_and_path {jpeg/jcarith.c}
+      }
+      file_ref {jdarith.c} {
+        filename_and_path {jpeg/jdarith.c}
+      }
+      file_ref {jcapimin.c} {
+        filename_and_path {jpeg/jcapimin.c}
+      }
+      file_ref {jcapistd.c} {
+        filename_and_path {jpeg/jcapistd.c}
+      }
+      file_ref {jccoefct.c} {
+        filename_and_path {jpeg/jccoefct.c}
+      }
+      file_ref {jccolor.c} {
+        filename_and_path {jpeg/jccolor.c}
+      }
+      file_ref {jcdctmgr.c} {
+        filename_and_path {jpeg/jcdctmgr.c}
+      }
+      file_ref {jchuff.c} {
+        filename_and_path {jpeg/jchuff.c}
+      }
+      file_ref {jcinit.c} {
+        filename_and_path {jpeg/jcinit.c}
+      }
+      file_ref {jcmainct.c} {
+        filename_and_path {jpeg/jcmainct.c}
+      }
+      file_ref {jcmarker.c} {
+        filename_and_path {jpeg/jcmarker.c}
+      }
+      file_ref {jcmaster.c} {
+        filename_and_path {jpeg/jcmaster.c}
+      }
+      file_ref {jcomapi.c} {
+        filename_and_path {jpeg/jcomapi.c}
+      }
+      file_ref {jcparam.c} {
+        filename_and_path {jpeg/jcparam.c}
+      }
+      file_ref {jcprepct.c} {
+        filename_and_path {jpeg/jcprepct.c}
+      }
+      file_ref {jcsample.c} {
+        filename_and_path {jpeg/jcsample.c}
+      }
+      file_ref {jctrans.c} {
+        filename_and_path {jpeg/jctrans.c}
+      }
+      file_ref {jdapimin.c} {
+        filename_and_path {jpeg/jdapimin.c}
+      }
+      file_ref {jdapistd.c} {
+        filename_and_path {jpeg/jdapistd.c}
+      }
+      file_ref {jdatadst.c} {
+        filename_and_path {jpeg/jdatadst.c}
+      }
+      file_ref {jdatasrc.c} {
+        filename_and_path {jpeg/jdatasrc.c}
+      }
+      file_ref {jdcoefct.c} {
+        filename_and_path {jpeg/jdcoefct.c}
+      }
+      file_ref {jdcolor.c} {
+        filename_and_path {jpeg/jdcolor.c}
+      }
+      file_ref {jddctmgr.c} {
+        filename_and_path {jpeg/jddctmgr.c}
+      }
+      file_ref {jdhuff.c} {
+        filename_and_path {jpeg/jdhuff.c}
+      }
+      file_ref {jdinput.c} {
+        filename_and_path {jpeg/jdinput.c}
+      }
+      file_ref {jdmainct.c} {
+        filename_and_path {jpeg/jdmainct.c}
+      }
+      file_ref {jdmarker.c} {
+        filename_and_path {jpeg/jdmarker.c}
+      }
+      file_ref {jdmaster.c} {
+        filename_and_path {jpeg/jdmaster.c}
+      }
+      file_ref {jdmerge.c} {
+        filename_and_path {jpeg/jdmerge.c}
+      }
+      file_ref {jdpostct.c} {
+        filename_and_path {jpeg/jdpostct.c}
+      }
+      file_ref {jdsample.c} {
+        filename_and_path {jpeg/jdsample.c}
+      }
+      file_ref {jdtrans.c} {
+        filename_and_path {jpeg/jdtrans.c}
+      }
+      file_ref {jerror.c} {
+        filename_and_path {jpeg/jerror.c}
+      }
+      file_ref {jfdctflt.c} {
+        filename_and_path {jpeg/jfdctflt.c}
+      }
+      file_ref {jfdctfst.c} {
+        filename_and_path {jpeg/jfdctfst.c}
+      }
+      file_ref {jfdctint.c} {
+        filename_and_path {jpeg/jfdctint.c}
+      }
+      file_ref {jidctflt.c} {
+        filename_and_path {jpeg/jidctflt.c}
+      }
+      file_ref {jidctfst.c} {
+        filename_and_path {jpeg/jidctfst.c}
+      }
+      file_ref {jidctint.c} {
+        filename_and_path {jpeg/jidctint.c}
+      }
+      file_ref {jmemmgr.c} {
+        filename_and_path {jpeg/jmemmgr.c}
+      }
+      file_ref {jmemnobs.c} {
+        filename_and_path {jpeg/jmemnobs.c}
+      }
+      file_ref {jquant1.c} {
+        filename_and_path {jpeg/jquant1.c}
+      }
+      file_ref {jquant2.c} {
+        filename_and_path {jpeg/jquant2.c}
+      }
+      file_ref {jutils.c} {
+        filename_and_path {jpeg/jutils.c}
+      }
+    }
+  }
+  app_target fltk_zlib {} {
+    folder Sources {open selected
+    } {
+      file_ref {adler32.c} {
+        filename_and_path {zlib/adler32.c}
+      }
+      file_ref {compress.c} {
+        filename_and_path {zlib/compress.c}
+      }
+      file_ref {crc32.c} {
+        filename_and_path {zlib/crc32.c}
+      }
+      file_ref {deflate.c} {
+        filename_and_path {zlib/deflate.c}
+      }
+      file_ref {gzclose.c} {
+        filename_and_path {zlib/gzclose.c}
+      }
+      file_ref {gzlib.c} {
+        filename_and_path {zlib/gzlib.c}
+      }
+      file_ref {gzread.c} {
+        filename_and_path {zlib/gzread.c}
+      }
+      file_ref {gzwrite.c} {
+        filename_and_path {zlib/gzwrite.c}
+      }
+      file_ref {infback.c} {
+        filename_and_path {zlib/infback.c}
+      }
+      file_ref {inffast.c} {
+        filename_and_path {zlib/inffast.c}
+      }
+      file_ref {inflate.c} {
+        filename_and_path {zlib/inflate.c}
+      }
+      file_ref {inftrees.c} {
+        filename_and_path {zlib/inftrees.c}
+      }
+      file_ref {trees.c} {
+        filename_and_path {zlib/trees.c}
+      }
+      file_ref {uncompr.c} {
+        filename_and_path {zlib/uncompr.c}
+      }
+      file_ref {zutil.c} {
+        filename_and_path {zlib/zutil.c}
+      }
+    }
+  }
 } 
 
 folder Tests {open

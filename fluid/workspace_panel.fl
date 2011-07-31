@@ -273,91 +273,10 @@ if (wks_env)
   pEnv->value(wks_env);  
 else
   pEnv->value(ENV_ALL);
-workspace_panel->show();} {selected
-  }
-} 
-
-Function {make_app_target_panel()} {} {
-  {fltk3::Window} {} {
-    label {Application Target} open
-    xywh {550 437 307 281} type Double visible
-  } {
-    {fltk3::Input} {} {
-      label {Name:}
-      tooltip {name of the target - this will be used in the IDEs and as a general reference.} xywh {70 20 213 25} labelsize 12 textsize 12
-    }
-    {fltk3::Input} {} {
-      label {File Name:}
-      tooltip {name of the final executable - the appropriate file extension will be added} xywh {70 55 213 25} labelsize 12 textsize 12 deactivate
-    }
-    {fltk3::Choice} {} {
-      label {File Type:} open
-      xywh {70 90 215 25} down_box BORDER_BOX labelsize 12 textsize 12 deactivate
-    } {}
-    {fltk3::Choice} {} {
-      label {Location:} open
-      xywh {70 125 215 25} down_box BORDER_BOX labelsize 12 textsize 12 deactivate
-    } {}
-    {fltk3::Output} {} {
-      label {Full Path:}
-      xywh {70 160 215 25} labelsize 12 textsize 12 deactivate
-    }
-    {fltk3::Button} {} {
-      label OK
-      xywh {85 240 95 25} labelsize 12
-    }
-    {fltk3::Button} {} {
-      label Cancel
-      xywh {190 240 95 25} labelsize 12
-    }
-    {fltk3::Choice} {} {
-      label {Use:} open
-      xywh {70 195 215 25} down_box BORDER_BOX labelsize 12 textsize 12 deactivate
-    } {}
-  }
+workspace_panel->show();} {}
 } 
 
 decl {extern fltk3::Window *the_file_panel;} {private global
-} 
-
-Function {file_panel_name_cb(fltk3::Input *i, void *v)} {open private return_type void
-} {
-  code {if (v == Fl_Panel::LOAD) {
-    static char buf[1024];
-    if (Fl_Panel::numselected != 1) {
-      snprintf(buf, sizeof(buf), "File Properties (%d files)", Fl_Panel::numselected);
-      i->hide();
-    } else {
-      i->static_value(Fl_Panel::current_file()->filename());
-      i->show();
-      snprintf(buf, sizeof(buf), "%s Properties", Fl_Panel::current_file()->name());
-    }
-    the_file_panel->label(buf);
-  } else {
-    if (Fl_Panel::numselected == 1) {
-      Fl_Panel::current_file()->filename(i->value());
-      if (i->changed()) set_modflag(1);
-    }
-  }} {}
-} 
-
-Function {file_panel_env_cb(Fl_Environment_Choice *i, void *v)} {open private return_type void
-} {
-  code {if (v == Fl_Panel::LOAD) {
-    i->value(Fl_Panel::current_file()->environments());
-  } else {
-    int mod = 0;
-    unsigned int e = i->value();
-    for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
-      if (o->selected && o->is_file()) {
-        if (((Fl_File_Type*)o)->environments() != e) {
-          ((Fl_File_Type*)o)->environments(e);
-          mod = 1;
-        }
-      }
-    }
-    if (mod) set_modflag(1);
-  }} {}
 } 
 
 Function {file_panel_set_cb(fltk3::Widget*, void *v)} {open return_type void
@@ -376,15 +295,6 @@ Function {file_panel_set_cb(fltk3::Widget*, void *v)} {open return_type void
   }} {}
 } 
 
-Function {file_panel_ok_cb(fltk3::Widget*, void *v)} {open private return_type void
-} {
-  code {if (v == Fl_Panel::LOAD) {
-  } else {
-    file_panel_set_cb(0, 0);
-    the_file_panel->hide();
-  }} {}
-} 
-
 Function {make_file_panel()} {open
 } {
   {fltk3::Window} {} {
@@ -396,17 +306,48 @@ Function {make_file_panel()} {open
     {fltk3::Group} {} {
       label {File Name:}
       callback {Fl_Panel::propagate_load} open
-      xywh {75 15 309 20} labelfont 1 labelsize 11 align 4
+      xywh {75 15 309 20} labelsize 12 align 4
     } {
       {fltk3::Input} {} {
-        callback file_panel_name_cb
+        callback {if (v == Fl_Panel::LOAD) {
+    static char buf[1024];
+    if (Fl_Panel::numselected != 1) {
+      o->static_value("<Multiple Values>");
+      o->deactivate();
+      snprintf(buf, sizeof(buf), "File Properties (%d files)", Fl_Panel::numselected);
+    } else {
+      o->static_value(Fl_Panel::current_file()->filename());
+      o->show();
+      snprintf(buf, sizeof(buf), "%s Properties", Fl_Panel::current_file()->name());
+    }
+    the_file_panel->label(buf);
+  } else {
+    if (Fl_Panel::numselected == 1) {
+      Fl_Panel::current_file()->filename(o->value());
+      if (o->changed()) set_modflag(1);
+    }
+  }}
         tooltip {The label text for the widget.
-Use Ctrl-J for newlines.} xywh {75 15 170 20} labelfont 1 labelsize 11 when 1 textsize 11 resizable
+Use Ctrl-J for newlines.} xywh {75 15 170 20} labelsize 12 when 1 textsize 12 resizable
       }
     }
     {fltk3::MenuButton} {} {
-      callback file_panel_env_cb open
-      xywh {75 45 170 40} box FLAT_BOX
+      callback {if (v == Fl_Panel::LOAD) {
+    o->value(Fl_Panel::current_file()->environments());
+  } else {
+    int mod = 0;
+    unsigned int e = o->value();
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_file()) {
+        if (((Fl_File_Type*)t)->environments() != e) {
+          ((Fl_File_Type*)t)->environments(e);
+          mod = 1;
+        }
+      }
+    }
+    if (mod) set_modflag(1);
+  }} open
+      xywh {75 45 170 40} box FLAT_BOX labelsize 12
       class Fl_Environment_Choice
     } {}
     {fltk3::Group} {} {
@@ -418,8 +359,12 @@ Use Ctrl-J for newlines.} xywh {75 15 170 20} labelfont 1 labelsize 11 when 1 te
       }
       {fltk3::ReturnButton} {} {
         label Close
-        callback file_panel_ok_cb
-        xywh {330 100 64 20} labelsize 11
+        callback {if (v == Fl_Panel::LOAD) {
+  } else {
+    file_panel_set_cb(0, 0);
+    the_file_panel->hide();
+  }}
+        xywh {330 100 64 20} labelsize 12
       }
     }
   }

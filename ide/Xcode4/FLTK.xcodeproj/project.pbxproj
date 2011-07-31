@@ -793,7 +793,6 @@
 		C9EDD4EA1274BBC000ADB21C /* jerror.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C9EDD4E41274BBB600ADB21C /* jerror.h */; };
 		C9EDD4EB1274BBC000ADB21C /* jmorecfg.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C9EDD4E51274BBB600ADB21C /* jmorecfg.h */; };
 		C9EDD4EC1274BBC000ADB21C /* jpeglib.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C9EDD4E61274BBB600ADB21C /* jpeglib.h */; };
-		C9EDD4ED1274BBCD00ADB21C /* forms.H in CopyFiles */ = {isa = PBXBuildFile; fileRef = E0132688B22159A85307F264 /* forms.H */; };
 		C9EDD5531274C04500ADB21C /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05376DC900B2C885B847EA36 /* OpenGL.framework */; };
 		C9F9C0DE12CFCDAC0067ADCC /* rgb.txt in Resources */ = {isa = PBXBuildFile; fileRef = C9F9C0DD12CFCDAC0067ADCC /* rgb.txt */; };
 		CA035B0265710EFABD6E632D /* Fl_Dial.cxx in Sources */ = {isa = PBXBuildFile; fileRef = 3AFC31503AB99F6D00BAC647 /* Fl_Dial.cxx */; };
@@ -3842,7 +3841,6 @@
 			dstPath = ../Headers/FL;
 			dstSubfolderSpec = 7;
 			files = (
-				C9EDD4ED1274BBCD00ADB21C /* forms.H in CopyFiles */,
 				C9EDD4C91274B95700ADB21C /* Fl_BMP_Image.H in CopyFiles */,
 				C9EDD4CA1274B95700ADB21C /* Fl_GIF_Image.H in CopyFiles */,
 				C9EDD4CB1274B95700ADB21C /* Fl_Help_Dialog.H in CopyFiles */,
@@ -4081,7 +4079,6 @@
 		05BBBFE4BED0452E5D6A81F7 /* Fl_Positioner.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Positioner.cxx; path = ../../src/Fl_Positioner.cxx; sourceTree = SOURCE_ROOT; };
 		05ECF96A7262C1F1111ABCC7 /* native-filechooser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "native-filechooser.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		077BDEA1F0364BDA61518702 /* fl_diamond_box.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fl_diamond_box.cxx; path = ../../src/fl_diamond_box.cxx; sourceTree = SOURCE_ROOT; };
-		07CDB54753C46D7CB01A3C8C /* forms_compatability.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = forms_compatability.cxx; path = ../../src/forms_compatability.cxx; sourceTree = SOURCE_ROOT; };
 		09A359CA8F522F64BAF6CEAF /* Fl_x.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_x.cxx; path = ../../src/Fl_x.cxx; sourceTree = SOURCE_ROOT; };
 		09A55ED62CD9010F1E512122 /* curve.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = curve.cxx; path = ../../test/curve.cxx; sourceTree = SOURCE_ROOT; };
 		09CC113E65D83D7E7A30D89C /* code.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = code.cxx; path = ../../fluid/code.cxx; sourceTree = SOURCE_ROOT; };
@@ -4180,7 +4177,6 @@
 		33AF346DF043165E0A62ABB5 /* Fl_Double_Window.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Double_Window.cxx; path = ../../src/Fl_Double_Window.cxx; sourceTree = SOURCE_ROOT; };
 		33F18D02CA150D5654D48366 /* jidctint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jidctint.c; path = ../../jpeg/jidctint.c; sourceTree = SOURCE_ROOT; };
 		340E5CD1F39C1484B1BCE8F3 /* fl_oval_box.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fl_oval_box.cxx; path = ../../src/fl_oval_box.cxx; sourceTree = SOURCE_ROOT; };
-		34A2B3EFA6146F599E7CA80A /* forms_bitmap.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = forms_bitmap.cxx; path = ../../src/forms_bitmap.cxx; sourceTree = SOURCE_ROOT; };
 		34CB383C3A4360C14B58562E /* Fl_Value_Input.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Value_Input.cxx; path = ../../src/Fl_Value_Input.cxx; sourceTree = SOURCE_ROOT; };
 		351BFCA4747AF494F84FFE36 /* Fl_Table_Row.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Table_Row.cxx; path = ../../src/Fl_Table_Row.cxx; sourceTree = SOURCE_ROOT; };
 		368BC008DC3AE26333DF0321 /* editor.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = editor.cxx; path = ../../test/editor.cxx; sourceTree = SOURCE_ROOT; };
@@ -4204,7 +4200,6 @@
 		3F000DD5F091F66BC42822E3 /* Fl_Bitmap.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Bitmap.cxx; path = ../../src/Fl_Bitmap.cxx; sourceTree = SOURCE_ROOT; };
 		3F0F366F151B9E0E2FAD0948 /* editor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = editor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F60A41762817C834FF38947 /* Fl_Scroll.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Scroll.cxx; path = ../../src/Fl_Scroll.cxx; sourceTree = SOURCE_ROOT; };
-		4036292D2024DE5622EA0D11 /* forms_free.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = forms_free.cxx; path = ../../src/forms_free.cxx; sourceTree = SOURCE_ROOT; };
 		4120FB2B23E168C4377E78E2 /* image.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = image.cxx; path = ../../test/image.cxx; sourceTree = SOURCE_ROOT; };
 		4194C917D667C0E2FCEF0A39 /* Fl_Valuator.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Valuator.cxx; path = ../../src/Fl_Valuator.cxx; sourceTree = SOURCE_ROOT; };
 		41D6B03607BD43BB0D703411 /* Fl_Repeat_Button.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Repeat_Button.cxx; path = ../../src/Fl_Repeat_Button.cxx; sourceTree = SOURCE_ROOT; };
@@ -4285,7 +4280,6 @@
 		61D90C98A833DD410C9D5BED /* checkers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = checkers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		622198DBFF6479ED2A8B6283 /* glpuzzle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = glpuzzle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		62281FC096BA407C4F1E6824 /* win32.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = win32.H; path = ../../FL/win32.H; sourceTree = SOURCE_ROOT; };
-		62777DA2221D60EC8F03C905 /* forms_fselect.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = forms_fselect.cxx; path = ../../src/forms_fselect.cxx; sourceTree = SOURCE_ROOT; };
 		63CB19652C470F1E58DCF01E /* Fl_Input.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Input.cxx; path = ../../src/Fl_Input.cxx; sourceTree = SOURCE_ROOT; };
 		648E9C3B61328280244FCCA5 /* Fl_Input_Choice.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Input_Choice.H; path = ../../FL/Fl_Input_Choice.H; sourceTree = SOURCE_ROOT; };
 		64C9C1F20285A471398A7818 /* Fl_Text_Display.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Text_Display.H; path = ../../FL/Fl_Text_Display.H; sourceTree = SOURCE_ROOT; };
@@ -4659,9 +4653,9 @@
 		C915E3F413842F3F00C5FD27 /* Rectangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Rectangle.h; path = ../../fltk3/Rectangle.h; sourceTree = "<group>"; };
 		C9165EAF1291A304003FF4F0 /* utf8.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = utf8.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9165ED31291A376003FF4F0 /* unittests.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = unittests.cxx; path = ../../test/unittests.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		C9431DA41392C4D900C1070F /* fl_call_main.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fl_call_main.cxx; path = ../../src/fl_call_main.cxx; sourceTree = "<group>"; };
-		C9431DA61392C4F800C1070F /* scandir.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scandir.cxx; path = ../../src/scandir.cxx; sourceTree = "<group>"; };
-		C945A66B138C277D0043D11D /* fl_utf.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fl_utf.cxx; path = ../../src/fl_utf.cxx; sourceTree = "<group>"; };
+		C9431DA41392C4D900C1070F /* fl_call_main.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fl_call_main.cxx; path = ../../src/fl_call_main.cxx; sourceTree = SOURCE_ROOT; };
+		C9431DA61392C4F800C1070F /* scandir.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = scandir.cxx; path = ../../src/scandir.cxx; sourceTree = SOURCE_ROOT; };
+		C945A66B138C277D0043D11D /* fl_utf.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fl_utf.cxx; path = ../../src/fl_utf.cxx; sourceTree = SOURCE_ROOT; };
 		C9568B8A1380730100CDA5BF /* Adjuster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Adjuster.h; path = ../../fltk3/Adjuster.h; sourceTree = "<group>"; };
 		C9568B8B1380730100CDA5BF /* ask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ask.h; path = ../../fltk3/ask.h; sourceTree = "<group>"; };
 		C9568B8C1380730100CDA5BF /* Bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Bitmap.h; path = ../../fltk3/Bitmap.h; sourceTree = "<group>"; };
@@ -4807,7 +4801,7 @@
 		C9628FFD1274D0B3007D3CFE /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		C96290E11274D0EF007D3CFE /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = System/Library/Frameworks/AGL.framework; sourceTree = SDKROOT; };
 		C96290E51274D100007D3CFE /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		C964A6D1138857DE004A8700 /* numericsort.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = numericsort.cxx; path = ../../src/numericsort.cxx; sourceTree = "<group>"; };
+		C964A6D1138857DE004A8700 /* numericsort.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = numericsort.cxx; path = ../../src/numericsort.cxx; sourceTree = SOURCE_ROOT; };
 		C96581291386B8EF00DF7523 /* show_colormap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = show_colormap.h; path = ../../fltk3/show_colormap.h; sourceTree = "<group>"; };
 		C96FA1A4138275F800FF34AA /* Wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wrapper.h; path = ../../fltk3/Wrapper.h; sourceTree = "<group>"; };
 		C984AFA712D02A1800D66DAD /* demo.menu */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = demo.menu; path = ../../test/demo.menu; sourceTree = SOURCE_ROOT; };
@@ -4880,7 +4874,6 @@
 		DE2F47C61B9083A6E7811620 /* Fl_File_Browser.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_File_Browser.H; path = ../../FL/Fl_File_Browser.H; sourceTree = SOURCE_ROOT; };
 		DEF20F6B91F7FB0EBCBD2411 /* fl_utf8.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fl_utf8.cxx; path = ../../src/fl_utf8.cxx; sourceTree = SOURCE_ROOT; };
 		DF2662F7275F8873F9BA6C64 /* device.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = device.cxx; path = ../../test/device.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		E0132688B22159A85307F264 /* forms.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = forms.H; path = ../../FL/forms.H; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		E1BF46F43DB886EB2301F83A /* fast_slow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fast_slow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E21339D33557BB5501B08AB1 /* Fl_Button.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Button.H; path = ../../FL/Fl_Button.H; sourceTree = SOURCE_ROOT; };
 		E4337D2D7CEEDCAD78B068E5 /* jctrans.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jctrans.c; path = ../../jpeg/jctrans.c; sourceTree = SOURCE_ROOT; };
@@ -4899,7 +4892,6 @@
 		E8D790E9361D2B311B6839B1 /* pixmap.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = pixmap.cxx; path = ../../test/pixmap.cxx; sourceTree = SOURCE_ROOT; };
 		E917C15E28EE293416A38C5E /* fltk_images.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = fltk_images.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E93CF8BB106A2249F0FC58B8 /* Fl_abort.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_abort.cxx; path = ../../src/Fl_abort.cxx; sourceTree = SOURCE_ROOT; };
-		E954F5F2730C01DC9FD2866D /* forms_pixmap.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = forms_pixmap.cxx; path = ../../src/forms_pixmap.cxx; sourceTree = SOURCE_ROOT; };
 		E9893274B0B6C5F24730235F /* Fl_Counter.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Counter.cxx; path = ../../src/Fl_Counter.cxx; sourceTree = SOURCE_ROOT; };
 		EA692103E0BAB27111B9B470 /* Fl_Function_Type.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fl_Function_Type.cxx; path = ../../fluid/Fl_Function_Type.cxx; sourceTree = SOURCE_ROOT; };
 		EA8E6EC230301E597B9D9AED /* fltk_gl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = fltk_gl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -4917,7 +4909,6 @@
 		EE2FB1F7B99BE408E1B4DFB7 /* Fl_Object.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Object.H; path = ../../FL/Fl_Object.H; sourceTree = SOURCE_ROOT; };
 		EE6507EFCDDA13ACF9373E3E /* Fl_Hor_Fill_Slider.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Hor_Fill_Slider.H; path = ../../FL/Fl_Hor_Fill_Slider.H; sourceTree = SOURCE_ROOT; };
 		EF6D2F48B12359DE60E499C2 /* fl_labeltype.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fl_labeltype.cxx; path = ../../src/fl_labeltype.cxx; sourceTree = SOURCE_ROOT; };
-		EF7E3948AA6D39FF92C88E06 /* forms_timer.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = forms_timer.cxx; path = ../../src/forms_timer.cxx; sourceTree = SOURCE_ROOT; };
 		EFAE92A1C7CA90BC56E5A70A /* fl_show_input.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = fl_show_input.H; path = ../../FL/fl_show_input.H; sourceTree = SOURCE_ROOT; };
 		EFBF35C8627522F105B4B0AD /* Fluid_Image.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Fluid_Image.cxx; path = ../../fluid/Fluid_Image.cxx; sourceTree = SOURCE_ROOT; };
 		EFEEE679374D7E4191873447 /* Fl_Input.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Input.H; path = ../../FL/Fl_Input.H; sourceTree = SOURCE_ROOT; };
@@ -5758,8 +5749,8 @@
 				F4EFF27D730BED51EF0EAA8D /* Fl.cxx */,
 				19C5DB6F3DD5011DAE6F79AB /* Fl_Adjuster.cxx */,
 				3F000DD5F091F66BC42822E3 /* Fl_Bitmap.cxx */,
-				C3F048573FAEABD2D27401D4 /* Fl_Box.cxx */,
 				4E2BE7807B57162E18C7E63F /* Fl_Browser.cxx */,
+				C3F048573FAEABD2D27401D4 /* Fl_Box.cxx */,
 				AAD25B747F4122A2C5224708 /* Fl_Browser_.cxx */,
 				E46A3C4F955A94AE095FF726 /* Fl_Browser_load.cxx */,
 				5A7532B3CDA46030885D1D14 /* Fl_Button.cxx */,
@@ -5958,7 +5949,6 @@
 				AE877F45887AC9F2667D4880 /* fltk_images */,
 				700E2C8CE84DC32967A9578A /* fltk_png */,
 				A07416CF2BF150F093A0F9AD /* fltk_jpeg */,
-				CBA24C637614007F99A61807 /* fltk_forms */,
 				DA28C614BBA1C4ED5CF6CAED /* fltk_zlib */,
 			);
 			name = Frameworks;
@@ -6044,14 +6034,6 @@
 				D3761C93D5C7A48D4B80225A /* doublebuffer.cxx */,
 			);
 			name = doublebuffer;
-			sourceTree = "<group>";
-		};
-		3561F7EB989A4BBA606E380F /* Headers */ = {
-			isa = PBXGroup;
-			children = (
-				E0132688B22159A85307F264 /* forms.H */,
-			);
-			name = Headers;
 			sourceTree = "<group>";
 		};
 		3565869B79F481C90BE5CDFF /* ask */ = {
@@ -7090,20 +7072,6 @@
 				AB3FA145ED96A9DA69465E9F /* table.cxx */,
 			);
 			name = table;
-			sourceTree = "<group>";
-		};
-		CBA24C637614007F99A61807 /* fltk_forms */ = {
-			isa = PBXGroup;
-			children = (
-				3561F7EB989A4BBA606E380F /* Headers */,
-				34A2B3EFA6146F599E7CA80A /* forms_bitmap.cxx */,
-				07CDB54753C46D7CB01A3C8C /* forms_compatability.cxx */,
-				4036292D2024DE5622EA0D11 /* forms_free.cxx */,
-				62777DA2221D60EC8F03C905 /* forms_fselect.cxx */,
-				E954F5F2730C01DC9FD2866D /* forms_pixmap.cxx */,
-				EF7E3948AA6D39FF92C88E06 /* forms_timer.cxx */,
-			);
-			name = fltk_forms;
 			sourceTree = "<group>";
 		};
 		CBCA45CC75C8819F4660B0E0 /* scroll */ = {

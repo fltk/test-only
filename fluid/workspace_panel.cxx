@@ -228,95 +228,7 @@ fltk3::DoubleWindow* show_workspace_panel() {
       workspace_panel->show();
   return workspace_panel;
 }
-
-fltk3::DoubleWindow* make_app_target_panel() {
-  fltk3::DoubleWindow* w;
-  { fltk3::DoubleWindow* o = new fltk3::DoubleWindow(307, 281, "Application Target");
-    w = o;
-    { fltk3::Input* o = new fltk3::Input(70, 20, 213, 25, "Name:");
-      o->tooltip("name of the target - this will be used in the IDEs and as a general reference\
-.");
-      o->labelsize(12);
-      o->textsize(12);
-    } // fltk3::Input* o
-    { fltk3::Input* o = new fltk3::Input(70, 55, 213, 25, "File Name:");
-      o->tooltip("name of the final executable - the appropriate file extension will be added");
-      o->labelsize(12);
-      o->textsize(12);
-      o->deactivate();
-    } // fltk3::Input* o
-    { fltk3::Choice* o = new fltk3::Choice(70, 90, 215, 25, "File Type:");
-      o->down_box(fltk3::BORDER_BOX);
-      o->labelsize(12);
-      o->textsize(12);
-      o->deactivate();
-    } // fltk3::Choice* o
-    { fltk3::Choice* o = new fltk3::Choice(70, 125, 215, 25, "Location:");
-      o->down_box(fltk3::BORDER_BOX);
-      o->labelsize(12);
-      o->textsize(12);
-      o->deactivate();
-    } // fltk3::Choice* o
-    { fltk3::Output* o = new fltk3::Output(70, 160, 215, 25, "Full Path:");
-      o->labelsize(12);
-      o->textsize(12);
-      o->deactivate();
-    } // fltk3::Output* o
-    { fltk3::Button* o = new fltk3::Button(85, 240, 95, 25, "OK");
-      o->labelsize(12);
-    } // fltk3::Button* o
-    { fltk3::Button* o = new fltk3::Button(190, 240, 95, 25, "Cancel");
-      o->labelsize(12);
-    } // fltk3::Button* o
-    { fltk3::Choice* o = new fltk3::Choice(70, 195, 215, 25, "Use:");
-      o->down_box(fltk3::BORDER_BOX);
-      o->labelsize(12);
-      o->textsize(12);
-      o->deactivate();
-    } // fltk3::Choice* o
-    o->end();
-  } // fltk3::DoubleWindow* o
-  return w;
-}
 extern fltk3::Window *the_file_panel;
-
-static void file_panel_name_cb(fltk3::Input *i, void *v) {
-  if (v == Fl_Panel::LOAD) {
-      static char buf[1024];
-      if (Fl_Panel::numselected != 1) {
-        snprintf(buf, sizeof(buf), "File Properties (%d files)", Fl_Panel::numselected);
-        i->hide();
-      } else {
-        i->static_value(Fl_Panel::current_file()->filename());
-        i->show();
-        snprintf(buf, sizeof(buf), "%s Properties", Fl_Panel::current_file()->name());
-      }
-      the_file_panel->label(buf);
-    } else {
-      if (Fl_Panel::numselected == 1) {
-        Fl_Panel::current_file()->filename(i->value());
-        if (i->changed()) set_modflag(1);
-      }
-    }
-}
-
-static void file_panel_env_cb(Fl_Environment_Choice *i, void *v) {
-  if (v == Fl_Panel::LOAD) {
-      i->value(Fl_Panel::current_file()->environments());
-    } else {
-      int mod = 0;
-      unsigned int e = i->value();
-      for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
-        if (o->selected && o->is_file()) {
-          if (((Fl_File_Type*)o)->environments() != e) {
-            ((Fl_File_Type*)o)->environments(e);
-            mod = 1;
-          }
-        }
-      }
-      if (mod) set_modflag(1);
-    }
-}
 
 void file_panel_set_cb(fltk3::Widget*, void *v) {
   if (v == Fl_Panel::LOAD) {
@@ -333,12 +245,51 @@ void file_panel_set_cb(fltk3::Widget*, void *v) {
     }
 }
 
-static void file_panel_ok_cb(fltk3::Widget*, void *v) {
+static void cb_(fltk3::Input* o, void* v) {
   if (v == Fl_Panel::LOAD) {
+    static char buf[1024];
+    if (Fl_Panel::numselected != 1) {
+      o->static_value("<Multiple Values>");
+      o->deactivate();
+      snprintf(buf, sizeof(buf), "File Properties (%d files)", Fl_Panel::numselected);
     } else {
-      file_panel_set_cb(0, 0);
-      the_file_panel->hide();
+      o->static_value(Fl_Panel::current_file()->filename());
+      o->show();
+      snprintf(buf, sizeof(buf), "%s Properties", Fl_Panel::current_file()->name());
     }
+    the_file_panel->label(buf);
+  } else {
+    if (Fl_Panel::numselected == 1) {
+      Fl_Panel::current_file()->filename(o->value());
+      if (o->changed()) set_modflag(1);
+    }
+  };
+}
+
+static void cb_1(Fl_Environment_Choice* o, void* v) {
+  if (v == Fl_Panel::LOAD) {
+    o->value(Fl_Panel::current_file()->environments());
+  } else {
+    int mod = 0;
+    unsigned int e = o->value();
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_file()) {
+        if (((Fl_File_Type*)t)->environments() != e) {
+          ((Fl_File_Type*)t)->environments(e);
+          mod = 1;
+        }
+      }
+    }
+    if (mod) set_modflag(1);
+  };
+}
+
+static void cb_Close(fltk3::ReturnButton*, void* v) {
+  if (v == Fl_Panel::LOAD) {
+  } else {
+    file_panel_set_cb(0, 0);
+    the_file_panel->hide();
+  };
 }
 
 Fl_Panel* make_file_panel() {
@@ -356,16 +307,14 @@ Fl_Panel* make_file_panel() {
     o->when(fltk3::WHEN_RELEASE);
     o->hotspot(o);
     { fltk3::Group* o = new fltk3::Group(75, 15, 309, 20, "File Name:");
-      o->labelfont(1);
-      o->labelsize(11);
+      o->labelsize(12);
       o->callback((fltk3::Callback*)Fl_Panel::propagate_load);
       o->align(fltk3::Align(fltk3::ALIGN_LEFT));
       { fltk3::Input* o = new fltk3::Input(75, 15, 170, 20);
         o->tooltip("The label text for the widget.\nUse Ctrl-J for newlines.");
-        o->labelfont(1);
-        o->labelsize(11);
-        o->textsize(11);
-        o->callback((fltk3::Callback*)file_panel_name_cb);
+        o->labelsize(12);
+        o->textsize(12);
+        o->callback((fltk3::Callback*)cb_);
         o->when(fltk3::WHEN_CHANGED);
         fltk3::Group::current()->resizable(o);
       } // fltk3::Input* o
@@ -377,9 +326,9 @@ Fl_Panel* make_file_panel() {
       o->selection_color(fltk3::SELECTION_COLOR);
       o->labeltype(fltk3::NORMAL_LABEL);
       o->labelfont(0);
-      o->labelsize(14);
+      o->labelsize(12);
       o->labelcolor(fltk3::FOREGROUND_COLOR);
-      o->callback((fltk3::Callback*)file_panel_env_cb);
+      o->callback((fltk3::Callback*)cb_1);
       o->align(fltk3::Align(fltk3::ALIGN_CENTER));
       o->when(fltk3::WHEN_RELEASE_ALWAYS);
     } // Fl_Environment_Choice* o
@@ -391,8 +340,8 @@ Fl_Panel* make_file_panel() {
         fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
       { fltk3::ReturnButton* o = new fltk3::ReturnButton(330, 100, 64, 20, "Close");
-        o->labelsize(11);
-        o->callback((fltk3::Callback*)file_panel_ok_cb);
+        o->labelsize(12);
+        o->callback((fltk3::Callback*)cb_Close);
       } // fltk3::ReturnButton* o
       o->end();
     } // fltk3::Group* o
