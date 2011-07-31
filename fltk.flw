@@ -209,8 +209,7 @@ folder Libraries {open
 } {
   app_target fltk {open
   } {
-    folder Headers {open
-    } {
+    folder Headers {} {
       file_ref {Adjuster.h} {
         uuid_Xcode4_PBXBuildFile {19D0A8A7-81F6-48F4-A42B-0A0DBBC3770F}
         uuid_Xcode4_PBXFileRef {1CDC310C-BCD1-48E9-90F6-541607EE265B}
@@ -225,7 +224,7 @@ folder Libraries {open
         list_env 64
         filename_and_path {fltk3/ask.h}
       }
-      file_ref {Bitmap.h} {selected
+      file_ref {Bitmap.h} {
         uuid_Xcode4_PBXBuildFile {D83BCD17-0F87-4FB5-8986-C0F3F65C02EB}
         uuid_Xcode4_PBXFileRef {249A3332-2091-44E1-8C33-059FC2702523}
         build_env 64
@@ -1220,20 +1219,27 @@ folder Libraries {open
         filename_and_path {fltk3/Xutf8.h}
       }
     }
-    folder Sources {} {
+    folder Sources {open
+    } {
       file_ref {Fl_cocoa.mm} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {99D08647-5486-4C7E-8CC9-51B70074F29C}
+        uuid_Xcode4_PBXFileRef {F6BB47B6-F621-4FC2-A7DC-BFD6B7C5F16D}
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_cocoa.mm}
       }
       file_ref {Fl_Native_File_Chooser_MAC.mm} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {60D9759F-404F-4A7C-A356-2F92BC2F400F}
+        uuid_Xcode4_PBXFileRef {B23CCB73-2D6F-4196-8925-2B663827C3EE}
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Native_File_Chooser_MAC.mm}
       }
       file_ref {Fl_Quartz_Printer.mm} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {982B3E9E-7B79-4E84-A10F-7270A2EB17A5}
+        uuid_Xcode4_PBXFileRef {10A048C4-1F53-4215-8F9A-E8829C9F77EA}
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Quartz_Printer.mm}
       }
       file_ref {Fl.cxx} {
@@ -1250,7 +1256,7 @@ folder Libraries {open
         list_env 64
         filename_and_path {src/Fl_Adjuster.cxx}
       }
-      file_ref {Fl_Bitmap.cxx} {
+      file_ref {Fl_Bitmap.cxx} {selected
         uuid_Xcode4_PBXBuildFile {E9733D69-4D22-4B2E-B89C-81D879FA8FC5}
         uuid_Xcode4_PBXFileRef {D68004A5-9E82-4A55-B1D1-365E2E22B59B}
         build_env 64
@@ -2224,8 +2230,10 @@ folder Libraries {open
         filename_and_path {src/fl_vertex.cxx}
       }
       file_ref {flstring.c} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {1B622B06-3765-4E90-BE13-155DFCBAB791}
+        uuid_Xcode4_PBXFileRef {EF672C7C-6AF9-43D0-8320-CBAED55C8145}
+        build_env 64
+        list_env 64
         filename_and_path {src/flstring.c}
       }
       file_ref {numericsort.cxx} {
@@ -2257,23 +2265,31 @@ folder Libraries {open
         filename_and_path {src/screen_xywh.cxx}
       }
       file_ref {vsnprintf.c} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {22C4313D-D9D6-41BD-BA8B-E3CE07600FE1}
+        uuid_Xcode4_PBXFileRef {4024031C-0F34-4A2D-A3F2-9D9373805457}
+        build_env 64
+        list_env 64
         filename_and_path {src/vsnprintf.c}
       }
       file_ref {case.c} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {F9589A9E-897C-4D01-9853-40C736FE4C03}
+        uuid_Xcode4_PBXFileRef {6A8D0240-7AD5-4648-B663-8D1B5B0D8F30}
+        build_env 64
+        list_env 64
         filename_and_path {src/xutf8/case.c}
       }
       file_ref {is_right2left.c} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {5D197D19-28FF-4FA8-B83B-F0796D18D7C7}
+        uuid_Xcode4_PBXFileRef {15064F3F-0F6F-4A59-8531-9E361125C187}
+        build_env 64
+        list_env 64
         filename_and_path {src/xutf8/is_right2left.c}
       }
       file_ref {is_spacing.c} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {33D01DE7-EC28-45C9-AC26-AB81F6F7E056}
+        uuid_Xcode4_PBXFileRef {35196210-B2C0-48F9-88B8-7DB816C06ED2}
+        build_env 64
+        list_env 64
         filename_and_path {src/xutf8/is_spacing.c}
       }
     }
