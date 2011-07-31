@@ -67,6 +67,7 @@ fltk3::DoubleWindow* show_workspace_panel();
 void file_panel_set_cb(fltk3::Widget*, void *v);
 #include <fltk3/ReturnButton.h>
 Fl_Panel* make_file_panel();
+extern fltk3::MenuItem menu_Unknown[];
 #endif
 
 //

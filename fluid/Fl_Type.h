@@ -50,7 +50,25 @@ void set_modflag(int mf);
 extern unsigned int wks_env;
 extern char *wks_name;
 
-enum { ENV_NONE=0, ENV_ALL=0x007f, ENV_ALL_SHELL=0x0003, ENV_MAKE=0x0001, ENV_CMAKE=0x0002, ENV_ALL_VC=0x001c, ENV_VC6=0x0004, ENV_VC2008=0x0008, ENV_VC2010=0x0010, ENV_ALL_XC=0x0060, ENV_XC3=0x0020, ENV_XC4=0x0040 }; 
+enum { 
+  ENV_NONE=0, 
+  ENV_ALL=0x007f, 
+    ENV_ALL_SHELL=0x0003, 
+      ENV_MAKE=0x0001, ENV_CMAKE=0x0002, 
+    ENV_ALL_VC=0x001c, 
+      ENV_VC6=0x0004, ENV_VC2008=0x0008, ENV_VC2010=0x0010,
+    ENV_ALL_XC=0x0060, 
+      ENV_XC3=0x0020, ENV_XC4=0x0040 
+}; 
+
+typedef enum {
+  FILE_EXPLICIT = 0x8000,
+  FILE_UNKNOWN = 0,
+  FILE_C_SOURCE, FILE_C_HEADER,
+  FILE_CPP_SOURCE, FILE_CPP_HEADER,
+  FILE_OBJC_SOURCE, FILE_OBJC_HEADER,
+  FILE_TEXT, FILE_TEXT_SCRIPT
+} FileType;
 
 class Fl_Type {
 
@@ -258,10 +276,12 @@ extern Fl_Lib_Target_Type Fl_Lib_Target_type;
 
 class Fl_File_Type : public Fl_Workspace_Type {
   char *pFilename;
+  FileType pFileType;
 public:
   Fl_File_Type() :
-  Fl_Workspace_Type(),
-  pFilename(0) {
+    Fl_Workspace_Type(),
+    pFilename(0),
+    pFileType(FILE_UNKNOWN) {
   }
   ~Fl_File_Type() {
     if (pFilename) free(pFilename);
@@ -278,12 +298,17 @@ public:
   virtual char read_property(const char *);
   static Fl_File_Type *first_file(Fl_Type *base);
   Fl_File_Type *next_file(Fl_Type *base);
-  char is_code();
-  char is_obj_c_code();
+  void set_default_type();
+  FileType filetype() { return pFileType; }
+  void filetype(unsigned int ft) { pFileType = (FileType)ft; }
+  char is_objc_code();
+  char is_objc_header();
   char is_c_code();
+  char is_c_header();
   char is_cplusplus_code();
-  char is_header();
   char is_cplusplus_header();
+  char is_code();
+  char is_header();
 };
 extern Fl_File_Type Fl_File_type;
 

@@ -49,7 +49,7 @@ decl {extern fltk3::Pixmap menu_all_pixmap;} {public global
 } 
 
 widget_class Fl_Environment_Choice {open
-  xywh {494 182 170 25} type Double
+  xywh {820 144 170 25} type Double
   class {fltk3::Group} visible position_relative
 } {
   decl {unsigned int pEnv;} {protected local
@@ -296,7 +296,7 @@ Function {make_file_panel()} {open
 } {
   {fltk3::Window} {} {
     label {File Properties} open
-    xywh {510 319 405 136} type Double labelsize 11 align 80 resizable hotspot
+    xywh {718 318 291 245} type Double labelsize 11 align 80 resizable hotspot
     code0 {o->size_range(o->w(), o->h());}
     class Fl_Panel non_modal visible
   } {
@@ -323,7 +323,7 @@ Function {make_file_panel()} {open
       Fl_Panel::current_file()->filename(o->value());
       if (o->changed()) set_modflag(1);
     }
-  }} selected
+  }}
         tooltip {The label text for the widget.
 Use Ctrl-J for newlines.} xywh {75 15 170 20} labelsize 12 when 1 textsize 12 resizable
       }
@@ -369,11 +369,109 @@ Use Ctrl-J for newlines.} xywh {75 15 170 20} labelsize 12 when 1 textsize 12 re
       class Fl_Environment_Choice
     } {}
     {fltk3::Group} {} {
+      label {File Type:}
       callback {Fl_Panel::propagate_load} open
-      xywh {9 100 400 20} labelsize 11
+      xywh {75 105 170 20} labelsize 12 align 4
+    } {
+      {fltk3::MenuButton} {} {
+        label Unknown
+        callback {if (v == Fl_Panel::LOAD) {
+  } else {
+    int mod = 0;
+    const fltk3::MenuItem *mi = o->mvalue();
+    int e = mi->argument();
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_file()) {
+        if (((Fl_File_Type*)t)->filetype() != e) {
+          if (e==FILE_EXPLICIT)
+            ((Fl_File_Type*)t)->set_default_type();
+          else
+            ((Fl_File_Type*)t)->filetype(e|FILE_EXPLICIT);
+          mod = 1;
+        }
+      }
+    }
+    if (mod) set_modflag(1);
+  }
+      char buf[64];
+      unsigned int ft = Fl_Panel::current_file()->filetype();
+      if (ft&FILE_EXPLICIT) {
+        strcpy(buf, "explicit - ");
+      } else {
+        strcpy(buf, "default - ");
+      }
+      ft = ft & 0x7fff;
+      for (const fltk3::MenuItem *mi = o->menu(); ; mi++) {
+        if (!mi->label()) {
+          strcat(buf, "<unknown>");
+          break;
+        }
+        if (mi->argument()==ft) {
+          strcat(buf, mi->label());
+          break;
+        }
+      }
+      o->copy_label(buf);} open selected
+        xywh {75 105 170 20} labelsize 12
+      } {
+        MenuItem {} {
+          label Default
+          user_data FILE_EXPLICIT user_data_type long
+          xywh {10 10 31 20} labelsize 12 divider
+        }
+        MenuItem {} {
+          label {C Source Code}
+          user_data FILE_C_SOURCE user_data_type long
+          xywh {0 0 31 20} labelsize 12
+        }
+        MenuItem {} {
+          label {C Header}
+          user_data FILE_C_HEADER user_data_type long
+          xywh {10 10 31 20} labelsize 12
+        }
+        MenuItem {} {
+          label {C++ Source Code}
+          user_data FILE_CPP_SOURCE user_data_type long
+          xywh {20 20 31 20} labelsize 12
+        }
+        MenuItem {} {
+          label {C++ Header}
+          user_data FILE_CPP_HEADER user_data_type long
+          xywh {30 30 31 20} labelsize 12
+        }
+        MenuItem {} {
+          label {ObjectiveC Source}
+          user_data FILE_OBJC_SOURCE user_data_type long
+          xywh {40 40 31 20} labelsize 12
+        }
+        MenuItem {} {
+          label {ObjectiveC Header}
+          user_data FILE_OBJC_HEADER user_data_type long
+          xywh {50 50 31 20} labelsize 12
+        }
+        MenuItem {} {
+          label Text
+          user_data FILE_TEXT user_data_type long
+          xywh {60 60 31 20} labelsize 12
+        }
+        MenuItem {} {
+          label {Shell Script}
+          user_data FILE_TEXT_SCRIPT user_data_type long
+          xywh {70 70 31 20} labelsize 12
+        }
+        MenuItem {} {
+          label Unknown
+          user_data FILE_UNKNOWN user_data_type long
+          xywh {80 80 31 20} labelsize 12
+        }
+      }
+    }
+    {fltk3::Group} {} {
+      callback {Fl_Panel::propagate_load} open
+      xywh {9 195 261 25} labelsize 11
     } {
       {fltk3::Box} {} {
-        xywh {9 100 321 20} labelsize 11 resizable
+        xywh {9 195 166 25} labelsize 11 resizable
       }
       {fltk3::ReturnButton} {} {
         label Close
@@ -382,7 +480,7 @@ Use Ctrl-J for newlines.} xywh {75 15 170 20} labelsize 12 when 1 textsize 12 re
     file_panel_set_cb(0, 0);
     the_file_panel->hide();
   }}
-        xywh {330 100 64 20} labelsize 12
+        xywh {175 195 94 25} labelsize 12
       }
     }
   }

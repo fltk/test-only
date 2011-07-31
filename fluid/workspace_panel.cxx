@@ -299,6 +299,60 @@ static void cb_List(Fl_Environment_Choice* o, void* v) {
   };
 }
 
+static void cb_Unknown(fltk3::MenuButton* o, void* v) {
+  if (v == Fl_Panel::LOAD) {
+  } else {
+    int mod = 0;
+    const fltk3::MenuItem *mi = o->mvalue();
+    int e = mi->argument();
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_file()) {
+        if (((Fl_File_Type*)t)->filetype() != e) {
+          if (e==FILE_EXPLICIT)
+            ((Fl_File_Type*)t)->set_default_type();
+          else
+            ((Fl_File_Type*)t)->filetype(e|FILE_EXPLICIT);
+          mod = 1;
+        }
+      }
+    }
+    if (mod) set_modflag(1);
+  }
+      char buf[64];
+      unsigned int ft = Fl_Panel::current_file()->filetype();
+      if (ft&FILE_EXPLICIT) {
+        strcpy(buf, "explicit - ");
+      } else {
+        strcpy(buf, "default - ");
+      }
+      ft = ft & 0x7fff;
+      for (const fltk3::MenuItem *mi = o->menu(); ; mi++) {
+        if (!mi->label()) {
+          strcat(buf, "<unknown>");
+          break;
+        }
+        if (mi->argument()==ft) {
+          strcat(buf, mi->label());
+          break;
+        }
+      }
+      o->copy_label(buf);
+}
+
+fltk3::MenuItem menu_Unknown[] = {
+ {"Default", 0,  0, (void*)(FILE_EXPLICIT), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"C Source Code", 0,  0, (void*)(FILE_C_SOURCE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"C Header", 0,  0, (void*)(FILE_C_HEADER), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"C++ Source Code", 0,  0, (void*)(FILE_CPP_SOURCE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"C++ Header", 0,  0, (void*)(FILE_CPP_HEADER), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"ObjectiveC Source", 0,  0, (void*)(FILE_OBJC_SOURCE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"ObjectiveC Header", 0,  0, (void*)(FILE_OBJC_HEADER), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Text", 0,  0, (void*)(FILE_TEXT), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Shell Script", 0,  0, (void*)(FILE_TEXT_SCRIPT), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Unknown", 0,  0, (void*)(FILE_UNKNOWN), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {0,0,0,0,0,0,0,0,0}
+};
+
 static void cb_Close(fltk3::ReturnButton*, void* v) {
   if (v == Fl_Panel::LOAD) {
   } else {
@@ -309,7 +363,7 @@ static void cb_Close(fltk3::ReturnButton*, void* v) {
 
 Fl_Panel* make_file_panel() {
   Fl_Panel* w;
-  { Fl_Panel* o = new Fl_Panel(0, 0, 405, 136, "File Properties");
+  { Fl_Panel* o = new Fl_Panel(0, 0, 291, 245, "File Properties");
     w = o;
     o->box(fltk3::FLAT_BOX);
     o->color(fltk3::BACKGROUND_COLOR);
@@ -359,14 +413,25 @@ Fl_Panel* make_file_panel() {
       o->align(fltk3::Align(fltk3::ALIGN_LEFT));
       o->when(fltk3::WHEN_RELEASE_ALWAYS);
     } // Fl_Environment_Choice* o
-    { fltk3::Group* o = new fltk3::Group(9, 100, 400, 20);
+    { fltk3::Group* o = new fltk3::Group(75, 105, 170, 20, "File Type:");
+      o->labelsize(12);
+      o->callback((fltk3::Callback*)Fl_Panel::propagate_load);
+      o->align(fltk3::Align(fltk3::ALIGN_LEFT));
+      { fltk3::MenuButton* o = new fltk3::MenuButton(75, 105, 170, 20, "Unknown");
+        o->labelsize(12);
+        o->callback((fltk3::Callback*)cb_Unknown);
+        o->menu(menu_Unknown);
+      } // fltk3::MenuButton* o
+      o->end();
+    } // fltk3::Group* o
+    { fltk3::Group* o = new fltk3::Group(9, 195, 261, 25);
       o->labelsize(11);
       o->callback((fltk3::Callback*)Fl_Panel::propagate_load);
-      { fltk3::Box* o = new fltk3::Box(9, 100, 321, 20);
+      { fltk3::Box* o = new fltk3::Box(9, 195, 166, 25);
         o->labelsize(11);
         fltk3::Group::current()->resizable(o);
       } // fltk3::Box* o
-      { fltk3::ReturnButton* o = new fltk3::ReturnButton(330, 100, 64, 20, "Close");
+      { fltk3::ReturnButton* o = new fltk3::ReturnButton(175, 195, 94, 25, "Close");
         o->labelsize(12);
         o->callback((fltk3::Callback*)cb_Close);
       } // fltk3::ReturnButton* o

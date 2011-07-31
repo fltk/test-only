@@ -225,7 +225,7 @@ folder Libraries {open
         list_env 64
         filename_and_path {fltk3/ask.h}
       }
-      file_ref {Bitmap.h} {
+      file_ref {Bitmap.h} {selected
         uuid_Xcode4_PBXBuildFile {D83BCD17-0F87-4FB5-8986-C0F3F65C02EB}
         uuid_Xcode4_PBXFileRef {249A3332-2091-44E1-8C33-059FC2702523}
         build_env 64
@@ -1107,7 +1107,7 @@ folder Libraries {open
         list_env 64
         filename_and_path {fltk3/TreeItemArray.h}
       }
-      file_ref {TreePrefs.h} {selected
+      file_ref {TreePrefs.h} {
         uuid_Xcode4_PBXBuildFile {C2B74F46-3E7C-4CD7-8267-4FC28F34895D}
         uuid_Xcode4_PBXFileRef {EC737FCE-1C5A-4F70-9A27-F94BA25D1072}
         build_env 64
@@ -2594,27 +2594,22 @@ folder Tests {open
 } {
   app_target Demo {open
   } {
-    file_ref {demo.cxx} {
-      }
+    file_ref {demo.cxx} {}
   }
   app_target adjuster {open
   } {
-    file_ref {adjuster.cxx} {
-      }
+    file_ref {adjuster.cxx} {}
   }
   app_target arc {open
   } {
-    file_ref {arc.cxx} {
-      }
+    file_ref {arc.cxx} {}
   }
   app_target ask {open
   } {
-    file_ref {ask.cxx} {
-      }
+    file_ref {ask.cxx} {}
   }
   app_target bitmap {open
   } {
-    file_ref {bitmap.cxx} {
-      }
+    file_ref {bitmap.cxx} {}
   }
 } 
