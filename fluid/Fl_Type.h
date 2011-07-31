@@ -278,7 +278,11 @@ public:
   virtual char read_property(const char *);
   static Fl_File_Type *first_file(Fl_Type *base);
   Fl_File_Type *next_file(Fl_Type *base);
+  char is_code();
+  char is_obj_c_code();
+  char is_c_code();
   char is_cplusplus_code();
+  char is_header();
   char is_cplusplus_header();
 };
 extern Fl_File_Type Fl_File_type;

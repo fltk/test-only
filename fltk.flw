@@ -5,8 +5,7 @@ code_name {.cxx}
 wks_name FLTK
 folder Applications {open
 } {
-  app_target Fluid {open
-  } {
+  app_target Fluid {} {
     folder Headers {open
     } {
       file_ref {CodeEditor.h} {
@@ -210,8 +209,7 @@ folder Libraries {open
 } {
   app_target fltk {open
   } {
-    folder Headers {open
-    } {
+    folder Headers {} {
       file_ref {Adjuster.h} {
         build_env 64
         list_env 64
@@ -950,9 +948,9 @@ folder Libraries {open
         list_env 0
         filename_and_path {src/Fl_Quartz_Printer.mm}
       }
-      file_ref {Fl.cxx} {selected
-        build_env 0
-        list_env 0
+      file_ref {Fl.cxx} {
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl.cxx}
       }
       file_ref {Fl_Adjuster.cxx} {
@@ -961,698 +959,698 @@ folder Libraries {open
         filename_and_path {src/Fl_Adjuster.cxx}
       }
       file_ref {Fl_Bitmap.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Bitmap.cxx}
       }
       file_ref {Fl_Box.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Box.cxx}
       }
       file_ref {Fl_Browser.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Browser.cxx}
       }
       file_ref {Fl_Browser_.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Browser_.cxx}
       }
       file_ref {Fl_Browser_load.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Browser_load.cxx}
       }
       file_ref {Fl_Button.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Button.cxx}
       }
       file_ref {Fl_Chart.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Chart.cxx}
       }
       file_ref {Fl_Check_Browser.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Check_Browser.cxx}
       }
       file_ref {Fl_Check_Button.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Check_Button.cxx}
       }
       file_ref {Fl_Choice.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Choice.cxx}
       }
       file_ref {Fl_Clock.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Clock.cxx}
       }
       file_ref {Fl_Color_Chooser.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Color_Chooser.cxx}
       }
       file_ref {Fl_Counter.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Counter.cxx}
       }
       file_ref {Fl_Device.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Device.cxx}
       }
       file_ref {Fl_Dial.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Dial.cxx}
       }
       file_ref {Fl_Double_Window.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Double_Window.cxx}
       }
       file_ref {Fl_File_Browser.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_File_Browser.cxx}
       }
       file_ref {Fl_File_Chooser.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_File_Chooser.cxx}
       }
       file_ref {Fl_File_Chooser2.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_File_Chooser2.cxx}
       }
       file_ref {Fl_File_Icon.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_File_Icon.cxx}
       }
       file_ref {Fl_File_Input.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_File_Input.cxx}
       }
       file_ref {Fl_Group.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Group.cxx}
       }
       file_ref {Fl_Help_View.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Help_View.cxx}
       }
       file_ref {Fl_Image.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Image.cxx}
       }
       file_ref {Fl_Input.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Input.cxx}
       }
       file_ref {Fl_Input_.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Input_.cxx}
       }
       file_ref {Fl_Light_Button.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Light_Button.cxx}
       }
       file_ref {Fl_Menu.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Menu.cxx}
       }
       file_ref {Fl_Menu_.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Menu_.cxx}
       }
       file_ref {Fl_Menu_Bar.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Menu_Bar.cxx}
       }
       file_ref {Fl_Menu_Button.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Menu_Button.cxx}
       }
       file_ref {Fl_Menu_Window.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Menu_Window.cxx}
       }
       file_ref {Fl_Menu_add.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Menu_add.cxx}
       }
       file_ref {Fl_Menu_global.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Menu_global.cxx}
       }
       file_ref {Fl_Multi_Label.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Multi_Label.cxx}
       }
       file_ref {Fl_Native_File_Chooser.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Native_File_Chooser.cxx}
       }
       file_ref {Fl_Overlay_Window.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Overlay_Window.cxx}
       }
       file_ref {Fl_Pack.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Pack.cxx}
       }
       file_ref {Fl_Paged_Device.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Paged_Device.cxx}
       }
       file_ref {Fl_Pixmap.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Pixmap.cxx}
       }
       file_ref {Fl_Positioner.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Positioner.cxx}
       }
       file_ref {Fl_Printer.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Printer.cxx}
       }
       file_ref {Fl_Preferences.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Preferences.cxx}
       }
       file_ref {Fl_Progress.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Progress.cxx}
       }
       file_ref {Fl_Repeat_Button.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Repeat_Button.cxx}
       }
       file_ref {Fl_Return_Button.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Return_Button.cxx}
       }
       file_ref {Fl_Roller.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Roller.cxx}
       }
       file_ref {Fl_Round_Button.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Round_Button.cxx}
       }
       file_ref {Fl_Scroll.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Scroll.cxx}
       }
       file_ref {Fl_Scrollbar.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Scrollbar.cxx}
       }
       file_ref {Fl_Shared_Image.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Shared_Image.cxx}
       }
       file_ref {Fl_Single_Window.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Single_Window.cxx}
       }
       file_ref {Fl_Slider.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Slider.cxx}
       }
       file_ref {Fl_Sys_Menu_Bar.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Sys_Menu_Bar.cxx}
       }
       file_ref {Fl_Table.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Table.cxx}
       }
       file_ref {Fl_Table_Row.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Table_Row.cxx}
       }
       file_ref {Fl_Tabs.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Tabs.cxx}
       }
       file_ref {Fl_Text_Buffer.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Text_Buffer.cxx}
       }
       file_ref {Fl_Text_Display.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Text_Display.cxx}
       }
       file_ref {Fl_Text_Editor.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Text_Editor.cxx}
       }
       file_ref {Fl_Tile.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Tile.cxx}
       }
       file_ref {Fl_Tiled_Image.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Tiled_Image.cxx}
       }
       file_ref {Fl_Tooltip.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Tooltip.cxx}
       }
       file_ref {Fl_Tree.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Tree.cxx}
       }
       file_ref {Fl_Tree_Item.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Tree_Item.cxx}
       }
       file_ref {Fl_Tree_Item_Array.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Tree_Item_Array.cxx}
       }
       file_ref {Fl_Tree_Prefs.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Tree_Prefs.cxx}
       }
       file_ref {Fl_Valuator.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Valuator.cxx}
       }
       file_ref {Fl_Value_Input.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Value_Input.cxx}
       }
       file_ref {Fl_Value_Output.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Value_Output.cxx}
       }
       file_ref {Fl_Value_Slider.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Value_Slider.cxx}
       }
       file_ref {Fl_Widget.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Widget.cxx}
       }
       file_ref {Fl_Window.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Window.cxx}
       }
       file_ref {Fl_Window_fullscreen.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Window_fullscreen.cxx}
       }
       file_ref {Fl_Window_hotspot.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Window_hotspot.cxx}
       }
       file_ref {Fl_Window_iconize.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Window_iconize.cxx}
       }
       file_ref {Fl_Wizard.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Wizard.cxx}
       }
       file_ref {Fl_XBM_Image.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_XBM_Image.cxx}
       }
       file_ref {Fl_XPM_Image.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_XPM_Image.cxx}
       }
       file_ref {Fl_abort.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_abort.cxx}
       }
       file_ref {Fl_add_idle.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_add_idle.cxx}
       }
       file_ref {Fl_arg.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_arg.cxx}
       }
       file_ref {Fl_compose.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_compose.cxx}
       }
       file_ref {Fl_display.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_display.cxx}
       }
       file_ref {Fl_get_key.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_get_key.cxx}
       }
       file_ref {Fl_get_system_colors.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_get_system_colors.cxx}
       }
       file_ref {Fl_grab.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_grab.cxx}
       }
       file_ref {Fl_lock.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_lock.cxx}
       }
       file_ref {Fl_own_colormap.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_own_colormap.cxx}
       }
       file_ref {Fl_visual.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_visual.cxx}
       }
       file_ref {Fl_x.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_x.cxx}
       }
       file_ref {cmap.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/cmap.cxx}
       }
       file_ref {filename_absolute.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/filename_absolute.cxx}
       }
       file_ref {filename_expand.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/filename_expand.cxx}
       }
       file_ref {filename_ext.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/filename_ext.cxx}
       }
       file_ref {filename_isdir.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/filename_isdir.cxx}
       }
       file_ref {filename_list.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/filename_list.cxx}
       }
       file_ref {filename_match.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/filename_match.cxx}
       }
       file_ref {filename_setext.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/filename_setext.cxx}
       }
       file_ref {fl_arc.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_arc.cxx}
       }
       file_ref {fl_arci.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_arci.cxx}
       }
       file_ref {fl_ask.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_ask.cxx}
       }
       file_ref {fl_boxtype.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_boxtype.cxx}
       }
       file_ref {fl_call_main.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_call_main.cxx}
       }
       file_ref {fl_color.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_color.cxx}
       }
       file_ref {fl_cursor.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_cursor.cxx}
       }
       file_ref {fl_curve.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_curve.cxx}
       }
       file_ref {fl_diamond_box.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_diamond_box.cxx}
       }
       file_ref {fl_dnd.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_dnd.cxx}
       }
       file_ref {fl_draw.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_draw.cxx}
       }
       file_ref {fl_draw_image.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_draw_image.cxx}
       }
       file_ref {fl_draw_pixmap.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_draw_pixmap.cxx}
       }
       file_ref {fl_encoding_latin1.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_encoding_latin1.cxx}
       }
       file_ref {fl_encoding_mac_roman.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_encoding_mac_roman.cxx}
       }
       file_ref {fl_engraved_label.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_engraved_label.cxx}
       }
       file_ref {fl_file_dir.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_file_dir.cxx}
       }
       file_ref {fl_font.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_font.cxx}
       }
       file_ref {fl_gtk.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_gtk.cxx}
       }
       file_ref {fl_labeltype.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_labeltype.cxx}
       }
       file_ref {fl_line_style.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_line_style.cxx}
       }
       file_ref {fl_open_uri.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_open_uri.cxx}
       }
       file_ref {fl_oval_box.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_oval_box.cxx}
       }
       file_ref {fl_overlay.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_overlay.cxx}
       }
       file_ref {fl_overlay_visual.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_overlay_visual.cxx}
       }
       file_ref {fl_plastic.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_plastic.cxx}
       }
       file_ref {fl_read_image.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_read_image.cxx}
       }
       file_ref {fl_rect.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_rect.cxx}
       }
       file_ref {fl_round_box.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_round_box.cxx}
       }
       file_ref {fl_rounded_box.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_rounded_box.cxx}
       }
       file_ref {fl_scroll_area.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_scroll_area.cxx}
       }
       file_ref {fl_set_font.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_set_font.cxx}
       }
       file_ref {fl_set_fonts.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_set_fonts.cxx}
       }
       file_ref {fl_shadow_box.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_shadow_box.cxx}
       }
       file_ref {fl_shortcut.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_shortcut.cxx}
       }
       file_ref {fl_show_colormap.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_show_colormap.cxx}
       }
       file_ref {fl_symbols.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_symbols.cxx}
       }
       file_ref {fl_utf8.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_utf8.cxx}
       }
       file_ref {fl_utf.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_utf.cxx}
       }
       file_ref {fl_vertex.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/fl_vertex.cxx}
       }
       file_ref {flstring.c} {
@@ -1661,26 +1659,26 @@ folder Libraries {open
         filename_and_path {src/flstring.c}
       }
       file_ref {numericsort.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/numericsort.cxx}
       }
       file_ref {ps_image.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/ps_image.cxx}
       }
       file_ref {scandir.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/scandir.cxx}
       }
       file_ref {screen_xywh.cxx} {
-        build_env 0
-        list_env 0
+        build_env 64
+        list_env 64
         filename_and_path {src/screen_xywh.cxx}
       }
-      file_ref {vsnprintf.c} {
+      file_ref {vsnprintf.c} {selected
         build_env 0
         list_env 0
         filename_and_path {src/vsnprintf.c}
