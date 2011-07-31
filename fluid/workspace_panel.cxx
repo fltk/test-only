@@ -224,7 +224,7 @@ fltk3::DoubleWindow* show_workspace_panel() {
       if (wks_env)  
         pEnv->value(wks_env);  
       else
-        pEnv->value(Fl_Environment_Choice::ENV_ALL);
+        pEnv->value(ENV_ALL);
       workspace_panel->show();
   return workspace_panel;
 }

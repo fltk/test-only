@@ -45,7 +45,6 @@ public:
 protected:
   unsigned int pEnv; 
 public:
-  enum { ENV_NONE=0, ENV_ALL=0x007f, ENV_ALL_SHELL=0x0003, ENV_MAKE=0x0001, ENV_CMAKE=0x0002, ENV_ALL_VC=0x001c, ENV_VC6=0x0004, ENV_VC2008=0x0008, ENV_VC2010=0x0010, ENV_ALL_XC=0x0060, ENV_XC3=0x0020, ENV_XC4=0x0040 }; 
   fltk3::MenuButton *pEnvMenu;
   static fltk3::MenuItem menu_pEnvMenu[];
   static fltk3::MenuItem *pMenuAll;

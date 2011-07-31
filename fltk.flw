@@ -9,122 +9,122 @@ folder Applications {open
   } {
     folder Sources {open
     } {
-      code_file {CodeEditor.cxx} {
+      file_ref {CodeEditor.cxx} {
         uuid_Xcode4_PBXBuildFile {21531985-E735-4E4D-8AD4-601ECF511590}
         uuid_Xcode4_PBXFileRef {233B84BF-4134-4BEE-AB2F-9DFBE2B8842A}
         filename_and_path {fluid/CodeEditor.cxx}
       }
-      code_file {Fl_Function_Type.cxx} {
+      file_ref {Fl_Function_Type.cxx} {
         uuid_Xcode4_PBXBuildFile {76506CDF-5D66-49BF-B9F0-7DF0A22E518F}
         uuid_Xcode4_PBXFileRef {EA692103-A561-45DB-BAB7-08C611B9B470}
         filename_and_path {fluid/Fl_Function_Type.cxx}
       }
-      code_file {Fl_Group_Type.cxx} {
+      file_ref {Fl_Group_Type.cxx} {
         uuid_Xcode4_PBXBuildFile {9E403B5C-EAFE-4102-958C-123162EF31D0}
         uuid_Xcode4_PBXFileRef {4846F7E3-8930-4B0D-8AC4-4B370E63EE0E}
         filename_and_path {fluid/Fl_Group_Type.cxx}
       }
-      code_file {Fl_Menu_Type.cxx} {
+      file_ref {Fl_Menu_Type.cxx} {
         uuid_Xcode4_PBXBuildFile {DDD88F08-4E7A-46A8-87E8-7AE77929B7BD}
         uuid_Xcode4_PBXFileRef {E5E26424-9D4F-41A4-A4B4-C3698DCFAAC6}
         filename_and_path {fluid/Fl_Menu_Type.cxx}
       }
-      code_file {Fl_Type.cxx} {
+      file_ref {Fl_Type.cxx} {
         uuid_Xcode4_PBXBuildFile {0D9700AF-483A-4DDE-B763-B9B0B0F553F2}
         uuid_Xcode4_PBXFileRef {FB6899F0-9E7D-44D6-AE56-6FBD161952CE}
         filename_and_path {fluid/Fl_Type.cxx}
       }
-      code_file {Fl_Widget_Type.cxx} {
+      file_ref {Fl_Widget_Type.cxx} {
         uuid_Xcode4_PBXBuildFile {D2DAFD4F-8844-4ACE-916E-657842F001BD}
         uuid_Xcode4_PBXFileRef {A1E97C69-4062-4D1A-AADB-4BB90BCF332C}
         filename_and_path {fluid/Fl_Widget_Type.cxx}
       }
-      code_file {Fl_Window_Type.cxx} {
+      file_ref {Fl_Window_Type.cxx} {
         uuid_Xcode4_PBXBuildFile {3047F62F-95D0-4187-B94A-8339A79A2FFF}
         uuid_Xcode4_PBXFileRef {F433B19A-BF9E-4627-A430-149056B7E74E}
         filename_and_path {fluid/Fl_Window_Type.cxx}
       }
-      code_file {Fluid_Image.cxx} {
+      file_ref {Fluid_Image.cxx} {
         uuid_Xcode4_PBXBuildFile {2A0835F0-8DB4-47E4-B1B5-8F1E1C3727C1}
         uuid_Xcode4_PBXFileRef {EFBF35C8-2D5B-4F2E-ACCE-8E3F05B4B0AD}
         filename_and_path {fluid/Fluid_Image.cxx}
       }
-      code_file {about_panel.cxx} {
+      file_ref {about_panel.cxx} {
         uuid_Xcode4_PBXBuildFile {060FCD71-A79D-49A8-9672-4D3085E81A71}
         uuid_Xcode4_PBXFileRef {227D091D-B4DD-4404-AC06-830A880C2763}
         filename_and_path {fluid/about_panel.cxx}
       }
-      code_file {align_widget.cxx} {
+      file_ref {align_widget.cxx} {
         uuid_Xcode4_PBXBuildFile {F798DDD7-4493-4765-B386-2499712536FB}
         uuid_Xcode4_PBXFileRef {24CE269A-726A-4C1C-877B-A541D697F91C}
         filename_and_path {fluid/align_widget.cxx}
       }
-      code_file {alignment_panel.cxx} {
+      file_ref {alignment_panel.cxx} {
         uuid_Xcode4_PBXBuildFile {17BEA00E-3304-4E2F-A2B7-1BD33A1BAC70}
         uuid_Xcode4_PBXFileRef {899A7E34-9D97-46A6-B5B3-3F5C8247D9A2}
         filename_and_path {fluid/alignment_panel.cxx}
       }
-      code_file {code.cxx} {
+      file_ref {code.cxx} {
         uuid_Xcode4_PBXBuildFile {5F465A55-0199-42C5-B173-199357FC11A9}
         uuid_Xcode4_PBXFileRef {09CC113E-256C-40B4-9EA0-A3DE7A30D89C}
         filename_and_path {fluid/code.cxx}
       }
-      code_file {factory.cxx} {
+      file_ref {factory.cxx} {
         uuid_Xcode4_PBXBuildFile {660933C9-FE08-441D-9BFC-A33F896094E0}
         uuid_Xcode4_PBXFileRef {5C7951B9-91C1-48CE-9D89-E31BAA6CA89A}
         filename_and_path {fluid/factory.cxx}
       }
-      code_file {file.cxx} {selected
+      file_ref {file.cxx} {selected
         uuid_Xcode4_PBXBuildFile {9180CE40-4261-45D4-BA54-7E496D64E491}
         uuid_Xcode4_PBXFileRef {C9E8495F-E0DA-41CA-A433-0EE31A53EA61}
         filename_and_path {fluid/file.cxx}
       }
-      code_file {file_cmake.cxx} {
+      file_ref {file_cmake.cxx} {
         uuid_Xcode4_PBXBuildFile {2C5A18FB-7CDA-4E83-BF5D-0A703C159CE4}
         uuid_Xcode4_PBXFileRef {C610271C-BE6B-4BC7-9DAC-02457D070C83}
         filename_and_path {fluid/file_cmake.cxx}
       }
-      code_file {file_make.cxx} {
+      file_ref {file_make.cxx} {
         uuid_Xcode4_PBXBuildFile {440345C5-F414-46E0-8451-A4BF6404BAD8}
         uuid_Xcode4_PBXFileRef {AA030641-32F5-4A30-83C3-AB4C12B116BF}
         filename_and_path {fluid/file_make.cxx}
       }
-      code_file {file_visualc.cxx} {
+      file_ref {file_visualc.cxx} {
         uuid_Xcode4_PBXBuildFile {90165E96-B379-4CFB-9443-96A69D1138FF}
         uuid_Xcode4_PBXFileRef {3897A14B-FF80-4B19-905F-F4FB3BEC9F0E}
         filename_and_path {fluid/file_visualc.cxx}
       }
-      code_file {file_xcode.cxx} {
+      file_ref {file_xcode.cxx} {
         uuid_Xcode4_PBXBuildFile {6274DFA2-A0BB-41B1-A445-DA19DDBEA45B}
         uuid_Xcode4_PBXFileRef {8AB9E1DA-0E88-4EC9-BA9C-A772BE5E138D}
         filename_and_path {fluid/file_xcode.cxx}
       }
-      code_file {fluid.cxx} {
+      file_ref {fluid.cxx} {
         uuid_Xcode4_PBXBuildFile {040ADAF6-46C7-41CB-9C4C-280781FC1D34}
         uuid_Xcode4_PBXFileRef {248C3EC8-EF4A-40C8-84F8-B9844B50DD4D}
         filename_and_path {fluid/fluid.cxx}
       }
-      code_file {function_panel.cxx} {
+      file_ref {function_panel.cxx} {
         uuid_Xcode4_PBXBuildFile {70498161-84AF-4916-A91A-E9993C7265BE}
         uuid_Xcode4_PBXFileRef {0279DE51-109D-42F1-BD87-5BF96C8790BE}
         filename_and_path {fluid/function_panel.cxx}
       }
-      code_file {template_panel.cxx} {
+      file_ref {template_panel.cxx} {
         uuid_Xcode4_PBXBuildFile {DB7E42B7-28C2-4DFD-9BE3-A5E046FB8ED8}
         uuid_Xcode4_PBXFileRef {5C0AC8E4-C774-4082-AD48-4DF7D04B0423}
         filename_and_path {fluid/template_panel.cxx}
       }
-      code_file {undo.cxx} {
+      file_ref {undo.cxx} {
         uuid_Xcode4_PBXBuildFile {9F2F34D6-3E87-4B4C-A4E7-459A6F518639}
         uuid_Xcode4_PBXFileRef {6A66AFC5-0859-4BA2-8EF1-A85C3A828ED7}
         filename_and_path {fluid/undo.cxx}
       }
-      code_file {widget_panel.cxx} {
+      file_ref {widget_panel.cxx} {
         uuid_Xcode4_PBXBuildFile {53153194-20D6-47CD-A8A9-4FE29F0CEE34}
         uuid_Xcode4_PBXFileRef {425C2E3E-9BA2-4FF8-8D5E-D1F634A7B379}
         filename_and_path {fluid/widget_panel.cxx}
       }
-      code_file {workspace_panel.cxx} {
+      file_ref {workspace_panel.cxx} {
         uuid_Xcode4_PBXBuildFile {608B6D5F-C180-4935-8136-7268F7C1C9BE}
         uuid_Xcode4_PBXFileRef {43642281-C39A-4E19-B046-6CFE718FDFEE}
         filename_and_path {fluid/workspace_panel.cxx}
@@ -132,59 +132,59 @@ folder Applications {open
     }
     folder Headers {open
     } {
-      code_file {CodeEditor.h} {
+      file_ref {CodeEditor.h} {
         uuid_Xcode4_PBXFileRef {6A73CBE8-D82E-4770-B122-1162C650A349}
         filename_and_path {fluid/CodeEditor.h}
       }
-      code_file {Fl_Type.h} {
+      file_ref {Fl_Type.h} {
         uuid_Xcode4_PBXFileRef {6FEAD9ED-49D4-4725-90E9-2F5F252A8BB1}
         filename_and_path {fluid/Fl_Type.h}
       }
-      code_file {Fl_Widget_Type.h} {
+      file_ref {Fl_Widget_Type.h} {
         uuid_Xcode4_PBXFileRef {8D769D5B-8552-4F3F-870C-EB5F4D88BA7E}
         filename_and_path {fluid/Fl_Widget_Type.h}
       }
-      code_file {Fluid_Image.h} {
+      file_ref {Fluid_Image.h} {
         uuid_Xcode4_PBXFileRef {65197118-1119-4E36-830B-52295D8E04FE}
         filename_and_path {fluid/Fluid_Image.h}
       }
-      code_file {Shortcut_Button.h} {
+      file_ref {Shortcut_Button.h} {
         uuid_Xcode4_PBXFileRef {E7FEDB0D-1218-4316-AB2F-F5E1E2C6FAA8}
         filename_and_path {fluid/Shortcut_Button.h}
       }
-      code_file {about_panel.h} {
+      file_ref {about_panel.h} {
         uuid_Xcode4_PBXFileRef {F420CC30-9E28-43A1-8F55-04F2A4285E2D}
         filename_and_path {fluid/about_panel.h}
       }
-      code_file {alignment_panel.h} {
+      file_ref {alignment_panel.h} {
         uuid_Xcode4_PBXFileRef {26103935-2D50-4B44-97C7-EE9AA857DE61}
         filename_and_path {fluid/alignment_panel.h}
       }
-      code_file {comments.h} {
+      file_ref {comments.h} {
         uuid_Xcode4_PBXFileRef {19297348-7E5A-41AE-99F6-7AB10245A1D8}
         filename_and_path {fluid/comments.h}
       }
-      code_file {function_panel.h} {
+      file_ref {function_panel.h} {
         uuid_Xcode4_PBXFileRef {88AC76F8-37BC-48CF-B6D1-33DCD67DFD98}
         filename_and_path {fluid/function_panel.h}
       }
-      code_file {print_panel.h} {
+      file_ref {print_panel.h} {
         uuid_Xcode4_PBXFileRef {D0E0882D-24C1-4A93-AF9E-109EC52D185C}
         filename_and_path {fluid/print_panel.h}
       }
-      code_file {template_panel.h} {
+      file_ref {template_panel.h} {
         uuid_Xcode4_PBXFileRef {000422E2-90D4-45AD-A495-95AC4385D9FE}
         filename_and_path {fluid/template_panel.h}
       }
-      code_file {undo.h} {
+      file_ref {undo.h} {
         uuid_Xcode4_PBXFileRef {88491B5D-61FA-4D41-954E-528D7BD9DF52}
         filename_and_path {fluid/undo.h}
       }
-      code_file {widget_panel.h} {
+      file_ref {widget_panel.h} {
         uuid_Xcode4_PBXFileRef {E66E13F7-CB1B-4DE1-801E-C7601315D72B}
         filename_and_path {fluid/widget_panel.h}
       }
-      code_file {workspace_panel.h} {
+      file_ref {workspace_panel.h} {
         uuid_Xcode4_PBXFileRef {EAF89B48-F485-4F7C-A942-5E212E45BAB1}
         filename_and_path {fluid/workspace_panel.h}
       }
@@ -198,7 +198,7 @@ folder Libraries {open
   } {
     folder Sources {open
     } {
-      code_file {Fl_Adjuster.cxx} {
+      file_ref {Fl_Adjuster.cxx} {
         filename_and_path {src/Fl_Adjuster.cxx}
       }
     }
@@ -221,27 +221,27 @@ folder Tests {open
 } {
   app_target Demo {open
   } {
-    code_file {demo.cxx} {
+    file_ref {demo.cxx} {
       }
   }
   app_target adjuster {open
   } {
-    code_file {adjuster.cxx} {
+    file_ref {adjuster.cxx} {
       }
   }
   app_target arc {open
   } {
-    code_file {arc.cxx} {
+    file_ref {arc.cxx} {
       }
   }
   app_target ask {open
   } {
-    code_file {ask.cxx} {
+    file_ref {ask.cxx} {
       }
   }
   app_target bitmap {open
   } {
-    code_file {bitmap.cxx} {
+    file_ref {bitmap.cxx} {
       }
   }
 } 

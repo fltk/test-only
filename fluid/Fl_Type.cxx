@@ -111,8 +111,9 @@ static fltk3::Pixmap	protected_pixmap(protected_xpm);
 #include "pixmaps/flTree.xpm"
 #include "pixmaps/flTable.xpm"
 #include "pixmaps/flAppTarget.xpm"
-#include "pixmaps/flFluidFile.xpm"
+#include "pixmaps/flFile.xpm"
 #include "pixmaps/flFolder.xpm"
+#include "pixmaps/flFluidFile.xpm"
 #include "pixmaps/flCodeFile.xpm"
 #include "pixmaps/flMenuNone.xpm"
 #include "pixmaps/flMenuMulti.xpm"
@@ -170,9 +171,10 @@ static fltk3::Pixmap	data_pixmap(flData_xpm);
 static fltk3::Pixmap	tree_pixmap(flTree_xpm);
 static fltk3::Pixmap	table_pixmap(flTable_xpm);
 static fltk3::Pixmap	app_target_pixmap(flAppTarget_xpm);
-static fltk3::Pixmap	fluid_file_pixmap(flFluidFile_xpm);
+static fltk3::Pixmap	file_pixmap(flFile_xpm);
 static fltk3::Pixmap	folder_pixmap(flFolder_xpm);
-static fltk3::Pixmap	code_file_pixmap(flCodeFile_xpm);
+//static fltk3::Pixmap	fluid_file_pixmap(flFluidFile_xpm);
+//static fltk3::Pixmap	code_file_pixmap(flCodeFile_xpm);
 fltk3::Pixmap	menu_none_pixmap(flMenuNone_xpm);
 fltk3::Pixmap	menu_multi_pixmap(flMenuMulti_xpm);
 fltk3::Pixmap	menu_all_pixmap(flMenuAll_xpm);
@@ -187,13 +189,13 @@ fltk3::Pixmap *pixmap[] = { 0, &window_pixmap, &button_pixmap, &checkbutton_pixm
  &slider_pixmap, &scrollbar_pixmap, &valueslider_pixmap, &adjuster_pixmap, &counter_pixmap,          /* 37..41 */
  &dial_pixmap, &roller_pixmap, &valueinput_pixmap, &valueoutput_pixmap, &comment_pixmap,             /* 42..46 */
  &spinner_pixmap, &widgetclass_pixmap, &data_pixmap, &tree_pixmap, &table_pixmap,                    /* 47..51 */
- &app_target_pixmap, &fluid_file_pixmap, &folder_pixmap, &code_file_pixmap}; /* 52..55 */
+ &app_target_pixmap, &file_pixmap, &folder_pixmap}; /* 52..54 */
 
 extern int show_comments;
 
 ////////////////////////////////////////////////////////////////
 
-unsigned int wks_env = Fl_Environment_Choice::ENV_ALL;
+unsigned int wks_env = ENV_ALL;
 char *wks_name = 0L;
 
 ////////////////////////////////////////////////////////////////
@@ -1076,7 +1078,7 @@ extern char is_workspace();
 
 Fl_Workspace_Type::Fl_Workspace_Type()
 : Fl_Type(),
-  pEnv(Fl_Environment_Choice::ENV_ALL),
+  pEnv(ENV_ALL),
   pNUUID(0), pnUUID(0), 
   pUUIDName(0L), pUUID(0) 
 {
@@ -1177,6 +1179,10 @@ void Fl_Workspace_Type::write_properties() {
     write_word(buf);
     write_word(pUUID[i]);
   }
+  if (environments()!=ENV_ALL) {
+    write_indent(level+1);
+    write_string("environments %d", environments());
+  }
 }
 
 char Fl_Workspace_Type::read_property(const char *name) {
@@ -1184,6 +1190,8 @@ char Fl_Workspace_Type::read_property(const char *name) {
     char buf[80];
     strcpy(buf, name+5);
     set_UUID(buf, read_word());
+  } else if (!strcmp(name,"environments")) {
+    environments(atoi(read_word()));
   } else {
     return Fl_Type::read_property(name);
   }
@@ -1216,7 +1224,7 @@ int Fl_Workspace_Type::dnd_paste() {
         if (e!=s) {
           char buf[2048];
           fltk3::filename_relative(buf, 2048, s, basedir);
-          Fl_Code_File_Type *o = new Fl_Code_File_Type();
+          Fl_File_Type *o = new Fl_File_Type();
           o->filename(buf);
           o->add(this);
           o->factory = this;
@@ -1349,8 +1357,6 @@ void Fl_File_Type::filename(const char *fn) {
 char Fl_File_Type::read_property(const char *c) {
   if (!strcmp(c,"filename_and_path")) {
     filename(read_word());
-  } else  if (!strcmp(c,"environments")) {
-    environments(atoi(read_word()));
   } else {
     return Fl_Workspace_Type::read_property(c);
   }
@@ -1363,9 +1369,6 @@ void Fl_File_Type::write_properties() {
   if (filename() && *filename()) {
     write_string("filename_and_path");
     write_word(filename());
-  }
-  if (environments()!=Fl_Environment_Choice::ENV_ALL) {
-    write_string("environments %d", environments());
   }
 }
 
@@ -1423,56 +1426,6 @@ void Fl_File_Type::open() {
   if (!the_file_panel) the_file_panel = make_file_panel();
   the_file_panel->load(&Fl_Type::is_file);
   if (Fl_Panel::numselected) the_file_panel->show();
-}
-
-// ------------ Fluid File -----------------------------------------------------
-
-Fl_Fluid_File_Type Fl_Fluid_File_type;
-
-Fl_Type *Fl_Fluid_File_Type::make() {
-  // make sure that this is a workspace file
-  if (Fl_Type::first && !is_workspace()) {
-    fltk3::message("Fluid Files can only be used in Workspace files.");
-    return 0;
-  }
-  // files can be children of folders and children of targets
-  Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_target() && !p->is_folder()) 
-    p = p->parent;
-  if (!p) {
-    fltk3::message("A Fluid File reference can only be added to a Target or Folder!");
-    return 0;
-  }
-  Fl_Fluid_File_Type *o = new Fl_Fluid_File_Type();
-  o->name("main_ui.fl");
-  o->add(p);
-  o->factory = this;
-  return o;
-}
-
-// ------------ Fluid File -----------------------------------------------------
-
-Fl_Code_File_Type Fl_Code_File_type;
-
-Fl_Type *Fl_Code_File_Type::make() {
-  // make sure that this is a workspace file
-  if (Fl_Type::first && !is_workspace()) {
-    fltk3::message("C/C++ Files can only be used in Workspace files.");
-    return 0;
-  }
-  // files can be children of folders and children of targets
-  Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_target() && !p->is_folder()) 
-    p = p->parent;
-  if (!p) {
-    fltk3::message("A C/C++ File reference can only be added to a Target or Folder!");
-    return 0;
-  }
-  Fl_Code_File_Type *o = new Fl_Code_File_Type();
-  o->name("main.cxx");
-  o->add(p);
-  o->factory = this;
-  return o;
 }
 
 // ------------ Folder ---------------------------------------------------------

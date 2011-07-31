@@ -50,6 +50,8 @@ void set_modflag(int mf);
 extern unsigned int wks_env;
 extern char *wks_name;
 
+enum { ENV_NONE=0, ENV_ALL=0x007f, ENV_ALL_SHELL=0x0003, ENV_MAKE=0x0001, ENV_CMAKE=0x0002, ENV_ALL_VC=0x001c, ENV_VC6=0x0004, ENV_VC2008=0x0008, ENV_VC2010=0x0010, ENV_ALL_XC=0x0060, ENV_XC3=0x0020, ENV_XC4=0x0040 }; 
+
 class Fl_Type {
 
   friend class Widget_Browser;
@@ -258,7 +260,7 @@ public:
   ~Fl_File_Type() {
     if (pFilename) free(pFilename);
   }
-  const char *type_name() { return "file"; }
+  const char *type_name() { return "file_ref"; }
   Fl_Type *make();
   virtual int is_file() const { return 1; }
   virtual int pixmapID() { return 53; } // FIXME: draw icon
@@ -274,34 +276,6 @@ public:
   char is_cplusplus_header();
 };
 extern Fl_File_Type Fl_File_type;
-
-class Fl_Fluid_File_Type : public Fl_File_Type {
-public:
-  Fl_Fluid_File_Type() :
-  Fl_File_Type() {
-  }
-  ~Fl_Fluid_File_Type() {
-  }
-  const char *type_name() { return "fluid_file"; }
-  Fl_Type *make();
-  virtual int is_parent() const { return 1; } 
-  virtual int is_fluid_file() const { return 1; }
-  virtual int pixmapID() { return 53; }
-};
-extern Fl_Fluid_File_Type Fl_Fluid_File_type;
-
-class Fl_Code_File_Type : public Fl_File_Type {
-public:
-  Fl_Code_File_Type() :
-  Fl_File_Type() {
-  }
-  ~Fl_Code_File_Type() {
-  }
-  const char *type_name() { return "code_file"; }
-  Fl_Type *make();
-  virtual int pixmapID() { return 55; }
-};
-extern Fl_Code_File_Type Fl_Code_File_type;
 
 class Fl_Folder_Type : public Fl_Workspace_Type {
 public:

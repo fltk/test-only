@@ -54,8 +54,6 @@ widget_class Fl_Environment_Choice {open
 } {
   decl {unsigned int pEnv;} {protected local
   }
-  decl {enum { ENV_NONE=0, ENV_ALL=0x007f, ENV_ALL_SHELL=0x0003, ENV_MAKE=0x0001, ENV_CMAKE=0x0002, ENV_ALL_VC=0x001c, ENV_VC6=0x0004, ENV_VC2008=0x0008, ENV_VC2010=0x0010, ENV_ALL_XC=0x0060, ENV_XC3=0x0020, ENV_XC4=0x0040 };} {public local
-  }
   {fltk3::MenuButton} pEnvMenu {
     label Environent open
     xywh {0 0 170 20} labelsize 12
@@ -237,7 +235,8 @@ update_all();} {}
   }
 } 
 
-Function {show_workspace_panel()} {} {
+Function {show_workspace_panel()} {open
+} {
   codeblock {if (!workspace_panel)} {open
   } {
     {fltk3::Window} workspace_panel {
@@ -273,8 +272,9 @@ else
 if (wks_env)  
   pEnv->value(wks_env);  
 else
-  pEnv->value(Fl_Environment_Choice::ENV_ALL);
-workspace_panel->show();} {}
+  pEnv->value(ENV_ALL);
+workspace_panel->show();} {selected
+  }
 } 
 
 Function {make_app_target_panel()} {} {
@@ -388,7 +388,7 @@ Function {file_panel_ok_cb(fltk3::Widget*, void *v)} {open private return_type v
 Function {make_file_panel()} {open
 } {
   {fltk3::Window} {} {
-    label {File Properties} open selected
+    label {File Properties} open
     xywh {510 319 405 136} type Double labelsize 11 align 80 resizable hotspot
     code0 {o->size_range(o->w(), o->h());}
     class Fl_Panel non_modal visible
