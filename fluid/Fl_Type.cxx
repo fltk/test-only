@@ -1078,7 +1078,8 @@ extern char is_workspace();
 
 Fl_Workspace_Type::Fl_Workspace_Type()
 : Fl_Type(),
-  pEnv(ENV_ALL),
+  pBuildEnv(ENV_ALL),
+  pListEnv(ENV_ALL),
   pNUUID(0), pnUUID(0), 
   pUUIDName(0L), pUUID(0) 
 {
@@ -1179,9 +1180,13 @@ void Fl_Workspace_Type::write_properties() {
     write_word(buf);
     write_word(pUUID[i]);
   }
-  if (environments()!=ENV_ALL) {
+  if (build_env()!=ENV_ALL) {
     write_indent(level+1);
-    write_string("environments %d", environments());
+    write_string("build_env %d", build_env());
+  }
+  if (list_env()!=ENV_ALL) {
+    write_indent(level+1);
+    write_string("list_env %d", list_env());
   }
 }
 
@@ -1190,8 +1195,13 @@ char Fl_Workspace_Type::read_property(const char *name) {
     char buf[80];
     strcpy(buf, name+5);
     set_UUID(buf, read_word());
-  } else if (!strcmp(name,"environments")) {
-    environments(atoi(read_word()));
+  } else if (!strcmp(name,"environments")) { // FIXME: delete this
+    int v = atoi(read_word());
+    build_env(v); list_env(v);
+  } else if (!strcmp(name,"build_env")) {
+    build_env(atoi(read_word()));
+  } else if (!strcmp(name,"list_env")) {
+    list_env(atoi(read_word()));
   } else {
     return Fl_Type::read_property(name);
   }
@@ -1247,10 +1257,18 @@ Fl_Type *Fl_Target_Type::make() {
   return 0L;
 }
 
-Fl_Target_Type *Fl_Target_Type::find(const char *name) {
+Fl_Target_Type *Fl_Target_Type::find(const char *name, char end) {
+  // find a partial string, if 'end' is set to a character
+  char buf[2048];
+  strcpy(buf, name);
+  if (end) {
+    char *sep = strchr(buf, end);
+    if (sep) *sep = 0;
+  }
+  // now find the target by name (stored in 'buf')
   Fl_Type *tgt = first;
   while (tgt) {
-    if (tgt->is_target() && strcmp(tgt->name(), name)==0)
+    if (tgt->is_target() && strcmp(tgt->name(), buf)==0)
       return (Fl_Target_Type*)tgt;
     tgt = tgt->next;
   }

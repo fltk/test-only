@@ -183,7 +183,7 @@ public:
 typedef int (Fl_Type::*RTTI_Query)() const;
 
 class Fl_Workspace_Type : public Fl_Type {  
-  unsigned int pEnv;
+  unsigned int pBuildEnv, pListEnv;
   int pNUUID, pnUUID;
   char **pUUIDName;
   char **pUUID;
@@ -202,8 +202,14 @@ public:
   virtual int is_workspace_type() const { return 1; }
   virtual int dnd_available();
   virtual int dnd_paste();
-  void environments(unsigned int e) { pEnv = e; }
-  unsigned int environments() { return pEnv; }
+  
+  void build_env(unsigned int e) { pBuildEnv = e; }
+  unsigned int build_env() { return pBuildEnv; }
+  int builds_in(unsigned int env) { return ((pBuildEnv&env)!=0); }
+  
+  void list_env(unsigned int e) { pListEnv = e; }
+  unsigned int list_env() { return pListEnv; }
+  int lists_in(unsigned int env) { return (((pBuildEnv|pListEnv)&env)!=0); }
 };
 
 class Fl_Target_Type : public Fl_Workspace_Type {
@@ -218,7 +224,7 @@ public:
   virtual int is_parent() const { return 1; }
   virtual int is_target() const { return 1; }
   
-  static Fl_Target_Type *find(const char *name);
+  static Fl_Target_Type *find(const char *name, char end=0);
 };
 extern Fl_Target_Type Fl_Target_type;
 

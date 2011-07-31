@@ -80,15 +80,12 @@ this->labelsize(14);
 this->labelcolor(fltk3::FOREGROUND_COLOR);
 this->align(fltk3::Align(fltk3::ALIGN_TOP));
 this->when(fltk3::WHEN_RELEASE);
-{ pEnvMenu = new fltk3::MenuButton(0, 0, 170, 20, "Environent");
-  pEnvMenu->labelsize(12);
+{ pEnvMenu = new fltk3::MenuButton(0, 0, 170, 25, "- unknown -");
+  pEnvMenu->labelsize(9);
   pEnvMenu->menu(menu_pEnvMenu);
 } // fltk3::MenuButton* pEnvMenu
-{ pEnvList = new fltk3::Box(0, 20, 170, 20, "make, cmake, Xcode3 Xcode4, VC6, VC2010, VC2008");
-  pEnvList->labelsize(9);
-  pEnvList->align(fltk3::Align(193|fltk3::ALIGN_INSIDE));
-} // fltk3::Box* pEnvList
-fltk3::MenuItem *mi = menu_pEnvMenu;
+pEnvMenu->copy(menu_pEnvMenu);
+fltk3::MenuItem *mi = (fltk3::MenuItem*)pEnvMenu->menu();
 int level = 0;
 while (mi->label()) {
   unsigned int me = (intptr_t)mi->user_data();
@@ -114,7 +111,7 @@ end();
 void Fl_Environment_Choice::update_all() {
   // now update all menus
   unsigned int e = pEnv;
-  fltk3::MenuItem *mi = menu_pEnvMenu;
+  fltk3::MenuItem *mi = (fltk3::MenuItem*)pEnvMenu->menu();
   int level = 0;
   while (mi->label()) {
     unsigned int me = (intptr_t)mi->user_data();
@@ -138,9 +135,9 @@ void Fl_Environment_Choice::update_all() {
   
   // update the text
   if (pEnv==ENV_ALL) {
-    pEnvList->label("- all -");
+    pEnvMenu->label("- all -");
   } else if (pEnv==ENV_NONE) {
-    pEnvList->label("- none -");
+    pEnvMenu->label("- none -");
   } else {
     char buf[1024]; buf[0] = 0;
     if (pEnv&ENV_MAKE) strcat(buf, "make, ");
@@ -152,7 +149,7 @@ void Fl_Environment_Choice::update_all() {
     if (pEnv&ENV_XC4) strcat(buf, "Xcode4, ");
     int n = strlen(buf);
     if (n>2) buf[n-2] = 0;
-    pEnvList->copy_label(buf);
+    pEnvMenu->copy_label(buf);
   }
 }
 
@@ -254,7 +251,7 @@ static void cb_(fltk3::Input* o, void* v) {
       snprintf(buf, sizeof(buf), "File Properties (%d files)", Fl_Panel::numselected);
     } else {
       o->static_value(Fl_Panel::current_file()->filename());
-      o->show();
+      o->activate();
       snprintf(buf, sizeof(buf), "%s Properties", Fl_Panel::current_file()->name());
     }
     the_file_panel->label(buf);
@@ -266,16 +263,34 @@ static void cb_(fltk3::Input* o, void* v) {
   };
 }
 
-static void cb_1(Fl_Environment_Choice* o, void* v) {
+static void cb_Build(Fl_Environment_Choice* o, void* v) {
   if (v == Fl_Panel::LOAD) {
-    o->value(Fl_Panel::current_file()->environments());
+    o->value(Fl_Panel::current_file()->build_env());
   } else {
     int mod = 0;
     unsigned int e = o->value();
     for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
       if (t->selected && t->is_file()) {
-        if (((Fl_File_Type*)t)->environments() != e) {
-          ((Fl_File_Type*)t)->environments(e);
+        if (((Fl_File_Type*)t)->build_env() != e) {
+          ((Fl_File_Type*)t)->build_env(e);
+          mod = 1;
+        }
+      }
+    }
+    if (mod) set_modflag(1);
+  };
+}
+
+static void cb_List(Fl_Environment_Choice* o, void* v) {
+  if (v == Fl_Panel::LOAD) {
+    o->value(Fl_Panel::current_file()->list_env());
+  } else {
+    int mod = 0;
+    unsigned int e = o->value();
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_file()) {
+        if (((Fl_File_Type*)t)->list_env() != e) {
+          ((Fl_File_Type*)t)->list_env(e);
           mod = 1;
         }
       }
@@ -320,7 +335,7 @@ Fl_Panel* make_file_panel() {
       } // fltk3::Input* o
       o->end();
     } // fltk3::Group* o
-    { Fl_Environment_Choice* o = new Fl_Environment_Choice(75, 45, 170, 40);
+    { Fl_Environment_Choice* o = new Fl_Environment_Choice(75, 45, 170, 25, "Build in:");
       o->box(fltk3::FLAT_BOX);
       o->color(fltk3::BACKGROUND_COLOR);
       o->selection_color(fltk3::SELECTION_COLOR);
@@ -328,8 +343,20 @@ Fl_Panel* make_file_panel() {
       o->labelfont(0);
       o->labelsize(12);
       o->labelcolor(fltk3::FOREGROUND_COLOR);
-      o->callback((fltk3::Callback*)cb_1);
-      o->align(fltk3::Align(fltk3::ALIGN_CENTER));
+      o->callback((fltk3::Callback*)cb_Build);
+      o->align(fltk3::Align(fltk3::ALIGN_LEFT));
+      o->when(fltk3::WHEN_RELEASE_ALWAYS);
+    } // Fl_Environment_Choice* o
+    { Fl_Environment_Choice* o = new Fl_Environment_Choice(75, 75, 170, 25, "List in:");
+      o->box(fltk3::FLAT_BOX);
+      o->color(fltk3::BACKGROUND_COLOR);
+      o->selection_color(fltk3::SELECTION_COLOR);
+      o->labeltype(fltk3::NORMAL_LABEL);
+      o->labelfont(0);
+      o->labelsize(12);
+      o->labelcolor(fltk3::FOREGROUND_COLOR);
+      o->callback((fltk3::Callback*)cb_List);
+      o->align(fltk3::Align(fltk3::ALIGN_LEFT));
       o->when(fltk3::WHEN_RELEASE_ALWAYS);
     } // Fl_Environment_Choice* o
     { fltk3::Group* o = new fltk3::Group(9, 100, 400, 20);

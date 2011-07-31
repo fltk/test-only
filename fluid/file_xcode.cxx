@@ -47,13 +47,6 @@ int write_fltk_ide_xcode4() {
   //    template is ide/Xcode4/FLTK.xcodeproj/project.pbxproj.tmpl
   // destination is ide/Xcode4/FLTK.xcodeproj/project.pbxproj
 
-  /* find the target named "Fluid" */
-  Fl_Type *tgt = Fl_Target_Type::find("Fluid");
-  if (!tgt) {
-    printf("FLUID target not found\n");
-    return -1;
-  }
-  
   char buf[2048];
   strcpy(buf, filename);
   strcpy((char*)fltk3::filename_name(buf), "ide/Xcode4/FLTK.xcodeproj/project.pbxproj");
@@ -75,10 +68,15 @@ int write_fltk_ide_xcode4() {
         continue;
       } else { // single hash is a command
         copyLine = 0;
-        if (strncmp(hash, "#FluidBuildFileReferences;", 26)==0) {
+        if (strncmp(hash, "#BuildFileReferences(", 21)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+21, ')'); // keep tgt local
+          if (!tgt) {
+            printf("ERROR writing Xcode 4 file: target not found!");
+            return -1;
+          }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_cplusplus_code()) {
+            if (f->builds_in(ENV_XC4)) {
               char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
               char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
               fprintf(out, "\t\t%s /* %s in %s */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };\n", 
@@ -89,18 +87,24 @@ int write_fltk_ide_xcode4() {
                       f->filename_name());
             }
           }
-          hash += 26;
-        } else if (strncmp(hash, "#FluidFileReferences;", 21)==0) {
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#FileReferences(", 16)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+16, ')');
+          if (!tgt) {
+            printf("ERROR writing Xcode 4 file: target not found!");
+            return -1;
+          }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_cplusplus_code()) {
+            // FIXME: write a file type converter!
+            if (f->lists_in(ENV_XC4) && f->is_cplusplus_code()) {
               char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
               fprintf(out, "\t\t%s /* %s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = %s; path = ../../%s; sourceTree = SOURCE_ROOT; };\n", 
                       PBXFileRef,
                       f->filename_name(), 
                       f->filename_name(), 
                       f->filename());
-            } else if (f->is_cplusplus_header()) {
+            } else if (f->lists_in(ENV_XC4) && f->is_cplusplus_header()) {
               char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
               fprintf(out, "\t\t%s /* %s */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = %s; path = ../../%s; sourceTree = SOURCE_ROOT; };\n", 
                       PBXFileRef,
@@ -109,33 +113,48 @@ int write_fltk_ide_xcode4() {
                       f->filename());
             }
           }
-          hash += 21;
-        } else if (strncmp(hash, "#FluidHeadersGroup;", 19)==0) {
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#HeadersGroup(", 14)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+14, ')');
+          if (!tgt) {
+            printf("ERROR writing Xcode 4 file: target not found!");
+            return -1;
+          }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_cplusplus_header()) {
+            if (f->lists_in(ENV_XC4) && f->is_cplusplus_header()) {
               char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
               fprintf(out, "\t\t\t\t%s /* %s */,\n", 
                       PBXFileRef, 
                       f->filename_name());
             }
           }
-          hash += 19;
-        } else if (strncmp(hash, "#FluidSourcesGroup;", 19)==0) {
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#SourcesGroup(", 14)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+14, ')');
+          if (!tgt) {
+            printf("ERROR writing Xcode 4 file: target not found!");
+            return -1;
+          }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_cplusplus_code()) {
+            if (f->lists_in(ENV_XC4) && f->is_cplusplus_code()) {
               char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
               fprintf(out, "\t\t\t\t%s /* %s */,\n", 
                       PBXFileRef, 
                       f->filename_name());
             }
           }
-          hash += 19;
-        } else if (strncmp(hash, "#FluidSourcesBuildPhase;", 23)==0) {
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#HeadersBuildPhase(", 19)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+19, ')');
+          if (!tgt) {
+            printf("ERROR writing Xcode 4 file: target not found!");
+            return -1;
+          }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_cplusplus_code()) {
+            if (f->builds_in(ENV_XC4) && f->is_cplusplus_header()) {
               char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
               fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
                       PBXBuildFile, 
@@ -143,7 +162,24 @@ int write_fltk_ide_xcode4() {
                       "Sources");
             }
           }
-          hash += 23;
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#SourcesBuildPhase(", 19)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+19, ')');
+          if (!tgt) {
+            printf("ERROR writing Xcode 4 file: target not found!");
+            return -1;
+          }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->builds_in(ENV_XC4) && f->is_cplusplus_code()) {
+              char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
+              fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
+                      PBXBuildFile, 
+                      f->filename_name(), 
+                      "Sources");
+            }
+          }
+          hash = strchr(hash, ';')+1;
         } else {
           printf("Unknown command in template: <<%s>>\n", hash);
           copyLine = 1;

@@ -49,14 +49,14 @@ decl {extern fltk3::Pixmap menu_all_pixmap;} {public global
 } 
 
 widget_class Fl_Environment_Choice {open
-  xywh {494 182 170 40} type Double
+  xywh {494 182 170 25} type Double
   class {fltk3::Group} visible position_relative
 } {
   decl {unsigned int pEnv;} {protected local
   }
   {fltk3::MenuButton} pEnvMenu {
-    label Environent open
-    xywh {0 0 170 20} labelsize 12
+    label {- unknown -} open
+    xywh {0 0 170 25} labelsize 9
   } {
     MenuItem pMenuAll {
       label {All Environments}
@@ -154,11 +154,8 @@ if (callback())
       }
     }
   }
-  {fltk3::Box} pEnvList {
-    label {make, cmake, Xcode3 Xcode4, VC6, VC2010, VC2008}
-    xywh {0 20 170 20} labelsize 9 align 209
-  }
-  code {fltk3::MenuItem *mi = menu_pEnvMenu;
+  code {pEnvMenu->copy(menu_pEnvMenu);
+fltk3::MenuItem *mi = (fltk3::MenuItem*)pEnvMenu->menu();
 int level = 0;
 while (mi->label()) {
   unsigned int me = (intptr_t)mi->user_data();
@@ -181,7 +178,7 @@ while (mi->label()) {
   } {
     code {// now update all menus
 unsigned int e = pEnv;
-fltk3::MenuItem *mi = menu_pEnvMenu;
+fltk3::MenuItem *mi = (fltk3::MenuItem*)pEnvMenu->menu();
 int level = 0;
 while (mi->label()) {
   unsigned int me = (intptr_t)mi->user_data();
@@ -205,9 +202,9 @@ while (mi->label()) {
 
 // update the text
 if (pEnv==ENV_ALL) {
-  pEnvList->label("- all -");
+  pEnvMenu->label("- all -");
 } else if (pEnv==ENV_NONE) {
-  pEnvList->label("- none -");
+  pEnvMenu->label("- none -");
 } else {
   char buf[1024]; buf[0] = 0;
   if (pEnv&ENV_MAKE) strcat(buf, "make, ");
@@ -219,7 +216,7 @@ if (pEnv==ENV_ALL) {
   if (pEnv&ENV_XC4) strcat(buf, "Xcode4, ");
   int n = strlen(buf);
   if (n>2) buf[n-2] = 0;
-  pEnvList->copy_label(buf);
+  pEnvMenu->copy_label(buf);
 }} {}
   }
   Function {value(unsigned int v)} {
@@ -317,7 +314,7 @@ Function {make_file_panel()} {open
       snprintf(buf, sizeof(buf), "File Properties (%d files)", Fl_Panel::numselected);
     } else {
       o->static_value(Fl_Panel::current_file()->filename());
-      o->show();
+      o->activate();
       snprintf(buf, sizeof(buf), "%s Properties", Fl_Panel::current_file()->name());
     }
     the_file_panel->label(buf);
@@ -326,28 +323,49 @@ Function {make_file_panel()} {open
       Fl_Panel::current_file()->filename(o->value());
       if (o->changed()) set_modflag(1);
     }
-  }}
+  }} selected
         tooltip {The label text for the widget.
 Use Ctrl-J for newlines.} xywh {75 15 170 20} labelsize 12 when 1 textsize 12 resizable
       }
     }
     {fltk3::MenuButton} {} {
+      label {Build in:}
       callback {if (v == Fl_Panel::LOAD) {
-    o->value(Fl_Panel::current_file()->environments());
+    o->value(Fl_Panel::current_file()->build_env());
   } else {
     int mod = 0;
     unsigned int e = o->value();
     for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
       if (t->selected && t->is_file()) {
-        if (((Fl_File_Type*)t)->environments() != e) {
-          ((Fl_File_Type*)t)->environments(e);
+        if (((Fl_File_Type*)t)->build_env() != e) {
+          ((Fl_File_Type*)t)->build_env(e);
           mod = 1;
         }
       }
     }
     if (mod) set_modflag(1);
   }} open
-      xywh {75 45 170 40} box FLAT_BOX labelsize 12
+      xywh {75 45 170 25} box FLAT_BOX labelsize 12 align 4
+      class Fl_Environment_Choice
+    } {}
+    {fltk3::MenuButton} {} {
+      label {List in:}
+      callback {if (v == Fl_Panel::LOAD) {
+    o->value(Fl_Panel::current_file()->list_env());
+  } else {
+    int mod = 0;
+    unsigned int e = o->value();
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_file()) {
+        if (((Fl_File_Type*)t)->list_env() != e) {
+          ((Fl_File_Type*)t)->list_env(e);
+          mod = 1;
+        }
+      }
+    }
+    if (mod) set_modflag(1);
+  }} open
+      xywh {75 75 170 25} box FLAT_BOX labelsize 12 align 4
       class Fl_Environment_Choice
     } {}
     {fltk3::Group} {} {

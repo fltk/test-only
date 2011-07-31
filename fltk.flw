@@ -7,65 +7,81 @@ folder Applications {open
 } {
   app_target Fluid {open
   } {
-    folder Headers {} {
+    folder Headers {open
+    } {
       file_ref {CodeEditor.h} {
         uuid_Xcode4_PBXFileRef {6A73CBE8-D82E-4770-B122-1162C650A349}
+        build_env 0
         filename_and_path {fluid/CodeEditor.h}
       }
       file_ref {Fl_Type.h} {
         uuid_Xcode4_PBXFileRef {6FEAD9ED-49D4-4725-90E9-2F5F252A8BB1}
+        build_env 0
         filename_and_path {fluid/Fl_Type.h}
       }
       file_ref {Fl_Widget_Type.h} {
         uuid_Xcode4_PBXFileRef {8D769D5B-8552-4F3F-870C-EB5F4D88BA7E}
+        build_env 0
         filename_and_path {fluid/Fl_Widget_Type.h}
       }
       file_ref {Fluid_Image.h} {
         uuid_Xcode4_PBXFileRef {65197118-1119-4E36-830B-52295D8E04FE}
+        build_env 0
         filename_and_path {fluid/Fluid_Image.h}
       }
       file_ref {Shortcut_Button.h} {
         uuid_Xcode4_PBXFileRef {E7FEDB0D-1218-4316-AB2F-F5E1E2C6FAA8}
+        build_env 0
         filename_and_path {fluid/Shortcut_Button.h}
       }
       file_ref {about_panel.h} {
         uuid_Xcode4_PBXFileRef {F420CC30-9E28-43A1-8F55-04F2A4285E2D}
+        build_env 0
         filename_and_path {fluid/about_panel.h}
       }
       file_ref {alignment_panel.h} {
         uuid_Xcode4_PBXFileRef {26103935-2D50-4B44-97C7-EE9AA857DE61}
+        build_env 0
         filename_and_path {fluid/alignment_panel.h}
       }
       file_ref {comments.h} {
         uuid_Xcode4_PBXFileRef {19297348-7E5A-41AE-99F6-7AB10245A1D8}
+        build_env 0
         filename_and_path {fluid/comments.h}
       }
       file_ref {function_panel.h} {
         uuid_Xcode4_PBXFileRef {88AC76F8-37BC-48CF-B6D1-33DCD67DFD98}
+        build_env 0
         filename_and_path {fluid/function_panel.h}
       }
       file_ref {print_panel.h} {
         uuid_Xcode4_PBXFileRef {D0E0882D-24C1-4A93-AF9E-109EC52D185C}
+        build_env 0
         filename_and_path {fluid/print_panel.h}
       }
       file_ref {template_panel.h} {
         uuid_Xcode4_PBXFileRef {000422E2-90D4-45AD-A495-95AC4385D9FE}
+        build_env 0
         filename_and_path {fluid/template_panel.h}
       }
       file_ref {undo.h} {
         uuid_Xcode4_PBXFileRef {88491B5D-61FA-4D41-954E-528D7BD9DF52}
+        build_env 0
         filename_and_path {fluid/undo.h}
       }
       file_ref {widget_panel.h} {
         uuid_Xcode4_PBXFileRef {E66E13F7-CB1B-4DE1-801E-C7601315D72B}
+        build_env 0
         filename_and_path {fluid/widget_panel.h}
       }
       file_ref {workspace_panel.h} {
         uuid_Xcode4_PBXFileRef {EAF89B48-F485-4F7C-A942-5E212E45BAB1}
+        build_env 0
         filename_and_path {fluid/workspace_panel.h}
       }
     }
-    folder Sources {} {
+    folder Sources {open
+    } {
       file_ref {CodeEditor.cxx} {
         uuid_Xcode4_PBXBuildFile {21531985-E735-4E4D-8AD4-601ECF511590}
         uuid_Xcode4_PBXFileRef {233B84BF-4134-4BEE-AB2F-9DFBE2B8842A}
@@ -194,898 +210,1494 @@ folder Libraries {open
 } {
   app_target fltk {open
   } {
-    folder Headers {} {
+    folder Headers {open
+    } {
       file_ref {Adjuster.h} {
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Adjuster.h}
       }
       file_ref {ask.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/ask.h}
       }
       file_ref {Bitmap.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Bitmap.h}
       }
       file_ref {BMPImage.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/BMPImage.h}
       }
       file_ref {Box.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Box.h}
       }
       file_ref {Browser_.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Browser_.h}
       }
       file_ref {Browser.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Browser.h}
       }
       file_ref {Button.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Button.h}
       }
       file_ref {Cairo.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Cairo.h}
       }
       file_ref {CairoWindow.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/CairoWindow.h}
       }
       file_ref {Chart.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Chart.h}
       }
       file_ref {CheckBrowser.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/CheckBrowser.h}
       }
       file_ref {CheckButton.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/CheckButton.h}
       }
       file_ref {Choice.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Choice.h}
       }
       file_ref {Clock.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Clock.h}
       }
       file_ref {ColorChooser.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/ColorChooser.h}
       }
       file_ref {Counter.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Counter.h}
       }
       file_ref {Device.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Device.h}
       }
       file_ref {Dial.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Dial.h}
       }
       file_ref {dirent.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/dirent.h}
       }
       file_ref {DoubleWindow.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/DoubleWindow.h}
       }
       file_ref {draw.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/draw.h}
       }
       file_ref {enumerations.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/enumerations.h}
       }
       file_ref {Export.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Export.h}
       }
       file_ref {FileBrowser.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/FileBrowser.h}
       }
       file_ref {FileChooser.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/FileChooser.h}
       }
       file_ref {FileIcon.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/FileIcon.h}
       }
       file_ref {FileInput.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/FileInput.h}
       }
       file_ref {filename.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/filename.h}
       }
       file_ref {FillDial.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/FillDial.h}
       }
       file_ref {FillSlider.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/FillSlider.h}
       }
       file_ref {FloatInput.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/FloatInput.h}
       }
       file_ref {forms.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/forms.h}
       }
       file_ref {FormsBitmap.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/FormsBitmap.h}
       }
       file_ref {FormsPixmap.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/FormsPixmap.h}
       }
       file_ref {Free.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Free.h}
       }
       file_ref {GIFImage.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/GIFImage.h}
       }
       file_ref {gl.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/gl.h}
       }
       file_ref {gl2opengl.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/gl2opengl.h}
       }
       file_ref {glDraw.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/glDraw.h}
       }
       file_ref {glu.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/glu.h}
       }
       file_ref {glut.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/glut.h}
       }
       file_ref {GlWindow.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/GlWindow.h}
       }
       file_ref {Group.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Group.h}
       }
       file_ref {HelpDialog.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/HelpDialog.h}
       }
       file_ref {HelpView.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/HelpView.h}
       }
       file_ref {HoldBrowser.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/HoldBrowser.h}
       }
       file_ref {HorFillSlider.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/HorFillSlider.h}
       }
       file_ref {HorNiceSlider.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/HorNiceSlider.h}
       }
       file_ref {HorSlider.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/HorSlider.h}
       }
       file_ref {HorValueSlider.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/HorValueSlider.h}
       }
       file_ref {Image.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Image.h}
       }
       file_ref {Input_.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Input_.h}
       }
       file_ref {Input.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Input.h}
       }
       file_ref {InputChoice.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/InputChoice.h}
       }
       file_ref {IntInput.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/IntInput.h}
       }
       file_ref {JPEGImage.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/JPEGImage.h}
       }
       file_ref {LightButton.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/LightButton.h}
       }
       file_ref {LineDial.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/LineDial.h}
       }
       file_ref {math.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/math.h}
       }
       file_ref {Menu_.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Menu_.h}
       }
       file_ref {Menu.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Menu.h}
       }
       file_ref {MenuBar.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/MenuBar.h}
       }
       file_ref {MenuButton.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/MenuButton.h}
       }
       file_ref {MenuItem.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/MenuItem.h}
       }
       file_ref {MenuWindow.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/MenuWindow.h}
       }
       file_ref {message.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/message.h}
       }
       file_ref {MultiBrowser.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/MultiBrowser.h}
       }
       file_ref {MultiLabel.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/MultiLabel.h}
       }
       file_ref {MultilineInput.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/MultilineInput.h}
       }
       file_ref {MultilineOutput.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/MultilineOutput.h}
       }
       file_ref {names.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/names.h}
       }
       file_ref {NativeFileChooser.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/NativeFileChooser.h}
       }
       file_ref {NiceSlider.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/NiceSlider.h}
       }
       file_ref {Object.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Object.h}
       }
       file_ref {osx.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/osx.h}
       }
       file_ref {Output.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Output.h}
       }
       file_ref {OverlayWindow.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/OverlayWindow.h}
       }
       file_ref {PackedGroup.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/PackedGroup.h}
       }
       file_ref {PagedDevice.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/PagedDevice.h}
       }
       file_ref {Pixmap.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Pixmap.h}
       }
       file_ref {Plugin.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Plugin.h}
       }
       file_ref {PNGImage.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/PNGImage.h}
       }
       file_ref {PNMImage.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/PNMImage.h}
       }
       file_ref {Positioner.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Positioner.h}
       }
       file_ref {PostScript.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/PostScript.h}
       }
       file_ref {Preferences.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Preferences.h}
       }
       file_ref {Printer.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Printer.h}
       }
       file_ref {Progress.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Progress.h}
       }
       file_ref {RadioButton.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/RadioButton.h}
       }
       file_ref {RadioLightButton.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/RadioLightButton.h}
       }
       file_ref {RadioRoundButton.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/RadioRoundButton.h}
       }
       file_ref {Rectangle.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Rectangle.h}
       }
       file_ref {RepeatButton.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/RepeatButton.h}
       }
       file_ref {ReturnButton.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/ReturnButton.h}
       }
       file_ref {RGBImage.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/RGBImage.h}
       }
       file_ref {Roller.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Roller.h}
       }
       file_ref {RoundButton.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/RoundButton.h}
       }
       file_ref {RoundClock.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/RoundClock.h}
       }
       file_ref {run.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/run.h}
       }
       file_ref {Scrollbar.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Scrollbar.h}
       }
       file_ref {ScrollGroup.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/ScrollGroup.h}
       }
       file_ref {SecretInput.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/SecretInput.h}
       }
       file_ref {SelectBrowser.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/SelectBrowser.h}
       }
       file_ref {SharedImage.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/SharedImage.h}
       }
       file_ref {show_colormap.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/show_colormap.h}
       }
       file_ref {showInput.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/showInput.h}
       }
       file_ref {SimpleCounter.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/SimpleCounter.h}
       }
       file_ref {SingleWindow.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/SingleWindow.h}
       }
       file_ref {Slider.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Slider.h}
       }
       file_ref {Spinner.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Spinner.h}
       }
       file_ref {SysMenuBar.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/SysMenuBar.h}
       }
       file_ref {TabGroup.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/TabGroup.h}
       }
       file_ref {Table.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Table.h}
       }
       file_ref {TableRow.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/TableRow.h}
       }
       file_ref {TextBuffer.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/TextBuffer.h}
       }
       file_ref {TextDisplay.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/TextDisplay.h}
       }
       file_ref {TextEditor.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/TextEditor.h}
       }
       file_ref {TiledGroup.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/TiledGroup.h}
       }
       file_ref {TiledImage.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/TiledImage.h}
       }
       file_ref {Timer.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Timer.h}
       }
       file_ref {ToggleButton.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/ToggleButton.h}
       }
       file_ref {ToggleLightButton.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/ToggleLightButton.h}
       }
       file_ref {ToggleRoundButton.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/ToggleRoundButton.h}
       }
       file_ref {Tooltip.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Tooltip.h}
       }
       file_ref {Tree.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Tree.h}
       }
       file_ref {TreeItem.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/TreeItem.h}
       }
       file_ref {TreeItemArray.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/TreeItemArray.h}
       }
       file_ref {TreePrefs.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/TreePrefs.h}
       }
       file_ref {types.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/types.h}
       }
       file_ref {utf8.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/utf8.h}
       }
       file_ref {Valuator.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Valuator.h}
       }
       file_ref {ValueInput.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/ValueInput.h}
       }
       file_ref {ValueOutput.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/ValueOutput.h}
       }
       file_ref {ValueSlider.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/ValueSlider.h}
       }
       file_ref {Widget.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Widget.h}
       }
       file_ref {win32.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/win32.h}
       }
       file_ref {Window.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Window.h}
       }
       file_ref {WizardGroup.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/WizardGroup.h}
       }
       file_ref {Wrapper.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Wrapper.h}
       }
       file_ref {x.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/x.h}
       }
       file_ref {XBMImage.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/XBMImage.h}
       }
       file_ref {XPMImage.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/XPMImage.h}
       }
       file_ref {Xutf8.h} {
+        build_env 0
+        list_env 0
         filename_and_path {fltk3/Xutf8.h}
       }
     }
-    folder Sources {} {
+    folder Sources {open
+    } {
       file_ref {Fl_cocoa.mm} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_cocoa.mm}
       }
       file_ref {Fl_Native_File_Chooser_MAC.mm} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Native_File_Chooser_MAC.mm}
       }
       file_ref {Fl_Quartz_Printer.mm} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Quartz_Printer.mm}
       }
-      file_ref {Fl.cxx} {
+      file_ref {Fl.cxx} {selected
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl.cxx}
       }
       file_ref {Fl_Adjuster.cxx} {
+        build_env 64
+        list_env 64
         filename_and_path {src/Fl_Adjuster.cxx}
       }
       file_ref {Fl_Bitmap.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Bitmap.cxx}
       }
       file_ref {Fl_Box.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Box.cxx}
       }
       file_ref {Fl_Browser.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Browser.cxx}
       }
       file_ref {Fl_Browser_.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Browser_.cxx}
       }
       file_ref {Fl_Browser_load.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Browser_load.cxx}
       }
       file_ref {Fl_Button.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Button.cxx}
       }
       file_ref {Fl_Chart.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Chart.cxx}
       }
       file_ref {Fl_Check_Browser.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Check_Browser.cxx}
       }
       file_ref {Fl_Check_Button.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Check_Button.cxx}
       }
       file_ref {Fl_Choice.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Choice.cxx}
       }
       file_ref {Fl_Clock.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Clock.cxx}
       }
       file_ref {Fl_Color_Chooser.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Color_Chooser.cxx}
       }
       file_ref {Fl_Counter.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Counter.cxx}
       }
       file_ref {Fl_Device.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Device.cxx}
       }
       file_ref {Fl_Dial.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Dial.cxx}
       }
       file_ref {Fl_Double_Window.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Double_Window.cxx}
       }
       file_ref {Fl_File_Browser.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_File_Browser.cxx}
       }
       file_ref {Fl_File_Chooser.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_File_Chooser.cxx}
       }
       file_ref {Fl_File_Chooser2.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_File_Chooser2.cxx}
       }
       file_ref {Fl_File_Icon.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_File_Icon.cxx}
       }
       file_ref {Fl_File_Input.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_File_Input.cxx}
       }
       file_ref {Fl_Group.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Group.cxx}
       }
       file_ref {Fl_Help_View.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Help_View.cxx}
       }
       file_ref {Fl_Image.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Image.cxx}
       }
       file_ref {Fl_Input.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Input.cxx}
       }
       file_ref {Fl_Input_.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Input_.cxx}
       }
       file_ref {Fl_Light_Button.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Light_Button.cxx}
       }
       file_ref {Fl_Menu.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Menu.cxx}
       }
       file_ref {Fl_Menu_.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Menu_.cxx}
       }
       file_ref {Fl_Menu_Bar.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Menu_Bar.cxx}
       }
       file_ref {Fl_Menu_Button.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Menu_Button.cxx}
       }
       file_ref {Fl_Menu_Window.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Menu_Window.cxx}
       }
       file_ref {Fl_Menu_add.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Menu_add.cxx}
       }
       file_ref {Fl_Menu_global.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Menu_global.cxx}
       }
       file_ref {Fl_Multi_Label.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Multi_Label.cxx}
       }
       file_ref {Fl_Native_File_Chooser.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Native_File_Chooser.cxx}
       }
       file_ref {Fl_Overlay_Window.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Overlay_Window.cxx}
       }
       file_ref {Fl_Pack.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Pack.cxx}
       }
       file_ref {Fl_Paged_Device.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Paged_Device.cxx}
       }
       file_ref {Fl_Pixmap.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Pixmap.cxx}
       }
       file_ref {Fl_Positioner.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Positioner.cxx}
       }
       file_ref {Fl_Printer.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Printer.cxx}
       }
       file_ref {Fl_Preferences.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Preferences.cxx}
       }
       file_ref {Fl_Progress.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Progress.cxx}
       }
       file_ref {Fl_Repeat_Button.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Repeat_Button.cxx}
       }
       file_ref {Fl_Return_Button.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Return_Button.cxx}
       }
       file_ref {Fl_Roller.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Roller.cxx}
       }
       file_ref {Fl_Round_Button.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Round_Button.cxx}
       }
       file_ref {Fl_Scroll.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Scroll.cxx}
       }
       file_ref {Fl_Scrollbar.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Scrollbar.cxx}
       }
       file_ref {Fl_Shared_Image.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Shared_Image.cxx}
       }
       file_ref {Fl_Single_Window.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Single_Window.cxx}
       }
       file_ref {Fl_Slider.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Slider.cxx}
       }
       file_ref {Fl_Sys_Menu_Bar.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Sys_Menu_Bar.cxx}
       }
       file_ref {Fl_Table.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Table.cxx}
       }
       file_ref {Fl_Table_Row.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Table_Row.cxx}
       }
       file_ref {Fl_Tabs.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Tabs.cxx}
       }
       file_ref {Fl_Text_Buffer.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Text_Buffer.cxx}
       }
       file_ref {Fl_Text_Display.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Text_Display.cxx}
       }
       file_ref {Fl_Text_Editor.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Text_Editor.cxx}
       }
       file_ref {Fl_Tile.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Tile.cxx}
       }
       file_ref {Fl_Tiled_Image.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Tiled_Image.cxx}
       }
       file_ref {Fl_Tooltip.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Tooltip.cxx}
       }
       file_ref {Fl_Tree.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Tree.cxx}
       }
       file_ref {Fl_Tree_Item.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Tree_Item.cxx}
       }
       file_ref {Fl_Tree_Item_Array.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Tree_Item_Array.cxx}
       }
       file_ref {Fl_Tree_Prefs.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Tree_Prefs.cxx}
       }
       file_ref {Fl_Valuator.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Valuator.cxx}
       }
       file_ref {Fl_Value_Input.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Value_Input.cxx}
       }
       file_ref {Fl_Value_Output.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Value_Output.cxx}
       }
       file_ref {Fl_Value_Slider.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Value_Slider.cxx}
       }
       file_ref {Fl_Widget.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Widget.cxx}
       }
       file_ref {Fl_Window.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Window.cxx}
       }
       file_ref {Fl_Window_fullscreen.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Window_fullscreen.cxx}
       }
       file_ref {Fl_Window_hotspot.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Window_hotspot.cxx}
       }
       file_ref {Fl_Window_iconize.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Window_iconize.cxx}
       }
       file_ref {Fl_Wizard.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_Wizard.cxx}
       }
       file_ref {Fl_XBM_Image.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_XBM_Image.cxx}
       }
       file_ref {Fl_XPM_Image.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_XPM_Image.cxx}
       }
       file_ref {Fl_abort.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_abort.cxx}
       }
       file_ref {Fl_add_idle.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_add_idle.cxx}
       }
       file_ref {Fl_arg.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_arg.cxx}
       }
       file_ref {Fl_compose.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_compose.cxx}
       }
       file_ref {Fl_display.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_display.cxx}
       }
       file_ref {Fl_get_key.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_get_key.cxx}
       }
       file_ref {Fl_get_system_colors.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_get_system_colors.cxx}
       }
       file_ref {Fl_grab.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_grab.cxx}
       }
       file_ref {Fl_lock.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_lock.cxx}
       }
       file_ref {Fl_own_colormap.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_own_colormap.cxx}
       }
       file_ref {Fl_visual.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_visual.cxx}
       }
       file_ref {Fl_x.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/Fl_x.cxx}
       }
       file_ref {cmap.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/cmap.cxx}
       }
       file_ref {filename_absolute.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/filename_absolute.cxx}
       }
       file_ref {filename_expand.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/filename_expand.cxx}
       }
       file_ref {filename_ext.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/filename_ext.cxx}
       }
       file_ref {filename_isdir.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/filename_isdir.cxx}
       }
       file_ref {filename_list.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/filename_list.cxx}
       }
       file_ref {filename_match.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/filename_match.cxx}
       }
       file_ref {filename_setext.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/filename_setext.cxx}
       }
       file_ref {fl_arc.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_arc.cxx}
       }
       file_ref {fl_arci.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_arci.cxx}
       }
       file_ref {fl_ask.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_ask.cxx}
       }
       file_ref {fl_boxtype.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_boxtype.cxx}
       }
       file_ref {fl_call_main.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_call_main.cxx}
       }
       file_ref {fl_color.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_color.cxx}
       }
       file_ref {fl_cursor.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_cursor.cxx}
       }
       file_ref {fl_curve.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_curve.cxx}
       }
       file_ref {fl_diamond_box.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_diamond_box.cxx}
       }
       file_ref {fl_dnd.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_dnd.cxx}
       }
       file_ref {fl_draw.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_draw.cxx}
       }
       file_ref {fl_draw_image.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_draw_image.cxx}
       }
       file_ref {fl_draw_pixmap.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_draw_pixmap.cxx}
       }
       file_ref {fl_encoding_latin1.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_encoding_latin1.cxx}
       }
       file_ref {fl_encoding_mac_roman.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_encoding_mac_roman.cxx}
       }
       file_ref {fl_engraved_label.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_engraved_label.cxx}
       }
       file_ref {fl_file_dir.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_file_dir.cxx}
       }
       file_ref {fl_font.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_font.cxx}
       }
       file_ref {fl_gtk.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_gtk.cxx}
       }
       file_ref {fl_labeltype.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_labeltype.cxx}
       }
       file_ref {fl_line_style.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_line_style.cxx}
       }
       file_ref {fl_open_uri.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_open_uri.cxx}
       }
       file_ref {fl_oval_box.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_oval_box.cxx}
       }
       file_ref {fl_overlay.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_overlay.cxx}
       }
       file_ref {fl_overlay_visual.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_overlay_visual.cxx}
       }
       file_ref {fl_plastic.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_plastic.cxx}
       }
       file_ref {fl_read_image.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_read_image.cxx}
       }
       file_ref {fl_rect.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_rect.cxx}
       }
       file_ref {fl_round_box.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_round_box.cxx}
       }
       file_ref {fl_rounded_box.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_rounded_box.cxx}
       }
       file_ref {fl_scroll_area.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_scroll_area.cxx}
       }
       file_ref {fl_set_font.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_set_font.cxx}
       }
       file_ref {fl_set_fonts.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_set_fonts.cxx}
       }
       file_ref {fl_shadow_box.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_shadow_box.cxx}
       }
       file_ref {fl_shortcut.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_shortcut.cxx}
       }
       file_ref {fl_show_colormap.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_show_colormap.cxx}
       }
       file_ref {fl_symbols.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_symbols.cxx}
       }
       file_ref {fl_utf8.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_utf8.cxx}
       }
       file_ref {fl_utf.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_utf.cxx}
       }
       file_ref {fl_vertex.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/fl_vertex.cxx}
       }
       file_ref {flstring.c} {
+        build_env 0
+        list_env 0
         filename_and_path {src/flstring.c}
       }
       file_ref {numericsort.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/numericsort.cxx}
       }
       file_ref {ps_image.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/ps_image.cxx}
       }
       file_ref {scandir.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/scandir.cxx}
       }
       file_ref {screen_xywh.cxx} {
+        build_env 0
+        list_env 0
         filename_and_path {src/screen_xywh.cxx}
       }
       file_ref {vsnprintf.c} {
+        build_env 0
+        list_env 0
         filename_and_path {src/vsnprintf.c}
       }
       file_ref {case.c} {
+        build_env 0
+        list_env 0
         filename_and_path {src/xutf8/case.c}
       }
       file_ref {is_right2left.c} {
+        build_env 0
+        list_env 0
         filename_and_path {src/xutf8/is_right2left.c}
       }
       file_ref {is_spacing.c} {
+        build_env 0
+        list_env 0
         filename_and_path {src/xutf8/is_spacing.c}
       }
     }
@@ -1351,7 +1963,7 @@ folder Libraries {open
     }
   }
   app_target fltk_zlib {} {
-    folder Sources {open selected
+    folder Sources {open
     } {
       file_ref {adler32.c} {
         filename_and_path {zlib/adler32.c}

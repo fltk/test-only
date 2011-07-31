@@ -37,7 +37,6 @@ extern fltk3::Pixmap menu_all_pixmap;
 #include <fltk3/Group.h>
 #include <fltk3/MenuButton.h>
 extern void cb_pMenuAll(fltk3::Menu_*, void*);
-#include <fltk3/Box.h>
 
 class Fl_Environment_Choice : public fltk3::Group {
 public:
@@ -51,8 +50,6 @@ public:
 private:
   void cb_pMenuAll_i(fltk3::Menu_*, void*);
   static void cb_pMenuAll(fltk3::Menu_*, void*);
-public:
-  fltk3::Box *pEnvList;
 protected:
   void update_all();
 public:
@@ -63,6 +60,7 @@ public:
 extern fltk3::DoubleWindow *workspace_panel;
 #include <fltk3/Input.h>
 extern fltk3::Input *pName;
+#include <fltk3/Box.h>
 extern Fl_Environment_Choice *pEnv;
 #include <fltk3/Button.h>
 fltk3::DoubleWindow* show_workspace_panel();
