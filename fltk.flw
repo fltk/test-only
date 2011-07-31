@@ -209,730 +209,1018 @@ folder Libraries {open
 } {
   app_target fltk {open
   } {
-    folder Headers {} {
+    folder Headers {open
+    } {
       file_ref {Adjuster.h} {
+        uuid_Xcode4_PBXBuildFile {19D0A8A7-81F6-48F4-A42B-0A0DBBC3770F}
+        uuid_Xcode4_PBXFileRef {1CDC310C-BCD1-48E9-90F6-541607EE265B}
         build_env 64
         list_env 64
         filename_and_path {fltk3/Adjuster.h}
       }
       file_ref {ask.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {AEDF2A15-B44B-4BD8-B754-2E54A44DB5B5}
+        uuid_Xcode4_PBXFileRef {D31DE8AC-9AC3-4E54-98FE-200462A57910}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/ask.h}
       }
       file_ref {Bitmap.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {D83BCD17-0F87-4FB5-8986-C0F3F65C02EB}
+        uuid_Xcode4_PBXFileRef {249A3332-2091-44E1-8C33-059FC2702523}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Bitmap.h}
       }
       file_ref {BMPImage.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {B02F1ACA-8C63-4C41-A0FA-429D42B66E10}
+        uuid_Xcode4_PBXFileRef {5B9A35BB-8AE6-4627-BE89-BB6BF86DBDA1}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/BMPImage.h}
       }
       file_ref {Box.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {A443E7E1-065D-4CA8-9E14-C567C120B62E}
+        uuid_Xcode4_PBXFileRef {0800D21F-C11C-4581-BA43-356FDB90C72D}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Box.h}
       }
       file_ref {Browser_.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {28FD6277-A75E-45F4-8AC0-D32D4A90E8B8}
+        uuid_Xcode4_PBXFileRef {32841D65-A764-459C-B17D-9D4224A360D2}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Browser_.h}
       }
       file_ref {Browser.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {1BC27473-D70A-460D-B8FF-9467FE0B8189}
+        uuid_Xcode4_PBXFileRef {B8F30574-CEAF-48F4-B9E0-1848081AF0E4}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Browser.h}
       }
       file_ref {Button.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {56A922CB-2D4C-47E2-9F32-E53F75395679}
+        uuid_Xcode4_PBXFileRef {35C25179-5BB4-4171-84DB-ED32FA8A37D5}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Button.h}
       }
       file_ref {Cairo.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {E0086A45-7DE4-4B92-AE3C-61476A5C58AC}
+        uuid_Xcode4_PBXFileRef {DE684D74-63EA-403C-B4A3-AAF2884F2083}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Cairo.h}
       }
       file_ref {CairoWindow.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {3437BED3-6247-4AF8-BEF3-E0DD0C4CA738}
+        uuid_Xcode4_PBXFileRef {54A13D51-FC6D-484F-A55D-2ADA1BF7BBDC}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/CairoWindow.h}
       }
       file_ref {Chart.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {2D4F6D8F-847F-4179-94C7-C62F62E6E2E1}
+        uuid_Xcode4_PBXFileRef {1DFB2DCD-F1C1-40A4-84FF-1460739FA4DC}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Chart.h}
       }
       file_ref {CheckBrowser.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {3A59B91F-DC0C-4E99-87E8-DDD3192A85D5}
+        uuid_Xcode4_PBXFileRef {EACD8665-AB76-453E-A395-FDECD497476B}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/CheckBrowser.h}
       }
       file_ref {CheckButton.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {E3F8FE30-AB1B-4F85-8FC4-DC80874A922F}
+        uuid_Xcode4_PBXFileRef {11A6F6A1-399B-414D-BF61-77BE280EDA66}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/CheckButton.h}
       }
       file_ref {Choice.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {1F012CFB-A6E1-4945-A9B7-86F6A9BCF983}
+        uuid_Xcode4_PBXFileRef {880936EF-0BF0-4AD9-BD6B-B214BC549344}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Choice.h}
       }
       file_ref {Clock.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {714334FF-5D89-4BA6-9C63-339DE784279E}
+        uuid_Xcode4_PBXFileRef {1A2F22F8-1D5F-443F-8025-DE48DE62CB04}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Clock.h}
       }
       file_ref {ColorChooser.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {4E4C6BDD-DD3C-486B-9F8B-4C0C67DA0183}
+        uuid_Xcode4_PBXFileRef {C66F149F-AEC5-41ED-AA4A-02D33BA7325F}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/ColorChooser.h}
       }
       file_ref {Counter.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {F86B5E39-4135-4B33-9DDA-E9F0C4DDF91F}
+        uuid_Xcode4_PBXFileRef {7F7A35A2-3CBC-45FA-9455-EE590B6804D3}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Counter.h}
       }
       file_ref {Device.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {D2B75DDD-0FB8-4245-B646-F692C20A37A8}
+        uuid_Xcode4_PBXFileRef {FFD7DD53-545C-4306-8294-FCC50775BBCA}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Device.h}
       }
       file_ref {Dial.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {E5B25268-CCB4-4EFE-9232-DB0631926A25}
+        uuid_Xcode4_PBXFileRef {A2C2CD62-0F8A-49F4-AB12-7B601B8B6192}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Dial.h}
       }
       file_ref {dirent.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {4D18FEE1-2E3E-4C13-B0FC-D5A3F45FD1B2}
+        uuid_Xcode4_PBXFileRef {1F5CF794-349B-4D40-8552-1942024EDAF2}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/dirent.h}
       }
       file_ref {DoubleWindow.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {C914169D-8DAD-49F1-973F-B6C1EE636CC0}
+        uuid_Xcode4_PBXFileRef {8F826E72-A068-400E-B4CB-85EE26D23BDB}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/DoubleWindow.h}
       }
       file_ref {draw.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {87FA373D-1868-4353-94D6-7CC84E82F89D}
+        uuid_Xcode4_PBXFileRef {B9C21DDD-E2E3-4D03-993E-215994C281E0}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/draw.h}
       }
       file_ref {enumerations.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {B3B44B22-A2AB-4046-BE0D-01AC71420AEE}
+        uuid_Xcode4_PBXFileRef {4A38E27D-78CF-4868-B53F-A989AB52C658}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/enumerations.h}
       }
       file_ref {Export.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {D3C18CCD-F2C1-4685-902F-DE409B589265}
+        uuid_Xcode4_PBXFileRef {90105BC2-6596-4780-B14E-0856C986F3A7}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Export.h}
       }
       file_ref {FileBrowser.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {BC0DCAEA-F201-436F-8293-974E7D64E065}
+        uuid_Xcode4_PBXFileRef {42DF71C7-4961-4318-8FC8-D26C3E2EEB04}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/FileBrowser.h}
       }
       file_ref {FileChooser.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {0CB0EBF3-B975-46CC-8918-C4E211FA4048}
+        uuid_Xcode4_PBXFileRef {5C85EE90-8D4E-4B7A-A39B-52EDCD8D44AC}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/FileChooser.h}
       }
       file_ref {FileIcon.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {3716C3D5-92AE-4141-AA97-DD2ADE3750A6}
+        uuid_Xcode4_PBXFileRef {A31F2D0E-DDC3-4AF7-903A-AAF465D4F9CE}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/FileIcon.h}
       }
       file_ref {FileInput.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {8245FBEA-22EA-408C-9198-D464AC8B07CB}
+        uuid_Xcode4_PBXFileRef {16A26636-71C2-49C3-92D2-02A55434727C}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/FileInput.h}
       }
       file_ref {filename.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {2567B83E-EC58-4004-938C-0632F0947FD3}
+        uuid_Xcode4_PBXFileRef {39F40372-7445-483C-AB9B-7499442F3818}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/filename.h}
       }
       file_ref {FillDial.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {E8A30BF0-DB33-4B0C-80BF-B8732323CC5A}
+        uuid_Xcode4_PBXFileRef {14CD50CD-F5FF-4227-810B-D10CFEA1946C}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/FillDial.h}
       }
       file_ref {FillSlider.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {3AC5E477-8EB2-438C-9321-387A4D128525}
+        uuid_Xcode4_PBXFileRef {6DB8818F-98DC-4C4B-B2DC-5561A327CFF2}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/FillSlider.h}
       }
       file_ref {FloatInput.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {6A64A514-3CD0-4BF8-863C-3B24348C989E}
+        uuid_Xcode4_PBXFileRef {48767088-E538-4DA1-8D5F-78FE51BDFC22}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/FloatInput.h}
       }
       file_ref {forms.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {13BD0083-5C3A-4485-B0C4-76521CB9DCF9}
+        uuid_Xcode4_PBXFileRef {BA378976-019A-40AC-9C07-D6A57A07A00A}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/forms.h}
       }
       file_ref {FormsBitmap.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {16C8EAEF-18D0-4B67-B81A-EF35EB92559A}
+        uuid_Xcode4_PBXFileRef {11DF5111-EDFE-4B10-B251-852CAAFDB68B}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/FormsBitmap.h}
       }
       file_ref {FormsPixmap.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {CF013257-1A2A-481C-AAA2-28D934B7AAC1}
+        uuid_Xcode4_PBXFileRef {7E62E615-9092-4053-B564-F3BFB74B477A}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/FormsPixmap.h}
       }
       file_ref {Free.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {E420FEC9-D30F-468D-A6B6-7AD4CEA93947}
+        uuid_Xcode4_PBXFileRef {11F5FE43-B110-4FD4-B63B-B7DE2D4CABB7}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Free.h}
       }
       file_ref {GIFImage.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {E1645FE3-A511-42A3-873D-131C575CF91A}
+        uuid_Xcode4_PBXFileRef {605121E0-DA10-4363-AD06-B3FF977E11C8}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/GIFImage.h}
       }
       file_ref {gl.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {171AF659-2712-45E4-917F-0971FA2C1040}
+        uuid_Xcode4_PBXFileRef {AA155A86-0B3D-4238-A705-B8E83B16258B}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/gl.h}
       }
       file_ref {gl2opengl.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {A18A80EF-C434-4B35-BE46-702905667C1D}
+        uuid_Xcode4_PBXFileRef {6AC61280-F875-42D8-9A44-087A036E896A}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/gl2opengl.h}
       }
       file_ref {glDraw.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {0CE51E55-FA96-44E7-B2E8-67DD96F3C30C}
+        uuid_Xcode4_PBXFileRef {B1017553-3892-425D-AD7B-921D27DF6DB1}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/glDraw.h}
       }
       file_ref {glu.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {E5E7BD83-9048-4F70-B075-3AEBA4E431F3}
+        uuid_Xcode4_PBXFileRef {853E4A1D-B602-42DC-8BBD-FAA73C103971}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/glu.h}
       }
       file_ref {glut.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {8AB70A97-595C-4E23-B623-688B0FF2BCE4}
+        uuid_Xcode4_PBXFileRef {D910C663-E83B-40C8-B04C-A74F18F324D9}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/glut.h}
       }
       file_ref {GlWindow.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {8949C41C-2C1C-4C70-B1D1-CD2E7FF04607}
+        uuid_Xcode4_PBXFileRef {F9673F32-154D-455D-9944-259374A4A13D}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/GlWindow.h}
       }
       file_ref {Group.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {2D46FE73-1213-4993-9C58-3AD4F912D0F1}
+        uuid_Xcode4_PBXFileRef {91EA0376-23A2-4777-B42C-16F89603F364}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Group.h}
       }
       file_ref {HelpDialog.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {039E6910-80A1-4672-8705-02AC45E81900}
+        uuid_Xcode4_PBXFileRef {0925F193-41B3-477E-B5AD-81F5397661F3}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/HelpDialog.h}
       }
       file_ref {HelpView.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {35AC3DE1-3781-43C2-A095-E3DC454BDCD4}
+        uuid_Xcode4_PBXFileRef {0CD096CD-1274-4A7C-9EC2-74191B646DB4}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/HelpView.h}
       }
       file_ref {HoldBrowser.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {49B90CF5-91E1-4814-A362-A2044664DE22}
+        uuid_Xcode4_PBXFileRef {CFF83CFB-D965-4763-B5AF-B80BF81AE816}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/HoldBrowser.h}
       }
       file_ref {HorFillSlider.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {4FC85770-D876-4202-93C8-0B47C06A7864}
+        uuid_Xcode4_PBXFileRef {5C8658CA-D9F5-4999-8134-5492C35FA96B}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/HorFillSlider.h}
       }
       file_ref {HorNiceSlider.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {069B4980-A156-4F26-AE84-D70B7AAB0958}
+        uuid_Xcode4_PBXFileRef {1B6A7CF4-9F21-435A-A6BB-78D849908474}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/HorNiceSlider.h}
       }
       file_ref {HorSlider.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {4B1AABAD-79EA-4796-97CD-F347C825D3AF}
+        uuid_Xcode4_PBXFileRef {D2E0D211-374C-4798-818C-C818003579D3}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/HorSlider.h}
       }
       file_ref {HorValueSlider.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {8C3AD61D-0E49-444A-86A7-57A53EF411E4}
+        uuid_Xcode4_PBXFileRef {FD4330AA-422C-46EE-A386-FECF269F17D1}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/HorValueSlider.h}
       }
       file_ref {Image.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {3C411723-0BA7-420B-AB44-CC070E604583}
+        uuid_Xcode4_PBXFileRef {D78004F7-3B0F-4D90-A3EE-26CF2260B94D}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Image.h}
       }
       file_ref {Input_.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {7A45BCF9-5AF0-4946-8F5F-2685AE0BB1B8}
+        uuid_Xcode4_PBXFileRef {CB0D1546-E384-40E0-B2C4-EE243B8BC1FA}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Input_.h}
       }
       file_ref {Input.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {B4744BA6-3A72-44C6-AECB-1886322E24B9}
+        uuid_Xcode4_PBXFileRef {28D897DF-E858-4A24-90A7-5CFD3933D952}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Input.h}
       }
       file_ref {InputChoice.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {AD7AEF6A-2D92-41A6-B0BF-D55FDFA155FC}
+        uuid_Xcode4_PBXFileRef {11C99945-757E-4855-990B-72D8A5B32DA4}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/InputChoice.h}
       }
       file_ref {IntInput.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {DD5E12EF-D917-4A2D-A1BB-2A4C73C57153}
+        uuid_Xcode4_PBXFileRef {B5CA37E0-CDEB-4ED2-95C5-7312820C0973}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/IntInput.h}
       }
       file_ref {JPEGImage.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {E924726D-D8F9-42F3-99B6-0B33A6E07929}
+        uuid_Xcode4_PBXFileRef {60A217E0-989A-441E-96AA-E8B7D7B44D49}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/JPEGImage.h}
       }
       file_ref {LightButton.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {CC28845A-AB92-4F7F-8BAB-D7C630F0AD00}
+        uuid_Xcode4_PBXFileRef {5A390823-6671-4644-BA82-DC6AB1FB4B81}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/LightButton.h}
       }
       file_ref {LineDial.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {18F94519-BC08-476F-AA92-C89EFFC7D6C0}
+        uuid_Xcode4_PBXFileRef {D10E3F19-9E41-43CD-920F-54ACFAA912AF}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/LineDial.h}
       }
       file_ref {math.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {9E556D63-6BE1-4DAA-BE86-D6882A75C50E}
+        uuid_Xcode4_PBXFileRef {6523340D-4E2B-406C-B7C3-1467B3852435}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/math.h}
       }
       file_ref {Menu_.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {6E367156-49F5-45B1-8865-73C6C12A3AD4}
+        uuid_Xcode4_PBXFileRef {491CFF65-E843-464D-9A17-A924213C16CC}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Menu_.h}
       }
       file_ref {Menu.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {49A939E9-0E99-4BCD-B42E-F1E99E13D150}
+        uuid_Xcode4_PBXFileRef {3D9E66BD-BF97-4C10-8E63-FEA890E29F8F}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Menu.h}
       }
       file_ref {MenuBar.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {0EEEBBEA-D744-4E2B-8A67-867E2D3D50AC}
+        uuid_Xcode4_PBXFileRef {C96E2C07-8EF7-49DE-B63C-6F034DC516E2}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/MenuBar.h}
       }
       file_ref {MenuButton.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {9B8AFFC5-3B65-4686-9AD9-E7704DCA3698}
+        uuid_Xcode4_PBXFileRef {4DA41837-3327-4777-BD02-9902A738E12C}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/MenuButton.h}
       }
       file_ref {MenuItem.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {35B87DDE-7E6F-4981-98E6-A06CF94616CC}
+        uuid_Xcode4_PBXFileRef {02D236C2-9287-43BA-8C8D-7994F2CEA15F}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/MenuItem.h}
       }
       file_ref {MenuWindow.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {F9ADA642-4ECF-4A83-B141-074E96D90DEF}
+        uuid_Xcode4_PBXFileRef {38AE873D-38F2-4BAE-ABD4-4051BC4204FF}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/MenuWindow.h}
       }
       file_ref {message.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {7B1F47C1-B2E6-46BF-AC3B-268CE1FD07A8}
+        uuid_Xcode4_PBXFileRef {030B2B5E-ADDC-4042-8D45-C45719AACAE9}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/message.h}
       }
       file_ref {MultiBrowser.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {68DADDDB-2980-48DA-BA9A-2FE33327CC73}
+        uuid_Xcode4_PBXFileRef {8EAC0881-D80F-4679-AF1B-699321DEA7E0}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/MultiBrowser.h}
       }
       file_ref {MultiLabel.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {F4A1C768-90F7-4F3E-83A7-0859BE906866}
+        uuid_Xcode4_PBXFileRef {8EC91BD5-0677-4B85-A263-39469600FAE9}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/MultiLabel.h}
       }
       file_ref {MultilineInput.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {907F6D8E-AFEA-405C-A766-47019492BA4A}
+        uuid_Xcode4_PBXFileRef {135CC0A6-96CE-4BB5-9951-4C23BFAB0DA5}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/MultilineInput.h}
       }
       file_ref {MultilineOutput.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {FBB9EBB6-321E-411B-BA9C-E2589E820CD8}
+        uuid_Xcode4_PBXFileRef {D7446BAC-EBC6-4D76-8B64-337F71F19DDE}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/MultilineOutput.h}
       }
       file_ref {names.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {17406949-1209-4EB6-8D75-0CB4C7601908}
+        uuid_Xcode4_PBXFileRef {605DF456-97CB-4C13-AA62-9C10998541BA}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/names.h}
       }
       file_ref {NativeFileChooser.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {AB7BA9B4-F91E-4B45-B306-F4AA69FB2C02}
+        uuid_Xcode4_PBXFileRef {7A091B39-0F66-480C-B2C3-8AE39C61A3E9}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/NativeFileChooser.h}
       }
       file_ref {NiceSlider.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {9828396D-E899-44F0-B0C9-6282CC57D77A}
+        uuid_Xcode4_PBXFileRef {690A220C-592C-449D-9344-CE56DE1D5B5C}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/NiceSlider.h}
       }
       file_ref {Object.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {40D638D3-8D31-4F0D-B53A-F3FCBE42C40B}
+        uuid_Xcode4_PBXFileRef {23987A09-9444-4A26-AC05-53E5E2C335F9}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Object.h}
       }
       file_ref {osx.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {7A284F23-A5FE-4AA4-A9D0-D1E8A4A43C35}
+        uuid_Xcode4_PBXFileRef {88E7EEAB-D956-4160-BD5B-12BC5EF36D0D}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/osx.h}
       }
       file_ref {Output.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {4764043F-5C8D-440A-A65E-F3928A0AE1BB}
+        uuid_Xcode4_PBXFileRef {8FD59657-A4A9-4DA1-947B-E6D816961585}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Output.h}
       }
       file_ref {OverlayWindow.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {3F380557-8CBD-4B6B-AD4C-9EDFE0BA5B4F}
+        uuid_Xcode4_PBXFileRef {31410D1F-3368-4DA3-B81C-CDCD9821EF60}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/OverlayWindow.h}
       }
       file_ref {PackedGroup.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {952AA8C1-6406-4B61-B4F3-5FEC742B4484}
+        uuid_Xcode4_PBXFileRef {328CEB75-C897-468F-ACAF-50B21DB168BB}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/PackedGroup.h}
       }
       file_ref {PagedDevice.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {211FAC46-08EB-488A-BAC1-54548D29475B}
+        uuid_Xcode4_PBXFileRef {C539C329-1B1B-4830-BAEE-5A750422A23A}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/PagedDevice.h}
       }
       file_ref {Pixmap.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {BF1FA8FE-B4EA-4EFD-9513-82A904563D59}
+        uuid_Xcode4_PBXFileRef {AEF91012-13BD-4954-B489-A2DD739457BF}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Pixmap.h}
       }
       file_ref {Plugin.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {6463D727-3733-4F2F-B46C-67F19D55B802}
+        uuid_Xcode4_PBXFileRef {A5DB3592-9613-4C91-8E60-B80555A66B4A}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Plugin.h}
       }
       file_ref {PNGImage.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {5D9E7161-6EC7-4233-AA60-D021CB0DFC59}
+        uuid_Xcode4_PBXFileRef {25BEA285-CF71-4ED0-B043-193DEA1014E2}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/PNGImage.h}
       }
       file_ref {PNMImage.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {4C35DB58-66D6-4FE6-8D74-0F09B1B8EC70}
+        uuid_Xcode4_PBXFileRef {EC95850E-4FC1-4DEB-A8EB-551759E4EBC2}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/PNMImage.h}
       }
       file_ref {Positioner.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {62B3D61F-3AE4-4EF7-8084-F0A6FBD55B84}
+        uuid_Xcode4_PBXFileRef {813FC874-2EAA-4EDF-A759-0016EDAE447C}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Positioner.h}
       }
       file_ref {PostScript.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {F1D238B9-0348-4C69-8A96-C1AB02BD55F5}
+        uuid_Xcode4_PBXFileRef {6A0B5BF3-8A4B-4FA7-B342-49B241951029}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/PostScript.h}
       }
       file_ref {Preferences.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {B14021BB-7B7C-43FA-90DD-8D574E85F561}
+        uuid_Xcode4_PBXFileRef {A9B88BB6-8730-4155-9161-D545E37B8082}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Preferences.h}
       }
       file_ref {Printer.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {DCF86F46-6E2A-4B75-8213-6E5D920E8E26}
+        uuid_Xcode4_PBXFileRef {A71F4289-AD73-4303-93E0-B24AB797001D}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Printer.h}
       }
       file_ref {Progress.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {90702262-589B-4260-980F-F0F0A458B87F}
+        uuid_Xcode4_PBXFileRef {21F9B067-51F8-4C89-9DFA-7CA4436430BD}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Progress.h}
       }
       file_ref {RadioButton.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {773E10BB-A982-4CA8-8A1A-5FB15C62C366}
+        uuid_Xcode4_PBXFileRef {39A7AFB6-2C67-4F73-A75F-BF6808E79A75}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/RadioButton.h}
       }
       file_ref {RadioLightButton.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {D0CA766C-B070-486D-90CE-96EF6EA98ED4}
+        uuid_Xcode4_PBXFileRef {6BFBB132-54D4-45B7-9CE3-0980DDFF3B58}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/RadioLightButton.h}
       }
       file_ref {RadioRoundButton.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {50F213E5-2D3D-4C82-9871-7544B9453BF5}
+        uuid_Xcode4_PBXFileRef {047FB452-2E5E-4258-BF23-0EF15D3436AA}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/RadioRoundButton.h}
       }
       file_ref {Rectangle.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {F95C5A92-0695-40C4-A6E2-0A592EE1EC0F}
+        uuid_Xcode4_PBXFileRef {5A9EE60B-7064-4444-AD42-E829B5F22708}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Rectangle.h}
       }
       file_ref {RepeatButton.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {1CF53F2D-715D-4512-8F5B-BA20E1726122}
+        uuid_Xcode4_PBXFileRef {DEBA3B1D-0CDE-4647-B096-ACB4075B2B5F}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/RepeatButton.h}
       }
       file_ref {ReturnButton.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {ADBE4846-AA90-4966-93EB-74E39DB2C2AE}
+        uuid_Xcode4_PBXFileRef {41A957AF-EF2A-441E-9FF3-C740DD422617}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/ReturnButton.h}
       }
       file_ref {RGBImage.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {CBF2F915-9357-4362-B83C-A7188315D23A}
+        uuid_Xcode4_PBXFileRef {E66B871C-1ECA-4F21-887D-AC107DC4B1E1}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/RGBImage.h}
       }
       file_ref {Roller.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {665F39DC-8BFF-4675-8D7B-09FAF762FCDA}
+        uuid_Xcode4_PBXFileRef {7C454E6C-8B22-4D44-AB57-70599502E820}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Roller.h}
       }
       file_ref {RoundButton.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {5EB54150-424C-4F97-906A-8FCB03F50F7B}
+        uuid_Xcode4_PBXFileRef {F9BE0E64-BE34-4C45-9F0D-3C3151097CD6}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/RoundButton.h}
       }
       file_ref {RoundClock.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {85ACD94A-E352-413E-976C-A3EDA23F0DF7}
+        uuid_Xcode4_PBXFileRef {553BFA55-1FDC-4324-AF76-14F9E14FC48C}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/RoundClock.h}
       }
       file_ref {run.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {BCD82270-EAA9-459A-B5E0-1E59FC5155BB}
+        uuid_Xcode4_PBXFileRef {9201E5B0-9727-4B24-99EE-5C1532A707F9}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/run.h}
       }
       file_ref {Scrollbar.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {1091CE8D-5503-4DCF-93C7-D91C1FAF8A72}
+        uuid_Xcode4_PBXFileRef {7189CF78-A4B1-4F05-9F7D-6AE4EB528784}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Scrollbar.h}
       }
       file_ref {ScrollGroup.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {44E8E706-EBB1-4AAA-9E77-5D686B09EBCD}
+        uuid_Xcode4_PBXFileRef {D6D609BE-24C9-43CE-BA77-4403D2054509}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/ScrollGroup.h}
       }
       file_ref {SecretInput.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {4BDB4DCC-387B-40BE-99BA-006DED0FCBDA}
+        uuid_Xcode4_PBXFileRef {25EDE9D0-E812-4B63-BEBB-260F55E225D5}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/SecretInput.h}
       }
       file_ref {SelectBrowser.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {D7845810-9029-405E-ADA3-38C399188304}
+        uuid_Xcode4_PBXFileRef {3C5B8EA3-E880-4576-973B-D0F4CE454BEA}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/SelectBrowser.h}
       }
       file_ref {SharedImage.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {F6781690-45D3-43A2-97D0-428E3F972600}
+        uuid_Xcode4_PBXFileRef {455CBD05-0AB7-4154-8687-1FBD4BDA0037}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/SharedImage.h}
       }
       file_ref {show_colormap.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {03BC6417-4A25-49D8-85A9-54830C1D008E}
+        uuid_Xcode4_PBXFileRef {4797DF66-8F75-40EC-92A3-771A20778579}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/show_colormap.h}
       }
       file_ref {showInput.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {9F31C590-F3DE-4CF5-AFB9-3A193109953D}
+        uuid_Xcode4_PBXFileRef {6D9BA1DD-77BA-4099-A619-4ADDCA7A2733}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/showInput.h}
       }
       file_ref {SimpleCounter.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {FDB479E7-809A-4CFB-AC49-334E29BBAC34}
+        uuid_Xcode4_PBXFileRef {75D7531C-40AC-4902-B7A5-F63C292BC91C}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/SimpleCounter.h}
       }
       file_ref {SingleWindow.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {9132D3A1-012D-4D80-ACE1-8F382C0A351B}
+        uuid_Xcode4_PBXFileRef {632C7A36-4BFE-4C48-B10F-67D036ACC513}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/SingleWindow.h}
       }
       file_ref {Slider.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {EBE0213A-2491-433A-A674-322BE25FAA14}
+        uuid_Xcode4_PBXFileRef {7BDF5255-1663-4666-B709-6F31492790A2}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Slider.h}
       }
       file_ref {Spinner.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {D76363C0-7FE0-4A29-8EBA-6F929B570EFF}
+        uuid_Xcode4_PBXFileRef {CAC6AA77-56C9-4768-BF2D-33EE9662C445}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Spinner.h}
       }
       file_ref {SysMenuBar.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {F9CF92AB-336C-4D0A-BFF4-835EC59F6CD1}
+        uuid_Xcode4_PBXFileRef {A76F03E8-29AB-434C-A057-DA682A140721}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/SysMenuBar.h}
       }
       file_ref {TabGroup.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {C5106059-F99B-4031-925E-961380819E74}
+        uuid_Xcode4_PBXFileRef {789EF90B-2F26-4348-96AC-CBE8F4E6A32F}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/TabGroup.h}
       }
       file_ref {Table.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {ABE56142-DE83-4A0F-B010-446DCF23A83F}
+        uuid_Xcode4_PBXFileRef {B367CABC-8946-4B50-A4D6-BAF5D1F55A5C}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Table.h}
       }
       file_ref {TableRow.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {89662D26-D11B-416D-A194-583ED4288C78}
+        uuid_Xcode4_PBXFileRef {15927486-70D1-449F-B5AA-35B2B4DE61E2}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/TableRow.h}
       }
       file_ref {TextBuffer.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {CDEC102F-FF80-40F7-A9D5-7B7E96042E19}
+        uuid_Xcode4_PBXFileRef {893A6B58-3E78-4381-86B5-ACC0423ECC58}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/TextBuffer.h}
       }
       file_ref {TextDisplay.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {A9AF1C37-3D0A-4F48-BA94-4B86C7A1A761}
+        uuid_Xcode4_PBXFileRef {BD0A56AB-4DFB-4FF8-8269-D1425439CC1B}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/TextDisplay.h}
       }
       file_ref {TextEditor.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {67C7FA0B-802E-4487-97A1-6E6387F62564}
+        uuid_Xcode4_PBXFileRef {2C096645-7BCA-4D5B-9442-C963C924E3B1}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/TextEditor.h}
       }
       file_ref {TiledGroup.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {6E1AAABD-0D0E-43B6-8155-0314EF3BE7FE}
+        uuid_Xcode4_PBXFileRef {A536BFE1-1363-48EB-A437-3554A057D93E}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/TiledGroup.h}
       }
       file_ref {TiledImage.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {F5886F9D-2362-4C9E-92FB-EF926EFECAE5}
+        uuid_Xcode4_PBXFileRef {BC04523B-D394-49EA-906F-11299B13D37E}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/TiledImage.h}
       }
       file_ref {Timer.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {59B60905-6FB9-4807-A57B-5401B9F8AAB0}
+        uuid_Xcode4_PBXFileRef {DC8676EF-1516-4309-8CCA-F1AF43F48A65}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Timer.h}
       }
       file_ref {ToggleButton.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {24974A99-72A3-4E92-922F-33308EA73586}
+        uuid_Xcode4_PBXFileRef {A43481E1-C8DE-4191-9EE6-C41B25030229}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/ToggleButton.h}
       }
       file_ref {ToggleLightButton.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {F28C203D-5411-4C83-BF4A-2CFD3CF3403A}
+        uuid_Xcode4_PBXFileRef {EC5C2370-CB14-4C8F-89B7-891FA92633B7}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/ToggleLightButton.h}
       }
       file_ref {ToggleRoundButton.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {93A7154C-012D-476D-889D-9762A6750520}
+        uuid_Xcode4_PBXFileRef {B91DED46-5446-4F9D-81F2-39D077FB1B96}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/ToggleRoundButton.h}
       }
       file_ref {Tooltip.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {8276B012-4188-4C12-8305-1F5251314F05}
+        uuid_Xcode4_PBXFileRef {206ED85C-0B4F-4016-BB3A-218263227DED}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Tooltip.h}
       }
       file_ref {Tree.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {C3BC5E98-4E3F-46D5-9A15-FFA50F065D47}
+        uuid_Xcode4_PBXFileRef {17CE00F9-6B58-40DC-9475-2635F4090A28}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Tree.h}
       }
       file_ref {TreeItem.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {FE8A3875-9AFD-4CD4-B185-179F8E48178E}
+        uuid_Xcode4_PBXFileRef {F8C5F548-05D4-4B31-8D82-75EF351BC65F}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/TreeItem.h}
       }
       file_ref {TreeItemArray.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {66D03DB1-40F6-4172-A57A-1D2C7A55CE91}
+        uuid_Xcode4_PBXFileRef {3E3557B6-04A4-4D2E-9B4E-73DE6003A6BE}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/TreeItemArray.h}
       }
-      file_ref {TreePrefs.h} {
-        build_env 0
-        list_env 0
+      file_ref {TreePrefs.h} {selected
+        uuid_Xcode4_PBXBuildFile {C2B74F46-3E7C-4CD7-8267-4FC28F34895D}
+        uuid_Xcode4_PBXFileRef {EC737FCE-1C5A-4F70-9A27-F94BA25D1072}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/TreePrefs.h}
       }
       file_ref {types.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {DC994779-18AC-4E19-A594-CC1898905C23}
+        uuid_Xcode4_PBXFileRef {D640E4CF-B598-402B-9CEA-F927963F4796}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/types.h}
       }
       file_ref {utf8.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {681E2C35-DD25-4D5E-86E3-8D324589B6C3}
+        uuid_Xcode4_PBXFileRef {933EE908-3039-40FA-9765-1CA6C73F443A}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/utf8.h}
       }
       file_ref {Valuator.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {C47845FF-66AC-429D-BEA1-A6DE64E3B916}
+        uuid_Xcode4_PBXFileRef {B6471A05-7C74-4CE9-9D6E-AAD41683F1B1}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Valuator.h}
       }
       file_ref {ValueInput.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {DFE89C49-5316-4CBC-8197-BCFF6A20EE92}
+        uuid_Xcode4_PBXFileRef {41D3C3F8-B124-4067-B1A3-B3156B0BD7A8}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/ValueInput.h}
       }
       file_ref {ValueOutput.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {F5859980-E64A-4F2F-8C57-35C2CFDBF3B6}
+        uuid_Xcode4_PBXFileRef {FFF2D24F-C2AA-40E5-9186-28FFF5C4B4FF}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/ValueOutput.h}
       }
       file_ref {ValueSlider.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {9CCACFCE-2AEE-4A38-9F8C-7ABBDAA107EA}
+        uuid_Xcode4_PBXFileRef {239DD5D7-A3B5-4128-BADD-1F419EDD3282}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/ValueSlider.h}
       }
       file_ref {Widget.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {77EFEC33-D024-4917-9CDB-7D74C85D2145}
+        uuid_Xcode4_PBXFileRef {CFEC113F-FFBB-4004-BEB6-7D9F40B07279}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Widget.h}
       }
       file_ref {win32.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {B6BC0131-EF86-48A2-A56E-0A39CA8B36DF}
+        uuid_Xcode4_PBXFileRef {B8038563-16F6-478A-9EB2-6E575D936115}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/win32.h}
       }
       file_ref {Window.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {11F547C0-6521-40C7-ACBF-7258AB416476}
+        uuid_Xcode4_PBXFileRef {B2C09467-6A7B-464A-B0FA-B953B4D12F7E}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Window.h}
       }
       file_ref {WizardGroup.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {911B9212-7CE9-4673-B58A-1F685B0F7488}
+        uuid_Xcode4_PBXFileRef {8BD4A9C1-70FF-461B-840E-D3C292F9ADFE}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/WizardGroup.h}
       }
       file_ref {Wrapper.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {D3AF8F9F-6681-4F22-A57D-19DF636D33A2}
+        uuid_Xcode4_PBXFileRef {DF699445-69DA-45B5-9234-4344E9507C6D}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Wrapper.h}
       }
       file_ref {x.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {569F455D-36D9-478D-8499-634081EA3C24}
+        uuid_Xcode4_PBXFileRef {05950566-CB58-40F0-818D-071AE40E6C32}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/x.h}
       }
       file_ref {XBMImage.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {8AF480EA-F1C2-4A25-9AD4-658E8600CB70}
+        uuid_Xcode4_PBXFileRef {9F6F453D-C13B-4551-9976-F2088679FDAA}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/XBMImage.h}
       }
       file_ref {XPMImage.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {DAEEEDE3-9330-459C-AC22-055D2BB29021}
+        uuid_Xcode4_PBXFileRef {0C163988-882F-456A-9798-71334710982F}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/XPMImage.h}
       }
       file_ref {Xutf8.h} {
-        build_env 0
-        list_env 0
+        uuid_Xcode4_PBXBuildFile {A0588617-DA9D-48BB-8001-E0414DBCBAA2}
+        uuid_Xcode4_PBXFileRef {2E1B4089-1661-448E-8219-3960A46CDE69}
+        build_env 64
+        list_env 64
         filename_and_path {fltk3/Xutf8.h}
       }
     }
-    folder Sources {open
-    } {
+    folder Sources {} {
       file_ref {Fl_cocoa.mm} {
         build_env 0
         list_env 0
@@ -949,706 +1237,988 @@ folder Libraries {open
         filename_and_path {src/Fl_Quartz_Printer.mm}
       }
       file_ref {Fl.cxx} {
+        uuid_Xcode4_PBXBuildFile {5E78E80A-9D1C-4351-9F3E-B2944D622982}
+        uuid_Xcode4_PBXFileRef {81045D02-0D89-472C-BAE7-D77BD81C23A2}
         build_env 64
         list_env 64
         filename_and_path {src/Fl.cxx}
       }
       file_ref {Fl_Adjuster.cxx} {
+        uuid_Xcode4_PBXBuildFile {91FE1840-74E4-4847-8B8E-D8952CEAF112}
+        uuid_Xcode4_PBXFileRef {ECEA64F2-F8B3-4A76-B195-748D6949AD76}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Adjuster.cxx}
       }
       file_ref {Fl_Bitmap.cxx} {
+        uuid_Xcode4_PBXBuildFile {E9733D69-4D22-4B2E-B89C-81D879FA8FC5}
+        uuid_Xcode4_PBXFileRef {D68004A5-9E82-4A55-B1D1-365E2E22B59B}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Bitmap.cxx}
       }
       file_ref {Fl_Box.cxx} {
+        uuid_Xcode4_PBXBuildFile {F4F6FEBB-918A-4AC7-813D-7B3E68C40425}
+        uuid_Xcode4_PBXFileRef {81608512-8823-4586-AF62-6E7935A2B539}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Box.cxx}
       }
       file_ref {Fl_Browser.cxx} {
+        uuid_Xcode4_PBXBuildFile {DA189983-8D64-4A1D-96B0-2E367C8C4CC6}
+        uuid_Xcode4_PBXFileRef {5CE1FF6E-BFDC-4925-A6BE-F6B954C22170}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Browser.cxx}
       }
       file_ref {Fl_Browser_.cxx} {
+        uuid_Xcode4_PBXBuildFile {545A2839-E435-4EB6-839C-22C991346FF0}
+        uuid_Xcode4_PBXFileRef {2FC85E98-E2B4-484F-815B-75078EBBA1CC}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Browser_.cxx}
       }
       file_ref {Fl_Browser_load.cxx} {
+        uuid_Xcode4_PBXBuildFile {C18A3B76-19AC-4503-9A82-6386F545EFE7}
+        uuid_Xcode4_PBXFileRef {B89AE0F9-320A-489A-A15A-34AEA064E6FF}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Browser_load.cxx}
       }
       file_ref {Fl_Button.cxx} {
+        uuid_Xcode4_PBXBuildFile {07627EF8-0726-4AEE-A7BE-5B01D59A2320}
+        uuid_Xcode4_PBXFileRef {70F96088-141B-442E-AF9B-5EAE13E45EFD}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Button.cxx}
       }
       file_ref {Fl_Chart.cxx} {
+        uuid_Xcode4_PBXBuildFile {A6F1AA20-5E36-4069-95D7-B2ADB04EACBB}
+        uuid_Xcode4_PBXFileRef {39250031-7441-4BDF-ABE1-745EE2786E57}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Chart.cxx}
       }
       file_ref {Fl_Check_Browser.cxx} {
+        uuid_Xcode4_PBXBuildFile {2D43DF76-FFA8-46BE-8CC7-97E71F74AB36}
+        uuid_Xcode4_PBXFileRef {F6EC011E-29BD-4ADB-B4C8-EEC9E72E52E7}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Check_Browser.cxx}
       }
       file_ref {Fl_Check_Button.cxx} {
+        uuid_Xcode4_PBXBuildFile {6F0253C7-58FE-4E3E-A84D-ACA19AE0B60F}
+        uuid_Xcode4_PBXFileRef {490C9DC5-6833-46C7-A0F5-F3D9C9795A6D}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Check_Button.cxx}
       }
       file_ref {Fl_Choice.cxx} {
+        uuid_Xcode4_PBXBuildFile {3BD02867-1A12-4C3A-AE6C-5D570873345C}
+        uuid_Xcode4_PBXFileRef {6356BFF2-3C95-496B-8310-FA86D8F77F5C}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Choice.cxx}
       }
       file_ref {Fl_Clock.cxx} {
+        uuid_Xcode4_PBXBuildFile {64809F27-28E9-4E6E-95D6-BF69AE67D5FD}
+        uuid_Xcode4_PBXFileRef {1C4F7DBF-440E-4FD8-A83E-F098D786280A}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Clock.cxx}
       }
       file_ref {Fl_Color_Chooser.cxx} {
+        uuid_Xcode4_PBXBuildFile {F4AB783F-377F-4E93-8461-F7D5660002E3}
+        uuid_Xcode4_PBXFileRef {4CF353D8-81FC-4DE3-9189-39E910629419}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Color_Chooser.cxx}
       }
       file_ref {Fl_Counter.cxx} {
+        uuid_Xcode4_PBXBuildFile {45E38AE7-C514-4BBB-A2CE-4B897029509D}
+        uuid_Xcode4_PBXFileRef {96D41530-E053-46CC-8B6F-C1EBDBF7E11E}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Counter.cxx}
       }
       file_ref {Fl_Device.cxx} {
+        uuid_Xcode4_PBXBuildFile {9CBCE251-1829-44C4-BAF4-F95523E02EDF}
+        uuid_Xcode4_PBXFileRef {CB4EA804-687E-4579-AB3B-DE67EA64E9FB}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Device.cxx}
       }
       file_ref {Fl_Dial.cxx} {
+        uuid_Xcode4_PBXBuildFile {F4D1986C-C2AB-46EA-951E-0F696A73F7F5}
+        uuid_Xcode4_PBXFileRef {FDB40722-2840-4C62-98C1-D38291CAB607}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Dial.cxx}
       }
       file_ref {Fl_Double_Window.cxx} {
+        uuid_Xcode4_PBXBuildFile {6E8494D3-F35B-4D9F-846B-5EFE8203DC04}
+        uuid_Xcode4_PBXFileRef {D65E879C-A8F7-46EF-94C2-E474B73853BC}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Double_Window.cxx}
       }
       file_ref {Fl_File_Browser.cxx} {
+        uuid_Xcode4_PBXBuildFile {3C81269D-295A-4C8D-93B4-9A7B72027FE2}
+        uuid_Xcode4_PBXFileRef {31B32445-8CFD-4811-A4C7-628F7D814264}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_File_Browser.cxx}
       }
       file_ref {Fl_File_Chooser.cxx} {
+        uuid_Xcode4_PBXBuildFile {3B24302E-E655-42B1-8195-4A65633638BE}
+        uuid_Xcode4_PBXFileRef {E74C762F-3E71-4C17-8E8F-783C5BA2394A}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_File_Chooser.cxx}
       }
       file_ref {Fl_File_Chooser2.cxx} {
+        uuid_Xcode4_PBXBuildFile {22A4B14E-FC3A-4D9F-A56C-07AD36664F71}
+        uuid_Xcode4_PBXFileRef {A7770A7F-FF59-489E-AB60-3811A3BFB46C}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_File_Chooser2.cxx}
       }
       file_ref {Fl_File_Icon.cxx} {
+        uuid_Xcode4_PBXBuildFile {AF7F7642-24A6-444F-9A16-C020F722E332}
+        uuid_Xcode4_PBXFileRef {19FA31AE-9089-4E73-97EA-56F68EC5D035}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_File_Icon.cxx}
       }
       file_ref {Fl_File_Input.cxx} {
+        uuid_Xcode4_PBXBuildFile {E80A34C3-962D-4260-9AE8-3099080002B9}
+        uuid_Xcode4_PBXFileRef {D05F5EBC-72FF-49FD-912F-BB5399F2DDC2}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_File_Input.cxx}
       }
       file_ref {Fl_Group.cxx} {
+        uuid_Xcode4_PBXBuildFile {18D56E2C-8A51-4AC4-8247-489E424C5E2D}
+        uuid_Xcode4_PBXFileRef {A5952FB9-CE93-48E3-8F3E-9906B15F1B22}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Group.cxx}
       }
       file_ref {Fl_Help_View.cxx} {
+        uuid_Xcode4_PBXBuildFile {E452ED95-DA10-4107-8505-81FF885CB929}
+        uuid_Xcode4_PBXFileRef {047B650C-DBF4-44C6-8D05-A009B49D48D6}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Help_View.cxx}
       }
       file_ref {Fl_Image.cxx} {
+        uuid_Xcode4_PBXBuildFile {DF973496-4200-49AA-BC93-249BA2210DA0}
+        uuid_Xcode4_PBXFileRef {E01E16F1-143B-485F-B5FC-F6258C32F5F6}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Image.cxx}
       }
       file_ref {Fl_Input.cxx} {
+        uuid_Xcode4_PBXBuildFile {76FB90B7-4336-4503-9BE1-BAFE1C6595FD}
+        uuid_Xcode4_PBXFileRef {184F6210-C542-4DA1-83AC-8711FD7A0384}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Input.cxx}
       }
       file_ref {Fl_Input_.cxx} {
+        uuid_Xcode4_PBXBuildFile {48A7C3EF-5BA8-4979-B113-AD2901649800}
+        uuid_Xcode4_PBXFileRef {A8924614-71DC-4863-9895-60692D538E50}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Input_.cxx}
       }
       file_ref {Fl_Light_Button.cxx} {
+        uuid_Xcode4_PBXBuildFile {A7701349-FD57-46A0-84D3-B65C795C834B}
+        uuid_Xcode4_PBXFileRef {36C72097-8E40-47E8-914C-FB7F861ACD51}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Light_Button.cxx}
       }
       file_ref {Fl_Menu.cxx} {
+        uuid_Xcode4_PBXBuildFile {FC5ADC05-7CB3-4213-9C1A-5F737CC9EDAE}
+        uuid_Xcode4_PBXFileRef {4672B51C-C45E-4BD5-8083-1C8403D7EAA5}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Menu.cxx}
       }
       file_ref {Fl_Menu_.cxx} {
+        uuid_Xcode4_PBXBuildFile {F4886C34-73DF-44FB-A100-AD10EEC6340F}
+        uuid_Xcode4_PBXFileRef {DE9E57A2-6320-4D65-8B5C-485F9D820566}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Menu_.cxx}
       }
       file_ref {Fl_Menu_Bar.cxx} {
+        uuid_Xcode4_PBXBuildFile {F690A4A3-C410-4C28-8B0C-DD694D66E06E}
+        uuid_Xcode4_PBXFileRef {265C00BF-D5DC-4849-813B-19E9A10BE42A}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Menu_Bar.cxx}
       }
       file_ref {Fl_Menu_Button.cxx} {
+        uuid_Xcode4_PBXBuildFile {FD9004A1-F802-4C5D-9225-5344D737A373}
+        uuid_Xcode4_PBXFileRef {58FD2064-F6B4-447C-BCF8-E8998D2E68DB}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Menu_Button.cxx}
       }
       file_ref {Fl_Menu_Window.cxx} {
+        uuid_Xcode4_PBXBuildFile {8C7C9611-0CD1-4C32-847B-11A750EB0745}
+        uuid_Xcode4_PBXFileRef {CBE03F81-8878-47F2-8580-C669735AEFC9}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Menu_Window.cxx}
       }
       file_ref {Fl_Menu_add.cxx} {
+        uuid_Xcode4_PBXBuildFile {83EF6417-50A0-4E49-8D93-357ECA893443}
+        uuid_Xcode4_PBXFileRef {C649ABF1-FC49-41C2-B145-EEF11539FB5F}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Menu_add.cxx}
       }
       file_ref {Fl_Menu_global.cxx} {
+        uuid_Xcode4_PBXBuildFile {8FA4327A-A0BD-4F1B-A447-93E87A9BCE1C}
+        uuid_Xcode4_PBXFileRef {25D17230-B6AF-4AF7-B3C0-2995DA9C6F23}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Menu_global.cxx}
       }
       file_ref {Fl_Multi_Label.cxx} {
+        uuid_Xcode4_PBXBuildFile {2F50A0D8-B6F7-490A-A8EC-11F893AC8AB9}
+        uuid_Xcode4_PBXFileRef {37D57C7D-DA2D-4296-AA55-229B1A3BFC20}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Multi_Label.cxx}
       }
       file_ref {Fl_Native_File_Chooser.cxx} {
+        uuid_Xcode4_PBXBuildFile {3CCD0677-B052-4EAB-847D-EA18F342D11F}
+        uuid_Xcode4_PBXFileRef {FC634C34-9189-40E6-90A4-8D42EF923847}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Native_File_Chooser.cxx}
       }
       file_ref {Fl_Overlay_Window.cxx} {
+        uuid_Xcode4_PBXBuildFile {50CCB3E9-D605-4F6C-97EA-4607BFC19BEC}
+        uuid_Xcode4_PBXFileRef {CEF1A66A-1E4B-4A61-A236-82B007C52832}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Overlay_Window.cxx}
       }
       file_ref {Fl_Pack.cxx} {
+        uuid_Xcode4_PBXBuildFile {2EC07AEA-4325-4E47-8D60-139740EAE1C2}
+        uuid_Xcode4_PBXFileRef {0F0129FF-794E-4E1D-9091-7900F59B9FB5}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Pack.cxx}
       }
       file_ref {Fl_Paged_Device.cxx} {
+        uuid_Xcode4_PBXBuildFile {3851F580-32C6-4733-9167-C8CBD7610692}
+        uuid_Xcode4_PBXFileRef {680EF039-6F4F-4B31-B176-BD222AD802F6}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Paged_Device.cxx}
       }
       file_ref {Fl_Pixmap.cxx} {
+        uuid_Xcode4_PBXBuildFile {C4D7E2E9-314F-4361-AD85-CDBEB0E9B9A8}
+        uuid_Xcode4_PBXFileRef {9AEB9365-32CF-48CF-8810-7F9B2046454D}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Pixmap.cxx}
       }
       file_ref {Fl_Positioner.cxx} {
+        uuid_Xcode4_PBXBuildFile {AFC22C98-7D5A-47AD-8F79-8AE0ABA64048}
+        uuid_Xcode4_PBXFileRef {9EB992B1-D710-426E-A89D-8F3306A07426}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Positioner.cxx}
       }
       file_ref {Fl_Printer.cxx} {
+        uuid_Xcode4_PBXBuildFile {7BA4A607-6C7B-4BB0-B8CB-0F7B4F3EDE3F}
+        uuid_Xcode4_PBXFileRef {53F2F9DE-99B0-4879-AD46-BA1EA21D0246}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Printer.cxx}
       }
       file_ref {Fl_Preferences.cxx} {
+        uuid_Xcode4_PBXBuildFile {B6CC4604-60B8-4F7A-B134-C1D8EC515A12}
+        uuid_Xcode4_PBXFileRef {59610374-761E-4912-BDCE-5F669B7B3FA5}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Preferences.cxx}
       }
       file_ref {Fl_Progress.cxx} {
+        uuid_Xcode4_PBXBuildFile {20F00948-E2C6-4027-BE38-4BD07D34D62E}
+        uuid_Xcode4_PBXFileRef {B62169E8-CBE5-4A83-8893-D176E6E4DD9F}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Progress.cxx}
       }
       file_ref {Fl_Repeat_Button.cxx} {
+        uuid_Xcode4_PBXBuildFile {A494B047-B897-48AC-B463-91BA94498C6B}
+        uuid_Xcode4_PBXFileRef {F2E611B0-825F-4087-AD5E-6863D06946BC}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Repeat_Button.cxx}
       }
       file_ref {Fl_Return_Button.cxx} {
+        uuid_Xcode4_PBXBuildFile {87CE402C-87A8-4C9C-AB9A-0F4D9B28E093}
+        uuid_Xcode4_PBXFileRef {69E296C0-6A1A-43E1-A97D-9905A82EE913}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Return_Button.cxx}
       }
       file_ref {Fl_Roller.cxx} {
+        uuid_Xcode4_PBXBuildFile {07E3396B-982F-4ACA-A15F-604C0F96FB37}
+        uuid_Xcode4_PBXFileRef {A5526E66-615E-4C5D-BEFD-4A34647C13A4}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Roller.cxx}
       }
       file_ref {Fl_Round_Button.cxx} {
+        uuid_Xcode4_PBXBuildFile {8CE9A2F5-45BE-4D71-845A-3BCEFBC1D0AF}
+        uuid_Xcode4_PBXFileRef {5DA33AF3-3DC1-4878-970E-E2E5BE824A96}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Round_Button.cxx}
       }
       file_ref {Fl_Scroll.cxx} {
+        uuid_Xcode4_PBXBuildFile {0105EB4F-2FD7-4B85-B5D8-B09B33CEBC16}
+        uuid_Xcode4_PBXFileRef {135F7AE4-1BF1-474C-BB37-117ED80BB12D}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Scroll.cxx}
       }
       file_ref {Fl_Scrollbar.cxx} {
+        uuid_Xcode4_PBXBuildFile {5C70A5A9-A67B-4B14-9D23-ABBDCE533FD9}
+        uuid_Xcode4_PBXFileRef {6F7BEB35-6EBF-499D-A9F5-BD43167B1FB8}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Scrollbar.cxx}
       }
       file_ref {Fl_Shared_Image.cxx} {
+        uuid_Xcode4_PBXBuildFile {8A0C023A-0383-430E-95D8-B9AEA5E17969}
+        uuid_Xcode4_PBXFileRef {8580401C-DB11-4629-931A-AA44CAD127AC}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Shared_Image.cxx}
       }
       file_ref {Fl_Single_Window.cxx} {
+        uuid_Xcode4_PBXBuildFile {C6BD816D-59B7-4C3C-A83A-A78D32B5BDBC}
+        uuid_Xcode4_PBXFileRef {17A03BA5-0404-4989-A516-C22F7D8BDCEE}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Single_Window.cxx}
       }
       file_ref {Fl_Slider.cxx} {
+        uuid_Xcode4_PBXBuildFile {05A570C7-6790-48AF-B07E-3DA2E4738B28}
+        uuid_Xcode4_PBXFileRef {085FAF82-6F59-4F42-AB4C-349D927A8BAA}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Slider.cxx}
       }
       file_ref {Fl_Sys_Menu_Bar.cxx} {
+        uuid_Xcode4_PBXBuildFile {FC5F7A11-9A94-4596-BCF0-458EB54BF587}
+        uuid_Xcode4_PBXFileRef {43C12A4D-7C89-4BAE-B250-C5E2307220CC}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Sys_Menu_Bar.cxx}
       }
       file_ref {Fl_Table.cxx} {
+        uuid_Xcode4_PBXBuildFile {BFA14DC7-600F-49DF-99DF-24A48C8142E6}
+        uuid_Xcode4_PBXFileRef {02584243-5408-4D4A-96A5-3FA806F5BCFA}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Table.cxx}
       }
       file_ref {Fl_Table_Row.cxx} {
+        uuid_Xcode4_PBXBuildFile {8B6C6698-82A4-490F-B7D9-3AB8182B0DD4}
+        uuid_Xcode4_PBXFileRef {7097EA09-FB87-4E3F-B29A-4E64EBE28CA8}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Table_Row.cxx}
       }
       file_ref {Fl_Tabs.cxx} {
+        uuid_Xcode4_PBXBuildFile {BDA1F834-FADD-4394-A2A3-67616F09DB47}
+        uuid_Xcode4_PBXFileRef {77126381-0CA1-4F19-8800-48B51FF6A61B}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Tabs.cxx}
       }
       file_ref {Fl_Text_Buffer.cxx} {
+        uuid_Xcode4_PBXBuildFile {9BD37A78-D289-47A9-BBA2-7B67CEFEB0DA}
+        uuid_Xcode4_PBXFileRef {8867A20B-7B96-4B4E-BBE1-E492D157D617}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Text_Buffer.cxx}
       }
       file_ref {Fl_Text_Display.cxx} {
+        uuid_Xcode4_PBXBuildFile {1A94F4A9-95C0-4A75-8DE5-8945E353D597}
+        uuid_Xcode4_PBXFileRef {E5E1DA87-AA6C-460E-90F4-2C8D9411CDB9}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Text_Display.cxx}
       }
       file_ref {Fl_Text_Editor.cxx} {
+        uuid_Xcode4_PBXBuildFile {A507F8F6-5687-406F-A0B0-A424A3CB162B}
+        uuid_Xcode4_PBXFileRef {5995AACC-72D1-4AAA-A20A-84D4CEE88139}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Text_Editor.cxx}
       }
       file_ref {Fl_Tile.cxx} {
+        uuid_Xcode4_PBXBuildFile {3870255E-E9C6-4D50-9C26-E04A6CA659C9}
+        uuid_Xcode4_PBXFileRef {A3F6667D-AF2F-460F-809F-4BDDED6E95FC}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Tile.cxx}
       }
       file_ref {Fl_Tiled_Image.cxx} {
+        uuid_Xcode4_PBXBuildFile {C043B0DE-0983-418C-88CB-5CB7F7F4A60A}
+        uuid_Xcode4_PBXFileRef {4C92BA7B-29EF-46D2-91C9-348D49388F69}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Tiled_Image.cxx}
       }
       file_ref {Fl_Tooltip.cxx} {
+        uuid_Xcode4_PBXBuildFile {36ACF63E-9691-4DFE-8918-CA3610F13FAD}
+        uuid_Xcode4_PBXFileRef {22CA4A41-F913-4DAC-A13D-CC57F6A6F244}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Tooltip.cxx}
       }
       file_ref {Fl_Tree.cxx} {
+        uuid_Xcode4_PBXBuildFile {AE64AF6B-751E-4D4E-B923-16EFC07C9234}
+        uuid_Xcode4_PBXFileRef {214492E9-38C0-491D-AC42-F4E1EF8FEAA3}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Tree.cxx}
       }
       file_ref {Fl_Tree_Item.cxx} {
+        uuid_Xcode4_PBXBuildFile {03133ABA-346B-4DEC-B667-9E9A78C07AD7}
+        uuid_Xcode4_PBXFileRef {D9F29791-60DE-48C5-9266-701106AB7E8E}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Tree_Item.cxx}
       }
       file_ref {Fl_Tree_Item_Array.cxx} {
+        uuid_Xcode4_PBXBuildFile {A082BAF2-ECA2-4E15-A323-76837C355BE9}
+        uuid_Xcode4_PBXFileRef {D6CBFFFA-2FE1-4D65-883E-F592FACE5284}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Tree_Item_Array.cxx}
       }
       file_ref {Fl_Tree_Prefs.cxx} {
+        uuid_Xcode4_PBXBuildFile {D18C9E57-25E8-4D5D-8A64-59536C9DD869}
+        uuid_Xcode4_PBXFileRef {CFFE37EE-309C-43FC-BCE5-41E02E7B592D}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Tree_Prefs.cxx}
       }
       file_ref {Fl_Valuator.cxx} {
+        uuid_Xcode4_PBXBuildFile {2BE8F141-3682-40D9-86E6-ED82BFF69E75}
+        uuid_Xcode4_PBXFileRef {35EB53B1-EE73-4CA2-A8DE-47D037A4970E}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Valuator.cxx}
       }
       file_ref {Fl_Value_Input.cxx} {
+        uuid_Xcode4_PBXBuildFile {44BC0D55-DA69-4BD4-9F19-B42DD0F34E4E}
+        uuid_Xcode4_PBXFileRef {1685625E-A5F8-463D-BE13-D96C29D7D314}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Value_Input.cxx}
       }
       file_ref {Fl_Value_Output.cxx} {
+        uuid_Xcode4_PBXBuildFile {4EA1B94C-4E2A-4416-A2D4-2552A132F55A}
+        uuid_Xcode4_PBXFileRef {7553A0E7-0663-41E1-AE1E-E07C7DB0DDE5}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Value_Output.cxx}
       }
       file_ref {Fl_Value_Slider.cxx} {
+        uuid_Xcode4_PBXBuildFile {2AF743E0-9646-472E-9B92-7D02BD5C25D0}
+        uuid_Xcode4_PBXFileRef {07F5E789-E549-43E0-B527-FB1FE46B9744}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Value_Slider.cxx}
       }
       file_ref {Fl_Widget.cxx} {
+        uuid_Xcode4_PBXBuildFile {9B2E9C9D-3B03-453C-B5ED-887C12F26BBC}
+        uuid_Xcode4_PBXFileRef {C5F5E189-F794-4C76-B727-E18198ADF418}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Widget.cxx}
       }
       file_ref {Fl_Window.cxx} {
+        uuid_Xcode4_PBXBuildFile {92A1ED53-56AF-4774-ADED-DC90687267DF}
+        uuid_Xcode4_PBXFileRef {8E1A3A4F-8323-456A-9EC0-B1C80AF48D54}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Window.cxx}
       }
       file_ref {Fl_Window_fullscreen.cxx} {
+        uuid_Xcode4_PBXBuildFile {06F92B62-70C7-4220-9B40-9E49613889D5}
+        uuid_Xcode4_PBXFileRef {7679F6CC-1F04-4C95-82A8-45ADD9B921DA}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Window_fullscreen.cxx}
       }
       file_ref {Fl_Window_hotspot.cxx} {
+        uuid_Xcode4_PBXBuildFile {01838D98-2D61-477B-8251-BFEF7F7934B1}
+        uuid_Xcode4_PBXFileRef {B5E58AC3-DBBC-4921-9066-AABABE238301}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Window_hotspot.cxx}
       }
       file_ref {Fl_Window_iconize.cxx} {
+        uuid_Xcode4_PBXBuildFile {C23C9712-2419-4812-927C-ADFAB6DF91C0}
+        uuid_Xcode4_PBXFileRef {C34CF806-B0A3-4A4A-B3B1-502CDFD23D3B}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Window_iconize.cxx}
       }
       file_ref {Fl_Wizard.cxx} {
+        uuid_Xcode4_PBXBuildFile {0ECB24E4-43CE-497B-AE79-CFB4AA24EE9F}
+        uuid_Xcode4_PBXFileRef {A84F1844-4DC5-4FCD-925E-20F4809D2871}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_Wizard.cxx}
       }
       file_ref {Fl_XBM_Image.cxx} {
+        uuid_Xcode4_PBXBuildFile {0331C1F4-F50E-40CE-A3DF-DBCE1026AEE5}
+        uuid_Xcode4_PBXFileRef {9A21D7ED-A598-46CE-9BEF-FF2BB0EDD969}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_XBM_Image.cxx}
       }
       file_ref {Fl_XPM_Image.cxx} {
+        uuid_Xcode4_PBXBuildFile {BA6520FE-E8C8-46CE-97D2-B2004FBA58EB}
+        uuid_Xcode4_PBXFileRef {302A3FA8-E0E6-4BBF-BFFF-61815255E28C}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_XPM_Image.cxx}
       }
       file_ref {Fl_abort.cxx} {
+        uuid_Xcode4_PBXBuildFile {76CBBC9B-34FC-4D1D-8B91-4364D399C78E}
+        uuid_Xcode4_PBXFileRef {671B96BA-1F00-4285-B741-6287EE31AB76}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_abort.cxx}
       }
       file_ref {Fl_add_idle.cxx} {
+        uuid_Xcode4_PBXBuildFile {995D8E2D-7F48-4AA5-BC5D-1EE141C7D5B7}
+        uuid_Xcode4_PBXFileRef {1821AF47-D43D-4B6F-BAF7-0C8239CB0CF8}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_add_idle.cxx}
       }
       file_ref {Fl_arg.cxx} {
+        uuid_Xcode4_PBXBuildFile {3DBCCC28-455E-4B3D-A821-A87B87661BAB}
+        uuid_Xcode4_PBXFileRef {8E5EB755-F5D6-4F27-8C0C-B3BD5109FC0C}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_arg.cxx}
       }
       file_ref {Fl_compose.cxx} {
+        uuid_Xcode4_PBXBuildFile {008D083F-48BF-4D00-91BE-4A038C38678F}
+        uuid_Xcode4_PBXFileRef {AA048ACB-ADC4-4FE4-9FEE-77DF739595BD}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_compose.cxx}
       }
       file_ref {Fl_display.cxx} {
+        uuid_Xcode4_PBXBuildFile {7CD1939D-5904-41CA-8EDF-051E74AF82AD}
+        uuid_Xcode4_PBXFileRef {44287148-A93A-4F14-BF82-CF1A80C4EA41}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_display.cxx}
       }
       file_ref {Fl_get_key.cxx} {
+        uuid_Xcode4_PBXBuildFile {A82ED410-8A3B-4306-8DB8-B26F032BF0B4}
+        uuid_Xcode4_PBXFileRef {A8DC358A-CD4F-4EDF-BCC0-1853A9A8AE55}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_get_key.cxx}
       }
       file_ref {Fl_get_system_colors.cxx} {
+        uuid_Xcode4_PBXBuildFile {304D9DBC-B02C-4B24-9313-78D56E0DB732}
+        uuid_Xcode4_PBXFileRef {FEADB63E-10A5-4C86-BDC0-C7427884C5C5}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_get_system_colors.cxx}
       }
       file_ref {Fl_grab.cxx} {
+        uuid_Xcode4_PBXBuildFile {63ABEAB0-ACB7-4C09-907A-41FB050A8D7C}
+        uuid_Xcode4_PBXFileRef {76AA6E6C-3BA9-4D36-8E49-3F1EF8125874}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_grab.cxx}
       }
       file_ref {Fl_lock.cxx} {
+        uuid_Xcode4_PBXBuildFile {590BA941-4384-40FA-AFFA-2CA40D153532}
+        uuid_Xcode4_PBXFileRef {7FAC5183-623B-4758-B960-41D044E55B90}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_lock.cxx}
       }
       file_ref {Fl_own_colormap.cxx} {
+        uuid_Xcode4_PBXBuildFile {2A1194F3-22E2-490B-AD07-E1CAB1EBB610}
+        uuid_Xcode4_PBXFileRef {013DBB50-59E0-4063-B31F-D57E3C31E2A9}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_own_colormap.cxx}
       }
       file_ref {Fl_visual.cxx} {
+        uuid_Xcode4_PBXBuildFile {899B51B6-BAE8-4D54-942F-B2CD51DE703F}
+        uuid_Xcode4_PBXFileRef {1626800F-6D7F-4052-88E8-7EF69E2468DD}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_visual.cxx}
       }
       file_ref {Fl_x.cxx} {
+        uuid_Xcode4_PBXBuildFile {4FEC890B-E99A-4CC0-B4FA-8A61FFB4C5AD}
+        uuid_Xcode4_PBXFileRef {F285310A-3E4D-4595-B259-6AD6965104C8}
         build_env 64
         list_env 64
         filename_and_path {src/Fl_x.cxx}
       }
       file_ref {cmap.cxx} {
+        uuid_Xcode4_PBXBuildFile {9B6A1B07-7896-4568-B667-B9001B826F08}
+        uuid_Xcode4_PBXFileRef {24EDC083-D04B-4DC2-A68A-3BFFDE30D371}
         build_env 64
         list_env 64
         filename_and_path {src/cmap.cxx}
       }
       file_ref {filename_absolute.cxx} {
+        uuid_Xcode4_PBXBuildFile {9C057CB7-470D-474A-8A65-F3EB5D64C178}
+        uuid_Xcode4_PBXFileRef {04A6409B-1DA2-4F77-8692-2F0417606460}
         build_env 64
         list_env 64
         filename_and_path {src/filename_absolute.cxx}
       }
       file_ref {filename_expand.cxx} {
+        uuid_Xcode4_PBXBuildFile {53B53EC9-FB0E-4CA1-908C-AD77EC9602D1}
+        uuid_Xcode4_PBXFileRef {F9F779F2-6B64-4A82-B453-84BD4A837595}
         build_env 64
         list_env 64
         filename_and_path {src/filename_expand.cxx}
       }
       file_ref {filename_ext.cxx} {
+        uuid_Xcode4_PBXBuildFile {D613722A-19E9-4250-953B-907DFE7B14FC}
+        uuid_Xcode4_PBXFileRef {210616B2-483B-418C-9D2D-89C418A5CD3B}
         build_env 64
         list_env 64
         filename_and_path {src/filename_ext.cxx}
       }
       file_ref {filename_isdir.cxx} {
+        uuid_Xcode4_PBXBuildFile {6C9314CD-21BC-40F7-8415-73B0E190D503}
+        uuid_Xcode4_PBXFileRef {C07EC3AE-3C83-4B3E-9966-35A28058E2CA}
         build_env 64
         list_env 64
         filename_and_path {src/filename_isdir.cxx}
       }
       file_ref {filename_list.cxx} {
+        uuid_Xcode4_PBXBuildFile {F2152084-2546-45BA-8321-EB4ADC4D82C9}
+        uuid_Xcode4_PBXFileRef {F08599CC-AC58-4DC3-9A01-8C41395AB3D0}
         build_env 64
         list_env 64
         filename_and_path {src/filename_list.cxx}
       }
       file_ref {filename_match.cxx} {
+        uuid_Xcode4_PBXBuildFile {D2F1A161-BF18-4766-B901-D2BF0C467D27}
+        uuid_Xcode4_PBXFileRef {AB171A4B-B928-4010-BDE1-1F82E10FD0AD}
         build_env 64
         list_env 64
         filename_and_path {src/filename_match.cxx}
       }
       file_ref {filename_setext.cxx} {
+        uuid_Xcode4_PBXBuildFile {B68A8072-65B1-4E62-8618-393D6277AB38}
+        uuid_Xcode4_PBXFileRef {003AA96B-483E-4BCF-BB09-CF9C7585B088}
         build_env 64
         list_env 64
         filename_and_path {src/filename_setext.cxx}
       }
       file_ref {fl_arc.cxx} {
+        uuid_Xcode4_PBXBuildFile {F2D72D4B-3CD3-424B-BCBE-E6ED0B1ADE19}
+        uuid_Xcode4_PBXFileRef {876B6A63-7D11-413F-926D-F400FC3119DD}
         build_env 64
         list_env 64
         filename_and_path {src/fl_arc.cxx}
       }
       file_ref {fl_arci.cxx} {
+        uuid_Xcode4_PBXBuildFile {201C7772-F8EA-46A9-8675-1DC75946FF84}
+        uuid_Xcode4_PBXFileRef {E52CB16D-9900-4D70-ACBA-7698063934AA}
         build_env 64
         list_env 64
         filename_and_path {src/fl_arci.cxx}
       }
       file_ref {fl_ask.cxx} {
+        uuid_Xcode4_PBXBuildFile {7888A1B7-3CC5-44AD-B3AB-20E7A8B7289F}
+        uuid_Xcode4_PBXFileRef {60E7DD73-D034-4D69-BA46-619166E2E30F}
         build_env 64
         list_env 64
         filename_and_path {src/fl_ask.cxx}
       }
       file_ref {fl_boxtype.cxx} {
+        uuid_Xcode4_PBXBuildFile {FFD22E0B-E0EC-485B-8838-5DF7DC9649AC}
+        uuid_Xcode4_PBXFileRef {BC14596F-6410-40F3-96F5-930B8CE39DAF}
         build_env 64
         list_env 64
         filename_and_path {src/fl_boxtype.cxx}
       }
       file_ref {fl_call_main.cxx} {
+        uuid_Xcode4_PBXBuildFile {E0BFCC98-3264-4E4F-A465-DAD81F5A9450}
+        uuid_Xcode4_PBXFileRef {8B35EF2F-2920-4F0F-A82D-D8472B46BDD7}
         build_env 64
         list_env 64
         filename_and_path {src/fl_call_main.cxx}
       }
       file_ref {fl_color.cxx} {
+        uuid_Xcode4_PBXBuildFile {27FB3CD2-EF50-4CE1-A940-76EE40C14C3D}
+        uuid_Xcode4_PBXFileRef {02716487-AA34-406A-9C95-983284DE5A34}
         build_env 64
         list_env 64
         filename_and_path {src/fl_color.cxx}
       }
       file_ref {fl_cursor.cxx} {
+        uuid_Xcode4_PBXBuildFile {191125BA-A890-4754-AB59-D8FB26F9328A}
+        uuid_Xcode4_PBXFileRef {C832D220-A5C0-4938-8129-C2CB8FBAFED8}
         build_env 64
         list_env 64
         filename_and_path {src/fl_cursor.cxx}
       }
       file_ref {fl_curve.cxx} {
+        uuid_Xcode4_PBXBuildFile {56EADAE0-20B2-430D-B01C-FA223EA97E3A}
+        uuid_Xcode4_PBXFileRef {53EC964E-94FC-461A-A2EF-7CA3BF80B206}
         build_env 64
         list_env 64
         filename_and_path {src/fl_curve.cxx}
       }
       file_ref {fl_diamond_box.cxx} {
+        uuid_Xcode4_PBXBuildFile {E40B19F0-5E9F-4EC7-9899-F4528B9AA70D}
+        uuid_Xcode4_PBXFileRef {5557266E-5E95-4208-AE3A-EA3B72D5DF09}
         build_env 64
         list_env 64
         filename_and_path {src/fl_diamond_box.cxx}
       }
       file_ref {fl_dnd.cxx} {
+        uuid_Xcode4_PBXBuildFile {298EDA4F-8AF0-4A92-AFC1-9408CFCD5712}
+        uuid_Xcode4_PBXFileRef {D1E006BE-6D34-4468-9F0D-9085A8E51304}
         build_env 64
         list_env 64
         filename_and_path {src/fl_dnd.cxx}
       }
       file_ref {fl_draw.cxx} {
+        uuid_Xcode4_PBXBuildFile {4F438445-50DE-4B76-BBFF-BC46EBBFA664}
+        uuid_Xcode4_PBXFileRef {3CF0F8B5-7C8D-4462-B572-4A122D6549B0}
         build_env 64
         list_env 64
         filename_and_path {src/fl_draw.cxx}
       }
       file_ref {fl_draw_image.cxx} {
+        uuid_Xcode4_PBXBuildFile {4665DB5F-068D-4310-B2C0-AE689AA85929}
+        uuid_Xcode4_PBXFileRef {F608DA64-EF05-49A3-ABAC-C7C9E7494BEA}
         build_env 64
         list_env 64
         filename_and_path {src/fl_draw_image.cxx}
       }
       file_ref {fl_draw_pixmap.cxx} {
+        uuid_Xcode4_PBXBuildFile {E4923B73-9025-450C-BB43-97FC0850A83A}
+        uuid_Xcode4_PBXFileRef {B6E2BA6C-59E0-4F18-AD7D-164F016C0FF0}
         build_env 64
         list_env 64
         filename_and_path {src/fl_draw_pixmap.cxx}
       }
       file_ref {fl_encoding_latin1.cxx} {
+        uuid_Xcode4_PBXBuildFile {B00A9E35-5560-4825-904B-EF57CD4C0A92}
+        uuid_Xcode4_PBXFileRef {0BEBF5A7-7773-43BE-91CC-B0DFBB6BDA08}
         build_env 64
         list_env 64
         filename_and_path {src/fl_encoding_latin1.cxx}
       }
       file_ref {fl_encoding_mac_roman.cxx} {
+        uuid_Xcode4_PBXBuildFile {8555518A-BE8E-4BFA-B667-6551E92013A8}
+        uuid_Xcode4_PBXFileRef {C2BF9CDF-E31E-4895-A45D-5AAF3768C51B}
         build_env 64
         list_env 64
         filename_and_path {src/fl_encoding_mac_roman.cxx}
       }
       file_ref {fl_engraved_label.cxx} {
+        uuid_Xcode4_PBXBuildFile {52DA813A-9A95-4890-A38D-19B026277F95}
+        uuid_Xcode4_PBXFileRef {0522E1C2-0E5A-4C29-A956-E8CD45EF1B4D}
         build_env 64
         list_env 64
         filename_and_path {src/fl_engraved_label.cxx}
       }
       file_ref {fl_file_dir.cxx} {
+        uuid_Xcode4_PBXBuildFile {8F52E66B-DE06-408C-9FA4-1444637F7B80}
+        uuid_Xcode4_PBXFileRef {1BF9BBF4-D53A-424A-8C0A-D3B0D92797FF}
         build_env 64
         list_env 64
         filename_and_path {src/fl_file_dir.cxx}
       }
       file_ref {fl_font.cxx} {
+        uuid_Xcode4_PBXBuildFile {DAECD573-97D2-4295-8321-13B8F8BC23A6}
+        uuid_Xcode4_PBXFileRef {1CFFB72A-F54F-4002-AE50-C1BCF9F0C89C}
         build_env 64
         list_env 64
         filename_and_path {src/fl_font.cxx}
       }
       file_ref {fl_gtk.cxx} {
+        uuid_Xcode4_PBXBuildFile {1FB7855F-AB31-4B42-AA73-93B07D746272}
+        uuid_Xcode4_PBXFileRef {E3303C9A-F31B-4B23-8AC3-863A5C000D0C}
         build_env 64
         list_env 64
         filename_and_path {src/fl_gtk.cxx}
       }
       file_ref {fl_labeltype.cxx} {
+        uuid_Xcode4_PBXBuildFile {A91665C1-0010-43EE-8A86-9EC869983557}
+        uuid_Xcode4_PBXFileRef {95F43A2D-21DE-4899-9F5B-1DB341E90C3A}
         build_env 64
         list_env 64
         filename_and_path {src/fl_labeltype.cxx}
       }
       file_ref {fl_line_style.cxx} {
+        uuid_Xcode4_PBXBuildFile {70D1EF40-CEE3-4460-9437-445EF6570006}
+        uuid_Xcode4_PBXFileRef {5FD374C4-6C63-497E-9F2B-1B396390EEE5}
         build_env 64
         list_env 64
         filename_and_path {src/fl_line_style.cxx}
       }
       file_ref {fl_open_uri.cxx} {
+        uuid_Xcode4_PBXBuildFile {AE238B51-38F4-4F2E-BC0B-78F3746B987F}
+        uuid_Xcode4_PBXFileRef {5515C9CC-3DEB-4ED1-8B65-42966A9B7E06}
         build_env 64
         list_env 64
         filename_and_path {src/fl_open_uri.cxx}
       }
       file_ref {fl_oval_box.cxx} {
+        uuid_Xcode4_PBXBuildFile {5C5315ED-224F-4077-A54A-D916A09FD43D}
+        uuid_Xcode4_PBXFileRef {554EB894-1B49-46DC-9B44-004AF565327A}
         build_env 64
         list_env 64
         filename_and_path {src/fl_oval_box.cxx}
       }
       file_ref {fl_overlay.cxx} {
+        uuid_Xcode4_PBXBuildFile {13DECC0A-91E0-4B09-9A65-7565C4E4DE00}
+        uuid_Xcode4_PBXFileRef {5536CF51-0B6B-499F-9C91-C2E4898D00BA}
         build_env 64
         list_env 64
         filename_and_path {src/fl_overlay.cxx}
       }
       file_ref {fl_overlay_visual.cxx} {
+        uuid_Xcode4_PBXBuildFile {B447BDF4-E847-4FC6-A720-0CDF4002BA4E}
+        uuid_Xcode4_PBXFileRef {3132F016-7D43-43BE-B074-445C9F20DB50}
         build_env 64
         list_env 64
         filename_and_path {src/fl_overlay_visual.cxx}
       }
       file_ref {fl_plastic.cxx} {
+        uuid_Xcode4_PBXBuildFile {E84D52FD-DECE-4423-8099-1101A9B16E65}
+        uuid_Xcode4_PBXFileRef {D9934C34-B4C6-45E9-9D8D-302562D201D1}
         build_env 64
         list_env 64
         filename_and_path {src/fl_plastic.cxx}
       }
       file_ref {fl_read_image.cxx} {
+        uuid_Xcode4_PBXBuildFile {89292870-50B2-4B4C-9C47-BDD54D8F9A95}
+        uuid_Xcode4_PBXFileRef {1FA85C80-2951-4144-A92D-E37E598C9B19}
         build_env 64
         list_env 64
         filename_and_path {src/fl_read_image.cxx}
       }
       file_ref {fl_rect.cxx} {
+        uuid_Xcode4_PBXBuildFile {7DFE2DA4-C5ED-4447-8F6A-3F7D514DEDA3}
+        uuid_Xcode4_PBXFileRef {82F1E1FC-8B3C-460B-A309-ABE348A6FD1B}
         build_env 64
         list_env 64
         filename_and_path {src/fl_rect.cxx}
       }
       file_ref {fl_round_box.cxx} {
+        uuid_Xcode4_PBXBuildFile {54AED6D6-19AA-4960-A913-C1DDE3A04981}
+        uuid_Xcode4_PBXFileRef {C791DFA1-9A90-4016-B393-FF1205CA92D3}
         build_env 64
         list_env 64
         filename_and_path {src/fl_round_box.cxx}
       }
       file_ref {fl_rounded_box.cxx} {
+        uuid_Xcode4_PBXBuildFile {07653622-17B7-423E-8440-FA89462F116C}
+        uuid_Xcode4_PBXFileRef {557E8041-0084-4B1C-9D36-CF44F1C0F5BE}
         build_env 64
         list_env 64
         filename_and_path {src/fl_rounded_box.cxx}
       }
       file_ref {fl_scroll_area.cxx} {
+        uuid_Xcode4_PBXBuildFile {62206CE3-C4B8-41A3-B0B2-E87558EF8359}
+        uuid_Xcode4_PBXFileRef {0E08EA1C-BD91-44D4-A0EA-0D4243805A2C}
         build_env 64
         list_env 64
         filename_and_path {src/fl_scroll_area.cxx}
       }
       file_ref {fl_set_font.cxx} {
+        uuid_Xcode4_PBXBuildFile {A21C7DBB-77B4-4145-94D3-C8F4E0F7A704}
+        uuid_Xcode4_PBXFileRef {C7ED2C14-A368-4077-A484-B5C6DDCAC057}
         build_env 64
         list_env 64
         filename_and_path {src/fl_set_font.cxx}
       }
       file_ref {fl_set_fonts.cxx} {
+        uuid_Xcode4_PBXBuildFile {2D99B7D6-2146-4F22-B7C4-7CF6B353B3B6}
+        uuid_Xcode4_PBXFileRef {22603052-0721-416C-9BC9-9117FA96A7E6}
         build_env 64
         list_env 64
         filename_and_path {src/fl_set_fonts.cxx}
       }
       file_ref {fl_shadow_box.cxx} {
+        uuid_Xcode4_PBXBuildFile {5F09A8BB-4F72-4A29-9D89-1B3686738A5F}
+        uuid_Xcode4_PBXFileRef {2C5EEC89-51E9-41FB-8530-FBF66EEA73B1}
         build_env 64
         list_env 64
         filename_and_path {src/fl_shadow_box.cxx}
       }
       file_ref {fl_shortcut.cxx} {
+        uuid_Xcode4_PBXBuildFile {6DC429A2-4E0F-46F0-9928-C972C13F3A79}
+        uuid_Xcode4_PBXFileRef {BFCE21B1-56B8-4D68-B7AE-BFB8E2D65029}
         build_env 64
         list_env 64
         filename_and_path {src/fl_shortcut.cxx}
       }
       file_ref {fl_show_colormap.cxx} {
+        uuid_Xcode4_PBXBuildFile {09571C9D-E0F2-44E1-B3BB-BEA58AF6DB6E}
+        uuid_Xcode4_PBXFileRef {76D6638A-FCA0-47DD-97AC-02F20B149360}
         build_env 64
         list_env 64
         filename_and_path {src/fl_show_colormap.cxx}
       }
       file_ref {fl_symbols.cxx} {
+        uuid_Xcode4_PBXBuildFile {E5E13729-9359-407A-ADAE-8CA9BF1153A4}
+        uuid_Xcode4_PBXFileRef {ECAFDF98-A4C6-47A4-AAC5-CBBAA9E2B887}
         build_env 64
         list_env 64
         filename_and_path {src/fl_symbols.cxx}
       }
       file_ref {fl_utf8.cxx} {
+        uuid_Xcode4_PBXBuildFile {1D28C444-CF47-48A3-B7BD-AC7FC031BF60}
+        uuid_Xcode4_PBXFileRef {C82D09C9-A25C-4969-AA75-C1844388A904}
         build_env 64
         list_env 64
         filename_and_path {src/fl_utf8.cxx}
       }
       file_ref {fl_utf.cxx} {
+        uuid_Xcode4_PBXBuildFile {AB04400B-9F1A-4F37-888C-89372FDCF7F7}
+        uuid_Xcode4_PBXFileRef {574878A1-4FD8-42FA-9BD2-ABE5009BD0DE}
         build_env 64
         list_env 64
         filename_and_path {src/fl_utf.cxx}
       }
       file_ref {fl_vertex.cxx} {
+        uuid_Xcode4_PBXBuildFile {62CA9151-24C4-427F-8D7C-E667CB1A6005}
+        uuid_Xcode4_PBXFileRef {6C74D84D-D2D9-473C-B4EF-A2916D41A606}
         build_env 64
         list_env 64
         filename_and_path {src/fl_vertex.cxx}
@@ -1659,26 +2229,34 @@ folder Libraries {open
         filename_and_path {src/flstring.c}
       }
       file_ref {numericsort.cxx} {
+        uuid_Xcode4_PBXBuildFile {BDD37F5E-669D-45D0-AEA7-84934BD116C6}
+        uuid_Xcode4_PBXFileRef {2286DB22-6117-4F0A-BEE5-E39D655B21BB}
         build_env 64
         list_env 64
         filename_and_path {src/numericsort.cxx}
       }
       file_ref {ps_image.cxx} {
+        uuid_Xcode4_PBXBuildFile {3FCA9BA2-08F4-4493-AAC5-1C5BA6C19BF9}
+        uuid_Xcode4_PBXFileRef {472AB397-43B4-4F36-8D30-46796562F422}
         build_env 64
         list_env 64
         filename_and_path {src/ps_image.cxx}
       }
       file_ref {scandir.cxx} {
+        uuid_Xcode4_PBXBuildFile {91F32552-6EBD-41A3-A404-C13499D47D1B}
+        uuid_Xcode4_PBXFileRef {1E2B1DAE-2CA8-4E24-9D70-7648A5F0E604}
         build_env 64
         list_env 64
         filename_and_path {src/scandir.cxx}
       }
       file_ref {screen_xywh.cxx} {
+        uuid_Xcode4_PBXBuildFile {898DCC19-92C6-4CAD-8F97-795C17BF0F8E}
+        uuid_Xcode4_PBXFileRef {4302C79C-040D-4155-9A83-7B77750879E4}
         build_env 64
         list_env 64
         filename_and_path {src/screen_xywh.cxx}
       }
-      file_ref {vsnprintf.c} {selected
+      file_ref {vsnprintf.c} {
         build_env 0
         list_env 0
         filename_and_path {src/vsnprintf.c}
