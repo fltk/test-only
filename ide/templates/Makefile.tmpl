@@ -1,180 +1,152 @@
-#
-# "$Id$"
-#
-# Library makefile for the Fast Light Tool Kit (FLTK).
-#
-# Copyright 1998-2010 by Bill Spitzak and others.
-#
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Library General Public
-# License as published by the Free Software Foundation; either
-# version 2 of the License, or (at your option) any later version.
-#
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Library General Public License for more details.
-#
-# You should have received a copy of the GNU Library General Public
-# License along with this library; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-# USA.
-#
-# Please report all bugs and problems on the following page:
-#
-#      http://www.fltk.org/str.php
-#
+#WriteFile(fluid/Makefile);
+##
+## "$Id$"
+##
+## FLUID makefile for the Fast Light Tool Kit (FLTK).
+##
+## Copyright 1998-2011 by Bill Spitzak and others.
+##
+## This library is free software; you can redistribute it and/or
+## modify it under the terms of the GNU Library General Public
+## License as published by the Free Software Foundation; either
+## version 2 of the License, or (at your option) any later version.
+##
+## This library is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+## Library General Public License for more details.
+##
+## You should have received a copy of the GNU Library General Public
+## License along with this library; if not, write to the Free Software
+## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+## USA.
+##
+## Please report all bugs and problems on the following page:
+##
+##      http://www.fltk.org/str.php
+##
 
-CPPFILES =  \
-	Fl.cxx \
-	Fl_Adjuster.cxx \
-	Fl_Bitmap.cxx \
-	Fl_Box.cxx \
-	Fl_Browser.cxx \
-	Fl_Browser_.cxx \
-	Fl_Browser_load.cxx \
-	Fl_Button.cxx \
-	Fl_Chart.cxx \
-	Fl_Check_Browser.cxx \
-	Fl_Check_Button.cxx \
-	Fl_Choice.cxx \
-	Fl_Clock.cxx \
-	Fl_Color_Chooser.cxx \
-	Fl_Counter.cxx \
-	Fl_Device.cxx \
-	Fl_Dial.cxx \
-	Fl_Double_Window.cxx \
-	Fl_File_Browser.cxx \
-	Fl_File_Chooser.cxx \
-	Fl_File_Chooser2.cxx \
-	Fl_File_Icon.cxx \
-	Fl_File_Input.cxx \
-	Fl_Group.cxx \
-	Fl_Help_View.cxx \
-	Fl_Image.cxx \
-	Fl_Input.cxx \
-	Fl_Input_.cxx \
-	Fl_Light_Button.cxx \
-	Fl_Menu.cxx \
-	Fl_Menu_.cxx \
-	Fl_Menu_Bar.cxx \
-	Fl_Menu_Button.cxx \
-	Fl_Menu_Window.cxx \
-	Fl_Menu_add.cxx \
-	Fl_Menu_global.cxx \
-	Fl_Multi_Label.cxx \
-	Fl_Native_File_Chooser.cxx \
-	Fl_Overlay_Window.cxx \
-	Fl_Pack.cxx \
-	Fl_Paged_Device.cxx \
-	Fl_Pixmap.cxx \
-	Fl_Positioner.cxx \
-	Fl_Printer.cxx \
-	Fl_Preferences.cxx \
-	Fl_Progress.cxx \
-	Fl_Repeat_Button.cxx \
-	Fl_Return_Button.cxx \
-	Fl_Roller.cxx \
-	Fl_Round_Button.cxx \
-	Fl_Scroll.cxx \
-	Fl_Scrollbar.cxx \
-	Fl_Shared_Image.cxx \
-	Fl_Single_Window.cxx \
-	Fl_Slider.cxx \
-	Fl_Sys_Menu_Bar.cxx \
-	Fl_Table.cxx \
-	Fl_Table_Row.cxx \
-	Fl_Tabs.cxx \
-	Fl_Text_Buffer.cxx \
-	Fl_Text_Display.cxx \
-	Fl_Text_Editor.cxx \
-	Fl_Tile.cxx \
-	Fl_Tiled_Image.cxx \
-	Fl_Tooltip.cxx \
-	Fl_Tree.cxx \
-	Fl_Tree_Item.cxx \
-	Fl_Tree_Item_Array.cxx \
-	Fl_Tree_Prefs.cxx \
-	Fl_Valuator.cxx \
-	Fl_Value_Input.cxx \
-	Fl_Value_Output.cxx \
-	Fl_Value_Slider.cxx \
-	Fl_Widget.cxx \
-	Fl_Window.cxx \
-	Fl_Window_fullscreen.cxx \
-	Fl_Window_hotspot.cxx \
-	Fl_Window_iconize.cxx \
-	Fl_Wizard.cxx \
-	Fl_XBM_Image.cxx \
-	Fl_XPM_Image.cxx \
-	Fl_abort.cxx \
-	Fl_add_idle.cxx \
-	Fl_arg.cxx \
-	Fl_compose.cxx \
-	Fl_display.cxx \
-	Fl_get_key.cxx \
-	Fl_get_system_colors.cxx \
-	Fl_grab.cxx \
-	Fl_lock.cxx \
-	Fl_own_colormap.cxx \
-	Fl_visual.cxx \
-	Fl_x.cxx \
-	filename_absolute.cxx \
-	filename_expand.cxx \
-	filename_ext.cxx \
-	filename_isdir.cxx \
-	filename_list.cxx \
-	filename_match.cxx \
-	filename_setext.cxx \
-	fl_arc.cxx \
-	fl_arci.cxx \
-	fl_ask.cxx \
-	fl_boxtype.cxx \
-	fl_call_main.cxx \
-	fl_color.cxx \
-	fl_cursor.cxx \
-	fl_curve.cxx \
-	fl_diamond_box.cxx \
-	fl_dnd.cxx \
-	fl_draw.cxx \
-	fl_draw_image.cxx \
-	fl_draw_pixmap.cxx \
-	fl_encoding_latin1.cxx \
-	fl_encoding_mac_roman.cxx \
-	fl_engraved_label.cxx \
-	fl_file_dir.cxx \
-	fl_font.cxx \
-	fl_gtk.cxx \
-	fl_labeltype.cxx \
-	fl_line_style.cxx \
-	fl_open_uri.cxx \
-	fl_oval_box.cxx \
-	fl_overlay.cxx \
-	fl_overlay_visual.cxx \
-	fl_plastic.cxx \
-	fl_read_image.cxx \
-	fl_rect.cxx \
-	fl_round_box.cxx \
-	fl_rounded_box.cxx \
-	fl_scroll_area.cxx \
-	fl_set_font.cxx \
-	fl_set_fonts.cxx \
-	fl_shadow_box.cxx \
-	fl_shortcut.cxx \
-	fl_show_colormap.cxx \
-	fl_symbols.cxx \
-	fl_utf8.cxx \
-	fl_utf.cxx \
-	fl_vertex.cxx \
-	numericsort.cxx \
-	ps_image.cxx \
-	scandir.cxx \
-	screen_xywh.cxx
+#CppFiles(Fluid);
+
+################################################################################################################################
+
+OBJECTS = $(CPPFILES:.cxx=.o)
+
+include ../makeinclude
+
+all:	$(FLUID) fluid$(EXEEXT)
+
+fluid$(EXEEXT):		$(OBJECTS) $(LIBNAME) $(FLLIBNAME) \
+			$(IMGLIBNAME)
+	echo Linking $@...
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(OBJECTS) $(LINKFLTKFORMS) $(LINKFLTKIMG) $(LDLIBS)
+	$(OSX_ONLY) $(INSTALL_BIN) fluid fluid.app/Contents/MacOS
+
+fluid-shared$(EXEEXT):	$(OBJECTS) ../src/$(DSONAME) ../src/$(FLDSONAME) \
+			../src/$(IMGDSONAME)
+	echo Linking $@...
+	$(CXX) $(ARCHFLAGS) $(LDFLAGS) -o $@ $(OBJECTS) $(LINKSHARED) $(LDLIBS)
+
+clean:
+	-$(RM) *.o core.* *~ *.bck *.bck
+	-$(RM) core fluid$(EXEEXT) fluid-shared$(EXEEXT)
+	-$(RM) fluid.app/Contents/MacOS/fluid$(EXEEXT)
+
+depend:	$(CPPFILES)
+	makedepend -Y -I.. -f makedepend $(CPPFILES)
+
+## Automatically generated dependencies...
+include makedepend
+
+install: all
+	echo "Installing FLUID in $(DESTDIR)$(bindir)..."
+	-$(INSTALL_DIR) $(DESTDIR)$(bindir)
+	$(INSTALL_BIN) $(FLUID) $(DESTDIR)$(bindir)/fluid$(EXEEXT)
+
+install-linux:
+	-$(INSTALL_DIR) $(DESTDIR)/usr/share/applications
+	$(INSTALL_DATA) fluid.desktop  $(DESTDIR)/usr/share/applications
+	for size in 16 32 48 64 128; do \
+		if test ! -d $(DESTDIR)/usr/share/icons/hicolor/$${size}x$${size}/apps; then \
+			$(INSTALL_DIR) $(DESTDIR)/usr/share/icons/hicolor/$${size}x$${size}/apps; \
+		fi; \
+		$(INSTALL_DATA) icons/fluid-$$size.png $(DESTDIR)/usr/share/icons/hicolor/$${size}x$${size}/apps/fluid.png; \
+	done
+	-$(INSTALL_DIR) $(DESTDIR)/usr/share/mimelnk/application
+	$(INSTALL_DATA) x-fluid.desktop  $(DESTDIR)/usr/share/mimelnk/application
+
+install-osx:
+	echo Installing Fluid in $(DESTDIR)/Applications...
+	-$(INSTALL_DIR) $(DESTDIR)/Applications/fluid.app
+	-$(INSTALL_DIR) $(DESTDIR)/Applications/fluid.app/Contents
+	$(INSTALL_DATA) fluid.app/Contents/Info.plist $(DESTDIR)/Applications/fluid.app/Contents/Info.plist
+	$(INSTALL_DATA) fluid.app/Contents/PkgInfo $(DESTDIR)/Applications/fluid.app/Contents/PkgInfo
+	-$(INSTALL_DIR) $(DESTDIR)/Applications/fluid.app/Contents/MacOS
+	$(RM) $(DESTDIR)/Applications/fluid.app/Contents/MacOS/fluid
+	$(LN) $(bindir)/fluid $(DESTDIR)/Applications/fluid.app/Contents/MacOS/fluid
+	-$(INSTALL_DIR) $(DESTDIR)/Applications/fluid.app/Contents/Resources
+	$(INSTALL_DATA) fluid.app/Contents/Resources/fluid.icns $(DESTDIR)/Applications/fluid.app/Contents/Resources
+
+uninstall:
+	$(RM) $(DESTDIR)$(bindir)/fluid$(EXEEXT)
+
+uninstall-linux:
+	$(RM) $(DESTDIR)/usr/share/applications/fluid.desktop
+	$(RM) $(DESTDIR)/usr/share/icons/hicolor/*/fluid.png
+	$(RM) $(DESTDIR)/usr/share/mimelnk/application/x-fluid.desktop
+
+uninstall-osx:
+	$(RM) -r $(DESTDIR)/Applications/fluid.app
+
+
+##
+## Note: The rebuild target can only be used if you have the original .fl
+##       files.  This is normally only used by the FLTK maintainers...
+##
+
+rebuild:
+	./fluid -c about_panel.fl
+	./fluid -c alignment_panel.fl
+	./fluid -c function_panel.fl
+	./fluid -c print_panel.fl
+	./fluid -c template_panel.fl
+	./fluid -c widget_panel.fl
+
+##
+## End of "$Id$".
+##
+#CloseFile;
+#WriteFile(src/Makefile);
+##
+## "$Id$"
+##
+## Library makefile for the Fast Light Tool Kit (FLTK).
+##
+## Copyright 1998-2010 by Bill Spitzak and others.
+##
+## This library is free software; you can redistribute it and/or
+## modify it under the terms of the GNU Library General Public
+## License as published by the Free Software Foundation; either
+## version 2 of the License, or (at your option) any later version.
+##
+## This library is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+## Library General Public License for more details.
+##
+## You should have received a copy of the GNU Library General Public
+## License along with this library; if not, write to the Free Software
+## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+## USA.
+##
+## Please report all bugs and problems on the following page:
+##
+##      http://www.fltk.org/str.php
+##
+
+#CppFiles(fltk);
 	
-OBJCPPFILES =  \
-	Fl_cocoa.mm \
-	Fl_Native_File_Chooser_MAC.mm \
-	Fl_Quartz_Printer.mm
+#ObjCppFiles(fltk);
 	
 GLCPPFILES = \
 	Fl_Gl_Choice.cxx \
@@ -212,7 +184,7 @@ UTF8CFILES = \
 	xutf8/utf8Utils.c \
 	xutf8/utf8Wrap.c
 
-################################################################
+################################################################################################################################
 FLTKFLAGS = -DFL_LIBRARY
 include ../makeinclude
 
@@ -342,17 +314,17 @@ libfltk_images_s.a: $(IMGOBJECTS)
 	$(LIBCOMMAND) libfltk_images_s.a libfltk_images_s.o
 	$(CHMOD) +x libfltk_images_s.a
 
-#-----------------------------------------------------------------
-# - the import libraries libfltk*.dll.a and the .dll files
-#   are created from the libfltk*.a files. They are built
-#   into the src dir.
-# - The _images, _gl and dlls must be linked
-#   against the import libraries in the src dir.
-#-----------------------------------------------------------------
+##-----------------------------------------------------------------
+## - the import libraries libfltk*.dll.a and the .dll files
+##   are created from the libfltk*.a files. They are built
+##   into the src dir.
+## - The _images, _gl and dlls must be linked
+##   against the import libraries in the src dir.
+##-----------------------------------------------------------------
 
-#-----------------------------------------------------------------
-# cygwin GDI shared libraries
-#-----------------------------------------------------------------
+##-----------------------------------------------------------------
+## cygwin GDI shared libraries
+##-----------------------------------------------------------------
 
 cygfltknox-1.3.dll: $(LIBNAME)
 	echo $(DSOCOMMAND) $(LIBNAME) ...
@@ -372,9 +344,9 @@ cygfltknox_images-1.3.dll: $(IMGLIBNAME) cygfltknox-1.3.dll
 		-L. -lfltk -Wl,--exclude-libs -Wl,libfltk_png.a \
 			$(IMAGELIBS) $(LDLIBS)
 
-#-----------------------------------------------------------------
-# cygwin X11 shared libraries
-#-----------------------------------------------------------------
+##-----------------------------------------------------------------
+## cygwin X11 shared libraries
+##-----------------------------------------------------------------
 
 cygfltk-1.3.dll: $(LIBNAME)
 	echo $(DSOCOMMAND) $(LIBNAME) ...
@@ -405,9 +377,9 @@ mgwfltknox_gl-1.3.dll: $(GLLIBNAME) mgwfltknox-1.3.dll
 		-Wl,--out-implib=libfltk_gl.dll.a \
 		-L. -lfltk $(GLDLIBS)
 
-#-----------------------------------------------------
-# See STR #1585 for --exclude-libs
-#-----------------------------------------------------
+##-----------------------------------------------------
+## See STR ##1585 for --exclude-libs
+##-----------------------------------------------------
 
 mgwfltknox_images-1.3.dll: $(IMGLIBNAME) mgwfltknox-1.3.dll
 	echo $(DSOCOMMAND) $(IMGLIBNAME) ...
@@ -431,13 +403,13 @@ depend:	$(CPPFILES) $(MMFILES) $(FLCPPFILES) $(GLCPPFILES) $(IMGCPPFILES) $(CFIL
 	makedepend -Y -I.. -f makedepend $(CPPFILES) $(MMFILES) $(FLCPPFILES) \
 		$(GLCPPFILES) $(IMGCPPFILES) $(CFILES) $(UTF8CFILES)
 
-# Automatically generated dependencies... generated on a Linux/Unix host !
+## Automatically generated dependencies... generated on a Linux/Unix host !
 include makedepend
 
-# These dependencies aren't part of the makedepend file since
-# they are part of the WIN32 and MacOS code base...
-# Please add only non-Linux/Unix files or such that are optional
-# (like "*xft*") here:
+## These dependencies aren't part of the makedepend file since
+## they are part of the WIN32 and MacOS code base...
+## Please add only non-Linux/Unix files or such that are optional
+## (like "*xft*") here:
 Fl_get_key.o:	Fl_get_key_mac.cxx Fl_get_key_win32.cxx
 Fl_Native_File_Chooser.o : Fl_Native_File_Chooser_WIN32.cxx
 Fl_Native_File_Chooser_MAC.o:	Fl_Native_File_Chooser_MAC.mm
@@ -500,7 +472,7 @@ Fl_x.o:	../fltk3/osx.h ../fltk3/win32.h
 gl_draw.o:	../fltk3/osx.h ../fltk3/win32.h
 gl_start.o:	../fltk3/osx.h ../fltk3/win32.h
 
-################################################################
+################################################################################################################################
 
 install: $(LIBNAME) $(DSONAME) \
 	$(FLLIBNAME) $(FLDSONAME) \
@@ -698,7 +670,8 @@ uninstall:
 		$(RM) $(DESTDIR)$(libdir)/libfltk_images.dll.a;\
 	fi
 
-#
-# End of "$Id$".
-#
-# DO NOT DELETE
+##
+## End of "$Id$".
+##
+## DO NOT DELETE
+#CloseFile;
