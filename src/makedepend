@@ -30,6 +30,9 @@ Fl_Bitmap.o: ../fltk3/Image.h ../fltk3/Bitmap.h ../fltk3/Image.h
 Fl_Bitmap.o: ../fltk3/Pixmap.h ../fltk3/RGBImage.h ../fltk3/MenuItem.h
 Fl_Bitmap.o: ../fltk3/Printer.h ../fltk3/PagedDevice.h ../fltk3/PostScript.h
 Fl_Bitmap.o: flstring.h ../fltk3/Export.h ../config.h
+Fl_Box.o: ../fltk3/Widget.h ../fltk3/enumerations.h ../fltk3/Export.h
+Fl_Box.o: ../fltk3/types.h ../fltk3/Rectangle.h ../fltk3/Object.h
+Fl_Box.o: ../fltk3/Box.h ../fltk3/Widget.h ../fltk3/Wrapper.h
 Fl_Browser.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 Fl_Browser.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 Fl_Browser.o: ../fltk3/Browser.h ../fltk3/Browser_.h ../fltk3/Group.h
@@ -58,9 +61,6 @@ Fl_Browser_load.o: ../fltk3/Widget.h ../fltk3/Wrapper.h ../fltk3/Widget.h
 Fl_Browser_load.o: ../fltk3/Rectangle.h ../fltk3/Object.h
 Fl_Browser_load.o: ../fltk3/Scrollbar.h ../fltk3/Slider.h ../fltk3/Valuator.h
 Fl_Browser_load.o: ../fltk3/Image.h ../fltk3/utf8.h
-Fl_Box.o: ../fltk3/Widget.h ../fltk3/enumerations.h ../fltk3/Export.h
-Fl_Box.o: ../fltk3/types.h ../fltk3/Rectangle.h ../fltk3/Object.h
-Fl_Box.o: ../fltk3/Box.h ../fltk3/Widget.h ../fltk3/Wrapper.h
 Fl_Button.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 Fl_Button.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 Fl_Button.o: ../fltk3/Button.h ../fltk3/Widget.h ../fltk3/Wrapper.h
@@ -138,6 +138,12 @@ Fl_Counter.o: ../fltk3/Group.h ../fltk3/Device.h ../fltk3/Object.h
 Fl_Counter.o: ../fltk3/Plugin.h ../fltk3/Preferences.h ../fltk3/Image.h
 Fl_Counter.o: ../fltk3/Bitmap.h ../fltk3/Image.h ../fltk3/Pixmap.h
 Fl_Counter.o: ../fltk3/RGBImage.h
+Fl_Device.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
+Fl_Device.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
+Fl_Device.o: ../fltk3/Device.h ../fltk3/x.h ../fltk3/Window.h
+Fl_Device.o: ../fltk3/Object.h ../fltk3/Plugin.h ../fltk3/Preferences.h
+Fl_Device.o: ../fltk3/Image.h ../fltk3/Object.h ../fltk3/Bitmap.h
+Fl_Device.o: ../fltk3/Image.h ../fltk3/Pixmap.h ../fltk3/RGBImage.h
 Fl_Dial.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h ../fltk3/types.h
 Fl_Dial.o: ../fltk3/Xutf8.h ../fltk3/enumerations.h ../fltk3/Dial.h
 Fl_Dial.o: ../fltk3/Valuator.h ../fltk3/Widget.h ../fltk3/Wrapper.h
@@ -148,12 +154,6 @@ Fl_Dial.o: ../fltk3/Device.h ../fltk3/Object.h ../fltk3/Plugin.h
 Fl_Dial.o: ../fltk3/Preferences.h ../fltk3/Image.h ../fltk3/Bitmap.h
 Fl_Dial.o: ../fltk3/Image.h ../fltk3/Pixmap.h ../fltk3/RGBImage.h
 Fl_Dial.o: ../fltk3/math.h
-Fl_Device.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
-Fl_Device.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
-Fl_Device.o: ../fltk3/Device.h ../fltk3/x.h ../fltk3/Window.h
-Fl_Device.o: ../fltk3/Object.h ../fltk3/Plugin.h ../fltk3/Preferences.h
-Fl_Device.o: ../fltk3/Image.h ../fltk3/Object.h ../fltk3/Bitmap.h
-Fl_Device.o: ../fltk3/Image.h ../fltk3/Pixmap.h ../fltk3/RGBImage.h
 Fl_Double_Window.o: ../config.h ../fltk3/run.h ../fltk3/utf8.h
 Fl_Double_Window.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
 Fl_Double_Window.o: ../fltk3/enumerations.h ../fltk3/DoubleWindow.h
@@ -440,11 +440,6 @@ Fl_Positioner.o: ../fltk3/Widget.h ../fltk3/Rectangle.h ../fltk3/Object.h
 Fl_Positioner.o: ../fltk3/Device.h ../fltk3/Object.h ../fltk3/Plugin.h
 Fl_Positioner.o: ../fltk3/Preferences.h ../fltk3/Image.h ../fltk3/Bitmap.h
 Fl_Positioner.o: ../fltk3/Image.h ../fltk3/Pixmap.h ../fltk3/RGBImage.h
-Fl_Preferences.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
-Fl_Preferences.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
-Fl_Preferences.o: ../fltk3/Preferences.h ../fltk3/Plugin.h
-Fl_Preferences.o: ../fltk3/filename.h ../fltk3/utf8.h flstring.h
-Fl_Preferences.o: ../fltk3/Export.h ../config.h
 Fl_Printer.o: ../fltk3/Printer.h ../fltk3/x.h ../fltk3/enumerations.h
 Fl_Printer.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Window.h
 Fl_Printer.o: ../fltk3/Xutf8.h ../fltk3/PagedDevice.h ../fltk3/Device.h
@@ -468,6 +463,11 @@ Fl_Printer.o: ../fltk3/Input_.h ../fltk3/ReturnButton.h print_panel.cxx
 Fl_Printer.o: print_panel.h ../fltk3/RoundButton.h ../fltk3/Spinner.h
 Fl_Printer.o: ../fltk3/RepeatButton.h ../fltk3/Progress.h ../src/flstring.h
 Fl_Printer.o: ../fltk3/Export.h ../fltk3/IntInput.h ../fltk3/Input.h
+Fl_Preferences.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
+Fl_Preferences.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
+Fl_Preferences.o: ../fltk3/Preferences.h ../fltk3/Plugin.h
+Fl_Preferences.o: ../fltk3/filename.h ../fltk3/utf8.h flstring.h
+Fl_Preferences.o: ../fltk3/Export.h ../config.h
 Fl_Progress.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 Fl_Progress.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 Fl_Progress.o: ../fltk3/Progress.h ../fltk3/Widget.h ../fltk3/draw.h
@@ -623,6 +623,16 @@ Fl_Tiled_Image.o: ../fltk3/Wrapper.h ../fltk3/Widget.h ../fltk3/Rectangle.h
 Fl_Tiled_Image.o: ../fltk3/Object.h ../fltk3/Device.h ../fltk3/Object.h
 Fl_Tiled_Image.o: ../fltk3/Plugin.h ../fltk3/Preferences.h ../fltk3/Image.h
 Fl_Tiled_Image.o: ../fltk3/Bitmap.h ../fltk3/Pixmap.h ../fltk3/RGBImage.h
+Fl_Tooltip.o: ../fltk3/Tooltip.h ../fltk3/run.h ../fltk3/utf8.h
+Fl_Tooltip.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
+Fl_Tooltip.o: ../fltk3/enumerations.h ../fltk3/Widget.h ../fltk3/Rectangle.h
+Fl_Tooltip.o: ../fltk3/Object.h ../fltk3/draw.h ../fltk3/x.h
+Fl_Tooltip.o: ../fltk3/Window.h ../fltk3/enumerations.h ../fltk3/Window.h
+Fl_Tooltip.o: ../fltk3/Group.h ../fltk3/Widget.h ../fltk3/Wrapper.h
+Fl_Tooltip.o: ../fltk3/Device.h ../fltk3/Object.h ../fltk3/Plugin.h
+Fl_Tooltip.o: ../fltk3/Preferences.h ../fltk3/Image.h ../fltk3/Bitmap.h
+Fl_Tooltip.o: ../fltk3/Image.h ../fltk3/Pixmap.h ../fltk3/RGBImage.h
+Fl_Tooltip.o: ../fltk3/MenuWindow.h ../fltk3/SingleWindow.h
 Fl_Tree.o: ../fltk3/Tree.h ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 Fl_Tree.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 Fl_Tree.o: ../fltk3/Group.h ../fltk3/Widget.h ../fltk3/Wrapper.h
@@ -659,16 +669,6 @@ Fl_Tree_Item_Array.o: ../fltk3/TreePrefs.h
 Fl_Tree_Prefs.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 Fl_Tree_Prefs.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 Fl_Tree_Prefs.o: ../fltk3/Pixmap.h ../fltk3/Image.h ../fltk3/TreePrefs.h
-Fl_Tooltip.o: ../fltk3/Tooltip.h ../fltk3/run.h ../fltk3/utf8.h
-Fl_Tooltip.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
-Fl_Tooltip.o: ../fltk3/enumerations.h ../fltk3/Widget.h ../fltk3/Rectangle.h
-Fl_Tooltip.o: ../fltk3/Object.h ../fltk3/draw.h ../fltk3/x.h
-Fl_Tooltip.o: ../fltk3/Window.h ../fltk3/enumerations.h ../fltk3/Window.h
-Fl_Tooltip.o: ../fltk3/Group.h ../fltk3/Widget.h ../fltk3/Wrapper.h
-Fl_Tooltip.o: ../fltk3/Device.h ../fltk3/Object.h ../fltk3/Plugin.h
-Fl_Tooltip.o: ../fltk3/Preferences.h ../fltk3/Image.h ../fltk3/Bitmap.h
-Fl_Tooltip.o: ../fltk3/Image.h ../fltk3/Pixmap.h ../fltk3/RGBImage.h
-Fl_Tooltip.o: ../fltk3/MenuWindow.h ../fltk3/SingleWindow.h
 Fl_Valuator.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 Fl_Valuator.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 Fl_Valuator.o: ../fltk3/Valuator.h ../fltk3/Widget.h ../fltk3/math.h
@@ -1083,6 +1083,15 @@ fl_rounded_box.o: ../fltk3/Rectangle.h ../fltk3/Object.h ../fltk3/Device.h
 fl_rounded_box.o: ../fltk3/Object.h ../fltk3/Plugin.h ../fltk3/Preferences.h
 fl_rounded_box.o: ../fltk3/Image.h ../fltk3/Bitmap.h ../fltk3/Image.h
 fl_rounded_box.o: ../fltk3/Pixmap.h ../fltk3/RGBImage.h
+fl_scroll_area.o: ../config.h ../fltk3/run.h ../fltk3/utf8.h
+fl_scroll_area.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
+fl_scroll_area.o: ../fltk3/enumerations.h ../fltk3/x.h ../fltk3/Window.h
+fl_scroll_area.o: ../fltk3/draw.h ../fltk3/enumerations.h ../fltk3/Window.h
+fl_scroll_area.o: ../fltk3/Group.h ../fltk3/Widget.h ../fltk3/Wrapper.h
+fl_scroll_area.o: ../fltk3/Widget.h ../fltk3/Rectangle.h ../fltk3/Object.h
+fl_scroll_area.o: ../fltk3/Device.h ../fltk3/Object.h ../fltk3/Plugin.h
+fl_scroll_area.o: ../fltk3/Preferences.h ../fltk3/Image.h ../fltk3/Bitmap.h
+fl_scroll_area.o: ../fltk3/Image.h ../fltk3/Pixmap.h ../fltk3/RGBImage.h
 fl_set_font.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 fl_set_font.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 fl_set_font.o: ../fltk3/x.h ../fltk3/Window.h ../fltk3/draw.h
@@ -1098,15 +1107,6 @@ fl_set_fonts.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 fl_set_fonts.o: ../fltk3/x.h ../fltk3/Window.h Fl_Font.H ../config.h
 fl_set_fonts.o: ../fltk3/Xutf8.h flstring.h ../fltk3/Export.h
 fl_set_fonts.o: fl_set_fonts_x.cxx
-fl_scroll_area.o: ../config.h ../fltk3/run.h ../fltk3/utf8.h
-fl_scroll_area.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
-fl_scroll_area.o: ../fltk3/enumerations.h ../fltk3/x.h ../fltk3/Window.h
-fl_scroll_area.o: ../fltk3/draw.h ../fltk3/enumerations.h ../fltk3/Window.h
-fl_scroll_area.o: ../fltk3/Group.h ../fltk3/Widget.h ../fltk3/Wrapper.h
-fl_scroll_area.o: ../fltk3/Widget.h ../fltk3/Rectangle.h ../fltk3/Object.h
-fl_scroll_area.o: ../fltk3/Device.h ../fltk3/Object.h ../fltk3/Plugin.h
-fl_scroll_area.o: ../fltk3/Preferences.h ../fltk3/Image.h ../fltk3/Bitmap.h
-fl_scroll_area.o: ../fltk3/Image.h ../fltk3/Pixmap.h ../fltk3/RGBImage.h
 fl_shadow_box.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 fl_shadow_box.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 fl_shadow_box.o: ../fltk3/draw.h ../fltk3/x.h ../fltk3/Window.h
@@ -1146,6 +1146,8 @@ fl_symbols.o: ../fltk3/Object.h ../fltk3/Plugin.h ../fltk3/Preferences.h
 fl_symbols.o: ../fltk3/Image.h ../fltk3/Bitmap.h ../fltk3/Image.h
 fl_symbols.o: ../fltk3/Pixmap.h ../fltk3/RGBImage.h ../fltk3/math.h
 fl_symbols.o: flstring.h ../fltk3/Export.h ../config.h
+fl_utf8.o: ../config.h ../fltk3/filename.h ../fltk3/Xutf8.h ../fltk3/utf8.h
+fl_utf.o: ../fltk3/utf8.h xutf8/mk_wcwidth.c
 fl_vertex.o: ../config.h ../fltk3/draw.h ../fltk3/x.h ../fltk3/enumerations.h
 fl_vertex.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Window.h
 fl_vertex.o: ../fltk3/Xutf8.h ../fltk3/enumerations.h ../fltk3/Window.h
@@ -1155,10 +1157,7 @@ fl_vertex.o: ../fltk3/Device.h ../fltk3/Object.h ../fltk3/Plugin.h
 fl_vertex.o: ../fltk3/Preferences.h ../fltk3/Image.h ../fltk3/Bitmap.h
 fl_vertex.o: ../fltk3/Image.h ../fltk3/Pixmap.h ../fltk3/RGBImage.h
 fl_vertex.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/math.h
-screen_xywh.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
-screen_xywh.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
-screen_xywh.o: ../fltk3/x.h ../fltk3/Window.h ../config.h
-fl_utf8.o: ../config.h ../fltk3/filename.h ../fltk3/Xutf8.h ../fltk3/utf8.h
+numericsort.o: ../config.h ../fltk3/filename.h
 ps_image.o: ../fltk3/PostScript.h ../fltk3/PagedDevice.h ../fltk3/Device.h
 ps_image.o: ../fltk3/x.h ../fltk3/enumerations.h ../fltk3/Export.h
 ps_image.o: ../fltk3/types.h ../fltk3/Window.h ../fltk3/Xutf8.h
@@ -1169,9 +1168,10 @@ ps_image.o: ../fltk3/Window.h ../fltk3/Group.h ../fltk3/Widget.h
 ps_image.o: ../fltk3/Wrapper.h ../fltk3/Widget.h ../fltk3/Rectangle.h
 ps_image.o: ../fltk3/draw.h ../fltk3/enumerations.h ../fltk3/run.h
 ps_image.o: ../fltk3/utf8.h
-numericsort.o: ../config.h ../fltk3/filename.h
-fl_utf.o: ../fltk3/utf8.h xutf8/mk_wcwidth.c
 scandir.o: flstring.h ../fltk3/Export.h ../config.h
+screen_xywh.o: ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
+screen_xywh.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
+screen_xywh.o: ../fltk3/x.h ../fltk3/Window.h ../config.h
 Fl_Gl_Choice.o: ../config.h ../fltk3/run.h ../fltk3/utf8.h ../fltk3/Export.h
 Fl_Gl_Choice.o: ../fltk3/types.h ../fltk3/Xutf8.h ../fltk3/enumerations.h
 Fl_Gl_Choice.o: ../fltk3/x.h ../fltk3/Window.h Fl_Gl_Choice.H
@@ -1301,24 +1301,3 @@ flstring.o: flstring.h ../fltk3/Export.h ../config.h
 vsnprintf.o: flstring.h ../fltk3/Export.h ../config.h
 xutf8/case.o: xutf8/headers/case.h
 xutf8/is_spacing.o: xutf8/headers/spacing.h
-xutf8/keysym2Ucs.o: ../fltk3/Xutf8.h xutf8/imKStoUCS.c xutf8/Xlibint.h
-xutf8/keysym2Ucs.o: xutf8/Ximint.h
-xutf8/utf8Input.o: ../config.h ../fltk3/Xutf8.h xutf8/lcUniConv/big5.h
-xutf8/utf8Input.o: xutf8/lcUniConv/gb2312.h xutf8/lcUniConv/cp936ext.h
-xutf8/utf8Input.o: xutf8/lcUniConv/jisx0201.h xutf8/lcUniConv/jisx0208.h
-xutf8/utf8Input.o: xutf8/lcUniConv/jisx0212.h xutf8/lcUniConv/ksc5601.h
-xutf8/utf8Utils.o: ../fltk3/Xutf8.h
-xutf8/utf8Wrap.o: ../fltk3/Xutf8.h xutf8/ucs2fontmap.c
-xutf8/utf8Wrap.o: xutf8/lcUniConv/cp936ext.h xutf8/lcUniConv/big5.h
-xutf8/utf8Wrap.o: xutf8/lcUniConv/gb2312.h xutf8/lcUniConv/iso8859_10.h
-xutf8/utf8Wrap.o: xutf8/lcUniConv/iso8859_11.h xutf8/lcUniConv/iso8859_13.h
-xutf8/utf8Wrap.o: xutf8/lcUniConv/iso8859_14.h xutf8/lcUniConv/iso8859_15.h
-xutf8/utf8Wrap.o: xutf8/lcUniConv/iso8859_2.h xutf8/lcUniConv/iso8859_3.h
-xutf8/utf8Wrap.o: xutf8/lcUniConv/iso8859_4.h xutf8/lcUniConv/iso8859_5.h
-xutf8/utf8Wrap.o: xutf8/lcUniConv/iso8859_6.h xutf8/lcUniConv/iso8859_7.h
-xutf8/utf8Wrap.o: xutf8/lcUniConv/iso8859_8.h xutf8/lcUniConv/iso8859_9.h
-xutf8/utf8Wrap.o: xutf8/lcUniConv/jisx0201.h xutf8/lcUniConv/jisx0208.h
-xutf8/utf8Wrap.o: xutf8/lcUniConv/jisx0212.h xutf8/lcUniConv/koi8_r.h
-xutf8/utf8Wrap.o: xutf8/lcUniConv/koi8_u.h xutf8/lcUniConv/ksc5601.h
-xutf8/utf8Wrap.o: xutf8/lcUniConv/cp1251.h xutf8/headers/symbol_.h
-xutf8/utf8Wrap.o: xutf8/headers/dingbats_.h
