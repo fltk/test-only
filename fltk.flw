@@ -2,8 +2,7 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx} 
-wks_name FLTK 
-wks_env 16
+wks_name FLTK
 folder Applications {open
 } {
   app_target Fluid {open
@@ -54,11 +53,6 @@ folder Applications {open
         uuid_Xcode4_PBXFileRef {88AC76F8-37BC-48CF-B6D1-33DCD67DFD98}
         build_env 0
         filename_and_path {fluid/function_panel.h}
-      }
-      file_ref {print_panel.h} {
-        uuid_Xcode4_PBXFileRef {D0E0882D-24C1-4A93-AF9E-109EC52D185C}
-        build_env 0
-        filename_and_path {fluid/print_panel.h}
       }
       file_ref {template_panel.h} {
         uuid_Xcode4_PBXFileRef {000422E2-90D4-45AD-A495-95AC4385D9FE}
@@ -213,7 +207,7 @@ folder Libraries {open
   } {
     folder Headers {open
     } {
-      file_ref {Adjuster.h} {
+      file_ref {Adjuster.h} {selected
         uuid_Xcode4_PBXBuildFile {19D0A8A7-81F6-48F4-A42B-0A0DBBC3770F}
         uuid_Xcode4_PBXFileRef {1CDC310C-BCD1-48E9-90F6-541607EE265B}
         build_env 64
@@ -2148,7 +2142,7 @@ folder Libraries {open
         list_env 92
         filename_and_path {src/fl_round_box.cxx}
       }
-      file_ref {fl_rounded_box.cxx} {selected
+      file_ref {fl_rounded_box.cxx} {
         uuid_Xcode4_PBXBuildFile {07653622-17B7-423E-8440-FA89462F116C}
         uuid_Xcode4_PBXFileRef {557E8041-0084-4B1C-9D36-CF44F1C0F5BE}
         build_env 95

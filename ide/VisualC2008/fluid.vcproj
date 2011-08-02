@@ -432,10 +432,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\fluid\print_panel.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\fluid\template_panel.h"
 				>
 			</File>

@@ -39,6 +39,7 @@
 #include <fltk3/draw.h>
 #include <fltk3/FileChooser.h>
 #include <fltk3/PNGImage.h>
+#include <fltk3/Printer.h>
 #include <fltk3/message.h>
 #include <fltk3/filename.h>
 #include <stdio.h>
@@ -52,9 +53,6 @@
 #include "function_panel.h"
 #include "template_panel.h"
 #include "workspace_panel.h"
-#if !defined(WIN32) || defined(__CYGWIN__)
-#  include "print_panel.cxx"
-#endif // !WIN32 || __CYGWIN__
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #  include <direct.h>
@@ -985,703 +983,75 @@ void write_makefiles_cb(fltk3::Widget*, void*) {
 
 ////////////////////////////////////////////////////////////////
 
-#if defined(WIN32) && !defined(__CYGWIN__)
-// Draw a shaded box...
-static void win_box(int x, int y, int w, int h) {
-  fltk3::color(0xc0, 0xc0, 0xc0);
-  fltk3::rectf(x, y, w, h);
-  fltk3::color(0, 0, 0);
-  fltk3::rect(x, y, w, h);
-  fltk3::color(0xf0, 0xf0, 0xf0);
-  fltk3::rectf(x + 1, y + 1, 4, h - 2);
-  fltk3::rectf(x + 1, y + 1, w - 2, 4);
-  fltk3::color(0x90, 0x90, 0x90);
-  fltk3::rectf(x + w - 5, y + 1, 4, h - 2);
-  fltk3::rectf(x + 1, y + h - 5, w - 2, 4);
-}
-
-// Load and show the print dialog...
 void print_menu_cb(fltk3::Widget *, void *) {
-  PRINTDLG	dialog;			// Print dialog
-  DOCINFO	docinfo;		// Document info
-  int		first, last;		// First and last page
-  int		page;			// Current page
-  int		winpage;		// Current window page
-  int		num_pages;		// Number of pages
-  Fl_Type	*t;			// Current widget
-  int		num_windows;		// Number of windows
-  Fl_Window_Type *windows[1000];	// Windows to print
-
-
-  // Show print dialog...
-  for (t = Fl_Type::first, num_pages = 0; t; t = t->next) {
-    if (t->is_window()) num_pages ++;
-  }
-
-  memset(&dialog, 0, sizeof(dialog));
-  dialog.lStructSize = sizeof(dialog);
-  dialog.hwndOwner   = fl_xid(main_window);
-  dialog.Flags       = PD_ALLPAGES |
-                       PD_RETURNDC;
-  dialog.nFromPage   = 1;
-  dialog.nToPage     = num_pages;
-  dialog.nMinPage    = 1;
-  dialog.nMaxPage    = num_pages;
-  dialog.nCopies     = 1;
-
-  if (!PrintDlg(&dialog)) return;
-
-  // Get the base filename...
+  Fl_Window_Type *windows[1000];
+  int num_windows = 0, winpage = 0;
+  int	fontsize = 14; // assumin 72 dpi
+  int width, height;
+  char buffer[1024];
+  Fl_Type *t;
+  
   const char *basename = strrchr(filename, '/');
   if (basename) basename ++;
   else basename = filename;
-
-  // Do the print job...
-  memset(&docinfo, 0, sizeof(docinfo));
-  docinfo.cbSize      = sizeof(docinfo);
-  docinfo.lpszDocName = basename;
-
-  StartDoc(dialog.hDC, &docinfo);
-
-  // Figure out how many pages we'll have to print...
-  if (dialog.Flags & PD_PAGENUMS) {
-    // Get from and to page numbers...
-    first = dialog.nFromPage;
-    last  = dialog.nToPage;
-
-    if (first > last) {
-      // Swap first/last page
-      page  = first;
-      first = last;
-      last  = page;
-    }
-  } else {
-    // Print everything...
-    first = 1;
-    last  = dialog.nMaxPage;
-  }
-
-  for (t = Fl_Type::first, num_windows = 0, winpage = 0; t; t = t->next) {
-    if (t->is_window()) {
-      winpage ++;
-      windows[num_windows] = (Fl_Window_Type *)t;
-      num_windows ++;
-#if 0
-      if (dialog.Flags & PD_ALLPAGES) num_windows ++;
-      else if ((dialog.Flags & PD_PAGENUMS) && winpage >= first &&
-               winpage <= last) num_windows ++;
-      else if ((dialog.Flags & PD_SELECTION) && t->selected) num_windows ++;
-#endif // 0
-    }
-  }
-
-  num_pages = num_windows;
-
-  // Figure out the page size and margins...
-  int	width, length;			// Size of page
-  int   xdpi, ydpi;			// Output resolution
-  char	buffer[1024];
-
-  width  = GetDeviceCaps(dialog.hDC, HORZRES);
-  length = GetDeviceCaps(dialog.hDC, VERTRES);
-  xdpi   = GetDeviceCaps(dialog.hDC, LOGPIXELSX);
-  ydpi   = GetDeviceCaps(dialog.hDC, LOGPIXELSY);
-
-//  fltk3::message("width=%d, length=%d, xdpi=%d, ydpi=%d, num_windows=%d\n",
-//             width, length, xdpi, ydpi, num_windows);
-
-  HDC	save_dc = fl_gc;
-  HWND	save_win = fl_window;
-  int	fontsize = 14 * ydpi / 72;
-
-  fl_gc = dialog.hDC;
-  fl_window = (HWND)dialog.hDC;
-  fltk3::push_no_clip();
 
   // Get the time and date...
   time_t curtime = time(NULL);
   struct tm *curdate = localtime(&curtime);
   char date[1024];
-
   strftime(date, sizeof(date), "%c", curdate);
 
-  // Print each of the windows...
-  for (winpage = 0; winpage < num_windows; winpage ++) {
-    // Draw header...
-    StartPage(dialog.hDC);
-
-    fltk3::font(fltk3::HELVETICA_BOLD, fontsize);
-    fltk3::color(0, 0, 0);
-
-    fltk3::draw(basename, 0, fontsize);
-
-    fltk3::draw(date, (width - (int)fltk3::width(date)) / 2, fontsize);
-
-    sprintf(buffer, "%d/%d", winpage + 1, num_windows);
-    fltk3::draw(buffer, width - (int)fltk3::width(buffer), fontsize);
-
-    // Get window image...
-    uchar	*pixels;		// Window image data
-    int		w, h;			// Window image dimensions
-    int		ww, hh;			// Scaled size
-    int		ulx, uly;		// Upper-lefthand corner
-    fltk3::Window	*win;			// Window widget
-    BITMAPINFO	info;			// Bitmap information
-
-    win    = (fltk3::Window *)(windows[winpage]->o);
-    pixels = windows[winpage]->read_image(w, h);
-
-    // Swap colors: FLTK uses R-G-B --> Windows GDI uses B-G-R
-
-    { uchar *p = pixels;
-      for (int i=0; i<w*h; i++, p+=3) {
-	uchar temp = p[0]; p[0] = p[2]; p[2] = temp;
-      }
-    }
-
-    // Figure out the window size, first at 100 PPI and then scaled
-    // down if that is too big...
-    ww = w * xdpi / 100;
-    hh = h * ydpi / 100;
-
-    if (ww > width) {
-      ww = width;
-      hh = h * ww * ydpi / xdpi / w;
-    }
-
-    if (hh > (length - ydpi / 2)) {
-      hh = length - ydpi / 2;
-      ww = w * hh / h;
-    }
-
-    // Position the window in the center...
-    ulx = (width - ww) / 2;
-    uly = (length - hh) / 2;
-
-//    fltk3::message("winpage=%d, ulx=%d, uly=%d, ww=%d, hh=%d",
-//               winpage, ulx, uly, ww, hh);
-
-    // Draw a simulated window border...
-    int xborder = 4 * ww / w;
-    int yborder = 4 * hh / h;
-
-    win_box(ulx - xborder, uly - 5 * yborder,
-            ww + 2 * xborder, hh + 6 * yborder);
-
-    fltk3::color(0, 0, 255);
-    fltk3::rectf(ulx, uly - 4 * yborder, ww, 4 * yborder);
-
-    fltk3::font(fltk3::HELVETICA_BOLD, 2 * yborder);
-    fltk3::color(255, 255, 255);
-    fltk3::draw(win->label() ? win->label() : "Window",
-            ulx + xborder, uly - 3 * yborder);
-
-    int x = ulx + ww - 4 * xborder;
-
-    win_box(x, uly - 4 * yborder, 4 * xborder, 4 * yborder);
-    fltk3::color(0, 0, 0);
-    fltk3::line(x + xborder, uly - yborder,
-            x + 3 * xborder, uly - 3 * yborder);
-    fltk3::line(x + xborder, uly - 3 * yborder,
-            x + 3 * xborder, uly - yborder);
-    x -= 4 * xborder;
-
-    if (win->resizable()) {
-      win_box(x, uly - 4 * yborder, 4 * xborder, 4 * yborder);
-      fltk3::color(0, 0, 0);
-      fltk3::rect(x + xborder, uly - 3 * yborder, 2 * xborder, 2 * yborder);
-      x -= 4 * xborder;
-    }
-
-    if (!win->modal()) {
-      win_box(x, uly - 4 * yborder, 4 * xborder, 4 * yborder);
-      fltk3::color(0, 0, 0);
-      fltk3::line(x + xborder, uly - yborder, x + 3 * xborder, uly - yborder);
-      x -= 4 * xborder;
-    }
-
-    // Color image...
-    memset(&info, 0, sizeof(info));
-    info.bmiHeader.biSize        = sizeof(info);
-    info.bmiHeader.biWidth       = w;
-    info.bmiHeader.biHeight      = 1;
-    info.bmiHeader.biPlanes      = 1;
-    info.bmiHeader.biBitCount    = 24;
-    info.bmiHeader.biCompression = BI_RGB;
-
-    for (int y = 0; y < h; y ++) {
-      StretchDIBits(dialog.hDC, ulx, uly + y * hh / h, ww, (hh + h - 1) / h, 0, 0, w, 1,
-                    pixels + y * w * 3, &info, DIB_RGB_COLORS, SRCCOPY);
-    }
-
-    delete[] pixels;
-
-    // Show the page...
-    EndPage(dialog.hDC);
-  }
-
-  // Finish up...
-  EndDoc(dialog.hDC);
-
-  fl_gc = save_dc;
-  fl_window = save_win;
-  fltk3::pop_clip();
-
-  // Free the print DC and return...
-  DeleteDC(dialog.hDC);
-}
-#else
-// Load and show the print dialog...
-void print_menu_cb(fltk3::Widget *, void *) {
-  if (!print_panel) make_print_panel();
-
-  print_load();
-
-  print_selection->deactivate();
-
-  for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
-    if (t->selected && t->is_window()) {
-      print_selection->activate();
-      break;
-    }
-  }
-
-  print_all->setonly();
-  print_all->do_callback();
-
-  print_panel->show();
-}
-
-// Quote a string for PostScript printing
-static const char *ps_string(const char *s) {
-  char *bufptr;
-  static char buffer[FLTK3_PATH_MAX];
-
-
-  if (!s) {
-    buffer[0] = '\0';
-  } else {
-    for (bufptr = buffer; bufptr < (buffer + sizeof(buffer) - 3) && *s;) {
-      if (*s == '(' || *s == ')' || *s == '\\') *bufptr++ = '\\';
-      *bufptr++ = *s++;
-    }
-
-    *bufptr = '\0';
-  }
-
-  return (buffer);
-}
-
-// Actually print...
-void print_cb(fltk3::ReturnButton *, void *) {
-  FILE		*outfile;		// Output file or pipe to print command
-  char		command[1024];		// Print command
-  int		copies;			// Collated copies
-  int		first, last;		// First and last page
-  int		page;			// Current page
-  int		winpage;		// Current window page
-  int		num_pages;		// Number of pages
-  Fl_Type	*t;			// Current widget
-  int		num_windows;		// Number of windows
-  Fl_Window_Type *windows[1000];	// Windows to print
-
-  // Show progress, deactivate controls...
-  print_panel_controls->deactivate();
-  print_progress->show();
-
-  // Figure out how many pages we'll have to print...
-  if (print_collate_button->value()) copies = (int)print_copies->value();
-  else copies = 1;
-
-  if (print_pages->value()) {
-    // Get from and to page numbers...
-    if ((first = atoi(print_from->value())) < 1) first = 1;
-    if ((last = atoi(print_to->value())) < 1) last = 1000;
-
-    if (first > last) {
-      // Swap first/last page
-      page  = first;
-      first = last;
-      last  = page;
-    }
-  } else {
-    // Print everything...
-    first = 1;
-    last  = 1000;
-  }
-
-  for (t = Fl_Type::first, num_windows = 0, winpage = 0; t; t = t->next) {
+  // count pages
+  for (t = Fl_Type::first; t; t = t->next) {
     if (t->is_window()) {
-      winpage ++;
       windows[num_windows] = (Fl_Window_Type *)t;
-
-      if (print_all->value()) num_windows ++;
-      else if (print_pages->value() && winpage >= first &&
-               winpage <= last) num_windows ++;
-      else if (print_selection->value() && t->selected) num_windows ++;
+      num_windows ++;
     }
   }
-
-  num_pages = num_windows * copies;
-
-  print_progress->minimum(0);
-  print_progress->maximum(num_pages);
-  print_progress->value(0);
-  fltk3::check();
-
-  // Get the base filename...
-  const char *basename = strrchr(filename, '/');
-  if (basename) basename ++;
-  else basename = filename;
-
-  // Open the print stream...
-  if (print_choice->value()) {
-    // Pipe the output into the lp command...
-    const char *printer = (const char *)print_choice->menu()[print_choice->value()].user_data();
-
-    snprintf(command, sizeof(command), "lp -s -d %s -n %.0f -t '%s' -o media=%s",
-             printer, print_collate_button->value() ? 1.0 : print_copies->value(),
-	     basename, print_page_size->text(print_page_size->value()));
-    outfile = popen(command, "w");
-  } else {
-    // Print to file...
-    fltk3::file_chooser_ok_label("Print");
-    const char *outname = fltk3::file_chooser("Print To", "PostScript (*.ps)", NULL, 1);
-    fltk3::file_chooser_ok_label(NULL);
-
-    if (outname && !access(outname, 0)) {
-      if (fltk3::choice("The file \"%s\" already exists.\n"
-                    "Do you want to replace it?", "Cancel",
-		    "Replace", NULL, outname) == 0) outname = NULL;
-    }
-
-    if (outname) outfile = fltk3::fopen(outname, "w");
-    else outfile = NULL;
-  }
-
-  if (outfile) {
-    // Figure out the page size and margins...
-    int	width, length;			// Size of page
-    int	left, bottom,			// Bottom lefthand corner
-	right, top;			// Top righthand corner
-
-    if (print_page_size->value()) {
-      // A4
-      width  = 595;
-      length = 842;
-    } else {
-      // Letter
-      width  = 612;
-      length = 792;
-    }
-
-    int output_mode;
-    for (output_mode = 0; output_mode < 4; output_mode ++) {
-      if (print_output_mode[output_mode]->value()) break;
-    }
-
-    if (output_mode & 1) {
-      // Landscape
-      left   = 36;
-      bottom = 18;
-      right  = length - 36;
-      top    = width - 18;
-    } else {
-      // Portrait
-      left   = 18;
-      bottom = 36;
-      right  = width - 18;
-      top    = length - 36;
-    }
-
-    // Get the time and date...
-    time_t curtime = time(NULL);
-    struct tm *curdate = localtime(&curtime);
-    char date[1024];
-
-    strftime(date, sizeof(date), "%c", curdate);
-
-    // Write the prolog...
-    fprintf(outfile,
-            "%%!PS-Adobe-3.0\n"
-	    "%%%%BoundingBox: 18 36 %d %d\n"
-	    "%%%%Pages: %d\n"
-	    "%%%%LanguageLevel: 1\n"
-	    "%%%%DocumentData: Clean7Bit\n"
-	    "%%%%DocumentNeededResources: font Helvetica-Bold\n"
-	    "%%%%Creator: FLUID %.4f\n"
-	    "%%%%CreationDate: %s\n"
-	    "%%%%Title: (%s)\n"
-	    "%%%%EndComments\n"
-	    "%%%%BeginProlog\n"
-	    "%%languagelevel 1 eq {\n"
-	    "  /rectfill {\n"
-	    "    newpath 4 2 roll moveto dup 0 exch rlineto exch 0 rlineto\n"
-	    "    neg 0 exch rlineto closepath fill\n"
-	    "  } bind def\n"
-	    "  /rectstroke {\n"
-	    "    newpath 4 2 roll moveto dup 0 exch rlineto exch 0 rlineto\n"
-	    "    neg 0 exch rlineto closepath stroke\n"
-	    "  } bind def\n"
-	    "%%} if\n"
-	    "%%%%EndProlog\n"
-	    "%%%%BeginSetup\n"
-	    "%%%%BeginFeature: *PageSize %s\n"
-	    "languagelevel 1 ne {\n"
-	    "  <</PageSize[%d %d]/ImagingBBox null>>setpagedevice\n"
-	    "} {\n"
-	    "  %s\n"
-	    "} ifelse\n"
-	    "%%%%EndFeature\n"
-	    "%%%%EndSetup\n",
-	    width - 18, length - 36,
-	    num_pages,
-	    FL_VERSION,
-	    date,
-	    basename,
-	    print_page_size->text(print_page_size->value()),
-	    width, length,
-	    print_page_size->value() ? "a4tray" : "lettertray");
-
+  
+  // print pages
+  fltk3::Printer * p = new fltk3::Printer();
+  if (!p->start_job(num_windows)) {
     // Print each of the windows...
-    char	progress[255];		// Progress text
-    int		copy;			// Current copy
-
-    for (copy = 0, page = 0; copy < copies; copy ++) {
-      for (winpage = 0; winpage < num_pages; winpage ++) {
-        // Start next page...
-        page ++;
-	sprintf(progress, "Printing page %d/%d...", page, num_pages);
-	print_progress->value(page);
-	print_progress->label(progress);
-	fltk3::check();
-
-        // Add common page stuff...
-	fprintf(outfile,
-	        "%%%%Page: %d %d\n"
-		"gsave\n",
-		page, page);
-
-        if (output_mode & 1) {
-	  // Landscape...
-	  fprintf(outfile, "%d 0 translate 90 rotate\n", width);
-	}
-
-        // Draw header...
-	fprintf(outfile,
-		"0 setgray\n"
-		"/Helvetica-Bold findfont 14 scalefont setfont\n"
-		"%d %d moveto (%s) show\n"
-		"%.1f %d moveto (%s) dup stringwidth pop -0.5 mul 0 rmoveto show\n"
-		"%d %d moveto (%d/%d) dup stringwidth pop neg 0 rmoveto show\n",
-	        left, top - 15, ps_string(basename),
-		0.5 * (left + right), top - 15, date,
-		right, top - 15, winpage + 1, num_windows);
-
-        // Get window image...
-	uchar	*pixels;		// Window image data
-        int	w, h;			// Window image dimensions
-	float	ww, hh;			// Scaled size
-	float	border;			// Width of 1 pixel
-        float	llx, lly,		// Lower-lefthand corner
-		urx, ury;		// Upper-righthand corner
-	fltk3::Window *win;			// Window widget
-
-        win    = (fltk3::Window *)(windows[winpage]->o);
-	pixels = windows[winpage]->read_image(w, h);
-
-        // Figure out the window size, first at 100 PPI and then scaled
-	// down if that is too big...
-        ww = w * 72.0 / 100.0;
-	hh = h * 72.0 / 100.0;
-
-        if (ww > (right - left)) {
-	  ww = right - left;
-	  hh = h * ww / w;
-	}
-
-        if (hh > (top - bottom - 36)) {
-	  hh = top - bottom;
-	  ww = w * hh / h;
-	}
-
-        border = ww / w;
-
-	// Position the window in the center...
-	llx = 0.5 * (right - left - ww);
-	lly = 0.5 * (top - bottom - hh);
-	urx = 0.5 * (right - left + ww);
-	ury = 0.5 * (top - bottom + hh);
-
-        // Draw a simulated window border...
-        fprintf(outfile,
-	        "0.75 setgray\n"			// Gray background
-	        "newpath %.2f %.2f %.2f 180 90 arcn\n"	// Top left
-		"%.2f %.2f %.2f 90 0 arcn\n"		// Top right
-		"%.2f %.2f %.2f 0 -90 arcn\n"		// Bottom right
-		"%.2f %.2f %.2f -90 -180 arcn\n"	// Bottom left
-		"closepath gsave fill grestore\n"	// Fill
-		"0 setlinewidth 0 setgray stroke\n",	// Outline
-		llx, ury + 12 * border, 4 * border,
-		urx, ury + 12 * border, 4 * border,
-		urx, lly, 4 * border,
-		llx, lly, 4 * border);
-
-        // Title bar...
-	if (output_mode & 2) {
-	  fputs("0.25 setgray\n", outfile);
-	} else {
-	  fputs("0.1 0.2 0.6 setrgbcolor\n", outfile);
-	}
-
-        fprintf(outfile, "%.2f %.2f %.2f %.2f rectfill\n",
-	        llx + 12 * border, ury,
-		ww - (24 + 16 * (!win->modal() || win->resizable()) +
-		      16 * (!win->modal() && win->resizable())) * border,
-		16 * border);
-
-        if (win->resizable()) {
-	  fprintf(outfile,
-		  "%.2f %.2f %.2f -90 -180 arcn\n"	// Bottom left
-	          "0 %.2f rlineto %.2f 0 rlineto 0 -%.2f rlineto closepath fill\n"
-		  "%.2f %.2f %.2f 0 -90 arcn\n"	// Bottom right
-	          "-%.2f 0 rlineto 0 %.2f rlineto %.2f 0 rlineto closepath fill\n",
-		  llx, lly, 4 * border,
-		  12 * border, 16 * border, 16 * border,
-		  urx, lly, 4 * border,
-		  12 * border, 16 * border, 16 * border);
-	}
-
-        // Inside outline and button shading...
-        fprintf(outfile,
-	        "%.2f setlinewidth 0.5 setgray\n"
-		"%.2f %.2f %.2f %.2f rectstroke\n"
-		"%.2f %.2f moveto 0 %.2f rlineto\n"
-		"%.2f %.2f moveto 0 %.2f rlineto\n",
-		border,
-		llx - 0.5 * border, lly - 0.5 * border, ww + border, hh + border,
-		llx + 12 * border, ury, 16 * border,
-		urx - 12 * border, ury, 16 * border);
-
-        if (!win->modal() || win->resizable()) {
-	  fprintf(outfile, "%.2f %.2f moveto 0 %.2f rlineto\n",
-	          urx - 28 * border, ury, 16 * border);
-	}
-
-        if (!win->modal() && win->resizable()) {
-	  fprintf(outfile, "%.2f %.2f moveto 0 %.2f rlineto\n",
-	          urx - 44 * border, ury, 16 * border);
-	}
-
-        fprintf(outfile, "%.2f %.2f moveto %.2f 0 rlineto stroke\n",
-		llx - 3.5 * border, ury + 0.5 * border, ww + 7 * border);
-
-        // Button icons...
-        fprintf(outfile,
-	        "%.2f setlinewidth 0 setgray\n"
-		"%.2f %.2f moveto %.2f -%.2f rlineto %.2f %.2f rlineto\n"
-		"%.2f %.2f moveto -%.2f -%.2f rlineto 0 %.2f rmoveto %.2f -%.2f rlineto\n",
-		2 * border,
-		llx, ury + 10 * border, 4 * border, 4 * border, 4 * border, 4 * border,
-		urx, ury + 12 * border, 8 * border, 8 * border, 8 * border, 8 * border, 8 * border);
-
-        float x = urx - 16 * border;
-
-        if (win->resizable()) {
-	  // Maximize button
-	  fprintf(outfile,
-	          "%.2f %.2f moveto -%.2f 0 rlineto 0 -%.2f rlineto "
-		  "%.2f 0 rlineto 0 %.2f rlineto\n",
-		  x, ury + 12 * border, 8 * border, 8 * border,
-		  8 * border, 8 * border);
-
-          x -= 16 * border;
-        }
-
-        if (!win->modal()) {
-	  // Minimize button
-	  fprintf(outfile,
-	          "%.2f %.2f moveto -%.2f 0 rlineto\n",
-		  x, ury + 4 * border, 8 * border);
-        }
-
-        fputs("stroke\n", outfile);
-
-        if (win->label()) {
-	  // Add window title...
-	  fprintf(outfile,
-		  "1 setgray\n"
-		  "/Helvetica-Bold findfont %.2f scalefont setfont\n"
-		  "(%s) %.2f %.2f moveto show\n",
-		  12 * border,
-		  ps_string(win->label()), llx + 16 * border, ury + 4 * border);
-	}
-
-        fprintf(outfile,
-	        "gsave\n"
-		"%.2f %.2f translate %.2f %.2f scale\n",
-		llx, ury - border, border, border);
-
-        if (output_mode & 2) {
-	  // Grayscale image...
-	  fprintf(outfile,
-	          "/imgdata %d string def\n"
-		  "%d %d 8[1 0 0 -1 0 1] "
-		  "{currentfile imgdata readhexstring pop} image\n",
-		  w,
-		  w, h);
-
-          uchar *ptr = pixels;
-	  int i, count = w * h;
-
-          for (i = 0; i < count; i ++, ptr += 3) {
-	    fprintf(outfile, "%02X",
-	            (31 * ptr[0] + 61 * ptr[1] + 8 * ptr[2]) / 100);
-	    if (!(i % 40)) putc('\n', outfile);
-	  }
-	} else {
-	  // Color image...
-	  fprintf(outfile,
-	          "/imgdata %d string def\n"
-		  "%d %d 8[1 0 0 -1 0 1] "
-		  "{currentfile imgdata readhexstring pop} false 3 colorimage\n",
-		  w * 3,
-		  w, h);
-
-          uchar *ptr = pixels;
-	  int i, count = w * h;
-
-          for (i = 0; i < count; i ++, ptr += 3) {
-	    fprintf(outfile, "%02X%02X%02X", ptr[0], ptr[1], ptr[2]);
-	    if (!(i % 13)) putc('\n', outfile);
-	  }
-	}
-
-        fputs("\ngrestore\n", outfile);
-
-        delete[] pixels;
-
-        // Show the page...
-	fputs("grestore showpage\n", outfile);
-      }
+    for (winpage = 0; winpage < num_windows; winpage ++) {
+      p->start_page();
+      p->printable_rect(&width, &height);
+      
+      // draw a headline
+      fltk3::font(fltk3::HELVETICA_BOLD, fontsize);
+      fltk3::color(0, 0, 0);
+      fltk3::draw(basename, 0, fontsize);
+      fltk3::draw(date, (width - (int)fltk3::width(date)) / 2, fontsize);      
+      sprintf(buffer, "%d/%d", winpage + 1, num_windows);
+      fltk3::draw(buffer, width - (int)fltk3::width(buffer), fontsize);
+      
+      // find a good size for printing
+      fltk3::Widget *w = windows[winpage]->o;
+      int ww = w->w(), hh = w->h();
+      double sx = (0.95*width)/ww;
+      double sy = (0.95*(height-30))/hh;
+      double scale = (sx<sy)?sx:sy;
+      if (scale>1.0) scale = 1.0;
+      
+      // set the scale, and center the image at the top
+      p->scale(scale, scale);
+      p->printable_rect(&width, &height);
+      p->origin(0.5*(width-ww), 30/scale);
+      
+      // draw the widget
+      p->print_widget(w);
+      
+      // reset stuff (probably not needed)
+      p->scale(1.0, 1.0);
+      p->origin(0.0, 0.0);
+      
+      // flush the page out
+      p->end_page();
     }
-
-    // Finish up...
-    fputs("%%EOF\n", outfile);
-
-    if (print_choice->value()) pclose(outfile);
-    else fclose(outfile);
-  } else {
-    // Unable to print...
-    fltk3::alert("Error printing: %s", strerror(errno));
+    p->end_job();
   }
-
-  // Hide progress, activate controls, hide print panel...
-  print_panel_controls->activate();
-  print_progress->hide();
-  print_panel->hide();
+  delete p;
 }
-#endif // WIN32 && !__CYGWIN__
 
 ////////////////////////////////////////////////////////////////
 
