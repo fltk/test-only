@@ -106,7 +106,7 @@ int write_fltk_ide_visualc6() {
         } else if (strncmp(hash, "#SourceFiles(", 13)==0) {
           Fl_Type *tgt = Fl_Target_Type::find(hash+13, ')'); // keep tgt local
           if (!tgt) {
-            printf("ERROR writing CMake file: target not found!");
+            printf("ERROR writing VisualC6 file: target not found!");
             return -1;
           }
           Fl_File_Type *f;
@@ -138,480 +138,140 @@ int write_fltk_ide_visualc6() {
 // ------------ VisualC 2008 ---------------------------------------------------
 
 int write_fltk_ide_visualc2008() {
-  if (!filename) {
-    printf("Workspace must be saved first\n");
-    return -1;
-  }
+  // for now, we use a template file in FLTK/ide/templates/VisualC6.tmpl .
+  // When done, everything will likely be integrated into the executable to make one compact package.
+  char buf[2048], base_dir[2048], tgt_base[2048];
+  strcpy(base_dir, filename);
+  *((char*)fltk3::filename_name(base_dir)) = 0; // keep only the path
+  strcpy(tgt_base, base_dir);
+  strcpy(buf, base_dir);
+  strcat(buf, "ide/templates/VisualC2008.tmpl");
+  FILE *out = stdout;
+  FILE *in = fopen(buf, "rb");
   
-  /* find the target named "Fluid" */
-  Fl_Type *tgt = Fl_Target_Type::find("Fluid");
-  if (!tgt) {
-    printf("FLUID target not found\n");
-    return -1;
-  }
-  
-  /* Create a new Fluid.dsp */
-  char buf[2048];
-  strcpy(buf, filename);
-  strcpy((char*)fltk3::filename_name(buf), "ide/VisualC2008/fluid.vcproj");
-  FILE *out = fopen(buf, "wb");
-  if (!out) {
-    printf("Can't open FLUID VisualC 2008 project file\n");
-    return -1;
-  }
-  
-  fprintf(out, "<?xml version=\"1.0\" encoding=\"Windows-1252\"?>\r\n");
-  fprintf(out, "<VisualStudioProject\r\n");
-  fprintf(out, "\tProjectType=\"Visual C++\"\r\n");
-  fprintf(out, "\tVersion=\"9,00\"\r\n");
-  fprintf(out, "\tName=\"fluid\"\r\n");
-  fprintf(out, "\tProjectGUID=\"{8AED3078-8CD8-40C9-A8FF-46080024F1EB}\"\r\n");
-  fprintf(out, "\tRootNamespace=\"fluid\"\r\n");
-  fprintf(out, "\tTargetFrameworkVersion=\"131072\"\r\n");
-  fprintf(out, "\t>\r\n");
-  fprintf(out, "\t<Platforms>\r\n");
-  fprintf(out, "\t\t<Platform\r\n");
-  fprintf(out, "\t\t\tName=\"Win32\"\r\n");
-  fprintf(out, "\t\t/>\r\n");
-  fprintf(out, "\t</Platforms>\r\n");
-  fprintf(out, "\t<ToolFiles>\r\n");
-  fprintf(out, "\t</ToolFiles>\r\n");
-  fprintf(out, "\t<Configurations>\r\n");
-  fprintf(out, "\t\t<Configuration\r\n");
-  fprintf(out, "\t\t\tName=\"Debug|Win32\"\r\n");
-  fprintf(out, "\t\t\tOutputDirectory=\".\\fluid__0\"\r\n");
-  fprintf(out, "\t\t\tIntermediateDirectory=\".\\fluid__0\"\r\n");
-  fprintf(out, "\t\t\tConfigurationType=\"1\"\r\n");
-  fprintf(out, "\t\t\tInheritedPropertySheets=\"$(VCInstallDir)VCProjectDefaults\\UpgradeFromVC71.vsprops\"\r\n");
-  fprintf(out, "\t\t\tUseOfMFC=\"0\"\r\n");
-  fprintf(out, "\t\t\tATLMinimizesCRunTimeLibraryUsage=\"false\"\r\n");
-  fprintf(out, "\t\t\t>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCPreBuildEventTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCCustomBuildTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCXMLDataGeneratorTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCWebServiceProxyGeneratorTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCMIDLTool\"\r\n");
-  fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"_DEBUG\"\r\n");
-  fprintf(out, "\t\t\t\tMkTypLibCompatible=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tTargetEnvironment=\"1\"\r\n");
-  fprintf(out, "\t\t\t\tTypeLibraryName=\".\\fluid__0/fluid.tlb\"\r\n");
-  fprintf(out, "\t\t\t\tHeaderFileName=\"\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-  fprintf(out, "\t\t\t\tOptimization=\"0\"\r\n");
-  fprintf(out, "\t\t\t\tAdditionalIncludeDirectories=\".;..\\..\\zlib;..\\..\\png;..\\..\\jpeg;../..\"\r\n");
-  fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN\"\r\n");
-  fprintf(out, "\t\t\t\tRuntimeLibrary=\"3\"\r\n");
-  fprintf(out, "\t\t\t\tUsePrecompiledHeader=\"0\"\r\n");
-  fprintf(out, "\t\t\t\tPrecompiledHeaderFile=\".\\fluid__0/fluid.pch\"\r\n");
-  fprintf(out, "\t\t\t\tAssemblerListingLocation=\".\\fluid__0/\"\r\n");
-  fprintf(out, "\t\t\t\tObjectFile=\".\\fluid__0/\"\r\n");
-  fprintf(out, "\t\t\t\tProgramDataBaseFileName=\".\\fluid__0/\"\r\n");
-  fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tDebugInformationFormat=\"3\"\r\n");
-  fprintf(out, "\t\t\t\tCompileAs=\"0\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCManagedResourceCompilerTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCResourceCompilerTool\"\r\n");
-  fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"_DEBUG\"\r\n");
-  fprintf(out, "\t\t\t\tCulture=\"1033\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCPreLinkEventTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCLinkerTool\"\r\n");
-  fprintf(out, "\t\t\t\tAdditionalDependencies=\"comctl32.lib\"\r\n");
-  fprintf(out, "\t\t\t\tOutputFile=\"../../fluid/fluidd.exe\"\r\n");
-  fprintf(out, "\t\t\t\tLinkIncremental=\"1\"\r\n");
-  fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tAdditionalLibraryDirectories=\"..\\..\\lib\"\r\n");
-  fprintf(out, "\t\t\t\tIgnoreDefaultLibraryNames=\"libcmtd\"\r\n");
-  fprintf(out, "\t\t\t\tGenerateDebugInformation=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tProgramDatabaseFile=\".\\fluid__0/fluidd.pdb\"\r\n");
-  fprintf(out, "\t\t\t\tSubSystem=\"2\"\r\n");
-  fprintf(out, "\t\t\t\tRandomizedBaseAddress=\"1\"\r\n");
-  fprintf(out, "\t\t\t\tDataExecutionPrevention=\"0\"\r\n");
-  fprintf(out, "\t\t\t\tTargetMachine=\"1\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCALinkTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCManifestTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCXDCMakeTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCBscMakeTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCFxCopTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCAppVerifierTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCPostBuildEventTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t</Configuration>\r\n");
-  fprintf(out, "\t\t<Configuration\r\n");
-  fprintf(out, "\t\t\tName=\"Release|Win32\"\r\n");
-  fprintf(out, "\t\t\tOutputDirectory=\".\\fluid___\"\r\n");
-  fprintf(out, "\t\t\tIntermediateDirectory=\".\\fluid___\"\r\n");
-  fprintf(out, "\t\t\tConfigurationType=\"1\"\r\n");
-  fprintf(out, "\t\t\tInheritedPropertySheets=\"$(VCInstallDir)VCProjectDefaults\\UpgradeFromVC71.vsprops\"\r\n");
-  fprintf(out, "\t\t\tUseOfMFC=\"0\"\r\n");
-  fprintf(out, "\t\t\tATLMinimizesCRunTimeLibraryUsage=\"false\"\r\n");
-  fprintf(out, "\t\t\t>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCPreBuildEventTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCCustomBuildTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCXMLDataGeneratorTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCWebServiceProxyGeneratorTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCMIDLTool\"\r\n");
-  fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"NDEBUG\"\r\n");
-  fprintf(out, "\t\t\t\tMkTypLibCompatible=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tTargetEnvironment=\"1\"\r\n");
-  fprintf(out, "\t\t\t\tTypeLibraryName=\".\\fluid___/fluid.tlb\"\r\n");
-  fprintf(out, "\t\t\t\tHeaderFileName=\"\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-  fprintf(out, "\t\t\t\tOptimization=\"4\"\r\n");
-  fprintf(out, "\t\t\t\tInlineFunctionExpansion=\"2\"\r\n");
-  fprintf(out, "\t\t\t\tFavorSizeOrSpeed=\"0\"\r\n");
-  fprintf(out, "\t\t\t\tAdditionalIncludeDirectories=\".;..\\..\\zlib;..\\..\\png;..\\..\\jpeg;../..\"\r\n");
-  fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN\"\r\n");
-  fprintf(out, "\t\t\t\tRuntimeLibrary=\"2\"\r\n");
-  fprintf(out, "\t\t\t\tUsePrecompiledHeader=\"0\"\r\n");
-  fprintf(out, "\t\t\t\tPrecompiledHeaderFile=\".\\fluid___/fluid.pch\"\r\n");
-  fprintf(out, "\t\t\t\tAssemblerListingLocation=\".\\fluid___/\"\r\n");
-  fprintf(out, "\t\t\t\tObjectFile=\".\\fluid___/\"\r\n");
-  fprintf(out, "\t\t\t\tProgramDataBaseFileName=\".\\fluid___/\"\r\n");
-  fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tCompileAs=\"0\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCManagedResourceCompilerTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCResourceCompilerTool\"\r\n");
-  fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"NDEBUG\"\r\n");
-  fprintf(out, "\t\t\t\tCulture=\"1033\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCPreLinkEventTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCLinkerTool\"\r\n");
-  fprintf(out, "\t\t\t\tAdditionalDependencies=\"comctl32.lib\"\r\n");
-  fprintf(out, "\t\t\t\tOutputFile=\"../../fluid/fluid.exe\"\r\n");
-  fprintf(out, "\t\t\t\tLinkIncremental=\"1\"\r\n");
-  fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tAdditionalLibraryDirectories=\"..\\..\\lib\"\r\n");
-  fprintf(out, "\t\t\t\tIgnoreDefaultLibraryNames=\"libcmt\"\r\n");
-  fprintf(out, "\t\t\t\tProgramDatabaseFile=\".\\fluid___/fluid.pdb\"\r\n");
-  fprintf(out, "\t\t\t\tSubSystem=\"2\"\r\n");
-  fprintf(out, "\t\t\t\tRandomizedBaseAddress=\"1\"\r\n");
-  fprintf(out, "\t\t\t\tDataExecutionPrevention=\"0\"\r\n");
-  fprintf(out, "\t\t\t\tTargetMachine=\"1\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCALinkTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCManifestTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCXDCMakeTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCBscMakeTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCFxCopTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCAppVerifierTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCPostBuildEventTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t</Configuration>\r\n");
-  fprintf(out, "\t\t<Configuration\r\n");
-  fprintf(out, "\t\t\tName=\"Debug Cairo|Win32\"\r\n");
-  fprintf(out, "\t\t\tOutputDirectory=\"$(ConfigurationName)\"\r\n");
-  fprintf(out, "\t\t\tIntermediateDirectory=\"$(ConfigurationName)\"\r\n");
-  fprintf(out, "\t\t\tConfigurationType=\"1\"\r\n");
-  fprintf(out, "\t\t\tInheritedPropertySheets=\"$(VCInstallDir)VCProjectDefaults\\UpgradeFromVC71.vsprops\"\r\n");
-  fprintf(out, "\t\t\tUseOfMFC=\"0\"\r\n");
-  fprintf(out, "\t\t\tATLMinimizesCRunTimeLibraryUsage=\"false\"\r\n");
-  fprintf(out, "\t\t\t>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCPreBuildEventTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCCustomBuildTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCXMLDataGeneratorTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCWebServiceProxyGeneratorTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCMIDLTool\"\r\n");
-  fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"_DEBUG\"\r\n");
-  fprintf(out, "\t\t\t\tMkTypLibCompatible=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tTargetEnvironment=\"1\"\r\n");
-  fprintf(out, "\t\t\t\tTypeLibraryName=\".\\fluid__0/fluid.tlb\"\r\n");
-  fprintf(out, "\t\t\t\tHeaderFileName=\"\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-  fprintf(out, "\t\t\t\tOptimization=\"0\"\r\n");
-  fprintf(out, "\t\t\t\tAdditionalIncludeDirectories=\".;..\\..\\zlib;..\\..\\png;..\\..\\jpeg;../..\"\r\n");
-  fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"FLTK_HAVE_CAIRO=1;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN\"\r\n");
-  fprintf(out, "\t\t\t\tRuntimeLibrary=\"3\"\r\n");
-  fprintf(out, "\t\t\t\tUsePrecompiledHeader=\"0\"\r\n");
-  fprintf(out, "\t\t\t\tPrecompiledHeaderFile=\".\\fluid__0/fluid.pch\"\r\n");
-  fprintf(out, "\t\t\t\tAssemblerListingLocation=\".\\fluid__0/\"\r\n");
-  fprintf(out, "\t\t\t\tObjectFile=\".\\fluid__0/\"\r\n");
-  fprintf(out, "\t\t\t\tProgramDataBaseFileName=\".\\fluid__0/\"\r\n");
-  fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tDebugInformationFormat=\"3\"\r\n");
-  fprintf(out, "\t\t\t\tCompileAs=\"0\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCManagedResourceCompilerTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCResourceCompilerTool\"\r\n");
-  fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"_DEBUG\"\r\n");
-  fprintf(out, "\t\t\t\tCulture=\"1033\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCPreLinkEventTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCLinkerTool\"\r\n");
-  fprintf(out, "\t\t\t\tAdditionalDependencies=\"cairo.lib comctl32.lib\"\r\n");
-  fprintf(out, "\t\t\t\tOutputFile=\"../fluid/fluidd.exe\"\r\n");
-  fprintf(out, "\t\t\t\tLinkIncremental=\"1\"\r\n");
-  fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tAdditionalLibraryDirectories=\"..\\..\\lib\"\r\n");
-  fprintf(out, "\t\t\t\tIgnoreDefaultLibraryNames=\"libcmtd\"\r\n");
-  fprintf(out, "\t\t\t\tGenerateDebugInformation=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tProgramDatabaseFile=\".\\fluid__0/fluidd.pdb\"\r\n");
-  fprintf(out, "\t\t\t\tSubSystem=\"2\"\r\n");
-  fprintf(out, "\t\t\t\tRandomizedBaseAddress=\"1\"\r\n");
-  fprintf(out, "\t\t\t\tDataExecutionPrevention=\"0\"\r\n");
-  fprintf(out, "\t\t\t\tTargetMachine=\"1\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCALinkTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCManifestTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCXDCMakeTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCBscMakeTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCFxCopTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCAppVerifierTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCPostBuildEventTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t</Configuration>\r\n");
-  fprintf(out, "\t\t<Configuration\r\n");
-  fprintf(out, "\t\t\tName=\"Release Cairo|Win32\"\r\n");
-  fprintf(out, "\t\t\tOutputDirectory=\"$(ConfigurationName)\"\r\n");
-  fprintf(out, "\t\t\tIntermediateDirectory=\"$(ConfigurationName)\"\r\n");
-  fprintf(out, "\t\t\tConfigurationType=\"1\"\r\n");
-  fprintf(out, "\t\t\tInheritedPropertySheets=\"$(VCInstallDir)VCProjectDefaults\\UpgradeFromVC71.vsprops\"\r\n");
-  fprintf(out, "\t\t\tUseOfMFC=\"0\"\r\n");
-  fprintf(out, "\t\t\tATLMinimizesCRunTimeLibraryUsage=\"false\"\r\n");
-  fprintf(out, "\t\t\t>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCPreBuildEventTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCCustomBuildTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCXMLDataGeneratorTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCWebServiceProxyGeneratorTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCMIDLTool\"\r\n");
-  fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"NDEBUG\"\r\n");
-  fprintf(out, "\t\t\t\tMkTypLibCompatible=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tTargetEnvironment=\"1\"\r\n");
-  fprintf(out, "\t\t\t\tTypeLibraryName=\".\\fluid___/fluid.tlb\"\r\n");
-  fprintf(out, "\t\t\t\tHeaderFileName=\"\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-  fprintf(out, "\t\t\t\tOptimization=\"4\"\r\n");
-  fprintf(out, "\t\t\t\tInlineFunctionExpansion=\"2\"\r\n");
-  fprintf(out, "\t\t\t\tFavorSizeOrSpeed=\"0\"\r\n");
-  fprintf(out, "\t\t\t\tAdditionalIncludeDirectories=\".;..\\..\\zlib;..\\..\\png;..\\..\\jpeg;../..\"\r\n");
-  fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"FLTK_HAVE_CAIRO=1,_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN\"\r\n");
-  fprintf(out, "\t\t\t\tRuntimeLibrary=\"2\"\r\n");
-  fprintf(out, "\t\t\t\tUsePrecompiledHeader=\"0\"\r\n");
-  fprintf(out, "\t\t\t\tPrecompiledHeaderFile=\".\\fluid___/fluid.pch\"\r\n");
-  fprintf(out, "\t\t\t\tAssemblerListingLocation=\".\\fluid___/\"\r\n");
-  fprintf(out, "\t\t\t\tObjectFile=\".\\fluid___/\"\r\n");
-  fprintf(out, "\t\t\t\tProgramDataBaseFileName=\".\\fluid___/\"\r\n");
-  fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tCompileAs=\"0\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCManagedResourceCompilerTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCResourceCompilerTool\"\r\n");
-  fprintf(out, "\t\t\t\tPreprocessorDefinitions=\"NDEBUG\"\r\n");
-  fprintf(out, "\t\t\t\tCulture=\"1033\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCPreLinkEventTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCLinkerTool\"\r\n");
-  fprintf(out, "\t\t\t\tAdditionalDependencies=\"comctl32.lib cairo.lib\"\r\n");
-  fprintf(out, "\t\t\t\tOutputFile=\"../fluid/fluid.exe\"\r\n");
-  fprintf(out, "\t\t\t\tLinkIncremental=\"1\"\r\n");
-  fprintf(out, "\t\t\t\tSuppressStartupBanner=\"true\"\r\n");
-  fprintf(out, "\t\t\t\tAdditionalLibraryDirectories=\"..\\..\\lib\"\r\n");
-  fprintf(out, "\t\t\t\tIgnoreDefaultLibraryNames=\"libcmt\"\r\n");
-  fprintf(out, "\t\t\t\tProgramDatabaseFile=\".\\fluid___/fluid.pdb\"\r\n");
-  fprintf(out, "\t\t\t\tSubSystem=\"2\"\r\n");
-  fprintf(out, "\t\t\t\tRandomizedBaseAddress=\"1\"\r\n");
-  fprintf(out, "\t\t\t\tDataExecutionPrevention=\"0\"\r\n");
-  fprintf(out, "\t\t\t\tTargetMachine=\"1\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCALinkTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCManifestTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCXDCMakeTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCBscMakeTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCFxCopTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCAppVerifierTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t\t<Tool\r\n");
-  fprintf(out, "\t\t\t\tName=\"VCPostBuildEventTool\"\r\n");
-  fprintf(out, "\t\t\t/>\r\n");
-  fprintf(out, "\t\t</Configuration>\r\n");
-  fprintf(out, "\t</Configurations>\r\n");
-  fprintf(out, "\t<References>\r\n");
-  fprintf(out, "\t</References>\r\n");
-  fprintf(out, "\t<Files>\r\n");
-  
-  /* loop through the target and write out all C++ files */
-  Fl_File_Type *f;
-  for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-    if (f->is_cplusplus_code()) {
-      fprintf(out, "\t\t<File\r\n");
-      fprintf(out, "\t\t\tRelativePath=\"..\\..\\%s\"\r\n", DOS_path(f->filename()));
-      fprintf(out, "\t\t\t>\r\n");
-      fprintf(out, "\t\t\t<FileConfiguration\r\n");
-      fprintf(out, "\t\t\t\tName=\"Debug|Win32\"\r\n");
-      fprintf(out, "\t\t\t\t>\r\n");
-      fprintf(out, "\t\t\t\t<Tool\r\n");
-      fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-      fprintf(out, "\t\t\t\t\tOptimization=\"0\"\r\n");
-      fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
-      fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
-      fprintf(out, "\t\t\t\t/>\r\n");
-      fprintf(out, "\t\t\t</FileConfiguration>\r\n");
-      fprintf(out, "\t\t\t<FileConfiguration\r\n");
-      fprintf(out, "\t\t\t\tName=\"Release|Win32\"\r\n");
-      fprintf(out, "\t\t\t\t>\r\n");
-      fprintf(out, "\t\t\t\t<Tool\r\n");
-      fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-      fprintf(out, "\t\t\t\t\tFavorSizeOrSpeed=\"0\"\r\n");
-      fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
-      fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
-      fprintf(out, "\t\t\t\t/>\r\n");
-      fprintf(out, "\t\t\t</FileConfiguration>\r\n");
-      fprintf(out, "\t\t\t<FileConfiguration\r\n");
-      fprintf(out, "\t\t\t\tName=\"Debug Cairo|Win32\"\r\n");
-      fprintf(out, "\t\t\t\t>\r\n");
-      fprintf(out, "\t\t\t\t<Tool\r\n");
-      fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-      fprintf(out, "\t\t\t\t\tOptimization=\"0\"\r\n");
-      fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
-      fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
-      fprintf(out, "\t\t\t\t/>\r\n");
-      fprintf(out, "\t\t\t</FileConfiguration>\r\n");
-      fprintf(out, "\t\t\t<FileConfiguration\r\n");
-      fprintf(out, "\t\t\t\tName=\"Release Cairo|Win32\"\r\n");
-      fprintf(out, "\t\t\t\t>\r\n");
-      fprintf(out, "\t\t\t\t<Tool\r\n");
-      fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
-      fprintf(out, "\t\t\t\t\tFavorSizeOrSpeed=\"0\"\r\n");
-      fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
-      fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
-      fprintf(out, "\t\t\t\t/>\r\n");
-      fprintf(out, "\t\t\t</FileConfiguration>\r\n");
-      fprintf(out, "\t\t</File>\r\n");          
+  for (;;) {
+    if (fgets(buf, 2047, in)==0) // FIXME: handle error!
+      break;
+    char *hash = buf-1;
+    char copyLine = 1;
+    for (;;) {
+      hash = strchr(hash+1, '#');
+      if (!hash) break;
+      if (hash && hash[1]=='#') { // double hash escapes the control character
+        int n = strlen(hash);
+        memmove(hash, hash+1, n);
+        continue;
+      } else { // single hash is a command
+        copyLine = 0;
+        if (strncmp(hash, "#WriteFile(",11)==0) {
+          // mark the end of the filename (this will crash if the formatting is wrong!)
+          char *sep = strchr(hash, ')');
+          *sep = 0;
+          // filename is relative, so add it to the base_dir
+          char fnbuf[2048];
+          strcpy(fnbuf, base_dir);
+          strcat(fnbuf, hash+11);
+          out = fopen(fnbuf, "wb");
+          // set the filepath for this target. In this module, all filenames are relative to the Makefile
+          strcpy(tgt_base, fnbuf);
+          *((char*)fltk3::filename_name(tgt_base)) = 0; // keep only the path
+                                                        // restore buffer and continue 
+          *sep = ')';
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#CloseFile", 10)==0) {
+          if (out!=stdout) fclose(out);
+          out = stdout;
+          // set the filepath for the default target. 
+          strcpy(tgt_base, base_dir);
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#SourceFiles(", 13)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+13, ')'); // keep tgt local
+          if (!tgt) {
+            printf("ERROR writing VisualC 2008 file: target not found!");
+            return -1;
+          }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_code() && f->builds_in(ENV_VC2008)) {
+              fprintf(out, "\t\t<File\r\n");
+              fprintf(out, "\t\t\tRelativePath=\"..\\..\\%s\"\r\n", DOS_path(f->filename()));
+              fprintf(out, "\t\t\t>\r\n");
+              fprintf(out, "\t\t\t<FileConfiguration\r\n");
+              fprintf(out, "\t\t\t\tName=\"Debug|Win32\"\r\n");
+              fprintf(out, "\t\t\t\t>\r\n");
+              fprintf(out, "\t\t\t\t<Tool\r\n");
+              fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
+              fprintf(out, "\t\t\t\t\tOptimization=\"0\"\r\n");
+              fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
+              fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
+              fprintf(out, "\t\t\t\t/>\r\n");
+              fprintf(out, "\t\t\t</FileConfiguration>\r\n");
+              fprintf(out, "\t\t\t<FileConfiguration\r\n");
+              fprintf(out, "\t\t\t\tName=\"Release|Win32\"\r\n");
+              fprintf(out, "\t\t\t\t>\r\n");
+              fprintf(out, "\t\t\t\t<Tool\r\n");
+              fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
+              fprintf(out, "\t\t\t\t\tFavorSizeOrSpeed=\"0\"\r\n");
+              fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
+              fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
+              fprintf(out, "\t\t\t\t/>\r\n");
+              fprintf(out, "\t\t\t</FileConfiguration>\r\n");
+              fprintf(out, "\t\t\t<FileConfiguration\r\n");
+              fprintf(out, "\t\t\t\tName=\"Debug Cairo|Win32\"\r\n");
+              fprintf(out, "\t\t\t\t>\r\n");
+              fprintf(out, "\t\t\t\t<Tool\r\n");
+              fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
+              fprintf(out, "\t\t\t\t\tOptimization=\"0\"\r\n");
+              fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
+              fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
+              fprintf(out, "\t\t\t\t/>\r\n");
+              fprintf(out, "\t\t\t</FileConfiguration>\r\n");
+              fprintf(out, "\t\t\t<FileConfiguration\r\n");
+              fprintf(out, "\t\t\t\tName=\"Release Cairo|Win32\"\r\n");
+              fprintf(out, "\t\t\t\t>\r\n");
+              fprintf(out, "\t\t\t\t<Tool\r\n");
+              fprintf(out, "\t\t\t\t\tName=\"VCCLCompilerTool\"\r\n");
+              fprintf(out, "\t\t\t\t\tFavorSizeOrSpeed=\"0\"\r\n");
+              fprintf(out, "\t\t\t\t\tAdditionalIncludeDirectories=\"\"\r\n");
+              fprintf(out, "\t\t\t\t\tPreprocessorDefinitions=\"\"\r\n");
+              fprintf(out, "\t\t\t\t/>\r\n");
+              fprintf(out, "\t\t\t</FileConfiguration>\r\n");
+              fprintf(out, "\t\t</File>\r\n");                        
+            }
+          }
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#HeaderFiles(", 13)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+13, ')'); // keep tgt local
+          if (!tgt) {
+            printf("ERROR writing VisualC 2008 file: target not found!");
+            return -1;
+          }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_header() && f->lists_in(ENV_VC2008)) {
+              fprintf(out, "\t\t\t<File\r\n");
+              fprintf(out, "\t\t\t\tRelativePath=\"..\\..\\%s\"\r\n", DOS_path(f->filename()));
+              fprintf(out, "\t\t\t\t>\r\n");
+              // OK, we have cheated here quite a bit. The stuff missing here (as opposed to "#SourceFiles"
+              // depends on "builds_in", and not on the fact of being a header file. But for now it does
+              // what we expect...
+              fprintf(out, "\t\t\t</File>\r\n");                        
+            }
+          }
+          hash = strchr(hash, ';')+1;
+        } else {
+          printf("Unknown command in template: <<%s>>\n", hash);
+          copyLine = 1;
+          hash++;
+        }
+      }
     }
+    if (copyLine) fputs(buf, out);
   }
   
-  fprintf(out, "\t</Files>\r\n");
-  fprintf(out, "\t<Globals>\r\n");
-  fprintf(out, "\t</Globals>\r\n");
-  fprintf(out, "</VisualStudioProject>\r\n");
+  fclose(in);
+  if (out!=stdout) fclose(out);
   
-  fclose(out);
-
   return 0;
 }
 

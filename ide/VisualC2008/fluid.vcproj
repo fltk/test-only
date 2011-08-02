@@ -391,6 +391,67 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="Headers"
+			Filter="*.h*"
+			>
+			<File
+				RelativePath="..\..\fluid\CodeEditor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\fluid\Fl_Type.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\fluid\Fl_Widget_Type.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\fluid\Fluid_Image.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\fluid\Shortcut_Button.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\fluid\about_panel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\fluid\alignment_panel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\fluid\comments.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\fluid\function_panel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\fluid\print_panel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\fluid\template_panel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\fluid\undo.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\fluid\widget_panel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\fluid\workspace_panel.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\fluid\CodeEditor.cxx"
 			>
