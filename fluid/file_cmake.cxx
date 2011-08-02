@@ -41,60 +41,103 @@
 extern char *filename;
 
 int write_fltk_cmake() {
-  /* find the target named "Fluid" */
-  Fl_Type *tgt = Fl_Target_Type::find("Fluid");
-  if (!tgt) {
-    printf("FLUID target not found\n");
-    return -1;
-  }
+  // for now, we use a template file in FLTK/ide/templates/Makefile.tmpl .
+  // When done, everything will likely be integrated into the executable to make one compact package.
+  char buf[2048], base_dir[2048], tgt_base[2048];
+  strcpy(base_dir, filename);
+  *((char*)fltk3::filename_name(base_dir)) = 0; // keep only the path
+  strcpy(tgt_base, base_dir);
+  strcpy(buf, base_dir);
+  strcat(buf, "ide/templates/CMake.tmpl");
+  FILE *out = stdout;
+  FILE *in = fopen(buf, "rb");
   
-  /* Create a new CMakeLists.txt */
-  char buf[2048];
-  strcpy(buf, filename);
-  strcpy((char*)fltk3::filename_name(buf), "fluid/CMakeLists.txt");
-  FILE *out = fopen(buf, "wb");
-  if (!out) {
-    printf("Can't open FLUID CMakeLists.txt\n");
-    return -1;
-  }
-  
-  fprintf(out, "set(CPPFILES\n");
-  
-  Fl_File_Type *f;
-  for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-    if (f->is_cplusplus_code()) {
-      fprintf(out, "\t%s\n", f->filename_name());
+  for (;;) {
+    if (fgets(buf, 2047, in)==0) // FIXME: handle error!
+      break;
+    char *hash = buf-1;
+    char copyLine = 1;
+    for (;;) {
+      hash = strchr(hash+1, '#');
+      if (!hash) break;
+      if (hash && hash[1]=='#') { // double hash escapes the control character
+        int n = strlen(hash);
+        memmove(hash, hash+1, n);
+        continue;
+      } else { // single hash is a command
+        copyLine = 0;
+        if (strncmp(hash, "#WriteFile(",11)==0) {
+          // mark the end of the filename (this will crash if the formatting is wrong!)
+          char *sep = strchr(hash, ')');
+          *sep = 0;
+          // filename is relative, so add it to the base_dir
+          char fnbuf[2048];
+          strcpy(fnbuf, base_dir);
+          strcat(fnbuf, hash+11);
+          out = fopen(fnbuf, "wb");
+          // set the filepath for this target. In this module, all filenames are relative to the Makefile
+          strcpy(tgt_base, fnbuf);
+          *((char*)fltk3::filename_name(tgt_base)) = 0; // keep only the path
+                                                        // restore buffer and continue 
+          *sep = ')';
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#CloseFile", 10)==0) {
+          if (out!=stdout) fclose(out);
+          out = stdout;
+          // set the filepath for the default target. 
+          strcpy(tgt_base, base_dir);
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#CppFiles(", 10)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+10, ')'); // keep tgt local
+          if (!tgt) {
+            printf("ERROR writing CMake file: target not found!");
+            return -1;
+          }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_cplusplus_code() && f->builds_in(ENV_CMAKE)) {
+              fprintf(out, "  %s\n", f->filename_relative(base_dir, tgt_base));
+            }
+          }
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#ObjCppFiles(", 13)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+13, ')'); // keep tgt local
+          if (!tgt) {
+            printf("ERROR writing CMake file: target not found!");
+            return -1;
+          }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_objc_code() && f->builds_in(ENV_CMAKE)) {
+              fprintf(out, "\t\t%s\n", f->filename_relative(base_dir, tgt_base));
+            }
+          }
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#CFiles(", 8)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+8, ')'); // keep tgt local
+          if (!tgt) {
+            printf("ERROR writing CMake file: target not found!");
+            return -1;
+          }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_c_code() && f->builds_in(ENV_CMAKE)) {
+              fprintf(out, "  %s\n", f->filename_relative(base_dir, tgt_base));
+            }
+          }
+          hash = strchr(hash, ';')+1;
+        } else {
+          printf("Unknown command in template: <<%s>>\n", hash);
+          copyLine = 1;
+          hash++;
+        }
+      }
     }
+    if (copyLine) fputs(buf, out);
   }
   
-  fprintf(out, ")\n");  
-  fprintf(out, "add_executable(fluid ${CPPFILES})\n");
-  fprintf(out, "target_link_libraries(fluid fltk fltk_images fltk_forms)\n");
-  fprintf(out, "\n");
-  fprintf(out, "# link in optional libraries\n");
-  fprintf(out, "if(FLTK_HAVE_CAIRO)\n");
-  fprintf(out, "    target_link_libraries(fluid fltk_cairo)\n");
-  fprintf(out, "endif(FLTK_HAVE_CAIRO)\n");
-  fprintf(out, "\n");
-  fprintf(out, "if(FLTK_USE_GL)\n");
-  fprintf(out, "    target_link_libraries(fluid fltk_gl)\n");
-  fprintf(out, "    target_link_libraries(fluid ${OPENGL_LIBRARIES})\n");
-  fprintf(out, "endif(FLTK_USE_GL)\n");
-  fprintf(out, "\n");
-  fprintf(out, "if(USE_XFT)\n");
-  fprintf(out, "    target_link_libraries(fluid ${X11_Xft_LIB})\n");
-  fprintf(out, "endif(USE_XFT)\n");
-  fprintf(out, "\n");
-  fprintf(out, "if(HAVE_XINERAMA)\n");
-  fprintf(out, "    target_link_libraries(fluid ${X11_Xinerama_LIB})\n");
-  fprintf(out, "endif(HAVE_XINERAMA)\n");
-  fprintf(out, "\n");
-  fprintf(out, "install(TARGETS fluid\n");
-  fprintf(out, "    EXPORT fltk-install\n");
-  fprintf(out, "    DESTINATION ${PREFIX_BIN}\n");
-  fprintf(out, ")\n");
-
-  fclose(out);
+  fclose(in);
+  if (out!=stdout) fclose(out);
   
   return 0;
 }

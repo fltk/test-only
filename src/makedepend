@@ -1301,3 +1301,24 @@ flstring.o: flstring.h ../fltk3/Export.h ../config.h
 vsnprintf.o: flstring.h ../fltk3/Export.h ../config.h
 xutf8/case.o: xutf8/headers/case.h
 xutf8/is_spacing.o: xutf8/headers/spacing.h
+xutf8/keysym2Ucs.o: ../fltk3/Xutf8.h xutf8/imKStoUCS.c xutf8/Xlibint.h
+xutf8/keysym2Ucs.o: xutf8/Ximint.h
+xutf8/utf8Input.o: ../config.h ../fltk3/Xutf8.h xutf8/lcUniConv/big5.h
+xutf8/utf8Input.o: xutf8/lcUniConv/gb2312.h xutf8/lcUniConv/cp936ext.h
+xutf8/utf8Input.o: xutf8/lcUniConv/jisx0201.h xutf8/lcUniConv/jisx0208.h
+xutf8/utf8Input.o: xutf8/lcUniConv/jisx0212.h xutf8/lcUniConv/ksc5601.h
+xutf8/utf8Utils.o: ../fltk3/Xutf8.h
+xutf8/utf8Wrap.o: ../fltk3/Xutf8.h xutf8/ucs2fontmap.c
+xutf8/utf8Wrap.o: xutf8/lcUniConv/cp936ext.h xutf8/lcUniConv/big5.h
+xutf8/utf8Wrap.o: xutf8/lcUniConv/gb2312.h xutf8/lcUniConv/iso8859_10.h
+xutf8/utf8Wrap.o: xutf8/lcUniConv/iso8859_11.h xutf8/lcUniConv/iso8859_13.h
+xutf8/utf8Wrap.o: xutf8/lcUniConv/iso8859_14.h xutf8/lcUniConv/iso8859_15.h
+xutf8/utf8Wrap.o: xutf8/lcUniConv/iso8859_2.h xutf8/lcUniConv/iso8859_3.h
+xutf8/utf8Wrap.o: xutf8/lcUniConv/iso8859_4.h xutf8/lcUniConv/iso8859_5.h
+xutf8/utf8Wrap.o: xutf8/lcUniConv/iso8859_6.h xutf8/lcUniConv/iso8859_7.h
+xutf8/utf8Wrap.o: xutf8/lcUniConv/iso8859_8.h xutf8/lcUniConv/iso8859_9.h
+xutf8/utf8Wrap.o: xutf8/lcUniConv/jisx0201.h xutf8/lcUniConv/jisx0208.h
+xutf8/utf8Wrap.o: xutf8/lcUniConv/jisx0212.h xutf8/lcUniConv/koi8_r.h
+xutf8/utf8Wrap.o: xutf8/lcUniConv/koi8_u.h xutf8/lcUniConv/ksc5601.h
+xutf8/utf8Wrap.o: xutf8/lcUniConv/cp1251.h xutf8/headers/symbol_.h
+xutf8/utf8Wrap.o: xutf8/headers/dingbats_.h

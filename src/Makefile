@@ -205,7 +205,11 @@ CFILES =  \
 	vsnprintf.c \
 	xutf8/case.c \
 	xutf8/is_right2left.c \
-	xutf8/is_spacing.c
+	xutf8/is_spacing.c \
+	xutf8/keysym2Ucs.c \
+	xutf8/utf8Input.c \
+	xutf8/utf8Utils.c \
+	xutf8/utf8Wrap.c
 
 ################################################################
 FLTKFLAGS = -DFL_LIBRARY
