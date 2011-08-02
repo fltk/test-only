@@ -226,7 +226,7 @@ fltk3::DoubleWindow* show_workspace_panel() {
       workspace_panel->show();
   return workspace_panel;
 }
-extern fltk3::Window *the_file_panel;
+extern Fl_Panel *the_file_panel;
 
 void file_panel_set_cb(fltk3::Widget*, void *v) {
   if (v == Fl_Panel::LOAD) {

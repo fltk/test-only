@@ -59,7 +59,7 @@ widget_class Fl_Environment_Choice {open
   decl {unsigned int pEnv;} {protected local
   }
   {fltk3::MenuButton} pEnvMenu {
-    label {- unknown -} open selected
+    label {- unknown -} open
     xywh {0 0 170 25} labelsize 9 align 192
   } {
     MenuItem pMenuAll {
@@ -277,7 +277,7 @@ else
 workspace_panel->show();} {}
 } 
 
-decl {extern fltk3::Window *the_file_panel;} {private global
+decl {extern Fl_Panel *the_file_panel;} {selected private global
 } 
 
 Function {file_panel_set_cb(fltk3::Widget*, void *v)} {open return_type void
