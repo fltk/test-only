@@ -2,7 +2,8 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx} 
-wks_name FLTK
+wks_name FLTK 
+wks_env 1
 comment {//
 // "$Id$"
 //
@@ -31,6 +32,9 @@ comment {//
 } 
 
 decl {\#include "Fl_Type.h"} {public global
+} 
+
+decl {\#include <stdint.h>} {selected public global
 } 
 
 decl {\#include <fltk3/Pixmap.h>} {public global
@@ -411,7 +415,7 @@ Use Ctrl-J for newlines.} xywh {75 15 170 20} labelsize 12 when 1 textsize 12 re
           break;
         }
       }
-      o->copy_label(buf);} open selected
+      o->copy_label(buf);} open
         xywh {75 105 170 20} labelsize 12
       } {
         MenuItem {} {
