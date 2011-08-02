@@ -350,7 +350,7 @@ int write_file(const char *filename, int selected_only) {
   if (wks_name) {
     write_string("\nwks_name "); write_word(wks_name);
   }
-  if (wks_env!=ENV_ALL) {
+  if (wks_env!=FL_ENV_ALL) {
     write_string("\nwks_env %d", wks_env);
   }
   for (Fl_Type *p = Fl_Type::first; p;) {

@@ -111,7 +111,7 @@ int write_fltk_ide_visualc6() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_code() && f->builds_in(ENV_VC6)) {
+            if (f->is_code() && f->builds_in(FL_ENV_VC6)) {
               fprintf(out, "# Begin Source File\r\n");
               fprintf(out, "\r\n");
               fprintf(out, "SOURCE=..\\..\\%s\r\n", DOS_path(f->filename()));
@@ -192,7 +192,7 @@ int write_fltk_ide_visualc2008() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_code() && f->builds_in(ENV_VC2008)) {
+            if (f->is_code() && f->builds_in(FL_ENV_VC2008)) {
               fprintf(out, "\t\t<File\r\n");
               fprintf(out, "\t\t\tRelativePath=\"..\\..\\%s\"\r\n", DOS_path(f->filename()));
               fprintf(out, "\t\t\t>\r\n");
@@ -248,7 +248,7 @@ int write_fltk_ide_visualc2008() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_header() && f->lists_in(ENV_VC2008)) {
+            if (f->is_header() && f->lists_in(FL_ENV_VC2008)) {
               fprintf(out, "\t\t\t<File\r\n");
               fprintf(out, "\t\t\t\tRelativePath=\"..\\..\\%s\"\r\n", DOS_path(f->filename()));
               fprintf(out, "\t\t\t\t>\r\n");
@@ -332,7 +332,7 @@ int write_fltk_ide_visualc2010() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_code() && f->builds_in(ENV_VC2010)) {
+            if (f->is_code() && f->builds_in(FL_ENV_VC2010)) {
               fprintf(out, "    <ClCompile Include=\"..\\..\\%s\">\r\n", DOS_path(f->filename()));
               fprintf(out, "      <Optimization Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">Disabled</Optimization>\r\n");
               fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
@@ -358,7 +358,7 @@ int write_fltk_ide_visualc2010() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_code() && f->lists_in(ENV_VC2010)) {
+            if (f->is_code() && f->lists_in(FL_ENV_VC2010)) {
               fprintf(out, "    <ClInclude Include=\"..\\..\\%s\" />\r\n", DOS_path(f->filename()));
             }
           }
@@ -371,7 +371,7 @@ int write_fltk_ide_visualc2010() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_header() && f->lists_in(ENV_VC2010)) {
+            if (f->is_header() && f->lists_in(FL_ENV_VC2010)) {
               fprintf(out, "    <ClInclude Include=\"..\\..\\%s\" />\r\n", DOS_path(f->filename()));
             }
           }
@@ -384,7 +384,7 @@ int write_fltk_ide_visualc2010() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_header() && f->lists_in(ENV_VC2010)) {
+            if (f->is_header() && f->lists_in(FL_ENV_VC2010)) {
               fprintf(out, "    <ClInclude Include=\"..\\..\\%s\">\r\n", DOS_path(f->filename()));
               fprintf(out, "      <Filter>Headers</Filter>\r\n");
               fprintf(out, "    </ClInclude>\r\n");

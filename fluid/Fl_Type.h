@@ -51,23 +51,23 @@ extern unsigned int wks_env;
 extern char *wks_name;
 
 enum { 
-  ENV_NONE=0, 
-  ENV_ALL=0x007f, 
-    ENV_ALL_SHELL=0x0003, 
-      ENV_MAKE=0x0001, ENV_CMAKE=0x0002, 
-    ENV_ALL_VC=0x001c, 
-      ENV_VC6=0x0004, ENV_VC2008=0x0008, ENV_VC2010=0x0010,
-    ENV_ALL_XC=0x0060, 
-      ENV_XC3=0x0020, ENV_XC4=0x0040 
+  FL_ENV_NONE=0, 
+  FL_ENV_ALL=0x007f, 
+    FL_ENV_ALL_SHELL=0x0003, 
+      FL_ENV_MAKE=0x0001, FL_ENV_CMAKE=0x0002, 
+    FL_ENV_ALL_VC=0x001c, 
+      FL_ENV_VC6=0x0004, FL_ENV_VC2008=0x0008, FL_ENV_VC2010=0x0010,
+    FL_ENV_ALL_XC=0x0060, 
+      FL_ENV_XC3=0x0020, FL_ENV_XC4=0x0040 
 }; 
 
 typedef enum {
-  FILE_EXPLICIT = 0x8000,
-  FILE_UNKNOWN = 0,
-  FILE_C_SOURCE, FILE_C_HEADER,
-  FILE_CPP_SOURCE, FILE_CPP_HEADER,
-  FILE_OBJC_SOURCE, FILE_OBJC_HEADER,
-  FILE_TEXT, FILE_TEXT_SCRIPT
+  FL_FILE_EXPLICIT = 0x8000,
+  FL_FILE_UNKNOWN = 0,
+  FL_FILE_C_SOURCE, FL_FILE_C_HEADER,
+  FL_FILE_CPP_SOURCE, FL_FILE_CPP_HEADER,
+  FL_FILE_OBJC_SOURCE, FL_FILE_OBJC_HEADER,
+  FL_FILE_TEXT, FL_FILE_TEXT_SCRIPT
 } FileType;
 
 class Fl_Type {
@@ -281,7 +281,7 @@ public:
   Fl_File_Type() :
     Fl_Workspace_Type(),
     pFilename(0),
-    pFileType(FILE_UNKNOWN) {
+    pFileType(FL_FILE_UNKNOWN) {
   }
   ~Fl_File_Type() {
     if (pFilename) free(pFilename);

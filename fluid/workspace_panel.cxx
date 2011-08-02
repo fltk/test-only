@@ -49,22 +49,22 @@ void Fl_Environment_Choice::cb_pMenuAll(fltk3::Menu_* o, void* v) {
 }
 
 fltk3::MenuItem Fl_Environment_Choice::menu_pEnvMenu[] = {
- {"All Environments", 0,  (fltk3::Callback*)Fl_Environment_Choice::cb_pMenuAll, (void*)(ENV_ALL), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"All Environments", 0,  (fltk3::Callback*)Fl_Environment_Choice::cb_pMenuAll, (void*)(FL_ENV_ALL), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"Command Line", 0,  0, 0, 64, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"All", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_ALL_SHELL), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"Makefile (make, gmake)", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_MAKE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"CMake File (cmake)", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_CMAKE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"All", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(FL_ENV_ALL_SHELL), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Makefile (make, gmake)", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(FL_ENV_MAKE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"CMake File (cmake)", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(FL_ENV_CMAKE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {0,0,0,0,0,0,0,0,0},
  {"MS Windows", 0,  0, 0, 64, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"All", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_ALL_VC), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"VisualC 6", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_VC6), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"VisualC 2008", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_VC2008), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"VisualC 2010", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_VC2010), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"All", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(FL_ENV_ALL_VC), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"VisualC 6", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(FL_ENV_VC6), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"VisualC 2008", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(FL_ENV_VC2008), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"VisualC 2010", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(FL_ENV_VC2010), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {0,0,0,0,0,0,0,0,0},
  {"Apple OS X", 0,  0, 0, 64, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"All", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_ALL_XC), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"Xcode 3", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_XC3), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"Xcode 4", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(ENV_XC4), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"All", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(FL_ENV_ALL_XC), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Xcode 3", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(FL_ENV_XC3), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Xcode 4", 0,  (fltk3::Callback*)cb_pMenuAll, (void*)(FL_ENV_XC4), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {0,0,0,0,0,0,0,0,0},
  {0,0,0,0,0,0,0,0,0}
 };
@@ -135,19 +135,19 @@ void Fl_Environment_Choice::update_all() {
   }
   
   // update the text
-  if (pEnv==ENV_ALL) {
+  if (pEnv==FL_ENV_ALL) {
     pEnvMenu->label("- all -");
-  } else if (pEnv==ENV_NONE) {
+  } else if (pEnv==FL_ENV_NONE) {
     pEnvMenu->label("- none -");
   } else {
     char buf[1024]; buf[0] = 0;
-    if (pEnv&ENV_MAKE) strcat(buf, "make, ");
-    if (pEnv&ENV_CMAKE) strcat(buf, "cmake, ");
-    if (pEnv&ENV_VC6) strcat(buf, "VC6, ");
-    if (pEnv&ENV_VC2008) strcat(buf, "VC2008, ");
-    if (pEnv&ENV_VC2010) strcat(buf, "VC2010, ");
-    if (pEnv&ENV_XC3) strcat(buf, "Xcode3, ");
-    if (pEnv&ENV_XC4) strcat(buf, "Xcode4, ");
+    if (pEnv&FL_ENV_MAKE) strcat(buf, "make, ");
+    if (pEnv&FL_ENV_CMAKE) strcat(buf, "cmake, ");
+    if (pEnv&FL_ENV_VC6) strcat(buf, "VC6, ");
+    if (pEnv&FL_ENV_VC2008) strcat(buf, "VC2008, ");
+    if (pEnv&FL_ENV_VC2010) strcat(buf, "VC2010, ");
+    if (pEnv&FL_ENV_XC3) strcat(buf, "Xcode3, ");
+    if (pEnv&FL_ENV_XC4) strcat(buf, "Xcode4, ");
     int n = strlen(buf);
     if (n>2) buf[n-2] = 0;
     pEnvMenu->copy_label(buf);
@@ -222,7 +222,7 @@ fltk3::DoubleWindow* show_workspace_panel() {
       if (wks_env)  
         pEnv->value(wks_env);  
       else
-        pEnv->value(ENV_ALL);
+        pEnv->value(FL_ENV_ALL);
       workspace_panel->show();
   return workspace_panel;
 }
@@ -309,10 +309,10 @@ static void cb_Unknown(fltk3::MenuButton* o, void* v) {
     for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
       if (t->selected && t->is_file()) {
         if (((Fl_File_Type*)t)->filetype() != e) {
-          if (e==FILE_EXPLICIT)
+          if (e==FL_FILE_EXPLICIT)
             ((Fl_File_Type*)t)->set_default_type();
           else
-            ((Fl_File_Type*)t)->filetype(e|FILE_EXPLICIT);
+            ((Fl_File_Type*)t)->filetype(e|FL_FILE_EXPLICIT);
           mod = 1;
         }
       }
@@ -321,7 +321,7 @@ static void cb_Unknown(fltk3::MenuButton* o, void* v) {
   }
       char buf[64];
       unsigned int ft = Fl_Panel::current_file()->filetype();
-      if (ft&FILE_EXPLICIT) {
+      if (ft&FL_FILE_EXPLICIT) {
         strcpy(buf, "explicit - ");
       } else {
         strcpy(buf, "default - ");
@@ -341,16 +341,16 @@ static void cb_Unknown(fltk3::MenuButton* o, void* v) {
 }
 
 fltk3::MenuItem menu_Unknown[] = {
- {"Default", 0,  0, (void*)(FILE_EXPLICIT), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"C Source Code", 0,  0, (void*)(FILE_C_SOURCE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"C Header", 0,  0, (void*)(FILE_C_HEADER), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"C++ Source Code", 0,  0, (void*)(FILE_CPP_SOURCE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"C++ Header", 0,  0, (void*)(FILE_CPP_HEADER), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"ObjectiveC Source", 0,  0, (void*)(FILE_OBJC_SOURCE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"ObjectiveC Header", 0,  0, (void*)(FILE_OBJC_HEADER), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"Text", 0,  0, (void*)(FILE_TEXT), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"Shell Script", 0,  0, (void*)(FILE_TEXT_SCRIPT), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
- {"Unknown", 0,  0, (void*)(FILE_UNKNOWN), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Default", 0,  0, (void*)(FL_FILE_EXPLICIT), 128, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"C Source Code", 0,  0, (void*)(FL_FILE_C_SOURCE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"C Header", 0,  0, (void*)(FL_FILE_C_HEADER), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"C++ Source Code", 0,  0, (void*)(FL_FILE_CPP_SOURCE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"C++ Header", 0,  0, (void*)(FL_FILE_CPP_HEADER), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"ObjectiveC Source", 0,  0, (void*)(FL_FILE_OBJC_SOURCE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"ObjectiveC Header", 0,  0, (void*)(FL_FILE_OBJC_HEADER), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Text", 0,  0, (void*)(FL_FILE_TEXT), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Shell Script", 0,  0, (void*)(FL_FILE_TEXT_SCRIPT), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Unknown", 0,  0, (void*)(FL_FILE_UNKNOWN), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {0,0,0,0,0,0,0,0,0}
 };
 

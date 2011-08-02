@@ -96,7 +96,7 @@ int write_fltk_makefiles() {
           char first = 1;
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_cplusplus_code() && f->builds_in(ENV_MAKE)) {
+            if (f->is_cplusplus_code() && f->builds_in(FL_ENV_MAKE)) {
               if (first) { fprintf(out, "CPPFILES = "); first=0; }
               fprintf(out, " \\\n\t%s", f->filename_relative(base_dir, tgt_base));
             }
@@ -112,7 +112,7 @@ int write_fltk_makefiles() {
           char first = 1;
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_objc_code() && f->builds_in(ENV_MAKE)) {
+            if (f->is_objc_code() && f->builds_in(FL_ENV_MAKE)) {
               if (first) { fprintf(out, "OBJCPPFILES = "); first=0; }
               fprintf(out, " \\\n\t%s", f->filename_relative(base_dir, tgt_base));
             }
@@ -128,7 +128,7 @@ int write_fltk_makefiles() {
           char first = 1;
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_c_code() && f->builds_in(ENV_MAKE)) {
+            if (f->is_c_code() && f->builds_in(FL_ENV_MAKE)) {
               if (first) { fprintf(out, "CFILES = "); first=0; }
               fprintf(out, " \\\n\t%s", f->filename_relative(base_dir, tgt_base));
             }

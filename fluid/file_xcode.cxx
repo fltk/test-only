@@ -39,12 +39,12 @@
 /*
  
  typedef enum {
- FILE_DEFAULT = 0x8000,
- FILE_UNKNOWN = 0,
- FILE_C_SOURCE, FILE_C_HEADER,
- FILE_CPP_SOURCE, FILE_CPP_HEADER,
- FILE_OBJC_SOURCE, FILE_OBJC_HEADER,
- FILE_TEXT, FILE_TEXT_SCRIPT
+ FL_FILE_DEFAULT = 0x8000,
+ FL_FILE_UNKNOWN = 0,
+ FL_FILE_C_SOURCE, FL_FILE_C_HEADER,
+ FL_FILE_CPP_SOURCE, FL_FILE_CPP_HEADER,
+ FL_FILE_OBJC_SOURCE, FL_FILE_OBJC_HEADER,
+ FL_FILE_TEXT, FL_FILE_TEXT_SCRIPT
  } FileType;
 
 lastKnownFileType  or  explicitFileType
@@ -70,20 +70,20 @@ extern char *filename;
 
 static const char *xcode4_type(unsigned int ft) {
   static char buf[64];
-  if (ft & FILE_EXPLICIT) {
+  if (ft & FL_FILE_EXPLICIT) {
     strcpy(buf, "explicitFileType = ");
   } else {
     strcpy(buf, "lastKnownFileType = ");
   }
   switch (ft & 0x7fff) {
-    case FILE_C_SOURCE:     strcat(buf, "sourcecode.c.c"); break;
-    case FILE_C_HEADER:     strcat(buf, "sourcecode.c.h"); break;
-    case FILE_CPP_SOURCE:   strcat(buf, "sourcecode.cpp.cpp"); break;
-    case FILE_CPP_HEADER:   strcat(buf, "sourcecode.cpp.h"); break;
-    case FILE_OBJC_SOURCE:  strcat(buf, "sourcecode.cpp.objcpp"); break;
-    case FILE_OBJC_HEADER:  strcat(buf, "sourcecode.cpp.h"); break;
-    case FILE_TEXT:         strcat(buf, "text"); break;
-    case FILE_TEXT_SCRIPT:  strcat(buf, "text.script.sh"); break;
+    case FL_FILE_C_SOURCE:     strcat(buf, "sourcecode.c.c"); break;
+    case FL_FILE_C_HEADER:     strcat(buf, "sourcecode.c.h"); break;
+    case FL_FILE_CPP_SOURCE:   strcat(buf, "sourcecode.cpp.cpp"); break;
+    case FL_FILE_CPP_HEADER:   strcat(buf, "sourcecode.cpp.h"); break;
+    case FL_FILE_OBJC_SOURCE:  strcat(buf, "sourcecode.cpp.objcpp"); break;
+    case FL_FILE_OBJC_HEADER:  strcat(buf, "sourcecode.cpp.h"); break;
+    case FL_FILE_TEXT:         strcat(buf, "text"); break;
+    case FL_FILE_TEXT_SCRIPT:  strcat(buf, "text.script.sh"); break;
     default:                strcat(buf, "text"); break;
   }
   return buf;
@@ -123,7 +123,7 @@ int write_fltk_ide_xcode4() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->builds_in(ENV_XC4)) {
+            if (f->builds_in(FL_ENV_XC4)) {
               char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
               char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
               fprintf(out, "\t\t%s /* %s in %s */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };\n", 
@@ -144,7 +144,7 @@ int write_fltk_ide_xcode4() {
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             // FIXME: write a file type converter!
-            if (f->lists_in(ENV_XC4)) {
+            if (f->lists_in(FL_ENV_XC4)) {
               char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
               fprintf(out, "\t\t%s /* %s */ = {isa = PBXFileReference; fileEncoding = 4; %s; name = %s; path = ../../%s; sourceTree = SOURCE_ROOT; };\n", 
                       PBXFileRef,
@@ -163,7 +163,7 @@ int write_fltk_ide_xcode4() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->lists_in(ENV_XC4) && f->is_header()) {
+            if (f->lists_in(FL_ENV_XC4) && f->is_header()) {
               char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
               fprintf(out, "\t\t\t\t%s /* %s */,\n", 
                       PBXFileRef, 
@@ -179,7 +179,7 @@ int write_fltk_ide_xcode4() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->lists_in(ENV_XC4) && f->is_code()) {
+            if (f->lists_in(FL_ENV_XC4) && f->is_code()) {
               char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
               fprintf(out, "\t\t\t\t%s /* %s */,\n", 
                       PBXFileRef, 
@@ -195,7 +195,7 @@ int write_fltk_ide_xcode4() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->builds_in(ENV_XC4) && f->is_header()) {
+            if (f->builds_in(FL_ENV_XC4) && f->is_header()) {
               char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
               fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
                       PBXBuildFile, 
@@ -212,7 +212,7 @@ int write_fltk_ide_xcode4() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->builds_in(ENV_XC4) && f->is_code()) {
+            if (f->builds_in(FL_ENV_XC4) && f->is_code()) {
               char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
               fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
                       PBXBuildFile, 

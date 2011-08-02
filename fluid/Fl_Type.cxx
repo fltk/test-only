@@ -195,7 +195,7 @@ extern int show_comments;
 
 ////////////////////////////////////////////////////////////////
 
-unsigned int wks_env = ENV_ALL;
+unsigned int wks_env = FL_ENV_ALL;
 char *wks_name = 0L;
 
 ////////////////////////////////////////////////////////////////
@@ -1078,8 +1078,8 @@ extern char is_workspace();
 
 Fl_Workspace_Type::Fl_Workspace_Type()
 : Fl_Type(),
-  pBuildEnv(ENV_ALL),
-  pListEnv(ENV_ALL),
+  pBuildEnv(FL_ENV_ALL),
+  pListEnv(FL_ENV_ALL),
   pNUUID(0), pnUUID(0), 
   pUUIDName(0L), pUUID(0) 
 {
@@ -1180,11 +1180,11 @@ void Fl_Workspace_Type::write_properties() {
     write_word(buf);
     write_word(pUUID[i]);
   }
-  if (build_env()!=ENV_ALL) {
+  if (build_env()!=FL_ENV_ALL) {
     write_indent(level+1);
     write_string("build_env %d", build_env());
   }
-  if (list_env()!=ENV_ALL) {
+  if (list_env()!=FL_ENV_ALL) {
     write_indent(level+1);
     write_string("list_env %d", list_env());
   }
@@ -1364,18 +1364,18 @@ void Fl_File_Type::set_default_type() {
   const char *fn = filename();
   if (fn) {
     const char *ext = fltk3::filename_ext(fn);
-    filetype(FILE_TEXT);
+    filetype(FL_FILE_TEXT);
     if (ext) {
       if (strcmp(ext, ".cxx")==0 || strcmp(ext, ".cpp")==0) {
-        filetype(FILE_CPP_SOURCE);
+        filetype(FL_FILE_CPP_SOURCE);
       } else if (strcmp(ext, ".c")==0) {
-        filetype(FILE_C_SOURCE);
+        filetype(FL_FILE_C_SOURCE);
       } else if (strcmp(ext, ".H")==0) {
-        filetype(FILE_CPP_HEADER);
+        filetype(FL_FILE_CPP_HEADER);
       } else if (strcmp(ext, ".h")==0) {
-        filetype(FILE_C_HEADER);
+        filetype(FL_FILE_C_HEADER);
       } else if (strcmp(ext, ".mm")==0) {
-        filetype(FILE_OBJC_SOURCE);
+        filetype(FL_FILE_OBJC_SOURCE);
       }
     }
   }
@@ -1412,7 +1412,7 @@ void Fl_File_Type::write_properties() {
     write_string("filename_and_path");
     write_word(filename());
   }
-  if (filetype()&FILE_EXPLICIT) {
+  if (filetype()&FL_FILE_EXPLICIT) {
     write_indent(level+1);
     write_string("filetype %d", filetype());
   }
@@ -1439,35 +1439,35 @@ Fl_File_Type *Fl_File_Type::next_file(Fl_Type *base) {
 }
 
 char Fl_File_Type::is_cplusplus_code() {
-  return (pFileType==FILE_CPP_SOURCE);
+  return (pFileType==FL_FILE_CPP_SOURCE);
 }
 
 char Fl_File_Type::is_cplusplus_header() {
-  return (pFileType==FILE_CPP_HEADER);
+  return (pFileType==FL_FILE_CPP_HEADER);
 }
 
 char Fl_File_Type::is_c_code() {
-  return (pFileType==FILE_C_SOURCE);
+  return (pFileType==FL_FILE_C_SOURCE);
 }
 
 char Fl_File_Type::is_c_header() {
-  return (pFileType==FILE_C_HEADER);
+  return (pFileType==FL_FILE_C_HEADER);
 }
 
 char Fl_File_Type::is_objc_code() {
-  return (pFileType==FILE_OBJC_SOURCE);
+  return (pFileType==FL_FILE_OBJC_SOURCE);
 }
 
 char Fl_File_Type::is_objc_header() {
-  return (pFileType==FILE_OBJC_HEADER);
+  return (pFileType==FL_FILE_OBJC_HEADER);
 }
 
 char Fl_File_Type::is_code() {
-  return (pFileType==FILE_CPP_SOURCE)||(pFileType==FILE_C_SOURCE)||(pFileType==FILE_OBJC_SOURCE);
+  return (pFileType==FL_FILE_CPP_SOURCE)||(pFileType==FL_FILE_C_SOURCE)||(pFileType==FL_FILE_OBJC_SOURCE);
 }
 
 char Fl_File_Type::is_header() {
-  return (pFileType==FILE_CPP_HEADER)||(pFileType==FILE_C_HEADER)||(pFileType==FILE_OBJC_HEADER);
+  return (pFileType==FL_FILE_CPP_HEADER)||(pFileType==FL_FILE_C_HEADER)||(pFileType==FL_FILE_OBJC_HEADER);
 }
 
 const char *Fl_File_Type::filename_name() {
