@@ -37,9 +37,9 @@
 #include "../fltk3/filename.h"
 
 
-// ------------ file conversion ------------------------------------------------
-
 extern char *filename;
+
+// ------------ file conversion ------------------------------------------------
 
 const char *DOS_path(const char *filename) {
   static char buf[2048];
@@ -54,139 +54,88 @@ const char *DOS_path(const char *filename) {
   return buf;
 }
 
+// ------------ VisualC 6 ------------------------------------------------------
+
 int write_fltk_ide_visualc6() {
-  if (!filename) {
-    printf("Workspace must be saved first\n");
-    return -1;
-  }
+  // for now, we use a template file in FLTK/ide/templates/VisualC6.tmpl .
+  // When done, everything will likely be integrated into the executable to make one compact package.
+  char buf[2048], base_dir[2048], tgt_base[2048];
+  strcpy(base_dir, filename);
+  *((char*)fltk3::filename_name(base_dir)) = 0; // keep only the path
+  strcpy(tgt_base, base_dir);
+  strcpy(buf, base_dir);
+  strcat(buf, "ide/templates/VisualC6.tmpl");
+  FILE *out = stdout;
+  FILE *in = fopen(buf, "rb");
   
-  /* find the target named "Fluid" */
-  Fl_Type *tgt = Fl_Target_Type::find("Fluid");
-  if (!tgt) {
-    printf("FLUID target not found\n");
-    return -1;
-  }
-  
-  /* Create a new Fluid.dsp */
-  char buf[2048];
-  strcpy(buf, filename);
-  strcpy((char*)fltk3::filename_name(buf), "ide/VisualC6/Fluid.dsp");
-  FILE *out = fopen(buf, "wb");
-  if (!out) {
-    printf("Can't open FLUID VisualC 6 project file\n");
-    return -1;
-  }
-  
-  fprintf(out, "# Microsoft Developer Studio Project File - Name=\"Fluid\" - Package Owner=<4>\r\n");
-  fprintf(out, "# Microsoft Developer Studio Generated Build File, Format Version 6.00\r\n");
-  fprintf(out, "# ** DO NOT EDIT **\r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "# TARGTYPE \"Win32 (x86) Application\" 0x0101\r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "CFG=Fluid - Win32 Debug\r\n");
-  fprintf(out, "!MESSAGE This is not a valid makefile. To build this project using NMAKE,\r\n");
-  fprintf(out, "!MESSAGE use the Export Makefile command and run\r\n");
-  fprintf(out, "!MESSAGE \r\n");
-  fprintf(out, "!MESSAGE NMAKE /f \"Fluid.mak\".\r\n");
-  fprintf(out, "!MESSAGE \r\n");
-  fprintf(out, "!MESSAGE You can specify a configuration when running NMAKE\r\n");
-  fprintf(out, "!MESSAGE by defining the macro CFG on the command line. For example:\r\n");
-  fprintf(out, "!MESSAGE \r\n");
-  fprintf(out, "!MESSAGE NMAKE /f \"Fluid.mak\" CFG=\"Fluid - Win32 Debug\"\r\n");
-  fprintf(out, "!MESSAGE \r\n");
-  fprintf(out, "!MESSAGE Possible choices for configuration are:\r\n");
-  fprintf(out, "!MESSAGE \r\n");
-  fprintf(out, "!MESSAGE \"Fluid - Win32 Release\" (based on \"Win32 (x86) Application\")\r\n");
-  fprintf(out, "!MESSAGE \"Fluid - Win32 Debug\" (based on \"Win32 (x86) Application\")\r\n");
-  fprintf(out, "!MESSAGE \r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "# Begin Project\r\n");
-  fprintf(out, "# PROP AllowPerConfigDependencies 0\r\n");
-  fprintf(out, "# PROP Scc_ProjName \"\"\r\n");
-  fprintf(out, "# PROP Scc_LocalPath \"\"\r\n");
-  fprintf(out, "CPP=cl.exe\r\n");
-  fprintf(out, "MTL=midl.exe\r\n");
-  fprintf(out, "RSC=rc.exe\r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "!IF  \"$(CFG)\" == \"Fluid - Win32 Release\"\r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "# PROP BASE Use_MFC 0\r\n");
-  fprintf(out, "# PROP BASE Use_Debug_Libraries 0\r\n");
-  fprintf(out, "# PROP BASE Output_Dir \"Release/Fluid\"\r\n");
-  fprintf(out, "# PROP BASE Intermediate_Dir \"Release/Fluid\"\r\n");
-  fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
-  fprintf(out, "# PROP Use_MFC 0\r\n");
-  fprintf(out, "# PROP Use_Debug_Libraries 0\r\n");
-  fprintf(out, "# PROP Output_Dir \"Release/Fluid\"\r\n");
-  fprintf(out, "# PROP Intermediate_Dir \"Release/Fluid\"\r\n");
-  fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
-  fprintf(out, "# PROP Target_Dir \"\"\r\n");
-  fprintf(out, "# ADD BASE CPP /nologo /W3 /GX /O2 /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MD /GX /Os /Ob2 /I \".\" /I \"../..\" /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /D \"WIN32\" /D \"NDEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD BASE MTL /nologo /D \"NDEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
-  fprintf(out, "# ADD MTL /nologo /D \"NDEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
-  fprintf(out, "# ADD BASE RSC /l 0x409 /d \"NDEBUG\"\r\n");
-  fprintf(out, "# ADD RSC /l 0x409 /d \"NDEBUG\"\r\n");
-  fprintf(out, "BSC32=bscmake.exe\r\n");
-  fprintf(out, "# ADD BASE BSC32 /nologo\r\n");
-  fprintf(out, "# ADD BSC32 /nologo\r\n");
-  fprintf(out, "LINK32=link.exe\r\n");
-  fprintf(out, "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386\r\n");
-  fprintf(out, "# ADD LINK32 fltk.lib fltk_forms.lib fltk_images.lib fltk_jpeg.lib fltk_png.lib fltk_zlib.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd\" /out:\"../../Fluid/Fluid.exe\" /pdbtype:sept /libpath:\"..\\..\\lib\"\r\n");
-  fprintf(out, "# SUBTRACT LINK32 /pdb:none /incremental:yes\r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "!ELSEIF  \"$(CFG)\" == \"Fluid - Win32 Debug\"\r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "# PROP BASE Use_MFC 0\r\n");
-  fprintf(out, "# PROP BASE Use_Debug_Libraries 1\r\n");
-  fprintf(out, "# PROP BASE Output_Dir \"Debug/Fluid\"\r\n");
-  fprintf(out, "# PROP BASE Intermediate_Dir \"Debug/Fluid\"\r\n");
-  fprintf(out, "# PROP BASE Target_Dir \"\"\r\n");
-  fprintf(out, "# PROP Use_MFC 0\r\n");
-  fprintf(out, "# PROP Use_Debug_Libraries 1\r\n");
-  fprintf(out, "# PROP Output_Dir \"Debug/Fluid\"\r\n");
-  fprintf(out, "# PROP Intermediate_Dir \"Debug/Fluid\"\r\n");
-  fprintf(out, "# PROP Ignore_Export_Lib 0\r\n");
-  fprintf(out, "# PROP Target_Dir \"\"\r\n");
-  fprintf(out, "# ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD CPP /nologo /MDd /Gm /GX /ZI /Od /I \".\" /I \"../..\" /I \"../../zlib\" /I \"../../png\" /I \"../../jpeg\" /D \"WIN32\" /D \"_DEBUG\" /D \"_WINDOWS\" /D \"_CRT_SECURE_NO_DEPRECATE\" /D \"_CRT_NONSTDC_NO_DEPRECATE\" /D \"WIN32_LEAN_AND_MEAN\" /D \"VC_EXTRA_LEAN\" /D \"WIN32_EXTRA_LEAN\" /YX /FD /c\r\n");
-  fprintf(out, "# ADD BASE MTL /nologo /D \"_DEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
-  fprintf(out, "# ADD MTL /nologo /D \"_DEBUG\" /mktyplib203 /o \"NUL\" /win32\r\n");
-  fprintf(out, "# ADD BASE RSC /l 0x409 /d \"_DEBUG\"\r\n");
-  fprintf(out, "# ADD RSC /l 0x409 /d \"_DEBUG\"\r\n");
-  fprintf(out, "BSC32=bscmake.exe\r\n");
-  fprintf(out, "# ADD BASE BSC32 /nologo\r\n");
-  fprintf(out, "# ADD BSC32 /nologo\r\n");
-  fprintf(out, "LINK32=link.exe\r\n");
-  fprintf(out, "# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept\r\n");
-  fprintf(out, "# ADD LINK32 fltkd.lib fltk_formsd.lib fltk_imagesd.lib fltk_jpegd.lib fltk_pngd.lib fltk_zlibd.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /debug /machine:I386 /nodefaultlib:\"libcd\" /out:\"../../Fluid/Fluidd.exe\" /pdbtype:sept /libpath:\"..\\..\\lib\"\r\n");
-  fprintf(out, "# SUBTRACT LINK32 /pdb:none /incremental:no\r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "!ENDIF \r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "# Begin Target\r\n");
-  fprintf(out, "\r\n");
-  fprintf(out, "# Name \"Fluid - Win32 Release\"\r\n");
-  fprintf(out, "# Name \"Fluid - Win32 Debug\"\r\n");
-  
-  /* loop through the target and write out all C++ files */
-  Fl_File_Type *f;
-  for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-    if (f->is_cplusplus_code()) {
-      fprintf(out, "# Begin Source File\r\n");
-      fprintf(out, "\r\n");
-      fprintf(out, "SOURCE=..\\..\\%s\r\n", DOS_path(f->filename()));
-      fprintf(out, "# End Source File\r\n");
+  for (;;) {
+    if (fgets(buf, 2047, in)==0) // FIXME: handle error!
+      break;
+    char *hash = buf-1;
+    char copyLine = 1;
+    for (;;) {
+      hash = strchr(hash+1, '#');
+      if (!hash) break;
+      if (hash && hash[1]=='#') { // double hash escapes the control character
+        int n = strlen(hash);
+        memmove(hash, hash+1, n);
+        continue;
+      } else { // single hash is a command
+        copyLine = 0;
+        if (strncmp(hash, "#WriteFile(",11)==0) {
+          // mark the end of the filename (this will crash if the formatting is wrong!)
+          char *sep = strchr(hash, ')');
+          *sep = 0;
+          // filename is relative, so add it to the base_dir
+          char fnbuf[2048];
+          strcpy(fnbuf, base_dir);
+          strcat(fnbuf, hash+11);
+          out = fopen(fnbuf, "wb");
+          // set the filepath for this target. In this module, all filenames are relative to the Makefile
+          strcpy(tgt_base, fnbuf);
+          *((char*)fltk3::filename_name(tgt_base)) = 0; // keep only the path
+                                                        // restore buffer and continue 
+          *sep = ')';
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#CloseFile", 10)==0) {
+          if (out!=stdout) fclose(out);
+          out = stdout;
+          // set the filepath for the default target. 
+          strcpy(tgt_base, base_dir);
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#SourceFiles(", 13)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+13, ')'); // keep tgt local
+          if (!tgt) {
+            printf("ERROR writing CMake file: target not found!");
+            return -1;
+          }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_code() && f->builds_in(ENV_VC6)) {
+              fprintf(out, "# Begin Source File\r\n");
+              fprintf(out, "\r\n");
+              fprintf(out, "SOURCE=..\\..\\%s\r\n", DOS_path(f->filename()));
+              fprintf(out, "# End Source File\r\n");
+            }
+          }
+          hash = strchr(hash, ';')+1;
+        } else {
+          printf("Unknown command in template: <<%s>>\n", hash);
+          copyLine = 1;
+          hash++;
+        }
+      }
     }
-  }  
+    if (copyLine) fputs(buf, out);
+  }
   
-  fprintf(out, "# End Target\r\n");
-  fprintf(out, "# End Project\r\n");
-  
-  fclose(out);
+  fclose(in);
+  if (out!=stdout) fclose(out);
   
   return 0;
 }
+
+// ------------ VisualC 2008 ---------------------------------------------------
 
 int write_fltk_ide_visualc2008() {
   if (!filename) {
@@ -665,6 +614,8 @@ int write_fltk_ide_visualc2008() {
 
   return 0;
 }
+
+// ------------ VisualC 2010 ---------------------------------------------------
 
 int write_fltk_ide_visualc2010() {
   if (!filename) {

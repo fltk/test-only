@@ -41,7 +41,7 @@
 extern char *filename;
 
 int write_fltk_cmake() {
-  // for now, we use a template file in FLTK/ide/templates/Makefile.tmpl .
+  // for now, we use a template file in FLTK/ide/templates/CMake.tmpl .
   // When done, everything will likely be integrated into the executable to make one compact package.
   char buf[2048], base_dir[2048], tgt_base[2048];
   strcpy(base_dir, filename);
