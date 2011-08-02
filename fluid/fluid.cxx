@@ -207,7 +207,7 @@ void save_cb(fltk3::Widget *, void *v) {
     if (is_workspace())      
       c=fltk3::file_chooser("Save Workspace To:", "FLUID Workspace (*.flw)", c);
     else
-      c=fltk3::file_chooser("Save UI Design To:", "FLUID Design (*.f[ld])", c);
+      c=fltk3::file_chooser("Save UI Design To:", "FLUID Design (*.fl)", c);
     fltk3::file_chooser_ok_label(NULL);
     if (!c) return;
 
@@ -479,7 +479,7 @@ void open_cb(fltk3::Widget *, void *v) {
   const char *c;
   const char *oldfilename;
   fltk3::file_chooser_ok_label("Open");
-  c = fltk3::file_chooser("Open:", "FLUID Designs (*.f[ld])\tFLUID Workspaces (*.flw)", filename);
+  c = fltk3::file_chooser("Open:", "FLUID File (*.{fl,flw})", filename);
   fltk3::file_chooser_ok_label(NULL);
   if (!c) return;
   oldfilename = filename;
@@ -952,7 +952,6 @@ void write_makefiles_cb(fltk3::Widget*, void*) {
     if (!filename)
       return;
   }
-  // TODO: we need workspace settings that declare which of these systems will be written
   // TODO: we need to collect error messages and output them
   if ((wks_env&FL_ENV_MAKE) && write_fltk_makefiles()) {
     int v = fltk3::choice("Error writing Makefile build system", "Cancel", "Continue", 0);
