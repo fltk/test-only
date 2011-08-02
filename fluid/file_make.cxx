@@ -43,10 +43,12 @@ extern char *filename;
 int write_fltk_makefiles() {
   // for now, we use a template file in FLTK/ide/templates/Makefile.tmpl .
   // When done, everything will likely be integrated into the executable to make one compact package.
-  
-  char buf[2048];
-  strcpy(buf, filename);
-  strcpy((char*)fltk3::filename_name(buf), "ide/templates/Makefile.tmpl");
+  char buf[2048], base_dir[2048], tgt_base[2048];
+  strcpy(base_dir, filename);
+  *((char*)fltk3::filename_name(base_dir)) = 0; // keep only the path
+  strcpy(tgt_base, base_dir);
+  strcpy(buf, base_dir);
+  strcat(buf, "ide/templates/Makefile.tmpl");
   FILE *out = stdout;
   FILE *in = fopen(buf, "rb");
   
@@ -65,17 +67,25 @@ int write_fltk_makefiles() {
       } else { // single hash is a command
         copyLine = 0;
         if (strncmp(hash, "#WriteFile(",11)==0) {
-          char fnbuf[2048];
+          // mark the end of the filename (this will crash if the formatting is wrong!)
           char *sep = strchr(hash, ')');
           *sep = 0;
-          strcpy(fnbuf, filename);
-          strcpy((char*)fltk3::filename_name(fnbuf), hash+11);
-          *sep = ')';
+          // filename is relative, so add it to the base_dir
+          char fnbuf[2048];
+          strcpy(fnbuf, base_dir);
+          strcat(fnbuf, hash+11);
           out = fopen(fnbuf, "wb");
+          // set the filepath for this target. In this module, all filenames are relative to the Makefile
+          strcpy(tgt_base, fnbuf);
+          *((char*)fltk3::filename_name(tgt_base)) = 0; // keep only the path
+          // restore buffer and continue 
+          *sep = ')';
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#CloseFile", 10)==0) {
           if (out!=stdout) fclose(out);
           out = stdout;
+          // set the filepath for the default target. 
+          strcpy(tgt_base, base_dir);
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#CppFiles(", 10)==0) {
           Fl_Type *tgt = Fl_Target_Type::find(hash+10, ')'); // keep tgt local
@@ -88,7 +98,7 @@ int write_fltk_makefiles() {
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             if (f->is_cplusplus_code() && f->builds_in(ENV_MAKE)) {
               if (first) { fprintf(out, "CPPFILES = "); first=0; }
-              fprintf(out, " \\\n\t%s", f->filename_name());
+              fprintf(out, " \\\n\t%s", f->filename_relative(base_dir, tgt_base));
             }
           }
           if (!first) fprintf(out, "\n");
@@ -104,7 +114,23 @@ int write_fltk_makefiles() {
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             if (f->is_objc_code() && f->builds_in(ENV_MAKE)) {
               if (first) { fprintf(out, "OBJCPPFILES = "); first=0; }
-              fprintf(out, " \\\n\t%s", f->filename_name());
+              fprintf(out, " \\\n\t%s", f->filename_relative(base_dir, tgt_base));
+            }
+          }
+          if (!first) fprintf(out, "\n");
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#CFiles(", 8)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+8, ')'); // keep tgt local
+          if (!tgt) {
+            printf("ERROR writing Makefile: target not found!");
+            return -1;
+          }
+          char first = 1;
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_c_code() && f->builds_in(ENV_MAKE)) {
+              if (first) { fprintf(out, "CFILES = "); first=0; }
+              fprintf(out, " \\\n\t%s", f->filename_relative(base_dir, tgt_base));
             }
           }
           if (!first) fprintf(out, "\n");

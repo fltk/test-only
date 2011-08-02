@@ -200,17 +200,12 @@ IMGCPPFILES = \
 	Fl_PNG_Image.cxx \
 	Fl_PNM_Image.cxx
 
-
-CFILES = flstring.c vsnprintf.c
-
-UTF8CFILES = \
+CFILES =  \
+	flstring.c \
+	vsnprintf.c \
 	xutf8/case.c \
 	xutf8/is_right2left.c \
-	xutf8/is_spacing.c \
-	xutf8/keysym2Ucs.c \
-	xutf8/utf8Input.c \
-	xutf8/utf8Utils.c \
-	xutf8/utf8Wrap.c
+	xutf8/is_spacing.c
 
 ################################################################
 FLTKFLAGS = -DFL_LIBRARY
@@ -218,7 +213,7 @@ include ../makeinclude
 
 MMFILES = $(shell if test $(USEMMFILES) = Yes; then echo $(OBJCPPFILES); fi)
 
-OBJECTS =  $(MMFILES:.mm=.o) $(CPPFILES:.cxx=.o) $(CFILES:.c=.o) $(UTF8CFILES:.c=.o)
+OBJECTS =  $(MMFILES:.mm=.o) $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 GLOBJECTS = $(GLCPPFILES:.cxx=.o)
 FLOBJECTS = $(FLCPPFILES:.cxx=.o)
 IMGOBJECTS = $(IMGCPPFILES:.cxx=.o)
@@ -427,9 +422,9 @@ clean:
 		libfltk_gl.dylib libfltk_images.dylib \
 		cmap core
 
-depend:	$(CPPFILES) $(MMFILES) $(FLCPPFILES) $(GLCPPFILES) $(IMGCPPFILES) $(CFILES) $(UTF8CFILES)
+depend:	$(CPPFILES) $(MMFILES) $(FLCPPFILES) $(GLCPPFILES) $(IMGCPPFILES) $(CFILES)
 	makedepend -Y -I.. -f makedepend $(CPPFILES) $(MMFILES) $(FLCPPFILES) \
-		$(GLCPPFILES) $(IMGCPPFILES) $(CFILES) $(UTF8CFILES)
+		$(GLCPPFILES) $(IMGCPPFILES) $(CFILES)
 
 # Automatically generated dependencies... generated on a Linux/Unix host !
 include makedepend

@@ -293,6 +293,7 @@ public:
   void filename(const char *new_name);
   const char *filename() { return pFilename; }
   const char *filename_name();
+  const char *filename_relative(const char *fnbase, const char *tgtbase);
   virtual void open();
   virtual void write_properties();
   virtual char read_property(const char *);

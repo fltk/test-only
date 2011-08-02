@@ -1478,6 +1478,20 @@ const char *Fl_File_Type::filename_name() {
   return 0;
 }
 
+const char *Fl_File_Type::filename_relative(const char *fnbase, const char *tgtbase) {
+  char src_name[2048];
+  static char result[2048];
+  const char *fn = filename();
+  if (fn) {
+    strcpy(src_name, fnbase);
+    strcat(src_name, fn);
+    fltk3::filename_relative(result, 2048, src_name, tgtbase);
+    return result;
+  } else {
+    return 0;
+  }
+}
+
 void Fl_File_Type::open() {
   if (!the_file_panel) the_file_panel = make_file_panel();
   the_file_panel->load(&Fl_Type::is_file);
