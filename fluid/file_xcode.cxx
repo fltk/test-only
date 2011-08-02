@@ -65,7 +65,7 @@ lastKnownFileType  or  explicitFileType
 
 // ------------ file conversion ------------------------------------------------
 
-extern char *filename;
+extern const char *filename;
 
 
 static const char *xcode4_type(unsigned int ft) {

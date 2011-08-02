@@ -37,7 +37,7 @@
 #include "../fltk3/filename.h"
 
 
-extern char *filename;
+extern const char *filename;
 
 // ------------ file conversion ------------------------------------------------
 

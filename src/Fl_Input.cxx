@@ -787,34 +787,34 @@ fltk3::Input::Input(int X, int Y, int W, int H, const char *l)
  */
 #if defined(FL_DLL)
 
-Fl_Float_Input::Fl_Float_Input(int X,int Y,int W,int H,const char *l)
-: Fl_Input(X,Y,W,H,l) {
-  type(FL_FLOAT_INPUT);
+fltk3::FloatInput::FloatInput(int X,int Y,int W,int H,const char *l)
+: fltk3::Input(X,Y,W,H,l) {
+  type(fltk3::FLOAT_INPUT);
 }
 
-Fl_Int_Input::Fl_Int_Input(int X,int Y,int W,int H,const char *l)
-: Fl_Input(X,Y,W,H,l) {
-  type(FL_INT_INPUT);
+fltk3::IntInput::IntInput(int X,int Y,int W,int H,const char *l)
+: fltk3::Input(X,Y,W,H,l) {
+  type(fltk3::INT_INPUT);
 }
 
-Fl_Multiline_Input::Fl_Multiline_Input(int X,int Y,int W,int H,const char *l)
-: Fl_Input(X,Y,W,H,l) {
-  type(FL_MULTILINE_INPUT);
+fltk3::MultilineInput::MultilineInput(int X,int Y,int W,int H,const char *l)
+: fltk3::Input(X,Y,W,H,l) {
+  type(fltk3::MULTILINE_INPUT);
 }
 
-Fl_Output::Fl_Output(int X,int Y,int W,int H, const char *l)
-: Fl_Input(X, Y, W, H, l) {
-  type(FL_NORMAL_OUTPUT);
+fltk3::Output::Output(int X,int Y,int W,int H, const char *l)
+: fltk3::Input(X, Y, W, H, l) {
+  type(fltk3::NORMAL_OUTPUT);
 }
 
-Fl_Multiline_Output::Fl_Multiline_Output(int X,int Y,int W,int H,const char *l)
-: Fl_Output(X,Y,W,H,l) {
-  type(FL_MULTILINE_OUTPUT);
+fltk3::MultilineOutput::MultilineOutput(int X,int Y,int W,int H,const char *l)
+: fltk3::Output(X,Y,W,H,l) {
+  type(fltk3::MULTILINE_OUTPUT);
 }
 
-Fl_Secret_Input::Fl_Secret_Input(int X,int Y,int W,int H,const char *l)
-: Fl_Input(X,Y,W,H,l) {
-  type(FL_SECRET_INPUT);
+fltk3::SecretInput::SecretInput(int X,int Y,int W,int H,const char *l)
+: fltk3::Input(X,Y,W,H,l) {
+  type(fltk3::SECRET_INPUT);
 }
 
 #endif // FL_DLL

@@ -38,7 +38,7 @@
 
 // ------------ file conversion ------------------------------------------------
 
-extern char *filename;
+extern const char *filename;
 
 int write_fltk_makefiles() {
   // for now, we use a template file in FLTK/ide/templates/Makefile.tmpl .

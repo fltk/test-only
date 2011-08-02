@@ -226,7 +226,7 @@ fltk3::DoubleWindow* show_workspace_panel() {
       workspace_panel->show();
   return workspace_panel;
 }
-extern fltk3::Window *the_file_panel;
+extern Fl_Panel *the_file_panel;
 
 void file_panel_set_cb(fltk3::Widget*, void *v) {
   if (v == Fl_Panel::LOAD) {
@@ -249,11 +249,11 @@ static void cb_(fltk3::Input* o, void* v) {
     if (Fl_Panel::numselected != 1) {
       o->static_value("<Multiple Values>");
       o->deactivate();
-      snprintf(buf, sizeof(buf), "File Properties (%d files)", Fl_Panel::numselected);
+      sprintf(buf, "File Properties (%d files)", Fl_Panel::numselected);
     } else {
       o->static_value(Fl_Panel::current_file()->filename());
       o->activate();
-      snprintf(buf, sizeof(buf), "%s Properties", Fl_Panel::current_file()->name());
+      sprintf(buf, "%s Properties", Fl_Panel::current_file()->name());
     }
     the_file_panel->label(buf);
   } else {
