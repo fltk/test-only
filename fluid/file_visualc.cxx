@@ -138,7 +138,7 @@ int write_fltk_ide_visualc6() {
 // ------------ VisualC 2008 ---------------------------------------------------
 
 int write_fltk_ide_visualc2008() {
-  // for now, we use a template file in FLTK/ide/templates/VisualC6.tmpl .
+  // for now, we use a template file in FLTK/ide/templates/VisualC2008.tmpl .
   // When done, everything will likely be integrated into the executable to make one compact package.
   char buf[2048], base_dir[2048], tgt_base[2048];
   strcpy(base_dir, filename);
@@ -278,332 +278,134 @@ int write_fltk_ide_visualc2008() {
 // ------------ VisualC 2010 ---------------------------------------------------
 
 int write_fltk_ide_visualc2010() {
-  if (!filename) {
-    printf("Workspace must be saved first\n");
-    return -1;
-  }
+  // for now, we use a template file in FLTK/ide/templates/VisualC2010.tmpl .
+  // When done, everything will likely be integrated into the executable to make one compact package.
+  char buf[2048], base_dir[2048], tgt_base[2048];
+  strcpy(base_dir, filename);
+  *((char*)fltk3::filename_name(base_dir)) = 0; // keep only the path
+  strcpy(tgt_base, base_dir);
+  strcpy(buf, base_dir);
+  strcat(buf, "ide/templates/VisualC2010.tmpl");
+  FILE *out = stdout;
+  FILE *in = fopen(buf, "rb");
   
-  /* find the target named "Fluid" */
-  Fl_Type *tgt = Fl_Target_Type::find("Fluid");
-  if (!tgt) {
-    printf("FLUID target not found\n");
-    return -1;
-  }
-  
-  /* Create a new Fluid.dsp */
-  char buf[2048];
-  strcpy(buf, filename);
-  strcpy((char*)fltk3::filename_name(buf), "ide/VisualC2010/fluid.vcxproj");
-  FILE *out = fopen(buf, "wb");
-  if (!out) {
-    printf("Can't open FLUID VisualC 2010 project file\n");
-    return -1;
-  }
-  
-  fprintf(out, "\357\273\277<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n");
-  fprintf(out, "<Project DefaultTargets=\"Build\" ToolsVersion=\"4.0\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">\r\n");
-  fprintf(out, "  <ItemGroup Label=\"ProjectConfigurations\">\r\n");
-  fprintf(out, "    <ProjectConfiguration Include=\"Debug Cairo|Win32\">\r\n");
-  fprintf(out, "      <Configuration>Debug Cairo</Configuration>\r\n");
-  fprintf(out, "      <Platform>Win32</Platform>\r\n");
-  fprintf(out, "    </ProjectConfiguration>\r\n");
-  fprintf(out, "    <ProjectConfiguration Include=\"Debug|Win32\">\r\n");
-  fprintf(out, "      <Configuration>Debug</Configuration>\r\n");
-  fprintf(out, "      <Platform>Win32</Platform>\r\n");
-  fprintf(out, "    </ProjectConfiguration>\r\n");
-  fprintf(out, "    <ProjectConfiguration Include=\"Release Cairo|Win32\">\r\n");
-  fprintf(out, "      <Configuration>Release Cairo</Configuration>\r\n");
-  fprintf(out, "      <Platform>Win32</Platform>\r\n");
-  fprintf(out, "    </ProjectConfiguration>\r\n");
-  fprintf(out, "    <ProjectConfiguration Include=\"Release|Win32\">\r\n");
-  fprintf(out, "      <Configuration>Release</Configuration>\r\n");
-  fprintf(out, "      <Platform>Win32</Platform>\r\n");
-  fprintf(out, "    </ProjectConfiguration>\r\n");
-  fprintf(out, "  </ItemGroup>\r\n");
-  fprintf(out, "  <PropertyGroup Label=\"Globals\">\r\n");
-  fprintf(out, "    <ProjectGuid>{8AED3078-8CD8-40C9-A8FF-46080024F1EB}</ProjectGuid>\r\n");
-  fprintf(out, "    <RootNamespace>fluid</RootNamespace>\r\n");
-  fprintf(out, "  </PropertyGroup>\r\n");
-  fprintf(out, "  <Import Project=\"$(VCTargetsPath)\\Microsoft.Cpp.Default.props\" />\r\n");
-  fprintf(out, "  <PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\" Label=\"Configuration\">\r\n");
-  fprintf(out, "    <ConfigurationType>Application</ConfigurationType>\r\n");
-  fprintf(out, "    <UseOfMfc>false</UseOfMfc>\r\n");
-  fprintf(out, "  </PropertyGroup>\r\n");
-  fprintf(out, "  <PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\" Label=\"Configuration\">\r\n");
-  fprintf(out, "    <ConfigurationType>Application</ConfigurationType>\r\n");
-  fprintf(out, "    <UseOfMfc>false</UseOfMfc>\r\n");
-  fprintf(out, "  </PropertyGroup>\r\n");
-  fprintf(out, "  <PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\" Label=\"Configuration\">\r\n");
-  fprintf(out, "    <ConfigurationType>Application</ConfigurationType>\r\n");
-  fprintf(out, "    <UseOfMfc>false</UseOfMfc>\r\n");
-  fprintf(out, "  </PropertyGroup>\r\n");
-  fprintf(out, "  <PropertyGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\" Label=\"Configuration\">\r\n");
-  fprintf(out, "    <ConfigurationType>Application</ConfigurationType>\r\n");
-  fprintf(out, "    <UseOfMfc>false</UseOfMfc>\r\n");
-  fprintf(out, "  </PropertyGroup>\r\n");
-  fprintf(out, "  <Import Project=\"$(VCTargetsPath)\\Microsoft.Cpp.props\" />\r\n");
-  fprintf(out, "  <ImportGroup Label=\"ExtensionSettings\">\r\n");
-  fprintf(out, "  </ImportGroup>\r\n");
-  fprintf(out, "  <ImportGroup Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\" Label=\"PropertySheets\">\r\n");
-  fprintf(out, "    <Import Project=\"$(UserRootDir)\\Microsoft.Cpp.$(Platform).user.props\" Condition=\"exists('$(UserRootDir)\\Microsoft.Cpp.$(Platform).user.props')\" Label=\"LocalAppDataPlatform\" />\r\n");
-  fprintf(out, "    <Import Project=\"$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props\" />\r\n");
-  fprintf(out, "  </ImportGroup>\r\n");
-  fprintf(out, "  <ImportGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\" Label=\"PropertySheets\">\r\n");
-  fprintf(out, "    <Import Project=\"$(UserRootDir)\\Microsoft.Cpp.$(Platform).user.props\" Condition=\"exists('$(UserRootDir)\\Microsoft.Cpp.$(Platform).user.props')\" Label=\"LocalAppDataPlatform\" />\r\n");
-  fprintf(out, "    <Import Project=\"$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props\" />\r\n");
-  fprintf(out, "  </ImportGroup>\r\n");
-  fprintf(out, "  <ImportGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\" Label=\"PropertySheets\">\r\n");
-  fprintf(out, "    <Import Project=\"$(UserRootDir)\\Microsoft.Cpp.$(Platform).user.props\" Condition=\"exists('$(UserRootDir)\\Microsoft.Cpp.$(Platform).user.props')\" Label=\"LocalAppDataPlatform\" />\r\n");
-  fprintf(out, "    <Import Project=\"$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props\" />\r\n");
-  fprintf(out, "  </ImportGroup>\r\n");
-  fprintf(out, "  <ImportGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\" Label=\"PropertySheets\">\r\n");
-  fprintf(out, "    <Import Project=\"$(UserRootDir)\\Microsoft.Cpp.$(Platform).user.props\" Condition=\"exists('$(UserRootDir)\\Microsoft.Cpp.$(Platform).user.props')\" Label=\"LocalAppDataPlatform\" />\r\n");
-  fprintf(out, "    <Import Project=\"$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props\" />\r\n");
-  fprintf(out, "  </ImportGroup>\r\n");
-  fprintf(out, "  <PropertyGroup Label=\"UserMacros\" />\r\n");
-  fprintf(out, "  <PropertyGroup>\r\n");
-  fprintf(out, "    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>\r\n");
-  fprintf(out, "    <OutDir Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">..\\..\\fluid\\</OutDir>\r\n");
-  fprintf(out, "    <IntDir Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">.\\$(ProjectName)_debug\\</IntDir>\r\n");
-  fprintf(out, "    <LinkIncremental Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">false</LinkIncremental>\r\n");
-  fprintf(out, "    <OutDir Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">..\\..\\fluid\\</OutDir>\r\n");
-  fprintf(out, "    <IntDir Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">.\\$(ProjectName)_release\\</IntDir>\r\n");
-  fprintf(out, "    <LinkIncremental Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">false</LinkIncremental>\r\n");
-  fprintf(out, "    <OutDir Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">..\\..\\fluid\\</OutDir>\r\n");
-  fprintf(out, "    <IntDir Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">$(Configuration)\\</IntDir>\r\n");
-  fprintf(out, "    <LinkIncremental Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">false</LinkIncremental>\r\n");
-  fprintf(out, "    <OutDir Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">..\\..\\fluid\\</OutDir>\r\n");
-  fprintf(out, "    <IntDir Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">$(Configuration)\\</IntDir>\r\n");
-  fprintf(out, "    <LinkIncremental Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">false</LinkIncremental>\r\n");
-  fprintf(out, "    <TargetName Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">$(ProjectName)d</TargetName>\r\n");
-  fprintf(out, "  </PropertyGroup>\r\n");
-  fprintf(out, "  <ItemDefinitionGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">\r\n");
-  fprintf(out, "    <Midl>\r\n");
-  fprintf(out, "      <PreprocessorDefinitions>_DEBUG;%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-  fprintf(out, "      <MkTypLibCompatible>true</MkTypLibCompatible>\r\n");
-  fprintf(out, "      <SuppressStartupBanner>true</SuppressStartupBanner>\r\n");
-  fprintf(out, "      <TargetEnvironment>Win32</TargetEnvironment>\r\n");
-  fprintf(out, "      <TypeLibraryName>.\\fluid__0/fluid.tlb</TypeLibraryName>\r\n");
-  fprintf(out, "      <HeaderFileName>\r\n");
-  fprintf(out, "      </HeaderFileName>\r\n");
-  fprintf(out, "    </Midl>\r\n");
-  fprintf(out, "    <ClCompile>\r\n");
-  fprintf(out, "      <Optimization>Disabled</Optimization>\r\n");
-  fprintf(out, "      <AdditionalIncludeDirectories>.;..\\..\\zlib;..\\..\\png;..\\..\\jpeg;../..;%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
-  fprintf(out, "      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-  fprintf(out, "      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>\r\n");
-  fprintf(out, "      <PrecompiledHeader>\r\n");
-  fprintf(out, "      </PrecompiledHeader>\r\n");
-  fprintf(out, "      <SuppressStartupBanner>true</SuppressStartupBanner>\r\n");
-  fprintf(out, "      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>\r\n");
-  fprintf(out, "      <CompileAs>Default</CompileAs>\r\n");
-  fprintf(out, "    </ClCompile>\r\n");
-  fprintf(out, "    <ResourceCompile>\r\n");
-  fprintf(out, "      <PreprocessorDefinitions>_DEBUG;%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-  fprintf(out, "      <Culture>0x0409</Culture>\r\n");
-  fprintf(out, "    </ResourceCompile>\r\n");
-  fprintf(out, "    <Link>\r\n");
-  fprintf(out, "      <AdditionalDependencies>comctl32.lib;%%(AdditionalDependencies)</AdditionalDependencies>\r\n");
-  fprintf(out, "      <OutputFile>../../fluid/fluidd.exe</OutputFile>\r\n");
-  fprintf(out, "      <SuppressStartupBanner>true</SuppressStartupBanner>\r\n");
-  fprintf(out, "      <AdditionalLibraryDirectories>..\\..\\lib;%%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>\r\n");
-  fprintf(out, "      <IgnoreSpecificDefaultLibraries>libcmtd;%%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>\r\n");
-  fprintf(out, "      <GenerateDebugInformation>true</GenerateDebugInformation>\r\n");
-  fprintf(out, "      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>\r\n");
-  fprintf(out, "      <SubSystem>Windows</SubSystem>\r\n");
-  fprintf(out, "      <RandomizedBaseAddress>false</RandomizedBaseAddress>\r\n");
-  fprintf(out, "      <DataExecutionPrevention>\r\n");
-  fprintf(out, "      </DataExecutionPrevention>\r\n");
-  fprintf(out, "      <TargetMachine>MachineX86</TargetMachine>\r\n");
-  fprintf(out, "    </Link>\r\n");
-  fprintf(out, "  </ItemDefinitionGroup>\r\n");
-  fprintf(out, "  <ItemDefinitionGroup Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">\r\n");
-  fprintf(out, "    <Midl>\r\n");
-  fprintf(out, "      <PreprocessorDefinitions>NDEBUG;%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-  fprintf(out, "      <MkTypLibCompatible>true</MkTypLibCompatible>\r\n");
-  fprintf(out, "      <SuppressStartupBanner>true</SuppressStartupBanner>\r\n");
-  fprintf(out, "      <TargetEnvironment>Win32</TargetEnvironment>\r\n");
-  fprintf(out, "      <TypeLibraryName>.\\fluid___/fluid.tlb</TypeLibraryName>\r\n");
-  fprintf(out, "      <HeaderFileName>\r\n");
-  fprintf(out, "      </HeaderFileName>\r\n");
-  fprintf(out, "    </Midl>\r\n");
-  fprintf(out, "    <ClCompile>\r\n");
-  fprintf(out, "      <Optimization>Disabled</Optimization>\r\n");
-  fprintf(out, "      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>\r\n");
-  fprintf(out, "      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>\r\n");
-  fprintf(out, "      <AdditionalIncludeDirectories>.;..\\..\\zlib;..\\..\\png;..\\..\\jpeg;../..;%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
-  fprintf(out, "      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-  fprintf(out, "      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>\r\n");
-  fprintf(out, "      <PrecompiledHeader>\r\n");
-  fprintf(out, "      </PrecompiledHeader>\r\n");
-  fprintf(out, "      <SuppressStartupBanner>true</SuppressStartupBanner>\r\n");
-  fprintf(out, "      <CompileAs>Default</CompileAs>\r\n");
-  fprintf(out, "      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>\r\n");
-  fprintf(out, "      <ObjectFileName>$(IntDir)</ObjectFileName>\r\n");
-  fprintf(out, "      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>\r\n");
-  fprintf(out, "    </ClCompile>\r\n");
-  fprintf(out, "    <ResourceCompile>\r\n");
-  fprintf(out, "      <PreprocessorDefinitions>NDEBUG;%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-  fprintf(out, "      <Culture>0x0409</Culture>\r\n");
-  fprintf(out, "    </ResourceCompile>\r\n");
-  fprintf(out, "    <Link>\r\n");
-  fprintf(out, "      <AdditionalDependencies>comctl32.lib;%%(AdditionalDependencies)</AdditionalDependencies>\r\n");
-  fprintf(out, "      <OutputFile>../../fluid/fluid.exe</OutputFile>\r\n");
-  fprintf(out, "      <SuppressStartupBanner>true</SuppressStartupBanner>\r\n");
-  fprintf(out, "      <AdditionalLibraryDirectories>..\\..\\lib;%%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>\r\n");
-  fprintf(out, "      <IgnoreSpecificDefaultLibraries>libcmt;%%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>\r\n");
-  fprintf(out, "      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>\r\n");
-  fprintf(out, "      <SubSystem>Windows</SubSystem>\r\n");
-  fprintf(out, "      <RandomizedBaseAddress>false</RandomizedBaseAddress>\r\n");
-  fprintf(out, "      <DataExecutionPrevention>\r\n");
-  fprintf(out, "      </DataExecutionPrevention>\r\n");
-  fprintf(out, "      <TargetMachine>MachineX86</TargetMachine>\r\n");
-  fprintf(out, "    </Link>\r\n");
-  fprintf(out, "  </ItemDefinitionGroup>\r\n");
-  fprintf(out, "  <ItemDefinitionGroup Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">\r\n");
-  fprintf(out, "    <Midl>\r\n");
-  fprintf(out, "      <PreprocessorDefinitions>_DEBUG;%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-  fprintf(out, "      <MkTypLibCompatible>true</MkTypLibCompatible>\r\n");
-  fprintf(out, "      <SuppressStartupBanner>true</SuppressStartupBanner>\r\n");
-  fprintf(out, "      <TargetEnvironment>Win32</TargetEnvironment>\r\n");
-  fprintf(out, "      <TypeLibraryName>.\\fluid__0/fluid.tlb</TypeLibraryName>\r\n");
-  fprintf(out, "      <HeaderFileName>\r\n");
-  fprintf(out, "      </HeaderFileName>\r\n");
-  fprintf(out, "    </Midl>\r\n");
-  fprintf(out, "    <ClCompile>\r\n");
-  fprintf(out, "      <Optimization>Disabled</Optimization>\r\n");
-  fprintf(out, "      <AdditionalIncludeDirectories>.;..\\..\\zlib;..\\..\\png;..\\..\\jpeg;../..;%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
-  fprintf(out, "      <PreprocessorDefinitions>FLTK_HAVE_CAIRO=1;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-  fprintf(out, "      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>\r\n");
-  fprintf(out, "      <PrecompiledHeader>\r\n");
-  fprintf(out, "      </PrecompiledHeader>\r\n");
-  fprintf(out, "      <PrecompiledHeaderOutputFile>.\\fluid__0/fluid.pch</PrecompiledHeaderOutputFile>\r\n");
-  fprintf(out, "      <AssemblerListingLocation>.\\fluid__0/</AssemblerListingLocation>\r\n");
-  fprintf(out, "      <ObjectFileName>.\\fluid__0/</ObjectFileName>\r\n");
-  fprintf(out, "      <ProgramDataBaseFileName>.\\fluid__0/</ProgramDataBaseFileName>\r\n");
-  fprintf(out, "      <SuppressStartupBanner>true</SuppressStartupBanner>\r\n");
-  fprintf(out, "      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>\r\n");
-  fprintf(out, "      <CompileAs>Default</CompileAs>\r\n");
-  fprintf(out, "    </ClCompile>\r\n");
-  fprintf(out, "    <ResourceCompile>\r\n");
-  fprintf(out, "      <PreprocessorDefinitions>_DEBUG;%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-  fprintf(out, "      <Culture>0x0409</Culture>\r\n");
-  fprintf(out, "    </ResourceCompile>\r\n");
-  fprintf(out, "    <Link>\r\n");
-  fprintf(out, "      <AdditionalDependencies>cairo.lib;comctl32.lib;%%(AdditionalDependencies)</AdditionalDependencies>\r\n");
-  fprintf(out, "      <OutputFile>../fluid/fluidd.exe</OutputFile>\r\n");
-  fprintf(out, "      <SuppressStartupBanner>true</SuppressStartupBanner>\r\n");
-  fprintf(out, "      <AdditionalLibraryDirectories>..\\..\\lib;%%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>\r\n");
-  fprintf(out, "      <IgnoreSpecificDefaultLibraries>libcmtd;%%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>\r\n");
-  fprintf(out, "      <GenerateDebugInformation>true</GenerateDebugInformation>\r\n");
-  fprintf(out, "      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>\r\n");
-  fprintf(out, "      <SubSystem>Windows</SubSystem>\r\n");
-  fprintf(out, "      <RandomizedBaseAddress>false</RandomizedBaseAddress>\r\n");
-  fprintf(out, "      <DataExecutionPrevention>\r\n");
-  fprintf(out, "      </DataExecutionPrevention>\r\n");
-  fprintf(out, "      <TargetMachine>MachineX86</TargetMachine>\r\n");
-  fprintf(out, "    </Link>\r\n");
-  fprintf(out, "  </ItemDefinitionGroup>\r\n");
-  fprintf(out, "  <ItemDefinitionGroup Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">\r\n");
-  fprintf(out, "    <Midl>\r\n");
-  fprintf(out, "      <PreprocessorDefinitions>NDEBUG;%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-  fprintf(out, "      <MkTypLibCompatible>true</MkTypLibCompatible>\r\n");
-  fprintf(out, "      <SuppressStartupBanner>true</SuppressStartupBanner>\r\n");
-  fprintf(out, "      <TargetEnvironment>Win32</TargetEnvironment>\r\n");
-  fprintf(out, "      <TypeLibraryName>.\\fluid___/fluid.tlb</TypeLibraryName>\r\n");
-  fprintf(out, "      <HeaderFileName>\r\n");
-  fprintf(out, "      </HeaderFileName>\r\n");
-  fprintf(out, "    </Midl>\r\n");
-  fprintf(out, "    <ClCompile>\r\n");
-  fprintf(out, "      <Optimization>Disabled</Optimization>\r\n");
-  fprintf(out, "      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>\r\n");
-  fprintf(out, "      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>\r\n");
-  fprintf(out, "      <AdditionalIncludeDirectories>.;..\\..\\zlib;..\\..\\png;..\\..\\jpeg;../..;%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
-  fprintf(out, "      <PreprocessorDefinitions>FLTK_HAVE_CAIRO=1;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;WIN32_LEAN_AND_MEAN;VC_EXTRA_LEAN;WIN32_EXTRA_LEAN;%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-  fprintf(out, "      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>\r\n");
-  fprintf(out, "      <PrecompiledHeader>\r\n");
-  fprintf(out, "      </PrecompiledHeader>\r\n");
-  fprintf(out, "      <PrecompiledHeaderOutputFile>.\\fluid___/fluid.pch</PrecompiledHeaderOutputFile>\r\n");
-  fprintf(out, "      <AssemblerListingLocation>.\\fluid___/</AssemblerListingLocation>\r\n");
-  fprintf(out, "      <ObjectFileName>.\\fluid___/</ObjectFileName>\r\n");
-  fprintf(out, "      <ProgramDataBaseFileName>.\\fluid___/</ProgramDataBaseFileName>\r\n");
-  fprintf(out, "      <SuppressStartupBanner>true</SuppressStartupBanner>\r\n");
-  fprintf(out, "      <CompileAs>Default</CompileAs>\r\n");
-  fprintf(out, "    </ClCompile>\r\n");
-  fprintf(out, "    <ResourceCompile>\r\n");
-  fprintf(out, "      <PreprocessorDefinitions>NDEBUG;%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-  fprintf(out, "      <Culture>0x0409</Culture>\r\n");
-  fprintf(out, "    </ResourceCompile>\r\n");
-  fprintf(out, "    <Link>\r\n");
-  fprintf(out, "      <AdditionalDependencies>comctl32.lib;cairo.lib;%%(AdditionalDependencies)</AdditionalDependencies>\r\n");
-  fprintf(out, "      <OutputFile>../fluid/fluid.exe</OutputFile>\r\n");
-  fprintf(out, "      <SuppressStartupBanner>true</SuppressStartupBanner>\r\n");
-  fprintf(out, "      <AdditionalLibraryDirectories>..\\..\\lib;%%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>\r\n");
-  fprintf(out, "      <IgnoreSpecificDefaultLibraries>libcmt;%%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>\r\n");
-  fprintf(out, "      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>\r\n");
-  fprintf(out, "      <SubSystem>Windows</SubSystem>\r\n");
-  fprintf(out, "      <RandomizedBaseAddress>false</RandomizedBaseAddress>\r\n");
-  fprintf(out, "      <DataExecutionPrevention>\r\n");
-  fprintf(out, "      </DataExecutionPrevention>\r\n");
-  fprintf(out, "      <TargetMachine>MachineX86</TargetMachine>\r\n");
-  fprintf(out, "    </Link>\r\n");
-  fprintf(out, "  </ItemDefinitionGroup>\r\n");
-  fprintf(out, "  <ItemGroup>\r\n");
-  
-  /* loop through the target and write out all C++ files */
-  Fl_File_Type *f;
-  for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-    if (f->is_cplusplus_code()) {
-      fprintf(out, "    <ClCompile Include=\"..\\..\\%s\">\r\n", DOS_path(f->filename()));
-      fprintf(out, "      <Optimization Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">Disabled</Optimization>\r\n");
-      fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
-      fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-      fprintf(out, "      <Optimization Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">Disabled</Optimization>\r\n");
-      fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
-      fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-      fprintf(out, "      <FavorSizeOrSpeed Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">Neither</FavorSizeOrSpeed>\r\n");
-      fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
-      fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-      fprintf(out, "      <FavorSizeOrSpeed Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">Neither</FavorSizeOrSpeed>\r\n");
-      fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
-      fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
-      fprintf(out, "    </ClCompile>\r\n");
+  for (;;) {
+    if (fgets(buf, 2047, in)==0) // FIXME: handle error!
+      break;
+    char *hash = buf-1;
+    char copyLine = 1;
+    for (;;) {
+      hash = strchr(hash+1, '#');
+      if (!hash) break;
+      if (hash && hash[1]=='#') { // double hash escapes the control character
+        int n = strlen(hash);
+        memmove(hash, hash+1, n);
+        continue;
+      } else { // single hash is a command
+        copyLine = 0;
+        if (strncmp(hash, "#WriteFile(",11)==0) {
+          // mark the end of the filename (this will crash if the formatting is wrong!)
+          char *sep = strchr(hash, ')');
+          *sep = 0;
+          // filename is relative, so add it to the base_dir
+          char fnbuf[2048];
+          strcpy(fnbuf, base_dir);
+          strcat(fnbuf, hash+11);
+          out = fopen(fnbuf, "wb");
+          // set the filepath for this target. In this module, all filenames are relative to the Makefile
+          strcpy(tgt_base, fnbuf);
+          *((char*)fltk3::filename_name(tgt_base)) = 0; // keep only the path
+                                                        // restore buffer and continue 
+          *sep = ')';
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#CloseFile", 10)==0) {
+          if (out!=stdout) fclose(out);
+          out = stdout;
+          // set the filepath for the default target. 
+          strcpy(tgt_base, base_dir);
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#SourceFiles(", 13)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+13, ')'); // keep tgt local
+          if (!tgt) {
+            printf("ERROR writing VisualC 2010 file: target not found!");
+            return -1;
+          }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_code() && f->builds_in(ENV_VC2010)) {
+              fprintf(out, "    <ClCompile Include=\"..\\..\\%s\">\r\n", DOS_path(f->filename()));
+              fprintf(out, "      <Optimization Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">Disabled</Optimization>\r\n");
+              fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
+              fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Debug Cairo|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
+              fprintf(out, "      <Optimization Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">Disabled</Optimization>\r\n");
+              fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
+              fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Debug|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
+              fprintf(out, "      <FavorSizeOrSpeed Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">Neither</FavorSizeOrSpeed>\r\n");
+              fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
+              fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Release Cairo|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
+              fprintf(out, "      <FavorSizeOrSpeed Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">Neither</FavorSizeOrSpeed>\r\n");
+              fprintf(out, "      <AdditionalIncludeDirectories Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>\r\n");
+              fprintf(out, "      <PreprocessorDefinitions Condition=\"'$(Configuration)|$(Platform)'=='Release|Win32'\">%%(PreprocessorDefinitions)</PreprocessorDefinitions>\r\n");
+              fprintf(out, "    </ClCompile>\r\n");
+            }
+          }
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#SourceFilesFilters(", 20)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+20, ')'); // keep tgt local
+          if (!tgt) {
+            printf("ERROR writing VisualC 2010 file: target not found!");
+            return -1;
+          }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_code() && f->lists_in(ENV_VC2010)) {
+              fprintf(out, "    <ClInclude Include=\"..\\..\\%s\" />\r\n", DOS_path(f->filename()));
+            }
+          }
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#HeaderFiles(", 13)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+13, ')'); // keep tgt local
+          if (!tgt) {
+            printf("ERROR writing VisualC 2010 file: target not found!");
+            return -1;
+          }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_header() && f->lists_in(ENV_VC2010)) {
+              fprintf(out, "    <ClInclude Include=\"..\\..\\%s\" />\r\n", DOS_path(f->filename()));
+            }
+          }
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#HeaderFilesFilters(", 20)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+20, ')'); // keep tgt local
+          if (!tgt) {
+            printf("ERROR writing VisualC 2010 file: target not found!");
+            return -1;
+          }
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->is_header() && f->lists_in(ENV_VC2010)) {
+              fprintf(out, "    <ClInclude Include=\"..\\..\\%s\">\r\n", DOS_path(f->filename()));
+              fprintf(out, "      <Filter>Headers</Filter>\r\n");
+              fprintf(out, "    </ClInclude>\r\n");
+            }
+          }
+          hash = strchr(hash, ';')+1;
+        } else {
+          printf("Unknown command in template: <<%s>>\n", hash);
+          copyLine = 1;
+          hash++;
+        }
+      }
     }
+    if (copyLine) fputs(buf, out);
   }
-
-  fprintf(out, "  </ItemGroup>\r\n");
-  fprintf(out, "  <ItemGroup>\r\n");
-  fprintf(out, "    <ProjectReference Include=\"fltk.lib.vcxproj\">\r\n");
-  fprintf(out, "      <Project>{e070aafc-9d03-41a3-bc7d-30887ea0d50f}</Project>\r\n");
-  fprintf(out, "      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>\r\n");
-  fprintf(out, "    </ProjectReference>\r\n");
-  fprintf(out, "    <ProjectReference Include=\"fltkimages.vcxproj\">\r\n");
-  fprintf(out, "      <Project>{6e8e1663-b88d-4454-adf2-279666a93306}</Project>\r\n");
-  fprintf(out, "      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>\r\n");
-  fprintf(out, "    </ProjectReference>\r\n");
-  fprintf(out, "    <ProjectReference Include=\"jpeg.vcxproj\">\r\n");
-  fprintf(out, "      <Project>{08b82852-90b3-4767-a5d2-f0a4fccb2377}</Project>\r\n");
-  fprintf(out, "      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>\r\n");
-  fprintf(out, "    </ProjectReference>\r\n");
-  fprintf(out, "    <ProjectReference Include=\"libpng.vcxproj\">\r\n");
-  fprintf(out, "      <Project>{d640a221-f95a-40ff-ac0e-0e8b615c7681}</Project>\r\n");
-  fprintf(out, "      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>\r\n");
-  fprintf(out, "    </ProjectReference>\r\n");
-  fprintf(out, "    <ProjectReference Include=\"zlib.vcxproj\">\r\n");
-  fprintf(out, "      <Project>{e1d9ce3f-400d-40e8-ad0d-61c29b1847ff}</Project>\r\n");
-  fprintf(out, "      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>\r\n");
-  fprintf(out, "    </ProjectReference>\r\n");
-  fprintf(out, "  </ItemGroup>\r\n");
-  fprintf(out, "  <Import Project=\"$(VCTargetsPath)\\Microsoft.Cpp.targets\" />\r\n");
-  fprintf(out, "  <ImportGroup Label=\"ExtensionTargets\">\r\n");
-  fprintf(out, "  </ImportGroup>\r\n");
-  fprintf(out, "</Project>");  
   
-  fclose(out);
+  fclose(in);
+  if (out!=stdout) fclose(out);
   
   return 0;
 }
-
 
 //
 // End of "$Id: file.cxx 8870 2011-07-26 21:19:35Z matt $".

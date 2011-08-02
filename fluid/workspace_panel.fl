@@ -34,7 +34,7 @@ comment {//
 decl {\#include "Fl_Type.h"} {public global
 } 
 
-decl {\#include <stdint.h>} {selected public global
+decl {\#include <stdint.h>} {public global
 } 
 
 decl {\#include <fltk3/Pixmap.h>} {public global
@@ -59,8 +59,8 @@ widget_class Fl_Environment_Choice {open
   decl {unsigned int pEnv;} {protected local
   }
   {fltk3::MenuButton} pEnvMenu {
-    label {- unknown -} open
-    xywh {0 0 170 25} labelsize 9
+    label {- unknown -} open selected
+    xywh {0 0 170 25} labelsize 9 align 192
   } {
     MenuItem pMenuAll {
       label {All Environments}

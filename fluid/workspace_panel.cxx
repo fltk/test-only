@@ -82,6 +82,7 @@ this->align(fltk3::Align(fltk3::ALIGN_TOP));
 this->when(fltk3::WHEN_RELEASE);
 { pEnvMenu = new fltk3::MenuButton(0, 0, 170, 25, "- unknown -");
   pEnvMenu->labelsize(9);
+  pEnvMenu->align(fltk3::Align(192));
   pEnvMenu->menu(menu_pEnvMenu);
 } // fltk3::MenuButton* pEnvMenu
 pEnvMenu->copy(menu_pEnvMenu);
