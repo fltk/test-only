@@ -422,6 +422,7 @@ fluid.o: ../fltk3/FileChooser.h ../fltk3/Choice.h ../fltk3/MenuButton.h
 fluid.o: ../fltk3/TiledGroup.h ../fltk3/FileBrowser.h ../fltk3/FileIcon.h
 fluid.o: ../fltk3/CheckButton.h ../fltk3/LightButton.h ../fltk3/Button.h
 fluid.o: ../fltk3/FileInput.h ../fltk3/ReturnButton.h ../fltk3/PNGImage.h
+fluid.o: ../fltk3/Printer.h ../fltk3/PagedDevice.h ../fltk3/PostScript.h
 fluid.o: ../fltk3/message.h ../fltk3/ask.h ../fltk3/filename.h
 fluid.o: ../src/flstring.h ../fltk3/Export.h ../config.h alignment_panel.h
 fluid.o: ../fltk3/TextBuffer.h ../fltk3/TextDisplay.h ../fltk3/TextBuffer.h
@@ -432,8 +433,7 @@ fluid.o: ../fltk3/TextEditor.h ../fltk3/TextDisplay.h CodeEditor.h
 fluid.o: template_panel.h ../fltk3/Browser.h workspace_panel.h Fl_Type.h
 fluid.o: ../fltk3/Menu.h Fluid_Image.h ../fltk3/SharedImage.h
 fluid.o: ../fltk3/PackedGroup.h ../fltk3/WizardGroup.h ../fltk3/Menu_.h
-fluid.o: ../fltk3/InputChoice.h ../fltk3/MultiLabel.h print_panel.cxx
-fluid.o: print_panel.h ../fltk3/Progress.h about_panel.h undo.h
+fluid.o: ../fltk3/InputChoice.h ../fltk3/MultiLabel.h about_panel.h undo.h
 function_panel.o: function_panel.h ../fltk3/run.h ../fltk3/utf8.h
 function_panel.o: ../fltk3/Export.h ../fltk3/types.h ../fltk3/Xutf8.h
 function_panel.o: ../fltk3/enumerations.h ../fltk3/DoubleWindow.h
