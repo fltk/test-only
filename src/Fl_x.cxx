@@ -1974,7 +1974,7 @@ void fltk3::Window::make_current() {
   return temp ? temp->xid : 0;
 }
 
-static void decorated_win_size(Fl_Window *win, int &w, int &h)
+static void decorated_win_size(fltk3::Window *win, int &w, int &h)
 {
   w = win->w();
   h = win->h();
