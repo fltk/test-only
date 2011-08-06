@@ -128,7 +128,6 @@ static int writeBuildConfigurations(FILE *out, const char *debugKey, const char 
   fprintf(out, "\t\t\t\tDYLIB_CURRENT_VERSION = 1;\n");
   fprintf(out, "\t\t\t\tFRAMEWORK_VERSION = A;\n");
   fprintf(out, "\t\t\t\tGCC_DYNAMIC_NO_PIC = NO;\n");
-  fprintf(out, "\t\t\t\tGCC_ENABLE_FIX_AND_CONTINUE = YES;\n");
   fprintf(out, "\t\t\t\tGCC_MODEL_TUNING = G5;\n");
   fprintf(out, "\t\t\t\tGCC_OPTIMIZATION_LEVEL = 0;\n");
   fprintf(out, "\t\t\t\tGCC_PRECOMPILE_PREFIX_HEADER = YES;\n");
@@ -144,9 +143,8 @@ static int writeBuildConfigurations(FILE *out, const char *debugKey, const char 
   fprintf(out, "\t\t\t\tINFOPLIST_FILE = \"plists/fltk-Info.plist\";\n");
   fprintf(out, "\t\t\t\tINSTALL_PATH = \"@executable_path/../Frameworks\";\n");
   fprintf(out, "\t\t\t\tOTHER_LDFLAGS = \"\";\n");
-  fprintf(out, "\t\t\t\tPREBINDING = NO;\n");
   fprintf(out, "\t\t\t\tPRODUCT_NAME = \"%s\";\n", productName);
-  fprintf(out, "\t\t\t\tSDKROOT = \"$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk\";\n");
+  fprintf(out, "\t\t\t\tSDKROOT = macosx;\n");
   fprintf(out, "\t\t\t\tWARNING_CFLAGS = (\n");
   fprintf(out, "\t\t\t\t\t\"-Wno-format-security\",\n");
   fprintf(out, "\t\t\t\t\t\"-Wall\",\n");
@@ -167,7 +165,6 @@ static int writeBuildConfigurations(FILE *out, const char *debugKey, const char 
   fprintf(out, "\t\t\t\tDYLIB_COMPATIBILITY_VERSION = 1;\n");
   fprintf(out, "\t\t\t\tDYLIB_CURRENT_VERSION = 1;\n");
   fprintf(out, "\t\t\t\tFRAMEWORK_VERSION = A;\n");
-  fprintf(out, "\t\t\t\tGCC_ENABLE_FIX_AND_CONTINUE = NO;\n");
   fprintf(out, "\t\t\t\tGCC_MODEL_TUNING = G5;\n");
   fprintf(out, "\t\t\t\tGCC_PRECOMPILE_PREFIX_HEADER = YES;\n");
   fprintf(out, "\t\t\t\tGCC_PREFIX_HEADER = fltk.pch;\n");
@@ -182,9 +179,8 @@ static int writeBuildConfigurations(FILE *out, const char *debugKey, const char 
   fprintf(out, "\t\t\t\tINFOPLIST_FILE = \"plists/fltk-Info.plist\";\n");
   fprintf(out, "\t\t\t\tINSTALL_PATH = \"@executable_path/../Frameworks\";\n");
   fprintf(out, "\t\t\t\tOTHER_LDFLAGS = \"\";\n");
-  fprintf(out, "\t\t\t\tPREBINDING = NO;\n");
   fprintf(out, "\t\t\t\tPRODUCT_NAME = \"%s\";\n", productName);
-  fprintf(out, "\t\t\t\tSDKROOT = \"$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk\";\n");
+  fprintf(out, "\t\t\t\tSDKROOT = macosx;\n");
   fprintf(out, "\t\t\t\tWARNING_CFLAGS = (\n");
   fprintf(out, "\t\t\t\t\t\"-Wno-format-security\",\n");
   fprintf(out, "\t\t\t\t\t\"-Wall\",\n");
