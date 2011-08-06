@@ -90,6 +90,32 @@ static const char *xcode4_type(unsigned int ft) {
 }
 
 
+static int writeHeadersBuildPhase(FILE *out, Fl_Target_Type *tgt) {
+  
+  char HeadersBuildPhase[32]; strcpy(HeadersBuildPhase, tgt->get_UUID_Xcode("Xcode4_HeadersBuildPhase"));
+  
+  fprintf(out, "\t\t%s /* Headers */ = {\n", HeadersBuildPhase);
+  fprintf(out, "\t\t\tisa = PBXHeadersBuildPhase;\n");
+  fprintf(out, "\t\t\tbuildActionMask = 2147483647;\n");
+  fprintf(out, "\t\t\tcomments = \"Copy just any file here so that the Headers link will be generated correctly.\";\n");
+  fprintf(out, "\t\t\tfiles = (\n");
+  Fl_File_Type *f;
+  for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+    if (f->builds_in(FL_ENV_XC4) && f->is_header()) {
+      char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
+      fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
+              PBXBuildFile, 
+              f->filename_name(), 
+              "Sources");
+    }
+  }
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\t\trunOnlyForDeploymentPostprocessing = 0;\n");
+  fprintf(out, "\t\t};\n");
+  return 0;
+}
+
+
 static int writeBuildConfigurations(FILE *out, const char *debugKey, const char *releaseKey, const char *productName) {
   // Write the Debug Build Configuration
   fprintf(out, "\t\t%s /* Debug */ = {\n", debugKey);
@@ -172,6 +198,7 @@ static int writeBuildConfigurations(FILE *out, const char *debugKey, const char 
   return 0;
 }
 
+
 static int writeBuildConfigurationList(FILE *out, const char *listKey, const char *debugKey, const char *releaseKey, const char *productName) {
   fprintf(out, "\t\t%s /* Build configuration list for PBXNativeTarget \"%s\" */ = {\n", listKey, productName);
   fprintf(out, "\t\t\tisa = XCConfigurationList;\n");
@@ -184,6 +211,7 @@ static int writeBuildConfigurationList(FILE *out, const char *listKey, const cha
   fprintf(out, "\t\t};\n");
   return 0;
 }
+
 
 static int writeResourcesBuildPhase(FILE *out, const char *key, const char *productName) {
   fprintf(out, "\t\t%s /* Resources */ = {\n", key);
@@ -202,20 +230,22 @@ static int writeNativeTarget(FILE *out, Fl_Target_Type *tgt) {
 
   char buildConfigurationList[32]; strcpy(buildConfigurationList, tgt->get_UUID_Xcode("Xcode4_BuildConfigurationList"));
   char ResourcesBuildPhase[32]; strcpy(ResourcesBuildPhase, tgt->get_UUID_Xcode("Xcode4_ResourcesBuildPhase"));
+  char HeadersBuildPhase[32]; strcpy(HeadersBuildPhase, tgt->get_UUID_Xcode("Xcode4_HeadersBuildPhase"));
+  char FluidBuildRule[32]; strcpy(FluidBuildRule, tgt->get_UUID_Xcode("Xcode4_FluidBuildRule"));
 
   fprintf(out, "\t\tA57FDE871C99A52BEEDEE68C /* %s */ = {\n", tgt->name());     // FIXME: use generated key
   fprintf(out, "\t\t\tisa = PBXNativeTarget;\n");
   fprintf(out, "\t\t\tbuildConfigurationList = %s /* Build configuration list for PBXNativeTarget \"%s\" */;", buildConfigurationList, tgt->name());
   fprintf(out, "\t\t\tbuildPhases = (\n");
   fprintf(out, "\t\t\t\t%s /* Resources */,\n", ResourcesBuildPhase);
-  fprintf(out, "\t\t\t\tC9EDD5C81274C6BA00ADB21C /* Headers */,\n");            // FIXME: use generated key
-  fprintf(out, "\t\t\t\tC9EDD42D1274B84100ADB21C /* CopyFiles */,\n");          // FIXME: use generated key
-  fprintf(out, "\t\t\t\tC9EDD4DD1274BB4100ADB21C /* CopyFiles */,\n");          // FIXME: use generated key
+  fprintf(out, "\t\t\t\t%s /* Headers */,\n", HeadersBuildPhase);
+  fprintf(out, "\t\t\t\tC9EDD42D1274B84100ADB21C /* CopyFiles */,\n");          // FIXME: this build phase is nonsense (this includes outdated FLTK1 headers)
+  fprintf(out, "\t\t\t\tC9EDD4DD1274BB4100ADB21C /* CopyFiles */,\n");          // FIXME: this build phase is nonsense (this includes jpg and png headers)
   fprintf(out, "\t\t\t\t4DA82C38AA0403E56A1E3545 /* Sources */,\n");            // FIXME: use generated key
   fprintf(out, "\t\t\t\tD2A1AD2D93B0EED43F624520 /* Frameworks */,\n");         // FIXME: use generated key
   fprintf(out, "\t\t\t);\n");
   fprintf(out, "\t\tbuildRules = (\n");
-  fprintf(out, "\t\t\t\tEFFAAB905A54B0BFE13CB56C /* PBXBuildRule */,\n");       // FIXME: use generated key
+  fprintf(out, "\t\t\t\t%s /* PBXBuildRule */,\n", FluidBuildRule);
   fprintf(out, "\t\t\t);\n");
   fprintf(out, "\t\t\tdependencies = (\n");
   fprintf(out, "\t\t\t);\n");
@@ -225,7 +255,27 @@ static int writeNativeTarget(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\tproductType = \"com.apple.product-type.framework\";\n");
   fprintf(out, "\t\t};\n");
   
+  return 0;
+}
+
+
+static int writeFluidBuildRule(FILE *out, Fl_Target_Type *tgt) {
   
+  char FluidBuildRule[32]; strcpy(FluidBuildRule, tgt->get_UUID_Xcode("Xcode4_FluidBuildRule"));
+  
+  fprintf(out, "\t\t%s /* PBXBuildRule */ = {\n", FluidBuildRule);
+  fprintf(out, "\t\t\tisa = PBXBuildRule;\n");
+  fprintf(out, "\t\t\tcompilerSpec = com.apple.compilers.proxy.script;\n");
+  fprintf(out, "\t\t\tfilePatterns = \"*.fl\";\n");
+  fprintf(out, "\t\t\tfileType = pattern.proxy;\n");
+  fprintf(out, "\t\t\tisEditable = 1;\n");
+  fprintf(out, "\t\t\toutputFiles = (\n");
+  fprintf(out, "\t\t\t\t\"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.cxx\",\n");
+  fprintf(out, "\t\t\t\t\"${INPUT_FILE_DIR}/${INPUT_FILE_BASE}.h\",\n");
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\t\tscript = \"export DYLD_FRAMEWORK_PATH=${TARGET_BUILD_DIR} && cd ${INPUT_FILE_DIR} && ${TARGET_BUILD_DIR}/Fluid.app/Contents/MacOS/Fluid -c ${INPUT_FILE_NAME}\";\n");
+  fprintf(out, "\t\t};\n");
+
   return 0;
 }
 
@@ -334,17 +384,8 @@ int write_fltk_ide_xcode4() {
           }
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#HeadersBuildPhase(", 19)==0) {
-          Fl_Type *tgt = Fl_Target_Type::find(hash+19, ')');
-          Fl_File_Type *f;
-          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->builds_in(FL_ENV_XC4) && f->is_header()) {
-              char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
-              fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
-                      PBXBuildFile, 
-                      f->filename_name(), 
-                      "Sources");
-            }
-          }
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+19, ')');
+          writeHeadersBuildPhase(out, tgt);
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#SourcesBuildPhase(", 19)==0) {
           Fl_Type *tgt = Fl_Target_Type::find(hash+19, ')');
@@ -380,6 +421,10 @@ int write_fltk_ide_xcode4() {
         } else if (strncmp(hash, "#NativeTarget(", 14)==0) {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+14, ')');
           writeNativeTarget(out, tgt);
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#FluidBuildRule(", 16)==0) {
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+16, ')');
+          writeFluidBuildRule(out, tgt);
           hash = strchr(hash, ';')+1;
         } else {
 #if 0

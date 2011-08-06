@@ -207,6 +207,8 @@ folder Libraries {open
     uuid_Xcode4_DebugBuildConfiguration {034870F2-FE15-4D23-AD0D-62ED38449392}
     uuid_Xcode4_ReleaseBuildConfiguration {D584B52C-FED3-4E71-A47E-A60BA05375B9}
     uuid_Xcode4_ResourcesBuildPhase {1DAA0C25-90AF-445C-A814-DB4C66428D29}
+    uuid_Xcode4_HeadersBuildPhase {0A872A2E-9DB3-42CD-A238-D38635FEFE8E}
+    uuid_Xcode4_FluidBuildRule {21280AFA-1D23-477C-9F1C-641693104B3F}
   } {
     folder Headers {open
     } {
