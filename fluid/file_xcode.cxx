@@ -97,7 +97,6 @@ static int writeHeadersBuildPhase(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t%s /* Headers */ = {\n", HeadersBuildPhase);
   fprintf(out, "\t\t\tisa = PBXHeadersBuildPhase;\n");
   fprintf(out, "\t\t\tbuildActionMask = 2147483647;\n");
-  fprintf(out, "\t\t\tcomments = \"Copy just any file here so that the Headers link will be generated correctly.\";\n");
   fprintf(out, "\t\t\tfiles = (\n");
   Fl_File_Type *f;
   for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
@@ -239,8 +238,8 @@ static int writeNativeTarget(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\tbuildPhases = (\n");
   fprintf(out, "\t\t\t\t%s /* Resources */,\n", ResourcesBuildPhase);
   fprintf(out, "\t\t\t\t%s /* Headers */,\n", HeadersBuildPhase);
-  fprintf(out, "\t\t\t\tC9EDD42D1274B84100ADB21C /* CopyFiles */,\n");          // FIXME: this build phase is nonsense (this includes outdated FLTK1 headers)
-  fprintf(out, "\t\t\t\tC9EDD4DD1274BB4100ADB21C /* CopyFiles */,\n");          // FIXME: this build phase is nonsense (this includes jpg and png headers)
+  //fprintf(out, "\t\t\t\tC9EDD42D1274B84100ADB21C /* CopyFiles */,\n");          // FIXME: this build phase is nonsense (this includes outdated FLTK1 headers)
+  //fprintf(out, "\t\t\t\tC9EDD4DD1274BB4100ADB21C /* CopyFiles */,\n");          // FIXME: this build phase is nonsense (this includes jpg and png headers)
   fprintf(out, "\t\t\t\t4DA82C38AA0403E56A1E3545 /* Sources */,\n");            // FIXME: use generated key
   fprintf(out, "\t\t\t\tD2A1AD2D93B0EED43F624520 /* Frameworks */,\n");         // FIXME: use generated key
   fprintf(out, "\t\t\t);\n");

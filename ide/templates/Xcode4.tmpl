@@ -3501,40 +3501,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C9EDD42D1274B84100ADB21C /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			comments = "Copy all FLTK headers into a custom position within the Framework. FLTK requires a slightly different syntax compared to regular Apple frameworks.\n\nApple (this does not work!):\n  ##include <fltk/fltk.h>\n\nFLTK:\n  ##include <FL/Fl.H>\n\nFor the second format to work, the following path must be added to the project:\n  /Library/Framework/fltk.framework/Headers/\n\n";
-			dstPath = ../Headers/FL;
-			dstSubfolderSpec = 7;
-			files = (
-				C9EDD4ED1274BBCD00ADB21C /* forms.H in CopyFiles */,
-				C9EDD4C91274B95700ADB21C /* Fl_BMP_Image.H in CopyFiles */,
-				C9EDD4CA1274B95700ADB21C /* Fl_GIF_Image.H in CopyFiles */,
-				C9EDD4CB1274B95700ADB21C /* Fl_Help_Dialog.H in CopyFiles */,
-				C9EDD4CC1274B95700ADB21C /* Fl_Help_View.H in CopyFiles */,
-				C9EDD4CD1274B95700ADB21C /* Fl_JPEG_Image.H in CopyFiles */,
-				C9EDD4CE1274B95700ADB21C /* Fl_PNG_Image.H in CopyFiles */,
-				C9EDD4CF1274B95700ADB21C /* Fl_PNM_Image.H in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C9EDD4DD1274BB4100ADB21C /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			comments = "Copy some selected image headers. FLTK requires a slightly different syntax compared to regular Apple frameworks.\n\nApple (this does not work!):\n  ##include <fltk/fltk.h>\n\nFLTK:\n  ##include <FL/Fl.H>\n\nFor the second format to work, the following path must be added to the project:\n  /Library/Framework/fltk.framework/Headers/\n\n";
-			dstPath = ../Headers/FL/images;
-			dstSubfolderSpec = 7;
-			files = (
-				C9EDD4E91274BBC000ADB21C /* jconfig.h in CopyFiles */,
-				C9EDD4EA1274BBC000ADB21C /* jerror.h in CopyFiles */,
-				C9EDD4EB1274BBC000ADB21C /* jmorecfg.h in CopyFiles */,
-				C9EDD4EC1274BBC000ADB21C /* jpeglib.h in CopyFiles */,
-				C9EDD4E01274BB7000ADB21C /* png.h in CopyFiles */,
-				C9EDD4E11274BB7000ADB21C /* pngconf.h in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		CAC749CC825FEBDDCDF3BB42 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
