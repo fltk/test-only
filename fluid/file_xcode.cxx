@@ -89,6 +89,109 @@ static const char *xcode4_type(unsigned int ft) {
   return buf;
 }
 
+
+static int writeBuildConfigurations(FILE *out, const char *debugKey, const char *releaseKey, const char *productName) {
+  // Write the Debug Build Configuration
+  fprintf(out, "\t\t%s /* Debug */ = {\n", debugKey);
+  fprintf(out, "\t\t\tisa = XCBuildConfiguration;\n");
+  fprintf(out, "\t\t\tbuildSettings = {\n");
+  fprintf(out, "\t\t\t\tALWAYS_SEARCH_USER_PATHS = NO;\n");
+  fprintf(out, "\t\t\t\tCOPY_PHASE_STRIP = NO;\n");
+  fprintf(out, "\t\t\t\tDEPLOYMENT_LOCATION = NO;\n");
+  fprintf(out, "\t\t\t\tDEPLOYMENT_POSTPROCESSING = NO;\n");
+  fprintf(out, "\t\t\t\tDYLIB_COMPATIBILITY_VERSION = 1;\n");
+  fprintf(out, "\t\t\t\tDYLIB_CURRENT_VERSION = 1;\n");
+  fprintf(out, "\t\t\t\tFRAMEWORK_VERSION = A;\n");
+  fprintf(out, "\t\t\t\tGCC_DYNAMIC_NO_PIC = NO;\n");
+  fprintf(out, "\t\t\t\tGCC_ENABLE_FIX_AND_CONTINUE = YES;\n");
+  fprintf(out, "\t\t\t\tGCC_MODEL_TUNING = G5;\n");
+  fprintf(out, "\t\t\t\tGCC_OPTIMIZATION_LEVEL = 0;\n");
+  fprintf(out, "\t\t\t\tGCC_PRECOMPILE_PREFIX_HEADER = YES;\n");
+  fprintf(out, "\t\t\t\tGCC_PREFIX_HEADER = fltk.pch;\n");
+  fprintf(out, "\t\t\t\tGCC_PREPROCESSOR_DEFINITIONS = FL_LIBRARY;\n");
+  fprintf(out, "\t\t\t\tGCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;\n");
+  fprintf(out, "\t\t\t\tHEADER_SEARCH_PATHS = (\n");
+  fprintf(out, "\t\t\t\t\t../../ide/XCode4/,\n");
+  fprintf(out, "\t\t\t\t\t../../,\n");
+  fprintf(out, "\t\t\t\t\t../../png,\n");
+  fprintf(out, "\t\t\t\t\t../../jpeg,\n");
+  fprintf(out, "\t\t\t\t);\n");
+  fprintf(out, "\t\t\t\tINFOPLIST_FILE = \"plists/fltk-Info.plist\";\n");
+  fprintf(out, "\t\t\t\tINSTALL_PATH = \"@executable_path/../Frameworks\";\n");
+  fprintf(out, "\t\t\t\tOTHER_LDFLAGS = \"\";\n");
+  fprintf(out, "\t\t\t\tPREBINDING = NO;\n");
+  fprintf(out, "\t\t\t\tPRODUCT_NAME = \"%s\";\n", productName);
+  fprintf(out, "\t\t\t\tSDKROOT = \"$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk\";\n");
+  fprintf(out, "\t\t\t\tWARNING_CFLAGS = (\n");
+  fprintf(out, "\t\t\t\t\t\"-Wno-format-security\",\n");
+  fprintf(out, "\t\t\t\t\t\"-Wall\",\n");
+  fprintf(out, "\t\t\t\t);\n");
+  fprintf(out, "\t\t\t};\n");
+  fprintf(out, "\t\t\tname = Debug;\n");
+  fprintf(out, "\t\t};\n");
+  
+  // Write the Release Build Configuration
+  fprintf(out, "\t\t%s /* Release */ = {\n", releaseKey);
+  fprintf(out, "\t\t\tisa = XCBuildConfiguration;\n");
+  fprintf(out, "\t\t\tbuildSettings = {\n");
+  fprintf(out, "\t\t\t\tALWAYS_SEARCH_USER_PATHS = NO;\n");
+  fprintf(out, "\t\t\t\tCOPY_PHASE_STRIP = YES;\n");
+  fprintf(out, "\t\t\t\tDEBUG_INFORMATION_FORMAT = \"dwarf-with-dsym\";\n");
+  fprintf(out, "\t\t\t\tDEPLOYMENT_LOCATION = NO;\n");
+  fprintf(out, "\t\t\t\tDEPLOYMENT_POSTPROCESSING = NO;\n");
+  fprintf(out, "\t\t\t\tDYLIB_COMPATIBILITY_VERSION = 1;\n");
+  fprintf(out, "\t\t\t\tDYLIB_CURRENT_VERSION = 1;\n");
+  fprintf(out, "\t\t\t\tFRAMEWORK_VERSION = A;\n");
+  fprintf(out, "\t\t\t\tGCC_ENABLE_FIX_AND_CONTINUE = NO;\n");
+  fprintf(out, "\t\t\t\tGCC_MODEL_TUNING = G5;\n");
+  fprintf(out, "\t\t\t\tGCC_PRECOMPILE_PREFIX_HEADER = YES;\n");
+  fprintf(out, "\t\t\t\tGCC_PREFIX_HEADER = fltk.pch;\n");
+  fprintf(out, "\t\t\t\tGCC_PREPROCESSOR_DEFINITIONS = FL_LIBRARY;\n");
+  fprintf(out, "\t\t\t\tGCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;\n");
+  fprintf(out, "\t\t\t\tHEADER_SEARCH_PATHS = (\n");
+  fprintf(out, "\t\t\t\t\t../../ide/XCode4/,\n");
+  fprintf(out, "\t\t\t\t\t../../,\n");
+  fprintf(out, "\t\t\t\t\t../../png,\n");
+  fprintf(out, "\t\t\t\t\t../../jpeg,\n");
+  fprintf(out, "\t\t\t\t);\n");
+  fprintf(out, "\t\t\t\tINFOPLIST_FILE = \"plists/fltk-Info.plist\";\n");
+  fprintf(out, "\t\t\t\tINSTALL_PATH = \"@executable_path/../Frameworks\";\n");
+  fprintf(out, "\t\t\t\tOTHER_LDFLAGS = \"\";\n");
+  fprintf(out, "\t\t\t\tPREBINDING = NO;\n");
+  fprintf(out, "\t\t\t\tPRODUCT_NAME = \"%s\";\n", productName);
+  fprintf(out, "\t\t\t\tSDKROOT = \"$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk\";\n");
+  fprintf(out, "\t\t\t\tWARNING_CFLAGS = (\n");
+  fprintf(out, "\t\t\t\t\t\"-Wno-format-security\",\n");
+  fprintf(out, "\t\t\t\t\t\"-Wall\",\n");
+  fprintf(out, "\t\t\t\t);\n");
+  fprintf(out, "\t\t\t\tZERO_LINK = NO;\n");
+  fprintf(out, "\t\t\t};\n");
+  fprintf(out, "\t\t\tname = Release;\n");
+  fprintf(out, "\t\t};\n");
+
+  return 0;
+}
+
+static int writeBuildConfigurationList(FILE *out, const char *listKey, const char *debugKey, const char *releaseKey, const char *productName) {
+  fprintf(out, "\t\t%s /* Build configuration list for PBXNativeTarget \"%s\" */ = {\n", listKey, productName);
+  fprintf(out, "\t\t\tisa = XCConfigurationList;\n");
+  fprintf(out, "\t\t\tbuildConfigurations = (\n");
+  fprintf(out, "\t\t\t\t%s /* Debug */,\n", debugKey);
+  fprintf(out, "\t\t\t\t%s /* Release */,\n", releaseKey);
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\t\tdefaultConfigurationIsVisible = 0;\n");
+  fprintf(out, "\t\t\tdefaultConfigurationName = Debug;\n");
+  fprintf(out, "\t\t};\n");
+  return 0;
+}
+
+static int writeNativeTarget(FILE *out, const char *listKey, const char *productName) {
+  // currently writes only one entry inside the native target!
+  fprintf(out, "\t\t\tbuildConfigurationList = %s /* Build configuration list for PBXNativeTarget \"%s\" */;", listKey, productName);
+  return 0;
+}
+
+
 int write_fltk_ide_xcode4() {
   // for now, we use a template file in FLTK/ide/templates/VisualC2008.tmpl .
   // When done, everything will likely be integrated into the executable to make one compact package.
@@ -242,7 +345,55 @@ int write_fltk_ide_xcode4() {
             }
           }
           hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#BuildConfigurations(", 21)==0) {
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+21, ')');
+          if (!tgt) {
+            printf("ERROR writing Xcode 4 file: target not found!");
+            return -1;
+          }
+          char debugKey[32]; strcpy(debugKey, tgt->get_UUID_Xcode("Xcode4_DebugBuildConfiguration"));
+          char releaseKey[32]; strcpy(releaseKey, tgt->get_UUID_Xcode("Xcode4_ReleaseBuildConfiguration"));
+          writeBuildConfigurations(out, debugKey, releaseKey, tgt->name());
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#BuildConfigurationList(", 24)==0) {
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+24, ')');
+          if (!tgt) {
+            printf("ERROR writing Xcode 4 file: target not found!");
+            return -1;
+          }
+          char listKey[32]; strcpy(listKey, tgt->get_UUID_Xcode("Xcode4_BuildConfigurationList"));
+          char debugKey[32]; strcpy(debugKey, tgt->get_UUID_Xcode("Xcode4_DebugBuildConfiguration"));
+          char releaseKey[32]; strcpy(releaseKey, tgt->get_UUID_Xcode("Xcode4_ReleaseBuildConfiguration"));
+          writeBuildConfigurationList(out, listKey, debugKey, releaseKey, tgt->name());
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#NativeTarget(", 14)==0) {
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+14, ')');
+          if (!tgt) {
+            printf("ERROR writing Xcode 4 file: target not found!");
+            return -1;
+          }
+          char listKey[32]; strcpy(listKey, tgt->get_UUID_Xcode("Xcode4_BuildConfigurationList"));
+          writeNativeTarget(out, listKey, tgt->name());
+          hash = strchr(hash, ';')+1;
         } else {
+#if 0
+          fltk.framework starts here: A57FDE871C99A52BEEDEE68C
+          
+          rootObject = 4BF1A7FFEACF5F31B4127482, contains fltk as a target
+            fltk (NativeTarget) = A57FDE871C99A52BEEDEE68C
+              buildConfigurationList (ConfigurationList) = 3BD5FFB6FCC8F21A23C23DF4 /* Build configuration list for PBXNativeTarget "fltk" */;
+                Debug (BuildConfiguration) = 78446623B2E9921ED6B05986
+                Release (BuildConfiguration) = BFEB622BA8B40E851AF0E91F
+              Resources build phase (ResourcesBuildPhase) = 6715D162BEFF87372B2A31E0 (can reference files (BuildFile))
+              Headers build phase (HeadersBuildPhas) = C9EDD5C81274C6BA00ADB21C (can reference files (BuildFile))
+              CopyFilesBuildPhase = C9EDD42D1274B84100ADB21C /* CopyFiles */,
+              CopyFilesBuildPhase = C9EDD4DD1274BB4100ADB21C /* CopyFiles */,
+              SourcesBuildPhase = 4DA82C38AA0403E56A1E3545 /* Sources */,
+              FrameworksBuildPhase = D2A1AD2D93B0EED43F624520
+                Cocoa.framework = C96290C21274D0CF007D3CFE (BuildFile -> FileReference)
+              buildRules (BuildRule) = EFFAAB905A54B0BFE13CB56C (Fluid build rule, no more references)
+              productReference = FEB0F8FE6383384180570D94 (-> FileReference, is also referenced in "Products")
+#endif
           printf("Unknown command in template: <<%s>>\n", hash);
           copyLine = 1;
           hash++;

@@ -200,8 +200,13 @@ folder Applications {open
   }
 } 
 
-folder Libraries {} {
-  lib_target fltk {} {
+folder Libraries {open
+} {
+  lib_target fltk {open
+    uuid_Xcode4_BuildConfigurationList {F8A317C2-0F96-4681-8A97-DA6FDEF118E2}
+    uuid_Xcode4_DebugBuildConfiguration {034870F2-FE15-4D23-AD0D-62ED38449392}
+    uuid_Xcode4_ReleaseBuildConfiguration {D584B52C-FED3-4E71-A47E-A60BA05375B9}
+  } {
     folder Headers {open
     } {
       file_ref {Adjuster.h} {
@@ -211,7 +216,7 @@ folder Libraries {} {
         list_env 92
         filename_and_path {fltk3/Adjuster.h}
       }
-      file_ref {ask.h} {
+      file_ref {ask.h} {selected
         uuid_Xcode4_PBXBuildFile {AEDF2A15-B44B-4BD8-B754-2E54A44DB5B5}
         uuid_Xcode4_PBXFileRef {D31DE8AC-9AC3-4E54-98FE-200462A57910}
         build_env 64
@@ -1213,8 +1218,7 @@ folder Libraries {} {
         filename_and_path {fltk3/Xutf8.h}
       }
     }
-    folder Sources {open
-    } {
+    folder Sources {} {
       file_ref {Fl_cocoa.mm} {
         uuid_Xcode4_PBXBuildFile {99D08647-5486-4C7E-8CC9-51B70074F29C}
         uuid_Xcode4_PBXFileRef {F6BB47B6-F621-4FC2-A7DC-BFD6B7C5F16D}
@@ -2611,8 +2615,7 @@ folder Libraries {} {
   }
 } 
 
-folder Tests {open selected
-} {
+folder Tests {} {
   app_target Demo {} {
     file_ref {demo.cxx} {}
     file_ref {demo.menu} {

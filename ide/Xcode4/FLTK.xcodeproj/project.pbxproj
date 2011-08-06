@@ -8496,8 +8496,7 @@
 		};
 		A57FDE871C99A52BEEDEE68C /* fltk */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3BD5FFB6FCC8F21A23C23DF4 /* Build configuration list for PBXNativeTarget "fltk" */;
-			buildPhases = (
+			buildConfigurationList = F8A317C2491750F8DEF118E2 /* Build configuration list for PBXNativeTarget "fltk" */;			buildPhases = (
 				6715D162BEFF87372B2A31E0 /* Resources */,
 				C9EDD5C81274C6BA00ADB21C /* Headers */,
 				C9EDD42D1274B84100ADB21C /* CopyFiles */,
@@ -13779,7 +13778,7 @@
 			};
 			name = Release;
 		};
-		78446623B2E9921ED6B05986 /* Debug */ = {
+		034870F2B336CFE038449392 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -13798,7 +13797,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = FL_LIBRARY;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				HEADER_SEARCH_PATHS = (
-					../../ide/XCode3/,
+					../../ide/XCode4/,
 					../../,
 					../../png,
 					../../jpeg,
@@ -13807,7 +13806,7 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
-				PRODUCT_NAME = fltk;
+				PRODUCT_NAME = "fltk";
 				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 				WARNING_CFLAGS = (
 					"-Wno-format-security",
@@ -13815,6 +13814,43 @@
 				);
 			};
 			name = Debug;
+		};
+		D584B52CB0A20275A05375B9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = fltk.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = FL_LIBRARY;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				HEADER_SEARCH_PATHS = (
+					../../ide/XCode4/,
+					../../,
+					../../png,
+					../../jpeg,
+				);
+				INFOPLIST_FILE = "plists/fltk-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = "fltk";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				WARNING_CFLAGS = (
+					"-Wno-format-security",
+					"-Wall",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
 		};
 		7852BC9638DB86312B634FCC /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -15366,43 +15402,6 @@
 			};
 			name = Debug;
 		};
-		BFEB622BA8B40E851AF0E91F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEPLOYMENT_LOCATION = NO;
-				DEPLOYMENT_POSTPROCESSING = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = fltk.pch;
-				GCC_PREPROCESSOR_DEFINITIONS = FL_LIBRARY;
-				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				HEADER_SEARCH_PATHS = (
-					../../ide/XCode3/,
-					../../,
-					../../png,
-					../../jpeg,
-				);
-				INFOPLIST_FILE = "plists/fltk-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = fltk;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
-				WARNING_CFLAGS = (
-					"-Wno-format-security",
-					"-Wall",
-				);
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		BFF26783A7FAE12B0EA16C83 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -16929,11 +16928,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		3BD5FFB6FCC8F21A23C23DF4 /* Build configuration list for PBXNativeTarget "fltk" */ = {
+		F8A317C2491750F8DEF118E2 /* Build configuration list for PBXNativeTarget "fltk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				78446623B2E9921ED6B05986 /* Debug */,
-				BFEB622BA8B40E851AF0E91F /* Release */,
+				034870F2B336CFE038449392 /* Debug */,
+				D584B52CB0A20275A05375B9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
