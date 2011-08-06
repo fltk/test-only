@@ -90,15 +90,15 @@ static const char *xcode4_type(unsigned int ft) {
 }
 
 int write_fltk_ide_xcode4() {
-  // for now, we use a template project file. Eventually, the entire file will be generated
-  //    template is ide/Xcode4/FLTK.xcodeproj/project.pbxproj.tmpl
-  // destination is ide/Xcode4/FLTK.xcodeproj/project.pbxproj
-
-  char buf[2048];
-  strcpy(buf, filename);
-  strcpy((char*)fltk3::filename_name(buf), "ide/Xcode4/FLTK.xcodeproj/project.pbxproj");
-  FILE *out = fopen(buf, "wb");
-  strcat(buf, ".tmpl");
+  // for now, we use a template file in FLTK/ide/templates/VisualC2008.tmpl .
+  // When done, everything will likely be integrated into the executable to make one compact package.
+  char buf[2048], base_dir[2048], tgt_base[2048];
+  strcpy(base_dir, filename);
+  *((char*)fltk3::filename_name(base_dir)) = 0; // keep only the path
+  strcpy(tgt_base, base_dir);
+  strcpy(buf, base_dir);
+  strcat(buf, "ide/templates/Xcode4.tmpl");
+  FILE *out = stdout;
   FILE *in = fopen(buf, "rb");
   
   for (;;) {
@@ -115,7 +115,28 @@ int write_fltk_ide_xcode4() {
         continue;
       } else { // single hash is a command
         copyLine = 0;
-        if (strncmp(hash, "#BuildFileReferences(", 21)==0) {
+        if (strncmp(hash, "#WriteFile(",11)==0) {
+          // mark the end of the filename (this will crash if the formatting is wrong!)
+          char *sep = strchr(hash, ')');
+          *sep = 0;
+          // filename is relative, so add it to the base_dir
+          char fnbuf[2048];
+          strcpy(fnbuf, base_dir);
+          strcat(fnbuf, hash+11);
+          out = fopen(fnbuf, "wb");
+          // set the filepath for this target. In this module, all filenames are relative to the Makefile
+          strcpy(tgt_base, fnbuf);
+          *((char*)fltk3::filename_name(tgt_base)) = 0; // keep only the path
+                                                        // restore buffer and continue 
+          *sep = ')';
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#CloseFile", 10)==0) {
+          if (out!=stdout) fclose(out);
+          out = stdout;
+          // set the filepath for the default target. 
+          strcpy(tgt_base, base_dir);
+          hash = strchr(hash, ';')+1;
+      } else if (strncmp(hash, "#BuildFileReferences(", 21)==0) {
           Fl_Type *tgt = Fl_Target_Type::find(hash+21, ')'); // keep tgt local
           if (!tgt) {
             printf("ERROR writing Xcode 4 file: target not found!");
