@@ -8497,14 +8497,14 @@
 		A57FDE871C99A52BEEDEE68C /* fltk */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F8A317C2491750F8DEF118E2 /* Build configuration list for PBXNativeTarget "fltk" */;			buildPhases = (
-				6715D162BEFF87372B2A31E0 /* Resources */,
+				1DAA0C25D4F3735866428D29 /* Resources */,
 				C9EDD5C81274C6BA00ADB21C /* Headers */,
 				C9EDD42D1274B84100ADB21C /* CopyFiles */,
 				C9EDD4DD1274BB4100ADB21C /* CopyFiles */,
 				4DA82C38AA0403E56A1E3545 /* Sources */,
 				D2A1AD2D93B0EED43F624520 /* Frameworks */,
 			);
-			buildRules = (
+		buildRules = (
 				EFFAAB905A54B0BFE13CB56C /* PBXBuildRule */,
 			);
 			dependencies = (
@@ -9525,7 +9525,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6715D162BEFF87372B2A31E0 /* Resources */ = {
+		1DAA0C25D4F3735866428D29 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (

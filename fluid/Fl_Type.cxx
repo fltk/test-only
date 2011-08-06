@@ -1260,6 +1260,7 @@ Fl_Type *Fl_Target_Type::make() {
   return 0L;
 }
 
+// throws a null exception!
 Fl_Target_Type *Fl_Target_Type::find(const char *name, char end) {
   // find a partial string, if 'end' is set to a character
   char buf[2048];
@@ -1275,6 +1276,7 @@ Fl_Target_Type *Fl_Target_Type::find(const char *name, char end) {
       return (Fl_Target_Type*)tgt;
     tgt = tgt->next;
   }
+  throw "Target not found";
   return 0;
 }
 

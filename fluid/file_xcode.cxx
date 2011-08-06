@@ -185,9 +185,47 @@ static int writeBuildConfigurationList(FILE *out, const char *listKey, const cha
   return 0;
 }
 
-static int writeNativeTarget(FILE *out, const char *listKey, const char *productName) {
-  // currently writes only one entry inside the native target!
-  fprintf(out, "\t\t\tbuildConfigurationList = %s /* Build configuration list for PBXNativeTarget \"%s\" */;", listKey, productName);
+static int writeResourcesBuildPhase(FILE *out, const char *key, const char *productName) {
+  fprintf(out, "\t\t%s /* Resources */ = {\n", key);
+  fprintf(out, "\t\t\tisa = PBXResourcesBuildPhase;\n");
+  fprintf(out, "\t\t\tbuildActionMask = 2147483647;\n");
+  fprintf(out, "\t\t\tfiles = (\n");
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\t\trunOnlyForDeploymentPostprocessing = 0;\n");
+  fprintf(out, "\t\t};\n");
+  return 0;
+}
+
+
+static int writeNativeTarget(FILE *out, Fl_Target_Type *tgt) {
+  // currently we still have a bunch of fixed UUIDs in here!
+
+  char buildConfigurationList[32]; strcpy(buildConfigurationList, tgt->get_UUID_Xcode("Xcode4_BuildConfigurationList"));
+  char ResourcesBuildPhase[32]; strcpy(ResourcesBuildPhase, tgt->get_UUID_Xcode("Xcode4_ResourcesBuildPhase"));
+
+  fprintf(out, "\t\tA57FDE871C99A52BEEDEE68C /* %s */ = {\n", tgt->name());     // FIXME: use generated key
+  fprintf(out, "\t\t\tisa = PBXNativeTarget;\n");
+  fprintf(out, "\t\t\tbuildConfigurationList = %s /* Build configuration list for PBXNativeTarget \"%s\" */;", buildConfigurationList, tgt->name());
+  fprintf(out, "\t\t\tbuildPhases = (\n");
+  fprintf(out, "\t\t\t\t%s /* Resources */,\n", ResourcesBuildPhase);
+  fprintf(out, "\t\t\t\tC9EDD5C81274C6BA00ADB21C /* Headers */,\n");            // FIXME: use generated key
+  fprintf(out, "\t\t\t\tC9EDD42D1274B84100ADB21C /* CopyFiles */,\n");          // FIXME: use generated key
+  fprintf(out, "\t\t\t\tC9EDD4DD1274BB4100ADB21C /* CopyFiles */,\n");          // FIXME: use generated key
+  fprintf(out, "\t\t\t\t4DA82C38AA0403E56A1E3545 /* Sources */,\n");            // FIXME: use generated key
+  fprintf(out, "\t\t\t\tD2A1AD2D93B0EED43F624520 /* Frameworks */,\n");         // FIXME: use generated key
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\tbuildRules = (\n");
+  fprintf(out, "\t\t\t\tEFFAAB905A54B0BFE13CB56C /* PBXBuildRule */,\n");       // FIXME: use generated key
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\t\tdependencies = (\n");
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\t\tname = %s;\n", tgt->name());
+  fprintf(out, "\t\t\tproductName = %s;\n", tgt->name());
+  fprintf(out, "\t\t\tproductReference = FEB0F8FE6383384180570D94 /* %s.framework */;\n", tgt->name()); // FIXME: use generated key
+  fprintf(out, "\t\t\tproductType = \"com.apple.product-type.framework\";\n");
+  fprintf(out, "\t\t};\n");
+  
+  
   return 0;
 }
 
@@ -241,10 +279,6 @@ int write_fltk_ide_xcode4() {
           hash = strchr(hash, ';')+1;
       } else if (strncmp(hash, "#BuildFileReferences(", 21)==0) {
           Fl_Type *tgt = Fl_Target_Type::find(hash+21, ')'); // keep tgt local
-          if (!tgt) {
-            printf("ERROR writing Xcode 4 file: target not found!");
-            return -1;
-          }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             if (f->builds_in(FL_ENV_XC4)) {
@@ -261,10 +295,6 @@ int write_fltk_ide_xcode4() {
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#FileReferences(", 16)==0) {
           Fl_Type *tgt = Fl_Target_Type::find(hash+16, ')');
-          if (!tgt) {
-            printf("ERROR writing Xcode 4 file: target not found!");
-            return -1;
-          }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             // FIXME: write a file type converter!
@@ -281,10 +311,6 @@ int write_fltk_ide_xcode4() {
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#HeadersGroup(", 14)==0) {
           Fl_Type *tgt = Fl_Target_Type::find(hash+14, ')');
-          if (!tgt) {
-            printf("ERROR writing Xcode 4 file: target not found!");
-            return -1;
-          }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             if (f->lists_in(FL_ENV_XC4) && f->is_header()) {
@@ -297,10 +323,6 @@ int write_fltk_ide_xcode4() {
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#SourcesGroup(", 14)==0) {
           Fl_Type *tgt = Fl_Target_Type::find(hash+14, ')');
-          if (!tgt) {
-            printf("ERROR writing Xcode 4 file: target not found!");
-            return -1;
-          }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             if (f->lists_in(FL_ENV_XC4) && f->is_code()) {
@@ -313,10 +335,6 @@ int write_fltk_ide_xcode4() {
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#HeadersBuildPhase(", 19)==0) {
           Fl_Type *tgt = Fl_Target_Type::find(hash+19, ')');
-          if (!tgt) {
-            printf("ERROR writing Xcode 4 file: target not found!");
-            return -1;
-          }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             if (f->builds_in(FL_ENV_XC4) && f->is_header()) {
@@ -330,10 +348,6 @@ int write_fltk_ide_xcode4() {
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#SourcesBuildPhase(", 19)==0) {
           Fl_Type *tgt = Fl_Target_Type::find(hash+19, ')');
-          if (!tgt) {
-            printf("ERROR writing Xcode 4 file: target not found!");
-            return -1;
-          }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             if (f->builds_in(FL_ENV_XC4) && f->is_code()) {
@@ -347,33 +361,25 @@ int write_fltk_ide_xcode4() {
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#BuildConfigurations(", 21)==0) {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+21, ')');
-          if (!tgt) {
-            printf("ERROR writing Xcode 4 file: target not found!");
-            return -1;
-          }
           char debugKey[32]; strcpy(debugKey, tgt->get_UUID_Xcode("Xcode4_DebugBuildConfiguration"));
           char releaseKey[32]; strcpy(releaseKey, tgt->get_UUID_Xcode("Xcode4_ReleaseBuildConfiguration"));
           writeBuildConfigurations(out, debugKey, releaseKey, tgt->name());
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#BuildConfigurationList(", 24)==0) {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+24, ')');
-          if (!tgt) {
-            printf("ERROR writing Xcode 4 file: target not found!");
-            return -1;
-          }
           char listKey[32]; strcpy(listKey, tgt->get_UUID_Xcode("Xcode4_BuildConfigurationList"));
           char debugKey[32]; strcpy(debugKey, tgt->get_UUID_Xcode("Xcode4_DebugBuildConfiguration"));
           char releaseKey[32]; strcpy(releaseKey, tgt->get_UUID_Xcode("Xcode4_ReleaseBuildConfiguration"));
           writeBuildConfigurationList(out, listKey, debugKey, releaseKey, tgt->name());
           hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#ResourcesBuildPhase(", 21)==0) {
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+21, ')');
+          char key[32]; strcpy(key, tgt->get_UUID_Xcode("Xcode4_ResourcesBuildPhase"));
+          writeResourcesBuildPhase(out, key, tgt->name());
+          hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#NativeTarget(", 14)==0) {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+14, ')');
-          if (!tgt) {
-            printf("ERROR writing Xcode 4 file: target not found!");
-            return -1;
-          }
-          char listKey[32]; strcpy(listKey, tgt->get_UUID_Xcode("Xcode4_BuildConfigurationList"));
-          writeNativeTarget(out, listKey, tgt->name());
+          writeNativeTarget(out, tgt);
           hash = strchr(hash, ';')+1;
         } else {
 #if 0
@@ -381,13 +387,13 @@ int write_fltk_ide_xcode4() {
           
           rootObject = 4BF1A7FFEACF5F31B4127482, contains fltk as a target
             fltk (NativeTarget) = A57FDE871C99A52BEEDEE68C
-              buildConfigurationList (ConfigurationList) = 3BD5FFB6FCC8F21A23C23DF4 /* Build configuration list for PBXNativeTarget "fltk" */;
-                Debug (BuildConfiguration) = 78446623B2E9921ED6B05986
-                Release (BuildConfiguration) = BFEB622BA8B40E851AF0E91F
+              -buildConfigurationList (ConfigurationList) = 3BD5FFB6FCC8F21A23C23DF4 /* Build configuration list for PBXNativeTarget "fltk" */;
+                -Debug (BuildConfiguration) = 78446623B2E9921ED6B05986
+                -Release (BuildConfiguration) = BFEB622BA8B40E851AF0E91F
               Resources build phase (ResourcesBuildPhase) = 6715D162BEFF87372B2A31E0 (can reference files (BuildFile))
               Headers build phase (HeadersBuildPhas) = C9EDD5C81274C6BA00ADB21C (can reference files (BuildFile))
-              CopyFilesBuildPhase = C9EDD42D1274B84100ADB21C /* CopyFiles */,
-              CopyFilesBuildPhase = C9EDD4DD1274BB4100ADB21C /* CopyFiles */,
+              CopyFilesBuildPhase = C9EDD42D1274B84100ADB21C /* CopyFiles */, (copying header files around that shouldn`t)
+              CopyFilesBuildPhase = C9EDD4DD1274BB4100ADB21C /* CopyFiles */, (copying header files around that shouldn`t)
               SourcesBuildPhase = 4DA82C38AA0403E56A1E3545 /* Sources */,
               FrameworksBuildPhase = D2A1AD2D93B0EED43F624520
                 Cocoa.framework = C96290C21274D0CF007D3CFE (BuildFile -> FileReference)
