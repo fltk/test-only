@@ -867,10 +867,10 @@ void fltk3::focus(fltk3::Widget *o) {
 	if (fl_xfocus != win) {
 	  Fl_X *x = Fl_X::i(win);
 	  if (x) x->set_key_window();
-	  }
+        }
 #endif
 	fl_xfocus = win;
-	}
+      }
     }
     // take focus from the old focused window
     fl_oldfocus = 0;

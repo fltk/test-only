@@ -111,6 +111,7 @@ static fltk3::Pixmap	protected_pixmap(protected_xpm);
 #include "pixmaps/flTree.xpm"
 #include "pixmaps/flTable.xpm"
 #include "pixmaps/flAppTarget.xpm"
+#include "pixmaps/flLibTarget.xpm"
 #include "pixmaps/flFile.xpm"
 #include "pixmaps/flFolder.xpm"
 #include "pixmaps/flFluidFile.xpm"
@@ -171,10 +172,11 @@ static fltk3::Pixmap	data_pixmap(flData_xpm);
 static fltk3::Pixmap	tree_pixmap(flTree_xpm);
 static fltk3::Pixmap	table_pixmap(flTable_xpm);
 static fltk3::Pixmap	app_target_pixmap(flAppTarget_xpm);
+static fltk3::Pixmap	lib_target_pixmap(flLibTarget_xpm);
 static fltk3::Pixmap	file_pixmap(flFile_xpm);
 static fltk3::Pixmap	folder_pixmap(flFolder_xpm);
-//static fltk3::Pixmap	fluid_file_pixmap(flFluidFile_xpm);
-//static fltk3::Pixmap	code_file_pixmap(flCodeFile_xpm);
+static fltk3::Pixmap	fluid_file_pixmap(flFluidFile_xpm);
+static fltk3::Pixmap	code_file_pixmap(flCodeFile_xpm);
 fltk3::Pixmap	menu_none_pixmap(flMenuNone_xpm);
 fltk3::Pixmap	menu_multi_pixmap(flMenuMulti_xpm);
 fltk3::Pixmap	menu_all_pixmap(flMenuAll_xpm);
@@ -189,7 +191,8 @@ fltk3::Pixmap *pixmap[] = { 0, &window_pixmap, &button_pixmap, &checkbutton_pixm
  &slider_pixmap, &scrollbar_pixmap, &valueslider_pixmap, &adjuster_pixmap, &counter_pixmap,          /* 37..41 */
  &dial_pixmap, &roller_pixmap, &valueinput_pixmap, &valueoutput_pixmap, &comment_pixmap,             /* 42..46 */
  &spinner_pixmap, &widgetclass_pixmap, &data_pixmap, &tree_pixmap, &table_pixmap,                    /* 47..51 */
- &app_target_pixmap, &file_pixmap, &folder_pixmap}; /* 52..54 */
+ &app_target_pixmap, &file_pixmap, &folder_pixmap, &fluid_file_pixmap, &code_file_pixmap,            /* 52..56 */
+ &lib_target_pixmap};                                                                                /* 57 */
 
 extern int show_comments;
 
@@ -1320,7 +1323,7 @@ Fl_Type *Fl_Lib_Target_Type::make() {
   Fl_Type *p = Fl_Type::current;
   while (p && !p->is_category())
     p = p->parent;  
-  Fl_App_Target_Type *o = new Fl_App_Target_Type();
+  Fl_Lib_Target_Type *o = new Fl_Lib_Target_Type();
   o->name("myLibrary");
   o->add(p);
   o->factory = this;

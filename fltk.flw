@@ -5,8 +5,7 @@ code_name {.cxx}
 wks_name FLTK
 folder Applications {open
 } {
-  app_target Fluid {open
-  } {
+  app_target Fluid {} {
     folder Headers {open
     } {
       file_ref {CodeEditor.h} {
@@ -201,13 +200,11 @@ folder Applications {open
   }
 } 
 
-folder Libraries {open
-} {
-  app_target fltk {open
-  } {
+folder Libraries {} {
+  lib_target fltk {} {
     folder Headers {open
     } {
-      file_ref {Adjuster.h} {selected
+      file_ref {Adjuster.h} {
         uuid_Xcode4_PBXBuildFile {19D0A8A7-81F6-48F4-A42B-0A0DBBC3770F}
         uuid_Xcode4_PBXFileRef {1CDC310C-BCD1-48E9-90F6-541607EE265B}
         build_env 64
@@ -2304,9 +2301,8 @@ folder Libraries {open
       }
     }
   }
-  app_target fltk_gl {} {
-    folder Sources {open
-    } {
+  lib_target fltk_gl {} {
+    folder Sources {} {
       file_ref {Fl_Gl_Choice.cxx} {
         filename_and_path {src/Fl_Gl_Choice.cxx}
       }
@@ -2342,9 +2338,8 @@ folder Libraries {open
       }
     }
   }
-  app_target fltk_images {} {
-    folder Sources {open
-    } {
+  lib_target fltk_images {} {
+    folder Sources {} {
       file_ref {Fl_BMP_Image.cxx} {
         filename_and_path {src/Fl_BMP_Image.cxx}
       }
@@ -2371,7 +2366,7 @@ folder Libraries {open
       }
     }
   }
-  app_target fltk_png {} {
+  lib_target fltk_png {} {
     folder Sources {open
     } {
       file_ref {png.c} {
@@ -2421,7 +2416,7 @@ folder Libraries {open
       }
     }
   }
-  app_target fltk_jpeg {} {
+  lib_target fltk_jpeg {} {
     folder Sources {open
     } {
       file_ref {jaricom.c} {
@@ -2564,7 +2559,7 @@ folder Libraries {open
       }
     }
   }
-  app_target fltk_zlib {} {
+  lib_target fltk_zlib {} {
     folder Sources {open
     } {
       file_ref {adler32.c} {
@@ -2616,26 +2611,427 @@ folder Libraries {open
   }
 } 
 
-folder Tests {open
+folder Tests {open selected
 } {
-  app_target Demo {open
-  } {
+  app_target Demo {} {
     file_ref {demo.cxx} {}
+    file_ref {demo.menu} {
+      filename_and_path {test/demo.menu}
+    }
   }
-  app_target adjuster {open
-  } {
+  app_target adjuster {} {
     file_ref {adjuster.cxx} {}
   }
-  app_target arc {open
-  } {
+  app_target arc {} {
     file_ref {arc.cxx} {}
   }
-  app_target ask {open
-  } {
+  app_target ask {} {
     file_ref {ask.cxx} {}
   }
   app_target bitmap {open
   } {
     file_ref {bitmap.cxx} {}
+  }
+  app_target blocks {open
+  } {
+    file_ref {blocks.cxx} {
+      filename_and_path {test/blocks.cxx}
+    }
+  }
+  app_target boxtype {open
+  } {
+    file_ref {boxtype.cxx} {
+      filename_and_path {test/boxtype.cxx}
+    }
+  }
+  app_target browser {open
+  } {
+    file_ref {browser.cxx} {
+      filename_and_path {test/browser.cxx}
+    }
+  }
+  app_target button {open
+  } {
+    file_ref {button.cxx} {
+      filename_and_path {test/button.cxx}
+    }
+  }
+  app_target buttons {open
+  } {
+    file_ref {buttons.cxx} {
+      filename_and_path {test/buttons.cxx}
+    }
+  }
+  app_target checkers {open
+  } {
+    file_ref {checkers.cxx} {
+      filename_and_path {test/checkers.cxx}
+    }
+  }
+  app_target clock {open
+  } {
+    file_ref {clock.cxx} {
+      filename_and_path {test/clock.cxx}
+    }
+  }
+  app_target colbrowser {open
+  } {
+    file_ref {colbrowser.cxx} {
+      filename_and_path {test/colbrowser.cxx}
+    }
+    file_ref {rgb.txt} {
+      filename_and_path {test/rgb.txt}
+    }
+  }
+  app_target color_chooser {open
+  } {
+    file_ref {color_chooser.cxx} {
+      filename_and_path {color_chooser.cxx}
+    }
+  }
+  app_target cube {open
+  } {
+    file_ref {cube.cxx} {
+      filename_and_path {cube.cxx}
+    }
+  }
+  app_target CubeView {open
+  } {
+    file_ref {CubeView.cxx} {
+      filename_and_path {test/CubeView.cxx}
+    }
+    file_ref {CubeMain.cxx} {
+      filename_and_path {test/CubeMain.cxx}
+    }
+    file_ref {CubeViewUI.fl} {
+      filename_and_path {test/CubeViewUI.fl}
+    }
+  }
+  app_target cursor {open
+  } {
+    file_ref {cursor.cxx} {
+      filename_and_path {test/cursor.cxx}
+    }
+  }
+  app_target curve {open
+  } {
+    file_ref {curve.cxx} {
+      filename_and_path {test/curve.cxx}
+    }
+  }
+  app_target device {open
+  } {
+    file_ref {device.cxx} {
+      filename_and_path {device.cxx}
+    }
+  }
+  app_target doublebuffer {open
+  } {
+    file_ref {doublebuffer.cxx} {
+      filename_and_path {test/doublebuffer.cxx}
+    }
+  }
+  app_target editor {open
+  } {
+    file_ref {editor.cxx} {
+      filename_and_path {test/editor.cxx}
+    }
+  }
+  app_target fast_slow {open
+  } {
+    file_ref {fast_slow.fl} {
+      filename_and_path {test/fast_slow.fl}
+    }
+  }
+  app_target file_chooser {open
+  } {
+    file_ref {file_chooser.cxx} {
+      filename_and_path {test/file_chooser.cxx}
+    }
+  }
+  app_target fonts {open
+  } {
+    file_ref {fonts.cxx} {
+      filename_and_path {fonts.cxx}
+    }
+  }
+  app_target fractals {open
+  } {
+    file_ref {fractals.cxx} {
+      filename_and_path {test/fractals.cxx}
+    }
+    file_ref {fracviewer.cxx} {
+      filename_and_path {test/fracviewer.cxx}
+    }
+  }
+  app_target fullscreen {open
+  } {
+    file_ref {fullscreen.cxx} {
+      filename_and_path {test/fullscreen.cxx}
+    }
+  }
+  app_target gl_overlay {open
+  } {
+    file_ref {gl_overlay.cxx} {
+      filename_and_path {test/gl_overlay.cxx}
+    }
+  }
+  app_target glpuzzle {open
+  } {
+    file_ref {glpuzzle.cxx} {
+      filename_and_path {test/glpuzzle.cxx}
+    }
+  }
+  app_target hello {open
+  } {
+    file_ref {hello.cxx} {
+      filename_and_path {test/hello.cxx}
+    }
+  }
+  app_target help {open
+  } {
+    file_ref {help.cxx} {
+      filename_and_path {test/help.cxx}
+    }
+  }
+  app_target iconize {open
+  } {
+    file_ref {iconize.cxx} {
+      filename_and_path {test/iconize.cxx}
+    }
+  }
+  app_target image {open
+  } {
+    file_ref {image.cxx} {
+      filename_and_path {test/image.cxx}
+    }
+  }
+  app_target inactive {open
+  } {
+    file_ref {inactive.cxx} {
+      filename_and_path {test/inactive.cxx}
+    }
+  }
+  app_target input {open
+  } {
+    file_ref {input.cxx} {
+      filename_and_path {test/input.cxx}
+    }
+  }
+  app_target input_choice {open
+  } {
+    file_ref {input_choice.cxx} {
+      filename_and_path {test/input_choice.cxx}
+    }
+  }
+  app_target keyboard {open
+  } {
+    file_ref {keyboard.cxx} {
+      filename_and_path {test/keyboard.cxx}
+    }
+    file_ref {keyboard_ui.fl} {
+      filename_and_path {test/keyboard_ui.fl}
+    }
+  }
+  app_target label {open
+  } {
+    file_ref {label.cxx} {
+      filename_and_path {test/label.cxx}
+    }
+  }
+  app_target line_style {open
+  } {
+    file_ref {line_sty;e.cxx} {
+      filename_and_path {test/line_sty;e.cxx}
+    }
+  }
+  app_target list_visuals {open
+  } {
+    file_ref {list_visuals.cxx} {
+      filename_and_path {test/list_visuals.cxx}
+    }
+  }
+  app_target mandelbrot {open
+  } {
+    file_ref {mandelbrot.cxx} {
+      filename_and_path {test/mandelbrot.cxx}
+    }
+    file_ref {mandelbrot_ui.fl} {
+      filename_and_path {test/mandelbrot_ui.fl}
+    }
+  }
+  app_target menubar {open
+  } {
+    file_ref {menubar.cxx} {
+      filename_and_path {test/menubar.cxx}
+    }
+  }
+  app_target message {open
+  } {
+    file_ref {message.cxx} {
+      filename_and_path {test/message.cxx}
+    }
+  }
+  app_target minimum {open
+  } {
+    file_ref {minimum.cxx} {
+      filename_and_path {test/minimum.cxx}
+    }
+  }
+  app_target navigation {open
+  } {
+    file_ref {navigation.cxx} {
+      filename_and_path {test/navigation.cxx}
+    }
+  }
+  app_target {native-filechooser} {open
+  } {
+    file_ref {native-filechooser.cxx} {
+      filename_and_path {test/native-filechooser.cxx}
+    }
+  }
+  app_target output {open
+  } {
+    file_ref {output.cxx} {
+      filename_and_path {test/output.cxx}
+    }
+  }
+  app_target overlay {open
+  } {
+    file_ref {overlay.cxx} {
+      filename_and_path {test/overlay.cxx}
+    }
+  }
+  app_target pack {open
+  } {
+    file_ref {pack.cxx} {
+      filename_and_path {test/pack.cxx}
+    }
+  }
+  app_target pixmap_browser {open
+  } {
+    file_ref {pixmap_browser.cxx} {
+      filename_and_path {test/pixmap_browser.cxx}
+    }
+  }
+  app_target pixmap {open
+  } {
+    file_ref {pixmap.cxx} {
+      filename_and_path {test/pixmap.cxx}
+    }
+  }
+  app_target preferences {open
+  } {
+    file_ref {preferences.fl} {
+      filename_and_path {test/preferences.fl}
+    }
+  }
+  app_target radio {open
+  } {
+    file_ref {radio.fl} {
+      filename_and_path {test/radio.fl}
+    }
+  }
+  app_target resizebox {open
+  } {
+    file_ref {resizebox.cxx} {
+      filename_and_path {test/resizebox.cxx}
+    }
+  }
+  app_target resize {open
+  } {
+    file_ref {resize.fl} {
+      filename_and_path {test/resize.fl}
+    }
+  }
+  app_target rotated_text {open
+  } {
+    file_ref {rotated_text.cxx} {
+      filename_and_path {test/rotated_text.cxx}
+    }
+  }
+  app_target scroll {open
+  } {
+    file_ref {scroll.cxx} {
+      filename_and_path {test/scroll.cxx}
+    }
+  }
+  app_target shape {open
+  } {
+    file_ref {shape.cxx} {
+      filename_and_path {test/shape.cxx}
+    }
+  }
+  app_target subwindow {open
+  } {
+    file_ref {subwindow.cxx} {
+      filename_and_path {test/subwindow.cxx}
+    }
+  }
+  app_target sudoku {open
+  } {
+    file_ref {sudoku.cxx} {
+      filename_and_path {test/sudoku.cxx}
+    }
+  }
+  app_target symbols {open
+  } {
+    file_ref {symbols.cxx} {
+      filename_and_path {test/symbols.cxx}
+    }
+  }
+  app_target table {open
+  } {
+    file_ref {table.cxx} {
+      filename_and_path {test/table.cxx}
+    }
+  }
+  app_target tabs {open
+  } {
+    file_ref {tabs.fl} {
+      filename_and_path {test/tabs.fl}
+    }
+  }
+  app_target threads {open
+  } {
+    file_ref {threads.cxx} {
+      filename_and_path {test/threads.cxx}
+    }
+  }
+  app_target tile {open
+  } {
+    file_ref {tile.cxx} {
+      filename_and_path {test/tile.cxx}
+    }
+  }
+  app_target tiled_image {open
+  } {
+    file_ref {tiled_image.cxx} {
+      filename_and_path {test/tiled_image.cxx}
+    }
+  }
+  app_target tree {open
+  } {
+    file_ref {tree.fl} {
+      filename_and_path {test/tree.fl}
+    }
+  }
+  app_target unittest {open
+  } {
+    file_ref {unittest.cxx} {
+      filename_and_path {test/unittest.cxx}
+    }
+  }
+  app_target utf8 {open
+  } {
+    file_ref {utf8.cxx} {
+      filename_and_path {test/utf8.cxx}
+    }
+  }
+  app_target valuators {open
+  } {
+    file_ref {valuators.fl} {
+      filename_and_path {test/valuators.fl}
+    }
   }
 } 

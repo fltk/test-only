@@ -791,7 +791,7 @@ namespace fltk3 {
      \retval 0 if this widget has no visible focus.
      \see visible_focus(int), set_visible_focus(), clear_visible_focus()
      */
-    unsigned int  visible_focus() { return flags_ & VISIBLE_FOCUS; }
+    unsigned int visible_focus() { return flags_ & VISIBLE_FOCUS; }
     
     /** Sets the default callback for all widgets.
      Sets the default callback, which puts a pointer to the widget on the queue 

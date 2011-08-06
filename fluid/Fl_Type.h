@@ -269,7 +269,7 @@ public:
   }
   const char *type_name() { return "lib_target"; }
   Fl_Type *make();
-  virtual int pixmapID() { return 52; } // FIXME: new icon
+  virtual int pixmapID() { return 57; } // FIXME: new icon
   virtual void open();
 };
 extern Fl_Lib_Target_Type Fl_Lib_Target_type;

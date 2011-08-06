@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
     // figure out the keyname:
     char buffer[100];
     const char *keyname = buffer;
-    int k = fltk3::event_key();
+    unsigned int k = fltk3::event_key();
     if (!k)
       keyname = "0";
     else if (k < 256) {
