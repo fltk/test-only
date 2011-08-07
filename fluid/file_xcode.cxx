@@ -279,6 +279,7 @@ static int writeResourcesBuildPhase(FILE *out, const char *key, const char *prod
 static int writeNativeTarget(FILE *out, Fl_Target_Type *tgt) {
   // currently we still have a bunch of fixed UUIDs in here!
 
+  char Target[32]; strcpy(Target, tgt->get_UUID_Xcode("Xcode4_Target"));
   char buildConfigurationList[32]; strcpy(buildConfigurationList, tgt->get_UUID_Xcode("Xcode4_BuildConfigurationList"));
   char ResourcesBuildPhase[32]; strcpy(ResourcesBuildPhase, tgt->get_UUID_Xcode("Xcode4_ResourcesBuildPhase"));
   char HeadersBuildPhase[32]; strcpy(HeadersBuildPhase, tgt->get_UUID_Xcode("Xcode4_HeadersBuildPhase"));
@@ -286,7 +287,7 @@ static int writeNativeTarget(FILE *out, Fl_Target_Type *tgt) {
   char FluidBuildRule[32]; strcpy(FluidBuildRule, tgt->get_UUID_Xcode("Xcode4_FluidBuildRule"));
   char ProductReference[32]; strcpy(ProductReference, tgt->get_UUID_Xcode("Xcode4_ProductReference"));
 
-  fprintf(out, "\t\tA57FDE871C99A52BEEDEE68C /* %s */ = {\n", tgt->name());     // FIXME: use generated key
+  fprintf(out, "\t\t%s /* %s */ = {\n",Target ,tgt->name());     // FIXME: use generated key
   fprintf(out, "\t\t\tisa = PBXNativeTarget;\n");
   fprintf(out, "\t\t\tbuildConfigurationList = %s /* Build configuration list for PBXNativeTarget \"%s\" */;", buildConfigurationList, tgt->name());
   fprintf(out, "\t\t\tbuildPhases = (\n");
@@ -330,6 +331,12 @@ static int writeFluidBuildRule(FILE *out, Fl_Target_Type *tgt) {
   return 0;
 }
 
+
+static int writeProjectTarget(FILE *out, Fl_Target_Type *tgt) {
+  char Target[32]; strcpy(Target, tgt->get_UUID_Xcode("Xcode4_Target"));
+  fprintf(out, "\t\t\t\t%s /* %s */,\n", Target, tgt->name());
+  return 0;
+}
 
 int write_fltk_ide_xcode4() {
   // for now, we use a template file in FLTK/ide/templates/VisualC2008.tmpl .
@@ -469,6 +476,10 @@ int write_fltk_ide_xcode4() {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+16, ')');
           writeFluidBuildRule(out, tgt);
           hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#ProjectTarget(", 15)==0) {
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+15, ')');
+          writeProjectTarget(out, tgt);
+          hash = strchr(hash, ';')+1;
         } else {
 #if 0
           fltk.framework starts here: A57FDE871C99A52BEEDEE68C
@@ -486,7 +497,7 @@ int write_fltk_ide_xcode4() {
               FrameworksBuildPhase = D2A1AD2D93B0EED43F624520
                 Cocoa.framework = C96290C21274D0CF007D3CFE (BuildFile -> FileReference)
               -buildRules (BuildRule) = EFFAAB905A54B0BFE13CB56C (Fluid build rule, no more references)
-              productReference = FEB0F8FE6383384180570D94 (-> FileReference, is also referenced in "Products")
+              -productReference = FEB0F8FE6383384180570D94 (-> FileReference, is also referenced in "Products")
           
           Also still missing are dependencies, like this one: A8AB7DEC3970D5A693D2BC84 and dependency proxies (uuuaaaahh!)
 #endif

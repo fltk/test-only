@@ -213,6 +213,7 @@ folder Libraries {open
     uuid_Xcode4_FluidBuildRule {21280AFA-1D23-477C-9F1C-641693104B3F}
     uuid_Xcode4_SourcesBuildPhase {ABBF042C-9682-43C8-A51D-9D39F354B9DB}
     uuid_Xcode4_ProductReference {FEB0F8FE-0000-6383-0000-384180570D94}
+    uuid_Xcode4_Target {A57FDE87-0000-1C99-0000-A52BEEDEE68C}
   } {
     folder Headers {open
     } {
