@@ -226,7 +226,7 @@ folder Libraries {open
         list_env 92
         filename_and_path {fltk3/Adjuster.h}
       }
-      file_ref {ask.h} {selected
+      file_ref {ask.h} {
         uuid_Xcode4_PBXBuildFile {AEDF2A15-B44B-4BD8-B754-2E54A44DB5B5}
         uuid_Xcode4_PBXFileRef {D31DE8AC-9AC3-4E54-98FE-200462A57910}
         build_env 64
@@ -247,7 +247,7 @@ folder Libraries {open
         list_env 92
         filename_and_path {fltk3/BMPImage.h}
       }
-      file_ref {Box.h} {
+      file_ref {Box.h} {selected
         uuid_Xcode4_PBXBuildFile {A443E7E1-065D-4CA8-9E14-C567C120B62E}
         uuid_Xcode4_PBXFileRef {0800D21F-C11C-4581-BA43-356FDB90C72D}
         build_env 64

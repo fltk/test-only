@@ -84,7 +84,8 @@ static const char *xcode4_type(unsigned int ft) {
     case FL_FILE_OBJC_HEADER:  strcat(buf, "sourcecode.cpp.h"); break;
     case FL_FILE_TEXT:         strcat(buf, "text"); break;
     case FL_FILE_TEXT_SCRIPT:  strcat(buf, "text.script.sh"); break;
-    default:                strcat(buf, "text"); break;
+    case FL_FILE_FRAMEWORK:    strcat(buf, "wrapper.framework"); break;
+    default:                   strcat(buf, "text"); break;
   }
   return buf;
 }
@@ -107,15 +108,16 @@ static int writeFileReferences(FILE *out, Fl_Target_Type *tgt) {
 
   Fl_File_Type *f;
   for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-    // FIXME: write a file type converter!
     if (f->lists_in(FL_ENV_XC4)) {
       char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
-      fprintf(out, "\t\t%s /* %s */ = {isa = PBXFileReference; fileEncoding = 4; %s; name = %s; path = ../../%s; sourceTree = SOURCE_ROOT; };\n", 
+      fprintf(out, "\t\t%s /* %s */ = {isa = PBXFileReference; fileEncoding = 4; %s; name = %s; path = %s%s; sourceTree = %s; };\n", 
               PBXFileRef,
               f->filename_name(), 
               xcode4_type(f->filetype()),
               f->filename_name(), 
-              f->filename());
+              f->location()==FL_LOCATION_WORKSPACE ? "../../" : "",
+              f->filename(), // FIXME: calculate the correct path!
+              xcode4_location(f->location()));
     }
   }
   if (tgt->is_lib_target()) {
@@ -128,6 +130,9 @@ static int writeFileReferences(FILE *out, Fl_Target_Type *tgt) {
   // or:
   // FEB0F8FE6383384180570D94 /* fltk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = fltk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
   // but be careful: these are referenced very often in the BuildFile section for CopyFiles phases, and in the group "products"
+  
+  // C9E17DB813EF55140066CA61 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+  // C9E17DB913EF55140066CA61 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E17DB813EF55140066CA61 /* Cocoa.framework */; };
   return 0;
 }
 
@@ -465,6 +470,18 @@ int write_fltk_ide_xcode4() {
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             if (f->lists_in(FL_ENV_XC4) && f->file_is_code()) {
+              char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
+              fprintf(out, "\t\t\t\t%s /* %s */,\n", 
+                      PBXFileRef, 
+                      f->filename_name());
+            }
+          }
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#ResourcesGroup(", 16)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+16, ')');
+          Fl_File_Type *f;
+          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+            if (f->lists_in(FL_ENV_XC4) && f->file_is_framework()) {
               char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
               fprintf(out, "\t\t\t\t%s /* %s */,\n", 
                       PBXFileRef, 
