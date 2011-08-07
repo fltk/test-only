@@ -183,6 +183,8 @@ public:
   virtual int is_class() const;
   virtual int is_public() const;
   virtual int is_target() const { return 0; }
+  virtual int is_lib_target() const { return 0; }
+  virtual int is_app_target() const { return 0; }
   virtual int is_file() const { return 0; }
   virtual int is_fluid_file() const { return 0; }
   virtual int is_folder() const { return 0; }
@@ -255,6 +257,7 @@ public:
   }
   const char *type_name() { return "app_target"; }
   Fl_Type *make();
+  virtual int is_app_target() const { return 1; }
   virtual int pixmapID() { return 52; }
   virtual void open();
 };
@@ -269,6 +272,7 @@ public:
   }
   const char *type_name() { return "lib_target"; }
   Fl_Type *make();
+  virtual int is_lib_target() const { return 1; }
   virtual int pixmapID() { return 57; } // FIXME: new icon
   virtual void open();
 };

@@ -90,6 +90,37 @@ static const char *xcode4_type(unsigned int ft) {
 }
 
 
+static int writeFileReferences(FILE *out, Fl_Target_Type *tgt) {
+
+  char ProductReference[32]; strcpy(ProductReference, tgt->get_UUID_Xcode("Xcode4_ProductReference"));
+
+  Fl_File_Type *f;
+  for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+    // FIXME: write a file type converter!
+    if (f->lists_in(FL_ENV_XC4)) {
+      char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
+      fprintf(out, "\t\t%s /* %s */ = {isa = PBXFileReference; fileEncoding = 4; %s; name = %s; path = ../../%s; sourceTree = SOURCE_ROOT; };\n", 
+              PBXFileRef,
+              f->filename_name(), 
+              xcode4_type(f->filetype()),
+              f->filename_name(), 
+              f->filename());
+    }
+  }
+  if (tgt->is_lib_target()) {
+    fprintf(out, "\t\t%s /* %s.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = %s.framework; sourceTree = BUILT_PRODUCTS_DIR; };\n", ProductReference, tgt->name(), tgt->name());
+  } else if (tgt->is_app_target()) {
+    // TODO: B2F3E15BD31ADBA58ECD50C4 /* Fluid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fluid.app; sourceTree = BUILT_PRODUCTS_DIR; };
+  }
+  // we also need a file reference for the end produkt, for example:
+  // B2F3E15BD31ADBA58ECD50C4 /* Fluid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fluid.app; sourceTree = BUILT_PRODUCTS_DIR; };
+  // or:
+  // FEB0F8FE6383384180570D94 /* fltk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = fltk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+  // but be careful: these are referenced very often in the BuildFile section for CopyFiles phases, and in the group "products"
+  return 0;
+}
+
+
 static int writeHeadersBuildPhase(FILE *out, Fl_Target_Type *tgt) {
   
   char HeadersBuildPhase[32]; strcpy(HeadersBuildPhase, tgt->get_UUID_Xcode("Xcode4_HeadersBuildPhase"));
@@ -101,6 +132,31 @@ static int writeHeadersBuildPhase(FILE *out, Fl_Target_Type *tgt) {
   Fl_File_Type *f;
   for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
     if (f->builds_in(FL_ENV_XC4) && f->is_header()) {
+      char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
+      fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
+              PBXBuildFile, 
+              f->filename_name(), 
+              "Sources");
+    }
+  }
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\t\trunOnlyForDeploymentPostprocessing = 0;\n");
+  fprintf(out, "\t\t};\n");
+  return 0;
+}
+
+
+static int writeSourcesBuildPhase(FILE *out, Fl_Target_Type *tgt) {
+  
+  char SourcesBuildPhase[32]; strcpy(SourcesBuildPhase, tgt->get_UUID_Xcode("Xcode4_SourcesBuildPhase"));
+  
+  fprintf(out, "\t\t%s /* Sources */ = {\n", SourcesBuildPhase);
+  fprintf(out, "\t\t\tisa = PBXSourcesBuildPhase;\n");
+  fprintf(out, "\t\t\tbuildActionMask = 2147483647;\n");
+  fprintf(out, "\t\t\tfiles = (\n");
+  Fl_File_Type *f;
+  for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+    if (f->builds_in(FL_ENV_XC4) && f->is_code()) {
       char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
       fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
               PBXBuildFile, 
@@ -226,7 +282,9 @@ static int writeNativeTarget(FILE *out, Fl_Target_Type *tgt) {
   char buildConfigurationList[32]; strcpy(buildConfigurationList, tgt->get_UUID_Xcode("Xcode4_BuildConfigurationList"));
   char ResourcesBuildPhase[32]; strcpy(ResourcesBuildPhase, tgt->get_UUID_Xcode("Xcode4_ResourcesBuildPhase"));
   char HeadersBuildPhase[32]; strcpy(HeadersBuildPhase, tgt->get_UUID_Xcode("Xcode4_HeadersBuildPhase"));
+  char SourcesBuildPhase[32]; strcpy(SourcesBuildPhase, tgt->get_UUID_Xcode("Xcode4_SourcesBuildPhase"));
   char FluidBuildRule[32]; strcpy(FluidBuildRule, tgt->get_UUID_Xcode("Xcode4_FluidBuildRule"));
+  char ProductReference[32]; strcpy(ProductReference, tgt->get_UUID_Xcode("Xcode4_ProductReference"));
 
   fprintf(out, "\t\tA57FDE871C99A52BEEDEE68C /* %s */ = {\n", tgt->name());     // FIXME: use generated key
   fprintf(out, "\t\t\tisa = PBXNativeTarget;\n");
@@ -234,9 +292,7 @@ static int writeNativeTarget(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\tbuildPhases = (\n");
   fprintf(out, "\t\t\t\t%s /* Resources */,\n", ResourcesBuildPhase);
   fprintf(out, "\t\t\t\t%s /* Headers */,\n", HeadersBuildPhase);
-  //fprintf(out, "\t\t\t\tC9EDD42D1274B84100ADB21C /* CopyFiles */,\n");          // FIXME: this build phase is nonsense (this includes outdated FLTK1 headers)
-  //fprintf(out, "\t\t\t\tC9EDD4DD1274BB4100ADB21C /* CopyFiles */,\n");          // FIXME: this build phase is nonsense (this includes jpg and png headers)
-  fprintf(out, "\t\t\t\t4DA82C38AA0403E56A1E3545 /* Sources */,\n");            // FIXME: use generated key
+  fprintf(out, "\t\t\t\t%s /* Sources */,\n", SourcesBuildPhase);
   fprintf(out, "\t\t\t\tD2A1AD2D93B0EED43F624520 /* Frameworks */,\n");         // FIXME: use generated key
   fprintf(out, "\t\t\t);\n");
   fprintf(out, "\t\tbuildRules = (\n");
@@ -246,7 +302,7 @@ static int writeNativeTarget(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\t);\n");
   fprintf(out, "\t\t\tname = %s;\n", tgt->name());
   fprintf(out, "\t\t\tproductName = %s;\n", tgt->name());
-  fprintf(out, "\t\t\tproductReference = FEB0F8FE6383384180570D94 /* %s.framework */;\n", tgt->name()); // FIXME: use generated key
+  fprintf(out, "\t\t\tproductReference = %s /* %s.framework */;\n", ProductReference, tgt->name()); // FIXME: .framework or .app
   fprintf(out, "\t\t\tproductType = \"com.apple.product-type.framework\";\n");
   fprintf(out, "\t\t};\n");
   
@@ -332,27 +388,15 @@ int write_fltk_ide_xcode4() {
               fprintf(out, "\t\t%s /* %s in %s */ = {isa = PBXBuildFile; fileRef = %s /* %s */; };\n", 
                       PBXBuildFile, 
                       f->filename_name(), 
-                      "Sources", 
+                      "Sources",  // FIXME: use group name!
                       PBXFileRef, 
                       f->filename_name());
             }
           }
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#FileReferences(", 16)==0) {
-          Fl_Type *tgt = Fl_Target_Type::find(hash+16, ')');
-          Fl_File_Type *f;
-          for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            // FIXME: write a file type converter!
-            if (f->lists_in(FL_ENV_XC4)) {
-              char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
-              fprintf(out, "\t\t%s /* %s */ = {isa = PBXFileReference; fileEncoding = 4; %s; name = %s; path = ../../%s; sourceTree = SOURCE_ROOT; };\n", 
-                      PBXFileRef,
-                      f->filename_name(), 
-                      xcode4_type(f->filetype()),
-                      f->filename_name(), 
-                      f->filename());
-            }
-          }
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+16, ')');
+          writeFileReferences(out, tgt);
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#HeadersGroup(", 14)==0) {
           Fl_Type *tgt = Fl_Target_Type::find(hash+14, ')');
@@ -383,7 +427,11 @@ int write_fltk_ide_xcode4() {
           writeHeadersBuildPhase(out, tgt);
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#SourcesBuildPhase(", 19)==0) {
-          Fl_Type *tgt = Fl_Target_Type::find(hash+19, ')');
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+19, ')');
+          writeSourcesBuildPhase(out, tgt);
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#OldSourcesBuildPhase(", 22)==0) {
+          Fl_Type *tgt = Fl_Target_Type::find(hash+22, ')');
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
             if (f->builds_in(FL_ENV_XC4) && f->is_code()) {
@@ -430,15 +478,17 @@ int write_fltk_ide_xcode4() {
               -buildConfigurationList (ConfigurationList) = 3BD5FFB6FCC8F21A23C23DF4 /* Build configuration list for PBXNativeTarget "fltk" */;
                 -Debug (BuildConfiguration) = 78446623B2E9921ED6B05986
                 -Release (BuildConfiguration) = BFEB622BA8B40E851AF0E91F
-              Resources build phase (ResourcesBuildPhase) = 6715D162BEFF87372B2A31E0 (can reference files (BuildFile))
-              Headers build phase (HeadersBuildPhas) = C9EDD5C81274C6BA00ADB21C (can reference files (BuildFile))
-              CopyFilesBuildPhase = C9EDD42D1274B84100ADB21C /* CopyFiles */, (copying header files around that shouldn`t)
-              CopyFilesBuildPhase = C9EDD4DD1274BB4100ADB21C /* CopyFiles */, (copying header files around that shouldn`t)
-              SourcesBuildPhase = 4DA82C38AA0403E56A1E3545 /* Sources */,
+              -Resources build phase (ResourcesBuildPhase) = 6715D162BEFF87372B2A31E0 (can reference files (BuildFile))
+              -Headers build phase (HeadersBuildPhas) = C9EDD5C81274C6BA00ADB21C (can reference files (BuildFile))
+              -CopyFilesBuildPhase = C9EDD42D1274B84100ADB21C /* CopyFiles */, (copying header files around that shouldn`t)
+              -CopyFilesBuildPhase = C9EDD4DD1274BB4100ADB21C /* CopyFiles */, (copying header files around that shouldn`t)
+              -SourcesBuildPhase = 4DA82C38AA0403E56A1E3545 /* Sources */,
               FrameworksBuildPhase = D2A1AD2D93B0EED43F624520
                 Cocoa.framework = C96290C21274D0CF007D3CFE (BuildFile -> FileReference)
-              buildRules (BuildRule) = EFFAAB905A54B0BFE13CB56C (Fluid build rule, no more references)
+              -buildRules (BuildRule) = EFFAAB905A54B0BFE13CB56C (Fluid build rule, no more references)
               productReference = FEB0F8FE6383384180570D94 (-> FileReference, is also referenced in "Products")
+          
+          Also still missing are dependencies, like this one: A8AB7DEC3970D5A693D2BC84 and dependency proxies (uuuaaaahh!)
 #endif
           printf("Unknown command in template: <<%s>>\n", hash);
           copyLine = 1;

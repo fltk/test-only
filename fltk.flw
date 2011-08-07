@@ -5,7 +5,9 @@ code_name {.cxx}
 wks_name FLTK
 folder Applications {open
 } {
-  app_target Fluid {} {
+  app_target Fluid {
+    uuid_Xcode4_ProductReference {FD9750B2-CA9C-4856-A516-E56BD9B2E805}
+  } {
     folder Headers {open
     } {
       file_ref {CodeEditor.h} {
@@ -209,6 +211,8 @@ folder Libraries {open
     uuid_Xcode4_ResourcesBuildPhase {1DAA0C25-90AF-445C-A814-DB4C66428D29}
     uuid_Xcode4_HeadersBuildPhase {0A872A2E-9DB3-42CD-A238-D38635FEFE8E}
     uuid_Xcode4_FluidBuildRule {21280AFA-1D23-477C-9F1C-641693104B3F}
+    uuid_Xcode4_SourcesBuildPhase {ABBF042C-9682-43C8-A51D-9D39F354B9DB}
+    uuid_Xcode4_ProductReference {FEB0F8FE-0000-6383-0000-384180570D94}
   } {
     folder Headers {open
     } {

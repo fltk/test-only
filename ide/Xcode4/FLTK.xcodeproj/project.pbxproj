@@ -4353,6 +4353,7 @@
 		6A8D02403C9D3B785B0D8F30 /* case.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = case.c; path = ../../src/xutf8/case.c; sourceTree = SOURCE_ROOT; };
 		15064F3F45361B071125C187 /* is_right2left.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = is_right2left.c; path = ../../src/xutf8/is_right2left.c; sourceTree = SOURCE_ROOT; };
 		35196210FA39F50016C06ED2 /* is_spacing.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = is_spacing.c; path = ../../src/xutf8/is_spacing.c; sourceTree = SOURCE_ROOT; };
+		FEB0F8FE6383384180570D94 /* fltk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = fltk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BCEDC8AA971784435AC3119 /* adjuster.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = adjuster.cxx; path = ../../test/adjuster.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1C17C98660CE64B98C8E2DFB /* fonts.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = fonts.cxx; path = ../../test/fonts.cxx; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1CFFC165E8EE6C1AD9CFD33C /* Fl_Int_Input.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Int_Input.H; path = ../../FL/Fl_Int_Input.H; sourceTree = SOURCE_ROOT; };
@@ -4814,7 +4815,6 @@
 		FE29497A25C52BC2F7D5A9D4 /* inactive.fl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; lineEnding = 0; name = inactive.fl; path = ../../test/inactive.fl; sourceTree = SOURCE_ROOT; };
 		FE466F26BF6C316E5A1770E6 /* jccolor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jccolor.c; path = ../../jpeg/jccolor.c; sourceTree = SOURCE_ROOT; };
 		FE90AA3BB40510FA45E0C27B /* Fl_Bitmap.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Bitmap.H; path = ../../FL/Fl_Bitmap.H; sourceTree = SOURCE_ROOT; };
-		FEB0F8FE6383384180570D94 /* fltk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = fltk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF88A1DACCAFA2D143A7F234 /* Fl_Value_Input.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Fl_Value_Input.H; path = ../../FL/Fl_Value_Input.H; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -8337,7 +8337,7 @@
 			buildConfigurationList = F8A317C2491750F8DEF118E2 /* Build configuration list for PBXNativeTarget "fltk" */;			buildPhases = (
 				1DAA0C25D4F3735866428D29 /* Resources */,
 				0A872A2EDF7E71BE35FEFE8E /* Headers */,
-				4DA82C38AA0403E56A1E3545 /* Sources */,
+				ABBF042CD54A3824F354B9DB /* Sources */,
 				D2A1AD2D93B0EED43F624520 /* Frameworks */,
 			);
 		buildRules = (
@@ -9927,7 +9927,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4DA82C38AA0403E56A1E3545 /* Sources */ = {
+		ABBF042CD54A3824F354B9DB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
