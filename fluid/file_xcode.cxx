@@ -131,7 +131,7 @@ static int writeHeadersBuildPhase(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\tfiles = (\n");
   Fl_File_Type *f;
   for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-    if (f->builds_in(FL_ENV_XC4) && f->is_header()) {
+    if (f->builds_in(FL_ENV_XC4) && f->file_is_header()) {
       char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
       fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
               PBXBuildFile, 
@@ -156,7 +156,7 @@ static int writeSourcesBuildPhase(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\tfiles = (\n");
   Fl_File_Type *f;
   for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-    if (f->builds_in(FL_ENV_XC4) && f->is_code()) {
+    if (f->builds_in(FL_ENV_XC4) && f->file_is_code()) {
       char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
       fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
               PBXBuildFile, 
@@ -409,7 +409,7 @@ int write_fltk_ide_xcode4() {
           Fl_Type *tgt = Fl_Target_Type::find(hash+14, ')');
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->lists_in(FL_ENV_XC4) && f->is_header()) {
+            if (f->lists_in(FL_ENV_XC4) && f->file_is_header()) {
               char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
               fprintf(out, "\t\t\t\t%s /* %s */,\n", 
                       PBXFileRef, 
@@ -421,7 +421,7 @@ int write_fltk_ide_xcode4() {
           Fl_Type *tgt = Fl_Target_Type::find(hash+14, ')');
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->lists_in(FL_ENV_XC4) && f->is_code()) {
+            if (f->lists_in(FL_ENV_XC4) && f->file_is_code()) {
               char PBXFileRef[32]; strcpy(PBXFileRef, f->get_UUID_Xcode("Xcode4_PBXFileRef"));
               fprintf(out, "\t\t\t\t%s /* %s */,\n", 
                       PBXFileRef, 
@@ -441,7 +441,7 @@ int write_fltk_ide_xcode4() {
           Fl_Type *tgt = Fl_Target_Type::find(hash+22, ')');
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->builds_in(FL_ENV_XC4) && f->is_code()) {
+            if (f->builds_in(FL_ENV_XC4) && f->file_is_code()) {
               char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
               fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
                       PBXBuildFile, 

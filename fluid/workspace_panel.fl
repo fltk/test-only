@@ -277,7 +277,7 @@ else
 workspace_panel->show();} {}
 } 
 
-decl {extern Fl_Panel *the_file_panel;} {selected private global
+decl {extern Fl_Panel *the_file_panel;} {private global
 } 
 
 Function {file_panel_set_cb(fltk3::Widget*, void *v)} {open return_type void
@@ -300,7 +300,7 @@ Function {make_file_panel()} {open
 } {
   {fltk3::Window} {} {
     label {File Properties} open
-    xywh {718 318 291 245} type Double labelsize 11 align 80 resizable hotspot
+    xywh {908 321 291 245} type Double labelsize 11 align 80 resizable hotspot
     code0 {o->size_range(o->w(), o->h());}
     class Fl_Panel non_modal visible
   } {
@@ -467,6 +467,57 @@ Use Ctrl-J for newlines.} xywh {75 15 170 20} labelsize 12 when 1 textsize 12 re
           label Unknown
           user_data FL_FILE_UNKNOWN user_data_type long
           xywh {80 80 31 20} labelsize 12
+        }
+      }
+    }
+    {fltk3::Group} {} {
+      label {Location:}
+      callback {Fl_Panel::propagate_load} open
+      xywh {75 130 170 20} labelsize 12 align 4
+    } {
+      {fltk3::MenuButton} {} {
+        label {Relative to Workspace}
+        callback {if (v == Fl_Panel::LOAD) {
+  /*...*/
+  } else {
+    int mod = 0;
+    const fltk3::MenuItem *mi = o->mvalue();
+    int e = mi->argument();
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_file()) {
+        if (((Fl_File_Type*)t)->location() != e) {
+          ((Fl_File_Type*)t)->location(e);
+          mod = 1;
+        }
+      }
+    }
+    if (mod) set_modflag(1);
+  }
+      // FIXME: we should show <multiple values> is required
+    unsigned int fl = Fl_Panel::current_file()->location();
+    for (const fltk3::MenuItem *mi = o->menu(); ; mi++) {
+      if (!mi->label()) break;
+      if (mi->argument()==fl) {
+        o->label(mi->label());
+        break;
+      }
+    }} open selected
+        xywh {75 130 170 20} labelsize 12
+      } {
+        MenuItem {} {
+          label {Relative to Workspace}
+          user_data FL_LOCATION_WORKSPACE user_data_type long
+          xywh {20 20 31 20} labelsize 12
+        }
+        MenuItem {} {
+          label {Absolute Path}
+          user_data FL_LOCATION_ABSOLUTE user_data_type long
+          xywh {10 10 31 20} labelsize 12
+        }
+        MenuItem {} {
+          label {Relative to SDK}
+          user_data FL_LOCATION_SDK user_data_type long
+          xywh {20 20 31 20} labelsize 12
         }
       }
     }

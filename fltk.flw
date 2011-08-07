@@ -2,7 +2,8 @@
 version 3.0000 
 header_name {.h} 
 code_name {.cxx} 
-wks_name FLTK
+wks_name FLTK 
+wks_env 1
 folder Applications {open
 } {
   app_target Fluid {
@@ -224,7 +225,7 @@ folder Libraries {open
         list_env 92
         filename_and_path {fltk3/Adjuster.h}
       }
-      file_ref {ask.h} {selected
+      file_ref {ask.h} {
         uuid_Xcode4_PBXBuildFile {AEDF2A15-B44B-4BD8-B754-2E54A44DB5B5}
         uuid_Xcode4_PBXFileRef {D31DE8AC-9AC3-4E54-98FE-200462A57910}
         build_env 64
@@ -238,7 +239,7 @@ folder Libraries {open
         list_env 92
         filename_and_path {fltk3/Bitmap.h}
       }
-      file_ref {BMPImage.h} {
+      file_ref {BMPImage.h} {selected
         uuid_Xcode4_PBXBuildFile {B02F1ACA-8C63-4C41-A0FA-429D42B66E10}
         uuid_Xcode4_PBXFileRef {5B9A35BB-8AE6-4627-BE89-BB6BF86DBDA1}
         build_env 64

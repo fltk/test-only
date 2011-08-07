@@ -354,6 +354,41 @@ fltk3::MenuItem menu_Unknown[] = {
  {0,0,0,0,0,0,0,0,0}
 };
 
+static void cb_Relative(fltk3::MenuButton* o, void* v) {
+  if (v == Fl_Panel::LOAD) {
+  /*...*/
+  } else {
+    int mod = 0;
+    const fltk3::MenuItem *mi = o->mvalue();
+    int e = mi->argument();
+    for (Fl_Type *t = Fl_Type::first; t; t = t->next) {
+      if (t->selected && t->is_file()) {
+        if (((Fl_File_Type*)t)->location() != e) {
+          ((Fl_File_Type*)t)->location(e);
+          mod = 1;
+        }
+      }
+    }
+    if (mod) set_modflag(1);
+  }
+      // FIXME: we should show <multiple values> is required
+    unsigned int fl = Fl_Panel::current_file()->location();
+    for (const fltk3::MenuItem *mi = o->menu(); ; mi++) {
+      if (!mi->label()) break;
+      if (mi->argument()==fl) {
+        o->label(mi->label());
+        break;
+      }
+    };
+}
+
+fltk3::MenuItem menu_Relative[] = {
+ {"Relative to Workspace", 0,  0, (void*)(FL_LOCATION_WORKSPACE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Absolute Path", 0,  0, (void*)(FL_LOCATION_ABSOLUTE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Relative to SDK", 0,  0, (void*)(FL_LOCATION_SDK), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {0,0,0,0,0,0,0,0,0}
+};
+
 static void cb_Close(fltk3::ReturnButton*, void* v) {
   if (v == Fl_Panel::LOAD) {
   } else {
@@ -422,6 +457,17 @@ Fl_Panel* make_file_panel() {
         o->labelsize(12);
         o->callback((fltk3::Callback*)cb_Unknown);
         o->menu(menu_Unknown);
+      } // fltk3::MenuButton* o
+      o->end();
+    } // fltk3::Group* o
+    { fltk3::Group* o = new fltk3::Group(75, 130, 170, 20, "Location:");
+      o->labelsize(12);
+      o->callback((fltk3::Callback*)Fl_Panel::propagate_load);
+      o->align(fltk3::Align(fltk3::ALIGN_LEFT));
+      { fltk3::MenuButton* o = new fltk3::MenuButton(75, 130, 170, 20, "Relative to Workspace");
+        o->labelsize(12);
+        o->callback((fltk3::Callback*)cb_Relative);
+        o->menu(menu_Relative);
       } // fltk3::MenuButton* o
       o->end();
     } // fltk3::Group* o

@@ -1404,6 +1404,8 @@ char Fl_File_Type::read_property(const char *c) {
     filename(read_word());
   } else if (!strcmp(c,"filetype")) {
     filetype(atoi(read_word()));
+  } else if (!strcmp(c,"location")) {
+    location(atoi(read_word()));
   } else {
     return Fl_Workspace_Type::read_property(c);
   }
@@ -1420,6 +1422,10 @@ void Fl_File_Type::write_properties() {
   if (filetype()&FL_FILE_EXPLICIT) {
     write_indent(level+1);
     write_string("filetype %d", filetype());
+  }
+  if (location()!=FL_LOCATION_WORKSPACE) {
+    write_indent(level+1);
+    write_string("location %d", location());
   }
 }
 
@@ -1443,35 +1449,35 @@ Fl_File_Type *Fl_File_Type::next_file(Fl_Type *base) {
   return 0;
 }
 
-char Fl_File_Type::is_cplusplus_code() {
+char Fl_File_Type::file_is_cplusplus_code() {
   return (pFileType==FL_FILE_CPP_SOURCE);
 }
 
-char Fl_File_Type::is_cplusplus_header() {
+char Fl_File_Type::file_is_cplusplus_header() {
   return (pFileType==FL_FILE_CPP_HEADER);
 }
 
-char Fl_File_Type::is_c_code() {
+char Fl_File_Type::file_is_c_code() {
   return (pFileType==FL_FILE_C_SOURCE);
 }
 
-char Fl_File_Type::is_c_header() {
+char Fl_File_Type::file_is_c_header() {
   return (pFileType==FL_FILE_C_HEADER);
 }
 
-char Fl_File_Type::is_objc_code() {
+char Fl_File_Type::file_is_objc_code() {
   return (pFileType==FL_FILE_OBJC_SOURCE);
 }
 
-char Fl_File_Type::is_objc_header() {
+char Fl_File_Type::file_is_objc_header() {
   return (pFileType==FL_FILE_OBJC_HEADER);
 }
 
-char Fl_File_Type::is_code() {
+char Fl_File_Type::file_is_code() {
   return (pFileType==FL_FILE_CPP_SOURCE)||(pFileType==FL_FILE_C_SOURCE)||(pFileType==FL_FILE_OBJC_SOURCE);
 }
 
-char Fl_File_Type::is_header() {
+char Fl_File_Type::file_is_header() {
   return (pFileType==FL_FILE_CPP_HEADER)||(pFileType==FL_FILE_C_HEADER)||(pFileType==FL_FILE_OBJC_HEADER);
 }
 

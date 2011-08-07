@@ -70,6 +70,12 @@ typedef enum {
   FL_FILE_TEXT, FL_FILE_TEXT_SCRIPT
 } FileType;
 
+typedef enum {
+  FL_LOCATION_WORKSPACE = 0,
+  FL_LOCATION_ABSOLUTE,
+  FL_LOCATION_SDK
+} FileLocation;
+
 class Fl_Type {
 
   friend class Widget_Browser;
@@ -281,11 +287,13 @@ extern Fl_Lib_Target_Type Fl_Lib_Target_type;
 class Fl_File_Type : public Fl_Workspace_Type {
   char *pFilename;
   FileType pFileType;
+  FileLocation pFileLocation;
 public:
   Fl_File_Type() :
     Fl_Workspace_Type(),
     pFilename(0),
-    pFileType(FL_FILE_UNKNOWN) {
+    pFileType(FL_FILE_UNKNOWN),
+    pFileLocation(FL_LOCATION_WORKSPACE) {
   }
   ~Fl_File_Type() {
     if (pFilename) free(pFilename);
@@ -306,14 +314,16 @@ public:
   void set_default_type();
   FileType filetype() { return pFileType; }
   void filetype(unsigned int ft) { pFileType = (FileType)ft; }
-  char is_objc_code();
-  char is_objc_header();
-  char is_c_code();
-  char is_c_header();
-  char is_cplusplus_code();
-  char is_cplusplus_header();
-  char is_code();
-  char is_header();
+  FileLocation location() { return pFileLocation; }
+  void location(unsigned int fl) { pFileLocation = (FileLocation)fl; }
+  char file_is_objc_code();
+  char file_is_objc_header();
+  char file_is_c_code();
+  char file_is_c_header();
+  char file_is_cplusplus_code();
+  char file_is_cplusplus_header();
+  char file_is_code();
+  char file_is_header();
 };
 extern Fl_File_Type Fl_File_type;
 

@@ -1,0 +1,29 @@
+/* XPM */
+static const char *flDependency_xpm[] = {
+/* width height ncolors chars_per_pixel */
+"16 16 6 1",
+/* colors */
+"a c #606060",
+"b c #444444",
+"c c none",
+"d c #ffffff",
+"e c #cc8844",
+"f c #000000",
+/* pixels */
+"ccffffffffcccccc",
+"ccfddddddbfccccc",
+"ccfddddddbdfccce",
+"ccfddddddbddfcee",
+"ccfddddddbbbbeee",
+"ccfdddddddddeeee",
+"ccfddddddddeeeee",
+"ccfdddddddeeeeee",
+"ccfdddddddddeecc",
+"eefddddddddeefcc",
+"ceeddddddeeedfcc",
+"cceeeeeeeedddfcc",
+"ccfeeeeeeddddfcc",
+"ccfddddddddddfcc",
+"ccffffffffffffcc",
+"cccccccccccccccc"
+};

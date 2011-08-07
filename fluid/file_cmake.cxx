@@ -95,7 +95,7 @@ int write_fltk_cmake() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_cplusplus_code() && f->builds_in(FL_ENV_CMAKE)) {
+            if (f->file_is_cplusplus_code() && f->builds_in(FL_ENV_CMAKE)) {
               fprintf(out, "  %s\n", f->filename_relative(base_dir, tgt_base));
             }
           }
@@ -108,7 +108,7 @@ int write_fltk_cmake() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_objc_code() && f->builds_in(FL_ENV_CMAKE)) {
+            if (f->file_is_objc_code() && f->builds_in(FL_ENV_CMAKE)) {
               fprintf(out, "\t\t%s\n", f->filename_relative(base_dir, tgt_base));
             }
           }
@@ -121,7 +121,7 @@ int write_fltk_cmake() {
           }
           Fl_File_Type *f;
           for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
-            if (f->is_c_code() && f->builds_in(FL_ENV_CMAKE)) {
+            if (f->file_is_c_code() && f->builds_in(FL_ENV_CMAKE)) {
               fprintf(out, "  %s\n", f->filename_relative(base_dir, tgt_base));
             }
           }
