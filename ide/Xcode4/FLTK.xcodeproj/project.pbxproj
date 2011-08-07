@@ -5111,6 +5111,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B5140FAA26F5E81078247541 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C96290C21274D0CF007D3CFE /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B6F3107B7FE73A3FEC52224A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -5257,14 +5265,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				71967BE27E13E5EA2F6627D0 /* fltk.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D2A1AD2D93B0EED43F624520 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C96290C21274D0CF007D3CFE /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8196,7 +8196,7 @@
 				1DAA0C25D4F3735866428D29 /* Resources */,
 				0A872A2EDF7E71BE35FEFE8E /* Headers */,
 				ABBF042CD54A3824F354B9DB /* Sources */,
-				D2A1AD2D93B0EED43F624520 /* Frameworks */,
+				B5140FAA26F5E81078247541 /* Frameworks */,
 			);
 			buildRules = (
 				21280AFA5A5FFB0A93104B3F /* PBXBuildRule */,

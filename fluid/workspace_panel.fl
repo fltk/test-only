@@ -464,6 +464,11 @@ Use Ctrl-J for newlines.} xywh {75 15 170 20} labelsize 12 when 1 textsize 12 re
           xywh {70 70 31 20} labelsize 12
         }
         MenuItem {} {
+          label {OS X Framework}
+          user_data FL_FILE_FRAMEWORK user_data_type long selected
+          xywh {80 80 31 20} labelsize 12
+        }
+        MenuItem {} {
           label Unknown
           user_data FL_FILE_UNKNOWN user_data_type long
           xywh {80 80 31 20} labelsize 12
@@ -501,7 +506,7 @@ Use Ctrl-J for newlines.} xywh {75 15 170 20} labelsize 12 when 1 textsize 12 re
         o->label(mi->label());
         break;
       }
-    }} open selected
+    }} open
         xywh {75 130 170 20} labelsize 12
       } {
         MenuItem {} {
@@ -515,9 +520,14 @@ Use Ctrl-J for newlines.} xywh {75 15 170 20} labelsize 12 when 1 textsize 12 re
           xywh {10 10 31 20} labelsize 12
         }
         MenuItem {} {
+          label {Relative to IDE}
+          user_data FL_LOCATION_IDE user_data_type long
+          tooltip {Xcode: relative to Developer Directory, used for Frameworks} xywh {20 20 31 20} labelsize 12
+        }
+        MenuItem {} {
           label {Relative to SDK}
           user_data FL_LOCATION_SDK user_data_type long
-          xywh {20 20 31 20} labelsize 12
+          xywh {30 30 31 20} labelsize 12
         }
       }
     }

@@ -1381,6 +1381,8 @@ void Fl_File_Type::set_default_type() {
         filetype(FL_FILE_C_HEADER);
       } else if (strcmp(ext, ".mm")==0) {
         filetype(FL_FILE_OBJC_SOURCE);
+      } else if (strcmp(ext, ".framework")==0) {
+        filetype(FL_FILE_FRAMEWORK);
       }
     }
   }
@@ -1471,6 +1473,10 @@ char Fl_File_Type::file_is_objc_code() {
 
 char Fl_File_Type::file_is_objc_header() {
   return (pFileType==FL_FILE_OBJC_HEADER);
+}
+
+char Fl_File_Type::file_is_framework() {
+  return (pFileType==FL_FILE_FRAMEWORK);
 }
 
 char Fl_File_Type::file_is_code() {

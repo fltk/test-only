@@ -90,6 +90,17 @@ static const char *xcode4_type(unsigned int ft) {
 }
 
 
+static const char *xcode4_location(unsigned int fl) {
+  switch (fl) {
+    case FL_LOCATION_WORKSPACE: return "SOURCE_ROOT";
+    case FL_LOCATION_IDE:       return "DEVELOPER_DIR";
+    case FL_LOCATION_SDK:       return "SDKROOT";
+    case FL_LOCATION_ABSOLUTE:  return "<absolute>";
+  }
+  return "";
+}
+
+
 static int writeFileReferences(FILE *out, Fl_Target_Type *tgt) {
 
   char ProductReference[32]; strcpy(ProductReference, tgt->get_UUID_Xcode("Xcode4_ProductReference"));
@@ -162,6 +173,33 @@ static int writeSourcesBuildPhase(FILE *out, Fl_Target_Type *tgt) {
               PBXBuildFile, 
               f->filename_name(), 
               "Sources");
+    }
+  }
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\t\trunOnlyForDeploymentPostprocessing = 0;\n");
+  fprintf(out, "\t\t};\n");
+  return 0;
+}
+
+
+static int writeFrameworksBuildPhase(FILE *out, Fl_Target_Type *tgt) {
+  
+  char FrameworksBuildPhase[32]; strcpy(FrameworksBuildPhase, tgt->get_UUID_Xcode("Xcode4_FrameworksBuildPhase"));
+  
+  fprintf(out, "\t\t%s /* Frameworks */ = {\n", FrameworksBuildPhase);
+  fprintf(out, "\t\t\tisa = PBXFrameworksBuildPhase;\n");
+  fprintf(out, "\t\t\tbuildActionMask = 2147483647;\n");
+  fprintf(out, "\t\t\tfiles = (\n");
+  Fl_File_Type *f;
+  for (f = Fl_File_Type::first_file(tgt); f; f = f->next_file(tgt)) {
+    if (f->builds_in(FL_ENV_XC4) && f->file_is_framework()) {
+      char PBXBuildFile[32]; strcpy(PBXBuildFile, f->get_UUID_Xcode("Xcode4_PBXBuildFile"));
+      fprintf(out, "\t\t\t\t%s /* %s in %s */,\n", 
+              PBXBuildFile, 
+              f->filename_name(), 
+              "Frameworks");
+      // FIXME: C96290C21274D0CF007D3CFE /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9628FFD1274D0B3007D3CFE /* Cocoa.framework */; };
+      // FIXME: C9628FFD1274D0B3007D3CFE /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
     }
   }
   fprintf(out, "\t\t\t);\n");
@@ -284,6 +322,7 @@ static int writeNativeTarget(FILE *out, Fl_Target_Type *tgt) {
   char ResourcesBuildPhase[32]; strcpy(ResourcesBuildPhase, tgt->get_UUID_Xcode("Xcode4_ResourcesBuildPhase"));
   char HeadersBuildPhase[32]; strcpy(HeadersBuildPhase, tgt->get_UUID_Xcode("Xcode4_HeadersBuildPhase"));
   char SourcesBuildPhase[32]; strcpy(SourcesBuildPhase, tgt->get_UUID_Xcode("Xcode4_SourcesBuildPhase"));
+  char FrameworksBuildPhase[32]; strcpy(FrameworksBuildPhase, tgt->get_UUID_Xcode("Xcode4_FrameworksBuildPhase"));
   char FluidBuildRule[32]; strcpy(FluidBuildRule, tgt->get_UUID_Xcode("Xcode4_FluidBuildRule"));
   char ProductReference[32]; strcpy(ProductReference, tgt->get_UUID_Xcode("Xcode4_ProductReference"));
 
@@ -294,7 +333,11 @@ static int writeNativeTarget(FILE *out, Fl_Target_Type *tgt) {
   fprintf(out, "\t\t\t\t%s /* Resources */,\n", ResourcesBuildPhase);
   fprintf(out, "\t\t\t\t%s /* Headers */,\n", HeadersBuildPhase);
   fprintf(out, "\t\t\t\t%s /* Sources */,\n", SourcesBuildPhase);
-  fprintf(out, "\t\t\t\tD2A1AD2D93B0EED43F624520 /* Frameworks */,\n");         // FIXME: use generated key
+  fprintf(out, "\t\t\t\t%s /* Frameworks */,\n", FrameworksBuildPhase);
+  // Relative to developer directory (the Xcode4 way):
+  // C933C2D913EEF82400E12C6E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = SDKs/MacOSX10.7.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+  // Relative to SDK (the Xcode3 way):
+  // C9628FFD1274D0B3007D3CFE /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
   fprintf(out, "\t\t\t);\n");
   fprintf(out, "\t\tbuildRules = (\n");
   fprintf(out, "\t\t\t\t%s /* PBXBuildRule */,\n", FluidBuildRule);
@@ -467,6 +510,10 @@ int write_fltk_ide_xcode4() {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+21, ')');
           char key[32]; strcpy(key, tgt->get_UUID_Xcode("Xcode4_ResourcesBuildPhase"));
           writeResourcesBuildPhase(out, key, tgt->name());
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#FrameworksBuildPhase(", 22)==0) {
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+22, ')');
+          writeFrameworksBuildPhase(out, tgt);
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#NativeTarget(", 14)==0) {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+14, ')');

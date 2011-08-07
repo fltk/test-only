@@ -3,7 +3,7 @@ version 3.0000
 header_name {.h} 
 code_name {.cxx} 
 wks_name FLTK 
-wks_env 1
+wks_env 64
 folder Applications {open
 } {
   app_target Fluid {
@@ -215,6 +215,7 @@ folder Libraries {open
     uuid_Xcode4_SourcesBuildPhase {ABBF042C-9682-43C8-A51D-9D39F354B9DB}
     uuid_Xcode4_ProductReference {FEB0F8FE-0000-6383-0000-384180570D94}
     uuid_Xcode4_Target {A57FDE87-0000-1C99-0000-A52BEEDEE68C}
+    uuid_Xcode4_FrameworksBuildPhase {B5140FAA-6B8D-4D78-814B-695B78247541}
   } {
     folder Headers {open
     } {
@@ -225,7 +226,7 @@ folder Libraries {open
         list_env 92
         filename_and_path {fltk3/Adjuster.h}
       }
-      file_ref {ask.h} {
+      file_ref {ask.h} {selected
         uuid_Xcode4_PBXBuildFile {AEDF2A15-B44B-4BD8-B754-2E54A44DB5B5}
         uuid_Xcode4_PBXFileRef {D31DE8AC-9AC3-4E54-98FE-200462A57910}
         build_env 64
@@ -239,7 +240,7 @@ folder Libraries {open
         list_env 92
         filename_and_path {fltk3/Bitmap.h}
       }
-      file_ref {BMPImage.h} {selected
+      file_ref {BMPImage.h} {
         uuid_Xcode4_PBXBuildFile {B02F1ACA-8C63-4C41-A0FA-429D42B66E10}
         uuid_Xcode4_PBXFileRef {5B9A35BB-8AE6-4627-BE89-BB6BF86DBDA1}
         build_env 64
@@ -2311,6 +2312,17 @@ folder Libraries {open
         build_env 3
         list_env 0
         filename_and_path {src/xutf8/utf8Wrap.c}
+      }
+    }
+    folder Libraries {open
+    } {
+      file_ref {Cocoa.framework} {
+        uuid_Xcode4_PBXBuildFile {C96290C2-0000-1274-0000-D0CF007D3CFE}
+        uuid_Xcode4_PBXFileRef {14F66311-AC34-4543-80C3-56AFE29024C3}
+        build_env 64
+        list_env 64
+        filename_and_path {SDKs/MacOSX10.7.sdk/System/Library/Frameworks/Cocoa.framework}
+        location 2
       }
     }
   }

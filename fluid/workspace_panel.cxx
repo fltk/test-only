@@ -350,6 +350,7 @@ fltk3::MenuItem menu_Unknown[] = {
  {"ObjectiveC Header", 0,  0, (void*)(FL_FILE_OBJC_HEADER), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"Text", 0,  0, (void*)(FL_FILE_TEXT), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"Shell Script", 0,  0, (void*)(FL_FILE_TEXT_SCRIPT), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"OS X Framework", 0,  0, (void*)(FL_FILE_FRAMEWORK), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"Unknown", 0,  0, (void*)(FL_FILE_UNKNOWN), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {0,0,0,0,0,0,0,0,0}
 };
@@ -385,6 +386,7 @@ static void cb_Relative(fltk3::MenuButton* o, void* v) {
 fltk3::MenuItem menu_Relative[] = {
  {"Relative to Workspace", 0,  0, (void*)(FL_LOCATION_WORKSPACE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"Absolute Path", 0,  0, (void*)(FL_LOCATION_ABSOLUTE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
+ {"Relative to IDE", 0,  0, (void*)(FL_LOCATION_IDE), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {"Relative to SDK", 0,  0, (void*)(FL_LOCATION_SDK), 0, fltk3::NORMAL_LABEL, 0, 12, 0},
  {0,0,0,0,0,0,0,0,0}
 };
