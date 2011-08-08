@@ -257,6 +257,21 @@ public:
 };
 extern Fl_Workspace_Type Fl_Workspace_type;
 
+class Fl_Target_Dependency_Type : public Fl_Tool_Type {
+public:
+  Fl_Target_Dependency_Type() :
+  Fl_Tool_Type() {
+  }
+  ~Fl_Target_Dependency_Type() {
+  }
+  const char *type_name() { return "target_dependency"; }
+  Fl_Type *make();
+  virtual int is_target_dependency() const { return 1; }
+  virtual int pixmapID() { return 59; }
+  virtual void open();
+};
+extern Fl_Target_Dependency_Type Fl_Target_Dependency_type;
+
 class Fl_Target_Type : public Fl_Tool_Type {
 public:
   Fl_Target_Type() :

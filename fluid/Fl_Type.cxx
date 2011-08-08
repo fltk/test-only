@@ -120,6 +120,7 @@ static fltk3::Pixmap	protected_pixmap(protected_xpm);
 #include "pixmaps/flMenuMulti.xpm"
 #include "pixmaps/flMenuAll.xpm"
 #include "pixmaps/flWorkspace.xpm"
+#include "pixmaps/flDependency.xpm"
 
 static fltk3::Pixmap	window_pixmap(flWindow_xpm);
 static fltk3::Pixmap	button_pixmap(flButton_xpm);
@@ -179,6 +180,7 @@ static fltk3::Pixmap	folder_pixmap(flFolder_xpm);
 static fltk3::Pixmap	fluid_file_pixmap(flFluidFile_xpm);
 static fltk3::Pixmap	code_file_pixmap(flCodeFile_xpm);
 static fltk3::Pixmap	workspace_pixmap(flWorkspace_xpm);
+static fltk3::Pixmap	dependency_pixmap(flDependency_xpm);
 fltk3::Pixmap	menu_none_pixmap(flMenuNone_xpm);
 fltk3::Pixmap	menu_multi_pixmap(flMenuMulti_xpm);
 fltk3::Pixmap	menu_all_pixmap(flMenuAll_xpm);
@@ -194,7 +196,7 @@ fltk3::Pixmap *pixmap[] = { 0, &window_pixmap, &button_pixmap, &checkbutton_pixm
  &dial_pixmap, &roller_pixmap, &valueinput_pixmap, &valueoutput_pixmap, &comment_pixmap,             /* 42..46 */
  &spinner_pixmap, &widgetclass_pixmap, &data_pixmap, &tree_pixmap, &table_pixmap,                    /* 47..51 */
  &app_target_pixmap, &file_pixmap, &folder_pixmap, &fluid_file_pixmap, &code_file_pixmap,            /* 52..56 */
- &lib_target_pixmap, &workspace_pixmap};                                                             /* 57, 58 */
+ &lib_target_pixmap, &workspace_pixmap, &dependency_pixmap};                                         /* 57..59 */
 
 extern int show_comments;
 
@@ -1273,6 +1275,39 @@ Fl_Type *Fl_Workspace_Type::make() {
 
 void Fl_Workspace_Type::open() {
   const char *lName = fltk3::input("Enter a name for the workspace", name());
+  if (lName) {
+    name(lName);
+  }
+}
+
+
+// ------------ Target Dependency ----------------------------------------------
+
+Fl_Target_Dependency_Type Fl_Target_Dependency_type;
+
+Fl_Type *Fl_Target_Dependency_Type::make() {
+  // A workspace must be the first entry
+  if (!project_is_workspace()) {
+    fltk3::message("A Target Dependency can only be added to another Target in a Workspace.");
+    return 0;
+  }
+  // add the dependency to the target
+  Fl_Type *p = Fl_Type::current;
+  while (p && !p->is_folder() && !p->is_target())
+    p = p->parent;  
+  if (!p) {
+    fltk3::message("A Target Dependency reference can only be added to a Target or Folder!");
+    return 0;
+  }
+  Fl_Target_Dependency_Type *o = new Fl_Target_Dependency_Type();
+  o->name("otherTarget");
+  o->add(p);
+  o->factory = this;
+  return o;
+}
+
+void Fl_Target_Dependency_Type::open() {
+  const char *lName = fltk3::input("Enter a name for the target dependency", name());
   if (lName) {
     name(lName);
   }
