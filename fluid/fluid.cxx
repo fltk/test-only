@@ -150,8 +150,8 @@ void leave_source_dir() {
   in_source_dir = 0;
 }
 
-char is_workspace() {
-  if (Fl_Type::first && (Fl_Type::first->is_target() || Fl_Type::first->is_category() ))
+char project_is_workspace() {
+  if (Fl_Type::first && Fl_Type::first->is_workspace())
     return 1;
   return 0;
 }
@@ -204,7 +204,7 @@ void save_cb(fltk3::Widget *, void *v) {
   const char *c = filename;
   if (v || !c || !*c) {
     fltk3::file_chooser_ok_label("Save");
-    if (is_workspace())      
+    if (project_is_workspace())      
       c=fltk3::file_chooser("Save Workspace To:", "FLUID Workspace (*.flw)", c);
     else
       c=fltk3::file_chooser("Save UI Design To:", "FLUID Design (*.fl)", c);

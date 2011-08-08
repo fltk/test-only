@@ -4,6 +4,8 @@ header_name {.h}
 code_name {.cxx} 
 wks_name FLTK 
 wks_env 64
+workspace FLTK {open
+} {
 folder Applications {open
 } {
   app_target Fluid {
@@ -3066,3 +3068,4 @@ folder Tests {} {
     }
   }
 } 
+}

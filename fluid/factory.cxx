@@ -1010,6 +1010,7 @@ static void cb(fltk3::Widget *, void *v) {
 
 fltk3::MenuItem New_Menu[] = {
 {"Workspace",0,0,0,fltk3::SUBMENU},
+  {"Workspace",0,cb,(void*)&Fl_Workspace_type},
   {"Application",0,cb,(void*)&Fl_App_Target_type},
   {"Library",0,cb,(void*)&Fl_Lib_Target_type, fltk3::MENU_DIVIDER},
   {"File",0,cb,(void*)&Fl_File_type, fltk3::MENU_DIVIDER},

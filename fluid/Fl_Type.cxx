@@ -119,6 +119,7 @@ static fltk3::Pixmap	protected_pixmap(protected_xpm);
 #include "pixmaps/flMenuNone.xpm"
 #include "pixmaps/flMenuMulti.xpm"
 #include "pixmaps/flMenuAll.xpm"
+#include "pixmaps/flWorkspace.xpm"
 
 static fltk3::Pixmap	window_pixmap(flWindow_xpm);
 static fltk3::Pixmap	button_pixmap(flButton_xpm);
@@ -177,6 +178,7 @@ static fltk3::Pixmap	file_pixmap(flFile_xpm);
 static fltk3::Pixmap	folder_pixmap(flFolder_xpm);
 static fltk3::Pixmap	fluid_file_pixmap(flFluidFile_xpm);
 static fltk3::Pixmap	code_file_pixmap(flCodeFile_xpm);
+static fltk3::Pixmap	workspace_pixmap(flWorkspace_xpm);
 fltk3::Pixmap	menu_none_pixmap(flMenuNone_xpm);
 fltk3::Pixmap	menu_multi_pixmap(flMenuMulti_xpm);
 fltk3::Pixmap	menu_all_pixmap(flMenuAll_xpm);
@@ -192,7 +194,7 @@ fltk3::Pixmap *pixmap[] = { 0, &window_pixmap, &button_pixmap, &checkbutton_pixm
  &dial_pixmap, &roller_pixmap, &valueinput_pixmap, &valueoutput_pixmap, &comment_pixmap,             /* 42..46 */
  &spinner_pixmap, &widgetclass_pixmap, &data_pixmap, &tree_pixmap, &table_pixmap,                    /* 47..51 */
  &app_target_pixmap, &file_pixmap, &folder_pixmap, &fluid_file_pixmap, &code_file_pixmap,            /* 52..56 */
- &lib_target_pixmap};                                                                                /* 57 */
+ &lib_target_pixmap, &workspace_pixmap};                                                             /* 57, 58 */
 
 extern int show_comments;
 
@@ -1075,11 +1077,11 @@ int Fl_Type::user_defined(const char* cbname) const {
 
 extern const char *filename;
 extern void set_filename(const char*);
-extern char is_workspace();
+extern char project_is_workspace();
 
-// ------------ Target ---------------------------------------------------------
+// ------------ Tool -----------------------------------------------------------
 
-Fl_Workspace_Type::Fl_Workspace_Type()
+Fl_Tool_Type::Fl_Tool_Type()
 : Fl_Type(),
   pBuildEnv(FL_ENV_ALL),
   pListEnv(FL_ENV_ALL),
@@ -1088,7 +1090,7 @@ Fl_Workspace_Type::Fl_Workspace_Type()
 {
 }
 
-Fl_Workspace_Type::~Fl_Workspace_Type() {
+Fl_Tool_Type::~Fl_Tool_Type() {
   int i;
   for (i=0; i<pnUUID; i++) {
     free(pUUIDName[i]);
@@ -1100,7 +1102,7 @@ Fl_Workspace_Type::~Fl_Workspace_Type() {
   }
 }
 
-int Fl_Workspace_Type::find_UUID(const char *name) {
+int Fl_Tool_Type::find_UUID(const char *name) {
   int i;
   for (i=0; i<pnUUID; i++) {
     if (strcmp(pUUIDName[i], name)==0)
@@ -1109,14 +1111,14 @@ int Fl_Workspace_Type::find_UUID(const char *name) {
   return -1;
 }
 
-void Fl_Workspace_Type::set_UUID(int i, const char *uuid) {
+void Fl_Tool_Type::set_UUID(int i, const char *uuid) {
   if (pUUID[i]) 
     free(pUUID[i]);
   pUUID[i] = 0;
   pUUID[i] = strdup(verify_UUID(uuid));
 }
 
-void Fl_Workspace_Type::set_UUID(const char *name, const char *uuid) {
+void Fl_Tool_Type::set_UUID(const char *name, const char *uuid) {
   int i = find_UUID(name);
   if (i==-1) {
     if (pNUUID==pnUUID) {
@@ -1135,11 +1137,11 @@ void Fl_Workspace_Type::set_UUID(const char *name, const char *uuid) {
 /*
  Verify that a Uniqe ID is truly unique.
  */
-const char *Fl_Workspace_Type::verify_UUID(const char *uuid) {
+const char *Fl_Tool_Type::verify_UUID(const char *uuid) {
   Fl_Type *t;
   for (t = first; t; t = t->next) {
-    if (t->is_workspace_type()) {
-      Fl_Workspace_Type *wt = (Fl_Workspace_Type*)t;
+    if (t->is_tool()) {
+      Fl_Tool_Type *wt = (Fl_Tool_Type*)t;
       int j, n = wt->pnUUID;
       for (j=0; j<n; j++) {
         if (wt->pUUID[j] && strcmp(wt->pUUID[j], uuid)==0) {
@@ -1152,7 +1154,7 @@ const char *Fl_Workspace_Type::verify_UUID(const char *uuid) {
   return uuid;
 }
 
-const char *Fl_Workspace_Type::get_UUID(const char *name) {
+const char *Fl_Tool_Type::get_UUID(const char *name) {
   int i = find_UUID(name);
   if (i==-1) {
     i = pnUUID;
@@ -1162,7 +1164,7 @@ const char *Fl_Workspace_Type::get_UUID(const char *name) {
   return pUUID[i];
 }
 
-const char *Fl_Workspace_Type::get_UUID_Xcode(const char *name) {
+const char *Fl_Tool_Type::get_UUID_Xcode(const char *name) {
   static char buf[25];
   const char *uuid = get_UUID(name);
   // 937C4900-51AA-4C11-8DD3-7AB5 9944F03E
@@ -1172,7 +1174,7 @@ const char *Fl_Workspace_Type::get_UUID_Xcode(const char *name) {
   return buf;
 }
 
-void Fl_Workspace_Type::write_properties() {
+void Fl_Tool_Type::write_properties() {
   Fl_Type::write_properties();
   int i;
   for (i=0; i<pnUUID; i++) {
@@ -1193,7 +1195,7 @@ void Fl_Workspace_Type::write_properties() {
   }
 }
 
-char Fl_Workspace_Type::read_property(const char *name) {
+char Fl_Tool_Type::read_property(const char *name) {
   if (strncmp(name, "uuid_", 5)==0) {
     char buf[80];
     strcpy(buf, name+5);
@@ -1211,14 +1213,14 @@ char Fl_Workspace_Type::read_property(const char *name) {
   return 1;
 }
 
-int Fl_Workspace_Type::dnd_available() {
+int Fl_Tool_Type::dnd_available() {
   // FIXME: we should maybe test if the objects dropped are actually valid file names
   if (filename && *filename && (is_target() || is_folder()))
     return 1;
   return 0;
 }
 
-int Fl_Workspace_Type::dnd_paste() {
+int Fl_Tool_Type::dnd_paste() {
   if (filename && *filename && (is_target() || is_folder())) {
     if (fltk3::event_text() && *fltk3::event_text()) {
       char *basedir = strdup(filename); // global name of workspace file!
@@ -1250,6 +1252,32 @@ int Fl_Workspace_Type::dnd_paste() {
   }
   return 1;
 }
+
+// ------------ Workspace ------------------------------------------------------
+
+Fl_Workspace_Type Fl_Workspace_type;
+
+Fl_Type *Fl_Workspace_Type::make() {
+  // A workspace must be the first entry
+  if (Fl_Type::first) {
+    fltk3::message("A Workspace can only be added to an empty project.");
+    return 0;
+  }
+  // add the workspace to the file
+  Fl_Workspace_Type *o = new Fl_Workspace_Type();
+  o->name("myWorkspace");
+  o->add(0L);
+  o->factory = this;
+  return o;
+}
+
+void Fl_Workspace_Type::open() {
+  const char *lName = fltk3::input("Enter a name for the workspace", name());
+  if (lName) {
+    name(lName);
+  }
+}
+
 
 // ------------ Target ---------------------------------------------------------
 
@@ -1287,14 +1315,13 @@ Fl_App_Target_Type Fl_App_Target_type;
 
 Fl_Type *Fl_App_Target_Type::make() {
   // a target can only go into a workspace file
-  // TODO: we can offer to create a workspace if this is currently a GUI file
-  if (Fl_Type::first && !is_workspace()) {
+  if (!project_is_workspace()) {
     fltk3::message("A Target can only be added to a Workspace.");
     return 0;
   }
   // find out where we can add this target
   Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_category())
+  while (p && !p->is_category() && !p->is_workspace())
     p = p->parent;  
   Fl_App_Target_Type *o = new Fl_App_Target_Type();
   o->name("myProgram");
@@ -1317,13 +1344,13 @@ Fl_Lib_Target_Type Fl_Lib_Target_type;
 Fl_Type *Fl_Lib_Target_Type::make() {
   // a target con only go into a workspace file
   // TODO: we can offer to create a workspace if this is currently a GUI file
-  if (Fl_Type::first && !is_workspace()) {
+  if (!project_is_workspace()) {
     fltk3::message("A Target can only be added to a Workspace.");
     return 0;
   }
   // find out where we can add this target
   Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_category())
+  while (p && !p->is_category() && !p->is_workspace())
     p = p->parent;  
   Fl_Lib_Target_Type *o = new Fl_Lib_Target_Type();
   o->name("myLibrary");
@@ -1346,7 +1373,7 @@ Fl_File_Type Fl_File_type;
 
 Fl_Type *Fl_File_Type::make() {
   // make sure that this is a workspace file
-  if (Fl_Type::first && !is_workspace()) {
+  if (Fl_Type::first && !project_is_workspace()) {
     fltk3::message("File references can only be used in Workspace files.");
     return 0;
   }
@@ -1409,13 +1436,13 @@ char Fl_File_Type::read_property(const char *c) {
   } else if (!strcmp(c,"location")) {
     location(atoi(read_word()));
   } else {
-    return Fl_Workspace_Type::read_property(c);
+    return Fl_Tool_Type::read_property(c);
   }
   return 1;
 }
 
 void Fl_File_Type::write_properties() {
-  Fl_Workspace_Type::write_properties();
+  Fl_Tool_Type::write_properties();
   if (filename() && *filename()) {
     write_indent(level+1);
     write_string("filename_and_path");
@@ -1521,14 +1548,14 @@ Fl_Folder_Type Fl_Folder_type;
 
 Fl_Type *Fl_Folder_Type::make() {
   // make sure that this is a workspace file
-  if (Fl_Type::first && !is_workspace()) {
+  if (Fl_Type::first && !project_is_workspace()) {
     fltk3::message("Folders can only be used in Workspace files.");
     return 0;
   }
   // Folders can be inside folders of inside targets
   // Categories can be at the top level or inside categories
   Fl_Type *p = Fl_Type::current;
-  while (p && !p->is_category() && !p->is_folder() && !p->is_target()) 
+  while (p && !p->is_category() && !p->is_folder() && !p->is_target() && !p->is_workspace()) 
     p = p->parent;
   Fl_Folder_Type *o = new Fl_Folder_Type();
   o->name("Group");

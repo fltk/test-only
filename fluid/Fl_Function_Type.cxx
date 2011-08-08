@@ -47,7 +47,7 @@ extern int compile_only;
 extern void redraw_browser();
 extern void goto_source_dir();
 extern void leave_source_dir();
-extern char is_workspace();
+extern char project_is_workspace();
 
 ////////////////////////////////////////////////////////////////
 // quick check of any C code for legality, returns an error message
@@ -131,7 +131,7 @@ Fl_Type *Fl_Function_Type::make() {
   Fl_Type *p = Fl_Type::current;
   while (p && !p->is_decl_block() && !p->is_fluid_file()) 
     p = p->parent;
-  if (!p && is_workspace()) {
+  if (!p && project_is_workspace()) {
     fltk3::message("A Function can only be added to a Fluid File.");
     return 0;
   }
@@ -582,7 +582,7 @@ Fl_Type *Fl_Decl_Type::make() {
   Fl_Type *p = Fl_Type::current;
   while (p && !p->is_decl_block() && !p->is_fluid_file()) 
     p = p->parent;
-  if (!p && is_workspace()) {
+  if (!p && project_is_workspace()) {
     fltk3::message("A Declaration can only be added to a Fluid File.");
     return 0;
   }
@@ -757,7 +757,7 @@ Fl_Type *Fl_Data_Type::make() {
   Fl_Type *p = Fl_Type::current;
   while (p && !p->is_decl_block() && !p->is_fluid_file()) 
     p = p->parent;
-  if (!p && is_workspace()) {
+  if (!p && project_is_workspace()) {
     fltk3::message("Binary Data can only be added to a Fluid File.");
     return 0;
   }
@@ -969,7 +969,7 @@ Fl_Type *Fl_DeclBlock_Type::make() {
   Fl_Type *p = Fl_Type::current;
   while (p && !p->is_decl_block() && !p->is_fluid_file()) 
     p = p->parent;
-  if (!p && is_workspace()) {
+  if (!p && project_is_workspace()) {
     fltk3::message("A Declaration Block can only be added to a Fluid File.");
     return 0;
   }
@@ -1063,7 +1063,7 @@ Fl_Type *Fl_Comment_Type::make() {
   Fl_Type *p = Fl_Type::current;
   while (p && !p->is_code_block() && !p->is_fluid_file()) 
     p = p->parent;
-  if (!p && is_workspace()) {
+  if (!p && project_is_workspace()) {
     fltk3::message("A Comment can only be added to a Fluid File.");
     return 0;
   }
@@ -1347,7 +1347,7 @@ Fl_Type *Fl_Class_Type::make() {
   Fl_Type *p = Fl_Type::current;
   while (p && !p->is_decl_block() && !p->is_fluid_file()) 
     p = p->parent;
-  if (!p && is_workspace()) {
+  if (!p && project_is_workspace()) {
     fltk3::message("A Class Declaration can only be added to a Fluid File.");
     return 0;
   }

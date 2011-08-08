@@ -197,7 +197,8 @@ public:
   virtual int is_fluid_file() const { return 0; }
   virtual int is_folder() const { return 0; }
   virtual int is_category() const { return 0; }
-  virtual int is_workspace_type() const { return 0; }
+  virtual int is_tool() const { return 0; }
+  virtual int is_workspace() const { return 0; }
 
   virtual int pixmapID() { return 0; }
 
@@ -210,7 +211,7 @@ public:
 
 typedef int (Fl_Type::*RTTI_Query)() const;
 
-class Fl_Workspace_Type : public Fl_Type {  
+class Fl_Tool_Type : public Fl_Type {  
   unsigned int pBuildEnv, pListEnv;
   int pNUUID, pnUUID;
   char **pUUIDName;
@@ -221,13 +222,13 @@ class Fl_Workspace_Type : public Fl_Type {
   int find_UUID(const char *name);
   static const char *verify_UUID(const char *uuid);
 public:
-  Fl_Workspace_Type();
-  ~Fl_Workspace_Type();
+  Fl_Tool_Type();
+  ~Fl_Tool_Type();
   const char *get_UUID(const char *name);
   const char *get_UUID_Xcode(const char *name);
   void write_properties();
   char read_property(const char *);
-  virtual int is_workspace_type() const { return 1; }
+  virtual int is_tool() const { return 1; }
   virtual int dnd_available();
   virtual int dnd_paste();
   
@@ -240,10 +241,26 @@ public:
   int lists_in(unsigned int env) { return (((pBuildEnv|pListEnv)&env)!=0); }
 };
 
-class Fl_Target_Type : public Fl_Workspace_Type {
+class Fl_Workspace_Type : public Fl_Tool_Type {
+public:
+  Fl_Workspace_Type() :
+  Fl_Tool_Type() {
+  }
+  ~Fl_Workspace_Type() {
+  }
+  const char *type_name() { return "workspace"; }
+  Fl_Type *make();
+  virtual int is_parent() const { return 1; }
+  virtual int is_workspace() const { return 1; }
+  virtual int pixmapID() { return 58; }
+  virtual void open();
+};
+extern Fl_Workspace_Type Fl_Workspace_type;
+
+class Fl_Target_Type : public Fl_Tool_Type {
 public:
   Fl_Target_Type() :
-  Fl_Workspace_Type() {
+  Fl_Tool_Type() {
   }
   ~Fl_Target_Type() {
   }
@@ -286,13 +303,13 @@ public:
 };
 extern Fl_Lib_Target_Type Fl_Lib_Target_type;
 
-class Fl_File_Type : public Fl_Workspace_Type {
+class Fl_File_Type : public Fl_Tool_Type {
   char *pFilename;
   FileType pFileType;
   FileLocation pFileLocation;
 public:
   Fl_File_Type() :
-    Fl_Workspace_Type(),
+    Fl_Tool_Type(),
     pFilename(0),
     pFileType(FL_FILE_UNKNOWN),
     pFileLocation(FL_LOCATION_WORKSPACE) {
@@ -330,10 +347,10 @@ public:
 };
 extern Fl_File_Type Fl_File_type;
 
-class Fl_Folder_Type : public Fl_Workspace_Type {
+class Fl_Folder_Type : public Fl_Tool_Type {
 public:
   Fl_Folder_Type() :
-  Fl_Workspace_Type() {
+  Fl_Tool_Type() {
   }
   ~Fl_Folder_Type() {
   }
@@ -344,7 +361,7 @@ public:
     return parent && (parent->is_folder() || parent->is_target()); 
   }
   virtual int is_category() const { 
-    return parent==0 || parent->is_category(); 
+    return parent==0 || parent->is_workspace() || parent->is_category(); 
   }
   virtual int pixmapID() { return 54; }
   virtual void open();
