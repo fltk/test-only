@@ -216,8 +216,10 @@ folder Libraries {open
     uuid_Xcode4_ProductReference {FEB0F8FE-0000-6383-0000-384180570D94}
     uuid_Xcode4_Target {A57FDE87-0000-1C99-0000-A52BEEDEE68C}
     uuid_Xcode4_FrameworksBuildPhase {B5140FAA-6B8D-4D78-814B-695B78247541}
+    uuid_Xcode4_PBXGroup {727B6B68-F3C4-4BBB-9445-1AB0CD7EA6D9}
   } {
-    folder Headers {open
+    folder Headers {
+      uuid_Xcode4_PBXGroup {C2F00625-E401-4002-85F6-FA183D17629D}
     } {
       file_ref {Adjuster.h} {
         uuid_Xcode4_PBXBuildFile {19D0A8A7-81F6-48F4-A42B-0A0DBBC3770F}
@@ -247,7 +249,7 @@ folder Libraries {open
         list_env 92
         filename_and_path {fltk3/BMPImage.h}
       }
-      file_ref {Box.h} {selected
+      file_ref {Box.h} {
         uuid_Xcode4_PBXBuildFile {A443E7E1-065D-4CA8-9E14-C567C120B62E}
         uuid_Xcode4_PBXFileRef {0800D21F-C11C-4581-BA43-356FDB90C72D}
         build_env 64
@@ -1228,7 +1230,9 @@ folder Libraries {open
         filename_and_path {fltk3/Xutf8.h}
       }
     }
-    folder Sources {} {
+    folder Sources {
+      uuid_Xcode4_PBXGroup {91990322-0AF9-42F2-A077-713540EE5AB1}
+    } {
       file_ref {Fl_cocoa.mm} {
         uuid_Xcode4_PBXBuildFile {99D08647-5486-4C7E-8CC9-51B70074F29C}
         uuid_Xcode4_PBXFileRef {F6BB47B6-F621-4FC2-A7DC-BFD6B7C5F16D}
@@ -2315,6 +2319,7 @@ folder Libraries {open
       }
     }
     folder Libraries {open
+      uuid_Xcode4_PBXGroup {5495DB62-2621-4D95-824E-7D7E0FD9E613}
     } {
       file_ref {Cocoa.framework} {
         uuid_Xcode4_PBXBuildFile {C96290C2-0000-1274-0000-D0CF007D3CFE}
@@ -2326,8 +2331,10 @@ folder Libraries {open
       }
     }
   }
-  lib_target fltk_gl {} {
-    folder Sources {} {
+  lib_target fltk_gl {open
+  } {
+    folder Sources {open
+    } {
       file_ref {Fl_Gl_Choice.cxx} {
         filename_and_path {src/Fl_Gl_Choice.cxx}
       }
@@ -2349,7 +2356,7 @@ folder Libraries {open
       file_ref {freeglut_stroke_roman.cxx} {
         filename_and_path {src/freeglut_stroke_roman.cxx}
       }
-      file_ref {freeglut_teapot.cxx} {
+      file_ref {freeglut_teapot.cxx} {selected
         filename_and_path {src/freeglut_teapot.cxx}
       }
       file_ref {gl_draw.cxx} {

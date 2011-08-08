@@ -271,8 +271,42 @@ static int writeFrameworksBuildPhase(FILE *out, Fl_Target_Type *tgt) {
 
 // This section generates the hierarchy of files and folders in the left panel
 // in the Xcode interface.
+//  - t can be a target or a group.
+static int writeGroup(FILE *out, Fl_Workspace_Type *t) {
+  char Group[32]; strcpy(Group, t->get_UUID_Xcode("Xcode4_PBXGroup"));
+  int tlev1 = t->level+1;
+  Fl_Workspace_Type *t1;
 
-// TODO: write those
+  for (t1 = (Fl_Workspace_Type*)t->next; t1 && t1->level>=tlev1; t1 = (Fl_Workspace_Type*)t1->next) {
+    if (t1->level==tlev1 && t1->is_folder()) {
+      Fl_Folder_Type *folder = (Fl_Folder_Type*)t1;
+      writeGroup(out, folder);
+    }
+  }
+
+  fprintf(out, "\t\t%s /* %s */ = {\n", Group, t->name());
+  fprintf(out, "\t\t\tisa = PBXGroup;\n");
+  fprintf(out, "\t\t\tchildren = (\n");
+  for (t1 = (Fl_Workspace_Type*)t->next; t1 && t1->level>=tlev1; t1 = (Fl_Workspace_Type*)t1->next) {
+    if (t1->level==tlev1) {
+      if (t1->is_folder() || t1->is_target()) {
+        Fl_Workspace_Type *folder = (Fl_Workspace_Type*)t1;
+        char Group[32]; strcpy(Group, folder->get_UUID_Xcode("Xcode4_PBXGroup"));
+        fprintf(out, "\t\t\t\t%s /* %s */,\n", Group, folder->name());
+      } if (t1->lists_in(FL_ENV_XC4) && t1->is_file()) {
+        char PBXFileRef[32]; strcpy(PBXFileRef, t1->get_UUID_Xcode("Xcode4_PBXFileRef"));
+        Fl_File_Type *f = (Fl_File_Type*)t1;
+        fprintf(out, "\t\t\t\t%s /* %s */,\n", PBXFileRef, f->filename_name());
+      }
+    }
+  }
+  fprintf(out, "\t\t\t);\n");
+  fprintf(out, "\t\t\tname = %s;\n", t->name());
+  fprintf(out, "\t\t\tsourceTree = \"<group>\";\n");
+  fprintf(out, "\t\t};\n");
+
+  return 0;
+}
 
 
 /* Begin PBXHeadersBuildPhase section */
@@ -618,6 +652,15 @@ int write_fltk_ide_xcode4() {
                       f->filename_name());
             }
           }
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#TargetGroup(", 13)==0) {
+          Fl_Workspace_Type *tgt = Fl_Target_Type::find(hash+13, ')');
+          writeGroup(out, tgt);
+          hash = strchr(hash, ';')+1;
+        } else if (strncmp(hash, "#TargetGroupRef(", 16)==0) {
+          Fl_Target_Type *tgt = Fl_Target_Type::find(hash+16, ')');
+          char Group[32]; strcpy(Group, tgt->get_UUID_Xcode("Xcode4_PBXGroup"));
+          fprintf(out, "\t\t\t\t%s /* %s */,\n", Group, tgt->name());
           hash = strchr(hash, ';')+1;
         } else if (strncmp(hash, "#HeadersBuildPhase(", 19)==0) {
           Fl_Target_Type *tgt = Fl_Target_Type::find(hash+19, ')');
